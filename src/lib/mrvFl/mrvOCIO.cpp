@@ -408,7 +408,7 @@ namespace mrv
             auto uiICS = App::ui->uiICS;
             int idx = uiICS->value();
             if (idx <= 0 || idx >= uiICS->children())
-                return "";
+                return kInactive;
 
             const Fl_Menu_Item* item = uiICS->child(idx);
             if (!item || !item->label() || item->flags & FL_SUBMENU)
@@ -417,7 +417,7 @@ namespace mrv
             char pathname[1024];
             int ret = uiICS->item_pathname(pathname, 1024, item);
             if (ret != 0)
-                return "";
+                return kInactive;
 
             std::string ics = pathname;
             if (ics[0] == '/')
@@ -449,7 +449,11 @@ namespace mrv
                 if (ret != 0)
                     continue;
 
-                if (name == pathname || name == item->label())
+                std::string path = pathname;
+                if (path[0] == '/')
+                    path = path.substr(1, path.size());
+                
+                if (name == path)
                 {
                     value = i;
                     break;
@@ -457,10 +461,25 @@ namespace mrv
             }
             if (value == -1)
             {
-                std::string err =
-                    string::Format(_("Invalid OCIO Ics '{0}'.")).arg(name);
-                throw std::runtime_error(err);
-                return;
+                for (int i = 0; i < uiICS->children(); ++i)
+                {
+                    const Fl_Menu_Item* item = uiICS->child(i);
+                    if (!item || !item->label() || item->flags & FL_SUBMENU)
+                        continue;
+                
+                    if (name == item->label())
+                    {
+                        value = i;
+                        break;
+                    }
+                }
+                if (value == -1)
+                {
+                    std::string err =
+                        string::Format(_("Invalid OCIO Ics '{0}'.")).arg(name);
+                    throw std::runtime_error(err);
+                    return;
+                }
             }
             uiICS->value(value);
             uiICS->do_callback();
@@ -480,8 +499,12 @@ namespace mrv
                 int ret = uiICS->item_pathname(pathname, 1024, item);
                 if (ret != 0)
                     continue;
+                
+                std::string path = pathname;
+                if (path[0] == '/')
+                    path = path.substr(1, path.size());
 
-                if (name == pathname)
+                if (name == path)
                 {
                     value = i;
                     break;
@@ -495,10 +518,18 @@ namespace mrv
             auto uiOCIOLook = App::ui->uiOCIOLook;
             int idx = uiOCIOLook->value();
             if (idx <= 0 || idx >= uiOCIOLook->children())
-                return "";
+                return kInactive;
 
             const Fl_Menu_Item* item = uiOCIOLook->child(idx);
-            return item->label();
+            char pathname[1024];
+            int ret = uiOCIOLook->item_pathname(pathname, 1024, item);
+            if (ret != 0)
+                return kInactive;
+
+            std::string name = pathname;
+            if (name[0] == '/')
+                name = name.substr(1, name.size());
+            return name;
         }
 
         void setLook(const std::string& name)
@@ -523,8 +554,12 @@ namespace mrv
                 int ret = uiOCIOLook->item_pathname(pathname, 1024, item);
                 if (ret != 0)
                     continue;
+                
+                std::string path = pathname;
+                if (path[0] == '/')
+                    path = path.substr(1, path.size());
 
-                if (name == pathname || name == item->label())
+                if (name == path)
                 {
                     value = i;
                     break;
@@ -555,8 +590,12 @@ namespace mrv
                 int ret = uiOCIOLook->item_pathname(pathname, 1024, item);
                 if (ret != 0)
                     continue;
+                
+                std::string path = pathname;
+                if (path[0] == '/')
+                    path = path.substr(1, path.size());
 
-                if (name == pathname)
+                if (name == path)
                 {
                     value = i;
                     break;
@@ -570,14 +609,14 @@ namespace mrv
             auto uiOCIOView = App::ui->uiOCIOView;
             int idx = uiOCIOView->value();
             if (idx <= 0 || idx >= uiOCIOView->children())
-                return "";
+                return kInactive;
 
             const Fl_Menu_Item* item = uiOCIOView->child(idx);
 
             char pathname[1024];
             int ret = uiOCIOView->item_pathname(pathname, 1024, item);
             if (ret != 0)
-                return "";
+                return kInactive;
 
             std::string view = pathname;
             if (view[0] == '/')
@@ -607,7 +646,11 @@ namespace mrv
                 if (ret != 0)
                     continue;
 
-                if (name == pathname || name == item->label())
+                std::string path = pathname;
+                if (path[0] == '/')
+                    path = path.substr(1, path.size());
+
+                if (name == path)
                 {
                     value = i;
                     break;
