@@ -3181,6 +3181,30 @@ msgstr "Yiddish"
 msgid "Zulu"
 msgstr "Zulu"
 
+msgid ""
+"\n"
+"Hotkeys:   "
+msgstr ""
+"\n"
+"Raccourci claviers:   "
+
+msgid "   and   "
+msgstr "    et    "
+
+msgid ""
+"\n"
+"Reset:   "
+msgstr ""
+"\n"
+"Réinitialiser:   "
+
+msgid ""
+"\n"
+"Hotkey: "
+msgstr ""
+"\n"
+"Raccourci clavier: "
+
 msgid "@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"
 msgstr "@B12@C7@b@.Fonction @B12@C7@b@.Hotkey"
 
@@ -3199,28 +3223,11 @@ msgstr ""
 msgid "Reduce gain 1/4 stop (divide by sqrt(sqrt(2)))."
 msgstr "Réduire le gain de 1/4 d'arrêt (diviser par sqrt(sqrt(2)))."
 
-msgid ""
-"\n"
-"Hotkey: "
-msgstr ""
-"\n"
-"Clé d'ouverture :"
-
 msgid "Increase gain 1/4 stop (multiply by sqrt(sqrt(2)))."
 msgstr "Augmenter le gain de 1/4 stop (multiplier par sqrt(sqrt(2)))."
 
 msgid "Allows you to adjust the gain or exposure of the image."
 msgstr "Permet d'ajuster le gain ou l'exposition de l'image."
-
-msgid ""
-"\n"
-"Hotkeys:   "
-msgstr ""
-"\n"
-"Claviers d'ouverture:   "
-
-msgid "   and   "
-msgstr "    et    "
 
 msgid "Allows you to adjust the saturation of the image."
 msgstr "Permet d'ajuster la saturation de l'image."

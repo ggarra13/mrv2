@@ -21,7 +21,7 @@ v1.2.7
 - Fixed tooltip in Gain slider not showing up.
 - Fixed an OCIO bug when setting from the command-line the display/view with
   nuke-default's config.ocio.
-- Fixed Menu Entry Playback/Go to/Start and Playback/Go to/End not showing
+- Fixed Menu Entry "Playback/Go to/Start" and "Playback/Go to/End" not showing
   their keyboard shortcuts.
   
 

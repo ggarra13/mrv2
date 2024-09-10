@@ -2915,6 +2915,24 @@ msgstr ""
 msgid "Zulu"
 msgstr ""
 
+msgid ""
+"\n"
+"Hotkeys:   "
+msgstr ""
+
+msgid "   and   "
+msgstr ""
+
+msgid ""
+"\n"
+"Reset:   "
+msgstr ""
+
+msgid ""
+"\n"
+"Hotkey: "
+msgstr ""
+
 msgid "@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"
 msgstr ""
 
@@ -2931,23 +2949,10 @@ msgstr ""
 msgid "Reduce gain 1/4 stop (divide by sqrt(sqrt(2)))."
 msgstr ""
 
-msgid ""
-"\n"
-"Hotkey: "
-msgstr ""
-
 msgid "Increase gain 1/4 stop (multiply by sqrt(sqrt(2)))."
 msgstr ""
 
 msgid "Allows you to adjust the gain or exposure of the image."
-msgstr ""
-
-msgid ""
-"\n"
-"Hotkeys:   "
-msgstr ""
-
-msgid "   and   "
 msgstr ""
 
 msgid "Allows you to adjust the saturation of the image."

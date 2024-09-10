@@ -3177,6 +3177,30 @@ msgstr "Iddish"
 msgid "Zulu"
 msgstr "Zulu"
 
+msgid ""
+"\n"
+"Hotkeys:   "
+msgstr ""
+"\n"
+"Teclas:   "
+
+msgid "   and   "
+msgstr "    e    "
+
+msgid ""
+"\n"
+"Reset:   "
+msgstr ""
+"\n"
+"Restaurar:   "
+
+msgid ""
+"\n"
+"Hotkey: "
+msgstr ""
+"\n"
+"Tecla: "
+
 msgid "@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"
 msgstr "@B12@C7@b@.Funo @B12@C7@b@.Hotkey"
 
@@ -3195,28 +3219,11 @@ msgstr ""
 msgid "Reduce gain 1/4 stop (divide by sqrt(sqrt(2)))."
 msgstr "Reduzir o ganho 1/4 parada (dividir por sqrt(sqrt(2)))."
 
-msgid ""
-"\n"
-"Hotkey: "
-msgstr ""
-"\n"
-"Tecla quente:"
-
 msgid "Increase gain 1/4 stop (multiply by sqrt(sqrt(2)))."
 msgstr "Aumentar o ganho 1/4 parada (multiplicar por sqrt(sqrt(2)))."
 
 msgid "Allows you to adjust the gain or exposure of the image."
 msgstr "Permite ajustar o ganho ou exposio da imagem."
-
-msgid ""
-"\n"
-"Hotkeys:   "
-msgstr ""
-"\n"
-"Teclas:   "
-
-msgid "   and   "
-msgstr "    e    "
 
 msgid "Allows you to adjust the saturation of the image."
 msgstr "Permite ajustar a saturao da imagem."

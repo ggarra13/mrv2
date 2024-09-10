@@ -3209,6 +3209,30 @@ msgstr "Yiddish"
 msgid "Zulu"
 msgstr "Zulu"
 
+msgid ""
+"\n"
+"Hotkeys:   "
+msgstr ""
+"\n"
+"Tasti di avviamento:   "
+
+msgid "   and   "
+msgstr "    e    "
+
+msgid ""
+"\n"
+"Reset:   "
+msgstr ""
+"\n"
+"Ripristina:   "
+
+msgid ""
+"\n"
+"Hotkey: "
+msgstr ""
+"\n"
+"Tasto di avviamento: "
+
 msgid "@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"
 msgstr "@B12@C7@b@.Funzione @B12@C7@b@.Hotkey"
 
@@ -3227,28 +3251,11 @@ msgstr ""
 msgid "Reduce gain 1/4 stop (divide by sqrt(sqrt(2)))."
 msgstr "Ridurre il guadagno 1/4 stop (dividere di sqrt(sqrt(2)))."
 
-msgid ""
-"\n"
-"Hotkey: "
-msgstr ""
-"\n"
-"Tasto di avviamento:"
-
 msgid "Increase gain 1/4 stop (multiply by sqrt(sqrt(2)))."
 msgstr "Aumentare il guadagno 1/4 stop (multiplicare di sqrt(sqrt(2)))."
 
 msgid "Allows you to adjust the gain or exposure of the image."
 msgstr "Consente di regolare il guadagno o l'esposizione dell'immagine."
-
-msgid ""
-"\n"
-"Hotkeys:   "
-msgstr ""
-"\n"
-"Tasti di avviamento:   "
-
-msgid "   and   "
-msgstr "    e    "
 
 msgid "Allows you to adjust the saturation of the image."
 msgstr "Consente di regolare la saturazione dell'immagine."

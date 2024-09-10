@@ -3183,6 +3183,30 @@ msgstr "यिशिशिश"
 msgid "Zulu"
 msgstr "जियू"
 
+msgid ""
+"\n"
+"Hotkeys:   "
+msgstr ""
+"\n"
+"गीत-सूचियाँ:   "
+
+msgid "   and   "
+msgstr "   और   "
+
+msgid ""
+"\n"
+"Reset:   "
+msgstr ""
+"\n"
+"रीसेट:   "
+
+msgid ""
+"\n"
+"Hotkey: "
+msgstr ""
+"\n"
+"गर्म हवा: "
+
 msgid "@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"
 msgstr "@B12"
 
@@ -3203,28 +3227,11 @@ msgstr ""
 msgid "Reduce gain 1/4 stop (divide by sqrt(sqrt(2)))."
 msgstr "Asctt( squququg) द्वारा प्राप्त किए गए अंश को कम करें."
 
-msgid ""
-"\n"
-"Hotkey: "
-msgstr ""
-"\n"
-"गर्म हवा:"
-
 msgid "Increase gain 1/4 stop (multiply by sqrt(sqrt(2)))."
 msgstr "Amact( equg) द्वारा गुणनpt( ectqug) की संख्या बढ़ती है."
 
 msgid "Allows you to adjust the gain or exposure of the image."
 msgstr "छवि के लाभ या एक्सपोजर को आपको समायोजित करने देता है."
-
-msgid ""
-"\n"
-"Hotkeys:   "
-msgstr ""
-"\n"
-"गीत-सूचियाँ:   "
-
-msgid "   and   "
-msgstr "   और   "
 
 msgid "Allows you to adjust the saturation of the image."
 msgstr "यहाँ पर छवि के संतृप्ति समायोजन को सेट करने की अनुमति देता है."
