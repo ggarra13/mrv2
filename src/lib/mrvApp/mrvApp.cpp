@@ -325,7 +325,8 @@ namespace mrv
                             p.options.compareOptions.wipeRotation)),
                     app::CmdLineFlagOption::create(
                         p.options.createOtioTimeline, {"-otio", "-o", "-edl"},
-                        _("Create OpenTimelineIO EDL from the list of clips provided.")),
+                        _("Create OpenTimelineIO EDL from the list of clips "
+                          "provided.")),
                     app::CmdLineFlagOption::create(
                         p.options.otioEditMode, {"-editMode", "-e"},
                         _("OpenTimelineIO Edit mode.")),
@@ -458,7 +459,7 @@ namespace mrv
                         {"-version", "--version", "-v", "--v"},
                         _("Return the version and exit."))
             });
-        
+
         const int exitCode = getExit();
         if (exitCode != 0)
         {
@@ -492,7 +493,7 @@ namespace mrv
 #endif
             return;
         }
-        
+
         DBG;
         // Initialize FLTK.
         Fl::scheme("gtk+");
@@ -596,7 +597,7 @@ namespace mrv
             }
         }
 #endif
-        
+
         Preferences::run();
 
 #if defined(TLRENDER_USD)
@@ -626,7 +627,7 @@ namespace mrv
         if (!NDIlib_initialize())
             throw std::runtime_error(_("Could not initialize NDI"));
 #endif
-        
+
         p.volume = p.settings->getValue<float>("Audio/Volume");
         p.mute = p.settings->getValue<bool>("Audio/Mute");
 
@@ -745,7 +746,7 @@ namespace mrv
                 p.options.fileNames.clear();
                 p.options.fileNames.push_back(otioFile);
             }
-        
+
             bool foundAudio = false;
             for (const auto& fileName : p.options.fileNames)
             {
@@ -839,7 +840,7 @@ namespace mrv
             tcp = new Client(p.options.client, p.options.port);
             store_port(p.options.port);
         }
-        
+
 #endif
 
         //
@@ -854,7 +855,7 @@ namespace mrv
                 ocio::setLook(p.options.ocioOptions.look);
 
             if (!p.options.ocioOptions.display.empty())
-            { 
+            {
                 if (!p.options.ocioOptions.view.empty())
                 {
                     const std::string& merged = ocio::combineView(
@@ -890,16 +891,16 @@ namespace mrv
                     script = pythonpath() + script;
                     if (!file::isReadable(script))
                     {
-                        std::cerr << std::string(
-                            string::Format(
-                                _("Could not read python script '{0}'"))
-                            .arg(p.options.pythonScript))
-                                  << std::endl;
+                        std::cerr
+                            << std::string(
+                                   string::Format(
+                                       _("Could not read python script '{0}'"))
+                                       .arg(p.options.pythonScript))
+                            << std::endl;
                         _exit = 1;
                         return;
                     }
                 }
-                
             }
 
             p.pythonArgs = std::make_unique<PythonArgs>(p.options.pythonArgs);
@@ -935,29 +936,32 @@ namespace mrv
             ui = nullptr;
             return;
         }
-        
+
         // Create Python's output window
         outputDisplay = new PythonOutput(0, 0, 400, 400);
 
         // Redirect Python's stdout/stderr to my own class
         p.pythonStdErrOutRedirect.reset(new PyStdErrOutStreamRedirect);
 #endif
-        
+
         //
         // Show the UI
         //
         ui->uiMain->show();
         ui->uiView->take_focus();
 
+        // Open Panel Windows if not loading a session file.
         if (!p.session)
             Preferences::open_windows();
-        ui->uiMain->fill_menu(ui->uiMenuBar);
 
+        // We raise the secondary window last, so it shows at front
         if (ui->uiSecondary)
         {
-            // We raise the secondary window last, so it shows at front
             ui->uiSecondary->window()->show();
         }
+
+        // Update menus
+        ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
     void App::cleanResources()
