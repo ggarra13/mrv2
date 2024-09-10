@@ -24,6 +24,7 @@ v1.2.7
 - Fixed Menu Entry "Playback/Go to/Start" and "Playback/Go to/End" not showing
   their keyboard shortcuts.
 - Fixed Darby's DPX reading code.
+- Allowed saving comparisons (Tiles, for example) to a movie file.
   
 
 v1.2.6

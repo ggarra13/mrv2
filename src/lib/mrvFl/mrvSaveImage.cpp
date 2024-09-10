@@ -120,7 +120,17 @@ namespace mrv
 
             const SaveResolution resolution = options.resolution;
             {
-                renderSize = info.video[layerId].size;
+                auto compareSize = ui->uiView->getRenderSize();
+                if (!options.annotations ||
+                    compareSize.w == 0 || compareSize.h == 0)
+                {
+                    renderSize = info.video[layerId].size;
+                }
+                else
+                {
+                    renderSize.w = compareSize.w;
+                    renderSize.h = compareSize.h;
+                }
                 auto rotation = ui->uiView->getRotation();
                 if (options.annotations && rotationSign(rotation) != 0)
                 {
