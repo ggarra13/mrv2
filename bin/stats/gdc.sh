@@ -23,7 +23,7 @@ locate_python
 
 export LD_LIBRARY_PATH=$BUILD_DIR/install/lib64:$BUILD_DIR/install/lib:$OLD_LIBRRARY_PATH
 
-if [[ ! -d $PYTHON_SITEDIR/requests && ! -d $PYTHON_USER_SITEDIR/requests ]];
+if [[ ! -d $PYTHON_SITEDIR/requests || ! -d $PYTHON_SITEDIR/pytz ]];
 then
     $PYTHON -m pip install requests pytz
 fi
