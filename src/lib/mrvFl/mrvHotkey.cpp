@@ -35,10 +35,10 @@ namespace
 namespace
 {
     using mrv::Hotkey;
-    
-    std::string addHotkeys(const Hotkey& hotkey_less,
-                           const Hotkey& hotkey_more,
-                           const Hotkey& hotkey_reset)
+
+    std::string addHotkeys(
+        const Hotkey& hotkey_less, const Hotkey& hotkey_more,
+        const Hotkey& hotkey_reset)
     {
         std::string out;
         const std::string& less = hotkey_less.to_s();
@@ -58,7 +58,7 @@ namespace
         }
         return out;
     }
-    
+
     std::string addHotkey(const Hotkey& hotkey)
     {
         std::string out;
@@ -70,7 +70,7 @@ namespace
         }
         return out;
     }
-}
+} // namespace
 
 namespace mrv
 {
@@ -354,12 +354,20 @@ namespace mrv
         delete keys;
     }
 
-    
     void update_hotkey_tooltips()
     {
         ViewerUI* ui = App::ui;
 
         std::string tooltip;
+
+        tooltip = _("Allows you to select different image channels or layers.");
+        tooltip += addHotkeys(kPreviousChannel, kNextChannel, Hotkey());
+        ui->uiColorChannel->copy_tooltip(tooltip.c_str());
+
+        tooltip = _("Reduce gain 1/4 stop (divide by sqrt(sqrt(2))).");
+        tooltip += addHotkey(kExposureLess);
+        ui->uiExposureLess->copy_tooltip(tooltip.c_str());
+
         tooltip = _("Reduce gain 1/4 stop (divide by sqrt(sqrt(2))).");
         tooltip += addHotkey(kExposureLess);
         ui->uiExposureLess->copy_tooltip(tooltip.c_str());
@@ -372,92 +380,92 @@ namespace mrv
         tooltip += addHotkeys(kExposureLess, kExposureMore, kResetChanges);
         ui->uiGain->copy_tooltip(tooltip.c_str());
         ui->uiGainInput->copy_tooltip(tooltip.c_str());
-        
+
         tooltip = _("Allows you to adjust the saturation of the image.");
         tooltip += addHotkeys(kSaturationLess, kSaturationMore, kResetChanges);
         ui->uiSaturation->copy_tooltip(tooltip.c_str());
         ui->uiSaturationInput->copy_tooltip(tooltip.c_str());
-    
+
         tooltip = _("Allows you to adjust gamma curve for display.\nValue is:  "
                     "pow( 2, 1/x ).");
         tooltip += addHotkeys(kGammaLess, kGammaMore, kResetChanges);
         ui->uiGamma->copy_tooltip(tooltip.c_str());
         ui->uiGammaInput->copy_tooltip(tooltip.c_str());
-        
+
+        //
+        // Action tools.
+        //
         tooltip = _("Scrubbing Tool");
         tooltip += addHotkey(kScrubMode);
         ui->uiScrub->copy_tooltip(tooltip.c_str());
-        
+
         tooltip = _("Area Select Tool");
         tooltip += addHotkey(kAreaMode);
         ui->uiSelection->copy_tooltip(tooltip.c_str());
-        
+
         tooltip = _("Freehand Drawing Tool");
         tooltip += addHotkey(kDrawMode);
         ui->uiDraw->copy_tooltip(tooltip.c_str());
-        
+
         tooltip = _("Eraser Tool");
         tooltip += addHotkey(kEraseMode);
         ui->uiErase->copy_tooltip(tooltip.c_str());
-        
+
         tooltip = _("Circle Tool");
         tooltip += addHotkey(kCircleMode);
         ui->uiCircle->copy_tooltip(tooltip.c_str());
-        
+
         tooltip = _("Rectangle Tool");
         tooltip += addHotkey(kRectangleMode);
         ui->uiRectangle->copy_tooltip(tooltip.c_str());
-        
+
         tooltip = _("Arrow Tool");
         tooltip += addHotkey(kArrowMode);
         ui->uiArrow->copy_tooltip(tooltip.c_str());
-        
+
         tooltip = _("Text Tool.   "
                     "Right click to edit previously stamped text.");
         tooltip += addHotkey(kTextMode);
         ui->uiText->copy_tooltip(tooltip.c_str());
 
+        // Timebar Window Toolbar
         TimelineClass* c = ui->uiTimeWindow;
 
-
-        
         tooltip = _("Go to the beginning of the sequence.");
         tooltip += addHotkey(kFirstFrame);
         c->uiPlayStart->copy_tooltip(tooltip.c_str());
-        
+
         tooltip = _("Play sequence backwards.");
         tooltip += addHotkey(kPlayBack);
         c->uiPlayBackwards->copy_tooltip(tooltip.c_str());
-        
+
         tooltip = _("Go back one frame.");
         tooltip += addHotkey(kFrameStepBack);
         c->uiStepBackwards->copy_tooltip(tooltip.c_str());
-        
+
         tooltip = _("Stop playback.");
         tooltip += addHotkey(kStop);
         c->uiStop->copy_tooltip(tooltip.c_str());
-        
+
         tooltip = _("Go back one frame.");
         tooltip += addHotkey(kFrameStepFwd);
         c->uiStepForwards->copy_tooltip(tooltip.c_str());
-        
+
         tooltip = _("Play sequence forwards.");
         tooltip += addHotkey(kPlayFwd);
         c->uiPlayForwards->copy_tooltip(tooltip.c_str());
-        
+
         tooltip = _("Go to the end of the sequence.");
         tooltip += addHotkey(kLastFrame);
         c->uiPlayEnd->copy_tooltip(tooltip.c_str());
 
-        
         tooltip = _("Set In Point");
         tooltip += addHotkey(kSetInPoint);
         c->uiStartButton->copy_tooltip(tooltip.c_str());
-        
+
         tooltip = _("Set Out Point");
         tooltip += addHotkey(kSetOutPoint);
         c->uiEndButton->copy_tooltip(tooltip.c_str());
     }
-
 
 } // namespace mrv

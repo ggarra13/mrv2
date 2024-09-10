@@ -23,6 +23,7 @@ v1.2.7
   nuke-default's config.ocio.
 - Fixed Menu Entry "Playback/Go to/Start" and "Playback/Go to/End" not showing
   their keyboard shortcuts.
+- Fixed Darby's DPX reading code.
   
 
 v1.2.6
