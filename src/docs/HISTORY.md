@@ -12,16 +12,17 @@ v1.2.7
   display window.
 - Fixed FPS display not respecting the decimal separator on numeric locales
   that use commas.
-- Fixed numeric locale for Hindi.
 - Fixed numeric locale for all languages.
 - Made CTRL + r (Reset Colors) reset also saturation changes.
-- Added Hotkeys display to all button tooltips, which will change if you 
-  modify any shortcuts.
+- Added Hotkeys display to all button and slider tooltips, which will change
+  if you modify any shortcuts.
 - Added hotkeys entries for saturation more and saturation less.  By default,
   they are not assigned.
 - Fixed tooltip in Gain slider not showing up.
 - Fixed an OCIO bug when setting from the command-line the display/view with
   nuke-default's config.ocio.
+- Fixed Menu Entry Playback/Go to/Start and Playback/Go to/End not showing
+  their keyboard shortcuts.
   
 
 v1.2.6
