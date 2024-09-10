@@ -5,6 +5,7 @@ import sys
 import itertools
 import re
 from datetime import datetime
+import pytz
 from functions import *
 
 
@@ -68,15 +69,26 @@ repo = args.repo
 tag  = args.tag
 start_date = args.start_date
 end_date = args.end_date
+folder_name = args.tag
 
-start_date = datetime.fromisoformat(start_date).strftime("%Y-%m-%d")
+utc = pytz.utc
+
+start_date = datetime.fromisoformat(start_date).astimezone(utc)
     
 if not end_date:
     today = datetime.utcnow()
-    end_date = today.strftime("%Y-%m-%d")
+    end_date = today.strftime("%Y-%m-%d").astimezone(utc)
 else:
-    end_date = datetime.fromisoformat(end_date).strftime("%Y-%m-%d")
+    end_date = datetime.fromisoformat(end_date).astimezone(utc)
 
+time_difference = end_date - start_date
+days  = time_difference.days
+hours, remainder = divmod(time_difference.seconds, 3600)
+minutes, seconds = divmod(remainder, 60)
+print(f'DIFFERENCE: {days} days, {hours} hours, {minutes} minutes')
+
+start_date = start_date.strftime("%Y-%m-%d")
+end_date = end_date.strftime("%Y-%m-%d")
 
 # Print out the arguments
 # print('      User:', user)
@@ -133,8 +145,6 @@ for full_name in full_names:
     formatted_total = format_number(total_count, 5)
     print(f'{formatted_total}\tTotal Downloads for repo {full_name}')
     
-
-folder_name = sys.argv[3]
 
 def count_sourceforge(repo, folder_name, end_date, start_date = '2014-10-29'):
 
