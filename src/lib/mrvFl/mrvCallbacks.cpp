@@ -1526,7 +1526,7 @@ namespace mrv
 
         // Split combined display/view into separate parts.
         timeline::OCIOOptions o;
-        ocio::splitViewIntoDisplayView(combined, o.display, o.view);
+        ocio::splitView(combined, o.display, o.view);
         if (numMonitors == 1)
         {
             // If only one monitor, update main UI.
@@ -1566,7 +1566,7 @@ namespace mrv
         {
             // Split combined display/view into separate parts.
             timeline::OCIOOptions o;
-            ocio::splitViewIntoDisplayView(combined, o.display, o.view);
+            ocio::splitView(combined, o.display, o.view);
             ui->uiView->setOCIOOptions(i, o);
         }
 

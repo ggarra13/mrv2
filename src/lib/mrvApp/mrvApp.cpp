@@ -857,7 +857,7 @@ namespace mrv
             { 
                 if (!p.options.ocioOptions.view.empty())
                 {
-                    const std::string& merged = ocio::displayViewShortened(
+                    const std::string& merged = ocio::combineView(
                         p.options.ocioOptions.display,
                         p.options.ocioOptions.view);
                     ocio::setView(merged);

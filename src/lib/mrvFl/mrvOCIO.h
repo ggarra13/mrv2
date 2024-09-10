@@ -36,10 +36,11 @@ namespace mrv
         void setLook(const std::string&);
 
         //! Given a display and view, return mrv2's merged display view format
-        std::string displayViewShortened(
+        std::string combineView(
             const std::string& display, const std::string& view);
 
-        void splitViewIntoDisplayView(
+        //! Given a combined (display/view) return separate display and view.
+        void splitView(
             const std::string& combined, std::string& display,
             std::string& view);
 

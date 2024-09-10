@@ -2000,7 +2000,7 @@ namespace mrv
         if (viewIndex >= 0)
         {
             const std::string& combined = ocio::view();
-            ocio::splitViewIntoDisplayView(combined, o.display, o.view);
+            ocio::splitView(combined, o.display, o.view);
         }
 
         std::string look = p.ui->uiOCIOLook->label();
@@ -2414,7 +2414,7 @@ namespace mrv
         {
             p.previous_screen = screen;
             const std::string& combined =
-                ocio::displayViewShortened(o.display, o.view);
+                ocio::combineView(o.display, o.view);
             p.ui->uiOCIOView->copy_label(combined.c_str());
         }
     }

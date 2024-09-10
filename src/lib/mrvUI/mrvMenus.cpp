@@ -1394,7 +1394,7 @@ namespace mrv
         {
             const timeline::OCIOOptions& o = uiView->getOCIOOptions(0);
             std::string combined =
-                ocio::displayViewShortened(o.display, o.view);
+                ocio::combineView(o.display, o.view);
 
             for (int i = 0; i < ui->uiOCIOView->children(); ++i)
             {
@@ -1433,7 +1433,7 @@ namespace mrv
             const timeline::OCIOOptions& o = uiView->getOCIOOptions(m);
             std::string monitorName = mrv::desktop::monitorName(m);
             std::string combined =
-                ocio::displayViewShortened(o.display, o.view);
+                ocio::combineView(o.display, o.view);
             combined = monitorName + "/" + combined;
 
             for (int i = 0; i < ui->uiOCIOView->children(); ++i)

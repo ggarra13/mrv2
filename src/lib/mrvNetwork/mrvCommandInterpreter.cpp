@@ -518,7 +518,7 @@ namespace mrv
                 ui->uiICS->value(index);
 
                 std::string mergedView =
-                    ocio::displayViewShortened(o.display, o.view);
+                    ocio::combineView(o.display, o.view);
                 index = ocio::viewIndex(mergedView);
                 ui->uiOCIOView->value(index);
 

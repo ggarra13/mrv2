@@ -256,7 +256,7 @@ namespace mrv
             {
                 // Set the default ocio display/view as found in config.ocio
                 // file.
-                display_view = displayViewShortened(defaultDisplay,
+                display_view = combineView(defaultDisplay,
                                                     defaultView);
             }
             
@@ -681,7 +681,7 @@ namespace mrv
             uiOCIOView->do_callback();
         }
 
-        std::string displayViewShortened(
+        std::string combineView(
             const std::string& display, const std::string& view)
         {
             if (display.empty() || view.empty() || view == kInactive)
@@ -712,7 +712,7 @@ namespace mrv
             return out;
         }
 
-        void splitViewIntoDisplayView(
+        void splitView(
             const std::string& combined, std::string& display,
             std::string& view)
         {
@@ -846,7 +846,7 @@ namespace mrv
                         .arg(display);
                 throw std::runtime_error(err);
             }
-            auto display_view = displayViewShortened(display, defaultView);
+            auto display_view = combineView(display, defaultView);
             setView(display_view);
         }
         
@@ -1002,7 +1002,7 @@ namespace mrv
                     setConfig(ocio.fileName);
                     setIcs(ocio.input);
                     std::string view =
-                        displayViewShortened(ocio.display, ocio.view);
+                        combineView(ocio.display, ocio.view);
                     setView(view);
                     setLook(ocio.look);
 
@@ -1046,7 +1046,7 @@ namespace mrv
 
             std::string display, view;
             std::string combined = ocio::view();
-            splitViewIntoDisplayView(combined, display, view);
+            splitView(combined, display, view);
 
             ocio.display = display;
             ocio.view = view;
