@@ -45,14 +45,19 @@ class SaveMovieOptionsUI {open
       xywh {834 81 465 613} type Double align 0 hide modal
     } {
       Fl_Group {} {
-        label {Common Settings}
+        label {Common Settings} open
         xywh {34 38 390 44} box ROUNDED_FRAME color 56
       } {
         Fl_Check_Button Annotations {
           label {Save Annotations}
           callback {auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Annotations", static_cast<int>(o->value()));}
-          tooltip {Save Annotations burned into the movie or sequence.  It also allows saving OpenEXRs from an 8-bit movie and changing OpenEXR's pixel type.} xywh {160 48 25 18} down_box DOWN_BOX
+settings->setValue("SaveMovie/Annotations", static_cast<int>(o->value()));} selected
+          tooltip {Save Annotations burned into the movie or sequence.
+It also allows saving OpenEXRs from an 8-bit movie and changing OpenEXR's pixel type.
+
+Furthermore, it allows saving A/B or Tiled comparisons.
+
+However, it is limited to the size of your screen.} xywh {160 48 20 20} down_box DOWN_BOX
           code0 {auto settings = mrv::App::app->settings();}
           code1 {int value = settings->getValue<int>("SaveMovie/Annotations");}
           code2 {o->value(value);}
@@ -493,8 +498,7 @@ Hardware encoding is only supported on newer MacBook
 Pro with M1 or newer chips.  H264, Prores, VP9 and
 AV1 are supported or soon will be.
 )"));
-uiHelpWindow->show();} {selected
-    }
+uiHelpWindow->show();} {}
   }
   Function {help_pixel_format_cb()} {} {
     code {uiHelpWindow->label(_("Pixel Format Help"));

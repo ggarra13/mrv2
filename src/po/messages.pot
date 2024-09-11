@@ -2946,6 +2946,9 @@ msgid ""
 "available.  Already used in {2}."
 msgstr ""
 
+msgid "Allows you to select different image channels or layers."
+msgstr ""
+
 msgid "Reduce gain 1/4 stop (divide by sqrt(sqrt(2)))."
 msgstr ""
 
@@ -4248,8 +4251,13 @@ msgid "Save Annotations"
 msgstr ""
 
 msgid ""
-"Save Annotations burned into the movie or sequence.  It also allows saving "
-"OpenEXRs from an 8-bit movie and changing OpenEXR's pixel type."
+"Save Annotations burned into the movie or sequence.\n"
+"It also allows saving OpenEXRs from an 8-bit movie and changing OpenEXR's "
+"pixel type.\n"
+"\n"
+"Furthermore, it allows saving A/B or Tiled comparisons.\n"
+"\n"
+"However, it is limited to the size of your screen."
 msgstr ""
 
 msgid "Video Options"
@@ -4778,9 +4786,6 @@ msgstr ""
 msgid "Layers"
 msgstr ""
 
-msgid "Allows you to select different image channels or layers."
-msgstr ""
-
 msgid "Exposure, Saturation, and Gamma"
 msgstr ""
 
@@ -4910,9 +4915,6 @@ msgid "Float"
 msgstr ""
 
 msgid "Save Image Options"
-msgstr ""
-
-msgid "Save Annotations burned into the movie or sequence."
 msgstr ""
 
 msgid "OpenEXR Options"

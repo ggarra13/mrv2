@@ -75,7 +75,12 @@ o->value(0);} {}
           label {Save Annotations}
           callback {auto settings = mrv::App::app->settings();
 settings->setValue("SaveImage/Annotations", static_cast<int>(o->value()));}
-          tooltip {Save Annotations burned into the movie or sequence.} xywh {192 49 25 25} down_box DOWN_BOX
+          tooltip {Save Annotations burned into the movie or sequence.
+It also allows saving OpenEXRs from an 8-bit movie and changing OpenEXR's pixel type.
+
+Furthermore, it allows saving A/B or Tiled comparisons.
+
+However, it is limited to the size of your screen.} xywh {192 49 25 25} down_box DOWN_BOX
           code0 {auto settings = mrv::App::app->settings();}
           code1 {int value = settings->getValue<int>("SaveImage/Annotations");}
           code2 {o->value(value);}

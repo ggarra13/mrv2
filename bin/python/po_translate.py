@@ -200,7 +200,7 @@ class POTranslator:
             return
     
         model_name = f"Helsinki-NLP/opus-mt-en-{self.helsinki}"
-        print('Load model',model_name)
+        print('Load model',model_name,'for',self.code)
         
         if use_tokenizer:
             self.tokenizer = MarianTokenizer.from_pretrained(model_name,
