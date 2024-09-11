@@ -103,6 +103,7 @@ namespace mrv
                 int dock_attempt = would_dock();
                 if (dock_attempt)
                 {
+                    color_dock_group(FL_DARK_YELLOW);
                     show_dock_group();
                 }
                 else
@@ -119,6 +120,7 @@ namespace mrv
                     
                 if (dock_attempt)
                 {
+                    // Color the dock area with the background color
                     color_dock_group(FL_BACKGROUND_COLOR);
                     show_dock_group();
                     tg->dock_grp();
@@ -192,7 +194,6 @@ namespace mrv
         if (!uiDockGroup->visible())
         {
             uiDockGroup->show();
-            color_dock_group(FL_DARK_YELLOW);
 
             auto dropWindow =
                 static_cast<DropWindow*>(uiDockGroup->top_window());

@@ -25,6 +25,7 @@ v1.2.7
   their keyboard shortcuts.
 - Fixed Darby's DPX reading code.
 - Allowed saving comparisons (Tiles, for example) to a movie file.
+- Fixed dockgroup not getting highlited when dragging and the panel could dock.
   
 
 v1.2.6
