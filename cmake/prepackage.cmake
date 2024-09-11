@@ -42,6 +42,18 @@ function(remove_pycache_directories dir)
     endforeach()
 endfunction()
 
+# Function to remove python directories and modules
+function(remove_python_directories _dirs)
+    if ( NOT "${_dirs}" STREQUAL "" )
+	foreach( _dir ${_dirs} )
+	    remove_pycache_directories(${_dir})
+	    message(STATUS "Removing ${_dir}")
+	endforeach()
+	
+	file( REMOVE_RECURSE ${_dirs} )
+    endif()
+endfunction()
+
 if( UNIX AND NOT APPLE )
     #
     # \@bug: Linux CMAKE_INSTALL_PREFIX is broken and not pointing to
@@ -85,6 +97,42 @@ endif()
 #
 message( STATUS "Removing ${CPACK_PREPACKAGE}/include" )
 file( REMOVE_RECURSE "${CPACK_PREPACKAGE}/include" )
+
+#
+# List of python module globs to remove if present
+# 
+set( _pythonBuiltinModules 
+    test*
+    config*
+    ctypes/test*
+    distutils/test*
+    idlelib/idle_test*
+    lib2to3/test*
+    sqlite3/test*
+    tkinter/test*
+    unittest*
+)
+
+set( _pythonSiteModules 
+    alabaster*
+    babel*
+    colorama*
+    docutils*
+    fltk14/*.cpp
+    fltk14/*.h
+    imagesize*
+    Jinja*
+    MarkupSafe*
+    pillow*
+    PIL*
+    polib*
+    pygments*
+    Pygments*
+    pytz*
+    snowballstemmer*
+    sphinx*
+    unittest*
+)
 
 #
 # Install system .SO dependencies
@@ -176,45 +224,24 @@ elseif(WIN32)
     #
     # Don't pack sphinx and other auxiliary documentation libs in .exe
     #
-    file(GLOB MRV2_UNUSED_PYTHON_DIRS
-	"${MRV2_APP_DIR}/lib/Lib/"
-	"${MRV2_PYTHON_APP_LIB_DIR}/test*"
-	"${MRV2_PYTHON_APP_LIB_DIR}/config*"
-	"${MRV2_PYTHON_APP_LIB_DIR}/ctypes/test*"
-	"${MRV2_PYTHON_APP_LIB_DIR}/distutils/test*"
-	"${MRV2_PYTHON_APP_LIB_DIR}/idlelib/idle_test*"
-	"${MRV2_PYTHON_APP_LIB_DIR}/lib2to3/test*"
-	"${MRV2_PYTHON_APP_LIB_DIR}/sqlite3/test*"
-	"${MRV2_PYTHON_APP_LIB_DIR}/tkinter/test*"
-	"${MRV2_PYTHON_APP_LIB_DIR}/unittest*"
-	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/alabaster*"
-	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/babel*"
-	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/colorama*"
-	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/docutils*"
-	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/fltk14/*.cpp"
-	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/fltk14/*.h"
-	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/imagesize*"
-	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/Jinja*"
-	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/MarkupSafe*"
-	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/pillow*"
-	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/PIL*"
-	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/polib*"
-	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/pygments*"
-	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/Pygments*"
-	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/pytz*"
-	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/snowballstemmer*"
-	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/sphinx*"
-	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/unittest*")
 
-    foreach( _dir ${MRV2_UNUSED_PYTHON_DIRS} )
-	remove_pycache_directories(${_dir})
-	message(STATUS "Removing ${_dir}")
+    set(MRV2_PYTHON_GLOBS 
+	"${MRV2_APP_DIR}/lib/Lib/")
+    foreach( _dir ${_pythonBuiltinModules} )
+	set(MRV2_PYTHON_GLOBS
+	    ${MRV2_PYTHON_GLOBS}
+	    "${MRV2_PYTHON_APP_LIB_DIR}/${_dir}")
     endforeach()
-	
-    if ( NOT "${MRV2_UNUSED_PYTHON_DIRS}" STREQUAL "" )
-	file( REMOVE_RECURSE ${MRV2_UNUSED_PYTHON_DIRS} )
-    endif()
-
+    
+    foreach( _dir ${_pythonSiteModules} )
+	set(MRV2_PYTHON_GLOBS
+	    ${MRV2_PYTHON_GLOBS}
+	    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/${_dir}")
+    endforeach()
+    
+    file(GLOB MRV2_UNUSED_PYTHON_DIRS ${MRV2_PYTHON_GLOBS})
+    remove_python_directories( "${MRV2_UNUSED_PYTHON_DIRS}" )
+    
     #
     # Set python's site-packages and lib dir for .zip.
     #
@@ -231,53 +258,19 @@ endif()
 # Don't pack sphinx and other auxiliary documentation libs nor the tests
 # for the libraries.
 #
-message(STATUS "Removing tests from ${MRV2_PYTHON_LIB_DIR}")
-message(STATUS "Removing unneeded packages from ${MRV2_PYTHON_SITE_PACKAGES_DIR}")
-file(GLOB MRV2_UNUSED_PYTHON_DIRS
-    "${CPACK_PREPACKAGE}/lib/Lib/"
-    "${MRV2_PYTHON_LIB_DIR}/test*"
-    "${MRV2_PYTHON_LIB_DIR}/config*"
-    "${MRV2_PYTHON_LIB_DIR}/ctypes/test*"
-    "${MRV2_PYTHON_LIB_DIR}/distutils/test*"
-    "${MRV2_PYTHON_LIB_DIR}/idlelib/idle_test*"
-    "${MRV2_PYTHON_LIB_DIR}/lib2to3/test*"
-    "${MRV2_PYTHON_LIB_DIR}/sqlite3/test*"
-    "${MRV2_PYTHON_LIB_DIR}/tkinter/test*"
-    "${MRV2_PYTHON_LIB_DIR}/unittest*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/alabaster*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/babel*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/Babel*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/chardet*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/colorama*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/docutils*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/fltk14/*.cpp"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/fltk14/*.h"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/googletrans*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/h11*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/h2*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/hpack*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/hstspreload*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/hyperframe*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/idna*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/imagesize*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/Jinja*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/jinja2*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/markupsafe*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/MarkupSafe*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/pillow*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/PIL*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/polib*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/pygments*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/Pygments*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/pytz*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/snowballstemmer*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/sphinx*"
-    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/unittest*")
+set(MRV2_PYTHON_GLOBS )
 
-if ( NOT "${MRV2_UNUSED_PYTHON_DIRS}" STREQUAL "" )
-    foreach( _dir ${MRV2_UNUSED_PYTHON_DIRS} )
-	remove_pycache_directories(${_dir})
-	message(STATUS "Removing ${_dir}")
-    endforeach()
-    file( REMOVE_RECURSE ${MRV2_UNUSED_PYTHON_DIRS} )
-endif()
+foreach( _dir ${_pythonBuiltinModules} )
+    set(MRV2_PYTHON_GLOBS
+	${MRV2_PYTHON_GLOBS}
+	"${MRV2_PYTHON_LIB_DIR}/${_dir}")
+endforeach()
+    
+foreach( _dir ${_pythonSiteModules} )
+    set(MRV2_PYTHON_GLOBS
+	${MRV2_PYTHON_GLOBS}
+	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/${_dir}")
+endforeach()
+
+file(GLOB MRV2_UNUSED_PYTHON_DIRS ${MRV2_PYTHON_GLOBS})
+remove_python_directories( "${MRV2_UNUSED_PYTHON_DIRS}" )
