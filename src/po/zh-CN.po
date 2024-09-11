@@ -1856,9 +1856,6 @@ msgstr "带音频"
 msgid "Without Audio"
 msgstr "无音频"
 
-msgid "USD"
-msgstr "USD"
-
 msgid "Renderer"
 msgstr "渲染器"
 
@@ -2822,7 +2819,7 @@ msgid ""
 msgstr "在此剪辑中没有版本。 请创建名为版本字符串的图像或目录 。"
 
 msgid "Example:  gizmo_v003.0001.exr"
-msgstr "示例:gizmo_v003.0001.exr"
+msgstr "示例:  gizmo_v003.0001.exr"
 
 msgid "Annotation already existed at this time"
 msgstr "当前时间已经存在批注"
@@ -3260,6 +3257,12 @@ msgstr "箭头工具"
 msgid "Text Tool.   Right click to edit previously stamped text."
 msgstr "文本工具。 右键单击以编辑先前标记的文本"
 
+msgid "Undo Draw"
+msgstr "撤消绘制"
+
+msgid "Redo Draw"
+msgstr "重做绘制"
+
 msgid "Go to the beginning of the sequence."
 msgstr "跳转到序列起点"
 
@@ -3403,6 +3406,9 @@ msgstr "Python"
 
 msgid "Settings"
 msgstr "设置"
+
+msgid "USD"
+msgstr "USD"
 
 msgid "Vectorscope"
 msgstr "Vectorscope"
@@ -6092,13 +6098,14 @@ msgstr "版本 Regex"
 msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
-"automatically be created a regular expression to match verisions defined "
-"with _v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
+"automatically be created a regular expression to match versions defined with "
+"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
+"exr"
 msgstr ""
-"用于匹配片段版本的正则表达式。 必须将三件( 前缀、 数字和后缀) 组合为三件( 前"
-"缀、 数字和后缀)。 如果保留在默认值 (_v) 上, 它将自动创建一个正则表达式, 以匹"
-"配文件、 目录或两者名称中定义的 _ verisions。 例如 : gizmo_ v001.0001. exr 。"
+"用于匹配剪辑版本的正则表达式。必须分组三部分（前缀、数字和后缀）。如果保持默认值(_v)，"
+"它会自动创建一个正则表达式来匹配文件、目录或两者名称中带有_v定义的版本。例如："
+"gizmo_v001.0001.exr"
+
 
 msgid "Maximum Images Apart"
 msgstr "最大图像版本差"
@@ -6963,12 +6970,6 @@ msgstr "笔变大"
 
 msgid "Pen Size Less"
 msgstr "笔变小"
-
-msgid "Undo Draw"
-msgstr "撤消绘制"
-
-msgid "Redo Draw"
-msgstr "重做绘制"
 
 msgid "Switch Pen Color"
 msgstr "切换笔颜色"

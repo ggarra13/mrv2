@@ -1852,9 +1852,6 @@ msgstr "ऑडियो के साथ"
 msgid "Without Audio"
 msgstr "बिना ऑडियो"
 
-msgid "USD"
-msgstr "USD"
-
 msgid "Renderer"
 msgstr "रेंडरर"
 
@@ -2825,7 +2822,7 @@ msgstr ""
 "इस क्लिप में कोई संस्करण नहीं है. कृपया संस्करणिंग स्ट्रिंग के साथ एक छवि या निर्देशिका बनाएँ."
 
 msgid "Example:  gizmo_v003.0001.exr"
-msgstr "उदाहरण: Azz_ v0000.0001.exr"
+msgstr "उदाहरण: gizmo_v0003.0001.exr"
 
 msgid "Annotation already existed at this time"
 msgstr "व्याख्या इस समय से पहले से ही अस्तित्व में है"
@@ -3278,6 +3275,12 @@ msgstr "तीर औज़ारName"
 msgid "Text Tool.   Right click to edit previously stamped text."
 msgstr "पाठ औज़ार. पिछला दबाने पर पाठ संपादित करने के लिए दायाँ क्लिक करें."
 
+msgid "Undo Draw"
+msgstr "आरेखित करें"
+
+msgid "Redo Draw"
+msgstr "दोहराएँ"
+
 msgid "Go to the beginning of the sequence."
 msgstr "अनुक्रम के प्रारंभ में जाएँ"
 
@@ -3421,6 +3424,9 @@ msgstr "पायथन"
 
 msgid "Settings"
 msgstr "विन्यास"
+
+msgid "USD"
+msgstr "USD"
 
 msgid "Vectorscope"
 msgstr "वेक्टर- ग्राफ"
@@ -6128,15 +6134,14 @@ msgstr "संस्करण रेगिक्स"
 msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
-"automatically be created a regular expression to match verisions defined "
-"with _v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
+"automatically be created a regular expression to match versions defined with "
+"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
+"exr"
 msgstr ""
-"Regular Expression used to match clip versions. Must group three things "
-"(prefix, number and suffix). If left on its default value (_v), it will "
-"automatically be created a regular expression to match verisions defined "
-"with _v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
+"क्लिप संस्करणों से मेल खाने के लिए उपयोग किया जाने वाला नियमित अभिव्यक्ति (रेगुलर एक्सप्रेशन)। "
+"इसमें तीन चीजें (प्रिफिक्स, संख्या, और सफिक्स) का समूह होना चाहिए। यदि इसे इसकी डिफ़ॉल्ट वैल्यू (_v) "
+"पर छोड़ा जाता है, तो यह स्वतः ही एक नियमित अभिव्यक्ति बनाएगा जो फ़ाइल, डायरेक्टरी या दोनों के "
+"नाम में _v के साथ परिभाषित संस्करणों से मेल खाएगा। उदाहरण के लिए: gizmo_v001.0001.exr"
 
 msgid "Maximum Images Apart"
 msgstr "अधिकतम छवियाँ इसके अलावा"
@@ -7012,12 +7017,6 @@ msgstr "पेन आकार अधिक"
 
 msgid "Pen Size Less"
 msgstr "पेन आकार कम"
-
-msgid "Undo Draw"
-msgstr "आरेखित करें"
-
-msgid "Redo Draw"
-msgstr "दोहराएँ (_d)"
 
 msgid "Switch Pen Color"
 msgstr "पेन रंग स्विच करें"

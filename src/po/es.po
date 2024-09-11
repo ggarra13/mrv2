@@ -1917,9 +1917,6 @@ msgstr "Con Audio"
 msgid "Without Audio"
 msgstr "Sin Audio"
 
-msgid "USD"
-msgstr "USD"
-
 msgid "Renderer"
 msgstr "Renderer"
 
@@ -3383,6 +3380,12 @@ msgstr ""
 "Herramienta de Texto.  Cliquee con el botón derecho para editar texto "
 "previamente estampado."
 
+msgid "Undo Draw"
+msgstr "Deshacer Dibujo"
+
+msgid "Redo Draw"
+msgstr "Rehacer Dibujo"
+
 msgid "Go to the beginning of the sequence."
 msgstr "Ir al principio de la secuencia."
 
@@ -3526,6 +3529,9 @@ msgstr "Python"
 
 msgid "Settings"
 msgstr "Seteos"
+
+msgid "USD"
+msgstr "USD"
 
 msgid "Vectorscope"
 msgstr "Vectorscopio"
@@ -6284,9 +6290,9 @@ msgstr "Regex de Versión"
 msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
-"automatically be created a regular expression to match verisions defined "
-"with _v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
+"automatically be created a regular expression to match versions defined with "
+"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
+"exr"
 msgstr ""
 "Expresión regular usada para distinguir versiones del clip.  Debe tener tres "
 "groupos (prefijo, número y sufijo).  Si se deja en su valor estándar (_v), "
@@ -7176,12 +7182,6 @@ msgstr "Mayor Tamaño del Lápiz"
 
 msgid "Pen Size Less"
 msgstr "Menor Tamaño del Lápiz"
-
-msgid "Undo Draw"
-msgstr "Deshacer Dibujo"
-
-msgid "Redo Draw"
-msgstr "Rehacer Dibujo"
 
 msgid "Switch Pen Color"
 msgstr "Intercambiar Color del Lápiz"

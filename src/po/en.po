@@ -1888,9 +1888,6 @@ msgstr "With Audio"
 msgid "Without Audio"
 msgstr "Without Audio"
 
-msgid "USD"
-msgstr "USD"
-
 msgid "Renderer"
 msgstr "Renderer"
 
@@ -3326,6 +3323,12 @@ msgstr "Arrow Tool"
 msgid "Text Tool.   Right click to edit previously stamped text."
 msgstr "Text Tool.   Right click to edit previously stamped text."
 
+msgid "Undo Draw"
+msgstr "Undo Draw"
+
+msgid "Redo Draw"
+msgstr "Redo Draw"
+
 msgid "Go to the beginning of the sequence."
 msgstr "Go to the beginning of the sequence."
 
@@ -3469,6 +3472,9 @@ msgstr "Python"
 
 msgid "Settings"
 msgstr "Settings"
+
+msgid "USD"
+msgstr "USD"
 
 msgid "Vectorscope"
 msgstr "Vectorscope"
@@ -6221,13 +6227,13 @@ msgstr "Version Regex"
 msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
-"automatically be created a regular expression to match verisions defined "
-"with _v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
+"automatically be created a regular expression to match versions defined with "
+"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
+"exr"
 msgstr ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
-"automatically be created a regular expression to match verisions defined "
+"automatically be created a regular expression to match versions defined "
 "with _v in the name of the file, directory or both. For example: "
 "gizmo_v001.0001.exr"
 
@@ -7108,12 +7114,6 @@ msgstr "Pen Size More"
 
 msgid "Pen Size Less"
 msgstr "Pen Size Less"
-
-msgid "Undo Draw"
-msgstr "Undo Draw"
-
-msgid "Redo Draw"
-msgstr "Redo Draw"
 
 msgid "Switch Pen Color"
 msgstr "Switch Pen Color"

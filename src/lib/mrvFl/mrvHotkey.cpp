@@ -427,6 +427,14 @@ namespace mrv
                     "Right click to edit previously stamped text.");
         tooltip += addHotkey(kTextMode);
         ui->uiText->copy_tooltip(tooltip.c_str());
+        
+        tooltip = _("Undo Draw");
+        tooltip += addHotkey(kUndoDraw);
+        ui->uiUndoDraw->copy_tooltip(tooltip.c_str());
+        
+        tooltip = _("Redo Draw");
+        tooltip += addHotkey(kRedoDraw);
+        ui->uiRedoDraw->copy_tooltip(tooltip.c_str());
 
         // Timebar Window Toolbar
         TimelineClass* c = ui->uiTimeWindow;

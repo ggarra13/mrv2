@@ -1866,9 +1866,6 @@ msgstr "Avec audio"
 msgid "Without Audio"
 msgstr "Sans audio"
 
-msgid "USD"
-msgstr "USD"
-
 msgid "Renderer"
 msgstr "Rendeur"
 
@@ -3326,6 +3323,12 @@ msgstr ""
 "Outil de texte. Cliquez avec le bouton droit pour modifier le texte "
 "précédemment estampillé."
 
+msgid "Undo Draw"
+msgstr "Annuler le dessin"
+
+msgid "Redo Draw"
+msgstr "Refaire le dessin"
+
 msgid "Go to the beginning of the sequence."
 msgstr "Allez au début de la séquence."
 
@@ -3469,6 +3472,9 @@ msgstr "Python"
 
 msgid "Settings"
 msgstr "Paramètres"
+
+msgid "USD"
+msgstr "USD"
 
 msgid "Vectorscope"
 msgstr "Vectorscope"
@@ -6251,18 +6257,19 @@ msgstr "Chargement"
 msgid "Version Regex"
 msgstr "Version Regex"
 
+#, fuzzy
 msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
-"automatically be created a regular expression to match verisions defined "
-"with _v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
+"automatically be created a regular expression to match versions defined with "
+"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
+"exr"
 msgstr ""
-"Expression régulière utilisée pour correspondre aux versions des clips. Il "
-"faut grouper trois choses (préfixe, numéro et suffixe). Si elle est laissée "
-"sur sa valeur par défaut (_v), elle sera automatiquement créée une "
-"expression régulière pour correspondre aux verisions définies avec _v dans "
-"le nom du fichier, répertoire ou les deux. Par exemple: gizmo_v001.001.exr"
+"Expression régulière utilisée pour correspondre aux versions des clips. Doit regrouper "
+"trois éléments (préfixe, numéro et suffixe). Si laissée à sa valeur par défaut (_v), "
+"elle créera automatiquement une expression régulière pour correspondre aux versions définies "
+"avec _v dans le nom du fichier, du répertoire ou les deux. Par exemple: "
+"gizmo_v001.0001.exr"
 
 msgid "Maximum Images Apart"
 msgstr "Images maximales à part"
@@ -7159,12 +7166,6 @@ msgstr "Taille du stylo Plus"
 
 msgid "Pen Size Less"
 msgstr "Taille du stylo Moins"
-
-msgid "Undo Draw"
-msgstr "Annuler le dessin"
-
-msgid "Redo Draw"
-msgstr "Refaire le dessin"
 
 msgid "Switch Pen Color"
 msgstr "Changer la couleur du stylo"

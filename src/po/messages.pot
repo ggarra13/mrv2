@@ -1596,9 +1596,6 @@ msgstr ""
 msgid "Without Audio"
 msgstr ""
 
-msgid "USD"
-msgstr ""
-
 msgid "Renderer"
 msgstr ""
 
@@ -2990,6 +2987,12 @@ msgstr ""
 msgid "Text Tool.   Right click to edit previously stamped text."
 msgstr ""
 
+msgid "Undo Draw"
+msgstr ""
+
+msgid "Redo Draw"
+msgstr ""
+
 msgid "Go to the beginning of the sequence."
 msgstr ""
 
@@ -3132,6 +3135,9 @@ msgid "Python"
 msgstr ""
 
 msgid "Settings"
+msgstr ""
+
+msgid "USD"
 msgstr ""
 
 msgid "Vectorscope"
@@ -5671,9 +5677,9 @@ msgstr ""
 msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
-"automatically be created a regular expression to match verisions defined "
-"with _v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
+"automatically be created a regular expression to match versions defined with "
+"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
+"exr"
 msgstr ""
 
 msgid "Maximum Images Apart"
@@ -6528,12 +6534,6 @@ msgid "Pen Size More"
 msgstr ""
 
 msgid "Pen Size Less"
-msgstr ""
-
-msgid "Undo Draw"
-msgstr ""
-
-msgid "Redo Draw"
 msgstr ""
 
 msgid "Switch Pen Color"

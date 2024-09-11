@@ -31,7 +31,7 @@ decl {\#include "mrvCore/mrvEnv.h"} {public global
 decl {\#include "mrvCore/mrvFonts.h"} {public global
 }
 
-decl {\#include "mrvCore/mrvI8N.h"} {public global
+decl {\#include "mrvCore/mrvI8N.h"} {selected public global
 }
 
 decl {\#include "mrvCore/mrvMedia.h"} {public global
@@ -646,8 +646,8 @@ o->redraw();}
               }
             }
             Fl_Group {} {
-              label Positioning selected
-              xywh {288 37 555 360} box EMBOSSED_BOX
+              label Positioning
+              xywh {288 37 555 360} box EMBOSSED_BOX hide
             } {
               Fl_Group {} {
                 label Positioning open
@@ -855,7 +855,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
               }
             }
             Fl_Group {} {
-              label Playback open
+              label Playback
               xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
@@ -1090,7 +1090,7 @@ uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );}
               }
             }
             Fl_Group {} {
-              label {OCIO Defaults} open
+              label {OCIO Defaults}
               xywh {288 37 555 367} align 5 hide
             } {
               Fl_Group {} {
@@ -1245,15 +1245,15 @@ v->uiOCIO_Display_View->do_callback();}
               }
             }
             Fl_Group {} {
-              label Loading
-              xywh {288 37 555 360} align 5 hide
+              label Loading open
+              xywh {288 37 555 360} align 5
             } {
               Fl_Group {} {open
                 xywh {324 140 488 180}
               } {
                 Fl_Input uiPrefsVersionRegex {
                   label {Version Regex}
-                  tooltip {Regular Expression used to match clip versions.  Must group three things (prefix, number and suffix). If left on its default value (_v), it will automatically be created a regular expression to match verisions defined with _v in the name of the file, directory or both. For example: gizmo_v001.0001.exr} xywh {443 164 345 30} color 20 textcolor 56
+                  tooltip {Regular Expression used to match clip versions.  Must group three things (prefix, number and suffix). If left on its default value (_v), it will automatically be created a regular expression to match versions defined with _v in the name of the file, directory or both. For example: gizmo_v001.0001.exr} xywh {443 164 345 30} color 20 textcolor 56
                   code0 {o->value( "_v" );}
                 }
                 Fl_Spinner uiPrefsMaxImagesApart {

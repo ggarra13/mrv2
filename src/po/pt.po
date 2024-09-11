@@ -1868,9 +1868,6 @@ msgstr "Com udio"
 msgid "Without Audio"
 msgstr "Sem udio"
 
-msgid "USD"
-msgstr "USD"
-
 msgid "Renderer"
 msgstr "Renderer"
 
@@ -3307,6 +3304,12 @@ msgstr ""
 "Ferramenta de texto. Clique com o boto direito para editar o texto "
 "previamente carimbado."
 
+msgid "Undo Draw"
+msgstr "Desfazer Desenhar"
+
+msgid "Redo Draw"
+msgstr "Refazer o desenho"
+
 msgid "Go to the beginning of the sequence."
 msgstr "V para o incio da sequncia."
 
@@ -3450,6 +3453,9 @@ msgstr "Python"
 
 msgid "Settings"
 msgstr "Configurao"
+
+msgid "USD"
+msgstr "USD"
 
 msgid "Vectorscope"
 msgstr "Vectorescpio"
@@ -6204,18 +6210,19 @@ msgstr "Carregamento"
 msgid "Version Regex"
 msgstr "Verso Regex"
 
+#, fuzzy
 msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
-"automatically be created a regular expression to match verisions defined "
-"with _v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
+"automatically be created a regular expression to match versions defined with "
+"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
+"exr"
 msgstr ""
-"Expresso regular usada para combinar as verses do clipe. Deve agrupar trs "
-"coisas (prefixo, nmero e sufixo). Se for deixada no seu valor padro (_v), "
-"ser automaticamente criada uma expresso regular para combinar as veries "
-"definidas com _v no nome do arquivo, diretrio ou ambos. Por exemplo: "
-"gizmo_v001.001.exr"
+"Expressão regular usada para corresponder versões de clipes. Deve agrupar três "
+"coisas (prefixo, número e sufixo). Se deixado no valor padrão (_v), será "
+"automaticamente criada uma expressão regular para corresponder versões definidas "
+"com _v no nome do arquivo, diretório ou ambos. Por exemplo: "
+"gizmo_v001.0001.exr"
 
 msgid "Maximum Images Apart"
 msgstr "Mximo de Imagens Aparte"
@@ -7100,12 +7107,6 @@ msgstr "Tamanho da caneta Mais"
 
 msgid "Pen Size Less"
 msgstr "Tamanho da caneta Menos"
-
-msgid "Undo Draw"
-msgstr "Desfazer Desenhar"
-
-msgid "Redo Draw"
-msgstr "Refazer o desenho"
 
 msgid "Switch Pen Color"
 msgstr "Alterar a cor da caneta"
