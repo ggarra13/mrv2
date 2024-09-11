@@ -32,6 +32,8 @@ v1.2.7
   switching languages in session files.
 - Fixed "None" getting saved translated in several panels and OCIO settings,
   causing problems when loading the same session file on a different language.
+- Dramatically improved the performance of playback of Sol_Levante Netflix demo
+  clip by using YUV420P_U16 instead of RGB48.
   
 
 v1.2.6
