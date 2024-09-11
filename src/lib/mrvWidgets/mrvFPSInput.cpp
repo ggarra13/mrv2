@@ -16,8 +16,7 @@ namespace
         // and then divide by 10
         return std::floor(number * 10.0) / 10.0;
     }
-}
-
+} // namespace
 
 namespace mrv
 {
@@ -28,12 +27,15 @@ namespace mrv
 
         double number = value();
 
-        if (w() < 52.0) {
-            length = sprintf(temp, "%.1f", floorToOnePlace(number));
-        } else {
-            length = sprintf(temp, "%.3f", number);
+        if (w() < 52.0)
+        {
+            length = snprintf(temp, 64, "%.1f", floorToOnePlace(number));
         }
-        
+        else
+        {
+            length = snprintf(temp, 64, "%.3f", number);
+        }
+
         strcpy(buffer, temp);
         return length;
     }
