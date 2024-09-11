@@ -24,8 +24,10 @@ v1.2.7
 - Fixed Menu Entry "Playback/Go to/Start" and "Playback/Go to/End" not showing
   their keyboard shortcuts.
 - Fixed Darby's DPX reading code.
-- Allowed saving comparisons (Tiles, for example) to a movie file.
 - Fixed dockgroup not getting highlited when dragging and the panel could dock.
+- Allowed saving comparisons (Tiles, for example) to a movie file if Save
+  Annotations is turned on.
+- Improved dramatically the speed of packaging mrv2 on Linux and macOS.
   
 
 v1.2.6
