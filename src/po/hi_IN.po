@@ -1904,7 +1904,7 @@ msgid "Separation of left and right eye."
 msgstr "दाएँ और बाएँ से गिरोह के गिरोह"
 
 msgid "Swap Eyes"
-msgstr "महसूस करें (S)"
+msgstr "महसूस करें"
 
 msgid "Swap left and right eyes."
 msgstr "बाईं ओर और दाएँ नज़रों में बदलें."
@@ -2554,7 +2554,7 @@ msgid "Wipe Rotation.  Use Shift + left mouse button along X to rotate wipe."
 msgstr "घुमाव पोंछना है. विंडो को घुमाने के लिए शिफ्ट + बायाँ माउस बटन का प्रयोग करें."
 
 msgid "Overlay"
-msgstr "सीमा: (S)"
+msgstr "सीमा"
 
 msgid "Use the Option key + left mouse button to change transparency."
 msgstr "पारदर्शिता को बदलने के लिए विकल्प कुंजी + बायाँ माउस बटन का उपयोग करें."
@@ -5990,7 +5990,7 @@ msgid "Select default looping mode in timeline."
 msgstr "समय रेखा में डिफ़ॉल्ट लूपिंग मोड चुनें."
 
 msgid "Scrub Sensitivity"
-msgstr "छवियाँ सक्षम करें (S)"
+msgstr "छवियाँ सक्षम करें"
 
 msgid ""
 "This setting controls the sensitivity of scrubbing (SHIFT and then the mouse "
@@ -6213,7 +6213,7 @@ msgstr ""
 "सटीकता को निर्धारित करता है छवि गहराई पर."
 
 msgid "Blit Viewports"
-msgstr "विन्यास (S)"
+msgstr "विन्यास"
 
 msgid ""
 "Viewports can be drawn with blitting or with OpenGL shaders.  Depending on "

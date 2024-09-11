@@ -68,7 +68,7 @@ namespace mrv
 
             int Y = g->y();
 
-            auto cg = new CollapsibleGroup(g->x(), Y, g->w(), 20, _("USD"));
+            auto cg = new CollapsibleGroup(g->x(), Y, g->w(), 20, "USD");
             cg->spacing(2);
             auto b = cg->button();
             b->labelsize(14);
@@ -122,7 +122,7 @@ namespace mrv
                     }
                 }
                 if (!hasRenderer)
-                    m->add(_("None"));
+                    m->add("None");
             }
             std::string rendererName =
                 settings->getValue<std::string>("USD/rendererName");

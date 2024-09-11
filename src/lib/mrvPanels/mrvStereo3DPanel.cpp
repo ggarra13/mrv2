@@ -223,9 +223,9 @@ namespace mrv
             box->align(FL_ALIGN_RIGHT | FL_ALIGN_INSIDE);
 
             auto pW = new Widget< PopupMenu >(
-                g->x() + 70, 20, g->w() - 70, 20, _("None"));
+                g->x() + 70, 20, g->w() - 70, 20, "None");
             m = _r->input = pW;
-            m->add(_("None"));
+            m->add("None");
             m->add(_("Image"));
             m->value(static_cast<int>(o.input));
             // m->add(_("Horizontal"));

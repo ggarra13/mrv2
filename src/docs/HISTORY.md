@@ -28,6 +28,10 @@ v1.2.7
 - Allowed saving comparisons (Tiles, for example) to a movie file if Save
   Annotations is turned on.
 - Improved dramatically the speed of packaging mrv2 on Linux and macOS.
+- Made ICS, View and Look not translate "None" as that was causing trouble when
+  switching languages in session files.
+- Fixed "None" getting saved translated in several panels and OCIO settings,
+  causing problems when loading the same session file on a different language.
   
 
 v1.2.6

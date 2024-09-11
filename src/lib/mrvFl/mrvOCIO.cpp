@@ -22,6 +22,7 @@ namespace
     const char* kModule = "ocio";
 
     static std::string kInactive = _("None");
+    
 } // namespace
 
 namespace mrv
@@ -41,9 +42,9 @@ namespace mrv
             looks.clear();
             views.clear();
 
-            inputs.push_back(_(kInactive.c_str()));
-            looks.push_back(_(kInactive.c_str()));
-            views.push_back(_(kInactive.c_str()));
+            inputs.push_back(kInactive.c_str());
+            looks.push_back(kInactive.c_str());
+            views.push_back(kInactive.c_str());
 
             std::string defaultDisplay;
             std::string defaultView;
@@ -431,7 +432,8 @@ namespace mrv
             auto uiICS = App::ui->uiICS;
 
             int value = -1;
-            if (name.empty())
+            if (name.empty() || name == kInactive ||
+                name == _(kInactive.c_str()))
             {
                 uiICS->value(-1);
                 uiICS->do_callback();
@@ -537,7 +539,8 @@ namespace mrv
             auto uiOCIOLook = App::ui->uiOCIOLook;
 
             int value = -1;
-            if (name.empty())
+            if (name.empty() || name == kInactive ||
+                name == _(kInactive.c_str()))
             {
                 uiOCIOLook->value(-1);
                 uiOCIOLook->do_callback();
@@ -627,7 +630,8 @@ namespace mrv
         void setView(const std::string& name)
         {
             auto uiOCIOView = App::ui->uiOCIOView;
-            if (name.empty() || name == kInactive)
+            if (name.empty() || name == kInactive ||
+                name == _(kInactive.c_str()))
             {
                 uiOCIOView->value(-1);
                 uiOCIOView->do_callback();

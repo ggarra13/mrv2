@@ -23,14 +23,6 @@ jobs:
     - name: Get machine name
       run: |
         echo "Machine name: $RUNNER_NAME"
-
-    - name: Check hdiutil
-      run: |
-        hdiutil info
-        hdiutil create -size 10m -fs HFS+ -volname test_disk test.dmg
-        hdiutil attach test.dmg
-        hdiutil detach /Volumes/test_disk
-        rm test.dmg
       
     - name: Install ninja-build
       run: brew install ninja
