@@ -276,6 +276,12 @@ class POTranslator:
             print()
             self.use_google = False
             return english
+
+        if english == translated_text:
+            print()
+            print('GOOGLE TRANSLATE FAILED.')
+            print()
+            return '****FAILED****'
         
         self.have_seen[english] = translated_text
         return translated_text
@@ -336,6 +342,14 @@ class POTranslator:
             translated_text = '/'.join(menus)
             print('\t\tMENU English=',replaced)
             print('\t\tMENU Translated=', translated_text)
+            return translated_text
+        
+        if '\n' in english:
+            lines = english.split('\n')
+            lines = [self._translate_text(line) for line in lines]
+            translated_text = '\n'.join(lines)
+            print('\t\tNEWLINES English=',english)
+            print('\t\tNEWLINES Translated=', translated_text)
             return translated_text
     
         # Tokenize the input text

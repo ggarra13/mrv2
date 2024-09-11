@@ -17,7 +17,7 @@ v1.2.7
 - Added Hotkeys display to all button and slider tooltips, which will change
   if you modify any shortcuts.
 - Added hotkeys entries for saturation more and saturation less.  By default,
-  they are not assigned.
+  they are assigned to '<' and '>'.
 - Fixed tooltip in Gain slider not showing up.
 - Fixed an OCIO bug when setting from the command-line the display/view with
   nuke-default's config.ocio.

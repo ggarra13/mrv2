@@ -163,8 +163,8 @@ namespace mrv
     Hotkey kResetChanges(true, false, false, false, 'r');
     Hotkey kExposureMore(false, false, false, false, '.');
     Hotkey kExposureLess(false, false, false, false, ',');
-    Hotkey kSaturationMore(false, false, false, false, 0);
-    Hotkey kSaturationLess(false, false, false, false, 0);
+    Hotkey kSaturationMore(false, false, false, false, '<');
+    Hotkey kSaturationLess(false, false, false, false, '>');
     Hotkey kGammaMore(false, false, false, false, 0, ")");
     Hotkey kGammaLess(false, false, false, false, 0, "(");
 
@@ -178,6 +178,7 @@ namespace mrv
 
     Hotkey kGridToggle(true, false, false, false, 'g');
     Hotkey kGridSize(true, true, false, false, 'g');
+    
     Hotkey kHudToggle(true, false, false, false, 'h');
 
     Hotkey kOCIOPresetsToggle(false, false, false, false, 0);

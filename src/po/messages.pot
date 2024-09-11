@@ -3017,6 +3017,26 @@ msgstr ""
 msgid "Set Out Point"
 msgstr ""
 
+msgid "Image zoom setting."
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Mousewheel to zoom in and out."
+msgstr ""
+
+msgid ""
+"\n"
+"Alt + Right Mouse Button to zoom in and out."
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"0 to 9 to zoom to a specific level."
+msgstr ""
+
 msgid "Load Directory"
 msgstr ""
 
@@ -4581,9 +4601,6 @@ msgid "Y' (Lumma)"
 msgstr ""
 
 msgid "L (Lightness)"
-msgstr ""
-
-msgid "Image zoom setting."
 msgstr ""
 
 msgid "XY"

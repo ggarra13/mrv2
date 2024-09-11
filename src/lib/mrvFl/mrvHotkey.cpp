@@ -474,6 +474,17 @@ namespace mrv
         tooltip = _("Set Out Point");
         tooltip += addHotkey(kSetOutPoint);
         c->uiEndButton->copy_tooltip(tooltip.c_str());
+        
+        //
+        // Pixel Tool Bar.
+        //
+        PixelToolBarClass* p = ui->uiPixelWindow;
+        tooltip = _("Image zoom setting.");
+        tooltip += addHotkeys(kZoomOut, kZoomIn, kFitScreen);
+        tooltip += _("\n\nMousewheel to zoom in and out.");
+        tooltip += _("\nAlt + Right Mouse Button to zoom in and out.");
+        tooltip += _("\n\n0 to 9 to zoom to a specific level.");
+        p->uiZoom->copy_tooltip(tooltip.c_str());
     }
 
 } // namespace mrv
