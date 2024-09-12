@@ -36,6 +36,7 @@ v1.2.7
   clip by using YUV420P_U16 instead of RGB48.
 - Improved hotkey selection/display when using shift on some international
   keyboards.
+- Added explanation when FFmpeg Color Accuracy is on to explain slow conversion.
   
 
 v1.2.6
