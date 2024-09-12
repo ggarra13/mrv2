@@ -1235,6 +1235,11 @@ namespace mrv
                 p.ui->uiSaturation->do_callback();
                 return 1;
             }
+            else if (kToggleEditMode.match(rawkey))
+            {
+                p.ui->uiEdit->do_callback();
+                return 1;
+            }
             else if (kToggleToolBar.match(rawkey))
             {
                 toggle_action_tool_bar(nullptr, p.ui);
