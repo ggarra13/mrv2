@@ -81,6 +81,12 @@ namespace mrv
                 }
             }
 
+            if (m_shift && m_text != Fl::event_text())
+            {
+                m_text = Fl::event_text();
+                m_shift = false;
+            }
+            
             value(m_text.c_str());
 
             if (hotkey)

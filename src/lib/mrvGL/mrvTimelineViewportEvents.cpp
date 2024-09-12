@@ -1211,19 +1211,34 @@ namespace mrv
             else if (kGammaLess.match(rawkey))
             {
                 float gamma = p.ui->uiGamma->value();
-                p.ui->uiGamma->value(gamma - 0.1f);
+                gamma -= 0.1F;
+                if (gamma < 0.1F)
+                    gamma = 0.1F;
+                p.ui->uiGamma->value(gamma);
                 p.ui->uiGamma->do_callback();
+                return 1;
+            }
+            else if (kSaturationLess.match(rawkey))
+            {
+                float saturation = p.ui->uiSaturation->value();
+                saturation -= 0.1F;
+                if (saturation < 0.F)
+                    saturation = 0.F;
+                p.ui->uiSaturation->value(saturation);
+                p.ui->uiSaturation->do_callback();
+                return 1;
+            }
+            else if (kSaturationMore.match(rawkey))
+            {
+                float saturation = p.ui->uiSaturation->value();
+                p.ui->uiSaturation->value(saturation + 0.1F);
+                p.ui->uiSaturation->do_callback();
                 return 1;
             }
             else if (kToggleToolBar.match(rawkey))
             {
                 toggle_action_tool_bar(nullptr, p.ui);
                 save_ui_state(p.ui, p.ui->uiToolsGroup);
-                return 1;
-            }
-            else if (kToggleEditMode.match(rawkey))
-            {
-                p.ui->uiEdit->do_callback();
                 return 1;
             }
             else if (kShapeFrameStepFwd.match(rawkey))

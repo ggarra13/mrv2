@@ -3267,6 +3267,9 @@ msgstr ""
 "Consente di regolare la curva gamma per la visualizzazione. Il valore è: "
 "pow( 2, 1/x )."
 
+msgid "Toggle Edit Mode."
+msgstr "Commuta la modalità Modifica."
+
 msgid "Scrubbing Tool"
 msgstr "Strumento di sfregamento"
 
@@ -5250,9 +5253,6 @@ msgstr "Barra di menu"
 msgid "Edit"
 msgstr "Modifica"
 
-msgid "Toggle Edit Mode"
-msgstr "Commuta la modalità Modifica"
-
 msgid "Fit Window to Image"
 msgstr "Adatta finestra all'immagine"
 
@@ -7052,6 +7052,9 @@ msgstr "Commutare l'USD"
 
 msgid "Toggle Stereo 3D"
 msgstr "Commuta stereo 3D"
+
+msgid "Toggle Edit Mode"
+msgstr "Commuta la modalità Modifica"
 
 msgid "Toggle Timeline Editable"
 msgstr "Commuta la timeline modificabile"

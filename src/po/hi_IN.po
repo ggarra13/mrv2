@@ -3242,6 +3242,9 @@ msgid ""
 msgstr ""
 "प्रदर्शन के लिए गामा वक्र को समायोजित करने देता है. मान है: po( 2, 1/ x)."
 
+msgid "Toggle Edit Mode."
+msgstr "संपादन मोड टॉगल करें."
+
 msgid "Scrubbing Tool"
 msgstr "स्क्रैचिंग औज़ार"
 
@@ -5205,9 +5208,6 @@ msgstr "मेन्यू पट्टी"
 msgid "Edit"
 msgstr "संपादन"
 
-msgid "Toggle Edit Mode"
-msgstr "संपादन मोड टॉगल करें"
-
 msgid "Fit Window to Image"
 msgstr "विंडो छवि में फिट करें"
 
@@ -6970,6 +6970,9 @@ msgstr "यूएसडी टॉगल करें"
 
 msgid "Toggle Stereo 3D"
 msgstr "स्टीरियो ३डी टॉगल करें"
+
+msgid "Toggle Edit Mode"
+msgstr "संपादन मोड टॉगल करें"
 
 msgid "Toggle Timeline Editable"
 msgstr "टाइम- लाइन संशोधनीय टॉगल करें"

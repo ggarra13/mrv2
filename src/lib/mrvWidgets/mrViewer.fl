@@ -843,8 +843,8 @@ else
     if (value) mrv::editMode = mrv::EditMode::kFull;
     else       mrv::editMode = mrv::EditMode::kNone;
     mrv::toggle_bottom_bar(nullptr, v);
-}}
-              tooltip {Toggle Edit Mode} xywh {602 0 58 24} down_box DOWN_BOX selection_color 95 labelsize 12 align 192
+}} selected
+              tooltip {Toggle Edit Mode.} xywh {602 0 58 24} down_box DOWN_BOX selection_color 95 labelsize 12 align 192
             }
           }
           Fl_Button {} {
@@ -855,7 +855,7 @@ else
           }
         }
         Fl_Group uiTopBar {
-          label TopBar open
+          label TopBar
           xywh {0 24 690 29} box ENGRAVED_BOX labeltype NO_LABEL
         } {
           Fl_Group {} {
@@ -877,7 +877,7 @@ model->setLayer(item, o->value());} open
             } {}
           }
           Fl_Group uiCOLORS {
-            label {Exposure, Saturation, and Gamma} open
+            label {Exposure, Saturation, and Gamma}
             xywh {183 24 507 29} labeltype NO_LABEL
           } {
             Fl_Group {} {
@@ -885,7 +885,7 @@ model->setLayer(item, o->value());} open
               xywh {183 24 187 29} labeltype NO_LABEL
             } {
               Fl_Group {} {
-                label Exposure open
+                label Exposure
                 xywh {183 24 49 29} labeltype NO_LABEL
               } {
                 Fl_Button uiExposureLess {
@@ -938,7 +938,7 @@ uiView->updateDisplayOptions();}
                 Fl_Slider uiGain {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiGainInput->value( o->value() );
-uiView->updateDisplayOptions();} selected
+uiView->updateDisplayOptions();}
                   tooltip {Allows you to adjust the gain or exposure of the image.} xywh {270 24 100 29} type {Horz Knob} labelsize 10 align 0 maximum 64 step 0.01 value 1 resizable
                   code3 {o->slider_type( mrv::Slider::kLOG );}
                   class {mrv::Slider}
@@ -946,7 +946,7 @@ uiView->updateDisplayOptions();} selected
               }
             }
             Fl_Group {} {
-              label Saturation open
+              label Saturation
               xywh {370 24 160 29} labeltype NO_LABEL
             } {
               Fl_Button uiSaturationSwitch {
@@ -987,7 +987,7 @@ uiView->updateDisplayOptions();}
               }
             }
             Fl_Group {} {
-              label Gamma open
+              label Gamma
               xywh {530 24 160 29} labeltype NO_LABEL
             } {
               Fl_Button uiGammaSwitch {

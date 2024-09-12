@@ -9,7 +9,7 @@ set( FL_SOURCES
     mrvHotkeyUI.fl
     mrvHUDUI.fl
     mrvOCIOPresetsUI.fl
-    PathMappingUI.fl
+    mrvPathMappingUI.fl
     mrvPDFOptionsUI.fl
     mrvPreferencesUI.fl
     mrvSaveImageOptionsUI.fl

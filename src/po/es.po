@@ -3312,6 +3312,9 @@ msgstr ""
 "Permite ajustar la curva gamma para la visualización. El valor es: pow( 2, "
 "1/x )."
 
+msgid "Toggle Edit Mode."
+msgstr "Alternar el modo Editar."
+
 msgid "Scrubbing Tool"
 msgstr "Herramienta de Fregado"
 
@@ -5293,9 +5296,6 @@ msgstr "Barra de Menú"
 msgid "Edit"
 msgstr "Edición"
 
-msgid "Toggle Edit Mode"
-msgstr "Alternar Modo de Edición"
-
 msgid "Fit Window to Image"
 msgstr "Ajustar Ventana a la Imagen"
 
@@ -7078,6 +7078,9 @@ msgstr "Alternar USD"
 
 msgid "Toggle Stereo 3D"
 msgstr "Alternar Estéreo 3D"
+
+msgid "Toggle Edit Mode"
+msgstr "Alternar Modo de Edición"
 
 msgid "Toggle Timeline Editable"
 msgstr "Alternar Línea de Tiempo Editable"

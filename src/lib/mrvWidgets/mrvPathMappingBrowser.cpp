@@ -11,7 +11,7 @@
 
 #include "mrvWidgets/mrvPathMappingBrowser.h"
 
-#include "PathMappingUI.h"
+#include "mrvPathMappingUI.h"
 
 namespace mrv
 {

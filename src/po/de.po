@@ -3239,6 +3239,9 @@ msgstr ""
 "Ermöglicht die Anpassung der Gammakurve für die Anzeige. Wert ist: pow( 2, "
 "1/x )."
 
+msgid "Toggle Edit Mode."
+msgstr "Bearbeiten-Modus umschalten."
+
 msgid "Scrubbing Tool"
 msgstr "Scrubbing-Werkzeug"
 
@@ -5223,9 +5226,6 @@ msgstr "Menleiste"
 msgid "Edit"
 msgstr "Bearbeiten"
 
-msgid "Toggle Edit Mode"
-msgstr "Bearbeitungsmodus umschalten"
-
 msgid "Fit Window to Image"
 msgstr "Fenster auf Bild einfgen"
 
@@ -7009,6 +7009,9 @@ msgstr "USD umschalten"
 
 msgid "Toggle Stereo 3D"
 msgstr "Stereo 3D umschalten"
+
+msgid "Toggle Edit Mode"
+msgstr "Bearbeitungsmodus umschalten"
 
 msgid "Toggle Timeline Editable"
 msgstr "Zeitleiste editierbar umschalten"

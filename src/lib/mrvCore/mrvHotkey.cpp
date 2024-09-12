@@ -161,17 +161,18 @@ namespace mrv
     Hotkey kSwitchPenColor(false, false, false, false, 0);
 
     Hotkey kResetChanges(true, false, false, false, 'r');
+    
     Hotkey kExposureMore(false, false, false, false, '.');
     Hotkey kExposureLess(false, false, false, false, ',');
-    Hotkey kSaturationMore(false, false, false, false, '<');
-    Hotkey kSaturationLess(false, false, false, false, '>');
+    
+    Hotkey kSaturationMore(false, false, false, false, 0, ">");
+    Hotkey kSaturationLess(false, false, false, false, 0, "<");
+    
     Hotkey kGammaMore(false, false, false, false, 0, ")");
     Hotkey kGammaLess(false, false, false, false, 0, "(");
 
-    Hotkey kSOPSatNodes(false, false, false, false, 0);
-
-    Hotkey kCopyFrameXYValues(true, false, false, true, 'c');
-    Hotkey kCopyRGBAValues(true, false, true, false, 'c');
+    // Hotkey kCopyFrameXYValues(true, false, false, true, 'c');
+    // Hotkey kCopyRGBAValues(true, false, true, false, 'c');
 
     Hotkey kSetInPoint(false, false, false, false, 'i');
     Hotkey kSetOutPoint(false, false, false, false, 'o');

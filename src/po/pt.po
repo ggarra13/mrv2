@@ -3233,6 +3233,9 @@ msgid ""
 "Value is:  pow( 2, 1/x )."
 msgstr "Permite ajustar a curva gama para exibição. O valor é: pow( 2, 1/x )."
 
+msgid "Toggle Edit Mode."
+msgstr "Comutar o modo Editar."
+
 msgid "Scrubbing Tool"
 msgstr "Ferramenta de Esfregagem"
 
@@ -5217,9 +5220,6 @@ msgstr "Barra de Menus"
 msgid "Edit"
 msgstr "Editar"
 
-msgid "Toggle Edit Mode"
-msgstr "Activar o Modo de Editar"
-
 msgid "Fit Window to Image"
 msgstr "Ajustar a Janela  Imagem"
 
@@ -7001,6 +7001,9 @@ msgstr "Comutar o USD"
 
 msgid "Toggle Stereo 3D"
 msgstr "Alterna estereo 3D"
+
+msgid "Toggle Edit Mode"
+msgstr "Activar o Modo de Editar"
 
 msgid "Toggle Timeline Editable"
 msgstr "Comutar a linha de tempo editvel"

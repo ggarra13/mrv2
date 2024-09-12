@@ -391,6 +391,10 @@ namespace mrv
         tooltip += addHotkeys(kGammaLess, kGammaMore, kResetChanges);
         ui->uiGamma->copy_tooltip(tooltip.c_str());
         ui->uiGammaInput->copy_tooltip(tooltip.c_str());
+        
+        tooltip = _("Toggle Edit Mode.");
+        tooltip += addHotkey(kToggleEditMode);
+        ui->uiEdit->copy_tooltip(tooltip.c_str());
 
         //
         // Action tools.

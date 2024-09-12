@@ -3199,6 +3199,9 @@ msgid ""
 "Value is:  pow( 2, 1/x )."
 msgstr "允许您调整显示的伽马曲线。 值为: pow( 2, 1/x) 。"
 
+msgid "Toggle Edit Mode."
+msgstr "切换编辑模式 。"
+
 msgid "Scrubbing Tool"
 msgstr "擦擦工具"
 
@@ -5168,9 +5171,6 @@ msgstr "菜单栏"
 msgid "Edit"
 msgstr "编辑"
 
-msgid "Toggle Edit Mode"
-msgstr "切换编辑模式"
-
 msgid "Fit Window to Image"
 msgstr "窗口适合图像"
 
@@ -6846,6 +6846,9 @@ msgstr "开关USD"
 
 msgid "Toggle Stereo 3D"
 msgstr "开关Stereo 3D"
+
+msgid "Toggle Edit Mode"
+msgstr "切换编辑模式"
 
 msgid "Toggle Timeline Editable"
 msgstr "开关可编辑的时间线"

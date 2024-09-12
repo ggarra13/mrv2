@@ -2963,6 +2963,9 @@ msgid ""
 "Value is:  pow( 2, 1/x )."
 msgstr ""
 
+msgid "Toggle Edit Mode."
+msgstr ""
+
 msgid "Scrubbing Tool"
 msgstr ""
 
@@ -4797,9 +4800,6 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-msgid "Toggle Edit Mode"
-msgstr ""
-
 msgid "Fit Window to Image"
 msgstr ""
 
@@ -6464,6 +6464,9 @@ msgid "Toggle USD"
 msgstr ""
 
 msgid "Toggle Stereo 3D"
+msgstr ""
+
+msgid "Toggle Edit Mode"
 msgstr ""
 
 msgid "Toggle Timeline Editable"

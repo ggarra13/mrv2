@@ -3239,6 +3239,9 @@ msgstr ""
 "Permet d'ajuster la courbe gamma pour l'affichage. La valeur est : pow( 2, "
 "1/x )."
 
+msgid "Toggle Edit Mode."
+msgstr "Commutation du mode d'édition."
+
 msgid "Scrubbing Tool"
 msgstr "Outil de frottement"
 
@@ -5226,9 +5229,6 @@ msgstr "Barre de menus"
 msgid "Edit"
 msgstr "Modifier"
 
-msgid "Toggle Edit Mode"
-msgstr "Commutation du mode d'édition"
-
 msgid "Fit Window to Image"
 msgstr "Fixer la fenêtre à l'image"
 
@@ -7041,6 +7041,9 @@ msgstr "Commutation en dollars des États-Unis"
 
 msgid "Toggle Stereo 3D"
 msgstr "Commutation stéréo 3D"
+
+msgid "Toggle Edit Mode"
+msgstr "Commutation du mode d'édition"
 
 msgid "Toggle Timeline Editable"
 msgstr "Commutation de la ligne de temps modifiable"

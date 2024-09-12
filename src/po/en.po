@@ -3261,6 +3261,9 @@ msgstr ""
 "Allows you to adjust gamma curve for display.\n"
 "Value is:  pow( 2, 1/x )."
 
+msgid "Toggle Edit Mode."
+msgstr "Toggle Edit Mode."
+
 msgid "Scrubbing Tool"
 msgstr "Scrubbing Tool"
 
@@ -5249,9 +5252,6 @@ msgstr "MenuBar"
 msgid "Edit"
 msgstr "Edit"
 
-msgid "Toggle Edit Mode"
-msgstr "Toggle Edit Mode"
-
 msgid "Fit Window to Image"
 msgstr "Fit Window to Image"
 
@@ -7015,6 +7015,9 @@ msgstr "Toggle USD"
 
 msgid "Toggle Stereo 3D"
 msgstr "Toggle Stereo 3D"
+
+msgid "Toggle Edit Mode"
+msgstr "Toggle Edit Mode"
 
 msgid "Toggle Timeline Editable"
 msgstr "Toggle Timeline Editable"
