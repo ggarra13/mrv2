@@ -41,6 +41,14 @@ endif()
 set(FLTK_USE_SYSTEM_ZLIB TRUE)
 set(FLTK_USE_SYSTEM_LIBPNG TRUE)
 
+# We set this to use FLTK's built-in libdecor
+set(FLTK_USE_SYSTEM_LIBDECOR FALSE)
+
+# Set this to FALSE to use libdecor's uglier looking windows' borders
+# instead of GTK's nicer window borders.  Note that using GTK's borders will
+# result in a warning due to FLTK and GLFW calling the same function.
+set(FLTK_USE_LIBDECOR_GTK ON)
+
 # This one may be turned off
 set(FLTK_USE_SYSTEM_LIBJPEG FALSE)
 if(TLRENDER_JPEG)
@@ -82,7 +90,8 @@ ExternalProject_Add(
     -DFLTK_BUILD_SHARED_LIBS=${FLTK_BUILD_SHARED_LIBS}
     -DFLTK_BACKEND_WAYLAND=${TLRENDER_WAYLAND}
     -DFLTK_BACKEND_X11=${TLRENDER_X11}
-    -DFLTK_USE_SYSTEM_LIBDECOR=0
+    -DFLTK_USE_SYSTEM_LIBDECOR=${FLTK_USE_SYSTEM_LIBDECOR}
+    -DFLTK_USE_LIBDECOR_GTK=${FLTK_USE_LIBDECOR_GTK}
     -DFLTK_USE_SYSTEM_ZLIB=${FLTK_USE_SYSTEM_ZLIB}
     -DFLTK_USE_SYSTEM_LIBJPEG=${FLTK_USE_SYSTEM_LIBJPEG}
     -DFLTK_USE_SYSTEM_LIBPNG=${FLTK_USE_SYSTEM_LIBPNG}

@@ -37,6 +37,7 @@ v1.2.7
 - Improved hotkey selection/display when using shift on some international
   keyboards.
 - Added explanation when FFmpeg Color Accuracy is on to explain slow conversion.
+- Wayland crashing fix.
   
 
 v1.2.6
