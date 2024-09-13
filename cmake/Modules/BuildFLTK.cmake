@@ -11,7 +11,7 @@ include( ExternalProject )
 #set(FLTK_GIT_TAG 05c91b287f16d87f335a8cc375074d712cb8511a)
 
 # Fluid fixes.
-set(FLTK_GIT_TAG 634ce805e5de4663fc9efdb288ed5b726af96005)
+set(FLTK_GIT_TAG bb917628ffa8ffc6cafc79da80344c8c9c653969)
 
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
     # If we are building pyFLTK compile shared
