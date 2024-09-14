@@ -12,16 +12,21 @@
 #    include <unistd.h>
 #endif
 
+#include <algorithm>
+#include <array>
 #include <iostream>
 #include <fstream>
+#include <memory>
+#include <stdexcept>
 #include <string>
-#include <algorithm>
 
 #include <tlCore/OS.h>
+#include <tlCore/String.h>
 
 #include <FL/Fl.H>
 
 #include "mrvCore/mrvEnv.h"
+#include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvHome.h"
 
@@ -38,6 +43,32 @@ namespace
 {
     const char* kModule = "os";
 }
+
+namespace
+{
+    // Function to execute a shell command and capture the output
+    std::string exec_command(const std::string& command)
+    {
+        std::string out;
+
+        std::array<char, 128> buffer;
+
+        // Open a pipe to the command
+        std::shared_ptr<FILE> pipe(popen(command.c_str(), "r"), pclose);
+        if (!pipe)
+        {
+            throw std::runtime_error("popen() failed!");
+        }
+
+        // Read the output from the command
+        while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr)
+        {
+            out += buffer.data();
+        }
+
+        return out;
+    }
+} // namespace
 
 namespace mrv
 {
@@ -195,6 +226,75 @@ namespace mrv
             return out;
         }
 
+        std::string getWaylandCompositorVersion(const std::string& compositor)
+        {
+            std::string version_command;
+
+            // Choose the command based on the compositor name
+            if (compositor == "mutter")
+            {
+                version_command = "gnome-shell --version";
+            }
+            else if (compositor == "kwin")
+            {
+                version_command = "kwin_wayland --version";
+            }
+            else if (compositor == "weston")
+            {
+                version_command = "weston --version";
+            }
+            else if (compositor == "sway")
+            {
+                version_command = "sway --version";
+            }
+            else
+            {
+                return "";
+            }
+
+            try
+            {
+                // Execute the command and capture the output
+                std::string version_output = exec_command(version_command);
+                return version_output;
+            }
+            catch (const std::exception& e)
+            {
+                return std::string("Error executing command: ") + e.what();
+            }
+        }
+
+        std::string getWaylandCompositor(const std::string& desktop_env)
+        {
+            const std::string& desktop = tl::string::toLower(desktop_env);
+
+            // Check against common Wayland compositor names
+            if (desktop == "ubuntu-wayland" ||
+                desktop.substr(0, 5) == "gnome" || desktop == "mutter" ||
+                desktop == "gnome-wayland")
+            {
+                return "mutter";
+            }
+            else if (
+                desktop == "kwin" || desktop == "kde" || desktop == "plasma")
+            {
+                return "kwin";
+            }
+            else if (desktop == "weston")
+            {
+                return "weston";
+            }
+            else if (desktop == "sway")
+            {
+                return "sway"; // If using Sway (a Wayland compositor based on
+                               // i3)
+            }
+            else
+            {
+                return "unknown"; // If no match is found
+            }
+        }
+
         std::string getDesktop()
         {
             std::string out = _("Desktop: ");
@@ -218,6 +318,17 @@ namespace mrv
                     {
                         out += env;
                     }
+                    else
+                    {
+                        env = "";
+                    }
+                }
+
+                if (env && strlen(env) > 0)
+                {
+                    std::string compositor = getWaylandCompositor(env);
+                    out += " ";
+                    out += getWaylandCompositorVersion(compositor);
                 }
             }
 #elif _WIN32
