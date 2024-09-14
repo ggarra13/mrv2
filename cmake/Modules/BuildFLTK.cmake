@@ -47,7 +47,7 @@ set(FLTK_USE_SYSTEM_LIBDECOR FALSE)
 # Set this to FALSE to use libdecor's uglier looking windows' borders
 # instead of GTK's nicer window borders.  Note that using GTK's borders will
 # result in a warning due to FLTK and GLFW calling the same function.
-set(FLTK_USE_LIBDECOR_GTK ON)
+set(FLTK_USE_LIBDECOR_GTK FALSE)
 
 # This one may be turned off
 set(FLTK_USE_SYSTEM_LIBJPEG FALSE)
