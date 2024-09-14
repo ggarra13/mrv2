@@ -46,6 +46,9 @@ namespace
 
 namespace
 {
+    
+#ifdef __linux__
+
     // Function to execute a shell command and capture the output
     std::string exec_command(const std::string& command)
     {
@@ -68,6 +71,8 @@ namespace
 
         return out;
     }
+#endif
+    
 } // namespace
 
 namespace mrv
