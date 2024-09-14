@@ -38,6 +38,10 @@ v1.2.7
   keyboards.
 - Added explanation when FFmpeg Color Accuracy is on to explain slow conversion.
 - Wayland crashing fix.
+- Wayland now uses FLTK's own built-in libdecor to avoid warnings in GTK-3.
+  If you compile from source, you can change this, albeit you will still get
+  a minor warning due to a conflict between FLTK and GLFW calling GTK-3's
+  functions twice.
   
 
 v1.2.6
