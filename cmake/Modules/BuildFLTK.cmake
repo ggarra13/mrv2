@@ -10,8 +10,8 @@ include( ExternalProject )
 # Adds label_image_spacing().
 #set(FLTK_GIT_TAG 05c91b287f16d87f335a8cc375074d712cb8511a)
 
-# Fluid fixes.
-set(FLTK_GIT_TAG bb917628ffa8ffc6cafc79da80344c8c9c653969)
+# Wayland fix.
+set(FLTK_GIT_TAG 382d6b2fbdb441ef8cbbe52a7dc07032aa733188)
 
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
     # If we are building pyFLTK compile shared
