@@ -262,8 +262,6 @@ namespace mrv
     // @todo:
     extern Hotkey kGridToggle;
     extern Hotkey kGridSize;
-
-    // @todo:
     extern Hotkey kCopyFrameXYValues;
     extern Hotkey kCopyRGBAValues;
 
@@ -322,7 +320,6 @@ namespace mrv
     extern Hotkey kEditUndo;
     extern Hotkey kEditRedo;
 
-    // @todo:
     extern Hotkey kRotatePlus90;
     extern Hotkey kRotateMinus90;
 
@@ -351,10 +348,7 @@ namespace mrv
         HotkeyEntry(const std::string n, Hotkey* h, bool f = false) :
             force(f),
             name(n),
-            hotkey(h){
-                // if (h)
-                //     hotkey = new Hotkey(*h);
-            };
+            hotkey(h){};
 
         ~HotkeyEntry()
         { /*delete hotkey;*/
