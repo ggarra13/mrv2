@@ -31,56 +31,55 @@ decl {\#include "mrvCore/mrvEnv.h"} {public global
 decl {\#include "mrvCore/mrvFonts.h"} {public global
 }
 
-decl {\#include "mrvCore/mrvI8N.h"} {selected public global
+decl {\#include "mrvCore/mrvI8N.h"} {public global
 }
 
-decl {\#include "mrvCore/mrvMedia.h"} {public global
+decl {\#include "mrViewer.h"} {selected public global
 }
 
-decl {\#include "mrvCore/mrvPathMapping.h"} {public global
+decl {\#include "make_ocio_chooser.h"} {selected public global
 }
 
-decl {\#include "mrvFl/mrvPreferences.h"} {public global
+decl {\#include "mrvWidgets/mrvPopupMenu.h"} {selected public global
 }
 
-decl {\#include "mrvFl/mrvPathMapping.h"} {public global
+decl {\#include "mrvWidgets/mrvPreferencesTree.h"} {selected public global
 }
 
-decl {\#include "mrvWidgets/mrvBrowser.h"} {public global
+decl {\#include "mrvFl/mrvOCIO.h"} {selected private global
 }
 
-decl {\#include "mrvWidgets/mrvPathMappingBrowser.h"} {public global
+decl {\#include "mrvFl/mrvFileRequester.h"} {selected public global
 }
 
-decl {\#include "mrvWidgets/mrvButton.h"} {public global
+decl {\#include "mrvWidgets/mrvOCIOBrowser.h"} {selected public global
 }
 
-decl {\#include "mrvWidgets/mrvChoice.h"} {public global
+decl {\#include "mrvWidgets/mrvChoice.h"} {selected public global
 }
 
-decl {\#include "mrvWidgets/mrvOCIOBrowser.h"} {public global
+decl {\#include "mrvWidgets/mrvButton.h"} {selected public global
 }
 
-decl {\#include "mrvFl/mrvFileRequester.h"} {public global
+decl {\#include "mrvWidgets/mrvPathMappingBrowser.h"} {selected public global
 }
 
-decl {\#include "mrvFl/mrvOCIO.h"} {private global
+decl {\#include "mrvWidgets/mrvBrowser.h"} {selected public global
 }
 
-decl {\#include "mrvWidgets/mrvPreferencesTree.h"} {public global
+decl {\#include "mrvFl/mrvPathMapping.h"} {selected public global
 }
 
-decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public global
+decl {\#include "mrvFl/mrvPreferences.h"} {selected public global
 }
 
-decl {\#include "make_ocio_chooser.h"} {public global
+decl {\#include "mrvCore/mrvPathMapping.h"} {selected public global
 }
 
-decl {\#include "mrViewer.h"} {public global
+decl {\#include "mrvCore/mrvMedia.h"} {selected public global
 }
 
-class PreferencesUI {open
-} {
+class PreferencesUI {} {
   decl {ViewerUI* main;} {private local
   }
   Function {make_window(ViewerUI* m)} {open private
@@ -89,7 +88,7 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {903 93 853 467} type Double resizable
+      xywh {0 0 853 467} type Double resizable
       code0 {main = m;} visible
     } {
       Fl_Group {} {open
@@ -1023,7 +1022,7 @@ v->uiPrefsFPS->value( g );}
             }
             Fl_Group {} {
               label OCIO
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label OCIO open
@@ -1246,7 +1245,7 @@ v->uiOCIO_Display_View->do_callback();}
             }
             Fl_Group {} {
               label Loading open
-              xywh {288 37 555 360} align 5
+              xywh {288 37 555 360} align 5 hide
             } {
               Fl_Group {} {open
                 xywh {324 140 488 180}
