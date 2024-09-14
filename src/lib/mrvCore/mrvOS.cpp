@@ -27,8 +27,9 @@
 
 #include "mrvCore/mrvEnv.h"
 #include "mrvCore/mrvFile.h"
-#include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvI8N.h"
+#include "mrvCore/mrvOS.h"
 
 #include "mrvFl/mrvIO.h"
 
@@ -47,7 +48,6 @@ namespace
 namespace
 {
     
-#ifdef __linux__
 
     // Function to execute a shell command and capture the output
     std::string exec_command(const std::string& command)
@@ -71,7 +71,6 @@ namespace
 
         return out;
     }
-#endif
     
 } // namespace
 

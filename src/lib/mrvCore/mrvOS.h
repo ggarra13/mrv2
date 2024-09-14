@@ -50,6 +50,12 @@
 #    undef chdir
 #    define chdir _chdir
 
+#    undef popen
+#    define popen _popen
+
+#    undef pclose
+#    define pclose _pclose
+
 #endif // _WIN32
 
 namespace mrv
