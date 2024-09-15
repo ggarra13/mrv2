@@ -879,6 +879,7 @@ namespace mrv
         // plug-ins.
         py::module::import("mrv2");
 
+        
         // Discover Python plugins
         mrv2_discover_python_plugins();
         

@@ -48,7 +48,16 @@ else
 fi
 
 date_created=$(git for-each-ref --format="%(creatordate:iso)" refs/tags/$TAG)
-today=$(date +'%F %T')
+if [[ "$date_created" == "" ]]; then
+    git pull
+    date_created=$(git for-each-ref --format="%(creatordate:iso)" refs/tags/$TAG)
+fi
+
+if [[ "$date_created" == "" ]]; then
+    echo "No tag ${TAG} found!"
+    exit 1
+fi
+
 
 echo "START DATE: $date_created"
 echo "  END DATE: $next_tag_date"
