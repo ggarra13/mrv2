@@ -253,7 +253,7 @@ brew install git gnu-sed swig subversion meson cmake ninja gettext openssl readl
 
 Additional dependencies are downloaded and built automatically by the CMake
 superbuild script.  For a list of non-system libraries that mrv2 depends on
-and their licenses, please refer to mrv2/docs/Legal.
+and their licenses, please refer to src/docs/Legal.
 
 The only special requirement is installing a new copy of cmake than the
 one that ships with MSVC19.
