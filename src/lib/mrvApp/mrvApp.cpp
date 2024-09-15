@@ -874,7 +874,14 @@ namespace mrv
             LOG_ERROR(e.what());
         }
 
-#ifdef MRV2_PYBIND11
+#ifdef MRV2_PYBIND11        
+        // Import the mrv2 python module so we read all python
+        // plug-ins.
+        py::module::import("mrv2");
+
+        // Discover Python plugins
+        mrv2_discover_python_plugins();
+        
         //
         // Run command-line python script.
         //
