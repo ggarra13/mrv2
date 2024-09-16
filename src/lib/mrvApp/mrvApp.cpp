@@ -950,6 +950,7 @@ namespace mrv
         }
 
         // Create Python's output window
+        Fl_Group::current(0);
         outputDisplay = new PythonOutput(0, 0, 400, 400);
 
         // Redirect Python's stdout/stderr to my own class

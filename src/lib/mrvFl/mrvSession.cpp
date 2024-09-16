@@ -574,7 +574,7 @@ namespace mrv
                     // Hide Panels and Windows
                     removePanels(ui);
                     removeWindows(ui);
-
+                    
                     j = session["settings"];
 
                     auto settings = app->settings();

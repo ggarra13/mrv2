@@ -435,7 +435,7 @@ namespace mrv
             if (name.empty() || name == kInactive ||
                 name == _(kInactive.c_str()))
             {
-                uiICS->value(-1);
+                uiICS->value(0);
                 uiICS->do_callback();
                 return;
             }

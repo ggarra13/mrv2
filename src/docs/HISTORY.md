@@ -13,9 +13,16 @@ v1.2.8
   mrv2 <INPUT_FILE> -ics ACEScg -od 'sRGB - Display' -pythonScript bakeOCIO.py -pythonArgs <BAKED.mov>
   ```
   
+  Note that this script bakes without annotations support so if saving a float
+  EXR to an 8 or 16-bit image, you will get banding.
+  
 - Fixed changing displayOptions through python not reflecting the changes in
   the UI.
 - Fixed cmd.compare() to refresh the comparison immediately.
+- Fixed Python Output showing icorrectly in panels when loading a session from
+  the command-line.
+- Fixed ICS pulldown not showing None when switching to a clip with no
+  Input Color Space stored.
 
 
 v1.2.7
