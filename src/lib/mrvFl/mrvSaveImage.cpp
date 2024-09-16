@@ -30,6 +30,8 @@ namespace fs = std::filesystem;
 #include "mrvFl/mrvSaveOptions.h"
 #include "mrvFl/mrvIO.h"
 
+#include "mrvApp/mrvSettingsObject.h"
+
 #include "mrViewer.h"
 
 #include <FL/platform.H>
@@ -431,6 +433,13 @@ namespace mrv
         view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
         view->setHudActive(hud);
         view->setPresentationMode(presentation);
+        
+        auto settings = ui->app->settings();
+        if (file::isReadable(file))
+        {
+            settings->addRecentFile(file);
+            ui->uiMain->fill_menu(ui->uiMenuBar);
+        }
         return ret;
     }
 
