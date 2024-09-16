@@ -9,7 +9,7 @@ v1.2.8
 - Fixed and simplified bakeOCIO.py demo script.
 - Fixed changing displayOptions through python not reflecting the changes in
   the UI.
-- Fixed compareDemo.py script to reflect new A/B Comparison changes.
+- Fixed cmd.compare() to refresh the comparison immediately.
 
 
 v1.2.7

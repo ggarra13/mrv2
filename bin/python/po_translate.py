@@ -334,7 +334,15 @@ class POTranslator:
     # each menu entry separately.
     #
     def translate_text(self, english):
-        print('AI TRANSLATE')
+        print('AI TRANSLATE')        
+        if '\n' in english:
+            lines = english.split('\n')
+            lines = [self._translate_text(line) for line in lines]
+            translated_text = '\n'.join(lines)
+            print('\t\tNEWLINES English=',english)
+            print('\t\tNEWLINES Translated=', translated_text)
+            return translated_text
+        
         if '/' in english and len(english) < 40:
             replaced = english.replace('&','')
             menus = replaced.split('/')
@@ -342,14 +350,6 @@ class POTranslator:
             translated_text = '/'.join(menus)
             print('\t\tMENU English=',replaced)
             print('\t\tMENU Translated=', translated_text)
-            return translated_text
-        
-        if '\n' in english:
-            lines = english.split('\n')
-            lines = [self._translate_text(line) for line in lines]
-            translated_text = '\n'.join(lines)
-            print('\t\tNEWLINES English=',english)
-            print('\t\tNEWLINES Translated=', translated_text)
             return translated_text
     
         # Tokenize the input text

@@ -5,7 +5,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.2.7\n"
+"Project-Id-Version: mrv2 v1.2.8\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -4284,7 +4284,7 @@ msgid ""
 "It also allows saving OpenEXRs from an 8-bit movie and changing OpenEXR's "
 "pixel type.\n"
 "\n"
-"Furthermore, it allows saving A/B or Tiled comparisons.\n"
+"Furthermore, it allows saving A/B or Tiled comparisons and baking OCIO.\n"
 "\n"
 "However, it is limited to the size of your screen."
 msgstr ""
@@ -5947,13 +5947,13 @@ msgstr ""
 msgid "Reset hotkeys to mrv2's default configuration."
 msgstr ""
 
+msgid "Accept the current hotkeys."
+msgstr ""
+
 msgid "Reload"
 msgstr ""
 
 msgid "Reload hotkeys to last saved file."
-msgstr ""
-
-msgid "Accept the current hotkeys."
 msgstr ""
 
 msgid "HW"
