@@ -1,3 +1,9 @@
+v1.2.8
+======
+
+- Automated sourceforge OS automatic file selection for a release (default, the
+  last git release).
+
 v1.2.7
 ======
 
