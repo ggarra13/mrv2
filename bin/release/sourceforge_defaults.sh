@@ -37,7 +37,7 @@ function change_default()
     fi
     if [[ "$err" == "*code*" ]]; then
 	echo $err
-	exit 1
+	exit 0
     fi
 }    
 

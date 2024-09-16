@@ -769,6 +769,7 @@ namespace mrv
           << endl
           << "libjpeg-turbo v" << AV_STRINGIFY(LIBJPEG_TURBO_VERSION) << endl
           << "Copyright (c) 2009-2020 D. R. Commander.  All Rights Reserved."
+          << endl
           << "Copyright (c) 2015 Viktor Szathmáry.  All Rights Reserved."
           << endl
           << endl;
@@ -1106,6 +1107,7 @@ jrsndl                                        (Versioning debugging)
 jtomori                                       (OCIO pipeline ideas)
 kursad-k                                      (Windows 11, Positioning)
 lucky3d                                       (Windows 10, Background Panel)
+lukas-remis                                   (Comparison issues)
 mantissa-                                     (Sequences misdetection)
 mhgandvisions                                 (Session debugging)
 MMmaoamao                                     (AV1 Suggestion)
