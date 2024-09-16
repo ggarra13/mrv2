@@ -131,8 +131,12 @@ namespace mrv
 
         if (Fl::event_alt())
         {
-            float dx = p.event_x / (float)w();
-            float dy = p.event_y / (float)h();
+            math::Vector2f pos = _getRasterf();
+            const auto& renderSize = getRenderSize();
+            
+            float dx = pos.x / renderSize.w;
+            float dy = pos.y / renderSize.h;
+
             p.compareOptions.wipeCenter.x = dx;
             p.compareOptions.wipeCenter.y = dy;
             p.ui->app->filesModel()->setCompareOptions(p.compareOptions);

@@ -3,6 +3,11 @@ v1.2.8
 
 - Automated sourceforge OS automatic file selection for a release (default, the
   last git release).
+- Gain, Saturation and Gamma now effect all videos in a comparison when in
+  Compare Mode.
+- A/B Wipe Comparison now properly follows the cursor when zoomed in.
+- Fixed and simplified bakeOCIO.py demo script.
+
 
 v1.2.7
 ======

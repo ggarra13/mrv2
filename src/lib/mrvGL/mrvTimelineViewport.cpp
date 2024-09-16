@@ -2062,6 +2062,8 @@ namespace mrv
     {
         TLRENDER_P();
 
+
+        p.displayOptions.resize(p.videoData.size());
         if (p.displayOptions.empty())
         {
             p.ui->uiGain->value(1.0f);
@@ -2356,6 +2358,7 @@ namespace mrv
         const timeline::DisplayOptions& d) noexcept
     {
         TLRENDER_P();
+        
         for (auto& display : p.displayOptions)
         {
             display = d;
