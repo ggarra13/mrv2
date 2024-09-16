@@ -892,8 +892,12 @@ namespace mrv
             if (!file::isReadable(script))
             {
                 // Search for script in $STUDIOPATH/python/ directory
-                script = studiopath() + "/python/" + script;
-                if (!file::isReadable(script))
+                std::string studio_script = studiopath() + "/python/" + script;
+                if (file::isReadable(studio_script))
+                {
+                    script = studio_script;
+                }
+                else
                 {
                     // Search for script in mrv2's python demos directory.
                     script = pythonpath() + script;

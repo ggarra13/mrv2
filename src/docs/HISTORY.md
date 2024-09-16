@@ -6,7 +6,13 @@ v1.2.8
 - Gain, Saturation and Gamma now effect all videos in a comparison when in
   Compare Mode.
 - A/B Wipe Comparison now properly follows the cursor when zoomed in.
-- Fixed and simplified bakeOCIO.py demo script.
+- Fixed and simplified bakeOCIO.py demo script.  Now, you can bake OCIO
+  from the command-line by just doing something like:
+  
+  ```
+  mrv2 <INPUT_FILE> -ics ACEScg -od 'sRGB - Display' -pythonScript bakeOCIO.py -pythonArgs <BAKED.mov>
+  ```
+  
 - Fixed changing displayOptions through python not reflecting the changes in
   the UI.
 - Fixed cmd.compare() to refresh the comparison immediately.

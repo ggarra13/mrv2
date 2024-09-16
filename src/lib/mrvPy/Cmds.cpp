@@ -119,7 +119,7 @@ namespace mrv2
             model->setA(itemA);
             model->setB(itemB, true);
 
-            // Fl::check need to update comparisons.
+            // Fl::check needed to update comparisons.
             Fl::check();
         }
 
