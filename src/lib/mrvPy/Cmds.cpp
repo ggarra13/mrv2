@@ -110,7 +110,6 @@ namespace mrv2
         void
         compare(const int itemA, const int itemB, timeline::CompareMode mode)
         {
-
             auto model = filesModel();
 
             auto o = model->observeCompareOptions()->get();
@@ -224,7 +223,7 @@ namespace mrv2
             ViewerUI* ui = App::ui;
             toggle_data_window_cb(nullptr, ui);
         }
-        
+
         void toggleDisplayWindow()
         {
             ViewerUI* ui = App::ui;
@@ -236,13 +235,13 @@ namespace mrv2
             ViewerUI* ui = App::ui;
             toggle_safe_areas_cb(nullptr, ui);
         }
-        
+
         void toggleIgnoreDisplayWindow()
         {
             ViewerUI* ui = App::ui;
             toggle_ignore_display_window_cb(nullptr, ui);
         }
-        
+
         void toggleAutoNormalize()
         {
             ViewerUI* ui = App::ui;
@@ -357,7 +356,7 @@ namespace mrv2
             }
             return out;
         }
-        
+
         /**
          * \brief Refresh the UI.
          *
@@ -531,15 +530,15 @@ Used to run main commands and get arguments and set the display, image, compare,
     cmds.def(
         "setMute", &mrv2::cmd::setMute, _("Set the muting of the audio."),
         py::arg("mute"));
-    
+
     cmds.def(
         "toggleAutoNormalize", &mrv2::cmd::toggleAutoNormalize,
         _("Toggle Image Auto Normalize."));
-    
+
     cmds.def(
         "toggleDataWindow", &mrv2::cmd::toggleDataWindow,
         _("Toggle Data Window."));
-    
+
     cmds.def(
         "toggleDisplayWindow", &mrv2::cmd::toggleDisplayWindow,
         _("Toggle Display Window."));
@@ -547,15 +546,15 @@ Used to run main commands and get arguments and set the display, image, compare,
     cmds.def(
         "toggleIgnoreDisplayWindow", &mrv2::cmd::toggleIgnoreDisplayWindow,
         _("Toggle Ignored Display Window on OpenEXRs."));
-    
+
     cmds.def(
         "toggleInvalidValues", &mrv2::cmd::toggleInvalidValues,
         _("Toggle Image invalid values."));
-    
+
     cmds.def(
         "toggleSafeAreas", &mrv2::cmd::toggleSafeAreas,
         _("Toggle Safe Areas."));
-    
+
     cmds.def("volume", &mrv2::cmd::volume, _("Get the playback volume."));
 
     cmds.def(

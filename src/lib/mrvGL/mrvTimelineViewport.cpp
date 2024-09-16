@@ -805,7 +805,7 @@ namespace mrv
         if (value == p.lutOptions)
             return;
         p.lutOptions = value;
-        
+
         auto display = p.ui->uiTimeline->getDisplayOptions();
         display.lut = value;
         p.ui->uiTimeline->setDisplayOptions(display);
@@ -830,6 +830,44 @@ namespace mrv
         if (value == p.displayOptions)
             return;
         p.displayOptions = value;
+
+        const auto& d = p.displayOptions[0];
+
+        float gamma, saturation, gain;
+        if (d.levels.enabled)
+        {
+            gamma = d.levels.gamma;
+        }
+        else
+        {
+            gamma = 1.0;
+        }
+        if (d.color.enabled)
+        {
+            gain = d.color.brightness.x;
+            saturation = d.color.saturation.x;
+
+            if (d.exrDisplay.exposure > 0.001F)
+            {
+                gain /= d.exrDisplay.exposure;
+            }
+        }
+        else
+        {
+            gain = 1.0;
+            saturation = 1.0;
+        }
+
+        //
+        // Update UI sliders
+        //
+        p.ui->uiGain->value(gain);
+        p.ui->uiGainInput->value(gain);
+        p.ui->uiGamma->value(gamma);
+        p.ui->uiGammaInput->value(gamma);
+        p.ui->uiSaturation->value(saturation);
+        p.ui->uiSaturationInput->value(saturation);
+
         redraw();
     }
 
@@ -2062,7 +2100,6 @@ namespace mrv
     {
         TLRENDER_P();
 
-
         p.displayOptions.resize(p.videoData.size());
         if (p.displayOptions.empty())
         {
@@ -2358,7 +2395,7 @@ namespace mrv
         const timeline::DisplayOptions& d) noexcept
     {
         TLRENDER_P();
-        
+
         for (auto& display : p.displayOptions)
         {
             display = d;
@@ -2405,23 +2442,21 @@ namespace mrv
     }
 
     void TimelineViewport::_updateMonitorDisplayView(
-        const int screen,
-        const timeline::OCIOOptions& o) const noexcept
+        const int screen, const timeline::OCIOOptions& o) const noexcept
     {
         TLRENDER_P();
-        
+
         if (this != p.ui->uiView)
             return;
 
         if (screen != p.previous_screen)
         {
             p.previous_screen = screen;
-            const std::string& combined =
-                ocio::combineView(o.display, o.view);
+            const std::string& combined = ocio::combineView(o.display, o.view);
             p.ui->uiOCIOView->copy_label(combined.c_str());
         }
     }
-    
+
     void TimelineViewport::hsv_to_info(
         const image::Color4f& hsv, area::Info& info) const noexcept
     {

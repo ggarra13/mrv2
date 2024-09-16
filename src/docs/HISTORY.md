@@ -7,6 +7,9 @@ v1.2.8
   Compare Mode.
 - A/B Wipe Comparison now properly follows the cursor when zoomed in.
 - Fixed and simplified bakeOCIO.py demo script.
+- Fixed changing displayOptions through python not reflecting the changes in
+  the UI.
+- Fixed compareDemo.py script to reflect new A/B Comparison changes.
 
 
 v1.2.7

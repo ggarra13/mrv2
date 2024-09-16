@@ -220,11 +220,13 @@ namespace mrv
         Viewport* view = p.ui->uiView;
         view->setLUTOptions(p.lutOptions);
         view->setDisplayOptions({p.displayOptions});
+        view->updateDisplayOptions();
         if (p.ui->uiSecondary)
         {
             view = p.ui->uiSecondary->viewport();
             view->setLUTOptions(p.lutOptions);
             view->setDisplayOptions({p.displayOptions});
+            view->updateDisplayOptions();
         }
 
         auto display = p.ui->uiTimeline->getDisplayOptions();
@@ -260,7 +262,6 @@ namespace mrv
     void MainControl::_widgetUpdate()
     {
         TLRENDER_P();
-
 
         App* app = p.ui->app;
         p.volume = app->volume();
