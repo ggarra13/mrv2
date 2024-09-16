@@ -245,5 +245,3 @@ IFS=$' \t\n'
 # Go back to root directory
 cd ..
 
-# Update sourceforge defaults
-bin/release/sourceforge_defaults.sh beta
