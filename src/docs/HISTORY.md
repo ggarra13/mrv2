@@ -27,6 +27,7 @@ v1.2.8
 - Fixed Save Resolution setting being set to Half Size when Save Annotations
   was on.
 - Made Status Bar error/warnings remain longer (8 seconds instead of 5).
+- Fixed a precision issue on Windows with arbitrary scalings like 115%.
 
 
 v1.2.7
