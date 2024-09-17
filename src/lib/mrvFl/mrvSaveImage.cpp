@@ -30,12 +30,11 @@ namespace fs = std::filesystem;
 #include "mrvFl/mrvSaveOptions.h"
 #include "mrvFl/mrvIO.h"
 
+#include "mrvUI/mrvDesktop.h"
+
 #include "mrvApp/mrvSettingsObject.h"
 
 #include "mrViewer.h"
-
-#include <FL/platform.H>
-#undef None
 
 namespace
 {
@@ -342,17 +341,18 @@ namespace mrv
 
                 GLenum imageBuffer = GL_FRONT;
 
-#ifdef FLTK_USE_WAYLAND
                 // @note: Wayland does not work like Windows, macOS or
                 //        X11.  The compositor does not immediately
                 //        swap buffers when calling view->flush().
-                if (fl_wl_display())
+                if (desktop::Wayland())
                 {
                     imageBuffer = GL_BACK;
                 }
-#else
-                view->make_current();
-#endif
+		else
+		{
+                    view->make_current();
+		}
+
                 glReadBuffer(imageBuffer);
 
                 CHECK_GL;
@@ -422,7 +422,6 @@ namespace mrv
             {
                 fs::rename(fs::path(filename), fs::path(file));
             }
-            tcp->unlock();
         }
         catch (const std::exception& e)
         {
@@ -433,6 +432,7 @@ namespace mrv
         view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
         view->setHudActive(hud);
         view->setPresentationMode(presentation);
+        tcp->unlock();
         
         auto settings = ui->app->settings();
         if (file::isReadable(file))

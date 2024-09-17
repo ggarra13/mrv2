@@ -130,7 +130,7 @@ v1.2.5
 - SECOND RE-RELEASE: Added toggle between showing OCIO or COLOR information in
   	 	     topbar in OCIO menu.
 - Input Color Space and Look setting are now stored with each clip.  However, 
-  you cannot compare two clips (say in a wipe) with different display settings.
+  you cannot compare two clips (say in a wipe) with different OCIO settings.
 - Made Image/Previous and Image/Next not appear when a single image or movie
   was loaded.
 - Fixed typo when saving session files which would prevent them from being
