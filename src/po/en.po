@@ -3929,6 +3929,9 @@ msgstr "Image/Previous"
 msgid "Image/Previous Limited"
 msgstr "Image/Previous Limited"
 
+msgid "Image/Go to/%s"
+msgstr "Image/Go to/%s"
+
 msgid "Image/Version/First"
 msgstr "Image/Version/First"
 

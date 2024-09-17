@@ -275,6 +275,16 @@ namespace mrv
         model->next();
     }
 
+    void goto_file_cb(Fl_Widget* w, void* data)
+    {
+        size_t Aindex = (size_t) data;
+        auto model = App::app->filesModel();
+        auto numFiles = model->observeFiles()->getSize();
+        if (Aindex < 0 || Aindex >= numFiles)
+            return;
+        model->setA(Aindex);
+    }
+
     static std::string lastSavedFile;
     static mrv::SaveOptions lastSavedOptions;
 

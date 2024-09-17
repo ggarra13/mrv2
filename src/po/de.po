@@ -3909,6 +3909,9 @@ msgstr "Bild/Zurck"
 msgid "Image/Previous Limited"
 msgstr "Bild/Früher Begrenzt"
 
+msgid "Image/Go to/%s"
+msgstr "Bild/Gehen Sie zu/%s"
+
 msgid "Image/Version/First"
 msgstr "Bild/Fassung/Zuerst"
 

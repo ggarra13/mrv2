@@ -3985,6 +3985,9 @@ msgstr "Imagen/Previa"
 msgid "Image/Previous Limited"
 msgstr "Imagen/Anterior Limitado"
 
+msgid "Image/Go to/%s"
+msgstr "Imagen/Ve a/%s"
+
 msgid "Image/Version/First"
 msgstr "Imagen/Versión/Primera"
 

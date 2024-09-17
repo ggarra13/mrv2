@@ -60,6 +60,7 @@ namespace mrv
     void next_file_cb(Fl_Widget* w, ViewerUI* ui);
     void previous_file_limited_cb(Fl_Widget* w, ViewerUI* ui);
     void next_file_limited_cb(Fl_Widget* w, ViewerUI* ui);
+    void goto_file_cb(Fl_Widget* w, void* idx);
 
     void exit_cb(Fl_Widget* w, ViewerUI* ui);
 

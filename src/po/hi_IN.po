@@ -3910,6 +3910,9 @@ msgstr "छवि/पिछला"
 msgid "Image/Previous Limited"
 msgstr "छवि/पिछला सीमा"
 
+msgid "Image/Go to/%s"
+msgstr "छवि/यहाँ जाएँ/%s"
+
 msgid "Image/Version/First"
 msgstr "छवि/संस्करण/प्रथम"
 

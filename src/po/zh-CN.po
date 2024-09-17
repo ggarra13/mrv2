@@ -3862,6 +3862,9 @@ msgstr "图像/上一个"
 msgid "Image/Previous Limited"
 msgstr "图像/原有限公司"
 
+msgid "Image/Go to/%s"
+msgstr "图像/转到/%s"
+
 msgid "Image/Version/First"
 msgstr "图像/版本/第一个"
 

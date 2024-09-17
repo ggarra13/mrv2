@@ -1118,6 +1118,17 @@ namespace mrv
                 menu->add(
                     _("Image/Previous Limited"), kPreviousImageLimited.hotkey(),
                     (Fl_Callback*)previous_file_limited_cb, ui);
+
+                for (size_t i = 0; i < numFiles; ++i)
+                {
+                    const auto& path = files[i]->path;
+                    fileName = path.getBaseName() + path.getNumber() +
+                               path.getExtension();
+                    snprintf(buf, 256, _("Image/Go to/%s"), fileName.c_str());
+                    void* ptr = nullptr;
+                    ptr = (void*)i;
+                    menu->add(buf, 0, (Fl_Callback*)goto_file_cb, ptr);
+                }
             }
 
             if (has_version)

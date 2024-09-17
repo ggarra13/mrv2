@@ -28,6 +28,10 @@ v1.2.8
   was on.
 - Made Status Bar error/warnings remain longer (8 seconds instead of 5).
 - Fixed a precision issue on Windows with arbitrary scalings like 115%.
+- Added Image/Previous Limited and Image/Next Limited to go from previous to
+  next images, without looping.
+- Added Image/Go to/<Clip> to switch from one clip to the next without having
+  to bring up the Files Panel.
 - Made UI at start up wider to account for new menus and new language 
   translations.
 
