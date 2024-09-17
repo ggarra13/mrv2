@@ -203,7 +203,6 @@ namespace mrv
                     Fl::check();
                     
                     const auto& viewportSize = view->getViewportSize();
-                    math::Size2i outputSize;
                     if (viewportSize.w >= renderSize.w &&
                         viewportSize.h >= renderSize.h)
                     {
@@ -222,17 +221,9 @@ namespace mrv
                                       "Will scale to the viewport size."));
 
                         view->frameView();
-
-                        double zoom =
-                            viewportSize.h / static_cast<double>(renderSize.h);
                         
-                        if (zoom * renderSize.w > viewportSize.w)
-                        {
-                            zoom = viewportSize.w / static_cast<double>(renderSize.w);
-                        }
-                        
-                        outputInfo.size.w = std::round(renderSize.w * zoom);
-                        outputInfo.size.h = std::round(renderSize.h * zoom);
+                        outputInfo.size.w = viewportSize.w;
+                        outputInfo.size.h = viewportSize.h;
                     }
 
                     X = (viewportSize.w - outputInfo.size.w) / 2;
