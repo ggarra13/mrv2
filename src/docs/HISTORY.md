@@ -28,6 +28,8 @@ v1.2.8
   was on.
 - Made Status Bar error/warnings remain longer (8 seconds instead of 5).
 - Fixed a precision issue on Windows with arbitrary scalings like 115%.
+- Made UI at start up wider to account for new menus and new language 
+  translations.
 
 
 v1.2.7
