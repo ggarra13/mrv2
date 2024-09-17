@@ -228,7 +228,7 @@ namespace mrv
                         double imageRatio =
                             renderSize.w / static_cast<double>(renderSize.h);
 
-                        if (imageRatio < viewportRatio)
+                        if (viewportRatio < imageRatio)
                         {
                             double factor = viewportSize.h /
                                             static_cast<double>(renderSize.h);

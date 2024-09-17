@@ -13,7 +13,7 @@ namespace mrv
 {
     class StatusBar : public Fl_Group
     {
-        float seconds_ = 5.0F;
+        float seconds_ = 8.0F;
         Fl_Color labelcolor_;
         Fl_Color color_;
 

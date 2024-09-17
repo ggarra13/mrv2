@@ -23,6 +23,10 @@ v1.2.8
   the command-line.
 - Fixed ICS pulldown not showing None when switching to a clip with no
   Input Color Space stored.
+- Fixed viewport/image ratio calculation in Save Move/Save Single Frame.
+- Fixed Save Resolution setting being set to Half Size when Save Annotations
+  was on.
+- Made Status Bar error/warnings remain longer (8 seconds instead of 5).
 
 
 v1.2.7

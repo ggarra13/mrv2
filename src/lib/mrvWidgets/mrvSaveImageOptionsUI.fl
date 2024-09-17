@@ -94,7 +94,7 @@ auto settings = mrv::App::app->settings();
 settings->setValue("SaveImage/Resolution", value);} open selected
           tooltip {Resolution of movie to save.} xywh {182 74 170 29} down_box BORDER_BOX
           code0 {auto settings = mrv::App::app->settings();}
-          code1 {int value = settings->getValue<int>("SaveImage/Annotations");}
+          code1 {int value = settings->getValue<int>("SaveImage/Resolution");}
           code2 {o->value(value);}
         } {
           MenuItem {} {
