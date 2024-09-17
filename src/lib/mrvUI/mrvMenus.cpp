@@ -35,15 +35,10 @@
 #include "mrvFl/mrvIO.h"
 
 // The FLTK includes have to come last as they conflict with Windows' includes
-#include <FL/platform.H>
 #include <FL/fl_utf8.h>
 #include <FL/Fl_Sys_Menu_Bar.H>
 #include <FL/Fl_Widget.H>
 #include <FL/Fl.H>
-
-#ifdef __linux__
-#    undef None // X11 defines None as a macro
-#endif
 
 namespace
 {
