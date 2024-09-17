@@ -28,6 +28,8 @@ namespace mrv
         static float rotation;
         static bool resizeWindow;
 
+        static std::string hdr;
+
         timeline::OCIOOptions ocioOptions;
         timeline::LUTOptions lutOptions;
         std::vector<tl::timeline::ImageOptions> imageOptions;

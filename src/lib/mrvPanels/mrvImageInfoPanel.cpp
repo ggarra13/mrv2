@@ -12,6 +12,8 @@
 #include <regex>
 namespace fs = std::filesystem;
 
+#include <tlCore/HDR.h>
+
 #include <FL/Fl_Pack.H>
 #include <FL/Fl_Flex.H>
 #include <FL/Fl_Int_Input.H>
@@ -1540,6 +1542,8 @@ namespace mrv
                 widget->align(FL_ALIGN_LEFT);
                 widget->color(colB);
                 double maxS = maxV;
+                if (content > 1000000 && maxV <= 1000000)
+                    maxS = 1000000;
                 if (content > 100000 && maxV <= 100000)
                     maxS = 1000000;
                 else if (content > 10000 && maxV <= 10000)
@@ -1832,6 +1836,7 @@ namespace mrv
                     std::string colorTRC;
                     std::string colorSpace;
                     std::string compression;
+                    std::string HDRdata;
                     if (!tagData.empty())
                     {
                         auto it = tagData.find("Video Codec");
@@ -1863,6 +1868,11 @@ namespace mrv
                         if (it != tagData.end())
                         {
                             colorSpace = it->second;
+                        }
+                        it = tagData.find("hdr");
+                        if (it != tagData.end())
+                        {
+                            HDRdata = it->second;
                         }
                     }
                     else
@@ -1983,7 +1993,43 @@ namespace mrv
                             _("Color Space"), _("Color Transfer Space"),
                             colorSpace);
                     }
+                    if (!HDRdata.empty())
+                    {
+                        nlohmann::json json = nlohmann::json::parse(HDRdata);
+                        image::HDRData hdr = json.get<image::HDRData>();
 
+                        
+                        math::Vector2f& v = hdr.primaries[image::HDRPrimaries::Red];
+                        snprintf(buf, 256, "(%g) (%g)", v.x, v.y);
+                        add_text(_("HDR Red Primaries"), _("HDR Red Primaries"), buf);
+                        
+                        v = hdr.primaries[image::HDRPrimaries::Green];
+                        snprintf(buf, 256, "(%g) (%g)", v.x, v.y);
+                        add_text(_("HDR Green Primaries"), _("HDR Green Primaries"), buf);
+
+                        v = hdr.primaries[image::HDRPrimaries::Blue];
+                        snprintf(buf, 256, "(%g) (%g)", v.x, v.y);
+                        add_text(_("HDR Blue Primaries"), _("HDR Blue Primaries"), buf);
+                        
+                        v = hdr.primaries[image::HDRPrimaries::White];
+                        snprintf(buf, 256, "(%g) (%g)", v.x, v.y);
+                        add_text(_("HDR White Primaries"), _("HDR White Primaries"), buf);
+
+                        const math::FloatRange& luminance =
+                            hdr.displayMasteringLuminance;
+                        snprintf(
+                            buf, 256, "min: %g max: %g", luminance.getMin(),
+                            luminance.getMax());
+                        add_text(
+                            _("HDR Display Mastering Luminance"),
+                            _("HDR Display Mastering Luminance"), buf);
+
+                        snprintf(buf, 256, "%g", hdr.maxCLL);
+                        add_text(_("HDR maxCLL"), _("HDR maxCLL"), buf);
+                        
+                        snprintf(buf, 256, "%g", hdr.maxFALL);
+                        add_text(_("HDR maxFALL"), _("HDR maxFALL"), buf);
+                    }
                     ++group;
 
                     std::string format;
@@ -2209,7 +2255,8 @@ namespace mrv
             for (const auto& item : tagData)
             {
                 bool skip = false;
-                if (item.first.substr(0, 5) == "Video" ||
+                if (item.first == "hdr" ||
+                    item.first.substr(0, 5) == "Video" ||
                     item.first.substr(0, 5) == "Audio" ||
                     item.first.substr(0, 19) == "FFmpeg Pixel Format")
                 {

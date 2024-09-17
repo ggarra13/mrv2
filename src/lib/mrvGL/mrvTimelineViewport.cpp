@@ -72,6 +72,7 @@ namespace mrv
 {
     using namespace tl;
 
+    std::string TimelineViewport::Private::hdr;
     timeline::BackgroundOptions TimelineViewport::Private::backgroundOptions;
     EnvironmentMapOptions TimelineViewport::Private::environmentMapOptions;
     math::Box2i TimelineViewport::Private::selection =
@@ -3283,6 +3284,17 @@ namespace mrv
             {
                 std::stringstream s(i->second);
                 s >> p.displayOptions[0].normalize.maximum;
+            }
+        }
+        
+        i = p.tagData.find("hdr");
+        if (i != p.tagData.end())
+        {
+            if (p.hdr != i->second)
+            {
+                p.hdr = i->second;
+                if (panel::imageInfoPanel)
+                    panel::imageInfoPanel->refresh();
             }
         }
     }

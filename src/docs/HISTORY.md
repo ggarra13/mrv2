@@ -34,6 +34,7 @@ v1.2.8
   to bring up the Files Panel.
 - Made UI at start up wider to account for new menus and new language 
   translations.
+- Added HDR metadata to Media Information Panel.
 
 
 v1.2.7
