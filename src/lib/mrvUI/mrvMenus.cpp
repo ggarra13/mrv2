@@ -39,6 +39,9 @@
 #include <FL/Fl_Sys_Menu_Bar.H>
 #include <FL/Fl_Widget.H>
 #include <FL/Fl.H>
+#ifdef __APPLE__
+#    include <FL/platform.H>  // Needed for Fl_Mac_App_Menu
+#endif
 
 namespace
 {
