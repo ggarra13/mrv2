@@ -1125,9 +1125,8 @@ namespace mrv
                     fileName = path.getBaseName() + path.getNumber() +
                                path.getExtension();
                     snprintf(buf, 256, _("Image/Go to/%s"), fileName.c_str());
-                    void* ptr = nullptr;
-                    ptr = (void*)i;
-                    menu->add(buf, 0, (Fl_Callback*)goto_file_cb, ptr);
+                    std::uintptr_t ptr = i;
+                    menu->add(buf, 0, (Fl_Callback*)goto_file_cb, (void*)ptr);
                 }
             }
 
