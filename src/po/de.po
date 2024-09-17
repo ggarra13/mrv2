@@ -2877,10 +2877,10 @@ msgstr "{0}: Das Schreiber-Plugin kann nicht geffnet werden."
 msgid "Image info: {0} {1}"
 msgstr "Bildinformation: {0} {1}"
 
-msgid ""
-"Image too big for options.annotations.  Will scale to the viewport size."
+msgid "Image too big for Save Annotations.  Will scale to the viewport size."
 msgstr ""
-"Bild zu gro fr options.annotations. Wird zur Ansichtsfenstergre skalieren."
+"Bild zu groß für Annotationen speichern. Skaliert auf die Größe des "
+"Ansichtsfensters."
 
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Ansichtsgre: {0} - X={1}, Y={2}"
@@ -4589,7 +4589,6 @@ msgstr ""
 "Darüber hinaus ermöglicht es das Speichern von A/B- oder Kachel-Vergleichen und das Backen von OCIO.\n"
 "\n"
 "Es ist jedoch auf die Größe Ihres Bildschirms beschränkt."
-
 
 msgid "Video Options"
 msgstr "Video-Optionen"

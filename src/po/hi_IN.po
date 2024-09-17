@@ -2882,10 +2882,8 @@ msgstr "{0}: लेखक प्लगइन खोल नहीं सका."
 msgid "Image info: {0} {1}"
 msgstr "छवि जानकारी: {0} {1}"
 
-msgid ""
-"Image too big for options.annotations.  Will scale to the viewport size."
-msgstr ""
-"विकल्प के लिए छवि बहुत बड़ा.अनुपलट. व्यूपोर्ट आकार में स्केल किया जाएगा."
+msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+msgstr "सहेजने के लिए छवि बहुत बड़ा. व्यूपोर्ट आकार में स्केल किया जाएगा."
 
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "दृश्य आकार: {0} - X={1}, Y={2}"
@@ -4592,7 +4590,6 @@ msgstr ""
 "इसके अलावा, यह A/B या टाइल्ड तुलना सहेजने और OCIO को बेक करने की अनुमति देता है।\n"
 "\n"
 "हालाँकि, यह आपकी स्क्रीन के आकार तक सीमित है।"
-
 
 msgid "Video Options"
 msgstr "वीडियो विकल्प"

@@ -2900,10 +2900,8 @@ msgstr "{0}: Cannot open writer plugin."
 msgid "Image info: {0} {1}"
 msgstr "Image info: {0} {1}"
 
-msgid ""
-"Image too big for options.annotations.  Will scale to the viewport size."
-msgstr ""
-"Image too big for options.annotations.  Will scale to the viewport size."
+msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+msgstr "Image too big for Save Annotations.  Will scale to the viewport size."
 
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Viewport Size: {0} - X={1}, Y={2}"

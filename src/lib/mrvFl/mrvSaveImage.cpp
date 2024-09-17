@@ -201,6 +201,7 @@ namespace mrv
                     Fl::flush();
                     view->flush();
                     Fl::check();
+                    
                     const auto& viewportSize = view->getViewportSize();
                     math::Size2i outputSize;
                     if (viewportSize.w >= renderSize.w &&
@@ -217,7 +218,7 @@ namespace mrv
                     }
                     else
                     {
-                        LOG_WARNING(_("Image too big for options.annotations.  "
+                        LOG_WARNING(_("Image too big for Save Annotations.  "
                                       "Will scale to the viewport size."));
 
                         view->frameView();
@@ -348,10 +349,10 @@ namespace mrv
                 {
                     imageBuffer = GL_BACK;
                 }
-		else
-		{
+                else
+                {
                     view->make_current();
-		}
+                }
 
                 glReadBuffer(imageBuffer);
 

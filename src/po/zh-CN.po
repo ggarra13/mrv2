@@ -2849,9 +2849,8 @@ msgstr "{0}: 无法打开插件"
 msgid "Image info: {0} {1}"
 msgstr "图像信息: {0} {1}"
 
-msgid ""
-"Image too big for options.annotations.  Will scale to the viewport size."
-msgstr "图像太大, 无法注释。将缩放到视图大小"
+msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+msgstr "图像太大, 无法保存说明 。 将缩放到查看端大小 。"
 
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "视图端口大小 : {0} - X={1}, Y={2}"

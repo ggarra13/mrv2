@@ -458,7 +458,7 @@ namespace mrv
                     }
                     else
                     {
-                        LOG_WARNING(_("Image too big for options.annotations.  "
+                        LOG_WARNING(_("Image too big for Save Annotations.  "
                                       "Will scale to the viewport size."));
 
                         view->frameView();

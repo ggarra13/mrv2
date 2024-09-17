@@ -2952,9 +2952,10 @@ msgstr "{0}: No puedo abrir plugin de escritura."
 msgid "Image info: {0} {1}"
 msgstr "Información de Imagen: {0} {1}"
 
-msgid ""
-"Image too big for options.annotations.  Will scale to the viewport size."
-msgstr "Imagen demasiado grande.  Grabaré el tamaño de la vista."
+msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+msgstr ""
+"Imagen demasiado grande para guardar anotaciones. Se escalará al tamaño de "
+"la vista."
 
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Tamaño de la Ventana: {0} - X={1}, Y={2}"
