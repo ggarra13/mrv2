@@ -3900,8 +3900,14 @@ msgstr "Zeitleiste/Markierungen"
 msgid "Image/Next"
 msgstr "Bild/Nchster"
 
+msgid "Image/Next Limited"
+msgstr "Bild/Nächstes Limitiert"
+
 msgid "Image/Previous"
 msgstr "Bild/Zurck"
+
+msgid "Image/Previous Limited"
+msgstr "Bild/Früher Begrenzt"
 
 msgid "Image/Version/First"
 msgstr "Bild/Fassung/Zuerst"

@@ -3920,8 +3920,14 @@ msgstr "Timeline/Markers"
 msgid "Image/Next"
 msgstr "Image/Next"
 
+msgid "Image/Next Limited"
+msgstr "Image/Next Limited"
+
 msgid "Image/Previous"
 msgstr "Image/Previous"
+
+msgid "Image/Previous Limited"
+msgstr "Image/Previous Limited"
 
 msgid "Image/Version/First"
 msgstr "Image/Version/First"

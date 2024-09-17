@@ -3853,8 +3853,14 @@ msgstr "时间线/标记"
 msgid "Image/Next"
 msgstr "图像/下一頁"
 
+msgid "Image/Next Limited"
+msgstr "图像/下个有限公司"
+
 msgid "Image/Previous"
 msgstr "图像/上一个"
+
+msgid "Image/Previous Limited"
+msgstr "图像/原有限公司"
 
 msgid "Image/Version/First"
 msgstr "图像/版本/第一个"

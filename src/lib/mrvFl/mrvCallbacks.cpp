@@ -256,6 +256,25 @@ namespace mrv
         model->next();
     }
 
+    void previous_file_limited_cb(Fl_Widget* w, ViewerUI* ui)
+    {
+        auto model = ui->app->filesModel();
+        auto Aindex = model->observeAIndex()->get();
+        if (Aindex <= 0)
+            return;
+        model->prev();
+    }
+
+    void next_file_limited_cb(Fl_Widget* w, ViewerUI* ui)
+    {
+        auto model = ui->app->filesModel();
+        auto numFiles = model->observeFiles()->getSize();
+        auto Aindex = model->observeAIndex()->get();
+        if (Aindex + 1 >= numFiles)
+            return;
+        model->next();
+    }
+
     static std::string lastSavedFile;
     static mrv::SaveOptions lastSavedOptions;
 

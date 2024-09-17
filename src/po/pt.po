@@ -3895,8 +3895,14 @@ msgstr "Linha Do Tempo/Marcadores"
 msgid "Image/Next"
 msgstr "Imagem/Prxima"
 
+msgid "Image/Next Limited"
+msgstr "Imagem/Próximo Limitado"
+
 msgid "Image/Previous"
 msgstr "Imagem/Anterior"
+
+msgid "Image/Previous Limited"
+msgstr "Imagem/Anterior Limitado"
 
 msgid "Image/Version/First"
 msgstr "Imagem/Verso/Primeiro"

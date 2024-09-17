@@ -3902,8 +3902,14 @@ msgstr "Échéancier/Marqueurs"
 msgid "Image/Next"
 msgstr "Image/Suivant"
 
+msgid "Image/Next Limited"
+msgstr "Image/Prochaine Limitée"
+
 msgid "Image/Previous"
 msgstr "Image/Précédent"
+
+msgid "Image/Previous Limited"
+msgstr "Image/Précédent Limité"
 
 msgid "Image/Version/First"
 msgstr "Image/Version/Première"

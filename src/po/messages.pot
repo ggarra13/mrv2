@@ -3609,7 +3609,13 @@ msgstr ""
 msgid "Image/Next"
 msgstr ""
 
+msgid "Image/Next Limited"
+msgstr ""
+
 msgid "Image/Previous"
+msgstr ""
+
+msgid "Image/Previous Limited"
 msgstr ""
 
 msgid "Image/Version/First"

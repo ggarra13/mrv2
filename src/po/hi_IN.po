@@ -3901,8 +3901,14 @@ msgstr "टाइम-लाइन/मार्कर्स"
 msgid "Image/Next"
 msgstr "छवि/अगला"
 
+msgid "Image/Next Limited"
+msgstr "छवि/अगली सीमा"
+
 msgid "Image/Previous"
 msgstr "छवि/पिछला"
+
+msgid "Image/Previous Limited"
+msgstr "छवि/पिछला सीमा"
 
 msgid "Image/Version/First"
 msgstr "छवि/संस्करण/प्रथम"

@@ -3929,8 +3929,14 @@ msgstr "Scadenza/Marcatori"
 msgid "Image/Next"
 msgstr "Immagine/Avanti"
 
+msgid "Image/Next Limited"
+msgstr "Immagine/Prossimo limitato"
+
 msgid "Image/Previous"
 msgstr "Immagine/Precedente"
+
+msgid "Image/Previous Limited"
+msgstr "Immagine/Precedente limitato"
 
 msgid "Image/Version/First"
 msgstr "Immagine/Versione/Prima"

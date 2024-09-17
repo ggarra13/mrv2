@@ -1110,8 +1110,14 @@ namespace mrv
                     _("Image/Next"), kNextImage.hotkey(),
                     (Fl_Callback*)next_file_cb, ui);
                 menu->add(
+                    _("Image/Next Limited"), kNextImageLimited.hotkey(),
+                    (Fl_Callback*)next_file_limited_cb, ui);
+                menu->add(
                     _("Image/Previous"), kPreviousImage.hotkey(),
                     (Fl_Callback*)previous_file_cb, ui);
+                menu->add(
+                    _("Image/Previous Limited"), kPreviousImageLimited.hotkey(),
+                    (Fl_Callback*)previous_file_limited_cb, ui);
             }
 
             if (has_version)
