@@ -463,28 +463,16 @@ namespace mrv
 
                         view->frameView();
 
-                        double viewportRatio =
-                            viewportSize.w /
-                            static_cast<double>(viewportSize.h);
-                        double imageRatio =
-                            renderSize.w / static_cast<double>(renderSize.h);
-
-                        if (viewportRatio < imageRatio)
+                        double zoom =
+                            viewportSize.h / static_cast<double>(renderSize.h);
+                        
+                        if (zoom * renderSize.w > viewportSize.w)
                         {
-                            double factor = viewportSize.h /
-                                            static_cast<double>(renderSize.h);
-                            outputInfo.size.w =
-                                std::round(renderSize.w * factor);
-                            outputInfo.size.h = viewportSize.h;
+                            zoom = viewportSize.w / static_cast<double>(renderSize.w);
                         }
-                        else
-                        {
-                            double factor = viewportSize.w /
-                                            static_cast<double>(renderSize.w);
-                            outputInfo.size.h =
-                                std::round(renderSize.h * factor);
-                            outputInfo.size.w = viewportSize.w;
-                        }
+                        
+                        outputInfo.size.w = std::round(renderSize.w * zoom);
+                        outputInfo.size.h = std::round(renderSize.h * zoom);
                     }
 
                     X = (viewportSize.w - outputInfo.size.w) / 2;
