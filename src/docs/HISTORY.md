@@ -6,6 +6,8 @@ v1.2.8
 - Gain, Saturation and Gamma now effect all videos in a comparison when in
   Compare Mode.
 - A/B Wipe Comparison now properly follows the cursor when zoomed in.
+- A/B Wipe Comparison now properly follows the cursor on Y (it was reversed
+  previously).
 - Fixed and simplified bakeOCIO.py demo script.  Now, you can bake OCIO
   from the command-line by just doing something like:
   ```

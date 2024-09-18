@@ -138,7 +138,7 @@ namespace mrv
             float dy = pos.y / renderSize.h;
 
             p.compareOptions.wipeCenter.x = dx;
-            p.compareOptions.wipeCenter.y = dy;
+            p.compareOptions.wipeCenter.y = 1.0F - dy;
             p.ui->app->filesModel()->setCompareOptions(p.compareOptions);
             redrawWindows();
         }
