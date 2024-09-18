@@ -76,12 +76,6 @@
 #    include <tlGL/Init.h>
 #endif
 
-#ifdef TLRENDER_RAW
-#    include <jasper/jas_version.h>
-#    include <lcms2.h>
-#    include <libraw/libraw_version.h>
-#endif
-
 #ifdef TLRENDER_STB
 #    include <stb/stb_image.h>
 #endif
@@ -152,6 +146,15 @@ extern "C"
 #endif
 
 #include "mrvFl/mrvIO.h"
+
+
+// Must come last!
+#ifdef TLRENDER_RAW
+#    include <lcms2.h>
+#    include <libraw/libraw_version.h>
+#    define __STDC_VERSION__ 201112L  // Avoid compiler warning
+#    include <jasper/jas_version.h>
+#endif
 
 namespace mrv
 {
