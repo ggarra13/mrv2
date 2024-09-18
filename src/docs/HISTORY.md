@@ -37,6 +37,9 @@ v1.2.8
 - Very minor playback improvement for non HDR videos.
 - Added "Image/Compare/<Clip>" and "Image/Compare Mode" to compare images 
   without bringing up the Compare Panel.
+- Made "Advanced Settings" in Save Movie options store its settings.
+- Made tlRender FFmpeg's write always print out the color space, color TRC
+  and color primaries used when saving.
 
 
 v1.2.7
