@@ -41,17 +41,17 @@ class SaveMovieOptionsUI {open
   Function {SaveMovieOptionsUI(bool hasAudio = true, bool audioOnly = false)} {open
   } {
     Fl_Window uiMain {
-      label {Save Movie Options} open
+      label {Save Movie Options}
       xywh {834 81 465 613} type Double align 0 hide modal
     } {
       Fl_Group {} {
-        label {Common Settings} open
+        label {Common Settings}
         xywh {34 38 390 44} box ROUNDED_FRAME color 56
       } {
         Fl_Check_Button Annotations {
           label {Save Annotations}
           callback {auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Annotations", static_cast<int>(o->value()));} selected
+settings->setValue("SaveMovie/Annotations", static_cast<int>(o->value()));}
           tooltip {Save Annotations burned into the movie or sequence.
 It also allows saving OpenEXRs from an 8-bit movie and changing OpenEXR's pixel type.
 
@@ -134,7 +134,7 @@ settings->setValue("SaveMovie/PixelFormat", std::string(item->label()));} open
           callback {const Fl_Menu_Item* item = o->mvalue();
 if (!item) return;
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Preset", std::string(item->label()));} open
+settings->setValue("SaveMovie/Preset", std::string(item->label()));}
           tooltip {FFMpeg's Preset setting for the codec selected.} xywh {171 309 170 29} down_box BORDER_BOX
         } {}
         Fl_Button {} {
@@ -196,7 +196,7 @@ v->hide();}
       }
     }
     Fl_Window uiHelpWindow {
-      label {Help Window} open
+      label {Help Window}
       xywh {696 505 638 327} type Double hide resizable modal
     } {
       Fl_Text_Display uiHelp {
@@ -207,15 +207,23 @@ v->hide();}
       }
     }
     Fl_Window uiAdvancedSettings {
-      label {Advanced Settings}
+      label {Advanced Settings} open
       xywh {720 371 411 310} type Double hide hotspot modal
     } {
       Fl_Check_Button Override {
         label Override
+        callback {int value = o->value();
+
+auto settings = mrv::App::app->settings();
+settings->setValue("SaveMovie/Override", value);}
         xywh {129 20 78 22} down_box DOWN_BOX
       }
       Fl_Choice ColorRange {
         label {Color Range}
+        callback {int value = o->value();
+
+auto settings = mrv::App::app->settings();
+settings->setValue("SaveMovie/Color Range", value);}
         tooltip {FFMpeg's Pixel Format for the codec selected} xywh {130 60 170 29} down_box BORDER_BOX
       } {
         MenuItem {} {
@@ -229,10 +237,14 @@ v->hide();}
       }
       Fl_Choice ColorSpace {
         label {Color Space}
+        callback {int value = o->value();
+
+auto settings = mrv::App::app->settings();
+settings->setValue("SaveMovie/Color Space", value);}
         tooltip {FFMpeg's Pixel Format for the codec selected} xywh {129 102 170 29} down_box BORDER_BOX
       } {
         MenuItem {} {
-          label sRGB
+          label BGR
           xywh {0 0 100 20}
         }
         MenuItem {} {
@@ -266,6 +278,10 @@ v->hide();}
       }
       Fl_Choice ColorPrimaries {
         label {Color Primaries}
+        callback {int value = o->value();
+
+auto settings = mrv::App::app->settings();
+settings->setValue("SaveMovie/Color Primaries", value);}
         tooltip {FFMpeg's Preset setting for the codec selected.} xywh {130 146 170 29} down_box BORDER_BOX
       } {
         MenuItem {} {
@@ -320,6 +336,10 @@ v->hide();}
       Fl_Choice ColorTRC {
         label {Color TRC}
         user_data this user_data_type {SaveMovieOptionsUI*}
+        callback {int value = o->value();
+
+auto settings = mrv::App::app->settings();
+settings->setValue("SaveMovie/Color TRC", value);}
         tooltip {FFMpeg's Profile settings.} xywh {129 190 170 29} down_box BORDER_BOX
       } {
         MenuItem {} {
@@ -404,7 +424,7 @@ v->hide();}
           label Cancel
           user_data uiAdvancedSettings user_data_type {Fl_Double_Window*}
           callback {Override->value(0);
-v->hide();}
+v->hide();} selected
           xywh {239 242 90 29}
         }
       }
@@ -424,16 +444,20 @@ else
    add_profiles(Profile);
    add_presets(Profile, Preset);
    add_hardware(Profile, Hardware);
-   add_pixel_formats(Profile, PixelFormat);
- }
+   add_pixel_formats(Profile, PixelFormat);      
+   add_advanced_override(Override);
+   add_advanced_color_range(ColorRange);
+   add_advanced_color_space(ColorSpace);
+   add_advanced_color_primaries(ColorPrimaries);   
+   add_advanced_color_trc(ColorTRC);
+}
 uiHelpWindow->hide();
 uiAdvancedSettings->hide();
 uiMain->show();
 while (uiMain->visible())
   Fl::check();} {}
   }
-  Function {help_profile_cb()} {open
-  } {
+  Function {help_profile_cb()} {} {
     code {uiHelpWindow->label(_("Profile Help"));
 auto buffer = uiHelp->buffer();
 buffer->text(_(R"(
@@ -631,8 +655,7 @@ v->add("YUV_420P_10LE");
 v->add("YUV_422P_10LE");
 v->add("YUV_444P_10LE");} {}
   }
-  Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {open
-  } {
+  Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {} {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
 if (!item || !item->label()) return;
 
@@ -751,8 +774,7 @@ if (v->size() > 0)
     v->value(0);
 }} {}
   }
-  Function {add_presets(Fl_Choice* o, Fl_Choice* v)} {open
-  } {
+  Function {add_presets(Fl_Choice* o, Fl_Choice* v)} {} {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
 if (!item || !item->label()) return;
 
@@ -805,8 +827,7 @@ else
   v->deactivate();
 }} {}
   }
-  Function {add_profiles(Fl_Choice* o)} {open
-  } {
+  Function {add_profiles(Fl_Choice* o)} {} {
     code {auto entries = tl::ffmpeg::getProfileLabels();
 for (auto entry : entries)
 {
@@ -837,10 +858,36 @@ for (auto entry : entries)
     }
     o->value(0);} {}
   }
-  Function {add_resolution(Fl_Choice* o)} {open
-  } {
+  Function {add_resolution(Fl_Choice* o)} {} {
     code {const auto& settings = mrv::App::app->settings();
 const int value = settings->getValue<int>("SaveMovie/Resolution");
+o->value(value);} {}
+  }
+  Function {add_advanced_override(Fl_Check_Button* v)} {open
+  } {
+    code {auto settings = mrv::App::app->settings();
+const bool value = settings->getValue<int>("SaveMovie/Override");
+v->value(value);} {}
+  }
+  Function {add_advanced_color_range(Fl_Choice* o)} {open
+  } {
+    code {const auto& settings = mrv::App::app->settings();
+const int value = settings->getValue<int>("SaveMovie/Color Range");
+o->value(value);} {}
+  }
+  Function {add_advanced_color_space(Fl_Choice* o)} {} {
+    code {const auto& settings = mrv::App::app->settings();
+const int value = settings->getValue<int>("SaveMovie/Color Space");
+o->value(value);} {}
+  }
+  Function {add_advanced_color_primaries(Fl_Choice* o)} {} {
+    code {const auto& settings = mrv::App::app->settings();
+const int value = settings->getValue<int>("SaveMovie/Color Primaries");
+o->value(value);} {}
+  }
+  Function {add_advanced_color_trc(Fl_Choice* o)} {} {
+    code {const auto& settings = mrv::App::app->settings();
+const int value = settings->getValue<int>("SaveMovie/Color TRC");
 o->value(value);} {}
   }
   Function {add_audio_codecs(Fl_Choice* o)} {} {

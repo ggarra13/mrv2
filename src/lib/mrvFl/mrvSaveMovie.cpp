@@ -336,6 +336,8 @@ namespace mrv
             std::shared_ptr<timeline_gl::Render> render;
             image::Size renderSize;
             int layerId = ui->uiColorChannel->value();
+            if (layerId < 0)
+                layerId = 0;
 
 
             const SaveResolution resolution = options.resolution;
