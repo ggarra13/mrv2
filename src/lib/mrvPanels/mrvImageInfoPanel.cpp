@@ -2302,6 +2302,9 @@ namespace mrv
         {
             tagData.clear();
 
+            if (!player)
+                return;
+            
             const auto& info = player->ioInfo();
 
             // First, add global tags
