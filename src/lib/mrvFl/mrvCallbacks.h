@@ -60,8 +60,21 @@ namespace mrv
     void next_file_cb(Fl_Widget* w, ViewerUI* ui);
     void previous_file_limited_cb(Fl_Widget* w, ViewerUI* ui);
     void next_file_limited_cb(Fl_Widget* w, ViewerUI* ui);
-    void goto_file_cb(Fl_Widget* w, void* idx);
 
+    //! Select A/B file callbacks
+    void goto_file_cb(Fl_Widget* w, void* idx);
+    void select_Bfile_cb(Fl_Widget* w, void* idx);
+
+    //! Compare callbacks
+    void compare_a_cb(Fl_Widget* w, ViewerUI* ui);
+    void compare_b_cb(Fl_Widget* w, ViewerUI* ui);
+    void compare_wipe_cb(Fl_Widget* w, ViewerUI* ui);
+    void compare_overlay_cb(Fl_Widget* w, ViewerUI* ui);
+    void compare_difference_cb(Fl_Widget* w, ViewerUI* ui);
+    void compare_horizontal_cb(Fl_Widget* w, ViewerUI* ui);
+    void compare_vertical_cb(Fl_Widget* w, ViewerUI* ui);
+    void compare_tile_cb(Fl_Widget* w, ViewerUI* ui);
+    
     void exit_cb(Fl_Widget* w, ViewerUI* ui);
 
     //! Layer callbacks

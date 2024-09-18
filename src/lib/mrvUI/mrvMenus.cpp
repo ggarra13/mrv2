@@ -1103,7 +1103,7 @@ namespace mrv
             bool has_version = regex_match(fileName, regex);
 
             if (numFiles > 1)
-            {
+            {   
                 menu->add(
                     _("Image/Next"), kNextImage.hotkey(),
                     (Fl_Callback*)next_file_cb, ui);
@@ -1115,19 +1115,9 @@ namespace mrv
                     (Fl_Callback*)previous_file_cb, ui);
                 menu->add(
                     _("Image/Previous Limited"), kPreviousImageLimited.hotkey(),
-                    (Fl_Callback*)previous_file_limited_cb, ui);
-
-                for (size_t i = 0; i < numFiles; ++i)
-                {
-                    const auto& path = files[i]->path;
-                    fileName = path.getBaseName() + path.getNumber() +
-                               path.getExtension();
-                    snprintf(buf, 256, _("Image/Go to/%s"), fileName.c_str());
-                    std::uintptr_t ptr = i;
-                    menu->add(buf, 0, (Fl_Callback*)goto_file_cb, (void*)ptr);
-                }
+                    (Fl_Callback*)previous_file_limited_cb, ui, FL_MENU_DIVIDER);
             }
-
+            
             if (has_version)
             {
                 menu->add(
@@ -1142,6 +1132,103 @@ namespace mrv
                 menu->add(
                     _("Image/Version/Next"), kNextVersionImage.hotkey(),
                     (Fl_Callback*)next_image_version_cb, ui);
+            }
+            
+            if (numFiles > 1)
+            {   
+                mode = FL_MENU_RADIO;
+                
+                auto o = model->observeCompareOptions()->get();
+                idx = menu->add(
+                    _("Image/Compare Mode/A"), 0, (Fl_Callback*)compare_a_cb,
+                    ui, mode);
+                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+                if (o.mode == timeline::CompareMode::A)
+                    item->set();
+
+                idx = menu->add(
+                    _("Image/Compare Mode/B"), 0, (Fl_Callback*)compare_b_cb,
+                    ui, mode);
+                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+                if (o.mode == timeline::CompareMode::B)
+                    item->set();
+
+                idx = menu->add(
+                    _("Image/Compare Mode/Wipe"), 0,
+                    (Fl_Callback*)compare_wipe_cb, ui, mode);
+                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+                if (o.mode == timeline::CompareMode::Wipe)
+                    item->set();
+
+                idx = menu->add(
+                    _("Image/Compare Mode/Overlay"), 0,
+                    (Fl_Callback*)compare_overlay_cb, ui, mode);
+                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+                if (o.mode == timeline::CompareMode::Overlay)
+                    item->set();
+
+                idx = menu->add(
+                    _("Image/Compare Mode/Difference"), 0,
+                    (Fl_Callback*)compare_difference_cb, ui, mode);
+                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+                if (o.mode == timeline::CompareMode::Difference)
+                    item->set();
+
+                idx = menu->add(
+                    _("Image/Compare Mode/Horizontal"), 0,
+                    (Fl_Callback*)compare_horizontal_cb, ui, mode);
+                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+                if (o.mode == timeline::CompareMode::Horizontal)
+                    item->set();
+                
+                idx = menu->add(
+                    _("Image/Compare Mode/Vertical"), 0,
+                    (Fl_Callback*)compare_vertical_cb, ui, mode);
+                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+                if (o.mode == timeline::CompareMode::Vertical)
+                    item->set();
+                
+                idx = menu->add(
+                    _("Image/Compare Mode/Tile"), 0,
+                    (Fl_Callback*)compare_tile_cb, ui, mode | FL_MENU_DIVIDER);
+                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+                if (o.mode == timeline::CompareMode::Tile)
+                    item->set();
+                
+                const auto& Aindex   = model->observeAIndex()->get();
+                const auto& Bindexes = model->observeBIndexes()->get();
+
+                mode = FL_MENU_TOGGLE;
+                for (size_t i = 0; i < numFiles; ++i)
+                {
+                    
+                    const auto& path = files[i]->path;
+                    fileName = path.getBaseName() + path.getNumber() +
+                               path.getExtension();
+                    snprintf(buf, 256, _("Image/Go to/%s"), fileName.c_str());
+                    std::uintptr_t ptr = i;
+                    idx = menu->add(buf, 0, (Fl_Callback*)goto_file_cb, (void*)ptr,
+                                    mode);
+                    item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+                    if (i == Aindex)
+                        item->set();
+                    else
+                        item->clear();
+                    
+                    snprintf(buf, 256, _("Image/Compare/%s"), fileName.c_str());
+                    idx = menu->add(buf, 0, (Fl_Callback*)select_Bfile_cb, (void*)ptr,
+                                    mode);
+                    item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+                    for (size_t j = 0; j < Bindexes.size(); ++j)
+                    {
+                        if (i == Bindexes[j])
+                        {
+                            item->set();
+                            break;
+                        }
+                    }
+                }
+                
             }
 
             menu->add(

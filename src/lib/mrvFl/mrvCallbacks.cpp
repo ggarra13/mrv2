@@ -248,12 +248,14 @@ namespace mrv
     {
         auto model = ui->app->filesModel();
         model->prev();
+        ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
     void next_file_cb(Fl_Widget* w, ViewerUI* ui)
     {
         auto model = ui->app->filesModel();
         model->next();
+        ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
     void previous_file_limited_cb(Fl_Widget* w, ViewerUI* ui)
@@ -263,6 +265,7 @@ namespace mrv
         if (Aindex <= 0)
             return;
         model->prev();
+        ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
     void next_file_limited_cb(Fl_Widget* w, ViewerUI* ui)
@@ -273,18 +276,109 @@ namespace mrv
         if (Aindex + 1 >= numFiles)
             return;
         model->next();
+        ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
     void goto_file_cb(Fl_Widget* w, void* data)
     {
+        ViewerUI* ui = App::ui;
         size_t Aindex = (size_t) data;
         auto model = App::app->filesModel();
         auto numFiles = model->observeFiles()->getSize();
         if (Aindex < 0 || Aindex >= numFiles)
             return;
         model->setA(Aindex);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
+    void select_Bfile_cb(Fl_Widget* w, void* data)
+    {
+        ViewerUI* ui = App::ui;
+        size_t Bindex = (size_t) data;
+        auto model = App::app->filesModel();
+        auto numFiles = model->observeFiles()->getSize();
+        if (Bindex < 0 || Bindex >= numFiles)
+            return;
+        
+        const auto bIndexes = model->observeBIndexes()->get();
+        const auto i = std::find(bIndexes.begin(), bIndexes.end(), Bindex);
+        model->setB(Bindex, i == bIndexes.end());
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void compare_a_cb(Fl_Widget* w, ViewerUI* ui)
+    {
+        auto model = App::app->filesModel();
+        auto o = model->observeCompareOptions()->get();
+        o.mode = timeline::CompareMode::A;
+        model->setCompareOptions(o);
+                    
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+    
+    void compare_b_cb(Fl_Widget* w, ViewerUI* ui)
+    {
+        auto model = App::app->filesModel();
+        auto o = model->observeCompareOptions()->get();
+        o.mode = timeline::CompareMode::B;
+        model->setCompareOptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void compare_wipe_cb(Fl_Widget* w, ViewerUI* ui)
+    {
+        auto model = App::app->filesModel();
+        auto o = model->observeCompareOptions()->get();
+        o.mode = timeline::CompareMode::Wipe;
+        model->setCompareOptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void compare_overlay_cb(Fl_Widget* w, ViewerUI* ui)
+    {
+        auto model = App::app->filesModel();
+        auto o = model->observeCompareOptions()->get();
+        o.mode = timeline::CompareMode::Overlay;
+        model->setCompareOptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void compare_difference_cb(Fl_Widget* w, ViewerUI* ui)
+    {
+        auto model = App::app->filesModel();
+        auto o = model->observeCompareOptions()->get();
+        o.mode = timeline::CompareMode::Difference;
+        model->setCompareOptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+    
+    void compare_horizontal_cb(Fl_Widget* w, ViewerUI* ui)
+    {
+        auto model = App::app->filesModel();
+        auto o = model->observeCompareOptions()->get();
+        o.mode = timeline::CompareMode::Horizontal;
+        model->setCompareOptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+    
+    void compare_vertical_cb(Fl_Widget* w, ViewerUI* ui)
+    {
+        auto model = App::app->filesModel();
+        auto o = model->observeCompareOptions()->get();
+        o.mode = timeline::CompareMode::Vertical;
+        model->setCompareOptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+    
+    void compare_tile_cb(Fl_Widget* w, ViewerUI* ui)
+    {
+        auto model = App::app->filesModel();
+        auto o = model->observeCompareOptions()->get();
+        o.mode = timeline::CompareMode::Tile;
+        model->setCompareOptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+    
     static std::string lastSavedFile;
     static mrv::SaveOptions lastSavedOptions;
 

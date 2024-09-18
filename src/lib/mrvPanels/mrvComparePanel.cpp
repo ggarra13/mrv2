@@ -233,9 +233,7 @@ namespace mrv
             bW->callback(
                 [=](auto w)
                 {
-                    auto o = model->observeCompareOptions()->get();
-                    o.mode = timeline::CompareMode::A;
-                    model->setCompareOptions(o);
+                    compare_a_cb(nullptr, p.ui);
                 });
 
             bW = new Widget< Button >(X + 30, Y, 30, 30);
@@ -246,9 +244,7 @@ namespace mrv
             bW->callback(
                 [=](auto w)
                 {
-                    auto o = model->observeCompareOptions()->get();
-                    o.mode = timeline::CompareMode::B;
-                    model->setCompareOptions(o);
+                    compare_b_cb(nullptr, p.ui);
                 });
 
             bW = new Widget< Button >(X + 60, Y, 30, 30);
@@ -271,9 +267,7 @@ namespace mrv
             bW->callback(
                 [=](auto w)
                 {
-                    auto o = model->observeCompareOptions()->get();
-                    o.mode = timeline::CompareMode::Wipe;
-                    model->setCompareOptions(o);
+                    compare_wipe_cb(nullptr, p.ui);
                 });
 
             bW = new Widget< Button >(X + 90, Y, 30, 30);
@@ -285,9 +279,7 @@ namespace mrv
             bW->callback(
                 [=](auto w)
                 {
-                    auto o = model->observeCompareOptions()->get();
-                    o.mode = timeline::CompareMode::Overlay;
-                    model->setCompareOptions(o);
+                    compare_overlay_cb(nullptr, p.ui);
                 });
 
             bW = new Widget< Button >(X + 120, Y, 30, 30);
@@ -298,9 +290,7 @@ namespace mrv
             bW->callback(
                 [=](auto w)
                 {
-                    auto o = model->observeCompareOptions()->get();
-                    o.mode = timeline::CompareMode::Difference;
-                    model->setCompareOptions(o);
+                    compare_difference_cb(nullptr, p.ui);
                 });
 
             bW = new Widget< Button >(X + 150, Y, 30, 30);
@@ -311,9 +301,7 @@ namespace mrv
             bW->callback(
                 [=](auto w)
                 {
-                    auto o = model->observeCompareOptions()->get();
-                    o.mode = timeline::CompareMode::Horizontal;
-                    model->setCompareOptions(o);
+                    compare_horizontal_cb(nullptr, p.ui);
                 });
 
             bW = new Widget< Button >(X + 180, Y, 30, 30);
@@ -324,9 +312,7 @@ namespace mrv
             bW->callback(
                 [=](auto w)
                 {
-                    auto o = model->observeCompareOptions()->get();
-                    o.mode = timeline::CompareMode::Vertical;
-                    model->setCompareOptions(o);
+                    compare_vertical_cb(nullptr, p.ui);
                 });
 
             bW = new Widget< Button >(X + 210, Y, 30, 30);
@@ -337,9 +323,7 @@ namespace mrv
             bW->callback(
                 [=](auto w)
                 {
-                    auto o = model->observeCompareOptions()->get();
-                    o.mode = timeline::CompareMode::Tile;
-                    model->setCompareOptions(o);
+                    compare_tile_cb(nullptr, p.ui);
                 });
 
             bW = new Widget< Button >(X + 240, Y, 30, 30);

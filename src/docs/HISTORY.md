@@ -8,14 +8,11 @@ v1.2.8
 - A/B Wipe Comparison now properly follows the cursor when zoomed in.
 - Fixed and simplified bakeOCIO.py demo script.  Now, you can bake OCIO
   from the command-line by just doing something like:
-  
   ```
   mrv2 <INPUT_FILE> -ics ACEScg -od 'sRGB - Display' -pythonScript bakeOCIO.py -pythonArgs <BAKED.mov>
   ```
-  
   Note that this script bakes without annotations support so if saving a float
   EXR to an 8 or 16-bit image, you will get banding.
-  
 - Fixed changing displayOptions through python not reflecting the changes in
   the UI.
 - Fixed cmd.compare() to refresh the comparison immediately.
@@ -30,12 +27,14 @@ v1.2.8
 - Fixed a precision issue on Windows with arbitrary scalings like 115%.
 - Added Image/Previous Limited and Image/Next Limited to go from previous to
   next images, without looping.
-- Added Image/Go to/<Clip> to switch from one clip to the next without having
+- Added "Image/Go to/<Clip>" to switch from one clip to the next without having
   to bring up the Files Panel.
 - Made UI at start up wider to account for new menus and new language 
   translations.
 - Added HDR metadata to Media Information Panel.
 - Very minor playback improvement for non HDR videos.
+- Added "Image/Compare/<Clip>" and "Image/Compare Mode" to compare images 
+  without bringing up the Compare Panel.
 
 
 v1.2.7
