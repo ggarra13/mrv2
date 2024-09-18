@@ -35,6 +35,7 @@ v1.2.8
 - Made UI at start up wider to account for new menus and new language 
   translations.
 - Added HDR metadata to Media Information Panel.
+- Very minor playback improvement for non HDR videos.
 
 
 v1.2.7

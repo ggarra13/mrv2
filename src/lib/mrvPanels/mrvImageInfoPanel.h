@@ -48,11 +48,17 @@ namespace mrv
             ImageInfoPanel(ViewerUI* ui);
             ~ImageInfoPanel();
 
+            //! Get the tags.
+            void getTags();
+            
             //! Refresh all tabs.
             void refresh();
 
             //! Quicky refresh the image tab if open.
             void imageRefresh();
+            
+            //! Quicky refresh the video tab if open.
+            void videoRefresh();
 
             //! Quicky refresh the metadata tab if open.
             void metadataRefresh();
@@ -157,9 +163,8 @@ namespace mrv
             void fill_data();
 
             void fill_image_data();
+            void fill_video_data();
             void fill_metadata();
-
-            void _getTags();
 
         public:
             Fl_Flex* flex;

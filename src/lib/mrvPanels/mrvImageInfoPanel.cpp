@@ -720,11 +720,17 @@ namespace mrv
             fill_image_data();
             Fl_Group::current(orig);
         }
+        
+        void ImageInfoPanel::videoRefresh()
+        {
+            Fl_Group* orig = Fl_Group::current();
+            fill_video_data();
+            Fl_Group::current(orig);
+        }
 
         void ImageInfoPanel::metadataRefresh()
         {
             Fl_Group* orig = Fl_Group::current();
-            _getTags();
             fill_metadata();
             Fl_Group::current(orig);
         }
@@ -741,6 +747,7 @@ namespace mrv
             m_subtitle->clear();
             m_attributes->clear();
 
+            getTags();
             fill_data();
 
             m_attributes->end();
@@ -1639,175 +1646,20 @@ namespace mrv
             m_curr->end();
         }
 
-        void ImageInfoPanel::fill_image_data()
+        void ImageInfoPanel::fill_video_data()
         {
-            m_image->hide();
-
-            if (!m_image->is_open())
+            m_video->hide();
+            if (!m_video->is_open())
             {
-                m_image->show();
+                m_video->show();
                 return;
             }
 
-            m_image->clear();
-
-            char buf[1024];
-            m_curr = add_browser(m_image);
-
-            const auto info = player->ioInfo();
-            unsigned num_video_streams = info.video.size();
-
-            unsigned num_audio_streams = 0;
-            if (info.audio.isValid())
-                num_audio_streams = info.audio.trackCount;
-
-            const auto& path = player->path();
-            const auto& directory = path.getDirectory();
-
-            const auto& audioPath = player->audioPath();
-            const otime::RationalTime& time = player->currentTime();
-
-            const auto& fullname = createStringFromPathAndTime(path, time);
-
-            add_text(
-                _("Directory"), _("Directory where clip resides"), directory);
-
-            add_text(_("Filename"), _("Filename of the clip"), fullname);
-
-            if (!audioPath.isEmpty() && path != audioPath)
-            {
-                add_text(
-                    _("Audio Directory"),
-                    _("Directory where audio clip resides"),
-                    audioPath.getDirectory());
-
-                add_text(
-                    _("Audio Filename"), _("Filename of the audio clip"),
-                    audioPath.get(-1, tl::file::PathType::FileName));
-            }
-
-            ++group;
-
-            add_int(
-                _("Video Streams"), _("Number of video streams in file"),
-                num_video_streams);
-            add_int(
-                _("Audio Streams"), _("Number of audio streams in file"),
-                num_audio_streams);
-            // add_int( _("Subtitle Streams"),
-            //          _("Number of subtitle streams in file"),
-            //          num_subtitle_streams );
-
-            const auto& range = player->timeRange();
-            const auto& startTime = range.start_time();
-            const auto& endTime = range.end_time_inclusive();
-            add_time(
-                _("Start Time"), _("Beginning frame of clip"), startTime,
-                false);
-            add_time(_("End Time"), _("Ending frame of clip"), endTime, false);
-
-            const otime::TimeRange& iorange = player->inOutRange();
-            int64_t first = iorange.start_time().to_frames();
-            int64_t last = iorange.end_time_inclusive().to_frames();
-
-            add_int(
-                _("First Frame"), _("First frame of clip - User selected"),
-                (int)first, true, true, (Fl_Callback*)change_first_frame_cb,
-                first, last);
-            add_int(
-                _("Last Frame"), _("Last frame of clip - User selected"),
-                (int)last, true, true, (Fl_Callback*)change_last_frame_cb,
-                first, last);
-
-            const char* name = "";
-            double fps = player->defaultSpeed();
-
-            if (is_equal(fps, 29.97))
-                name = "(NTSC)";
-            else if (is_equal(fps, 30.0))
-                name = "(60hz HDTV)";
-            else if (is_equal(fps, 25.0))
-                name = "(PAL)";
-            else if (is_equal(fps, 24.0))
-                name = "(Film)";
-            else if (is_equal(fps, 50.0))
-                name = _("(PAL Fields)");
-            else if (is_equal(fps, 59.940059))
-                name = _("(NTSC Fields)");
-
-            snprintf(buf, 256, "%g %s", fps, name);
-
-            add_text(
-                _("Default Speed"), _("Default Speed in Frames per Second"),
-                buf);
-
-            fps = player->speed();
-            add_float(
-                _("Current Speed"), _("Current Speed (Frames Per Second)"), fps,
-                true, true, (Fl_Callback*)change_fps_cb, 1.0f, 60.0f,
-                FL_WHEN_RELEASE);
-
-            ++group;
-
-            struct stat file_stat;
-            const std::string& filename = directory + fullname;
-
-            if (stat(filename.c_str(), &file_stat) == 0)
-            {
-                // Get file size
-                std::uintmax_t filesize = fs::file_size(filename);
-                add_memory(_("Disk space"), _("Disk space"), filesize);
-
-                // Retrieve last modification time
-                time_t mod_time = file_stat.st_mtime;
-                time_t creation_time = file_stat.st_ctime;
-
-                // Format time according to current locale
-                strftime(buf, sizeof(buf), "%c", localtime(&creation_time));
-                add_text(_("Creation Date"), _("Creation date of file"), buf);
-
-                // Format time according to current locale
-                strftime(buf, sizeof(buf), "%c", localtime(&mod_time));
-                add_text(
-                    _("Modified Date"), _("Last modified date of file"), buf);
-            }
-
-            m_image->end();
-            m_image->show();
-        }
-
-        void ImageInfoPanel::fill_data()
-        {
-            if (!player)
-            {
-                g->tooltip(_("Load an image or movie file"));
-                return;
-            }
-            else
-            {
-                g->tooltip("");
-            }
-
-            // Refresh the dock size
-
-            kMiddle = g->w() / 2;
-
+            m_video->clear();
+            
             const auto& info = player->ioInfo();
             unsigned num_video_streams = info.video.size();
-
-            unsigned num_audio_streams = 0;
-            if (info.audio.isValid())
-                num_audio_streams = info.audio.trackCount;
-
-            // @todo: tlRender does not handle subtitle tracks
-            unsigned num_subtitle_streams = 0;
-
-            fill_image_data();
-
-            // First, check the metadata
-
-            _getTags();
-
+            
             if (num_video_streams > 0)
             {
 
@@ -2066,6 +1918,176 @@ namespace mrv
 
                 m_video->show();
             }
+        }
+
+        void ImageInfoPanel::fill_image_data()
+        {
+            m_image->hide();
+
+            if (!m_image->is_open())
+            {
+                m_image->show();
+                return;
+            }
+
+            m_image->clear();
+
+            char buf[1024];
+            m_curr = add_browser(m_image);
+
+            const auto& info = player->ioInfo();
+            unsigned num_video_streams = info.video.size();
+
+            unsigned num_audio_streams = 0;
+            if (info.audio.isValid())
+                num_audio_streams = info.audio.trackCount;
+
+            const auto& path = player->path();
+            const auto& directory = path.getDirectory();
+
+            const auto& audioPath = player->audioPath();
+            const otime::RationalTime& time = player->currentTime();
+
+            const auto& fullname = createStringFromPathAndTime(path, time);
+
+            add_text(
+                _("Directory"), _("Directory where clip resides"), directory);
+
+            add_text(_("Filename"), _("Filename of the clip"), fullname);
+
+            if (!audioPath.isEmpty() && path != audioPath)
+            {
+                add_text(
+                    _("Audio Directory"),
+                    _("Directory where audio clip resides"),
+                    audioPath.getDirectory());
+
+                add_text(
+                    _("Audio Filename"), _("Filename of the audio clip"),
+                    audioPath.get(-1, tl::file::PathType::FileName));
+            }
+
+            ++group;
+
+            add_int(
+                _("Video Streams"), _("Number of video streams in file"),
+                num_video_streams);
+            add_int(
+                _("Audio Streams"), _("Number of audio streams in file"),
+                num_audio_streams);
+            // add_int( _("Subtitle Streams"),
+            //          _("Number of subtitle streams in file"),
+            //          num_subtitle_streams );
+
+            const auto& range = player->timeRange();
+            const auto& startTime = range.start_time();
+            const auto& endTime = range.end_time_inclusive();
+            add_time(
+                _("Start Time"), _("Beginning frame of clip"), startTime,
+                false);
+            add_time(_("End Time"), _("Ending frame of clip"), endTime, false);
+
+            const otime::TimeRange& iorange = player->inOutRange();
+            int64_t first = iorange.start_time().to_frames();
+            int64_t last = iorange.end_time_inclusive().to_frames();
+
+            add_int(
+                _("First Frame"), _("First frame of clip - User selected"),
+                (int)first, true, true, (Fl_Callback*)change_first_frame_cb,
+                first, last);
+            add_int(
+                _("Last Frame"), _("Last frame of clip - User selected"),
+                (int)last, true, true, (Fl_Callback*)change_last_frame_cb,
+                first, last);
+
+            const char* name = "";
+            double fps = player->defaultSpeed();
+
+            if (is_equal(fps, 29.97))
+                name = "(NTSC)";
+            else if (is_equal(fps, 30.0))
+                name = "(60hz HDTV)";
+            else if (is_equal(fps, 25.0))
+                name = "(PAL)";
+            else if (is_equal(fps, 24.0))
+                name = "(Film)";
+            else if (is_equal(fps, 50.0))
+                name = _("(PAL Fields)");
+            else if (is_equal(fps, 59.940059))
+                name = _("(NTSC Fields)");
+
+            snprintf(buf, 256, "%g %s", fps, name);
+
+            add_text(
+                _("Default Speed"), _("Default Speed in Frames per Second"),
+                buf);
+
+            fps = player->speed();
+            add_float(
+                _("Current Speed"), _("Current Speed (Frames Per Second)"), fps,
+                true, true, (Fl_Callback*)change_fps_cb, 1.0f, 60.0f,
+                FL_WHEN_RELEASE);
+
+            ++group;
+
+            struct stat file_stat;
+            const std::string& filename = directory + fullname;
+
+            if (stat(filename.c_str(), &file_stat) == 0)
+            {
+                // Get file size
+                std::uintmax_t filesize = fs::file_size(filename);
+                add_memory(_("Disk space"), _("Disk space"), filesize);
+
+                // Retrieve last modification time
+                time_t mod_time = file_stat.st_mtime;
+                time_t creation_time = file_stat.st_ctime;
+
+                // Format time according to current locale
+                strftime(buf, sizeof(buf), "%c", localtime(&creation_time));
+                add_text(_("Creation Date"), _("Creation date of file"), buf);
+
+                // Format time according to current locale
+                strftime(buf, sizeof(buf), "%c", localtime(&mod_time));
+                add_text(
+                    _("Modified Date"), _("Last modified date of file"), buf);
+            }
+
+            m_image->end();
+            m_image->show();
+        }
+
+        void ImageInfoPanel::fill_data()
+        {
+            if (!player)
+            {
+                g->tooltip(_("Load an image or movie file"));
+                return;
+            }
+            else
+            {
+                g->tooltip("");
+            }
+
+            // Refresh the dock size
+
+            kMiddle = g->w() / 2;
+
+            const auto& info = player->ioInfo();
+            unsigned num_video_streams = info.video.size();
+
+            unsigned num_audio_streams = 0;
+            if (info.audio.isValid())
+                num_audio_streams = info.audio.trackCount;
+
+            // @todo: tlRender does not handle subtitle tracks
+            unsigned num_subtitle_streams = 0;
+
+            fill_image_data();
+
+            // First, check the metadata
+            fill_video_data();
+
 
             if (num_audio_streams > 0)
             {
@@ -2276,7 +2298,7 @@ namespace mrv
                 m_attributes->show();
         }
 
-        void ImageInfoPanel::_getTags()
+        void ImageInfoPanel::getTags()
         {
             tagData.clear();
 

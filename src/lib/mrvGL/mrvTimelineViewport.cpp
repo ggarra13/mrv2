@@ -1239,6 +1239,7 @@ namespace mrv
         if (panel::imageInfoPanel)
         {
             bool imageRefresh = false;
+            bool videoRefresh = false;
             bool metadataRefresh = false;
             bool fullRefresh = false;
 
@@ -1248,7 +1249,7 @@ namespace mrv
                 imageRefresh = true;
 
             // If timeline is stopped or has a single frame,
-            // refresh the media info panel, sa
+            // refresh the media info panel completely.
             if (p.player->playback() == timeline::Playback::Stop ||
                 p.player->timeRange().duration().value() == 1.0)
                 fullRefresh = true;
@@ -1258,15 +1259,30 @@ namespace mrv
             auto i = p.tagData.find("Data Window");
             if (i != p.tagData.end())
                 metadataRefresh = true;
-
+        
+            i = p.tagData.find("hdr");
+            if (i != p.tagData.end())
+            {
+                if (p.hdr != i->second)
+                {
+                    p.hdr = i->second;
+                    videoRefresh = true;
+                }
+            }
+        
             if (fullRefresh)
             {
                 panel::imageInfoPanel->refresh();
             }
             else
             {
+                if (videoRefresh || metadataRefresh)
+                    panel::imageInfoPanel->getTags();
+                
                 if (imageRefresh)
                     panel::imageInfoPanel->imageRefresh();
+                if (videoRefresh)
+                    panel::imageInfoPanel->videoRefresh();
                 if (metadataRefresh)
                     panel::imageInfoPanel->metadataRefresh();
             }
@@ -3284,17 +3300,6 @@ namespace mrv
             {
                 std::stringstream s(i->second);
                 s >> p.displayOptions[0].normalize.maximum;
-            }
-        }
-        
-        i = p.tagData.find("hdr");
-        if (i != p.tagData.end())
-        {
-            if (p.hdr != i->second)
-            {
-                p.hdr = i->second;
-                if (panel::imageInfoPanel)
-                    panel::imageInfoPanel->refresh();
             }
         }
     }
