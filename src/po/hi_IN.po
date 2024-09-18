@@ -2139,102 +2139,6 @@ msgstr "चुनें"
 msgid "%.3f seconds "
 msgstr "%.3f सेकण्ड"
 
-msgid "Directory"
-msgstr "निर्देशिका नाम:"
-
-msgid "Directory where clip resides"
-msgstr "निर्देशिका जहाँ क्लिप है"
-
-msgid "Filename"
-msgstr "फ़ाइलनाम"
-
-msgid "Filename of the clip"
-msgstr "क्लिप का फ़ाइलनाम"
-
-msgid "Audio Directory"
-msgstr "ऑडियो डिरेक्ट्री"
-
-msgid "Directory where audio clip resides"
-msgstr "निर्देशिका जहाँ ऑडियो क्लिप सेट है"
-
-msgid "Audio Filename"
-msgstr "ऑडियो फ़ाइलनाम"
-
-msgid "Filename of the audio clip"
-msgstr "ऑडियो क्लिप का फ़ाइलनाम"
-
-msgid "Video Streams"
-msgstr "वीडियो स्ट्रीम"
-
-msgid "Number of video streams in file"
-msgstr "फ़ाइल में वीडियो नहरेंों की संख्या"
-
-msgid "Audio Streams"
-msgstr "ऑडियो स्ट्रीम्स"
-
-msgid "Number of audio streams in file"
-msgstr "फ़ाइल में ऑडियो नदियाँ की संख्या"
-
-msgid "Start Time"
-msgstr "प्रारंभ समय"
-
-msgid "Beginning frame of clip"
-msgstr "क्लिप के फ्रेम का आरंभ करें"
-
-msgid "End Time"
-msgstr "समाप्ति समय"
-
-msgid "Ending frame of clip"
-msgstr "क्लिपिंग फ्रेम"
-
-msgid "First Frame"
-msgstr "पहला फ्रेम"
-
-msgid "First frame of clip - User selected"
-msgstr "क्लिप - चुने गए उपयोक्ता के प्रथम फ्रेम"
-
-msgid "Last Frame"
-msgstr "अंतिम फ्रेम"
-
-msgid "Last frame of clip - User selected"
-msgstr "क्लिप - उपयोक्ता के अंतिम फ्रेम"
-
-msgid "(PAL Fields)"
-msgstr "(सीटी)"
-
-msgid "(NTSC Fields)"
-msgstr "(घटते क्रम में फ़ील्ड)"
-
-msgid "Default Speed"
-msgstr "डिफ़ॉल्ट गति"
-
-msgid "Default Speed in Frames per Second"
-msgstr "फ्रेम्स प्रति सेकेंड में डिफ़ॉल्ट गति"
-
-msgid "Current Speed"
-msgstr "वर्तमान गति"
-
-msgid "Current Speed (Frames Per Second)"
-msgstr "मौज़ूदा गति (फैम्स प्रति सेकण्ड)"
-
-msgid "Disk space"
-msgstr "डिस्क स्थान"
-
-msgid "Creation Date"
-msgstr "निर्माण तारीख़"
-
-msgid "Creation date of file"
-msgstr "बनाने की तिथि"
-
-msgid "Modified Date"
-msgstr "परिवर्धित तारीख़"
-
-msgid "Last modified date of file"
-msgstr "अंतिम रूपांतरक"
-
-msgid "Load an image or movie file"
-msgstr "कोई छवि या फिल्म फ़ाइल लोड करें"
-
 msgid "Video Stream #%d"
 msgstr "वीडियो स्ट्रीम #%d"
 
@@ -2337,11 +2241,128 @@ msgstr "रंग जगह"
 msgid "Color Transfer Space"
 msgstr "रंग ट्रांसफर जगह"
 
+msgid "HDR Red Primaries"
+msgstr "डीएसआर लाल आदिम"
+
+msgid "HDR Green Primaries"
+msgstr "डीएसआर हरा भंडार"
+
+msgid "HDR Blue Primaries"
+msgstr "डीएसआर ब्लू पिथ"
+
+msgid "HDR White Primaries"
+msgstr "डीएसआर सफेद इमेज"
+
+msgid "HDR Display Mastering Luminance"
+msgstr "एचडीआर डिस्प्ले मास्टरिंग ल्यूमिनेंस"
+
+msgid "HDR maxCLL"
+msgstr "एचडीआर अधिकतम CLL"
+
+msgid "HDR maxFALL"
+msgstr "एचडीआर अधिकतम FALL"
+
 msgid "FFmpeg Pixel Format"
 msgstr "एफ़एफएमपी पिक्सेल प्रारूप"
 
 msgid "Render Pixel Format"
 msgstr "रेंडर पिक्सेल प्रारूप"
+
+msgid "Directory"
+msgstr "निर्देशिका नाम:"
+
+msgid "Directory where clip resides"
+msgstr "निर्देशिका जहाँ क्लिप है"
+
+msgid "Filename"
+msgstr "फ़ाइलनाम"
+
+msgid "Filename of the clip"
+msgstr "क्लिप का फ़ाइलनाम"
+
+msgid "Audio Directory"
+msgstr "ऑडियो डिरेक्ट्री"
+
+msgid "Directory where audio clip resides"
+msgstr "निर्देशिका जहाँ ऑडियो क्लिप सेट है"
+
+msgid "Audio Filename"
+msgstr "ऑडियो फ़ाइलनाम"
+
+msgid "Filename of the audio clip"
+msgstr "ऑडियो क्लिप का फ़ाइलनाम"
+
+msgid "Video Streams"
+msgstr "वीडियो स्ट्रीम"
+
+msgid "Number of video streams in file"
+msgstr "फ़ाइल में वीडियो नहरेंों की संख्या"
+
+msgid "Audio Streams"
+msgstr "ऑडियो स्ट्रीम्स"
+
+msgid "Number of audio streams in file"
+msgstr "फ़ाइल में ऑडियो नदियाँ की संख्या"
+
+msgid "Start Time"
+msgstr "प्रारंभ समय"
+
+msgid "Beginning frame of clip"
+msgstr "क्लिप के फ्रेम का आरंभ करें"
+
+msgid "End Time"
+msgstr "समाप्ति समय"
+
+msgid "Ending frame of clip"
+msgstr "क्लिपिंग फ्रेम"
+
+msgid "First Frame"
+msgstr "पहला फ्रेम"
+
+msgid "First frame of clip - User selected"
+msgstr "क्लिप - चुने गए उपयोक्ता के प्रथम फ्रेम"
+
+msgid "Last Frame"
+msgstr "अंतिम फ्रेम"
+
+msgid "Last frame of clip - User selected"
+msgstr "क्लिप - उपयोक्ता के अंतिम फ्रेम"
+
+msgid "(PAL Fields)"
+msgstr "(सीटी)"
+
+msgid "(NTSC Fields)"
+msgstr "(घटते क्रम में फ़ील्ड)"
+
+msgid "Default Speed"
+msgstr "डिफ़ॉल्ट गति"
+
+msgid "Default Speed in Frames per Second"
+msgstr "फ्रेम्स प्रति सेकेंड में डिफ़ॉल्ट गति"
+
+msgid "Current Speed"
+msgstr "वर्तमान गति"
+
+msgid "Current Speed (Frames Per Second)"
+msgstr "मौज़ूदा गति (फैम्स प्रति सेकण्ड)"
+
+msgid "Disk space"
+msgstr "डिस्क स्थान"
+
+msgid "Creation Date"
+msgstr "निर्माण तारीख़"
+
+msgid "Creation date of file"
+msgstr "बनाने की तिथि"
+
+msgid "Modified Date"
+msgstr "परिवर्धित तारीख़"
+
+msgid "Last modified date of file"
+msgstr "अंतिम रूपांतरक"
+
+msgid "Load an image or movie file"
+msgstr "कोई छवि या फिल्म फ़ाइल लोड करें"
 
 msgid "Audio Stream #%d"
 msgstr "ऑडियो स्ट्रीम #%d"
@@ -3910,9 +3931,6 @@ msgstr "छवि/पिछला"
 msgid "Image/Previous Limited"
 msgstr "छवि/पिछला सीमा"
 
-msgid "Image/Go to/%s"
-msgstr "छवि/यहाँ जाएँ/%s"
-
 msgid "Image/Version/First"
 msgstr "छवि/संस्करण/प्रथम"
 
@@ -3924,6 +3942,36 @@ msgstr "छवि/संस्करण/पिछला"
 
 msgid "Image/Version/Next"
 msgstr "छवि/संस्करण/अगला"
+
+msgid "Image/Compare Mode/A"
+msgstr "छवि/मोड से तुलना करें/A"
+
+msgid "Image/Compare Mode/B"
+msgstr "छवि/मोड से तुलना करें/B"
+
+msgid "Image/Compare Mode/Wipe"
+msgstr "छवि/मोड से तुलना करें/पट्टी पोंछना प्रभाव"
+
+msgid "Image/Compare Mode/Overlay"
+msgstr "छवि/मोड से तुलना करें/सीमा: (S)"
+
+msgid "Image/Compare Mode/Difference"
+msgstr "छवि/मोड से तुलना करें/भिन्नता"
+
+msgid "Image/Compare Mode/Horizontal"
+msgstr "छवि/मोड से तुलना करें/क्षैतिज"
+
+msgid "Image/Compare Mode/Vertical"
+msgstr "छवि/मोड से तुलना करें/लंबवत"
+
+msgid "Image/Compare Mode/Tile"
+msgstr "छवि/मोड से तुलना करें/टाइल"
+
+msgid "Image/Go to/%s"
+msgstr "छवि/यहाँ जाएँ/%s"
+
+msgid "Image/Compare/%s"
+msgstr "छवि/तुलना करें/%s"
 
 msgid "Edit/Frame/Cut"
 msgstr "संपादन/फ्रेम/Cut"

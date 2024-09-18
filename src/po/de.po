@@ -2118,102 +2118,6 @@ msgstr "Auswahl"
 msgid "%.3f seconds "
 msgstr "%.3f Sekunden"
 
-msgid "Directory"
-msgstr "Verzeichnis"
-
-msgid "Directory where clip resides"
-msgstr "Verzeichnis, in dem sich Clip befindet"
-
-msgid "Filename"
-msgstr "Dateiname"
-
-msgid "Filename of the clip"
-msgstr "Dateiname des Clips"
-
-msgid "Audio Directory"
-msgstr "Audioverzeichnis"
-
-msgid "Directory where audio clip resides"
-msgstr "Verzeichnis, in dem sich Audioclip befindet"
-
-msgid "Audio Filename"
-msgstr "Audio-Dateiname"
-
-msgid "Filename of the audio clip"
-msgstr "Dateiname des Audioclips"
-
-msgid "Video Streams"
-msgstr "Videostreams"
-
-msgid "Number of video streams in file"
-msgstr "Anzahl der Videostreams in der Datei"
-
-msgid "Audio Streams"
-msgstr "Audio-Streams"
-
-msgid "Number of audio streams in file"
-msgstr "Anzahl der Audiostreams in der Datei"
-
-msgid "Start Time"
-msgstr "Startzeit"
-
-msgid "Beginning frame of clip"
-msgstr "Beginnen des Rahmens des Clips"
-
-msgid "End Time"
-msgstr "Endzeit"
-
-msgid "Ending frame of clip"
-msgstr "Enden des Rahmens des Clips"
-
-msgid "First Frame"
-msgstr "Erster Rahmen"
-
-msgid "First frame of clip - User selected"
-msgstr "Erster Rahmen des Clips - Benutzer ausgewhlt"
-
-msgid "Last Frame"
-msgstr "Letzter Rahmen"
-
-msgid "Last frame of clip - User selected"
-msgstr "Letzter Rahmen des Clips - Benutzer ausgewhlt"
-
-msgid "(PAL Fields)"
-msgstr "(PAL-Felder)"
-
-msgid "(NTSC Fields)"
-msgstr "(NTSC-Felder)"
-
-msgid "Default Speed"
-msgstr "Standardgeschwindigkeit"
-
-msgid "Default Speed in Frames per Second"
-msgstr "Standardgeschwindigkeit in Frames pro Sekunde"
-
-msgid "Current Speed"
-msgstr "Aktuelle Geschwindigkeit"
-
-msgid "Current Speed (Frames Per Second)"
-msgstr "Aktuelle Geschwindigkeit (Frames pro Sekunde)"
-
-msgid "Disk space"
-msgstr "Speicherplatz"
-
-msgid "Creation Date"
-msgstr "Erstellungsdatum"
-
-msgid "Creation date of file"
-msgstr "Erstellungsdatum der Datei"
-
-msgid "Modified Date"
-msgstr "Gendertes Datum"
-
-msgid "Last modified date of file"
-msgstr "Zuletzt gendertes Datum der Datei"
-
-msgid "Load an image or movie file"
-msgstr "Ein Bild oder eine Filmdatei laden"
-
 msgid "Video Stream #%d"
 msgstr "Videostream #%d"
 
@@ -2316,11 +2220,128 @@ msgstr "Farbraum"
 msgid "Color Transfer Space"
 msgstr "Farbbertragungsraum"
 
+msgid "HDR Red Primaries"
+msgstr "HDR-Rote Grundlinien"
+
+msgid "HDR Green Primaries"
+msgstr "HDR Green Primaries"
+
+msgid "HDR Blue Primaries"
+msgstr "HDR Blaue Grundlinien"
+
+msgid "HDR White Primaries"
+msgstr "HDR-Weiße Grundlinien"
+
+msgid "HDR Display Mastering Luminance"
+msgstr "HDR-Display-Mastering-Lichtstärke"
+
+msgid "HDR maxCLL"
+msgstr "HDR maxCLL"
+
+msgid "HDR maxFALL"
+msgstr "HDR maxFALL"
+
 msgid "FFmpeg Pixel Format"
 msgstr "FFmpeg Pixelformat"
 
 msgid "Render Pixel Format"
 msgstr "Pixelformat rendern"
+
+msgid "Directory"
+msgstr "Verzeichnis"
+
+msgid "Directory where clip resides"
+msgstr "Verzeichnis, in dem sich Clip befindet"
+
+msgid "Filename"
+msgstr "Dateiname"
+
+msgid "Filename of the clip"
+msgstr "Dateiname des Clips"
+
+msgid "Audio Directory"
+msgstr "Audioverzeichnis"
+
+msgid "Directory where audio clip resides"
+msgstr "Verzeichnis, in dem sich Audioclip befindet"
+
+msgid "Audio Filename"
+msgstr "Audio-Dateiname"
+
+msgid "Filename of the audio clip"
+msgstr "Dateiname des Audioclips"
+
+msgid "Video Streams"
+msgstr "Videostreams"
+
+msgid "Number of video streams in file"
+msgstr "Anzahl der Videostreams in der Datei"
+
+msgid "Audio Streams"
+msgstr "Audio-Streams"
+
+msgid "Number of audio streams in file"
+msgstr "Anzahl der Audiostreams in der Datei"
+
+msgid "Start Time"
+msgstr "Startzeit"
+
+msgid "Beginning frame of clip"
+msgstr "Beginnen des Rahmens des Clips"
+
+msgid "End Time"
+msgstr "Endzeit"
+
+msgid "Ending frame of clip"
+msgstr "Enden des Rahmens des Clips"
+
+msgid "First Frame"
+msgstr "Erster Rahmen"
+
+msgid "First frame of clip - User selected"
+msgstr "Erster Rahmen des Clips - Benutzer ausgewhlt"
+
+msgid "Last Frame"
+msgstr "Letzter Rahmen"
+
+msgid "Last frame of clip - User selected"
+msgstr "Letzter Rahmen des Clips - Benutzer ausgewhlt"
+
+msgid "(PAL Fields)"
+msgstr "(PAL-Felder)"
+
+msgid "(NTSC Fields)"
+msgstr "(NTSC-Felder)"
+
+msgid "Default Speed"
+msgstr "Standardgeschwindigkeit"
+
+msgid "Default Speed in Frames per Second"
+msgstr "Standardgeschwindigkeit in Frames pro Sekunde"
+
+msgid "Current Speed"
+msgstr "Aktuelle Geschwindigkeit"
+
+msgid "Current Speed (Frames Per Second)"
+msgstr "Aktuelle Geschwindigkeit (Frames pro Sekunde)"
+
+msgid "Disk space"
+msgstr "Speicherplatz"
+
+msgid "Creation Date"
+msgstr "Erstellungsdatum"
+
+msgid "Creation date of file"
+msgstr "Erstellungsdatum der Datei"
+
+msgid "Modified Date"
+msgstr "Gendertes Datum"
+
+msgid "Last modified date of file"
+msgstr "Zuletzt gendertes Datum der Datei"
+
+msgid "Load an image or movie file"
+msgstr "Ein Bild oder eine Filmdatei laden"
 
 msgid "Audio Stream #%d"
 msgstr "Audio Stream #%d"
@@ -3909,9 +3930,6 @@ msgstr "Bild/Zurck"
 msgid "Image/Previous Limited"
 msgstr "Bild/Früher Begrenzt"
 
-msgid "Image/Go to/%s"
-msgstr "Bild/Gehen Sie zu/%s"
-
 msgid "Image/Version/First"
 msgstr "Bild/Fassung/Zuerst"
 
@@ -3923,6 +3941,36 @@ msgstr "Bild/Fassung/Zurck"
 
 msgid "Image/Version/Next"
 msgstr "Bild/Fassung/Nchster"
+
+msgid "Image/Compare Mode/A"
+msgstr "Bild/Modus vergleichen/A"
+
+msgid "Image/Compare Mode/B"
+msgstr "Bild/Modus vergleichen/B"
+
+msgid "Image/Compare Mode/Wipe"
+msgstr "Bild/Modus vergleichen/Wischen"
+
+msgid "Image/Compare Mode/Overlay"
+msgstr "Bild/Modus vergleichen/Überlagerung"
+
+msgid "Image/Compare Mode/Difference"
+msgstr "Bild/Modus vergleichen/Veränderung"
+
+msgid "Image/Compare Mode/Horizontal"
+msgstr "Bild/Modus vergleichen/Horizontal"
+
+msgid "Image/Compare Mode/Vertical"
+msgstr "Bild/Modus vergleichen/Vertikal"
+
+msgid "Image/Compare Mode/Tile"
+msgstr "Bild/Modus vergleichen/Fliesen"
+
+msgid "Image/Go to/%s"
+msgstr "Bild/Gehen Sie zu/%s"
+
+msgid "Image/Compare/%s"
+msgstr "Bild/Vergleich/%s"
 
 msgid "Edit/Frame/Cut"
 msgstr "Bearbeiten/Rahmen/Cut"

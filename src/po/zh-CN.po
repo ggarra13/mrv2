@@ -2126,102 +2126,6 @@ msgstr "选取"
 msgid "%.3f seconds "
 msgstr "% 3f 秒"
 
-msgid "Directory"
-msgstr "目录"
-
-msgid "Directory where clip resides"
-msgstr "片段存放目录"
-
-msgid "Filename"
-msgstr "文件名"
-
-msgid "Filename of the clip"
-msgstr "片段文件名"
-
-msgid "Audio Directory"
-msgstr "音频目录"
-
-msgid "Directory where audio clip resides"
-msgstr "音频片段所在目录"
-
-msgid "Audio Filename"
-msgstr "音频文件名"
-
-msgid "Filename of the audio clip"
-msgstr "音频片段的文件名"
-
-msgid "Video Streams"
-msgstr "视频流"
-
-msgid "Number of video streams in file"
-msgstr "文件中的视频流数"
-
-msgid "Audio Streams"
-msgstr "音频流"
-
-msgid "Number of audio streams in file"
-msgstr "文件中的音频流数"
-
-msgid "Start Time"
-msgstr "开始时间"
-
-msgid "Beginning frame of clip"
-msgstr "片段的开始帧"
-
-msgid "End Time"
-msgstr "结束时间"
-
-msgid "Ending frame of clip"
-msgstr "片段的结束帧"
-
-msgid "First Frame"
-msgstr "第一帧"
-
-msgid "First frame of clip - User selected"
-msgstr "用户选择的片段第一帧"
-
-msgid "Last Frame"
-msgstr "最后一帧"
-
-msgid "Last frame of clip - User selected"
-msgstr "用户选择的片段最后一帧"
-
-msgid "(PAL Fields)"
-msgstr "(PAL Fields)"
-
-msgid "(NTSC Fields)"
-msgstr "(NTSC Fields)"
-
-msgid "Default Speed"
-msgstr "默认速度"
-
-msgid "Default Speed in Frames per Second"
-msgstr "默认速度(帧每秒)"
-
-msgid "Current Speed"
-msgstr "当前速度"
-
-msgid "Current Speed (Frames Per Second)"
-msgstr "当前速度(帧每秒)"
-
-msgid "Disk space"
-msgstr "磁盘空间"
-
-msgid "Creation Date"
-msgstr "创建日期"
-
-msgid "Creation date of file"
-msgstr "文件创建日期"
-
-msgid "Modified Date"
-msgstr "修改日期"
-
-msgid "Last modified date of file"
-msgstr "文件的最近修改日期"
-
-msgid "Load an image or movie file"
-msgstr "载入图像或影片"
-
 msgid "Video Stream #%d"
 msgstr "视频流 #%d"
 
@@ -2324,11 +2228,128 @@ msgstr "色彩空间"
 msgid "Color Transfer Space"
 msgstr "色彩转换空间"
 
+msgid "HDR Red Primaries"
+msgstr "HDR 红色原始资料"
+
+msgid "HDR Green Primaries"
+msgstr "HDR 绿色原始知识"
+
+msgid "HDR Blue Primaries"
+msgstr "HDR 蓝色原始情况"
+
+msgid "HDR White Primaries"
+msgstr "HDR 白特权"
+
+msgid "HDR Display Mastering Luminance"
+msgstr "HDR 显示主控能力"
+
+msgid "HDR maxCLL"
+msgstr "HDR 最大CLL"
+
+msgid "HDR maxFALL"
+msgstr "HDR 最大FALL"
+
 msgid "FFmpeg Pixel Format"
 msgstr "FFmpeg 像素格式"
 
 msgid "Render Pixel Format"
 msgstr "渲染像素格式"
+
+msgid "Directory"
+msgstr "目录"
+
+msgid "Directory where clip resides"
+msgstr "片段存放目录"
+
+msgid "Filename"
+msgstr "文件名"
+
+msgid "Filename of the clip"
+msgstr "片段文件名"
+
+msgid "Audio Directory"
+msgstr "音频目录"
+
+msgid "Directory where audio clip resides"
+msgstr "音频片段所在目录"
+
+msgid "Audio Filename"
+msgstr "音频文件名"
+
+msgid "Filename of the audio clip"
+msgstr "音频片段的文件名"
+
+msgid "Video Streams"
+msgstr "视频流"
+
+msgid "Number of video streams in file"
+msgstr "文件中的视频流数"
+
+msgid "Audio Streams"
+msgstr "音频流"
+
+msgid "Number of audio streams in file"
+msgstr "文件中的音频流数"
+
+msgid "Start Time"
+msgstr "开始时间"
+
+msgid "Beginning frame of clip"
+msgstr "片段的开始帧"
+
+msgid "End Time"
+msgstr "结束时间"
+
+msgid "Ending frame of clip"
+msgstr "片段的结束帧"
+
+msgid "First Frame"
+msgstr "第一帧"
+
+msgid "First frame of clip - User selected"
+msgstr "用户选择的片段第一帧"
+
+msgid "Last Frame"
+msgstr "最后一帧"
+
+msgid "Last frame of clip - User selected"
+msgstr "用户选择的片段最后一帧"
+
+msgid "(PAL Fields)"
+msgstr "(PAL Fields)"
+
+msgid "(NTSC Fields)"
+msgstr "(NTSC Fields)"
+
+msgid "Default Speed"
+msgstr "默认速度"
+
+msgid "Default Speed in Frames per Second"
+msgstr "默认速度(帧每秒)"
+
+msgid "Current Speed"
+msgstr "当前速度"
+
+msgid "Current Speed (Frames Per Second)"
+msgstr "当前速度(帧每秒)"
+
+msgid "Disk space"
+msgstr "磁盘空间"
+
+msgid "Creation Date"
+msgstr "创建日期"
+
+msgid "Creation date of file"
+msgstr "文件创建日期"
+
+msgid "Modified Date"
+msgstr "修改日期"
+
+msgid "Last modified date of file"
+msgstr "文件的最近修改日期"
+
+msgid "Load an image or movie file"
+msgstr "载入图像或影片"
 
 msgid "Audio Stream #%d"
 msgstr "音频流 #%d"
@@ -3862,9 +3883,6 @@ msgstr "图像/上一个"
 msgid "Image/Previous Limited"
 msgstr "图像/原有限公司"
 
-msgid "Image/Go to/%s"
-msgstr "图像/转到/%s"
-
 msgid "Image/Version/First"
 msgstr "图像/版本/第一个"
 
@@ -3876,6 +3894,36 @@ msgstr "图像/版本/上一个"
 
 msgid "Image/Version/Next"
 msgstr "图像/版本/下一个"
+
+msgid "Image/Compare Mode/A"
+msgstr "图像/比较模式/A"
+
+msgid "Image/Compare Mode/B"
+msgstr "图像/比较模式/B"
+
+msgid "Image/Compare Mode/Wipe"
+msgstr "图像/比较模式/擦去"
+
+msgid "Image/Compare Mode/Overlay"
+msgstr "图像/比较模式/重叠"
+
+msgid "Image/Compare Mode/Difference"
+msgstr "图像/比较模式/差异"
+
+msgid "Image/Compare Mode/Horizontal"
+msgstr "图像/比较模式/水平"
+
+msgid "Image/Compare Mode/Vertical"
+msgstr "图像/比较模式/垂直"
+
+msgid "Image/Compare Mode/Tile"
+msgstr "图像/比较模式/平铺"
+
+msgid "Image/Go to/%s"
+msgstr "图像/转到/%s"
+
+msgid "Image/Compare/%s"
+msgstr "图像/比较比/%s"
 
 msgid "Edit/Frame/Cut"
 msgstr "编辑/框架/剪切"
