@@ -1248,10 +1248,11 @@ namespace mrv
             if (!file::isMovie(p.player->path().getExtension()))
                 imageRefresh = true;
 
-            // If timeline is stopped or has a single frame,
-            // refresh the media info panel completely.
+            // If timeline is stopped or has a single frame, or we are the
+            // beginning, refresh the media info panel completely.
             if (p.player->playback() == timeline::Playback::Stop ||
-                p.player->timeRange().duration().value() == 1.0)
+                p.player->timeRange().duration().value() == 1.0 ||
+                p.player->inOutRange().start_time() == p.player->currentTime())
                 fullRefresh = true;
 
             // If timeline has a Data Window (it is an OpenEXR)
