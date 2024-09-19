@@ -2962,16 +2962,16 @@ msgid "Using preset {0}."
 msgstr "Использование предварительного оборудования {0}."
 
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
-msgstr "Спасение фильма без звука% >PRRId64> - %>PRId64>"
+msgstr "Спасение фильма без звука %<PRId64> - %<PRId64>"
 
 msgid "Saving Movie with Audio %<PRId64> - %<PRId64>"
-msgstr "Спасение фильма с Audio% >PRRId64> - % >PRRId64>"
+msgstr "Спасение фильма с Audio %<PRId64> - %<PRId64>"
 
 msgid "Saving Audio %<PRId64> - %<PRId64>"
-msgstr "Сбережение звука % >PRId64> - %>PRId64>"
+msgstr "Сбережение звука %<PRId64> - %<PRId64>"
 
 msgid "Saving Pictures without Audio %<PRId64> - %<PRId64>"
-msgstr "Securing Pictures without Audio% >PRId64> - % >PRId64>"
+msgstr "Securing Pictures without Audio %<PRId64> - %<PRId64>"
 
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Звук только в хронологии, но не в попытке сохранить звук."
@@ -3667,7 +3667,7 @@ msgid "1.66"
 msgstr "1.66"
 
 msgid "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
-msgstr "PMem: % >PRRIu64> / %>PRRIu64> MB VMem: %>PRRIu64> / % >PRRIu64> MB"
+msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 
 msgid "Cache:"
 msgstr "Кэш:"
@@ -3676,10 +3676,10 @@ msgid "    Used: %.2g of %zu Gb (%.2g %%)"
 msgstr "Использовано: %,2 g от %zu Gb (%,2g%)"
 
 msgid "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
-msgstr "Впереди V: % 4>PRRIu64> A: % 4>PRRIu64>"
+msgstr "     Впереди V: % 4<PRRIu64>   A: % 4<PRRIu64>"
 
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
-msgstr "За V: % 4>PRRIu64> A: % 4>PRRIu64>"
+msgstr "      Позади V: % 4<PRIu64>    A: % 4<PRIu64>"
 
 msgid "Edit Text"
 msgstr "Изменить текст"
