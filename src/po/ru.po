@@ -1915,7 +1915,7 @@ msgid "Cache"
 msgstr "Кэш"
 
 msgid "      Gigabytes"
-msgstr "Гигабайты"
+msgstr "      Гигабайты"
 
 msgid "Cache in Gigabytes."
 msgstr "Кэш в Гигабайте."
@@ -2619,7 +2619,7 @@ msgid "Color Controls"
 msgstr "Контроль цвета"
 
 msgid "Add"
-msgstr "Add"
+msgstr "Добавить"
 
 msgid "Contrast"
 msgstr "Противоположность"

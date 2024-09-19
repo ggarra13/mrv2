@@ -10,13 +10,13 @@ code_name {.cxx}
 decl {\#include <string>} {public global
 }
 
-decl {\#include "mrvFl/mrvCallbacks.h"} {private local
+decl {\#include "mrViewer.h"} {selected private local
 }
 
-decl {\#include "mrvFl/mrvOCIO.h"} {private local
+decl {\#include "mrvFl/mrvOCIO.h"} {selected private local
 }
 
-decl {\#include "mrViewer.h"} {private local
+decl {\#include "mrvFl/mrvCallbacks.h"} {selected private local
 }
 
 class OCIOPresetsUI {open
@@ -31,14 +31,14 @@ class OCIOPresetsUI {open
 mrv::OCIOPresetsClass = nullptr;
 delete o;
 ViewerUI* ui = mrv::App::ui;
-ui->uiMain->fill_menu( ui->uiMenuBar );}
-      xywh {578 262 495 511} type Double resizable visible
+ui->uiMain->fill_menu( ui->uiMenuBar );} open
+      xywh {578 262 495 511} type Double hide resizable
     } {
       Fl_Group {} {open
         xywh {0 0 495 511} box FLAT_BOX
       } {
         Fl_Group {} {open
-          xywh {59 17 373 478}
+          xywh {33 17 428 478}
         } {
           Fl_Menu_Button uiOCIOPreset {
             label Preset
@@ -52,7 +52,7 @@ o->label(item->label());
 
 const std::string& summary = mrv::ocio::presetSummary(presetName);
 uiOCIOSummary->copy_label(summary.c_str());}
-            tooltip {Click to switch to a stored preset.} xywh {59 146 228 28}
+            tooltip {Click to switch to a stored preset.} xywh {33 146 228 28}
           } {}
           Fl_Button {} {
             label Add
@@ -84,7 +84,7 @@ v->label(item.label());
 
 const std::string& summary = mrv::ocio::presetSummary(presetName);
 uiOCIOSummary->copy_label(summary.c_str());}
-            tooltip {Click to add a new preset with the current settings.} xywh {298 146 64 28}
+            tooltip {Click to add a new preset with the current settings.} xywh {272 146 84 28}
           }
           Fl_Button {} {
             label Delete
@@ -105,18 +105,18 @@ mrv::ocio::removePreset(presetName);
 fill_ocio_presets();
 
 uiOCIOSummary->label("");}
-            tooltip {Click to delete the selected preset.} xywh {368 146 64 28}
+            tooltip {Click to delete the selected preset.} xywh {364 146 97 28}
           }
           Fl_Box {} {
             label {Select, Add or Delete an OCIO Preset that stores: config filename, Input Color Space, View, Look, LUT settings and Defaults for 8-bits, 16-bits, 32-bits, half and float images. }
-            xywh {59 17 373 112} box BORDER_BOX align 128
+            xywh {33 17 428 112} box BORDER_BOX align 128
           }
           Fl_Box {} {
             label Summary
-            xywh {59 187 373 28}
+            xywh {45 187 373 28}
           }
           Fl_Box uiOCIOSummary {
-            xywh {59 215 373 280} box BORDER_BOX labelsize 12 align 85
+            xywh {33 215 428 276} box BORDER_BOX labelsize 12 align 85
           }
         }
       }
@@ -129,13 +129,13 @@ uiOCIOSummary->label("");}
       label {Preset Name}
       callback {presetName = uiPresetName->value();
 delete o;} open
-      xywh {857 535 440 102} type Double
-      code0 {o->show();} modal visible
+      xywh {857 535 440 102} type Double hide
+      code0 {o->show();} modal
     } {
       Fl_Group {} {open
         xywh {0 0 440 102} box FLAT_BOX
       } {
-        Fl_Group {} {open selected
+        Fl_Group {} {open
           xywh {99 15 242 72}
         } {
           Fl_Input uiPresetName {
