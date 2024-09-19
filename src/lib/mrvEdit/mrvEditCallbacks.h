@@ -69,6 +69,15 @@ namespace mrv
     //! Menu function to remove item(s) from the timeline.
     void edit_remove_clip_cb(Fl_Menu_* m, ViewerUI* ui);
 
+    //! Menu function to insert an audio clip at current time.
+    void edit_insert_audio_clip_cb(ViewerUI* ui, const std::string& audioFile);
+
+    //! Edit callbacks that open file requesters
+    void insert_audio_clip_cb(Fl_Menu_* w, ViewerUI* ui);
+    
+    //! Menu function to remove audio clip(s) at current time.
+    void edit_remove_audio_clip_cb(Fl_Menu_* m, ViewerUI* ui);
+    
     //! Menu function to insert an audio gap at current time.
     void edit_insert_audio_gap_cb(Fl_Menu_* m, ViewerUI* ui);
 

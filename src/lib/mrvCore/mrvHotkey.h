@@ -314,6 +314,8 @@ namespace mrv
 
     extern Hotkey kEditSliceClip;
     extern Hotkey kEditRemoveClip;
+    extern Hotkey kEditInsertAudioClip;
+    extern Hotkey kEditRemoveAudioClip;
     extern Hotkey kEditInsertAudioGap;
     extern Hotkey kEditRemoveAudioGap;
 

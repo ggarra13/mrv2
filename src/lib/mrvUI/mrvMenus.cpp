@@ -1245,6 +1245,12 @@ namespace mrv
                 (Fl_Callback*)edit_insert_frame_cb, ui);
 
             menu->add(
+                _("Edit/Audio Clip/Insert"), kEditInsertAudioClip.hotkey(),
+                (Fl_Callback*)insert_audio_clip_cb, ui);
+            menu->add(
+                _("Edit/Audio Clip/Remove"), kEditRemoveAudioClip.hotkey(),
+                (Fl_Callback*)edit_remove_audio_clip_cb, ui);
+            menu->add(
                 _("Edit/Audio Gap/Insert"), kEditInsertAudioGap.hotkey(),
                 (Fl_Callback*)edit_insert_audio_gap_cb, ui);
             menu->add(

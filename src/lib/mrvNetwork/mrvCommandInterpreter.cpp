@@ -1394,6 +1394,15 @@ namespace mrv
             {
                 edit_insert_frame_cb(nullptr, ui);
             }
+            else if (c == "Edit/Audio Clip/Insert")
+            {
+                std::string audioFile = message["value"];
+                edit_insert_audio_clip_cb(ui, audioFile);
+            }
+            else if (c == "Edit/Audio Clip/Remove")
+            {
+                edit_remove_audio_clip_cb(nullptr, ui);
+            }
             else if (c == "Edit/Audio Gap/Insert")
             {
                 edit_insert_audio_gap_cb(nullptr, ui);

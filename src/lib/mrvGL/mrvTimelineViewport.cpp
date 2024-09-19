@@ -1704,13 +1704,13 @@ namespace mrv
         if (W < minW)
         {
             p.frameView = true;
-            W = 690;
+            W = minW;
         }
 
         if (H < minH)
         {
             p.frameView = true;
-            H = 602;
+            H = minH;
         }
 
 #ifdef DEBUG_SCALING

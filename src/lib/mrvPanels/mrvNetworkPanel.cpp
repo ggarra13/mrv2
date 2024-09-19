@@ -92,7 +92,7 @@ namespace mrv
 
             Fl_Group* gp = new Fl_Group(g->x(), Y, g->w(), 20);
 
-            Fl_Box* box = new Fl_Box(g->x(), Y, 70, 20, _("Type"));
+            Fl_Box* box = new Fl_Box(g->x(), Y, X, 20, _("Type"));
             box->labelsize(12);
             box->align(FL_ALIGN_INSIDE | FL_ALIGN_RIGHT);
 

@@ -43,6 +43,11 @@ v1.2.8
 - Preferences->Render->Video Levels had Full Range and Legal Range reversed.
   Fixed.
 - Added first pass at Russian AI translation.
+- Added Edit/Audio Clip/Insert.  It allows inserting an audio clip at the point
+  in time for the video clip.
+- Added Edit/Audio Clip/Remove.  It allows removing audio clip(s) at the point
+  in time for the video clip.
+  
 
 
 v1.2.7

@@ -1213,6 +1213,184 @@ namespace mrv
         tcp->pushMessage("Edit/Remove", time);
     }
 
+    void edit_insert_audio_clip_cb(ViewerUI* ui, const std::string& audioFile)
+    {
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+
+        const auto& time = getTime(player);
+        auto compositions = getTracks(player);
+
+        auto timeline = player->getTimeline();
+        if (!timeline)
+            return;
+
+                
+        tl::file::Path audioPath(audioFile);
+
+                
+        // Find first video clip at current time.
+        int clipIndex = -1;
+        otio::ErrorStatus errorStatus;
+        otio::Clip* clip = nullptr;
+        for (auto composition : compositions)
+        {
+            auto track = dynamic_cast<otio::Track*>(composition);
+            if (!track)
+                continue;
+
+            // Find first video track
+            if (track->kind() != otio::Track::Kind::video)
+                continue;
+
+            clip = otio::dynamic_retainer_cast<Clip>(
+                track->child_at_time(time, &errorStatus));
+            if (!clip)
+                continue;
+
+            clipIndex = track->index_of_child(clip);
+            break;
+        }
+
+        if (!clip || clipIndex < 0)
+            return;
+
+        edit_store_undo(player, ui);
+
+        auto clipRange = clip->trimmed_range();
+        auto range = clip->trimmed_range_in_parent().value();
+
+        // Check if no audio tracks.  If that's the case, add one audio track
+        bool hasAudioTrack = false;
+        for (auto composition : compositions)
+        {
+            auto track = dynamic_cast<otio::Track*>(composition);
+            if (!track)
+                continue;
+
+            if (track->kind() != otio::Track::Kind::audio)
+                continue;
+
+            hasAudioTrack = true;
+            break;
+        }
+
+        bool modified = false;
+        if (!hasAudioTrack)
+        {
+            auto stack = timeline->tracks();
+
+            // Append a new audio track
+            auto track = new otio::Track(
+                "Audio", std::nullopt, otio::Track::Kind::audio);
+            stack->append_child(track, &errorStatus);
+            if (is_error(errorStatus))
+            {
+                LOG_DEBUG("stack->append_child(track) failed with:");
+                LOG_ERROR(errorStatus.full_description);
+            }
+
+            modified = true;
+            updateTimeline(timeline, time, ui);
+            compositions = getTracks(player);
+        }
+
+            
+        auto context = App::app->getContext();
+        auto ioSystem = context->getSystem<io::System>();
+            
+        for (auto composition : compositions)
+        {
+            auto track = dynamic_cast<otio::Track*>(composition);
+            if (!track)
+                continue;
+
+            if (track->kind() != otio::Track::Kind::audio)
+                continue;
+
+            auto sampleRate = track->trimmed_range().duration().rate();
+
+            auto rangeInTrack = otime::TimeRange(
+                range.start_time().rescaled_to(sampleRate),
+                range.duration().rescaled_to(sampleRate));
+
+            auto audioItem = otio::dynamic_retainer_cast<Item>(
+                track->child_at_time(time, &errorStatus));
+
+            if (audioItem)
+            {
+                auto audioRange = audioItem->trimmed_range_in_parent().value();
+                if (audioRange == rangeInTrack &&
+                    otio::dynamic_retainer_cast<otio::Clip>(audioItem))
+                    continue;
+
+                if (audioRange == rangeInTrack)
+                    continue;
+            }
+            
+            int audioIndex = track->index_of_child(audioItem);
+
+
+            const timeline::Options options;
+            if (auto read = ioSystem->read(audioPath, options.ioOptions))
+            {
+                const auto info = read->getInfo().get();
+                if (!info.audio.isValid())
+                    continue;
+                
+                otio::Clip* audioClip = new otio::Clip;
+                audioClip->set_source_range(info.audioTime);
+                audioClip->set_media_reference(new otio::ExternalReference(
+                                                   audioPath.get(-1, tl::file::PathType::Full),
+                                                   info.audioTime));
+                
+                if (audioIndex < 0 || audioIndex >= track->children().size())
+                {
+                    track->append_child(audioClip, &errorStatus);
+                    if (is_error(errorStatus))
+                    {
+                        LOG_DEBUG("track->append_child(audioClip) failed with:");
+                        LOG_ERROR(errorStatus.full_description);
+                    }
+                }
+                else
+                {
+                    track->insert_child(audioIndex, audioClip, &errorStatus);
+                    if (is_error(errorStatus))
+                    {
+                        LOG_DEBUG("track->insert_child(audioClip) " << audioIndex << " failed with:");
+                        LOG_ERROR(errorStatus.full_description);
+                    }
+                }
+                
+                modified = true;
+                break;
+            }
+        }
+            
+
+
+        updateTimeline(timeline, time, ui);
+
+        toOtioFile(timeline, ui);
+
+        if (modified)
+            edit_clear_redo(ui);
+
+        panel::redrawThumbnails();
+
+        tcp->pushMessage("Edit/Audio Clip/Insert", audioFile);
+    }
+    
+    void insert_audio_clip_cb(Fl_Menu_* w, ViewerUI* ui)
+    {   
+        std::string audioFile = open_audio_file(nullptr);
+        if (audioFile.empty())
+            return;
+        edit_insert_audio_clip_cb(ui, audioFile);
+    }
+    
     void edit_insert_audio_gap_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         auto player = ui->uiView->getTimelinePlayer();
@@ -1361,6 +1539,59 @@ namespace mrv
     }
     
 
+    void edit_remove_audio_clip_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+
+        const auto& time = getTime(player);
+        auto compositions = getTracks(player);
+
+        auto timeline = player->getTimeline();
+        if (!timeline)
+            return;
+
+        edit_store_undo(player, ui);
+
+        bool modified = false;
+        otio::ErrorStatus errorStatus;
+        for (auto composition : compositions)
+        {
+            auto track = dynamic_cast<otio::Track*>(composition);
+            if (!track)
+                continue;
+
+            // Find first video track
+            if (track->kind() != otio::Track::Kind::audio)
+                continue;
+
+            auto clip = otio::dynamic_retainer_cast<Clip>(
+                track->child_at_time(time, &errorStatus));
+            if (!clip)
+                continue;
+
+            int clipIndex = track->index_of_child(clip);
+            if (clipIndex < 0 || clipIndex >= track->children().size())
+                continue;
+
+            modified = true;
+            track->remove_child(clipIndex);
+        }
+
+        updateTimeline(timeline, time, ui);
+
+        toOtioFile(timeline, ui);
+
+        if (modified)
+            edit_clear_redo(ui);
+
+        panel::redrawThumbnails();
+
+        tcp->pushMessage("Edit/Audio Clip/Remove", time);
+    }
+
+    
     void edit_remove_audio_gap_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         auto player = ui->uiView->getTimelinePlayer();
