@@ -3720,7 +3720,6 @@ msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgid "Cache:"
 msgstr "Кэш:"
 
-#, fuzzy, c-format
 msgid "    Used: %.2g of %zu Gb (%.2g %%)"
 msgstr "Использовано: %.2g от %zu Gb (%.2g%%)"
 
