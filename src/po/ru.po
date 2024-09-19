@@ -1883,7 +1883,7 @@ msgid "Search String:"
 msgstr "Поиск Структуры:"
 
 msgid "No occurrences of '%s' found!"
-msgstr "Никаких совпадений '%' не найдено!"
+msgstr "Никаких совпадений '%s' не найдено!"
 
 msgid "None"
 msgstr "Нет"
@@ -2220,7 +2220,7 @@ msgid "Pick"
 msgstr "Выбрать"
 
 msgid "%.3f seconds "
-msgstr "%,3 секунды"
+msgstr "%.3f секунды"
 
 msgid "Video Stream #%d"
 msgstr "Видеопоток #%d"
@@ -2950,7 +2950,7 @@ msgid "Cannot save an NDI stream"
 msgstr "Не удалось сохранить поток NDI"
 
 msgid "Saving movie to {0}."
-msgstr "Сбережение фильма до \"0\"."
+msgstr "Сбережение фильма до {0}."
 
 msgid "Saving audio to {0}."
 msgstr "Сохранение звука до {0}."
@@ -3077,7 +3077,7 @@ msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "Hotkeys были сохранены на \"(0){1}.prefs\"."
 
 msgid "Preferences have been saved to: \"{0}{1}\"."
-msgstr "Преференции были сохранены следующим образом: \" {0} {1}\"."
+msgstr "Преференции были сохранены следующим образом: \"{0}{1}\"."
 
 msgid "Removing "
 msgstr "Удаление"
@@ -3110,13 +3110,13 @@ msgid "OCIO config '{0}' does not exist or is not readable."
 msgstr "Конфигурация OCIO \" {0} не существует или не читается."
 
 msgid "Invalid OCIO Ics '{0}'."
-msgstr "Неверный ОКИО Ics '(0)'."
+msgstr "Неверный ОКИО Ics '{0}'."
 
 msgid "Invalid OCIO Look '{0}'."
-msgstr "Неверный OCIO выглядит '(0)'."
+msgstr "Неверный OCIO выглядит '{0}'."
 
 msgid "Invalid OCIO Display/View '{0}'."
-msgstr "Неверное отображение OCIO/Вид '0'."
+msgstr "Неверное отображение OCIO/Вид '{0}'."
 
 msgid "Could not split '{0}' into display and view."
 msgstr "Невозможно разделить \" {0}\" на отображение и просмотр."
@@ -3126,13 +3126,13 @@ msgstr ""
 "Нет просмотра по умолчанию для отображения \" {0}\". Существует ли дисплей?"
 
 msgid "Setting OCIO Preset '{0}'."
-msgstr "Установка OCIO Preset '(0)'."
+msgstr "Установка OCIO Preset '{0}'."
 
 msgid "Preset '{0}' not found."
-msgstr "Предположить '(0)' не найдено."
+msgstr "Предположить '{0}' не найдено."
 
 msgid "OCIO Preset '{0}' already exists!"
-msgstr "OCIO Preset '(0)' уже существует!"
+msgstr "OCIO Preset '{0}' уже существует!"
 
 msgid "Failed to load the file '{0}'."
 msgstr "Не удалось загрузить файл \" {0}\"."
@@ -3721,10 +3721,10 @@ msgid "Cache:"
 msgstr "Кэш:"
 
 msgid "    Used: %.2g of %zu Gb (%.2g %%)"
-msgstr "Использовано: %,2 g от %zu Gb (%,2g%)"
+msgstr "Использовано: %.2 g от %zu Gb (%.2g%)"
 
 msgid "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
-msgstr "     Впереди V: % 4<PRRIu64>   A: % 4<PRRIu64>"
+msgstr "   Впереди   V: % 4<PRIu64>    A: % 4<PRIu64>"
 
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "      Позади V: % 4<PRIu64>    A: % 4<PRIu64>"
