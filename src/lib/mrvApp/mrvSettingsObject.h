@@ -57,6 +57,9 @@ namespace mrv
         //! Get a value safely.
         template < typename T > T getValue(const std::string&);
 
+        //! Check if it has a value.
+        bool hasValue(const std::string&);
+        
         //! Get default value safely.
         template < typename T > T getDefaultValue(const std::string&);
 

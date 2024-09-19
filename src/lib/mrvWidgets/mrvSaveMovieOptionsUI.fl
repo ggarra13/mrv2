@@ -208,7 +208,7 @@ v->hide();}
     }
     Fl_Window uiAdvancedSettings {
       label {Advanced Settings} open
-      xywh {720 371 411 310} type Double hide hotspot modal
+      xywh {1185 376 411 310} type Double hide hotspot modal
     } {
       Fl_Check_Button Override {
         label Override
@@ -424,7 +424,7 @@ settings->setValue("SaveMovie/Color TRC", value);}
           label Cancel
           user_data uiAdvancedSettings user_data_type {Fl_Double_Window*}
           callback {Override->value(0);
-v->hide();} selected
+v->hide();}
           xywh {239 242 90 29}
         }
       }
@@ -863,8 +863,7 @@ for (auto entry : entries)
 const int value = settings->getValue<int>("SaveMovie/Resolution");
 o->value(value);} {}
   }
-  Function {add_advanced_override(Fl_Check_Button* v)} {open
-  } {
+  Function {add_advanced_override(Fl_Check_Button* v)} {} {
     code {auto settings = mrv::App::app->settings();
 const bool value = settings->getValue<int>("SaveMovie/Override");
 v->value(value);} {}
@@ -872,23 +871,39 @@ v->value(value);} {}
   Function {add_advanced_color_range(Fl_Choice* o)} {open
   } {
     code {const auto& settings = mrv::App::app->settings();
-const int value = settings->getValue<int>("SaveMovie/Color Range");
+int value;
+if (!settings->hasValue("SaveMovie/Color Range"))
+   value = o->find_index("PC");
+else
+   value = settings->getValue<int>("SaveMovie/Color Range");
 o->value(value);} {}
   }
-  Function {add_advanced_color_space(Fl_Choice* o)} {} {
+  Function {add_advanced_color_space(Fl_Choice* o)} {open
+  } {
     code {const auto& settings = mrv::App::app->settings();
-const int value = settings->getValue<int>("SaveMovie/Color Space");
+int value;
+if (!settings->hasValue("SaveMovie/Color Space"))
+   value = o->find_index("bt709");
+else
+   value = settings->getValue<int>("SaveMovie/Color Space");
 o->value(value);} {}
   }
-  Function {add_advanced_color_primaries(Fl_Choice* o)} {} {
+  Function {add_advanced_color_primaries(Fl_Choice* o)} {open
+  } {
     code {const auto& settings = mrv::App::app->settings();
 const int value = settings->getValue<int>("SaveMovie/Color Primaries");
 o->value(value);} {}
   }
-  Function {add_advanced_color_trc(Fl_Choice* o)} {} {
+  Function {add_advanced_color_trc(Fl_Choice* o)} {open
+  } {
     code {const auto& settings = mrv::App::app->settings();
-const int value = settings->getValue<int>("SaveMovie/Color TRC");
-o->value(value);} {}
+int value;
+if (!settings->hasValue("SaveMovie/Color TRC"))
+   value = o->find_index("iec61966-2-1");
+else
+   value = settings->getValue<int>("SaveMovie/Color TRC");
+o->value(value);} {selected
+    }
   }
   Function {add_audio_codecs(Fl_Choice* o)} {} {
     code {auto entries = tl::ffmpeg::getAudioCodecLabels();

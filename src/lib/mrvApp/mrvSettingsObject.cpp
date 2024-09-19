@@ -325,6 +325,17 @@ namespace mrv
         return p.settings[name] = defaultValue;
     }
 
+    bool SettingsObject::hasValue(const std::string& name)
+    {
+        TLRENDER_P();
+        auto i = p.settings.find(name);
+        if (i != p.settings.end())
+        {
+            return true;
+        }
+        return false;
+    }
+    
     template < typename T > T SettingsObject::getValue(const std::string& name)
     {
         T out;
