@@ -12,7 +12,7 @@ GITHUB_ASSET_DATE    = 'published_at'
 GITHUB_ASSET_URL     = 'browser_download_url'
 GITHUB_RELEASE_NOTES = 'body'
 
-GITHUB_ASSET_RELEASE_DAYS = 5
+GITHUB_ASSET_RELEASE_DAYS = 3
 
     
 #
