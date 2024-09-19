@@ -65,6 +65,7 @@ if not lang in ['all'] + LANGUAGES:
 # Text that we should not translate.    
 #
 DONT_TRANSLATE = [
+    '@B12@C7@b@.Remote\\t@B12@C7@b@.Local'
     '%d Hz.',
     '1:2',
     '1:4',
