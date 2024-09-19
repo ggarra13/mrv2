@@ -4623,13 +4623,13 @@ msgid "smpte240m"
 msgstr "smpte240m"
 
 msgid "linear"
-msgstr "lineare"
+msgstr "linear"
 
 msgid "log"
 msgstr "log"
 
 msgid "logsqrt"
-msgstr "Logsqrt"
+msgstr "logsqrt"
 
 msgid "iec61966-2-4"
 msgstr "iec61966-2-4"
