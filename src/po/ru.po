@@ -35,7 +35,7 @@ msgid "Models' complexity."
 msgstr "Сложность моделей."
 
 msgid "Draw mode  :class:`mrv2.usd.DrawMode`."
-msgstr "Режим рисования: класс: \"mrv2.usd.DrawMode\"."
+msgstr "Режим рисования :class:`mrv2.usd.DrawMode`."
 
 msgid "Enable Lighting"
 msgstr "Осветить"
@@ -506,8 +506,8 @@ msgid ""
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
 "\n"
-"Класс Рационального времени представляет собой меру времени :math: \"t.rt.rt/tr.rate\" секунд.\n"
-"Его можно переоформить в другой класс: \"~ RationalTime\" (цена RationalTime).\n"
+"Класс RationalTime представляет собой измерение времени в :math:`rt.value/rt.rate` секундах.\n"
+"Он может быть пересчитан в другой :class:`~RationalTime` с другим частотным значением.\n"
 
 msgid ""
 "\n"
@@ -565,7 +565,7 @@ msgstr ""
 "отличие от указанной величины."
 
 msgid "Turn a frame number and rate into a :class:`~RationalTime` object."
-msgstr "Преобразовать число рамы и скорость в: класс: \"~RationalTime\" объект."
+msgstr "Преобразуйте номер кадра и частоту в объект :class:`~RationalTime`."
 
 msgid "Returns the frame number based on the current rate."
 msgstr "Возвращает рамочное число на основе текущей ставки."
@@ -663,8 +663,8 @@ msgid ""
 ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
 msgstr ""
 "\n"
-"Зажим \"прочее\" (класс: \"~TimeTribunal\") в соответствии с\n"
-":attr:'start_time'/:attr:'end_time_ exclusion' и связанные аргументы.\n"
+"Ограничьте 'other' (:class:`~TimeRange`) в соответствии с\n"
+":attr:`start_time`/:attr:`end_time_exclusive` и заданными аргументами.\n"
 
 msgid ""
 "\n"
@@ -1005,16 +1005,16 @@ msgid "Enabled Levels."
 msgstr "Включённые уровни."
 
 msgid "Add a :class:`mrv2.math.Vector3f` to image."
-msgstr "Добавить : класс:'mrv2.math.Vector3f' в изображение."
+msgstr "Добавить :class:`mrv2.math.Vector3f` к изображению."
 
 msgid "Change a :class:`mrv2.math.Vector3f` of brightness to image."
-msgstr "Изменить класс:'mrv2.math.Vector3f' яркости на изображение."
+msgstr "Изменить :class:`mrv2.math.Vector3f` яркости изображения."
 
 msgid "Change a :class:`mrv2.math.Vector3f` of contrast to image."
-msgstr "Изменить класс:'mrv2.math.Vector3f' контрастирует с изображением."
+msgstr "Изменить :class:`mrv2.math.Vector3f` контраста изображения."
 
 msgid "Change a :class:`mrv2.math.Vector3f` of saturation to image."
-msgstr "Изменение класса: \"mrv2.math.Vector3f\" насыщения изображения."
+msgstr "Изменить :class:`mrv2.math.Vector3f` насыщенности изображения."
 
 msgid "Change tint of image to image between 0 and 1."
 msgstr "Сменить изображение на изображение между 0 и 1."
@@ -1068,31 +1068,31 @@ msgid "Soft clip value."
 msgstr "Мягкое значение клипа."
 
 msgid "Minify filter :class:`mrv2.image.ImageFilter`."
-msgstr "Минимизация фильтра: класс: \"mrv2.image.ImageFilter\"."
+msgstr "Фильтр уменьшения масштаба :class:`mrv2.image.ImageFilter`."
 
 msgid "Magnify filter :class:`mrv2.image.ImageFilter`."
-msgstr "Увеличить фильтр: класс: \"mrv2.image. ImageFilter\"."
+msgstr "Фильтр увеличения :class:`mrv2.image.ImageFilter`."
 
 msgid "Image filters."
 msgstr "Фильтры изображения."
 
 msgid "Color channels :class:`mrv2.image.Channels`."
-msgstr "Цветные каналы: класс: \"mrv2.image.Channels\"."
+msgstr "Цветовые каналы :class:`mrv2.image.Channels`."
 
 msgid "Mirror on X, Y or both :class:`mrv2.image.Mirror`."
-msgstr "Зеркало на X, Y или оба: класс: \"mrv2.image.mrror\"."
+msgstr "Отразить по X, Y или обоим :class:`mrv2.image.Mirror`."
 
 msgid "Color options :class:`mrv2.image.Color`."
-msgstr "Цвета: класс: \"mrv2.image.Color\"."
+msgstr "Опции цвета :class:`mrv2.image.Color`."
 
 msgid "Levels options :class:`mrv2.image.Levels`."
-msgstr "Параметры уровней: класс: \"mrv2.image."
+msgstr "Опции уровней :class:`mrv2.image.Levels`."
 
 msgid "EXR Display options :class:`mrv2.image.EXRDisplay`.."
-msgstr "Параметры отображения EXR: класс: \"mrv2.image.EXRDisplay\"..."
+msgstr "Опции отображения EXR :class:`mrv2.image.EXRDisplay`.."
 
 msgid "Soft Clip options :class:`mrv2.image.SoftClip`.."
-msgstr "Мягкие опции Клипа: класс: \"mrv2.image.SoftClip\"..."
+msgstr "Опции мягкой обрезки :class:`mrv2.image.SoftClip`.."
 
 msgid "Display options."
 msgstr "Опции отображения."
