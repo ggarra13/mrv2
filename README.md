@@ -148,6 +148,7 @@ Currently supported:
 - Stereo 3D (Anaglyph, Scanlines, Columns, Checkered, Side by Side)
 - PDF Exporting of Annotations and Notes
 - Linux Wayland support
+- Internationalization (Translations) support.
 
 # Building
 
@@ -453,8 +454,8 @@ To do so, you must run:
 # Translating
 
 mrv2 can support multiple natural language translations.  Currently, 
-Chinese, English, French, German, Hindi, Italian, Portuguese and Spanish
-are supported.  The translation system used is gettext so
+Chinese, English, French, German, Hindi, Italian, Portuguese, Russian and
+Spanish are supported.  The translation system used is gettext so
 familiarity with it is desired (albeit not essential).
 The translations reside in src/po and follow internationalization language
 code files, like es.po (for Spanish) or de.po (for German).
