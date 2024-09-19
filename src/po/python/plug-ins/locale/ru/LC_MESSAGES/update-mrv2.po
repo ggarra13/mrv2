@@ -1,0 +1,135 @@
+# Russian translations for mrv package.
+# Automatically generated, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: mrv 2-build\n"
+"PO-Revision-Date: 2024-09-16 07:36-0300\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Generated-By: pygettext.py 1.5\n"
+
+msgid ""
+"\n"
+"\n"
+"Install completed with output:\n"
+msgstr ""
+"\n"
+"\n"
+"Установить выполненное мероприятие:\n"
+
+msgid "Removed temporary \""
+msgstr "Удалено временно\""
+
+msgid "The new version of mrv2 was installed."
+msgstr "Была установлена новая версия mrv2."
+
+msgid "Could not locate mrv2 in:\n"
+msgstr "Невозможно найти mrv2 в:\n"
+
+msgid "Maybe you installed it in a non-default location."
+msgstr "Может, вы установили его в месте, где он не был неисправен."
+
+msgid "Something failed installing mrv2 - It is not in \""
+msgstr "Что-то не сработало с установкой mrv2 - его нет в \""
+
+msgid "Invalid ISO 8601 format provided: "
+msgstr "Неверный формат ISO 8601:"
+
+msgid "No file matching"
+msgstr "Нет совпадения файлов"
+
+msgid "was found"
+msgstr "был найден"
+
+msgid "No match found"
+msgstr "Совпадений не найдено"
+
+msgid "Install Location: "
+msgstr "Расположение:"
+
+msgid "Error retrieving value:\n"
+msgstr "Погрешность поиска:\n"
+
+msgid "Unknown platform"
+msgstr "Неизвестная платформа"
+
+msgid "Saving session:"
+msgstr "Спасительный сеанс:"
+
+msgid "An unexpected error occurred:"
+msgstr "Произошла неожиданная ошибка:"
+
+msgid "Trying to install"
+msgstr "Пытаюсь установить"
+
+msgid "Please wait"
+msgstr "Подождите, пожалуйста."
+
+msgid "Enter Sudo Password"
+msgstr "Введите пароль Sudo"
+
+msgid "Password"
+msgstr "Пароль"
+
+msgid "You will need to install file"
+msgstr "Вы должны установить файл"
+
+msgid "manually."
+msgstr "Ручной."
+
+msgid "Unknown operating system"
+msgstr "Неизвестная операционная система"
+
+msgid "Downloading "
+msgstr "Загрузка"
+
+msgid "Download seems to have failed!"
+msgstr "Похоже, загрузка провалилась!"
+
+msgid "Release Notes"
+msgstr "Выпущенные ноты"
+
+msgid "Current version is v"
+msgstr "Текущая версия v"
+
+msgid "Latest version at Github is v"
+msgstr "Последняя версия на Github v"
+
+msgid "Released on "
+msgstr "Выпущена в эфир"
+
+msgid "Ignore"
+msgstr "Игнорировать"
+
+msgid "Error fetching latest release information:\n"
+msgstr "Ошибка получения последней информации о выпуске:\n"
+
+msgid "There's a new release but it has not been more than 5 days"
+msgstr "Есть новое освобождение, но прошло не больше 5 дней."
+
+msgid "unknown date."
+msgstr "Неизвестная дата."
+
+msgid "Update anyway"
+msgstr "В любом случае, обновите"
+
+msgid "Downgrade"
+msgstr "Пониженный класс"
+
+msgid "Upgrade"
+msgstr "Модернизация"
+
+msgid "No download url was found for"
+msgstr "Скачивания url не было найдено"
+
+msgid "No releases found for the specified repository."
+msgstr "Для указанного хранилища не найдено никаких выбросов."
+
+msgid "Help/Update mrv2"
+msgstr "Справка/Обновить mrv2"

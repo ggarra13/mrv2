@@ -5,7 +5,7 @@
 #
 # Language codes to be translated
 #
-set( LANGUAGES de en es it fr hi_IN pt zh-CN )
+set( LANGUAGES de en es fr hi_IN it pt ru zh-CN )
 
 #
 # This file creates the .pot / .po / .mo language translations

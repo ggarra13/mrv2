@@ -3081,6 +3081,9 @@ msgstr "पोर्तुगीज"
 msgid "French"
 msgstr "फ्रेंच"
 
+msgid "Russian"
+msgstr "रूसी"
+
 msgid ""
 "Need to reboot mrv2 to change language to {0}.  Are you sure you want to "
 "continue?"
@@ -3168,9 +3171,6 @@ msgstr "तिब्बती"
 
 msgid "Romanian"
 msgstr "रोमानियाई"
-
-msgid "Russian"
-msgstr "रूसी"
 
 msgid "Serbian"
 msgstr "सर्बियाईName"
@@ -4540,8 +4540,8 @@ msgstr "TV"
 msgid "PC"
 msgstr "PC"
 
-msgid "sRGB"
-msgstr "sRGB"
+msgid "BGR"
+msgstr "BGR"
 
 msgid "bt709"
 msgstr "bt709"
@@ -5515,11 +5515,11 @@ msgstr "सीआईआई एक्सy"
 msgid "From File"
 msgstr "फ़ाइल से"
 
-msgid "Legal Range"
-msgstr "लीगल सीमा"
-
 msgid "Full Range"
 msgstr "पूरा सीमा"
+
+msgid "Legal Range"
+msgstr "लीगल सीमा"
 
 msgid "Straight"
 msgstr "सीधा"
@@ -7181,6 +7181,9 @@ msgstr "यदि आप विंडो को बन्द करना चा
 
 msgid "Toggle About Window"
 msgstr "विंडो के बारे में टॉगल करें"
+
+#~ msgid "sRGB"
+#~ msgstr "sRGB"
 
 #~ msgid "Save Annotations burned into the movie or sequence."
 #~ msgstr "उदाहरण के लिए, एक उदाहरण पर ध्यान दीजिए ।"

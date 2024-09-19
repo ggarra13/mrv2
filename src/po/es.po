@@ -5,7 +5,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v0.7.7\n"
+"Project-Id-Version: mrv2 v1.2.8\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
@@ -3153,6 +3153,9 @@ msgstr "Portugués"
 msgid "French"
 msgstr "Francés"
 
+msgid "Russian"
+msgstr "Ruso"
+
 msgid ""
 "Need to reboot mrv2 to change language to {0}.  Are you sure you want to "
 "continue?"
@@ -3240,9 +3243,6 @@ msgstr "Tibetano"
 
 msgid "Romanian"
 msgstr "Romano"
-
-msgid "Russian"
-msgstr "Ruso"
 
 msgid "Serbian"
 msgstr "Serbio"
@@ -4614,8 +4614,8 @@ msgstr "TV"
 msgid "PC"
 msgstr "PC"
 
-msgid "sRGB"
-msgstr "sRGB"
+msgid "BGR"
+msgstr "BGR"
 
 msgid "bt709"
 msgstr "bt709"
@@ -5609,11 +5609,11 @@ msgstr "CIE xyY"
 msgid "From File"
 msgstr "Del Archivo"
 
-msgid "Legal Range"
-msgstr "Rango Legal"
-
 msgid "Full Range"
 msgstr "Rango Completo"
+
+msgid "Legal Range"
+msgstr "Rango Legal"
 
 msgid "Straight"
 msgstr "Derecho"
@@ -7292,6 +7292,9 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
+
+#~ msgid "sRGB"
+#~ msgstr "sRGB"
 
 #~ msgid "Save Annotations burned into the movie or sequence."
 #~ msgstr "Grabar anotaciones fijas en la película o secuencia."

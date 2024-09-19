@@ -1,0 +1,7265 @@
+# Russian translations for mrv2 package.
+# This file is distributed under the same license as the mrv2 package.
+# Automatically generated, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: mrv2 v1.2.8\n"
+"Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
+"PO-Revision-Date: 2023-02-11 13:42-0300\n"
+"Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgid ""
+"\n"
+"USD module.\n"
+"\n"
+"Contains all classes and enums related to USD (Universal Scene Description). \n"
+msgstr ""
+"\n"
+"Модуль долл. США.\n"
+"\n"
+"Содержит все классы и энумы, относящиеся к доллару США (всеобщее описание сцены).\n"
+
+msgid "Renderer Name"
+msgstr "Имя заказчика"
+
+msgid "Render Width"
+msgstr "Рендер-широкоугольник"
+
+msgid "Models' complexity."
+msgstr "Сложность моделей."
+
+msgid "Draw mode  :class:`mrv2.usd.DrawMode`."
+msgstr "Режим рисования: класс: \"mrv2.usd.DrawMode\"."
+
+msgid "Enable Lighting"
+msgstr "Осветить"
+
+msgid "Enable Scene Lights"
+msgstr "Включите сценические огни"
+
+msgid "Enable Scene Materials"
+msgstr "Включить сценические материалы"
+
+msgid "Enable sRGB"
+msgstr "Включить SRGB"
+
+msgid "Stage Cache Count"
+msgstr "Количество кэшов"
+
+msgid "Disk Cache Byte Count"
+msgstr "Граф Disk Kach Byte"
+
+msgid "USD Render Options."
+msgstr "Варианты рендера в долл. США."
+
+msgid "Get USD Render Options."
+msgstr "Получите опционы в долларах США."
+
+msgid "Set USD Render Options."
+msgstr "Установите параметры рендера в долл. США."
+
+msgid ""
+"\n"
+"UI module.\n"
+"\n"
+"Contains all classes and enums related to UI (User Interface). \n"
+msgstr ""
+"\n"
+"Модуль UI.\n"
+"\n"
+"Содержит все классы и энумы, связанные с UI (пользовательский интерфейс).\n"
+
+msgid "Refresh menus."
+msgstr "Обновить меню."
+
+msgid ""
+"\n"
+"Timeline module.\n"
+"\n"
+"Contains all functions related to the timeline control.\n"
+msgstr ""
+"\n"
+"Модуль временных рамок.\n"
+"\n"
+"Содержит все функции, связанные с контролем времени.\n"
+
+msgid "Play forwards."
+msgstr "Играй вперёд."
+
+msgid "Play backwards."
+msgstr "Играй назад."
+
+msgid "Seek to a time in timeline."
+msgstr "Ищите время в графике."
+
+msgid "Seek to a frame in timeline."
+msgstr "Ищите хронологию в хронологии."
+
+msgid "Seek to a second in timeline."
+msgstr "Ищите секунду во времени."
+
+msgid "Time range of the timeline."
+msgstr "Сроки."
+
+msgid "Selected time range of the timeline."
+msgstr "Отдельные временные интервалы."
+
+msgid "Set the selected time range of the timeline."
+msgstr "Установите выбранный временной диапазон в графике."
+
+msgid "Set the in time of the selected time range of the timeline."
+msgstr "Установите время в выбранном временном диапазоне."
+
+msgid "Set the in frame of the selected time range of the timeline."
+msgstr "Установите рамки выбранного периода времени."
+
+msgid "Set the in seconds of the selected time range of the timeline."
+msgstr "Установите в секундах выбранный временной диапазон."
+
+msgid "Set the out time of the selected time range of the timeline."
+msgstr "Указать время выбранного периода времени."
+
+msgid "Set the out frame of the selected time range of the timeline."
+msgstr "Установите рамки выбранного периода времени."
+
+msgid "Set the out seconds of the selected time range of the timeline."
+msgstr "Установите секунды выбранного диапазона времени."
+
+msgid "Current time in timeline."
+msgstr "Текущее время в графике."
+
+msgid "Current frame in timeline."
+msgstr "Текущая рамка в графике."
+
+msgid "Current seconds in timeline."
+msgstr "Текущие секунды в хронологии."
+
+msgid "Return current loop mode of timeline."
+msgstr "Возвращайте текущий режим петли."
+
+msgid "Set current loop mode of timeline."
+msgstr "Установите текущий режим петли."
+
+msgid "Gets the current FPS of timeline."
+msgstr "Получает текущие ФПС времени."
+
+msgid "Gets the default speed of the timeline."
+msgstr "Получает по умолчанию скорость времени."
+
+msgid "Set current FPS of timeline."
+msgstr "Установите текущие FPS временн*е рамки."
+
+msgid "Value less than 0"
+msgstr "Значение менее 0"
+
+msgid ""
+"\n"
+"Settings module.\n"
+"\n"
+"Contains all settings functions.\n"
+msgstr ""
+"\n"
+"Модуль параметров.\n"
+"\n"
+"Содержит все функции настройки.\n"
+
+msgid "Returns whether to check for updates at start up."
+msgstr "Возвращается ли проверка обновления в начале."
+
+msgid "Retrieve the cache memory setting in gigabytes."
+msgstr "Возьмите кэш-память в гигабайтах."
+
+msgid "Set the cache memory setting in gigabytes."
+msgstr "Установите настройку памяти кэша в гигабайтах."
+
+msgid "Retrieve Read Ahead cache in seconds."
+msgstr "Попробуй прочесть кэш за секунды."
+
+msgid "Set Read Ahead cache in seconds."
+msgstr "Начните читать в кэше через секунды."
+
+msgid "Retrieve Read Behind cache in seconds."
+msgstr "Прочитай заднюю кэшу в секунды."
+
+msgid "Set Read Behind cache in seconds."
+msgstr "Займитесь чтением за кэшом в секунды."
+
+msgid "Set file sequence audio."
+msgstr "Установите звук последовательности файлов."
+
+msgid "Get file sequence audio."
+msgstr "Найдите звук последовательности файлов."
+
+msgid "Set file sequence audio file name."
+msgstr "Установить звуковое имя файла."
+
+msgid "Get file sequence audio file name."
+msgstr "Найдите последовательность звукового файла."
+
+msgid "Set file sequence audio directory."
+msgstr "Установите аудиоканал файловой последовательности."
+
+msgid "Get file sequence audio directory."
+msgstr "Возьмите аудиоканал файловой последовательности."
+
+msgid "Set maximum file sequence digits."
+msgstr "Установите максимальные цифры последовательности файлов."
+
+msgid "Get maximum file sequence digits."
+msgstr "Выбрать максимальные цифры последовательности файлов."
+
+msgid "Set Timer Mode."
+msgstr "Установите режим таймера."
+
+msgid "Get Timer Mode."
+msgstr "Возьмите режим таймера."
+
+msgid "Set Audio Buffer Frame Count."
+msgstr "Зафиксировать подсчёт аудио-буферов."
+
+msgid "Get Audio Buffer Frame Count."
+msgstr "Найдите подсчёт аудио-буферов."
+
+msgid "Set Video Request Count."
+msgstr "Назначь число запросов на видео."
+
+msgid "Get Video Request Count."
+msgstr "Найдите список запросов на видео."
+
+msgid "Set Audio Request Count."
+msgstr "Назначьте число запросов на аудио."
+
+msgid "Get Audio Request Count."
+msgstr "Найдите звуковой запрос подсчёт."
+
+msgid "Set Sequence Thread Count."
+msgstr "Установите граф последовательности."
+
+msgid "Get Sequence Thread Count."
+msgstr "Найдите граф последовательности."
+
+msgid "Set FFmpeg YUV To RGB Conversion."
+msgstr "Установите FFmpeg YUV на преобразование RGB."
+
+msgid "Get FFmpeg YUV To RGB Conversion."
+msgstr "Отправьте FFmpeg YUV на конверсию RGB."
+
+msgid "Set FFmpeg Color Accuracy."
+msgstr "Указать точность цвета FFmpeg."
+
+msgid "Get FFmpeg Color Accuracy."
+msgstr "Получите точность цвета FFmpeg."
+
+msgid "Set FFmpeg Thread Count."
+msgstr "Установите граф FFmpeg Tread."
+
+msgid "Get FFmpeg Thread Count."
+msgstr "Возьмите граф FFmpeg Tread."
+
+msgid "No session name established, cannot save."
+msgstr "Имя сеанса не установлено, не может сохранить."
+
+msgid ""
+"\n"
+"Session module.\n"
+"\n"
+"Used to manage everything related to sessions.\n"
+msgstr ""
+"\n"
+"Сессионный модуль.\n"
+"\n"
+"Обрабатывал всё, что связано с сессиями.\n"
+
+msgid "Returns the current session metadata."
+msgstr "Возвращает метаданные текущей сессии."
+
+msgid "Returns the current metadata for a key."
+msgstr "Возвращает текущие метаданные для ключа."
+
+msgid "Sets all the session metadata for a session."
+msgstr "Устанавливает все метаданные сессии для заседания."
+
+msgid "Sets the session metadata for a key."
+msgstr "Устанавливает сессионные метаданные для ключа."
+
+msgid "Clears the current session metadata."
+msgstr "Очистить метаданные текущей сессии."
+
+msgid "Returns current session file."
+msgstr "Возвращает файл текущего сеанса."
+
+msgid "Sets the current session file."
+msgstr "Устанавливает текущий файл сеанса."
+
+msgid "Open a session file."
+msgstr "Откройте сессионный файл."
+
+msgid "Save a session file."
+msgstr "Сохранить сессионный файл."
+
+msgid "Duplicated Python plugin {0} in {1} and {2}."
+msgstr "Дублированный мешок Python {0} в {1} и {2}."
+
+msgid ""
+"Expected a tuple containing a Python function and a string with menu options"
+" in it."
+msgstr "Ожидал тюльку, содержащую функцию Python и строку с опциями меню."
+
+msgid ""
+"Expected a handle to a Python function or to a tuple containing a Python "
+"function and a string with menu options in it."
+msgstr ""
+"Ожидал рукоятку для функции Python или тюльпана, содержащего функцию Python "
+"и строку с опциями меню."
+
+msgid ""
+"Please override the menus method by returning a valid dict of key menus, "
+"values methods."
+msgstr ""
+"Пожалуйста, отмените метод меню, верните действительный диктофон меню "
+"ключей, методы значений."
+
+msgid ""
+"\n"
+"Plugin module.\n"
+"\n"
+"Contains all classes related to python plugins.\n"
+"\n"
+msgstr ""
+"\n"
+"Модуль провинции.\n"
+"\n"
+"В этой колонке содержатся все классы, относящиеся к питоновым бамперам.\n"
+"\n"
+
+msgid ""
+"Whether a plugin is active or not.  If not overriden, the default is True."
+msgstr ""
+"Вне зависимости от того, активен ли пультин или нет. Если он не отменяется, "
+"то по умолчанию это правда."
+
+msgid ""
+"\n"
+"Dictionary of menu entries with callbacks, like:\n"
+"\n"
+"def menus(self):\n"
+"    menus = { \"Nem Menu/Hello\" : self.run }\n"
+"    return menus\n"
+"\n"
+msgstr ""
+"\n"
+"Словарь меню с ответами на звонки, типа:\n"
+"\n"
+"def меню (самое):\n"
+"меню = {\"Nem Lown/Hello\" : self.run }\n"
+"меню возврата\n"
+"\n"
+
+msgid ""
+"\n"
+"\n"
+"import mrv2\n"
+"from mrv2 import plugin\n"
+"\n"
+"class DemoPlugin(plugin.Plugin):\n"
+"    def __init__(self):\n"
+"        \"\"\"\n"
+"        Constructor for DemoPlugin.\n"
+"\n"
+"        Define your own variables here.\n"
+"        \"\"\"\n"
+"        super().__init__()\n"
+"\n"
+"    def run(self):\n"
+"        \"\"\"\n"
+"        Example method used for the callback.\n"
+"        \"\"\"\n"
+"        print(\"Hello from Python plugin\")\n"
+"\n"
+"    def active(self):\n"
+"        \"\"\"\n"
+"        Optional method to return whether the plug-in is active or not.\n"
+"\n"
+"\n"
+"        :return: True if the plug-in is active, False otherwise.\n"
+"        :rtype: bool\n"
+"\n"
+"        \"\"\"\n"
+"        return True\n"
+"\n"
+"    def menus(self):\n"
+"        \"\"\"\n"
+"        Dictionary of menu entries as keys with callbacks as values.\n"
+"\n"
+"\n"
+"        :return: A dictionary of menu entries and their corresponding callbacks.\n"
+"        :rtype: dict\n"
+"\n"
+"        \"\"\"\n"
+"        menus = {\"New Menu/Hello\": self.run}\n"
+"        return menus\n"
+"\n"
+msgstr ""
+"\n"
+"\n"
+"импорт mrv2\n"
+"от mrv2\n"
+"\n"
+"Класс DemoPlugin (plugin.Plugin):\n"
+"def_init_(самый):\n"
+"\"\"\"\n"
+"Строитель для Демофлюгина.\n"
+"\n"
+"Определите свои собственные переменные здесь.\n"
+"\"\"\"\n"
+"super()._init_()\n"
+"\n"
+"def бег (самый):\n"
+"\"\"\"\n"
+"Пример метода, использованного для обратного вызова.\n"
+"\"\"\"\n"
+"распечатка (\"Hello from Python bigin\")\n"
+"\n"
+"def активный (самый активный):\n"
+"\"\"\"\n"
+"Факультативный метод возвращения независимо от того, является ли включённое устройство активным или нет.\n"
+"\n"
+"\n"
+": Возвращение: Верно, если вставка активирована, то ложное обратное.\n"
+":rtype: булыжник\n"
+"\n"
+"\"\"\"\n"
+"Вернуть\n"
+"\n"
+"def меню (самое):\n"
+"\"\"\"\n"
+"Словарь меню как ключи с ответами на звонки как значения.\n"
+"\n"
+"\n"
+": Возвращение: словарь записей меню и их соответствующих звонков.\n"
+":rtype: диктовка\n"
+"\n"
+"\"\"\"\n"
+"меню = {\"Новый меню/привет\": само.\n"
+"меню возврата\n"
+"\n"
+
+msgid "No playlist matched item."
+msgstr "Никакого списка воспроизведения."
+
+msgid "No playlist matched file name."
+msgstr "Нет списка совпадающих файлов."
+
+msgid "No playlist loaded."
+msgstr "Никакого плей-листа."
+
+msgid "No playlist selected."
+msgstr "Нет выбранного списка воспроизведения."
+
+msgid "Not an EDL playlist to add clips to."
+msgstr "Не плейлист EDL, в который можно добавить клипы."
+
+msgid "Could not find clip in loaded clips."
+msgstr "Не удалось найти клип в заряженных клипах."
+
+msgid ""
+"\n"
+"Playlist module.\n"
+"\n"
+"Contains all functions and classes related to the playlists.\n"
+msgstr ""
+"\n"
+"Модуль списка воспроизведения.\n"
+"\n"
+"Включает все функции и классы, связанные с плейлистами.\n"
+
+msgid "List playlist items."
+msgstr "Перечислите записи в плейлисте."
+
+msgid "Select a playlist by FileModelItem."
+msgstr "Выбрать список воспроизведения с помощью шаблона файла."
+
+msgid "Select a playlist by fileName."
+msgstr "Выберите список воспроизведения по файлу."
+
+msgid "Select a playlist by index."
+msgstr "Выберите список воспроизведения по индексу."
+
+msgid "Add a clip to currently selected Playlist EDL."
+msgstr "Добавить клип в выбранный в настоящее время Playlist EDL."
+
+msgid "Save current .otio file with relative paths."
+msgstr "Сохранить текущий файл.otio с относительными путями."
+
+msgid "unsupported operand type(s) for {0}: RationalTime and {1}"
+msgstr "неподдерживаемый тип(ы) операнда {0}: Рациональное время и {1}"
+
+msgid ""
+"\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/rt.rate` seconds.\n"
+"It can be rescaled into another :class:`~RationalTime`'s rate.\n"
+msgstr ""
+"\n"
+"Класс Рационального времени представляет собой меру времени :math: \"t.rt.rt/tr.rate\" секунд.\n"
+"Его можно переоформить в другой класс: \"~ RationalTime\" (цена RationalTime).\n"
+
+msgid ""
+"\n"
+"Returns true if the time is invalid. The time is considered invalid if the value or the rate are a NaN value\n"
+"or if the rate is less than or equal to zero.\n"
+msgstr ""
+"\n"
+"Возвращение верно, если время является недействительным. Время считается недействительным, если значение или ставка являются значением NN\n"
+"или если ставка меньше или равна нулю.\n"
+
+msgid "Returns the time value for time converted to new_rate."
+msgstr ""
+"Возвращает значение времени для времени, преобразованного в новый "
+"formula_rate."
+
+msgid "Returns the time for time converted to new_rate."
+msgstr "Возвращает время времени, преобразованное в новое_tate."
+
+msgid "Returns the time value for \"self\" converted to new_rate."
+msgstr ""
+"Возвращает значение времени для себя, преобразованного в новый formula_rate."
+
+msgid ""
+"\n"
+"Compute the duration of samples from first to last (excluding last). This is not the same as distance.\n"
+"\n"
+"For example, the duration of a clip from frame 10 to frame 15 is 5 frames. Result will be in the rate of start_time.\n"
+msgstr ""
+"\n"
+"Вычислить продолжительность проб от первого до последнего (за исключением последнего). Это не то же самое, что расстояние.\n"
+"\n"
+"Например, продолжительность клипа от 10 до 15 кадра равна 5 кадрам. Результат будет в скорости начала_время.\n"
+
+msgid ""
+"\n"
+"Compute the duration of samples from first to last (including last). This is not the same as distance.\n"
+"\n"
+"For example, the duration of a clip from frame 10 to frame 15 is 6 frames. Result will be in the rate of start_time.\n"
+msgstr ""
+"\n"
+"Вычислить продолжительность проб от первого до последнего (в том числе последнего). Это не то же самое, что расстояние.\n"
+"\n"
+"Например, продолжительность клипа от 10 до 15 кадра равна 6 кадрам. Результат будет в скорости начала_время.\n"
+
+msgid "Returns true if the rate is valid for use with timecode."
+msgstr ""
+"Возвращение верно, если ставка действительна для использования с помощью "
+"временного кода."
+
+msgid ""
+"Returns the first valid timecode rate that has the least difference from the"
+" given value."
+msgstr ""
+"Возвращает первую действительную скорость времени, которая имеет наименьшее "
+"отличие от указанной величины."
+
+msgid "Turn a frame number and rate into a :class:`~RationalTime` object."
+msgstr "Преобразовать число рамы и скорость в: класс: \"~RationalTime\" объект."
+
+msgid "Returns the frame number based on the current rate."
+msgstr "Возвращает рамочное число на основе текущей ставки."
+
+msgid "Returns the frame number based on the given rate."
+msgstr "Возвращает рамочное число на основе указанной ставки."
+
+msgid "Convert to timecode (``HH:MM:SS;FRAME``)"
+msgstr "Преобразование во временной код (`HH:MM:SS; FRAME')"
+
+msgid ""
+"Convert a timecode string (``HH:MM:SS;FRAME``) into a "
+":class:`~RationalTime`."
+msgstr ""
+"Преобразовать строку временн*х кодов (\"HH:MM:SS; FRAME\") в класс: "
+"\"~RationalTime\"."
+
+msgid ""
+"Convert a time with microseconds string (``HH:MM:ss`` where ``ss`` is an "
+"integer or a decimal number) into a :class:`~RationalTime`."
+msgstr ""
+"Преобразовать время с микросекундной струной (`HH:MM:s', где's' является "
+"целым или десятичным числом) в : класс: «~ RationalTime»."
+
+msgid ""
+"\n"
+"The TimeRange class represents a range in time. It encodes the start time and the duration,\n"
+"meaning that :meth:`end_time_inclusive` (last portion of a sample in the time range) and\n"
+":meth:`end_time_exclusive` can be computed.\n"
+msgstr ""
+"\n"
+"Класс времени представляет собой диапазон во времени. Он кодирует время начала и продолжительность,\n"
+"означает, что: meth: 'end_time_cluster' (последняя часть пробы в диапазоне времени) и\n"
+": meth: 'Конец_time_ exclusion' может быть вычислен.\n"
+
+msgid ""
+"\n"
+"The time of the last sample containing data in the time range.\n"
+"\n"
+"If the time range starts at (0, 24) with duration (10, 24), this will be\n"
+"(9, 24)\n"
+"\n"
+"If the time range starts at (0, 24) with duration (10.5, 24):\n"
+"(10, 24)\n"
+"\n"
+"In other words, the last frame with data, even if the last frame is fractional.\n"
+msgstr ""
+"\n"
+"Время проведения последней выборки, содержащей данные во временном диапазоне.\n"
+"\n"
+"Если временной интервал начинается с (0, 24) с продолжительностью (10, 24), то он составляет:\n"
+"(9, 24)\n"
+"\n"
+"Если временной интервал начинается с (0, 24) с продолжительностью (10.5, 24):\n"
+"(10, 24)\n"
+"\n"
+"Иными словами, последняя рамка с данными, даже если последняя рамка является частичной.\n"
+
+msgid ""
+"\n"
+"Time of the first sample outside the time range.\n"
+"\n"
+"If start frame is 10 and duration is 5, then end_time_exclusive is 15,\n"
+"because the last time with data in this range is 14.\n"
+"\n"
+"If start frame is 10 and duration is 5.5, then end_time_exclusive is\n"
+"15.5, because the last time with data in this range is 15.\n"
+msgstr ""
+"\n"
+"Время первого образца вне временных рамок.\n"
+"\n"
+"Если стартовая рамка - 10, а продолжительность - 5, то конец_время_исключительно - 15,\n"
+"Потому что последний раз с данными в этом диапазоне - 14.\n"
+"\n"
+"Если стартовая рамка равна 10, а продолжительность - 5,5, то конец_время_исключительно\n"
+"15.5, потому что последний раз с данными в этом диапазоне - 15.\n"
+
+msgid ""
+"Construct a new :class:`~TimeRange` that is this one extended by other."
+msgstr ""
+"Построить новый: класс: \"~TimeTRONS', который распространяется на другой."
+
+msgid ""
+"\n"
+"Clamp 'other' (:class:`~RationalTime`) according to\n"
+":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
+msgstr ""
+"\n"
+"Зажим \"прочее\" (класс: \"~RationalTime\") в соответствии с\n"
+":attr:'start_time'/:attr:'end_time_ exclusion' и связанные аргументы.\n"
+
+msgid ""
+"\n"
+"Clamp 'other' (:class:`~TimeRange`) according to\n"
+":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
+msgstr ""
+"\n"
+"Зажим \"прочее\" (класс: \"~TimeTribunal\") в соответствии с\n"
+":attr:'start_time'/:attr:'end_time_ exclusion' и связанные аргументы.\n"
+
+msgid ""
+"\n"
+"The start of `this` precedes `other`.\n"
+"`other` precedes the end of `this`.\n"
+"::\n"
+"\n"
+"         other\n"
+"           |\n"
+"           *\n"
+"   [      this      ]\n"
+"\n"
+msgstr ""
+"\n"
+"Начало слова \"это\" предшествует слову \"другое\".\n"
+"&quot; другие &quot; предшествует концу &quot; этого &quot;.\n"
+"::\n"
+"\n"
+"прочее\n"
+"▸\n"
+"*\n"
+"[это ]\n"
+"\n"
+
+msgid ""
+"\n"
+"The start of `this` precedes start of `other`.\n"
+"The end of `this` antecedes end of `other`.\n"
+"::\n"
+"\n"
+"        [ other ]\n"
+"   [      this      ]\n"
+"\n"
+"The converse would be ``other.contains(this)``\n"
+msgstr ""
+"\n"
+"Начало слов \"это\" предшествует началу слов \"другое\".\n"
+"Конец слова \"это\" заканчивается словом \"другое\".\n"
+"::\n"
+"\n"
+"[другое ]\n"
+"[это ]\n"
+"\n"
+"Иными словами, \"другие.\n"
+
+msgid ""
+"\n"
+"`this` contains `other`.\n"
+"::\n"
+"\n"
+"        other\n"
+"         |\n"
+"         *\n"
+"   [    this    ]\n"
+"\n"
+msgstr ""
+"\n"
+"\"это\" содержит \"другое\".\n"
+"::\n"
+"\n"
+"прочее\n"
+"▸\n"
+"*\n"
+"[это ]\n"
+"\n"
+
+msgid ""
+"\n"
+"The start of `this` strictly precedes end of `other` by a value >= `epsilon_s`.\n"
+"The end of `this` strictly antecedes start of `other` by a value >= `epsilon_s`.\n"
+"::\n"
+"\n"
+"   [ this ]\n"
+"       [ other ]\n"
+"\n"
+"The converse would be ``other.overlaps(this)``\n"
+msgstr ""
+"\n"
+"Начало слова \"это\" строго предшествует окончанию слова \"другое\" значением >= \"эпсилон_s\".\n"
+"Конец слова \"это\" строго антекдирует начало слова \"другое\" на значение >= \"эпсилон_s\".\n"
+"::\n"
+"\n"
+"[это ]\n"
+"[другое ]\n"
+"\n"
+"Обратная сторона будет следующей: \"другие.\n"
+
+msgid ""
+"\n"
+"The end of `this` strictly precedes `other` by a value >= `epsilon_s`.\n"
+"::\n"
+"\n"
+"             other\n"
+"               |\n"
+"   [ this ]    *\n"
+"\n"
+msgstr ""
+"\n"
+"Конец слова \"это\" строго предшествует слову \"другое\" значение >= \"эпсилон_s\".\n"
+"::\n"
+"\n"
+"прочее\n"
+"▸\n"
+"[это ] *\n"
+"\n"
+
+msgid ""
+"\n"
+"The end of `this` strictly equals the start of `other` and\n"
+"the start of `this` strictly equals the end of `other`.\n"
+"::\n"
+"\n"
+"   [this][other]\n"
+"\n"
+"The converse would be ``other.meets(this)``\n"
+msgstr ""
+"\n"
+"Конец слов \"это\" строго равно началу слов \"другое\" и\n"
+"начало слова \"это\" строго равно концу слова \"другое\".\n"
+"::\n"
+"\n"
+"[это] [прочее]\n"
+"\n"
+"Обратная сторона будет \"другие.meets(это)\"\n"
+
+msgid ""
+"\n"
+"The start of `this` strictly equals `other`.\n"
+"::\n"
+"\n"
+"   other\n"
+"     |\n"
+"     *\n"
+"     [ this ]\n"
+"\n"
+msgstr ""
+"\n"
+"Начало слов \"это\" строго равно \"другому\".\n"
+"::\n"
+"\n"
+"прочее\n"
+"▸\n"
+"*\n"
+"[это ]\n"
+"\n"
+
+msgid ""
+"\n"
+"The start of `this` strictly equals the start of `other`.\n"
+"The end of `this` strictly precedes the end of `other` by a value >= `epsilon_s`.\n"
+"::\n"
+"\n"
+"   [ this ]\n"
+"   [    other    ]\n"
+"\n"
+"The converse would be ``other.begins(this)``\n"
+msgstr ""
+"\n"
+"Начало слов \"это\" строго равно началу слов \"другое\".\n"
+"Конец слова \"это\" строго предшествует концу слова \"другое\" значением >= \"эпсилон_s\".\n"
+"::\n"
+"\n"
+"[это ]\n"
+"[другое ]\n"
+"\n"
+"Обратная сторона будет \"другие, начинающие (это)\"\n"
+
+msgid ""
+"\n"
+"The end of `this` strictly equals `other`.\n"
+"::\n"
+"\n"
+"        other\n"
+"          |\n"
+"          *\n"
+"   [ this ]\n"
+"\n"
+msgstr ""
+"\n"
+"Конец слова \"это\" строго равно \"другому\".\n"
+"::\n"
+"\n"
+"прочее\n"
+"▸\n"
+"*\n"
+"[это ]\n"
+"\n"
+
+msgid ""
+"\n"
+"The start of `this` strictly antecedes the start of `other` by a value >= `epsilon_s`.\n"
+"The end of `this` strictly equals the end of `other`.\n"
+"::\n"
+"\n"
+"           [ this ]\n"
+"   [     other    ]\n"
+"\n"
+"The converse would be ``other.finishes(this)``\n"
+msgstr ""
+"\n"
+"Начало слова \"это\" строго подтверждает начало слова \"другое\" значение >= \"эпсилон_s\".\n"
+"Конец слова \"это\" строго равно концу слова \"другое\".\n"
+"::\n"
+"\n"
+"[это ]\n"
+"[другое ]\n"
+"\n"
+"Обратная сторона будет \"другие. финиш(это)\"\n"
+
+msgid ""
+"\n"
+"The start of `this` precedes or equals the end of `other` by a value >= `epsilon_s`.\n"
+"The end of `this` antecedes or equals the start of `other` by a value >= `epsilon_s`.\n"
+"::\n"
+"\n"
+"   [    this    ]           OR      [    other    ]\n"
+"        [     other    ]                    [     this    ]\n"
+"\n"
+"The converse would be ``other.finishes(this)``\n"
+msgstr ""
+"\n"
+"Начало \"это\" предшествует или равно концу \"другого\" значением >= \"эпсилон_s\".\n"
+"Конец \"этого\" антекдирует или равно началу \"другого\" на значение >= \"эпсилон_s\".\n"
+"::\n"
+"\n"
+"ИЛИ [другие]\n"
+"[другое ] [это ]\n"
+"\n"
+"Обратная сторона будет \"другие. финиш(это)\"\n"
+
+msgid ""
+"\n"
+"Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\\s (exclusive).\n"
+"\n"
+"For example, if start_time is 1 and end_time is 10, the returned will have a duration of 9.\n"
+msgstr ""
+"\n"
+"Создаёт класс: \"~TimeTimeTripe\" от начала и конца: класс: \"~RationalTime's (исключительно).\n"
+"\n"
+"Например, если начало_время равно 1, а конец_время - 10, то продолжительность возврата составит 9.\n"
+
+msgid ""
+"\n"
+"Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\\s (inclusive).\n"
+"\n"
+"For example, if start_time is 1 and end_time is 10, the returned will have a duration of 10.\n"
+msgstr ""
+"\n"
+"Создаёт класс: \"~TimeTimeTripe\" от начала и конца: класс: \"~RationalTime's (включает).\n"
+"\n"
+"Например, если начало_время равно 1, а конец_время - 10, то продолжительность возврата составляет 10.\n"
+
+msgid ""
+"\n"
+"Media module.\n"
+"\n"
+"Contains all classes and enums related to media. \n"
+msgstr ""
+"\n"
+"Модуль для СМИ.\n"
+"\n"
+"Содержит все классы и энумы, связанные со средствами массовой информации.\n"
+
+msgid "Compare mode :class:`mrv2.media.CompareMode`."
+msgstr "Сравните режим: класс: \"mrv2.media.comparemode\"."
+
+msgid "Wipe center in X and Y :class:`mrv2.math.Vector2f`."
+msgstr "Промывочный центр в X и Y: класс:'mrv2.math.Vector2f'."
+
+msgid "Wipe Rotation."
+msgstr "Вращение стрижки."
+
+msgid "Overlay ( A over B )"
+msgstr "Накладные (А больше В)"
+
+msgid "Comparison options."
+msgstr "Варианты сопоставления."
+
+msgid ""
+"\n"
+"Math module.\n"
+"\n"
+"Contains all math classes.\n"
+msgstr ""
+"\n"
+"Модуль математики.\n"
+"\n"
+"Содержит все классы математики.\n"
+
+msgid "Vector of 2 integers."
+msgstr "Вектор двух целых чисел."
+
+msgid "Vector of 2 floats."
+msgstr "Вектор двух поплавков."
+
+msgid "Vector of 3 floats."
+msgstr "Вектор трёх поплавков."
+
+msgid "Vector of 4 floats."
+msgstr "Вектор 4 поплавков."
+
+msgid "Size of 2 integers."
+msgstr "Размер 2 целых."
+
+msgid ""
+"\n"
+"Image module.\n"
+"\n"
+"Contains all classes and enums related to image controls. \n"
+msgstr ""
+"\n"
+"Модуль изображения.\n"
+"\n"
+"Содержит все классы и энумы, связанные с управлением изображениями.\n"
+
+msgid "Red Channel."
+msgstr "Красный канал."
+
+msgid "Green Channel."
+msgstr "Зеленый канал."
+
+msgid "Blue Channel."
+msgstr "Голубой канал."
+
+msgid "Alpha Channel."
+msgstr "Альфа-канал."
+
+msgid "Image mirroring."
+msgstr "Фотография зеркально."
+
+msgid "Flip image on X."
+msgstr "Перемотай изображение на X."
+
+msgid "Flip image on Y."
+msgstr "Перемотай изображение на Y."
+
+msgid "Enabled Levels."
+msgstr "Включённые уровни."
+
+msgid "Add a :class:`mrv2.math.Vector3f` to image."
+msgstr "Добавить : класс:'mrv2.math.Vector3f' в изображение."
+
+msgid "Change a :class:`mrv2.math.Vector3f` of brightness to image."
+msgstr "Изменить класс:'mrv2.math.Vector3f' яркости на изображение."
+
+msgid "Change a :class:`mrv2.math.Vector3f` of contrast to image."
+msgstr "Изменить класс:'mrv2.math.Vector3f' контрастирует с изображением."
+
+msgid "Change a :class:`mrv2.math.Vector3f` of saturation to image."
+msgstr "Изменение класса: \"mrv2.math.Vector3f\" насыщения изображения."
+
+msgid "Change tint of image to image between 0 and 1."
+msgstr "Сменить изображение на изображение между 0 и 1."
+
+msgid "Invert the color values."
+msgstr "Переверните значения цвета."
+
+msgid "Color values."
+msgstr "Значения цвета."
+
+msgid "In Low Level value."
+msgstr "В низкоуровневом значении."
+
+msgid "In High Level value."
+msgstr "В высокоуровневом значении."
+
+msgid "Gamma Level value."
+msgstr "Значение уровня гаммы."
+
+msgid "Out Low Level value."
+msgstr "На нижнем уровне."
+
+msgid "Out High Level value."
+msgstr "Высокоуровневое значение."
+
+msgid "Levels values."
+msgstr "Значения уровней."
+
+msgid "Enabled EXR display."
+msgstr "Включено отображение EXR."
+
+msgid "Exposure value."
+msgstr "Значение воздействия."
+
+msgid "Defog value."
+msgstr "Цена дефога."
+
+msgid "kneeLow value."
+msgstr "Наклон понижается."
+
+msgid "kneeHigh value."
+msgstr "Высокое значение колена."
+
+msgid "EXR display values."
+msgstr "Значения отображения EXR."
+
+msgid "Enabled Soft Clip."
+msgstr "Включён Мягкий Клип."
+
+msgid "Soft clip value."
+msgstr "Мягкое значение клипа."
+
+msgid "Minify filter :class:`mrv2.image.ImageFilter`."
+msgstr "Минимизация фильтра: класс: \"mrv2.image.ImageFilter\"."
+
+msgid "Magnify filter :class:`mrv2.image.ImageFilter`."
+msgstr "Увеличить фильтр: класс: \"mrv2.image. ImageFilter\"."
+
+msgid "Image filters."
+msgstr "Фильтры изображения."
+
+msgid "Color channels :class:`mrv2.image.Channels`."
+msgstr "Цветные каналы: класс: \"mrv2.image.Channels\"."
+
+msgid "Mirror on X, Y or both :class:`mrv2.image.Mirror`."
+msgstr "Зеркало на X, Y или оба: класс: \"mrv2.image.mrror\"."
+
+msgid "Color options :class:`mrv2.image.Color`."
+msgstr "Цвета: класс: \"mrv2.image.Color\"."
+
+msgid "Levels options :class:`mrv2.image.Levels`."
+msgstr "Параметры уровней: класс: \"mrv2.image."
+
+msgid "EXR Display options :class:`mrv2.image.EXRDisplay`.."
+msgstr "Параметры отображения EXR: класс: \"mrv2.image.EXRDisplay\"..."
+
+msgid "Soft Clip options :class:`mrv2.image.SoftClip`.."
+msgstr "Мягкие опции Клипа: класс: \"mrv2.image.SoftClip\"..."
+
+msgid "Display options."
+msgstr "Опции отображения."
+
+msgid "LUT enabled."
+msgstr "Включено."
+
+msgid "LUT filename."
+msgstr "Имя файла LUT."
+
+msgid "LUT transformation order."
+msgstr "Порядок преобразования."
+
+msgid "LUT options."
+msgstr "Варианты."
+
+msgid "Video Levels."
+msgstr "Видеоуровни."
+
+msgid "Alpha blending algorithm"
+msgstr "Алгоритм альфа-комбинации"
+
+msgid "Image Filters"
+msgstr "Фильтры изображений"
+
+msgid "Image options."
+msgstr "Варианты изображения."
+
+msgid "Environment Map type."
+msgstr "Тип экологической карты."
+
+msgid "Horizontal aperture"
+msgstr "Горизонтальная апертура"
+
+msgid "Vertical aperture"
+msgstr "Вертикальная апертура"
+
+msgid "Focal Length"
+msgstr "Протяженность"
+
+msgid "Rotation on X"
+msgstr "Вращение X"
+
+msgid "Rotation on Y"
+msgstr "Вращение Y"
+
+msgid "Subdivision on X"
+msgstr "Подраздел по X"
+
+msgid "Subdivision on Y"
+msgstr "Подраздел Y"
+
+msgid "Spin"
+msgstr "Поворачивай."
+
+msgid "EnvironmentMap options."
+msgstr "Варианты EnvironmentMap."
+
+msgid "Stereo 3d input :class:`mrv2.image.StereoInput`.."
+msgstr "Стерео 3d вход: класс: \"mrv2.image.StereoInput\"."
+
+msgid "Stereo 3d output :class:`mrv2.image.StereoOutput`.."
+msgstr "Стерео 3d выход: класс: \"mrv2.image.StereoOutput\"."
+
+msgid "Separation between left and right eye."
+msgstr "Разъединение между левым и правым глазом."
+
+msgid "Swap left and right eye"
+msgstr "Поворачивайте левым и правым глазом"
+
+msgid "Stereo3D options."
+msgstr "Варианты стерео3D."
+
+msgid "Background type :class:`mrv2.image.Background`.."
+msgstr "Тип фона: класс: \"mrv2.image.background\"..."
+
+msgid "Checkers Color0 :class:`mrv2.image.Color4f`.."
+msgstr "Цвет 0: класс: \"mrv2.image.Color4f\"..."
+
+msgid "Checkers Color1 :class:`mrv2.image.Color4f`.."
+msgstr "Цвет1: класс: \"mrv2.image.Color4f\"..."
+
+msgid "Checkers Size :class:`mrv2.math.Size2i`.."
+msgstr "Размер: класс: \"mrv2.math.Size2i\"."
+
+msgid "Background options."
+msgstr "Справочная информация."
+
+msgid "Gets the current background options."
+msgstr "Получает текущие варианты фона."
+
+msgid "Sets the current background options."
+msgstr "Устанавливает текущие фоновые варианты."
+
+msgid "Gets the current OCIO config file."
+msgstr "Получает текущий файл OCIO config."
+
+msgid "Sets the current OCIO config file."
+msgstr "Устанавливает текущий файл OCIO config."
+
+msgid "Gets the current input color space."
+msgstr "Получает текущее цветовое пространство."
+
+msgid "Gets a list of all input color spaces."
+msgstr "Получил список всех входных цветовых пространств."
+
+msgid "Set the input color space."
+msgstr "Установите цветовое пространство для входа."
+
+msgid "Gets the current Display/View."
+msgstr "Получает текущий дисплей/Вид."
+
+msgid "Gets the list of Displays/Views."
+msgstr "Получает список дисплеев/Мнения."
+
+msgid "Set an OCIO Display/View."
+msgstr "Установить дисплей OCIO/Вид."
+
+msgid "Gets the current OCIO look."
+msgstr "Получил текущий взгляд OCIO."
+
+msgid "Gets a list of all OCIO looks."
+msgstr "Получил список всех, на кого смотрит OCIO."
+
+msgid "Set the OCIO look by name."
+msgstr "Установите обозрение по имени."
+
+msgid "Return all the files."
+msgstr "Возвращай все файлы."
+
+msgid "Return all the active files."
+msgstr "Возвращайте все активные файлы."
+
+msgid "Return the A file item."
+msgstr "Верните файл А."
+
+msgid "Return the A file index."
+msgstr "Верните индекс файла А."
+
+msgid "Return the list of B files."
+msgstr "Верните список файлов B."
+
+msgid "Return the list of B indexes."
+msgstr "Возвращайте список индексов В."
+
+msgid "Close the current A file."
+msgstr "Закрыть текущий файл A."
+
+msgid "Close all files."
+msgstr "Закрыть все файлы."
+
+msgid "Set the A file index."
+msgstr "Установите индекс файла А."
+
+msgid "Set a new B file index."
+msgstr "Установите новый индекс файла B."
+
+msgid "Set a new stereo file index."
+msgstr "Установите новый стерео файлный индекс."
+
+msgid "Toggle the B file index."
+msgstr "Настроить индекс файла B."
+
+msgid "Clear the B indexes."
+msgstr "Очистить индексы В."
+
+msgid "Return the list of layers."
+msgstr "Верните список слоев."
+
+msgid "Set layer for file item."
+msgstr "Установите слой для файла."
+
+msgid "Set compare time."
+msgstr "Сопоставь время."
+
+msgid "Get compare time."
+msgstr "Сопоставим время."
+
+msgid "Set the first version for current media."
+msgstr "Установите первую версию для текущих СМИ."
+
+msgid "Set the previous version for current media."
+msgstr "Предыдущая версия для текущих СМИ."
+
+msgid "Set the next version for current media."
+msgstr "Установите следующую версию для текущих СМИ."
+
+msgid "Set the last version for current media."
+msgstr "Установите последнюю версию для текущих СМИ."
+
+msgid "Path :class:`mrv2.Path` to the File Media."
+msgstr "Путь: класс:'mrv2.Path' в Файл Медиа."
+
+msgid "Audio path :class:`mrv2.Path` to the File Media if any."
+msgstr ""
+"Аудиовизуальная дорожка: класс:'mrv2.Path' в Файл Медиа, если имеется."
+
+msgid "Time range :class:`mrv2.TimeRange` of the File Media."
+msgstr "Диапазон времени: класс: \"mrv2.TimeRights\" File Media."
+
+msgid "Speed (FPS) of the File Media."
+msgstr "Скорость (PFS) файловой среды."
+
+msgid "Playback state :class:`mrv2.timeline.Playbacks` of the File Media."
+msgstr ""
+"Состояние воспроизведения: класс:'mrv2.timeline.Playbacks' File Media."
+
+msgid "Loop state :class:`mrv2.timeline.Loop` of the File Media."
+msgstr "Состояние : класс:'mrv2.timeline.Loop' File Media."
+
+msgid "Current time :class:`mrv2.RationalTime` of the File Media."
+msgstr "Текущее время: класс: \"mrv2.RationalTime\" из File Media."
+
+msgid "In/Out range :class:`mrv2.TimeRange` of the File Media."
+msgstr "В/выходе: класс: \"mrv2.TimeRights\" файловой среды."
+
+msgid "Video layer of the File Media."
+msgstr "Видеоуровень файловой среды."
+
+msgid "Volume of the File Media."
+msgstr "Количество файловых медиа."
+
+msgid "Mute state of the File Media."
+msgstr "Выключите состояние файловой среды."
+
+msgid "Audio offset of the File Media."
+msgstr "Аудиовизна файловых медиа."
+
+msgid "Class used to hold a media item."
+msgstr "Класс раньше держал в руках медиа вещь."
+
+msgid "Save annotations."
+msgstr "Сохранить аннотации."
+
+msgid "Save resolution."
+msgstr "Сохранить разрешение."
+
+msgid "FFmpeg Profile."
+msgstr "Профиль FFmpeg."
+
+msgid "FFmpeg Preset."
+msgstr "FFmpeg Preset."
+
+msgid "FFmpeg Pixel Format."
+msgstr "FFmpeg Pixel Формат."
+
+msgid "FFmpeg video encoding with hardware if possible."
+msgstr "FFmpeg видеокодирование с аппаратными средствами, если возможно."
+
+msgid "FFmpeg Override color characteristics."
+msgstr "Характеристики цвета FFmpeg."
+
+msgid "FFmpeg Color Range."
+msgstr "Цветной диапазон FFmpeg."
+
+msgid "FFmpeg Color Space."
+msgstr "Цветное пространство FFmpeg."
+
+msgid "FFmpeg Color Primaries."
+msgstr "Первостепенные цвета FFmpeg."
+
+msgid "FFmpeg Color Transfer Characteristics."
+msgstr "Характеристики передачи цвета FFmpeg."
+
+msgid "FFmpeg Audio Codec."
+msgstr "FFmpeg Audio Codec."
+
+msgid "OpenEXR's Compression."
+msgstr "Компрессия OpenEXR."
+
+msgid "OpenEXR's Pixel Type."
+msgstr "Тип пикселя OpenEXR."
+
+msgid "OpenEXR's Zip Compression Level."
+msgstr "Уровень компрессии OpenEXR."
+
+msgid "OpenEXR's DWA Compression Level."
+msgstr "Уровень сжатия DWA OpenEXR."
+
+msgid ""
+"\n"
+"Command module.\n"
+"\n"
+"Used to run main commands and get arguments and set the display, image, compare, LUT options.\n"
+msgstr ""
+"\n"
+"Командный модуль.\n"
+"\n"
+"Используется для выполнения основных команд, получения аргументов и установки дисплея, изображения, сравнения, опции LUT.\n"
+
+msgid ""
+"Get command-line arguments passed as single quoted string to -pythonArgs."
+msgstr ""
+"Получите аргументы в командной линии, как одна цитируемая струна - "
+"PythonArgs."
+
+msgid "Open file with optional audio."
+msgstr "Открыть файл с факультативным звуком."
+
+msgid "Compare two file items with a compare mode."
+msgstr "Сравнить два файла с сопоставимым режимом."
+
+msgid "Close the file item."
+msgstr "Закрыть файл."
+
+msgid "Close all file items."
+msgstr "Закрыть все файлы."
+
+msgid "Return the root path to the insallation of mrv2."
+msgstr "Вернуть корневую дорожку к изолированию mrv2."
+
+msgid "Return the path to preferences of mrv2."
+msgstr "Вернуть путь к предпочтениям mrv2."
+
+msgid "Return the display options."
+msgstr "Верните опции дисплея."
+
+msgid "Set the display options."
+msgstr "Установите параметры дисплея."
+
+msgid "Return the LUT options."
+msgstr "Верните варианты LUT."
+
+msgid "Set the LUT options."
+msgstr "Установите варианты LUT."
+
+msgid "Return the image options."
+msgstr "Верните опции изображения."
+
+msgid "Set the image options."
+msgstr "Установите параметры изображения."
+
+msgid "Return the environment map options."
+msgstr "Возвращайте параметры карты окружающей среды."
+
+msgid "Set the environment map options."
+msgstr "Установите параметры экологической карты."
+
+msgid "Set the compare options."
+msgstr "Установите сравнительные параметры."
+
+msgid "Set the stereo 3D options."
+msgstr "Установите 3D опции стерео."
+
+msgid "Get the language of mrv2."
+msgstr "Узнайте язык mrv2."
+
+msgid "Get the layers of the timeline (GUI)."
+msgstr "Соберите слои временной линии (GUI)."
+
+msgid "Get the version of mrv2."
+msgstr "Получите версию mrv2."
+
+msgid ""
+"Call Fl::check to update the GUI and return the number of seconds that "
+"elapsed."
+msgstr ""
+"Звоните Fl: проверьте, чтобы обновить GI и вернуть количество секунд, "
+"которое прошло."
+
+msgid "Returns true if audio is muted."
+msgstr "Возвращается, если звук заглушен."
+
+msgid "Runs the same or a new mrv2 with a session file."
+msgstr "Запускает тот же или новый mrv2 с сессионным файлом."
+
+msgid "Set the muting of the audio."
+msgstr "Установите глушение звука."
+
+msgid "Toggle Image Auto Normalize."
+msgstr "Автонормализировать изображение."
+
+msgid "Toggle Data Window."
+msgstr "Окно Панелей данных."
+
+msgid "Toggle Display Window."
+msgstr "Окно буфера обмена."
+
+msgid "Toggle Ignored Display Window on OpenEXRs."
+msgstr "Окно Показать на OpenEXR."
+
+msgid "Toggle Image invalid values."
+msgstr "Неверные значения изображения."
+
+msgid "Toggle Safe Areas."
+msgstr "Безопасные районы."
+
+msgid "Get the playback volume."
+msgstr "Возьмите громкость воспроизведения."
+
+msgid "Set the playback volume."
+msgstr "Установите громкость воспроизведения."
+
+msgid "Save a movie or sequence from the front layer."
+msgstr "Сохранить фильм или последовательность из переднего слоя."
+
+msgid "Save an .otio file from the current selected image."
+msgstr "Сохранить файл.otio из текущего выбранного изображения."
+
+msgid "Save a PDF document with all annotations and notes."
+msgstr "Сохранить документ PDF со всеми аннотациями и примечаниями."
+
+msgid ""
+"\n"
+"Annotations module.\n"
+"\n"
+"Contains all functions and classes related to the annotationss.\n"
+msgstr ""
+"\n"
+"Модуль для аббревиатур.\n"
+"\n"
+"Содержит все функции и классы, связанные с аннотациями.\n"
+
+msgid "Add notes annotations to current clip at a certain time."
+msgstr "Добавить примечания к текущему клипу в определенное время."
+
+msgid "Add notes annotations to current clip at a certain frame."
+msgstr "Добавить примечания к текущему клипу в определенном кадре."
+
+msgid "Add notes annotations to current clip at certain seconds."
+msgstr "Добавить примечания к текущему клипу в определенные секунды."
+
+msgid "Open with Audio"
+msgstr "Открыто с помощью звука"
+
+msgid "Video"
+msgstr "Видео"
+
+msgid "Audio"
+msgstr "Звук"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Cancel"
+msgstr "Отмена"
+
+msgid "{0} - Channels: {1} {2} {3}"
+msgstr "{0} - Каналы: {1} {2} {3}"
+
+msgid "Play timelines, movies, and image sequences."
+msgstr "Воспроизвести графики, фильмы и последовательности изображений."
+
+msgid "Timelines, movies, image sequences, or folders."
+msgstr "Сроки, фильмы, последовательности изображений или папки."
+
+msgid "Debug verbosity."
+msgstr "Глаголёзность отладки."
+
+msgid "Audio file name."
+msgstr "Имя звукового файла."
+
+msgid "A/B comparison \"B\" file name."
+msgstr "A/Сравнение имени файла \"B\"."
+
+msgid "A/B comparison mode."
+msgstr "A/Режим сопоставления B."
+
+msgid "A/B comparison wipe center."
+msgstr "A/Сравнение с центром стержня."
+
+msgid "A/B comparison wipe rotation."
+msgstr "A/Сопоставление стереть вращение."
+
+msgid "Create OpenTimelineIO EDL from the list of clips provided."
+msgstr "Создать OpenTimelineIO EDL из списка предоставленных клипов."
+
+msgid "OpenTimelineIO Edit mode."
+msgstr "Режим Правки OpenTimelineIO."
+
+msgid "Load the images as still images not sequences."
+msgstr "Загрузить изображения как снимки, а не как последовательности."
+
+msgid "Playback speed."
+msgstr "Скорость воспроизведения."
+
+msgid "Playback mode."
+msgstr "Режим воспроизведения."
+
+msgid "Playback loop mode."
+msgstr "Режим цикла воспроизведения."
+
+msgid "Seek to the given time, in value/fps format.  Example: 50/30."
+msgstr "Ищите время в формате значения/фиксов. Пример: 50/30."
+
+msgid "Set the in/out points range in start/end/fps format, like 23/120/24."
+msgstr ""
+"Установить диапазон точек входа/выхода в формате запуска/конца/фпса, как "
+"23/120/24."
+
+msgid "OpenColorIO input color space."
+msgstr "Цветовое пространство OpenColorIO."
+
+msgid "OpenColorIO display name."
+msgstr "Название дисплея OpenColorIO."
+
+msgid "OpenColorIO view name."
+msgstr "Имя просмотра OpenColorIO."
+
+msgid "OpenColorIO look name."
+msgstr "Название OpenColorIO."
+
+msgid "LUT file name."
+msgstr "Имя файла LUT."
+
+msgid "LUT operation order."
+msgstr "Заказ на операцию."
+
+msgid "Python Script to run and exit."
+msgstr "Питон Скрипт, беги и уходи."
+
+msgid ""
+"Python Arguments to pass to the Python script as a single quoted string like"
+" \"arg1 'arg2 asd' arg3\", stored in cmd.argv."
+msgstr ""
+"Python Arguments для передачи Питонскому сценарию как одна цитируемая "
+"струна, как \"arg1 'arg2 asd' arg3\", хранимая в смд.argv."
+
+msgid "Reset settings to defaults."
+msgstr "Переключить настройки на по умолчанию."
+
+msgid "Reset hotkeys to defaults."
+msgstr "Переключите хижины на по умолчанию."
+
+msgid "Start a server.  Use -port to specify a port number."
+msgstr "Запуск сервера. Используйте порт для указания номера порта."
+
+msgid "Connect to a server at <value>.  Use -port to specify a port number."
+msgstr ""
+"Подключиться к серверу на <значение> Использовать -порт для указания номера "
+"порта."
+
+msgid ""
+"Port number for the server to listen to or for the client to connect to."
+msgstr ""
+"Номер порта для сервера, чтобы слушать или чтобы клиент подключался к нему."
+
+msgid "Return the version and exit."
+msgstr "Верните версию и уйдите."
+
+msgid "Cannot create window"
+msgstr "Невозможно создать окно"
+
+msgid "About mrv2"
+msgstr "О mrv2"
+
+msgid "Hide mrv2"
+msgstr "Скрыть mrv2"
+
+msgid "Hide Others"
+msgstr "Скрыть другие"
+
+msgid "Services"
+msgstr "Услуги"
+
+msgid "Show All"
+msgstr "Показать все"
+
+msgid "Quit mrv2"
+msgstr "Выход mrv2"
+
+msgid "Running from "
+msgstr "Убегает от"
+
+msgid "Could not initialize NDI"
+msgstr "Не удалось инициализировать NDI"
+
+msgid "Could not read python script '{0}'"
+msgstr "Не удаётся прочитать Python скрипт \" {0}"
+
+msgid "Running python script '{0}'"
+msgstr "Сценарий Python \"(0)\""
+
+msgid "with Arguments:"
+msgstr "с аргументами:"
+
+msgid "Python Error: "
+msgstr "Ошибка Python:"
+
+msgid "Filename '{0}' does not exist or does not have read permissions."
+msgstr "Файловое имя \" {0}\" не существует или не имеет разрешения на чтение."
+
+msgid "Files"
+msgstr "Файлы"
+
+msgid "Compare"
+msgstr "Сравнить"
+
+msgid "Playlist"
+msgstr "Список воспроизведения"
+
+msgid "Network"
+msgstr "Сеть"
+
+msgid "Stereo 3D"
+msgstr "Stereo 3D"
+
+msgid "Type"
+msgstr "Тип"
+
+msgid "Client"
+msgstr "Клиент"
+
+msgid "Server"
+msgstr "Сервер"
+
+msgid "Host"
+msgstr "Принимающая сторона"
+
+msgid "Host name or IP to connect to.  For example: 127.0.0.1"
+msgstr "Название приемника или IP для подключения к нему."
+
+msgid "Previously used Hosts"
+msgstr "Ранее использовавшиеся хост-компьютеры"
+
+msgid "Port"
+msgstr "Порт"
+
+msgid ""
+"Port to connect to.  Make sure your firewall and router allows read/write "
+"through it."
+msgstr ""
+"Порт для подключения. Убедитесь, что ваш файервол и маршрутизатор позволяют "
+"читать/ писать через него."
+
+msgid "Connect"
+msgstr "Подключиться"
+
+msgid "Create"
+msgstr "Создать"
+
+msgid "Disconnect"
+msgstr "Разъединить"
+
+msgid "Shutdown"
+msgstr "Отключение"
+
+msgid "&File/&Open"
+msgstr "Файл/Открыто"
+
+msgid "&File/&Save"
+msgstr "Файл/Сохранить"
+
+msgid "&Edit/&Undo"
+msgstr "Правка/Отменить"
+
+msgid "&Edit/Cu&t"
+msgstr "Правка/Cut"
+
+msgid "&Edit/&Copy"
+msgstr "Правка/Копировать"
+
+msgid "&Edit/&Paste"
+msgstr "Правка/Вставить"
+
+msgid "&Edit/&Delete"
+msgstr "Правка/Исключить"
+
+msgid "&Edit/&Comment Selection"
+msgstr "Правка/Выбор комментариев"
+
+msgid "&Edit/&Uncomment Selection"
+msgstr "Правка/Отмена выбора@ info: whatsthis: whatsthis"
+
+msgid "&Search/&Find..."
+msgstr "Поиск/Найти..."
+
+msgid "&Search/F&ind Again"
+msgstr "Поиск/Найти снова"
+
+msgid "&Search/&Replace"
+msgstr "Поиск/Заменить"
+
+msgid "&Search/&Replace Again"
+msgstr "Поиск/Заменить еще раз"
+
+msgid "Clear/&Output"
+msgstr "Очистить/Мероприятие"
+
+msgid "Clear/&Editor"
+msgstr "Очистить/Редактор"
+
+msgid "Editor/&Run Code"
+msgstr "Редактор/Запустить код@ info: whatsthis"
+
+msgid "Editor/Toggle &Line Numbers"
+msgstr "Редактор/Номера строк@ info: whatsthis"
+
+msgid "Editor/&Jump to Error"
+msgstr "Редактор/Перейти к ошибке"
+
+msgid "Editor/&External Editor"
+msgstr "Редактор/Внешний редактор"
+
+msgid "Scripts/Add To Script List"
+msgstr "Скрипты/Добавить в список скриптов"
+
+msgid "Scripts/%s"
+msgstr "Скрипты/%s"
+
+msgid ""
+"Type in your python code here.  Select an area to execute just a portion of "
+"it.  Press Keypad Enter to run it."
+msgstr ""
+"Введите код Python здесь. Выберите область для выполнения только части. "
+"Нажмите Keypad Enter для запуска."
+
+msgid "Python file {0} already exists.  Do you want to overwrite it?"
+msgstr "Файл Python {0} уже существует. Вы хотите переписать его?"
+
+msgid "No"
+msgstr "No"
+
+msgid "Yes"
+msgstr "Yes"
+
+msgid "Failed to open the file for writing."
+msgstr "Не удалось открыть файл для записи."
+
+msgid "Failed to write to the file."
+msgstr "Не удалось записать в файл."
+
+msgid "The stream is in an unrecoverable error state."
+msgstr "Речок находится в непоправимом состоянии ошибки."
+
+msgid "Type your editor command"
+msgstr "Введите команду редактора"
+
+msgid "{0} will be replaced with the line number.  {1} with the file name"
+msgstr "{0} будет заменено номером строчки {1} именем файла."
+
+msgid "Regular expression error: {0}"
+msgstr "Ошибка регулярного выражения: {0}"
+
+msgid "Could not open python editor: {0}"
+msgstr "Невозможно открыть редактор Python: {0}"
+
+msgid "Search String:"
+msgstr "Поиск Структуры:"
+
+msgid "No occurrences of '%s' found!"
+msgstr "Никаких совпадений '%' не найдено!"
+
+msgid "None"
+msgstr "Нет"
+
+msgid "Input"
+msgstr "Ввод"
+
+msgid "NDI Connection"
+msgstr "Подключение NDI"
+
+msgid "Fast Format"
+msgstr "Быстрый формат"
+
+msgid "Best Format"
+msgstr "Лучший формат"
+
+msgid "With Audio"
+msgstr "С помощью звука"
+
+msgid "Without Audio"
+msgstr "Без звука"
+
+msgid "Renderer"
+msgstr "Редактор"
+
+msgid "Complexity"
+msgstr "Сложность"
+
+msgid "Draw Mode"
+msgstr "Режим рисования"
+
+msgid "Stage Cache"
+msgstr "Сценический кэш"
+
+msgid "Disk Cache in GB"
+msgstr "Дисковый кэш в GB"
+
+msgid "Toggle other eye stereo image."
+msgstr "Настроить другой стереоизображение."
+
+msgid "Image"
+msgstr "Фотография"
+
+msgid "Output"
+msgstr "Мероприятие"
+
+msgid "Anaglyph"
+msgstr "Анаглиф"
+
+msgid "Scanlines"
+msgstr "Сканирование"
+
+msgid "Columns"
+msgstr "Колонки"
+
+msgid "Checkerboard"
+msgstr "Проверочная доска"
+
+msgid "OpenGL"
+msgstr "OpenGL"
+
+msgid "Adjustments"
+msgstr "Корректировки"
+
+msgid "Eye Separation"
+msgstr "Разъединение глаз"
+
+msgid "Separation of left and right eye."
+msgstr "Разделение левого и правого глаз."
+
+msgid "Swap Eyes"
+msgstr "Глаза взмахи"
+
+msgid "Swap left and right eyes."
+msgstr "Пошевеливайтесь левыми и правыми глазами."
+
+msgid "Cache"
+msgstr "Кэш"
+
+msgid "      Gigabytes"
+msgstr "Гигабайты"
+
+msgid "Cache in Gigabytes."
+msgstr "Кэш в Гигабайте."
+
+msgid "   Read Ahead"
+msgstr "Читать вперёд"
+
+msgid "Read Ahead in seconds"
+msgstr "Читать вперёд в секунды"
+
+msgid "Read Behind"
+msgstr "Читать позади"
+
+msgid "Read Behind in seconds"
+msgstr "Читать позади в секундах"
+
+msgid "File Sequences"
+msgstr "Последовательность файлов"
+
+msgid "Audio file name"
+msgstr "Имя звукового файла"
+
+msgid "Maximum Digits"
+msgstr "Максимальные значения"
+
+msgid "Performance"
+msgstr "Показатели деятельности"
+
+msgid "Changes force a reload of the current movie file."
+msgstr "Изменения заставляют перезагрузить текущий файл фильма."
+
+msgid "Timer mode"
+msgstr "Режим таймера"
+
+msgid "Audio buffer frames"
+msgstr "Аудиовизуальные буферные рамки"
+
+msgid "Video Requests"
+msgstr "Запросы на видеоматериалы"
+
+msgid "Audio Requests"
+msgstr "Аудиовизуальные запросы"
+
+msgid "Sequence I/O threads"
+msgstr "Последовательность I/О нити"
+
+msgid "FFmpeg YUV to RGB conversion"
+msgstr "Преобразование FFmpeg YUV в RGB"
+
+msgid "FFmpeg Color Accuracy"
+msgstr "Точность цвета FFmpeg"
+
+msgid ""
+"When this setting is on, color accuracy is chosen when decoding YUV420_P8 "
+"movies that have Color Space as 'unknown', at the cost of some performance."
+msgstr ""
+"При включении этой настройки точность цвета выбирается при расшифровке "
+"фильмов YUV420_P8, в которых цветное пространство является \"неизвестным\" "
+"за счет некоторых результатов."
+
+msgid "FFmpeg I/O threads"
+msgstr "FFmpeg I/О нити"
+
+msgid ""
+"This value controls the number of threads that FFmpeg uses.  For most "
+"movies, it should be left at 0.  Some movies will show black frames.  For "
+"any like that, you should set them to 1, press Enter and reload the movie "
+"file."
+msgstr ""
+"Это значение контролирует количество строк, которые использует FFmpeg. Для "
+"большинства фильмов его следует оставить на 0. Некоторые фильмы будут "
+"показывать черные рамки. Для любого подобного, вы должны установить их на 1,"
+" нажмите Enter и перезагрузите файл фильма."
+
+msgid "Default Settings"
+msgstr "Параметры по умолчанию"
+
+msgid ""
+"This will reset all your settings to their default.  Are you sure you want "
+"to continue?"
+msgstr ""
+"Это перезагрузит все ваши настройки к их по умолчанию. Вы уверены, что "
+"хотите продолжить?"
+
+msgid "Drop a clip here to create a playlist."
+msgstr "Брось клип, чтобы создать плейлист."
+
+msgid "Create an empty timeline with a video and audio track."
+msgstr "Создать пустую хронологию с видео и звуковой дорожкой."
+
+msgid "Create a timeline from the selected clip."
+msgstr "Создать хронологию из выбранного клипа."
+
+msgid ""
+"Save current EDL to a permanent location, making paths relative if possible."
+msgstr ""
+"Сохранить текущий EDL в постоянное место, делая маршруты относительными, "
+"если возможно."
+
+msgid "Close current EDL."
+msgstr "Закрыть текущий ЭДЛ."
+
+msgid "Clear the messages"
+msgstr "Очистить сообщения"
+
+msgid "Turn off image warping."
+msgstr "Выключите искривляющие изображения."
+
+msgid "Spherical"
+msgstr "Шерифический"
+
+msgid "Wrap the image or images onto a sphere."
+msgstr "Заверните изображение или изображения в сферу."
+
+msgid "Cubic"
+msgstr "Кубик"
+
+msgid "Wrap the image or images onto a cube."
+msgstr "Заверните изображение или изображения на куб."
+
+msgid "Projection"
+msgstr "Прогноз"
+
+msgid "   H. Aperture"
+msgstr "H. Апертура"
+
+msgid "Horizontal Aperture of the Projection."
+msgstr "Горизонтальная апертура проекции."
+
+msgid "    V. Aperture"
+msgstr "V. Апертура"
+
+msgid "Vertical Aperture of the Projection."
+msgstr "Вертикальная апертура проекции."
+
+msgid ""
+"Focal Length of the Projection. Use Shift + left mouse button to change or "
+"the mousewheel."
+msgstr ""
+"Проекция проекции. Используйте кнопку Shift + левая кнопка мыши для "
+"изменения или мышиное колесо."
+
+msgid "Rotation"
+msgstr "Вращение"
+
+msgid "Spin with middle mouse instead of rotating with it."
+msgstr "Поворачивай со средней мышкой вместо того, чтобы вращаться с ней."
+
+msgid ""
+"Rotation in X of the projection.  Use middle mouse button to move around."
+msgstr ""
+"Вращение в X проекции. Используйте среднюю кнопку мыши, чтобы двигаться."
+
+msgid ""
+"Rotation in Y of the projection.  Use middle mouse button to move around."
+msgstr ""
+"Вращение в Y проекции. Используйте среднюю кнопку мыши, чтобы двигаться."
+
+msgid "Subdivisions"
+msgstr "Подразделы"
+
+msgid "Subdivision of the sphere when doing spherical projections"
+msgstr "Подразделение сферы при производстве сферических выступов"
+
+msgid "Subdivision of the sphere in X."
+msgstr "Подразделение сферы в X."
+
+msgid "Subdivision of the sphere in Y."
+msgstr "Подразделение сферы в Y."
+
+msgid "Search"
+msgstr "Поиск"
+
+msgid "Both"
+msgstr "И то, и другое"
+
+msgid "Attribute"
+msgstr "Атрибуты"
+
+msgid "Value"
+msgstr "Стоимость"
+
+msgid "Main"
+msgstr "Главное"
+
+msgid "Subtitle"
+msgstr "Субтитры:"
+
+msgid "Metadata"
+msgstr "Метаданные"
+
+msgid "PAL Video"
+msgstr "PAL Видео"
+
+msgid "NTSC Video"
+msgstr "Видеозапись NTSC"
+
+msgid "35mm Academy"
+msgstr "35-мм Академия"
+
+msgid "Widescreen (HDTV + STV)"
+msgstr "Широкий экран (HDTV + STV)"
+
+msgid "35mm European Widescreen"
+msgstr "35-мм европейский широкополосный экран"
+
+msgid "Early 35mm"
+msgstr "Раннее 35-мм"
+
+msgid "HDTV / Widescreen 16:9"
+msgstr "HDTV/Широкий экран 16:9"
+
+msgid "35mm Flat"
+msgstr "35-мм Площадь"
+
+msgid "70mm"
+msgstr "70 мм"
+
+msgid "35mm Anamorphic"
+msgstr "35-мм анаморфный"
+
+msgid "35mm Panavision"
+msgstr "35-мм Панавидение"
+
+msgid "Cinemascope"
+msgstr "Киноскоп"
+
+msgid "MGM Camera 65"
+msgstr "MGM Камера 65"
+
+msgid "Load"
+msgstr "Загрузка"
+
+msgid "Reset"
+msgstr "Перезагрузить"
+
+msgid "1:1"
+msgstr "1:1"
+
+msgid "1:2"
+msgstr "1:2"
+
+msgid "1:4"
+msgstr "1:4"
+
+msgid "1:8"
+msgstr "1:8"
+
+msgid "1:16"
+msgstr "1:16"
+
+msgid "Pick"
+msgstr "Выбрать"
+
+msgid "%.3f seconds "
+msgstr "%,3 секунды"
+
+msgid "Video Stream #%d"
+msgstr "Видеопоток #%d"
+
+msgid "Name"
+msgstr "Имя"
+
+msgid "Codec"
+msgstr "Кодыc"
+
+msgid "Unknown"
+msgstr "Неизвестно"
+
+msgid "Width"
+msgstr "Ширина"
+
+msgid "Width of clip"
+msgstr "Ширина клипа"
+
+msgid "Height"
+msgstr "Высота"
+
+msgid "Height of clip"
+msgstr "Высота клипа"
+
+msgid "Aspect Ratio"
+msgstr "Соотношение чувствительности"
+
+msgid "Aspect ratio of clip"
+msgstr "Соотношение параметров клипа"
+
+msgid "Pixel Ratio"
+msgstr "Соотношение пикселей"
+
+msgid "Pixel ratio of clip"
+msgstr "Соотношение пикселей клипа"
+
+msgid "Video Rotation"
+msgstr "Вращение видео"
+
+msgid "Compression"
+msgstr "Огнестрельное давление"
+
+msgid "unsigned byte (8-bits per channel)"
+msgstr "Неподписанный байт (8 бит на канал)"
+
+msgid "(10-bits per channel)"
+msgstr "(10 бит на один канал)"
+
+msgid "(12-bits per channel)"
+msgstr "(12 бит на один канал)"
+
+msgid "unsigned short (16-bits per channel)"
+msgstr "Неподписанная короткая (16 бит на канал)"
+
+msgid "half float (16-bits per channel)"
+msgstr "половина поплавка (16 бит на один канал)"
+
+msgid "unsigned int (32-bits per channel)"
+msgstr "Неподписанный инт (32-биты на канал)"
+
+msgid "float (32-bits per channel)"
+msgstr "поплавк (32 бита на один канал)"
+
+msgid "Unknown bit depth"
+msgstr "Неизвестная глубина бита"
+
+msgid "Depth"
+msgstr "Глубина"
+
+msgid "Bit depth of clip"
+msgstr "Глубина клипа"
+
+msgid "Image Channels"
+msgstr "Каналы изображения"
+
+msgid "Number of channels in clip"
+msgstr "Количество каналов в клипе"
+
+msgid "YUV Coefficients"
+msgstr "УФ-коэффициенты"
+
+msgid "YUV Coefficients used for video conversion"
+msgstr "Коэффициенты, используемые для преобразования видеоматериалов"
+
+msgid "Video Levels"
+msgstr "Видеоуровни"
+
+msgid "Color Primaries"
+msgstr "Первостепенные цвета"
+
+msgid "Color TRC"
+msgstr "Цветовая КИП"
+
+msgid "Color Transfer Characteristics"
+msgstr "Характеристики передачи цвета"
+
+msgid "Color Space"
+msgstr "Цветовое пространство"
+
+msgid "Color Transfer Space"
+msgstr "Пространство для передачи цветов"
+
+msgid "HDR Red Primaries"
+msgstr "&lt; Красные первенства &gt;"
+
+msgid "HDR Green Primaries"
+msgstr ""
+"&lt; Зеленые премиальные &gt; доклады о развитии человеческого потенциала"
+
+msgid "HDR Blue Primaries"
+msgstr ""
+"&lt; Голубые премиальные &gt; доклады о развитии человеческого потенциала"
+
+msgid "HDR White Primaries"
+msgstr "&lt; Белые первенства &gt;"
+
+msgid "HDR Display Mastering Luminance"
+msgstr "ДРЧ демонстрирует яркость"
+
+msgid "HDR maxCLL"
+msgstr "HDR maxCLL"
+
+msgid "HDR maxFALL"
+msgstr "Максимум FALL"
+
+msgid "FFmpeg Pixel Format"
+msgstr "FFmpeg Pixel Формат"
+
+msgid "Render Pixel Format"
+msgstr "Формат пикселя"
+
+msgid "Directory"
+msgstr "Каталог"
+
+msgid "Directory where clip resides"
+msgstr "Каталог, где находится клип"
+
+msgid "Filename"
+msgstr "Имя файла"
+
+msgid "Filename of the clip"
+msgstr "Имя файла клипа"
+
+msgid "Audio Directory"
+msgstr "Аудиовизуальный каталог"
+
+msgid "Directory where audio clip resides"
+msgstr "Каталог, где находится аудиоклип"
+
+msgid "Audio Filename"
+msgstr "Имя звукового файла"
+
+msgid "Filename of the audio clip"
+msgstr "Имя файла звукового клипа"
+
+msgid "Video Streams"
+msgstr "Видеополосы"
+
+msgid "Number of video streams in file"
+msgstr "Количество потоков видео в файле"
+
+msgid "Audio Streams"
+msgstr "Аудиовизуальные потоки"
+
+msgid "Number of audio streams in file"
+msgstr "Количество звуковых потоков в файле"
+
+msgid "Start Time"
+msgstr "Время начала"
+
+msgid "Beginning frame of clip"
+msgstr "Начало клипа"
+
+msgid "End Time"
+msgstr "Время окончания"
+
+msgid "Ending frame of clip"
+msgstr "Конец рамы клипа"
+
+msgid "First Frame"
+msgstr "Первая основа"
+
+msgid "First frame of clip - User selected"
+msgstr "Первая рамка клипа - выбран пользователь"
+
+msgid "Last Frame"
+msgstr "Последняя основа"
+
+msgid "Last frame of clip - User selected"
+msgstr "Последний кадр клипа - выбран пользователь"
+
+msgid "(PAL Fields)"
+msgstr "(поле PAL)"
+
+msgid "(NTSC Fields)"
+msgstr "(NTSC поля)"
+
+msgid "Default Speed"
+msgstr "Скорость@ info: whatsthis"
+
+msgid "Default Speed in Frames per Second"
+msgstr "По умолчанию скорость в рамках в секунду"
+
+msgid "Current Speed"
+msgstr "Текущая скорость"
+
+msgid "Current Speed (Frames Per Second)"
+msgstr "Текущая скорость (фреймы в секунду)"
+
+msgid "Disk space"
+msgstr "Дисковое пространство"
+
+msgid "Creation Date"
+msgstr "Дата создания"
+
+msgid "Creation date of file"
+msgstr "Дата создания файла"
+
+msgid "Modified Date"
+msgstr "Измененная дата"
+
+msgid "Last modified date of file"
+msgstr "Последняя изменённая дата файла"
+
+msgid "Load an image or movie file"
+msgstr "Загрузить изображение или файл фильма"
+
+msgid "Audio Stream #%d"
+msgstr "Звуковой поток #%d"
+
+msgid "FourCC"
+msgstr "Четыре комитета по координации (КК)"
+
+msgid "Four letter ID"
+msgstr "Четыре буквы Идентификатор"
+
+msgid "Channels"
+msgstr "Каналы"
+
+msgid "Number of audio channels"
+msgstr "Количество аудиоканалов"
+
+msgid "Format"
+msgstr "Формат"
+
+msgid "%d Hz."
+msgstr "%d Hz."
+
+msgid "Frequency"
+msgstr "Периодичность"
+
+msgid "Frequency of audio"
+msgstr "Частота звука"
+
+msgid "%d kb/s"
+msgstr "%d kb/s"
+
+msgid "Max. Bitrate"
+msgstr "Макс."
+
+msgid "Disposition"
+msgstr "Решение по делу"
+
+msgid "Disposition of Track"
+msgstr "Отмена решения по треку"
+
+msgid "Start"
+msgstr "Запуск"
+
+msgid "Start of Audio"
+msgstr "Начало звука"
+
+msgid "Duration"
+msgstr "Продолжительность"
+
+msgid "Duration of Audio"
+msgstr "Продолжительность звука"
+
+msgid "Subtitle Stream #%d"
+msgstr "Субтитры #%d"
+
+msgid "Codec Name"
+msgstr "Название кодаc"
+
+msgid "Closed Captions"
+msgstr "Закрытые слова"
+
+msgid "Video has Closed Captions"
+msgstr "Видео закрыло кнопки"
+
+msgid "Avg. Bitrate"
+msgstr "Битрат"
+
+msgid "Language"
+msgstr "Язык"
+
+msgid "Language if known"
+msgstr "Язык, если он известен"
+
+msgid "Start of Subtitle"
+msgstr "Начало субтитров"
+
+msgid "Duration of Subtitle"
+msgstr "Продолжительность субтитров"
+
+msgid "Linear"
+msgstr "Linear"
+
+msgid "Logarithmic"
+msgstr "Логарифмическая"
+
+msgid "Square Root"
+msgstr "Квадратный корень"
+
+msgid "Channel"
+msgstr "Канал"
+
+msgid "Red"
+msgstr "Red"
+
+msgid "Green"
+msgstr "Зеленый"
+
+msgid "Blue"
+msgstr "Синий"
+
+msgid "Lumma"
+msgstr "Lumma"
+
+msgid "Select main A image."
+msgstr "Выбрать основной образ А."
+
+msgid "Open a filename"
+msgstr "Откройте имя файла"
+
+msgid "Open a filename with audio"
+msgstr "Откройте имя файла с аудио"
+
+msgid "Close current filename"
+msgstr "Закрыть текущее имя файла"
+
+msgid "Close all filenames"
+msgstr "Закрыть все имена файлов"
+
+msgid "Previous filename"
+msgstr "Предыдущее имя файла"
+
+msgid "Next filename"
+msgstr "Следующее имя файла"
+
+msgid "Filter EDLs"
+msgstr "Фильтры EDL"
+
+msgid "Select one or more B images."
+msgstr "Выберите один или несколько изображений B."
+
+msgid "Select between Relative or Absolute Compare Time Mode"
+msgstr "Выбор относительного или абсолютного времени"
+
+msgid "Compare A"
+msgstr "Сравнить A"
+
+msgid "Compare B"
+msgstr "Сравнить B"
+
+msgid ""
+"Wipe between the A and B files\n"
+"\n"
+"Use the Option key + left mouse button to move the wipe in X or in Y"
+msgstr ""
+"Прочистить файлы A и B\n"
+"\n"
+"Использовать клавишу опции + левую кнопку мыши для перемещения стирания в X или Y"
+
+msgid ""
+"Wipe between the A and B files\n"
+"\n"
+"Use the Alt key + left mouse button to move the wipe in X or in Y."
+msgstr ""
+"Прочистить файлы A и B\n"
+"\n"
+"Используйте клавишу Alt + левую кнопку мыши, чтобы передвинуть стирку в X или Y."
+
+msgid "Overlay the A and B files with optional transparencyy"
+msgstr "Наложить на файлы A и B факультативную прозрачность"
+
+msgid "Difference the A and B files"
+msgstr "Отличить файлы A и B"
+
+msgid "Compare the A and B files side by side"
+msgstr "Сравнить файлы А и В бок о бок"
+
+msgid "Show the A file above the B file"
+msgstr "Показать файл А над файлом B"
+
+msgid "Tile the A and B files"
+msgstr "Подключить файлы A и B"
+
+msgid "Wipe"
+msgstr "Промывка"
+
+msgid "Use the Option key + left mouse button to move the wipe in X."
+msgstr ""
+"Используйте клавишу Опции + левую кнопку мыши, чтобы передвинуть стирку в X."
+
+msgid "Use the Alt key + left mouse button to move the wipe in X."
+msgstr ""
+"Используйте клавишу Альта + левую кнопку мыши, чтобы передвинуть стирку в X."
+
+msgid "Use the Option key + left mouse button to move the wipe in Y."
+msgstr ""
+"Используйте клавишу Опции + левую кнопку мыши для перемещения стирания в Y."
+
+msgid "Use the Alt key + left mouse button to move the wipe in Y."
+msgstr ""
+"Используйте клавишу Alt + левую кнопку мыши, чтобы передвинуть стирку в Y."
+
+msgid "Wipe Rotation.  Use Shift + left mouse button along X to rotate wipe."
+msgstr ""
+"Вращение стержня. Используйте кнопку Shift + левая кнопка мыши вдоль X для "
+"вращения стержня."
+
+msgid "Overlay"
+msgstr "Накладные"
+
+msgid "Use the Option key + left mouse button to change transparency."
+msgstr ""
+"Для изменения прозрачности используйте клавишу Опции + левую кнопку мыши."
+
+msgid "Use the Alt key + left mouse button to change transparency."
+msgstr ""
+"Для изменения прозрачности используйте клавишу Alt + левую кнопку мыши."
+
+msgid "LUT"
+msgstr "LUT"
+
+msgid "Enabled"
+msgstr "Включено"
+
+msgid "Order"
+msgstr "Порядок"
+
+msgid "Color Controls"
+msgstr "Контроль цвета"
+
+msgid "Add"
+msgstr "Add"
+
+msgid "Contrast"
+msgstr "Противоположность"
+
+msgid "Saturation"
+msgstr "Насыщение"
+
+msgid "Tint"
+msgstr "Подсказка"
+
+msgid "Invert"
+msgstr "Инвертировать"
+
+msgid "Levels"
+msgstr "Уровни"
+
+msgid "In Low"
+msgstr "Низкий"
+
+msgid "In High"
+msgstr "В высокой"
+
+msgid "Gamma"
+msgstr "Gamma"
+
+msgid "Out Low"
+msgstr "Низкая"
+
+msgid "Out High"
+msgstr "Высокая"
+
+msgid "Soft Clip"
+msgstr "Мягкий щелчок"
+
+msgid "Selects the current background type from the list"
+msgstr "Выберите текущий тип фона из списка"
+
+msgid "Solid Color:"
+msgstr "Твердый цвет:"
+
+msgid "Selects the solid color."
+msgstr "Выбор твердого цвета."
+
+msgid "Size:"
+msgstr "Размер:"
+
+msgid "Selects the checker size."
+msgstr "Выбирает размер шакера."
+
+msgid "First Color:"
+msgstr "Первый цвет:"
+
+msgid "Selects the first color."
+msgstr "Выберите первый цвет."
+
+msgid "Second Color:"
+msgstr "Второй цвет:"
+
+msgid "Selects the second color in Checkers."
+msgstr "Выберите второй цвет в шакерах."
+
+msgid "Text"
+msgstr "Текст"
+
+msgid "Font"
+msgstr "Шрифт"
+
+msgid "Selects the current font from the list"
+msgstr "Выберите текущий шрифт из списка"
+
+msgid "Selects the current font size."
+msgstr "Выберите размер шрифта."
+
+msgid "Pen"
+msgstr "Pen"
+
+msgid "Laser"
+msgstr "Laser"
+
+msgid "Makes the following annotation dissapear a second after drawn."
+msgstr ""
+"Спустя секунду после нарисованного аннотация делает следующую аннотацию "
+"рассеянной."
+
+msgid "Color:"
+msgstr "Цвет:"
+
+msgid "Selects the current pen color."
+msgstr "Выбирает текущий цвет ручки."
+
+msgid "Selects a hard brush."
+msgstr "Выбирает жесткую кисть."
+
+msgid "Selects a soft brush."
+msgstr "Выбирает мягкую щетку."
+
+msgid "Pen Size:"
+msgstr "Размер карандаша:"
+
+msgid "Selects the current pen size."
+msgstr "Выбирает текущий размер ручки."
+
+msgid "Ghosting"
+msgstr "Привидение"
+
+msgid "Previous:"
+msgstr "Предыдущий:"
+
+msgid ""
+"Selects the number of fading frames previous to the frame of the annotation."
+msgstr "Выберите число увядших рам перед рамой аннотации."
+
+msgid "Next:"
+msgstr "Следующий:"
+
+msgid ""
+"Selects the number of fading frames following the frame of the annotation."
+msgstr "Выберите число увядших рам после рам аннотации."
+
+msgid "Frames"
+msgstr "Рамки"
+
+msgid "Current"
+msgstr "Текущая"
+
+msgid "Makes the following annotation show on this frame only."
+msgstr "Делает следующую аннотацию только на этой раме."
+
+msgid "All"
+msgstr "All"
+
+msgid "Makes the following annotation show on all frames."
+msgstr "Делает следующую аннотацию на всех кадрах."
+
+msgid "Notes"
+msgstr "Примечания"
+
+msgid "Invalid index for add clip to timeline."
+msgstr "Неверный индекс для добавления в график."
+
+msgid "Could not get current path."
+msgstr "Невозможно найти текущий путь."
+
+msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
+msgstr ""
+"Элемент EDL \" {0} больше не загружен. Не может отменить или переделать."
+
+msgid "Could not paste {0}.  Error {1}."
+msgstr "Невозможно вставить {0}. Ошибка {1}."
+
+msgid "Could not save .otio file: {0}"
+msgstr "Невозможно сохранить файл.otio: {0}"
+
+msgid "Error saving {0}. {1}"
+msgstr "Ошибка сохранения {0}. {1}"
+
+msgid "Empty EDL file.  Not saving."
+msgstr "Пустой файл EDL, не сохранённый."
+
+msgid "Destination file is invalid."
+msgstr "Файл назначения недействителен."
+
+msgid "You can only add clips to an .otio EDL playlist."
+msgstr "Вы можете добавить только клипы в плейлист EDL.otio."
+
+msgid "Cannot currently concatenate an .otio file."
+msgstr "В настоящее время невозможно создать файл.otio."
+
+msgid "Cannot currently concatenate a directory."
+msgstr "В настоящее время не удалось создать каталог."
+
+msgid "Could not append video track {0}"
+msgstr "Невозможно добавить видео дорожку {0}"
+
+msgid "Could not append audio track {0}"
+msgstr "Не удалось добавить звуковую дорожку {0}"
+
+msgid "Server started at port {0}."
+msgstr "Сервер стартовал в порту {0}."
+
+msgid "Server stopped."
+msgstr "Сервер остановился."
+
+msgid "A client connected from {0}"
+msgstr "Клиент, связанный с {0}"
+
+msgid "Client at {0} disconnected."
+msgstr "Клиент на {0} отключен."
+
+msgid "Server protocol version is {0}.  Client protocol version is {1}"
+msgstr "Версия протокола сервера {0}. Версия протокола клиента {1}"
+
+msgid "Remote file {0} does not exist on local filesystem."
+msgstr "Удалённый файл {0} не существует в местной файловой системе."
+
+msgid "Remote files are less than local files."
+msgstr "Удалённые файлы меньше, чем местные."
+
+msgid "Remote file {0} matches file name {1} but not path."
+msgstr ""
+"Дистанционный файл {0} совпадает с именем файла {1}, но не с дорожкой."
+
+msgid "Remote file {0} does not match local filename."
+msgstr "Удалённый файл {0} не совпадает с местным именем файла."
+
+msgid "Removing {0} from message publisher."
+msgstr "Удаление {0} из издателя сообщений."
+
+msgid "Server listening on port "
+msgstr "Слушание сервера в порту"
+
+msgid "ComfyUI listening on port "
+msgstr "Слушание в порту"
+
+msgid "Connected to server at {0}, port {1}"
+msgstr "Подключено к серверу на {0}, порт {1}"
+
+msgid "Server connection lost."
+msgstr "Связь с сервером потеряна."
+
+msgid "Exception caught: "
+msgstr "Исключения пойманы:"
+
+msgid "ERROR: "
+msgstr "ТЕРРОРИЗМ:"
+
+msgid "WARN : "
+msgstr "Уорн:"
+
+msgid ""
+"Regular expression created from {0}.  It is:\n"
+"{1}"
+msgstr ""
+"Регулярное выражение, созданное из {0}:\n"
+"{1}"
+
+msgid "Iteration {0} matched prefix={1}"
+msgstr "Итерация {0} совпадающий префикс= {1}"
+
+msgid "Iteration {0} matched version={1}"
+msgstr "Итерация {0} compended версия= {1}"
+
+msgid "Iteration {0} matched suffix={1}"
+msgstr "Итерация {0} Совпадение suffix= {1}"
+
+msgid "Iteration {0} will check version={1}"
+msgstr "Итерация {0} проверяет версию {1}"
+
+msgid ""
+"No versioning in this clip.  Please create an image or directory named with "
+"a versioning string."
+msgstr ""
+"В этом клипе нет версий. Создайте изображение или каталог, названный строкой"
+" версий."
+
+msgid "Example:  gizmo_v003.0001.exr"
+msgstr "Пример: gizmo_v003 0001.exr"
+
+msgid "Annotation already existed at this time"
+msgstr "Аннотация уже существовала на данный момент."
+
+msgid "Failed to open the file {0} for writing."
+msgstr "Не удалось открыть файл {0} для записи."
+
+msgid "Failed to write to the file {0}."
+msgstr "Не удалось записать в файл {0}."
+
+msgid "Session saved to \"{0}\"."
+msgstr "Сеанс сохранен на \" {0}\"."
+
+msgid "Failed to open the file '{0}' for reading."
+msgstr "Не удалось открыть файл \" {0}\" для чтения."
+
+msgid "Failed to load the file '{0}."
+msgstr "Не удалось загрузить файл."
+
+msgid "Cannot save an NDI stream"
+msgstr "Не удалось сохранить поток NDI"
+
+msgid "Saving movie to {0}."
+msgstr "Сбережение фильма до \"0\"."
+
+msgid "Saving audio to {0}."
+msgstr "Сохранение звука до {0}."
+
+msgid "Saving pictures to {0}."
+msgstr "Сохранение фотографий до {0}."
+
+msgid "ProRes profiles need a .mov movie extension.  Changing it to .mov."
+msgstr "Прорецензии должны быть дополнены фильмом.mov, изменить его на.mov."
+
+msgid ""
+"VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to "
+".mp4"
+msgstr "Профиль VP9 нуждается в.mp4,.mkv или.webm расширения фильма."
+
+msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
+msgstr "Профиль AV1 требует расширения фильма.mp4 или.mkv."
+
+msgid ""
+"GoPro Cineform profile needs a .mkv movie extension.  Changing it to .mkv"
+msgstr "Профиль GoPro Cineform требует расширения фильма.mkv."
+
+msgid "HAP profile needs a .mov extension.  Changing it to .mov"
+msgstr "Профиль HAP требует расширения.mov."
+
+msgid "New file {0} already exist!  Cannot overwrite it."
+msgstr "Новый файл {0} уже существует! Не может переписать его."
+
+msgid "Rotated image info: {0}"
+msgstr "Информация о поворачиваемых изображениях: {0}"
+
+msgid "Scaled image info: {0}"
+msgstr "Расширенная информация об изображениях: {0}"
+
+msgid "{0}: Cannot open writer plugin."
+msgstr "Не удаётся открыть пиджак."
+
+msgid "Image info: {0} {1}"
+msgstr "Фотография: {0} {1}"
+
+msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+msgstr ""
+"Фотография слишком большая, чтобы сохранить аннотации. Расширится до размера"
+" смотрового портала."
+
+msgid "Viewport Size: {0} - X={1}, Y={2}"
+msgstr "Размер просмотра: {0} - X= {1}, Y= {2}"
+
+msgid "Writer plugin did not get output info.  Defaulting to {0}"
+msgstr "Писатель не получил информацию о выходе. По умолчанию {0}"
+
+msgid "Output info: {0} {1}"
+msgstr "Результаты: {0} {1}"
+
+msgid "Using profile {0}, pixel format {1}."
+msgstr "Используя профиль {0}, пиксельный формат {1}."
+
+msgid "Using preset {0}."
+msgstr "Использование предварительного оборудования {0}."
+
+msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
+msgstr "Спасение фильма без звука% >PRRId64> - %>PRId64>"
+
+msgid "Saving Movie with Audio %<PRId64> - %<PRId64>"
+msgstr "Спасение фильма с Audio% >PRRId64> - % >PRRId64>"
+
+msgid "Saving Audio %<PRId64> - %<PRId64>"
+msgstr "Сбережение звука % >PRId64> - %>PRId64>"
+
+msgid "Saving Pictures without Audio %<PRId64> - %<PRId64>"
+msgstr "Securing Pictures without Audio% >PRId64> - % >PRId64>"
+
+msgid "Audio only in timeline, but not trying to save audio."
+msgstr "Звук только в хронологии, но не в попытке сохранить звук."
+
+msgid "{0}: Invalid OpenGL format and type"
+msgstr "{0}: Неверный формат и тип OpenGL"
+
+msgid "OpenGL info: {0}"
+msgstr "Информация OpenGL: {0}"
+
+msgid "Saving... {0}"
+msgstr "Спасаю..."
+
+msgid "Empty video data at time {0}.  Repeating frame."
+msgstr "Пустые видеоданные в момент {0} Повторяю рамку."
+
+msgid "Reading preferences from \"{0}{1}\"."
+msgstr "Предпочтение чтения от \" {0} {1}\"."
+
+msgid "Failed to retrieve {0}."
+msgstr "Не удалось получить {0}."
+
+msgid ""
+"FFmpeg YUV to RGB Conversion is on in Settings Panel.  mrv2 will play back "
+"movies slower."
+msgstr ""
+"FFmpeg YUV в RGB преобразуется в Group. mrv2 будет играть фильмы "
+"помедленнее."
+
+msgid "Could not open color theme from \"{0}\"."
+msgstr "Невозможно открыть цветную тему из \" {0}\"."
+
+msgid "Loaded color themes from \"{0}\"."
+msgstr "Загруженные цветные темы из \" {0}\"."
+
+msgid "Setting OCIO config from preferences."
+msgstr "Сделать орио-конфигурацию из предпочтений."
+
+msgid "Setting OCIO config from OCIO environment variable."
+msgstr "Запуск OCIO Conig из переменной окружающей среды OCIO."
+
+msgid "Path mappings have been loaded from \"{0}{1}\"."
+msgstr "Картирование путей было загружено с \" {0} {1}\"."
+
+msgid "Loading hotkeys from \"{0}{1}.prefs\"."
+msgstr "Загрузка хот-дога из \"(0} {1}.prefs\"."
+
+msgid "Reseting hotkeys to default."
+msgstr "Перезагрузить хот-доги по умолчанию."
+
+msgid "Path mappings have been saved to \"{0}{1}\"."
+msgstr "Картирование путей было сохранено до \" {0} {1}\"."
+
+msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
+msgstr "Hotkeys были сохранены на \"(0) {1}.prefs\"."
+
+msgid "Preferences have been saved to: \"{0}{1}\"."
+msgstr "Преференции были сохранены следующим образом: \" {0} {1}\"."
+
+msgid "Removing "
+msgstr "Удаление"
+
+msgid "OCIO config is now:"
+msgstr "OCIO config теперь:"
+
+msgid "OCIO file \"{0}\" not found or not readable."
+msgstr "Файл OCIO \" {0} не найден или не читается."
+
+msgid "Setting OCIO config to default:"
+msgstr "Настроить концерн OCIO по умолчанию:"
+
+msgid "Setting OCIO config to built-in:"
+msgstr "Установка встроенной орио-конфигурации:"
+
+msgid "Path mapping for {0} already exists!"
+msgstr "Картирование путей для {0} уже существует!"
+
+msgid "Comparing {0} to prefix {1}"
+msgstr "Сопоставление {0} с префиксом {1}"
+
+msgid "Found a match.  File is now {0}"
+msgstr "Нашел совпадение. Файл сейчас {0}"
+
+msgid "OCIO config file cannot be empty."
+msgstr "Файл OCIO config не может быть пустым."
+
+msgid "OCIO config '{0}' does not exist or is not readable."
+msgstr "Конфигурация OCIO \" {0} не существует или не читается."
+
+msgid "Invalid OCIO Ics '{0}'."
+msgstr "Неверный ОКИО Ics '(0)'."
+
+msgid "Invalid OCIO Look '{0}'."
+msgstr "Неверный OCIO выглядит '(0)'."
+
+msgid "Invalid OCIO Display/View '{0}'."
+msgstr "Неверное отображение OCIO/Вид '0'."
+
+msgid "Could not split '{0}' into display and view."
+msgstr "Невозможно разделить \" {0}\" на отображение и просмотр."
+
+msgid "No default view for display '{0}'.  Does display exist?"
+msgstr ""
+"Нет просмотра по умолчанию для отображения \" {0}\". Существует ли дисплей?"
+
+msgid "Setting OCIO Preset '{0}'."
+msgstr "Установка OCIO Preset '(0)'."
+
+msgid "Preset '{0}' not found."
+msgstr "Предположить \"(0)\" не найдено."
+
+msgid "OCIO Preset '{0}' already exists!"
+msgstr "OCIO Preset \"(0)\" уже существует!"
+
+msgid "Failed to load the file '{0}'."
+msgstr "Не удалось загрузить файл \" {0}\"."
+
+msgid "Loaded {0} ocio presets from \"{1}\"."
+msgstr "Заряженные {0} осио предваряют от \" {1}\"."
+
+msgid "Failed to open the file '{0}' for saving."
+msgstr "Не удалось открыть файл \" {0}\" для сохранения."
+
+msgid "Failed to save the file '{0}'."
+msgstr "Не удалось сохранить файл \" {0}\"."
+
+msgid "OCIO presets have been saved to \"{0}\"."
+msgstr "Предварительные установки OCIO были сохранены на \" {0}\"."
+
+msgid "English"
+msgstr "Английский"
+
+msgid "Spanish"
+msgstr "Испанский"
+
+msgid "German"
+msgstr "Немецкий"
+
+msgid "Hindi"
+msgstr "хинди"
+
+msgid "Chinese Simplified"
+msgstr "Упрощенный китайский язык"
+
+msgid "Portuguese"
+msgstr "Португальский"
+
+msgid "French"
+msgstr "Французский"
+
+msgid "Russian"
+msgstr "Русский"
+
+msgid ""
+"Need to reboot mrv2 to change language to {0}.  Are you sure you want to "
+"continue?"
+msgstr ""
+"Нужно перезагрузить mrv2, чтобы заменить язык на {0} Ты уверена, что хочешь "
+"продолжить?"
+
+msgid "Set Language to {0}, Numbers to {1}"
+msgstr "Указать язык {0}, Числа {1}"
+
+msgid "Arabic"
+msgstr "Арабский"
+
+msgid "Armenian"
+msgstr "Армянский"
+
+msgid "Basque"
+msgstr "Баскский"
+
+msgid "Belarusian"
+msgstr "Белорусский"
+
+msgid "Bengali"
+msgstr "Бенгальский"
+
+msgid "Bulgarian"
+msgstr "Болгарский"
+
+msgid "Catalan"
+msgstr "Каталонский"
+
+msgid "Chinese"
+msgstr "Китайцы"
+
+msgid "Czech"
+msgstr "Чешская"
+
+msgid "Danish"
+msgstr "Датский"
+
+msgid "Dutch"
+msgstr "Датч"
+
+msgid "Finnish"
+msgstr "Финский"
+
+msgid "Galician"
+msgstr "Галициан"
+
+msgid "Greek"
+msgstr "Греческий"
+
+msgid "Hebrew"
+msgstr "Иврит"
+
+msgid "Icelandic"
+msgstr "Исландский"
+
+msgid "Indonesian"
+msgstr "Индонезия"
+
+msgid "Italian"
+msgstr "Итальянский"
+
+msgid "Irish"
+msgstr "Ирландский"
+
+msgid "Japanese"
+msgstr "Японский"
+
+msgid "Korean"
+msgstr "Корейский"
+
+msgid "Norwegan"
+msgstr "Норвеган"
+
+msgid "Persian"
+msgstr "Персидский"
+
+msgid "Polish"
+msgstr "Польский"
+
+msgid "Tibetan"
+msgstr "Тибетский"
+
+msgid "Romanian"
+msgstr "Румынский"
+
+msgid "Serbian"
+msgstr "Сербский"
+
+msgid "Slovenian"
+msgstr "Словения"
+
+msgid "Swedish"
+msgstr "Шведский"
+
+msgid "Thai"
+msgstr "Тайский"
+
+msgid "Turkish"
+msgstr "Турецкий"
+
+msgid "Vietnamese"
+msgstr "Вьетнам"
+
+msgid "Welsh"
+msgstr "Уэльский"
+
+msgid "Yiddish"
+msgstr "Идиш"
+
+msgid "Zulu"
+msgstr "Зулу"
+
+msgid ""
+"\n"
+"Hotkeys:   "
+msgstr ""
+"\n"
+"Хоткейки:"
+
+msgid "   and   "
+msgstr "и"
+
+msgid ""
+"\n"
+"Reset:   "
+msgstr ""
+"\n"
+"Перезагрузить:"
+
+msgid ""
+"\n"
+"Hotkey: "
+msgstr ""
+"\n"
+"Хоткей:"
+
+msgid "@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"
+msgstr "@B12@C7@b@.Function @B12@C7@b@.Hotkey"
+
+msgid ""
+"Hotkey \"%s\" already used in \"%s\".\n"
+"Do you want to override it?"
+msgstr ""
+"Hotkey \"%s\" уже используется в \"%s\".\n"
+"Хочешь отключить его?"
+
+msgid ""
+"Corruption in hotkeys preferences. Hotkey '{0}' for {1} will not be "
+"available.  Already used in {2}."
+msgstr ""
+"Коррупция предпочтений хот-кей. Hotkey \" {0}\" для {1} не будет доступна. "
+"Уже используется в {2}."
+
+msgid "Allows you to select different image channels or layers."
+msgstr "Позволяет вам выбирать различные каналы или слои изображения."
+
+msgid "Reduce gain 1/4 stop (divide by sqrt(sqrt(2)))."
+msgstr ""
+"Снижение прибыли на 1/4 остановка (разделяется по квадратам (sqrt(2)))."
+
+msgid "Increase gain 1/4 stop (multiply by sqrt(sqrt(2)))."
+msgstr ""
+"Увеличение прироста 1/4 остановка (множественно по квадратам (sqrt(2)))."
+
+msgid "Allows you to adjust the gain or exposure of the image."
+msgstr "Позволяет вам скорректировать наживу или обнажение изображения."
+
+msgid "Allows you to adjust the saturation of the image."
+msgstr "Позволяет вам скорректировать насыщение изображения."
+
+msgid ""
+"Allows you to adjust gamma curve for display.\n"
+"Value is:  pow( 2, 1/x )."
+msgstr ""
+"Позволит вам отрегулировать гамма-изгиб для показа.\n"
+"Значение: pow( 2, 1/x)."
+
+msgid "Toggle Edit Mode."
+msgstr "Режим Правки Панелей."
+
+msgid "Scrubbing Tool"
+msgstr "Инструмент скруббирования"
+
+msgid "Area Select Tool"
+msgstr "Выделить область"
+
+msgid "Freehand Drawing Tool"
+msgstr "Инструмент свободного рисования"
+
+msgid "Eraser Tool"
+msgstr "Стереть инструмент"
+
+msgid "Circle Tool"
+msgstr "Инструмент окружности"
+
+msgid "Rectangle Tool"
+msgstr "Инструмент рентгена"
+
+msgid "Arrow Tool"
+msgstr "Стрелка"
+
+msgid "Text Tool.   Right click to edit previously stamped text."
+msgstr "Нажмите правый нажатие на ранее отпечатанный текст."
+
+msgid "Undo Draw"
+msgstr "Отменить рисование"
+
+msgid "Redo Draw"
+msgstr "Повторить рисование"
+
+msgid "Go to the beginning of the sequence."
+msgstr "Перейти к началу последовательности."
+
+msgid "Play sequence backwards."
+msgstr "Воспроизвести последовательность назад."
+
+msgid "Go back one frame."
+msgstr "Возвращайся на одну рамку."
+
+msgid "Stop playback."
+msgstr "Остановите воспроизведение."
+
+msgid "Play sequence forwards."
+msgstr "Воспроизвести последовательность вперёд."
+
+msgid "Go to the end of the sequence."
+msgstr "Перейти к концу последовательности."
+
+msgid "Set In Point"
+msgstr "Вставить в точку"
+
+msgid "Set Out Point"
+msgstr "Выделить точку"
+
+msgid "Image zoom setting."
+msgstr "Настройка изображения."
+
+msgid ""
+"\n"
+"\n"
+"Mousewheel to zoom in and out."
+msgstr ""
+"\n"
+"\n"
+"Мышечное колесо, чтобы увеличить вход и выход."
+
+msgid ""
+"\n"
+"Alt + Right Mouse Button to zoom in and out."
+msgstr ""
+"\n"
+"Альт + правый мышиный кнопка для увеличения входа и выхода."
+
+msgid ""
+"\n"
+"\n"
+"0 to 9 to zoom to a specific level."
+msgstr ""
+"\n"
+"\n"
+"От 0 до 9, чтобы увеличить до определенного уровня."
+
+msgid "Load Directory"
+msgstr "Загрузка каталога@ info: whatsthis"
+
+msgid "Reels (*.{"
+msgstr "Крылья (*. {"
+
+msgid "Images (*.{"
+msgstr "Изображение (*. {"
+
+msgid "Sessions (*."
+msgstr "Сессии (*)."
+
+msgid "All (*.{"
+msgstr "Все (*. {"
+
+msgid "Movies (*.{"
+msgstr "Фильмы (*) {"
+
+msgid "Load Image(s)"
+msgstr "Загрузить изображение (фотографии)"
+
+msgid "Load Movie or Sequence"
+msgstr "Загрузить кино или последовательность"
+
+msgid "Save OTIO timeline"
+msgstr "Сохранить график OTIO"
+
+msgid "Save Python Script"
+msgstr "Сохранить скрипт Python"
+
+msgid "Load Python Script"
+msgstr "Загрузить Python Script"
+
+msgid "LUTS (*.{"
+msgstr "КОЛИЧЕСТВО (*) {"
+
+msgid "Load LUT"
+msgstr "Загрузить LUT"
+
+msgid "Subtitles (*.{"
+msgstr "Субтитры (*. {"
+
+msgid "Load Subtitle"
+msgstr "Загрузить субтитры"
+
+msgid "Audios (*.{"
+msgstr "Звуки (*. {"
+
+msgid "Load Audio"
+msgstr "Загрузить звук"
+
+msgid "Save Single Frame"
+msgstr "Сохранить единую систему"
+
+msgid "Save Audio"
+msgstr "Сохранить звук"
+
+msgid "Save Movie or Sequence"
+msgstr "Сохранить кино или последовательность"
+
+msgid "Acrobat PDF (*.{pdf})"
+msgstr "Acrobat PDF (*. {pdf})"
+
+msgid "Save Annotations to PDF"
+msgstr "Сохранить ссылки на PDF"
+
+msgid "Session"
+msgstr "Сессия"
+
+msgid "Open Session"
+msgstr "Открытое заседание"
+
+msgid "Save Session"
+msgstr "Сохранить сеанс"
+
+msgid "OCIO config (*.{"
+msgstr "ОКИО-Конфигурация (*) {"
+
+msgid "Load OCIO Config"
+msgstr "Загрузить OCIO Conpig"
+
+msgid "Default"
+msgstr "Ошибка@ info: whatsthis"
+
+msgid "Annotations"
+msgstr "Аннотации"
+
+msgid "Background"
+msgstr "Справочная информация"
+
+msgid "Color"
+msgstr "Цвет"
+
+msgid "Color Area"
+msgstr "Цветовая область"
+
+msgid "Devices"
+msgstr "Устройства"
+
+msgid "Environment Map"
+msgstr "Экологическая карта"
+
+msgid "Histogram"
+msgstr "Гистограмма"
+
+msgid "Logs"
+msgstr "Журналы"
+
+msgid "Media Information"
+msgstr "Информация для средств массовой информации"
+
+msgid "NDI"
+msgstr "NDI"
+
+msgid "Python"
+msgstr "Питон"
+
+msgid "Settings"
+msgstr "Параметры"
+
+msgid "USD"
+msgstr "USD"
+
+msgid "Vectorscope"
+msgstr "Векторный телескоп"
+
+msgid "Hotkeys"
+msgstr "Горячие ключи"
+
+msgid "Preferences"
+msgstr "Преференции"
+
+msgid "About"
+msgstr "О том, что"
+
+msgid "File extension cannot be empty."
+msgstr "Распространение файла не может быть пустым."
+
+msgid "Saving audio but current clip does not have audio."
+msgstr "Сохранение аудио, но текущего клипа не имеет звука."
+
+msgid "Saving video but with an audio extension."
+msgstr "Сохранить видео, но с аудиопродукцией."
+
+msgid "View/Mask"
+msgstr "Вид/Маска"
+
+msgid "OCIO/     Input Color Space"
+msgstr "OCIO/Цветовое пространство"
+
+msgid "OCIO/     Look"
+msgstr "OCIO/Смотри."
+
+msgid "All Monitors"
+msgstr "Все мониторы"
+
+msgid "Pick Color"
+msgstr "Выбрать цвет"
+
+msgid "Pick Draw Color and Alpha"
+msgstr "Выберите цвет рисунка и Альфа"
+
+msgid "Media"
+msgstr "Средства массовой информации"
+
+msgid "UI"
+msgstr "UI"
+
+msgid "Pan And Zoom"
+msgstr "Пэн и Зум"
+
+msgid "Timeline"
+msgstr "Сроки"
+
+msgid ""
+"You have EDLs in the current session.  These will not be saved in the "
+"session file.  Do you want to continue?"
+msgstr ""
+"На текущей сессии у вас есть EDL. Они не будут сохранены в файле сеанса. Вы "
+"хотите продолжить?"
+
+msgid "Edit Text Annotation"
+msgstr "Изменить текст Аннотация"
+
+msgid "No item selected"
+msgstr "Не выбранный элемент"
+
+msgid "%s - Page %d"
+msgstr "%s - page %d"
+
+msgid "Frame {0} - TC: {1} - S: {2}"
+msgstr "Рамка {0} - ТС: {1} - S: {2}"
+
+msgid "Image too big.  Will save the viewport size."
+msgstr "Слишком большое изображение, сохранит размер смотрового портала."
+
+msgid "Scrub"
+msgstr "Скреб"
+
+msgid "Selection"
+msgstr "Выбор"
+
+msgid "Draw"
+msgstr "Рисовать"
+
+msgid "Erase"
+msgstr "Стереть"
+
+msgid "Circle"
+msgstr "Круг"
+
+msgid "Rectangle"
+msgstr "Прямоугольник"
+
+msgid "Arrow"
+msgstr "Стрела"
+
+msgid "Rotate"
+msgstr "Вращение"
+
+msgid "Trim"
+msgstr "Трим"
+
+msgid "Slip"
+msgstr "Скачок"
+
+msgid "Slide"
+msgstr "Слайд"
+
+msgid "Ripple"
+msgstr "Риппл"
+
+msgid "Roll"
+msgstr "Поворачивай."
+
+msgid "Render/Minify Filter/Linear"
+msgstr "Редакция/Минимизация фильтра/Linear"
+
+msgid "Render/Magnify Filter/Linear"
+msgstr "Редакция/Увеличить фильтр/Linear"
+
+msgid "(no image)"
+msgstr "(без изображения)"
+
+msgid "Unknown action mode in "
+msgstr "Неизвестный режим действия в"
+
+msgid ""
+"Cannot create an annotation here for all frames.  A current frame annotation"
+" already exists."
+msgstr ""
+"Невозможно создать аннотацию для всех рамок. Аннотация течений уже "
+"существует."
+
+msgid ""
+"Cannot create an annotation here for current frame.  An all frames "
+"annotation already exists."
+msgstr ""
+"Невозможно создать аннотацию для текущей структуры. Аннотация всех рамок уже"
+" существует."
+
+msgid "Play"
+msgstr "Воспроизвести"
+
+msgid "Stop"
+msgstr "Стой."
+
+msgid "2.35"
+msgstr "2.35"
+
+msgid "1.85"
+msgstr "1.85"
+
+msgid "1.66"
+msgstr "1.66"
+
+msgid "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
+msgstr "PMem: % >PRRIu64> / %>PRRIu64> MB VMem: %>PRRIu64> / % >PRRIu64> MB"
+
+msgid "Cache:"
+msgstr "Кэш:"
+
+msgid "    Used: %.2g of %zu Gb (%.2g %%)"
+msgstr "Использовано: %,2 g от %zu Gb (%,2g%)"
+
+msgid "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
+msgstr "Впереди V: % 4>PRRIu64> A: % 4>PRRIu64>"
+
+msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
+msgstr "За V: % 4>PRRIu64> A: % 4>PRRIu64>"
+
+msgid "Edit Text"
+msgstr "Изменить текст"
+
+msgid "Invalid font for text drawing"
+msgstr "Неверный шрифт для текстового рисунка"
+
+msgid "Could not convert message to shape: "
+msgstr "Невозможно преобразовать сообщение в форму:"
+
+msgid "File/Open/Movie or Sequence"
+msgstr "Файл/Открыто/Фильм или последовательность"
+
+msgid "File/Open/With Separate Audio"
+msgstr "Файл/Открыто/С отдельным звуком"
+
+msgid "File/Open/Single Image"
+msgstr "Файл/Открыто/Единый образ"
+
+msgid "File/Open/Directory"
+msgstr "Файл/Открыто/Каталог"
+
+msgid "File/Open/Session"
+msgstr "Файл/Открыто/Сессия"
+
+msgid "File/Save/Movie or Sequence"
+msgstr "Файл/Сохранить/Фильм или последовательность"
+
+msgid "File/Save/Single Frame"
+msgstr "Файл/Сохранить/Единая основа"
+
+msgid "File/Save/Frames to Folder"
+msgstr "Файл/Сохранить/Рамки папки"
+
+msgid "File/Save/OTIO EDL Timeline"
+msgstr "Файл/Сохранить/График работы OTIO EDL"
+
+msgid "File/Save/PDF Document"
+msgstr "Файл/Сохранить/Документ PDF"
+
+msgid "File/Save/Session"
+msgstr "Файл/Сохранить/Сессия"
+
+msgid "File/Save/Session As"
+msgstr "Файл/Сохранить/Сессия в качестве сессии"
+
+msgid "File/Close Current"
+msgstr "Файл/Закрыть текущее"
+
+msgid "File/Close All"
+msgstr "Файл/Закрыть все"
+
+msgid "File/Recent/%s"
+msgstr "Файл/Последние/%s"
+
+msgid "File/Quit"
+msgstr "Файл/Выход"
+
+msgid "Window/Presentation"
+msgstr "Окно/Представление"
+
+msgid "Window/Full Screen"
+msgstr "Окно/Полноэкранный скриншот"
+
+msgid "Window/Float On Top"
+msgstr "Окно/Поплавок сверху"
+
+msgid "Window/Secondary"
+msgstr "Окно/Средняя школа"
+
+msgid "Window/Secondary Float On Top"
+msgstr "Окно/Средняя плавка сверху"
+
+msgid "View/Tool Bars/Toggle Menu Bar"
+msgstr "Вид/Панели инструментов/Панель инструментов@ info: whatsthis"
+
+msgid "View/Tool Bars/Toggle Top Bar"
+msgstr "Вид/Панели инструментов/Верхняя панель инструментов@ info: whatsthis"
+
+msgid "View/Tool Bars/Toggle Pixel Bar"
+msgstr "Вид/Панели инструментов/Панель пикселя@ info: whatsthis"
+
+msgid "View/Tool Bars/Toggle Timeline Bar"
+msgstr "Вид/Панели инструментов/Панель времени@ info: whatsthis"
+
+msgid "View/Tool Bars/Toggle Status Bar"
+msgstr "Вид/Панели инструментов/Скриншот состояния закладки"
+
+msgid "View/Tool Bars/Toggle Action Dock"
+msgstr "Вид/Панели инструментов/Панель действий@ info: whatsthis"
+
+msgid "View/Auto Frame"
+msgstr "Вид/Автоматическая основа"
+
+msgid "View/Safe Areas"
+msgstr "Вид/Безопасные районы"
+
+msgid "View/OpenEXR/Data Window"
+msgstr "Вид/OpenEXR/Окно данных"
+
+msgid "View/OpenEXR/Display Window"
+msgstr "Вид/OpenEXR/Показать окно"
+
+msgid "View/OpenEXR/Ignore Display Window"
+msgstr "Вид/OpenEXR/Игнорировать окно отображения"
+
+msgid "Panel/One Panel Only"
+msgstr "Дискуссионная группа/Только одна группа"
+
+msgid "Panel/"
+msgstr "Дискуссионная группа/"
+
+msgid "Window/"
+msgstr "Окно/"
+
+msgid "Unknown menu entry "
+msgstr "Неизвестная запись меню"
+
+msgid "Render/Color Channel"
+msgstr "Редакция/Цветной канал"
+
+msgid "Render/Red Channel"
+msgstr "Редакция/Красный канал"
+
+msgid "Render/Green Channel "
+msgstr "Редакция/Зеленый канал"
+
+msgid "Render/Blue Channel"
+msgstr "Редакция/Голубой канал"
+
+msgid "Render/Alpha Channel"
+msgstr "Редакция/Альфа-канал"
+
+msgid "Render/Lumma"
+msgstr "Редакция/Lumma"
+
+msgid "Render/Mirror X"
+msgstr "Редакция/Зеркало X"
+
+msgid "Render/Mirror Y"
+msgstr "Редакция/Зеркало Y"
+
+msgid "Render/Rotate/-90 Degrees"
+msgstr "Редакция/Вращение/- 90 степеней"
+
+msgid "Render/Rotate/+90 Degrees"
+msgstr "Редакция/Вращение/+90 степеней"
+
+msgid "Render/Video Levels/From File"
+msgstr "Редакция/Видеоуровни/Из файла"
+
+msgid "Render/Video Levels/Legal Range"
+msgstr "Редакция/Видеоуровни/Правовые рамки"
+
+msgid "Render/Video Levels/Full Range"
+msgstr "Редакция/Видеоуровни/Полная дальность"
+
+msgid "Render/Alpha Blend/None"
+msgstr "Редакция/Альфа Бленд/Нет"
+
+msgid "Render/Alpha Blend/Straight"
+msgstr "Редакция/Альфа Бленд/Прямо"
+
+msgid "Render/Alpha Blend/Premultiplied"
+msgstr "Редакция/Альфа Бленд/Предмногочисленные"
+
+msgid "Render/Minify Filter/Nearest"
+msgstr "Редакция/Минимизация фильтра/Ближайший"
+
+msgid "Render/Magnify Filter/Nearest"
+msgstr "Редакция/Увеличить фильтр/Ближайший"
+
+msgid "Render/HDR/Auto Normalize"
+msgstr "Редакция/HDR/Автонормализовать"
+
+msgid "Render/HDR/Invalid Values"
+msgstr "Редакция/HDR/Неверные значения"
+
+msgid "Playback/Stop"
+msgstr "Воспроизведение/Стой."
+
+msgid "Playback/Forwards"
+msgstr "Воспроизведение/Вперёд"
+
+msgid "Playback/Backwards"
+msgstr "Воспроизведение/Назад"
+
+msgid "Playback/Toggle Playback"
+msgstr "Воспроизведение/Панель воспроизведения@ info: whatsthis"
+
+msgid "Playback/Toggle In Point"
+msgstr "Воспроизведение/Заголовок в точке@ info: whatsthis"
+
+msgid "Playback/Toggle Out Point"
+msgstr "Воспроизведение/Выйти из точки@ info: whatsthis"
+
+msgid "Playback/Loop Playback"
+msgstr "Воспроизведение/Воспроизведение"
+
+msgid "Playback/Playback Once"
+msgstr "Воспроизведение/Воспроизвести один раз"
+
+msgid "Playback/Playback Ping Pong"
+msgstr "Воспроизведение/Воспроизведение Ping Pong"
+
+msgid "Playback/Go to/Start"
+msgstr "Воспроизведение/Перейти/Запуск"
+
+msgid "Playback/Go to/End"
+msgstr "Воспроизведение/Перейти/End"
+
+msgid "Playback/Go to/Previous Frame"
+msgstr "Воспроизведение/Перейти/Предыдущая основа"
+
+msgid "Playback/Go to/Next Frame"
+msgstr "Воспроизведение/Перейти/Следующая основа"
+
+msgid "Playback/Go to/Previous Clip"
+msgstr "Воспроизведение/Перейти/Предыдущий слип"
+
+msgid "Playback/Go to/Next Clip"
+msgstr "Воспроизведение/Перейти/Следующий слип"
+
+msgid "Playback/Go to/Previous Annotation"
+msgstr "Воспроизведение/Перейти/Предыдущая аннотация"
+
+msgid "Playback/Go to/Next Annotation"
+msgstr "Воспроизведение/Перейти/Следующая аннотация"
+
+msgid "Playback/Annotation/Clear"
+msgstr "Воспроизведение/Аннотация/Очистить"
+
+msgid "Playback/Annotation/Clear All"
+msgstr "Воспроизведение/Аннотация/Очистить все"
+
+msgid "View/Mask/%s"
+msgstr "Вид/Маска/%s"
+
+msgid "View/Hud"
+msgstr "Вид/Hud"
+
+msgid "Timeline/Cache/Clear"
+msgstr "Сроки/Кэш/Очистить"
+
+msgid "Timeline/Cache/Update Frame"
+msgstr "Сроки/Кэш/Обновить рамки"
+
+msgid "Timeline/Editable"
+msgstr "Сроки/Редакция"
+
+msgid "Timeline/Edit Associated Clips"
+msgstr "Сроки/Правка Ассоциированные Клипы"
+
+msgid "Timeline/Frame View"
+msgstr "Сроки/Рамочный вид"
+
+msgid "Timeline/Scroll To Current Frame"
+msgstr "Сроки/Свиток в текущую структуру"
+
+msgid "Timeline/Track Info"
+msgstr "Сроки/Информация о дорожке"
+
+msgid "Timeline/Clip Info"
+msgstr "Сроки/Скопировать информацию"
+
+msgid "Timeline/Thumbnails/None"
+msgstr "Сроки/Пальцы/Нет"
+
+msgid "Timeline/Thumbnails/Small"
+msgstr "Сроки/Пальцы/Маленький"
+
+msgid "Timeline/Thumbnails/Medium"
+msgstr "Сроки/Пальцы/Средняя"
+
+msgid "Timeline/Thumbnails/Large"
+msgstr "Сроки/Пальцы/Большой"
+
+msgid "Timeline/Transitions"
+msgstr "Сроки/Переходные периоды"
+
+msgid "Timeline/Markers"
+msgstr "Сроки/Маркеры"
+
+msgid "Image/Next"
+msgstr "Фотография/Следующий"
+
+msgid "Image/Next Limited"
+msgstr "Фотография/Следующий лимитед"
+
+msgid "Image/Previous"
+msgstr "Фотография/Предыдущий"
+
+msgid "Image/Previous Limited"
+msgstr "Фотография/Предыдущая ограниченная"
+
+msgid "Image/Version/First"
+msgstr "Фотография/Версия/Первая"
+
+msgid "Image/Version/Last"
+msgstr "Фотография/Версия/Последний"
+
+msgid "Image/Version/Previous"
+msgstr "Фотография/Версия/Предыдущий"
+
+msgid "Image/Version/Next"
+msgstr "Фотография/Версия/Следующий"
+
+msgid "Image/Compare Mode/A"
+msgstr "Фотография/Сравнить режим/A"
+
+msgid "Image/Compare Mode/B"
+msgstr "Фотография/Сравнить режим/B"
+
+msgid "Image/Compare Mode/Wipe"
+msgstr "Фотография/Сравнить режим/Промывка"
+
+msgid "Image/Compare Mode/Overlay"
+msgstr "Фотография/Сравнить режим/Накладные"
+
+msgid "Image/Compare Mode/Difference"
+msgstr "Фотография/Сравнить режим/Разница"
+
+msgid "Image/Compare Mode/Horizontal"
+msgstr "Фотография/Сравнить режим/Горизонтальный"
+
+msgid "Image/Compare Mode/Vertical"
+msgstr "Фотография/Сравнить режим/Вертикальный"
+
+msgid "Image/Compare Mode/Tile"
+msgstr "Фотография/Сравнить режим/Тяжелый"
+
+msgid "Image/Go to/%s"
+msgstr "Фотография/Перейти/%s"
+
+msgid "Image/Compare/%s"
+msgstr "Фотография/Сравнить/%s"
+
+msgid "Edit/Frame/Cut"
+msgstr "Правка/Рамки/Cut"
+
+msgid "Edit/Frame/Copy"
+msgstr "Правка/Рамки/Копировать"
+
+msgid "Edit/Frame/Paste"
+msgstr "Правка/Рамки/Вставить"
+
+msgid "Edit/Frame/Insert"
+msgstr "Правка/Рамки/Вставить"
+
+msgid "Edit/Audio Gap/Insert"
+msgstr "Правка/Пробел звука/Вставить"
+
+msgid "Edit/Audio Gap/Remove"
+msgstr "Правка/Пробел звука/Удалить"
+
+msgid "Edit/Slice"
+msgstr "Правка/Кусочек"
+
+msgid "Edit/Remove"
+msgstr "Правка/Удалить"
+
+msgid "Edit/Undo"
+msgstr "Правка/Отменить"
+
+msgid "Edit/Redo"
+msgstr "Правка/Повторить"
+
+msgid "OCIO/Presets"
+msgstr "OCIO/Преобразования"
+
+msgid "OCIO/In Top Bar"
+msgstr "OCIO/В топ-баре"
+
+msgid "OCIO/Current"
+msgstr "OCIO/Текущая"
+
+msgid "OCIO/         ICS: %s"
+msgstr "OCIO/МЦННТ: %s"
+
+msgid "OCIO/     Display: %s"
+msgstr "OCIO/Показать: %s"
+
+msgid "OCIO/        View: %s"
+msgstr "OCIO/Вид: %s"
+
+msgid "OCIO/  Monitor #%d Display: %s"
+msgstr "OCIO/Монитор #%d Показать: %s"
+
+msgid "OCIO/  Monitor #%d    View: %s"
+msgstr "OCIO/Монитор #%d Вид: %s"
+
+msgid "OCIO/        Look: %s"
+msgstr "OCIO/Посмотрите: %s"
+
+msgid "OCIO/        LUT: %s"
+msgstr "OCIO/LUT: %s"
+
+msgid "OCIO/Change Current File"
+msgstr "OCIO/Изменить текущий файл"
+
+msgid "OCIO/Displays"
+msgstr "OCIO/Показать"
+
+msgid "Sync/Send/Media"
+msgstr "Синхронизация/Отправить/Средства массовой информации"
+
+msgid "Sync/Send/UI"
+msgstr "Синхронизация/Отправить/UI"
+
+msgid "Sync/Send/Pan And Zoom"
+msgstr "Синхронизация/Отправить/Пэн и Зум"
+
+msgid "Sync/Send/Color"
+msgstr "Синхронизация/Отправить/Цвет"
+
+msgid "Sync/Send/Timeline"
+msgstr "Синхронизация/Отправить/Сроки"
+
+msgid "Sync/Send/Annotations"
+msgstr "Синхронизация/Отправить/Аннотации"
+
+msgid "Sync/Send/Audio"
+msgstr "Синхронизация/Отправить/Звук"
+
+msgid "Sync/Accept/Media"
+msgstr "Синхронизация/Принять/Средства массовой информации"
+
+msgid "Sync/Accept/UI"
+msgstr "Синхронизация/Принять/UI"
+
+msgid "Sync/Accept/Pan And Zoom"
+msgstr "Синхронизация/Принять/Пэн и Зум"
+
+msgid "Sync/Accept/Color"
+msgstr "Синхронизация/Принять/Цвет"
+
+msgid "Sync/Accept/Timeline"
+msgstr "Синхронизация/Принять/Сроки"
+
+msgid "Sync/Accept/Annotations"
+msgstr "Синхронизация/Принять/Аннотации"
+
+msgid "Sync/Accept/Audio"
+msgstr "Синхронизация/Принять/Звук"
+
+msgid ""
+"In '{0}' expected a function as a value or a tuple containing a Python "
+"function and a string with menu options in it."
+msgstr ""
+"В \" {0}\" ожидается функция как значение или тюль, содержащий функцию "
+"Python и строку с опциями меню."
+
+msgid ""
+"In '{0}' expected a function a tuple containing a Python function and a "
+"string with menu options in it."
+msgstr ""
+"В'{0} ожидала функции тюльпан, содержащий функцию Python и строку с опциями "
+"меню."
+
+msgid "Help/Documentation"
+msgstr "Справка/Документация"
+
+msgid "Help/About"
+msgstr "Справка/О том, что"
+
+msgid "Monitor "
+msgstr "Монитор"
+
+msgid "Favorites"
+msgstr "Любимые"
+
+msgid "My Computer"
+msgstr "Мой компьютер"
+
+msgid "My Documents"
+msgstr "Мои документы"
+
+msgid "Desktop"
+msgstr "Рабочий стол"
+
+msgid "Home"
+msgstr "Домой"
+
+msgid "Temporary"
+msgstr "Временные"
+
+msgid "Size"
+msgstr "Размер"
+
+msgid "Date"
+msgstr "Дата"
+
+msgid "Owner"
+msgstr "Владелец"
+
+msgid "Permissions"
+msgstr "Разрешения"
+
+msgid "New Folder"
+msgstr "Новая папка"
+
+msgid "Rename"
+msgstr "Переименовать"
+
+msgid "Delete"
+msgstr "Исключить"
+
+msgid "Ok"
+msgstr "Ok"
+
+msgid "Location"
+msgstr "Место проведения"
+
+msgid "Show Hidden Files"
+msgstr "Показать скрытые файлы"
+
+msgid "File Types"
+msgstr "Типы файлов"
+
+msgid "All Files (*)"
+msgstr "Все файлы (*)"
+
+msgid "Go back one directory in the history"
+msgstr "Верните один каталог в историю"
+
+msgid "Go forward one directory in the history"
+msgstr "Перейти к одному каталогу в истории"
+
+msgid "Go to the parent directory"
+msgstr "Перейти к родительскому каталогу"
+
+msgid "Refresh this directory"
+msgstr "Обновить этот каталог"
+
+msgid "Delete file(s)"
+msgstr "Удалить файл(ы)"
+
+msgid "Create new directory"
+msgstr "Создать новый каталог"
+
+msgid "Add this directory to my favorites"
+msgstr "Добавьте этот каталог к моим любимым"
+
+msgid "Preview files"
+msgstr "Просмотр файлов"
+
+msgid "List mode"
+msgstr "Режим списка"
+
+msgid "Wide list mode"
+msgstr "Режим широкого списка"
+
+msgid "Detail mode"
+msgstr "Детальный режим"
+
+msgid ""
+"Could not create directory '%s'. You may not have permission to perform this"
+" operation."
+msgstr ""
+"Невозможно создать каталог '%s'. Вы можете не иметь разрешения на выполнение"
+" этой операции."
+
+msgid "An error ocurred while trying to delete '%s'. %s"
+msgstr "Ошибка в процессе удаления '%s'. %s"
+
+msgid "File '%s' already exists!"
+msgstr "Файл '%s' уже существует!"
+
+msgid "Unable to rename '%s' to '%s'"
+msgstr "Невозможно переименовать '%s' в '%s'"
+
+msgid "3GP Movie"
+msgstr "3GP Фильм"
+
+msgid "Advanced Systems Format Media"
+msgstr "Формат усовершенствованных систем"
+
+msgid "AVCHD Video"
+msgstr "Видеозапись AVCHD"
+
+msgid "AVI Movie"
+msgstr "АВИ Фильм"
+
+msgid "DIVX Movie"
+msgstr "Фильм DIVX"
+
+msgid "Digital Video"
+msgstr "Цифровое видео"
+
+msgid "Flash Movie"
+msgstr "Флэш Кино"
+
+msgid "Apple's M4V Movie"
+msgstr "Фильм Apple M4V"
+
+msgid "Matroska Movie"
+msgstr "Матросское кино"
+
+msgid "Quicktime Movie"
+msgstr "Быстрое кино"
+
+msgid "MP4 Movie"
+msgstr "Фильм MP4"
+
+msgid "MPEG Movie"
+msgstr "Фильм MPEG"
+
+msgid "MXF Movie"
+msgstr "MXF Moview"
+
+msgid "Ogg Movie"
+msgstr "Огг Кино"
+
+msgid "Ogg Video"
+msgstr "Огг Видео"
+
+msgid "OpenTimelineIO EDL"
+msgstr "EDL OpenTimelineio"
+
+msgid "OpenTimelineIO Zipped EDL"
+msgstr "OpenTimelineio Zed EDL"
+
+msgid "Real Media Movie"
+msgstr "Фильм \"Настоящие средства массовой информации\""
+
+msgid "VOB Movie"
+msgstr "Фильм VOB"
+
+msgid "WebM Movie"
+msgstr "Фильм WebM"
+
+msgid "WMV Movie"
+msgstr "Фильм WMV"
+
+msgid "RAW Picture"
+msgstr "Фотография RAW"
+
+msgid "Bitmap Picture"
+msgstr "Картинка"
+
+msgid "Cineon Picture"
+msgstr "Картина с кинеоном"
+
+msgid "Canon Raw Picture"
+msgstr "Рамка канона"
+
+msgid "Kodak Digital Negative"
+msgstr "Цифровой отрицательный Kodak"
+
+msgid "DPX Picture"
+msgstr "DРХ Иллюстрация"
+
+msgid "EXR Picture"
+msgstr "ИСПЫТАНИЕ"
+
+msgid "GIF Picture"
+msgstr "Фотография GIF"
+
+msgid "HDRI Picture"
+msgstr "Фотография ДРЧ"
+
+msgid "JPEG Picture"
+msgstr "Фото JPEG"
+
+msgid "Softimage Picture"
+msgstr "Симпатичная картинка"
+
+msgid "Portable Network Graphics Picture"
+msgstr "Картина Портативных сетей"
+
+msgid "Portable Pixmap"
+msgstr "Портативная пикс-карта"
+
+msgid "Photoshop Picture"
+msgstr "Фотошоп"
+
+msgid "SGI Picture"
+msgstr "Картина SGI"
+
+msgid "Stereo OpenEXR Picture"
+msgstr "Картина Stereo OpenEXR"
+
+msgid "TGA Picture"
+msgstr "Картина TGA"
+
+msgid "TIFF Picture"
+msgstr "Фотография TIFF"
+
+msgid "MP3 music"
+msgstr "Музыка MP3"
+
+msgid "OGG Vorbis music"
+msgstr "Музыка WGG Vorbis"
+
+msgid "Wave music"
+msgstr "Волновая музыка"
+
+msgid "OpenUSD Asset"
+msgstr "Активы с открытым капиталом"
+
+msgid "OpenUSD Zipped Asset"
+msgstr "Активы, приобретенные в рамках программы &lt; Открытое имущество &gt;"
+
+msgid "OpenUSD Compressed Asset"
+msgstr "Сжимаемый актив Open$"
+
+msgid "OpenUSD ASCII Asset"
+msgstr "Активы ASCII Open$"
+
+msgid "Another process using the file."
+msgstr "Другой процесс с использованием файла."
+
+msgid "Jan"
+msgstr "Jan"
+
+msgid "Feb"
+msgstr "Feb"
+
+msgid "Mar"
+msgstr "Mar"
+
+msgid "Apr"
+msgstr "Apr"
+
+msgid "May"
+msgstr "May"
+
+msgid "Jun"
+msgstr "Jun"
+
+msgid "Jul"
+msgstr "Jul"
+
+msgid "Aug"
+msgstr "Aug"
+
+msgid "Sep"
+msgstr "Sep"
+
+msgid "Oct"
+msgstr "Oct"
+
+msgid "Nov"
+msgstr "Nov"
+
+msgid "Replace"
+msgstr "Заменить"
+
+msgid "Find:"
+msgstr "Найти:"
+
+msgid "Replace:"
+msgstr "Заменить:"
+
+msgid "Replace All"
+msgstr "Заменить все"
+
+msgid "Replace Next"
+msgstr "Заменить следующий"
+
+msgid "D\t\t\t\t\t=\tDecoding supported"
+msgstr "D = поддерживаемое декодирование"
+
+msgid "\tE\t\t\t\t=\tEncoding supported"
+msgstr "E = поддерживаемое кодирование"
+
+msgid "\t\tI\t\t\t=\tIntra frame-only codec"
+msgstr "I = только коды для внутренней рамыc"
+
+msgid "\t\t\tL\t\t=\tLossy compression"
+msgstr "L = проигрышное сжатие"
+
+msgid "\t\t\t\tS\t=\tLossless compression"
+msgstr "S = Бесполезное сжатие"
+
+msgid "With gcc "
+msgstr "С gcc"
+
+msgid "With clang "
+msgstr "С кланом"
+
+msgid "With msvc "
+msgstr "С msvc"
+
+msgid "mrv2 depends on:"
+msgstr "mrv2 зависит от:"
+
+msgid "Vendor:\t"
+msgstr "Поставщик:"
+
+msgid "Renderer:\t"
+msgstr "Редактор:"
+
+msgid "Version:\t"
+msgstr "Версия:"
+
+msgid "Max. Texture Size:\t"
+msgstr "Макс. размер текстуры:"
+
+msgid "This is a list of contributors to the mrv2 project:"
+msgstr "Это список участников проекта mrv2:"
+
+msgid "Mark an area in the image with SHIFT + the left mouse button"
+msgstr "Отметьте область в образе с помощью SHIFT + левой кнопки мыши"
+
+msgid "&Copy"
+msgstr "& Копи"
+
+msgid "Everything OK. "
+msgstr "Всё в порядке."
+
+msgid "GPU: Unknown"
+msgstr "GPU: неизвестно"
+
+msgid "Elapsed"
+msgstr "Свернуто"
+
+msgid "Remaining"
+msgstr "Остальное"
+
+msgid "FPS"
+msgstr "FPS"
+
+msgid "Undock"
+msgstr "Унток"
+
+msgid "Dock"
+msgstr "Док"
+
+msgid "Dismiss"
+msgstr "Разойтись"
+
+msgid "Drag Box"
+msgstr "Драконья коробка"
+
+msgid "Unknown type for mrvOCIOBrowser"
+msgstr "Неизвестный тип mrvOCIOBrowser"
+
+msgid "Session: "
+msgstr "Сессия:"
+
+msgid "Edit/&Copy"
+msgstr "Правка/Копировать"
+
+msgid "Reset to default value"
+msgstr "Перезагрузить в значение по умолчанию"
+
+msgid "&File/&Clone"
+msgstr "Файл/Клон"
+
+msgid "&File/&Refresh Cache"
+msgstr "Файл/Обновить кэш"
+
+msgid "&Copy/&Filename"
+msgstr "Копировать/Имя файла"
+
+msgid "&Show/In &File Manager"
+msgstr "Показать/В файловом менеджере"
+
+msgid "Maximum:"
+msgstr "Максимум:"
+
+msgid "Copy/Color"
+msgstr "Копировать/Цвет"
+
+msgid "Area"
+msgstr "Область"
+
+msgid "pixel"
+msgstr "пиксель"
+
+msgid "pixels"
+msgstr "пиксели"
+
+msgid "Maximum"
+msgstr "Максимум"
+
+msgid "Minimum"
+msgstr "Минимальный"
+
+msgid "Range"
+msgstr "Диапазон"
+
+msgid "Mean"
+msgstr "Средняя"
+
+msgid "Track #%d - %s"
+msgstr "Дорожка #%d - %s"
+
+msgid "Same Size"
+msgstr "Один и тот же размер"
+
+msgid "Half Size"
+msgstr "Полуразмер"
+
+msgid "Quarter Size"
+msgstr "Размер квартала"
+
+msgid "TV"
+msgstr "TV"
+
+msgid "PC"
+msgstr "PC"
+
+msgid "BGR"
+msgstr "BGR"
+
+msgid "bt709"
+msgstr "bt709"
+
+msgid "FCC"
+msgstr "FCC"
+
+msgid "SMPTE240m"
+msgstr "SMPTE240m"
+
+msgid "bt601"
+msgstr "bt601"
+
+msgid "bt2020"
+msgstr "bt2020"
+
+msgid "unspecified"
+msgstr "не указано"
+
+msgid "reserved"
+msgstr "зарезервированы"
+
+msgid "bt470m"
+msgstr "bt470m"
+
+msgid "SMPTE170m"
+msgstr "SMPTE170m"
+
+msgid "Film"
+msgstr "Фильм"
+
+msgid "SMPTE428"
+msgstr "SMPTE428"
+
+msgid "SMPTE431"
+msgstr "SMPTE431"
+
+msgid "SMPTE432"
+msgstr "SMPTE432"
+
+msgid "EBU3213"
+msgstr "EBU3213"
+
+msgid "gamma22"
+msgstr "gamma22"
+
+msgid "gamma28"
+msgstr "gamma28"
+
+msgid "smpte240m"
+msgstr "smpte240m"
+
+msgid "linear"
+msgstr "linear"
+
+msgid "log"
+msgstr "log"
+
+msgid "logsqrt"
+msgstr "logsqrt"
+
+msgid "iec61966-2-4"
+msgstr "iec61966-2-4"
+
+msgid "bt1361"
+msgstr "bt1361"
+
+msgid "iec61966-2-1"
+msgstr "iec61966-2-1"
+
+msgid "bt2020-10"
+msgstr "bt2020-10"
+
+msgid "bt2020-12"
+msgstr "bt2020-12"
+
+msgid "smpte2084"
+msgstr "smpte2084"
+
+msgid "arib-std-b67"
+msgstr "arib-std-b67"
+
+msgid "Save Movie Options"
+msgstr "Сохранить параметры кинематографа"
+
+msgid "Common Settings"
+msgstr "Общие параметры"
+
+msgid "Save Annotations"
+msgstr "Сохранить напоминания"
+
+msgid ""
+"Save Annotations burned into the movie or sequence.\n"
+"It also allows saving OpenEXRs from an 8-bit movie and changing OpenEXR's pixel type.\n"
+"\n"
+"Furthermore, it allows saving A/B or Tiled comparisons and baking OCIO.\n"
+"\n"
+"However, it is limited to the size of your screen."
+msgstr ""
+"Сохранить ссылки, сожженные в фильме или последовательности.\n"
+"Он также позволяет сохранить OpenEXRs из 8-битного фильма и изменить тип пикселя OpenEXR.\n"
+"\n"
+"Кроме того, это позволяет сохранить сопоставления A/B или Triled и выпечку OCIO.\n"
+"\n"
+"Однако он ограничен размером с ваш экран."
+
+msgid "Video Options"
+msgstr "Параметры видео"
+
+msgid "Resolution"
+msgstr "Резолюция"
+
+msgid "Resolution of movie to save."
+msgstr "Разрешение фильма на спасение."
+
+msgid "Hardware Codec"
+msgstr "Аппаратный кодc"
+
+msgid "Profile"
+msgstr "Профиль"
+
+msgid "FFMpeg's Profile settings."
+msgstr "Настройка профиля FFMpeg."
+
+msgid "?"
+msgstr "?"
+
+msgid "Help on Profile"
+msgstr "Помощь в изучении профиля"
+
+msgid "Pixel Format"
+msgstr "Формат пикселя"
+
+msgid "FFMpeg's Pixel Format for the codec selected"
+msgstr "Формат пикселя FFMpeg для выбранного кодека"
+
+msgid "Help on Pixel Format"
+msgstr "Справка о формате пикселя"
+
+msgid "Preset"
+msgstr "Предварительный набор"
+
+msgid "FFMpeg's Preset setting for the codec selected."
+msgstr "Предисловие FFMpeg к выбранному кодеку."
+
+msgid "Help on Preset"
+msgstr "Помощь в пресетке"
+
+msgid "Advanced Settings"
+msgstr "Дополнительные параметры"
+
+msgid "Help on Advance Settings"
+msgstr "Помощь в опережающих параметрах"
+
+msgid "Audio Options"
+msgstr "Параметры звука"
+
+msgid "FFMpeg's Audio Codec settings."
+msgstr "Аудиовизуальные коды FFMpeg."
+
+msgid "Note that while saving with audio, the audio will not be heard."
+msgstr "Обратите внимание, что, сохраняя звук, звук не будет услышан."
+
+msgid "Help Window"
+msgstr "Окно помощи"
+
+msgid "Override"
+msgstr "Превышение"
+
+msgid "Color Range"
+msgstr "Диапазон цветов"
+
+msgid "Profile Help"
+msgstr "Справка по профилям"
+
+msgid ""
+"\n"
+"  The Profile setting allows you to select\n"
+"  the codec and profile for video saving.\n"
+"\n"
+"  Each profile has its benefits and drawbacks.\n"
+"\n"
+"  None - This is mpeg4 compatible with DVD movies.\n"
+"  H264 - Only if mrv2 has been compiled as GPL.  One\n"
+"         of the most popular codecs, but it is now\n"
+"         becoming obsolete.\n"
+"  ProRes - ProRes is a family of codecs developed by \n"
+"           Apple.\n"
+"           The Normal version strikes a balance \n"
+"           between quality and file size.  \n"
+"  ProRes_Proxy - Most compressed ProRes, offering the\n"
+"                 smallest file size.  \n"
+"                 Good for offline editing.\n"
+"  ProRes_LT - More compressed than normal ProRes but \n"
+"              less than Proxy.  Good for offline \n"
+"              editing.\n"
+"  ProRes_HQ - Less compressed then normal ProRes.  \n"
+"              Often used for mastering and final \n"
+"              delivery.\n"
+"  ProRes_4444 - Highest quality ProRes format, \n"
+"                offering full 4:4:4\n"
+"                chroma sampling (color information \n"
+"                for each pixel).\n"
+"                Preserves the most detail and color \n"
+"                accuracy, ideal for high-end workflows \n"
+"                like color grading and visual effects.\n"
+"                Supports alpha channels for \n"
+"                compositing graphics with \n"
+"                transparency.\n"
+"  ProRes_XQ - Highest quality version of ProRes 4444, \n"
+"              designed for high-dynamic-range (HDR) \n"
+"              imagery.\n"
+"  VP9 - Codec developed by Google.  High compression \n"
+"        ratio.\n"
+"        It supports a whole range of pixel formats to\n"
+"        balance disk space vs. quality.\n"
+"        Good for high-end delivery for either Web or \n"
+"        online review.\n"
+"  Cineform - codec developed by GoPro, that rivals \n"
+"             ProRes in features, except for HDR.  \n"
+"             It was discontinued in 2021, but most \n"
+"             packages may support it.\n"
+"             It does not compress as well as ProRes \n"
+"             or VP9.\n"
+"             It supports alpha channels for \n"
+"             compositing graphics with transparency.\n"
+"  AV1 - New generation codec which is gaining support from\n"
+"        Google, Netflix and Amazon.  Compresses better than VP9 \n"
+"        or H264 for the same quality but requires more computer\n"
+"        resources.  Optimal for video reviews.\n"
+"  HAP - RGB/A codec which is optimized for fast playback with\n"
+"        CPU decoding.  It does not compress that well.\n"
+"        It needs hap-alpha* presets to save alpha channel.\n"
+"\n"
+"  Hardware encoding is only supported on newer MacBook\n"
+"  Pro with M1 or newer chips.  H264, Prores, VP9 and\n"
+"  AV1 are supported or soon will be.\n"
+"  "
+msgstr ""
+"\n"
+"Настройка профиля позволяет вам выбрать\n"
+"кодек и профиль для видеосохранения.\n"
+"\n"
+"Каждый профиль имеет свои преимущества и недостатки.\n"
+"\n"
+"Нет - это mopeg4 совместимо с DVD-фильмами.\n"
+"H264 - Только в том случае, если mrv2 был составлен в качестве GPL.\n"
+"Самые популярные кодеки, но теперь это\n"
+"Становится устаревшим.\n"
+"ProRes - ProRes - семейство кодов, разработанных\n"
+"Яблоко.\n"
+"Обычная версия имеет баланс\n"
+"между качеством и размером файла.\n"
+"ProRes_Poxy - Самый сжатый ProRes, предлагающий\n"
+"Маленький размер файла.\n"
+"Хорошо для офлайн-редакции.\n"
+"PRRes_LT - более сжатая, чем обычная PRRes, но\n"
+"Меньше, чем Прокси.\n"
+"редактирование.\n"
+"ProRes_HQ - Менее сжатая, а затем обычная ProRes.\n"
+"Часто используется для овладения и завершения\n"
+"Доставка.\n"
+"ProRes_4444 - наиболее качественный формат ProRes,\n"
+"полный 4:4:4\n"
+"Отбор проб хрома (информация о цвете кожи)\n"
+"для каждого пикселя).\n"
+"Сохраняет наибольшую деталь и цвет\n"
+"точность, идеальная для высокопроизводительных рабочих процессов\n"
+"Например, сортировка цвета и визуальные эффекты.\n"
+"Поддерживает альфа-каналы для\n"
+":: компиляция графики с\n"
+"транспарентность.\n"
+"ProRes_XQ - наиболее качественная версия ProRes 4444,\n"
+"для высокодинамического диапазона (HDR)\n"
+"Снимки.\n"
+"VP9 - Codec разработан Google.\n"
+"соотношение.\n"
+"Он поддерживает целый ряд пиксельных форматов\n"
+"d) пространство диска по сравнению с качеством.\n"
+"Хорошая для высококлассной доставки либо для Web, либо\n"
+"Онлайновый обзор.\n"
+"Кинеформа - кодек, разработанный Го Про, который соперничает\n"
+"Проресс по темам, за исключением &lt; Доклада о развитии человеческого потенциала &gt; &gt;.\n"
+"Она была прекращена в 2021 году, но в большинстве случаев\n"
+"Пакеты могут поддержать его.\n"
+"Он не сжимается так же, как и ProRes\n"
+"или VP9.\n"
+"Он поддерживает альфа-каналы для\n"
+":: компиляция графики с прозрачностью.\n"
+"AV1 - шифр нового поколения, который получает поддержку от\n"
+"Google, Netflix и Amazon. Компрессы лучше, чем VP9.\n"
+"или H264 для одного и того же качества, но требует большего количества компьютеров\n"
+"Оптимальный подход к просмотру видеоматериалов.\n"
+"HAP - RGB/A codec, который оптимизирован для быстрого воспроизведения с\n"
+"Процессор декодирует. Он не так хорошо сжимается.\n"
+"Чтобы спасти альфа-канал, нужны предустановки Hap-alpha*.\n"
+"\n"
+"Аппаратное кодирование поддерживается только на новом MacBook\n"
+"Про с M1 или новыми чипами H264, Prores, VP9 и\n"
+"AV1 поддерживается или скоро будет.\n"
+"  "
+
+msgid "Pixel Format Help"
+msgstr "Справка о формате пикселя"
+
+msgid ""
+"\n"
+"  The Pixel Format specifies how the video is encoded in the\n"
+"  file.  Each codec and profile has a number of pixel formats \n"
+"  it supports.\n"
+"  There are two main types of pixel formats supported:\n"
+"\n"
+"      - YUV (Luminance, Cr, Cb)\n"
+"      - BGR (RGB with reversed channels)\n"
+"      - RGB\n"
+"\n"
+"  In addition, some codecs support alpha channel (transparency),\n"
+"  like BGRA.\n"
+"\n"
+"  The other element of the codec is the 'P' which indicates the\n"
+"  channels are stored in planar order, instead of each component\n"
+"  interleaved.\n"
+"\n"
+"  Finally, the number in the pixel format name indicates the\n"
+"  number of bits the pixel format uses to encode.  \n"
+"  Normal values for that are 8, 10, 12 and 16.\n"
+"\n"
+"  "
+msgstr ""
+"\n"
+"Формат Pixel указывает, как видео кодируется в\n"
+"Файл. Каждый кодек и профиль имеют несколько форматов пикселей.\n"
+"Он поддерживает.\n"
+"Существует два основных типа форматов пикселя:\n"
+"\n"
+"- джип (уровень, Cr, Cb)\n"
+"- БГР (РПГ с обратными каналами)\n"
+"- РПГ\n"
+"\n"
+"Кроме того, некоторые кодеки поддерживают альфа-канал (транспарентность),\n"
+"Как БГРА.\n"
+"\n"
+"Другим элементом кода является \"P\", который указывает на то, что\n"
+"Каналы хранятся в плановом порядке, а не в каждом элементе\n"
+"Взаимно.\n"
+"\n"
+"И наконец, число в имени формата пикселя указывает на\n"
+"Количество бит, используемых форматом пикселя для кодирования.\n"
+"Нормальные значения для этого составляют 8, 10, 12 и 16.\n"
+"\n"
+"  "
+
+msgid "Preset Help"
+msgstr "Выделить справку@ info: whatsthis"
+
+msgid ""
+"\n"
+"\n"
+"  The Preset setting allows you to store and pass\n"
+"  flags to FFmpeg (the video engine that mrv2 uses) to \n"
+"  easily control the quality and size of the video besides\n"
+"  the pixel format.\n"
+"\n"
+"  When choosing the quality you should set in this order:\n"
+"    - Profile\n"
+"    - Pixel Format\n"
+"    - Preset\n"
+"\n"
+"  The preset files are stored in the presets/ directory of the \n"
+"  mrv2 install but you can configure the directory by using the\n"
+"  environment variable $STUDIOPATH/presets.\n"
+"\n"
+"  The naming of the files is the name of the profile-preset.pst.\n"
+"\n"
+"  The format is very simple, with comments and colon separated \n"
+"  options.\n"
+"  "
+msgstr ""
+"\n"
+"\n"
+"Настройка пресета позволяет вам хранить и пропускать\n"
+"флаги FFmpeg (видеодвигатель, используемый Mrv2)\n"
+"легко контролировать качество и размер видео, кроме того\n"
+"формат пикселя.\n"
+"\n"
+"При выборе качества вы должны установить в этом порядке:\n"
+"- Профиль\n"
+"- Формат пикселя\n"
+"- Предварительная подготовка\n"
+"\n"
+"Предусмотренные файлы хранятся в предзаписях/диапазоне\n"
+"mrv2 установить, но вы можете настроить каталог с помощью\n"
+"Экологическая переменная $STUDIOPATH/presets.\n"
+"\n"
+"Название файлов - это название профиля-презентации.pst.\n"
+"\n"
+"Формат очень прост, комментарии и толщина разделены.\n"
+"Варианты.\n"
+"  "
+
+msgid "Advanced Settings Help"
+msgstr "Усовершенствованные параметры Справка"
+
+msgid ""
+"\n"
+"\n"
+"  The Advanced Settings allows you store \n"
+"  metadata in the movie file to determine where \n"
+"  and how it was created.  Useful to indicate, \n"
+"  for example, if a set of 8-bit images were \n"
+"  sRGB or Rec709.\n"
+"\n"
+"  If you don't know what those settings do, \n"
+"  DON'T MESS WITH THEM!\n"
+"  "
+msgstr ""
+"\n"
+"\n"
+"Дополнительные параметры позволяют хранить\n"
+"Метаданные в файле фильма для определения места\n"
+"и как она была сотворена, и она была полезной для того, чтобы видеть,\n"
+"например, если набор из 8-битных изображений\n"
+"sRGB или Rec709.\n"
+"\n"
+"Если ты не знаешь, что делают эти настройки,\n"
+"Не думай об этом!\n"
+"  "
+
+msgid "1/9"
+msgstr "1/9"
+
+msgid "1/8"
+msgstr "1/8"
+
+msgid "1/7"
+msgstr "1/7"
+
+msgid "1/6"
+msgstr "1/6"
+
+msgid "1/5"
+msgstr "1/5"
+
+msgid "1/4"
+msgstr "1/4"
+
+msgid "1/3"
+msgstr "1/3"
+
+msgid "1/2"
+msgstr "1/2"
+
+msgid "x1"
+msgstr "x1"
+
+msgid "x2"
+msgstr "x2"
+
+msgid "x3"
+msgstr "x3"
+
+msgid "x4"
+msgstr "x4"
+
+msgid "x5"
+msgstr "x5"
+
+msgid "x6"
+msgstr "x6"
+
+msgid "x7"
+msgstr "x7"
+
+msgid "x8"
+msgstr "x8"
+
+msgid "x9"
+msgstr "x9"
+
+msgid "FIT"
+msgstr "FIT"
+
+msgid "RGBA"
+msgstr "РГБ"
+
+msgid "Hex"
+msgstr "Hex"
+
+msgid "8bit"
+msgstr "8 бит"
+
+msgid "HSV"
+msgstr "HSV"
+
+msgid "HSL"
+msgstr "HSL"
+
+msgid "XYZ CIE XYZ"
+msgstr "XYZ CIE XYZ"
+
+msgid "xyY CIE xyY"
+msgstr "xyY CIE xyy"
+
+msgid "Lab CIELAB (L*a*b*)"
+msgstr "Лаборатория CIELAB (L*a*b*)"
+
+msgid "Luv CIELUV (L*u*v*)"
+msgstr "Luv CIELUV (L*u*v*)"
+
+msgid "YUV (Analog PAL)"
+msgstr "YUV (Analog PAL)"
+
+msgid "YDbDr (Analog SECAM/PAL-N)"
+msgstr "YDbDr (Analog SECAM)/ПАЛ-Н)"
+
+msgid "YIQ (Analog NTSC)"
+msgstr "YIQ (Analog NTSC)"
+
+msgid "ITU-601 (Digital PAL/NTSC YCbCr)"
+msgstr "МСЭ-601 (Дигнальный ПАЛ)/NTSC YCbCr)"
+
+msgid "ITU-709 (Digital HDTV YCbCr)"
+msgstr "МСЭ-709 (Дигинальный HDTV YCbCr)"
+
+msgid "Full"
+msgstr "Полный"
+
+msgid "Original"
+msgstr "Оригинал"
+
+msgid "Y (Luminance)"
+msgstr "Y (муниципалитет)"
+
+msgid "Y' (Lumma)"
+msgstr "Y' (Лумма)"
+
+msgid "L (Lightness)"
+msgstr "L (светлость)"
+
+msgid "XY"
+msgstr "XY"
+
+msgid "Image coordinate of pixel under mouse."
+msgstr "Координаты изображения пикселя под мышью."
+
+msgid ""
+"Switch RGBA display between floating point, hexadecimal (0..0xff) and "
+"decimal (0..255)."
+msgstr ""
+"Переключить дисплей RGBA между плавающей точкой, гексадековым (0,0xff) и "
+"десятичным (0,255)."
+
+msgid "Red value of image pixel under mouse."
+msgstr "Красное значение пикселя изображения под мышью."
+
+msgid "Green value of image pixel under mouse."
+msgstr "Зеленое значение пикселя изображения под мышью."
+
+msgid "Blue value of image pixel under mouse."
+msgstr "Синее значение пикселя изображения под мышью."
+
+msgid "Alpha value of image pixel under mouse."
+msgstr "Альфа-значение пикселя изображения под мышью."
+
+msgid "8-bit sample of image pixel under mouse."
+msgstr "8-битный образец пикселя изображения под мышью."
+
+msgid ""
+"Switch pixel color space information display for the pixel under the cursor."
+msgstr "Переключить цветную информацию для пикселя под курсором."
+
+msgid "Hue value of image pixel under mouse."
+msgstr "Жесткое значение пикселя изображения под мышью."
+
+msgid "Saturation value of image pixel under mouse."
+msgstr "Значение насыщения пикселя изображения под мышью."
+
+msgid "Value (Intensity) of image pixel under mouse."
+msgstr "Значение (интенсивность) пикселя изображения под мышью."
+
+msgid "F"
+msgstr "F"
+
+msgid ""
+"Displays:\n"
+"* Full Pixel Values (Gamma, Gain and LUT)\n"
+"* Original (No Gamma, No Gain, No Lut)"
+msgstr ""
+"Показать:\n"
+"* Полные пиксельные значения (гамма, прибыль и LUT)\n"
+"* Оригинал (Нет гаммы, нет гонорара, нет лута)"
+
+msgid "Y"
+msgstr "Y"
+
+msgid ""
+"Switch brightness calculation.\n"
+"Y (Luminance) is the pixel value according to Rec709:\n"
+"      Y = 0.2126 R + 0.7152 G + 0.0722 B\n"
+"Y' (Lumma) is the weighted pixel value according to:\n"
+"      Y' = ( R + G + B ) / 3.0\n"
+"L (Lightness) is the human perception of luminance of the image which is non linear.\n"
+"According to CIE No.15.2:\n"
+"      L = (116 * Y ^ 1/3 - 16) / 100\n"
+"A pixel of Y = 0.18 (L = 0.5) will appear about half as bright as Y = L = 1.0 (white)."
+msgstr ""
+"Переключите расчеты яркости.\n"
+"Y (Luminance) - значение пикселя в соответствии с Rec709:\n"
+"Y = 0,2126 R + 0,7152 G + 0,0722 B\n"
+"Y' (Lumma) - взвешенное значение пикселя в соответствии с:\n"
+"Y' = (R + G + B) 3,0\n"
+"L (светильность) — восприятие человека яркости изображения, которое не является линейным.\n"
+"Согласно МКС No 15.2:\n"
+"L = (116 * Y 1/3 - 16) / 100\n"
+"A pixel of Y = 0.18 (L = 0.5) will appear about half as bright as Y = L = 1.0 (white)."
+
+msgid "Luminance of image pixel under mouse."
+msgstr "Яркость пикселя изображения под мышью."
+
+msgid "Seconds"
+msgstr "Секунды"
+
+msgid "Timecode"
+msgstr "Код времени"
+
+msgid "120"
+msgstr "120"
+
+msgid "60"
+msgstr "60"
+
+msgid "59.952"
+msgstr "59,952"
+
+msgid "50"
+msgstr "50"
+
+msgid "48"
+msgstr "48"
+
+msgid "47.952"
+msgstr "47,952"
+
+msgid "30"
+msgstr "30"
+
+msgid "29.976"
+msgstr "29,976"
+
+msgid "25"
+msgstr "25"
+
+msgid "24"
+msgstr "24"
+
+msgid "23.976"
+msgstr "23.976"
+
+msgid "15"
+msgstr "15"
+
+msgid "14.988"
+msgstr "14.988"
+
+msgid "12.5"
+msgstr "12.5"
+
+msgid "12"
+msgstr "12"
+
+msgid "11.988"
+msgstr "11.988"
+
+msgid "F:"
+msgstr "F:"
+
+msgid "Switch between Frame, Seconds and Timecode display"
+msgstr "Переключение между рамками, секундами и отображением кода времени"
+
+msgid "Current frame."
+msgstr "Текущая структура."
+
+msgid "@|<"
+msgstr "@|<"
+
+msgid "@<"
+msgstr "@<"
+
+msgid "@<|"
+msgstr "@<|"
+
+msgid "@||"
+msgstr "@||"
+
+msgid "@|>"
+msgstr "@|>"
+
+msgid "Advance one frame."
+msgstr "Запустить одну рамку."
+
+msgid "@>"
+msgstr "@>"
+
+msgid "Play sequence forward."
+msgstr "Воспроизвести последовательность вперёд."
+
+msgid "@>|"
+msgstr "@>|"
+
+msgid "Looping mode (Loop, Once, Ping-Pong)"
+msgstr "Режим растяжки (Loop, один раз, Ping-Pong)"
+
+msgid "Some default frame rate settings."
+msgstr "Некоторые параметры рейтинга по умолчанию."
+
+msgid "Allows you to adjust frame rate playback."
+msgstr "Позволяет вам отрегулировать рамку."
+
+msgid "Mute audio or switch audio tracks with the right mouse button."
+msgstr ""
+"Выключите аудио- или переключайте звуковые дорожки с правильной кнопкой "
+"мыши."
+
+msgid "Audio Volume"
+msgstr "Звуковой объем"
+
+msgid "S"
+msgstr "S"
+
+msgid "Allows you to set starting frame for timeline."
+msgstr "Позволяет вам установить хронологию."
+
+msgid "E"
+msgstr "E"
+
+msgid "Allows you to set the ending frame for timeline."
+msgstr "Позволяет вам установить конечный график."
+
+msgid "mrv2"
+msgstr "mrv2"
+
+msgid "MenuBar"
+msgstr "Панель инструментов@ info: whatsthis"
+
+msgid "Edit"
+msgstr "Правка"
+
+msgid "Fit Window to Image"
+msgstr "Подключить окно к картинке"
+
+msgid "TopBar"
+msgstr "Верхний пузырь"
+
+msgid "Layers"
+msgstr "Слои"
+
+msgid "Exposure, Saturation, and Gamma"
+msgstr "Воздействие, насыщение и гамма"
+
+msgid "Exposure and Gain"
+msgstr "Воздействие и прибыль"
+
+msgid "Exposure"
+msgstr "Воздействие"
+
+msgid "f/8"
+msgstr "f/8"
+
+msgid "Toggle gain between 1 and the previous setting."
+msgstr "Накопление лома между 1 и предыдущей настройкой."
+
+msgid "Gain"
+msgstr "Прибыль"
+
+msgid "Gain image value.  A simple multiplier of the image pixel values."
+msgstr ""
+"Получите значение изображения. Простое умножение значений пикселя "
+"изображения."
+
+msgid "Toggle Saturation between current and previous setting."
+msgstr "Настройка между текущей и предыдущей настройками."
+
+msgid "Saturation Input"
+msgstr "Вход в насыщение"
+
+msgid "Saturation value."
+msgstr "Значимость насыщения."
+
+msgid "Toggle gamma between 1 and the previous setting."
+msgstr "Настроить гамма между 1 и предыдущей настройкой."
+
+msgid "Gamma Input"
+msgstr "Вход Gamma"
+
+msgid ""
+"Allows you to adjust gamma curve for display.\n"
+"Value is:  pow( 2, 1/x );"
+msgstr ""
+"Позволит вам отрегулировать гамма-изгиб для показа.\n"
+"Значение: pow( 2, 1/x);"
+
+msgid "ICS, View, Look"
+msgstr "ICS, вид, смотри."
+
+msgid "Input Color Space"
+msgstr "Цветовое пространство"
+
+msgid "OCIO input color space for the image"
+msgstr "Цветовое пространство OCIO для изображения"
+
+msgid "View"
+msgstr "Вид"
+
+msgid "OCIO Display/View"
+msgstr "Выставка OCIO/Вид"
+
+msgid "Look"
+msgstr "Смотри."
+
+msgid "OCIO Looks"
+msgstr "OCIO выглядит"
+
+msgid "TileGroup"
+msgstr "Группа TileGroup"
+
+msgid "Old Color Used.  Click on the Arrow to alternate."
+msgstr "Старый цвет использован. Нажмите Стрела на альтернативную."
+
+msgid "Switch Colors"
+msgstr "Переключить цвета"
+
+msgid "Opacity of pen stroke"
+msgstr "Непрозрачность ручного инсульта"
+
+msgid "Undo Last Shape Drawn in Current Frame."
+msgstr "Отменить последнюю форму в текущей системе."
+
+msgid "Redo Previous Shape Drawn in Current Frame."
+msgstr "Редо Предыдущая Шейп Драген в текущей системе."
+
+msgid "DockGroup"
+msgstr "Докгруппа"
+
+msgid "BottomBar"
+msgstr "Нижний пузырь"
+
+msgid "PixelBar"
+msgstr "Pixel Bar"
+
+msgid "StatusBar"
+msgstr "Строка статуса"
+
+msgid "Current tool being used."
+msgstr "Используется текущий инструмент."
+
+msgid "RLE"
+msgstr "RLE"
+
+msgid "ZIPS"
+msgstr "ЗИПС"
+
+msgid "ZIP"
+msgstr "ZIP"
+
+msgid "PIZ"
+msgstr "PIZ"
+
+msgid "PXR24"
+msgstr "PXR24"
+
+msgid "B44"
+msgstr "B44"
+
+msgid "B44A"
+msgstr "B44A"
+
+msgid "DWAA"
+msgstr "ДАВА"
+
+msgid "DWAB"
+msgstr "ДАБ"
+
+msgid "Half"
+msgstr "Половина"
+
+msgid "Float"
+msgstr "Температура плавления"
+
+msgid "Save Image Options"
+msgstr "Сохранить параметры изображения"
+
+msgid "OpenEXR Options"
+msgstr "Параметры OpenEXR"
+
+msgid "OpenEXR's Compression Type"
+msgstr "Тип сжатия OpenEXR"
+
+msgid "Pixel Type"
+msgstr "Тип пикселя"
+
+msgid "OpenEXR's Pixel Type"
+msgstr "Тип пикселя OpenEXR"
+
+msgid "ZIP Compression"
+msgstr "ZIP Компрессия"
+
+msgid "DWA Compression"
+msgstr "ДВА - подавление"
+
+msgid "0.00 None"
+msgstr "0,00 Нет"
+
+msgid "1.00 Square"
+msgstr "1.00 Квадрат"
+
+msgid "1.19 Movietone"
+msgstr "1.19 Мовитоне"
+
+msgid "1.37 Academy (Full Frame)"
+msgstr "1.37 Академия (полная основа)"
+
+msgid "1.50 Still Photo"
+msgstr "1.50 Фотография все еще"
+
+msgid "1.56 STV - HDTV (14:9)"
+msgstr "1,56 СЦВ - ХДТВ (14:9)"
+
+msgid "1.66 European Widescreen"
+msgstr "1.66 Европейское широкоэкранное стекло"
+
+msgid "1.77 HDTV (16:9)"
+msgstr "1.77 HDTV (16:9)"
+
+msgid "1.85 Widescreen (3-perf)"
+msgstr "1.85 Широкий экран (3-перф)"
+
+msgid "2.00 Univisium"
+msgstr "2.00 Университет"
+
+msgid "2.10 VistaVision"
+msgstr "2.10 Виставидение"
+
+msgid "2.20 70mm"
+msgstr "2,20 70 мм"
+
+msgid "2.35 CinemaScope (old 2.35)"
+msgstr "2.35 Кассета кинематографа (прежний пункт 2.35)"
+
+msgid "2.39 Panavision (new 2.35)"
+msgstr "2.39 Панавидение (новый пункт 2.35)"
+
+msgid "4.00 Polyvision"
+msgstr "4.00 Поливидитория"
+
+msgid "Slow"
+msgstr "Медленно"
+
+msgid "Medium"
+msgstr "Средняя"
+
+msgid "Fast"
+msgstr "Быстрая"
+
+msgid "base"
+msgstr "base"
+
+msgid "plastic"
+msgstr "plastic"
+
+msgid "gtk+"
+msgstr "gtk+"
+
+msgid "gleam"
+msgstr "Сияние"
+
+msgid "oxy"
+msgstr "oxy"
+
+msgid "Float Values"
+msgstr "Значения поплавка"
+
+msgid "Hex Values"
+msgstr "Значения гекса"
+
+msgid "8-bit Values"
+msgstr "8-битные значения"
+
+msgid "Full Lut, Gamma and Gain"
+msgstr "Полная лута, гамма и прибыль"
+
+msgid "Original without Gamma, Gain or Lut"
+msgstr "Оригинал без гаммы, гонорара или люта"
+
+msgid "CIE XYZ"
+msgstr "КИЭ XYZ"
+
+msgid "CIE xyY"
+msgstr "МГК &lt; Кси &gt;"
+
+msgid "From File"
+msgstr "Из файла"
+
+msgid "Full Range"
+msgstr "Полная дальность"
+
+msgid "Legal Range"
+msgstr "Правовые рамки"
+
+msgid "Straight"
+msgstr "Прямо"
+
+msgid "Premultiplied"
+msgstr "Предмногочисленные"
+
+msgid "Nearest"
+msgstr "Ближайший"
+
+msgid "Small"
+msgstr "Маленький"
+
+msgid "Large"
+msgstr "Большой"
+
+msgid "59.94"
+msgstr "59.94"
+
+msgid "29.97"
+msgstr "29.97"
+
+msgid "14.985"
+msgstr "14.985"
+
+msgid "Loop"
+msgstr "Лоп"
+
+msgid "Ping Pong"
+msgstr "Пинг Понг"
+
+msgid "Video Only"
+msgstr "Только видео"
+
+msgid "Video and Audio"
+msgstr "Видео и аудио"
+
+msgid "CG"
+msgstr "CG"
+
+msgid "Studio"
+msgstr "Studio"
+
+msgid "Black Frame"
+msgstr "Черная основа"
+
+msgid "Repeat  Frame"
+msgstr "Повторить"
+
+msgid "Scratched  Frame"
+msgstr "Сломанная основа"
+
+msgid "Always"
+msgstr "Всегда"
+
+msgid "Presentation Mode"
+msgstr "Режим отображения"
+
+msgid "Automatic"
+msgstr "Автоматическое"
+
+msgid "Half Float"
+msgstr "Половина поплавка"
+
+msgid "Full Float (Accurate)"
+msgstr "Полный поплавок (аккурат)"
+
+msgid "Do Nothing"
+msgstr "Ничего не делай"
+
+msgid "Open Logs on Dock"
+msgstr "Открыть журнал на доке"
+
+msgid "Open Logs on Window"
+msgstr "Открыть журналы на окне"
+
+msgid "On Demand From Help Menu"
+msgstr "По запросу из меню Справка"
+
+msgid "At Start Up"
+msgstr "На старте"
+
+msgid ""
+"This will reset all your preferences to their default values.  Are you sure "
+"you want to continue?"
+msgstr ""
+"Это перезагрузит все ваши предпочтения к их нормальным значениям. Вы "
+"уверены, что хотите продолжить?"
+
+msgid "User Interface"
+msgstr "Интерфэйс пользователя"
+
+msgid "Window Behavior"
+msgstr "Поведение окна"
+
+msgid "Always on Top"
+msgstr "Всегда на вершине"
+
+msgid ""
+"When selected, mrv2's window will always show up on top of other windows on "
+"the desktop."
+msgstr ""
+"Когда будет выбрано окно mrv2, оно всегда будет появляться на верхушке "
+"других окон на рабочем столе."
+
+msgid "Secondary on Top"
+msgstr "Средняя школа наверху"
+
+msgid "Single Instance"
+msgstr "Единовременные случаи"
+
+msgid ""
+"When selected, only a single mrv2 instance is allowed.\n"
+"If you try to open several mrv2s with different images, all these images will be sent to the already open mrv2."
+msgstr ""
+"При выборе допускается только один случай mrv2.\n"
+"Если вы попытаетесь открыть несколько mrv2 с различными изображениями, все эти изображения будут отправлены на уже открытый mrv2."
+
+msgid "Auto Refit Image"
+msgstr "Автомобильная модификация изображения"
+
+msgid ""
+"When selected, mrv2 will apply a fit image operation on each video played.  "
+"This effectly means the video will be resized automatically based on the "
+"size of the window."
+msgstr ""
+"При выборе, mrv2 будет применять встроенную операцию изображения на каждом "
+"воспроизведенном видео. Это будет означать, что видео будет умножено "
+"автоматически на размер окна."
+
+msgid "Raise on Enter"
+msgstr "Подняться на входе"
+
+msgid ""
+"When selected, mrv2 will raise the window to the front once you enter the "
+"view window."
+msgstr ""
+"При выборе mrv2 поднимет окно вперед, как только вы войдете в окно "
+"просмотра."
+
+msgid "Normal"
+msgstr "Обычный"
+
+msgid "When selected, mrv2 will resize its window to the first image."
+msgstr "При выборе mrv2 перестроит окно на первое изображение."
+
+msgid "Fullscreen"
+msgstr "Полноэкранный экран"
+
+msgid "When selected, mrv2 will start in full screen mode."
+msgstr "При выборе mrv2 начнется в режиме полного экрана."
+
+msgid "Presentation"
+msgstr "Представление"
+
+msgid "When selected, mrv2 will start in presentation mode."
+msgstr "При выборе mrv2 начнется в режиме презентации."
+
+msgid "Maximized"
+msgstr "Максимизация"
+
+msgid "When selected, mrv2 will start in a maximized window."
+msgstr "При выборе mrv2 начнётся в максимальном окне."
+
+msgid "UI Elements"
+msgstr "Элементы UI"
+
+msgid "Menu Bar"
+msgstr "Панель инструментов@ info: whatsthis"
+
+msgid "When selected, mrv2 will start with the menu bar already shown."
+msgstr "При выборе mrv2 начнётся с уже показанной панели меню."
+
+msgid "Topbar"
+msgstr "Топбар"
+
+msgid ""
+"When selected, mrv2 will start with its channel, gain, gamma toolbar "
+"visible."
+msgstr ""
+"При выборе mrv2 начнётся с своего канала, выиграет, гамма будет видна."
+
+msgid "Pixel Toolbar"
+msgstr "Панель пикселя"
+
+msgid "When selected, mrv2 will start with the pixel toolbar shown."
+msgstr "При выборе mrv2 начнётся с показанной панели инструментов пикселя."
+
+msgid "When selected, mrv2 will start with the timeline shown."
+msgstr "Когда будет выбрана, mrv2 начнётся с показываемой временной линии."
+
+msgid "Status Bar"
+msgstr "Строка статуса"
+
+msgid "When selected, mrv2 will start with the status bar visible."
+msgstr "При выборе mrv2 начинается с видимого стержня состояния."
+
+msgid "macOS Menus"
+msgstr "Меню MacOS"
+
+msgid ""
+"This is a macOS setting only.  When selected the menus will appear on the "
+"system toolbar instead of the mrv2 toolbar."
+msgstr ""
+"Это только macOS. При выборе меню появится на панели инструментов системы, а"
+" не на панели инструментов mrv2."
+
+msgid "Tool Dock"
+msgstr "Инструменты@ info: whatsthis"
+
+msgid "When selected, mrv2 will start with the action tool dock already open."
+msgstr "Когда будет выбрана, mrv2 начнётся с уже открытой доки."
+
+msgid "Only One Panel"
+msgstr "Только одна группа"
+
+msgid ""
+"When selected, mrv2 will start with the only one panel option selected."
+msgstr "При выборе mrv2 начнётся с единственного выбранного варианта панели."
+
+msgid "View Window"
+msgstr "Вид Окно"
+
+msgid "Defaults"
+msgstr "Погрешности"
+
+msgid "Sets the default gain when mrv2 starts."
+msgstr "Устанавливает выигрыш по умолчанию, когда начинается mrv2."
+
+msgid "Sets the default gamma when mrv2 starts."
+msgstr "Устанавливает гамма по умолчанию, когда начинается mrv2."
+
+msgid "Crop"
+msgstr "Урожай"
+
+msgid "Allows you to select a standard cropping area around image."
+msgstr ""
+"Позволяет вам выбрать стандартную зону сбора урожая вокруг изображения."
+
+msgid "Auto Frame"
+msgstr "Автоматическая основа"
+
+msgid "When this is on, View/Auto Frame will be active."
+msgstr "Когда это будет включено, будет активно работать View/Auto Frame."
+
+msgid "Safe Areas"
+msgstr "Безопасные районы"
+
+msgid "When mrv2 starts, the safe area display will be active by default."
+msgstr "При запуске mrv2 дисплей безопасности будет активирован по умолчанию."
+
+msgid "OCIO in Top Bar"
+msgstr "OCIO в топ-баре"
+
+msgid ""
+"When mrv2 starts, OCIO should start in the top bar instead of color "
+"adjustments."
+msgstr ""
+"Когда начинается mrv2, OCIO должна начинаться в верхнем стержне вместо "
+"цветовой корректировки."
+
+msgid "Zoom Speed"
+msgstr "Скорость увеличения"
+
+msgid "HUD"
+msgstr "HUD"
+
+msgid ""
+"This area specifies which elements should be shown as a HUD overlay on the "
+"view screen."
+msgstr ""
+"В этой области указывается, какие элементы следует показывать в виде "
+"накладки HUD на экране обзора."
+
+msgid "Frame"
+msgstr "Рамки"
+
+msgid "Frame Range"
+msgstr "Диапазон"
+
+msgid "Frame Count"
+msgstr "Графический подсчет"
+
+msgid "Memory"
+msgstr "Память"
+
+msgid "Attributes"
+msgstr "Атрибуты"
+
+msgid "File Requester"
+msgstr "Запрашиватель файла"
+
+msgid "Single Click to Travel Drawers"
+msgstr "Один щёлкните к рисункам путешествий"
+
+msgid ""
+"When using mrv2's file chooser, a single click on a folder will open it."
+msgstr "При использовании выбора файла mrv2 его откроет один щелчок на папке."
+
+msgid "Thumbnails Active"
+msgstr "Активированные пальцы"
+
+msgid "Show thumbnails for known files."
+msgstr "Показать пальцы для известных файлов."
+
+msgid "USD Thumbnails"
+msgstr "Памфотные пули в долл. США"
+
+msgid "Show Thumbnails for USD files (can be slow if they are big)"
+msgstr ""
+"Показать пальцы для файлов в долларах США (может быть медленно, если они "
+"большие)"
+
+msgid "Use Native File Chooser"
+msgstr "Использовать выбранный файл"
+
+msgid ""
+"If selected, the natlve file chooser will be used.  If unselected, mrv2's "
+"standard file chooser will be used."
+msgstr ""
+"Если выбрано, будет использован выбравший файл natlve. В случае невыбранного"
+" будет использован выбранный стандартный файл mrv2."
+
+msgid "Fonts"
+msgstr "Шрифты"
+
+msgid "Menus"
+msgstr "Меню"
+
+msgid "Sets the font to use in menus."
+msgstr "Устанавливает шрифт для использования в меню."
+
+msgid "Panels"
+msgstr "Таблицы"
+
+msgid "Sets the font to use in panels. (Not yet working)"
+msgstr "Устанавливает шрифт для использования в панелях. (Еще не работает)"
+
+msgid "Language and Colors"
+msgstr "Язык и цвета"
+
+msgid "Scheme"
+msgstr "Схема"
+
+msgid "Color Theme"
+msgstr "Цветовая тема"
+
+msgid "Reload Theme"
+msgstr "Перезагрузить тему"
+
+msgid ""
+"Reload color theme from mrv2.colors file again to refresh change in colors"
+msgstr ""
+"Перезагрузить цветную тему из файла mrv2.colors снова для обновления "
+"изменения цвета"
+
+msgid "Selects the background color of areas outside the current image."
+msgstr "Выберите цвет фона участков вне текущего изображения."
+
+msgid "Text Overlay"
+msgstr "Текстовая накладка"
+
+msgid "Selects the color of text overlays printed over the current image."
+msgstr "Выберите цвет текстовых накладок, напечатанных по текущему снимку."
+
+msgid "Selects the color of the selection rectangle over the current image."
+msgstr ""
+"Выберите цвет выбранного прямоугольника по отношению к текущему снимку."
+
+msgid "Selects the color of HUD overlays."
+msgstr "Выберите цвет накладок HUD."
+
+msgid "RGBA Display"
+msgstr "Показать RGBA"
+
+msgid "Pixel Values"
+msgstr "Значения пикселя"
+
+msgid "Secondary Display"
+msgstr "Вторичное отображение"
+
+msgid "Luminance"
+msgstr "Освещение"
+
+msgid "Positioning"
+msgstr "Расположение"
+
+msgid "Always Save on Exit"
+msgstr "Всегда сохранять в выходе"
+
+msgid ""
+"When this option is set, mrv2 will save its position and size upon exiting "
+"the program."
+msgstr ""
+"Когда эта опция установлена, mrv2 сохранит свое положение и размер при "
+"выходе из программы."
+
+msgid "Fixed Position"
+msgstr "Стационарное положение"
+
+msgid ""
+"When this option is set, mrv2 will open in the position you set here (except"
+" if the window goes out of the Desktop).  If Always Save on Exit is on, the "
+"values are recakculated upon exiting the program."
+msgstr ""
+"Когда эта опция установлена, mrv2 будет открыта в положении, которое вы "
+"установили здесь (за исключением того, что окно выходит из рабочего стола). "
+"Если всегда включён вход на входе, значения выстраиваются при выходе из "
+"программы."
+
+msgid "X:"
+msgstr "X:"
+
+msgid "Y:"
+msgstr "Y:"
+
+msgid "Fixed Size"
+msgstr "Фиксированный размер"
+
+msgid ""
+"When this option is on, mrv2 will always open to the size you set in W and "
+"H.  If Always Save on Exit is on, the values are recalculated upon exiting "
+"the program."
+msgstr ""
+"Когда эта опция включена, mrv2 всегда будет открыта для размера, "
+"установленного в W и H. Если всегда сохранить на выходе, значения "
+"пересчитываются при выходе из программы."
+
+msgid "W:"
+msgstr "W:"
+
+msgid "H:"
+msgstr "H:"
+
+msgid "Take Current Window Values"
+msgstr "Воспользуйтесь текущими значениями окна"
+
+msgid ""
+"Fills the Fixed Position and and Fixed Size values with the current values "
+"of the viewer.  Remember to also check the boxes for Fixed Position and/or "
+"Fixed Size depending what you want to save."
+msgstr ""
+"Fills the Fixed Position and Fixed Size values with the current values of "
+"the viewer. Remember to also check the boxes for Fixed Position and/or Fixed"
+" Size depending what you want to save."
+
+msgid "Render"
+msgstr "Редакция"
+
+msgid "Alpha Blend"
+msgstr "Альфа Бленд"
+
+msgid "Minify Filter"
+msgstr "Минимизация фильтра"
+
+msgid "Magnify Filter"
+msgstr "Увеличить фильтр"
+
+msgid "Thumbnails"
+msgstr "Пальцы"
+
+msgid "Preview Thumbnails above Timeline"
+msgstr "Просмотр миниатюрных пальцев над временной линией"
+
+msgid "Preview Thumbnails in a rectangle above Timeline"
+msgstr "Просмотреть пальцы в прямоугольнике над временной линией"
+
+msgid "Preview Thumbnails on Panels"
+msgstr "Просмотр табличек с пальцами на табличках"
+
+msgid "Preview Thumbnails in Panels"
+msgstr "Просмотр миниатюрных снимков в табличках"
+
+msgid "Edit Viewport"
+msgstr "Правка Просмотра"
+
+msgid "How to display timeline thumbnails by default."
+msgstr "Как отображать хронологию ногтей по умолчанию."
+
+msgid "Display"
+msgstr "Показать"
+
+msgid "How to display timeline by default."
+msgstr "Как отображать временную линию по умолчанию."
+
+msgid "Start in Edit mode"
+msgstr "Начать в режиме Правки"
+
+msgid "Editing viewport will be visible at start up."
+msgstr "Редакторский порт будет виден с самого начала."
+
+msgid "Remove EDLs in Temporary Folder on Exit"
+msgstr "Удалить EDL во временной папке при выходе"
+
+msgid ""
+"When selected, temporary EDLs (Playlists) will be removed from the temporary"
+" folder."
+msgstr ""
+"При выборе из временной папки будут удалены временные EDL (Playlists)."
+
+msgid "Playback"
+msgstr "Воспроизведение"
+
+msgid "Auto Playback"
+msgstr "Автозакрытие воспроизведения"
+
+msgid "Start Playback when opening files."
+msgstr "Начать воспроизведение при открытии файлов."
+
+msgid "Scrub with Audio"
+msgstr "Скрутка звука"
+
+msgid ""
+"Start playback when scrubbing so that audio can be heard.  Scrubbing can be "
+"less smooth."
+msgstr ""
+"Начать воспроизведение при чистке, чтобы звук был услышан. Скруббирование "
+"может быть менее гладким."
+
+msgid "Single Click Playback"
+msgstr "Одинокий щелчок воспроизведения@ info: whatsthis"
+
+msgid ""
+"Start Playback when single clicking the left mouse button on the view window"
+msgstr ""
+"Запустить воспроизведение, когда один щелчок левой кнопкой мыши на окне "
+"просмотра"
+
+msgid "Auto Hide Pixel Bar"
+msgstr "Автоматическое скрытие пикселя"
+
+msgid ""
+"The Pixel Bar can slow down playback at high resolutions.  When this option "
+"is on, the pixel toolbar will be hidden automatically."
+msgstr ""
+"Pixel Bar может замедлить воспроизведение при высоких разрешениях. Когда эта"
+" опция включена, панель пикселя будет скрыта автоматически."
+
+msgid "Sequences"
+msgstr "Последовательность"
+
+msgid "Speed"
+msgstr "Скорость"
+
+msgid "Frames Per Second value for sequences that don't have embedded speed."
+msgstr ""
+"Рамки на второе значение для последовательностей, которые не имеют "
+"встроенной скорости."
+
+msgid "Looping Mode"
+msgstr "Режим прокладки"
+
+msgid "Select default looping mode in timeline."
+msgstr "Выберите режим петли по умолчанию во времени."
+
+msgid "Scrub Sensitivity"
+msgstr "Чувствительность"
+
+msgid ""
+"This setting controls the sensitivity of scrubbing (SHIFT and then the mouse"
+" right and left).  Smaller values make the mouse move jump more frames while"
+" higher values does the opposite."
+msgstr ""
+"Эта регулировка контролирует чувствительность скруббирования (SHIFT и затем "
+"мышь справа и слева). Меньшие значения заставляют мышь двигать больше "
+"кадров, в то время как более высокие значения делают обратное."
+
+msgid "Default View"
+msgstr "Вид по умолчанию"
+
+msgid "Show Transitions"
+msgstr "Показать изменения"
+
+msgid "Show Transitions in Edit Viewport"
+msgstr "Показать изменения в просмотре"
+
+msgid "Show Markers"
+msgstr "Показать маркеры"
+
+msgid "Show Markers in Edit Viewport"
+msgstr "Показать маркеры в портале Правки"
+
+msgid "Behavior"
+msgstr "Поведение"
+
+msgid "Edit Associated Clips"
+msgstr "Правка Ассоциированные Клипы"
+
+msgid "Edit Associated Clips."
+msgstr "Правка Associated Clips."
+
+msgid "Editable"
+msgstr "Редакция"
+
+msgid "Editable Timeline Viewport."
+msgstr "Редактируемый просмотр времени."
+
+msgid "OCIO"
+msgstr "OCIO"
+
+msgid "OCIO Config File"
+msgstr "Файл OCIO Conpig"
+
+msgid ""
+"This is the path to your config.ocio file.  It can be set with the "
+"environment variable OCIO, which takes precedence over any saved setting."
+msgstr ""
+"Это путь к вашему файлу config.ocio. Он может быть установлен с переменной "
+"окружающей среды OCIO, которая имеет приоритет над любой сохранённой "
+"настройкой."
+
+msgid "Built-in Configs"
+msgstr "Встроенные конфигуры"
+
+msgid "Pick a config.ocio file from disk."
+msgstr "Выбери файл config.ocio с диска."
+
+msgid "Use Default Display and View"
+msgstr "Использовать по умолчанию показ и просмотр"
+
+msgid ""
+"When this option is on, and your config.ocio has a default display and view,"
+" it will be used to be set as default."
+msgstr ""
+"Когда эта опция включена, и у вашей конфег.ocio есть по умолчанию дисплей и "
+"обзор, она будет установлена как по умолчанию."
+
+msgid "Use Active Views and Active Displays"
+msgstr "Использовать активные взгляды и активные дисплеи"
+
+msgid ""
+"When this option is off, OCIO files with active_views: and active_displays: "
+"are not taken into account."
+msgstr ""
+"Когда эта опция выключена, файлы OCIO с активными просмотрами: и "
+"активные_дискуссии: не принимаются во внимание."
+
+msgid "OCIO Defaults"
+msgstr "Погрешности OCIO"
+
+msgid "8-bits"
+msgstr "8 бит"
+
+msgid ""
+"The name of the OCIO default image color space for 8 bit images (jpg, bmp, "
+"etc)."
+msgstr ""
+"Название цветового пространства OCIO для 8 битных изображений (jpg, bmp и "
+"т.д.)."
+
+msgid "16-bits"
+msgstr "16 бит"
+
+msgid ""
+"The name of the OCIO default image color space for 16-bit images (cin, tiff,"
+" etc.)"
+msgstr ""
+"Название цветового пространства OCIO для 16-битных изображений (cin, tiff и "
+"т.д.)"
+
+msgid "32-bits"
+msgstr "32 бита"
+
+msgid ""
+"The name of the OCIO default image color space for 32-bit int images "
+"(openexr integers, etc.)"
+msgstr ""
+"Название цветового пространства OCIO для 32-битных интиллюстраций (открытые "
+"целые числа и т.д.)"
+
+msgid "half"
+msgstr "половина"
+
+msgid ""
+"The name of the OCIO default image color space for OpenEXR half images."
+msgstr "Название цветового пространства OCIO для полуснимков OpenEXR."
+
+msgid "float"
+msgstr "плавучая точка"
+
+msgid ""
+"The name of the OCIO default image color space for half and float images "
+"(OpenEXR, hdr, dpx, etc.)"
+msgstr ""
+"Название цветового пространства OCIO для половинных и поплавковых "
+"изображений (OpenEXR, hdr, dpx и т.д.)"
+
+msgid "Default Look"
+msgstr "По умолчанию"
+
+msgid "Display / View"
+msgstr "Показать/Вид"
+
+msgid "Default Display / View"
+msgstr "Показать по умолчанию/Вид"
+
+msgid "Loading"
+msgstr "Загрузка"
+
+msgid "Version Regex"
+msgstr "Версия Regex"
+
+msgid ""
+"Regular Expression used to match clip versions.  Must group three things "
+"(prefix, number and suffix). If left on its default value (_v), it will "
+"automatically be created a regular expression to match versions defined with"
+" _v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
+msgstr ""
+"Регулярное выражение, используемое для совпадения с версиями клипов. Нужно "
+"группировать три вещи (prefix, число и suffix). Если оставить на своем "
+"значении по умолчанию (_v), то оно автоматически будет создаваться "
+"регулярное выражение для совпадения с версиями, определенными на _v в имени "
+"файла, каталога или обоих. Например: gizmo_v001 0001.exr"
+
+msgid "Maximum Images Apart"
+msgstr "Максимальные изображения"
+
+msgid ""
+"When searching for a version, this value is the maximum version apart from "
+"each other when searching the first or last version."
+msgstr ""
+"При поиске версии это значение представляет собой максимальную версию "
+"отдельно друг от друга при поиске первой или последней версии."
+
+msgid "Missing Frame"
+msgstr "Недостающие рамки"
+
+msgid "Path Mappings"
+msgstr "Пути картирования"
+
+msgid ""
+"Use Up and Down arrows to move the selected line up and down.  Double click "
+"to change item.  Click on an empty area to unselect."
+msgstr ""
+"Используйте стрелки вверх и вниз, чтобы переместить выбранную линию вверх и "
+"вниз. Двойной щелчок для изменения пункта. Нажмите на пустую область, чтобы "
+"не выбрать."
+
+msgid "Add Paths"
+msgstr "Добавить пути"
+
+msgid "Add a new remote mapping."
+msgstr "Добавить новое дистанционное картирование."
+
+msgid "Remove Paths"
+msgstr "Удалить пути"
+
+msgid "Remove the currently selected path mapping."
+msgstr "Удалить выбранное в настоящее время картирование путей."
+
+msgid "Send"
+msgstr "Отправить"
+
+msgid "Accept"
+msgstr "Принять"
+
+msgid "UI Control"
+msgstr "Контроль UI"
+
+msgid "Pan and Zoom"
+msgstr "Пановое и крупногабаритное"
+
+msgid "Color Control"
+msgstr "Контроль цвета"
+
+msgid "Audio Control"
+msgstr "Аудиовизуальное управление"
+
+msgid "Monitor VSync"
+msgstr "Монитор VSync"
+
+msgid ""
+"Turns on and off Monitor's Vsync.  VSync off can display movies faster, at "
+"the cost of potential tearing in the image."
+msgstr ""
+"Включается и выключается Vsync Monitor's Vsync. VSync может показывать "
+"фильмы быстрее, за счет потенциального разрыва изображения."
+
+msgid "Color Buffers' Accuracy"
+msgstr "Точность цветовых буферов"
+
+msgid ""
+"Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves "
+"all float information, Half Float preserves most float information and Fast "
+"works in 8-bits.  Automatic selects the accuracy baed on image depth."
+msgstr ""
+"Цветные Buffers могут быть Float, Float Float, Fast или Automo. Float "
+"сохраняет всю поплавковую информацию, Пол Float сохраняет большую часть "
+"поплавковой информации и быстро работает в 8 битах. Автоматически выбирает "
+"точность на глубине изображения."
+
+msgid "Blit Viewports"
+msgstr "Blit Viewports"
+
+msgid ""
+"Viewports can be drawn with blitting or with OpenGL shaders.  Depending on "
+"graphics card and OS one can perform better then the other."
+msgstr ""
+"Просмотры можно нарисовать с помощью блеска или с помощью OpenGL Sheners. В "
+"зависимости от карты графики и ОС один может работать лучше, а другой - "
+"лучше."
+
+msgid "Blit Timeline"
+msgstr "Блитная временн*е рамки"
+
+msgid ""
+"Timeline can be drawn with blitting or with OpenGL shaders.  Depending on "
+"graphics card and OS one can perform better then the other."
+msgstr ""
+"Временную линию можно нарисовать с помощью блеска или с помощью OpenGL "
+"Sheners. В зависимости от карты графики и ОС один может работать лучше, а "
+"другой - лучше."
+
+msgid ""
+"For changes to take effect, you will need to re-open any movies already "
+"playing or reload mrv2."
+msgstr ""
+"Для того чтобы изменения вступили в силу, вам нужно будет вновь открыть "
+"любые фильмы, которые уже играют или перезаряжают mrv2."
+
+msgid "API"
+msgstr "API"
+
+msgid "Audio API to use for platforms that support multiple APIs (Linux only)"
+msgstr ""
+"Audio API для использования в платформах, которые поддерживают несколько API"
+" (только Linux)"
+
+msgid "Output Device"
+msgstr "Выходное устройство"
+
+msgid "Output Device to use for audio playback."
+msgstr "Выходное устройство для использования для воспроизведения звука."
+
+msgid "ComfyUI"
+msgstr "ComfyUI"
+
+msgid ""
+"Here are the current settings to interact with ComfyUI.  It requires "
+"installation of mrv2's comfyUI nodes."
+msgstr ""
+"Вот текущие настройки для взаимодействия с ComfyUI. Это требует установки "
+"узлов mrv2 comfyUI."
+
+msgid "Use ComfyUI Pipe"
+msgstr "Использовать ComfyUI трубу"
+
+msgid ""
+"This setting opens a pipe to communicate with ComfyUI's "
+"mrv2_save_exr_node.py"
+msgstr ""
+"Эта установка открывает трубу для связи с ComfyUI mrv2_save_exr_node.py"
+
+msgid "Errors"
+msgstr "Ошибки"
+
+msgid "On FFmpeg Error"
+msgstr "Ошибка FFmpeg"
+
+msgid "Adjusts how Log Window behaves in case of an FFmpeg error."
+msgstr "Регулирует поведение окна журнала в случае ошибки FFmpeg."
+
+msgid "On Error"
+msgstr "Ошибка"
+
+msgid "Adjusts how Log Window behaves in case of error."
+msgstr "Отрегулирует поведение окна журнала в случае ошибки."
+
+msgid "Check for Updates"
+msgstr "Проверка обновления"
+
+msgid ""
+"Allows you to automatically download updates of mrv2 when it starts up."
+msgstr "Позволяет вам автоматически загружать обновления mrv2 при запуске."
+
+msgid "Reset settings to the default."
+msgstr "Перезагрузить настройки по умолчанию."
+
+msgid "Revert"
+msgstr "Отменить"
+
+msgid "Revert settings to last saved preferences."
+msgstr "Отменить настройки для последнего сохранения предпочтений."
+
+msgid ""
+"Accept settings but don't save.  They will get saved when exiting the "
+"program."
+msgstr ""
+"Принимать настройки, но не сохранять. Они будут спасены при выходе из "
+"программы."
+
+msgid "Module"
+msgstr "Модуль"
+
+msgid "User Interface/View Window"
+msgstr "Интерфэйс пользователя/Вид Окно"
+
+msgid "User Interface/File Requester"
+msgstr "Интерфэйс пользователя/Запрашиватель файла"
+
+msgid "User Interface/Fonts"
+msgstr "Интерфэйс пользователя/Шрифты"
+
+msgid "User Interface/Language and Colors"
+msgstr "Интерфэйс пользователя/Язык и цвета"
+
+msgid "User Interface/Pixel Toolbar"
+msgstr "Интерфэйс пользователя/Панель пикселя"
+
+msgid "User Interface/Positioning"
+msgstr "Интерфэйс пользователя/Расположение"
+
+msgid "User Interface/Render"
+msgstr "Интерфэйс пользователя/Редакция"
+
+msgid "User Interface/Thumbnails"
+msgstr "Интерфэйс пользователя/Пальцы"
+
+msgid "User Interface/Timeline"
+msgstr "Интерфэйс пользователя/Сроки"
+
+msgid "No Audio was Compiled"
+msgstr "Никакого звука не было скомпилировано"
+
+msgid "No Audio Devices were Found"
+msgstr "Аудиовизуальные устройства не найдены"
+
+msgid "Default API"
+msgstr "По умолчанию API"
+
+msgid "No Valid Devices found"
+msgstr "Не найдены действительные устройства"
+
+msgid "Default Device"
+msgstr "По умолчанию"
+
+msgid "PDF Options"
+msgstr "Параметры PDF"
+
+msgid "Page Size"
+msgstr "Размер страницы"
+
+msgid "Remote to Local Path Mapping"
+msgstr "Дистанционное картирование до местного картирования"
+
+msgid "Remote Path"
+msgstr "Удалённый путь"
+
+msgid "Local Path"
+msgstr "Местный путь"
+
+msgid "Okay"
+msgstr "Хорошо."
+
+msgid "OCIO Presets"
+msgstr "Пресеты OCIO"
+
+msgid "Click to switch to a stored preset."
+msgstr "Нажмите, чтобы перейти к хранимой предварительной настройке."
+
+msgid "Click to add a new preset with the current settings."
+msgstr ""
+"Нажмите для добавления новой предварительной настройки с текущими "
+"настройками."
+
+msgid "Click to delete the selected preset."
+msgstr "Нажмите для удаления выбранного предварительного набора."
+
+msgid ""
+"Select, Add or Delete an OCIO Preset that stores: config filename, Input "
+"Color Space, View, Look, LUT settings and Defaults for 8-bits, 16-bits, "
+"32-bits, half and float images. "
+msgstr ""
+"Выберите, добавьте или удалите OCIO Preset, который хранит: config Pame, "
+"Introduction Color Space, View, LUT, настройки и по умолчанию для 8-битных, "
+"16-битных, 32-битных, половинчатых и поплавковых изображений."
+
+msgid "Summary"
+msgstr "Резюме"
+
+msgid "Preset Name"
+msgstr "Предопределенное имя"
+
+msgid "Active"
+msgstr "Активные"
+
+msgid "Function"
+msgstr "Функция"
+
+msgid "Key"
+msgstr "Key"
+
+msgid "Reset hotkeys to mrv2's default configuration."
+msgstr "Перезагрузить хот-доги в конфигурацию mrv2."
+
+msgid "Accept the current hotkeys."
+msgstr "Прими текущие хижины."
+
+msgid "Reload"
+msgstr "Перезагрузить"
+
+msgid "Reload hotkeys to last saved file."
+msgstr "Перезагрузить хот-доги в последний сохраненный файл."
+
+msgid "HW"
+msgstr "HW"
+
+msgid "CPU Information"
+msgstr "Информация о процессоре"
+
+msgid "GPU Information"
+msgstr "Информация GPU"
+
+msgid "Formats"
+msgstr "Форматы"
+
+msgid "Codecs"
+msgstr "Коды"
+
+msgid "Subtitles"
+msgstr "Субтитры"
+
+msgid "Protocols"
+msgstr "Протоколы"
+
+msgid "Thanks"
+msgstr "Спасибо."
+
+msgid "Hotkey for..."
+msgstr "Хоткей для..."
+
+msgid "Type Key"
+msgstr "Тип ключа"
+
+msgid "Type a key."
+msgstr "Набери ключ."
+
+msgid "Shift"
+msgstr "Смена"
+
+msgid "Ctrl"
+msgstr "linkki"
+
+msgid "Alt"
+msgstr "Alt"
+
+msgid "Meta"
+msgstr "Meta"
+
+msgid "Clear"
+msgstr "Очистить"
+
+msgid "OCIO Browser"
+msgstr "Просмотр OCIO"
+
+msgid "Select an OCIO Transform"
+msgstr "Выбрать OCIO Transform"
+
+msgid "Accept the selected OCIO file."
+msgstr "Выбрать выбранный файл OCIO."
+
+msgid "Cancel the OCIO selection and don't change anything."
+msgstr "Отмените отбор ОВД и ничего не меняйте."
+
+msgid "Escape"
+msgstr "Побег"
+
+msgid "BackSpace"
+msgstr "Заднее пространство"
+
+msgid "Tab"
+msgstr "Tab"
+
+msgid "Return"
+msgstr "Возвращение"
+
+msgid "Print"
+msgstr "Печать"
+
+msgid "ScrollLock"
+msgstr "Свиток@ info: whatsthis"
+
+msgid "Pause"
+msgstr "Приостановить"
+
+msgid "Insert"
+msgstr "Вставить"
+
+msgid "PageUp"
+msgstr "Стр."
+
+msgid "End"
+msgstr "End"
+
+msgid "PageDown"
+msgstr "Страница"
+
+msgid "Left"
+msgstr "Налево"
+
+msgid "Up"
+msgstr "Up"
+
+msgid "Right"
+msgstr "Верно."
+
+msgid "Down"
+msgstr "Вниз"
+
+msgid "LeftShift"
+msgstr "Левый шифт"
+
+msgid "RightShift"
+msgstr "Правый шайт"
+
+msgid "LeftCtrl"
+msgstr "Левый трл"
+
+msgid "RightCtrl"
+msgstr "Правый"
+
+msgid "CapsLock"
+msgstr "CapsLock"
+
+msgid "LeftAlt"
+msgstr "Левый альт"
+
+msgid "RightAlt"
+msgstr "Правильно."
+
+msgid "LeftMeta"
+msgstr "Левая Мета"
+
+msgid "RightMeta"
+msgstr "Правая Мета"
+
+msgid "Menu"
+msgstr "Меню"
+
+msgid "NumLock"
+msgstr "Нумлок"
+
+msgid "padEnter"
+msgstr "Вход"
+
+msgid "pad0"
+msgstr "Paper0"
+
+msgid "pad1"
+msgstr "колодка1"
+
+msgid "pad2"
+msgstr "колодка2"
+
+msgid "pad3"
+msgstr "колодка3"
+
+msgid "pad4"
+msgstr "рисунок4"
+
+msgid "pad5"
+msgstr "рисунок5"
+
+msgid "pad6"
+msgstr "рисунок6"
+
+msgid "pad7"
+msgstr "рисунок7"
+
+msgid "pad8"
+msgstr "рисунок 8"
+
+msgid "pad9"
+msgstr "рисунок9"
+
+msgid "Space (' ')"
+msgstr "Космос ('')"
+
+msgid "Multiply"
+msgstr "Умножить"
+
+msgid "Subtract"
+msgstr "Вычитать"
+
+msgid "Decimal"
+msgstr "Десимальная"
+
+msgid "Divide"
+msgstr "Разделение"
+
+msgid "@B12@C7@b@.Remote\t@B12@C7@b@.Local"
+msgstr "@B12@C7@b@.Remote @B12@C7@b@."
+
+msgid "Desktop: "
+msgstr "Рабочий стол:"
+
+msgid "Running on: "
+msgstr "Работает:"
+
+msgid "sysctl failed!"
+msgstr "Сисктл провалился!"
+
+msgid "host_statistics64 failed"
+msgstr "shop_statistics64 не сработал"
+
+msgid "task info failed"
+msgstr "Ошибка информации о задаче"
+
+msgid "Open Directory"
+msgstr "Открыть каталог"
+
+msgid "Open Movie or Sequence"
+msgstr "Открытое кино или последовательность"
+
+msgid "Open Single Image"
+msgstr "Открыть единый образ"
+
+msgid "Save Image"
+msgstr "Сохранить изображение"
+
+msgid "Save Frames To Folder"
+msgstr "Сохранить рамки папки"
+
+msgid "Save OTIO Timeline"
+msgstr "Сохранить временную линию OTIO"
+
+msgid "Save PDF Document"
+msgstr "Сохранить документ PDF"
+
+msgid "Save Session As"
+msgstr "Сохранить сеанс как"
+
+msgid "Close Current"
+msgstr "Закрыть текущее"
+
+msgid "Close All"
+msgstr "Закрыть все"
+
+msgid "Quit Program"
+msgstr "Выход из программы"
+
+msgid "Zoom Minimum"
+msgstr "Минимальное увеличение"
+
+msgid "Zoom Maximum"
+msgstr "Максимальное увеличение"
+
+msgid "Center Image"
+msgstr "Фотография центра"
+
+msgid "Fit Screen"
+msgstr "Скриншот"
+
+msgid "Resize Main Window to Fit"
+msgstr "Изменить размер главного окна, чтобы его можно было использовать"
+
+msgid "Fit All"
+msgstr "Совместиться со всеми"
+
+msgid "Toggle Minify Texture Filtering"
+msgstr "Фильтрация текста@ info: whatsthis"
+
+msgid "Toggle Magnify Texture Filtering"
+msgstr "Фильтрация текста@ info: whatsthis"
+
+msgid "Auto Frame View"
+msgstr "Вид авторамки"
+
+msgid "Ignore Display Window"
+msgstr "Игнорировать окно отображения"
+
+msgid "Auto Normalize"
+msgstr "Автонормализовать"
+
+msgid "Invalid Values"
+msgstr "Неверные значения"
+
+msgid "Display Window"
+msgstr "Показать окно"
+
+msgid "Data Window"
+msgstr "Окно данных"
+
+msgid "Compare Wipe"
+msgstr "Сравнить сетку"
+
+msgid "Compare Overlay"
+msgstr "Сравнить оплошность"
+
+msgid "Compare Difference"
+msgstr "Сравнить разницу"
+
+msgid "Compare Horizontal"
+msgstr "Сравните горизонтальные"
+
+msgid "Compare Vertical"
+msgstr "Сравните вертикально"
+
+msgid "Compare Tile"
+msgstr "Сравнить подтяжку"
+
+msgid "Color Channel"
+msgstr "Цветной канал"
+
+msgid "Red Channel"
+msgstr "Красный канал"
+
+msgid "Green Channel"
+msgstr "Зеленый канал"
+
+msgid "Blue Channel"
+msgstr "Голубой канал"
+
+msgid "Alpha Channel"
+msgstr "Альфа-канал"
+
+msgid "Lumma Channel"
+msgstr "Ламмский канал"
+
+msgid "Flip X"
+msgstr "Перевернуть X"
+
+msgid "Flip Y"
+msgstr "Перевернуть Y"
+
+msgid "Rotate Images +90 Degrees"
+msgstr "Вращение изображений +90 степеней"
+
+msgid "Rotate Images -90 Degrees"
+msgstr "Поворачивай образы - 90 степеней"
+
+msgid "Video Levels from File"
+msgstr "Видеоуровни из файла"
+
+msgid "Video Levels Legal Range"
+msgstr "Правовой диапазон видеоуровней"
+
+msgid "Video Levels Full Range"
+msgstr "Видеоуровни Полная дальность"
+
+msgid "Alpha Blend None"
+msgstr "Альфа Бленд Отсутствует"
+
+msgid "Alpha Blend Straight"
+msgstr "Альфа Бленд Прямой"
+
+msgid "Alpha Blend Premultiplied"
+msgstr "&lt; Альфа Бленд &gt;"
+
+msgid "Annotation Clear Frame"
+msgstr "Чистая основа примечания"
+
+msgid "Annotation Clear All Frames"
+msgstr "Обозначение Очистить все рамки"
+
+msgid "Annotation Frame Step Backwards"
+msgstr "Обозначение Шаг назад"
+
+msgid "Frame Step Backwards"
+msgstr "Шаг назад"
+
+msgid "Frame Step FPS Backwards"
+msgstr "Шаг FPS назад"
+
+msgid "Annotation Frame Step Forwards"
+msgstr "Обозначение Шаг вперёд"
+
+msgid "Frame Step Forwards"
+msgstr "Шаг вперёд"
+
+msgid "Frame Step FPS Forwards"
+msgstr "Фрейм-шап FPS вперёд"
+
+msgid "Play Backwards"
+msgstr "Воспроизвести назад"
+
+msgid "Play Backwards / Change Speed"
+msgstr "Воспроизвести назад/Изменить скорость"
+
+msgid "Play in Current Direction"
+msgstr "Воспроизвести в текущем направлении"
+
+msgid "Play Forwards"
+msgstr "Воспроизвести вперёд"
+
+msgid "Play Forwards / Change Speed"
+msgstr "Воспроизвести вперёд/Изменить скорость"
+
+msgid "Next Clip"
+msgstr "Следующий слип"
+
+msgid "Previous Clip"
+msgstr "Предыдущий слип"
+
+msgid "Loop Playback"
+msgstr "Воспроизведение"
+
+msgid "Playback Once"
+msgstr "Воспроизвести один раз"
+
+msgid "Playback Ping Pong"
+msgstr "Воспроизведение Ping Pong"
+
+msgid "First Image Version"
+msgstr "Версия первого изображения"
+
+msgid "Previous Image Version"
+msgstr "Предыдущая версия изображения"
+
+msgid "Next Image Version"
+msgstr "Следующая версия изображения"
+
+msgid "Last Image Version"
+msgstr "Версия последнего изображения"
+
+msgid "Previous Image"
+msgstr "Предыдущая фотография"
+
+msgid "Next Image"
+msgstr "Следующий снимок"
+
+msgid "Previous Image Limited"
+msgstr "Предыдущий снимок ограничен"
+
+msgid "Next Image Limited"
+msgstr "Следующий снимок Limited"
+
+msgid "Previous Channel"
+msgstr "Предыдущий канал"
+
+msgid "Next Channel"
+msgstr "Следующий канал"
+
+msgid "Clear Cache"
+msgstr "Очистить кэш"
+
+msgid "UpdateVideoFrame"
+msgstr "Обновление VideoFrame"
+
+msgid "Cut Frame"
+msgstr "Строка отруба"
+
+msgid "Copy Frame"
+msgstr "Скопировать рамки"
+
+msgid "Paste Frame"
+msgstr "Вставить рамки"
+
+msgid "Insert Frame"
+msgstr "Вставить рамки"
+
+msgid "Slice Clip"
+msgstr "Сломанный скальпель"
+
+msgid "Remove Clip"
+msgstr "Удалить щелчок"
+
+msgid "Insert Audio Gap"
+msgstr "Вставить проем звука"
+
+msgid "Remove Audio Gap"
+msgstr "Удалить звуковой пробел"
+
+msgid "Edit Undo"
+msgstr "Правка Отменить"
+
+msgid "Edit Redo"
+msgstr "Правка Повторить"
+
+msgid "Toggle Menu Bar"
+msgstr "Панель инструментов@ info: whatsthis"
+
+msgid "Toggle Top Bar"
+msgstr "Верхняя панель инструментов@ info: whatsthis"
+
+msgid "Toggle Pixel Bar"
+msgstr "Панель пикселя@ info: whatsthis"
+
+msgid "Toggle Timeline"
+msgstr "График закладки@ info: whatsthis"
+
+msgid "Toggle Status Bar"
+msgstr "Скриншот состояния закладки"
+
+msgid "Toggle Tool Dock"
+msgstr "Панель инструментов@ info: whatsthis"
+
+msgid "Toggle Full Screen"
+msgstr "Скриншот@ info: whatsthis"
+
+msgid "Toggle Presentation"
+msgstr "Закладка@ info: whatsthis"
+
+msgid "Toggle Float On Top"
+msgstr "Поплавок сверху@ info: whatsthis"
+
+msgid "Toggle Secondary"
+msgstr "Средняя панель@ info: whatsthis"
+
+msgid "Toggle Secondary Float On Top"
+msgstr "Вторичный поплавок сверху"
+
+msgid "Toggle NDI"
+msgstr "Заголовок NDI"
+
+msgid "Toggle Network"
+msgstr "Сетевая панель@ info: whatsthis"
+
+msgid "Toggle USD"
+msgstr "долл. США"
+
+msgid "Toggle Stereo 3D"
+msgstr "Стерео 3D@ info: whatsthis"
+
+msgid "Toggle Edit Mode"
+msgstr "Режим Правки@ info: whatsthis"
+
+msgid "Toggle Timeline Editable"
+msgstr "Перенос времени@ info: whatsthis: whatsthis"
+
+msgid "Toggle Edit Associated Clips"
+msgstr "Редактировать ассоциированные клипы@ info: whatsthis"
+
+msgid "Timeline Frame View"
+msgstr "Просмотр временны́х рамок"
+
+msgid "Toggle Timeline Scroll To Current Frame"
+msgstr "Свиток времени в текущую систему"
+
+msgid "Toggle Timeline Track Info"
+msgstr "Загрузка информации о временнóй дорожке@ info: whatsthis"
+
+msgid "Toggle Timeline Clip Info"
+msgstr "Панель слипов@ info: whatsthis"
+
+msgid "Toggle Timeline Thumbnails"
+msgstr "Закладка тайм-линейные пальцы@ info: whatsthis"
+
+msgid "Toggle Timeline Transitions"
+msgstr "Переключение сроков@ info: whatsthis"
+
+msgid "Toggle Timeline Markers"
+msgstr "Обозначение времени@ info: whatsthis"
+
+msgid "Reset Gain/Gamma"
+msgstr "Перезагрузить прибыль/Gamma"
+
+msgid "Exposure More"
+msgstr "Больше"
+
+msgid "Exposure Less"
+msgstr "Минус"
+
+msgid "Saturation More"
+msgstr "Насыщенность"
+
+msgid "Saturation Less"
+msgstr "Насыщение минус"
+
+msgid "Gamma More"
+msgstr "Гамма больше"
+
+msgid "Gamma Less"
+msgstr "Гамма Меньше"
+
+msgid "OCIO In Top Bar"
+msgstr "OCIO в топ-баре"
+
+msgid "OCIO Input Color Space"
+msgstr "Цветовое пространство OCIO"
+
+msgid "OCIO Display"
+msgstr "Выставка OCIO"
+
+msgid "OCIO View"
+msgstr "Вид OCIO"
+
+msgid "Scrub Mode"
+msgstr "Режим скруба"
+
+msgid "Area Selection Mode"
+msgstr "Режим выделения области"
+
+msgid "Erase Mode"
+msgstr "Стереть режим"
+
+msgid "Arrow Mode"
+msgstr "Режим стрелки"
+
+msgid "Rectangle Mode"
+msgstr "Режим рентгеноскопии"
+
+msgid "Circle Mode"
+msgstr "Режим окружности"
+
+msgid "Text Mode"
+msgstr "Текстовый режим"
+
+msgid "Pen Size More"
+msgstr "Размер пены больше"
+
+msgid "Pen Size Less"
+msgstr "Размер карандаша минус"
+
+msgid "Switch Pen Color"
+msgstr "Переключить цвет Pen"
+
+msgid "Hud Window"
+msgstr "Окно Хад"
+
+msgid "Toggle One Panel Only"
+msgstr "Только одна панель@ info: whatsthis"
+
+msgid "Toggle Files Panel"
+msgstr "Панель файлов@ info: whatsthis"
+
+msgid "Toggle Media Info Panel"
+msgstr "Панель данных для средств массовой информации@ info: whatsthis"
+
+msgid "Toggle Color Area Info Panel"
+msgstr "Панель данных о цветовой полосе@ info: whatsthis"
+
+msgid "Toggle Color Controls Panel"
+msgstr "Панель контроля за цветом@ info: whatsthis"
+
+msgid "Toggle Playlist Panel"
+msgstr "Панель списка воспроизведения@ info: whatsthis"
+
+msgid "Toggle Compare Panel"
+msgstr "Панель инструментов для сравнения@ info: whatsthis"
+
+msgid "Toggle Devices Panel"
+msgstr "Панель инструментов@ info: whatsthis"
+
+msgid "Toggle Annotation Panel"
+msgstr "Панель аннотаций@ info: whatsthis"
+
+msgid "Toggle Background Panel"
+msgstr "Панель справочных данных@ info: whatsthis"
+
+msgid "Toggle Settings Panel"
+msgstr "Панель настроек@ info: whatsthis"
+
+msgid "Toggle Histogram Panel"
+msgstr "Панель гистограммы@ info: whatsthis"
+
+msgid "Toggle Vectorscope Panel"
+msgstr "Панель векторного обзора@ info: whatsthis"
+
+msgid "Toggle Waveform Panel"
+msgstr "Панель инструментов Waveform"
+
+msgid "Toggle Environment Map Panel"
+msgstr "Группа по составлению карты состояния окружающей среды"
+
+msgid "Toggle Preferences Window"
+msgstr "Окно преференций@ info: whatsthis"
+
+msgid "Toggle Python Panel"
+msgstr "Панель инструментов@ info: whatsthis"
+
+msgid "Toggle Log Panel"
+msgstr "Панель журнала@ info: whatsthis"
+
+msgid "Toggle Hotkeys Window"
+msgstr "Окно инструментов@ info: whatsthis"
+
+msgid "Toggle About Window"
+msgstr "Закладка о окне"

@@ -3046,6 +3046,9 @@ msgstr "Portuguese"
 msgid "French"
 msgstr "French"
 
+msgid "Russian"
+msgstr "Russian"
+
 msgid ""
 "Need to reboot mrv2 to change language to {0}.  Are you sure you want to "
 "continue?"
@@ -3131,9 +3134,6 @@ msgstr "Tibetan"
 
 msgid "Romanian"
 msgstr "Romanian"
-
-msgid "Russian"
-msgstr "Russian"
 
 msgid "Serbian"
 msgstr "Serbian"
@@ -4491,8 +4491,8 @@ msgstr "TV"
 msgid "PC"
 msgstr "PC"
 
-msgid "sRGB"
-msgstr "sRGB"
+msgid "BGR"
+msgstr "BGR"
 
 msgid "bt709"
 msgstr "bt709"
@@ -5478,11 +5478,11 @@ msgstr "CIE xyY"
 msgid "From File"
 msgstr "从文件"
 
-msgid "Legal Range"
-msgstr "合法范围"
-
 msgid "Full Range"
 msgstr "全范围"
+
+msgid "Legal Range"
+msgstr "合法范围"
 
 msgid "Straight"
 msgstr "Straight"
@@ -7058,6 +7058,9 @@ msgstr "开关热键窗口"
 
 msgid "Toggle About Window"
 msgstr "开关关于窗口"
+
+#~ msgid "sRGB"
+#~ msgstr "sRGB"
 
 #~ msgid "Save Annotations burned into the movie or sequence."
 #~ msgstr "将注释保存到影片或序列中。"

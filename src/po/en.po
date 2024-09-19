@@ -3099,6 +3099,9 @@ msgstr "Portuguese"
 msgid "French"
 msgstr "French"
 
+msgid "Russian"
+msgstr "Russian"
+
 msgid ""
 "Need to reboot mrv2 to change language to {0}.  Are you sure you want to "
 "continue?"
@@ -3186,9 +3189,6 @@ msgstr "Tibetan"
 
 msgid "Romanian"
 msgstr "Romanian"
-
-msgid "Russian"
-msgstr "Russian"
 
 msgid "Serbian"
 msgstr "Serbian"
@@ -4559,8 +4559,8 @@ msgstr "TV"
 msgid "PC"
 msgstr "PC"
 
-msgid "sRGB"
-msgstr "sRGB"
+msgid "BGR"
+msgstr "BGR"
 
 msgid "bt709"
 msgstr "bt709"
@@ -5560,11 +5560,11 @@ msgstr "CIE xyY"
 msgid "From File"
 msgstr "From File"
 
-msgid "Legal Range"
-msgstr "Legal Range"
-
 msgid "Full Range"
 msgstr "Full Range"
+
+msgid "Legal Range"
+msgstr "Legal Range"
 
 msgid "Straight"
 msgstr "Straight"
@@ -7226,6 +7226,9 @@ msgstr "Toggle Hotkeys Window"
 
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
+
+#~ msgid "sRGB"
+#~ msgstr "sRGB"
 
 #~ msgid "Save Annotations burned into the movie or sequence."
 #~ msgstr "Save Annotations burned into the movie or sequence."

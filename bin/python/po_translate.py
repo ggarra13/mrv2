@@ -25,6 +25,7 @@ LANGUAGES = [
     'hi_IN',
     'it',
     'pt',
+    'ru',
     'zh-CN',
 ]
 
@@ -73,6 +74,8 @@ DONT_TRANSLATE = [
     'API',
     'arib-std-b67',
     'base',
+    'BGR',
+    'RGB',
     'bt1361',
     'bt2020',
     'bt2020-10',
@@ -177,8 +180,9 @@ if not use_google and not use_tokenizer:
 class POTranslator:
 
 
-    def __init__(self, po_file, lang, use_google = True, use_tokenizer = True):
-
+    def __init__(self, po_file, lang, use_google = True, use_tokenizer = True): 
+        self.model = self.tokenizer = None
+        
         if not os.path.exists(po_file):
             print(po_file,'does not exist!')
             exit(1)
@@ -191,8 +195,6 @@ class POTranslator:
         if self.code == 'pt' or self.code == 'fr' or \
            self.code == 'es' or self.code == 'it':
             self.helsinki = 'ROMANCE'
-            
-        self.model = self.tokenizer = None
         
         self.have_seen = {}
 

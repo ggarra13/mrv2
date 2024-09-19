@@ -2816,6 +2816,9 @@ msgstr ""
 msgid "French"
 msgstr ""
 
+msgid "Russian"
+msgstr ""
+
 msgid ""
 "Need to reboot mrv2 to change language to {0}.  Are you sure you want to "
 "continue?"
@@ -2900,9 +2903,6 @@ msgid "Tibetan"
 msgstr ""
 
 msgid "Romanian"
-msgstr ""
-
-msgid "Russian"
 msgstr ""
 
 msgid "Serbian"
@@ -4242,7 +4242,7 @@ msgstr ""
 msgid "PC"
 msgstr ""
 
-msgid "sRGB"
+msgid "BGR"
 msgstr ""
 
 msgid "bt709"
@@ -5107,10 +5107,10 @@ msgstr ""
 msgid "From File"
 msgstr ""
 
-msgid "Legal Range"
+msgid "Full Range"
 msgstr ""
 
-msgid "Full Range"
+msgid "Legal Range"
 msgstr ""
 
 msgid "Straight"
