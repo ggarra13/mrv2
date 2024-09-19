@@ -1108,6 +1108,8 @@ dynestudio                                    (OCIO pipeline debugging)
 efleurant                                     (Python script debugging)
 gerroon                                       (Saving suggestion)
 Howard Lightstone                             (Windows 10 checks)
+JoelRVC                                       (Windows 11 scaling issues,
+                                               Video Levels Preferences)
 Jose Quinteiro                                (Windows 10 checks)
 jrsndl                                        (Versioning debugging)
 jtomori                                       (OCIO pipeline ideas)
