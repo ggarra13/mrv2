@@ -31,12 +31,12 @@ v1.2.8
   next images, without looping.
 - Added "Image/Go to/<Clip>" to switch from one clip to the next without having
   to bring up the Files Panel.
+- Added "Image/Compare/<Clip>" and "Image/Compare Mode" to compare images 
+  without bringing up the Compare Panel.
 - Made UI at start up wider to account for new menus and new language 
   translations.
 - Added HDR metadata to Media Information Panel.
 - Very minor playback improvement for non HDR videos.
-- Added "Image/Compare/<Clip>" and "Image/Compare Mode" to compare images 
-  without bringing up the Compare Panel.
 - Made "Advanced Settings" in Save Movie options store its settings.
 - Made tlRender FFmpeg's write always print out the color space, color TRC
   and color primaries used when saving.
