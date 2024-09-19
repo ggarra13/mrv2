@@ -42,7 +42,7 @@ v1.2.8
   and color primaries used when saving.
 - Preferences->Render->Video Levels had Full Range and Legal Range reversed.
   Fixed.
-- Added Russian AI translation.
+- Added first pass at Russian AI translation.
 
 
 v1.2.7
