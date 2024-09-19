@@ -3693,6 +3693,12 @@ msgstr ""
 msgid "Edit/Frame/Insert"
 msgstr ""
 
+msgid "Edit/Audio Clip/Insert"
+msgstr ""
+
+msgid "Edit/Audio Clip/Remove"
+msgstr ""
+
 msgid "Edit/Audio Gap/Insert"
 msgstr ""
 
@@ -6463,6 +6469,12 @@ msgid "Slice Clip"
 msgstr ""
 
 msgid "Remove Clip"
+msgstr ""
+
+msgid "Insert Audio Clip"
+msgstr ""
+
+msgid "Remove Audio Clip"
 msgstr ""
 
 msgid "Insert Audio Gap"
