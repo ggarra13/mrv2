@@ -40,6 +40,8 @@ v1.2.8
 - Made "Advanced Settings" in Save Movie options store its settings.
 - Made tlRender FFmpeg's write always print out the color space, color TRC
   and color primaries used when saving.
+- Preferences->Render->Video Levels had Full Range and Legal Range reverse.
+  Fixed.
 
 
 v1.2.7
