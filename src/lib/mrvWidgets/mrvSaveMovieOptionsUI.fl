@@ -215,7 +215,7 @@ v->hide();}
         callback {int value = o->value();
 
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Override", value);} selected
+settings->setValue("SaveMovie/Override", value);}
         tooltip {Select this to override all the parameters below.} xywh {129 20 78 22} down_box DOWN_BOX
       }
       Fl_Choice ColorRange {
@@ -223,11 +223,11 @@ settings->setValue("SaveMovie/Override", value);} selected
         callback {int value = o->value();
 
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Color Range", value);}
+settings->setValue("SaveMovie/Color Range", value);} open
         tooltip {FFMpeg's Color Range for the codec selected} xywh {130 60 170 29} down_box BORDER_BOX
       } {
         MenuItem {} {
-          label {TV (Legal Ramge)}
+          label {TV (Legal Range)} selected
           xywh {0 0 100 20}
         }
         MenuItem {} {

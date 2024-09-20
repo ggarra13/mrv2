@@ -4242,10 +4242,10 @@ msgstr ""
 msgid "Quarter Size"
 msgstr ""
 
-msgid "TV"
+msgid "TV (Legal Range)"
 msgstr ""
 
-msgid "PC"
+msgid "PC (Full Range)"
 msgstr ""
 
 msgid "BGR"
@@ -4414,7 +4414,22 @@ msgstr ""
 msgid "Override"
 msgstr ""
 
+msgid "Select this to override all the parameters below."
+msgstr ""
+
 msgid "Color Range"
+msgstr ""
+
+msgid "FFMpeg's Color Range for the codec selected"
+msgstr ""
+
+msgid "FFMpeg's Color Space for the codec selected"
+msgstr ""
+
+msgid "FFMpeg's Color Primaries setting for the codec selected."
+msgstr ""
+
+msgid "FFMpeg's Color Transfer Function settings for the codec selected."
 msgstr ""
 
 msgid "Profile Help"
@@ -4550,7 +4565,7 @@ msgid ""
 "  metadata in the movie file to determine where \n"
 "  and how it was created.  Useful to indicate, \n"
 "  for example, if a set of 8-bit images were \n"
-"  sRGB or Rec709.\n"
+"  bt709 or some other color space.\n"
 "\n"
 "  If you don't know what those settings do, \n"
 "  DON'T MESS WITH THEM!\n"
