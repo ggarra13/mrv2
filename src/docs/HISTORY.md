@@ -49,7 +49,8 @@ v1.2.8
   in time for the video clip.
 - Fixed potential export issues when using Save Movie not exporting from the
   first frame.
-- Clarified the name of TV (Legal Range) and PC (Full Range).
+- Clarified the name of TV (Legal Range) and PC (Full Range) in Advanced
+  Options of Save Movie Options.
 - tlRender now skips video streams with **AV_DISPOSITION_ATTACHED_PIC** or
   **AV_DISPOSITION_STILL_IMAGE**.
 - Fixed Darby tlRender's BT.2020 coefficients. 
