@@ -41,6 +41,39 @@ namespace
     const char* kModule = "save";
 }
 
+
+namespace
+{
+    void waitForFirstFrame(const mrv::TimelinePlayer* player,
+                           const otime::RationalTime& startTime)
+    {
+        using namespace tl;
+        
+        bool found = false;
+                    
+        auto cacheInfoObserver =
+            observer::ValueObserver<timeline::PlayerCacheInfo>::create(
+                player->player()->observeCacheInfo(),
+                [&startTime, &found](const timeline::PlayerCacheInfo& value)
+                    {
+                        for (const auto& t : value.videoFrames)
+                        {
+                            if (startTime >= t.start_time() &&
+                                startTime <= t.end_time_exclusive())
+                            {
+                                found = true;
+                                break;
+                            }
+                        }
+                    });
+
+        while (!found)
+        {
+            Fl::check();
+        }
+    }
+}
+
 namespace mrv
 {
 
@@ -422,6 +455,8 @@ namespace mrv
 
             outputInfo.pixelType = info.video[layerId].pixelType;
 
+            player->start();
+
             if (hasVideo)
             {
 
@@ -439,6 +474,7 @@ namespace mrv
                     Fl::flush();
                     view->flush();
                     Fl::check();
+                    
                     const auto& viewportSize = view->getViewportSize();
                     math::Size2i outputSize;
                     if (viewportSize.w >= renderSize.w &&
@@ -480,6 +516,9 @@ namespace mrv
                     LOG_INFO(msg);
                 }
 
+                waitForFirstFrame(player, startTime);
+
+                    
                 outputInfo = writerPlugin->getWriteInfo(outputInfo);
                 if (image::PixelType::None == outputInfo.pixelType)
                 {
@@ -621,8 +660,6 @@ namespace mrv
             msg = tl::string::Format(_("OpenGL info: {0}"))
                       .arg(offscreenBufferOptions.colorType);
             LOG_INFO(msg);
-
-            player->start();
 
             // Turn off hud so it does not get captured by glReadPixels.
             view->setHudActive(false);

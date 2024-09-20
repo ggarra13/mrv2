@@ -215,8 +215,8 @@ v->hide();}
         callback {int value = o->value();
 
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Override", value);}
-        xywh {129 20 78 22} down_box DOWN_BOX
+settings->setValue("SaveMovie/Override", value);} selected
+        tooltip {Select this to override all the parameters below.} xywh {129 20 78 22} down_box DOWN_BOX
       }
       Fl_Choice ColorRange {
         label {Color Range}
@@ -224,14 +224,14 @@ settings->setValue("SaveMovie/Override", value);}
 
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveMovie/Color Range", value);}
-        tooltip {FFMpeg's Pixel Format for the codec selected} xywh {130 60 170 29} down_box BORDER_BOX
+        tooltip {FFMpeg's Color Range for the codec selected} xywh {130 60 170 29} down_box BORDER_BOX
       } {
         MenuItem {} {
-          label TV
+          label {TV (Legal Ramge)}
           xywh {0 0 100 20}
         }
         MenuItem {} {
-          label PC
+          label {PC (Full Range)}
           xywh {10 10 100 20}
         }
       }
@@ -241,7 +241,7 @@ settings->setValue("SaveMovie/Color Range", value);}
 
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveMovie/Color Space", value);}
-        tooltip {FFMpeg's Pixel Format for the codec selected} xywh {129 102 170 29} down_box BORDER_BOX
+        tooltip {FFMpeg's Color Space for the codec selected} xywh {129 102 170 29} down_box BORDER_BOX
       } {
         MenuItem {} {
           label BGR
@@ -282,7 +282,7 @@ settings->setValue("SaveMovie/Color Space", value);}
 
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveMovie/Color Primaries", value);}
-        tooltip {FFMpeg's Preset setting for the codec selected.} xywh {130 146 170 29} down_box BORDER_BOX
+        tooltip {FFMpeg's Color Primaries setting for the codec selected.} xywh {130 146 170 29} down_box BORDER_BOX
       } {
         MenuItem {} {
           label bt709
@@ -339,8 +339,8 @@ settings->setValue("SaveMovie/Color Primaries", value);}
         callback {int value = o->value();
 
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Color TRC", value);}
-        tooltip {FFMpeg's Profile settings.} xywh {129 190 170 29} down_box BORDER_BOX
+settings->setValue("SaveMovie/Color TRC", value);} open
+        tooltip {FFMpeg's Color Transfer Function settings for the codec selected.} xywh {129 190 170 29} down_box BORDER_BOX
       } {
         MenuItem {} {
           label bt709
@@ -411,7 +411,7 @@ settings->setValue("SaveMovie/Color TRC", value);}
           xywh {160 160 100 20}
         }
       }
-      Fl_Group {} {open
+      Fl_Group {} {
         xywh {85 242 244 29}
       } {
         Fl_Button {} {
@@ -577,7 +577,8 @@ options.
 )"));
 uiHelpWindow->show();} {}
   }
-  Function {help_advanced_settings_cb()} {} {
+  Function {help_advanced_settings_cb()} {open
+  } {
     code {uiHelpWindow->label(_("Advanced Settings Help"));
 auto buffer = uiHelp->buffer();
 buffer->text(_(R"(
@@ -586,7 +587,7 @@ The Advanced Settings allows you store
 metadata in the movie file to determine where 
 and how it was created.  Useful to indicate, 
 for example, if a set of 8-bit images were 
-sRGB or Rec709.
+bt709 or some other color space.
 
 If you don't know what those settings do, 
 DON'T MESS WITH THEM!
@@ -902,8 +903,7 @@ if (!settings->hasValue("SaveMovie/Color TRC"))
    value = o->find_index("iec61966-2-1");
 else
    value = settings->getValue<int>("SaveMovie/Color TRC");
-o->value(value);} {selected
-    }
+o->value(value);} {}
   }
   Function {add_audio_codecs(Fl_Choice* o)} {} {
     code {auto entries = tl::ffmpeg::getAudioCodecLabels();

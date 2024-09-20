@@ -47,6 +47,9 @@ v1.2.8
   in time for the video clip.
 - Added Edit/Audio Clip/Remove.  It allows removing audio clip(s) at the point
   in time for the video clip.
+- Fixed potential export issues when using Save Movie not exporting from the
+  first frame.
+- Clarified the name of TV (Legal Range) and PC (Full Range).
   
 
 
