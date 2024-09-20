@@ -52,6 +52,7 @@ v1.2.8
 - Clarified the name of TV (Legal Range) and PC (Full Range).
 - tlRender now skips video streams with **AV_DISPOSITION_ATTACHED_PIC** or
   **AV_DISPOSITION_STILL_IMAGE**.
+- Fixed Darby tlRender's BT.2020 coefficients. 
 
 
 v1.2.7
