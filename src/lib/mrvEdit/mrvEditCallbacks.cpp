@@ -91,7 +91,7 @@ namespace mrv
         std::vector<Composition*> getTracks(TimelinePlayer* player)
         {
             std::vector<Composition*> out;
-            
+
             otio::ErrorStatus errorStatus;
             auto timeline = player->getTimeline();
 
@@ -563,12 +563,11 @@ namespace mrv
                         if (videoRate > 0)
                         {
                             auto range = item->trimmed_range();
-                            auto start = 
-                                range.start_time().
-                                rescaled_to(videoRate).round();
-                            auto duration = 
-                                range.duration().
-                                rescaled_to(videoRate).round();
+                            auto start = range.start_time()
+                                             .rescaled_to(videoRate)
+                                             .round();
+                            auto duration =
+                                range.duration().rescaled_to(videoRate).round();
                             range = TimeRange(start, duration);
                             item->set_source_range(range);
                         }
@@ -589,10 +588,12 @@ namespace mrv
                         if (sampleRate > 0)
                         {
                             auto range = item->trimmed_range();
-                            auto start = range.start_time().
-                                         rescaled_to(sampleRate).round();
-                            auto duration = range.duration().
-                                            rescaled_to(sampleRate).round();
+                            auto start = range.start_time()
+                                             .rescaled_to(sampleRate)
+                                             .round();
+                            auto duration = range.duration()
+                                                .rescaled_to(sampleRate)
+                                                .round();
                             range = TimeRange(start, duration);
                             duration = duration.rescaled_to(videoRate);
                             item->set_source_range(range);
@@ -735,7 +736,6 @@ namespace mrv
 
     } // anonymous namespace
 
-
     std::string otioFilename(ViewerUI* ui)
     {
         auto out = _otioFilename(ui);
@@ -743,7 +743,6 @@ namespace mrv
         return out;
     }
 
-    
     file::Path getRelativePath(const file::Path& path, const fs::path& fileName)
     {
         fs::path filePath = path.get();
@@ -1226,10 +1225,8 @@ namespace mrv
         if (!timeline)
             return;
 
-                
         tl::file::Path audioPath(audioFile);
 
-                
         // Find first video clip at current time.
         int clipIndex = -1;
         otio::ErrorStatus errorStatus;
@@ -1262,6 +1259,7 @@ namespace mrv
         auto range = clip->trimmed_range_in_parent().value();
 
         // Check if no audio tracks.  If that's the case, add one audio track
+        bool refreshMedia = false;
         bool hasAudioTrack = false;
         for (auto composition : compositions)
         {
@@ -1292,14 +1290,15 @@ namespace mrv
             }
 
             modified = true;
+            refreshMedia = true;
+
             updateTimeline(timeline, time, ui);
             compositions = getTracks(player);
         }
 
-            
         auto context = App::app->getContext();
         auto ioSystem = context->getSystem<io::System>();
-            
+
         for (auto composition : compositions)
         {
             auto track = dynamic_cast<otio::Track*>(composition);
@@ -1328,9 +1327,8 @@ namespace mrv
                 if (audioRange == rangeInTrack)
                     continue;
             }
-            
-            int audioIndex = track->index_of_child(audioItem);
 
+            int audioIndex = track->index_of_child(audioItem);
 
             const timeline::Options options;
             if (auto read = ioSystem->read(audioPath, options.ioOptions))
@@ -1338,19 +1336,20 @@ namespace mrv
                 const auto info = read->getInfo().get();
                 if (!info.audio.isValid())
                     continue;
-                
+
                 otio::Clip* audioClip = new otio::Clip;
                 audioClip->set_source_range(info.audioTime);
                 audioClip->set_media_reference(new otio::ExternalReference(
-                                                   audioPath.get(-1, tl::file::PathType::Full),
-                                                   info.audioTime));
-                
+                    audioPath.get(-1, tl::file::PathType::Full),
+                    info.audioTime));
+
                 if (audioIndex < 0 || audioIndex >= track->children().size())
                 {
                     track->append_child(audioClip, &errorStatus);
                     if (is_error(errorStatus))
                     {
-                        LOG_DEBUG("track->append_child(audioClip) failed with:");
+                        LOG_DEBUG(
+                            "track->append_child(audioClip) failed with:");
                         LOG_ERROR(errorStatus.full_description);
                     }
                 }
@@ -1359,38 +1358,41 @@ namespace mrv
                     track->insert_child(audioIndex, audioClip, &errorStatus);
                     if (is_error(errorStatus))
                     {
-                        LOG_DEBUG("track->insert_child(audioClip) " << audioIndex << " failed with:");
+                        LOG_DEBUG(
+                            "track->insert_child(audioClip) "
+                            << audioIndex << " failed with:");
                         LOG_ERROR(errorStatus.full_description);
                     }
                 }
-                
+
                 modified = true;
                 break;
             }
         }
-            
-
 
         updateTimeline(timeline, time, ui);
 
         toOtioFile(timeline, ui);
 
         if (modified)
+        {
             edit_clear_redo(ui);
 
-        panel::redrawThumbnails();
+            if (refreshMedia)
+                refresh_media_cb(nullptr, ui);
+        }
 
         tcp->pushMessage("Edit/Audio Clip/Insert", audioFile);
     }
-    
+
     void insert_audio_clip_cb(Fl_Menu_* w, ViewerUI* ui)
-    {   
+    {
         std::string audioFile = open_audio_file(nullptr);
         if (audioFile.empty())
             return;
         edit_insert_audio_clip_cb(ui, audioFile);
     }
-    
+
     void edit_insert_audio_gap_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         auto player = ui->uiView->getTimelinePlayer();
@@ -1520,7 +1522,9 @@ namespace mrv
                 track->insert_child(audioIndex, gap, &errorStatus);
                 if (is_error(errorStatus))
                 {
-                    LOG_DEBUG("track->insert_child(gap) " << audioIndex << " failed with:");
+                    LOG_DEBUG(
+                        "track->insert_child(gap) " << audioIndex
+                                                    << " failed with:");
                     LOG_ERROR(errorStatus.full_description);
                 }
             }
@@ -1537,7 +1541,6 @@ namespace mrv
 
         tcp->pushMessage("Edit/Audio Gap/Insert", time);
     }
-    
 
     void edit_remove_audio_clip_cb(Fl_Menu_* m, ViewerUI* ui)
     {
@@ -1591,7 +1594,6 @@ namespace mrv
         tcp->pushMessage("Edit/Audio Clip/Remove", time);
     }
 
-    
     void edit_remove_audio_gap_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         auto player = ui->uiView->getTimelinePlayer();
@@ -2110,8 +2112,8 @@ namespace mrv
                     //     track->append_child(transition);
                     //     if (is_error(errorStatus))
                     //     {
-                    //         LOG_DEBUG("track->append_child(transition) failed with:");
-                    //         LOG_ERROR(errorStatus.full_description);
+                    //         LOG_DEBUG("track->append_child(transition) failed
+                    //         with:"); LOG_ERROR(errorStatus.full_description);
                     //     }
                     // }
                     // else
@@ -2264,9 +2266,9 @@ namespace mrv
                     // {
                     //     track->append_child(transition, &errorStatus);
                     //     if (is_error(errorStatus))
-                    //     { 
-                    //         LOG_DEBUG("track->append_child(transition) failed with:");
-                    //         LOG_ERROR(errorStatus.full_description);
+                    //     {
+                    //         LOG_DEBUG("track->append_child(transition) failed
+                    //         with:"); LOG_ERROR(errorStatus.full_description);
                     //     }
                     // }
                     // selse
@@ -2500,14 +2502,13 @@ namespace mrv
                 LOG_ERROR("Invalid TO track or index");
                 continue;
             }
-            if (move.fromIndex < 0 ||
-                move.fromTrack < 0 ||
+            if (move.fromIndex < 0 || move.fromTrack < 0 ||
                 move.fromTrack >= tracks.size())
             {
                 LOG_ERROR("Invalid FROM track or index");
                 continue;
             }
-        
+
             if (auto track = otio::dynamic_retainer_cast<otio::Track>(
                     tracks[move.fromTrack]))
             {
@@ -2516,8 +2517,7 @@ namespace mrv
             }
 
             int toIndex = move.toOtioIndex;
-            if (move.fromTrack == move.toTrack &&
-                move.fromIndex < move.toIndex)
+            if (move.fromTrack == move.toTrack && move.fromIndex < move.toIndex)
             {
                 --toIndex;
             }
@@ -2529,11 +2529,11 @@ namespace mrv
                 auto item = otio::dynamic_retainer_cast<otio::Item>(child);
                 if (!item)
                 {
-                    LOG_ERROR("From track=" << move.fromTrack
-                              << " item=" << move.fromIndex
-                              << " otio=" << move.fromOtioIndex
-                              << " name=" << child->name()
-                              << " not an item ");
+                    LOG_ERROR(
+                        "From track="
+                        << move.fromTrack << " item=" << move.fromIndex
+                        << " otio=" << move.fromOtioIndex
+                        << " name=" << child->name() << " not an item ");
                     continue;
                 }
 
@@ -2552,14 +2552,14 @@ namespace mrv
                     auto item = otio::dynamic_retainer_cast<otio::Item>(child);
                     if (!item)
                     {
-                        LOG_ERROR("To track=" << move.toTrack
-                                  << " item=" << toIndex
-                                  << " otio=" << move.toOtioIndex
-                                  << " name=" << child->name()
-                                  << " not an item");
+                        LOG_ERROR(
+                            "To track=" << move.toTrack << " item=" << toIndex
+                                        << " otio=" << move.toOtioIndex
+                                        << " name=" << child->name()
+                                        << " not an item");
                         continue;
                     }
-                    
+
                     auto insertRange = item->trimmed_range_in_parent().value();
 
                     otime::RationalTime insertTime;
@@ -2627,7 +2627,7 @@ namespace mrv
             {
                 if (move.toOtioIndex >= track->children().size())
                     continue;
-                
+
                 auto child = track->children()[move.toOtioIndex];
 
                 auto item = otio::dynamic_retainer_cast<otio::Item>(child);
@@ -2662,11 +2662,6 @@ namespace mrv
         // Refresh edit mode in case there are no transition tracks.
         set_edit_mode_cb(editMode, ui);
     }
-
-
-
-
-
 
     /// @todo: REFACTOR THIS PLEASE
     EditMode editMode = EditMode::kTimeline;
