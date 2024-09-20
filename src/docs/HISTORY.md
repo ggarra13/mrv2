@@ -50,7 +50,8 @@ v1.2.8
 - Fixed potential export issues when using Save Movie not exporting from the
   first frame.
 - Clarified the name of TV (Legal Range) and PC (Full Range).
-  
+- tlRender now skips video streams with **AV_DISPOSITION_ATTACHED_PIC** or
+  **AV_DISPOSITION_STILL_IMAGE**.
 
 
 v1.2.7
