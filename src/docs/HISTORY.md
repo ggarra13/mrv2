@@ -1,3 +1,8 @@
+v1.2.9
+======
+
+- Handle **AV_DISPOSITION_ATTACHED_PIC** properly.
+
 v1.2.8
 ======
 
@@ -41,7 +46,6 @@ v1.2.8
 - Made tlRender FFmpeg's write always print out the color space, color TRC
   and color primaries used when saving.
 - Preferences->Render->Video Levels had Full Range and Legal Range reversed.
-  Fixed.
 - Added first pass at Russian AI translation.
 - Added Edit/Audio Clip/Insert.  It allows inserting an audio clip at the point
   in time for the video clip.
