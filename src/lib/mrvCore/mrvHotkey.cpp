@@ -28,6 +28,7 @@ namespace mrv
     Hotkey kSaveImage(false, false, false, false, 0);
     Hotkey kSaveImageToFolder(false, false, false, false, 0);
     Hotkey kSaveSequence(true, false, false, true, 's');
+    Hotkey kSaveAnnotationsAsJson(false, false, false, false, 0);
     Hotkey kSaveOTIOEDL(false, false, false, false, 0);
     Hotkey kSavePDF(false, false, false, false, 0);
     Hotkey kSaveSession(true, false, false, false, 's');
@@ -368,6 +369,7 @@ namespace mrv
 
         HotkeyEntry(_("Save Movie or Sequence"), &kSaveSequence),
         HotkeyEntry(_("Save OTIO Timeline"), &kSaveOTIOEDL),
+        HotkeyEntry(_("Save Annotations as JSON"), &kSaveAnnotationsAsJson),
         HotkeyEntry(_("Save PDF Document"), &kSavePDF),
         HotkeyEntry(_("Save Session"), &kSaveSession),
         HotkeyEntry(_("Save Session As"), &kSaveSessionAs),

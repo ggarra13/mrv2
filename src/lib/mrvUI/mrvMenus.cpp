@@ -112,6 +112,19 @@ namespace mrv
         menu->add(
             _("File/Save/OTIO EDL Timeline"), kSaveOTIOEDL.hotkey(),
             (Fl_Callback*)save_timeline_to_disk_cb, ui, mode | FL_MENU_DIVIDER);
+
+        auto player = ui->uiView->getTimelinePlayer();
+        mode = 0;
+        if (!player || !player->hasAnnotations())
+            mode = FL_MENU_INACTIVE;
+        
+        menu->add(
+            _("File/Save/Annotations as JSON"), kSaveAnnotationsAsJson.hotkey(),
+            (Fl_Callback*)save_annotations_as_json_cb, ui, mode | FL_MENU_DIVIDER);
+
+        mode = 0;
+        if (numFiles == 0)
+            mode = FL_MENU_INACTIVE;
         menu->add(
             _("File/Save/PDF Document"), kSavePDF.hotkey(),
             (Fl_Callback*)save_pdf_cb, ui, FL_MENU_DIVIDER | mode);
@@ -789,9 +802,6 @@ namespace mrv
         }
 
         timeline::Playback playback = timeline::Playback::Stop;
-        auto player = uiView->getTimelinePlayer();
-        if (player)
-            playback = player->playback();
 
         mode = FL_MENU_RADIO;
         if (numFiles == 0)

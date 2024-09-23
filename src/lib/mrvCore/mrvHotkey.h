@@ -96,6 +96,7 @@ namespace mrv
     extern Hotkey kSaveImageToFolder;
     extern Hotkey kSaveOTIOEDL;
     extern Hotkey kSaveSequence;
+    extern Hotkey kSaveAnnotationsAsJson;
     extern Hotkey kSavePDF;
     extern Hotkey kSaveSession;
     extern Hotkey kSaveSessionAs;

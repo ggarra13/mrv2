@@ -4,6 +4,8 @@ v1.2.9
 - Handle **AV_DISPOSITION_ATTACHED_PIC** properly, instead of skipping it.
 - Added PNG decoder so attached png pictures in .wav files are decoded 
   properly.
+- Added a File->Save Annotations as JSON.  This allows you to export the
+  annotations as a .json file.
 
 v1.2.8
 ======

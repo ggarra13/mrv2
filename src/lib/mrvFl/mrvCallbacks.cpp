@@ -664,6 +664,33 @@ namespace mrv
 #endif
     }
 
+    void save_annotations_as_json_cb(Fl_Menu_* w, ViewerUI* ui)
+    {
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+
+        const auto& annotations = player->getAllAnnotations();
+        if (annotations.empty())
+            return;
+
+        const std::string& file = save_annotations();
+        if (file.empty())
+            return;
+
+        Message j;
+        std::vector< draw::Annotation > flatAnnotations;
+        for (const auto& annotation : annotations)
+        {
+            flatAnnotations.push_back(*annotation.get());
+        }
+        j["annotations"] = flatAnnotations;
+
+        std::ofstream f(file);
+        f << j;
+    }
+
+    
     void close_current_cb(Fl_Widget* w, ViewerUI* ui)
     {
         // Must come before model->close().

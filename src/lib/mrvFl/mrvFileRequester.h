@@ -85,6 +85,8 @@ namespace mrv
 
     std::string save_movie_or_sequence_file(const char* startfile = nullptr);
 
+    std::string save_annotations(const char* startdir = nullptr);
+    
     std::string save_pdf(const char* startdir = nullptr);
 
     std::string open_session_file(const char* startfile = nullptr);

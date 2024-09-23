@@ -1053,7 +1053,7 @@ namespace mrv
                 std::shared_ptr< draw::Shape > s;
                 if (annotation)
                     s = annotation->lastShape();
-
+                
                 p.lastEvent = 0;
 
                 if (!s->laser)
@@ -1070,6 +1070,7 @@ namespace mrv
                     kLaserFadeTimeout, (Fl_Timeout_Handler)laserFade_cb,
                     laserData);
             }
+            p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
             _updateCursor();
             return 1;
         }

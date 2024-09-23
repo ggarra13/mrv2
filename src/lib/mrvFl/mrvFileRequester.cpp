@@ -551,6 +551,30 @@ namespace mrv
         return file;
     }
 
+    std::string save_annotations(const char* startdir)
+    {
+        const std::string kJSON_PATTERN = _("Annotations (*.{json})");
+        const std::string kALL_PATTERN = kJSON_PATTERN;
+
+        std::string title = _("Save Annotations to JSON");
+
+        if (!startdir)
+            startdir = "";
+
+        std::string file = file_save_single_requester(
+            title.c_str(), kALL_PATTERN.c_str(), startdir, true);
+
+        if (file.empty())
+            return file;
+
+        if (file.substr(file.size() - 5, file.size()) != ".json")
+        {
+            file += ".json";
+        }
+
+        return file;
+    }
+    
     std::string save_pdf(const char* startdir)
     {
         const std::string kPDF_PATTERN = _("Acrobat PDF (*.{pdf})");
