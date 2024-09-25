@@ -13,14 +13,13 @@ def _scale_points(points, scale_x, scale_y):
     return [(x * scale_x, y * scale_y) for x, y in points]
 
 # Function to draw a circle with a specific width
-def _draw_circle(draw, center, radius, width, color):
-    outer_radius = radius
-    inner_radius = radius - width / 2
+def _draw_circle(draw, center, radius, width, fill_color, outline_color):
     
     # Draw the outer circle
     draw.ellipse(
-        (center[0] - outer_radius, center[1] - outer_radius, center[0] + outer_radius, center[1] + outer_radius),
-        outline=255,
+        (center[0] - radius, center[1] - radius, center[0] + radius, center[1] + radius),
+        fill=fill_color,
+        outline=outline_color,
         width=width
     )
     
@@ -83,6 +82,7 @@ class mrv2AnnotationsImageNode:
             for shape in annotation['shapes']:
                 shape_type = shape['type']
                 pen_size = int(shape.get('pen_size', 1.0) * scale_factor)
+                points = None
                 if shape.get('pts', None):
                     points = [(point['x'], image_height - point['y'])
                               for point in shape['pts']]
@@ -95,7 +95,7 @@ class mrv2AnnotationsImageNode:
                     draw.line(points, fill=255, width=int(pen_size))
                 elif shape_type == 'ErasePath':
                     # Draw the path (white color, width defined by 'pen_size')
-                    draw.line(points, fill=0, width=int(pen_size * 1.5))
+                    draw.line(points, fill=0, width=int(pen_size * 1.25))
                 elif shape_type == 'Arrow':
                     left_side = [points[1], points[2]]
                     draw.line(left_side, fill=255, width=int(pen_size))
@@ -103,9 +103,9 @@ class mrv2AnnotationsImageNode:
                     draw.line(right_side, fill=255, width=int(pen_size))
                     root = [points[0], points[1]]
                     draw.line(root, fill=255, width=int(pen_size))
-                elif shape_type == 'Text':
+                elif shape_type == 'GL2Text' or shape_type == "Text":
                     continue
-                elif shape_type == 'Circle':
+                elif shape_type == 'Circle' or shape_type == 'FilledCircle':
                     # Center and radius for the circle
                     center = shape['center']     # Center of the image
                     center[1] = image_height - center[1]
@@ -114,9 +114,25 @@ class mrv2AnnotationsImageNode:
                     center = _scale_points([center], scale_factor, scale_factor)[0]
             
                     # Draw the circle with the specified stroke width
-                    _draw_circle(draw, center, radius, pen_size, 255)
-        
-    
+                    fill_color = None
+                    outline_color = 255
+                    if shape_type == 'FilledCircle':
+                        fill_color = 255
+                        outline_color = None
+                    _draw_circle(draw, center, radius, pen_size, fill_color, outline_color)
+                elif shape_type == 'Rectangle' or shape_type == 'FilledRectangle':
+                    box = [(points[0][0], points[0][1]), (points[2][0], points[2][1])]
+                    if shape_type == 'Rectangle':
+                        draw.rectangle(box, fill=None, outline=255)
+                    else:
+                        draw.rectangle(box, fill=255, outline=None)
+                elif shape_type == 'Polygon':
+                    draw.polygon(points, fill=None, outline=255)
+                elif shape_type == 'FilledPolygon':
+                    draw.polygon(points, fill=255, outline=None)
+                else:
+                    logging.error(f"Unknown shape type {shape_type}")
+                    
         # Downscale to the target resolution
         mask = image.resize((image_width, image_height),
                             Image.Resampling.LANCZOS)
@@ -140,6 +156,5 @@ class mrv2AnnotationsImageNode:
             output_image = output_images[0]
             output_mask = output_masks[0]
 
-        print("Annotation Image", output_image.shape)
-        print("Annotation  Mask", output_mask.shape)
+            
         return (output_image, output_mask)

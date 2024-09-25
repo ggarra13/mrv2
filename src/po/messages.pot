@@ -5,7 +5,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.2.8\n"
+"Project-Id-Version: mrv2 v1.2.9\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -3120,6 +3120,12 @@ msgstr ""
 msgid "Save Movie or Sequence"
 msgstr ""
 
+msgid "Annotations (*.{json})"
+msgstr ""
+
+msgid "Save Annotations to JSON"
+msgstr ""
+
 msgid "Acrobat PDF (*.{pdf})"
 msgstr ""
 
@@ -3269,13 +3275,25 @@ msgstr ""
 msgid "Circle"
 msgstr ""
 
+msgid "Filled Circle"
+msgstr ""
+
 msgid "Rectangle"
+msgstr ""
+
+msgid "Filled Rectangle"
 msgstr ""
 
 msgid "Arrow"
 msgstr ""
 
 msgid "Rotate"
+msgstr ""
+
+msgid "Polygon"
+msgstr ""
+
+msgid "Filled Polygon"
 msgstr ""
 
 msgid "Trim"
@@ -3379,6 +3397,12 @@ msgid "File/Save/Frames to Folder"
 msgstr ""
 
 msgid "File/Save/OTIO EDL Timeline"
+msgstr ""
+
+msgid "File/Save/Annotations Only"
+msgstr ""
+
+msgid "File/Save/Annotations as JSON"
 msgstr ""
 
 msgid "File/Save/PDF Document"
@@ -4951,13 +4975,16 @@ msgstr ""
 msgid "TileGroup"
 msgstr ""
 
-msgid "Old Color Used.  Click on the Arrow to alternate."
+msgid "Polygon Tool."
+msgstr ""
+
+msgid "Opacity of pen stroke"
 msgstr ""
 
 msgid "Switch Colors"
 msgstr ""
 
-msgid "Opacity of pen stroke"
+msgid "Old Color Used.  Click on the Arrow to alternate."
 msgstr ""
 
 msgid "Undo Last Shape Drawn in Current Frame."
@@ -6253,6 +6280,12 @@ msgid "Save Frames To Folder"
 msgstr ""
 
 msgid "Save OTIO Timeline"
+msgstr ""
+
+msgid "Save Annotations Only"
+msgstr ""
+
+msgid "Save Annotations as JSON"
 msgstr ""
 
 msgid "Save PDF Document"

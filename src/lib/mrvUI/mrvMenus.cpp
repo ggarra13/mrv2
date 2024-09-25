@@ -119,6 +119,10 @@ namespace mrv
             mode = FL_MENU_INACTIVE;
         
         menu->add(
+            _("File/Save/Annotations Only"), kSaveAnnotationsOnly.hotkey(),
+            (Fl_Callback*)save_annotations_only_cb, ui, mode);
+        
+        menu->add(
             _("File/Save/Annotations as JSON"), kSaveAnnotationsAsJson.hotkey(),
             (Fl_Callback*)save_annotations_as_json_cb, ui, mode | FL_MENU_DIVIDER);
 

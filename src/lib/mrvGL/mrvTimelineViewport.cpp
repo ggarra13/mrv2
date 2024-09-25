@@ -215,7 +215,11 @@ namespace mrv
         p.ui->uiSelection->value(0);
         p.ui->uiDraw->value(0);
         p.ui->uiErase->value(0);
+        p.ui->uiPolygon->bind_image(mrv::load_svg("Polygon.svg"));
+        p.ui->uiPolygon->value(0);
+        p.ui->uiCircle->bind_image(mrv::load_svg("Circle.svg"));
         p.ui->uiCircle->value(0);
+        p.ui->uiRectangle->bind_image(mrv::load_svg("Rectangle.svg"));
         p.ui->uiRectangle->value(0);
         p.ui->uiArrow->value(0);
         p.ui->uiText->value(0);
@@ -255,11 +259,23 @@ namespace mrv
             break;
         case kCircle:
             p.ui->uiCircle->value(1);
+            p.ui->uiCircle->bind_image(mrv::load_svg("OutlineCircle.svg"));
             p.ui->uiStatus->copy_label(_("Circle"));
+            break;
+        case kFilledCircle:
+            p.ui->uiCircle->value(1);
+            p.ui->uiCircle->bind_image(mrv::load_svg("FilledCircle.svg"));
+            p.ui->uiStatus->copy_label(_("Filled Circle"));
             break;
         case kRectangle:
             p.ui->uiRectangle->value(1);
+            p.ui->uiRectangle->bind_image(mrv::load_svg("OutlineRectangle.svg"));
             p.ui->uiStatus->copy_label(_("Rectangle"));
+            break;
+        case kFilledRectangle:
+            p.ui->uiRectangle->value(1);
+            p.ui->uiRectangle->bind_image(mrv::load_svg("FilledRectangle.svg"));
+            p.ui->uiStatus->copy_label(_("Filled Rectangle"));
             break;
         case kArrow:
             p.ui->uiArrow->value(1);
@@ -271,6 +287,16 @@ namespace mrv
             break;
         case kRotate:
             p.ui->uiStatus->copy_label(_("Rotate"));
+            break;
+        case kPolygon:
+            p.ui->uiPolygon->value(1);
+            p.ui->uiPolygon->bind_image(mrv::load_svg("OutlinePolygon.svg"));
+            p.ui->uiStatus->copy_label(_("Polygon"));
+            break;
+        case kFilledPolygon:
+            p.ui->uiPolygon->value(1);
+            p.ui->uiPolygon->bind_image(mrv::load_svg("FilledPolygon.svg"));
+            p.ui->uiStatus->copy_label(_("Filled Polygon"));
             break;
         case kEditTrim:
             p.ui->uiStatus->copy_label(_("Trim"));
@@ -1073,11 +1099,13 @@ namespace mrv
             }
 
             Fl_Widget* widget = Fl::belowmouse();
-            if (widget != primary && (secondary && widget != secondary))
+            if (widget != primary || !(secondary && widget == secondary))
                 return;
 
             if (p.player)
+            {
                 set_cursor(FL_CURSOR_NONE);
+            }
         }
     }
 
@@ -3165,6 +3193,17 @@ namespace mrv
         }
     }
 
+    void TimelineViewport::setShowVideo(bool value) noexcept
+    {
+        TLRENDER_P();
+
+        if (value == p.showVideo)
+            return;
+        
+        p.showVideo = value;
+        redrawWindows();
+    }
+        
     void TimelineViewport::showImage(const std::shared_ptr<image::Image>& image)
     {
         TLRENDER_P();

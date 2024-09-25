@@ -481,7 +481,7 @@ namespace mrv
             file = save_movie_or_sequence_file();
         if (file.empty())
             return;
-
+        
         std::string extension = tl::file::Path(file).getExtension();
         extension = string::toLower(extension);
         if (extension.empty())
@@ -663,6 +663,190 @@ namespace mrv
         save_pdf(file, ui);
 #endif
     }
+
+    void save_annotations_only_cb(Fl_Menu_* w, ViewerUI* ui)
+    {
+        auto view = ui->uiView;
+        auto player = view->getTimelinePlayer();
+        if (!player)
+            return;
+
+        const auto& ioInfo = player->ioInfo();
+        
+        const auto& annotations = player->getAllAnnotations();
+        if (annotations.empty())
+            return;
+
+        const std::string& file = save_movie_or_sequence_file();
+        if (file.empty())
+            return;
+
+        std::string extension = tl::file::Path(file).getExtension();
+        extension = string::toLower(extension);
+        if (extension.empty())
+        {
+            LOG_ERROR(_("File extension cannot be empty."));
+            return;
+        }
+
+        if (extension == ".otio")
+        {
+            save_timeline_to_disk(file);
+            return;
+        }
+
+        mrv::SaveOptions options;
+
+#ifdef TLRENDER_FFMPEG
+        if (file::isMovie(extension) || file::isAudio(extension))
+        {
+            bool hasAudio = false;
+            if (ioInfo.audio.isValid())
+                hasAudio = true;
+
+            bool hasVideo = !ioInfo.video.empty();
+
+            if (!hasAudio && file::isAudio(extension))
+            {
+                LOG_ERROR(
+                    _("Saving audio but current clip does not have audio."));
+                return;
+            }
+
+            if (hasVideo && file::isAudio(extension))
+            {
+                LOG_ERROR(_("Saving video but with an audio extension."));
+                return;
+            }
+
+            SaveMovieOptionsUI saveOptions(hasAudio, false);
+            if (saveOptions.cancel)
+                return;
+
+            options.annotations =
+                static_cast<bool>(saveOptions.Annotations->value());
+            options.resolution =
+                static_cast<SaveResolution>(saveOptions.Resolution->value());
+
+            int value;
+            value = saveOptions.Profile->value();
+
+            const Fl_Menu_Item* item = &saveOptions.Profile->menu()[value];
+
+            // We need to iterate through all the profiles, as some profiles
+            // may be hidden from the UI due to FFmpeg being compiled as
+            // LGPL.
+            int index = 0;
+            auto entries = tl::ffmpeg::getProfileLabels();
+            for (auto entry : entries)
+            {
+                if (entry == item->label())
+                {
+                    options.ffmpegProfile =
+                        static_cast<tl::ffmpeg::Profile>(index);
+                }
+                ++index;
+            }
+
+            std::string preset;
+            value = saveOptions.Preset->value();
+            if (value >= 0)
+            {
+                const Fl_Menu_Item* item = &saveOptions.Preset->menu()[value];
+                if (item->label())
+                {
+                    auto entries = tl::ffmpeg::getProfileLabels();
+                    std::string profileName =
+                        entries[(int)options.ffmpegProfile];
+                    preset = tl::string::toLower(profileName) + "-" +
+                             item->label() + ".pst";
+                    options.ffmpegPreset = presetspath() + preset;
+                    if (!file::isReadable(options.ffmpegPreset))
+                    {
+                        options.ffmpegPreset = "";
+                    }
+                }
+            }
+
+            std::string pixelFormat;
+            value = saveOptions.PixelFormat->value();
+            if (value >= 0)
+            {
+                const Fl_Menu_Item* item =
+                    &saveOptions.PixelFormat->menu()[value];
+                if (item->label())
+                {
+                    options.ffmpegPixelFormat = item->label();
+                }
+            }
+            value = saveOptions.AudioCodec->value();
+            options.ffmpegAudioCodec =
+                static_cast<tl::ffmpeg::AudioCodec>(value);
+
+            options.ffmpegHardwareEncode = saveOptions.Hardware->value();
+            options.ffmpegOverride = saveOptions.Override->value();
+            if (options.ffmpegOverride)
+            {
+                const Fl_Menu_Item* item;
+
+                item = &saveOptions.ColorRange
+                            ->menu()[saveOptions.ColorRange->value()];
+                options.ffmpegColorRange = item->label();
+
+                item = &saveOptions.ColorSpace
+                            ->menu()[saveOptions.ColorSpace->value()];
+                options.ffmpegColorSpace = item->label();
+
+                item = &saveOptions.ColorPrimaries
+                            ->menu()[saveOptions.ColorPrimaries->value()];
+                options.ffmpegColorPrimaries = item->label();
+
+                item = &saveOptions.ColorTRC
+                            ->menu()[saveOptions.ColorTRC->value()];
+                options.ffmpegColorTRC = item->label();
+            }
+        }
+        else
+#endif
+        {
+            bool valid_for_exr = false;
+            if (extension == ".exr")
+            {
+                valid_for_exr = true;
+            }
+
+            SaveImageOptionsUI saveOptions(extension, valid_for_exr);
+            if (saveOptions.cancel)
+                return;
+
+            options.annotations =
+                static_cast<bool>(saveOptions.Annotations->value());
+
+            int value;
+
+#ifdef TLRENDER_EXR
+            value = saveOptions.PixelType->value();
+            if (value == 0)
+                options.exrPixelType = tl::image::PixelType::RGBA_F16;
+            if (value == 1)
+                options.exrPixelType = tl::image::PixelType::RGBA_F32;
+
+            value = saveOptions.Compression->value();
+            options.exrCompression = static_cast<tl::exr::Compression>(value);
+
+            options.zipCompressionLevel =
+                static_cast<int>(saveOptions.ZipCompressionLevel->value());
+            options.dwaCompressionLevel =
+                saveOptions.DWACompressionLevel->value();
+#endif
+        }
+
+        options.annotations = true;
+        options.video = false;
+            
+        save_movie(file, ui, options);
+    }
+
 
     void save_annotations_as_json_cb(Fl_Menu_* w, ViewerUI* ui)
     {

@@ -72,6 +72,9 @@ namespace mrv
         //! Show annotations
         bool showAnnotations = true;
 
+        //! Show video
+        bool showVideo = true;
+        
         short ghostPrevious = 5;
         short ghostNext = 5;
 

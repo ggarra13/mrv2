@@ -49,6 +49,7 @@ namespace mrv
     
     void save_single_frame_to_folder_cb(Fl_Menu_* w, ViewerUI* ui);
     void save_single_frame_cb(Fl_Menu_* w, ViewerUI* ui);
+    void save_annotations_only_cb(Fl_Menu_* w, ViewerUI* ui);
     void save_annotations_as_json_cb(Fl_Menu_* w, ViewerUI* ui);
     void save_movie_cb(Fl_Menu_* w, ViewerUI* ui);
     void save_pdf_cb(Fl_Menu_* w, ViewerUI* ui);

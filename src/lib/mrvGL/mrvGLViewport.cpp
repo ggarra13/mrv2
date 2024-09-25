@@ -315,7 +315,7 @@ namespace mrv
             {
                 if (p.stereo3DOptions.output == Stereo3DOutput::OpenGL &&
                     p.stereo3DOptions.input == Stereo3DInput::Image &&
-                    p.videoData.size() > 1)
+                    p.videoData.size() > 1 && p.showVideo)
                 {
                     _drawStereoOpenGL();
                 }
@@ -329,48 +329,51 @@ namespace mrv
 
                     gl.render->begin(renderSize, renderOptions);
 
-                    int screen = this->screen_num();
-                    if (screen >= 0 && !p.monitorOCIOOptions.empty() &&
-                        screen < p.monitorOCIOOptions.size())
-                    {   
-                        timeline::OCIOOptions o = p.ocioOptions;
-                        o.display = p.monitorOCIOOptions[screen].display;
-                        o.view = p.monitorOCIOOptions[screen].view;
-                        gl.render->setOCIOOptions(o);
-
-                        _updateMonitorDisplayView(screen, o);
-                    }
-                    else
+                    if (p.showVideo)
                     {
-                        gl.render->setOCIOOptions(p.ocioOptions);
-                        _updateMonitorDisplayView(screen, p.ocioOptions);
-                    }
-                    
-                    gl.render->setLUTOptions(p.lutOptions);
-                    if (p.missingFrame &&
-                        p.missingFrameType != MissingFrameType::kBlackFrame)
-                    {
-                        _drawMissingFrame(renderSize);
-                    }
-                    else
-                    {
-                        if (p.stereo3DOptions.input == Stereo3DInput::Image &&
-                            p.videoData.size() > 1)
-                        {
-                            _drawStereo3D();
+                        int screen = this->screen_num();
+                        if (screen >= 0 && !p.monitorOCIOOptions.empty() &&
+                            screen < p.monitorOCIOOptions.size())
+                        {   
+                            timeline::OCIOOptions o = p.ocioOptions;
+                            o.display = p.monitorOCIOOptions[screen].display;
+                            o.view = p.monitorOCIOOptions[screen].view;
+                            gl.render->setOCIOOptions(o);
+                            
+                            _updateMonitorDisplayView(screen, o);
                         }
                         else
                         {
-                            gl.render->drawVideo(
-                                p.videoData,
-                                timeline::getBoxes(
-                                    p.compareOptions.mode, p.videoData),
-                                p.imageOptions, p.displayOptions,
-                                p.compareOptions, p.backgroundOptions);
+                            gl.render->setOCIOOptions(p.ocioOptions);
+                            _updateMonitorDisplayView(screen, p.ocioOptions);
                         }
+                    
+                        gl.render->setLUTOptions(p.lutOptions);
+                        if (p.missingFrame &&
+                            p.missingFrameType != MissingFrameType::kBlackFrame)
+                        {
+                            _drawMissingFrame(renderSize);
+                        }
+                        else
+                        {
+                            if (p.stereo3DOptions.input == Stereo3DInput::Image &&
+                                p.videoData.size() > 1)
+                            {
+                                _drawStereo3D();
+                            }
+                            else
+                            {
+                                gl.render->drawVideo(
+                                    p.videoData,
+                                    timeline::getBoxes(
+                                        p.compareOptions.mode, p.videoData),
+                                    p.imageOptions, p.displayOptions,
+                                    p.compareOptions, p.backgroundOptions);
+                            }
+                        }
+                        _drawOverlays(renderSize);
+                        gl.render->end();
                     }
-                    _drawOverlays(renderSize);
-                    gl.render->end();
                 }
             }
         }
@@ -1079,9 +1082,19 @@ namespace mrv
             auto s = dynamic_cast< GLArrowShape* >(shape);
             value = *s;
         }
+        else if (dynamic_cast< GLFilledRectangleShape* >(shape))
+        {
+            auto s = dynamic_cast< GLFilledRectangleShape* >(shape);
+            value = *s;
+        }
         else if (dynamic_cast< GLRectangleShape* >(shape))
         {
             auto s = dynamic_cast< GLRectangleShape* >(shape);
+            value = *s;
+        }
+        else if (dynamic_cast< GLFilledCircleShape* >(shape))
+        {
+            auto s = dynamic_cast< GLFilledCircleShape* >(shape);
             value = *s;
         }
         else if (dynamic_cast< GLCircleShape* >(shape))
@@ -1105,6 +1118,16 @@ namespace mrv
         else if (dynamic_cast< draw::NoteShape* >(shape))
         {
             auto s = dynamic_cast< draw::NoteShape* >(shape);
+            value = *s;
+        }
+        else if (dynamic_cast< GLFilledPolygonShape* >(shape))
+        {
+            auto s = dynamic_cast< GLFilledPolygonShape* >(shape);
+            value = *s;
+        }
+        else if (dynamic_cast< GLPolygonShape* >(shape))
+        {
+            auto s = dynamic_cast< GLPolygonShape* >(shape);
             value = *s;
         }
         else if (dynamic_cast< GLErasePathShape* >(shape))

@@ -2,10 +2,13 @@ v1.2.9
 ======
 
 - Handle **AV_DISPOSITION_ATTACHED_PIC** properly, instead of skipping it.
-- Added PNG decoder so attached png pictures in .wav files are decoded 
-  properly.
-- Added a File->Save Annotations as JSON.  This allows you to export the
-  annotations as a .json file.
+- Added PNG decoder so attached png pictures in .wav files are decoded properly.
+- Added a File->Save Annotations Only.  This allows you to export the annotations as a movie or file sequence.
+- Added a File->Save Annotations as JSON.  This allows you to export the annotations as a .json file.
+- Fixed a crashing bug when drawing freehand.
+- Fixed disappearing cursor when selecting a drawing tool.
+- Added polygon drawing to the drawing tools.
+- Polygon, Circle and Rectangle have two modes (outline or filled now). You select the mode by clicking on each triangle edge of the button.
 
 v1.2.8
 ======

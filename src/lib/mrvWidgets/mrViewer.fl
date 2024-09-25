@@ -16,94 +16,73 @@ decl {\#include "mrvCore/mrvColorSpaces.h"} {public global
 decl {\#include "mrvCore/mrvI8N.h"} {public global
 }
 
-decl {\#include "mrvWidgets/mrvAudioButton.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvButton.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvDockGroup.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvFPSInput.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvMainWindow.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvMenuBar.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvVolumeSlider.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvResizableBar.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvSecondaryWindow.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvSlider.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvStateButton.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvStatusBar.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvTile.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvTimecode.h"} {public global
+decl {\#include "mrvCore/mrvMath.h"} {private local
 }
 
 decl {\#include "mrvWidgets/mrvTimelineGroup.h"} {public global
 }
 
-decl {\#include "mrvFl/mrvLanguages.h"} {public global
+decl {\#include "mrvWidgets/mrvTimecode.h"} {public global
 }
 
-decl {\#include "mrvFl/mrvCallbacks.h"} {public global
+decl {\#include "mrvWidgets/mrvTile.h"} {public global
 }
 
-decl {\#include "mrvFl/mrvPreferences.h"} {public global
+decl {\#include "mrvWidgets/mrvStatusBar.h"} {public global
 }
 
-decl {\#include "mrvUI/mrvUtil.h"} {public global
+decl {\#include "mrvWidgets/mrvStateButton.h"} {public global
 }
 
-decl {\#include "mrvGL/mrvGLViewport.h"} {public global
+decl {\#include "mrvWidgets/mrvSlider.h"} {public global
+}
+
+decl {\#include "mrvWidgets/mrvSecondaryWindow.h"} {public global
+}
+
+decl {\#include "mrvWidgets/mrvResizableBar.h"} {public global
+}
+
+decl {\#include "mrvWidgets/mrvVolumeSlider.h"} {public global
+}
+
+decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public global
+}
+
+decl {\#include "mrvWidgets/mrvMenuBar.h"} {public global
+}
+
+decl {\#include "mrvWidgets/mrvMainWindow.h"} {public global
+}
+
+decl {\#include "mrvWidgets/mrvFPSInput.h"} {public global
+}
+
+decl {\#include "mrvWidgets/mrvDockGroup.h"} {public global
+}
+
+decl {\#include "mrvWidgets/mrvButton.h"} {selected public global
+}
+
+decl {\#include "mrvWidgets/mrvAudioButton.h"} {public global
 }
 
 decl {\#include "mrvGL/mrvTimelineWidget.h"} {public global
 }
 
+decl {\#include "mrvGL/mrvGLViewport.h"} {public global
+}
+
 decl {\#include "mrvPanels/mrvPanelsCallbacks.h"} {public global
 }
 
-decl {\#include "mrvApp/mrvSettingsObject.h"} {private local
+decl {\#include "mrvFl/mrvPreferences.h"} {public global
 }
 
-decl {\#include "mrvApp/mrvApp.h"} {public global
+decl {\#include "mrvFl/mrvCallbacks.h"} {public global
 }
 
-decl {\#include "mrvAboutUI.h"} {public global
-}
-
-decl {\#include "mrvHotkeyUI.h"} {private local
-}
-
-decl {\#include "mrvPreferencesUI.h"} {public global
-}
-
-decl {class HotkeyUI;} {public global
-}
-
-decl {class AboutUI;} {public global
+decl {\#include "mrvFl/mrvLanguages.h"} {public global
 }
 
 widget_class PixelToolBarClass {
@@ -412,7 +391,31 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
   }
 }
 
-widget_class TimelineClass {selected
+decl {\#include "mrvApp/mrvSettingsObject.h"} {private local
+}
+
+decl {\#include "mrvUI/mrvUtil.h"} {public global
+}
+
+decl {\#include "mrvApp/mrvApp.h"} {public global
+}
+
+decl {\#include "mrvAboutUI.h"} {public global
+}
+
+decl {\#include "mrvHotkeyUI.h"} {private local
+}
+
+decl {\#include "mrvPreferencesUI.h"} {public global
+}
+
+decl {class HotkeyUI;} {public global
+}
+
+decl {class AboutUI;} {public global
+}
+
+widget_class TimelineClass {
   xywh {56 69 933 47} box NO_BOX resizable
   class Fl_Double_Window visible
 } {
@@ -816,7 +819,7 @@ if (reason == FL_REASON_CLOSED)
         xywh {0 0 933 602} box FLAT_BOX resizable fixed_size_tuples {5  0 24  1 29  3 29  4 30  5 25 }
       } {
         Fl_Group uiMenuGroup {
-          label MenuBar open
+          label MenuBar
           xywh {0 0 933 24} box FLAT_BOX labeltype NO_LABEL
         } {
           Fl_Group {} {open
@@ -1066,27 +1069,27 @@ Value is:  pow( 2, 1/x );} xywh {796 24 137 29} type {Horz Knob} labelsize 10 ma
           }
         }
         Fl_Tile uiTileGroup {
-          label TileGroup
+          label TileGroup open
           xywh {0 53 933 465} labeltype NO_LABEL
           code0 {;}
           class {mrv::Tile}
         } {
           Fl_Box uiTimelineLimit {
-            xywh {0 80 933 408} labeltype NO_LABEL hide resizable
+            xywh {0 80 933 408} labeltype NO_LABEL hide
           }
           Fl_Pack uiViewGroup {open
-            xywh {0 53 933 435} type HORIZONTAL box FLAT_BOX
+            xywh {0 53 933 434} type HORIZONTAL box FLAT_BOX resizable
             code0 {o->fixed( uiToolsGroup, uiToolsGroup->w() );}
             code1 {uiMain->workspace = uiViewGroup;}
             class Fl_Flex
           } {
-            Fl_Group uiToolsGroup {
-              xywh {0 53 42 435} box FLAT_BOX
+            Fl_Group uiToolsGroup {open
+              xywh {0 53 44 434} box FLAT_BOX
             } {
               Fl_Button uiScrub {
                 user_data this user_data_type {ViewerUI*}
                 callback {uiView->setActionMode( mrv::ActionMode::kScrub );}
-                tooltip {Scrubbing Tool} image {../../icons/Scrub.svg} compress_image 1 xywh {2 53 40 35} down_box DOWN_BOX value 1 selection_color 95
+                tooltip {Scrubbing Tool} image {../../icons/Scrub.svg} compress_image 1 xywh {2 53 40 33} down_box DOWN_BOX value 1 selection_color 95
                 class {mrv::Button}
               }
               Fl_Button uiSelection {
@@ -1098,7 +1101,7 @@ if (Fl::event_clicks() >= 1)
    mrv::panel::color_area_panel_cb( nullptr, v);
    Fl::event_clicks(0);
 }}
-                tooltip {Area Select Tool} image {../../icons/Selection.svg} compress_image 1 xywh {2 88 40 35} down_box DOWN_BOX selection_color 95
+                tooltip {Area Select Tool} image {../../icons/Selection.svg} compress_image 1 xywh {2 86 40 33} down_box DOWN_BOX selection_color 95
                 class {mrv::Button}
               }
               Fl_Button uiDraw {
@@ -1110,7 +1113,7 @@ if (Fl::event_clicks() >= 1)
    mrv::panel::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
 }}
-                tooltip {Freehand Drawing Tool} image {../../icons/Draw.svg} compress_image 1 xywh {2 123 40 35} down_box DOWN_BOX selection_color 95
+                tooltip {Freehand Drawing Tool} image {../../icons/Draw.svg} compress_image 1 xywh {2 119 40 33} down_box DOWN_BOX selection_color 95
                 class {mrv::Button}
               }
               Fl_Button uiErase {
@@ -1122,43 +1125,34 @@ if (Fl::event_clicks() >= 1)
    mrv::panel::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
 }}
-                tooltip {Eraser Tool} image {../../icons/Erase.svg} compress_image 1 xywh {2 158 40 35} down_box DOWN_BOX selection_color 95
+                tooltip {Eraser Tool} image {../../icons/Erase.svg} compress_image 1 xywh {2 152 40 32} down_box DOWN_BOX selection_color 95
                 class {mrv::Button}
               }
-              Fl_Button uiCircle {
+              Fl_Button uiPolygon {
                 user_data this user_data_type {ViewerUI*}
-                callback {uiView->setActionMode( mrv::ActionMode::kCircle );
-
+                callback {auto mode = mrv::ActionMode::kPolygon;
 if (Fl::event_clicks() >= 1)
 {
    mrv::panel::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
-}}
-                tooltip {Circle Tool} image {../../icons/Circle.svg} compress_image 1 xywh {2 193 40 35} down_box DOWN_BOX selection_color 95
-                class {mrv::Button}
-              }
-              Fl_Button uiRectangle {
-                user_data this user_data_type {ViewerUI*}
-                callback {uiView->setActionMode( mrv::ActionMode::kRectangle);
-
-if (Fl::event_clicks() >= 1)
+}
+else
 {
-   mrv::panel::annotations_panel_cb( nullptr, v);
-   Fl::event_clicks(0);
-}}
-                tooltip {Rectangle Tool} image {../../icons/Rectangle.svg} compress_image 1 xywh {2 228 40 35} down_box DOWN_BOX selection_color 95
-                class {mrv::Button}
-              }
-              Fl_Button uiArrow {
-                user_data this user_data_type {ViewerUI*}
-                callback {uiView->setActionMode( mrv::ActionMode::kArrow );
+  int PX = Fl::event_x();
+  int PY = Fl::event_y();
+  int X1 = o->x();
+  int Y1 = o->y();
+  int X2 = o->x() + o->w();
+  int Y2 = o->y() + o->h();
+  int ret = mrv::checkWhichTriangle(PX, PY, X1, Y1, X2, Y2);
+  if (ret == 1)
+  {
+     mode = mrv::ActionMode::kFilledPolygon;
+  }
+}
 
-if (Fl::event_clicks() >= 1)
-{
-   mrv::panel::annotations_panel_cb( nullptr, v);
-   Fl::event_clicks(0);
-}}
-                tooltip {Arrow Tool} image {../../icons/Arrow.svg} compress_image 1 xywh {2 263 40 35} down_box DOWN_BOX selection_color 95
+uiView->setActionMode( mode );}
+                tooltip {Polygon Tool.} image {../../icons/Polygon.svg} compress_image 1 xywh {2 184 40 32} down_box DOWN_BOX selection_color 95
                 class {mrv::Button}
               }
               Fl_Button uiText {
@@ -1177,74 +1171,144 @@ if (Fl::event_clicks() >= 1)
    mrv::panel::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
 }}
-                tooltip {Text Tool.   Right click to edit previously stamped text.} image {../../icons/Text.svg} compress_image 1 xywh {1 298 40 35} down_box DOWN_BOX selection_color 95 labelfont 8 labelsize 24 labelcolor 7
+                tooltip {Text Tool.   Right click to edit previously stamped text.} image {../../icons/Text.svg} compress_image 1 xywh {2 315 40 33} down_box DOWN_BOX selection_color 95 labelfont 8 labelsize 24 labelcolor 7
                 class {mrv::Button}
               }
-              Fl_Button uiPenColor {
+              Fl_Button uiArrow {
                 user_data this user_data_type {ViewerUI*}
-                callback {mrv::set_pen_color_cb( o, v );}
-                tooltip {Pick Draw Color and Alpha} xywh {5 337 20 20} box ENGRAVED_BOX color 3 selection_color 3 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
-              }
-              Fl_Button uiOldPenColor {
-                user_data this user_data_type {ViewerUI*}
-                tooltip {Old Color Used.  Click on the Arrow to alternate.} xywh {25 357 15 16} box ENGRAVED_BOX color 1 selection_color 1 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
-              }
-              Fl_Button uiFlipPenColor {
-                user_data this user_data_type {ViewerUI*}
-                callback {mrv::flip_pen_color_cb( o, v );}
-                tooltip {Switch Colors} image {../../icons/Flip.svg} compress_image 1 xywh {25 337 16 20} box NO_BOX labelfont 8 labelsize 24 align 16
+                callback {uiView->setActionMode( mrv::ActionMode::kArrow );
+
+if (Fl::event_clicks() >= 1)
+{
+   mrv::panel::annotations_panel_cb( nullptr, v);
+   Fl::event_clicks(0);
+}}
+                tooltip {Arrow Tool} image {../../icons/Arrow.svg} compress_image 1 xywh {2 282 40 33} down_box DOWN_BOX selection_color 95
                 class {mrv::Button}
               }
-              Fl_Slider uiPenOpacity {
-                callback {auto settings = app->settings();
+              Fl_Button uiRectangle {
+                user_data this user_data_type {ViewerUI*}
+                callback {auto mode = mrv::ActionMode::kRectangle;
+if (Fl::event_clicks() >= 1)
+{
+   mrv::panel::annotations_panel_cb( nullptr, v);
+   Fl::event_clicks(0);
+}
+else
+{
+  int PX = Fl::event_x();
+  int PY = Fl::event_y();
+  int X1 = o->x();
+  int Y1 = o->y();
+  int X2 = o->x() + o->w();
+  int Y2 = o->y() + o->h();
+  int ret = mrv::checkWhichTriangle(PX, PY, X1, Y1, X2, Y2);
+  if (ret == 1)
+  {
+     mode = mrv::ActionMode::kFilledRectangle;
+  }
+}
+
+uiView->setActionMode( mode );}
+                tooltip {Rectangle Tool} image {../../icons/Rectangle.svg} compress_image 1 xywh {2 249 40 33} down_box DOWN_BOX selection_color 95
+                class {mrv::Button}
+              }
+              Fl_Button uiCircle {
+                user_data this user_data_type {ViewerUI*}
+                callback {auto mode = mrv::ActionMode::kCircle;
+if (Fl::event_clicks() >= 1)
+{
+   mrv::panel::annotations_panel_cb( nullptr, v);
+   Fl::event_clicks(0);
+}
+else
+{
+  int PX = Fl::event_x();
+  int PY = Fl::event_y();
+  int X1 = o->x();
+  int Y1 = o->y();
+  int X2 = o->x() + o->w();
+  int Y2 = o->y() + o->h();
+  int ret = mrv::checkWhichTriangle(PX, PY, X1, Y1, X2, Y2);
+  if (ret == 1)
+  {
+     mode = mrv::ActionMode::kFilledCircle;
+  }
+}
+
+uiView->setActionMode( mode );}
+                tooltip {Circle Tool} image {../../icons/Circle.svg} compress_image 1 xywh {2 216 40 33} down_box DOWN_BOX selection_color 95
+                class {mrv::Button}
+              }
+              Fl_Group {} {
+                xywh {2 366 37 51}
+              } {
+                Fl_Slider uiPenOpacity {
+                  callback {auto settings = app->settings();
 int a = o->value() * 255;
 settings->setValue( mrv::kPenColorA, a);}
-                tooltip {Opacity of pen stroke} xywh {7 373 34 19} type {Horz Knob} step 0.01 value 1
+                  tooltip {Opacity of pen stroke} xywh {5 400 34 17} type {Horz Knob} step 0.01 value 1
+                }
+                Fl_Button uiFlipPenColor {
+                  user_data this user_data_type {ViewerUI*}
+                  callback {mrv::flip_pen_color_cb( o, v );}
+                  tooltip {Switch Colors} image {../../icons/Flip.svg} compress_image 1 xywh {23 366 16 19} box NO_BOX labelfont 8 labelsize 24 align 16
+                  class {mrv::Button}
+                }
+                Fl_Button uiOldPenColor {
+                  user_data this user_data_type {ViewerUI*}
+                  tooltip {Old Color Used.  Click on the Arrow to alternate.} xywh {23 385 15 15} box ENGRAVED_BOX color 1 selection_color 1 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
+                }
+                Fl_Button uiPenColor {
+                  user_data this user_data_type {ViewerUI*}
+                  callback {mrv::set_pen_color_cb( o, v );}
+                  tooltip {Pick Draw Color and Alpha} xywh {3 366 20 19} box ENGRAVED_BOX color 3 selection_color 3 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
+                }
               }
               Fl_Group {} {open
-                xywh {0 396 42 71}
+                xywh {2 421 42 66}
               } {
                 Fl_Button uiUndoDraw {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiView->undo();}
-                  tooltip {Undo Last Shape Drawn in Current Frame.} image {../../icons/Undo.svg} compress_image 1 xywh {0 396 40 35} deactivate
+                  tooltip {Undo Last Shape Drawn in Current Frame.} image {../../icons/Undo.svg} compress_image 1 xywh {2 421 40 33} deactivate
                   class {mrv::Button}
                 }
                 Fl_Button uiRedoDraw {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiView->redo();}
-                  tooltip {Redo Previous Shape Drawn in Current Frame.} image {../../icons/Redo.svg} compress_image 1 xywh {0 431 40 36} deactivate
+                  tooltip {Redo Previous Shape Drawn in Current Frame.} image {../../icons/Redo.svg} compress_image 1 xywh {2 454 40 33} deactivate
                   class {mrv::Button}
                 }
               }
             }
             Fl_Group uiView {open
-              xywh {42 53 621 435} color 56 labeltype NO_LABEL resizable
+              xywh {42 53 621 433} color 56 labeltype NO_LABEL resizable
               code0 {o->main( this );}
               class {mrv::Viewport}
             } {}
-            Fl_Group uiDockGroup {
-              xywh {663 53 270 435} box FLAT_BOX hide
+            Fl_Group uiDockGroup {open
+              xywh {663 53 270 433} box FLAT_BOX hide
               code0 {uiViewGroup->fixed( o, 270 );}
             } {
               Fl_Box uiResizableBar {
-                xywh {663 53 10 435} box ENGRAVED_BOX
+                xywh {663 53 10 433} box ENGRAVED_BOX
                 class {mrv::ResizableBar}
               }
               Fl_Group uiDock {
                 label DockGroup open
-                xywh {673 53 260 435} box FLAT_BOX labeltype NO_LABEL resizable
+                xywh {673 53 260 433} box FLAT_BOX labeltype NO_LABEL resizable
                 code0 {o->set_window( uiMain );}
                 code1 {uiMain->set_dock(o);}
                 class {mrv::DockGroup}
               } {}
             }
           }
-          Fl_Group uiTimelineGroup {
+          Fl_Group uiTimelineGroup {open
             xywh {0 488 933 30} box FLAT_BOX color 51
             class {mrv::TimelineGroup}
           } {
-            Fl_Group uiTimeline {open
+            Fl_Group uiTimeline {
               xywh {0 496 933 22} labeltype NO_LABEL resizable
               class {mrv::TimelineWidget}
             } {}
@@ -1272,7 +1336,7 @@ settings->setValue( mrv::kPenColorA, a);}
           } {}
         }
         Fl_Group uiStatusGroup {
-          label StatusBar
+          label StatusBar open
           xywh {0 577 933 25} color 0 labeltype NO_LABEL
         } {
           Fl_Group uiStatusBar {open
@@ -1283,7 +1347,7 @@ settings->setValue( mrv::kPenColorA, a);}
           } {
             Fl_Box uiStatus {
               label Scrub
-              tooltip {Current tool being used.} xywh {818 577 115 25} box ENGRAVED_BOX align 64
+              tooltip {Current tool being used.} xywh {818 577 115 25} box ENGRAVED_BOX labelsize 12 align 64
             }
           }
         }

@@ -37,7 +37,7 @@ namespace mrv
             const std::shared_ptr<timeline::IRender>&,
             const std::shared_ptr<opengl::Lines>&) = 0;
     };
-
+    
     class GLCircleShape : public GLShape
     {
     public:
@@ -54,9 +54,20 @@ namespace mrv
         double radius;
         opengl::Lines lines;
     };
-
+    
     void to_json(nlohmann::json& json, const GLCircleShape& value);
     void from_json(const nlohmann::json& json, GLCircleShape& value);
+
+    class GLFilledCircleShape : public GLCircleShape
+    {
+    public:
+        void draw(
+            const std::shared_ptr<timeline::IRender>&,
+            const std::shared_ptr<opengl::Lines>&) override;
+    };
+    
+    void to_json(nlohmann::json& json, const GLFilledCircleShape& value);
+    void from_json(const nlohmann::json& json, GLFilledCircleShape& value);
 
     class GLPathShape : public draw::PathShape
     {
@@ -74,6 +85,31 @@ namespace mrv
     void to_json(nlohmann::json& json, const GLPathShape& value);
     void from_json(const nlohmann::json& json, GLPathShape& value);
 
+
+    class GLPolygonShape : public GLPathShape
+    {
+    public:
+        GLPolygonShape() :
+            GLPathShape() {};
+        virtual ~GLPolygonShape() {};
+
+        void draw(
+            const std::shared_ptr<timeline::IRender>&,
+            const std::shared_ptr<opengl::Lines>&) override;
+
+        opengl::Lines lines;
+    };
+
+    class GLFilledPolygonShape : public GLPolygonShape
+    {
+    public:
+        void draw(const std::shared_ptr<timeline::IRender>&,
+                  const std::shared_ptr<opengl::Lines>&) override;
+    };
+    
+    void to_json(nlohmann::json& json, const GLFilledPolygonShape& value);
+    void from_json(const nlohmann::json& json, GLFilledPolygonShape& value);
+    
     class GLArrowShape : public GLPathShape
     {
     public:
@@ -102,6 +138,17 @@ namespace mrv
 
     void to_json(nlohmann::json& json, const GLRectangleShape& value);
     void from_json(const nlohmann::json& json, GLRectangleShape& value);
+    
+    class GLFilledRectangleShape : public GLRectangleShape
+    {
+    public:
+        void draw(
+            const std::shared_ptr<timeline::IRender>&,
+            const std::shared_ptr<opengl::Lines>&) override;
+    };
+    
+    void to_json(nlohmann::json& json, const GLFilledRectangleShape& value);
+    void from_json(const nlohmann::json& json, GLFilledRectangleShape& value);
 
     class GLTextShape : public GLPathShape
     {

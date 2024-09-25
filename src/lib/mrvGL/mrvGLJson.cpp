@@ -38,9 +38,33 @@ namespace mrv
                 json.get_to(*shape.get());
                 return shape;
             }
+            else if (type == "FilledCircle")
+            {
+                auto shape = std::make_shared< GLFilledCircleShape >();
+                json.get_to(*shape.get());
+                return shape;
+            }
+            else if (type == "Polygon")
+            {
+                auto shape = std::make_shared< GLPolygonShape >();
+                json.get_to(*shape.get());
+                return shape;
+            }
+            else if (type == "FilledPolygon")
+            {
+                auto shape = std::make_shared< GLFilledPolygonShape >();
+                json.get_to(*shape.get());
+                return shape;
+            }
             else if (type == "Rectangle")
             {
                 auto shape = std::make_shared< GLRectangleShape >();
+                json.get_to(*shape.get());
+                return shape;
+            }
+            else if (type == "FilledRectangle")
+            {
+                auto shape = std::make_shared< GLFilledRectangleShape >();
                 json.get_to(*shape.get());
                 return shape;
             }
@@ -74,7 +98,13 @@ namespace mrv
             Message msg;
             auto ptr = shape.get();
 
-            if (dynamic_cast< GLRectangleShape* >(ptr))
+            if (dynamic_cast< GLFilledRectangleShape* >(ptr))
+            {
+                GLFilledRectangleShape* p =
+                    reinterpret_cast< GLFilledRectangleShape* >(ptr);
+                msg = *p;
+            }
+            else if (dynamic_cast< GLRectangleShape* >(ptr))
             {
                 GLRectangleShape* p =
                     reinterpret_cast< GLRectangleShape* >(ptr);
@@ -87,9 +117,26 @@ namespace mrv
                 msg = *p;
             }
 #endif
+            else if (dynamic_cast< GLFilledCircleShape* >(ptr))
+            {
+                GLFilledCircleShape* p =
+                    reinterpret_cast< GLFilledCircleShape* >(ptr);
+                msg = *p;
+            }
             else if (dynamic_cast< GLCircleShape* >(ptr))
             {
                 GLCircleShape* p = reinterpret_cast< GLCircleShape* >(ptr);
+                msg = *p;
+            }
+            else if (dynamic_cast< GLFilledPolygonShape* >(ptr))
+            {
+                GLFilledPolygonShape* p =
+                    reinterpret_cast< GLFilledPolygonShape* >(ptr);
+                msg = *p;
+            }
+            else if (dynamic_cast< GLPolygonShape* >(ptr))
+            {
+                GLPolygonShape* p = reinterpret_cast< GLPolygonShape* >(ptr);
                 msg = *p;
             }
             else if (dynamic_cast< GLArrowShape* >(ptr))

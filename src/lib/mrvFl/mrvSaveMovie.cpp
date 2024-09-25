@@ -376,7 +376,7 @@ namespace mrv
             const SaveResolution resolution = options.resolution;
             if (hasVideo)
             {
-                auto compareSize = ui->uiView->getRenderSize();
+                auto compareSize = view->getRenderSize();
                 if (!options.annotations ||
                     compareSize.w == 0 || compareSize.h == 0)
                 {
@@ -387,7 +387,7 @@ namespace mrv
                     renderSize.w = compareSize.w;
                     renderSize.h = compareSize.h;
                 }
-                auto rotation = ui->uiView->getRotation();
+                auto rotation = view->getRotation();
                 if (options.annotations && rotationSign(rotation) != 0)
                 {
                     size_t tmp = renderSize.w;
@@ -417,7 +417,7 @@ namespace mrv
             }
 
 
-            bool interactive = ui->uiView->visible_r();
+            bool interactive = view->visible_r();
             std::shared_ptr<gl::GLFWWindow> window;
             if (!interactive)
             {
@@ -467,6 +467,7 @@ namespace mrv
 
                 if (options.annotations)
                 {
+                    view->setShowVideo(options.video);
                     view->setActionMode(ActionMode::kScrub);
                     view->setPresentationMode(true);
                     view->redraw();
@@ -852,7 +853,7 @@ namespace mrv
                                     {timeline::ImageOptions()},
                                     {timeline::DisplayOptions()},
                                     timeline::CompareOptions(),
-                                    ui->uiView->getBackgroundOptions());
+                                    view->getBackgroundOptions());
                                 render->end();
                             }
 
@@ -907,6 +908,7 @@ namespace mrv
         view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
         view->setHudActive(hud);
         view->setPresentationMode(presentation);
+        view->setShowVideo(true);
         player->seek(currentTime);
         player->setMute(mute);
         ui->uiTimeline->valid(0); // needed

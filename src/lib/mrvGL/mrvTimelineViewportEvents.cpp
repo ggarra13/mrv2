@@ -234,6 +234,7 @@ namespace mrv
                     scrub();
                     return;
                 case ActionMode::kRectangle:
+                case ActionMode::kFilledRectangle:
                 {
                     auto shape = dynamic_cast< GLRectangleShape* >(s.get());
                     if (!shape)
@@ -243,6 +244,20 @@ namespace mrv
                     shape->pts[2].x = pnt.x;
                     shape->pts[2].y = pnt.y;
                     shape->pts[3].y = pnt.y;
+                    _updateAnnotationShape();
+                    redrawWindows();
+                    return;
+                }
+                case ActionMode::kPolygon:
+                case ActionMode::kFilledPolygon:
+                {
+                    auto shape = dynamic_cast< GLPathShape* >(s.get());
+                    if (!shape)
+                        return;
+
+                    auto& lastPoint = shape->pts.back();
+                    lastPoint = pnt;
+
                     _updateAnnotationShape();
                     redrawWindows();
                     return;
@@ -302,6 +317,7 @@ namespace mrv
                     redrawWindows();
                     return;
                 }
+                case ActionMode::kFilledCircle:
                 case ActionMode::kCircle:
                 {
                     auto shape = dynamic_cast< GLCircleShape* >(s.get());
@@ -582,6 +598,81 @@ namespace mrv
                     _createAnnotationShape(laser);
                     break;
                 }
+                case ActionMode::kFilledPolygon:
+                {
+                    std::shared_ptr<GLFilledPolygonShape> shape;
+                    if (p.lastEvent != FL_DRAG)
+                    {
+                        shape = std::make_shared< GLFilledPolygonShape >();
+                        shape->pen_size = pen_size;
+                        shape->soft = false;
+                        shape->color = color;
+                        shape->laser = laser;
+                        shape->pts.push_back(pnt);
+                        p.lastEvent = FL_PUSH;
+                    }
+                    else
+                    {
+                        auto s = annotation->lastShape();
+                        shape =
+                            std::dynamic_pointer_cast<GLFilledPolygonShape>(s);
+                        if (!shape)
+                            return;
+                        shape->pts.push_back(pnt);
+                    }
+                    
+                    if (p.lastEvent == FL_PUSH)
+                    {
+                        annotation->push_back(shape);
+                        _createAnnotationShape(false);
+                        p.lastEvent = FL_DRAG;
+                    }
+                    break;
+                }
+                case ActionMode::kPolygon:
+                {
+                    std::shared_ptr<GLPolygonShape> shape;
+                    if (p.lastEvent != FL_DRAG)
+                    {
+                        shape = std::make_shared< GLPolygonShape >();
+                        shape->pen_size = pen_size;
+                        shape->soft = false;
+                        shape->color = color;
+                        shape->laser = laser;
+                        p.lastEvent = FL_PUSH;
+                    }
+                    else
+                    {
+                        auto s = annotation->lastShape();
+                        shape = std::dynamic_pointer_cast<GLPolygonShape>(s);
+                        if (!shape)
+                            return;
+                    }
+                    
+                    shape->pts.push_back(pnt);
+                        
+                    if (p.lastEvent == FL_PUSH)
+                    {
+                        annotation->push_back(shape);
+                        _createAnnotationShape(false);
+                        p.lastEvent = FL_DRAG;
+                    }
+                    break;
+                }
+                case ActionMode::kFilledCircle:
+                {
+                    auto shape = std::make_shared< GLFilledCircleShape >();
+                    shape->pen_size = pen_size;
+                    shape->soft = softBrush;
+                    shape->color = color;
+                    shape->laser = laser;
+                    shape->center = _getRasterf();
+                    shape->radius = 0;
+
+                    annotation->push_back(shape);
+                    _createAnnotationShape(laser);
+                    break;
+                }
                 case ActionMode::kCircle:
                 {
                     auto shape = std::make_shared< GLCircleShape >();
@@ -592,6 +683,22 @@ namespace mrv
                     shape->center = _getRasterf();
                     shape->radius = 0;
 
+                    annotation->push_back(shape);
+                    _createAnnotationShape(laser);
+                    break;
+                }
+                case ActionMode::kFilledRectangle:
+                {
+                    auto shape = std::make_shared< GLFilledRectangleShape >();
+                    shape->pen_size = pen_size;
+                    shape->soft = softBrush;
+                    shape->color = color;
+                    shape->laser = laser;
+                    shape->pts.push_back(pnt);
+                    shape->pts.push_back(pnt);
+                    shape->pts.push_back(pnt);
+                    shape->pts.push_back(pnt);
+                    shape->pts.push_back(pnt);
                     annotation->push_back(shape);
                     _createAnnotationShape(laser);
                     break;
@@ -999,6 +1106,10 @@ namespace mrv
         }
         case FL_RELEASE:
         {
+            if (p.actionMode == ActionMode::kPolygon ||
+                p.actionMode == ActionMode::kFilledPolygon)
+                return 1;
+            
             if (p.actionMode == ActionMode::kScrub ||
                 p.actionMode == ActionMode::kRotate)
             {

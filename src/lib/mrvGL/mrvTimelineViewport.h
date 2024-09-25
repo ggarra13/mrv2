@@ -63,7 +63,7 @@ namespace mrv
 
         //! Change cursor to another.
         void set_cursor(Fl_Cursor x) const noexcept;
-
+        
         //! Set the action mode.
         void setActionMode(const ActionMode& mode) noexcept;
 
@@ -312,6 +312,9 @@ namespace mrv
         //! Show annotations toggle
         void setShowAnnotations(const bool value) noexcept;
 
+        //! Set whether to render the video or not (annotations are still rendered).
+        void setShowVideo(bool value) noexcept;
+        
         //! Laser fading annotation
         void laserFade(LaserFadeData*);
 
