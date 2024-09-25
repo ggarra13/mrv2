@@ -7,11 +7,10 @@ include( ExternalProject )
 # The cutting EDGE!
 #set( FLTK_GIT_TAG master )
 
-# Adds label_image_spacing().
-#set(FLTK_GIT_TAG 05c91b287f16d87f335a8cc375074d712cb8511a)
+# Wayland fix. (latest stable)
+#set(FLTK_GIT_TAG 382d6b2fbdb441ef8cbbe52a7dc07032aa733188)
 
-# Wayland fix.
-set(FLTK_GIT_TAG 382d6b2fbdb441ef8cbbe52a7dc07032aa733188)
+set(FLTK_GIT_TAG a333817f4178d944685fc787bd389097e8d85aca)
 
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
     # If we are building pyFLTK compile shared

@@ -666,7 +666,8 @@ namespace mrv
 
     void save_annotations_as_json_cb(Fl_Menu_* w, ViewerUI* ui)
     {
-        auto player = ui->uiView->getTimelinePlayer();
+        auto view = ui->uiView;
+        auto player = view->getTimelinePlayer();
         if (!player)
             return;
 
@@ -679,6 +680,8 @@ namespace mrv
             return;
 
         Message j;
+        j["render_size"] = view->getRenderSize();
+        
         std::vector< draw::Annotation > flatAnnotations;
         for (const auto& annotation : annotations)
         {

@@ -107,6 +107,7 @@ class mrv2SaveEXRImage:
 
     CATEGORY = "mrv2/save"
 
+    @classmethod
     def IS_CHANGED(s, images):
         return time.time()
     
@@ -215,10 +216,10 @@ class mrv2SaveEXRImage:
     
 # NOTE: names should be globally unique
 NODE_CLASS_MAPPINGS = {
-    "mrv2SaveEXRImage": mrv2SaveEXRImage
+    "mrv2SaveEXRImage": mrv2SaveEXRImage,
 }
 
 # A dictionary that contains the friendly/humanly readable titles for the nodes
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "mrv2SaveEXRImage": "mrv2 Save EXR Node"
+  "mrv2SaveEXRImage": "mrv2 Save EXR Node",
 }
