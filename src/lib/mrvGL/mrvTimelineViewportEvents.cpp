@@ -1407,6 +1407,11 @@ namespace mrv
                 setActionMode(ActionMode::kErase);
                 return 1;
             }
+            else if (kPolygonMode.match(rawkey))
+            {
+                setActionMode(ActionMode::kPolygon);
+                return 1;
+            }
             else if (kArrowMode.match(rawkey))
             {
                 setActionMode(ActionMode::kArrow);

@@ -414,6 +414,10 @@ namespace mrv
         tooltip = _("Eraser Tool");
         tooltip += addHotkey(kEraseMode);
         ui->uiErase->copy_tooltip(tooltip.c_str());
+        
+        tooltip = _("Polygon Tool");
+        tooltip += addHotkey(kPolygonMode);
+        ui->uiPolygon->copy_tooltip(tooltip.c_str());
 
         tooltip = _("Circle Tool");
         tooltip += addHotkey(kCircleMode);

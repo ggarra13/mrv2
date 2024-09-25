@@ -232,6 +232,7 @@ namespace mrv
     //! Drawing hotkeys.
     extern Hotkey kDrawMode;
     extern Hotkey kEraseMode;
+    extern Hotkey kPolygonMode;
     extern Hotkey kCircleMode;
     extern Hotkey kArrowMode;
     extern Hotkey kRectangleMode;

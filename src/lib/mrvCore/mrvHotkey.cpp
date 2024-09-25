@@ -144,6 +144,7 @@ namespace mrv
     Hotkey kEraseMode(false, false, false, true, 'e');
     Hotkey kScrubMode(false, false, false, true, 's');
     Hotkey kAreaMode(false, false, false, true, 0);
+    Hotkey kPolygonMode(false, false, false, true, 'p');
     Hotkey kArrowMode(false, false, false, true, 'a');
     Hotkey kRectangleMode(false, false, false, true, 'r');
     Hotkey kCircleMode(false, false, false, true, 'c');
@@ -531,6 +532,7 @@ namespace mrv
         HotkeyEntry(_("Area Selection Mode"), &kAreaMode),
         HotkeyEntry(_("Draw Mode"), &kDrawMode),
         HotkeyEntry(_("Erase Mode"), &kEraseMode),
+        HotkeyEntry(_("Polygon Mode"), &kPolygonMode),
         HotkeyEntry(_("Arrow Mode"), &kArrowMode),
         HotkeyEntry(_("Rectangle Mode"), &kRectangleMode),
         HotkeyEntry(_("Circle Mode"), &kCircleMode),
