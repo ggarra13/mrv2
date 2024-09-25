@@ -5,7 +5,7 @@
    width="28"
    height="28"
    viewBox="0 0 28 28"
-   sodipodi:docname="Circle.svg"
+   sodipodi:docname="FilledCircle.svg"
    inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -22,7 +22,6 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -99,28 +98,11 @@
      inkscape:label="Image"
      id="g10">
     <ellipse
-       style="fill:none;stroke:#ffffff;stroke-width:1.9877;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+       style="fill:#ffffff;stroke:#ffffff;stroke-width:1.9877;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal;fill-opacity:1"
        id="path2348"
        cx="13.7104"
        cy="13.997366"
        rx="10.270064"
        ry="9.9091539" />
-    <path
-       style="fill:#ffffff;stroke-width:2.00034;stroke-linejoin:bevel"
-       id="path14316"
-       sodipodi:type="arc"
-       sodipodi:cx="-0.59137392"
-       sodipodi:cy="20.401461"
-       sodipodi:rx="9.416481"
-       sodipodi:ry="9.1118145"
-       sodipodi:start="6.2062465"
-       sodipodi:end="3.2162798"
-       sodipodi:arc-type="slice"
-       d="m 8.79725,19.7011 a 9.416481,9.1118145 0 0 1 -4.4667849,8.468427 9.416481,9.1118145 0 0 1 -9.8255897,0.0107 9.416481,9.1118145 0 0 1 -4.4864792,-8.458673 l 9.39022988,0.679903 z"
-       transform="matrix(0.70382787,-0.71037056,0.72789019,0.68569371,0,0)" />
-    <path
-       style="fill:#434343;fill-opacity:1;stroke:#863c3c;stroke-width:0.999992;stroke-linecap:square;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1"
-       d="M 0.94973347,27.186947 C 27.195538,0.88305133 27.195538,0.88305133 27.195538,0.88305133 v 0"
-       id="path1881" />
   </g>
 </svg>
