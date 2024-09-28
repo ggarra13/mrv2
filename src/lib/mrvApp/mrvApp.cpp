@@ -963,6 +963,14 @@ namespace mrv
         ui->uiMain->show();
         ui->uiView->take_focus();
 
+        // Fix for always on top on Linux
+        bool value = ui->uiPrefs->uiPrefsAlwaysOnTop->value();
+        int fullscreen_active = ui->uiMain->fullscreen_active();
+        if (!fullscreen_active)
+        {
+            ui->uiMain->always_on_top(value);
+        }
+
         // Open Panel Windows if not loading a session file.
         if (!p.session)
             Preferences::open_windows();

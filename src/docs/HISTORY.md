@@ -9,6 +9,9 @@ v1.2.9
 - Fixed disappearing cursor when selecting a drawing tool.
 - Added polygon drawing to the drawing tools.
 - Polygon, Circle and Rectangle have two modes (outline or filled now). You select the mode by clicking on each triangle edge of the button.
+- When saving a single frame, the file name is automatically filled on the file
+  requester to save over the same file.
+- Fixed Float on Top on start up.
 
 v1.2.8
 ======

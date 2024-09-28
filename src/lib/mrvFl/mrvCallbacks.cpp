@@ -384,7 +384,13 @@ namespace mrv
 
     void save_single_frame_renaming(Fl_Menu_* w, ViewerUI* ui, bool rename)
     {
-        const std::string& file = save_single_image();
+        auto model = ui->app->filesModel();
+        auto Afile = model->observeA()->get();
+        if (!Afile)
+            return;
+        
+        
+        const std::string& file = save_single_image(Afile->path.get().c_str());
         if (file.empty())
             return;
 

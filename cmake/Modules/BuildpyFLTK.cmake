@@ -5,7 +5,7 @@
 include(ExternalProject)
 
 set(pyFLTK_SVN_REPOSITORY "https://svn.code.sf.net/p/pyfltk/code/branches/fltk1.4")
-set(pyFLTK_SVN_REVISION 627)
+set(pyFLTK_SVN_REVISION 631)
 set(pyFLTK_SVN_REVISION_ARG -r ${pyFLTK_SVN_REVISION})
 
 if(NOT PYTHON_EXECUTABLE)

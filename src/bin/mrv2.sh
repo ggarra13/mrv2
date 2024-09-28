@@ -29,15 +29,7 @@ fi
 
 source "$dir/environment.sh"
 
-params=""
-
-for param in "$@"
-do
-  params="${params} \"${param}\""
-done
-
-
 #
 # Start up mrv2
 #
-sh -c "${dir}/bin/mrv2 $params"
+${dir}/bin/mrv2 "$@"

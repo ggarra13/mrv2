@@ -119,7 +119,7 @@
        d="m 8.79725,19.7011 a 9.416481,9.1118145 0 0 1 -4.4667849,8.468427 9.416481,9.1118145 0 0 1 -9.8255897,0.0107 9.416481,9.1118145 0 0 1 -4.4864792,-8.458673 l 9.39022988,0.679903 z"
        transform="matrix(0.70382787,-0.71037056,0.72789019,0.68569371,0,0)" />
     <path
-       style="fill:#434343;fill-opacity:1;stroke:#863c3c;stroke-width:0.999992;stroke-linecap:square;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:#434343;fill-opacity:1;stroke:#863c3c;stroke-width:2;stroke-linecap:square;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1"
        d="M 0.94973347,27.186947 C 27.195538,0.88305133 27.195538,0.88305133 27.195538,0.88305133 v 0"
        id="path1881" />
   </g>
