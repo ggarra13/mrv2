@@ -27,4 +27,4 @@ source "$dir/environment.sh"
 #
 # Start up python
 #
-${dir}/bin/python@MRV2_PYTHON_VERSION@ "$@"
+"${dir}/bin/python@MRV2_PYTHON_VERSION@" "$@"

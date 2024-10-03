@@ -291,7 +291,17 @@ if ( NOT WIN32 )
     configure_file(${CMAKE_SOURCE_DIR}/bin/python.sh.in
 	${CMAKE_INSTALL_PREFIX}/bin/python.sh @ONLY)
 
+    # Configure python.sh with python version
+    configure_file(${CMAKE_SOURCE_DIR}/bin/pip.sh.in
+	${CMAKE_INSTALL_PREFIX}/bin/pip.sh @ONLY)
+    
     file(CHMOD ${CMAKE_INSTALL_PREFIX}/bin/python.sh
+        PERMISSIONS 
+        OWNER_READ OWNER_WRITE OWNER_EXECUTE
+        GROUP_READ GROUP_EXECUTE
+        WORLD_READ WORLD_EXECUTE )
+    
+    file(CHMOD ${CMAKE_INSTALL_PREFIX}/bin/pip.sh
         PERMISSIONS 
         OWNER_READ OWNER_WRITE OWNER_EXECUTE
         GROUP_READ GROUP_EXECUTE

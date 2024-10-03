@@ -32,4 +32,4 @@ source "$dir/environment.sh"
 #
 # Start up mrv2
 #
-${dir}/bin/mrv2 "$@"
+"${dir}/bin/mrv2" "$@"

@@ -11,7 +11,9 @@ v1.2.9
 - Polygon, Circle and Rectangle have two modes (outline or filled now). You select the mode by clicking on each triangle edge of the button.
 - When saving a single frame, the file name is automatically filled on the file
   requester to save over the same file.
-- Fixed Float on Top on start up.
+- Fixed Float on Top on start up on Linux X11.
+- Added pip.sh for Unix systems to easily install pip libraries inside mrv2's 
+  python library directory.
 
 v1.2.8
 ======
