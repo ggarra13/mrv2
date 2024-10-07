@@ -236,7 +236,7 @@ include_directories( ${mrv2_INCLUDE_DIRS} )
 #
 # Install mrv2's auxiliary application directories
 #
-install( DIRECTORY colors ComfyUI icons ocio presets
+install( DIRECTORY colors icons ocio presets
     DESTINATION .
     COMPONENT applications )
 

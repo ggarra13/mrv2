@@ -61,7 +61,7 @@ decl {\#include "mrvWidgets/mrvFPSInput.h"} {public global
 decl {\#include "mrvWidgets/mrvDockGroup.h"} {public global
 }
 
-decl {\#include "mrvWidgets/mrvButton.h"} {selected public global
+decl {\#include "mrvWidgets/mrvButton.h"} {public global
 }
 
 decl {\#include "mrvWidgets/mrvAudioButton.h"} {public global
@@ -83,6 +83,24 @@ decl {\#include "mrvFl/mrvCallbacks.h"} {public global
 }
 
 decl {\#include "mrvFl/mrvLanguages.h"} {public global
+}
+
+decl {\#include "mrvApp/mrvSettingsObject.h"} {private local
+}
+
+decl {\#include "mrvUI/mrvUtil.h"} {public global
+}
+
+decl {\#include "mrvApp/mrvApp.h"} {public global
+}
+
+decl {\#include "mrvAboutUI.h"} {public global
+}
+
+decl {\#include "mrvHotkeyUI.h"} {private local
+}
+
+decl {\#include "mrvPreferencesUI.h"} {selected public global
 }
 
 widget_class PixelToolBarClass {
@@ -389,24 +407,6 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
   } {
     code {ui = x;} {}
   }
-}
-
-decl {\#include "mrvApp/mrvSettingsObject.h"} {private local
-}
-
-decl {\#include "mrvUI/mrvUtil.h"} {public global
-}
-
-decl {\#include "mrvApp/mrvApp.h"} {public global
-}
-
-decl {\#include "mrvAboutUI.h"} {public global
-}
-
-decl {\#include "mrvHotkeyUI.h"} {private local
-}
-
-decl {\#include "mrvPreferencesUI.h"} {public global
 }
 
 decl {class HotkeyUI;} {public global

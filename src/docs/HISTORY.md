@@ -14,6 +14,10 @@ v1.2.9
 - Fixed Float on Top on start up on Linux X11.
 - Added pip.sh for Unix systems to easily install pip libraries inside mrv2's 
   python library directory.
+- Moved mrv2's ComfyUI directory to its own repository at:
+	https://github.com/ggarra13/ComfyUI-mrv2
+  so that it can be listed more easily in ComfyUI's Node Manager *AND* we
+  make it more clear that that project is GPL compatible, not BSD one.
 
 v1.2.8
 ======
