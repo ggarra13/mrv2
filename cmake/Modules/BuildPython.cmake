@@ -13,6 +13,13 @@ set( Python_VERSION 3.12 )
 set( Python_TINY   3 )
 set( Python_URL https://www.python.org/ftp/python/${Python_VERSION}.${Python_TINY}/Python-${Python_VERSION}.${Python_TINY}.tar.xz )
 
+if(UNIX)
+    set(Python_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python${Python_VERSION})
+else()
+    set(Python_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python.exe )
+endif()
+
+    
 set( Python_PATCH )
 set( Python_ENV )
 set( Python_PATH $ENV{PATH} )
