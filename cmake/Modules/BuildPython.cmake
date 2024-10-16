@@ -9,8 +9,8 @@ include(ProcessorCount)
 ProcessorCount(NPROCS)
 
 
-set( Python_VERSION 3.11 )
-set( Python_TINY   9 )
+set( Python_VERSION 3.12 )
+set( Python_TINY   3 )
 set( Python_URL https://www.python.org/ftp/python/${Python_VERSION}.${Python_TINY}/Python-${Python_VERSION}.${Python_TINY}.tar.xz )
 
 set( Python_PATCH )
@@ -44,6 +44,9 @@ if(APPLE)
     set( Python_CONFIGURE ${CMAKE_COMMAND} -E env "CFLAGS=${Python_C_FLAGS}" "CPPFLAGS=${Python_C_FLAGS}" "CXXFLAGS=${Python_CXX_FLAGS}" "LDFLAGS=${Python_LD_FLAGS}" -- ./configure --enable-optimizations --enable-shared --with-openssl=${_openssl_LOC} --prefix=${CMAKE_INSTALL_PREFIX}
     )
     set( Python_BUILD  make -j ${NPROCS} )
+    set( Python_INSTALL
+	COMMAND make -j ${NPROCS} install
+	COMMAND ${PYTHON_EXECUTABLE} -m ensurepip --upgrade )
     set( Python_INSTALL  make -j ${NPROCS} install )
 
 elseif(UNIX)
@@ -58,7 +61,9 @@ elseif(UNIX)
         --prefix=${CMAKE_INSTALL_PREFIX}
     )
     set( Python_BUILD   make -j ${NPROCS} )
-    set( Python_INSTALL  make -j ${NPROCS} install )
+    set( Python_INSTALL
+	COMMAND make -j ${NPROCS} install
+	COMMAND ${PYTHON_EXECUTABLE} -m ensurepip --upgrade )
 else()
 
     set( platform x64 )
@@ -78,8 +83,9 @@ else()
 	-D Python_PLATFORM=${platform})
     set(Python_BUILD ${Python_BUILD} ${Python_SCRIPT})
     
-    set(Python_INSTALL ${CMAKE_COMMAND} -D Python_COMMAND=install)
-    set(Python_INSTALL ${Python_INSTALL} ${Python_SCRIPT})
+    set(Python_INSTALL
+	COMMAND ${CMAKE_COMMAND} -D Python_COMMAND=install ${Python_SCRIPT}
+	COMMAND ${CMAKE_COMMAND} -D Python_COMMAND=pip ${Python_SCRIPT})
 endif()
 
 ExternalProject_Add(
