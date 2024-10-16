@@ -181,8 +181,10 @@ if [[ $KERNEL == *Darwin* ]]; then
     echo "Building on MacOS Brand ${MACOS_BRAND}"
 fi
 echo "Compiler flags are ${FLAGS}"
-echo
-
+if [[ $KERNEL == *Msys* ]]; then
+    nsis_version=`makensis.exe -version`
+    echo "NSIS ${nsis_version}"
+fi
 
 mkdir -p $BUILD_DIR/install
 
