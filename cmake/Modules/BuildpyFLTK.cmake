@@ -8,11 +8,11 @@ set(pyFLTK_SVN_REPOSITORY "https://svn.code.sf.net/p/pyfltk/code/branches/fltk1.
 set(pyFLTK_SVN_REVISION 631)
 set(pyFLTK_SVN_REVISION_ARG -r ${pyFLTK_SVN_REVISION})
 
-if(NOT PYTHON_EXECUTABLE)
+if(NOT Python_EXECUTABLE)
     if(UNIX)
-	set(PYTHON_EXECUTABLE python3)
+	set(Python_EXECUTABLE python3)
     else()
-	set(PYTHON_EXECUTABLE python)
+	set(Python_EXECUTABLE python)
     endif()
 endif()
 
@@ -116,10 +116,10 @@ endif()
 
 # Commands for configure, build and install
 set(pyFLTK_CONFIGURE
-    COMMAND ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} -m pip install setuptools
-    COMMAND ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py swig --enable-shared ${pyFLTK_DEBUG})
-set(pyFLTK_BUILD     ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py build --enable-shared ${pyFLTK_DEBUG})
-set(pyFLTK_INSTALL ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} -m pip install . )
+    COMMAND ${pyFLTK_ENV} ${Python_EXECUTABLE} -m pip install setuptools
+    COMMAND ${pyFLTK_ENV} ${Python_EXECUTABLE} setup.py swig --enable-shared ${pyFLTK_DEBUG})
+set(pyFLTK_BUILD     ${pyFLTK_ENV} ${Python_EXECUTABLE} setup.py build --enable-shared ${pyFLTK_DEBUG})
+set(pyFLTK_INSTALL ${pyFLTK_ENV} ${Python_EXECUTABLE} -m pip install . )
 
 ExternalProject_Add(
     pyFLTK

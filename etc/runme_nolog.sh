@@ -182,7 +182,12 @@ if [[ $KERNEL == *Darwin* ]]; then
 fi
 echo "Compiler flags are ${FLAGS}"
 if [[ $KERNEL == *Msys* ]]; then
-    nsis_version=`makensis.exe -version`
+    if command -v makensis.exe > /dev/null 2>&1; then
+	nsis_exe=makensis.exe
+    else
+	nsis_exe="/C/Program Files (x86)/NSIS/bin/makensis"
+    fi
+    nsis_version=`"${nsis_exe}" -version`
     echo "NSIS ${nsis_version}"
 fi
 

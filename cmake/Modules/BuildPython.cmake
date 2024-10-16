@@ -9,8 +9,12 @@ include(ProcessorCount)
 ProcessorCount(NPROCS)
 
 
-set( Python_VERSION 3.12 )
-set( Python_TINY   3 )
+set( Python_VERSION 3.11 )
+set( Python_TINY    9 )
+
+#set( Python_VERSION 3.12 )
+#set( Python_TINY   3 )
+
 set( Python_URL https://www.python.org/ftp/python/${Python_VERSION}.${Python_TINY}/Python-${Python_VERSION}.${Python_TINY}.tar.xz )
 
 if(UNIX)
