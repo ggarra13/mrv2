@@ -46,7 +46,7 @@ if(APPLE)
     set( Python_BUILD  make -j ${NPROCS} )
     set( Python_INSTALL
 	COMMAND make -j ${NPROCS} install
-	COMMAND ${PYTHON_EXECUTABLE} -m ensurepip --upgrade )
+	COMMAND ${Python_EXECUTABLE} -m ensurepip --upgrade )
     set( Python_INSTALL  make -j ${NPROCS} install )
 
 elseif(UNIX)
@@ -63,7 +63,7 @@ elseif(UNIX)
     set( Python_BUILD   make -j ${NPROCS} )
     set( Python_INSTALL
 	COMMAND make -j ${NPROCS} install
-	COMMAND ${PYTHON_EXECUTABLE} -m ensurepip --upgrade )
+	COMMAND ${Python_EXECUTABLE} -m ensurepip --upgrade )
 else()
 
     set( platform x64 )
