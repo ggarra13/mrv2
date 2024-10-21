@@ -23,7 +23,21 @@ jobs:
 
     - name: Setup environment
       uses: ilammy/msvc-dev-cmd@v1
+        
+    - name: Install Visual C++ Redistributable 2019
+      run: |
+         $vc_redist_url = "https://aka.ms/vs/16/release/vc_redist.x64.exe"
+         Invoke-WebRequest -Uri $vc_redist_url -OutFile vc_redist.x64.exe
+         Start-Process vc_redist.x64.exe -ArgumentList "/install", "/quiet", "/norestart" -Wait
+      shell: powershell
 
+    - name: Install Visual C++ Redistributable 2022
+      run: |
+        $vc_redist_url_2022 = "https://aka.ms/vs/17/release/vc_redist.x64.exe"
+        Invoke-WebRequest -Uri $vc_redist_url_2022 -OutFile vc_redist_2022.x64.exe
+        Start-Process vc_redist_2022.x64.exe -ArgumentList "/install", "/quiet", "/norestart" -Wait
+      shell: powershell
+      
     - name: Setup MSYS
       uses: msys2/setup-msys2@v2
       with:
