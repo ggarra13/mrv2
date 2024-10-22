@@ -33,7 +33,8 @@ fi
 #
 # Latest TAGS of all libraries
 #
-LIBVPX_TAG=v1.14.1
+#LIBVPX_TAG=v1.14.1
+LIBVPX_TAG=c21ed8d7a675c58a0ad45d42decfc0506d24f72a
 DAV1D_TAG=1.3.0
 SVTAV1_TAG=v2.1.2
 X264_TAG=stable
