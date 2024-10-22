@@ -13,6 +13,9 @@ message(STATUS "PATH ENV 2=$ENV{PATH}")
 
 set(ROOT_DIR ${CMAKE_INSTALL_PREFIX}/../deps/Python/src/Python)
 
+
+set( Python_PLATFORM x64 )
+
 if (Python_COMMAND STREQUAL "build")
     set(CMD PCbuild\\build.bat -q -p ${Python_PLATFORM} --pgo )
 elseif(Python_COMMAND STREQUAL "install")
