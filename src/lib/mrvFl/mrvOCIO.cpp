@@ -22,7 +22,7 @@ namespace
     const char* kModule = "ocio";
 
     static std::string kInactive = _("None");
-    
+
 } // namespace
 
 namespace mrv
@@ -91,7 +91,8 @@ namespace mrv
                         int numDisplays = OCIOconfig->getNumDisplays();
                         for (int i = 0; i < numDisplays; ++i)
                         {
-                            active_displays.push_back(OCIOconfig->getDisplay(i));
+                            active_displays.push_back(
+                                OCIOconfig->getDisplay(i));
                         }
                     }
 
@@ -132,7 +133,8 @@ namespace mrv
 
                                 for (int i = 0; i < numViews; ++i)
                                 {
-                                    view = OCIOconfig->getView(display.c_str(), i);
+                                    view =
+                                        OCIOconfig->getView(display.c_str(), i);
                                     if (active_views[h] == view)
                                     {
                                         add = true;
@@ -257,14 +259,13 @@ namespace mrv
             {
                 // Set the default ocio display/view as found in config.ocio
                 // file.
-                display_view = combineView(defaultDisplay,
-                                                    defaultView);
+                display_view = combineView(defaultDisplay, defaultView);
             }
-            
+
             std::string view_prefs = uiPrefs->uiOCIO_Display_View->value();
             if (!view_prefs.empty())
                 display_view = view_prefs;
-            
+
             // Set defaults if available in preferences
             std::string look = uiPrefs->uiOCIO_Look->value();
             try
@@ -454,7 +455,7 @@ namespace mrv
                 std::string path = pathname;
                 if (path[0] == '/')
                     path = path.substr(1, path.size());
-                
+
                 if (name == path)
                 {
                     value = i;
@@ -468,7 +469,7 @@ namespace mrv
                     const Fl_Menu_Item* item = uiICS->child(i);
                     if (!item || !item->label() || item->flags & FL_SUBMENU)
                         continue;
-                
+
                     if (name == item->label())
                     {
                         value = i;
@@ -501,7 +502,7 @@ namespace mrv
                 int ret = uiICS->item_pathname(pathname, 1024, item);
                 if (ret != 0)
                     continue;
-                
+
                 std::string path = pathname;
                 if (path[0] == '/')
                     path = path.substr(1, path.size());
@@ -557,7 +558,7 @@ namespace mrv
                 int ret = uiOCIOLook->item_pathname(pathname, 1024, item);
                 if (ret != 0)
                     continue;
-                
+
                 std::string path = pathname;
                 if (path[0] == '/')
                     path = path.substr(1, path.size());
@@ -593,7 +594,7 @@ namespace mrv
                 int ret = uiOCIOLook->item_pathname(pathname, 1024, item);
                 if (ret != 0)
                     continue;
-                
+
                 std::string path = pathname;
                 if (path[0] == '/')
                     path = path.substr(1, path.size());
@@ -606,7 +607,7 @@ namespace mrv
             }
             return value;
         }
-        
+
         std::string view()
         {
             auto uiOCIOView = App::ui->uiOCIOView;
@@ -633,7 +634,7 @@ namespace mrv
             if (name.empty() || name == kInactive ||
                 name == _(kInactive.c_str()))
             {
-                uiOCIOView->value(-1);
+                uiOCIOView->value(0);
                 uiOCIOView->do_callback();
                 return;
             }
@@ -685,8 +686,8 @@ namespace mrv
             uiOCIOView->do_callback();
         }
 
-        std::string combineView(
-            const std::string& display, const std::string& view)
+        std::string
+        combineView(const std::string& display, const std::string& view)
         {
             if (display.empty() || view.empty() || view == kInactive)
                 return kInactive;
@@ -720,7 +721,7 @@ namespace mrv
             const std::string& combined, std::string& display,
             std::string& view)
         {
-                
+
             if (combined.empty() || combined == kInactive)
             {
                 display.clear();
@@ -746,7 +747,7 @@ namespace mrv
                             .arg(combined);
                     throw std::runtime_error(err);
                 }
-                
+
                 display = view.substr(pos + 1, view.size());
                 view = view.substr(0, pos - 1);
                 pos = display.find(')');
@@ -853,7 +854,7 @@ namespace mrv
             auto display_view = combineView(display, defaultView);
             setView(display_view);
         }
-        
+
         struct OCIODefaults
         {
             std::string bits8;
@@ -1005,8 +1006,7 @@ namespace mrv
                     const timeline::OCIOOptions& ocio = preset.ocio;
                     setConfig(ocio.fileName);
                     setIcs(ocio.input);
-                    std::string view =
-                        combineView(ocio.display, ocio.view);
+                    std::string view = combineView(ocio.display, ocio.view);
                     setView(view);
                     setLook(ocio.look);
 

@@ -4978,16 +4978,13 @@ msgstr ""
 msgid "TileGroup"
 msgstr ""
 
-msgid "Polygon Tool."
-msgstr ""
-
-msgid "Opacity of pen stroke"
+msgid "Old Color Used.  Click on the Arrow to alternate."
 msgstr ""
 
 msgid "Switch Colors"
 msgstr ""
 
-msgid "Old Color Used.  Click on the Arrow to alternate."
+msgid "Opacity of pen stroke"
 msgstr ""
 
 msgid "Undo Last Shape Drawn in Current Frame."
@@ -6054,13 +6051,13 @@ msgstr ""
 msgid "Reset hotkeys to mrv2's default configuration."
 msgstr ""
 
+msgid "Accept the current hotkeys."
+msgstr ""
+
 msgid "Reload"
 msgstr ""
 
 msgid "Reload hotkeys to last saved file."
-msgstr ""
-
-msgid "Accept the current hotkeys."
 msgstr ""
 
 msgid "HW"

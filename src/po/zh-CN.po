@@ -5386,17 +5386,14 @@ msgstr "OCIO 显示"
 msgid "TileGroup"
 msgstr "TileGroup"
 
-msgid "Polygon Tool."
-msgstr "多边形工具 。"
-
-msgid "Opacity of pen stroke"
-msgstr "笔触透明度"
+msgid "Old Color Used.  Click on the Arrow to alternate."
+msgstr "旧颜色已用过。 单击箭头可替换"
 
 msgid "Switch Colors"
 msgstr "切换颜色"
 
-msgid "Old Color Used.  Click on the Arrow to alternate."
-msgstr "旧颜色已用过。 单击箭头可替换"
+msgid "Opacity of pen stroke"
+msgstr "笔触透明度"
 
 msgid "Undo Last Shape Drawn in Current Frame."
 msgstr "在当前帧中撤消上次绘制的形状"
@@ -6496,14 +6493,14 @@ msgstr "键"
 msgid "Reset hotkeys to mrv2's default configuration."
 msgstr "重置快捷键到 mrv2 的默认配置"
 
+msgid "Accept the current hotkeys."
+msgstr "接受当前快捷键"
+
 msgid "Reload"
 msgstr "重载"
 
 msgid "Reload hotkeys to last saved file."
 msgstr "将热键重新载入上次保存的文件"
-
-msgid "Accept the current hotkeys."
-msgstr "接受当前快捷键"
 
 msgid "HW"
 msgstr "HW"
@@ -7185,6 +7182,9 @@ msgstr "开关热键窗口"
 
 msgid "Toggle About Window"
 msgstr "开关关于窗口"
+
+#~ msgid "Polygon Tool."
+#~ msgstr "多边形工具 。"
 
 #~ msgid "TV"
 #~ msgstr "TV"

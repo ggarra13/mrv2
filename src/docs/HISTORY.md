@@ -18,6 +18,8 @@ v1.2.9
 	https://github.com/ggarra13/ComfyUI-mrv2
   so that it can be listed more easily in ComfyUI's Node Manager *AND* we
   make it more clear that that project is GPL compatible, not BSD one.
+- Fixed selecting montior's Display/View to None from the Menus.
+
 
 v1.2.8
 ======

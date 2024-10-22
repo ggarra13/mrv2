@@ -5513,17 +5513,14 @@ msgstr "OCIO выглядит"
 msgid "TileGroup"
 msgstr "Группа TileGroup"
 
-msgid "Polygon Tool."
-msgstr "Многоугольник."
-
-msgid "Opacity of pen stroke"
-msgstr "Непрозрачность ручного инсульта"
+msgid "Old Color Used.  Click on the Arrow to alternate."
+msgstr "Старый цвет использован. Нажмите Стрела на альтернативную."
 
 msgid "Switch Colors"
 msgstr "Переключить цвета"
 
-msgid "Old Color Used.  Click on the Arrow to alternate."
-msgstr "Старый цвет использован. Нажмите Стрела на альтернативную."
+msgid "Opacity of pen stroke"
+msgstr "Непрозрачность ручного инсульта"
 
 msgid "Undo Last Shape Drawn in Current Frame."
 msgstr "Отменить последнюю форму в текущей системе."
@@ -6688,14 +6685,14 @@ msgstr "Key"
 msgid "Reset hotkeys to mrv2's default configuration."
 msgstr "Перезагрузить хот-доги в конфигурацию mrv2."
 
+msgid "Accept the current hotkeys."
+msgstr "Прими текущие хижины."
+
 msgid "Reload"
 msgstr "Перезагрузить"
 
 msgid "Reload hotkeys to last saved file."
 msgstr "Перезагрузить хот-доги в последний сохраненный файл."
-
-msgid "Accept the current hotkeys."
-msgstr "Прими текущие хижины."
 
 msgid "HW"
 msgstr "HW"
@@ -7377,6 +7374,9 @@ msgstr "Переключить окно горячих клавиш"
 
 msgid "Toggle About Window"
 msgstr "Закладка о окне"
+
+#~ msgid "Polygon Tool."
+#~ msgstr "Многоугольник."
 
 #~ msgid "TV"
 #~ msgstr "TV"

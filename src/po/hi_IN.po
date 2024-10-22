@@ -5407,17 +5407,14 @@ msgstr "ओसीएसआईएस"
 msgid "TileGroup"
 msgstr "टाइल समूह"
 
-msgid "Polygon Tool."
-msgstr "बहुभुज औज़ार."
-
-msgid "Opacity of pen stroke"
-msgstr "पेन स्ट्रोक की अपारदर्शिता"
+msgid "Old Color Used.  Click on the Arrow to alternate."
+msgstr "पुराना रंग उपयोग में आता है. वैकल्पिक तीरपर बटण दबाये."
 
 msgid "Switch Colors"
 msgstr "रंग बदलें"
 
-msgid "Old Color Used.  Click on the Arrow to alternate."
-msgstr "पुराना रंग उपयोग में आता है. वैकल्पिक तीरपर बटण दबाये."
+msgid "Opacity of pen stroke"
+msgstr "पेन स्ट्रोक की अपारदर्शिता"
 
 msgid "Undo Last Shape Drawn in Current Frame."
 msgstr "वर्तमान फ्रेम में अंतिम आकार फिट हो चुका है."
@@ -6545,14 +6542,14 @@ msgstr "Key"
 msgid "Reset hotkeys to mrv2's default configuration."
 msgstr "webkeye को mrv2 के डिफ़ॉल्ट कॉन्फ़िगरेशन में रीसेट करें."
 
+msgid "Accept the current hotkeys."
+msgstr "वर्तमान गर्मियों को स्वीकार कर लें."
+
 msgid "Reload"
 msgstr "री-लोड"
 
 msgid "Reload hotkeys to last saved file."
 msgstr "पिछले सहेजे गए फ़ाइल में गर्मकीस को फिर से लोड करें."
-
-msgid "Accept the current hotkeys."
-msgstr "वर्तमान गर्मियों को स्वीकार कर लें."
 
 msgid "HW"
 msgstr "HW"
@@ -7234,6 +7231,9 @@ msgstr "यदि आप विंडो को बन्द करना चा
 
 msgid "Toggle About Window"
 msgstr "विंडो के बारे में टॉगल करें"
+
+#~ msgid "Polygon Tool."
+#~ msgstr "बहुभुज औज़ार."
 
 #~ msgid "TV"
 #~ msgstr "TV"

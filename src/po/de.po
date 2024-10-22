@@ -5485,17 +5485,14 @@ msgstr "OCIO-Looks"
 msgid "TileGroup"
 msgstr "Fliesengruppe"
 
-msgid "Polygon Tool."
-msgstr "Polygon-Werkzeug."
-
-msgid "Opacity of pen stroke"
-msgstr "Deckkraft des Pen-Hubs"
+msgid "Old Color Used.  Click on the Arrow to alternate."
+msgstr "Alte Farbe verwendet. Klicken Sie auf den Pfeil, um zu wechseln."
 
 msgid "Switch Colors"
 msgstr "Farben wechseln"
 
-msgid "Old Color Used.  Click on the Arrow to alternate."
-msgstr "Alte Farbe verwendet. Klicken Sie auf den Pfeil, um zu wechseln."
+msgid "Opacity of pen stroke"
+msgstr "Deckkraft des Pen-Hubs"
 
 msgid "Undo Last Shape Drawn in Current Frame."
 msgstr "Letzte Form im aktuellen Rahmen gezeichnet rckgngig machen."
@@ -6669,14 +6666,14 @@ msgstr "Key"
 msgid "Reset hotkeys to mrv2's default configuration."
 msgstr "Hotkeys auf die Standardkonfiguration von mrv2 zurcksetzen."
 
+msgid "Accept the current hotkeys."
+msgstr "Akzeptieren Sie die aktuellen Hotkeys."
+
 msgid "Reload"
 msgstr "Neu laden"
 
 msgid "Reload hotkeys to last saved file."
 msgstr "Hotkeys in die zuletzt gespeicherte Datei laden."
-
-msgid "Accept the current hotkeys."
-msgstr "Akzeptieren Sie die aktuellen Hotkeys."
 
 msgid "HW"
 msgstr "HW"
@@ -7358,6 +7355,9 @@ msgstr "Hotkeys-Fenster umschalten"
 
 msgid "Toggle About Window"
 msgstr "Fenster umschalten"
+
+#~ msgid "Polygon Tool."
+#~ msgstr "Polygon-Werkzeug."
 
 #~ msgid "TV"
 #~ msgstr "TV"
