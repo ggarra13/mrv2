@@ -88,8 +88,16 @@ else()
     
     list(JOIN Python_PATH "|" Python_PATH_STR)
     set(Python_SCRIPT "-DPATH=${Python_PATH_STR}" -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -P ${PROJECT_SOURCE_DIR}/cmake/build_python_windows.cmake
-	)
-    
+    )
+
+    set(Python_PATCH
+	COMMAND
+	${CMAKE_COMMAND} -E copy_if_different
+	"${PROJECT_SOURCE_DIR}/cmake/patches/Python-patch/PC/layout/main.py"
+	"${CMAKE_BINARY_DIR}/deps/Python/src/Python/PC/layout"
+    )
+
+
     set(Python_BUILD ${CMAKE_COMMAND} -D Python_COMMAND=build
 	-D Python_PLATFORM=${platform})
     set(Python_BUILD ${Python_BUILD} ${Python_SCRIPT})
