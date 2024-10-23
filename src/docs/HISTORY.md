@@ -19,6 +19,7 @@ v1.2.9
   so that it can be listed more easily in ComfyUI's Node Manager *AND* we
   make it more clear that that project is GPL compatible, not BSD one.
 - Fixed selecting montior's Display/View to None from the Menus.
+- Updated OpenColorIO to v2.3.4.
 
 
 v1.2.8
