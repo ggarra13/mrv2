@@ -20,7 +20,7 @@ if(NOT DEFINED Python_PLATFORM)
 endif()
 
 if (Python_COMMAND STREQUAL "build")
-    set(CMD PCbuild\\build.bat -q -p ${Python_PLATFORM} --pgo ) # --pgo
+    set(CMD PCbuild\\build.bat -p ${Python_PLATFORM} --pgo ) # --pgo
 elseif(Python_COMMAND STREQUAL "install")
     set(CMD python.bat PC\\layout --precompile --preset-default  --copy "${CMAKE_INSTALL_PREFIX}/bin/")
 elseif(Python_COMMAND STREQUAL "pip")

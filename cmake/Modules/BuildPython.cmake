@@ -95,6 +95,10 @@ else()
 	${CMAKE_COMMAND} -E copy_if_different
 	"${PROJECT_SOURCE_DIR}/cmake/patches/Python-patch/PC/layout/main.py"
 	"${CMAKE_BINARY_DIR}/deps/Python/src/Python/PC/layout"
+	COMMAND
+	${CMAKE_COMMAND} -E copy_if_different
+	"${PROJECT_SOURCE_DIR}/cmake/patches/Python-patch/PCbuild/find_python.bat"
+	"${CMAKE_BINARY_DIR}/deps/Python/src/Python/PCbuild/"
     )
 
 
