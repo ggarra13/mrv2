@@ -3327,7 +3327,8 @@ namespace mrv
         }
         _setVideoRotation(videoRotation);
 
-        if (p.displayOptions[0].normalize.enabled)
+        if (!p.displayOptions.empty() &&
+            p.displayOptions[0].normalize.enabled)
         {
             i = p.tagData.find("Autonormalize Minimum");
             if (i != p.tagData.end())
