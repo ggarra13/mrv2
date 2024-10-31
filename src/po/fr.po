@@ -5483,14 +5483,17 @@ msgstr "OCIO regarde"
 msgid "TileGroup"
 msgstr "Groupe des carreaux"
 
-msgid "Old Color Used.  Click on the Arrow to alternate."
-msgstr "Old Color Utilisé. Cliquez sur la flèche pour alterner."
+msgid "Polygon Tool."
+msgstr "Outil Polygone."
+
+msgid "Opacity of pen stroke"
+msgstr "Opacité de l'accident vasculaire cérébral du stylo"
 
 msgid "Switch Colors"
 msgstr "Changer les couleurs"
 
-msgid "Opacity of pen stroke"
-msgstr "Opacité de l'accident vasculaire cérébral du stylo"
+msgid "Old Color Used.  Click on the Arrow to alternate."
+msgstr "Old Color Utilisé. Cliquez sur la flèche pour alterner."
 
 msgid "Undo Last Shape Drawn in Current Frame."
 msgstr "Annuler la dernière forme dessinée dans le cadre actuel."
@@ -6682,14 +6685,14 @@ msgstr "Key"
 msgid "Reset hotkeys to mrv2's default configuration."
 msgstr "Réinitialiser les hot-keys à la configuration par défaut de mrv2."
 
-msgid "Accept the current hotkeys."
-msgstr "Acceptez les hot-keys actuels."
-
 msgid "Reload"
 msgstr "Recharger"
 
 msgid "Reload hotkeys to last saved file."
 msgstr "Recharger les touches raccourcies dans le dernier fichier enregistré."
+
+msgid "Accept the current hotkeys."
+msgstr "Acceptez les hot-keys actuels."
 
 msgid "HW"
 msgstr "HW"
@@ -7379,9 +7382,6 @@ msgstr "Activer la fenêtre des touches d'amorçage"
 
 msgid "Toggle About Window"
 msgstr "Commutation à propos de la fenêtre"
-
-#~ msgid "Polygon Tool."
-#~ msgstr "Outil Polygone."
 
 #~ msgid "TV"
 #~ msgstr "TV"

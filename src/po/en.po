@@ -5475,14 +5475,17 @@ msgstr "OCIO Looks"
 msgid "TileGroup"
 msgstr "TileGroup"
 
-msgid "Old Color Used.  Click on the Arrow to alternate."
-msgstr "Old Color Used.  Click on the Arrow to alternate."
+msgid "Polygon Tool."
+msgstr "Polygon Tool."
+
+msgid "Opacity of pen stroke"
+msgstr "Opacity of pen stroke"
 
 msgid "Switch Colors"
 msgstr "Switch Colors"
 
-msgid "Opacity of pen stroke"
-msgstr "Opacity of pen stroke"
+msgid "Old Color Used.  Click on the Arrow to alternate."
+msgstr "Old Color Used.  Click on the Arrow to alternate."
 
 msgid "Undo Last Shape Drawn in Current Frame."
 msgstr "Undo Last Shape Drawn in Current Frame."
@@ -6637,14 +6640,14 @@ msgstr "Key"
 msgid "Reset hotkeys to mrv2's default configuration."
 msgstr "Reset hotkeys to mrv2's default configuration."
 
-msgid "Accept the current hotkeys."
-msgstr "Accept the current hotkeys."
-
 msgid "Reload"
 msgstr "Reload"
 
 msgid "Reload hotkeys to last saved file."
 msgstr "Reload hotkeys to last saved file."
+
+msgid "Accept the current hotkeys."
+msgstr "Accept the current hotkeys."
 
 msgid "HW"
 msgstr "HW"
@@ -7326,9 +7329,6 @@ msgstr "Toggle Hotkeys Window"
 
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
-
-#~ msgid "Polygon Tool."
-#~ msgstr "Polygon Tool."
 
 #~ msgid "TV"
 #~ msgstr "TV"

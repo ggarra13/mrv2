@@ -5454,14 +5454,17 @@ msgstr "OCIO parece"
 msgid "TileGroup"
 msgstr "Grupo de Telha"
 
-msgid "Old Color Used.  Click on the Arrow to alternate."
-msgstr "Antiga cor usada. Clique na seta para alternar."
+msgid "Polygon Tool."
+msgstr "Ferramenta de polígonos."
+
+msgid "Opacity of pen stroke"
+msgstr "Opacidade do curso da caneta"
 
 msgid "Switch Colors"
 msgstr "Alterar as cores"
 
-msgid "Opacity of pen stroke"
-msgstr "Opacidade do curso da caneta"
+msgid "Old Color Used.  Click on the Arrow to alternate."
+msgstr "Antiga cor usada. Clique na seta para alternar."
 
 msgid "Undo Last Shape Drawn in Current Frame."
 msgstr "Desfazer a ltima forma desenhada no quadro atual."
@@ -6633,14 +6636,14 @@ msgstr "Key"
 msgid "Reset hotkeys to mrv2's default configuration."
 msgstr "Reinicie as teclas de acesso para a configurao padro do mrv2."
 
-msgid "Accept the current hotkeys."
-msgstr "Aceite as teclas atuais."
-
 msgid "Reload"
 msgstr "Recarregar"
 
 msgid "Reload hotkeys to last saved file."
 msgstr "Recarregar as teclas para o ltimo arquivo salvo."
+
+msgid "Accept the current hotkeys."
+msgstr "Aceite as teclas atuais."
 
 msgid "HW"
 msgstr "HW"
@@ -7322,9 +7325,6 @@ msgstr "Alternar a janela de teclas instantneas"
 
 msgid "Toggle About Window"
 msgstr "Alternar Sobre a Janela"
-
-#~ msgid "Polygon Tool."
-#~ msgstr "Ferramenta de polígonos."
 
 #~ msgid "TV"
 #~ msgstr "TV"

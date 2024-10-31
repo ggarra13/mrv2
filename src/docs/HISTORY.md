@@ -27,6 +27,7 @@ v1.2.9
   make it more clear that that project is GPL compatible, not BSD one.
 - Fixed selecting montior's Display/View to None from the Menus.
 - Updated OpenColorIO to v2.3.4.
+- Updated to OpenUSD v0.24.8.
 
 
 v1.2.8

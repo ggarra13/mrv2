@@ -5,7 +5,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.2.9\n"
+"Project-Id-Version: mrv2 v1.3.0\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -4978,13 +4978,16 @@ msgstr ""
 msgid "TileGroup"
 msgstr ""
 
-msgid "Old Color Used.  Click on the Arrow to alternate."
+msgid "Polygon Tool."
+msgstr ""
+
+msgid "Opacity of pen stroke"
 msgstr ""
 
 msgid "Switch Colors"
 msgstr ""
 
-msgid "Opacity of pen stroke"
+msgid "Old Color Used.  Click on the Arrow to alternate."
 msgstr ""
 
 msgid "Undo Last Shape Drawn in Current Frame."
@@ -6051,13 +6054,13 @@ msgstr ""
 msgid "Reset hotkeys to mrv2's default configuration."
 msgstr ""
 
-msgid "Accept the current hotkeys."
-msgstr ""
-
 msgid "Reload"
 msgstr ""
 
 msgid "Reload hotkeys to last saved file."
+msgstr ""
+
+msgid "Accept the current hotkeys."
 msgstr ""
 
 msgid "HW"
