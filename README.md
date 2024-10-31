@@ -241,6 +241,9 @@ xcode-select --install
 #
 brew install git gnu-sed swig subversion python cmake ninja gettext openssl readline sqlite3 xz zlib
 
+#
+# Install meson
+#
 pip install meson
 
 ```
