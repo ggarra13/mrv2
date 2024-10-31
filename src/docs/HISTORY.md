@@ -1,3 +1,10 @@
+v1.3.0
+======
+
+- Added tone-mapping of HDR videos.  Note that FFmpeg seems to be buggy when
+  reading the frame metadata, so we must rely on the stream metadata.
+  
+
 v1.2.9
 ======
 
