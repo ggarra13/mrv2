@@ -178,10 +178,6 @@ sudo dnf -y install perl perl-CPAN
 # Install IPC::Cmd non-interactively
 sudo cpan App::cpanminus && cpanm --notest IPC::Cmd
 
-# Install python3 and meson
-sudo dnf -y install python3
-sudo pip3 install meson
-
 #
 # Install dependencies
 #
@@ -217,9 +213,6 @@ sudo apt -y install curl build-essential perl git cmake ninja-build \
 # Install cpanminus and IPC::Cmd non-interactively
 sudo cpan App::cpanminus && cpanm --notest IPC::Cmd
 
-# Install meson for dav1d codec
-sudo apt install pip
-sudo pip3 install meson
 
 ```
 
@@ -240,11 +233,6 @@ xcode-select --install
 # Install dependencies
 #
 brew install git gnu-sed swig subversion python cmake ninja gettext openssl readline sqlite3 xz zlib
-
-#
-# Install meson
-#
-pip install meson
 
 ```
 
