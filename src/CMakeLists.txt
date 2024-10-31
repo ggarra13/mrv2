@@ -111,16 +111,20 @@ if(TLRENDER_FFMPEG)
     add_definitions(-DTLRENDER_FFMPEG)
 endif()
 
-if(TLRENDER_HAP)
-    add_definitions(-DTLRENDER_HAP)
-endif()
-
 if(TLRENDER_GL)
     add_definitions(-DTLRENDER_GL)
 endif()
 
+if(TLRENDER_HAP)
+    add_definitions(-DTLRENDER_HAP)
+endif()
+
 if(TLRENDER_JPEG)
     add_definitions(-DTLRENDER_JPEG)
+endif()
+
+if(TLRENDER_LIBPLACEBO)
+    add_definitions(-DTLRENDER_LIBPLACEBO)
 endif()
 
 if(TLRENDER_NDI)

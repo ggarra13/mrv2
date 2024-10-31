@@ -9,6 +9,7 @@
 #include <cmath>
 #include <algorithm>
 
+#include <tlCore/HDR.h>
 #include <tlCore/Matrix.h>
 
 #include "mrViewer.h"
@@ -1292,11 +1293,7 @@ namespace mrv
             i = p.tagData.find("hdr");
             if (i != p.tagData.end())
             {
-                if (p.hdr != i->second)
-                {
-                    p.hdr = i->second;
-                    videoRefresh = true;
-                }
+                videoRefresh = true;
             }
         
             if (fullRefresh)
@@ -3327,6 +3324,25 @@ namespace mrv
         }
         _setVideoRotation(videoRotation);
 
+        i = p.tagData.find("hdr");
+        if (i != p.tagData.end())
+        {
+            p.hdrOptions.tonemap = true;
+            if (p.hdr != i->second)
+            {
+                p.hdr = i->second;
+                
+                // Parse the JSON string back into a nlohmann::json object
+                nlohmann::json j = nlohmann::json::parse(i->second);
+                p.hdrOptions.hdrData = j.get<image::HDRData>();
+            }
+        }
+        else
+        {
+            p.hdrOptions.tonemap = false;
+        }
+
+            
         if (!p.displayOptions.empty() &&
             p.displayOptions[0].normalize.enabled)
         {

@@ -91,6 +91,14 @@ if [ -z "$TLRENDER_FFMPEG_MINIMAL" ]; then
     export TLRENDER_FFMPEG_MINIMAL=ON
 fi
 
+if [ -z "$TLRENDER_LIBPLACEBO" ]; then
+    if [[ $TLRENDER_FFMPEG == ON || $TLRENDER_FFMPEG == 1 ]]; then
+	export TLRENDER_LIBPLACEBO=ON
+    else
+	export TLRENDER_LIBPLACEBO=OFF
+    fi
+fi
+
 if [ -z "$TLRENDER_NDI_SDK" ]; then
     if [[ $KERNEL == *Linux* ]]; then
 	export TLRENDER_NDI_SDK="$HOME/code/lib/NDI SDK for Linux/"
@@ -227,6 +235,7 @@ if [[ $TLRENDER_FFMPEG == ON || $TLRENDER_FFMPEG == 1 ]]; then
     echo "    HAP codec support .............. ${TLRENDER_HAP} 	(TLRENDER_HAP)"
     echo "    VPX codec support .............. ${TLRENDER_VPX} 	(TLRENDER_VPX)"
     echo "    X264 codec support ............. ${TLRENDER_X264} 	(Use -gpl flag)"
+    echo "    libplacebo support ............. ${TLRENDER_LIBPLACEBO}         (TLRENDER_LIBPLACEBO)"
     echo "    YASM assembler ................. ${TLRENDER_YASM} 	(TLRENDER_YASM)"
 fi
 echo
@@ -291,6 +300,7 @@ cmd="cmake -G '${CMAKE_GENERATOR}'
            -D TLRENDER_FFMPEG_MINIMAL=${TLRENDER_FFMPEG_MINIMAL}
            -D TLRENDER_HAP=${TLRENDER_HAP}
            -D TLRENDER_JPEG=${TLRENDER_JPEG}
+           -D TLRENDER_LIBPLACEBO=${TLRENDER_LIBPLACEBO}
 	   -D TLRENDER_NDI=${TLRENDER_NDI}
 	   -D TLRENDER_NDI_SDK=\"${TLRENDER_NDI_SDK}\"
 	   -D TLRENDER_NET=${TLRENDER_NET}

@@ -32,6 +32,8 @@ namespace mrv
 
         timeline::OCIOOptions ocioOptions;
         timeline::LUTOptions lutOptions;
+        timeline::HDROptions hdrOptions;
+        
         std::vector<tl::timeline::ImageOptions> imageOptions;
         std::vector<tl::timeline::DisplayOptions> displayOptions;
         timeline::CompareOptions compareOptions;

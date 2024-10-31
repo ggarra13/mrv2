@@ -349,6 +349,7 @@ namespace mrv
                         }
                     
                         gl.render->setLUTOptions(p.lutOptions);
+                        gl.render->setHDROptions(p.hdrOptions);
                         if (p.missingFrame &&
                             p.missingFrameType != MissingFrameType::kBlackFrame)
                         {

@@ -76,6 +76,13 @@
 #    include <tlGL/Init.h>
 #endif
 
+#ifdef TLRENDER_LIBPLACEBO
+extern "C"
+{
+#    include <libplacebo/config.h>
+}
+#endif
+
 // Must come last!
 #ifdef TLRENDER_RAW
 #    include <lcms2.h>
@@ -779,6 +786,12 @@ namespace mrv
           << "Copyright (c) 2015 Viktor Szathmáry.  All Rights Reserved."
           << endl
           << endl;
+#ifdef TLRENDER_LIBPLACEBO
+        o << "libplacebo v" << pl_version() << std::endl
+          << "Copyright Niklas Haas et al."
+          << std::endl
+          << std::endl;
+#endif
 #ifdef TLRENDER_RAW
         o << "LibRaw " << LIBRAW_VERSION_STR << endl
           << "Copyright (C) 2008-2021 LibRaw LLC (info@libraw.org)" << endl

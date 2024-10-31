@@ -123,7 +123,7 @@ set(SOURCES
 )
 
 
-list( APPEND LIBRARIES mrvFlmm mrvCore ${FLTK_LIBRARIES} ${FLTK_gl_LIBRARIES} ${JASPER_LIBRARIES} MINIZIP::minizip)
+list(APPEND LIBRARIES mrvFlmm mrvCore ${FLTK_LIBRARIES} ${FLTK_gl_LIBRARIES} ${JASPER_LIBRARIES} MINIZIP::minizip)
 
 if(UNIX AND NOT APPLE)
     list(APPEND LIBRARIES OpenGL::OpenGL)
@@ -157,6 +157,10 @@ if (UNIX AND NOT APPLE)
     if (TLRENDER_X11)
 	list(APPEND LIBRARIES Xss )
     endif()
+endif()
+
+if(TLRENDER_LIBPLACEBO)
+    list(APPEND LIBRARIES libplacebo::libplacebo)
 endif()
 
 if(TLRENDER_NET)

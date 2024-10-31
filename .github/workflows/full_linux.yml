@@ -49,7 +49,7 @@ jobs:
       run: sudo apt-get install -y ninja-build
       
     - name: Install meson
-      run: sudo apt-get install meson
+      run: sudo pip install meson
       
     - name: Install gettext
       run: sudo apt-get install -y gettext

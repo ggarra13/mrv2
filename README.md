@@ -126,7 +126,7 @@ mrv2 binaries run on Windows 8.1+, RedHat 8.9+ or Ubuntu 20.04+ and macOS 11.0+.
 
 # Features
 
-The source code is written in C++17 and uses CMake for the build system, with some bash scripts for auxiliary tasks.  
+The source code is written in C++20 and uses CMake for the build system, with some bash scripts for auxiliary tasks.  
 The core of the playback engine is a custom version of tlRender (www.github.com/darbyjohnston/tlRender.git).
 
 Currently supported:
@@ -239,7 +239,9 @@ xcode-select --install
 #
 # Install dependencies
 #
-brew install git gnu-sed swig subversion meson cmake ninja gettext openssl readline sqlite3 xz zlib
+brew install git gnu-sed swig subversion python cmake ninja gettext openssl readline sqlite3 xz zlib
+
+pip install meson
 
 ```
 

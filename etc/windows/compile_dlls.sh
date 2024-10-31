@@ -12,6 +12,11 @@
 . bin/compile/install_libintl_windows.sh
 
 #
+# Deal with libplacebo (compile from source)
+#
+. bin/compile/compile_libplacebo_windows.sh
+
+#
 # Deal with FFmpeg dependencies (compiled from source)
 #
 . bin/compile/compile_ffmpeg_deps_windows.sh 
