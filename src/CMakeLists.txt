@@ -178,8 +178,11 @@ if(TLRENDER_X264)
 endif()
 
 
-if(MRV2_PYBIND11)
+if(MRV2_PYBIND11 OR BUILD_PYTHON)
     find_package(Python REQUIRED COMPONENTS Interpreter Development)
+endif()
+
+if(MRV2_PYBIND11)
     add_definitions(-DMRV2_PYBIND11)
     find_package(pybind11 REQUIRED)
 endif()
