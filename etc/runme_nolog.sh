@@ -174,6 +174,7 @@ if [ -z "$FLTK_BUILD_SHARED" ]; then
     fi
 fi
 
+
 echo
 echo
 echo "Building summary"
@@ -197,6 +198,18 @@ if [[ $KERNEL == *Msys* ]]; then
     fi
     nsis_version=`"${nsis_exe}" -version`
     echo "NSIS ${nsis_version}"
+    if [[ $TLRENDER_LIBPLACEBO == 1 || $TLRENDER_LIBPLACEBO == ON ]]; then
+	if command -v clang > /dev/null 2>&1; then
+	    clang_exe=clang.exe
+	    ${clang_exe} --version
+	else
+	    echo
+	    echo "clang.exe NOT found!!! Cannot compile libplacebo."
+	    echo "Please re-install MSVC with Clang turned on."
+	    echo
+	    exit 1
+	fi
+    fi
 fi
 
 mkdir -p $BUILD_DIR/install
