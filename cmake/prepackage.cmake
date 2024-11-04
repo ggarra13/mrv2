@@ -123,6 +123,7 @@ set( _pythonSiteModules
     imagesize*
     Jinja*
     MarkupSafe*
+    meson*
     pillow*
     PIL*
     polib*
