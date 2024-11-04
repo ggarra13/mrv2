@@ -54,7 +54,8 @@ namespace mrv
             int H = w.H;
             o->damage_resize(X, Y, W, H);
         }
-        if(d->t) d->t->init_sizes();
+        if (d->t)
+            d->t->init_sizes();
         delete d;
     }
 
@@ -64,8 +65,8 @@ namespace mrv
 
       Pass zero as \p oldx or \p oldy to disable drag in that direction.
     */
-    void Tile::move_intersection(int oldx, int oldy, int newx, int newy,
-                                 bool release)
+    void Tile::move_intersection(
+        int oldx, int oldy, int newx, int newy, bool release)
     {
         Fl_Widget* const* a = array();
         Fl_Rect* p = bounds();
@@ -158,7 +159,7 @@ namespace mrv
     int Tile::handle(int event)
     {
         static int sdrag;
-        static int sdx, sdy;
+        static int sdy;
         static int sx, sy;
 
         int mx = Fl::event_x();
@@ -196,7 +197,6 @@ namespace mrv
                         int t = mx - (o->x() + o->w());
                         if (abs(t) < mindx)
                         {
-                            sdx = t;
                             mindx = abs(t);
                             oldx = p->r();
                         }
