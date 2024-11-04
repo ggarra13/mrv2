@@ -1,8 +1,13 @@
 v1.3.0
 ======
 
+One major new feature and one important bug fix.
+
 - Added tone-mapping of HDR videos.  Note that FFmpeg seems to be buggy when
-  reading the frame metadata, so we must rely on the stream metadata.
+  reading the frame metadata, so we must rely on the stream metadata only.
+  Note that to compile this on Windows, you must install MSVC's shipped clang
+  compiler.
+  
 - Fixed tiling behavior (dragging of timeline bar not making view window
   smaller) which got broken in v1.2.9.
   
