@@ -13,76 +13,79 @@ decl {\#include "FL/Fl_Flex.H"} {public global
 decl {\#include "mrvCore/mrvColorSpaces.h"} {public global
 }
 
+decl {\#include "mrvCore/mrvMath.h"} {selected public global
+}
+
 decl {\#include "mrvCore/mrvI8N.h"} {public global
-}
-
-decl {\#include "mrvCore/mrvMath.h"} {private local
-}
-
-decl {\#include "mrvWidgets/mrvTimelineGroup.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvTimecode.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvTile.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvStatusBar.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvStateButton.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvSlider.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvSecondaryWindow.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvResizableBar.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvVolumeSlider.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvMenuBar.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvMainWindow.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvFPSInput.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvDockGroup.h"} {public global
-}
-
-decl {\#include "mrvWidgets/mrvButton.h"} {public global
 }
 
 decl {\#include "mrvWidgets/mrvAudioButton.h"} {public global
 }
 
-decl {\#include "mrvGL/mrvTimelineWidget.h"} {public global
+decl {\#include "mrvWidgets/mrvButton.h"} {public global
 }
 
-decl {\#include "mrvGL/mrvGLViewport.h"} {public global
+decl {\#include "mrvWidgets/mrvDockGroup.h"} {public global
 }
 
-decl {\#include "mrvPanels/mrvPanelsCallbacks.h"} {public global
+decl {\#include "mrvWidgets/mrvFPSInput.h"} {public global
 }
 
-decl {\#include "mrvFl/mrvPreferences.h"} {public global
+decl {\#include "mrvWidgets/mrvMainWindow.h"} {public global
+}
+
+decl {\#include "mrvWidgets/mrvMenuBar.h"} {public global
+}
+
+decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public global
+}
+
+decl {\#include "mrvWidgets/mrvVolumeSlider.h"} {public global
+}
+
+decl {\#include "mrvWidgets/mrvResizableBar.h"} {public global
+}
+
+decl {\#include "mrvWidgets/mrvSecondaryWindow.h"} {public global
+}
+
+decl {\#include "mrvWidgets/mrvSlider.h"} {public global
+}
+
+decl {\#include "mrvWidgets/mrvStateButton.h"} {public global
+}
+
+decl {\#include "mrvWidgets/mrvStatusBar.h"} {public global
+}
+
+decl {\#include "mrvWidgets/mrvTile.h"} {public global
+}
+
+decl {\#include "mrvWidgets/mrvTimecode.h"} {public global
+}
+
+decl {\#include "mrvWidgets/mrvTimelineGroup.h"} {public global
+}
+
+decl {\#include "mrvFl/mrvLanguages.h"} {public global
 }
 
 decl {\#include "mrvFl/mrvCallbacks.h"} {public global
 }
 
-decl {\#include "mrvFl/mrvLanguages.h"} {public global
+decl {\#include "mrvFl/mrvPreferences.h"} {public global
+}
+
+decl {\#include "mrvUI/mrvUtil.h"} {public global
+}
+
+decl {\#include "mrvGL/mrvGLViewport.h"} {public global
+}
+
+decl {\#include "mrvGL/mrvTimelineWidget.h"} {public global
+}
+
+decl {\#include "mrvPanels/mrvPanelsCallbacks.h"} {public global
 }
 
 decl {\#include "mrvApp/mrvSettingsObject.h"} {private local
@@ -100,7 +103,13 @@ decl {\#include "mrvAboutUI.h"} {public global
 decl {\#include "mrvHotkeyUI.h"} {private local
 }
 
-decl {\#include "mrvPreferencesUI.h"} {selected public global
+decl {\#include "mrvPreferencesUI.h"} {public global
+}
+
+decl {class HotkeyUI;} {public global
+}
+
+decl {class AboutUI;} {public global
 }
 
 widget_class PixelToolBarClass {
@@ -812,8 +821,8 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {56 69 933 602} type Double align 80 hide resizable
-      class {mrv::MainWindow} size_range {933 602 0 0}
+      xywh {56 69 933 602} type Double align 80 resizable
+      class {mrv::MainWindow} size_range {933 602 0 0} visible
     } {
       Fl_Flex uiRegion {open
         xywh {0 0 933 602} box FLAT_BOX resizable fixed_size_tuples {5  0 24  1 29  3 29  4 30  5 25 }
@@ -1069,27 +1078,27 @@ Value is:  pow( 2, 1/x );} xywh {796 24 137 29} type {Horz Knob} labelsize 10 ma
           }
         }
         Fl_Tile uiTileGroup {
-          label TileGroup open
+          label TileGroup
           xywh {0 53 933 465} labeltype NO_LABEL
           code0 {;}
           class {mrv::Tile}
         } {
           Fl_Box uiTimelineLimit {
-            xywh {0 80 933 408} labeltype NO_LABEL hide
+            xywh {0 80 933 408} labeltype NO_LABEL hide resizable
           }
           Fl_Pack uiViewGroup {open
-            xywh {0 53 933 434} type HORIZONTAL box FLAT_BOX resizable
+            xywh {0 53 933 435} type HORIZONTAL box FLAT_BOX
             code0 {o->fixed( uiToolsGroup, uiToolsGroup->w() );}
             code1 {uiMain->workspace = uiViewGroup;}
             class Fl_Flex
           } {
-            Fl_Group uiToolsGroup {open
-              xywh {0 53 44 434} box FLAT_BOX
+            Fl_Group uiToolsGroup {
+              xywh {0 53 42 435} box FLAT_BOX
             } {
               Fl_Button uiScrub {
                 user_data this user_data_type {ViewerUI*}
                 callback {uiView->setActionMode( mrv::ActionMode::kScrub );}
-                tooltip {Scrubbing Tool} image {../../icons/Scrub.svg} compress_image 1 xywh {2 53 40 33} down_box DOWN_BOX value 1 selection_color 95
+                tooltip {Scrubbing Tool} image {../../icons/Scrub.svg} compress_image 1 xywh {2 53 40 35} down_box DOWN_BOX value 1 selection_color 95
                 class {mrv::Button}
               }
               Fl_Button uiSelection {
@@ -1101,7 +1110,7 @@ if (Fl::event_clicks() >= 1)
    mrv::panel::color_area_panel_cb( nullptr, v);
    Fl::event_clicks(0);
 }}
-                tooltip {Area Select Tool} image {../../icons/Selection.svg} compress_image 1 xywh {2 86 40 33} down_box DOWN_BOX selection_color 95
+                tooltip {Area Select Tool} image {../../icons/Selection.svg} compress_image 1 xywh {2 88 40 35} down_box DOWN_BOX selection_color 95
                 class {mrv::Button}
               }
               Fl_Button uiDraw {
@@ -1113,7 +1122,7 @@ if (Fl::event_clicks() >= 1)
    mrv::panel::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
 }}
-                tooltip {Freehand Drawing Tool} image {../../icons/Draw.svg} compress_image 1 xywh {2 119 40 33} down_box DOWN_BOX selection_color 95
+                tooltip {Freehand Drawing Tool} image {../../icons/Draw.svg} compress_image 1 xywh {2 123 40 35} down_box DOWN_BOX selection_color 95
                 class {mrv::Button}
               }
               Fl_Button uiErase {
@@ -1125,7 +1134,7 @@ if (Fl::event_clicks() >= 1)
    mrv::panel::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
 }}
-                tooltip {Eraser Tool} image {../../icons/Erase.svg} compress_image 1 xywh {2 152 40 32} down_box DOWN_BOX selection_color 95
+                tooltip {Eraser Tool} image {../../icons/Erase.svg} compress_image 1 xywh {2 158 40 35} down_box DOWN_BOX selection_color 95
                 class {mrv::Button}
               }
               Fl_Button uiPolygon {
@@ -1241,7 +1250,7 @@ uiView->setActionMode( mode );}
                 class {mrv::Button}
               }
               Fl_Group {} {
-                xywh {2 366 37 51}
+                xywh {2 366 40 51}
               } {
                 Fl_Slider uiPenOpacity {
                   callback {auto settings = app->settings();
@@ -1266,49 +1275,49 @@ settings->setValue( mrv::kPenColorA, a);}
                 }
               }
               Fl_Group {} {open
-                xywh {2 421 42 66}
+                xywh {2 421 40 66}
               } {
                 Fl_Button uiUndoDraw {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiView->undo();}
-                  tooltip {Undo Last Shape Drawn in Current Frame.} image {../../icons/Undo.svg} compress_image 1 xywh {2 421 40 33} deactivate
+                  tooltip {Undo Last Shape Drawn in Current Frame.} image {../../icons/Undo.svg} compress_image 1 xywh {0 396 40 35} deactivate
                   class {mrv::Button}
                 }
                 Fl_Button uiRedoDraw {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiView->redo();}
-                  tooltip {Redo Previous Shape Drawn in Current Frame.} image {../../icons/Redo.svg} compress_image 1 xywh {2 454 40 33} deactivate
+                  tooltip {Redo Previous Shape Drawn in Current Frame.} image {../../icons/Redo.svg} compress_image 1 xywh {0 431 40 36} deactivate
                   class {mrv::Button}
                 }
               }
             }
             Fl_Group uiView {open
-              xywh {42 53 621 433} color 56 labeltype NO_LABEL resizable
+              xywh {42 53 621 435} color 56 labeltype NO_LABEL resizable
               code0 {o->main( this );}
               class {mrv::Viewport}
             } {}
-            Fl_Group uiDockGroup {open
-              xywh {663 53 270 433} box FLAT_BOX hide
+            Fl_Group uiDockGroup {
+              xywh {663 53 270 435} box FLAT_BOX hide
               code0 {uiViewGroup->fixed( o, 270 );}
             } {
               Fl_Box uiResizableBar {
-                xywh {663 53 10 433} box ENGRAVED_BOX
+                xywh {663 53 10 435} box ENGRAVED_BOX
                 class {mrv::ResizableBar}
               }
               Fl_Group uiDock {
                 label DockGroup open
-                xywh {673 53 260 433} box FLAT_BOX labeltype NO_LABEL resizable
+                xywh {673 53 260 435} box FLAT_BOX labeltype NO_LABEL resizable
                 code0 {o->set_window( uiMain );}
                 code1 {uiMain->set_dock(o);}
                 class {mrv::DockGroup}
               } {}
             }
           }
-          Fl_Group uiTimelineGroup {open
+          Fl_Group uiTimelineGroup {
             xywh {0 488 933 30} box FLAT_BOX color 51
             class {mrv::TimelineGroup}
           } {
-            Fl_Group uiTimeline {
+            Fl_Group uiTimeline {open
               xywh {0 496 933 22} labeltype NO_LABEL resizable
               class {mrv::TimelineWidget}
             } {}
@@ -1336,7 +1345,7 @@ settings->setValue( mrv::kPenColorA, a);}
           } {}
         }
         Fl_Group uiStatusGroup {
-          label StatusBar open
+          label StatusBar
           xywh {0 577 933 25} color 0 labeltype NO_LABEL
         } {
           Fl_Group uiStatusBar {open
@@ -1347,7 +1356,7 @@ settings->setValue( mrv::kPenColorA, a);}
           } {
             Fl_Box uiStatus {
               label Scrub
-              tooltip {Current tool being used.} xywh {818 577 115 25} box ENGRAVED_BOX labelsize 12 align 64
+              tooltip {Current tool being used.} xywh {818 577 115 25} box ENGRAVED_BOX align 64
             }
           }
         }
