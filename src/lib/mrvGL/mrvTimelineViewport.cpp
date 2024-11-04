@@ -3341,6 +3341,10 @@ namespace mrv
         {
             p.hdrOptions.tonemap = false;
         }
+            
+        auto display = p.ui->uiTimeline->getDisplayOptions();
+        display.hdr = p.hdrOptions;
+        p.ui->uiTimeline->setDisplayOptions(display);
 
             
         if (!p.displayOptions.empty() &&
