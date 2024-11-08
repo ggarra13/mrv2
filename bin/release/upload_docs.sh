@@ -16,6 +16,8 @@ find "$start_dir" -type f -name '*.rst' -exec sed -i "s/v[0-9]\.[0-9]\.[0-9]/v${
 
 ./runmeq.sh -t doc
 
+pacman -Sy rsync --noconfirm
+
 rsync -avP --exclude '*~' -e ssh docs/www/* ggarra13@web.sourceforge.net:/home/project-web/mrv2/htdocs
 
 rsync -avP --exclude '*~' -e ssh src/docs/* ggarra13@web.sourceforge.net:/home/project-web/mrv2/htdocs/docs
