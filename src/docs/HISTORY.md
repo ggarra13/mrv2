@@ -1,7 +1,7 @@
 v1.3.1
 ======
 
-- No changes.
+- Updated docs.
 
 v1.3.0
 ======
