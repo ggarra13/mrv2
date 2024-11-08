@@ -238,12 +238,11 @@ brew install git gnu-sed swig subversion python cmake ninja gettext openssl read
 
 ### Windows
 
-- [Visual Studio 2019 or later Community](https://visualstudio.microsoft.com/en/free-developer-offers)
+- [Visual Studio 2019 or later Community](https://visualstudio.microsoft.com/en/free-developer-offers) (with clang compiler)
 - [MSYS2](https://www.msys2.org/)
 - [Git](https://git-scm.com/downloads)
 - [CMake 3.26.2 or later](https://cmake.org/download/)
 - [Python 3.10 or later](https://www.python.org/downloads/)
-- [meson 1.3.1 or later](https://github.com/mesonbuild/meson/releases/tag/1.3.1)
 - [NSIS Installer for Packaging](https://nsis.sourceforge.io/Download) - Optional
 
 Additional dependencies are downloaded and built automatically by the CMake
