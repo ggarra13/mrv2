@@ -270,7 +270,8 @@ namespace mrv
             break;
         case kRectangle:
             p.ui->uiRectangle->value(1);
-            p.ui->uiRectangle->bind_image(mrv::load_svg("OutlineRectangle.svg"));
+            p.ui->uiRectangle->bind_image(
+                mrv::load_svg("OutlineRectangle.svg"));
             p.ui->uiStatus->copy_label(_("Rectangle"));
             break;
         case kFilledRectangle:
@@ -1289,13 +1290,13 @@ namespace mrv
             auto i = p.tagData.find("Data Window");
             if (i != p.tagData.end())
                 metadataRefresh = true;
-        
+
             i = p.tagData.find("hdr");
             if (i != p.tagData.end())
             {
                 videoRefresh = true;
             }
-        
+
             if (fullRefresh)
             {
                 panel::imageInfoPanel->refresh();
@@ -1304,7 +1305,7 @@ namespace mrv
             {
                 if (videoRefresh || metadataRefresh)
                     panel::imageInfoPanel->getTags();
-                
+
                 if (imageRefresh)
                     panel::imageInfoPanel->imageRefresh();
                 if (videoRefresh)
@@ -2337,15 +2338,14 @@ namespace mrv
                     Fl::screen_xywh(X, Y, W, H, screen_num);
                     w->resize(X, Y, W, H);
 #endif
-                    
+
                     // When fullscreen happens, the tool group bar also resizes
                     // on width, so we need to bring it back to its originazl
                     // size.
                     p.ui->uiRegion->layout();
-                    
+
                     p.ui->uiViewGroup->layout();
                     p.ui->uiViewGroup->redraw();
-                    
                 }
             }
         }
@@ -3196,11 +3196,11 @@ namespace mrv
 
         if (value == p.showVideo)
             return;
-        
+
         p.showVideo = value;
         redrawWindows();
     }
-        
+
     void TimelineViewport::showImage(const std::shared_ptr<image::Image>& image)
     {
         TLRENDER_P();
@@ -3331,7 +3331,7 @@ namespace mrv
             if (p.hdr != i->second)
             {
                 p.hdr = i->second;
-                
+
                 // Parse the JSON string back into a nlohmann::json object
                 nlohmann::json j = nlohmann::json::parse(i->second);
                 p.hdrOptions.hdrData = j.get<image::HDRData>();
@@ -3341,14 +3341,15 @@ namespace mrv
         {
             p.hdrOptions.tonemap = false;
         }
-            
+
+        // \@bug: Apple (macOS Intel at least) is too slow and goes black.
+#ifndef __APPLE__
         auto display = p.ui->uiTimeline->getDisplayOptions();
         display.hdr = p.hdrOptions;
         p.ui->uiTimeline->setDisplayOptions(display);
+#endif
 
-            
-        if (!p.displayOptions.empty() &&
-            p.displayOptions[0].normalize.enabled)
+        if (!p.displayOptions.empty() && p.displayOptions[0].normalize.enabled)
         {
             i = p.tagData.find("Autonormalize Minimum");
             if (i != p.tagData.end())
