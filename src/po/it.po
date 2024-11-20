@@ -2886,15 +2886,6 @@ msgid ""
 "{1}"
 msgstr "Espressione regolare creata da {0}. È: {1}"
 
-msgid "Iteration {0} matched prefix={1}"
-msgstr "Iterazione {0} corrispondente prefisso={1}"
-
-msgid "Iteration {0} matched version={1}"
-msgstr "Iterazione {0} corrispondente versione={1}"
-
-msgid "Iteration {0} matched suffix={1}"
-msgstr "Iterazione {0} abbinata suffisso={1}"
-
 msgid "Iteration {0} will check version={1}"
 msgstr "Iterazione {0} controllerà versione={1}"
 
@@ -7380,6 +7371,15 @@ msgstr "Finestra di commutazione di tasti di avviamento"
 
 msgid "Toggle About Window"
 msgstr "Commuta la finestra"
+
+#~ msgid "Iteration {0} matched prefix={1}"
+#~ msgstr "Iterazione {0} corrispondente prefisso={1}"
+
+#~ msgid "Iteration {0} matched version={1}"
+#~ msgstr "Iterazione {0} corrispondente versione={1}"
+
+#~ msgid "Iteration {0} matched suffix={1}"
+#~ msgstr "Iterazione {0} abbinata suffisso={1}"
 
 #~ msgid "TV"
 #~ msgstr "TV"

@@ -2,6 +2,8 @@ v1.3.1
 ======
 
 - Updated docs.
+- Fixed Image/Version/Next and Image/Version/Previous always going to the last
+  clips.  The routines are also faster now.
 
 v1.3.0
 ======

@@ -2873,15 +2873,6 @@ msgid ""
 "{1}"
 msgstr "Regelmiger Ausdruck aus {0}. Es ist: {1}"
 
-msgid "Iteration {0} matched prefix={1}"
-msgstr "Iteration {0} angepasste Prfix={1}"
-
-msgid "Iteration {0} matched version={1}"
-msgstr "Iteration {0} angepasste Version={1}"
-
-msgid "Iteration {0} matched suffix={1}"
-msgstr "Iteration {0} angepasst Suffix={1}"
-
 msgid "Iteration {0} will check version={1}"
 msgstr "Iteration {0} wird Version={1} berprfen"
 
@@ -7358,6 +7349,15 @@ msgstr "Hotkeys-Fenster umschalten"
 
 msgid "Toggle About Window"
 msgstr "Fenster umschalten"
+
+#~ msgid "Iteration {0} matched prefix={1}"
+#~ msgstr "Iteration {0} angepasste Prfix={1}"
+
+#~ msgid "Iteration {0} matched version={1}"
+#~ msgstr "Iteration {0} angepasste Version={1}"
+
+#~ msgid "Iteration {0} matched suffix={1}"
+#~ msgstr "Iteration {0} angepasst Suffix={1}"
 
 #~ msgid "TV"
 #~ msgstr "TV"

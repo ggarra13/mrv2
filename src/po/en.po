@@ -2873,15 +2873,6 @@ msgstr ""
 "Regular expression created from {0}.  It is:\n"
 "{1}"
 
-msgid "Iteration {0} matched prefix={1}"
-msgstr "Iteration {0} matched prefix={1}"
-
-msgid "Iteration {0} matched version={1}"
-msgstr "Iteration {0} matched version={1}"
-
-msgid "Iteration {0} matched suffix={1}"
-msgstr "Iteration {0} matched suffix={1}"
-
 msgid "Iteration {0} will check version={1}"
 msgstr "Iteration {0} will check version={1}"
 
@@ -7329,6 +7320,15 @@ msgstr "Toggle Hotkeys Window"
 
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
+
+#~ msgid "Iteration {0} matched prefix={1}"
+#~ msgstr "Iteration {0} matched prefix={1}"
+
+#~ msgid "Iteration {0} matched version={1}"
+#~ msgstr "Iteration {0} matched version={1}"
+
+#~ msgid "Iteration {0} matched suffix={1}"
+#~ msgstr "Iteration {0} matched suffix={1}"
 
 #~ msgid "TV"
 #~ msgstr "TV"

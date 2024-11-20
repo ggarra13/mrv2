@@ -2925,15 +2925,6 @@ msgstr ""
 "Expression regular creada desde {0}.  Es:\n"
 "{1}"
 
-msgid "Iteration {0} matched prefix={1}"
-msgstr "Iteración {0} encontró prefijo={1}"
-
-msgid "Iteration {0} matched version={1}"
-msgstr "Iteración {0} encontró versión={1}"
-
-msgid "Iteration {0} matched suffix={1}"
-msgstr "Iteración {0} encontró sufijo={1}"
-
 msgid "Iteration {0} will check version={1}"
 msgstr "Iteración {0} encontró versión={1}"
 
@@ -7403,6 +7394,15 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
+
+#~ msgid "Iteration {0} matched prefix={1}"
+#~ msgstr "Iteración {0} encontró prefijo={1}"
+
+#~ msgid "Iteration {0} matched version={1}"
+#~ msgstr "Iteración {0} encontró versión={1}"
+
+#~ msgid "Iteration {0} matched suffix={1}"
+#~ msgstr "Iteración {0} encontró sufijo={1}"
 
 #~ msgid "TV"
 #~ msgstr "TV"

@@ -2822,15 +2822,6 @@ msgid ""
 "{1}"
 msgstr "从 {0} 创建的正则表达式。 它是 : {1}"
 
-msgid "Iteration {0} matched prefix={1}"
-msgstr "迭代 {0} 符合前缀 {1}"
-
-msgid "Iteration {0} matched version={1}"
-msgstr "迭代 {0} 匹配版本 {1}"
-
-msgid "Iteration {0} matched suffix={1}"
-msgstr "迭代 {0} 匹配的后缀 {1}"
-
 msgid "Iteration {0} will check version={1}"
 msgstr "迭代 {0} 将检查版本 {1} 。"
 
@@ -7185,6 +7176,15 @@ msgstr "开关热键窗口"
 
 msgid "Toggle About Window"
 msgstr "开关关于窗口"
+
+#~ msgid "Iteration {0} matched prefix={1}"
+#~ msgstr "迭代 {0} 符合前缀 {1}"
+
+#~ msgid "Iteration {0} matched version={1}"
+#~ msgstr "迭代 {0} 匹配版本 {1}"
+
+#~ msgid "Iteration {0} matched suffix={1}"
+#~ msgstr "迭代 {0} 匹配的后缀 {1}"
 
 #~ msgid "TV"
 #~ msgstr "TV"

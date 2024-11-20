@@ -2869,15 +2869,6 @@ msgid ""
 "{1}"
 msgstr "Expression régulière créée à partir de {0}. C'est : {1}"
 
-msgid "Iteration {0} matched prefix={1}"
-msgstr "Itération {0} correspondant au préfixe={1}"
-
-msgid "Iteration {0} matched version={1}"
-msgstr "Itération {0} correspondant à la version={1}"
-
-msgid "Iteration {0} matched suffix={1}"
-msgstr "Itération {0} correspondant au suffixe={1}"
-
 msgid "Iteration {0} will check version={1}"
 msgstr "Iteration {0} va vérifier version={1}"
 
@@ -7382,6 +7373,15 @@ msgstr "Activer la fenêtre des touches d'amorçage"
 
 msgid "Toggle About Window"
 msgstr "Commutation à propos de la fenêtre"
+
+#~ msgid "Iteration {0} matched prefix={1}"
+#~ msgstr "Itération {0} correspondant au préfixe={1}"
+
+#~ msgid "Iteration {0} matched version={1}"
+#~ msgstr "Itération {0} correspondant à la version={1}"
+
+#~ msgid "Iteration {0} matched suffix={1}"
+#~ msgstr "Itération {0} correspondant au suffixe={1}"
 
 #~ msgid "TV"
 #~ msgstr "TV"

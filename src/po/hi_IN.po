@@ -2824,15 +2824,6 @@ msgid ""
 "{1}"
 msgstr "{0} से नियमित एक्सप्रेशन बनाया गया है. यह है: {1}"
 
-msgid "Iteration {0} matched prefix={1}"
-msgstr "यह प्रोशनरेशन {0} से मेल खाता उपसर्ग={1}"
-
-msgid "Iteration {0} matched version={1}"
-msgstr "यह प्रोशनरेशन {0} संस्करण={1} का मेल खाता है"
-
-msgid "Iteration {0} matched suffix={1}"
-msgstr "यह प्रोशन्शन {0} प्रत्यय={1} का मेल खाता है"
-
 msgid "Iteration {0} will check version={1}"
 msgstr "यह प्रोशनरेशन {0} संस्करण={1} जाँच करेगा"
 
@@ -7234,6 +7225,15 @@ msgstr "यदि आप विंडो को बन्द करना चा
 
 msgid "Toggle About Window"
 msgstr "विंडो के बारे में टॉगल करें"
+
+#~ msgid "Iteration {0} matched prefix={1}"
+#~ msgstr "यह प्रोशनरेशन {0} से मेल खाता उपसर्ग={1}"
+
+#~ msgid "Iteration {0} matched version={1}"
+#~ msgstr "यह प्रोशनरेशन {0} संस्करण={1} का मेल खाता है"
+
+#~ msgid "Iteration {0} matched suffix={1}"
+#~ msgstr "यह प्रोशन्शन {0} प्रत्यय={1} का मेल खाता है"
 
 #~ msgid "TV"
 #~ msgstr "TV"

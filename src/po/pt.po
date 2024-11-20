@@ -2852,15 +2852,6 @@ msgid ""
 "{1}"
 msgstr "Expresso regular criada a partir de {0}. : {1}"
 
-msgid "Iteration {0} matched prefix={1}"
-msgstr "Iterao {0} correspondente ao prefixo={1}"
-
-msgid "Iteration {0} matched version={1}"
-msgstr "Iterao {0} correspondente  verso={1}"
-
-msgid "Iteration {0} matched suffix={1}"
-msgstr "Iterao {0} correspondente ao sufixo={1}"
-
 msgid "Iteration {0} will check version={1}"
 msgstr "Iterao {0} ir verificar a verso={1}"
 
@@ -7325,6 +7316,15 @@ msgstr "Alternar a janela de teclas instantneas"
 
 msgid "Toggle About Window"
 msgstr "Alternar Sobre a Janela"
+
+#~ msgid "Iteration {0} matched prefix={1}"
+#~ msgstr "Iterao {0} correspondente ao prefixo={1}"
+
+#~ msgid "Iteration {0} matched version={1}"
+#~ msgstr "Iterao {0} correspondente  verso={1}"
+
+#~ msgid "Iteration {0} matched suffix={1}"
+#~ msgstr "Iterao {0} correspondente ao sufixo={1}"
 
 #~ msgid "TV"
 #~ msgstr "TV"

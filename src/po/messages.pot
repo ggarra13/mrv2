@@ -5,7 +5,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.3.0\n"
+"Project-Id-Version: mrv2 v1.3.1\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -2556,15 +2556,6 @@ msgstr ""
 msgid ""
 "Regular expression created from {0}.  It is:\n"
 "{1}"
-msgstr ""
-
-msgid "Iteration {0} matched prefix={1}"
-msgstr ""
-
-msgid "Iteration {0} matched version={1}"
-msgstr ""
-
-msgid "Iteration {0} matched suffix={1}"
 msgstr ""
 
 msgid "Iteration {0} will check version={1}"

@@ -2906,15 +2906,6 @@ msgstr ""
 "Регулярное выражение, созданное из {0}:\n"
 "{1}"
 
-msgid "Iteration {0} matched prefix={1}"
-msgstr "Итерация {0} совпадающий префикс= {1}"
-
-msgid "Iteration {0} matched version={1}"
-msgstr "Итерация {0} compended версия= {1}"
-
-msgid "Iteration {0} matched suffix={1}"
-msgstr "Итерация {0} Совпадение suffix= {1}"
-
 msgid "Iteration {0} will check version={1}"
 msgstr "Итерация {0} проверяет версию {1}"
 
@@ -7377,6 +7368,15 @@ msgstr "Переключить окно горячих клавиш"
 
 msgid "Toggle About Window"
 msgstr "Закладка о окне"
+
+#~ msgid "Iteration {0} matched prefix={1}"
+#~ msgstr "Итерация {0} совпадающий префикс= {1}"
+
+#~ msgid "Iteration {0} matched version={1}"
+#~ msgstr "Итерация {0} compended версия= {1}"
+
+#~ msgid "Iteration {0} matched suffix={1}"
+#~ msgstr "Итерация {0} Совпадение suffix= {1}"
 
 #~ msgid "TV"
 #~ msgstr "TV"
