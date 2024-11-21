@@ -1148,6 +1148,7 @@ SteffenDuenner                                (Linux Build Debugging)
 throb                                         (Caching improvements)
 Todica Ionut                                  (UI improvements)
 Tomycj                                        (UI improvements)
+Viktor Holló                                  (Image Versioning bug)
 xiaopeng12138                                 (UTF-8 Debugging)
 
 )THANKS";
