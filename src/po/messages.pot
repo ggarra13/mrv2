@@ -1939,6 +1939,18 @@ msgstr ""
 msgid "Compression"
 msgstr ""
 
+msgid "Compression Num. Scanlines"
+msgstr ""
+
+msgid "Number of Compression Scanlines"
+msgstr ""
+
+msgid "Lossy Compression"
+msgstr ""
+
+msgid "Deep Compression"
+msgstr ""
+
 msgid "unsigned byte (8-bits per channel)"
 msgstr ""
 
