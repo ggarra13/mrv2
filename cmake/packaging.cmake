@@ -85,6 +85,9 @@ set( CPACK_PRE_BUILD_SCRIPTS ${MRV2_ROOT}/cmake/prepackage.cmake )
 if( APPLE )
     set(CPACK_GENERATOR Bundle )
 
+    set(CPACK_DMG_FORMAT "UDBZ")
+    set(CPACK_DMG_FILESYSTEM "APFS")
+
     set( INSTALL_NAME ${PROJECT_NAME} )
 
     configure_file(
