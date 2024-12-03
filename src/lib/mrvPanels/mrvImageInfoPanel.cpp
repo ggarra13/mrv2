@@ -1767,17 +1767,20 @@ namespace mrv
                     if (rotation != 0.F)
                         add_float(_("Rotation"), _("Video Rotation"), rotation);
 
-                    if (!compression.empty())
+                    if (!compression.empty() && compression != "Unknown")
+                    {
                         add_text(
                             _("Compression"), _("Compression"), compression);
 
-                    if (compressionNumScanlines > 0)
-                        add_int(_("Compression Num. Scanlines"),
-                                compressionNumScanlines);
-                    add_bool(_("Lossy Compression"), _("Lossy Compression"),
-                             isLossyCompression);
-                    add_bool(_("Deep Compression"), _("Deep Compression"),
-                             isValidDeepCompression);
+                        if (compressionNumScanlines > 0)
+                            add_int(_("Compression Num. Scanlines"),
+                                    _("Number of Compression Scanlines"),
+                                    compressionNumScanlines);
+                        add_bool(_("Lossy Compression"), _("Lossy Compression"),
+                                 isLossyCompression);
+                        add_bool(_("Deep Compression"), _("Deep Compression"),
+                                 isValidDeepCompression);
+                    }
                     
                     ++group;
 

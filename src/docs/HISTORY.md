@@ -4,6 +4,10 @@ v1.3.1
 - Updated docs.
 - Fixed Image/Version/Next and Image/Version/Previous always going to the last
   clips.  The routines are also faster now.
+- Upgraded to FLTK 1.4-release-1.
+- Upgraded to OpenEXR v3.3.2.
+- Added OpenEXR's headers Compression, Compression Num. Scanlines,
+  and Is Deep, Is Lossy.
 
 v1.3.0
 ======
