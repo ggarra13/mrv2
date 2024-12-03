@@ -43,6 +43,8 @@ get_kernel()
 
     if [[ $ARCH == arm64 ]]; then
 	export ARCH=arm64
+    elif [[ $ARCH == aarch64 ]]; then
+	export ARCH=aarch64
     elif [[ $ARCH == *64* ]]; then
 	export ARCH=amd64
     else

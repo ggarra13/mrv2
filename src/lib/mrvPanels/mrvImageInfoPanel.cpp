@@ -1688,6 +1688,9 @@ namespace mrv
                     std::string colorTRC;
                     std::string colorSpace;
                     std::string compression;
+                    int compressionNumScanlines = video.compressionNumScanlines;
+                    bool isLossyCompression = video.isLossyCompression;
+                    bool isValidDeepCompression = video.isValidDeepCompression;
                     std::string HDRdata;
                     if (!tagData.empty())
                     {
@@ -1768,6 +1771,14 @@ namespace mrv
                         add_text(
                             _("Compression"), _("Compression"), compression);
 
+                    if (compressionNumScanlines > 0)
+                        add_int(_("Compression Num. Scanlines"),
+                                compressionNumScanlines);
+                    add_bool(_("Lossy Compression"), _("Lossy Compression"),
+                             isLossyCompression);
+                    add_bool(_("Deep Compression"), _("Deep Compression"),
+                             isValidDeepCompression);
+                    
                     ++group;
 
                     tl::image::PixelType pixelType = video.pixelType;
