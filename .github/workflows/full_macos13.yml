@@ -52,9 +52,7 @@ jobs:
 
     - name: Build mrv2
       run: |
-        ./etc/runme_nolog.sh -D TLRENDER_USD=OFF -t packageenv:
-      env:
-        CMAKE_BUILD_PARALLEL_LEVEL: 1
+        ./etc/runme_nolog.sh -D TLRENDER_USD=OFF -t package
       
     - name: Upload binaries
       run: |

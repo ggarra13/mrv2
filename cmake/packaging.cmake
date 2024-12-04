@@ -20,6 +20,8 @@ set( CPACK_PACKAGE_CONTACT "ggarra13@gmail.com")
 #
 if(NOT APPLE)
     set( CPACK_THREADS 0 )
+else()
+    set( CPACK_THREADS 1 )
 endif()
 
 set( MRV2_OS_BITS 32 )
