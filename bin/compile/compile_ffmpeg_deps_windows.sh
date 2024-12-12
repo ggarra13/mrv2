@@ -33,7 +33,7 @@ fi
 #
 # Latest TAGS of all libraries
 #
-LIBVPX_TAG=v1.14.1
+LIBVPX_TAG=6f0c446c7b88d384a1c09caf33ec132e7ee24aea
 DAV1D_TAG=1.3.0
 SVTAV1_TAG=v2.1.2
 X264_TAG=stable
@@ -199,7 +199,7 @@ if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
 	#         latest MSVC on github Actions.
 	#
 	./configure --prefix=$INSTALL_DIR \
-		    --target=x86_64-win64-vs16 \
+		    --target=x86_64-win64-vs17 \
 		    --enable-vp9-highbitdepth \
 		    --disable-unit-tests \
 		    --disable-examples \

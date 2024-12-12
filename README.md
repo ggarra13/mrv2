@@ -250,7 +250,7 @@ superbuild script.  For a list of non-system libraries that mrv2 depends on
 and their licenses, please refer to src/docs/Legal.
 
 The only special requirement is installing a new copy of cmake than the
-one that ships with MSVC19.
+one that ships with MSVC2022.
 If building the NSIS installer, you need to place the root of mrv2 in a path
 that has less than 20 characters, like:
 
