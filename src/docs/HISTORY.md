@@ -8,6 +8,11 @@ v1.3.1
 - Upgraded to OpenEXR v3.3.2.
 - Added OpenEXR's headers Compression, Compression Num. Scanlines,
   and Is Deep, Is Lossy.
+- Added support for Flame's .otio files using OTIO's SerializableContainer in
+  them.
+- Added support for Flame's naming of filenames as localhost/ in .otio files.
+  This change is somewhat controversial in my opinion.
+  
 
 v1.3.0
 ======
