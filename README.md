@@ -238,7 +238,7 @@ brew install git gnu-sed swig subversion python cmake ninja gettext openssl read
 
 ### Windows
 
-- [Visual Studio 2019 or later Community](https://visualstudio.microsoft.com/en/free-developer-offers) (with clang compiler)
+- [Visual Studio 2022 or later Community/Enterprise](https://visualstudio.microsoft.com/en/free-developer-offers) (with clang compiler)
 - [MSYS2](https://www.msys2.org/)
 - [Git](https://git-scm.com/downloads)
 - [CMake 3.26.2 or later](https://cmake.org/download/)

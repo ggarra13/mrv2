@@ -181,12 +181,13 @@ fi
 if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
     cd $ROOT_DIR/sources
     if [[ ! -d libvpx ]]; then
-	git clone --depth 1 --branch ${LIBVPX_TAG} ${LIBVPX_REPO}
+	git clone ${LIBVPX_REPO}
     fi
     
     if [[ ! -e $INSTALL_DIR/lib/vpx.lib ]]; then
 
 	cd $ROOT_DIR/sources/libvpx
+	git checkout ${LIBVPX_TAG}
     
 	echo
 	echo "Compiling libvpx......"
