@@ -12,6 +12,7 @@ v1.3.1
   them.
 - Added support for Flame's naming of filenames as localhost/ in .otio files.
   This change is somewhat controversial in my opinion.
+- Updated libvpx compilation to MSVC2022, instead of MSVC2019.
   
 
 v1.3.0
