@@ -76,7 +76,6 @@ if(BUILD_PYTHON )
 else()
     set(Python_EXECUTABLE "$ENV{PYTHONEXE}")
     set(Python_VERSION "$ENV{PYTHON_VERSION}")
-    message(STATUS "Python EXECUTABLE=${Python_EXECUTABLE}")
     if (NOT EXISTS "${Python_EXECUTABLE}")
 	find_package(Python REQUIRED COMPONENTS Interpreter)
 	if (NOT EXISTS "${Python_EXECUTABLE}")
@@ -90,6 +89,7 @@ else()
     endif()
 endif()
 
+message(STATUS "Python EXECUTABLE=${Python_EXECUTABLE}")
 set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
 
 
