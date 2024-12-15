@@ -9,8 +9,6 @@ v1.3.1
   and Is Deep, Is Lossy.
 - Added support for Flame's .otio files using OTIO's SerializableContainer in
   them.
-- Added support for Flame's naming of filenames as localhost/ in .otio files.
-  This change is somewhat controversial in my opinion.
 - Updated libvpx compilation to MSVC2022, instead of MSVC2019, except on
   GitHub Actions.
 - Updated to FLTK's release 1.4.1.
@@ -18,7 +16,10 @@ v1.3.1
 - Improved build reporting swig version used.
 - Made tlRender compile after FLTK so that preferences can be read from
   tlRender.
-- Made PathMappings' work on .otio files.
+- Made PathMappings' work on .otio files.  If building from source, you may
+  need to do a:
+
+       $ runme.sh clean
   
 
 v1.3.0
