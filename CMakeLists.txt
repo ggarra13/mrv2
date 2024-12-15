@@ -145,6 +145,7 @@ add_subdirectory( tlRender/etc/SuperBuild)
 set(FLTK_DEP )
 if(BUILD_FLTK)
     include(cmake/Modules/BuildFLTK.cmake)
+    add_dependencies(tlRender ${FLTK_DEP})
 endif()
 
 if(BUILD_PYTHON AND TLRENDER_USD)

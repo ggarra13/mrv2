@@ -7,10 +7,8 @@ include( ExternalProject )
 # The cutting EDGE!
 #set( FLTK_GIT_TAG master )
 
-# Wayland fix. (latest stable)
-#set(FLTK_GIT_TAG a333817f4178d944685fc787bd389097e8d85aca)
-
-set(FLTK_GIT_TAG release-1.4.0-1)
+#set(FLTK_GIT_TAG 5ff42dd37a5fa071f54a6e413e349f26f4837340 )
+set(FLTK_GIT_TAG release-1.4.1)
 
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
     # If we are building pyFLTK compile shared
@@ -67,7 +65,6 @@ ExternalProject_Add(
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps/FLTK
     GIT_REPOSITORY "https://github.com/fltk/fltk.git"
     GIT_TAG ${FLTK_GIT_TAG}
-    DEPENDS tlRender
     PATCH_COMMAND ${FLTK_PATCH}
     CMAKE_ARGS
     -DCMAKE_C_COMPILER=${FLTK_C_COMPILER}

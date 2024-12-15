@@ -4,7 +4,6 @@ v1.3.1
 - Updated docs.
 - Fixed Image/Version/Next and Image/Version/Previous always going to the last
   clips.  The routines are also faster now.
-- Upgraded to FLTK 1.4-release-1.
 - Upgraded to OpenEXR v3.3.2.
 - Added OpenEXR's headers Compression, Compression Num. Scanlines,
   and Is Deep, Is Lossy.
@@ -12,7 +11,14 @@ v1.3.1
   them.
 - Added support for Flame's naming of filenames as localhost/ in .otio files.
   This change is somewhat controversial in my opinion.
-- Updated libvpx compilation to MSVC2022, instead of MSVC2019.
+- Updated libvpx compilation to MSVC2022, instead of MSVC2019, except on
+  GitHub Actions.
+- Updated to FLTK's release 1.4.1.
+- Updated pyFTLK to release -r650.
+- Improved build reporting swig version used.
+- Made tlRender compile after FLTK so that preferences can be read from
+  tlRender.
+- Made PathMappings' work on .otio files.
   
 
 v1.3.0

@@ -5,14 +5,14 @@
 include(ExternalProject)
 
 set(pyFLTK_SVN_REPOSITORY "https://svn.code.sf.net/p/pyfltk/code/branches/fltk1.4")
-set(pyFLTK_SVN_REVISION 631)
+set(pyFLTK_SVN_REVISION 650)
 set(pyFLTK_SVN_REVISION_ARG -r ${pyFLTK_SVN_REVISION})
 
-if(NOT Python_EXECUTABLE)
+if(NOT PYTHON_EXECUTABLE)
     if(UNIX)
-	set(Python_EXECUTABLE python3)
+	set(PYTHON_EXECUTABLE python3)
     else()
-	set(Python_EXECUTABLE python)
+	set(PYTHON_EXECUTABLE python)
     endif()
 endif()
 
@@ -64,35 +64,6 @@ endif()
 # Commands
 #
 set(pyFLTK_PATCH
-    # For compilation on new FLTK1.4 fltk-config
-    COMMAND
-    ${CMAKE_COMMAND} -E copy_if_different
-    "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/setup.py"
-    "${CMAKE_BINARY_DIR}/deps/pyFLTK/src/pyFLTK/"
-
-    # for fl_measure
-    COMMAND
-    ${CMAKE_COMMAND} -E copy_if_different
-    "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/fl_draw.i" 
-    "${CMAKE_BINARY_DIR}/deps/pyFLTK/src/pyFLTK/swig/"
-
-    # for screen_xywh
-    COMMAND
-    ${CMAKE_COMMAND} -E copy_if_different
-    "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/Fl.i" 
-    "${CMAKE_BINARY_DIR}/deps/pyFLTK/src/pyFLTK/swig/"
-    
-    # for on_remove/on_insert
-    COMMAND
-    ${CMAKE_COMMAND} -E copy_if_different
-    "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/Fl_Group.i"
-    "${CMAKE_BINARY_DIR}/deps/pyFLTK/src/pyFLTK/swig/"
-    
-    # for typemap(out) data()
-    COMMAND
-    ${CMAKE_COMMAND} -E copy_if_different
-    "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/Fl_Image.i"
-    "${CMAKE_BINARY_DIR}/deps/pyFLTK/src/pyFLTK/swig/"
 )
 
 # Environment setup for configure, building and installing
@@ -116,10 +87,10 @@ endif()
 
 # Commands for configure, build and install
 set(pyFLTK_CONFIGURE
-    COMMAND ${pyFLTK_ENV} ${Python_EXECUTABLE} -m pip install setuptools
-    COMMAND ${pyFLTK_ENV} ${Python_EXECUTABLE} setup.py swig --enable-shared ${pyFLTK_DEBUG})
-set(pyFLTK_BUILD     ${pyFLTK_ENV} ${Python_EXECUTABLE} setup.py build --enable-shared ${pyFLTK_DEBUG})
-set(pyFLTK_INSTALL ${pyFLTK_ENV} ${Python_EXECUTABLE} -m pip install . )
+    COMMAND ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} -m pip install setuptools
+    COMMAND ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py swig --enable-shared ${pyFLTK_DEBUG})
+set(pyFLTK_BUILD     ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py build --enable-shared ${pyFLTK_DEBUG})
+set(pyFLTK_INSTALL ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} -m pip install . )
 
 ExternalProject_Add(
     pyFLTK

@@ -737,7 +737,7 @@ namespace mrv
         loading.get("max_images_apart", tmp, 10);
         uiPrefs->uiPrefsMaxImagesApart->value(tmp);
 
-        char key[256];
+        char key[2048];
 
         std::string mappingpath = studiopath();
         if (!file::isReadable(mappingpath + "/mrv2.paths"))
@@ -749,8 +749,8 @@ namespace mrv
         num = path_mapping.entries();
         for (int i = 0; i < num; ++i)
         {
-            snprintf(key, 256, "Path #%d", i + 1);
-            path_mapping.get(key, tmpS, "", 256);
+            snprintf(key, 2048, "Path #%d", i + 1);
+            path_mapping.get(key, tmpS, "", 2048);
             if (strlen(tmpS) == 0)
                 continue;
             uiPrefs->PathMappings->add(tmpS);

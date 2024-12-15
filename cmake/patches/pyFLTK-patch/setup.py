@@ -1,6 +1,6 @@
 import setuptools
 import subprocess
-import os, re, sys, string, platform
+import glob, os, re, sys, string, platform
 
 #
 # REGEX for matching -I includes with or without quotes.
@@ -16,14 +16,25 @@ opengl_dir = ""
 fltk_dir = os.environ.get('FLTK_HOME', '')
 opengl_dir = os.environ.get('OPENGL_HOME', '')
 
+#if environment vars are not set use fltk-config for all platforms but Windows
+if fltk_dir=="":
+    if sys.platform != 'win32':
+        try:
+            fltk_dir=subprocess.check_output(['fltk-config','--prefix']).decode()[:-1]
+            print(f'fltk dir found at {fltk_dir}')
+        except:
+            print('fltk-config not found. Please install FLTK first and add fltk-config directory to your PATH.')
+            sys.exit()
+
 # Use this to pass additional compile flags, like macOS -mmacosx-version-min=OS_VERSION
 cxx_flags = os.environ.get('CXX_FLAGS', '')
 print("pyFLTK CXX_FLAGS=",cxx_flags)
 
-# add your extensions here
-UserDefinedSources = []
-# add additional include paths here
-UserIncludeDirs = []
+# add your .cpp extensions in the plug-in/src directory.
+UserDefinedSources = glob.glob('./plug-in/src/*.cpp') + \
+    glob.glob('./plug-in/src/*.cxx')
+# add additional include paths in the plug-in/include directory.
+UserIncludeDirs = ['./plug-in/include', './plug-in/src']
 
 # do not edit beyond this point
 ###########################################################################
@@ -81,10 +92,10 @@ if sys.platform == 'win32':
     lib_dir_list = [fltk_lib_dir, opengl_lib_dir]
     win32_lib_list = ["kernel32", "user32", "gdi32", "winspool", "comdlg32", "Comctl32", "advapi32", "shell32", "ole32", "oleaut32", "uuid", "odbc32", "odbccp32", "wsock32", "gdiplus", "glu32", "opengl32"]
     if doDebug:
-        static_lib_list = ["fltkd", "fltk_imagesd", "fltk_formsd", "fltk_gld"]
+        static_lib_list = ["fltkd", "fltk_imagesd", "fltk_jpegd", "fltk_pngd", "fltk_zd", "fltk_formsd", "fltk_gld"]
         shared_lib_list = ["fltk_dlld"]
     else:
-        static_lib_list = ["fltk", "fltk_images", "fltk_forms", "fltk_gl"]
+        static_lib_list = ["fltk", "fltk_images", "fltk_jpeg", "fltk_png", "fltk_z", "fltk_forms", "fltk_gl"]
         shared_lib_list = ["fltk_dll"]
     static_lib_list += win32_lib_list
     shared_lib_list += win32_lib_list
@@ -116,18 +127,18 @@ elif sys.platform == 'darwin':
     cpu_type = platform.processor()
     if cpu_type.startswith("i386"):
         print("i386 CPU variant detected")
-        lib_dir_list.append('/usr/local/lib')
+        #lib_dir_list.append('/usr/local/lib')
         osx_arch = "x86_64"
     elif cpu_type.startswith("arm"):
         print("arm CPU variant detected")
-        lib_dir_list.append('/opt/homebrew/lib')
+        #lib_dir_list.append('/opt/homebrew/lib')
         osx_arch = "arm64"
     else:
         print("PowerPC system detected")
         osx_arch = "ppc"
 
     compile_arg_list=['-arch', osx_arch]
-    link_arg_list=['-stdlib=libc++', '-arch', osx_arch, '-framework','ApplicationServices','-framework','Carbon','-framework', 'Cocoa', '-framework','OpenGL','-framework','AGL']
+    link_arg_list=['-stdlib=libc++', '-arch', osx_arch, '-framework','ApplicationServices','-framework','Carbon','-framework', 'Cocoa', '-framework','OpenGL','-framework','AGL','-rpath', fltk_lib_dir]
 
 else:
     print("Platform not officially supported!")
@@ -138,7 +149,7 @@ else:
 
 ###########################################################################
 # test for fltk configuration (libraries)
-def fltk_config(dir):
+def fltk_config(fltk_dir):
     global doMulti
     "return library paths and additional libraries that were used to link FLTK"
     needed_libraries = []
@@ -155,15 +166,15 @@ def fltk_config(dir):
     if doCheckForms:
         var_string = var_string + " --use-forms"
     try:
-        if isVerbose:
-            print("Checking fltk-config using FLTK_HOME")
-        fltk_dir = os.environ['FLTK_HOME']
+        #if isVerbose:
+        #    print("Checking fltk-config using FLTK_HOME")
+        #fltk_dir = os.environ['FLTK_HOME']
         if isVerbose:
             print(f"FLTK_HOME={fltk_dir}")
-        ver_cmd = f"sh {fltk_dir}/fltk-config --version"
-        inc_cmd = f"sh {fltk_dir}/fltk-config --cxxflags {var_string}"
-        #lib_cmd = f"sh {fltk_dir}/fltk-config --use-gl --use-glut --use-images --use-forms --ldflags"
-        lib_cmd = f"sh {fltk_dir}/fltk-config --ldflags {var_string}"
+        ver_cmd = f"sh {fltk_dir}/bin/fltk-config --version"
+        inc_cmd = f"sh {fltk_dir}/bin/fltk-config --cxxflags {var_string}"
+        #lib_cmd = f"sh {fltk_dir}/bin/fltk-config --use-gl --use-glut --use-images --use-forms --ldflags"
+        lib_cmd = f"sh {fltk_dir}/bin/fltk-config --ldflags {var_string}"
     except:
         if isVerbose:
             print("Checking fltk-config using default installation")
@@ -219,10 +230,11 @@ def fltk_config(dir):
 ###########################################################################
 all_include_dirs = ['./src', './contrib','/usr/include']
 if fltk_dir != "":
-    if (sys.platform == 'win32'):
-        all_include_dirs.insert(0, fltk_dir+"/include")
-    else:
-        all_include_dirs.insert(0, fltk_dir)
+    #if (sys.platform == 'win32'):
+    #    all_include_dirs.insert(0, fltk_dir+"/include")
+    #else:
+    #    all_include_dirs.insert(0, fltk_dir)
+    all_include_dirs.insert(0, os.path.join(fltk_dir,'include'))
 print(all_include_dirs)
 ###########################################################################
 
@@ -305,10 +317,11 @@ class PySwigCommand(setuptools.Command):
     add_incl = []
     try:
         fltk_dir = os.environ['FLTK_HOME']
-        if (sys.platform == 'win32'):
-            add_incl.insert(0, f"-I{fltk_dir}/include")
-        else:
-            add_incl.insert(0, f"-I{fltk_dir}")
+        #if (sys.platform == 'win32'):
+        #    add_incl.insert(0, f"-I{fltk_dir}/include")
+        #else:
+        #    add_incl.insert(0, f"-I{fltk_dir}")
+        add_incl.insert(0, f"-I{fltk_dir}/include")
     except:
         print("Using default location for FLTK!")
         result = os.popen('fltk-config --cxxflags').readlines()
@@ -345,6 +358,7 @@ if cxx_flags != '':
     compile_arg_list.append(cxx_flags)
     
 # module declarations
+contrib_sources = []
 module1 = setuptools.Extension(name='fltk14._fltk14',
 		    define_macros=def_list,
 		    include_dirs = all_include_dirs+UserIncludeDirs,
