@@ -30,7 +30,7 @@
 
 from mrv2 import cmd
 
-from fltk14 import *
+from fltk import *
 import sys
 
 help = Fl_Help_Dialog()

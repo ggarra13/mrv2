@@ -39,7 +39,7 @@ import traceback, sys
 if sys.version > '3':
     long = int
 
-from fltk14 import *
+from fltk import *
 
 G_cb_counter = 0
 but = None

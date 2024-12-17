@@ -4,6 +4,7 @@ v1.3.1
 - Updated docs.
 - Fixed Image/Version/Next and Image/Version/Previous always going to the last
   clips.  The routines are also faster now.
+- Fixed Image Versioning not taking into account path mapping.
 - Upgraded to OpenEXR v3.3.2.
 - Added OpenEXR's headers Compression, Compression Num. Scanlines,
   and Is Deep, Is Lossy.
@@ -12,11 +13,27 @@ v1.3.1
 - Updated libvpx compilation to MSVC2022, instead of MSVC2019, except on
   GitHub Actions.
 - Updated to FLTK's release 1.4.1.
-- Updated pyFTLK to release -r650.
+- Updated pyFTLK to release -r658.
+
+  ** COMPATIBILITY NOTE **
+
+  Note that this pyFLTK update changes the namespace from fltk14 to fltk.
+  If you are using:
+
+``
+  from fltk14 import *
+``
+
+  in your scripts, you will need to change it to:
+
+``
+  from fltk import *
+``
+  
 - Improved build reporting swig version used.
 - Made tlRender compile after FLTK so that preferences can be read from
   tlRender.
-- Made PathMappings' work on .otio files.  If building from source, you may
+- Made Path Mappings to work on .otio files.  If building from source, you may
   need to do a:
 
        $ runme.sh clean

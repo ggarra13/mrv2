@@ -35,7 +35,7 @@
 
 
 import sys
-from fltk14 import *
+from fltk import *
 
 def onFileQuit(ptr, data):
     #menuItem = Fl_Menu_ItemPtr(ptr)

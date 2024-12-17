@@ -31,7 +31,7 @@
 
 # Arc drawing test program for the Fast Light Tool Kit (FLTK).
 
-from fltk14 import *
+from fltk import *
 import sys
 if sys.version > '3':
     long = int

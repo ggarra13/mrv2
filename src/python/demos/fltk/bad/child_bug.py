@@ -1,4 +1,4 @@
-from fltk14 import *
+from fltk import *
 #.add() .child() bug example code
 
 win=Fl_Window(300,200)

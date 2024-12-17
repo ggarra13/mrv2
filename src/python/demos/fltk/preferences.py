@@ -29,7 +29,7 @@
 #
 
 import sys, time
-from fltk14 import *
+from fltk import *
 
 myWindow = None
 wAmPm = None

@@ -24,7 +24,7 @@
 # Please report all bugs and problems to "pyfltk-user@lists.sourceforge.net".
 #
 
-from fltk14 import *
+from fltk import *
 import sys
 from string import *
 

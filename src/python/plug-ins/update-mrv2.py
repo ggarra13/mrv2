@@ -30,7 +30,7 @@ from mrv2 import cmd, plugin, session, settings
 # pyFLTK import (don't fail if it is not installed).
 # 
 try:
-    from fltk14 import *
+    from fltk import *
 except Exception as e:
     pass
 

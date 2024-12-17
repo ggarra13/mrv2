@@ -28,7 +28,7 @@
 #
 
 
-from fltk14 import *
+from fltk import *
 import sys, math
 
 

@@ -28,7 +28,7 @@
 # Please report all bugs and problems to "pyfltk-user@lists.sourceforge.net".
 #
 
-from fltk14 import *
+from fltk import *
 import sys
 
 # Note:  the child windows are assigned to the charts list

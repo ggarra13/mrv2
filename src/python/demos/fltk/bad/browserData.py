@@ -27,7 +27,7 @@ print("""
 This is a quick hack to check setting and getting browser data 
 """)
 
-from fltk14 import *
+from fltk import *
 
 
 # global object names

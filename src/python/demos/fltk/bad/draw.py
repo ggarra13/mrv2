@@ -26,7 +26,7 @@
 #
 
 
-from fltk14 import *
+from fltk import *
 from math import *
 import sys
 from array import *

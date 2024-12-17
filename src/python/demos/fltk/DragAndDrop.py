@@ -29,7 +29,7 @@
 #
 
 
-from fltk14 import *
+from fltk import *
 
 
 class DNDWidget(Fl_Widget):

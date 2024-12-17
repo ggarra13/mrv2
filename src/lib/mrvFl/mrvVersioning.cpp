@@ -14,6 +14,7 @@ namespace fs = std::filesystem;
 #include "mrvCore/mrvSequence.h"
 #include "mrvCore/mrvFile.h"
 
+#include "mrvFl/mrvPathMapping.h"
 #include "mrvFl/mrvVersioning.h"
 
 #include "mrvFl/mrvIO.h"
@@ -85,6 +86,7 @@ namespace mrv
 
         std::string msg;
         std::string file = path.get();
+        replace_path(file);
 
         while ((first_or_last || found == false) &&
                tries <= max_tries)

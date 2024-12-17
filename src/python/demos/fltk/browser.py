@@ -62,7 +62,7 @@ That was a blank line above this.
 */
 """
 
-from fltk14 import *
+from fltk import *
 from mrv2 import cmd
 import sys
 

@@ -32,7 +32,7 @@
 # Please report all bugs and problems to "pyfltk-user@lists.sourceforge.net".
 #
 
-from fltk14 import *
+from fltk import *
 import string, os.path, sys
 from keyword import iskeyword
 

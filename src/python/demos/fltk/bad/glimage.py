@@ -29,7 +29,7 @@
 
 
 import sys
-from fltk14 import *
+from fltk import *
 
 class MyWindow(Fl_Window):
     """

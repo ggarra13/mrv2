@@ -26,7 +26,7 @@
 # Please report all bugs and problems to "fltk-bugs@fltk.org".
 #
 
-from fltk14 import *
+from fltk import *
 import sys, math
 
 #

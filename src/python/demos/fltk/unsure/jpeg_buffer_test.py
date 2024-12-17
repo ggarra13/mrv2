@@ -24,7 +24,7 @@
 
 # cat image from https://commons.wikimedia.org/wiki/File:Arthur,_the_cat.jpg
 
-from fltk14 import *
+from fltk import *
 from PIL import Image
 import io
 
