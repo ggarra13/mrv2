@@ -116,22 +116,44 @@ set( _pythonBuiltinModules
 set( _pythonSiteModules 
     alabaster*
     babel*
+    click*
     colorama*
     docutils*
+    filelock*
     fltk14/*.cpp
     fltk14/*.h
+    fsspec*
+    huggingface-hub*
     imagesize*
     Jinja*
+    joblib*
+    libretranslatepy*
+    lxml*
     MarkupSafe*
     meson*
+    mpmath*
+    numpy*
+    networkx*
     pillow*
     PIL*
     polib*
+    pyyaml*
+    pyYAML*
     pygments*
     Pygments*
     pytz*
+    regex*
+    sacremoses*
+    safetensors*
     snowballstemmer*
     sphinx*
+    sympy*
+    tokenizers*
+    torch*
+    transformers
+    translate*
+    typing-extensions*
+    tqdm*
     unittest*
 )
 

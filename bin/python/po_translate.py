@@ -8,6 +8,7 @@ import os
 import polib
 import re
 import sys
+from urllib.error import HTTPError
 
 #
 # Script version

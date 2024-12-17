@@ -2581,6 +2581,18 @@ msgstr ""
 msgid "Example:  gizmo_v003.0001.exr"
 msgstr ""
 
+msgid "File {0} is a network file.  Cannot do versioning."
+msgstr ""
+
+msgid "Found new versioned file {0}."
+msgstr ""
+
+msgid "File {0} found but is not readable."
+msgstr ""
+
+msgid "Did not find new versioned file {0}."
+msgstr ""
+
 msgid "Annotation already existed at this time"
 msgstr ""
 
