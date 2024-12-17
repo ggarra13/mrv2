@@ -30,7 +30,7 @@ namespace mrv
     {
         std::regex expr;
         std::string suffix;
-        std::string prefix;
+        std::string regex_string;
         static std::string short_prefix = "_v";
         std::string orig = ui->uiPrefs->uiPrefsVersionRegex->value();
         if (orig.empty())
@@ -38,25 +38,25 @@ namespace mrv
 
         if (orig.size() < 5)
         {
-            prefix = "([\\w/:]*[\\._]*" + orig + ")(\\d+)([\\w\\d\\./]*)";
+            regex_string = "([\\w\\d/:\\-]*?[\\._\\-]*" + orig + ")(\\d+)([\\w\\d\\./]*)";
             if (verbose)
             {
                 std::string msg = tl::string::Format(
                                       _("Regular expression created from {0}.  "
                                         "It is:\n{1}"))
                                       .arg(orig)
-                                      .arg(prefix);
+                                      .arg(regex_string);
                 LOG_INFO(msg);
             }
         }
         else
         {
-            prefix = orig;
+            regex_string = orig;
         }
 
         try
         {
-            expr = prefix;
+            expr = regex_string;
         }
         catch (const std::regex_error& e)
         {
