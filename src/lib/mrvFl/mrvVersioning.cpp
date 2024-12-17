@@ -26,7 +26,6 @@ namespace
 
 namespace mrv
 {
-
     const std::regex version_regex(const ViewerUI* ui, const bool verbose)
     {
         std::regex expr;
@@ -39,7 +38,7 @@ namespace mrv
 
         if (orig.size() < 5)
         {
-            prefix = "([\\w\\\\:/]*?[/\\._]*" + orig + ")(\\d+)([\\w\\d\\./]*)";
+            prefix = "([\\w/:]*[\\._]*" + orig + ")(\\d+)([\\w\\d\\./]*)";
             if (verbose)
             {
                 std::string msg = tl::string::Format(
@@ -85,7 +84,7 @@ namespace mrv
         unsigned max_tries = ui->uiPrefs->uiPrefsMaxImagesApart->value();
 
         std::string msg;
-        std::string file = path.get();
+        std::string file = mrv::file::normalizePath(path.get());
 
         while ((first_or_last || found == false) &&
                tries <= max_tries)
@@ -146,45 +145,12 @@ namespace mrv
                 newfile += suffix;
 
 
-                if (file::isNetwork(newfile))
+                if (file::isReadable(newfile))
                 {
-                    msg = tl::string::Format(_("File {0} is a network file.  "
-                                               "Cannot do versioning."))
-                          .arg(newfile);
-                    LOG_ERROR(msg);
-                    return file;
-                }
-
-                    
-                if (file::exists(newfile))
-                {
-                    msg = tl::string::Format(
-                        _("Found new versioned file {0}."))
-                        .arg(newfile);
-                    LOG_INFO(msg);
-
-                    if (file::isReadable(newfile))
-                    {
-                        loadfile = newfile;
-                        found = true;
-                        if (!first_or_last)
-                            break;
-                    }
-                    else
-                    {
-                        msg = tl::string::Format(
-                            _("File {0} found but is not readable."))
-                              .arg(newfile);
-                        LOG_ERROR(msg);
-                        return file; 
-                    }
-                }
-                else
-                {
-                    msg = tl::string::Format(
-                        _("Did not find new versioned file {0}."))
-                          .arg(newfile);
-                    LOG_INFO(msg);
+                    loadfile = newfile;
+                    found = true;
+                    if (!first_or_last)
+                        break;
                 }
                 
                 file = newfile;

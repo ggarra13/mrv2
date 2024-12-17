@@ -8,6 +8,7 @@
 
 #include <tlCore/StringFormat.h>
 
+#include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvMath.h"
@@ -1112,6 +1113,7 @@ namespace mrv
         {
             const auto& files = model->observeFiles()->get();
             std::string fileName = files[aIndex]->path.get(-1);
+            fileName = mrv::file::normalizePath(fileName);
 
             const std::regex& regex = version_regex(ui, false);
             bool has_version = regex_match(fileName, regex);

@@ -2848,18 +2848,6 @@ msgstr ""
 msgid "Example:  gizmo_v003.0001.exr"
 msgstr "उदाहरण: gizmo_v0003.0001.exr"
 
-msgid "File {0} is a network file.  Cannot do versioning."
-msgstr "फ़ाइल {0} एक संजाल फ़ाइल है. संस्करण {0} नहीं कर सकता है."
-
-msgid "Found new versioned file {0}."
-msgstr "नया संस्करण किया गया फ़ाइल पाया {0}"
-
-msgid "File {0} found but is not readable."
-msgstr "फ़ाइल {0} मिला लेकिन पढ़ने योग्य नहीं है."
-
-msgid "Did not find new versioned file {0}."
-msgstr "क्या नई संस्करणकृत फ़ाइल नहीं मिली."
-
 msgid "Annotation already existed at this time"
 msgstr "व्याख्या इस समय से पहले से ही अस्तित्व में है"
 
@@ -7249,6 +7237,18 @@ msgstr "यदि आप विंडो को बन्द करना चा
 
 msgid "Toggle About Window"
 msgstr "विंडो के बारे में टॉगल करें"
+
+#~ msgid "File {0} is a network file.  Cannot do versioning."
+#~ msgstr "फ़ाइल {0} एक संजाल फ़ाइल है. संस्करण {0} नहीं कर सकता है."
+
+#~ msgid "Found new versioned file {0}."
+#~ msgstr "नया संस्करण किया गया फ़ाइल पाया {0}"
+
+#~ msgid "File {0} found but is not readable."
+#~ msgstr "फ़ाइल {0} मिला लेकिन पढ़ने योग्य नहीं है."
+
+#~ msgid "Did not find new versioned file {0}."
+#~ msgstr "क्या नई संस्करणकृत फ़ाइल नहीं मिली."
 
 #~ msgid "Iteration {0} matched prefix={1}"
 #~ msgstr "यह प्रोशनरेशन {0} से मेल खाता उपसर्ग={1}"

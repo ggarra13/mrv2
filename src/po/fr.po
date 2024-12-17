@@ -2894,18 +2894,6 @@ msgstr ""
 msgid "Example:  gizmo_v003.0001.exr"
 msgstr "Exemple : gizmo_v003.001.exr"
 
-msgid "File {0} is a network file.  Cannot do versioning."
-msgstr "Le fichier {0} est un fichier réseau. Impossible de faire la version."
-
-msgid "Found new versioned file {0}."
-msgstr "Trouvé un nouveau fichier {0}."
-
-msgid "File {0} found but is not readable."
-msgstr "Le fichier {0} a été trouvé mais n'est pas lisible."
-
-msgid "Did not find new versioned file {0}."
-msgstr "Il n'a pas trouvé de nouveau fichier {0}."
-
 msgid "Annotation already existed at this time"
 msgstr "L'annotation existait déjà à ce moment-là"
 
@@ -7397,6 +7385,19 @@ msgstr "Activer la fenêtre des touches d'amorçage"
 
 msgid "Toggle About Window"
 msgstr "Commutation à propos de la fenêtre"
+
+#~ msgid "File {0} is a network file.  Cannot do versioning."
+#~ msgstr ""
+#~ "Le fichier {0} est un fichier réseau. Impossible de faire la version."
+
+#~ msgid "Found new versioned file {0}."
+#~ msgstr "Trouvé un nouveau fichier {0}."
+
+#~ msgid "File {0} found but is not readable."
+#~ msgstr "Le fichier {0} a été trouvé mais n'est pas lisible."
+
+#~ msgid "Did not find new versioned file {0}."
+#~ msgstr "Il n'a pas trouvé de nouveau fichier {0}."
 
 #~ msgid "Iteration {0} matched prefix={1}"
 #~ msgstr "Itération {0} correspondant au préfixe={1}"

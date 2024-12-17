@@ -4,7 +4,7 @@ v1.3.1
 - Updated docs.
 - Fixed Image/Version/Next and Image/Version/Previous always going to the last
   clips.  The routines are also faster now.
-- Added more logging to Image/Version commands.
+- Fixed Image/Version menu not appearing when the files were on an NFS mount.
 - Upgraded to OpenEXR v3.3.2.
 - Added OpenEXR's headers Compression, Compression Num. Scanlines,
   and Is Deep, Is Lossy.

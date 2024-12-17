@@ -2898,20 +2898,6 @@ msgstr ""
 msgid "Example:  gizmo_v003.0001.exr"
 msgstr "Beispiel: gizmo_v003.0001.exr"
 
-msgid "File {0} is a network file.  Cannot do versioning."
-msgstr ""
-"Datei {0} ist eine Netzwerkdatei. Versionierung kann nicht durchgeführt "
-"werden."
-
-msgid "Found new versioned file {0}."
-msgstr "Neue versionierte Datei {0} gefunden."
-
-msgid "File {0} found but is not readable."
-msgstr "Datei {0} gefunden, ist aber nicht lesbar."
-
-msgid "Did not find new versioned file {0}."
-msgstr "Die neue versionierte Datei {0} wurde nicht gefunden."
-
 msgid "Annotation already existed at this time"
 msgstr "Annotation existierte bereits zu dieser Zeit"
 
@@ -7375,6 +7361,20 @@ msgstr "Hotkeys-Fenster umschalten"
 
 msgid "Toggle About Window"
 msgstr "Fenster umschalten"
+
+#~ msgid "File {0} is a network file.  Cannot do versioning."
+#~ msgstr ""
+#~ "Datei {0} ist eine Netzwerkdatei. Versionierung kann nicht durchgeführt "
+#~ "werden."
+
+#~ msgid "Found new versioned file {0}."
+#~ msgstr "Neue versionierte Datei {0} gefunden."
+
+#~ msgid "File {0} found but is not readable."
+#~ msgstr "Datei {0} gefunden, ist aber nicht lesbar."
+
+#~ msgid "Did not find new versioned file {0}."
+#~ msgstr "Die neue versionierte Datei {0} wurde nicht gefunden."
 
 #~ msgid "Iteration {0} matched prefix={1}"
 #~ msgstr "Iteration {0} angepasste Prfix={1}"
