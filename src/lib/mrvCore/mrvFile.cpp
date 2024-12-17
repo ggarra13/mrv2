@@ -137,6 +137,11 @@ namespace mrv
             return fs::is_directory(dir);
         }
 
+        bool exists(const fs::path& filePath)
+        {
+            return fs::exists(filePath);
+        }
+        
         bool isReadable(const fs::path& p)
         {
             const std::string& filePath = p.generic_string();
