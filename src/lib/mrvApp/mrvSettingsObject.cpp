@@ -672,7 +672,7 @@ namespace mrv
             fs::path filePath(str);
             if (fs::exists(filePath))
             {
-                auto path = fs::canonical(filePath);
+                auto path = fs::absolute(filePath);
                 if (set.find(path.generic_string()) == set.end())
                 {
                     set.insert(path.generic_string());
