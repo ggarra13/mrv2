@@ -4,7 +4,7 @@ v1.3.1
 - Updated docs.
 - Fixed Image/Version/Next and Image/Version/Previous always going to the last
   clips.  The routines are also faster now.
-- Fixed Image Versioning not taking into account path mapping.
+- Added more logging to Image/Version commands.
 - Upgraded to OpenEXR v3.3.2.
 - Added OpenEXR's headers Compression, Compression Num. Scanlines,
   and Is Deep, Is Lossy.
@@ -13,7 +13,7 @@ v1.3.1
 - Updated libvpx compilation to MSVC2022, instead of MSVC2019, except on
   GitHub Actions.
 - Updated to FLTK's release 1.4.1.
-- Updated pyFTLK to release -r658.
+- Updated pyFTLK to official 1.4 release.
 
   ** COMPATIBILITY NOTE **
 
