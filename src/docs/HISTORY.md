@@ -4,8 +4,8 @@ v1.3.1
 - Updated docs.
 - Fixed Image/Version/Next and Image/Version/Previous always going to the last
   clips.  The routines are also faster now.
-- Fixed Image/Version menu not appearing when some directories had numbers in
-  them.
+- Fixed Image/Version menu not appearing when some directories had dashes and
+  numbers in them.
 - Upgraded to OpenEXR v3.3.2.
 - Added OpenEXR's headers Compression, Compression Num. Scanlines,
   and Is Deep, Is Lossy.
