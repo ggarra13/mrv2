@@ -1109,6 +1109,8 @@ BigRoy                                        (Prores4444 debugging,
                                                UI improvement ideas,
                                                Python Debugging)
 bouncyferret                                  (Tablet debugging)
+cgene75                                       (Recent Files bug,
+                                               NFS issues, versioning regex)
 c0nvexo                                       (Color Pipeline on Missing
                                                Frames)
 Christoph Lohr                                (Color Pipeline Debugging,
