@@ -26,6 +26,12 @@ namespace
 
 namespace mrv
 {
+    std::string regex_escape(const std::string& input)
+    {
+        static const std::regex special_chars(R"([.^$|()[]{}*+?\\])"); // Special regex characters
+        return std::regex_replace(input, special_chars, R"(\$&)");    // Prefix with '\'
+    }
+    
     const std::regex version_regex(const ViewerUI* ui, const bool verbose)
     {
         std::regex expr;
@@ -51,7 +57,7 @@ namespace mrv
         }
         else
         {
-            regex_string = orig;
+            regex_string = regex_escape(orig);
         }
 
         try
