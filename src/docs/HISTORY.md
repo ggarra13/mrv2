@@ -39,6 +39,10 @@ v1.3.1
   need to do a:
 
        $ runme.sh clean
+	   
+- Added displaying of clip names in the otio files in the HUD.
+- Improved performance of Data Window and Display Window when reading 
+  multipart OpenEXRs.
   
 
 v1.3.0

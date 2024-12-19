@@ -843,8 +843,16 @@ namespace mrv
 
         if (p.hud & HudDisplay::kFilename)
         {
-            const std::string& fullname =
-                createStringFromPathAndTime(path, time);
+            std::string fullname = createStringFromPathAndTime(path, time);
+            if (path.getExtension() == ".otio")
+            {
+                auto i = p.tagData.find("otioClipName");
+                if (i != p.tagData.end())
+                {
+                    auto otioClipName = i->second;
+                    fullname += " ( " + otioClipName + " )";
+                }
+            }
             _drawText(
                 p.fontSystem->getGlyphs(fullname, fontInfo), pos, lineHeight,
                 labelColor);
@@ -1102,12 +1110,9 @@ namespace mrv
     void Viewport::_drawDataWindow() const noexcept
     {
         TLRENDER_P();
-        if (p.videoData.empty() || p.videoData[0].layers.empty())
-            return;
-
-        const auto& tags = p.videoData[0].layers[0].image->getTags();
-        image::Tags::const_iterator i = tags.find("Data Window");
-        if (i == tags.end())
+        ;
+        image::Tags::const_iterator i = p.tagData.find("Data Window");
+        if (i == p.tagData.end())
             return;
 
         const std::string& dw = i->second;
@@ -1117,12 +1122,9 @@ namespace mrv
     void Viewport::_drawDisplayWindow() const noexcept
     {
         TLRENDER_P();
-        if (p.videoData.empty() || p.videoData[0].layers.empty())
-            return;
-
-        const auto& tags = p.videoData[0].layers[0].image->getTags();
-        image::Tags::const_iterator i = tags.find("Display Window");
-        if (i == tags.end())
+        
+        image::Tags::const_iterator i = p.tagData.find("Display Window");
+        if (i == p.tagData.end())
             return;
 
         const std::string& dw = i->second;
