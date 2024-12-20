@@ -30,10 +30,12 @@ namespace mrv
 {
     std::string regex_escape(const std::string& input)
     {
-        static const std::regex special_chars(R"([.^$|()[]{}*+?\\])"); // Special regex characters
-        return std::regex_replace(input, special_chars, R"(\$&)");    // Prefix with '\'
+        static const std::regex special_chars(
+            R"([.^$|()[]{}*+?\\])"); // Special regex characters
+        return std::regex_replace(
+            input, special_chars, R"(\$&)"); // Prefix with '\'
     }
-    
+
     const std::regex version_regex(const ViewerUI* ui, const bool verbose)
     {
         std::regex expr;
@@ -46,7 +48,8 @@ namespace mrv
 
         if (orig.size() < 5)
         {
-            regex_string = "([\\w\\d/:\\-]*?[\\._\\-]*" + orig + ")(\\d+)([\\w\\d\\./]*)";
+            regex_string =
+                "([\\w\\d/:\\-]*?[\\._\\-]*" + orig + ")(\\d+)([\\w\\d\\./]*)";
             if (verbose)
             {
                 std::string msg = tl::string::Format(
@@ -78,8 +81,8 @@ namespace mrv
     }
 
     std::string media_version(
-        ViewerUI* ui, const file::Path& path, int sum,
-        const bool first_or_last, const file::Path& otioPath)
+        ViewerUI* ui, const file::Path& path, int sum, const bool first_or_last,
+        const file::Path& otioPath)
     {
         const std::regex& expr = version_regex(ui, true);
         if (std::regex_match("", expr))
@@ -94,13 +97,13 @@ namespace mrv
         std::string msg;
         std::string file = mrv::file::normalizePath(path.get());
 
-        while ((first_or_last || found == false) &&
-               tries <= max_tries)
+        while ((first_or_last || found == false) && tries <= max_tries)
         {
             std::string::const_iterator tstart = file.begin();
             std::string::const_iterator tend = file.end();
             std::smatch what;
-            std::regex_constants::match_flag_type flags = std::regex_constants::match_default;
+            std::regex_constants::match_flag_type flags =
+                std::regex_constants::match_default;
 
             newfile.clear();
             try
@@ -120,14 +123,15 @@ namespace mrv
 
                         // We don't allow negative versions
                         int num = std::stoi(version) + sum;
-                        if (num < 0) num = 0;
-                        
+                        if (num < 0)
+                            num = 0;
+
                         char buf[128];
                         snprintf(buf, 128, "%0*d", padding, num);
                         msg = tl::string::Format(
-                            _("Iteration {0} will check version={1}"))
-                              .arg(iter)
-                              .arg(buf);
+                                  _("Iteration {0} will check version={1}"))
+                                  .arg(iter)
+                                  .arg(buf);
                         LOG_INFO(msg);
                         newfile += buf;
                     }
@@ -136,7 +140,7 @@ namespace mrv
                     tstart = what[3].first; // Move start position
 
                     // Ensure overlap if necessary
-                    flags |= std::regex_constants::match_prev_avail; 
+                    flags |= std::regex_constants::match_prev_avail;
                     ++iter;
                 }
 
@@ -152,7 +156,6 @@ namespace mrv
 
                 newfile += suffix;
 
-
                 if (file::isReadable(newfile))
                 {
                     loadfile = newfile;
@@ -160,34 +163,34 @@ namespace mrv
                     if (!first_or_last)
                         break;
                 }
-                
+
                 file = newfile;
             }
             catch (const std::regex_error& e)
             {
-                std::string err = tl::string::Format(
-                    _("Regular expression error: {0}")).arg(e.what());
+                std::string err =
+                    tl::string::Format(_("Regular expression error: {0}"))
+                        .arg(e.what());
                 LOG_ERROR(err);
             }
-            
 
             ++tries;
         }
 
-        if (otioPath != path)
+        if (found && otioPath != path)
         {
             tl::file::Path newClipPath(loadfile);
             if (!replaceClipPath(newClipPath, ui))
             {
                 std::string err =
                     tl::string::Format(_("Could not replace {0} with {1}"))
-                    .arg(path.get())
-                    .arg(newClipPath.get());
+                        .arg(path.get())
+                        .arg(newClipPath.get());
                 LOG_ERROR(err);
                 return loadfile;
             }
         }
-        
+
         return loadfile;
     }
 
