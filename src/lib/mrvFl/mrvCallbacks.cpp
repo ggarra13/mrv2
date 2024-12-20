@@ -1983,6 +1983,45 @@ namespace mrv
     {
         ui->uiView->framePrev();
     }
+    
+    void toggle_otio_clip_in_out_cb(Fl_Menu_*, ViewerUI* ui)
+    {
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+        
+        const auto time = player->currentTime();
+        const auto timeline = player->getTimeline();
+        const auto tracks = timeline->video_tracks();
+        const auto track = tracks[0];
+
+        const auto item =
+            otio::dynamic_retainer_cast<otio::Item>(track->child_at_time(time));
+        if (!item)
+            return;
+        
+        const auto& fullRange = player->timeRange();
+        const auto& inOutRange = player->inOutRange();
+        auto range = item->trimmed_range_in_parent().value();
+        if (range == inOutRange)
+        {
+            range = fullRange;
+        }
+
+        auto rate = track->trimmed_range().end_time_exclusive().rate();
+        range = otime::TimeRange::range_from_start_end_time(
+            range.start_time().rescaled_to(rate).round(),
+            range.end_time_exclusive().rescaled_to(rate).round());
+        player->setInOutRange(range);
+        
+        TimelineClass* c = ui->uiTimeWindow;
+        c->uiStartButton->value(!c->uiStartButton->value());
+        c->uiEndButton->value(!c->uiEndButton->value());
+        c->uiStartFrame->setTime(range.start_time());
+        c->uiEndFrame->setTime(range.end_time_exclusive());
+
+        ui->uiTimeline->redraw();
+    }
 
     void next_clip_cb(Fl_Menu_*, ViewerUI* ui)
     {

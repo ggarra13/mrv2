@@ -70,6 +70,17 @@ namespace mrv
         const auto model = ui->app->filesModel();
         const size_t numFiles = model->observeFiles()->getSize();
 
+        bool isOtio = false;
+        std::shared_ptr<FilesModelItem> Aitem;
+        if (numFiles > 0)
+        {
+            Aitem = model->observeA()->get();
+            
+            if (Aitem && string::compare(
+                    Aitem->path.getExtension(), ".otio",
+                    string::Compare::CaseInsensitive))
+                isOtio = true;
+        }
         menu->clear();
 
         int idx;
@@ -861,6 +872,14 @@ namespace mrv
         if (c->uiEndButton->value())
             item->set();
 
+        if (isOtio)
+        {
+            menu->add(_("Playback/Toggle In\\/Out Otio Clip"),
+                      kToggleOtioClipInOut.hotkey(),
+                      (Fl_Callback*)toggle_otio_clip_in_out_cb, ui,
+                      FL_MENU_DIVIDER | FL_MENU_TOGGLE | mode);
+        }
+
         // Looping
         DBG;
 
@@ -917,10 +936,7 @@ namespace mrv
 
             if (numFiles)
             {
-                auto Aitem = model->observeA()->get();
-                if (string::compare(
-                        Aitem->path.getExtension(), ".otio",
-                        string::Compare::CaseInsensitive))
+                if (isOtio)
                 {
                     menu->add(
                         _("Playback/Go to/Previous Clip"),
@@ -1114,9 +1130,8 @@ namespace mrv
             const auto& files = model->observeFiles()->get();
             const auto& path  = files[aIndex]->path;
             std::string fileName = path.get(-1);
-
-            if (string::compare(path.getExtension(), ".otio",
-                                string::Compare::CaseInsensitive))
+            
+            if (isOtio)
             {
                 const auto& tags = uiView->getTags();
                 auto i = tags.find("otioClipName");

@@ -193,6 +193,7 @@ namespace mrv
     //! Looping hotkeys.
     extern Hotkey kSetInPoint;
     extern Hotkey kSetOutPoint;
+    extern Hotkey kToggleOtioClipInOut;
 
     extern Hotkey kPlaybackLoop;
     extern Hotkey kPlaybackOnce;

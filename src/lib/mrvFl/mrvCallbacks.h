@@ -170,6 +170,7 @@ namespace mrv
     // In/Out point callbacks
     void playback_set_in_point_cb(Fl_Menu_*, ViewerUI* ui);
     void playback_set_out_point_cb(Fl_Menu_*, ViewerUI* ui);
+    void toggle_otio_clip_in_out_cb(Fl_Menu_*, ViewerUI* ui);
 
     // Loop callbacks
     void playback_loop_cb(Fl_Menu_*, ViewerUI* ui);

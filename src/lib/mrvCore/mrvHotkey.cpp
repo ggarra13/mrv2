@@ -179,6 +179,7 @@ namespace mrv
 
     Hotkey kSetInPoint(false, false, false, false, 'i');
     Hotkey kSetOutPoint(false, false, false, false, 'o');
+    Hotkey kToggleOtioClipInOut(false, false, false, false, 'm');
 
     Hotkey kGridToggle(true, false, false, false, 'g');
     Hotkey kGridSize(true, true, false, false, 'g');
