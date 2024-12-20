@@ -463,6 +463,7 @@ namespace mrv
             c->uiPlayForwards->redraw();
             c->uiPlayBackwards->redraw();
             c->uiStop->redraw();
+            p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
             return;
         }
 
@@ -532,6 +533,8 @@ namespace mrv
         c->uiPlayForwards->redraw();
         c->uiPlayBackwards->redraw();
         c->uiStop->redraw();
+        
+        p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
     }
 
     void TimelineViewport::startFrame() noexcept
@@ -3282,6 +3285,12 @@ namespace mrv
         return speedValues[idx];
     }
 
+    std::map<std::string, std::string, string::CaseInsensitiveCompare>
+    TimelineViewport::getTags() const noexcept
+    {
+        return _p->tagData;
+    }
+    
     void TimelineViewport::_getTags() noexcept
     {
         TLRENDER_P();

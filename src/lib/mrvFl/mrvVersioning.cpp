@@ -17,6 +17,8 @@ namespace fs = std::filesystem;
 #include "mrvFl/mrvPathMapping.h"
 #include "mrvFl/mrvVersioning.h"
 
+#include "mrvEdit/mrvEditCallbacks.h"
+
 #include "mrvFl/mrvIO.h"
 
 namespace
@@ -76,8 +78,8 @@ namespace mrv
     }
 
     std::string media_version(
-        const ViewerUI* ui, const file::Path& path, int sum,
-        const bool first_or_last)
+        ViewerUI* ui, const file::Path& path, int sum,
+        const bool first_or_last, const file::Path& otioPath)
     {
         const std::regex& expr = version_regex(ui, true);
         if (std::regex_match("", expr))
@@ -172,6 +174,20 @@ namespace mrv
             ++tries;
         }
 
+        if (otioPath != path)
+        {
+            tl::file::Path newClipPath(loadfile);
+            if (!replaceClipPath(newClipPath, ui))
+            {
+                std::string err =
+                    tl::string::Format(_("Could not replace {0} with {1}"))
+                    .arg(path.get())
+                    .arg(newClipPath.get());
+                LOG_ERROR(err);
+                return loadfile;
+            }
+        }
+        
         return loadfile;
     }
 

@@ -13,6 +13,6 @@ namespace mrv
     const std::regex
     version_regex(const ViewerUI* ui, const bool verbose = false);
     std::string media_version(
-        const ViewerUI* ui, const tl::file::Path& path, int sum,
-        const bool first_or_last);
+        ViewerUI* ui, const tl::file::Path& path, int sum,
+        const bool first_or_last, const tl::file::Path& otioPath);
 } // namespace mrv

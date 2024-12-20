@@ -7,6 +7,8 @@ v1.3.1
 - Fixed Image/Version menu not appearing when some directories had dashes and
   numbers in them.
 - Made versioning regex get escaped, like Python's re.escape() function.
+- Added support for version switching of clips in .otio timeline.   You need
+  to be stopped at a certain clip to change it.
 - Upgraded to OpenEXR v3.3.2.
 - Added OpenEXR's headers Compression, Compression Num. Scanlines,
   and Is Deep, Is Lossy.

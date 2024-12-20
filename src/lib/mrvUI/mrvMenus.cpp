@@ -1112,9 +1112,22 @@ namespace mrv
         if (numFiles > 0 && aIndex >= 0 && aIndex < numFiles)
         {
             const auto& files = model->observeFiles()->get();
-            std::string fileName = files[aIndex]->path.get(-1);
-            fileName = mrv::file::normalizePath(fileName);
+            const auto& path  = files[aIndex]->path;
+            std::string fileName = path.get(-1);
 
+            if (string::compare(path.getExtension(), ".otio",
+                                string::Compare::CaseInsensitive))
+            {
+                const auto& tags = uiView->getTags();
+                auto i = tags.find("otioClipName");
+                if (i != tags.end())
+                {
+                    fileName = i->second;
+                }
+            }
+
+            fileName = mrv::file::normalizePath(fileName);
+            
             const std::regex& regex = version_regex(ui, false);
             bool has_version = regex_match(fileName, regex);
 

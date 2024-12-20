@@ -9,6 +9,7 @@
 #include <tlTimeline/IRender.h>
 
 #include "mrvCore/mrvActionMode.h"
+#include "mrvCore/mrvString.h"
 
 #include "mrvOptions/mrvStereo3DOptions.h"
 #include "mrvOptions/mrvEnvironmentMapOptions.h"
@@ -342,6 +343,10 @@ namespace mrv
 
         //! Show an image.
         void showImage(const std::shared_ptr<image::Image>& image);
+
+        //! Get current frame/video tags
+        std::map<std::string, std::string, string::CaseInsensitiveCompare>
+        getTags() const noexcept;
         
     protected:
         virtual void _readPixel(image::Color4f& rgba) const noexcept = 0;

@@ -88,13 +88,9 @@ namespace mrv
         static std::vector<UndoRedo> undoBuffer;
         static std::vector<UndoRedo> redoBuffer;
 
-        std::vector<Composition*> getTracks(TimelinePlayer* player)
+        std::vector<Composition*> getTracks(otio::Timeline* timeline)
         {
             std::vector<Composition*> out;
-
-            otio::ErrorStatus errorStatus;
-            auto timeline = player->getTimeline();
-
             auto tracks = timeline->tracks()->children();
             for (auto child : tracks)
             {
@@ -105,6 +101,12 @@ namespace mrv
                 out.push_back(composition);
             }
             return out;
+        }
+        
+        std::vector<Composition*> getTracks(TimelinePlayer* player)
+        {
+            auto timeline = player->getTimeline();
+            return getTracks(timeline);
         }
 
         RationalTime getTime(TimelinePlayer* player)
@@ -2663,6 +2665,75 @@ namespace mrv
         set_edit_mode_cb(editMode, ui);
     }
 
+
+    bool replaceClipPath(tl::file::Path clipPath, ViewerUI* ui)
+    {
+        auto view = ui->uiView;
+        auto player = view->getTimelinePlayer();
+        if (!player)
+            return false;
+
+        auto timeline = player->getTimeline();
+        if (!timeline)
+        {
+            LOG_ERROR("No timeline in player");
+            return false;
+        }
+
+        const auto& time = getTime(player);
+        auto compositions = getTracks(player);
+        
+        otio::ErrorStatus errorStatus;
+        otio::Clip* clip = nullptr;
+        int clipIndex = -1;
+        for (auto composition : compositions)
+        {
+            auto track = dynamic_cast<otio::Track*>(composition);
+            if (!track)
+                continue;
+
+            // Find first video track
+            if (track->kind() != otio::Track::Kind::video)
+                continue;
+
+            clip = otio::dynamic_retainer_cast<Clip>(
+                track->child_at_time(time, &errorStatus));
+            if (!clip)
+                continue;
+
+            clipIndex = track->index_of_child(clip);
+            break;
+        }
+
+        if (clipIndex < 0 || !clip)
+            return false;
+
+        auto media = clip->media_reference();
+        if (auto ref = dynamic_cast<otio::ExternalReference*>(media))
+        {
+            ref->set_target_url(clipPath.get());
+        }
+        else if (auto ref = dynamic_cast<otio::ImageSequenceReference*>(media))
+        {
+            ref->set_target_url_base(clipPath.getDirectory());
+            ref->set_name_prefix(clipPath.getBaseName());
+        }
+        else
+        {
+            LOG_ERROR(_("Unknown media reference"));
+            return false;
+        }
+
+        makePathsAbsolute(timeline, ui);
+        
+        toOtioFile(timeline, ui);
+
+        refresh_file_cache_cb(nullptr, ui);
+                
+        return true;
+    }
+
+    
     /// @todo: REFACTOR THIS PLEASE
     EditMode editMode = EditMode::kTimeline;
     int editModeH = 30;

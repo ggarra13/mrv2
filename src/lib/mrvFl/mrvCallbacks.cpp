@@ -2382,7 +2382,7 @@ namespace mrv
     }
 
     static void image_version_cb(
-        const ViewerUI* ui, const int sum, const bool first_or_last = false)
+        ViewerUI* ui, const int sum, const bool first_or_last = false)
     {
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
@@ -2401,11 +2401,27 @@ namespace mrv
         auto Aindex = model->observeAIndex()->get();
         const auto& media = files->getItem(Aindex);
 
+        tl::file::Path otioPath = media->path;
+        auto clipPath = media->path;
+        if (string::compare(otioPath.getExtension(), ".otio",
+                            string::Compare::CaseInsensitive))
+        {
+            const auto& tags = ui->uiView->getTags();
+            auto i = tags.find("otioClipName");
+            if (i != tags.end())
+            {
+                clipPath = tl::file::Path(i->second);
+            }
+        }
+            
         const std::string& fileName =
-            media_version(ui, media->path, sum, first_or_last);
+            media_version(ui, clipPath, sum, first_or_last, otioPath);
         if (fileName.empty())
             return;
 
+        if (otioPath != clipPath)
+            return;
+        
         auto item = std::make_shared<FilesModelItem>();
         item->init = true;
         item->path = file::Path(fileName);

@@ -127,6 +127,9 @@ namespace mrv
 
     //! Save current OTIO timeline (EDL) to a filename.
     void save_timeline_to_disk(const std::string& otioFile);
+
+    //! Replace current clip in otio timeline with newClipPath.
+    bool replaceClipPath(tl::file::Path newClipPath, ViewerUI* ui);
     
     //
     // Set the edit mode height.
