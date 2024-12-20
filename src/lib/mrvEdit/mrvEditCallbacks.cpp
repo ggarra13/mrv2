@@ -2834,6 +2834,9 @@ namespace mrv
         {
             if (const auto* track = dynamic_cast<otio::Track*>(child.value))
             {
+                if (!track->enabled())
+                    continue;
+                
                 bool visibleTrack = false;
                 if (otio::Track::Kind::video == track->kind())
                 {
