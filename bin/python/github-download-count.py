@@ -71,7 +71,7 @@ start_date = args.start_date
 end_date = args.end_date
 folder_name = args.tag
 
-utc = pytz.utc
+utc = pytz.timezone('UTC')
 
 start_date = datetime.fromisoformat(start_date).astimezone(utc)
     

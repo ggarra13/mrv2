@@ -23,13 +23,13 @@ jobs:
     - name: Get machine name
       run: |
         echo "Machine name: $RUNNER_NAME"
-      
+
     - name: Install ninja-build
       run: brew install ninja
       
     - name: Install automake
       run: brew install automake curl
-      
+
     - name: Install GNU sed
       run: brew install gnu-sed
       

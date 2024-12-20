@@ -50,6 +50,10 @@ jobs:
       run: |
         chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
 
+    # - name: Install cmake
+    #   run: |
+    #     ./etc/install_cmake.sh
+
     - name: Build mrv2
       run: |
         ./etc/runme_nolog.sh -D TLRENDER_USD=OFF -t package
