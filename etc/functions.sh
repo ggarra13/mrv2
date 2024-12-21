@@ -219,6 +219,22 @@ send_to_packages()
 }
 
 
+# Function to ask the question and return 1 for yes, 0 for no
+# in response variable
+ask_question()
+{
+    while true; do
+	read -p "$1 (y/n): " answer
+	case "$answer" in
+	    [Yy]*)
+		response=1; break;;
+	    [Nn]*)
+		response=2; break;;
+	    *) echo "Please answer y or n." ;;
+	esac
+    done
+}
+
 #
 # Auxiliary function to ask to continue (y/n)
 #
