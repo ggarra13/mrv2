@@ -20,6 +20,8 @@ do
 		dos2unix $FILE
 		echo "Changing $FILE permissions to 0755"
 		chmod 0755 $FILE
+		# Explicitly set executable bit in Git
+		git update-index --chmod=+x $FILE
 		git add $FILE
 	    fi
 	else
