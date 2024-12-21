@@ -49,6 +49,7 @@ v1.3.1
 - Improved performance of Data Window and Display Window when reading 
   multipart OpenEXRs.
 - Fixed crashes of PlaylistButton when there were no tracks or stack.
+- Updated AI translations.
   
 
 v1.3.0

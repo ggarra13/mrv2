@@ -1,5 +1,8 @@
 #!/usr/env/bin python
 
+#
+# Built-in imports
+#
 import argparse
 from collections import Counter
 import gc
@@ -151,7 +154,8 @@ GOOGLE_LANGUAGES = {
     'hi' : 'Hindi',
     'it' : 'Italian',
     'pt' : 'Portuguese',
-    'zh' : 'Chinese (Simplified)',
+    'ru' : 'Russian',
+    'zh' : 'ZH-CN',
 }
 
 #
