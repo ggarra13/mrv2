@@ -15,1541 +15,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid ""
-"\n"
-"USD module.\n"
-"\n"
-"Contains all classes and enums related to USD (Universal Scene "
-"Description). \n"
-msgstr ""
-"\n"
-"USD module.\n"
-"\n"
-"Contains all classes and enums related to USD (Universal Scene "
-"Description). \n"
-
-msgid "Renderer Name"
-msgstr "Renderer Name"
-
-msgid "Render Width"
-msgstr "Render Width"
-
-msgid "Models' complexity."
-msgstr "Models' complexity."
-
-msgid "Draw mode  :class:`mrv2.usd.DrawMode`."
-msgstr "Draw mode  :class:`mrv2.usd.DrawMode`."
-
-msgid "Enable Lighting"
-msgstr "Enable Lighting"
-
-msgid "Enable Scene Lights"
-msgstr "Enable Scene Lights"
-
-msgid "Enable Scene Materials"
-msgstr "Enable Scene Materials"
-
-msgid "Enable sRGB"
-msgstr "Enable sRGB"
-
-msgid "Stage Cache Count"
-msgstr "Stage Cache Count"
-
-msgid "Disk Cache Byte Count"
-msgstr "Disk Cache Byte Count"
-
-msgid "USD Render Options."
-msgstr "USD Render Options."
-
-msgid "Get USD Render Options."
-msgstr "Get USD Render Options."
-
-msgid "Set USD Render Options."
-msgstr "Set USD Render Options."
-
-msgid ""
-"\n"
-"UI module.\n"
-"\n"
-"Contains all classes and enums related to UI (User Interface). \n"
-msgstr ""
-"\n"
-"UI module.\n"
-"\n"
-"Contains all classes and enums related to UI (User Interface). \n"
-
-msgid "Refresh menus."
-msgstr "Refresh menus."
-
-msgid ""
-"\n"
-"Timeline module.\n"
-"\n"
-"Contains all functions related to the timeline control.\n"
-msgstr ""
-"\n"
-"Timeline module.\n"
-"\n"
-"Contains all functions related to the timeline control.\n"
-
-msgid "Play forwards."
-msgstr "Play forwards."
-
-msgid "Play backwards."
-msgstr "Play backwards."
-
-msgid "Seek to a time in timeline."
-msgstr "Seek to a time in timeline."
-
-msgid "Seek to a frame in timeline."
-msgstr "Seek to a frame in timeline."
-
-msgid "Seek to a second in timeline."
-msgstr "Seek to a second in timeline."
-
-msgid "Time range of the timeline."
-msgstr "Time range of the timeline."
-
-msgid "Selected time range of the timeline."
-msgstr "Selected time range of the timeline."
-
-msgid "Set the selected time range of the timeline."
-msgstr "Set the selected time range of the timeline."
-
-msgid "Set the in time of the selected time range of the timeline."
-msgstr "Set the in time of the selected time range of the timeline."
-
-msgid "Set the in frame of the selected time range of the timeline."
-msgstr "Set the in frame of the selected time range of the timeline."
-
-msgid "Set the in seconds of the selected time range of the timeline."
-msgstr "Set the in seconds of the selected time range of the timeline."
-
-msgid "Set the out time of the selected time range of the timeline."
-msgstr "Set the out time of the selected time range of the timeline."
-
-msgid "Set the out frame of the selected time range of the timeline."
-msgstr "Set the out frame of the selected time range of the timeline."
-
-msgid "Set the out seconds of the selected time range of the timeline."
-msgstr "Set the out seconds of the selected time range of the timeline."
-
-msgid "Current time in timeline."
-msgstr "Current time in timeline."
-
-msgid "Current frame in timeline."
-msgstr "Current frame in timeline."
-
-msgid "Current seconds in timeline."
-msgstr "Current seconds in timeline."
-
-msgid "Return current loop mode of timeline."
-msgstr "Return current loop mode of timeline."
-
-msgid "Set current loop mode of timeline."
-msgstr "Set current loop mode of timeline."
-
-msgid "Gets the current FPS of timeline."
-msgstr "Gets the current FPS of timeline."
-
-msgid "Gets the default speed of the timeline."
-msgstr "Gets the default speed of the timeline."
-
-msgid "Set current FPS of timeline."
-msgstr "Set current FPS of timeline."
-
-msgid "Value less than 0"
-msgstr "Value less than 0"
-
-msgid ""
-"\n"
-"Settings module.\n"
-"\n"
-"Contains all settings functions.\n"
-msgstr ""
-"\n"
-"Settings module.\n"
-"\n"
-"Contains all settings functions.\n"
-
-msgid "Returns whether to check for updates at start up."
-msgstr "Returns whether to check for updates at start up."
-
-msgid "Retrieve the cache memory setting in gigabytes."
-msgstr "Retrieve the cache memory setting in gigabytes."
-
-msgid "Set the cache memory setting in gigabytes."
-msgstr "Set the cache memory setting in gigabytes."
-
-msgid "Retrieve Read Ahead cache in seconds."
-msgstr "Retrieve Read Ahead cache in seconds."
-
-msgid "Set Read Ahead cache in seconds."
-msgstr "Set Read Ahead cache in seconds."
-
-msgid "Retrieve Read Behind cache in seconds."
-msgstr "Retrieve Read Behind cache in seconds."
-
-msgid "Set Read Behind cache in seconds."
-msgstr "Set Read Behind cache in seconds."
-
-msgid "Set file sequence audio."
-msgstr "Set file sequence audio."
-
-msgid "Get file sequence audio."
-msgstr "Get file sequence audio."
-
-msgid "Set file sequence audio file name."
-msgstr "Set file sequence audio file name."
-
-msgid "Get file sequence audio file name."
-msgstr "Get file sequence audio file name."
-
-msgid "Set file sequence audio directory."
-msgstr "Set file sequence audio directory."
-
-msgid "Get file sequence audio directory."
-msgstr "Get file sequence audio directory."
-
-msgid "Set maximum file sequence digits."
-msgstr "Set maximum file sequence digits."
-
-msgid "Get maximum file sequence digits."
-msgstr "Get maximum file sequence digits."
-
-msgid "Set Timer Mode."
-msgstr "Set Timer Mode."
-
-msgid "Get Timer Mode."
-msgstr "Get Timer Mode."
-
-msgid "Set Audio Buffer Frame Count."
-msgstr "Set Audio Buffer Frame Count."
-
-msgid "Get Audio Buffer Frame Count."
-msgstr "Get Audio Buffer Frame Count."
-
-msgid "Set Video Request Count."
-msgstr "Set Video Request Count."
-
-msgid "Get Video Request Count."
-msgstr "Get Video Request Count."
-
-msgid "Set Audio Request Count."
-msgstr "Set Audio Request Count."
-
-msgid "Get Audio Request Count."
-msgstr "Get Audio Request Count."
-
-msgid "Set Sequence Thread Count."
-msgstr "Set Sequence Thread Count."
-
-msgid "Get Sequence Thread Count."
-msgstr "Get Sequence Thread Count."
-
-msgid "Set FFmpeg YUV To RGB Conversion."
-msgstr "Set FFmpeg YUV To RGB Conversion."
-
-msgid "Get FFmpeg YUV To RGB Conversion."
-msgstr "Get FFmpeg YUV To RGB Conversion."
-
-msgid "Set FFmpeg Color Accuracy."
-msgstr "Set FFmpeg Color Accuracy."
-
-msgid "Get FFmpeg Color Accuracy."
-msgstr "Get FFmpeg Color Accuracy."
-
-msgid "Set FFmpeg Thread Count."
-msgstr "Set FFmpeg Thread Count."
-
-msgid "Get FFmpeg Thread Count."
-msgstr "Get FFmpeg Thread Count."
-
-msgid "No session name established, cannot save."
-msgstr "No session name established, cannot save."
-
-msgid ""
-"\n"
-"Session module.\n"
-"\n"
-"Used to manage everything related to sessions.\n"
-msgstr ""
-"\n"
-"Session module.\n"
-"\n"
-"Used to manage everything related to sessions.\n"
-
-msgid "Returns the current session metadata."
-msgstr "Returns the current session metadata."
-
-msgid "Returns the current metadata for a key."
-msgstr "Returns the current metadata for a key."
-
-msgid "Sets all the session metadata for a session."
-msgstr "Sets all the session metadata for a session."
-
-msgid "Sets the session metadata for a key."
-msgstr "Sets the session metadata for a key."
-
-msgid "Clears the current session metadata."
-msgstr "Clears the current session metadata."
-
-msgid "Returns current session file."
-msgstr "Returns current session file."
-
-msgid "Sets the current session file."
-msgstr "Sets the current session file."
-
-msgid "Open a session file."
-msgstr "Open a session file."
-
-msgid "Save a session file."
-msgstr "Save a session file."
-
-msgid "Duplicated Python plugin {0} in {1} and {2}."
-msgstr "Duplicated Python plugin {0} in {1} and {2}."
-
-msgid ""
-"Expected a tuple containing a Python function and a string with menu options "
-"in it."
-msgstr ""
-"Expected a tuple containing a Python function and a string with menu options "
-"in it."
-
-msgid ""
-"Expected a handle to a Python function or to a tuple containing a Python "
-"function and a string with menu options in it."
-msgstr ""
-"Expected a handle to a Python function or to a tuple containing a Python "
-"function and a string with menu options in it."
-
-msgid ""
-"Please override the menus method by returning a valid dict of key menus, "
-"values methods."
-msgstr ""
-"Please override the menus method by returning a valid dict of key menus, "
-"values methods."
-
-msgid ""
-"\n"
-"Plugin module.\n"
-"\n"
-"Contains all classes related to python plugins.\n"
-"\n"
-msgstr ""
-"\n"
-"Plugin module.\n"
-"\n"
-"Contains all classes related to python plugins.\n"
-"\n"
-
-msgid ""
-"Whether a plugin is active or not.  If not overriden, the default is True."
-msgstr ""
-"Whether a plugin is active or not.  If not overriden, the default is True."
-
-msgid ""
-"\n"
-"Dictionary of menu entries with callbacks, like:\n"
-"\n"
-"def menus(self):\n"
-"    menus = { \"Nem Menu/Hello\" : self.run }\n"
-"    return menus\n"
-"\n"
-msgstr ""
-"\n"
-"Dictionary of menu entries with callbacks, like:\n"
-"\n"
-"def menus(self):\n"
-"    menus = { \"Nem Menu/Hello\" : self.run }\n"
-"    return menus\n"
-"\n"
-
-msgid ""
-"\n"
-"\n"
-"import mrv2\n"
-"from mrv2 import plugin\n"
-"\n"
-"class DemoPlugin(plugin.Plugin):\n"
-"    def __init__(self):\n"
-"        \"\"\"\n"
-"        Constructor for DemoPlugin.\n"
-"\n"
-"        Define your own variables here.\n"
-"        \"\"\"\n"
-"        super().__init__()\n"
-"\n"
-"    def run(self):\n"
-"        \"\"\"\n"
-"        Example method used for the callback.\n"
-"        \"\"\"\n"
-"        print(\"Hello from Python plugin\")\n"
-"\n"
-"    def active(self):\n"
-"        \"\"\"\n"
-"        Optional method to return whether the plug-in is active or not.\n"
-"\n"
-"\n"
-"        :return: True if the plug-in is active, False otherwise.\n"
-"        :rtype: bool\n"
-"\n"
-"        \"\"\"\n"
-"        return True\n"
-"\n"
-"    def menus(self):\n"
-"        \"\"\"\n"
-"        Dictionary of menu entries as keys with callbacks as values.\n"
-"\n"
-"\n"
-"        :return: A dictionary of menu entries and their corresponding "
-"callbacks.\n"
-"        :rtype: dict\n"
-"\n"
-"        \"\"\"\n"
-"        menus = {\"New Menu/Hello\": self.run}\n"
-"        return menus\n"
-"\n"
-msgstr ""
-"\n"
-"\n"
-"import mrv2\n"
-"from mrv2 import plugin\n"
-"\n"
-"class DemoPlugin(plugin.Plugin):\n"
-"    def __init__(self):\n"
-"        \"\"\"\n"
-"        Constructor for DemoPlugin.\n"
-"\n"
-"        Define your own variables here.\n"
-"        \"\"\"\n"
-"        super().__init__()\n"
-"\n"
-"    def run(self):\n"
-"        \"\"\"\n"
-"        Example method used for the callback.\n"
-"        \"\"\"\n"
-"        print(\"Hello from Python plugin\")\n"
-"\n"
-"    def active(self):\n"
-"        \"\"\"\n"
-"        Optional method to return whether the plug-in is active or not.\n"
-"\n"
-"\n"
-"        :return: True if the plug-in is active, False otherwise.\n"
-"        :rtype: bool\n"
-"\n"
-"        \"\"\"\n"
-"        return True\n"
-"\n"
-"    def menus(self):\n"
-"        \"\"\"\n"
-"        Dictionary of menu entries as keys with callbacks as values.\n"
-"\n"
-"\n"
-"        :return: A dictionary of menu entries and their corresponding "
-"callbacks.\n"
-"        :rtype: dict\n"
-"\n"
-"        \"\"\"\n"
-"        menus = {\"New Menu/Hello\": self.run}\n"
-"        return menus\n"
-"\n"
-
-msgid "No playlist matched item."
-msgstr "No playlist matched item."
-
-msgid "No playlist matched file name."
-msgstr "No playlist matched file name."
-
-msgid "No playlist loaded."
-msgstr "No playlist loaded."
-
-msgid "No playlist selected."
-msgstr "No playlist selected."
-
-msgid "Not an EDL playlist to add clips to."
-msgstr "Not an EDL playlist to add clips to."
-
-msgid "Could not find clip in loaded clips."
-msgstr "Could not find clip in loaded clips."
-
-msgid ""
-"\n"
-"Playlist module.\n"
-"\n"
-"Contains all functions and classes related to the playlists.\n"
-msgstr ""
-"\n"
-"Playlist module.\n"
-"\n"
-"Contains all functions and classes related to the playlists.\n"
-
-msgid "List playlist items."
-msgstr "List playlist items."
-
-msgid "Select a playlist by FileModelItem."
-msgstr "Select a playlist by FileModelItem."
-
-msgid "Select a playlist by fileName."
-msgstr "Select a playlist by fileName."
-
-msgid "Select a playlist by index."
-msgstr "Select a playlist by index."
-
-msgid "Add a clip to currently selected Playlist EDL."
-msgstr "Add a clip to currently selected Playlist EDL."
-
-msgid "Save current .otio file with relative paths."
-msgstr "Save current .otio file with relative paths."
-
-msgid "unsupported operand type(s) for {0}: RationalTime and {1}"
-msgstr "unsupported operand type(s) for {0}: RationalTime and {1}"
-
-msgid ""
-"\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/rt."
-"rate` seconds.\n"
-"It can be rescaled into another :class:`~RationalTime`'s rate.\n"
-msgstr ""
-"\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/rt."
-"rate` seconds.\n"
-"It can be rescaled into another :class:`~RationalTime`'s rate.\n"
-
-msgid ""
-"\n"
-"Returns true if the time is invalid. The time is considered invalid if the "
-"value or the rate are a NaN value\n"
-"or if the rate is less than or equal to zero.\n"
-msgstr ""
-"\n"
-"Returns true if the time is invalid. The time is considered invalid if the "
-"value or the rate are a NaN value\n"
-"or if the rate is less than or equal to zero.\n"
-
-msgid "Returns the time value for time converted to new_rate."
-msgstr "Returns the time value for time converted to new_rate."
-
-msgid "Returns the time for time converted to new_rate."
-msgstr "Returns the time for time converted to new_rate."
-
-msgid "Returns the time value for \"self\" converted to new_rate."
-msgstr "Returns the time value for \"self\" converted to new_rate."
-
-msgid ""
-"\n"
-"Compute the duration of samples from first to last (excluding last). This is "
-"not the same as distance.\n"
-"\n"
-"For example, the duration of a clip from frame 10 to frame 15 is 5 frames. "
-"Result will be in the rate of start_time.\n"
-msgstr ""
-"\n"
-"Compute the duration of samples from first to last (excluding last). This is "
-"not the same as distance.\n"
-"\n"
-"For example, the duration of a clip from frame 10 to frame 15 is 5 frames. "
-"Result will be in the rate of start_time.\n"
-
-msgid ""
-"\n"
-"Compute the duration of samples from first to last (including last). This is "
-"not the same as distance.\n"
-"\n"
-"For example, the duration of a clip from frame 10 to frame 15 is 6 frames. "
-"Result will be in the rate of start_time.\n"
-msgstr ""
-"\n"
-"Compute the duration of samples from first to last (including last). This is "
-"not the same as distance.\n"
-"\n"
-"For example, the duration of a clip from frame 10 to frame 15 is 6 frames. "
-"Result will be in the rate of start_time.\n"
-
-msgid "Returns true if the rate is valid for use with timecode."
-msgstr "Returns true if the rate is valid for use with timecode."
-
-msgid ""
-"Returns the first valid timecode rate that has the least difference from the "
-"given value."
-msgstr ""
-"Returns the first valid timecode rate that has the least difference from the "
-"given value."
-
-msgid "Turn a frame number and rate into a :class:`~RationalTime` object."
-msgstr "Turn a frame number and rate into a :class:`~RationalTime` object."
-
-msgid "Returns the frame number based on the current rate."
-msgstr "Returns the frame number based on the current rate."
-
-msgid "Returns the frame number based on the given rate."
-msgstr "Returns the frame number based on the given rate."
-
-msgid "Convert to timecode (``HH:MM:SS;FRAME``)"
-msgstr "Convert to timecode (``HH:MM:SS;FRAME``)"
-
-msgid ""
-"Convert a timecode string (``HH:MM:SS;FRAME``) into a :class:`~RationalTime`."
-msgstr ""
-"Convert a timecode string (``HH:MM:SS;FRAME``) into a :class:`~RationalTime`."
-
-msgid ""
-"Convert a time with microseconds string (``HH:MM:ss`` where ``ss`` is an "
-"integer or a decimal number) into a :class:`~RationalTime`."
-msgstr ""
-"Convert a time with microseconds string (``HH:MM:ss`` where ``ss`` is an "
-"integer or a decimal number) into a :class:`~RationalTime`."
-
-msgid ""
-"\n"
-"The TimeRange class represents a range in time. It encodes the start time "
-"and the duration,\n"
-"meaning that :meth:`end_time_inclusive` (last portion of a sample in the "
-"time range) and\n"
-":meth:`end_time_exclusive` can be computed.\n"
-msgstr ""
-"\n"
-"The TimeRange class represents a range in time. It encodes the start time "
-"and the duration,\n"
-"meaning that :meth:`end_time_inclusive` (last portion of a sample in the "
-"time range) and\n"
-":meth:`end_time_exclusive` can be computed.\n"
-
-msgid ""
-"\n"
-"The time of the last sample containing data in the time range.\n"
-"\n"
-"If the time range starts at (0, 24) with duration (10, 24), this will be\n"
-"(9, 24)\n"
-"\n"
-"If the time range starts at (0, 24) with duration (10.5, 24):\n"
-"(10, 24)\n"
-"\n"
-"In other words, the last frame with data, even if the last frame is "
-"fractional.\n"
-msgstr ""
-"\n"
-"The time of the last sample containing data in the time range.\n"
-"\n"
-"If the time range starts at (0, 24) with duration (10, 24), this will be\n"
-"(9, 24)\n"
-"\n"
-"If the time range starts at (0, 24) with duration (10.5, 24):\n"
-"(10, 24)\n"
-"\n"
-"In other words, the last frame with data, even if the last frame is "
-"fractional.\n"
-
-msgid ""
-"\n"
-"Time of the first sample outside the time range.\n"
-"\n"
-"If start frame is 10 and duration is 5, then end_time_exclusive is 15,\n"
-"because the last time with data in this range is 14.\n"
-"\n"
-"If start frame is 10 and duration is 5.5, then end_time_exclusive is\n"
-"15.5, because the last time with data in this range is 15.\n"
-msgstr ""
-"\n"
-"Time of the first sample outside the time range.\n"
-"\n"
-"If start frame is 10 and duration is 5, then end_time_exclusive is 15,\n"
-"because the last time with data in this range is 14.\n"
-"\n"
-"If start frame is 10 and duration is 5.5, then end_time_exclusive is\n"
-"15.5, because the last time with data in this range is 15.\n"
-
-msgid "Construct a new :class:`~TimeRange` that is this one extended by other."
-msgstr ""
-"Construct a new :class:`~TimeRange` that is this one extended by other."
-
-msgid ""
-"\n"
-"Clamp 'other' (:class:`~RationalTime`) according to\n"
-":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
-msgstr ""
-"\n"
-"Clamp 'other' (:class:`~RationalTime`) according to\n"
-":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
-
-msgid ""
-"\n"
-"Clamp 'other' (:class:`~TimeRange`) according to\n"
-":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
-msgstr ""
-"\n"
-"Clamp 'other' (:class:`~TimeRange`) according to\n"
-":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
-
-msgid ""
-"\n"
-"The start of `this` precedes `other`.\n"
-"`other` precedes the end of `this`.\n"
-"::\n"
-"\n"
-"         other\n"
-"           |\n"
-"           *\n"
-"   [      this      ]\n"
-"\n"
-msgstr ""
-"\n"
-"The start of `this` precedes `other`.\n"
-"`other` precedes the end of `this`.\n"
-"::\n"
-"\n"
-"         other\n"
-"           |\n"
-"           *\n"
-"   [      this      ]\n"
-"\n"
-
-msgid ""
-"\n"
-"The start of `this` precedes start of `other`.\n"
-"The end of `this` antecedes end of `other`.\n"
-"::\n"
-"\n"
-"        [ other ]\n"
-"   [      this      ]\n"
-"\n"
-"The converse would be ``other.contains(this)``\n"
-msgstr ""
-"\n"
-"The start of `this` precedes start of `other`.\n"
-"The end of `this` antecedes end of `other`.\n"
-"::\n"
-"\n"
-"        [ other ]\n"
-"   [      this      ]\n"
-"\n"
-"The converse would be ``other.contains(this)``\n"
-
-msgid ""
-"\n"
-"`this` contains `other`.\n"
-"::\n"
-"\n"
-"        other\n"
-"         |\n"
-"         *\n"
-"   [    this    ]\n"
-"\n"
-msgstr ""
-"\n"
-"`this` contains `other`.\n"
-"::\n"
-"\n"
-"        other\n"
-"         |\n"
-"         *\n"
-"   [    this    ]\n"
-"\n"
-
-msgid ""
-"\n"
-"The start of `this` strictly precedes end of `other` by a value >= "
-"`epsilon_s`.\n"
-"The end of `this` strictly antecedes start of `other` by a value >= "
-"`epsilon_s`.\n"
-"::\n"
-"\n"
-"   [ this ]\n"
-"       [ other ]\n"
-"\n"
-"The converse would be ``other.overlaps(this)``\n"
-msgstr ""
-"\n"
-"The start of `this` strictly precedes end of `other` by a value >= "
-"`epsilon_s`.\n"
-"The end of `this` strictly antecedes start of `other` by a value >= "
-"`epsilon_s`.\n"
-"::\n"
-"\n"
-"   [ this ]\n"
-"       [ other ]\n"
-"\n"
-"The converse would be ``other.overlaps(this)``\n"
-
-msgid ""
-"\n"
-"The end of `this` strictly precedes `other` by a value >= `epsilon_s`.\n"
-"::\n"
-"\n"
-"             other\n"
-"               |\n"
-"   [ this ]    *\n"
-"\n"
-msgstr ""
-"\n"
-"The end of `this` strictly precedes `other` by a value >= `epsilon_s`.\n"
-"::\n"
-"\n"
-"             other\n"
-"               |\n"
-"   [ this ]    *\n"
-"\n"
-
-msgid ""
-"\n"
-"The end of `this` strictly equals the start of `other` and\n"
-"the start of `this` strictly equals the end of `other`.\n"
-"::\n"
-"\n"
-"   [this][other]\n"
-"\n"
-"The converse would be ``other.meets(this)``\n"
-msgstr ""
-"\n"
-"The end of `this` strictly equals the start of `other` and\n"
-"the start of `this` strictly equals the end of `other`.\n"
-"::\n"
-"\n"
-"   [this][other]\n"
-"\n"
-"The converse would be ``other.meets(this)``\n"
-
-msgid ""
-"\n"
-"The start of `this` strictly equals `other`.\n"
-"::\n"
-"\n"
-"   other\n"
-"     |\n"
-"     *\n"
-"     [ this ]\n"
-"\n"
-msgstr ""
-"\n"
-"The start of `this` strictly equals `other`.\n"
-"::\n"
-"\n"
-"   other\n"
-"     |\n"
-"     *\n"
-"     [ this ]\n"
-"\n"
-
-msgid ""
-"\n"
-"The start of `this` strictly equals the start of `other`.\n"
-"The end of `this` strictly precedes the end of `other` by a value >= "
-"`epsilon_s`.\n"
-"::\n"
-"\n"
-"   [ this ]\n"
-"   [    other    ]\n"
-"\n"
-"The converse would be ``other.begins(this)``\n"
-msgstr ""
-"\n"
-"The start of `this` strictly equals the start of `other`.\n"
-"The end of `this` strictly precedes the end of `other` by a value >= "
-"`epsilon_s`.\n"
-"::\n"
-"\n"
-"   [ this ]\n"
-"   [    other    ]\n"
-"\n"
-"The converse would be ``other.begins(this)``\n"
-
-msgid ""
-"\n"
-"The end of `this` strictly equals `other`.\n"
-"::\n"
-"\n"
-"        other\n"
-"          |\n"
-"          *\n"
-"   [ this ]\n"
-"\n"
-msgstr ""
-"\n"
-"The end of `this` strictly equals `other`.\n"
-"::\n"
-"\n"
-"        other\n"
-"          |\n"
-"          *\n"
-"   [ this ]\n"
-"\n"
-
-msgid ""
-"\n"
-"The start of `this` strictly antecedes the start of `other` by a value >= "
-"`epsilon_s`.\n"
-"The end of `this` strictly equals the end of `other`.\n"
-"::\n"
-"\n"
-"           [ this ]\n"
-"   [     other    ]\n"
-"\n"
-"The converse would be ``other.finishes(this)``\n"
-msgstr ""
-"\n"
-"The start of `this` strictly antecedes the start of `other` by a value >= "
-"`epsilon_s`.\n"
-"The end of `this` strictly equals the end of `other`.\n"
-"::\n"
-"\n"
-"           [ this ]\n"
-"   [     other    ]\n"
-"\n"
-"The converse would be ``other.finishes(this)``\n"
-
-msgid ""
-"\n"
-"The start of `this` precedes or equals the end of `other` by a value >= "
-"`epsilon_s`.\n"
-"The end of `this` antecedes or equals the start of `other` by a value >= "
-"`epsilon_s`.\n"
-"::\n"
-"\n"
-"   [    this    ]           OR      [    other    ]\n"
-"        [     other    ]                    [     this    ]\n"
-"\n"
-"The converse would be ``other.finishes(this)``\n"
-msgstr ""
-"\n"
-"The start of `this` precedes or equals the end of `other` by a value >= "
-"`epsilon_s`.\n"
-"The end of `this` antecedes or equals the start of `other` by a value >= "
-"`epsilon_s`.\n"
-"::\n"
-"\n"
-"   [    this    ]           OR      [    other    ]\n"
-"        [     other    ]                    [     this    ]\n"
-"\n"
-"The converse would be ``other.finishes(this)``\n"
-
-msgid ""
-"\n"
-"Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\\s "
-"(exclusive).\n"
-"\n"
-"For example, if start_time is 1 and end_time is 10, the returned will have a "
-"duration of 9.\n"
-msgstr ""
-"\n"
-"Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\\s "
-"(exclusive).\n"
-"\n"
-"For example, if start_time is 1 and end_time is 10, the returned will have a "
-"duration of 9.\n"
-
-msgid ""
-"\n"
-"Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\\s "
-"(inclusive).\n"
-"\n"
-"For example, if start_time is 1 and end_time is 10, the returned will have a "
-"duration of 10.\n"
-msgstr ""
-"\n"
-"Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\\s "
-"(inclusive).\n"
-"\n"
-"For example, if start_time is 1 and end_time is 10, the returned will have a "
-"duration of 10.\n"
-
-msgid ""
-"\n"
-"Media module.\n"
-"\n"
-"Contains all classes and enums related to media. \n"
-msgstr ""
-"\n"
-"Media module.\n"
-"\n"
-"Contains all classes and enums related to media. \n"
-
-msgid "Compare mode :class:`mrv2.media.CompareMode`."
-msgstr "Compare mode :class:`mrv2.media.CompareMode`."
-
-msgid "Wipe center in X and Y :class:`mrv2.math.Vector2f`."
-msgstr "Wipe center in X and Y :class:`mrv2.math.Vector2f`."
-
-msgid "Wipe Rotation."
-msgstr "Wipe Rotation."
-
-msgid "Overlay ( A over B )"
-msgstr "Overlay ( A over B )"
-
-msgid "Comparison options."
-msgstr "Comparison options."
-
-msgid ""
-"\n"
-"Math module.\n"
-"\n"
-"Contains all math classes.\n"
-msgstr ""
-"\n"
-"Math module.\n"
-"\n"
-"Contains all math classes.\n"
-
-msgid "Vector of 2 integers."
-msgstr "Vector of 2 integers."
-
-msgid "Vector of 2 floats."
-msgstr "Vector of 2 floats."
-
-msgid "Vector of 3 floats."
-msgstr "Vector of 3 floats."
-
-msgid "Vector of 4 floats."
-msgstr "Vector of 4 floats."
-
-msgid "Size of 2 integers."
-msgstr "Size of 2 integers."
-
-msgid ""
-"\n"
-"Image module.\n"
-"\n"
-"Contains all classes and enums related to image controls. \n"
-msgstr ""
-"\n"
-"Image module.\n"
-"\n"
-"Contains all classes and enums related to image controls. \n"
-
-msgid "Red Channel."
-msgstr "Red Channel."
-
-msgid "Green Channel."
-msgstr "Green Channel."
-
-msgid "Blue Channel."
-msgstr "Blue Channel."
-
-msgid "Alpha Channel."
-msgstr "Alpha Channel."
-
-msgid "Image mirroring."
-msgstr "Image mirroring."
-
-msgid "Flip image on X."
-msgstr "Flip image on X."
-
-msgid "Flip image on Y."
-msgstr "Flip image on Y."
-
-msgid "Enabled Levels."
-msgstr "Enabled Levels."
-
-msgid "Add a :class:`mrv2.math.Vector3f` to image."
-msgstr "Add a :class:`mrv2.math.Vector3f` to image."
-
-msgid "Change a :class:`mrv2.math.Vector3f` of brightness to image."
-msgstr "Change a :class:`mrv2.math.Vector3f` of brightness to image."
-
-msgid "Change a :class:`mrv2.math.Vector3f` of contrast to image."
-msgstr "Change a :class:`mrv2.math.Vector3f` of contrast to image."
-
-msgid "Change a :class:`mrv2.math.Vector3f` of saturation to image."
-msgstr "Change a :class:`mrv2.math.Vector3f` of saturation to image."
-
-msgid "Change tint of image to image between 0 and 1."
-msgstr "Change tint of image to image between 0 and 1."
-
-msgid "Invert the color values."
-msgstr "Invert the color values."
-
-msgid "Color values."
-msgstr "Color values."
-
-msgid "In Low Level value."
-msgstr "In Low Level value."
-
-msgid "In High Level value."
-msgstr "In High Level value."
-
-msgid "Gamma Level value."
-msgstr "Gamma Level value."
-
-msgid "Out Low Level value."
-msgstr "Out Low Level value."
-
-msgid "Out High Level value."
-msgstr "Out High Level value."
-
-msgid "Levels values."
-msgstr "Levels values."
-
-msgid "Enabled EXR display."
-msgstr "Enabled EXR display."
-
-msgid "Exposure value."
-msgstr "Exposure value."
-
-msgid "Defog value."
-msgstr "Defog value."
-
-msgid "kneeLow value."
-msgstr "kneeLow value."
-
-msgid "kneeHigh value."
-msgstr "kneeHigh value."
-
-msgid "EXR display values."
-msgstr "EXR display values."
-
-msgid "Enabled Soft Clip."
-msgstr "Enabled Soft Clip."
-
-msgid "Soft clip value."
-msgstr "Soft clip value."
-
-msgid "Minify filter :class:`mrv2.image.ImageFilter`."
-msgstr "Minify filter :class:`mrv2.image.ImageFilter`."
-
-msgid "Magnify filter :class:`mrv2.image.ImageFilter`."
-msgstr "Magnify filter :class:`mrv2.image.ImageFilter`."
-
-msgid "Image filters."
-msgstr "Image filters."
-
-msgid "Color channels :class:`mrv2.image.Channels`."
-msgstr "Color channels :class:`mrv2.image.Channels`."
-
-msgid "Mirror on X, Y or both :class:`mrv2.image.Mirror`."
-msgstr "Mirror on X, Y or both :class:`mrv2.image.Mirror`."
-
-msgid "Color options :class:`mrv2.image.Color`."
-msgstr "Color options :class:`mrv2.image.Color`."
-
-msgid "Levels options :class:`mrv2.image.Levels`."
-msgstr "Levels options :class:`mrv2.image.Levels`."
-
-msgid "EXR Display options :class:`mrv2.image.EXRDisplay`.."
-msgstr "EXR Display options :class:`mrv2.image.EXRDisplay`.."
-
-msgid "Soft Clip options :class:`mrv2.image.SoftClip`.."
-msgstr "Soft Clip options :class:`mrv2.image.SoftClip`.."
-
-msgid "Display options."
-msgstr "Display options."
-
-msgid "LUT enabled."
-msgstr "LUT enabled."
-
-msgid "LUT filename."
-msgstr "LUT filename."
-
-msgid "LUT transformation order."
-msgstr "LUT transformation order."
-
-msgid "LUT options."
-msgstr "LUT options."
-
-msgid "Video Levels."
-msgstr "Video Levels."
-
-msgid "Alpha blending algorithm"
-msgstr "Alpha blending algorithm"
-
-msgid "Image Filters"
-msgstr "Image Filters"
-
-msgid "Image options."
-msgstr "Image options."
-
-msgid "Environment Map type."
-msgstr "Environment Map type."
-
-msgid "Horizontal aperture"
-msgstr "Horizontal aperture"
-
-msgid "Vertical aperture"
-msgstr "Vertical aperture"
-
-msgid "Focal Length"
-msgstr "Focal Length"
-
-msgid "Rotation on X"
-msgstr "Rotation on X"
-
-msgid "Rotation on Y"
-msgstr "Rotation on Y"
-
-msgid "Subdivision on X"
-msgstr "Subdivision on X"
-
-msgid "Subdivision on Y"
-msgstr "Subdivision on Y"
-
-msgid "Spin"
-msgstr "Spin"
-
-msgid "EnvironmentMap options."
-msgstr "EnvironmentMap options."
-
-msgid "Stereo 3d input :class:`mrv2.image.StereoInput`.."
-msgstr "Stereo 3d input :class:`mrv2.image.StereoInput`.."
-
-msgid "Stereo 3d output :class:`mrv2.image.StereoOutput`.."
-msgstr "Stereo 3d output :class:`mrv2.image.StereoOutput`.."
-
-msgid "Separation between left and right eye."
-msgstr "Separation between left and right eye."
-
-msgid "Swap left and right eye"
-msgstr "Swap left and right eye"
-
-msgid "Stereo3D options."
-msgstr "Stereo3D options."
-
-msgid "Background type :class:`mrv2.image.Background`.."
-msgstr "Background type :class:`mrv2.image.Background`.."
-
-msgid "Checkers Color0 :class:`mrv2.image.Color4f`.."
-msgstr "Checkers Color0 :class:`mrv2.image.Color4f`.."
-
-msgid "Checkers Color1 :class:`mrv2.image.Color4f`.."
-msgstr "Checkers Color1 :class:`mrv2.image.Color4f`.."
-
-msgid "Checkers Size :class:`mrv2.math.Size2i`.."
-msgstr "Checkers Size :class:`mrv2.math.Size2i`.."
-
-msgid "Background options."
-msgstr "Background options."
-
-msgid "Gets the current background options."
-msgstr "Gets the current background options."
-
-msgid "Sets the current background options."
-msgstr "Sets the current background options."
-
-msgid "Gets the current OCIO config file."
-msgstr "Gets the current OCIO config file."
-
-msgid "Sets the current OCIO config file."
-msgstr "Sets the current OCIO config file."
-
-msgid "Gets the current input color space."
-msgstr "Gets the current input color space."
-
-msgid "Gets a list of all input color spaces."
-msgstr "Gets a list of all input color spaces."
-
-msgid "Set the input color space."
-msgstr "Set the input color space."
-
-msgid "Gets the current Display/View."
-msgstr "Gets the current Display/View."
-
-msgid "Gets the list of Displays/Views."
-msgstr "Gets the list of Displays/Views."
-
-msgid "Set an OCIO Display/View."
-msgstr "Set an OCIO Display/View."
-
-msgid "Gets the current OCIO look."
-msgstr "Gets the current OCIO look."
-
-msgid "Gets a list of all OCIO looks."
-msgstr "Gets a list of all OCIO looks."
-
-msgid "Set the OCIO look by name."
-msgstr "Set the OCIO look by name."
-
-msgid "Return all the files."
-msgstr "Return all the files."
-
-msgid "Return all the active files."
-msgstr "Return all the active files."
-
-msgid "Return the A file item."
-msgstr "Return the A file item."
-
-msgid "Return the A file index."
-msgstr "Return the A file index."
-
-msgid "Return the list of B files."
-msgstr "Return the list of B files."
-
-msgid "Return the list of B indexes."
-msgstr "Return the list of B indexes."
-
-msgid "Close the current A file."
-msgstr "Close the current A file."
-
-msgid "Close all files."
-msgstr "Close all files."
-
-msgid "Set the A file index."
-msgstr "Set the A file index."
-
-msgid "Set a new B file index."
-msgstr "Set a new B file index."
-
-msgid "Set a new stereo file index."
-msgstr "Set a new stereo file index."
-
-msgid "Toggle the B file index."
-msgstr "Toggle the B file index."
-
-msgid "Clear the B indexes."
-msgstr "Clear the B indexes."
-
-msgid "Return the list of layers."
-msgstr "Return the list of layers."
-
-msgid "Set layer for file item."
-msgstr "Set layer for file item."
-
-msgid "Set compare time."
-msgstr "Set compare time."
-
-msgid "Get compare time."
-msgstr "Get compare time."
-
-msgid "Set the first version for current media."
-msgstr "Set the first version for current media."
-
-msgid "Set the previous version for current media."
-msgstr "Set the previous version for current media."
-
-msgid "Set the next version for current media."
-msgstr "Set the next version for current media."
-
-msgid "Set the last version for current media."
-msgstr "Set the last version for current media."
-
-msgid "Path :class:`mrv2.Path` to the File Media."
-msgstr "Path :class:`mrv2.Path` to the File Media."
-
-msgid "Audio path :class:`mrv2.Path` to the File Media if any."
-msgstr "Audio path :class:`mrv2.Path` to the File Media if any."
-
-msgid "Time range :class:`mrv2.TimeRange` of the File Media."
-msgstr "Time range :class:`mrv2.TimeRange` of the File Media."
-
-msgid "Speed (FPS) of the File Media."
-msgstr "Speed (FPS) of the File Media."
-
-msgid "Playback state :class:`mrv2.timeline.Playbacks` of the File Media."
-msgstr "Playback state :class:`mrv2.timeline.Playbacks` of the File Media."
-
-msgid "Loop state :class:`mrv2.timeline.Loop` of the File Media."
-msgstr "Loop state :class:`mrv2.timeline.Loop` of the File Media."
-
-msgid "Current time :class:`mrv2.RationalTime` of the File Media."
-msgstr "Current time :class:`mrv2.RationalTime` of the File Media."
-
-msgid "In/Out range :class:`mrv2.TimeRange` of the File Media."
-msgstr "In/Out range :class:`mrv2.TimeRange` of the File Media."
-
-msgid "Video layer of the File Media."
-msgstr "Video layer of the File Media."
-
-msgid "Volume of the File Media."
-msgstr "Volume of the File Media."
-
-msgid "Mute state of the File Media."
-msgstr "Mute state of the File Media."
-
-msgid "Audio offset of the File Media."
-msgstr "Audio offset of the File Media."
-
-msgid "Class used to hold a media item."
-msgstr "Class used to hold a media item."
-
-msgid "Save annotations."
-msgstr "Save annotations."
-
-msgid "Save resolution."
-msgstr "Save resolution."
-
-msgid "FFmpeg Profile."
-msgstr "FFmpeg Profile."
-
-msgid "FFmpeg Preset."
-msgstr "FFmpeg Preset."
-
-msgid "FFmpeg Pixel Format."
-msgstr "FFmpeg Pixel Format."
-
-msgid "FFmpeg video encoding with hardware if possible."
-msgstr "FFmpeg video encoding with hardware if possible."
-
-msgid "FFmpeg Override color characteristics."
-msgstr "FFmpeg Override color characteristics."
-
-msgid "FFmpeg Color Range."
-msgstr "FFmpeg Color Range."
-
-msgid "FFmpeg Color Space."
-msgstr "FFmpeg Color Space."
-
-msgid "FFmpeg Color Primaries."
-msgstr "FFmpeg Color Primaries."
-
-msgid "FFmpeg Color Transfer Characteristics."
-msgstr "FFmpeg Color Transfer Characteristics."
-
-msgid "FFmpeg Audio Codec."
-msgstr "FFmpeg Audio Codec."
-
-msgid "OpenEXR's Compression."
-msgstr "OpenEXR's Compression."
-
-msgid "OpenEXR's Pixel Type."
-msgstr "OpenEXR's Pixel Type."
-
-msgid "OpenEXR's Zip Compression Level."
-msgstr "OpenEXR's Zip Compression Level."
-
-msgid "OpenEXR's DWA Compression Level."
-msgstr "OpenEXR's DWA Compression Level."
-
-msgid ""
-"\n"
-"Command module.\n"
-"\n"
-"Used to run main commands and get arguments and set the display, image, "
-"compare, LUT options.\n"
-msgstr ""
-"\n"
-"Command module.\n"
-"\n"
-"Used to run main commands and get arguments and set the display, image, "
-"compare, LUT options.\n"
-
-msgid ""
-"Get command-line arguments passed as single quoted string to -pythonArgs."
-msgstr ""
-"Get command-line arguments passed as single quoted string to -pythonArgs."
-
-msgid "Open file with optional audio."
-msgstr "Open file with optional audio."
-
-msgid "Compare two file items with a compare mode."
-msgstr "Compare two file items with a compare mode."
-
-msgid "Close the file item."
-msgstr "Close the file item."
-
-msgid "Close all file items."
-msgstr "Close all file items."
-
-msgid "Return the root path to the insallation of mrv2."
-msgstr "Return the root path to the insallation of mrv2."
-
-msgid "Return the path to preferences of mrv2."
-msgstr "Return the path to preferences of mrv2."
-
-msgid "Return the display options."
-msgstr "Return the display options."
-
-msgid "Set the display options."
-msgstr "Set the display options."
-
-msgid "Return the LUT options."
-msgstr "Return the LUT options."
-
-msgid "Set the LUT options."
-msgstr "Set the LUT options."
-
-msgid "Return the image options."
-msgstr "Return the image options."
-
-msgid "Set the image options."
-msgstr "Set the image options."
-
-msgid "Return the environment map options."
-msgstr "Return the environment map options."
-
-msgid "Set the environment map options."
-msgstr "Set the environment map options."
-
-msgid "Set the compare options."
-msgstr "Set the compare options."
-
-msgid "Set the stereo 3D options."
-msgstr "Set the stereo 3D options."
-
-msgid "Get the language of mrv2."
-msgstr "Get the language of mrv2."
-
-msgid "Get the layers of the timeline (GUI)."
-msgstr "Get the layers of the timeline (GUI)."
-
-msgid "Get the version of mrv2."
-msgstr "Get the version of mrv2."
-
-msgid ""
-"Call Fl::check to update the GUI and return the number of seconds that "
-"elapsed."
-msgstr ""
-"Call Fl::check to update the GUI and return the number of seconds that "
-"elapsed."
-
-msgid "Returns true if audio is muted."
-msgstr "Returns true if audio is muted."
-
-msgid "Runs the same or a new mrv2 with a session file."
-msgstr "Runs the same or a new mrv2 with a session file."
-
-msgid "Set the muting of the audio."
-msgstr "Set the muting of the audio."
-
-msgid "Toggle Image Auto Normalize."
-msgstr "Toggle Image Auto Normalize."
-
-msgid "Toggle Data Window."
-msgstr "Toggle Data Window."
-
-msgid "Toggle Display Window."
-msgstr "Toggle Display Window."
-
-msgid "Toggle Ignored Display Window on OpenEXRs."
-msgstr "Toggle Ignored Display Window on OpenEXRs."
-
-msgid "Toggle Image invalid values."
-msgstr "Toggle Image invalid values."
-
-msgid "Toggle Safe Areas."
-msgstr "Toggle Safe Areas."
-
-msgid "Get the playback volume."
-msgstr "Get the playback volume."
-
-msgid "Set the playback volume."
-msgstr "Set the playback volume."
-
-msgid "Save a movie or sequence from the front layer."
-msgstr "Save a movie or sequence from the front layer."
-
-msgid "Save an .otio file from the current selected image."
-msgstr "Save an .otio file from the current selected image."
-
-msgid "Save a PDF document with all annotations and notes."
-msgstr "Save a PDF document with all annotations and notes."
-
-msgid ""
-"\n"
-"Annotations module.\n"
-"\n"
-"Contains all functions and classes related to the annotationss.\n"
-msgstr ""
-"\n"
-"Annotations module.\n"
-"\n"
-"Contains all functions and classes related to the annotationss.\n"
-
-msgid "Add notes annotations to current clip at a certain time."
-msgstr "Add notes annotations to current clip at a certain time."
-
-msgid "Add notes annotations to current clip at a certain frame."
-msgstr "Add notes annotations to current clip at a certain frame."
-
-msgid "Add notes annotations to current clip at certain seconds."
-msgstr "Add notes annotations to current clip at certain seconds."
-
 msgid "Open with Audio"
 msgstr "Open with Audio"
 
@@ -1761,112 +226,6 @@ msgstr "Disconnect"
 msgid "Shutdown"
 msgstr "Shutdown"
 
-msgid "&File/&Open"
-msgstr "&File/&Open"
-
-msgid "&File/&Save"
-msgstr "&File/&Save"
-
-msgid "&Edit/&Undo"
-msgstr "&Edit/&Undo"
-
-msgid "&Edit/Cu&t"
-msgstr "&Edit/Cu&t"
-
-msgid "&Edit/&Copy"
-msgstr "&Edit/&Copy"
-
-msgid "&Edit/&Paste"
-msgstr "&Edit/&Paste"
-
-msgid "&Edit/&Delete"
-msgstr "&Edit/&Delete"
-
-msgid "&Edit/&Comment Selection"
-msgstr "&Edit/&Comment Selection"
-
-msgid "&Edit/&Uncomment Selection"
-msgstr "&Edit/&Uncomment Selection"
-
-msgid "&Search/&Find..."
-msgstr "&Search/&Find..."
-
-msgid "&Search/F&ind Again"
-msgstr "&Search/F&ind Again"
-
-msgid "&Search/&Replace"
-msgstr "&Search/&Replace"
-
-msgid "&Search/&Replace Again"
-msgstr "&Search/&Replace Again"
-
-msgid "Clear/&Output"
-msgstr "Clear/&Output"
-
-msgid "Clear/&Editor"
-msgstr "Clear/&Editor"
-
-msgid "Editor/&Run Code"
-msgstr "Editor/&Run Code"
-
-msgid "Editor/Toggle &Line Numbers"
-msgstr "Editor/Toggle &Line Numbers"
-
-msgid "Editor/&Jump to Error"
-msgstr "Editor/&Jump to Error"
-
-msgid "Editor/&External Editor"
-msgstr "Editor/&External Editor"
-
-msgid "Scripts/Add To Script List"
-msgstr "Scripts/Add To Script List"
-
-msgid "Scripts/%s"
-msgstr "Scripts/%s"
-
-msgid ""
-"Type in your python code here.  Select an area to execute just a portion of "
-"it.  Press Keypad Enter to run it."
-msgstr ""
-"Type in your python code here.  Select an area to execute just a portion of "
-"it.  Press Keypad Enter to run it."
-
-msgid "Python file {0} already exists.  Do you want to overwrite it?"
-msgstr "Python file {0} already exists.  Do you want to overwrite it?"
-
-msgid "No"
-msgstr "No"
-
-msgid "Yes"
-msgstr "Yes"
-
-msgid "Failed to open the file for writing."
-msgstr "Failed to open the file for writing."
-
-msgid "Failed to write to the file."
-msgstr "Failed to write to the file."
-
-msgid "The stream is in an unrecoverable error state."
-msgstr "The stream is in an unrecoverable error state."
-
-msgid "Type your editor command"
-msgstr "Type your editor command"
-
-msgid "{0} will be replaced with the line number.  {1} with the file name"
-msgstr "{0} will be replaced with the line number.  {1} with the file name"
-
-msgid "Regular expression error: {0}"
-msgstr "Regular expression error: {0}"
-
-msgid "Could not open python editor: {0}"
-msgstr "Could not open python editor: {0}"
-
-msgid "Search String:"
-msgstr "Search String:"
-
-msgid "No occurrences of '%s' found!"
-msgstr "No occurrences of '%s' found!"
-
 msgid "None"
 msgstr "None"
 
@@ -1887,21 +246,6 @@ msgstr "With Audio"
 
 msgid "Without Audio"
 msgstr "Without Audio"
-
-msgid "Renderer"
-msgstr "Renderer"
-
-msgid "Complexity"
-msgstr "Complexity"
-
-msgid "Draw Mode"
-msgstr "Draw Mode"
-
-msgid "Stage Cache"
-msgstr "Stage Cache"
-
-msgid "Disk Cache in GB"
-msgstr "Disk Cache in GB"
 
 msgid "Toggle other eye stereo image."
 msgstr "Toggle other eye stereo image."
@@ -2030,6 +374,12 @@ msgstr ""
 "This will reset all your settings to their default.  Are you sure you want "
 "to continue?"
 
+msgid "Yes"
+msgstr "Yes"
+
+msgid "No"
+msgstr "No"
+
 msgid "Drop a clip here to create a playlist."
 msgstr "Drop a clip here to create a playlist."
 
@@ -2080,6 +430,9 @@ msgstr "    V. Aperture"
 msgid "Vertical Aperture of the Projection."
 msgstr "Vertical Aperture of the Projection."
 
+msgid "Focal Length"
+msgstr "Focal Length"
+
 msgid ""
 "Focal Length of the Projection. Use Shift + left mouse button to change or "
 "the mousewheel."
@@ -2089,6 +442,9 @@ msgstr ""
 
 msgid "Rotation"
 msgstr "Rotation"
+
+msgid "Spin"
+msgstr "Spin"
 
 msgid "Spin with middle mouse instead of rotating with it."
 msgstr "Spin with middle mouse instead of rotating with it."
@@ -2815,6 +1171,10 @@ msgstr "Destination file is invalid."
 msgid "You can only add clips to an .otio EDL playlist."
 msgstr "You can only add clips to an .otio EDL playlist."
 
+#, fuzzy
+msgid "Unknown media reference"
+msgstr "Unknown menu entry "
+
 msgid "Cannot currently concatenate an .otio file."
 msgstr "Cannot currently concatenate an .otio file."
 
@@ -2885,6 +1245,9 @@ msgstr ""
 "Regular expression created from {0}.  It is:\n"
 "{1}"
 
+msgid "Regular expression error: {0}"
+msgstr "Regular expression error: {0}"
+
 msgid "Iteration {0} will check version={1}"
 msgstr "Iteration {0} will check version={1}"
 
@@ -2898,6 +1261,10 @@ msgstr ""
 msgid "Example:  gizmo_v003.0001.exr"
 msgstr "Example:  gizmo_v003.0001.exr"
 
+#, fuzzy, c++-format
+msgid "Could not replace {0} with {1}"
+msgstr "Could not paste {0}.  Error {1}."
+
 msgid "Annotation already existed at this time"
 msgstr "Annotation already existed at this time"
 
@@ -2906,6 +1273,9 @@ msgstr "Failed to open the file {0} for writing."
 
 msgid "Failed to write to the file {0}."
 msgstr "Failed to write to the file {0}."
+
+msgid "The stream is in an unrecoverable error state."
+msgstr "The stream is in an unrecoverable error state."
 
 msgid "Session saved to \"{0}\"."
 msgstr "Session saved to \"{0}\"."
@@ -3919,6 +2289,10 @@ msgstr "Playback/Toggle In Point"
 msgid "Playback/Toggle Out Point"
 msgstr "Playback/Toggle Out Point"
 
+#, fuzzy
+msgid "Playback/Toggle In\\/Out Otio Clip"
+msgstr "Playback/Toggle Out Point"
+
 msgid "Playback/Loop Playback"
 msgstr "Playback/Loop Playback"
 
@@ -4473,21 +2847,6 @@ msgstr "Oct"
 
 msgid "Nov"
 msgstr "Nov"
-
-msgid "Replace"
-msgstr "Replace"
-
-msgid "Find:"
-msgstr "Find:"
-
-msgid "Replace:"
-msgstr "Replace:"
-
-msgid "Replace All"
-msgstr "Replace All"
-
-msgid "Replace Next"
-msgstr "Replace Next"
 
 msgid "D\t\t\t\t\t=\tDecoding supported"
 msgstr "D\t\t\t\t\t=\tDecoding supported"
@@ -7243,6 +5602,9 @@ msgstr "Scrub Mode"
 msgid "Area Selection Mode"
 msgstr "Area Selection Mode"
 
+msgid "Draw Mode"
+msgstr "Draw Mode"
+
 msgid "Erase Mode"
 msgstr "Erase Mode"
 
@@ -7332,6 +5694,1659 @@ msgstr "Toggle Hotkeys Window"
 
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
+
+#~ msgid ""
+#~ "\n"
+#~ "USD module.\n"
+#~ "\n"
+#~ "Contains all classes and enums related to USD (Universal Scene "
+#~ "Description). \n"
+#~ msgstr ""
+#~ "\n"
+#~ "USD module.\n"
+#~ "\n"
+#~ "Contains all classes and enums related to USD (Universal Scene "
+#~ "Description). \n"
+
+#~ msgid "Renderer Name"
+#~ msgstr "Renderer Name"
+
+#~ msgid "Render Width"
+#~ msgstr "Render Width"
+
+#~ msgid "Models' complexity."
+#~ msgstr "Models' complexity."
+
+#~ msgid "Draw mode  :class:`mrv2.usd.DrawMode`."
+#~ msgstr "Draw mode  :class:`mrv2.usd.DrawMode`."
+
+#~ msgid "Enable Lighting"
+#~ msgstr "Enable Lighting"
+
+#~ msgid "Enable Scene Lights"
+#~ msgstr "Enable Scene Lights"
+
+#~ msgid "Enable Scene Materials"
+#~ msgstr "Enable Scene Materials"
+
+#~ msgid "Enable sRGB"
+#~ msgstr "Enable sRGB"
+
+#~ msgid "Stage Cache Count"
+#~ msgstr "Stage Cache Count"
+
+#~ msgid "Disk Cache Byte Count"
+#~ msgstr "Disk Cache Byte Count"
+
+#~ msgid "USD Render Options."
+#~ msgstr "USD Render Options."
+
+#~ msgid "Get USD Render Options."
+#~ msgstr "Get USD Render Options."
+
+#~ msgid "Set USD Render Options."
+#~ msgstr "Set USD Render Options."
+
+#~ msgid ""
+#~ "\n"
+#~ "UI module.\n"
+#~ "\n"
+#~ "Contains all classes and enums related to UI (User Interface). \n"
+#~ msgstr ""
+#~ "\n"
+#~ "UI module.\n"
+#~ "\n"
+#~ "Contains all classes and enums related to UI (User Interface). \n"
+
+#~ msgid "Refresh menus."
+#~ msgstr "Refresh menus."
+
+#~ msgid ""
+#~ "\n"
+#~ "Timeline module.\n"
+#~ "\n"
+#~ "Contains all functions related to the timeline control.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Timeline module.\n"
+#~ "\n"
+#~ "Contains all functions related to the timeline control.\n"
+
+#~ msgid "Play forwards."
+#~ msgstr "Play forwards."
+
+#~ msgid "Play backwards."
+#~ msgstr "Play backwards."
+
+#~ msgid "Seek to a time in timeline."
+#~ msgstr "Seek to a time in timeline."
+
+#~ msgid "Seek to a frame in timeline."
+#~ msgstr "Seek to a frame in timeline."
+
+#~ msgid "Seek to a second in timeline."
+#~ msgstr "Seek to a second in timeline."
+
+#~ msgid "Time range of the timeline."
+#~ msgstr "Time range of the timeline."
+
+#~ msgid "Selected time range of the timeline."
+#~ msgstr "Selected time range of the timeline."
+
+#~ msgid "Set the selected time range of the timeline."
+#~ msgstr "Set the selected time range of the timeline."
+
+#~ msgid "Set the in time of the selected time range of the timeline."
+#~ msgstr "Set the in time of the selected time range of the timeline."
+
+#~ msgid "Set the in frame of the selected time range of the timeline."
+#~ msgstr "Set the in frame of the selected time range of the timeline."
+
+#~ msgid "Set the in seconds of the selected time range of the timeline."
+#~ msgstr "Set the in seconds of the selected time range of the timeline."
+
+#~ msgid "Set the out time of the selected time range of the timeline."
+#~ msgstr "Set the out time of the selected time range of the timeline."
+
+#~ msgid "Set the out frame of the selected time range of the timeline."
+#~ msgstr "Set the out frame of the selected time range of the timeline."
+
+#~ msgid "Set the out seconds of the selected time range of the timeline."
+#~ msgstr "Set the out seconds of the selected time range of the timeline."
+
+#~ msgid "Current time in timeline."
+#~ msgstr "Current time in timeline."
+
+#~ msgid "Current frame in timeline."
+#~ msgstr "Current frame in timeline."
+
+#~ msgid "Current seconds in timeline."
+#~ msgstr "Current seconds in timeline."
+
+#~ msgid "Return current loop mode of timeline."
+#~ msgstr "Return current loop mode of timeline."
+
+#~ msgid "Set current loop mode of timeline."
+#~ msgstr "Set current loop mode of timeline."
+
+#~ msgid "Gets the current FPS of timeline."
+#~ msgstr "Gets the current FPS of timeline."
+
+#~ msgid "Gets the default speed of the timeline."
+#~ msgstr "Gets the default speed of the timeline."
+
+#~ msgid "Set current FPS of timeline."
+#~ msgstr "Set current FPS of timeline."
+
+#~ msgid "Value less than 0"
+#~ msgstr "Value less than 0"
+
+#~ msgid ""
+#~ "\n"
+#~ "Settings module.\n"
+#~ "\n"
+#~ "Contains all settings functions.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Settings module.\n"
+#~ "\n"
+#~ "Contains all settings functions.\n"
+
+#~ msgid "Returns whether to check for updates at start up."
+#~ msgstr "Returns whether to check for updates at start up."
+
+#~ msgid "Retrieve the cache memory setting in gigabytes."
+#~ msgstr "Retrieve the cache memory setting in gigabytes."
+
+#~ msgid "Set the cache memory setting in gigabytes."
+#~ msgstr "Set the cache memory setting in gigabytes."
+
+#~ msgid "Retrieve Read Ahead cache in seconds."
+#~ msgstr "Retrieve Read Ahead cache in seconds."
+
+#~ msgid "Set Read Ahead cache in seconds."
+#~ msgstr "Set Read Ahead cache in seconds."
+
+#~ msgid "Retrieve Read Behind cache in seconds."
+#~ msgstr "Retrieve Read Behind cache in seconds."
+
+#~ msgid "Set Read Behind cache in seconds."
+#~ msgstr "Set Read Behind cache in seconds."
+
+#~ msgid "Set file sequence audio."
+#~ msgstr "Set file sequence audio."
+
+#~ msgid "Get file sequence audio."
+#~ msgstr "Get file sequence audio."
+
+#~ msgid "Set file sequence audio file name."
+#~ msgstr "Set file sequence audio file name."
+
+#~ msgid "Get file sequence audio file name."
+#~ msgstr "Get file sequence audio file name."
+
+#~ msgid "Set file sequence audio directory."
+#~ msgstr "Set file sequence audio directory."
+
+#~ msgid "Get file sequence audio directory."
+#~ msgstr "Get file sequence audio directory."
+
+#~ msgid "Set maximum file sequence digits."
+#~ msgstr "Set maximum file sequence digits."
+
+#~ msgid "Get maximum file sequence digits."
+#~ msgstr "Get maximum file sequence digits."
+
+#~ msgid "Set Timer Mode."
+#~ msgstr "Set Timer Mode."
+
+#~ msgid "Get Timer Mode."
+#~ msgstr "Get Timer Mode."
+
+#~ msgid "Set Audio Buffer Frame Count."
+#~ msgstr "Set Audio Buffer Frame Count."
+
+#~ msgid "Get Audio Buffer Frame Count."
+#~ msgstr "Get Audio Buffer Frame Count."
+
+#~ msgid "Set Video Request Count."
+#~ msgstr "Set Video Request Count."
+
+#~ msgid "Get Video Request Count."
+#~ msgstr "Get Video Request Count."
+
+#~ msgid "Set Audio Request Count."
+#~ msgstr "Set Audio Request Count."
+
+#~ msgid "Get Audio Request Count."
+#~ msgstr "Get Audio Request Count."
+
+#~ msgid "Set Sequence Thread Count."
+#~ msgstr "Set Sequence Thread Count."
+
+#~ msgid "Get Sequence Thread Count."
+#~ msgstr "Get Sequence Thread Count."
+
+#~ msgid "Set FFmpeg YUV To RGB Conversion."
+#~ msgstr "Set FFmpeg YUV To RGB Conversion."
+
+#~ msgid "Get FFmpeg YUV To RGB Conversion."
+#~ msgstr "Get FFmpeg YUV To RGB Conversion."
+
+#~ msgid "Set FFmpeg Color Accuracy."
+#~ msgstr "Set FFmpeg Color Accuracy."
+
+#~ msgid "Get FFmpeg Color Accuracy."
+#~ msgstr "Get FFmpeg Color Accuracy."
+
+#~ msgid "Set FFmpeg Thread Count."
+#~ msgstr "Set FFmpeg Thread Count."
+
+#~ msgid "Get FFmpeg Thread Count."
+#~ msgstr "Get FFmpeg Thread Count."
+
+#~ msgid "No session name established, cannot save."
+#~ msgstr "No session name established, cannot save."
+
+#~ msgid ""
+#~ "\n"
+#~ "Session module.\n"
+#~ "\n"
+#~ "Used to manage everything related to sessions.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Session module.\n"
+#~ "\n"
+#~ "Used to manage everything related to sessions.\n"
+
+#~ msgid "Returns the current session metadata."
+#~ msgstr "Returns the current session metadata."
+
+#~ msgid "Returns the current metadata for a key."
+#~ msgstr "Returns the current metadata for a key."
+
+#~ msgid "Sets all the session metadata for a session."
+#~ msgstr "Sets all the session metadata for a session."
+
+#~ msgid "Sets the session metadata for a key."
+#~ msgstr "Sets the session metadata for a key."
+
+#~ msgid "Clears the current session metadata."
+#~ msgstr "Clears the current session metadata."
+
+#~ msgid "Returns current session file."
+#~ msgstr "Returns current session file."
+
+#~ msgid "Sets the current session file."
+#~ msgstr "Sets the current session file."
+
+#~ msgid "Open a session file."
+#~ msgstr "Open a session file."
+
+#~ msgid "Save a session file."
+#~ msgstr "Save a session file."
+
+#~ msgid "Duplicated Python plugin {0} in {1} and {2}."
+#~ msgstr "Duplicated Python plugin {0} in {1} and {2}."
+
+#~ msgid ""
+#~ "Expected a tuple containing a Python function and a string with menu "
+#~ "options in it."
+#~ msgstr ""
+#~ "Expected a tuple containing a Python function and a string with menu "
+#~ "options in it."
+
+#~ msgid ""
+#~ "Expected a handle to a Python function or to a tuple containing a Python "
+#~ "function and a string with menu options in it."
+#~ msgstr ""
+#~ "Expected a handle to a Python function or to a tuple containing a Python "
+#~ "function and a string with menu options in it."
+
+#~ msgid ""
+#~ "Please override the menus method by returning a valid dict of key menus, "
+#~ "values methods."
+#~ msgstr ""
+#~ "Please override the menus method by returning a valid dict of key menus, "
+#~ "values methods."
+
+#~ msgid ""
+#~ "\n"
+#~ "Plugin module.\n"
+#~ "\n"
+#~ "Contains all classes related to python plugins.\n"
+#~ "\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Plugin module.\n"
+#~ "\n"
+#~ "Contains all classes related to python plugins.\n"
+#~ "\n"
+
+#~ msgid ""
+#~ "Whether a plugin is active or not.  If not overriden, the default is True."
+#~ msgstr ""
+#~ "Whether a plugin is active or not.  If not overriden, the default is True."
+
+#~ msgid ""
+#~ "\n"
+#~ "Dictionary of menu entries with callbacks, like:\n"
+#~ "\n"
+#~ "def menus(self):\n"
+#~ "    menus = { \"Nem Menu/Hello\" : self.run }\n"
+#~ "    return menus\n"
+#~ "\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Dictionary of menu entries with callbacks, like:\n"
+#~ "\n"
+#~ "def menus(self):\n"
+#~ "    menus = { \"Nem Menu/Hello\" : self.run }\n"
+#~ "    return menus\n"
+#~ "\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "import mrv2\n"
+#~ "from mrv2 import plugin\n"
+#~ "\n"
+#~ "class DemoPlugin(plugin.Plugin):\n"
+#~ "    def __init__(self):\n"
+#~ "        \"\"\"\n"
+#~ "        Constructor for DemoPlugin.\n"
+#~ "\n"
+#~ "        Define your own variables here.\n"
+#~ "        \"\"\"\n"
+#~ "        super().__init__()\n"
+#~ "\n"
+#~ "    def run(self):\n"
+#~ "        \"\"\"\n"
+#~ "        Example method used for the callback.\n"
+#~ "        \"\"\"\n"
+#~ "        print(\"Hello from Python plugin\")\n"
+#~ "\n"
+#~ "    def active(self):\n"
+#~ "        \"\"\"\n"
+#~ "        Optional method to return whether the plug-in is active or not.\n"
+#~ "\n"
+#~ "\n"
+#~ "        :return: True if the plug-in is active, False otherwise.\n"
+#~ "        :rtype: bool\n"
+#~ "\n"
+#~ "        \"\"\"\n"
+#~ "        return True\n"
+#~ "\n"
+#~ "    def menus(self):\n"
+#~ "        \"\"\"\n"
+#~ "        Dictionary of menu entries as keys with callbacks as values.\n"
+#~ "\n"
+#~ "\n"
+#~ "        :return: A dictionary of menu entries and their corresponding "
+#~ "callbacks.\n"
+#~ "        :rtype: dict\n"
+#~ "\n"
+#~ "        \"\"\"\n"
+#~ "        menus = {\"New Menu/Hello\": self.run}\n"
+#~ "        return menus\n"
+#~ "\n"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "import mrv2\n"
+#~ "from mrv2 import plugin\n"
+#~ "\n"
+#~ "class DemoPlugin(plugin.Plugin):\n"
+#~ "    def __init__(self):\n"
+#~ "        \"\"\"\n"
+#~ "        Constructor for DemoPlugin.\n"
+#~ "\n"
+#~ "        Define your own variables here.\n"
+#~ "        \"\"\"\n"
+#~ "        super().__init__()\n"
+#~ "\n"
+#~ "    def run(self):\n"
+#~ "        \"\"\"\n"
+#~ "        Example method used for the callback.\n"
+#~ "        \"\"\"\n"
+#~ "        print(\"Hello from Python plugin\")\n"
+#~ "\n"
+#~ "    def active(self):\n"
+#~ "        \"\"\"\n"
+#~ "        Optional method to return whether the plug-in is active or not.\n"
+#~ "\n"
+#~ "\n"
+#~ "        :return: True if the plug-in is active, False otherwise.\n"
+#~ "        :rtype: bool\n"
+#~ "\n"
+#~ "        \"\"\"\n"
+#~ "        return True\n"
+#~ "\n"
+#~ "    def menus(self):\n"
+#~ "        \"\"\"\n"
+#~ "        Dictionary of menu entries as keys with callbacks as values.\n"
+#~ "\n"
+#~ "\n"
+#~ "        :return: A dictionary of menu entries and their corresponding "
+#~ "callbacks.\n"
+#~ "        :rtype: dict\n"
+#~ "\n"
+#~ "        \"\"\"\n"
+#~ "        menus = {\"New Menu/Hello\": self.run}\n"
+#~ "        return menus\n"
+#~ "\n"
+
+#~ msgid "No playlist matched item."
+#~ msgstr "No playlist matched item."
+
+#~ msgid "No playlist matched file name."
+#~ msgstr "No playlist matched file name."
+
+#~ msgid "No playlist loaded."
+#~ msgstr "No playlist loaded."
+
+#~ msgid "No playlist selected."
+#~ msgstr "No playlist selected."
+
+#~ msgid "Not an EDL playlist to add clips to."
+#~ msgstr "Not an EDL playlist to add clips to."
+
+#~ msgid "Could not find clip in loaded clips."
+#~ msgstr "Could not find clip in loaded clips."
+
+#~ msgid ""
+#~ "\n"
+#~ "Playlist module.\n"
+#~ "\n"
+#~ "Contains all functions and classes related to the playlists.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Playlist module.\n"
+#~ "\n"
+#~ "Contains all functions and classes related to the playlists.\n"
+
+#~ msgid "List playlist items."
+#~ msgstr "List playlist items."
+
+#~ msgid "Select a playlist by FileModelItem."
+#~ msgstr "Select a playlist by FileModelItem."
+
+#~ msgid "Select a playlist by fileName."
+#~ msgstr "Select a playlist by fileName."
+
+#~ msgid "Select a playlist by index."
+#~ msgstr "Select a playlist by index."
+
+#~ msgid "Add a clip to currently selected Playlist EDL."
+#~ msgstr "Add a clip to currently selected Playlist EDL."
+
+#~ msgid "Save current .otio file with relative paths."
+#~ msgstr "Save current .otio file with relative paths."
+
+#~ msgid "unsupported operand type(s) for {0}: RationalTime and {1}"
+#~ msgstr "unsupported operand type(s) for {0}: RationalTime and {1}"
+
+#~ msgid ""
+#~ "\n"
+#~ "The RationalTime class represents a measure of time of :math:`rt.value/rt."
+#~ "rate` seconds.\n"
+#~ "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "The RationalTime class represents a measure of time of :math:`rt.value/rt."
+#~ "rate` seconds.\n"
+#~ "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Returns true if the time is invalid. The time is considered invalid if "
+#~ "the value or the rate are a NaN value\n"
+#~ "or if the rate is less than or equal to zero.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Returns true if the time is invalid. The time is considered invalid if "
+#~ "the value or the rate are a NaN value\n"
+#~ "or if the rate is less than or equal to zero.\n"
+
+#~ msgid "Returns the time value for time converted to new_rate."
+#~ msgstr "Returns the time value for time converted to new_rate."
+
+#~ msgid "Returns the time for time converted to new_rate."
+#~ msgstr "Returns the time for time converted to new_rate."
+
+#~ msgid "Returns the time value for \"self\" converted to new_rate."
+#~ msgstr "Returns the time value for \"self\" converted to new_rate."
+
+#~ msgid ""
+#~ "\n"
+#~ "Compute the duration of samples from first to last (excluding last). This "
+#~ "is not the same as distance.\n"
+#~ "\n"
+#~ "For example, the duration of a clip from frame 10 to frame 15 is 5 "
+#~ "frames. Result will be in the rate of start_time.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Compute the duration of samples from first to last (excluding last). This "
+#~ "is not the same as distance.\n"
+#~ "\n"
+#~ "For example, the duration of a clip from frame 10 to frame 15 is 5 "
+#~ "frames. Result will be in the rate of start_time.\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Compute the duration of samples from first to last (including last). This "
+#~ "is not the same as distance.\n"
+#~ "\n"
+#~ "For example, the duration of a clip from frame 10 to frame 15 is 6 "
+#~ "frames. Result will be in the rate of start_time.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Compute the duration of samples from first to last (including last). This "
+#~ "is not the same as distance.\n"
+#~ "\n"
+#~ "For example, the duration of a clip from frame 10 to frame 15 is 6 "
+#~ "frames. Result will be in the rate of start_time.\n"
+
+#~ msgid "Returns true if the rate is valid for use with timecode."
+#~ msgstr "Returns true if the rate is valid for use with timecode."
+
+#~ msgid ""
+#~ "Returns the first valid timecode rate that has the least difference from "
+#~ "the given value."
+#~ msgstr ""
+#~ "Returns the first valid timecode rate that has the least difference from "
+#~ "the given value."
+
+#~ msgid "Turn a frame number and rate into a :class:`~RationalTime` object."
+#~ msgstr "Turn a frame number and rate into a :class:`~RationalTime` object."
+
+#~ msgid "Returns the frame number based on the current rate."
+#~ msgstr "Returns the frame number based on the current rate."
+
+#~ msgid "Returns the frame number based on the given rate."
+#~ msgstr "Returns the frame number based on the given rate."
+
+#~ msgid "Convert to timecode (``HH:MM:SS;FRAME``)"
+#~ msgstr "Convert to timecode (``HH:MM:SS;FRAME``)"
+
+#~ msgid ""
+#~ "Convert a timecode string (``HH:MM:SS;FRAME``) into a :class:"
+#~ "`~RationalTime`."
+#~ msgstr ""
+#~ "Convert a timecode string (``HH:MM:SS;FRAME``) into a :class:"
+#~ "`~RationalTime`."
+
+#~ msgid ""
+#~ "Convert a time with microseconds string (``HH:MM:ss`` where ``ss`` is an "
+#~ "integer or a decimal number) into a :class:`~RationalTime`."
+#~ msgstr ""
+#~ "Convert a time with microseconds string (``HH:MM:ss`` where ``ss`` is an "
+#~ "integer or a decimal number) into a :class:`~RationalTime`."
+
+#~ msgid ""
+#~ "\n"
+#~ "The TimeRange class represents a range in time. It encodes the start time "
+#~ "and the duration,\n"
+#~ "meaning that :meth:`end_time_inclusive` (last portion of a sample in the "
+#~ "time range) and\n"
+#~ ":meth:`end_time_exclusive` can be computed.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "The TimeRange class represents a range in time. It encodes the start time "
+#~ "and the duration,\n"
+#~ "meaning that :meth:`end_time_inclusive` (last portion of a sample in the "
+#~ "time range) and\n"
+#~ ":meth:`end_time_exclusive` can be computed.\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "The time of the last sample containing data in the time range.\n"
+#~ "\n"
+#~ "If the time range starts at (0, 24) with duration (10, 24), this will be\n"
+#~ "(9, 24)\n"
+#~ "\n"
+#~ "If the time range starts at (0, 24) with duration (10.5, 24):\n"
+#~ "(10, 24)\n"
+#~ "\n"
+#~ "In other words, the last frame with data, even if the last frame is "
+#~ "fractional.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "The time of the last sample containing data in the time range.\n"
+#~ "\n"
+#~ "If the time range starts at (0, 24) with duration (10, 24), this will be\n"
+#~ "(9, 24)\n"
+#~ "\n"
+#~ "If the time range starts at (0, 24) with duration (10.5, 24):\n"
+#~ "(10, 24)\n"
+#~ "\n"
+#~ "In other words, the last frame with data, even if the last frame is "
+#~ "fractional.\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Time of the first sample outside the time range.\n"
+#~ "\n"
+#~ "If start frame is 10 and duration is 5, then end_time_exclusive is 15,\n"
+#~ "because the last time with data in this range is 14.\n"
+#~ "\n"
+#~ "If start frame is 10 and duration is 5.5, then end_time_exclusive is\n"
+#~ "15.5, because the last time with data in this range is 15.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Time of the first sample outside the time range.\n"
+#~ "\n"
+#~ "If start frame is 10 and duration is 5, then end_time_exclusive is 15,\n"
+#~ "because the last time with data in this range is 14.\n"
+#~ "\n"
+#~ "If start frame is 10 and duration is 5.5, then end_time_exclusive is\n"
+#~ "15.5, because the last time with data in this range is 15.\n"
+
+#~ msgid ""
+#~ "Construct a new :class:`~TimeRange` that is this one extended by other."
+#~ msgstr ""
+#~ "Construct a new :class:`~TimeRange` that is this one extended by other."
+
+#~ msgid ""
+#~ "\n"
+#~ "Clamp 'other' (:class:`~RationalTime`) according to\n"
+#~ ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Clamp 'other' (:class:`~RationalTime`) according to\n"
+#~ ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Clamp 'other' (:class:`~TimeRange`) according to\n"
+#~ ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Clamp 'other' (:class:`~TimeRange`) according to\n"
+#~ ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "The start of `this` precedes `other`.\n"
+#~ "`other` precedes the end of `this`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "         other\n"
+#~ "           |\n"
+#~ "           *\n"
+#~ "   [      this      ]\n"
+#~ "\n"
+#~ msgstr ""
+#~ "\n"
+#~ "The start of `this` precedes `other`.\n"
+#~ "`other` precedes the end of `this`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "         other\n"
+#~ "           |\n"
+#~ "           *\n"
+#~ "   [      this      ]\n"
+#~ "\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "The start of `this` precedes start of `other`.\n"
+#~ "The end of `this` antecedes end of `other`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "        [ other ]\n"
+#~ "   [      this      ]\n"
+#~ "\n"
+#~ "The converse would be ``other.contains(this)``\n"
+#~ msgstr ""
+#~ "\n"
+#~ "The start of `this` precedes start of `other`.\n"
+#~ "The end of `this` antecedes end of `other`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "        [ other ]\n"
+#~ "   [      this      ]\n"
+#~ "\n"
+#~ "The converse would be ``other.contains(this)``\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "`this` contains `other`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "        other\n"
+#~ "         |\n"
+#~ "         *\n"
+#~ "   [    this    ]\n"
+#~ "\n"
+#~ msgstr ""
+#~ "\n"
+#~ "`this` contains `other`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "        other\n"
+#~ "         |\n"
+#~ "         *\n"
+#~ "   [    this    ]\n"
+#~ "\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "The start of `this` strictly precedes end of `other` by a value >= "
+#~ "`epsilon_s`.\n"
+#~ "The end of `this` strictly antecedes start of `other` by a value >= "
+#~ "`epsilon_s`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "   [ this ]\n"
+#~ "       [ other ]\n"
+#~ "\n"
+#~ "The converse would be ``other.overlaps(this)``\n"
+#~ msgstr ""
+#~ "\n"
+#~ "The start of `this` strictly precedes end of `other` by a value >= "
+#~ "`epsilon_s`.\n"
+#~ "The end of `this` strictly antecedes start of `other` by a value >= "
+#~ "`epsilon_s`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "   [ this ]\n"
+#~ "       [ other ]\n"
+#~ "\n"
+#~ "The converse would be ``other.overlaps(this)``\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "The end of `this` strictly precedes `other` by a value >= `epsilon_s`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "             other\n"
+#~ "               |\n"
+#~ "   [ this ]    *\n"
+#~ "\n"
+#~ msgstr ""
+#~ "\n"
+#~ "The end of `this` strictly precedes `other` by a value >= `epsilon_s`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "             other\n"
+#~ "               |\n"
+#~ "   [ this ]    *\n"
+#~ "\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "The end of `this` strictly equals the start of `other` and\n"
+#~ "the start of `this` strictly equals the end of `other`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "   [this][other]\n"
+#~ "\n"
+#~ "The converse would be ``other.meets(this)``\n"
+#~ msgstr ""
+#~ "\n"
+#~ "The end of `this` strictly equals the start of `other` and\n"
+#~ "the start of `this` strictly equals the end of `other`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "   [this][other]\n"
+#~ "\n"
+#~ "The converse would be ``other.meets(this)``\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "The start of `this` strictly equals `other`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "   other\n"
+#~ "     |\n"
+#~ "     *\n"
+#~ "     [ this ]\n"
+#~ "\n"
+#~ msgstr ""
+#~ "\n"
+#~ "The start of `this` strictly equals `other`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "   other\n"
+#~ "     |\n"
+#~ "     *\n"
+#~ "     [ this ]\n"
+#~ "\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "The start of `this` strictly equals the start of `other`.\n"
+#~ "The end of `this` strictly precedes the end of `other` by a value >= "
+#~ "`epsilon_s`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "   [ this ]\n"
+#~ "   [    other    ]\n"
+#~ "\n"
+#~ "The converse would be ``other.begins(this)``\n"
+#~ msgstr ""
+#~ "\n"
+#~ "The start of `this` strictly equals the start of `other`.\n"
+#~ "The end of `this` strictly precedes the end of `other` by a value >= "
+#~ "`epsilon_s`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "   [ this ]\n"
+#~ "   [    other    ]\n"
+#~ "\n"
+#~ "The converse would be ``other.begins(this)``\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "The end of `this` strictly equals `other`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "        other\n"
+#~ "          |\n"
+#~ "          *\n"
+#~ "   [ this ]\n"
+#~ "\n"
+#~ msgstr ""
+#~ "\n"
+#~ "The end of `this` strictly equals `other`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "        other\n"
+#~ "          |\n"
+#~ "          *\n"
+#~ "   [ this ]\n"
+#~ "\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "The start of `this` strictly antecedes the start of `other` by a value >= "
+#~ "`epsilon_s`.\n"
+#~ "The end of `this` strictly equals the end of `other`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "           [ this ]\n"
+#~ "   [     other    ]\n"
+#~ "\n"
+#~ "The converse would be ``other.finishes(this)``\n"
+#~ msgstr ""
+#~ "\n"
+#~ "The start of `this` strictly antecedes the start of `other` by a value >= "
+#~ "`epsilon_s`.\n"
+#~ "The end of `this` strictly equals the end of `other`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "           [ this ]\n"
+#~ "   [     other    ]\n"
+#~ "\n"
+#~ "The converse would be ``other.finishes(this)``\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "The start of `this` precedes or equals the end of `other` by a value >= "
+#~ "`epsilon_s`.\n"
+#~ "The end of `this` antecedes or equals the start of `other` by a value >= "
+#~ "`epsilon_s`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "   [    this    ]           OR      [    other    ]\n"
+#~ "        [     other    ]                    [     this    ]\n"
+#~ "\n"
+#~ "The converse would be ``other.finishes(this)``\n"
+#~ msgstr ""
+#~ "\n"
+#~ "The start of `this` precedes or equals the end of `other` by a value >= "
+#~ "`epsilon_s`.\n"
+#~ "The end of `this` antecedes or equals the start of `other` by a value >= "
+#~ "`epsilon_s`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "   [    this    ]           OR      [    other    ]\n"
+#~ "        [     other    ]                    [     this    ]\n"
+#~ "\n"
+#~ "The converse would be ``other.finishes(this)``\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Creates a :class:`~TimeRange` from start and end :class:"
+#~ "`~RationalTime`\\s (exclusive).\n"
+#~ "\n"
+#~ "For example, if start_time is 1 and end_time is 10, the returned will "
+#~ "have a duration of 9.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Creates a :class:`~TimeRange` from start and end :class:"
+#~ "`~RationalTime`\\s (exclusive).\n"
+#~ "\n"
+#~ "For example, if start_time is 1 and end_time is 10, the returned will "
+#~ "have a duration of 9.\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Creates a :class:`~TimeRange` from start and end :class:"
+#~ "`~RationalTime`\\s (inclusive).\n"
+#~ "\n"
+#~ "For example, if start_time is 1 and end_time is 10, the returned will "
+#~ "have a duration of 10.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Creates a :class:`~TimeRange` from start and end :class:"
+#~ "`~RationalTime`\\s (inclusive).\n"
+#~ "\n"
+#~ "For example, if start_time is 1 and end_time is 10, the returned will "
+#~ "have a duration of 10.\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Media module.\n"
+#~ "\n"
+#~ "Contains all classes and enums related to media. \n"
+#~ msgstr ""
+#~ "\n"
+#~ "Media module.\n"
+#~ "\n"
+#~ "Contains all classes and enums related to media. \n"
+
+#~ msgid "Compare mode :class:`mrv2.media.CompareMode`."
+#~ msgstr "Compare mode :class:`mrv2.media.CompareMode`."
+
+#~ msgid "Wipe center in X and Y :class:`mrv2.math.Vector2f`."
+#~ msgstr "Wipe center in X and Y :class:`mrv2.math.Vector2f`."
+
+#~ msgid "Wipe Rotation."
+#~ msgstr "Wipe Rotation."
+
+#~ msgid "Overlay ( A over B )"
+#~ msgstr "Overlay ( A over B )"
+
+#~ msgid "Comparison options."
+#~ msgstr "Comparison options."
+
+#~ msgid ""
+#~ "\n"
+#~ "Math module.\n"
+#~ "\n"
+#~ "Contains all math classes.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Math module.\n"
+#~ "\n"
+#~ "Contains all math classes.\n"
+
+#~ msgid "Vector of 2 integers."
+#~ msgstr "Vector of 2 integers."
+
+#~ msgid "Vector of 2 floats."
+#~ msgstr "Vector of 2 floats."
+
+#~ msgid "Vector of 3 floats."
+#~ msgstr "Vector of 3 floats."
+
+#~ msgid "Vector of 4 floats."
+#~ msgstr "Vector of 4 floats."
+
+#~ msgid "Size of 2 integers."
+#~ msgstr "Size of 2 integers."
+
+#~ msgid ""
+#~ "\n"
+#~ "Image module.\n"
+#~ "\n"
+#~ "Contains all classes and enums related to image controls. \n"
+#~ msgstr ""
+#~ "\n"
+#~ "Image module.\n"
+#~ "\n"
+#~ "Contains all classes and enums related to image controls. \n"
+
+#~ msgid "Red Channel."
+#~ msgstr "Red Channel."
+
+#~ msgid "Green Channel."
+#~ msgstr "Green Channel."
+
+#~ msgid "Blue Channel."
+#~ msgstr "Blue Channel."
+
+#~ msgid "Alpha Channel."
+#~ msgstr "Alpha Channel."
+
+#~ msgid "Image mirroring."
+#~ msgstr "Image mirroring."
+
+#~ msgid "Flip image on X."
+#~ msgstr "Flip image on X."
+
+#~ msgid "Flip image on Y."
+#~ msgstr "Flip image on Y."
+
+#~ msgid "Enabled Levels."
+#~ msgstr "Enabled Levels."
+
+#~ msgid "Add a :class:`mrv2.math.Vector3f` to image."
+#~ msgstr "Add a :class:`mrv2.math.Vector3f` to image."
+
+#~ msgid "Change a :class:`mrv2.math.Vector3f` of brightness to image."
+#~ msgstr "Change a :class:`mrv2.math.Vector3f` of brightness to image."
+
+#~ msgid "Change a :class:`mrv2.math.Vector3f` of contrast to image."
+#~ msgstr "Change a :class:`mrv2.math.Vector3f` of contrast to image."
+
+#~ msgid "Change a :class:`mrv2.math.Vector3f` of saturation to image."
+#~ msgstr "Change a :class:`mrv2.math.Vector3f` of saturation to image."
+
+#~ msgid "Change tint of image to image between 0 and 1."
+#~ msgstr "Change tint of image to image between 0 and 1."
+
+#~ msgid "Invert the color values."
+#~ msgstr "Invert the color values."
+
+#~ msgid "Color values."
+#~ msgstr "Color values."
+
+#~ msgid "In Low Level value."
+#~ msgstr "In Low Level value."
+
+#~ msgid "In High Level value."
+#~ msgstr "In High Level value."
+
+#~ msgid "Gamma Level value."
+#~ msgstr "Gamma Level value."
+
+#~ msgid "Out Low Level value."
+#~ msgstr "Out Low Level value."
+
+#~ msgid "Out High Level value."
+#~ msgstr "Out High Level value."
+
+#~ msgid "Levels values."
+#~ msgstr "Levels values."
+
+#~ msgid "Enabled EXR display."
+#~ msgstr "Enabled EXR display."
+
+#~ msgid "Exposure value."
+#~ msgstr "Exposure value."
+
+#~ msgid "Defog value."
+#~ msgstr "Defog value."
+
+#~ msgid "kneeLow value."
+#~ msgstr "kneeLow value."
+
+#~ msgid "kneeHigh value."
+#~ msgstr "kneeHigh value."
+
+#~ msgid "EXR display values."
+#~ msgstr "EXR display values."
+
+#~ msgid "Enabled Soft Clip."
+#~ msgstr "Enabled Soft Clip."
+
+#~ msgid "Soft clip value."
+#~ msgstr "Soft clip value."
+
+#~ msgid "Minify filter :class:`mrv2.image.ImageFilter`."
+#~ msgstr "Minify filter :class:`mrv2.image.ImageFilter`."
+
+#~ msgid "Magnify filter :class:`mrv2.image.ImageFilter`."
+#~ msgstr "Magnify filter :class:`mrv2.image.ImageFilter`."
+
+#~ msgid "Image filters."
+#~ msgstr "Image filters."
+
+#~ msgid "Color channels :class:`mrv2.image.Channels`."
+#~ msgstr "Color channels :class:`mrv2.image.Channels`."
+
+#~ msgid "Mirror on X, Y or both :class:`mrv2.image.Mirror`."
+#~ msgstr "Mirror on X, Y or both :class:`mrv2.image.Mirror`."
+
+#~ msgid "Color options :class:`mrv2.image.Color`."
+#~ msgstr "Color options :class:`mrv2.image.Color`."
+
+#~ msgid "Levels options :class:`mrv2.image.Levels`."
+#~ msgstr "Levels options :class:`mrv2.image.Levels`."
+
+#~ msgid "EXR Display options :class:`mrv2.image.EXRDisplay`.."
+#~ msgstr "EXR Display options :class:`mrv2.image.EXRDisplay`.."
+
+#~ msgid "Soft Clip options :class:`mrv2.image.SoftClip`.."
+#~ msgstr "Soft Clip options :class:`mrv2.image.SoftClip`.."
+
+#~ msgid "Display options."
+#~ msgstr "Display options."
+
+#~ msgid "LUT enabled."
+#~ msgstr "LUT enabled."
+
+#~ msgid "LUT filename."
+#~ msgstr "LUT filename."
+
+#~ msgid "LUT transformation order."
+#~ msgstr "LUT transformation order."
+
+#~ msgid "LUT options."
+#~ msgstr "LUT options."
+
+#~ msgid "Video Levels."
+#~ msgstr "Video Levels."
+
+#~ msgid "Alpha blending algorithm"
+#~ msgstr "Alpha blending algorithm"
+
+#~ msgid "Image Filters"
+#~ msgstr "Image Filters"
+
+#~ msgid "Image options."
+#~ msgstr "Image options."
+
+#~ msgid "Environment Map type."
+#~ msgstr "Environment Map type."
+
+#~ msgid "Horizontal aperture"
+#~ msgstr "Horizontal aperture"
+
+#~ msgid "Vertical aperture"
+#~ msgstr "Vertical aperture"
+
+#~ msgid "Rotation on X"
+#~ msgstr "Rotation on X"
+
+#~ msgid "Rotation on Y"
+#~ msgstr "Rotation on Y"
+
+#~ msgid "Subdivision on X"
+#~ msgstr "Subdivision on X"
+
+#~ msgid "Subdivision on Y"
+#~ msgstr "Subdivision on Y"
+
+#~ msgid "EnvironmentMap options."
+#~ msgstr "EnvironmentMap options."
+
+#~ msgid "Stereo 3d input :class:`mrv2.image.StereoInput`.."
+#~ msgstr "Stereo 3d input :class:`mrv2.image.StereoInput`.."
+
+#~ msgid "Stereo 3d output :class:`mrv2.image.StereoOutput`.."
+#~ msgstr "Stereo 3d output :class:`mrv2.image.StereoOutput`.."
+
+#~ msgid "Separation between left and right eye."
+#~ msgstr "Separation between left and right eye."
+
+#~ msgid "Swap left and right eye"
+#~ msgstr "Swap left and right eye"
+
+#~ msgid "Stereo3D options."
+#~ msgstr "Stereo3D options."
+
+#~ msgid "Background type :class:`mrv2.image.Background`.."
+#~ msgstr "Background type :class:`mrv2.image.Background`.."
+
+#~ msgid "Checkers Color0 :class:`mrv2.image.Color4f`.."
+#~ msgstr "Checkers Color0 :class:`mrv2.image.Color4f`.."
+
+#~ msgid "Checkers Color1 :class:`mrv2.image.Color4f`.."
+#~ msgstr "Checkers Color1 :class:`mrv2.image.Color4f`.."
+
+#~ msgid "Checkers Size :class:`mrv2.math.Size2i`.."
+#~ msgstr "Checkers Size :class:`mrv2.math.Size2i`.."
+
+#~ msgid "Background options."
+#~ msgstr "Background options."
+
+#~ msgid "Gets the current background options."
+#~ msgstr "Gets the current background options."
+
+#~ msgid "Sets the current background options."
+#~ msgstr "Sets the current background options."
+
+#~ msgid "Gets the current OCIO config file."
+#~ msgstr "Gets the current OCIO config file."
+
+#~ msgid "Sets the current OCIO config file."
+#~ msgstr "Sets the current OCIO config file."
+
+#~ msgid "Gets the current input color space."
+#~ msgstr "Gets the current input color space."
+
+#~ msgid "Gets a list of all input color spaces."
+#~ msgstr "Gets a list of all input color spaces."
+
+#~ msgid "Set the input color space."
+#~ msgstr "Set the input color space."
+
+#~ msgid "Gets the current Display/View."
+#~ msgstr "Gets the current Display/View."
+
+#~ msgid "Gets the list of Displays/Views."
+#~ msgstr "Gets the list of Displays/Views."
+
+#~ msgid "Set an OCIO Display/View."
+#~ msgstr "Set an OCIO Display/View."
+
+#~ msgid "Gets the current OCIO look."
+#~ msgstr "Gets the current OCIO look."
+
+#~ msgid "Gets a list of all OCIO looks."
+#~ msgstr "Gets a list of all OCIO looks."
+
+#~ msgid "Set the OCIO look by name."
+#~ msgstr "Set the OCIO look by name."
+
+#~ msgid "Return all the files."
+#~ msgstr "Return all the files."
+
+#~ msgid "Return all the active files."
+#~ msgstr "Return all the active files."
+
+#~ msgid "Return the A file item."
+#~ msgstr "Return the A file item."
+
+#~ msgid "Return the A file index."
+#~ msgstr "Return the A file index."
+
+#~ msgid "Return the list of B files."
+#~ msgstr "Return the list of B files."
+
+#~ msgid "Return the list of B indexes."
+#~ msgstr "Return the list of B indexes."
+
+#~ msgid "Close the current A file."
+#~ msgstr "Close the current A file."
+
+#~ msgid "Close all files."
+#~ msgstr "Close all files."
+
+#~ msgid "Set the A file index."
+#~ msgstr "Set the A file index."
+
+#~ msgid "Set a new B file index."
+#~ msgstr "Set a new B file index."
+
+#~ msgid "Set a new stereo file index."
+#~ msgstr "Set a new stereo file index."
+
+#~ msgid "Toggle the B file index."
+#~ msgstr "Toggle the B file index."
+
+#~ msgid "Clear the B indexes."
+#~ msgstr "Clear the B indexes."
+
+#~ msgid "Return the list of layers."
+#~ msgstr "Return the list of layers."
+
+#~ msgid "Set layer for file item."
+#~ msgstr "Set layer for file item."
+
+#~ msgid "Set compare time."
+#~ msgstr "Set compare time."
+
+#~ msgid "Get compare time."
+#~ msgstr "Get compare time."
+
+#~ msgid "Set the first version for current media."
+#~ msgstr "Set the first version for current media."
+
+#~ msgid "Set the previous version for current media."
+#~ msgstr "Set the previous version for current media."
+
+#~ msgid "Set the next version for current media."
+#~ msgstr "Set the next version for current media."
+
+#~ msgid "Set the last version for current media."
+#~ msgstr "Set the last version for current media."
+
+#~ msgid "Path :class:`mrv2.Path` to the File Media."
+#~ msgstr "Path :class:`mrv2.Path` to the File Media."
+
+#~ msgid "Audio path :class:`mrv2.Path` to the File Media if any."
+#~ msgstr "Audio path :class:`mrv2.Path` to the File Media if any."
+
+#~ msgid "Time range :class:`mrv2.TimeRange` of the File Media."
+#~ msgstr "Time range :class:`mrv2.TimeRange` of the File Media."
+
+#~ msgid "Speed (FPS) of the File Media."
+#~ msgstr "Speed (FPS) of the File Media."
+
+#~ msgid "Playback state :class:`mrv2.timeline.Playbacks` of the File Media."
+#~ msgstr "Playback state :class:`mrv2.timeline.Playbacks` of the File Media."
+
+#~ msgid "Loop state :class:`mrv2.timeline.Loop` of the File Media."
+#~ msgstr "Loop state :class:`mrv2.timeline.Loop` of the File Media."
+
+#~ msgid "Current time :class:`mrv2.RationalTime` of the File Media."
+#~ msgstr "Current time :class:`mrv2.RationalTime` of the File Media."
+
+#~ msgid "In/Out range :class:`mrv2.TimeRange` of the File Media."
+#~ msgstr "In/Out range :class:`mrv2.TimeRange` of the File Media."
+
+#~ msgid "Video layer of the File Media."
+#~ msgstr "Video layer of the File Media."
+
+#~ msgid "Volume of the File Media."
+#~ msgstr "Volume of the File Media."
+
+#~ msgid "Mute state of the File Media."
+#~ msgstr "Mute state of the File Media."
+
+#~ msgid "Audio offset of the File Media."
+#~ msgstr "Audio offset of the File Media."
+
+#~ msgid "Class used to hold a media item."
+#~ msgstr "Class used to hold a media item."
+
+#~ msgid "Save annotations."
+#~ msgstr "Save annotations."
+
+#~ msgid "Save resolution."
+#~ msgstr "Save resolution."
+
+#~ msgid "FFmpeg Profile."
+#~ msgstr "FFmpeg Profile."
+
+#~ msgid "FFmpeg Preset."
+#~ msgstr "FFmpeg Preset."
+
+#~ msgid "FFmpeg Pixel Format."
+#~ msgstr "FFmpeg Pixel Format."
+
+#~ msgid "FFmpeg video encoding with hardware if possible."
+#~ msgstr "FFmpeg video encoding with hardware if possible."
+
+#~ msgid "FFmpeg Override color characteristics."
+#~ msgstr "FFmpeg Override color characteristics."
+
+#~ msgid "FFmpeg Color Range."
+#~ msgstr "FFmpeg Color Range."
+
+#~ msgid "FFmpeg Color Space."
+#~ msgstr "FFmpeg Color Space."
+
+#~ msgid "FFmpeg Color Primaries."
+#~ msgstr "FFmpeg Color Primaries."
+
+#~ msgid "FFmpeg Color Transfer Characteristics."
+#~ msgstr "FFmpeg Color Transfer Characteristics."
+
+#~ msgid "FFmpeg Audio Codec."
+#~ msgstr "FFmpeg Audio Codec."
+
+#~ msgid "OpenEXR's Compression."
+#~ msgstr "OpenEXR's Compression."
+
+#~ msgid "OpenEXR's Pixel Type."
+#~ msgstr "OpenEXR's Pixel Type."
+
+#~ msgid "OpenEXR's Zip Compression Level."
+#~ msgstr "OpenEXR's Zip Compression Level."
+
+#~ msgid "OpenEXR's DWA Compression Level."
+#~ msgstr "OpenEXR's DWA Compression Level."
+
+#~ msgid ""
+#~ "\n"
+#~ "Command module.\n"
+#~ "\n"
+#~ "Used to run main commands and get arguments and set the display, image, "
+#~ "compare, LUT options.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Command module.\n"
+#~ "\n"
+#~ "Used to run main commands and get arguments and set the display, image, "
+#~ "compare, LUT options.\n"
+
+#~ msgid ""
+#~ "Get command-line arguments passed as single quoted string to -pythonArgs."
+#~ msgstr ""
+#~ "Get command-line arguments passed as single quoted string to -pythonArgs."
+
+#~ msgid "Open file with optional audio."
+#~ msgstr "Open file with optional audio."
+
+#~ msgid "Compare two file items with a compare mode."
+#~ msgstr "Compare two file items with a compare mode."
+
+#~ msgid "Close the file item."
+#~ msgstr "Close the file item."
+
+#~ msgid "Close all file items."
+#~ msgstr "Close all file items."
+
+#~ msgid "Return the root path to the insallation of mrv2."
+#~ msgstr "Return the root path to the insallation of mrv2."
+
+#~ msgid "Return the path to preferences of mrv2."
+#~ msgstr "Return the path to preferences of mrv2."
+
+#~ msgid "Return the display options."
+#~ msgstr "Return the display options."
+
+#~ msgid "Set the display options."
+#~ msgstr "Set the display options."
+
+#~ msgid "Return the LUT options."
+#~ msgstr "Return the LUT options."
+
+#~ msgid "Set the LUT options."
+#~ msgstr "Set the LUT options."
+
+#~ msgid "Return the image options."
+#~ msgstr "Return the image options."
+
+#~ msgid "Set the image options."
+#~ msgstr "Set the image options."
+
+#~ msgid "Return the environment map options."
+#~ msgstr "Return the environment map options."
+
+#~ msgid "Set the environment map options."
+#~ msgstr "Set the environment map options."
+
+#~ msgid "Set the compare options."
+#~ msgstr "Set the compare options."
+
+#~ msgid "Set the stereo 3D options."
+#~ msgstr "Set the stereo 3D options."
+
+#~ msgid "Get the language of mrv2."
+#~ msgstr "Get the language of mrv2."
+
+#~ msgid "Get the layers of the timeline (GUI)."
+#~ msgstr "Get the layers of the timeline (GUI)."
+
+#~ msgid "Get the version of mrv2."
+#~ msgstr "Get the version of mrv2."
+
+#~ msgid ""
+#~ "Call Fl::check to update the GUI and return the number of seconds that "
+#~ "elapsed."
+#~ msgstr ""
+#~ "Call Fl::check to update the GUI and return the number of seconds that "
+#~ "elapsed."
+
+#~ msgid "Returns true if audio is muted."
+#~ msgstr "Returns true if audio is muted."
+
+#~ msgid "Runs the same or a new mrv2 with a session file."
+#~ msgstr "Runs the same or a new mrv2 with a session file."
+
+#~ msgid "Set the muting of the audio."
+#~ msgstr "Set the muting of the audio."
+
+#~ msgid "Toggle Image Auto Normalize."
+#~ msgstr "Toggle Image Auto Normalize."
+
+#~ msgid "Toggle Data Window."
+#~ msgstr "Toggle Data Window."
+
+#~ msgid "Toggle Display Window."
+#~ msgstr "Toggle Display Window."
+
+#~ msgid "Toggle Ignored Display Window on OpenEXRs."
+#~ msgstr "Toggle Ignored Display Window on OpenEXRs."
+
+#~ msgid "Toggle Image invalid values."
+#~ msgstr "Toggle Image invalid values."
+
+#~ msgid "Toggle Safe Areas."
+#~ msgstr "Toggle Safe Areas."
+
+#~ msgid "Get the playback volume."
+#~ msgstr "Get the playback volume."
+
+#~ msgid "Set the playback volume."
+#~ msgstr "Set the playback volume."
+
+#~ msgid "Save a movie or sequence from the front layer."
+#~ msgstr "Save a movie or sequence from the front layer."
+
+#~ msgid "Save an .otio file from the current selected image."
+#~ msgstr "Save an .otio file from the current selected image."
+
+#~ msgid "Save a PDF document with all annotations and notes."
+#~ msgstr "Save a PDF document with all annotations and notes."
+
+#~ msgid ""
+#~ "\n"
+#~ "Annotations module.\n"
+#~ "\n"
+#~ "Contains all functions and classes related to the annotationss.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Annotations module.\n"
+#~ "\n"
+#~ "Contains all functions and classes related to the annotationss.\n"
+
+#~ msgid "Add notes annotations to current clip at a certain time."
+#~ msgstr "Add notes annotations to current clip at a certain time."
+
+#~ msgid "Add notes annotations to current clip at a certain frame."
+#~ msgstr "Add notes annotations to current clip at a certain frame."
+
+#~ msgid "Add notes annotations to current clip at certain seconds."
+#~ msgstr "Add notes annotations to current clip at certain seconds."
+
+#~ msgid "&File/&Open"
+#~ msgstr "&File/&Open"
+
+#~ msgid "&File/&Save"
+#~ msgstr "&File/&Save"
+
+#~ msgid "&Edit/&Undo"
+#~ msgstr "&Edit/&Undo"
+
+#~ msgid "&Edit/Cu&t"
+#~ msgstr "&Edit/Cu&t"
+
+#~ msgid "&Edit/&Copy"
+#~ msgstr "&Edit/&Copy"
+
+#~ msgid "&Edit/&Paste"
+#~ msgstr "&Edit/&Paste"
+
+#~ msgid "&Edit/&Delete"
+#~ msgstr "&Edit/&Delete"
+
+#~ msgid "&Edit/&Comment Selection"
+#~ msgstr "&Edit/&Comment Selection"
+
+#~ msgid "&Edit/&Uncomment Selection"
+#~ msgstr "&Edit/&Uncomment Selection"
+
+#~ msgid "&Search/&Find..."
+#~ msgstr "&Search/&Find..."
+
+#~ msgid "&Search/F&ind Again"
+#~ msgstr "&Search/F&ind Again"
+
+#~ msgid "&Search/&Replace"
+#~ msgstr "&Search/&Replace"
+
+#~ msgid "&Search/&Replace Again"
+#~ msgstr "&Search/&Replace Again"
+
+#~ msgid "Clear/&Output"
+#~ msgstr "Clear/&Output"
+
+#~ msgid "Clear/&Editor"
+#~ msgstr "Clear/&Editor"
+
+#~ msgid "Editor/&Run Code"
+#~ msgstr "Editor/&Run Code"
+
+#~ msgid "Editor/Toggle &Line Numbers"
+#~ msgstr "Editor/Toggle &Line Numbers"
+
+#~ msgid "Editor/&Jump to Error"
+#~ msgstr "Editor/&Jump to Error"
+
+#~ msgid "Editor/&External Editor"
+#~ msgstr "Editor/&External Editor"
+
+#~ msgid "Scripts/Add To Script List"
+#~ msgstr "Scripts/Add To Script List"
+
+#~ msgid "Scripts/%s"
+#~ msgstr "Scripts/%s"
+
+#~ msgid ""
+#~ "Type in your python code here.  Select an area to execute just a portion "
+#~ "of it.  Press Keypad Enter to run it."
+#~ msgstr ""
+#~ "Type in your python code here.  Select an area to execute just a portion "
+#~ "of it.  Press Keypad Enter to run it."
+
+#~ msgid "Python file {0} already exists.  Do you want to overwrite it?"
+#~ msgstr "Python file {0} already exists.  Do you want to overwrite it?"
+
+#~ msgid "Failed to open the file for writing."
+#~ msgstr "Failed to open the file for writing."
+
+#~ msgid "Failed to write to the file."
+#~ msgstr "Failed to write to the file."
+
+#~ msgid "Type your editor command"
+#~ msgstr "Type your editor command"
+
+#~ msgid "{0} will be replaced with the line number.  {1} with the file name"
+#~ msgstr "{0} will be replaced with the line number.  {1} with the file name"
+
+#~ msgid "Could not open python editor: {0}"
+#~ msgstr "Could not open python editor: {0}"
+
+#~ msgid "Search String:"
+#~ msgstr "Search String:"
+
+#~ msgid "No occurrences of '%s' found!"
+#~ msgstr "No occurrences of '%s' found!"
+
+#~ msgid "Renderer"
+#~ msgstr "Renderer"
+
+#~ msgid "Complexity"
+#~ msgstr "Complexity"
+
+#~ msgid "Stage Cache"
+#~ msgstr "Stage Cache"
+
+#~ msgid "Disk Cache in GB"
+#~ msgstr "Disk Cache in GB"
+
+#~ msgid "Replace"
+#~ msgstr "Replace"
+
+#~ msgid "Find:"
+#~ msgstr "Find:"
+
+#~ msgid "Replace:"
+#~ msgstr "Replace:"
+
+#~ msgid "Replace All"
+#~ msgstr "Replace All"
+
+#~ msgid "Replace Next"
+#~ msgstr "Replace Next"
 
 #~ msgid "File {0} is a network file.  Cannot do versioning."
 #~ msgstr "File {0} is a network file.  Cannot do versioning."

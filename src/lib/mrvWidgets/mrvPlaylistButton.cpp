@@ -100,21 +100,29 @@ namespace mrv
         TLRENDER_P();
         unsigned videoClips = 0;
         unsigned audioClips = 0;
-        auto tracks = p.timeline->tracks()->children();
-        for (auto child : tracks)
-        {
-            auto track = otio::dynamic_retainer_cast<otio::Track>(child);
-            if (!track)
-                continue;
 
-            auto clips = track->find_children<otio::Clip>();
-            if (track->kind() == otio::Track::Kind::video)
+        if (p.timeline)
+        {
+            auto stack  = p.timeline->tracks();
+            if (stack)
             {
-                videoClips += clips.size();
-            }
-            else if (track->kind() == otio::Track::Kind::audio)
-            {
-                audioClips += clips.size();
+                auto tracks = stack->children();
+                for (auto child : tracks)
+                {
+                    auto track = otio::dynamic_retainer_cast<otio::Track>(child);
+                    if (!track)
+                        continue;
+
+                    auto clips = track->find_children<otio::Clip>();
+                    if (track->kind() == otio::Track::Kind::video)
+                    {
+                        videoClips += clips.size();
+                    }
+                    else if (track->kind() == otio::Track::Kind::audio)
+                    {
+                        audioClips += clips.size();
+                    }
+                }
             }
         }
 

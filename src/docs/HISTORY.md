@@ -8,7 +8,8 @@ v1.3.1
   numbers in them.
 - Made versioning regex get escaped, like Python's re.escape() function.
 - Added support for version switching of clips in .otio timeline.   You need
-  to be stopped at a certain clip to change it.
+  to be stopped at a certain clip with a proper version name to change it.
+- Fixed showing of timelines that had the "enabled" set to false on them.
 - Added 'm' hotkey to mark the in and out points of a clip in the .otio
   timeline.
 - Upgraded to OpenEXR v3.3.2.
@@ -47,6 +48,7 @@ v1.3.1
 - Added displaying of clip names in the otio files in the HUD.
 - Improved performance of Data Window and Display Window when reading 
   multipart OpenEXRs.
+- Fixed crashes of PlaylistButton when there were no tracks or stack.
   
 
 v1.3.0

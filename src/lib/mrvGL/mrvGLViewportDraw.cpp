@@ -841,16 +841,25 @@ namespace mrv
                 labelColor);
         }
 
+        bool otioClip = false;
+        otime::RationalTime clipTime;
         if (p.hud & HudDisplay::kFilename)
         {
             std::string fullname = createStringFromPathAndTime(path, time);
             if (path.getExtension() == ".otio")
             {
+                otioClip = true;
                 auto i = p.tagData.find("otioClipName");
                 if (i != p.tagData.end())
                 {
                     auto otioClipName = i->second;
                     fullname += " ( " + otioClipName + " )";
+                }
+                i = p.tagData.find("otioClipTime");
+                if (i != p.tagData.end())
+                {
+                    std::stringstream ss(i->second);
+                    ss >> clipTime;
                 }
             }
             _drawText(
@@ -889,6 +898,12 @@ namespace mrv
         {
             snprintf(buf, 512, "F: %" PRId64 " ", frame);
             tmp += buf;
+            if (otioClip)
+            {
+                int64_t clipFrame = clipTime.to_frames();
+                snprintf(buf, 512, " ( %" PRId64 " )", clipFrame);
+                tmp += buf;
+            }
         }
 
         if (p.hud & HudDisplay::kFrameRange)
@@ -897,14 +912,19 @@ namespace mrv
             frame = range.start_time().to_frames();
             const int64_t last_frame = range.end_time_inclusive().to_frames();
             snprintf(
-                buf, 512, "Range: %" PRId64 " -  %" PRId64, frame, last_frame);
+                buf, 512, " Range: %" PRId64 " -  %" PRId64, frame, last_frame);
             tmp += buf;
         }
 
         if (p.hud & HudDisplay::kTimecode)
         {
-            snprintf(buf, 512, "TC: %s ", time.to_timecode(nullptr).c_str());
+            snprintf(buf, 512, " TC: %s ", time.to_timecode(nullptr).c_str());
             tmp += buf;
+            if (otioClip)
+            {
+                snprintf(buf, 512, " ( %s ) ", clipTime.to_timecode(nullptr).c_str());
+                tmp += buf;
+            }
         }
 
         if (p.hud & HudDisplay::kFPS)
