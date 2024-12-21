@@ -10,6 +10,8 @@ import re
 import sys
 from urllib.error import HTTPError
 
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
 #
 # Script version
 #
@@ -182,12 +184,8 @@ if not use_google and not use_tokenizer:
 class POTranslator:
 
 
-    def __init__(self, po_file, lang, use_google = True, use_tokenizer = True): 
+    def __init__(self, lang, use_google = True, use_tokenizer = True): 
         self.model = self.tokenizer = None
-        
-        if not os.path.exists(po_file):
-            print(po_file,'does not exist!')
-            exit(1)
         
         self.use_google = use_google
         self.use_tokenizer = use_tokenizer
@@ -200,10 +198,7 @@ class POTranslator:
         
         self.have_seen = {}
 
-
         if self.code == 'en':
-            # Initialitize po translation
-            self.translate_po(po_file, self.code)
             return
     
         model_name = f"Helsinki-NLP/opus-mt-en-{self.helsinki}"
@@ -221,9 +216,7 @@ class POTranslator:
         # Initialize Google translator
         if use_google:
             self.translator = Translator(to_lang=GOOGLE_LANGUAGES[self.code])
-
-        # Initialitize po translation
-        self.translate_po(po_file, self.code)
+        
         
     def verify_text(self, text):
         # Use regex to match any repeated pair of two characters
@@ -373,10 +366,15 @@ class POTranslator:
         return translated_text
 
     # Load the .po file
-    def translate_po(self, po_input, language):
+    def translate_po(self, po_input):
+        if not os.path.exists(po_input):
+            print(po_input,'does not exist!')
+            exit(1)
+            
         po = polib.pofile(po_input)
         
         # Translate each entry
+        language = self.code
         try:
             for entry in po:
                 if language == 'en':
@@ -421,8 +419,8 @@ class POTranslator:
 def po_translate(lang):
 
     main_po = f'src/po/{lang}.po'
-    POTranslator(main_po, lang, use_google, use_tokenizer)
-
+    translator = POTranslator(lang, use_google, use_tokenizer)
+    translator.translate_po(main_po)
 
     cwd = os.getcwd()
     os.chdir('src/python/plug-ins')
@@ -432,16 +430,20 @@ def po_translate(lang):
         plugin = plugin[:-3] + '.po'
         plugin_po = f'src/po/python/plug-ins/locale/{lang}/LC_MESSAGES/{plugin}'
         print('Translating plugin',plugin)
-        POTranslator(plugin_po, lang, use_google, use_tokenizer)
+        translator.translate_po(plugin_po)
 
 
 model_name = ''
-    
-if lang == 'all':
-    for lang in LANGUAGES:
-        po_translate(lang)
-else:
-    po_translate(lang)    
+
+if __name__ == "__main__":
+    import multiprocessing
+    multiprocessing.freeze_support()
+
+    if lang == 'all':
+        for lang in LANGUAGES:
+            po_translate(lang)
+    else:
+        po_translate(lang)    
 
 
 
