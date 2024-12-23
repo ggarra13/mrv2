@@ -83,44 +83,53 @@ export CMAKE_TARGET=""
 ASK_TO_CONTINUE=0
 
 if [[ "$NOARGS" == "" ]]; then
-
-    for i in "$@"; do
-	case $i in
+    
+    while [ $# -gt 0 ]; do
+	case $1 in
 	    reldeb|RelWithDebInfo)
 		export CMAKE_BUILD_TYPE="RelWithDebInfo"
 		export BUILD_TYPE_DIR="RelWithDebInfo"
 		shift
+		continue
 		;;
 	    release|Release)
 		export CMAKE_BUILD_TYPE="Release"
 		export BUILD_TYPE_DIR="Release"
 		shift
+		continue
 		;;
 	    debug|Debug)		
 		export CMAKE_BUILD_TYPE="Debug"
 		export BUILD_TYPE_DIR="Debug"
 		shift
+		continue
 		;;
 	    -y|-yes|--y|--yes)
 		shift
 		ASK_TO_CONTINUE=0
+		continue
 		;;
 	    --ask|-ask)
 		shift
 		ASK_TO_CONTINUE=1
+		continue
 		;;
 	    --build-dir|-build-dir|--dir|-dir|--root|-root)
 		shift
 		export BUILD_ROOT=$1
+		echo "BUILD_ROOT set to $BUILD_ROOT"
 		shift
+		continue
 		;;
 	    --small|-small)
 		shift
 		export BUILD_ROOT=$default_build_root-small
+		continue
 		;;
 	    --minimal|-minimal|--min|-min)
 		shift
 		export BUILD_ROOT=$default_build_root-minimal
+		continue
 		;;
 	    clean)
 		CLEAN_DIR=1
@@ -130,27 +139,32 @@ if [[ "$NOARGS" == "" ]]; then
 		    exit 1
 		fi
 		shift
+		continue
 		;;
 	    -lgpl|--lgpl)
 		export FFMPEG_GPL=LGPL
 		export TLRENDER_X264=OFF
 		shift
+		continue
 		;;
 	    -gpl|--gpl)
 		export FFMPEG_GPL=GPL
 		export TLRENDER_X264=ON
 		shift
+		continue
 		;;
 	    -v|--v|--verbose)
 		export CMAKE_VERBOSE_MAKEFILE=ON
 		export FLAGS="-v ${FLAGS}"
 		shift
+		continue
 		;;
 	    -j)
 		shift
 		export CPU_CORES=$1
 		export FLAGS="-j $CPU_CORES ${FLAGS}"
 		shift
+		continue
 		;;
 	    -D*)
 		if [[ $1 == "-D" ]]; then
@@ -158,6 +172,7 @@ if [[ "$NOARGS" == "" ]]; then
 		fi
 		parse_option $1
 		shift
+		continue
 		;;
 	    -G)
 		shift
@@ -168,16 +183,22 @@ if [[ "$NOARGS" == "" ]]; then
 		fi
 		export CMAKE_GENERATOR=$1
 		shift
+		continue
 		;;
 	    -t|--t|--target)
 		shift
 		export CMAKE_TARGET=$1
 		shift
+		continue
 		;;
 	    -h|-help|--help)
 		show_help
 		exit 1
 		;;
+	    *)
+		echo "Unknown option: $i"
+		show_help
+		exit 1
 	esac
     done
 
