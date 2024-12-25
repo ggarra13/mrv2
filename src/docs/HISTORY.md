@@ -12,6 +12,7 @@ v1.3.1
 - Fixed showing of timelines that had the "enabled" set to false on them.
 - Added 'm' hotkey to mark the in and out points of a clip in the .otio
   timeline.
+- Added toggling visible state of tracks in Timeline Viewport.
 - Upgraded to OpenEXR v3.3.2.
 - Added OpenEXR's headers Compression, Compression Num. Scanlines,
   and Is Deep, Is Lossy.
