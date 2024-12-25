@@ -46,7 +46,7 @@ namespace mrv
     void open_directory_cb(Fl_Widget* w, ViewerUI* ui);
     void open_separate_audio_cb(Fl_Widget* w, ViewerUI* ui);
     void open_recent_cb(Fl_Menu_* w, ViewerUI* ui);
-    
+
     void save_single_frame_to_folder_cb(Fl_Menu_* w, ViewerUI* ui);
     void save_single_frame_cb(Fl_Menu_* w, ViewerUI* ui);
     void save_annotations_only_cb(Fl_Menu_* w, ViewerUI* ui);
@@ -76,7 +76,7 @@ namespace mrv
     void compare_horizontal_cb(Fl_Widget* w, ViewerUI* ui);
     void compare_vertical_cb(Fl_Widget* w, ViewerUI* ui);
     void compare_tile_cb(Fl_Widget* w, ViewerUI* ui);
-    
+
     void exit_cb(Fl_Widget* w, ViewerUI* ui);
 
     //! Layer callbacks
@@ -203,6 +203,7 @@ namespace mrv
     void toggle_timeline_scroll_to_current_frame_cb(Fl_Menu_*, ViewerUI* ui);
     void toggle_timeline_track_info_cb(Fl_Menu_*, ViewerUI* ui);
     void toggle_timeline_clip_info_cb(Fl_Menu_*, ViewerUI* ui);
+    void toggle_timeline_active_track_cb(Fl_Menu_*, ViewerUI* ui);
 
     // OCIO callbacks
 

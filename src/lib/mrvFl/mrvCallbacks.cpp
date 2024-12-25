@@ -282,7 +282,7 @@ namespace mrv
     void goto_file_cb(Fl_Widget* w, void* data)
     {
         ViewerUI* ui = App::ui;
-        size_t Aindex = (size_t) data;
+        size_t Aindex = (size_t)data;
         auto model = App::app->filesModel();
         auto numFiles = model->observeFiles()->getSize();
         if (Aindex < 0 || Aindex >= numFiles)
@@ -294,12 +294,12 @@ namespace mrv
     void select_Bfile_cb(Fl_Widget* w, void* data)
     {
         ViewerUI* ui = App::ui;
-        size_t Bindex = (size_t) data;
+        size_t Bindex = (size_t)data;
         auto model = App::app->filesModel();
         auto numFiles = model->observeFiles()->getSize();
         if (Bindex < 0 || Bindex >= numFiles)
             return;
-        
+
         const auto bIndexes = model->observeBIndexes()->get();
         const auto i = std::find(bIndexes.begin(), bIndexes.end(), Bindex);
         model->setB(Bindex, i == bIndexes.end());
@@ -312,10 +312,10 @@ namespace mrv
         auto o = model->observeCompareOptions()->get();
         o.mode = timeline::CompareMode::A;
         model->setCompareOptions(o);
-                    
+
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
-    
+
     void compare_b_cb(Fl_Widget* w, ViewerUI* ui)
     {
         auto model = App::app->filesModel();
@@ -351,7 +351,7 @@ namespace mrv
         model->setCompareOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
-    
+
     void compare_horizontal_cb(Fl_Widget* w, ViewerUI* ui)
     {
         auto model = App::app->filesModel();
@@ -360,7 +360,7 @@ namespace mrv
         model->setCompareOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
-    
+
     void compare_vertical_cb(Fl_Widget* w, ViewerUI* ui)
     {
         auto model = App::app->filesModel();
@@ -369,7 +369,7 @@ namespace mrv
         model->setCompareOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
-    
+
     void compare_tile_cb(Fl_Widget* w, ViewerUI* ui)
     {
         auto model = App::app->filesModel();
@@ -378,7 +378,7 @@ namespace mrv
         model->setCompareOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
-    
+
     static std::string lastSavedFile;
     static mrv::SaveOptions lastSavedOptions;
 
@@ -388,8 +388,7 @@ namespace mrv
         auto Afile = model->observeA()->get();
         if (!Afile)
             return;
-        
-        
+
         const std::string& file = save_single_image(Afile->path.get().c_str());
         if (file.empty())
             return;
@@ -487,7 +486,7 @@ namespace mrv
             file = save_movie_or_sequence_file();
         if (file.empty())
             return;
-        
+
         std::string extension = tl::file::Path(file).getExtension();
         extension = string::toLower(extension);
         if (extension.empty())
@@ -678,7 +677,7 @@ namespace mrv
             return;
 
         const auto& ioInfo = player->ioInfo();
-        
+
         const auto& annotations = player->getAllAnnotations();
         if (annotations.empty())
             return;
@@ -849,10 +848,9 @@ namespace mrv
 
         options.annotations = true;
         options.video = false;
-            
+
         save_movie(file, ui, options);
     }
-
 
     void save_annotations_as_json_cb(Fl_Menu_* w, ViewerUI* ui)
     {
@@ -871,7 +869,7 @@ namespace mrv
 
         Message j;
         j["render_size"] = view->getRenderSize();
-        
+
         std::vector< draw::Annotation > flatAnnotations;
         for (const auto& annotation : annotations)
         {
@@ -883,7 +881,6 @@ namespace mrv
         f << j;
     }
 
-    
     void close_current_cb(Fl_Widget* w, ViewerUI* ui)
     {
         // Must come before model->close().
@@ -1161,7 +1158,7 @@ namespace mrv
         const timeline::Channels channel = timeline::Channels::Alpha;
         toggle_channel(ui, channel);
     }
-    
+
     void toggle_lumma_channel_cb(Fl_Menu_* w, ViewerUI* ui)
     {
         const timeline::Channels channel = timeline::Channels::Lumma;
@@ -1983,13 +1980,13 @@ namespace mrv
     {
         ui->uiView->framePrev();
     }
-    
+
     void toggle_otio_clip_in_out_cb(Fl_Menu_*, ViewerUI* ui)
     {
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
-        
+
         const auto time = player->currentTime();
         const auto timeline = player->getTimeline();
         const auto tracks = timeline->video_tracks();
@@ -1999,7 +1996,7 @@ namespace mrv
             otio::dynamic_retainer_cast<otio::Item>(track->child_at_time(time));
         if (!item)
             return;
-        
+
         const auto& fullRange = player->timeRange();
         const auto& inOutRange = player->inOutRange();
         auto range = item->trimmed_range_in_parent().value();
@@ -2013,7 +2010,7 @@ namespace mrv
             range.start_time().rescaled_to(rate).round(),
             range.end_time_exclusive().rescaled_to(rate).round());
         player->setInOutRange(range);
-        
+
         TimelineClass* c = ui->uiTimeWindow;
         c->uiStartButton->value(!c->uiStartButton->value());
         c->uiEndButton->value(!c->uiEndButton->value());
@@ -2266,6 +2263,22 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
+    void toggle_timeline_active_track_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
+        std::string track = item->label();
+
+        size_t startIndex = track.find("#");
+        if (startIndex == std::string::npos)
+            return;
+
+        size_t endIndex = track.find("-");
+        size_t len = endIndex - startIndex - 2;
+        unsigned trackIndex = std::stoul(track.substr(startIndex + 1, len)) - 1;
+        toggleTrack(trackIndex, ui);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
     void toggle_timeline_transitions_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
@@ -2442,8 +2455,9 @@ namespace mrv
 
         tl::file::Path otioPath = media->path;
         auto clipPath = media->path;
-        if (string::compare(otioPath.getExtension(), ".otio",
-                            string::Compare::CaseInsensitive))
+        if (string::compare(
+                otioPath.getExtension(), ".otio",
+                string::Compare::CaseInsensitive))
         {
             const auto& tags = ui->uiView->getTags();
             auto i = tags.find("otioClipName");
@@ -2452,7 +2466,7 @@ namespace mrv
                 clipPath = tl::file::Path(i->second);
             }
         }
-            
+
         const std::string& fileName =
             media_version(ui, clipPath, sum, first_or_last, otioPath);
         if (fileName.empty())
@@ -2460,7 +2474,7 @@ namespace mrv
 
         if (otioPath != clipPath)
             return;
-        
+
         auto item = std::make_shared<FilesModelItem>();
         item->init = true;
         item->path = file::Path(fileName);

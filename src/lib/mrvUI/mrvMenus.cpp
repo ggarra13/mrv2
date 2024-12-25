@@ -41,7 +41,7 @@
 #include <FL/Fl_Widget.H>
 #include <FL/Fl.H>
 #ifdef __APPLE__
-#    include <FL/platform.H>  // Needed for Fl_Mac_App_Menu
+#    include <FL/platform.H> // Needed for Fl_Mac_App_Menu
 #endif
 
 namespace
@@ -75,10 +75,10 @@ namespace mrv
         if (numFiles > 0)
         {
             Aitem = model->observeA()->get();
-            
+
             if (Aitem && string::compare(
-                    Aitem->path.getExtension(), ".otio",
-                    string::Compare::CaseInsensitive))
+                             Aitem->path.getExtension(), ".otio",
+                             string::Compare::CaseInsensitive))
                 isOtio = true;
         }
         menu->clear();
@@ -129,14 +129,15 @@ namespace mrv
         mode = 0;
         if (!player || !player->hasAnnotations())
             mode = FL_MENU_INACTIVE;
-        
+
         menu->add(
             _("File/Save/Annotations Only"), kSaveAnnotationsOnly.hotkey(),
             (Fl_Callback*)save_annotations_only_cb, ui, mode);
-        
+
         menu->add(
             _("File/Save/Annotations as JSON"), kSaveAnnotationsAsJson.hotkey(),
-            (Fl_Callback*)save_annotations_as_json_cb, ui, mode | FL_MENU_DIVIDER);
+            (Fl_Callback*)save_annotations_as_json_cb, ui,
+            mode | FL_MENU_DIVIDER);
 
         mode = 0;
         if (numFiles == 0)
@@ -655,7 +656,7 @@ namespace mrv
             idx = menu->add(
                 _("Render/Alpha Channel"), kAlphaChannel.hotkey(),
                 (Fl_Callback*)toggle_alpha_channel_cb, ui, mode);
-            
+
             mode = FL_MENU_RADIO;
             if (numFiles == 0)
                 mode |= FL_MENU_INACTIVE;
@@ -874,10 +875,11 @@ namespace mrv
 
         if (isOtio)
         {
-            menu->add(_("Playback/Toggle In\\/Out Otio Clip"),
-                      kToggleOtioClipInOut.hotkey(),
-                      (Fl_Callback*)toggle_otio_clip_in_out_cb, ui,
-                      FL_MENU_DIVIDER | FL_MENU_TOGGLE | mode);
+            menu->add(
+                _("Playback/Toggle In\\/Out Otio Clip"),
+                kToggleOtioClipInOut.hotkey(),
+                (Fl_Callback*)toggle_otio_clip_in_out_cb, ui,
+                FL_MENU_DIVIDER | FL_MENU_TOGGLE | mode);
         }
 
         // Looping
@@ -1124,13 +1126,38 @@ namespace mrv
         if (displayOptions.markers)
             item->set();
 
+        if (isOtio)
+        {
+            std::vector<std::string> tracks;
+            std::vector<bool> tracksActive;
+            getActiveTracks(tracks, tracksActive, ui);
+            unsigned numTracks = tracks.size();
+            if (numTracks > 1)
+            {
+                for (unsigned i = 0; i < tracks.size(); ++i)
+                {
+                    std::string msg =
+                        tl::string::Format(_("Timeline/Visible Tracks/{0}"))
+                            .arg(tracks[i]);
+
+                    idx = menu->add(
+                        msg.c_str(), 0,
+                        (Fl_Callback*)toggle_timeline_active_track_cb, ui,
+                        FL_MENU_TOGGLE);
+                    item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+                    if (tracksActive[i])
+                        item->set();
+                }
+            }
+        }
+
         const int aIndex = model->observeAIndex()->get();
         if (numFiles > 0 && aIndex >= 0 && aIndex < numFiles)
         {
             const auto& files = model->observeFiles()->get();
-            const auto& path  = files[aIndex]->path;
+            const auto& path = files[aIndex]->path;
             std::string fileName = path.get(-1);
-            
+
             if (isOtio)
             {
                 const auto& tags = uiView->getTags();
@@ -1142,12 +1169,12 @@ namespace mrv
             }
 
             fileName = mrv::file::normalizePath(fileName);
-            
+
             const std::regex& regex = version_regex(ui, false);
             bool has_version = regex_match(fileName, regex);
 
             if (numFiles > 1)
-            {   
+            {
                 menu->add(
                     _("Image/Next"), kNextImage.hotkey(),
                     (Fl_Callback*)next_file_cb, ui);
@@ -1159,9 +1186,10 @@ namespace mrv
                     (Fl_Callback*)previous_file_cb, ui);
                 menu->add(
                     _("Image/Previous Limited"), kPreviousImageLimited.hotkey(),
-                    (Fl_Callback*)previous_file_limited_cb, ui, FL_MENU_DIVIDER);
+                    (Fl_Callback*)previous_file_limited_cb, ui,
+                    FL_MENU_DIVIDER);
             }
-            
+
             if (has_version)
             {
                 menu->add(
@@ -1177,11 +1205,11 @@ namespace mrv
                     _("Image/Version/Next"), kNextVersionImage.hotkey(),
                     (Fl_Callback*)next_image_version_cb, ui);
             }
-            
+
             if (numFiles > 1)
-            {   
+            {
                 mode = FL_MENU_RADIO;
-                
+
                 auto o = model->observeCompareOptions()->get();
                 idx = menu->add(
                     _("Image/Compare Mode/A"), 0, (Fl_Callback*)compare_a_cb,
@@ -1224,44 +1252,45 @@ namespace mrv
                 item = (Fl_Menu_Item*)&(menu->menu()[idx]);
                 if (o.mode == timeline::CompareMode::Horizontal)
                     item->set();
-                
+
                 idx = menu->add(
                     _("Image/Compare Mode/Vertical"), 0,
                     (Fl_Callback*)compare_vertical_cb, ui, mode);
                 item = (Fl_Menu_Item*)&(menu->menu()[idx]);
                 if (o.mode == timeline::CompareMode::Vertical)
                     item->set();
-                
+
                 idx = menu->add(
                     _("Image/Compare Mode/Tile"), 0,
                     (Fl_Callback*)compare_tile_cb, ui, mode | FL_MENU_DIVIDER);
                 item = (Fl_Menu_Item*)&(menu->menu()[idx]);
                 if (o.mode == timeline::CompareMode::Tile)
                     item->set();
-                
-                const auto& Aindex   = model->observeAIndex()->get();
+
+                const auto& Aindex = model->observeAIndex()->get();
                 const auto& Bindexes = model->observeBIndexes()->get();
 
                 mode = FL_MENU_TOGGLE;
                 for (size_t i = 0; i < numFiles; ++i)
                 {
-                    
+
                     const auto& path = files[i]->path;
                     fileName = path.getBaseName() + path.getNumber() +
                                path.getExtension();
                     snprintf(buf, 256, _("Image/Go to/%s"), fileName.c_str());
                     std::uintptr_t ptr = i;
-                    idx = menu->add(buf, 0, (Fl_Callback*)goto_file_cb, (void*)ptr,
-                                    mode);
+                    idx = menu->add(
+                        buf, 0, (Fl_Callback*)goto_file_cb, (void*)ptr, mode);
                     item = (Fl_Menu_Item*)&(menu->menu()[idx]);
                     if (i == Aindex)
                         item->set();
                     else
                         item->clear();
-                    
+
                     snprintf(buf, 256, _("Image/Compare/%s"), fileName.c_str());
-                    idx = menu->add(buf, 0, (Fl_Callback*)select_Bfile_cb, (void*)ptr,
-                                    mode);
+                    idx = menu->add(
+                        buf, 0, (Fl_Callback*)select_Bfile_cb, (void*)ptr,
+                        mode);
                     item = (Fl_Menu_Item*)&(menu->menu()[idx]);
                     for (size_t j = 0; j < Bindexes.size(); ++j)
                     {
@@ -1272,7 +1301,6 @@ namespace mrv
                         }
                     }
                 }
-                
             }
 
             menu->add(
@@ -1366,7 +1394,6 @@ namespace mrv
 
         menu->add(_("OCIO/Current"), 0, 0, nullptr, FL_MENU_INACTIVE);
 
-
         snprintf(buf, 1024, _("OCIO/         ICS: %s"), ics.c_str());
         idx = menu->add(buf, 0, 0, nullptr);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
@@ -1380,7 +1407,7 @@ namespace mrv
             menu->add(buf, 0, 0, nullptr);
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
             item->labelcolor(FL_YELLOW);
-            
+
             snprintf(buf, 1024, _("OCIO/        View: %s"), o.view.c_str());
             menu->add(buf, 0, 0, nullptr);
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
@@ -1447,15 +1474,16 @@ namespace mrv
         if (lut.enabled && !lut.fileName.empty())
         {
             file::Path path(lut.fileName);
-            snprintf(buf, 1024, _("OCIO/        LUT: %s"),
-                     path.getBaseName().c_str());
+            snprintf(
+                buf, 1024, _("OCIO/        LUT: %s"),
+                path.getBaseName().c_str());
             idx = menu->add(buf, 0, 0, nullptr);
         }
 
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         item->labelcolor(FL_YELLOW);
         item->flags |= FL_MENU_DIVIDER;
-        
+
         menu->add(
             _("OCIO/Change Current File"), 0, 0, nullptr, FL_MENU_INACTIVE);
 
@@ -1544,8 +1572,7 @@ namespace mrv
         if (num_screens > 1)
         {
             const timeline::OCIOOptions& o = uiView->getOCIOOptions(0);
-            std::string combined =
-                ocio::combineView(o.display, o.view);
+            std::string combined = ocio::combineView(o.display, o.view);
 
             for (int i = 0; i < ui->uiOCIOView->children(); ++i)
             {
@@ -1583,8 +1610,7 @@ namespace mrv
         {
             const timeline::OCIOOptions& o = uiView->getOCIOOptions(m);
             std::string monitorName = mrv::desktop::monitorName(m);
-            std::string combined =
-                ocio::combineView(o.display, o.view);
+            std::string combined = ocio::combineView(o.display, o.view);
             combined = monitorName + "/" + combined;
 
             for (int i = 0; i < ui->uiOCIOView->children(); ++i)

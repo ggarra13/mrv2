@@ -102,7 +102,7 @@ namespace mrv
             }
             return out;
         }
-        
+
         std::vector<Composition*> getTracks(TimelinePlayer* player)
         {
             auto timeline = player->getTimeline();
@@ -2665,7 +2665,6 @@ namespace mrv
         set_edit_mode_cb(editMode, ui);
     }
 
-
     bool replaceClipPath(tl::file::Path clipPath, ViewerUI* ui)
     {
         auto view = ui->uiView;
@@ -2682,7 +2681,7 @@ namespace mrv
 
         const auto& time = getTime(player);
         auto compositions = getTracks(player);
-        
+
         otio::ErrorStatus errorStatus;
         otio::Clip* clip = nullptr;
         int clipIndex = -1;
@@ -2725,15 +2724,104 @@ namespace mrv
         }
 
         makePathsAbsolute(timeline, ui);
-        
+
         toOtioFile(timeline, ui);
 
         refresh_file_cache_cb(nullptr, ui);
-                
+
         return true;
     }
 
-    
+    //! Get Active Tracks.
+    bool getActiveTracks(
+        std::vector<std::string>& tracks, std::vector<bool>& tracksActive,
+        ViewerUI* ui)
+    {
+        auto view = ui->uiView;
+        auto player = view->getTimelinePlayer();
+        if (!player)
+            return false;
+
+        auto timeline = player->getTimeline();
+        if (!timeline)
+        {
+            LOG_ERROR("No timeline in player");
+            return false;
+        }
+
+        auto compositions = getTracks(player);
+
+        otio::ErrorStatus errorStatus;
+        otio::Clip* clip = nullptr;
+        unsigned trackIndex = 0;
+        for (auto composition : compositions)
+        {
+            auto track = dynamic_cast<otio::Track*>(composition);
+            if (!track)
+                continue;
+
+            ++trackIndex;
+
+            const std::string name = tl::string::Format(_("Track #{0} - {1}"))
+                                         .arg(trackIndex)
+                                         .arg(track->name());
+
+            bool active = track->enabled();
+
+            tracks.push_back(name);
+            tracksActive.push_back(active);
+        }
+
+        return true;
+    }
+
+    bool toggleTrack(unsigned trackIndex, ViewerUI* ui)
+    {
+        auto view = ui->uiView;
+        auto player = view->getTimelinePlayer();
+        if (!player)
+            return false;
+
+        auto timeline = player->getTimeline();
+        if (!timeline)
+        {
+            LOG_ERROR("No timeline in player");
+            return false;
+        }
+
+        const auto& time = getTime(player);
+        auto compositions = getTracks(player);
+
+        otio::ErrorStatus errorStatus;
+        unsigned index = 0;
+        for (auto composition : compositions)
+        {
+            auto track = dynamic_cast<otio::Track*>(composition);
+            if (!track)
+                continue;
+
+            if (trackIndex != index)
+            {
+                ++index;
+                continue;
+            }
+
+            bool enabled = track->enabled();
+            enabled ^= true;
+            track->set_enabled(enabled);
+            break;
+        }
+
+        makePathsAbsolute(timeline, ui);
+
+        updateTimeline(timeline, time, ui);
+        toOtioFile(timeline, ui);
+
+        refresh_file_cache_cb(nullptr, ui);
+
+        return true;
+    }
+
     /// @todo: REFACTOR THIS PLEASE
     EditMode editMode = EditMode::kTimeline;
     int editModeH = 30;
@@ -2836,7 +2924,7 @@ namespace mrv
             {
                 if (!track->enabled())
                     continue;
-                
+
                 bool visibleTrack = false;
                 if (otio::Track::Kind::video == track->kind())
                 {

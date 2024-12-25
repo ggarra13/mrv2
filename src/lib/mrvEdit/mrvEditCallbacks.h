@@ -74,10 +74,10 @@ namespace mrv
 
     //! Edit callbacks that open file requesters
     void insert_audio_clip_cb(Fl_Menu_* w, ViewerUI* ui);
-    
+
     //! Menu function to remove audio clip(s) at current time.
     void edit_remove_audio_clip_cb(Fl_Menu_* m, ViewerUI* ui);
-    
+
     //! Menu function to insert an audio gap at current time.
     void edit_insert_audio_gap_cb(Fl_Menu_* m, ViewerUI* ui);
 
@@ -130,7 +130,15 @@ namespace mrv
 
     //! Replace current clip in otio timeline with newClipPath.
     bool replaceClipPath(tl::file::Path newClipPath, ViewerUI* ui);
-    
+
+    //! Get Active Tracks.
+    bool getActiveTracks(
+        std::vector<std::string>& tracks, std::vector<bool>& tracksActive,
+        ViewerUI* ui);
+
+    //! Toggle Track Enabled (active) state.
+    bool toggleTrack(unsigned trackIndex, ViewerUI* ui);
+
     //
     // Set the edit mode height.
     //
