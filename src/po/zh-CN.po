@@ -1,6 +1,6 @@
 # AI Simplified Chinese translations for mrv2 package
 # This file is distributed under the same license as the mrv2 package.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.5\n"
@@ -2769,6 +2769,9 @@ msgstr "您只能将剪辑添加到.otio EDL 播放列表中"
 msgid "Unknown media reference"
 msgstr "未知媒体引用未知"
 
+msgid "Track #{0} - {1}"
+msgstr "音轨 #{0} - {1}"
+
 msgid "Cannot currently concatenate an .otio file."
 msgstr "无法将. otio 文件归结为. otio 文件"
 
@@ -3943,6 +3946,9 @@ msgstr "时间线/过渡"
 
 msgid "Timeline/Markers"
 msgstr "时间线/标记"
+
+msgid "Timeline/Visible Tracks/{0}"
+msgstr "时间线/可见音轨/{0}"
 
 msgid "Image/Next"
 msgstr "图像/下一頁"

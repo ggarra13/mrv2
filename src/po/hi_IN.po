@@ -1,7 +1,7 @@
 # Hindi translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.7\n"
@@ -2771,6 +2771,9 @@ msgstr "आप सिर्फ क्लिप्स को एक सूची 
 msgid "Unknown media reference"
 msgstr "अज्ञात मीडिया संदर्भ"
 
+msgid "Track #{0} - {1}"
+msgstr "ट्रैक 5:{0} - {1}"
+
 msgid "Cannot currently concatenate an .otio file."
 msgstr "वर्तमान में के- स्केट नहीं की जा सकी. ooio फ़ाइल."
 
@@ -3965,6 +3968,9 @@ msgstr "टाइम-लाइन/स्लाइड संक्रमण:"
 
 msgid "Timeline/Markers"
 msgstr "टाइम-लाइन/मार्कर्स"
+
+msgid "Timeline/Visible Tracks/{0}"
+msgstr "टाइम-लाइन/दृष्टिगोचर ट्रैक्स/{0}"
 
 msgid "Image/Next"
 msgstr "छवि/अगला"

@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
@@ -2819,6 +2819,9 @@ msgstr "Sie knnen Clips nur zu einer.otio EDL Wiedergabeliste hinzufgen."
 msgid "Unknown media reference"
 msgstr "Unbekannte Medienreferenz"
 
+msgid "Track #{0} - {1}"
+msgstr "Gleis #{0} - {1}"
+
 msgid "Cannot currently concatenate an .otio file."
 msgstr "Eine.otio-Datei kann derzeit nicht verkettet werden."
 
@@ -4018,6 +4021,9 @@ msgstr "Zeitleiste/bergnge"
 
 msgid "Timeline/Markers"
 msgstr "Zeitleiste/Markierungen"
+
+msgid "Timeline/Visible Tracks/{0}"
+msgstr "Zeitleiste/Sichtbare Spuren/{0}"
 
 msgid "Image/Next"
 msgstr "Bild/Nchster"
