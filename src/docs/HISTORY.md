@@ -51,6 +51,8 @@ v1.3.1
   multipart OpenEXRs.
 - Fixed crashes of PlaylistButton when there were no tracks or stack.
 - Updated AI translations.
+- Fixed opening of sequences with Open Directory or dragging an actual
+  directory to mrv2.
   
 
 v1.3.0

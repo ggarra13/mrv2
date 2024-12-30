@@ -56,6 +56,7 @@ namespace mrv
         for (const auto& file : files)
         {
             file::Path path(file);
+            const std::string dir = path.getDirectory();
             const std::string root = path.getBaseName();
             const std::string frame = path.getNumber();
             const std::string view = ""; // @todo: path.getView();
@@ -67,7 +68,7 @@ namespace mrv
             else if (file::isSequence(file))
             {
                 Sequence s;
-                s.root = root;
+                s.root = dir + root;
                 s.view = view;
                 s.number = frame;
                 s.ext = ext;
