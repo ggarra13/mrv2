@@ -21,7 +21,6 @@ NOARGS=1
 
 locate_python
 
-echo $PYTHON_SITEDIR
 if [[ ! -e $PYTHON_SITEDIR/polib.py &&
 	  ! -e $PYTHON_USER_SITEDIR/polib.py ]];
 then

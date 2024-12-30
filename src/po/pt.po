@@ -1,7 +1,7 @@
 # Portuguese translations for mrv2 package
 # This file is distributed under the same license as the mrv2 package.
 # Gonzalo Garramuño <ggarra13@gmail.com>, 2023.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.7\n"
@@ -2798,6 +2798,9 @@ msgstr "Voc s pode adicionar clipes a uma lista de reproduo.otio EDL."
 msgid "Unknown media reference"
 msgstr "Referência dos meios de comunicação desconhecidos"
 
+msgid "Track #{0} - {1}"
+msgstr "Pista #{0} - {1}"
+
 msgid "Cannot currently concatenate an .otio file."
 msgstr "Atualmente no  possvel concatenar um arquivo.otio."
 
@@ -3996,6 +3999,9 @@ msgstr "Linha Do Tempo/Transies"
 
 msgid "Timeline/Markers"
 msgstr "Linha Do Tempo/Marcadores"
+
+msgid "Timeline/Visible Tracks/{0}"
+msgstr "Calendário/Pistas Visíveis/{0}"
 
 msgid "Image/Next"
 msgstr "Imagem/Prxima"

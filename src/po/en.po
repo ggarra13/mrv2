@@ -1,7 +1,7 @@
 # English translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.6\n"
@@ -2818,6 +2818,9 @@ msgstr "You can only add clips to an .otio EDL playlist."
 msgid "Unknown media reference"
 msgstr "Unknown media reference"
 
+msgid "Track #{0} - {1}"
+msgstr "Track #{0} - {1}"
+
 msgid "Cannot currently concatenate an .otio file."
 msgstr "Cannot currently concatenate an .otio file."
 
@@ -4014,6 +4017,9 @@ msgstr "Timeline/Transitions"
 
 msgid "Timeline/Markers"
 msgstr "Timeline/Markers"
+
+msgid "Timeline/Visible Tracks/{0}"
+msgstr "Timeline/Visible Tracks/{0}"
 
 msgid "Image/Next"
 msgstr "Image/Next"

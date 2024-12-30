@@ -2505,6 +2505,9 @@ msgstr ""
 msgid "Unknown media reference"
 msgstr ""
 
+msgid "Track #{0} - {1}"
+msgstr ""
+
 msgid "Cannot currently concatenate an .otio file."
 msgstr ""
 
@@ -3664,6 +3667,9 @@ msgid "Timeline/Transitions"
 msgstr ""
 
 msgid "Timeline/Markers"
+msgstr ""
+
+msgid "Timeline/Visible Tracks/{0}"
 msgstr ""
 
 msgid "Image/Next"

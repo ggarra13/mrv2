@@ -1,7 +1,7 @@
 # Russian translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.8\n"
@@ -2851,6 +2851,9 @@ msgstr "Вы можете добавить только клипы в плейл
 msgid "Unknown media reference"
 msgstr "Неизвестная ссылка на средства массовой информации"
 
+msgid "Track #{0} - {1}"
+msgstr "Дорожка # {0} - {1}"
+
 msgid "Cannot currently concatenate an .otio file."
 msgstr "В настоящее время невозможно создать файл.otio."
 
@@ -4049,6 +4052,9 @@ msgstr "Сроки/Переходные периоды"
 
 msgid "Timeline/Markers"
 msgstr "Сроки/Маркеры"
+
+msgid "Timeline/Visible Tracks/{0}"
+msgstr "Сроки/Видимые дорожки/{0}"
 
 msgid "Image/Next"
 msgstr "Фотография/Следующий"
