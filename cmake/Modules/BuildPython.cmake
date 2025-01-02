@@ -49,6 +49,14 @@ if(APPLE)
 	endif()
     endif()
 
+    set(Python_PATCH
+	COMMAND
+	${CMAKE_COMMAND} -E copy_if_different
+	"${PROJECT_SOURCE_DIR}/cmake/patches/Python-patch/Mac/BuildScript/build-installer.py"
+	"${CMAKE_BINARY_DIR}/deps/Python/src/Python/Mac/BuildScript"
+    )
+
+    
     set( Python_ENV ${CMAKE_COMMAND} -E env "DYLD_FALLBACK_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib:${Python_DYLD_LIBRARY_PATH}" -- )
     set( Python_CONFIGURE ${CMAKE_COMMAND} -E env "CFLAGS=${Python_C_FLAGS}" "CPPFLAGS=${Python_C_FLAGS}" "CXXFLAGS=${Python_CXX_FLAGS}" "LDFLAGS=${Python_LD_FLAGS}" -- ./configure --enable-optimizations --enable-shared --with-openssl=${_openssl_LOC} --prefix=${CMAKE_INSTALL_PREFIX}
     )
