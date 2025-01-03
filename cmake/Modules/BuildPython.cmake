@@ -8,7 +8,6 @@ include( ExternalProject )
 include(ProcessorCount)
 ProcessorCount(NPROCS)
 
-
 set( Python_VERSION 3.11 )
 set( Python_TINY    9 )
 
@@ -47,18 +46,17 @@ if(APPLE)
 	if(openssl_prefix_error)
 	    message(FATAL_ERROR "Could not located openssl with 'brew --prefix openssl'.  Error: ${openssl_prefix_error}")
 	endif()
+	
     endif()
-
+    
     set(Python_PATCH
 	COMMAND
 	${CMAKE_COMMAND} -E copy_if_different
-	"${PROJECT_SOURCE_DIR}/cmake/patches/Python-patch/Mac/BuildScript/build-installer.py"
-	"${CMAKE_BINARY_DIR}/deps/Python/src/Python/Mac/BuildScript"
+	"${PROJECT_SOURCE_DIR}/cmake/patches/Python-patch/configure"
+	"${CMAKE_BINARY_DIR}/deps/Python/src/Python/"
     )
-
-    
-    set( Python_ENV ${CMAKE_COMMAND} -E env "DYLD_FALLBACK_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib:${Python_DYLD_LIBRARY_PATH}" -- )
-    set( Python_CONFIGURE ${CMAKE_COMMAND} -E env "CFLAGS=${Python_C_FLAGS}" "CPPFLAGS=${Python_C_FLAGS}" "CXXFLAGS=${Python_CXX_FLAGS}" "LDFLAGS=${Python_LD_FLAGS}" -- ./configure --enable-optimizations --enable-shared --with-openssl=${_openssl_LOC} --prefix=${CMAKE_INSTALL_PREFIX}
+    set( Python_ENV ${CMAKE_COMMAND} -E env CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX})
+    set( Python_CONFIGURE ${CMAKE_COMMAND} -E env "CFLAGS=${Python_C_FLAGS}" "CPPFLAGS=${Python_C_FLAGS}" "CXXFLAGS=${Python_CXX_FLAGS}" "LDFLAGS=${Python_LD_FLAGS}" -- ./configure --enable-optimizations --enable-shared --with-zlib=${_zlib_LOC} --with-openssl=${_openssl_LOC} --prefix=${CMAKE_INSTALL_PREFIX}
     )
     set( Python_BUILD ${Python_ENV} make -j ${NPROCS} )
     set( Python_INSTALL
