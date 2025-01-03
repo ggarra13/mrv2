@@ -14,7 +14,7 @@ do
 	fi
     else
 	echo "Skipping formatting of $FILE"
-	if [[ $FILE == *.sh || $FILE == configure || $FILE == *.py || $FILE == *pre-commit ]]; then
+	if [[ $FILE == *.sh || $FILE == *configure* || $FILE == *.py || $FILE == *pre-commit ]]; then
 	    if [[ -e $FILE ]]; then
 		echo "Running dos2unix on $FILE"
 		dos2unix $FILE
