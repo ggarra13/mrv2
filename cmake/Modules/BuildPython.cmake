@@ -25,6 +25,7 @@ set( Python_ENV )
 set( Python_PATH $ENV{PATH} )
 if(APPLE)
 
+    set(Python_DYLD_LIBRARY_PATH $ENV{DYLD_LIBRARY_PATH})
     set(Python_C_FLAGS "${CMAKE_C_FLAGS}" )
     set(Python_CXX_FLAGS "${CMAKE_CXX_FLAGS}" )
     set(Python_LD_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}" )
@@ -55,12 +56,13 @@ if(APPLE)
 	"${PROJECT_SOURCE_DIR}/cmake/patches/Python-patch/configure"
 	"${CMAKE_BINARY_DIR}/deps/Python/src/Python/"
     )
-    set( Python_ENV ${CMAKE_COMMAND} -E env CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX})
-    set( Python_CONFIGURE ${CMAKE_COMMAND} -E env "CFLAGS=${Python_C_FLAGS}" "CPPFLAGS=${Python_C_FLAGS}" "CXXFLAGS=${Python_CXX_FLAGS}" "LDFLAGS=${Python_LD_FLAGS}" -- ./configure --enable-optimizations --enable-shared --with-zlib=${_zlib_LOC} --with-openssl=${_openssl_LOC} --prefix=${CMAKE_INSTALL_PREFIX}
+    
+    set( Python_ENV ${CMAKE_COMMAND} -E env "DYLD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib:${Python_DYLD_LIBRARY_PATH}" -- )
+    set( Python_CONFIGURE ${CMAKE_COMMAND} -E env "CFLAGS=${Python_C_FLAGS}" "CPPFLAGS=${Python_C_FLAGS}" "CXXFLAGS=${Python_CXX_FLAGS}" "LDFLAGS=${Python_LD_FLAGS}" "CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}" -- ./configure --enable-optimizations --enable-shared --with-openssl=${_openssl_LOC} --prefix=${CMAKE_INSTALL_PREFIX}
     )
-    set( Python_BUILD ${Python_ENV} make -j ${NPROCS} )
+    set( Python_BUILD make -j ${NPROCS} )
     set( Python_INSTALL
-	COMMAND ${Python_ENV} make -j ${NPROCS} install
+	COMMAND make -j ${NPROCS} install
 	COMMAND ${Python_ENV} ${Python_EXECUTABLE} -m ensurepip --upgrade)
 
 elseif(UNIX)
