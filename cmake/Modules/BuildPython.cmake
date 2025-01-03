@@ -23,6 +23,7 @@ endif()
 set( Python_PATCH )
 set( Python_ENV )
 set( Python_PATH $ENV{PATH} )
+set( Python_DEPENDENCIES OpenSSL )
 if(APPLE)
 
     set(Python_DYLD_LIBRARY_PATH $ENV{DYLD_LIBRARY_PATH})
@@ -84,6 +85,8 @@ elseif(UNIX)
 	COMMAND ${Python_ENV} ${Python_EXECUTABLE} -m ensurepip --upgrade )
 else()
 
+    set( Python_DEPENDENCIES )
+    
     set( platform x64 )
     if( "$ENV{ARCH}" STREQUAL "i386" )
     	set( platform Win32 )
@@ -121,6 +124,7 @@ endif()
 ExternalProject_Add(
     Python
     URL ${Python_URL}
+    DEPENDS ${Python_DEPENDENCIES}
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps/Python
     PATCH_COMMAND     "${Python_PATCH}"
     CONFIGURE_COMMAND "${Python_CONFIGURE}"
