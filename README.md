@@ -187,7 +187,7 @@ sudo dnf -y install git wget curl cmake pango-devel gettext ninja-build \
 	       autoconf wayland-devel wayland-protocols-devel cairo-devel \
 	       libxkbcommon-devel dbus-devel mesa-libGLU-devel gtk3-devel \
 	       libffi-devel openssl-devel tk-devel tcl-devel libXt-devel \
-	       subversion swig
+	       swig
 ```
 
 ### Ubuntu
@@ -208,7 +208,7 @@ sudo apt -y install curl build-essential perl git cmake ninja-build \
 		    libpulse-dev libssl-dev libffi-dev \
 		    libwayland-dev wayland-protocols libdbus-1-dev \
 		    libxkbcommon-dev libegl-dev libgtk-3-dev rpm \
-                    doxygen tk-dev libxt-dev swig subversion
+                    doxygen tk-dev libxt-dev swig
 
 # Install cpanminus and IPC::Cmd non-interactively
 sudo cpan App::cpanminus && cpanm --notest IPC::Cmd
@@ -232,7 +232,7 @@ xcode-select --install
 #
 # Install dependencies
 #
-brew install git gnu-sed swig subversion python cmake ninja gettext openssl readline sqlite3 xz zlib
+brew install git gnu-sed swig python cmake ninja gettext openssl readline sqlite3 xz zlib
 
 ```
 
@@ -344,7 +344,7 @@ You run the .bat file first, which will set the Visual Studio paths and
 fire up a Msys console.  From then on, all commands described are run in 
 the Msys console.
 
-FFmpeg and liblcms2 are now compiled as part of the pre-flight cmake build.  libssh and libcrypto are taken from Msys64 repositories when building FFmpeg as well as swig and subversion.
+FFmpeg and liblcms2 are now compiled as part of the pre-flight cmake build.  libssh and libcrypto are taken from Msys64 repositories when building FFmpeg as well as swig.
 
 The libintl and libiconv libraries are taken from the MSys64 repositories as pre-flight check with the bin/install_libintl_window.sh script (part of runme.sh).
 
