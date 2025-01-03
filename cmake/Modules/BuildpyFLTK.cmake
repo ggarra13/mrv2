@@ -79,8 +79,6 @@ set(pyFLTK_INSTALL ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} -m pip install . )
 
 ExternalProject_Add(
     pyFLTK
-    # \bug: subversion on Linux is usually not compiled with the latest OpenSSL
-    #       so we need to DOWNLOAD_COMMAND for checking out the repository.
     GIT_REPOSITORY ${pyFLTK_GIT_REPOSITORY}
     GIT_TAG ${pyFLTK_GIT_TAG}
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps/pyFLTK
