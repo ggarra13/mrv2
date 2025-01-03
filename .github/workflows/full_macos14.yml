@@ -40,7 +40,7 @@ jobs:
       run: brew reinstall xz
         
     - name: Install pyFLTK dependencies
-      run: brew install subversion swig
+      run: brew install swig
       
     - name: Setup environment
       run: mkdir -p ssh

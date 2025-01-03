@@ -34,7 +34,7 @@ jobs:
       run: brew install libb2 libffi readline sqlite3 xz zlib
         
     - name: Install pyFLTK dependencies
-      run: brew install subversion swig
+      run: brew install swig
       
     - name: Setup environment
       run: mkdir -p ssh

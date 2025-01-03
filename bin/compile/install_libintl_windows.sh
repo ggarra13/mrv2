@@ -26,9 +26,9 @@ if [[ ! -e /mingw64/bin/gettext.exe ||
 fi
 
 #
-# Install subversion
+# Install 
 #
-pacman -Sy libsqlite subversion swig mingw-w64-x86_64-gettext --noconfirm
+pacman -Sy libsqlite swig mingw-w64-x86_64-gettext --noconfirm
 
 mkdir -p $BUILD_DIR/install/bin
 mkdir -p $BUILD_DIR/install/lib
