@@ -67,7 +67,7 @@ ExternalProject_Add(
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps/FLTK
     GIT_REPOSITORY "https://github.com/fltk/fltk.git"
     GIT_TAG ${FLTK_GIT_TAG}
-    DEPENDS libjpeg-turbo
+    DEPENDS libjpeg-turbo PNG
     PATCH_COMMAND ${FLTK_PATCH}
     CMAKE_ARGS
     -DCMAKE_C_COMPILER=${FLTK_C_COMPILER}
