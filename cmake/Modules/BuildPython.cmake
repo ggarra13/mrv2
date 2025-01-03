@@ -23,7 +23,6 @@ endif()
 set( Python_PATCH )
 set( Python_ENV )
 set( Python_PATH $ENV{PATH} )
-set( Python_DEPENDENCIES OpenSSL )
 if(APPLE)
 
     set(Python_DYLD_LIBRARY_PATH $ENV{DYLD_LIBRARY_PATH})
@@ -56,6 +55,7 @@ if(APPLE)
 	${CMAKE_COMMAND} -E copy_if_different
 	"${PROJECT_SOURCE_DIR}/cmake/patches/Python-patch/configure"
 	"${CMAKE_BINARY_DIR}/deps/Python/src/Python/"
+	COMMAND chmod 0755 "${CMAKE_BINARY_DIR}/deps/Python/src/Python/configure"
     )
     
     set( Python_ENV ${CMAKE_COMMAND} -E env "DYLD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib:${Python_DYLD_LIBRARY_PATH}" -- )
@@ -124,7 +124,6 @@ endif()
 ExternalProject_Add(
     Python
     URL ${Python_URL}
-    DEPENDS ${Python_DEPENDENCIES}
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps/Python
     PATCH_COMMAND     "${Python_PATCH}"
     CONFIGURE_COMMAND "${Python_CONFIGURE}"
