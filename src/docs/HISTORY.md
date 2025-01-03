@@ -53,6 +53,9 @@ v1.3.1
 - Updated AI translations.
 - Fixed opening of sequences with Open Directory or dragging an actual
   directory to mrv2.
+- Updated pyFLTK to use Git in sourceforge.
+- Fixed Python compilation on new macOS that is no longer passing neither DYLD_LIBRARY_PATH nor
+  DYLD_FALLBACK_LIBRARY_PATH to subshells.
   
 
 v1.3.0

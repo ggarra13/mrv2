@@ -8,7 +8,6 @@ include( ExternalProject )
 include(ProcessorCount)
 ProcessorCount(NPROCS)
 
-
 set( Python_VERSION 3.11 )
 set( Python_TINY    9 )
 
@@ -26,6 +25,7 @@ set( Python_ENV )
 set( Python_PATH $ENV{PATH} )
 if(APPLE)
 
+    set(Python_DYLD_LIBRARY_PATH $ENV{DYLD_LIBRARY_PATH})
     set(Python_C_FLAGS "${CMAKE_C_FLAGS}" )
     set(Python_CXX_FLAGS "${CMAKE_CXX_FLAGS}" )
     set(Python_LD_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}" )
@@ -47,18 +47,27 @@ if(APPLE)
 	if(openssl_prefix_error)
 	    message(FATAL_ERROR "Could not located openssl with 'brew --prefix openssl'.  Error: ${openssl_prefix_error}")
 	endif()
+	
     endif()
     
-    set( Python_CONFIGURE ${CMAKE_COMMAND} -E env "CFLAGS=${Python_C_FLAGS}" "CPPFLAGS=${Python_C_FLAGS}" "CXXFLAGS=${Python_CXX_FLAGS}" "LDFLAGS=${Python_LD_FLAGS}" -- ./configure --enable-optimizations --enable-shared --with-openssl=${_openssl_LOC} --prefix=${CMAKE_INSTALL_PREFIX}
+    set(Python_PATCH
+	COMMAND
+	${CMAKE_COMMAND} -E copy_if_different
+	"${PROJECT_SOURCE_DIR}/cmake/patches/Python-patch/configure"
+	"${CMAKE_BINARY_DIR}/deps/Python/src/Python/"
     )
-    set( Python_BUILD  make -j ${NPROCS} )
+    
+    set( Python_ENV ${CMAKE_COMMAND} -E env "DYLD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib:${Python_DYLD_LIBRARY_PATH}" -- )
+    set( Python_CONFIGURE ${CMAKE_COMMAND} -E env "CFLAGS=${Python_C_FLAGS}" "CPPFLAGS=${Python_C_FLAGS}" "CXXFLAGS=${Python_CXX_FLAGS}" "LDFLAGS=${Python_LD_FLAGS}" "CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}" -- ./configure --enable-optimizations --enable-shared --with-openssl=${_openssl_LOC} --prefix=${CMAKE_INSTALL_PREFIX}
+    )
+    set( Python_BUILD make -j ${NPROCS} )
     set( Python_INSTALL
 	COMMAND make -j ${NPROCS} install
-	COMMAND ${Python_EXECUTABLE} -m ensurepip --upgrade )
-    set( Python_INSTALL  make -j ${NPROCS} install )
+	COMMAND ${Python_ENV} ${Python_EXECUTABLE} -m ensurepip --upgrade)
 
 elseif(UNIX)
 
+    set(Python_LD_LIBRARY_PATH $ENV{LD_LIBRARY_PATH})
     set(Python_C_FLAGS "${CMAKE_C_FLAGS}" )
     set(Python_CXX_FLAGS "${CMAKE_CXX_FLAGS}" )
     set(Python_LD_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}" )
@@ -68,10 +77,11 @@ elseif(UNIX)
 	--enable-shared
         --prefix=${CMAKE_INSTALL_PREFIX}
     )
-    set( Python_BUILD   make -j ${NPROCS} )
+    set( Python_ENV ${CMAKE_COMMAND} -E env "LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib:${Python_LD_LIBRARY_PATH}" -- )
+    set( Python_BUILD ${Python_ENV} make -j ${NPROCS} )
     set( Python_INSTALL
-	COMMAND make -j ${NPROCS} install
-	COMMAND ${Python_EXECUTABLE} -m ensurepip --upgrade )
+	COMMAND ${Python_ENV} make -j ${NPROCS} install
+	COMMAND ${Python_ENV} ${Python_EXECUTABLE} -m ensurepip --upgrade )
 else()
 
     set( platform x64 )

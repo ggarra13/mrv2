@@ -89,16 +89,6 @@ export FLAGS="${FLAGS} $*"
 #
 # Store old LD_LIBRARY_PATH
 #
-if [ -z "$OLD_LD_LIBRARY_PATH" ]; then
-    export OLD_LD_LIBRARY_PATH="${LD_LIBRARY_PATH}"
-fi
-
-if [ -z "$OLD_DYLD_LIBRARY_PATH" ]; then
-    # On macOS, sqlite which is used by subversion does not get linked into
-    # /usr/local to not shadow the one in /usr/lib
-    export OLD_DYLD_LIBRARY_PATH="/usr/local/opt/sqlite/lib"
-fi
-
 if [ -z "$OLD_PATH" ]; then
     export OLD_PATH="$PATH"
 fi
@@ -119,6 +109,7 @@ get_cmake_version
 #
 export LD_LIBRARY_PATH="$PWD/${BUILD_DIR}/install/lib64:$PWD/${BUILD_DIR}/install/lib:${LD_LIBRARY_PATH}"
 export DYLD_LIBRARY_PATH="$PWD/${BUILD_DIR}/install/lib:${DYLD_LIBRARY_PATH}"
+export DYLD_FALLBACK_LIBRARY_PATH="$PWD/${BUILD_DIR}/install/lib:${DYLD_FALLBACK_LIBRARY_PATH}"
 
 #
 # We set both lib64 and lib to handle differences in Linux RH and Ubuntu

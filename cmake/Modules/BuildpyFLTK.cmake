@@ -4,9 +4,8 @@
 
 include(ExternalProject)
 
-set(pyFLTK_SVN_REPOSITORY "https://svn.code.sf.net/p/pyfltk/code/trunk")
-set(pyFLTK_SVN_REVISION 660)
-set(pyFLTK_SVN_REVISION_ARG -r ${pyFLTK_SVN_REVISION})
+set(pyFLTK_GIT_REPOSITORY "git://git.code.sf.net/p/pyfltk/git-code")
+set(pyFLTK_GIT_TAG c50e3b772ed27d4719f5f03a3580a701f69d73b3)
 
 if(NOT PYTHON_EXECUTABLE)
     if(UNIX)
@@ -22,9 +21,6 @@ endif()
 # Environment setup
 #
 set(pyFLTK_CXX_FLAGS ${CMAKE_CXX_FLAGS} )
-
-set(pyFLTK_OLD_LD_LIBRARY_PATH $ENV{OLD_LD_LIBRARY_PATH})
-set(pyFLTK_OLD_DYLD_LIBRARY_PATH $ENV{OLD_DYLD_LIBRARY_PATH})
 
 set(pyFLTK_LD_LIBRARY_PATH $ENV{LD_LIBRARY_PATH})
 set(pyFLTK_DYLD_LIBRARY_PATH $ENV{DYLD_LIBRARY_PATH})
@@ -42,22 +38,6 @@ if(APPLE)
 	set(pyFLTK_CXX_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${pyFLTK_CXX_FLAGS}")
     endif()
 endif()
-
-
-#
-# Old environment and checkout command
-#
-if(WIN32)
-    set(pyFLTK_OLD_ENV ${CMAKE_COMMAND} -E env -- )
-    set(pyFLTK_CHECKOUT_CMD ${pyFLTK_OLD_ENV} svn checkout ${pyFLTK_SVN_REVISION_ARG} ${pyFLTK_SVN_REPOSITORY} pyFLTK)
-elseif(APPLE)
-    set(pyFLTK_OLD_ENV ${CMAKE_COMMAND} -E env "DYLD_LIBRARY_PATH=${pyFLTK_OLD_DYLD_LIBRARY_PATH}" -- )
-    set(pyFLTK_CHECKOUT_CMD ${pyFLTK_OLD_ENV} svn checkout ${pyFLTK_SVN_REVISION_ARG} ${pyFLTK_SVN_REPOSITORY} pyFLTK)
-else()
-    set(pyFLTK_OLD_ENV ${CMAKE_COMMAND} -E env "LD_LIBRARY_PATH=${pyFLTK_OLD_LD_LIBRARY_PATH}" -- )
-    set(pyFLTK_CHECKOUT_CMD ${pyFLTK_OLD_ENV} svn checkout ${pyFLTK_SVN_REVISION_ARG} ${pyFLTK_SVN_REPOSITORY} pyFLTK)
-endif()
-
 
 
 #
@@ -101,11 +81,10 @@ ExternalProject_Add(
     pyFLTK
     # \bug: subversion on Linux is usually not compiled with the latest OpenSSL
     #       so we need to DOWNLOAD_COMMAND for checking out the repository.
-    # SVN_REPOSITORY ${pyFLTK_SVN_REPOSITORY}
-    # SVN_REVISION ${pyFLTK_SVN_REVISION}
+    GIT_REPOSITORY ${pyFLTK_GIT_REPOSITORY}
+    GIT_TAG ${pyFLTK_GIT_TAG}
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps/pyFLTK
     DEPENDS ${PYTHON_DEP} ${FLTK_DEP}
-    DOWNLOAD_COMMAND  "${pyFLTK_CHECKOUT_CMD}"
     PATCH_COMMAND     ${pyFLTK_PATCH}
     CONFIGURE_COMMAND "${pyFLTK_CONFIGURE}"
     BUILD_COMMAND     "${pyFLTK_BUILD}"
