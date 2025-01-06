@@ -56,6 +56,7 @@ v1.3.1
 - Updated pyFLTK to use Git in sourceforge.
 - Fixed Python compilation on new macOS that is no longer passing neither DYLD_LIBRARY_PATH nor
   DYLD_FALLBACK_LIBRARY_PATH to subshells.
+- Fixed libplacebo compilation linking in unneeded libshaderc.dylib.
   
 
 v1.3.0
