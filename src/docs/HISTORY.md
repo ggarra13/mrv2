@@ -57,6 +57,7 @@ v1.3.1
 - Fixed Python compilation on new macOS that is no longer passing neither DYLD_LIBRARY_PATH nor
   DYLD_FALLBACK_LIBRARY_PATH to subshells.
 - Fixed libplacebo compilation linking in unneeded libshaderc.dylib.
+- Added support for .m4a audio files used in Quicktime.
   
 
 v1.3.0
