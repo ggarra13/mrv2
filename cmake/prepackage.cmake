@@ -145,12 +145,13 @@ set( _pythonSiteModules
     regex*
     sacremoses*
     safetensors*
+    setntencepiece*
     snowballstemmer*
     sphinx*
     sympy*
     tokenizers*
     torch*
-    transformers
+    transformers*
     translate*
     typing-extensions*
     tqdm*

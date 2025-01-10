@@ -1520,6 +1520,9 @@ namespace mrv
 
         Fl_Double_Window* mw = p.ui->uiMain;
         int screen = mw->screen_num();
+#ifdef DEBUG_SCALING
+        std::cerr << "Main Window on screen " << screen << std::endl;
+#endif
 
         int W = renderSize.w;
         int H = renderSize.h;
@@ -1534,22 +1537,8 @@ namespace mrv
         }
 
         float aspectRatio = static_cast<float>(W) / H;
-
-#ifdef DEBUG_SCALING
-        std::cerr << "renderSize=" << renderSize << std::endl;
-        std::cerr << "aspectRatio=" << aspectRatio << std::endl;
-#endif
-
+        
         int minX, minY, maxW, maxH, posX, posY;
-        Fl::screen_work_area(minX, minY, maxW, maxH, screen);
-#ifdef DEBUG_SCALING
-        std::cerr << "work area=" << minX << " " << minY << " " << maxW << "x"
-                  << maxH << std::endl;
-#endif
-
-        int WBars = 0;
-        int HBars = 0;
-
         PreferencesUI* uiPrefs = p.ui->uiPrefs;
         if (!desktop::Wayland() && uiPrefs->uiWindowFixedPosition->value())
         {
@@ -1561,6 +1550,26 @@ namespace mrv
             posX = mw->x();
             posY = mw->y();
         }
+        
+#ifdef DEBUG_SCALING
+        std::cerr << "Main Window pos=(" << posX << " " << posY << ")"
+                  << std::endl;
+#endif
+
+
+#ifdef DEBUG_SCALING
+        std::cerr << "renderSize=" << renderSize << std::endl;
+        std::cerr << "aspectRatio=" << aspectRatio << std::endl;
+#endif
+
+        Fl::screen_work_area(minX, minY, maxW, maxH, posX, posY); //, screen);
+#ifdef DEBUG_SCALING
+        std::cerr << "work area=" << minX << " " << minY << " " << maxW << "x"
+                  << maxH << std::endl;
+#endif
+
+        int WBars = 0;
+        int HBars = 0;
 
         // First, make sure the user or window manager did not set an
         // incorrect position
@@ -1571,7 +1580,7 @@ namespace mrv
             posY = minY;
 
 #ifdef DEBUG_SCALING
-        std::cerr << "pos=" << posX << " " << posY << std::endl;
+        std::cerr << "Clamped pos=" << posX << " " << posY << std::endl;
 #endif
 
         int decW = mw->decorated_w();
