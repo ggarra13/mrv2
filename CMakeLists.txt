@@ -114,6 +114,7 @@ elseif(APPLE)
     if (NOT CMAKE_OSX_ARCHITECTURES OR CMAKE_OSX_ARCHITECTURES STREQUAL "")
 	message(WARNING
 	    "Target architecture not specified for macOS deployment")
+    else()
 	if(CMAKE_OSX_ARCHITECTURES MATCHES "^x86_64$") 
 	    #
 	    # brew .dylibs are compiled only for the current version of the OS.

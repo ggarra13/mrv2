@@ -58,6 +58,8 @@ v1.3.1
   DYLD_LIBRARY_PATH nor DYLD_FALLBACK_LIBRARY_PATH to subshells.
 - Fixed "Always Save on Exit" getting confused about the monitor where to open
   the window.
+- Fixed libplacebo compilation linking in unneeded libshaderc.dylib.
+- Added support for .m4a audio files used in Quicktime.
   
 
 v1.3.0
