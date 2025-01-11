@@ -1,4 +1,4 @@
-name: MacOS 13
+name: MacOS Intel
 
 on: [push]
 

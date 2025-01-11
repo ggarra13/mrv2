@@ -1,4 +1,4 @@
-name: MacOS 14
+name: MacOS M1
 
 on: [push]
 
