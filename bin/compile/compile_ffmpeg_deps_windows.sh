@@ -206,18 +206,7 @@ if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
 
 	cp $ROOT_DIR/sources/yasm.exe .
 
-	#
-	# \@note: do not use --target=x86_64-win64-vs17 as that compiles for
-	#         latest MSVC on github Actions.
-	#
 	target=x86_64-win64-vs17
-	if [ "$GITHUB_ACTIONS" == "true" ]; then
-	    target=x86_64-win64-vs16
-	else
-	    echo "Not running under GitHub Actions"
-	fi
-	
-	export AS=$(cygpath -w "$PWD/yasm.exe" | sed -e 's#\\#\\\\#g')
 	./configure --prefix=$INSTALL_DIR \
 		    --target=$target \
 		    --enable-vp9-highbitdepth \
