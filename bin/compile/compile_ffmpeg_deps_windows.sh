@@ -163,11 +163,13 @@ download_yasm() {
 	cd build
 	cmake .. -G Ninja -D CMAKE_INSTALL_PREFIX=$INSTALL_DIR -D CMAKE_BUILD_TYPE=Release -D BUILD_SHARED_LIBS=OFF -D YASM_BUILD_TESTS=OFF
 	ninja
-	mv yasm.exe ../..
+	mv yasm.exe $ROOT_DIR/sources/
 	# 	# We need to download a win64 specific yasm, not msys64 one
 	# 	wget -c https://github.com/yasm/yasm/releases/download/v1.3.0/yasm-1.3.0-win64.exe
 	# 	mv yasm-1.3.0-win64.exe yasm.exe
     fi
+    
+    cd $ROOT_DIR/sources
 }
 
 
