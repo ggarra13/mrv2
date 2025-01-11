@@ -33,14 +33,17 @@ fi
 #
 # Latest TAGS of all libraries
 #
-LIBVPX_TAG=6f0c446c7b88d384a1c09caf33ec132e7ee24aea
+#LIBVPX_TAG=6f0c446c7b88d384a1c09caf33ec132e7ee24aea
+LIBVPX_TAG=7a65480684b1b28bb9defae164bf0dc78b32653e
 DAV1D_TAG=1.3.0
 SVTAV1_TAG=v2.1.2
 X264_TAG=stable
 
+
 #
 # Repositories
 #
+YASM_TGZ=http://www.tortall.net/projects/yasm/releases/yasm-1.3.0.tar.gz
 SVTAV1_REPO=https://gitlab.com/AOMediaCodec/SVT-AV1.git
 LIBVPX_REPO=https://chromium.googlesource.com/webm/libvpx.git
 LIBDAV1D_REPO=https://code.videolan.org/videolan/dav1d.git 
@@ -153,9 +156,17 @@ download_yasm() {
     cd $ROOT_DIR/sources
 
     if [ ! -e yasm.exe ]; then
-	# We need to download a win64 specific yasm, not msys64 one
-	wget -c https://github.com/yasm/yasm/releases/download/v1.3.0/yasm-1.3.0-win64.exe
-	mv yasm-1.3.0-win64.exe yasm.exe
+	wget -c http://www.tortall.net/projects/yasm/releases/yasm-1.3.0.tar.gz
+	tar -xf yasm-1.3.0.tar.gz
+	cd yasm-1.3.0
+	mkdir build
+	cd build
+	cmake .. -G Ninja -D CMAKE_INSTALL_PREFIX=$INSTALL_DIR -D CMAKE_BUILD_TYPE=Release -D BUILD_SHARED_LIBS=OFF -D YASM_BUILD_TESTS=OFF
+	ninja
+	mv yasm.exe ../..
+	# 	# We need to download a win64 specific yasm, not msys64 one
+	# 	wget -c https://github.com/yasm/yasm/releases/download/v1.3.0/yasm-1.3.0-win64.exe
+	# 	mv yasm-1.3.0-win64.exe yasm.exe
     fi
 }
 
@@ -206,6 +217,7 @@ if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
 	    echo "Not running under GitHub Actions"
 	fi
 	
+	export AS=$(cygpath -w "$PWD/yasm.exe" | sed -e 's#\\#\\\\#g')
 	./configure --prefix=$INSTALL_DIR \
 		    --target=$target \
 		    --enable-vp9-highbitdepth \
