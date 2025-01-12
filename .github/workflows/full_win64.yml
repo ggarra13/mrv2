@@ -65,7 +65,7 @@ jobs:
     - name: Set executable permissions
       run: |
         chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
-
+        
     # - name: Install cmake
     #   run: |
     #     ./etc/install_cmake.sh
@@ -74,6 +74,6 @@ jobs:
       run: |
         ./etc/runme_nolog.sh -v -t package -D TLRENDER_USD=OFF
         
-    - name: Upload binaries  # Conditional step
+    - name: Upload binaries  # Conditional step (beta branch only)
       run: |
         ./bin/release/upload_sourceforge.sh
