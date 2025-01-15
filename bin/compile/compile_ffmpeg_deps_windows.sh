@@ -43,7 +43,6 @@ X264_TAG=stable
 #
 # Repositories
 #
-YASM_TGZ=http://www.tortall.net/projects/yasm/releases/yasm-1.3.0.tar.gz
 SVTAV1_REPO=https://gitlab.com/AOMediaCodec/SVT-AV1.git
 LIBVPX_REPO=https://chromium.googlesource.com/webm/libvpx.git
 LIBDAV1D_REPO=https://code.videolan.org/videolan/dav1d.git 
@@ -88,6 +87,8 @@ fi
 # Get Msys dependencies
 #
 pacman -Sy make wget diffutils nasm pkg-config --noconfirm
+
+export AS=nasm
 
 #
 # Build with h264 encoding.
@@ -152,39 +153,6 @@ cd    $ROOT_DIR
 mkdir -p sources
 mkdir -p build
 
-download_yasm() {
-    cd $ROOT_DIR/sources
-
-    if [ ! -e yasm.exe ]; then
-	wget -c http://www.tortall.net/projects/yasm/releases/yasm-1.3.0.tar.gz
-	tar -xf yasm-1.3.0.tar.gz
-	cd yasm-1.3.0
-	mkdir build
-	cd build
-	cmake .. -G Ninja -D CMAKE_INSTALL_PREFIX=$INSTALL_DIR -D CMAKE_BUILD_TYPE=Release -D BUILD_SHARED_LIBS=OFF -D YASM_BUILD_TESTS=OFF
-	ninja
-	mv yasm.exe $ROOT_DIR/sources/
-	# 	# We need to download a win64 specific yasm, not msys64 one
-	# 	wget -c https://github.com/yasm/yasm/releases/download/v1.3.0/yasm-1.3.0-win64.exe
-	# 	mv yasm-1.3.0-win64.exe yasm.exe
-    fi
-    
-    cd $ROOT_DIR/sources
-}
-
-
-export OLD_PATH="$PATH"
-
-#
-# Add current path to avoid long PATH on Windows.
-#
-export PATH=".:$OLD_PATH"
-
-if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 || \
-	  $BUILD_LIBSVTAV1 == 1 ]]; then
-    download_yasm
-fi
-
 #############
 ## BUILDING #
 #############
@@ -205,8 +173,6 @@ if [[ $TLRENDER_VPX == ON || $TLRENDER_VPX == 1 ]]; then
 	echo
 	echo "Compiling libvpx......"
 	echo
-
-	cp $ROOT_DIR/sources/yasm.exe .
 
 	target=x86_64-win64-vs17
 	./configure --prefix=$INSTALL_DIR \
@@ -264,8 +230,6 @@ if [[ $BUILD_LIBSVTAV1 == 1 ]]; then
     if [[ ! -e $INSTALL_DIR/lib/SvtAV1Enc.lib ]]; then
 	echo "Building SvtAV1Enc.lib"
 	cd SVT-AV1
-	
-	cp $ROOT_DIR/sources/yasm.exe .
 	
 
 	cd Build/windows
@@ -387,11 +351,6 @@ fi
 if [[ $TLRENDER_X264 == ON || $TLRENDER_X264 == 1 ]]; then
     echo "libx264"
 fi
-
-#
-# Restore PATH
-#
-export PATH="$OLD_PATH"
 
 #
 # Set PKG_CONFIG_PATH 

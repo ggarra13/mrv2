@@ -60,6 +60,7 @@ v1.3.1
   the window.
 - Fixed libplacebo compilation linking in unneeded libshaderc.dylib.
 - Added support for .m4a audio files used in Quicktime.
+- Sped up building by removing yasm dependency.
   
 
 v1.3.0
