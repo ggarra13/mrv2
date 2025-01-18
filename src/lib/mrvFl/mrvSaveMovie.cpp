@@ -41,38 +41,37 @@ namespace
     const char* kModule = "save";
 }
 
-
 namespace
 {
-    void waitForFirstFrame(const mrv::TimelinePlayer* player,
-                           const otime::RationalTime& startTime)
+    void waitForFirstFrame(
+        const mrv::TimelinePlayer* player, const otime::RationalTime& startTime)
     {
         using namespace tl;
-        
+
         bool found = false;
-                    
+
         auto cacheInfoObserver =
             observer::ValueObserver<timeline::PlayerCacheInfo>::create(
                 player->player()->observeCacheInfo(),
                 [&startTime, &found](const timeline::PlayerCacheInfo& value)
+                {
+                    for (const auto& t : value.videoFrames)
                     {
-                        for (const auto& t : value.videoFrames)
+                        if (startTime >= t.start_time() &&
+                            startTime <= t.end_time_exclusive())
                         {
-                            if (startTime >= t.start_time() &&
-                                startTime <= t.end_time_exclusive())
-                            {
-                                found = true;
-                                break;
-                            }
+                            found = true;
+                            break;
                         }
-                    });
+                    }
+                });
 
         while (!found)
         {
             Fl::check();
         }
     }
-}
+} // namespace
 
 namespace mrv
 {
@@ -109,7 +108,7 @@ namespace mrv
 
         auto mute = player->isMuted();
         player->setMute(true);
-        
+
         auto context = ui->app->getContext();
 
         // Get I/O cache and store its size.
@@ -238,7 +237,7 @@ namespace mrv
 
             auto videoTime = info.videoTime;
 
-            const bool hasVideo = !info.video.empty();
+            const bool hasVideo = (!info.video.empty()) && options.saveVideo;
 
             if (player->timeRange() != timeRange ||
                 info.videoTime.start_time() != timeRange.start_time() ||
@@ -265,7 +264,6 @@ namespace mrv
                         timeRange.duration().rescaled_to(sampleRate));
                 }
             }
-
 
 #ifdef TLRENDER_FFMPEG
             const std::string& profile = getLabel(options.ffmpegProfile);
@@ -351,7 +349,6 @@ namespace mrv
             if (time::compareExact(videoTime, time::invalidTimeRange))
                 videoTime = audioTime;
 
-
             const size_t endAudioSampleCount =
                 endTime.rescaled_to(sampleRate).value();
             const size_t maxAudioSampleCount =
@@ -372,13 +369,12 @@ namespace mrv
             if (layerId < 0)
                 layerId = 0;
 
-
             const SaveResolution resolution = options.resolution;
             if (hasVideo)
             {
                 auto compareSize = view->getRenderSize();
-                if (!options.annotations ||
-                    compareSize.w == 0 || compareSize.h == 0)
+                if (!options.annotations || compareSize.w == 0 ||
+                    compareSize.h == 0)
                 {
                     renderSize = info.video[layerId].size;
                 }
@@ -416,19 +412,16 @@ namespace mrv
                 }
             }
 
-
             bool interactive = view->visible_r();
             std::shared_ptr<gl::GLFWWindow> window;
             if (!interactive)
             {
                 // Create the window.
                 window = gl::GLFWWindow::create(
-                    "bake",
-                    math::Size2i(1, 1),
-                    context,
+                    "bake", math::Size2i(1, 1), context,
                     static_cast<int>(gl::GLFWWindowOptions::MakeCurrent));
             }
-            
+
             // Create the renderer.
             render = timeline_gl::Render::create(context);
 
@@ -443,7 +436,6 @@ namespace mrv
                     string::Format(_("{0}: Cannot open writer plugin."))
                         .arg(file));
             }
-
 
             int X = 0, Y = 0;
 
@@ -475,7 +467,7 @@ namespace mrv
                     Fl::flush();
                     view->flush();
                     Fl::check();
-                    
+
                     const auto& viewportSize = view->getViewportSize();
                     math::Size2i outputSize;
                     if (viewportSize.w >= renderSize.w &&
@@ -501,7 +493,7 @@ namespace mrv
                                       "Will scale to the viewport size."));
 
                         view->frameView();
-                        
+
                         outputInfo.size.w = viewportSize.w;
                         outputInfo.size.h = viewportSize.h;
                     }
@@ -519,7 +511,6 @@ namespace mrv
 
                 waitForFirstFrame(player, startTime);
 
-                    
                 outputInfo = writerPlugin->getWriteInfo(outputInfo);
                 if (image::PixelType::None == outputInfo.pixelType)
                 {
@@ -551,7 +542,6 @@ namespace mrv
                     offscreenBufferOptions.colorType =
                         image::PixelType::RGB_F32;
                 }
-
 
                 msg = tl::string::Format(_("Output info: {0} {1}"))
                           .arg(outputInfo.size)
@@ -675,7 +665,7 @@ namespace mrv
                     view->make_current();
                     gl::initGLAD();
                 }
-                
+
                 buffer = gl::OffscreenBuffer::create(
                     offscreenBufferSize, offscreenBufferOptions);
             }
@@ -683,7 +673,7 @@ namespace mrv
             size_t totalSamples = 0;
             size_t currentSampleCount =
                 startTime.rescaled_to(sampleRate).value();
-            
+
             while (running)
             {
                 context->tick();
@@ -691,7 +681,7 @@ namespace mrv
                 // If progress window is closed, exit loop.
                 if (interactive)
                 {
-                    if(!progress.tick())
+                    if (!progress.tick())
                         break;
                 }
                 else
@@ -723,8 +713,8 @@ namespace mrv
                         if (!audio)
                         {
                             // Create silence
-                            audio = audio::Audio::create(info.audio,
-                                                         sampleRate);
+                            audio =
+                                audio::Audio::create(info.audio, sampleRate);
                             audio->zero();
                         }
 
@@ -801,7 +791,7 @@ namespace mrv
                         }
 
                         glReadBuffer(imageBuffer);
-                        
+
                         glReadPixels(
                             X, Y, outputInfo.size.w, outputInfo.size.h, format,
                             type, outputImage->getData());
@@ -811,7 +801,7 @@ namespace mrv
                         // Get the videoData
                         auto videoData =
                             timeline->getVideo(currentTime).future.get();
-                        
+
                         if (videoData.layers.empty() ||
                             !videoData.layers[0].image)
                         {
@@ -831,7 +821,7 @@ namespace mrv
                                 view->currentVideoCallback({videoData});
                                 view->flush();
                             }
-                        
+
                             // back to conventional pixel operation
                             glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
                             // CHECK_GL;
@@ -849,7 +839,8 @@ namespace mrv
                                 render->setLUTOptions(view->lutOptions());
                                 render->drawVideo(
                                     {videoData},
-                                    {math::Box2i(0, 0, renderSize.w, renderSize.h)},
+                                    {math::Box2i(
+                                        0, 0, renderSize.w, renderSize.h)},
                                     {timeline::ImageOptions()},
                                     {timeline::DisplayOptions()},
                                     timeline::CompareOptions(),
@@ -861,13 +852,13 @@ namespace mrv
                                 GL_PACK_ALIGNMENT, outputInfo.layout.alignment);
 #if defined(TLRENDER_API_GL_4_1)
                             glPixelStorei(
-                                GL_PACK_SWAP_BYTES,
-                                outputInfo.layout.endian != memory::getEndian());
+                                GL_PACK_SWAP_BYTES, outputInfo.layout.endian !=
+                                                        memory::getEndian());
 #endif // TLRENDER_API_GL_4_1
 
                             glReadPixels(
-                                0, 0, outputInfo.size.w, outputInfo.size.h, format,
-                                type, outputImage->getData());
+                                0, 0, outputInfo.size.w, outputInfo.size.h,
+                                format, type, outputImage->getData());
                         }
                     }
 

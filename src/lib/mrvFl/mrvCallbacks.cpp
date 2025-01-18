@@ -469,6 +469,44 @@ namespace mrv
         save_single_frame(file, ui, lastSavedOptions);
     }
 
+    void save_audio_cb(Fl_Menu_* w, ViewerUI* ui)
+    {
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+
+        const auto& ioInfo = player->ioInfo();
+        if (!ioInfo.audio.isValid())
+            return;
+
+        std::string file = save_audio_file();
+        if (file.empty())
+            return;
+
+        std::string extension = tl::file::Path(file).getExtension();
+        extension = string::toLower(extension);
+        if (!file::isAudio(extension))
+        {
+            LOG_ERROR(_("Saving audio but not with an audio extension."));
+            return;
+        }
+
+        mrv::SaveOptions options;
+        bool hasAudio = true;
+        bool hasVideo = false;
+        bool audioOnly = true;
+
+        SaveMovieOptionsUI saveOptions(hasAudio, audioOnly);
+        if (saveOptions.cancel)
+            return;
+
+        options.video = options.saveVideo = false;
+        int value = saveOptions.AudioCodec->value();
+        options.ffmpegAudioCodec = static_cast<tl::ffmpeg::AudioCodec>(value);
+
+        save_movie(file, ui, options);
+    }
+
     void save_movie_cb(Fl_Menu_* w, ViewerUI* ui)
     {
 

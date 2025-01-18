@@ -19,7 +19,8 @@ namespace mrv
     struct SaveOptions
     {
         bool annotations = false;
-        bool video       = true;
+        bool video = true;
+        bool saveVideo = true;
 
         SaveResolution resolution = SaveResolution::kSameSize;
 

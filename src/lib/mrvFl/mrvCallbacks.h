@@ -52,6 +52,7 @@ namespace mrv
     void save_annotations_only_cb(Fl_Menu_* w, ViewerUI* ui);
     void save_annotations_as_json_cb(Fl_Menu_* w, ViewerUI* ui);
     void save_movie_cb(Fl_Menu_* w, ViewerUI* ui);
+    void save_audio_cb(Fl_Menu_* w, ViewerUI* ui);
     void save_pdf_cb(Fl_Menu_* w, ViewerUI* ui);
 
     void close_current_cb(Fl_Widget* w, ViewerUI* ui);

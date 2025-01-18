@@ -28,6 +28,7 @@ namespace mrv
     Hotkey kSaveImage(false, false, false, false, 0);
     Hotkey kSaveImageToFolder(false, false, false, false, 0);
     Hotkey kSaveSequence(true, false, false, true, 's');
+    Hotkey kSaveAudio(false, false, false, false, 0);
     Hotkey kSaveAnnotationsOnly(false, false, false, false, 0);
     Hotkey kSaveAnnotationsAsJson(false, false, false, false, 0);
     Hotkey kSaveOTIOEDL(false, false, false, false, 0);
@@ -164,13 +165,13 @@ namespace mrv
     Hotkey kSwitchPenColor(false, false, false, false, 0);
 
     Hotkey kResetChanges(true, false, false, false, 'r');
-    
+
     Hotkey kExposureMore(false, false, false, false, '.');
     Hotkey kExposureLess(false, false, false, false, ',');
-    
+
     Hotkey kSaturationMore(false, false, false, false, 0, ">");
     Hotkey kSaturationLess(false, false, false, false, 0, "<");
-    
+
     Hotkey kGammaMore(false, false, false, false, 0, ")");
     Hotkey kGammaLess(false, false, false, false, 0, "(");
 
@@ -183,7 +184,7 @@ namespace mrv
 
     Hotkey kGridToggle(true, false, false, false, 'g');
     Hotkey kGridSize(true, true, false, false, 'g');
-    
+
     Hotkey kHudToggle(true, false, false, false, 'h');
 
     Hotkey kOCIOPresetsToggle(false, false, false, false, 0);
@@ -368,6 +369,7 @@ namespace mrv
         HotkeyEntry(_("Open Single Image"), &kOpenSingleImage),
         HotkeyEntry(_("Open Session"), &kOpenSession),
         HotkeyEntry(_("Save Image"), &kSaveImage),
+        HotkeyEntry(_("Save Audio"), &kSaveAudio),
         HotkeyEntry(_("Save Frames To Folder"), &kSaveImageToFolder),
 
         HotkeyEntry(_("Save Movie or Sequence"), &kSaveSequence),

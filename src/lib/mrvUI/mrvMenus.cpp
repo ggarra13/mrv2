@@ -115,6 +115,9 @@ namespace mrv
             _("File/Save/Movie or Sequence"), kSaveSequence.hotkey(),
             (Fl_Callback*)save_movie_cb, ui, mode);
         menu->add(
+            _("File/Save/Audio"), kSaveAudio.hotkey(),
+            (Fl_Callback*)save_audio_cb, ui, mode);
+        menu->add(
             _("File/Save/Single Frame"), kSaveImage.hotkey(),
             (Fl_Callback*)save_single_frame_cb, ui, mode | FL_MENU_DIVIDER);
         menu->add(
