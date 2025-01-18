@@ -89,8 +89,8 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {106 119 853 467} type Double hide resizable
-      code0 {main = m;}
+      xywh {975 257 853 467} type Double resizable
+      code0 {main = m;} visible
     } {
       Fl_Group {} {open
         xywh {0 0 853 466} box FLAT_BOX
@@ -103,11 +103,11 @@ class PreferencesUI {open
             xywh {283 28 570 380} box PLASTIC_UP_BOX labelcolor 32
           } {
             Fl_Group {} {
-              label {User Interface} open
+              label {User Interface} selected
               xywh {288 37 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
-                label {Window Behavior} open selected
+                label {Window Behavior} open
                 xywh {293 61 545 164} box ROUNDED_BOX
               } {
                 Fl_Check_Button uiPrefsAlwaysOnTop {
@@ -705,7 +705,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
               }
             }
             Fl_Group {} {
-              label Render open
+              label Render
               xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
@@ -815,14 +815,14 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
               }
             }
             Fl_Group {} {
-              label Timeline
+              label Timeline open
               xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
-                label Timeline
+                label Timeline open
                 xywh {325 63 480 316} box ROUNDED_BOX
               } {
-                Fl_Group {} {open
+                Fl_Group {} {
                   xywh {397 145 405 129}
                 } {
                   Fl_Choice uiPrefsTimelineDisplay {
@@ -851,6 +851,10 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                     label {Remove EDLs in Temporary Folder on Exit}
                     tooltip {When selected, temporary EDLs (Playlists) will be removed from the temporary folder.} xywh {397 254 370 20} down_box DOWN_BOX value 1
                   }
+                }
+                Fl_Value_Input uiStartTimeOffset {
+                  label {Video Start Frame}
+                  tooltip {Start value in the timeline where video starts.} xywh {525 302 78 29} color 20 minimum -32400 maximum 324000 step 1 textcolor 56
                 }
               }
             }
@@ -1245,7 +1249,7 @@ v->uiOCIO_Display_View->do_callback();}
               }
             }
             Fl_Group {} {
-              label Loading open
+              label Loading
               xywh {288 37 555 360} align 5 hide
             } {
               Fl_Group {} {open
@@ -1290,7 +1294,7 @@ v->uiOCIO_Display_View->do_callback();}
               }
             }
             Fl_Group {} {
-              label {Path Mappings}
+              label {Path Mappings} open
               xywh {288 37 555 360} hide
             } {
               Fl_Browser PathMappings {

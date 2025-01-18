@@ -1524,6 +1524,9 @@ namespace mrv
             p.settings->getValue<int>("Misc/MaxFileSequenceDigits"), 255);
 
         otio::SerializableObject::Retainer<otio::Timeline> otioTimeline;
+        otime::RationalTime offsetTime;
+        double value = ui->uiPrefs->uiStartTimeOffset->value();
+        offsetTime = otime::RationalTime(value, 24.0);  // rate is not used.
 
         if (file::isUSD(item->path))
         {
@@ -1532,17 +1535,18 @@ namespace mrv
 #endif
             otioTimeline =
                 item->audioPath.isEmpty()
-                    ? timeline::create(item->path, _context, options)
-                    : timeline::create(
-                          item->path, item->audioPath, _context, options);
+                ? timeline::create(item->path, _context, offsetTime, options)
+                : timeline::create(
+                    item->path, item->audioPath, _context, offsetTime, options);
         }
         else
         {
             otioTimeline =
                 item->audioPath.isEmpty()
-                    ? timeline::create(item->path, _context, options)
+                ? timeline::create(item->path, _context, offsetTime, options)
                     : timeline::create(
-                          item->path, item->audioPath, _context, options);
+                        item->path, item->audioPath, _context,
+                        offsetTime, options);
         }
 
         auto out = timeline::Timeline::create(otioTimeline, _context, options);

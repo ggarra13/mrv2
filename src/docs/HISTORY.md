@@ -61,6 +61,9 @@ v1.3.1
 - Fixed libplacebo compilation linking in unneeded libshaderc.dylib.
 - Added support for .m4a audio files used in Quicktime.
 - Sped up building by removing yasm dependency.
+- Added Preferences->Timeline->Video Start Frame to set the start frame of video
+  files.  By default it is 0.  This setting does not effect sequences nor .otio
+  timelines.
   
 
 v1.3.0
