@@ -104,6 +104,31 @@ namespace
         return result;
     }
 
+    std::string
+    getSaveAudioPattern(const std::shared_ptr<tl::system::Context>& context)
+    {
+        std::string result;
+        const auto ioSystem = context->getSystem<io::System>();
+        const auto plugins = ioSystem->getPlugins();
+        for (auto plugin : plugins)
+        {
+            auto extensions =
+                plugin->getExtensions(static_cast<int>(io::FileType::Audio));
+            for (auto& extension : extensions)
+            {
+                if (extension == ".ac3" || extension == ".m4a" ||
+                    extension == ".mka" || extension == ".mp3" ||
+                    extension == ".ogg" || extension == ".opus" ||
+                    extension == ".vorbis")
+                    continue;
+                if (!result.empty())
+                    result += ',';
+                result += extension.substr(1, extension.size());
+            }
+        }
+        return result;
+    }
+
     static const std::string kSubtitlePattern = "srt,sub,ass,vtt";
 
     static const std::string kOCIOPattern = "ocio";
@@ -511,9 +536,10 @@ namespace mrv
     {
         auto context = App::app->getContext();
         const std::string kAUDIO_PATTERN =
-            _("Audios (*.{") + getAudioPattern(context) + "})";
-        const std::string kALL_PATTERN =
-            _("All (*.{") + getAudioPattern(context) + "})\t" + kAUDIO_PATTERN;
+            _("Audios (*.{") + getSaveAudioPattern(context) + "})";
+        const std::string kALL_PATTERN = _("All (*.{") +
+                                         getSaveAudioPattern(context) + "})\t" +
+                                         kAUDIO_PATTERN;
 
         if (!startdir)
             startdir = "";
@@ -574,7 +600,7 @@ namespace mrv
 
         return file;
     }
-    
+
     std::string save_pdf(const char* startdir)
     {
         const std::string kPDF_PATTERN = _("Acrobat PDF (*.{pdf})");
@@ -648,7 +674,7 @@ namespace mrv
         const char* startfile = ocioFile.c_str();
         if (ocioFile.find("ocio://") == 0)
             startfile = nullptr;
-        
+
         std::string file = file_single_requester(
             title.c_str(), kOCIO_PATTERN.c_str(), startfile, false);
         return file;

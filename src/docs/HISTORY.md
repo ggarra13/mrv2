@@ -65,8 +65,9 @@ v1.3.1
   files.  By default it is 0.  This setting does not effect sequences nor .otio
   timelines.
 - Fixed thumbnails of movie files not showing the right frame when Video Start
-  Frame was different than 0.
+  Frame was different than 0. 
 - Added "File/Save Audio" to save only the audio track disregarding video.
+- Constrained Save Audio Formats/Containers to those supported  my LGPL mrv2.
   
 
 v1.3.0
