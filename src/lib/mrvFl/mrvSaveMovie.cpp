@@ -263,7 +263,6 @@ namespace mrv
                         timeRange.start_time().rescaled_to(sampleRate),
                         timeRange.duration().rescaled_to(sampleRate));
                 }
-                std::cerr << "     audioTime=" << audioTime << std::endl;
             }
 
 #ifdef TLRENDER_FFMPEG

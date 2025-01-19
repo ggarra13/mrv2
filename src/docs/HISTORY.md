@@ -18,8 +18,7 @@ v1.3.1
   and Is Deep, Is Lossy.
 - Added support for Flame's .otio files using OTIO's SerializableContainer in
   them.
-- Updated libvpx compilation to MSVC2022, instead of MSVC2019, except on
-  GitHub Actions.
+- Updated libvpx compilation to MSVC2022.
 - Updated to FLTK's release 1.4.1.
 - Updated pyFTLK to official 1.4 release.
 
