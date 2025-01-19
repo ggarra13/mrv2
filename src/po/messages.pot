@@ -3219,6 +3219,9 @@ msgstr ""
 msgid "File extension cannot be empty."
 msgstr ""
 
+msgid "Saving audio but not with an audio extension."
+msgstr ""
+
 msgid "Saving audio but current clip does not have audio."
 msgstr ""
 
@@ -3403,6 +3406,9 @@ msgid "File/Open/Session"
 msgstr ""
 
 msgid "File/Save/Movie or Sequence"
+msgstr ""
+
+msgid "File/Save/Audio"
 msgstr ""
 
 msgid "File/Save/Single Frame"
@@ -5639,6 +5645,12 @@ msgstr ""
 msgid ""
 "When selected, temporary EDLs (Playlists) will be removed from the temporary "
 "folder."
+msgstr ""
+
+msgid "Video Start Frame"
+msgstr ""
+
+msgid "Start value in the timeline where video starts."
 msgstr ""
 
 msgid "Playback"
