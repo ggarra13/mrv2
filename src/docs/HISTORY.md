@@ -64,6 +64,8 @@ v1.3.1
 - Added Preferences->Timeline->Video Start Frame to set the start frame of video
   files.  By default it is 0.  This setting does not effect sequences nor .otio
   timelines.
+- Fixed thumbnails of movie files not showing the right frame when Video Start
+  Frame was different than 0.
 - Added "File/Save Audio" to save only the audio track disregarding video.
   
 

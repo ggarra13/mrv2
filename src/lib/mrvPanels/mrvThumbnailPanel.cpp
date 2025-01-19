@@ -12,6 +12,8 @@ namespace py = pybind11;
 
 #include <tlCore/StringFormat.h>
 
+#include "mrvCore/mrvFile.h"
+
 #include "mrvPanels/mrvThumbnailPanel.h"
 
 #include "mrViewer.h"
@@ -30,12 +32,12 @@ namespace mrv
         ThumbnailPanel::ThumbnailPanel(ViewerUI* ui) :
             PanelWidget(ui)
         {
-            Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this); 
+            Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
         }
 
         ThumbnailPanel::~ThumbnailPanel()
         {
-            Fl::remove_timeout((Fl_Timeout_Handler)timerEvent_cb, this); 
+            Fl::remove_timeout((Fl_Timeout_Handler)timerEvent_cb, this);
         }
 
         void ThumbnailPanel::timerEvent_cb(void* opaque)
@@ -50,7 +52,8 @@ namespace mrv
             while (i != thumbnailRequests.end())
             {
                 if (i->second.future.valid() &&
-                    i->second.future.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
+                    i->second.future.wait_for(std::chrono::seconds(0)) ==
+                        std::future_status::ready)
                 {
                     if (auto image = i->second.future.get())
                     {
@@ -62,8 +65,8 @@ namespace mrv
 
                             uint8_t* pixelData = new uint8_t[w * h * depth];
 
-                            auto rgbImage = new Fl_RGB_Image(
-                                pixelData, w, h, depth);
+                            auto rgbImage =
+                                new Fl_RGB_Image(pixelData, w, h, depth);
                             rgbImage->alloc_array = true;
 
                             uint8_t* d = pixelData;
@@ -85,8 +88,8 @@ namespace mrv
                     ++i;
                 }
             }
-            Fl::repeat_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb,
-                               this);
+            Fl::repeat_timeout(
+                kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
         }
 
         void ThumbnailPanel::_createThumbnail(
@@ -110,12 +113,12 @@ namespace mrv
                 return;
             }
 
-
             try
             {
                 const auto context = App::app->getContext();
-                auto thumbnailSystem = context->getSystem<ui::ThumbnailSystem>();
-                
+                auto thumbnailSystem =
+                    context->getSystem<ui::ThumbnailSystem>();
+
 #ifdef MRV2_PYBIND11
                 py::gil_scoped_release release;
 #endif
@@ -125,11 +128,17 @@ namespace mrv
 
                 auto time = currentTime;
 
+                if (file::isMovie(path))
+                {
+                    double start = p.ui->uiPrefs->uiStartTimeOffset->value();
+                    time -= otime::RationalTime(start, time.rate());
+                }
+
                 if (time::isValid(timeRange))
                 {
                     auto startTime = timeRange.start_time();
                     auto endTime = timeRange.end_time_inclusive();
-                    
+
                     if (time < startTime)
                         time = startTime;
                     else if (time > endTime)
@@ -140,7 +149,7 @@ namespace mrv
                 if (it != thumbnailRequests.end())
                 {
                     const auto& request = it->second;
-                    thumbnailSystem->cancelRequests( { request.id } );
+                    thumbnailSystem->cancelRequests({request.id});
                     thumbnailRequests.erase(it);
                 }
 
@@ -152,7 +161,7 @@ namespace mrv
                 }
 
                 options["Layer"] = string::Format("{0}").arg(layerId);
-                
+
                 thumbnailRequests[widget] =
                     thumbnailSystem->getThumbnail(path, size.h, time, options);
             }
@@ -171,7 +180,7 @@ namespace mrv
         {
             const auto context = App::app->getContext();
             auto thumbnailSystem = context->getSystem<ui::ThumbnailSystem>();
-                
+
             std::vector<uint64_t> ids;
             for (const auto& i : thumbnailRequests)
             {
