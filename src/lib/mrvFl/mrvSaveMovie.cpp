@@ -263,6 +263,7 @@ namespace mrv
                         timeRange.start_time().rescaled_to(sampleRate),
                         timeRange.duration().rescaled_to(sampleRate));
                 }
+                std::cerr << "     audioTime=" << audioTime << std::endl;
             }
 
 #ifdef TLRENDER_FFMPEG
@@ -646,11 +647,11 @@ namespace mrv
                         string::Format(_("{0}: Invalid OpenGL format and type"))
                             .arg(file));
                 }
-            }
-
-            msg = tl::string::Format(_("OpenGL info: {0}"))
+                
+                msg = tl::string::Format(_("OpenGL info: {0}"))
                       .arg(offscreenBufferOptions.colorType);
-            LOG_INFO(msg);
+                LOG_INFO(msg);
+            }
 
             // Turn off hud so it does not get captured by glReadPixels.
             view->setHudActive(false);
@@ -706,9 +707,8 @@ namespace mrv
                                 otime::RationalTime(1.0, currentTime.rate()));
                         else
                             range = otime::TimeRange(
-                                currentTime,
-                                otime::RationalTime(
-                                    currentTime.rate(), currentTime.rate()));
+                                otime::RationalTime(seconds, 1.0),
+                                otime::RationalTime(1.0, 1.0));
                         auto audio = audioData.layers[0].audio;
                         if (!audio)
                         {
@@ -726,7 +726,8 @@ namespace mrv
                         // timeline->getAudio() returns one second of audio.
                         // Clamp to end of the timeRange/inOutRange.
                         if (!skip &&
-                            currentAudioTime.value() >= currentSampleCount)
+                            std::round(currentAudioTime.value()) >=
+                            currentSampleCount)
                         {
                             const size_t sampleCount = audio->getSampleCount();
                             if (currentSampleCount + sampleCount >=
