@@ -29,11 +29,12 @@ namespace mrv
         static bool resizeWindow;
 
         static std::string hdr;
+        static float pixelAspectRatio;
 
         timeline::OCIOOptions ocioOptions;
         timeline::LUTOptions lutOptions;
         timeline::HDROptions hdrOptions;
-        
+
         std::vector<tl::timeline::ImageOptions> imageOptions;
         std::vector<tl::timeline::DisplayOptions> displayOptions;
         timeline::CompareOptions compareOptions;
@@ -56,11 +57,11 @@ namespace mrv
         //! Previous screen where window was opened.  Used to avoid an
         //! expensive string copy.
         int previous_screen = -1;
-        
+
         //! Timer used to stop scrubbing if there's no action on the user's
         //! side.
         std::chrono::high_resolution_clock::time_point lastScrubTime;
-        
+
         //! Used to handle spinning in environment map mode.
         math::Vector2f viewSpin;
 
@@ -76,7 +77,7 @@ namespace mrv
 
         //! Show video
         bool showVideo = true;
-        
+
         short ghostPrevious = 5;
         short ghostNext = 5;
 
@@ -105,7 +106,7 @@ namespace mrv
 
         //! Per-monitor Display/View OCIO Options.
         static std::vector<timeline::OCIOOptions> monitorOCIOOptions;
-        
+
         //! Action Mode
         static ActionMode actionMode;
 
@@ -132,7 +133,7 @@ namespace mrv
 
         //! Ignore Display Window
         static bool ignoreDisplayWindow;
-        
+
         //! Masking
         static float masking;
 
@@ -177,7 +178,8 @@ namespace mrv
         std::chrono::high_resolution_clock::time_point startTime;
 
         // Observers
-        std::shared_ptr<observer::ListObserver<timeline::VideoData> > videoDataObserver;
+        std::shared_ptr<observer::ListObserver<timeline::VideoData> >
+            videoDataObserver;
     };
 
 } // namespace mrv

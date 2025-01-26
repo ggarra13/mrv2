@@ -55,7 +55,7 @@ namespace mrv
 
         //! Stop playback while scrubbing check for audio
         void stopPlaybackWhileScrubbing() noexcept;
-        
+
         //! Undo last shape and annotations if no more shapes.
         void undo();
 
@@ -64,7 +64,7 @@ namespace mrv
 
         //! Change cursor to another.
         void set_cursor(Fl_Cursor x) const noexcept;
-        
+
         //! Set the action mode.
         void setActionMode(const ActionMode& mode) noexcept;
 
@@ -85,8 +85,8 @@ namespace mrv
         void setOCIOOptions(const timeline::OCIOOptions&) noexcept;
 
         //! Set the OCIO options for monitor.
-        void setOCIOOptions(unsigned monitorId,
-                            const timeline::OCIOOptions&) noexcept;
+        void setOCIOOptions(
+            unsigned monitorId, const timeline::OCIOOptions&) noexcept;
 
         const timeline::OCIOOptions&
         getOCIOOptions(unsigned monitorId) const noexcept;
@@ -130,6 +130,9 @@ namespace mrv
         //! Return if ignoring display window is active.
         bool getIgnoreDisplayWindow() const noexcept;
 
+        //! Get pixel aspect ratio of image.
+        float getPixelAspectRatio() const noexcept;
+
         //! Set the crop mask.
         void setSafeAreas(bool) noexcept;
 
@@ -141,7 +144,10 @@ namespace mrv
 
         //! Set ignore of display window.
         void setIgnoreDisplayWindow(bool) noexcept;
-        
+
+        //! Set pixel aspect ratio of image.
+        void setPixelAspectRatio(const float x) noexcept;
+
         //! Clear the help text after 1 second has elapsed.
         void clearHelpText();
 
@@ -241,7 +247,8 @@ namespace mrv
 
         void currentTimeChanged(const otime::RationalTime&) const noexcept;
 
-        void currentVideoCallback(const std::vector<tl::timeline::VideoData>&) noexcept;
+        void currentVideoCallback(
+            const std::vector<tl::timeline::VideoData>&) noexcept;
 
         //! Set the OCIO configuration from the GUI.
         void updateOCIOOptions() noexcept;
@@ -263,7 +270,7 @@ namespace mrv
 
         //! Set or unset the window in maximized state.
         void setMaximized() noexcept;
-        
+
         //! Get the window to full screen and hide/show all bars.
         bool getPresentationMode() const noexcept;
 
@@ -313,9 +320,10 @@ namespace mrv
         //! Show annotations toggle
         void setShowAnnotations(const bool value) noexcept;
 
-        //! Set whether to render the video or not (annotations are still rendered).
+        //! Set whether to render the video or not (annotations are still
+        //! rendered).
         void setShowVideo(bool value) noexcept;
-        
+
         //! Laser fading annotation
         void laserFade(LaserFadeData*);
 
@@ -347,7 +355,7 @@ namespace mrv
         //! Get current frame/video tags
         std::map<std::string, std::string, string::CaseInsensitiveCompare>
         getTags() const noexcept;
-        
+
     protected:
         virtual void _readPixel(image::Color4f& rgba) const noexcept = 0;
         math::Vector2i _getViewportCenter() const noexcept;
@@ -420,9 +428,9 @@ namespace mrv
 
         void _updateDisplayOptions(const timeline::DisplayOptions& d) noexcept;
 
-        void _updateMonitorDisplayView(const int screen,
-                                       const timeline::OCIOOptions& o) const noexcept;
-        
+        void _updateMonitorDisplayView(
+            const int screen, const timeline::OCIOOptions& o) const noexcept;
+
         void _pushColorMessage(const std::string& command, float value);
 
         void _mallocBuffer() const noexcept;

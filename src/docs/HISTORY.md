@@ -68,6 +68,10 @@ v1.3.1
 - Added "File/Save Audio" to save only the audio track disregarding video.
 - Constrained Save Audio Formats/Containers to those supported by LGPL mrv2.
 - Fixed File/Save Audio for 48KHZ audios.
+- Fixed pixel aspect ratio reading from movie files.
+- Added changing pixel aspect ratio interactively from the Media Information
+  Panel.  Note, however, that the framing of the image is done with the original
+  pixel aspect ratio.
   
 
 v1.3.0

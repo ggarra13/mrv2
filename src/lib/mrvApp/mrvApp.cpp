@@ -299,166 +299,159 @@ namespace mrv
                     Preferences::debug, {"-debug", "-d"},
                     _("Debug verbosity.")),
 #endif
-                    app::CmdLineValueOption<std::string>::create(
-                        p.options.audioFileName, {"-audio", "-a"},
-                        _("Audio file name.")),
-                    app::CmdLineValueOption<std::string>::create(
-                        p.options.compareFileName, {"-compare", "-b"},
-                        _("A/B comparison \"B\" file name.")),
-                    app::CmdLineValueOption<timeline::CompareMode>::create(
-                        p.options.compareOptions.mode, {"-compareMode", "-c"},
-                        _("A/B comparison mode."),
-                        string::Format("{0}").arg(
-                            p.options.compareOptions.mode),
-                        string::join(timeline::getCompareModeLabels(), ", ")),
-                    app::CmdLineValueOption<math::Vector2f>::create(
-                        p.options.compareOptions.wipeCenter,
-                        {"-wipeCenter", "-wc"},
-                        _("A/B comparison wipe center."),
-                        string::Format("{0}").arg(
-                            p.options.compareOptions.wipeCenter)),
-                    app::CmdLineValueOption<float>::create(
-                        p.options.compareOptions.wipeRotation,
-                        {"-wipeRotation", "-wr"},
-                        _("A/B comparison wipe rotation."),
-                        string::Format("{0}").arg(
-                            p.options.compareOptions.wipeRotation)),
-                    app::CmdLineFlagOption::create(
-                        p.options.createOtioTimeline, {"-otio", "-o", "-edl"},
-                        _("Create OpenTimelineIO EDL from the list of clips "
-                          "provided.")),
-                    app::CmdLineFlagOption::create(
-                        p.options.otioEditMode, {"-editMode", "-e"},
-                        _("OpenTimelineIO Edit mode.")),
-                    app::CmdLineFlagOption::create(
-                        p.options.singleImages, {"--single", "-single", "-s"},
-                        _("Load the images as still images not sequences.")),
-                    app::CmdLineValueOption<double>::create(
-                        p.options.speed, {"-speed"}, _("Playback speed.")),
-                    app::CmdLineValueOption<timeline::Playback>::create(
-                        p.options.playback, {"-playback", "-p"},
-                        _("Playback mode."),
-                        string::Format("{0}").arg(timeline::Playback::Stop),
-                        string::join(timeline::getPlaybackLabels(), ", ")),
-                    app::CmdLineValueOption<timeline::Loop>::create(
-                        p.options.loop, {"-loop"}, _("Playback loop mode."),
-                        string::Format("{0}").arg(timeline::Loop::Loop),
-                        string::join(timeline::getLoopLabels(), ", ")),
-                    app::CmdLineValueOption<otime::RationalTime>::create(
-                        p.options.seek, {"-seek"},
-                        _("Seek to the given time, in value/fps format.  "
-                          "Example: 50/30.")),
-                    app::CmdLineValueOption<otime::TimeRange>::create(
-                        p.options.inOutRange, {"-inOutRange", "-inout"},
-                        _("Set the in/out points range in start/end/fps "
-                          "format, like 23/120/24.")),
-                    app::CmdLineValueOption<std::string>::create(
-                        p.options.ocioOptions.input,
-                        {"-ocioInput", "-ics", "-oi"},
-                        _("OpenColorIO input color space.")),
-                    app::CmdLineValueOption<std::string>::create(
-                        p.options.ocioOptions.display, {"-ocioDisplay", "-od"},
-                        _("OpenColorIO display name.")),
-                    app::CmdLineValueOption<std::string>::create(
-                        p.options.ocioOptions.view, {"-ocioView", "-ov"},
-                        _("OpenColorIO view name.")),
-                    app::CmdLineValueOption<std::string>::create(
-                        p.options.ocioOptions.look, {"-ocioLook", "-ol"},
-                        _("OpenColorIO look name.")),
-                    app::CmdLineValueOption<std::string>::create(
-                        p.options.lutOptions.fileName, {"-lut"},
-                        _("LUT file name.")),
-                    app::CmdLineValueOption<timeline::LUTOrder>::create(
-                        p.options.lutOptions.order, {"-lutOrder"},
-                        _("LUT operation order."),
-                        string::Format("{0}").arg(p.options.lutOptions.order),
-                        string::join(timeline::getLUTOrderLabels(), ", ")),
+                app::CmdLineValueOption<std::string>::create(
+                    p.options.audioFileName, {"-audio", "-a"},
+                    _("Audio file name.")),
+                app::CmdLineValueOption<std::string>::create(
+                    p.options.compareFileName, {"-compare", "-b"},
+                    _("A/B comparison \"B\" file name.")),
+                app::CmdLineValueOption<timeline::CompareMode>::create(
+                    p.options.compareOptions.mode, {"-compareMode", "-c"},
+                    _("A/B comparison mode."),
+                    string::Format("{0}").arg(p.options.compareOptions.mode),
+                    string::join(timeline::getCompareModeLabels(), ", ")),
+                app::CmdLineValueOption<math::Vector2f>::create(
+                    p.options.compareOptions.wipeCenter, {"-wipeCenter", "-wc"},
+                    _("A/B comparison wipe center."),
+                    string::Format("{0}").arg(
+                        p.options.compareOptions.wipeCenter)),
+                app::CmdLineValueOption<float>::create(
+                    p.options.compareOptions.wipeRotation,
+                    {"-wipeRotation", "-wr"},
+                    _("A/B comparison wipe rotation."),
+                    string::Format("{0}").arg(
+                        p.options.compareOptions.wipeRotation)),
+                app::CmdLineFlagOption::create(
+                    p.options.createOtioTimeline, {"-otio", "-o", "-edl"},
+                    _("Create OpenTimelineIO EDL from the list of clips "
+                      "provided.")),
+                app::CmdLineFlagOption::create(
+                    p.options.otioEditMode, {"-editMode", "-e"},
+                    _("OpenTimelineIO Edit mode.")),
+                app::CmdLineFlagOption::create(
+                    p.options.singleImages, {"--single", "-single", "-s"},
+                    _("Load the images as still images not sequences.")),
+                app::CmdLineValueOption<double>::create(
+                    p.options.speed, {"-speed"}, _("Playback speed.")),
+                app::CmdLineValueOption<timeline::Playback>::create(
+                    p.options.playback, {"-playback", "-p"},
+                    _("Playback mode."),
+                    string::Format("{0}").arg(timeline::Playback::Stop),
+                    string::join(timeline::getPlaybackLabels(), ", ")),
+                app::CmdLineValueOption<timeline::Loop>::create(
+                    p.options.loop, {"-loop"}, _("Playback loop mode."),
+                    string::Format("{0}").arg(timeline::Loop::Loop),
+                    string::join(timeline::getLoopLabels(), ", ")),
+                app::CmdLineValueOption<otime::RationalTime>::create(
+                    p.options.seek, {"-seek"},
+                    _("Seek to the given time, in value/fps format.  "
+                      "Example: 50/30.")),
+                app::CmdLineValueOption<otime::TimeRange>::create(
+                    p.options.inOutRange, {"-inOutRange", "-inout"},
+                    _("Set the in/out points range in start/end/fps "
+                      "format, like 23/120/24.")),
+                app::CmdLineValueOption<std::string>::create(
+                    p.options.ocioOptions.input, {"-ocioInput", "-ics", "-oi"},
+                    _("OpenColorIO input color space.")),
+                app::CmdLineValueOption<std::string>::create(
+                    p.options.ocioOptions.display, {"-ocioDisplay", "-od"},
+                    _("OpenColorIO display name.")),
+                app::CmdLineValueOption<std::string>::create(
+                    p.options.ocioOptions.view, {"-ocioView", "-ov"},
+                    _("OpenColorIO view name.")),
+                app::CmdLineValueOption<std::string>::create(
+                    p.options.ocioOptions.look, {"-ocioLook", "-ol"},
+                    _("OpenColorIO look name.")),
+                app::CmdLineValueOption<std::string>::create(
+                    p.options.lutOptions.fileName, {"-lut"},
+                    _("LUT file name.")),
+                app::CmdLineValueOption<timeline::LUTOrder>::create(
+                    p.options.lutOptions.order, {"-lutOrder"},
+                    _("LUT operation order."),
+                    string::Format("{0}").arg(p.options.lutOptions.order),
+                    string::join(timeline::getLUTOrderLabels(), ", ")),
 #ifdef MRV2_PYBIND11
-                    app::CmdLineValueOption<std::string>::create(
-                        p.options.pythonScript, {"-pythonScript", "-ps"},
-                        _("Python Script to run and exit.")),
-                    app::CmdLineValueOption<std::string>::create(
-                        p.options.pythonArgs, {"-pythonArgs", "-pa"},
-                        _("Python Arguments to pass to the Python script as a "
-                          "single quoted string like \"arg1 'arg2 asd' arg3\", "
-                          "stored in cmd.argv.")),
+                app::CmdLineValueOption<std::string>::create(
+                    p.options.pythonScript, {"-pythonScript", "-ps"},
+                    _("Python Script to run and exit.")),
+                app::CmdLineValueOption<std::string>::create(
+                    p.options.pythonArgs, {"-pythonArgs", "-pa"},
+                    _("Python Arguments to pass to the Python script as a "
+                      "single quoted string like \"arg1 'arg2 asd' arg3\", "
+                      "stored in cmd.argv.")),
 #endif
-                    app::CmdLineFlagOption::create(
-                        p.options.resetSettings, {"-resetSettings"},
-                        _("Reset settings to defaults.")),
-                    app::CmdLineFlagOption::create(
-                        p.options.resetHotkeys, {"-resetHotkeys"},
-                        _("Reset hotkeys to defaults.")),
+                app::CmdLineFlagOption::create(
+                    p.options.resetSettings, {"-resetSettings"},
+                    _("Reset settings to defaults.")),
+                app::CmdLineFlagOption::create(
+                    p.options.resetHotkeys, {"-resetHotkeys"},
+                    _("Reset hotkeys to defaults.")),
 #if defined(TLRENDER_USD)
-                    app::CmdLineValueOption<bool>::create(
-                        p.options.usdOverrides, {"-usd", "-usdOverrides"},
-                        "USD overrides.",
-                        string::Format("{0}").arg(p.options.usdOverrides)),
-                    app::CmdLineValueOption<int>::create(
-                        p.options.usd.renderWidth, {"-usdRenderWidth"},
-                        "USD render width.",
-                        string::Format("{0}").arg(p.options.usd.renderWidth)),
-                    app::CmdLineValueOption<float>::create(
-                        p.options.usd.complexity, {"-usdComplexity"},
-                        "USD render complexity setting.",
-                        string::Format("{0}").arg(p.options.usd.complexity)),
-                    app::CmdLineValueOption<tl::usd::DrawMode>::create(
-                        p.options.usd.drawMode, {"-usdDrawMode"},
-                        "USD render draw mode.",
-                        string::Format("{0}").arg(p.options.usd.drawMode),
-                        string::join(tl::usd::getDrawModeLabels(), ", ")),
-                    app::CmdLineValueOption<bool>::create(
-                        p.options.usd.enableLighting, {"-usdEnableLighting"},
-                        "USD render enable lighting setting.",
-                        string::Format("{0}").arg(
-                            p.options.usd.enableLighting)),
-                    app::CmdLineValueOption<bool>::create(
-                        p.options.usd.enableSceneLights,
-                        {"-usdEnableSceneLights"},
-                        "USD render enable scene lights setting.",
-                        string::Format("{0}").arg(
-                            p.options.usd.enableSceneLights)),
-                    app::CmdLineValueOption<bool>::create(
-                        p.options.usd.enableSceneMaterials,
-                        {"-usdEnableSceneMaterials"},
-                        "USD render enable scene materials setting.",
-                        string::Format("{0}").arg(
-                            p.options.usd.enableSceneMaterials)),
-                    app::CmdLineValueOption<bool>::create(
-                        p.options.usd.sRGB, {"-usdSRGB"},
-                        "USD render SRGB setting.",
-                        string::Format("{0}").arg(p.options.usd.sRGB)),
-                    app::CmdLineValueOption<size_t>::create(
-                        p.options.usd.stageCache, {"-usdStageCache"},
-                        "USD stage cache size.",
-                        string::Format("{0}").arg(p.options.usd.stageCache)),
-                    app::CmdLineValueOption<size_t>::create(
-                        p.options.usd.diskCache, {"-usdDiskCache"},
-                        "USD disk cache size in gigabytes. A size of zero "
-                        "disables the cache.",
-                        string::Format("{0}").arg(p.options.usd.diskCache)),
+                app::CmdLineValueOption<bool>::create(
+                    p.options.usdOverrides, {"-usd", "-usdOverrides"},
+                    "USD overrides.",
+                    string::Format("{0}").arg(p.options.usdOverrides)),
+                app::CmdLineValueOption<int>::create(
+                    p.options.usd.renderWidth, {"-usdRenderWidth"},
+                    "USD render width.",
+                    string::Format("{0}").arg(p.options.usd.renderWidth)),
+                app::CmdLineValueOption<float>::create(
+                    p.options.usd.complexity, {"-usdComplexity"},
+                    "USD render complexity setting.",
+                    string::Format("{0}").arg(p.options.usd.complexity)),
+                app::CmdLineValueOption<tl::usd::DrawMode>::create(
+                    p.options.usd.drawMode, {"-usdDrawMode"},
+                    "USD render draw mode.",
+                    string::Format("{0}").arg(p.options.usd.drawMode),
+                    string::join(tl::usd::getDrawModeLabels(), ", ")),
+                app::CmdLineValueOption<bool>::create(
+                    p.options.usd.enableLighting, {"-usdEnableLighting"},
+                    "USD render enable lighting setting.",
+                    string::Format("{0}").arg(p.options.usd.enableLighting)),
+                app::CmdLineValueOption<bool>::create(
+                    p.options.usd.enableSceneLights, {"-usdEnableSceneLights"},
+                    "USD render enable scene lights setting.",
+                    string::Format("{0}").arg(p.options.usd.enableSceneLights)),
+                app::CmdLineValueOption<bool>::create(
+                    p.options.usd.enableSceneMaterials,
+                    {"-usdEnableSceneMaterials"},
+                    "USD render enable scene materials setting.",
+                    string::Format("{0}").arg(
+                        p.options.usd.enableSceneMaterials)),
+                app::CmdLineValueOption<bool>::create(
+                    p.options.usd.sRGB, {"-usdSRGB"},
+                    "USD render SRGB setting.",
+                    string::Format("{0}").arg(p.options.usd.sRGB)),
+                app::CmdLineValueOption<size_t>::create(
+                    p.options.usd.stageCache, {"-usdStageCache"},
+                    "USD stage cache size.",
+                    string::Format("{0}").arg(p.options.usd.stageCache)),
+                app::CmdLineValueOption<size_t>::create(
+                    p.options.usd.diskCache, {"-usdDiskCache"},
+                    "USD disk cache size in gigabytes. A size of zero "
+                    "disables the cache.",
+                    string::Format("{0}").arg(p.options.usd.diskCache)),
 #endif // TLRENDER_USD
 #ifdef MRV2_NETWORK
-                    app::CmdLineFlagOption::create(
-                        p.options.server, {"-server"},
-                        _("Start a server.  Use -port to specify a port "
-                          "number.")),
-                    app::CmdLineValueOption<std::string>::create(
-                        p.options.client, {"-client"},
-                        _("Connect to a server at <value>.  Use -port to "
-                          "specify a port number.")),
-                    app::CmdLineValueOption<unsigned>::create(
-                        p.options.port, {"-port"},
-                        _("Port number for the server to listen to or for the "
-                          "client to connect to."),
-                        string::Format("{0}").arg(p.options.port)),
+                app::CmdLineFlagOption::create(
+                    p.options.server, {"-server"},
+                    _("Start a server.  Use -port to specify a port "
+                      "number.")),
+                app::CmdLineValueOption<std::string>::create(
+                    p.options.client, {"-client"},
+                    _("Connect to a server at <value>.  Use -port to "
+                      "specify a port number.")),
+                app::CmdLineValueOption<unsigned>::create(
+                    p.options.port, {"-port"},
+                    _("Port number for the server to listen to or for the "
+                      "client to connect to."),
+                    string::Format("{0}").arg(p.options.port)),
 #endif
 
-                    app::CmdLineFlagOption::create(
-                        p.options.displayVersion,
-                        {"-version", "--version", "-v", "--v"},
-                        _("Return the version and exit."))
-            });
+                app::CmdLineFlagOption::create(
+                    p.options.displayVersion,
+                    {"-version", "--version", "-v", "--v"},
+                    _("Return the version and exit."))});
 
         const int exitCode = getExit();
         if (exitCode != 0)
@@ -874,15 +867,14 @@ namespace mrv
             LOG_ERROR(e.what());
         }
 
-#ifdef MRV2_PYBIND11        
+#ifdef MRV2_PYBIND11
         // Import the mrv2 python module so we read all python
         // plug-ins.
         py::module::import("mrv2");
 
-        
         // Discover Python plugins
         mrv2_discover_python_plugins();
-        
+
         //
         // Run command-line python script.
         //
@@ -1414,10 +1406,6 @@ namespace mrv
         TimelineClass* c = ui->uiTimeWindow;
         int idx = c->uiAudioTracks->current_track();
         out["FFmpeg/AudioTrack"] = string::Format("{0}").arg(idx);
-
-        float pixelRatio = \
-            p.settings->getValue<float>("FFmpeg/PixelAspectRatio");
-        out["FFmpeg/PixelAspectRatio"] = string::Format("{0}").arg(pixelRatio);
 #endif // TLRENDER_FFMPEG
 
 #if defined(TLRENDER_USD)
@@ -1530,27 +1518,28 @@ namespace mrv
         otio::SerializableObject::Retainer<otio::Timeline> otioTimeline;
         otime::RationalTime offsetTime;
         double value = ui->uiPrefs->uiStartTimeOffset->value();
-        offsetTime = otime::RationalTime(value, 24.0);  // rate is not used.
+        offsetTime = otime::RationalTime(value, 24.0); // rate is not used.
 
         if (file::isUSD(item->path))
         {
 #ifdef MRV2_PYBIND11
             py::gil_scoped_release release;
 #endif
-            otioTimeline =
-                item->audioPath.isEmpty()
-                ? timeline::create(item->path, _context, offsetTime, options)
-                : timeline::create(
-                    item->path, item->audioPath, _context, offsetTime, options);
+            otioTimeline = item->audioPath.isEmpty()
+                               ? timeline::create(
+                                     item->path, _context, offsetTime, options)
+                               : timeline::create(
+                                     item->path, item->audioPath, _context,
+                                     offsetTime, options);
         }
         else
         {
-            otioTimeline =
-                item->audioPath.isEmpty()
-                ? timeline::create(item->path, _context, offsetTime, options)
-                    : timeline::create(
-                        item->path, item->audioPath, _context,
-                        offsetTime, options);
+            otioTimeline = item->audioPath.isEmpty()
+                               ? timeline::create(
+                                     item->path, _context, offsetTime, options)
+                               : timeline::create(
+                                     item->path, item->audioPath, _context,
+                                     offsetTime, options);
         }
 
         auto out = timeline::Timeline::create(otioTimeline, _context, options);

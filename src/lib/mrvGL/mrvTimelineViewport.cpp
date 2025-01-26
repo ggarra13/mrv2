@@ -93,6 +93,7 @@ namespace mrv
     bool TimelineViewport::Private::dataWindow = false;
     bool TimelineViewport::Private::displayWindow = false;
     bool TimelineViewport::Private::ignoreDisplayWindow = false;
+    float TimelineViewport::Private::pixelAspectRatio = -1.F;
     std::string TimelineViewport::Private::helpText;
     float TimelineViewport::Private::helpTextFade;
     bool TimelineViewport::Private::hudActive = true;
@@ -533,7 +534,7 @@ namespace mrv
         c->uiPlayForwards->redraw();
         c->uiPlayBackwards->redraw();
         c->uiStop->redraw();
-        
+
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
     }
 
@@ -1003,6 +1004,11 @@ namespace mrv
         return _p->ignoreDisplayWindow;
     }
 
+    float TimelineViewport::getPixelAspectRatio() const noexcept
+    {
+        return _p->pixelAspectRatio;
+    }
+
     void TimelineViewport::setSafeAreas(bool value) noexcept
     {
         if (value == _p->safeAreas)
@@ -1032,6 +1038,14 @@ namespace mrv
         if (value == _p->ignoreDisplayWindow)
             return;
         _p->ignoreDisplayWindow = value;
+        redrawWindows();
+    }
+
+    void TimelineViewport::setPixelAspectRatio(const float value) noexcept
+    {
+        if (value == _p->pixelAspectRatio)
+            return;
+        _p->pixelAspectRatio = value;
         redrawWindows();
     }
 
@@ -1537,7 +1551,7 @@ namespace mrv
         }
 
         float aspectRatio = static_cast<float>(W) / H;
-        
+
         int minX, minY, maxW, maxH, posX, posY;
         PreferencesUI* uiPrefs = p.ui->uiPrefs;
         if (!desktop::Wayland() && uiPrefs->uiWindowFixedPosition->value())
@@ -1550,12 +1564,11 @@ namespace mrv
             posX = mw->x();
             posY = mw->y();
         }
-        
+
 #ifdef DEBUG_SCALING
         std::cerr << "Main Window pos=(" << posX << " " << posY << ")"
                   << std::endl;
 #endif
-
 
 #ifdef DEBUG_SCALING
         std::cerr << "renderSize=" << renderSize << std::endl;
@@ -3299,7 +3312,7 @@ namespace mrv
     {
         return _p->tagData;
     }
-    
+
     void TimelineViewport::_getTags() noexcept
     {
         TLRENDER_P();

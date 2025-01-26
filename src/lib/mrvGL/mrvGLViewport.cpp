@@ -313,6 +313,14 @@ namespace mrv
 
             if (gl.buffer && gl.render)
             {
+
+                if (p.pixelAspectRatio > 0.F && !p.videoData.empty() &&
+                    !p.videoData[0].layers.empty())
+                {
+                    auto image = p.videoData[0].layers[0].image;
+                    image->setPixelAspectRatio(p.pixelAspectRatio);
+                }
+
                 if (p.stereo3DOptions.output == Stereo3DOutput::OpenGL &&
                     p.stereo3DOptions.input == Stereo3DInput::Image &&
                     p.videoData.size() > 1 && p.showVideo)
@@ -334,12 +342,12 @@ namespace mrv
                         int screen = this->screen_num();
                         if (screen >= 0 && !p.monitorOCIOOptions.empty() &&
                             screen < p.monitorOCIOOptions.size())
-                        {   
+                        {
                             timeline::OCIOOptions o = p.ocioOptions;
                             o.display = p.monitorOCIOOptions[screen].display;
                             o.view = p.monitorOCIOOptions[screen].view;
                             gl.render->setOCIOOptions(o);
-                            
+
                             _updateMonitorDisplayView(screen, o);
                         }
                         else
@@ -347,7 +355,7 @@ namespace mrv
                             gl.render->setOCIOOptions(p.ocioOptions);
                             _updateMonitorDisplayView(screen, p.ocioOptions);
                         }
-                    
+
                         gl.render->setLUTOptions(p.lutOptions);
                         gl.render->setHDROptions(p.hdrOptions);
                         if (p.missingFrame &&
@@ -357,7 +365,8 @@ namespace mrv
                         }
                         else
                         {
-                            if (p.stereo3DOptions.input == Stereo3DInput::Image &&
+                            if (p.stereo3DOptions.input ==
+                                    Stereo3DInput::Image &&
                                 p.videoData.size() > 1)
                             {
                                 _drawStereo3D();
@@ -452,7 +461,7 @@ namespace mrv
             player->getAnnotations(p.ghostPrevious, p.ghostNext);
 
         auto time = player->currentTime();
-        
+
         if (gl.buffer && gl.shader)
         {
             math::Matrix4x4f mvp;

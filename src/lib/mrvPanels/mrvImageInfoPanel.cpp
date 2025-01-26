@@ -305,7 +305,7 @@ namespace mrv
 
             p = info->m_attributes->contents();
             b = info->m_attributes->button();
-            
+
             start = info->m_attributes->y() - pack->y();
             start += b->h();
             start += info->flex->h();
@@ -622,19 +622,13 @@ namespace mrv
 
         static void change_pixel_ratio_cb(HorSlider* w, ImageInfoPanel* info)
         {
-            auto app = App::app;
-            auto settings = app->settings();
-        
+            ViewerUI* ui = App::ui;
+            auto view = ui->uiView;
+
             float pixelRatio = w->value();
-            settings->setValue("FFmpeg/PixelAspectRatio", pixelRatio);
-
-            info->m_update = false;
-            refresh_media_cb(nullptr, nullptr);
-
-            settings->setValue("FFmpeg/PixelAspectRatio", -1.F);
-            info->m_update = true;
+            view->setPixelAspectRatio(pixelRatio);
         }
-        
+
         double
         ImageInfoPanel::to_memory(std::uintmax_t value, const char*& extension)
         {
@@ -735,7 +729,7 @@ namespace mrv
             fill_image_data();
             Fl_Group::current(orig);
         }
-        
+
         void ImageInfoPanel::videoRefresh()
         {
             Fl_Group* orig = Fl_Group::current();
@@ -752,9 +746,6 @@ namespace mrv
 
         void ImageInfoPanel::refresh()
         {
-            if (m_update == false)
-                return;
-            
             Fl_Group* orig = Fl_Group::current();
 
             hide_tabs();
@@ -1674,10 +1665,10 @@ namespace mrv
             }
 
             m_video->clear();
-            
+
             const auto& info = player->ioInfo();
             unsigned num_video_streams = info.video.size();
-            
+
             if (num_video_streams > 0)
             {
 
@@ -1778,12 +1769,16 @@ namespace mrv
                     snprintf(buf, 256, "%g (%s)", aspect_ratio, name);
                     add_text(_("Aspect Ratio"), _("Aspect ratio of clip"), buf);
 
+                    const auto view = _p->ui->uiView;
+                    float pixelAspectRatio = view->getPixelAspectRatio();
+                    if (pixelAspectRatio < 0.001F)
+                        pixelAspectRatio = size.pixelAspectRatio;
+
                     add_float(
                         _("Pixel Ratio"), _("Pixel ratio of clip"),
-                        size.pixelAspectRatio,
-                        true, true,
-                        (Fl_Callback*)change_pixel_ratio_cb, 0.01f, 8.0f,
-                        FL_WHEN_ENTER_KEY | FL_WHEN_RELEASE);
+                        pixelAspectRatio, true, true,
+                        (Fl_Callback*)change_pixel_ratio_cb, 0.0f, 8.0f,
+                        FL_WHEN_ENTER_KEY | FL_WHEN_CHANGED);
 
                     if (rotation != 0.F)
                         add_float(_("Rotation"), _("Video Rotation"), rotation);
@@ -1794,15 +1789,18 @@ namespace mrv
                             _("Compression"), _("Compression"), compression);
 
                         if (compressionNumScanlines > 0)
-                            add_int(_("Compression Num. Scanlines"),
-                                    _("Number of Compression Scanlines"),
-                                    compressionNumScanlines);
-                        add_bool(_("Lossy Compression"), _("Lossy Compression"),
-                                 isLossyCompression);
-                        add_bool(_("Deep Compression"), _("Deep Compression"),
-                                 isValidDeepCompression);
+                            add_int(
+                                _("Compression Num. Scanlines"),
+                                _("Number of Compression Scanlines"),
+                                compressionNumScanlines);
+                        add_bool(
+                            _("Lossy Compression"), _("Lossy Compression"),
+                            isLossyCompression);
+                        add_bool(
+                            _("Deep Compression"), _("Deep Compression"),
+                            isValidDeepCompression);
                     }
-                    
+
                     ++group;
 
                     tl::image::PixelType pixelType = video.pixelType;
@@ -1885,22 +1883,30 @@ namespace mrv
                         nlohmann::json json = nlohmann::json::parse(HDRdata);
                         image::HDRData hdr = json.get<image::HDRData>();
 
-                        
-                        math::Vector2f& v = hdr.primaries[image::HDRPrimaries::Red];
+                        math::Vector2f& v =
+                            hdr.primaries[image::HDRPrimaries::Red];
                         snprintf(buf, 256, "(%g) (%g)", v.x, v.y);
-                        add_text(_("HDR Red Primaries"), _("HDR Red Primaries"), buf);
-                        
+                        add_text(
+                            _("HDR Red Primaries"), _("HDR Red Primaries"),
+                            buf);
+
                         v = hdr.primaries[image::HDRPrimaries::Green];
                         snprintf(buf, 256, "(%g) (%g)", v.x, v.y);
-                        add_text(_("HDR Green Primaries"), _("HDR Green Primaries"), buf);
+                        add_text(
+                            _("HDR Green Primaries"), _("HDR Green Primaries"),
+                            buf);
 
                         v = hdr.primaries[image::HDRPrimaries::Blue];
                         snprintf(buf, 256, "(%g) (%g)", v.x, v.y);
-                        add_text(_("HDR Blue Primaries"), _("HDR Blue Primaries"), buf);
-                        
+                        add_text(
+                            _("HDR Blue Primaries"), _("HDR Blue Primaries"),
+                            buf);
+
                         v = hdr.primaries[image::HDRPrimaries::White];
                         snprintf(buf, 256, "(%g) (%g)", v.x, v.y);
-                        add_text(_("HDR White Primaries"), _("HDR White Primaries"), buf);
+                        add_text(
+                            _("HDR White Primaries"), _("HDR White Primaries"),
+                            buf);
 
                         const math::FloatRange& luminance =
                             hdr.displayMasteringLuminance;
@@ -1913,7 +1919,7 @@ namespace mrv
 
                         snprintf(buf, 256, "%g", hdr.maxCLL);
                         add_text(_("HDR maxCLL"), _("HDR maxCLL"), buf);
-                        
+
                         snprintf(buf, 256, "%g", hdr.maxFALL);
                         add_text(_("HDR maxFALL"), _("HDR maxFALL"), buf);
                     }
@@ -2123,7 +2129,6 @@ namespace mrv
             // First, check the metadata
             fill_video_data();
 
-
             if (num_audio_streams > 0)
             {
                 for (int i = 0; i < num_audio_streams; ++i)
@@ -2312,8 +2317,7 @@ namespace mrv
             for (const auto& item : tagData)
             {
                 bool skip = false;
-                if (item.first == "hdr" ||
-                    item.first.substr(0, 5) == "Video" ||
+                if (item.first == "hdr" || item.first.substr(0, 5) == "Video" ||
                     item.first.substr(0, 5) == "Audio" ||
                     item.first.substr(0, 19) == "FFmpeg Pixel Format")
                 {
@@ -2339,7 +2343,7 @@ namespace mrv
 
             if (!player)
                 return;
-            
+
             const auto& info = player->ioInfo();
 
             // First, add global tags

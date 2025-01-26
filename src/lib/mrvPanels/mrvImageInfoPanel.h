@@ -50,13 +50,13 @@ namespace mrv
 
             //! Get the tags.
             void getTags();
-            
+
             //! Refresh all tabs.
             void refresh();
 
             //! Quicky refresh the image tab if open.
             void imageRefresh();
-            
+
             //! Quicky refresh the video tab if open.
             void videoRefresh();
 
@@ -71,7 +71,6 @@ namespace mrv
             void scroll_to(int w, int h);
 
             Pack* get_pack() const { return g->get_pack(); };
-
 
         protected:
             Fl_Color get_title_color();
@@ -168,7 +167,6 @@ namespace mrv
 
         public:
             Fl_Flex* flex;
-            bool m_update = true;
             CollapsibleGroup* m_image;
             CollapsibleGroup* m_video;
             CollapsibleGroup* m_audio;
