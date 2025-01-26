@@ -1414,6 +1414,10 @@ namespace mrv
         TimelineClass* c = ui->uiTimeWindow;
         int idx = c->uiAudioTracks->current_track();
         out["FFmpeg/AudioTrack"] = string::Format("{0}").arg(idx);
+
+        float pixelRatio = \
+            p.settings->getValue<float>("FFmpeg/PixelAspectRatio");
+        out["FFmpeg/PixelAspectRatio"] = string::Format("{0}").arg(pixelRatio);
 #endif // TLRENDER_FFMPEG
 
 #if defined(TLRENDER_USD)

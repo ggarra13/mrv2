@@ -305,7 +305,7 @@ namespace mrv
 
             p = info->m_attributes->contents();
             b = info->m_attributes->button();
-
+            
             start = info->m_attributes->y() - pack->y();
             start += b->h();
             start += info->flex->h();
@@ -620,6 +620,21 @@ namespace mrv
             player->setSpeed(f);
         }
 
+        static void change_pixel_ratio_cb(HorSlider* w, ImageInfoPanel* info)
+        {
+            auto app = App::app;
+            auto settings = app->settings();
+        
+            float pixelRatio = w->value();
+            settings->setValue("FFmpeg/PixelAspectRatio", pixelRatio);
+
+            info->m_update = false;
+            refresh_media_cb(nullptr, nullptr);
+
+            settings->setValue("FFmpeg/PixelAspectRatio", -1.F);
+            info->m_update = true;
+        }
+        
         double
         ImageInfoPanel::to_memory(std::uintmax_t value, const char*& extension)
         {
@@ -737,6 +752,9 @@ namespace mrv
 
         void ImageInfoPanel::refresh()
         {
+            if (m_update == false)
+                return;
+            
             Fl_Group* orig = Fl_Group::current();
 
             hide_tabs();
@@ -1762,7 +1780,10 @@ namespace mrv
 
                     add_float(
                         _("Pixel Ratio"), _("Pixel ratio of clip"),
-                        size.pixelAspectRatio, false, true);
+                        size.pixelAspectRatio,
+                        true, true,
+                        (Fl_Callback*)change_pixel_ratio_cb, 0.01f, 8.0f,
+                        FL_WHEN_ENTER_KEY | FL_WHEN_RELEASE);
 
                     if (rotation != 0.F)
                         add_float(_("Rotation"), _("Video Rotation"), rotation);

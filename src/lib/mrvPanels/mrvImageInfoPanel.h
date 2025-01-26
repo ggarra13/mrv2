@@ -168,6 +168,7 @@ namespace mrv
 
         public:
             Fl_Flex* flex;
+            bool m_update = true;
             CollapsibleGroup* m_image;
             CollapsibleGroup* m_video;
             CollapsibleGroup* m_audio;
