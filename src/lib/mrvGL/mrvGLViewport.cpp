@@ -318,6 +318,7 @@ namespace mrv
                     !p.videoData[0].layers.empty())
                 {
                     auto image = p.videoData[0].layers[0].image;
+                    p.videoData[0].size.pixelAspectRatio = p.pixelAspectRatio;
                     image->setPixelAspectRatio(p.pixelAspectRatio);
                 }
 
