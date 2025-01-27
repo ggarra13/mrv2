@@ -70,8 +70,7 @@ v1.3.1
 - Fixed File/Save Audio for 48KHZ audios.
 - Fixed pixel aspect ratio reading from movie files.
 - Added changing pixel aspect ratio interactively from the Media Information
-  Panel.  Note, however, that the framing of the image is done with the original
-  pixel aspect ratio.
+  Panel.
   
 
 v1.3.0
