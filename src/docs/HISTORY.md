@@ -71,6 +71,8 @@ v1.3.1
 - Fixed pixel aspect ratio reading from movie files.
 - Added changing pixel aspect ratio interactively from the Media Information
   Panel.
+- Added comparison modes with their possible shortcuts to mrv2's View/Compare
+  menu.
   
 
 v1.3.0

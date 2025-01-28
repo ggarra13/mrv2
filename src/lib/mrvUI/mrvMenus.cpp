@@ -1006,6 +1006,34 @@ namespace mrv
         if (hudClass)
             item->set();
 
+        snprintf(buf, 256, "%s", _("View/Compare/None"));
+        idx = menu->add(buf, kCompareNone.hotkey(),
+                        (Fl_Callback*)compare_a_cb, ui, mode);
+
+        snprintf(buf, 256, "%s", _("View/Compare/Overlay"));
+        idx = menu->add(buf, kCompareOverlay.hotkey(),
+                        (Fl_Callback*)compare_overlay_cb, ui, mode);
+        
+        snprintf(buf, 256, "%s", _("View/Compare/Wipe"));
+        idx = menu->add(buf, kCompareWipe.hotkey(),
+                        (Fl_Callback*)compare_wipe_cb, ui, mode);
+        
+        snprintf(buf, 256, "%s", _("View/Compare/Difference"));
+        idx = menu->add(buf, kCompareDifference.hotkey(),
+                        (Fl_Callback*)compare_difference_cb, ui, mode);
+        
+        snprintf(buf, 256, "%s", _("View/Compare/Horizontal"));
+        idx = menu->add(buf, kCompareHorizontal.hotkey(),
+                        (Fl_Callback*)compare_horizontal_cb, ui, mode);
+        
+        snprintf(buf, 256, "%s", _("View/Compare/Vertical"));
+        idx = menu->add(buf, kCompareVertical.hotkey(),
+                        (Fl_Callback*)compare_vertical_cb, ui, mode);
+        
+        snprintf(buf, 256, "%s", _("View/Compare/Tile"));
+        idx = menu->add(buf, kCompareTile.hotkey(),
+                        (Fl_Callback*)compare_tile_cb, ui, mode);
+        
         mode = 0;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;

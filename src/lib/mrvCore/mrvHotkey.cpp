@@ -71,6 +71,7 @@ namespace mrv
     Hotkey kDisplayWindow(true, false, false, false, 'd');
     Hotkey kDataWindow(false, false, false, false, 'd');
 
+    Hotkey kCompareNone(false, false, false, false, 0);
     Hotkey kCompareWipe(false, false, true, false, 'w');
     Hotkey kCompareOverlay(false, false, false, false, 0);
     Hotkey kCompareDifference(false, false, false, false, 0);
@@ -187,6 +188,7 @@ namespace mrv
 
     Hotkey kHudToggle(true, false, false, false, 'h');
 
+    
     Hotkey kOCIOPresetsToggle(false, false, false, false, 0);
     Hotkey kOCIOInTopBarToggle(false, false, false, false, 't');
     Hotkey kOCIOInputColorSpace(false, false, false, false, 0);
