@@ -29,4 +29,4 @@ fi
 
 $PYTHON bin/python/po_translate.py $*
 
-$PYTHON -m pip uninstall polib transformers translate torch sentencepiece sacremoses
+$PYTHON -m pip uninstall polib transformers translate torch sentencepiece sacremoses -y
