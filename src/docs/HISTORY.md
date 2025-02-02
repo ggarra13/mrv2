@@ -1,3 +1,9 @@
+v1.3.2
+======
+
+- Added support for Chromaticities attribute in OpenEXR files.
+
+
 v1.3.1
 ======
 
