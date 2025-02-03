@@ -3,6 +3,8 @@ v1.3.2
 
 - Added support for Chromaticities attribute in OpenEXR files.
 - Added support for Y, RY, BY OpenEXR images.
+- Hiding an audio track in an .otio timeline now turns off audio for that 
+  track.
 
 
 v1.3.1
