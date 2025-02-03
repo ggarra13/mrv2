@@ -18,4 +18,5 @@ Guía del Usuario de mrv2
    preferences
    saving
    videos
+   command-line
    faq

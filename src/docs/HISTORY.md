@@ -2,6 +2,7 @@ v1.3.2
 ======
 
 - Added support for Chromaticities attribute in OpenEXR files.
+- Added support for Y, RY, BY OpenEXR images.
 
 
 v1.3.1
