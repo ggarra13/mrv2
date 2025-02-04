@@ -2792,7 +2792,7 @@ namespace mrv
         const auto& time = getTime(player);
         auto compositions = getTracks(player);
 
-        std::vector<bool> audioMutedTracks;
+        std::vector<int> audioMutedTracks;
         otio::ErrorStatus errorStatus;
         unsigned index = 0;
         for (auto composition : compositions)
@@ -2819,7 +2819,7 @@ namespace mrv
         }
 
         player->player()->setChannelMute(audioMutedTracks);
-        
+
         makePathsAbsolute(timeline, ui);
 
         updateTimeline(timeline, time, ui);
