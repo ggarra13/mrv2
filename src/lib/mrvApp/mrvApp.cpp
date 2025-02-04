@@ -1393,6 +1393,17 @@ namespace mrv
             string::Format("{0}").arg(p.displayOptions.invalidValues);
 #endif
 
+#if defined(TLRENDER_EXR)
+        int xLevel = 0, yLevel = 0;
+        if (panel::imageInfoPanel)
+        {
+            xLevel = panel::imageInfoPanel->getXLevel();
+            yLevel = panel::imageInfoPanel->getYLevel();
+        }
+        out["X Level"] = string::Format("{0}").arg(xLevel);
+        out["Y Level"] = string::Format("{0}").arg(yLevel);
+#endif
+        
 #if defined(TLRENDER_FFMPEG)
         out["FFmpeg/YUVToRGBConversion"] = string::Format("{0}").arg(
             p.settings->getValue<int>("Performance/FFmpegYUVToRGBConversion"));

@@ -48,6 +48,19 @@ namespace mrv
             ImageInfoPanel(ViewerUI* ui);
             ~ImageInfoPanel();
 
+            //! Return X Level
+            int getXLevel() const { return xLevel; }
+            
+            //! Set X Mipmap level.
+            void setXLevel(int X) { xLevel = X; }
+            
+            //! Return X Level
+            int getYLevel() const { return yLevel; }
+            
+            //! Set Y Mipmap level.
+            void setYLevel(int X) { yLevel = X; }
+
+            
             //! Get the tags.
             void getTags();
 
@@ -186,6 +199,8 @@ namespace mrv
             std::map<std::string, std::string, string::CaseInsensitiveCompare>
                 tagData;
 
+            int xLevel = 0, yLevel = 0;
+            
         public:
             Fl_Menu_Button* menu = nullptr;
 

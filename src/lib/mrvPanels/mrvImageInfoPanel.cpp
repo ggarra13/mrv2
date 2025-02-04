@@ -19,6 +19,8 @@ namespace fs = std::filesystem;
 #include <FL/Fl_Int_Input.H>
 #include <FL/fl_draw.H>
 
+#include <OpenEXR/ImfTileDescription.h>
+
 #include "mrvCore/mrvColorSpaces.h"
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvUtil.h"
@@ -590,6 +592,28 @@ namespace mrv
         {
             update_int_slider(w);
             return true;
+        }
+
+        static void change_x_and_y_level_cb(HorSlider* w, ImageInfoPanel* info)
+        {
+            int f = w->value();
+            info->setXLevel(f);
+            info->setYLevel(f);
+            refresh_media_cb(nullptr, nullptr);
+        }
+        
+        static void change_xlevel_cb(HorSlider* w, ImageInfoPanel* info)
+        {
+            int f = w->value();
+            info->setXLevel(f);
+            refresh_media_cb(nullptr, nullptr);
+        }
+        
+        static void change_ylevel_cb(HorSlider* w, ImageInfoPanel* info)
+        {
+            int f = w->value();
+            info->setYLevel(f);
+            refresh_media_cb(nullptr, nullptr);
         }
 
         static void change_first_frame_cb(HorSlider* w, ImageInfoPanel* info)
@@ -1701,6 +1725,9 @@ namespace mrv
                     bool isLossyCompression = video.isLossyCompression;
                     bool isValidDeepCompression = video.isValidDeepCompression;
                     std::string HDRdata;
+                    int xLevels = 0, yLevels = 0;
+                    int mipmapMode = Imf::LevelMode::ONE_LEVEL;
+                    int roundingMode = Imf::LevelRoundingMode::ROUND_DOWN;
                     if (!tagData.empty())
                     {
                         auto it = tagData.find("Video Codec");
@@ -1711,6 +1738,24 @@ namespace mrv
                         else
                         {
                             compression = video.compression;
+                        }
+                        it = tagData.find("Tile");
+                        if (it != tagData.end())
+                        {
+                            std::stringstream s(it->second);
+                            s >> mipmapMode >> mipmapMode >> mipmapMode >> roundingMode;
+                        }
+                        it = tagData.find("numXLevels");
+                        if (it != tagData.end())
+                        {
+                            std::stringstream s(it->second);
+                            s >> xLevels;
+                        }
+                        it = tagData.find("numYLevels");
+                        if (it != tagData.end())
+                        {
+                            std::stringstream s(it->second);
+                            s >> yLevels;
                         }
                         it = tagData.find("Video Rotation");
                         if (it != tagData.end())
@@ -1780,6 +1825,29 @@ namespace mrv
                         (Fl_Callback*)change_pixel_ratio_cb, 0.0f, 8.0f,
                         FL_WHEN_ENTER_KEY | FL_WHEN_CHANGED);
 
+                    if (mipmapMode == Imf::MIPMAP_LEVELS)
+                    {
+                        ++group;
+                        add_int(_("Mipmap Level"), _("Mipmap Level"), xLevel, true, true, (Fl_Callback*)change_x_and_y_level_cb,
+                                0, xLevels, FL_WHEN_ENTER_KEY | FL_WHEN_RELEASE);
+                    }
+                    else if (mipmapMode == Imf::RIPMAP_LEVELS)
+                    {
+                        ++group;
+                        add_int(_("X Ripmap Level"), _("X Ripmap Level"), xLevel, true, true, (Fl_Callback*)change_xlevel_cb,
+                                0, xLevels, FL_WHEN_ENTER_KEY | FL_WHEN_RELEASE);
+                        add_int(_("Y Ripmap Level"), _("Y Ripmap Level"), yLevel, true, true, (Fl_Callback*)change_ylevel_cb,
+                                0, yLevels, FL_WHEN_ENTER_KEY | FL_WHEN_RELEASE);
+                    }
+                    if (mipmapMode != Imf::ONE_LEVEL)
+                    {
+                        std::string roundingModeText = _("DOWN");
+                        if (roundingMode == Imf::LevelRoundingMode::ROUND_UP)
+                            roundingModeText = _("UP");
+                        add_text(_("Rounding Mode"), _("Rounding Mode"), roundingModeText);
+                        ++group;
+                    }
+                            
                     if (rotation != 0.F)
                         add_float(_("Rotation"), _("Video Rotation"), rotation);
 
@@ -1947,6 +2015,7 @@ namespace mrv
                         for (const auto& tag : tagData)
                         {
                             std::string key = tag.first;
+                            
                             auto i = key.find(match);
                             if (i != std::string::npos)
                             {
@@ -2317,7 +2386,8 @@ namespace mrv
             for (const auto& item : tagData)
             {
                 bool skip = false;
-                if (item.first == "hdr" || item.first.substr(0, 5) == "Video" ||
+                if (item.first == "hdr" ||
+                    item.first.substr(0, 5) == "Video" ||
                     item.first.substr(0, 5) == "Audio" ||
                     item.first.substr(0, 19) == "FFmpeg Pixel Format")
                 {
