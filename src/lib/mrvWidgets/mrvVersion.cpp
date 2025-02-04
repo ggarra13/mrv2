@@ -1135,6 +1135,8 @@ mantissa-                                     (Sequences misdetection)
 mhgandvisions                                 (Session debugging)
 MMmaoamao                                     (AV1 Suggestion)
 mzigaib                                       (Sequences misdetection)
+ndeebook                                      (Save Single Frame with
+                                               Annotations)
 Olympusmonsgames                              (Windows Build Debugging)
 p2or                                          (MacOS debugging,
                                                NTFS permissions bug,
