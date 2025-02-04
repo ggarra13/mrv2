@@ -5,6 +5,8 @@ v1.3.2
 - Added support for Y, RY, BY OpenEXR images.
 - Hiding an audio track in an .otio timeline now turns off audio for that 
   track.
+- Added support for OpenEXR's ripmaps and mipmaps.
+- Made Mipmap and Ripmaps' rounding mode show as "UP" or "DOWN".
 
 
 v1.3.1
