@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>cmd module &mdash; mrv2 v1.3.1 documentation</title>
+  <title>cmd module &mdash; mrv2 v1.3.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
@@ -14,7 +14,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=40e582e5"></script>
+      <script src="../_static/documentation_options.js?v=771d088f"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -70,6 +70,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.saveOTIO"><code class="docutils literal notranslate"><span class="pre">saveOTIO()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.savePDF"><code class="docutils literal notranslate"><span class="pre">savePDF()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.saveSingleFrame"><code class="docutils literal notranslate"><span class="pre">saveSingleFrame()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.setCompareOptions"><code class="docutils literal notranslate"><span class="pre">setCompareOptions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.setDisplayOptions"><code class="docutils literal notranslate"><span class="pre">setDisplayOptions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.cmd.setEnvironmentMapOptions"><code class="docutils literal notranslate"><span class="pre">setEnvironmentMapOptions()</span></code></a></li>
@@ -254,6 +255,12 @@
 <dt class="sig sig-object py" id="mrv2.cmd.savePDF">
 <span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">savePDF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fileName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#mrv2.cmd.savePDF" title="Link to this definition"></a></dt>
 <dd><p>Save a PDF document with all annotations and notes.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.cmd.saveSingleFrame">
+<span class="sig-prename descclassname"><span class="pre">mrv2.cmd.</span></span><span class="sig-name descname"><span class="pre">saveSingleFrame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fileName:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options:</span> <span class="pre">mrv2.io.SaveOptions</span> <span class="pre">=</span> <span class="pre">&lt;mrv2.io.SaveOptions</span> <span class="pre">annotations=False</span> <span class="pre">ffmpegProfile=None</span> <span class="pre">ffmpegAudioCodec=AAC</span> <span class="pre">exrCompression=ZIP</span> <span class="pre">zipCompressionLevel=4</span> <span class="pre">dwaCompressionLevel=45&gt;</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.cmd.saveSingleFrame" title="Link to this definition"></a></dt>
+<dd><p>Save a single frame.</p>
 </dd></dl>
 
 <dl class="py function">
