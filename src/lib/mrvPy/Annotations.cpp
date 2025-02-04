@@ -61,6 +61,23 @@ namespace mrv2
             add(time, note);
         }
 
+        std::vector< otime::RationalTime >
+        getTimes()
+        {
+            std::vector< otime::RationalTime > out;
+            
+            ViewerUI* ui = App::ui;
+            Viewport* view = ui->uiView;
+            if (!view)
+                return out;
+            auto player = view->getTimelinePlayer();
+            if (!player)
+                return out;
+            
+            out = player->getAnnotationTimes();
+            return out;
+        }
+        
     } // namespace annotations
 } // namespace mrv2
 
@@ -93,4 +110,7 @@ Contains all functions and classes related to the annotationss.
             &mrv2::annotations::add),
         _("Add notes annotations to current clip at certain seconds."),
         py::arg("seconds"), py::arg("notes"));
+    annotations.def(
+        "getTimes", &mrv2::annotations::getTimes,
+        _("Get all times for annotations."));
 }

@@ -1287,10 +1287,11 @@ namespace mrv
             delete[] opts;
         }
 
-        void ImageInfoPanel::add_int(
+        void ImageInfoPanel::add_unsigned(
             const char* name, const char* tooltip, const unsigned int content,
             const bool editable, const bool active, Fl_Callback* callback,
-            const unsigned int minV, const unsigned int maxV)
+            const unsigned int minV, const unsigned int maxV,
+            const int when)
         {
             Fl_Color colA = get_title_color();
             Fl_Color colB = get_widget_color();
@@ -1333,6 +1334,7 @@ namespace mrv
                     snprintf(buf, 64, "% 9d", content);
                     widget->value(buf);
                     widget->align(FL_ALIGN_CENTER);
+                    widget->when(when);
                     if (tooltip)
                         widget->tooltip(tooltip);
                     else
@@ -1347,6 +1349,7 @@ namespace mrv
                     // slider->linesize(1);
                     slider->type(FL_HORIZONTAL);
                     slider->minimum(minV);
+                    slider->when(when);
 
                     unsigned maxS = maxV;
                     if (content > 100000 && maxV <= 100000)
@@ -1798,10 +1801,10 @@ namespace mrv
                         add_text(_("Codec"), _("Codec"), _("Unknown"));
                     }
 
-                    add_int(
+                    add_unsigned(
                         _("Width"), _("Width of clip"), (unsigned)size.w,
                         false);
-                    add_int(
+                    add_unsigned(
                         _("Height"), _("Height of clip"), (unsigned)size.h,
                         false);
 
@@ -1837,7 +1840,8 @@ namespace mrv
                     if (mipmapMode == Imf::MIPMAP_LEVELS)
                     {
                         ++group;
-                        add_int(_("Mipmap Level"), _("Mipmap Level"), xLevel,
+                        add_int(_("Mipmap Level"), _("Mipmap Level"),
+                                xLevel,
                                 true, true,
                                 (Fl_Callback*)change_x_and_y_level_cb,
                                 0, xLevels,

@@ -389,6 +389,21 @@ namespace mrv2
             save_movie(file, App::ui, opts);
         }
 
+
+        /**
+         * \brief Save a movie or sequence.
+         *
+         * @param file The path to the movie file or to the sequence, like:
+         *        bunny.0001.exr
+         * @param options (annotations, ffmpeg and openexr options)
+         */
+        void
+        saveSingleFrame(const std::string& file,
+                        const SaveOptions opts = SaveOptions())
+        {
+            save_single_frame(file, App::ui, opts);
+        }
+
         /**
          * \brief Save an .otio file with relative paths if possible.
          *
@@ -569,6 +584,11 @@ Used to run main commands and get arguments and set the display, image, compare,
         _("Save a movie or sequence from the front layer."),
         py::arg("fileName"), py::arg("options") = mrv::SaveOptions());
 
+    cmds.def(
+        "saveSingleFrame", &mrv2::cmd::saveSingleFrame,
+        _("Save a single frame."),
+        py::arg("fileName"), py::arg("options") = mrv::SaveOptions());
+    
     cmds.def(
         "saveOTIO", &mrv2::cmd::saveOTIO,
         _("Save an .otio file from the current selected image."),

@@ -5,7 +5,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.3.1\n"
+"Project-Id-Version: mrv2 v1.3.2\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -1243,6 +1243,9 @@ msgstr ""
 msgid "Save a movie or sequence from the front layer."
 msgstr ""
 
+msgid "Save a single frame."
+msgstr ""
+
 msgid "Save an .otio file from the current selected image."
 msgstr ""
 
@@ -1263,6 +1266,9 @@ msgid "Add notes annotations to current clip at a certain frame."
 msgstr ""
 
 msgid "Add notes annotations to current clip at certain seconds."
+msgstr ""
+
+msgid "Get all times for annotations."
 msgstr ""
 
 msgid "Open with Audio"
@@ -1931,6 +1937,24 @@ msgid "Pixel Ratio"
 msgstr ""
 
 msgid "Pixel ratio of clip"
+msgstr ""
+
+msgid "Mipmap Level"
+msgstr ""
+
+msgid "X Ripmap Level"
+msgstr ""
+
+msgid "Y Ripmap Level"
+msgstr ""
+
+msgid "DOWN"
+msgstr ""
+
+msgid "UP"
+msgstr ""
+
+msgid "Rounding Mode"
 msgstr ""
 
 msgid "Video Rotation"

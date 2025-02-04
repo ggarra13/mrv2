@@ -158,11 +158,12 @@ namespace mrv
                 const bool editable = false, const bool active = true,
                 Fl_Callback* callback = NULL, const int minV = 0,
                 const int maxV = 10, const int when = FL_WHEN_CHANGED);
-            void add_int(
+            void add_unsigned(
                 const char* name, const char* tooltip,
                 const unsigned int content, const bool editable = false,
                 const bool active = true, Fl_Callback* callback = NULL,
-                const unsigned int minV = 0, const unsigned int maxV = 9999);
+                const unsigned int minV = 0, const unsigned int maxV = 9999,
+                const int when = FL_WHEN_CHANGED);
             void add_bool(
                 const char* name, const char* tooltip, const bool content,
                 const bool editable = false, Fl_Callback* callback = NULL);
@@ -188,7 +189,8 @@ namespace mrv
             Fl_Input* m_entry;
             Fl_Choice* m_type;
 
-            //! Flag used in callbacks to avoid refreshing the panel.
+            //! Flag used in callbacks to avoid refreshing the panel on
+            //! media refresh.
             bool m_update = true;
 
         protected:
@@ -202,7 +204,7 @@ namespace mrv
             std::map<std::string, std::string, string::CaseInsensitiveCompare>
                 tagData;
 
-            int xLevel = 0, yLevel = 0;
+            unsigned int xLevel = 0, yLevel = 0;
             
         public:
             Fl_Menu_Button* menu = nullptr;
