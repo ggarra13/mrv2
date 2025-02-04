@@ -10,6 +10,7 @@ v1.3.2
 - Added Python functions: annotation.getTimes() to get the times where
   there are annotations.
 - Added Python function: cmd.saveSingleFrame() to save the current frame.
+- Fixed instantion of mrv2.io.SaveOptions().
 
 
 v1.3.1
