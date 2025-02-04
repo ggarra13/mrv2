@@ -188,6 +188,9 @@ namespace mrv
             Fl_Input* m_entry;
             Fl_Choice* m_type;
 
+            //! Flag used in callbacks to avoid refreshing the panel.
+            bool m_update = true;
+
         protected:
             int kMiddle;
             Table* m_curr;

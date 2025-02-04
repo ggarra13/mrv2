@@ -599,21 +599,27 @@ namespace mrv
             int f = w->value();
             info->setXLevel(f);
             info->setYLevel(f);
+            info->m_update = false;
             refresh_media_cb(nullptr, nullptr);
+            info->m_update = true;
         }
         
         static void change_xlevel_cb(HorSlider* w, ImageInfoPanel* info)
         {
             int f = w->value();
             info->setXLevel(f);
+            info->m_update = false;
             refresh_media_cb(nullptr, nullptr);
+            info->m_update = true;
         }
         
         static void change_ylevel_cb(HorSlider* w, ImageInfoPanel* info)
         {
             int f = w->value();
             info->setYLevel(f);
+            info->m_update = false;
             refresh_media_cb(nullptr, nullptr);
+            info->m_update = true;
         }
 
         static void change_first_frame_cb(HorSlider* w, ImageInfoPanel* info)
@@ -770,6 +776,9 @@ namespace mrv
 
         void ImageInfoPanel::refresh()
         {
+            if (!m_update)
+                return;
+            
             Fl_Group* orig = Fl_Group::current();
 
             hide_tabs();
@@ -1828,23 +1837,33 @@ namespace mrv
                     if (mipmapMode == Imf::MIPMAP_LEVELS)
                     {
                         ++group;
-                        add_int(_("Mipmap Level"), _("Mipmap Level"), xLevel, true, true, (Fl_Callback*)change_x_and_y_level_cb,
-                                0, xLevels, FL_WHEN_ENTER_KEY | FL_WHEN_RELEASE);
+                        add_int(_("Mipmap Level"), _("Mipmap Level"), xLevel,
+                                true, true,
+                                (Fl_Callback*)change_x_and_y_level_cb,
+                                0, xLevels,
+                                FL_WHEN_ENTER_KEY | FL_WHEN_RELEASE);
                     }
                     else if (mipmapMode == Imf::RIPMAP_LEVELS)
                     {
                         ++group;
-                        add_int(_("X Ripmap Level"), _("X Ripmap Level"), xLevel, true, true, (Fl_Callback*)change_xlevel_cb,
-                                0, xLevels, FL_WHEN_ENTER_KEY | FL_WHEN_RELEASE);
-                        add_int(_("Y Ripmap Level"), _("Y Ripmap Level"), yLevel, true, true, (Fl_Callback*)change_ylevel_cb,
-                                0, yLevels, FL_WHEN_ENTER_KEY | FL_WHEN_RELEASE);
+                        add_int(_("X Ripmap Level"), _("X Ripmap Level"),
+                                xLevel, true, true,
+                                (Fl_Callback*)change_xlevel_cb,
+                                0, xLevels,
+                                FL_WHEN_ENTER_KEY | FL_WHEN_RELEASE);
+                        add_int(_("Y Ripmap Level"), _("Y Ripmap Level"),
+                                yLevel, true, true,
+                                (Fl_Callback*)change_ylevel_cb,
+                                0, yLevels,
+                                FL_WHEN_ENTER_KEY | FL_WHEN_RELEASE);
                     }
                     if (mipmapMode != Imf::ONE_LEVEL)
                     {
                         std::string roundingModeText = _("DOWN");
                         if (roundingMode == Imf::LevelRoundingMode::ROUND_UP)
                             roundingModeText = _("UP");
-                        add_text(_("Rounding Mode"), _("Rounding Mode"), roundingModeText);
+                        add_text(_("Rounding Mode"), _("Rounding Mode"),
+                                 roundingModeText);
                         ++group;
                     }
                             
