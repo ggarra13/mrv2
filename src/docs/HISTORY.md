@@ -7,6 +7,9 @@ v1.3.2
   track.
 - Added support for OpenEXR's ripmaps and mipmaps.
 - Made Mipmap and Ripmaps' rounding mode show as "UP" or "DOWN".
+- Added Python functions: annotation.getTimes() to get the times where
+  there are annotations.
+- Added Python function: cmd.saveSingleFrame() to save the current frame.
 
 
 v1.3.1
