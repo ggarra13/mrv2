@@ -12,6 +12,8 @@ v1.3.2
   there are annotations.
 - Added Python function: cmd.saveSingleFrame() to save the current frame.
 - Fixed instantiation of mrv2.io.SaveOptions().
+- Made Page Up/Page Down change images always, instead of scrolling the panel
+  sidebar.
 
 
 v1.3.1
