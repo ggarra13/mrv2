@@ -14,6 +14,7 @@ v1.3.2
 - Fixed instantiation of mrv2.io.SaveOptions().
 - Made Page Up/Page Down change images always, instead of scrolling the panel
   sidebar.
+- Fixed color refreshing in timeline panel when switching color themes.
 
 
 v1.3.1
