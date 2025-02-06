@@ -168,9 +168,10 @@ namespace mrv
     {
         TLRENDER_P();
         MRV2_GL();
+        CHECK_GL;
 
         const auto& renderSize = getRenderSize();
-        const float renderAspect = renderSize.getAspect();
+        CHECK_GL;
 
         const auto& mesh =
             geom::box(math::Box2i(0, 0, renderSize.w, renderSize.h));
@@ -179,6 +180,7 @@ namespace mrv
         {
             gl.vbo =
                 gl::VBO::create(numTriangles * 3, gl::VBOType::Pos2_F32_UV_U16);
+            CHECK_GL;
             gl.vao.reset();
             CHECK_GL;
         }

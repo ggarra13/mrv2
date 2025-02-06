@@ -17,14 +17,11 @@
 // Set it to debug OpenGL issues with the CHECK_GL macro.
 // #define USE_GL_CHECKS 1
 
-// Use GL checks.
-// #define USE_GL_CHECKS 1
-
 // #define MRV2_DEBUG_GL 1  // Set this to debug OpenGL errors with a callback
 
 // Set this to debug the video times as they come from the player video
 // timeout.
-// #define DEBUG_VIDEO_CALLBACK 1  
+// #define DEBUG_VIDEO_CALLBACK 1
 
 // Set this to debug the video times as they come from the timeline timeout.
-// #define DEBUG_TIMELINE_CALLBACK 1  
+// #define DEBUG_TIMELINE_CALLBACK 1

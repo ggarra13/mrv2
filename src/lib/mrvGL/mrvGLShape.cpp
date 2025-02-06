@@ -13,15 +13,16 @@
 
 namespace
 {
-    using tl::math::Vector2f;
     using tl::geom::Triangle2;
-    
+    using tl::math::Vector2f;
+
     // Check if vertex i in the polygon is an ear
-    bool isEar(const std::vector<Vector2f>& points,
-               const std::vector<int>& poly, int i)
+    bool isEar(
+        const std::vector<Vector2f>& points, const std::vector<int>& poly,
+        int i)
     {
         int n = poly.size();
-        int prevIdx = poly[(i - 1 + n) % n] - 1;  // Convert to 0-based index
+        int prevIdx = poly[(i - 1 + n) % n] - 1; // Convert to 0-based index
         int currIdx = poly[i] - 1;
         int nextIdx = poly[(i + 1) % n] - 1;
 
@@ -30,35 +31,37 @@ namespace
         const Vector2f& next = points[nextIdx];
 
         // Ear condition: the triangle (prev, curr, next) must be convex
-        if (mrv::crossProduct(prev, curr, next) <= 0) {
+        if (mrv::crossProduct(prev, curr, next) <= 0)
+        {
             return false;
         }
 
-        // No other vertex should be inside the triangle formed by (prev, curr, next)
+        // No other vertex should be inside the triangle formed by (prev, curr,
+        // next)
         for (int j = 0; j < n; ++j)
         {
             if (j == (i - 1 + n) % n || j == i || j == (i + 1) % n)
             {
                 continue;
             }
-            int pointIdx = poly[j] - 1;  // Convert to 0-based index
+            int pointIdx = poly[j] - 1; // Convert to 0-based index
             if (mrv::isPointInTriangle(points[pointIdx], prev, curr, next))
             {
                 return false;
             }
         }
 
-
         return true;
     }
-        
+
     // Function to calculate polygon area to check the winding order
-    float polygonArea(const std::vector<Vector2f>& points,
-                      const std::vector<int>& poly)
+    float polygonArea(
+        const std::vector<Vector2f>& points, const std::vector<int>& poly)
     {
         float area = 0;
         int n = poly.size();
-        for (int i = 0; i < n; ++i) {
+        for (int i = 0; i < n; ++i)
+        {
             const Vector2f& p1 = points[poly[i] - 1];
             const Vector2f& p2 = points[poly[(i + 1) % n] - 1];
             area += (p1.x * p2.y) - (p2.x * p1.y);
@@ -66,30 +69,34 @@ namespace
         return 0.5f * area;
     }
 
-// Ensure counterclockwise winding
-    void ensureCounterClockwise(std::vector<int>& poly,
-                                const std::vector<Vector2f>& points)
+    // Ensure counterclockwise winding
+    void ensureCounterClockwise(
+        std::vector<int>& poly, const std::vector<Vector2f>& points)
     {
-        if (polygonArea(points, poly) < 0) {
+        if (polygonArea(points, poly) < 0)
+        {
             std::reverse(poly.begin(), poly.end());
         }
     }
-    
-    std::vector<Triangle2> triangulatePolygon(std::vector<Vector2f>& points,
-                                              std::vector<int>& poly)
+
+    std::vector<Triangle2>
+    triangulatePolygon(std::vector<Vector2f>& points, std::vector<int>& poly)
     {
         std::vector<Triangle2> triangles;
 
         Triangle2 triangle;
-        
+
         ensureCounterClockwise(poly, points);
 
-        while (poly.size() > 3) {
+        while (poly.size() > 3)
+        {
             int n = poly.size();
             bool earFound = false;
 
-            for (int i = 0; i < n; ++i) {
-                if (isEar(points, poly, i)) {
+            for (int i = 0; i < n; ++i)
+            {
+                if (isEar(points, poly, i))
+                {
                     int prevIdx = poly[(i - 1 + n) % n];
                     int currIdx = poly[i];
                     int nextIdx = poly[(i + 1) % n];
@@ -98,7 +105,7 @@ namespace
                     triangle.v[1].v = currIdx;
                     triangle.v[2].v = nextIdx;
                     triangles.push_back(triangle);
-                
+
                     // Remove the ear vertex from the polygon
                     poly.erase(poly.begin() + i);
 
@@ -107,12 +114,14 @@ namespace
                 }
             }
 
-            if (!earFound) {
+            if (!earFound)
+            {
                 break;
             }
         }
 
-        if (poly.size() == 3) {
+        if (poly.size() == 3)
+        {
             triangle.v[0].v = poly[0];
             triangle.v[1].v = poly[1];
             triangle.v[2].v = poly[2];
@@ -122,7 +131,7 @@ namespace
         return triangles;
     }
 
-}
+} // namespace
 
 namespace mrv
 {
@@ -187,7 +196,7 @@ namespace mrv
             render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::JOINT, catmullRomSpline);
     }
-    
+
     void GLCircleShape::draw(
         const std::shared_ptr<timeline::IRender>& render,
         const std::shared_ptr<opengl::Lines>& lines)
@@ -244,11 +253,11 @@ namespace mrv
         mesh.v.reserve(numVertices);
         for (size_t i = 0; i < numVertices; ++i)
             mesh.v.push_back(math::Vector2f(pts[i].x, pts[i].y));
-        
+
         std::vector<int> poly;
         for (int i = 0; i < pts.size(); ++i)
         {
-            poly.push_back(i+1);
+            poly.push_back(i + 1);
         }
         auto triangles = triangulatePolygon(mesh.v, poly);
         mesh.triangles = triangles;
@@ -256,7 +265,7 @@ namespace mrv
         math::Vector2i pos;
         render->drawMesh(mesh, pos, color);
     }
-    
+
     void GLFilledCircleShape::draw(
         const std::shared_ptr<timeline::IRender>& render,
         const std::shared_ptr<opengl::Lines>& lines)
@@ -272,7 +281,7 @@ namespace mrv
         math::Vector2i v(center.x, center.y);
         drawFilledCircle(render, v, radius, color, false);
     }
-    
+
     void GLFilledRectangleShape::draw(
         const std::shared_ptr<timeline::IRender>& render,
         const std::shared_ptr<opengl::Lines>& lines)
@@ -285,9 +294,8 @@ namespace mrv
             GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
             GL_ONE_MINUS_SRC_ALPHA);
 
-        math::Box2i box(pts[0].x, pts[0].y,
-                        pts[2].x - pts[0].x,
-                        pts[2].y - pts[0].y);
+        math::Box2i box(
+            pts[0].x, pts[0].y, pts[2].x - pts[0].x, pts[2].y - pts[0].y);
         render->drawRect(box, color);
     }
 
@@ -342,6 +350,7 @@ namespace mrv
             throw std::runtime_error(_("Invalid font for text drawing"));
 
         // Set the projection matrix
+        math::Matrix4x4f oldMatrix = render->getTransform();
         render->setTransform(matrix);
 
         // Copy the text to process it
@@ -366,6 +375,7 @@ namespace mrv
             const auto glyphs = fontSystem->getGlyphs(txt, fontInfo);
             render->drawText(glyphs, pnt, color);
         }
+        render->setTransform(oldMatrix);
     }
 
     void to_json(nlohmann::json& json, const GLPathShape& value)
@@ -401,7 +411,6 @@ namespace mrv
         from_json(json, static_cast<draw::PathShape&>(value));
     }
 
-    
     void to_json(nlohmann::json& json, const GLTextShape& value)
     {
         to_json(json, static_cast<const draw::PathShape&>(value));
@@ -453,7 +462,6 @@ namespace mrv
         json.at("radius").get_to(value.radius);
     }
 
-
     void to_json(nlohmann::json& json, const GLFilledCircleShape& value)
     {
         to_json(json, static_cast<const draw::Shape&>(value));
@@ -468,7 +476,7 @@ namespace mrv
         json.at("center").get_to(value.center);
         json.at("radius").get_to(value.radius);
     }
-    
+
     void to_json(nlohmann::json& json, const GLArrowShape& value)
     {
         to_json(json, static_cast<const draw::PathShape&>(value));

@@ -190,6 +190,7 @@ namespace mrv
         if (!valid())
         {
             _initializeGL();
+            CHECK_GL;
 
             if (p.ui->uiPrefs->uiPrefsOpenGLVsync->value() ==
                 MonitorVSync::kVSyncNone)
@@ -199,6 +200,7 @@ namespace mrv
 
             valid(1);
         }
+        CHECK_GL;
 
         const auto& viewportSize = getViewportSize();
         const auto& renderSize = getRenderSize();
@@ -310,6 +312,7 @@ namespace mrv
                 gl.buffer.reset();
                 gl.stereoBuffer.reset();
             }
+            CHECK_GL;
 
             if (gl.buffer && gl.render)
             {
@@ -394,6 +397,7 @@ namespace mrv
             gl.buffer.reset();
             gl.stereoBuffer.reset();
         }
+        CHECK_GL;
 
         float r = 0.F, g = 0.F, b = 0.F, a = 0.F;
 
@@ -447,16 +451,22 @@ namespace mrv
             }
         }
 
+        CHECK_GL;
         glDrawBuffer(GL_BACK_LEFT);
+        CHECK_GL;
 
         glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
         glClearStencil(0);
         glClearColor(r, g, b, a);
         glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+        CHECK_GL;
 
         const auto& player = getTimelinePlayer();
         if (!player)
+        {
+            Fl_Window::draw(); // Draw FLTK children
             return;
+        }
 
         const auto& annotations =
             player->getAnnotations(p.ghostPrevious, p.ghostNext);
@@ -733,19 +743,17 @@ namespace mrv
                 break;
         }
 
-        if (!draw_opengl1)
-            return;
+        // if (!draw_opengl1)
+        //     return;
 
         Fl_Gl_Window::draw_begin(); // Set up 1:1 projection
-        if (w)
-            Fl_Window::draw(); // Draw FLTK children
+        Fl_Window::draw();          // Draw FLTK children
         glViewport(0, 0, viewportSize.w, viewportSize.h);
         if (p.showAnnotations)
             _drawGL2TextShapes();
         Fl_Gl_Window::draw_end(); // Restore GL state
 #else
-        if (w)
-            Fl_Gl_Window::draw();
+        Fl_Gl_Window::draw();
 #endif
     }
 
