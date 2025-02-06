@@ -1522,6 +1522,26 @@ namespace mrv
                 next_channel_cb(nullptr, p.ui);
                 return 1;
             }
+            else if (kPreviousImage.match(rawkey))
+            {
+                previous_file_cb(nullptr, p.ui);
+                return 1;
+            }
+            else if (kNextImage.match(rawkey))
+            {
+                next_file_cb(nullptr, p.ui);
+                return 1;
+            }
+            else if (kPreviousImageLimited.match(rawkey))
+            {
+                previous_file_limited_cb(nullptr, p.ui);
+                return 1;
+            }
+            else if (kNextImageLimited.match(rawkey))
+            {
+                next_file_limited_cb(nullptr, p.ui);
+                return 1;
+            }
             else if (
                 !Fl::event_state(FL_SHIFT) && !Fl::event_state(FL_ALT) &&
                 !Fl::event_state(FL_META) &&

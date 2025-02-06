@@ -3,6 +3,7 @@ v1.3.2
 
 - Added support for Chromaticities attribute in OpenEXR files.
 - Added support for Y, RY, BY OpenEXR images.
+- Made YC OpenEXR conversion use file chromaticities.
 - Hiding an audio track in an .otio timeline now turns off audio for that 
   track.
 - Added support for OpenEXR's ripmaps and mipmaps.
@@ -10,6 +11,10 @@ v1.3.2
 - Added Python functions: annotation.getTimes() to get the times where
   there are annotations.
 - Added Python function: cmd.saveSingleFrame() to save the current frame.
+- Fixed instantiation of mrv2.io.SaveOptions().
+- Made Page Up/Page Down change images always, instead of scrolling the panel
+  sidebar.
+- Fixed color refreshing in timeline panel when switching color themes.
 
 
 v1.3.1

@@ -40,13 +40,13 @@ void mrv2_io(py::module& m)
             py::arg("ffmpegProfile") = tl::ffmpeg::Profile::None,
             py::arg("ffmpegPreset") = "",
             py::arg("ffmpegPixelFormat") = "YUV420P",
+            py::arg("ffmpegAudioCodec") = tl::ffmpeg::AudioCodec::None,
             py::arg("ffmpegHardwareEncode") = false,
             py::arg("ffmpegOverride") = false,
             py::arg("ffmpegColorRange") = "PC",
             py::arg("ffmpegColorSpace") = "bt709",
             py::arg("ffmpegColorPrimaries") = "bt709",
-            py::arg("ffmpegColorTRC") = "bt709",
-            py::arg("ffmpegAudioCodec") = tl::ffmpeg::AudioCodec::None
+            py::arg("ffmpegColorTRC") = "bt709"
 #endif
 #ifdef TLRENDER_EXR
             ,
@@ -114,12 +114,25 @@ void mrv2_io(py::module& m)
                 std::stringstream s;
                 s << "<mrv2.io.SaveOptions "
                   << " annotations=" << (o.annotations ? "True" : "False")
+                  << " video=" << (o.video ? "True" : "False")
+                  << " saveVideo=" << (o.saveVideo ? "True" : "False")
 #ifdef TLRENDER_FFMPEG
                   << " ffmpegProfile=" << getLabel(o.ffmpegProfile)
+                  << " ffmpegPreset=" << o.ffmpegPreset
+                  << " ffmpegPixelFormat=" << o.ffmpegPixelFormat
                   << " ffmpegAudioCodec=" << getLabel(o.ffmpegAudioCodec)
+                  << " ffmpegHardwareEncode="
+                  << (o.ffmpegHardwareEncode ? "True" : "False")
+                  << " ffmpegOverride="
+                  << (o.ffmpegOverride ? "True" : "False")
+                  << " ffmpegColorRange=" << o.ffmpegColorRange
+                  << " ffmpegColorSpace=" << o.ffmpegColorSpace
+                  << " ffmpegColorPrimaries=" << o.ffmpegColorPrimaries
+                  << " ffmpegColorTRC=" << o.ffmpegColorTRC
 #endif
 #ifdef TLRENDER_EXR
                   << " exrCompression=" << getLabel(o.exrCompression)
+                  << " exrPixelType=" << getLabel(o.exrPixelType)
                   << " zipCompressionLevel=" << o.zipCompressionLevel
                   << " dwaCompressionLevel=" << o.dwaCompressionLevel
 #endif
