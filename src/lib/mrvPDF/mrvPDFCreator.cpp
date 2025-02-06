@@ -20,8 +20,9 @@ namespace fs = std::filesystem;
 
 #include <FL/fl_draw.H>
 
-#include "mrvCore/mrvString.h"
 #include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvImage.h"
+#include "mrvCore/mrvString.h"
 
 #include "mrvWidgets/mrvProgressReport.h"
 
@@ -103,27 +104,6 @@ namespace mrv
             P.y = th + 15;
 
             Fl_Surface_Device::pop_current();
-        }
-
-        void Creator::flip_image_y(
-            GLubyte* image, const int width, const int height,
-            const int channels)
-        {
-            int rowSize = width * channels;
-            GLubyte* rowBuffer = new GLubyte[rowSize];
-
-            for (int y = 0; y < height / 2; y++)
-            {
-                int rowIndex1 = y * rowSize;
-                int rowIndex2 = (height - y - 1) * rowSize;
-
-                // Swap rows
-                memcpy(rowBuffer, &image[rowIndex1], rowSize);
-                memcpy(&image[rowIndex1], &image[rowIndex2], rowSize);
-                memcpy(&image[rowIndex2], rowBuffer, rowSize);
-            }
-
-            delete[] rowBuffer;
         }
 
         void Creator::create_thumbnail(
@@ -264,10 +244,9 @@ namespace mrv
                 LOG_ERROR(err_message);
                 return false;
             }
-            
 
             pdf.printable_rect(&width, &height);
-                
+
             addPage();
 
             auto view = ui->uiView;
@@ -294,30 +273,62 @@ namespace mrv
             Fl::check();
 
             auto viewportSize = view->getViewportSize();
+            float pixels_unit = view->pixels_per_unit();
             auto renderSize = view->getRenderSize();
 
             int X = 0, Y = 0;
+#ifdef __APPLE__
+            viewportSize.w /= pixels_unit;
+            viewportSize.h /= pixels_unit;
+#endif
             if (viewportSize.w >= renderSize.w &&
                 viewportSize.h >= renderSize.h)
             {
                 view->setFrameView(false);
+#ifdef __APPLE__
+                view->setViewZoom(pixels_unit);
+#else
                 view->setViewZoom(1.0);
+#endif
                 view->centerView();
                 view->redraw();
                 // flush is needed
                 Fl::flush();
-
-                X = (viewportSize.w - renderSize.w) / 2;
-                Y = (viewportSize.h - renderSize.h) / 2;
             }
             else
             {
                 LOG_WARNING(_("Image too big.  "
                               "Will save the viewport size."));
-                renderSize.w = viewportSize.w;
-                renderSize.h = viewportSize.h;
+
+                float aspectImage =
+                    static_cast<float>(renderSize.w) / renderSize.h;
+                float aspectViewport =
+                    static_cast<float>(viewportSize.w) / viewportSize.h;
+
+                if (aspectImage > aspectViewport)
+                {
+                    // Fit to width
+                    renderSize.w = viewportSize.w;
+                    renderSize.h = viewportSize.w / aspectImage;
+                }
+                else
+                {
+                    // Fit to height
+                    renderSize.h = viewportSize.h;
+                    renderSize.w = viewportSize.h * aspectImage;
+                }
                 view->frameView();
             }
+
+            X = (viewportSize.w - renderSize.w) / 2;
+            Y = (viewportSize.h - renderSize.h) / 2;
+
+            std::string msg = tl::string::Format(_("Viewport Size: {0} - "
+                                                   "X={1}, Y={2}"))
+                                  .arg(viewportSize)
+                                  .arg(X)
+                                  .arg(Y);
+            LOG_INFO(msg);
 
             view->make_current();
             gl::initGLAD();
@@ -358,6 +369,19 @@ namespace mrv
                 view->flush();
                 Fl::flush();
 
+#ifdef __APPLE__
+                Fl_RGB_Image* tmp =
+                    fl_capture_window(view, X, Y, renderSize.w, renderSize.h);
+                Fl_Image* rgb = tmp->copy(renderSize.w, renderSize.h);
+                tmp->alloc_array = 1;
+                delete tmp;
+
+                // Access the first pointer in the data array
+                const char* const* data = rgb->data();
+                const size_t data_size = rgb->w() * rgb->h() * rgb->d();
+                memcpy(buffer, data[0], data_size);
+                delete rgb;
+#else
                 GLenum imageBuffer = GL_FRONT;
 
                 // @note: Wayland does not work like Windows, macOS or
@@ -373,7 +397,8 @@ namespace mrv
                 glReadPixels(
                     X, Y, renderSize.w, renderSize.h, format, type, buffer);
 
-                flip_image_y(buffer, renderSize.w, renderSize.h, 3);
+                flipImageInY(buffer, renderSize.w, renderSize.h, 3);
+#endif
 
                 create_thumbnail(renderSize.w, renderSize.h, buffer);
 

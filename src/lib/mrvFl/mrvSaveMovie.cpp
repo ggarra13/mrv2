@@ -17,6 +17,7 @@
 
 #include <tlTimelineGL/Render.h>
 
+#include "mrvCore/mrvImage.h"
 #include "mrvCore/mrvLocale.h"
 #include "mrvCore/mrvMath.h"
 #include "mrvCore/mrvUtil.h"
@@ -468,18 +469,26 @@ namespace mrv
                     view->flush();
                     Fl::check();
 
-                    const auto& viewportSize = view->getViewportSize();
+                    // returns pixel_w(), pixel_h()
+                    auto viewportSize = view->getViewportSize();
+                    float pixels_unit = view->pixels_per_unit();
+                    viewportSize.w /= pixels_unit;
+                    viewportSize.h /= pixels_unit;
+
                     math::Size2i outputSize;
                     if (viewportSize.w >= renderSize.w &&
                         viewportSize.h >= renderSize.h)
                     {
                         view->setFrameView(false);
+#ifndef __APPLE__
+                        pixels_unit = 1.0F;
+#endif
                         if (resolution == SaveResolution::kHalfSize)
-                            view->setViewZoom(0.5);
+                            view->setViewZoom(0.5 * pixels_unit);
                         else if (resolution == SaveResolution::kQuarterSize)
-                            view->setViewZoom(0.25);
+                            view->setViewZoom(0.25 * pixels_unit);
                         else
-                            view->setViewZoom(1.0);
+                            view->setViewZoom(pixels_unit);
                         view->centerView();
                         view->redraw();
                         // flush is needed
@@ -494,8 +503,23 @@ namespace mrv
 
                         view->frameView();
 
-                        outputInfo.size.w = viewportSize.w;
-                        outputInfo.size.h = viewportSize.h;
+                        float aspectImage =
+                            static_cast<float>(renderSize.w) / renderSize.h;
+                        float aspectViewport =
+                            static_cast<float>(viewportSize.w) / viewportSize.h;
+
+                        if (aspectImage > aspectViewport)
+                        {
+                            // Fit to width
+                            outputInfo.size.w = viewportSize.w;
+                            outputInfo.size.h = viewportSize.w / aspectImage;
+                        }
+                        else
+                        {
+                            // Fit to height
+                            outputInfo.size.h = viewportSize.h;
+                            outputInfo.size.w = viewportSize.h * aspectImage;
+                        }
                     }
 
                     X = (viewportSize.w - outputInfo.size.w) / 2;
@@ -646,9 +670,9 @@ namespace mrv
                         string::Format(_("{0}: Invalid OpenGL format and type"))
                             .arg(file));
                 }
-                
+
                 msg = tl::string::Format(_("OpenGL info: {0}"))
-                      .arg(offscreenBufferOptions.colorType);
+                          .arg(offscreenBufferOptions.colorType);
                 LOG_INFO(msg);
             }
 
@@ -724,9 +748,8 @@ namespace mrv
 
                         // timeline->getAudio() returns one second of audio.
                         // Clamp to end of the timeRange/inOutRange.
-                        if (!skip &&
-                            std::round(currentAudioTime.value()) >=
-                            currentSampleCount)
+                        if (!skip && std::round(currentAudioTime.value()) >=
+                                         currentSampleCount)
                         {
                             const size_t sampleCount = audio->getSampleCount();
                             if (currentSampleCount + sampleCount >=
@@ -780,6 +803,46 @@ namespace mrv
                         view->flush();
                         Fl::flush();
 
+#ifdef __APPLE__
+                        Fl_RGB_Image* tmp = fl_capture_window(
+                            view, X, Y, outputInfo.size.w, outputInfo.size.h);
+                        Fl_Image* rgb =
+                            tmp->copy(outputInfo.size.w, outputInfo.size.h);
+                        tmp->alloc_array = 1;
+                        delete tmp;
+
+                        // Access the first pointer in the data array
+                        const char* const* data = rgb->data();
+
+                        // Flip image in Y
+                        const size_t data_size = rgb->w() * rgb->h() * rgb->d();
+                        switch (outputImage->getPixelType())
+                        {
+                        case image::PixelType::RGB_U8:
+                            flipImageInY(
+                                (uint8_t*)outputImage->getData(),
+                                (const uint8_t*)data[0], rgb->w(), rgb->h(),
+                                rgb->d());
+                            break;
+                        case image::PixelType::RGB_F16:
+                            flipImageInY(
+                                (Imath::half*)outputImage->getData(),
+                                (const uint8_t*)data[0], rgb->w(), rgb->h(),
+                                rgb->d());
+                            break;
+                        case image::PixelType::RGB_F32:
+                            flipImageInY(
+                                (float*)outputImage->getData(),
+                                (const uint8_t*)data[0], rgb->w(), rgb->h(),
+                                rgb->d());
+                            break;
+                        default:
+                            LOG_ERROR(_("Unsupport output format"));
+                            break;
+                        }
+
+                        delete rgb;
+#else
                         GLenum imageBuffer = GL_FRONT;
 
                         // @note: Wayland does not work like Windows, macOS or
@@ -791,10 +854,12 @@ namespace mrv
                         }
 
                         glReadBuffer(imageBuffer);
+                        glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
                         glReadPixels(
                             X, Y, outputInfo.size.w, outputInfo.size.h, format,
                             type, outputImage->getData());
+#endif
                     }
                     else
                     {

@@ -15,6 +15,9 @@ v1.3.2
 - Made Page Up/Page Down change images always, instead of scrolling the panel
   sidebar.
 - Fixed color refreshing in timeline panel when switching color themes.
+- Fixed text annotations saving in PDF, movies or sequences on macOS Sonoma
+  and Sequoia.
+- Fixed zoom factor capture on high DPI displays on macOS Sonoma and Sequoia.
 
 
 v1.3.1

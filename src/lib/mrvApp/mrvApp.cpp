@@ -518,7 +518,7 @@ namespace mrv
         DBG;
 #ifdef __APPLE__
         Fl_Mac_App_Menu::about = _("About mrv2");
-        Fl_Mac_App_Menu::print = "";
+        Fl_Mac_App_Menu::print = "Print Front Window";
         Fl_Mac_App_Menu::hide = _("Hide mrv2");
         Fl_Mac_App_Menu::hide_others = _("Hide Others");
         Fl_Mac_App_Menu::services = _("Services");
@@ -1403,7 +1403,7 @@ namespace mrv
         out["X Level"] = string::Format("{0}").arg(xLevel);
         out["Y Level"] = string::Format("{0}").arg(yLevel);
 #endif
-        
+
 #if defined(TLRENDER_FFMPEG)
         out["FFmpeg/YUVToRGBConversion"] = string::Format("{0}").arg(
             p.settings->getValue<int>("Performance/FFmpegYUVToRGBConversion"));

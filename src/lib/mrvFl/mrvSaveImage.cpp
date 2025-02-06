@@ -17,6 +17,7 @@ namespace fs = std::filesystem;
 #include <tlGL/Util.h>
 #include <tlTimelineGL/Render.h>
 
+#include "mrvCore/mrvImage.h"
 #include "mrvCore/mrvLocale.h"
 #include "mrvCore/mrvMath.h"
 #include "mrvCore/mrvUtil.h"
@@ -122,8 +123,8 @@ namespace mrv
             const SaveResolution resolution = options.resolution;
             {
                 auto compareSize = ui->uiView->getRenderSize();
-                if (!options.annotations ||
-                    compareSize.w == 0 || compareSize.h == 0)
+                if (!options.annotations || compareSize.w == 0 ||
+                    compareSize.h == 0)
                 {
                     renderSize = info.video[layerId].size;
                 }
@@ -185,6 +186,10 @@ namespace mrv
             std::shared_ptr<image::Image> outputImage;
 
             outputInfo.pixelType = info.video[layerId].pixelType;
+#ifdef __APPLE__
+            if (options.annotations)
+                outputInfo.pixelType = image::PixelType::RGB_U8;
+#endif
 
             {
                 std::string msg = tl::string::Format(_("Image info: {0} {1}"))
@@ -201,13 +206,22 @@ namespace mrv
                     Fl::flush();
                     view->flush();
                     Fl::check();
-                    
-                    const auto& viewportSize = view->getViewportSize();
+
+                    // returns pixel_w(), pixel_h()
+                    auto viewportSize = view->getViewportSize();
+                    const float pixels_unit = view->pixels_per_unit();
+                    viewportSize.w /= pixels_unit;
+                    viewportSize.h /= pixels_unit;
+
                     if (viewportSize.w >= renderSize.w &&
                         viewportSize.h >= renderSize.h)
                     {
                         view->setFrameView(false);
+#ifdef __APPLE__
+                        view->setViewZoom(pixels_unit);
+#else
                         view->setViewZoom(1.0);
+#endif
                         view->centerView();
                         view->redraw();
                         // flush is needed
@@ -221,9 +235,24 @@ namespace mrv
                                       "Will scale to the viewport size."));
 
                         view->frameView();
-                        
-                        outputInfo.size.w = viewportSize.w;
-                        outputInfo.size.h = viewportSize.h;
+
+                        float aspectImage =
+                            static_cast<float>(renderSize.w) / renderSize.h;
+                        float aspectViewport =
+                            static_cast<float>(viewportSize.w) / viewportSize.h;
+
+                        if (aspectImage > aspectViewport)
+                        {
+                            // Fit to width
+                            outputInfo.size.w = viewportSize.w;
+                            outputInfo.size.h = viewportSize.w / aspectImage;
+                        }
+                        else
+                        {
+                            // Fit to height
+                            outputInfo.size.h = viewportSize.h;
+                            outputInfo.size.w = viewportSize.h * aspectImage;
+                        }
                     }
 
                     X = (viewportSize.w - outputInfo.size.w) / 2;
@@ -318,6 +347,45 @@ namespace mrv
                 // Refresh the view (so we turn off the HUD, for example).
                 view->redraw();
                 view->flush();
+                Fl::flush();
+
+#ifdef __APPLE__
+                Fl_RGB_Image* tmp = fl_capture_window(
+                    view, X, Y, outputInfo.size.w, outputInfo.size.h);
+
+                Fl_Image* rgb = tmp->copy(outputInfo.size.w, outputInfo.size.h);
+                tmp->alloc_array = 1;
+                delete tmp;
+
+                // Access the first pointer in the data array
+                const char* const* data = rgb->data();
+
+                // Flip image in Y
+                const size_t data_size = rgb->w() * rgb->h() * rgb->d();
+                switch (outputImage->getPixelType())
+                {
+                case image::PixelType::RGB_U8:
+                    flipImageInY(
+                        (uint8_t*)outputImage->getData(),
+                        (const uint8_t*)data[0], rgb->w(), rgb->h(), rgb->d());
+                    break;
+                case image::PixelType::RGB_F16:
+                    flipImageInY(
+                        (Imath::half*)outputImage->getData(),
+                        (const uint8_t*)data[0], rgb->w(), rgb->h(), rgb->d());
+                    break;
+                case image::PixelType::RGB_F32:
+                    flipImageInY(
+                        (float*)outputImage->getData(), (const uint8_t*)data[0],
+                        rgb->w(), rgb->h(), rgb->d());
+                    break;
+                default:
+                    LOG_ERROR(_("Unsupport output format"));
+                    break;
+                }
+
+                delete rgb;
+#else
 
                 GLenum imageBuffer = GL_FRONT;
 
@@ -335,10 +403,13 @@ namespace mrv
 
                 glReadBuffer(imageBuffer);
 
+                glPixelStorei(GL_PACK_ALIGNMENT, 1);
+
                 CHECK_GL;
                 glReadPixels(
                     X, Y, outputInfo.size.w, outputInfo.size.h, format, type,
                     outputImage->getData());
+#endif
                 CHECK_GL;
             }
             else
@@ -413,7 +484,7 @@ namespace mrv
         view->setHudActive(hud);
         view->setPresentationMode(presentation);
         tcp->unlock();
-        
+
         auto settings = ui->app->settings();
         if (file::isReadable(file))
         {
