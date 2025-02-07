@@ -4,21 +4,17 @@ v1.3.2
 - Added support for Chromaticities attribute in OpenEXR files.
 - Added support for Y, RY, BY OpenEXR images.
 - Made YC OpenEXR conversion use file chromaticities.
-- Hiding an audio track in an .otio timeline now turns off audio for that 
-  track.
+- Hiding an audio track in an .otio timeline now turns off audio for that track.
 - Added support for OpenEXR's ripmaps and mipmaps.
 - Made Mipmap and Ripmaps' rounding mode show as "UP" or "DOWN".
-- Added Python functions: annotation.getTimes() to get the times where
-  there are annotations.
+- Added Python functions: annotation.getTimes() to get the times where there are annotations.
 - Added Python function: cmd.saveSingleFrame() to save the current frame.
-- Added Python function: cmd.saveMultipleFrames() to save multiple frames from a list
-  of times, like those returned from annotation.getTimes().
+- Added Python function: cmd.saveMultipleFrames() to save multiple frames from a list of times, like those returned from annotation.getTimes().
 - Fixed instantiation of mrv2.io.SaveOptions().
 - Made Page Up/Page Down change images always, instead of scrolling the panel
   sidebar.
 - Fixed color refreshing in timeline panel when switching color themes.
-- Fixed text annotations saving in PDF, movies or sequences on macOS Sonoma
-  and Sequoia.
+- Fixed text annotations saving in PDF, movies or sequences on macOS Sonoma and Sequoia.
 - Fixed zoom factor capture on high DPI displays on macOS Sonoma and Sequoia.
 - Removed printing of profile when not saving a movie.
 - Fixed opening a session file from the command-line when the Python panel was open.
