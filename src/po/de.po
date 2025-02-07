@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
@@ -918,8 +918,8 @@ msgid ""
 "duration of 10.\n"
 msgstr ""
 "\n"
-"Erstellt einen :class:`~TimeRange` aus Start- und End-:class:"
-"`~RationalTime`\\s (inklusive).\n"
+"Erstellt einen :class:`~TimeRange` aus Start- und End-:class:`~RationalTime`"
+"\\s (inklusive).\n"
 "\n"
 "Beispiel: Wenn start_time 1 ist und end_time 10, hat der Rückgabewert eine "
 "Dauer von 10.\n"
@@ -1490,6 +1490,10 @@ msgid "Save a movie or sequence from the front layer."
 msgstr "Speichern Sie einen Film oder eine Sequenz von der vorderen Ebene."
 
 msgid "Save a single frame."
+msgstr "Speichern Sie einen einzigen Rahmen."
+
+#, fuzzy
+msgid "Save multiple frames."
 msgstr "Speichern Sie einen einzigen Rahmen."
 
 msgid "Save an .otio file from the current selected image."
@@ -3047,6 +3051,10 @@ msgstr "Nicht unterstütztes Ausgabeformat"
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "Leere Videodaten zur Zeit {0}. Wiederholungsbild."
+
+#, fuzzy
+msgid "Unsupported output format: "
+msgstr "Nicht unterstütztes Ausgabeformat"
 
 msgid "Reading preferences from \"{0}{1}\"."
 msgstr "Voreinstellungen von \"{0}{1}\" lesen."

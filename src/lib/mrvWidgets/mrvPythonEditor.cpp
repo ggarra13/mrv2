@@ -651,7 +651,8 @@ namespace mrv
                          *bufptr++ = *temp++)
                         ;
 
-                    if (*temp == '\0' || *temp == '\n' || *temp == ' ')
+                    if (*temp == '\0' || *temp == '\n' || *temp == ' ' ||
+                        *temp == ')' || *temp == ',')
                     {
                         *bufptr = '\0';
 

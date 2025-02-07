@@ -1246,6 +1246,9 @@ msgstr ""
 msgid "Save a single frame."
 msgstr ""
 
+msgid "Save multiple frames."
+msgstr ""
+
 msgid "Save an .otio file from the current selected image."
 msgstr ""
 
@@ -2722,6 +2725,9 @@ msgid "Unsupported output format"
 msgstr ""
 
 msgid "Empty video data at time {0}.  Repeating frame."
+msgstr ""
+
+msgid "Unsupported output format: "
 msgstr ""
 
 msgid "Reading preferences from \"{0}{1}\"."

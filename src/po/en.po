@@ -1,7 +1,7 @@
 # English translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.6\n"
@@ -1527,6 +1527,10 @@ msgstr "Save a movie or sequence from the front layer."
 msgid "Save a single frame."
 msgstr "Save a single frame."
 
+#, fuzzy
+msgid "Save multiple frames."
+msgstr "Save a single frame."
+
 msgid "Save an .otio file from the current selected image."
 msgstr "Save an .otio file from the current selected image."
 
@@ -3042,6 +3046,10 @@ msgstr "Unsupported output format"
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "Empty video data at time {0}.  Repeating frame."
+
+#, fuzzy
+msgid "Unsupported output format: "
+msgstr "Unsupported output format"
 
 msgid "Reading preferences from \"{0}{1}\"."
 msgstr "Reading preferences from \"{0}{1}\"."

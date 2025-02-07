@@ -1,6 +1,6 @@
 # AI Simplified Chinese translations for mrv2 package
 # This file is distributed under the same license as the mrv2 package.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.5\n"
@@ -1500,6 +1500,10 @@ msgstr "从前层保存一个影片或序列"
 msgid "Save a single frame."
 msgstr "保存一个框架 。"
 
+#, fuzzy
+msgid "Save multiple frames."
+msgstr "保存一个框架 。"
+
 msgid "Save an .otio file from the current selected image."
 msgstr "从选中图片保存.otio文件"
 
@@ -2987,6 +2991,10 @@ msgstr "不支持的不支持输出格式"
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "时间 {0} 空视频数据 重复帧"
+
+#, fuzzy
+msgid "Unsupported output format: "
+msgstr "不支持的不支持输出格式"
 
 msgid "Reading preferences from \"{0}{1}\"."
 msgstr "读取“ \"{0}{1}\" 的首选项"

@@ -1,7 +1,7 @@
 # Hindi translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.7\n"
@@ -1491,6 +1491,10 @@ msgid "Save a movie or sequence from the front layer."
 msgstr "एक फिल्म या अनुक्रम को सामने की परत से सहेजें."
 
 msgid "Save a single frame."
+msgstr "एक एकल फ्रेम सहेजें."
+
+#, fuzzy
+msgid "Save multiple frames."
 msgstr "एक एकल फ्रेम सहेजें."
 
 msgid "Save an .otio file from the current selected image."
@@ -2999,6 +3003,10 @@ msgstr "असमर्थित आउटपुट प्रारूप"
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "{0} समय पर वीडियो आँकड़ा खाली करें"
+
+#, fuzzy
+msgid "Unsupported output format: "
+msgstr "असमर्थित आउटपुट प्रारूप"
 
 msgid "Reading preferences from \"{0}{1}\"."
 msgstr "वरीयता \"{0}{1}\" से पढ़ा जा रहा है।"

@@ -1,7 +1,7 @@
 # Portuguese translations for mrv2 package
 # This file is distributed under the same license as the mrv2 package.
 # Gonzalo Garramuño <ggarra13@gmail.com>, 2023.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.7\n"
@@ -1503,6 +1503,10 @@ msgid "Save a movie or sequence from the front layer."
 msgstr "Salve um filme ou sequncia da camada frontal."
 
 msgid "Save a single frame."
+msgstr "Salve uma única moldura."
+
+#, fuzzy
+msgid "Save multiple frames."
 msgstr "Salve uma única moldura."
 
 msgid "Save an .otio file from the current selected image."
@@ -3026,6 +3030,10 @@ msgstr "Formato de saída não suportado"
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "Dados de vídeo vazios no tempo {0}. Repetir o quadro."
+
+#, fuzzy
+msgid "Unsupported output format: "
+msgstr "Formato de saída não suportado"
 
 msgid "Reading preferences from \"{0}{1}\"."
 msgstr "Preferncias de leitura de \"{0}{1}\"."
