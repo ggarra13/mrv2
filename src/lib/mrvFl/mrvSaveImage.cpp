@@ -89,7 +89,6 @@ namespace mrv
 
 #ifdef TLRENDER_EXR
             ioOptions["OpenEXR/Compression"] = getLabel(options.exrCompression);
-            ioOptions["OpenEXR/PixelType"] = getLabel(options.exrPixelType);
             snprintf(buf, 256, "%d", options.zipCompressionLevel);
             ioOptions["OpenEXR/ZipCompressionLevel"] = buf;
             {
@@ -186,10 +185,6 @@ namespace mrv
             std::shared_ptr<image::Image> outputImage;
 
             outputInfo.pixelType = info.video[layerId].pixelType;
-#ifdef __APPLE__
-            if (options.annotations)
-                outputInfo.pixelType = image::PixelType::RGB_U8;
-#endif
 
             {
                 std::string msg = tl::string::Format(_("Image info: {0} {1}"))
@@ -267,6 +262,29 @@ namespace mrv
                 }
             }
 
+#ifdef __APPLE__
+            if (options.annotations)
+            {
+                switch (outputInfo.pixelType)
+                {
+                case image::PixelType::RGBA_F16:
+                    outputInfo.pixelType = image::PixelType::RGB_F16;
+                    break;
+                case image::PixelType::RGBA_F32:
+                    outputInfo.pixelType = image::PixelType::RGB_F32;
+                    break;
+                default:
+                    if (saveHDR)
+                        outputInfo.pixelType = image::PixelType::RGB_F32;
+                    else if (saveEXR)
+                        outputInfo.pixelType = image::PixelType::RGB_F16;
+                    else
+                        outputInfo.pixelType = image::PixelType::RGB_U8;
+                    break;
+                }
+            }
+#endif
+
             outputInfo = writerPlugin->getWriteInfo(outputInfo);
             if (image::PixelType::None == outputInfo.pixelType)
             {
@@ -289,7 +307,10 @@ namespace mrv
 #ifdef TLRENDER_EXR
             if (saveEXR)
             {
-                outputInfo.pixelType = options.exrPixelType;
+                if (!options.annotations)
+                {
+                    outputInfo.pixelType = options.exrPixelType;
+                }
             }
 #endif
             if (saveHDR)
@@ -302,6 +323,9 @@ namespace mrv
                                   .arg(outputInfo.size)
                                   .arg(outputInfo.pixelType);
             LOG_INFO(msg);
+#ifdef TLRENDER_EXR
+            ioOptions["OpenEXR/PixelType"] = getLabel(outputInfo.pixelType);
+#endif
 
             outputImage = image::Image::create(outputInfo);
             ioInfo.video.push_back(outputInfo);
@@ -361,7 +385,6 @@ namespace mrv
                 const char* const* data = rgb->data();
 
                 // Flip image in Y
-                const size_t data_size = rgb->w() * rgb->h() * rgb->d();
                 switch (outputImage->getPixelType())
                 {
                 case image::PixelType::RGB_U8:
@@ -370,17 +393,19 @@ namespace mrv
                         (const uint8_t*)data[0], rgb->w(), rgb->h(), rgb->d());
                     break;
                 case image::PixelType::RGB_F16:
-                    flipImageInY(
+                    flipGBRImageInY(
                         (Imath::half*)outputImage->getData(),
                         (const uint8_t*)data[0], rgb->w(), rgb->h(), rgb->d());
                     break;
                 case image::PixelType::RGB_F32:
-                    flipImageInY(
+                    flipGBRImageInY(
                         (float*)outputImage->getData(), (const uint8_t*)data[0],
                         rgb->w(), rgb->h(), rgb->d());
                     break;
                 default:
-                    LOG_ERROR(_("Unsupported output format"));
+                    LOG_ERROR(
+                        _("Unsupported output format: ")
+                        << outputImage->getPixelType());
                     break;
                 }
 

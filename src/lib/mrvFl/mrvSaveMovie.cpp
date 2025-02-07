@@ -170,7 +170,6 @@ namespace mrv
 
 #ifdef TLRENDER_EXR
             ioOptions["OpenEXR/Compression"] = getLabel(options.exrCompression);
-            ioOptions["OpenEXR/PixelType"] = getLabel(options.exrPixelType);
             {
                 std::stringstream s;
                 s << options.zipCompressionLevel;
@@ -535,6 +534,29 @@ namespace mrv
 
                 waitForFirstFrame(player, startTime);
 
+#ifdef __APPLE__
+                if (options.annotations)
+                {
+                    switch (outputInfo.pixelType)
+                    {
+                    case image::PixelType::RGBA_F16:
+                        outputInfo.pixelType = image::PixelType::RGB_F16;
+                        break;
+                    case image::PixelType::RGBA_F32:
+                        outputInfo.pixelType = image::PixelType::RGB_F32;
+                        break;
+                    default:
+                        if (saveHDR)
+                            outputInfo.pixelType = image::PixelType::RGB_F32;
+                        else if (saveEXR)
+                            outputInfo.pixelType = image::PixelType::RGB_F16;
+                        else
+                            outputInfo.pixelType = image::PixelType::RGB_U8;
+                        break;
+                    }
+                }
+#endif
+
                 outputInfo = writerPlugin->getWriteInfo(outputInfo);
                 if (image::PixelType::None == outputInfo.pixelType)
                 {
@@ -557,7 +579,10 @@ namespace mrv
 #ifdef TLRENDER_EXR
                 if (saveEXR)
                 {
-                    outputInfo.pixelType = options.exrPixelType;
+                    if (!options.annotations)
+                    {
+                        outputInfo.pixelType = options.exrPixelType;
+                    }
                 }
 #endif
                 if (saveHDR)
@@ -572,6 +597,9 @@ namespace mrv
                           .arg(outputInfo.pixelType);
                 LOG_INFO(msg);
 
+#ifdef TLRENDER_EXR
+                ioOptions["OpenEXR/PixelType"] = getLabel(options.exrPixelType);
+#endif
                 outputImage = image::Image::create(outputInfo);
                 ioInfo.videoTime = videoTime;
                 ioInfo.video.push_back(outputInfo);
@@ -825,13 +853,13 @@ namespace mrv
                                 rgb->d());
                             break;
                         case image::PixelType::RGB_F16:
-                            flipImageInY(
+                            flipGBRImageInY(
                                 (Imath::half*)outputImage->getData(),
                                 (const uint8_t*)data[0], rgb->w(), rgb->h(),
                                 rgb->d());
                             break;
                         case image::PixelType::RGB_F32:
-                            flipImageInY(
+                            flipGBRImageInY(
                                 (float*)outputImage->getData(),
                                 (const uint8_t*)data[0], rgb->w(), rgb->h(),
                                 rgb->d());
