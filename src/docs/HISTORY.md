@@ -1,3 +1,10 @@
+v1.3.3
+======
+
+- Fixed AC3 bitrate (saving audio using the AC3 codec).
+- Fixed the sourceforge_defaults.sh script to work on all platforms.
+
+
 v1.3.2
 ======
 
