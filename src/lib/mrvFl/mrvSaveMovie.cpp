@@ -597,26 +597,30 @@ namespace mrv
                 LOG_INFO(msg);
 
 #ifdef TLRENDER_EXR
-                ioOptions["OpenEXR/PixelType"] = getLabel(options.exrPixelType);
+                ioOptions["OpenEXR/PixelType"] = getLabel(outputInfo.pixelType);
 #endif
                 outputImage = image::Image::create(outputInfo);
                 ioInfo.videoTime = videoTime;
                 ioInfo.video.push_back(outputInfo);
 
 #ifdef TLRENDER_FFMPEG
-                auto entries = tl::ffmpeg::getProfileLabels();
-                std::string profileName = entries[(int)options.ffmpegProfile];
-
-                msg = tl::string::Format(
-                          _("Using profile {0}, pixel format {1}."))
-                          .arg(profileName)
-                          .arg(options.ffmpegPixelFormat);
-                LOG_INFO(msg);
-                if (!options.ffmpegPreset.empty())
+                if (hasVideo && savingMovie)
                 {
-                    msg = tl::string::Format(_("Using preset {0}."))
-                              .arg(options.ffmpegPreset);
+                    auto entries = tl::ffmpeg::getProfileLabels();
+                    std::string profileName =
+                        entries[(int)options.ffmpegProfile];
+
+                    msg = tl::string::Format(
+                              _("Using profile {0}, pixel format {1}."))
+                              .arg(profileName)
+                              .arg(options.ffmpegPixelFormat);
                     LOG_INFO(msg);
+                    if (!options.ffmpegPreset.empty())
+                    {
+                        msg = tl::string::Format(_("Using preset {0}."))
+                                  .arg(options.ffmpegPreset);
+                        LOG_INFO(msg);
+                    }
                 }
 #endif
             }

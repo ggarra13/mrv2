@@ -18,9 +18,12 @@ namespace mrv
 
     struct SaveOptions
     {
-        bool annotations = false;
-        bool video = true;
-        bool saveVideo = true;
+        bool annotations = false; // whether annotations shoud be saved
+        bool video = true;        // whether video should be shown
+                                  // If not, annotations are saved
+                                  // only.
+        bool saveVideo = true; // whether video should be saved.aitem // if not,
+                               // audio only is saved.
 
         SaveResolution resolution = SaveResolution::kSameSize;
 

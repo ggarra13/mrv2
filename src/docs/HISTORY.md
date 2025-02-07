@@ -18,6 +18,7 @@ v1.3.2
 - Fixed text annotations saving in PDF, movies or sequences on macOS Sonoma
   and Sequoia.
 - Fixed zoom factor capture on high DPI displays on macOS Sonoma and Sequoia.
+- Removed printing of profile when not saving a movie.
 
 
 v1.3.1
