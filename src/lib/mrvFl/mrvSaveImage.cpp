@@ -380,7 +380,7 @@ namespace mrv
                         rgb->w(), rgb->h(), rgb->d());
                     break;
                 default:
-                    LOG_ERROR(_("Unsupport output format"));
+                    LOG_ERROR(_("Unsupported output format"));
                     break;
                 }
 
