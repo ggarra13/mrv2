@@ -3,8 +3,6 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#!/usr/bin/env bash
-
 release=$1
 
 if [[ "$release" == "" ]]; then
@@ -18,35 +16,34 @@ API_KEY='568e57c2-5865-4a83-9ffc-1219d88be13d'
 
 download_site="https://sourceforge.net/projects/${project}/files/${release}"
 
-# Declare an associative array
-declare -A platforms
+# Use parallel arrays for platforms and filenames
+platforms=("windows" "mac" "linux")
+files=(
+    "${project}-${release}-Windows-amd64.exe"
+    "${project}-${release}-Darwin-amd64.dmg"
+    "${project}-${release}-Linux-amd64.deb"
+)
 
-platforms["windows"]="${project}-${release}-Windows-amd64.exe"
-platforms["mac"]="${project}-${release}-Darwin-amd64.dmg"
-platforms["linux"]="${project}-${release}-Linux-amd64.deb"
-
-function change_default()
-{
+change_default() {
     platform=$1
     name=$2
 
     filename="${download_site}/${name}"
-    
+
     echo "Changing ${filename}"
-    
-    err=`curl -s -H "Accept: application/json" -X PUT -d "default=${platform}" -d "api_key=${API_KEY}" "${filename}"`
-    if [[ $? != 0 ]]; then
-	echo "Returned status=$?"
-	echo $err
-	exit 1
-    fi
-    if [[ "$err" == "*code*" ]]; then
-	echo $err
-	exit 0
-    fi
-}    
 
-for platform in "${!platforms[@]}"; do
-    change_default $platform ${platforms[$platform]}
+    err=$(curl -s -H "Accept: application/json" -X PUT -d "default=${platform}" -d "api_key=${API_KEY}" "${filename}")
+    if [[ $? -ne 0 ]]; then
+        echo "Returned status=$?"
+        echo "$err"
+        exit 1
+    fi
+    if [[ "$err" == *"code"* ]]; then
+        echo "$err"
+        exit 0
+    fi
+}
+
+for i in "${!platforms[@]}"; do
+    change_default "${platforms[$i]}" "${files[$i]}"
 done
-
