@@ -22,6 +22,7 @@ v1.3.2
 - Fixed zoom factor capture on high DPI displays on macOS Sonoma and Sequoia.
 - Removed printing of profile when not saving a movie.
 - Fixed opening a session file from the command-line when the Python panel was open.
+- Improved Python Editor's highlighting of keywords.
 
 
 v1.3.1
