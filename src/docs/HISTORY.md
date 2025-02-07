@@ -7,9 +7,10 @@ v1.3.2
 - Hiding an audio track in an .otio timeline now turns off audio for that track.
 - Added support for OpenEXR's ripmaps and mipmaps.
 - Made Mipmap and Ripmaps' rounding mode show as "UP" or "DOWN".
-- Added Python functions: annotation.getTimes() to get the times where there are annotations.
+- Made Line Order in Media Info Panel show as Increasing Y, Decreasing Y or Random instead of a number.
+- Added Python functions: annotations.getTimes() to get the times where there are annotations.
 - Added Python function: cmd.saveSingleFrame() to save the current frame.
-- Added Python function: cmd.saveMultipleFrames() to save multiple frames from a list of times, like those returned from annotation.getTimes().
+- Added Python function: cmd.saveMultipleFrames() to save multiple frames from a list of times, like those returned from annotations.getTimes().
 - Fixed instantiation of mrv2.io.SaveOptions().
 - Made Page Up/Page Down change images always, instead of scrolling the panel
   sidebar.
