@@ -28,6 +28,7 @@ namespace fs = std::filesystem;
 
 #include "mrvNetwork/mrvTCP.h"
 
+#include "mrvFl/mrvSave.h"
 #include "mrvFl/mrvSaveOptions.h"
 #include "mrvFl/mrvIO.h"
 
@@ -45,32 +46,23 @@ namespace
 namespace mrv
 {
 
-    int save_single_frame(
-        const std::string& file, const ViewerUI* ui, SaveOptions options)
+    int _save_single_frame(
+        std::string file, const ViewerUI* ui, SaveOptions options)
     {
-        std::string msg;
-
         int ret = 0;
+        std::string msg;
         Viewport* view = ui->uiView;
-        bool presentation = view->getPresentationMode();
-        bool hud = view->getHudActive();
 
+        file::Path path(file);
+
+        // Time range.
         auto player = view->getTimelinePlayer();
         if (!player)
             return -1; // should never happen
 
-        file::Path path(file);
-
-        if (file::isTemporaryEDL(path))
-        {
-            LOG_ERROR(_("Cannot save an NDI stream"));
-            return -1;
-        }
-
         // Stop the playback
         player->stop();
 
-        // Time range.
         auto currentTime = player->currentTime();
 
         const std::string& extension = path.getExtension();
@@ -484,26 +476,100 @@ namespace mrv
             }
 
             writer->writeVideo(currentTime, outputImage);
-
-            // Rename file name that got saved with a frame number to the actual
-            // frame that the user set.
-            int64_t currentFrame = currentTime.to_frames();
-            char filename[4096];
-            snprintf(
-                filename, 4096, "%s%s%0*" PRId64 "%s",
-                path.getDirectory().c_str(), path.getBaseName().c_str(),
-                static_cast<int>(path.getPadding()), currentFrame,
-                path.getExtension().c_str());
-
-            if (filename != file && !options.noRename)
-            {
-                fs::rename(fs::path(filename), fs::path(file));
-            }
         }
         catch (const std::exception& e)
         {
             LOG_ERROR(e.what());
             ret = -1;
+        }
+        return ret;
+    }
+
+    int save_multiple_frames(
+        const std::string& file, const std::vector<otime::RationalTime>& times,
+        const ViewerUI* ui, SaveOptions options)
+    {
+        int ret = 0;
+        Viewport* view = ui->uiView;
+        bool presentation = view->getPresentationMode();
+        bool hud = view->getHudActive();
+
+        auto player = view->getTimelinePlayer();
+        if (!player)
+            return -1;
+
+        file::Path path(file);
+
+        if (file::isTemporaryEDL(path))
+        {
+            LOG_ERROR(_("Cannot save an NDI stream"));
+            return -1;
+        }
+
+        for (const auto& time : times)
+        {
+            player->seek(time);
+            waitForFrame(player, time);
+
+            _save_single_frame(file, ui, options);
+        }
+
+        view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
+        view->setHudActive(hud);
+        view->setPresentationMode(presentation);
+        tcp->unlock();
+
+        auto settings = ui->app->settings();
+        if (file::isReadable(file))
+        {
+            settings->addRecentFile(file);
+            ui->uiMain->fill_menu(ui->uiMenuBar);
+        }
+        return ret;
+    }
+
+    int save_single_frame(
+        const std::string& file, const ViewerUI* ui, SaveOptions options)
+    {
+        std::string msg;
+
+        int ret = 0;
+        Viewport* view = ui->uiView;
+        bool presentation = view->getPresentationMode();
+        bool hud = view->getHudActive();
+
+        file::Path path(file);
+
+        if (file::isTemporaryEDL(path))
+        {
+            LOG_ERROR(_("Cannot save an NDI stream"));
+            return -1;
+        }
+
+        // Time range.
+        auto player = view->getTimelinePlayer();
+        if (!player)
+            return -1; // should never happen
+
+        // Stop the playback
+        player->stop();
+
+        const auto& currentTime = player->currentTime();
+
+        _save_single_frame(file, ui, options);
+
+        // Rename file name that got saved with a frame number to the actual
+        // frame that the user set.
+        int64_t currentFrame = currentTime.to_frames();
+        char filename[4096];
+        snprintf(
+            filename, 4096, "%s%s%0*" PRId64 "%s", path.getDirectory().c_str(),
+            path.getBaseName().c_str(), static_cast<int>(path.getPadding()),
+            currentFrame, path.getExtension().c_str());
+
+        if (filename != file && !options.noRename)
+        {
+            fs::rename(fs::path(filename), fs::path(file));
         }
 
         view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());

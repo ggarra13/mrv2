@@ -723,6 +723,12 @@ namespace mrv
             p.settings->setValue("Misc/MaxFileSequenceDigits", 0);
         }
 
+#ifdef MRV2_PYBIND11
+        // Create Python's output window
+        Fl_Group::current(0);
+        outputDisplay = new PythonOutput(0, 0, 400, 400);
+#endif
+
         if (!p.options.fileNames.empty())
         {
             if (p.options.createOtioTimeline)
@@ -940,10 +946,6 @@ namespace mrv
             ui = nullptr;
             return;
         }
-
-        // Create Python's output window
-        Fl_Group::current(0);
-        outputDisplay = new PythonOutput(0, 0, 400, 400);
 
         // Redirect Python's stdout/stderr to my own class
         p.pythonStdErrOutRedirect.reset(new PyStdErrOutStreamRedirect);

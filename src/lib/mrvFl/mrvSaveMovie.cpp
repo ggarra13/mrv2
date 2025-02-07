@@ -42,9 +42,9 @@ namespace
     const char* kModule = "save";
 }
 
-namespace
+namespace mrv
 {
-    void waitForFirstFrame(
+    void waitForFrame(
         const mrv::TimelinePlayer* player, const otime::RationalTime& startTime)
     {
         using namespace tl;
@@ -72,10 +72,6 @@ namespace
             Fl::check();
         }
     }
-} // namespace
-
-namespace mrv
-{
 
     void
     save_movie(const std::string& file, const ViewerUI* ui, SaveOptions options)
@@ -448,7 +444,7 @@ namespace mrv
 
             player->start();
 
-            waitForFirstFrame(player, startTime);
+            waitForFrame(player, startTime);
 
             if (hasVideo)
             {

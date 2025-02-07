@@ -389,17 +389,29 @@ namespace mrv2
             save_movie(file, App::ui, opts);
         }
 
-
         /**
-         * \brief Save a movie or sequence.
+         * \brief Save a single frame.
          *
          * @param file The path to the movie file or to the sequence, like:
          *        bunny.0001.exr
-         * @param options (annotations, ffmpeg and openexr options)
+         * @param options (annotations and penexr options)
          */
-        void
-        saveSingleFrame(const std::string& file,
-                        const SaveOptions opts = SaveOptions())
+        void saveMultipleFrames(
+            const std::string& file, std::vector<otime::RationalTime> times,
+            const SaveOptions opts = SaveOptions())
+        {
+            save_multiple_frames(file, times, App::ui, opts);
+        }
+
+        /**
+         * \brief Save a single frame.
+         *
+         * @param file The path to the movie file or to the sequence, like:
+         *        bunny.0001.exr
+         * @param options (annotations and penexr options)
+         */
+        void saveSingleFrame(
+            const std::string& file, const SaveOptions opts = SaveOptions())
         {
             save_single_frame(file, App::ui, opts);
         }
@@ -586,9 +598,15 @@ Used to run main commands and get arguments and set the display, image, compare,
 
     cmds.def(
         "saveSingleFrame", &mrv2::cmd::saveSingleFrame,
-        _("Save a single frame."),
-        py::arg("fileName"), py::arg("options") = mrv::SaveOptions());
-    
+        _("Save a single frame."), py::arg("fileName"),
+        py::arg("options") = mrv::SaveOptions());
+
+    cmds.def(
+        "saveMultipleFrames", &mrv2::cmd::saveMultipleFrames,
+        _("Save multiple frames."), py::arg("fileName"),
+        py::arg("times") = std::vector<mrv::otime::RationalTime>(),
+        py::arg("options") = mrv::SaveOptions());
+
     cmds.def(
         "saveOTIO", &mrv2::cmd::saveOTIO,
         _("Save an .otio file from the current selected image."),

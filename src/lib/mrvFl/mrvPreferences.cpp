@@ -273,7 +273,7 @@ namespace mrv
 
         gui.get("timeline_video_offset", tmpF, 0.0);
         uiPrefs->uiStartTimeOffset->value(tmpF);
-        
+
         gui.get("timeline_thumbnails", tmp, 1);
         uiPrefs->uiPrefsTimelineThumbnails->value(tmp);
 
@@ -363,7 +363,7 @@ namespace mrv
 
         view.get("ocio_in_top_bar", tmp, 0);
         uiPrefs->uiPrefsOCIOInTopBar->value((bool)tmp);
-        
+
         view.get("video_levels", tmp, 0);
         uiPrefs->uiPrefsVideoLevels->value(tmp);
 
@@ -577,7 +577,7 @@ namespace mrv
 
         ocio.get("use_default_display_view", tmp, 0);
         uiPrefs->uiOCIOUseDefaultDisplayView->value(tmp);
-        
+
         ocio.get("use_active_views", tmp, 1);
         uiPrefs->uiOCIOUseActiveViews->value(tmp);
 
@@ -877,7 +877,6 @@ namespace mrv
         // Update hotkeys tooltips in UI.
         update_hotkey_tooltips();
 
-        
         std_any value;
 
         int v = settings->getValue<int>("Performance/AudioBufferFrameCount");
@@ -1030,7 +1029,7 @@ namespace mrv
             visible = 1;
         settings->setValue("gui/Preferences/Window/Visible", visible);
 
-        int width = ui->uiDockGroup->w() == 0 ? 1 : ui->uiDockGroup->w();
+        int width = ui->uiDockGroup->w() <= 0 ? 1 : ui->uiDockGroup->w();
         float pct = (float)width / ui->uiViewGroup->w();
         settings->setValue("gui/DockGroup/Width", pct);
 
@@ -1764,7 +1763,7 @@ namespace mrv
             ui->uiOCIO->hide();
             ui->uiCOLORS->show();
         }
-        
+
         // Handle image options
         auto imageOptions = app->imageOptions();
         int alphaBlend = uiPrefs->uiPrefsAlphaBlend->value();
