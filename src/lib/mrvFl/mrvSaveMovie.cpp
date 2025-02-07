@@ -2,6 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <chrono>
 #include <string>
 #include <sstream>
 
@@ -444,8 +445,6 @@ namespace mrv
 
             player->start();
 
-            waitForFrame(player, startTime);
-
             if (hasVideo)
             {
 
@@ -463,7 +462,26 @@ namespace mrv
                     // flush is needed
                     Fl::flush();
                     view->flush();
-                    Fl::check();
+
+                    // Wait 2 seconds (needed on Apple for presentation mode
+                    //                 visible resizing)
+                    const auto& start =
+                        std::chrono::high_resolution_clock::now();
+                    auto elapsedTime =
+                        std::chrono::duration_cast<std::chrono::milliseconds>(
+                            start - start)
+                            .count();
+                    while (elapsedTime < 2000)
+                    {
+                        Fl::check();
+
+                        const auto& now =
+                            std::chrono::high_resolution_clock::now();
+                        elapsedTime =
+                            std::chrono::duration_cast<
+                                std::chrono::milliseconds>(now - start)
+                                .count();
+                    }
 
                     // returns pixel_w(), pixel_h()
                     auto viewportSize = view->getViewportSize();
@@ -724,6 +742,8 @@ namespace mrv
             size_t totalSamples = 0;
             size_t currentSampleCount =
                 startTime.rescaled_to(sampleRate).value();
+
+            waitForFrame(player, startTime);
 
             while (running)
             {

@@ -20,6 +20,7 @@ v1.3.2
 - Removed printing of profile when not saving a movie.
 - Fixed opening a session file from the command-line when the Python panel was open.
 - Improved Python Editor's highlighting of keywords.
+- Fixed OpenGL capture of viewport on macOS, leading to offsets after some frames.
 
 
 v1.3.1
