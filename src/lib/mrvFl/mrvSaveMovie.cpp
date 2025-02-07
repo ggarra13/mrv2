@@ -424,7 +424,6 @@ namespace mrv
 
             // Create the renderer.
             render = timeline_gl::Render::create(context);
-
             offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
 
             // Create the writer.
@@ -448,6 +447,8 @@ namespace mrv
             outputInfo.pixelType = info.video[layerId].pixelType;
 
             player->start();
+
+            waitForFirstFrame(player, startTime);
 
             if (hasVideo)
             {
@@ -531,8 +532,6 @@ namespace mrv
                               .arg(Y);
                     LOG_INFO(msg);
                 }
-
-                waitForFirstFrame(player, startTime);
 
 #ifdef __APPLE__
                 if (options.annotations)

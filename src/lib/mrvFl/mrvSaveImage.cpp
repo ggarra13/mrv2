@@ -323,6 +323,7 @@ namespace mrv
                                   .arg(outputInfo.size)
                                   .arg(outputInfo.pixelType);
             LOG_INFO(msg);
+
 #ifdef TLRENDER_EXR
             ioOptions["OpenEXR/PixelType"] = getLabel(outputInfo.pixelType);
 #endif
