@@ -4,6 +4,8 @@ v1.3.3
 - Fixed AC3 bitrate (saving audio using the AC3 codec).
 - Improved saving audio bitrates for all formats.
 - Fixed the sourceforge_defaults.sh script to work on all platforms.
+- Fixed some potential rounding errors on saving frames or movies with
+  annotations.
 
 
 v1.3.2

@@ -536,8 +536,11 @@ namespace mrv
                         }
                     }
 
-                    X = (viewportSize.w - outputInfo.size.w) / 2;
-                    Y = (viewportSize.h - outputInfo.size.h) / 2;
+                    X = std::max(0, (viewportSize.w - outputInfo.size.w) / 2);
+                    Y = std::max(0, (viewportSize.h - outputInfo.size.h) / 2);
+
+                    outputInfo.size.w = std::round(outputInfo.size.w);
+                    outputInfo.size.h = std::round(outputInfo.size.h);
 
                     msg = tl::string::Format(_("Viewport Size: {0} - "
                                                "X={1}, Y={2}"))
