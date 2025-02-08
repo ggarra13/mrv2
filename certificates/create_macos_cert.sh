@@ -1,14 +1,28 @@
 #!/usr/bin/env bash
 
-rm mrv2.csr mrv2.crt mrv2.p12
 
-# Create a private key
-openssl genrsa -out mrv2.key 2048
+# Script to create a self-signed .p12 certificate
+
+# Configuration
+CERT_NAME="MySelfSignedCert"    # Common name for the certificate
+DAYS=3650                       # Validity period in days (10 years)
+OUTPUT_P12="mrv2.p12"           # Output .p12 file name
+PASSWORD="mrv2"                 # Password for the .p12 file
+
+# Generate a private key
+openssl genrsa -out key.pem 2048
 
 # Generate a certificate signing request (CSR)
-openssl req -new -key mrv2.key -out mrv2.csr -subj "/CN=mrv2 Developer/O=mrv2 Project/C=US"
+openssl req -new -key key.pem -out csr.pem -subj "/CN=${CERT_NAME}"
 
-# Create the self-signed certificate (valid for 10 years)
-openssl x509 -req -days 3650 -in mrv2.csr -signkey mrv2.key -out mrv2.crt
+# Generate the self-signed certificate
+openssl x509 -req -days ${DAYS} -in csr.pem -signkey key.pem -out cert.pem
 
-openssl pkcs12 -export -out mrv2.p12 -inkey mrv2.key -in mrv2.crt -name "mrv2" -password pass:mrv2_13091973
+# Combine the key and certificate into a .p12 file
+openssl pkcs12 -export -legacy -inkey key.pem -in cert.pem -out ${OUTPUT_P12} -passout pass:${PASSWORD}
+
+# Clean up intermediate files
+rm key.pem csr.pem cert.pem
+
+echo "Self-signed .p12 certificate created: ${OUTPUT_P12}"
+echo "Password: ${PASSWORD}"
