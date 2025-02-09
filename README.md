@@ -72,10 +72,12 @@ mrv2 binaries run on Windows 8.1+, RedHat 8.9+ or Ubuntu 20.04+ and macOS 11.0+.
   The macOS application is currently not notarized, so when you launch it you
   will not be able to run it as macOS will warn you that the file is not secure
   as it was downloaded from internet.
-  To avoid that, you need to open the Finder, go to the Applications directory
-  and CTRL + Left mouse click on the mrv2 application.  That will bring up
-  the same warning, but this time it will have a button that will allow you
-  to open it.  You only need to do this once.
+  To avoid that, you need to open the Apple Logo->Settings->Privacy and Security
+  and go to Security and allow "Opening Anyway".
+  Alternatively, you can do it from the Terminal, by:
+  
+  sudo xattr -rd com.apple.quarantine /Applications/mrv2.app/
+
 
 - Windows and Chrome, like macOS, also protect you from installing files
   from the Internet.  When you first download it with Chrome it may warn
