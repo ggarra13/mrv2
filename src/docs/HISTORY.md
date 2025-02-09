@@ -6,6 +6,7 @@ v1.3.3
 - Fixed the sourceforge_defaults.sh script to work on all platforms.
 - Fixed some potential rounding errors on saving frames or movies with
   annotations.
+- Added upcoming (not yet released) HT256 OpenEXR compressor.
 
 
 v1.3.2
