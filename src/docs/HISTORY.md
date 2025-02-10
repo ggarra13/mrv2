@@ -6,6 +6,8 @@ v1.3.3
 - Fixed the sourceforge_defaults.sh script to work on all platforms.
 - Fixed some potential rounding errors on saving frames or movies with
   annotations.
+- Minor UI improvement.  Added small space between Gain/Saturation/Gamma
+  sliders.
 - Added upcoming (not yet released) HT256 OpenEXR compressor.
 
 
