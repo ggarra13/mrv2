@@ -679,7 +679,7 @@ class UpdatePlugin(plugin.Plugin):
                                         release_info)
         else:
             self.fltk_ask_to_update(current_version, release_version,
-                                    _('Upgrade'), relese_info)
+                                    _('Upgrade'), release_info)
 
     def check_latest_release(self, user, project):
         """Checks for the latest github release for a user and project.

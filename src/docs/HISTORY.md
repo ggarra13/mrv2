@@ -9,6 +9,7 @@ v1.3.3
 - Minor UI improvement.  Added small space between Gain/Saturation/Gamma
   sliders.
 - Added upcoming (not yet released) HT256 OpenEXR compressor.
+- Fixed update-mrv2.py script typo which would not allow updating mrv2.
 
 
 v1.3.2
