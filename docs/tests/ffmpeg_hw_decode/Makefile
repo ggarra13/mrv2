@@ -1,7 +1,6 @@
 # use pkg-config for getting CFLAGS and LDLIBS
 FFMPEG_LIBS=    libavdevice                        \
                 libavformat                        \
-                libavfilter                        \
                 libavcodec                         \
                 libswresample                      \
                 libswscale                         \
@@ -27,7 +26,7 @@ OBJS=$(addsuffix .o,$(EXAMPLES))
 
 # the following examples make explicit use of the math library
 avcodec:           LDLIBS += -lm
-encode_audio:      LDLIBS += -lm
+encode_audio:      LDLIBS += -lmy
 mux:               LDLIBS += -lm
 resample_audio:    LDLIBS += -lm
 
@@ -41,7 +40,7 @@ all: $(OBJS) $(EXAMPLES)
 # Rule for compiling .cxx files
 %.o: %.cxx
 	$(CXX) $(CFLAGS) -c $< -o $@
-	
+
 clean-test:
 	$(RM) test*.pgm test.h264 test.mp2 test.sw test.mpg
 
