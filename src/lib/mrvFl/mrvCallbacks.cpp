@@ -431,7 +431,7 @@ namespace mrv
 
 #ifdef TLRENDER_EXR
         value = saveOptions.Compression->value();
-        options.exrCompression = static_cast<tl::exr::Compression>(value);
+        options.exrCompression = static_cast<Imf::Compression>(value);
         options.zipCompressionLevel =
             static_cast<int>(saveOptions.ZipCompressionLevel->value());
         options.dwaCompressionLevel = saveOptions.DWACompressionLevel->value();
@@ -676,7 +676,7 @@ namespace mrv
                 options.exrPixelType = tl::image::PixelType::RGBA_F32;
 
             value = saveOptions.Compression->value();
-            options.exrCompression = static_cast<tl::exr::Compression>(value);
+            options.exrCompression = static_cast<Imf::Compression>(value);
 
             options.zipCompressionLevel =
                 static_cast<int>(saveOptions.ZipCompressionLevel->value());
@@ -875,7 +875,7 @@ namespace mrv
                 options.exrPixelType = tl::image::PixelType::RGBA_F32;
 
             value = saveOptions.Compression->value();
-            options.exrCompression = static_cast<tl::exr::Compression>(value);
+            options.exrCompression = static_cast<Imf::Compression>(value);
 
             options.zipCompressionLevel =
                 static_cast<int>(saveOptions.ZipCompressionLevel->value());

@@ -73,17 +73,19 @@ void mrv2_enums(py::module& m)
 #endif
 
 #ifdef TLRENDER_EXR
-    py::enum_<exr::Compression>(io, "Compression")
-        .value("kNone", exr::Compression::None)
-        .value("RLE", exr::Compression::RLE)
-        .value("ZIPS", exr::Compression::ZIPS)
-        .value("ZIP", exr::Compression::ZIP)
-        .value("PIZ", exr::Compression::PIZ)
-        .value("PXR24", exr::Compression::PXR24)
-        .value("B44", exr::Compression::B44)
-        .value("B44A", exr::Compression::B44A)
-        .value("DWAA", exr::Compression::DWAA)
-        .value("DWAB", exr::Compression::DWAB);
+    py::enum_<Imf::Compression>(io, "Compression")
+        .value("kNone", Imf::NO_COMPRESSION)
+        .value("RLE", Imf::RLE_COMPRESSION)
+        .value("ZIPS", Imf::ZIPS_COMPRESSION)
+        .value("ZIP", Imf::ZIP_COMPRESSION)
+        .value("PIZ", Imf::PIZ_COMPRESSION)
+        .value("PXR24", Imf::PXR24_COMPRESSION)
+        .value("B44", Imf::B44_COMPRESSION)
+        .value("B44A", Imf::B44A_COMPRESSION)
+        .value("DWAA", Imf::DWAA_COMPRESSION)
+        .value("DWAB", Imf::DWAB_COMPRESSION)
+        //.value("HT256", Imf::HT256_COMPRESSION)
+        ;
 #endif
 
     py::module image = m.def_submodule("image");

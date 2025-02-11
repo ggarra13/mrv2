@@ -29,7 +29,7 @@ void mrv2_io(py::module& m)
 #endif
 #ifdef TLRENDER_EXR
                 ,
-                tl::exr::Compression, tl::image::PixelType, int, float
+                Imf::Compression, tl::image::PixelType, int, float
 #endif
                 >(),
             py::arg("annotations") = false, py::arg("video") = true,
@@ -50,7 +50,7 @@ void mrv2_io(py::module& m)
 #endif
 #ifdef TLRENDER_EXR
             ,
-            py::arg("exrCompression") = tl::exr::Compression::ZIP,
+            py::arg("exrCompression") = Imf::ZIP_COMPRESSION,
             py::arg("exrPixelType") = tl::image::PixelType::RGBA_F16,
             py::arg("zipCompressionLevel") = 4,
             py::arg("dwaCompressionLevel") = 45.0F
@@ -131,7 +131,10 @@ void mrv2_io(py::module& m)
                   << " ffmpegColorTRC=" << o.ffmpegColorTRC
 #endif
 #ifdef TLRENDER_EXR
-                  << " exrCompression=" << getLabel(o.exrCompression)
+                    ;
+                std::string name;
+                Imf::getCompressionNameFromId(o.exrCompression, name);
+                s << " exrCompression=" << name
                   << " exrPixelType=" << getLabel(o.exrPixelType)
                   << " zipCompressionLevel=" << o.zipCompressionLevel
                   << " dwaCompressionLevel=" << o.dwaCompressionLevel

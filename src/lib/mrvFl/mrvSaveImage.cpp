@@ -80,7 +80,8 @@ namespace mrv
             char buf[256];
 
 #ifdef TLRENDER_EXR
-            ioOptions["OpenEXR/Compression"] = getLabel(options.exrCompression);
+            ioOptions["OpenEXR/Compression"] =
+                tl::string::Format("{0}").arg(options.exrCompression);
             snprintf(buf, 256, "%d", options.zipCompressionLevel);
             ioOptions["OpenEXR/ZipCompressionLevel"] = buf;
             {

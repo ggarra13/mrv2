@@ -166,7 +166,8 @@ namespace mrv
 #endif
 
 #ifdef TLRENDER_EXR
-            ioOptions["OpenEXR/Compression"] = getLabel(options.exrCompression);
+            ioOptions["OpenEXR/Compression"] =
+                tl::string::Format("{0}").arg(options.exrCompression);
             {
                 std::stringstream s;
                 s << options.zipCompressionLevel;
