@@ -10,6 +10,7 @@ v1.3.3
   sliders.
 - Added upcoming (not yet released) HT256 OpenEXR compressor.
 - Fixed update-mrv2.py script typo which would not allow updating mrv2.
+- Updated OCIO default configs to v2.2 ones.  They are still based on ACES 1.3 though, as ACES 2 ones have yet to be released.
 
 
 v1.3.2

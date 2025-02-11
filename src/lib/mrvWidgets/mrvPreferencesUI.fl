@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0400
+version 1.0401
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
@@ -424,7 +424,7 @@ If you try to open several mrv2s with different images, all these images will be
             }
             Fl_Group {} {
               label {Language and Colors} open
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label UI open
@@ -1028,8 +1028,8 @@ v->uiPrefsFPS->value( g );}
               }
             }
             Fl_Group {} {
-              label OCIO
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+              label OCIO open
+              xywh {288 37 555 361} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label OCIO open
@@ -1053,12 +1053,12 @@ if (entry == _("Default"))
 }
 else if (entry == _("CG"))
 {
-   v->uiPrefsOCIOConfig->value("ocio://cg-config-v1.0.0_aces-v1.3_ocio-v2.1");
+   v->uiPrefsOCIOConfig->value("ocio://cg-config-v2.2.0_aces-v1.3_ocio-v2.4");
 }
 else if (entry == _("Studio"))
 {
-   v->uiPrefsOCIOConfig->value("ocio://studio-config-v1.0.0_aces-v1.3_ocio-v2.1");
-}}
+   v->uiPrefsOCIOConfig->value("ocio://studio-config-v2.2.0_aces-v1.3_ocio-v2.4");
+}} selected
                   xywh {477 101 119 32} down_box BORDER_BOX when 7
                 } {
                   MenuItem {} {
@@ -1664,7 +1664,7 @@ mrv::Preferences::load(false, false);}
               label OK
               user_data m user_data_type {ViewerUI*}
               callback {v->uiPrefs->uiMain->hide();
-mrv::Preferences::run();} selected
+mrv::Preferences::run();}
               tooltip {Accept settings but don't save.  They will get saved when exiting the program.} xywh {648 418 132 31}
             }
           }
