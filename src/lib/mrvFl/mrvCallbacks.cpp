@@ -540,6 +540,7 @@ namespace mrv
         }
 
         mrv::SaveOptions options;
+        bool annotations_frames_only = false;
 
 #ifdef TLRENDER_FFMPEG
         if (file::isMovie(extension) || file::isAudio(extension))
@@ -665,6 +666,8 @@ namespace mrv
 
             options.annotations =
                 static_cast<bool>(saveOptions.Annotations->value());
+            annotations_frames_only = 
+                static_cast<bool>(saveOptions.AnnotationFramesOnly->value());
 
             int value;
 
@@ -685,7 +688,15 @@ namespace mrv
 #endif
         }
 
-        save_movie(file, ui, options);
+        if (annotations_frames_only)
+        {
+            auto times = player->getAnnotationTimes();
+            save_multiple_frames(file, times, ui, options);
+        }
+        else
+        {
+            save_movie(file, ui, options);
+        }
     }
 
     void save_pdf_cb(Fl_Menu_* w, ViewerUI* ui)
@@ -734,11 +745,12 @@ namespace mrv
 
         if (extension == ".otio")
         {
-            save_timeline_to_disk(file);
+            LOG_ERROR(_("Cannot save annotations to .otio file"));
             return;
         }
 
         mrv::SaveOptions options;
+        bool annotations_frames_only = false;
 
 #ifdef TLRENDER_FFMPEG
         if (file::isMovie(extension) || file::isAudio(extension))
@@ -864,7 +876,10 @@ namespace mrv
 
             options.annotations =
                 static_cast<bool>(saveOptions.Annotations->value());
+            annotations_frames_only =
+                static_cast<bool>(saveOptions.AnnotationFramesOnly->value());
 
+            
             int value;
 
 #ifdef TLRENDER_EXR
@@ -886,8 +901,16 @@ namespace mrv
 
         options.annotations = true;
         options.video = false;
-
-        save_movie(file, ui, options);
+        
+        if (annotations_frames_only)
+        {
+            auto times = player->getAnnotationTimes();
+            save_multiple_annotation_frames(file, times, ui, options);
+        }
+        else
+        {
+            save_movie(file, ui, options);
+        }
     }
 
     void save_annotations_as_json_cb(Fl_Menu_* w, ViewerUI* ui)

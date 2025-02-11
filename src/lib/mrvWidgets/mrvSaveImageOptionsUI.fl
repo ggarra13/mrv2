@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0400
+version 1.0401
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
@@ -65,11 +65,11 @@ o->value(0);} {}
   } {
     Fl_Window uiMain {
       label {Save Image Options} open
-      xywh {635 296 523 453} type Double align 5 modal visible
+      xywh {766 301 523 453} type Double align 5 modal visible
     } {
       Fl_Group {} {
         label {Common Settings} open
-        xywh {80 41 376 72} box ROUNDED_FRAME color 56
+        xywh {82 37 380 120} box ROUNDED_FRAME color 56
       } {
         Fl_Check_Button Annotations {
           label {Save Annotations}
@@ -80,9 +80,18 @@ It also allows saving OpenEXRs from an 8-bit movie and changing OpenEXR's pixel 
 
 Furthermore, it allows saving A/B or Tiled comparisons and baking OCIO.
 
-However, it is limited to the size of your screen.} xywh {192 49 25 25} down_box DOWN_BOX
+However, it is limited to the size of your screen.} xywh {192 51 25 25} down_box DOWN_BOX
           code0 {auto settings = mrv::App::app->settings();}
           code1 {int value = settings->getValue<int>("SaveImage/Annotations");}
+          code2 {o->value(value);}
+        }
+        Fl_Check_Button AnnotationFramesOnly {
+          label {Annotation Frames Only}
+          callback {auto settings = mrv::App::app->settings();
+settings->setValue("SaveImage/AnnotationFramesOnly", static_cast<int>(o->value()));} selected
+          tooltip {Save only the annotation frames, not the whole sequence.} xywh {193 80 25 25} down_box DOWN_BOX
+          code0 {auto settings = mrv::App::app->settings();}
+          code1 {int value = settings->getValue<int>("SaveImage/AnnotationFramesOnly");}
           code2 {o->value(value);}
         }
         Fl_Choice Resolution {
@@ -91,8 +100,8 @@ However, it is limited to the size of your screen.} xywh {192 49 25 25} down_box
           callback {int value = o->value();
 
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveImage/Resolution", value);} open selected
-          tooltip {Resolution of movie to save.} xywh {182 74 170 29} down_box BORDER_BOX
+settings->setValue("SaveImage/Resolution", value);} open
+          tooltip {Resolution of movie to save.} xywh {194 113 170 29} down_box BORDER_BOX
           code0 {auto settings = mrv::App::app->settings();}
           code1 {int value = settings->getValue<int>("SaveImage/Resolution");}
           code2 {o->value(value);}
@@ -113,7 +122,7 @@ settings->setValue("SaveImage/Resolution", value);} open selected
       }
       Fl_Group OpenEXROptions {
         label {OpenEXR Options} open
-        xywh {82 139 374 212} box ROUNDED_FRAME color 56
+        xywh {82 183 380 188} box ROUNDED_FRAME color 56
       } {
         Fl_Choice Compression {
           label Compression
@@ -132,7 +141,7 @@ else if (label == "DWAA" || label == "DWAB")
 }
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveImage/Compression", label);}
-          tooltip {OpenEXR's Compression Type} xywh {223 161 170 29} down_box BORDER_BOX
+          tooltip {OpenEXR's Compression Type} xywh {223 205 170 29} down_box BORDER_BOX
         } {
           MenuItem {} {
             label None
@@ -181,7 +190,7 @@ settings->setValue("SaveImage/Compression", label);}
 const std::string& label = item->label();
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveImage/PixelType", label);}
-          tooltip {OpenEXR's Pixel Type} xywh {223 202 170 29} down_box BORDER_BOX
+          tooltip {OpenEXR's Pixel Type} xywh {223 246 170 29} down_box BORDER_BOX
         } {
           MenuItem {} {
             label Half
@@ -193,7 +202,7 @@ settings->setValue("SaveImage/PixelType", label);}
           }
         }
         Fl_Group ZipCompressionGroup {open
-          xywh {225 248 168 26} deactivate
+          xywh {225 292 168 26} deactivate
         } {
           Fl_Value_Input ZipCompressionLevel {
             label {ZIP Compression}
@@ -202,18 +211,18 @@ settings->setValue("SaveImage/PixelType", label);}
 
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveImage/ZipCompressionLevel", o->value());}
-            xywh {225 248 64 26} color -1733777408 minimum 1 maximum 9 step 1 value 4 textcolor 56
+            xywh {225 292 64 26} color -1733777408 minimum 1 maximum 9 step 1 value 4 textcolor 56
           }
           Fl_Slider ZipCompressionSlider {
             user_data ZipCompressionLevel user_data_type {Fl_Value_Input*}
             callback {v->value(o->value());
 v->do_callback();
 v->redraw();}
-            xywh {289 248 104 26} type {Horz Knob} minimum 1 maximum 9 step 1 value 4 slider_size 0.1
+            xywh {289 292 104 26} type {Horz Knob} minimum 1 maximum 9 step 1 value 4 slider_size 0.1
           }
         }
         Fl_Group DWACompressionGroup {open
-          xywh {225 286 168 26} deactivate
+          xywh {225 330 168 26} deactivate
         } {
           Fl_Value_Input DWACompressionLevel {
             label {DWA Compression}
@@ -222,32 +231,32 @@ v->redraw();}
 
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveImage/DWACompressionLevel", o->value());}
-            xywh {225 286 64 26} color -1733777408 maximum 1e+06 step 0.1 value 45 textcolor 56
+            xywh {225 330 64 26} color -1733777408 maximum 1e+06 step 0.1 value 45 textcolor 56
           }
           Fl_Slider DWACompressionSlider {
             user_data DWACompressionLevel user_data_type {Fl_Value_Input*}
             callback {v->value(o->value());
 v->do_callback();
 v->redraw();}
-            xywh {289 286 104 26} type {Horz Knob} maximum 1e+06 step 2 value 45 slider_size 0.1
+            xywh {289 330 104 26} type {Horz Knob} maximum 1e+06 step 2 value 45 slider_size 0.1
           }
         }
       }
       Fl_Group {} {open
-        xywh {133 381 262 34}
+        xywh {134 392 262 34}
       } {
         Fl_Button {} {
           label Ok
           user_data uiMain user_data_type {Fl_Double_Window*}
           callback {v->hide();}
-          xywh {133 381 90 34}
+          xywh {134 392 90 34}
         }
         Fl_Button {} {
           label Cancel
           user_data uiMain user_data_type {Fl_Double_Window*}
           callback {cancel = true;
 v->hide();}
-          xywh {305 381 90 34}
+          xywh {306 392 90 34}
         }
       }
     }

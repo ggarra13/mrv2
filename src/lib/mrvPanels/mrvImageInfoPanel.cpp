@@ -2412,7 +2412,9 @@ namespace mrv
                 if (item.first == "hdr" ||
                     item.first.substr(0, 5) == "Video" ||
                     item.first.substr(0, 5) == "Audio" ||
-                    item.first.substr(0, 19) == "FFmpeg Pixel Format")
+                    item.first.substr(0, 19) == "FFmpeg Pixel Format" ||
+                    item.first.substr(0, 12) == "otioClipName" ||
+                    item.first.substr(0, 12) == "otioClipTime")
                 {
                     skip = true;
                 }

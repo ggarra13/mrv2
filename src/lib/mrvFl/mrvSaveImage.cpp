@@ -187,6 +187,7 @@ namespace mrv
 
                 if (options.annotations)
                 {
+                    view->setShowVideo(options.video);
                     view->setActionMode(ActionMode::kScrub);
                     view->setPresentationMode(true);
                     view->redraw();
@@ -520,6 +521,51 @@ namespace mrv
 
         view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
         view->setHudActive(hud);
+        view->setShowVideo(true);
+        view->setPresentationMode(presentation);
+        tcp->unlock();
+
+        auto settings = ui->app->settings();
+        if (file::isReadable(file))
+        {
+            settings->addRecentFile(file);
+            ui->uiMain->fill_menu(ui->uiMenuBar);
+        }
+        return ret;
+    }
+
+    int save_multiple_annotation_frames(
+        const std::string& file, const std::vector<otime::RationalTime>& times,
+        const ViewerUI* ui, SaveOptions options)
+    {
+        int ret = 0;
+        Viewport* view = ui->uiView;
+        bool presentation = view->getPresentationMode();
+        bool hud = view->getHudActive();
+
+        auto player = view->getTimelinePlayer();
+        if (!player)
+            return -1;
+
+        file::Path path(file);
+
+        if (file::isTemporaryEDL(path))
+        {
+            LOG_ERROR(_("Cannot save an NDI stream"));
+            return -1;
+        }
+
+        for (const auto& time : times)
+        {
+            player->seek(time);
+            waitForFrame(player, time);
+
+            _save_single_frame(file, ui, options);
+        }
+
+        view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
+        view->setHudActive(hud);
+        view->setShowVideo(true);
         view->setPresentationMode(presentation);
         tcp->unlock();
 
@@ -578,6 +624,7 @@ namespace mrv
 
         view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
         view->setHudActive(hud);
+        view->setShowVideo(true);
         view->setPresentationMode(presentation);
         tcp->unlock();
 

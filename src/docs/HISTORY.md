@@ -13,6 +13,12 @@ v1.3.3
 - Updated OCIO default configs to v2.2 ones.  They are still based on ACES 1.3 though, as ACES 2 ones have yet to be released.
 - Changed tlRender's use of exr::Compression to Imf::Compression to support current and future OpenEXR compressors.
 - Updated Python code to also use Imf::Compression instead of exr::Compression.
+- Removed internal otioClipName and otioClipTime attributes from metadata.
+- Added Annotation Frames Only to Save Image Options to save only the frames
+  that have annotations when saving either annotations only or sequences with
+  annotations.
+- Added new Python command: cmd.saveMultipleAnnotationFrames() to save multiple
+  annotation frames with either video or without video.
 
 
 v1.3.2

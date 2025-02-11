@@ -27,6 +27,12 @@ namespace mrv
         const std::string& file, const std::vector<otime::RationalTime>& times,
         const ViewerUI* ui, SaveOptions options = SaveOptions());
 
+    //! Save multiple frames specified as a list of times.  Returns 0 if
+    //! successful, -1 if not.
+    int save_multiple_annotation_frames(
+        const std::string& file, const std::vector<otime::RationalTime>& times,
+        const ViewerUI* ui, SaveOptions options = SaveOptions());
+
     //! Saves a movie or sequence.
     void save_movie(
         const std::string& file, const ViewerUI* ui,

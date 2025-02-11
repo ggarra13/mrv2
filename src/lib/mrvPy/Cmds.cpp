@@ -402,6 +402,23 @@ namespace mrv2
         {
             save_multiple_frames(file, times, App::ui, opts);
         }
+        
+        /**
+         * \brief Save a single frame.
+         *
+         * @param file The path to the movie file or to the sequence, like:
+         *        bunny.0001.exr
+         * @param options (annotations and penexr options)
+         */
+        void saveMultipleAnnotationFrames(
+            const std::string& file, std::vector<otime::RationalTime> times,
+            SaveOptions opts = SaveOptions())
+        {
+            opts.annotations = true;
+            opts.video = false;
+            
+            save_multiple_annotation_frames(file, times, App::ui, opts);
+        }
 
         /**
          * \brief Save a single frame.
@@ -599,6 +616,13 @@ Used to run main commands and get arguments and set the display, image, compare,
     cmds.def(
         "saveSingleFrame", &mrv2::cmd::saveSingleFrame,
         _("Save a single frame."), py::arg("fileName"),
+        py::arg("options") = mrv::SaveOptions());
+    
+    cmds.def(
+        "saveMultipleAnnotationFrames",
+        &mrv2::cmd::saveMultipleAnnotationFrames,
+        _("Save multiple annotation frames."), py::arg("fileName"),
+        py::arg("times") = std::vector<mrv::otime::RationalTime>(),
         py::arg("options") = mrv::SaveOptions());
 
     cmds.def(
