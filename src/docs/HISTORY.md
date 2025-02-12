@@ -19,6 +19,8 @@ v1.3.3
   annotations.
 - Added new Python command: cmd.saveMultipleAnnotationFrames() to save multiple
   annotation frames with either video or without video.
+- Removed trailing newline from desktop information on status bar present on
+Rocky Linux's **XDG_SESSION_TYPE** environment variable.
 
 
 v1.3.2

@@ -29,6 +29,7 @@
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvI8N.h"
+#include "mrvCore/mrvString.h"
 #include "mrvCore/mrvOS.h"
 
 #include "mrvFl/mrvIO.h"
@@ -334,6 +335,9 @@ namespace mrv
                     out += " ";
                     out += getWaylandCompositorVersion(compositor);
                 }
+
+                // Remove any newlines or spaces at end (needed on Rocky Linux)
+                out = string::stripTrailingWhitespace(out);
             }
 #elif _WIN32
             out += "Windows (GDI+)";
