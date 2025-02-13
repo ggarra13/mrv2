@@ -12,6 +12,7 @@ v1.3.3
 - Fixed update-mrv2.py script typo which would not allow updating mrv2.
 - Updated OCIO default configs to v2.2 ones.  They are still based on ACES 1.3 though, as ACES 2 ones have yet to be released.
 - Changed tlRender's use of exr::Compression to Imf::Compression to support current and future OpenEXR compressors.
+- Changed SaveImageOptionsUI to use Imf::getCompressionNameFromId().
 - Updated Python code to also use Imf::Compression instead of exr::Compression.
 - Removed internal otioClipName and otioClipTime attributes from metadata.
 - Added Annotation Frames Only to Save Image Options to save only the frames
