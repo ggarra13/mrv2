@@ -3,7 +3,7 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 // Debug scaling of the window to image size.
-// #define DEBUG_SCALING 1
+//#define DEBUG_SCALING 1
 
 #include <memory>
 #include <cmath>
@@ -1532,6 +1532,7 @@ namespace mrv
         TLRENDER_P();
         auto renderSize = getRenderSize();
 
+        bool use_maximize = false;
         Fl_Double_Window* mw = p.ui->uiMain;
         int screen = mw->screen_num();
 #ifdef DEBUG_SCALING
@@ -1727,6 +1728,7 @@ namespace mrv
             p.frameView = true;
             posY = minY + dH; // dH is needed here!
             H = maxH;
+            use_maximize = true;
         }
 
 #ifdef DEBUG_SCALING
@@ -1739,6 +1741,7 @@ namespace mrv
             p.frameView = true;
             posX = minX + dW / 2; // dW / 2 is needed here!
             W = maxW;
+            use_maximize = true;
         }
 
 #ifdef DEBUG_SCALING
@@ -1768,9 +1771,19 @@ namespace mrv
         std::cerr << "FINAL Window=" << posX << " " << posY << " " << W << "x"
                   << H << " dW=" << dW << " dH=" << dH << std::endl;
 #endif
-
+#ifdef __linux__
+        if (use_maximize && !p.presentation)
+        {
+            mw->maximize();
+        }
+        else
+        {
+            mw->resize(posX, posY, W, H);
+        }
+#else
         mw->resize(posX, posY, W, H);
-
+#endif        
+        
         if (p.frameView)
         {
             _frameView();
