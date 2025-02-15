@@ -557,18 +557,18 @@ namespace mrv
                     switch (outputInfo.pixelType)
                     {
                     case image::PixelType::RGBA_F16:
-                        outputInfo.pixelType = image::PixelType::RGB_F16;
+                        outputInfo.pixelType = image::PixelType::RGBA_F16;
                         break;
                     case image::PixelType::RGBA_F32:
-                        outputInfo.pixelType = image::PixelType::RGB_F32;
+                        outputInfo.pixelType = image::PixelType::RGBA_F32;
                         break;
                     default:
                         if (saveHDR)
-                            outputInfo.pixelType = image::PixelType::RGB_F32;
+                            outputInfo.pixelType = image::PixelType::RGBA_F32;
                         else if (saveEXR)
-                            outputInfo.pixelType = image::PixelType::RGB_F16;
+                            outputInfo.pixelType = image::PixelType::RGBA_F16;
                         else
-                            outputInfo.pixelType = image::PixelType::RGB_U8;
+                            outputInfo.pixelType = image::PixelType::RGBA_U8;
                         break;
                     }
                 }
@@ -866,23 +866,22 @@ namespace mrv
                         const char* const* data = rgb->data();
 
                         // Flip image in Y
-                        const size_t data_size = rgb->w() * rgb->h() * rgb->d();
                         switch (outputImage->getPixelType())
                         {
-                        case image::PixelType::RGB_U8:
+                        case image::PixelType::RGBA_U8:
                             flipImageInY(
                                 (uint8_t*)outputImage->getData(),
                                 (const uint8_t*)data[0], rgb->w(), rgb->h(),
                                 rgb->d());
                             break;
-                        case image::PixelType::RGB_F16:
-                            flipGBRImageInY(
+                        case image::PixelType::RGBA_F16:
+                            flipImageInY(
                                 (Imath::half*)outputImage->getData(),
                                 (const uint8_t*)data[0], rgb->w(), rgb->h(),
                                 rgb->d());
                             break;
-                        case image::PixelType::RGB_F32:
-                            flipGBRImageInY(
+                        case image::PixelType::RGBA_F32:
+                            flipImageInY(
                                 (float*)outputImage->getData(),
                                 (const uint8_t*)data[0], rgb->w(), rgb->h(),
                                 rgb->d());

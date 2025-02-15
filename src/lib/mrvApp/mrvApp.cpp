@@ -729,6 +729,18 @@ namespace mrv
         outputDisplay = new PythonOutput(0, 0, 400, 400);
 #endif
 
+        //
+        // Show the UI if no python script was fed in.
+        //
+        // We make sure the UI is visible when we feed a filename.
+        // This is needed to avoid an issue with Wayland not properly
+        // refreshing the play buttons.
+        if (p.options.pythonScript.empty())
+        {
+            ui->uiMain->show();
+            ui->uiView->take_focus();
+        }
+
         if (!p.options.fileNames.empty())
         {
             if (p.options.createOtioTimeline)
@@ -746,19 +758,6 @@ namespace mrv
                 p.options.fileNames.push_back(otioFile);
             }
 
-            
-            //
-            // Show the UI if no python script was fed in.
-            //
-            // We make sure the UI is visible when we feed a filename.
-            // This is needed to avoid an issue with Wayland not properly
-            // refreshing the play buttons.
-            if (p.options.pythonScript.empty())
-            {
-                ui->uiMain->show();
-                ui->uiView->take_focus();
-            }
-            
             bool foundAudio = false;
             for (const auto& fileName : p.options.fileNames)
             {
@@ -963,8 +962,6 @@ namespace mrv
         // Redirect Python's stdout/stderr to my own class
         p.pythonStdErrOutRedirect.reset(new PyStdErrOutStreamRedirect);
 #endif
-
-            
 
         // Fix for always on top on Linux
         bool value = ui->uiPrefs->uiPrefsAlwaysOnTop->value();

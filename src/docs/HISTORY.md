@@ -26,6 +26,9 @@ Rocky Linux's **XDG_SESSION_TYPE** environment variable.
 - Made "Invalid EDID data" not appear when running under XWayland.
 - Fixed Play buttons sometimes appearing in the middle of the viewport under
   Wayland.
+- Made macOS OpenGL captures (Save Images/Movies with Annotations) use RGBA.
+- Fixed macOS OpenGL captures with annotations reporting window is not in full
+  screen.
 
 
 v1.3.2

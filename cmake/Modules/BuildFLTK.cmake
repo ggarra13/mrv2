@@ -4,11 +4,13 @@
 
 include( ExternalProject )
 
+set(FLTK_GIT_REPOSITORY "https://github.com/fltk/fltk.git")
+
 # The cutting EDGE!
 #set( FLTK_GIT_TAG master )
 
-#set(FLTK_GIT_TAG 5ff42dd37a5fa071f54a6e413e349f26f4837340 )
-set(FLTK_GIT_TAG 9afb35f3a68e71fd2afbb77123eb0fde1835b409)
+# set(FLTK_GIT_TAG 9afb35f3a68e71fd2afbb77123eb0fde1835b409)
+set(FLTK_GIT_TAG 27d991f046bdebb12bfd58f7c05a19f135979c29)
 
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
     # If we are building pyFLTK compile shared
@@ -63,7 +65,7 @@ endif()
 ExternalProject_Add(
     FLTK
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps/FLTK
-    GIT_REPOSITORY "https://github.com/fltk/fltk.git"
+    GIT_REPOSITORY ${FLTK_GIT_REPOSITORY}
     GIT_TAG ${FLTK_GIT_TAG}
     DEPENDS libjpeg-turbo PNG
     PATCH_COMMAND ${FLTK_PATCH}
