@@ -2,6 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <chrono>
 #include <string>
 #include <sstream>
 #include <filesystem>
@@ -189,9 +190,7 @@ namespace mrv
                 {
                     view->setShowVideo(options.video);
                     view->setActionMode(ActionMode::kScrub);
-                    bool presentation = view->getPresentationMode();
-                    if (!presentation)
-                        view->setPresentationMode(true);
+                    view->setPresentationMode(true);
                     view->redraw();
                     // flush is needed
                     Fl::flush();
@@ -423,10 +422,6 @@ namespace mrv
                 {
                     imageBuffer = GL_BACK;
                 }
-                else
-                {
-                    view->make_current();
-                }
 
                 glReadBuffer(imageBuffer);
 
@@ -444,9 +439,6 @@ namespace mrv
                 // Get the videoData
                 const auto& videoData =
                     timeline->getVideo(currentTime).future.get();
-
-                view->make_current();
-                gl::initGLAD();
 
                 // Render the video.
                 gl::OffscreenBufferBinding binding(buffer);
@@ -610,6 +602,7 @@ namespace mrv
 
         const auto& currentTime = player->currentTime();
 
+        // Save this frame with the frame number
         _save_single_frame(file, ui, options);
 
         // Rename file name that got saved with a frame number to the actual
