@@ -746,6 +746,19 @@ namespace mrv
                 p.options.fileNames.push_back(otioFile);
             }
 
+            
+            //
+            // Show the UI if no python script was fed in.
+            //
+            // We make sure the UI is visible when we feed a filename.
+            // This is needed to avoid an issue with Wayland not properly
+            // refreshing the play buttons.
+            if (p.options.pythonScript.empty())
+            {
+                ui->uiMain->show();
+                ui->uiView->take_focus();
+            }
+            
             bool foundAudio = false;
             for (const auto& fileName : p.options.fileNames)
             {
@@ -951,11 +964,7 @@ namespace mrv
         p.pythonStdErrOutRedirect.reset(new PyStdErrOutStreamRedirect);
 #endif
 
-        //
-        // Show the UI
-        //
-        ui->uiMain->show();
-        ui->uiView->take_focus();
+            
 
         // Fix for always on top on Linux
         bool value = ui->uiPrefs->uiPrefsAlwaysOnTop->value();

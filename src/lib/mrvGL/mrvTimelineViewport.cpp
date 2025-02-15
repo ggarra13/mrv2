@@ -1772,6 +1772,7 @@ namespace mrv
                   << H << " dW=" << dW << " dH=" << dH << std::endl;
 #endif
 #ifdef __linux__
+        // We use mw->maximize() to minimize NVidia's OpenGL bugs
         if (use_maximize && !p.presentation)
         {
             mw->maximize();
@@ -1780,9 +1781,14 @@ namespace mrv
         {
             mw->resize(posX, posY, W, H);
         }
+        
 #else
         mw->resize(posX, posY, W, H);
-#endif        
+#endif
+        
+#ifdef DEBUG_SCALING
+        std::cerr << "DONE resize/maximize" << std::endl;
+#endif  
         
         if (p.frameView)
         {

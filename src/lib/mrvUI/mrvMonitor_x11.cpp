@@ -15,6 +15,8 @@
 #include <X11/Xlib.h>
 #include <X11/extensions/Xrandr.h>
 
+#include "mrvUI/mrvDesktop.h"
+
 namespace
 {
 
@@ -91,6 +93,10 @@ namespace
         if (nitems < 128 || actual_format != 8)
         {
             XFree(prop);
+            if (mrv::desktop::XWayland())
+            {
+                return "";
+            }
             throw std::runtime_error("Invalid EDID data");
         }
 

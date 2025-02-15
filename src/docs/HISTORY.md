@@ -22,7 +22,10 @@ v1.3.3
   annotation frames with either video or without video.
 - Removed trailing newline from desktop information on status bar present on
 Rocky Linux's **XDG_SESSION_TYPE** environment variable.
-- Changed mrvTimelineViewport's resizeWindow() to use maximize() when the image will not fit on the screen.  This seems to fix Wayland issues.
+- Changed mrvTimelineViewport's resizeWindow() to use maximize() when the image will not fit on the screen.  This seems to fix some Wayland NVidia OpenGL issues.
+- Made "Invalid EDID data" not appear when running under XWayland.
+- Fixed Play buttons sometimes appearing in the middle of the viewport under
+  Wayland.
 
 
 v1.3.2

@@ -52,7 +52,8 @@ namespace mrv
         H = std_any_empty(value) ? H : std_any_cast<int>(value);
 
         Fl_Group::current(0);
-        p.mainWindow = new MainWindow(X, Y, W, H);
+        p.mainWindow = new MainWindow(X, Y, W, H, "SecondaryWindow");
+        p.mainWindow->labeltype(FL_NO_LABEL);
         p.mainWindow->begin();
 
         p.viewport = new Viewport(0, 0, W, H);

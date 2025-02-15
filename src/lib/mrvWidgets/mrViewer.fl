@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0400
+version 1.0401
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
@@ -113,7 +113,8 @@ decl {class AboutUI;} {public global
 }
 
 widget_class PixelToolBarClass {
-  xywh {56 69 933 30} resizable
+  label {Pixel Tool Bar}
+  xywh {0 0 933 56} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -425,7 +426,8 @@ decl {class AboutUI;} {public global
 }
 
 widget_class TimelineClass {
-  xywh {56 69 933 47} box NO_BOX resizable
+  label {Playback Toolbar (uiBottomBar)}
+  xywh {0 0 933 56} box NO_BOX resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {
@@ -821,7 +823,7 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {782 388 933 602} type Double align 80 resizable
+      xywh {0 0 933 602} type Double align 80 resizable
       class {mrv::MainWindow} size_range {933 602 0 0} visible
     } {
       Fl_Flex uiRegion {open
@@ -867,7 +869,7 @@ else
           }
         }
         Fl_Group uiTopBar {
-          label TopBar open selected
+          label TopBar open
           xywh {0 24 933 29} box FLAT_BOX color 51 labeltype NO_LABEL
         } {
           Fl_Group {} {
@@ -1376,17 +1378,19 @@ delete uiAbout; uiAbout = nullptr;} {}
   }
   Function {refresh()} {open
   } {
-    code {if ( uiMain ) uiMain->redraw();
+    code {
+    if ( uiMain ) uiMain->redraw();
 if ( uiPrefs ) uiPrefs->uiMain->redraw();
 if ( uiAbout ) uiAbout->uiMain->redraw();
 if ( uiHotkey ) uiHotkey->uiMain->redraw();
-if ( uiBottomBar->visible() )
+if ( uiMain->shown() && uiBottomBar->visible() )
 {
   uiBottomBar->hide();
   uiBottomBar->show();
   uiTimelineGroup->hide();
   uiTimelineGroup->show();
 }
-Fl::flush(); // needed to refresh windows} {}
+Fl::flush(); // needed to refresh windows} {selected
+    }
   }
 }
