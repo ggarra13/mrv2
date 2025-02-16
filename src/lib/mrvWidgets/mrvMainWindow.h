@@ -52,17 +52,27 @@ namespace mrv
         //! Handle override.
         int handle(int e) FL_OVERRIDE;
 
+        //! Draw override.
+        void draw() FL_OVERRIDE;
+
         //! Resize override to handle tile.
         void resize(int X, int Y, int W, int H) FL_OVERRIDE;
 
         //! Return whether we are resizing under wayland.
         bool is_wayland_resize() const { return wayland_resize; }
+
+        void set_alpha(int alpha);
+        
+        int get_alpha() const { return win_alpha; }
         
     protected:
 #ifdef __APPLE__
+        void set_window_transparency(Fl_Window *w, double alpha)
+    
         IOPMAssertionID assertionID;
         IOReturn success;
 #endif
+        int win_alpha = 255;
         bool wayland_resize = false;
         bool on_top = false;
     };

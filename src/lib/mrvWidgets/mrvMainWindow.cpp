@@ -37,12 +37,14 @@ namespace mrv
     MainWindow::MainWindow(int X, int Y, int W, int H, const char* title) :
         DropWindow(X, Y, W, H, title)
     {
+        box(FL_FLAT_BOX);
         init();
     }
 
     MainWindow::MainWindow(int W, int H, const char* title) :
         DropWindow(W, H, title)
     {
+        box(FL_FLAT_BOX);
         init();
     }
 
@@ -240,4 +242,59 @@ namespace mrv
         copy_label(buf);
     }
 
+    void MainWindow::draw()
+    {
+        
+#ifdef FLTK_USE_WAYLAND
+        if (fl_wl_display())
+        {
+            // double alpha = (double)win_alpha / 255.0;
+            // cairo_set_source_rgba(fl_wl_cairo(), 0, 0, 0, alpha); 
+            // fl_rectf(0, 0, w(), h());
+        }
+#endif
+        Fl_Double_Window::draw();
+    }
+
+    void MainWindow::set_alpha(int new_alpha)
+    {
+        if (new_alpha < 0)
+        {
+            win_alpha = 0;
+        }
+        else if (new_alpha > 255)
+        {
+            win_alpha = 255;
+        }
+        else
+        {
+            win_alpha = new_alpha;
+        }
+        
+#if defined (_WIN32)
+        HWND hwnd = fl_xid(this);
+        LONG_PTR exstyle = GetWindowLongPtr(hwnd, GWL_EXSTYLE);
+        if (!(exstyle & WS_EX_LAYERED))
+        {
+            SetWindowLongPtr(hwnd, GWL_EXSTYLE, exstyle | WS_EX_LAYERED);
+        }
+        SetLayeredWindowAttributes(hwnd, 0, BYTE(win_alpha), LWA_ALPHA);
+//        SetLayeredWindowAttributes(hwnd, RGB(0, 0, 0), 0, LWA_COLORKEY);
+#elif defined(__APPLE__)
+        double alpha = (double)win_alpha / 255.0;
+        set_window_transparency(this, alpha); // defined in transp_cocoa.mm
+#elif defined(FLTK_USE_X11)
+        if (fl_x11_display())
+        {
+            double alpha = (double)win_alpha / 255.0;
+            uint32_t cardinal_alpha = (uint32_t)(UINT32_MAX * alpha);
+            Atom atom = XInternAtom(fl_display, "_NET_WM_WINDOW_OPACITY",
+                                    False);
+            XChangeProperty(fl_display, fl_xid(this),
+                            atom, XA_CARDINAL, 32,
+                            PropModeReplace,
+                            (unsigned char *)&cardinal_alpha, 1);
+        }
+#endif
+    }
 } // namespace mrv
