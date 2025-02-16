@@ -106,8 +106,7 @@ namespace mrv
 
     void select_hotkey(HotkeyUI* b)
     {
-        int idx =
-            b->uiFunction->value() - 2; // 1 for browser offset, 1 for title
+        int idx = b->uiFunction->value() - 2; // 1 for browser offset, 1 title
         if (idx < 0)
             return;
 
@@ -127,9 +126,17 @@ namespace mrv
 
         for (int i = 0; hotkeys[i].hotkey; ++i)
         {
+            bool is_assigned = false;
+            if (hotkeys[i].hotkey->to_s() == "Ctrl++" &&
+                hotkeys[i].hotkey->to_s() == "Ctrl+-")
+                is_assigned = true;
+            
             if (h->hk == *(hotkeys[i].hotkey) && idx != i &&
                 hotkeys[i].hotkey->to_s() != "[" &&
                 hotkeys[i].hotkey->to_s() != "]")
+                is_assigned = true;
+
+            if (is_assigned)
             {
                 int ok = fl_choice(
                     _("Hotkey \"%s\" already used in \"%s\".\n"

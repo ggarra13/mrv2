@@ -10,7 +10,7 @@ v1.3.3
   sliders.
 - Added upcoming (not yet released) HT256 OpenEXR compressor.
 - Fixed update-mrv2.py script typo which would not allow updating mrv2.
-- Updated OCIO default configs to v2.2 ones.  They are still based on ACES 1.3 though, as ACES 2 ones have yet to be released.
+  - Updated OCIO default configs to v2.2 ones.  They are still based on ACES 1.3 though, as ACES 2 ones have yet to be released.
 - Changed tlRender's use of exr::Compression to Imf::Compression to support current and future OpenEXR compressors.
 - Changed SaveImageOptionsUI to use Imf::getCompressionNameFromId().
 - Updated Python code to also use Imf::Compression instead of exr::Compression.
@@ -29,6 +29,15 @@ Rocky Linux's **XDG_SESSION_TYPE** environment variable.
 - Made macOS OpenGL captures (Save Images/Movies with Annotations) use RGBA.
 - Fixed macOS OpenGL captures with annotations reporting window is not in full
   screen.
+- Fixed resizing of main window under Wayland by using maximize instead of resize.
+- Fixed resizing of main window when dealing with two monitors under X11.
+- Added hotkeys to control the User Interface's transparency under Windows,
+  macOS and Linux.  By default, they are assigned to:
+  ```
+	  Ctrl + . and Ctrl + , 
+  ```
+- Added hotkey to control click (pass) through of window position and clicking.
+  WIP not yet done.
 
 
 v1.3.2

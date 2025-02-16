@@ -92,13 +92,15 @@ namespace mrv
         return "#version 410\n"
                "\n"
                "in vec2 fTexture;\n"
+               "in float opacity;\n"
                "out vec4 fColor;\n"
                "\n"
                "uniform sampler2D textureSampler;\n"
                "\n"
                "void main()\n"
                "{\n"
-               "   fColor = texture(textureSampler, fTexture);\n"
+               "    fColor = texture(textureSampler, fTexture);\n"
+               "    fColor.a *= opacity;\n"
                "}\n";
     }
 
@@ -108,6 +110,7 @@ namespace mrv
                    "#version 410\n"
                    "\n"
                    "in vec2 fTexture;\n"
+                   "in float opacity;\n"
                    "out vec4 fColor;\n"
                    "\n"
                    "{0}\n"
@@ -118,6 +121,7 @@ namespace mrv
                    "{\n"
                    "    fColor = texture(textureSampler, fTexture);\n"
                    "    fColor = stereoFunc(fColor, fTexture);\n"
+                   "    fColor.a *= opacity;\n"
                    "}\n")
             .arg(stereoSource);
     }

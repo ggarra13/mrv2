@@ -26,10 +26,11 @@
 #include "mrvFl/mrvOCIO.h"
 #include "mrvFl/mrvTimelinePlayer.h"
 
-#include "mrvCore/mrvUtil.h"
-#include "mrvCore/mrvMath.h"
-#include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvColorSpaces.h"
+#include "mrvCore/mrvHotkey.h"
+#include "mrvCore/mrvMath.h"
+#include "mrvCore/mrvUtil.h"
+#include "mrvCore/mrvWait.h"
 
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvMultilineInput.h"
@@ -1531,6 +1532,11 @@ namespace mrv
     {
         TLRENDER_P();
         auto renderSize = getRenderSize();
+#ifdef DEBUG_SCALING
+        std::cerr << "0 WxH=" << renderSize
+                  << " " << getViewportSize() << " screens="
+                  << Fl::screen_count() << std::endl;
+#endif
 
         bool use_maximize = false;
         Fl_Double_Window* mw = p.ui->uiMain;
@@ -1584,6 +1590,7 @@ namespace mrv
 
         int WBars = 0;
         int HBars = 0;
+        int TVH   = 0;
 
         // First, make sure the user or window manager did not set an
         // incorrect position
@@ -1642,13 +1649,14 @@ namespace mrv
 
             if (p.ui->uiStatusGroup->visible())
                 HBars += p.ui->uiStatusGroup->h();
+            
             if (p.ui->uiBottomBar->visible())
             {
-                int TH = calculate_edit_viewport_size(p.ui);
-                HBars += TH;
+                TVH = calculate_edit_viewport_size(p.ui);
+                HBars += TVH;
 
 #ifdef DEBUG_SCALING
-                std::cerr << "Timeline Height=" << TH << std::endl;
+                std::cerr << "Timeline Height=" << TVH << std::endl;
 #endif
             }
 
@@ -1727,7 +1735,7 @@ namespace mrv
         {
             p.frameView = true;
             posY = minY + dH; // dH is needed here!
-            H = maxH;
+            H = maxH - posY;
             use_maximize = true;
         }
 
@@ -1771,8 +1779,9 @@ namespace mrv
         std::cerr << "FINAL Window=" << posX << " " << posY << " " << W << "x"
                   << H << " dW=" << dW << " dH=" << dH << std::endl;
 #endif
-#ifdef __linux__
-        // We use mw->maximize() to minimize NVidia's OpenGL bugs
+        // We use mw->maximize() as FLTK cannot give us real
+        // screen_work_area coordinates.  Work area of two monitors is wrong
+        // on X11 and Wayland does not give areas at all.
         if (use_maximize && !p.presentation)
         {
             mw->maximize();
@@ -1782,21 +1791,48 @@ namespace mrv
             mw->resize(posX, posY, W, H);
         }
         
-#else
-        mw->resize(posX, posY, W, H);
-#endif
-        
-#ifdef DEBUG_SCALING
-        std::cerr << "DONE resize/maximize" << std::endl;
-#endif  
-        
         if (p.frameView)
         {
+            // Wait a little so that resizing/maximizing takes place.
+            if (use_maximize)
+                wait::milliseconds(1000);
+            else
+                wait::milliseconds(100);
             _frameView();
         }
 
         set_edit_mode_cb(editMode, p.ui);
 
+#ifdef DEBUG_SCALING
+        HBars = 0; TVH = 0;
+        
+        // Take into account the different UI bars
+        if (p.ui->uiMenuGroup->visible())
+            HBars += p.ui->uiMenuGroup->h();
+
+        if (p.ui->uiTopBar->visible())
+            HBars += p.ui->uiTopBar->h();
+
+        if (p.ui->uiPixelBar->visible())
+            HBars += p.ui->uiPixelBar->h();
+
+        if (p.ui->uiBottomBar->visible())
+        {
+            HBars += p.ui->uiBottomBar->h();
+        }
+
+        
+        if (p.ui->uiStatusGroup->visible())
+            HBars += p.ui->uiStatusGroup->h();
+            
+        TVH = calculate_edit_viewport_size(p.ui);
+        std::cerr << "END HBars=" << HBars << " " << TVH << std::endl; 
+
+        std::cerr << "MAXIMIZED Window=" << posX << " " << posY << " "
+                  << mw->w() << "x" << mw->h()
+                  << std::endl;
+#endif
+            
         // We need to adjust dock group too.  These lines are needed.
         auto viewGroup = p.ui->uiViewGroup;
         auto dockGroup = p.ui->uiDockGroup;
@@ -2478,6 +2514,7 @@ namespace mrv
             p.presentation = false;
             p.fullScreen = true;
         }
+
         w->fill_menu(p.ui->uiMenuBar);
     }
 

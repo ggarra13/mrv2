@@ -23,6 +23,7 @@ namespace fs = std::filesystem;
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvImage.h"
 #include "mrvCore/mrvString.h"
+#include "mrvCore/mrvWait.h"
 
 #include "mrvWidgets/mrvProgressReport.h"
 
@@ -216,21 +217,7 @@ namespace mrv
                 Fl::check();
             }
 
-            const auto& start = std::chrono::high_resolution_clock::now();
-            auto elapsedTime =
-                std::chrono::duration_cast<std::chrono::milliseconds>(
-                    start - start)
-                    .count();
-            while (elapsedTime < 500)
-            {
-                Fl::check();
-
-                const auto& now = std::chrono::high_resolution_clock::now();
-                elapsedTime =
-                    std::chrono::duration_cast<std::chrono::milliseconds>(
-                        now - start)
-                        .count();
-            }
+            wait::milliseconds(1000);
         }
 
         bool Creator::create()

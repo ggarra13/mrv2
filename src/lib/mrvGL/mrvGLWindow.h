@@ -22,5 +22,6 @@ namespace mrv
         GLWindow(int W, int H, const char* L = 0);
 
         void make_current();
+        void show() FL_OVERRIDE;
     };
 } // namespace mrv

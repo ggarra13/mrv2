@@ -63,7 +63,6 @@ namespace mrv
     MainWindow::~MainWindow()
     {
 #ifdef FLTK_USE_WAYLAND
-        fl_delete_offscreen(offscreen);
         // Restore screensaver/black screen
 #elif defined(FLTK_USE_X11)
         if (fl_x11_display())
@@ -80,9 +79,6 @@ namespace mrv
 
     void MainWindow::init()
     {
-#ifdef FLTK_USE_WAYLAND
-        offscreen = fl_create_offscreen(w(), h());
-#endif
         xclass("mrv2");
         set_icon();
 
@@ -224,7 +220,7 @@ namespace mrv
         wayland_resize = true;
         DropWindow::resize(X, Y, W, H);
         wayland_resize = false;
-
+        
         // Redraw viewport windows in case we go from one monitor to another
         // with different OCIO display/view.
         App::ui->uiView->redrawWindows();
@@ -305,8 +301,10 @@ namespace mrv
         
 #ifdef FLTK_USE_WAYLAND
         if (fl_wl_display())
-        {
-            // 1. Begin offscreen drawing (to an offscreen Cairo context)
+        {   
+            offscreen = fl_create_offscreen(w(), h());
+            
+            // 1. Draw child widgets to an offscreen buffer 
             fl_begin_offscreen(offscreen);
             Fl_Double_Window::draw_children(); // Draw all the window's children (widgets)
             fl_end_offscreen();
@@ -331,6 +329,8 @@ namespace mrv
 
             const double alpha = (double)win_alpha / 255.0;
             cairo_paint_with_alpha(cr, alpha);
+
+            fl_delete_offscreen(offscreen);
         }
         else
         {

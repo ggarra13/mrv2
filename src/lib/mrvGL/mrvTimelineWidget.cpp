@@ -725,6 +725,7 @@ namespace mrv
                     "#version 410\n"
                     "\n"
                     "in vec2 fTexture;\n"
+                    "in float opacity;\n"
                     "out vec4 fColor;\n"
                     "\n"
                     "uniform sampler2D textureSampler;\n"
@@ -732,6 +733,7 @@ namespace mrv
                     "void main()\n"
                     "{\n"
                     "    fColor = texture(textureSampler, fTexture);\n"
+                    "    fColor.a *= opacity;\n"
                     "}\n";
                 p.shader = gl::Shader::create(vertexSource, fragmentSource);
                 CHECK_GL;
@@ -842,15 +844,16 @@ namespace mrv
                     timeline::RenderOptions renderOptions;
                     renderOptions.clearColor =
                         p.style->getColorRole(ui::ColorRole::Window);
+                    renderOptions.clearColor.a = 0.5F;
                     p.render->begin(renderSize, renderOptions);
-                    p.render->setOCIOOptions(timeline::OCIOOptions());
-                    p.render->setLUTOptions(timeline::LUTOptions());
-                    ui::DrawEvent drawEvent(
-                        p.style, p.iconLibrary, p.render, p.fontSystem);
-                    p.render->setClipRectEnabled(true);
-                    _drawEvent(
-                        p.timelineWindow, math::Box2i(renderSize), drawEvent);
-                    p.render->setClipRectEnabled(false);
+                    // p.render->setOCIOOptions(timeline::OCIOOptions());
+                    // p.render->setLUTOptions(timeline::LUTOptions());
+                    // ui::DrawEvent drawEvent(
+                    //     p.style, p.iconLibrary, p.render, p.fontSystem);
+                    // p.render->setClipRectEnabled(true);
+                    // _drawEvent(
+                    //     p.timelineWindow, math::Box2i(renderSize), drawEvent);
+                    // p.render->setClipRectEnabled(false);
                     p.render->end();
                 }
             }
@@ -860,7 +863,10 @@ namespace mrv
             }
         }
 
-        if (p.ui->uiPrefs->uiPrefsBlitTimeline->value() == kNoBlit)
+        const float alpha = p.ui->uiMain->get_alpha() / 255.0F;
+                
+        if (p.ui->uiPrefs->uiPrefsBlitTimeline->value() == kNoBlit ||
+            alpha < 1.0F)
         {
             glViewport(0, 0, renderSize.w, renderSize.h);
             glClearColor(0.F, 0.F, 0.F, 0.F);
@@ -873,6 +879,7 @@ namespace mrv
                     0.F, static_cast<float>(renderSize.w), 0.F,
                     static_cast<float>(renderSize.h), -1.F, 1.F);
                 p.shader->setUniform("transform.mvp", pm);
+                p.shader->setUniform("opacity", alpha);
 
                 glActiveTexture(GL_TEXTURE0);
                 glBindTexture(GL_TEXTURE_2D, p.buffer->getColorID());

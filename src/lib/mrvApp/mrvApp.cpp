@@ -739,6 +739,14 @@ namespace mrv
         {
             ui->uiMain->show();
             ui->uiView->take_focus();
+
+            // Fix for always on top on Linux
+            bool value = ui->uiPrefs->uiPrefsAlwaysOnTop->value();
+            int fullscreen_active = ui->uiMain->fullscreen_active();
+            if (!fullscreen_active)
+            {
+                ui->uiMain->always_on_top(value);
+            }
         }
 
         if (!p.options.fileNames.empty())
@@ -962,14 +970,6 @@ namespace mrv
         // Redirect Python's stdout/stderr to my own class
         p.pythonStdErrOutRedirect.reset(new PyStdErrOutStreamRedirect);
 #endif
-
-        // Fix for always on top on Linux
-        bool value = ui->uiPrefs->uiPrefsAlwaysOnTop->value();
-        int fullscreen_active = ui->uiMain->fullscreen_active();
-        if (!fullscreen_active)
-        {
-            ui->uiMain->always_on_top(value);
-        }
 
         // Open Panel Windows if not loading a session file.
         if (!p.session)
@@ -1759,7 +1759,6 @@ namespace mrv
                             set_edit_mode_cb(EditMode::kFull, ui);
                         }
                     }
-                    ui->uiView->take_focus();
                 }
                 else
                 {

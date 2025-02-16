@@ -226,8 +226,8 @@ namespace mrv
     // the OS windows behind it.
     Hotkey kToggleClickThrough(true, false, false, false, 't');
 
-    Hotkey kUITransparencyMore(false, false, false, false, 0);
-    Hotkey kUITransparencyLess(false, false, false, false, 0);
+    Hotkey kUITransparencyMore(true, false, false, false, '.');
+    Hotkey kUITransparencyLess(true, false, false, false, ',');
 
     
     Hotkey kToggleTimelineEditable(false, false, false, false, 0);

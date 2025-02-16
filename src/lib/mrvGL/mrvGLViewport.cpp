@@ -92,7 +92,6 @@ namespace mrv
         gl.buffer.reset();
         gl.annotation.reset();
         gl.shader.reset();
-        gl.stereoShader.reset();
         gl.annotationShader.reset();
         gl.vbo.reset();
         gl.vao.reset();
@@ -126,8 +125,6 @@ namespace mrv
                 const std::string& vertexSource = timeline_gl::vertexSource();
                 gl.shader =
                     gl::Shader::create(vertexSource, textureFragmentSource());
-                gl.stereoShader =
-                    gl::Shader::create(vertexSource, stereoFragmentSource());
                 gl.annotationShader = gl::Shader::create(
                     vertexSource, annotationFragmentSource());
             }
@@ -204,8 +201,15 @@ namespace mrv
 
         const auto& viewportSize = getViewportSize();
         const auto& renderSize = getRenderSize();
+
         bool hasAlpha = false;
-        const bool transparent =
+        const float alpha = p.ui->uiMain->get_alpha() / 255.F;
+        if (alpha < 1.0F)
+        {
+            hasAlpha = true;
+        }
+        
+        const bool transparent = hasAlpha ||
             p.backgroundOptions.type == timeline::Background::Transparent;
 
         try
@@ -270,7 +274,7 @@ namespace mrv
                     }
                     break;
                 }
-
+                
                 gl::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = gl.colorBufferType;
 
@@ -407,10 +411,10 @@ namespace mrv
 
             uint8_t ur = 0, ug = 0, ub = 0, ua = 0;
             Fl::get_color(c, ur, ug, ub, ua);
-            r = ur / 255.0f;
-            g = ug / 255.0f;
-            b = ub / 255.0f;
-            a = ua / 255.0f;
+            // r = ur / 255.0f;
+            // g = ug / 255.0f;
+            // b = ub / 255.0f;
+            // a = ua / 255.0f;
 
             if (desktop::Wayland())
             {
@@ -500,6 +504,7 @@ namespace mrv
 
                 gl.shader->bind();
                 gl.shader->setUniform("transform.mvp", mvp);
+                gl.shader->setUniform("opacity", alpha);
 
                 glActiveTexture(GL_TEXTURE0);
                 glBindTexture(GL_TEXTURE_2D, gl.buffer->getColorID());

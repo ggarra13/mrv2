@@ -32,7 +32,6 @@ namespace mrv
         std::shared_ptr<timeline_gl::Render> render;
         std::shared_ptr<gl::Shader> shader;
         std::shared_ptr<gl::Shader> annotationShader;
-        std::shared_ptr<gl::Shader> stereoShader;
         int index = 0;
         int nextIndex = 1;
         GLuint pboIds[2];

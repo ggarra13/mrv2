@@ -22,6 +22,7 @@
 #include "mrvCore/mrvLocale.h"
 #include "mrvCore/mrvMath.h"
 #include "mrvCore/mrvUtil.h"
+#include "mrvCore/mrvWait.h"
 
 #include "mrvWidgets/mrvProgressReport.h"
 
@@ -37,6 +38,7 @@
 #include "mrvApp/mrvSettingsObject.h"
 
 #include "mrViewer.h"
+
 
 namespace
 {
@@ -466,23 +468,7 @@ namespace mrv
 
                     // Wait 2 seconds (needed on Apple for presentation mode
                     //                 visible resizing)
-                    const auto& start =
-                        std::chrono::high_resolution_clock::now();
-                    auto elapsedTime =
-                        std::chrono::duration_cast<std::chrono::milliseconds>(
-                            start - start)
-                            .count();
-                    while (elapsedTime < 2000)
-                    {
-                        Fl::check();
-
-                        const auto& now =
-                            std::chrono::high_resolution_clock::now();
-                        elapsedTime =
-                            std::chrono::duration_cast<
-                                std::chrono::milliseconds>(now - start)
-                                .count();
-                    }
+                    mrv::wait::milliseconds(2000);
 
                     // returns pixel_w(), pixel_h()
                     auto viewportSize = view->getViewportSize();
