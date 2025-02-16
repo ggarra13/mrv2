@@ -1073,7 +1073,7 @@ Greg Ercolano                                 (FLTK 1.4 contributor,
                                                CollapsibleGroup widget,
                                                porting from fltk2.0 to 1.4)
 Ian MacArthur                                 (FLTK contributor, original
-                                               docking code)
+                                               docking code, See-Through code)
 Manolo Guoy                                   (FLTK 1,4 developer, macOS and
                                                Wayland)
 Matthias Melcher                              (FLTK 1.4 developer, macOS,
@@ -1149,6 +1149,8 @@ Rennatt                                       (Color Pipeline Debugging)
 Roy Nieterau                                  (Python API)
 shockerNY                                     (Text Annotation bug report)
 SteffenDuenner                                (Linux Build Debugging)
+The Maize                                     (Wayland issues, See-through
+                                               and Click-Through Functionality)
 throb                                         (Caching improvements)
 Todica Ionut                                  (UI improvements)
 Tomycj                                        (UI improvements)

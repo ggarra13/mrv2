@@ -496,6 +496,7 @@ namespace mrv
         bool hasVideo = false;
         bool audioOnly = true;
 
+#ifdef TLRENDER_FFMPEG
         SaveMovieOptionsUI saveOptions(hasAudio, audioOnly);
         if (saveOptions.cancel)
             return;
@@ -503,7 +504,8 @@ namespace mrv
         options.video = options.saveVideo = false;
         int value = saveOptions.AudioCodec->value();
         options.ffmpegAudioCodec = static_cast<tl::ffmpeg::AudioCodec>(value);
-
+#endif
+        
         save_movie(file, ui, options);
     }
 

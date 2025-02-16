@@ -4,7 +4,9 @@
 
 #pragma once
 
-#include <iostream>
+#include <FL/platform.H>
+#undef None
+#undef Status
 
 #include "mrvDropWindow.h"
 
@@ -55,17 +57,27 @@ namespace mrv
         //! Draw override.
         void draw() FL_OVERRIDE;
 
+        //! Show override.
+        void show() FL_OVERRIDE;
+        
         //! Resize override to handle tile.
         void resize(int X, int Y, int W, int H) FL_OVERRIDE;
 
         //! Return whether we are resizing under wayland.
         bool is_wayland_resize() const { return wayland_resize; }
 
+        //! Set the window's opacity to a value between 0 and 255.
         void set_alpha(int alpha);
-        
+
+        //! Return the window's opacity (value between 0 and 255).
         int get_alpha() const { return win_alpha; }
+
+        //! Allow click through behavior on the window
+        void set_click_through(bool value);
         
     protected:
+        void setClickThrough(bool value);
+        
 #ifdef __APPLE__
         void set_window_transparency(Fl_Window *w, double alpha)
     
@@ -75,6 +87,11 @@ namespace mrv
         int win_alpha = 255;
         bool wayland_resize = false;
         bool on_top = false;
+        bool click_through = false;
+        
+#ifdef FLTK_USE_WAYLAND
+        Fl_Offscreen offscreen;
+#endif
     };
 
 } // namespace mrv

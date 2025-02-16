@@ -10,7 +10,13 @@ code_name {.cxx}
 decl {\#include <string>} {public global
 }
 
+decl {\#ifdef TLRENDER_EXR} {public global
+}
+
 decl {\#include <OpenEXR/ImfCompression.h>} {public global
+}
+
+decl {\#endif} {selected public global
 }
 
 decl {\#include "mrvCore/mrvFile.h"} {public global
@@ -69,19 +75,21 @@ o->value(0);} {}
     code {std::string name;
 
 o->clear();
+
+\#ifdef TLRENDER_EXR
 for (int i = 0; i < Imf::NUM_COMPRESSION_METHODS; ++i)
 {
    getCompressionNameFromId((Imf::Compression)i, name);
    o->add(name.c_str());
 }
-o->menu_end();} {selected
-    }
+o->menu_end();
+\#endif} {}
   }
   Function {SaveImageOptionsUI(const std::string ext, const bool exr_valid)} {open
   } {
     Fl_Window uiMain {
       label {Save Image Options} open
-      xywh {766 301 523 453} type Double align 5 modal visible
+      xywh {0 0 523 453} type Double align 5 hide modal
     } {
       Fl_Group {} {
         label {Common Settings} open

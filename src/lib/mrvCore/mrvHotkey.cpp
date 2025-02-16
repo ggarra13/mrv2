@@ -222,6 +222,14 @@ namespace mrv
     Hotkey kToggleTimelineTransitions(false, false, false, false, 0);
     Hotkey kToggleTimelineMarkers(false, false, false, false, 0);
 
+    // Hotkey to allow mouse click handling to pass through the FLTK window to
+    // the OS windows behind it.
+    Hotkey kToggleClickThrough(true, false, false, false, 't');
+
+    Hotkey kUITransparencyMore(false, false, false, false, 0);
+    Hotkey kUITransparencyLess(false, false, false, false, 0);
+
+    
     Hotkey kToggleTimelineEditable(false, false, false, false, 0);
     Hotkey kToggleEditAssociatedClips(false, false, false, false, 0);
     Hotkey kToggleTimelineFrameView(false, false, false, false, 0);
@@ -399,6 +407,9 @@ namespace mrv
         HotkeyEntry(
             _("Toggle Magnify Texture Filtering"), &kMagnifyTextureFiltering),
         HotkeyEntry(_("Auto Frame View"), &kFrameView),
+        HotkeyEntry(_("Toggle Click Through"), &kToggleClickThrough),
+        HotkeyEntry(_("More UI Transparency"), &kUITransparencyMore),
+        HotkeyEntry(_("Less UI Transparency"), &kUITransparencyLess),
         HotkeyEntry(_("Safe Areas"), &kSafeAreas),
         HotkeyEntry(_("Ignore Display Window"), &kIgnoreDisplayWindow),
         HotkeyEntry(_("Auto Normalize"), &kAutoNormalize),

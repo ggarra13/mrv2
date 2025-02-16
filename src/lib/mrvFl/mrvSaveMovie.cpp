@@ -872,19 +872,19 @@ namespace mrv
                             flipImageInY(
                                 (uint8_t*)outputImage->getData(),
                                 (const uint8_t*)data[0], rgb->w(), rgb->h(),
-                                rgb->d());
+                                rgb->d(), 4);
                             break;
                         case image::PixelType::RGBA_F16:
                             flipImageInY(
                                 (Imath::half*)outputImage->getData(),
                                 (const uint8_t*)data[0], rgb->w(), rgb->h(),
-                                rgb->d());
+                                rgb->d(), 4);
                             break;
                         case image::PixelType::RGBA_F32:
                             flipImageInY(
                                 (float*)outputImage->getData(),
                                 (const uint8_t*)data[0], rgb->w(), rgb->h(),
-                                rgb->d());
+                                rgb->d(), 4);
                             break;
                         default:
                             LOG_ERROR(_("Unsupported output format"));

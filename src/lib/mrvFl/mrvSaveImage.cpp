@@ -391,17 +391,17 @@ namespace mrv
                 case image::PixelType::RGBA_U8:
                     flipImageInY(
                         (uint8_t*)outputImage->getData(),
-                        (const uint8_t*)data[0], rgb->w(), rgb->h(), rgb->d());
+                        (const uint8_t*)data[0], rgb->w(), rgb->h(), rgb->d(), 4);
                     break;
                 case image::PixelType::RGBA_F16:
                     flipImageInY(
                         (Imath::half*)outputImage->getData(),
-                        (const uint8_t*)data[0], rgb->w(), rgb->h(), rgb->d());
+                        (const uint8_t*)data[0], rgb->w(), rgb->h(), rgb->d(), 4);
                     break;
                 case image::PixelType::RGBA_F32:
                     flipImageInY(
                         (float*)outputImage->getData(), (const uint8_t*)data[0],
-                        rgb->w(), rgb->h(), rgb->d());
+                        rgb->w(), rgb->h(), rgb->d(), 4);
                     break;
                 default:
                     LOG_ERROR(

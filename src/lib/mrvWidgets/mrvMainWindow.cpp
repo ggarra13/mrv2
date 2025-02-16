@@ -2,6 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <cstring>
+
 #include "mrvCore/mrvHotkey.h"
 
 #include "mrvWidgets/mrvPanelWindow.h"
@@ -19,7 +21,17 @@
 #include <FL/Fl.H>
 
 #if defined(FLTK_USE_X11)
+#    define Status int
 #    include <X11/extensions/scrnsaver.h>
+#    include <X11/Xlib.h>
+#    include <X11/extensions/Xfixes.h>
+#    include <X11/extensions/shape.h>
+#endif
+
+#ifdef FLTK_USE_WAYLAND
+#    include <cairo/cairo.h>
+#    include <wayland-client.h>
+//#    include <wayland/protocols/xdg-shell-client-protocol.h>
 #endif
 
 #include "mrViewer.h"
@@ -50,8 +62,10 @@ namespace mrv
 
     MainWindow::~MainWindow()
     {
+#ifdef FLTK_USE_WAYLAND
+        fl_delete_offscreen(offscreen);
         // Restore screensaver/black screen
-#if defined(FLTK_USE_X11)
+#elif defined(FLTK_USE_X11)
         if (fl_x11_display())
             XScreenSaverSuspend(fl_x11_display(), False);
 #elif defined(_WIN32)
@@ -66,6 +80,9 @@ namespace mrv
 
     void MainWindow::init()
     {
+#ifdef FLTK_USE_WAYLAND
+        offscreen = fl_create_offscreen(w(), h());
+#endif
         xclass("mrv2");
         set_icon();
 
@@ -169,6 +186,34 @@ namespace mrv
         {
             App::ui->uiTimeline->requestThumbnail();
         }
+        else if (e == FL_KEYBOARD)
+        {
+            // If we have a text widget, don't swallow key presses
+            unsigned rawkey = Fl::event_key();
+#if defined(FLTK_USE_WAYLAND)
+            if (rawkey >= 'A' && rawkey <= 'Z')
+            {
+                rawkey = tolower(rawkey);
+            }
+#endif
+            
+            if (kUITransparencyMore.match(rawkey))
+            {
+                set_alpha( get_alpha() - 5 );
+                return 1;
+            }
+            else if (kUITransparencyLess.match(rawkey))
+            {
+                set_alpha( get_alpha() + 5 );
+                return 1;
+            }
+            else if (kToggleClickThrough.match(rawkey))
+            {
+                set_click_through(!click_through);
+                return 1;
+            }
+            
+        }
 
         return DropWindow::handle(e);
     }
@@ -242,25 +287,66 @@ namespace mrv
         copy_label(buf);
     }
 
+    void MainWindow::show()
+    {
+        DropWindow::show();
+        
+#ifdef FLTK_USE_WAYLAND
+        if (fl_wl_display())
+        {
+            wl_surface_set_opaque_region(fl_wl_surface(fl_wl_xid(this)), NULL);
+        }
+#endif
+        
+    }
+
     void MainWindow::draw()
     {
         
 #ifdef FLTK_USE_WAYLAND
         if (fl_wl_display())
         {
-            // double alpha = (double)win_alpha / 255.0;
-            // cairo_set_source_rgba(fl_wl_cairo(), 0, 0, 0, alpha); 
-            // fl_rectf(0, 0, w(), h());
+            // 1. Begin offscreen drawing (to an offscreen Cairo context)
+            fl_begin_offscreen(offscreen);
+            Fl_Double_Window::draw_children(); // Draw all the window's children (widgets)
+            fl_end_offscreen();
+
+            // 2. Get the offscreen Cairo context
+            cairo_t* offscreen_cr = (cairo_t*)offscreen;
+
+            // 3. Create a surface from the offscreen
+            cairo_surface_t* offscreen_surface = cairo_get_target(offscreen_cr);
+
+            cairo_t* cr = fl_wl_gc();
+            
+            // 4. Clear the canvas (needed as FLTK seems to accumulate
+            //    transparency)
+            cairo_set_source_rgba(cr, 0, 0, 0, 0);
+            cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
+            cairo_paint(cr);
+
+            // 5. Paint with alpha channel the offscreen widgets
+            cairo_set_source_surface(cr, offscreen_surface, 0, 0);
+            cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
+
+            const double alpha = (double)win_alpha / 255.0;
+            cairo_paint_with_alpha(cr, alpha);
         }
+        else
+        {
+            DropWindow::draw();
+        }
+#else
+        DropWindow::draw();
 #endif
-        Fl_Double_Window::draw();
     }
 
     void MainWindow::set_alpha(int new_alpha)
     {
-        if (new_alpha < 0)
+        // Don't allow fully transparent window
+        if (new_alpha < 25)
         {
-            win_alpha = 0;
+            win_alpha = 25;
         }
         else if (new_alpha > 255)
         {
@@ -281,12 +367,12 @@ namespace mrv
         SetLayeredWindowAttributes(hwnd, 0, BYTE(win_alpha), LWA_ALPHA);
 //        SetLayeredWindowAttributes(hwnd, RGB(0, 0, 0), 0, LWA_COLORKEY);
 #elif defined(__APPLE__)
-        double alpha = (double)win_alpha / 255.0;
-        set_window_transparency(this, alpha); // defined in transp_cocoa.mm
+        const double alpha = (double)win_alpha / 255.0;
+        set_window_transparency(alpha); // defined in transp_cocoa.mm
 #elif defined(FLTK_USE_X11)
         if (fl_x11_display())
         {
-            double alpha = (double)win_alpha / 255.0;
+            const double alpha = (double)win_alpha / 255.0;
             uint32_t cardinal_alpha = (uint32_t)(UINT32_MAX * alpha);
             Atom atom = XInternAtom(fl_display, "_NET_WM_WINDOW_OPACITY",
                                     False);
@@ -296,5 +382,137 @@ namespace mrv
                             (unsigned char *)&cardinal_alpha, 1);
         }
 #endif
+        redraw();
     }
+
+#ifdef _WIN32
+
+void setClickThrough(HWND hwnd, bool enable)
+{
+    LONG style = GetWindowLong(hwnd, GWL_EXSTYLE);
+    if (enable)
+    {
+        SetWindowLong(hwnd, GWL_EXSTYLE, style | WS_EX_LAYERED | WS_EX_TRANSPARENT);
+    }
+    else
+    {
+        SetWindowLong(hwnd, GWL_EXSTYLE, style & ~(WS_EX_LAYERED | WS_EX_TRANSPARENT));
+    }
+}
+
+#endif
+
+#if defined(__linux__)
+
+#ifdef FLTK_USE_X11
+    
+void setClickThroughX11(Display* display, Window window, bool enable,
+                        short unsigned int W,
+                        short unsigned int H)
+{
+    Region region = XCreateRegion();
+
+    if (enable)
+    {
+        XShapeCombineRegion(display, window, ShapeInput, 0, 0,
+                            region, ShapeSet);
+    }
+    else
+    {
+        // Restore normal click behavior: Set input region to window bounds.
+        XRectangle rect = {0, 0, W, H};
+        XUnionRectWithRegion(&rect, region, region);
+        XShapeCombineRegion(
+            display, window, ShapeInput, 0, 0, region, ShapeSet);
+    }
+    XDestroyRegion(region);
+    XFlush(display);
+}
+#endif  // FLTK_USE_X11
+
+#ifdef FLTK_USE_WAYLAND
+
+void setClickThroughWayland(struct wl_surface *surface,
+                            struct wl_compositor *compositor, bool enable,
+                            int W, int H)
+{
+    std::cerr << "setClickThroughWayland " << enable << std::endl;
+    struct wl_region* region = wl_compositor_create_region(compositor);
+    if (!enable)
+    {
+        // Restore normal behavior
+        wl_region_add(region, 0, 0, W, H);
+    }
+    wl_surface_set_input_region(surface, enable ? NULL : region);
+    wl_region_destroy(region);
+}
+    
+#endif // FLTK_USE_WAYLAND
+    
+
+#endif // __linux__
+
+#if !defined(__APPLE__)
+
+    void MainWindow::setClickThrough(bool enable)
+    {
+        int W = w();
+        int H = h();
+#ifdef _WIN32
+        HWND win = fl_win32_xid(this);
+        setClickThrough(win, enable);
+#elif defined(__linux__)
+
+#ifdef FLTK_USE_X11
+    auto display = fl_x11_display();
+    if (display)
+    {
+        Window win = fl_x11_xid(this);
+        if (!win)
+        {
+            LOG_ERROR("No window");
+        }
+        setClickThroughX11(display, win, enable, W, H);
+    }
+#endif // FLTK_USE_X11
+
+#ifdef FLTK_USE_WAYLAND
+    auto wldpy = fl_wl_display();
+    if (wldpy)
+    {
+        auto win = fl_wl_xid(this);
+        if (!win)
+        {
+            LOG_ERROR("No window");
+        }
+        auto compositor = fl_wl_compositor();
+        if (!compositor)
+        {
+            LOG_ERROR("No compositor");
+        }
+        auto surface = fl_wl_surface(win);
+        if (!surface)
+        {
+            LOG_ERROR("No surface");
+        }
+            
+        setClickThroughWayland(surface, compositor, enable, W, H);
+    }
+#endif  // FLTK_USE_WAYLAND
+    
+#endif  // __linux__
+    }
+
+#endif // !__APPLE__
+
+    void MainWindow::set_click_through(bool value)
+    {
+        if (click_through == value)
+            return;
+        
+        click_through = value;
+        
+        setClickThrough(value);
+    }
+
 } // namespace mrv

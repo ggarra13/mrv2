@@ -20,9 +20,13 @@ void MainWindow::always_on_top( int t )
        [nswin setLevel:NSNormalWindowLevel];
 } // above_all function
 
-void MainWindow::set_window_transparency(Fl_Window *w, double alpha)
+void MainWindow::set_window_transparency(double alpha)
 {
-    [fl_xid(w) setAlphaValue:alpha];
+    [fl_xid(this) setAlphaValue:alpha];
+}
+
+void setClickThrough(Fl_Window *w, BOOL enable) {
+    [fl_xid(w) setIgnoresMouseEvents:enable];
 }
 
 }   // namespace mrv

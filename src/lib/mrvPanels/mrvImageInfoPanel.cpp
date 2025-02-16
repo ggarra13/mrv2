@@ -19,7 +19,9 @@ namespace fs = std::filesystem;
 #include <FL/Fl_Int_Input.H>
 #include <FL/fl_draw.H>
 
+#ifdef TLRENDER_EXR
 #include <OpenEXR/ImfTileDescription.h>
+#endif
 
 #include "mrvCore/mrvColorSpaces.h"
 #include "mrvCore/mrvI8N.h"
@@ -1738,8 +1740,12 @@ namespace mrv
                     bool isValidDeepCompression = video.isValidDeepCompression;
                     std::string HDRdata;
                     int xLevels = 0, yLevels = 0;
+
+#ifdef TLRENDER_EXR
                     int mipmapMode = Imf::LevelMode::ONE_LEVEL;
                     int roundingMode = Imf::LevelRoundingMode::ROUND_DOWN;
+#endif
+                    
                     if (!tagData.empty())
                     {
                         auto it = tagData.find("Video Codec");
@@ -1751,6 +1757,8 @@ namespace mrv
                         {
                             compression = video.compression;
                         }
+
+#ifdef TLRENDER_EXR
                         it = tagData.find("Tile");
                         if (it != tagData.end())
                         {
@@ -1769,6 +1777,8 @@ namespace mrv
                             std::stringstream s(it->second);
                             s >> yLevels;
                         }
+#endif
+                        
                         it = tagData.find("Video Rotation");
                         if (it != tagData.end())
                         {
@@ -1837,6 +1847,7 @@ namespace mrv
                         (Fl_Callback*)change_pixel_ratio_cb, 0.0f, 8.0f,
                         FL_WHEN_ENTER_KEY | FL_WHEN_CHANGED);
 
+#ifdef TLRENDER_EXR
                     if (mipmapMode == Imf::MIPMAP_LEVELS)
                     {
                         ++group;
@@ -1870,6 +1881,7 @@ namespace mrv
                                  roundingModeText);
                         ++group;
                     }
+#endif
                             
                     if (rotation != 0.F)
                         add_float(_("Rotation"), _("Video Rotation"), rotation);

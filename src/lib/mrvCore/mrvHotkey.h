@@ -301,6 +301,11 @@ namespace mrv
     extern Hotkey kToggleStereo3D;
     extern Hotkey kToggleUSD;
 
+    //! Window behavior
+    extern Hotkey kToggleClickThrough;
+    extern Hotkey kUITransparencyLess;
+    extern Hotkey kUITransparencyMore;
+
     //! Editing hotkeys.
     extern Hotkey kToggleEditMode;
     extern Hotkey kToggleTimelineThumbnails;
@@ -330,7 +335,8 @@ namespace mrv
 
     extern Hotkey kRotatePlus90;
     extern Hotkey kRotateMinus90;
-
+    
+    
     /**
      * @brief Struct used to hold a hotkey entry.
      *
