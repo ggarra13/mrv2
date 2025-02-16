@@ -12,10 +12,6 @@
 
 #include "mrViewer.h"
 
-#include "mrvCore/mrvFile.h"
-#include "mrvCore/mrvHotkey.h"
-#include "mrvCore/mrvColorSpaces.h"
-
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvFl/mrvTimelinePlayer.h"
 
@@ -32,7 +28,12 @@
 #include "mrvNetwork/mrvTCP.h"
 
 #include "mrvApp/mrvSettingsObject.h"
+
+#include "mrvCore/mrvColorSpaces.h"
+#include "mrvCore/mrvFile.h"
+#include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvUtil.h"
+
 #include "mrvFl/mrvIO.h"
 
 // #define DEBUG_EVENTS

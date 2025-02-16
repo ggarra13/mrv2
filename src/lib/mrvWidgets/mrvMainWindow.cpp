@@ -211,6 +211,9 @@ namespace mrv
             
         }
 
+        if (click_through)
+            return 0;
+
         return DropWindow::handle(e);
     }
 
@@ -387,7 +390,7 @@ namespace mrv
 
 #ifdef _WIN32
 
-void setClickThrough(HWND hwnd, bool enable)
+void setClickThroughWin32(HWND hwnd, bool enable)
 {
     LONG style = GetWindowLong(hwnd, GWL_EXSTYLE);
     if (enable)
@@ -436,7 +439,6 @@ void setClickThroughWayland(struct wl_surface *surface,
                             struct wl_compositor *compositor, bool enable,
                             int W, int H)
 {
-    std::cerr << "setClickThroughWayland " << enable << std::endl;
     struct wl_region* region = wl_compositor_create_region(compositor);
     if (!enable)
     {
@@ -460,7 +462,7 @@ void setClickThroughWayland(struct wl_surface *surface,
         int H = h();
 #ifdef _WIN32
         HWND win = fl_win32_xid(this);
-        setClickThrough(win, enable);
+        setClickThroughWin32(win, enable);
 #elif defined(__linux__)
 
 #ifdef FLTK_USE_X11
