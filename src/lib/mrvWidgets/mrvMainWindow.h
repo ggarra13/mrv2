@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <memory>
+
 #include <tlCore/Util.h>
 
 #include "mrvDropWindow.h"
