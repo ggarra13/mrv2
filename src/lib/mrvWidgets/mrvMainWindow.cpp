@@ -15,13 +15,13 @@
 #include "mrvMainWindow.h"
 #include "mrvPreferencesUI.h"
 
+#include <FL/names.h>
 #include <FL/platform.H>
 #include <FL/fl_utf8.h>
 #include <FL/Enumerations.H>
 #include <FL/Fl.H>
 
 #if defined(FLTK_USE_X11)
-#    define Status int
 #    include <X11/extensions/scrnsaver.h>
 #    include <X11/Xlib.h>
 #    include <X11/extensions/Xfixes.h>
@@ -45,9 +45,14 @@ namespace
 
 namespace mrv
 {
-
+    struct MainWindow::Private
+    {
+        Fl_Offscreen offscreen;
+    };
+    
     MainWindow::MainWindow(int X, int Y, int W, int H, const char* title) :
-        DropWindow(X, Y, W, H, title)
+        DropWindow(X, Y, W, H, title),
+        _p(new Private)
     {
         box(FL_FLAT_BOX);
         init();
@@ -178,6 +183,8 @@ namespace mrv
 
     int MainWindow::handle(int e)
     {
+        if (click_through)
+            std::cerr << fl_eventnames[e] << std::endl;
         if (e == FL_FULLSCREEN)
         {
             App::ui->uiTimeline->requestThumbnail();
@@ -211,9 +218,12 @@ namespace mrv
             
         }
 
-        if (click_through)
-            return 0;
-
+        if ((e == FL_UNFOCUS) && click_through)
+        {
+            set_click_through(false);
+            return 1;
+        }
+        
         return DropWindow::handle(e);
     }
 
@@ -301,19 +311,20 @@ namespace mrv
 
     void MainWindow::draw()
     {
+        TLRENDER_P();
         
 #ifdef FLTK_USE_WAYLAND
         if (fl_wl_display())
         {   
-            offscreen = fl_create_offscreen(w(), h());
+            p.offscreen = fl_create_offscreen(w(), h());
             
             // 1. Draw child widgets to an offscreen buffer 
-            fl_begin_offscreen(offscreen);
+            fl_begin_offscreen(p.offscreen);
             Fl_Double_Window::draw_children(); // Draw all the window's children (widgets)
             fl_end_offscreen();
 
             // 2. Get the offscreen Cairo context
-            cairo_t* offscreen_cr = (cairo_t*)offscreen;
+            cairo_t* offscreen_cr = (cairo_t*)p.offscreen;
 
             // 3. Create a surface from the offscreen
             cairo_surface_t* offscreen_surface = cairo_get_target(offscreen_cr);
@@ -333,7 +344,7 @@ namespace mrv
             const double alpha = (double)win_alpha / 255.0;
             cairo_paint_with_alpha(cr, alpha);
 
-            fl_delete_offscreen(offscreen);
+            fl_delete_offscreen(p.offscreen);
         }
         else
         {
@@ -395,11 +406,13 @@ void setClickThroughWin32(HWND hwnd, bool enable)
     LONG style = GetWindowLong(hwnd, GWL_EXSTYLE);
     if (enable)
     {
-        SetWindowLong(hwnd, GWL_EXSTYLE, style | WS_EX_LAYERED | WS_EX_TRANSPARENT);
+        SetWindowLong(hwnd, GWL_EXSTYLE,
+                      style | WS_EX_LAYERED | WS_EX_TRANSPARENT);
     }
     else
     {
-        SetWindowLong(hwnd, GWL_EXSTYLE, style & ~(WS_EX_LAYERED | WS_EX_TRANSPARENT));
+        SetWindowLong(hwnd, GWL_EXSTYLE,
+                      style & ~(WS_EX_LAYERED | WS_EX_TRANSPARENT));
     }
 }
 

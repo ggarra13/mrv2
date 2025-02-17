@@ -4,9 +4,7 @@
 
 #pragma once
 
-#include <FL/platform.H>
-#undef None
-#undef Status
+#include <tlCore/Util.h>
 
 #include "mrvDropWindow.h"
 
@@ -89,9 +87,7 @@ namespace mrv
         bool on_top = false;
         bool click_through = false;
         
-#ifdef FLTK_USE_WAYLAND
-        Fl_Offscreen offscreen;
-#endif
+        TLRENDER_PRIVATE();
     };
 
 } // namespace mrv
