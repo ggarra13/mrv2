@@ -426,8 +426,6 @@ void setClickThroughX11(Display* display, Window window, bool enable,
                         short unsigned int W,
                         short unsigned int H)
 {
-    std::cerr << "setClickThroughX11 " << enable << std::endl;
-
     int event_base, error_base;
     if (!XShapeQueryExtension(display, &event_base, &error_base))
     {

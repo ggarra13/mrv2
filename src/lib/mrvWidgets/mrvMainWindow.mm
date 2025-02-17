@@ -25,8 +25,8 @@ void MainWindow::set_window_transparency(double alpha)
     [fl_xid(this) setAlphaValue:alpha];
 }
 
-void setClickThrough(Fl_Window *w, BOOL enable) {
-    [fl_xid(w) setIgnoresMouseEvents:enable];
+void MainWindow::setClickThrough(BOOL enable) {
+    [fl_xid(this) setIgnoresMouseEvents:enable];
 }
 
 }   // namespace mrv
