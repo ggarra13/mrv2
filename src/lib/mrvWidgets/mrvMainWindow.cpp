@@ -568,7 +568,7 @@ namespace mrv
 
             int ok;
 
-            if (fl_wl_display())
+            if (desktop::Wayland())
             {
                 ok = mrv::fl_choice(
                     _("This will disable events for mrv2, allowing them "
