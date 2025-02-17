@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// Copyright (c) 2021-2023 Darby Johnston
-// All rights reserved.
+// mrv2
+// Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Double_Window.H>
@@ -842,7 +842,6 @@ namespace mrv
                     timeline::RenderOptions renderOptions;
                     renderOptions.clearColor =
                         p.style->getColorRole(ui::ColorRole::Window);
-                    renderOptions.clearColor.a = 0.5F;
                     p.render->begin(renderSize, renderOptions);
                     p.render->setOCIOOptions(timeline::OCIOOptions());
                     p.render->setLUTOptions(timeline::LUTOptions());

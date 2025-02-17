@@ -412,14 +412,14 @@ namespace mrv
 
             uint8_t ur = 0, ug = 0, ub = 0, ua = 0;
             Fl::get_color(c, ur, ug, ub, ua);
+
             r = ur / 255.0f;
             g = ug / 255.0f;
             b = ub / 255.0f;
-            a = ua / 255.0f;
-
+            a = alpha;
+            
             if (desktop::Wayland())
             {
-                a = 0.F;
                 p.ui->uiViewGroup->color(fl_rgb_color(ur, ug, ub));
                 p.ui->uiViewGroup->redraw();
             }
@@ -463,10 +463,6 @@ namespace mrv
 
         glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
         glClearStencil(0);
-        // std::cerr << "transparent=" << transparent
-        //           << " hasAlpha=" << hasAlpha
-        //           << " alpha=" << alpha << " a=" << a
-        //           << std::endl;
         glClearColor(r, g, b, a);
         glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         CHECK_GL;
@@ -510,11 +506,16 @@ namespace mrv
 
                 gl.shader->bind();
                 gl.shader->setUniform("transform.mvp", mvp);
-                gl.shader->setUniform("opacity", alpha);
 #ifdef __APPLE__
+                gl.shader->setUniform("opacity", 1.0F);
                 set_window_transparency(alpha);
+#else
+                if (desktop::Wayland())
+                    gl.shader->setUniform("opacity", alpha);
+                else if (desktop::X11() || desktop::Windows())
+                    gl.shader->setUniform("opacity", 1.0F);
 #endif
-
+                
                 glActiveTexture(GL_TEXTURE0);
                 glBindTexture(GL_TEXTURE_2D, gl.buffer->getColorID());
 
@@ -529,6 +530,7 @@ namespace mrv
                 {
                     gl.shader->bind();
                     gl.shader->setUniform("transform.mvp", mvp);
+                    gl.shader->setUniform("opacity", alpha);
 
                     glActiveTexture(GL_TEXTURE0);
                     glBindTexture(GL_TEXTURE_2D, gl.stereoBuffer->getColorID());
@@ -720,7 +722,7 @@ namespace mrv
             }
 
             if (p.hudActive && p.hud != HudDisplay::kNone)
-                _drawHUD();
+                _drawHUD(alpha);
 
             if (!p.helpText.empty())
                 _drawHelpText();
@@ -757,8 +759,8 @@ namespace mrv
                 break;
         }
 
-        // if (!draw_opengl1)
-        //     return;
+        if (!draw_opengl1)
+            return;
 
         Fl_Gl_Window::draw_begin(); // Set up 1:1 projection
         Fl_Window::draw();          // Draw FLTK children

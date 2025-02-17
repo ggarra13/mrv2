@@ -61,7 +61,8 @@ namespace mrv
     }
 
     MainWindow::MainWindow(int W, int H, const char* title) :
-        DropWindow(W, H, title)
+        DropWindow(W, H, title),
+        _p(new Private)
     {
         box(FL_FLAT_BOX);
         init();
@@ -360,9 +361,9 @@ namespace mrv
     void MainWindow::set_alpha(int new_alpha)
     {
         // Don't allow fully transparent window
-        if (new_alpha < 25)
+        if (new_alpha < 96)
         {
-            win_alpha = 25;
+            win_alpha = 96;
         }
         else if (new_alpha > 255)
         {
@@ -373,6 +374,8 @@ namespace mrv
             win_alpha = new_alpha;
         }
 
+        const double alpha = (double)win_alpha / 255.0;
+            
 #if defined(_WIN32)
         HWND hwnd = fl_xid(this);
         LONG_PTR exstyle = GetWindowLongPtr(hwnd, GWL_EXSTYLE);
@@ -383,12 +386,10 @@ namespace mrv
         SetLayeredWindowAttributes(hwnd, 0, BYTE(win_alpha), LWA_ALPHA);
 //        SetLayeredWindowAttributes(hwnd, RGB(0, 0, 0), 0, LWA_COLORKEY);
 #elif defined(__APPLE__)
-        const double alpha = (double)win_alpha / 255.0;
         set_window_transparency(alpha); // defined in transp_cocoa.mm
 #elif defined(FLTK_USE_X11)
         if (fl_x11_display())
         {
-            const double alpha = (double)win_alpha / 255.0;
             uint32_t cardinal_alpha = (uint32_t)(UINT32_MAX * alpha);
             Atom atom =
                 XInternAtom(fl_display, "_NET_WM_WINDOW_OPACITY", False);

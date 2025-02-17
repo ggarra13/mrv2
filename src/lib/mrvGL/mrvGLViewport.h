@@ -74,7 +74,7 @@ namespace mrv
 
         void _drawCropMask(const math::Size2i& renderSize) const noexcept;
 
-        void _drawHUD() const noexcept;
+        void _drawHUD(float alpha) const noexcept;
 
         void _drawCursor(const math::Matrix4x4f& mvp) const noexcept;
 

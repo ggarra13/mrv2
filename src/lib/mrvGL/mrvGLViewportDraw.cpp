@@ -794,7 +794,7 @@ namespace mrv
         }
     }
 
-    void Viewport::_drawHUD() const noexcept
+    void Viewport::_drawHUD(float alpha) const noexcept
     {
         TLRENDER_P();
         MRV2_GL();
@@ -812,7 +812,7 @@ namespace mrv
         uint8_t r, g, b;
         Fl::get_color(c, r, g, b);
 
-        const image::Color4f labelColor(r / 255.F, g / 255.F, b / 255.F);
+        const image::Color4f labelColor(r / 255.F, g / 255.F, b / 255.F, alpha);
 
         const image::FontInfo fontInfo(fontFamily, fontSize);
         const image::FontMetrics fontMetrics =
@@ -829,8 +829,6 @@ namespace mrv
         timeline::RenderOptions renderOptions;
         renderOptions.clear = false;
         gl.render->begin(viewportSize, renderOptions);
-        // gl.render->setOCIOOptions(timeline::OCIOOptions());
-        // gl.render->setLUTOptions(timeline::LUTOptions());
 
         char buf[512];
         if (p.hud & HudDisplay::kDirectory)

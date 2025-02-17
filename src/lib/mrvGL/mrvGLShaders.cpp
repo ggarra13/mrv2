@@ -100,7 +100,7 @@ namespace mrv
                "void main()\n"
                "{\n"
                "    fColor = texture(textureSampler, fTexture);\n"
-               "    fColor.a *= opacity;\n"
+               "    fColor *= opacity;\n"
                "}\n";
     }
 
