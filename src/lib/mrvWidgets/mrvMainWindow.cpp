@@ -222,11 +222,13 @@ namespace mrv
             }
         }
 
+#ifdef _WIN32
         if ((e == FL_UNFOCUS) && click_through)
         {
             set_click_through(false);
             return 1;
         }
+#endif
 
         return DropWindow::handle(e);
     }
