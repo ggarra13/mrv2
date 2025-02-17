@@ -145,7 +145,7 @@ set( _pythonSiteModules
     regex*
     sacremoses*
     safetensors*
-    setntencepiece*
+    sentencepiece*
     snowballstemmer*
     sphinx*
     sympy*
