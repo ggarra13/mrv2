@@ -2,6 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+// #define DEBUG_CLICK_THROUGH 1
+
 #include <cstring>
 
 #include "mrvCore/mrvHotkey.h"
@@ -183,8 +185,10 @@ namespace mrv
 
     int MainWindow::handle(int e)
     {
+#ifdef DEBUG_CLICK_THROUGH
         if (click_through)
             std::cerr << fl_eventnames[e] << std::endl;
+#endif
         if (e == FL_FULLSCREEN)
         {
             App::ui->uiTimeline->requestThumbnail();
@@ -529,6 +533,8 @@ namespace mrv
             return;
 
         click_through = value;
+
+        always_on_top(click_through);
 
         setClickThrough(value);
     }

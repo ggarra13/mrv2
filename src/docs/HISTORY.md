@@ -33,7 +33,7 @@ Rocky Linux's **XDG_SESSION_TYPE** environment variable.
 - Fixed resizing of main window when dealing with two monitors under X11.
 - Added hotkeys to control the User Interface's transparency under Windows,
   macOS and Linux.  By default, they are assigned to **Ctrl + .** and
-  **Ctrl + ,**.
+  **Ctrl + ,**.  WIP not yet done.
 - Added hotkey to control click (pass) through of window position and clicking.
   WIP not yet done.  The hotkey by default is **Ctrl + t**.
 
