@@ -227,11 +227,13 @@ namespace mrv
 
         if (e == FL_FOCUS && click_through)
         {
+#ifdef FLTK_USE_WAYLAND
             if (ignoreFocus)
             {
                 ignoreFocus = false;
                 return 0;
             }
+#endif
             set_click_through(false);
             return 1;
         }
