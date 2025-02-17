@@ -2,7 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#define DEBUG_CLICK_THROUGH 1
+// #define DEBUG_CLICK_THROUGH 1
 
 #include <cstring>
 
@@ -12,6 +12,7 @@
 
 #include "mrvFl/mrvSession.h"
 
+#include "mrvUI/mrvAsk.h"
 #include "mrvUI/mrvDesktop.h"
 
 #include "mrvMainWindow.h"
@@ -222,14 +223,11 @@ namespace mrv
             }
         }
 
-#if defined(_WIN32)
-        // THis does not work on macOS
-        if ((e == FL_UNFOCUS) && click_through)
+        if (e == FL_FOCUS && click_through)
         {
             set_click_through(false);
             return 1;
         }
-#endif
 
         return DropWindow::handle(e);
     }
@@ -537,6 +535,18 @@ namespace mrv
     {
         if (click_through == value)
             return;
+
+        if (value)
+        {
+            int ok = mrv::fl_choice(
+                _("This will disable events for mrv2, allowing them "
+                  "to pass through.\n\n"
+                  "Give window focus (click on toolbar icon twice)\n"
+                  "to disable."),
+                _("Stop"), _("Continue"), NULL, NULL);
+            if (!ok)
+                return;
+        }
 
         click_through = value;
 

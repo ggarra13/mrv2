@@ -36,7 +36,7 @@ Rocky Linux's **XDG_SESSION_TYPE** environment variable.
   **Ctrl + ,**.  WIP not yet done.
 - Added hotkey to control click (pass) through of window position and clicking.
   WIP not yet done.  The hotkey by default is **Ctrl + t**.
-  Works on Windows.
+  Works on Windows and macOS.
 
 
 v1.3.2
