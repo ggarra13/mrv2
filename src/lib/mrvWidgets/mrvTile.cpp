@@ -155,7 +155,7 @@ namespace mrv
         tile_set_dragbar_color(t, c);
         t->window()->cursor(c);
     }
-
+    
     int Tile::handle(int event)
     {
         static int sdrag;

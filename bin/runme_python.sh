@@ -8,14 +8,13 @@
 #
 # Small build script for mrv2.  Run it from the root of the mrv2 dir, like:
 #
-# ./bin/runme_small.sh
+# ./bin/runme_python.sh
 #
-# It builds all dependencies and will install
-# the main executable on BUILD_DIR (by default
-#                                   BUILD-OS-ARCH/BUILD_TYPE/install/bin).
+# It builds python dependencies and will install the main executable on:
+# $BUILD_DIR/install/bin
+# By default: BUILD-OS-ARCH/BUILD_TYPE/install/bin.
 #
-# The small build does not have Python, USD, PDF, NDI or NETWORK support.
-# It is intended for solo artists.
+# The python build is mainly a check for python compilation.
 # 
 #
 # On Linux and macOS, it will also create a mrv2 or mrv2-dbg symbolic link

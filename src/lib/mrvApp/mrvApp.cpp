@@ -291,7 +291,8 @@ namespace mrv
             _("Play timelines, movies, and image sequences."),
             {app::CmdLineValueArg<std::string>::create(
                 p.options.dummy, "inputs",
-                _("Timelines, movies, image sequences, or folders."), true,
+                _("Timelines, movies, image sequences, USD assets or "
+                  "folders."), true,
                 true)},
             {
 #ifndef NDEBUG

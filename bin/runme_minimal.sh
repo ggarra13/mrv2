@@ -10,7 +10,7 @@
 # ./bin/runme_minimal.sh
 #
 # Intended to make sure cmake files, FLTK and mrv2 compile with no options.
-# You cannot open any image or movie file with this.
+# You can open only a PNG or EXR image.  No movie files with this.
 #
 
 

@@ -10,9 +10,9 @@
 #
 # ./bin/runme_small.sh
 #
-# It builds all dependencies and will install
-# the main executable on BUILD_DIR (by default
-#                                   BUILD-OS-ARCH/BUILD_TYPE/install/bin).
+# It builds all dependencies and will install the main executable on:
+# $BUILD_DIR/install/bin
+# By default: BUILD-OS-ARCH/BUILD_TYPE/install/bin.
 #
 # The small build does not have Python, USD, PDF, NDI or NETWORK support.
 # It is intended for solo artists.

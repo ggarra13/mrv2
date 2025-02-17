@@ -85,6 +85,7 @@ namespace mrv
         IOReturn success;
 #endif
         int win_alpha = 255;
+        bool ignoreFocus = false;
         bool wayland_resize = false;
         bool on_top = false;
         bool click_through = false;

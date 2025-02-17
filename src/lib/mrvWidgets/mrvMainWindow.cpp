@@ -219,26 +219,37 @@ namespace mrv
             else if (kToggleClickThrough.match(rawkey))
             {
                 set_click_through(!click_through);
+                ignoreFocus = true;
+                Fl::focus(nullptr);
                 return 1;
             }
         }
 
         if (e == FL_FOCUS && click_through)
         {
+            if (ignoreFocus)
+            {
+                ignoreFocus = false;
+                return 0;
+            }
             set_click_through(false);
             return 1;
         }
 
-        return DropWindow::handle(e);
+        int ret = DropWindow::handle(e);
+        return ret;
     }
 
     //! Resize override to handle tile
     void MainWindow::resize(int X, int Y, int W, int H)
     {
+        int oldW = w();
+        int oldH = h();
+        
         wayland_resize = true;
         DropWindow::resize(X, Y, W, H);
         wayland_resize = false;
-
+        
         // Redraw viewport windows in case we go from one monitor to another
         // with different OCIO display/view.
         App::ui->uiView->redrawWindows();
@@ -361,10 +372,13 @@ namespace mrv
 
     void MainWindow::set_alpha(int new_alpha)
     {
+        int minAlpha = 96;
+        if (desktop::Wayland())
+            minAlpha = 64;
         // Don't allow fully transparent window
-        if (new_alpha < 96)
+        if (new_alpha < minAlpha)
         {
-            win_alpha = 96;
+            win_alpha = minAlpha;
         }
         else if (new_alpha > 255)
         {
@@ -429,9 +443,7 @@ namespace mrv
 
 #    ifdef FLTK_USE_X11
 
-    void setClickThroughX11(
-        Display* display, Window window, bool enable, short unsigned int W,
-        short unsigned int H)
+    void setClickThroughX11(Display* display, Window window, bool enable)
     {
         int event_base, error_base;
         if (!XShapeQueryExtension(display, &event_base, &error_base))
@@ -457,19 +469,44 @@ namespace mrv
 #    endif // FLTK_USE_X11
 
 #    ifdef FLTK_USE_WAYLAND
-
-    void setClickThroughWayland(
-        struct wl_surface* surface, struct wl_compositor* compositor,
-        bool enable, int W, int H)
+    
+    void setClickThroughWayland(struct wl_surface* surface,
+                                int width, int height)
     {
-        struct wl_region* region = wl_compositor_create_region(compositor);
-        if (!enable)
+        auto compositor = fl_wl_compositor();
+        if (!compositor)
         {
-            // Restore normal behavior
-            wl_region_add(region, 0, 0, W, H);
+            LOG_ERROR("No compositor");
         }
-        wl_surface_set_input_region(surface, enable ? NULL : region);
+        struct wl_region* region = wl_compositor_create_region(compositor);
+        if (width > 0 && height > 0)
+        {
+            // Define the *non*-transparent area
+            wl_region_add(region, 0, 0, width, height);
+        }
+        wl_surface_set_input_region(surface, region);
+        wl_surface_commit(surface);
         wl_region_destroy(region);
+    }
+    
+    void setClickThroughWayland(const Fl_Window* window, const bool enable)
+    {
+        auto win = fl_wl_xid(window);
+        if (!win)
+        {
+            LOG_ERROR("No window");
+        }
+        auto surface = fl_wl_surface(win);
+        if (!surface)
+        {
+            LOG_ERROR("No surface");
+        }
+
+        int W = window->w();
+        int H = window->h();
+        if (enable)
+            W = H = 0;
+        setClickThroughWayland(surface, W, H);
     }
 
 #    endif // FLTK_USE_WAYLAND
@@ -480,8 +517,6 @@ namespace mrv
 
     void MainWindow::setClickThrough(bool enable)
     {
-        int W = w();
-        int H = h();
 #    ifdef _WIN32
         HWND win = fl_win32_xid(this);
         setClickThroughWin32(win, enable);
@@ -496,7 +531,7 @@ namespace mrv
             {
                 LOG_ERROR("No window");
             }
-            setClickThroughX11(display, win, enable, W, H);
+            setClickThroughX11(display, win, enable);
         }
 #        endif // FLTK_USE_X11
 
@@ -504,23 +539,9 @@ namespace mrv
         auto wldpy = fl_wl_display();
         if (wldpy)
         {
-            auto win = fl_wl_xid(this);
-            if (!win)
-            {
-                LOG_ERROR("No window");
-            }
-            auto compositor = fl_wl_compositor();
-            if (!compositor)
-            {
-                LOG_ERROR("No compositor");
-            }
-            auto surface = fl_wl_surface(win);
-            if (!surface)
-            {
-                LOG_ERROR("No surface");
-            }
-
-            setClickThroughWayland(surface, compositor, enable, W, H);
+            Fl_Window* window = Fl::first_window();
+            for (; window; window = Fl::next_window(window))
+                setClickThroughWayland(window, enable);
         }
 #        endif // FLTK_USE_WAYLAND
 
@@ -538,21 +559,39 @@ namespace mrv
 
         if (value)
         {
-            int ok = mrv::fl_choice(
-                _("This will disable events for mrv2, allowing them "
-                  "to pass through.\n\n"
-                  "Give window focus (click on toolbar icon twice)\n"
-                  "to disable."),
-                _("Stop"), _("Continue"), NULL, NULL);
+            // Click through not supported on X11, as X11 does not pass
+            // messages down to the window below.
+            if (desktop::X11())
+                return;
+
+            int ok;
+
+            if (fl_wl_display())
+            {
+                ok = mrv::fl_choice(
+                    _("This will disable events for mrv2, allowing them "
+                      "to pass through.\n\n"
+                      "Give window focus to disable."),
+                    _("Stop"), _("Continue"), NULL, NULL);
+            }
+            else
+            {
+                ok = mrv::fl_choice(
+                    _("This will disable events for mrv2, allowing them "
+                      "to pass through.\n\n"
+                      "Give window focus (click on the taskbar icon)\n"
+                      "to disable."),
+                    _("Stop"), _("Continue"), NULL, NULL);
+            }
             if (!ok)
                 return;
         }
 
         click_through = value;
 
-        always_on_top(click_through);
-
         setClickThrough(value);
+
+        always_on_top(click_through);
     }
 
 } // namespace mrv

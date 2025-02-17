@@ -5,7 +5,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.3.2\n"
+"Project-Id-Version: mrv2 v1.3.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -1246,6 +1246,9 @@ msgstr ""
 msgid "Save a single frame."
 msgstr ""
 
+msgid "Save multiple annotation frames."
+msgstr ""
+
 msgid "Save multiple frames."
 msgstr ""
 
@@ -1295,7 +1298,7 @@ msgstr ""
 msgid "Play timelines, movies, and image sequences."
 msgstr ""
 
-msgid "Timelines, movies, image sequences, or folders."
+msgid "Timelines, movies, image sequences, USD assets or folders."
 msgstr ""
 
 msgid "Debug verbosity."
@@ -3261,6 +3264,9 @@ msgstr ""
 msgid "Saving video but with an audio extension."
 msgstr ""
 
+msgid "Cannot save annotations to .otio file"
+msgstr ""
+
 msgid "View/Mask"
 msgstr ""
 
@@ -4290,6 +4296,22 @@ msgstr ""
 msgid "Session: "
 msgstr ""
 
+msgid ""
+"This will disable events for mrv2, allowing them to pass through.\n"
+"\n"
+"Give window focus to disable."
+msgstr ""
+
+msgid "Continue"
+msgstr ""
+
+msgid ""
+"This will disable events for mrv2, allowing them to pass through.\n"
+"\n"
+"Give window focus (click on the taskbar icon)\n"
+"to disable."
+msgstr ""
+
 msgid "Edit/&Copy"
 msgstr ""
 
@@ -5089,33 +5111,6 @@ msgstr ""
 msgid "Current tool being used."
 msgstr ""
 
-msgid "RLE"
-msgstr ""
-
-msgid "ZIPS"
-msgstr ""
-
-msgid "ZIP"
-msgstr ""
-
-msgid "PIZ"
-msgstr ""
-
-msgid "PXR24"
-msgstr ""
-
-msgid "B44"
-msgstr ""
-
-msgid "B44A"
-msgstr ""
-
-msgid "DWAA"
-msgstr ""
-
-msgid "DWAB"
-msgstr ""
-
 msgid "Half"
 msgstr ""
 
@@ -5123,6 +5118,12 @@ msgid "Float"
 msgstr ""
 
 msgid "Save Image Options"
+msgstr ""
+
+msgid "Annotation Frames Only"
+msgstr ""
+
+msgid "Save only the annotation frames, not the whole sequence."
 msgstr ""
 
 msgid "OpenEXR Options"
@@ -6415,6 +6416,15 @@ msgid "Toggle Magnify Texture Filtering"
 msgstr ""
 
 msgid "Auto Frame View"
+msgstr ""
+
+msgid "Toggle Click Through"
+msgstr ""
+
+msgid "More UI Transparency"
+msgstr ""
+
+msgid "Less UI Transparency"
 msgstr ""
 
 msgid "Ignore Display Window"
