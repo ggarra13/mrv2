@@ -59,7 +59,7 @@ namespace mrv
 
         //! Show override.
         void show() FL_OVERRIDE;
-        
+
         //! Resize override to handle tile.
         void resize(int X, int Y, int W, int H) FL_OVERRIDE;
 
@@ -74,13 +74,13 @@ namespace mrv
 
         //! Allow click through behavior on the window
         void set_click_through(bool value);
-        
+
     protected:
         void setClickThrough(bool value);
-        
+
 #ifdef __APPLE__
         void set_window_transparency(double alpha);
-    
+
         IOPMAssertionID assertionID;
         IOReturn success;
 #endif
@@ -88,7 +88,7 @@ namespace mrv
         bool wayland_resize = false;
         bool on_top = false;
         bool click_through = false;
-        
+
         TLRENDER_PRIVATE();
     };
 
