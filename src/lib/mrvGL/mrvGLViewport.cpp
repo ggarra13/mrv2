@@ -208,8 +208,9 @@ namespace mrv
         {
             hasAlpha = true;
         }
-        
-        const bool transparent = hasAlpha ||
+
+        const bool transparent =
+            hasAlpha ||
             p.backgroundOptions.type == timeline::Background::Transparent;
 
         try
@@ -274,7 +275,7 @@ namespace mrv
                     }
                     break;
                 }
-                
+
                 gl::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = gl.colorBufferType;
 
@@ -411,13 +412,14 @@ namespace mrv
 
             uint8_t ur = 0, ug = 0, ub = 0, ua = 0;
             Fl::get_color(c, ur, ug, ub, ua);
-            // r = ur / 255.0f;
-            // g = ug / 255.0f;
-            // b = ub / 255.0f;
-            // a = ua / 255.0f;
+            r = ur / 255.0f;
+            g = ug / 255.0f;
+            b = ub / 255.0f;
+            a = ua / 255.0f;
 
             if (desktop::Wayland())
             {
+                a = 0.F;
                 p.ui->uiViewGroup->color(fl_rgb_color(ur, ug, ub));
                 p.ui->uiViewGroup->redraw();
             }
@@ -461,6 +463,10 @@ namespace mrv
 
         glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
         glClearStencil(0);
+        // std::cerr << "transparent=" << transparent
+        //           << " hasAlpha=" << hasAlpha
+        //           << " alpha=" << alpha << " a=" << a
+        //           << std::endl;
         glClearColor(r, g, b, a);
         glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         CHECK_GL;
@@ -504,6 +510,7 @@ namespace mrv
 
                 gl.shader->bind();
                 gl.shader->setUniform("transform.mvp", mvp);
+                std::cerr << "set opacity " << alpha << std::endl;
                 gl.shader->setUniform("opacity", alpha);
 
                 glActiveTexture(GL_TEXTURE0);
