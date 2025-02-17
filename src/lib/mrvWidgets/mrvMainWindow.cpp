@@ -524,6 +524,8 @@ namespace mrv
 #        endif // FLTK_USE_WAYLAND
 
 #    endif // __linux__
+
+        set_alpha(win_alpha);
     }
 
 #endif // !__APPLE__
