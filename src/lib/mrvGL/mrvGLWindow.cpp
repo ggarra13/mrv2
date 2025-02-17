@@ -104,13 +104,14 @@ namespace mrv
     void GLWindow::show()
     {
         Fl_Gl_Window::show();
-        
-// #ifdef FLTK_USE_WAYLAND
-//         if (fl_wl_display())
-//         {
-//             wl_surface_set_opaque_region(fl_wl_surface(fl_wl_xid(this)), NULL);
-//         }
-// #endif
+
+#ifdef FLTK_USE_WAYLAND
+        // Not sure if this is needed
+        if (fl_wl_display())
+        {
+            wl_surface_set_opaque_region(fl_wl_surface(fl_wl_xid(this)), NULL);
+        }
+#endif
     }
 
 } // namespace mrv

@@ -844,15 +844,14 @@ namespace mrv
                         p.style->getColorRole(ui::ColorRole::Window);
                     renderOptions.clearColor.a = 0.5F;
                     p.render->begin(renderSize, renderOptions);
-                    // p.render->setOCIOOptions(timeline::OCIOOptions());
-                    // p.render->setLUTOptions(timeline::LUTOptions());
-                    // ui::DrawEvent drawEvent(
-                    //     p.style, p.iconLibrary, p.render, p.fontSystem);
-                    // p.render->setClipRectEnabled(true);
-                    // _drawEvent(
-                    //     p.timelineWindow, math::Box2i(renderSize),
-                    //     drawEvent);
-                    // p.render->setClipRectEnabled(false);
+                    p.render->setOCIOOptions(timeline::OCIOOptions());
+                    p.render->setLUTOptions(timeline::LUTOptions());
+                    ui::DrawEvent drawEvent(
+                        p.style, p.iconLibrary, p.render, p.fontSystem);
+                    p.render->setClipRectEnabled(true);
+                    _drawEvent(
+                        p.timelineWindow, math::Box2i(renderSize), drawEvent);
+                    p.render->setClipRectEnabled(false);
                     p.render->end();
                 }
             }
@@ -879,6 +878,10 @@ namespace mrv
                     static_cast<float>(renderSize.h), -1.F, 1.F);
                 p.shader->setUniform("transform.mvp", pm);
                 p.shader->setUniform("opacity", alpha);
+
+#ifdef __APPLE__
+                set_window_transparency(alpha);
+#endif
 
                 glActiveTexture(GL_TEXTURE0);
                 glBindTexture(GL_TEXTURE_2D, p.buffer->getColorID());

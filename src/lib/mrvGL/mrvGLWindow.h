@@ -23,5 +23,10 @@ namespace mrv
 
         void make_current();
         void show() FL_OVERRIDE;
+
+#ifdef __APPLE__
+    protected:
+        void set_window_transparency(double alpha);
+#endif
     };
 } // namespace mrv

@@ -510,8 +510,10 @@ namespace mrv
 
                 gl.shader->bind();
                 gl.shader->setUniform("transform.mvp", mvp);
-                std::cerr << "set opacity " << alpha << std::endl;
                 gl.shader->setUniform("opacity", alpha);
+#ifdef __APPLE__
+                set_window_transparency(alpha);
+#endif
 
                 glActiveTexture(GL_TEXTURE0);
                 glBindTexture(GL_TEXTURE_2D, gl.buffer->getColorID());
