@@ -2,7 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-// #define DEBUG_CLICK_THROUGH 1
+#define DEBUG_CLICK_THROUGH 1
 
 #include <cstring>
 
@@ -222,7 +222,8 @@ namespace mrv
             }
         }
 
-#ifdef _WIN32
+#if defined(_WIN32)
+        // THis does not work on macOS
         if ((e == FL_UNFOCUS) && click_through)
         {
             set_click_through(false);
@@ -377,7 +378,7 @@ namespace mrv
         }
 
         const double alpha = (double)win_alpha / 255.0;
-            
+
 #if defined(_WIN32)
         HWND hwnd = fl_xid(this);
         LONG_PTR exstyle = GetWindowLongPtr(hwnd, GWL_EXSTYLE);
