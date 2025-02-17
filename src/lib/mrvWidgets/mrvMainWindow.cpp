@@ -426,22 +426,27 @@ void setClickThroughX11(Display* display, Window window, bool enable,
                         short unsigned int W,
                         short unsigned int H)
 {
-    Region region = XCreateRegion();
+    std::cerr << "setClickThroughX11 " << enable << std::endl;
+
+    int event_base, error_base;
+    if (!XShapeQueryExtension(display, &event_base, &error_base))
+    {
+        LOG_ERROR("X Shape extension not available");
+        return;
+    }
+
 
     if (enable)
     {
+        Region region = XCreateRegion();
         XShapeCombineRegion(display, window, ShapeInput, 0, 0,
                             region, ShapeSet);
+        XDestroyRegion(region);
     }
     else
     {
-        // Restore normal click behavior: Set input region to window bounds.
-        XRectangle rect = {0, 0, W, H};
-        XUnionRectWithRegion(&rect, region, region);
-        XShapeCombineRegion(
-            display, window, ShapeInput, 0, 0, region, ShapeSet);
+        XShapeCombineMask(display, window, ShapeInput, 0, 0, None, ShapeSet);
     }
-    XDestroyRegion(region);
     XFlush(display);
 }
 #endif  // FLTK_USE_X11
