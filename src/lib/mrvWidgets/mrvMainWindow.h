@@ -79,7 +79,7 @@ namespace mrv
         void setClickThrough(bool value);
         
 #ifdef __APPLE__
-        void set_window_transparency(Fl_Window *w, double alpha)
+        void set_window_transparency(Fl_Window *w, double alpha);
     
         IOPMAssertionID assertionID;
         IOReturn success;
