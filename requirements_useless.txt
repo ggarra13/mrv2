@@ -27,7 +27,6 @@ pyyaml
 pyYAML
 pygments
 Pygments
-pytz
 regex
 sacremoses
 safetensors
