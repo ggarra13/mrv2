@@ -431,7 +431,7 @@ namespace
         case NoExpose:
         case PropertyNotify:
         case UnmapNotify:
-            return;
+            break;
         default:
             //return;  // ignore other events
             std::cerr << getEventName(e) << std::endl;
@@ -490,6 +490,7 @@ namespace
                 event.xcrossing.y = y;
                 event.xcrossing.x_root = x_root;
                 event.xcrossing.y_root = y_root;
+                event.xcrossing.time = evTime;
                 XSendEvent(display, target_window, True, mask, &event);
                 XFlush(display);
             }
@@ -511,12 +512,16 @@ namespace
                 event.xcrossing.y = y;
                 event.xcrossing.x_root = x_root;
                 event.xcrossing.y_root = y_root;
+                event.xcrossing.time = evTime;
                 XSendEvent(display, target_window, True, mask, &event);
                 XFlush(display);
             }
+            
+            last_window = new_window;
         }
 
-        if (e->type == MotionNotify)
+        if (e->type == MotionNotify ||
+            e->type == ButtonPress)
         {
             // Create an empty event
             XEvent event;
@@ -533,13 +538,43 @@ namespace
             event.xcrossing.y = y;
             event.xcrossing.x_root = x_root;
             event.xcrossing.y_root = y_root;
+            event.xcrossing.time = evTime;
             XSendEvent(display, target_window, True, NoEventMask, &event);
             XFlush(display);
+        }
+       
+        unsigned long evTime = get_current_time_ms();
+        switch(e->type)
+        {
+        case ButtonPress:
+        case ButtonRelease:
+            e->xbutton.time = evTime;
+            break;
+        case EnterNotify:
+        case LeaveNotify:
+            e->xcrossing.time = evTime;
+            break;
+        case MotionNotify:
+            e->xcrossing.time = evTime;
+            break;
+        case FocusIn:
+        case FocusOut:
+        case ClientMessage:
+        case DestroyNotify:
+        case Expose:
+        case KeymapNotify:
+        case NoExpose:
+        case PropertyNotify:
+        case UnmapNotify:
+            break;
+        default:
+            //return;  // ignore other events
+            std::cerr << "------------" << getEventName(e) << std::endl;
+            break;
         }
         
         XSendEvent(display, target_window, True, mask, e);
         XFlush(display);
-        last_window = new_window;
     }
     
 #endif
