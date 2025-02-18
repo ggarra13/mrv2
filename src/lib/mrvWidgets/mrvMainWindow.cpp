@@ -424,6 +424,8 @@ namespace
             break;
         case FocusOut:
             break;
+        case KeyPress:
+        case KeyRelease:
         case ClientMessage:
         case DestroyNotify:
         case Expose:
@@ -575,9 +577,23 @@ namespace
         
         XSendEvent(display, target_window, True, mask, e);
         XFlush(display);
-    }
-    
+
+        if (e->type == ButtonPress)
+        {
+            XGrabPointer(display, target_window, True,
+                         PointerMotionMask | ButtonReleaseMask,
+                         GrabModeAsync, GrabModeAsync, None, None, CurrentTime);
+            XFlush(display);
+        }
+        else if (e->type == ButtonRelease)
+        {
+            XUngrabPointer(display, CurrentTime);
+            XFlush(display);
+        }
 #endif
+    
+    }
+
 }
 
 
