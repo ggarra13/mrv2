@@ -19,6 +19,7 @@
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 #include <tlCore/OS.h>
 #include <tlCore/String.h>
@@ -49,7 +50,73 @@ namespace
 namespace
 {
     
+#ifdef _WIN32
 
+    std::string exec_command(const std::string& command)
+    {
+        std::string output;
+        SECURITY_ATTRIBUTES saAttr;
+        HANDLE hRead, hWrite;
+
+        // Set up security attributes to allow pipe handles to be inherited
+        saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
+        saAttr.bInheritHandle = TRUE;
+        saAttr.lpSecurityDescriptor = NULL;
+
+        // Create a pipe for the child process’s STDOUT
+        if (!CreatePipe(&hRead, &hWrite, &saAttr, 0))
+        {
+            throw std::runtime_error("CreatePipe failed!");
+        }
+
+        // Ensure the read handle to the pipe is not inherited
+        SetHandleInformation(hRead, HANDLE_FLAG_INHERIT, 0);
+
+        // Create the child process
+        PROCESS_INFORMATION pi;
+        STARTUPINFO si;
+        ZeroMemory(&pi, sizeof(PROCESS_INFORMATION));
+        ZeroMemory(&si, sizeof(STARTUPINFO));
+        si.cb = sizeof(STARTUPINFO);
+        si.hStdOutput = hWrite;
+        si.hStdError = hWrite;
+        si.dwFlags |= STARTF_USESTDHANDLES | STARTF_USESHOWWINDOW;
+        si.wShowWindow = SW_HIDE; // Prevents console window from appearing
+
+        // Convert command to a writable string buffer
+        std::vector<char> cmd(command.begin(), command.end());
+        cmd.push_back(0); // Null-terminate the string
+
+        // Create the process
+        if (!CreateProcess(NULL, cmd.data(), NULL, NULL, TRUE,
+                           CREATE_NO_WINDOW, NULL, NULL, &si, &pi))
+        {
+            CloseHandle(hRead);
+            CloseHandle(hWrite);
+            throw std::runtime_error("CreateProcess failed!");
+        }
+
+        // Close the write end of the pipe in the parent process
+        CloseHandle(hWrite);
+
+        // Read output from the child process
+        char buffer[128];
+        DWORD bytesRead;
+        while (ReadFile(hRead, buffer, sizeof(buffer) - 1, &bytesRead, NULL) && bytesRead > 0)
+        {
+            buffer[bytesRead] = '\0';
+            output += buffer;
+        }
+
+        // Cleanup
+        CloseHandle(hRead);
+        CloseHandle(pi.hProcess);
+        CloseHandle(pi.hThread);
+
+        return output;
+    }
+
+#else
     // Function to execute a shell command and capture the output
     std::string exec_command(const std::string& command)
     {
@@ -72,6 +139,7 @@ namespace
 
         return out;
     }
+#endif
     
 } // namespace
 
@@ -355,7 +423,7 @@ namespace mrv
         {
             std::string out;
 #ifdef _WIN32
-            out = exec_command("ver");
+            out = exec_command("cmd /C ver");
 #else
             out = exec_command("uname -r");
 #endif
@@ -365,8 +433,10 @@ namespace mrv
         
         const std::string getVersion()
         {
+            static std::string os_version;
+            if (!os_version.empty())
+                return os_version;
             tl::os::SystemInfo info = tl::os::getSystemInfo();
-            std::string os_version;
 #ifdef __linux__
             std::ifstream os_release("/etc/os-release");
             std::string line;
@@ -390,11 +460,13 @@ namespace mrv
             }
             if (os_version.empty())
                 os_version = info.name;
-            os_version = _("Linux Distribution: ") + os_version;
+#elif _WIN32
+            os_version = exec_command("powershell -Command  \"(Get-CimInstance Win32_OperatingSystem).Caption\"");
+            os_version = string::stripWhitespace(os_version);
 #else
             os_version = info.name;
 #endif
-            os_version = "\t" + os_version;
+            os_version = _("\tDistribution: ") + os_version;
             return os_version;
         }
 

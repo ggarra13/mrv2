@@ -324,10 +324,8 @@ namespace mrv
     {
         std::stringstream s;
         s << _("Build Environment:") << std::endl
-#ifdef __linux__
-          << _("\tLinux Distribution: ") << kBUILD_LINUX_DISTRO << std::endl
+          << _("\tDistribution: ") << kBUILD_DISTRO << std::endl
           << _("\tDesktop Environment: ") << kBUILD_DESKTOP_ENV << std::endl
-#endif
           << _("\tKernel Info: ") << kBUILD_KERNEL_INFO << std::endl;
         return s.str();
     }
@@ -337,11 +335,11 @@ namespace mrv
     {
         std::stringstream s;
         s << _("Running Environment:") << std::endl
-          << mrv::os::getVersion() << std::endl
-#ifdef __linux__
-          << mrv::os::getDesktop() << std::endl
-          << mrv::os::getKernel() << std::endl;
-#endif
+          << mrv::os::getVersion()
+          << std::endl << mrv::os::getDesktop() << std::endl
+          << mrv::os::getKernel()
+          << std::endl;
+        
         return s.str();
     }
 
@@ -736,7 +734,7 @@ namespace mrv
         std::stringstream o;
 
         o << "mrv2 " << kArch << " bits - v" << kVersion << " " 
-          << kBuild << endl
+          << build_date() << endl
           << "(C) 2022-Present" << endl
           << "Gonzalo Garramuño & others" << endl
           << endl

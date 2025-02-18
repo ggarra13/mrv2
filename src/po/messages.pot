@@ -1304,6 +1304,9 @@ msgstr ""
 msgid "Debug verbosity."
 msgstr ""
 
+msgid "Log verbosity."
+msgstr ""
+
 msgid "Audio file name."
 msgstr ""
 
@@ -1409,7 +1412,7 @@ msgstr ""
 msgid "Quit mrv2"
 msgstr ""
 
-msgid "Running from "
+msgid "Install Location: "
 msgstr ""
 
 msgid "Could not initialize NDI"
@@ -4215,6 +4218,21 @@ msgstr ""
 msgid "Replace Next"
 msgstr ""
 
+msgid "Build Environment:"
+msgstr ""
+
+msgid "\tLinux Distribution: "
+msgstr ""
+
+msgid "\tDesktop Environment: "
+msgstr ""
+
+msgid "\tKernel Info: "
+msgstr ""
+
+msgid "Running Environment:"
+msgstr ""
+
 msgid "D\t\t\t\t\t=\tDecoding supported"
 msgstr ""
 
@@ -6337,10 +6355,7 @@ msgstr ""
 msgid "@B12@C7@b@.Remote\t@B12@C7@b@.Local"
 msgstr ""
 
-msgid "Desktop: "
-msgstr ""
-
-msgid "Running on: "
+msgid "Linux Distribution: "
 msgstr ""
 
 msgid "sysctl failed!"

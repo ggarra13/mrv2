@@ -9,6 +9,8 @@ fsspec
 huggingface-hub
 imagesize
 Jinja
+jinja2
+Jinja2
 joblib
 libretranslatepy
 lxml
@@ -33,6 +35,7 @@ sentencepiece
 snowballstemmer
 sphinx
 sphinx_rtd_theme
+sphinxcontrib-jquery
 sympy
 tokenizers
 torchaudio
@@ -43,4 +46,3 @@ translate
 typing-extension
 tqdm
 unittest
-urllib3

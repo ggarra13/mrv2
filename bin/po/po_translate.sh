@@ -29,4 +29,7 @@ fi
 
 $PYTHON bin/python/po_translate.py $*
 
-$PYTHON -m pip uninstall polib transformers translate torch sentencepiece sacremoses -y
+#
+# Remove all the dependencies we installed
+#
+$PYTHON -m pip uninstall -r requirements_useless.txt -y

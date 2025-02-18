@@ -135,9 +135,13 @@ if(UNIX AND NOT APPLE)
 	list(APPEND LIBRARIES OpenGL::EGL)
     endif()
 elseif(WIN32)
-    execute_process(COMMAND ver OUTPUT_VARIABLE DISTRO_INFO)
-    set(DESKTOP_ENV "Windows")
-    execute_process(COMMAND ver OUTPUT_VARIABLE KERNEL_INFO)
+    execute_process(
+	COMMAND powershell -Command "(Get-CimInstance Win32_OperatingSystem).Caption"
+	OUTPUT_VARIABLE DISTRO_INFO
+	OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    set(DESKTOP_ENV "Windows (GDI+)")
+    execute_process(COMMAND cmd /C ver OUTPUT_VARIABLE KERNEL_INFO OUTPUT_STRIP_TRAILING_WHITESPACE)
 elseif(APPLE)
     execute_process(COMMAND sw_vers OUTPUT_VARIABLE DISTRO_INFO)
     set(DESKTOP_ENV "Cocoa")
@@ -145,7 +149,7 @@ elseif(APPLE)
 endif()
     
 add_definitions(
-    -DkBUILD_LINUX_DISTRO="${DISTRO_INFO}"
+    -DkBUILD_DISTRO="${DISTRO_INFO}"
     -DkBUILD_KERNEL_INFO="${KERNEL_INFO}"
     -DkBUILD_DESKTOP_ENV="${DESKTOP_ENV}"
 )
