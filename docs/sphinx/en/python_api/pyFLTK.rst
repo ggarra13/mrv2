@@ -4,7 +4,7 @@ pyFLTK
 
 mrv2 supports FLTK in python through the pyFLTK module.  You can import it like::
 
-  from fltk14 import *
+  from fltk import *
 
 Once with it, you can create new windows, buttons, and any sort of other widgets the pyFLTK supports.  For some demos, look into::
 
