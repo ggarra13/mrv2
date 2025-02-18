@@ -515,10 +515,6 @@ namespace mrv
 
     int MainWindow::handle(int event)
     {
-#ifdef DEBUG_CLICK_THROUGH
-        if (click_through)
-            std::cerr << fl_eventnames[event] << std::endl;
-#endif
         if (event == FL_FOCUS && click_through)
         {
 #ifdef __linux__
