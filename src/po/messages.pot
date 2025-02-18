@@ -4221,7 +4221,7 @@ msgstr ""
 msgid "Build Environment:"
 msgstr ""
 
-msgid "\tLinux Distribution: "
+msgid "\tDistribution: "
 msgstr ""
 
 msgid "\tDesktop Environment: "
@@ -6353,9 +6353,6 @@ msgid "Divide"
 msgstr ""
 
 msgid "@B12@C7@b@.Remote\t@B12@C7@b@.Local"
-msgstr ""
-
-msgid "Linux Distribution: "
 msgstr ""
 
 msgid "sysctl failed!"
