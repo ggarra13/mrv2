@@ -46,7 +46,7 @@ namespace fs = std::filesystem;
 
 namespace
 {
-    const char* kModule = "prefs";
+    const char* kModule = "pref";
     const int kPreferencesVersion = 9;
 } // namespace
 
@@ -66,6 +66,7 @@ namespace mrv
 
     std::string Preferences::root;
     int Preferences::debug = 0;
+    int Preferences::logLevel = 0;
     std::string Preferences::hotkeys_file = "mrv2.keys";
 
     int Preferences::language_index = 0; // English
@@ -550,23 +551,27 @@ namespace mrv
         }
 
         const char* var = fl_getenv("OCIO");
-        if (!var || strlen(var) == 0)
         {
-            ocio.get("config", tmpS, "", 4096);
-
-            if (strlen(tmpS) != 0)
+            const char* kModule = "ocio";
+            
+            if (!var || strlen(var) == 0)
             {
-                if (ocio::ocioDefault != tmpS)
+                ocio.get("config", tmpS, "", 4096);
+
+                if (strlen(tmpS) != 0)
                 {
-                    LOG_INFO(_("Setting OCIO config from preferences."));
-                    setConfig(tmpS);
+                    if (ocio::ocioDefault != tmpS)
+                    {
+                        LOG_INFO(_("Setting OCIO config from preferences."));
+                        setConfig(tmpS);
+                    }
                 }
             }
-        }
-        else
-        {
-            LOG_INFO(_("Setting OCIO config from OCIO environment variable."));
-            setConfig(var);
+            else
+            {
+                LOG_INFO(_("Setting OCIO config from OCIO environment variable."));
+                setConfig(var);
+            }
         }
 
         var = uiPrefs->uiPrefsOCIOConfig->value();
@@ -1966,21 +1971,21 @@ namespace mrv
                         _("OCIO file \"{0}\" not found or not readable."))
                         .arg(configName);
                 LOG_ERROR(msg);
-                LOG_INFO(_("Setting OCIO config to default:"));
+                LOG_TRACE(_("Setting OCIO config to default:"));
                 configName = ocio::ocioDefault;
             }
         }
         else if (configName == ocio::ocioDefault)
         {
-            LOG_INFO(_("Setting OCIO config to default:"));
+            LOG_TRACE(_("Setting OCIO config to default:"));
             configName = ocio::ocioDefault;
         }
         else
         {
-            LOG_INFO(_("Setting OCIO config to built-in:"));
+            LOG_TRACE(_("Setting OCIO config to built-in:"));
         }
 
-        LOG_INFO(configName);
+        LOG_TRACE("\t" << configName);
         uiPrefs->uiPrefsOCIOConfig->value(configName.c_str());
         oldConfigName = configName;
     }

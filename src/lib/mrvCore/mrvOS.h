@@ -65,11 +65,13 @@ namespace mrv
         int execv(const std::string& exe = "",
                   const std::string& session = "");
         
-        std::string getGPUVendor();
+        const std::string getGPUVendor();
 
-        std::string getDesktop();
+        const std::string getKernel();
+        
+        const std::string getDesktop();
 
-        std::string getVersion();
+        const std::string getVersion();
 
         bool runningInTerminal();
     } // namespace os

@@ -19,7 +19,9 @@ namespace mrv
     void ffmpeg_codec_information(mrv::TextBrowser* b);
 
     const char* version();
-    const char* build_date();
+    const std::string build_date();
+    const std::string build_info();
+    const std::string running_info();
 
     void about_message(mrv::TextBrowser* b);
     void thanks_message(mrv::TextBrowser* b);

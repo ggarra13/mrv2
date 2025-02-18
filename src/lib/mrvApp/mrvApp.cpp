@@ -98,7 +98,7 @@ namespace py = pybind11;
 
 namespace
 {
-    const char* kModule = "app";
+    const char* kModule = "main";
 }
 
 namespace mrv
@@ -300,6 +300,10 @@ namespace mrv
                     Preferences::debug, {"-debug", "-d"},
                     _("Debug verbosity.")),
 #endif
+                app::CmdLineValueOption<int>::create(
+                    Preferences::logLevel, {"-logLevel", "-verbosity", "-v"},
+                    _("Log verbosity."),
+                    string::Format("{0}").arg(Preferences::logLevel)),
                 app::CmdLineValueOption<std::string>::create(
                     p.options.audioFileName, {"-audio", "-a"},
                     _("Audio file name.")),
@@ -547,15 +551,29 @@ namespace mrv
         version += mrv::version();
         version += " ";
         version += mrv::build_date();
-        LOG_INFO(version);
+        LOG_TRACE(version);
+        LOG_TRACE(msg);
 
-        version = mrv::os::getVersion();
-        LOG_INFO(version);
-#ifdef __linux__
-        LOG_INFO(mrv::os::getDesktop());
-#endif
-        LOG_INFO(_("Running from ") << mrv::rootpath());
-        LOG_INFO(msg);
+        {
+            const std::string& info = mrv::build_info();
+            const auto& lines = string::split(info, '\n');
+            for (auto line : lines)
+            {
+                LOG_TRACE(line);
+            }
+        }
+
+        {
+            const std::string& info = mrv::running_info();
+            const auto& lines = string::split(info, '\n');
+            for (auto line : lines)
+            {
+                LOG_TRACE(line);
+            }
+        }
+        
+        LOG_TRACE(_("Install Location: "));
+        LOG_TRACE("\t" << mrv::rootpath());
         DBG;
 
         // Create the main control.
@@ -703,7 +721,7 @@ namespace mrv
 
                         lastStatusMessage = msg;
 
-                        LOG_INFO(msg);
+                        LOG_TRACE(msg);
                         break;
                     }
                     default:
@@ -936,17 +954,17 @@ namespace mrv
 
             p.pythonArgs = std::make_unique<PythonArgs>(p.options.pythonArgs);
 
-            LOG_INFO(std::string(
+            LOG_TRACE(std::string(
                 string::Format(_("Running python script '{0}'")).arg(script)));
             const auto& args = p.pythonArgs->getArguments();
 
             if (!args.empty())
             {
-                LOG_INFO(_("with Arguments:"));
+                LOG_TRACE(_("with Arguments:"));
                 std::string out = "[";
                 out += tl::string::join(args, ',');
                 out += "]";
-                LOG_INFO(out);
+                LOG_TRACE(out);
             }
 
             std::ifstream is(script);

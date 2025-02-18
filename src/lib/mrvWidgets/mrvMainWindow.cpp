@@ -687,7 +687,8 @@ namespace mrv
         else
         {
             snprintf(
-                buf, 256, "mrv2 v%s %s%s", mrv::version(), mrv::build_date(),
+                buf, 256, "mrv2 v%s %s%s", mrv::version(),
+                mrv::build_date().c_str(),
                 session.c_str());
         }
         copy_label(buf);

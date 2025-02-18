@@ -216,7 +216,7 @@ namespace mrv
             return -1;
         }
 
-        std::string getGPUVendor()
+        const std::string getGPUVendor()
         {
             std::string out = _("Unknown");
 
@@ -231,7 +231,8 @@ namespace mrv
             return out;
         }
 
-        std::string getWaylandCompositorVersion(const std::string& compositor)
+        const std::string
+        getWaylandCompositorVersion(const std::string& compositor)
         {
             std::string version_command;
 
@@ -269,7 +270,7 @@ namespace mrv
             }
         }
 
-        std::string getWaylandCompositor(const std::string& desktop_env)
+        const std::string getWaylandCompositor(const std::string& desktop_env)
         {
             const std::string& desktop = tl::string::toLower(desktop_env);
 
@@ -300,9 +301,9 @@ namespace mrv
             }
         }
 
-        std::string getDesktop()
+        const std::string getDesktop()
         {
-            std::string out = _("Desktop: ");
+            std::string out = _("\tDesktop Environment: ");
 
 #ifdef __linux__
             if (desktop::XWayland())
@@ -350,7 +351,19 @@ namespace mrv
             return out;
         }
 
-        std::string getVersion()
+        const std::string getKernel()
+        {
+            std::string out;
+#ifdef _WIN32
+            out = exec_command("ver");
+#else
+            out = exec_command("uname -r");
+#endif
+            out = _("\tKernel Info: ") + string::stripWhitespace(out);
+            return out;
+        }
+        
+        const std::string getVersion()
         {
             tl::os::SystemInfo info = tl::os::getSystemInfo();
             std::string os_version;
@@ -377,20 +390,11 @@ namespace mrv
             }
             if (os_version.empty())
                 os_version = info.name;
+            os_version = _("Linux Distribution: ") + os_version;
 #else
             os_version = info.name;
 #endif
-
-            // Output also ocmpile type
-            std::string compile = "Debug Compile";
-#ifdef NDEBUG
-#    ifdef MRV2_RelWithDebInfo
-            compile = "RelWithDebInfo";
-#    else
-            compile = "Release";
-#    endif
-#endif
-            os_version = _("Running on: ") + os_version + " " + compile;
+            os_version = "\t" + os_version;
             return os_version;
         }
 

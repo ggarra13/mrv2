@@ -79,16 +79,11 @@ namespace mrv
             }
         }
 
-        inline std::string stripAtStart(const std::string& s)
+        inline std::string stripWhitespace(const std::string& s)
         {
             std::string out;
-            bool found = false;
-            for (const auto& c : s)
-            {
-                if (!found && (c == ' ' || c == '\n' || c == '\r'))
-                    continue;
-                out.push_back(c);
-            }
+            out = stripLeadingWhitespace(s);
+            out = stripTrailingWhitespace(out);
             return out;
         }
 

@@ -260,6 +260,7 @@ namespace mrv
     const char* kBuild = "- Built " __DATE__ " " __TIME__;
     const char* kArch = "64";
 
+
     struct FormatInfo
     {
         bool encode;
@@ -302,9 +303,46 @@ namespace mrv
         return kVersion;
     }
 
-    const char* build_date()
+    const std::string build_date()
     {
-        return kBuild;
+        std::string out = kBuild;
+        
+        // Output also ocmpile type
+        std::string compile = "Debug Compile";
+#ifdef NDEBUG
+#    ifdef MRV2_RelWithDebInfo
+        compile = "RelWithDebInfo";
+#    else
+        compile = "Release";
+#    endif
+#endif
+        out += " - " + compile;
+        return out;
+    }
+    
+    const std::string build_info()
+    {
+        std::stringstream s;
+        s << _("Build Environment:") << std::endl
+#ifdef __linux__
+          << _("\tLinux Distribution: ") << kBUILD_LINUX_DISTRO << std::endl
+          << _("\tDesktop Environment: ") << kBUILD_DESKTOP_ENV << std::endl
+#endif
+          << _("\tKernel Info: ") << kBUILD_KERNEL_INFO << std::endl;
+        return s.str();
+    }
+
+
+    const std::string running_info()
+    {
+        std::stringstream s;
+        s << _("Running Environment:") << std::endl
+          << mrv::os::getVersion() << std::endl
+#ifdef __linux__
+          << mrv::os::getDesktop() << std::endl
+          << mrv::os::getKernel() << std::endl;
+#endif
+        return s.str();
     }
 
     static int ffmpeg_format_widths[] = {20, 20, 20, 130, 80, 150, 0};
@@ -697,7 +735,10 @@ namespace mrv
 
         std::stringstream o;
 
-        o << "mrv2 " << kArch << " bits - v" << kVersion << " " << kBuild
+        o << "mrv2 " << kArch << " bits - v" << kVersion << " " 
+          << kBuild << endl
+          << "(C) 2022-Present" << endl
+          << "Gonzalo Garramuño & others" << endl
           << endl
 #ifdef __GLIBCXX__
           << _("With gcc ") << __GNUC__ << endl
@@ -706,13 +747,8 @@ namespace mrv
 #else
           << _("With msvc ") << _MSC_VER << endl
 #endif
-          << "(C) 2022-Present" << endl
-          << "Gonzalo Garramuño & others" << endl
-          << endl
-          << mrv::os::getVersion() << endl
-#ifdef __linux__
-          << mrv::os::getDesktop() << endl
-#endif
+          << build_info() << endl
+          << running_info() << endl
           << endl
           << _("mrv2 depends on:") << endl
           << endl;

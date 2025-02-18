@@ -126,14 +126,29 @@ set(SOURCES
 list(APPEND LIBRARIES mrvFlmm mrvCore ${FLTK_LIBRARIES} ${FLTK_gl_LIBRARIES} ${JASPER_LIBRARIES} MINIZIP::minizip)
 
 if(UNIX AND NOT APPLE)
+    execute_process(COMMAND lsb_release -ds OUTPUT_VARIABLE DISTRO_INFO)
+    execute_process(COMMAND ${CMAKE_COMMAND} -E env -- echo "$ENV{XDG_SESSION_DESKTOP}" OUTPUT_VARIABLE DESKTOP_ENV)
+    execute_process(COMMAND uname -r OUTPUT_VARIABLE KERNEL_INFO)
+
     list(APPEND LIBRARIES OpenGL::OpenGL)
     if(TLRENDER_WAYLAND)
 	list(APPEND LIBRARIES OpenGL::EGL)
     endif()
-    if(TLRENDER_X11)
-	list(APPEND LIBRARIES Xtst)
-    endif()
+elseif(WIN32)
+    execute_process(COMMAND ver OUTPUT_VARIABLE DISTRO_INFO)
+    set(DESKTOP_ENV "Windows")
+    execute_process(COMMAND ver OUTPUT_VARIABLE KERNEL_INFO)
+elseif(APPLE)
+    execute_process(COMMAND sw_vers OUTPUT_VARIABLE DISTRO_INFO)
+    set(DESKTOP_ENV "Cocoa")
+    execute_process(COMMAND uname -r OUTPUT_VARIABLE KERNEL_INFO)
 endif()
+    
+add_definitions(
+    -DkBUILD_LINUX_DISTRO="${DISTRO_INFO}"
+    -DkBUILD_KERNEL_INFO="${KERNEL_INFO}"
+    -DkBUILD_DESKTOP_ENV="${DESKTOP_ENV}"
+)
 
 if(MRV2_PYBIND11)
     list( APPEND LIBRARIES pybind11::embed )
