@@ -34,7 +34,9 @@ Rocky Linux's **XDG_SESSION_TYPE** environment variable.
 - Added hotkeys to control the User Interface's transparency under Windows,
   macOS and Linux.  By default, they are assigned to **Ctrl + .** and
   **Ctrl + ,**.
-- Added hotkey to control click (pass) through of window position and clicking.  Works on Windows, macOS and Wayland.  The hotkey by default is **Ctrl + t**.
+- Added hotkey to control click (pass) through of window position and clicking.  Works on all platforms.  However, on X11, international keys are not handled and text selection does not work.  The hotkey by default is **Ctrl + t**.
+
+- Fixed pip.sh script to call pip on the local mrv2 install.
  
 
 

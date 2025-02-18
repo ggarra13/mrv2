@@ -35,7 +35,9 @@ sphinx
 sphinx_rtd_theme
 sympy
 tokenizers
+torchaudio
 torch
+torchvision
 transformers
 translate
 typing-extension

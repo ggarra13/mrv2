@@ -25,16 +25,17 @@
 #include <FL/Fl.H>
 
 #if defined(FLTK_USE_X11)
-#    include <X11/extensions/scrnsaver.h>
+#    include <sys/time.h>
 #    include <X11/Xlib.h>
-#    include <X11/extensions/Xfixes.h>
+#    include <X11/extensions/scrnsaver.h>
 #    include <X11/extensions/shape.h>
+#    include <X11/extensions/Xfixes.h>
+#    include <X11/extensions/XTest.h>
 #endif
 
 #ifdef FLTK_USE_WAYLAND
 #    include <cairo/cairo.h>
 #    include <wayland-client.h>
-// #    include <wayland/protocols/xdg-shell-client-protocol.h>
 #endif
 
 #include "mrViewer.h"
@@ -45,6 +46,334 @@ namespace
 {
     const char* kModule = "main";
 }
+
+
+namespace
+{
+#ifdef FLTK_USE_X11
+    Window last_window = None; // Tracks the last window under the cursor
+    bool   is_dragging = false;
+
+    unsigned long get_current_time_ms() {
+        struct timeval tv;
+        gettimeofday(&tv, NULL);
+        return tv.tv_sec * 1000UL + tv.tv_usec / 1000;
+    }
+
+    // Convert FLTK keycode to X11 KeySym
+    KeySym fltkToX11KeySym(int fltkKey)
+    {
+        switch (fltkKey) {
+        case FL_BackSpace: return XK_BackSpace;
+        case FL_Tab:       return XK_Tab;
+        case FL_Enter:     return XK_Return;
+        case FL_Escape:    return XK_Escape;
+        case FL_Delete:    return XK_Delete;
+        case FL_Left:      return XK_Left;
+        case FL_Right:     return XK_Right;
+        case FL_Up:        return XK_Up;
+        case FL_Down:      return XK_Down;
+        default:           return fltkKey; // FLTK keycodes are mostly compatible with X KeySyms
+        }
+}
+    
+    // Function to get a window's title
+    std::string get_window_name(Display *display, Window window)
+    {
+        std::string out;
+        char *window_name = NULL;
+        if (XFetchName(display, window, &window_name) && window_name)
+        {
+            out = window_name;
+            XFree(window_name);
+        }
+        return out;
+    }
+    
+    // Function to get window geometry (position and size)
+    void get_window_geometry(Display *display, Window window, int *x, int *y, unsigned int *width, unsigned int *height)
+    {
+        Window root;
+        int wx, wy;
+        unsigned int ww, wh, border_width, depth;
+    
+        if (XGetGeometry(display, window, &root, &wx, &wy, &ww, &wh,
+                         &border_width, &depth))
+        {
+            XWindowAttributes attr;
+            if (XGetWindowAttributes(display, window, &attr))
+            {
+                *x = attr.x;
+                *y = attr.y;
+                *width = attr.width;
+                *height = attr.height;
+            }
+        }
+    }
+
+    // Function to get all windows below my_window in the stacking order
+    std::vector<Window> get_windows_below(Display *display, Window my_window)
+    {
+        Atom atom = XInternAtom(display, "_NET_CLIENT_LIST_STACKING", False);
+        Atom actual_type;
+        int actual_format;
+        unsigned long nitems, bytes_after;
+        unsigned char *data = NULL;
+        std::vector<Window> below_windows;
+
+        if (XGetWindowProperty(display, DefaultRootWindow(display), atom,
+                               0, 1024, False, XA_WINDOW,
+                               &actual_type, &actual_format, &nitems,
+                               &bytes_after, &data) == Success && data)
+        {   
+            Window *windows = (Window *)data;
+            bool found_my_window = false;
+        
+            for (int i = nitems-1; i >= 0; --i)
+            {
+                if (found_my_window)
+                {
+                    // Add all windows below my_window
+                    below_windows.push_back(windows[i]);  
+                }
+                if (windows[i] == my_window)
+                {
+                    found_my_window = true;
+                }
+            }
+            XFree(data);
+        }
+
+        return below_windows;
+    }
+    
+    // Function to find the  window below a mouse coordinate and given vector of
+    // windows in stacked order.
+    Window find_window_below(Display *display,
+                             const std::vector<Window> &windows, int mx, int my)
+    {
+        Window closest_window = None;
+
+        for (Window win : windows)
+        {
+            int wx, wy;
+            unsigned int ww, wh;
+            get_window_geometry(display, win, &wx, &wy, &ww, &wh);
+
+            if (mx >= wx && my >= wy && mx <= wx + ww && my <= wy + wh)
+            {
+                closest_window = win;
+                break;
+            }
+        }
+
+        return closest_window;
+    }
+
+#define PRINT_CASE(x) \
+    case x:                                     \
+    {                                           \
+        std::cerr << "Send " << #x;              \
+        break;                                  \
+    }
+   
+#define IGNORE_CASE(x) \
+    case x:                                     \
+    {                                           \
+        return;                                 \
+    }
+   
+    void mrv2_XSendEvent(Display* display, Window target_window, Bool value,
+                         int mask, XEvent* event)
+    {
+        // switch(event->type)
+        // {
+        //     PRINT_CASE(ButtonPress);
+        //     PRINT_CASE(ButtonRelease);;
+        //     PRINT_CASE(CirculateNotify);
+        //     PRINT_CASE(CirculateRequest);
+        //     PRINT_CASE(ClientMessage);
+        //     PRINT_CASE(ColormapNotify);
+        //     PRINT_CASE(ConfigureNotify);
+        //     PRINT_CASE(ConfigureRequest);
+        //     PRINT_CASE(CreateNotify);
+        //     PRINT_CASE(DestroyNotify);
+        //     PRINT_CASE(EnterNotify);
+        //     PRINT_CASE(Expose);
+        //     PRINT_CASE(FocusIn);
+        //     PRINT_CASE(FocusOut);
+        //     PRINT_CASE(GraphicsExpose);
+        //     PRINT_CASE(KeymapNotify);
+        //     PRINT_CASE(KeyPress);
+        //     PRINT_CASE(KeyRelease);
+        //     PRINT_CASE(LeaveNotify);
+        //     PRINT_CASE(MapNotify);
+        //     PRINT_CASE(MappingNotify);
+        //     PRINT_CASE(MapRequest);
+        //     IGNORE_CASE(MotionNotify);
+        //     PRINT_CASE(NoExpose);
+        //     PRINT_CASE(PropertyNotify);
+        //     PRINT_CASE(ReparentNotify);
+        //     PRINT_CASE(ResizeRequest);
+        //     PRINT_CASE(SelectionClear);
+        //     PRINT_CASE(SelectionRequest);
+        //     PRINT_CASE(SelectionNotify);
+        //     PRINT_CASE(UnmapNotify);
+        //     PRINT_CASE(VisibilityNotify);
+        // default:
+        //     std::cerr << "UNKNOWN (" << event->type << ")";
+        //     break;
+        // }
+        // std::cerr << " to " << get_window_name(display, target_window)
+        //           << std::endl;
+        XSendEvent(display, target_window, value, mask, event);
+    }
+
+    // Function to send an FLTK event as an XEvent to the specified X11 window
+    void send_fltk_event_to_x11(Display *display, Window target_window,
+                                int fltk_event, int root_x, int root_y,
+                                int button = 0, unsigned int key = 0,
+                                unsigned int modifiers = 0,
+                                const char* text = "")
+    {
+        if (target_window == None)
+            return;
+        
+        // Convert root coordinates to local window coordinates
+        int local_x = root_x, local_y = root_y;
+        Window child_return;
+        XTranslateCoordinates(display, DefaultRootWindow(display),
+                              target_window, root_x, root_y,
+                              &local_x, &local_y, &child_return);
+
+        // Create an empty event
+        XEvent event;
+        memset(&event, 0, sizeof(event));
+        int mask = NoEventMask;
+        unsigned long evTime = get_current_time_ms();        
+        event.xany.type = 0;
+        event.xany.display = display;
+        event.xany.window = target_window;
+
+        // We need to send an EnterNotify so that the X11 window behind will
+        // receive input as we are inside the non-transparent front FLTK window
+        if (fltk_event != FL_LEAVE && fltk_event != FL_ENTER &&
+            fltk_event != FL_NO_EVENT)
+        {
+            event.type = EnterNotify;
+            event.xcrossing.x = local_x;
+            event.xcrossing.y = local_y;
+            event.xcrossing.x_root = root_x;
+            event.xcrossing.y_root = root_y;
+            mrv2_XSendEvent(display, target_window, True, mask, &event);
+            XFlush(display);
+            
+            KeySym keysym = fltkToX11KeySym(key);
+            event.xkey.keycode = XKeysymToKeycode(display, keysym);
+            event.xkey.state = modifiers;
+            event.xkey.time = evTime;
+
+        }
+
+        switch (fltk_event)
+        {
+        case FL_ENTER:
+            event.type = EnterNotify;
+            event.xcrossing.x = local_x;
+            event.xcrossing.y = local_y;
+            event.xcrossing.x_root = root_x;
+            event.xcrossing.y_root = root_y;
+            mrv2_XSendEvent(display, target_window, True, mask, &event);
+            XFlush(display);
+            
+            break;
+        case FL_PUSH:
+            mask = ButtonPressMask | ButtonReleaseMask | PointerMotionMask; // Use correct mask
+            event.type = ButtonPress;
+            event.xbutton.button = button;
+            event.xbutton.x = local_x;
+            event.xbutton.y = local_y;
+            event.xbutton.x_root = root_x;
+            event.xbutton.y_root = root_y;
+            event.xbutton.time = evTime;
+            mrv2_XSendEvent(display, target_window, True, mask, &event);
+            XFlush(display);
+
+
+            XGrabPointer(display, target_window, True,
+                         PointerMotionMask | ButtonReleaseMask,
+                         GrabModeAsync, GrabModeAsync, None, None, CurrentTime);
+
+            break;
+            
+        case FL_DRAG:
+            mask = PointerMotionMask | SubstructureRedirectMask;
+            event.type = MotionNotify;
+            event.xmotion.x = local_x;
+            event.xmotion.y = local_y;
+            event.xmotion.x_root = root_x;
+            event.xmotion.y_root = root_y;
+            event.xmotion.state = modifiers;
+            event.xmotion.time = evTime;
+            mrv2_XSendEvent(display, target_window, True, mask, &event);
+            XFlush(display);
+            break;
+        case FL_RELEASE:
+            mask = ButtonReleaseMask; // Use correct mask
+            event.type = ButtonRelease;
+            event.xbutton.button = button;
+            event.xbutton.x = local_x;
+            event.xbutton.y = local_y;
+            event.xbutton.x_root = root_x;
+            event.xbutton.y_root = root_y;
+            event.xbutton.time = evTime;
+            mrv2_XSendEvent(display, target_window, True, mask, &event);
+            XFlush(display);
+
+            XUngrabPointer(display, CurrentTime);
+
+            break;
+        case FL_MOVE:
+            mask = PointerMotionMask;
+            event.type = MotionNotify;
+            event.xmotion.x = local_x;
+            event.xmotion.y = local_y;
+            event.xmotion.x_root = root_x;
+            event.xmotion.y_root = root_y;
+            event.xmotion.time = evTime;
+            mrv2_XSendEvent(display, target_window, True, mask, &event);
+            XFlush(display);
+            break;
+        case FL_FOCUS:
+            event.type = FocusIn;
+            mrv2_XSendEvent(display, target_window, True, mask, &event);
+            XFlush(display);
+            break;
+        case FL_UNFOCUS:
+            event.type = FocusOut;
+            mrv2_XSendEvent(display, target_window, True, mask, &event);
+            XFlush(display);
+            break;
+        case FL_KEYBOARD:
+        case FL_SHORTCUT:
+            event.type = KeyPress;
+            mrv2_XSendEvent(display, target_window, True, mask, &event);
+            XFlush(display);
+            break;
+        case FL_KEYUP:
+            event.type = KeyRelease;
+            mrv2_XSendEvent(display, target_window, True, mask, &event);
+            XFlush(display);
+            break;
+        default:
+            return; // Ignore other events
+        }
+
+    }
+    
+#endif
+}
+
 
 namespace mrv
 {
@@ -130,7 +459,6 @@ namespace mrv
         if (desktop::Windows() || desktop::X11())
         {
             Fl_PNG_Image* rgb = load_png("mrv2.png");
-            ;
             icon(rgb);
             delete rgb;
         }
@@ -150,7 +478,7 @@ namespace mrv
             action = HWND_NOTOPMOST;
         // Microsoft (R) Windows(TM)
         SetWindowPos(
-            fl_xid(this), action, NULL, NULL, NULL, NULL,
+            fl_win32_xid(this), action, NULL, NULL, NULL, NULL,
             SWP_NOMOVE | SWP_NOSIZE);
 #    elif defined(FLTK_USE_X11)
         if (fl_x11_display())
@@ -185,17 +513,82 @@ namespace mrv
         return Fl_Double_Window::iconize();
     }
 
-    int MainWindow::handle(int e)
+    int MainWindow::handle(int event)
     {
 #ifdef DEBUG_CLICK_THROUGH
         if (click_through)
-            std::cerr << fl_eventnames[e] << std::endl;
+            std::cerr << fl_eventnames[event] << std::endl;
 #endif
-        if (e == FL_FULLSCREEN)
+        if (event == FL_FOCUS && click_through)
+        {
+#ifdef __linux__
+            if (ignoreFocus)
+            {
+                ignoreFocus = false;
+                return 0;
+            }
+#endif
+            set_click_through(false);
+            return 1;
+        }
+        
+#ifdef FLTK_USE_X11
+        if (click_through && desktop::X11() )
+        {
+            if (event == FL_ENTER || event == FL_LEAVE)
+                return 0;
+            
+            if (event == FL_FOCUS)
+            {
+                set_click_through(false);
+                return 1;
+            }
+            
+            int x = Fl::event_x();
+            int y = Fl::event_y();
+            if (x < 0 || x > w() || y < 0 || y > h())
+                return 0;
+            
+            int root_x = Fl::event_x_root();
+            int root_y = Fl::event_y_root();
+            int button = Fl::event_button();
+            unsigned int key = Fl::event_key();  // \@bug: international characters not handled
+            const char* text = Fl::event_text();
+            
+            unsigned int modifiers = Fl::e_state >> 16 | Fl::event_buttons();
+
+            Display* display = fl_x11_display();
+            Window this_window = fl_x11_xid(this);
+            
+            const std::vector<Window>& below_windows =
+                get_windows_below(display, this_window);
+
+            Window new_window = find_window_below(display, below_windows,
+                                                  root_x, root_y);
+
+            if (new_window != last_window)
+            {
+                if (last_window != None)
+                {
+                    send_fltk_event_to_x11(display, last_window, FL_LEAVE, root_x, root_y);
+                }
+                if (new_window != None)
+                {
+                    send_fltk_event_to_x11(display, new_window, FL_ENTER, root_x, root_y);
+                }
+            }
+            
+            send_fltk_event_to_x11(display, new_window, event, root_x, root_y,
+                                   button, key, modifiers, text);
+            last_window = new_window;
+            return 1;
+        }
+#endif
+        if (event == FL_FULLSCREEN)
         {
             App::ui->uiTimeline->requestThumbnail();
         }
-        else if (e == FL_KEYBOARD)
+        else if (event == FL_KEYBOARD)
         {
             // If we have a text widget, don't swallow key presses
             unsigned rawkey = Fl::event_key();
@@ -225,20 +618,7 @@ namespace mrv
             }
         }
 
-        if (e == FL_FOCUS && click_through)
-        {
-#ifdef FLTK_USE_WAYLAND
-            if (ignoreFocus)
-            {
-                ignoreFocus = false;
-                return 0;
-            }
-#endif
-            set_click_through(false);
-            return 1;
-        }
-
-        int ret = DropWindow::handle(e);
+        int ret = DropWindow::handle(event);
         return ret;
     }
 
@@ -323,6 +703,9 @@ namespace mrv
             wl_surface_set_opaque_region(fl_wl_surface(fl_wl_xid(this)), NULL);
         }
 #endif
+#ifdef DEBUG_CLICK_THROUGH
+        set_alpha(0);
+#endif
     }
 
     void MainWindow::draw()
@@ -394,7 +777,7 @@ namespace mrv
         const double alpha = (double)win_alpha / 255.0;
 
 #if defined(_WIN32)
-        HWND hwnd = fl_xid(this);
+        HWND hwnd = fl_win32_xid(this);
         LONG_PTR exstyle = GetWindowLongPtr(hwnd, GWL_EXSTYLE);
         if (!(exstyle & WS_EX_LAYERED))
         {
@@ -411,7 +794,7 @@ namespace mrv
             Atom atom =
                 XInternAtom(fl_display, "_NET_WM_WINDOW_OPACITY", False);
             XChangeProperty(
-                fl_display, fl_xid(this), atom, XA_CARDINAL, 32,
+                fl_display, fl_x11_xid(this), atom, XA_CARDINAL, 32,
                 PropModeReplace, (unsigned char*)&cardinal_alpha, 1);
         }
 #endif
@@ -442,33 +825,6 @@ namespace mrv
 #endif
 
 #if defined(__linux__)
-
-#    ifdef FLTK_USE_X11
-
-    void setClickThroughX11(Display* display, Window window, bool enable)
-    {
-        int event_base, error_base;
-        if (!XShapeQueryExtension(display, &event_base, &error_base))
-        {
-            LOG_ERROR("X Shape extension not available");
-            return;
-        }
-
-        if (enable)
-        {
-            Region region = XCreateRegion();
-            XShapeCombineRegion(
-                display, window, ShapeInput, 0, 0, region, ShapeSet);
-            XDestroyRegion(region);
-        }
-        else
-        {
-            XShapeCombineMask(
-                display, window, ShapeInput, 0, 0, None, ShapeSet);
-        }
-        XFlush(display);
-    }
-#    endif // FLTK_USE_X11
 
 #    ifdef FLTK_USE_WAYLAND
     
@@ -524,19 +880,6 @@ namespace mrv
         setClickThroughWin32(win, enable);
 #    elif defined(__linux__)
 
-#        ifdef FLTK_USE_X11
-        auto display = fl_x11_display();
-        if (display)
-        {
-            Window win = fl_x11_xid(this);
-            if (!win)
-            {
-                LOG_ERROR("No window");
-            }
-            setClickThroughX11(display, win, enable);
-        }
-#        endif // FLTK_USE_X11
-
 #        ifdef FLTK_USE_WAYLAND
         auto wldpy = fl_wl_display();
         if (wldpy)
@@ -561,11 +904,6 @@ namespace mrv
 
         if (value)
         {
-            // Click through not supported on X11, as X11 does not pass
-            // messages down to the window below.
-            if (desktop::X11())
-                return;
-
             int ok;
 
             if (desktop::Wayland())
