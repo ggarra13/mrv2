@@ -2,7 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-// #define DEBUG_CLICK_THROUGH 1
+#define DEBUG_CLICK_THROUGH 1
 
 #include <cstring>
 
