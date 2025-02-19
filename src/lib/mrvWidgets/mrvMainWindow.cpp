@@ -25,6 +25,7 @@
 #include <FL/Fl.H>
 
 #if defined(FLTK_USE_X11)
+#    include <unistd.h>
 #    include <sys/time.h>
 #    include <X11/Xlib.h>
 #    include <X11/extensions/scrnsaver.h>
@@ -55,9 +56,10 @@ namespace
     bool   is_dragging = false;
 
     unsigned long get_current_time_ms() {
-        struct timeval tv;
-        gettimeofday(&tv, NULL);
-        return tv.tv_sec * 1000UL + tv.tv_usec / 1000;
+        // struct timeval tv;
+        // gettimeofday(&tv, NULL);
+        // return tv.tv_sec * 1000UL + tv.tv_usec / 1000;
+        return CurrentTime;
     }
 
     // Convert FLTK keycode to X11 KeySym
@@ -95,55 +97,168 @@ namespace
     void get_window_geometry(Display* display, Window window, int* x, int* y,
                              unsigned int* width, unsigned int* height)
     {
-        Window root;
+        Window root, child;
         int wx, wy;
         unsigned int ww, wh, border_width, depth;
-    
+
+        // Get the geometry of the window
         if (XGetGeometry(display, window, &root, &wx, &wy, &ww, &wh,
                          &border_width, &depth))
         {
-            XWindowAttributes attr;
-            if (XGetWindowAttributes(display, window, &attr))
+            // Translate coordinates to root window (absolute screen position)
+            if (XTranslateCoordinates(display, window, root,
+                                      0, 0, &wx, &wy, &child))
             {
-                *x = attr.x;
-                *y = attr.y;
-                *width = attr.width;
-                *height = attr.height;
+                *x = wx;
+                *y = wy;
+                *width = ww;
+                *height = wh;
             }
         }
     }
-
-    // Function to get all windows below my_window in the stacking order
-    std::vector<Window> get_windows_below(Display *display, Window target)
+    
+    // Function to check whether a window is minimized
+    static int is_window_minimized(Display *display, Window window)
     {
-        std::vector<Window> below_windows;
+        Atom actual_type;
+        int actual_format;
+        unsigned long nitems, bytes_after;
+        unsigned char* prop_value = NULL;
+        Atom* atoms;
+        int minimized = 0;
+
+        Atom net_wm_state = XInternAtom(display, "_NET_WM_STATE", False);
+        Atom net_wm_state_iconified = XInternAtom(display,
+                                                  "_NET_WM_STATE_ICONIFIED",
+                                                  False);
+
+        Atom net_wm_state_hidden = XInternAtom(display, "_NET_WM_STATE_HIDDEN",
+                                               False);
+
+        if (net_wm_state != None)
+        {
+            int result = XGetWindowProperty(display, window, net_wm_state,
+                                            0, (~0L), False, XA_ATOM,
+                                            &actual_type,
+                                            &actual_format, &nitems,
+                                            &bytes_after,
+                                            &prop_value);
+            if (result == Success && prop_value != NULL)
+            {
+                atoms = (Atom *)prop_value;
+                for (unsigned long i = 0; i < nitems; i++)
+                {
+                    if (atoms[i] == net_wm_state_iconified ||
+                        atoms[i] == net_wm_state_hidden)
+                    {
+                        minimized = 1;
+                        break;
+                    }
+                }
+                XFree(prop_value);
+            }
+        }
+        return minimized;
+    }
+    
+    // Helper function to fetch the window list
+    static std::vector<Window> fetch_window_list(Display *display)
+    {
+        std::vector<Window> window_list;
         Atom atom = XInternAtom(display, "_NET_CLIENT_LIST_STACKING", False);
         Atom actual_type;
         int actual_format;
         unsigned long nitems, bytes_after;
-        unsigned char *data = NULL;
+        unsigned char *data = nullptr;
 
         if (XGetWindowProperty(display, DefaultRootWindow(display), atom,
                                0, 1024, False, XA_WINDOW,
                                &actual_type, &actual_format, &nitems,
                                &bytes_after, &data) == Success && data)
-        {   
-            Window *windows = (Window *)data;
-            bool found_my_window = false;
-        
-            for (int i = nitems-1; i >= 0; --i)
+        {
+            Window* windows = (Window *)data;
+            window_list.assign(windows, windows + nitems);
+            XFree(data);
+        }
+        return window_list;
+    }
+
+    
+    // Function to get all windows below my_window in the stacking order
+    // \@todo: VERIFY it doesn't fail
+    std::vector<Window> get_windows_below(Display *display,
+                                          Window target_window)
+    {
+        std::vector<Window> below_windows;
+        int max_retries = 3; // Maximum number of retries
+        int retry_count = 0;
+
+        while (retry_count < max_retries) {
+            // // Install error handler to suppress X11 errors
+            // old_error_handler = XSetErrorHandler(suppress_x_errors);
+
+            std::vector<Window> windows = fetch_window_list(display);
+            bool found_target_window = false;
+
+            int i;
+            for (i = windows.size() - 1; i >= 0; --i)
             {
-                if (found_my_window)
-                {
-                    // Add all windows below my_window
-                    below_windows.push_back(windows[i]);  
+                const Window& window = windows[i];
+                XWindowAttributes attr;
+                bool viewable = false;
+                bool minimized = false;
+
+                // Don't include unmapped windows on the list
+                if (XGetWindowAttributes(display, window, &attr)) {
+                    if (attr.map_state == IsViewable)
+                    {
+                        viewable = true;
+                    } else
+                    {
+                        viewable = false;
+                    }
                 }
-                if (windows[i] == target)
+                else
                 {
-                    found_my_window = true;
+                    // Invalid window...
+                    break; // Refetch window list
+                }
+
+                // Don't include minimized windows on the list
+                if (is_window_minimized(display, window))
+                {
+                    minimized = true;
+                }
+
+                if (found_target_window && viewable && !minimized)
+                {
+                    // Add all windows below target_window
+                    below_windows.push_back(window);
+                }
+
+                if (window == target_window)
+                {
+                    found_target_window = true;
                 }
             }
-            XFree(data);
+
+            // // Restore old error handler
+            // XSetErrorHandler(old_error_handler);
+            // XSync(display, False); // Flush pending errors
+
+            // If the loop completed without errors, break the retry loop
+            if ((i < 0 && found_target_window) || windows.empty())
+            {
+                break;
+            }
+
+            retry_count++;
+            usleep(5000); // Small delay before retrying
+        }
+
+        if (retry_count == max_retries)
+        {
+            std::cerr << "Max retries reached, get_windows_below may be incomplete." << std::endl;
         }
 
         return below_windows;
@@ -151,49 +266,41 @@ namespace
     
     // Function to find the  window below a mouse coordinate and given vector of
     // windows in stacked order.
-    Window find_window_below(Display *display,
-                             const std::vector<Window> &windows, int x_root, int y_root)
+    static Window find_window_below(Display *display,
+                                    const std::vector<Window> &windows,
+                                    int x_root, int y_root)
     {
         Window closest_window = None;
 
-        for (Window win : windows)
+        for (Window window : windows)
         {
             int wx, wy;
             unsigned int ww, wh;
-            get_window_geometry(display, win, &wx, &wy, &ww, &wh);
-
-            // Convert root coordinates to local window coordinates
-            int x = x_root, y = y_root;
-            Window child_return;
-            XTranslateCoordinates(display, DefaultRootWindow(display),
-                                  win, x_root, y_root,
-                                  &x, &y, &child_return);
-        
-            if (x >= wx && y >= wy && x <= wx + ww && y <= wy + wh)
+            get_window_geometry(display, window, &wx, &wy, &ww, &wh);
+            
+            if (x_root >= wx && y_root >= wy &&
+                x_root <= wx + ww && y_root <= wy + wh)
             {
-                closest_window = win;
+                closest_window = window;
                 break;
             }
         }
-
+        
         return closest_window;
     }
 
-#define CHECK_EVENT_TYPE(x) \
+    
+
+#define CHECK_EVENT_TYPE(x)                     \
     case x:                                     \
     {                                           \
         s << #x;                                \
         return s.str();                         \
         break;                                  \
     }
-   
-#define IGNORE_EVENT_TYPE(x) \
-    case x:                                     \
-    {                                           \
-        return "";                              \
-    }
 
-    std::string getEventName(XEvent* event)
+    // Debugging Function to return the event name.
+    static std::string get_event_name(XEvent* event)
     {
         std::stringstream s;
         switch(event->type)
@@ -240,155 +347,11 @@ namespace
     void mrv2_XSendEvent(Display* display, Window target_window, Bool value,
                          int mask, XEvent* event)
     {
-        // std::cerr << " to " << get_window_name(target_window)
-        //           << std::endl;
         XSendEvent(display, target_window, value, mask, event);
+        XFlush(display);
     }
 
-    // // Function to send an FLTK event as an XEvent to the specified X11 window
-    // void send_fltk_event_to_x11(Display *display, Window target_window,
-    //                             int fltk_event, int root_x, int root_y,
-    //                             int button = 0, unsigned int key = 0,
-    //                             unsigned int modifiers = 0,
-    //                             const char* text = "")
-    // {
-    //     if (target_window == None)
-    //         return;
-        
-    //     // Convert root coordinates to local window coordinates
-    //     int local_x = root_x, local_y = root_y;
-    //     Window child_return;
-    //     XTranslateCoordinates(display, DefaultRootWindow(display),
-    //                           target_window, root_x, root_y,
-    //                           &local_x, &local_y, &child_return);
-
-    //     // Create an empty event
-    //     XEvent event;
-    //     memset(&event, 0, sizeof(event));
-    //     int mask = NoEventMask;
-    //     unsigned long evTime = get_current_time_ms();        
-    //     event.xany.type = 0;
-    //     event.xany.display = display;
-    //     event.xany.window = target_window;
-
-    //     // We need to send an EnterNotify so that the X11 window behind will
-    //     // receive input as we are inside the non-transparent front FLTK window
-    //     if (fltk_event != FL_LEAVE && fltk_event != FL_ENTER &&
-    //         fltk_event != FL_NO_EVENT)
-    //     {
-    //         event.type = EnterNotify;
-    //         event.xcrossing.x = local_x;
-    //         event.xcrossing.y = local_y;
-    //         event.xcrossing.x_root = root_x;
-    //         event.xcrossing.y_root = root_y;
-    //         mrv2_XSendEvent(display, target_window, True, mask, &event);
-    //         XFlush(display);
-            
-    //         KeySym keysym = fltkToX11KeySym(key);
-    //         event.xkey.keycode = XKeysymToKeycode(display, keysym);
-    //         event.xkey.state = modifiers;
-    //         event.xkey.time = evTime;
-
-    //     }
-
-    //     switch (fltk_event)
-    //     {
-    //     case FL_ENTER:
-    //         event.type = EnterNotify;
-    //         event.xcrossing.x = local_x;
-    //         event.xcrossing.y = local_y;
-    //         event.xcrossing.x_root = root_x;
-    //         event.xcrossing.y_root = root_y;
-    //         mrv2_XSendEvent(display, target_window, True, mask, &event);
-    //         XFlush(display);
-            
-    //         break;
-    //     case FL_PUSH:
-    //         mask = ButtonPressMask | ButtonReleaseMask | PointerMotionMask; // Use correct mask
-    //         event.type = ButtonPress;
-    //         event.xbutton.button = button;
-    //         event.xbutton.x = local_x;
-    //         event.xbutton.y = local_y;
-    //         event.xbutton.x_root = root_x;
-    //         event.xbutton.y_root = root_y;
-    //         event.xbutton.time = evTime;
-    //         mrv2_XSendEvent(display, target_window, True, mask, &event);
-    //         XFlush(display);
-
-
-    //         XGrabPointer(display, target_window, True,
-    //                      PointerMotionMask | ButtonReleaseMask,
-    //                      GrabModeAsync, GrabModeAsync, None, None, CurrentTime);
-
-    //         break;
-            
-    //     case FL_DRAG:
-    //         mask = PointerMotionMask | SubstructureRedirectMask;
-    //         event.type = MotionNotify;
-    //         event.xmotion.x = local_x;
-    //         event.xmotion.y = local_y;
-    //         event.xmotion.x_root = root_x;
-    //         event.xmotion.y_root = root_y;
-    //         event.xmotion.state = modifiers;
-    //         event.xmotion.time = evTime;
-    //         mrv2_XSendEvent(display, target_window, True, mask, &event);
-    //         XFlush(display);
-    //         break;
-    //     case FL_RELEASE:
-    //         mask = ButtonReleaseMask; // Use correct mask
-    //         event.type = ButtonRelease;
-    //         event.xbutton.button = button;
-    //         event.xbutton.x = local_x;
-    //         event.xbutton.y = local_y;
-    //         event.xbutton.x_root = root_x;
-    //         event.xbutton.y_root = root_y;
-    //         event.xbutton.time = evTime;
-    //         mrv2_XSendEvent(display, target_window, True, mask, &event);
-    //         XFlush(display);
-
-    //         XUngrabPointer(display, CurrentTime);
-
-    //         break;
-    //     case FL_MOVE:
-    //         mask = PointerMotionMask;
-    //         event.type = MotionNotify;
-    //         event.xmotion.x = local_x;
-    //         event.xmotion.y = local_y;
-    //         event.xmotion.x_root = root_x;
-    //         event.xmotion.y_root = root_y;
-    //         event.xmotion.time = evTime;
-    //         mrv2_XSendEvent(display, target_window, True, mask, &event);
-    //         XFlush(display);
-    //         break;
-    //     case FL_FOCUS:
-    //         event.type = FocusIn;
-    //         mrv2_XSendEvent(display, target_window, True, mask, &event);
-    //         XFlush(display);
-    //         break;
-    //     case FL_UNFOCUS:
-    //         event.type = FocusOut;
-    //         mrv2_XSendEvent(display, target_window, True, mask, &event);
-    //         XFlush(display);
-    //         break;
-    //     case FL_KEYBOARD:
-    //     case FL_SHORTCUT:
-    //         event.type = KeyPress;
-    //         mrv2_XSendEvent(display, target_window, True, mask, &event);
-    //         XFlush(display);
-    //         break;
-    //     case FL_KEYUP:
-    //         event.type = KeyRelease;
-    //         mrv2_XSendEvent(display, target_window, True, mask, &event);
-    //         XFlush(display);
-    //         break;
-    //     default:
-    //         return; // Ignore other events
-    //     }
-
-    // }
-
-
-    void x11_handler(void* event, void* data)
+    static void x11_handler(void* event, void* data)
     {
         XEvent* e = static_cast<XEvent*>(event);
         Fl_Window* w = static_cast<Fl_Window*>(data);
@@ -399,7 +362,7 @@ namespace
         int x_root = 0, y_root = 0;
         unsigned mask = NoEventMask;
 
-        switch(e->type)
+        switch (e->type)
         {
         case ButtonPress:
             mask = ButtonPressMask | ButtonReleaseMask | PointerMotionMask;
@@ -420,180 +383,109 @@ namespace
             x_root = e->xmotion.x_root;
             y_root = e->xmotion.y_root;
             break;
-        case FocusIn:
-            break;
-        case FocusOut:
-            break;
         case KeyPress:
         case KeyRelease:
-        case ClientMessage:
-        case DestroyNotify:
-        case Expose:
-        case KeymapNotify:
-        case NoExpose:
-        case PropertyNotify:
-        case UnmapNotify:
+            x_root = e->xkey.x_root;
+            y_root = e->xkey.y_root;
             break;
         default:
-            //return;  // ignore other events
-            std::cerr << getEventName(e) << std::endl;
             break;
         }
 
-        const std::vector<Window>& below_windows =
-            get_windows_below(display, window);
+        const std::vector<Window>& below_windows = get_windows_below(display, window);
+        Window new_window = find_window_below(display, below_windows, x_root, y_root);
 
-        if (!below_windows.empty())
+        if (new_window == None)
         {
-            std::cerr << "Windows behind " << get_window_name(window) << std::endl;
-            for (auto win : below_windows)
-            {
-                std::cerr << "\t" << get_window_name(win) << std::endl;
-            }
+            last_window = new_window;
+            return;
         }
 
-        Window new_window =
-            find_window_below(display, below_windows, x_root, y_root);
-
-        Window target_window = new_window;
-        if (target_window == None)
-            return;
-
-        std::cerr << "TARGET: " << get_window_name(target_window) << std::endl;
-        
-        // Convert root coordinates to local window coordinates
+        // std::cerr << "------------------------------------------------------"
+        //           << std::endl;
+        // std::cerr << "window below is: " << get_window_name(new_window)
+        //           << std::endl;
+    
         int x = x_root, y = y_root;
         Window child_return;
-        XTranslateCoordinates(display, DefaultRootWindow(display),
-                              target_window, x_root, y_root,
-                              &x, &y, &child_return);
-        
-        std::cerr << new_window << " " << get_window_name(new_window)
-                  << std::endl;
-        std::cerr << x << ", " << y << " (root=" << x_root << ", " << y_root << ")"
-                  << std::endl;
+        if (XTranslateCoordinates(display, DefaultRootWindow(display), new_window, x_root, y_root, &x, &y, &child_return) == 0){
+            return;
+        }
+
         if (new_window != last_window)
         {
             if (last_window != None)
             {
-                // Create an empty event
-                XEvent event;
-                memset(&event, 0, sizeof(event));
-                int mask = NoEventMask;
-                unsigned long evTime = get_current_time_ms();        
-                event.xany.type = 0;
-                event.xany.display = display;
-                event.xany.window = target_window;
+                XEvent leave_event;
+                memset(&leave_event, 0, sizeof(leave_event));
+                leave_event.type = LeaveNotify;
+                leave_event.xcrossing.x = x;
+                leave_event.xcrossing.y = y;
+                leave_event.xcrossing.x_root = x_root;
+                leave_event.xcrossing.y_root = y_root;
+                leave_event.xcrossing.time = get_current_time_ms();
+                leave_event.xcrossing.display = display;
+                leave_event.xcrossing.window = last_window;
+                mrv2_XSendEvent(display, last_window, True, NoEventMask,
+                                &leave_event);
 
-                // We need to send an EnterNotify so that the X11 window behind will
-                // receive input as we are inside the non-transparent front FLTK window
-                event.type = LeaveNotify;
-                event.xcrossing.x = x;
-                event.xcrossing.y = y;
-                event.xcrossing.x_root = x_root;
-                event.xcrossing.y_root = y_root;
-                event.xcrossing.time = evTime;
-                XSendEvent(display, target_window, True, mask, &event);
-                XFlush(display);
+                XEvent focus_out;
+                memset(&focus_out, 0, sizeof(focus_out));
+                focus_out.type = FocusOut;
+                focus_out.xfocus.window = last_window;
+                focus_out.xfocus.mode = NotifyNormal;
+                focus_out.xfocus.detail = NotifyAncestor;
+                mrv2_XSendEvent(display, last_window, True, FocusChangeMask,
+                                &focus_out);
             }
             if (new_window != None)
             {
-                // Create an empty event
-                XEvent event;
-                memset(&event, 0, sizeof(event));
-                int mask = NoEventMask;
-                unsigned long evTime = get_current_time_ms();        
-                event.xany.type = 0;
-                event.xany.display = display;
-                event.xany.window = target_window;
+                XEvent enter_event;
+                memset(&enter_event, 0, sizeof(enter_event));
+                enter_event.type = EnterNotify;
+                enter_event.xcrossing.x = x;
+                enter_event.xcrossing.y = y;
+                enter_event.xcrossing.x_root = x_root;
+                enter_event.xcrossing.y_root = y_root;
+                enter_event.xcrossing.time = get_current_time_ms();
+                enter_event.xcrossing.display = display;
+                enter_event.xcrossing.window = new_window;
+                mrv2_XSendEvent(display, new_window, True, NoEventMask,
+                                &enter_event);
 
-                // We need to send an EnterNotify so that the X11 window behind will
-                // receive input as we are inside the non-transparent front FLTK window
-                event.type = EnterNotify;
-                event.xcrossing.x = x;
-                event.xcrossing.y = y;
-                event.xcrossing.x_root = x_root;
-                event.xcrossing.y_root = y_root;
-                event.xcrossing.time = evTime;
-                XSendEvent(display, target_window, True, mask, &event);
-                XFlush(display);
+                XEvent focus_in;
+                memset(&focus_in, 0, sizeof(focus_in));
+                focus_in.type = FocusIn;
+                focus_in.xfocus.window = new_window;
+                focus_in.xfocus.mode = NotifyNormal;
+                focus_in.xfocus.detail = NotifyAncestor;
+                mrv2_XSendEvent(display, new_window, True, FocusChangeMask,
+                                &focus_in);
             }
-            
             last_window = new_window;
         }
 
-        if (e->type == MotionNotify ||
-            e->type == ButtonPress)
+        if (e->type == KeyPress || e->type == KeyRelease)
         {
-            // Create an empty event
-            XEvent event;
-            memset(&event, 0, sizeof(event));
-            unsigned long evTime = get_current_time_ms();        
-            event.xany.type = 0;
-            event.xany.display = display;
-            event.xany.window = target_window;
+            e->xkey.x = x;
+            e->xkey.y = y;
+            e->xkey.x_root = x_root;
+            e->xkey.y_root = y_root;
+            e->xkey.window = new_window;
+        } else if (e->type == ButtonPress || e->type == ButtonRelease ||
+                   e->type == MotionNotify)
+        {
+            e->xbutton.x = x;
+            e->xbutton.y = y;
+            e->xbutton.x_root = x_root;
+            e->xbutton.y_root = y_root;
+            e->xbutton.window = new_window;
+        }
 
-            // We need to send an EnterNotify so that the X11 window behind will
-            // receive input as we are inside the non-trans parent front FLTK window
-            event.type = EnterNotify;
-            event.xcrossing.x = x;
-            event.xcrossing.y = y;
-            event.xcrossing.x_root = x_root;
-            event.xcrossing.y_root = y_root;
-            event.xcrossing.time = evTime;
-            XSendEvent(display, target_window, True, NoEventMask, &event);
-            XFlush(display);
-        }
-       
-        unsigned long evTime = get_current_time_ms();
-        switch(e->type)
-        {
-        case ButtonPress:
-        case ButtonRelease:
-            e->xbutton.time = evTime;
-            break;
-        case EnterNotify:
-        case LeaveNotify:
-            e->xcrossing.time = evTime;
-            break;
-        case MotionNotify:
-            e->xcrossing.time = evTime;
-            break;
-        case FocusIn:
-        case FocusOut:
-        case ClientMessage:
-        case DestroyNotify:
-        case Expose:
-        case KeymapNotify:
-        case NoExpose:
-        case PropertyNotify:
-        case UnmapNotify:
-            break;
-        default:
-            //return;  // ignore other events
-            std::cerr << "------------" << getEventName(e) << std::endl;
-            break;
-        }
-        
-        XSendEvent(display, target_window, True, mask, e);
-        XFlush(display);
-
-        if (e->type == ButtonPress)
-        {
-            XGrabPointer(display, target_window, True,
-                         PointerMotionMask | ButtonReleaseMask,
-                         GrabModeAsync, GrabModeAsync, None, None, CurrentTime);
-            XFlush(display);
-        }
-        else if (e->type == ButtonRelease)
-        {
-            XUngrabPointer(display, CurrentTime);
-            XFlush(display);
-        }
+        mrv2_XSendEvent(display, new_window, True, mask, e);
+    }
 #endif
     
-    }
-
 }
 
 
@@ -721,9 +613,9 @@ namespace mrv
             ev.xclient.data.l[0] = value;
             ev.xclient.data.l[1] = net_wm_state_above;
             ev.xclient.data.l[2] = 0;
-            XSendEvent(display, DefaultRootWindow(display), False,
-                       SubstructureNotifyMask | SubstructureRedirectMask, &ev);
-            XFlush(display);
+            mrv2_XSendEvent(display, DefaultRootWindow(display), False,
+                            SubstructureNotifyMask | SubstructureRedirectMask,
+                            &ev);
         }
 #    endif
     } // above_all function
@@ -749,59 +641,6 @@ namespace mrv
             set_click_through(false);
             return 1;
         }
-        
-// #ifdef FLTK_USE_X11
-//         if (click_through && desktop::X11() )
-//         {
-//             if (event == FL_ENTER || event == FL_LEAVE)
-//                 return 0;
-            
-//             if (event == FL_FOCUS)
-//             {
-//                 set_click_through(false);
-//                 return 1;
-//             }
-            
-//             int x = Fl::event_x();
-//             int y = Fl::event_y();
-//             if (x < 0 || x > w() || y < 0 || y > h())
-//                 return 0;
-            
-//             int root_x = Fl::event_x_root();
-//             int root_y = Fl::event_y_root();
-//             int button = Fl::event_button();
-//             unsigned int key = Fl::event_key();  // \@bug: international characters not handled
-//             const char* text = Fl::event_text();
-            
-//             unsigned int modifiers = Fl::e_state >> 16 | Fl::event_buttons();
-
-//             Display* display = fl_x11_display();
-//             Window this_window = fl_x11_xid(this);
-            
-//             const std::vector<Window>& below_windows =
-//                 get_windows_below(display, this_window);
-
-//             Window new_window = find_window_below(display, below_windows,
-//                                                   root_x, root_y);
-
-//             if (new_window != last_window)
-//             {
-//                 if (last_window != None)
-//                 {
-//                     send_fltk_event_to_x11(display, last_window, FL_LEAVE, root_x, root_y);
-//                 }
-//                 if (new_window != None)
-//                 {
-//                     send_fltk_event_to_x11(display, new_window, FL_ENTER, root_x, root_y);
-//                 }
-//             }
-            
-//             send_fltk_event_to_x11(display, new_window, event, root_x, root_y,
-//                                    button, key, modifiers, text);
-//             last_window = new_window;
-//             return 1;
-//         }
-// #endif
         if (event == FL_FULLSCREEN)
         {
             App::ui->uiTimeline->requestThumbnail();
