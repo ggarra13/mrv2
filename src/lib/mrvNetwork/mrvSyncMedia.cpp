@@ -48,7 +48,7 @@ namespace mrv
         auto prefs = ui->uiPrefs;
         auto model = app->filesModel();
 
-        LOG_INFO("Opening " << filePath);
+        LOG_STATUS("Opening " << filePath);
         app->open(filePath, audioFilePath);
 
         // Copy annotations to both item and player

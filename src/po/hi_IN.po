@@ -1,7 +1,7 @@
 # Hindi translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.7\n"
@@ -4617,12 +4617,16 @@ msgstr "mrvoIOrr के लिए अज्ञात प्रकार"
 msgid "Session: "
 msgstr "सत्र:"
 
+msgid "You cannot set Window click through with a totally opaque window."
+msgstr "आप विंडो क्लिक को पूरी तरह अपारदर्शी विंडो के द्वारा नियत नहीं कर सकते."
+
 msgid ""
-"This will disable events for mrv2, allowing them to pass through.\n"
+"This will disable events for mrv2, allowing them to pass through to windows "
+"below it.\n"
 "\n"
 "Give window focus to disable."
 msgstr ""
-"यह mrv2 के लिए घटनाएँ अक्षम करेगा, उन्हें पार करने की अनुमति देगा.\n"
+"यह एमरवी2 की घटनाओं को अक्षम करेगा, इसे नीचे विंडो में भेजने की अनुमति देगा.\n"
 "\n"
 "विंडो फ़ोकस करने पर ध्यान केंद्रित करें."
 
@@ -4630,15 +4634,22 @@ msgid "Continue"
 msgstr "जारी रखें"
 
 msgid ""
-"This will disable events for mrv2, allowing them to pass through.\n"
+"This will disable events for mrv2, allowing them to pass through to windows "
+"below it.\n"
 "\n"
 "Give window focus (click on the taskbar icon)\n"
 "to disable."
 msgstr ""
-"यह mrv2 के लिए घटनाएँ अक्षम करेगा, उन्हें पार करने की अनुमति देगा.\n"
+"यह एमरवी2 की घटनाओं को अक्षम करेगा, इसे नीचे विंडो में भेजने की अनुमति देगा.\n"
 "\n"
 "विंडो फ़ोकस दें ( कार्यपट्टी प्रतीक पर क्लिक करें)\n"
 "अक्षम करने के लिए."
+
+msgid "Window click through ON"
+msgstr "विंडो चालू होने पर क्लिक करें"
+
+msgid "Window click through OFF"
+msgstr "विंडो बन्द करने के द्वारा क्लिक करें"
 
 msgid "Edit/&Copy"
 msgstr "संपादन/नक़ल"

@@ -128,7 +128,7 @@ namespace mrv
         try
         {
             server.start();
-            LOG_INFO(_("ComfyUI listening on port ") << port);
+            LOG_STATUS(_("ComfyUI listening on port ") << port);
         }
         catch (const Poco::Exception& e)
         {

@@ -2,7 +2,7 @@
 # Traducciones al español para el paquete mrv2.
 # This file is distributed under the same license as the mrv2 package.
 # Gonzalo Garramuño <ggarra13@gmail.com>, 2023.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.8\n"
@@ -4729,12 +4729,19 @@ msgstr "Tipo desconocido para OCIO Browser"
 msgid "Session: "
 msgstr "Sesión: "
 
+msgid "You cannot set Window click through with a totally opaque window."
+msgstr ""
+"No se puede configurar el clic en la ventana con una ventana totalmente "
+"opaca."
+
 msgid ""
-"This will disable events for mrv2, allowing them to pass through.\n"
+"This will disable events for mrv2, allowing them to pass through to windows "
+"below it.\n"
 "\n"
 "Give window focus to disable."
 msgstr ""
-"Esto desactivará los eventos para mrv2, permitiéndoles pasar.\n"
+"Esto desactivará los eventos para mrv2, permitiéndoles pasar a través de las "
+"ventanas debajo de él.\n"
 "\n"
 "Ponga la ventana enfocada para desactivarla."
 
@@ -4742,15 +4749,23 @@ msgid "Continue"
 msgstr "Continúa"
 
 msgid ""
-"This will disable events for mrv2, allowing them to pass through.\n"
+"This will disable events for mrv2, allowing them to pass through to windows "
+"below it.\n"
 "\n"
 "Give window focus (click on the taskbar icon)\n"
 "to disable."
 msgstr ""
-"Esto desactivará los eventos para mrv2, permitiéndoles pasar.\n"
+"Esto desactivará los eventos para mrv2, permitiéndoles pasar a través de las "
+"ventanas debajo de él.\n"
 "\n"
 "Enfocar la ventana (haga clic en el icono de la barra de tareas)\n"
 "para desactivar."
+
+msgid "Window click through ON"
+msgstr "Haga clic en la ventana encendido"
+
+msgid "Window click through OFF"
+msgstr "Haga clic en la ventana a través de OFF"
 
 msgid "Edit/&Copy"
 msgstr "Editar/&Copiar"

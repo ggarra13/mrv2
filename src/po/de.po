@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
@@ -4673,12 +4673,19 @@ msgstr "Unbekannter Typ fr mrvOCIOBrowser"
 msgid "Session: "
 msgstr "Sitzung:"
 
+msgid "You cannot set Window click through with a totally opaque window."
+msgstr ""
+"Sie können Fenster nicht mit einem völlig undurchsichtigen Fenster "
+"durchklicken."
+
 msgid ""
-"This will disable events for mrv2, allowing them to pass through.\n"
+"This will disable events for mrv2, allowing them to pass through to windows "
+"below it.\n"
 "\n"
 "Give window focus to disable."
 msgstr ""
-"Dies wird Ereignisse für mrv2 deaktivieren, so dass sie passieren können.\n"
+"Dies wird Ereignisse für mrv2 deaktivieren, so dass sie durch zu Fenstern "
+"darunter gehen können.\n"
 "\n"
 "Geben Sie Fenster-Fokus zu deaktivieren."
 
@@ -4686,15 +4693,23 @@ msgid "Continue"
 msgstr "Weiter"
 
 msgid ""
-"This will disable events for mrv2, allowing them to pass through.\n"
+"This will disable events for mrv2, allowing them to pass through to windows "
+"below it.\n"
 "\n"
 "Give window focus (click on the taskbar icon)\n"
 "to disable."
 msgstr ""
-"Dies wird Ereignisse für mrv2 deaktivieren, so dass sie passieren können.\n"
+"Dies wird Ereignisse für mrv2 deaktivieren, so dass sie durch zu Fenstern "
+"darunter gehen können.\n"
 "\n"
 "Fenster fokussieren (auf das Symbol der Taskleiste klicken)\n"
 "zu deaktivieren."
+
+msgid "Window click through ON"
+msgstr "Fenster klicken durch EIN"
+
+msgid "Window click through OFF"
+msgstr "Fenster klicken durch OFF"
 
 msgid "Edit/&Copy"
 msgstr "Bearbeiten/Kopieren"

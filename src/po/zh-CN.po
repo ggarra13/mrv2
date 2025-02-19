@@ -1,6 +1,6 @@
 # AI Simplified Chinese translations for mrv2 package
 # This file is distributed under the same license as the mrv2 package.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.5\n"
@@ -4597,12 +4597,16 @@ msgstr "MrvOCIOBrowser 的未知类型"
 msgid "Session: "
 msgstr "Session: "
 
+msgid "You cannot set Window click through with a totally opaque window."
+msgstr "您不能在一个完全不透明的窗口中设置窗口单击 。"
+
 msgid ""
-"This will disable events for mrv2, allowing them to pass through.\n"
+"This will disable events for mrv2, allowing them to pass through to windows "
+"below it.\n"
 "\n"
 "Give window focus to disable."
 msgstr ""
-"这将禁用 MRV2 的事件, 允许他们通过 。\n"
+"这将禁用 MRV2 的事件, 允许他们通过它进入下面的窗口 。\n"
 "\n"
 "让窗口焦点禁用 。"
 
@@ -4610,15 +4614,22 @@ msgid "Continue"
 msgstr "继续"
 
 msgid ""
-"This will disable events for mrv2, allowing them to pass through.\n"
+"This will disable events for mrv2, allowing them to pass through to windows "
+"below it.\n"
 "\n"
 "Give window focus (click on the taskbar icon)\n"
 "to disable."
 msgstr ""
-"这将禁用 MRV2 的事件, 允许他们通过 。\n"
+"这将禁用 MRV2 的事件, 允许他们通过它进入下面的窗口 。\n"
 "\n"
 "给予窗口焦点( 点击任务栏图标)\n"
 "禁用。"
+
+msgid "Window click through ON"
+msgstr "窗口通过 OO 点击窗口"
+
+msgid "Window click through OFF"
+msgstr "窗口通过 OFF 点击窗口"
 
 msgid "Edit/&Copy"
 msgstr "Edit/&Copy"

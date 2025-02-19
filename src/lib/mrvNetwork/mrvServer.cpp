@@ -20,7 +20,7 @@ namespace mrv
     {
         std::string msg =
             tl::string::Format(_("Server started at port {0}.")).arg(port);
-        LOG_INFO(msg);
+        LOG_STATUS(msg);
 
         Poco::Timespan timeout(2000000); // 2 Sec
         reactor.setTimeout(timeout);
@@ -37,7 +37,7 @@ namespace mrv
                 t->join();
 
         ConnectionHandler::clearHandlers();
-        LOG_INFO(_("Server stopped."));
+        LOG_STATUS(_("Server stopped."));
     }
 
     void Server::start()

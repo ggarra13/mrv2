@@ -1962,7 +1962,7 @@ namespace mrv
         {
             if (file::isReadable(configName))
             {
-                LOG_INFO(_("OCIO config is now:"));
+                LOG_STATUS(_("OCIO config is now:"));
             }
             else
             {
@@ -1971,21 +1971,21 @@ namespace mrv
                         _("OCIO file \"{0}\" not found or not readable."))
                         .arg(configName);
                 LOG_ERROR(msg);
-                LOG_TRACE(_("Setting OCIO config to default:"));
+                LOG_STATUS(_("Setting OCIO config to default:"));
                 configName = ocio::ocioDefault;
             }
         }
         else if (configName == ocio::ocioDefault)
         {
-            LOG_TRACE(_("Setting OCIO config to default:"));
+            LOG_STATUS(_("Setting OCIO config to default:"));
             configName = ocio::ocioDefault;
         }
         else
         {
-            LOG_TRACE(_("Setting OCIO config to built-in:"));
+            LOG_STATUS(_("Setting OCIO config to built-in:"));
         }
 
-        LOG_TRACE("\t" << configName);
+        LOG_STATUS("\t" << configName);
         uiPrefs->uiPrefsOCIOConfig->value(configName.c_str());
         oldConfigName = configName;
     }

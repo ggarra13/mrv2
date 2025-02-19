@@ -1,7 +1,7 @@
 # Italian translations for mrv2 package
 # This file is distributed under the same license as the mrv2 package.
 # Gonzalo Garramuño <ggarra13@gmail.com>, 2023.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.7nReport-Msgid-Bugs-To: ggarra13@gmail.com\n"
@@ -4689,13 +4689,19 @@ msgstr "Tipo sconosciuto per mrvoCIOBrowser"
 msgid "Session: "
 msgstr "Sessione:"
 
+msgid "You cannot set Window click through with a totally opaque window."
+msgstr ""
+"Non è possibile impostare Finestra cliccare attraverso con una finestra "
+"totalmente opaca."
+
 msgid ""
-"This will disable events for mrv2, allowing them to pass through.\n"
+"This will disable events for mrv2, allowing them to pass through to windows "
+"below it.\n"
 "\n"
 "Give window focus to disable."
 msgstr ""
-"Questo disattiva gli eventi per mrv2, permettendo loro di passare "
-"attraverso.\n"
+"Questo disattiva gli eventi per mrv2, permettendo loro di passare a finestre "
+"sotto di esso.\n"
 "\n"
 "Fornisci il focus della finestra da disattivare."
 
@@ -4703,16 +4709,23 @@ msgid "Continue"
 msgstr "Continua"
 
 msgid ""
-"This will disable events for mrv2, allowing them to pass through.\n"
+"This will disable events for mrv2, allowing them to pass through to windows "
+"below it.\n"
 "\n"
 "Give window focus (click on the taskbar icon)\n"
 "to disable."
 msgstr ""
-"Questo disattiva gli eventi per mrv2, permettendo loro di passare "
-"attraverso.\n"
+"Questo disattiva gli eventi per mrv2, permettendo loro di passare a finestre "
+"sotto di esso.\n"
 "\n"
 "Concentra la finestra (clicca sull'icona della barra delle attività)\n"
 "disattivare."
+
+msgid "Window click through ON"
+msgstr "Fare clic sulla finestra"
+
+msgid "Window click through OFF"
+msgstr "Fare clic sulla finestra attraverso OFF"
 
 msgid "Edit/&Copy"
 msgstr "Modifica/Copia"

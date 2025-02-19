@@ -721,7 +721,7 @@ from mrv2 import playlist, timeline, ui, )PYTHON";
                         settings->getValue<std::string>("Python/Editor");
                     std::string command =
                         string::Format(editor).arg(line).arg(file);
-                    LOG_INFO(command);
+                    LOG_STATUS(command);
                     int ret = std::system(command.c_str());
                     if (ret != 0)
                     {

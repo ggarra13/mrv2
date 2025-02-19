@@ -366,7 +366,7 @@ namespace mrv
 
             std::string msg =
                 string::Format(_("Session saved to \"{0}\".")).arg(fileName);
-            LOG_INFO(msg);
+            LOG_STATUS(msg);
 
             return true;
         }

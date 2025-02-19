@@ -551,15 +551,15 @@ namespace mrv
         version += mrv::version();
         version += " ";
         version += mrv::build_date();
-        LOG_TRACE(version);
-        LOG_TRACE(msg);
+        LOG_STATUS(version);
+        LOG_STATUS(msg);
 
         {
             const std::string& info = mrv::build_info();
             const auto& lines = string::split(info, '\n');
             for (auto line : lines)
             {
-                LOG_TRACE(line);
+                LOG_STATUS(line);
             }
         }
 
@@ -568,12 +568,12 @@ namespace mrv
             const auto& lines = string::split(info, '\n');
             for (auto line : lines)
             {
-                LOG_TRACE(line);
+                LOG_STATUS(line);
             }
         }
         
-        LOG_TRACE(_("Install Location: "));
-        LOG_TRACE("\t" << mrv::rootpath());
+        LOG_STATUS(_("Install Location: "));
+        LOG_STATUS("\t" << mrv::rootpath());
         DBG;
 
         // Create the main control.
@@ -721,7 +721,7 @@ namespace mrv
 
                         lastStatusMessage = msg;
 
-                        LOG_TRACE(msg);
+                        LOG_STATUS(msg);
                         break;
                     }
                     default:
@@ -954,17 +954,17 @@ namespace mrv
 
             p.pythonArgs = std::make_unique<PythonArgs>(p.options.pythonArgs);
 
-            LOG_TRACE(std::string(
+            LOG_STATUS(std::string(
                 string::Format(_("Running python script '{0}'")).arg(script)));
             const auto& args = p.pythonArgs->getArguments();
 
             if (!args.empty())
             {
-                LOG_TRACE(_("with Arguments:"));
+                LOG_STATUS(_("with Arguments:"));
                 std::string out = "[";
                 out += tl::string::join(args, ',');
                 out += "]";
-                LOG_TRACE(out);
+                LOG_STATUS(out);
             }
 
             std::ifstream is(script);

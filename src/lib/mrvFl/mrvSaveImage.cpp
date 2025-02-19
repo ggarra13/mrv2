@@ -134,7 +134,7 @@ namespace mrv
 
                     msg = tl::string::Format(_("Rotated image info: {0}"))
                               .arg(renderSize);
-                    LOG_INFO(msg);
+                    LOG_STATUS(msg);
                 }
                 if (resolution == SaveResolution::kHalfSize)
                 {
@@ -142,7 +142,7 @@ namespace mrv
                     renderSize.h /= 2;
                     msg = tl::string::Format(_("Scaled image info: {0}"))
                               .arg(renderSize);
-                    LOG_INFO(msg);
+                    LOG_STATUS(msg);
                 }
                 else if (resolution == SaveResolution::kQuarterSize)
                 {
@@ -150,7 +150,7 @@ namespace mrv
                     renderSize.h /= 4;
                     msg = tl::string::Format(_("Scaled image info: {0}"))
                               .arg(renderSize);
-                    LOG_INFO(msg);
+                    LOG_STATUS(msg);
                 }
             }
 
@@ -183,7 +183,7 @@ namespace mrv
                 std::string msg = tl::string::Format(_("Image info: {0} {1}"))
                                       .arg(outputInfo.size)
                                       .arg(outputInfo.pixelType);
-                LOG_INFO(msg);
+                LOG_STATUS(msg);
 
                 if (options.annotations)
                 {
@@ -255,7 +255,7 @@ namespace mrv
                               .arg(viewportSize)
                               .arg(X)
                               .arg(Y);
-                    LOG_INFO(msg);
+                    LOG_STATUS(msg);
                 }
             }
 
@@ -300,7 +300,7 @@ namespace mrv
                           _("Writer plugin did not get output info.  "
                             "Defaulting to {0}"))
                           .arg(offscreenBufferOptions.colorType);
-                LOG_INFO(msg);
+                LOG_STATUS(msg);
             }
 
 #ifdef TLRENDER_EXR
@@ -321,7 +321,7 @@ namespace mrv
             std::string msg = tl::string::Format(_("Output info: {0} {1}"))
                                   .arg(outputInfo.size)
                                   .arg(outputInfo.pixelType);
-            LOG_INFO(msg);
+            LOG_STATUS(msg);
 
 #ifdef TLRENDER_EXR
             ioOptions["OpenEXR/PixelType"] = getLabel(outputInfo.pixelType);
@@ -352,7 +352,7 @@ namespace mrv
             {
                 std::string msg = tl::string::Format(_("OpenGL info: {0}"))
                                       .arg(offscreenBufferOptions.colorType);
-                LOG_INFO(msg);
+                LOG_STATUS(msg);
             }
 
             // Turn off hud so it does not get captured by glReadPixels.
