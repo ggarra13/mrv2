@@ -183,9 +183,17 @@ namespace
         return window_list;
     }
 
+    // Structure to hold the old error handler
+    static int (*old_error_handler)(Display*, XErrorEvent*);
+
+    // Custom error handler to suppress errors
+    static int suppress_x_errors(Display* display, XErrorEvent* event)
+    {
+        // Suppress all errors
+        return 0;
+    }
     
     // Function to get all windows below my_window in the stacking order
-    // \@todo: VERIFY it doesn't fail
     std::vector<Window> get_windows_below(Display *display,
                                           Window target_window)
     {
@@ -194,8 +202,10 @@ namespace
         int retry_count = 0;
 
         while (retry_count < max_retries) {
-            // // Install error handler to suppress X11 errors
-            // old_error_handler = XSetErrorHandler(suppress_x_errors);
+            // Install error handler to suppress X11 errors which
+            // can happen due to fetch_window_list returning outdated
+            // Window descriptors.
+            old_error_handler = XSetErrorHandler(suppress_x_errors);
 
             std::vector<Window> windows = fetch_window_list(display);
             bool found_target_window = false;
@@ -242,9 +252,9 @@ namespace
                 }
             }
 
-            // // Restore old error handler
-            // XSetErrorHandler(old_error_handler);
-            // XSync(display, False); // Flush pending errors
+            // Restore old error handler
+            XSetErrorHandler(old_error_handler);
+            XSync(display, False); // Flush pending errors
 
             // If the loop completed without errors, break the retry loop
             if ((i < 0 && found_target_window) || windows.empty())
@@ -254,11 +264,6 @@ namespace
 
             retry_count++;
             usleep(5000); // Small delay before retrying
-        }
-
-        if (retry_count == max_retries)
-        {
-            std::cerr << "Max retries reached, get_windows_below may be incomplete." << std::endl;
         }
 
         return below_windows;
@@ -641,6 +646,7 @@ namespace mrv
             set_click_through(false);
             return 1;
         }
+        
         if (event == FL_FULLSCREEN)
         {
             App::ui->uiTimeline->requestThumbnail();
