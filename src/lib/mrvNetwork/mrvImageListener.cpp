@@ -141,7 +141,7 @@ namespace mrv
         try
         {
             server.start();
-            LOG_INFO(_("Server listening on port ") << port);
+            LOG_STATUS(_("Server listening on port ") << port);
         }
         catch (const Poco::Exception& e)
         {

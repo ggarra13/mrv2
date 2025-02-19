@@ -1,7 +1,7 @@
 # English translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.6\n"
@@ -4669,8 +4669,13 @@ msgstr "Unknown type for mrvOCIOBrowser"
 msgid "Session: "
 msgstr "Session: "
 
+msgid "You cannot set Window click through with a totally opaque window."
+msgstr ""
+
+#, fuzzy
 msgid ""
-"This will disable events for mrv2, allowing them to pass through.\n"
+"This will disable events for mrv2, allowing them to pass through to windows "
+"below it.\n"
 "\n"
 "Give window focus to disable."
 msgstr ""
@@ -4681,8 +4686,10 @@ msgstr ""
 msgid "Continue"
 msgstr "Continue"
 
+#, fuzzy
 msgid ""
-"This will disable events for mrv2, allowing them to pass through.\n"
+"This will disable events for mrv2, allowing them to pass through to windows "
+"below it.\n"
 "\n"
 "Give window focus (click on the taskbar icon)\n"
 "to disable."
@@ -4691,6 +4698,13 @@ msgstr ""
 "\n"
 "Give window focus (click on the taskbar icon)\n"
 "to disable."
+
+#, fuzzy
+msgid "Window click through ON"
+msgstr "Toggle Click Through"
+
+msgid "Window click through OFF"
+msgstr ""
 
 msgid "Edit/&Copy"
 msgstr "Edit/&Copy"

@@ -4314,8 +4314,12 @@ msgstr ""
 msgid "Session: "
 msgstr ""
 
+msgid "You cannot set Window click through with a totally opaque window."
+msgstr ""
+
 msgid ""
-"This will disable events for mrv2, allowing them to pass through.\n"
+"This will disable events for mrv2, allowing them to pass through to windows "
+"below it.\n"
 "\n"
 "Give window focus to disable."
 msgstr ""
@@ -4324,10 +4328,17 @@ msgid "Continue"
 msgstr ""
 
 msgid ""
-"This will disable events for mrv2, allowing them to pass through.\n"
+"This will disable events for mrv2, allowing them to pass through to windows "
+"below it.\n"
 "\n"
 "Give window focus (click on the taskbar icon)\n"
 "to disable."
+msgstr ""
+
+msgid "Window click through ON"
+msgstr ""
+
+msgid "Window click through OFF"
 msgstr ""
 
 msgid "Edit/&Copy"

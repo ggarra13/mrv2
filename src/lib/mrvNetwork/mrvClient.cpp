@@ -46,7 +46,7 @@ namespace mrv
                 tl::string::Format(_("Connected to server at {0}, port {1}"))
                     .arg(host)
                     .arg(port);
-            LOG_INFO(msg);
+            LOG_STATUS(msg);
 
             // Set a send/receive timeout of 2 seconds
             Poco::Timespan timeout(2, 0); // 2 Sec
@@ -137,7 +137,7 @@ namespace mrv
         {
             // Handle the exception here, which indicates the client disconnect
             // event
-            LOG_INFO(_("Server connection lost."));
+            LOG_STATUS(_("Server connection lost."));
             std::lock_guard lk(m_sendMutex);
             m_send.clear();
             m_running = false;

@@ -1,7 +1,7 @@
 # French translations for mrv2 package
 # This file is distributed under the same license as the mrv2 package.
 # Gonzalo Garramuño <ggarra13@gmail.com>, 2023.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.6\n"
@@ -4671,8 +4671,13 @@ msgstr "Type inconnu pour mrvocioBrowser"
 msgid "Session: "
 msgstr "Session :"
 
+msgid "You cannot set Window click through with a totally opaque window."
+msgstr ""
+
+#, fuzzy
 msgid ""
-"This will disable events for mrv2, allowing them to pass through.\n"
+"This will disable events for mrv2, allowing them to pass through to windows "
+"below it.\n"
 "\n"
 "Give window focus to disable."
 msgstr ""
@@ -4683,8 +4688,10 @@ msgstr ""
 msgid "Continue"
 msgstr "Continuer"
 
+#, fuzzy
 msgid ""
-"This will disable events for mrv2, allowing them to pass through.\n"
+"This will disable events for mrv2, allowing them to pass through to windows "
+"below it.\n"
 "\n"
 "Give window focus (click on the taskbar icon)\n"
 "to disable."
@@ -4694,6 +4701,13 @@ msgstr ""
 "Donner la mise au point de la fenêtre (cliquez sur l'icône de la barre de "
 "tâches)\n"
 "à désactiver."
+
+#, fuzzy
+msgid "Window click through ON"
+msgstr "Commutation de clic par l'intermédiaire"
+
+msgid "Window click through OFF"
+msgstr ""
 
 msgid "Edit/&Copy"
 msgstr "Modifier/Copier"

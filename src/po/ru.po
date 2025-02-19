@@ -1,7 +1,7 @@
 # Russian translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.8\n"
@@ -4706,8 +4706,13 @@ msgstr "Неизвестный тип mrvOCIOBrowser"
 msgid "Session: "
 msgstr "Сессия:"
 
+msgid "You cannot set Window click through with a totally opaque window."
+msgstr ""
+
+#, fuzzy
 msgid ""
-"This will disable events for mrv2, allowing them to pass through.\n"
+"This will disable events for mrv2, allowing them to pass through to windows "
+"below it.\n"
 "\n"
 "Give window focus to disable."
 msgstr ""
@@ -4718,8 +4723,10 @@ msgstr ""
 msgid "Continue"
 msgstr "Продолжить"
 
+#, fuzzy
 msgid ""
-"This will disable events for mrv2, allowing them to pass through.\n"
+"This will disable events for mrv2, allowing them to pass through to windows "
+"below it.\n"
 "\n"
 "Give window focus (click on the taskbar icon)\n"
 "to disable."
@@ -4728,6 +4735,13 @@ msgstr ""
 "\n"
 "Сфокусируйтесь на окне (щёлкните на пиктограмме панели задач)\n"
 "отключить."
+
+#, fuzzy
+msgid "Window click through ON"
+msgstr "Пройти через панель инструментов@ info: whatsthis"
+
+msgid "Window click through OFF"
+msgstr ""
 
 msgid "Edit/&Copy"
 msgstr "Правка/Копировать"

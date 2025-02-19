@@ -2,7 +2,7 @@
 # Traducciones al español para el paquete mrv2.
 # This file is distributed under the same license as the mrv2 package.
 # Gonzalo Garramuño <ggarra13@gmail.com>, 2023.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.8\n"
@@ -4729,8 +4729,13 @@ msgstr "Tipo desconocido para OCIO Browser"
 msgid "Session: "
 msgstr "Sesión: "
 
+msgid "You cannot set Window click through with a totally opaque window."
+msgstr ""
+
+#, fuzzy
 msgid ""
-"This will disable events for mrv2, allowing them to pass through.\n"
+"This will disable events for mrv2, allowing them to pass through to windows "
+"below it.\n"
 "\n"
 "Give window focus to disable."
 msgstr ""
@@ -4741,8 +4746,10 @@ msgstr ""
 msgid "Continue"
 msgstr "Continúa"
 
+#, fuzzy
 msgid ""
-"This will disable events for mrv2, allowing them to pass through.\n"
+"This will disable events for mrv2, allowing them to pass through to windows "
+"below it.\n"
 "\n"
 "Give window focus (click on the taskbar icon)\n"
 "to disable."
@@ -4751,6 +4758,13 @@ msgstr ""
 "\n"
 "Enfocar la ventana (haga clic en el icono de la barra de tareas)\n"
 "para desactivar."
+
+#, fuzzy
+msgid "Window click through ON"
+msgstr "Commutar el clic a través de"
+
+msgid "Window click through OFF"
+msgstr ""
 
 msgid "Edit/&Copy"
 msgstr "Editar/&Copiar"

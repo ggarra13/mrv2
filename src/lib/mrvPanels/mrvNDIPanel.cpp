@@ -352,7 +352,7 @@ namespace mrv
                 return;
 
             if (!r.lastStream.empty())
-                LOG_INFO("Close stream " << r.lastStream);
+                LOG_STATUS("Close stream " << r.lastStream);
 
             auto model = p.ui->app->filesModel();
             if (model)
@@ -389,7 +389,7 @@ namespace mrv
             s << j << std::endl;
             s.close();
 
-            LOG_INFO("Opened stream " << sourceName);
+            LOG_STATUS("Opened stream " << sourceName);
 
             open_file_cb(ndiFile, p.ui);
 

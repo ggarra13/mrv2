@@ -71,7 +71,7 @@ namespace mrv
         //! Log the new connection
         std::string msg =
             tl::string::Format(_("A client connected from {0}")).arg(host);
-        LOG_INFO(msg);
+        LOG_STATUS(msg);
 
         //! Sync this client to the server
         syncClient();
@@ -100,7 +100,7 @@ namespace mrv
             const auto& host = ipToHostname(clientIP);
             std::string msg =
                 tl::string::Format(_("Client at {0} disconnected.")).arg(host);
-            LOG_INFO(msg);
+            LOG_STATUS(msg);
             messagePublisher.remove(clientIP);
             stop();
         }

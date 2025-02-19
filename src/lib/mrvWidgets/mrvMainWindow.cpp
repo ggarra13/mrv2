@@ -356,8 +356,144 @@ namespace
         XFlush(display);
     }
 
-    static void x11_handler(void* event, void* data)
+    // Function to send an FLTK event as an XEvent to the specified X11 window
+    void send_fltk_event_to_x11(Display *display, Window target_window,
+                                int fltk_event, int root_x, int root_y,
+                                int button = 0,
+                                unsigned int X11keycode = 0,
+                                unsigned int modifiers = 0,
+                                const char* text = "")
     {
+        // Convert root coordinates to local window coordinates
+        int local_x = root_x, local_y = root_y;
+        Window child_return;
+        XTranslateCoordinates(display, DefaultRootWindow(display),
+                              target_window, root_x, root_y,
+                              &local_x, &local_y, &child_return);
+
+        // Create an empty event
+        XEvent event;
+        memset(&event, 0, sizeof(event));
+        int mask = NoEventMask;
+        unsigned long evTime = get_current_time_ms();        
+        event.xany.type = 0;
+        event.xany.display = display;
+        event.xany.window = target_window;
+
+        switch (fltk_event)
+        {
+        case FL_ENTER:
+            event.type = EnterNotify;
+            event.xcrossing.x = local_x;
+            event.xcrossing.y = local_y;
+            event.xcrossing.x_root = root_x;
+            event.xcrossing.y_root = root_y;
+            mrv2_XSendEvent(display, target_window, True, mask, &event);
+            
+            break;
+        case FL_PUSH:
+            mask = ButtonPressMask | ButtonReleaseMask | PointerMotionMask; // Use correct mask
+            event.type = ButtonPress;
+            event.xbutton.button = button;
+            event.xbutton.x = local_x;
+            event.xbutton.y = local_y;
+            event.xbutton.x_root = root_x;
+            event.xbutton.y_root = root_y;
+            event.xbutton.time = evTime;
+            mrv2_XSendEvent(display, target_window, True, mask, &event);
+            break;
+            
+        case FL_DRAG:
+            mask = PointerMotionMask | SubstructureRedirectMask;
+            event.type = MotionNotify;
+            event.xmotion.x = local_x;
+            event.xmotion.y = local_y;
+            event.xmotion.x_root = root_x;
+            event.xmotion.y_root = root_y;
+            event.xmotion.state = modifiers;
+            event.xmotion.time = evTime;
+            mrv2_XSendEvent(display, target_window, True, mask, &event);
+            break;
+        case FL_RELEASE:
+            mask = ButtonReleaseMask; // Use correct mask
+            event.type = ButtonRelease;
+            event.xbutton.button = button;
+            event.xbutton.x = local_x;
+            event.xbutton.y = local_y;
+            event.xbutton.x_root = root_x;
+            event.xbutton.y_root = root_y;
+            event.xbutton.time = evTime;
+            mrv2_XSendEvent(display, target_window, True, mask, &event);
+            break;
+        case FL_MOVE:
+            mask = PointerMotionMask;
+            event.type = MotionNotify;
+            event.xmotion.x = local_x;
+            event.xmotion.y = local_y;
+            event.xmotion.x_root = root_x;
+            event.xmotion.y_root = root_y;
+            event.xmotion.time = evTime;
+            mrv2_XSendEvent(display, target_window, True, mask, &event);
+            break;
+        case FL_FOCUS:
+            event.type = FocusIn;
+            mrv2_XSendEvent(display, target_window, True, mask, &event);
+            break;
+        case FL_UNFOCUS:
+            event.type = FocusOut;
+            mrv2_XSendEvent(display, target_window, True, mask, &event);
+            break;
+        case FL_KEYBOARD:
+        case FL_SHORTCUT:
+            event.type = KeyPress;
+            event.xkey.x = local_x;
+            event.xkey.y = local_y;
+            event.xkey.x_root = root_x;
+            event.xkey.y_root = root_y;
+            event.xkey.keycode = X11keycode;
+            event.xkey.state = modifiers;
+            event.xkey.time = evTime;
+            mrv2_XSendEvent(display, target_window, True, mask, &event);
+            break;
+        case FL_KEYUP:
+            event.type = KeyRelease;
+            event.xkey.x = local_x;
+            event.xkey.y = local_y;
+            event.xkey.x_root = root_x;
+            event.xkey.y_root = root_y;
+            event.xkey.keycode = X11keycode;
+            event.xkey.state = modifiers;
+            mrv2_XSendEvent(display, target_window, True, mask, &event);
+            break;
+        case FL_MOUSEWHEEL:
+            mask = ButtonPressMask | ButtonReleaseMask | PointerMotionMask; // Use correct mask
+            event.type = ButtonPress;
+            if (Fl::e_dy == -1 && !Fl::event_shift())
+                button = Button4;
+            else if (Fl::e_dy == +1 && !Fl::event_shift())
+                button = Button5;
+            if (Fl::e_dy == -1 && Fl::event_shift())
+                button = 6;
+            else if (Fl::e_dy == +1 && Fl::event_shift())
+                button = 7;
+            event.xbutton.button = button;
+            event.xbutton.x = local_x;
+            event.xbutton.y = local_y;
+            event.xbutton.x_root = root_x;
+            event.xbutton.y_root = root_y;
+            event.xbutton.time = evTime;
+            break;
+        default:
+            // Ignore any other FLTK messages
+            return;
+        }
+
+    }
+    
+
+    static int x11_handler(void* event, void* data)
+    {
+    
         XEvent* e = static_cast<XEvent*>(event);
         Fl_Window* w = static_cast<Fl_Window*>(data);
 
@@ -365,159 +501,82 @@ namespace
         Window window = fl_x11_xid(w);
 
         int x_root = 0, y_root = 0;
-        unsigned mask = NoEventMask;
+        int fltk_event = FL_NO_EVENT; // Default
+        int button = 0;
+        unsigned int key = 0;
+        unsigned int modifiers = 0;
 
         switch (e->type)
         {
         case ButtonPress:
-            mask = ButtonPressMask | ButtonReleaseMask | PointerMotionMask;
             x_root = e->xbutton.x_root;
             y_root = e->xbutton.y_root;
+            fltk_event = FL_PUSH;
+            button = e->xbutton.button;
             break;
         case ButtonRelease:
-            mask = ButtonReleaseMask;
             x_root = e->xbutton.x_root;
             y_root = e->xbutton.y_root;
+            fltk_event = FL_RELEASE;
+            button = e->xbutton.button;
             break;
         case EnterNotify:
+            x_root = e->xcrossing.x_root;
+            y_root = e->xcrossing.y_root;
+            fltk_event = FL_ENTER;
+            break;
         case LeaveNotify:
             x_root = e->xcrossing.x_root;
             y_root = e->xcrossing.y_root;
+            fltk_event = FL_LEAVE;  // No FLTK equivalent, but we'll use it.
             break;
         case MotionNotify:
             x_root = e->xmotion.x_root;
             y_root = e->xmotion.y_root;
+            fltk_event = FL_MOVE; // Or FL_DRAG, depending on button state
+            if (e->xmotion.state & (Button1Mask | Button2Mask | Button3Mask)) {
+                fltk_event = FL_DRAG;
+                modifiers = e->xmotion.state;
+            }
             break;
         case KeyPress:
+            x_root = e->xkey.x_root;
+            y_root = e->xkey.y_root;
+            fltk_event = FL_KEYBOARD;
+            modifiers = e->xkey.state;
+            break;
         case KeyRelease:
             x_root = e->xkey.x_root;
             y_root = e->xkey.y_root;
+            fltk_event = FL_KEYUP;
+            modifiers = e->xkey.state;
             break;
         default:
+            return 0;
             break;
         }
 
-        const std::vector<Window>& below_windows = get_windows_below(display, window);
-        Window new_window = find_window_below(display, below_windows, x_root, y_root);
+        const std::vector<Window>& below_windows = get_windows_below(display,
+                                                                     window);
+        Window new_window = find_window_below(display, below_windows,
+                                              x_root, y_root);
 
         if (new_window == None)
         {
-            return;
+            return 0;
         }
 
-        // std::cerr << "------------------------------------------------------"
-        //           << std::endl;
-        // std::cerr << "window below is: " << get_window_name(new_window)
-        //           << std::endl;
-    
-        int x = x_root, y = y_root;
-        Window child_return;
-        if (XTranslateCoordinates(display, DefaultRootWindow(display), new_window, x_root, y_root, &x, &y, &child_return) == 0){
-            return;
-        }
 
-        if (new_window != last_window)
+        if (fltk_event != FL_NO_EVENT)
         {
-            if (last_window != None)
-            {
-                XEvent leave_event;
-                memset(&leave_event, 0, sizeof(leave_event));
-                leave_event.type = LeaveNotify;
-                leave_event.xcrossing.x = x;
-                leave_event.xcrossing.y = y;
-                leave_event.xcrossing.x_root = x_root;
-                leave_event.xcrossing.y_root = y_root;
-                leave_event.xcrossing.time = get_current_time_ms();
-                leave_event.xcrossing.display = display;
-                leave_event.xcrossing.window = last_window;
-                mrv2_XSendEvent(display, last_window, True, NoEventMask,
-                                &leave_event);
-
-                XEvent focus_out;
-                memset(&focus_out, 0, sizeof(focus_out));
-                focus_out.type = FocusOut;
-                focus_out.xfocus.window = last_window;
-                focus_out.xfocus.mode = NotifyNormal;
-                focus_out.xfocus.detail = NotifyAncestor;
-                mrv2_XSendEvent(display, last_window, True, FocusChangeMask,
-                                &focus_out);
-            }
-            if (new_window != None)
-            {
-                XEvent enter_event;
-                memset(&enter_event, 0, sizeof(enter_event));
-                enter_event.type = EnterNotify;
-                enter_event.xcrossing.x = x;
-                enter_event.xcrossing.y = y;
-                enter_event.xcrossing.x_root = x_root;
-                enter_event.xcrossing.y_root = y_root;
-                enter_event.xcrossing.time = get_current_time_ms();
-                enter_event.xcrossing.display = display;
-                enter_event.xcrossing.window = new_window;
-                mrv2_XSendEvent(display, new_window, True, NoEventMask,
-                                &enter_event);
-
-                XEvent focus_in;
-                memset(&focus_in, 0, sizeof(focus_in));
-                focus_in.type = FocusIn;
-                focus_in.xfocus.window = new_window;
-                focus_in.xfocus.mode = NotifyNormal;
-                focus_in.xfocus.detail = NotifyAncestor;
-                mrv2_XSendEvent(display, new_window, True, FocusChangeMask,
-                                &focus_in);
-            }
-            last_window = new_window;
+            send_fltk_event_to_x11(display, new_window, fltk_event, x_root,
+                                   y_root, button, e->xkey.keycode, modifiers);
+            return 1;
         }
 
-        if (e->type == ButtonPress || e->type == ButtonRelease)
-        {
-            XEvent event;
-            memset(&event, 0, sizeof(event));
-            int mask = NoEventMask;
-            unsigned long evTime = get_current_time_ms();        
-            event.xany.type = 0;
-            event.xany.display = display;
-            event.xany.window = new_window;
-            event.type = EnterNotify;
-            event.xcrossing.x = x;
-            event.xcrossing.y = y;
-            event.xcrossing.x_root = x_root;
-            event.xcrossing.y_root = y_root;
-            mrv2_XSendEvent(display, new_window, True, mask, &event);
-        }
-        
-        if (e->type == KeyPress || e->type == KeyRelease)
-        {
-            e->xkey.x = x;
-            e->xkey.y = y;
-            e->xkey.x_root = x_root;
-            e->xkey.y_root = y_root;
-            e->xkey.window = new_window;
-        }
-        else if (e->type == ButtonPress || e->type == ButtonRelease ||
-                 e->type == MotionNotify)
-        {
-            e->xbutton.x = x;
-            e->xbutton.y = y;
-            e->xbutton.x_root = x_root;
-            e->xbutton.y_root = y_root;
-            e->xbutton.window = new_window;
-            e->xbutton.time = get_current_time_ms();
-        }
-
-        mrv2_XSendEvent(display, new_window, True, mask, e);
-
-        if (e->type == ButtonPress)
-        {
-            XGrabPointer(display, new_window, True,
-                         PointerMotionMask | ButtonReleaseMask,
-                         GrabModeAsync, GrabModeAsync, None, None, CurrentTime);
-        }
-        else if (e->type == ButtonRelease)
-        {
-            XUngrabPointer(display, CurrentTime);
-        }
+        return 0;
     }
+
 #endif
     
 }
@@ -796,7 +855,6 @@ namespace mrv
             wl_surface_set_opaque_region(fl_wl_surface(fl_wl_xid(this)), NULL);
         }
 #endif
-        set_alpha(0);
     }
 
     void MainWindow::draw()
@@ -848,9 +906,9 @@ namespace mrv
 
     void MainWindow::set_alpha(int new_alpha)
     {
-        int minAlpha = 96;
+        int minAlpha = 95;
         if (desktop::Wayland())
-            minAlpha = 64;
+            minAlpha = 65;
         // Don't allow fully transparent window
         if (new_alpha < minAlpha)
         {
@@ -978,12 +1036,10 @@ namespace mrv
             if (enable)
             {
                 Fl::add_system_handler((Fl_System_Handler)x11_handler, this);
-                std::cerr << "click through ON" << std::endl;
             }
             else
             {
                 Fl::remove_system_handler((Fl_System_Handler)x11_handler);
-                std::cerr << "click through OFF" << std::endl;
             }
         }
 #        endif
@@ -998,8 +1054,6 @@ namespace mrv
 #        endif // FLTK_USE_WAYLAND
 
 #    endif // __linux__
-
-        set_alpha(win_alpha);
     }
 
 #endif // !__APPLE__
@@ -1009,6 +1063,14 @@ namespace mrv
         if (click_through == value)
             return;
 
+        if (win_alpha >= 250)
+        {
+            mrv::fl_alert("%s",
+                          _("You cannot set Window click through with a "
+                            "totally opaque window."));
+            return;
+        }
+        
         if (value)
         {
             int ok;
@@ -1017,7 +1079,7 @@ namespace mrv
             {
                 ok = mrv::fl_choice(
                     _("This will disable events for mrv2, allowing them "
-                      "to pass through.\n\n"
+                      "to pass through to windows below it.\n\n"
                       "Give window focus to disable."),
                     _("Stop"), _("Continue"), NULL, NULL);
             }
@@ -1025,7 +1087,7 @@ namespace mrv
             {
                 ok = mrv::fl_choice(
                     _("This will disable events for mrv2, allowing them "
-                      "to pass through.\n\n"
+                      "to pass through to windows below it.\n\n"
                       "Give window focus (click on the taskbar icon)\n"
                       "to disable."),
                     _("Stop"), _("Continue"), NULL, NULL);
@@ -1035,8 +1097,18 @@ namespace mrv
         }
 
         click_through = value;
+        
+        if (value)
+        {
+            LOG_STATUS(_("Window click through ON"));
+        }
+        else
+        {
+            LOG_STATUS(_("Window click through OFF"));
+        }
 
         setClickThrough(value);
+        
 
         always_on_top(click_through);
     }
