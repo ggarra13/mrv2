@@ -563,7 +563,7 @@ namespace
 
         if (new_window == None)
         {
-            return 0;
+            return 1;
         }
 
 
@@ -764,7 +764,6 @@ namespace mrv
             {
                 set_click_through(!click_through);
                 ignoreFocus = true;
-                Fl::focus(nullptr);
                 return 1;
             }
         }
@@ -1107,10 +1106,9 @@ namespace mrv
             LOG_STATUS(_("Window click through OFF"));
         }
 
-        setClickThrough(value);
-        
-
         always_on_top(click_through);
+        
+        setClickThrough(value);
     }
 
 } // namespace mrv
