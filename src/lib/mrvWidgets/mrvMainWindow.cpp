@@ -56,10 +56,10 @@ namespace
     bool   is_dragging = false;
 
     unsigned long get_current_time_ms() {
-        // struct timeval tv;
-        // gettimeofday(&tv, NULL);
-        // return tv.tv_sec * 1000UL + tv.tv_usec / 1000;
-        return CurrentTime;
+        struct timeval tv;
+        gettimeofday(&tv, NULL);
+        return tv.tv_sec * 1000UL + tv.tv_usec / 1000;
+        // return CurrentTime;
     }
 
     // Convert FLTK keycode to X11 KeySym
@@ -470,6 +470,23 @@ namespace
             last_window = new_window;
         }
 
+        if (e->type == ButtonPress || e->type == ButtonRelease)
+        {
+            XEvent event;
+            memset(&event, 0, sizeof(event));
+            int mask = NoEventMask;
+            unsigned long evTime = get_current_time_ms();        
+            event.xany.type = 0;
+            event.xany.display = display;
+            event.xany.window = new_window;
+            event.type = EnterNotify;
+            event.xcrossing.x = x;
+            event.xcrossing.y = y;
+            event.xcrossing.x_root = x_root;
+            event.xcrossing.y_root = y_root;
+            mrv2_XSendEvent(display, new_window, True, mask, &event);
+        }
+        
         if (e->type == KeyPress || e->type == KeyRelease)
         {
             e->xkey.x = x;
@@ -477,17 +494,30 @@ namespace
             e->xkey.x_root = x_root;
             e->xkey.y_root = y_root;
             e->xkey.window = new_window;
-        } else if (e->type == ButtonPress || e->type == ButtonRelease ||
-                   e->type == MotionNotify)
+        }
+        else if (e->type == ButtonPress || e->type == ButtonRelease ||
+                 e->type == MotionNotify)
         {
             e->xbutton.x = x;
             e->xbutton.y = y;
             e->xbutton.x_root = x_root;
             e->xbutton.y_root = y_root;
             e->xbutton.window = new_window;
+            e->xbutton.time = get_current_time_ms();
         }
 
         mrv2_XSendEvent(display, new_window, True, mask, e);
+
+        if (e->type == ButtonPress)
+        {
+            XGrabPointer(display, new_window, True,
+                         PointerMotionMask | ButtonReleaseMask,
+                         GrabModeAsync, GrabModeAsync, None, None, CurrentTime);
+        }
+        else if (e->type == ButtonRelease)
+        {
+            XUngrabPointer(display, CurrentTime);
+        }
     }
 #endif
     
