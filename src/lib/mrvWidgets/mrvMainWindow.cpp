@@ -25,6 +25,7 @@
 #include <FL/Fl.H>
 
 #if defined(FLTK_USE_X11)
+#    include <unistd.h>
 #    include <sys/time.h>
 #    include <X11/Xlib.h>
 #    include <X11/extensions/scrnsaver.h>
@@ -91,57 +92,178 @@ namespace
     }
     
     // Function to get window geometry (position and size)
-    void get_window_geometry(Display *display, Window window, int *x, int *y, unsigned int *width, unsigned int *height)
+    void get_window_geometry(Display *display, Window window, int *x, int *y,
+                             unsigned int *width, unsigned int *height)
     {
-        Window root;
+        Window root, child;
         int wx, wy;
         unsigned int ww, wh, border_width, depth;
-    
+
+        // Get the geometry of the window
         if (XGetGeometry(display, window, &root, &wx, &wy, &ww, &wh,
                          &border_width, &depth))
         {
-            XWindowAttributes attr;
-            if (XGetWindowAttributes(display, window, &attr))
+            // Translate coordinates to root window (absolute screen position)
+            if (XTranslateCoordinates(display, window, root,
+                                      0, 0, &wx, &wy, &child))
             {
-                *x = attr.x;
-                *y = attr.y;
-                *width = attr.width;
-                *height = attr.height;
+                *x = wx;
+                *y = wy;
+                *width = ww;
+                *height = wh;
             }
         }
     }
 
-    // Function to get all windows below my_window in the stacking order
-    std::vector<Window> get_windows_below(Display *display, Window my_window)
+    // Function to check whether a window is minimized
+    static int is_window_minimized(Display *display, Window window)
     {
+        Atom actual_type;
+        int actual_format;
+        unsigned long nitems, bytes_after;
+        unsigned char* prop_value = NULL;
+        Atom* atoms;
+        int minimized = 0;
+
+        Atom net_wm_state = XInternAtom(display, "_NET_WM_STATE", False);
+        Atom net_wm_state_iconified = XInternAtom(display,
+                                                  "_NET_WM_STATE_ICONIFIED",
+                                                  False);
+
+        Atom net_wm_state_hidden = XInternAtom(display, "_NET_WM_STATE_HIDDEN",
+                                               False);
+
+        if (net_wm_state != None)
+        {
+            int result = XGetWindowProperty(display, window, net_wm_state,
+                                            0, (~0L), False, XA_ATOM, &actual_type,
+                                            &actual_format, &nitems, &bytes_after,
+                                            &prop_value);
+            if (result == Success && prop_value != NULL)
+            {
+                atoms = (Atom *)prop_value;
+                for (unsigned long i = 0; i < nitems; i++)
+                {
+                    if (atoms[i] == net_wm_state_iconified ||
+                        atoms[i] == net_wm_state_hidden)
+                    {
+                        minimized = 1;
+                        break;
+                    }
+                }
+                XFree(prop_value);
+            }
+        }
+        return minimized;
+    }
+
+
+    // Helper function to fetch the window list
+    static std::vector<Window> fetch_window_list(Display *display)
+    {
+        std::vector<Window> window_list;
         Atom atom = XInternAtom(display, "_NET_CLIENT_LIST_STACKING", False);
         Atom actual_type;
         int actual_format;
         unsigned long nitems, bytes_after;
-        unsigned char *data = NULL;
-        std::vector<Window> below_windows;
+        unsigned char *data = nullptr;
 
         if (XGetWindowProperty(display, DefaultRootWindow(display), atom,
                                0, 1024, False, XA_WINDOW,
                                &actual_type, &actual_format, &nitems,
                                &bytes_after, &data) == Success && data)
-        {   
-            Window *windows = (Window *)data;
-            bool found_my_window = false;
-        
-            for (int i = nitems-1; i >= 0; --i)
+        {
+            Window* windows = (Window *)data;
+            window_list.assign(windows, windows + nitems);
+            XFree(data);
+        }
+        return window_list;
+    }
+
+    // Structure to hold the old error handler
+    static int (*old_error_handler)(Display*, XErrorEvent*);
+
+    // Custom error handler to suppress errors
+    static int suppress_x_errors(Display* display, XErrorEvent* event)
+    {
+        // Suppress all errors
+        return 0;
+    }
+
+    // Function to get all windows below my_window in the stacking order
+    std::vector<Window> get_windows_below(Display *display, Window target_window)
+    {
+        std::vector<Window> below_windows;
+        int max_retries = 3; // Maximum number of retries
+        int retry_count = 0;
+
+        while (retry_count < max_retries) {
+            // Install error handler to suppress X11 errors
+            old_error_handler = XSetErrorHandler(suppress_x_errors);
+
+            std::vector<Window> windows = fetch_window_list(display);
+            bool found_target_window = false;
+
+            int i;
+            for (i = windows.size() - 1; i >= 0; --i)
             {
-                if (found_my_window)
-                {
-                    // Add all windows below my_window
-                    below_windows.push_back(windows[i]);  
+                const Window& window = windows[i];
+                XWindowAttributes attr;
+                bool viewable = false;
+                bool minimized = false;
+
+                // Don't include unmapped windows on the list
+                if (XGetWindowAttributes(display, window, &attr)) {
+                    if (attr.map_state == IsViewable)
+                    {
+                        viewable = true;
+                    }
+                    else
+                    {
+                        viewable = false;
+                    }
                 }
-                if (windows[i] == my_window)
+                else
                 {
-                    found_my_window = true;
+                    // Invalid window...
+                    break; // Refetch window list
+                }
+
+                // Don't include minimized windows on the list
+                if (is_window_minimized(display, window))
+                {
+                    minimized = true;
+                }
+
+                if (found_target_window && viewable && !minimized)
+                {
+                    // Add all windows below target_window
+                    below_windows.push_back(window);
+                }
+
+                if (window == target_window)
+                {
+                    found_target_window = true;
                 }
             }
-            XFree(data);
+
+            // Restore old error handler
+            XSetErrorHandler(old_error_handler);
+            XSync(display, False); // Flush pending errors
+
+            // If the loop completed without errors, break the retry loop
+            if ((i < 0 && found_target_window) || windows.empty())
+            {
+                break;
+            }
+
+            retry_count++;
+            usleep(5000); // Small delay before retrying
+        }
+
+        if (retry_count == max_retries)
+        {
+            std::cerr << "Max retries reached, get_windows_below may be incomplete." << std::endl;
         }
 
         return below_windows;
@@ -169,64 +291,65 @@ namespace
 
         return closest_window;
     }
-
-#define PRINT_CASE(x) \
+    
+#define CHECK_EVENT_TYPE(x)                     \
     case x:                                     \
     {                                           \
-        std::cerr << "Send " << #x;              \
+        s << #x;                                \
+        return s.str();                         \
         break;                                  \
     }
-   
-#define IGNORE_CASE(x) \
-    case x:                                     \
-    {                                           \
-        return;                                 \
+    
+    // Debugging Function to return the event name.
+    std::string get_event_name(XEvent* event)
+    {
+        std::stringstream s;
+        switch(event->type)
+        {
+            CHECK_EVENT_TYPE(ButtonPress);
+            CHECK_EVENT_TYPE(ButtonRelease);;
+            CHECK_EVENT_TYPE(CirculateNotify);
+            CHECK_EVENT_TYPE(CirculateRequest);
+            CHECK_EVENT_TYPE(ClientMessage);
+            CHECK_EVENT_TYPE(ColormapNotify);
+            CHECK_EVENT_TYPE(ConfigureNotify);
+            CHECK_EVENT_TYPE(ConfigureRequest);
+            CHECK_EVENT_TYPE(CreateNotify);
+            CHECK_EVENT_TYPE(DestroyNotify);
+            CHECK_EVENT_TYPE(EnterNotify);
+            CHECK_EVENT_TYPE(Expose);
+            CHECK_EVENT_TYPE(FocusIn);
+            CHECK_EVENT_TYPE(FocusOut);
+            CHECK_EVENT_TYPE(GraphicsExpose);
+            CHECK_EVENT_TYPE(KeymapNotify);
+            CHECK_EVENT_TYPE(KeyPress);
+            CHECK_EVENT_TYPE(KeyRelease);
+            CHECK_EVENT_TYPE(LeaveNotify);
+            CHECK_EVENT_TYPE(MapNotify);
+            CHECK_EVENT_TYPE(MappingNotify);
+            CHECK_EVENT_TYPE(MapRequest);
+            CHECK_EVENT_TYPE(MotionNotify);
+            CHECK_EVENT_TYPE(NoExpose);
+            CHECK_EVENT_TYPE(PropertyNotify);
+            CHECK_EVENT_TYPE(ReparentNotify);
+            CHECK_EVENT_TYPE(ResizeRequest);
+            CHECK_EVENT_TYPE(SelectionClear);
+            CHECK_EVENT_TYPE(SelectionRequest);
+            CHECK_EVENT_TYPE(SelectionNotify);
+            CHECK_EVENT_TYPE(UnmapNotify);
+            CHECK_EVENT_TYPE(VisibilityNotify);
+        default:
+            s << "UNKNOWN (" << event->type << ")";
+            return s.str();
+            break;
+        }
     }
-   
+
     void mrv2_XSendEvent(Display* display, Window target_window, Bool value,
                          int mask, XEvent* event)
     {
-        // switch(event->type)
-        // {
-        //     PRINT_CASE(ButtonPress);
-        //     PRINT_CASE(ButtonRelease);;
-        //     PRINT_CASE(CirculateNotify);
-        //     PRINT_CASE(CirculateRequest);
-        //     PRINT_CASE(ClientMessage);
-        //     PRINT_CASE(ColormapNotify);
-        //     PRINT_CASE(ConfigureNotify);
-        //     PRINT_CASE(ConfigureRequest);
-        //     PRINT_CASE(CreateNotify);
-        //     PRINT_CASE(DestroyNotify);
-        //     PRINT_CASE(EnterNotify);
-        //     PRINT_CASE(Expose);
-        //     PRINT_CASE(FocusIn);
-        //     PRINT_CASE(FocusOut);
-        //     PRINT_CASE(GraphicsExpose);
-        //     PRINT_CASE(KeymapNotify);
-        //     PRINT_CASE(KeyPress);
-        //     PRINT_CASE(KeyRelease);
-        //     PRINT_CASE(LeaveNotify);
-        //     PRINT_CASE(MapNotify);
-        //     PRINT_CASE(MappingNotify);
-        //     PRINT_CASE(MapRequest);
-        //     IGNORE_CASE(MotionNotify);
-        //     PRINT_CASE(NoExpose);
-        //     PRINT_CASE(PropertyNotify);
-        //     PRINT_CASE(ReparentNotify);
-        //     PRINT_CASE(ResizeRequest);
-        //     PRINT_CASE(SelectionClear);
-        //     PRINT_CASE(SelectionRequest);
-        //     PRINT_CASE(SelectionNotify);
-        //     PRINT_CASE(UnmapNotify);
-        //     PRINT_CASE(VisibilityNotify);
-        // default:
-        //     std::cerr << "UNKNOWN (" << event->type << ")";
-        //     break;
-        // }
-        // std::cerr << " to " << get_window_name(display, target_window)
-        //           << std::endl;
         XSendEvent(display, target_window, value, mask, event);
+        XFlush(display);
     }
 
     // Function to send an FLTK event as an XEvent to the specified X11 window
@@ -257,8 +380,10 @@ namespace
 
         // We need to send an EnterNotify so that the X11 window behind will
         // receive input as we are inside the non-transparent front FLTK window
-        if (fltk_event != FL_LEAVE && fltk_event != FL_ENTER &&
-            fltk_event != FL_NO_EVENT)
+        // if (fltk_event != FL_LEAVE && fltk_event != FL_ENTER &&
+        //     fltk_event != FL_NO_EVENT)
+        if (fltk_event == FL_PUSH || fltk_event == FL_MOVE ||
+            fltk_event == FL_RELEASE)
         {
             event.type = EnterNotify;
             event.xcrossing.x = local_x;
@@ -266,9 +391,12 @@ namespace
             event.xcrossing.x_root = root_x;
             event.xcrossing.y_root = root_y;
             mrv2_XSendEvent(display, target_window, True, mask, &event);
-            XFlush(display);
             
             KeySym keysym = fltkToX11KeySym(key);
+            event.xkey.x = local_x;
+            event.xkey.y = local_y;
+            event.xkey.x_root = root_x;
+            event.xkey.y_root = root_y;
             event.xkey.keycode = XKeysymToKeycode(display, keysym);
             event.xkey.state = modifiers;
             event.xkey.time = evTime;
@@ -284,7 +412,6 @@ namespace
             event.xcrossing.x_root = root_x;
             event.xcrossing.y_root = root_y;
             mrv2_XSendEvent(display, target_window, True, mask, &event);
-            XFlush(display);
             
             break;
         case FL_PUSH:
@@ -297,7 +424,6 @@ namespace
             event.xbutton.y_root = root_y;
             event.xbutton.time = evTime;
             mrv2_XSendEvent(display, target_window, True, mask, &event);
-            XFlush(display);
 
 
             XGrabPointer(display, target_window, True,
@@ -316,7 +442,6 @@ namespace
             event.xmotion.state = modifiers;
             event.xmotion.time = evTime;
             mrv2_XSendEvent(display, target_window, True, mask, &event);
-            XFlush(display);
             break;
         case FL_RELEASE:
             mask = ButtonReleaseMask; // Use correct mask
@@ -328,7 +453,6 @@ namespace
             event.xbutton.y_root = root_y;
             event.xbutton.time = evTime;
             mrv2_XSendEvent(display, target_window, True, mask, &event);
-            XFlush(display);
 
             XUngrabPointer(display, CurrentTime);
 
@@ -342,28 +466,23 @@ namespace
             event.xmotion.y_root = root_y;
             event.xmotion.time = evTime;
             mrv2_XSendEvent(display, target_window, True, mask, &event);
-            XFlush(display);
             break;
         case FL_FOCUS:
             event.type = FocusIn;
             mrv2_XSendEvent(display, target_window, True, mask, &event);
-            XFlush(display);
             break;
         case FL_UNFOCUS:
             event.type = FocusOut;
             mrv2_XSendEvent(display, target_window, True, mask, &event);
-            XFlush(display);
             break;
         case FL_KEYBOARD:
         case FL_SHORTCUT:
             event.type = KeyPress;
             mrv2_XSendEvent(display, target_window, True, mask, &event);
-            XFlush(display);
             break;
         case FL_KEYUP:
             event.type = KeyRelease;
             mrv2_XSendEvent(display, target_window, True, mask, &event);
-            XFlush(display);
             break;
         default:
             return; // Ignore other events
