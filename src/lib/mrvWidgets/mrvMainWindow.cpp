@@ -402,7 +402,6 @@ namespace
 
         if (new_window == None)
         {
-            last_window = new_window;
             return;
         }
 
