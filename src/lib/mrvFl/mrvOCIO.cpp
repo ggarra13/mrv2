@@ -1001,7 +1001,7 @@ namespace mrv
                     std::string msg =
                         string::Format(_("Setting OCIO Preset '{0}'."))
                             .arg(presetName);
-                    LOG_INFO(msg);
+                    LOG_STATUS(msg);
 
                     const timeline::OCIOOptions& ocio = preset.ocio;
                     setConfig(ocio.fileName);

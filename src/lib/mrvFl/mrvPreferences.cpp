@@ -1962,7 +1962,7 @@ namespace mrv
         {
             if (file::isReadable(configName))
             {
-                LOG_INFO(_("OCIO config is now:"));
+                LOG_STATUS(_("OCIO config is now:"));
             }
             else
             {
