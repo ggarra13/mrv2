@@ -373,35 +373,25 @@ namespace
         XEvent event;
         memset(&event, 0, sizeof(event));
         int mask = NoEventMask;
+        KeySym keysym;
         unsigned long evTime = get_current_time_ms();        
         event.xany.type = 0;
         event.xany.display = display;
         event.xany.window = target_window;
 
-        // We need to send an EnterNotify so that the X11 window behind will
-        // receive input as we are inside the non-transparent front FLTK window
-        // if (fltk_event != FL_LEAVE && fltk_event != FL_ENTER &&
-        //     fltk_event != FL_NO_EVENT)
-        if (fltk_event == FL_PUSH || fltk_event == FL_MOVE ||
-            fltk_event == FL_RELEASE)
-        {
-            event.type = EnterNotify;
-            event.xcrossing.x = local_x;
-            event.xcrossing.y = local_y;
-            event.xcrossing.x_root = root_x;
-            event.xcrossing.y_root = root_y;
-            mrv2_XSendEvent(display, target_window, True, mask, &event);
+        
+        // if (fltk_event == FL_PUSH || fltk_event == FL_MOVE ||
+        //     fltk_event == FL_RELEASE)
+        // {
+        //     event.type = EnterNotify;
+        //     event.xcrossing.x = local_x;
+        //     event.xcrossing.y = local_y;
+        //     event.xcrossing.x_root = root_x;
+        //     event.xcrossing.y_root = root_y;
+        //     mrv2_XSendEvent(display, target_window, True, mask, &event);
             
-            KeySym keysym = fltkToX11KeySym(key);
-            event.xkey.x = local_x;
-            event.xkey.y = local_y;
-            event.xkey.x_root = root_x;
-            event.xkey.y_root = root_y;
-            event.xkey.keycode = XKeysymToKeycode(display, keysym);
-            event.xkey.state = modifiers;
-            event.xkey.time = evTime;
 
-        }
+        // }
 
         switch (fltk_event)
         {
@@ -478,14 +468,35 @@ namespace
         case FL_KEYBOARD:
         case FL_SHORTCUT:
             event.type = KeyPress;
+            keysym = fltkToX11KeySym(key);  // this is broken for international keys
+            event.xkey.x = local_x;
+            event.xkey.y = local_y;
+            event.xkey.x_root = root_x;
+            event.xkey.y_root = root_y;
+            event.xkey.keycode = XKeysymToKeycode(display, keysym);
+            event.xkey.state = modifiers;
+            event.xkey.time = evTime;
             mrv2_XSendEvent(display, target_window, True, mask, &event);
             break;
         case FL_KEYUP:
             event.type = KeyRelease;
+            keysym = fltkToX11KeySym(key);  // this is broken for international keys
+            event.xkey.x = local_x;
+            event.xkey.y = local_y;
+            event.xkey.x_root = root_x;
+            event.xkey.y_root = root_y;
+            event.xkey.keycode = XKeysymToKeycode(display, keysym);
+            event.xkey.state = modifiers;
+            event.xkey.time = evTime;
             mrv2_XSendEvent(display, target_window, True, mask, &event);
             break;
         default:
-            return; // Ignore other events
+            // Ignore other events.  NOTE: between FL_PUSH and Chrome pulldown
+            // bookmarks there are two FL_NO_EVENT (which not sure what
+            // XEvents they correspond to).
+            std::cerr << "IGNORED " << fl_eventnames[fltk_event]
+                      << std::endl;
+            return;
         }
 
     }
