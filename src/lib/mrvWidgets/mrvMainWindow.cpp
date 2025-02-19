@@ -485,7 +485,6 @@ namespace
             break;
         default:
             // Ignore any other FLTK messages
->>>>>>> x11
             return;
         }
 
@@ -711,6 +710,12 @@ namespace mrv
                             SubstructureNotifyMask | SubstructureRedirectMask,
                             &ev);
         }
+#    endif
+#    if defined(FLTK_USE_WAYLAND)
+        //const std::string& compositor = desktop::WaylandCompositor();
+        if (value)
+            LOG_ERROR(_("Float on Top is currently unsupported under "
+                        "Wayland's Compositors."));
 #    endif
     } // above_all function
 

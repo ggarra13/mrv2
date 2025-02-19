@@ -2,8 +2,13 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <string>
+
 #include <FL/Fl.H>
 #include <FL/platform.H>
+
+#include "mrvCore/mrvOS.h"
+#include "mrvCore/mrvString.h"
 
 #include "mrvUI/mrvMonitor.h"
 
@@ -91,6 +96,38 @@ namespace mrv
             return out;
         }
         
+
+        std::string WaylandCompositor()
+        {
+            std::string out;
+            
+#ifdef FLTK_USE_WAYLAND
+            const char* env = fl_getenv("XDG_SESSION_DESKTOP");
+            if (env && strlen(env) > 0)
+            {
+                out += env;
+            }
+            else
+            {
+                env = fl_getenv("DESKTOP_SESSION");
+                if (env && strlen(env) > 0)
+                {
+                    out += env;
+                }
+                else
+                {
+                    env = "";
+                }
+            }
+
+            if (env && strlen(env) > 0)
+            {
+                out = os::getWaylandCompositor(env);
+            }
+#endif
+            return out;
+        }
+
         std::string monitorName(int monitorIndex)
         {
             std::string out;

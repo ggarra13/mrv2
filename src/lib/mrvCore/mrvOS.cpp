@@ -47,106 +47,100 @@ namespace
     const char* kModule = "os";
 }
 
-namespace
-{
-    
-#ifdef _WIN32
-
-    std::string exec_command(const std::string& command)
-    {
-        std::string output;
-        SECURITY_ATTRIBUTES saAttr;
-        HANDLE hRead, hWrite;
-
-        // Set up security attributes to allow pipe handles to be inherited
-        saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
-        saAttr.bInheritHandle = TRUE;
-        saAttr.lpSecurityDescriptor = NULL;
-
-        // Create a pipe for the child process’s STDOUT
-        if (!CreatePipe(&hRead, &hWrite, &saAttr, 0))
-        {
-            throw std::runtime_error("CreatePipe failed!");
-        }
-
-        // Ensure the read handle to the pipe is not inherited
-        SetHandleInformation(hRead, HANDLE_FLAG_INHERIT, 0);
-
-        // Create the child process
-        PROCESS_INFORMATION pi;
-        STARTUPINFO si;
-        ZeroMemory(&pi, sizeof(PROCESS_INFORMATION));
-        ZeroMemory(&si, sizeof(STARTUPINFO));
-        si.cb = sizeof(STARTUPINFO);
-        si.hStdOutput = hWrite;
-        si.hStdError = hWrite;
-        si.dwFlags |= STARTF_USESTDHANDLES | STARTF_USESHOWWINDOW;
-        si.wShowWindow = SW_HIDE; // Prevents console window from appearing
-
-        // Convert command to a writable string buffer
-        std::vector<char> cmd(command.begin(), command.end());
-        cmd.push_back(0); // Null-terminate the string
-
-        // Create the process
-        if (!CreateProcess(NULL, cmd.data(), NULL, NULL, TRUE,
-                           CREATE_NO_WINDOW, NULL, NULL, &si, &pi))
-        {
-            CloseHandle(hRead);
-            CloseHandle(hWrite);
-            throw std::runtime_error("CreateProcess failed!");
-        }
-
-        // Close the write end of the pipe in the parent process
-        CloseHandle(hWrite);
-
-        // Read output from the child process
-        char buffer[128];
-        DWORD bytesRead;
-        while (ReadFile(hRead, buffer, sizeof(buffer) - 1, &bytesRead, NULL) && bytesRead > 0)
-        {
-            buffer[bytesRead] = '\0';
-            output += buffer;
-        }
-
-        // Cleanup
-        CloseHandle(hRead);
-        CloseHandle(pi.hProcess);
-        CloseHandle(pi.hThread);
-
-        return output;
-    }
-
-#else
-    // Function to execute a shell command and capture the output
-    std::string exec_command(const std::string& command)
-    {
-        std::string out;
-
-        std::array<char, 128> buffer;
-
-        // Open a pipe to the command
-        std::shared_ptr<FILE> pipe(popen(command.c_str(), "r"), pclose);
-        if (!pipe)
-        {
-            throw std::runtime_error("popen() failed!");
-        }
-
-        // Read the output from the command
-        while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr)
-        {
-            out += buffer.data();
-        }
-
-        return out;
-    }
-#endif
-    
-} // namespace
-
 namespace mrv
 {
     namespace os
     {
+#ifdef _WIN32
+
+        std::string exec_command(const std::string& command)
+        {
+            std::string output;
+            SECURITY_ATTRIBUTES saAttr;
+            HANDLE hRead, hWrite;
+
+            // Set up security attributes to allow pipe handles to be inherited
+            saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
+            saAttr.bInheritHandle = TRUE;
+            saAttr.lpSecurityDescriptor = NULL;
+
+            // Create a pipe for the child process’s STDOUT
+            if (!CreatePipe(&hRead, &hWrite, &saAttr, 0))
+            {
+                throw std::runtime_error("CreatePipe failed!");
+            }
+
+            // Ensure the read handle to the pipe is not inherited
+            SetHandleInformation(hRead, HANDLE_FLAG_INHERIT, 0);
+
+            // Create the child process
+            PROCESS_INFORMATION pi;
+            STARTUPINFO si;
+            ZeroMemory(&pi, sizeof(PROCESS_INFORMATION));
+            ZeroMemory(&si, sizeof(STARTUPINFO));
+            si.cb = sizeof(STARTUPINFO);
+            si.hStdOutput = hWrite;
+            si.hStdError = hWrite;
+            si.dwFlags |= STARTF_USESTDHANDLES | STARTF_USESHOWWINDOW;
+            si.wShowWindow = SW_HIDE; // Prevents console window from appearing
+
+            // Convert command to a writable string buffer
+            std::vector<char> cmd(command.begin(), command.end());
+            cmd.push_back(0); // Null-terminate the string
+
+            // Create the process
+            if (!CreateProcess(NULL, cmd.data(), NULL, NULL, TRUE,
+                               CREATE_NO_WINDOW, NULL, NULL, &si, &pi))
+            {
+                CloseHandle(hRead);
+                CloseHandle(hWrite);
+                throw std::runtime_error("CreateProcess failed!");
+            }
+
+            // Close the write end of the pipe in the parent process
+            CloseHandle(hWrite);
+
+            // Read output from the child process
+            char buffer[128];
+            DWORD bytesRead;
+            while (ReadFile(hRead, buffer, sizeof(buffer) - 1, &bytesRead, NULL) && bytesRead > 0)
+            {
+                buffer[bytesRead] = '\0';
+                output += buffer;
+            }
+
+            // Cleanup
+            CloseHandle(hRead);
+            CloseHandle(pi.hProcess);
+            CloseHandle(pi.hThread);
+
+            return output;
+        }
+
+#else
+        // Function to execute a shell command and capture the output
+        std::string exec_command(const std::string& command)
+        {
+            std::string out;
+
+            std::array<char, 128> buffer;
+
+            // Open a pipe to the command
+            std::shared_ptr<FILE> pipe(popen(command.c_str(), "r"), pclose);
+            if (!pipe)
+            {
+                throw std::runtime_error("popen() failed!");
+            }
+
+            // Read the output from the command
+            while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr)
+            {
+                out += buffer.data();
+            }
+
+            return out;
+        }
+#endif
 
         int execv(const std::string& exe, const std::string& session)
         {
@@ -344,13 +338,13 @@ namespace mrv
 
             // Check against common Wayland compositor names
             if (desktop == "ubuntu-wayland" ||
-                desktop.substr(0, 5) == "gnome" || desktop == "mutter" ||
-                desktop == "gnome-wayland")
+                desktop.substr(0, 5) == "gnome" || desktop == "mutter")
             {
-                return "mutter";
+                return "gnome-shell";
             }
             else if (
-                desktop == "kwin" || desktop == "kde" || desktop == "plasma")
+                desktop.substr(0, 4) == "kwin" || desktop == "kde" ||
+                desktop == "plasma")
             {
                 return "kwin";
             }
@@ -360,12 +354,11 @@ namespace mrv
             }
             else if (desktop == "sway")
             {
-                return "sway"; // If using Sway (a Wayland compositor based on
-                               // i3)
+                return "sway";
             }
             else
             {
-                return "unknown"; // If no match is found
+                return desktop; // If no match is found
             }
         }
 

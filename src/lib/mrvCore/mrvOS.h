@@ -62,8 +62,12 @@ namespace mrv
 {
     namespace os
     {
+        std::string exec_command(const std::string& command);
+        
         int execv(const std::string& exe = "",
                   const std::string& session = "");
+        
+        const std::string getWaylandCompositor(const std::string& desktop);
         
         const std::string getGPUVendor();
 
