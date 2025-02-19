@@ -688,22 +688,22 @@ namespace mrv
 
 #if !defined(__APPLE__)
 
-    void MainWindow::always_on_top(int t)
+    void MainWindow::always_on_top(int value)
     {
-        on_top = t;
+        on_top = value;
 
 #    if defined(_WIN32)
         HWND action;
-        if (t)
+        if (value)
             action = HWND_TOPMOST;
         else
             action = HWND_NOTOPMOST;
         // Microsoft (R) Windows(TM)
-        SetWindowPos(
-            fl_win32_xid(this), action, NULL, NULL, NULL, NULL,
-            SWP_NOMOVE | SWP_NOSIZE);
+        SetWindowPos(fl_win32_xid(this), action, NULL, NULL, NULL, NULL,
+                     SWP_NOMOVE | SWP_NOSIZE);
 #    elif defined(FLTK_USE_X11)
-        if (fl_x11_display())
+        Display* display = fl_x11_display();
+        if (display)
         {
             // XOrg / XWindows(TM)
             XEvent ev;
@@ -711,19 +711,19 @@ namespace mrv
                 "_NET_WM_STATE", "_NET_WM_STATE_ABOVE"};
             Atom atoms[2];
             fl_open_display();
-            XInternAtoms(fl_x11_display(), (char**)names, 2, False, atoms);
+            XInternAtoms(display, (char**)names, 2, False, atoms);
             Atom net_wm_state = atoms[0];
             Atom net_wm_state_above = atoms[1];
             ev.type = ClientMessage;
-            ev.xclient.window = fl_xid(this);
+            ev.xclient.window = fl_x11_xid(this);
             ev.xclient.message_type = net_wm_state;
             ev.xclient.format = 32;
-            ev.xclient.data.l[0] = t;
+            ev.xclient.data.l[0] = value;
             ev.xclient.data.l[1] = net_wm_state_above;
             ev.xclient.data.l[2] = 0;
-            XSendEvent(
-                fl_x11_display(), DefaultRootWindow(fl_display), False,
-                SubstructureNotifyMask | SubstructureRedirectMask, &ev);
+            XSendEvent(display, DefaultRootWindow(display), False,
+                       SubstructureNotifyMask | SubstructureRedirectMask, &ev);
+            XFlush(display);
         }
 #    endif
     } // above_all function
@@ -737,10 +737,6 @@ namespace mrv
 
     int MainWindow::handle(int event)
     {
-#ifdef DEBUG_CLICK_THROUGH
-        if (click_through)
-            std::cerr << fl_eventnames[event] << std::endl;
-#endif
         if (event == FL_FOCUS && click_through)
         {
 #ifdef __linux__
