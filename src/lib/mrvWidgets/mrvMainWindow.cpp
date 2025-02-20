@@ -2,11 +2,15 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#define DEBUG_CLICK_THROUGH 1
+// #define DEBUG_CLICK_THROUGH 1
 
 #include <cstring>
 
+#include <tlCore/StringFormat.h>
+
 #include "mrvCore/mrvHotkey.h"
+#include "mrvCore/mrvOS.h"
+#include "mrvCore/mrvString.h"
 
 #include "mrvWidgets/mrvPanelWindow.h"
 
@@ -35,6 +39,7 @@
 #endif
 
 #ifdef FLTK_USE_WAYLAND
+#    include <regex>
 #    include <cairo/cairo.h>
 #    include <wayland-client.h>
 #endif
@@ -61,23 +66,6 @@ namespace
         return tv.tv_sec * 1000UL + tv.tv_usec / 1000;
         // return CurrentTime;
     }
-
-    // Convert FLTK keycode to X11 KeySym
-    KeySym fltkToX11KeySym(int fltkKey)
-    {
-        switch (fltkKey) {
-        case FL_BackSpace: return XK_BackSpace;
-        case FL_Tab:       return XK_Tab;
-        case FL_Enter:     return XK_Return;
-        case FL_Escape:    return XK_Escape;
-        case FL_Delete:    return XK_Delete;
-        case FL_Left:      return XK_Left;
-        case FL_Right:     return XK_Right;
-        case FL_Up:        return XK_Up;
-        case FL_Down:      return XK_Down;
-        default:           return fltkKey; // FLTK keycodes are mostly compatible with X KeySyms
-        }
-}
     
     // Function to get a window's title
     std::string get_window_name(Window window)
@@ -686,11 +674,11 @@ namespace mrv
         // Microsoft (R) Windows(TM)
         SetWindowPos(fl_win32_xid(this), action, NULL, NULL, NULL, NULL,
                      SWP_NOMOVE | SWP_NOSIZE);
-#    elif defined(FLTK_USE_X11)
-        Display* display = fl_x11_display();
-        if (display)
+#    elif defined(__linux__)
+        if (desktop::X11())
         {
             // XOrg / XWindows(TM)
+            Display* display = fl_x11_display();
             XEvent ev;
             static const char* const names[2] = {
                 "_NET_WM_STATE", "_NET_WM_STATE_ABOVE"};
@@ -710,12 +698,6 @@ namespace mrv
                             SubstructureNotifyMask | SubstructureRedirectMask,
                             &ev);
         }
-#    endif
-#    if defined(FLTK_USE_WAYLAND)
-        //const std::string& compositor = desktop::WaylandCompositor();
-        if (value)
-            LOG_ERROR(_("Float on Top is currently unsupported under "
-                        "Wayland's Compositors."));
 #    endif
     } // above_all function
 
@@ -755,7 +737,6 @@ namespace mrv
                 rawkey = tolower(rawkey);
             }
 #endif
-
             if (kUITransparencyMore.match(rawkey))
             {
                 set_alpha(get_alpha() - 5);
@@ -855,9 +836,72 @@ namespace mrv
         DropWindow::show();
 
 #ifdef FLTK_USE_WAYLAND
-        if (fl_wl_display())
+        if (desktop::Wayland())
         {
             wl_surface_set_opaque_region(fl_wl_surface(fl_wl_xid(this)), NULL);
+
+            //
+            // \@todo: Implement proper Always on Top on all compositors on
+            //         a per application, instead of a global key for just
+            //         GNOME Shell.
+            //
+            const std::string& compositor_name = desktop::WaylandCompositor();
+            if (compositor_name == "gnome-shell")
+            {
+                std::string cmd = "gsettings get org.gnome.shell.extensions.tiling-assistant toggle-always-on-top";
+                std::string hotkey = os::exec_command(cmd);
+                hotkey = string::stripWhitespace(hotkey);
+                if (hotkey.empty() ||
+                    hotkey.substr(hotkey.size()-2, 2) == "[]")
+                {
+                    // If an FLTK hotkey is assigned, turn it into a GNOME
+                    // Hotkey.
+                    std::string hotkey = kToggleFloatOnTop.to_s();
+                    if (!hotkey.empty())
+                    {
+                        size_t startPos = 0;
+                        if (startPos = hotkey.find("Meta") !=
+                            std::string::npos)
+                        {
+                            hotkey.replace(startPos, 4, "Super");
+                        }
+                        // Use a GNOME shell extension and set always on top
+                        // to Meta + w
+                        cmd = "gsettings set org.gnome.shell.extensions.tiling-assistant toggle-always-on-top \"['"+ hotkey + "']\"";
+                        os::exec_command(cmd);
+                        const std::string msg = string::Format(_("No GNOME Shell Hotkey for Float On Top.  Setting it globally to '{0}'")).arg(hotkey);
+                        LOG_STATUS(msg);
+                    }
+                }
+                else
+                {
+                    if (hotkey[0] != '[' || hotkey[hotkey.size()-1] != ']')
+                        return;
+                    
+                    // Turn a GNOME-Shell hotkey into an mrv2's hotkey
+                    const std::regex kSuper("<Super>");
+                    const std::regex kShift("<Shift>");
+                    const std::regex kControl("<Ctrl>");
+                    const std::regex kAlt("<Alt>");
+                    kToggleFloatOnTop.meta = false;
+                    if (std::regex_search(hotkey, kSuper))
+                        kToggleFloatOnTop.meta = true;
+                    kToggleFloatOnTop.shift = false;
+                    if (std::regex_search(hotkey, kShift))
+                        kToggleFloatOnTop.shift = true;
+                    kToggleFloatOnTop.ctrl = false;
+                    if (std::regex_search(hotkey, kControl))
+                        kToggleFloatOnTop.ctrl = true;
+                    kToggleFloatOnTop.alt = false;
+                    if (std::regex_search(hotkey, kAlt))
+                        kToggleFloatOnTop.alt = true;
+                    std::string key = hotkey.substr(hotkey.size()-3, 1);
+                    char ch = key[0]; // Access the character
+                    int asciiValue = static_cast<int>(ch); // Convert to ASCII
+                    kToggleFloatOnTop.key = asciiValue;
+                    App::ui->uiMain->fill_menu(App::ui->uiMenuBar);
+                }
+            }
         }
 #endif
     }

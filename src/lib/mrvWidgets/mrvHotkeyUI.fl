@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0400
+version 1.0401
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
@@ -38,13 +38,13 @@ class HotkeyUI {open
   } {
     Fl_Window uiMain {
       label Hotkeys open
-      xywh {780 192 775 644} type Double resizable visible
+      xywh {0 0 775 644} type Double hide resizable
     } {
       Fl_Group {} {open
         xywh {0 0 775 644} box PLASTIC_DOWN_BOX resizable
       } {
-        Fl_Group {} {
-          xywh {138 23 550 32}
+        Fl_Group {} {open
+          xywh {138 22 550 49}
         } {
           Fl_Input uiSearchInput {
             label Search
@@ -54,20 +54,25 @@ HotkeyUI* ui = static_cast<HotkeyUI*>(v);
 int type = ui->type;
 if ( type == 0 )
 {
-    mrv::searchFunction( text, ui->uiFunction );
+    bool match_case = ui->uiMatchCase->value();
+    mrv::searchFunction( text, ui->uiFunction, match_case );
 }
 else
 {
     mrv::searchHotkey( text, ui->uiFunction );
-}}
-            xywh {138 24 354 31} color 20 when 10 textcolor 56
+}} selected
+            xywh {138 24 223 30} color 20 when 10 textcolor 56
+          }
+          Fl_Check_Button uiMatchCase {
+            label {Match Case}
+            xywh {365 23 129 31} down_box DOWN_BOX
           }
           Fl_Menu_Button uiSearchType {
             label Function
             user_data this
             callback {HotkeyUI* ui = static_cast<HotkeyUI*>(v);
 ui->type = o->value();
-ui->uiSearchInput->do_callback();}
+ui->uiSearchInput->do_callback();} open
             xywh {498 23 190 31} when 5
             class {mrv::PopupMenu}
           } {
@@ -96,7 +101,7 @@ ui->uiSearchInput->do_callback();}
             user_data uiFunction user_data_type {mrv::Browser*}
             callback {mrv::reset_hotkeys();
 fill_ui_hotkeys(v);
-mrv::update_hotkey_tooltips();} selected
+mrv::update_hotkey_tooltips();}
             tooltip {Reset hotkeys to mrv2's default configuration.} xywh {94 576 170 38}
           }
           Fl_Button {} {

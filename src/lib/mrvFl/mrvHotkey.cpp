@@ -2,9 +2,12 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <regex>
+#include <algorithm>
 #include <filesystem>
 namespace fs = std::filesystem;
+#include <regex>
+#include <string>
+#include <vector>
 
 #include <FL/Enumerations.H>
 
@@ -90,6 +93,8 @@ namespace mrv
         // Labels
         b->add(_("@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"));
 
+        std::vector<std::string> rows;
+        
         for (int i = 0; hotkeys[i].hotkey; ++i)
         {
             const HotkeyEntry& h = hotkeys[i];
@@ -98,6 +103,13 @@ namespace mrv
             std::string row(_(h.name.c_str()));
             row += "\t" + hotkey;
 
+            rows.push_back(row);
+        }
+
+        std::sort(rows.begin(), rows.end());
+
+        for (auto row : rows)
+        {
             b->add(row.c_str());
         }
 
@@ -106,9 +118,22 @@ namespace mrv
 
     void select_hotkey(HotkeyUI* b)
     {
-        int idx = b->uiFunction->value() - 2; // 1 for browser offset, 1 title
-        if (idx < 0)
+        int idx = b->uiFunction->value();
+        if (idx < 1)
             return;
+
+        const std::string selection = b->uiFunction->text(idx);
+        idx = 0;
+        for (int i = 0; hotkeys[i].hotkey; ++i)
+        {
+            const HotkeyEntry& h = hotkeys[i];
+            const std::string& name = h.name;
+            if (selection.substr(0, name.size()) == name)
+            {
+                idx = i;
+                break;
+            }
+        }
 
         const std::string& name = hotkeys[idx].name;
         Hotkey* hotkey = hotkeys[idx].hotkey;
@@ -127,8 +152,10 @@ namespace mrv
         for (int i = 0; hotkeys[i].hotkey; ++i)
         {
             bool is_assigned = false;
-            if (hotkeys[i].hotkey->to_s() == "Ctrl++" &&
-                hotkeys[i].hotkey->to_s() == "Ctrl+-")
+
+            // These are used internally by FLTK
+            if (hotkeys[i].hotkey->to_s() == "<Ctrl>+" &&
+                hotkeys[i].hotkey->to_s() == "<Ctrl>-")
                 is_assigned = true;
             
             if (h->hk == *(hotkeys[i].hotkey) && idx != i &&
@@ -162,7 +189,8 @@ namespace mrv
         fill_ui_hotkeys(b->uiFunction);
     }
 
-    void searchFunction(const std::string& searchText, mrv::Browser* o)
+    void searchFunction(const std::string& searchText, mrv::Browser* o,
+                        const bool match_case)
     {
         if (searchText.empty())
         {
@@ -173,7 +201,14 @@ namespace mrv
         }
         try
         {
-            std::regex regex{searchText, std::regex_constants::icase};
+            std::regex_constants::syntax_option_type
+                flags = std::regex_constants::ECMAScript;
+            if (!match_case)
+            {
+                flags |= std::regex_constants::icase;
+            }
+            
+            std::regex regex{searchText, flags};
             int start = o->value() + 1;
             for (int i = start; i <= o->size(); ++i)
             {

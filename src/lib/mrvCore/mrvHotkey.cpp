@@ -47,7 +47,7 @@ namespace mrv
     Hotkey kZoomIn(false, false, false, false, 0);
     Hotkey kZoomOut(false, false, false, false, 0);
     Hotkey kFullScreen(false, false, false, false, FL_F + 11);
-    Hotkey kToggleFloatOnTop(false, false, false, false, 0);
+    Hotkey kToggleFloatOnTop(true, false, false, false, 'w');
     Hotkey kToggleSecondary(false, false, false, false, 0);
     Hotkey kToggleSecondaryFloatOnTop(false, false, false, false, 0);
 
@@ -593,18 +593,15 @@ namespace mrv
     {
         std::string r;
         if (ctrl)
-            r += "Ctrl+";
+            r += "<Ctrl>";
         if (alt)
-            r += "Alt+";
+            r += "<Alt>";
         if (meta)
-            r += "Meta+";
+            r += "<Meta>";
         if (shift)
-            r += "Shift+";
+            r += "<Shift>";
 
         unsigned k = key;
-        if (k == 0 && (ctrl || alt || meta || shift))
-            r = r.substr(0, r.size() - 1);
-
         bool special = false;
         for (unsigned j = 0; j < sizeof(table) / sizeof(TableText); ++j)
         {

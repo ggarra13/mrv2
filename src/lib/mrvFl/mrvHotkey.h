@@ -14,7 +14,8 @@ namespace mrv
 {
     class Browser;
 
-    void searchFunction(const std::string& text, mrv::Browser* o);
+    void searchFunction(const std::string& text, mrv::Browser* o,
+                        const bool match_case);
     void searchHotkey(const std::string& text, mrv::Browser* o);
     void fill_ui_hotkeys(mrv::Browser* o);
     void select_hotkey(HotkeyUI* m);

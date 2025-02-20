@@ -35,12 +35,16 @@ Rocky Linux's **XDG_SESSION_TYPE** environment variable.
   macOS and Linux.  By default, they are assigned to **Ctrl + .** and
   **Ctrl + ,**.
 - Added hotkey to control click (pass) through of window position and clicking.  Works on all platforms.  The hotkey by default is **Ctrl + t**.
+- Added Wayland GNOME-Shell hotkey control for Float on Top.  It is Ctrl + w
+  by default.  Note, however, that pass through will not automatically set
+  Float on Top as in X11, macOS or Windows.  This is a limitation of Wayland.
 - Fixed pip.sh script to call pip on the local mrv2 install.
 - Added information about environment (desktop, os and kernel) of the machine that was used to build it.
 - Made Build and Running log information tidier.
-- Cleaned up log messages a bit.
- 
-
+- Cleaned up log messages a bit and added a -logLevel flag.
+- Added case matching to Hotkey searches.
+- Hotkey names are now listed alphabetically in all languages.
+- Hotkeys are now listed using GNOME's keyboard conventions in the Hotkey window, which are cleaner.
 
 v1.3.2
 ======
