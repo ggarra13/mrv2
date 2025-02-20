@@ -6829,6 +6829,9 @@ msgstr "Функция"
 msgid "Key"
 msgstr "Key"
 
+msgid "Match Case"
+msgstr "Совпадение"
+
 msgid "Reset hotkeys to mrv2's default configuration."
 msgstr "Перезагрузить хот-доги в конфигурацию mrv2."
 
@@ -7524,9 +7527,6 @@ msgstr "Переключить окно горячих клавиш"
 
 msgid "Toggle About Window"
 msgstr "Закладка о окне"
-
-#~ msgid "Match Case"
-#~ msgstr "Совпадение"
 
 #~ msgid "You cannot set Window click through with a totally opaque window."
 #~ msgstr "Невозможно пропустить окно с помощью абсолютно непрозрачного окна."

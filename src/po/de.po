@@ -6811,6 +6811,9 @@ msgstr "Funktion"
 msgid "Key"
 msgstr "Key"
 
+msgid "Match Case"
+msgstr "Anwendungsfall anpassen"
+
 msgid "Reset hotkeys to mrv2's default configuration."
 msgstr "Hotkeys auf die Standardkonfiguration von mrv2 zurcksetzen."
 
@@ -7506,9 +7509,6 @@ msgstr "Hotkeys-Fenster umschalten"
 
 msgid "Toggle About Window"
 msgstr "Fenster umschalten"
-
-#~ msgid "Match Case"
-#~ msgstr "Anwendungsfall anpassen"
 
 #~ msgid "You cannot set Window click through with a totally opaque window."
 #~ msgstr ""

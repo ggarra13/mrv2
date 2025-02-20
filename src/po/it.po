@@ -6830,6 +6830,9 @@ msgstr "Funzione"
 msgid "Key"
 msgstr "Key"
 
+msgid "Match Case"
+msgstr "Caso di corrispondenza"
+
 msgid "Reset hotkeys to mrv2's default configuration."
 msgstr ""
 "Reimposta i tasti di avviamento alla configurazione predefinita di mrv2."
@@ -7526,9 +7529,6 @@ msgstr "Finestra di commutazione di tasti di avviamento"
 
 msgid "Toggle About Window"
 msgstr "Commuta la finestra"
-
-#~ msgid "Match Case"
-#~ msgstr "Caso di corrispondenza"
 
 #~ msgid "You cannot set Window click through with a totally opaque window."
 #~ msgstr ""

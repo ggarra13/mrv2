@@ -6631,6 +6631,9 @@ msgstr "函数"
 msgid "Key"
 msgstr "键"
 
+msgid "Match Case"
+msgstr "匹配大小比大小写"
+
 msgid "Reset hotkeys to mrv2's default configuration."
 msgstr "重置快捷键到 mrv2 的默认配置"
 
@@ -7326,9 +7329,6 @@ msgstr "开关热键窗口"
 
 msgid "Toggle About Window"
 msgstr "开关关于窗口"
-
-#~ msgid "Match Case"
-#~ msgstr "匹配大小比大小写"
 
 #~ msgid "You cannot set Window click through with a totally opaque window."
 #~ msgstr "您不能在一个完全不透明的窗口中设置窗口单击 。"

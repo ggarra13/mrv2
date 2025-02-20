@@ -6684,6 +6684,9 @@ msgstr "फंक्शन"
 msgid "Key"
 msgstr "Key"
 
+msgid "Match Case"
+msgstr "केस मिलाएँ"
+
 msgid "Reset hotkeys to mrv2's default configuration."
 msgstr "webkeye को mrv2 के डिफ़ॉल्ट कॉन्फ़िगरेशन में रीसेट करें."
 
@@ -7379,9 +7382,6 @@ msgstr "यदि आप विंडो को बन्द करना चा
 
 msgid "Toggle About Window"
 msgstr "विंडो के बारे में टॉगल करें"
-
-#~ msgid "Match Case"
-#~ msgstr "केस मिलाएँ"
 
 #~ msgid "You cannot set Window click through with a totally opaque window."
 #~ msgstr "आप विंडो क्लिक को पूरी तरह अपारदर्शी विंडो के द्वारा नियत नहीं कर सकते."

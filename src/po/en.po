@@ -6779,6 +6779,9 @@ msgstr "Function"
 msgid "Key"
 msgstr "Key"
 
+msgid "Match Case"
+msgstr "Match Case"
+
 msgid "Reset hotkeys to mrv2's default configuration."
 msgstr "Reset hotkeys to mrv2's default configuration."
 
@@ -7474,9 +7477,6 @@ msgstr "Toggle Hotkeys Window"
 
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
-
-#~ msgid "Match Case"
-#~ msgstr "Match Case"
 
 #~ msgid "You cannot set Window click through with a totally opaque window."
 #~ msgstr "You cannot set Window click through with a totally opaque window."

@@ -6779,6 +6779,9 @@ msgstr "Funo"
 msgid "Key"
 msgstr "Key"
 
+msgid "Match Case"
+msgstr "Caso de correspondência"
+
 msgid "Reset hotkeys to mrv2's default configuration."
 msgstr "Reinicie as teclas de acesso para a configurao padro do mrv2."
 
@@ -7474,9 +7477,6 @@ msgstr "Alternar a janela de teclas instantneas"
 
 msgid "Toggle About Window"
 msgstr "Alternar Sobre a Janela"
-
-#~ msgid "Match Case"
-#~ msgstr "Caso de correspondência"
 
 #~ msgid "You cannot set Window click through with a totally opaque window."
 #~ msgstr ""

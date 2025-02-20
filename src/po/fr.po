@@ -6828,6 +6828,9 @@ msgstr "Fonction"
 msgid "Key"
 msgstr "Key"
 
+msgid "Match Case"
+msgstr "Cas de correspondance"
+
 msgid "Reset hotkeys to mrv2's default configuration."
 msgstr "Réinitialiser les hot-keys à la configuration par défaut de mrv2."
 
@@ -7531,9 +7534,6 @@ msgstr "Activer la fenêtre des touches d'amorçage"
 
 msgid "Toggle About Window"
 msgstr "Commutation à propos de la fenêtre"
-
-#~ msgid "Match Case"
-#~ msgstr "Cas de correspondance"
 
 #~ msgid "You cannot set Window click through with a totally opaque window."
 #~ msgstr ""

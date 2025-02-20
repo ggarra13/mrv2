@@ -6182,6 +6182,9 @@ msgstr ""
 msgid "Key"
 msgstr ""
 
+msgid "Match Case"
+msgstr ""
+
 msgid "Reset hotkeys to mrv2's default configuration."
 msgstr ""
 

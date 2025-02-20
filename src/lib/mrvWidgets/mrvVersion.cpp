@@ -30,7 +30,6 @@
 
 #endif
 
-
 #ifdef __APPLE__
 
 #    define GL_SILENCE_DEPRECATION 1
@@ -169,10 +168,9 @@ extern "C"
 
 #include "mrvFl/mrvIO.h"
 
-
 #ifdef TLRENDER_RAW
-#    define __STDC_VERSION__ 201112L  // Avoid compiler warning
-#    include <jasper/jas_version.h>   // Must be included last.
+#    define __STDC_VERSION__ 201112L // Avoid compiler warning
+#    include <jasper/jas_version.h>  // Must be included last.
 #endif
 
 namespace mrv
@@ -269,7 +267,6 @@ namespace mrv
     const char* kBuild = "- Built " __DATE__ " " __TIME__;
     const char* kArch = "64";
 
-
     struct FormatInfo
     {
         bool encode;
@@ -315,7 +312,7 @@ namespace mrv
     const std::string build_date()
     {
         std::string out = kBuild;
-        
+
         // Output also ocmpile type
         std::string compile = "Debug Compile";
 #ifdef NDEBUG
@@ -328,27 +325,26 @@ namespace mrv
         out += " - " + compile;
         return out;
     }
-    
+
     const std::string build_info()
     {
         std::stringstream s;
         s << _("Build Environment:") << std::endl
-          << _("\tDistribution: ") << kBUILD_DISTRO << std::endl
+          << _("\tDistribution: ") << kBUILD_DISTRO << " " << kBUILD_VERSION
+          << std::endl
           << _("\tDesktop Environment: ") << kBUILD_DESKTOP_ENV << std::endl
           << _("\tKernel Info: ") << kBUILD_KERNEL_INFO << std::endl;
         return s.str();
     }
 
-
     const std::string running_info()
     {
         std::stringstream s;
         s << _("Running Environment:") << std::endl
-          << mrv::os::getVersion()
-          << std::endl << mrv::os::getDesktop() << std::endl
-          << mrv::os::getKernel()
-          << std::endl;
-        
+          << mrv::os::getVersion() << std::endl
+          << mrv::os::getDesktop() << std::endl
+          << mrv::os::getKernel() << std::endl;
+
         return s.str();
     }
 
@@ -742,9 +738,9 @@ namespace mrv
 
         std::stringstream o;
 
-        o << "mrv2 " << kArch << " bits - v" << kVersion << " " 
-          << build_date() << " Git Branch: " << GIT_BRANCH_NAME
-          << " (" << GIT_SHORT_HASH << ")" << endl
+        o << "mrv2 " << kArch << " bits - v" << kVersion << " " << build_date()
+          << " Git Branch: " << GIT_BRANCH_NAME << " (" << GIT_SHORT_HASH << ")"
+          << endl
           << "(C) 2022-Present" << endl
           << "Gonzalo Garramuño & others" << endl
           << endl
@@ -832,8 +828,7 @@ namespace mrv
           << endl;
 #ifdef TLRENDER_LIBPLACEBO
         o << "libplacebo v" << pl_version() << std::endl
-          << "Copyright Niklas Haas et al."
-          << std::endl
+          << "Copyright Niklas Haas et al." << std::endl
           << std::endl;
 #endif
 #ifdef TLRENDER_RAW

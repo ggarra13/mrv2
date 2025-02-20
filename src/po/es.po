@@ -6858,6 +6858,9 @@ msgstr "Función"
 msgid "Key"
 msgstr "Tecla"
 
+msgid "Match Case"
+msgstr "Caso de coincidencia"
+
 msgid "Reset hotkeys to mrv2's default configuration."
 msgstr "Resetar teclas a los valores estándares."
 
@@ -7553,9 +7556,6 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
-
-#~ msgid "Match Case"
-#~ msgstr "Caso de coincidencia"
 
 #~ msgid "You cannot set Window click through with a totally opaque window."
 #~ msgstr ""
