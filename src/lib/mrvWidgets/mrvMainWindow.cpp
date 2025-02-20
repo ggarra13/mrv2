@@ -9,7 +9,6 @@
 #include <tlCore/StringFormat.h>
 
 #include "mrvCore/mrvHotkey.h"
-#include "mrvCore/mrvOS.h"
 #include "mrvCore/mrvString.h"
 
 #include "mrvWidgets/mrvPanelWindow.h"
@@ -44,9 +43,10 @@
 #    include <wayland-client.h>
 #endif
 
-#include "mrViewer.h"
-
 #include "mrvFl/mrvIO.h"
+
+#include "mrViewer.h"
+#include "mrvCore/mrvOS.h"
 
 namespace
 {
