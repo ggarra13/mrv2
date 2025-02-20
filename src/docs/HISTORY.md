@@ -27,8 +27,7 @@ Rocky Linux's **XDG_SESSION_TYPE** environment variable.
 - Fixed Play buttons sometimes appearing in the middle of the viewport under
   Wayland.
 - Made macOS OpenGL captures (Save Images/Movies with Annotations) use RGBA.
-- Fixed macOS OpenGL captures with annotations reporting window is not in full
-  screen.
+- Fixed macOS OpenGL captures with annotations reporting window is not in full screen when saving a single frame.
 - Fixed resizing of main window under Wayland by using maximize instead of resize.
 - Fixed resizing of main window when dealing with two monitors under X11.
 - Added hotkeys to control the User Interface's transparency under Windows,
