@@ -862,7 +862,7 @@ namespace mrv
 #ifdef FLTK_USE_WAYLAND
         if (desktop::Wayland())
         {
-            wl_surface_set_opaque_region(fl_wl_surface(fl_wl_xid(this)), NULL);
+            //wl_surface_set_opaque_region(fl_wl_surface(fl_wl_xid(this)), NULL);
 
             //
             // \@todo: Implement proper Always on Top on all compositors on

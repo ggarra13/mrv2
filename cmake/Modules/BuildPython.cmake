@@ -64,7 +64,8 @@ if(APPLE)
     set( Python_BUILD make -j ${NPROCS} )
     set( Python_INSTALL
 	COMMAND make -j ${NPROCS} install
-	COMMAND ${Python_ENV} ${Python_EXECUTABLE} -m ensurepip --upgrade)
+	COMMAND ${Python_ENV} ${Python_EXECUTABLE} -m ensurepip --upgrade
+	COMMAND ${Python_ENV} ${Python_EXECUTABLE} -m pip install meson)
 
 elseif(UNIX)
 
@@ -82,7 +83,8 @@ elseif(UNIX)
     set( Python_BUILD ${Python_ENV} make -j ${NPROCS} )
     set( Python_INSTALL
 	COMMAND ${Python_ENV} make -j ${NPROCS} install
-	COMMAND ${Python_ENV} ${Python_EXECUTABLE} -m ensurepip --upgrade )
+	COMMAND ${Python_ENV} ${Python_EXECUTABLE} -m ensurepip --upgrade 
+	COMMAND ${Python_ENV} ${Python_EXECUTABLE} -m pip install meson)
 else()
 
     set( Python_DEPENDENCIES )
@@ -118,7 +120,8 @@ else()
     
     set(Python_INSTALL
 	COMMAND ${CMAKE_COMMAND} -D Python_COMMAND=install ${Python_SCRIPT}
-	COMMAND ${CMAKE_COMMAND} -D Python_COMMAND=pip ${Python_SCRIPT})
+	COMMAND ${CMAKE_COMMAND} -D Python_COMMAND=pip ${Python_SCRIPT}
+	COMMAND ${CMAKE_COMMAND} -D Python_COMMAND=meson ${Python_SCRIPT})
 endif()
 
 ExternalProject_Add(
