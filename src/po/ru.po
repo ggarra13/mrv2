@@ -4707,7 +4707,9 @@ msgid "Session: "
 msgstr "Сессия:"
 
 msgid "No GNOME Shell Hotkey for Float On Top.  Setting it globally to '{0}'"
-msgstr "Нет горячей клавиши GNOME Shell для \"Плавать сверху\". Установка глобально на '{0}'"
+msgstr ""
+"Нет горячей клавиши GNOME Shell для \"Плавать сверху\". Установка глобально "
+"на '{0}'"
 
 msgid "You cannot set Window click through with a totally opaque window."
 msgstr "Невозможно пропустить окно с помощью абсолютно непрозрачного окна."

@@ -1114,10 +1114,7 @@ namespace mrv
 
         if (win_alpha >= 250)
         {
-            mrv::fl_alert("%s",
-                          _("You cannot set Window click through with a "
-                            "totally opaque window."));
-            return;
+            set_alpha(95);
         }
         
         if (value)
