@@ -728,6 +728,13 @@ namespace mrv
 
     int MainWindow::handle(int event)
     {
+#ifdef FLTK_USE_WAYLAND
+        if (click_through && ignoreFocus && desktop::Wayland() &&
+            event == FL_UNFOCUS)
+        {
+            return 0;
+        }
+#endif
         if (event == FL_FOCUS && click_through)
         {
 #ifdef __linux__
@@ -1162,7 +1169,7 @@ namespace mrv
 
             if (win_alpha >= 250)
             {
-                set_alpha(95);
+                set_alpha(0);
             }
             ignoreFocus = true;
         }
