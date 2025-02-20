@@ -113,7 +113,6 @@ decl {class AboutUI;} {public global
 }
 
 widget_class PixelToolBarClass {
-  label {Pixel Tool Bar}
   xywh {0 0 933 56} resizable
   class Fl_Double_Window visible
 } {
@@ -426,7 +425,6 @@ decl {class AboutUI;} {public global
 }
 
 widget_class TimelineClass {
-  label {Playback Toolbar (uiBottomBar)}
   xywh {0 0 933 56} box NO_BOX resizable
   class Fl_Double_Window visible
 } {
@@ -830,7 +828,7 @@ if (reason == FL_REASON_CLOSED)
         xywh {0 0 933 602} box FLAT_BOX resizable fixed_size_tuples {5  0 24  1 29  3 29  4 30  5 25 }
       } {
         Fl_Group uiMenuGroup {
-          label MenuBar
+          label MenuBar selected
           xywh {0 0 933 24} box FLAT_BOX labeltype NO_LABEL
         } {
           Fl_Group {} {open
@@ -870,7 +868,7 @@ else
         }
         Fl_Group uiTopBar {
           label TopBar open
-          xywh {0 24 933 29} box FLAT_BOX color 51 labeltype NO_LABEL
+          xywh {0 24 933 29} box ENGRAVED_BOX labeltype NO_LABEL
         } {
           Fl_Group {} {
             label Layers open
@@ -895,12 +893,12 @@ model->setLayer(item, o->value());} open
             xywh {247 24 686 29} labeltype NO_LABEL
           } {
             Fl_Group {} {
-              label {Exposure and Gain}
-              xywh {257 24 253 29} labeltype NO_LABEL
+              label {Exposure and Gain} open
+              xywh {247 24 253 29} labeltype NO_LABEL
             } {
               Fl_Group {} {
                 label Exposure
-                xywh {257 24 66 29} labeltype NO_LABEL
+                xywh {247 24 66 29} labeltype NO_LABEL
               } {
                 Fl_Button uiExposureLess {
                   label {@<}
@@ -909,7 +907,7 @@ float gain = uiGain->value();
 gain /= inc;
 uiGain->value( gain );
 uiGain->do_callback();}
-                  tooltip {Reduce gain 1/4 stop (divide by sqrt(sqrt(2))).} xywh {257 24 16 29} labelsize 10
+                  tooltip {Reduce gain 1/4 stop (divide by sqrt(sqrt(2))).} xywh {247 24 16 29} labelsize 10
                 }
                 Fl_Button uiFStop {
                   label {f/8}
@@ -925,7 +923,7 @@ else
    uiGain->value( 1.0f );
 }
 uiGain->do_callback();}
-                  tooltip {Toggle gain between 1 and the previous setting.} xywh {273 24 33 29} align 64
+                  tooltip {Toggle gain between 1 and the previous setting.} xywh {263 24 33 29} align 64
                 }
                 Fl_Button uiExposureMore {
                   label {@>}
@@ -934,18 +932,18 @@ float gain = uiGain->value();
 gain *= inc;
 uiGain->value( gain );
 uiGain->do_callback();}
-                  tooltip {Increase gain 1/4 stop (multiply by sqrt(sqrt(2))).} xywh {306 24 17 29} labelsize 10
+                  tooltip {Increase gain 1/4 stop (multiply by sqrt(sqrt(2))).} xywh {296 24 17 29} labelsize 10
                 }
               }
               Fl_Group {} {
                 label Gain open
-                xywh {324 24 186 29} labeltype NO_LABEL
+                xywh {314 24 186 29} labeltype NO_LABEL
               } {
                 Fl_Value_Input uiGainInput {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiGain->value( o->value() );
 uiView->updateDisplayOptions();}
-                  tooltip {Gain image value.  A simple multiplier of the image pixel values.} xywh {324 24 37 29} selection_color 0 maximum 64 step 0.02 value 1
+                  tooltip {Gain image value.  A simple multiplier of the image pixel values.} xywh {314 24 37 29} selection_color 0 maximum 64 step 0.02 value 1
                   code0 {o->textsize(12);}
                   code1 {o->textcolor( FL_BLACK );}
                 }
@@ -953,7 +951,7 @@ uiView->updateDisplayOptions();}
                   user_data this user_data_type {ViewerUI*}
                   callback {uiGainInput->value( o->value() );
 uiView->updateDisplayOptions();}
-                  tooltip {Allows you to adjust the gain or exposure of the image.} xywh {361 24 139 29} type {Horz Knob} labelsize 10 align 0 maximum 64 step 0.01 value 1 resizable
+                  tooltip {Allows you to adjust the gain or exposure of the image.} xywh {351 24 149 29} type {Horz Knob} labelsize 10 align 0 maximum 64 step 0.01 value 1 resizable
                   code3 {o->slider_type( mrv::Slider::kLOG );}
                   class {mrv::Slider}
                 }
@@ -961,7 +959,7 @@ uiView->updateDisplayOptions();}
             }
             Fl_Group {} {
               label Saturation open
-              xywh {510 24 216 29} labeltype NO_LABEL
+              xywh {500 24 216 29} labeltype NO_LABEL
             } {
               Fl_Button uiSaturationSwitch {
                 label S
@@ -977,17 +975,17 @@ else
    uiSaturation->value( 1.0f );
 }
 uiSaturation->do_callback();}
-                tooltip {Toggle Saturation between current and previous setting.} xywh {510 24 29 29} align 64
+                tooltip {Toggle Saturation between current and previous setting.} xywh {500 24 29 29} align 64
               }
               Fl_Group {} {
                 label {Saturation Input} open
-                xywh {539 24 187 29} labeltype NO_LABEL
+                xywh {529 24 187 29} labeltype NO_LABEL
               } {
                 Fl_Value_Input uiSaturationInput {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiSaturation->value( o->value() );
 uiView->updateDisplayOptions();}
-                  tooltip {Saturation value.} xywh {539 24 37 29} selection_color 0 maximum 64 step 0.02 value 1
+                  tooltip {Saturation value.} xywh {529 24 37 29} selection_color 0 maximum 64 step 0.02 value 1
                   code0 {o->textsize(12);}
                   code1 {o->textcolor( FL_BLACK );}
                 }
@@ -995,14 +993,14 @@ uiView->updateDisplayOptions();}
                   user_data this user_data_type {ViewerUI*}
                   callback {uiSaturationInput->value( o->value() );
 uiView->updateDisplayOptions();}
-                  tooltip {Allows you to adjust the saturation of the image.} xywh {577 24 139 29} type {Horz Knob} labelsize 10 align 0 maximum 4 step 0.01 value 1 resizable
+                  tooltip {Allows you to adjust the saturation of the image.} xywh {567 24 149 29} type {Horz Knob} labelsize 10 align 0 maximum 4 step 0.01 value 1 resizable
                   class {mrv::Slider}
                 }
               }
             }
             Fl_Group {} {
               label Gamma open
-              xywh {726 24 900 29} labeltype NO_LABEL
+              xywh {716 24 217 29} labeltype NO_LABEL
             } {
               Fl_Button uiGammaSwitch {
                 label Y
@@ -1018,18 +1016,18 @@ else
    uiGamma->value( 1.0f );
 }
 uiGamma->do_callback();}
-                tooltip {Toggle gamma between 1 and the previous setting.} xywh {726 24 29 29}
+                tooltip {Toggle gamma between 1 and the previous setting.} xywh {716 24 29 29}
               }
               Fl_Group {} {
                 label {Gamma Input} open
-                xywh {755 24 871 29} labeltype NO_LABEL
+                xywh {745 24 188 29} labeltype NO_LABEL
               } {
                 Fl_Value_Input uiGammaInput {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiGamma->value( o->value() );
 uiView->updateDisplayOptions();}
                   tooltip {Allows you to adjust gamma curve for display.
-Value is:  pow( 2, 1/x );} xywh {756 24 37 29} selection_color 0 maximum 64 step 0.02 value 1
+Value is:  pow( 2, 1/x );} xywh {746 24 37 29} selection_color 0 maximum 64 step 0.02 value 1
                   code0 {o->textsize(12);}
                   code1 {o->textcolor( FL_BLACK );}
                   code2 {o->color((Fl_Color)0xf98a8a800);}
@@ -1039,7 +1037,7 @@ Value is:  pow( 2, 1/x );} xywh {756 24 37 29} selection_color 0 maximum 64 step
                   callback {uiGammaInput->value( o->value() );
 uiView->updateDisplayOptions();}
                   tooltip {Allows you to adjust gamma curve for display.
-Value is:  pow( 2, 1/x );} xywh {793 24 139 29} type {Horz Knob} labelsize 10 maximum 4 step 0.01 value 1 resizable
+Value is:  pow( 2, 1/x );} xywh {783 24 150 29} type {Horz Knob} labelsize 10 maximum 4 step 0.01 value 1 resizable
                   class {mrv::Slider}
                 }
               }
@@ -1277,7 +1275,7 @@ settings->setValue( mrv::kPenColorA, a);}
                 }
               }
               Fl_Group {} {open
-                xywh {0 396 42 91}
+                xywh {2 421 40 66}
               } {
                 Fl_Button uiUndoDraw {
                   user_data this user_data_type {ViewerUI*}
@@ -1378,19 +1376,17 @@ delete uiAbout; uiAbout = nullptr;} {}
   }
   Function {refresh()} {open
   } {
-    code {
-    if ( uiMain ) uiMain->redraw();
+    code {if ( uiMain ) uiMain->redraw();
 if ( uiPrefs ) uiPrefs->uiMain->redraw();
 if ( uiAbout ) uiAbout->uiMain->redraw();
 if ( uiHotkey ) uiHotkey->uiMain->redraw();
-if ( uiMain->shown() && uiBottomBar->visible() )
+if ( uiBottomBar->visible() )
 {
   uiBottomBar->hide();
   uiBottomBar->show();
   uiTimelineGroup->hide();
   uiTimelineGroup->show();
 }
-Fl::flush(); // needed to refresh windows} {selected
-    }
+Fl::flush(); // needed to refresh windows} {}
   }
 }

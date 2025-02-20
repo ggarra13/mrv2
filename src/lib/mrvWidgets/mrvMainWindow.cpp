@@ -1023,7 +1023,7 @@ namespace mrv
 #endif
         redraw();
 
-        // We must redraw all panels under Wayland/XWayland
+        // \@bug: We must redraw all panels under Wayland/XWayland
         App::ui->uiView->redraw();
         App::ui->uiMenuBar->redraw();
         App::ui->uiTopBar->redraw();
