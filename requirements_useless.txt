@@ -1,10 +1,12 @@
 alabaster
 babel
+chardet
 click
 colorama
 cusparselt
 docutils
 filelock
+flk14
 fsspec
 huggingface-hub
 imagesize
@@ -18,7 +20,7 @@ MarkupSafe
 meson
 mpmath
 numpy
-nvidian
+nvidia
 nvidia_cublas_cu12
 nvidia_cuda_cupti_cu12
 nvidia_cuda_nvrtc_cu12
@@ -33,11 +35,13 @@ nvidia_nccl_cu12
 nvidia_nvjitlink_cu12
 nvidia_nvtx_cu12
 networkx
+packaging
 pillow
 PIL
 polib
 pyyaml
 pyYAML
+pyFltk1.4
 pyFltk1.4-1.4.0rc1
 pygments
 Pygments
@@ -57,6 +61,6 @@ torchvision
 transformers
 translate
 triton
-typing-extension
+typing-extensions
 tqdm
 unittest
