@@ -4606,31 +4606,31 @@ msgid "Build Environment:"
 msgstr "Costruire ambiente:"
 
 msgid "\tDistribution: "
-msgstr "Distribuzione:"
+msgstr "\tDistribuzione: "
 
 msgid "\tDesktop Environment: "
-msgstr "Ambiente desktop:"
+msgstr "\tAmbiente desktop: "
 
 msgid "\tKernel Info: "
-msgstr "Informazioni sul Kernel:"
+msgstr "\tInformazioni sul Kernel:"
 
 msgid "Running Environment:"
 msgstr "Ambiente in esecuzione:"
 
 msgid "D\t\t\t\t\t=\tDecoding supported"
-msgstr "D = Decodificazione supportata"
+msgstr "D\t\t\t\t\t=\tDecodificazione supportata"
 
 msgid "\tE\t\t\t\t=\tEncoding supported"
-msgstr "E = Codificazione supportata"
+msgstr "\tE\t\t\t\t=\tCodificazione supportata"
 
 msgid "\t\tI\t\t\t=\tIntra frame-only codec"
 msgstr "I = codec interno solo per fotogrammi"
 
 msgid "\t\t\tL\t\t=\tLossy compression"
-msgstr "L = compressione di perdita"
+msgstr "\t\t\tL\t\t=\tcompressione di perdita"
 
 msgid "\t\t\t\tS\t=\tLossless compression"
-msgstr "S = compressione senza perdita"
+msgstr "\t\t\t\tS\t=\tcompressione senza perdita"
 
 msgid "With gcc "
 msgstr "Con gcc"

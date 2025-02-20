@@ -3339,7 +3339,7 @@ msgstr ""
 "Hotkey:"
 
 msgid "@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"
-msgstr "@B12@C7@b@.Funktion @B12@C7@b@.Hotkey"
+msgstr "@B12@C7@b@.Funktion\t@B12@C7@b@.Hotkey"
 
 msgid ""
 "Hotkey \"%s\" already used in \"%s\".\n"
@@ -4592,31 +4592,31 @@ msgid "Build Environment:"
 msgstr "Umgebung aufbauen:"
 
 msgid "\tDistribution: "
-msgstr "Verteilung:"
+msgstr "\tVerteilung: "
 
 msgid "\tDesktop Environment: "
-msgstr "Arbeitsumgebung:"
+msgstr "\tArbeitsumgebung: "
 
 msgid "\tKernel Info: "
-msgstr "Kernel Info:"
+msgstr "\tKernel Info: "
 
 msgid "Running Environment:"
 msgstr "Laufende Umgebung:"
 
 msgid "D\t\t\t\t\t=\tDecoding supported"
-msgstr "D = Decodierung untersttzt"
+msgstr "D\t\t\t\t\t=\tDecodierung untersttzt"
 
 msgid "\tE\t\t\t\t=\tEncoding supported"
-msgstr "E = Kodierung untersttzt"
+msgstr "\tE\t\t\t\t=\tKodierung untersttzt"
 
 msgid "\t\tI\t\t\t=\tIntra frame-only codec"
-msgstr "I = Nur intra Frame-Codec"
+msgstr "\t\tI\t\t\t=\tNur intra Frame-Codec"
 
 msgid "\t\t\tL\t\t=\tLossy compression"
-msgstr "L = Verlustkompression"
+msgstr "\t\t\tL\t\t=\tVerlustkompression"
 
 msgid "\t\t\t\tS\t=\tLossless compression"
-msgstr "S = verlustfreie Kompression"
+msgstr "\t\t\t\tS\t=\tverlustfreie Kompression"
 
 msgid "With gcc "
 msgstr "mit gcc"

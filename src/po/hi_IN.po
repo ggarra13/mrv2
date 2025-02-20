@@ -4536,31 +4536,31 @@ msgid "Build Environment:"
 msgstr "वातावरण बिल्ड करें:"
 
 msgid "\tDistribution: "
-msgstr "वितरण:"
+msgstr "\tवितरण: "
 
 msgid "\tDesktop Environment: "
-msgstr "डेस्कटॉप वातावरण:"
+msgstr "\tडेस्कटॉप वातावरण: "
 
 msgid "\tKernel Info: "
-msgstr "कर्नेल जानकारी:"
+msgstr "\tकर्नेल जानकारी: "
 
 msgid "Running Environment:"
 msgstr "चलने का वातावरण:"
 
 msgid "D\t\t\t\t\t=\tDecoding supported"
-msgstr "D = डिकोडिंग समर्थित"
+msgstr "D\t\t\t\t\t=\tडिकोडिंग समर्थित"
 
 msgid "\tE\t\t\t\t=\tEncoding supported"
-msgstr "E = एनकोडिंग समर्थित"
+msgstr "\tE\t\t\t\t=\tएनकोडिंग समर्थित"
 
 msgid "\t\tI\t\t\t=\tIntra frame-only codec"
-msgstr "I = इनतम फ्रेम- सिर्फ कोडेक"
+msgstr "\t\tI\t\t\t=\tइनतम फ्रेम- सिर्फ कोडेक"
 
 msgid "\t\t\tL\t\t=\tLossy compression"
-msgstr "L = नुकसान की संपीडन"
+msgstr "\t\t\tL\t\t=\tनुकसान की संपीडन"
 
 msgid "\t\t\t\tS\t=\tLossless compression"
-msgstr "एस = नुक़सानरहित संपीडन"
+msgstr "\t\t\t\tS\t=\tनुक़सानरहित संपीडन"
 
 msgid "With gcc "
 msgstr "जीसीसी के साथ"

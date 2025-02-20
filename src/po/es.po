@@ -4646,13 +4646,13 @@ msgid "Build Environment:"
 msgstr "Construir un entorno:"
 
 msgid "\tDistribution: "
-msgstr "Distribución:"
+msgstr "\tDistribución: "
 
 msgid "\tDesktop Environment: "
-msgstr "Entorno de escritorio:"
+msgstr "\tEntorno de escritorio: "
 
 msgid "\tKernel Info: "
-msgstr "Información sobre el kernel:"
+msgstr "\tInformación sobre el kernel: "
 
 msgid "Running Environment:"
 msgstr "Entorno de ejecución:"

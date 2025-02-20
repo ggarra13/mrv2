@@ -3332,7 +3332,7 @@ msgstr ""
 "Raccourci clavier: "
 
 msgid "@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"
-msgstr "@B12@C7@b@.Fonction @B12@C7@b@.Hotkey"
+msgstr "@B12@C7@b@.Fonction\t@B12@C7@b@.Hotkey"
 
 msgid ""
 "Hotkey \"%s\" already used in \"%s\".\n"
@@ -4587,31 +4587,31 @@ msgid "Build Environment:"
 msgstr "Construire l'environnement :"
 
 msgid "\tDistribution: "
-msgstr "Répartition:"
+msgstr "\tRépartition: "
 
 msgid "\tDesktop Environment: "
-msgstr "Environnement de bureau :"
+msgstr "\tEnvironnement de bureau: "
 
 msgid "\tKernel Info: "
-msgstr "Renseignements sur le noyau :"
+msgstr "\tRenseignements sur le noyau: "
 
 msgid "Running Environment:"
-msgstr "Environnement d'exécution :"
+msgstr "Environnement d'exécution:"
 
 msgid "D\t\t\t\t\t=\tDecoding supported"
-msgstr "D = Décodage pris en charge"
+msgstr "D\t\t\t\t\t=\tDécodage pris en charge"
 
 msgid "\tE\t\t\t\t=\tEncoding supported"
-msgstr "E = Codage pris en charge"
+msgstr "\tE\t\t\t\t=\tCodage pris en charge"
 
 msgid "\t\tI\t\t\t=\tIntra frame-only codec"
-msgstr "I = codec intra frame uniquement"
+msgstr "\t\tI\t\t\t=\tCodec intra frame uniquement"
 
 msgid "\t\t\tL\t\t=\tLossy compression"
-msgstr "L = compression par perte"
+msgstr "\t\t\tL\t\t=\tCompression par perte"
 
 msgid "\t\t\t\tS\t=\tLossless compression"
-msgstr "S = Compression sans perte"
+msgstr "\t\t\t\tS\t=\tCompression sans perte"
 
 msgid "With gcc "
 msgstr "Avec gcc"

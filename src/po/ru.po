@@ -3366,7 +3366,7 @@ msgstr ""
 "Хоткей:"
 
 msgid "@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"
-msgstr "@B12@C7@b@.Function @B12@C7@b@.Hotkey"
+msgstr "@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"
 
 msgid ""
 "Hotkey \"%s\" already used in \"%s\".\n"
@@ -4623,31 +4623,31 @@ msgid "Build Environment:"
 msgstr "Построить окружающую среду:"
 
 msgid "\tDistribution: "
-msgstr "Распространение:"
+msgstr "\tРаспространение: "
 
 msgid "\tDesktop Environment: "
-msgstr "Настольная среда:"
+msgstr "\tНастольная среда: "
 
 msgid "\tKernel Info: "
-msgstr "Информация о ядре:"
+msgstr "\tИнформация о ядре: "
 
 msgid "Running Environment:"
 msgstr "Регулирование окружающей среды:"
 
 msgid "D\t\t\t\t\t=\tDecoding supported"
-msgstr "D = поддерживаемое декодирование"
+msgstr "D\t\t\t\t\t=\tподдерживаемое декодирование"
 
 msgid "\tE\t\t\t\t=\tEncoding supported"
 msgstr "E = поддерживаемое кодирование"
 
 msgid "\t\tI\t\t\t=\tIntra frame-only codec"
-msgstr "I = только коды для внутренней рамыc"
+msgstr "\t\tI\t\t\t=\tтолько коды для внутренней рамыc"
 
 msgid "\t\t\tL\t\t=\tLossy compression"
-msgstr "L = проигрышное сжатие"
+msgstr "\t\t\tL\t\t=\tпроигрышное сжатие"
 
 msgid "\t\t\t\tS\t=\tLossless compression"
-msgstr "S = Бесполезное сжатие"
+msgstr "\t\t\t\tS\t=\tБесполезное сжатие"
 
 msgid "With gcc "
 msgstr "С gcc"
