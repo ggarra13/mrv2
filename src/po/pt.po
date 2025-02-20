@@ -4656,10 +4656,6 @@ msgstr ""
 "Nenhuma tecla GNOME Shell para flutuar em cima. Definindo globalmente para "
 "\"{0}\""
 
-msgid "You cannot set Window click through with a totally opaque window."
-msgstr ""
-"Você não pode definir Window clicar através de uma janela totalmente opaca."
-
 msgid ""
 "This will disable events for mrv2, allowing them to pass through to windows "
 "below it.\n"
@@ -7460,6 +7456,11 @@ msgstr "Alternar a janela de teclas instantneas"
 
 msgid "Toggle About Window"
 msgstr "Alternar Sobre a Janela"
+
+#~ msgid "You cannot set Window click through with a totally opaque window."
+#~ msgstr ""
+#~ "Você não pode definir Window clicar através de uma janela totalmente "
+#~ "opaca."
 
 #~ msgid "Linux Distribution: "
 #~ msgstr "Distribuição Linux:"

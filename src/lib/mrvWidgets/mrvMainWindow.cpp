@@ -1111,11 +1111,6 @@ namespace mrv
     {
         if (click_through == value)
             return;
-
-        if (win_alpha >= 250)
-        {
-            set_alpha(95);
-        }
         
         if (value)
         {
@@ -1147,10 +1142,16 @@ namespace mrv
         if (value)
         {
             LOG_STATUS(_("Window click through ON"));
+
+            if (win_alpha >= 250)
+            {
+                set_alpha(95);
+            }
         }
         else
         {
             LOG_STATUS(_("Window click through OFF"));
+            set_alpha(255);
         }
 
         always_on_top(click_through);

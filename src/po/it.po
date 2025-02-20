@@ -4694,11 +4694,6 @@ msgstr ""
 "Nessuna tastiera GNOME Shell per fluttuare in alto. Impostare globalemente "
 "su \"{0}\""
 
-msgid "You cannot set Window click through with a totally opaque window."
-msgstr ""
-"Non è possibile impostare Finestra cliccare attraverso con una finestra "
-"totalmente opaca."
-
 msgid ""
 "This will disable events for mrv2, allowing them to pass through to windows "
 "below it.\n"
@@ -7514,6 +7509,11 @@ msgstr "Finestra di commutazione di tasti di avviamento"
 
 msgid "Toggle About Window"
 msgstr "Commuta la finestra"
+
+#~ msgid "You cannot set Window click through with a totally opaque window."
+#~ msgstr ""
+#~ "Non è possibile impostare Finestra cliccare attraverso con una finestra "
+#~ "totalmente opaca."
 
 #~ msgid "Linux Distribution: "
 #~ msgstr "Distribuzione Linux:"

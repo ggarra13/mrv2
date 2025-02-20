@@ -4672,9 +4672,6 @@ msgstr "Session: "
 msgid "No GNOME Shell Hotkey for Float On Top.  Setting it globally to '{0}'"
 msgstr "No GNOME Shell Hotkey for Float On Top.  Setting it globally to '{0}'"
 
-msgid "You cannot set Window click through with a totally opaque window."
-msgstr "You cannot set Window click through with a totally opaque window."
-
 msgid ""
 "This will disable events for mrv2, allowing them to pass through to windows "
 "below it.\n"
@@ -7461,6 +7458,9 @@ msgstr "Toggle Hotkeys Window"
 
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
+
+#~ msgid "You cannot set Window click through with a totally opaque window."
+#~ msgstr "You cannot set Window click through with a totally opaque window."
 
 #~ msgid "Linux Distribution: "
 #~ msgstr "Linux Distribution: "

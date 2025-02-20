@@ -1369,6 +1369,26 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
+    void toggle_click_through(Fl_Menu_* w, ViewerUI* ui)
+    {
+        bool value = !ui->uiMain->get_click_through();
+        ui->uiMain->set_click_through(value);
+    }
+
+    void more_ui_transparency(Fl_Menu_* w, ViewerUI* ui)
+    {
+        int alpha = ui->uiMain->get_alpha();
+        alpha -= 5;
+        ui->uiMain->set_alpha(alpha);
+    }
+    
+    void less_ui_transparency(Fl_Menu_* w, ViewerUI* ui)
+    {
+        int alpha = ui->uiMain->get_alpha();
+        alpha += 5;
+        ui->uiMain->set_alpha(alpha);
+    }
+    
     void toggle_one_panel_only_cb(Fl_Menu_* w, ViewerUI* ui)
     {
         panel::onlyOne(!panel::onlyOne());

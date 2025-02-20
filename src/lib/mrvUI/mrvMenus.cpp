@@ -240,6 +240,20 @@ namespace mrv
         else
             item->clear();
 
+        idx = menu->add(
+            _("Window/Toggle Click Through"),
+            kToggleClickThrough.hotkey(),
+            (Fl_Callback*)toggle_click_through, ui);
+        idx = menu->add(
+            _("Window/More UI Transparency"),
+            kUITransparencyMore.hotkey(),
+            (Fl_Callback*)more_ui_transparency, ui);
+        idx = menu->add(
+            _("Window/Less UI Transparency"),
+            kUITransparencyMore.hotkey(),
+            (Fl_Callback*)less_ui_transparency, ui);
+        
+
         snprintf(buf, 256, "%s", _("View/Tool Bars/Toggle Menu Bar"));
         idx = menu->add(
             buf, kToggleMenuBar.hotkey(), (Fl_Callback*)toggle_menu_bar, ui,

@@ -4600,9 +4600,6 @@ msgstr "Session: "
 msgid "No GNOME Shell Hotkey for Float On Top.  Setting it globally to '{0}'"
 msgstr "GNOME Shell 没有顶部浮点的 GNOME Shell 热键。 设置为“ {0} ”"
 
-msgid "You cannot set Window click through with a totally opaque window."
-msgstr "您不能在一个完全不透明的窗口中设置窗口单击 。"
-
 msgid ""
 "This will disable events for mrv2, allowing them to pass through to windows "
 "below it.\n"
@@ -7315,6 +7312,9 @@ msgstr "开关热键窗口"
 
 msgid "Toggle About Window"
 msgstr "开关关于窗口"
+
+#~ msgid "You cannot set Window click through with a totally opaque window."
+#~ msgstr "您不能在一个完全不透明的窗口中设置窗口单击 。"
 
 #~ msgid "Linux Distribution: "
 #~ msgstr "Linux 分布 :"

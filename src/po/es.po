@@ -4734,11 +4734,6 @@ msgstr ""
 "No hay tecla de acceso directo de GNOME Shell para flotar en la parte "
 "superior. Estableciéndolo globalmente a \"{0}\""
 
-msgid "You cannot set Window click through with a totally opaque window."
-msgstr ""
-"No se puede configurar el clic en la ventana con una ventana totalmente "
-"opaca."
-
 msgid ""
 "This will disable events for mrv2, allowing them to pass through to windows "
 "below it.\n"
@@ -7540,6 +7535,11 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
+
+#~ msgid "You cannot set Window click through with a totally opaque window."
+#~ msgstr ""
+#~ "No se puede configurar el clic en la ventana con una ventana totalmente "
+#~ "opaca."
 
 #~ msgid "Linux Distribution: "
 #~ msgstr "Distribución Linux:"

@@ -115,7 +115,10 @@ namespace mrv
     void toggle_float_on_top_cb(Fl_Menu_* w, ViewerUI* ui);
     void toggle_secondary_cb(Fl_Menu_* w, ViewerUI* ui);
     void toggle_secondary_float_on_top_cb(Fl_Menu_* w, ViewerUI* ui);
-
+    void toggle_click_through(Fl_Menu_* w, ViewerUI* ui);
+    void more_ui_transparency(Fl_Menu_* w, ViewerUI* ui);
+    void less_ui_transparency(Fl_Menu_* w, ViewerUI* ui);
+    
     //! Panel callbacks
     void toggle_one_panel_only_cb(Fl_Menu_* w, ViewerUI* ui);
 

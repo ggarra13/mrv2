@@ -75,6 +75,9 @@ namespace mrv
         //! Allow click through behavior on the window
         void set_click_through(bool value);
 
+        //! Return the Window's click through state.
+        bool get_click_through() const { return click_through; };
+
     protected:
         void setClickThrough(bool value);
 

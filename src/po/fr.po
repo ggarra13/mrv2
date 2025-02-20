@@ -4675,11 +4675,6 @@ msgid "No GNOME Shell Hotkey for Float On Top.  Setting it globally to '{0}'"
 msgstr ""
 "Aucun hot-key GNOME Shell pour Float On Top. Régler globalement sur « {0} »"
 
-msgid "You cannot set Window click through with a totally opaque window."
-msgstr ""
-"Vous ne pouvez pas paramétrer Fenêtre cliquer à travers avec une fenêtre "
-"totalement opaque."
-
 msgid ""
 "This will disable events for mrv2, allowing them to pass through to windows "
 "below it.\n"
@@ -7518,6 +7513,11 @@ msgstr "Activer la fenêtre des touches d'amorçage"
 
 msgid "Toggle About Window"
 msgstr "Commutation à propos de la fenêtre"
+
+#~ msgid "You cannot set Window click through with a totally opaque window."
+#~ msgstr ""
+#~ "Vous ne pouvez pas paramétrer Fenêtre cliquer à travers avec une fenêtre "
+#~ "totalement opaque."
 
 #~ msgid "Linux Distribution: "
 #~ msgstr "Distribution Linux :"

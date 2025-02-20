@@ -4620,9 +4620,6 @@ msgstr "सत्र:"
 msgid "No GNOME Shell Hotkey for Float On Top.  Setting it globally to '{0}'"
 msgstr "फ्लोट के लिए कोई गनोम शैलकी ऊपरी पर नहीं. इसे दुनिया भर में '{0}' पर सेट करें"
 
-msgid "You cannot set Window click through with a totally opaque window."
-msgstr "आप विंडो क्लिक को पूरी तरह अपारदर्शी विंडो के द्वारा नियत नहीं कर सकते."
-
 msgid ""
 "This will disable events for mrv2, allowing them to pass through to windows "
 "below it.\n"
@@ -7364,6 +7361,9 @@ msgstr "यदि आप विंडो को बन्द करना चा
 
 msgid "Toggle About Window"
 msgstr "विंडो के बारे में टॉगल करें"
+
+#~ msgid "You cannot set Window click through with a totally opaque window."
+#~ msgstr "आप विंडो क्लिक को पूरी तरह अपारदर्शी विंडो के द्वारा नियत नहीं कर सकते."
 
 #~ msgid "Linux Distribution: "
 #~ msgstr "लिनक्स वितरण:"

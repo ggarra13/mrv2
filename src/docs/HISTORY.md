@@ -45,6 +45,8 @@ Rocky Linux's **XDG_SESSION_TYPE** environment variable.
 - Added case matching to Hotkey searches.
 - Hotkey names are now listed alphabetically in all languages.
 - Hotkeys are now listed using GNOME's keyboard conventions in the Hotkey window, which are cleaner.
+- Added Window/Toggle Click Through to menus.
+- Added Window/More UI Transparency and Window/Less UI Transparency to menus.
 
 v1.3.2
 ======
