@@ -828,7 +828,7 @@ if (reason == FL_REASON_CLOSED)
         xywh {0 0 933 602} box FLAT_BOX resizable fixed_size_tuples {5  0 24  1 29  3 29  4 30  5 25 }
       } {
         Fl_Group uiMenuGroup {
-          label MenuBar selected
+          label MenuBar
           xywh {0 0 933 24} box FLAT_BOX labeltype NO_LABEL
         } {
           Fl_Group {} {open
@@ -867,7 +867,7 @@ else
           }
         }
         Fl_Group uiTopBar {
-          label TopBar open
+          label TopBar
           xywh {0 24 933 29} box ENGRAVED_BOX labeltype NO_LABEL
         } {
           Fl_Group {} {
@@ -1078,7 +1078,7 @@ Value is:  pow( 2, 1/x );} xywh {783 24 150 29} type {Horz Knob} labelsize 10 ma
           }
         }
         Fl_Tile uiTileGroup {
-          label TileGroup
+          label TileGroup open
           xywh {0 53 933 465} labeltype NO_LABEL
           code0 {;}
           class {mrv::Tile}
@@ -1092,7 +1092,7 @@ Value is:  pow( 2, 1/x );} xywh {783 24 150 29} type {Horz Knob} labelsize 10 ma
             code1 {uiMain->workspace = uiViewGroup;}
             class Fl_Flex
           } {
-            Fl_Group uiToolsGroup {
+            Fl_Group uiToolsGroup {open
               xywh {0 53 42 435} box FLAT_BOX
             } {
               Fl_Button uiScrub {
@@ -1249,33 +1249,33 @@ uiView->setActionMode( mode );}
                 tooltip {Circle Tool} image {../../icons/Circle.svg} compress_image 1 xywh {2 216 40 33} down_box DOWN_BOX selection_color 95
                 class {mrv::Button}
               }
-              Fl_Group {} {
-                xywh {2 366 40 51}
+              Fl_Group {} {open
+                xywh {2 348 40 51}
               } {
                 Fl_Slider uiPenOpacity {
                   callback {auto settings = app->settings();
 int a = o->value() * 255;
 settings->setValue( mrv::kPenColorA, a);}
-                  tooltip {Opacity of pen stroke} xywh {5 400 34 17} type {Horz Knob} step 0.01 value 1
+                  tooltip {Opacity of pen stroke} xywh {5 382 34 17} type {Horz Knob} step 0.01 value 1
                 }
                 Fl_Button uiFlipPenColor {
                   user_data this user_data_type {ViewerUI*}
                   callback {mrv::flip_pen_color_cb( o, v );}
-                  tooltip {Switch Colors} image {../../icons/Flip.svg} compress_image 1 xywh {23 366 16 19} box NO_BOX labelfont 8 labelsize 24 align 16
+                  tooltip {Switch Colors} image {../../icons/Flip.svg} compress_image 1 xywh {23 348 16 19} box NO_BOX labelfont 8 labelsize 24 align 16
                   class {mrv::Button}
                 }
                 Fl_Button uiOldPenColor {
                   user_data this user_data_type {ViewerUI*}
-                  tooltip {Old Color Used.  Click on the Arrow to alternate.} xywh {23 385 15 15} box ENGRAVED_BOX color 1 selection_color 1 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
+                  tooltip {Old Color Used.  Click on the Arrow to alternate.} xywh {23 367 15 15} box ENGRAVED_BOX color 1 selection_color 1 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
                 }
                 Fl_Button uiPenColor {
                   user_data this user_data_type {ViewerUI*}
                   callback {mrv::set_pen_color_cb( o, v );}
-                  tooltip {Pick Draw Color and Alpha} xywh {3 366 20 19} box ENGRAVED_BOX color 3 selection_color 3 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
+                  tooltip {Pick Draw Color and Alpha} xywh {3 348 20 19} box ENGRAVED_BOX color 3 selection_color 3 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
                 }
               }
               Fl_Group {} {open
-                xywh {2 421 40 66}
+                xywh {0 396 42 91}
               } {
                 Fl_Button uiUndoDraw {
                   user_data this user_data_type {ViewerUI*}
@@ -1285,7 +1285,7 @@ settings->setValue( mrv::kPenColorA, a);}
                 }
                 Fl_Button uiRedoDraw {
                   user_data this user_data_type {ViewerUI*}
-                  callback {uiView->redo();}
+                  callback {uiView->redo();} selected
                   tooltip {Redo Previous Shape Drawn in Current Frame.} image {../../icons/Redo.svg} compress_image 1 xywh {0 431 40 36} deactivate
                   class {mrv::Button}
                 }

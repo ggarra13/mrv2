@@ -289,6 +289,25 @@ install( DIRECTORY python/plug-ins/demos
 set( PO_SOURCES )
 set( PO_ABS_SOURCES )
 
+# Retrieve the current Git branch name
+execute_process(
+    COMMAND git rev-parse --abbrev-ref HEAD
+    OUTPUT_VARIABLE GIT_BRANCH
+    OUTPUT_STRIP_TRAILING_WHITESPACE  # This removes any trailing newline characters
+)
+# Retrieve the short Git commit hash
+execute_process(
+    COMMAND git rev-parse --short HEAD
+    OUTPUT_VARIABLE GIT_SHORT_HASH
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+# Optionally, print the branch name to verify
+message(STATUS "Current Git Branch: ${GIT_BRANCH}")
+
+# Define a preprocessor macro for the Git branch name and short hash
+add_compile_definitions(GIT_BRANCH_NAME="${GIT_BRANCH}")
+add_compile_definitions(GIT_SHORT_HASH="${GIT_SHORT_HASH}")
 #
 # Add auxiliary libraries
 #

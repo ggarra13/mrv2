@@ -8,6 +8,14 @@
 #include <vector>
 #include <algorithm>
 
+#ifndef GIT_BRANCH_NAME
+#    define GIT_BRANCH_NAME "main"
+#endif
+
+#ifndef GIT_SHORT_HASH
+#    define GIT_SHORT_HASH ""
+#endif
+
 #ifdef __linux__
 
 #    include <sys/types.h>
@@ -735,7 +743,8 @@ namespace mrv
         std::stringstream o;
 
         o << "mrv2 " << kArch << " bits - v" << kVersion << " " 
-          << build_date() << endl
+          << build_date() << " Git Branch: " << GIT_BRANCH_NAME
+          << " (" << GIT_SHORT_HASH << ")" << endl
           << "(C) 2022-Present" << endl
           << "Gonzalo Garramuño & others" << endl
           << endl
