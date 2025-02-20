@@ -750,7 +750,6 @@ namespace mrv
             else if (kToggleClickThrough.match(rawkey))
             {
                 set_click_through(!click_through);
-                ignoreFocus = true;
                 return 1;
             }
         }
@@ -1147,6 +1146,7 @@ namespace mrv
             {
                 set_alpha(95);
             }
+            ignoreFocus = true;
         }
         else
         {

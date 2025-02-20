@@ -3782,6 +3782,18 @@ msgstr "窗口/二级"
 msgid "Window/Secondary Float On Top"
 msgstr "窗口/二级置顶"
 
+#, fuzzy
+msgid "Window/Toggle Click Through"
+msgstr "切换点击"
+
+#, fuzzy
+msgid "Window/More UI Transparency"
+msgstr "提高用户界面透明度"
+
+#, fuzzy
+msgid "Window/Less UI Transparency"
+msgstr "减少界面透明度"
+
 msgid "View/Tool Bars/Toggle Menu Bar"
 msgstr "视图/工具栏/切换菜单栏"
 

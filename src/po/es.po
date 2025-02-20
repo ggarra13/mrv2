@@ -3914,6 +3914,18 @@ msgstr "Ventana/Secundaria"
 msgid "Window/Secondary Float On Top"
 msgstr "Ventana/Secundaria Floata Sobre Todo"
 
+#, fuzzy
+msgid "Window/Toggle Click Through"
+msgstr "Commutar el clic a través de"
+
+#, fuzzy
+msgid "Window/More UI Transparency"
+msgstr "Más transparencia de la interfaz de usuario"
+
+#, fuzzy
+msgid "Window/Less UI Transparency"
+msgstr "Menos transparencia de la IU"
+
 msgid "View/Tool Bars/Toggle Menu Bar"
 msgstr "Vista/Barras/Alternar Barra de Menú"
 

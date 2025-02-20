@@ -3854,6 +3854,18 @@ msgstr "Fenêtre/Secondaire"
 msgid "Window/Secondary Float On Top"
 msgstr "Fenêtre/Flotte secondaire en haut"
 
+#, fuzzy
+msgid "Window/Toggle Click Through"
+msgstr "Commutation de clic par l'intermédiaire"
+
+#, fuzzy
+msgid "Window/More UI Transparency"
+msgstr "Plus de transparence de l'assurance-chômage"
+
+#, fuzzy
+msgid "Window/Less UI Transparency"
+msgstr "Moins de transparence de l'assurance-chômage"
+
 msgid "View/Tool Bars/Toggle Menu Bar"
 msgstr "Affichage/Barres d'outils/Commutation de la barre de menu"
 

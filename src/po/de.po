@@ -3857,6 +3857,18 @@ msgstr "Fenster/Sekundarbereich"
 msgid "Window/Secondary Float On Top"
 msgstr "Fenster/Sekundre Float auf der Oberseite"
 
+#, fuzzy
+msgid "Window/Toggle Click Through"
+msgstr "Durchklicken umschalten"
+
+#, fuzzy
+msgid "Window/More UI Transparency"
+msgstr "Mehr Transparenz der Benutzeroberfläche"
+
+#, fuzzy
+msgid "Window/Less UI Transparency"
+msgstr "Weniger Transparenz der Benutzeroberfläche"
+
 msgid "View/Tool Bars/Toggle Menu Bar"
 msgstr "Sicht/Werkzeugleisten/umschalten"
 

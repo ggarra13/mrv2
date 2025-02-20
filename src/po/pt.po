@@ -3835,6 +3835,18 @@ msgstr "Janela/Secundrio"
 msgid "Window/Secondary Float On Top"
 msgstr "Janela/Flutuao Secundria no topo"
 
+#, fuzzy
+msgid "Window/Toggle Click Through"
+msgstr "Comutar o Clique Através"
+
+#, fuzzy
+msgid "Window/More UI Transparency"
+msgstr "Mais transparência da IU"
+
+#, fuzzy
+msgid "Window/Less UI Transparency"
+msgstr "Menos transparência da IU"
+
 msgid "View/Tool Bars/Toggle Menu Bar"
 msgstr "Visualizao/Barras de Ferramentas/Alternar a barra de menus"
 

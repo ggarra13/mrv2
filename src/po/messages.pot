@@ -3504,6 +3504,15 @@ msgstr ""
 msgid "Window/Secondary Float On Top"
 msgstr ""
 
+msgid "Window/Toggle Click Through"
+msgstr ""
+
+msgid "Window/More UI Transparency"
+msgstr ""
+
+msgid "Window/Less UI Transparency"
+msgstr ""
+
 msgid "View/Tool Bars/Toggle Menu Bar"
 msgstr ""
 

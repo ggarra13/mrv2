@@ -3890,6 +3890,18 @@ msgstr "Окно/Средняя школа"
 msgid "Window/Secondary Float On Top"
 msgstr "Окно/Средняя плавка сверху"
 
+#, fuzzy
+msgid "Window/Toggle Click Through"
+msgstr "Пройти через панель инструментов@ info: whatsthis"
+
+#, fuzzy
+msgid "Window/More UI Transparency"
+msgstr "Более прозрачный UI"
+
+#, fuzzy
+msgid "Window/Less UI Transparency"
+msgstr "Менее прозрачный UI"
+
 msgid "View/Tool Bars/Toggle Menu Bar"
 msgstr "Вид/Панели инструментов/Переключить панель меню"
 

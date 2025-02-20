@@ -3804,6 +3804,18 @@ msgstr "विंडो/माध्यमिक"
 msgid "Window/Secondary Float On Top"
 msgstr "विंडो/द्वितीयक फ्लोट ऊपर पर"
 
+#, fuzzy
+msgid "Window/Toggle Click Through"
+msgstr "के द्वारा क्लिक टॉगल करें"
+
+#, fuzzy
+msgid "Window/More UI Transparency"
+msgstr "अधिक यूआई पारदर्शिता"
+
+#, fuzzy
+msgid "Window/Less UI Transparency"
+msgstr "कम यूआई ट्रांसपेरेंसी"
+
 msgid "View/Tool Bars/Toggle Menu Bar"
 msgstr "दृश्य/ औजारपट्टी पट्टी/ टॉगल मेन्यू पट्टी"
 

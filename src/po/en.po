@@ -3853,6 +3853,18 @@ msgstr "Window/Secondary"
 msgid "Window/Secondary Float On Top"
 msgstr "Window/Secondary Float On Top"
 
+#, fuzzy
+msgid "Window/Toggle Click Through"
+msgstr "Toggle Click Through"
+
+#, fuzzy
+msgid "Window/More UI Transparency"
+msgstr "More UI Transparency"
+
+#, fuzzy
+msgid "Window/Less UI Transparency"
+msgstr "Less UI Transparency"
+
 msgid "View/Tool Bars/Toggle Menu Bar"
 msgstr "View/Tool Bars/Toggle Menu Bar"
 
