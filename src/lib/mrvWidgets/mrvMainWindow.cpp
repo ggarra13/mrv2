@@ -979,6 +979,7 @@ namespace mrv
 
     void MainWindow::set_alpha(int new_alpha)
     {
+        // \@bug: Wayland has a different transparency behavior.
         int minAlpha = 95;
         if (desktop::Wayland())
             minAlpha = 65;
@@ -1022,7 +1023,12 @@ namespace mrv
 #endif
         redraw();
 
+        // We must redraw all panels under Wayland/XWayland
         App::ui->uiView->redraw();
+        App::ui->uiMenuBar->redraw();
+        App::ui->uiTopBar->redraw();
+        App::ui->uiBottomBar->redraw();
+        App::ui->uiStatusBar->redraw();
         App::ui->uiTimeline->redraw();
     }
 
