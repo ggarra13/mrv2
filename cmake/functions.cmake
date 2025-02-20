@@ -88,6 +88,7 @@ function( is_system_lib TARGET ISSYSLIB )
 	nvidia
 	libm
 	libOpenGL
+	libpango
 	libpthread
 	libpulse
 	libpulse-simple

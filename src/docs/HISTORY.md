@@ -48,6 +48,8 @@ Rocky Linux's **XDG_SESSION_TYPE** environment variable.
 - Added Window/Toggle Click Through to menus.
 - Added Window/More UI Transparency and Window/Less UI Transparency to menus.
 - Added git branch and short hash of build to the About window.
+- Improved build times on successive runme.sh runs.
+
 
 v1.3.2
 ======
