@@ -40,7 +40,7 @@ namespace mrv
         void update_title_bar();
 
         //! Make window appear always on top of others
-        void always_on_top(int above);
+        void always_on_top(int above, bool synthetic = false);
 
         //! Returns whether the window is on top of all others.
         bool is_on_top() const { return on_top; }

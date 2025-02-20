@@ -661,8 +661,11 @@ namespace mrv
 
 #if !defined(__APPLE__)
 
-    void MainWindow::always_on_top(int value)
+    void MainWindow::always_on_top(int value, bool synthetic)
     {
+        if (on_top == value)
+            return;
+        
         on_top = value;
 
 #    if defined(_WIN32)
@@ -699,6 +702,21 @@ namespace mrv
                             &ev);
         }
 #    endif
+#ifdef FLTK_USE_WAYLAND
+        if (desktop::Wayland() && !synthetic)
+        {
+            const std::string& compositor_name = desktop::WaylandCompositor();
+            if (compositor_name == "gnome-shell")
+            {
+                const std::string msg = string::Format(_("Wayland supports Float on Top only through hotkeys.  Press {0}.")).arg(kToggleFloatOnTop.to_s());
+                LOG_WARNING(msg);
+            }
+            else
+            {
+                LOG_WARNING(_("Wayland does not support Float on Top.  Use your Window Manager to set a hotkey for it."));
+            }
+        }
+#endif
     } // above_all function
 
 #endif
@@ -1154,7 +1172,7 @@ namespace mrv
             set_alpha(255);
         }
 
-        always_on_top(click_through);
+        always_on_top(click_through, true);
         
         setClickThrough(value);
     }

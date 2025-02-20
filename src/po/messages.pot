@@ -4320,6 +4320,14 @@ msgstr ""
 msgid "Unknown type for mrvOCIOBrowser"
 msgstr ""
 
+msgid "Wayland supports Float on Top only through hotkeys.  Press {0}."
+msgstr ""
+
+msgid ""
+"Wayland does not support Float on Top.  Use your Window Manager to set a "
+"hotkey for it."
+msgstr ""
+
 msgid "Session: "
 msgstr ""
 

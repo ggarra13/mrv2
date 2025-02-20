@@ -10,7 +10,7 @@
 
 namespace mrv {
 
-void MainWindow::always_on_top( int t )
+void MainWindow::always_on_top( int t, bool synthetic )
 {
     on_top = t;
     FLWindow* nswin = fl_xid(this);
