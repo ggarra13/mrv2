@@ -417,7 +417,7 @@ namespace mrv
             g = ug / 255.0f;
             b = ub / 255.0f;
             a = alpha;
-            
+
             if (desktop::Wayland())
             {
                 p.ui->uiViewGroup->color(fl_rgb_color(ur, ug, ub));
@@ -470,6 +470,9 @@ namespace mrv
         const auto& player = getTimelinePlayer();
         if (!player)
         {
+#ifdef __APPLE__
+            set_window_transparency(alpha);
+#endif
             Fl_Window::draw(); // Draw FLTK children
             return;
         }
@@ -515,7 +518,7 @@ namespace mrv
                 else if (desktop::X11() || desktop::Windows())
                     gl.shader->setUniform("opacity", 1.0F);
 #endif
-                
+
                 glActiveTexture(GL_TEXTURE0);
                 glBindTexture(GL_TEXTURE_2D, gl.buffer->getColorID());
 
