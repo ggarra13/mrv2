@@ -4314,6 +4314,9 @@ msgstr ""
 msgid "Session: "
 msgstr ""
 
+msgid "No GNOME Shell Hotkey for Float On Top.  Setting it globally to '{0}'"
+msgstr ""
+
 msgid "You cannot set Window click through with a totally opaque window."
 msgstr ""
 
@@ -6163,6 +6166,9 @@ msgid "Function"
 msgstr ""
 
 msgid "Key"
+msgstr ""
+
+msgid "Match Case"
 msgstr ""
 
 msgid "Reset hotkeys to mrv2's default configuration."
