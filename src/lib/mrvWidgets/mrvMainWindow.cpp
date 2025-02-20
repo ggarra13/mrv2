@@ -33,8 +33,6 @@
 #    include <X11/Xlib.h>
 #    include <X11/extensions/scrnsaver.h>
 #    include <X11/extensions/shape.h>
-#    include <X11/extensions/Xfixes.h>
-#    include <X11/extensions/XTest.h>
 #endif
 
 #ifdef FLTK_USE_WAYLAND
@@ -53,26 +51,26 @@ namespace
     const char* kModule = "main";
 }
 
-
 namespace
 {
 #ifdef FLTK_USE_X11
     Window last_window = None; // Tracks the last window under the cursor
-    bool   is_dragging = false;
+    bool is_dragging = false;
 
-    unsigned long get_current_time_ms() {
+    unsigned long get_current_time_ms()
+    {
         struct timeval tv;
         gettimeofday(&tv, NULL);
         return tv.tv_sec * 1000UL + tv.tv_usec / 1000;
         // return CurrentTime;
     }
-    
+
     // Function to get a window's title
     std::string get_window_name(Window window)
     {
         Display* display = fl_x11_display();
         std::string out;
-        char *window_name = NULL;
+        char* window_name = NULL;
         if (XFetchName(display, window, &window_name) && window_name)
         {
             out = window_name;
@@ -80,22 +78,24 @@ namespace
         }
         return out + " (" + std::to_string(window) + ")";
     }
-    
+
     // Function to get window geometry (position and size)
-    void get_window_geometry(Display* display, Window window, int* x, int* y,
-                             unsigned int* width, unsigned int* height)
+    void get_window_geometry(
+        Display* display, Window window, int* x, int* y, unsigned int* width,
+        unsigned int* height)
     {
         Window root, child;
         int wx, wy;
         unsigned int ww, wh, border_width, depth;
 
         // Get the geometry of the window
-        if (XGetGeometry(display, window, &root, &wx, &wy, &ww, &wh,
-                         &border_width, &depth))
+        if (XGetGeometry(
+                display, window, &root, &wx, &wy, &ww, &wh, &border_width,
+                &depth))
         {
             // Translate coordinates to root window (absolute screen position)
-            if (XTranslateCoordinates(display, window, root,
-                                      0, 0, &wx, &wy, &child))
+            if (XTranslateCoordinates(
+                    display, window, root, 0, 0, &wx, &wy, &child))
             {
                 *x = wx;
                 *y = wy;
@@ -104,9 +104,9 @@ namespace
             }
         }
     }
-    
+
     // Function to check whether a window is minimized
-    static int is_window_minimized(Display *display, Window window)
+    static int is_window_minimized(Display* display, Window window)
     {
         Atom actual_type;
         int actual_format;
@@ -116,24 +116,21 @@ namespace
         int minimized = 0;
 
         Atom net_wm_state = XInternAtom(display, "_NET_WM_STATE", False);
-        Atom net_wm_state_iconified = XInternAtom(display,
-                                                  "_NET_WM_STATE_ICONIFIED",
-                                                  False);
+        Atom net_wm_state_iconified =
+            XInternAtom(display, "_NET_WM_STATE_ICONIFIED", False);
 
-        Atom net_wm_state_hidden = XInternAtom(display, "_NET_WM_STATE_HIDDEN",
-                                               False);
+        Atom net_wm_state_hidden =
+            XInternAtom(display, "_NET_WM_STATE_HIDDEN", False);
 
         if (net_wm_state != None)
         {
-            int result = XGetWindowProperty(display, window, net_wm_state,
-                                            0, (~0L), False, XA_ATOM,
-                                            &actual_type,
-                                            &actual_format, &nitems,
-                                            &bytes_after,
-                                            &prop_value);
+            int result = XGetWindowProperty(
+                display, window, net_wm_state, 0, (~0L), False, XA_ATOM,
+                &actual_type, &actual_format, &nitems, &bytes_after,
+                &prop_value);
             if (result == Success && prop_value != NULL)
             {
-                atoms = (Atom *)prop_value;
+                atoms = (Atom*)prop_value;
                 for (unsigned long i = 0; i < nitems; i++)
                 {
                     if (atoms[i] == net_wm_state_iconified ||
@@ -148,23 +145,24 @@ namespace
         }
         return minimized;
     }
-    
+
     // Helper function to fetch the window list
-    static std::vector<Window> fetch_window_list(Display *display)
+    static std::vector<Window> fetch_window_list(Display* display)
     {
         std::vector<Window> window_list;
         Atom atom = XInternAtom(display, "_NET_CLIENT_LIST_STACKING", False);
         Atom actual_type;
         int actual_format;
         unsigned long nitems, bytes_after;
-        unsigned char *data = nullptr;
+        unsigned char* data = nullptr;
 
-        if (XGetWindowProperty(display, DefaultRootWindow(display), atom,
-                               0, 1024, False, XA_WINDOW,
-                               &actual_type, &actual_format, &nitems,
-                               &bytes_after, &data) == Success && data)
+        if (XGetWindowProperty(
+                display, DefaultRootWindow(display), atom, 0, 1024, False,
+                XA_WINDOW, &actual_type, &actual_format, &nitems, &bytes_after,
+                &data) == Success &&
+            data)
         {
-            Window* windows = (Window *)data;
+            Window* windows = (Window*)data;
             window_list.assign(windows, windows + nitems);
             XFree(data);
         }
@@ -180,16 +178,17 @@ namespace
         // Suppress all errors
         return 0;
     }
-    
+
     // Function to get all windows below my_window in the stacking order
-    std::vector<Window> get_windows_below(Display *display,
-                                          Window target_window)
+    std::vector<Window>
+    get_windows_below(Display* display, Window target_window)
     {
         std::vector<Window> below_windows;
         int max_retries = 3; // Maximum number of retries
         int retry_count = 0;
 
-        while (retry_count < max_retries) {
+        while (retry_count < max_retries)
+        {
             // Install error handler to suppress X11 errors which
             // can happen due to fetch_window_list returning outdated
             // Window descriptors.
@@ -207,7 +206,8 @@ namespace
                 bool minimized = false;
 
                 // Don't include unmapped windows on the list
-                if (XGetWindowAttributes(display, window, &attr)) {
+                if (XGetWindowAttributes(display, window, &attr))
+                {
                     if (attr.map_state == IsViewable)
                     {
                         viewable = true;
@@ -257,12 +257,12 @@ namespace
 
         return below_windows;
     }
-    
+
     // Function to find the  window below a mouse coordinate and given vector of
     // windows in stacked order.
-    static Window find_window_below(Display *display,
-                                    const std::vector<Window> &windows,
-                                    int x_root, int y_root)
+    static Window find_window_below(
+        Display* display, const std::vector<Window>& windows, int x_root,
+        int y_root)
     {
         Window closest_window = None;
 
@@ -271,34 +271,35 @@ namespace
             int wx, wy;
             unsigned int ww, wh;
             get_window_geometry(display, window, &wx, &wy, &ww, &wh);
-            
-            if (x_root >= wx && y_root >= wy &&
-                x_root <= wx + ww && y_root <= wy + wh)
+
+            if (x_root >= wx && y_root >= wy && x_root <= wx + ww &&
+                y_root <= wy + wh)
             {
                 closest_window = window;
                 break;
             }
         }
-        
+
         return closest_window;
     }
-    
-#define CHECK_EVENT_TYPE(x)                     \
-    case x:                                     \
-    {                                           \
-        s << #x;                                \
-        return s.str();                         \
-        break;                                  \
+
+#    define CHECK_EVENT_TYPE(x)                                                \
+    case x:                                                                    \
+    {                                                                          \
+        s << #x;                                                               \
+        return s.str();                                                        \
+        break;                                                                 \
     }
 
     // Debugging Function to return the event name.
     std::string get_event_name(XEvent* event)
     {
         std::stringstream s;
-        switch(event->type)
+        switch (event->type)
         {
             CHECK_EVENT_TYPE(ButtonPress);
-            CHECK_EVENT_TYPE(ButtonRelease);;
+            CHECK_EVENT_TYPE(ButtonRelease);
+            ;
             CHECK_EVENT_TYPE(CirculateNotify);
             CHECK_EVENT_TYPE(CirculateRequest);
             CHECK_EVENT_TYPE(ClientMessage);
@@ -335,35 +336,34 @@ namespace
             break;
         }
     }
-    
-    void mrv2_XSendEvent(Display* display, Window target_window, Bool value,
-                         int mask, XEvent* event)
+
+    void mrv2_XSendEvent(
+        Display* display, Window target_window, Bool value, int mask,
+        XEvent* event)
     {
         XSendEvent(display, target_window, value, mask, event);
         XFlush(display);
     }
 
     // Function to send an FLTK event as an XEvent to the specified X11 window
-    void send_fltk_event_to_x11(Display *display, Window target_window,
-                                int fltk_event, int root_x, int root_y,
-                                int button = 0,
-                                unsigned int X11keycode = 0,
-                                unsigned int modifiers = 0,
-                                const char* text = "")
+    void send_fltk_event_to_x11(
+        Display* display, Window target_window, int fltk_event, int root_x,
+        int root_y, int button = 0, unsigned int X11keycode = 0,
+        unsigned int modifiers = 0, const char* text = "")
     {
         // Convert root coordinates to local window coordinates
         int local_x = root_x, local_y = root_y;
         Window child_return;
-        XTranslateCoordinates(display, DefaultRootWindow(display),
-                              target_window, root_x, root_y,
-                              &local_x, &local_y, &child_return);
+        XTranslateCoordinates(
+            display, DefaultRootWindow(display), target_window, root_x, root_y,
+            &local_x, &local_y, &child_return);
 
         // Create an empty event
         XEvent event;
         memset(&event, 0, sizeof(event));
         int mask = NoEventMask;
         KeySym keysym;
-        unsigned long evTime = get_current_time_ms();        
+        unsigned long evTime = get_current_time_ms();
         event.xany.type = 0;
         event.xany.display = display;
         event.xany.window = target_window;
@@ -377,10 +377,11 @@ namespace
             event.xcrossing.x_root = root_x;
             event.xcrossing.y_root = root_y;
             mrv2_XSendEvent(display, target_window, True, mask, &event);
-            
+
             break;
         case FL_PUSH:
-            mask = ButtonPressMask | ButtonReleaseMask | PointerMotionMask; // Use correct mask
+            mask = ButtonPressMask | ButtonReleaseMask |
+                   PointerMotionMask; // Use correct mask
             event.type = ButtonPress;
             event.xbutton.button = button;
             event.xbutton.x = local_x;
@@ -390,7 +391,7 @@ namespace
             event.xbutton.time = evTime;
             mrv2_XSendEvent(display, target_window, True, mask, &event);
             break;
-            
+
         case FL_DRAG:
             mask = PointerMotionMask | SubstructureRedirectMask;
             event.type = MotionNotify;
@@ -454,7 +455,8 @@ namespace
             mrv2_XSendEvent(display, target_window, True, mask, &event);
             break;
         case FL_MOUSEWHEEL:
-            mask = ButtonPressMask | ButtonReleaseMask | PointerMotionMask; // Use correct mask
+            mask = ButtonPressMask | ButtonReleaseMask |
+                   PointerMotionMask; // Use correct mask
             event.type = ButtonPress;
             if (Fl::e_dy == -1 && !Fl::event_shift())
                 button = Button4;
@@ -475,13 +477,11 @@ namespace
             // Ignore any other FLTK messages
             return;
         }
-
     }
-    
 
     static int x11_handler(void* event, void* data)
     {
-    
+
         XEvent* e = static_cast<XEvent*>(event);
         Fl_Window* w = static_cast<Fl_Window*>(data);
 
@@ -516,13 +516,14 @@ namespace
         case LeaveNotify:
             x_root = e->xcrossing.x_root;
             y_root = e->xcrossing.y_root;
-            fltk_event = FL_LEAVE;  // No FLTK equivalent, but we'll use it.
+            fltk_event = FL_LEAVE; // No FLTK equivalent, but we'll use it.
             break;
         case MotionNotify:
             x_root = e->xmotion.x_root;
             y_root = e->xmotion.y_root;
             fltk_event = FL_MOVE; // Or FL_DRAG, depending on button state
-            if (e->xmotion.state & (Button1Mask | Button2Mask | Button3Mask)) {
+            if (e->xmotion.state & (Button1Mask | Button2Mask | Button3Mask))
+            {
                 fltk_event = FL_DRAG;
                 modifiers = e->xmotion.state;
             }
@@ -544,21 +545,21 @@ namespace
             break;
         }
 
-        const std::vector<Window>& below_windows = get_windows_below(display,
-                                                                     window);
-        Window new_window = find_window_below(display, below_windows,
-                                              x_root, y_root);
+        const std::vector<Window>& below_windows =
+            get_windows_below(display, window);
+        Window new_window =
+            find_window_below(display, below_windows, x_root, y_root);
 
         if (new_window == None)
         {
             return 1;
         }
 
-
         if (fltk_event != FL_NO_EVENT)
         {
-            send_fltk_event_to_x11(display, new_window, fltk_event, x_root,
-                                   y_root, button, e->xkey.keycode, modifiers);
+            send_fltk_event_to_x11(
+                display, new_window, fltk_event, x_root, y_root, button,
+                e->xkey.keycode, modifiers);
             return 1;
         }
 
@@ -566,9 +567,8 @@ namespace
     }
 
 #endif
-    
-}
 
+} // namespace
 
 namespace mrv
 {
@@ -665,7 +665,7 @@ namespace mrv
     {
         if (on_top == value)
             return;
-        
+
         on_top = value;
 
 #    if defined(_WIN32)
@@ -675,8 +675,9 @@ namespace mrv
         else
             action = HWND_NOTOPMOST;
         // Microsoft (R) Windows(TM)
-        SetWindowPos(fl_win32_xid(this), action, NULL, NULL, NULL, NULL,
-                     SWP_NOMOVE | SWP_NOSIZE);
+        SetWindowPos(
+            fl_win32_xid(this), action, NULL, NULL, NULL, NULL,
+            SWP_NOMOVE | SWP_NOSIZE);
 #    elif defined(__linux__)
         if (desktop::X11())
         {
@@ -697,26 +698,30 @@ namespace mrv
             ev.xclient.data.l[0] = value;
             ev.xclient.data.l[1] = net_wm_state_above;
             ev.xclient.data.l[2] = 0;
-            mrv2_XSendEvent(display, DefaultRootWindow(display), False,
-                            SubstructureNotifyMask | SubstructureRedirectMask,
-                            &ev);
+            mrv2_XSendEvent(
+                display, DefaultRootWindow(display), False,
+                SubstructureNotifyMask | SubstructureRedirectMask, &ev);
         }
 #    endif
-#ifdef FLTK_USE_WAYLAND
+#    ifdef FLTK_USE_WAYLAND
         if (desktop::Wayland() && !synthetic)
         {
             const std::string& compositor_name = desktop::WaylandCompositor();
             if (compositor_name == "gnome-shell")
             {
-                const std::string msg = string::Format(_("Wayland supports Float on Top only through hotkeys.  Press {0}.")).arg(kToggleFloatOnTop.to_s());
+                const std::string msg =
+                    string::Format(_("Wayland supports Float on Top only "
+                                     "through hotkeys.  Press {0}."))
+                        .arg(kToggleFloatOnTop.to_s());
                 LOG_WARNING(msg);
             }
             else
             {
-                LOG_WARNING(_("Wayland does not support Float on Top.  Use your Window Manager to set a hotkey for it."));
+                LOG_WARNING(_("Wayland does not support Float on Top.  Use "
+                              "your Window Manager to set a hotkey for it."));
             }
         }
-#endif
+#    endif
     } // above_all function
 
 #endif
@@ -747,7 +752,7 @@ namespace mrv
             set_click_through(false);
             return 1;
         }
-        
+
         if (event == FL_FULLSCREEN)
         {
             App::ui->uiTimeline->requestThumbnail();
@@ -788,11 +793,11 @@ namespace mrv
     {
         int oldW = w();
         int oldH = h();
-        
+
         wayland_resize = true;
         DropWindow::resize(X, Y, W, H);
         wayland_resize = false;
-        
+
         // Redraw viewport windows in case we go from one monitor to another
         // with different OCIO display/view.
         App::ui->uiView->redrawWindows();
@@ -849,8 +854,7 @@ namespace mrv
         {
             snprintf(
                 buf, 256, "mrv2 v%s %s%s", mrv::version(),
-                mrv::build_date().c_str(),
-                session.c_str());
+                mrv::build_date().c_str(), session.c_str());
         }
         copy_label(buf);
     }
@@ -862,7 +866,8 @@ namespace mrv
 #ifdef FLTK_USE_WAYLAND
         if (desktop::Wayland())
         {
-            //wl_surface_set_opaque_region(fl_wl_surface(fl_wl_xid(this)), NULL);
+            // wl_surface_set_opaque_region(fl_wl_surface(fl_wl_xid(this)),
+            // NULL);
 
             //
             // \@todo: Implement proper Always on Top on all compositors on
@@ -872,11 +877,13 @@ namespace mrv
             const std::string& compositor_name = desktop::WaylandCompositor();
             if (compositor_name == "gnome-shell")
             {
-                std::string cmd = "gsettings get org.gnome.shell.extensions.tiling-assistant toggle-always-on-top";
+                std::string cmd =
+                    "gsettings get org.gnome.shell.extensions.tiling-assistant "
+                    "toggle-always-on-top";
                 std::string hotkey = os::exec_command(cmd);
                 hotkey = string::stripWhitespace(hotkey);
                 if (hotkey.empty() ||
-                    hotkey.substr(hotkey.size()-2, 2) == "[]")
+                    hotkey.substr(hotkey.size() - 2, 2) == "[]")
                 {
                     // If an FLTK hotkey is assigned, turn it into a GNOME
                     // Hotkey.
@@ -884,24 +891,30 @@ namespace mrv
                     if (!hotkey.empty())
                     {
                         size_t startPos = 0;
-                        if (startPos = hotkey.find("Meta") !=
-                            std::string::npos)
+                        if (startPos = hotkey.find("Meta") != std::string::npos)
                         {
                             hotkey.replace(startPos, 4, "Super");
                         }
                         // Use a GNOME shell extension and set always on top
                         // to Meta + w
-                        cmd = "gsettings set org.gnome.shell.extensions.tiling-assistant toggle-always-on-top \"['"+ hotkey + "']\"";
+                        cmd = "gsettings set "
+                              "org.gnome.shell.extensions.tiling-assistant "
+                              "toggle-always-on-top \"['" +
+                              hotkey + "']\"";
                         os::exec_command(cmd);
-                        const std::string msg = string::Format(_("No GNOME Shell Hotkey for Float On Top.  Setting it globally to '{0}'")).arg(hotkey);
+                        const std::string msg =
+                            string::Format(
+                                _("No GNOME Shell Hotkey for Float On Top.  "
+                                  "Setting it globally to '{0}'"))
+                                .arg(hotkey);
                         LOG_STATUS(msg);
                     }
                 }
                 else
                 {
-                    if (hotkey[0] != '[' || hotkey[hotkey.size()-1] != ']')
+                    if (hotkey[0] != '[' || hotkey[hotkey.size() - 1] != ']')
                         return;
-                    
+
                     // Turn a GNOME-Shell hotkey into an mrv2's hotkey
                     const std::regex kSuper("<Super>");
                     const std::regex kShift("<Shift>");
@@ -919,7 +932,7 @@ namespace mrv
                     kToggleFloatOnTop.alt = false;
                     if (std::regex_search(hotkey, kAlt))
                         kToggleFloatOnTop.alt = true;
-                    std::string key = hotkey.substr(hotkey.size()-3, 1);
+                    std::string key = hotkey.substr(hotkey.size() - 3, 1);
                     char ch = key[0]; // Access the character
                     int asciiValue = static_cast<int>(ch); // Convert to ASCII
                     kToggleFloatOnTop.key = asciiValue;
@@ -1055,9 +1068,9 @@ namespace mrv
 #if defined(__linux__)
 
 #    ifdef FLTK_USE_WAYLAND
-    
-    void setClickThroughWayland(struct wl_surface* surface,
-                                int width, int height)
+
+    void
+    setClickThroughWayland(struct wl_surface* surface, int width, int height)
     {
         auto compositor = fl_wl_compositor();
         if (!compositor)
@@ -1074,7 +1087,7 @@ namespace mrv
         wl_surface_commit(surface);
         wl_region_destroy(region);
     }
-    
+
     void setClickThroughWayland(const Fl_Window* window, const bool enable)
     {
         auto win = fl_wl_xid(window);
@@ -1141,7 +1154,7 @@ namespace mrv
     {
         if (click_through == value)
             return;
-        
+
         if (value)
         {
             int ok;
@@ -1168,7 +1181,7 @@ namespace mrv
         }
 
         click_through = value;
-        
+
         if (value)
         {
             LOG_STATUS(_("Window click through ON"));
@@ -1186,7 +1199,7 @@ namespace mrv
         }
 
         always_on_top(click_through, true);
-        
+
         setClickThrough(value);
     }
 
