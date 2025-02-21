@@ -650,6 +650,18 @@ namespace mrv
         }
 #endif // TLRENDER_USD
 
+#if defined(TLRENDER_BMD)
+        device::DevicesModelData bmdDevicesModelData;
+        p.settings->setDefaultValue("BMD/DeviceIndex", bmdDevicesModelData.deviceIndex);
+        p.settings->setDefaultValue("BMD/DisplayModeIndex", bmdDevicesModelData.displayModeIndex);
+        p.settings->setDefaultValue("BMD/PixelTypeIndex", bmdDevicesModelData.pixelTypeIndex);
+        p.settings->setDefaultValue("BMD/DeviceEnabled", bmdDevicesModelData.deviceEnabled);
+        const auto i = bmdDevicesModelData.boolOptions.find(bmd::Option::_444SDIVideoOutput);
+        p.settings->setDefaultValue("BMD/444SDIVideoOutput", i != bmdDevicesModelData.boolOptions.end() ? i->second : false);
+        p.settings->setDefaultValue("BMD/HDRMode", bmdDevicesModelData.hdrMode);
+        p.settings->setDefaultValue("BMD/HDRData", bmdDevicesModelData.hdrData);
+#endif // TLRENDER_BMD
+            
 #ifdef TLRENDER_NDI
         if (!NDIlib_initialize())
             throw std::runtime_error(_("Could not initialize NDI"));
@@ -1787,6 +1799,10 @@ namespace mrv
 
         p.activeFiles = activeFiles;
         p.player = player;
+#if defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
+        if (p.outputDevice)
+            p.outputDevice->setPlayer(p.player ? p.player->player() : nullptr);
+#endif // TLRENDER_BMD
 
         _layersUpdate(p.filesModel->observeLayers()->get());
 
@@ -1871,7 +1887,7 @@ namespace mrv
         double value = p.settings->getValue<double>("Cache/ReadBehind");
         return otime::RationalTime(value, 1.0);
     }
-
+    
     void App::cacheUpdate()
     {
         TLRENDER_P();

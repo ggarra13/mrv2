@@ -455,16 +455,19 @@ namespace mrv
 
 #if defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
         auto& outputDevice = app->outputDevice();
-        outputDevice->setOCIOOptions(p.ocioOptions);
-        outputDevice->setLUTOptions(p.lutOptions);
-        outputDevice->setImageOptions({p.imageOptions});
-        // for (auto& i : displayOptions)
-        // {
-        //     i.videoLevels = p.outputVideoLevels;
-        // }
-        // outputDevice->setDisplayOptions(displayOptions);
-        outputDevice->setDisplayOptions({p.displayOptions});
-        outputDevice->setCompareOptions(p.compareOptions);
+        if (outputDevice)
+        {
+            outputDevice->setOCIOOptions(p.ocioOptions);
+            outputDevice->setLUTOptions(p.lutOptions);
+            outputDevice->setImageOptions({p.imageOptions});
+            // for (auto& i : displayOptions)
+            // {
+            //     i.videoLevels = p.outputVideoLevels;
+            // }
+            // outputDevice->setDisplayOptions(displayOptions);
+            outputDevice->setDisplayOptions({p.displayOptions});
+            outputDevice->setCompareOptions(p.compareOptions);
+        }
 #endif
 
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);

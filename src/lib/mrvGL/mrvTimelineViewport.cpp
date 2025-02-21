@@ -1155,6 +1155,23 @@ namespace mrv
         p.viewPos = pos;
         p.viewZoom = zoom;
 
+        float scale = 1.F;
+        const auto& viewportSize = getViewportSize();
+
+#if defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
+        scale = 1.F;
+        const auto& outputDevice = App::app->outputDevice();
+        if (outputDevice)
+        {
+            const math::Size2i& deviceSize = outputDevice->getSize();
+            if (viewportSize.isValid() && deviceSize.isValid())
+            {
+                scale = deviceSize.w / static_cast<float>(viewportSize.w);
+            }
+            outputDevice->setView(pos * scale, zoom * scale, p.frameView);
+        }
+#endif // TLRENDER_BMD
+        
         _updateZoom();
         redraw();
 
