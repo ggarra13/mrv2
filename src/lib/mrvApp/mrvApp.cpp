@@ -301,7 +301,7 @@ namespace mrv
                     _("Debug verbosity.")),
 #endif
                 app::CmdLineValueOption<int>::create(
-                    Preferences::logLevel, {"-logLevel", "-verbosity", "-v"},
+                    Preferences::logLevel, {"-logLevel", "-l"},
                     _("Log verbosity."),
                     string::Format("{0}").arg(Preferences::logLevel)),
                 app::CmdLineValueOption<std::string>::create(

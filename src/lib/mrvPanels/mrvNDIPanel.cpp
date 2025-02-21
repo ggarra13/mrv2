@@ -22,9 +22,10 @@
 #    include "mrvCore/mrvFile.h"
 #    include "mrvCore/mrvMemory.h"
 
-#    include "mrvWidgets/mrvFunctional.h"
 #    include "mrvWidgets/mrvButton.h"
+#    include "mrvWidgets/mrvFunctional.h"
 #    include "mrvWidgets/mrvHorSlider.h"
+#    include "mrvWidgets/mrvInput.h"
 #    include "mrvWidgets/mrvCollapsibleGroup.h"
 
 #    include "mrvPanels/mrvPanelsCallbacks.h"
@@ -50,8 +51,11 @@ namespace mrv
         {
 
             PopupMenu* sourceMenu = nullptr;
-            PopupMenu* audioMenu = nullptr;
-            PopupMenu* bestFormatMenu = nullptr;
+            PopupMenu* inputAudioMenu = nullptr;
+            PopupMenu* inputBestFormatMenu = nullptr;
+            
+            PopupMenu* outputAudioMenu = nullptr;
+            PopupMenu* outputBestFormatMenu = nullptr;
 
             uint32_t no_sources = 0;
             const NDIlib_source_t* p_sources = NULL;
@@ -275,7 +279,7 @@ namespace mrv
                         cg->open();
 
                     const std::string& prefix = ndiPanel->tab_prefix();
-                    const std::string key = prefix + "NDI";
+                    const std::string key = prefix + "NDI Input";
 
                     auto settings = App::app->settings();
                     settings->setValue(key, static_cast<int>(cg->is_open()));
@@ -309,7 +313,7 @@ namespace mrv
             
             mW = new Widget< PopupMenu >(
                 g->x() + 10, Y, g->w() - 20, 20, _("Fast Format"));
-            m = r.bestFormatMenu = mW;
+            m = r.inputBestFormatMenu = mW;
             m->disable_submenus();
             m->labelsize(12);
             m->align(FL_ALIGN_CENTER | FL_ALIGN_CLIP);
@@ -319,7 +323,7 @@ namespace mrv
 
             mW = new Widget< PopupMenu >(
                 g->x() + 10, Y, g->w() - 20, 20, _("With Audio"));
-            m = r.audioMenu = mW;
+            m = r.inputAudioMenu = mW;
             m->disable_submenus();
             m->labelsize(12);
             m->align(FL_ALIGN_CENTER | FL_ALIGN_CLIP);
@@ -331,7 +335,79 @@ namespace mrv
 
             cg->end();
 
-            std::string key = prefix + "NDI";
+            std::string key = prefix + "NDI Input";
+            value = settings->getValue<std::any>(key);
+            open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
+            if (!open)
+            {
+                cg->close();
+            }
+            
+            cg = new CollapsibleGroup(g->x(), Y, g->w(), 20, _("Output"));
+            cg->spacing(2);
+            b = cg->button();
+            b->labelsize(14);
+            b->size(b->w(), 18);
+            b->callback(
+                [](Fl_Widget* w, void* d)
+                {
+                    CollapsibleGroup* cg = static_cast<CollapsibleGroup*>(d);
+                    if (cg->is_open())
+                        cg->close();
+                    else
+                        cg->open();
+
+                    const std::string& prefix = ndiPanel->tab_prefix();
+                    const std::string key = prefix + "NDI Output";
+
+                    auto settings = App::app->settings();
+                    settings->setValue(key, static_cast<int>(cg->is_open()));
+                },
+                cg);
+
+            cg->begin();
+
+            Fl_Button* stream_b = new Fl_Button(
+                g->x() + 10, Y, g->w() - 20, 20, _("Start streaming"));
+            stream_b->align(FL_ALIGN_CENTER);
+            stream_b->labelsize(12);
+            stream_b->callback(
+                [](Fl_Widget* w, void* d)
+                {
+                },
+                cg);
+
+            Fl_Group* ig = new Fl_Group(g->x() + 10, Y, g->w() - 20, 20);
+            Input* mI = new Input(
+                g->x() + 80, Y, g->w() - 90, 20, _("Name"));
+            mI->value("mrv2 HDR");
+            ig->end();
+            
+            mW = new Widget< PopupMenu >(
+                g->x() + 10, Y, g->w() - 20, 20, _("Fast Format"));
+            m = r.outputBestFormatMenu = mW;
+            m->disable_submenus();
+            m->labelsize(12);
+            m->align(FL_ALIGN_CENTER | FL_ALIGN_CLIP);
+            m->add(_("Fast Format"));
+            m->add(_("Best Format"));
+            m->value(0);
+
+            mW = new Widget< PopupMenu >(
+                g->x() + 10, Y, g->w() - 20, 20, _("With Audio"));
+            m = r.outputAudioMenu = mW;
+            m->disable_submenus();
+            m->labelsize(12);
+            m->align(FL_ALIGN_CENTER | FL_ALIGN_CLIP);
+            m->add(_("With Audio"));
+            m->add(_("Without Audio"));
+            m->value(0);
+            
+            r.find.awake = false;
+
+            cg->end();
+
+            key = prefix + "NDI Output";
             value = settings->getValue<std::any>(key);
             open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
@@ -379,8 +455,8 @@ namespace mrv
 
             ndi::Options options;
             options.sourceName = sourceName;
-            options.bestFormat = r.bestFormatMenu->value();
-            options.noAudio    = r.audioMenu->value();
+            options.bestFormat = r.inputBestFormatMenu->value();
+            options.noAudio    = r.inputAudioMenu->value();
 
             nlohmann::json j;
             j = options;

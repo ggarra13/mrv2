@@ -5,6 +5,8 @@ v1.3.4
 - Fixed disting libselinux on Linux.
 - Made HDR tonemapping an option in Render/HDR menu.
 - Made Ignore Chromaticities in Render/HDR menu.
+- Fixed -v flag being used in -logLevel as well as version.  For backwards compatibility -v will refer to -version and -l to -logLevel.
+- Added NDI Output Stream.
 
 
 v1.3.3
