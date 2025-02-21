@@ -18,6 +18,14 @@
 // #include <tlPlay/ViewportModel.h>
 // #include <tlPlay/Util.h>
 
+#ifdef TLRENDER_BMD
+#    include <tlDevice/BMDOutputDevice.h>
+#endif
+
+#ifdef TLRENDER_NDI
+#    include <tlDevice/NDIOutputDevice.h>
+#endif
+
 #ifdef MRV2_PYBIND11
 #    include <pybind11/embed.h>
 namespace py = pybind11;
@@ -1290,8 +1298,34 @@ namespace mrv
     {
         return _p->outputDevice;
     }
-#endif // TLRENDER_BMD
+#endif // TLRENDER_BMD || TLRENDER_NDI
 
+#ifdef TLRENDER_NDI
+    void App::beginNDIOutputStream(const device::DeviceConfig& options)
+    {
+        TLRENDER_P();
+        p.outputDevice = ndi::OutputDevice::create(_context);
+    }
+    
+    void App::endNDIOutputStream()
+    {
+        _p->outputDevice.reset();
+    }
+#endif
+    
+#ifdef TLRENDER_BMD
+    void App::beginBMDOutputStream(const device::DeviceConfig& options)
+    {
+        TLRENDER_P();
+        p.outputDevice = std::make_shared<bmd::OutputDevice>();
+    }
+    
+    void App::endBMDOutputStream()
+    {
+        p.outputDevice.reset();
+    }
+#endif
+    
     void
     App::open(const std::string& fileName, const std::string& audioFileName)
     {

@@ -11,8 +11,8 @@
 #include <tlTimeline/TimeUnits.h>
 
 #if defined(TLRENDER_NDI) || defined(TLRENDER_BMD)
-#include <tlDevice/DevicesModel.h>
-#include <tlDevice/IOutput.h>
+#    include <tlDevice/DevicesModel.h>
+#    include <tlDevice/IOutput.h>
 #endif
 
 #include <tlIO/IO.h>
@@ -78,6 +78,16 @@ namespace mrv
 
         //! Get the devices model.
         const std::shared_ptr<device::DevicesModel>& devicesModel() const;
+#endif
+
+#ifdef TLRENDER_NDI
+        void beginNDIOutputStream(const device::DeviceConfig& options);
+        void endNDIOutputStream();
+#endif
+        
+#ifdef TLRENDER_BMD
+        void beginBMDOutputStream(const device::DeviceConfig& options);
+        void endBMDOutputStream();
 #endif
         
         //! Create a new application.
