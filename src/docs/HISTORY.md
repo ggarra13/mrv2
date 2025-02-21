@@ -1,3 +1,10 @@
+v1.3.4
+======
+
+- Updated default ocio configs to use their latest names instead of the versioned ones.
+- Fixed disting libselinux on Linux.
+
+
 v1.3.3
 ======
 

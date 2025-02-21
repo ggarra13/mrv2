@@ -1053,11 +1053,11 @@ if (entry == _("Default"))
 }
 else if (entry == _("CG"))
 {
-   v->uiPrefsOCIOConfig->value("ocio://cg-config-v2.2.0_aces-v1.3_ocio-v2.4");
+   v->uiPrefsOCIOConfig->value("ocio://cg-config-latest");
 }
 else if (entry == _("Studio"))
 {
-   v->uiPrefsOCIOConfig->value("ocio://studio-config-v2.2.0_aces-v1.3_ocio-v2.4");
+   v->uiPrefsOCIOConfig->value("ocio://studio-config-latest");
 }} selected
                   xywh {477 101 119 32} down_box BORDER_BOX when 7
                 } {
