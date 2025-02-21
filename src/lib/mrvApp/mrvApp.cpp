@@ -12,6 +12,12 @@
 
 #include <tlTimeline/Util.h>
 
+#include <tlPlay/AudioModel.h>
+// #include <tlPlay/ColorModel.h>
+// #include <tlPlay/RenderModel.h>
+// #include <tlPlay/ViewportModel.h>
+// #include <tlPlay/Util.h>
+
 #ifdef MRV2_PYBIND11
 #    include <pybind11/embed.h>
 namespace py = pybind11;
@@ -195,6 +201,13 @@ namespace mrv
         std::vector<std::shared_ptr<FilesModelItem> > activeFiles;
         std::vector<std::shared_ptr<timeline::Timeline> > timelines;
 
+        bool deviceActive = false;
+#if defined(TLRENDER_NDI) || defined(TLRENDER_BMD)
+        std::shared_ptr<device::IOutput> outputDevice;
+        std::shared_ptr<device::DevicesModel> devicesModel;
+        image::VideoLevels outputVideoLevels = image::VideoLevels::First;
+#endif
+
         // Observers
         std::shared_ptr<
             observer::ListObserver<std::shared_ptr<FilesModelItem> > >
@@ -205,6 +218,8 @@ namespace mrv
         std::shared_ptr<observer::ListObserver<int> > layersObserver;
         std::shared_ptr<observer::ValueObserver<timeline::CompareTimeMode> >
             compareTimeObserver;
+        std::shared_ptr<observer::ValueObserver<float> > volumeObserver;
+        std::shared_ptr<observer::ValueObserver<bool> > muteObserver;
         std::shared_ptr<observer::ValueObserver<timeline::PlayerCacheInfo> >
             cacheInfoObserver;
         std::shared_ptr<observer::ListObserver<log::Item> > logObserver;
@@ -680,7 +695,7 @@ namespace mrv
                         player->setCompareTime(value);
                     }
                 });
-
+            
         p.logObserver = observer::ListObserver<log::Item>::create(
             ui->app->getContext()->getLogSystem()->observeLog(),
             [this](const std::vector<log::Item>& value)
@@ -1252,6 +1267,18 @@ namespace mrv
     {
         return _p->running;
     }
+
+#if defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
+    const std::shared_ptr<device::DevicesModel>& App::devicesModel() const
+    {
+        return _p->devicesModel;
+    }
+
+    const std::shared_ptr<device::IOutput>& App::outputDevice() const
+    {
+        return _p->outputDevice;
+    }
+#endif // TLRENDER_BMD
 
     void
     App::open(const std::string& fileName, const std::string& audioFileName)
@@ -1985,15 +2012,11 @@ namespace mrv
             p.player->setMute(p.mute);
         }
 
-#ifdef TLRENDER_BMD
         if (p.outputDevice)
         {
-            // @todo:
-            //
             p.outputDevice->setVolume(p.volume);
             p.outputDevice->setMute(p.mute);
         }
-#endif
     }
 
     void App::_layersUpdate(const std::vector<int>& value)

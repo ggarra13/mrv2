@@ -10,6 +10,11 @@
 #include <tlTimeline/IRender.h>
 #include <tlTimeline/TimeUnits.h>
 
+#if defined(TLRENDER_NDI) || defined(TLRENDER_BMD)
+#include <tlDevice/DevicesModel.h>
+#include <tlDevice/IOutput.h>
+#endif
+
 #include <tlIO/IO.h>
 
 #include "mrvApp/mrvFilesModel.h"
@@ -24,8 +29,6 @@ class ViewerUI;
 namespace mrv
 {
     using namespace tl;
-
-    class OutputDevice;
 
     struct Playlist;
 
@@ -69,12 +72,14 @@ namespace mrv
         //! Get the display options.
         const timeline::DisplayOptions& displayOptions() const;
 
+#if defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
         //! Get the output device.
-        OutputDevice* outputDevice() const;
+        const std::shared_ptr<device::IOutput>& outputDevice() const;
 
         //! Get the devices model.
-        const std::shared_ptr<DevicesModel>& devicesModel() const;
-
+        const std::shared_ptr<device::DevicesModel>& devicesModel() const;
+#endif
+        
         //! Create a new application.
         static std::shared_ptr<App>
         create(int argc, char* argv[], const std::shared_ptr<system::Context>&);

@@ -453,17 +453,18 @@ namespace mrv
             view->redraw();
         }
 
-#ifdef TLRENDER_BMD
-        p.app->outputDevice()->setOCIOOptions(p.ocioOptions);
-        p.app->outputDevice()->setLUTOptions(p.lutOptions);
-        p.app->outputDevice()->setImageOptions(imageOptions);
-        for (auto& i : displayOptions)
-        {
-            i.videoLevels = p.outputVideoLevels;
-        }
-        p.app->outputDevice()->setDisplayOptions(displayOptions);
-        p.app->outputDevice()->setCompareOptions(p.compareOptions);
-        p.app->outputDevice()->setTimelinePlayer(p.player);
+#if defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
+        auto& outputDevice = app->outputDevice();
+        outputDevice->setOCIOOptions(p.ocioOptions);
+        outputDevice->setLUTOptions(p.lutOptions);
+        outputDevice->setImageOptions({p.imageOptions});
+        // for (auto& i : displayOptions)
+        // {
+        //     i.videoLevels = p.outputVideoLevels;
+        // }
+        // outputDevice->setDisplayOptions(displayOptions);
+        outputDevice->setDisplayOptions({p.displayOptions});
+        outputDevice->setCompareOptions(p.compareOptions);
 #endif
 
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
