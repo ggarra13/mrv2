@@ -65,6 +65,7 @@ namespace mrv
     Hotkey kFrameView(false, false, false, false, 0);
     Hotkey kSafeAreas(false, false, false, false, 's');
     Hotkey kIgnoreDisplayWindow(false, false, false, false, 0);
+    Hotkey kIgnoreChromaticities(false, false, false, false, 0);
     Hotkey kAutoNormalize(false, false, false, false, 0);
     Hotkey kInvalidValues(false, false, false, false, 0);
     Hotkey kToggleHDRTonemap(false, false, false, false, 0);
@@ -413,6 +414,7 @@ namespace mrv
         HotkeyEntry(_("Less UI Transparency"), &kUITransparencyLess),
         HotkeyEntry(_("Safe Areas"), &kSafeAreas),
         HotkeyEntry(_("Ignore Display Window"), &kIgnoreDisplayWindow),
+        HotkeyEntry(_("Ignore Chromaticities"), &kIgnoreChromaticities),
         HotkeyEntry(_("Auto Normalize"), &kAutoNormalize),
         HotkeyEntry(_("Invalid Values"), &kInvalidValues),
         HotkeyEntry(_("Toggle HDR tonemap"), &kToggleHDRTonemap),

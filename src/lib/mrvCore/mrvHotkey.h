@@ -130,6 +130,7 @@ namespace mrv
     extern Hotkey kSafeAreas;
 
     extern Hotkey kIgnoreDisplayWindow;
+    extern Hotkey kIgnoreChromaticities;
     extern Hotkey kAutoNormalize;
     extern Hotkey kInvalidValues;
     extern Hotkey kToggleHDRTonemap;

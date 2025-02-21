@@ -1412,6 +1412,8 @@ namespace mrv
 #if defined(TLRENDER_EXR)
         out["OpenEXR/IgnoreDisplayWindow"] =
             string::Format("{0}").arg(ui->uiView->getIgnoreDisplayWindow());
+        out["IgnoreChromaticities"] =
+            string::Format("{0}").arg(p.displayOptions.ignoreChromaticities);
 #endif
 #if defined(TLRENDER_EXR) || defined(TLRENDER_STB)
         out["AutoNormalize"] =

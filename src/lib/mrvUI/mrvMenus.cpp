@@ -833,6 +833,14 @@ namespace mrv
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
             if (displayOptions.invalidValues)
                 item->set();
+        
+            idx = menu->add(
+                _("Render/HDR/Ignore Chromaticities"),
+                kIgnoreChromaticities.hotkey(),
+                (Fl_Callback*)toggle_ignore_chromaticities_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (displayOptions.ignoreChromaticities)
+                item->set();
 
             const timeline::HDROptions& hdrOptions = uiView->getHDROptions();
             idx = menu->add(

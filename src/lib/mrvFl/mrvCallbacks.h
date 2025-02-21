@@ -142,6 +142,9 @@ namespace mrv
 
     //! Ignore Display Window callback
     void toggle_ignore_display_window_cb(Fl_Menu_* w, ViewerUI* ui);
+    
+    //! Ignore Display Window callback
+    void toggle_ignore_chromaticities_cb(Fl_Menu_* w, ViewerUI* ui);
 
     //! Masking callback
     void masking_cb(Fl_Menu_* w, ViewerUI* ui);

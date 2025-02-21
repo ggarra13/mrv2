@@ -1237,7 +1237,16 @@ namespace mrv
     void toggle_normalize_image_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         timeline::DisplayOptions o = ui->app->displayOptions();
-        o.normalize.enabled ^= 1;
+        o.normalize.enabled = !o.normalize.enabled;
+        ui->app->setDisplayOptions(o);
+        refresh_media_cb(m, ui);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void toggle_ignore_chromaticities_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        timeline::DisplayOptions o = ui->app->displayOptions();
+        o.ignoreChromaticities = !o.ignoreChromaticities;
         ui->app->setDisplayOptions(o);
         refresh_media_cb(m, ui);
         ui->uiMain->fill_menu(ui->uiMenuBar);
