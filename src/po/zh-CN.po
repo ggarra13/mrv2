@@ -1,6 +1,6 @@
 # AI Simplified Chinese translations for mrv2 package
 # This file is distributed under the same license as the mrv2 package.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.5\n"
@@ -3896,6 +3896,12 @@ msgstr "渲染/HDR/自动归一化"
 msgid "Render/HDR/Invalid Values"
 msgstr "渲染/HDR/无效值"
 
+msgid "Render/HDR/Ignore Chromaticities"
+msgstr "招标/HDR/忽略颜色"
+
+msgid "Render/HDR/Tonemap"
+msgstr "招标/HDR/时针映射"
+
 msgid "Playback/Stop"
 msgstr "播放/停止"
 
@@ -6922,11 +6928,17 @@ msgstr "减少界面透明度"
 msgid "Ignore Display Window"
 msgstr "忽略显示窗口"
 
+msgid "Ignore Chromaticities"
+msgstr "忽略颜色"
+
 msgid "Auto Normalize"
 msgstr "自动统一化"
 
 msgid "Invalid Values"
 msgstr "无效值"
+
+msgid "Toggle HDR tonemap"
+msgstr "切换 HRD 音速映射"
 
 msgid "Display Window"
 msgstr "显示窗口"

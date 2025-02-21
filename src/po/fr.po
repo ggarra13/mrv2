@@ -1,7 +1,7 @@
 # French translations for mrv2 package
 # This file is distributed under the same license as the mrv2 package.
 # Gonzalo Garramuño <ggarra13@gmail.com>, 2023.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.6\n"
@@ -3968,6 +3968,12 @@ msgstr "Rendre/HDR/Normaliser automatiquement"
 msgid "Render/HDR/Invalid Values"
 msgstr "Rendre/HDR/Valeurs non valides"
 
+msgid "Render/HDR/Ignore Chromaticities"
+msgstr "Rendre/HDR/Ignorer les chromatismes"
+
+msgid "Render/HDR/Tonemap"
+msgstr "Rendre/HDR/Carte des tons"
+
 msgid "Playback/Stop"
 msgstr "Remise en ligne/Arrêtez-vous."
 
@@ -7127,11 +7133,17 @@ msgstr "Moins de transparence de l'assurance-chômage"
 msgid "Ignore Display Window"
 msgstr "Ignorer la fenêtre d'affichage"
 
+msgid "Ignore Chromaticities"
+msgstr "Ignorer les chromatismes"
+
 msgid "Auto Normalize"
 msgstr "Normaliser automatiquement"
 
 msgid "Invalid Values"
 msgstr "Valeurs non valides"
+
+msgid "Toggle HDR tonemap"
+msgstr "Commutation de la carte de tons HDR"
 
 msgid "Display Window"
 msgstr "Affiche la fenêtre"

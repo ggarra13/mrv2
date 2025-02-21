@@ -1,7 +1,7 @@
 # Russian translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.8\n"
@@ -4004,6 +4004,12 @@ msgstr "Редакция/HDR/Автонормализовать"
 msgid "Render/HDR/Invalid Values"
 msgstr "Редакция/HDR/Неверные значения"
 
+msgid "Render/HDR/Ignore Chromaticities"
+msgstr "Редакция/HDR/Игнорировать хроматизм"
+
+msgid "Render/HDR/Tonemap"
+msgstr "Редакция/HDR/Тональность"
+
 msgid "Playback/Stop"
 msgstr "Воспроизведение/Стой."
 
@@ -7120,11 +7126,17 @@ msgstr "Менее прозрачный UI"
 msgid "Ignore Display Window"
 msgstr "Игнорировать окно отображения"
 
+msgid "Ignore Chromaticities"
+msgstr "Игнорировать хроматизм"
+
 msgid "Auto Normalize"
 msgstr "Автонормализовать"
 
 msgid "Invalid Values"
 msgstr "Неверные значения"
+
+msgid "Toggle HDR tonemap"
+msgstr "Скриншот"
 
 msgid "Display Window"
 msgstr "Показать окно"

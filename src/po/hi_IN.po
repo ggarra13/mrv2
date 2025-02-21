@@ -1,7 +1,7 @@
 # Hindi translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.7\n"
@@ -3918,6 +3918,12 @@ msgstr "रेंडर/HDR/स्वचालित सामान्य क�
 msgid "Render/HDR/Invalid Values"
 msgstr "रेंडर/HDR/अवैध मान"
 
+msgid "Render/HDR/Ignore Chromaticities"
+msgstr "रेंडर/HDR/टॉगलिकता अनदेखा करें"
+
+msgid "Render/HDR/Tonemap"
+msgstr "रेंडर/HDR/टोनमैप"
+
 msgid "Playback/Stop"
 msgstr "प्लेबैक/रूकें"
 
@@ -6973,11 +6979,17 @@ msgstr "कम यूआई ट्रांसपेरेंसी"
 msgid "Ignore Display Window"
 msgstr "विंडो नज़रअंदाज़ करें"
 
+msgid "Ignore Chromaticities"
+msgstr "टॉगलिकता अनदेखा करें"
+
 msgid "Auto Normalize"
 msgstr "स्वचालित सामान्य करें"
 
 msgid "Invalid Values"
 msgstr "अवैध मान"
+
+msgid "Toggle HDR tonemap"
+msgstr "HDR वर्तनीमैप टॉगल करें"
 
 msgid "Display Window"
 msgstr "विंडो प्रदर्शित करें"

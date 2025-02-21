@@ -1,7 +1,7 @@
 # English translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.6\n"
@@ -3967,6 +3967,12 @@ msgstr "Render/HDR/Auto Normalize"
 msgid "Render/HDR/Invalid Values"
 msgstr "Render/HDR/Invalid Values"
 
+msgid "Render/HDR/Ignore Chromaticities"
+msgstr "Render/HDR/Ignore Chromaticities"
+
+msgid "Render/HDR/Tonemap"
+msgstr "Render/HDR/Tonemap"
+
 msgid "Playback/Stop"
 msgstr "Playback/Stop"
 
@@ -7070,11 +7076,17 @@ msgstr "Less UI Transparency"
 msgid "Ignore Display Window"
 msgstr "Ignore Display Window"
 
+msgid "Ignore Chromaticities"
+msgstr "Ignore Chromaticities"
+
 msgid "Auto Normalize"
 msgstr "Auto Normalize"
 
 msgid "Invalid Values"
 msgstr "Invalid Values"
+
+msgid "Toggle HDR tonemap"
+msgstr "Toggle HDR tonemap"
 
 msgid "Display Window"
 msgstr "Display Window"

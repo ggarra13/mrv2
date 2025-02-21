@@ -1,7 +1,7 @@
 # Italian translations for mrv2 package
 # This file is distributed under the same license as the mrv2 package.
 # Gonzalo Garramuño <ggarra13@gmail.com>, 2023.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.7nReport-Msgid-Bugs-To: ggarra13@gmail.com\n"
@@ -3987,6 +3987,12 @@ msgstr "Render/HDR/Normalizza automaticamente"
 msgid "Render/HDR/Invalid Values"
 msgstr "Render/HDR/Valori non validi"
 
+msgid "Render/HDR/Ignore Chromaticities"
+msgstr "Render/HDR/Ignora le cromaticità"
+
+msgid "Render/HDR/Tonemap"
+msgstr "Render/HDR/Mappa dei toni"
+
 msgid "Playback/Stop"
 msgstr "Riproduzione/Smettila."
 
@@ -7122,11 +7128,17 @@ msgstr "Meno trasparenza dell'interfaccia utente"
 msgid "Ignore Display Window"
 msgstr "Ignora la finestra di visualizzazione"
 
+msgid "Ignore Chromaticities"
+msgstr "Ignora le cromaticità"
+
 msgid "Auto Normalize"
 msgstr "Normalizza automaticamente"
 
 msgid "Invalid Values"
 msgstr "Valori non validi"
+
+msgid "Toggle HDR tonemap"
+msgstr "Commuta mappa tonale HDR"
 
 msgid "Display Window"
 msgstr "Visualizza finestra"

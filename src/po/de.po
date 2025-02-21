@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
@@ -3971,6 +3971,12 @@ msgstr "Render/HDR/Automatisch normalisieren"
 msgid "Render/HDR/Invalid Values"
 msgstr "Render/HDR/Ungltige Werte"
 
+msgid "Render/HDR/Ignore Chromaticities"
+msgstr "Render/HDR/Chromatizitäten ignorieren"
+
+msgid "Render/HDR/Tonemap"
+msgstr "Render/HDR/Tonkarte"
+
 msgid "Playback/Stop"
 msgstr "Wiedergabe/Anhalten"
 
@@ -7100,11 +7106,17 @@ msgstr "Weniger Transparenz der Benutzeroberfläche"
 msgid "Ignore Display Window"
 msgstr "Anzeigefenster ignorieren"
 
+msgid "Ignore Chromaticities"
+msgstr "Chromatizitäten ignorieren"
+
 msgid "Auto Normalize"
 msgstr "Automatisch normalisieren"
 
 msgid "Invalid Values"
 msgstr "Ungltige Werte"
+
+msgid "Toggle HDR tonemap"
+msgstr "HDR-Tonkarte umschalten"
 
 msgid "Display Window"
 msgstr "Fenster anzeigen"

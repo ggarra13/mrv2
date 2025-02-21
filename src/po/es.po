@@ -2,7 +2,7 @@
 # Traducciones al español para el paquete mrv2.
 # This file is distributed under the same license as the mrv2 package.
 # Gonzalo Garramuño <ggarra13@gmail.com>, 2023.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.8\n"
@@ -4028,6 +4028,12 @@ msgstr "Render/HDR/Auto Normalizar"
 msgid "Render/HDR/Invalid Values"
 msgstr "Render/HDR/Valores Inválidos"
 
+msgid "Render/HDR/Ignore Chromaticities"
+msgstr "Render/HDR/Ignorar Chromacidades"
+
+msgid "Render/HDR/Tonemap"
+msgstr "Render/HDR/Mapeo de Tonos"
+
 msgid "Playback/Stop"
 msgstr "Reproducir/Parar"
 
@@ -7149,11 +7155,17 @@ msgstr "Menos transparencia de la IU"
 msgid "Ignore Display Window"
 msgstr "Ignorar Ventana de Display"
 
+msgid "Ignore Chromaticities"
+msgstr "Ignorar las cromáticas"
+
 msgid "Auto Normalize"
 msgstr "Auto Normalizar"
 
 msgid "Invalid Values"
 msgstr "Valores Inválidos"
+
+msgid "Toggle HDR tonemap"
+msgstr "Alternar mapeo de tonos de HDR"
 
 msgid "Display Window"
 msgstr "Ventana de Display"

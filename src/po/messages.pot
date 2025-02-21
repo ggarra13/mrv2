@@ -5,7 +5,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.3.3\n"
+"Project-Id-Version: mrv2 v1.3.4\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -3618,6 +3618,12 @@ msgstr ""
 msgid "Render/HDR/Invalid Values"
 msgstr ""
 
+msgid "Render/HDR/Ignore Chromaticities"
+msgstr ""
+
+msgid "Render/HDR/Tonemap"
+msgstr ""
+
 msgid "Playback/Stop"
 msgstr ""
 
@@ -6473,10 +6479,16 @@ msgstr ""
 msgid "Ignore Display Window"
 msgstr ""
 
+msgid "Ignore Chromaticities"
+msgstr ""
+
 msgid "Auto Normalize"
 msgstr ""
 
 msgid "Invalid Values"
+msgstr ""
+
+msgid "Toggle HDR tonemap"
 msgstr ""
 
 msgid "Display Window"

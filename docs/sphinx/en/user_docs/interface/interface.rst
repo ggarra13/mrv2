@@ -205,7 +205,7 @@ The Render menu provides controls for modifying the rendering of the image on th
 
 .. topic:: Alpha Blend
 
-   You can select how the alpha channel is handled when the image or video has one.  You can choose between None, Straight or Premultiplied.
+   You can select how the alpha channel is handled when the image or video has one.  You can choose between None, Straight or Premultiplied.  OpenEXR images should, normally, be comped Premultiplied.
       
 .. topic:: Minify and Magnify Filters
 

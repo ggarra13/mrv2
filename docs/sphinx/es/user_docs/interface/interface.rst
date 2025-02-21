@@ -208,7 +208,7 @@ El menú de Render provee controles para modificar la representación de la imag
 
 .. topic:: Mezcla Alfa
 
-   Puede seleccionar como se maneja el canal alfa cuando la imagen o vídeo tiene uno.  Puede elegir entre Ninguna, Derecha o Premultiplicada.
+   Puede seleccionar como se maneja el canal alfa cuando la imagen o vídeo tiene uno.  Puede elegir entre Ninguna, Derecha o Premultiplicada.  Las imágenes de OpenEXR deben ser, normalmente, compuestas con alfa Premultiplicada.
       
 .. topic:: Filtros de Minificación y Magnificación
 
