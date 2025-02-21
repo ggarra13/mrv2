@@ -1252,6 +1252,14 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
+    void toggle_hdr_tonemap_cb(Fl_Menu_* w, ViewerUI* ui)
+    {
+        timeline::HDROptions o = ui->uiView->getHDROptions();
+        o.tonemap ^= 1;
+        ui->uiView->setHDROptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+    
     void toggle_fullscreen_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         bool active = true;

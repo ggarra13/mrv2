@@ -3,6 +3,8 @@ v1.3.4
 
 - Updated default ocio configs to use their latest names instead of the versioned ones.
 - Fixed disting libselinux on Linux.
+- Made tonemapping be an HDR menu option.  This is needed to support HDR output devices or APIs like NDI.
+- Made HDR tonemapping an option in Render/HDR menu.
 
 
 v1.3.3

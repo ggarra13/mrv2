@@ -927,6 +927,23 @@ namespace mrv
         redraw();
     }
 
+    void
+    TimelineViewport::setHDROptions(const timeline::HDROptions& value) noexcept
+    {
+        TLRENDER_P();
+        if (value == p.hdrOptions)
+            return;
+        p.hdrOptions.tonemap = value.tonemap;
+        redrawWindows();
+    }
+    
+    const timeline::HDROptions&
+    TimelineViewport::getHDROptions() const noexcept
+    {
+        return _p->hdrOptions;
+    }
+
+
     void TimelineViewport::setTimelinePlayer(TimelinePlayer* player) noexcept
     {
         TLRENDER_P();
@@ -3414,7 +3431,6 @@ namespace mrv
         i = p.tagData.find("hdr");
         if (i != p.tagData.end())
         {
-            p.hdrOptions.tonemap = true;
             if (p.hdr != i->second)
             {
                 p.hdr = i->second;
@@ -3423,10 +3439,6 @@ namespace mrv
                 nlohmann::json j = nlohmann::json::parse(i->second);
                 p.hdrOptions.hdrData = j.get<image::HDRData>();
             }
-        }
-        else
-        {
-            p.hdrOptions.tonemap = false;
         }
 
         // \@bug: Apple (macOS Intel at least) is too slow and goes black.

@@ -833,6 +833,14 @@ namespace mrv
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
             if (displayOptions.invalidValues)
                 item->set();
+
+            const timeline::HDROptions& hdrOptions = uiView->getHDROptions();
+            idx = menu->add(
+                _("Render/HDR/Tonemap"),
+                kToggleHDRTonemap.hotkey(),
+                (Fl_Callback*)toggle_hdr_tonemap_cb, ui, mode);
+            if (hdrOptions.tonemap)
+                item->set();
         }
 
         timeline::Playback playback = timeline::Playback::Stop;

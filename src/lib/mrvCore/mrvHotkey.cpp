@@ -67,6 +67,7 @@ namespace mrv
     Hotkey kIgnoreDisplayWindow(false, false, false, false, 0);
     Hotkey kAutoNormalize(false, false, false, false, 0);
     Hotkey kInvalidValues(false, false, false, false, 0);
+    Hotkey kToggleHDRTonemap(false, false, false, false, 0);
 
     Hotkey kDisplayWindow(true, false, false, false, 'd');
     Hotkey kDataWindow(false, false, false, false, 'd');
@@ -414,6 +415,7 @@ namespace mrv
         HotkeyEntry(_("Ignore Display Window"), &kIgnoreDisplayWindow),
         HotkeyEntry(_("Auto Normalize"), &kAutoNormalize),
         HotkeyEntry(_("Invalid Values"), &kInvalidValues),
+        HotkeyEntry(_("Toggle HDR tonemap"), &kToggleHDRTonemap),
         HotkeyEntry(_("Display Window"), &kDisplayWindow),
         HotkeyEntry(_("Data Window"), &kDataWindow),
         HotkeyEntry(_("Compare Wipe"), &kCompareWipe),

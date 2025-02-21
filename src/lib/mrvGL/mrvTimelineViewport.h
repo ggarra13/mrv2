@@ -112,6 +112,11 @@ namespace mrv
         //! Set the stereo 3D options.
         void setStereo3DOptions(const Stereo3DOptions&) noexcept;
 
+        //! Set HDR options.
+        void setHDROptions(const timeline::HDROptions&) noexcept;
+
+        const timeline::HDROptions& getHDROptions() const noexcept;
+        
         //! Set the timeline players.
         void setTimelinePlayer(TimelinePlayer*) noexcept;
 
