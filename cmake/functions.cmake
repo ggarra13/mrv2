@@ -94,6 +94,7 @@ function( is_system_lib TARGET ISSYSLIB )
 	libpulse-simple
 	libresolv
 	librt
+	libselinux
 	libtinfo
 	libwayland
 	libX
