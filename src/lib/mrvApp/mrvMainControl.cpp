@@ -14,6 +14,8 @@
 #include "mrvApp/mrvMainControl.h"
 #include "mrvApp/mrvApp.h"
 
+#include <tlDevice/IOutput.h>
+
 #include <tlCore/File.h>
 #include <tlCore/String.h>
 #include <tlCore/StringFormat.h>

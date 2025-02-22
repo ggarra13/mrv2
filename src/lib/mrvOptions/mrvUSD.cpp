@@ -4,14 +4,14 @@
 
 #ifdef TLRENDER_USD
 
-#    include <tlCore/StringFormat.h>
-
-#    include "mrvOptions/mrvUSD.h"
+#    include "mrvApp/mrvApp.h"
+#    include "mrvApp/mrvSettingsObject.h"
 
 #    include "mrvPanels/mrvPanelsCallbacks.h"
 
-#    include "mrvApp/mrvSettingsObject.h"
-#    include "mrvApp/mrvApp.h"
+#    include "mrvOptions/mrvUSD.h"
+
+#    include <tlCore/StringFormat.h>
 
 namespace mrv
 {

@@ -13,6 +13,8 @@
 #    include <tlCore/StringFormat.h>
 #    include <tlCore/NDIOptions.h>
 
+#    include <tlDevice/OutputData.h>
+
 #    include <FL/Fl_Choice.H>
 #    include <FL/Fl_Check_Button.H>
 #    include <FL/Fl_Toggle_Button.H>
@@ -386,7 +388,27 @@ namespace mrv
                         device::DeviceConfig config;
                         config.deviceIndex = 0;
                         config.displayModeIndex = 0;
-                        config.pixelType = device::PixelType::_8BitRGBX;
+                        // config.pixelType = device::PixelType::_8BitYUV; // OK
+                        // config.pixelType = device::PixelType::_8BitRGBX; //
+                        // OK config.pixelType = device::PixelType::_8BitBGRA;
+                        // // OK config.pixelType =
+                        // device::PixelType::_8BitBGRX; // OK config.pixelType
+                        // = device::PixelType::_8BitUYVA; // BAD (black)
+                        // config.pixelType = device::PixelType::_8BitI420; //
+                        // BAD (black) config.pixelType =
+                        // device::PixelType::_10BitRGB;  // Unsupported
+                        // config.pixelType = device::PixelType::_10BitRGBX; //
+                        // Unsupported config.pixelType =
+                        // device::PixelType::_10BitRGBXLE; // Unsupported
+                        // config.pixelType = device::PixelType::_10BitYUV; //
+                        // Unsupported config.pixelType =
+                        // device::PixelType::_12BitRGB;    // Unsupported
+                        // config.pixelType = device::PixelType::_12BitRGBLE; //
+                        // Unsupported
+                        config.pixelType =
+                            device::PixelType::_16BitP216; // BAD (need sws)
+                        // config.pixelType = device::PixelType::_16BitPA16; //
+                        // BAD (need sws)
                         App::app->beginNDIOutputStream(config);
                         b->copy_label(_("Stop streaming"));
                     }

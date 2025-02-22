@@ -10,11 +10,6 @@
 #include <tlTimeline/IRender.h>
 #include <tlTimeline/TimeUnits.h>
 
-#if defined(TLRENDER_NDI) || defined(TLRENDER_BMD)
-#    include <tlDevice/DevicesModel.h>
-#    include <tlDevice/IOutput.h>
-#endif
-
 #include <tlIO/IO.h>
 
 #include "mrvApp/mrvFilesModel.h"
@@ -26,6 +21,16 @@ namespace
 
 class ViewerUI;
 
+namespace tl
+{
+    namespace device
+    {
+        class IOutput;
+        class DevicesModel;
+        class DeviceConfig;
+    } // namespace device
+} // namespace tl
+
 namespace mrv
 {
     using namespace tl;
@@ -33,7 +38,6 @@ namespace mrv
     struct Playlist;
 
     class TimeObject;
-    class DevicesModel;
     class FilesModel;
     class PlaylistsModel;
     class SettingsObject;

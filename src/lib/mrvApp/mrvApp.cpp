@@ -18,14 +18,6 @@
 // #include <tlPlay/ViewportModel.h>
 // #include <tlPlay/Util.h>
 
-#ifdef TLRENDER_BMD
-#    include <tlDevice/BMD/BMDOutputDevice.h>
-#endif
-
-#ifdef TLRENDER_NDI
-#    include <tlDevice/NDI/NDIOutputDevice.h>
-#endif
-
 #ifdef MRV2_PYBIND11
 #    include <pybind11/embed.h>
 namespace py = pybind11;
@@ -105,6 +97,18 @@ namespace py = pybind11;
 #endif
 
 #include "mrvFl/mrvIO.h"
+
+#if defined(TLRENDER_NDI) || defined(TLRENDER_BMD)
+#    include <tlDevice/DevicesModel.h>
+#endif
+
+#ifdef TLRENDER_BMD
+#    include <tlDevice/BMD/BMDOutputDevice.h>
+#endif
+
+#ifdef TLRENDER_NDI
+#    include <tlDevice/NDI/NDIOutputDevice.h>
+#endif
 
 #ifdef TLRENDER_NDI
 #    include <Processing.NDI.Lib.h>
@@ -697,8 +701,9 @@ namespace mrv
         p.settings->setDefaultValue(
             "NDI/444SDIVideoOutput",
             i != devicesModelData.boolOptions.end() ? i->second : false);
-        p.settings->setDefaultValue("NDI/HDRMode", devicesModelData.hdrMode);
-        p.settings->setDefaultValue("NDI/HDRData", devicesModelData.hdrData);
+        // p.settings->setDefaultValue("NDI/HDRMode", devicesModelData.hdrMode);
+        // p.settings->setDefaultValue("NDI/HDRData", devicesModelData.hdrData)
+        ;
 #endif // TLRENDER_NDI
 
         p.volume = p.settings->getValue<float>("Audio/Volume");
@@ -780,8 +785,8 @@ namespace mrv
                     p.settings->setValue(
                         "NDI/444SDIVideoOutput",
                         i != value.boolOptions.end() ? i->second : false);
-                    p.settings->setValue("NDI/HDRMode", value.hdrMode);
-                    p.settings->setValue("NDI/HDRData", value.hdrData);
+                    // p.settings->setValue("NDI/HDRMode", value.hdrMode);
+                    // p.settings->setValue("NDI/HDRData", value.hdrData);
                 });
 
         p.bmdActiveObserver = observer::ValueObserver<bool>::create(
@@ -1411,20 +1416,36 @@ namespace mrv
 
     void App::_startOutputDeviceTimer()
     {
+        TLRENDER_P();
+
+#    if defined(TLRENDER_NDI) || defined(TLRENDER_BMD)
+        if (p.outputDevice)
+        {
+            p.outputDevice->setPlayer(p.player ? p.player->player() : nullptr);
+            p.outputDevice->setEnabled(true);
+        }
+#    endif
         Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)_timer_update_cb, this);
     }
 
     void App::_stopOutputDeviceTimer()
     {
+        TLRENDER_P();
+
+#    if defined(TLRENDER_NDI) || defined(TLRENDER_BMD)
+        if (p.outputDevice)
+            p.outputDevice->setEnabled(false);
+#    endif
         Fl::remove_timeout((Fl_Timeout_Handler)_timer_update_cb, this);
     }
 #endif // TLRENDER_BMD || TLRENDER_NDI
 
 #ifdef TLRENDER_NDI
-    void App::beginNDIOutputStream(const device::DeviceConfig& options)
+    void App::beginNDIOutputStream(const device::DeviceConfig& config)
     {
         TLRENDER_P();
         p.outputDevice = ndi::OutputDevice::create(_context);
+        p.outputDevice->setConfig(config);
         p.devicesModel = device::DevicesModel::create(_context);
         p.devicesModel->setDeviceIndex(
             p.settings->getValue<int>("NDI/DeviceIndex"));
@@ -1461,14 +1482,16 @@ namespace mrv
     {
         _stopOutputDeviceTimer();
         _p->outputDevice.reset();
+        _p->devicesModel.reset();
     }
 #endif
 
 #ifdef TLRENDER_BMD
-    void App::beginBMDOutputStream(const device::DeviceConfig& options)
+    void App::beginBMDOutputStream(const device::DeviceConfig& config)
     {
         TLRENDER_P();
         p.outputDevice = bmd::OutputDevice::create(_context);
+        p.outputDevice->setConfig(config);
         p.devicesModel = device::DevicesModel::create(_context);
         p.devicesModel->setDeviceIndex(
             p.settings->getValue<int>("BMD/DeviceIndex"));
@@ -1504,7 +1527,8 @@ namespace mrv
     void App::endBMDOutputStream()
     {
         _stopOutputDeviceTimer();
-        p.outputDevice.reset();
+        _p->outputDevice.reset();
+        _p->devicesModel.reset();
     }
 #endif
 
