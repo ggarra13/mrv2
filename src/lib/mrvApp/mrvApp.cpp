@@ -19,11 +19,11 @@
 // #include <tlPlay/Util.h>
 
 #ifdef TLRENDER_BMD
-#    include <tlDevice/BMDOutputDevice.h>
+#    include <tlDevice/BMD/BMDOutputDevice.h>
 #endif
 
 #ifdef TLRENDER_NDI
-#    include <tlDevice/NDIOutputDevice.h>
+#    include <tlDevice/NDI/NDIOutputDevice.h>
 #endif
 
 #ifdef MRV2_PYBIND11
@@ -670,7 +670,7 @@ namespace mrv
         p.settings->setDefaultValue(
             "BMD/DeviceEnabled", bmdDevicesModelData.deviceEnabled);
         const auto i = bmdDevicesModelData.boolOptions.find(
-            bmd::Option::_444SDIVideoOutput);
+            device::Option::_444SDIVideoOutput);
         p.settings->setDefaultValue(
             "BMD/444SDIVideoOutput",
             i != bmdDevicesModelData.boolOptions.end() ? i->second : false);
@@ -682,6 +682,25 @@ namespace mrv
         if (!NDIlib_initialize())
             throw std::runtime_error(_("Could not initialize NDI"));
 #endif
+
+#if defined(TLRENDER_NDI)
+        device::DevicesModelData devicesModelData;
+        p.settings->setDefaultValue(
+            "NDI/DeviceIndex", devicesModelData.deviceIndex);
+        p.settings->setDefaultValue(
+            "NDI/DisplayModeIndex", devicesModelData.displayModeIndex);
+        p.settings->setDefaultValue(
+            "NDI/PixelTypeIndex", devicesModelData.pixelTypeIndex);
+        p.settings->setDefaultValue(
+            "NDI/DeviceEnabled", devicesModelData.deviceEnabled);
+        const auto i = devicesModelData.boolOptions.find(
+            device::Option::_444SDIVideoOutput);
+        p.settings->setDefaultValue(
+            "NDI/444SDIVideoOutput",
+            i != devicesModelData.boolOptions.end() ? i->second : false);
+        p.settings->setDefaultValue("NDI/HDRMode", devicesModelData.hdrMode);
+        p.settings->setDefaultValue("NDI/HDRData", devicesModelData.hdrData);
+#endif // TLRENDER_NDI
 
         p.volume = p.settings->getValue<float>("Audio/Volume");
         p.mute = p.settings->getValue<bool>("Audio/Mute");
@@ -723,6 +742,72 @@ namespace mrv
                         player->setCompareTime(value);
                     }
                 });
+
+#if defined(TLRENDER_BMD)
+        p.devicesObserver =
+            observer::ValueObserver<device::DevicesModelData>::create(
+                p.devicesModel->observeData(),
+                [this](const device::DevicesModelData& value)
+                {
+                    TLRENDER_P();
+
+                    device::DeviceConfig config;
+                    config.deviceIndex = value.deviceIndex - 1;
+                    config.displayModeIndex = value.displayModeIndex - 1;
+                    config.pixelType =
+                        value.pixelTypeIndex >= 0 &&
+                                value.pixelTypeIndex < value.pixelTypes.size()
+                            ? value.pixelTypes[value.pixelTypeIndex]
+                            : device::PixelType::None;
+                    config.boolOptions = value.boolOptions;
+                    p.outputDevice->setConfig(config);
+                    p.outputDevice->setEnabled(value.deviceEnabled);
+                    p.putputVideoLevels = value.videoLevels;
+                    timeline::DisplayOptions displayOptions =
+                        p.viewportModel->getDisplayOptions();
+                    displayOptions.videoLevels = p.bmdOutputVideoLevels;
+                    p.outputDevice->setDisplayOptions({displayOptions});
+                    p.outputDevice->setHDR(value.hdrMode, value.hdrData);
+
+                    p.settings->setValue("NDI/DeviceIndex", value.deviceIndex);
+                    p.settings->setValue(
+                        "NDI/DisplayModeIndex", value.displayModeIndex);
+                    p.settings->setValue(
+                        "NDI/PixelTypeIndex", value.pixelTypeIndex);
+                    p.settings->setValue(
+                        "NDI/DeviceEnabled", value.deviceEnabled);
+                    const auto i = value.boolOptions.find(
+                        device::Option::_444SDIVideoOutput);
+                    p.settings->setValue(
+                        "NDI/444SDIVideoOutput",
+                        i != value.boolOptions.end() ? i->second : false);
+                    p.settings->setValue("NDI/HDRMode", value.hdrMode);
+                    p.settings->setValue("NDI/HDRData", value.hdrData);
+                });
+
+        p.bmdActiveObserver = observer::ValueObserver<bool>::create(
+            p.bmdOutputDevice->observeActive(),
+            [this](bool value)
+            {
+                _p->bmdDeviceActive = value;
+                _audioUpdate();
+            });
+        p.bmdSizeObserver = observer::ValueObserver<math::Size2i>::create(
+            p.bmdOutputDevice->observeSize(),
+            [this](const math::Size2i& value)
+            {
+                // std::cout << "output device size: " << value << std::endl;
+            });
+        p.bmdFrameRateObserver =
+            observer::ValueObserver<otime::RationalTime>::create(
+                p.bmdOutputDevice->observeFrameRate(),
+                [this](const otime::RationalTime& value)
+                {
+                    // std::cout << "output device frame rate: " << value <<
+                    // std::endl;
+                });
+
+#endif // TLRENDER_BMD || TLRENDER_NDI
 
         p.logObserver = observer::ListObserver<log::Item>::create(
             ui->app->getContext()->getLogSystem()->observeLog(),
@@ -1341,6 +1426,35 @@ namespace mrv
     {
         TLRENDER_P();
         p.outputDevice = ndi::OutputDevice::create(_context);
+        p.devicesModel = device::DevicesModel::create(_context);
+        p.devicesModel->setDeviceIndex(
+            p.settings->getValue<int>("NDI/DeviceIndex"));
+        p.devicesModel->setDisplayModeIndex(
+            p.settings->getValue<int>("NDI/DisplayModeIndex"));
+        p.devicesModel->setPixelTypeIndex(
+            p.settings->getValue<int>("NDI/PixelTypeIndex"));
+        p.devicesModel->setDeviceEnabled(
+            p.settings->getValue<bool>("NDI/DeviceEnabled"));
+        device::BoolOptions deviceBoolOptions;
+        deviceBoolOptions[device::Option::_444SDIVideoOutput] =
+            p.settings->getValue<bool>("NDI/444SDIVideoOutput");
+        p.devicesModel->setBoolOptions(deviceBoolOptions);
+        p.devicesModel->setHDRMode(static_cast<device::HDRMode>(
+            p.settings->getValue<int>("NDI/HDRMode")));
+        std::string s = p.settings->getValue<std::string>("NDI/HDRData");
+        if (!s.empty())
+        {
+            auto json = nlohmann::json::parse(s);
+            image::HDRData hdrData;
+            try
+            {
+                from_json(json, hdrData);
+            }
+            catch (const std::exception&)
+            {
+            }
+            p.devicesModel->setHDRData(hdrData);
+        }
         _startOutputDeviceTimer();
     }
 
@@ -1356,6 +1470,35 @@ namespace mrv
     {
         TLRENDER_P();
         p.outputDevice = bmd::OutputDevice::create(_context);
+        p.devicesModel = device::DevicesModel::create(_context);
+        p.devicesModel->setDeviceIndex(
+            p.settings->getValue<int>("BMD/DeviceIndex"));
+        p.devicesModel->setDisplayModeIndex(
+            p.settings->getValue<int>("BMD/DisplayModeIndex"));
+        p.devicesModel->setPixelTypeIndex(
+            p.settings->getValue<int>("BMD/PixelTypeIndex"));
+        p.devicesModel->setDeviceEnabled(
+            p.settings->getValue<bool>("BMD/DeviceEnabled"));
+        device::BoolOptions deviceBoolOptions;
+        deviceBoolOptions[bmd::Option::_444SDIVideoOutput] =
+            p.settings->getValue<bool>("BMD/444SDIVideoOutput");
+        p.devicesModel->setBoolOptions(deviceBoolOptions);
+        p.devicesModel->setHDRMode(static_cast<device::HDRMode>(
+            p.settings->getValue<int>("BMD/HDRMode")));
+        std::string s = p.settings->getValue<std::string>("BMD/HDRData");
+        if (!s.empty())
+        {
+            auto json = nlohmann::json::parse(s);
+            image::HDRData hdrData;
+            try
+            {
+                from_json(json, hdrData);
+            }
+            catch (const std::exception&)
+            {
+            }
+            p.devicesModel->setHDRData(hdrData);
+        }
         _startOutputDeviceTimer();
     }
 
