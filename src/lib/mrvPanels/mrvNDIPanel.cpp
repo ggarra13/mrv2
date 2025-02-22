@@ -15,6 +15,7 @@
 
 #    include <FL/Fl_Choice.H>
 #    include <FL/Fl_Check_Button.H>
+#    include <FL/Fl_Toggle_Button.H>
 
 #    include <Processing.NDI.Lib.h>
 
@@ -53,7 +54,7 @@ namespace mrv
             PopupMenu* sourceMenu = nullptr;
             PopupMenu* inputAudioMenu = nullptr;
             PopupMenu* inputBestFormatMenu = nullptr;
-            
+
             PopupMenu* outputAudioMenu = nullptr;
             PopupMenu* outputBestFormatMenu = nullptr;
 
@@ -310,7 +311,7 @@ namespace mrv
                         return;
                     _open_ndi(item);
                 });
-            
+
             mW = new Widget< PopupMenu >(
                 g->x() + 10, Y, g->w() - 20, 20, _("Fast Format"));
             m = r.inputBestFormatMenu = mW;
@@ -330,7 +331,7 @@ namespace mrv
             m->add(_("With Audio"));
             m->add(_("Without Audio"));
             m->value(0);
-            
+
             r.find.awake = false;
 
             cg->end();
@@ -342,7 +343,7 @@ namespace mrv
             {
                 cg->close();
             }
-            
+
             cg = new CollapsibleGroup(g->x(), Y, g->w(), 20, _("Output"));
             cg->spacing(2);
             b = cg->button();
@@ -367,22 +368,41 @@ namespace mrv
 
             cg->begin();
 
-            Fl_Button* stream_b = new Fl_Button(
+            Fl_Toggle_Button* stream_b = new Fl_Toggle_Button(
                 g->x() + 10, Y, g->w() - 20, 20, _("Start streaming"));
             stream_b->align(FL_ALIGN_CENTER);
             stream_b->labelsize(12);
             stream_b->callback(
                 [](Fl_Widget* w, void* d)
                 {
+                    Fl_Toggle_Button* b = static_cast<Fl_Toggle_Button*>(w);
+                    if (!App::ui->uiView->getTimelinePlayer())
+                    {
+                        b->value(0);
+                        return;
+                    }
+                    if (b->value())
+                    {
+                        device::DeviceConfig config;
+                        config.deviceIndex = 0;
+                        config.displayModeIndex = 0;
+                        config.pixelType = device::PixelType::_8BitRGBX;
+                        App::app->beginNDIOutputStream(config);
+                        b->copy_label(_("Stop streaming"));
+                    }
+                    else
+                    {
+                        App::app->endNDIOutputStream();
+                        b->copy_label(_("Start streaming"));
+                    }
                 },
-                cg);
+                stream_b);
 
             Fl_Group* ig = new Fl_Group(g->x() + 10, Y, g->w() - 20, 20);
-            Input* mI = new Input(
-                g->x() + 80, Y, g->w() - 90, 20, _("Name"));
+            Input* mI = new Input(g->x() + 80, Y, g->w() - 90, 20, _("Name"));
             mI->value("mrv2 HDR");
             ig->end();
-            
+
             mW = new Widget< PopupMenu >(
                 g->x() + 10, Y, g->w() - 20, 20, _("Fast Format"));
             m = r.outputBestFormatMenu = mW;
@@ -402,7 +422,7 @@ namespace mrv
             m->add(_("With Audio"));
             m->add(_("Without Audio"));
             m->value(0);
-            
+
             r.find.awake = false;
 
             cg->end();
@@ -456,7 +476,7 @@ namespace mrv
             ndi::Options options;
             options.sourceName = sourceName;
             options.bestFormat = r.inputBestFormatMenu->value();
-            options.noAudio    = r.inputAudioMenu->value();
+            options.noAudio = r.inputAudioMenu->value();
 
             nlohmann::json j;
             j = options;
@@ -484,27 +504,27 @@ namespace mrv
                         player->player()->observeCacheInfo(),
                         [this, player,
                          options](const timeline::PlayerCacheInfo& value)
+                        {
+                            MRV2_R();
+                            auto startTime = player->currentTime();
+                            auto endTime =
+                                startTime + options.audioBufferSize.rescaled_to(
+                                                startTime.rate());
+
+                            for (const auto& t : value.audioFrames)
                             {
-                                MRV2_R();
-                                auto startTime = player->currentTime();
-                                auto endTime =
-                                    startTime + options.audioBufferSize.rescaled_to(
-                                        startTime.rate());
-                                
-                                for (const auto& t : value.audioFrames)
+                                if (t.start_time() <= startTime &&
+                                    t.end_time_exclusive() >= endTime)
                                 {
-                                    if (t.start_time() <= startTime &&
-                                        t.end_time_exclusive() >= endTime)
-                                    {
-                                        r.play.found = true;
-                                        r.cacheInfoObserver.reset();
-                                        break;
-                                    }
+                                    r.play.found = true;
+                                    r.cacheInfoObserver.reset();
+                                    break;
                                 }
-                            },
+                            }
+                        },
                         observer::CallbackAction::Suppress);
             }
-            
+
             r.play.thread = std::thread(
                 [this, player, seconds]
                 {

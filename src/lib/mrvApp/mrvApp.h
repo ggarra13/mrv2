@@ -84,12 +84,12 @@ namespace mrv
         void beginNDIOutputStream(const device::DeviceConfig& options);
         void endNDIOutputStream();
 #endif
-        
+
 #ifdef TLRENDER_BMD
         void beginBMDOutputStream(const device::DeviceConfig& options);
         void endBMDOutputStream();
 #endif
-        
+
         //! Create a new application.
         static std::shared_ptr<App>
         create(int argc, char* argv[], const std::shared_ptr<system::Context>&);
@@ -175,6 +175,7 @@ namespace mrv
         //! Update the cache (Darby makes this private and uses an observer
         //! with a string, but I think it is simpler to make it public).
         void cacheUpdate();
+        void timerUpdate();
 
     public:
         static ViewerUI* ui;
@@ -196,6 +197,11 @@ namespace mrv
         void _layersUpdate(const std::vector<int>& value);
 
         void _audioUpdate();
+
+        static void _timer_update_cb(App*);
+
+        void _startOutputDeviceTimer();
+        void _stopOutputDeviceTimer();
 
         std::shared_ptr<timeline::Timeline>
         _createTimeline(const std::shared_ptr<FilesModelItem>& item);

@@ -113,7 +113,8 @@ namespace py = pybind11;
 namespace
 {
     const char* kModule = "main";
-}
+    const double kTimeout = 0.005;
+} // namespace
 
 namespace mrv
 {
@@ -315,8 +316,8 @@ namespace mrv
             {app::CmdLineValueArg<std::string>::create(
                 p.options.dummy, "inputs",
                 _("Timelines, movies, image sequences, USD assets or "
-                  "folders."), true,
-                true)},
+                  "folders."),
+                true, true)},
             {
 #ifndef NDEBUG
                 app::CmdLineValueOption<int>::create(
@@ -594,7 +595,7 @@ namespace mrv
                 LOG_STATUS(line);
             }
         }
-        
+
         LOG_STATUS(_("Install Location: "));
         LOG_STATUS("\t" << mrv::rootpath());
         DBG;
@@ -660,16 +661,23 @@ namespace mrv
 
 #if defined(TLRENDER_BMD)
         device::DevicesModelData bmdDevicesModelData;
-        p.settings->setDefaultValue("BMD/DeviceIndex", bmdDevicesModelData.deviceIndex);
-        p.settings->setDefaultValue("BMD/DisplayModeIndex", bmdDevicesModelData.displayModeIndex);
-        p.settings->setDefaultValue("BMD/PixelTypeIndex", bmdDevicesModelData.pixelTypeIndex);
-        p.settings->setDefaultValue("BMD/DeviceEnabled", bmdDevicesModelData.deviceEnabled);
-        const auto i = bmdDevicesModelData.boolOptions.find(bmd::Option::_444SDIVideoOutput);
-        p.settings->setDefaultValue("BMD/444SDIVideoOutput", i != bmdDevicesModelData.boolOptions.end() ? i->second : false);
+        p.settings->setDefaultValue(
+            "BMD/DeviceIndex", bmdDevicesModelData.deviceIndex);
+        p.settings->setDefaultValue(
+            "BMD/DisplayModeIndex", bmdDevicesModelData.displayModeIndex);
+        p.settings->setDefaultValue(
+            "BMD/PixelTypeIndex", bmdDevicesModelData.pixelTypeIndex);
+        p.settings->setDefaultValue(
+            "BMD/DeviceEnabled", bmdDevicesModelData.deviceEnabled);
+        const auto i = bmdDevicesModelData.boolOptions.find(
+            bmd::Option::_444SDIVideoOutput);
+        p.settings->setDefaultValue(
+            "BMD/444SDIVideoOutput",
+            i != bmdDevicesModelData.boolOptions.end() ? i->second : false);
         p.settings->setDefaultValue("BMD/HDRMode", bmdDevicesModelData.hdrMode);
         p.settings->setDefaultValue("BMD/HDRData", bmdDevicesModelData.hdrData);
 #endif // TLRENDER_BMD
-            
+
 #ifdef TLRENDER_NDI
         if (!NDIlib_initialize())
             throw std::runtime_error(_("Could not initialize NDI"));
@@ -715,7 +723,7 @@ namespace mrv
                         player->setCompareTime(value);
                     }
                 });
-            
+
         p.logObserver = observer::ListObserver<log::Item>::create(
             ui->app->getContext()->getLogSystem()->observeLog(),
             [this](const std::vector<log::Item>& value)
@@ -1298,6 +1306,34 @@ namespace mrv
     {
         return _p->outputDevice;
     }
+
+    void App::_timer_update_cb(App* self)
+    {
+        self->timerUpdate();
+    }
+
+    void App::timerUpdate()
+    {
+        TLRENDER_P();
+
+#    if defined(TLRENDER_NDI) || defined(TLRENDER_BMD)
+        if (p.outputDevice)
+            p.outputDevice->tick();
+#    endif
+
+        Fl::repeat_timeout(
+            kTimeout, (Fl_Timeout_Handler)_timer_update_cb, this);
+    }
+
+    void App::_startOutputDeviceTimer()
+    {
+        Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)_timer_update_cb, this);
+    }
+
+    void App::_stopOutputDeviceTimer()
+    {
+        Fl::remove_timeout((Fl_Timeout_Handler)_timer_update_cb, this);
+    }
 #endif // TLRENDER_BMD || TLRENDER_NDI
 
 #ifdef TLRENDER_NDI
@@ -1305,27 +1341,31 @@ namespace mrv
     {
         TLRENDER_P();
         p.outputDevice = ndi::OutputDevice::create(_context);
+        _startOutputDeviceTimer();
     }
-    
+
     void App::endNDIOutputStream()
     {
+        _stopOutputDeviceTimer();
         _p->outputDevice.reset();
     }
 #endif
-    
+
 #ifdef TLRENDER_BMD
     void App::beginBMDOutputStream(const device::DeviceConfig& options)
     {
         TLRENDER_P();
-        p.outputDevice = std::make_shared<bmd::OutputDevice>();
+        p.outputDevice = bmd::OutputDevice::create(_context);
+        _startOutputDeviceTimer();
     }
-    
+
     void App::endBMDOutputStream()
     {
+        _stopOutputDeviceTimer();
         p.outputDevice.reset();
     }
 #endif
-    
+
     void
     App::open(const std::string& fileName, const std::string& audioFileName)
     {
@@ -1921,7 +1961,7 @@ namespace mrv
         double value = p.settings->getValue<double>("Cache/ReadBehind");
         return otime::RationalTime(value, 1.0);
     }
-    
+
     void App::cacheUpdate()
     {
         TLRENDER_P();
