@@ -358,7 +358,7 @@ namespace mrv
                     p.options.otioEditMode, {"-editMode", "-e"},
                     _("OpenTimelineIO Edit mode.")),
                 app::CmdLineFlagOption::create(
-                    p.options.singleImages, {"--single", "-single", "-s"},
+                    p.options.singleImages, {"-single", "-s"},
                     _("Load the images as still images not sequences.")),
                 app::CmdLineValueOption<double>::create(
                     p.options.speed, {"-speed"}, _("Playback speed.")),
@@ -478,8 +478,7 @@ namespace mrv
 #endif
 
                 app::CmdLineFlagOption::create(
-                    p.options.displayVersion,
-                    {"-version", "--version", "-v", "--v"},
+                    p.options.displayVersion, {"-version", "-v"},
                     _("Return the version and exit."))});
 
         const int exitCode = getExit();
