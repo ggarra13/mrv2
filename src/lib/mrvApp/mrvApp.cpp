@@ -2270,11 +2270,13 @@ namespace mrv
             p.player->setMute(p.mute);
         }
 
+#if defined(TLRENDER_NDI) || defined(TLRENDER_BMD) 
         if (p.outputDevice)
         {
             p.outputDevice->setVolume(p.volume);
             p.outputDevice->setMute(p.mute);
         }
+#endif
     }
 
     void App::_layersUpdate(const std::vector<int>& value)
