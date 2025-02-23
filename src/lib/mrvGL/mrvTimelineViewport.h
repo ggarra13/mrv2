@@ -4,18 +4,20 @@
 
 #pragma once
 
-#include <tlTimeline/BackgroundOptions.h>
-#include <tlTimeline/PlayerOptions.h>
-#include <tlTimeline/IRender.h>
-
 #include "mrvCore/mrvActionMode.h"
 #include "mrvCore/mrvString.h"
+
+#include "mrvFl/mrvColorAreaInfo.h"
+#include "mrvFl/mrvLaserFadeData.h"
 
 #include "mrvOptions/mrvStereo3DOptions.h"
 #include "mrvOptions/mrvEnvironmentMapOptions.h"
 
-#include "mrvFl/mrvColorAreaInfo.h"
-#include "mrvFl/mrvLaserFadeData.h"
+#include <tlTimeline/BackgroundOptions.h>
+#include <tlTimeline/IRender.h>
+#include <tlTimeline/PlayerOptions.h>
+
+#include <tlCore/ValueObserver.h>
 
 // FLTK includes
 #ifdef TLRENDER_GL
@@ -74,10 +76,13 @@ namespace mrv
         //! Return the current video image in BGRA order after drawing it.
         const image::Color4f* image() const;
 
-        //! Get the compositing status.
+        //! Get the background options.
         const timeline::BackgroundOptions&
         getBackgroundOptions() const noexcept;
-
+        
+        //! Observe the background options.
+        std::shared_ptr<observer::IValue<timeline::BackgroundOptions> > observeBackgroundOptions() const;
+        
         //! Set the background options.
         void setBackgroundOptions(const timeline::BackgroundOptions& value);
 
@@ -362,6 +367,8 @@ namespace mrv
         getTags() const noexcept;
 
     protected:
+        void _init();
+        
         virtual void _readPixel(image::Color4f& rgba) const noexcept = 0;
         math::Vector2i _getViewportCenter() const noexcept;
 

@@ -76,7 +76,6 @@ namespace mrv
     using namespace tl;
 
     std::string TimelineViewport::Private::hdr;
-    timeline::BackgroundOptions TimelineViewport::Private::backgroundOptions;
     EnvironmentMapOptions TimelineViewport::Private::environmentMapOptions;
     math::Box2i TimelineViewport::Private::selection =
         math::Box2i(0, 0, -1, -1);
@@ -116,6 +115,7 @@ namespace mrv
         TLRENDER_P();
 
         p.ui = App::ui;
+        _init();
     }
 
     TimelineViewport::TimelineViewport(int W, int H, const char* L) :
@@ -125,6 +125,30 @@ namespace mrv
         TLRENDER_P();
 
         p.ui = App::ui;
+        _init();
+    }
+
+    void TimelineViewport::_init()
+    {
+        TLRENDER_P();
+        
+        auto settings = App::app->settings();
+
+        timeline::BackgroundOptions backgroundOptions;
+        backgroundOptions.type = static_cast<timeline::Background>(
+            settings->getValue<int>("Background/Type"));
+
+        Fl_Color color;
+        int size = settings->getValue<int>("Background/CheckersSize");
+        backgroundOptions.checkersSize = math::Size2i(size, size);
+
+        color = settings->getValue<int>("Background/color0");
+        backgroundOptions.color0 = from_fltk_color(color);
+
+        color = settings->getValue<int>("Background/color1");
+        backgroundOptions.color1 = from_fltk_color(color);
+        
+        p.backgroundOptions = observer::Value<timeline::BackgroundOptions>::create(backgroundOptions);
     }
 
     TimelineViewport::~TimelineViewport()
@@ -755,24 +779,19 @@ namespace mrv
     const timeline::BackgroundOptions&
     TimelineViewport::getBackgroundOptions() const noexcept
     {
+        return _p->backgroundOptions->get();
+    }
+    
+    std::shared_ptr<observer::IValue<timeline::BackgroundOptions> > TimelineViewport::observeBackgroundOptions() const
+    {
         return _p->backgroundOptions;
     }
 
     void TimelineViewport::setBackgroundOptions(
         const timeline::BackgroundOptions& value)
     {
-        TLRENDER_P();
-
-        if (value == p.backgroundOptions)
-            return;
-
-        p.backgroundOptions = value;
-
-        Message msg;
-        msg["command"] = "setBackgroundOptions";
-        msg["value"] = value;
-        tcp->pushMessage(msg);
-        redrawWindows();
+        auto settings = App::app->settings();
+        _p->backgroundOptions->setIfChanged(value);
     }
 
     void TimelineViewport::setOCIOOptions(

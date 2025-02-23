@@ -24,7 +24,7 @@ namespace mrv
         static std::map<
             std::string, std::string, string::CaseInsensitiveCompare>
             tagData;
-        static timeline::BackgroundOptions backgroundOptions;
+        std::shared_ptr<observer::Value<timeline::BackgroundOptions> > backgroundOptions;
         static float rotation;
         static bool resizeWindow;
 

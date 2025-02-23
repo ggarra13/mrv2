@@ -14,6 +14,7 @@
 #    include <tlCore/NDIOptions.h>
 
 #    include <tlDevice/OutputData.h>
+#    include <tlDevice/IOutput.h>
 
 #    include <FL/Fl_Choice.H>
 #    include <FL/Fl_Check_Button.H>
@@ -42,7 +43,7 @@
 
 namespace
 {
-    const char* kModule = "ndi";
+    const char* kModule = "NDI";
 }
 
 namespace mrv
@@ -55,10 +56,10 @@ namespace mrv
 
             PopupMenu* sourceMenu = nullptr;
             PopupMenu* inputAudioMenu = nullptr;
-            PopupMenu* inputBestFormatMenu = nullptr;
+            PopupMenu* inputFormatMenu = nullptr;
 
             PopupMenu* outputAudioMenu = nullptr;
-            PopupMenu* outputBestFormatMenu = nullptr;
+            PopupMenu* outputFormatMenu = nullptr;
 
             uint32_t no_sources = 0;
             const NDIlib_source_t* p_sources = NULL;
@@ -152,6 +153,15 @@ namespace mrv
             for (int i = 0; i < r.no_sources; ++i)
             {
                 const std::string ndiName = r.p_sources[i].p_ndi_name;
+
+                // Windows has weird items called REMOTE CONNECTION.
+                // We don't allow selecting them.
+                const std::regex pattern(
+                    "remote connection", std::regex_constants::icase);
+                if (std::regex_search(ndiName, pattern))
+                    continue;
+
+            
                 m->add(ndiName.c_str());
                 if (sourceName == ndiName)
                 {
@@ -297,7 +307,7 @@ namespace mrv
             title->labelsize(12);
 
             auto mW = new Widget< PopupMenu >(
-                g->x() + 10, Y, g->w() - 20, 20, _("None"));
+                g->x() + 10, Y, g->w() - 20, 30, _("None"));
             PopupMenu* m = r.sourceMenu = mW;
             m->disable_submenus();
             m->labelsize(12);
@@ -309,14 +319,14 @@ namespace mrv
                     if (o->size() < 3)
                         return;
                     const Fl_Menu_Item* item = o->mvalue();
-                    if (!item)
+                    if (!item || !item->label())
                         return;
-                    _open_ndi(item);
+                    _ndi_input(item);
                 });
 
             mW = new Widget< PopupMenu >(
                 g->x() + 10, Y, g->w() - 20, 20, _("Fast Format"));
-            m = r.inputBestFormatMenu = mW;
+            m = r.inputFormatMenu = mW;
             m->disable_submenus();
             m->labelsize(12);
             m->align(FL_ALIGN_CENTER | FL_ALIGN_CLIP);
@@ -370,69 +380,32 @@ namespace mrv
 
             cg->begin();
 
-            Fl_Toggle_Button* stream_b = new Fl_Toggle_Button(
-                g->x() + 10, Y, g->w() - 20, 20, _("Start streaming"));
-            stream_b->align(FL_ALIGN_CENTER);
-            stream_b->labelsize(12);
-            stream_b->callback(
-                [](Fl_Widget* w, void* d)
-                {
-                    Fl_Toggle_Button* b = static_cast<Fl_Toggle_Button*>(w);
-                    if (!App::ui->uiView->getTimelinePlayer())
+            auto bW = new Widget<Fl_Toggle_Button>(
+                g->x() + 10, Y, g->w() - 20, 30, _("Start streaming"));
+            bW->align(FL_ALIGN_CENTER);
+            bW->labelsize(12);
+            bW->callback(
+                [=](auto b)
                     {
-                        b->value(0);
-                        return;
-                    }
-                    if (b->value())
-                    {
-                        device::DeviceConfig config;
-                        config.deviceIndex = 0;
-                        config.displayModeIndex = 0;
-                        // config.pixelType = device::PixelType::_8BitYUV; // OK
-                        // config.pixelType = device::PixelType::_8BitRGBX; //
-                        // OK config.pixelType = device::PixelType::_8BitBGRA;
-                        // // OK config.pixelType =
-                        // device::PixelType::_8BitBGRX; // OK config.pixelType
-                        // = device::PixelType::_8BitUYVA; // BAD (black)
-                        // config.pixelType = device::PixelType::_8BitI420; //
-                        // BAD (black) config.pixelType =
-                        // device::PixelType::_10BitRGB;  // Unsupported
-                        // config.pixelType = device::PixelType::_10BitRGBX; //
-                        // Unsupported config.pixelType =
-                        // device::PixelType::_10BitRGBXLE; // Unsupported
-                        // config.pixelType = device::PixelType::_10BitYUV; //
-                        // Unsupported config.pixelType =
-                        // device::PixelType::_12BitRGB;    // Unsupported
-                        // config.pixelType = device::PixelType::_12BitRGBLE; //
-                        // Unsupported
-                        config.pixelType =
-                            device::PixelType::_16BitP216; // BAD (need sws)
-                        // config.pixelType = device::PixelType::_16BitPA16; //
-                        // BAD (need sws)
-                        App::app->beginNDIOutputStream(config);
-                        b->copy_label(_("Stop streaming"));
-                    }
-                    else
-                    {
-                        App::app->endNDIOutputStream();
-                        b->copy_label(_("Start streaming"));
-                    }
-                },
-                stream_b);
-
-            Fl_Group* ig = new Fl_Group(g->x() + 10, Y, g->w() - 20, 20);
-            Input* mI = new Input(g->x() + 80, Y, g->w() - 90, 20, _("Name"));
-            mI->value("mrv2 HDR");
-            ig->end();
+                        _ndi_output(b);
+                    });
 
             mW = new Widget< PopupMenu >(
                 g->x() + 10, Y, g->w() - 20, 20, _("Fast Format"));
-            m = r.outputBestFormatMenu = mW;
+            m = r.outputFormatMenu = mW;
             m->disable_submenus();
             m->labelsize(12);
             m->align(FL_ALIGN_CENTER | FL_ALIGN_CLIP);
             m->add(_("Fast Format"));
             m->add(_("Best Format"));
+            for (const auto& i : tl::device::getPixelTypeLabels())
+            {
+                // 10 and 12 bit formats are not supported by NDI
+                if (i == "None" || i.substr(0, 2) == "12" ||
+                    i.substr(0, 2) == "10")
+                    continue;
+                m->add(i.c_str());
+            }
             m->value(0);
 
             mW = new Widget< PopupMenu >(
@@ -445,8 +418,6 @@ namespace mrv
             m->add(_("Without Audio"));
             m->value(0);
 
-            r.find.awake = false;
-
             cg->end();
 
             key = prefix + "NDI Output";
@@ -458,7 +429,67 @@ namespace mrv
             }
         }
 
-        void NDIPanel::_open_ndi(const Fl_Menu_Item* item)
+        void NDIPanel::_ndi_output(Fl_Toggle_Button* b)
+        {
+            MRV2_R();
+                    
+            if (!App::ui->uiView->getTimelinePlayer())
+            {
+                b->value(0);
+                return;
+            }
+                    
+            if (b->value())
+            {
+                App::app->beginNDIOutputStream();
+                auto outputDevice = App::app->outputDevice();
+                if (!outputDevice)
+                    return;
+
+
+                const Fl_Menu_Item* item = r.outputFormatMenu->mvalue();
+                if (!item || !item->label())
+                    return;
+
+
+                std::string format = item->label();
+                int idx = -1;
+                for (const auto& label :
+                         tl::device::getPixelTypeLabels())
+                {
+                    ++idx;
+                    if (label == format)
+                        break;
+                }
+                
+                device::DeviceConfig config;
+                config.deviceIndex = 0;
+                config.displayModeIndex = 0;
+                config.pixelType = static_cast<device::PixelType>(idx);
+                if (format == _("Best Format"))
+                {
+                    config.pixelType = device::PixelType::_16BitPA16;
+                }
+                else if (format == _("Fast Format"))
+                {
+                    config.pixelType = device::PixelType::_8BitYUV;
+                }
+
+                const std::string msg =
+                    string::Format(_("Streaming {0}...")).arg(config.pixelType);
+                LOG_STATUS(msg);
+                            
+                outputDevice->setConfig(config);
+                b->copy_label(_("Stop streaming"));
+            }
+            else
+            {
+                App::app->endNDIOutputStream();
+                b->copy_label(_("Start streaming"));
+            }
+        }
+        
+        void NDIPanel::_ndi_input(const Fl_Menu_Item* item)
         {
             TLRENDER_P();
             MRV2_R();
@@ -480,13 +511,6 @@ namespace mrv
                     model->close();
             }
 
-            // Windows has weird items called REMOTE CONNECTION.
-            // We don't allow selecting them.
-            const std::regex pattern(
-                "remote connection", std::regex_constants::icase);
-            if (std::regex_search(sourceName, pattern))
-                return;
-
             r.lastStream = sourceName;
 
             if (sourceName == _("None"))
@@ -497,7 +521,7 @@ namespace mrv
 
             ndi::Options options;
             options.sourceName = sourceName;
-            options.bestFormat = r.inputBestFormatMenu->value();
+            options.bestFormat = r.inputFormatMenu->value();
             options.noAudio = r.inputAudioMenu->value();
 
             nlohmann::json j;

@@ -85,12 +85,12 @@ namespace mrv
 #endif
 
 #ifdef TLRENDER_NDI
-        void beginNDIOutputStream(const device::DeviceConfig& options);
+        void beginNDIOutputStream();
         void endNDIOutputStream();
 #endif
 
 #ifdef TLRENDER_BMD
-        void beginBMDOutputStream(const device::DeviceConfig& options);
+        void beginBMDOutputStream();
         void endBMDOutputStream();
 #endif
 

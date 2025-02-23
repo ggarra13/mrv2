@@ -42,6 +42,7 @@ namespace mrv
         timeline::ImageOptions imageOptions;
         timeline::DisplayOptions displayOptions;
         timeline::CompareOptions compareOptions;
+        timeline::BackgroundOptions backgroundOptions;
         Stereo3DOptions stereo3DOptions;
         FilesPanelOptions filesPanelOptions;
         image::VideoLevels outputVideoLevels;
@@ -54,6 +55,8 @@ namespace mrv
         std::shared_ptr<observer::ValueObserver<int> > aIndexObserver;
         std::shared_ptr<observer::ValueObserver<int> > stereoIndexObserver;
         std::shared_ptr<observer::ListObserver<int> > bIndexesObserver;
+        std::shared_ptr<observer::ValueObserver<timeline::BackgroundOptions> >
+            backgroundOptionsObserver;
         std::shared_ptr<observer::ValueObserver<timeline::CompareOptions> >
             compareOptionsObserver;
         std::shared_ptr<observer::ValueObserver<Stereo3DOptions> >
@@ -113,6 +116,21 @@ namespace mrv
                 tcp->pushMessage(msg);
                 _widgetUpdate();
             });
+        p.backgroundOptionsObserver =
+            observer::ValueObserver<timeline::BackgroundOptions>::create(
+                p.ui->uiView->observeBackgroundOptions(),
+                [this](const timeline::BackgroundOptions& value)
+                {
+                    _p->backgroundOptions = value;
+
+                    Message msg;
+                    Message opts(value);
+                    msg["command"] = "setBackgroundOptions";
+                    msg["value"] = opts;
+                    tcp->pushMessage(msg);
+
+                    _widgetUpdate();
+                });
         p.compareOptionsObserver =
             observer::ValueObserver<timeline::CompareOptions>::create(
                 app->filesModel()->observeCompareOptions(),
@@ -254,6 +272,14 @@ namespace mrv
             view = p.ui->uiSecondary->viewport();
             view->setCompareOptions(p.compareOptions);
         }
+
+#if defined(TLRENDER_NDI) || defined(TLRENDER_BMD)
+        auto outputDevice = App::app->outputDevice();
+        if (outputDevice)
+        {
+            outputDevice->setCompareOptions(p.compareOptions);
+        }
+#endif
 
         if (panel::comparePanel)
         {
@@ -459,6 +485,7 @@ namespace mrv
         auto& outputDevice = app->outputDevice();
         if (outputDevice)
         {
+            outputDevice->setBackgroundOptions(p.backgroundOptions);
             outputDevice->setOCIOOptions(p.ocioOptions);
             outputDevice->setLUTOptions(p.lutOptions);
             outputDevice->setImageOptions({p.imageOptions});

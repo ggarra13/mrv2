@@ -528,6 +528,9 @@ namespace mrv
         Fl::lock(); // needed for NDI and multithreaded logging
 
         DBG;
+        // Create the Settings
+        p.settings = new SettingsObject();
+        
         // Create the interface.
         ui = new ViewerUI();
         if (!ui)
@@ -535,9 +538,6 @@ namespace mrv
             throw std::runtime_error(_("Cannot create window"));
         }
         DBG;
-
-        // Create the Settings
-        p.settings = new SettingsObject();
 
         // Classes used to handle network connections
 #ifdef MRV2_NETWORK
@@ -886,7 +886,9 @@ namespace mrv
         // We make sure the UI is visible when we feed a filename.
         // This is needed to avoid an issue with Wayland not properly
         // refreshing the play buttons.
+#ifdef MRV2_PYBIND11
         if (p.options.pythonScript.empty())
+#endif
         {
             ui->uiMain->show();
             ui->uiView->take_focus();
@@ -1441,9 +1443,10 @@ namespace mrv
 #endif // TLRENDER_BMD || TLRENDER_NDI
 
 #ifdef TLRENDER_NDI
-    void App::beginNDIOutputStream(const device::DeviceConfig& config)
+    void App::beginNDIOutputStream()
     {
         TLRENDER_P();
+        device::DeviceConfig config;
         p.outputDevice = ndi::OutputDevice::create(_context);
         p.outputDevice->setConfig(config);
         p.devicesModel = device::DevicesModel::create(_context);
@@ -1487,11 +1490,10 @@ namespace mrv
 #endif
 
 #ifdef TLRENDER_BMD
-    void App::beginBMDOutputStream(const device::DeviceConfig& config)
+    void App::beginBMDOutputStream()
     {
         TLRENDER_P();
         p.outputDevice = bmd::OutputDevice::create(_context);
-        p.outputDevice->setConfig(config);
         p.devicesModel = device::DevicesModel::create(_context);
         p.devicesModel->setDeviceIndex(
             p.settings->getValue<int>("BMD/DeviceIndex"));
