@@ -368,6 +368,8 @@ namespace mrv
 
     protected:
         void _init();
+
+        void _updateDevices() const noexcept;
         
         virtual void _readPixel(image::Color4f& rgba) const noexcept = 0;
         math::Vector2i _getViewportCenter() const noexcept;

@@ -1013,6 +1013,7 @@ namespace mrv
     void TimelineViewport::setFrameView(bool active) noexcept
     {
         _p->frameView = active;
+        _updateDevices();
     }
 
     bool TimelineViewport::hasFrameView() const noexcept
@@ -1164,6 +1165,26 @@ namespace mrv
         }
     }
 
+    void TimelineViewport::_updateDevices() const noexcept
+    {
+#if defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
+        TLRENDER_P();
+        const auto& outputDevice = App::app->outputDevice();
+        if (outputDevice)
+        {
+            const auto& viewportSize = getViewportSize();
+            float scale = 1.0;
+            const math::Size2i& deviceSize = outputDevice->getSize();
+            if (viewportSize.isValid() && deviceSize.isValid())
+            {
+                scale *= deviceSize.w / static_cast<float>(viewportSize.w);
+            }
+            outputDevice->setView(p.viewPos * scale, p.viewZoom * scale,
+                                  _getRotation(), p.frameView);
+        }
+#endif // defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
+    }
+
     void TimelineViewport::setViewPosAndZoom(
         const math::Vector2i& pos, float zoom) noexcept
     {
@@ -1172,24 +1193,7 @@ namespace mrv
             return;
         p.viewPos = pos;
         p.viewZoom = zoom;
-
-        const auto& viewportSize = getViewportSize();
-
-#if defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
-        const auto& outputDevice = App::app->outputDevice();
-        if (outputDevice)
-        {
-            float scale = 1.0;
-            const math::Size2i& deviceSize = outputDevice->getSize();
-            if (viewportSize.isValid() && deviceSize.isValid())
-            {
-                scale *= deviceSize.w / static_cast<float>(viewportSize.w);
-            }
-            outputDevice->setView(pos * scale, zoom * scale,
-                                  _getRotation(), p.frameView);
-        }
-#endif // defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
-
+        _updateDevices();
         _updateZoom();
         redraw();
 
@@ -1492,22 +1496,7 @@ namespace mrv
         {
             _frameView();
         }
-        
-#if defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
-        const auto& outputDevice = App::app->outputDevice();
-        if (outputDevice)
-        {
-            float scale = 1.0;
-            const math::Size2i& deviceSize = outputDevice->getSize();
-            const auto& viewportSize = getViewportSize();
-            if (viewportSize.isValid() && deviceSize.isValid())
-            {
-                scale *= deviceSize.w / static_cast<float>(viewportSize.w);
-            }
-            outputDevice->setView(p.viewPos * scale, p.viewZoom * scale,
-                                  _getRotation(), p.frameView);
-        }
-#endif // defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
+        _updateDevices();
 
         redrawWindows();
         updatePixelBar();
