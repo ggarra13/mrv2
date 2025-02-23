@@ -3,10 +3,10 @@ v1.3.4
 
 - Updated default ocio configs to use their latest names instead of the versioned ones.
 - Fixed disting libselinux on Linux.
-- Made HDR tonemapping an option in Render/HDR menu.
+- Made HDR tonemapping an option in Render/HDR menu.  By default is off.
 - Made Ignore Chromaticities in Render/HDR menu.
 - Fixed -v flag being used in -logLevel as well as version.  For backwards compatibility -v will refer to -version and -l to -logLevel.
-- Added NDI Video Output to non-beta builds.
+- Added NDI Video Output to non-beta builds.  No annotations support yet.
 - Refactored Darby's BMD code to make it more generic to different devices.
 - Refactored Background options to be controlled from MainControl.
 
