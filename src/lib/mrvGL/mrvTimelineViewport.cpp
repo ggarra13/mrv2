@@ -1185,9 +1185,10 @@ namespace mrv
             {
                 scale *= deviceSize.w / static_cast<float>(viewportSize.w);
             }
-            outputDevice->setView(pos * scale, zoom * scale, p.frameView);
+            outputDevice->setView(pos * scale, zoom * scale,
+                                  _getRotation(), p.frameView);
         }
-#endif // TLRENDER_BMD
+#endif // defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
 
         _updateZoom();
         redraw();
@@ -1491,6 +1492,22 @@ namespace mrv
         {
             _frameView();
         }
+        
+#if defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
+        const auto& outputDevice = App::app->outputDevice();
+        if (outputDevice)
+        {
+            float scale = 1.0;
+            const math::Size2i& deviceSize = outputDevice->getSize();
+            const auto& viewportSize = getViewportSize();
+            if (viewportSize.isValid() && deviceSize.isValid())
+            {
+                scale *= deviceSize.w / static_cast<float>(viewportSize.w);
+            }
+            outputDevice->setView(p.viewPos * scale, p.viewZoom * scale,
+                                  _getRotation(), p.frameView);
+        }
+#endif // defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
 
         redrawWindows();
         updatePixelBar();
@@ -3519,7 +3536,6 @@ namespace mrv
         const auto& viewportSize = getViewportSize();
         const auto viewportAspect = viewportSize.getAspect();
 
-        image::Size transformSize;
         math::Vector2f transformOffset;
         if (viewportAspect > 1.F)
         {
@@ -3557,7 +3573,6 @@ namespace mrv
         const auto& viewportSize = getViewportSize();
         const auto viewportAspect = viewportSize.getAspect();
 
-        image::Size transformSize;
         math::Vector2f transformOffset;
         if (viewportAspect > 1.F)
         {
