@@ -3,24 +3,29 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 // Debug scaling of the window to image size.
-//#define DEBUG_SCALING 1
+// #define DEBUG_SCALING 1
 
-#include <memory>
-#include <cmath>
-#include <algorithm>
+#include "mrViewer.h"
+
+#include <tlDevice/IOutput.h>
 
 #include <tlCore/HDR.h>
 #include <tlCore/Matrix.h>
 
-#include "mrViewer.h"
+#include "mrvApp/mrvSettingsObject.h"
 
 #include "mrvPanels/mrvAnnotationsPanel.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvUI/mrvDesktop.h"
+#include "mrvWidgets/mrvHorSlider.h"
+#include "mrvWidgets/mrvMultilineInput.h"
 
 #include "mrvGL/mrvTimelineViewport.h"
 #include "mrvGL/mrvTimelineViewportPrivate.h"
+
+#include "mrvNetwork/mrvTCP.h"
+#include "mrvNetwork/mrvDummyClient.h"
 
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvFl/mrvOCIO.h"
@@ -32,17 +37,13 @@
 #include "mrvCore/mrvUtil.h"
 #include "mrvCore/mrvWait.h"
 
-#include "mrvWidgets/mrvHorSlider.h"
-#include "mrvWidgets/mrvMultilineInput.h"
-
-#include "mrvNetwork/mrvTCP.h"
-#include "mrvNetwork/mrvDummyClient.h"
-
-#include "mrvApp/mrvSettingsObject.h"
-
 #include "mrvFl/mrvIO.h"
 
 #include <FL/Fl.H>
+
+#include <algorithm>
+#include <cmath>
+#include <memory>
 
 namespace
 {
@@ -75,7 +76,6 @@ namespace mrv
     using namespace tl;
 
     std::string TimelineViewport::Private::hdr;
-    timeline::BackgroundOptions TimelineViewport::Private::backgroundOptions;
     EnvironmentMapOptions TimelineViewport::Private::environmentMapOptions;
     math::Box2i TimelineViewport::Private::selection =
         math::Box2i(0, 0, -1, -1);
@@ -115,6 +115,7 @@ namespace mrv
         TLRENDER_P();
 
         p.ui = App::ui;
+        _init();
     }
 
     TimelineViewport::TimelineViewport(int W, int H, const char* L) :
@@ -124,6 +125,30 @@ namespace mrv
         TLRENDER_P();
 
         p.ui = App::ui;
+        _init();
+    }
+
+    void TimelineViewport::_init()
+    {
+        TLRENDER_P();
+        
+        auto settings = App::app->settings();
+
+        timeline::BackgroundOptions backgroundOptions;
+        backgroundOptions.type = static_cast<timeline::Background>(
+            settings->getValue<int>("Background/Type"));
+
+        Fl_Color color;
+        int size = settings->getValue<int>("Background/CheckersSize");
+        backgroundOptions.checkersSize = math::Size2i(size, size);
+
+        color = settings->getValue<int>("Background/color0");
+        backgroundOptions.color0 = from_fltk_color(color);
+
+        color = settings->getValue<int>("Background/color1");
+        backgroundOptions.color1 = from_fltk_color(color);
+        
+        p.backgroundOptions = observer::Value<timeline::BackgroundOptions>::create(backgroundOptions);
     }
 
     TimelineViewport::~TimelineViewport()
@@ -754,24 +779,19 @@ namespace mrv
     const timeline::BackgroundOptions&
     TimelineViewport::getBackgroundOptions() const noexcept
     {
+        return _p->backgroundOptions->get();
+    }
+    
+    std::shared_ptr<observer::IValue<timeline::BackgroundOptions> > TimelineViewport::observeBackgroundOptions() const
+    {
         return _p->backgroundOptions;
     }
 
     void TimelineViewport::setBackgroundOptions(
         const timeline::BackgroundOptions& value)
     {
-        TLRENDER_P();
-
-        if (value == p.backgroundOptions)
-            return;
-
-        p.backgroundOptions = value;
-
-        Message msg;
-        msg["command"] = "setBackgroundOptions";
-        msg["value"] = value;
-        tcp->pushMessage(msg);
-        redrawWindows();
+        auto settings = App::app->settings();
+        _p->backgroundOptions->setIfChanged(value);
     }
 
     void TimelineViewport::setOCIOOptions(
@@ -936,13 +956,11 @@ namespace mrv
         p.hdrOptions.tonemap = value.tonemap;
         redrawWindows();
     }
-    
-    const timeline::HDROptions&
-    TimelineViewport::getHDROptions() const noexcept
+
+    const timeline::HDROptions& TimelineViewport::getHDROptions() const noexcept
     {
         return _p->hdrOptions;
     }
-
 
     void TimelineViewport::setTimelinePlayer(TimelinePlayer* player) noexcept
     {
@@ -995,6 +1013,7 @@ namespace mrv
     void TimelineViewport::setFrameView(bool active) noexcept
     {
         _p->frameView = active;
+        _updateDevices();
     }
 
     bool TimelineViewport::hasFrameView() const noexcept
@@ -1146,6 +1165,26 @@ namespace mrv
         }
     }
 
+    void TimelineViewport::_updateDevices() const noexcept
+    {
+#if defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
+        TLRENDER_P();
+        const auto& outputDevice = App::app->outputDevice();
+        if (outputDevice)
+        {
+            const auto& viewportSize = getViewportSize();
+            float scale = 1.0;
+            const math::Size2i& deviceSize = outputDevice->getSize();
+            if (viewportSize.isValid() && deviceSize.isValid())
+            {
+                scale *= deviceSize.w / static_cast<float>(viewportSize.w);
+            }
+            outputDevice->setView(p.viewPos * scale, p.viewZoom * scale,
+                                  _getRotation(), p.frameView);
+        }
+#endif // defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
+    }
+
     void TimelineViewport::setViewPosAndZoom(
         const math::Vector2i& pos, float zoom) noexcept
     {
@@ -1154,24 +1193,7 @@ namespace mrv
             return;
         p.viewPos = pos;
         p.viewZoom = zoom;
-
-        float scale = 1.F;
-        const auto& viewportSize = getViewportSize();
-
-#if defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
-        scale = 1.F;
-        const auto& outputDevice = App::app->outputDevice();
-        if (outputDevice)
-        {
-            const math::Size2i& deviceSize = outputDevice->getSize();
-            if (viewportSize.isValid() && deviceSize.isValid())
-            {
-                scale = deviceSize.w / static_cast<float>(viewportSize.w);
-            }
-            outputDevice->setView(pos * scale, zoom * scale, p.frameView);
-        }
-#endif // TLRENDER_BMD
-        
+        _updateDevices();
         _updateZoom();
         redraw();
 
@@ -1474,6 +1496,7 @@ namespace mrv
         {
             _frameView();
         }
+        _updateDevices();
 
         redrawWindows();
         updatePixelBar();
@@ -1567,9 +1590,8 @@ namespace mrv
         TLRENDER_P();
         auto renderSize = getRenderSize();
 #ifdef DEBUG_SCALING
-        std::cerr << "0 WxH=" << renderSize
-                  << " " << getViewportSize() << " screens="
-                  << Fl::screen_count() << std::endl;
+        std::cerr << "0 WxH=" << renderSize << " " << getViewportSize()
+                  << " screens=" << Fl::screen_count() << std::endl;
 #endif
 
         bool use_maximize = false;
@@ -1624,7 +1646,7 @@ namespace mrv
 
         int WBars = 0;
         int HBars = 0;
-        int TVH   = 0;
+        int TVH = 0;
 
         // First, make sure the user or window manager did not set an
         // incorrect position
@@ -1683,7 +1705,7 @@ namespace mrv
 
             if (p.ui->uiStatusGroup->visible())
                 HBars += p.ui->uiStatusGroup->h();
-            
+
             if (p.ui->uiBottomBar->visible())
             {
                 TVH = calculate_edit_viewport_size(p.ui);
@@ -1824,7 +1846,7 @@ namespace mrv
         {
             mw->resize(posX, posY, W, H);
         }
-        
+
         if (p.frameView)
         {
             // Wait a little so that resizing/maximizing takes place.
@@ -1838,8 +1860,9 @@ namespace mrv
         set_edit_mode_cb(editMode, p.ui);
 
 #ifdef DEBUG_SCALING
-        HBars = 0; TVH = 0;
-        
+        HBars = 0;
+        TVH = 0;
+
         // Take into account the different UI bars
         if (p.ui->uiMenuGroup->visible())
             HBars += p.ui->uiMenuGroup->h();
@@ -1855,18 +1878,16 @@ namespace mrv
             HBars += p.ui->uiBottomBar->h();
         }
 
-        
         if (p.ui->uiStatusGroup->visible())
             HBars += p.ui->uiStatusGroup->h();
-            
+
         TVH = calculate_edit_viewport_size(p.ui);
-        std::cerr << "END HBars=" << HBars << " " << TVH << std::endl; 
+        std::cerr << "END HBars=" << HBars << " " << TVH << std::endl;
 
         std::cerr << "MAXIMIZED Window=" << posX << " " << posY << " "
-                  << mw->w() << "x" << mw->h()
-                  << std::endl;
+                  << mw->w() << "x" << mw->h() << std::endl;
 #endif
-            
+
         // We need to adjust dock group too.  These lines are needed.
         auto viewGroup = p.ui->uiViewGroup;
         auto dockGroup = p.ui->uiDockGroup;
@@ -3504,7 +3525,6 @@ namespace mrv
         const auto& viewportSize = getViewportSize();
         const auto viewportAspect = viewportSize.getAspect();
 
-        image::Size transformSize;
         math::Vector2f transformOffset;
         if (viewportAspect > 1.F)
         {
@@ -3542,7 +3562,6 @@ namespace mrv
         const auto& viewportSize = getViewportSize();
         const auto viewportAspect = viewportSize.getAspect();
 
-        image::Size transformSize;
         math::Vector2f transformOffset;
         if (viewportAspect > 1.F)
         {

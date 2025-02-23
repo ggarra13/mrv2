@@ -6,7 +6,9 @@ v1.3.4
 - Made HDR tonemapping an option in Render/HDR menu.
 - Made Ignore Chromaticities in Render/HDR menu.
 - Fixed -v flag being used in -logLevel as well as version.  For backwards compatibility -v will refer to -version and -l to -logLevel.
-- Added NDI Output Stream for all formats.
+- Added NDI Video Output to non-beta builds.
+- Refactored Darby's BMD code to make it more generic to different devices.
+- Refactored Background options to be controlled from MainControl.
 
 
 v1.3.3

@@ -89,6 +89,13 @@ namespace mrv
         p.defaultValues["gui/Python/WindowW"] = 640;
         p.defaultValues["gui/Python/WindowH"] = 400;
 
+#ifdef TLRENDER_NDI
+        p.defaultValues["NDI/HDRData"] = "";
+#endif
+#ifdef TLRENDER_BMD
+        p.defaultValues["BMD/HDRData"] = "";
+#endif
+        
         uint64_t totalVirtualMem = 0;
         uint64_t virtualMemUsed = 0;
         uint64_t virtualMemUsedByMe = 0;
@@ -362,10 +369,17 @@ namespace mrv
         }
         catch (const std::bad_any_cast& e)
         {
-            LOG_ERROR(
-                "For " << name << " " << e.what() << " should be string is "
-                       << anyName(value));
-            setValue(name, out);
+            try
+            {
+                out = std::any_cast<const char*>(value);
+            }
+            catch (const std::bad_any_cast& e)
+            {
+                LOG_ERROR(
+                    "For " << name << " " << e.what() << " should be string is "
+                    << anyName(value));
+                setValue(name, out);
+            }
         }
         return out;
     }

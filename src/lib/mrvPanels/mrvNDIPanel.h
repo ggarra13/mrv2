@@ -8,6 +8,7 @@
 
 class ViewerUI;
 class Fl_Menu_Item;
+class Fl_Toggle_Button;
 
 namespace mrv
 {
@@ -26,7 +27,8 @@ namespace mrv
             void refresh_sources();
 
         protected:
-            void _open_ndi(const Fl_Menu_Item*);
+            void _ndi_input(const Fl_Menu_Item*);
+            void _ndi_output(Fl_Toggle_Button*);
 
         private:
             MRV2_PRIVATE();

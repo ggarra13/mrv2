@@ -663,7 +663,7 @@ namespace mrv
 
     void MainWindow::always_on_top(int value, bool synthetic)
     {
-        if (on_top == value)
+        if (on_top == static_cast<bool>(value))
             return;
 
         on_top = value;

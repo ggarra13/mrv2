@@ -211,7 +211,7 @@ namespace mrv
 
         const bool transparent =
             hasAlpha ||
-            p.backgroundOptions.type == timeline::Background::Transparent;
+            getBackgroundOptions().type == timeline::Background::Transparent;
 
         try
         {
@@ -363,7 +363,7 @@ namespace mrv
                         {
                             gl.render->setOCIOOptions(p.ocioOptions);
                             _updateMonitorDisplayView(screen, p.ocioOptions);
-                        }
+                        } 
 
                         gl.render->setLUTOptions(p.lutOptions);
                         gl.render->setHDROptions(p.hdrOptions);
@@ -387,7 +387,7 @@ namespace mrv
                                     timeline::getBoxes(
                                         p.compareOptions.mode, p.videoData),
                                     p.imageOptions, p.displayOptions,
-                                    p.compareOptions, p.backgroundOptions);
+                                    p.compareOptions, getBackgroundOptions());
                             }
                         }
                         _drawOverlays(renderSize);

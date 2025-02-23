@@ -2,17 +2,17 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <algorithm>
-#include <filesystem>
-namespace fs = std::filesystem;
-
-#include <tlIO/System.h>
+#include "mrvApp/mrvApp.h"
 
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvSequence.h"
 #include "mrvCore/mrvUtil.h"
 
-#include "mrvApp/mrvApp.h"
+#include <tlIO/System.h>
+
+#include <algorithm>
+#include <filesystem>
+namespace fs = std::filesystem;
 
 namespace mrv
 {

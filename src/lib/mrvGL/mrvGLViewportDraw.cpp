@@ -263,7 +263,7 @@ namespace mrv
                     timeline::getBoxes(
                         timeline::CompareMode::A, {p.videoData[left]}),
                     p.imageOptions, p.displayOptions, p.compareOptions,
-                    p.backgroundOptions);
+                    getBackgroundOptions());
             }
 
             _drawOverlays(renderSize);
@@ -339,7 +339,7 @@ namespace mrv
             {p.lastVideoData},
             timeline::getBoxes(p.compareOptions.mode, {p.lastVideoData}),
             p.imageOptions, p.displayOptions, p.compareOptions,
-            p.backgroundOptions);
+            getBackgroundOptions());
 
         if (p.missingFrameType == MissingFrameType::kScratchedFrame)
         {
