@@ -530,7 +530,7 @@ namespace mrv
         DBG;
         // Create the Settings
         p.settings = new SettingsObject();
-        
+
         // Create the interface.
         ui = new ViewerUI();
         if (!ui)
@@ -681,12 +681,10 @@ namespace mrv
         p.settings->setDefaultValue("BMD/HDRData", bmdDevicesModelData.hdrData);
 #endif // TLRENDER_BMD
 
-#ifdef TLRENDER_NDI
+#if defined(TLRENDER_NDI)
         if (!NDIlib_initialize())
             throw std::runtime_error(_("Could not initialize NDI"));
-#endif
 
-#if defined(TLRENDER_NDI)
         device::DevicesModelData devicesModelData;
         p.settings->setDefaultValue(
             "NDI/DeviceIndex", devicesModelData.deviceIndex);
@@ -702,8 +700,8 @@ namespace mrv
             "NDI/444SDIVideoOutput",
             i != devicesModelData.boolOptions.end() ? i->second : false);
         // p.settings->setDefaultValue("NDI/HDRMode", devicesModelData.hdrMode);
-        // p.settings->setDefaultValue("NDI/HDRData", devicesModelData.hdrData)
-        ;
+        // p.settings->setDefaultValue("NDI/HDRData", devicesModelData.hdrData);
+
 #endif // TLRENDER_NDI
 
         p.volume = p.settings->getValue<float>("Audio/Volume");
@@ -773,17 +771,17 @@ namespace mrv
                     p.outputDevice->setDisplayOptions({displayOptions});
                     p.outputDevice->setHDR(value.hdrMode, value.hdrData);
 
-                    p.settings->setValue("NDI/DeviceIndex", value.deviceIndex);
+                    p.settings->setValue("BMD/DeviceIndex", value.deviceIndex);
                     p.settings->setValue(
-                        "NDI/DisplayModeIndex", value.displayModeIndex);
+                        "BMD/DisplayModeIndex", value.displayModeIndex);
                     p.settings->setValue(
-                        "NDI/PixelTypeIndex", value.pixelTypeIndex);
+                        "BMD/PixelTypeIndex", value.pixelTypeIndex);
                     p.settings->setValue(
-                        "NDI/DeviceEnabled", value.deviceEnabled);
+                        "BMD/DeviceEnabled", value.deviceEnabled);
                     const auto i = value.boolOptions.find(
                         device::Option::_444SDIVideoOutput);
                     p.settings->setValue(
-                        "NDI/444SDIVideoOutput",
+                        "BMD/444SDIVideoOutput",
                         i != value.boolOptions.end() ? i->second : false);
                     // p.settings->setValue("NDI/HDRMode", value.hdrMode);
                     // p.settings->setValue("NDI/HDRData", value.hdrData);
@@ -2270,7 +2268,7 @@ namespace mrv
             p.player->setMute(p.mute);
         }
 
-#if defined(TLRENDER_NDI) || defined(TLRENDER_BMD) 
+#if defined(TLRENDER_NDI) || defined(TLRENDER_BMD)
         if (p.outputDevice)
         {
             p.outputDevice->setVolume(p.volume);
