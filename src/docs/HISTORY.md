@@ -14,6 +14,7 @@ v1.3.4
 - Refactored Background options to be controlled from MainControl.
 - Major code clean up of audio code.
 - Fixed antialiasing of text menus on Wayland.
+- Fixed transparency on Wayland to be like X11.
 
 
 v1.3.3

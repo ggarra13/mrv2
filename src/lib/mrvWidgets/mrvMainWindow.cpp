@@ -866,8 +866,9 @@ namespace mrv
 #ifdef FLTK_USE_WAYLAND
         if (desktop::Wayland())
         {
-            // wl_surface_set_opaque_region(fl_wl_surface(fl_wl_xid(this)),
-            // NULL);
+            // This call is needed for proper transparency of the main window.
+            wl_surface_set_opaque_region(fl_wl_surface(fl_wl_xid(this)),
+                                         NULL);
 
             //
             // \@todo: Implement proper Always on Top on all compositors on
@@ -948,10 +949,20 @@ namespace mrv
         TLRENDER_P();
 
 #ifdef FLTK_USE_WAYLAND
-        if (fl_wl_display())
+        if (fl_wl_display() && win_alpha < 255)
         {
-            p.offscreen = fl_create_offscreen(w(), h());
+            cairo_t* cr = fl_wl_gc();
 
+            // Make the offscreen surface bigger for antialiasing.
+            float scale = 1.0;
+            int screen = 0;
+            int valid_scaling = Fl::screen_scaling_supported();
+            if (scale == 2)
+                screen = screen_num();
+            else if (scale == 1)
+                scale = Fl::screen_scale(screen);
+            p.offscreen = fl_create_offscreen(w()*4*scale, h()*4*scale);
+            
             // 1. Draw child widgets to an offscreen buffer
             fl_begin_offscreen(p.offscreen);
             Fl_Double_Window::draw_children(); // Draw all the window's children
@@ -964,7 +975,6 @@ namespace mrv
             // 3. Create a surface from the offscreen
             cairo_surface_t* offscreen_surface = cairo_get_target(offscreen_cr);
 
-            cairo_t* cr = fl_wl_gc();
 
             // 4. Clear the canvas (needed as FLTK seems to accumulate
             //    transparency)
@@ -975,10 +985,10 @@ namespace mrv
             // 5. Paint with alpha channel the offscreen widgets
             cairo_set_source_surface(cr, offscreen_surface, 0, 0);
             cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
-
+            
             const double alpha = (double)win_alpha / 255.0;
             cairo_paint_with_alpha(cr, alpha);
-
+            
             fl_delete_offscreen(p.offscreen);
         }
         else
@@ -992,10 +1002,7 @@ namespace mrv
 
     void MainWindow::set_alpha(int new_alpha)
     {
-        // \@bug: Wayland has a different transparency behavior.
         int minAlpha = 95;
-        if (desktop::Wayland())
-            minAlpha = 65;
         // Don't allow fully transparent window
         if (new_alpha < minAlpha)
         {
