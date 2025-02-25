@@ -1383,7 +1383,6 @@ namespace mrv
         return _p->running;
     }
 
-#if defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
     const std::shared_ptr<device::DevicesModel>& App::devicesModel() const
     {
         return _p->devicesModel;
@@ -1393,7 +1392,8 @@ namespace mrv
     {
         return _p->outputDevice;
     }
-
+    
+#if defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
     void App::_timer_update_cb(App* self)
     {
         self->timerUpdate();
