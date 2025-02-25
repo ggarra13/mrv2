@@ -15,6 +15,7 @@ v1.3.4
 - Major code clean up of audio code.
 - Fixed antialiasing of text menus on Wayland.
 - Fixed transparency on Wayland to be like X11.
+- Fixed a Wayland crash when changing the scaling factor interactively from FLTK's <Ctrl>+ and <Ctrl>- shortcuts.
 
 
 v1.3.3

@@ -14,6 +14,7 @@
 // Bugs: ?
 
 #include <FL/Fl.H>
+#include <FL/platform.H>
 #include <FL/fl_draw.H>
 
 #include "mrvPack.h"
@@ -237,7 +238,10 @@ namespace mrv
                 }
                 if (X != o->x() || Y != o->y() || W != o->w() || H != o->h())
                 {
-                    o->resize(X, Y, W, H);
+#ifdef FLTK_USE_WAYLAND
+                    if (fl_wl_display() && !o->as_window())
+#endif
+                        o->resize(X, Y, W, H);
                     o->clear_damage(FL_DAMAGE_ALL);
                 }
                 if (d & FL_DAMAGE_ALL)
