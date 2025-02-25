@@ -9,10 +9,11 @@ v1.3.4
 - Added NDI Video Output to non-beta builds.
 - Added NDI Audio Output to non-beta builds.
 - Added NDI's HDR support to non-beta builds.  Albeit it is untested as I don't
-  have the hardware or the Advanced SDK for it.
+  have the hardware or the Advanced SDK for it.  However HDR metadata is tonemapped correctly.
 - Refactored Darby's BMD code to make it more generic to different devices.
 - Refactored Background options to be controlled from MainControl.
 - Major code clean up of audio code.
+- Fixed antialiasing of text menus on Wayland.
 
 
 v1.3.3

@@ -821,7 +821,7 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {138 161 933 608} type Double align 80 hide resizable
+      xywh {219 258 933 608} type Double align 80 hide resizable
       class {mrv::MainWindow} size_range {933 602 0 0}
     } {
       Fl_Flex uiRegion {open
@@ -835,7 +835,7 @@ if (reason == FL_REASON_CLOSED)
             xywh {0 0 892 30}
           } {
             Fl_Menu_Bar uiMenuBar {selected
-              xywh {0 0 813 30} labeltype NO_LABEL
+              xywh {0 0 813 30} labeltype NO_LABEL textsize 12
               class {mrv::MenuBar}
             } {}
             Fl_Button uiEdit {
@@ -1250,43 +1250,43 @@ uiView->setActionMode( mode );}
                 class {mrv::Button}
               }
               Fl_Group {} {open
-                xywh {2 354 40 51}
+                xywh {2 363 40 51}
               } {
                 Fl_Slider uiPenOpacity {
                   callback {auto settings = app->settings();
 int a = o->value() * 255;
 settings->setValue( mrv::kPenColorA, a);}
-                  tooltip {Opacity of pen stroke} xywh {5 388 34 17} type {Horz Knob} step 0.01 value 1
+                  tooltip {Opacity of pen stroke} xywh {5 397 34 17} type {Horz Knob} step 0.01 value 1
                 }
                 Fl_Button uiFlipPenColor {
                   user_data this user_data_type {ViewerUI*}
                   callback {mrv::flip_pen_color_cb( o, v );}
-                  tooltip {Switch Colors} image {../../icons/Flip.svg} compress_image 1 xywh {23 354 16 19} box NO_BOX labelfont 8 labelsize 24 align 16
+                  tooltip {Switch Colors} image {../../icons/Flip.svg} compress_image 1 xywh {23 363 16 19} box NO_BOX labelfont 8 labelsize 24 align 16
                   class {mrv::Button}
                 }
                 Fl_Button uiOldPenColor {
                   user_data this user_data_type {ViewerUI*}
-                  tooltip {Old Color Used.  Click on the Arrow to alternate.} xywh {23 373 15 15} box ENGRAVED_BOX color 1 selection_color 1 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
+                  tooltip {Old Color Used.  Click on the Arrow to alternate.} xywh {23 382 15 15} box ENGRAVED_BOX color 1 selection_color 1 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
                 }
                 Fl_Button uiPenColor {
                   user_data this user_data_type {ViewerUI*}
                   callback {mrv::set_pen_color_cb( o, v );}
-                  tooltip {Pick Draw Color and Alpha} xywh {3 354 20 19} box ENGRAVED_BOX color 3 selection_color 3 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
+                  tooltip {Pick Draw Color and Alpha} xywh {3 363 20 19} box ENGRAVED_BOX color 3 selection_color 3 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
                 }
               }
-              Fl_Group {} {open
-                xywh {0 402 42 91}
+              Fl_Group {} {
+                xywh {0 423 42 71}
               } {
                 Fl_Button uiUndoDraw {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiView->undo();}
-                  tooltip {Undo Last Shape Drawn in Current Frame.} image {../../icons/Undo.svg} compress_image 1 xywh {0 402 40 35} deactivate
+                  tooltip {Undo Last Shape Drawn in Current Frame.} image {../../icons/Undo.svg} compress_image 1 xywh {0 423 40 35} deactivate
                   class {mrv::Button}
                 }
                 Fl_Button uiRedoDraw {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiView->redo();}
-                  tooltip {Redo Previous Shape Drawn in Current Frame.} image {../../icons/Redo.svg} compress_image 1 xywh {0 437 40 36} deactivate
+                  tooltip {Redo Previous Shape Drawn in Current Frame.} image {../../icons/Redo.svg} compress_image 1 xywh {0 458 40 36} deactivate
                   class {mrv::Button}
                 }
               }

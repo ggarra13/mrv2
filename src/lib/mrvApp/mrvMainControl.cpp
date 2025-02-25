@@ -250,13 +250,11 @@ namespace mrv
         p.ui->uiTimeline->setDisplayOptions(display);
         p.ui->uiTimeline->redraw();
 
-#if defined(TLRENDER_NDI) || defined(TLRENDER_BMD)
         auto outputDevice = App::app->outputDevice();
         if (outputDevice)
         {
             outputDevice->setLUTOptions(p.lutOptions);
         }
-#endif
         
         if (panel::colorPanel)
         {
@@ -285,13 +283,11 @@ namespace mrv
         p.ui->uiTimeline->setDisplayOptions(display);
         p.ui->uiTimeline->redraw();
 
-#if defined(TLRENDER_NDI) || defined(TLRENDER_BMD)
         auto outputDevice = App::app->outputDevice();
         if (outputDevice)
         {
             outputDevice->setDisplayOptions({p.displayOptions});
         }
-#endif
         
         if (panel::colorPanel)
         {
@@ -311,13 +307,11 @@ namespace mrv
             view->setCompareOptions(p.compareOptions);
         }
 
-#if defined(TLRENDER_NDI) || defined(TLRENDER_BMD)
         auto outputDevice = App::app->outputDevice();
         if (outputDevice)
         {
             outputDevice->setCompareOptions(p.compareOptions);
         }
-#endif
 
         if (panel::comparePanel)
         {

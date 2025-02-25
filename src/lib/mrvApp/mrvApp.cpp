@@ -215,11 +215,9 @@ namespace mrv
         std::vector<std::shared_ptr<timeline::Timeline> > timelines;
 
         bool deviceActive = false;
-#if defined(TLRENDER_NDI) || defined(TLRENDER_BMD)
         std::shared_ptr<device::IOutput> outputDevice;
         std::shared_ptr<device::DevicesModel> devicesModel;
         image::VideoLevels outputVideoLevels = image::VideoLevels::First;
-#endif
 
         // Observers
         std::shared_ptr<
@@ -1405,10 +1403,8 @@ namespace mrv
     {
         TLRENDER_P();
 
-#    if defined(TLRENDER_NDI) || defined(TLRENDER_BMD)
         if (p.outputDevice)
             p.outputDevice->tick();
-#    endif
 
         Fl::repeat_timeout(
             kTimeout, (Fl_Timeout_Handler)_timer_update_cb, this);
@@ -1418,13 +1414,12 @@ namespace mrv
     {
         TLRENDER_P();
 
-#    if defined(TLRENDER_NDI) || defined(TLRENDER_BMD)
         if (p.outputDevice)
         {
             p.outputDevice->setPlayer(p.player ? p.player->player() : nullptr);
             p.outputDevice->setEnabled(true);
         }
-#    endif
+        
         Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)_timer_update_cb, this);
     }
 
@@ -1432,10 +1427,9 @@ namespace mrv
     {
         TLRENDER_P();
 
-#    if defined(TLRENDER_NDI) || defined(TLRENDER_BMD)
         if (p.outputDevice)
             p.outputDevice->setEnabled(false);
-#    endif
+        
         Fl::remove_timeout((Fl_Timeout_Handler)_timer_update_cb, this);
     }
 #endif // TLRENDER_BMD || TLRENDER_NDI
