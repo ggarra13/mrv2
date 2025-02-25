@@ -17,8 +17,6 @@
 #    include <tlDevice/IOutput.h>
 
 #    include <FL/Fl_Choice.H>
-#    include <FL/Fl_Check_Button.H>
-#    include <FL/Fl_Toggle_Button.H>
 
 #    include <Processing.NDI.Lib.h>
 
@@ -26,7 +24,7 @@
 #    include "mrvCore/mrvFile.h"
 #    include "mrvCore/mrvMemory.h"
 
-#    include "mrvWidgets/mrvButton.h"
+#    include "mrvWidgets/mrvToggleButton.h"
 #    include "mrvWidgets/mrvFunctional.h"
 #    include "mrvWidgets/mrvHorSlider.h"
 #    include "mrvWidgets/mrvInput.h"
@@ -380,10 +378,11 @@ namespace mrv
 
             cg->begin();
 
-            auto bW = new Widget<Fl_Toggle_Button>(
+            auto bW = new Widget<ToggleButton>(
                 g->x() + 10, Y, g->w() - 20, 30, _("Start streaming"));
             bW->align(FL_ALIGN_CENTER);
             bW->labelsize(12);
+            bW->selection_color(FL_YELLOW);
             bW->callback(
                 [=](auto b)
                     {
@@ -429,18 +428,20 @@ namespace mrv
             }
         }
 
-        void NDIPanel::_ndi_output(Fl_Toggle_Button* b)
+        void NDIPanel::_ndi_output(ToggleButton* b)
         {
             MRV2_R();
-                    
+            
             if (!App::ui->uiView->getTimelinePlayer())
             {
                 b->value(0);
+                b->redraw();
                 return;
             }
                     
-            if (b->value())
+            if (!b->value())
             {
+                
                 App::app->beginNDIOutputStream();
                 auto outputDevice = App::app->outputDevice();
                 if (!outputDevice)
@@ -462,13 +463,25 @@ namespace mrv
                         break;
                 }
                 
+                const Fl_Menu_Item* audioItem = r.outputAudioMenu->mvalue();
+                if (!audioItem || !audioItem->label())
+                    return;
+                
+                bool noAudio = r.outputAudioMenu->value();
+                
                 device::DeviceConfig config;
                 config.deviceIndex = 0;
                 config.displayModeIndex = 0;
                 config.pixelType = static_cast<device::PixelType>(idx);
+                config.noAudio = noAudio;
+                
                 if (format == _("Best Format"))
                 {
+#ifdef NDI_SDK_ADVANCED
                     config.pixelType = device::PixelType::_16BitPA16;
+#else
+                    config.pixelType = device::PixelType::_8BitRGBA;
+#endif
                 }
                 else if (format == _("Fast Format"))
                 {
@@ -476,16 +489,22 @@ namespace mrv
                 }
 
                 const std::string msg =
-                    string::Format(_("Streaming {0}...")).arg(config.pixelType);
+                    string::Format(_("Streaming {0} {1}...")).
+                    arg(config.pixelType).
+                    arg(audioItem->label());
                 LOG_STATUS(msg);
                             
                 outputDevice->setConfig(config);
                 b->copy_label(_("Stop streaming"));
+                b->value(1);
+                b->redraw();
             }
             else
             {
                 App::app->endNDIOutputStream();
                 b->copy_label(_("Start streaming"));
+                b->value(0);
+                b->redraw();
             }
         }
         

@@ -836,7 +836,11 @@ namespace mrv
         display.ocio = value;
         p.ui->uiTimeline->setDisplayOptions(display);
         p.ui->uiTimeline->redraw(); // to refresh thumbnail
-
+        
+        const auto outputDevice = App::app->outputDevice();
+        if (outputDevice)
+            outputDevice->setOCIOOptions(value);
+        
         Message msg;
         msg["command"] = "setOCIOOptions";
         msg["value"] = value;
@@ -864,6 +868,11 @@ namespace mrv
         display.lut = value;
         p.ui->uiTimeline->setDisplayOptions(display);
         p.ui->uiTimeline->redraw(); // to refresh thumbnail
+        
+        const auto outputDevice = App::app->outputDevice();
+        if (outputDevice)
+            outputDevice->setLUTOptions(value);
+        
         redraw();
     }
 
@@ -1167,9 +1176,8 @@ namespace mrv
 
     void TimelineViewport::_updateDevices() const noexcept
     {
-#if defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
         TLRENDER_P();
-        const auto& outputDevice = App::app->outputDevice();
+        const auto outputDevice = App::app->outputDevice();
         if (outputDevice)
         {
             const auto& viewportSize = getViewportSize();
@@ -1182,7 +1190,6 @@ namespace mrv
             outputDevice->setView(p.viewPos * scale, p.viewZoom * scale,
                                   _getRotation(), p.frameView);
         }
-#endif // defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
     }
 
     void TimelineViewport::setViewPosAndZoom(
@@ -2624,6 +2631,10 @@ namespace mrv
         default:
             break;
         }
+
+        const auto outputDevice = App::app->outputDevice();
+        if (outputDevice)
+            outputDevice->setDisplayOptions({d});
 
         p.ui->uiColorChannel->copy_label(name.c_str());
         p.ui->uiColorChannel->redraw();

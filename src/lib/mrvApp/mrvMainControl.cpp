@@ -197,7 +197,7 @@ namespace mrv
 
         p.lutOptions = value;
 
-        _widgetUpdate();
+        _lutUpdate();
     }
 
     void MainControl::setDisplayOptions(const timeline::DisplayOptions& value)
@@ -233,6 +233,37 @@ namespace mrv
         }
     }
 
+    void MainControl::_lutUpdate()
+    {
+        TLRENDER_P();
+
+        Viewport* view = p.ui->uiView;
+        view->setLUTOptions(p.lutOptions);
+        if (p.ui->uiSecondary)
+        {
+            view = p.ui->uiSecondary->viewport();
+            view->setLUTOptions(p.lutOptions);
+        }
+
+        auto display = p.ui->uiTimeline->getDisplayOptions();
+        display.lut = p.lutOptions;
+        p.ui->uiTimeline->setDisplayOptions(display);
+        p.ui->uiTimeline->redraw();
+
+#if defined(TLRENDER_NDI) || defined(TLRENDER_BMD)
+        auto outputDevice = App::app->outputDevice();
+        if (outputDevice)
+        {
+            outputDevice->setLUTOptions(p.lutOptions);
+        }
+#endif
+        
+        if (panel::colorPanel)
+        {
+            panel::colorPanel->setLUTOptions(p.lutOptions);
+        }
+    }
+    
     void MainControl::_displayUpdate()
     {
         TLRENDER_P();
@@ -254,9 +285,16 @@ namespace mrv
         p.ui->uiTimeline->setDisplayOptions(display);
         p.ui->uiTimeline->redraw();
 
+#if defined(TLRENDER_NDI) || defined(TLRENDER_BMD)
+        auto outputDevice = App::app->outputDevice();
+        if (outputDevice)
+        {
+            outputDevice->setDisplayOptions({p.displayOptions});
+        }
+#endif
+        
         if (panel::colorPanel)
         {
-            panel::colorPanel->setLUTOptions(p.lutOptions);
             panel::colorPanel->setDisplayOptions(p.displayOptions);
         }
     }
@@ -481,23 +519,16 @@ namespace mrv
             view->redraw();
         }
 
-#if defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
-        auto& outputDevice = app->outputDevice();
+        const auto& outputDevice = app->outputDevice();
         if (outputDevice)
         {
             outputDevice->setBackgroundOptions(p.backgroundOptions);
             outputDevice->setOCIOOptions(p.ocioOptions);
             outputDevice->setLUTOptions(p.lutOptions);
             outputDevice->setImageOptions({p.imageOptions});
-            // for (auto& i : displayOptions)
-            // {
-            //     i.videoLevels = p.outputVideoLevels;
-            // }
-            // outputDevice->setDisplayOptions(displayOptions);
             outputDevice->setDisplayOptions({p.displayOptions});
             outputDevice->setCompareOptions(p.compareOptions);
         }
-#endif
 
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
     }
