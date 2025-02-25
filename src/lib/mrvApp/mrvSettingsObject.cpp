@@ -89,12 +89,8 @@ namespace mrv
         p.defaultValues["gui/Python/WindowW"] = 640;
         p.defaultValues["gui/Python/WindowH"] = 400;
 
-#ifdef TLRENDER_NDI
         p.defaultValues["NDI/HDRData"] = "";
-#endif
-#ifdef TLRENDER_BMD
         p.defaultValues["BMD/HDRData"] = "";
-#endif
         
         uint64_t totalVirtualMem = 0;
         uint64_t virtualMemUsed = 0;

@@ -4,15 +4,19 @@
 
 #pragma once
 
+#ifdef TLRENDER_NDI
+
 #include "mrvPanelWidget.h"
 
 class ViewerUI;
 class Fl_Menu_Item;
-class Fl_Toggle_Button;
+class Fl_Button;
 
 namespace mrv
 {
-#ifdef TLRENDER_NDI
+
+    class ToggleButton;
+    
     namespace panel
     {
         class NDIPanel : public PanelWidget
@@ -28,12 +32,13 @@ namespace mrv
 
         protected:
             void _ndi_input(const Fl_Menu_Item*);
-            void _ndi_output(Fl_Toggle_Button*);
+            void _ndi_output(ToggleButton*);
 
         private:
             MRV2_PRIVATE();
         };
 
     } // namespace panel
-#endif // TLRENDER_NDI
 } // namespace mrv
+
+#endif // TLRENDER_NDI

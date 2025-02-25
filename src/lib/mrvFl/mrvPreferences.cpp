@@ -400,13 +400,8 @@ namespace mrv
 
         colors.get("scheme", tmpS, "gtk+", 4096);
 
-        const Fl_Menu_Item* item = uiPrefs->uiScheme->find_item(tmpS);
-        if (item)
-        {
-            uiPrefs->uiScheme->picked(item);
-            Fl::scheme(tmpS);
-        }
-
+        Fl::scheme(tmpS);
+        
         bool loaded = false;
 
         std::string colorname = prefspath() + "mrv2.colors";
@@ -436,7 +431,6 @@ namespace mrv
 
         for (auto& t : schemes.themes)
         {
-
             uiPrefs->uiColorTheme->add(t.name.c_str());
         }
 
@@ -445,7 +439,7 @@ namespace mrv
         auto context = App::app->getContext();
         schemes.setContext(context);
 
-        item = uiPrefs->uiColorTheme->find_item(tmpS);
+        const Fl_Menu_Item* item = uiPrefs->uiColorTheme->find_item(tmpS);
         if (item)
         {
             uiPrefs->uiColorTheme->picked(item);
@@ -1352,7 +1346,7 @@ namespace mrv
         // ui/colors prefs
         //
         Fl_Preferences colors(gui, "colors");
-        colors.set("scheme", uiPrefs->uiScheme->text());
+        colors.set("scheme", Fl::scheme());
         colors.set("theme", uiPrefs->uiColorTheme->text());
         colors.set("background_color", bgcolor);
         colors.set("text_color", textcolor);

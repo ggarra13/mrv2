@@ -2,6 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <FL/Fl_Window.H>
+
 #include "mrvButton.h"
 
 namespace mrv

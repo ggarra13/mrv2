@@ -76,13 +76,11 @@ namespace mrv
         //! Get the display options.
         const timeline::DisplayOptions& displayOptions() const;
 
-#if defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
         //! Get the output device.
         const std::shared_ptr<device::IOutput>& outputDevice() const;
 
         //! Get the devices model.
         const std::shared_ptr<device::DevicesModel>& devicesModel() const;
-#endif
 
 #ifdef TLRENDER_NDI
         void beginNDIOutputStream();

@@ -197,7 +197,7 @@ namespace mrv
 
         p.lutOptions = value;
 
-        _widgetUpdate();
+        _displayUpdate();
     }
 
     void MainControl::setDisplayOptions(const timeline::DisplayOptions& value)
@@ -233,6 +233,10 @@ namespace mrv
         }
     }
 
+    //
+    // In this function, we deal with LUT and Display options all at
+    // once as those will need updating of shader values.
+    //
     void MainControl::_displayUpdate()
     {
         TLRENDER_P();
@@ -254,9 +258,15 @@ namespace mrv
         p.ui->uiTimeline->setDisplayOptions(display);
         p.ui->uiTimeline->redraw();
 
+        auto outputDevice = App::app->outputDevice();
+        if (outputDevice)
+        {
+            outputDevice->setLUTOptions(p.lutOptions);
+            outputDevice->setDisplayOptions({p.displayOptions});
+        }
+        
         if (panel::colorPanel)
         {
-            panel::colorPanel->setLUTOptions(p.lutOptions);
             panel::colorPanel->setDisplayOptions(p.displayOptions);
         }
     }
@@ -273,13 +283,11 @@ namespace mrv
             view->setCompareOptions(p.compareOptions);
         }
 
-#if defined(TLRENDER_NDI) || defined(TLRENDER_BMD)
         auto outputDevice = App::app->outputDevice();
         if (outputDevice)
         {
             outputDevice->setCompareOptions(p.compareOptions);
         }
-#endif
 
         if (panel::comparePanel)
         {
@@ -481,23 +489,16 @@ namespace mrv
             view->redraw();
         }
 
-#if defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
-        auto& outputDevice = app->outputDevice();
+        const auto& outputDevice = app->outputDevice();
         if (outputDevice)
         {
             outputDevice->setBackgroundOptions(p.backgroundOptions);
             outputDevice->setOCIOOptions(p.ocioOptions);
             outputDevice->setLUTOptions(p.lutOptions);
             outputDevice->setImageOptions({p.imageOptions});
-            // for (auto& i : displayOptions)
-            // {
-            //     i.videoLevels = p.outputVideoLevels;
-            // }
-            // outputDevice->setDisplayOptions(displayOptions);
             outputDevice->setDisplayOptions({p.displayOptions});
             outputDevice->setCompareOptions(p.compareOptions);
         }
-#endif
 
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
     }

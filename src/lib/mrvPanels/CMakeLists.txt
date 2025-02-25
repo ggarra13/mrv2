@@ -46,7 +46,7 @@ set(SOURCES
     mrvVectorscopePanel.cpp
 )
 
-set(LIBRARIES mrvApp mrvFl mrvEdit)
+set(LIBRARIES mrvFl mrvEdit)
 	
 if(TLRENDER_USD)
     list( APPEND HEADERS mrvUSDPanel.h )

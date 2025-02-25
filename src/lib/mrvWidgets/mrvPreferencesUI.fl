@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0401
+version 1.0402
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
@@ -11,6 +11,9 @@ decl {\#include <FL/fl_ask.H>} {public global
 }
 
 decl {\#include <FL/Fl_Color_Chooser.H>} {public global
+}
+
+decl {\#include <FL/Fl_Scheme_Choice.H>} {selected public global
 }
 
 decl {\#ifdef TLRENDER_AUDIO} {private local
@@ -89,7 +92,7 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {975 257 853 467} type Double resizable
+      xywh {0 0 853 467} type Double resizable
       code0 {main = m;} visible
     } {
       Fl_Group {} {open
@@ -424,7 +427,7 @@ If you try to open several mrv2s with different images, all these images will be
             }
             Fl_Group {} {
               label {Language and Colors} open
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label UI open
@@ -436,10 +439,10 @@ If you try to open several mrv2s with different images, all these images will be
                   code0 {auto languages = mrv::getLanguages(); std::string entry;}
                   code1 {for (const auto& language : languages) { entry = _(language.c_str()); entry += " (" + language + ")"; o->add(entry.c_str()); }}
                 } {}
-                Fl_Choice uiScheme {
+                Fl_Choice {} {
                   label Scheme
-                  callback {Fl::scheme( o->mvalue()->text );}
                   xywh {522 131 100 25} down_box BORDER_BOX align 1
+                  class Fl_Scheme_Choice
                 } {
                   MenuItem {} {
                     label base
@@ -1029,7 +1032,7 @@ v->uiPrefsFPS->value( g );}
             }
             Fl_Group {} {
               label OCIO open
-              xywh {288 37 555 361} box EMBOSSED_BOX align 5
+              xywh {288 37 555 361} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label OCIO open
@@ -1058,7 +1061,7 @@ else if (entry == _("CG"))
 else if (entry == _("Studio"))
 {
    v->uiPrefsOCIOConfig->value("ocio://studio-config-latest");
-}} selected
+}}
                   xywh {477 101 119 32} down_box BORDER_BOX when 7
                 } {
                   MenuItem {} {

@@ -4,11 +4,12 @@
 
 #pragma once
 
-#include <FL/Fl_Window.H>
 #include <FL/Fl_Button.H>
 
 namespace mrv
 {
+
+    //! Button class that changes cursor and hilights the button when hover it.
     class Button : public Fl_Button
     {
         Fl_Color default_color;
