@@ -89,6 +89,7 @@ namespace mrv
         p.defaultValues["gui/Python/WindowW"] = 640;
         p.defaultValues["gui/Python/WindowH"] = 400;
 
+        p.defaultValues["NDI/Output/Stream Name"] = "mrv2";
         p.defaultValues["NDI/HDRData"] = "";
         p.defaultValues["BMD/HDRData"] = "";
         

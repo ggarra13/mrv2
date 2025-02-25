@@ -835,7 +835,7 @@ if (reason == FL_REASON_CLOSED)
             xywh {0 0 892 30}
           } {
             Fl_Menu_Bar uiMenuBar {selected
-              xywh {0 0 813 30} labeltype NO_LABEL textsize 12
+              xywh {0 0 813 30} labeltype NO_LABEL
               class {mrv::MenuBar}
             } {}
             Fl_Button uiEdit {

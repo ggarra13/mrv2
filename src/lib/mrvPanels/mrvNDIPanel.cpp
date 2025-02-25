@@ -57,7 +57,9 @@ namespace mrv
             PopupMenu* inputFormatMenu = nullptr;
 
             PopupMenu* outputAudioMenu = nullptr;
+            PopupMenu* outputMetadataMenu = nullptr;
             PopupMenu* outputFormatMenu = nullptr;
+            
 
             uint32_t no_sources = 0;
             const NDIlib_source_t* p_sources = NULL;
@@ -269,7 +271,7 @@ namespace mrv
             const std::string& prefix = tab_prefix();
 
             HorSlider* s;
-            Fl_Group *bg, *bg2;
+            Fl_Group* ig;
             std_any value;
             int val;
             int open;
@@ -423,6 +425,17 @@ namespace mrv
             val = settings->getValue<int>("NDI/Output/Audio");
             m->value(val);
 
+            mW = new Widget< PopupMenu >(
+                g->x() + 10, Y, g->w() - 20, 20, _("With Metadata"));
+            m = r.outputMetadataMenu = mW;
+            m->disable_submenus();
+            m->labelsize(12);
+            m->align(FL_ALIGN_CENTER | FL_ALIGN_CLIP);
+            m->add(_("With Metadata"));
+            m->add(_("Without Metadata"));
+            val = settings->getValue<int>("NDI/Output/Metadata");
+            m->value(val);
+            
             cg->end();
 
             key = prefix + "NDI Output";
@@ -455,7 +468,7 @@ namespace mrv
                 if (!outputDevice)
                     return;
 
-
+                
                 const Fl_Menu_Item* item = r.outputFormatMenu->mvalue();
                 if (!item || !item->label())
                     return;
@@ -480,11 +493,15 @@ namespace mrv
                 int noAudio = r.outputAudioMenu->value();
                 settings->setValue("NDI/Output/Audio", noAudio);
                 
+                int noMetadata = r.outputMetadataMenu->value();
+                settings->setValue("NDI/Output/Metatada", noMetadata);
+                
                 device::DeviceConfig config;
                 config.deviceIndex = 0;
                 config.displayModeIndex = 0;
                 config.pixelType = static_cast<device::PixelType>(idx);
                 config.noAudio = noAudio;
+                config.noMetadata = noMetadata;
                 
                 if (format == _("Best Format"))
                 {
@@ -498,9 +515,9 @@ namespace mrv
                 {
                     config.pixelType = device::PixelType::_8BitYUV;
                 }
-
+                
                 const std::string msg =
-                    string::Format(_("Streaming {0} {1}...")).
+                    string::Format(_("Streaming {0} {1} as {2}...")).
                     arg(config.pixelType).
                     arg(audioItem->label());
                 LOG_STATUS(msg);
