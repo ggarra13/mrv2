@@ -846,7 +846,8 @@ namespace mrv
             idx = menu->add(
                 _("Render/HDR/Tonemap"),
                 kToggleHDRTonemap.hotkey(),
-                (Fl_Callback*)toggle_hdr_tonemap_cb, ui, mode);
+                (Fl_Callback*)toggle_hdr_tonemap_cb, ui, mode);;
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
             if (hdrOptions.tonemap)
                 item->set();
         }

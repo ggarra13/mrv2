@@ -413,6 +413,33 @@ namespace mrv
             }
             val = settings->getValue<int>("NDI/Output/Format");
             m->value(val);
+            mW->callback([=](auto b)
+                {
+                    int value = b->value();
+                    settings->setValue("NDI/Output/Format", value);
+                    
+                    const Fl_Menu_Item* item = b->mvalue();
+                    if (!item || !item->label())
+                        return;
+                
+                    std::string format = item->label();
+                    int idx = -1;
+                    for (const auto& label :
+                             tl::device::getPixelTypeLabels())
+                    {
+                        ++idx;
+                        if (label == format)
+                            break;
+                    }
+                
+                    auto outputDevice = App::app->outputDevice();
+                    if (!outputDevice)
+                        return;
+
+                    auto config = outputDevice->getConfig();
+                    config.pixelType = static_cast<device::PixelType>(idx);
+                    outputDevice->setConfig(config);
+                });
 
             mW = new Widget< PopupMenu >(
                 g->x() + 10, Y, g->w() - 20, 20, _("With Audio"));
@@ -424,6 +451,19 @@ namespace mrv
             m->add(_("Without Audio"));
             val = settings->getValue<int>("NDI/Output/Audio");
             m->value(val);
+            mW->callback([=](auto b)
+                {
+                    int value = b->value();
+                    settings->setValue("NDI/Output/Audio", value);
+                    
+                    auto outputDevice = App::app->outputDevice();
+                    if (!outputDevice)
+                        return;
+
+                    auto config = outputDevice->getConfig();
+                    config.noAudio = value;
+                    outputDevice->setConfig(config);
+                });
 
             mW = new Widget< PopupMenu >(
                 g->x() + 10, Y, g->w() - 20, 20, _("With Metadata"));
@@ -435,6 +475,19 @@ namespace mrv
             m->add(_("Without Metadata"));
             val = settings->getValue<int>("NDI/Output/Metadata");
             m->value(val);
+            mW->callback([=](auto b)
+                {
+                    int value = b->value();
+                    settings->setValue("NDI/Output/Metatada", value);
+                    
+                    auto outputDevice = App::app->outputDevice();
+                    if (!outputDevice)
+                        return;
+
+                    auto config = outputDevice->getConfig();
+                    config.noMetadata = value;
+                    outputDevice->setConfig(config);
+                });
             
             cg->end();
 
@@ -464,9 +517,6 @@ namespace mrv
             {
                 
                 App::app->beginNDIOutputStream();
-                auto outputDevice = App::app->outputDevice();
-                if (!outputDevice)
-                    return;
 
                 
                 const Fl_Menu_Item* item = r.outputFormatMenu->mvalue();
@@ -494,7 +544,6 @@ namespace mrv
                 settings->setValue("NDI/Output/Audio", noAudio);
                 
                 int noMetadata = r.outputMetadataMenu->value();
-                settings->setValue("NDI/Output/Metatada", noMetadata);
                 
                 device::DeviceConfig config;
                 config.deviceIndex = 0;
@@ -522,6 +571,9 @@ namespace mrv
                     arg(audioItem->label());
                 LOG_STATUS(msg);
                             
+                auto outputDevice = App::app->outputDevice();
+                if (!outputDevice)
+                    return;
                 outputDevice->setConfig(config);
                 b->copy_label(_("Stop streaming"));
                 b->value(1);
