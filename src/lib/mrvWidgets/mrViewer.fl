@@ -85,7 +85,7 @@ decl {\#include "mrvGL/mrvGLViewport.h"} {public global
 decl {\#include "mrvGL/mrvTimelineWidget.h"} {public global
 }
 
-decl {\#include "mrvPanels/mrvPanelsCallbacks.h"} {selected public global
+decl {\#include "mrvPanels/mrvPanelsCallbacks.h"} {public global
 }
 
 decl {\#include "mrvApp/mrvSettingsObject.h"} {private local
@@ -113,7 +113,7 @@ decl {class AboutUI;} {public global
 }
 
 widget_class PixelToolBarClass {
-  xywh {0 0 933 56} resizable
+  xywh {86 109 933 56} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -425,7 +425,7 @@ decl {class AboutUI;} {public global
 }
 
 widget_class TimelineClass {
-  xywh {0 0 933 56} box NO_BOX resizable
+  xywh {112 135 933 56} box NO_BOX resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {
@@ -821,7 +821,7 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {0 0 933 608} type Double align 80 resizable
+      xywh {138 161 933 608} type Double align 80 resizable
       class {mrv::MainWindow} size_range {933 602 0 0} visible
     } {
       Fl_Flex uiRegion {open
@@ -834,8 +834,8 @@ if (reason == FL_REASON_CLOSED)
           Fl_Group {} {open
             xywh {0 0 892 30}
           } {
-            Fl_Menu_Bar uiMenuBar {
-              xywh {0 0 813 30} labeltype NO_LABEL
+            Fl_Menu_Bar uiMenuBar {selected
+              xywh {0 0 813 30} labeltype NO_LABEL textsize 12
               class {mrv::MenuBar}
             } {}
             Fl_Button uiEdit {
