@@ -17,6 +17,8 @@
 #include <FL/platform.H>
 #include <FL/fl_draw.H>
 
+#include "mrvUI/mrvDesktop.h"
+
 #include "mrvWidgets/mrvPack.h"
 
 namespace mrv
@@ -238,13 +240,16 @@ namespace mrv
                 }
                 if (X != o->x() || Y != o->y() || W != o->w() || H != o->h())
                 {
-#ifdef FLTK_USE_WAYLAND
-                    if (fl_wl_display() && !o->as_window())
-                        o->resize(X, Y, W, H);
+                    if (desktop::Wayland())
+                    {
+                        if (!o->as_window())
+                            o->resize(X, Y, W, H);
+                    }
                     else
-#endif
+                    {
                         o->resize(X, Y, W, H);
-                    o->clear_damage(FL_DAMAGE_ALL);
+                        o->clear_damage(FL_DAMAGE_ALL);
+                    }
                 }
                 if (d & FL_DAMAGE_ALL)
                 {
