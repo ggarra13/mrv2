@@ -14,9 +14,10 @@
 // Bugs: ?
 
 #include <FL/Fl.H>
+#include <FL/platform.H>
 #include <FL/fl_draw.H>
 
-#include "mrvPack.h"
+#include "mrvWidgets/mrvPack.h"
 
 namespace mrv
 {
@@ -152,13 +153,11 @@ namespace mrv
         }
     }
 
-    // void Pack::resize( int X, int Y, int W, int H )
-    // {
-    //     std::cerr << "Pack: " << (label() ? label() : "(null)" ) << " resize
-    //     " << X
-    //               << ", " << Y << " WxH " << W << "x" << H << std::endl;
-    //     return Fl_Group::resize( X, Y, W, H );
-    // }
+    void Pack::resize(int X, int Y, int W, int H)
+    {
+        Fl_Widget::resize(X, Y, W, H);
+        redraw();
+    }
 
     void Pack::draw()
     {
@@ -239,7 +238,12 @@ namespace mrv
                 }
                 if (X != o->x() || Y != o->y() || W != o->w() || H != o->h())
                 {
-                    o->resize(X, Y, W, H);
+#ifdef FLTK_USE_WAYLAND
+                    if (fl_wl_display() && !o->as_window())
+                        o->resize(X, Y, W, H);
+                    else
+#endif
+                        o->resize(X, Y, W, H);
                     o->clear_damage(FL_DAMAGE_ALL);
                 }
                 if (d & FL_DAMAGE_ALL)
