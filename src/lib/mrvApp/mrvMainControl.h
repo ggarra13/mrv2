@@ -29,7 +29,6 @@ namespace mrv
         void _timelinePlayersUpdate();
         void _widgetUpdate();
         void _compareUpdate();
-        void _lutUpdate();
         void _displayUpdate();
 
         TLRENDER_PRIVATE();

@@ -197,7 +197,7 @@ namespace mrv
 
         p.lutOptions = value;
 
-        _lutUpdate();
+        _displayUpdate();
     }
 
     void MainControl::setDisplayOptions(const timeline::DisplayOptions& value)
@@ -233,35 +233,10 @@ namespace mrv
         }
     }
 
-    void MainControl::_lutUpdate()
-    {
-        TLRENDER_P();
-
-        Viewport* view = p.ui->uiView;
-        view->setLUTOptions(p.lutOptions);
-        if (p.ui->uiSecondary)
-        {
-            view = p.ui->uiSecondary->viewport();
-            view->setLUTOptions(p.lutOptions);
-        }
-
-        auto display = p.ui->uiTimeline->getDisplayOptions();
-        display.lut = p.lutOptions;
-        p.ui->uiTimeline->setDisplayOptions(display);
-        p.ui->uiTimeline->redraw();
-
-        auto outputDevice = App::app->outputDevice();
-        if (outputDevice)
-        {
-            outputDevice->setLUTOptions(p.lutOptions);
-        }
-        
-        if (panel::colorPanel)
-        {
-            panel::colorPanel->setLUTOptions(p.lutOptions);
-        }
-    }
-    
+    //
+    // In this function, we deal with LUT and Display options all at
+    // once as those will need updating of shader values.
+    //
     void MainControl::_displayUpdate()
     {
         TLRENDER_P();
@@ -286,6 +261,7 @@ namespace mrv
         auto outputDevice = App::app->outputDevice();
         if (outputDevice)
         {
+            outputDevice->setLUTOptions(p.lutOptions);
             outputDevice->setDisplayOptions({p.displayOptions});
         }
         

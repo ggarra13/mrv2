@@ -1,7 +1,7 @@
 v1.3.4
 ======
 
-- Updated default ocio configs to use their latest names instead of the versioned ones.
+- Updated default OpenColorIO configs to use their latest names instead of the versioned ones.
 - Fixed disting libselinux on Linux.
 - Made HDR tonemapping an option in Render/HDR menu.
 - Added Ignore Chromaticities in Render/HDR menu.
