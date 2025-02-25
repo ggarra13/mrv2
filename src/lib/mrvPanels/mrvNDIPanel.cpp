@@ -271,6 +271,7 @@ namespace mrv
             HorSlider* s;
             Fl_Group *bg, *bg2;
             std_any value;
+            int val;
             int open;
 
             int Y = g->y();
@@ -330,7 +331,8 @@ namespace mrv
             m->align(FL_ALIGN_CENTER | FL_ALIGN_CLIP);
             m->add(_("Fast Format"));
             m->add(_("Best Format"));
-            m->value(0);
+            val = settings->getValue<int>("NDI/Input/Format");
+            m->value(val);
 
             mW = new Widget< PopupMenu >(
                 g->x() + 10, Y, g->w() - 20, 20, _("With Audio"));
@@ -340,7 +342,9 @@ namespace mrv
             m->align(FL_ALIGN_CENTER | FL_ALIGN_CLIP);
             m->add(_("With Audio"));
             m->add(_("Without Audio"));
-            m->value(0);
+            
+            val = settings->getValue<int>("NDI/Input/Audio");
+            m->value(val);
 
             r.find.awake = false;
 
@@ -405,7 +409,8 @@ namespace mrv
                     continue;
                 m->add(i.c_str());
             }
-            m->value(0);
+            val = settings->getValue<int>("NDI/Output/Format");
+            m->value(val);
 
             mW = new Widget< PopupMenu >(
                 g->x() + 10, Y, g->w() - 20, 20, _("With Audio"));
@@ -415,7 +420,8 @@ namespace mrv
             m->align(FL_ALIGN_CENTER | FL_ALIGN_CLIP);
             m->add(_("With Audio"));
             m->add(_("Without Audio"));
-            m->value(0);
+            val = settings->getValue<int>("NDI/Output/Audio");
+            m->value(val);
 
             cg->end();
 
@@ -431,6 +437,8 @@ namespace mrv
         void NDIPanel::_ndi_output(ToggleButton* b)
         {
             MRV2_R();
+            
+            SettingsObject* settings = App::app->settings();
             
             if (!App::ui->uiView->getTimelinePlayer())
             {
@@ -451,7 +459,9 @@ namespace mrv
                 const Fl_Menu_Item* item = r.outputFormatMenu->mvalue();
                 if (!item || !item->label())
                     return;
-
+                
+                int val = r.outputFormatMenu->value();
+                settings->setValue("NDI/Output/Format", val);
 
                 std::string format = item->label();
                 int idx = -1;
@@ -467,7 +477,8 @@ namespace mrv
                 if (!audioItem || !audioItem->label())
                     return;
                 
-                bool noAudio = r.outputAudioMenu->value();
+                int noAudio = r.outputAudioMenu->value();
+                settings->setValue("NDI/Output/Audio", noAudio);
                 
                 device::DeviceConfig config;
                 config.deviceIndex = 0;
