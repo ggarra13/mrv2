@@ -566,7 +566,7 @@ namespace mrv
                 }
                 
                 const std::string msg =
-                    string::Format(_("Streaming {0} {1} as {2}...")).
+                    string::Format(_("Streaming {0} {1}...")).
                     arg(config.pixelType).
                     arg(audioItem->label());
                 LOG_STATUS(msg);
