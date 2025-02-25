@@ -61,8 +61,6 @@ namespace mrv
             layout();
         }
 
-        void resize(int X, int Y, int W, int H) FL_OVERRIDE;
-        
         /**
            Gets the number of extra pixels of blank space that are added
            between the children.
