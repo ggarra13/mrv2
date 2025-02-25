@@ -10,7 +10,7 @@ set(FLTK_GIT_REPOSITORY "https://github.com/fltk/fltk.git")
 #set( FLTK_GIT_TAG master
 
 #set(FLTK_GIT_TAG 81a5736006d64d749f9694268dd180ae80ec3d9d) # OK
-set(FLTK_GIT_TAG 27d991f046bdebb12bfd58f7c05a19f135979c29)
+set(FLTK_GIT_TAG a206a778b415e5f21d3c1d86a1d509aca0265648)  # release-1.4.2
 
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
     # If we are building pyFLTK compile shared

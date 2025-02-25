@@ -956,36 +956,36 @@ namespace mrv
             float scale = 1.F;
             int screen = 0;
             int valid_scaling = Fl::screen_scaling_supported();
-            if (scale == 2)
+            if (valid_scaling == 2)
                 screen = screen_num();  // scale different on each window.
-            else if (scale == 1)
+            else if (valid_scaling == 1)
                 scale = Fl::screen_scale(0);  // scale same for all windows.
-            else if (scale == 0)
+            else if (valid_scaling == 0)
                 scale = 1.F;  // scale not supported
             
-            // Make the offscreen surface bigger for antialiasing.
+            // 1. Make an offscreen surface bigger for antialiasing.
             p.offscreen = fl_create_offscreen(w()*4*scale, h()*4*scale);
             
-            // 1. Draw child widgets to an offscreen buffer
+            // 2. Draw child widgets to an offscreen buffer
             fl_begin_offscreen(p.offscreen);
             Fl_Double_Window::draw_children(); // Draw all the window's children
                                                // (widgets)
             fl_end_offscreen();
 
-            // 2. Get the offscreen Cairo context
+            // 3. Get the offscreen Cairo context
             cairo_t* offscreen_cr = (cairo_t*)p.offscreen;
 
-            // 3. Create a surface from the offscreen
+            // 4. Create a surface from the offscreen
             cairo_surface_t* offscreen_surface = cairo_get_target(offscreen_cr);
 
 
-            // 4. Clear the canvas (needed as FLTK seems to accumulate
+            // 5. Clear the canvas (needed as FLTK seems to accumulate
             //    transparency)
             cairo_set_source_rgba(cr, 0, 0, 0, 0);
             cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
             cairo_paint(cr);
 
-            // 5. Paint with alpha channel the offscreen widgets
+            // 6. Paint with alpha channel the offscreen widgets
             cairo_set_source_surface(cr, offscreen_surface, 0, 0);
             cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
             

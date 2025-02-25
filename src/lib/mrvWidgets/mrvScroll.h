@@ -14,7 +14,6 @@ namespace mrv
         Scroll(int X, int Y, int W, int H, const char* L = 0);
 
         int handle(int event) FL_OVERRIDE;
-        void draw() FL_OVERRIDE;
     };
 
 } // namespace mrv
