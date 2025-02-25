@@ -953,14 +953,17 @@ namespace mrv
         {
             cairo_t* cr = fl_wl_gc();
 
-            // Make the offscreen surface bigger for antialiasing.
-            float scale = 1.0;
+            float scale = 1.F;
             int screen = 0;
             int valid_scaling = Fl::screen_scaling_supported();
             if (scale == 2)
-                screen = screen_num();
+                screen = screen_num();  // scale different on each window.
             else if (scale == 1)
-                scale = Fl::screen_scale(screen);
+                scale = Fl::screen_scale(0);  // scale same for all windows.
+            else if (scale == 0)
+                scale = 1.F;  // scale not supported
+            
+            // Make the offscreen surface bigger for antialiasing.
             p.offscreen = fl_create_offscreen(w()*4*scale, h()*4*scale);
             
             // 1. Draw child widgets to an offscreen buffer
