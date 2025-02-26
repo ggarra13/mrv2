@@ -671,7 +671,7 @@ namespace mrv
     
     void Viewport::_compositeAnnotations(
         const std::shared_ptr<tl::gl::OffscreenBuffer>& overlay,
-        const math::Matrix4x4f& shaderMatrix,
+        const math::Matrix4x4f& orthoMatrix,
         const math::Size2i& viewportSize)
     {
         MRV2_GL();
@@ -686,7 +686,7 @@ namespace mrv
         glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
 
         gl.annotationShader->bind();
-        gl.annotationShader->setUniform("transform.mvp", shaderMatrix);
+        gl.annotationShader->setUniform("transform.mvp", orthoMatrix);
         timeline::Channels channels = timeline::Channels::Color;
         if (!p.displayOptions.empty())
             channels = p.displayOptions[0].channels;

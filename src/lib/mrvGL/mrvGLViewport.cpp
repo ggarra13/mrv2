@@ -755,12 +755,12 @@ namespace mrv
                     gl.annotation = gl::OffscreenBuffer::create(
                         viewportSize, offscreenBufferOptions);
                 }
-                const math::Matrix4x4f ortho = math::ortho(
+                const math::Matrix4x4f orthoMatrix = math::ortho(
                     0.F, static_cast<float>(renderSize.w), 0.F,
                     static_cast<float>(renderSize.h), -1.F, 1.F);
                  _drawAnnotations(gl.annotation, mvp, player->currentTime(),
-                                  annotations, renderSize);
-                _compositeAnnotations(gl.annotation, ortho,
+                                  annotations, viewportSize);
+                _compositeAnnotations(gl.annotation, orthoMatrix,
                                       viewportSize);
             }
 
