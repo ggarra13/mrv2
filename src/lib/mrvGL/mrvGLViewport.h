@@ -41,6 +41,9 @@ namespace mrv
         void _initializeGL();
         void _initializeGLResources();
 
+        void _createPBOs(const math::Size2i& renderSize);
+        void _createOverlayPBO(const math::Size2i& renderSize);
+        
         void _createCubicEnvironmentMap();
 
         void _createSphericalEnvironmentMap();
@@ -79,8 +82,11 @@ namespace mrv
         void _drawCursor(const math::Matrix4x4f& mvp) const noexcept;
 
         void _drawAnnotations(
-            const math::Matrix4x4f& mvp, const otime::RationalTime& time,
-            const std::vector<std::shared_ptr<draw::Annotation>>& annotations);
+            const std::shared_ptr<tl::gl::OffscreenBuffer>& overlay,
+            const math::Matrix4x4f& renderMVP,
+            const otime::RationalTime& time,
+            const std::vector<std::shared_ptr<draw::Annotation>>& annotations,
+            const math::Size2i& renderSize);
 
 #ifdef USE_OPENGL2
         void _drawGL2TextShapes();
@@ -115,6 +121,14 @@ namespace mrv
 
         void _drawWindowArea(const std::string&) const noexcept;
 
+        void _compositeAnnotations(
+            const std::shared_ptr<tl::gl::OffscreenBuffer>&,
+            const math::Matrix4x4f& mvp,
+            const math::Size2i& viewportSize);
+        void _compositeOverlay(const std::shared_ptr<tl::gl::OffscreenBuffer>&,
+                               const math::Matrix4x4f& mvp,
+                               const math::Size2i& viewportSize);
+        
     private:
         struct GLPrivate;
         std::unique_ptr<GLPrivate> _gl;

@@ -3526,7 +3526,14 @@ namespace mrv
         if (hasFrameView())
             _frameView();
     }
-
+    math::Matrix4x4f TimelineViewport::_renderProjectionMatrix() const noexcept
+    {
+        TLRENDER_P();
+        const auto& renderSize = getRenderSize();
+        return math::ortho(0.F, static_cast<float>(renderSize.w), 0.F,
+                           static_cast<float>(renderSize.h), -1.F, 1.F);
+    }
+    
     math::Matrix4x4f TimelineViewport::_projectionMatrix() const noexcept
     {
         TLRENDER_P();

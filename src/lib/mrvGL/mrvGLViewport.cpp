@@ -82,7 +82,10 @@ namespace mrv
         TLRENDER_P();
         MRV2_GL();
         if (gl.render)
-            glDeleteBuffers(2, gl.pboIds);
+        {
+            glDeleteBuffers(2, gl.pboIDs);
+            glDeleteBuffers(1, &gl.overlayPBO);
+        }
         gl.render.reset();
         gl.outline.reset();
         gl.lines.reset();
@@ -91,13 +94,14 @@ namespace mrv
 #endif
         gl.buffer.reset();
         gl.annotation.reset();
+        gl.overlay.reset();
         gl.shader.reset();
         gl.annotationShader.reset();
         gl.vbo.reset();
         gl.vao.reset();
         p.fontSystem.reset();
-        gl.index = 0;
-        gl.nextIndex = 1;
+        gl.currentPBOIndex = 0;
+        gl.nextPBOIndex = 1;
     }
 
     void Viewport::_initializeGLResources()
@@ -110,7 +114,8 @@ namespace mrv
 
             gl.render = timeline_gl::Render::create(context);
 
-            glGenBuffers(2, gl.pboIds);
+            //glGenBuffers(2, gl.pboIDS);
+            glGenBuffers(1, &gl.overlayPBO);
 
             p.fontSystem = image::FontSystem::create(context);
 
@@ -290,15 +295,7 @@ namespace mrv
                 {
                     gl.buffer = gl::OffscreenBuffer::create(
                         renderSize, offscreenBufferOptions);
-                    unsigned dataSize =
-                        renderSize.w * renderSize.h * 4 * sizeof(GLfloat);
-                    glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[0]);
-                    glBufferData(
-                        GL_PIXEL_PACK_BUFFER, dataSize, 0, GL_STREAM_READ);
-                    glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[1]);
-                    glBufferData(
-                        GL_PIXEL_PACK_BUFFER, dataSize, 0, GL_STREAM_READ);
-                    glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+                    _createPBOs(renderSize);
                 }
 
                 if (can_do(FL_STEREO))
@@ -477,10 +474,11 @@ namespace mrv
             return;
         }
 
+
         const auto& annotations =
             player->getAnnotations(p.ghostPrevious, p.ghostNext);
-
-        auto time = player->currentTime();
+            
+        const auto& currentTime = player->currentTime();
 
         if (gl.buffer && gl.shader)
         {
@@ -545,7 +543,7 @@ namespace mrv
                         gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
                     }
                 }
-
+                
                 if (p.imageOptions[0].alphaBlend == timeline::AlphaBlend::None)
                 {
                     glEnable(GL_BLEND);
@@ -606,6 +604,47 @@ namespace mrv
                 }
             }
 
+            //
+            // Draw annotations for output device in an overlay buffer.
+            //
+            auto outputDevice = App::app->outputDevice();
+            if (outputDevice && gl.buffer &&
+                p.showAnnotations && !annotations.empty())
+            {
+                gl::OffscreenBufferOptions offscreenBufferOptions;
+                offscreenBufferOptions.colorType = image::PixelType::RGBA_U8;
+                if (!p.displayOptions.empty())
+                {
+                    offscreenBufferOptions.colorFilters =
+                        p.displayOptions[0].imageFilters;
+                }
+                offscreenBufferOptions.depth = gl::OffscreenDepth::None;
+                offscreenBufferOptions.stencil = gl::OffscreenStencil::None;
+                if (gl::doCreate(
+                        gl.overlay, renderSize, offscreenBufferOptions))
+                {
+                    gl.overlay = gl::OffscreenBuffer::create(
+                        renderSize, offscreenBufferOptions);
+                    _createOverlayPBO(renderSize);
+                }
+
+                const auto& renderMVP = _renderProjectionMatrix();
+                _drawAnnotations(gl.overlay, renderMVP, currentTime,
+                                 annotations, renderSize);
+
+                
+                // Copy data to PBO:
+                glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.overlayPBO);
+                glReadPixels(0, 0, renderSize.w, renderSize.h, GL_RGBA,
+                             GL_UNSIGNED_BYTE, nullptr);
+                glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+                
+                // Create a fence for the overlay PBO
+                gl.overlayFence = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+    
+                _compositeOverlay(gl.overlay, mvp, viewportSize);
+            }
+            
             math::Box2i selection = p.colorAreaInfo.box = p.selection;
             if (selection.max.x >= 0)
             {
@@ -705,7 +744,13 @@ namespace mrv
                     gl.annotation = gl::OffscreenBuffer::create(
                         viewportSize, offscreenBufferOptions);
                 }
-                _drawAnnotations(mvp, player->currentTime(), annotations);
+                // const math::Matrix4x4f ortho = math::ortho(
+                //     0.F, static_cast<float>(renderSize.w), 0.F,
+                //     static_cast<float>(renderSize.h), -1.F, 1.F);
+                 // _drawAnnotations(gl.annotation, mvp, player->currentTime(),
+                 //                  annotations, renderSize);
+                // _compositeAnnotations(gl.annotation, ortho,
+                //                       viewportSize);
             }
 
             if (p.dataWindow)
@@ -915,8 +960,8 @@ namespace mrv
             // set the target framebuffer to read
             // "index" is used to read pixels from framebuffer to a PBO
             // "nextIndex" is used to update pixels in the other PBO
-            gl.index = (gl.index + 1) % 2;
-            gl.nextIndex = (gl.index + 1) % 2;
+            gl.currentPBOIndex = (gl.currentPBOIndex + 1) % 2;
+            gl.nextPBOIndex = (gl.currentPBOIndex + 1) % 2;
 
             // If we are a single frame, we do a normal ReadPixels of front
             // buffer.
@@ -938,17 +983,19 @@ namespace mrv
 
                 // read pixels from framebuffer to PBO
                 // glReadPixels() should return immediately.
-                glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.index]);
+                glBindBuffer(GL_PIXEL_PACK_BUFFER,
+                             gl.pboIDs[gl.currentPBOIndex]);
 
                 glReadPixels(0, 0, renderSize.w, renderSize.h, format, type, 0);
 
                 // map the PBO to process its data by CPU
-                glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.nextIndex]);
+                glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIDs[gl.nextPBOIndex]);
 
                 // We are stopped, read the first PBO.
                 if (stopped)
                 {
-                    glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIds[gl.index]);
+                    glBindBuffer(GL_PIXEL_PACK_BUFFER,
+                                 gl.pboIDs[gl.currentPBOIndex]);
                 }
             }
 
@@ -957,6 +1004,13 @@ namespace mrv
                 free(p.image);
                 p.image = nullptr;
             }
+
+            gl.nextPBOIndex = (gl.currentPBOIndex + 1) % 2;
+
+            // Wait for the fence of the PBO you're about to use:
+            glClientWaitSync(gl.pboFences[gl.nextPBOIndex],
+                             GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
+            glDeleteSync(gl.pboFences[gl.nextPBOIndex]);
 
             p.image = (float*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
             p.rawImage = false;
@@ -969,6 +1023,7 @@ namespace mrv
 
     void Viewport::_unmapBuffer() const noexcept
     {
+        MRV2_GL();
         TLRENDER_P();
 
         if (p.image)
@@ -976,6 +1031,8 @@ namespace mrv
             if (!p.rawImage)
             {
                 glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+                gl.pboFences[gl.nextPBOIndex] = 
+                    glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0); // Create a new fence
                 p.image = nullptr;
                 p.rawImage = true;
             }

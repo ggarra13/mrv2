@@ -386,6 +386,9 @@ namespace mrv
         //! full rotation of the image (user rotation + video rotation)
         float _getRotation() const noexcept;
 
+        //! Get the render projection matrix.
+        math::Matrix4x4f _renderProjectionMatrix() const noexcept;
+        
         //! Get the full projection matrix.
         math::Matrix4x4f _projectionMatrix() const noexcept;
 
