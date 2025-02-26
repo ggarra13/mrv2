@@ -641,7 +641,22 @@ namespace mrv
                 
                 // Create a fence for the overlay PBO
                 gl.overlayFence = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
-    
+                
+                // Generate orthographic projection matrix for overlay
+                math::Matrix4x4f overlayMVP = math::ortho(
+                    0.0f, static_cast<float>(viewportSize.w),
+                    static_cast<float>(viewportSize.h), 0.0f,
+                    -1.0f, 1.0f);
+
+                // Wait for the fence to complete before compositing
+                GLenum waitReturn = glClientWaitSync(gl.overlayFence, 0,
+                                                     5000000000); // Wait 5 seconds
+                if (waitReturn == GL_TIMEOUT_EXPIRED)
+                {
+                    LOG_ERROR("glClientWaitSync: Timeout occurred!");
+                }
+                glDeleteSync(gl.overlayFence); // Delete the fence   
+
                 _compositeOverlay(gl.overlay, mvp, viewportSize);
             }
             

@@ -613,12 +613,11 @@ namespace mrv
             return;
         
         gl::SetAndRestore(GL_BLEND, GL_TRUE);
-
-        glBlendFuncSeparate(
-            GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA,
-            GL_ONE_MINUS_SRC_ALPHA);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Standard alpha blending
+        CHECK_GL;
 
         glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
+        CHECK_GL;
 
         gl.annotationShader->bind();
         gl.annotationShader->setUniform("transform.mvp", mvp);
@@ -632,24 +631,30 @@ namespace mrv
         const size_t width = overlay->getSize().w;
         const size_t height = overlay->getSize().h;
         
-        // Create texture from PBO:
-        GLuint pboTexture;
-        glGenTextures(1, &pboTexture);
-        glBindTexture(GL_TEXTURE_2D, pboTexture);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        // Bind the overlay texture
+        glBindTexture(GL_TEXTURE_2D, overlay->getColorID());
+        CHECK_GL;
 
         // Wait for the annotation PBO fence
-        glClientWaitSync(gl.overlayFence,
-                         GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
+        GLenum waitReturn = glClientWaitSync(gl.overlayFence,
+                                             GL_SYNC_FLUSH_COMMANDS_BIT,
+                                             GL_TIMEOUT_IGNORED);
+        CHECK_GL;
+        if (waitReturn == GL_TIMEOUT_EXPIRED)
+            return;
+        
         glDeleteSync(gl.overlayFence);
+        CHECK_GL;
 
         glBindBuffer(GL_PIXEL_UNPACK_BUFFER, gl.overlayPBO);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-                     width,
-                     height, 0, GL_RGBA,
-                     GL_UNSIGNED_BYTE, nullptr);
+        CHECK_GL;
+        glTexSubImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+                        width,
+                        height, 0, GL_RGBA,
+                        GL_UNSIGNED_BYTE, nullptr);
+        CHECK_GL;
         glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+        CHECK_GL;
         
         if (gl.vao && gl.vbo)
         {
@@ -658,22 +663,28 @@ namespace mrv
         }
 
         // Create a tlRender image from the pixelDataPtr
-        const image::PixelType pixelType = image::PixelType::RGBA_U8;
-        auto overlayImage = image::Image::create(width, height, pixelType);
-        
-        // Retrieve pixel data:
-        glBindTexture(GL_TEXTURE_2D, pboTexture);
-        glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-                      overlayImage->getData());
-    
-        // Clean up:
-        glDeleteTextures(1, &pboTexture);
+        CHECK_GL;
 
         auto outputDevice = App::app->outputDevice();
         if (outputDevice)
         {
+            // Create a tlRender image
+            const image::PixelType pixelType = image::PixelType::RGBA_U8;
+            auto overlayImage = image::Image::create(width, height, pixelType);
+        
+            // Retrieve pixel data
+            glBindTexture(GL_TEXTURE_2D, overlay->getColorID());
+            CHECK_GL;
+            glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                          overlayImage->getData());
+            CHECK_GL;
+
             outputDevice->setOverlay(overlayImage);
         }
+        
+        glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        CHECK_GL;
         
 #else
         // Draw to screen for beta testing
