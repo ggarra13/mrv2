@@ -658,7 +658,7 @@ namespace mrv
                         return true;
                     const otime::RationalTime start = a->time - previousTime;
                     const otime::RationalTime end = a->time + nextTime;
-                    return (time > start && time < end);
+                    return (time >= start && time <= end);
                 });
 
             if (found != p.annotations.end())

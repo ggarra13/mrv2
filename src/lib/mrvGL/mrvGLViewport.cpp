@@ -642,12 +642,7 @@ namespace mrv
                 // Create a fence for the overlay PBO
                 gl.overlayFence = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
                 
-                // Generate orthographic projection matrix for overlay
-                math::Matrix4x4f overlayMVP = math::ortho(
-                    0.0f, static_cast<float>(viewportSize.w),
-                    static_cast<float>(viewportSize.h), 0.0f,
-                    -1.0f, 1.0f);
-
+                // Create an identity matrix
                 // Wait for the fence to complete before compositing
                 GLenum waitReturn = glClientWaitSync(gl.overlayFence, 0,
                                                      5000000000); // Wait 5 seconds
@@ -655,9 +650,10 @@ namespace mrv
                 {
                     LOG_ERROR("glClientWaitSync: Timeout occurred!");
                 }
-                glDeleteSync(gl.overlayFence); // Delete the fence   
+                glDeleteSync(gl.overlayFence);
 
-                _compositeOverlay(gl.overlay, mvp, viewportSize);
+                math::Matrix4x4f overlayMVP;
+                _compositeOverlay(gl.overlay, overlayMVP, viewportSize);
             }
             
             math::Box2i selection = p.colorAreaInfo.box = p.selection;
@@ -759,13 +755,13 @@ namespace mrv
                     gl.annotation = gl::OffscreenBuffer::create(
                         viewportSize, offscreenBufferOptions);
                 }
-                // const math::Matrix4x4f ortho = math::ortho(
-                //     0.F, static_cast<float>(renderSize.w), 0.F,
-                //     static_cast<float>(renderSize.h), -1.F, 1.F);
-                 // _drawAnnotations(gl.annotation, mvp, player->currentTime(),
-                 //                  annotations, renderSize);
-                // _compositeAnnotations(gl.annotation, ortho,
-                //                       viewportSize);
+                const math::Matrix4x4f ortho = math::ortho(
+                    0.F, static_cast<float>(renderSize.w), 0.F,
+                    static_cast<float>(renderSize.h), -1.F, 1.F);
+                 _drawAnnotations(gl.annotation, mvp, player->currentTime(),
+                                  annotations, renderSize);
+                _compositeAnnotations(gl.annotation, ortho,
+                                      viewportSize);
             }
 
             if (p.dataWindow)

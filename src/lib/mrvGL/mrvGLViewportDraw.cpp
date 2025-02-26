@@ -583,18 +583,21 @@ namespace mrv
                 }
             }
 
-            if (alphamult == 0.F)
-                continue;
-
             {
                 gl::OffscreenBufferBinding binding(overlay);
-                gl.render->begin(renderSize);
+                
+                timeline::RenderOptions renderOptions;
+                renderOptions.colorBuffer = image::PixelType::RGBA_U8;
+                    
+                gl.render->begin(renderSize, renderOptions);
                 gl.render->setOCIOOptions(timeline::OCIOOptions());
                 gl.render->setLUTOptions(timeline::LUTOptions());
                 gl.render->setTransform(renderMVP);
                 const auto& shapes = annotation->shapes;
                 for (const auto& shape : shapes)
                 {
+                    if (alphamult == 0.F)
+                        continue;
                     _drawShape(shape, alphamult);
                 }
                 gl.render->end();
@@ -627,7 +630,6 @@ namespace mrv
         gl.annotationShader->setUniform(
             "channels", static_cast<int>(channels));
 
-#if 1
         const size_t width = overlay->getSize().w;
         const size_t height = overlay->getSize().h;
         
@@ -645,26 +647,7 @@ namespace mrv
         
         glDeleteSync(gl.overlayFence);
         CHECK_GL;
-
-        glBindBuffer(GL_PIXEL_UNPACK_BUFFER, gl.overlayPBO);
-        CHECK_GL;
-        glTexSubImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-                        width,
-                        height, 0, GL_RGBA,
-                        GL_UNSIGNED_BYTE, nullptr);
-        CHECK_GL;
-        glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
-        CHECK_GL;
         
-        if (gl.vao && gl.vbo)
-        {
-            gl.vao->bind();
-            gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
-        }
-
-        // Create a tlRender image from the pixelDataPtr
-        CHECK_GL;
-
         auto outputDevice = App::app->outputDevice();
         if (outputDevice)
         {
@@ -674,29 +657,16 @@ namespace mrv
         
             // Retrieve pixel data
             glBindTexture(GL_TEXTURE_2D, overlay->getColorID());
-            CHECK_GL;
             glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE,
                           overlayImage->getData());
-            CHECK_GL;
 
             outputDevice->setOverlay(overlayImage);
         }
-        
+
+        // Restore drawing to main viewport (needed for HUD and other annotation code)
         glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         CHECK_GL;
-        
-#else
-        // Draw to screen for beta testing
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, overlay->getColorID());
-
-        if (gl.vao && gl.vbo)
-        {
-            gl.vao->bind();
-            gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
-        }
-#endif
     }
     
     void Viewport::_compositeAnnotations(

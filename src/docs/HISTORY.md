@@ -17,6 +17,8 @@ v1.3.4
 - Fixed transparency on Wayland to be like X11.
 - Fixed a Wayland crash when changing the scaling factor interactively from FLTK's <Ctrl>+ and <Ctrl>- shortcuts.
 - Fixed a precision problem when drawing Text as an annotation.
+- Fixed an issue with a bad optimization of annotations.
+- Minor optimization of annotations drawing.
 
 
 v1.3.3
