@@ -629,13 +629,7 @@ namespace mrv
                     _createOverlayPBO(renderSize);
                 }
 
-                math::Matrix4x4f renderMVP;
-                if (p.frameView)
-                    renderMVP = math::ortho(
-                        0.F, static_cast<float>(renderSize.w), 0.F,
-                        static_cast<float>(renderSize.h), -1.F, 1.F);
-                else
-                    renderMVP = _renderProjectionMatrix();
+                const math::Matrix4x4f& renderMVP = _renderProjectionMatrix();
                 _drawAnnotations(gl.overlay, renderMVP, currentTime,
                                  annotations, renderSize);
 

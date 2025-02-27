@@ -3454,6 +3454,14 @@ namespace mrv
         const math::Size2i& viewportSize = getViewportSize();
         const math::Size2i& renderSize = getRenderSize();
 
+        math::Matrix4x4f renderMVP;
+                if (p.frameView && _getRotation() == 0.F)
+                    renderMVP = math::ortho(
+                        0.F, static_cast<float>(renderSize.w), 0.F,
+                        static_cast<float>(renderSize.h), -1.F, 1.F);
+                else
+                    renderMVP = _projectionMatrix();
+                
         // Scale the overlay to renderSize
         // math::Matrix4x4f scaleToRenderSize =
         //     math::scale(math::Vector3f(
@@ -3462,7 +3470,7 @@ namespace mrv
         //                     1.0f));
         math::Matrix4x4f scaleToRenderSize;
         
-        return scaleToRenderSize * _projectionMatrix();  // correct
+        return scaleToRenderSize * renderMVP;  // correct
     }
     
     math::Matrix4x4f TimelineViewport::_projectionMatrix() const noexcept
