@@ -1022,7 +1022,6 @@ namespace mrv
     void TimelineViewport::setFrameView(bool active) noexcept
     {
         _p->frameView = active;
-        _updateDevices();
     }
 
     bool TimelineViewport::hasFrameView() const noexcept
@@ -1178,18 +1177,19 @@ namespace mrv
     {
         TLRENDER_P();
         const auto outputDevice = App::app->outputDevice();
-        if (outputDevice)
+        if (!outputDevice)
+            return;
+        
+        const auto& viewportSize = getViewportSize();
+        float scale = 1.0;
+        const math::Size2i& deviceSize = outputDevice->getSize();
+        if (viewportSize.isValid() && deviceSize.isValid())
         {
-            const auto& viewportSize = getViewportSize();
-            float scale = 1.0;
-            const math::Size2i& deviceSize = outputDevice->getSize();
-            if (viewportSize.isValid() && deviceSize.isValid())
-            {
-                scale *= deviceSize.w / static_cast<float>(viewportSize.w);
-            }
-            outputDevice->setView(p.viewPos * scale, p.viewZoom * scale,
-                                  _getRotation(), p.frameView);
+            scale *= deviceSize.w / static_cast<float>(viewportSize.w);
         }
+        outputDevice->setView(viewportSize,
+                              p.viewPos * scale, p.viewZoom * scale,
+                              _getRotation(), p.frameView);
     }
 
     void TimelineViewport::setViewPosAndZoom(
@@ -1200,7 +1200,6 @@ namespace mrv
             return;
         p.viewPos = pos;
         p.viewZoom = zoom;
-        _updateDevices();
         _updateZoom();
         redraw();
 
@@ -1503,7 +1502,6 @@ namespace mrv
         {
             _frameView();
         }
-        _updateDevices();
 
         redrawWindows();
         updatePixelBar();
@@ -1596,17 +1594,10 @@ namespace mrv
     {
         TLRENDER_P();
         auto renderSize = getRenderSize();
-#ifdef DEBUG_SCALING
-        std::cerr << "0 WxH=" << renderSize << " " << getViewportSize()
-                  << " screens=" << Fl::screen_count() << std::endl;
-#endif
 
         bool use_maximize = false;
         Fl_Double_Window* mw = p.ui->uiMain;
         int screen = mw->screen_num();
-#ifdef DEBUG_SCALING
-        std::cerr << "Main Window on screen " << screen << std::endl;
-#endif
 
         int W = renderSize.w;
         int H = renderSize.h;
@@ -1635,21 +1626,7 @@ namespace mrv
             posY = mw->y();
         }
 
-#ifdef DEBUG_SCALING
-        std::cerr << "Main Window pos=(" << posX << " " << posY << ")"
-                  << std::endl;
-#endif
-
-#ifdef DEBUG_SCALING
-        std::cerr << "renderSize=" << renderSize << std::endl;
-        std::cerr << "aspectRatio=" << aspectRatio << std::endl;
-#endif
-
         Fl::screen_work_area(minX, minY, maxW, maxH, posX, posY); //, screen);
-#ifdef DEBUG_SCALING
-        std::cerr << "work area=" << minX << " " << minY << " " << maxW << "x"
-                  << maxH << std::endl;
-#endif
 
         int WBars = 0;
         int HBars = 0;
@@ -1663,19 +1640,12 @@ namespace mrv
         if (posY < minY)
             posY = minY;
 
-#ifdef DEBUG_SCALING
-        std::cerr << "Clamped pos=" << posX << " " << posY << std::endl;
-#endif
-
         int decW = mw->decorated_w();
         int decH = mw->decorated_h();
 
         int dW = decW - mw->w();
         int dH = decH - mw->h();
 
-#ifdef DEBUG_SCALING
-        std::cerr << "DECORATE SIZES " << dW << "x" << dH << std::endl;
-#endif
         maxW -= dW;
         maxH -= dH;
 
@@ -1717,16 +1687,8 @@ namespace mrv
             {
                 TVH = calculate_edit_viewport_size(p.ui);
                 HBars += TVH;
-
-#ifdef DEBUG_SCALING
-                std::cerr << "Timeline Height=" << TVH << std::endl;
-#endif
             }
 
-#ifdef DEBUG_SCALING
-            std::cerr << "BARS WBars=" << WBars << " HBars=" << HBars
-                      << std::endl;
-#endif
             // Try to adjust sizing first, keeping the pos the same.
             if (aspectRatio > 1)
             {
@@ -1736,11 +1698,6 @@ namespace mrv
                     float pct = static_cast<float>(maxH - HBars) / renderSize.h;
                     renderSize.h = maxH - HBars + dH;
                     renderSize.w *= pct;
-
-#ifdef DEBUG_SCALING
-                    std::cerr << "Adjust sizing on height pct=" << pct
-                              << std::endl;
-#endif
                 }
             }
             else
@@ -1752,27 +1709,13 @@ namespace mrv
                     float pct = static_cast<float>(maxW - WBars) / renderSize.w;
                     renderSize.w = maxW - WBars + dW;
                     renderSize.h *= pct;
-
-#ifdef DEBUG_SCALING
-                    std::cerr << "Adjust sizing on width pct=" << pct
-                              << std::endl;
-#endif
                 }
             }
-
-#ifdef DEBUG_SCALING
-            std::cerr << "renderSize rescaled=" << renderSize << std::endl;
-#endif
             // Add the bars to the render size to calculate potential window
             // size.
             W = renderSize.w + WBars;
             H = renderSize.h + HBars;
         }
-
-#ifdef DEBUG_SCALING
-        std::cerr << "Window size so far " << posX << " " << posY << " W=" << W
-                  << " H=" << H << std::endl;
-#endif
 
         // First, try by
         if (posY + H > minY + maxH)
@@ -1780,11 +1723,6 @@ namespace mrv
             p.frameView = true;
             posY = minY + dH; // dH is needed here!
         }
-
-#ifdef DEBUG_SCALING
-        std::cerr << "maxH check1 " << posX << " " << posY << " W=" << W
-                  << " H=" << H << std::endl;
-#endif
 
         if (posX + W > minX + maxW)
         {
@@ -1802,11 +1740,6 @@ namespace mrv
             use_maximize = true;
         }
 
-#ifdef DEBUG_SCALING
-        std::cerr << "maxH check2 " << posX << " " << posY << " W=" << W
-                  << " H=" << H << std::endl;
-#endif
-
         if (posX + W > minX + maxW)
         {
             p.frameView = true;
@@ -1814,11 +1747,6 @@ namespace mrv
             W = maxW;
             use_maximize = true;
         }
-
-#ifdef DEBUG_SCALING
-        std::cerr << "maxW check3 " << posX << " " << posY << " W=" << W
-                  << " H=" << H << std::endl;
-#endif
 
         int minW = 690;
         int minH = 602;
@@ -1838,10 +1766,6 @@ namespace mrv
             H = minH;
         }
 
-#ifdef DEBUG_SCALING
-        std::cerr << "FINAL Window=" << posX << " " << posY << " " << W << "x"
-                  << H << " dW=" << dW << " dH=" << dH << std::endl;
-#endif
         // We use mw->maximize() as FLTK cannot give us real
         // screen_work_area coordinates.  Work area of two monitors is wrong
         // on X11 and Wayland does not give areas at all.
@@ -1889,10 +1813,6 @@ namespace mrv
             HBars += p.ui->uiStatusGroup->h();
 
         TVH = calculate_edit_viewport_size(p.ui);
-        std::cerr << "END HBars=" << HBars << " " << TVH << std::endl;
-
-        std::cerr << "MAXIMIZED Window=" << posX << " " << posY << " "
-                  << mw->w() << "x" << mw->h() << std::endl;
 #endif
 
         // We need to adjust dock group too.  These lines are needed.
@@ -3526,12 +3446,23 @@ namespace mrv
         if (hasFrameView())
             _frameView();
     }
+    
     math::Matrix4x4f TimelineViewport::_renderProjectionMatrix() const noexcept
     {
         TLRENDER_P();
-        const auto& renderSize = getRenderSize();
-        return math::ortho(0.F, static_cast<float>(renderSize.w), 0.F,
-                           static_cast<float>(renderSize.h), -1.F, 1.F);
+
+        const math::Size2i& viewportSize = getViewportSize();
+        const math::Size2i& renderSize = getRenderSize();
+
+        // Scale the overlay to renderSize
+        // math::Matrix4x4f scaleToRenderSize =
+        //     math::scale(math::Vector3f(
+        //                     static_cast<float>(renderSize.w) / float(viewportSize.w),
+        //                     static_cast<float>(renderSize.h) / float(viewportSize.h),
+        //                     1.0f));
+        math::Matrix4x4f scaleToRenderSize;
+        
+        return scaleToRenderSize * _projectionMatrix();  // correct
     }
     
     math::Matrix4x4f TimelineViewport::_projectionMatrix() const noexcept
@@ -3558,17 +3489,20 @@ namespace mrv
         const math::Matrix4x4f& vm =
             math::translate(math::Vector3f(p.viewPos.x, p.viewPos.y, 0.F)) *
             math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
-        const auto& rm = math::rotateZ(_getRotation());
-        const math::Matrix4x4f& tm = math::translate(
+        const auto& rotateMatrix = math::rotateZ(_getRotation());
+        const math::Matrix4x4f& centerMatrix = math::translate(
             math::Vector3f(-renderSize.w / 2, -renderSize.h / 2, 0.F));
-        const math::Matrix4x4f& to = math::translate(
+        const math::Matrix4x4f& transformOffsetMatrix = math::translate(
             math::Vector3f(transformOffset.x, transformOffset.y, 0.F));
 
-        const auto pm = math::ortho(
-            0.F, static_cast<float>(viewportSize.w), 0.F,
-            static_cast<float>(viewportSize.h), -1.F, 1.F);
-
-        return pm * vm * to * rm * tm;
+        const math::Matrix4x4f& pm = math::ortho(
+            0.F,
+            static_cast<float>(viewportSize.w),
+            0.F,
+            static_cast<float>(viewportSize.h),
+            -1.F,
+            1.F);
+        return pm * vm * transformOffsetMatrix * rotateMatrix * centerMatrix;
     }
 
     math::Matrix4x4f TimelineViewport::_pixelMatrix() const noexcept

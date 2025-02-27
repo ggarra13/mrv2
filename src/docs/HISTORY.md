@@ -19,6 +19,8 @@ v1.3.4
 - Fixed a precision problem when drawing Text as an annotation.
 - Fixed an issue with a bad optimization of annotations.
 - Minor optimization of annotations drawing.
+- Added annotations support to NDI video output.  The only thing that does not work yet is text annotations.
+- Added NDI panels saving to sessions file.
 
 
 v1.3.3

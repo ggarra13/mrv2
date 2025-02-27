@@ -82,7 +82,7 @@ namespace mrv
             using namespace panel;
 
             ViewerUI* ui = App::ui;
-            App* app = ui->app;
+            App* app = App::app;
             auto model = app->filesModel();
             auto files_ptrs = model->observeFiles()->get();
 
@@ -163,6 +163,9 @@ namespace mrv
 #ifdef MRV2_NETWORK
                 {"Network", (networkPanel != nullptr)},
 #endif
+#ifdef TLRENDER_NDI
+                {"NDI", (ndiPanel != nullptr)},
+#endif
                 {"Histogram", (histogramPanel != nullptr)},
                 {"Vectorscope", (vectorscopePanel != nullptr)},
                 {"Stereo 3D", (stereo3DPanel != nullptr)},
@@ -186,6 +189,10 @@ namespace mrv
                 imageInfoPanel->save();
             if (annotationsPanel)
                 annotationsPanel->save();
+#ifdef TLRENDER_NDI
+            if (ndiPanel)
+                ndiPanel->save();
+#endif
             if (environmentMapPanel)
                 environmentMapPanel->save();
             if (settingsPanel)

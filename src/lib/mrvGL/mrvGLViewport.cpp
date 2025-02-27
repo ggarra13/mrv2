@@ -474,6 +474,7 @@ namespace mrv
             return;
         }
 
+        _updateDevices();
 
         const auto& annotations =
             player->getAnnotations(p.ghostPrevious, p.ghostNext);
@@ -628,7 +629,13 @@ namespace mrv
                     _createOverlayPBO(renderSize);
                 }
 
-                const auto& renderMVP = _renderProjectionMatrix();
+                math::Matrix4x4f renderMVP;
+                if (p.frameView)
+                    renderMVP = math::ortho(
+                        0.F, static_cast<float>(renderSize.w), 0.F,
+                        static_cast<float>(renderSize.h), -1.F, 1.F);
+                else
+                    renderMVP = _renderProjectionMatrix();
                 _drawAnnotations(gl.overlay, renderMVP, currentTime,
                                  annotations, renderSize);
 
@@ -755,11 +762,13 @@ namespace mrv
                     gl.annotation = gl::OffscreenBuffer::create(
                         viewportSize, offscreenBufferOptions);
                 }
+
+                _drawAnnotations(gl.annotation, mvp, player->currentTime(),
+                                 annotations, viewportSize);
+                
                 const math::Matrix4x4f orthoMatrix = math::ortho(
                     0.F, static_cast<float>(renderSize.w), 0.F,
                     static_cast<float>(renderSize.h), -1.F, 1.F);
-                 _drawAnnotations(gl.annotation, mvp, player->currentTime(),
-                                  annotations, viewportSize);
                 _compositeAnnotations(gl.annotation, orthoMatrix,
                                       viewportSize);
             }

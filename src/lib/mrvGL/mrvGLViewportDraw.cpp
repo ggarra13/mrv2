@@ -659,7 +659,6 @@ namespace mrv
             glBindTexture(GL_TEXTURE_2D, overlay->getColorID());
             glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE,
                           overlayImage->getData());
-
             outputDevice->setOverlay(overlayImage);
         }
 
