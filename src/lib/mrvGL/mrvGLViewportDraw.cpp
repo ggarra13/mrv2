@@ -390,7 +390,8 @@ namespace mrv
 
 #ifdef USE_OPENGL2
 
-    void Viewport::_drawGL2TextShapes()
+    void Viewport::_drawGL1TextShapes(const math::Matrix4x4f& vm,
+                                      const double viewZoom)
     {
         TLRENDER_P();
         MRV2_GL();
@@ -405,11 +406,13 @@ namespace mrv
             player->getAnnotations(p.ghostPrevious, p.ghostNext);
         if (annotations.empty())
             return;
-
+        
         float pixel_unit = pixels_per_unit();
-        const auto& viewportSize = getViewportSize();
-        const auto& renderSize = getRenderSize();
-
+        
+        // So compositing works properly
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            
         for (const auto& annotation : annotations)
         {
             const auto& annotationTime = annotation->time;
@@ -451,22 +454,9 @@ namespace mrv
                 continue;
 
             const auto& shapes = annotation->shapes;
-            math::Vector2f pos;  // was Vector2i
-
-            pos.x = p.viewPos.x;
-            pos.y = p.viewPos.y;
-            pos.x /= pixel_unit;
-            pos.y /= pixel_unit;
-            math::Matrix4x4f vm = math::translate(math::Vector3f(pos.x, pos.y, 0.F));
-            vm = vm * math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
-
+            
             // No projection matrix.  Thar's set by FLTK ( and we
             // reset it -- flip it in Y -- inside mrvGL2TextShape.cpp ).
-
-
-            // So compositing works properly
-            glEnable(GL_BLEND);
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         
             for (auto& shape : shapes)
@@ -481,7 +471,7 @@ namespace mrv
                 textShape->pixels_per_unit = pixel_unit;
                 textShape->w = w();
                 textShape->h = h();
-                textShape->viewZoom = p.viewZoom;
+                textShape->viewZoom = viewZoom;
                 shape->matrix = vm;
                 CHECK_GL;
                 shape->draw(gl.render, gl.lines);
@@ -546,6 +536,16 @@ namespace mrv
         TLRENDER_P();
         MRV2_GL();
 
+        gl::OffscreenBufferBinding binding(overlay);
+        CHECK_GL;
+                
+        timeline::RenderOptions renderOptions;
+        renderOptions.colorBuffer = image::PixelType::RGBA_U8;
+                    
+        gl.render->begin(renderSize, renderOptions);
+        gl.render->setOCIOOptions(timeline::OCIOOptions());
+        gl.render->setLUTOptions(timeline::LUTOptions());
+                
         for (const auto& annotation : annotations)
         {
             const auto& annotationTime = annotation->time;
@@ -582,41 +582,38 @@ namespace mrv
                     }
                 }
             }
-
+            
+            const auto& shapes = annotation->shapes;
+            for (const auto& shape : shapes)
             {
-                gl::OffscreenBufferBinding binding(overlay);
-                
-                timeline::RenderOptions renderOptions;
-                renderOptions.colorBuffer = image::PixelType::RGBA_U8;
-                    
-                gl.render->begin(renderSize, renderOptions);
-                gl.render->setOCIOOptions(timeline::OCIOOptions());
-                gl.render->setLUTOptions(timeline::LUTOptions());
+                if (alphamult == 0.F)
+                    continue;
                 gl.render->setTransform(renderMVP);
-                const auto& shapes = annotation->shapes;
-                for (const auto& shape : shapes)
-                {
-                    if (alphamult == 0.F)
-                        continue;
-                    _drawShape(shape, alphamult);
-                }
-                gl.render->end();
+                CHECK_GL;
+                _drawShape(shape, alphamult);
+                CHECK_GL;
             }
         }
+
+        gl.render->setClipRectEnabled(false);
+        gl.render->end();
     }
 
-    void Viewport::_compositeOverlay(
-        const std::shared_ptr<tl::gl::OffscreenBuffer>& overlay,
+    void Viewport::_compositeAnnotations(
         const math::Matrix4x4f& mvp,
         const math::Size2i& viewportSize)
     {
-        MRV2_GL();
         TLRENDER_P();
-        if (!gl.overlayPBO)
-            return;
+        MRV2_GL();
         
         gl::SetAndRestore(GL_BLEND, GL_TRUE);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Standard alpha blending
+        
+        glBlendFuncSeparate(
+            GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA,
+            GL_ONE_MINUS_SRC_ALPHA);  // this is needed to composite soft
+                                      // brushes correctly.  Note that the
+                                      // standardard premult composite is
+                                      // done later in the shaders.
         CHECK_GL;
 
         glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
@@ -630,6 +627,21 @@ namespace mrv
         gl.annotationShader->setUniform(
             "channels", static_cast<int>(channels));
 
+    }
+    
+    void Viewport::_compositeOverlay(
+        const std::shared_ptr<tl::gl::OffscreenBuffer>& overlay,
+        const math::Matrix4x4f& mvp,
+        const math::Size2i& viewportSize)
+    {
+        MRV2_GL();
+        TLRENDER_P();
+        if (!gl.overlayPBO)
+            return;
+
+        _compositeAnnotations(overlay, mvp, viewportSize);
+        CHECK_GL;
+        
         const size_t width = overlay->getSize().w;
         const size_t height = overlay->getSize().h;
         
@@ -651,14 +663,15 @@ namespace mrv
         auto outputDevice = App::app->outputDevice();
         if (outputDevice)
         {
-            // Create a tlRender image
-            const image::PixelType pixelType = image::PixelType::RGBA_U8;
-            auto overlayImage = image::Image::create(width, height, pixelType);
-        
             // Retrieve pixel data
             glBindTexture(GL_TEXTURE_2D, overlay->getColorID());
+
+            const image::PixelType pixelType = image::PixelType::RGBA_U8;
+            auto overlayImage = image::Image::create(width, height, pixelType);
+            
             glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE,
                           overlayImage->getData());
+
             outputDevice->setOverlay(overlayImage);
         }
 
@@ -675,23 +688,9 @@ namespace mrv
     {
         MRV2_GL();
         TLRENDER_P();
+
+        _compositeAnnotations(orthoMatrix, viewportSize);
         
-        gl::SetAndRestore(GL_BLEND, GL_TRUE);
-
-        glBlendFuncSeparate(
-            GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA,
-            GL_ONE_MINUS_SRC_ALPHA);
-
-        glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
-
-        gl.annotationShader->bind();
-        gl.annotationShader->setUniform("transform.mvp", orthoMatrix);
-        timeline::Channels channels = timeline::Channels::Color;
-        if (!p.displayOptions.empty())
-            channels = p.displayOptions[0].channels;
-        gl.annotationShader->setUniform(
-            "channels", static_cast<int>(channels));
-
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, overlay->getColorID());
 
@@ -1288,21 +1287,33 @@ namespace mrv
             if (gl.pboIDs[0] != 0)
             {
                 glDeleteBuffers(2, gl.pboIDs);
+                CHECK_GL;
                 glDeleteSync(gl.pboFences[0]);
+                CHECK_GL;
                 glDeleteSync(gl.pboFences[1]);
+                CHECK_GL;
             }
             glGenBuffers(2, gl.pboIDs);
+            CHECK_GL;
             
-            const unsigned dataSize =
-                renderSize.w * renderSize.h * 4 * sizeof(GLfloat);
+            const gl::OffscreenBufferOptions& options = gl.buffer->getOptions();
+            const size_t dataSize =
+                renderSize.w * renderSize.h *
+                image::getChannelCount(options.colorType) *
+                image::getBitDepth(options.colorType);
+            CHECK_GL;
             for(int i = 0; i < 2; ++i)
             {
                 glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIDs[i]);
+                CHECK_GL;
                 glBufferData(GL_PIXEL_PACK_BUFFER, dataSize, nullptr,
                              GL_STREAM_READ);
+                CHECK_GL;
                 gl.pboFences[i] = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+                CHECK_GL;
             }
             glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+            CHECK_GL;
         }
     }
     void Viewport::_createOverlayPBO(const math::Size2i& renderSize)

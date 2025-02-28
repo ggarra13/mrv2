@@ -7,6 +7,7 @@
 #include <tlCore/StringFormat.h>
 
 #include "mrvCore/mrvFile.h"
+#include "mrvCore/mrvWait.h"
 
 #include "mrvOptions/mrvEnvironmentMapOptions.h"
 #include "mrvOptions/mrvStereo3DOptions.h"
@@ -40,7 +41,7 @@
 namespace
 {
     const char* kModule = "mrv2s";
-    const int kSessionVersion = 13;
+    const int kSessionVersion = 15;
 } // namespace
 
 namespace
@@ -109,7 +110,8 @@ namespace mrv
             session["Aindex"] = model->observeAIndex()->get();
             session["Bindexes"] = model->observeBIndexes()->get();
 
-            auto player = ui->uiView->getTimelinePlayer();
+            auto view   = ui->uiView;
+            auto player = view->getTimelinePlayer();
 
             Message timeline;
             Message annotation;
@@ -225,15 +227,15 @@ namespace mrv
             }
 
             int layer = ui->uiColorChannel->value();
-            const std::string& ics = ocio::ics();
-            const std::string& view = ocio::view();
-            const std::string& look = ocio::look();
+            const std::string& ocioIcs = ocio::ics();
+            const std::string& ocioView = ocio::view();
+            const std::string& ocioLook = ocio::look();
 
             Message ocio = {
                 {"config", config},
-                {"ics", ics},
-                {"view", view},
-                {"look", look},
+                {"ics", ocioIcs},
+                {"view", ocioView},
+                {"look", ocioLook},
             };
 
             Message json_settings;
@@ -316,8 +318,8 @@ namespace mrv
             Message compare = model->observeCompareOptions()->get();
             Message stereo = model->observeStereo3DOptions()->get();
             Message image = app->imageOptions();
-            Message environmentMap = ui->uiView->getEnvironmentMapOptions();
-            Message background = ui->uiView->getBackgroundOptions();
+            Message environmentMap = view->getEnvironmentMapOptions();
+            Message background = view->getBackgroundOptions();
             int stereoIndex = model->observeStereoIndex()->get();
 
             auto options = ui->uiTimeline->getItemOptions();
@@ -340,6 +342,9 @@ namespace mrv
             session["editMode"] = editMode;
             session["metadata"] = sessionMetadata;
             session["timelineViewport"] = timelineViewport;
+            session["frameView"] = view->hasFrameView();
+            session["viewZoom"] = view->viewZoom();
+            session["viewPos"] = view->viewPos();
 
             std::ofstream ofs(fileName);
             if (!ofs.is_open())
@@ -421,7 +426,7 @@ namespace mrv
                     return false;
                 }
                 ifs.close();
-
+                
                 // Set the edit mode to timeline
                 set_edit_mode_cb(EditMode::kTimeline, ui);
 
@@ -434,9 +439,9 @@ namespace mrv
                 // Get session version
                 int version = session["version"];
 
-                // Decode session file
+                // Close all first, but don't exit.
                 close_all_cb(nullptr, ui);
-
+                
                 // Turn off auto-playback temporarily
                 bool autoPlayback = ui->uiPrefs->uiPrefsAutoPlayback->value();
                 ui->uiPrefs->uiPrefsAutoPlayback->value(false);
@@ -576,7 +581,7 @@ namespace mrv
                         ocio::setLook(look);
                     }
 
-                    ui->uiView->updateOCIOOptions();
+                    view->updateOCIOOptions();
 
                     // Hide Panels and Windows
                     removePanels(ui);
@@ -651,7 +656,7 @@ namespace mrv
                         show_window_cb(_(wc->name), ui);
                     }
                 }
-
+                    
                 if (version >= 3)
                 {
                     EnvironmentMapOptions env =
@@ -674,6 +679,19 @@ namespace mrv
                     timeline::DisplayOptions display =
                         session["displayOptions"];
                     app->setDisplayOptions(display);
+                }
+
+                if (version >= 6)
+                {
+                    if (ui->uiBottomBar->visible())
+                    {
+                        EditMode editMode = session["editMode"];
+                        set_edit_mode_cb(editMode, ui);
+                    }
+                    else
+                    {
+                        set_edit_mode_cb(EditMode::kNone, ui);
+                    }
                 }
 
                 if (version >= 7)
@@ -703,20 +721,7 @@ namespace mrv
                         session["imageOptions"];
                     app->setImageOptions(imageOptions);
                 }
-
-                if (version >= 6)
-                {
-                    if (ui->uiBottomBar->visible())
-                    {
-                        EditMode editMode = session["editMode"];
-                        set_edit_mode_cb(editMode, ui);
-                    }
-                    else
-                    {
-                        set_edit_mode_cb(EditMode::kNone, ui);
-                    }
-                }
-
+                
                 if (version >= 2)
                 {
                     std::vector<int> Bindexes = session["Bindexes"];
@@ -794,6 +799,24 @@ namespace mrv
                             }
                             view->setPlayback(playback);
                         }
+
+                        // Set up the viewport attributes
+                        if (version >= 15)
+                        {
+                            // If we are running command-line, wait a tad for the callbacks
+                            // and the main resize of window function to update.
+                            wait::milliseconds(100);
+
+                            // Get the view attributes
+                            auto viewPos = session["viewPos"];
+                            double viewZoom = session["viewZoom"];
+                            view->setViewPosAndZoom(viewPos, viewZoom);
+                        
+                            bool frameView = session["frameView"];
+                            view->setFrameView(frameView);
+                            view->redraw();
+                        }
+                        
                     }
                 }
             }
@@ -808,6 +831,7 @@ namespace mrv
 
             // Change current session filename.
             setCurrent(fileName);
+                
 
             return true;
         }

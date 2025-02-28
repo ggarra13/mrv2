@@ -7,9 +7,6 @@
 // Set it draw selection rectangle with GL_LINE_STRIP
 #define USE_ONE_PIXEL_LINES 1
 
-// Set it to avoid Window's FLTK childrens from being drawn
-// #define NO_GL_WINDOW_CHILDREN 1
-
 // Set it to draw text shapes with opengl2 instead of
 // tlRender's OpenGL 3 freetype routines
 #define USE_OPENGL2 1

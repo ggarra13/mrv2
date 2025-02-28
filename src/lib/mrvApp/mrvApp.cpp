@@ -12,12 +12,6 @@
 
 #include <tlTimeline/Util.h>
 
-#include <tlPlay/AudioModel.h>
-// #include <tlPlay/ColorModel.h>
-// #include <tlPlay/RenderModel.h>
-// #include <tlPlay/ViewportModel.h>
-// #include <tlPlay/Util.h>
-
 #ifdef MRV2_PYBIND11
 #    include <pybind11/embed.h>
 namespace py = pybind11;
@@ -1414,6 +1408,9 @@ namespace mrv
     {
         TLRENDER_P();
 
+        // Needed to refresh the outputDevice annotations
+        ui->uiView->redraw();
+
         if (p.outputDevice)
         {
             p.outputDevice->setPlayer(p.player ? p.player->player() : nullptr);
@@ -1429,6 +1426,9 @@ namespace mrv
 
         if (p.outputDevice)
             p.outputDevice->setEnabled(false);
+        
+        // \@todo: Remove.  Needed to refresh the viewport annotations
+        ui->uiView->redraw();
         
         Fl::remove_timeout((Fl_Timeout_Handler)_timer_update_cb, this);
     }

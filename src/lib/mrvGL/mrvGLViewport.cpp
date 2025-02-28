@@ -7,6 +7,8 @@
 #include <tlCore/FontSystem.h>
 #include <tlCore/StringFormat.h>
 
+#include <tlDevice/IOutput.h>
+
 #include <tlGL/OffscreenBuffer.h>
 #include <tlTimelineGL/RenderPrivate.h>
 #include <tlGL/Init.h>
@@ -81,11 +83,6 @@ namespace mrv
     {
         TLRENDER_P();
         MRV2_GL();
-        if (gl.render)
-        {
-            glDeleteBuffers(2, gl.pboIDs);
-            glDeleteBuffers(1, &gl.overlayPBO);
-        }
         gl.render.reset();
         gl.outline.reset();
         gl.lines.reset();
@@ -113,10 +110,6 @@ namespace mrv
         {
 
             gl.render = timeline_gl::Render::create(context);
-
-            //glGenBuffers(2, gl.pboIDS);
-            glGenBuffers(1, &gl.overlayPBO);
-
             p.fontSystem = image::FontSystem::create(context);
 
 #ifdef USE_ONE_PIXEL_LINES
@@ -218,6 +211,7 @@ namespace mrv
             hasAlpha ||
             getBackgroundOptions().type == timeline::Background::Transparent;
 
+        CHECK_GL;
         try
         {
             if (renderSize.isValid())
@@ -281,6 +275,7 @@ namespace mrv
                     break;
                 }
 
+                CHECK_GL;
                 gl::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = gl.colorBufferType;
 
@@ -291,12 +286,17 @@ namespace mrv
                 }
                 offscreenBufferOptions.depth = gl::OffscreenDepth::_24;
                 offscreenBufferOptions.stencil = gl::OffscreenStencil::_8;
+                CHECK_GL;
                 if (gl::doCreate(gl.buffer, renderSize, offscreenBufferOptions))
                 {
+                    CHECK_GL;
                     gl.buffer = gl::OffscreenBuffer::create(
                         renderSize, offscreenBufferOptions);
+                    CHECK_GL;
                     _createPBOs(renderSize);
+                    CHECK_GL;
                 }
+                CHECK_GL;
 
                 if (can_do(FL_STEREO))
                 {
@@ -308,11 +308,13 @@ namespace mrv
                             renderSize, offscreenBufferOptions);
                     }
                 }
+                CHECK_GL;
             }
             else
             {
                 gl.buffer.reset();
                 gl.stereoBuffer.reset();
+                CHECK_GL;
             }
             CHECK_GL;
 
@@ -470,7 +472,7 @@ namespace mrv
 #ifdef __APPLE__
             set_window_transparency(alpha);
 #endif
-            Fl_Window::draw(); // Draw FLTK children
+            Fl_Gl_Window::draw();
             return;
         }
 
@@ -478,6 +480,40 @@ namespace mrv
 
         const auto& annotations =
             player->getAnnotations(p.ghostPrevious, p.ghostNext);
+
+        MultilineInput* w = getMultilineInput();
+        if (w)
+        {
+            std_any value;
+            int font_size = App::app->settings()->getValue<int>(kFontSize);
+            double pixels_unit = pixels_per_unit();
+            double pct = renderSize.h / 1024.F;
+            double fontSize = font_size * pct * p.viewZoom / pixels_unit;
+            w->textsize(fontSize);
+            math::Vector2i pos(w->pos.x, w->pos.y);
+            w->Fl_Widget::position(pos.x, pos.y);
+        }
+
+
+        // Flag for FLTK's opengl1 text annotations drawings 
+        bool draw_opengl1 = static_cast<bool>(w) & p.showAnnotations;        
+
+#ifdef USE_OPENGL2
+        for (const auto& annotation : annotations)
+        {
+            for (const auto& shape : annotation->shapes)
+            {
+                if (dynamic_cast<GL2TextShape*>(shape.get()))
+                {
+                    draw_opengl1 = true;
+                    break;
+                }
+            }
+            if (draw_opengl1 == true)
+                break;
+        }
+#endif
+        
             
         const auto& currentTime = player->currentTime();
 
@@ -626,35 +662,45 @@ namespace mrv
                 {
                     gl.overlay = gl::OffscreenBuffer::create(
                         renderSize, offscreenBufferOptions);
+                    CHECK_GL;
                     _createOverlayPBO(renderSize);
+                    CHECK_GL;
                 }
+                CHECK_GL;
 
                 const math::Matrix4x4f& renderMVP = _renderProjectionMatrix();
                 _drawAnnotations(gl.overlay, renderMVP, currentTime,
                                  annotations, renderSize);
+                CHECK_GL;
 
                 
                 // Copy data to PBO:
                 glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.overlayPBO);
+                CHECK_GL;
                 glReadPixels(0, 0, renderSize.w, renderSize.h, GL_RGBA,
                              GL_UNSIGNED_BYTE, nullptr);
+                CHECK_GL;
                 glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+                CHECK_GL;
                 
                 // Create a fence for the overlay PBO
                 gl.overlayFence = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+                CHECK_GL;
                 
-                // Create an identity matrix
                 // Wait for the fence to complete before compositing
                 GLenum waitReturn = glClientWaitSync(gl.overlayFence, 0,
                                                      5000000000); // Wait 5 seconds
+                CHECK_GL;
                 if (waitReturn == GL_TIMEOUT_EXPIRED)
                 {
                     LOG_ERROR("glClientWaitSync: Timeout occurred!");
                 }
-                glDeleteSync(gl.overlayFence);
 
-                math::Matrix4x4f overlayMVP;
-                _compositeOverlay(gl.overlay, overlayMVP, viewportSize);
+                if (!draw_opengl1)
+                {
+                    math::Matrix4x4f overlayMVP;
+                    _compositeOverlay(gl.overlay, overlayMVP, viewportSize);
+                }
             }
             
             math::Box2i selection = p.colorAreaInfo.box = p.selection;
@@ -790,45 +836,68 @@ namespace mrv
                 _drawHelpText();
         }
 
-        MultilineInput* w = getMultilineInput();
-        if (w)
-        {
-            std_any value;
-            int font_size = p.ui->app->settings()->getValue<int>(kFontSize);
-            double pixels_unit = pixels_per_unit();
-            double pct = renderSize.h / 1024.F;
-            double fontSize = font_size * pct * p.viewZoom / pixels_unit;
-            w->textsize(fontSize);
-            math::Vector2i pos(w->pos.x, w->pos.y);
-            w->Fl_Widget::position(pos.x, pos.y);
-        }
-
 #ifdef USE_OPENGL2
 
-        bool draw_opengl1 = static_cast<bool>(w) & p.showAnnotations;
-
-        for (const auto& annotation : annotations)
-        {
-            for (const auto& shape : annotation->shapes)
-            {
-                if (dynamic_cast<GL2TextShape*>(shape.get()))
-                {
-                    draw_opengl1 = true;
-                    break;
-                }
-            }
-            if (draw_opengl1 == true)
-                break;
-        }
 
         if (!draw_opengl1)
+        {
+            Fl_Gl_Window::draw();      
             return;
+        }
+        
+        // Set up 1:1 projection
+        Fl_Gl_Window::draw_begin();
 
-        Fl_Gl_Window::draw_begin(); // Set up 1:1 projection
-        Fl_Window::draw();          // Draw FLTK children
+        // Draw FLTK children
+        Fl_Window::draw();         
+                
         glViewport(0, 0, viewportSize.w, viewportSize.h);
         if (p.showAnnotations)
-            _drawGL2TextShapes();
+        {
+            // Draw the text shape annotations to the viewport.
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            glDrawBuffer(GL_BACK_LEFT);
+            
+            float pixel_unit = pixels_per_unit();
+            math::Vector2f pos;
+            pos.x = p.viewPos.x / pixel_unit;
+            pos.y = p.viewPos.y / pixel_unit;
+            math::Matrix4x4f vm = math::translate(math::Vector3f(pos.x, pos.y, 0.F));
+            vm = vm * math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
+            _drawGL1TextShapes(vm, p.viewZoom);
+            
+            auto outputDevice = App::app->outputDevice();
+            if (outputDevice)
+            {
+                // Now, draw the text shape annotations to the overlay frame
+                // buffer.
+                glBindFramebuffer(GL_FRAMEBUFFER, gl.overlay->getID());
+                glDrawBuffer(GL_BACK_LEFT);
+
+                math::Matrix4x4f vm;
+                float viewZoom = 1.0;
+                if (!p.frameView)
+                {
+                    viewZoom = p.viewZoom;
+                    vm = math::translate(math::Vector3f(pos.x, pos.y, 0.F));
+                    vm = vm * math::scale(math::Vector3f(viewZoom, viewZoom, 1.F));
+                }
+                _drawGL1TextShapes(vm, viewZoom);
+            
+                glReadBuffer(GL_BACK_LEFT);
+
+                // Create a new image with to read the gl.overlay composited results.
+                const image::PixelType pixelType = image::PixelType::RGBA_U8;
+                auto overlayImage = image::Image::create(renderSize.w,
+                                                         renderSize.h,
+                                                         pixelType);
+                glReadPixels(0, 0, renderSize.w, renderSize.h, GL_RGBA,
+                             GL_UNSIGNED_BYTE, overlayImage->getData());
+
+                outputDevice->setOverlay(overlayImage);
+            }
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        }
         Fl_Gl_Window::draw_end(); // Restore GL state
 #else
         Fl_Gl_Window::draw();
@@ -987,9 +1056,12 @@ namespace mrv
                 if (!p.image)
                     return;
                 glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            CHECK_GL;
                 glReadBuffer(GL_FRONT);
+                CHECK_GL;
                 glReadPixels(
                     0, 0, renderSize.w, renderSize.h, format, type, p.image);
+                CHECK_GL;
                 return;
             }
             else
@@ -999,17 +1071,21 @@ namespace mrv
                 // glReadPixels() should return immediately.
                 glBindBuffer(GL_PIXEL_PACK_BUFFER,
                              gl.pboIDs[gl.currentPBOIndex]);
+                CHECK_GL;
 
                 glReadPixels(0, 0, renderSize.w, renderSize.h, format, type, 0);
+                CHECK_GL;
 
                 // map the PBO to process its data by CPU
                 glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIDs[gl.nextPBOIndex]);
+                CHECK_GL;
 
                 // We are stopped, read the first PBO.
                 if (stopped)
                 {
                     glBindBuffer(GL_PIXEL_PACK_BUFFER,
                                  gl.pboIDs[gl.currentPBOIndex]);
+                    CHECK_GL;
                 }
             }
 
@@ -1024,14 +1100,18 @@ namespace mrv
             // Wait for the fence of the PBO you're about to use:
             glClientWaitSync(gl.pboFences[gl.nextPBOIndex],
                              GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
+            CHECK_GL;
             glDeleteSync(gl.pboFences[gl.nextPBOIndex]);
+            CHECK_GL;
 
             p.image = (float*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
+            CHECK_GL;
             p.rawImage = false;
         }
         else
         {
             TimelineViewport::_mapBuffer();
+            CHECK_GL;
         }
     }
 
@@ -1045,8 +1125,10 @@ namespace mrv
             if (!p.rawImage)
             {
                 glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+
+                // Create a new fence
                 gl.pboFences[gl.nextPBOIndex] = 
-                    glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0); // Create a new fence
+                    glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
                 p.image = nullptr;
                 p.rawImage = true;
             }

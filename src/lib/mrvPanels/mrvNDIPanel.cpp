@@ -99,6 +99,8 @@ namespace mrv
         void NDIPanel::refresh_sources()
         {
             MRV2_R();
+            if (!_r)
+                return;
 
             PopupMenu* m = r.sourceMenu;
 

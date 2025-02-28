@@ -89,7 +89,8 @@ namespace mrv
             const math::Size2i& renderSize);
 
 #ifdef USE_OPENGL2
-        void _drawGL2TextShapes();
+        void _drawGL1TextShapes(const tl::math::Matrix4x4f&,
+                                const double viewZoom);
 #endif
 
         void _pushAnnotationShape(const std::string& cmd) const override;
@@ -122,11 +123,16 @@ namespace mrv
         void _drawWindowArea(const std::string&) const noexcept;
 
         void _compositeAnnotations(
-            const std::shared_ptr<tl::gl::OffscreenBuffer>&,
-            const math::Matrix4x4f& mvp,
+            const math::Matrix4x4f& shaderMatrix,
             const math::Size2i& viewportSize);
+        
+        void _compositeAnnotations(
+            const std::shared_ptr<tl::gl::OffscreenBuffer>&,
+            const math::Matrix4x4f& orthoMatrix,
+            const math::Size2i& viewportSize);
+        
         void _compositeOverlay(const std::shared_ptr<tl::gl::OffscreenBuffer>&,
-                               const math::Matrix4x4f& mvp,
+                               const math::Matrix4x4f& identity,
                                const math::Size2i& viewportSize);
         
     private:

@@ -1024,6 +1024,11 @@ namespace mrv
         _p->frameView = active;
         _updateDevices();
     }
+    
+    void TimelineViewport::setResizeWindow(bool active) noexcept
+    {
+        _p->resizeWindow = active;
+    }
 
     bool TimelineViewport::hasFrameView() const noexcept
     {
@@ -1258,8 +1263,6 @@ namespace mrv
         const std::vector<timeline::VideoData>& values) noexcept
     {
         TLRENDER_P();
-
-        assert(!values.empty());
 
         p.videoData = values;
 
@@ -1588,6 +1591,7 @@ namespace mrv
         setViewPosAndZoom(viewPos, zoom);
 
         p.mousePos = _getFocus();
+        _updateDevices();
         redraw();
     }
 
@@ -1652,6 +1656,7 @@ namespace mrv
 
         bool alwaysFrameView = (bool)uiPrefs->uiPrefsAutoFitImage->value();
         p.frameView = alwaysFrameView;
+        bool frameView = p.frameView;
 
         if (uiPrefs->uiWindowFixedSize->value())
         {
@@ -1695,7 +1700,7 @@ namespace mrv
             {
                 if (posY + H > minY + maxH)
                 {
-                    p.frameView = true;
+                    frameView = true;
                     float pct = static_cast<float>(maxH - HBars) / renderSize.h;
                     renderSize.h = maxH - HBars + dH;
                     renderSize.w *= pct;
@@ -1705,7 +1710,7 @@ namespace mrv
             {
                 if (posX + W + WBars > minX + maxW)
                 {
-                    p.frameView = true;
+                    frameView = true;
 
                     float pct = static_cast<float>(maxW - WBars) / renderSize.w;
                     renderSize.w = maxW - WBars + dW;
@@ -1721,13 +1726,13 @@ namespace mrv
         // First, try by
         if (posY + H > minY + maxH)
         {
-            p.frameView = true;
+            frameView = true;
             posY = minY + dH; // dH is needed here!
         }
 
         if (posX + W > minX + maxW)
         {
-            p.frameView = true;
+            frameView = true;
             posX = minX + dW / 2; // dW / 2 is needed here!
         }
 
@@ -1735,7 +1740,7 @@ namespace mrv
         // minX, minY with maxW and maxH.
         if (posY + H > minY + maxH)
         {
-            p.frameView = true;
+            frameView = true;
             posY = minY + dH; // dH is needed here!
             H = maxH - posY;
             use_maximize = true;
@@ -1743,7 +1748,7 @@ namespace mrv
 
         if (posX + W > minX + maxW)
         {
-            p.frameView = true;
+            frameView = true;
             posX = minX + dW / 2; // dW / 2 is needed here!
             W = maxW;
             use_maximize = true;
@@ -1757,20 +1762,20 @@ namespace mrv
         // sizes, in case the user loaded a very tiny image.
         if (W < minW)
         {
-            p.frameView = true;
+            frameView = true;
             W = minW;
         }
 
         if (H < minH)
         {
-            p.frameView = true;
+            frameView = true;
             H = minH;
         }
 
         // We use mw->maximize() as FLTK cannot give us real
         // screen_work_area coordinates.  Work area of two monitors is wrong
         // on X11 and Wayland does not give areas at all.
-        if (use_maximize && !p.presentation)
+        if (use_maximize && !p.presentation && p.resizeWindow)
         {
             mw->maximize();
         }
@@ -1779,7 +1784,7 @@ namespace mrv
             mw->resize(posX, posY, W, H);
         }
 
-        if (p.frameView)
+        if (frameView)
         {
             // Wait a little so that resizing/maximizing takes place.
             if (use_maximize)
@@ -1822,6 +1827,11 @@ namespace mrv
         viewGroup->fixed(dockGroup, dockGroup->w());
         const int X = viewGroup->x() + viewGroup->w() - dockGroup->w();
         dockGroup->position(X, dockGroup->y());
+        
+        if (renderSize.isValid())
+        {
+            p.resizeWindow = false;
+        }
     }
 
     math::Vector2i TimelineViewport::_getFocus(int X, int Y) const noexcept
@@ -3462,16 +3472,63 @@ namespace mrv
             return math::ortho(
                 0.F, static_cast<float>(renderSize.w), 0.F,
                 static_cast<float>(renderSize.h), -1.F, 1.F);
+
+        const auto renderAspect = renderSize.getAspect();
+        const auto viewportAspect = viewportSize.getAspect();
+
+        math::Vector2f transformOffset;
+        if (viewportAspect > 1.F)
+        {
+            transformOffset.x = renderSize.w / 2.F;
+            transformOffset.y = renderSize.w / renderAspect / 2.F;
+        }
         else
-            renderMVP = _projectionMatrix();
-                
-        // Scale the overlay to renderSize
-        math::Matrix4x4f scaleToRenderSize;
-        scaleToRenderSize =
-            math::scale(math::Vector3f(
-                            static_cast<float>(renderSize.w) / float(viewportSize.w),
-                            static_cast<float>(renderSize.h) / float(viewportSize.h),
-                            1.0f));
+        {
+            transformOffset.x = renderSize.h * renderAspect / 2.F;
+            transformOffset.y = renderSize.h / 2.F;
+        }
+        const auto outputDevice = App::app->outputDevice();
+        if (!outputDevice)
+            return math::ortho(
+                0.F, static_cast<float>(renderSize.w), 0.F,
+                static_cast<float>(renderSize.h), -1.F, 1.F);
+
+        float scale = 1.0;
+        const math::Size2i& deviceSize = outputDevice->getSize();
+        if (viewportSize.isValid() && deviceSize.isValid())
+        {
+            scale *= deviceSize.w / static_cast<float>(viewportSize.w);
+        }
+        const math::Matrix4x4f& vm =
+            math::translate(math::Vector3f(p.viewPos.x * scale, p.viewPos.y * scale, 0.F)) *
+            math::scale(math::Vector3f(p.viewZoom * scale, p.viewZoom * scale, 1.F));
+        const auto& rotateMatrix = math::rotateZ(_getRotation());
+        const math::Matrix4x4f& centerMatrix = math::translate(
+            math::Vector3f(-renderSize.w / 2, -renderSize.h / 2, 0.F));
+        const math::Matrix4x4f& transformOffsetMatrix = math::translate(
+            math::Vector3f(transformOffset.x, transformOffset.y, 0.F));
+
+        const math::Matrix4x4f& pm = math::ortho(
+            0.F,
+            static_cast<float>(viewportSize.w),
+            0.F,
+            static_cast<float>(viewportSize.h),
+            -1.F,
+            1.F);
+                    
+        
+        // Calculate aspect-correct scale
+        math::Matrix4x4f resizeScaleMatrix;
+        
+        if (!p.frameView)
+        {
+            float scaleX = static_cast<float>(viewportSize.w) /
+                           static_cast<float>(renderSize.w);
+            float scaleY = static_cast<float>(viewportSize.h) /
+                           static_cast<float>(renderSize.h);
+            resizeScaleMatrix = math::scale(math::Vector3f(scaleX, scaleY, 1.0f));
+        }
+        renderMVP = pm * resizeScaleMatrix * vm * transformOffsetMatrix * rotateMatrix * centerMatrix;
         
         return renderMVP;  // correct
     }
