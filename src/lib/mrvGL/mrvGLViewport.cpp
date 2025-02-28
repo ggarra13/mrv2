@@ -495,7 +495,7 @@ namespace mrv
         }
 
         // Flag for FLTK's opengl1 text annotations drawings
-        bool draw_opengl1 = static_cast<bool>(w) & p.showAnnotations;
+        bool draw_opengl1 = false;
 
 #ifdef USE_OPENGL2
         for (const auto& annotation : annotations)
@@ -695,10 +695,12 @@ namespace mrv
                     LOG_ERROR("glClientWaitSync: Timeout occurred!");
                 }
 
+                math::Matrix4x4f overlayMVP;
+                _compositeOverlay(gl.overlay, overlayMVP, viewportSize);
+
                 if (!draw_opengl1)
                 {
-                    math::Matrix4x4f overlayMVP;
-                    _compositeOverlay(gl.overlay, overlayMVP, viewportSize);
+                    outputDevice->setOverlay(gl.annotationImage);
                 }
             }
 
@@ -849,7 +851,7 @@ namespace mrv
         // Draw FLTK children
         Fl_Window::draw();
 
-        glViewport(0, 0, viewportSize.w, viewportSize.h);
+        glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
         if (p.showAnnotations)
         {
             // Draw the text shape annotations to the viewport.
@@ -860,8 +862,8 @@ namespace mrv
             math::Vector2f pos;
             pos.x = p.viewPos.x / pixel_unit;
             pos.y = p.viewPos.y / pixel_unit;
-            math::Matrix4x4f vm =
-                math::translate(math::Vector3f(pos.x, pos.y, 0.F));
+            math::Matrix4x4f vm = math::translate(math::Vector3f(
+                p.viewPos.x / pixel_unit, p.viewPos.y / pixel_unit, 0.F));
             vm = vm * math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
 
             _drawGL1TextShapes(vm, p.viewZoom);
@@ -869,14 +871,17 @@ namespace mrv
             auto outputDevice = App::app->outputDevice();
             if (outputDevice)
             {
-                // Now, draw the text shape annotations to the overlay frame
-                // buffer.
-                glBindFramebuffer(GL_FRAMEBUFFER, gl.overlay->getID());
-                glDrawBuffer(GL_BACK_LEFT);
-
                 math::Matrix4x4f vm;
                 float viewZoom = 1.0;
                 float scale = 1.F;
+#    ifndef __APPLE__
+                // Now, draw the text shape annotations to the overlay frame
+                // buffer.  This accumulates the OpenGL3 drawings with the
+                // OpenGL1 text.
+                // On Apple, we render to a new OpenGL1 context and
+                // composite manually.
+                glBindFramebuffer(GL_FRAMEBUFFER, gl.overlay->getID());
+
                 if (!p.frameView)
                 {
                     const math::Size2i& deviceSize = outputDevice->getSize();
@@ -892,21 +897,69 @@ namespace mrv
                          math::scale(math::Vector3f(viewZoom, viewZoom, 1.F));
                 }
                 _drawGL1TextShapes(vm, viewZoom);
-
-                glReadBuffer(GL_BACK_LEFT);
+#    endif
 
                 // Create a new image with to read the gl.overlay composited
                 // results.
+                // This is the image we send to the outputDevice.
                 const image::PixelType pixelType = image::PixelType::RGBA_U8;
                 auto overlayImage =
                     image::Image::create(renderSize.w, renderSize.h, pixelType);
+
+#    ifdef __APPLE__
+                // On Apple, we must do the composite ourselves.
+                glReadBuffer(GL_BACK_LEFT);
+
+                math::Vector2f pos;
+                math::Size2i tmpSize(
+                    renderSize.w * p.viewZoom, renderSize.h * p.viewZoom);
+                if (!p.frameView)
+                {
+                    pos = _getRasterf(p.viewPos.x, p.viewPos.y);
+                }
+
+                auto tmp =
+                    image::Image::create(tmpSize.w, tmpSize.h, pixelType);
+                tmp->zero();
+                glReadPixels(
+                    pos.x, pos.y, tmpSize.w, tmpSize.h, GL_RGBA,
+                    GL_UNSIGNED_BYTE, tmp->getData());
+
+                resizeImage(
+                    overlayImage->getData(), tmp->getData(), tmpSize.w,
+                    tmpSize.h, renderSize.w, renderSize.h);
+
+                // Create a new image with to read the gl.overlay composited
+                // results.
+                GLubyte* source = gl.annotationImage->getData();
+                GLubyte* result = overlayImage->getData();
+                for (int y = 0; y < renderSize.h; ++y)
+                {
+                    for (int x = 0; x < renderSize.w; ++x)
+                    {
+                        const float alpha = result[3] / 255.F;
+                        result[0] =
+                            source[0] * (1.F - alpha) + result[0] * alpha;
+                        result[1] =
+                            source[1] * (1.F - alpha) + result[1] * alpha;
+                        result[2] =
+                            source[2] * (1.F - alpha) + result[2] * alpha;
+                        result[3] =
+                            source[3] * (1.F - alpha) + result[3] * alpha;
+                        source += 4;
+                        result += 4;
+                    }
+                }
+#    else
+                // On Windows, X11, Wayland we can let the gfx card handle it.
                 glReadPixels(
                     0, 0, renderSize.w, renderSize.h, GL_RGBA, GL_UNSIGNED_BYTE,
                     overlayImage->getData());
+#    endif
 
                 outputDevice->setOverlay(overlayImage);
+                glBindFramebuffer(GL_FRAMEBUFFER, 0);
             }
-            glBindFramebuffer(GL_FRAMEBUFFER, 0);
         }
         Fl_Gl_Window::draw_end(); // Restore GL state
 #else

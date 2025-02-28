@@ -72,4 +72,8 @@ namespace mrv
     geom::TriangleMesh2
     checkers(const math::Box2i&, const math::Size2i& checkerSize);
 
+    // Function to perform bilinear interpolation for resizing
+    void resizeImage(
+        GLubyte* targetPixels, GLubyte* srcPixels, const int srcWidth,
+        const int srcHeight, const int targetWidth, const int targetHeight);
 } // namespace mrv

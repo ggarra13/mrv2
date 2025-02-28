@@ -141,4 +141,57 @@ namespace mrv
         return out;
     }
 
+    // Function to perform bilinear interpolation for resizing
+    void resizeImage(
+        GLubyte* targetPixels, GLubyte* srcPixels, const int srcWidth,
+        const int srcHeight, const int targetWidth, const int targetHeight)
+    {
+
+        // Calculate scaling factors
+        double scaleX = static_cast<double>(srcWidth) / targetWidth;
+        double scaleY = static_cast<double>(srcHeight) / targetHeight;
+
+        for (int y = 0; y < targetHeight; ++y)
+        {
+            for (int x = 0; x < targetWidth; ++x)
+            {
+                // Calculate coordinates in the source image
+                double srcX = x * scaleX;
+                double srcY = y * scaleY;
+
+                // Calculate indices of the nearest pixels in the source image
+                int x1 = static_cast<int>(srcX);
+                int y1 = static_cast<int>(srcY);
+                int x2 = std::min(x1 + 1, srcWidth - 1);
+                int y2 = std::min(y1 + 1, srcHeight - 1);
+
+                // Calculate interpolation weights
+                double wx2 = srcX - x1;
+                double wy2 = srcY - y1;
+                double wx1 = 1.0 - wx2;
+                double wy1 = 1.0 - wy2;
+
+                // Get the pixels from the source image
+                GLubyte* p11 = &srcPixels[(y1 * srcWidth + x1) * 4];
+                GLubyte* p12 = &srcPixels[(y2 * srcWidth + x1) * 4];
+                GLubyte* p21 = &srcPixels[(y1 * srcWidth + x2) * 4];
+                GLubyte* p22 = &srcPixels[(y2 * srcWidth + x2) * 4];
+
+                // Perform bilinear interpolation for each channel
+                GLubyte* targetPixel = &targetPixels[(y * targetWidth + x) * 4];
+                targetPixel[0] = static_cast<GLubyte>(
+                    wx1 * wy1 * p11[0] + wx2 * wy1 * p21[0] +
+                    wx1 * wy2 * p12[0] + wx2 * wy2 * p22[0]);
+                targetPixel[1] = static_cast<GLubyte>(
+                    wx1 * wy1 * p11[1] + wx2 * wy1 * p21[1] +
+                    wx1 * wy2 * p12[1] + wx2 * wy2 * p22[1]);
+                targetPixel[2] = static_cast<GLubyte>(
+                    wx1 * wy1 * p11[2] + wx2 * wy1 * p21[2] +
+                    wx1 * wy2 * p12[2] + wx2 * wy2 * p22[2]);
+                targetPixel[3] = static_cast<GLubyte>(
+                    wx1 * wy1 * p11[3] + wx2 * wy1 * p21[3] +
+                    wx1 * wy2 * p12[3] + wx2 * wy2 * p22[3]);
+            }
+        }
+    }
 } // namespace mrv
