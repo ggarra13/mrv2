@@ -25,6 +25,8 @@ v1.3.4
 - Improved performance of annotations drawing.
 - Made session files store the frame view, view position and view zoom settings.
 - Fixed resizeWindow button not working any more as it should.
+- Fixed a number of buggy OpenGL that were mostly responsible for mrv2's bad
+  behavior under Wayland with NVidia graphics cards.
 
 
 v1.3.3

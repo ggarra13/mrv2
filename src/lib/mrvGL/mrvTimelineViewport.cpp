@@ -1606,11 +1606,7 @@ namespace mrv
 
         int W = renderSize.w;
         int H = renderSize.h;
-        if (renderSize.isValid())
-        {
-            p.resizeWindow = false;
-        }
-        else
+        if (!renderSize.isValid())
         {
             W = 320;
             H = 240;
