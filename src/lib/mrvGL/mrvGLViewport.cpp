@@ -362,7 +362,7 @@ namespace mrv
                         {
                             gl.render->setOCIOOptions(p.ocioOptions);
                             _updateMonitorDisplayView(screen, p.ocioOptions);
-                        } 
+                        }
 
                         gl.render->setLUTOptions(p.lutOptions);
                         gl.render->setHDROptions(p.hdrOptions);
@@ -494,9 +494,8 @@ namespace mrv
             w->Fl_Widget::position(pos.x, pos.y);
         }
 
-
-        // Flag for FLTK's opengl1 text annotations drawings 
-        bool draw_opengl1 = static_cast<bool>(w) & p.showAnnotations;        
+        // Flag for FLTK's opengl1 text annotations drawings
+        bool draw_opengl1 = static_cast<bool>(w) & p.showAnnotations;
 
 #ifdef USE_OPENGL2
         for (const auto& annotation : annotations)
@@ -513,8 +512,7 @@ namespace mrv
                 break;
         }
 #endif
-        
-            
+
         const auto& currentTime = player->currentTime();
 
         if (gl.buffer && gl.shader)
@@ -580,7 +578,7 @@ namespace mrv
                         gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
                     }
                 }
-                
+
                 if (p.imageOptions[0].alphaBlend == timeline::AlphaBlend::None)
                 {
                     glEnable(GL_BLEND);
@@ -645,8 +643,8 @@ namespace mrv
             // Draw annotations for output device in an overlay buffer.
             //
             auto outputDevice = App::app->outputDevice();
-            if (outputDevice && gl.buffer &&
-                p.showAnnotations && !annotations.empty())
+            if (outputDevice && gl.buffer && p.showAnnotations &&
+                !annotations.empty())
             {
                 gl::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = image::PixelType::RGBA_U8;
@@ -669,27 +667,28 @@ namespace mrv
                 CHECK_GL;
 
                 const math::Matrix4x4f& renderMVP = _renderProjectionMatrix();
-                _drawAnnotations(gl.overlay, renderMVP, currentTime,
-                                 annotations, renderSize);
+                _drawAnnotations(
+                    gl.overlay, renderMVP, currentTime, annotations,
+                    renderSize);
                 CHECK_GL;
 
-                
                 // Copy data to PBO:
                 glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.overlayPBO);
                 CHECK_GL;
-                glReadPixels(0, 0, renderSize.w, renderSize.h, GL_RGBA,
-                             GL_UNSIGNED_BYTE, nullptr);
+                glReadPixels(
+                    0, 0, renderSize.w, renderSize.h, GL_RGBA, GL_UNSIGNED_BYTE,
+                    nullptr);
                 CHECK_GL;
                 glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
                 CHECK_GL;
-                
+
                 // Create a fence for the overlay PBO
                 gl.overlayFence = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
                 CHECK_GL;
-                
+
                 // Wait for the fence to complete before compositing
-                GLenum waitReturn = glClientWaitSync(gl.overlayFence, 0,
-                                                     5000000000); // Wait 5 seconds
+                GLenum waitReturn =
+                    glClientWaitSync(gl.overlayFence, 0, GL_TIMEOUT_IGNORED);
                 CHECK_GL;
                 if (waitReturn == GL_TIMEOUT_EXPIRED)
                 {
@@ -702,7 +701,7 @@ namespace mrv
                     _compositeOverlay(gl.overlay, overlayMVP, viewportSize);
                 }
             }
-            
+
             math::Box2i selection = p.colorAreaInfo.box = p.selection;
             if (selection.max.x >= 0)
             {
@@ -803,14 +802,14 @@ namespace mrv
                         viewportSize, offscreenBufferOptions);
                 }
 
-                _drawAnnotations(gl.annotation, mvp, player->currentTime(),
-                                 annotations, viewportSize);
-                
+                _drawAnnotations(
+                    gl.annotation, mvp, player->currentTime(), annotations,
+                    viewportSize);
+
                 const math::Matrix4x4f orthoMatrix = math::ortho(
                     0.F, static_cast<float>(renderSize.w), 0.F,
                     static_cast<float>(renderSize.h), -1.F, 1.F);
-                _compositeAnnotations(gl.annotation, orthoMatrix,
-                                      viewportSize);
+                _compositeAnnotations(gl.annotation, orthoMatrix, viewportSize);
             }
 
             if (p.dataWindow)
@@ -838,35 +837,35 @@ namespace mrv
 
 #ifdef USE_OPENGL2
 
-
         if (!draw_opengl1)
         {
-            Fl_Gl_Window::draw();      
+            Fl_Gl_Window::draw();
             return;
         }
-        
+
         // Set up 1:1 projection
         Fl_Gl_Window::draw_begin();
 
         // Draw FLTK children
-        Fl_Window::draw();         
-                
+        Fl_Window::draw();
+
         glViewport(0, 0, viewportSize.w, viewportSize.h);
         if (p.showAnnotations)
         {
             // Draw the text shape annotations to the viewport.
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
             glDrawBuffer(GL_BACK_LEFT);
-            
+
             float pixel_unit = pixels_per_unit();
             math::Vector2f pos;
             pos.x = p.viewPos.x / pixel_unit;
             pos.y = p.viewPos.y / pixel_unit;
-            math::Matrix4x4f vm = math::translate(math::Vector3f(pos.x, pos.y, 0.F));
+            math::Matrix4x4f vm =
+                math::translate(math::Vector3f(pos.x, pos.y, 0.F));
             vm = vm * math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
-            
+
             _drawGL1TextShapes(vm, p.viewZoom);
-            
+
             auto outputDevice = App::app->outputDevice();
             if (outputDevice)
             {
@@ -883,23 +882,27 @@ namespace mrv
                     const math::Size2i& deviceSize = outputDevice->getSize();
                     if (viewportSize.isValid() && deviceSize.isValid())
                     {
-                        scale *= deviceSize.w / static_cast<float>(viewportSize.w);
+                        scale *=
+                            deviceSize.w / static_cast<float>(viewportSize.w);
                     }
                     viewZoom = p.viewZoom * scale;
-                    vm = math::translate(math::Vector3f(pos.x * scale, pos.y * scale, 0.F));
-                    vm = vm * math::scale(math::Vector3f(viewZoom, viewZoom, 1.F));
+                    vm = math::translate(
+                        math::Vector3f(pos.x * scale, pos.y * scale, 0.F));
+                    vm = vm *
+                         math::scale(math::Vector3f(viewZoom, viewZoom, 1.F));
                 }
                 _drawGL1TextShapes(vm, viewZoom);
-            
+
                 glReadBuffer(GL_BACK_LEFT);
 
-                // Create a new image with to read the gl.overlay composited results.
+                // Create a new image with to read the gl.overlay composited
+                // results.
                 const image::PixelType pixelType = image::PixelType::RGBA_U8;
-                auto overlayImage = image::Image::create(renderSize.w,
-                                                         renderSize.h,
-                                                         pixelType);
-                glReadPixels(0, 0, renderSize.w, renderSize.h, GL_RGBA,
-                             GL_UNSIGNED_BYTE, overlayImage->getData());
+                auto overlayImage =
+                    image::Image::create(renderSize.w, renderSize.h, pixelType);
+                glReadPixels(
+                    0, 0, renderSize.w, renderSize.h, GL_RGBA, GL_UNSIGNED_BYTE,
+                    overlayImage->getData());
 
                 outputDevice->setOverlay(overlayImage);
             }
@@ -1063,7 +1066,7 @@ namespace mrv
                 if (!p.image)
                     return;
                 glBindFramebuffer(GL_FRAMEBUFFER, 0);
-            CHECK_GL;
+                CHECK_GL;
                 glReadBuffer(GL_FRONT);
                 CHECK_GL;
                 glReadPixels(
@@ -1076,8 +1079,8 @@ namespace mrv
 
                 // read pixels from framebuffer to PBO
                 // glReadPixels() should return immediately.
-                glBindBuffer(GL_PIXEL_PACK_BUFFER,
-                             gl.pboIDs[gl.currentPBOIndex]);
+                glBindBuffer(
+                    GL_PIXEL_PACK_BUFFER, gl.pboIDs[gl.currentPBOIndex]);
                 CHECK_GL;
 
                 glReadPixels(0, 0, renderSize.w, renderSize.h, format, type, 0);
@@ -1090,8 +1093,8 @@ namespace mrv
                 // We are stopped, read the first PBO.
                 if (stopped)
                 {
-                    glBindBuffer(GL_PIXEL_PACK_BUFFER,
-                                 gl.pboIDs[gl.currentPBOIndex]);
+                    glBindBuffer(
+                        GL_PIXEL_PACK_BUFFER, gl.pboIDs[gl.currentPBOIndex]);
                     CHECK_GL;
                 }
             }
@@ -1105,8 +1108,9 @@ namespace mrv
             gl.nextPBOIndex = (gl.currentPBOIndex + 1) % 2;
 
             // Wait for the fence of the PBO you're about to use:
-            glClientWaitSync(gl.pboFences[gl.nextPBOIndex],
-                             GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
+            glClientWaitSync(
+                gl.pboFences[gl.nextPBOIndex], GL_SYNC_FLUSH_COMMANDS_BIT,
+                GL_TIMEOUT_IGNORED);
             CHECK_GL;
             glDeleteSync(gl.pboFences[gl.nextPBOIndex]);
             CHECK_GL;
@@ -1134,7 +1138,7 @@ namespace mrv
                 glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
 
                 // Create a new fence
-                gl.pboFences[gl.nextPBOIndex] = 
+                gl.pboFences[gl.nextPBOIndex] =
                     glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
                 p.image = nullptr;
                 p.rawImage = true;
