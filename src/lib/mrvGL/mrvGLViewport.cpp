@@ -864,6 +864,7 @@ namespace mrv
             pos.y = p.viewPos.y / pixel_unit;
             math::Matrix4x4f vm = math::translate(math::Vector3f(pos.x, pos.y, 0.F));
             vm = vm * math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
+            
             _drawGL1TextShapes(vm, p.viewZoom);
             
             auto outputDevice = App::app->outputDevice();
@@ -876,10 +877,16 @@ namespace mrv
 
                 math::Matrix4x4f vm;
                 float viewZoom = 1.0;
+                float scale = 1.F;
                 if (!p.frameView)
                 {
-                    viewZoom = p.viewZoom;
-                    vm = math::translate(math::Vector3f(pos.x, pos.y, 0.F));
+                    const math::Size2i& deviceSize = outputDevice->getSize();
+                    if (viewportSize.isValid() && deviceSize.isValid())
+                    {
+                        scale *= deviceSize.w / static_cast<float>(viewportSize.w);
+                    }
+                    viewZoom = p.viewZoom * scale;
+                    vm = math::translate(math::Vector3f(pos.x * scale, pos.y * scale, 0.F));
                     vm = vm * math::scale(math::Vector3f(viewZoom, viewZoom, 1.F));
                 }
                 _drawGL1TextShapes(vm, viewZoom);
