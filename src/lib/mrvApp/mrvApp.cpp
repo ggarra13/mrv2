@@ -29,6 +29,7 @@ namespace py = pybind11;
 #include "mrvCore/mrvSignalHandler.h"
 
 #include "mrvFl/mrvContextObject.h"
+#include "mrvFl/mrvInit.h"
 #include "mrvFl/mrvLanguages.h"
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvSession.h"
@@ -102,10 +103,6 @@ namespace py = pybind11;
 
 #ifdef TLRENDER_NDI
 #    include <tlDevice/NDI/NDIOutputDevice.h>
-#endif
-
-#ifdef TLRENDER_NDI
-#    include <Processing.NDI.Lib.h>
 #endif
 
 namespace
@@ -280,9 +277,10 @@ namespace mrv
         _p(new Private)
     {
         TLRENDER_P();
-
+        
         // Establish MRV2_ROOT environment variable
         set_root_path(argc, argv);
+        mrv::init(context);
 
 #ifdef __linux__
 
@@ -674,8 +672,6 @@ namespace mrv
 #endif // TLRENDER_BMD
 
 #if defined(TLRENDER_NDI)
-        if (!NDIlib_initialize())
-            throw std::runtime_error(_("Could not initialize NDI"));
 
         device::DevicesModelData devicesModelData;
         p.settings->setDefaultValue(
@@ -1131,12 +1127,7 @@ namespace mrv
     void App::cleanResources()
     {
         TLRENDER_P();
-
-#ifdef TLRENDER_NDI
-        // Not required, but nice
-        NDIlib_destroy();
-#endif
-
+        
         delete p.mainControl;
         p.mainControl = nullptr;
 

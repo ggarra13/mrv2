@@ -28,6 +28,10 @@ v1.3.4
 - Fixed resizeWindow button not working any more as it should.
 - Fixed a number of buggy OpenGL that were mostly responsible for mrv2's bad
   behavior under Wayland with NVidia graphics cards.
+- NDI libraries can be loaded on demand instead of being shipped with mrv2.  However, Vizr is not shipping .h files compatible with NDI SDK 6.
+- Made NDI sources be detected more cleanly by using Darby's observer class (observer pattern).
+- Windows installer now opens the Firewall for mrv2 (and the version will show
+  in the list of Firewall applications).
 
 
 v1.3.3

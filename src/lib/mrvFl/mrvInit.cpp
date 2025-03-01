@@ -16,7 +16,7 @@ namespace mrv
         using namespace tl;
 
         timelineui::init(context);
-        // device::init(context); // @todo:
+        device::init(context);
     }
 
 } // namespace mrv

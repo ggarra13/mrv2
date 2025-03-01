@@ -11,8 +11,6 @@
 
 #include <iostream>
 
-#include "tlGL/Init.h"
-
 #include <FL/fl_utf8.h>
 
 #ifdef MRV2_PYBIND11
@@ -22,7 +20,6 @@ namespace py = pybind11;
 #    include "mrvPy/Cmds.h"
 #endif
 
-#include "mrvFl/mrvInit.h"
 
 #include "mrvApp/mrvApp.h"
 
@@ -63,7 +60,6 @@ int main(int argc, char* argv[])
     try
     {
         auto context = tl::system::Context::create();
-        mrv::init(context);
         mrv::App app(argc, argv, context);
         r = app.getExit();
         if (0 == r)

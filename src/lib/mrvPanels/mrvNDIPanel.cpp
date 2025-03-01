@@ -10,15 +10,16 @@
 #    include <mutex>
 #    include <atomic>
 
+#    include <tlCore/ListObserver.h>
 #    include <tlCore/StringFormat.h>
-#    include <tlCore/NDIOptions.h>
 
 #    include <tlDevice/OutputData.h>
-#    include <tlDevice/IOutput.h>
+#    include <tlDevice/NDI/NDIOptions.h>
+#    include <tlDevice/NDI/NDIOutputDevice.h>
+#    include <tlDevice/NDI/NDISystem.h>
+#    include <tlDevice/NDI/NDIUtil.h>
 
 #    include <FL/Fl_Choice.H>
-
-#    include <Processing.NDI.Lib.h>
 
 #    include "mrvCore/mrvHome.h"
 #    include "mrvCore/mrvFile.h"
@@ -60,9 +61,7 @@ namespace mrv
             PopupMenu* outputMetadataMenu = nullptr;
             PopupMenu* outputFormatMenu = nullptr;
             
-
-            uint32_t no_sources = 0;
-            const NDIlib_source_t* p_sources = NULL;
+            std::shared_ptr<observer::ListObserver<device::DeviceInfo> > deviceObserver;
 
             static std::string lastStream;
 
@@ -75,17 +74,6 @@ namespace mrv
                 std::thread thread;
             };
             PlayThread play;
-
-            struct FindThread
-            {
-                NDIlib_find_instance_t NDI = nullptr;
-                std::atomic<bool> running = false;
-                std::atomic<bool> awake = false;
-                std::thread thread;
-            };
-            FindThread find;
-
-            std::atomic<bool> running = false;
         };
 
         std::string NDIPanel::Private::lastStream;
@@ -104,77 +92,7 @@ namespace mrv
 
             PopupMenu* m = r.sourceMenu;
 
-            if (m->popped() || !r.find.running)
-            {
-                r.find.awake = false;
-                return;
-            }
 
-            std::string sourceName;
-            bool changed = false;
-            const Fl_Menu_Item* item = nullptr;
-
-            // Empty menu returns 0, while all others return +1.
-            size_t numSources = r.no_sources;
-
-            // We substract 2: 1 for FLTK quirk and one for "None".
-            int size = m->size() - 2;
-            if (size < 0)
-                size = 0;
-
-            sourceName = r.lastStream;
-
-            if (numSources != size)
-            {
-                changed = true;
-            }
-            else
-            {
-                // child(0) is "None".
-                for (int i = 0; i < numSources; ++i)
-                {
-                    item = m->child(i + 1);
-                    if (!item->label() ||
-                        !strcmp(item->label(), r.p_sources[i].p_ndi_name))
-                    {
-                        changed = true;
-                        break;
-                    }
-                }
-            }
-
-            if (!changed)
-            {
-                r.find.awake = false;
-                return;
-            }
-
-            m->clear();
-            m->add(_("None"));
-            int selected = 0;
-            for (int i = 0; i < r.no_sources; ++i)
-            {
-                const std::string ndiName = r.p_sources[i].p_ndi_name;
-
-                // Windows has weird items called REMOTE CONNECTION.
-                // We don't allow selecting them.
-                const std::regex pattern(
-                    "remote connection", std::regex_constants::icase);
-                if (std::regex_search(ndiName, pattern))
-                    continue;
-
-            
-                m->add(ndiName.c_str());
-                if (sourceName == ndiName)
-                {
-                    selected = i + 1;
-                }
-            }
-            m->menu_end();
-            if (selected >= 0 && selected < m->size())
-                m->value(selected);
-
-            r.find.awake = false;
         }
 
         NDIPanel::NDIPanel(ViewerUI* ui) :
@@ -187,55 +105,7 @@ namespace mrv
 
             Fl_SVG_Image* svg = load_svg("NDI.svg");
             g->bind_image(svg);
-
-            r.find.NDI = NDIlib_find_create_v2();
-
-            // Run for one minute
-            r.find.thread = std::thread(
-                [this]
-                {
-                    MRV2_R();
-
-                    r.find.running = true;
-                    while (r.find.running)
-                    {
-                        using namespace std::chrono;
-                        for (const auto start = high_resolution_clock::now();
-                             high_resolution_clock::now() - start <
-                             seconds(10);)
-                        {
-                            // Wait up till 1 second to check for new sources to
-                            // be added or removed
-                            if (!NDIlib_find_wait_for_sources(
-                                    r.find.NDI, 1000 /* milliseconds */))
-                            {
-                                break;
-                            }
-                        }
-
-                        if (!r.sourceMenu)
-                            continue;
-
-                        r.no_sources = std::numeric_limits<uint32_t>::max();
-                        while (r.no_sources ==
-                                   std::numeric_limits<uint32_t>::max() &&
-                               r.find.running)
-                        {
-                            // Get the updated list of sources
-                            r.p_sources = NDIlib_find_get_current_sources(
-                                r.find.NDI, &r.no_sources);
-                        }
-
-                        if (!r.find.awake)
-                        {
-                            Fl::awake(
-                                (Fl_Awake_Handler)refresh_sources_cb, this);
-                            r.find.awake = true;
-                        }
-                    }
-                    r.no_sources = 0;
-                });
-
+                        
             g->callback(
                 [](Fl_Widget* w, void* d)
                 {
@@ -250,18 +120,6 @@ namespace mrv
         NDIPanel::~NDIPanel()
         {
             MRV2_R();
-
-            r.find.awake = true;
-            r.find.running = false;
-
-            if (r.find.thread.joinable())
-                r.find.thread.join();
-
-            if (r.find.NDI)
-            {
-                NDIlib_find_destroy(r.find.NDI);
-                r.find.NDI = nullptr;
-            }
         }
 
         void NDIPanel::add_controls()
@@ -327,6 +185,28 @@ namespace mrv
                     _ndi_input(item);
                 });
 
+            
+            auto context = App::app->getContext();
+            auto NDISystem = context->getSystem<ndi::System>();
+            
+            r.deviceObserver =
+                observer::ListObserver<device::DeviceInfo>::create(
+                        NDISystem->observeDeviceInfo(),
+                        [this](const std::vector<device::DeviceInfo>& devices)
+                            {
+                                MRV2_R();
+
+                                r.sourceMenu->clear();
+                                r.sourceMenu->add(_("None"));
+                                
+                                for (auto& device : devices)
+                                {
+                                    r.sourceMenu->add(device.name.c_str());
+                                }
+                                r.sourceMenu->menu_end();
+                                r.sourceMenu->redraw();
+                            });
+
             mW = new Widget< PopupMenu >(
                 g->x() + 10, Y, g->w() - 20, 20, _("Fast Format"));
             m = r.inputFormatMenu = mW;
@@ -349,8 +229,6 @@ namespace mrv
             
             val = settings->getValue<int>("NDI/Input/Audio");
             m->value(val);
-
-            r.find.awake = false;
 
             cg->end();
 
@@ -417,29 +295,17 @@ namespace mrv
             m->value(val);
             mW->callback([=](auto b)
                 {
-                    int value = b->value();
-                    settings->setValue("NDI/Output/Format", value);
+                    int fltk_value = b->value();
+                    settings->setValue("NDI/Output/Format", fltk_value);
                     
-                    const Fl_Menu_Item* item = b->mvalue();
-                    if (!item || !item->label())
-                        return;
-                
-                    std::string format = item->label();
-                    int idx = -1;
-                    for (const auto& label :
-                             tl::device::getPixelTypeLabels())
-                    {
-                        ++idx;
-                        if (label == format)
-                            break;
-                    }
+                    device::PixelType pixelType = _ndi_fourCC(fltk_value);
                 
                     auto outputDevice = App::app->outputDevice();
                     if (!outputDevice)
                         return;
 
                     auto config = outputDevice->getConfig();
-                    config.pixelType = static_cast<device::PixelType>(idx);
+                    config.pixelType = pixelType;
                     outputDevice->setConfig(config);
                 });
 
@@ -525,19 +391,11 @@ namespace mrv
                 if (!item || !item->label())
                     return;
                 
-                int val = r.outputFormatMenu->value();
-                settings->setValue("NDI/Output/Format", val);
+                int fltk_value = r.outputFormatMenu->value();
+                settings->setValue("NDI/Output/Format", fltk_value);
 
-                std::string format = item->label();
-                int idx = -1;
-                for (const auto& label :
-                         tl::device::getPixelTypeLabels())
-                {
-                    ++idx;
-                    if (label == format)
-                        break;
-                }
-                
+                device::PixelType pixelType = _ndi_fourCC(fltk_value);
+                    
                 const Fl_Menu_Item* audioItem = r.outputAudioMenu->mvalue();
                 if (!audioItem || !audioItem->label())
                     return;
@@ -550,22 +408,12 @@ namespace mrv
                 device::DeviceConfig config;
                 config.deviceIndex = 0;
                 config.displayModeIndex = 0;
-                config.pixelType = static_cast<device::PixelType>(idx);
+                config.pixelType = pixelType;
                 config.noAudio = noAudio;
                 config.noMetadata = noMetadata;
                 
-                if (format == _("Best Format"))
-                {
-#ifdef NDI_SDK_ADVANCED
-                    config.pixelType = device::PixelType::_16BitPA16;
-#else
-                    config.pixelType = device::PixelType::_8BitRGBA;
-#endif
-                }
-                else if (format == _("Fast Format"))
-                {
-                    config.pixelType = device::PixelType::_8BitYUV;
-                }
+                
+                std::string format = item->label();
                 
                 const std::string msg =
                     string::Format(_("Streaming {0} {1}...")).
@@ -687,7 +535,41 @@ namespace mrv
 
             r.play.thread.detach();
         }
+        
+        device::PixelType  NDIPanel::_ndi_fourCC(int fltk_value)
+        {
+            MRV2_R();
+            
+            const Fl_Menu_Item* item = r.outputFormatMenu->mvalue();
+            const std::string format = item->label();
 
+            
+            if (format == _("Best Format"))
+            {
+#ifdef NDI_SDK_ADVANCED
+                return device::PixelType::_16BitPA16;
+#else
+                return device::PixelType::_8BitRGBA;
+#endif
+            }
+            else if (format == _("Fast Format"))
+            {
+                return device::PixelType::_8BitUYVA;
+            }
+
+            int idx = -1;
+                
+            for (const auto& label :
+                     tl::device::getPixelTypeLabels())
+            {
+                ++idx;
+                if (label == format)
+                    break;
+            }
+            
+            return static_cast<device::PixelType>(idx);
+        }
+        
     } // namespace panel
 
 } // namespace mrv

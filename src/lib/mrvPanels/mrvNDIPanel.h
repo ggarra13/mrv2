@@ -6,7 +6,9 @@
 
 #ifdef TLRENDER_NDI
 
-#include "mrvPanelWidget.h"
+#include "mrvPanels/mrvPanelWidget.h"
+
+#include <tlDevice/OutputData.h>
 
 class ViewerUI;
 class Fl_Menu_Item;
@@ -30,10 +32,11 @@ namespace mrv
             static void refresh_sources_cb(void* v);
             void refresh_sources();
 
+            
         protected:
             void _ndi_input(const Fl_Menu_Item*);
             void _ndi_output(ToggleButton*);
-
+            device::PixelType  _ndi_fourCC(int fltk_value);
         private:
             MRV2_PRIVATE();
         };
