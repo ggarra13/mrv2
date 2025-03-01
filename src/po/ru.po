@@ -1,7 +1,7 @@
 # Russian translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.8\n"
@@ -1923,6 +1923,27 @@ msgstr "С помощью звука"
 msgid "Without Audio"
 msgstr "Без звука"
 
+msgid "Output"
+msgstr "Мероприятие"
+
+msgid "Start streaming"
+msgstr ""
+
+#, fuzzy
+msgid "With Metadata"
+msgstr "Метаданные"
+
+#, fuzzy
+msgid "Without Metadata"
+msgstr "Метаданные"
+
+#, fuzzy, c++-format
+msgid "Streaming {0} {1}..."
+msgstr "Ошибка сохранения {0}. {1}"
+
+msgid "Stop streaming"
+msgstr ""
+
 msgid "Renderer"
 msgstr "Редактор"
 
@@ -1943,9 +1964,6 @@ msgstr "Настроить другой стереоизображение."
 
 msgid "Image"
 msgstr "Фотография"
-
-msgid "Output"
-msgstr "Мероприятие"
 
 msgid "Anaglyph"
 msgstr "Анаглиф"

@@ -28,7 +28,7 @@ namespace mrv
         const std::string getDesktop();
 
         const std::string getVersion();
-
+        
         bool runningInTerminal();
     } // namespace os
 

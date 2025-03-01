@@ -40,7 +40,7 @@ namespace mrv
 
     //! Path to ffmpeg presets
     std::string presetspath();
-
+    
     //! Paths to the built-in python plug-ins
     std::vector<std::string> python_plugin_paths();
 

@@ -1,6 +1,6 @@
 # AI Simplified Chinese translations for mrv2 package
 # This file is distributed under the same license as the mrv2 package.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.5\n"
@@ -1871,6 +1871,27 @@ msgstr "带音频"
 msgid "Without Audio"
 msgstr "无音频"
 
+msgid "Output"
+msgstr "输出"
+
+msgid "Start streaming"
+msgstr ""
+
+#, fuzzy
+msgid "With Metadata"
+msgstr "元数据"
+
+#, fuzzy
+msgid "Without Metadata"
+msgstr "元数据"
+
+#, fuzzy, c++-format
+msgid "Streaming {0} {1}..."
+msgstr "保存 {0} 出错  {1}"
+
+msgid "Stop streaming"
+msgstr ""
+
 msgid "Renderer"
 msgstr "渲染器"
 
@@ -1891,9 +1912,6 @@ msgstr "切换其它眼睛立体图像 。"
 
 msgid "Image"
 msgstr "图像"
-
-msgid "Output"
-msgstr "输出"
 
 msgid "Anaglyph"
 msgstr "形体"

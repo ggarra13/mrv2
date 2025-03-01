@@ -21,6 +21,14 @@ namespace fs = std::filesystem;
 #    include <pwd.h>
 #endif
 
+#include "mrvFl/mrvIO.h"
+
+namespace
+{
+    const char* kModule = "env ";
+}
+
+
 namespace mrv
 {
 
@@ -237,4 +245,43 @@ namespace mrv
         }
         return docs;
     }
+    
+    //! Path to NDI (if installed)
+    std::string NDI_library()
+    {
+#ifdef _WIN32
+        const std::string library = "Processing.NDI.Lib.x64.dll";
+#endif
+#ifdef __linux__
+        const std::string library = "libndi.so";
+#endif
+#ifdef __APPLE__
+        const std::string library = "libndi.dylib";
+#endif
+        std::string libpath = rootpath() + "/lib/";
+        std::string fullpath = libpath + library;
+        if (!file::isReadable(fullpath))
+        {
+            libpath = sgetenv("NDI_RUNTIME_DIR_V6");
+            if (!libpath.empty())
+            {
+                fullpath = libpath + library;
+            }
+            else
+            {
+                libpath = "/usr/local/lib/";
+                fullpath = libpath + library;
+                if (!file::isReadable(fullpath))
+                {
+                    fullpath = "";
+                    LOG_ERROR("NDI was not found.  "
+                              "Please download it from "
+                              "http://ndi.link/NDIRedistV6");
+                }
+            }
+        }
+            
+        return fullpath;
+    }
+    
 } // namespace mrv

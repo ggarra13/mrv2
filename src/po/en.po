@@ -1,7 +1,7 @@
 # English translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.6\n"
@@ -1903,6 +1903,27 @@ msgstr "With Audio"
 msgid "Without Audio"
 msgstr "Without Audio"
 
+msgid "Output"
+msgstr "Output"
+
+msgid "Start streaming"
+msgstr ""
+
+#, fuzzy
+msgid "With Metadata"
+msgstr "Metadata"
+
+#, fuzzy
+msgid "Without Metadata"
+msgstr "Metadata"
+
+#, fuzzy, c++-format
+msgid "Streaming {0} {1}..."
+msgstr "Error saving {0}. {1}"
+
+msgid "Stop streaming"
+msgstr ""
+
 msgid "Renderer"
 msgstr "Renderer"
 
@@ -1923,9 +1944,6 @@ msgstr "Toggle other eye stereo image."
 
 msgid "Image"
 msgstr "Image"
-
-msgid "Output"
-msgstr "Output"
 
 msgid "Anaglyph"
 msgstr "Anaglyph"

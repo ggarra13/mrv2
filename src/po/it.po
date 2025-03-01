@@ -1,7 +1,7 @@
 # Italian translations for mrv2 package
 # This file is distributed under the same license as the mrv2 package.
 # Gonzalo Garramuño <ggarra13@gmail.com>, 2023.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.7nReport-Msgid-Bugs-To: ggarra13@gmail.com\n"
@@ -1897,6 +1897,27 @@ msgstr "Con audio"
 msgid "Without Audio"
 msgstr "Senza audio"
 
+msgid "Output"
+msgstr "Uscita"
+
+msgid "Start streaming"
+msgstr ""
+
+#, fuzzy
+msgid "With Metadata"
+msgstr "Metadati"
+
+#, fuzzy
+msgid "Without Metadata"
+msgstr "Metadati"
+
+#, fuzzy, c++-format
+msgid "Streaming {0} {1}..."
+msgstr "Errore nel salvare {0}. {1}"
+
+msgid "Stop streaming"
+msgstr ""
+
 msgid "Renderer"
 msgstr "Renderer"
 
@@ -1917,9 +1938,6 @@ msgstr "Commutare l'altra immagine stereo degli occhi."
 
 msgid "Image"
 msgstr "Immagine"
-
-msgid "Output"
-msgstr "Uscita"
 
 msgid "Anaglyph"
 msgstr "Anaglifo"

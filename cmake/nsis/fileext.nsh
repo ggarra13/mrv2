@@ -142,6 +142,11 @@ Call DeleteIconCacheFiles
 ;
 ${CreateLinkFile} "$INSTDIR\bin\${mrv2_KEY}" "$INSTDIR\bin\${mrv2_EXE}" "$bCheckAll"
 
+;
+; Open Firewall
+;
+nsExec::Exec 'netsh advfirewall firewall add rule name="${mrv2_KEY}" dir=in action=allow program="$INSTDIR\bin\${mrv2_EXE}" enable=yes profile=any'
+
 ; MessageBox MB_YESNO "Do you want to set file associations?" IDYES yes
 ;      Abort
 ; yes:

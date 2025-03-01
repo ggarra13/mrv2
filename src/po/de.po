@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
@@ -1874,6 +1874,27 @@ msgstr "Mit Audio"
 msgid "Without Audio"
 msgstr "Ohne Audio"
 
+msgid "Output"
+msgstr "Ausgabe"
+
+msgid "Start streaming"
+msgstr ""
+
+#, fuzzy
+msgid "With Metadata"
+msgstr "Metadaten"
+
+#, fuzzy
+msgid "Without Metadata"
+msgstr "Metadaten"
+
+#, fuzzy, c++-format
+msgid "Streaming {0} {1}..."
+msgstr "Fehler beim Speichern von {0}. {1}"
+
+msgid "Stop streaming"
+msgstr ""
+
 msgid "Renderer"
 msgstr ""
 "Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/"
@@ -1901,9 +1922,6 @@ msgstr "Schalten Sie andere Augen Stereo-Bild."
 
 msgid "Image"
 msgstr "Bild"
-
-msgid "Output"
-msgstr "Ausgabe"
 
 msgid "Anaglyph"
 msgstr "Anaglyphe"

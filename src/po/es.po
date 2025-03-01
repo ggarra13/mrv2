@@ -2,7 +2,7 @@
 # Traducciones al español para el paquete mrv2.
 # This file is distributed under the same license as the mrv2 package.
 # Gonzalo Garramuño <ggarra13@gmail.com>, 2023.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.8\n"
@@ -1933,6 +1933,27 @@ msgstr "Con Audio"
 msgid "Without Audio"
 msgstr "Sin Audio"
 
+msgid "Output"
+msgstr "Salida"
+
+msgid "Start streaming"
+msgstr ""
+
+#, fuzzy
+msgid "With Metadata"
+msgstr "Metadatos"
+
+#, fuzzy
+msgid "Without Metadata"
+msgstr "Metadatos"
+
+#, fuzzy, c++-format
+msgid "Streaming {0} {1}..."
+msgstr "Error grabando {0}. {1}"
+
+msgid "Stop streaming"
+msgstr ""
+
 msgid "Renderer"
 msgstr "Renderer"
 
@@ -1953,9 +1974,6 @@ msgstr "Alternar el otro ojo de la imagen estéreo."
 
 msgid "Image"
 msgstr "Imagen"
-
-msgid "Output"
-msgstr "Salida"
 
 msgid "Anaglyph"
 msgstr "Anáglifo"

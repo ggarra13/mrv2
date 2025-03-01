@@ -1611,6 +1611,24 @@ msgstr ""
 msgid "Without Audio"
 msgstr ""
 
+msgid "Output"
+msgstr ""
+
+msgid "Start streaming"
+msgstr ""
+
+msgid "With Metadata"
+msgstr ""
+
+msgid "Without Metadata"
+msgstr ""
+
+msgid "Streaming {0} {1}..."
+msgstr ""
+
+msgid "Stop streaming"
+msgstr ""
+
 msgid "Renderer"
 msgstr ""
 
@@ -1630,9 +1648,6 @@ msgid "Toggle other eye stereo image."
 msgstr ""
 
 msgid "Image"
-msgstr ""
-
-msgid "Output"
 msgstr ""
 
 msgid "Anaglyph"

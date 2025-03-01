@@ -1,7 +1,7 @@
 # French translations for mrv2 package
 # This file is distributed under the same license as the mrv2 package.
 # Gonzalo Garramuño <ggarra13@gmail.com>, 2023.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.6\n"
@@ -1881,6 +1881,27 @@ msgstr "Avec audio"
 msgid "Without Audio"
 msgstr "Sans audio"
 
+msgid "Output"
+msgstr "Produit"
+
+msgid "Start streaming"
+msgstr ""
+
+#, fuzzy
+msgid "With Metadata"
+msgstr "Métadonnées"
+
+#, fuzzy
+msgid "Without Metadata"
+msgstr "Métadonnées"
+
+#, fuzzy, c++-format
+msgid "Streaming {0} {1}..."
+msgstr "Erreur lors de l'enregistrement {0}. {1}"
+
+msgid "Stop streaming"
+msgstr ""
+
 msgid "Renderer"
 msgstr "Rendeur"
 
@@ -1901,9 +1922,6 @@ msgstr "Commutation d'une autre image stéréo de l'œil."
 
 msgid "Image"
 msgstr "Image"
-
-msgid "Output"
-msgstr "Produit"
 
 msgid "Anaglyph"
 msgstr "Anaglyphe"

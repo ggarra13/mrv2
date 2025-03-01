@@ -107,5 +107,11 @@ RMDir $INSTDIR
 FunctionEnd
 
 Section "un.DelKeys"
+
+;
+; Remove Firewall settings
+;
+nsExec::Exec 'netsh advfirewall firewall delete rule name="${mrv2_KEY}" program="$INSTDIR\bin\${mrv2_EXE}"'
+
 Call un.BorrarKeys
 SectionEnd
