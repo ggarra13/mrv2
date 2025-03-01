@@ -42,7 +42,7 @@
 
 namespace
 {
-    const char* kModule = "NDI";
+    const char* kModule = "ndi ";
 }
 
 namespace mrv
