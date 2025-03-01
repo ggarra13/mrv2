@@ -625,10 +625,7 @@ namespace mrv
         MRV2_GL();
         TLRENDER_P();
         if (!gl.overlayPBO)
-        {
-            std::cerr << "No overlay PBO to comp to/from" << std::endl;
             return;
-        }
 
         _compositeAnnotations(overlay, mvp, viewportSize);
         CHECK_GL;

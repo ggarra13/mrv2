@@ -52,3 +52,8 @@ packages
 .git
 .DS_Store
 
+
+#
+# Git files
+#
+.githooks/*
