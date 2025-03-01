@@ -21,6 +21,7 @@ v1.3.4
 - Minor optimization of annotations drawing.
 - Added annotations support to NDI video output.  The only thing that does not work yet is text annotations.
 - Added NDI panels saving to sessions file.
+- Made text annotations for NDI work on all platforms.
 - Fixed annotations when set to all frames.
 - Improved performance of annotations drawing.
 - Made session files store the frame view, view position and view zoom settings.
