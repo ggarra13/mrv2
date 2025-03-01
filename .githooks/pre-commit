@@ -17,7 +17,10 @@ do
 	if [[ $FILE == *.sh || $FILE == *configure* || $FILE == *.py || $FILE == *pre-commit ]]; then
 	    if [[ -e $FILE ]]; then
 		echo "Running dos2unix on $FILE"
-		dos2unix $FILE
+		# configure files can be binary ones. Avoid touching them
+		if [[ $FILE != *configure* ]]; then
+		    dos2unix $FILE
+		fi
 		echo "Changing $FILE permissions to 0755"
 		chmod 0755 $FILE
 		git add $FILE
