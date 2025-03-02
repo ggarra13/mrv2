@@ -217,6 +217,11 @@ namespace mrv
             m->add(_("Best Format"));
             val = settings->getValue<int>("NDI/Input/Format");
             m->value(val);
+            mW->callback([=](auto b)
+                {
+                    int value = b->value();
+                    settings->setValue("NDI/Input/Format", value);
+                });
 
             mW = new Widget< PopupMenu >(
                 g->x() + 10, Y, g->w() - 20, 20, _("With Audio"));
@@ -226,9 +231,13 @@ namespace mrv
             m->align(FL_ALIGN_CENTER | FL_ALIGN_CLIP);
             m->add(_("With Audio"));
             m->add(_("Without Audio"));
-            
             val = settings->getValue<int>("NDI/Input/Audio");
             m->value(val);
+            mW->callback([=](auto b)
+                {
+                    int value = b->value();
+                    settings->setValue("NDI/Input/Audio", value);
+                });
 
             cg->end();
 
