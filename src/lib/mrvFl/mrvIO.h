@@ -101,14 +101,14 @@ namespace mrv
 #define mrvLOG_ERROR(mod, msg)                                          \
     do                                                                  \
     {                                                                   \
-        mrv::trace::error << _("ERROR: ") << "[" << mod << "] " << msg; \
+        mrv::trace::error << _("ERROR:\t") << "[" << mod << "] " << msg; \
     } while (0)
 
 // Log a warning
 #define mrvLOG_WARNING(mod, msg)                                        \
     do                                                                  \
     {                                                                   \
-        mrv::trace::warn << _("WARN : ") << "[" << mod << "] " << msg;  \
+        mrv::trace::warn << _("WARN:\t") << "[" << mod << "] " << msg;  \
     } while (0)
 
 // Log if verbosity is more than 0
@@ -116,14 +116,14 @@ namespace mrv
     do                                                                  \
     {                                                                   \
         if (mrv::Preferences::logLevel > 0)                             \
-            mrv::trace::info << "       [" << mod << "] " << msg;       \
+            mrv::trace::info << "       \t[" << mod << "] " << msg;       \
     } while (0)
 
 // Log out always
 #define mrvLOG_STATUS(mod, msg)                                         \
     do                                                                  \
     {                                                                   \
-        mrv::trace::info << "       [" << mod << "] " << msg;           \
+        mrv::trace::info << "       \t[" << mod << "] " << msg;           \
     } while (0)
 
 #define LOG_ERROR(msg) mrvLOG_ERROR(kModule, msg << std::endl)

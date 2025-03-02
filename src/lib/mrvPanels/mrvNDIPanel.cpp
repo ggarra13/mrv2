@@ -105,7 +105,6 @@ namespace mrv
             MRV2_R();
 
             r.play.running = false;
-            std::cerr << "~NDIPanel" << std::endl;
         }
 
         void NDIPanel::add_controls()

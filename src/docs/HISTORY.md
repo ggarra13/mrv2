@@ -32,6 +32,8 @@ v1.3.4
 - Made NDI sources be detected more cleanly by using Darby's observer class (observer pattern).
 - Windows installer now opens the Firewall for mrv2 (and the version will show
   in the list of Firewall applications).
+- Fixed a zombie process sometimes appearing when playing NDI.
+- Improved log reporting by using TABs instead of spaces.
 
 
 v1.3.3
