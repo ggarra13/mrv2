@@ -109,6 +109,20 @@ if [ -z "$TLRENDER_NDI_SDK" ]; then
     fi
 fi
 
+if [ -z "$TLRENDER_NDI_ADVANCED" ]; then
+    export TLRENDER_NDI_ADVANCED=OFF
+fi
+
+if [[ $TLRENDER_NDI_ADVANCED == ON || $TLRENDER_NDI_ADVANCED == 1 ]]; then
+    if [[ $KERNEL == *Linux* ]]; then
+	export TLRENDER_NDI_SDK="$HOME/code/lib/NDI Advanced SDK for Linux/"
+    elif [[ $KERNEL == *Msys* ]]; then
+	export TLRENDER_NDI_SDK="C:/Program Files/NDI/NDI 6 Advanced SDK/"
+    else
+	export TLRENDER_NDI_SDK="/Library/NDI Avanced SDK for Apple/"
+    fi
+fi
+
 if [ -z "$TLRENDER_NDI" ]; then
     if [ -d "${TLRENDER_NDI_SDK}" ]; then
 	export TLRENDER_NDI=ON
@@ -324,6 +338,7 @@ cmd="cmake -G '${CMAKE_GENERATOR}'
            -D TLRENDER_JPEG=${TLRENDER_JPEG}
            -D TLRENDER_LIBPLACEBO=${TLRENDER_LIBPLACEBO}
 	   -D TLRENDER_NDI=${TLRENDER_NDI}
+	   -D TLRENDER_NDI_ADVANCED=${TLRENDER_NDI_ADVANCED}
 	   -D TLRENDER_NDI_SDK=\"${TLRENDER_NDI_SDK}\"
 	   -D TLRENDER_NET=${TLRENDER_NET}
 	   -D TLRENDER_NFD=OFF
