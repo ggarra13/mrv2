@@ -3411,6 +3411,11 @@ namespace mrv
             {
                 p.hdr = i->second;
 
+                // In OpenGL we cannot support native directly, so we tonemap
+                // it.
+#ifdef TLRENDER_GL
+                p.hdrOptions.tonemap = true;
+#endif
                 // Parse the JSON string back into a nlohmann::json object
                 nlohmann::json j = nlohmann::json::parse(i->second);
                 p.hdrOptions.hdrData = j.get<image::HDRData>();

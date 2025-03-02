@@ -124,8 +124,11 @@ if (MRV2_PYBIND11)
 endif()
 
 if(TLRENDER_NDI)
+    # NDI libraries have two names: Advanced and normal.  We use a glob to simplify
+    # and also for potential future development of NDI's SDK.
     if (WIN32)
-	install( FILES  ${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.x64.dll
+	file( GLOB MRV2_LIB_DYLIBS ${TLRENDER_NDI_SDK}/bin/x64/*.dll )
+	install( FILES  ${MRV2_LIB_DYLIBS}
 	    DESTINATION bin
 	    COMPONENT applications )
     elseif (APPLE)

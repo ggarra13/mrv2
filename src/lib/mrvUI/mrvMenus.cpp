@@ -842,6 +842,7 @@ namespace mrv
             if (displayOptions.ignoreChromaticities)
                 item->set();
 
+#ifndef TLRENDER_GL
             const timeline::HDROptions& hdrOptions = uiView->getHDROptions();
             idx = menu->add(
                 _("Render/HDR/Tonemap"),
@@ -850,6 +851,7 @@ namespace mrv
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
             if (hdrOptions.tonemap)
                 item->set();
+#endif
         }
 
         timeline::Playback playback = timeline::Playback::Stop;

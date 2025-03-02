@@ -279,9 +279,12 @@ namespace mrv
             m->add(_("Best Format"));
             for (const auto& i : tl::device::getPixelTypeLabels())
             {
-                // 10 and 12 bit formats are not supported by NDI
+                // \@todo: 10 and 12 bit formats are not supported by NDI?
                 if (i == "None" || i.substr(0, 2) == "12" ||
                     i.substr(0, 2) == "10")
+                    continue;
+                // \@bug: This one is broken in NDI's SDK.
+                if (i == "8BitI420")
                     continue;
                 m->add(i.c_str());
             }
