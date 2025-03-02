@@ -1064,8 +1064,8 @@ namespace mrv
 #endif
 
         // Close all files
-        // close_all_cb(w, ui);  // takes too long to exit .ndi files
-
+        close_all_cb(w, ui);
+        
         // Hide any GL Window (needed in Windows)
         Fl_Window* pw = Fl::first_window();
         while (pw)

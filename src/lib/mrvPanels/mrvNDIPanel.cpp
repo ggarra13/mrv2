@@ -70,30 +70,13 @@ namespace mrv
 
             struct PlayThread
             {
-                std::atomic<bool> found = false;
+                std::atomic<bool> running = false;
                 std::thread thread;
             };
             PlayThread play;
         };
 
         std::string NDIPanel::Private::lastStream;
-
-        void NDIPanel::refresh_sources_cb(void* v)
-        {
-            NDIPanel* self = (NDIPanel*)v;
-            self->refresh_sources();
-        }
-
-        void NDIPanel::refresh_sources()
-        {
-            MRV2_R();
-            if (!_r)
-                return;
-
-            PopupMenu* m = r.sourceMenu;
-
-
-        }
 
         NDIPanel::NDIPanel(ViewerUI* ui) :
             _r(new Private),
@@ -120,6 +103,9 @@ namespace mrv
         NDIPanel::~NDIPanel()
         {
             MRV2_R();
+
+            r.play.running = false;
+            std::cerr << "~NDIPanel" << std::endl;
         }
 
         void NDIPanel::add_controls()
@@ -498,7 +484,7 @@ namespace mrv
                 return;
 
             int seconds = 4;
-            r.play.found = !options.noAudio;
+            r.play.running = !options.noAudio;
             player->stop();
 
             if (!options.noAudio)
@@ -520,7 +506,7 @@ namespace mrv
                                 if (t.start_time() <= startTime &&
                                     t.end_time_exclusive() >= endTime)
                                 {
-                                    r.play.found = true;
+                                    r.play.running = true;
                                     r.cacheInfoObserver.reset();
                                     break;
                                 }
@@ -534,7 +520,7 @@ namespace mrv
                 {
                     MRV2_R();
                     auto start = std::chrono::steady_clock::now();
-                    while (!r.play.found &&
+                    while (!r.play.running &&
                            std::chrono::steady_clock::now() - start <=
                                std::chrono::seconds(seconds))
                     {
@@ -542,6 +528,7 @@ namespace mrv
                     player->forward();
                 });
 
+            // This thread will onlyh run for 4 seconds.
             r.play.thread.detach();
         }
         

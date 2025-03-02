@@ -28,10 +28,6 @@ namespace mrv
             ~NDIPanel();
 
             void add_controls() override;
-
-            static void refresh_sources_cb(void* v);
-            void refresh_sources();
-
             
         protected:
             void _ndi_input(const Fl_Menu_Item*);
