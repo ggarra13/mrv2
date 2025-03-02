@@ -33,6 +33,7 @@ v1.3.4
   in the list of Firewall applications).
 - Fixed a zombie process sometimes appearing when playing NDI.
 - Improved log reporting by using TABs instead of spaces.
+- Added support for HDR metadata for NDI Input reader.  Needs NDI's Advanced SDK.
 
 
 v1.3.3
