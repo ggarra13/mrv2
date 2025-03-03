@@ -5473,8 +5473,8 @@ msgstr "120"
 msgid "60"
 msgstr "60"
 
-msgid "59.952"
-msgstr "59,952"
+msgid "59.94"
+msgstr "59,94"
 
 msgid "50"
 msgstr "50"
