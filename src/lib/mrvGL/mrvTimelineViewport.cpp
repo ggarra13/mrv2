@@ -131,7 +131,7 @@ namespace mrv
     void TimelineViewport::_init()
     {
         TLRENDER_P();
-        
+
         auto settings = App::app->settings();
 
         timeline::BackgroundOptions backgroundOptions;
@@ -147,8 +147,10 @@ namespace mrv
 
         color = settings->getValue<int>("Background/color1");
         backgroundOptions.color1 = from_fltk_color(color);
-        
-        p.backgroundOptions = observer::Value<timeline::BackgroundOptions>::create(backgroundOptions);
+
+        p.backgroundOptions =
+            observer::Value<timeline::BackgroundOptions>::create(
+                backgroundOptions);
     }
 
     TimelineViewport::~TimelineViewport()
@@ -781,8 +783,9 @@ namespace mrv
     {
         return _p->backgroundOptions->get();
     }
-    
-    std::shared_ptr<observer::IValue<timeline::BackgroundOptions> > TimelineViewport::observeBackgroundOptions() const
+
+    std::shared_ptr<observer::IValue<timeline::BackgroundOptions> >
+    TimelineViewport::observeBackgroundOptions() const
     {
         return _p->backgroundOptions;
     }
@@ -836,11 +839,11 @@ namespace mrv
         display.ocio = value;
         p.ui->uiTimeline->setDisplayOptions(display);
         p.ui->uiTimeline->redraw(); // to refresh thumbnail
-        
+
         const auto outputDevice = App::app->outputDevice();
         if (outputDevice)
             outputDevice->setOCIOOptions(value);
-        
+
         Message msg;
         msg["command"] = "setOCIOOptions";
         msg["value"] = value;
@@ -868,11 +871,11 @@ namespace mrv
         display.lut = value;
         p.ui->uiTimeline->setDisplayOptions(display);
         p.ui->uiTimeline->redraw(); // to refresh thumbnail
-        
+
         const auto outputDevice = App::app->outputDevice();
         if (outputDevice)
             outputDevice->setLUTOptions(value);
-        
+
         redraw();
     }
 
@@ -1024,7 +1027,7 @@ namespace mrv
         _p->frameView = active;
         _updateDevices();
     }
-    
+
     void TimelineViewport::setResizeWindow(bool active) noexcept
     {
         _p->resizeWindow = active;
@@ -1185,7 +1188,7 @@ namespace mrv
         const auto outputDevice = App::app->outputDevice();
         if (!outputDevice)
             return;
-        
+
         const auto& viewportSize = getViewportSize();
         float scale = 1.0;
         const math::Size2i& deviceSize = outputDevice->getSize();
@@ -1193,9 +1196,9 @@ namespace mrv
         {
             scale *= deviceSize.w / static_cast<float>(viewportSize.w);
         }
-        outputDevice->setView(viewportSize,
-                              p.viewPos * scale, p.viewZoom * scale,
-                              _getRotation(), p.frameView);
+        outputDevice->setView(
+            viewportSize, p.viewPos * scale, p.viewZoom * scale, _getRotation(),
+            p.frameView);
     }
 
     void TimelineViewport::setViewPosAndZoom(
@@ -1823,7 +1826,7 @@ namespace mrv
         viewGroup->fixed(dockGroup, dockGroup->w());
         const int X = viewGroup->x() + viewGroup->w() - dockGroup->w();
         dockGroup->position(X, dockGroup->y());
-        
+
         if (renderSize.isValid())
         {
             p.resizeWindow = false;
@@ -3407,17 +3410,18 @@ namespace mrv
         i = p.tagData.find("hdr");
         if (i != p.tagData.end())
         {
+            // In OpenGL we cannot support native directly, so we tonemap
+            // it.
+#ifdef TLRENDER_GL
+            p.hdrOptions.tonemap = true;
+#endif
+
             if (p.hdr != i->second)
             {
                 p.hdr = i->second;
 
-                // In OpenGL we cannot support native directly, so we tonemap
-                // it.
-#ifdef TLRENDER_GL
-                p.hdrOptions.tonemap = true;
-#endif
                 // Parse the JSON string back into a nlohmann::json object
-                nlohmann::json j = nlohmann::json::parse(i->second);
+                nlohmann::json j = nlohmann::json::parse(p.hdr);
                 p.hdrOptions.hdrData = j.get<image::HDRData>();
             }
         }
@@ -3458,7 +3462,7 @@ namespace mrv
         if (hasFrameView())
             _frameView();
     }
-    
+
     math::Matrix4x4f TimelineViewport::_renderProjectionMatrix() const noexcept
     {
         TLRENDER_P();
@@ -3468,7 +3472,6 @@ namespace mrv
 
         math::Matrix4x4f renderMVP;
 
-        
         if (p.frameView && _getRotation() == 0.F)
             return math::ortho(
                 0.F, static_cast<float>(renderSize.w), 0.F,
@@ -3501,8 +3504,10 @@ namespace mrv
             scale *= deviceSize.w / static_cast<float>(viewportSize.w);
         }
         const math::Matrix4x4f& vm =
-            math::translate(math::Vector3f(p.viewPos.x * scale, p.viewPos.y * scale, 0.F)) *
-            math::scale(math::Vector3f(p.viewZoom * scale, p.viewZoom * scale, 1.F));
+            math::translate(
+                math::Vector3f(p.viewPos.x * scale, p.viewPos.y * scale, 0.F)) *
+            math::scale(
+                math::Vector3f(p.viewZoom * scale, p.viewZoom * scale, 1.F));
         const auto& rotateMatrix = math::rotateZ(_getRotation());
         const math::Matrix4x4f& centerMatrix = math::translate(
             math::Vector3f(-renderSize.w / 2, -renderSize.h / 2, 0.F));
@@ -3510,30 +3515,27 @@ namespace mrv
             math::Vector3f(transformOffset.x, transformOffset.y, 0.F));
 
         const math::Matrix4x4f& pm = math::ortho(
-            0.F,
-            static_cast<float>(viewportSize.w),
-            0.F,
-            static_cast<float>(viewportSize.h),
-            -1.F,
-            1.F);
-                    
-        
+            0.F, static_cast<float>(viewportSize.w), 0.F,
+            static_cast<float>(viewportSize.h), -1.F, 1.F);
+
         // Calculate aspect-correct scale
         math::Matrix4x4f resizeScaleMatrix;
-        
+
         if (!p.frameView)
         {
             float scaleX = static_cast<float>(viewportSize.w) /
                            static_cast<float>(renderSize.w);
             float scaleY = static_cast<float>(viewportSize.h) /
                            static_cast<float>(renderSize.h);
-            resizeScaleMatrix = math::scale(math::Vector3f(scaleX, scaleY, 1.0f));
+            resizeScaleMatrix =
+                math::scale(math::Vector3f(scaleX, scaleY, 1.0f));
         }
-        renderMVP = pm * resizeScaleMatrix * vm * transformOffsetMatrix * rotateMatrix * centerMatrix;
-        
-        return renderMVP;  // correct
+        renderMVP = pm * resizeScaleMatrix * vm * transformOffsetMatrix *
+                    rotateMatrix * centerMatrix;
+
+        return renderMVP; // correct
     }
-    
+
     math::Matrix4x4f TimelineViewport::_projectionMatrix() const noexcept
     {
         TLRENDER_P();
@@ -3565,12 +3567,8 @@ namespace mrv
             math::Vector3f(transformOffset.x, transformOffset.y, 0.F));
 
         const math::Matrix4x4f& pm = math::ortho(
-            0.F,
-            static_cast<float>(viewportSize.w),
-            0.F,
-            static_cast<float>(viewportSize.h),
-            -1.F,
-            1.F);
+            0.F, static_cast<float>(viewportSize.w), 0.F,
+            static_cast<float>(viewportSize.h), -1.F, 1.F);
         return pm * vm * transformOffsetMatrix * rotateMatrix * centerMatrix;
     }
 

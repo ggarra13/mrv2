@@ -34,6 +34,8 @@ v1.3.4
 - Fixed a zombie process sometimes appearing when playing NDI.
 - Improved log reporting by using TABs instead of spaces.
 - Added support for HDR metadata for NDI Input reader.  Needs NDI's Advanced SDK.
+- Sped up annotations drawing.
+- Fixed a problem with annotations being kept with a slow macOS Intel.
 
 
 v1.3.3

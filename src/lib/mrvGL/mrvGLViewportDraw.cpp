@@ -578,7 +578,7 @@ namespace mrv
             const auto& shapes = annotation->shapes;
             for (const auto& shape : shapes)
             {
-                if (alphamult == 0.F)
+                if (alphamult <= 0.001F)
                     continue;
                 gl.render->setTransform(renderMVP);
                 CHECK_GL;
@@ -587,7 +587,6 @@ namespace mrv
             }
         }
 
-        gl.render->setClipRectEnabled(false);
         gl.render->end();
     }
 

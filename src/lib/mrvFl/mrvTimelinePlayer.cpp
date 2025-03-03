@@ -95,7 +95,7 @@ namespace mrv
         TLRENDER_P();
 
         p.player = player;
-        
+
         timeline::Loop loop = static_cast<timeline::Loop>(
             App::ui->uiPrefs->uiPrefsLoopMode->value());
         p.player->setLoop(loop);
@@ -279,7 +279,7 @@ namespace mrv
         _p->player->updateVideoCache(time);
         panel::redrawThumbnails(true);
     }
-    
+
     void TimelinePlayer::clearCache()
     {
         pushMessage("clearCache", 0);
@@ -393,7 +393,7 @@ namespace mrv
     void TimelinePlayer::framePrev()
     {
         TLRENDER_P();
-        
+
         pushMessage("framePrev", 0);
 
         if (isMuted())
@@ -419,7 +419,7 @@ namespace mrv
                 break;
             }
         }
-        
+
         p.player->setPlayback(timeline::Playback::Reverse);
         StopData* data = new StopData;
         data->player = this;
@@ -433,7 +433,7 @@ namespace mrv
     void TimelinePlayer::frameNext()
     {
         TLRENDER_P();
-        
+
         pushMessage("frameNext", 0);
 
         if (isMuted())
@@ -460,7 +460,7 @@ namespace mrv
                 break;
             }
         }
-        
+
         p.player->setPlayback(timeline::Playback::Forward);
         StopData* data = new StopData;
         data->player = this;
@@ -639,10 +639,7 @@ namespace mrv
         TLRENDER_P();
 
         const auto& time = currentTime();
-
-        otime::RationalTime previousTime(
-            static_cast<double>(previous), time.rate());
-        otime::RationalTime nextTime(static_cast<double>(next), time.rate());
+        const int64_t frame = time.value();
 
         std::vector< std::shared_ptr< draw::Annotation > > annotations;
 
@@ -652,13 +649,13 @@ namespace mrv
         {
             found = std::find_if(
                 found, p.annotations.end(),
-                [time, previousTime, nextTime](const auto& a)
+                [frame, previous, next](const auto& a)
                 {
                     if (a->allFrames)
                         return true;
-                    const otime::RationalTime start = a->time - previousTime;
-                    const otime::RationalTime end = a->time + nextTime;
-                    return (time >= start && time <= end);
+                    const int64_t start = frame - previous;
+                    const int64_t end = frame + next;
+                    return (frame > start && frame < end);
                 });
 
             if (found != p.annotations.end())

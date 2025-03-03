@@ -643,8 +643,7 @@ namespace mrv
             // Draw annotations for output device in an overlay buffer.
             //
             auto outputDevice = App::app->outputDevice();
-            if (outputDevice && gl.buffer && p.showAnnotations &&
-                !annotations.empty())
+            if (outputDevice && gl.buffer && p.showAnnotations)
             {
                 gl::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = image::PixelType::RGBA_U8;
@@ -805,8 +804,7 @@ namespace mrv
                 }
 
                 _drawAnnotations(
-                    gl.annotation, mvp, player->currentTime(), annotations,
-                    viewportSize);
+                    gl.annotation, mvp, currentTime, annotations, viewportSize);
 
                 const math::Matrix4x4f orthoMatrix = math::ortho(
                     0.F, static_cast<float>(renderSize.w), 0.F,

@@ -119,13 +119,16 @@ if [[ $TLRENDER_NDI_ADVANCED == ON || $TLRENDER_NDI_ADVANCED == 1 ]]; then
     elif [[ $KERNEL == *Msys* ]]; then
 	export TLRENDER_NDI_SDK="C:/Program Files/NDI/NDI 6 Advanced SDK/"
     else
-	export TLRENDER_NDI_SDK="/Library/NDI Avanced SDK for Apple/"
+	export TLRENDER_NDI_SDK="/Library/NDI Advanced SDK for Apple/"
     fi
 fi
 
 if [ -z "$TLRENDER_NDI" ]; then
     if [ -d "${TLRENDER_NDI_SDK}" ]; then
 	export TLRENDER_NDI=ON
+    else
+	echo "TLRENDER_NDI_SDK not found at ${TLRENDER_NDI_SDK}!"
+	export TLRENDER_NDI=OFF
     fi
 fi
 
