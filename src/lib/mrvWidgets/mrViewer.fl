@@ -592,7 +592,7 @@ uiFPS->do_callback();} open
               xywh {15 13 100 20}
             }
             MenuItem {} {
-              label {59.952}
+              label {59.94}
               xywh {5 3 100 20}
             }
             MenuItem {} {
