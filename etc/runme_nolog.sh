@@ -111,6 +111,11 @@ fi
 
 if [ -z "$TLRENDER_NDI_ADVANCED" ]; then
     export TLRENDER_NDI_ADVANCED=OFF
+    if [ -d "${TLRENDER_NDI_SDK}" ]; then
+	if [[ "${TLRENDER_NDI_SDK}" == *Advanced* ]]; then
+	    export TLRENDER_NDI_ADVANCED=ON
+	fi
+    fi
 fi
 
 if [[ $TLRENDER_NDI_ADVANCED == ON || $TLRENDER_NDI_ADVANCED == 1 ]]; then
@@ -282,7 +287,7 @@ echo
 echo "NDI support ........................ ${TLRENDER_NDI} 	(TLRENDER_NDI)"
 if [[ $TLRENDER_NDI == ON || $TLRENDER_NDI == 1 ]]; then
     echo "NDI SDK ${TLRENDER_NDI_SDK} 	(TLRENDER_NDI_SDK}"
-    echo "NDI SDK Advanced ................... ${TLRENDER_NDI_ADVANCED}	(TLRENDER_NDI_ADVANCED)"
+    echo "NDI SDK Advanced ................... ${TLRENDER_NDI_ADVANCED} 	(TLRENDER_NDI_ADVANCED)"
 fi
 
 echo
