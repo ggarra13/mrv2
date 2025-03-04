@@ -7,10 +7,10 @@ include( ExternalProject )
 set(FLTK_GIT_REPOSITORY "https://github.com/fltk/fltk.git")
 
 # The cutting EDGE!
-#set( FLTK_GIT_TAG master
+#set( FLTK_GIT_TAG master )
 
-#set(FLTK_GIT_TAG 81a5736006d64d749f9694268dd180ae80ec3d9d) # OK
-set(FLTK_GIT_TAG a206a778b415e5f21d3c1d86a1d509aca0265648)  # release-1.4.2
+#set(FLTK_GIT_TAG a206a778b415e5f21d3c1d86a1d509aca0265648)  # release-1.4.2
+set(FLTK_GIT_TAG 257435dca0c64b667ba82b885f9ef42c5c20962c)
 
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
     # If we are building pyFLTK compile shared
