@@ -41,8 +41,6 @@ PIL
 polib
 pyyaml
 pyYAML
-pyFltk1.4
-pyFltk1.4-1.4.0rc1
 pygments
 Pygments
 regex

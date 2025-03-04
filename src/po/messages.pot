@@ -1415,9 +1415,6 @@ msgstr ""
 msgid "Install Location: "
 msgstr ""
 
-msgid "Could not initialize NDI"
-msgstr ""
-
 msgid "Could not read python script '{0}'"
 msgstr ""
 
@@ -1590,13 +1587,13 @@ msgstr ""
 msgid "No occurrences of '%s' found!"
 msgstr ""
 
-msgid "None"
-msgstr ""
-
 msgid "Input"
 msgstr ""
 
 msgid "NDI Connection"
+msgstr ""
+
+msgid "None"
 msgstr ""
 
 msgid "Fast Format"
@@ -2613,10 +2610,10 @@ msgstr ""
 msgid "Exception caught: "
 msgstr ""
 
-msgid "ERROR: "
+msgid "ERROR:\t"
 msgstr ""
 
-msgid "WARN : "
+msgid "WARN:\t"
 msgstr ""
 
 msgid ""
@@ -4957,7 +4954,7 @@ msgstr ""
 msgid "60"
 msgstr ""
 
-msgid "59.952"
+msgid "59.94"
 msgstr ""
 
 msgid "50"
@@ -5323,9 +5320,6 @@ msgid "Small"
 msgstr ""
 
 msgid "Large"
-msgstr ""
-
-msgid "59.94"
 msgstr ""
 
 msgid "29.97"
