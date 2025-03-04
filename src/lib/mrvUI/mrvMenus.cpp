@@ -241,18 +241,14 @@ namespace mrv
             item->clear();
 
         idx = menu->add(
-            _("Window/Toggle Click Through"),
-            kToggleClickThrough.hotkey(),
+            _("Window/Toggle Click Through"), kToggleClickThrough.hotkey(),
             (Fl_Callback*)toggle_click_through, ui);
         idx = menu->add(
-            _("Window/More UI Transparency"),
-            kUITransparencyMore.hotkey(),
+            _("Window/More UI Transparency"), kUITransparencyMore.hotkey(),
             (Fl_Callback*)more_ui_transparency, ui);
         idx = menu->add(
-            _("Window/Less UI Transparency"),
-            kUITransparencyMore.hotkey(),
+            _("Window/Less UI Transparency"), kUITransparencyMore.hotkey(),
             (Fl_Callback*)less_ui_transparency, ui);
-        
 
         snprintf(buf, 256, "%s", _("View/Tool Bars/Toggle Menu Bar"));
         idx = menu->add(
@@ -833,7 +829,7 @@ namespace mrv
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
             if (displayOptions.invalidValues)
                 item->set();
-        
+
             idx = menu->add(
                 _("Render/HDR/Ignore Chromaticities"),
                 kIgnoreChromaticities.hotkey(),
@@ -845,12 +841,32 @@ namespace mrv
 #ifndef TLRENDER_GL
             const timeline::HDROptions& hdrOptions = uiView->getHDROptions();
             idx = menu->add(
-                _("Render/HDR/Tonemap"),
-                kToggleHDRTonemap.hotkey(),
-                (Fl_Callback*)toggle_hdr_tonemap_cb, ui, mode);;
+                _("Render/HDR/Tonemap"), kToggleHDRTonemap.hotkey(),
+                (Fl_Callback*)toggle_hdr_tonemap_cb, ui, mode);
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
             if (hdrOptions.tonemap)
                 item->set();
+#else
+            const timeline::HDROptions& hdrOptions = uiView->getHDROptions();
+            int selected = static_cast<int>(hdrOptions.algorithm);
+
+            mode = FL_MENU_RADIO;
+            if (numFiles == 0)
+                mode |= FL_MENU_INACTIVE;
+            std::string tonemap_root = _("Render/HDR/Tonemap");
+            int tonemap = 0;
+            for (const auto& algorithm :
+                 timeline::getHDRTonemapAlgorithmLabels())
+            {
+                const std::string entry = tonemap_root + "/" + algorithm;
+                idx = menu->add(
+                    entry.c_str(), 0, (Fl_Callback*)select_hdr_tonemap_cb, ui,
+                    mode);
+                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+                if (tonemap == (int)selected)
+                    item->set();
+                ++tonemap;
+            }
 #endif
         }
 
@@ -1040,33 +1056,39 @@ namespace mrv
             item->set();
 
         snprintf(buf, 256, "%s", _("View/Compare/None"));
-        idx = menu->add(buf, kCompareNone.hotkey(),
-                        (Fl_Callback*)compare_a_cb, ui, mode);
+        idx = menu->add(
+            buf, kCompareNone.hotkey(), (Fl_Callback*)compare_a_cb, ui, mode);
 
         snprintf(buf, 256, "%s", _("View/Compare/Overlay"));
-        idx = menu->add(buf, kCompareOverlay.hotkey(),
-                        (Fl_Callback*)compare_overlay_cb, ui, mode);
-        
+        idx = menu->add(
+            buf, kCompareOverlay.hotkey(), (Fl_Callback*)compare_overlay_cb, ui,
+            mode);
+
         snprintf(buf, 256, "%s", _("View/Compare/Wipe"));
-        idx = menu->add(buf, kCompareWipe.hotkey(),
-                        (Fl_Callback*)compare_wipe_cb, ui, mode);
-        
+        idx = menu->add(
+            buf, kCompareWipe.hotkey(), (Fl_Callback*)compare_wipe_cb, ui,
+            mode);
+
         snprintf(buf, 256, "%s", _("View/Compare/Difference"));
-        idx = menu->add(buf, kCompareDifference.hotkey(),
-                        (Fl_Callback*)compare_difference_cb, ui, mode);
-        
+        idx = menu->add(
+            buf, kCompareDifference.hotkey(),
+            (Fl_Callback*)compare_difference_cb, ui, mode);
+
         snprintf(buf, 256, "%s", _("View/Compare/Horizontal"));
-        idx = menu->add(buf, kCompareHorizontal.hotkey(),
-                        (Fl_Callback*)compare_horizontal_cb, ui, mode);
-        
+        idx = menu->add(
+            buf, kCompareHorizontal.hotkey(),
+            (Fl_Callback*)compare_horizontal_cb, ui, mode);
+
         snprintf(buf, 256, "%s", _("View/Compare/Vertical"));
-        idx = menu->add(buf, kCompareVertical.hotkey(),
-                        (Fl_Callback*)compare_vertical_cb, ui, mode);
-        
+        idx = menu->add(
+            buf, kCompareVertical.hotkey(), (Fl_Callback*)compare_vertical_cb,
+            ui, mode);
+
         snprintf(buf, 256, "%s", _("View/Compare/Tile"));
-        idx = menu->add(buf, kCompareTile.hotkey(),
-                        (Fl_Callback*)compare_tile_cb, ui, mode);
-        
+        idx = menu->add(
+            buf, kCompareTile.hotkey(), (Fl_Callback*)compare_tile_cb, ui,
+            mode);
+
         mode = 0;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;

@@ -103,6 +103,7 @@ namespace mrv
     void toggle_normalize_image_cb(Fl_Menu_* w, ViewerUI* ui);
     void toggle_invalid_values_cb(Fl_Menu_* w, ViewerUI* ui);
     void toggle_hdr_tonemap_cb(Fl_Menu_* w, ViewerUI* ui);
+    void select_hdr_tonemap_cb(Fl_Menu_* w, ViewerUI* ui);
 
     //! Channel callbacks
     void toggle_red_channel_cb(Fl_Menu_* m, ViewerUI* ui);
@@ -121,7 +122,7 @@ namespace mrv
     void toggle_click_through(Fl_Menu_* w, ViewerUI* ui);
     void more_ui_transparency(Fl_Menu_* w, ViewerUI* ui);
     void less_ui_transparency(Fl_Menu_* w, ViewerUI* ui);
-    
+
     //! Panel callbacks
     void toggle_one_panel_only_cb(Fl_Menu_* w, ViewerUI* ui);
 
@@ -142,7 +143,7 @@ namespace mrv
 
     //! Ignore Display Window callback
     void toggle_ignore_display_window_cb(Fl_Menu_* w, ViewerUI* ui);
-    
+
     //! Ignore Display Window callback
     void toggle_ignore_chromaticities_cb(Fl_Menu_* w, ViewerUI* ui);
 

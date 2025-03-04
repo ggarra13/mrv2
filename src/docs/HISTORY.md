@@ -36,6 +36,8 @@ v1.3.4
 - Added support for HDR metadata for NDI Input reader.  Needs NDI's Advanced SDK.
 - Sped up annotations drawing.
 - Fixed a problem with annotations being kept with a slow macOS Intel.
+- Added all tonemapping algorithms that libplacebo supports.  They are listed
+  under Render/HDR/Algorithms.
 
 
 v1.3.3

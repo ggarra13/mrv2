@@ -966,6 +966,7 @@ namespace mrv
         if (value == p.hdrOptions)
             return;
         p.hdrOptions.tonemap = value.tonemap;
+        p.hdrOptions.algorithm = value.algorithm;
         redrawWindows();
     }
 

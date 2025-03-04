@@ -505,7 +505,7 @@ namespace mrv
         int value = saveOptions.AudioCodec->value();
         options.ffmpegAudioCodec = static_cast<tl::ffmpeg::AudioCodec>(value);
 #endif
-        
+
         save_movie(file, ui, options);
     }
 
@@ -668,7 +668,7 @@ namespace mrv
 
             options.annotations =
                 static_cast<bool>(saveOptions.Annotations->value());
-            annotations_frames_only = 
+            annotations_frames_only =
                 static_cast<bool>(saveOptions.AnnotationFramesOnly->value());
 
             int value;
@@ -881,7 +881,6 @@ namespace mrv
             annotations_frames_only =
                 static_cast<bool>(saveOptions.AnnotationFramesOnly->value());
 
-            
             int value;
 
 #ifdef TLRENDER_EXR
@@ -903,7 +902,7 @@ namespace mrv
 
         options.annotations = true;
         options.video = false;
-        
+
         if (annotations_frames_only)
         {
             auto times = player->getAnnotationTimes();
@@ -1065,7 +1064,7 @@ namespace mrv
 
         // Close all files
         close_all_cb(w, ui);
-        
+
         // Hide any GL Window (needed in Windows)
         Fl_Window* pw = Fl::first_window();
         while (pw)
@@ -1268,7 +1267,26 @@ namespace mrv
         ui->uiView->setHDROptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
-    
+
+    void select_hdr_tonemap_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        const Fl_Menu_Item* item = m->mvalue();
+        const std::string algorithm = item->label();
+
+        int idx = 0;
+        for (const auto& entry : timeline::getHDRTonemapAlgorithmLabels())
+        {
+            if (entry == algorithm)
+                break;
+            ++idx;
+        }
+
+        timeline::HDROptions o = ui->uiView->getHDROptions();
+        o.algorithm = static_cast<timeline::HDRTonemapAlgorithm>(idx);
+        ui->uiView->setHDROptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
     void toggle_fullscreen_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         bool active = true;
@@ -1398,14 +1416,14 @@ namespace mrv
         alpha -= 5;
         ui->uiMain->set_alpha(alpha);
     }
-    
+
     void less_ui_transparency(Fl_Menu_* w, ViewerUI* ui)
     {
         int alpha = ui->uiMain->get_alpha();
         alpha += 5;
         ui->uiMain->set_alpha(alpha);
     }
-    
+
     void toggle_one_panel_only_cb(Fl_Menu_* w, ViewerUI* ui)
     {
         panel::onlyOne(!panel::onlyOne());
@@ -1723,7 +1741,7 @@ namespace mrv
             ui->uiAbout->uiMain->show();
 
         ui->uiView->frameView();
-        
+
         PanelGroup::show_all();
     }
 
