@@ -59,7 +59,7 @@ The source forge site also hosts beta builds (nightly builds with the latest cha
 
 [SourceForge Betas](https://sourceforge.net/projects/mrv2/files/beta)
 
-The Linux releases are built on Rocky Linux 8.10 so that's the preferred OS for installation.
+The Linux releases are built on Rocky Linux 8.10 using SCL so that's the preferred OS for installation.
 The Linux beta builds are built on Ubuntu 22.04, so that's the preferred OS for
 installation.
 
