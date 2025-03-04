@@ -70,12 +70,12 @@ endif()
 #
 # Python cannot be built with asan dependencies
 #
+set(Python_EXECUTABLE "$ENV{PYTHON}")
+set(Python_VERSION "$ENV{PYTHON_VERSION}")
 set(PYTHON_DEP )
 if(BUILD_PYTHON )
     include(cmake/Modules/BuildPython.cmake )
 else()
-    set(Python_EXECUTABLE "$ENV{PYTHON}")
-    set(Python_VERSION "$ENV{PYTHON_VERSION}")
     if (NOT EXISTS "${Python_EXECUTABLE}")
 	find_package(Python REQUIRED COMPONENTS Interpreter)
 	if (NOT EXISTS "${Python_EXECUTABLE}")

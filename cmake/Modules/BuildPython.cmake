@@ -135,6 +135,8 @@ ExternalProject_Add(
     BUILD_IN_SOURCE 1
 )
 
+set(TLRENDER_USD_PYTHON ${Python_EXECUTABLE})
+
 
 set( PYTHON_DEP Python )
 
