@@ -886,6 +886,11 @@ namespace mrv
           << endl;
 #ifdef TLRENDER_NDI
         o << "NDI® " << NDIlib_version() << endl
+#ifdef TLRENDER_NDI_ADVANCED
+          << "Advanced SDK"
+#else
+          << "Normal SDK"
+#endif
           << "Copyright (C) 2021-Present Vizrt NDI AB" << endl
           << endl;
 #endif

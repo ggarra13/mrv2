@@ -286,16 +286,20 @@ namespace mrv
                 // \@bug: This one is broken in NDI's SDK.
                 if (i == "8BitI420")
                     continue;
+#ifndef TLRENDER_NDI_ADVANCED
+                if (i.substr(0, 2) == "16")
+                    continue;
+#endif
                 m->add(i.c_str());
             }
             val = settings->getValue<int>("NDI/Output/Format");
             m->value(val);
             mW->callback([=](auto b)
                 {
-                    int fltk_value = b->value();
-                    settings->setValue("NDI/Output/Format", fltk_value);
+                    int value = b->value();
+                    settings->setValue("NDI/Output/Format", value);
                     
-                    device::PixelType pixelType = _ndi_fourCC(fltk_value);
+                    device::PixelType pixelType = _ndi_fourCC(value);
                 
                     auto outputDevice = App::app->outputDevice();
                     if (!outputDevice)
@@ -544,10 +548,14 @@ namespace mrv
             
             if (format == _("Best Format"))
             {
-#ifdef NDI_SDK_ADVANCED
+#ifdef TLRENDER_NDI_ADVANCED
                 return device::PixelType::_16BitPA16;
 #else
+#    ifdef __APPLE__
+                return device::PixelType::_8BitBGRA;
+#    else
                 return device::PixelType::_8BitRGBA;
+#    endif
 #endif
             }
             else if (format == _("Fast Format"))

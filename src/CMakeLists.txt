@@ -129,6 +129,9 @@ endif()
 
 if(TLRENDER_NDI)
     add_definitions(-DTLRENDER_NDI)
+    if (TLRENDER_NDI_SDK MATCHES ".*Advanced.*")
+	add_definitions(-DTLRENDER_NDI_ADVANCED)
+    endif()
 endif()
 
 if(TLRENDER_NET)
