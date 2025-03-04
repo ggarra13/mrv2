@@ -137,6 +137,11 @@ locate_python()
 			break
 		    fi
 		done
+	    else
+		export PYTHON=$PYTHONDIR/$PYTHONEXE
+		if [ ! -d $PYTHON ]; then
+		    continue
+		fi
 	    fi
 	    break
 	fi

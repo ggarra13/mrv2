@@ -124,10 +124,17 @@ if (MRV2_PYBIND11)
 endif()
 
 if(TLRENDER_NDI)
-    # NDI libraries have two names: Advanced and normal.  We use a glob to simplify
-    # and also for potential future development of NDI's SDK.
+    # NDI libraries have two names: Advanced and normal.
+    # We use a glob to simplify and also for potential future development
+    # of NDI's SDK.
     if (WIN32)
-	file( GLOB MRV2_LIB_DYLIBS ${TLRENDER_NDI_SDK}/bin/x64/*.dll )
+	if (TLRENDER_NDI_SDK MATCHES ".*Advanced.*")
+	    # Advanced lib is ${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.Advanced.x64.dll
+	    file( GLOB MRV2_LIB_DYLIBS ${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Advanced.Lib.x64.dll )
+	else()
+	    # Normal lib is ${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.x64.dll
+	    file( GLOB MRV2_LIB_DYLIBS ${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.x64.dll )
+	endif()
 	install( FILES  ${MRV2_LIB_DYLIBS}
 	    DESTINATION bin
 	    COMPONENT applications )
