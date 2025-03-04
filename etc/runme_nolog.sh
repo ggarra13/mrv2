@@ -282,6 +282,7 @@ echo
 echo "NDI support ........................ ${TLRENDER_NDI} 	(TLRENDER_NDI)"
 if [[ $TLRENDER_NDI == ON || $TLRENDER_NDI == 1 ]]; then
     echo "NDI SDK ${TLRENDER_NDI_SDK} 	(TLRENDER_NDI_SDK}"
+    echo "NDI SDK Advanced ................... ${TLRENDER_NDI_ADVANCED}	(TLRENDER_NDI_ADVANCED)"
 fi
 
 echo
