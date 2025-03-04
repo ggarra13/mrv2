@@ -40,7 +40,6 @@ set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
         #
         # This create the actual file association command.
         #
-	DeleteRegKey HKCR '${mrv2_KEY}'
         WriteRegStr HKCR '${mrv2_KEY}\\\\shell\\\\open\\\\command' '' '$INSTDIR\\\\bin\\\\${mrv2_KEY} \\\"%1\\\"'
 
 
@@ -57,7 +56,6 @@ set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
         #
         # This create the actual file association command.
         #
-	DeleteRegKey HKCR '${mrv2_EXE}'
         WriteRegStr HKCR '${mrv2_EXE}\\\\shell\\\\open\\\\command' '' '$INSTDIR\\\\bin\\\\${mrv2_EXE} \\\"%1\\\"'
 
         #
@@ -72,7 +70,7 @@ set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
 
 	Section \\\"-Dummy\\\"
 		"
-   )
+)
 
 
 # Extra uninstall commands for NSIS
@@ -87,4 +85,4 @@ set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
 	!include fileext_uninstall.nsh
 	Section \\\"un.Dummy\\\"
 	"
-   )
+)

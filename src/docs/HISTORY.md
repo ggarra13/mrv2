@@ -38,6 +38,7 @@ v1.3.4
 - Fixed a problem with annotations being kept with a slow macOS Intel.
 - Added all tonemapping algorithms that libplacebo supports.  They are listed
   under Render/HDR/Tonemap.
+- Fixed a potential installation issue on Windows.
 
 
 v1.3.3
