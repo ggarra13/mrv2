@@ -52,7 +52,16 @@ if [ -z "$MRV2_PDF" ]; then
 fi
 
 if [ -z "$MRV2_PYTHON" ]; then
-    locate_python
+    if [[ $BUILD_PYTHON == ON || $BUILD_PYTHON == 1 ]]; then
+	if [[ $KERNEL == *Msys* ]]; then
+	    export PYTHONEXE=python.exe
+	else
+	    export PYTHONEXE=python3
+	fi
+	export PYTHON="${PWD}/${BUILD_DIR}/install/bin/${PYTHONEXE}"
+    else
+	locate_python
+    fi
     export MRV2_PYTHON=$PYTHON
     export TLRENDER_USD_PYTHON=$PYTHON
 else
