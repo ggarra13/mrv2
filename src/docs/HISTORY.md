@@ -9,7 +9,7 @@ v1.3.4
 - Added NDI Audio Output to non-beta builds.
 - Added NDI's HDR support to non-beta builds.  Albeit it is untested as I don't
   have an HDR monitor for it.  However HDR metadata is tonemapped correctly.
-- Refactored Darby's BMD code to make it more generic to different devices.
+- Refactored Darby's broken BMD code to make it more generic to different devices.
 - Refactored Background options to be controlled from MainControl.
 - Major code clean up of audio code.
 - Fixed antialiasing of text menus on Wayland.
@@ -39,6 +39,7 @@ v1.3.4
 - Added all tonemapping algorithms that libplacebo supports.  They are listed
   under Render/HDR/Tonemap.
 - Fixed a potential installation issue on Windows.
+- Updated to NDI 6.1.1.
 
 
 v1.3.3
