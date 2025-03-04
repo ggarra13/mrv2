@@ -52,11 +52,11 @@ if [ -z "$MRV2_PDF" ]; then
 fi
 
 if [ -z "$MRV2_PYTHON" ]; then
-    export MRV2_PYTHON=$PYTHONEXE
-    export TLRENDER_USD_PYTHON=$PYTHONEXE
+    export MRV2_PYTHON=$PYTHON
+    export TLRENDER_USD_PYTHON=$PYTHON
 else
     export TLRENDER_USD_PYTHON=$MRV2_PYTHON
-    export PYTHONEXE=$MRV2_PYTHON
+    export PYTHON=$MRV2_PYTHON
 fi
 
 #
@@ -191,8 +191,8 @@ if [ -z "$FLTK_BUILD_SHARED" ]; then
 fi
 
 export TLRENDER_API=GL_4_1
-if [ "$CMAKE_BUILD_TYPE" == "Debug" || \
-	 "$CMAKE_BUILD_TYPE" == "RelWithDebInfo" ]; then
+if [[ "$CMAKE_BUILD_TYPE" == "Debug" || \
+	  "$CMAKE_BUILD_TYPE" == "RelWithDebInfo" ]]; then
     export TLRENDER_API=GL_4_1_Debug
 fi
 
@@ -348,7 +348,6 @@ cmd="cmake -G '${CMAKE_GENERATOR}'
            -D TLRENDER_JPEG=${TLRENDER_JPEG}
            -D TLRENDER_LIBPLACEBO=${TLRENDER_LIBPLACEBO}
 	   -D TLRENDER_NDI=${TLRENDER_NDI}
-	   -D TLRENDER_NDI_ADVANCED=${TLRENDER_NDI_ADVANCED}
 	   -D TLRENDER_NDI_SDK=\"${TLRENDER_NDI_SDK}\"
 	   -D TLRENDER_NET=${TLRENDER_NET}
 	   -D TLRENDER_NFD=OFF

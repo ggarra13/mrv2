@@ -122,9 +122,13 @@ locate_python()
 	if [[ "$pythons" != "" ]]; then
 	    pythons=`echo "$pythons" | sed -e 's#/python.sh##'`
 	    export PYTHONDIR=$location
-	    export PYTHONEXE=`echo "$pythons" | grep -o '/python.*' | head -1`
-	    export PYTHON=$PYTHONDIR/$PYTHONEXE
+	    export PYTHONEXE=`echo "$pythons" | grep -o '/python.exe' | head -1`
 	    if [[ $KERNEL != *Msys* ]]; then
+		export PYTHONEXE=`echo "$pythons" | grep -o '/python[0-9]*' | head -1`
+		export PYTHON=$PYTHONDIR/$PYTHONEXE
+		if [ ! -e $PYTHON ]; then
+		    continue
+		fi
 		while true; do
 		    if [[ -L $PYTHON ]]; then
 			export PYTHONEXE=`readlink ${PYTHON}`
@@ -138,7 +142,7 @@ locate_python()
 	fi
     done
 
-    if [[ "$PYTHONEXE" == "" ]]; then
+    if [[ "$PYTHON" == "" ]]; then
 	echo "No python found!!! Please install it in your PATH"
     fi
 
