@@ -9,6 +9,10 @@ project(mrv2)
 # For macOS, finds Frameworks last.  Uses Find*.cmake first.
 set(CMAKE_FIND_FRAMEWORK LAST)
 
+# Turn off RPATH so that zlib does not emit a warning.
+set(CMAKE_SKIP_RPATH TRUE)
+
+
 
 include( ../cmake/version.cmake )
 include( ../cmake/options.cmake )

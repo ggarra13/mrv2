@@ -161,12 +161,6 @@ fi
 
 if [ -z "$TLRENDER_USD" ]; then
     export TLRENDER_USD=ON
-    #
-    # USD crashes on Windows on Debug mode.
-    #
-    if [[ $KERNEL == *Msys* && $CMAKE_BUILD_TYPE == "Debug" ]]; then
-	export TLRENDER_USD=OFF
-    fi
 fi
 
 if [ -z "$TLRENDER_VPX" ]; then
@@ -194,6 +188,12 @@ if [ -z "$FLTK_BUILD_SHARED" ]; then
     if [ -z "$FLTK_BUILD_SHARED" ]; then
 	export FLTK_BUILD_SHARED=OFF
     fi
+fi
+
+export TLRENDER_API=GL_4_1
+if [ "$CMAKE_BUILD_TYPE" == "Debug" || \
+	 "$CMAKE_BUILD_TYPE" == "RelWithDebInfo" ]; then
+    export TLRENDER_API=GL_4_1_Debug
 fi
 
 
@@ -338,6 +338,7 @@ cmd="cmake -G '${CMAKE_GENERATOR}'
 
 	   -D FLTK_BUILD_SHARED=${FLTK_BUILD_SHARED}
 
+           -D TLRENDER_API=${TLRENDER_API}
            -D TLRENDER_ASAN=${TLRENDER_ASAN}
            -D TLRENDER_AV1=${TLRENDER_AV1}
            -D TLRENDER_EXR=${TLRENDER_EXR}
