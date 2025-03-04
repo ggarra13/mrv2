@@ -127,7 +127,11 @@ locate_python()
 		export PYTHONEXE=`echo "$pythons" | grep -o '/python[0-9]*' | head -1`
 		export PYTHON=$PYTHONDIR/$PYTHONEXE
 		if [ ! -e $PYTHON ]; then
-		    continue
+		    export PYTHONEXE=`echo "$pythons" | grep -o '/python' | head -1`
+		    export PYTHON=$PYTHONDIR/$PYTHONEXE
+		    if [ ! -e $PYTHON ]; then
+			continue
+		    fi
 		fi
 		while true; do
 		    if [[ -L $PYTHON ]]; then
@@ -139,16 +143,26 @@ locate_python()
 		done
 	    else
 		export PYTHON=$PYTHONDIR/$PYTHONEXE
-		if [ ! -d $PYTHON ]; then
+		if [ ! -e $PYTHON ]; then
 		    continue
 		fi
 	    fi
-	    break
 	fi
     done
 
     if [[ "$PYTHON" == "" ]]; then
-	echo "No python found!!! Please install it in your PATH"
+	if [[ -z $BUILD_PYTHON ]]; then
+	    echo "No python found!!! Please install it in your PATH"
+	    exit 1
+	fi
+	export PYTHONDIR="${PWD}/${BUILD_DIR}/install/bin/"
+	if [[ $KERNEL != *Msys* ]]; then
+	    export PYTHONEXE=python3	
+	    export PYTHON=$PYTHONDIR/$PYTHONEXE
+	else
+	    export PYTHONEXE=python
+	    export PYTHON=$PYTHONDIR/$PYTHONEXE
+	fi
     fi
 
     export PYTHON_LIBDIR="-unknown-"

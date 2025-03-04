@@ -744,10 +744,14 @@ namespace mrv
           << "(C) 2022-Present" << endl
           << "Gonzalo Garramuño & others" << endl
           << endl
-#ifdef __GLIBCXX__
+#if defined(__clang__)
+          << _("With clang ") << __clang__
+#if defined(__llvm__)
+          << " " << __llvm__
+#endif
+          << endl
+#elif defined(__GNUC__)
           << _("With gcc ") << __GNUC__ << endl
-#elif defined(__clang__)
-          << _("With clang ") << __clang__ << " " << __llvm__ << endl
 #else
           << _("With msvc ") << _MSC_VER << endl
 #endif

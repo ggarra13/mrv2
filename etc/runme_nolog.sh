@@ -52,6 +52,7 @@ if [ -z "$MRV2_PDF" ]; then
 fi
 
 if [ -z "$MRV2_PYTHON" ]; then
+    locate_python
     export MRV2_PYTHON=$PYTHON
     export TLRENDER_USD_PYTHON=$PYTHON
 else
