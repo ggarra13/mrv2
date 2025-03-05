@@ -261,7 +261,7 @@ El menú de línea de tiempo provee controles para modificar la ventana gráfica
 
    Con esto prendido, podés mostrar las transiciones de audio y vídeo en
    archivos .otio.
-   (Actualmente no implementado en v1.3.3).
+   (Actualmente no implementado en v1.3.4).
 
 .. topic:: Marcadores
 

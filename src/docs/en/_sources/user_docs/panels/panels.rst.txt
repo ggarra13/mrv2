@@ -118,8 +118,11 @@ The NDI Panel allows you to play back an NDI® stream (ie. a video and audio pla
 
 For the connection to take place, you need to make sure your firewall allows incoming and outgoing connections.  For more information, refer to the NDI® SDK documentation.
 
-The pulldown allows you to select the source to play.
+The pulldown allows you to select the source to play.  Note that starting of playback of NDI® in mrv2 is currently a tad slow, as it needs to cache the video thumbnails and audio first.
 
+In v1.3.4 and later, NDI® Video and Audio output was also added.  This allows you to stream the contents of what's playing in mrv2 to any NDI® compatible device or software (like NDI® Tools Studio Monitor on Windows or NDI® Tools Video Monitor on macOS or other instance of mrv2 itself).
+
+NDI® is a registered trademark of Vizrt NDI AB.
 
 Playlist Panel
 ++++++++++++++

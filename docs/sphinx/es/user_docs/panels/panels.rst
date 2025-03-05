@@ -118,8 +118,11 @@ El Panel de NDI permite reproducir una fuente de NDI® (es decir, una fuente de 
 
 Para que la conección se ejecute, debés tener varios puertos de tu cortafuegos abiertos de entrada y salida.  Para más información, refiérase a la documentación del SDK de NDI®.
 
-El menú permite elegir qué fuente reproducir.
+El menú permite elegir qué fuente reproducir.  Nótese que el comienzo de la reproducción de NDI® en mrv2 es actualmente un poco lenta, ya que necesita llevar el audio y el video al cache primero.
 
+Desde la version v1.3.4, salida de Video y Audio de NDI® fue agregado.  Esto te permite transmitir los contenidos de qué se reproduce en mrv2 a cualquier software o dispositivo de NDI® compatible (como NDI® Tools Studio Monitor en Windows o NDI® Tools Video Monitor en macOS o otras instancias de mrv2 mismo).
+
+NDI® is a registered trademark of Vizrt NDI AB.
 
 Panel de Lista de Reproducción
 ++++++++++++++++++++++++++++++

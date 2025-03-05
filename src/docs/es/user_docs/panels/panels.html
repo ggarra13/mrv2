@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Paneles &mdash; documentación de mrv2 - v1.3.3</title>
+  <title>Paneles &mdash; documentación de mrv2 - v1.3.4</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=68f710da"></script>
+      <script src="../../_static/documentation_options.js?v=a37e8017"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../../_static/translations.js?v=f85f4cfb"></script>
@@ -79,6 +79,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../preferences.html">Preferencias</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../saving.html">Grabando</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../videos.html">Tutoriales de Video (en Inglés)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hdr.html">HDR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../command-line.html">Switches de la Línea de Comandos y Parámetros</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../faq.html">Preguntas Frecuentes</a></li>
 </ul>
@@ -186,7 +187,9 @@ Horizontal, Vertical y Mosaicos.  La comparación de Mosaicos permite que muchas
 <img alt="../../_images/ndi-panel-01.png" class="align-center" src="../../_images/ndi-panel-01.png" />
 <p>El Panel de NDI permite reproducir una fuente de NDI® (es decir, una fuente de video y audio) desde cualquier lugar en tu red usando el protocolo Network Device Interface.</p>
 <p>Para que la conección se ejecute, debés tener varios puertos de tu cortafuegos abiertos de entrada y salida.  Para más información, refiérase a la documentación del SDK de NDI®.</p>
-<p>El menú permite elegir qué fuente reproducir.</p>
+<p>El menú permite elegir qué fuente reproducir.  Nótese que el comienzo de la reproducción de NDI® en mrv2 es actualmente un poco lenta, ya que necesita llevar el audio y el video al cache primero.</p>
+<p>Desde la version v1.3.4, salida de Video y Audio de NDI® fue agregado.  Esto te permite transmitir los contenidos de qué se reproduce en mrv2 a cualquier software o dispositivo de NDI® compatible (como NDI® Tools Studio Monitor en Windows o NDI® Tools Video Monitor en macOS o otras instancias de mrv2 mismo).</p>
+<p>NDI® is a registered trademark of Vizrt NDI AB.</p>
 </section>
 <section id="panel-de-lista-de-reproduccion">
 <h2>Panel de Lista de Reproducción<a class="headerlink" href="#panel-de-lista-de-reproduccion" title="Link to this heading"></a></h2>
