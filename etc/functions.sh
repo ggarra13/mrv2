@@ -118,7 +118,6 @@ locate_python()
     fi
 
     for location in $locations; do
-	echo "Checking ${location}"
 	local pythons=$(ls ${location}/python* 2> /dev/null) || PYTHON=""
 	if [[ "$pythons" != "" ]]; then
 	    pythons=`echo "$pythons" | sed -e 's#/python.sh##'`

@@ -205,7 +205,7 @@ The Render menu provides controls for modifying the rendering of the image on th
 
 .. topic:: Alpha Blend
 
-   You can select how the alpha channel is handled when the image or video has one.  You can choose between None, Straight or Premultiplied.
+   You can select how the alpha channel is handled when the image or video has one.  You can choose between None, Straight or Premultiplied.  OpenEXR images should, normally, be comped Premultiplied.
       
 .. topic:: Minify and Magnify Filters
 
@@ -256,7 +256,7 @@ The Timeline menu provides controls for modifying the timeline viewport at the b
 .. topic:: Transitions
 
    With this on, you can show audio and video transitions in .otio files.
-   (Currently not implemented in v1.3.3).
+   (Currently not implemented in v1.3.5).
 
 .. topic:: Markers
 

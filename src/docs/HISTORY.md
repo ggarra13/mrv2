@@ -1,3 +1,10 @@
+v1.3.5
+======
+
+- Updated to NDI's Advanced SDK.  The only limitation is that you can only stream content for a max. of 30 mins.  Note that NDI is currently not available on macOS arm64.
+- Updated documentation to follow the NDI guidelines.
+
+
 v1.3.4
 ======
 
@@ -40,6 +47,7 @@ v1.3.4
   under Render/HDR/Tonemap.
 - Fixed a potential installation issue on Windows.
 - Updated to NDI 6.1.1.
+- Fixed some potential libraries incompatibilities on macOS.
 
 
 v1.3.3
