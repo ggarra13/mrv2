@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Módulo de anotaciones &mdash; documentación de mrv2 - v1.3.4</title>
+  <title>Módulo de anotaciones &mdash; documentación de mrv2 - v1.3.5</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
@@ -14,7 +14,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=a37e8017"></script>
+      <script src="../_static/documentation_options.js?v=0706040e"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../_static/translations.js?v=f85f4cfb"></script>
@@ -100,8 +100,8 @@
              
   <section id="module-mrv2.annotations">
 <span id="modulo-de-anotaciones"></span><h1>Módulo de anotaciones<a class="headerlink" href="#module-mrv2.annotations" title="Link to this heading"></a></h1>
-<p>Mòdulo de Anotaciones.</p>
-<p>Contiene todas las clases y enums relacionados con las anotaciones.</p>
+<p>Annotations module.</p>
+<p>Contains all functions and classes related to the annotationss.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.annotations.add">
 <span class="sig-prename descclassname"><span class="pre">mrv2.annotations.</span></span><span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mrv2.annotations.add" title="Link to this definition"></a></dt>
@@ -109,21 +109,21 @@
 <ol class="arabic simple">
 <li><p>add(time: mrv2.RationalTime, notes: str) -&gt; None</p></li>
 </ol>
-<p>Agregue anotaciones de notas al clip actual en cierto tiempo.</p>
+<p>Add notes annotations to current clip at a certain time.</p>
 <ol class="arabic simple" start="2">
 <li><p>add(frame: int, notes: str) -&gt; None</p></li>
 </ol>
-<p>Agregue anotaciones de notas al clip actual en cierto cuadro.</p>
+<p>Add notes annotations to current clip at a certain frame.</p>
 <ol class="arabic simple" start="3">
 <li><p>add(seconds: float, notes: str) -&gt; None</p></li>
 </ol>
-<p>Agregue anotaciones de notas al clip actual en ciertos segundos.</p>
+<p>Add notes annotations to current clip at certain seconds.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.annotations.getTimes">
 <span class="sig-prename descclassname"><span class="pre">mrv2.annotations.</span></span><span class="sig-name descname"><span class="pre">getTimes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="mrv2.html#mrv2.RationalTime" title="mrv2.RationalTime"><span class="pre">mrv2.RationalTime</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mrv2.annotations.getTimes" title="Link to this definition"></a></dt>
-<dd><p>Consigue todos los tiempos para anotaciones.</p>
+<dd><p>Get all times for annotations.</p>
 </dd></dl>
 
 </section>
