@@ -118,7 +118,8 @@ locate_python()
     fi
 
     for location in $locations; do
-	export pythons=$(ls ${location}/python* 2> /dev/null) || PYTHON=""
+	echo "Checking ${location}"
+	local pythons=$(ls ${location}/python* 2> /dev/null) || PYTHON=""
 	if [[ "$pythons" != "" ]]; then
 	    pythons=`echo "$pythons" | sed -e 's#/python.sh##'`
 	    export PYTHONDIR=$location
@@ -131,6 +132,8 @@ locate_python()
 		    export PYTHON=$PYTHONDIR/$PYTHONEXE
 		    if [ ! -e $PYTHON ]; then
 			continue
+		    else
+			break
 		    fi
 		fi
 		while true; do
@@ -141,6 +144,7 @@ locate_python()
 			break
 		    fi
 		done
+		break
 	    else
 		export PYTHON=$PYTHONDIR/$PYTHONEXE
 		if [ ! -e $PYTHON ]; then
