@@ -40,6 +40,7 @@ v1.3.4
   under Render/HDR/Tonemap.
 - Fixed a potential installation issue on Windows.
 - Updated to NDI 6.1.1.
+- Fixed some potential libraries incompatibilities on macOS.
 
 
 v1.3.3
