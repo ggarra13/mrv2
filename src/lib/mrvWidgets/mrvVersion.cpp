@@ -746,9 +746,9 @@ namespace mrv
           << endl
 #if defined(__clang__)
           << _("With clang ") << __clang__
-#if defined(__llvm__)
+#    if defined(__llvm__)
           << " " << __llvm__
-#endif
+#    endif
           << endl
 #elif defined(__GNUC__)
           << _("With gcc ") << __GNUC__ << endl
@@ -890,12 +890,14 @@ namespace mrv
           << endl;
 #ifdef TLRENDER_NDI
         o << "NDI® " << NDIlib_version() << endl
-#ifdef TLRENDER_NDI_ADVANCED
+#    ifdef TLRENDER_NDI_ADVANCED
           << "Advanced SDK"
-#else
+#    else
           << "Normal SDK"
-#endif
+#    endif
+          << endl
           << "Copyright (C) 2021-Present Vizrt NDI AB" << endl
+          << "NDI® is a registered trademark of Vizrt NDI AB" << endl
           << endl;
 #endif
         o << "nlohmann_json v" << NLOHMANN_JSON_VERSION_MAJOR << "."
