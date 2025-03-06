@@ -14,7 +14,7 @@ namespace fs = std::filesystem;
 #if defined(WIN32) || defined(WIN64)
 #    include <winsock2.h>
 #    include <io.h>      // for _access
-#    include <windows.h> // for GetModuleFileName
+#    include <windows.h> // for GetModuleFileNameW
 #    define strdup _strdup
 #else
 #    include <unistd.h> // for access
@@ -64,21 +64,28 @@ namespace
                             through) */
         }
 #elif defined(_WIN32)
-        result = GetModuleFileName(NULL, pname, DWORD(pathsize));
+        wchar_t wpath[PATH_MAX];
+        result = GetModuleFileNameW(NULL, pname, DWORD(PATH_MAX));
         if (result > 0)
         {
-            /* fix up the dir slashes... */
-            size_t len = strlen(pname);
-            size_t idx;
-            for (idx = 0; idx < len; idx++)
+            // Convert wide string to UTF-8
+            int size_needed = WideCharToMultiByte(CP_UTF8, 0, wpath, -1,
+                                                  NULL, 0, NULL, NULL);
+            if (size_needed > 0 && size_needed <= pathsize)
             {
-                if (pname[idx] == '\\')
-                    pname[idx] = '/';
+                WideCharToMultiByte(CP_UTF8, 0, wpath, -1, pname,
+                                    int(pathsize), NULL, NULL);
+            
+                // Replace Windows backslashes with forward slashes
+                for (size_t i = 0; i < strlen(pname); ++i)
+                {
+                    if (pname[i] == '\\')
+                        pname[i] = '/';
+                }
+
+                if ((access(pname, 0) == 0))
+                    return 0;
             }
-            if ((access(pname, 0) == 0))
-                return 0; /* file exists, return OK */
-                          /*else name doesn't seem to exist, return FAIL (falls
-                            through) */
         }
 #elif defined(SOLARIS)
         char* p = getexecname();
