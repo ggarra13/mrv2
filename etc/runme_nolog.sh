@@ -120,7 +120,7 @@ if [ -z "$TLRENDER_NDI_SDK" ]; then
 fi
 
 if [ -z "$TLRENDER_NDI_ADVANCED" ]; then
-    export TLRENDER_NDI_ADVANCED=OFF
+    export TLRENDER_NDI_ADVANCED=ON
     if [ -d "${TLRENDER_NDI_SDK}" ]; then
 	if [[ "${TLRENDER_NDI_SDK}" == *Advanced* ]]; then
 	    export TLRENDER_NDI_ADVANCED=ON
