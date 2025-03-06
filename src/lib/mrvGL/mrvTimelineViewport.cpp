@@ -1282,7 +1282,7 @@ namespace mrv
             frameView();
         }
 
-        if (p.switchClip)
+        if (p.switchClip && !values.empty() && !values[0].layers.empty())
         {
             const auto& image = values[0].layers[0].image;
             if (image && image->isValid())

@@ -106,6 +106,13 @@ namespace mrv
         TLRENDER_P();
         MRV2_GL();
 
+#ifdef __APPLE__
+#    undef GL_BACK_LEFT
+#    undef GL_BACK_RIGHT
+#    define GL_BACK_LEFT GL_FRONT_LEFT
+#    define GL_BACK_RIGHT GL_FRONT_RIGHT
+#endif
+
         if (auto context = gl.context.lock())
         {
 
