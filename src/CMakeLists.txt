@@ -12,6 +12,9 @@ set(CMAKE_FIND_FRAMEWORK LAST)
 # Do not skip RPATH as that can make macOS crash.
 set(CMAKE_SKIP_RPATH FALSE)
 
+# Avoid warnings of overshadowing system libraries.
+set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 
 
 include( ../cmake/version.cmake )

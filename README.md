@@ -193,6 +193,13 @@ sudo dnf -y install git wget curl cmake pango-devel gettext ninja-build \
 	       libxkbcommon-devel dbus-devel mesa-libGLU-devel gtk3-devel \
 	       libffi-devel openssl-devel tk-devel tcl-devel libXt-devel \
 	       swig
+
+sudo dnf install centos-release-scl
+
+sudo dnf install gcc-toolset-13
+
+scl enable gcc-toolset-13 bash
+
 ```
 
 ### Ubuntu
@@ -403,10 +410,6 @@ start it from the BUILD directory with the mrv2.sh script, like:
 ```
 BUILD-Linux-amd64/Release/install/bin/mrv2.sh
 ```
-
-Note, the binary Linux distribution of mrv2 may run into some Wayland
-incompatibilities with modern distros like Ubuntu 22.04.4 LTS, leading to some harmless warnings.
-
 
 ## Windows
 
