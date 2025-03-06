@@ -65,7 +65,7 @@ namespace
         }
 #elif defined(_WIN32)
         wchar_t wpath[PATH_MAX];
-        result = GetModuleFileNameW(NULL, pname, DWORD(PATH_MAX));
+        result = GetModuleFileNameW(NULL, wpath, DWORD(PATH_MAX));
         if (result > 0)
         {
             // Convert wide string to UTF-8
