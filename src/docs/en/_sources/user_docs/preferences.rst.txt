@@ -27,7 +27,7 @@ The hotkeys file that holds all your keyboard shortcuts is called::
 
   mrv2.keys.prefs
   
-The paths preferences file that holds old the path mappings is callled::
+The paths preferences file that holds old the path mappings is called::
 
   mrv2.paths.prefs
 
