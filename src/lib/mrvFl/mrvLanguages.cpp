@@ -190,6 +190,29 @@ namespace mrv
         return out;
     }
 
+    std::string getDefaultLocale()
+    {
+        std::string out;
+#ifdef _WIN32
+        // For Windows, we get the default language from the system one.
+        wchar_t wbuffer[LOCALE_NAME_MAX_LENGTH];
+        if (GetUserDefaultLocaleName(wbuffer, LOCALE_NAME_MAX_LENGTH))
+        {
+            static char buffer[256];
+            int len = WideCharToMultiByte(
+                    CP_UTF8, 0, wbuffer, -1, buffer, sizeof(buffer), nullptr,
+                    nullptr);
+            if (len > 0)
+            {
+                out = buffer;
+                out += ".UTF-8";  // Ensure POSIX format
+            }
+        }
+#else
+        out = sgetenv("LANGUAGE");
+#endif
+        return out;
+    }
     
     void initLocale(const char*& langcode)
     {
@@ -200,22 +223,15 @@ namespace mrv
             langcode = codeOverride;
 
 #ifdef _WIN32
+        //
+        // Windows cannot change the environment variables of the same
+        // process.
+        // That's why we end up calling execv() which will re-initialize
+        // the application with all its arguments intact, *BUT* with
+        // LANGUAGE set in the environment now, which we end up reading
+        // here.
+        //
         const char* language = fl_getenv("LANGUAGE");
-        if ((!language || strlen(language) == 0))
-        {
-            wchar_t wbuffer[LOCALE_NAME_MAX_LENGTH];
-            if (GetUserDefaultLocaleName(wbuffer, LOCALE_NAME_MAX_LENGTH))
-            {
-                static char buffer[256];
-                int len = WideCharToMultiByte(
-                    CP_UTF8, 0, wbuffer, -1, buffer, sizeof(buffer), nullptr,
-                    nullptr);
-                if (len > 0)
-                {
-                    language = buffer;
-                }
-            }
-        }
         if (!language || strncmp(language, langcode, 2) != 0)
         {
             setenv("LANGUAGE", langcode, 1);
@@ -243,14 +259,17 @@ namespace mrv
 
         char languageCode[32];
         const char* language = "en_US.UTF-8";
+        const std::string& defaultLocale = getDefaultLocale();
+        if (!defaultLocale.empty())
+            language = defaultLocale.c_str();
 
+
+        // Load ui language preferences to see if user chose a different
+        // language than the OS one.
         Fl_Preferences base(
             mrv::prefspath().c_str(), "filmaura", "mrv2",
             Fl_Preferences::C_LOCALE);
-
-        // Load ui language preferences
         Fl_Preferences ui(base, "ui");
-
         ui.get("language_code", languageCode, "", 32);
 
         if (strlen(languageCode) != 0)
@@ -258,6 +277,11 @@ namespace mrv
             language = languageCode;
         }
 
+        //
+        // Now, initialize the chosen locale for each platform.
+        // Note that gettext() behaves differently on each OS, that's
+        // why we need a special function for it.
+        //
         initLocale(language);
 
         const char* numericLocale = language;
@@ -266,7 +290,8 @@ namespace mrv
             // This is for Apple mainly, as it we just set LC_MESSAGES only
             // and not the numeric locale, which we must set separately for
             // those locales that use periods in their floating point.
-            if (strcmp(language, "C") == 0 || strncmp(language, "ar", 2) == 0 ||
+            if (strcmp(language, "C") == 0 ||
+                strncmp(language, "ar", 2) == 0 ||
                 strncmp(language, "en", 2) == 0 ||
                 strncmp(language, "hi", 2) == 0 ||
                 strncmp(language, "ja", 2) == 0 ||
