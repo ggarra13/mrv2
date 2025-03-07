@@ -35,10 +35,10 @@ fl_yes_set("Ja")
 fl_no_set("Nein")
 fl_cancel_set("Abbrechen")
 
-fl_message("Spelling check sucessfull, %d errors found with %f confidence" \
+fl_message("Spelling check successful, %d errors found with %f confidence" \
 	%(1002, 100*(15/77.0)))
 
-fl_alert("Quantum fluctuations in the space-time continuim detected, "
+fl_alert("Quantum fluctuations in the space-time continuum detected, "
 	   "you have %f seconds to comply."% 10.0)
 
 print(f"fl_ask returned {fl_ask('Do you really want to continue?')}")
