@@ -120,7 +120,7 @@ def fl_point_test():
     page = beginTestPage(
             """testing the fl_point call\n
             You should see four pixels each in black, red, green and blue. 
-            Make sure that pixels are not anti-aliased (blured across multiple pixels)!"""  )
+            Make sure that pixels are not anti-aliased (blurred across multiple pixels)!"""  )
     pt = PointTest(20, 140, 100, 100)
     page.end()
     return pt
@@ -371,7 +371,7 @@ def fl_circle_test():
         "testing int drawing of circles and ovals (fl_arc, fl_pie)\n"
         "No red lines should be visible. "
         "If you see bright red pixels, the circle drawing alignment is off. "
-        "If you see dark red pixels, your syste supports anti-aliasing "
+        "If you see dark red pixels, your system supports anti-aliasing "
         "which should be of no concern. "
         "The green rectangles should not be touched by circle drawings."
         )

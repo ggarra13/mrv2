@@ -56,7 +56,7 @@ def main():
 	o_2_1.callback(onOK)
 	o_1_0.label('check_browser.py')
 	o_1_0.end()
-	aBrowser.add("Guiness", "line 1" )  # code
+	aBrowser.add("Guinness", "line 1" )  # code
 	aBrowser.add("Bud", "line 2")  # code
 	aBrowser.add("Coors", "line 3")
 	aBrowser.add("rocky mountain", "line 4")  # code

@@ -60,7 +60,7 @@ def main():
 	btn.callback(onOK)
 	win.label('check_browser.py')
 	win.end()
-	aBrowser.add("Guiness\tline 1", "line 1" )  # code
+	aBrowser.add("Guinness\tline 1", "line 1" )  # code
 	aBrowser.add("Bud\tline 2", "line 2")  # code
 	aBrowser.add("Coors\tline 3", "line 3")
 	aBrowser.add("rocky mountain\tline 4", "line 4")  # code

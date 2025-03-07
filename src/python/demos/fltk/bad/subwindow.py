@@ -137,7 +137,7 @@ window.add(subwindow)
 
 fb = Fl_Box(FL_NO_BOX,0,0,400,100,
 	     "A child Fl_Window with children of it's own may "
-	     "be useful for imbedding controls into a GL or display "
+	     "be useful for embedding controls into a GL or display "
 	     "that needs a different visual.  There are bugs with the "
 	     "origins being different between drawing and events, "
 	     "which I hope I have solved."
