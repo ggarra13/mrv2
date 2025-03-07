@@ -2,6 +2,11 @@ v1.3.6
 ======
 
 - Fixed a serious OpenEXR crash on multipart files.
+- Dramatically improved NDI input stream playback performance.  If playing with
+  no audio, it is immediate.  If playing with audio, it will play with a 4
+  seconds delay.
+- Fixed a hanging when playing NDI with audio.
+- Fixed a zombie process when playing NDI upon program exit.
 
 v1.3.5
 ======

@@ -102,9 +102,21 @@ namespace mrv
 
         NDIPanel::~NDIPanel()
         {
+            TLRENDER_P();
             MRV2_R();
 
             r.play.running = false;
+            
+            r.cacheInfoObserver.reset();
+            r.deviceObserver.reset();
+            
+            auto model = p.ui->app->filesModel();
+            if (model)
+            {
+                auto aItem = model->observeA()->get();
+                if (aItem && file::isTemporaryNDI(aItem->path))
+                    model->close();
+            }
         }
 
         void NDIPanel::add_controls()
@@ -453,6 +465,8 @@ namespace mrv
             if (!r.lastStream.empty())
                 LOG_STATUS("Close stream " << r.lastStream);
 
+            r.cacheInfoObserver.reset();
+            
             auto model = p.ui->app->filesModel();
             if (model)
             {
@@ -473,7 +487,7 @@ namespace mrv
             options.sourceName = sourceName;
             options.bestFormat = r.inputFormatMenu->value();
             options.noAudio = r.inputAudioMenu->value();
-
+            
             nlohmann::json j;
             j = options;
 
@@ -490,8 +504,11 @@ namespace mrv
                 return;
 
             int seconds = 4;
-            r.play.running = !options.noAudio;
+            r.play.running = options.noAudio;
+
             player->stop();
+            player->start();
+            player->clearCache();
 
             if (!options.noAudio)
             {
@@ -513,29 +530,33 @@ namespace mrv
                                     t.end_time_exclusive() >= endTime)
                                 {
                                     r.play.running = true;
-                                    r.cacheInfoObserver.reset();
                                     break;
                                 }
                             }
-                        },
-                        observer::CallbackAction::Suppress);
+                        });
+                
+                r.play.thread = std::thread(
+                    [this, player, seconds]
+                        {
+                            MRV2_R();
+                            auto start = std::chrono::steady_clock::now();
+                            while (!r.play.running &&
+                                   std::chrono::steady_clock::now() - start <=
+                                   std::chrono::seconds(seconds))
+                            {
+                            }
+                            r.cacheInfoObserver.reset();
+                            player->forward();
+                        });
+
+                // This thread will only run for 4 seconds.
+                r.play.thread.detach();
+            }
+            else
+            {
+                player->forward();
             }
 
-            r.play.thread = std::thread(
-                [this, player, seconds]
-                {
-                    MRV2_R();
-                    auto start = std::chrono::steady_clock::now();
-                    while (!r.play.running &&
-                           std::chrono::steady_clock::now() - start <=
-                               std::chrono::seconds(seconds))
-                    {
-                    }
-                    player->forward();
-                });
-
-            // This thread will onlyh run for 4 seconds.
-            r.play.thread.detach();
         }
         
         device::PixelType  NDIPanel::_ndi_fourCC(int fltk_value)
