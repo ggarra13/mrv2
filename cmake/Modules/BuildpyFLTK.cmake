@@ -44,7 +44,7 @@ endif()
 # Commands
 #
 set(pyFLTK_PATCH
-    # For avoiding the show(argv) messing mrv2's color pallette.
+    # For avoiding the show(argv) messing mrv2's color palette.
     COMMAND
     ${CMAKE_COMMAND} -E copy_if_different
     "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/WindowShowTypemap.i"

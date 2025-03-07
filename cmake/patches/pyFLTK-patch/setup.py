@@ -12,7 +12,7 @@ INCLUDE_REGEX = r"-I[\"']?([^\"']+)[\"']?"
 #
 fltk_dir = ""
 opengl_dir = ""
-# this will be overrridden by environment variables:
+# this will be overridden by environment variables:
 fltk_dir = os.environ.get('FLTK_HOME', '')
 opengl_dir = os.environ.get('OPENGL_HOME', '')
 

@@ -179,7 +179,7 @@ cat <<"EOF" >> README.md
   Windows Explorer and go to the Downloads directory.  You should then
   run it from there.
   Then Windows will popup a Blue box telling you Windows SmartScreen
-  prevented the start of an unknown aplication and that you can place your
+  prevented the start of an unknown application and that you can place your
   PC at risk.
   Click on the More Information text and a Button that says Run anyway or
   similar should appear.  Click on it and follow the standard instructions

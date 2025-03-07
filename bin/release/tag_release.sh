@@ -7,7 +7,7 @@
 
 #
 # This script tags a release both locally and in the remote repository.  It
-# should be run before an actualy release.
+# should be run before an actual release.
 #
 # You must run it from the root of the mrv2 project.
 #
@@ -88,7 +88,7 @@ add_remote_tag()
 echo "Switch to main and pull changes"
 ${GIT_EXECUTABLE} switch main && ${GIT_EXECUTABLE} pull
 
-echo "Now push any commited changes"
+echo "Now push any committed changes"
 ${GIT_EXECUTABLE} push
 
 
