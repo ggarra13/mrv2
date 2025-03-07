@@ -7,6 +7,11 @@ v1.3.6
   seconds delay.
 - Fixed a hanging when playing NDI with audio.
 - Fixed a zombie process when playing NDI upon program exit.
+- Fixed locale (Internationalization) issues on Windows, which would make it
+  impossible to switch to a different language if your Windows was not set up
+  as English.
+- Revamped locale on start up the first time you install mrv2 (or remove the
+  preferences) on Windows and macOS to start with the System's locale.
 
 v1.3.5
 ======

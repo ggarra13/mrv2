@@ -11,6 +11,7 @@ namespace fs = std::filesystem;
 
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvFile.h"
+#include "mrvCore/mrvOS.h"
 #include "mrvCore/mrvString.h"
 
 #if defined(_WIN32) && !defined(_WIN64_)
@@ -28,17 +29,8 @@ namespace
     const char* kModule = "env ";
 }
 
-
 namespace mrv
 {
-
-    std::string sgetenv(const char* const n)
-    {
-        if (fl_getenv(n))
-            return fl_getenv(n);
-        else
-            return std::string();
-    }
 
     std::string username()
     {
@@ -112,8 +104,8 @@ namespace mrv
         if ((e = fl_getenv("HOMEDRIVE")))
         {
             path = e;
-            path += sgetenv("HOMEPATH");
-            path += "/" + sgetenv("USERNAME");
+            path += os::sgetenv("HOMEPATH");
+            path += "/" + os::sgetenv("USERNAME");
             if (fs::is_directory(path))
                 return path;
         }
@@ -200,12 +192,8 @@ namespace mrv
         return out;
     }
 
-    const char* docs_list[] = {
-        "en",
-        "es",
-        nullptr
-    };
-    
+    const char* docs_list[] = {"en", "es", nullptr};
+
     std::string docspath()
     {
         std::string docs;
@@ -220,7 +208,7 @@ namespace mrv
 
         bool found = false;
         const char** d = docs_list;
-        for ( ; *d; ++d)
+        for (; *d; ++d)
         {
             if (code == *d)
             {
@@ -230,7 +218,7 @@ namespace mrv
         }
         if (!found)
             code = "en";
-        
+
         std::string local_docs =
             mrv::rootpath() + "/docs/" + code + "/index.html";
         if (file::isReadable(local_docs))
@@ -245,7 +233,7 @@ namespace mrv
         }
         return docs;
     }
-    
+
     //! Path to NDI (if installed)
     std::string NDI_library()
     {
@@ -262,7 +250,7 @@ namespace mrv
         std::string fullpath = libpath + library;
         if (!file::isReadable(fullpath))
         {
-            libpath = sgetenv("NDI_RUNTIME_DIR_V6");
+            libpath = os::sgetenv("NDI_RUNTIME_DIR_V6");
             if (!libpath.empty())
             {
                 fullpath = libpath + library;
@@ -280,8 +268,8 @@ namespace mrv
                 }
             }
         }
-            
+
         return fullpath;
     }
-    
+
 } // namespace mrv

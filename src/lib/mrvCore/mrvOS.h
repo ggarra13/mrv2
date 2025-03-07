@@ -7,28 +7,39 @@
 #include <string>
 
 #ifdef _WIN32
-#     define strcasecmp(a, b) _stricmp(a, b)
+#    define strcasecmp(a, b) _stricmp(a, b)
 #endif // _WIN32
 
 namespace mrv
 {
     namespace os
     {
+        //! Return an environment variable's content in UTF-8 or empty string.
+        std::string sgetenv(const char* const n);
+
+        //! Execute a command.
         std::string exec_command(const std::string& command);
-        
-        int execv(const std::string& exe = "",
-                  const std::string& session = "");
-        
+
+        //! Re-run the executable with its parameters or an optional session
+        //! file.
+        int execv(const std::string& exe = "", const std::string& session = "");
+
+        //! Return the name of the wayland compositor.
         const std::string getWaylandCompositor(const std::string& desktop);
-        
+
+        //! Return the name of the GPU Vendor.
         const std::string getGPUVendor();
 
+        //! Return the name of the Kernel (OS).
         const std::string getKernel();
-        
+
+        //! Return the name of the desktop.
         const std::string getDesktop();
 
+        //! Return the version of the OS.
         const std::string getVersion();
-        
+
+        //! Returns true if running on the terminal (ie. TERM is set).
         bool runningInTerminal();
     } // namespace os
 

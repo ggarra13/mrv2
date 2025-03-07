@@ -51,6 +51,15 @@ namespace mrv
 {
     namespace os
     {
+
+        std::string sgetenv(const char* const n)
+        {
+            if (fl_getenv(n))
+                return fl_getenv(n);
+            else
+                return std::string();
+        }
+
 #ifdef _WIN32
 
         std::string exec_command(const std::string& command)
@@ -89,8 +98,9 @@ namespace mrv
             cmd.push_back(0); // Null-terminate the string
 
             // Create the process
-            if (!CreateProcess(NULL, cmd.data(), NULL, NULL, TRUE,
-                               CREATE_NO_WINDOW, NULL, NULL, &si, &pi))
+            if (!CreateProcess(
+                    NULL, cmd.data(), NULL, NULL, TRUE, CREATE_NO_WINDOW, NULL,
+                    NULL, &si, &pi))
             {
                 CloseHandle(hRead);
                 CloseHandle(hWrite);
@@ -103,7 +113,9 @@ namespace mrv
             // Read output from the child process
             char buffer[128];
             DWORD bytesRead;
-            while (ReadFile(hRead, buffer, sizeof(buffer) - 1, &bytesRead, NULL) && bytesRead > 0)
+            while (
+                ReadFile(hRead, buffer, sizeof(buffer) - 1, &bytesRead, NULL) &&
+                bytesRead > 0)
             {
                 buffer[bytesRead] = '\0';
                 output += buffer;
@@ -423,7 +435,7 @@ namespace mrv
             out = _("\tKernel Info: ") + string::stripWhitespace(out);
             return out;
         }
-        
+
         const std::string getVersion()
         {
             static std::string os_version;
@@ -454,7 +466,8 @@ namespace mrv
             if (os_version.empty())
                 os_version = info.name;
 #elif _WIN32
-            os_version = exec_command("powershell -Command  \"(Get-CimInstance Win32_OperatingSystem).Caption\"");
+            os_version = exec_command("powershell -Command  \"(Get-CimInstance "
+                                      "Win32_OperatingSystem).Caption\"");
             os_version = string::stripWhitespace(os_version);
 #else
             os_version = info.name;
