@@ -40,7 +40,7 @@ if (MRV2_PYBIND11)
 	set( _potFile "${_potPythonPluginDir}/${_py_basename}.pot" )
 
 	#
-	# First, try to find pygettext.py sript
+	# First, try to find pygettext.py script
 	#
 	set(_pyscript_dir "${CMAKE_BINARY_DIR}/../../../deps/Python/src/Python/Tools/i18n" )
 	if (NOT EXISTS ${_pyscript_dir})

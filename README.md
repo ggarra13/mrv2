@@ -90,7 +90,7 @@ mrv2 binaries run on Windows 8.1+, RedHat 8.10+ or Ubuntu 22.04+, and macOS 11.0
   Windows Explorer and go to the Downloads directory.  You should then
   run it from there.
   Then Windows will popup a Blue box telling you Windows SmartScreen
-  prevented the start of an unknown aplication and that you can place your
+  prevented the start of an unknown application and that you can place your
   PC at risk.
   Click on the More Information text and a Button that says Run anyway or
   similar should appear.  Click on it and follow the standard instructions
@@ -296,7 +296,7 @@ directory where all files shall reside.
 
 Make sure you meet the basic dependencies for your platform.  See [Dependencies](#dependencies).
 
-The runme.sh sript will output its progress to the terminal and also save it
+The runme.sh script will output its progress to the terminal and also save it
 in:
 ````
 BUILD-KERNEL-ARCH/BUILDTYPE/compile.log.

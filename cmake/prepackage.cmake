@@ -217,12 +217,12 @@ if(UNIX)
 	
     if ( APPLE )
 	#
-	# Get DYLIB dependencies of componenets
+	# Get DYLIB dependencies of components
 	#
 	get_macos_runtime_dependencies( "${MRV2_EXES}" )
     else()
 	#
-	# Get DSO dependencies of componenets
+	# Get DSO dependencies of components
 	#
 	get_runtime_dependencies( "${MRV2_EXES}" )
     endif()
