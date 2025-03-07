@@ -256,7 +256,7 @@ The Timeline menu provides controls for modifying the timeline viewport at the b
 .. topic:: Transitions
 
    With this on, you can show audio and video transitions in .otio files.
-   (Currently not implemented in v1.3.5).
+   (Currently not implemented in v1.3.6).
 
 .. topic:: Markers
 

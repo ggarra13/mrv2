@@ -49,7 +49,7 @@ mrv2 can be customized to show any of the toolbars from **Window->Preferences->U
 Mouse interaction in the Viewer
 -------------------------------
 
-A three buttoned mouse can be used for closer image inspection. Hold the middle button and drag to pan the image within the viewport. Hold down the Alt key on your keyboard and drag left/right with the right mouse button to perform a centred zoom in/out on the image.  You can also use the mousewheel which is more confortable.
+A three buttoned mouse can be used for closer image inspection. Hold the middle button and drag to pan the image within the viewport. Hold down the Alt key on your keyboard and drag left/right with the right mouse button to perform a centred zoom in/out on the image.  You can also use the mousewheel which is more comfortable.
 The current zoom factor is shown on the pixel toolbar to the left.
 
 .. note::
@@ -230,7 +230,7 @@ The playback menu holds the standard playback functions that work just like the 
 	   
 .. topic:: Annotation/Clear, Annotation/Clear All
 	   
-	   With these commands, once one or more annotations have been created, you will be able to clear the annotation on the current frame or all the annoations on the timeline.
+	   With these commands, once one or more annotations have been created, you will be able to clear the annotation on the current frame or all the annotations on the timeline.
 
 Timeline Menu
 +++++++++++++
