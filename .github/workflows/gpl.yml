@@ -136,9 +136,6 @@ jobs:
       
     - name: Install automake
       run: brew install automake
-      
-    - name: Install meson
-      run: brew install meson
 
     - name: Install GNU sed
       run: brew install gnu-sed
@@ -185,9 +182,6 @@ jobs:
       
     - name: Install automake
       run: brew install automake
-
-    - name: Install meson
-      run: brew install meson
       
     - name: Install GNU sed
       run: brew install gnu-sed
