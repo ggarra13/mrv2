@@ -21,6 +21,8 @@ v1.3.6
 - Fixed installation of NDI Advanced DLL being with the wrong name.
 - Fixed builds when not building Python.
 - Made building faster by using NPROCS.
+- Made building faster by removing tlRender libraries we don't use, as Darby's
+  code is diverging from the one used in mrv2.
 
 
 v1.3.5
