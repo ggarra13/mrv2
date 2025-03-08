@@ -312,7 +312,7 @@ namespace mrv
     }
 
     // Constructors for docked/floating window
-    // WITH x, y co-ordinates
+    // WITH x, y coordinates
     PanelGroup::PanelGroup(
         DockGroup* dk, int floater, int X, int Y, int W, int H,
         const char* lbl) :

@@ -36,7 +36,7 @@ namespace mrv
         if (dock)
         {
             // Did the drop happen on us?
-            // Get our co-ordinates
+            // Get our coordinates
             int ex = x_root() + dock->x();
             int ey = y_root() + dock->y();
             int ew = dock->w();
