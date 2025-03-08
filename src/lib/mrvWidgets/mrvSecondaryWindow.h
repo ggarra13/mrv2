@@ -21,7 +21,7 @@ namespace mrv
         SecondaryWindow(ViewerUI*);
         ~SecondaryWindow();
 
-        //! Save the settings for the vindow (if it is visible or not)
+        //! Save the settings for the window (if it is visible or not)
         void save() const;
 
         //! Get the main window

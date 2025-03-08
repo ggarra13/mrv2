@@ -9,7 +9,7 @@
 namespace mrv
 {
 
-    //! Button class that changes cursor and hilights the button when hover it.
+    //! Button class that changes cursor and highlights the button when hover it.
     class Button : public Fl_Button
     {
         Fl_Color default_color;

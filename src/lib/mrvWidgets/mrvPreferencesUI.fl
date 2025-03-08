@@ -128,7 +128,7 @@ If you try to open several mrv2s with different images, all these images will be
                 }
                 Fl_Check_Button uiPrefsAutoFitImage {
                   label {Auto Refit Image}
-                  tooltip {When selected, mrv2 will apply a fit image operation on each video played.  This effectly means the video will be resized automatically based on the size of the window.} xywh {317 161 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
+                  tooltip {When selected, mrv2 will apply a fit image operation on each video played.  This effectively means the video will be resized automatically based on the size of the window.} xywh {317 161 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
                 }
                 Fl_Check_Button uiPrefsRaiseOnEnter {
                   label {Raise on Enter}
@@ -1462,7 +1462,7 @@ v->uiOCIO_Display_View->do_callback();}
                 }
                 Fl_Choice uiPrefsColorAccuracy {
                   label {Color Buffers' Accuracy} open
-                  tooltip {Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves all float information, Half Float preserves most float information and Fast works in 8-bits.  Automatic selects the accuracy baed on image depth.} xywh {511 167 140 25} down_box BORDER_BOX align 132 textcolor 32
+                  tooltip {Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves all float information, Half Float preserves most float information and Fast works in 8-bits.  Automatic selects the accuracy based on image depth.} xywh {511 167 140 25} down_box BORDER_BOX align 132 textcolor 32
                   class {mrv::Choice}
                 } {
                   MenuItem {} {

@@ -466,7 +466,7 @@ namespace mrv
         f = new FormatInfo(true, false, false, "DRF", "mrv2", "RAW Image File");
         formats.push_back(f);
         f = new FormatInfo(
-            true, false, false, "DSC", "mrv2", "Digitial Still RAW Camera");
+            true, false, false, "DSC", "mrv2", "Digital Still RAW Camera");
         formats.push_back(f);
         f = new FormatInfo(
             true, false, false, "ERF", "mrv2", "Epson RAW Camera");

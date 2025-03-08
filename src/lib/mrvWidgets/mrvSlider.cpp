@@ -502,7 +502,7 @@ namespace mrv
             return 1;
         case FL_KEYBOARD:
             // Only arrows in the correct direction are used.  This allows the
-            // opposite arrows to be used to navigate between a set of parellel
+            // opposite arrows to be used to navigate between a set of parallel
             // sliders.
             switch (Fl::event_key())
             {
