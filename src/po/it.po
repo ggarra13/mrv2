@@ -1,7 +1,7 @@
 # Italian translations for mrv2 package
 # This file is distributed under the same license as the mrv2 package.
 # Gonzalo Garramuño <ggarra13@gmail.com>, 2023.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.7nReport-Msgid-Bugs-To: ggarra13@gmail.com\n"
@@ -5956,11 +5956,11 @@ msgstr "Immagine di rifiuto automatico"
 
 msgid ""
 "When selected, mrv2 will apply a fit image operation on each video played.  "
-"This effectly means the video will be resized automatically based on the "
+"This effectively means the video will be resized automatically based on the "
 "size of the window."
 msgstr ""
 "Una volta selezionato, mrv2 applicherà un'operazione di immagine adatta su "
-"ogni video riprodotto. Questo significa che il video verrà ridimensionato "
+"ogni video riprodotto. Ciò significa che il video verrà ridimensionato "
 "automaticamente in base alle dimensioni della finestra."
 
 msgid "Raise on Enter"
@@ -6639,12 +6639,12 @@ msgstr "Precisione dei tamponi a colori"
 msgid ""
 "Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves "
 "all float information, Half Float preserves most float information and Fast "
-"works in 8-bits.  Automatic selects the accuracy baed on image depth."
+"works in 8-bits.  Automatic selects the accuracy based on image depth."
 msgstr ""
 "I tamponi a colori possono essere Float, Mezzo Float, Veloce o Automatico. "
 "Float conserva tutte le informazioni di galleggiante, Mezzo Float conserva "
 "la maggior parte delle informazioni di galleggiante e Fast lavora in 8 bit. "
-"Automatico seleziona l'accuratezza baed sulla profondità dell'immagine."
+"Automatico seleziona l'accuratezza in base alla profondità dell'immagine."
 
 msgid "Blit Viewports"
 msgstr "Vedute di sbiancamento"

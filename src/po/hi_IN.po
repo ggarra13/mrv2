@@ -1,7 +1,7 @@
 # Hindi translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.7\n"
@@ -5864,10 +5864,10 @@ msgstr "छवि स्वचलित फिर से लोड करें"
 
 msgid ""
 "When selected, mrv2 will apply a fit image operation on each video played.  "
-"This effectly means the video will be resized automatically based on the "
+"This effectively means the video will be resized automatically based on the "
 "size of the window."
 msgstr ""
-"जब चुना जाता है, mrv2 प्रत्येक वीडियो लोड पर फिट छवि ऑपरेशन लागू करेगा. इसका अर्थ है "
+"जब चुना जाता है, mrv2 प्रत्येक वीडियो लोड पर फिट छवि ऑपरेशन लागू करेगा. इसका मतलब है "
 "कि वीडियो का आकार स्वचालित रूप से विंडो के आकार पर आधारित किया जाएगा."
 
 msgid "Raise on Enter"
@@ -6499,11 +6499,11 @@ msgstr "रंग बफर्स शुद्धता"
 msgid ""
 "Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves "
 "all float information, Half Float preserves most float information and Fast "
-"works in 8-bits.  Automatic selects the accuracy baed on image depth."
+"works in 8-bits.  Automatic selects the accuracy based on image depth."
 msgstr ""
 "रंग बफर फ्लोट, आधा फ्लोट, तेज या स्वचालित हो सकता है. फ्लोट सभी फ्लोट जानकारी बनाए "
-"रखता है, आधा फ्लोट जानकारी बनाए रखता है तथा 8- बिट में तीव्र कार्य करता है. स्वचालित "
-"सटीकता को निर्धारित करता है छवि गहराई पर."
+"रखता है, आधा फ्लोट जानकारी बनाए रखता है तथा 8- बिट पर तीव्र कार्य करता है. स्वचालित "
+"छवि गहराई पर आधारित सटीकता का चयन करता है."
 
 msgid "Blit Viewports"
 msgstr "विन्यास"

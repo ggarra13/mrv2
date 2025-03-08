@@ -1,7 +1,7 @@
 # French translations for mrv2 package
 # This file is distributed under the same license as the mrv2 package.
 # Gonzalo Garramuño <ggarra13@gmail.com>, 2023.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.6\n"
@@ -5948,7 +5948,7 @@ msgstr "Image de refit automatique"
 
 msgid ""
 "When selected, mrv2 will apply a fit image operation on each video played.  "
-"This effectly means the video will be resized automatically based on the "
+"This effectively means the video will be resized automatically based on the "
 "size of the window."
 msgstr ""
 "Une fois sélectionné, mrv2 appliquera une opération d'image adaptée à chaque "
@@ -6634,12 +6634,11 @@ msgstr "Exactitude des tampons de couleur"
 msgid ""
 "Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves "
 "all float information, Half Float preserves most float information and Fast "
-"works in 8-bits.  Automatic selects the accuracy baed on image depth."
+"works in 8-bits.  Automatic selects the accuracy based on image depth."
 msgstr ""
-"Les tampons couleur peuvent être Float, Half Float, Fast ou Automatique. "
-"Float préserve toutes les informations de flotteur, Half Float préserve la "
-"plupart des informations de flotteur et Fast fonctionne en 8 bits. "
-"Automatique sélectionne la précision baed sur la profondeur de l'image."
+"Color Buffers can be Float, Half Float, Fast or Automatic. Float preserves "
+"all float information, Half Float preserves most float information and Fast "
+"works in 8-bits. Automatic selects the accuracy based on image depth."
 
 msgid "Blit Viewports"
 msgstr "Affiner les affichages"

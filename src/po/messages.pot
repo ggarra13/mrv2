@@ -5421,7 +5421,7 @@ msgstr ""
 
 msgid ""
 "When selected, mrv2 will apply a fit image operation on each video played.  "
-"This effectly means the video will be resized automatically based on the "
+"This effectively means the video will be resized automatically based on the "
 "size of the window."
 msgstr ""
 
@@ -6015,7 +6015,7 @@ msgstr ""
 msgid ""
 "Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves "
 "all float information, Half Float preserves most float information and Fast "
-"works in 8-bits.  Automatic selects the accuracy baed on image depth."
+"works in 8-bits.  Automatic selects the accuracy based on image depth."
 msgstr ""
 
 msgid "Blit Viewports"

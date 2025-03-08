@@ -1,7 +1,7 @@
 # English translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.6\n"
@@ -5936,11 +5936,11 @@ msgstr "Auto Refit Image"
 
 msgid ""
 "When selected, mrv2 will apply a fit image operation on each video played.  "
-"This effectly means the video will be resized automatically based on the "
+"This effectively means the video will be resized automatically based on the "
 "size of the window."
 msgstr ""
 "When selected, mrv2 will apply a fit image operation on each video played.  "
-"This effectly means the video will be resized automatically based on the "
+"This effectively means the video will be resized automatically based on the "
 "size of the window."
 
 msgid "Raise on Enter"
@@ -6594,11 +6594,11 @@ msgstr "Color Buffers' Accuracy"
 msgid ""
 "Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves "
 "all float information, Half Float preserves most float information and Fast "
-"works in 8-bits.  Automatic selects the accuracy baed on image depth."
+"works in 8-bits.  Automatic selects the accuracy based on image depth."
 msgstr ""
 "Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves "
 "all float information, Half Float preserves most float information and Fast "
-"works in 8-bits.  Automatic selects the accuracy baed on image depth."
+"works in 8-bits.  Automatic selects the accuracy based on image depth."
 
 msgid "Blit Viewports"
 msgstr "Blit Viewports"

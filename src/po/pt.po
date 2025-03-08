@@ -1,7 +1,7 @@
 # Portuguese translations for mrv2 package
 # This file is distributed under the same license as the mrv2 package.
 # Gonzalo Garramuño <ggarra13@gmail.com>, 2023.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.7\n"
@@ -5919,12 +5919,12 @@ msgstr "Imagem de Refinamento Automtico"
 
 msgid ""
 "When selected, mrv2 will apply a fit image operation on each video played.  "
-"This effectly means the video will be resized automatically based on the "
+"This effectively means the video will be resized automatically based on the "
 "size of the window."
 msgstr ""
-"Quando selecionado, o mrv2 ir aplicar uma operao de imagem adequada a cada "
-"vdeo reproduzido. Isto significa que o vdeo ser redimensionado "
-"automaticamente com base no tamanho da janela."
+"Quando selecionado, o mrv2 irá aplicar uma operação de imagem adequada a "
+"cada vídeo reproduzido. Isto significa efectivamente que o vídeo será "
+"redimensionado automaticamente com base no tamanho da janela."
 
 msgid "Raise on Enter"
 msgstr "Aumentar no Enter"
@@ -6588,12 +6588,12 @@ msgstr "Preciso dos bufers de cores"
 msgid ""
 "Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves "
 "all float information, Half Float preserves most float information and Fast "
-"works in 8-bits.  Automatic selects the accuracy baed on image depth."
+"works in 8-bits.  Automatic selects the accuracy based on image depth."
 msgstr ""
-"Os buffers de cores podem ser flutuantes, meio flutuantes, rpidos ou "
-"automticos. Float preserva todas as informaes flutuantes, Half Float "
-"preserva a maioria das informaes flutuantes e funciona rpido em 8 bits. "
-"Automtico seleciona a preciso baed na profundidade da imagem."
+"Os filtros de cores podem ser flutuantes, meio flutuantes, rápidos ou "
+"automáticos. Float preserva todas as informações flutuantes, Half Float "
+"preserva a maioria das informações flutuantes e Fast trabalha em 8 bits. "
+"Automático seleciona a precisão com base na profundidade da imagem."
 
 msgid "Blit Viewports"
 msgstr "Visualizaes de BlitName"

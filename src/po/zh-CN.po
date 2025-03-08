@@ -1,6 +1,6 @@
 # AI Simplified Chinese translations for mrv2 package
 # This file is distributed under the same license as the mrv2 package.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.5\n"
@@ -5838,11 +5838,11 @@ msgstr "自动缩放图像"
 
 msgid ""
 "When selected, mrv2 will apply a fit image operation on each video played.  "
-"This effectly means the video will be resized automatically based on the "
+"This effectively means the video will be resized automatically based on the "
 "size of the window."
 msgstr ""
-"当选中时, mrv2 将在播放的每段视频上应用适合的图像缩放。 这意味着视频将根据窗"
-"口大小自动调整大小 。"
+"当选中时, drv2 将在播放的每段视频上应用一个适合的图像操作。 这实际上意味着视"
+"频将根据窗口大小自动调整大小 。"
 
 msgid "Raise on Enter"
 msgstr "进入时唤起"
@@ -6456,10 +6456,10 @@ msgstr "颜色缓冲器的精确度"
 msgid ""
 "Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves "
 "all float information, Half Float preserves most float information and Fast "
-"works in 8-bits.  Automatic selects the accuracy baed on image depth."
+"works in 8-bits.  Automatic selects the accuracy based on image depth."
 msgstr ""
 "颜色缓冲器可以是浮点、 半浮点、 快速或自动。 浮点保存所有浮点信息, 半浮点保存"
-"大多数浮点信息, 快速工作为 8 位。 自动选择图像深度的精度 。"
+"大多数浮点信息, 快速工作为 8 位。 根据图像深度自动选择精度 。"
 
 msgid "Blit Viewports"
 msgstr "Blit 视图"

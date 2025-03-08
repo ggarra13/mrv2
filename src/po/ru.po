@@ -1,7 +1,7 @@
 # Russian translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.8\n"
@@ -5976,12 +5976,12 @@ msgstr "Автомобильная модификация изображения
 
 msgid ""
 "When selected, mrv2 will apply a fit image operation on each video played.  "
-"This effectly means the video will be resized automatically based on the "
+"This effectively means the video will be resized automatically based on the "
 "size of the window."
 msgstr ""
-"При выборе, mrv2 будет применять встроенную операцию изображения на каждом "
-"воспроизведенном видео. Это будет означать, что видео будет умножено "
-"автоматически на размер окна."
+"При выборе, mrv2 будет применять на каждом проигрываемом видео операцию "
+"подходящего изображения. Это фактически означает, что видео будет умножаться "
+"автоматически, исходя из размера окна."
 
 msgid "Raise on Enter"
 msgstr "Подняться на входе"
@@ -6638,12 +6638,12 @@ msgstr "Точность цветовых буферов"
 msgid ""
 "Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves "
 "all float information, Half Float preserves most float information and Fast "
-"works in 8-bits.  Automatic selects the accuracy baed on image depth."
+"works in 8-bits.  Automatic selects the accuracy based on image depth."
 msgstr ""
-"Цветные Buffers могут быть Float, Float Float, Fast или Automo. Float "
+"Цветные бафферы могут быть Float, Float Float, Fast или Automo. Float "
 "сохраняет всю поплавковую информацию, Пол Float сохраняет большую часть "
-"поплавковой информации и быстро работает в 8 битах. Автоматически выбирает "
-"точность на глубине изображения."
+"поплавковой информации и Fast работает в 8 битах. Автоматически выбирает "
+"точность на основе глубины изображения."
 
 msgid "Blit Viewports"
 msgstr "Blit Viewports"

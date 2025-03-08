@@ -2,7 +2,7 @@
 # Traducciones al español para el paquete mrv2.
 # This file is distributed under the same license as the mrv2 package.
 # Gonzalo Garramuño <ggarra13@gmail.com>, 2023.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.8\n"
@@ -5996,7 +5996,7 @@ msgstr "Auto Rencuadrar la Imagen"
 
 msgid ""
 "When selected, mrv2 will apply a fit image operation on each video played.  "
-"This effectly means the video will be resized automatically based on the "
+"This effectively means the video will be resized automatically based on the "
 "size of the window."
 msgstr ""
 "Cuando esta seleccionado, mrv2 aplicará una operación de enmarcar imagen en "
@@ -6669,7 +6669,7 @@ msgstr "Precision del Color"
 msgid ""
 "Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves "
 "all float information, Half Float preserves most float information and Fast "
-"works in 8-bits.  Automatic selects the accuracy baed on image depth."
+"works in 8-bits.  Automatic selects the accuracy based on image depth."
 msgstr ""
 "Los búferes de color pueden ser Coma Flotante, Media Coma Flotante, Rápidos "
 "o Automáticos.  Coma Flotante preserve toda la información, Media Coma "
