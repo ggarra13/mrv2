@@ -107,12 +107,13 @@ namespace mrv
         MRV2_GL();
 
 #ifdef __APPLE__
+        // On Apple, there's no OpenGL BACK buffer. 
 #    undef GL_BACK_LEFT
 #    undef GL_BACK_RIGHT
 #    define GL_BACK_LEFT GL_FRONT_LEFT
 #    define GL_BACK_RIGHT GL_FRONT_RIGHT
 #endif
-
+               
         if (auto context = gl.context.lock())
         {
 
@@ -145,7 +146,7 @@ namespace mrv
         MRV2_GL();
         gl::initGLAD();
 
-#ifdef MRV2_DEBUG_GL
+#ifdef TLRENDER_API_GL_4_1_Debug
         if (!gl.init_debug)
         {
             gl.init_debug = true;

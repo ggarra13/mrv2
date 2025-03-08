@@ -762,6 +762,11 @@ namespace mrv
           << endl;
 #ifdef TLRENDER_OCIO
         const auto expat = XML_ExpatVersionInfo();
+#ifndef __APPLE__
+        o << "cpptrace v1.0" << endl
+          << "Copyright (C) 2023-2024 Jeremy Rifkin." << endl
+          << endl;
+#endif
         o << "expat v" << expat.major << "." << expat.minor << "."
           << expat.micro << endl
           << "Copyright (c) 1998-2000 Thai Open Source Software Center Ltd and "
@@ -868,12 +873,6 @@ namespace mrv
           << endl;
 #ifdef TLRENDER_TIFF
         o << TIFFLIB_VERSION_STR << endl << endl;
-#endif
-#ifdef __linux__
-        o << "libbacktrace v1.0" << endl
-          << "Copyright (C) 2012-2021 Free Software Foundation, Inc." << endl
-          << "Written by Ian Lance Taylor, Google." << endl
-          << endl;
 #endif
         o << "LibVPX" << endl
           << "Copyright (c) 2010, The WebM Project authors. All rights "

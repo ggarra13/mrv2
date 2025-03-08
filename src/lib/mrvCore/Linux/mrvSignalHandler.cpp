@@ -20,7 +20,7 @@ namespace mrv
 
         printStackTrace();
 
-        exit(1);
+        exit(signal);
     }
 
     SignalHandler::SignalHandler()

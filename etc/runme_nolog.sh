@@ -73,6 +73,13 @@ fi
 # These are some of the expensive TLRENDER options
 #
 
+if [[ -z "$TLRENDER_API" ]]; then
+    export TLRENDER_API=GL_4_1
+    if [[ "$CMAKE_BUILD_TYPE" == "Debug" ]]; then
+	export TLRENDER_API=GL_4_1_Debug
+    fi
+fi
+
 if [ -z "$TLRENDER_ASAN" ]; then
     export TLRENDER_ASAN=OFF # asan memory debugging (not yet working)
 fi
@@ -200,13 +207,6 @@ if [ -z "$FLTK_BUILD_SHARED" ]; then
     fi
 fi
 
-export TLRENDER_API=GL_4_1
-if [[ "$CMAKE_BUILD_TYPE" == "Debug" || \
-	  "$CMAKE_BUILD_TYPE" == "RelWithDebInfo" ]]; then
-    export TLRENDER_API=GL_4_1_Debug
-fi
-
-
 echo
 echo
 echo "Building summary"
@@ -306,6 +306,7 @@ echo "LibRaw support ..................... ${TLRENDER_RAW} 	(TLRENDER_RAW)"
 echo "OpenEXR support .................... ${TLRENDER_EXR} 	(TLRENDER_EXR)"
 echo "STB support (TGA, BMP, PSD) ........ ${TLRENDER_STB} 	(TLRENDER_STB)"
 echo "TIFF support ....................... ${TLRENDER_TIFF} 	(TLRENDER_TIFF)"
+echo "tlRender API ....................... ${TLRENDER_API} 	(TLRENDER_API)"
 echo "USD support ........................ ${TLRENDER_USD} 	(TLRENDER_USD)"
 
 if [[ $ASK_TO_CONTINUE == 1 ]]; then

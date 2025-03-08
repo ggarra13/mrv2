@@ -34,7 +34,7 @@ namespace mrv
 
         printStackTrace();
 
-        exit(1);
+        exit(signal);
     }
 
     LONG WINAPI exceptionHandler(EXCEPTION_POINTERS* exceptionInfo)

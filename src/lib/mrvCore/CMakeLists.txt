@@ -19,6 +19,7 @@ set(HEADERS
   mrvMemory.h
   mrvMesh.h
   mrvOrderedMap.h
+  mrvOS.h 
   mrvPathMapping.h
   mrvRoot.h
   mrvSequence.h
@@ -44,7 +45,7 @@ set(SOURCES
   mrvOS.cpp
   mrvPathMapping.cpp
   mrvRoot.cpp
-  #mrvSequence.cpp
+  mrvStackTrace.cpp
   mrvString.cpp
   mrvWait.cpp
   mrvTimeObject.cpp
@@ -57,26 +58,20 @@ set(LIBRARIES tlRender Imath::Imath ${FLTK_LIBRARIES} )
 if( WIN32 )
     list( APPEND HEADERS
 	mrvEnv.h
-	mrvOS.h 
-	win32/mrvStackTrace.cpp
 	win32/mrvSignalHandler.cpp
         mrvFileManager.cpp
 	mrvEnv.cpp )
-    list( APPEND LIBRARIES_PRIVATE Dbghelp )
+    list(APPEND LIBRARIES_PRIVATE cpptrace::cpptrace)
 elseif( APPLE )
-    # macOS has a built-in stack trace and signal handler
+    # macOS has a great a built-in stack trace and signal handler
     list( APPEND SOURCES
         mrvFileManager.mm
         )
 else()
     list(APPEND SOURCES
         mrvFileManager.cpp
-	Linux/mrvStackTrace.cpp 
 	Linux/mrvSignalHandler.cpp)
-    if (CMAKE_BUILD_TYPE STREQUAL "Debug" OR
-	    CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
-	list(APPEND LIBRARIES_PRIVATE backtrace)
-    endif()
+    list(APPEND LIBRARIES_PRIVATE cpptrace::cpptrace)
 endif()
 
 add_library(mrvCore ${SOURCES} ${HEADERS})

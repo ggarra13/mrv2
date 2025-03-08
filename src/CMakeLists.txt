@@ -23,7 +23,8 @@ include( ../cmake/functions.cmake )
 
 list(PREPEND CMAKE_MODULE_PATH
     ${PROJECT_SOURCE_DIR}/../tlRender/cmake/Modules
-    ${PROJECT_SOURCE_DIR}/../cmake/Modules)
+    ${PROJECT_SOURCE_DIR}/../cmake/Modules
+    ${CMAKE_INSTALL_PREFIX}/lib/cmake)
 
 
 
@@ -98,8 +99,12 @@ if (CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
     add_definitions( -D MRV2_RelWithDebInfo )
 endif()
 
-if(UNIX AND NOT APPLE)
-    find_library(backtrace NAMES backtrace)
+if(NOT APPLE)
+    find_package(cpptrace CONFIG REQUIRED)
+endif()
+
+if("${TLRENDER_API}" STREQUAL "GL_4_1_Debug")
+    add_definitions(-DTLRENDER_API_GL_4_1_Debug)
 endif()
 
 if(TLRENDER_AUDIO)

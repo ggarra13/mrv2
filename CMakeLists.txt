@@ -77,13 +77,13 @@ if(BUILD_PYTHON )
     include(cmake/Modules/BuildPython.cmake )
 else()
     if (NOT EXISTS "${Python_EXECUTABLE}")
-	find_package(Python REQUIRED COMPONENTS Interpreter)
+	find_package(Python COMPONENTS Interpreter)
 	if (NOT EXISTS "${Python_EXECUTABLE}")
 	    # As a last resort...
 	    if (UNIX)
-		set(Python_EXECUTABLE python3)
+		find_program(Python_EXECUTABLE NAMES python3 python)
 	    else()
-		set(Python_EXECUTABLE python.exe)
+		find_program(Python_EXECUTABLE NAMES py.exe python.exe)
 	    endif()
 	endif()
     endif()
@@ -91,6 +91,18 @@ endif()
 
 message(STATUS "Python EXECUTABLE=${Python_EXECUTABLE}")
 set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
+
+#
+# If not building Python, make sure we have meson in path to build
+# libdav1d and libplacebo.
+# If no meson, try to install it.
+#
+if (NOT BUILD_PYTHON AND (TLRENDER_AV1 OR TLRENDER_LIBPLACEBO))
+    find_program(MESON_EXECUTABLE NAMES meson.exe meson)
+    if (NOT MESON_EXECUTABLE)
+	execute_process(${Python_EXECUTABLE} -m pip install meson)
+    endif()
+endif()
 
 
 if(CMAKE_BUILD_TYPE MATCHES "^Debug$")
@@ -128,12 +140,9 @@ elseif(APPLE)
 endif()
 
 
-set(libbacktrace_DEP )
-if(CMAKE_BUILD_TYPE MATCHES "^Debug$" OR
-	CMAKE_BUILD_TYPE MATCHES "^DebRelInfo$")
-    if(UNIX AND NOT APPLE)
-	include(cmake/Modules/Buildlibbacktrace.cmake)
-    endif()
+set(cpptrace_DEP )
+if(NOT APPLE)
+    include(cmake/Modules/Buildcpptrace.cmake)
 endif()
 
 set(PYBIND11_DEP )

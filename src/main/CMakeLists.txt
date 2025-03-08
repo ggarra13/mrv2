@@ -130,7 +130,7 @@ if(TLRENDER_NDI)
     if (WIN32)
 	if (TLRENDER_NDI_SDK MATCHES ".*Advanced.*")
 	    # Advanced lib is ${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.Advanced.x64.dll
-	    file( GLOB MRV2_LIB_DYLIBS ${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Advanced.Lib.x64.dll )
+	    file( GLOB MRV2_LIB_DYLIBS ${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.Advanced.x64.dll )
 	else()
 	    # Normal lib is ${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.x64.dll
 	    file( GLOB MRV2_LIB_DYLIBS ${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.x64.dll )

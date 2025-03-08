@@ -16,7 +16,3 @@
 #
 . bin/compile/compile_ffmpeg_deps_windows.sh 
 
-#
-# Deal with libcms2 (compile from source)
-#
-. bin/compile/compile_liblcms2_windows.sh

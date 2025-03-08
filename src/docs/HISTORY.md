@@ -12,6 +12,16 @@ v1.3.6
   as English.
 - Revamped locale on start up the first time you install mrv2 (or remove the
   preferences) on Windows and macOS to start with the System's locale.
+- Moved building of dav1d, lcms2, vpx and SvtAV1 on Windows to the tlRender
+  repository to avoid dealing with shell scripts.  This makes the build on
+  Windows faster too and consistant on all platforms.
+- Ported stack trace in debug and reldeb builds to use cpptrace on Windows and
+  Linux.  The advantage is that it can give us stack traces of threads other
+  than the main one.  Not as good as the traces of macOS, but it is a start.
+- Fixed installation of NDI Advanced DLL being with the wrong name.
+- Fixed builds when not building Python.
+- Made building faster by using NPROCS.
+
 
 v1.3.5
 ======
