@@ -69,11 +69,10 @@ endif()
 
 #
 # Python cannot be built with asan dependencies
-#
-set(Python_EXECUTABLE "$ENV{PYTHON}")
-set(Python_VERSION "$ENV{PYTHON_VERSION}")
-set(PYTHON_DEP )
-if(BUILD_PYTHON )
+#set(PYTHON_DEP )
+if(BUILD_PYTHON)
+    set(Python_EXECUTABLE "$ENV{PYTHON}")
+    set(Python_VERSION "$ENV{PYTHON_VERSION}")
     include(cmake/Modules/BuildPython.cmake )
 else()
     if (NOT EXISTS "${Python_EXECUTABLE}")
@@ -100,8 +99,9 @@ set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
 if (NOT BUILD_PYTHON AND (TLRENDER_AV1 OR TLRENDER_LIBPLACEBO))
     find_program(MESON_EXECUTABLE NAMES meson.exe meson)
     if (NOT MESON_EXECUTABLE)
-	message(WARNING "No meson found in path.  Trying to install it.")
-	execute_process(${Python_EXECUTABLE} -m pip install meson)
+	message(WARNING "No meson found in path.  Trying to install it "
+	    "with ${Python_EXECUTABLE}")
+	execute_process(COMMAND ${Python_EXECUTABLE} -m pip install meson)
     endif()
 endif()
 
