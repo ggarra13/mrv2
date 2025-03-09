@@ -206,6 +206,14 @@ namespace mrv
             {
                 out = buffer;
                 out += ".UTF-8"; // Ensure POSIX format
+
+                auto languageCodes = getLanguageCodes();
+                for (const auto& code : languageCodes)
+                {
+                    if (strncmp(code.c_str(), out.c_str(), 2) == 0)
+                        return out;
+                }
+                out = "en_US.UTF-8";
             }
         }
 #else

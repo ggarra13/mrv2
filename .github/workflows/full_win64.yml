@@ -69,7 +69,10 @@ jobs:
     # - name: Install cmake
     #   run: |
     #     ./etc/install_cmake.sh
-
+    - name: Install MSYS2 Dependencies
+      run: |
+        pacman -S --noconfirm nasm
+      
     - name: Build mrv2
       run: |
         ./etc/runme_nolog.sh -v -t package -D TLRENDER_USD=OFF
