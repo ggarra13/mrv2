@@ -97,14 +97,39 @@ set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
 # If no meson, try to install it.
 #
 if (NOT BUILD_PYTHON AND (TLRENDER_AV1 OR TLRENDER_LIBPLACEBO))
-    find_program(MESON_EXECUTABLE NAMES meson.exe meson)
-    if (NOT MESON_EXECUTABLE)
-	message(WARNING "No meson found in path.  Trying to install it "
-	    "with ${Python_EXECUTABLE}")
-	execute_process(COMMAND ${Python_EXECUTABLE} -m pip install meson)
-    endif()
+    # Extract the directory from the Python executable path
+    get_filename_component(PYTHON_DIR "${PYTHON_EXECUTABLE}" DIRECTORY)
+    
+    # Add the extracted directory to the PATH environment variable
+    set(ENV{PATH} "${PYTHON_DIR};${PYTHON_DIR}/Scripts;$ENV{PATH}")
 endif()
 
+find_program(MESON_EXECUTABLE NAMES meson.exe meson)
+if (NOT MESON_EXECUTABLE)
+    message(WARNING "No meson found in path.  Trying to install it "
+	"with ${Python_EXECUTABLE}")
+    execute_process(COMMAND ${Python_EXECUTABLE} -m pip install --user meson )
+    if(WIN32)
+	# Use execute_process to get the Python version
+	execute_process(
+	    COMMAND ${Python_EXECUTABLE} -c "import sys; print(f'Python{sys.version_info.major}{sys.version_info.minor}')"
+	    OUTPUT_VARIABLE PYTHON_VERSION
+	    OUTPUT_STRIP_TRAILING_WHITESPACE
+	)
+
+	# Construct the Roaming Scripts directory path
+	set(PYTHON_ROAMING_SCRIPTS_DIR "$ENV{APPDATA}/Python/${PYTHON_VERSION}/Scripts")
+
+        # Add the Roaming Scripts directory to the PATH environment variable
+        set(ENV{PATH} "${ROAMING_SCRIPTS_DIR};$ENV{PATH}")
+    endif()
+    
+    find_program(MESON_EXECUTABLE NAMES meson.exe meson)
+    if (NOT MESON_EXECUTABLE)
+	message(FATAL_ERROR "No meson found in PATH.  Please install it manually or set the PATH to it.")
+    endif()
+endif()
+    
 
 if(CMAKE_BUILD_TYPE MATCHES "^Debug$")
     # Check for Clang or GCC compiler  (@todo: add Microsoft support)
