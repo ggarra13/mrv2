@@ -105,7 +105,7 @@ if (NOT BUILD_PYTHON AND (TLRENDER_AV1 OR TLRENDER_LIBPLACEBO))
 endif()
 
 find_program(MESON_EXECUTABLE NAMES meson.exe meson)
-if (NOT MESON_EXECUTABLE)
+if (NOT BUILD_PYTHON AND NOT MESON_EXECUTABLE)
     message(WARNING "No meson found in path.  Trying to install it "
 	"with ${Python_EXECUTABLE}")
     execute_process(COMMAND ${Python_EXECUTABLE} -m pip install --user meson )
