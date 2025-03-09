@@ -32,21 +32,9 @@ if [[ $KERNEL != *Msys* ]]; then
 fi
 
 #
-# Latest TAGS of all libraries
-#
-X264_TAG=stable
-
-
-#
-# Repositories
-#
-LIBX264_REPO=https://code.videolan.org/videolan/x264.git
-
-#
 # Some auxiliary variables
 #
 MRV2_ROOT=$PWD
-ROOT_DIR=$PWD/$BUILD_DIR/tlRender/etc/SuperBuild/FFmpeg
 INSTALL_DIR=$PWD/$BUILD_DIR/install
     
 
@@ -55,85 +43,9 @@ if [ -z "$TLRENDER_NET" ]; then
 fi
 
 
-#
-# Get Msys dependencies
-#
-pacman -Sy make diffutils nasm --noconfirm
-
-
-#
-# Build with h264 encoding.
-#
-TLRENDER_X264=ON
-if [[ $FFMPEG_GPL == LGPL ]]; then
-    TLRENDER_X264=OFF
-fi
-
-if [[ $TLRENDER_FFMPEG == OFF || $TLRENDER_FFMPEG == 0 ]]; then
-    export TLRENDER_VPX=OFF
-    export TLRENDER_AV1=OFF
-    export TLRENDER_NET=OFF
-    export TLRENDER_X264=OFF
-else
-    echo
-    echo "Installing packages needed to build:"
-    echo
-    if [[ $TLRENDER_X264 == ON || $TLRENDER_X264 == 1 ]]; then
-	echo "libx264"
-    fi
-    echo
-fi
-
-
-
 #############
 ## BUILDING #
 #############
-
-#
-# Build x264
-#
-ENABLE_LIBX264=""
-if [[ $TLRENDER_X264 == ON || $TLRENDER_X264 == 1 ]]; then
-    
-    mkdir -p $ROOT_DIR
-
-    cd    $ROOT_DIR
-    
-    mkdir -p sources
-    mkdir -p build
-
-
-    cd $ROOT_DIR/sources
-
-    if [[ ! -d x264 ]]; then
-	git clone ${LIBX264_REPO} --branch ${X264_TAG}
-    fi
-
-    if [[ ! -e $INSTALL_DIR/lib/libx264.lib ]]; then
-	echo
-	echo "Compiling libx264 as GPL......"
-	echo
-	cd $ROOT_DIR/build
-	mkdir -p x264
-	cd x264
-	CC=cl CXX=cl LD=link ./../../sources/x264/configure --prefix=$INSTALL_DIR --enable-shared
-	make -j ${CPU_CORES}
-	make install
-	run_cmd mv $INSTALL_DIR/lib/libx264.dll.lib $INSTALL_DIR/lib/libx264.lib
-    fi
-    
-    ENABLE_LIBX264="--enable-libx264 
-                    --enable-decoder=libx264
-                    --enable-encoder=libx264
-                    --enable-gpl"
-else
-    # Remove unused libx264
-    if [[ -e $INSTALL_DIR/lib/libx264.lib ]]; then
-	run_cmd rm -f $INSTALL_DIR/bin/libx264*.dll
-	run_cmd rm -f $INSTALL_DIR/lib/libx264.lib
-    fi
-fi
 
 
 #
@@ -161,13 +73,6 @@ if [[ $TLRENDER_NET == ON || $TLRENDER_NET == 1 ]]; then
 	run_cmd cp /mingw64/lib/pkgconfig/libcrypto.pc $INSTALL_DIR/lib/pkgconfig/
 	run_cmd sed -i -e "s#=/mingw64#=$INSTALL_DIR#" $INSTALL_DIR/lib/pkgconfig/libcrypto.pc
     fi
-fi
-
-echo
-echo "Removing packages used to build:"
-echo
-if [[ $TLRENDER_X264 == ON || $TLRENDER_X264 == 1 ]]; then
-    echo "libx264"
 fi
 
 cd $MRV2_ROOT
