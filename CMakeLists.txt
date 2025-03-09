@@ -52,7 +52,7 @@ endif()
 if(GIT_SUBMODULE)
     find_package(Git REQUIRED)
     
-    message(STATUS "Update/init tlRender's submodules (FSeq, etc)")
+    message(STATUS "Update/init tlRender's submodules")
     execute_process(
 	COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/
@@ -118,7 +118,7 @@ if (NOT MESON_EXECUTABLE)
 	)
 
 	# Construct the Roaming Scripts directory path
-	set(PYTHON_ROAMING_SCRIPTS_DIR "$ENV{APPDATA}/Python/${PYTHON_VERSION}/Scripts")
+	set(ROAMING_SCRIPTS_DIR "$ENV{APPDATA}/Python/${PYTHON_VERSION}/Scripts")
 
         # Add the Roaming Scripts directory to the PATH environment variable
         set(ENV{PATH} "${ROAMING_SCRIPTS_DIR};$ENV{PATH}")
@@ -126,6 +126,7 @@ if (NOT MESON_EXECUTABLE)
     
     find_program(MESON_EXECUTABLE NAMES meson.exe meson)
     if (NOT MESON_EXECUTABLE)
+	message(WARNING "Path is $ENV{PATH}")
 	message(FATAL_ERROR "No meson found in PATH.  Please install it manually or set the PATH to it.")
     endif()
 endif()
