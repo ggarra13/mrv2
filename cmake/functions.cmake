@@ -72,14 +72,20 @@ function( is_system_lib TARGET ISSYSLIB )
 	linux-vdso
 	ld-linux
 	libasound
+	libblkid
 	libc
+	libcairo
 	libdl
+	libdrm
 	libdrm2
 	libharfbuzz
 	libfontconfig
 	libfreetype
+	libgbm
 	libgcc_s
+	libgio
 	libglib
+	libgobject
 	libgpg-error
 	libEGL
 	libGL
@@ -95,12 +101,17 @@ function( is_system_lib TARGET ISSYSLIB )
 	libresolv
 	librt
 	libselinux
+	libsystemd
 	libtinfo
-	libwayland
+	libudev
+	libwayland-client
+	libwayland-server
 	libX
 	libxcb
+	libxcbcommon
 	libxshmfence
 	libstdc
+	libvulkan
 	libz )
 
     
