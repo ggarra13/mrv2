@@ -61,58 +61,175 @@ function( is_system_lib TARGET ISSYSLIB )
     # List of libraries that are accepted to distribute
     #
     set( _acceptedlibs
-	libavcodec libavdevice libavfilter libavformat libavutil libboost
-	libcairo libcap libcrypto liblcms2 libMaterial libmount libmd
-	libosd libraw libtbb libusd )
+	libavcodec
+	libavdevice
+	libavfilter
+	libavformat
+	libavutil
+	libcairo
+	libcrypto
+	liblcms2
+	libMaterial
+	libmd
+	libndi
+	libosd
+	libraw
+	libraw_r
+	libtbb
+	libusd )
 
+    #
+    # List of system kde libraries that should not be distributed
+    #
+    set(_kde_libs
+	libkwin
+	
+	libKF5ConfigCore
+	libKF5ConfigGui
+	libKF5CoreAddons
+	libKF5KIO
+	libKF5Notifications
+	libKF5Plasma
+	libKF5WaylandClient
+	libKF5WindowSystem
+	
+	libKF6ConfigCore
+	libKF6ConfigGui
+	libKF6CoreAddons
+	libKF6KIO
+	libKF6Notifications
+	libKF6Plasma
+	libKF6WaylandClient
+	libKF6WindowSystem
+	
+	libinput
+    )
+
+    set(_qt_libs	
+	libQt5Core
+	libQt5DBus
+	libQt5Gui
+	libQt5Widgets
+	libQt5WaylandClient
+	libQt5WaylandCompositor
+
+	libQt6Core
+	libQt6DBus
+	libQt6Gui
+	libQt6Widgets
+	libQt6WaylandClient
+	libQt6WaylandCompositor
+    )
+    
+    set(_gnome_libs
+	libcairo
+	libdrm
+	libdrm2
+	libgio
+	libglib
+	libgobject
+	libpango
+	libwayland-client
+	libwayland-server
+	libxkbcommon
+    )
+
+    set(_x11_libs
+	libX11
+	libX11-xcb
+	libXau
+	libXaw7
+	libXaw
+	libXcomposite
+	libXcursor
+	libXdamage
+	libXdmcp
+	libXext
+	libXfixes
+	libXinerama
+	libXi
+	libXmu
+	libXmuu
+	libXpm
+	libXrender
+	libXrandr
+	libXRes
+	libXss
+	libxshmfence
+	libXt
+	libXtst
+	libXvMC
+	libXvMCW
+	libXv
+	libXxf86dga
+	libXxf86vm
+	
+	libxcb-shape
+	libxcb-xfixes
+	libxcb-render
+	libxcb-randr
+	libxcb-shm
+	libxcb-composite
+	libxcb
+    )
+
+    set(_opengl_libs
+	libEGL
+	libGL
+	libGLdispatch
+	libGLX
+	libOpenGL
+	nvidia
+    )
+
+    set(_vulkan_libs
+	libvulkan
+    )
+
+    set(_audio_libs
+	libasound
+	libpulse
+	libpulse-simple
+	librtaudio
+    )
+    
     #
     # List of system libraries that should not be distributed
     #
-    set( _syslibs
+    set(_syslibs
 	linux-vdso
 	ld-linux
-	libasound
 	libblkid
 	libc
-	libcairo
+	libcap         # was accepted
+	libdbus        # was accepted before
 	libdl
-	libdrm
-	libdrm2
 	libharfbuzz
 	libfontconfig
 	libfreetype
 	libgbm
 	libgcc_s
-	libgio
-	libglib
-	libgobject
 	libgpg-error
-	libEGL
-	libGL
-	libGLdispatch
-	libGLX
-	nvidia
 	libm
-	libOpenGL
-	libpango
+	libmount        # was accepted before - broke in Fedora 42
 	libpthread
-	libpulse
-	libpulse-simple
 	libresolv
 	librt
 	libselinux
 	libsystemd
 	libtinfo
 	libudev
-	libwayland-client
-	libwayland-server
-	libX
-	libxcb
-	libxcbcommon
-	libxshmfence
+	libutil          # was accepted before
 	libstdc
-	libvulkan
-	libz )
+	libz
+	${_audio_libs}
+	${_kde_libs}
+	${_gnome_libs}
+	${_qt_libs}
+	${_x11_libs}
+	${_opengl_libs}
+	${_vulkan_libs}
+    )
 
     
     set( ${ISSYSLIB} 0 PARENT_SCOPE)
