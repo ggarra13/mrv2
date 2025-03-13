@@ -215,7 +215,6 @@ function( is_system_lib TARGET ISSYSLIB )
 	libpthread
 	libresolv
 	librt
-	libselinux
 	libsystemd
 	libtinfo
 	libudev
