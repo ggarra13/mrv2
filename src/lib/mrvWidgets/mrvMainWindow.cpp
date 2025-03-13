@@ -878,13 +878,16 @@ namespace mrv
             const std::string& compositor_name = desktop::WaylandCompositor();
             if (compositor_name == "gnome-shell")
             {
+                int ret;
+                std::string out, err;
                 std::string cmd =
                     "gsettings get org.gnome.shell.extensions.tiling-assistant "
                     "toggle-always-on-top";
-                std::string hotkey = os::exec_command(cmd);
-                hotkey = string::stripWhitespace(hotkey);
-                if (hotkey.empty() ||
-                    hotkey.substr(hotkey.size() - 2, 2) == "[]")
+                ret = os::exec_command(cmd, out, err);
+                std::string hotkey = string::stripWhitespace(out);
+                if (ret == 0 &&
+                    (hotkey.empty() ||
+                     (hotkey.substr(hotkey.size() - 2, 2)) == "[]"))
                 {
                     // If an FLTK hotkey is assigned, turn it into a GNOME
                     // Hotkey.
@@ -902,13 +905,16 @@ namespace mrv
                               "org.gnome.shell.extensions.tiling-assistant "
                               "toggle-always-on-top \"['" +
                               hotkey + "']\"";
-                        os::exec_command(cmd);
-                        const std::string msg =
-                            string::Format(
-                                _("No GNOME Shell Hotkey for Float On Top.  "
-                                  "Setting it globally to '{0}'"))
+                        ret = os::exec_command(cmd, out, err);
+                        if (ret == 0)
+                        {
+                            const std::string msg =
+                                string::Format(
+                                    _("No GNOME Shell Hotkey for Float On Top.  "
+                                      "Setting it globally to '{0}'"))
                                 .arg(hotkey);
-                        LOG_STATUS(msg);
+                            LOG_STATUS(msg);
+                        }
                     }
                 }
                 else
