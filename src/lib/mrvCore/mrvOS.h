@@ -19,8 +19,8 @@ namespace mrv
 
         //! Execute a command through pipes and capture stdout/sterr.
         //! Returns the exit value of the command.
-        int exec_command(const std::string& command, std::string& stdout,
-                         std::string& stderr);
+        int exec_command(const std::string& command, std::string& output,
+                         std::string& errors);
 
         //! Re-run the executable with its parameters or an optional session
         //! file.
