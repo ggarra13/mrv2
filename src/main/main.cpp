@@ -102,8 +102,7 @@ int WINAPI WinMain(
     int i;
     int argc;
     char** argv;
-    char strbuf[2048];
-
+    
     FILE* f = fopen("C:\\mrv2_winmain.log", "w");
     if (f) {
         fprintf(f, "Process started\n");
@@ -152,6 +151,7 @@ int WINAPI WinMain(
             } else {
                 argv[i] = _strdup("");
                 free(strbuf);
+                fprintf(stderr, "Failed to convert arg %d\n", i);
             }
         } else {
             argv[i] = _strdup("");
