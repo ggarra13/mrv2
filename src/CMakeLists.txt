@@ -323,6 +323,14 @@ message(STATUS "Current Git Branch: ${GIT_BRANCH}")
 # Define a preprocessor macro for the Git branch name and short hash
 add_compile_definitions(GIT_BRANCH_NAME="${GIT_BRANCH}")
 add_compile_definitions(GIT_SHORT_HASH="${GIT_SHORT_HASH}")
+
+#
+# Use UTF-8
+#
+if(MSVC)
+    add_compile_options(/utf-8)
+endif()
+
 #
 # Add auxiliary libraries
 #

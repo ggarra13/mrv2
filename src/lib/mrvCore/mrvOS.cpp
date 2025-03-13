@@ -69,9 +69,9 @@ namespace mrv
 #include <memory>
 
 #ifdef _WIN32
-        int pipe(const std::string& command,
-                 std::string& std_out,
-                 std::string& std_err)
+        int exec_command(const std::string& command,
+                         std::string& std_out,
+                         std::string& std_err)
         {
             SECURITY_ATTRIBUTES saAttr;
             HANDLE hStdOutRead, hStdOutWrite;
