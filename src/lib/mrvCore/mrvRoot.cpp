@@ -76,14 +76,16 @@ namespace
                 WideCharToMultiByte(CP_UTF8, 0, wpath, -1, pname,
                                     int(pathsize), NULL, NULL);
             
-                // Replace Windows backslashes with forward slashes
-                for (size_t i = 0; i < strlen(pname); ++i)
+                // Replace backslashes with forward slashes efficiently
+                char* p = pname;
+                while (*p)
                 {
-                    if (pname[i] == '\\')
-                        pname[i] = '/';
+                    if (*p == '\\') *p = '/';
+                    p++;
                 }
 
-                if ((access(pname, 0) == 0))
+                // Use Windows-native file check
+                if (GetFileAttributesA(pname) != INVALID_FILE_ATTRIBUTES)
                     return 0;
             }
         }
