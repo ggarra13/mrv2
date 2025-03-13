@@ -81,7 +81,7 @@ int main(int argc, char* argv[])
 // This is a debugging step to see if mrv2 even starts.
 struct EarlyLogger {
     EarlyLogger() {
-        FILE* f = fopen("C:\\temp\\mrv2_early.log", "w");
+        FILE* f = fopen("C:\\mrv2_early.log", "w");
         if (f) {
             fprintf(f, "Process started\n");
             fclose(f);
@@ -104,7 +104,7 @@ int WINAPI WinMain(
     char** argv;
     char strbuf[2048];
 
-    FILE* f = fopen("C:\\temp\\mrv2_winmain.log", "w");
+    FILE* f = fopen("C:\\mrv2_winmain.log", "w");
     if (f) {
         fprintf(f, "Process started\n");
         fclose(f);
