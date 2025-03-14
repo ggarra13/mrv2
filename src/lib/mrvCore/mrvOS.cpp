@@ -222,118 +222,106 @@ namespace mrv
 
 #endif
 
+        // When no session is provided, pass all the arguments the user
+        // used to call the execuutable.  We use this routine to restart
+        // mrv2 with all its parameters so that the LANGUAGE env. variable
+        // takes effect.
+        //
+        // When a session is provided, just pass that as a parameter
+        //
         int execv(const std::string& exe, const std::string& session)
         {
-
 #ifdef _WIN32
-            int argc = 2;
             LPWSTR* argv = nullptr;
             LPWSTR* newArgv = nullptr;
-            std::wstring wExe;
-            std::wstring wSession;
+            int argc = 0;
+            wchar_t wExe[MAX_PATH];
+            std::vector<std::wstring> wArgs; // To store converted args safely
 
+            // Get the executable path
             if (exe.empty())
             {
-                // Get the full command line string
+                // Get the full command line and parse it
                 LPWSTR lpCmdLine = GetCommandLineW();
-
-                // Parse the command line string into an array of arguments
                 argv = CommandLineToArgvW(lpCmdLine, &argc);
-
-                if (argv == nullptr)
+                if (!argv || argc < 1)
                 {
-                    wprintf(L"Failed to parse command line\n");
+                    LOG_ERROR("Failed to parse command line");
                     return EXIT_FAILURE;
                 }
 
-                // Allocate new array
-                argc = argc + 2;
+                // Use the resolved executable path
+                DWORD len = GetModuleFileNameW(NULL, wExe, MAX_PATH);
+                if (len == 0 || len >= MAX_PATH)
+                {
+                    LOG_ERROR("GetModuleFileNameW failed");
+                    LocalFree(argv);
+                    return EXIT_FAILURE;
+                }
 
-                newArgv = new LPWSTR[argc];
-                for (int i = 0; i < argc; ++i)
-                    newArgv[i] = nullptr;
-
-                for (int i = 0; i < argc - 1; ++i)
-                    newArgv[i] = argv[i];
+                // Store original arguments (skip argv[0])
+                wArgs.push_back(wExe);
+                if (session.empty())
+                {
+                    for (int i = 1; i < argc; ++i)
+                        wArgs.push_back(argv[i]);
+                }
             }
             else
             {
+                // Convert provided exe to wchar_t
                 unsetenv(L"MRV2_ROOT");
-                wExe = std::wstring(exe.begin(), exe.end());
-
-                // Allocate new array
-                argc = 3;
-                newArgv = new LPWSTR[argc];
-                newArgv[0] = const_cast<LPWSTR>(wExe.c_str());
-                newArgv[1] = nullptr;
-                newArgv[2] = nullptr;
+                int len = MultiByteToWideChar(CP_UTF8, 0, exe.c_str(), -1, wExe, MAX_PATH);
+                if (len <= 0)
+                {
+                    LOG_ERROR("Failed to convert exe to wide string");
+                    return EXIT_FAILURE;
+                }
+                wArgs.push_back(wExe);
             }
 
+            // Add session if provided
             if (!session.empty())
             {
-                wSession = std::wstring(session.begin(), session.end());
-                newArgv[1] = const_cast<LPWSTR>(wSession.c_str());
-            }
-
-            // Enclose argv[0] in double quotes if it contains spaces
-            LPWSTR cmd = newArgv[0];
-            bool* allocated = new bool[argc];
-            for (int i = 0; i < argc; i++)
-            {
-                allocated[i] = false;
-                const LPWSTR arg = newArgv[i];
-                if (arg == nullptr)
-                    continue;
-
-                if (wcschr(arg, L' ') != NULL)
+                wchar_t wSession[MAX_PATH];
+                int len = MultiByteToWideChar(CP_UTF8, 0, session.c_str(), -1, wSession, MAX_PATH);
+                if (len <= 0)
                 {
-                    // 2 for quotes, 1 for null terminator
-                    size_t len = wcslen(arg) + 3;
-                    LPWSTR quoted_arg = (LPWSTR)malloc(len * sizeof(wchar_t));
-                    if (quoted_arg == NULL)
-                    {
-                        wprintf(
-                            L"Failed to allocate memory for command line\n");
-                        return EXIT_FAILURE;
-                    }
-                    swprintf_s(quoted_arg, len, L"\"%s\"", arg);
-
-                    // Free the memory used by the unquoted argument
-                    newArgv[i] = quoted_arg;
-                    allocated[i] = true;
+                    LOG_ERROR("Failed to convert session to wide string");
+                    if (argv) LocalFree(argv);
+                    return EXIT_FAILURE;
                 }
+                if (wArgs.size() > 1) wArgs.resize(1); // Clear extra args
+                wArgs.push_back(wSession);
             }
+
+            // Allocate newArgv with exact size
+            size_t argCount = wArgs.size() + 1; // +1 for nullptr
+            newArgv = new LPWSTR[argCount];
+            for (size_t i = 0; i < wArgs.size(); ++i)
+            {
+                if (wcschr(wArgs[i].c_str(), L' ') != nullptr)
+                {
+                    wArgs[i] = L"\"" + wArgs[i] + L"\""; // Quote if spaces
+                }
+                newArgv[i] = const_cast<LPWSTR>(wArgs[i].c_str()); // Safe: wArgs lives until execv
+            }
+            newArgv[argCount - 1] = nullptr;
 
             // Call _wexecv
-            int result;
-            result = _wexecv(cmd, newArgv);
-
-            // Free the array of arguments
-            for (int i = 0; i < argc; i++)
-            {
-                if (allocated[i])
-                    free(newArgv[i]);
-                newArgv[i] = nullptr;
-            }
-            delete[] newArgv;
-            delete[] allocated;
-
-            if (argv)
-            {
-                for (int i = 0; i < argc; i++)
-                {
-                    free(argv[i]);
-                    argv[i] = nullptr;
-                }
-                LocalFree(argv);
-            }
+            LPWSTR cmd = newArgv[0];
+            int result = _wexecv(cmd, newArgv);
             if (result == -1)
             {
-                perror("_wexecv");
-                return EXIT_FAILURE;
+                LOG_ERROR("'_wexecv' failed with errno: " + std::to_string(errno));
+                wprintf(L"_wexecv failed: errno=%d path=%s\n", errno, cmd);
             }
 
-            exit(EXIT_SUCCESS);
+            // Cleanup
+            delete[] newArgv;
+            if (argv) LocalFree(argv);
+
+            return result == -1 ? EXIT_FAILURE : 0;
 #else
             std::string run;
             if (exe.empty())
@@ -350,12 +338,10 @@ namespace mrv
             int ret = ::execv(run.c_str(), const_cast<char**>(newArgv));
             if (ret == -1)
             {
-                LOG_ERROR("execv failed " << run << " " << session);
                 perror("execv failed");
             }
-            exit(ret);
+            return ret;
 #endif
-            return -1;
         }
 
         const std::string getGPUVendor()

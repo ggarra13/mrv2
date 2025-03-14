@@ -80,20 +80,6 @@ int main(int argc, char* argv[])
 
 #include <stdio.h>
 
-// This is a debugging step to see if mrv2 even starts.
-struct EarlyLogger {
-    EarlyLogger() {
-        std::string tmpfile = mrv::tmppath() + "/mrv2_early.log";
-        FILE* f = fopen(tmpfile.c_str(), "w");
-        if (f) {
-            fprintf(f, "Process started\n");
-            fclose(f);
-        }
-    }
-};
-
-static EarlyLogger earlyLogger;
-
 
 #    include <FL/fl_utf8.h>
 #    include <FL/fl_string_functions.h>
@@ -105,13 +91,6 @@ int WINAPI WinMain(
     int i;
     int argc;
     char** argv;
-    
-    std::string tmpfile = mrv::tmppath() + "/mrv2_winmain.log";
-    FILE* f = fopen(tmpfile.c_str(), "w");
-    if (f) {
-        fprintf(f, "Process started\n");
-        fclose(f);
-    }
 
     /*
      * If we are compiling in debug mode, open a console window so
