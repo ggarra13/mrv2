@@ -83,8 +83,13 @@ void check_language(PreferencesUI* uiPrefs, int& language_index, mrv::App* app)
 
             // this would create a fontconfig error.
             // setenv( "LC_CTYPE", "UTF-8", 1 );
+#ifdef _WIN32
+            wchar_t wlanguage[32];
+            fl_utf8towc(language, strlen(language), wlanguage, 32);
+            setenv(L"LANGUAGE", wlanguage, 1);
+#else
             setenv("LANGUAGE", language, 1);
-
+#endif
             // Save ui preferences
             mrv::Preferences::save();
 
@@ -280,14 +285,17 @@ namespace mrv
         const char* language = fl_getenv("LANGUAGE");
         if (!language || strncmp(language, langcode, 2) != 0)
         {
-            setenv("LANGUAGE", langcode, 1);
+            wchar_t wlanguage[32];
+            fl_utf8towc(langcode, strlen(langcode), wlanguage, 32);
+            setenv(L"LANGUAGE", wlanguage, 1);
             mrv::os::execv();
             exit(0);
         }
-#endif
-
+#else
         // Needed for Linux and OSX.  See above for windows.
         setenv("LANGUAGE", langcode, 1);
+#endif
+
 
         setlocale(LC_ALL, "");
         setlocale(LC_ALL, langcode);

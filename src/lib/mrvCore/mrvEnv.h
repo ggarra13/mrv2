@@ -6,7 +6,7 @@
 
 #ifdef _WIN32
 
-int setenv(const char* name, const char* value, int overwrite);
-int unsetenv(const char* name);
+int setenv(const wchar_t* name, const wchar_t* value, int overwrite);
+int unsetenv(const wchar_t* name);
 
 #endif // _WIN32

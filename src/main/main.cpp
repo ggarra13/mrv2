@@ -9,6 +9,7 @@
 #    include <shellapi.h>
 #endif
 
+#include <string>
 #include <iostream>
 
 #include <FL/fl_utf8.h>
@@ -20,6 +21,7 @@ namespace py = pybind11;
 #    include "mrvPy/Cmds.h"
 #endif
 
+#include "mrvCore/mrvHome.h"
 
 #include "mrvApp/mrvApp.h"
 
@@ -81,7 +83,8 @@ int main(int argc, char* argv[])
 // This is a debugging step to see if mrv2 even starts.
 struct EarlyLogger {
     EarlyLogger() {
-        FILE* f = fopen("C:\\mrv2_early.log", "w");
+        std::string tmpfile = mrv::tmppath() + "/mrv2_early.log";
+        FILE* f = fopen(tmpfile.c_str(), "w");
         if (f) {
             fprintf(f, "Process started\n");
             fclose(f);
@@ -103,7 +106,8 @@ int WINAPI WinMain(
     int argc;
     char** argv;
     
-    FILE* f = fopen("C:\\mrv2_winmain.log", "w");
+    std::string tmpfile = mrv::tmppath() + "/mrv2_winmain.log";
+    FILE* f = fopen(tmpfile.c_str(), "w");
     if (f) {
         fprintf(f, "Process started\n");
         fclose(f);

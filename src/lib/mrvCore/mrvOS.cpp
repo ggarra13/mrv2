@@ -258,7 +258,7 @@ namespace mrv
             }
             else
             {
-                unsetenv("MRV2_ROOT");
+                unsetenv(L"MRV2_ROOT");
                 wExe = std::wstring(exe.begin(), exe.end());
 
                 // Allocate new array

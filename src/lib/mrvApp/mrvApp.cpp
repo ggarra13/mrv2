@@ -592,6 +592,9 @@ namespace mrv
         LOG_STATUS(_("Install Location: "));
         LOG_STATUS("\t" << mrv::rootpath());
         DBG;
+        
+        LOG_STATUS(_("Preferences Location: "));
+        LOG_STATUS("\t" << mrv::prefspath());
 
         // Create the main control.
         p.mainControl = new MainControl(ui);
