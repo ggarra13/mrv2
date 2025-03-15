@@ -1295,6 +1295,30 @@ msgstr ""
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr ""
 
+msgid "Print the log to the console."
+msgstr ""
+
+msgid "Show this message."
+msgstr ""
+
+msgid "Cannot parse option \"{0}\": {1}"
+msgstr ""
+
+msgid "Cannot parse argument \"{0}\": {1}"
+msgstr ""
+
+msgid "Usage:\n"
+msgstr ""
+
+msgid " [option]..."
+msgstr ""
+
+msgid "Arguments:\n"
+msgstr ""
+
+msgid "Options:\n"
+msgstr ""
+
 msgid "Play timelines, movies, and image sequences."
 msgstr ""
 

@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
@@ -1544,6 +1544,30 @@ msgstr "Abbrechen"
 
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Kanle: {1} {2} {3}"
+
+msgid "Print the log to the console."
+msgstr "Drucken Sie das Protokoll auf der Konsole."
+
+msgid "Show this message."
+msgstr "Zeigen Sie diese Nachricht."
+
+msgid "Cannot parse option \"{0}\": {1}"
+msgstr "Die Option \"{0}\" kann nicht analysiert werden: {1}"
+
+msgid "Cannot parse argument \"{0}\": {1}"
+msgstr "Das Argument \"{0}\" kann nicht analysiert werden: {1}"
+
+msgid "Usage:\n"
+msgstr "Verwendung:\n"
+
+msgid " [option]..."
+msgstr "[Option]..."
+
+msgid "Arguments:\n"
+msgstr "Argumente:\n"
+
+msgid "Options:\n"
+msgstr "Optionen:\n"
 
 msgid "Play timelines, movies, and image sequences."
 msgstr "Zeitleisten, Filme und Bildsequenzen abspielen."

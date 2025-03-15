@@ -135,14 +135,14 @@ namespace mrv
         kModule, __FUNCTION__ << "(" << __LINE__ << ") " << msg << std::endl)
 
 #if defined(NDEBUG)
-#    define DBGM3(msg)
-#    define DBGM2(msg)
-#    define DBGM1(msg)
-#    define DBGM0(msg)
-#    define DBG3
-#    define DBG2
-#    define DBG
-#else
+// #    define DBGM3(msg)
+// #    define DBGM2(msg)
+// #    define DBGM1(msg)
+// #    define DBGM0(msg)
+// #    define DBG3
+// #    define DBG2
+// #    define DBG
+// #else
 #    define DBGM3(msg)                                                         \
         do                                                                     \
         {                                                                      \

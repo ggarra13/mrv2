@@ -16,7 +16,6 @@ if [[ ! -e etc/build_dir.sh ]]; then
 fi
 
 NOARGS=1
-
 . etc/build_dir.sh
 
 locate_python

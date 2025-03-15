@@ -1,6 +1,6 @@
 # AI Simplified Chinese translations for mrv2 package
 # This file is distributed under the same license as the mrv2 package.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.5\n"
@@ -1552,6 +1552,30 @@ msgstr "取消"
 
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Channels: {1} {2} {3}"
+
+msgid "Print the log to the console."
+msgstr "打印到控制台的日志 。"
+
+msgid "Show this message."
+msgstr "显示此消息 。"
+
+msgid "Cannot parse option \"{0}\": {1}"
+msgstr "无法分析“ {0} ” 选项 : {1}"
+
+msgid "Cannot parse argument \"{0}\": {1}"
+msgstr "无法分析参数“ {0} ” : {1}"
+
+msgid "Usage:\n"
+msgstr "用法 :\n"
+
+msgid " [option]..."
+msgstr "[选择]..."
+
+msgid "Arguments:\n"
+msgstr "参数 :\n"
+
+msgid "Options:\n"
+msgstr "选项 :\n"
 
 msgid "Play timelines, movies, and image sequences."
 msgstr "播放时间轴、影片和图像序列"

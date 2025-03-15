@@ -58,7 +58,13 @@ if(TLRENDER_JPEG)
     set(FLTK_DEPENDENCIES libjpeg-turbo ${FLTK_DEPENDENCIES})
 endif()
 
-set(FLTK_PATCH )
+set(FLTK_PATCH
+    # For avoiding the show(argv) messing mrv2's color palette.
+    COMMAND
+    ${CMAKE_COMMAND} -E copy_if_different
+    "${PROJECT_SOURCE_DIR}/cmake/patches/FLTK-patch/src/drivers/GDI/Fl_GDI_Graphics_Driver_font.cxx"
+    "${CMAKE_BINARY_DIR}/deps/pyFLTK/src/FLTK/src/drivers/GDI/Fl_GDI_Graphics_Driver_font.cxx"
+)
     
 if (APPLE OR WIN32)
     set(TLRENDER_X11 OFF)

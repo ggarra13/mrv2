@@ -1,7 +1,7 @@
 # English translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.6\n"
@@ -1579,6 +1579,30 @@ msgstr "Cancel"
 
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Channels: {1} {2} {3}"
+
+msgid "Print the log to the console."
+msgstr "Print the log to the console."
+
+msgid "Show this message."
+msgstr "Show this message."
+
+msgid "Cannot parse option \"{0}\": {1}"
+msgstr "Cannot parse option \"{0}\": {1}"
+
+msgid "Cannot parse argument \"{0}\": {1}"
+msgstr "Cannot parse argument \"{0}\": {1}"
+
+msgid "Usage:\n"
+msgstr "Usage:\n"
+
+msgid " [option]..."
+msgstr " [option]..."
+
+msgid "Arguments:\n"
+msgstr "Arguments:\n"
+
+msgid "Options:\n"
+msgstr "Options:\n"
 
 msgid "Play timelines, movies, and image sequences."
 msgstr "Play timelines, movies, and image sequences."

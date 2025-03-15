@@ -1,7 +1,7 @@
 # Russian translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.8\n"
@@ -1593,6 +1593,30 @@ msgstr "Отмена"
 
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Каналы: {1} {2} {3}"
+
+msgid "Print the log to the console."
+msgstr "Распечатайте журнал на консоли."
+
+msgid "Show this message."
+msgstr "Покажите это сообщение."
+
+msgid "Cannot parse option \"{0}\": {1}"
+msgstr "Невозможно обработать вариант \" {0}\": {1}"
+
+msgid "Cannot parse argument \"{0}\": {1}"
+msgstr "Невозможно обдумать аргумент \" {0}: {1}"
+
+msgid "Usage:\n"
+msgstr "Использование:\n"
+
+msgid " [option]..."
+msgstr "[вариант]..."
+
+msgid "Arguments:\n"
+msgstr "Аргументы:\n"
+
+msgid "Options:\n"
+msgstr "Параметры:\n"
 
 msgid "Play timelines, movies, and image sequences."
 msgstr "Воспроизвести графики, фильмы и последовательности изображений."

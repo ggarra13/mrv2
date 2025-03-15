@@ -84,7 +84,6 @@ namespace mrv
         menu->clear();
 
         int idx;
-        DBG;
 
         menu->add(
             _("File/Open/Movie or Sequence"), kOpenImage.hotkey(),
@@ -105,7 +104,7 @@ namespace mrv
         menu->add(
             _("File/Open/Session"), kOpenSession.hotkey(),
             (Fl_Callback*)load_session_cb, ui);
-        DBG;
+        
 
         mode = 0;
         if (numFiles == 0)
@@ -183,7 +182,7 @@ namespace mrv
             _("Window/Presentation"), kTogglePresentation.hotkey(),
             (Fl_Callback*)toggle_presentation_cb, ui, FL_MENU_TOGGLE);
 
-        DBG;
+        
         const Viewport* uiView = ui->uiView;
         const Viewport* uiView2 = nullptr;
         if (ui->uiSecondary && ui->uiSecondary->window()->visible())
@@ -298,7 +297,7 @@ namespace mrv
         if (ui->uiToolsGroup->visible())
             item->set();
 
-        DBG;
+        
         mode = FL_MENU_TOGGLE;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
@@ -308,7 +307,7 @@ namespace mrv
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (uiView->hasFrameView())
             item->set();
-        DBG;
+        
 
         idx = menu->add(
             _("View/Safe Areas"), kSafeAreas.hotkey(),
@@ -323,7 +322,7 @@ namespace mrv
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (uiView->getDataWindow())
             item->set();
-        DBG;
+        
 
         idx = menu->add(
             _("View/OpenEXR/Display Window"), kDisplayWindow.hotkey(),
@@ -340,7 +339,7 @@ namespace mrv
         if (uiView->getIgnoreDisplayWindow())
             item->set();
 
-        DBG;
+        
 
         idx = menu->add(
             _("Panel/One Panel Only"), kToggleOnePanelOnly.hotkey(),
@@ -352,7 +351,7 @@ namespace mrv
         else
             item->clear();
 
-        DBG;
+        
 
         std::unordered_map<std::string, std::string > panelsMap;
         const WindowCallback* wc = kWindowCallbacks;
@@ -365,7 +364,7 @@ namespace mrv
         std::vector<std::pair<std::string, std::string>> vec(
             panelsMap.begin(), panelsMap.end());
 
-        DBG;
+        
         // Sort the vector in ascending order based on the keys
         std::locale loc;
         std::sort(
@@ -454,7 +453,7 @@ namespace mrv
                 continue; // Unknown window check
             }
 
-            DBG;
+            
             tmp = pair.first;
             std::string menu_name = menu_root + tmp + "\t";
             int idx = menu->add(
@@ -616,7 +615,7 @@ namespace mrv
         // Make sure to sync panels remotely.
         syncPanels();
 
-        DBG;
+        
         {
             const timeline::DisplayOptions& displayOptions =
                 ui->app->displayOptions();
@@ -935,7 +934,7 @@ namespace mrv
         }
 
         // Looping
-        DBG;
+        
 
         timeline::Loop loop = timeline::Loop::Loop;
         if (player)
@@ -1159,7 +1158,7 @@ namespace mrv
         if (displayOptions.clipInfo)
             item->set();
 
-        DBG;
+        
         mode = FL_MENU_RADIO;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
@@ -1458,7 +1457,7 @@ namespace mrv
         //                kCopyRGBAValues.hotkey(),
         //                (Fl_Callback*)copy_pixel_rgba_cb, (void*)view);
         // }
-        DBG;
+        
 
 #ifdef TLRENDER_OCIO
         mode = 0;
@@ -1731,7 +1730,7 @@ namespace mrv
         }
 #endif
 
-        DBG;
+        
         if (dynamic_cast< DummyClient* >(tcp) == nullptr)
         {
             mode = FL_MENU_TOGGLE;
@@ -1940,7 +1939,7 @@ namespace mrv
 #else
         menu->textfont(ui->uiPrefs->uiFontMenus->value());
 #endif
-        DBG;
+        
 
         menu->redraw();
     }
