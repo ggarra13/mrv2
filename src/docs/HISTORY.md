@@ -2,14 +2,10 @@ v1.3.6
 ======
 
 - Fixed a serious OpenEXR crash on multipart files.
-- Dramatically improved NDI input stream playback performance.  If playing with
-  no audio, it is immediate.  If playing with audio, it will play with a 4
-  seconds delay.
+- Dramatically improved NDI input stream playback performance.  If playing with no audio, it is immediate.  If playing with audio, it will play with a 4 seconds delay.
 - Fixed a hanging when playing NDI with audio.
 - Fixed a zombie process when playing NDI upon program exit.
-- Fixed locale (Internationalization) issues on Windows, which would make it
-  impossible to switch to a different language if your Windows was not set up
-  as English.
+- Fixed locale (Internationalization) issues on Windows, which would make it impossible to switch to a different language if your Windows was not set up as English.
 - Revamped locale on start up the first time you install mrv2 (or remove the
   preferences) on Windows and macOS to start with the System's locale.
 - Moved building of dav1d, lcms2, vpx and SvtAV1 on Windows to the tlRender
@@ -29,6 +25,8 @@ v1.3.6
   from Powershell or cmd.exe.
 - Fixed python's cmd.getLanguage() call potentially crashing.  This would make
   the update-mrv2.py plugin fail.
+- Fixed Window's _wexecv call with CreateProcessW to attach stderr/stdout
+properly.
 
 
 v1.3.5
