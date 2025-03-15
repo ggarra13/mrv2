@@ -9,8 +9,8 @@ set(FLTK_GIT_REPOSITORY "https://github.com/fltk/fltk.git")
 # The cutting EDGE!
 #set( FLTK_GIT_TAG master )
 
-#set(FLTK_GIT_TAG a206a778b415e5f21d3c1d86a1d509aca0265648)  # release-1.4.2
-set(FLTK_GIT_TAG 257435dca0c64b667ba82b885f9ef42c5c20962c)
+set(FLTK_GIT_TAG 257435dca0c64b667ba82b885f9ef42c5c20962c)   # needs patch
+set(FLTK_GIT_TAG 24aec69f27aedeead49ed629b7d434b8846826d3)
 
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
     # If we are building pyFLTK compile shared
@@ -59,12 +59,14 @@ if(TLRENDER_JPEG)
 endif()
 
 set(FLTK_PATCH
-    # For avoiding the show(argv) messing mrv2's color palette.
-    COMMAND
-    ${CMAKE_COMMAND} -E copy_if_different
-    "${PROJECT_SOURCE_DIR}/cmake/patches/FLTK-patch/src/drivers/GDI/Fl_GDI_Graphics_Driver_font.cxx"
-    "${CMAKE_BINARY_DIR}/deps/FLTK/src/FLTK/src/drivers/GDI/Fl_GDI_Graphics_Driver_font.cxx"
 )
+
+# set(FLTK_PATCH
+#     COMMAND
+#     ${CMAKE_COMMAND} -E copy_if_different
+#     "${PROJECT_SOURCE_DIR}/cmake/patches/FLTK-patch/src/drivers/GDI/Fl_GDI_Graphics_Driver_font.cxx"
+#     "${CMAKE_BINARY_DIR}/deps/FLTK/src/FLTK/src/drivers/GDI/Fl_GDI_Graphics_Driver_font.cxx"
+# )
     
 if (APPLE OR WIN32)
     set(TLRENDER_X11 OFF)

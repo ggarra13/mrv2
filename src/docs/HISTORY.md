@@ -27,6 +27,7 @@ v1.3.6
   the update-mrv2.py plugin fail.
 - Fixed Window's _wexecv call with CreateProcessW to attach stderr/stdout
 properly.
+- Fixed Window's set_fonts() returning font names longer than 32 characters leading to problems of some users starting the program.
 
 
 v1.3.5
