@@ -296,13 +296,11 @@ namespace mrv
         const char* language = fl_getenv("LANGUAGE");
         if (!language || strncmp(language, langcode, 2) != 0)
         {
+            const std::string languageCheck = langcode;
             wchar_t wlanguage[32];
             fl_utf8towc(langcode, strlen(langcode), wlanguage, 32);
             setenv(L"LANGUAGE", wlanguage, 1);
-            std::wcerr << "Setting language to " << wlanguage
-                       << std::endl;
             mrv::os::execv();
-            exit(0);
         }
 #else
         // Needed for Linux and OSX.  See above for windows.
@@ -329,8 +327,6 @@ namespace mrv
         const std::string& defaultLocale = getDefaultLocale();
         if (!defaultLocale.empty())
             language = defaultLocale.c_str();
-
-        std::cerr << "defaultLocale=" << language << std::endl;
         
         // Load ui language preferences to see if user chose a different
         // language than the OS one.

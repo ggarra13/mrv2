@@ -1036,12 +1036,15 @@ namespace mrv
         }
 
 #ifdef MRV2_PYBIND11
+        DBG;
         // Import the mrv2 python module so we read all python
         // plug-ins.
         py::module::import("mrv2");
+        DBG;
 
         // Discover Python plugins
         mrv2_discover_python_plugins();
+        DBG;
 
         //
         // Run command-line python script.
@@ -1109,6 +1112,7 @@ namespace mrv
             return;
         }
 
+        DBG;
         // Redirect Python's stdout/stderr to my own class
         p.pythonStdErrOutRedirect.reset(new PyStdErrOutStreamRedirect);
 #endif
