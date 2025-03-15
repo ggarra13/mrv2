@@ -23,6 +23,12 @@ v1.3.6
 - Made building faster by using NPROCS.
 - Made building faster by removing tlRender libraries we don't use, as Darby's
   code is diverging from the one used in mrv2.
+- Fixed several locale issues.
+- Fixed problem on Windows making the executable not run.
+- Fixed command-line arguments not showing up when the application was used
+  from Powershell or cmd.exe.
+- Fixed python's cmd.getLanguage() call potentially crashing.  This would make
+  the update-mrv2.py plugin fail.
 
 
 v1.3.5

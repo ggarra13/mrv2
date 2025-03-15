@@ -270,7 +270,6 @@ namespace mrv
             else
             {
                 // Convert provided exe to wchar_t
-                unsetenv(L"MRV2_ROOT");
                 int len = MultiByteToWideChar(CP_UTF8, 0, exe.c_str(), -1, wExe, MAX_PATH);
                 if (len <= 0)
                 {
@@ -295,33 +294,101 @@ namespace mrv
                 wArgs.push_back(wSession);
             }
 
-            // Allocate newArgv with exact size
-            size_t argCount = wArgs.size() + 1; // +1 for nullptr
-            newArgv = new LPWSTR[argCount];
+            // // Allocate newArgv with exact size
+            // size_t argCount = wArgs.size() + 1; // +1 for nullptr
+            // newArgv = new LPWSTR[argCount];
+            // for (size_t i = 0; i < wArgs.size(); ++i)
+            // {
+            //     if (wcschr(wArgs[i].c_str(), L' ') != nullptr)
+            //     {
+            //         wArgs[i] = L"\"" + wArgs[i] + L"\""; // Quote if spaces
+            //     }
+            //     newArgv[i] = const_cast<LPWSTR>(wArgs[i].c_str()); // Safe: wArgs lives until execv
+            // }
+            // newArgv[argCount - 1] = nullptr;
+            // // Call _wexecv
+            // LPWSTR cmd = wExe;  // command must be unquoted
+            // unsetenv(L"MRV2_ROOT"); // Remove MRV2_ROOT from environment
+            // int result = _wexecv(wExe, newArgv);
+            // if (result == -1)
+            // {
+            //     LOG_ERROR("'_wexecv' failed with errno: " + std::to_string(errno));
+            //     std::wcerr << L"Command: " << cmd;
+            //     for (int i = 1; i < argc; ++i)
+            //     {
+            //         std::wcerr << L" " << newArgv[i];
+            //     }
+            //     std::wcerr << std::endl;
+            // }
+            //
+            // // Cleanup
+            // delete[] newArgv;
+            // if (argv) LocalFree(argv);
+            //
+            // return result == -1 ? EXIT_FAILURE : 0;
+
+
+            // Build the command line string for CreateProcess
+            std::wstring cmdLine;
             for (size_t i = 0; i < wArgs.size(); ++i)
             {
                 if (wcschr(wArgs[i].c_str(), L' ') != nullptr)
                 {
-                    wArgs[i] = L"\"" + wArgs[i] + L"\""; // Quote if spaces
+                    cmdLine += L"\"" + wArgs[i] + L"\"";
                 }
-                newArgv[i] = const_cast<LPWSTR>(wArgs[i].c_str()); // Safe: wArgs lives until execv
+                else
+                {
+                    cmdLine += wArgs[i];
+                }
+                if (i < wArgs.size() - 1) cmdLine += L" ";
             }
-            newArgv[argCount - 1] = nullptr;
 
-            // Call _wexecv
-            LPWSTR cmd = newArgv[0];
-            int result = _wexecv(cmd, newArgv);
-            if (result == -1)
+            // Setup STARTUPINFOW to inherit handles
+            STARTUPINFOW si = { sizeof(si) };
+            PROCESS_INFORMATION pi = { 0 };
+            si.dwFlags = STARTF_USESTDHANDLES;
+            si.hStdInput = GetStdHandle(STD_INPUT_HANDLE);
+            si.hStdOutput = GetStdHandle(STD_OUTPUT_HANDLE);
+            si.hStdError = GetStdHandle(STD_ERROR_HANDLE);
+
+            // Create the process
+            BOOL success = CreateProcessW(
+                wExe,                   // Executable path
+                &cmdLine[0],            // Command line (must be writable)
+                NULL,                   // Process handle not inheritable
+                NULL,                   // Thread handle not inheritable
+                TRUE,                   // Inherit handles
+                0,                      // Creation flags
+                NULL,                   // Use parent's environment
+                NULL,                   // Use parent's current directory
+                &si,                    // STARTUPINFO
+                &pi                     // PROCESS_INFORMATION
+                );
+
+            if (!success)
             {
-                LOG_ERROR("'_wexecv' failed with errno: " + std::to_string(errno));
-                wprintf(L"_wexecv failed: errno=%d path=%s\n", errno, cmd);
+                DWORD error = GetLastError();
+                LOG_ERROR("CreateProcessW failed with error: " +
+                          std::to_string(error));
+                std::wcerr << L"Command: " << cmdLine << std::endl;
+                if (argv) LocalFree(argv);
+                return EXIT_FAILURE;
             }
+
+            // Wait for the process to complete (optional, remove if
+            // you don't want to wait)
+            WaitForSingleObject(pi.hProcess, INFINITE);
+
+            // Get the exit code
+            DWORD exitCode;
+            GetExitCodeProcess(pi.hProcess, &exitCode);
 
             // Cleanup
-            delete[] newArgv;
+            CloseHandle(pi.hProcess);
+            CloseHandle(pi.hThread);
             if (argv) LocalFree(argv);
 
-            return result == -1 ? EXIT_FAILURE : 0;
+            exit(exitCode);
 #else
             std::string run;
             if (exe.empty())

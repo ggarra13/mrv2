@@ -252,17 +252,19 @@ namespace mrv
 
     namespace
     {
-        inline void open_console()
+        void open_console()
         {
 #ifdef _WIN32
+            // If TERM is defined, user fired the application from
+            // the Msys console that does not show these problems.x
             const char* term = fl_getenv("TERM");
             if (!term || strlen(term) == 0)
             {
-                BOOL ok = AttachConsole(ATTACH_PARENT_PROCESS);
-                if (ok)
-                {
-                    freopen("conout$", "w", stdout);
-                    freopen("conout$", "w", stderr);
+                if (AttachConsole(ATTACH_PARENT_PROCESS)) {
+                    // Redirect stdout and stderr to the parent console
+                    freopen("CONOUT$", "w", stdout);
+                    freopen("CONOUT$", "w", stderr);
+                    return;
                 }
             }
 #endif
