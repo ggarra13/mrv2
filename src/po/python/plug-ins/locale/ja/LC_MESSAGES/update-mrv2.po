@@ -1,0 +1,132 @@
+# Japanese translations for mrv package.
+# Automatically generated, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: mrv 2-build\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ASCII\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid ""
+"\n"
+"\n"
+"Install completed with output:\n"
+msgstr ""
+
+msgid "Removed temporary \""
+msgstr ""
+
+msgid "The new version of mrv2 was installed."
+msgstr ""
+
+msgid "Could not locate mrv2 in:\n"
+msgstr ""
+
+msgid "Maybe you installed it in a non-default location."
+msgstr ""
+
+msgid "Something failed installing mrv2 - It is not in \""
+msgstr ""
+
+msgid "Invalid ISO 8601 format provided: "
+msgstr ""
+
+msgid "No file matching"
+msgstr ""
+
+msgid "was found"
+msgstr ""
+
+msgid "No match found"
+msgstr ""
+
+msgid "Install Location: "
+msgstr ""
+
+msgid "Error retrieving value:\n"
+msgstr ""
+
+msgid "Unknown platform"
+msgstr ""
+
+msgid "Saving session:"
+msgstr ""
+
+msgid "An unexpected error occurred:"
+msgstr ""
+
+msgid "Trying to install"
+msgstr ""
+
+msgid "Please wait"
+msgstr ""
+
+msgid "Enter Sudo Password"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+msgid "You will need to install file"
+msgstr ""
+
+msgid "manually."
+msgstr ""
+
+msgid "Unknown operating system"
+msgstr ""
+
+msgid "Downloading "
+msgstr ""
+
+msgid "Download seems to have failed!"
+msgstr ""
+
+msgid "Release Notes"
+msgstr ""
+
+msgid "Current version is v"
+msgstr ""
+
+msgid "Latest version at Github is v"
+msgstr ""
+
+msgid "Released on "
+msgstr ""
+
+msgid "Ignore"
+msgstr ""
+
+msgid "Error fetching latest release information:\n"
+msgstr ""
+
+msgid "There's a new release but it has not been more than 5 days"
+msgstr ""
+
+msgid "unknown date."
+msgstr ""
+
+msgid "Update anyway"
+msgstr ""
+
+msgid "Downgrade"
+msgstr ""
+
+msgid "Upgrade"
+msgstr ""
+
+msgid "No download url was found for"
+msgstr ""
+
+msgid "No releases found for the specified repository."
+msgstr ""
+
+msgid "Help/Update mrv2"
+msgstr ""

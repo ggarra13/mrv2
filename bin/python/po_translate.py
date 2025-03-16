@@ -199,6 +199,8 @@ class POTranslator:
         if self.code == 'pt' or self.code == 'fr' or \
            self.code == 'es' or self.code == 'it':
             self.helsinki = 'ROMANCE'
+        elif self.code == 'ja':
+            self.helsinki = 'jap'
         
         self.have_seen = {}
 
