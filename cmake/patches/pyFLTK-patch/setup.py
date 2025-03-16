@@ -339,7 +339,7 @@ class PySwigCommand(setuptools.Command):
 
   def run(self):
     """Run command."""
-    command = ['swig', '-D{0}'.format(sys.platform.upper()), '-DFL_INTERNALS', '-w302', '-w312', '-w325', '-w362', '-w389', '-w401', '-w473', '-w509', '-I./swig', '-DPYTHON', '-DPYTHON3', '-c++', '-python', '-shadow', '-fastdispatch', '-outdir', 'fltk14', '-o', 'fltk14/fltk_wrap.cpp', './swig/fltk.i']
+    command = ['swig', '-D{0}'.format(sys.platform.upper()), '-DFL_INTERNALS', '-w302', '-w312', '-w325', '-w362', '-w389', '-w401', '-w473', '-w509', '-I./swig', '-DPYTHON', '-DPYTHON3', '-c++', '-python', '-shadow', '-fastdispatch', '-outdir', 'fltk', '-o', 'fltk/fltk_wrap.cpp', './swig/fltk.i']
     pos = command.index('-I./swig')
     if sys.platform.upper() == 'DARWIN':
         command[pos:pos] = ["-D__APPLE__"]
@@ -359,10 +359,10 @@ if cxx_flags != '':
     
 # module declarations
 contrib_sources = []
-module1 = setuptools.Extension(name='fltk14._fltk14',
+module1 = setuptools.Extension(name='fltk._fltk',
 		    define_macros=def_list,
 		    include_dirs = all_include_dirs+UserIncludeDirs,
-                    sources = ['./fltk14/fltk_wrap.cpp',
+                    sources = ['./fltk/fltk_wrap.cpp',
                                './contrib/ListSelect.cpp']+UserDefinedSources,
 		    extra_compile_args=compile_arg_list,
                     extra_link_args=link_arg_list,
@@ -375,13 +375,13 @@ with open("README.md", "r", encoding="utf-8") as fh:
 setuptools.setup (cmdclass={
         'swig': PySwigCommand,
        },
-       name = 'pyFltk1.4',
-       version = '1.4.0rc1',
+       name = 'pyfltk',
+       version = '1.4.1.0',
        #setup_requires=['wheel'],
        ext_modules = [module1],
-       packages = ['fltk14','fltk14.test'],
+       packages = ['fltk','fltk.test'],
 
-       package_data={'fltk14': ['fltk14']},
+       package_data={'fltk': ['fltk']},
        include_package_data=True,
 
        # metadata to display on PyPI

@@ -137,9 +137,6 @@ namespace mrv
 
     struct Options
     {
-#ifdef DEBUG
-        int debug = 0;
-#endif
         std::string dummy;
         bool createOtioTimeline = false;
         std::vector<std::string> fileNames;
@@ -252,17 +249,19 @@ namespace mrv
 
     namespace
     {
-        inline void open_console()
+        void open_console()
         {
 #ifdef _WIN32
+            // If TERM is defined, user fired the application from
+            // the Msys console that does not show these problems.x
             const char* term = fl_getenv("TERM");
             if (!term || strlen(term) == 0)
             {
-                BOOL ok = AttachConsole(ATTACH_PARENT_PROCESS);
-                if (ok)
-                {
-                    freopen("conout$", "w", stdout);
-                    freopen("conout$", "w", stderr);
+                if (AttachConsole(ATTACH_PARENT_PROCESS)) {
+                    // Redirect stdout and stderr to the parent console
+                    freopen("CONOUT$", "w", stdout);
+                    freopen("CONOUT$", "w", stderr);
+                    return;
                 }
             }
 #endif
@@ -300,10 +299,13 @@ namespace mrv
         App::app = this;
         ViewerUI::app = this;
 
+        DBG;
         open_console();
 
+        DBG;
         const std::string& msg = setLanguageLocale();
 
+        DBG;
         BaseApp::_init(
             app::convert(argc, argv), context, "mrv2",
             _("Play timelines, movies, and image sequences."),
@@ -313,7 +315,7 @@ namespace mrv
                   "folders."),
                 true, true)},
             {
-#ifndef NDEBUG
+#if 1 //ndef NDEBUG
                 app::CmdLineValueOption<int>::create(
                     Preferences::debug, {"-debug", "-d"},
                     _("Debug verbosity.")),
@@ -475,12 +477,15 @@ namespace mrv
                     p.options.displayVersion, {"-version", "-v"},
                     _("Return the version and exit."))});
 
+        DBG;
         const int exitCode = getExit();
         if (exitCode != 0)
         {
+            DBG;
             return;
         }
 
+        DBG;
         file::Path lastPath;
         const auto& unusedArgs = getUnusedArgs();
         for (const auto& unused : unusedArgs)
@@ -512,15 +517,24 @@ namespace mrv
         DBG;
         // Initialize FLTK.
         Fl::scheme("gtk+");
+        DBG;
         Fl::option(Fl::OPTION_VISIBLE_FOCUS, false);
+        DBG;
         Fl::use_high_res_GL(true);
+        DBG;
+
+        
+        
         Fl::set_fonts("-*");
+        DBG;
         Fl::lock(); // needed for NDI and multithreaded logging
 
         DBG;
         // Create the Settings
         p.settings = new SettingsObject();
 
+        DBG;
+        
         // Create the interface.
         ui = new ViewerUI();
         if (!ui)
@@ -532,6 +546,7 @@ namespace mrv
         // Classes used to handle network connections
 #ifdef MRV2_NETWORK
         p.commandInterpreter = new CommandInterpreter(ui);
+        DBG;
 #endif
         tcp = new DummyClient();
 
@@ -564,12 +579,15 @@ namespace mrv
         DBG;
         uiLogDisplay = new LogDisplay(0, 20, 340, 320);
 
+        DBG;
         std::string version = "mrv2 v";
         version += mrv::version();
         version += " ";
         version += mrv::build_date();
         LOG_STATUS(version);
         LOG_STATUS(msg);
+        
+        DBG;
 
         {
             const std::string& info = mrv::build_info();
@@ -592,6 +610,9 @@ namespace mrv
         LOG_STATUS(_("Install Location: "));
         LOG_STATUS("\t" << mrv::rootpath());
         DBG;
+        
+        LOG_STATUS(_("Preferences Location: "));
+        LOG_STATUS("\t" << mrv::prefspath());
 
         // Create the main control.
         p.mainControl = new MainControl(ui);
@@ -1033,12 +1054,15 @@ namespace mrv
         }
 
 #ifdef MRV2_PYBIND11
+        DBG;
         // Import the mrv2 python module so we read all python
         // plug-ins.
         py::module::import("mrv2");
+        DBG;
 
         // Discover Python plugins
         mrv2_discover_python_plugins();
+        DBG;
 
         //
         // Run command-line python script.
@@ -1106,6 +1130,7 @@ namespace mrv
             return;
         }
 
+        DBG;
         // Redirect Python's stdout/stderr to my own class
         p.pythonStdErrOutRedirect.reset(new PyStdErrOutStreamRedirect);
 #endif

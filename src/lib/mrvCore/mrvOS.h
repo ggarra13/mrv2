@@ -17,8 +17,10 @@ namespace mrv
         //! Return an environment variable's content in UTF-8 or empty string.
         std::string sgetenv(const char* const n);
 
-        //! Execute a command.
-        std::string exec_command(const std::string& command);
+        //! Execute a command through pipes and capture stdout/sterr.
+        //! Returns the exit value of the command.
+        int exec_command(const std::string& command, std::string& output,
+                         std::string& errors);
 
         //! Re-run the executable with its parameters or an optional session
         //! file.

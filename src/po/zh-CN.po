@@ -1553,6 +1553,30 @@ msgstr "取消"
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Channels: {1} {2} {3}"
 
+msgid "Print the log to the console."
+msgstr "打印到控制台的日志 。"
+
+msgid "Show this message."
+msgstr "显示此消息 。"
+
+msgid "Cannot parse option \"{0}\": {1}"
+msgstr "无法分析“ {0} ” 选项 : {1}"
+
+msgid "Cannot parse argument \"{0}\": {1}"
+msgstr "无法分析参数“ {0} ” : {1}"
+
+msgid "Usage:\n"
+msgstr "用法 :\n"
+
+msgid " [option]..."
+msgstr "[选择]..."
+
+msgid "Arguments:\n"
+msgstr "参数 :\n"
+
+msgid "Options:\n"
+msgstr "选项 :\n"
+
 msgid "Play timelines, movies, and image sequences."
 msgstr "播放时间轴、影片和图像序列"
 
@@ -1674,6 +1698,9 @@ msgstr "退出 mrv2"
 
 msgid "Install Location: "
 msgstr "安装位置 :"
+
+msgid "Preferences Location: "
+msgstr "首选项位置 :"
 
 msgid "Could not read python script '{0}'"
 msgstr "无法读取 python 脚本 '{0}'"

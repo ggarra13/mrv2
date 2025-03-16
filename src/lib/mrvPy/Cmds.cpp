@@ -41,7 +41,10 @@ namespace mrv2
 
         std::string getLanguage()
         {
-            return fl_getenv("LANGUAGE");
+            const char* language = fl_getenv("LANGUAGE");
+            if (!language)
+                return "en_US.UTF-8";
+            return language;
         }
 
         std::string getVersion()

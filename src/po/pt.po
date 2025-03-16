@@ -1557,6 +1557,30 @@ msgstr "Cancelar"
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Canais: {1} {2} {3}"
 
+msgid "Print the log to the console."
+msgstr "Imprima o log para o console."
+
+msgid "Show this message."
+msgstr "Mostra esta mensagem."
+
+msgid "Cannot parse option \"{0}\": {1}"
+msgstr "Não foi possível analisar a opção \"{0}\": {1}"
+
+msgid "Cannot parse argument \"{0}\": {1}"
+msgstr "Não foi possível analisar o argumento \"{0}\": {1}"
+
+msgid "Usage:\n"
+msgstr "Utilização:\n"
+
+msgid " [option]..."
+msgstr "[Opção]..."
+
+msgid "Arguments:\n"
+msgstr "Argumentos:\n"
+
+msgid "Options:\n"
+msgstr "Opções:\n"
+
 msgid "Play timelines, movies, and image sequences."
 msgstr "Reproduzir linhas de tempo, filmes e sequncias de imagens."
 
@@ -1682,6 +1706,9 @@ msgstr "Sair do mrv2"
 
 msgid "Install Location: "
 msgstr "Instalar a Localização:"
+
+msgid "Preferences Location: "
+msgstr "Localização das Preferências:"
 
 msgid "Could not read python script '{0}'"
 msgstr "No foi possvel ler o script python '{0}'"

@@ -9,7 +9,10 @@
 #    include <windows.h>
 #    include <shellapi.h>
 #else
+#    include <cstdio>
+#    include <sys/wait.h>
 #    include <unistd.h>
+#    include <fcntl.h>
 #endif
 
 #include <algorithm>
@@ -59,213 +62,333 @@ namespace mrv
             else
                 return std::string();
         }
+        #include <string>
+#include <vector>
+#include <stdexcept>
+#include <array>
+#include <memory>
 
 #ifdef _WIN32
-
-        std::string exec_command(const std::string& command)
+        int exec_command(const std::string& command,
+                         std::string& std_out,
+                         std::string& std_err)
         {
-            std::string output;
             SECURITY_ATTRIBUTES saAttr;
-            HANDLE hRead, hWrite;
+            HANDLE hStdOutRead, hStdOutWrite;
+            HANDLE hStdErrRead, hStdErrWrite;
 
-            // Set up security attributes to allow pipe handles to be inherited
+            // Initialize output variables
+            std_out.clear();
+            std_err.clear();
+
+            // Set up security attributes
             saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
             saAttr.bInheritHandle = TRUE;
             saAttr.lpSecurityDescriptor = NULL;
 
-            // Create a pipe for the child process’s STDOUT
-            if (!CreatePipe(&hRead, &hWrite, &saAttr, 0))
+            // Create pipes for stdout and stderr
+            if (!CreatePipe(&hStdOutRead, &hStdOutWrite, &saAttr, 0) ||
+                !CreatePipe(&hStdErrRead, &hStdErrWrite, &saAttr, 0))
             {
                 throw std::runtime_error("CreatePipe failed!");
             }
 
-            // Ensure the read handle to the pipe is not inherited
-            SetHandleInformation(hRead, HANDLE_FLAG_INHERIT, 0);
+            // Ensure the read handles are not inherited
+            SetHandleInformation(hStdOutRead, HANDLE_FLAG_INHERIT, 0);
+            SetHandleInformation(hStdErrRead, HANDLE_FLAG_INHERIT, 0);
 
-            // Create the child process
-            PROCESS_INFORMATION pi;
+            // Configure STARTUPINFO
             STARTUPINFO si;
-            ZeroMemory(&pi, sizeof(PROCESS_INFORMATION));
+            PROCESS_INFORMATION pi;
             ZeroMemory(&si, sizeof(STARTUPINFO));
+            ZeroMemory(&pi, sizeof(PROCESS_INFORMATION));
             si.cb = sizeof(STARTUPINFO);
-            si.hStdOutput = hWrite;
-            si.hStdError = hWrite;
+            si.hStdOutput = hStdOutWrite;
+            si.hStdError = hStdErrWrite;
             si.dwFlags |= STARTF_USESTDHANDLES | STARTF_USESHOWWINDOW;
-            si.wShowWindow = SW_HIDE; // Prevents console window from appearing
+            si.wShowWindow = SW_HIDE; // Prevent console window from appearing
 
-            // Convert command to a writable string buffer
+            // Convert command to mutable char buffer
             std::vector<char> cmd(command.begin(), command.end());
-            cmd.push_back(0); // Null-terminate the string
+            cmd.push_back(0);
 
             // Create the process
-            if (!CreateProcess(
-                    NULL, cmd.data(), NULL, NULL, TRUE, CREATE_NO_WINDOW, NULL,
-                    NULL, &si, &pi))
+            if (!CreateProcess(NULL, cmd.data(), NULL, NULL, TRUE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi))
             {
-                CloseHandle(hRead);
-                CloseHandle(hWrite);
+                CloseHandle(hStdOutRead);
+                CloseHandle(hStdOutWrite);
+                CloseHandle(hStdErrRead);
+                CloseHandle(hStdErrWrite);
                 throw std::runtime_error("CreateProcess failed!");
             }
 
-            // Close the write end of the pipe in the parent process
-            CloseHandle(hWrite);
+            // Close write ends in parent
+            CloseHandle(hStdOutWrite);
+            CloseHandle(hStdErrWrite);
 
-            // Read output from the child process
-            char buffer[128];
+            // Read stdout and stderr
+            char buffer[256];
             DWORD bytesRead;
-            while (
-                ReadFile(hRead, buffer, sizeof(buffer) - 1, &bytesRead, NULL) &&
-                bytesRead > 0)
+
+            while (ReadFile(hStdOutRead, buffer, sizeof(buffer) - 1, &bytesRead, NULL) && bytesRead > 0)
             {
                 buffer[bytesRead] = '\0';
-                output += buffer;
+                std_out += buffer;
             }
 
+            while (ReadFile(hStdErrRead, buffer, sizeof(buffer) - 1, &bytesRead, NULL) && bytesRead > 0)
+            {
+                buffer[bytesRead] = '\0';
+                std_err += buffer;
+            }
+
+            // Close handles
+            CloseHandle(hStdOutRead);
+            CloseHandle(hStdErrRead);
+
+            // Wait for process to exit and get exit code
+            WaitForSingleObject(pi.hProcess, INFINITE);
+            DWORD exitCode;
+            GetExitCodeProcess(pi.hProcess, &exitCode);
+
             // Cleanup
-            CloseHandle(hRead);
             CloseHandle(pi.hProcess);
             CloseHandle(pi.hThread);
 
-            return output;
+            return static_cast<int>(exitCode);
         }
 
 #else
-        // Function to execute a shell command and capture the output
-        std::string exec_command(const std::string& command)
+
+        int exec_command(const std::string& command,
+                         std::string& std_out, std::string& std_err)
         {
-            std::string out;
+            int stdout_pipe[2], stderr_pipe[2];
+            std_out.clear();
+            std_err.clear();
 
-            std::array<char, 128> buffer;
-
-            // Open a pipe to the command
-            std::shared_ptr<FILE> pipe(popen(command.c_str(), "r"), pclose);
-            if (!pipe)
+            if (pipe(stdout_pipe) != 0 || pipe(stderr_pipe) != 0)
             {
-                throw std::runtime_error("popen() failed!");
+                throw std::runtime_error("pipe() failed!");
             }
 
-            // Read the output from the command
-            while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr)
+            pid_t pid = fork();
+            if (pid == -1)
             {
-                out += buffer.data();
+                throw std::runtime_error("fork() failed!");
+            }
+            else if (pid == 0) // Child process
+            {
+                close(stdout_pipe[0]); // Close read end of stdout pipe
+                close(stderr_pipe[0]); // Close read end of stderr pipe
+
+                dup2(stdout_pipe[1], STDOUT_FILENO); // Redirect stdout to pipe
+                dup2(stderr_pipe[1], STDERR_FILENO); // Redirect stderr to pipe
+
+                close(stdout_pipe[1]);
+                close(stderr_pipe[1]);
+
+                execl("/bin/sh", "sh", "-c", command.c_str(), NULL);
+                _exit(127); // Only reached if execl fails
             }
 
-            return out;
+            // Parent process
+            close(stdout_pipe[1]); // Close write end
+            close(stderr_pipe[1]); // Close write end
+
+            char buffer[256];
+            ssize_t bytesRead;
+
+            while ((bytesRead = read(stdout_pipe[0], buffer, sizeof(buffer) - 1)) > 0)
+            {
+                buffer[bytesRead] = '\0';
+                std_out += buffer;
+            }
+
+            while ((bytesRead = read(stderr_pipe[0], buffer, sizeof(buffer) - 1)) > 0)
+            {
+                buffer[bytesRead] = '\0';
+                std_err += buffer;
+            }
+
+            close(stdout_pipe[0]);
+            close(stderr_pipe[0]);
+
+            int status;
+            waitpid(pid, &status, 0);
+
+            return WIFEXITED(status) ? WEXITSTATUS(status) : -1;
         }
+
 #endif
 
+        // When no session is provided, pass all the arguments the user
+        // used to call the execuutable.  We use this routine to restart
+        // mrv2 with all its parameters so that the LANGUAGE env. variable
+        // takes effect.
+        //
+        // When a session is provided, just pass that as a parameter
+        //
         int execv(const std::string& exe, const std::string& session)
         {
-
 #ifdef _WIN32
-            int argc = 2;
             LPWSTR* argv = nullptr;
             LPWSTR* newArgv = nullptr;
-            std::wstring wExe;
-            std::wstring wSession;
+            int argc = 0;
+            wchar_t wExe[MAX_PATH];
+            std::vector<std::wstring> wArgs; // To store converted args safely
 
+            // Get the executable path
             if (exe.empty())
             {
-                // Get the full command line string
+                // Get the full command line and parse it
                 LPWSTR lpCmdLine = GetCommandLineW();
-
-                // Parse the command line string into an array of arguments
                 argv = CommandLineToArgvW(lpCmdLine, &argc);
-
-                if (argv == nullptr)
+                if (!argv || argc < 1)
                 {
-                    wprintf(L"Failed to parse command line\n");
+                    LOG_ERROR("Failed to parse command line");
                     return EXIT_FAILURE;
                 }
 
-                // Allocate new array
-                argc = argc + 2;
+                // Use the resolved executable path
+                DWORD len = GetModuleFileNameW(NULL, wExe, MAX_PATH);
+                if (len == 0 || len >= MAX_PATH)
+                {
+                    LOG_ERROR("GetModuleFileNameW failed");
+                    LocalFree(argv);
+                    return EXIT_FAILURE;
+                }
 
-                newArgv = new LPWSTR[argc];
-                for (int i = 0; i < argc; ++i)
-                    newArgv[i] = nullptr;
-
-                for (int i = 0; i < argc - 1; ++i)
-                    newArgv[i] = argv[i];
+                // Store original arguments (skip argv[0])
+                wArgs.push_back(wExe);
+                if (session.empty())
+                {
+                    for (int i = 1; i < argc; ++i)
+                        wArgs.push_back(argv[i]);
+                }
             }
             else
             {
-                unsetenv("MRV2_ROOT");
-                wExe = std::wstring(exe.begin(), exe.end());
-
-                // Allocate new array
-                argc = 3;
-                newArgv = new LPWSTR[argc];
-                newArgv[0] = const_cast<LPWSTR>(wExe.c_str());
-                newArgv[1] = nullptr;
-                newArgv[2] = nullptr;
+                // Convert provided exe to wchar_t
+                int len = MultiByteToWideChar(CP_UTF8, 0, exe.c_str(), -1, wExe, MAX_PATH);
+                if (len <= 0)
+                {
+                    LOG_ERROR("Failed to convert exe to wide string");
+                    return EXIT_FAILURE;
+                }
+                wArgs.push_back(wExe);
             }
 
+            // Add session if provided
             if (!session.empty())
             {
-                wSession = std::wstring(session.begin(), session.end());
-                newArgv[1] = const_cast<LPWSTR>(wSession.c_str());
-            }
-
-            // Enclose argv[0] in double quotes if it contains spaces
-            LPWSTR cmd = newArgv[0];
-            bool* allocated = new bool[argc];
-            for (int i = 0; i < argc; i++)
-            {
-                allocated[i] = false;
-                const LPWSTR arg = newArgv[i];
-                if (arg == nullptr)
-                    continue;
-
-                if (wcschr(arg, L' ') != NULL)
+                wchar_t wSession[MAX_PATH];
+                int len = MultiByteToWideChar(CP_UTF8, 0, session.c_str(), -1, wSession, MAX_PATH);
+                if (len <= 0)
                 {
-                    // 2 for quotes, 1 for null terminator
-                    size_t len = wcslen(arg) + 3;
-                    LPWSTR quoted_arg = (LPWSTR)malloc(len * sizeof(wchar_t));
-                    if (quoted_arg == NULL)
-                    {
-                        wprintf(
-                            L"Failed to allocate memory for command line\n");
-                        return EXIT_FAILURE;
-                    }
-                    swprintf_s(quoted_arg, len, L"\"%s\"", arg);
-
-                    // Free the memory used by the unquoted argument
-                    newArgv[i] = quoted_arg;
-                    allocated[i] = true;
+                    LOG_ERROR("Failed to convert session to wide string");
+                    if (argv) LocalFree(argv);
+                    return EXIT_FAILURE;
                 }
+                if (wArgs.size() > 1) wArgs.resize(1); // Clear extra args
+                wArgs.push_back(wSession);
             }
 
-            // Call _wexecv
-            int result;
-            result = _wexecv(cmd, newArgv);
+            // // Allocate newArgv with exact size
+            // size_t argCount = wArgs.size() + 1; // +1 for nullptr
+            // newArgv = new LPWSTR[argCount];
+            // for (size_t i = 0; i < wArgs.size(); ++i)
+            // {
+            //     if (wcschr(wArgs[i].c_str(), L' ') != nullptr)
+            //     {
+            //         wArgs[i] = L"\"" + wArgs[i] + L"\""; // Quote if spaces
+            //     }
+            //     newArgv[i] = const_cast<LPWSTR>(wArgs[i].c_str()); // Safe: wArgs lives until execv
+            // }
+            // newArgv[argCount - 1] = nullptr;
+            // // Call _wexecv
+            // LPWSTR cmd = wExe;  // command must be unquoted
+            // unsetenv(L"MRV2_ROOT"); // Remove MRV2_ROOT from environment
+            // int result = _wexecv(wExe, newArgv);
+            // if (result == -1)
+            // {
+            //     LOG_ERROR("'_wexecv' failed with errno: " + std::to_string(errno));
+            //     std::wcerr << L"Command: " << cmd;
+            //     for (int i = 1; i < argc; ++i)
+            //     {
+            //         std::wcerr << L" " << newArgv[i];
+            //     }
+            //     std::wcerr << std::endl;
+            // }
+            //
+            // // Cleanup
+            // delete[] newArgv;
+            // if (argv) LocalFree(argv);
+            //
+            // return result == -1 ? EXIT_FAILURE : 0;
 
-            // Free the array of arguments
-            for (int i = 0; i < argc; i++)
-            {
-                if (allocated[i])
-                    free(newArgv[i]);
-                newArgv[i] = nullptr;
-            }
-            delete[] newArgv;
-            delete[] allocated;
 
-            if (argv)
+            // Build the command line string for CreateProcess
+            std::wstring cmdLine;
+            for (size_t i = 0; i < wArgs.size(); ++i)
             {
-                for (int i = 0; i < argc; i++)
+                if (wcschr(wArgs[i].c_str(), L' ') != nullptr)
                 {
-                    free(argv[i]);
-                    argv[i] = nullptr;
+                    cmdLine += L"\"" + wArgs[i] + L"\"";
                 }
-                LocalFree(argv);
+                else
+                {
+                    cmdLine += wArgs[i];
+                }
+                if (i < wArgs.size() - 1) cmdLine += L" ";
             }
-            if (result == -1)
+
+            // Setup STARTUPINFOW to inherit handles
+            STARTUPINFOW si = { sizeof(si) };
+            PROCESS_INFORMATION pi = { 0 };
+            si.dwFlags = STARTF_USESTDHANDLES;
+            si.hStdInput = GetStdHandle(STD_INPUT_HANDLE);
+            si.hStdOutput = GetStdHandle(STD_OUTPUT_HANDLE);
+            si.hStdError = GetStdHandle(STD_ERROR_HANDLE);
+
+            // Create the process
+            BOOL success = CreateProcessW(
+                wExe,                   // Executable path
+                &cmdLine[0],            // Command line (must be writable)
+                NULL,                   // Process handle not inheritable
+                NULL,                   // Thread handle not inheritable
+                TRUE,                   // Inherit handles
+                0,                      // Creation flags
+                NULL,                   // Use parent's environment
+                NULL,                   // Use parent's current directory
+                &si,                    // STARTUPINFO
+                &pi                     // PROCESS_INFORMATION
+                );
+
+            if (!success)
             {
-                perror("_wexecv");
+                DWORD error = GetLastError();
+                LOG_ERROR("CreateProcessW failed with error: " +
+                          std::to_string(error));
+                std::wcerr << L"Command: " << cmdLine << std::endl;
+                if (argv) LocalFree(argv);
                 return EXIT_FAILURE;
             }
 
-            exit(EXIT_SUCCESS);
+            // Wait for the process to complete (optional, remove if
+            // you don't want to wait)
+            WaitForSingleObject(pi.hProcess, INFINITE);
+
+            // Get the exit code
+            DWORD exitCode;
+            GetExitCodeProcess(pi.hProcess, &exitCode);
+
+            // Cleanup
+            CloseHandle(pi.hProcess);
+            CloseHandle(pi.hThread);
+            if (argv) LocalFree(argv);
+
+            exit(exitCode);
 #else
             std::string run;
             if (exe.empty())
@@ -282,12 +405,10 @@ namespace mrv
             int ret = ::execv(run.c_str(), const_cast<char**>(newArgv));
             if (ret == -1)
             {
-                LOG_ERROR("execv failed " << run << " " << session);
                 perror("execv failed");
             }
-            exit(ret);
+            return ret;
 #endif
-            return -1;
         }
 
         const std::string getGPUVendor()
@@ -335,8 +456,11 @@ namespace mrv
             try
             {
                 // Execute the command and capture the output
-                std::string version_output = exec_command(version_command);
-                return version_output;
+                int ret;
+                std::string err;
+                std::string out;
+                ret = os::exec_command(version_command, out, err);
+                return out;
             }
             catch (const std::exception& e)
             {
@@ -426,11 +550,13 @@ namespace mrv
 
         const std::string getKernel()
         {
+            int ret;
             std::string out;
+            std::string err;
 #ifdef _WIN32
-            out = exec_command("cmd /C ver");
+            ret = exec_command("cmd /C ver", out, err);
 #else
-            out = exec_command("uname -r");
+            ret = exec_command("uname -r", out, err);
 #endif
             out = _("\tKernel Info: ") + string::stripWhitespace(out);
             return out;
@@ -466,9 +592,11 @@ namespace mrv
             if (os_version.empty())
                 os_version = info.name;
 #elif _WIN32
-            os_version = exec_command("powershell -Command  \"(Get-CimInstance "
-                                      "Win32_OperatingSystem).Caption\"");
-            os_version = string::stripWhitespace(os_version);
+            int ret;
+            std::string out, err;
+            ret = exec_command("powershell -Command  \"(Get-CimInstance "
+                               "Win32_OperatingSystem).Caption\"", out, err);
+            os_version = string::stripWhitespace(out);
 #else
             os_version = info.name;
 #endif

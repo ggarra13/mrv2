@@ -4,21 +4,23 @@
 
 set(HEADERS
     mrvApp.h
+    mrvBaseApp.h
     mrvFilesModel.h
     mrvMainControl.h
     mrvOpenSeparateAudioDialog.h
     mrvPlaylistsModel.h
     mrvSettingsObject.h
     mrvStdAnyHelper.h
-  )
-  set(SOURCES
+)
+set(SOURCES
     mrvApp.cpp
+    mrvBaseApp.cpp
     mrvFilesModel.cpp
     mrvMainControl.cpp
     mrvOpenSeparateAudioDialog.cpp
     mrvPlaylistsModel.cpp
     mrvSettingsObject.cpp
-  )
+)
 
 add_library(mrvApp ${SOURCES} ${HEADERS})
 files_to_absolute_paths()

@@ -116,6 +116,10 @@ if [ -z "$TLRENDER_LIBPLACEBO" ]; then
     fi
 fi
 
+if [ -z "$TLRENDER_LOCAL" ]; then
+    export TLRENDER_LOCAL=OFF
+fi
+
 if [ -z "$TLRENDER_NDI_SDK" ]; then
     if [[ $KERNEL == *Linux* ]]; then
 	export TLRENDER_NDI_SDK="$HOME/code/lib/NDI SDK for Linux/"
@@ -358,6 +362,7 @@ cmd="cmake -G '${CMAKE_GENERATOR}'
            -D TLRENDER_HAP=${TLRENDER_HAP}
            -D TLRENDER_JPEG=${TLRENDER_JPEG}
            -D TLRENDER_LIBPLACEBO=${TLRENDER_LIBPLACEBO}
+           -D TLRENDER_LOCAL=${TLRENDER_LOCAL}
 	   -D TLRENDER_NDI=${TLRENDER_NDI}
 	   -D TLRENDER_NDI_SDK=\"${TLRENDER_NDI_SDK}\"
 	   -D TLRENDER_NET=${TLRENDER_NET}

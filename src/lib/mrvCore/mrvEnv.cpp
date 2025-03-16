@@ -7,6 +7,8 @@
 
 #ifdef _WIN32
 
+#include <iostream>
+
 #    define WIN32_LEAN_AND_MEAN
 #    include <windows.h>
 
@@ -19,7 +21,7 @@
  *
  * @return 0 if success, -1 if not.
  */
-int setenv(const char* name, const char* value, int overwrite)
+int setenv(const wchar_t* name, const wchar_t* value, int overwrite)
 {
     /* On Win32, each process has two copies of the environment variables,
        one managed by the OS and one managed by the C library. We set
@@ -29,27 +31,17 @@ int setenv(const char* name, const char* value, int overwrite)
        <https://article.gmane.org/gmane.comp.gnu.mingw.user/8272>
        <https://article.gmane.org/gmane.comp.gnu.mingw.user/8273>
        <https://www.cygwin.com/ml/cygwin/1999-04/msg00478.html> */
-    if (!SetEnvironmentVariableA(name, value))
-        return -1;
-#    if 1
-    return _putenv_s(name, value);
-#    else
-    size_t namelen = strlen(name);
-    size_t valuelen = (value == NULL ? 0 : strlen(value));
-    char* buffer = (char*)malloc(namelen + 1 + valuelen + 1);
-    if (!buffer)
-        return -1; /* no need to set errno = ENOMEM */
-    memcpy(buffer, name, namelen);
-    if (value != NULL)
+    if (!SetEnvironmentVariableW(name, value))
     {
-        buffer[namelen] = '=';
-        memcpy(buffer + namelen + 1, value, valuelen);
-        buffer[namelen + 1 + valuelen] = 0;
+        std::wcerr << "SetEnvironmentVariableW failed" << std::endl;
+        return -1;
     }
-    else
-        buffer[namelen] = 0;
-    return putenv(buffer);
-#    endif
+    if (_wputenv_s(name, value) != 0) {
+        std::wcerr << L"_wputenv_s failed" << std::endl;
+        return -1;
+    }
+    
+    return 0;
 }
 
 /**
@@ -59,10 +51,10 @@ int setenv(const char* name, const char* value, int overwrite)
  *
  * @return 0 if success, other if not.
  */
-int unsetenv(const char* name)
+int unsetenv(const wchar_t* name)
 {
-    if (!SetEnvironmentVariableA(name, ""))
+    if (!SetEnvironmentVariableW(name, L""))
         return -1;
-    return _putenv_s(name, "");
+    return _wputenv_s(name, L"");
 }
 #endif

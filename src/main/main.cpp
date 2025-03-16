@@ -9,6 +9,7 @@
 #    include <shellapi.h>
 #endif
 
+#include <string>
 #include <iostream>
 
 #include <FL/fl_utf8.h>
@@ -20,6 +21,7 @@ namespace py = pybind11;
 #    include "mrvPy/Cmds.h"
 #endif
 
+#include "mrvCore/mrvHome.h"
 
 #include "mrvApp/mrvApp.h"
 
@@ -76,6 +78,9 @@ int main(int argc, char* argv[])
 
 #if defined(_WIN32) && defined(_MSC_VER)
 
+#include <stdio.h>
+
+
 #    include <FL/fl_utf8.h>
 #    include <FL/fl_string_functions.h>
 
@@ -86,7 +91,6 @@ int WINAPI WinMain(
     int i;
     int argc;
     char** argv;
-    char strbuf[2048];
 
     /*
      * If we are compiling in debug mode, open a console window so
@@ -100,20 +104,43 @@ int WINAPI WinMain(
 
     /* Convert the command line arguments to UTF-8 */
     LPWSTR* wideArgv = CommandLineToArgvW(GetCommandLineW(), &argc);
-    argv = (char**)malloc(argc * sizeof(void*));
-    for (i = 0; i < argc; i++)
-    {
-        int ret = WideCharToMultiByte(
-            CP_UTF8,        /* CodePage          */
-            0,              /* dwFlags           */
-            wideArgv[i],    /* lpWideCharStr     */
-            -1,             /* cchWideChar       */
-            strbuf,         /* lpMultiByteStr    */
-            sizeof(strbuf), /* cbMultiByte       */
-            NULL,           /* lpDefaultChar     */
-            NULL);          /* lpUsedDefaultChar */
-        argv[i] = fl_strdup(strbuf);
+
+    /* Allocate an array of 'argc + 1' string pointers */
+    argv = (char **)malloc((argc + 1) * sizeof(char *));
+  
+    /* Convert the command line arguments to UTF-8 */
+    for (i = 0; i < argc; i++) {
+        /* find the required size of the buffer */
+        int u8size = WideCharToMultiByte(CP_UTF8,     /* CodePage */
+                                         0,           /* dwFlags */
+                                         wideArgv[i], /* lpWideCharStr */
+                                         -1,          /* cchWideChar */
+                                         NULL,        /* lpMultiByteStr */
+                                         0,           /* cbMultiByte */
+                                         NULL,        /* lpDefaultChar */
+                                         NULL);       /* lpUsedDefaultChar */
+        if (u8size > 0) {
+            char *strbuf = (char *)malloc(u8size);
+            int ret = WideCharToMultiByte(CP_UTF8,     /* CodePage */
+                                          0,           /* dwFlags */
+                                          wideArgv[i], /* lpWideCharStr */
+                                          -1,          /* cchWideChar */
+                                          strbuf,      /* lpMultiByteStr */
+                                          u8size,      /* cbMultiByte */
+                                          NULL,        /* lpDefaultChar */
+                                          NULL);       /* lpUsedDefaultChar */
+            if (ret) {
+                argv[i] = strbuf;
+            } else {
+                argv[i] = _strdup("");
+                free(strbuf);
+                fprintf(stderr, "Failed to convert arg %d\n", i);
+            }
+        } else {
+            argv[i] = _strdup("");
+        }
     }
+    argv[argc] = NULL; /* required by C standard at end of list */
 
     /* Free the wide character string array */
     LocalFree(wideArgv);

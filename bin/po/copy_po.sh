@@ -15,6 +15,7 @@ if [[ ! -e etc/build_dir.sh ]]; then
     exit 1
 fi
 
+NOARGS=1
 . etc/build_dir.sh
 
 locate_python
@@ -26,3 +27,5 @@ then
 fi
 
 $PYTHON bin/python/copy_po.py $*
+
+$PYTHON -m pip uninstall polib
