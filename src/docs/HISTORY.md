@@ -6,19 +6,13 @@ v1.3.6
 - Fixed a hanging when playing NDI with audio.
 - Fixed a zombie process when playing NDI upon program exit.
 - Fixed locale (Internationalization) issues on Windows, which would make it impossible to switch to a different language if your Windows was not set up as English.
-- Revamped locale on start up the first time you install mrv2 (or remove the
-  preferences) on Windows and macOS to start with the System's locale.
-- Moved building of dav1d, lcms2, vpx and SvtAV1 on Windows to the tlRender
-  repository to avoid dealing with shell scripts.  This makes the build on
-  Windows faster too and consistant on all platforms.
-- Ported stack trace in debug and reldeb builds to use cpptrace on Windows and
-  Linux.  The advantage is that it can give us stack traces of threads other
-  than the main one.  Not as good as the traces of macOS, but it is a start.
+- Revamped locale on start up the first time you install mrv2 (or remove the preferences) on Windows and macOS to start with the System's locale.
+- Moved building of dav1d, lcms2, vpx and SvtAV1 on Windows to the tlRender repository to avoid dealing with shell scripts.  This makes the build on Windows faster too and consistant on all platforms.
+- Ported stack trace in debug and reldeb builds to use cpptrace on Windows and Linux.  The advantage is that it can give us stack traces of threads other than the main one.  Not as good as the traces of macOS, but it is a start.
 - Fixed installation of NDI Advanced DLL being with the wrong name.
 - Fixed builds when not building Python.
 - Made building faster by using NPROCS.
-- Made building faster by removing tlRender libraries we don't use, as Darby's
-  code is diverging from the one used in mrv2.
+- Made building faster by removing tlRender libraries we don't use, as Darby's code is diverging from the one used in mrv2.
 - Fixed several locale issues.
 - Fixed problem on Windows making the executable not run.
 - Fixed command-line arguments not showing up when the application was used
