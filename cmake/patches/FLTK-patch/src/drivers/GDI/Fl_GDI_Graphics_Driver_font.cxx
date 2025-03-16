@@ -86,27 +86,31 @@ static int fl_free_font = FL_FREE_FONT;
 
 static int CALLBACK
 enumcbw(CONST LOGFONTW    *lpelf,
-        CONST TEXTMETRICW * /* lpntm */,
-        DWORD               /* FontType */,
-        LPARAM            p) {
+        CONST TEXTMETRICW * /*lpntm*/,
+       DWORD            /*FontType*/,
+       LPARAM           p) {
   if (!p && lpelf->lfCharSet != ANSI_CHARSET) return 1;
-  char        *fn = nullptr; // "FLTK font name": "?" + name + NUL
-  unsigned     lw = (unsigned)wcslen(lpelf->lfFaceName);
-  unsigned dstlen = fl_utf8fromwc(fn, 0, (wchar_t*)lpelf->lfFaceName, lw); // measure the string
-  fn = (char*)malloc((size_t)dstlen + 2);
-  if (!fn) return 1; // silence warning and prevent deferencing nullptr
-  fn[0] = ' ';
-  dstlen = fl_utf8fromwc(fn + 1, dstlen + 1, (wchar_t*)lpelf->lfFaceName, lw); // convert the string
-  fn[dstlen] = 0;
-  for (int i = 0; i < FL_FREE_FONT; i++) // skip if it is one of our built-in fonts
-    if (!strcmp(Fl::get_font_name((Fl_Font)i), fn + 1)) { free(fn); return 1; }
-  fn[0] = ' '; Fl::set_font((Fl_Font)(fl_free_font++), fl_strdup(fn));
+  char *n = NULL;
+  size_t l = wcslen(lpelf->lfFaceName);
+  if (l >= LF_FACESIZE) l = LF_FACESIZE - 1; // Truncate if too long
+  unsigned dstlen = fl_utf8fromwc(n, 0, (wchar_t*)lpelf->lfFaceName, (unsigned) l) + 1; // measure the string
+  n = (char*) malloc(dstlen);
+  if (!n) return 1;
+//n[fl_unicode2utf((wchar_t*)lpelf->lfFaceName, l, n)] = 0;
+  dstlen = fl_utf8fromwc(n, dstlen, (wchar_t*)lpelf->lfFaceName, (unsigned) l); // convert the string
+  n[dstlen] = 0;
+  for (int i=0; i<FL_FREE_FONT; i++) // skip if one of our built-in fonts
+    if (!strcmp(Fl::get_font_name((Fl_Font)i),n)) {free(n);return 1;}
+  char buffer[LF_FACESIZE + 1];
+  strncpy(buffer+1, n, LF_FACESIZE);
+  buffer[LF_FACESIZE] = 0; // Ensure null termination
+  buffer[0] = ' '; Fl::set_font((Fl_Font)(fl_free_font++), fl_strdup(buffer));
   if (lpelf->lfWeight <= 400)
-    fn[0] = 'B', Fl::set_font((Fl_Font)(fl_free_font++), fl_strdup(fn));
-  fn[0] = 'I'; Fl::set_font((Fl_Font)(fl_free_font++), fl_strdup(fn));
+    buffer[0] = 'B', Fl::set_font((Fl_Font)(fl_free_font++), fl_strdup(buffer));
+  buffer[0] = 'I'; Fl::set_font((Fl_Font)(fl_free_font++), fl_strdup(buffer));
   if (lpelf->lfWeight <= 400)
-    fn[0] = 'P', Fl::set_font((Fl_Font)(fl_free_font++), fl_strdup(fn));
-  free(fn);
+    buffer[0] = 'P', Fl::set_font((Fl_Font)(fl_free_font++), fl_strdup(buffer));
+  free(n);
   return 1;
 } /* enumcbw */
 
