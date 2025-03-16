@@ -62,10 +62,10 @@ set(FLTK_PATCH
 )
 
 set(FLTK_PATCH
-    COMMAND
-    ${CMAKE_COMMAND} -E copy_if_different
-    "${PROJECT_SOURCE_DIR}/cmake/patches/FLTK-patch/src/drivers/GDI/Fl_GDI_Graphics_Driver_font.cxx"
-    "${CMAKE_BINARY_DIR}/deps/FLTK/src/FLTK/src/drivers/GDI/Fl_GDI_Graphics_Driver_font.cxx"
+    # COMMAND
+    # ${CMAKE_COMMAND} -E copy_if_different
+    # "${PROJECT_SOURCE_DIR}/cmake/patches/FLTK-patch/src/drivers/GDI/Fl_GDI_Graphics_Driver_font.cxx"
+    # "${CMAKE_BINARY_DIR}/deps/FLTK/src/FLTK/src/drivers/GDI/Fl_GDI_Graphics_Driver_font.cxx"
 )
     
 if (APPLE OR WIN32)

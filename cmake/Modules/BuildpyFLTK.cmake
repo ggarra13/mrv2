@@ -7,14 +7,6 @@ include(ExternalProject)
 set(pyFLTK_GIT_REPOSITORY "git://git.code.sf.net/p/pyfltk/git-code")
 set(pyFLTK_GIT_TAG c50e3b772ed27d4719f5f03a3580a701f69d73b3)
 
-if(NOT PYTHON_EXECUTABLE)
-    if(UNIX)
-	set(PYTHON_EXECUTABLE python3)
-    else()
-	set(PYTHON_EXECUTABLE python)
-    endif()
-endif()
-
 
 
 #
@@ -77,10 +69,10 @@ endif()
 
 # Commands for configure, build and install
 set(pyFLTK_CONFIGURE
-    COMMAND ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} -m pip install setuptools
-    COMMAND ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py swig --enable-shared ${pyFLTK_DEBUG})
-set(pyFLTK_BUILD     ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} setup.py build --enable-shared ${pyFLTK_DEBUG})
-set(pyFLTK_INSTALL ${pyFLTK_ENV} ${PYTHON_EXECUTABLE} -m pip install . )
+    COMMAND ${pyFLTK_ENV} ${Python_EXECUTABLE} -m pip install setuptools
+    COMMAND ${pyFLTK_ENV} ${Python_EXECUTABLE} setup.py swig --enable-shared ${pyFLTK_DEBUG})
+set(pyFLTK_BUILD     ${pyFLTK_ENV} ${Python_EXECUTABLE} setup.py build --enable-shared ${pyFLTK_DEBUG})
+set(pyFLTK_INSTALL ${pyFLTK_ENV} ${Python_EXECUTABLE} -m pip install . )
 
 ExternalProject_Add(
     pyFLTK
