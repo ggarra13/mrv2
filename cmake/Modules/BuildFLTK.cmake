@@ -10,7 +10,8 @@ set(FLTK_GIT_REPOSITORY "https://github.com/fltk/fltk.git")
 #set( FLTK_GIT_TAG master )
 
 #set(FLTK_GIT_TAG 257435dca0c64b667ba82b885f9ef42c5c20962c)   # needs patch
-set(FLTK_GIT_TAG 24aec69f27aedeead49ed629b7d434b8846826d3)
+#set(FLTK_GIT_TAG 24aec69f27aedeead49ed629b7d434b8846826d3)   # broken
+set(FLTK_GIT_TAG 13a7073a1e007ce5b71ef70bced1a9b15158820d)
 
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
     # If we are building pyFLTK compile shared
@@ -61,12 +62,13 @@ endif()
 set(FLTK_PATCH
 )
 
-set(FLTK_PATCH
-    # COMMAND
-    # ${CMAKE_COMMAND} -E copy_if_different
-    # "${PROJECT_SOURCE_DIR}/cmake/patches/FLTK-patch/src/drivers/GDI/Fl_GDI_Graphics_Driver_font.cxx"
-    # "${CMAKE_BINARY_DIR}/deps/FLTK/src/FLTK/src/drivers/GDI/Fl_GDI_Graphics_Driver_font.cxx"
-)
+# Use this patch if tonts break.
+# set(FLTK_PATCH
+#     COMMAND
+#     ${CMAKE_COMMAND} -E copy_if_different
+#     "${PROJECT_SOURCE_DIR}/cmake/patches/FLTK-patch/src/drivers/GDI/Fl_GDI_Graphics_Driver_font.cxx"
+#     "${CMAKE_BINARY_DIR}/deps/FLTK/src/FLTK/src/drivers/GDI/Fl_GDI_Graphics_Driver_font.cxx"
+#)
     
 if (APPLE OR WIN32)
     set(TLRENDER_X11 OFF)
