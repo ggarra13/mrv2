@@ -287,7 +287,7 @@ class POTranslator:
             print("Stopping... too many requests for today")
             print()
             self.use_google = False
-            return english
+            return ''
 
         if english == translated_text:
             print()
@@ -344,8 +344,11 @@ class POTranslator:
     #
     # Main translate text function.  Checks if it is a menu and translates
     # each menu entry separately.
+    # If we have '/' try to translate with google first 
     #
     def translate_text(self, english):
+        if '/' in english and self.use_google:
+            return self.translate_with_google(english)
         print('AI TRANSLATE')        
         if '\n' in english:
             lines = english.split('\n')
@@ -390,7 +393,6 @@ class POTranslator:
         try:
             for entry in po:
                 translate = False
-                with_google = False
                 if language == 'en':
                     entry.msgstr = entry.msgid
                     if 'fuzzy' in entry.flags:
