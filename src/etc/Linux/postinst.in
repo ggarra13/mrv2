@@ -161,7 +161,7 @@ if [ $FOUND -eq 0 ]; then
         echo "Found libselinux.so.1 at $LIB_SOURCE via ldconfig"
         FOUND=1
     fi
-done
+fi
 
 # Handle case where library is not found
 if [ $FOUND -eq 0 ]; then
