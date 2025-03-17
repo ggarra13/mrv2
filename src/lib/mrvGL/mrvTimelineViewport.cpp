@@ -101,6 +101,8 @@ namespace mrv
     HudDisplay TimelineViewport::Private::hud = HudDisplay::kNone;
     std::map<std::string, std::string, string::CaseInsensitiveCompare>
         TimelineViewport::Private::tagData;
+    short TimelineViewport::Private::ghostNext = 5;
+    short TimelineViewport::Private::ghostPrevious = 5;
 
     static void drawTimeoutText_cb(TimelineViewport* view)
     {

@@ -31,6 +31,10 @@ namespace mrv
         static std::string hdr;
         static float pixelAspectRatio;
 
+        //! Ghosting options
+        static short ghostPrevious;
+        static short ghostNext;
+        
         timeline::OCIOOptions ocioOptions;
         timeline::LUTOptions lutOptions;
         timeline::HDROptions hdrOptions;
@@ -77,9 +81,6 @@ namespace mrv
 
         //! Show video
         bool showVideo = true;
-
-        short ghostPrevious = 5;
-        short ghostNext = 5;
 
         //! Main ui pointer
         ViewerUI* ui = nullptr;

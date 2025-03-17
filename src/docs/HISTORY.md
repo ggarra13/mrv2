@@ -1,3 +1,9 @@
+v1.3.7
+======
+
+- Fixed Ghost Previous and Ghost Next not being in sync on the Secondary 
+  viewport.
+  
 v1.3.6
 ======
 
