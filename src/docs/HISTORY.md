@@ -5,6 +5,8 @@ v1.3.7
   viewport.
 - Made stepping with Next Annotation and Previous Annotation loop once they 
   reach the final and first annotation respectively.
+- Fixed opening Secondary Window not displaying the video when the video was
+  stopped.
   
 v1.3.6
 ======

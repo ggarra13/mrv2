@@ -998,6 +998,9 @@ namespace mrv
                     [this](const std::vector<timeline::VideoData>& value)
                     { currentVideoCallback(value); },
                     observer::CallbackAction::Suppress);
+            
+            // needed for refreshing secondary viewport when stopped.   
+            p.videoData = player->currentVideo();       
 
             p.switchClip = true;
         }
