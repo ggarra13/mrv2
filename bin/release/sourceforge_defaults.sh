@@ -30,9 +30,11 @@ change_default() {
 
     filename="${download_site}/${name}"
 
-    echo "Changing ${filename}"
+    echo "Changing ${filename} with curl"
+    which curl
 
     err=$(curl -s -H "Accept: application/json" -X PUT -d "default=${platform}" -d "api_key=${API_KEY}" "${filename}")
+    echo "Returned status=$? $err"
     if [[ $? -ne 0 ]]; then
         echo "Returned status=$?"
         echo "$err"

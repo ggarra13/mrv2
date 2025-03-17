@@ -57,7 +57,8 @@ fi
 #
 # Copy icon to applications directory
 #
-sharedir=/usr/local/@mrv2ShortName@/share
+INSTALL_DIR=/usr/local/@mrv2ShortName@/
+sharedir=$INSTALL_DIR/share
 
 #
 # Copy desktop, icon and locale translations
@@ -122,3 +123,70 @@ update-desktop-database
 
 echo "Updating mime database..."
 update-mime-database /usr/share/mime
+
+#
+# Deal with libselinux-so.1
+#
+
+# Common locations to search for libselinux.so.1
+LIB_PATHS=(
+    "/lib/x86_64-linux-gnu"  # Ubuntu, Debian
+    "/usr/lib/x86_64-linux-gnu"  # Ubuntu, Debian (additional)
+    "/lib64"                 # RHEL, Rocky, Fedora, CentOS
+    "/usr/lib64"            # RHEL, Rocky, Fedora, CentOS (additional)
+    "/usr/lib"              # Generic fallback
+    "/lib"                  # Generic fallback
+)
+
+# Variable to track if library is found
+FOUND=0
+LIB_SOURCE=""
+
+# Search for libselinux.so.1 in common paths
+echo "Searching for libselinux.so.1..."
+for path in "${LIB_PATHS[@]}"; do
+    if [ -f "$path/libselinux.so.1" ]; then
+        echo "Found libselinux.so.1 at $path/libselinux.so.1"
+        LIB_SOURCE="$path/libselinux.so.1"
+        FOUND=1
+        break
+    fi
+done
+
+# If not found in standard paths, try using ldconfig
+if [ $FOUND -eq 0 ]; then
+    echo "Not found in standard paths. Searching with ldconfig..."
+    LIB_SOURCE=$(ldconfig -p | grep "libselinux.so.1" | head -n 1 | awk '{print $NF}')
+    if [ -n "$LIB_SOURCE" ] && [ -f "$LIB_SOURCE" ]; then
+        echo "Found libselinux.so.1 at $LIB_SOURCE via ldconfig"
+        FOUND=1
+    fi
+done
+
+# Handle case where library is not found
+if [ $FOUND -eq 0 ]; then
+    echo "Error: libselinux.so.1 not found on this system."
+    echo "You may need to install it (e.g., 'sudo apt install libselinux1' on Ubuntu/Debian or 'sudo dnf install libselinux' on RHEL/Rocky).  Installation will use bundled libselinux.so.1"
+fi
+
+# Copy the library to the target directory
+LIB_TARGET_DIR=$INSTALL_DIR/lib
+echo "Copying system $LIB_SOURCE to $LIB_TARGET_DIR"
+cp "$LIB_SOURCE" "$LIB_TARGET_DIR/"
+if [ $? -ne 0 ]; then
+    echo "Error: Failed to copy $LIB_SOURCE to $LIB_TARGET_DIR. Check permissions."
+    exit 1
+fi
+
+# Verify the copy
+if [ -f "$LIB_TARGET_DIR/libselinux.so.1" ]; then
+    echo "Successfully installed libselinux.so.1 to $LIB_TARGET_DIR/libselinux.so.1"
+else
+    echo "Error: Copy appears to have failed. File not found at $LIB_TARGET_DIR/libselinux.so.1"
+    exit 1
+fi
+
+#
+# Optional: Set permissions (ensure it's readable/executable)
+#
+chmod 755 "$LIB_TARGET_DIR/libselinux.so.1"

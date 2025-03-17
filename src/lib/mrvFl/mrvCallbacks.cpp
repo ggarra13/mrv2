@@ -1384,6 +1384,7 @@ namespace mrv
             window->always_on_top(value);
 
             view->frameView();
+            view->redraw();
         }
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
