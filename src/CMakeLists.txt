@@ -342,6 +342,13 @@ add_subdirectory( ${CMAKE_CURRENT_SOURCE_DIR}/lib )
 add_subdirectory( main )
 
 #
+# Add hdr source
+#
+if (TLRENDER_NDI AND TLRENDER_FFMPEG)
+    add_subdirectory( hdr )
+endif()
+
+#
 # Add the packaging logic
 #
 include( ../cmake/packaging.cmake )
