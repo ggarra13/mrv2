@@ -55,20 +55,17 @@ jobs:
       
     - name: Install python dependencies
       run: sudo apt-get install -y libssl-dev libffi-dev python3
-      
-    - name: Verify libshaderc-dev availability
-      run: |
-        apt-cache policy libshaderc-dev
-    
-    - name: Install libshaderc-dev
-      run: |
-        sudo apt-get install -y libshaderc-dev || { echo "Install failed"; exit 1; }
         
     - name: Install vulkan
       if: github.ref_name == 'vulkan'
       run: |
         sudo apt-get install -y libvulkan1 libvulkan-dev mesa-vulkan-drivers vulkan-validationlayers
 
+    - name: Install libshaderc-dev dependencies
+      if: github.ref_name == 'vulkan'
+      run: |
+        sudo apt-get install -y glslang-dev spirv-tools
+        
     - name: Synchronize clock
       run: |
         sudo apt-get install -y ntp
