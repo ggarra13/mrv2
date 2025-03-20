@@ -35,35 +35,56 @@ jobs:
         
     - name: Install pyFLTK dependencies
       run: brew install swig
-      
-    # Download and install Vulkan SDK with MoltenVK
-    - name: Install Vulkan SDK
-      if: github.ref_name == 'vulkan'
-      run: |
-        # Download the latest Vulkan SDK DMG
-        curl -L -o vulkan-sdk.dmg "https://sdk.lunarg.com/sdk/download/latest/mac/vulkan-sdk.dmg"
-          
-        # Mount the DMG
-        echo "Download done"
-        hdiutil attach vulkan-sdk.dmg -nobrowse -mountpoint /Volumes/vulkan-sdk
-          
-        # Copy the Vulkan SDK contents to a local directory
-        mkdir -p ~/VulkanSDK
-        cp -R /Volumes/vulkan-sdk/* ~/VulkanSDK/
-        
-        # Unmount the DMG
-        hdiutil detach /Volumes/vulkan-sdk
-          
-        # Set environment variables
-        echo "VULKAN_SDK=~/VulkanSDK/macOS" >> $GITHUB_ENV
-        echo "DYLD_LIBRARY_PATH=~/VulkanSDK/macOS/lib:$DYLD_LIBRARY_PATH" >> $GITHUB_ENV
-        echo "VK_ICD_FILENAMES=~/VulkanSDK/macOS/share/vulkan/icd.d/MoltenVK_icd.json" >> $GITHUB_ENV
-        echo "~/VulkanSDK/macOS/bin" >> $GITHUB_PATH
 
-    # Verify Vulkan installation
-    - name: Verify Vulkan
+    - name: Setup Vulkan SDK
+      uses: humbletim/setup-vulkan-sdk@v1.2.0
+      with:
+        vulkan-query-version: 'latest'
+        vulkan-components: 'Vulkan-Headers, Vulkan-Loader'
+        vulkan-use-cache: true
+
+    - name: Clone Vulkan-LoaderAndValidationLayers
       run: |
-        vulkaninfo --summary
+        git clone https://github.com/KhronosGroup/Vulkan-LoaderAndValidationLayers.git
+        cd Vulkan-LoaderAndValidationLayers
+        ./update_external_sources.sh
+          
+    - name: Set Environment Variables
+      run: |
+        export VULKAN_SDK=$GITHUB_WORKSPACE/Vulkan-LoaderAndValidationLayers
+        export PATH=$VULKAN_SDK/bin:$PATH
+        export DYLD_LIBRARY_PATH=$VULKAN_SDK/lib:$DYLD_LIBRARY_PATH
+        export VK_ICD_FILENAMES=$VULKAN_SDK/share/vulkan/icd.d/MoltenVK_icd.json
+        export VK_LAYER_PATH=$VULKAN_SDK/share/vulkan/explicit_layer.d
+      
+    # # Download and install Vulkan SDK with MoltenVK
+    # - name: Install Vulkan SDK
+    #   if: github.ref_name == 'vulkan'
+    #   run: |
+    #     # Download the latest Vulkan SDK DMG
+    #     curl -L -o vulkan-sdk.dmg "https://sdk.lunarg.com/sdk/download/latest/mac/vulkan-sdk.dmg"
+          
+    #     # Mount the DMG
+    #     echo "Download done"
+    #     hdiutil attach vulkan-sdk.dmg -nobrowse -mountpoint /Volumes/vulkan-sdk
+          
+    #     # Copy the Vulkan SDK contents to a local directory
+    #     mkdir -p ~/VulkanSDK
+    #     cp -R /Volumes/vulkan-sdk/* ~/VulkanSDK/
+        
+    #     # Unmount the DMG
+    #     hdiutil detach /Volumes/vulkan-sdk
+          
+    #     # Set environment variables
+    #     echo "VULKAN_SDK=~/VulkanSDK/macOS" >> $GITHUB_ENV
+    #     echo "DYLD_LIBRARY_PATH=~/VulkanSDK/macOS/lib:$DYLD_LIBRARY_PATH" >> $GITHUB_ENV
+    #     echo "VK_ICD_FILENAMES=~/VulkanSDK/macOS/share/vulkan/icd.d/MoltenVK_icd.json" >> $GITHUB_ENV
+    #     echo "~/VulkanSDK/macOS/bin" >> $GITHUB_PATH
+
+    # # Verify Vulkan installation
+    # - name: Verify Vulkan
+    #   run: |
+    #     vulkaninfo --summary
           
     - name: Setup environment
       run: mkdir -p ssh
