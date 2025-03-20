@@ -126,25 +126,6 @@ fi
 
 if [ -z "$TLRENDER_NDI_SDK" ]; then
     if [[ $KERNEL == *Linux* ]]; then
-	export TLRENDER_NDI_SDK="$HOME/code/lib/NDI SDK for Linux/"
-    elif [[ $KERNEL == *Msys* ]]; then
-	export TLRENDER_NDI_SDK="C:/Program Files/NDI/NDI 6 SDK/"
-    else
-	export TLRENDER_NDI_SDK="/Library/NDI SDK for Apple/"
-    fi
-fi
-
-if [ -z "$TLRENDER_NDI_ADVANCED" ]; then
-    export TLRENDER_NDI_ADVANCED=ON
-    if [ -d "${TLRENDER_NDI_SDK}" ]; then
-	if [[ "${TLRENDER_NDI_SDK}" == *Advanced* ]]; then
-	    export TLRENDER_NDI_ADVANCED=ON
-	fi
-    fi
-fi
-
-if [[ $TLRENDER_NDI_ADVANCED == ON || $TLRENDER_NDI_ADVANCED == 1 ]]; then
-    if [[ $KERNEL == *Linux* ]]; then
 	export TLRENDER_NDI_SDK="$HOME/code/lib/NDI Advanced SDK for Linux/"
     elif [[ $KERNEL == *Msys* ]]; then
 	export TLRENDER_NDI_SDK="C:/Program Files/NDI/NDI 6 Advanced SDK/"
@@ -189,7 +170,6 @@ if [ -z "$TLRENDER_USD" ]; then
 fi
 
 if [ -z "$TLRENDER_VK" ]; then
-    export TLRENDER_VK=ON
     if [ -z "$VULKAN_SDK" ]; then
 	if [[ $KERNEL == *Msys* ]]; then
 	    VULKAN_ROOT=/C/VulkanSDK
@@ -206,6 +186,13 @@ if [ -z "$TLRENDER_VK" ]; then
     fi
 fi
 
+if [ -d "$VULKAN_SDK" ]; then
+    export TLRENDER_VK=ON
+else
+    echo "VULKAN SDK not found!"
+    export TLRENDER_VK=OFF
+fi
+    
 if [ -z "$TLRENDER_VPX" ]; then
     export TLRENDER_VPX=ON
 fi
@@ -323,7 +310,6 @@ echo
 echo "NDI support ........................ ${TLRENDER_NDI} 	(TLRENDER_NDI)"
 if [[ $TLRENDER_NDI == ON || $TLRENDER_NDI == 1 ]]; then
     echo "NDI SDK ${TLRENDER_NDI_SDK} 	(TLRENDER_NDI_SDK}"
-    echo "NDI SDK Advanced ................... ${TLRENDER_NDI_ADVANCED} 	(TLRENDER_NDI_ADVANCED)"
     if [[ $TLRENDER_VK == ON ]]; then
 	echo "VULKAN_SDK    .................. ${VULKAN_SDK}"
     fi
