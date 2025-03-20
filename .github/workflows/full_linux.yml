@@ -56,7 +56,7 @@ jobs:
 
     - name: Install vulkan
       if: github.ref_name == 'vulkan'
-      run: sudo apt-get install -y libvulkan1 libvulkan1-dev mesa-vulkan-drivers vulkan-validationlayers
+      run: sudo apt-get install -y libvulkan1 libvulkan-dev mesa-vulkan-drivers vulkan-validationlayers
 
     - name: Synchronize clock
       run: |
