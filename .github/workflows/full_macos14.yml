@@ -48,9 +48,11 @@ jobs:
       if: github.ref_name == 'vulkan'
       run: |
         . etc/install_macos_vulkan.sh
-        echo "VULKAN_SDK=$VULKAN_SDK" >> GITHUB_ENV
-        echo "DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH" >> GITHUB_ENV
-        echo "PATH=$PATH" >> GITHUB_PATH
+        
+        echo "VULKAN_SDK=${VULKAN_SDK}" >> $GITHUB_ENV
+        echo "DYLD_LIBRARY_PATH=${VULKAN_SDK}/macOS/lib:$DYLD_LIBRARY_PATH" >> $GITHUB_ENV
+        echo "VK_ICD_FILENAMES=${VULKAN_SDK}/macOS/share/vulkan/icd.d/MoltenVK_icd.json" >> $GITHUB_ENV
+        echo "${VULKAN_SDK}/macOS/bin" >> $GITHUB_PATH
 
     # Verify Vulkan installation
     - name: Verify Vulkan
