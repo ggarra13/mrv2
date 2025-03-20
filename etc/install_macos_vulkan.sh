@@ -23,4 +23,4 @@ SDK_VERSION=$(ls -d $VULKANROOT* | grep -o "$VULKAN_ROOT[0-9]*\..*"| sed -e "s#$
 rm -rf /tmp/InstallVulkan-*
 
 
-export VULKAN_SDK=~/VulkanSDK/${SDK_VERSION}
+export VULKAN_SDK=~/VulkanSDK/${SDK_VERSION}/macOS
