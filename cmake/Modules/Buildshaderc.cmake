@@ -5,10 +5,12 @@
 include( ExternalProject )
 
 set(shaderc_REPOSITORY "https://github.com/google/shaderc.git")
+set(shaderc_GIT_TAG v2025.1)
 
 ExternalProject_Add(
     shaderc
     GIT_REPOSITORY ${shaderc_REPOSITORY}
+    GIT_TAG ${shaderc_GIT_TAG}
     GIT_SUBMODULES_RECURSE TRUE
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps/shaderc
     CMAKE_ARGS

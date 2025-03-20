@@ -44,7 +44,7 @@ set(FLTK_USE_SYSTEM_LIBPNG TRUE)
 # Set FLTK default dependencies
 set(FLTK_DEPENDENCIES PNG ZLIB)
 if (TLRENDER_VK)
-    list(APPEND FLTK_DEPENDENCIES shaderc)
+    list(APPEND FLTK_DEPENDENCIES shaderc_DEP)
 endif()
 
 # We set this to use FLTK's built-in libdecor
