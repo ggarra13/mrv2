@@ -20,7 +20,7 @@ SDK_VERSION=$(ls -d $VULKANROOT* | grep -o "$VULKAN_ROOT[0-9]*\..*"| sed -e "s#$
   --default-answer \
   --confirm-command install
 
-rm -f /tmp/InstallVulkan-*
+rm -rf /tmp/InstallVulkan-*
 
 
 export VULKAN_SDK=~/VulkanSDK/${SDK_VERSION}
