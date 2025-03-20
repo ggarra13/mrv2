@@ -272,30 +272,31 @@ class POTranslator:
             return english
     
         if not self.use_google:
-            return english
+            return ''
 
         print('GOOGLE TRANSLATE:')
         print(f"\tOriginal: {english}")
         try:
             translated_text = self.translator.translate(english)
             print(f'\tTranslated: {translated_text}')
+            self.have_seen[english] = translated_text
         except Exception as e:
             print(e)
             translated_text = ''
-        if "WARNING" in translated_text or 'http' in translated_text:
+        if "WARNING" in translated_text:
             print()
             print("Stopping... too many requests for today")
-            print()
+            print(translated_text)
             self.use_google = False
-            return ''
+            
+            if 'http' in translated_text:
+            translated_text = re.sub('<a href.*</a>', '', translated_text)
 
         if english == translated_text:
             print()
             print('GOOGLE TRANSLATE FAILED.')
             print()
-            return '****FAILED****'
-        
-        self.have_seen[english] = translated_text
+            return ''
         return translated_text
 
     
@@ -347,10 +348,15 @@ class POTranslator:
     # If we have '/' try to translate with google first 
     #
     def translate_text(self, english):
-        if '/' in english and self.use_google:
-            return self.translate_with_google(english)
-        print('AI TRANSLATE')        
+        if ':class:' in english:
+            return ''
+        if '(*.' in english:
+            return ''
+        if self.code == 'ja' and self.use_google:
+            return self.translate_with_google(english)        
         if '\n' in english:
+            if self.use_google:
+                return self.translate_with_google(english)
             lines = english.split('\n')
             lines = [self._translate_text(line) for line in lines]
             translated_text = '\n'.join(lines)
@@ -359,6 +365,8 @@ class POTranslator:
             return translated_text
         
         if '/' in english and len(english) < 40:
+            if self.use_google:
+                return self.translate_with_google(english)
             replaced = english.replace('&','')
             menus = replaced.split('/')
             menus = [self._translate_text(menu_item) for menu_item in menus]
@@ -366,7 +374,10 @@ class POTranslator:
             print('\t\tMENU English=',replaced)
             print('\t\tMENU Translated=', translated_text)
             return translated_text
-    
+
+        if not self.tokenizer and not self.use_google:
+            return ''
+        
         # Tokenize the input text
         print(f"\tOriginal: {english}")
 
@@ -378,6 +389,8 @@ class POTranslator:
             return '********FAILED********'
         translated_text = translated_text.replace('Mrv2', 'mrv2')
         print(f"\tTranslated: {translated_text}")
+        if translated_text == english:
+            return ''
         return translated_text
 
     # Load the .po file
@@ -392,7 +405,6 @@ class POTranslator:
         language = self.code
         try:
             for entry in po:
-                translate = False
                 if language == 'en':
                     entry.msgstr = entry.msgid
                     if 'fuzzy' in entry.flags:
@@ -403,11 +415,14 @@ class POTranslator:
                 elif entry.msgid and not entry.msgstr:
                     translated = self.translate_text(entry.msgid)
                     entry.msgstr = translated
-                if 'fuzzy' in entry.flags or entry.msgid == entry.msgstr:
+                elif entry.msgid == entry.msgstr:
                     translated = self.translate_text(entry.msgid)
                     entry.msgstr = translated
-                    if 'fuzzy' in entry.flags:
-                        entry.flags.remove('fuzzy')
+                if 'fuzzy' in entry.flags:
+                    entry.flags.remove('fuzzy')
+
+                if entry.msgstr == '':
+                    continue
                     
                 # Check to see if it begins and ends with newlines
                 if entry.msgid[0] == '\n' and entry.msgstr[0] != '\n':

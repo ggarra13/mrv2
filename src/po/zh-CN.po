@@ -343,7 +343,7 @@ msgid ""
 "Dictionary of menu entries with callbacks, like:\n"
 "\n"
 "def menus(self):\n"
-"    menus = { \"Nem Menu/Hello\" : self.run }\n"
+"    menus = { \"New Menu/Hello\" : self.run }\n"
 "    return menus\n"
 "\n"
 msgstr ""
@@ -351,7 +351,7 @@ msgstr ""
 "Dictionary of menu entries with callbacks, like:\n"
 "\n"
 "def menus(self):\n"
-"  menus = { \"Nem Menu/Hello\" : self.run }\n"
+"  menus = { \"New Menu/Hello\" : self.run }\n"
 "  return menus\n"
 "\n"
 
@@ -3688,12 +3688,6 @@ msgstr "Ripple"
 msgid "Roll"
 msgstr "Roll"
 
-msgid "Render/Minify Filter/Linear"
-msgstr "渲染/最小过滤器/线性"
-
-msgid "Render/Magnify Filter/Linear"
-msgstr "渲染/最大过滤器/线性"
-
 msgid "(no image)"
 msgstr "(无图像)"
 
@@ -3926,8 +3920,14 @@ msgstr "渲染/Alpha混合/Premultiplied"
 msgid "Render/Minify Filter/Nearest"
 msgstr "渲染/最小过滤器/Nearest"
 
+msgid "Render/Minify Filter/Linear"
+msgstr "渲染/最小过滤器/线性"
+
 msgid "Render/Magnify Filter/Nearest"
 msgstr "渲染/最大过滤器/Nearest"
+
+msgid "Render/Magnify Filter/Linear"
+msgstr "渲染/最大过滤器/线性"
 
 msgid "Render/HDR/Auto Normalize"
 msgstr "渲染/HDR/自动归一化"

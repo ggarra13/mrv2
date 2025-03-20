@@ -367,7 +367,7 @@ msgid ""
 "Dictionary of menu entries with callbacks, like:\n"
 "\n"
 "def menus(self):\n"
-"    menus = { \"Nem Menu/Hello\" : self.run }\n"
+"    menus = { \"New Menu/Hello\" : self.run }\n"
 "    return menus\n"
 "\n"
 msgstr ""
@@ -3816,12 +3816,6 @@ msgstr "Ondulación"
 msgid "Roll"
 msgstr "Rodar"
 
-msgid "Render/Minify Filter/Linear"
-msgstr "Render/Filtro Minificación/Linear"
-
-msgid "Render/Magnify Filter/Linear"
-msgstr "Render/Filtro Magnificación/Linear"
-
 msgid "(no image)"
 msgstr "(sin imagen)"
 
@@ -4058,8 +4052,14 @@ msgstr "Render/Mezcla Alfa/Premultiplicada"
 msgid "Render/Minify Filter/Nearest"
 msgstr "Render/Filtro Minificación/Cercanía"
 
+msgid "Render/Minify Filter/Linear"
+msgstr "Render/Filtro Minificación/Linear"
+
 msgid "Render/Magnify Filter/Nearest"
 msgstr "Render/Filtro Magnificación/Cercanía"
+
+msgid "Render/Magnify Filter/Linear"
+msgstr "Render/Filtro Magnificación/Linear"
 
 msgid "Render/HDR/Auto Normalize"
 msgstr "Render/HDR/Auto Normalizar"

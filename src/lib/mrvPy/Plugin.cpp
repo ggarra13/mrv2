@@ -297,7 +297,7 @@ Contains all classes related to python plugins.
 Dictionary of menu entries with callbacks, like:
 
 def menus(self):
-    menus = { "Nem Menu/Hello" : self.run }
+    menus = { "New Menu/Hello" : self.run }
     return menus
 
 )PYTHON"))
