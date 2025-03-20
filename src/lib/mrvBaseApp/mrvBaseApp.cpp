@@ -4,7 +4,7 @@
 
 #include "mrvCore/mrvI8N.h"
 
-#include "mrvApp/mrvBaseApp.h"
+#include "mrvBaseApp/mrvBaseApp.h"
 
 #include <tlCore/String.h>
 #include <tlCore/StringFormat.h>
@@ -16,7 +16,7 @@ namespace mrv
     namespace app
     {
         using namespace tl;
-        
+
         std::vector<std::string> convert(int argc, char* argv[])
         {
             std::vector<std::string> out;
@@ -55,8 +55,7 @@ namespace mrv
         void BaseApp::_init(
             const std::vector<std::string>& argv,
             const std::shared_ptr<system::Context>& context,
-            const std::string& cmdLineName,
-            const std::string& cmdLineSummary,
+            const std::string& cmdLineName, const std::string& cmdLineSummary,
             const std::vector<std::shared_ptr<ICmdLineArg> >& cmdLineArgs,
             const std::vector<std::shared_ptr<ICmdLineOption> >& cmdLineOptions)
         {
@@ -74,12 +73,9 @@ namespace mrv
             p.cmdLine.args = cmdLineArgs;
             p.cmdLine.options = cmdLineOptions;
             p.cmdLine.options.push_back(CmdLineFlagOption::create(
-                _options.log,
-                { "-log" },
-                _("Print the log to the console.")));
+                _options.log, {"-log"}, _("Print the log to the console.")));
             p.cmdLine.options.push_back(CmdLineFlagOption::create(
-                _options.help,
-                { "-help", "-h", "--help", "--h" },
+                _options.help, {"-help", "-h", "--help", "--h"},
                 _("Show this message.")));
             _exit = _parseCmdLine();
 
@@ -101,13 +97,13 @@ namespace mrv
                     observer::CallbackAction::Suppress);
             }
         }
-        
+
         BaseApp::BaseApp() :
             _p(new Private)
-        {}
+        {
+        }
 
-        BaseApp::~BaseApp()
-        {}
+        BaseApp::~BaseApp() {}
 
         const std::shared_ptr<system::Context>& BaseApp::getContext() const
         {
@@ -163,12 +159,13 @@ namespace mrv
                 }
                 catch (const std::exception& e)
                 {
-                    throw std::runtime_error(string::Format(_("Cannot parse option \"{0}\": {1}")).
-                        arg(i->getMatchedName()).
-                        arg(e.what()));
+                    throw std::runtime_error(
+                        string::Format(_("Cannot parse option \"{0}\": {1}"))
+                            .arg(i->getMatchedName())
+                            .arg(e.what()));
                 }
             }
-            bool   unusedArgs   = false;
+            bool unusedArgs = false;
             size_t requiredArgs = 0;
             size_t optionalArgs = 0;
             for (const auto& i : p.cmdLine.args)
@@ -200,7 +197,7 @@ namespace mrv
                 {
                     if (!p.cmdLine.argv.empty())
                     {
-                        if(i->isUnused())
+                        if (i->isUnused())
                         {
                             _unusedArgs = p.cmdLine.argv;
                             break;
@@ -210,9 +207,10 @@ namespace mrv
                 }
                 catch (const std::exception& e)
                 {
-                    throw std::runtime_error(string::Format(_("Cannot parse argument \"{0}\": {1}")).
-                        arg(i->getName()).
-                        arg(e.what()));
+                    throw std::runtime_error(
+                        string::Format(_("Cannot parse argument \"{0}\": {1}"))
+                            .arg(i->getName())
+                            .arg(e.what()));
                 }
             }
             return 0;
@@ -233,7 +231,7 @@ namespace mrv
                     for (const auto& i : p.cmdLine.args)
                     {
                         const bool optional = i->isOptional();
-                        const bool unused   = i->isUnused();
+                        const bool unused = i->isUnused();
                         args.push_back(
                             (optional ? "[" : "(") +
                             string::toLower(i->getName()) +
@@ -276,5 +274,5 @@ namespace mrv
                 _printNewline();
             }
         }
-    }
-}
+    } // namespace app
+} // namespace mrv

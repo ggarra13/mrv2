@@ -92,6 +92,10 @@ if [ -z "$TLRENDER_EXR" ]; then
     export TLRENDER_EXR=ON
 fi
 
+if [ -z "$TLRENDER_GL" ]; then
+    export TLRENDER_GL=ON
+fi
+
 if [ -z "$TLRENDER_HAP" ]; then
     export TLRENDER_HAP=ON
 fi
@@ -182,6 +186,24 @@ fi
 
 if [ -z "$TLRENDER_USD" ]; then
     export TLRENDER_USD=ON
+fi
+
+if [ -z "$TLRENDER_VK" ]; then
+    export TLRENDER_VK=ON
+    if [ -z "$VULKAN_SDK" ]; then
+	if [[ $KERNEL == *Msys* ]]; then
+	    VULKAN_ROOT=/C/VulkanSDK
+	    SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sort -r | grep -o "$VULKAN_ROOT/[0-9]*\..*"| sed -e "s#$VULKAN_ROOT/##" | head -1)
+	    export VULKAN_SDK=/C/VulkanSDK/$SDK_VERSION/
+	elif [[ $KERNEL == *Linux* ]]; then
+	    export VULKAN_SDK=/usr/
+	elif [[ $KERNEL == *Darwin* ]]; then
+	    VULKAN_ROOT=$HOME/VulkanSDK
+	    SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sort -r | grep -o "$VULKAN_ROOT/[0-9]*\..*"| sed -e "s#$VULKAN_ROOT/##" | head -1)
+	    echo $SDK_VERSION
+	    export VULKAN_SDK=$HOME/VulkanSDK/$SDK_VERSION/macOS
+	fi
+    fi
 fi
 
 if [ -z "$TLRENDER_VPX" ]; then
@@ -302,6 +324,9 @@ echo "NDI support ........................ ${TLRENDER_NDI} 	(TLRENDER_NDI)"
 if [[ $TLRENDER_NDI == ON || $TLRENDER_NDI == 1 ]]; then
     echo "NDI SDK ${TLRENDER_NDI_SDK} 	(TLRENDER_NDI_SDK}"
     echo "NDI SDK Advanced ................... ${TLRENDER_NDI_ADVANCED} 	(TLRENDER_NDI_ADVANCED)"
+    if [[ $TLRENDER_VK == ON ]]; then
+	echo "VULKAN_SDK    .................. ${VULKAN_SDK}"
+    fi
 fi
 
 echo
@@ -359,6 +384,7 @@ cmd="cmake -G '${CMAKE_GENERATOR}'
            -D TLRENDER_EXR=${TLRENDER_EXR}
            -D TLRENDER_FFMPEG=${TLRENDER_FFMPEG}
            -D TLRENDER_FFMPEG_MINIMAL=${TLRENDER_FFMPEG_MINIMAL}
+	   -D TLRENDER_GL=${TLRENDER_GL}
            -D TLRENDER_HAP=${TLRENDER_HAP}
            -D TLRENDER_JPEG=${TLRENDER_JPEG}
            -D TLRENDER_LIBPLACEBO=${TLRENDER_LIBPLACEBO}
@@ -371,6 +397,7 @@ cmd="cmake -G '${CMAKE_GENERATOR}'
            -D TLRENDER_STB=${TLRENDER_STB}
 	   -D TLRENDER_TIFF=${TLRENDER_TIFF}
 	   -D TLRENDER_USD=${TLRENDER_USD}
+	   -D TLRENDER_VK=${TLRENDER_VK}
 	   -D TLRENDER_VPX=${TLRENDER_VPX}
 	   -D TLRENDER_WAYLAND=${TLRENDER_WAYLAND}
            -D TLRENDER_X11=${TLRENDER_X11}

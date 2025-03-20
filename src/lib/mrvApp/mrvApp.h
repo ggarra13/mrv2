@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <mrvApp/mrvBaseApp.h>
+#include <mrvBaseApp/mrvBaseApp.h>
 
 #include <tlTimeline/PlayerOptions.h>
 #include <tlTimeline/IRender.h>

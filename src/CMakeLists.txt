@@ -41,7 +41,7 @@ if ( UNIX )
     link_directories(${CMAKE_INSTALL_PREFIX}/lib)
 endif()
 
-
+find_package(Vulkan OPTIONAL_COMPONENTS glslang shaderc_combined SPIRV-Tools)
 find_package(FLTK CONFIG REQUIRED)
 
 
@@ -50,13 +50,16 @@ if(FLTK_BUILD_SHARED_LIBS)
 	add_definitions(-D FL_DLL)
 	set(FLTK_LIBRARIES fltk::fltk-shared )
 	set(FLTK_gl_LIBRARY )
+	set(FLTK_vk_LIBRARY )
     else()
 	set(FLTK_LIBRARIES fltk::fltk-shared fltk::images-shared )
 	set(FLTK_gl_LIBRARY fltk::gl-shared)
+	set(FLTK_vk_LIBRARY fltk::vk-shared)
     endif()
 else()
     set(FLTK_LIBRARIES fltk::fltk fltk::images )
     set(FLTK_gl_LIBRARY fltk::gl )
+    set(FLTK_vk_LIBRARY fltk::vk )
 endif()
 
 #
