@@ -38,6 +38,16 @@ jobs:
       with:
         path: C:\VulkanSDK
         key: vulkan-sdk-${{ runner.os }}-latest
+          
+    - name: Setup MSYS
+      uses: msys2/setup-msys2@v2
+      with:
+        update: true
+        path-type: inherit
+        
+    - name: Get machine name
+      run: |
+        echo "Machine name: $RUNNER_NAME"
     
     # Install Vulkan SDK
     - name: Install Vulkan SDK
@@ -53,16 +63,6 @@ jobs:
     - name: Verify Vulkan
       run: |
         vulkaninfo --summary
-          
-    - name: Setup MSYS
-      uses: msys2/setup-msys2@v2
-      with:
-        update: true
-        path-type: inherit
-        
-    - name: Get machine name
-      run: |
-        echo "Machine name: $RUNNER_NAME"
 
     - name: Setup environment
       run: mkdir -p ssh

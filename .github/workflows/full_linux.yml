@@ -64,7 +64,7 @@ jobs:
     - name: Install libshaderc-dev dependencies
       if: github.ref_name == 'vulkan'
       run: |
-        sudo apt-get install -y glslang-dev spirv-tools libspirv-tools-dev
+        sudo apt-get install -y glslang-dev spirv-tools spirv-headers
         
     - name: Synchronize clock
       run: |
