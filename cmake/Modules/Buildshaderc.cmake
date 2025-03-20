@@ -4,7 +4,7 @@
 
 include( ExternalProject )
 
-set(shaderc_REPOSITORY "https://github.com/jeremy-rifkin/shaderc.git")
+set(shaderc_REPOSITORY "https://github.com/google/shaderc.git")
 
 ExternalProject_Add(
     shaderc
