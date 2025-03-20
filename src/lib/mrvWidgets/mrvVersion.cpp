@@ -1198,6 +1198,9 @@ qsek                                          (Drawing tools improvements)
 Rémi Achard                                   (OpenColorIO 2 color pipeline)
 Rennatt                                       (Color Pipeline Debugging)
 Roy Nieterau                                  (Python API)
+Runenash                                      (Bug in ghosting Secondary
+                                               window, loop in stepping
+                                               through annotations)
 shockerNY                                     (Text Annotation bug report)
 SteffenDuenner                                (Linux Build Debugging)
 The Maize                                     (Wayland issues, See-through

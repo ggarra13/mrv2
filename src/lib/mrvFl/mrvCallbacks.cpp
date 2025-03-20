@@ -1384,6 +1384,7 @@ namespace mrv
             window->always_on_top(value);
 
             view->frameView();
+            view->redraw();
         }
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
@@ -2216,6 +2217,12 @@ namespace mrv
                 return;
             }
         }
+        // If no next annotation was found, look to the first annotation
+        if (!times.empty())
+        {
+            view->stop();
+            player->seek(times[0]);
+        }
     }
 
     void next_annotation_cb(Fl_Menu_*, ViewerUI* ui)
@@ -2236,6 +2243,12 @@ namespace mrv
                 player->seek(time);
                 return;
             }
+        }
+        // If no next annotation was found, look to the first annotation
+        if (!times.empty())
+        {
+            view->stop();
+            player->seek(times[0]);
         }
     }
 

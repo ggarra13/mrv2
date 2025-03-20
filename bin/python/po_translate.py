@@ -30,6 +30,7 @@ LANGUAGES = [
     'fr',
     'hi_IN',
     'it',
+    'ja',
     'pt',
     'ru',
     'zh-CN',
@@ -153,6 +154,7 @@ GOOGLE_LANGUAGES = {
     'fr' : 'French',
     'hi' : 'Hindi',
     'it' : 'Italian',
+    'ja' : 'Japanese',
     'pt' : 'Portuguese',
     'ru' : 'Russian',
     'zh' : 'ZH-CN',
@@ -199,16 +201,18 @@ class POTranslator:
         if self.code == 'pt' or self.code == 'fr' or \
            self.code == 'es' or self.code == 'it':
             self.helsinki = 'ROMANCE'
+        elif self.code == 'ja':
+            self.helsinki = 'jap'
         
         self.have_seen = {}
 
         if self.code == 'en':
             return
     
-        model_name = f"Helsinki-NLP/opus-mt-en-{self.helsinki}"
-        print('Load model',model_name,'for',self.code)
         
         if use_tokenizer:
+            model_name = f"Helsinki-NLP/opus-mt-en-{self.helsinki}"
+            print('Load model',model_name,'for',self.code)
             self.tokenizer = MarianTokenizer.from_pretrained(model_name,
                                                              clean_up_tokenization_spaces=True)
             try:
@@ -272,14 +276,18 @@ class POTranslator:
 
         print('GOOGLE TRANSLATE:')
         print(f"\tOriginal: {english}")
-        translated_text = self.translator.translate(english)
-        print(f'\tTranslated: {translated_text}')
+        try:
+            translated_text = self.translator.translate(english)
+            print(f'\tTranslated: {translated_text}')
+        except Exception as e:
+            print(e)
+            translated_text = ''
         if "WARNING" in translated_text or 'http' in translated_text:
             print()
             print("Stopping... too many requests for today")
             print()
             self.use_google = False
-            return english
+            return ''
 
         if english == translated_text:
             print()
@@ -336,8 +344,11 @@ class POTranslator:
     #
     # Main translate text function.  Checks if it is a menu and translates
     # each menu entry separately.
+    # If we have '/' try to translate with google first 
     #
     def translate_text(self, english):
+        if '/' in english and self.use_google:
+            return self.translate_with_google(english)
         print('AI TRANSLATE')        
         if '\n' in english:
             lines = english.split('\n')
@@ -381,6 +392,7 @@ class POTranslator:
         language = self.code
         try:
             for entry in po:
+                translate = False
                 if language == 'en':
                     entry.msgstr = entry.msgid
                     if 'fuzzy' in entry.flags:
@@ -388,17 +400,15 @@ class POTranslator:
                     continue
                 elif entry.msgid in DONT_TRANSLATE:
                     entry.msgstr = entry.msgid
-                elif 'GOOGLE' == entry.msgstr:
-                    translated = self.translate_with_google(entry.msgid)
-                    entry.msgstr = translated
                 elif entry.msgid and not entry.msgstr:
                     translated = self.translate_text(entry.msgid)
                     entry.msgstr = translated
-                if 'fuzzy' in entry.flags:
+                if 'fuzzy' in entry.flags or entry.msgid == entry.msgstr:
                     translated = self.translate_text(entry.msgid)
                     entry.msgstr = translated
-                    entry.flags.remove('fuzzy')
-
+                    if 'fuzzy' in entry.flags:
+                        entry.flags.remove('fuzzy')
+                    
                 # Check to see if it begins and ends with newlines
                 if entry.msgid[0] == '\n' and entry.msgstr[0] != '\n':
                     entry.msgstr = '\n' + entry.msgstr
