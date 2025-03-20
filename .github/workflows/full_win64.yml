@@ -60,9 +60,9 @@ jobs:
         echo "VK_LAYER_PATH=$VK_LAYER_PATH" >> $GITHUB_ENV
 
     # Verify Vulkan installation
-    - name: Verify Vulkan
-      run: |
-        vulkaninfo --summary
+    # - name: Verify Vulkan
+    #   run: |
+    #     vulkaninfo --summary
 
     - name: Setup environment
       run: mkdir -p ssh
