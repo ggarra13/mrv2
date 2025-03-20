@@ -5,13 +5,14 @@
 
 curl -L -o /tmp/vulkan-sdk.exe "https://sdk.lunarg.com/sdk/download/latest/windows/vulkan-sdk.exe"
 
-cd /tmp
+ls /tmp
 
 export VULKAN_SDK="/C/VulkanSDK"
 
-vulkan-sdk.exe \
+/tmp/vulkan-sdk.exe \
     --root "$VULKAN_SDK" \
     --accept-licenses \
     --default-answer \
     --confirm-command install
 
+rm -f /tmp/vulkan-sdk.exe
