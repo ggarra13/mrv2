@@ -180,7 +180,7 @@ endif()
 # For Ubuntu 22.04 LTS - Remove for Ubuntu 24.04 LTS and later
 set(shaderc_DEP )
 if(TLRENDER_VK AND UNIX AND NOT APPLE)
-    include(cnake/Modules/Buildshaderc.cmake)
+    include(cmake/Modules/Buildshaderc.cmake)
 endif()
 
 add_subdirectory( tlRender/etc/SuperBuild)
