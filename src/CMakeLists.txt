@@ -347,7 +347,7 @@ add_subdirectory( main )
 #
 # Add hdr source
 #
-if (TLRENDER_NDI AND TLRENDER_FFMPEG)
+if (TLRENDER_NDI AND TLRENDER_FFMPEG AND TLRENDER_VK)
     add_subdirectory( hdr )
 endif()
 
