@@ -9,6 +9,8 @@ v1.3.7
   stopped.
 - Fixed Render->Minify Filter and Render->Magnify Filter toggling from the
   menu entries (Shift + F was working fine).
+- Added partial support for Japanese language in the UI.
+
   
 v1.3.6
 ======

@@ -353,7 +353,7 @@ msgid ""
 "Dictionary of menu entries with callbacks, like:\n"
 "\n"
 "def menus(self):\n"
-"    menus = { \"Nem Menu/Hello\" : self.run }\n"
+"    menus = { \"New Menu/Hello\" : self.run }\n"
 "    return menus\n"
 "\n"
 msgstr ""
@@ -361,7 +361,7 @@ msgstr ""
 "Dictionary of menu entries with callbacks, like:\n"
 "\n"
 "def menus(self):\n"
-"    menus = { \"Nem Menu/Hello\" : self.run }\n"
+"    menus = { \"New Menu/Hello\" : self.run }\n"
 "    return menus\n"
 "\n"
 
@@ -3755,12 +3755,6 @@ msgstr "Ripple"
 msgid "Roll"
 msgstr "Roll"
 
-msgid "Render/Minify Filter/Linear"
-msgstr "Render/Minify Filter/Linear"
-
-msgid "Render/Magnify Filter/Linear"
-msgstr "Render/Magnify Filter/Linear"
-
 msgid "(no image)"
 msgstr "(no image)"
 
@@ -3997,8 +3991,14 @@ msgstr "Render/Alpha Blend/Premultiplied"
 msgid "Render/Minify Filter/Nearest"
 msgstr "Render/Minify Filter/Nearest"
 
+msgid "Render/Minify Filter/Linear"
+msgstr "Render/Minify Filter/Linear"
+
 msgid "Render/Magnify Filter/Nearest"
 msgstr "Render/Magnify Filter/Nearest"
+
+msgid "Render/Magnify Filter/Linear"
+msgstr "Render/Magnify Filter/Linear"
 
 msgid "Render/HDR/Auto Normalize"
 msgstr "Render/HDR/Auto Normalize"

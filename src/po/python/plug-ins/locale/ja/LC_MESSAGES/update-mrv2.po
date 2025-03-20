@@ -21,115 +21,115 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Install completed with output:\n"
+"\n"
 
 msgid "Removed temporary \""
-msgstr "Removed temporary \""
+msgstr ""
 
 msgid "The new version of mrv2 was installed."
-msgstr "The new version of mrv2 was installed."
+msgstr ""
 
 msgid "Could not locate mrv2 in:\n"
-msgstr "Could not locate mrv2 in:\n"
+msgstr "\n"
 
 msgid "Maybe you installed it in a non-default location."
-msgstr "Maybe you installed it in a non-default location."
+msgstr ""
 
 msgid "Something failed installing mrv2 - It is not in \""
-msgstr "Something failed installing mrv2 - It is not in \""
+msgstr ""
 
 msgid "Invalid ISO 8601 format provided: "
-msgstr "Invalid ISO 8601 format provided: "
+msgstr ""
 
 msgid "No file matching"
-msgstr "No file matching"
+msgstr ""
 
 msgid "was found"
-msgstr "was found"
+msgstr ""
 
 msgid "No match found"
-msgstr "No match found"
+msgstr ""
 
 msgid "Install Location: "
-msgstr "Install Location: "
+msgstr ""
 
 msgid "Error retrieving value:\n"
-msgstr "Error retrieving value:\n"
+msgstr "\n"
 
 msgid "Unknown platform"
-msgstr "Unknown platform"
+msgstr ""
 
 msgid "Saving session:"
-msgstr "Saving session:"
+msgstr ""
 
 msgid "An unexpected error occurred:"
-msgstr "An unexpected error occurred:"
+msgstr ""
 
 msgid "Trying to install"
-msgstr "Trying to install"
+msgstr ""
 
 msgid "Please wait"
-msgstr "Please wait"
+msgstr ""
 
 msgid "Enter Sudo Password"
-msgstr "Enter Sudo Password"
+msgstr ""
 
 msgid "Password"
-msgstr "Password"
+msgstr ""
 
 msgid "You will need to install file"
-msgstr "You will need to install file"
+msgstr ""
 
 msgid "manually."
-msgstr "manually."
+msgstr ""
 
 msgid "Unknown operating system"
-msgstr "Unknown operating system"
+msgstr ""
 
 msgid "Downloading "
-msgstr "Downloading "
+msgstr ""
 
 msgid "Download seems to have failed!"
-msgstr "Download seems to have failed!"
+msgstr ""
 
 msgid "Release Notes"
-msgstr "Release Notes"
+msgstr ""
 
 msgid "Current version is v"
-msgstr "Current version is v"
+msgstr ""
 
 msgid "Latest version at Github is v"
-msgstr "Latest version at Github is v"
+msgstr ""
 
 msgid "Released on "
-msgstr "Released on "
+msgstr ""
 
 msgid "Ignore"
-msgstr "Ignore"
+msgstr ""
 
 msgid "Error fetching latest release information:\n"
-msgstr "Error fetching latest release information:\n"
+msgstr "\n"
 
 msgid "There's a new release but it has not been more than 5 days"
-msgstr "There's a new release but it has not been more than 5 days"
+msgstr ""
 
 msgid "unknown date."
-msgstr "unknown date."
+msgstr ""
 
 msgid "Update anyway"
-msgstr "Update anyway"
+msgstr ""
 
 msgid "Downgrade"
-msgstr "Downgrade"
+msgstr ""
 
 msgid "Upgrade"
-msgstr "Upgrade"
+msgstr ""
 
 msgid "No download url was found for"
-msgstr "No download url was found for"
+msgstr ""
 
 msgid "No releases found for the specified repository."
-msgstr "No releases found for the specified repository."
+msgstr ""
 
 msgid "Help/Update mrv2"
-msgstr "Help/Update mrv2"
+msgstr "/"

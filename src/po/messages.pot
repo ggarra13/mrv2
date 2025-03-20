@@ -320,7 +320,7 @@ msgid ""
 "Dictionary of menu entries with callbacks, like:\n"
 "\n"
 "def menus(self):\n"
-"    menus = { \"Nem Menu/Hello\" : self.run }\n"
+"    menus = { \"New Menu/Hello\" : self.run }\n"
 "    return menus\n"
 "\n"
 msgstr ""
@@ -3410,12 +3410,6 @@ msgstr ""
 msgid "Roll"
 msgstr ""
 
-msgid "Render/Minify Filter/Linear"
-msgstr ""
-
-msgid "Render/Magnify Filter/Linear"
-msgstr ""
-
 msgid "(no image)"
 msgstr ""
 
@@ -3648,7 +3642,13 @@ msgstr ""
 msgid "Render/Minify Filter/Nearest"
 msgstr ""
 
+msgid "Render/Minify Filter/Linear"
+msgstr ""
+
 msgid "Render/Magnify Filter/Nearest"
+msgstr ""
+
+msgid "Render/Magnify Filter/Linear"
 msgstr ""
 
 msgid "Render/HDR/Auto Normalize"

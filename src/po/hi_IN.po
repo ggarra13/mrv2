@@ -335,7 +335,7 @@ msgid ""
 "Dictionary of menu entries with callbacks, like:\n"
 "\n"
 "def menus(self):\n"
-"    menus = { \"Nem Menu/Hello\" : self.run }\n"
+"    menus = { \"New Menu/Hello\" : self.run }\n"
 "    return menus\n"
 "\n"
 msgstr ""
@@ -343,7 +343,7 @@ msgstr ""
 "कॉलबैक्स के साथ मेनू प्रविष्टियों का डिक्शनरी, जैसे:\n"
 "\n"
 "def menus(self):\n"
-"    menus = { \"Nem Menu/Hello\" : self.run }\n"
+"    menus = { \"New Menu/Hello\" : self.run }\n"
 "    return menus\n"
 "\n"
 
@@ -3708,12 +3708,6 @@ msgstr "लहरें"
 msgid "Roll"
 msgstr "फेंकें"
 
-msgid "Render/Minify Filter/Linear"
-msgstr "रेंडर/न्यूनतमीकरण फ़िल्टर/लीनियर"
-
-msgid "Render/Magnify Filter/Linear"
-msgstr "रेंडर/आवाही फ़िल्टर/लीनियर"
-
 msgid "(no image)"
 msgstr "(कोई छवि नहीं)"
 
@@ -3948,8 +3942,14 @@ msgstr "रेंडर/अल्फा ब्लेंड/पूर्वगु
 msgid "Render/Minify Filter/Nearest"
 msgstr "रेंडर/न्यूनतमीकरण फ़िल्टर/निकटस्थ"
 
+msgid "Render/Minify Filter/Linear"
+msgstr "रेंडर/न्यूनतमीकरण फ़िल्टर/लीनियर"
+
 msgid "Render/Magnify Filter/Nearest"
 msgstr "रेंडर/आवाही फ़िल्टर/निकटस्थ"
+
+msgid "Render/Magnify Filter/Linear"
+msgstr "रेंडर/आवाही फ़िल्टर/लीनियर"
 
 msgid "Render/HDR/Auto Normalize"
 msgstr "रेंडर/HDR/स्वचालित सामान्य करें"

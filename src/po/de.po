@@ -345,13 +345,16 @@ msgid ""
 "Dictionary of menu entries with callbacks, like:\n"
 "\n"
 "def menus(self):\n"
-"    menus = { \"Nem Menu/Hello\" : self.run }\n"
+"    menus = { \"New Menu/Hello\" : self.run }\n"
 "    return menus\n"
 "\n"
 msgstr ""
 "\n"
-"Wrterbuch der Meneintrge mit Rckrufen, wie z.B.: def menus(self): menus = "
-"{ \"Nem Menu/Hello\" : self.run } return menus\n"
+"Wrterbuch der Meneintrge mit Rckrufen, wie z.B.:\n"
+"\n"
+"def menus(self):\n"
+"   menus = { \"New Menu/Hello\" : self.run }\n"
+"   return menus\n"
 
 msgid ""
 "\n"
@@ -3759,12 +3762,6 @@ msgstr "Rippig"
 msgid "Roll"
 msgstr "Walzwerk"
 
-msgid "Render/Minify Filter/Linear"
-msgstr "Render/Filter verkleinern/Linear"
-
-msgid "Render/Magnify Filter/Linear"
-msgstr "Render/Filter vergrern/Linear"
-
 msgid "(no image)"
 msgstr "(kein Bild)"
 
@@ -4001,8 +3998,14 @@ msgstr "Render/Alpha Blend/Vorvervielfacht"
 msgid "Render/Minify Filter/Nearest"
 msgstr "Render/Filter verkleinern/Nchstgelegen"
 
+msgid "Render/Minify Filter/Linear"
+msgstr "Render/Filter verkleinern/Linear"
+
 msgid "Render/Magnify Filter/Nearest"
 msgstr "Render/Filter vergrern/Nchstgelegen"
+
+msgid "Render/Magnify Filter/Linear"
+msgstr "Render/Filter vergrern/Linear"
 
 msgid "Render/HDR/Auto Normalize"
 msgstr "Render/HDR/Automatisch normalisieren"

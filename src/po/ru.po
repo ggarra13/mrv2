@@ -352,7 +352,7 @@ msgid ""
 "Dictionary of menu entries with callbacks, like:\n"
 "\n"
 "def menus(self):\n"
-"    menus = { \"Nem Menu/Hello\" : self.run }\n"
+"    menus = { \"New Menu/Hello\" : self.run }\n"
 "    return menus\n"
 "\n"
 msgstr ""
@@ -3792,12 +3792,6 @@ msgstr "Риппл"
 msgid "Roll"
 msgstr "Поворачивай."
 
-msgid "Render/Minify Filter/Linear"
-msgstr "Редакция/Минимизация фильтра/Linear"
-
-msgid "Render/Magnify Filter/Linear"
-msgstr "Редакция/Увеличить фильтр/Linear"
-
 msgid "(no image)"
 msgstr "(без изображения)"
 
@@ -4034,8 +4028,14 @@ msgstr "Редакция/Альфа Бленд/Предмногочисленн�
 msgid "Render/Minify Filter/Nearest"
 msgstr "Редакция/Минимизация фильтра/Ближайший"
 
+msgid "Render/Minify Filter/Linear"
+msgstr "Редакция/Минимизация фильтра/Linear"
+
 msgid "Render/Magnify Filter/Nearest"
 msgstr "Редакция/Увеличить фильтр/Ближайший"
+
+msgid "Render/Magnify Filter/Linear"
+msgstr "Редакция/Увеличить фильтр/Linear"
 
 msgid "Render/HDR/Auto Normalize"
 msgstr "Редакция/HDR/Автонормализовать"
