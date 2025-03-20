@@ -190,13 +190,12 @@ if [ -z "$TLRENDER_VK" ]; then
     fi
 fi
 
-echo $VULKAN_SDK
-ls $VULKAN_SDK/include
-if [ -d "$VULKAN_SDK/include/vulkan" ]; then
+if [ -d "${VULKAN_SDK}/include/vulkan/" ]; then
     export TLRENDER_VK=ON
 else
-    echo "VULKAN SDK not found!"
     export TLRENDER_VK=OFF
+    echo "VULKAN NOT FOUND at ${VULKAN_SDK}/include/vulkan"
+    exit 1
 fi
     
 if [ -z "$TLRENDER_VPX" ]; then
