@@ -50,10 +50,11 @@ jobs:
         # Example: Replace with your method of getting the latest version
         VULKAN_VERSION="1.4.309.0"
           
-        VULKAN_SDK_URL="https://sdk.lunarg.com/sdk/download/${VULKAN_VERSION}/mac/vulkansdk-macos-${VULKAN_VERSION}.dmg"
+        VULKAN_SDK_URL="https://sdk.lunarg.com/sdk/download/latest/mac/vulkansdk.zip"
           
         curl -LO "${VULKAN_SDK_URL}"
         echo "Download done"
+
         
         hdiutil attach "vulkansdk-macos-${VULKAN_VERSION}.dmg"
 
