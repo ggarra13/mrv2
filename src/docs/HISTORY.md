@@ -7,6 +7,8 @@ v1.3.7
   reach the final and first annotation respectively.
 - Fixed opening Secondary Window not displaying the video when the video was
   stopped.
+- Fixed Render->Minify Filter and Render->Magnify Filter toggling from the
+  menu entries (Shift + F was working fine).
   
 v1.3.6
 ======
