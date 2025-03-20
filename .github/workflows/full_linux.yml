@@ -64,7 +64,17 @@ jobs:
     - name: Install libshaderc-dev dependencies
       if: github.ref_name == 'vulkan'
       run: |
-        sudo apt-get install -y glslang-dev spirv-tools spirv-headers libspirv-dev
+        sudo apt-get install -y glslang-dev spirv-tools spirv-headers
+        
+    # Install Vulkan SDK
+    - name: Install Vulkan SDK
+      if: github.ref_name == 'vulkan'
+      run: |
+        . etc/install_linux_vulkan.sh
+        # Persist environment variables for subsequent steps
+        echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
+        echo "PATH=$VULKAN_SDK\Bin;$PATH" >> $GITHUB_ENV
+        echo "VK_LAYER_PATH=$VK_LAYER_PATH" >> $GITHUB_ENV
         
     - name: Synchronize clock
       run: |
