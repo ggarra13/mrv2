@@ -14,6 +14,8 @@
 
 #include <tlIO/System.h>
 
+#include <tlDevice/NDI/NDI.h>
+
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvRoot.h"
 
@@ -37,12 +39,6 @@ namespace mrv
                   << std::endl;
         exit(-1);
     }
-#endif
-
-#ifndef __APPLE__
-    // Apple has a kickass system handler and backtrace functions as part of
-    // the OS.  No need for that there.
-    static SignalHandler signalHandler;
 #endif
 
     namespace
@@ -144,6 +140,16 @@ namespace mrv
             return;
         }
 
+        // Not required, but "correct" (see the SDK documentation).
+        if (!NDIlib_initialize())
+        {
+            // Cannot run NDI. Most likely because the CPU is not sufficient (see SDK documentation).
+            // you can check this directly with a call to NDIlib_is_supported_CPU()
+            printf("Cannot run NDI.");
+            _exit = -1;
+            return;
+        }
+    
         // Initialize FLTK.
         Fl::scheme("gtk+");
         Fl::option(Fl::OPTION_VISIBLE_FOCUS, false);
@@ -187,6 +193,9 @@ namespace mrv
         TLRENDER_P();
         delete ui;
         ui = nullptr;
+        
+        // Not required, but nice
+        NDIlib_destroy();
     }
 
     HDRApp::~HDRApp()

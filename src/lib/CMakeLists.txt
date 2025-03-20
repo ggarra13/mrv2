@@ -24,7 +24,7 @@ add_subdirectory(mrvApp)
 if(MRV2_PYBIND11)
     add_subdirectory(mrvPy)
 endif()
-if(TLRENDER_VK)
+if(TLRENDER_VK AND TLRENDER_NDI)
     add_subdirectory(mrvHDR)
 endif()
 

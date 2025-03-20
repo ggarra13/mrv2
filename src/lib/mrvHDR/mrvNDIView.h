@@ -42,6 +42,8 @@ namespace mrv
         Fl_Vk_Mesh m_vertices;
         Fl_Vk_Texture m_textures[DEMO_TEXTURE_COUNT];
 
+        int main_loop();
+        
         void prepare_textures();
         void prepare_vertices();
         void prepare_descriptor_layout();
