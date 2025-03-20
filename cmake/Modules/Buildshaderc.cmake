@@ -9,6 +9,7 @@ set(shaderc_REPOSITORY "https://github.com/jeremy-rifkin/shaderc.git")
 ExternalProject_Add(
     shaderc
     GIT_REPOSITORY ${shaderc_REPOSITORY}
+    GIT_SUBMODULES_RECURSE TRUE
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps/shaderc
     CMAKE_ARGS
     -DSHADERC_ENABLE_SHARED_CRT=ON
