@@ -1632,8 +1632,10 @@ namespace mrv
     void App::setDisplayOptions(const timeline::DisplayOptions& value)
     {
         TLRENDER_P();
+
         if (value == p.displayOptions)
             return;
+
         p.displayOptions = value;
         displayOptionsChanged(p.displayOptions);
     }
@@ -1647,7 +1649,6 @@ namespace mrv
         msg["command"] = "Display Options";
         msg["value"] = opts;
         tcp->pushMessage(msg);
-        ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
     void App::setVolume(float value)

@@ -895,8 +895,10 @@ namespace mrv
         const std::vector<timeline::DisplayOptions>& value) noexcept
     {
         TLRENDER_P();
+
         if (value == p.displayOptions)
             return;
+        
         p.displayOptions = value;
 
         const auto& d = p.displayOptions[0];
@@ -2290,21 +2292,6 @@ namespace mrv
             p.ui->uiFStop->copy_label("f/8");
             p.ui->uiFStop->labelcolor(p.ui->uiGain->labelcolor());
         }
-
-        // Get the filters from the menu bar (even if hidden)
-        const Fl_Menu_Item* item =
-            p.ui->uiMenuBar->find_item(_("Render/Minify Filter/Linear"));
-        timeline::ImageFilter min_filter = timeline::ImageFilter::Nearest;
-        if (item && item->value())
-            min_filter = timeline::ImageFilter::Linear;
-
-        item = p.ui->uiMenuBar->find_item(_("Render/Magnify Filter/Linear"));
-        timeline::ImageFilter mag_filter = timeline::ImageFilter::Nearest;
-        if (item && item->value())
-            mag_filter = timeline::ImageFilter::Linear;
-
-        d.imageFilters.minify = min_filter;
-        d.imageFilters.magnify = mag_filter;
 
         _updateDisplayOptions(d);
     }
