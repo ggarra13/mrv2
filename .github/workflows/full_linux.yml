@@ -56,7 +56,10 @@ jobs:
 
     - name: Install vulkan
       if: github.ref_name == 'vulkan'
-      run: sudo apt-get install -y libvulkan1 libvulkan-dev mesa-vulkan-drivers vulkan-validationlayers libshaderc-dev libshaderc1
+      run: |
+        sudo add-apt-repository universe
+        sudo apt update
+        sudo apt-get install -y libvulkan1 libvulkan-dev mesa-vulkan-drivers vulkan-validationlayers libshaderc-dev
 
     - name: Synchronize clock
       run: |
