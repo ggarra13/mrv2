@@ -190,6 +190,8 @@ if [ -z "$TLRENDER_VK" ]; then
     fi
 fi
 
+echo $VULKAN_SDK
+ls $VULKAN_SDK/include
 if [ -d "$VULKAN_SDK/include/vulkan" ]; then
     export TLRENDER_VK=ON
 else
