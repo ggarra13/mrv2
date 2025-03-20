@@ -31,7 +31,14 @@ jobs:
         Invoke-WebRequest -Uri $vc_redist_url_2022 -OutFile vc_redist_2022.x64.exe
         Start-Process vc_redist_2022.x64.exe -ArgumentList "/install", "/quiet", "/norestart" -Wait
       shell: powershell
-      
+
+    - name: Cache Vulkan SDK
+      uses: actions/cache@v3
+      if: github.ref_name == 'vulkan'
+      with:
+        path: C:\VulkanSDK
+        key: vulkan-sdk-${{ runner.os }}-latest
+    
     # Install Vulkan SDK
     - name: Install Vulkan SDK
       if: github.ref_name == 'vulkan'

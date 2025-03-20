@@ -50,6 +50,7 @@ jobs:
         curl -L -o vulkan-sdk.dmg "https://sdk.lunarg.com/sdk/download/latest/mac/vulkan-sdk.dmg"
           
         # Mount the DMG
+        echo "Download done"
         hdiutil attach vulkan-sdk.dmg -nobrowse -mountpoint /Volumes/vulkan-sdk
           
         # Copy the Vulkan SDK contents to a local directory
