@@ -173,11 +173,7 @@ if [ -z "$TLRENDER_VK" ]; then
     if [ -z "$VULKAN_SDK" ]; then
 	export VULKAN_SDK=/crapola_of_dir
 	if [[ $KERNEL == *Msys* ]]; then
-	    VULKAN_ROOT=/C/VulkanSDK
-	    if [ -d "$VULKAN_ROOT" ]; then
-		SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sort -r | grep -o "$VULKAN_ROOT/[0-9]*\..*"| sed -e "s#$VULKAN_ROOT/##" | head -1)
-		export VULKAN_SDK=/C/VulkanSDK/$SDK_VERSION/
-	    fi
+	    export VULKAN_SDK=/C/VulkanSDK
 	elif [[ $KERNEL == *Linux* ]]; then
 	    export VULKAN_SDK=/usr/
 	elif [[ $KERNEL == *Darwin* ]]; then

@@ -42,23 +42,12 @@ jobs:
     # Install Vulkan SDK
     - name: Install Vulkan SDK
       if: github.ref_name == 'vulkan'
-      shell: pwsh # Use PowerShell for better Windows scripting
       run: |
-        # Download Vulkan SDK installer
-        Invoke-WebRequest -Uri "https://sdk.lunarg.com/sdk/download/latest/windows/vulkan-sdk.exe" -OutFile "vulkan-sdk.exe"
-          
-        # Install silently to C:\VulkanSDK
-        Start-Process -FilePath ".\vulkan-sdk.exe" -ArgumentList "/S", "/D=C:\VulkanSDK" -Wait -NoNewWindow
-          
-        # Set environment variables
-        $env:VULKAN_SDK = "C:\VulkanSDK"
-        $env:PATH = "$env:VULKAN_SDK\Bin;" + $env:PATH
-        $env:VK_LAYER_PATH = "$env:VULKAN_SDK\Bin"
-          
+        . etc/install_win32_vulkan.sh
         # Persist environment variables for subsequent steps
-        echo "VULKAN_SDK=$env:VULKAN_SDK" >> $env:GITHUB_ENV
-        echo "PATH=$env:VULKAN_SDK\Bin;$env:PATH" >> $env:GITHUB_ENV
-        echo "VK_LAYER_PATH=$env:VK_LAYER_PATH" >> $env:GITHUB_ENV
+        echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
+        echo "PATH=$VULKAN_SDK\Bin;$PATH" >> $GITHUB_ENV
+        echo "VK_LAYER_PATH=$VK_LAYER_PATH" >> $GITHUB_ENV
 
     # Verify Vulkan installation
     - name: Verify Vulkan
