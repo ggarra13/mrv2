@@ -44,6 +44,7 @@ jobs:
 
     # Download and install Vulkan SDK with MoltenVK
     - name: Install Vulkan SDK
+      if: github.ref_name == 'vulkan'
       run: |
         # Download the latest Vulkan SDK DMG
         curl -L -o vulkan-sdk.dmg "https://sdk.lunarg.com/sdk/download/latest/mac/vulkan-sdk.dmg"
@@ -92,5 +93,6 @@ jobs:
         ./etc/runme_nolog.sh -t package
 
     - name: Upload binaries  # Conditional step
+      if: github.ref_name == 'beta'
       run: |
         ./bin/release/upload_sourceforge.sh

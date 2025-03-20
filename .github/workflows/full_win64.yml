@@ -34,6 +34,7 @@ jobs:
       
     # Install Vulkan SDK
     - name: Install Vulkan SDK
+      if: github.ref_name == 'vulkan'
       shell: pwsh # Use PowerShell for better Windows scripting
       run: |
         # Download Vulkan SDK installer
@@ -103,5 +104,6 @@ jobs:
         ./etc/runme_nolog.sh -v -t package -D TLRENDER_USD=OFF
         
     - name: Upload binaries  # Conditional step (beta branch only)
+      if: github.ref_name == 'beta'
       run: |
         ./bin/release/upload_sourceforge.sh
