@@ -39,11 +39,6 @@ jobs:
         net stop w32time
         net start w32time
         w32tm /resync /rediscover
-
-    - name: Set permissions on SSH key
-      shell: cmd
-      run: |
-        icacls "ssh\id_rsa" /inheritance:r /grant:r "%USERNAME%:R"
           
     - name: Setup MSYS
       uses: msys2/setup-msys2@v2
@@ -76,6 +71,11 @@ jobs:
     - name: Decode SSH key
       run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
       shell: bash
+        
+    - name: Set permissions on SSH key
+      shell: cmd
+      run: |
+        icacls "ssh\id_rsa" /inheritance:r /grant:r "%USERNAME%:R"
         
     - name: Set executable permissions
       run: |
