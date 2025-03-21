@@ -264,14 +264,6 @@ if [[ $KERNEL == *Msys* ]]; then
     fi
 fi
 
-if command -v swig > /dev/null 2>&1; then
-    swig -version
-else
-    echo
-    echo "swig NOT found!!! Cannot compile pyFLTK."
-    echo
-    exit 1
-fi
 
 mkdir -p $BUILD_DIR/install
 
@@ -343,6 +335,15 @@ mkdir -p $BUILD_DIR/install
 #
 if [[ $KERNEL == *Msys* ]]; then
     . $PWD/etc/windows/compile_dlls.sh
+fi
+
+if command -v swig > /dev/null 2>&1; then
+    swig -version
+else
+    echo
+    echo "swig NOT found!!! Cannot compile pyFLTK."
+    echo
+    exit 1
 fi
 
 #

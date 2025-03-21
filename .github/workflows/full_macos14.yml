@@ -47,7 +47,8 @@ jobs:
     - name: Install Vulkan SDK
       if: github.ref_name == 'vulkan'
       run: |
-        . etc/install_macos_vulkan.sh
+        
+        . ./etc/macos/install_vulkan.sh
         
         echo "VULKAN_SDK=${VULKAN_SDK}" >> $GITHUB_ENV
         echo "DYLD_LIBRARY_PATH=${VULKAN_SDK}/lib:$DYLD_LIBRARY_PATH" >> $GITHUB_ENV

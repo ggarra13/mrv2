@@ -54,7 +54,9 @@ jobs:
     - name: Install Vulkan SDK
       if: github.ref_name == 'vulkan'
       run: |
-        . etc/install_win32_vulkan.sh
+
+        . ./etc/windows/install_vulkan.sh
+        
         # Persist environment variables for subsequent steps
         echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
         echo "VK_LAYER_PATH=$VK_LAYER_PATH" >> $GITHUB_ENV
