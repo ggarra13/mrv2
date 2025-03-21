@@ -175,12 +175,18 @@ if [ -z "$TLRENDER_VK" ]; then
 	if [[ $KERNEL == *Msys* ]]; then
 	    export VULKAN_SDK=/C/VulkanSDK
 	elif [[ $KERNEL == *Linux* ]]; then
-	    export VULKAN_SDK=/usr/
+	    if [[ -d VulkanSDK ]]; then
+		export VULKAN_ROOT=$PWD/VulkanSDK
+		SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sort -r | grep -o "$VULKAN_ROOT/[0-9]*\..*"| sed -e "s#$VULKAN_ROOT/##" | head -1)
+		export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/
+	    else
+		export VULKAN_SDK=/usr/
+	    fi
 	elif [[ $KERNEL == *Darwin* ]]; then
 	    VULKAN_ROOT=$HOME/VulkanSDK
 	    if [ -d "$VULKAN_ROOT" ]; then
 		SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sort -r | grep -o "$VULKAN_ROOT/[0-9]*\..*"| sed -e "s#$VULKAN_ROOT/##" | head -1)
-		export VULKAN_SDK=$HOME/VulkanSDK/$SDK_VERSION/macOS
+		export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/macOS
 	    fi
 	fi
     fi

@@ -59,7 +59,7 @@ jobs:
         echo "PATH=$VULKAN_SDK\Bin;$PATH" >> $GITHUB_ENV
         echo "VK_LAYER_PATH=$VK_LAYER_PATH" >> $GITHUB_ENV
 
-    # Verify Vulkan installation
+    # Verify Vulkan installation (does not work on Github Actions)
     # - name: Verify Vulkan
     #   run: |
     #     vulkaninfo --summary

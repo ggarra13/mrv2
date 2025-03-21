@@ -9,11 +9,14 @@ curl -L -o /tmp/vulkan-sdk.tar.gz "https://sdk.lunarg.com/sdk/download/latest/li
 echo "After downloading it..."
 ls /tmp
 
+mkdir -p VulkanSDK
+cd VulkanSDK
 tar -xvf /tmp/vulkan-sdk.tar.gz
 
-echo "After decompressing it..."
-ls /tmp
+cd -
 
-export VULKAN_SDK="/tmp/"
+VULKAN_ROOT=$PWD/VulkanSDK
+SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sort -r | grep -o "$VULKAN_ROOT/[0-9]*\..*"| sed -e "s#$VULKAN_ROOT/##" | head -1)
+export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/
 
 rm -f /tmp/vulkan-sdk.tar.gz
