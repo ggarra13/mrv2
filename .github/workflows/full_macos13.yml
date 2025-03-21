@@ -35,7 +35,24 @@ jobs:
         
     - name: Install pyFLTK dependencies
       run: brew install swig
-      
+
+    - name: Setup Vulkan SDK
+      if: github.ref_name == 'vulkan'
+      run: |
+        
+        . ./etc/macos/install_vulkan.sh
+        
+        echo "VULKAN_SDK=${VULKAN_SDK}" >> $GITHUB_ENV
+        echo "DYLD_LIBRARY_PATH=${VULKAN_SDK}/lib:$DYLD_LIBRARY_PATH" >> $GITHUB_ENV
+        echo "VK_ICD_FILENAMES=${VULKAN_SDK}/share/vulkan/icd.d/MoltenVK_icd.json" >> $GITHUB_ENV
+        echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
+
+    # # Verify Vulkan installation
+    - name: Verify Vulkan
+      if: github.ref_name == 'vulkan'
+      run: |
+        vulkaninfo --summary
+          
     - name: Setup environment
       run: mkdir -p ssh
 
@@ -59,5 +76,6 @@ jobs:
         ./etc/runme_nolog.sh -D TLRENDER_USD=OFF -t package
       
     - name: Upload binaries
+      if: github.ref_name == 'beta'
       run: |
         ./bin/release/upload_sourceforge.sh
