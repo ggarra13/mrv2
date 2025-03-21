@@ -3,6 +3,10 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
+. etc/functions.sh
+
+get_kernel
+
 curl -L -o /tmp/vulkan-sdk.tar.gz "https://sdk.lunarg.com/sdk/download/latest/linux/vulkan-sdk.tar.gz"
 
 
