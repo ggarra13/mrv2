@@ -31,15 +31,7 @@ jobs:
         Invoke-WebRequest -Uri $vc_redist_url_2022 -OutFile vc_redist_2022.x64.exe
         Start-Process vc_redist_2022.x64.exe -ArgumentList "/install", "/quiet", "/norestart" -Wait
       shell: powershell
-
-    - name: Synchronize clock
-      shell: cmd
-      run: |
-        w32tm /config /manualpeerlist:time.windows.com /syncfromflags:manual /reliable:YES /update
-        net stop w32time
-        net start w32time
-        w32tm /resync /rediscover
-          
+      
     - name: Setup MSYS
       uses: msys2/setup-msys2@v2
       with:
@@ -49,23 +41,6 @@ jobs:
     - name: Get machine name
       run: |
         echo "Machine name: $RUNNER_NAME"
-    
-    # Install Vulkan SDK
-    - name: Install Vulkan SDK
-      if: github.ref_name == 'vulkan'
-      run: |
-
-        . ./etc/windows/install_vulkan.sh
-        
-        # Persist environment variables for subsequent steps
-        echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
-        echo "VK_LAYER_PATH=$VK_LAYER_PATH" >> $GITHUB_ENV
-        echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
-
-    # Verify Vulkan installation (does not work on Github Actions)
-    # - name: Verify Vulkan
-    #   run: |
-    #     vulkaninfo --summary
 
     - name: Setup environment
       run: mkdir -p ssh
@@ -73,7 +48,15 @@ jobs:
     - name: Decode SSH key
       run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
       shell: bash
-        
+
+    - name: Synchronize clock
+      shell: cmd
+      run: |
+        w32tm /config /manualpeerlist:time.windows.com /syncfromflags:manual /reliable:YES /update
+        net stop w32time
+        net start w32time
+        w32tm /resync /rediscover
+
     - name: Set permissions on SSH key
       shell: cmd
       run: |
@@ -95,6 +78,5 @@ jobs:
         ./etc/runme_nolog.sh -v -t package -D TLRENDER_USD=OFF
         
     - name: Upload binaries  # Conditional step (beta branch only)
-      if: github.ref_name == 'beta'
       run: |
         ./bin/release/upload_sourceforge.sh

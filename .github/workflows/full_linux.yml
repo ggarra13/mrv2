@@ -22,9 +22,7 @@ jobs:
         echo "Machine name: $RUNNER_NAME"
 
     - name: Update
-      run: |
-        sudo add-apt-repository universe -y
-        sudo apt-get update || { echo "apt-get update failed"; exit 1; }
+      run: sudo apt-get update
       
     - name: Install OpenGL dev
       run: sudo apt-get install -y xorg-dev libglu1-mesa-dev mesa-common-dev
@@ -55,29 +53,7 @@ jobs:
       
     - name: Install python dependencies
       run: sudo apt-get install -y libssl-dev libffi-dev python3
-        
-    # - name: Install vulkan
-    #   if: github.ref_name == 'vulkan'
-    #   run: |
-    #     sudo apt-get install -y libvulkan1 libvulkan-dev mesa-vulkan-drivers vulkan-validationlayers
 
-    # - name: Install libshaderc-dev dependencies
-    #   if: github.ref_name == 'vulkan'
-    #   run: |
-    #     sudo apt-get install -y glslang-dev spirv-tools spirv-headers
-        
-    # Install Vulkan SDK
-    - name: Install Vulkan SDK
-      if: github.ref_name == 'vulkan'
-      run: |
-
-        . ./etc/linux/install_vulkan.sh
-        
-        # Persist environment variables for subsequent steps
-        echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
-        echo "VK_LAYER_PATH=$VK_LAYER_PATH" >> $GITHUB_ENV
-        echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
-        
     - name: Synchronize clock
       run: |
         sudo apt-get install -y ntp
@@ -105,6 +81,5 @@ jobs:
         ./etc/runme_nolog.sh -t package
       
     - name: Upload binaries  # Conditional step
-      if: github.ref_name == 'beta'
       run: |
         ./bin/release/upload_sourceforge.sh
