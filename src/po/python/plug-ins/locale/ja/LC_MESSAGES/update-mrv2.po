@@ -19,9 +19,6 @@ msgid ""
 "\n"
 "Install completed with output:\n"
 msgstr ""
-"\n"
-"\n"
-"\n"
 
 msgid "Removed temporary \""
 msgstr ""
@@ -30,7 +27,7 @@ msgid "The new version of mrv2 was installed."
 msgstr ""
 
 msgid "Could not locate mrv2 in:\n"
-msgstr "\n"
+msgstr ""
 
 msgid "Maybe you installed it in a non-default location."
 msgstr ""
@@ -54,7 +51,7 @@ msgid "Install Location: "
 msgstr ""
 
 msgid "Error retrieving value:\n"
-msgstr "\n"
+msgstr " \n"
 
 msgid "Unknown platform"
 msgstr ""
@@ -108,7 +105,7 @@ msgid "Ignore"
 msgstr ""
 
 msgid "Error fetching latest release information:\n"
-msgstr "\n"
+msgstr ""
 
 msgid "There's a new release but it has not been more than 5 days"
 msgstr ""
@@ -132,4 +129,4 @@ msgid "No releases found for the specified repository."
 msgstr ""
 
 msgid "Help/Update mrv2"
-msgstr "/"
+msgstr ""
