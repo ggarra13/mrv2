@@ -902,7 +902,7 @@ namespace mrv
         p.displayOptions = value;
 
         const auto& d = p.displayOptions[0];
-
+        
         float gamma, saturation, gain;
         if (d.levels.enabled)
         {
@@ -1011,8 +1011,8 @@ namespace mrv
             p.videoData.clear();
         }
 
-        // refreshWindows(); // needed We need to refresh, as the new
-        // video data may have different sizes.
+        refreshWindows(); // needed We need to refresh, as the new
+                          // video data may have different sizes.
     }
 
     mrv::TimelinePlayer* TimelineViewport::getTimelinePlayer() const noexcept
@@ -2224,9 +2224,9 @@ namespace mrv
     {
         TLRENDER_P();
 
-        p.displayOptions.resize(p.videoData.size());
-        if (p.displayOptions.empty())
+        if (p.videoData.empty())
         {
+            p.displayOptions.resize(1);  // needed for image filters
             p.ui->uiGain->value(1.0f);
             p.ui->uiGainInput->value(1.0f);
             p.ui->uiGamma->value(1.0f);
