@@ -10,6 +10,8 @@ v1.3.7
 - Fixed Render->Minify Filter and Render->Magnify Filter toggling from the
   menu entries (Shift + F was working fine).
 - Added 'hdr' stand-alone utility based on NDI and Vulkan.
+- Fixed Render->Minify and Magnify filter toggling.
+- Fixed Render->Minify and Magnify saving in preferences.
 - Added partial support for Japanese language in the UI.
 
   

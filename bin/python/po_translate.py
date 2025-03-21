@@ -290,7 +290,7 @@ class POTranslator:
             self.use_google = False
             
             if 'http' in translated_text:
-            translated_text = re.sub('<a href.*</a>', '', translated_text)
+                translated_text = re.sub('<a href.*</a>', '', translated_text)
 
         if english == translated_text:
             print()
