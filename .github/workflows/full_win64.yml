@@ -58,6 +58,7 @@ jobs:
         # Persist environment variables for subsequent steps
         echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
         echo "VK_LAYER_PATH=$VK_LAYER_PATH" >> $GITHUB_ENV
+        echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
 
     # Verify Vulkan installation (does not work on Github Actions)
     # - name: Verify Vulkan
