@@ -73,7 +73,6 @@ jobs:
         . etc/install_linux_vulkan.sh
         # Persist environment variables for subsequent steps
         echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
-        echo "PATH=$VULKAN_SDK/bin;$PATH" >> $GITHUB_ENV
         echo "VK_LAYER_PATH=$VK_LAYER_PATH" >> $GITHUB_ENV
         
     - name: Synchronize clock
