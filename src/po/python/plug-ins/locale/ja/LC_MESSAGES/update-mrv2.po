@@ -54,7 +54,7 @@ msgid "Install Location: "
 msgstr ""
 
 msgid "Error retrieving value:\n"
-msgstr "\n"
+msgstr " \n"
 
 msgid "Unknown platform"
 msgstr ""
