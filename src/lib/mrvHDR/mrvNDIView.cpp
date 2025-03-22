@@ -289,13 +289,10 @@ namespace mrv
          * need to add a mem ref */
     }
 
-    void NDIView::prepare_textures()
+    void NDIView::prepare_textures(const uint32_t tex_colors[1][2])
     {
         const VkFormat tex_format = VK_FORMAT_B8G8R8A8_UNORM;
         VkFormatProperties props;
-        const uint32_t tex_colors[DEMO_TEXTURE_COUNT][2] = {
-            {0xffff0000, 0xff00ff00},
-        };
         uint32_t i;
         VkResult result;
 
@@ -851,19 +848,20 @@ namespace mrv
         p.videoThread.running = false;
         if (p.videoThread.thread.joinable())
             p.videoThread.thread.join();
-        std::cerr << "exited video thread" << std::endl;
                     
         p.audioThread.running = false;
         if (p.audioThread.thread.joinable())
             p.audioThread.thread.join();
-        std::cerr << "exited audio thread" << std::endl;
     }
     
     void NDIView::_init()
     {
         TLRENDER_P();
-        
+
+        // Some Vulkan settings
         m_validate = true;
+        m_use_staging_buffer = true;
+        
         mode(FL_RGB | FL_DOUBLE | FL_ALPHA);
         m_vert_shader_module = VK_NULL_HANDLE;
         m_frag_shader_module = VK_NULL_HANDLE;
@@ -898,9 +896,8 @@ namespace mrv
             std::thread(
                 [this]
                     {
-                        std::cerr << "started video thread" << std::endl;
                         TLRENDER_P();
-
+                        
                         _videoThread();
                     });
     }
@@ -909,7 +906,12 @@ namespace mrv
     {
         TLRENDER_P();
         
-        prepare_textures();
+        const uint32_t tex_colors[DEMO_TEXTURE_COUNT][2] = {
+            {0xffff0000, 0xff00ff00},
+        };
+        
+        prepare_textures(tex_colors);
+        
         prepare_vertices();
         prepare_descriptor_layout();
         prepare_render_pass();
@@ -944,7 +946,6 @@ namespace mrv
     void NDIView::_videoThread()
     {
         TLRENDER_P();
-        std::cerr << "start video thread" << std::endl;
         while(p.videoThread.running)
         {
             {
@@ -967,13 +968,13 @@ namespace mrv
 
             // The descriptors
             NDIlib_video_frame_t video_frame;
-            NDIlib_audio_frame_t audio_frame;
+            NDIlib_audio_frame_t audio_frame;  // not used yet
 
             // Run for one minute
             const auto start = std::chrono::high_resolution_clock::now();
             while (p.videoThread.running) {
                 switch (NDIlib_recv_capture(p.NDI_recv, &video_frame,
-                                            &audio_frame, nullptr, 1000)) {
+                                            nullptr, nullptr, 1000)) {
                 //     // No data
                 // case NDIlib_frame_type_none:
                 //     printf("No data received.\n");
@@ -1000,6 +1001,11 @@ namespace mrv
                     }
                     if (video_frame.p_data) {
                         // Video frame buffer.
+        
+                        const uint32_t tex_colors[DEMO_TEXTURE_COUNT][2] = {
+                            {0x00ff0000, 0x00ffff00},
+                        };
+                        prepare_textures(tex_colors);
                     }
                     NDIlib_recv_free_video(p.NDI_recv, &video_frame);
                     break;

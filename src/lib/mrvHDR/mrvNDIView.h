@@ -47,7 +47,7 @@ namespace mrv
         Fl_Vk_Texture m_textures[DEMO_TEXTURE_COUNT];
 
         
-        void prepare_textures();
+        void prepare_textures(const uint32_t[1][2]);
         void prepare_vertices();
         void prepare_descriptor_layout();
         void prepare_render_pass();
