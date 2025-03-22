@@ -57,6 +57,8 @@ namespace mrv
 
     private:
         void _init();
+        void _startThreads();
+        void _exitThreads();
         void _findThread();
         void _videoThread();
         void _audioThread();

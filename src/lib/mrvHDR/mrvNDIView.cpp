@@ -89,6 +89,14 @@ namespace mrv
 
     NDIView::~NDIView()
     {
+        TLRENDER_P();
+        
+        _exitThreads();
+        
+        p.findThread.running = false;
+        if (p.findThread.thread.joinable())
+            p.findThread.thread.join();
+        
         vkDestroyShaderModule(m_device, m_frag_shader_module, NULL);
         vkDestroyShaderModule(m_device, m_vert_shader_module, NULL);
     }
@@ -834,6 +842,23 @@ namespace mrv
         vkUpdateDescriptorSets(m_device, 1, &write, 0, NULL);
     }
 
+    void NDIView::_exitThreads()
+    {
+        TLRENDER_P();
+
+        p.currentNDISource.clear();
+        
+        p.videoThread.running = false;
+        if (p.videoThread.thread.joinable())
+            p.videoThread.thread.join();
+        std::cerr << "exited video thread" << std::endl;
+                    
+        p.audioThread.running = false;
+        if (p.audioThread.thread.joinable())
+            p.audioThread.thread.join();
+        std::cerr << "exited audio thread" << std::endl;
+    }
+    
     void NDIView::_init()
     {
         TLRENDER_P();
@@ -861,11 +886,19 @@ namespace mrv
                         }
                     });
 
+        _startThreads();
+    }
+    
+    void NDIView::_startThreads()
+    {
+        TLRENDER_P();
+        
         p.videoThread.running = true;
         p.videoThread.thread =
             std::thread(
                 [this]
                     {
+                        std::cerr << "started video thread" << std::endl;
                         TLRENDER_P();
 
                         _videoThread();
@@ -911,15 +944,15 @@ namespace mrv
     void NDIView::_videoThread()
     {
         TLRENDER_P();
-
+        std::cerr << "start video thread" << std::endl;
         while(p.videoThread.running)
         {
-            while (1)
             {
                 std::unique_lock<std::mutex> lock(p.findMutex.mutex);
-                if (!p.currentNDISource.empty())
-                    break;
+                if (p.currentNDISource.empty())
+                    continue;
             }
+            
             // We now have at least one source, so we create a receiver to look at it.
         
             NDIlib_recv_create_t NDI_recv_create_desc;
@@ -929,25 +962,22 @@ namespace mrv
 
             // Create the receiver
             p.NDI_recv = NDIlib_recv_create(&NDI_recv_create_desc);
-            if (!p.NDI_recv) {
-                NDIlib_find_destroy(p.NDI_find);
-                return;
-            }
+            if (!p.NDI_recv)
+                continue;
 
             // The descriptors
             NDIlib_video_frame_t video_frame;
             NDIlib_audio_frame_t audio_frame;
 
             // Run for one minute
-            bool exit_loop = false;
             const auto start = std::chrono::high_resolution_clock::now();
-            while (!exit_loop && std::chrono::high_resolution_clock::now() - start < std::chrono::minutes(1)) {
+            while (p.videoThread.running) {
                 switch (NDIlib_recv_capture(p.NDI_recv, &video_frame,
                                             &audio_frame, nullptr, 1000)) {
-                    // No data
-                case NDIlib_frame_type_none:
-                    printf("No data received.\n");
-                    break;
+                //     // No data
+                // case NDIlib_frame_type_none:
+                //     printf("No data received.\n");
+                //     break;
 
                     // Video data
                 case NDIlib_frame_type_video:
@@ -974,11 +1004,11 @@ namespace mrv
                     NDIlib_recv_free_video(p.NDI_recv, &video_frame);
                     break;
 
-                    // Audio data
-                case NDIlib_frame_type_audio:
-                    printf("Audio data received (%d samples).\n", audio_frame.no_samples);
-                    NDIlib_recv_free_audio(p.NDI_recv, &audio_frame);
-                    break;
+                //     // Audio data
+                // case NDIlib_frame_type_audio:
+                //     printf("Audio data received (%d samples).\n", audio_frame.no_samples);
+                //     NDIlib_recv_free_audio(p.NDI_recv, &audio_frame);
+                //     break;
 
                     // Everything else
                 default:
@@ -1002,24 +1032,22 @@ namespace mrv
             throw std::runtime_error("could not create ndi find");
 
         
-        while (1)
+        while (p.findThread.running)
         {
             using namespace std::chrono;
-            std::string sourceName;
             for (const auto start = high_resolution_clock::now();
                  high_resolution_clock::now() - start < seconds(3);)
             {
                 // Wait up till 1 second to check for new sources to be added or removed
                 if (!NDIlib_find_wait_for_sources(p.NDI_find,
                                                   1000 /* milliseconds */)) {
-                    std::cerr << "got sources" << std::endl;
                     break;
                 }
             }
             
             uint32_t no_sources = 0;
 
-            std::unique_lock lock(p.audioMutex.mutex);
+            std::unique_lock lock(p.findMutex.mutex);
             p.NDIsources.clear();
             
             // Get the updated list of sources
@@ -1035,7 +1063,18 @@ namespace mrv
             }
 
             if (!p.NDIsources.empty())
+            {
+                std::string oldSource = p.currentNDISource;
                 p.currentNDISource = p.NDIsources[0];
+
+                // \@bug:  check for oldSource.empty() should not be used
+                if (p.currentNDISource != oldSource &&
+                    !oldSource.empty())
+                {
+                    _exitThreads();
+                    _startThreads();
+                }
+            }
         }
     }
 
@@ -1112,81 +1151,5 @@ namespace mrv
             m_device, &pPipelineLayoutCreateInfo, NULL, &m_pipeline_layout);
         VK_CHECK_RESULT(result);
     }
-
-
-    // int NDIView::main_loop()
-    // {
-        // We now have at least one source, so we create a receiver to look at it.
-        // NDIlib_recv_create_v3_t NDI_recv_create_desc;
-        // NDI_recv_create_desc.p_ndi_recv_name = "Example HDR Receiver";
-        // NDI_recv_create_desc.source_to_connect_to = *p_hdr_source;
-        // NDI_recv_create_desc.color_format = NDIlib_recv_color_format_best;
-
-        // // Create the receiver
-        // NDIlib_recv_instance_t pNDI_recv = NDIlib_recv_create_v3(&NDI_recv_create_desc);
-        // if (!pNDI_recv) {
-        //     NDIlib_find_destroy(pNDI_find);
-        //     return 0;
-        // }
-
-        // // Destroy the NDI finder. We needed to have access to the pointers to p_hdr_source
-        // NDIlib_find_destroy(pNDI_find);
-
-        // // The descriptors
-        // NDIlib_video_frame_v2_t video_frame;
-        // NDIlib_audio_frame_v2_t audio_frame;
-
-        // // Run for one minute
-        // bool exit_loop = false;
-        // const auto start = std::chrono::high_resolution_clock::now();
-        // while (!exit_loop && std::chrono::high_resolution_clock::now() - start < std::chrono::minutes(1)) {
-        //     switch (NDIlib_recv_capture_v2(pNDI_recv, &video_frame, &audio_frame, nullptr, 1000)) {
-        //         // No data
-        //     case NDIlib_frame_type_none:
-        //         printf("No data received.\n");
-        //         break;
-
-        //         // Video data
-        //     case NDIlib_frame_type_video:
-        //         printf("Video data received (%dx%d).\n", video_frame.xres, video_frame.yres);
-        //         if (video_frame.p_metadata) {
-        //             // Parsing XML metadata
-        //             rapidxml::xml_document<> doc;
-        //             doc.parse<0>((char*)video_frame.p_metadata);
-
-        //             // Get root node
-        //             rapidxml::xml_node<>* root = doc.first_node("ndi_color_info");
-
-        //             // Get attributes
-        //             rapidxml::xml_attribute<>* attr_transfer = root->first_attribute("transfer");
-        //             rapidxml::xml_attribute<>* attr_matrix = root->first_attribute("matrix");
-        //             rapidxml::xml_attribute<>* attr_primaries = root->first_attribute("primaries");
-
-        //             // Display color information
-        //             printf("Video metadata color info (transfer: %s, matrix: %s, primaries: %s)\n", attr_transfer->value(), attr_matrix->value(), attr_primaries->value());
-        //         }
-        //         if (video_frame.p_data) {
-        //             // Video frame buffer.
-        //         }
-        //         NDIlib_recv_free_video_v2(pNDI_recv, &video_frame);
-        //         break;
-
-        //         // Audio data
-        //     case NDIlib_frame_type_audio:
-        //         printf("Audio data received (%d samples).\n", audio_frame.no_samples);
-        //         NDIlib_recv_free_audio_v2(pNDI_recv, &audio_frame);
-        //         break;
-
-        //         // Everything else
-        //     default:
-        //         break;
-        //     }
-        // }
-
-        // // Destroy the receiver
-        // NDIlib_recv_destroy(pNDI_recv);
-
-        // return 0;
-    // }
     
 } // namespace mrv
