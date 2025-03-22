@@ -1516,7 +1516,7 @@ msgid "Audio"
 msgstr "オーディオ"
 
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 msgid "Cancel"
 msgstr "キャンセル"
@@ -1811,10 +1811,10 @@ msgid "Python file {0} already exists.  Do you want to overwrite it?"
 msgstr "ファイルは既に存在します。上書きしますか？"
 
 msgid "No"
-msgstr ""
+msgstr "No"
 
 msgid "Yes"
-msgstr ""
+msgstr "Yes"
 
 msgid "Failed to open the file for writing."
 msgstr "ファイルを書き込みのために開けませんでしたNAME OF TRANSLATORS"
@@ -2141,13 +2141,13 @@ msgid "35mm Flat"
 msgstr "35mm フラット"
 
 msgid "70mm"
-msgstr ""
+msgstr "70mmフィルム"
 
 msgid "35mm Anamorphic"
 msgstr "35mm アナモルフィック"
 
 msgid "35mm Panavision"
-msgstr ""
+msgstr "35mm"
 
 msgid "Cinemascope"
 msgstr "シネマ スコープ"
@@ -2162,7 +2162,7 @@ msgid "Reset"
 msgstr "リセット"
 
 msgid "1:1"
-msgstr ""
+msgstr "1:1"
 
 msgid "1:2"
 msgstr "1:2"
@@ -2330,10 +2330,10 @@ msgid "HDR Display Mastering Luminance"
 msgstr "HDRディスプレイマスタリング輝度"
 
 msgid "HDR maxCLL"
-msgstr ""
+msgstr "HDR maxCLL"
 
 msgid "HDR maxFALL"
-msgstr ""
+msgstr "HDR maxFALL"
 
 msgid "FFmpeg Pixel Format"
 msgstr "FFmpeg ピクセルフォーマット"
@@ -2442,6 +2442,8 @@ msgstr "ワイヤレス オーディオストリーム"
 
 msgid "FourCC"
 msgstr ""
+"FourCC: {0}\n"
+"訳者註：FourCC(フォーシーシー)とは、データフォーマットを一意に識別するための4バイトの並びである（four-character code の意）。ビデオコーデックの識別子とピクセルフォーマット情報のソース　<href=\"https://ja.wikipedia.org/wiki/FourCC\">（ウィキペディアより抜粋）</a>"
 
 msgid "Four letter ID"
 msgstr "4文字のID"
@@ -2456,7 +2458,7 @@ msgid "Format"
 msgstr "フォーマット"
 
 msgid "%d Hz."
-msgstr ""
+msgstr "%d Hz."
 
 msgid "Frequency"
 msgstr "プロセッサ周波数"
@@ -2513,7 +2515,7 @@ msgid "Start of Subtitle"
 msgstr "開始"
 
 msgid "Duration of Subtitle"
-msgstr ""
+msgstr "MS の罹病期間"
 
 msgid "Linear"
 msgstr "Linear"
@@ -2528,7 +2530,7 @@ msgid "Channel"
 msgstr "チャンネル"
 
 msgid "Red"
-msgstr ""
+msgstr "Red"
 
 msgid "Green"
 msgstr "緑"
@@ -2634,7 +2636,7 @@ msgid "Use the Alt key + left mouse button to change transparency."
 msgstr "* Alt + マウスの左ボタンでパン"
 
 msgid "LUT"
-msgstr ""
+msgstr "LUT"
 
 msgid "Enabled"
 msgstr "有効"
@@ -2646,7 +2648,7 @@ msgid "Color Controls"
 msgstr "コントロールの色"
 
 msgid "Add"
-msgstr ""
+msgstr "Add"
 
 msgid "Contrast"
 msgstr "コントラスト"
@@ -2721,7 +2723,7 @@ msgid "Selects the current font size."
 msgstr "現在のフォント"
 
 msgid "Pen"
-msgstr ""
+msgstr "Pen"
 
 msgid "Laser"
 msgstr "Laser"
@@ -2774,7 +2776,7 @@ msgid "Makes the following annotation show on this frame only."
 msgstr "本システムには、下記のグリスを必ず使用してください。"
 
 msgid "All"
-msgstr ""
+msgstr "All"
 
 msgid "Makes the following annotation show on all frames."
 msgstr "次の情報は、すべてのソースドキュメントに示す必要があります。"
@@ -3417,19 +3419,19 @@ msgid "Load Directory"
 msgstr "ディレクトリ"
 
 msgid "Reels (*.{"
-msgstr "リール (*.{" 
+msgstr "リール (*.{"
 
 msgid "Images (*.{"
-msgstr "画像 (*.{" 
+msgstr "画像 (*.{"
 
 msgid "Sessions (*."
 msgstr "セッション (*."
 
 msgid "All (*.{"
-msgstr "すべて (*.{" 
+msgstr "すべて (*.{"
 
 msgid "Movies (*.{"
-msgstr "映画 (*.{" 
+msgstr "映画 (*.{"
 
 msgid "Load Image(s)"
 msgstr "画像を読み込む"
@@ -3453,13 +3455,13 @@ msgid "Load LUT"
 msgstr "LUT を読み込む"
 
 msgid "Subtitles (*.{"
-msgstr "字幕 (*.{" 
+msgstr "字幕 (*.{"
 
 msgid "Load Subtitle"
 msgstr "サブタイトル"
 
 msgid "Audios (*.{"
-msgstr "オーディオ (*.{" 
+msgstr "オーディオ (*.{"
 
 msgid "Load Audio"
 msgstr "オーディオを読み込む"
@@ -3679,16 +3681,12 @@ msgstr "不明な操作"
 msgid ""
 "Cannot create an annotation here for all frames.  A current frame annotation"
 " already exists."
-msgstr ""
-"すべてのフレームに注釈を作成できません。現在のフレームの注釈が"
-"すでに存在します。"x
+msgstr "すべてのフレームに注釈を作成できません。現在のフレームの注釈がすでに存在します。"
 
 msgid ""
 "Cannot create an annotation here for current frame.  An all frames "
 "annotation already exists."
-msgstr ""
-"現在のフレームに注釈を作成できません。すべてのフレームの"
-"注釈がすでに存在します。"
+msgstr "現在のフレームに注釈を作成できません。すべてのフレームの注釈がすでに存在します。"
 
 msgid "Play"
 msgstr "再生"
@@ -3719,7 +3717,6 @@ msgstr "    先読み    V: % 4<PRIu64>    A: % 4<PRIu64>"
 
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "    後ろ    V: % 4<PRIu64>    A: % 4<PRIu64>"
-
 
 msgid "Edit Text"
 msgstr "テキストを編集"
@@ -3839,412 +3836,415 @@ msgid "View/OpenEXR/Data Window"
 msgstr "表示/OpenEXR/データウィンドウ"
 
 msgid "View/OpenEXR/Display Window"
+msgstr "ビュー/OpenEXR/表示ウィンドウ"
 
 msgid "View/OpenEXR/Ignore Display Window"
-msgstr "/OpenEXR/"
+msgstr "ビュー/OpenEXR/表示ウィンドウを無視"
 
 msgid "Panel/One Panel Only"
-msgstr "/"
+msgstr "パネル/単一パネルのみ"
 
 msgid "Panel/"
-msgstr "/"
+msgstr ""パネル/"
 
 msgid "Window/"
-msgstr "/"
+msgstr "ウィンドウ/"
 
 msgid "Unknown menu entry "
 msgstr "メニュー項目:"
 
 msgid "Render/Color Channel"
-msgstr "/"
+msgstr "レンダー/カラーチャンネル"
 
 msgid "Render/Red Channel"
-msgstr "/"
+msgstr "レンダー/赤チャンネル"
 
 msgid "Render/Green Channel "
-msgstr "/"
+msgstr "レンダー/緑チャンネル"
 
 msgid "Render/Blue Channel"
-msgstr "/"
+msgstr "レンダー/青チャンネル"
 
 msgid "Render/Alpha Channel"
-msgstr "/"
+msgstr "レンダー/アルファチャンネル"
 
 msgid "Render/Lumma"
-msgstr "/Lumma"
+msgstr "レンダー/ルマ"
 
 msgid "Render/Mirror X"
-msgstr "/"
+msgstr "レンダー/ミラー X"
 
 msgid "Render/Mirror Y"
-msgstr "/"
+msgstr "レンダー/ミラー Y"
 
 msgid "Render/Rotate/-90 Degrees"
-msgstr "//"
+msgstr "レンダー/回転/-90度"
 
 msgid "Render/Rotate/+90 Degrees"
-msgstr "//"
+msgstr "レンダー/回転/+90度"
 
 msgid "Render/Video Levels/From File"
-msgstr "//"
+msgstr "レンダー/ビデオレベル/ファイルから"
 
 msgid "Render/Video Levels/Legal Range"
-msgstr "//"
+msgstr "レンダー/ビデオレベル/リーガルレンジ"
 
 msgid "Render/Video Levels/Full Range"
-msgstr "//"
+msgstr "レンダー/ビデオレベル/フルレンジ"
 
 msgid "Render/Alpha Blend/None"
-msgstr "//"
+msgstr "レンダー/アルファブレンド/なし"
 
 msgid "Render/Alpha Blend/Straight"
-msgstr "//"
+msgstr "レンダー/アルファブレンド/ストレート"
 
 msgid "Render/Alpha Blend/Premultiplied"
-msgstr "//"
+msgstr "レンダー/アルファブレンド/プリマルチプライド"
 
 msgid "Render/Minify Filter/Nearest"
-msgstr "//"
+msgstr "レンダー/ミニファイフィルター/最寄り"
 
 msgid "Render/Minify Filter/Linear"
-msgstr "//Linear"
+msgstr "レンダー/ミニファイフィルター/リニア"
 
 msgid "Render/Magnify Filter/Nearest"
-msgstr "//"
+msgstr "レンダー/マグニファイフィルター/最寄り"
 
 msgid "Render/Magnify Filter/Linear"
-msgstr "//Linear"
+msgstr "レンダー/マグニファイフィルター/リニア"
 
 msgid "Render/HDR/Auto Normalize"
-msgstr "/HDR/"
+msgstr "レンダー/HDR/自動ノーマライズ"
 
 msgid "Render/HDR/Invalid Values"
-msgstr "/HDR/"
+msgstr "レンダー/HDR/無効な値"
 
 msgid "Render/HDR/Ignore Chromaticities"
-msgstr "/HDR/"
+msgstr "レンダー/HDR/色度を無視"
 
 msgid "Render/HDR/Tonemap"
-msgstr "/HDR/"
+msgstr "レンダー/HDR/トーンマップ"
 
 msgid "Playback/Stop"
-msgstr "/"
+msgstr "再生/停止"
 
 msgid "Playback/Forwards"
-msgstr "/"
+msgstr "再生/前進"
 
 msgid "Playback/Backwards"
-msgstr "/"
+msgstr "再生/後退"
 
 msgid "Playback/Toggle Playback"
-msgstr "/"
+msgstr "再生/再生の切り替え"
 
 msgid "Playback/Toggle In Point"
-msgstr "/"
+msgstr "再生/インポイントの切り替え"
 
 msgid "Playback/Toggle Out Point"
-msgstr "/"
+msgstr "再生/アウトポイントの切り替え"
 
 msgid "Playback/Toggle In\\/Out Otio Clip"
-msgstr "//"
+msgstr "再生/イン/アウトOTIOクリップの切り替え"
 
 msgid "Playback/Loop Playback"
-msgstr "/"
+msgstr "再生/ループ再生"
 
 msgid "Playback/Playback Once"
-msgstr "/"
+msgstr "再生/一回再生"
 
 msgid "Playback/Playback Ping Pong"
-msgstr "/"
+msgstr "再生/ピングポン再生"
 
 msgid "Playback/Go to/Start"
-msgstr "//"
+msgstr "再生/移動/開始"
 
 msgid "Playback/Go to/End"
-msgstr "//End"
+msgstr "再生/移動/終了"
 
 msgid "Playback/Go to/Previous Frame"
-msgstr "//"
+msgstr "再生/移動/前のフレーム"
 
 msgid "Playback/Go to/Next Frame"
-msgstr "//"
+msgstr "再生/移動/次のフレーム"
 
 msgid "Playback/Go to/Previous Clip"
-msgstr "//"
+msgstr "再生/移動/前のクリップ"
 
 msgid "Playback/Go to/Next Clip"
-msgstr "//"
+msgstr "再生/移動/次のフリップ"
 
 msgid "Playback/Go to/Previous Annotation"
-msgstr "//"
+msgstr "再生/移動/前のアノテーション"
 
 msgid "Playback/Go to/Next Annotation"
-msgstr "//"
+msgstr "再生/移動/次のフノテーション"
 
 msgid "Playback/Annotation/Clear"
-msgstr "//"
+msgstr "再生/アノテーション/クリア"
 
 msgid "Playback/Annotation/Clear All"
-msgstr "//"
+msgstr "再生/アノテーション/すべてクリア"
 
 msgid "View/Mask/%s"
-msgstr "//%s"
+msgstr "ビュー/マスク/%s"
 
 msgid "View/Hud"
-msgstr "/Hud"
+msgstr "ビュー/Hud"
 
 msgid "View/Compare/None"
-msgstr "//"
+msgstr "ビュー/比較/なし"
 
 msgid "View/Compare/Overlay"
-msgstr "//"
+msgstr "ビュー/比較/オーバーレイ"
 
 msgid "View/Compare/Wipe"
-msgstr "//"
+msgstr "ビュー/比較/ワイプ"
 
 msgid "View/Compare/Difference"
-msgstr "//"
+msgstr "ビュー/比較/差分"
 
 msgid "View/Compare/Horizontal"
-msgstr "//"
+msgstr "ビュー/比較/水平"
 
 msgid "View/Compare/Vertical"
-msgstr "//"
+msgstr "ビュー/比較/垂直"
 
 msgid "View/Compare/Tile"
-msgstr "//"
+msgstr "ビュー/比較/タイル"
 
 msgid "Timeline/Cache/Clear"
-msgstr "//"
+msgstr "タイムライン/キャッシュ/クリア"
 
 msgid "Timeline/Cache/Update Frame"
-msgstr "//"
+msgstr "タイムライン/キャッシュ/フレーム更新"
 
 msgid "Timeline/Editable"
-msgstr "/"
+msgstr "タイムライン/編集可能"
 
 msgid "Timeline/Edit Associated Clips"
-msgstr "/"
+msgstr "タイムライン/関連クリップを編集"
 
 msgid "Timeline/Frame View"
-msgstr "/"
+msgstr "タイムライン/フレームビュー"
 
 msgid "Timeline/Scroll To Current Frame"
-msgstr "/"
+msgstr "タイムライン/現在のフレームにスクロール"
 
 msgid "Timeline/Track Info"
-msgstr "/"
+msgstr "タイムライン/トラック情報"
 
 msgid "Timeline/Clip Info"
-msgstr "/"
+msgstr "タイムライン/クリップ情報"
 
 msgid "Timeline/Thumbnails/None"
-msgstr "//"
+msgstr "タイムライン/サムネイル/なし"
 
 msgid "Timeline/Thumbnails/Small"
-msgstr "//"
+msgstr "タイムライン/サムネイル/小"
 
 msgid "Timeline/Thumbnails/Medium"
-msgstr "//"
+msgstr "タイムライン/サムネイル/中"
 
 msgid "Timeline/Thumbnails/Large"
-msgstr "//"
+msgstr "タイムライン/サムネイル/大"
 
 msgid "Timeline/Transitions"
-msgstr "/"
+msgstr "タイムライン/トランジション"
 
 msgid "Timeline/Markers"
-msgstr "/"
+msgstr "タイムライン/マーカー"
 
 msgid "Timeline/Visible Tracks/{0}"
-msgstr "//{0}"
+msgstr "タイムライン/表示されるトラック/{0}"
 
 msgid "Image/Next"
-msgstr "/"
+msgstr "画像/次"
 
 msgid "Image/Next Limited"
-msgstr "/"
+msgstr "画像/次（制限付き）"
 
 msgid "Image/Previous"
-msgstr "/"
+msgstr "画像/前"
 
 msgid "Image/Previous Limited"
-msgstr "/"
+msgstr "画像/前（制限付き）"
 
 msgid "Image/Version/First"
-msgstr "//"
+msgstr "画像/バージョン/最初"
 
 msgid "Image/Version/Last"
-msgstr "//"
+msgstr "画像/バージョン/最後"
 
 msgid "Image/Version/Previous"
-msgstr "//"
+msgstr "画像/バージョン/前"
 
 msgid "Image/Version/Next"
-msgstr "//"
+msgstr "画像/バージョン/次"
 
 msgid "Image/Compare Mode/A"
-msgstr "//A"
+msgstr "画像/比較モード/A"
 
 msgid "Image/Compare Mode/B"
-msgstr "//B"
+msgstr "画像/比較モード/B"
 
 msgid "Image/Compare Mode/Wipe"
-msgstr "//"
+msgstr "画像/比較モード/ワイプ"
 
 msgid "Image/Compare Mode/Overlay"
-msgstr "//"
+msgstr "画像/比較モード/オーバーレイ"
 
 msgid "Image/Compare Mode/Difference"
-msgstr "//"
+msgstr "画像/比較モード/差分"
 
 msgid "Image/Compare Mode/Horizontal"
-msgstr "//"
+msgstr "画像/比較モード/水平"
 
 msgid "Image/Compare Mode/Vertical"
-msgstr "//"
+msgstr "画像/比較モード/垂直"
 
 msgid "Image/Compare Mode/Tile"
-msgstr "//"
+msgstr "画像/比較モード/タイル"
 
 msgid "Image/Go to/%s"
-msgstr "//%s"
+msgstr "画像/移動/%s"
 
 msgid "Image/Compare/%s"
-msgstr "//%s"
+msgstr "画像/比較/%s"
 
 msgid "Edit/Frame/Cut"
-msgstr "//Cut"
+msgstr "編集/フレーム/切り取り"
 
 msgid "Edit/Frame/Copy"
-msgstr "//"
+msgstr "編集/フレーム/コピー"
 
 msgid "Edit/Frame/Paste"
-msgstr "//"
+msgstr "編集/フレーム/貼り付け"
 
 msgid "Edit/Frame/Insert"
-msgstr "//"
+msgstr "編集/フレーム/挿入"
 
 msgid "Edit/Audio Clip/Insert"
-msgstr "//"
+msgstr "編集/オーディオクリップ/挿入"
 
 msgid "Edit/Audio Clip/Remove"
-msgstr "//"
+msgstr "編集/オーディオクリップ/削除"
 
 msgid "Edit/Audio Gap/Insert"
-msgstr "//"
+msgstr "編集/オーディオギャップ/挿入"
 
 msgid "Edit/Audio Gap/Remove"
-msgstr "//"
+msgstr "編集/オーディオギャップ/削除"
 
 msgid "Edit/Slice"
-msgstr "/"
+msgstr "編集/スライス"
 
 msgid "Edit/Remove"
-msgstr "/"
+msgstr "編集/削除"
 
 msgid "Edit/Undo"
-msgstr "/"
+msgstr "編集/元に戻す"
 
 msgid "Edit/Redo"
-msgstr "/"
+msgstr "編集/やり直し"
 
 msgid "OCIO/Presets"
-msgstr "OCIO/"
+msgstr "OCIO/プリセット"
 
 msgid "OCIO/In Top Bar"
-msgstr "OCIO/"
+msgstr "OCIO/トップバーに"
 
 msgid "OCIO/Current"
-msgstr "OCIO/"
+msgstr "OCIO/現在"
 
 msgid "OCIO/         ICS: %s"
-msgstr "OCIO/"
+msgstr "OCIO/         ICS: %s"
 
 msgid "OCIO/     Display: %s"
-msgstr "OCIO/"
+msgstr "OCIO/  ディスプレイ: %s"
 
 msgid "OCIO/        View: %s"
-msgstr "OCIO/"
+msgstr "OCIO/       ビュー: %s"
 
 msgid "OCIO/  Monitor #%d Display: %s"
-msgstr "OCIO/"
+msgstr "OCIO/ モニター #%d ディスプレイ: %s"
 
 msgid "OCIO/  Monitor #%d    View: %s"
-msgstr "OCIO/"
+msgstr "OCIO/ モニター #%d    ビュー: %s"
 
 msgid "OCIO/        Look: %s"
-msgstr "OCIO/"
+msgstr "OCIO/       ルック: %s"
 
 msgid "OCIO/        LUT: %s"
-msgstr "OCIO/"
+msgstr "OCIO/        LUT: %s"
 
 msgid "OCIO/Change Current File"
-msgstr "OCIO/"
+msgstr "OCIO/ 現在のファイルを変更"
 
 msgid "OCIO/Displays"
-msgstr "OCIO/"
+msgstr "OCIO/ディスプレイ"
 
 msgid "Sync/Send/Media"
-msgstr "//"
+msgstr "同期/送信/メディア"
 
 msgid "Sync/Send/UI"
-msgstr "//UI"
+msgstr "同期/送信/UI"
 
 msgid "Sync/Send/Pan And Zoom"
-msgstr "//"
+msgstr "同期/送信/パンとズーム"
 
 msgid "Sync/Send/Color"
-msgstr "//"
+msgstr "同期/送信/カラー"
 
 msgid "Sync/Send/Timeline"
-msgstr "//"
+msgstr "同期/送信/タイムライン"
 
 msgid "Sync/Send/Annotations"
-msgstr "//"
+msgstr "同期/送信/注釈"
 
 msgid "Sync/Send/Audio"
-msgstr "//"
+msgstr "同期/送信/オーディオ"
 
 msgid "Sync/Accept/Media"
-msgstr "//"
+msgstr "同期/受信/メディア"
 
 msgid "Sync/Accept/UI"
-msgstr "//UI"
+msgstr "同期/受信/UI"
 
 msgid "Sync/Accept/Pan And Zoom"
-msgstr "//"
+msgstr "同期/受信/パンとズーム"
 
 msgid "Sync/Accept/Color"
-msgstr "//"
+msgstr "同期/受信/カラー"
 
 msgid "Sync/Accept/Timeline"
-msgstr "//"
+msgstr "同期/受信/タイムライン"
 
 msgid "Sync/Accept/Annotations"
-msgstr "//"
+msgstr "同期/受信/注釈"
 
 msgid "Sync/Accept/Audio"
-msgstr "//"
+msgstr "同期/受信/オーディオ"
 
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
 "function and a string with menu options in it."
 msgstr ""
+"'{0}' では、値として関数または、Python 関数とメニューオプションを含む文字列のタプルを期待していました。"
 
 msgid ""
 "In '{0}' expected a function a tuple containing a Python function and a "
 "string with menu options in it."
 msgstr ""
+"'{0}' では、関数または、Python 関数とメニューオプションを含む文字列のタプルを期待していました。"
 
 msgid "Help/Documentation"
-msgstr "/"
+msgstr "ヘルプ/ドキュメント"
 
 msgid "Help/About"
-msgstr "/"
+msgstr "ヘルプ/このソフトウェアについて"
 
 msgid "Monitor "
-msgstr "監視"
+msgstr "監視 "
 
 msgid "Favorites"
 msgstr "お気に入り"
@@ -4369,7 +4369,7 @@ msgid "Flash Movie"
 msgstr "映画"
 
 msgid "Apple's M4V Movie"
-msgstr ""
+msgstr "AppleのM4Vムービー"
 
 msgid "Matroska Movie"
 msgstr "映画"
@@ -4393,10 +4393,10 @@ msgid "Ogg Video"
 msgstr "Ogg 動画ファイル"
 
 msgid "OpenTimelineIO EDL"
-msgstr "EDL"
+msgstr "OpenTimelineIO EDL"
 
 msgid "OpenTimelineIO Zipped EDL"
-msgstr ""
+msgstr "OpenTimelineIO Zipped EDL"
 
 msgid "Real Media Movie"
 msgstr "本物のメディア"
@@ -4420,10 +4420,10 @@ msgid "Cineon Picture"
 msgstr "写真"
 
 msgid "Canon Raw Picture"
-msgstr "ZSLモードではRAW画像フォーマットは&#x0A;サポートされていません。JPEGに変更してください"
+msgstr "Canon Raw 画像"
 
 msgid "Kodak Digital Negative"
-msgstr "RAW 画像を DNG (Digital Negative) に変換するツールComment"
+msgstr "Kodak デジタルネガティブ"
 
 msgid "DPX Picture"
 msgstr "写真"
@@ -4474,52 +4474,55 @@ msgid "Wave music"
 msgstr "ウェーブ"
 
 msgid "OpenUSD Asset"
-msgstr "アセット"
+msgstr "OpenUSD アセット"
 
 msgid "OpenUSD Zipped Asset"
-msgstr ""
+msgstr "OpenUSD 圧縮アセット"
 
 msgid "OpenUSD Compressed Asset"
-msgstr ""
+msgstr "OpenUSD 圧縮アセット"
 
 msgid "OpenUSD ASCII Asset"
-msgstr ""
+msgstr "OpenUSD ASCII アセット"
 
 msgid "Another process using the file."
 msgstr "別のプロセスを開く"
 
 msgid "Jan"
-msgstr ""
+msgstr "1月"
 
 msgid "Feb"
-msgstr ""
+msgstr "2月"
 
 msgid "Mar"
-msgstr ""
+msgstr "3月"
 
 msgid "Apr"
-msgstr ""
+msgstr "4月"
 
 msgid "May"
-msgstr ""
+msgstr "5月"
 
 msgid "Jun"
-msgstr ""
+msgstr "6月"
 
 msgid "Jul"
-msgstr ""
+msgstr "7月"
 
 msgid "Aug"
-msgstr ""
+msgstr "8月"
 
 msgid "Sep"
-msgstr ""
+msgstr "9月"
 
 msgid "Oct"
-msgstr ""
+msgstr "10月"
 
 msgid "Nov"
-msgstr ""
+msgstr "11月"
+
+msgid "Dec"
+msgstr "12月"
 
 msgid "Replace"
 msgstr "置換"
@@ -4537,7 +4540,7 @@ msgid "Replace Next"
 msgstr "置換"
 
 msgid "Build Environment:"
-msgstr ""
+msgstr "ビルド環境："
 
 msgid "\tDistribution: "
 msgstr "\t送信先： "
@@ -4549,22 +4552,22 @@ msgid "\tKernel Info: "
 msgstr "\tカーネル: "
 
 msgid "Running Environment:"
-msgstr "環境"
+msgstr "環境:"
 
 msgid "D\t\t\t\t\t=\tDecoding supported"
-msgstr ""
+msgstr "D\t\t\t\t\t=\tデコードサポート"
 
 msgid "\tE\t\t\t\t=\tEncoding supported"
-msgstr ""
+msgstr "\tE\t\t\t\t=\tエンコードサポート"
 
 msgid "\t\tI\t\t\t=\tIntra frame-only codec"
-msgstr ""
+msgstr "\t\tI\t\t\t=\tインタフレーム専用コーデック"
 
 msgid "\t\t\tL\t\t=\tLossy compression"
-msgstr ""
+msgstr "\t\t\tL\t\t=\t非可逆圧縮"
 
 msgid "\t\t\t\tS\t=\tLossless compression"
-msgstr ""
+msgstr "\t\t\t\tS\t=\t可逆圧縮"
 
 msgid "With clang "
 msgstr ""

@@ -73,6 +73,11 @@ if not lang in ['all'] + LANGUAGES:
 #
 DONT_TRANSLATE = [
     '@B12@C7@b@.Remote\\t@B12@C7@b@.Local'
+    '70 mm',
+    '35 mm Panavision',
+    'HDR maxCLL',
+    'HDR maxFALL',
+    'FourCC: {0}',
     '%d Hz.',
     '1:2',
     '1:4',
@@ -348,6 +353,8 @@ class POTranslator:
     # If we have '/' try to translate with google first 
     #
     def translate_text(self, english):
+        if '/' in english:
+            return ''
         if ':class:' in english:
             return ''
         if '(*.' in english:
