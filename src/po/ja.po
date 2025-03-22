@@ -9,21 +9,18 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 msgid ""
 "\n"
 "USD module.\n"
 "\n"
-"Contains all classes and enums related to USD (Universal Scene "
-"Description). \n"
+"Contains all classes and enums related to USD (Universal Scene Description). \n"
 msgstr ""
 "\n"
 "USDモジュール。\n"
 "\n"
-"USD（Universal Scene Description）に関連するすべてのクラスと列挙型を含みま"
-"す。\n"
+"USD（Universal Scene Description）に関連するすべてのクラスと列挙型を含みます。\n"
 
 msgid "Renderer Name"
 msgstr "レンダラー"
@@ -308,23 +305,19 @@ msgid "Duplicated Python plugin {0} in {1} and {2}."
 msgstr "重複したPythonプラグイン {0} が {1} と {2} にあります。"
 
 msgid ""
-"Expected a tuple containing a Python function and a string with menu options "
-"in it."
+"Expected a tuple containing a Python function and a string with menu options"
+" in it."
 msgstr "Python 関数とメニュー オプションを含む文字列を含むタプルが必要です。"
 
 msgid ""
 "Expected a handle to a Python function or to a tuple containing a Python "
 "function and a string with menu options in it."
-msgstr ""
-"Python 関数へのハンドル、または Python 関数とメニュー オプションを含む文字列"
-"を含むタプルへのハンドルが必要です。"
+msgstr "Python 関数へのハンドル、または Python 関数とメニュー オプションを含む文字列を含むタプルへのハンドルが必要です。"
 
 msgid ""
 "Please override the menus method by returning a valid dict of key menus, "
 "values methods."
-msgstr ""
-"キーメニュー、値メソッドの有効な辞書を返すことによって、メニューメソッドを"
-"オーバーライドしてください"
+msgstr "キーメニュー、値メソッドの有効な辞書を返すことによって、メニューメソッドをオーバーライドしてください"
 
 msgid ""
 "\n"
@@ -397,8 +390,7 @@ msgid ""
 "        Dictionary of menu entries as keys with callbacks as values.\n"
 "\n"
 "\n"
-"        :return: A dictionary of menu entries and their corresponding "
-"callbacks.\n"
+"        :return: A dictionary of menu entries and their corresponding callbacks.\n"
 "        :rtype: dict\n"
 "\n"
 "        \"\"\"\n"
@@ -502,19 +494,16 @@ msgstr "{0} に対するオペランド型がサポートされていません: 
 
 msgid ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/rt."
-"rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/rt.rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
 "\n"
-"RationalTime クラスは、時間の単位を :math:`rt.value/rt.rate` 秒として表しま"
-"す。\n"
+"RationalTime クラスは、時間の単位を :math:`rt.value/rt.rate` 秒として表します。\n"
 "別の :class:`~RationalTime` のレートに再スケールすることができます。\n"
 
 msgid ""
 "\n"
-"Returns true if the time is invalid. The time is considered invalid if the "
-"value or the rate are a NaN value\n"
+"Returns true if the time is invalid. The time is considered invalid if the value or the rate are a NaN value\n"
 "or if the rate is less than or equal to zero.\n"
 msgstr ""
 "\n"
@@ -532,46 +521,36 @@ msgstr "\"self\" の時間を新しいレートに変換した値を返します
 
 msgid ""
 "\n"
-"Compute the duration of samples from first to last (excluding last). This is "
-"not the same as distance.\n"
+"Compute the duration of samples from first to last (excluding last). This is not the same as distance.\n"
 "\n"
-"For example, the duration of a clip from frame 10 to frame 15 is 5 frames. "
-"Result will be in the rate of start_time.\n"
+"For example, the duration of a clip from frame 10 to frame 15 is 5 frames. Result will be in the rate of start_time.\n"
 msgstr ""
 "\n"
-"最初から最後まで（最後は除く）のサンプルの長さを計算します。これは距離とは異"
-"なります。\n"
+"最初から最後まで（最後は除く）のサンプルの長さを計算します。これは距離とは異なります。\n"
 "\n"
-"例えば、フレーム 10 からフレーム 15 までのクリップの長さは 5 フレームです。結"
-"果は start_time のレートで返されます。\n"
+"例えば、フレーム 10 からフレーム 15 までのクリップの長さは 5 フレームです。結果は start_time のレートで返されます。\n"
 
 msgid ""
 "\n"
-"Compute the duration of samples from first to last (including last). This is "
-"not the same as distance.\n"
+"Compute the duration of samples from first to last (including last). This is not the same as distance.\n"
 "\n"
-"For example, the duration of a clip from frame 10 to frame 15 is 6 frames. "
-"Result will be in the rate of start_time.\n"
+"For example, the duration of a clip from frame 10 to frame 15 is 6 frames. Result will be in the rate of start_time.\n"
 msgstr ""
 "\n"
-"最初から最後まで（最後を含む）のサンプルの長さを計算します。これは距離とは異"
-"なります。\n"
+"最初から最後まで（最後を含む）のサンプルの長さを計算します。これは距離とは異なります。\n"
 "\n"
-"例えば、フレーム 10 からフレーム 15 までのクリップの長さは 6 フレームです。結"
-"果は start_time のレートで返されます。\n"
+"例えば、フレーム 10 からフレーム 15 までのクリップの長さは 6 フレームです。結果は start_time のレートで返されます。\n"
 
 msgid "Returns true if the rate is valid for use with timecode."
 msgstr "テーブルのセルのテキストを返す。"
 
 msgid ""
-"Returns the first valid timecode rate that has the least difference from the "
-"given value."
-msgstr ""
-"指定された値から最小の差を持つ最初の有効なタイムコードレートを返します。"
+"Returns the first valid timecode rate that has the least difference from the"
+" given value."
+msgstr "指定された値から最小の差を持つ最初の有効なタイムコードレートを返します。"
 
 msgid "Turn a frame number and rate into a :class:`~RationalTime` object."
-msgstr ""
-"フレーム番号とレートを :class:`~RationalTime` オブジェクトに変換します。"
+msgstr "フレーム番号とレートを :class:`~RationalTime` オブジェクトに変換します。"
 
 msgid "Returns the frame number based on the current rate."
 msgstr "現在の市場"
@@ -583,24 +562,21 @@ msgid "Convert to timecode (``HH:MM:SS;FRAME``)"
 msgstr "タイムコードに変換（``HH:MM:SS;FRAME``）"
 
 msgid ""
-"Convert a timecode string (``HH:MM:SS;FRAME``) into a :class:`~RationalTime`."
-msgstr ""
-"タイムコード文字列（``HH:MM:SS;FRAME``）を :class:`~RationalTime` に変換しま"
-"す。"
+"Convert a timecode string (``HH:MM:SS;FRAME``) into a "
+":class:`~RationalTime`."
+msgstr "タイムコード文字列（``HH:MM:SS;FRAME``）を :class:`~RationalTime` に変換します。"
 
 msgid ""
 "Convert a time with microseconds string (``HH:MM:ss`` where ``ss`` is an "
 "integer or a decimal number) into a :class:`~RationalTime`."
 msgstr ""
-"マイクロ秒付きの時間文字列（``HH:MM:ss``、ここで``ss``は整数または小数）を :"
-"class:`~RationalTime` に変換します。"
+"マイクロ秒付きの時間文字列（``HH:MM:ss``、ここで``ss``は整数または小数）を :class:`~RationalTime` "
+"に変換します。"
 
 msgid ""
 "\n"
-"The TimeRange class represents a range in time. It encodes the start time "
-"and the duration,\n"
-"meaning that :meth:`end_time_inclusive` (last portion of a sample in the "
-"time range) and\n"
+"The TimeRange class represents a range in time. It encodes the start time and the duration,\n"
+"meaning that :meth:`end_time_inclusive` (last portion of a sample in the time range) and\n"
 ":meth:`end_time_exclusive` can be computed.\n"
 msgstr ""
 "\n"
@@ -618,8 +594,7 @@ msgid ""
 "If the time range starts at (0, 24) with duration (10.5, 24):\n"
 "(10, 24)\n"
 "\n"
-"In other words, the last frame with data, even if the last frame is "
-"fractional.\n"
+"In other words, the last frame with data, even if the last frame is fractional.\n"
 msgstr ""
 "\n"
 "時間範囲内でデータを含む最後のサンプルの時間。\n"
@@ -630,8 +605,7 @@ msgstr ""
 "時間範囲が (0, 24) から始まり、期間が (10.5, 24) の場合：\n"
 "(10, 24) になります。\n"
 "\n"
-"言い換えれば、最後のフレームが分数であっても、データを含む最後のフレームで"
-"す。\n"
+"言い換えれば、最後のフレームが分数であっても、データを含む最後のフレームです。\n"
 
 msgid ""
 "\n"
@@ -652,7 +626,8 @@ msgstr ""
 "開始フレームが 10 で、期間が 5.5 の場合、end_time_exclusive は\n"
 "15.5 です。なぜなら、この範囲内でデータがある最後の時間は 15 だからです。\n"
 
-msgid "Construct a new :class:`~TimeRange` that is this one extended by other."
+msgid ""
+"Construct a new :class:`~TimeRange` that is this one extended by other."
 msgstr "この :class:`~TimeRange` を他のもので拡張した新しいものを構築します。"
 
 msgid ""
@@ -661,8 +636,7 @@ msgid ""
 ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
 msgstr ""
 "\n"
-"引数 'other' (:class:`~RationalTime`) を :attr:`start_time`/:attr:"
-"`end_time_exclusive` および境界引数に従ってクランプします。\n"
+"引数 'other' (:class:`~RationalTime`) を :attr:`start_time`/:attr:`end_time_exclusive` および境界引数に従ってクランプします。\n"
 
 msgid ""
 "\n"
@@ -670,8 +644,7 @@ msgid ""
 ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
 msgstr ""
 "\n"
-"引数 'other' (:class:`~TimeRange`) を :attr:`start_time`/:attr:"
-"`end_time_exclusive` および境界引数に従ってクランプします。\n"
+"引数 'other' (:class:`~TimeRange`) を :attr:`start_time`/:attr:`end_time_exclusive` および境界引数に従ってクランプします。\n"
 
 msgid ""
 "\n"
@@ -738,10 +711,8 @@ msgstr ""
 
 msgid ""
 "\n"
-"The start of `this` strictly precedes end of `other` by a value >= "
-"`epsilon_s`.\n"
-"The end of `this` strictly antecedes start of `other` by a value >= "
-"`epsilon_s`.\n"
+"The start of `this` strictly precedes end of `other` by a value >= `epsilon_s`.\n"
+"The end of `this` strictly antecedes start of `other` by a value >= `epsilon_s`.\n"
 "::\n"
 "\n"
 "   [ this ]\n"
@@ -820,8 +791,7 @@ msgstr ""
 msgid ""
 "\n"
 "The start of `this` strictly equals the start of `other`.\n"
-"The end of `this` strictly precedes the end of `other` by a value >= "
-"`epsilon_s`.\n"
+"The end of `this` strictly precedes the end of `other` by a value >= `epsilon_s`.\n"
 "::\n"
 "\n"
 "   [ this ]\n"
@@ -862,8 +832,7 @@ msgstr ""
 
 msgid ""
 "\n"
-"The start of `this` strictly antecedes the start of `other` by a value >= "
-"`epsilon_s`.\n"
+"The start of `this` strictly antecedes the start of `other` by a value >= `epsilon_s`.\n"
 "The end of `this` strictly equals the end of `other`.\n"
 "::\n"
 "\n"
@@ -884,10 +853,8 @@ msgstr ""
 
 msgid ""
 "\n"
-"The start of `this` precedes or equals the end of `other` by a value >= "
-"`epsilon_s`.\n"
-"The end of `this` antecedes or equals the start of `other` by a value >= "
-"`epsilon_s`.\n"
+"The start of `this` precedes or equals the end of `other` by a value >= `epsilon_s`.\n"
+"The end of `this` antecedes or equals the start of `other` by a value >= `epsilon_s`.\n"
 "::\n"
 "\n"
 "   [    this    ]           OR      [    other    ]\n"
@@ -907,11 +874,9 @@ msgstr ""
 
 msgid ""
 "\n"
-"Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\\s "
-"(exclusive).\n"
+"Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\\s (exclusive).\n"
 "\n"
-"For example, if start_time is 1 and end_time is 10, the returned will have a "
-"duration of 9.\n"
+"For example, if start_time is 1 and end_time is 10, the returned will have a duration of 9.\n"
 msgstr ""
 "\n"
 "\n"
@@ -920,11 +885,9 @@ msgstr ""
 
 msgid ""
 "\n"
-"Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\\s "
-"(inclusive).\n"
+"Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\\s (inclusive).\n"
 "\n"
-"For example, if start_time is 1 and end_time is 10, the returned will have a "
-"duration of 10.\n"
+"For example, if start_time is 1 and end_time is 10, the returned will have a duration of 10.\n"
 msgstr ""
 "\n"
 "\n"
@@ -953,8 +916,8 @@ msgstr "擦除"
 
 msgid "Overlay ( A over B )"
 msgstr ""
-"<a href=\"editor_overlays.htm\">オーバーレイ</a>および<a "
-"href=\"editor_product environments.htm#_Toc375231933\">環境</a>"
+"<a href=\"editor_overlays.htm\">オーバーレイ</a>および<a href=\"editor_product "
+"environments.htm#_Toc375231933\">環境</a>"
 
 msgid "Comparison options."
 msgstr "比較"
@@ -1061,6 +1024,9 @@ msgstr "現在のチャンネルのレベル値をリセットします。"
 
 msgid "Enabled EXR display."
 msgstr ""
+"MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT "
+"AVAILABLE IN  09 HOURS 10 MINUTES 05 SECONDS VISIT "
+"HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE"
 
 msgid "Exposure value."
 msgstr "出力露出値：%.1f"
@@ -1121,6 +1087,9 @@ msgstr "ファイル名"
 
 msgid "LUT transformation order."
 msgstr ""
+"MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT "
+"AVAILABLE IN  00 HOURS 52 MINUTES 32 SECONDS VISIT "
+"HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE"
 
 msgid "LUT options."
 msgstr "Lut"
@@ -1390,8 +1359,7 @@ msgid ""
 "\n"
 "Command module.\n"
 "\n"
-"Used to run main commands and get arguments and set the display, image, "
-"compare, LUT options.\n"
+"Used to run main commands and get arguments and set the display, image, compare, LUT options.\n"
 msgstr ""
 "\n"
 "\n"
@@ -1527,8 +1495,7 @@ msgstr ""
 "\n"
 
 msgid "Add notes annotations to current clip at a certain time."
-msgstr ""
-"移行ジョブは、特定の時間に毎日起動するようにスケジュールすることができます。"
+msgstr "移行ジョブは、特定の時間に毎日起動するようにスケジュールすることができます。"
 
 msgid "Add notes annotations to current clip at a certain frame."
 msgstr ""
@@ -1549,7 +1516,7 @@ msgid "Audio"
 msgstr "オーディオ"
 
 msgid "OK"
-msgstr "OK"
+msgstr ""
 
 msgid "Cancel"
 msgstr "キャンセル"
@@ -1654,8 +1621,8 @@ msgid "Python Script to run and exit."
 msgstr "Pythonスクリプト"
 
 msgid ""
-"Python Arguments to pass to the Python script as a single quoted string like "
-"\"arg1 'arg2 asd' arg3\", stored in cmd.argv."
+"Python Arguments to pass to the Python script as a single quoted string like"
+" \"arg1 'arg2 asd' arg3\", stored in cmd.argv."
 msgstr ""
 
 msgid "Reset settings to defaults."
@@ -1704,7 +1671,6 @@ msgstr "インストール場所 : "
 msgid "Preferences Location: "
 msgstr "好み："
 
-#, fuzzy, c++-format
 msgid "Could not read python script '{0}'"
 msgstr "Pythonスクリプト"
 
@@ -1759,9 +1725,7 @@ msgstr "ポート"
 msgid ""
 "Port to connect to.  Make sure your firewall and router allows read/write "
 "through it."
-msgstr ""
-"接続するポート。ファイアウォールやルーターが読み書きを許可していることを確認"
-"してください。"
+msgstr "接続するポート。ファイアウォールやルーターが読み書きを許可していることを確認してください。"
 
 msgid "Connect"
 msgstr "接続"
@@ -1841,19 +1805,16 @@ msgstr "スクリプト/%s"
 msgid ""
 "Type in your python code here.  Select an area to execute just a portion of "
 "it.  Press Keypad Enter to run it."
-msgstr ""
-"ここにPythonコードを入力してください。実行したい部分を選択して、キーのEnterを"
-"押すことでその部分だけ実行できます。"
+msgstr "ここにPythonコードを入力してください。実行したい部分を選択して、キーのEnterを押すことでその部分だけ実行できます。"
 
-#, fuzzy, c++-format
 msgid "Python file {0} already exists.  Do you want to overwrite it?"
 msgstr "ファイルは既に存在します。上書きしますか？"
 
 msgid "No"
-msgstr "No"
+msgstr ""
 
 msgid "Yes"
-msgstr "Yes"
+msgstr ""
 
 msgid "Failed to open the file for writing."
 msgstr "ファイルを書き込みのために開けませんでしたNAME OF TRANSLATORS"
@@ -1867,22 +1828,18 @@ msgstr "[14] VaranManagerクラスがエラー状態です"
 msgid "Type your editor command"
 msgstr "編集長には"
 
-#, fuzzy, c++-format
 msgid "{0} will be replaced with the line number.  {1} with the file name"
 msgstr "{role_name}はユーザー役割名に置き換わります"
 
-#, fuzzy, c++-format
 msgid "Regular expression error: {0}"
 msgstr "正規表現エラー"
 
-#, fuzzy, c++-format
 msgid "Could not open python editor: {0}"
 msgstr "ファイルを開けません"
 
 msgid "Search String:"
 msgstr "検索文字列"
 
-#, fuzzy, c-format
 msgid "No occurrences of '%s' found!"
 msgstr "'%s' ('%s'の母天体)が見つかりません。\n"
 
@@ -2037,9 +1994,7 @@ msgid ""
 "When this setting is on, color accuracy is chosen when decoding YUV420_P8 "
 "movies that have Color Space as 'unknown', at the cost of some performance."
 msgstr ""
-"この設定がオンの場合、パフォーマンスに多少の影響があるものの、カラー空間が"
-"「不明」として設定されたYUV420_P8映画をデコードする際にカラー精度が選択されま"
-"す。"
+"この設定がオンの場合、パフォーマンスに多少の影響があるものの、カラー空間が「不明」として設定されたYUV420_P8映画をデコードする際にカラー精度が選択されます。"
 
 msgid "FFmpeg I/O threads"
 msgstr "FFmpeg I/Oスレッド"
@@ -2050,10 +2005,7 @@ msgid ""
 "any like that, you should set them to 1, press Enter and reload the movie "
 "file."
 msgstr ""
-"この値はFFmpegが使用するスレッドの数を制御します。ほとんどの映画では、0のまま"
-"にしておくべきです。いくつかの映画では黒いフレームが表示されることがありま"
-"す。そのような場合は、1に設定し、Enterキーを押して映画ファイルを再読み込みし"
-"てください。"
+"この値はFFmpegが使用するスレッドの数を制御します。ほとんどの映画では、0のままにしておくべきです。いくつかの映画では黒いフレームが表示されることがあります。そのような場合は、1に設定し、Enterキーを押して映画ファイルを再読み込みしてください。"
 
 msgid "Default Settings"
 msgstr "デフォルト設定"
@@ -2061,8 +2013,7 @@ msgstr "デフォルト設定"
 msgid ""
 "This will reset all your settings to their default.  Are you sure you want "
 "to continue?"
-msgstr ""
-"お使いのテーマのデフォルトスタイルを復元します。本当に実行してよいですか ?"
+msgstr "お使いのテーマのデフォルトスタイルを復元します。本当に実行してよいですか ?"
 
 msgid "Drop a clip here to create a playlist."
 msgstr "いかにプレイリストを作るか   "
@@ -2190,13 +2141,13 @@ msgid "35mm Flat"
 msgstr "35mm フラット"
 
 msgid "70mm"
-msgstr "70mm"
+msgstr ""
 
 msgid "35mm Anamorphic"
 msgstr "35mm アナモルフィック"
 
 msgid "35mm Panavision"
-msgstr "35mm Panavision"
+msgstr ""
 
 msgid "Cinemascope"
 msgstr "シネマ スコープ"
@@ -2211,7 +2162,7 @@ msgid "Reset"
 msgstr "リセット"
 
 msgid "1:1"
-msgstr "1:1"
+msgstr ""
 
 msgid "1:2"
 msgstr "1:2"
@@ -2231,7 +2182,6 @@ msgstr "選ぶ"
 msgid "%.3f seconds "
 msgstr "%.3f 秒 "
 
-#, fuzzy, c-format
 msgid "Video Stream #%d"
 msgstr "映像ストリーム"
 
@@ -2380,10 +2330,10 @@ msgid "HDR Display Mastering Luminance"
 msgstr "HDRディスプレイマスタリング輝度"
 
 msgid "HDR maxCLL"
-msgstr "HDR maxCLL"
+msgstr ""
 
 msgid "HDR maxFALL"
-msgstr "HDR maxFALL"
+msgstr ""
 
 msgid "FFmpeg Pixel Format"
 msgstr "FFmpeg ピクセルフォーマット"
@@ -2487,12 +2437,11 @@ msgstr "最終更新日"
 msgid "Load an image or movie file"
 msgstr "イメージか HTML ファイルをドロップ"
 
-#, fuzzy, c-format
 msgid "Audio Stream #%d"
 msgstr "ワイヤレス オーディオストリーム"
 
 msgid "FourCC"
-msgstr "FourCC"
+msgstr ""
 
 msgid "Four letter ID"
 msgstr "4文字のID"
@@ -2507,7 +2456,7 @@ msgid "Format"
 msgstr "フォーマット"
 
 msgid "%d Hz."
-msgstr "%d Hz."
+msgstr ""
 
 msgid "Frequency"
 msgstr "プロセッサ周波数"
@@ -2516,7 +2465,7 @@ msgid "Frequency of audio"
 msgstr "実行の頻度"
 
 msgid "%d kb/s"
-msgstr "%d kb/s"
+msgstr "/s"
 
 msgid "Max. Bitrate"
 msgstr "ビットレート"
@@ -2579,7 +2528,7 @@ msgid "Channel"
 msgstr "チャンネル"
 
 msgid "Red"
-msgstr "Red"
+msgstr ""
 
 msgid "Green"
 msgstr "緑"
@@ -2631,12 +2580,16 @@ msgid ""
 "\n"
 "Use the Option key + left mouse button to move the wipe in X or in Y"
 msgstr ""
+"\n"
+"\n"
 
 msgid ""
 "Wipe between the A and B files\n"
 "\n"
 "Use the Alt key + left mouse button to move the wipe in X or in Y."
 msgstr ""
+"\n"
+"\n"
 
 msgid "Overlay the A and B files with optional transparencyy"
 msgstr "AとB"
@@ -2681,7 +2634,7 @@ msgid "Use the Alt key + left mouse button to change transparency."
 msgstr "* Alt + マウスの左ボタンでパン"
 
 msgid "LUT"
-msgstr "LUT"
+msgstr ""
 
 msgid "Enabled"
 msgstr "有効"
@@ -2693,7 +2646,7 @@ msgid "Color Controls"
 msgstr "コントロールの色"
 
 msgid "Add"
-msgstr "Add"
+msgstr ""
 
 msgid "Contrast"
 msgstr "コントラスト"
@@ -2768,7 +2721,7 @@ msgid "Selects the current font size."
 msgstr "現在のフォント"
 
 msgid "Pen"
-msgstr "Pen"
+msgstr ""
 
 msgid "Laser"
 msgstr "Laser"
@@ -2821,7 +2774,7 @@ msgid "Makes the following annotation show on this frame only."
 msgstr "本システムには、下記のグリスを必ず使用してください。"
 
 msgid "All"
-msgstr "All"
+msgstr ""
 
 msgid "Makes the following annotation show on all frames."
 msgstr "次の情報は、すべてのソースドキュメントに示す必要があります。"
@@ -2838,15 +2791,12 @@ msgstr "設問タイプを取得できません。"
 msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
 msgstr ""
 
-#, fuzzy, c++-format
 msgid "Could not paste {0}.  Error {1}."
 msgstr "データを貼り付けできませんでした: %1"
 
-#, fuzzy, c++-format
 msgid "Could not save .otio file: {0}"
 msgstr "ファイルを保存できませんでした。"
 
-#, fuzzy, c++-format
 msgid "Error saving {0}. {1}"
 msgstr "'%1' の保存エラーです。"
 
@@ -2871,33 +2821,27 @@ msgstr "現在、このリージョンから移動することはできません
 msgid "Cannot currently concatenate a directory."
 msgstr "%1 ãéãã¾ãã: ãã£ã¬ã¯ããªã§ã"
 
-#, fuzzy, c++-format
 msgid "Could not append video track {0}"
 msgstr "動画を読み込めませんでした。"
 
-#, fuzzy, c++-format
 msgid "Could not append audio track {0}"
 msgstr "音声ファイルをデコードできませんでした。"
 
-#, fuzzy, c++-format
 msgid "Server started at port {0}."
 msgstr "サーバを起動しました"
 
 msgid "Server stopped."
 msgstr "サーバを停止しました"
 
-#, fuzzy, c++-format
 msgid "A client connected from {0}"
 msgstr "接続元"
 
 msgid "Client at {0} disconnected."
 msgstr "{0} の接続解除"
 
-#, fuzzy, c++-format
 msgid "Server protocol version is {0}.  Client protocol version is {1}"
 msgstr "サーバのプロトコルのバージョンが古すぎます。"
 
-#, fuzzy, c++-format
 msgid "Remote file {0} does not exist on local filesystem."
 msgstr "ファイルが存在しません。"
 
@@ -2907,11 +2851,9 @@ msgstr "ローカルファイルのみがサポートされています。"
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr ""
 
-#, fuzzy, c++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "一致しません"
 
-#, fuzzy, c++-format
 msgid "Removing {0} from message publisher."
 msgstr "メッセージから解約した人"
 
@@ -2921,7 +2863,6 @@ msgstr "%S 番ポートを使用しています"
 msgid "ComfyUI listening on port "
 msgstr "%S 番ポートを使用しています"
 
-#, fuzzy, c++-format
 msgid "Connected to server at {0}, port {1}"
 msgstr "サーバーに接続しました"
 
@@ -2937,7 +2878,6 @@ msgstr "ERROR:"
 msgid "WARN:\t"
 msgstr "警告"
 
-#, fuzzy, c++-format
 msgid ""
 "Regular expression created from {0}.  It is:\n"
 "{1}"
@@ -2945,7 +2885,6 @@ msgstr ""
 "\n"
 "{1}"
 
-#, fuzzy, c++-format
 msgid "Iteration {0} will check version={1}"
 msgstr "バージョンを確認"
 
@@ -2957,45 +2896,36 @@ msgstr ""
 msgid "Example:  gizmo_v003.0001.exr"
 msgstr ""
 
-#, fuzzy, c++-format
 msgid "Could not replace {0} with {1}"
 msgstr "見つからない"
 
 msgid "Annotation already existed at this time"
 msgstr "重複に都市を追加できません!"
 
-#, fuzzy, c++-format
 msgid "Failed to open the file {0} for writing."
 msgstr "ファイルを書き込みのために開けませんでしたNAME OF TRANSLATORS"
 
-#, fuzzy, c++-format
 msgid "Failed to write to the file {0}."
 msgstr "ファイルへの書き込みに失敗しました。"
 
-#, fuzzy, c++-format
 msgid "Session saved to \"{0}\"."
 msgstr "保存しました"
 
-#, fuzzy, c++-format
 msgid "Failed to open the file '{0}' for reading."
 msgstr "読み込み用のデータベースファイルを開けませんでした。"
 
-#, fuzzy, c++-format
 msgid "Failed to load the file '{0}."
 msgstr "ファイルの読み込みに失敗しました:"
 
 msgid "Cannot save an NDI stream"
 msgstr "保存できません"
 
-#, fuzzy, c++-format
 msgid "Saving movie to {0}."
 msgstr "どの映画を観るか決める"
 
-#, fuzzy, c++-format
 msgid "Saving audio to {0}."
 msgstr "オーディオをテキストに変換:"
 
-#, fuzzy, c++-format
 msgid "Saving pictures to {0}."
 msgstr "画像保存中で、お待ち下さい。"
 
@@ -3003,7 +2933,8 @@ msgid "ProRes profiles need a .mov movie extension.  Changing it to .mov."
 msgstr ""
 
 msgid ""
-"VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to .mp4"
+"VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to "
+".mp4"
 msgstr ""
 
 msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
@@ -3016,32 +2947,24 @@ msgstr ""
 msgid "HAP profile needs a .mov extension.  Changing it to .mov"
 msgstr ""
 
-#, fuzzy, c++-format
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "ファイル %1 は既に存在します。上書きしますか？"
 
-#, fuzzy, c++-format
 msgid "Rotated image info: {0}"
 msgstr "画像タイトルを表示"
 
-#, fuzzy, c++-format
 msgid "Scaled image info: {0}"
 msgstr "画像タイトルを表示"
 
-#, fuzzy, c++-format
 msgid "{0}: Cannot open writer plugin."
 msgstr "開封不可"
 
-#, fuzzy, c++-format
 msgid "Image info: {0} {1}"
 msgstr "画像タイトルを表示"
 
 msgid "Image too big for Save Annotations.  Will scale to the viewport size."
-msgstr ""
-"cover=　画像は、内容をカバーするために調整<br />auto=幅と高さがイメージに調"
-"整。"
+msgstr "cover=　画像は、内容をカバーするために調整<br />auto=幅と高さがイメージに調整。"
 
-#, fuzzy, c++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "X: {1} Y: {2}"
 
@@ -3051,40 +2974,33 @@ msgstr ""
 msgid "Output info: {0} {1}"
 msgstr "{0}：{1}"
 
-#, fuzzy, c++-format
 msgid "Using profile {0}, pixel format {1}."
 msgstr "ピクセル形式"
 
 msgid "Using preset {0}."
 msgstr "プリセット{0}"
 
-#, fuzzy, c-format
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr "この映画を見て感動しない者はいない。"
 
-#, fuzzy, c-format
 msgid "Saving Movie with Audio %<PRId64> - %<PRId64>"
 msgstr "オーディオでエラーが発生しました"
 
 msgid "Saving Audio %<PRId64> - %<PRId64>"
 msgstr ""
 
-#, fuzzy, c-format
 msgid "Saving Pictures without Audio %<PRId64> - %<PRId64>"
 msgstr "画像保存中で、お待ち下さい。"
 
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "しかし、どこかへ行こうとしているわけじゃない。"
 
-#, fuzzy, c++-format
 msgid "{0}: Invalid OpenGL format and type"
 msgstr "フォーマットと消去"
 
-#, fuzzy, c++-format
 msgid "OpenGL info: {0}"
 msgstr "情報 0"
 
-#, fuzzy, c++-format
 msgid "Saving... {0}"
 msgstr "保存中..."
 
@@ -3097,11 +3013,9 @@ msgstr ""
 msgid "Unsupported output format: "
 msgstr "サポートされていない出力形式: %1%"
 
-#, fuzzy, c++-format
 msgid "Reading preferences from \"{0}{1}\"."
 msgstr "設定の読み取りエラーが発生しました。"
 
-#, fuzzy, c++-format
 msgid "Failed to retrieve {0}."
 msgstr "お客様の情報を取得することに失敗しました"
 
@@ -3110,11 +3024,9 @@ msgid ""
 "movies slower."
 msgstr ""
 
-#, fuzzy, c++-format
 msgid "Could not open color theme from \"{0}\"."
 msgstr "カラーパレット %1を開けませんでした。"
 
-#, fuzzy, c++-format
 msgid "Loaded color themes from \"{0}\"."
 msgstr "•\tカラーテーマを追加しました："
 
@@ -3124,7 +3036,6 @@ msgstr "XML ファイルから設定をインポート"
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr ""
 
-#, fuzzy, c++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "更新された値が読み込まれました。"
 
@@ -3134,15 +3045,12 @@ msgstr "ギャラリーの ソース '{0}' から拡張機能の読込みエラ�
 msgid "Reseting hotkeys to default."
 msgstr "デフォルトに戻す"
 
-#, fuzzy, c++-format
 msgid "Path mappings have been saved to \"{0}{1}\"."
 msgstr "\"{0}\" 設定は保存されました。"
 
-#, fuzzy, c++-format
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "設定を保存しました。"
 
-#, fuzzy, c++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "設定が保存されました。"
 
@@ -3152,7 +3060,6 @@ msgstr "取り外し"
 msgid "OCIO config is now:"
 msgstr "WPML は今"
 
-#, fuzzy, c++-format
 msgid "OCIO file \"{0}\" not found or not readable."
 msgstr "MySQL サーバの設定が見つからなかったか、読み取り可能ではありません。"
 
@@ -3170,14 +3077,12 @@ msgstr ""
 "{0}から\n"
 "{1}"
 
-#, fuzzy, c++-format
 msgid "Found a match.  File is now {0}"
 msgstr "ハーヴィが見つけたの"
 
 msgid "OCIO config file cannot be empty."
 msgstr "ファイル名を空にできません。"
 
-#, fuzzy, c++-format
 msgid "OCIO config '{0}' does not exist or is not readable."
 msgstr "ビュー %sが存在しないか、読み取り可能ではありません。"
 
@@ -3187,42 +3092,33 @@ msgstr ""
 msgid "Invalid OCIO Look '{0}'."
 msgstr ""
 
-#, fuzzy, c++-format
 msgid "Invalid OCIO Display/View '{0}'."
 msgstr "/"
 
-#, fuzzy, c++-format
 msgid "Could not split '{0}' into display and view."
 msgstr "共有タームを分割することはできません。"
 
-#, fuzzy, c++-format
 msgid "No default view for display '{0}'.  Does display exist?"
 msgstr "リストのデフォルトビューを設定します"
 
 msgid "Setting OCIO Preset '{0}'."
 msgstr "プリセット{0}"
 
-#, fuzzy, c++-format
 msgid "Preset '{0}' not found."
 msgstr "プリセットが見つかりません"
 
-#, fuzzy, c++-format
 msgid "OCIO Preset '{0}' already exists!"
 msgstr "すでに存在します"
 
-#, fuzzy, c++-format
 msgid "Failed to load the file '{0}'."
 msgstr "ファイルの読み込みに失敗しました:"
 
-#, fuzzy, c++-format
 msgid "Loaded {0} ocio presets from \"{1}\"."
 msgstr "%1$S からツールを読み込みました。"
 
-#, fuzzy, c++-format
 msgid "Failed to open the file '{0}' for saving."
 msgstr "Name"
 
-#, fuzzy, c++-format
 msgid "Failed to save the file '{0}'."
 msgstr "ファイルの保存に失敗しました"
 
@@ -3253,7 +3149,6 @@ msgstr "フランス"
 msgid "Russian"
 msgstr "ロシア語"
 
-#, fuzzy, c++-format
 msgid ""
 "Need to reboot mrv2 to change language to {0}.  Are you sure you want to "
 "continue?"
@@ -3371,42 +3266,51 @@ msgid ""
 "\n"
 "Hotkeys:   "
 msgstr ""
+"\n"
+"ホットキー:   "
 
 msgid "   and   "
-msgstr ""
+msgstr "   と   "
 
 msgid ""
 "\n"
 "Reset:   "
 msgstr ""
+"\n"
+"リセット:   "
 
 msgid ""
 "\n"
 "Hotkey: "
 msgstr ""
+"\n"
+"ホットキー: "
 
 msgid "@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"
-msgstr "@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"
+msgstr "@B12@C7@b@.機能\t@B12@C7@b@.ホットキー"
 
-#, fuzzy, c-format
 msgid ""
 "Hotkey \"%s\" already used in \"%s\".\n"
 "Do you want to override it?"
-msgstr "\n"
+msgstr ""
+"ホットキー \"%s\" はすでに \"%s\" で使用されています。\n"
+"上書きしますか？"
 
 msgid ""
 "Corruption in hotkeys preferences. Hotkey '{0}' for {1} will not be "
 "available.  Already used in {2}."
 msgstr ""
+"ホットキー設定が破損しています。ホットキー '{0}' は {1} で使用できません。\n"
+"すでに {2} で使用されています。"
 
 msgid "Allows you to select different image channels or layers."
 msgstr "ツールバーのフォントサイズを選択できます。 "
 
 msgid "Reduce gain 1/4 stop (divide by sqrt(sqrt(2)))."
-msgstr ""
+msgstr "ゲインを1/4ストップ減少（√(√2)で除算）。"
 
 msgid "Increase gain 1/4 stop (multiply by sqrt(sqrt(2)))."
-msgstr ""
+msgstr "ゲインを1/4ストップ増加（√(√2)を乗算）。"
 
 msgid "Allows you to adjust the gain or exposure of the image."
 msgstr "環境画像の色の彩度を調節できます。"
@@ -3418,6 +3322,8 @@ msgid ""
 "Allows you to adjust gamma curve for display.\n"
 "Value is:  pow( 2, 1/x )."
 msgstr ""
+"ディスプレイのガンマ曲線を調整することができます。\n"
+"値は: pow( 2, 1/x ) です。"
 
 msgid "Toggle Edit Mode."
 msgstr "編集モードの切り替え"
@@ -3459,7 +3365,7 @@ msgid "Go to the beginning of the sequence."
 msgstr "移动到动画片段的开头."
 
 msgid "Play sequence backwards."
-msgstr ""
+msgstr "シーケンスを逆再生します。"
 
 msgid "Go back one frame."
 msgstr "フレームを一つ進めます。"
@@ -3468,7 +3374,7 @@ msgid "Stop playback."
 msgstr "再生を停止"
 
 msgid "Play sequence forwards."
-msgstr ""
+msgstr "シーケンスを順方向に再生します。"
 
 msgid "Go to the end of the sequence."
 msgstr "シークエンスが 終わった"
@@ -3477,7 +3383,7 @@ msgid "Set In Point"
 msgstr "インポイント"
 
 msgid "Set Out Point"
-msgstr "クリップアウトポイントをトリムする"
+msgstr "アウトポイントを設定"
 
 msgid "Image zoom setting."
 msgstr "画像ズーム"
@@ -3487,44 +3393,52 @@ msgid ""
 "\n"
 "Mousewheel to zoom in and out."
 msgstr ""
+"\n"
+"\n"
+"マウスホイールでズームインおよびズームアウトします。"
 
 msgid ""
 "\n"
 "Alt + Right Mouse Button to zoom in and out."
 msgstr ""
+"\n"
+"Alt + 右クリックでズームインおよびズームアウトします。"
 
 msgid ""
 "\n"
 "\n"
 "0 to 9 to zoom to a specific level."
 msgstr ""
+"\n"
+"\n"
+"0から9までの数字で特定のズームレベルに切り替えます。"
 
 msgid "Load Directory"
 msgstr "ディレクトリ"
 
 msgid "Reels (*.{"
-msgstr ""
+msgstr "リール (*.{" 
 
 msgid "Images (*.{"
-msgstr ""
+msgstr "画像 (*.{" 
 
 msgid "Sessions (*."
-msgstr ""
+msgstr "セッション (*."
 
 msgid "All (*.{"
-msgstr ""
+msgstr "すべて (*.{" 
 
 msgid "Movies (*.{"
-msgstr ""
+msgstr "映画 (*.{" 
 
 msgid "Load Image(s)"
-msgstr "画像 (%s)"
+msgstr "画像を読み込む"
 
 msgid "Load Movie or Sequence"
 msgstr "映画なんかどうかな？"
 
 msgid "Save OTIO timeline"
-msgstr ""
+msgstr "OTIO タイムラインを保存"
 
 msgid "Save Python Script"
 msgstr "Python スクリプトの保存方法"
@@ -3533,19 +3447,19 @@ msgid "Load Python Script"
 msgstr "Pythonスクリプト"
 
 msgid "LUTS (*.{"
-msgstr ""
+msgstr "LUTS (*.{"
 
 msgid "Load LUT"
-msgstr "Lut"
+msgstr "LUT を読み込む"
 
 msgid "Subtitles (*.{"
-msgstr ""
+msgstr "字幕 (*.{" 
 
 msgid "Load Subtitle"
 msgstr "サブタイトル"
 
 msgid "Audios (*.{"
-msgstr ""
+msgstr "オーディオ (*.{" 
 
 msgid "Load Audio"
 msgstr "オーディオを読み込む"
@@ -3560,13 +3474,13 @@ msgid "Save Movie or Sequence"
 msgstr "映画なんかどうかな？"
 
 msgid "Annotations (*.{json})"
-msgstr ""
+msgstr "アノテーション (*.{json})"
 
 msgid "Save Annotations to JSON"
 msgstr "注釈を描画して寸法を生成"
 
 msgid "Acrobat PDF (*.{pdf})"
-msgstr ""
+msgstr "Acrobat PDF (*.{pdf})"
 
 msgid "Save Annotations to PDF"
 msgstr "PDF に保存"
@@ -3581,10 +3495,10 @@ msgid "Save Session"
 msgstr "セッションを保存する"
 
 msgid "OCIO config (*.{"
-msgstr ""
+msgstr "OCIO config (*.{"
 
 msgid "Load OCIO Config"
-msgstr ""
+msgstr "OCIO 設定を読み込む"
 
 msgid "Default"
 msgstr "デフォルト"
@@ -3617,7 +3531,7 @@ msgid "Media Information"
 msgstr "メディア情報"
 
 msgid "NDI"
-msgstr "NDI"
+msgstr ""
 
 msgid "Python"
 msgstr "パイソン"
@@ -3688,9 +3602,7 @@ msgstr "タイムライン"
 msgid ""
 "You have EDLs in the current session.  These will not be saved in the "
 "session file.  Do you want to continue?"
-msgstr ""
-"名前なしのセッションは自動的に保存されません。そのようなセッションを作成しま"
-"すか？"
+msgstr "名前なしのセッションは自動的に保存されません。そのようなセッションを作成しますか？"
 
 msgid "Edit Text Annotation"
 msgstr "テキスト注釈"
@@ -3698,13 +3610,11 @@ msgstr "テキスト注釈"
 msgid "No item selected"
 msgstr "アイテムが選択されていません"
 
-#, fuzzy, c-format
 msgid "%s - Page %d"
-msgstr "%s件の固定ページ"
+msgstr "%s - ページ %d"
 
-#, fuzzy, c++-format
 msgid "Frame {0} - TC: {1} - S: {2}"
-msgstr "%1$s - %2$s"
+msgstr "フレーム {0} - TC: {1} - S: {2}"
 
 msgid "Image too big.  Will save the viewport size."
 msgstr "彼らが都を守ってくれます"
@@ -3767,14 +3677,18 @@ msgid "Unknown action mode in "
 msgstr "不明な操作"
 
 msgid ""
-"Cannot create an annotation here for all frames.  A current frame annotation "
-"already exists."
+"Cannot create an annotation here for all frames.  A current frame annotation"
+" already exists."
 msgstr ""
+"すべてのフレームに注釈を作成できません。現在のフレームの注釈が"
+"すでに存在します。"x
 
 msgid ""
 "Cannot create an annotation here for current frame.  An all frames "
 "annotation already exists."
 msgstr ""
+"現在のフレームに注釈を作成できません。すべてのフレームの"
+"注釈がすでに存在します。"
 
 msgid "Play"
 msgstr "再生"
@@ -3783,28 +3697,29 @@ msgid "Stop"
 msgstr "停止"
 
 msgid "2.35"
-msgstr "<g id=\"1\"><g id=\"2\">3,500円</g></g>"
+msgstr "2.35"
 
 msgid "1.85"
-msgstr ""
+msgstr "1.85"
 
 msgid "1.66"
-msgstr "【請求項66】"
+msgstr "1.66"
 
 msgid "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
-msgstr ""
+msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 
 msgid "Cache:"
-msgstr "キャッシュ"
+msgstr "キャッシュ:"
 
 msgid "    Used: %.2g of %zu Gb (%.2g %%)"
-msgstr ""
+msgstr "    使用済み: %.2g / %zu Gb (%.2g %%)"
 
 msgid "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
-msgstr ""
+msgstr "    先読み    V: % 4<PRIu64>    A: % 4<PRIu64>"
 
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
-msgstr ""
+msgstr "    後ろ    V: % 4<PRIu64>    A: % 4<PRIu64>"
+
 
 msgid "Edit Text"
 msgstr "テキストを編集"
@@ -3816,115 +3731,114 @@ msgid "Could not convert message to shape: "
 msgstr "ベクター図形に変換"
 
 msgid "File/Open/Movie or Sequence"
-msgstr "//"
+msgstr "ファイル/開く/ムービーまたはシーケンス"
 
 msgid "File/Open/With Separate Audio"
-msgstr "//"
+msgstr "ファイル/開く/別々のオーディオで"
 
 msgid "File/Open/Single Image"
-msgstr "//"
+msgstr "ファイル/開く/単一画像"
 
 msgid "File/Open/Directory"
-msgstr "//"
+msgstr "ファイル/開く/ディレクトリ"
 
 msgid "File/Open/Session"
-msgstr "//"
+msgstr "ファイル/開く/セッション"
 
 msgid "File/Save/Movie or Sequence"
-msgstr "//"
+msgstr "ファイル/保存/映画またはシーケンス"
 
 msgid "File/Save/Audio"
-msgstr "//"
+msgstr "ファイル/保存/オーディオ"
 
 msgid "File/Save/Single Frame"
-msgstr "//"
+msgstr "ファイル/保存/単一フレーム"
 
 msgid "File/Save/Frames to Folder"
-msgstr "//"
+msgstr "ファイル/保存/フォルダにフレーム"
 
 msgid "File/Save/OTIO EDL Timeline"
-msgstr "//"
+msgstr "ファイル/保存/OTIO EDL タイムライン"
 
 msgid "File/Save/Annotations Only"
-msgstr "//"
+msgstr "ファイル/保存/アノテーションのみ"
 
 msgid "File/Save/Annotations as JSON"
-msgstr "//"
+msgstr "ファイル/保存/アノテーションをJSONとして保存"
 
 msgid "File/Save/PDF Document"
-msgstr "//"
+msgstr "ファイル/保存/PDFドキュメント"
 
 msgid "File/Save/Session"
-msgstr "//"
+msgstr "ファイル/保存/セッション"
 
 msgid "File/Save/Session As"
-msgstr "//"
+msgstr "ファイル/名前を付けて保存/セッション"
 
 msgid "File/Close Current"
-msgstr "/"
+msgstr "ファイル/現在のファイルを閉じる"
 
 msgid "File/Close All"
-msgstr "/"
+msgstr "ファイル/すべてを閉じる"
 
 msgid "File/Recent/%s"
-msgstr "//%s"
+msgstr "ファイル/最近の/%s"
 
 msgid "File/Quit"
-msgstr "/"
+msgstr "ファイル/終了"
 
 msgid "Window/Presentation"
-msgstr "/"
+msgstr "ウィンドウ/プレゼンテーション"
 
 msgid "Window/Full Screen"
-msgstr "/"
+msgstr "ウィンドウ/フルスクリーン"
 
 msgid "Window/Float On Top"
-msgstr "/"
+msgstr "ウィンドウ/常に最前面"
 
 msgid "Window/Secondary"
-msgstr "/"
+msgstr "ウィンドウ/セカンダリ"
 
 msgid "Window/Secondary Float On Top"
-msgstr "/"
+msgstr "ウィンドウ/セカンダリ 常に前面に表示"
 
 msgid "Window/Toggle Click Through"
-msgstr "/"
+msgstr "ウィンドウ/クリック透過切り替え"
 
 msgid "Window/More UI Transparency"
-msgstr "/"
+msgstr "ウィンドウ/より多くのUI透過"
 
 msgid "Window/Less UI Transparency"
-msgstr "/"
+msgstr "ウィンドウ/UI透過度を減らす"
 
 msgid "View/Tool Bars/Toggle Menu Bar"
-msgstr "//"
+msgstr "表示/ツールバー/メニューバーの表示切替"
 
 msgid "View/Tool Bars/Toggle Top Bar"
-msgstr "//"
+msgstr "表示/ツールバー/トップバーの表示切替"
 
 msgid "View/Tool Bars/Toggle Pixel Bar"
-msgstr "//"
+msgstr "表示/ツールバー/ピクセルバーの表示切替"
 
 msgid "View/Tool Bars/Toggle Timeline Bar"
-msgstr "//"
+msgstr "表示/ツールバー/タイムラインバーの表示切替"
 
 msgid "View/Tool Bars/Toggle Status Bar"
-msgstr "//"
+msgstr "表示/ツールバー/ステータスバーの表示切替"
 
 msgid "View/Tool Bars/Toggle Action Dock"
-msgstr "//"
+msgstr "表示/ツールバー/アクションドックの表示切替"
 
 msgid "View/Auto Frame"
-msgstr "/"
+msgstr "表示/自動フレーム"
 
 msgid "View/Safe Areas"
-msgstr "/"
+msgstr "表示/安全領域"
 
 msgid "View/OpenEXR/Data Window"
-msgstr "/OpenEXR/"
+msgstr "表示/OpenEXR/データウィンドウ"
 
 msgid "View/OpenEXR/Display Window"
-msgstr "/OpenEXR/"
 
 msgid "View/OpenEXR/Ignore Display Window"
 msgstr "/OpenEXR/"
@@ -4244,31 +4158,24 @@ msgstr "OCIO/"
 msgid "OCIO/Current"
 msgstr "OCIO/"
 
-#, fuzzy, c-format
 msgid "OCIO/         ICS: %s"
 msgstr "OCIO/"
 
-#, fuzzy, c-format
 msgid "OCIO/     Display: %s"
 msgstr "OCIO/"
 
-#, fuzzy, c-format
 msgid "OCIO/        View: %s"
 msgstr "OCIO/"
 
-#, fuzzy, c-format
 msgid "OCIO/  Monitor #%d Display: %s"
 msgstr "OCIO/"
 
-#, fuzzy, c-format
 msgid "OCIO/  Monitor #%d    View: %s"
 msgstr "OCIO/"
 
-#, fuzzy, c-format
 msgid "OCIO/        Look: %s"
 msgstr "OCIO/"
 
-#, fuzzy, c-format
 msgid "OCIO/        LUT: %s"
 msgstr "OCIO/"
 
@@ -4379,7 +4286,7 @@ msgid "Delete"
 msgstr "削除"
 
 msgid "Ok"
-msgstr "Ok"
+msgstr ""
 
 msgid "Location"
 msgstr "所在地"
@@ -4426,13 +4333,11 @@ msgstr "リストモード"
 msgid "Detail mode"
 msgstr "モード"
 
-#, fuzzy, c-format
 msgid ""
-"Could not create directory '%s'. You may not have permission to perform this "
-"operation."
+"Could not create directory '%s'. You may not have permission to perform this"
+" operation."
 msgstr "この操作を実行する権限がありません。"
 
-#, fuzzy, c-format
 msgid "An error ocurred while trying to delete '%s'. %s"
 msgstr "メッセージ: リストアを中にエラーが発生しました。"
 
@@ -4515,9 +4420,7 @@ msgid "Cineon Picture"
 msgstr "写真"
 
 msgid "Canon Raw Picture"
-msgstr ""
-"ZSLモードではRAW画像フォーマットは&#x0A;サポートされていません。JPEGに変更し"
-"てください"
+msgstr "ZSLモードではRAW画像フォーマットは&#x0A;サポートされていません。JPEGに変更してください"
 
 msgid "Kodak Digital Negative"
 msgstr "RAW 画像を DNG (Digital Negative) に変換するツールComment"
@@ -4586,37 +4489,37 @@ msgid "Another process using the file."
 msgstr "別のプロセスを開く"
 
 msgid "Jan"
-msgstr "Jan"
+msgstr ""
 
 msgid "Feb"
-msgstr "Feb"
+msgstr ""
 
 msgid "Mar"
-msgstr "Mar"
+msgstr ""
 
 msgid "Apr"
-msgstr "Apr"
+msgstr ""
 
 msgid "May"
-msgstr "May"
+msgstr ""
 
 msgid "Jun"
-msgstr "Jun"
+msgstr ""
 
 msgid "Jul"
-msgstr "Jul"
+msgstr ""
 
 msgid "Aug"
-msgstr "Aug"
+msgstr ""
 
 msgid "Sep"
-msgstr "Sep"
+msgstr ""
 
 msgid "Oct"
-msgstr "Oct"
+msgstr ""
 
 msgid "Nov"
-msgstr "Nov"
+msgstr ""
 
 msgid "Replace"
 msgstr "置換"
@@ -4634,16 +4537,16 @@ msgid "Replace Next"
 msgstr "置換"
 
 msgid "Build Environment:"
-msgstr "ASRを使用してDR環境を構築する"
+msgstr ""
 
 msgid "\tDistribution: "
-msgstr "送信先："
+msgstr "\t送信先： "
 
 msgid "\tDesktop Environment: "
-msgstr "デスクトップ環境"
+msgstr "\tデスクトップ環境: "
 
 msgid "\tKernel Info: "
-msgstr "カーネル"
+msgstr "\tカーネル: "
 
 msgid "Running Environment:"
 msgstr "環境"
@@ -4652,16 +4555,16 @@ msgid "D\t\t\t\t\t=\tDecoding supported"
 msgstr ""
 
 msgid "\tE\t\t\t\t=\tEncoding supported"
-msgstr "この関数は、 pg_clientencoding() とコールするこ とも可能です。"
+msgstr ""
 
 msgid "\t\tI\t\t\t=\tIntra frame-only codec"
-msgstr "アイドル・インジケータ（フレームのみ）"
+msgstr ""
 
 msgid "\t\t\tL\t\t=\tLossy compression"
-msgstr "損失圧縮"
+msgstr ""
 
 msgid "\t\t\t\tS\t=\tLossless compression"
-msgstr "データ損失のない圧縮"
+msgstr ""
 
 msgid "With clang "
 msgstr ""
@@ -4697,13 +4600,13 @@ msgid "&Copy"
 msgstr ""
 
 msgid "Everything OK. "
-msgstr "\"問題ないか？\""
+msgstr ""
 
 msgid "GPU: Unknown"
-msgstr "不明"
+msgstr ""
 
 msgid "Elapsed"
-msgstr "経過:"
+msgstr ":"
 
 msgid "Remaining"
 msgstr "残存しています"
@@ -4741,22 +4644,25 @@ msgid "No GNOME Shell Hotkey for Float On Top.  Setting it globally to '{0}'"
 msgstr ""
 
 msgid ""
-"This will disable events for mrv2, allowing them to pass through to windows "
-"below it.\n"
+"This will disable events for mrv2, allowing them to pass through to windows below it.\n"
 "\n"
 "Give window focus to disable."
 msgstr ""
+"\n"
+"\n"
 
 msgid "Continue"
 msgstr "続行"
 
 msgid ""
-"This will disable events for mrv2, allowing them to pass through to windows "
-"below it.\n"
+"This will disable events for mrv2, allowing them to pass through to windows below it.\n"
 "\n"
 "Give window focus (click on the taskbar icon)\n"
 "to disable."
 msgstr ""
+"\n"
+"\n"
+"\n"
 
 msgid "Window click through ON"
 msgstr "click-through rate：クリック スルー率"
@@ -4764,8 +4670,8 @@ msgstr "click-through rate：クリック スルー率"
 msgid "Window click through OFF"
 msgstr ""
 "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT "
-"AVAILABLE IN  20 HOURS 47 MINUTES 54 SECONDS VISIT HTTPS://MYMEMORY."
-"TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE"
+"AVAILABLE IN  20 HOURS 47 MINUTES 54 SECONDS VISIT "
+"HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE"
 
 msgid "Edit/&Copy"
 msgstr "Edit/Copy"
@@ -4925,13 +4831,17 @@ msgstr ""
 
 msgid ""
 "Save Annotations burned into the movie or sequence.\n"
-"It also allows saving OpenEXRs from an 8-bit movie and changing OpenEXR's "
-"pixel type.\n"
+"It also allows saving OpenEXRs from an 8-bit movie and changing OpenEXR's pixel type.\n"
 "\n"
 "Furthermore, it allows saving A/B or Tiled comparisons and baking OCIO.\n"
 "\n"
 "However, it is limited to the size of your screen."
 msgstr ""
+"\n"
+"\n"
+"\n"
+"\n"
+"\n"
 
 msgid "Video Options"
 msgstr ""
@@ -5428,6 +5338,8 @@ msgid ""
 "* Full Pixel Values (Gamma, Gain and LUT)\n"
 "* Original (No Gamma, No Gain, No Lut)"
 msgstr ""
+"\n"
+"\n"
 
 msgid "Y"
 msgstr ""
@@ -5438,13 +5350,19 @@ msgid ""
 "      Y = 0.2126 R + 0.7152 G + 0.0722 B\n"
 "Y' (Lumma) is the weighted pixel value according to:\n"
 "      Y' = ( R + G + B ) / 3.0\n"
-"L (Lightness) is the human perception of luminance of the image which is non "
-"linear.\n"
+"L (Lightness) is the human perception of luminance of the image which is non linear.\n"
 "According to CIE No.15.2:\n"
 "      L = (116 * Y ^ 1/3 - 16) / 100\n"
-"A pixel of Y = 0.18 (L = 0.5) will appear about half as bright as Y = L = "
-"1.0 (white)."
+"A pixel of Y = 0.18 (L = 0.5) will appear about half as bright as Y = L = 1.0 (white)."
 msgstr ""
+"\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"\n"
 
 msgid "Luminance of image pixel under mouse."
 msgstr ""
@@ -5623,7 +5541,7 @@ msgstr ""
 msgid ""
 "Allows you to adjust gamma curve for display.\n"
 "Value is:  pow( 2, 1/x );"
-msgstr ""
+msgstr "\n"
 
 msgid "ICS, View, Look"
 msgstr ""
@@ -5919,9 +5837,8 @@ msgstr ""
 
 msgid ""
 "When selected, only a single mrv2 instance is allowed.\n"
-"If you try to open several mrv2s with different images, all these images "
-"will be sent to the already open mrv2."
-msgstr ""
+"If you try to open several mrv2s with different images, all these images will be sent to the already open mrv2."
+msgstr "\n"
 
 msgid "Auto Refit Image"
 msgstr ""
@@ -5977,7 +5894,8 @@ msgid "Topbar"
 msgstr ""
 
 msgid ""
-"When selected, mrv2 will start with its channel, gain, gamma toolbar visible."
+"When selected, mrv2 will start with its channel, gain, gamma toolbar "
+"visible."
 msgstr ""
 
 msgid "Pixel Toolbar"
@@ -6012,7 +5930,8 @@ msgstr ""
 msgid "Only One Panel"
 msgstr ""
 
-msgid "When selected, mrv2 will start with the only one panel option selected."
+msgid ""
+"When selected, mrv2 will start with the only one panel option selected."
 msgstr ""
 
 msgid "View Window"
@@ -6182,8 +6101,8 @@ msgid "Fixed Position"
 msgstr ""
 
 msgid ""
-"When this option is set, mrv2 will open in the position you set here (except "
-"if the window goes out of the Desktop).  If Always Save on Exit is on, the "
+"When this option is set, mrv2 will open in the position you set here (except"
+" if the window goes out of the Desktop).  If Always Save on Exit is on, the "
 "values are recakculated upon exiting the program."
 msgstr ""
 
@@ -6266,8 +6185,8 @@ msgid "Remove EDLs in Temporary Folder on Exit"
 msgstr ""
 
 msgid ""
-"When selected, temporary EDLs (Playlists) will be removed from the temporary "
-"folder."
+"When selected, temporary EDLs (Playlists) will be removed from the temporary"
+" folder."
 msgstr ""
 
 msgid "Video Start Frame"
@@ -6327,9 +6246,9 @@ msgid "Scrub Sensitivity"
 msgstr ""
 
 msgid ""
-"This setting controls the sensitivity of scrubbing (SHIFT and then the mouse "
-"right and left).  Smaller values make the mouse move jump more frames while "
-"higher values does the opposite."
+"This setting controls the sensitivity of scrubbing (SHIFT and then the mouse"
+" right and left).  Smaller values make the mouse move jump more frames while"
+" higher values does the opposite."
 msgstr ""
 
 msgid "Default View"
@@ -6383,8 +6302,8 @@ msgid "Use Default Display and View"
 msgstr ""
 
 msgid ""
-"When this option is on, and your config.ocio has a default display and view, "
-"it will be used to be set as default."
+"When this option is on, and your config.ocio has a default display and view,"
+" it will be used to be set as default."
 msgstr ""
 
 msgid "Use Active Views and Active Displays"
@@ -6410,8 +6329,8 @@ msgid "16-bits"
 msgstr ""
 
 msgid ""
-"The name of the OCIO default image color space for 16-bit images (cin, tiff, "
-"etc.)"
+"The name of the OCIO default image color space for 16-bit images (cin, tiff,"
+" etc.)"
 msgstr ""
 
 msgid "32-bits"
@@ -6425,7 +6344,8 @@ msgstr ""
 msgid "half"
 msgstr ""
 
-msgid "The name of the OCIO default image color space for OpenEXR half images."
+msgid ""
+"The name of the OCIO default image color space for OpenEXR half images."
 msgstr ""
 
 msgid "float"
@@ -6454,9 +6374,9 @@ msgstr ""
 msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
-"automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
-"exr"
+"automatically be created a regular expression to match versions defined with"
+" _v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
 msgstr ""
 
 msgid "Maximum Images Apart"
@@ -6570,7 +6490,8 @@ msgid "Use ComfyUI Pipe"
 msgstr ""
 
 msgid ""
-"This setting opens a pipe to communicate with ComfyUI's mrv2_save_exr_node.py"
+"This setting opens a pipe to communicate with ComfyUI's "
+"mrv2_save_exr_node.py"
 msgstr ""
 
 msgid "Errors"
@@ -6591,7 +6512,8 @@ msgstr ""
 msgid "Check for Updates"
 msgstr ""
 
-msgid "Allows you to automatically download updates of mrv2 when it starts up."
+msgid ""
+"Allows you to automatically download updates of mrv2 when it starts up."
 msgstr ""
 
 msgid "Reset settings to the default."
@@ -6685,8 +6607,8 @@ msgstr ""
 
 msgid ""
 "Select, Add or Delete an OCIO Preset that stores: config filename, Input "
-"Color Space, View, Look, LUT settings and Defaults for 8-bits, 16-bits, 32-"
-"bits, half and float images. "
+"Color Space, View, Look, LUT settings and Defaults for 8-bits, 16-bits, "
+"32-bits, half and float images. "
 msgstr ""
 
 msgid "Summary"

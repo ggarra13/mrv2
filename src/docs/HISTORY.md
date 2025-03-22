@@ -12,6 +12,8 @@ v1.3.7
 - Fixed Render->Minify and Magnify filter toggling.
 - Fixed Render->Minify and Magnify saving in preferences.
 - Added partial support for Japanese language in the UI.
+- Fixed some warnings when starting mrv2 with PYTHONHOME set on Linux.
+- Removed the "export FLTK_BACKEND=x11" line as Wayland now is mature enough.
 
   
 v1.3.6
