@@ -14,6 +14,10 @@
 //     https://www.fltk.org/bugs.php
 //
 
+#include <memory>
+
+#include <tlCore/Util.h>
+
 #include <FL/Fl_Vk_Window.H>
 
 #define DEMO_TEXTURE_COUNT 1
@@ -42,7 +46,6 @@ namespace mrv
         Fl_Vk_Mesh m_vertices;
         Fl_Vk_Texture m_textures[DEMO_TEXTURE_COUNT];
 
-        int main_loop();
         
         void prepare_textures();
         void prepare_vertices();
@@ -53,6 +56,10 @@ namespace mrv
         void prepare_descriptor_set();
 
     private:
+        void _init();
+        void _findThread();
+        void _videoThread();
+        void _audioThread();
         void prepare_texture_image(
             const uint32_t* tex_colors, Fl_Vk_Texture* tex_obj,
             VkImageTiling tiling, VkImageUsageFlags usage,
@@ -64,6 +71,8 @@ namespace mrv
 
         VkShaderModule prepare_vs();
         VkShaderModule prepare_fs();
+
+        TLRENDER_PRIVATE();
     };
 
 } // namespace mrv
