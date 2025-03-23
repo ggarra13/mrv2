@@ -23,12 +23,12 @@ locate_python
 if [[ ! -e $PYTHON_SITEDIR/polib.py &&
 	  ! -e $PYTHON_USER_SITEDIR/polib.py ]];
 then
-    $PYTHON -m pip install polib transformers translate torch sentencepiece sacremoses
+    $PYTHON -m pip install polib
 fi
 
-$PYTHON bin/python/po_translate.py $*
+$PYTHON bin/python/po_missing.py $*
 
 #
 # Remove all the dependencies we installed
 #
-$PYTHON -m pip uninstall -r requirements_useless.txt -y
+#$PYTHON -m pip uninstall -r requirements_useless.txt -y

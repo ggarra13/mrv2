@@ -2909,6 +2909,9 @@ msgstr ""
 msgid "Russian"
 msgstr ""
 
+msgid "Japanese"
+msgstr ""
+
 msgid ""
 "Need to reboot mrv2 to change language to {0}.  Are you sure you want to "
 "continue?"
@@ -2972,9 +2975,6 @@ msgid "Italian"
 msgstr ""
 
 msgid "Irish"
-msgstr ""
-
-msgid "Japanese"
 msgstr ""
 
 msgid "Korean"
@@ -4255,6 +4255,9 @@ msgid "Oct"
 msgstr ""
 
 msgid "Nov"
+msgstr ""
+
+msgid "Dec"
 msgstr ""
 
 msgid "Replace"
@@ -6686,7 +6689,7 @@ msgstr ""
 msgid "Clear Cache"
 msgstr ""
 
-msgid "UpdateVideoFrame"
+msgid "Update Video Frame"
 msgstr ""
 
 msgid "Cut Frame"

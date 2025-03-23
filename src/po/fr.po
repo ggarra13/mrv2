@@ -3235,6 +3235,9 @@ msgstr "Français"
 msgid "Russian"
 msgstr "Russe"
 
+msgid "Japanese"
+msgstr "Japonais"
+
 msgid ""
 "Need to reboot mrv2 to change language to {0}.  Are you sure you want to "
 "continue?"
@@ -3301,9 +3304,6 @@ msgstr "Italien"
 
 msgid "Irish"
 msgstr "Irlande"
-
-msgid "Japanese"
-msgstr "Japonais"
 
 msgid "Korean"
 msgstr "Coréen"
@@ -4588,25 +4588,25 @@ msgid "Jan"
 msgstr "Jan"
 
 msgid "Feb"
-msgstr "Feb"
+msgstr "Fév"
 
 msgid "Mar"
 msgstr "Mar"
 
 msgid "Apr"
-msgstr "Apr"
+msgstr "Avr"
 
 msgid "May"
-msgstr "May"
+msgstr "Mai"
 
 msgid "Jun"
-msgstr "Jun"
+msgstr "Juin"
 
 msgid "Jul"
-msgstr "Jul"
+msgstr "Juil"
 
 msgid "Aug"
-msgstr "Aug"
+msgstr "Août"
 
 msgid "Sep"
 msgstr "Sep"
@@ -4616,6 +4616,9 @@ msgstr "Oct"
 
 msgid "Nov"
 msgstr "Nov"
+
+msgid "Dec"
+msgstr "Déc"
 
 msgid "Replace"
 msgstr "Remplacer"
@@ -7343,7 +7346,7 @@ msgstr "Chaîne suivante"
 msgid "Clear Cache"
 msgstr "Effacer la cachette"
 
-msgid "UpdateVideoFrame"
+msgid "Update Video Frame"
 msgstr "Mise à jour du cadre vidéo"
 
 msgid "Cut Frame"

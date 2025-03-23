@@ -3241,6 +3241,9 @@ msgstr "Franzsisch"
 msgid "Russian"
 msgstr "Russisch"
 
+msgid "Japanese"
+msgstr "Japanisch"
+
 msgid ""
 "Need to reboot mrv2 to change language to {0}.  Are you sure you want to "
 "continue?"
@@ -3307,9 +3310,6 @@ msgstr "Italienisch"
 
 msgid "Irish"
 msgstr "Irisch"
-
-msgid "Japanese"
-msgstr "Japanisch"
 
 msgid "Korean"
 msgstr "Koreanisch"
@@ -4620,6 +4620,9 @@ msgstr "Oct"
 
 msgid "Nov"
 msgstr "Nov"
+
+msgid "Dec"
+msgstr "Dec"
 
 msgid "Replace"
 msgstr "Ersetzen"
@@ -7318,7 +7321,7 @@ msgstr "Nchster Kanal"
 msgid "Clear Cache"
 msgstr "Cache lschen"
 
-msgid "UpdateVideoFrame"
+msgid "Update Video Frame"
 msgstr "VideoFrame aktualisieren"
 
 msgid "Cut Frame"

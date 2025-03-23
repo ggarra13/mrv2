@@ -73,11 +73,35 @@ if not lang in ['all'] + LANGUAGES:
 #
 DONT_TRANSLATE = [
     '@B12@C7@b@.Remote\\t@B12@C7@b@.Local'
+    '70 mm',
+    '35 mm Panavision',
+    'HDR maxCLL',
+    'HDR maxFALL',
+    'FourCC: {0}',
     '%d Hz.',
     '1:2',
     '1:4',
     '1:8',
     '1:16',
+    'x1',
+    'x2',
+    'x3',
+    'x4',
+    'x5',
+    'x6',
+    'x7',
+    'x8',
+    'x9',
+    '24',
+    '1/2',
+    '1/3',
+    '1/4',
+    '1/5',
+    '1/6',
+    '1/7',
+    '1/8',
+    '1/9',
+    '24',
     'Alt',
     'API',
     'arib-std-b67',
@@ -131,6 +155,8 @@ DONT_TRANSLATE = [
     'Stereo 3D',
     'Studio',
     'USD',
+    'ZIP',
+    'ZIPS',
 ]
 
 #
@@ -190,7 +216,7 @@ if not use_google and not use_tokenizer:
 class POTranslator:
 
 
-    def __init__(self, lang, use_google = True, use_tokenizer = True): 
+    def __init__(self, lang, use_google = False, use_tokenizer = True): 
         self.model = self.tokenizer = None
         
         self.use_google = use_google
@@ -305,6 +331,7 @@ class POTranslator:
             return english
         
         if len(english) < 4 and not self.is_number(english):
+            print(english)
             return english
     
         translated_text = self.have_seen.get(english, None)
@@ -348,6 +375,8 @@ class POTranslator:
     # If we have '/' try to translate with google first 
     #
     def translate_text(self, english):
+        if '/' in english:
+            return ''
         if ':class:' in english:
             return ''
         if '(*.' in english:
@@ -379,7 +408,7 @@ class POTranslator:
             return ''
         
         # Tokenize the input text
-        print(f"\tOriginal: {english}")
+        print(f"\tTRANSFORMERS Original: {english}")
 
         if TRANSLATE_FIXES.get(english, False):
             english = TRANSLATE_FIXES[english]
@@ -411,6 +440,7 @@ class POTranslator:
                         entry.flags.remove('fuzzy')
                     continue
                 elif entry.msgid in DONT_TRANSLATE:
+                    print('DONT TRANSLATE')
                     entry.msgstr = entry.msgid
                 elif entry.msgid and not entry.msgstr:
                     translated = self.translate_text(entry.msgid)

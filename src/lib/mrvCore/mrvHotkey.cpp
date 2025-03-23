@@ -486,7 +486,7 @@ namespace mrv
         HotkeyEntry(_("Next Channel"), &kNextChannel),
 
         HotkeyEntry(_("Clear Cache"), &kClearCache),
-        HotkeyEntry(_("UpdateVideoFrame"), &kUpdateVideoFrame),
+        HotkeyEntry(_("Update Video Frame"), &kUpdateVideoFrame),
 
         HotkeyEntry(_("Cut Frame"), &kEditCutFrame),
         HotkeyEntry(_("Copy Frame"), &kEditCopyFrame),

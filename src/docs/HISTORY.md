@@ -12,9 +12,10 @@ v1.3.7
 - Added 'hdr' stand-alone utility based on NDI and Vulkan.
 - Fixed Render->Minify and Magnify filter toggling.
 - Fixed Render->Minify and Magnify saving in preferences.
-- Added partial support for Japanese language in the UI.
+- Added full support for Japanese language in the UI.
 - Fixed some warnings when starting mrv2 with PYTHONHOME set on Linux.
 - Removed the "export FLTK_BACKEND=x11" line as Wayland now is mature enough.
+
 
   
 v1.3.6

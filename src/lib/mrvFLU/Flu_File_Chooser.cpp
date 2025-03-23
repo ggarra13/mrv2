@@ -2731,6 +2731,8 @@ std::string Flu_File_Chooser::formatDate(const char* d)
         month = 10;
     else if (strcmp(MM, _("Nov")) == 0)
         month = 11;
+    else if (strcmp(MM, _("Dec")) == 0)
+        month = 11;
     else
         month = 12;
 
