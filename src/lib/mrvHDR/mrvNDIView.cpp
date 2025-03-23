@@ -32,6 +32,8 @@
 
 #include <tlDevice/NDI/NDI.h>
 
+#include <tlCore/HDR.h>
+
 #include "mrvHDR/mrvNDIView.h"
 
 #undef printf
@@ -41,6 +43,25 @@ namespace
     const char* kModule = "ndi_viewer";
     const double kTimeout = 0.005;
 } // namespace
+
+namespace
+{
+    // Function to unescape &quot; back to normal quotes (")
+    std::string unescape_quotes_from_xml(const std::string& xml_escaped_str) {
+        std::string json_str;
+        size_t pos = 0;
+        while (pos < xml_escaped_str.size()) {
+            if (xml_escaped_str.compare(pos, 6, "&quot;") == 0) {
+                json_str += '"';  // Replace &quot; with "
+                pos += 6;         // Skip over &quot;
+            } else {
+                json_str += xml_escaped_str[pos];
+                pos++;
+            }
+        }
+        return json_str;
+    }
+}
 
 namespace mrv
 {
@@ -942,37 +963,27 @@ namespace mrv
                         rapidxml::xml_document<> doc;
                         doc.parse<0>((char*)video_frame.p_metadata);
 
-                        {
-                            // Get root node
-                            rapidxml::xml_node<>* root = doc.first_node("ndi_color_info");
+                        // Get root node
+                        rapidxml::xml_node<>* root = doc.first_node("ndi_color_info");
 
-                            // Get attributes
-                            rapidxml::xml_attribute<>* attr_transfer = root->first_attribute("transfer");
-                            rapidxml::xml_attribute<>* attr_matrix = root->first_attribute("matrix");
-                            rapidxml::xml_attribute<>* attr_primaries = root->first_attribute("primaries");
+                        // Get attributes
+                        rapidxml::xml_attribute<>* attr_transfer = root->first_attribute("transfer");
+                        rapidxml::xml_attribute<>* attr_matrix = root->first_attribute("matrix");
+                        rapidxml::xml_attribute<>* attr_primaries = root->first_attribute("primaries");
+                        rapidxml::xml_attribute<>* attr_mrv2 = root->first_attribute("mrv2");
 
-                            // Display color information
-                            fprintf(stderr, "Video metadata color info (transfer: %s, matrix: %s, primaries: %s)\n", attr_transfer->value(), attr_matrix->value(), attr_primaries->value());
-                        }
+                        const std::string& jsonString =
+                            unescape_quotes_from_xml(attr_mrv2->value());
 
-                        {
-                            // Get root node
-                            rapidxml::xml_node<>* root = doc.first_node("cieY_color_info");
-                            if (root) {
-                                // Get the maxPQY value
-                                rapidxml::xml_node<> *maxPQY_node = root->first_node("maxPQY");
-                                rapidxml::xml_node<> *avgPQY_node = root->first_node("avgPQY");
+                        const nlohmann::json& j = nlohmann::json(jsonString);
 
-                                if (maxPQY_node && avgPQY_node)
-                                {
-                                    float maxPQY = std::stof(maxPQY_node->value()); // Convert string to float
-                                    float avgPQY = std::stof(avgPQY_node->value());
-
-                                    std::cerr << "maxPQY: " << maxPQY << std::endl;
-                                    std::cerr << "avgPQY: " << avgPQY << std::endl;
-                                }
-                            }
-                        }
+                        using namespace tl;
+                        image::HDRData hdrData = j.get<image::HDRData>();
+                        
+                        // Display color information
+                        fprintf(stderr, "Video metadata color info (transfer: %s, matrix: %s, primaries: %s)\n", attr_transfer->value(), attr_matrix->value(), attr_primaries->value());
+                        
+                        
                     }
                     if (video_frame.p_data)
                     {
