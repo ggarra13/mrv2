@@ -915,8 +915,8 @@ namespace mrv
                     continue;
             }
             
-            // We now have at least one source, so we create a receiver to look at it.
-        
+            // We now have at least one source, so we create a receiver to
+            // look at it.
             NDIlib_recv_create_t NDI_recv_create_desc;
             NDI_recv_create_desc.p_ndi_recv_name = "mrv2 HDR Receiver";
             NDI_recv_create_desc.source_to_connect_to = p.currentNDISource.c_str();
@@ -951,16 +951,37 @@ namespace mrv
                         rapidxml::xml_document<> doc;
                         doc.parse<0>((char*)video_frame.p_metadata);
 
-                        // Get root node
-                        rapidxml::xml_node<>* root = doc.first_node("ndi_color_info");
+                        {
+                            // Get root node
+                            rapidxml::xml_node<>* root = doc.first_node("ndi_color_info");
 
-                        // Get attributes
-                        rapidxml::xml_attribute<>* attr_transfer = root->first_attribute("transfer");
-                        rapidxml::xml_attribute<>* attr_matrix = root->first_attribute("matrix");
-                        rapidxml::xml_attribute<>* attr_primaries = root->first_attribute("primaries");
+                            // Get attributes
+                            rapidxml::xml_attribute<>* attr_transfer = root->first_attribute("transfer");
+                            rapidxml::xml_attribute<>* attr_matrix = root->first_attribute("matrix");
+                            rapidxml::xml_attribute<>* attr_primaries = root->first_attribute("primaries");
 
-                        // Display color information
-                        fprintf(stderr, "Video metadata color info (transfer: %s, matrix: %s, primaries: %s)\n", attr_transfer->value(), attr_matrix->value(), attr_primaries->value());
+                            // Display color information
+                            fprintf(stderr, "Video metadata color info (transfer: %s, matrix: %s, primaries: %s)\n", attr_transfer->value(), attr_matrix->value(), attr_primaries->value());
+                        }
+
+                        {
+                            // Get root node
+                            rapidxml::xml_node<>* root = doc.first_node("cieY_color_info");
+                            if (root) {
+                                // Get the maxPQY value
+                                rapidxml::xml_node<> *maxPQY_node = root->first_node("maxPQY");
+                                rapidxml::xml_node<> *avgPQY_node = root->first_node("avgPQY");
+
+                                if (maxPQY_node && avgPQY_node)
+                                {
+                                    float maxPQY = std::stof(maxPQY_node->value()); // Convert string to float
+                                    float avgPQY = std::stof(avgPQY_node->value());
+
+                                    std::cerr << "maxPQY: " << maxPQY << std::endl;
+                                    std::cerr << "avgPQY: " << avgPQY << std::endl;
+                                }
+                            }
+                        }
                     }
                     if (video_frame.p_data) {
                         // Video frame buffer.
