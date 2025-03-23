@@ -4257,6 +4257,9 @@ msgstr ""
 msgid "Nov"
 msgstr ""
 
+msgid "Dec"
+msgstr ""
+
 msgid "Replace"
 msgstr ""
 
@@ -6686,7 +6689,7 @@ msgstr ""
 msgid "Clear Cache"
 msgstr ""
 
-msgid "UpdateVideoFrame"
+msgid "Update Video Frame"
 msgstr ""
 
 msgid "Cut Frame"

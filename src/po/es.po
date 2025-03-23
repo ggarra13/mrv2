@@ -4672,6 +4672,9 @@ msgstr "Oct"
 msgid "Nov"
 msgstr "Nov"
 
+msgid "Dec"
+msgstr "Dic"
+
 msgid "Replace"
 msgstr "Reemplazar"
 
@@ -7362,8 +7365,8 @@ msgstr "Próximo Canal"
 msgid "Clear Cache"
 msgstr "Borrar Cache"
 
-msgid "UpdateVideoFrame"
-msgstr "UpdateVideoFrame"
+msgid "Update Video Frame"
+msgstr "Actualizar Cuadro de Vídeo"
 
 msgid "Cut Frame"
 msgstr "Cortar Cuadro"

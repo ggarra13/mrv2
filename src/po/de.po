@@ -4619,6 +4619,9 @@ msgstr "Oct"
 msgid "Nov"
 msgstr "Nov"
 
+msgid "Dec"
+msgstr "Dec"
+
 msgid "Replace"
 msgstr "Ersetzen"
 
@@ -7316,7 +7319,7 @@ msgstr "Nchster Kanal"
 msgid "Clear Cache"
 msgstr "Cache lschen"
 
-msgid "UpdateVideoFrame"
+msgid "Update Video Frame"
 msgstr "VideoFrame aktualisieren"
 
 msgid "Cut Frame"

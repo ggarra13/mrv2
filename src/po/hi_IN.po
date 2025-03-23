@@ -4528,37 +4528,40 @@ msgid "Another process using the file."
 msgstr "फ़ाइल का उपयोग कर एक और प्रक्रिया."
 
 msgid "Jan"
-msgstr "Jan"
+msgstr "जनवरी"
 
 msgid "Feb"
-msgstr "Feb"
+msgstr "फ़रवरी"
 
 msgid "Mar"
-msgstr "Mar"
+msgstr "मार्च"
 
 msgid "Apr"
-msgstr "Apr"
+msgstr "अप्रैल"
 
 msgid "May"
-msgstr "May"
+msgstr "मई"
 
 msgid "Jun"
-msgstr "Jun"
+msgstr "जून"
 
 msgid "Jul"
-msgstr "Jul"
+msgstr "जुलाई"
 
 msgid "Aug"
-msgstr "Aug"
+msgstr "अगस्त"
 
 msgid "Sep"
-msgstr "Sep"
+msgstr "सितंबर"
 
 msgid "Oct"
-msgstr "Oct"
+msgstr "अक्टूबर"
 
 msgid "Nov"
-msgstr "Nov"
+msgstr "नवंबर"
+
+msgid "Dec"
+msgstr "डिवाइस"
 
 msgid "Replace"
 msgstr "बदलें"
@@ -7186,7 +7189,7 @@ msgstr "अगला चैनल"
 msgid "Clear Cache"
 msgstr "कैश साफ करें (l)"
 
-msgid "UpdateVideoFrame"
+msgid "Update Video Frame"
 msgstr "वीडियो फ़ाइल अद्यतन करें"
 
 msgid "Cut Frame"

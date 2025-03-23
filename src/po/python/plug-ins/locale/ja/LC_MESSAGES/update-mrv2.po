@@ -21,115 +21,115 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"\n"
+"インストールが完了しました。出力は以下の通りです:\n"
 
 msgid "Removed temporary \""
-msgstr ""
+msgstr "一時的な \""
 
 msgid "The new version of mrv2 was installed."
-msgstr ""
+msgstr "mrv2 の新しいバージョンがインストールされました。"
 
 msgid "Could not locate mrv2 in:\n"
-msgstr "\n"
+msgstr "mrv2 が以下の場所に見つかりませんでした:\n"
 
 msgid "Maybe you installed it in a non-default location."
-msgstr ""
+msgstr "デフォルト以外の場所にインストールした可能性があります。"
 
 msgid "Something failed installing mrv2 - It is not in \""
-msgstr ""
+msgstr "mrv2 のインストールに失敗しました。\""
 
 msgid "Invalid ISO 8601 format provided: "
-msgstr ""
+msgstr "無効な ISO 8601 形式が提供されました: "
 
 msgid "No file matching"
-msgstr ""
+msgstr "一致するファイルはありません"
 
 msgid "was found"
-msgstr ""
+msgstr "が見つかりました"
 
 msgid "No match found"
-msgstr ""
+msgstr "一致するものは見つかりませんでした"
 
 msgid "Install Location: "
-msgstr ""
+msgstr "インストール場所: "
 
 msgid "Error retrieving value:\n"
-msgstr " \n"
+msgstr "値の取得にエラーが発生しました:\n"
 
 msgid "Unknown platform"
-msgstr ""
+msgstr "不明なプラットフォーム"
 
 msgid "Saving session:"
-msgstr ""
+msgstr "セッションを保存しています:"
 
 msgid "An unexpected error occurred:"
-msgstr ""
+msgstr "予期しないエラーが発生しました:"
 
 msgid "Trying to install"
-msgstr ""
+msgstr "インストールを試みています"
 
 msgid "Please wait"
-msgstr ""
+msgstr "お待ちください"
 
 msgid "Enter Sudo Password"
-msgstr ""
+msgstr "Sudo パスワードを入力してください"
 
 msgid "Password"
-msgstr ""
+msgstr "パスワード"
 
 msgid "You will need to install file"
-msgstr ""
+msgstr "ファイルをインストールする必要があります"
 
 msgid "manually."
-msgstr ""
+msgstr "手動で。"
 
 msgid "Unknown operating system"
-msgstr ""
+msgstr "不明なオペレーティングシステム"
 
 msgid "Downloading "
-msgstr ""
+msgstr "ダウンロード中: "
 
 msgid "Download seems to have failed!"
-msgstr ""
+msgstr "ダウンロードが失敗したようです!"
 
 msgid "Release Notes"
-msgstr ""
+msgstr "リリースノート"
 
 msgid "Current version is v"
-msgstr ""
+msgstr "現在のバージョンは v"
 
 msgid "Latest version at Github is v"
-msgstr ""
+msgstr "Github の最新バージョンは v"
 
 msgid "Released on "
-msgstr ""
+msgstr "リリース日: "
 
 msgid "Ignore"
-msgstr ""
+msgstr "無視"
 
 msgid "Error fetching latest release information:\n"
-msgstr "\n"
+msgstr "最新リリース情報の取得にエラーが発生しました:\n"
 
 msgid "There's a new release but it has not been more than 5 days"
-msgstr ""
+msgstr "新しいリリースがありますが、5日以上経過していません"
 
 msgid "unknown date."
-msgstr ""
+msgstr "不明な日付。"
 
 msgid "Update anyway"
-msgstr ""
+msgstr "それでも更新する"
 
 msgid "Downgrade"
-msgstr ""
+msgstr "ダウングレード"
 
 msgid "Upgrade"
-msgstr ""
+msgstr "アップグレード"
 
 msgid "No download url was found for"
-msgstr ""
+msgstr "ダウンロードURLが見つかりませんでした: "
 
 msgid "No releases found for the specified repository."
-msgstr ""
+msgstr "指定されたリポジトリにはリリースが見つかりませんでした。"
 
 msgid "Help/Update mrv2"
-msgstr "/"
+msgstr "ヘルプ/mrv2 を更新"

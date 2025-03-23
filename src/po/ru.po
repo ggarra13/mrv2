@@ -4617,37 +4617,40 @@ msgid "Another process using the file."
 msgstr "Другой процесс с использованием файла."
 
 msgid "Jan"
-msgstr "Jan"
+msgstr "Янв"
 
 msgid "Feb"
-msgstr "Feb"
+msgstr "Фев"
 
 msgid "Mar"
-msgstr "Mar"
+msgstr "Map"
 
 msgid "Apr"
-msgstr "Apr"
+msgstr "Апр"
 
 msgid "May"
-msgstr "May"
+msgstr "Май"
 
 msgid "Jun"
-msgstr "Jun"
+msgstr "Июн"
 
 msgid "Jul"
-msgstr "Jul"
+msgstr "Июл"
 
 msgid "Aug"
-msgstr "Aug"
+msgstr "Авг"
 
 msgid "Sep"
-msgstr "Sep"
+msgstr "Сент"
 
 msgid "Oct"
-msgstr "Oct"
+msgstr "Окт"
 
 msgid "Nov"
-msgstr "Nov"
+msgstr "Нояб"
+
+msgid "Dec"
+msgstr "Дек."
 
 msgid "Replace"
 msgstr "Заменить"
@@ -7333,7 +7336,7 @@ msgstr "Следующий канал"
 msgid "Clear Cache"
 msgstr "Очистить кэш"
 
-msgid "UpdateVideoFrame"
+msgid "Update Video Frame"
 msgstr "Обновление VideoFrame"
 
 msgid "Cut Frame"

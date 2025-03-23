@@ -4507,38 +4507,41 @@ msgid "Another process using the file."
 msgstr "另一个进程在使用文件"
 
 msgid "Jan"
-msgstr "Jan"
+msgstr "1月"
 
 msgid "Feb"
-msgstr "Feb"
+msgstr "2月"
 
 # INVALID
 msgid "Mar"
-msgstr "Mar"
+msgstr "3月"
 
 msgid "Apr"
-msgstr "Apr"
+msgstr "4月"
 
 msgid "May"
-msgstr "May"
+msgstr "5月"
 
 msgid "Jun"
-msgstr "Jun"
+msgstr "6月"
 
 msgid "Jul"
-msgstr "Jul"
+msgstr "7月"
 
 msgid "Aug"
-msgstr "Aug"
+msgstr "8月"
 
 msgid "Sep"
-msgstr "Sep"
+msgstr "9月"
 
 msgid "Oct"
-msgstr "Oct"
+msgstr "10月"
 
 msgid "Nov"
-msgstr "Nov"
+msgstr "11月"
+
+msgid "Dec"
+msgstr "12月"
 
 msgid "Replace"
 msgstr "替换"
@@ -7135,8 +7138,8 @@ msgstr "下一个频道"
 msgid "Clear Cache"
 msgstr "清除缓存"
 
-msgid "UpdateVideoFrame"
-msgstr "更新 VideoFrame"
+msgid "Update Video Frame"
+msgstr "更新 Video Frame"
 
 msgid "Cut Frame"
 msgstr "剪切帧"

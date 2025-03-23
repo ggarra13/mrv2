@@ -4604,37 +4604,40 @@ msgid "Another process using the file."
 msgstr "Un altro processo che utilizza il file."
 
 msgid "Jan"
-msgstr "Jan"
+msgstr "gen"
 
 msgid "Feb"
-msgstr "Feb"
+msgstr "feb"
 
 msgid "Mar"
-msgstr "Mar"
+msgstr "mar"
 
 msgid "Apr"
-msgstr "Apr"
+msgstr "apr"
 
 msgid "May"
-msgstr "May"
+msgstr "mag"
 
 msgid "Jun"
-msgstr "Jun"
+msgstr "giu"
 
 msgid "Jul"
-msgstr "Jul"
+msgstr "lug"
 
 msgid "Aug"
-msgstr "Aug"
+msgstr "ago"
 
 msgid "Sep"
-msgstr "Sep"
+msgstr "set"
 
 msgid "Oct"
-msgstr "Oct"
+msgstr "ott"
 
 msgid "Nov"
-msgstr "Nov"
+msgstr "nov"
+
+msgid "Dec"
+msgstr "dic"
 
 msgid "Replace"
 msgstr "Sostituire"
@@ -7339,7 +7342,7 @@ msgstr "Canale successivo"
 msgid "Clear Cache"
 msgstr "Cancella la cache"
 
-msgid "UpdateVideoFrame"
+msgid "Update Video Frame"
 msgstr "Aggiorna il QuadroVideo"
 
 msgid "Cut Frame"
