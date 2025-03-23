@@ -48,10 +48,10 @@ namespace mrv
     {
         NDIlib_find_instance_t NDI_find = nullptr;
         NDIlib_recv_instance_t NDI_recv = nullptr;
-            
+
         std::vector<std::string> NDIsources;
         std::string currentNDISource;
-        
+
         struct FindMutex
         {
             std::mutex mutex;
@@ -64,7 +64,7 @@ namespace mrv
             std::atomic<bool> running;
         };
         FindThread findThread;
-        
+
         struct VideoMutex
         {
             std::mutex mutex;
@@ -92,20 +92,20 @@ namespace mrv
             std::atomic<bool> running;
         };
         AudioThread audioThread;
-        
+
         uint32_t frame_counter = 0;
     };
 
     NDIView::~NDIView()
     {
         TLRENDER_P();
-        
+
         _exitThreads();
-        
+
         p.findThread.running = false;
         if (p.findThread.thread.joinable())
             p.findThread.thread.join();
-        
+
         vkDestroyShaderModule(m_device, m_frag_shader_module, NULL);
         vkDestroyShaderModule(m_device, m_vert_shader_module, NULL);
     }
@@ -124,13 +124,10 @@ namespace mrv
         _init();
     }
 
-
-
-    void NDIView::prepare_texture_image(const uint32_t *tex_colors,
-                                        Fl_Vk_Texture* tex_obj,
-                                        VkImageTiling tiling,
-                                        VkImageUsageFlags usage,
-                                        VkFlags required_props) {
+    void NDIView::prepare_texture_image(
+        const uint32_t* tex_colors, Fl_Vk_Texture* tex_obj,
+        VkImageTiling tiling, VkImageUsageFlags usage, VkFlags required_props)
+    {
         const VkFormat tex_format = VK_FORMAT_B8G8R8A8_UNORM;
         const int32_t tex_width = 2;
         const int32_t tex_height = 2;
@@ -153,22 +150,23 @@ namespace mrv
         image_create_info.usage = usage;
         image_create_info.flags = 0;
         image_create_info.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    
+
         VkMemoryAllocateInfo mem_alloc = {};
         mem_alloc.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
         mem_alloc.pNext = NULL;
         mem_alloc.allocationSize = 0;
         mem_alloc.memoryTypeIndex = 0;
 
-        result = vkCreateImage(m_device, &image_create_info, NULL, &tex_obj->image);
+        result =
+            vkCreateImage(m_device, &image_create_info, NULL, &tex_obj->image);
         VK_CHECK_RESULT(result);
 
         vkGetImageMemoryRequirements(m_device, tex_obj->image, &m_mem_reqs);
 
         mem_alloc.allocationSize = m_mem_reqs.size;
-        pass = memory_type_from_properties(m_mem_reqs.memoryTypeBits,
-                                           required_props,
-                                           &mem_alloc.memoryTypeIndex);
+        pass = memory_type_from_properties(
+            m_mem_reqs.memoryTypeBits, required_props,
+            &mem_alloc.memoryTypeIndex);
 
         /* allocate memory */
         result = vkAllocateMemory(m_device, &mem_alloc, NULL, &tex_obj->mem);
@@ -178,25 +176,27 @@ namespace mrv
         result = vkBindImageMemory(m_device, tex_obj->image, tex_obj->mem, 0);
         VK_CHECK_RESULT(result);
 
-        if (required_props & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) {
+        if (required_props & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
+        {
             VkImageSubresource subres = {};
             subres.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
             subres.mipLevel = 0;
             subres.arrayLayer = 0;
             VkSubresourceLayout layout;
-            void *data;
+            void* data;
             int32_t x, y;
 
-            vkGetImageSubresourceLayout(m_device, tex_obj->image, &subres,
-                                        &layout);
+            vkGetImageSubresourceLayout(
+                m_device, tex_obj->image, &subres, &layout);
 
-            result = vkMapMemory(m_device, tex_obj->mem, 0,
-                                 mem_alloc.allocationSize, 0, &data);
+            result = vkMapMemory(
+                m_device, tex_obj->mem, 0, mem_alloc.allocationSize, 0, &data);
             VK_CHECK_RESULT(result);
 
             // Tile the texture over tex_height and tex_width
-            for (y = 0; y < tex_height; y++) {
-                uint32_t *row = (uint32_t *)((char *)data + layout.rowPitch * y);
+            for (y = 0; y < tex_height; y++)
+            {
+                uint32_t* row = (uint32_t*)((char*)data + layout.rowPitch * y);
                 for (x = 0; x < tex_width; x++)
                     row[x] = tex_colors[(x & 1) ^ (y & 1)];
             }
@@ -215,17 +215,17 @@ namespace mrv
         VkCommandBufferBeginInfo cmdBeginInfo = {};
         cmdBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
         vkBeginCommandBuffer(cmd, &cmdBeginInfo);
-    
+
         // Initial transition to shader-readable layout
-        set_image_layout(cmd, tex_obj->image,
-                         VK_IMAGE_ASPECT_COLOR_BIT,
-                         VK_IMAGE_LAYOUT_UNDEFINED,   // Initial layout
-                         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-                         0, // No previous access
-                         VK_PIPELINE_STAGE_HOST_BIT, // Host stage
-                         VK_ACCESS_SHADER_READ_BIT,  // Shader read
-                         VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
-    
+        set_image_layout(
+            cmd, tex_obj->image, VK_IMAGE_ASPECT_COLOR_BIT,
+            VK_IMAGE_LAYOUT_UNDEFINED, // Initial layout
+            VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+            0,                          // No previous access
+            VK_PIPELINE_STAGE_HOST_BIT, // Host stage
+            VK_ACCESS_SHADER_READ_BIT,  // Shader read
+            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+
         // Submit the command buffer to apply the transition
         vkEndCommandBuffer(cmd);
         VkSubmitInfo submit_info = {};
@@ -233,11 +233,10 @@ namespace mrv
         submit_info.commandBufferCount = 1;
         submit_info.pCommandBuffers = &cmd;
         vkQueueSubmit(m_queue, 1, &submit_info, VK_NULL_HANDLE);
-        vkQueueWaitIdle(m_queue);  // Wait for completion
+        vkQueueWaitIdle(m_queue); // Wait for completion
 
         vkFreeCommandBuffers(m_device, m_cmd_pool, 1, &cmd);
     }
-
 
     void NDIView::prepare_textures()
     {
@@ -245,7 +244,7 @@ namespace mrv
         const VkFormat tex_format = VK_FORMAT_B8G8R8A8_UNORM;
         const uint32_t tex_colors[DEMO_TEXTURE_COUNT][2] = {
             // B G R A     B G R A
-            {0xffff0000, 0xff00ff00},  // Red, Green
+            {0xffff0000, 0xff00ff00}, // Red, Green
         };
 
         // Query if image supports texture format
@@ -747,24 +746,24 @@ namespace mrv
     void NDIView::_exitThreads()
     {
         TLRENDER_P();
-        
+
         p.videoThread.running = false;
         if (p.videoThread.thread.joinable())
             p.videoThread.thread.join();
-                    
+
         p.audioThread.running = false;
         if (p.audioThread.thread.joinable())
             p.audioThread.thread.join();
     }
-    
+
     void NDIView::_init()
     {
         TLRENDER_P();
 
         // Some Vulkan settings
-        m_validate = true;
+        m_validate = false;
         m_use_staging_buffer = false;
-        
+
         mode(FL_RGB | FL_DOUBLE | FL_ALPHA);
         m_vert_shader_module = VK_NULL_HANDLE;
         m_frag_shader_module = VK_NULL_HANDLE;
@@ -773,38 +772,32 @@ namespace mrv
             throw std::runtime_error("Could not initialize NDI library");
 
         p.findThread.running = true;
-        p.findThread.thread =
-            std::thread(
-                [this]
-                    {
-                        try
-                        {
-                            _findThread();
-                        }
-                        catch(std::exception& e)
-                        {
-                            std::cerr << e.what() << std::endl;
-                        }
-                    });
+        p.findThread.thread = std::thread(
+            [this]
+            {
+                try
+                {
+                    _findThread();
+                }
+                catch (std::exception& e)
+                {
+                    std::cerr << e.what() << std::endl;
+                }
+            });
     }
-    
+
     void NDIView::_startThreads()
     {
         TLRENDER_P();
-        
+
         p.videoThread.running = true;
-        p.videoThread.thread =
-            std::thread(
-                [this]
-                    {
-                        _videoThread();
-                    });
+        p.videoThread.thread = std::thread([this] { _videoThread(); });
     }
-    
+
     void NDIView::prepare()
     {
         TLRENDER_P();
-        
+
         prepare_textures();
         prepare_vertices();
         prepare_descriptor_layout();
@@ -812,13 +805,12 @@ namespace mrv
         prepare_pipeline();
         prepare_descriptor_pool();
         prepare_descriptor_set();
-
     }
-    
+
     void NDIView::update_texture()
     {
         TLRENDER_P();
-    
+
         VkCommandBuffer update_cmd;
         VkCommandBufferAllocateInfo cmdAllocInfo = {};
         cmdAllocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -832,14 +824,11 @@ namespace mrv
         vkBeginCommandBuffer(update_cmd, &cmdBeginInfo);
 
         // Transition to GENERAL for CPU writes
-        set_image_layout(update_cmd, m_textures[0].image,
-                         VK_IMAGE_ASPECT_COLOR_BIT,
-                         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-                         VK_IMAGE_LAYOUT_GENERAL,
-                         VK_ACCESS_SHADER_READ_BIT,
-                         VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-                         VK_ACCESS_HOST_WRITE_BIT,
-                         VK_PIPELINE_STAGE_HOST_BIT);
+        set_image_layout(
+            update_cmd, m_textures[0].image, VK_IMAGE_ASPECT_COLOR_BIT,
+            VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_IMAGE_LAYOUT_GENERAL,
+            VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+            VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT);
 
         vkEndCommandBuffer(update_cmd);
         VkSubmitInfo submitInfo = {};
@@ -847,18 +836,18 @@ namespace mrv
         submitInfo.commandBufferCount = 1;
         submitInfo.pCommandBuffers = &update_cmd;
         vkQueueSubmit(m_queue, 1, &submitInfo, VK_NULL_HANDLE);
-        vkQueueWaitIdle(m_queue);  // Synchronize before CPU write
+        vkQueueWaitIdle(m_queue); // Synchronize before CPU write
 
         void* data;
         vkMapMemory(m_device, m_textures[0].mem, 0, m_mem_reqs.size, 0, &data);
-    
+
         uint32_t* pixels = (uint32_t*)data;
         uint8_t intensity = (p.frame_counter % 255);
-        pixels[0] = (intensity << 16) | 0xFF;        // Red
-        pixels[1] = (intensity << 8) | 0xFF;         // Green
-        pixels[2] = (intensity) | 0xFF;              // Blue
-        pixels[3] = ((255 - intensity) << 16) | 0xFF;// Inverted Red
-    
+        pixels[0] = (intensity << 16) | 0xFF;         // Red
+        pixels[1] = (intensity << 8) | 0xFF;          // Green
+        pixels[2] = (intensity) | 0xFF;               // Blue
+        pixels[3] = ((255 - intensity) << 16) | 0xFF; // Inverted Red
+
         vkUnmapMemory(m_device, m_textures[0].mem);
 
         // Reallocate command buffer for second transition
@@ -866,19 +855,16 @@ namespace mrv
         vkBeginCommandBuffer(update_cmd, &cmdBeginInfo);
 
         // Transition back to SHADER_READ_ONLY_OPTIMAL
-        set_image_layout(update_cmd, m_textures[0].image,
-                         VK_IMAGE_ASPECT_COLOR_BIT,
-                         VK_IMAGE_LAYOUT_GENERAL,
-                         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-                         VK_ACCESS_HOST_WRITE_BIT,
-                         VK_PIPELINE_STAGE_HOST_BIT,
-                         VK_ACCESS_SHADER_READ_BIT,
-                         VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+        set_image_layout(
+            update_cmd, m_textures[0].image, VK_IMAGE_ASPECT_COLOR_BIT,
+            VK_IMAGE_LAYOUT_GENERAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+            VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT,
+            VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
 
         vkEndCommandBuffer(update_cmd);
         submitInfo.pCommandBuffers = &update_cmd;
         vkQueueSubmit(m_queue, 1, &submitInfo, VK_NULL_HANDLE);
-        vkQueueWaitIdle(m_queue);  // Synchronize before rendering
+        vkQueueWaitIdle(m_queue); // Synchronize before rendering
 
         vkFreeCommandBuffers(m_device, m_cmd_pool, 1, &update_cmd);
     }
@@ -886,7 +872,7 @@ namespace mrv
     void NDIView::draw()
     {
         TLRENDER_P();
-        
+
         // Background color
         draw_begin();
 
@@ -907,19 +893,20 @@ namespace mrv
     void NDIView::_videoThread()
     {
         TLRENDER_P();
-        while(p.videoThread.running)
+        while (p.videoThread.running)
         {
             {
                 std::unique_lock<std::mutex> lock(p.findMutex.mutex);
                 if (p.currentNDISource.empty())
                     continue;
             }
-            
             // We now have at least one source, so we create a receiver to
             // look at it.
+            
             NDIlib_recv_create_t NDI_recv_create_desc;
             NDI_recv_create_desc.p_ndi_recv_name = "mrv2 HDR Receiver";
-            NDI_recv_create_desc.source_to_connect_to = p.currentNDISource.c_str();
+            NDI_recv_create_desc.source_to_connect_to =
+                p.currentNDISource.c_str();
             NDI_recv_create_desc.color_format = NDIlib_recv_color_format_best;
 
             // Create the receiver
@@ -929,24 +916,28 @@ namespace mrv
 
             // The descriptors
             NDIlib_video_frame_t video_frame;
-            NDIlib_audio_frame_t audio_frame;  // not used yet
+            NDIlib_audio_frame_t audio_frame; // not used yet
 
             // Run for one minute
             const auto start = std::chrono::high_resolution_clock::now();
-            while (p.videoThread.running) {
-                
-                switch (NDIlib_recv_capture(p.NDI_recv, &video_frame,
-                                            nullptr, nullptr, 1000)) {
-                //     // No data
-                // case NDIlib_frame_type_none:
-                //     printf("No data received.\n");
-                //     break;
+            while (p.videoThread.running)
+            {
+
+                switch (NDIlib_recv_capture(
+                    p.NDI_recv, &video_frame, nullptr, nullptr, 1000))
+                {
+                    //     // No data
+                    // case NDIlib_frame_type_none:
+                    //     printf("No data received.\n");
+                    //     break;
 
                     // Video data
                 case NDIlib_frame_type_video:
-                    fprintf(stderr, "Video data received (%dx%d).\n",
-                            video_frame.xres, video_frame.yres);
-                    if (video_frame.p_metadata) {
+                    fprintf(
+                        stderr, "Video data received (%dx%d).\n",
+                        video_frame.xres, video_frame.yres);
+                    if (video_frame.p_metadata)
+                    {
                         // Parsing XML metadata
                         rapidxml::xml_document<> doc;
                         doc.parse<0>((char*)video_frame.p_metadata);
@@ -983,7 +974,8 @@ namespace mrv
                             }
                         }
                     }
-                    if (video_frame.p_data) {
+                    if (video_frame.p_data)
+                    {
                         // Video frame buffer.
                         p.frame_counter++;
                         redraw();
@@ -991,11 +983,12 @@ namespace mrv
                     NDIlib_recv_free_video(p.NDI_recv, &video_frame);
                     break;
 
-                //     // Audio data
-                // case NDIlib_frame_type_audio:
-                //     printf("Audio data received (%d samples).\n", audio_frame.no_samples);
-                //     NDIlib_recv_free_audio(p.NDI_recv, &audio_frame);
-                //     break;
+                    //     // Audio data
+                    // case NDIlib_frame_type_audio:
+                    //     printf("Audio data received (%d samples).\n",
+                    //     audio_frame.no_samples);
+                    //     NDIlib_recv_free_audio(p.NDI_recv, &audio_frame);
+                    //     break;
 
                     // Everything else
                 default:
@@ -1003,45 +996,46 @@ namespace mrv
                 }
             }
         }
-        
+
         // Destroy the receiver
         NDIlib_recv_destroy(p.NDI_recv);
     }
-        
+
     void NDIView::_findThread()
     {
         TLRENDER_P();
 
         const NDIlib_source_t* sources = nullptr;
-        
+
         p.NDI_find = NDIlib_find_create_v2();
         if (!p.NDI_find)
             throw std::runtime_error("could not create ndi find");
 
-        
         while (p.findThread.running)
         {
             using namespace std::chrono;
             for (const auto start = high_resolution_clock::now();
                  high_resolution_clock::now() - start < seconds(3);)
             {
-                // Wait up till 1 second to check for new sources to be added or removed
-                if (!NDIlib_find_wait_for_sources(p.NDI_find,
-                                                  1000 /* milliseconds */)) {
+                // Wait up till 1 second to check for new sources to be added or
+                // removed
+                if (!NDIlib_find_wait_for_sources(
+                        p.NDI_find, 1000 /* milliseconds */))
+                {
                     break;
                 }
             }
-            
+
             uint32_t no_sources = 0;
 
             std::unique_lock lock(p.findMutex.mutex);
             p.NDIsources.clear();
-            
+
             // Get the updated list of sources
             while (!no_sources)
             {
-                sources = NDIlib_find_get_current_sources(p.NDI_find,
-                                                          &no_sources);
+                sources =
+                    NDIlib_find_get_current_sources(p.NDI_find, &no_sources);
             }
 
             for (int i = 0; i < no_sources; ++i)
@@ -1053,7 +1047,7 @@ namespace mrv
             {
                 std::string oldSource = p.currentNDISource;
                 p.currentNDISource = p.NDIsources[0];
-                
+
                 if (p.currentNDISource != oldSource)
                 {
                     _exitThreads();
@@ -1136,5 +1130,5 @@ namespace mrv
             m_device, &pPipelineLayoutCreateInfo, NULL, &m_pipeline_layout);
         VK_CHECK_RESULT(result);
     }
-    
+
 } // namespace mrv
