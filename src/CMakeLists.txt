@@ -71,17 +71,12 @@ else()
     set(FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid)
 endif()
 
-if(WIN32 AND FLTK_BUILD_SHARED_LIBS)
-    add_definitions(-DFL_DLL)
-endif()
-
-
 message( STATUS "Found FLTK: ${FLTK_INCLUDE_DIR}" )
 message( STATUS "FLTK LIBRARIES: ${FLTK_gl_LIBRARY} ${FLTK_LIBRARIES}" )
 message( STATUS "FLTK_FLUID_EXECUTABLE: ${FLTK_FLUID_EXECUTABLE}" )
 
 
-find_package(Intl)
+find_package(Intl REQUIRED)
 find_package(tlRender REQUIRED)
 find_package(nlohmann_json REQUIRED)
 find_package(glfw3 REQUIRED)

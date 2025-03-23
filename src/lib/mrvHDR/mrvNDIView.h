@@ -32,7 +32,7 @@ namespace mrv
     public:
         NDIView(int x, int y, int w, int h, const char* l = 0);
         NDIView(int w, int h, const char* l = 0);
-        ~NDIView();
+        virtual ~NDIView();
 
         void prepare() FL_OVERRIDE;
         void destroy_resources() FL_OVERRIDE;

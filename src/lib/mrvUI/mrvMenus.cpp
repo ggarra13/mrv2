@@ -837,7 +837,6 @@ namespace mrv
             if (displayOptions.ignoreChromaticities)
                 item->set();
 
-#ifndef TLRENDER_GL
             const timeline::HDROptions& hdrOptions = uiView->getHDROptions();
             idx = menu->add(
                 _("Render/HDR/Tonemap"), kToggleHDRTonemap.hotkey(),
@@ -845,10 +844,8 @@ namespace mrv
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
             if (hdrOptions.tonemap)
                 item->set();
-#else
-            const timeline::HDROptions& hdrOptions = uiView->getHDROptions();
-            int selected = static_cast<int>(hdrOptions.algorithm);
 
+            int selected = static_cast<int>(hdrOptions.algorithm);
             mode = FL_MENU_RADIO;
             if (numFiles == 0)
                 mode |= FL_MENU_INACTIVE;
@@ -866,7 +863,6 @@ namespace mrv
                     item->set();
                 ++tonemap;
             }
-#endif
         }
 
         timeline::Playback playback = timeline::Playback::Stop;

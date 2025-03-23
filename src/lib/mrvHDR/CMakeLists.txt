@@ -10,13 +10,24 @@ set(SOURCES
     mrvNDIView.cpp
 )
 
-set(LIBRARIES ${FLTK_LIBRARIES} Vulkan::Vulkan)
+find_package(Intl REQUIRED)
+find_package(Vulkan REQUIRED
+    COMPONENTS
+    glslang
+    shaderc_combined
+    SPIRV-Tools)
 
+set(LIBRARIES ${FLTK_LIBRARIES}
+    Vulkan::Vulkan
+    Vulkan::shaderc_combined
+    Vulkan::SPIRV-Tools
+    Vulkan::glslang
+    ${Intl_LIBRARIES}
+)
 
 add_library(mrvHDR ${SOURCES} ${HEADERS})
 
 files_to_absolute_paths()
-
 target_link_libraries(mrvHDR PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE} )
 set_target_properties(mrvHDR PROPERTIES FOLDER lib)
 

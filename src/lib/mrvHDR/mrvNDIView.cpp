@@ -34,6 +34,8 @@
 
 #include "mrvHDR/mrvNDIView.h"
 
+#undef printf
+
 namespace
 {
     const char* kModule = "ndi_viewer";
@@ -942,7 +944,8 @@ namespace mrv
 
                     // Video data
                 case NDIlib_frame_type_video:
-                    printf("Video data received (%dx%d).\n", video_frame.xres, video_frame.yres);
+                    fprintf(stderr, "Video data received (%dx%d).\n",
+                            video_frame.xres, video_frame.yres);
                     if (video_frame.p_metadata) {
                         // Parsing XML metadata
                         rapidxml::xml_document<> doc;
@@ -957,7 +960,7 @@ namespace mrv
                         rapidxml::xml_attribute<>* attr_primaries = root->first_attribute("primaries");
 
                         // Display color information
-                        printf("Video metadata color info (transfer: %s, matrix: %s, primaries: %s)\n", attr_transfer->value(), attr_matrix->value(), attr_primaries->value());
+                        fprintf(stderr, "Video metadata color info (transfer: %s, matrix: %s, primaries: %s)\n", attr_transfer->value(), attr_matrix->value(), attr_primaries->value());
                     }
                     if (video_frame.p_data) {
                         // Video frame buffer.

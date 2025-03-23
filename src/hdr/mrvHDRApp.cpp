@@ -145,7 +145,7 @@ namespace mrv
         {
             // Cannot run NDI. Most likely because the CPU is not sufficient (see SDK documentation).
             // you can check this directly with a call to NDIlib_is_supported_CPU()
-            printf("Cannot run NDI.");
+            std::cerr << "Cannot run NDI." << std::endl;
             _exit = -1;
             return;
         }

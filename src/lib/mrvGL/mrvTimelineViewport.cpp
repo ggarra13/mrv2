@@ -3403,12 +3403,6 @@ namespace mrv
         i = p.tagData.find("hdr");
         if (i != p.tagData.end())
         {
-            // In OpenGL we cannot support native directly, so we tonemap
-            // it.
-#ifdef TLRENDER_GL
-            p.hdrOptions.tonemap = true;
-#endif
-
             if (p.hdr != i->second)
             {
                 p.hdr = i->second;

@@ -8,7 +8,9 @@ set(FL_SOURCES
 
 FLTK_WRAP_UI( hdr ${FL_SOURCES} )
 
-set(HEADERS )
+set(HEADERS
+    mrvHDRApp.h
+)
 set(SOURCES
     ${hdr_FLTK_UI_SRCS}
     mrvHDRApp.cpp
@@ -17,21 +19,29 @@ set(SOURCES
 files_to_absolute_paths()
 set( PO_SOURCES ${PO_FILES} ${PO_SOURCES} PARENT_SCOPE)
 
+find_package(Intl REQUIRED)
+
 if (WIN32)
     enable_language("RC")
     set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_CURRENT_SOURCE_DIR}/app.rc")
     list( APPEND SOURCES ${APP_ICON_RESOURCE_WINDOWS} )
 endif()
 
-set(LIBRARIES mrvBaseApp mrvHDR mrvCore tlRender ${Intl_LIBRARIES})
+set(LIBRARIES
+    mrvBaseApp
+    mrvHDR
+    mrvCore
+    ${Intl_LIBRARIES})
 
-if(WIN32)
+if (WIN32)
     list(APPEND LIBRARIES ${FLTK_LIBRARIES})
 else()
-    list(APPEND LIBRARIES fltk::vk-shared ${FLTK_LIBRARIES})
+    list(APPEND LIBRARIES ${FLTK_LIBRARIES} fltk::vk-shared)
 endif()
 
 if( APPLE )
+    set(OSX_FRAMEWORKS "-framework IOKit")
+    list(APPEND LIBRARIES ${OSX_FRAMEWORKS})
     set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
     set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib;/usr/local/lib")
 endif()
