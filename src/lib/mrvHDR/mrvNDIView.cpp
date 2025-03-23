@@ -47,21 +47,26 @@ namespace
 namespace
 {
     // Function to unescape &quot; back to normal quotes (")
-    std::string unescape_quotes_from_xml(const std::string& xml_escaped_str) {
+    std::string unescape_quotes_from_xml(const std::string& xml_escaped_str)
+    {
         std::string json_str;
         size_t pos = 0;
-        while (pos < xml_escaped_str.size()) {
-            if (xml_escaped_str.compare(pos, 6, "&quot;") == 0) {
-                json_str += '"';  // Replace &quot; with "
-                pos += 6;         // Skip over &quot;
-            } else {
+        while (pos < xml_escaped_str.size())
+        {
+            if (xml_escaped_str.compare(pos, 6, "&quot;") == 0)
+            {
+                json_str += '"'; // Replace &quot; with "
+                pos += 6;        // Skip over &quot;
+            }
+            else
+            {
                 json_str += xml_escaped_str[pos];
                 pos++;
             }
         }
         return json_str;
     }
-}
+} // namespace
 
 namespace mrv
 {
@@ -923,7 +928,7 @@ namespace mrv
             }
             // We now have at least one source, so we create a receiver to
             // look at it.
-            
+
             NDIlib_recv_create_t NDI_recv_create_desc;
             NDI_recv_create_desc.p_ndi_recv_name = "mrv2 HDR Receiver";
             NDI_recv_create_desc.source_to_connect_to =
@@ -964,26 +969,41 @@ namespace mrv
                         doc.parse<0>((char*)video_frame.p_metadata);
 
                         // Get root node
-                        rapidxml::xml_node<>* root = doc.first_node("ndi_color_info");
+                        rapidxml::xml_node<>* root =
+                            doc.first_node("ndi_color_info");
 
                         // Get attributes
-                        rapidxml::xml_attribute<>* attr_transfer = root->first_attribute("transfer");
-                        rapidxml::xml_attribute<>* attr_matrix = root->first_attribute("matrix");
-                        rapidxml::xml_attribute<>* attr_primaries = root->first_attribute("primaries");
-                        rapidxml::xml_attribute<>* attr_mrv2 = root->first_attribute("mrv2");
+                        rapidxml::xml_attribute<>* attr_transfer =
+                            root->first_attribute("transfer");
+                        rapidxml::xml_attribute<>* attr_matrix =
+                            root->first_attribute("matrix");
+                        rapidxml::xml_attribute<>* attr_primaries =
+                            root->first_attribute("primaries");
+                        rapidxml::xml_attribute<>* attr_mrv2 =
+                            root->first_attribute("mrv2");
 
                         const std::string& jsonString =
                             unescape_quotes_from_xml(attr_mrv2->value());
 
-                        const nlohmann::json& j = nlohmann::json(jsonString);
+                        const nlohmann::json& j =
+                            nlohmann::json::parse(jsonString);
 
                         using namespace tl;
                         image::HDRData hdrData = j.get<image::HDRData>();
-                        
+
                         // Display color information
-                        fprintf(stderr, "Video metadata color info (transfer: %s, matrix: %s, primaries: %s)\n", attr_transfer->value(), attr_matrix->value(), attr_primaries->value());
-                        
-                        
+                        fprintf(
+                            stderr,
+                            "Video metadata color info (transfer: %s, matrix: "
+                            "%s, primaries: %s)\n",
+                            attr_transfer->value(), attr_matrix->value(),
+                            attr_primaries->value());
+
+                        std::cerr << "primaries--------" << std::endl;
+                        std::cerr << hdrData.primaries[0] << " "
+                                  << hdrData.primaries[1] << " "
+                                  << hdrData.primaries[2] << " "
+                                  << hdrData.primaries[3] << std::endl;
                     }
                     if (video_frame.p_data)
                     {
