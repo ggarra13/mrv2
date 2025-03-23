@@ -34,9 +34,14 @@
 
 #include "mrvHDR/mrvNDIView.h"
 
+namespace
+{
+    const char* kModule = "ndi_viewer";
+    const double kTimeout = 0.005;
+} // namespace
+
 namespace mrv
 {
-        
     struct NDIView::Private
     {
         NDIlib_find_instance_t NDI_find = nullptr;
@@ -85,6 +90,8 @@ namespace mrv
             std::atomic<bool> running;
         };
         AudioThread audioThread;
+        
+        uint32_t frame_counter = 0;
     };
 
     NDIView::~NDIView()
@@ -115,94 +122,13 @@ namespace mrv
         _init();
     }
 
-    // Uses m_cmd_pool, m_setup_cmd
-    void NDIView::set_image_layout(
-        VkImage image, VkImageAspectFlags aspectMask,
-        VkImageLayout old_image_layout, VkImageLayout new_image_layout,
-        int srcAccessMaskInt)
-    {
-        VkResult err;
 
-        VkAccessFlagBits srcAccessMask =
-            static_cast<VkAccessFlagBits>(srcAccessMaskInt);
-        if (m_setup_cmd == VK_NULL_HANDLE)
-        {
-            VkCommandBufferAllocateInfo cmd = {};
-            cmd.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-            cmd.pNext = NULL;
-            cmd.commandPool = m_cmd_pool;
-            cmd.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-            cmd.commandBufferCount = 1;
 
-            err = vkAllocateCommandBuffers(m_device, &cmd, &m_setup_cmd);
-            VkCommandBufferBeginInfo cmd_buf_info = {};
-            cmd_buf_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-            cmd_buf_info.pNext = NULL;
-            cmd_buf_info.flags = 0;
-            cmd_buf_info.pInheritanceInfo = NULL;
-
-            err = vkBeginCommandBuffer(m_setup_cmd, &cmd_buf_info);
-        }
-
-        VkImageMemoryBarrier image_memory_barrier = {};
-        image_memory_barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-        image_memory_barrier.pNext = NULL;
-        image_memory_barrier.srcAccessMask = srcAccessMask;
-        image_memory_barrier.dstAccessMask = 0;
-        image_memory_barrier.oldLayout = old_image_layout;
-        image_memory_barrier.newLayout = new_image_layout;
-        image_memory_barrier.image = image;
-        image_memory_barrier.subresourceRange = {aspectMask, 0, 1, 0, 1};
-
-        VkPipelineStageFlags src_stages =
-            VK_PIPELINE_STAGE_HOST_BIT; // Default for host writes
-        VkPipelineStageFlags dest_stages =
-            VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT; // Default
-
-        // Adjust source and destination stages based on access and layout
-        if (srcAccessMask & VK_ACCESS_HOST_WRITE_BIT)
-        {
-            src_stages = VK_PIPELINE_STAGE_HOST_BIT;
-        }
-        else if (srcAccessMask & VK_ACCESS_TRANSFER_WRITE_BIT)
-        {
-            src_stages = VK_PIPELINE_STAGE_TRANSFER_BIT;
-        }
-
-        if (new_image_layout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL)
-        {
-            image_memory_barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
-            dest_stages = VK_PIPELINE_STAGE_TRANSFER_BIT;
-        }
-        else if (new_image_layout == VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL)
-        {
-            image_memory_barrier.dstAccessMask =
-                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-            dest_stages = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-        }
-        else if (
-            new_image_layout ==
-            VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL)
-        {
-            image_memory_barrier.dstAccessMask =
-                VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
-            dest_stages = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
-        }
-        else if (new_image_layout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
-        {
-            image_memory_barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
-            dest_stages = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-        }
-
-        vkCmdPipelineBarrier(
-            m_setup_cmd, src_stages, dest_stages, 0, 0, NULL, 0, NULL, 1,
-            &image_memory_barrier);
-    }
-
-    void NDIView::prepare_texture_image(
-        const uint32_t* tex_colors, Fl_Vk_Texture* tex_obj,
-        VkImageTiling tiling, VkImageUsageFlags usage, VkFlags required_props)
-    {
+    void NDIView::prepare_texture_image(const uint32_t *tex_colors,
+                                        Fl_Vk_Texture* tex_obj,
+                                        VkImageTiling tiling,
+                                        VkImageUsageFlags usage,
+                                        VkFlags required_props) {
         const VkFormat tex_format = VK_FORMAT_B8G8R8A8_UNORM;
         const int32_t tex_width = 2;
         const int32_t tex_height = 2;
@@ -224,26 +150,23 @@ namespace mrv
         image_create_info.tiling = tiling;
         image_create_info.usage = usage;
         image_create_info.flags = 0;
-        image_create_info.initialLayout = VK_IMAGE_LAYOUT_PREINITIALIZED;
-
+        image_create_info.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    
         VkMemoryAllocateInfo mem_alloc = {};
         mem_alloc.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
         mem_alloc.pNext = NULL;
         mem_alloc.allocationSize = 0;
         mem_alloc.memoryTypeIndex = 0;
 
-        VkMemoryRequirements mem_reqs;
-
-        result =
-            vkCreateImage(m_device, &image_create_info, NULL, &tex_obj->image);
+        result = vkCreateImage(m_device, &image_create_info, NULL, &tex_obj->image);
         VK_CHECK_RESULT(result);
 
-        vkGetImageMemoryRequirements(m_device, tex_obj->image, &mem_reqs);
+        vkGetImageMemoryRequirements(m_device, tex_obj->image, &m_mem_reqs);
 
-        mem_alloc.allocationSize = mem_reqs.size;
-        pass = memory_type_from_properties(
-            mem_reqs.memoryTypeBits, required_props,
-            &mem_alloc.memoryTypeIndex);
+        mem_alloc.allocationSize = m_mem_reqs.size;
+        pass = memory_type_from_properties(m_mem_reqs.memoryTypeBits,
+                                           required_props,
+                                           &mem_alloc.memoryTypeIndex);
 
         /* allocate memory */
         result = vkAllocateMemory(m_device, &mem_alloc, NULL, &tex_obj->mem);
@@ -253,26 +176,25 @@ namespace mrv
         result = vkBindImageMemory(m_device, tex_obj->image, tex_obj->mem, 0);
         VK_CHECK_RESULT(result);
 
-        if (required_props & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
-        {
+        if (required_props & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) {
             VkImageSubresource subres = {};
             subres.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
             subres.mipLevel = 0;
             subres.arrayLayer = 0;
             VkSubresourceLayout layout;
-            void* data;
+            void *data;
             int32_t x, y;
 
-            vkGetImageSubresourceLayout(
-                m_device, tex_obj->image, &subres, &layout);
+            vkGetImageSubresourceLayout(m_device, tex_obj->image, &subres,
+                                        &layout);
 
-            result = vkMapMemory(
-                m_device, tex_obj->mem, 0, mem_alloc.allocationSize, 0, &data);
+            result = vkMapMemory(m_device, tex_obj->mem, 0,
+                                 mem_alloc.allocationSize, 0, &data);
             VK_CHECK_RESULT(result);
 
-            for (y = 0; y < tex_height; y++)
-            {
-                uint32_t* row = (uint32_t*)((char*)data + layout.rowPitch * y);
+            // Tile the texture over tex_height and tex_width
+            for (y = 0; y < tex_height; y++) {
+                uint32_t *row = (uint32_t *)((char *)data + layout.rowPitch * y);
                 for (x = 0; x < tex_width; x++)
                     row[x] = tex_colors[(x & 1) ^ (y & 1)];
             }
@@ -280,25 +202,55 @@ namespace mrv
             vkUnmapMemory(m_device, tex_obj->mem);
         }
 
-        tex_obj->imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-        set_image_layout(
-            tex_obj->image, VK_IMAGE_ASPECT_COLOR_BIT,
-            VK_IMAGE_LAYOUT_PREINITIALIZED, tex_obj->imageLayout,
-            VK_ACCESS_HOST_WRITE_BIT);
-        /* setting the image layout does not reference the actual memory so no
-         * need to add a mem ref */
+        VkCommandBuffer cmd;
+        VkCommandBufferAllocateInfo cmdAllocInfo = {};
+        cmdAllocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+        cmdAllocInfo.commandPool = m_cmd_pool;
+        cmdAllocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+        cmdAllocInfo.commandBufferCount = 1;
+        vkAllocateCommandBuffers(m_device, &cmdAllocInfo, &cmd);
+
+        VkCommandBufferBeginInfo cmdBeginInfo = {};
+        cmdBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+        vkBeginCommandBuffer(cmd, &cmdBeginInfo);
+    
+        // Initial transition to shader-readable layout
+        set_image_layout(cmd, tex_obj->image,
+                         VK_IMAGE_ASPECT_COLOR_BIT,
+                         VK_IMAGE_LAYOUT_UNDEFINED,   // Initial layout
+                         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                         0, // No previous access
+                         VK_PIPELINE_STAGE_HOST_BIT, // Host stage
+                         VK_ACCESS_SHADER_READ_BIT,  // Shader read
+                         VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+    
+        // Submit the command buffer to apply the transition
+        vkEndCommandBuffer(cmd);
+        VkSubmitInfo submit_info = {};
+        submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+        submit_info.commandBufferCount = 1;
+        submit_info.pCommandBuffers = &cmd;
+        vkQueueSubmit(m_queue, 1, &submit_info, VK_NULL_HANDLE);
+        vkQueueWaitIdle(m_queue);  // Wait for completion
+
+        vkFreeCommandBuffers(m_device, m_cmd_pool, 1, &cmd);
     }
 
-    void NDIView::prepare_textures(const uint32_t tex_colors[1][2])
-    {
-        const VkFormat tex_format = VK_FORMAT_B8G8R8A8_UNORM;
-        VkFormatProperties props;
-        uint32_t i;
-        VkResult result;
 
+    void NDIView::prepare_textures()
+    {
+        VkResult result;
+        const VkFormat tex_format = VK_FORMAT_B8G8R8A8_UNORM;
+        const uint32_t tex_colors[DEMO_TEXTURE_COUNT][2] = {
+            // B G R A     B G R A
+            {0xffff0000, 0xff00ff00},  // Red, Green
+        };
+
+        // Query if image supports texture format
+        VkFormatProperties props;
         vkGetPhysicalDeviceFormatProperties(m_gpu, tex_format, &props);
 
-        for (i = 0; i < DEMO_TEXTURE_COUNT; i++)
+        for (int i = 0; i < DEMO_TEXTURE_COUNT; i++)
         {
             if ((props.linearTilingFeatures &
                  VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT) &&
@@ -315,56 +267,7 @@ namespace mrv
                 props.optimalTilingFeatures &
                 VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT)
             {
-                /* Must use staging buffer to copy linear texture to optimized
-                 */
-                Fl_Vk_Texture staging_texture;
-
-                memset(&staging_texture, 0, sizeof(staging_texture));
-                prepare_texture_image(
-                    tex_colors[i], &staging_texture, VK_IMAGE_TILING_LINEAR,
-                    VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
-                    VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                        VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
-                prepare_texture_image(
-                    tex_colors[i], &m_textures[i], VK_IMAGE_TILING_OPTIMAL,
-                    (VK_IMAGE_USAGE_TRANSFER_DST_BIT |
-                     VK_IMAGE_USAGE_SAMPLED_BIT),
-                    VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-
-                set_image_layout(
-                    staging_texture.image, VK_IMAGE_ASPECT_COLOR_BIT,
-                    staging_texture.imageLayout,
-                    VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, 0);
-
-                set_image_layout(
-                    m_textures[i].image, VK_IMAGE_ASPECT_COLOR_BIT,
-                    m_textures[i].imageLayout,
-                    VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 0);
-
-                VkImageCopy copy_region = {};
-                copy_region.srcSubresource = {
-                    VK_IMAGE_ASPECT_COLOR_BIT, 0, 0, 1};
-                copy_region.srcOffset = {0, 0, 0};
-                copy_region.dstSubresource = {
-                    VK_IMAGE_ASPECT_COLOR_BIT, 0, 0, 1};
-                copy_region.dstOffset = {0, 0, 0};
-                copy_region.extent = {
-                    (uint32_t)staging_texture.tex_width,
-                    (uint32_t)staging_texture.tex_height, 1};
-                vkCmdCopyImage(
-                    m_setup_cmd, staging_texture.image,
-                    VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, m_textures[i].image,
-                    VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copy_region);
-
-                set_image_layout(
-                    m_textures[i].image, VK_IMAGE_ASPECT_COLOR_BIT,
-                    VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                    m_textures[i].imageLayout, 0);
-
-                flush_init_cmd();
-
-                destroy_texture_image(&staging_texture);
+                Fl::fatal("m_use_staging_buffer is unimplemented");
             }
             else
             {
@@ -842,8 +745,6 @@ namespace mrv
     void NDIView::_exitThreads()
     {
         TLRENDER_P();
-
-        p.currentNDISource.clear();
         
         p.videoThread.running = false;
         if (p.videoThread.thread.joinable())
@@ -860,7 +761,7 @@ namespace mrv
 
         // Some Vulkan settings
         m_validate = true;
-        m_use_staging_buffer = true;
+        m_use_staging_buffer = false;
         
         mode(FL_RGB | FL_DOUBLE | FL_ALPHA);
         m_vert_shader_module = VK_NULL_HANDLE;
@@ -883,8 +784,6 @@ namespace mrv
                             std::cerr << e.what() << std::endl;
                         }
                     });
-
-        _startThreads();
     }
     
     void NDIView::_startThreads()
@@ -896,8 +795,6 @@ namespace mrv
             std::thread(
                 [this]
                     {
-                        TLRENDER_P();
-                        
                         _videoThread();
                     });
     }
@@ -906,12 +803,7 @@ namespace mrv
     {
         TLRENDER_P();
         
-        const uint32_t tex_colors[DEMO_TEXTURE_COUNT][2] = {
-            {0xffff0000, 0xff00ff00},
-        };
-        
-        prepare_textures(tex_colors);
-        
+        prepare_textures();
         prepare_vertices();
         prepare_descriptor_layout();
         prepare_render_pass();
@@ -920,16 +812,83 @@ namespace mrv
         prepare_descriptor_set();
 
     }
+    
+    void NDIView::update_texture()
+    {
+        TLRENDER_P();
+    
+        VkCommandBuffer update_cmd;
+        VkCommandBufferAllocateInfo cmdAllocInfo = {};
+        cmdAllocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+        cmdAllocInfo.commandPool = m_cmd_pool;
+        cmdAllocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+        cmdAllocInfo.commandBufferCount = 1;
+        vkAllocateCommandBuffers(m_device, &cmdAllocInfo, &update_cmd);
+
+        VkCommandBufferBeginInfo cmdBeginInfo = {};
+        cmdBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+        vkBeginCommandBuffer(update_cmd, &cmdBeginInfo);
+
+        // Transition to GENERAL for CPU writes
+        set_image_layout(update_cmd, m_textures[0].image,
+                         VK_IMAGE_ASPECT_COLOR_BIT,
+                         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                         VK_IMAGE_LAYOUT_GENERAL,
+                         VK_ACCESS_SHADER_READ_BIT,
+                         VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+                         VK_ACCESS_HOST_WRITE_BIT,
+                         VK_PIPELINE_STAGE_HOST_BIT);
+
+        vkEndCommandBuffer(update_cmd);
+        VkSubmitInfo submitInfo = {};
+        submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+        submitInfo.commandBufferCount = 1;
+        submitInfo.pCommandBuffers = &update_cmd;
+        vkQueueSubmit(m_queue, 1, &submitInfo, VK_NULL_HANDLE);
+        vkQueueWaitIdle(m_queue);  // Synchronize before CPU write
+
+        void* data;
+        vkMapMemory(m_device, m_textures[0].mem, 0, m_mem_reqs.size, 0, &data);
+    
+        uint32_t* pixels = (uint32_t*)data;
+        uint8_t intensity = (p.frame_counter % 255);
+        pixels[0] = (intensity << 16) | 0xFF;        // Red
+        pixels[1] = (intensity << 8) | 0xFF;         // Green
+        pixels[2] = (intensity) | 0xFF;              // Blue
+        pixels[3] = ((255 - intensity) << 16) | 0xFF;// Inverted Red
+    
+        vkUnmapMemory(m_device, m_textures[0].mem);
+
+        // Reallocate command buffer for second transition
+        vkAllocateCommandBuffers(m_device, &cmdAllocInfo, &update_cmd);
+        vkBeginCommandBuffer(update_cmd, &cmdBeginInfo);
+
+        // Transition back to SHADER_READ_ONLY_OPTIMAL
+        set_image_layout(update_cmd, m_textures[0].image,
+                         VK_IMAGE_ASPECT_COLOR_BIT,
+                         VK_IMAGE_LAYOUT_GENERAL,
+                         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                         VK_ACCESS_HOST_WRITE_BIT,
+                         VK_PIPELINE_STAGE_HOST_BIT,
+                         VK_ACCESS_SHADER_READ_BIT,
+                         VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+
+        vkEndCommandBuffer(update_cmd);
+        submitInfo.pCommandBuffers = &update_cmd;
+        vkQueueSubmit(m_queue, 1, &submitInfo, VK_NULL_HANDLE);
+        vkQueueWaitIdle(m_queue);  // Synchronize before rendering
+
+        vkFreeCommandBuffers(m_device, m_cmd_pool, 1, &update_cmd);
+    }
 
     void NDIView::draw()
     {
-        if (!shown() || w() <= 0 || h() <= 0)
-            return;
-
+        TLRENDER_P();
+        
         // Background color
-        m_clearColor = {0.0, 0.0, 1.0, 1.0};
-
         draw_begin();
+
+        update_texture();
 
         // Draw the triangle
         VkDeviceSize offsets[1] = {0};
@@ -973,6 +932,7 @@ namespace mrv
             // Run for one minute
             const auto start = std::chrono::high_resolution_clock::now();
             while (p.videoThread.running) {
+                
                 switch (NDIlib_recv_capture(p.NDI_recv, &video_frame,
                                             nullptr, nullptr, 1000)) {
                 //     // No data
@@ -1001,11 +961,8 @@ namespace mrv
                     }
                     if (video_frame.p_data) {
                         // Video frame buffer.
-        
-                        const uint32_t tex_colors[DEMO_TEXTURE_COUNT][2] = {
-                            {0x00ff0000, 0x00ffff00},
-                        };
-                        prepare_textures(tex_colors);
+                        p.frame_counter++;
+                        redraw();
                     }
                     NDIlib_recv_free_video(p.NDI_recv, &video_frame);
                     break;
@@ -1072,10 +1029,8 @@ namespace mrv
             {
                 std::string oldSource = p.currentNDISource;
                 p.currentNDISource = p.NDIsources[0];
-
-                // \@bug:  check for oldSource.empty() should not be used
-                if (p.currentNDISource != oldSource &&
-                    !oldSource.empty())
+                
+                if (p.currentNDISource != oldSource)
                 {
                     _exitThreads();
                     _startThreads();

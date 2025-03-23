@@ -226,9 +226,13 @@ namespace mrv
         if (!ui)
             return 0;
 
-        // Open the viewer window by calling Fl::flush
-        Fl::flush();
-        return Fl::run();
+        std::cerr << "Start HDRApp::run loop" << std::endl;
+        while(ui->uiMain->shown())
+        {
+            Fl::check();
+        }
+        return 0;
+//        return Fl::run();
     }
 
     void HDRApp::setVolume(float value)

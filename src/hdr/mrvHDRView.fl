@@ -5,15 +5,15 @@ code_name {.cxx}
 decl {\#include "mrvHDR/mrvNDIView.h"} {public global
 }
 
-class HDRUI {open selected
+class HDRUI {open
 } {
   Function {make_window()} {open
   } {
-    Fl_Window uiMain {open
-      xywh {116 53 727 532} type Double hide
+    Fl_Window uiMain {open selected
+      xywh {1040 272 727 532} type Double resizable visible
     } {
       Fl_Group uiView {open
-        xywh {0 0 727 532}
+        xywh {0 0 727 532} resizable
         class {mrv::NDIView}
       } {}
     }

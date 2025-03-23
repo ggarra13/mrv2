@@ -47,7 +47,7 @@ namespace mrv
         Fl_Vk_Texture m_textures[DEMO_TEXTURE_COUNT];
 
         
-        void prepare_textures(const uint32_t[1][2]);
+        void prepare_textures();
         void prepare_vertices();
         void prepare_descriptor_layout();
         void prepare_render_pass();
@@ -55,6 +55,8 @@ namespace mrv
         void prepare_descriptor_pool();
         void prepare_descriptor_set();
 
+        void update_texture();
+        
     private:
         void _init();
         void _startThreads();
@@ -66,10 +68,6 @@ namespace mrv
             const uint32_t* tex_colors, Fl_Vk_Texture* tex_obj,
             VkImageTiling tiling, VkImageUsageFlags usage,
             VkFlags required_props);
-        void set_image_layout(
-            VkImage image, VkImageAspectFlags aspectMask,
-            VkImageLayout old_image_layout, VkImageLayout new_image_layout,
-            int srcAccessMaskInt);
 
         VkShaderModule prepare_vs();
         VkShaderModule prepare_fs();
