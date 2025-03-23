@@ -3254,6 +3254,9 @@ msgstr "Francese"
 msgid "Russian"
 msgstr "Russo"
 
+msgid "Japanese"
+msgstr "Giapponese"
+
 msgid ""
 "Need to reboot mrv2 to change language to {0}.  Are you sure you want to "
 "continue?"
@@ -3320,9 +3323,6 @@ msgstr "Italiano"
 
 msgid "Irish"
 msgstr "Irlandese"
-
-msgid "Japanese"
-msgstr "Giapponese"
 
 msgid "Korean"
 msgstr "Coreano"

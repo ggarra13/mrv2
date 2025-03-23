@@ -60,7 +60,7 @@ LanguageTable kLanguages[] = {
     {_("Portuguese"), "pt.UTF-8"},
     {_("French"), "fr.UTF-8"},
     {_("Russian"), "ru.UTF-8"},
-    // {_("Japanese"), "ja.UTF-8"},
+    {_("Japanese"), "ja.UTF-8"},
     {nullptr, nullptr}};
 
 void check_language(PreferencesUI* uiPrefs, int& language_index, mrv::App* app)
