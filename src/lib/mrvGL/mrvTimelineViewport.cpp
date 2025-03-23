@@ -898,11 +898,11 @@ namespace mrv
 
         if (value == p.displayOptions)
             return;
-        
+
         p.displayOptions = value;
 
         const auto& d = p.displayOptions[0];
-        
+
         float gamma, saturation, gain;
         if (d.levels.enabled)
         {
@@ -1000,9 +1000,9 @@ namespace mrv
                     [this](const std::vector<timeline::VideoData>& value)
                     { currentVideoCallback(value); },
                     observer::CallbackAction::Suppress);
-            
-            // needed for refreshing secondary viewport when stopped.   
-            p.videoData = player->currentVideo();       
+
+            // needed for refreshing secondary viewport when stopped.
+            p.videoData = player->currentVideo();
 
             p.switchClip = true;
         }
@@ -2226,7 +2226,7 @@ namespace mrv
 
         if (p.videoData.empty())
         {
-            p.displayOptions.resize(1);  // needed for image filters
+            p.displayOptions.resize(1); // needed for image filters
             p.ui->uiGain->value(1.0f);
             p.ui->uiGainInput->value(1.0f);
             p.ui->uiGamma->value(1.0f);
@@ -3403,11 +3403,7 @@ namespace mrv
         i = p.tagData.find("hdr");
         if (i != p.tagData.end())
         {
-            // In OpenGL we cannot support native directly, so we tonemap
-            // it.
-#ifdef TLRENDER_GL
             p.hdrOptions.tonemap = true;
-#endif
 
             if (p.hdr != i->second)
             {
@@ -3417,6 +3413,10 @@ namespace mrv
                 nlohmann::json j = nlohmann::json::parse(p.hdr);
                 p.hdrOptions.hdrData = j.get<image::HDRData>();
             }
+        }
+        else
+        {
+            p.hdrOptions.tonemap = false;
         }
 
         // \@bug: Apple (macOS Intel at least) is too slow and goes black.

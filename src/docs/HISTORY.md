@@ -14,7 +14,8 @@ v1.3.7
 - Added full support for Japanese language in the UI.
 - Fixed some warnings when starting mrv2 with PYTHONHOME set on Linux.
 - Removed the "export FLTK_BACKEND=x11" line as Wayland now is mature enough.
-
+- Fixed tonemapping not turning off when switching from an HDR movie to aces
+  SDR one.
 
   
 v1.3.6

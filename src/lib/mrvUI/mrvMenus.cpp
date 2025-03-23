@@ -104,7 +104,6 @@ namespace mrv
         menu->add(
             _("File/Open/Session"), kOpenSession.hotkey(),
             (Fl_Callback*)load_session_cb, ui);
-        
 
         mode = 0;
         if (numFiles == 0)
@@ -182,7 +181,6 @@ namespace mrv
             _("Window/Presentation"), kTogglePresentation.hotkey(),
             (Fl_Callback*)toggle_presentation_cb, ui, FL_MENU_TOGGLE);
 
-        
         const Viewport* uiView = ui->uiView;
         const Viewport* uiView2 = nullptr;
         if (ui->uiSecondary && ui->uiSecondary->window()->visible())
@@ -297,7 +295,6 @@ namespace mrv
         if (ui->uiToolsGroup->visible())
             item->set();
 
-        
         mode = FL_MENU_TOGGLE;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
@@ -307,7 +304,6 @@ namespace mrv
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (uiView->hasFrameView())
             item->set();
-        
 
         idx = menu->add(
             _("View/Safe Areas"), kSafeAreas.hotkey(),
@@ -322,7 +318,6 @@ namespace mrv
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (uiView->getDataWindow())
             item->set();
-        
 
         idx = menu->add(
             _("View/OpenEXR/Display Window"), kDisplayWindow.hotkey(),
@@ -339,8 +334,6 @@ namespace mrv
         if (uiView->getIgnoreDisplayWindow())
             item->set();
 
-        
-
         idx = menu->add(
             _("Panel/One Panel Only"), kToggleOnePanelOnly.hotkey(),
             (Fl_Callback*)toggle_one_panel_only_cb, ui,
@@ -350,8 +343,6 @@ namespace mrv
             item->set();
         else
             item->clear();
-
-        
 
         std::unordered_map<std::string, std::string > panelsMap;
         const WindowCallback* wc = kWindowCallbacks;
@@ -364,7 +355,6 @@ namespace mrv
         std::vector<std::pair<std::string, std::string>> vec(
             panelsMap.begin(), panelsMap.end());
 
-        
         // Sort the vector in ascending order based on the keys
         std::locale loc;
         std::sort(
@@ -453,7 +443,6 @@ namespace mrv
                 continue; // Unknown window check
             }
 
-            
             tmp = pair.first;
             std::string menu_name = menu_root + tmp + "\t";
             int idx = menu->add(
@@ -615,7 +604,6 @@ namespace mrv
         // Make sure to sync panels remotely.
         syncPanels();
 
-        
         {
             const timeline::DisplayOptions& displayOptions =
                 ui->app->displayOptions();
@@ -837,18 +825,15 @@ namespace mrv
             if (displayOptions.ignoreChromaticities)
                 item->set();
 
-#ifndef TLRENDER_GL
             const timeline::HDROptions& hdrOptions = uiView->getHDROptions();
             idx = menu->add(
-                _("Render/HDR/Tonemap"), kToggleHDRTonemap.hotkey(),
+                _("Render/HDR/Toggle Tonemap"), kToggleHDRTonemap.hotkey(),
                 (Fl_Callback*)toggle_hdr_tonemap_cb, ui, mode);
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
             if (hdrOptions.tonemap)
                 item->set();
-#else
-            const timeline::HDROptions& hdrOptions = uiView->getHDROptions();
-            int selected = static_cast<int>(hdrOptions.algorithm);
 
+            int selected = static_cast<int>(hdrOptions.algorithm);
             mode = FL_MENU_RADIO;
             if (numFiles == 0)
                 mode |= FL_MENU_INACTIVE;
@@ -866,7 +851,6 @@ namespace mrv
                     item->set();
                 ++tonemap;
             }
-#endif
         }
 
         timeline::Playback playback = timeline::Playback::Stop;
@@ -934,7 +918,6 @@ namespace mrv
         }
 
         // Looping
-        
 
         timeline::Loop loop = timeline::Loop::Loop;
         if (player)
@@ -1158,7 +1141,6 @@ namespace mrv
         if (displayOptions.clipInfo)
             item->set();
 
-        
         mode = FL_MENU_RADIO;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
@@ -1457,7 +1439,6 @@ namespace mrv
         //                kCopyRGBAValues.hotkey(),
         //                (Fl_Callback*)copy_pixel_rgba_cb, (void*)view);
         // }
-        
 
 #ifdef TLRENDER_OCIO
         mode = 0;
@@ -1730,7 +1711,6 @@ namespace mrv
         }
 #endif
 
-        
         if (dynamic_cast< DummyClient* >(tcp) == nullptr)
         {
             mode = FL_MENU_TOGGLE;
@@ -1939,7 +1919,6 @@ namespace mrv
 #else
         menu->textfont(ui->uiPrefs->uiFontMenus->value());
 #endif
-        
 
         menu->redraw();
     }
