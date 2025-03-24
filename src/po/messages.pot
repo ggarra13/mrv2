@@ -3660,6 +3660,9 @@ msgstr ""
 msgid "Render/HDR/Ignore Chromaticities"
 msgstr ""
 
+msgid "Render/HDR/Toggle Tonemap"
+msgstr ""
+
 msgid "Render/HDR/Tonemap"
 msgstr ""
 

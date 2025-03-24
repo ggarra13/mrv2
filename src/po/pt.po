@@ -3991,6 +3991,10 @@ msgstr "Renncia/HDR/Valores invlidos"
 msgid "Render/HDR/Ignore Chromaticities"
 msgstr "Renúncia/HDR/Ignorar as Cromáticas"
 
+#, fuzzy
+msgid "Render/HDR/Toggle Tonemap"
+msgstr "Renúncia/HDR/Mapa de tons"
+
 msgid "Render/HDR/Tonemap"
 msgstr "Renúncia/HDR/Mapa de tons"
 

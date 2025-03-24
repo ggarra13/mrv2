@@ -3938,6 +3938,10 @@ msgstr "渲染/HDR/无效值"
 msgid "Render/HDR/Ignore Chromaticities"
 msgstr "招标/HDR/忽略颜色"
 
+#, fuzzy
+msgid "Render/HDR/Toggle Tonemap"
+msgstr "招标/HDR/时针映射"
+
 msgid "Render/HDR/Tonemap"
 msgstr "招标/HDR/时针映射"
 

@@ -4046,6 +4046,10 @@ msgstr "Редакция/HDR/Неверные значения"
 msgid "Render/HDR/Ignore Chromaticities"
 msgstr "Редакция/HDR/Игнорировать хроматизм"
 
+#, fuzzy
+msgid "Render/HDR/Toggle Tonemap"
+msgstr "Редакция/HDR/Тональность"
+
 msgid "Render/HDR/Tonemap"
 msgstr "Редакция/HDR/Тональность"
 
