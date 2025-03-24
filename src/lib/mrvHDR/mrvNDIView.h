@@ -22,8 +22,18 @@
 
 #define DEMO_TEXTURE_COUNT 1
 
+namespace tl
+{
+    namespace image
+    {
+        class Image;
+    }
+}
+
+
 namespace mrv
 {
+    using namespace tl;
 
     class NDIView : public Fl_Vk_Window
     {
@@ -46,7 +56,7 @@ namespace mrv
         Fl_Vk_Mesh m_vertices;
         Fl_Vk_Texture m_textures[DEMO_TEXTURE_COUNT];
 
-        
+        void init_vk_swapchain() FL_OVERRIDE;
         void prepare_textures();
         void prepare_vertices();
         void prepare_descriptor_layout();
@@ -59,19 +69,23 @@ namespace mrv
         
     private:
         void _init();
+        void _copy(const uint8_t* video_frame);
         void _startThreads();
         void _exitThreads();
         void _findThread();
         void _videoThread();
         void _audioThread();
         void prepare_texture_image(
-            const uint32_t* tex_colors, Fl_Vk_Texture* tex_obj,
+            const float* tex_colors, Fl_Vk_Texture* tex_obj,
             VkImageTiling tiling, VkImageUsageFlags usage,
             VkFlags required_props);
 
         VkShaderModule prepare_vs();
         VkShaderModule prepare_fs();
 
+        void _create_HDR_shader();
+        void start();
+        
         TLRENDER_PRIVATE();
     };
 

@@ -226,7 +226,6 @@ namespace mrv
         if (!ui)
             return 0;
 
-        std::cerr << "Start HDRApp::run loop" << std::endl;
         while(ui->uiMain->shown())
         {
             Fl::check();

@@ -22,8 +22,11 @@
 #include <regex>
 #include <thread>
 
-#include <FL/platform.H>
-#include <FL/Fl.H>
+#include "half.h"
+
+#include <tlCore/Image.h>
+#include <tlCore/HDR.h>
+#include <tlCore/StringFormat.h>
 
 #include <FL/Fl_Vk_Window.H>
 #include <FL/Fl_Vk_Utils.H>
@@ -32,11 +35,21 @@
 
 #include <tlDevice/NDI/NDI.h>
 
-#include <tlCore/HDR.h>
-
 #include "mrvHDR/mrvNDIView.h"
 
-#undef printf
+// Must come last due to X11 macros
+#include <FL/platform.H>
+#include <FL/Fl.H>
+
+#if defined(TLRENDER_LIBPLACEBO)
+extern "C"
+{
+#include <libplacebo/dummy.h>
+#include <libplacebo/shaders/colorspace.h>
+#include <libplacebo/shaders.h>
+}
+#endif
+
 
 namespace
 {
@@ -70,6 +83,80 @@ namespace
 
 namespace mrv
 {
+#if defined(TLRENDER_LIBPLACEBO)
+    struct LibPlaceboData
+    {
+        LibPlaceboData();
+        ~LibPlaceboData();
+
+        pl_log log;
+        pl_gpu gpu;
+        //std::vector<OCIOTexture> textures;
+    };
+
+    LibPlaceboData::LibPlaceboData()
+    {
+        log = pl_log_create(PL_API_VER, NULL);
+        if (!log)
+        {
+            throw std::runtime_error("log creation failed");
+        }
+
+        struct pl_gpu_dummy_params gpu_dummy;
+        memset(&gpu_dummy, 0, sizeof(pl_gpu_dummy_params));
+    
+        gpu_dummy.glsl.version = 410;
+        gpu_dummy.glsl.gles = false;
+        gpu_dummy.glsl.vulkan = false;
+        gpu_dummy.glsl.compute = false;
+
+        gpu_dummy.limits.callbacks = false;
+        gpu_dummy.limits.thread_safe = true;
+        /* pl_buf */  
+        gpu_dummy.limits.max_buf_size  = SIZE_MAX;  
+        gpu_dummy.limits.max_ubo_size  = SIZE_MAX;   
+        gpu_dummy.limits.max_ssbo_size = SIZE_MAX;  
+        gpu_dummy.limits.max_vbo_size  = SIZE_MAX;
+        gpu_dummy.limits.max_mapped_size    = SIZE_MAX;   
+        gpu_dummy.limits.max_buffer_texels  = UINT64_MAX;  
+        /* pl_tex */  
+        gpu_dummy.limits.max_tex_1d_dim= UINT32_MAX;
+        gpu_dummy.limits.max_tex_2d_dim= UINT32_MAX;
+        gpu_dummy.limits.max_tex_3d_dim= UINT32_MAX;    
+        gpu_dummy.limits.buf_transfer  = true;  
+        gpu_dummy.limits.align_tex_xfer_pitch = 1; 
+        gpu_dummy.limits.align_tex_xfer_offset = 1;
+    
+        /* pl_pass */ 
+        gpu_dummy.limits.max_variable_comps = SIZE_MAX; 
+        gpu_dummy.limits.max_constants = SIZE_MAX;
+        gpu_dummy.limits.max_pushc_size= SIZE_MAX;   
+        gpu_dummy.limits.max_dispatch[0]    = UINT32_MAX;   
+        gpu_dummy.limits.max_dispatch[1]    = UINT32_MAX;   
+        gpu_dummy.limits.max_dispatch[2]    = UINT32_MAX;
+        gpu_dummy.limits.fragment_queues    = 0;   
+        gpu_dummy.limits.compute_queues= 0;
+    
+        gpu = pl_gpu_dummy_create(log, &gpu_dummy);
+        if (!gpu)
+        {
+            throw std::runtime_error("pl_gpu_dummy_create failed!");
+        }
+    }
+    
+    LibPlaceboData::~LibPlaceboData()
+    {
+        // for (size_t i = 0; i < textures.size(); ++i)
+        // {
+            // glDeleteTextures(1, &textures[i].id);
+        // }
+            
+        pl_gpu_dummy_destroy(&gpu);
+        pl_log_destroy(&log);
+    }
+#endif // TLRENDER_LIBPLACEBO
+
+    
     struct NDIView::Private
     {
         NDIlib_find_instance_t NDI_find = nullptr;
@@ -119,7 +206,24 @@ namespace mrv
         };
         AudioThread audioThread;
 
-        uint32_t frame_counter = 0;
+        // Standard NDI attributes (we don't use this)
+        std::string    primariesName;
+        std::string    transferName;
+        std::string    matrixName;
+
+        // Full mrv2 image data (we try to use this)
+        image::HDRData hdrData;
+
+        NDIlib_FourCC_video_type_e fourCC =	NDIlib_FourCC_type_UYVY;
+
+        // tlRender variables
+        image::Info   info;
+        std::shared_ptr<image::Image> image;
+
+        // LibPlacebo variables
+        std::shared_ptr<LibPlaceboData> placeboData;
+        std::string hdrColors;
+        std::string hdrColorsDef;
     };
 
     NDIView::~NDIView()
@@ -149,14 +253,141 @@ namespace mrv
     {
         _init();
     }
+    
+    void NDIView::init_vk_swapchain()
+    {
+        Fl_Vk_Window::init_vk_swapchain();
+
+        VkResult result;
+        uint32_t formatCount;
+        result = vkGetPhysicalDeviceSurfaceFormatsKHR(m_gpu,
+                                                      m_surface,
+                                                      &formatCount, NULL);
+        VK_CHECK_RESULT(result);
+  
+        std::vector<VkSurfaceFormatKHR> formats(formatCount);
+        result = vkGetPhysicalDeviceSurfaceFormatsKHR(m_gpu,
+                                                      m_surface,
+                                                      &formatCount,
+                                                      formats.data());
+        VK_CHECK_RESULT(result);
+        
+        // Look for HDR10 or HLG if present
+        for (const auto& format : formats) {
+            
+            if (format.colorSpace == VK_COLOR_SPACE_HDR10_ST2084_EXT)
+            {
+                std::cerr << "HDR10 present" << std::endl;
+                m_format = format.format;
+                m_color_space = format.colorSpace;
+                return;
+            }
+            if (format.colorSpace == VK_COLOR_SPACE_HDR10_HLG_EXT)
+            {
+                std::cerr << "HLG present" << std::endl;
+                m_format = format.format;
+                m_color_space = format.colorSpace;
+                return;
+            }
+        }
+        
+        // If the format list includes just one entry of VK_FORMAT_UNDEFINED,
+        // the surface has no prefresulted format.  Otherwise, at least one
+        // supported format will be returned.
+        if (formatCount == 1 && formats[0].format == VK_FORMAT_UNDEFINED) {
+            m_format = VK_FORMAT_B8G8R8A8_UNORM;
+        } else {
+            m_format = formats[0].format;
+        }
+        m_color_space = formats[0].colorSpace;
+
+    }
+
+    void NDIView::start()
+    {
+        TLRENDER_P();
+        
+        p.image = image::Image::create(p.info);
+
+        destroy_resources();
+
+        vkDestroyShaderModule(m_device, m_frag_shader_module, NULL);
+        m_frag_shader_module = VK_NULL_HANDLE;
+
+        _create_HDR_shader();
+        
+        prepare();
+    }
+    
+
+    void NDIView::_copy(const uint8_t* video_frame)
+    {
+        TLRENDER_P();
+        
+        const auto& info = p.image->getInfo();
+        const std::size_t w = p.info.size.w;
+        const std::size_t h = p.info.size.h;
+        uint8_t* const data = p.image->getData();
+
+        if (p.fourCC == NDIlib_FourCC_type_PA16)
+        {
+            uint16_t* p_y = (uint16_t*)video_frame;
+            const uint16_t* p_uv = p_y + w * h;
+            const uint16_t* p_alpha = p_uv + w * h;
+            half* rgba = (half*) data;
+                    
+            // Determine BT.601 or BT.709 based on resolution
+            bool useBT709 = (w >= 1280 && h >= 720);
+                    
+            // Coefficients
+            float Kr = useBT709 ? 0.2126f : 0.299f;
+            float Kb = useBT709 ? 0.0722f : 0.114f;
+            float Kg = 1.0f - Kr - Kb;
+
+            for (int y = 0; y < h; ++y) {
+                for (int x = 0; x < w; ++x) {
+                    const int yw = y * w;
+                    int index_y = yw + x;
+                    int index_uv = yw + (x / 2) * 2;
+                    int index_alpha = index_y;
+
+                    // Extract Y, U, V, and Alpha
+                    float Yf = p_y[index_y] / 65535.0f;
+                    float Uf = (p_uv[index_uv] - 32768) / 32768.0f;
+                    float Vf = (p_uv[index_uv + 1] - 32768) / 32768.0f;
+                    float A = p_alpha[index_alpha] / 65535.0f;
+
+                    // YUV to RGB conversion
+                    float R = Yf + 1.402f * Vf;
+                    float G = Yf - 0.344f * Uf - 0.714f * Vf;
+                    float B = Yf + 1.772f * Uf;
+
+                    // Store as RGBA float
+                    int rgba_index = index_y * 4;
+                    rgba[rgba_index] = R;
+                    rgba[rgba_index + 1] = G;
+                    rgba[rgba_index + 2] = B;
+                    rgba[rgba_index + 3] = A;
+                }
+            }
+        }
+    }
 
     void NDIView::prepare_texture_image(
-        const uint32_t* tex_colors, Fl_Vk_Texture* tex_obj,
+        const float* tex_colors, Fl_Vk_Texture* tex_obj,
         VkImageTiling tiling, VkImageUsageFlags usage, VkFlags required_props)
     {
-        const VkFormat tex_format = VK_FORMAT_B8G8R8A8_UNORM;
-        const int32_t tex_width = 2;
-        const int32_t tex_height = 2;
+        TLRENDER_P();
+        
+        const VkFormat tex_format = VK_FORMAT_R16G16B16A16_SFLOAT;
+        uint32_t tex_width = 1, tex_height = 1;
+        if (p.image)
+        {
+            const auto& info = p.image->getInfo();
+            tex_width = info.size.w;
+            tex_height = info.size.h;
+        }
+        
         VkResult result;
         bool pass;
 
@@ -219,14 +450,6 @@ namespace mrv
                 m_device, tex_obj->mem, 0, mem_alloc.allocationSize, 0, &data);
             VK_CHECK_RESULT(result);
 
-            // Tile the texture over tex_height and tex_width
-            for (y = 0; y < tex_height; y++)
-            {
-                uint32_t* row = (uint32_t*)((char*)data + layout.rowPitch * y);
-                for (x = 0; x < tex_width; x++)
-                    row[x] = tex_colors[(x & 1) ^ (y & 1)];
-            }
-
             vkUnmapMemory(m_device, tex_obj->mem);
         }
 
@@ -267,10 +490,9 @@ namespace mrv
     void NDIView::prepare_textures()
     {
         VkResult result;
-        const VkFormat tex_format = VK_FORMAT_B8G8R8A8_UNORM;
-        const uint32_t tex_colors[DEMO_TEXTURE_COUNT][2] = {
-            // B G R A     B G R A
-            {0xffff0000, 0xff00ff00}, // Red, Green
+        const VkFormat tex_format = VK_FORMAT_R16G16B16A16_SFLOAT;
+        const float tex_colors[DEMO_TEXTURE_COUNT][2 * 4 * sizeof(half)] = {
+            {0.4F, 0.4F, 0.4F, 1.F, 0.6F, 0.6F, 0.6F, 0.1F}
         };
 
         // Query if image supports texture format
@@ -408,7 +630,7 @@ namespace mrv
             m_device, m_vertices.mem, 0, mem_alloc.allocationSize, 0, &data);
         VK_CHECK_RESULT(result);
 
-        memcpy(data, vertices.data(), static_cast<size_t>(buffer_size));
+        std::memcpy(data, vertices.data(), static_cast<size_t>(buffer_size));
 
         vkUnmapMemory(m_device, m_vertices.mem);
 
@@ -555,8 +777,9 @@ namespace mrv
         if (m_frag_shader_module != VK_NULL_HANDLE)
             return m_frag_shader_module;
 
+        TLRENDER_P();
         // Example GLSL vertex shader
-        std::string frag_shader_glsl = R"(
+        std::string frag_shader_glsl = tl::string::Format(R"(
         #version 450
 
         // Input from vertex shader
@@ -568,10 +791,15 @@ namespace mrv
         // Texture sampler (bound via descriptor set)
         layout(binding = 0) uniform sampler2D textureSampler;
 
+        {0}
+
+
         void main() {
             outColor = texture(textureSampler, inTexCoord);
+            {1}
         }
-    )";
+    )").arg(p.hdrColorsDef).arg(p.hdrColors);
+        std::cerr << frag_shader_glsl << std::endl;
         // Compile to SPIR-V
         try
         {
@@ -581,7 +809,6 @@ namespace mrv
                 shaderc_fragment_shader, // Shader type
                 "frag_shader.glsl"       // Filename for error reporting
             );
-            // Assuming you have a VkDevice 'device' already created
             m_frag_shader_module = create_shader_module(m_device, spirv);
         }
         catch (const std::exception& e)
@@ -787,7 +1014,7 @@ namespace mrv
         TLRENDER_P();
 
         // Some Vulkan settings
-        m_validate = false;
+        m_validate = true;
         m_use_staging_buffer = false;
 
         mode(FL_RGB | FL_DOUBLE | FL_ALPHA);
@@ -797,6 +1024,8 @@ namespace mrv
         if (!NDIlib_initialize())
             throw std::runtime_error("Could not initialize NDI library");
 
+        p.placeboData.reset(new LibPlaceboData);
+        
         p.findThread.running = true;
         p.findThread.thread = std::thread(
             [this]
@@ -867,13 +1096,11 @@ namespace mrv
         void* data;
         vkMapMemory(m_device, m_textures[0].mem, 0, m_mem_reqs.size, 0, &data);
 
-        uint32_t* pixels = (uint32_t*)data;
-        uint8_t intensity = (p.frame_counter % 255);
-        pixels[0] = (intensity << 16) | 0xFF;         // Red
-        pixels[1] = (intensity << 8) | 0xFF;          // Green
-        pixels[2] = (intensity) | 0xFF;               // Blue
-        pixels[3] = ((255 - intensity) << 16) | 0xFF; // Inverted Red
-
+        if (p.image)
+        {
+            std::memcpy(data, p.image->getData(), p.image->getDataByteCount());
+        }
+        
         vkUnmapMemory(m_device, m_textures[0].mem);
 
         // Reallocate command buffer for second transition
@@ -935,6 +1162,8 @@ namespace mrv
                 p.currentNDISource.c_str();
             NDI_recv_create_desc.color_format = NDIlib_recv_color_format_best;
 
+            
+            
             // Create the receiver
             p.NDI_recv = NDIlib_recv_create(&NDI_recv_create_desc);
             if (!p.NDI_recv)
@@ -944,26 +1173,41 @@ namespace mrv
             NDIlib_video_frame_t video_frame;
             NDIlib_audio_frame_t audio_frame; // not used yet
 
-            // Run for one minute
-            const auto start = std::chrono::high_resolution_clock::now();
             while (p.videoThread.running)
             {
 
                 switch (NDIlib_recv_capture(
-                    p.NDI_recv, &video_frame, nullptr, nullptr, 1000))
+                            p.NDI_recv, &video_frame, nullptr, nullptr, 1000))
                 {
-                    //     // No data
-                    // case NDIlib_frame_type_none:
-                    //     printf("No data received.\n");
-                    //     break;
-
                     // Video data
                 case NDIlib_frame_type_video:
-                    fprintf(
-                        stderr, "Video data received (%dx%d).\n",
-                        video_frame.xres, video_frame.yres);
-                    if (video_frame.p_metadata)
+                {
+                    bool init = false;
+                    
+                    float pixelAspectRatio = 1.F;
+                    if (video_frame.picture_aspect_ratio == 0.F)
+                        pixelAspectRatio = 1.F /
+                                           ( video_frame.xres *
+                                             video_frame.yres );
+                
+                    if (p.info.size.w != video_frame.xres ||
+                        p.info.size.h != video_frame.yres ||
+                        p.info.size.pixelAspectRatio != pixelAspectRatio ||
+                        p.fourCC != video_frame.FourCC)
                     {
+                        init = true;
+                    }
+
+                    p.info.size.w = video_frame.xres;
+                    p.info.size.h = video_frame.yres;
+                    p.info.size.pixelAspectRatio = pixelAspectRatio;
+                    p.info.layout.mirror.y = true;
+                    p.info.pixelType = image::PixelType::RGBA_F16;
+                    p.info.videoLevels = image::VideoLevels::FullRange;
+                    p.fourCC = video_frame.FourCC;
+
+                    if (video_frame.p_metadata)
+                    {   
                         // Parsing XML metadata
                         rapidxml::xml_document<> doc;
                         doc.parse<0>((char*)video_frame.p_metadata);
@@ -982,33 +1226,52 @@ namespace mrv
                         rapidxml::xml_attribute<>* attr_mrv2 =
                             root->first_attribute("mrv2");
 
-                        const std::string& jsonString =
-                            unescape_quotes_from_xml(attr_mrv2->value());
+                        if (attr_transfer)
+                            p.transferName = attr_transfer->value();
+                        if (attr_matrix)
+                            p.matrixName = attr_matrix->value();
+                        if (attr_primaries)
+                            p.primariesName = attr_primaries->value();
 
-                        const nlohmann::json& j =
-                            nlohmann::json::parse(jsonString);
-
-                        using namespace tl;
-                        image::HDRData hdrData = j.get<image::HDRData>();
-
+                        if (attr_mrv2)
+                        {
+                            const std::string& jsonString =
+                                unescape_quotes_from_xml(attr_mrv2->value());
+                            
+                            const nlohmann::json& j =
+                                nlohmann::json::parse(jsonString);
+                            
+                            const image::HDRData& hdrData =
+                                j.get<image::HDRData>();
+                            if (p.hdrData != hdrData)
+                            {
+                                p.hdrData = hdrData;
+                                init = true;
+                            }
+                        }
+                        
+                        if (init)
+                        {
+                            start();
+                        }
+                    
                         // Display color information
-                        fprintf(
-                            stderr,
-                            "Video metadata color info (transfer: %s, matrix: "
-                            "%s, primaries: %s)\n",
-                            attr_transfer->value(), attr_matrix->value(),
-                            attr_primaries->value());
+                        // fprintf(
+                        //     stderr,
+                        //     "Video metadata color info (transfer: %s, matrix: "
+                        //     "%s, primaries: %s)\n",
+                        //     attr_transfer->value(), attr_matrix->value(),
+                        //     attr_primaries->value());
 
-                        std::cerr << "primaries--------" << std::endl;
-                        std::cerr << hdrData.primaries[0] << " "
-                                  << hdrData.primaries[1] << " "
-                                  << hdrData.primaries[2] << " "
-                                  << hdrData.primaries[3] << std::endl;
+                        // std::cerr << "primaries--------" << std::endl;
+                        // std::cerr << hdrData.primaries[0] << " "
+                        //           << hdrData.primaries[1] << " "
+                        //           << hdrData.primaries[2] << " "
+                        //           << hdrData.primaries[3] << std::endl;
                     }
                     if (video_frame.p_data)
                     {
-                        // Video frame buffer.
-                        p.frame_counter++;
+                        _copy(video_frame.p_data);
                         redraw();
                     }
                     NDIlib_recv_free_video(p.NDI_recv, &video_frame);
@@ -1022,6 +1285,7 @@ namespace mrv
                     //     break;
 
                     // Everything else
+                }
                 default:
                     break;
                 }
@@ -1045,8 +1309,8 @@ namespace mrv
         while (p.findThread.running)
         {
             using namespace std::chrono;
-            for (const auto start = high_resolution_clock::now();
-                 high_resolution_clock::now() - start < seconds(3);)
+            for (const auto startTime = high_resolution_clock::now();
+                 high_resolution_clock::now() - startTime < seconds(3);)
             {
                 // Wait up till 1 second to check for new sources to be added or
                 // removed
@@ -1162,4 +1426,322 @@ namespace mrv
         VK_CHECK_RESULT(result);
     }
 
+    void NDIView::_create_HDR_shader()
+    {
+        TLRENDER_P();
+        
+#if 0  // defined(TLRENDER_LIBPLACEBO)
+        pl_shader_params shader_params;
+        memset(&shader_params, 0, sizeof(pl_shader_params));
+    
+        shader_params.id = 1;
+        shader_params.gpu = p.placeboData->gpu;
+        shader_params.dynamic_constants = false;
+    
+        pl_shader shader = pl_shader_alloc(p.placeboData->log,
+                                            &shader_params);
+        if (!shader)
+        {
+            throw std::runtime_error("pl_shader_alloc failed!");
+        }
+
+
+        pl_color_map_params cmap;
+        memset(&cmap, 0, sizeof(pl_color_map_params));
+
+        // defaults, generates LUTs if state is set.
+        cmap.gamut_mapping = nullptr; //&pl_gamut_map_perceptual;
+        cmap.tone_mapping_function = nullptr; // pl_tone_mapping clip
+                    
+        // PL_GAMUT_MAP_CONSTANTS is defined in wrong order for C++
+        cmap.gamut_constants = { 0 };
+        cmap.gamut_constants.perceptual_deadzone = 0.3F;
+        cmap.gamut_constants.perceptual_strength = 0.8F;
+        cmap.gamut_constants.colorimetric_gamma  = 1.80f; 
+        cmap.gamut_constants.softclip_knee  = 0.70f;
+        cmap.gamut_constants.softclip_desat = 0.35f;
+                    
+        cmap.metadata   = PL_HDR_METADATA_ANY;
+        cmap.lut3d_size[0] = 48;
+        cmap.lut3d_size[1] = 32;
+        cmap.lut3d_size[2] = 256;
+        cmap.lut_size = 256;
+        cmap.visualize_rect.x0 = 0;
+        cmap.visualize_rect.y0 = 0;
+        cmap.visualize_rect.x1 = 1;
+        cmap.visualize_rect.y1 = 1;
+        cmap.contrast_smoothness = 3.5f;
+
+        const image::HDRData& data = p.hdrData;
+                
+        pl_color_space src_colorspace;
+        memset(&src_colorspace, 0, sizeof(pl_color_space));
+        src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
+        src_colorspace.transfer  = PL_COLOR_TRC_PQ;
+
+                
+        pl_hdr_metadata& hdr = src_colorspace.hdr;
+        hdr.min_luma = data.displayMasteringLuminance.getMin();
+        hdr.max_luma = data.displayMasteringLuminance.getMax();
+        hdr.prim.red.x = data.primaries[image::HDRPrimaries::Red][0];
+        hdr.prim.red.y = data.primaries[image::HDRPrimaries::Red][1];
+        hdr.prim.green.x = data.primaries[image::HDRPrimaries::Green][0];
+        hdr.prim.green.y = data.primaries[image::HDRPrimaries::Green][1];
+        hdr.prim.blue.x = data.primaries[image::HDRPrimaries::Blue][0];
+        hdr.prim.blue.y = data.primaries[image::HDRPrimaries::Blue][1];
+        hdr.prim.white.x = data.primaries[image::HDRPrimaries::White][0];
+        hdr.prim.white.y = data.primaries[image::HDRPrimaries::White][1];
+        hdr.max_cll = data.maxCLL;
+        hdr.max_fall = data.maxFALL;
+        hdr.scene_max[0] = data.sceneMax[0];
+        hdr.scene_max[1] = data.sceneMax[1];
+        hdr.scene_max[2] = data.sceneMax[2];
+        hdr.scene_avg = data.sceneAvg;
+        hdr.ootf.target_luma = data.ootf.targetLuma;
+        hdr.ootf.knee_x = data.ootf.kneeX;
+        hdr.ootf.knee_y = data.ootf.kneeY;
+        hdr.ootf.num_anchors = data.ootf.numAnchors;
+        for (int i = 0; i < hdr.ootf.num_anchors; i++)
+            hdr.ootf.anchors[i] = data.ootf.anchors[i];
+        pl_color_space_infer(&src_colorspace);
+                
+                    
+    
+        pl_color_space dst_colorspace;
+        memset(&dst_colorspace, 0, sizeof(pl_color_space));
+        dst_colorspace.primaries = PL_COLOR_PRIM_BT_709;
+        dst_colorspace.transfer  = PL_COLOR_TRC_BT_1886;
+        pl_color_space_infer(&dst_colorspace);
+    
+        pl_color_map_args color_map_args;
+        memset(&color_map_args, 0, sizeof(pl_color_map_args));
+    
+        color_map_args.src = src_colorspace;
+        color_map_args.dst = dst_colorspace;
+        color_map_args.prelinearized = false;
+
+        pl_shader_obj state = NULL;
+        color_map_args.state = &state;  // with NULL and tonemap_clip works
+    
+        pl_shader_color_map_ex(shader, &cmap, &color_map_args);
+    
+        const pl_shader_res* res = pl_shader_finalize(shader);
+        if (!res)
+        {
+            pl_shader_free(&shader);
+            throw std::runtime_error("pl_shader_finalize failed!");
+        }
+
+        std::string hdrColors;
+        std::string hdrColorsDef;
+        
+        std::cout << "num_vertex_attribs=" << res->num_vertex_attribs
+                  << std::endl
+                  << "num_variables=" << res->num_variables << std::endl
+                  << "num_descriptors=" << res->num_descriptors << std::endl
+                  << "num_constants=" << res->num_constants << std::endl;
+        
+        std::stringstream s;
+
+        s << "#define textureLod(t, p, b) texture(t, p)"
+          << std::endl
+          << std::endl;
+        
+        for (int i = 0; i < res->num_descriptors; i++)
+        {
+            const pl_shader_desc* sd = &res->descriptors[i];
+            const pl_desc* desc = &sd->desc;
+            switch (desc->type)
+            {
+            case PL_DESC_SAMPLED_TEX:
+            case PL_DESC_STORAGE_IMG:
+            {
+                static const char *types[] = {
+                    "sampler1D",
+                    "sampler2D",
+                    "sampler3D",
+                };
+
+                pl_desc_binding binding = sd->binding;
+                pl_tex tex = (pl_tex)binding.object;
+                int dims = pl_tex_params_dimension(tex->params);
+                const char* type = types[dims-1];
+
+                char prefix = ' ';
+                switch(tex->params.format->type)
+                {
+                case PL_FMT_UINT:
+                    prefix = 'u';
+                    break;
+                case PL_FMT_SINT:
+                    prefix = 'i';
+                    break;
+                case PL_FMT_FLOAT:
+                case PL_FMT_UNORM:
+                case PL_FMT_SNORM:
+                default:
+                    break;
+                }
+                                
+                s << "layout(binding=" << (i + 1) << ") uniform "
+                  << prefix
+                  << type
+                  << " "
+                  << desc->name
+                  << ";"
+                  << std::endl;
+                break;
+            }
+            case PL_DESC_BUF_UNIFORM:
+                throw "buf uniform";
+                break;
+            case PL_DESC_BUF_STORAGE:
+                throw "buf storage";
+            case PL_DESC_BUF_TEXEL_UNIFORM:
+                throw "buf texel uniform";
+            case PL_DESC_BUF_TEXEL_STORAGE:
+                throw "buf texel storage";
+            case PL_DESC_INVALID:
+            case PL_DESC_TYPE_COUNT:
+                throw "invalid or count";
+                break;
+            }
+        }
+        
+        s << "// Variables" << std::endl << std::endl;
+        // \@todo: add uniform bindings
+        // s << "layout(binding = 2) uniform UBO {\n";
+        for (int i = 0; i < res->num_variables; ++i)
+        {
+            const struct pl_shader_var shader_var = res->variables[i];
+            const struct pl_var var = shader_var.var;
+            std::string glsl_type = pl_var_glsl_type_name(var);
+            s << "const " << glsl_type << " " << var.name;
+            if (!shader_var.data)
+            {
+                s << ";" << std::endl;
+            }
+            else
+            {
+                int dim_v = var.dim_v;
+                int dim_m = var.dim_m;
+                switch(var.type)
+                {
+                case PL_VAR_SINT:
+                {
+                    int* m = (int*) shader_var.data;
+                    s << " = " << m[0] << ";" << std::endl;
+                    break;
+                }
+                case PL_VAR_UINT:
+                {
+                    unsigned* m = (unsigned*) shader_var.data;
+                    s << " = " << m[0] << ";" << std::endl;
+                    break;
+                }
+                case PL_VAR_FLOAT:
+                {
+                    float* m = (float*) shader_var.data;
+                    if (dim_m > 1 && dim_v > 1)
+                    {
+                        s << " = " << glsl_type << "(";
+                        for (int c = 0; c < dim_v; ++c)
+                        {
+                            for (int r = 0; r < dim_m; ++r)
+                            {
+                                int index = c * dim_m + r;
+                                s << m[index];
+
+                                // Check if it's the last element
+                                if (!(r == dim_m - 1 &&
+                                      c == dim_v - 1))
+                                {
+                                    s << ", ";
+                                }
+                            }
+                        }
+                        s << ");" << std::endl;
+                    }
+                    else if (dim_v > 1)
+                    {
+                        s << " = " << glsl_type << "(";
+                        for (int c = 0; c < dim_v; ++c)
+                        {
+                            s << m[c];
+
+                            // Check if it's the last element
+                            if (!(c == dim_v - 1))
+                            {
+                                s << ", ";
+                            }
+                        }
+                        s << ");" << std::endl;
+                    }
+                    else
+                    {
+                        s << " = " << m[0] << ";" << std::endl;
+                    }
+                    break;
+                }
+                default:
+                    break;
+                }
+            
+            }
+        }
+
+        // \@todo: add uniform bindings, instead of using constants
+        // s << "};" << std::endl;
+        s << std::endl
+          << "//" << std::endl
+          << "// Constants" << std::endl 
+          << "//" << std::endl << std::endl;
+        for (int i = 0; i < res->num_constants; ++i)
+        {
+            const struct pl_shader_const constant = res->constants[i];
+            switch(constant.type)
+            {
+            case PL_VAR_SINT:
+                s << "const int " << constant.name << " = "
+                  << *(reinterpret_cast<const int*>(constant.data));
+                break;
+            case PL_VAR_UINT:
+                s << "const uint " << constant.name << " = "
+                  << *(reinterpret_cast<const unsigned*>(constant.data));
+                break;
+            case PL_VAR_FLOAT:
+                s << "const float " << constant.name << " = "
+                  << *(reinterpret_cast<const float*>(constant.data));
+                break;
+            default:
+                break;
+            }
+            s << ";" << std::endl;
+                
+            try
+            {
+                //addGPUTextures(p.placeboData->textures, res);
+            }
+            catch(const std::exception& e)
+            {
+                throw e;
+            }
+        }
+
+        s << res->glsl << std::endl;
+        p.hdrColorsDef = s.str();
+        
+
+        {
+            std::stringstream s;
+            s << "outColor = " << res->name << "(outColor);"
+              << std::endl;
+            p.hdrColors = s.str();
+        }
+
+        pl_shader_free(&shader);
+#endif
+        return;
+    }
+    
 } // namespace mrv
