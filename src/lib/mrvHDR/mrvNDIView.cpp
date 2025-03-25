@@ -1509,8 +1509,8 @@ namespace mrv
     
         pl_color_space dst_colorspace;
         memset(&dst_colorspace, 0, sizeof(pl_color_space));
-        dst_colorspace.primaries = PL_COLOR_PRIM_BT_709;
-        dst_colorspace.transfer  = PL_COLOR_TRC_BT_1886;
+        src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
+        src_colorspace.transfer  = PL_COLOR_TRC_PQ;
         pl_color_space_infer(&dst_colorspace);
     
         pl_color_map_args color_map_args;
