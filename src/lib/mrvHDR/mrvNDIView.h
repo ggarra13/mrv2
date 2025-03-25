@@ -57,6 +57,7 @@ namespace mrv
         Fl_Vk_Texture m_textures[DEMO_TEXTURE_COUNT];
 
         void init_vk_swapchain() FL_OVERRIDE;
+
         void prepare_textures();
         void prepare_vertices();
         void prepare_descriptor_layout();

@@ -91,7 +91,6 @@ namespace mrv
 
         pl_log log;
         pl_gpu gpu;
-        //std::vector<OCIOTexture> textures;
     };
 
     LibPlaceboData::LibPlaceboData()
@@ -146,11 +145,6 @@ namespace mrv
     
     LibPlaceboData::~LibPlaceboData()
     {
-        // for (size_t i = 0; i < textures.size(); ++i)
-        // {
-            // glDeleteTextures(1, &textures[i].id);
-        // }
-            
         pl_gpu_dummy_destroy(&gpu);
         pl_log_destroy(&log);
     }
@@ -272,22 +266,31 @@ namespace mrv
                                                       &formatCount,
                                                       formats.data());
         VK_CHECK_RESULT(result);
-        
+
+        bool hdrFound = false;
         // Look for HDR10 or HLG if present
-        for (const auto& format : formats) {
-            
-            if (format.colorSpace == VK_COLOR_SPACE_HDR10_ST2084_EXT)
+        for (const auto& format : formats)
+        {
+            switch(format.colorSpace)
             {
+            case VK_COLOR_SPACE_HDR10_ST2084_EXT:
+            case VK_COLOR_SPACE_HDR10_HLG_EXT:
+            case VK_COLOR_SPACE_DOLBYVISION_EXT:
                 m_format = format.format;
                 m_color_space = format.colorSpace;
-                return;
+                hdrFound = true;
+                break;
+            default:
+                break;
             }
-            if (format.colorSpace == VK_COLOR_SPACE_HDR10_HLG_EXT)
-            {
-                m_format = format.format;
-                m_color_space = format.colorSpace;
-                return;
-            }
+
+            if (hdrFound)
+                break;
+        }
+
+        if (!hdrFound)
+        {
+            std::cerr << "No HDR supported!" << std::endl;
         }
         
         // If the format list includes just one entry of VK_FORMAT_UNDEFINED,
@@ -831,7 +834,6 @@ namespace mrv
             {1}
         }
     )").arg(p.hdrColorsDef).arg(p.hdrColors);
-        // std::cerr << frag_shader_glsl << std::endl;
         // Compile to SPIR-V
         try
         {
@@ -1099,6 +1101,33 @@ namespace mrv
     {
         TLRENDER_P();
 
+        if (p.hasHDR)
+        {
+            const image::HDRData& data = p.hdrData;
+            m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
+            m_hdr_metadata.displayPrimaryRed = {
+                data.primaries[image::HDRPrimaries::Red][0],
+                data.primaries[image::HDRPrimaries::Red][1],
+            };
+            m_hdr_metadata.displayPrimaryGreen = {
+                data.primaries[image::HDRPrimaries::Green][0],
+                data.primaries[image::HDRPrimaries::Green][1],
+            };
+            m_hdr_metadata.displayPrimaryBlue = {
+                data.primaries[image::HDRPrimaries::Blue][0],
+                data.primaries[image::HDRPrimaries::Blue][1],
+            };
+            m_hdr_metadata.whitePoint = {
+                data.primaries[image::HDRPrimaries::White][0],
+                data.primaries[image::HDRPrimaries::White][1],
+            };
+            // Max display capability
+            m_hdr_metadata.maxLuminance = data.displayMasteringLuminance.getMax(); 
+            m_hdr_metadata.minLuminance = data.displayMasteringLuminance.getMin(); 
+            m_hdr_metadata.maxContentLightLevel = data.maxCLL;
+            m_hdr_metadata.maxFrameAverageLightLevel = data.maxFALL;
+        }
+
         VkCommandBuffer update_cmd;
         VkCommandBufferAllocateInfo cmdAllocInfo = {};
         cmdAllocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -1229,7 +1258,6 @@ namespace mrv
                         p.info.size.pixelAspectRatio != pixelAspectRatio ||
                         p.fourCC != video_frame.FourCC)
                     {
-                        std::cerr << "init" << std::endl;
                         init = true;
                     }
 
@@ -1550,8 +1578,18 @@ namespace mrv
     
         pl_color_space dst_colorspace;
         memset(&dst_colorspace, 0, sizeof(pl_color_space));
-        src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
-        src_colorspace.transfer  = PL_COLOR_TRC_PQ;
+        dst_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
+        dst_colorspace.transfer  = PL_COLOR_TRC_PQ;
+        if (m_color_space == VK_COLOR_SPACE_HDR10_HLG_EXT)
+        {
+            dst_colorspace.transfer = PL_COLOR_TRC_HLG;
+        }
+        else if (m_color_space == VK_COLOR_SPACE_DOLBYVISION_EXT)
+        {
+            // \@todo:  How to handle this?
+            // dst_colorspace.transfer = PL_COLOR_TRC_DOLBYVISION;
+        }
+        
         pl_color_space_infer(&dst_colorspace);
     
         pl_color_map_args color_map_args;
@@ -1576,17 +1614,7 @@ namespace mrv
         std::string hdrColors;
         std::string hdrColorsDef;
         
-        std::cout << "num_vertex_attribs=" << res->num_vertex_attribs
-                  << std::endl
-                  << "num_variables=" << res->num_variables << std::endl
-                  << "num_descriptors=" << res->num_descriptors << std::endl
-                  << "num_constants=" << res->num_constants << std::endl;
-        
         std::stringstream s;
-
-        s << "#define textureLod(t, p, b) texture(t, p)"
-          << std::endl
-          << std::endl;
         
         for (int i = 0; i < res->num_descriptors; i++)
         {
@@ -1649,7 +1677,9 @@ namespace mrv
             }
         }
         
-        s << "// Variables" << std::endl << std::endl;
+        s << "//" << std::endl
+          << "// Variables"
+          << "//" << std::endl << std::endl;
         // \@todo: add uniform bindings
         // s << "layout(binding = 2) uniform UBO {\n";
         for (int i = 0; i < res->num_variables; ++i)
@@ -1758,15 +1788,6 @@ namespace mrv
                 break;
             }
             s << ";" << std::endl;
-                
-            try
-            {
-                //addGPUTextures(p.placeboData->textures, res);
-            }
-            catch(const std::exception& e)
-            {
-                throw e;
-            }
         }
 
         s << res->glsl << std::endl;
