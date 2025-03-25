@@ -212,6 +212,7 @@ namespace mrv
         std::string    matrixName;
 
         // Full mrv2 image data (we try to use this)
+        bool hasHDR = false;
         image::HDRData hdrData;
 
         NDIlib_FourCC_video_type_e fourCC =	NDIlib_FourCC_type_UYVY;
@@ -277,14 +278,12 @@ namespace mrv
             
             if (format.colorSpace == VK_COLOR_SPACE_HDR10_ST2084_EXT)
             {
-                std::cerr << "HDR10 present" << std::endl;
                 m_format = format.format;
                 m_color_space = format.colorSpace;
                 return;
             }
             if (format.colorSpace == VK_COLOR_SPACE_HDR10_HLG_EXT)
             {
-                std::cerr << "HLG present" << std::endl;
                 m_format = format.format;
                 m_color_space = format.colorSpace;
                 return;
@@ -314,7 +313,15 @@ namespace mrv
         vkDestroyShaderModule(m_device, m_frag_shader_module, NULL);
         m_frag_shader_module = VK_NULL_HANDLE;
 
-        _create_HDR_shader();
+        if (p.hasHDR)
+        {
+            _create_HDR_shader();
+        }
+        else
+        {
+            p.hdrColors.clear();
+            p.hdrColorsDef.clear();
+        }
         
         prepare();
     }
@@ -573,6 +580,8 @@ namespace mrv
 
     void NDIView::prepare_vertices()
     {
+        TLRENDER_P();
+        
         // clang-format off
         struct Vertex
         {
@@ -581,11 +590,34 @@ namespace mrv
         };
 
         std::vector<Vertex> vertices;
-        vertices.push_back({-1.F, -1.F, 0.F, 0.F});
-        vertices.push_back({ 1.F, -1.F, 1.F, 0.F});
-        vertices.push_back({ 1.F,  1.F, 1.F, 1.F});
-        vertices.push_back({-1.F,  1.F, 0.F, 1.F});
-    
+        const math::Size2i viewportSize = { pixel_w(), pixel_h() };
+        image::Size renderSize = { pixel_w(), pixel_h() };
+        
+        if (p.image)
+        {
+            renderSize = p.image->getSize();
+        }
+
+        float aspectRender = renderSize.w / static_cast<float>(renderSize.h);
+        float aspectViewport = viewportSize.w / static_cast<float>(viewportSize.h);
+
+        float scaleX = 1.0F;
+        float scaleY = 1.0F;
+
+        if (aspectRender < aspectViewport) {
+            // Image is too wide, shrink X
+            scaleX = aspectRender / aspectViewport;
+        }
+        else
+        {
+            // Image is too tall, shrink Y
+            scaleY = aspectViewport / aspectRender;
+        }
+        
+        vertices.push_back({-scaleX, -scaleY, 0.F, 0.F});
+        vertices.push_back({ scaleX, -scaleY, 1.F, 0.F});
+        vertices.push_back({ scaleX,  scaleY, 1.F, 1.F});
+        vertices.push_back({-scaleX,  scaleY, 0.F, 1.F});
             
         VkDeviceSize buffer_size = sizeof(vertices[0]) * vertices.size();
 
@@ -799,7 +831,7 @@ namespace mrv
             {1}
         }
     )").arg(p.hdrColorsDef).arg(p.hdrColors);
-        std::cerr << frag_shader_glsl << std::endl;
+        // std::cerr << frag_shader_glsl << std::endl;
         // Compile to SPIR-V
         try
         {
@@ -1016,6 +1048,7 @@ namespace mrv
         // Some Vulkan settings
         m_validate = true;
         m_use_staging_buffer = false;
+        m_clearColor = { 0.F, 0.F, 0.F, 0.F };
 
         mode(FL_RGB | FL_DOUBLE | FL_ALPHA);
         m_vert_shader_module = VK_NULL_HANDLE;
@@ -1127,6 +1160,7 @@ namespace mrv
         TLRENDER_P();
 
         // Background color
+        
         draw_begin();
 
         update_texture();
@@ -1195,6 +1229,7 @@ namespace mrv
                         p.info.size.pixelAspectRatio != pixelAspectRatio ||
                         p.fourCC != video_frame.FourCC)
                     {
+                        std::cerr << "init" << std::endl;
                         init = true;
                     }
 
@@ -1235,6 +1270,7 @@ namespace mrv
 
                         if (attr_mrv2)
                         {
+                            p.hasHDR = true;
                             const std::string& jsonString =
                                 unescape_quotes_from_xml(attr_mrv2->value());
                             
@@ -1249,10 +1285,9 @@ namespace mrv
                                 init = true;
                             }
                         }
-                        
-                        if (init)
+                        else
                         {
-                            start();
+                            p.hasHDR= false;
                         }
                     
                         // Display color information
@@ -1269,6 +1304,12 @@ namespace mrv
                         //           << hdrData.primaries[2] << " "
                         //           << hdrData.primaries[3] << std::endl;
                     }
+                        
+                    if (init)
+                    {
+                        start();
+                    }
+                        
                     if (video_frame.p_data)
                     {
                         _copy(video_frame.p_data);
@@ -1430,7 +1471,7 @@ namespace mrv
     {
         TLRENDER_P();
         
-#if 0  // defined(TLRENDER_LIBPLACEBO)
+#if defined(TLRENDER_LIBPLACEBO)
         pl_shader_params shader_params;
         memset(&shader_params, 0, sizeof(pl_shader_params));
     
