@@ -174,11 +174,36 @@ namespace mrv
 
             io::Info ioInfo;
             image::Info outputInfo;
-
             outputInfo.size = renderSize;
+            
+            auto tags = ui->uiView->getTags();
+
+            // \@bug: this is not working.  We loose data window for now.
+            // if (!options.annotations)
+            // {
+            //     auto i = tags.find("Data Window");
+            //     if (i != tags.end())
+            //     {
+            //         std::stringstream s(i->second);
+            //         math::Box2i box;
+            //         s >> box;
+            //         outputInfo.size.w = box.max.x - box.min.x + 1;
+            //         outputInfo.size.h = box.max.y - box.min.y + 1;
+            //     }
+            // }
+            // else
+            // {
+            //     auto i = tags.find("Display Window");
+            //     if (i != tags.end())
+            //     {
+            //         tags["Data Window"] = i->second;
+            //     }
+            // }
+
             std::shared_ptr<image::Image> outputImage;
 
             outputInfo.pixelType = info.video[layerId].pixelType;
+            outputInfo.size.pixelAspectRatio = 1.0;
 
             {
                 std::string msg = tl::string::Format(_("Image info: {0} {1}"))
@@ -327,8 +352,8 @@ namespace mrv
 #ifdef TLRENDER_EXR
             ioOptions["OpenEXR/PixelType"] = getLabel(outputInfo.pixelType);
 #endif
-
             outputImage = image::Image::create(outputInfo);
+            
             ioInfo.video.push_back(outputInfo);
             ioInfo.videoTime = oneFrameTimeRange;
 
@@ -478,6 +503,7 @@ namespace mrv
                 CHECK_GL;
             }
 
+            outputImage->setTags(tags);
             writer->writeVideo(currentTime, outputImage);
         }
         catch (const std::exception& e)

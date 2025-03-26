@@ -43,6 +43,11 @@ void mrv2_enums(py::module& m)
         .value("Same_Size", mrv::SaveResolution::kSameSize)
         .value("Half_Size", mrv::SaveResolution::kHalfSize)
         .value("Quarter_Size", mrv::SaveResolution::kQuarterSize);
+    
+    py::enum_<mrv::SavePixelRatio>(io, "SavePixelRatio")
+        .value("Keep", mrv::SavePixelRatio::kKeep)
+        .value("Reset", mrv::SavePixelRatio::kReset)
+        .value("Reset_And_Resize", mrv::SavePixelRatio::kResetAndResize);
 
 #ifdef TLRENDER_FFMPEG
     py::enum_<ffmpeg::Profile>(io, "Profile")
@@ -86,6 +91,10 @@ void mrv2_enums(py::module& m)
         .value("DWAB", Imf::DWAB_COMPRESSION)
         //.value("HT256", Imf::HT256_COMPRESSION)
         ;
+    
+    py::enum_<mrv::SaveContents>(io, "Contents")
+        .value("Display_Window", mrv::SaveContents::kDisplayWindow)
+        .value("Data_Window", mrv::SaveContents::kDataWindow);
 #endif
 
     py::module image = m.def_submodule("image");

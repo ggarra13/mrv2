@@ -1162,7 +1162,7 @@ namespace mrv
 
         math::Box2i box;
         std::stringstream ss(dw);
-        ss >> box.min.x >> box.min.y >> box.max.x >> box.max.y;
+        ss >> box;
 
         box.min.y = -(renderSize.h - box.min.y);
         box.max.y = -(renderSize.h - box.max.y);
