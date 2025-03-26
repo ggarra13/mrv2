@@ -82,6 +82,7 @@ class POMergeMissing:
             if entry.msgid in source_entries:
                 # Replace the msgstr in the target PO file with the one from the source PO file
                 entry.msgstr = source_entries[entry.msgid]
+                entry.fuzzy = False
 
         # Save the modified target PO file
         print('Creating merged',merged_file)
@@ -91,7 +92,7 @@ class POMergeMissing:
 def merge_missing(lang):
 
     main_po = f'src/po/{lang}.po'
-    merged_po = f'src/po/{lang}_merged.po'
+    merged_po = f'src/po/{lang}.po'
     missing_po = f'src/po/{lang}_missing.po'
     missing = POMergeMissing()
     missing.merge(merged_po, main_po, missing_po)
@@ -102,7 +103,7 @@ def merge_missing(lang):
     os.chdir(cwd)
     for plugin in plugins:
         code   = plugin[:-3]
-        merged = code + '_merged.po'
+        merged = code + '.po'
         plugin = code + '.po'
         out_po = code + '_missing.po'
         merged_po = f'src/po/python/plug-ins/locale/{lang}/LC_MESSAGES/{merged}'

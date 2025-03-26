@@ -28,4 +28,3 @@ fi
 
 $PYTHON bin/python/copy_po.py $*
 
-$PYTHON -m pip uninstall polib
