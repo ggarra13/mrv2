@@ -103,10 +103,10 @@ Summary Table
 Component		Windows (DLLs)		Linux (SO files)			macOS (dylibs)
 Vulkan Loader		vulkan-1.dll (optional)	libvulkan.so.1 (system preferred)	libvulkan.1.dylib (required)
 MoltenVK		N/A	     		N/A	       	       			libMoltenVK.dylib (required)
-			glslang	glslang.dll	libglslang.so	libglslang.dylib
+glslang			glslang.dll		libglslang.so				libglslang.dylib
 shaderc_combined	shaderc_combined.dll	libshaderc_combined.so			libshaderc_combined.dylib
-SPIRV-Tools	SPIRV-Tools.dll			libSPIRV-Tools.so			libSPIRV-Tools.dylib
-SPIRV-Tools-opt	SPIRV-Tools-opt.dll (optional)	libSPIRV-Tools-opt.so			libSPIRV-Tools-opt.dylib (if used)
+SPIRV-Tools		SPIRV-Tools.dll		libSPIRV-Tools.so			libSPIRV-Tools.dylib
+SPIRV-Tools-opt		SPIRV-Tools-opt.dll (optional)	libSPIRV-Tools-opt.so			libSPIRV-Tools-opt.dylib (if used)
 Validation Layers	Debug only		Debug only				Debug only
 
 Additional Notes

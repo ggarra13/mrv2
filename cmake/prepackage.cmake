@@ -204,7 +204,7 @@ if(UNIX)
     set(MRV2_PYTHON_SITE_PACKAGES_DIR "${MRV2_PYTHON_LIB_DIR}/site-packages")
 
     set( MRV2_EXES "${CPACK_PREPACKAGE}/bin/mrv2" )
-    
+    list(APPEND MRV2_EXES "${CPACK_PREPACKAGE}/bin/hdr" )
 	
     #
     # We need to get the dependencies of the python DSOs to avoid

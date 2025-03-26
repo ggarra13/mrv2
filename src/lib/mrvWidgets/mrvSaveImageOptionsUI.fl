@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0401
+version 1.0500
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
@@ -16,7 +16,7 @@ decl {\#ifdef TLRENDER_EXR} {public global
 decl {\#include <OpenEXR/ImfCompression.h>} {public global
 }
 
-decl {\#endif} {selected public global
+decl {\#endif} {public global
 }
 
 decl {\#include "mrvCore/mrvFile.h"} {public global
@@ -36,7 +36,8 @@ class SaveImageOptionsUI {open
   }
   decl {std::string extension;} {private local
   }
-  Function {select_pixel_type(Fl_Choice* o)} {} {
+  Function {select_pixel_type(Fl_Choice* o)} {open
+  } {
     code {auto settings = mrv::App::app->settings();
 const std::string& saved =
         settings->getValue<std::string>("SaveImage/PixelType");
@@ -52,7 +53,8 @@ for (int i = 0; i < o->size(); ++i)
 }
 o->value(0);} {}
   }
-  Function {select_compression(Fl_Choice* o)} {} {
+  Function {select_compression(Fl_Choice* o)} {open
+  } {
     code {auto settings = mrv::App::app->settings();
 const std::string& saved =
         settings->getValue<std::string>("SaveImage/Compression");
@@ -61,6 +63,42 @@ for (int i = 0; i < o->size(); ++i)
    const Fl_Menu_Item* const item = &o->menu()[i];
    if (!item || !item->label())
          continue;
+   const std::string& type = item->label();
+   if (saved == type)
+   {
+       o->value(i);
+       return;
+    }
+}
+o->value(0);} {}
+  }
+  Function {select_contents(Fl_Choice* o)} {open
+  } {
+    code {auto settings = mrv::App::app->settings();
+const std::string& saved =
+        settings->getValue<std::string>("SaveImage/Contents");
+for (int i = 0; i < o->size(); ++i)
+{
+   const Fl_Menu_Item* const item = &o->menu()[i];
+   if (!item || !item->label())
+         continue;
+   const std::string& type = item->label();
+   if (saved == type)
+   {
+       o->value(i);
+       return;
+    }
+}
+o->value(0);} {}
+  }
+  Function {select_pixel_ratio(Fl_Choice* o)} {open selected
+  } {
+    code {auto settings = mrv::App::app->settings();
+const std::string& saved =
+        settings->getValue<std::string>("SaveImage/PixelRatio");
+for (int i = 0; i < o->size(); ++i)
+{
+   const Fl_Menu_Item* const item = &o->menu()[i];
    const std::string& type = item->label();
    if (saved == type)
    {
@@ -85,15 +123,14 @@ for (int i = 0; i < Imf::NUM_COMPRESSION_METHODS; ++i)
 o->menu_end();
 \#endif} {}
   }
-  Function {SaveImageOptionsUI(const std::string ext, const bool exr_valid)} {open
-  } {
+  Function {SaveImageOptionsUI(const std::string ext, const bool exr_valid)} {} {
     Fl_Window uiMain {
       label {Save Image Options} open
-      xywh {0 0 523 453} type Double align 5 hide modal
+      xywh {893 260 523 632} type Double align 5 modal visible
     } {
       Fl_Group {} {
         label {Common Settings} open
-        xywh {82 37 380 120} box ROUNDED_FRAME color 56
+        xywh {71 37 380 120} box ROUNDED_FRAME color 56
       } {
         Fl_Check_Button Annotations {
           label {Save Annotations}
@@ -104,7 +141,7 @@ It also allows saving OpenEXRs from an 8-bit movie and changing OpenEXR's pixel 
 
 Furthermore, it allows saving A/B or Tiled comparisons and baking OCIO.
 
-However, it is limited to the size of your screen.} xywh {192 51 25 25} down_box DOWN_BOX
+However, it is limited to the size of your screen.} xywh {181 51 25 25} down_box DOWN_BOX
           code0 {auto settings = mrv::App::app->settings();}
           code1 {int value = settings->getValue<int>("SaveImage/Annotations");}
           code2 {o->value(value);}
@@ -113,7 +150,7 @@ However, it is limited to the size of your screen.} xywh {192 51 25 25} down_box
           label {Annotation Frames Only}
           callback {auto settings = mrv::App::app->settings();
 settings->setValue("SaveImage/AnnotationFramesOnly", static_cast<int>(o->value()));}
-          tooltip {Save only the annotation frames, not the whole sequence.} xywh {193 80 25 25} down_box DOWN_BOX
+          tooltip {Save only the annotation frames, not the whole sequence.} xywh {182 80 25 25} down_box DOWN_BOX
           code0 {auto settings = mrv::App::app->settings();}
           code1 {int value = settings->getValue<int>("SaveImage/AnnotationFramesOnly");}
           code2 {o->value(value);}
@@ -125,7 +162,7 @@ settings->setValue("SaveImage/AnnotationFramesOnly", static_cast<int>(o->value()
 
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveImage/Resolution", value);} open
-          tooltip {Resolution of movie to save.} xywh {194 113 170 29} down_box BORDER_BOX
+          tooltip {Resolution of movie to save.} xywh {176 113 170 29} down_box BORDER_BOX
           code0 {auto settings = mrv::App::app->settings();}
           code1 {int value = settings->getValue<int>("SaveImage/Resolution");}
           code2 {o->value(value);}
@@ -146,7 +183,7 @@ settings->setValue("SaveImage/Resolution", value);} open
       }
       Fl_Group OpenEXROptions {
         label {OpenEXR Options} open
-        xywh {82 183 380 188} box ROUNDED_FRAME color 56
+        xywh {71 183 370 292} box ROUNDED_FRAME color 56
       } {
         Fl_Choice Compression {
           label Compression
@@ -165,7 +202,7 @@ else if (label == "DWAA" || label == "DWAB")
 }
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveImage/Compression", label);} open
-          tooltip {OpenEXR's Compression Type} xywh {223 205 170 29} down_box BORDER_BOX
+          tooltip {OpenEXR's Compression Type} xywh {212 205 170 29} down_box BORDER_BOX
           code0 {fill_compression(o);}
         } {}
         Fl_Choice PixelType {
@@ -174,7 +211,7 @@ settings->setValue("SaveImage/Compression", label);} open
 const std::string& label = item->label();
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveImage/PixelType", label);}
-          tooltip {OpenEXR's Pixel Type} xywh {223 246 170 29} down_box BORDER_BOX
+          tooltip {OpenEXR's Pixel Type} xywh {212 246 170 29} down_box BORDER_BOX
         } {
           MenuItem {} {
             label Half
@@ -186,7 +223,7 @@ settings->setValue("SaveImage/PixelType", label);}
           }
         }
         Fl_Group ZipCompressionGroup {open
-          xywh {225 292 168 26} deactivate
+          xywh {214 292 168 26} deactivate
         } {
           Fl_Value_Input ZipCompressionLevel {
             label {ZIP Compression}
@@ -195,18 +232,18 @@ settings->setValue("SaveImage/PixelType", label);}
 
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveImage/ZipCompressionLevel", o->value());}
-            xywh {225 292 64 26} color -1733777408 minimum 1 maximum 9 step 1 value 4 textcolor 56
+            xywh {214 292 64 26} color -1733777408 minimum 1 maximum 9 step 1 value 4 textcolor 56
           }
           Fl_Slider ZipCompressionSlider {
             user_data ZipCompressionLevel user_data_type {Fl_Value_Input*}
             callback {v->value(o->value());
 v->do_callback();
 v->redraw();}
-            xywh {289 292 104 26} type {Horz Knob} minimum 1 maximum 9 step 1 value 4 slider_size 0.1
+            xywh {278 292 104 26} type {Horz Knob} minimum 1 maximum 9 step 1 value 4 slider_size 0.1
           }
         }
         Fl_Group DWACompressionGroup {open
-          xywh {225 330 168 26} deactivate
+          xywh {214 330 168 26} deactivate
         } {
           Fl_Value_Input DWACompressionLevel {
             label {DWA Compression}
@@ -215,32 +252,64 @@ v->redraw();}
 
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveImage/DWACompressionLevel", o->value());}
-            xywh {225 330 64 26} color -1733777408 maximum 1e+06 step 0.1 value 45 textcolor 56
+            xywh {214 330 64 26} color -1733777408 maximum 1e+06 step 0.1 value 45 textcolor 56
           }
           Fl_Slider DWACompressionSlider {
             user_data DWACompressionLevel user_data_type {Fl_Value_Input*}
             callback {v->value(o->value());
 v->do_callback();
 v->redraw();}
-            xywh {289 330 104 26} type {Horz Knob} maximum 1e+06 step 2 value 45 slider_size 0.1
+            xywh {278 330 104 26} type {Horz Knob} maximum 1e+06 step 2 value 45 slider_size 0.1
+          }
+        }
+        Fl_Choice Contents {
+          label Contents
+          user_data this user_data_type {SaveImageOptionsUI*} open
+          tooltip {OpenEXR's Compression Type} xywh {212 368 170 29} down_box BORDER_BOX
+        } {
+          MenuItem {} {
+            label {Display Window}
+            xywh {0 0 100 20}
+          }
+          MenuItem {} {
+            label {Data Window}
+            xywh {10 10 100 20}
+          }
+        }
+        Fl_Choice PixelRatio {
+          label {Pixel Ratio}
+          user_data this user_data_type {SaveImageOptionsUI*} open
+          tooltip {OpenEXR's Pixel Ratio} xywh {212 413 170 29} down_box BORDER_BOX
+        } {
+          MenuItem {} {
+            label Keep
+            xywh {10 10 100 20}
+          }
+          MenuItem {} {
+            label Reset
+            xywh {20 20 100 20}
+          }
+          MenuItem {} {
+            label {Reset and Rescale}
+            xywh {30 30 100 20}
           }
         }
       }
       Fl_Group {} {open
-        xywh {134 392 262 34}
+        xywh {134 492 262 34}
       } {
         Fl_Button {} {
           label Ok
           user_data uiMain user_data_type {Fl_Double_Window*}
           callback {v->hide();}
-          xywh {134 392 90 34}
+          xywh {134 492 90 34}
         }
         Fl_Button {} {
           label Cancel
           user_data uiMain user_data_type {Fl_Double_Window*}
           callback {cancel = true;
 v->hide();}
-          xywh {306 392 90 34}
+          xywh {306 492 90 34}
         }
       }
     }
@@ -252,6 +321,8 @@ if (ext == ".exr" && exr_valid)
    OpenEXROptions->activate();
    select_pixel_type(PixelType);   
    select_compression(Compression);
+   select_contents(Contents);
+   select_pixel_ratio(PixelRatio);
 }
 uiMain->show();
 while (uiMain->visible())
