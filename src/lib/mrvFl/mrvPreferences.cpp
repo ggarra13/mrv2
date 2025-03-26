@@ -383,6 +383,19 @@ namespace mrv
         view.get("zoom_speed", tmp, 2);
         uiPrefs->uiPrefsZoomSpeed->value(tmp);
 
+        //
+        // HDR
+        //
+        Fl_Preferences hdr(gui, "hdr");
+        hdr.get("chromaticities", tmp, 0);
+        uiPrefs->uiPrefsChromaticities->value(tmp);
+        
+        hdr.get("tonemap", tmp, 1);
+        uiPrefs->uiPrefsTonemap->value(tmp);
+        
+        hdr.get("tonemap_algorithm", tmp, 0);
+        uiPrefs->uiPrefsTonemapAlgorithm->value(tmp);
+        
         DBG3;
         //
         // ui/colors
@@ -1249,6 +1262,12 @@ namespace mrv
         view.set("crop_area", uiPrefs->uiPrefsCropArea->value());
         view.set("zoom_speed", (int)uiPrefs->uiPrefsZoomSpeed->value());
 
+        Fl_Preferences hdr(gui, "hdr");
+        hdr.set("chromaticities", uiPrefs->uiPrefsChromaticities->value());
+        hdr.set("tonemap", uiPrefs->uiPrefsTonemap->value());
+        hdr.set("tonemap_algorithm",
+                uiPrefs->uiPrefsTonemapAlgorithm->value());
+        
         //
         // view/colors prefs
         //
@@ -1779,7 +1798,14 @@ namespace mrv
             static_cast<timeline::ImageFilter>(minifyFilter);
         displayOptions.imageFilters.magnify =
             static_cast<timeline::ImageFilter>(magnifyFilter);
+        displayOptions.ignoreChromaticities =
+            !uiPrefs->uiPrefsChromaticities->value();
         app->setDisplayOptions(displayOptions);
+        
+        timeline::HDROptions hdrOptions = ui->uiView->getHDROptions();
+        hdrOptions.algorithm =
+            static_cast<timeline::HDRTonemapAlgorithm>(uiPrefs->uiPrefsTonemapAlgorithm->value());
+        ui->uiView->setHDROptions(hdrOptions);
 
         //
         // Handle HUD

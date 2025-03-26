@@ -17,6 +17,7 @@ v1.3.7
 - Fixed tonemapping not turning off when switching from an HDR movie to aces
   SDR one.
 - Fixed playing movies that have frames of 0 duration.
+- Added Preferences->Render->HDR to control chromaticities and tonemapping.
 
   
 v1.3.6
