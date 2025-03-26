@@ -5349,6 +5349,42 @@ msgstr ""
 msgid "Nearest"
 msgstr ""
 
+msgid "Ignore"
+msgstr ""
+
+msgid "Apply"
+msgstr ""
+
+msgid "Never"
+msgstr ""
+
+msgid "ST2094_40"
+msgstr ""
+
+msgid "ST2094_10"
+msgstr ""
+
+msgid "Clip"
+msgstr ""
+
+msgid "BT2390"
+msgstr ""
+
+msgid "BT2446A"
+msgstr ""
+
+msgid "Spline"
+msgstr ""
+
+msgid "Reinhard"
+msgstr ""
+
+msgid "Mobius"
+msgstr ""
+
+msgid "Linear Light"
+msgstr ""
+
 msgid "Small"
 msgstr ""
 
@@ -5753,6 +5789,18 @@ msgid "Minify Filter"
 msgstr ""
 
 msgid "Magnify Filter"
+msgstr ""
+
+msgid "HDR"
+msgstr ""
+
+msgid "Chromaticities"
+msgstr ""
+
+msgid "Tonemap"
+msgstr ""
+
+msgid "Tonemap Algorithm"
 msgstr ""
 
 msgid "Thumbnails"

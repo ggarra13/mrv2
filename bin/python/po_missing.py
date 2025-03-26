@@ -48,7 +48,7 @@ parser.add_argument('language', type=str,
 args = parser.parse_args()
 lang = args.language
 
-if not lang in LANGUAGES:
+if not lang in ['all'] + LANGUAGES:
     print(f'Invalid language "{lang}"')
     print(f'Valid ones are:\n\t{", ".join(LANGUAGES)}')
     exit(1)
@@ -82,7 +82,7 @@ class POMissingTranslations:
         found = False
         try:
             for entry in po:
-                if entry.msgstr != '':
+                if not entry.fuzzy and entry.msgstr != '':
                     continue
 
                 found = True
