@@ -3403,9 +3403,10 @@ namespace mrv
         i = p.tagData.find("hdr");
         if (i != p.tagData.end())
         {
-            p.hdrOptions.tonemap = true;
+            if (p.ui->uiPrefs->uiPrefsTonemap->value() != 0)
+                p.hdrOptions.tonemap = true;
 
-            if (p.hdr != i->second)
+            if (p.hdrOptions.tonemap && p.hdr != i->second)
             {
                 p.hdr = i->second;
 

@@ -3962,6 +3962,10 @@ msgstr "रेंडर/HDR/अवैध मान"
 msgid "Render/HDR/Ignore Chromaticities"
 msgstr "रेंडर/HDR/टॉगलिकता अनदेखा करें"
 
+#, fuzzy
+msgid "Render/HDR/Toggle Tonemap"
+msgstr "रेंडर/HDR/टोनमैप"
+
 msgid "Render/HDR/Tonemap"
 msgstr "रेंडर/HDR/टोनमैप"
 

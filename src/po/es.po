@@ -4070,6 +4070,10 @@ msgstr "Render/HDR/Valores Inválidos"
 msgid "Render/HDR/Ignore Chromaticities"
 msgstr "Render/HDR/Ignorar Chromacidades"
 
+#, fuzzy
+msgid "Render/HDR/Toggle Tonemap"
+msgstr "Render/HDR/Mapeo de Tonos"
+
 msgid "Render/HDR/Tonemap"
 msgstr "Render/HDR/Mapeo de Tonos"
 

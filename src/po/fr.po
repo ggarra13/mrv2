@@ -4014,6 +4014,10 @@ msgstr "Rendre/HDR/Valeurs non valides"
 msgid "Render/HDR/Ignore Chromaticities"
 msgstr "Rendre/HDR/Ignorer les chromatismes"
 
+#, fuzzy
+msgid "Render/HDR/Toggle Tonemap"
+msgstr "Rendre/HDR/Carte des tons"
+
 msgid "Render/HDR/Tonemap"
 msgstr "Rendre/HDR/Carte des tons"
 
