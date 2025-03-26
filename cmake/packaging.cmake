@@ -118,16 +118,24 @@ elseif(UNIX)
     #
     configure_file( ${MRV2_DIR}/etc/Linux/mrv2.desktop.in
 	"${PROJECT_BINARY_DIR}/etc/mrv2-v${mrv2_VERSION}.desktop" )
+    configure_file( ${MRV2_DIR}/etc/Linux/hdr.desktop.in
+	"${PROJECT_BINARY_DIR}/etc/hdr-v${mrv2_VERSION}.desktop" )
 
     #
     # This desktop file is for Wayland to set its icon correctly.
     #
     configure_file( ${MRV2_DIR}/etc/Linux/mrv2.main.desktop.in
 	"${PROJECT_BINARY_DIR}/etc/mrv2.desktop" )
+    configure_file( ${MRV2_DIR}/etc/Linux/hdr.main.desktop.in
+	"${PROJECT_BINARY_DIR}/etc/hdr.desktop" )
 
     install(FILES "${PROJECT_BINARY_DIR}/etc/mrv2-v${mrv2_VERSION}.desktop"
 	DESTINATION share/applications COMPONENT applications)
     install(FILES "${PROJECT_BINARY_DIR}/etc/mrv2.desktop"
+	DESTINATION share/applications COMPONENT applications)
+    install(FILES "${PROJECT_BINARY_DIR}/etc/hdr-v${mrv2_VERSION}.desktop"
+	DESTINATION share/applications COMPONENT applications)
+    install(FILES "${PROJECT_BINARY_DIR}/etc/hdr.desktop"
 	DESTINATION share/applications COMPONENT applications)
     install(DIRECTORY ${MRV2_DIR}/share/icons
 	DESTINATION share/ COMPONENT applications)
