@@ -5,8 +5,7 @@ code_name {.cxx}
 decl {\#include "mrvHDR/mrvNDIView.h"} {public global
 }
 
-decl {\#include "FL/Fl_Sys_Menu_Bar
-.h"} {selected public global
+decl {\#include "FL/Fl_Sys_Menu_Bar.H"} {selected public global
 }
 
 class HDRUI {open
