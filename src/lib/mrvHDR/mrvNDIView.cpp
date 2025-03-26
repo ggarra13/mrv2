@@ -206,6 +206,8 @@ namespace mrv
         std::string    matrixName;
 
         // Full mrv2 image data (we try to use this)
+        bool hdrMonitorFound = false;
+        bool createHDRShader = false;
         bool hasHDR = false;
         image::HDRData hdrData;
 
@@ -251,6 +253,8 @@ namespace mrv
     
     void NDIView::init_vk_swapchain()
     {
+        TLRENDER_P();
+        
         Fl_Vk_Window::init_vk_swapchain();
 
         VkResult result;
@@ -267,7 +271,6 @@ namespace mrv
                                                       formats.data());
         VK_CHECK_RESULT(result);
 
-        bool hdrFound = false;
         // Look for HDR10 or HLG if present
         for (const auto& format : formats)
         {
@@ -278,19 +281,20 @@ namespace mrv
             case VK_COLOR_SPACE_DOLBYVISION_EXT:
                 m_format = format.format;
                 m_color_space = format.colorSpace;
-                hdrFound = true;
+                p.hdrMonitorFound = true;
                 break;
             default:
                 break;
             }
 
-            if (hdrFound)
+            if (p.hdrMonitorFound)
                 break;
         }
 
-        if (!hdrFound)
+        if (!p.hdrMonitorFound)
         {
-            std::cerr << "No HDR supported!" << std::endl;
+            std::cerr << "No HDR monitor found or configured for SDR!"
+                      << std::endl;
         }
         
         // If the format list includes just one entry of VK_FORMAT_UNDEFINED,
@@ -316,7 +320,7 @@ namespace mrv
         vkDestroyShaderModule(m_device, m_frag_shader_module, NULL);
         m_frag_shader_module = VK_NULL_HANDLE;
 
-        if (p.hasHDR)
+        if (p.createHDRShader)
         {
             _create_HDR_shader();
         }
@@ -1101,7 +1105,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        if (p.hasHDR)
+        if (p.hdrMonitorFound && p.hasHDR)
         {
             const image::HDRData& data = p.hdrData;
             m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
@@ -1498,6 +1502,7 @@ namespace mrv
     void NDIView::_create_HDR_shader()
     {
         TLRENDER_P();
+        return;
         
 #if defined(TLRENDER_LIBPLACEBO)
         pl_shader_params shader_params;
