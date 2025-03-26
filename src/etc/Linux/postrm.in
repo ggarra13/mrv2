@@ -59,6 +59,7 @@ fi
 # Remove Desktop shortcut
 #
 rm -f "${desktop_dir}/mrv2-v@mrv2_VERSION@.desktop"
+rm -f "${desktop_dir}/hdr-v@mrv2_VERSION@.desktop"
 
 
 sharedir=/usr/share
@@ -70,12 +71,14 @@ appdir=${sharedir}/applications
 for i in $ICON_SIZES; do
     icons_dir=${sharedir}/icons/hicolor/${i}x${i}/apps/
     rm $icons_dir/mrv2-v@mrv2_VERSION@.png
+    rm $icons_dir/hdr-v@mrv2_VERSION@.png
 done
 
 #
 # Remove /usr/share/applications/mrv2-v<VERSION>.desktop
 #
 rm -f ${appdir}/mrv2-v@mrv2_VERSION@.desktop
+rm -f ${appdir}/hdr-v@mrv2_VERSION@.desktop
 
 
 echo "Updating desktop database..."

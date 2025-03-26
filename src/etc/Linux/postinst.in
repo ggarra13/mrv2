@@ -77,28 +77,37 @@ for i in $ICON_SIZES; do
     cp ${sharedir}/icons/hicolor/${i}x${i}/apps/mrv2.png /usr/share/icons/hicolor/${i}x${i}/apps/mrv2.png
 done
 
+copy_desktop_shortcut()
+{
+    local shortcut=$1
+    
+    appshortcut="${appdir}/${shortcut}"
+    desktop_shortcut="${desktop_dir}/${shortcut}"
+
+    #
+    # Copy shortcut to desktop
+    #
+    cp -f "${appshortcut}" "${desktop_dir}"
+
+    #
+    # Change owner of shortcut to user
+    #
+    chown ${name} "${desktop_shortcut}"
+    
+    #
+    # Make it executable
+    #
+    chmod a+x "${desktop_shortcut}"
+}
 
 #
 # Copy versioned shortcut to applications and desktop
 #
 shortcut="mrv2-v@mrv2_VERSION@.desktop"
-appshortcut="${appdir}/${shortcut}"
-desktop_shortcut="${desktop_dir}/${shortcut}"
+copy_desktop_shorcut $shortcut
 
-#
-# Copy shortcut to desktop
-#
-cp -f "${appshortcut}" "${desktop_dir}"
-
-#
-# Change owner of shortcut to user
-#
-chown ${name} "${desktop_shortcut}"
-
-#
-# Make it executable
-#
-chmod a+x "${desktop_shortcut}"
+shortcut="hdr-v@mrv2_VERSION@.desktop"
+copy_desktop_shorcut $shortcut
 
 #
 # Copy unversioned shortcut for Wayland to applications
@@ -117,6 +126,15 @@ xdg-mime default "${appshortcut}" video/mp4 video/mpeg video/quicktime video/x-f
 # Associate Image formats
 #
 xdg-mime default "${appshortcut}" image/x-cin image/x-dpx image/jpeg image/png image/x-tiff image/x-tga image/x-exr image/x-sxr
+
+
+#
+# Copy unversioned shortcut for Wayland
+#
+shortcut="hdr.desktop"
+appshortcut="${appdir}/${shortcut}"
+cp -f "${appshortcut}" /usr/share/applications
+
 
 echo "Updating desktop database..."
 update-desktop-database
