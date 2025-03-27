@@ -22,6 +22,7 @@ v1.3.7
 - Fixed tags not getting saved when using save image or save movie.
 - Made OpenEXRs keep the Data Window and Display Window when saving.
 - Fixed OpenEXR saving when channel count was different than 4.
+- Added the option in the Save Image Options for OpenEXR to allow saving the Data Window or flatten the image to save the full Display Window.
 
   
 v1.3.6

@@ -17,8 +17,7 @@ namespace mrv
     //! Resolution to save
     enum class SaveResolution { kSameSize, kHalfSize, kQuarterSize };
     
-    enum class SavePixelRatio { kKeep, kReset, kResetAndResize };
-    enum class SaveContents   { kDisplayWindow, kDataWindow };
+    enum class SaveContents   { kDataWindow, kDisplayWindow };
 
     struct SaveOptions
     {
@@ -47,12 +46,10 @@ namespace mrv
 #ifdef TLRENDER_EXR
         Imf::Compression exrCompression = Imf::ZIP_COMPRESSION;
         tl::image::PixelType exrPixelType = tl::image::PixelType::RGBA_F16;
-        SaveContents exrSaveContents = SaveContents::kDisplayWindow;
+        SaveContents exrSaveContents = SaveContents::kDataWindow;
         int zipCompressionLevel = 4;
         float dwaCompressionLevel = 45.0F;
 #endif
-        SavePixelRatio pixelRatio = SavePixelRatio::kKeep;
-
         bool noRename = false;
     };
 } // namespace mrv
