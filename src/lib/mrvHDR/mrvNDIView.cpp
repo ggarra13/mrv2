@@ -1188,13 +1188,16 @@ namespace mrv
         vkFreeCommandBuffers(m_device, m_cmd_pool, 1, &update_cmd);
     }
 
+    void NDIView::vk_draw_begin()
+    {
+        // Change background color here
+        Fl_Vk_Window::vk_draw_begin();
+    }
+    
     void NDIView::draw()
     {
         TLRENDER_P();
 
-        // Background color
-        
-        draw_begin();
 
         update_texture();
 
@@ -1206,8 +1209,6 @@ namespace mrv
         vkCmdDraw(m_draw_cmd, 4, 1, 0, 0);
 
         Fl_Window::draw();
-
-        draw_end();
     }
 
     void NDIView::_videoThread()

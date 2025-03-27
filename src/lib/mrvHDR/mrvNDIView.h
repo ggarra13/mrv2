@@ -37,6 +37,7 @@ namespace mrv
 
     class NDIView : public Fl_Vk_Window
     {
+        void vk_draw_begin() FL_OVERRIDE;
         void draw() FL_OVERRIDE;
 
     public:
