@@ -204,8 +204,6 @@ namespace mrv
                 }
             }
 
-            std::shared_ptr<image::Image> outputImage;
-
             {
 
                 if (options.annotations)
