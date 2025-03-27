@@ -21,9 +21,7 @@ namespace mrv
 
     struct TimelineViewport::Private
     {
-        static std::map<
-            std::string, std::string, string::CaseInsensitiveCompare>
-            tagData;
+        static image::Tags tagData;
         std::shared_ptr<observer::Value<timeline::BackgroundOptions> > backgroundOptions;
         static float rotation;
         static bool resizeWindow;

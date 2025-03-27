@@ -425,17 +425,18 @@ namespace mrv
         value = saveOptions.PixelType->value();
         if (value == 0)
             options.exrPixelType = tl::image::PixelType::RGBA_F16;
-        if (value == 1)
+        else if (value == 1)
             options.exrPixelType = tl::image::PixelType::RGBA_F32;
-#endif
-
-#ifdef TLRENDER_EXR
         value = saveOptions.Compression->value();
         options.exrCompression = static_cast<Imf::Compression>(value);
+        value = saveOptions.Contents->value();
+        options.exrSaveContents = static_cast<mrv::SaveContents>(value);
+        value = saveOptions.PixelRatio->value();
         options.zipCompressionLevel =
             static_cast<int>(saveOptions.ZipCompressionLevel->value());
         options.dwaCompressionLevel = saveOptions.DWACompressionLevel->value();
 #endif
+        options.pixelRatio     = static_cast<mrv::SavePixelRatio>(value);
 
         options.noRename = !rename;
 

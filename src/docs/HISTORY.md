@@ -9,6 +9,7 @@ v1.3.7
   stopped.
 - Fixed Render->Minify Filter and Render->Magnify Filter toggling from the
   menu entries (Shift + F was working fine).
+- Added 'hdr' stand-alone utility based on NDI and Vulkan.
 - Fixed Render->Minify and Magnify filter toggling.
 - Fixed Render->Minify and Magnify saving in preferences.
 - Added full support for Japanese language in the UI.
@@ -18,6 +19,9 @@ v1.3.7
   SDR one.
 - Fixed playing movies that have frames of 0 duration.
 - Added Preferences->Render->HDR to control chromaticities and tonemapping.
+- Fixed tags not getting saved when using save image or save movie.
+  Note, however, that the data window currently is not kept and it is made
+  equal to the display window.
 
   
 v1.3.6

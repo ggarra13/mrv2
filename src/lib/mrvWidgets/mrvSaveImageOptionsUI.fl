@@ -75,38 +75,14 @@ o->value(0);} {}
   Function {select_contents(Fl_Choice* o)} {open
   } {
     code {auto settings = mrv::App::app->settings();
-const std::string& saved =
-        settings->getValue<std::string>("SaveImage/Contents");
-for (int i = 0; i < o->size(); ++i)
-{
-   const Fl_Menu_Item* const item = &o->menu()[i];
-   if (!item || !item->label())
-         continue;
-   const std::string& type = item->label();
-   if (saved == type)
-   {
-       o->value(i);
-       return;
-    }
-}
-o->value(0);} {}
+int v = settings->getValue<int>("SaveImage/Contents");
+o->value(v);} {}
   }
-  Function {select_pixel_ratio(Fl_Choice* o)} {open selected
+  Function {select_pixel_ratio(Fl_Choice* o)} {open
   } {
     code {auto settings = mrv::App::app->settings();
-const std::string& saved =
-        settings->getValue<std::string>("SaveImage/PixelRatio");
-for (int i = 0; i < o->size(); ++i)
-{
-   const Fl_Menu_Item* const item = &o->menu()[i];
-   const std::string& type = item->label();
-   if (saved == type)
-   {
-       o->value(i);
-       return;
-    }
-}
-o->value(0);} {}
+int v = settings->getValue<int>("SaveImage/PixelRatio");
+o->value(v);} {}
   }
   Function {fill_compression(Fl_Choice* o)} {open
   } {
@@ -123,10 +99,11 @@ for (int i = 0; i < Imf::NUM_COMPRESSION_METHODS; ++i)
 o->menu_end();
 \#endif} {}
   }
-  Function {SaveImageOptionsUI(const std::string ext, const bool exr_valid)} {} {
+  Function {SaveImageOptionsUI(const std::string ext, const bool exr_valid)} {open
+  } {
     Fl_Window uiMain {
-      label {Save Image Options} open
-      xywh {893 260 523 632} type Double align 5 modal visible
+      label {Save Image Options} open selected
+      xywh {893 260 523 548} type Double align 5 hide modal
     } {
       Fl_Group {} {
         label {Common Settings} open
@@ -264,8 +241,10 @@ v->redraw();}
         }
         Fl_Choice Contents {
           label Contents
-          user_data this user_data_type {SaveImageOptionsUI*} open
-          tooltip {OpenEXR's Compression Type} xywh {212 368 170 29} down_box BORDER_BOX
+          user_data this user_data_type {SaveImageOptionsUI*}
+          callback {auto settings = mrv::App::app->settings();
+settings->setValue("SaveImage/Contents", o->value());} open
+          tooltip {OpenEXR's Contents to Save} xywh {212 368 170 29} down_box BORDER_BOX
         } {
           MenuItem {} {
             label {Display Window}
@@ -278,7 +257,9 @@ v->redraw();}
         }
         Fl_Choice PixelRatio {
           label {Pixel Ratio}
-          user_data this user_data_type {SaveImageOptionsUI*} open
+          user_data this user_data_type {SaveImageOptionsUI*}
+          callback {auto settings = mrv::App::app->settings();
+settings->setValue("SaveImage/PixeRatio", o->value());} open
           tooltip {OpenEXR's Pixel Ratio} xywh {212 413 170 29} down_box BORDER_BOX
         } {
           MenuItem {} {

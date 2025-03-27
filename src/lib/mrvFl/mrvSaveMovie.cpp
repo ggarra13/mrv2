@@ -965,6 +965,8 @@ namespace mrv
 
                     if (videoTime.contains(currentTime))
                     {
+                        const auto& tags = ui->uiView->getTags();
+                        outputImage->setTags(tags);
                         writer->writeVideo(currentTime, outputImage);
                     }
                 }

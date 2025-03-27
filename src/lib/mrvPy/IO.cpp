@@ -29,8 +29,11 @@ void mrv2_io(py::module& m)
 #endif
 #ifdef TLRENDER_EXR
                 ,
-                Imf::Compression, tl::image::PixelType, int, float
+                Imf::Compression, tl::image::PixelType,
+            mrv::SaveContents, int, float
 #endif
+            ,
+            mrv::SavePixelRatio
                 >(),
             py::arg("annotations") = false, py::arg("video") = true,
             py::arg("saveVideo") = true,
@@ -52,9 +55,12 @@ void mrv2_io(py::module& m)
             ,
             py::arg("exrCompression") = Imf::ZIP_COMPRESSION,
             py::arg("exrPixelType") = tl::image::PixelType::RGBA_F16,
+            py::arg("exrSaveContents") = mrv::SaveContents::kDisplayWindow,
             py::arg("zipCompressionLevel") = 4,
             py::arg("dwaCompressionLevel") = 45.0F
 #endif
+            ,
+            py::arg("pixelRatio") = mrv::SavePixelRatio::kKeep
             )
         .def_readwrite(
             "annotations", &mrv::SaveOptions::annotations,

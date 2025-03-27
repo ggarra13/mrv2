@@ -366,8 +366,7 @@ namespace mrv
         void showImage(const std::shared_ptr<image::Image>& image);
 
         //! Get current frame/video tags
-        std::map<std::string, std::string, string::CaseInsensitiveCompare>
-        getTags() const noexcept;
+        image::Tags getTags() const noexcept;
 
     protected:
         void _init();

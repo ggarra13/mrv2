@@ -99,8 +99,7 @@ namespace mrv
     float TimelineViewport::Private::helpTextFade;
     bool TimelineViewport::Private::hudActive = true;
     HudDisplay TimelineViewport::Private::hud = HudDisplay::kNone;
-    std::map<std::string, std::string, string::CaseInsensitiveCompare>
-        TimelineViewport::Private::tagData;
+    image::Tags TimelineViewport::Private::tagData;
     short TimelineViewport::Private::ghostNext = 5;
     short TimelineViewport::Private::ghostPrevious = 5;
 
@@ -3352,7 +3351,7 @@ namespace mrv
         return speedValues[idx];
     }
 
-    std::map<std::string, std::string, string::CaseInsensitiveCompare>
+    tl::image::Tags
     TimelineViewport::getTags() const noexcept
     {
         return _p->tagData;
