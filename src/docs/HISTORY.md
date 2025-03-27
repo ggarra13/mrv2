@@ -20,6 +20,8 @@ v1.3.7
 - Fixed playing movies that have frames of 0 duration.
 - Added Preferences->Render->HDR to control chromaticities and tonemapping.
 - Fixed tags not getting saved when using save image or save movie.
+- Made OpenEXRs keep the Data Window and Display Window when saving.
+- Fixed OpenEXR saving when channel count was different than 4.
 
   
 v1.3.6

@@ -2,9 +2,11 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <algorithm> // For std::clamp
 #include <string>
 #include <sstream>
 #include <filesystem>
+#include <vector>
 namespace fs = std::filesystem;
 
 #include <tlIO/System.h>
@@ -141,20 +143,18 @@ namespace mrv
                 {
                     renderSize.w /= 2;
                     renderSize.h /= 2;
-                    msg = tl::string::Format(_("Scaled image info: {0}"))
-                              .arg(renderSize);
-                    LOG_STATUS(msg);
                 }
                 else if (resolution == SaveResolution::kQuarterSize)
                 {
                     renderSize.w /= 4;
                     renderSize.h /= 4;
-                    msg = tl::string::Format(_("Scaled image info: {0}"))
-                              .arg(renderSize);
-                    LOG_STATUS(msg);
                 }
+                msg = tl::string::Format(_("Render size: {0}"))
+                      .arg(renderSize);
+                LOG_STATUS(msg);
             }
 
+                    
             // Create the renderer.
             render = timeline_gl::Render::create(context);
             offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
@@ -178,38 +178,35 @@ namespace mrv
             
             auto tags = ui->uiView->getTags();
 
-            // \@bug: this is not working.  We loose data window for now.
-            // if (!options.annotations)
-            // {
-            //     auto i = tags.find("Data Window");
-            //     if (i != tags.end())
-            //     {
-            //         std::stringstream s(i->second);
-            //         math::Box2i box;
-            //         s >> box;
-            //         outputInfo.size.w = box.max.x - box.min.x + 1;
-            //         outputInfo.size.h = box.max.y - box.min.y + 1;
-            //     }
-            // }
-            // else
-            // {
-            //     auto i = tags.find("Display Window");
-            //     if (i != tags.end())
-            //     {
-            //         tags["Data Window"] = i->second;
-            //     }
-            // }
 
             std::shared_ptr<image::Image> outputImage;
 
             outputInfo.pixelType = info.video[layerId].pixelType;
             outputInfo.size.pixelAspectRatio = 1.0;
 
+            math::Box2i displayWindow(0, 0, renderSize.w, renderSize.h);
+            math::Box2i dataWindow(0, 0, renderSize.w, renderSize.h);
+            if (!options.annotations && saveEXR)
             {
-                std::string msg = tl::string::Format(_("Image info: {0} {1}"))
-                                      .arg(outputInfo.size)
-                                      .arg(outputInfo.pixelType);
-                LOG_STATUS(msg);
+                auto i = tags.find("Data Window");
+                if (i != tags.end())
+                {
+                    std::stringstream s(i->second);
+                    s >> dataWindow;
+                    outputInfo.size.w = dataWindow.max.x - dataWindow.min.x + 1;
+                    outputInfo.size.h = dataWindow.max.y - dataWindow.min.y + 1;
+                }
+                i = tags.find("Display Window");
+                if (i != tags.end())
+                {
+                    std::stringstream s(i->second);
+                    s >> displayWindow;
+                }
+            }
+
+            std::shared_ptr<image::Image> outputImage;
+
+            {
 
                 if (options.annotations)
                 {
@@ -310,6 +307,17 @@ namespace mrv
             }
 #endif
 
+            if (!options.annotations)
+            {
+                std::string layerName = ui->uiColorChannel->label();
+                outputInfo.pixelType = info.video[layerId].pixelType;
+                msg = tl::string::Format(_("Image Layer '{0}' info: {1} {2}"))
+                      .arg(layerName)
+                      .arg(outputInfo.size)
+                      .arg(outputInfo.pixelType);
+                LOG_STATUS(msg);
+            }
+            
             outputInfo = writerPlugin->getWriteInfo(outputInfo);
             if (image::PixelType::None == outputInfo.pixelType)
             {
@@ -329,20 +337,22 @@ namespace mrv
                 LOG_STATUS(msg);
             }
 
-#ifdef TLRENDER_EXR
-            if (saveEXR)
-            {
-                if (!options.annotations)
-                {
-                    outputInfo.pixelType = options.exrPixelType;
-                }
-            }
-#endif
             if (saveHDR)
             {
                 outputInfo.pixelType = image::PixelType::RGB_F32;
                 offscreenBufferOptions.colorType = image::PixelType::RGB_F32;
             }
+            
+#ifdef TLRENDER_EXR
+            if (saveEXR)
+            {
+                if (options.annotations)
+                {
+                    outputInfo.pixelType = options.exrPixelType;
+                }
+                offscreenBufferOptions.colorType = outputInfo.pixelType;
+            }
+#endif
 
             std::string msg = tl::string::Format(_("Output info: {0} {1}"))
                                   .arg(outputInfo.size)
@@ -464,9 +474,9 @@ namespace mrv
             else
             {
                 // Get the videoData
-                const auto& videoData =
-                    timeline->getVideo(currentTime).future.get();
-
+                auto videoData = timeline->getVideo(currentTime).future.get();
+                videoData.layers[0].image->setPixelAspectRatio(1.F);
+                
                 // Render the video.
                 gl::OffscreenBufferBinding binding(buffer);
                 CHECK_GL;
@@ -497,9 +507,20 @@ namespace mrv
                     outputInfo.layout.endian != memory::getEndian());
                 CHECK_GL;
 
-                glReadPixels(
-                    0, 0, outputInfo.size.w, outputInfo.size.h, format, type,
-                    outputImage->getData());
+                X = dataWindow.min.x;
+
+                //
+                // OpenGL Framebuffer:
+                // Origin (0,0) is at the bottom-left, and Y increases upwards.
+                // However, when reading pixels with glReadPixels, the image
+                // data is stored top-down.
+                //
+                Y = displayWindow.max.y - (dataWindow.min.y +
+                                           outputImage->getHeight()) + 1;
+
+                glReadPixels(X, Y, outputImage->getWidth(),
+                             outputImage->getHeight(), format, type,
+                             outputImage->getData());
                 CHECK_GL;
             }
 
