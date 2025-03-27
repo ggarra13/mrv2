@@ -141,20 +141,18 @@ namespace mrv
                 {
                     renderSize.w /= 2;
                     renderSize.h /= 2;
-                    msg = tl::string::Format(_("Scaled image info: {0}"))
-                              .arg(renderSize);
-                    LOG_STATUS(msg);
                 }
                 else if (resolution == SaveResolution::kQuarterSize)
                 {
                     renderSize.w /= 4;
                     renderSize.h /= 4;
-                    msg = tl::string::Format(_("Scaled image info: {0}"))
-                              .arg(renderSize);
-                    LOG_STATUS(msg);
                 }
+                msg = tl::string::Format(_("Scaled image info: {0}"))
+                      .arg(renderSize);
+                LOG_STATUS(msg);
             }
 
+                    
             // Create the renderer.
             render = timeline_gl::Render::create(context);
             offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
@@ -178,27 +176,26 @@ namespace mrv
             
             auto tags = ui->uiView->getTags();
 
-            // \@bug: this is not working.  We loose data window for now.
-            // if (!options.annotations)
-            // {
-            //     auto i = tags.find("Data Window");
-            //     if (i != tags.end())
-            //     {
-            //         std::stringstream s(i->second);
-            //         math::Box2i box;
-            //         s >> box;
-            //         outputInfo.size.w = box.max.x - box.min.x + 1;
-            //         outputInfo.size.h = box.max.y - box.min.y + 1;
-            //     }
-            // }
-            // else
-            // {
-            //     auto i = tags.find("Display Window");
-            //     if (i != tags.end())
-            //     {
-            //         tags["Data Window"] = i->second;
-            //     }
-            // }
+            math::Box2i dataWindow(0, 0, renderSize.w, renderSize.h);
+            if (!options.annotations)
+            {
+                auto i = tags.find("Data Window");
+                if (i != tags.end())
+                {
+                    std::stringstream s(i->second);
+                    s >> dataWindow;
+                    outputInfo.size.w = dataWindow.max.x - dataWindow.min.x + 1;
+                    outputInfo.size.h = dataWindow.max.y - dataWindow.min.y + 1;
+                }
+            }
+            else
+            {
+                auto i = tags.find("Display Window");
+                if (i != tags.end())
+                {
+                    tags["Data Window"] = i->second;
+                }
+            }
 
             std::shared_ptr<image::Image> outputImage;
 
@@ -335,6 +332,7 @@ namespace mrv
                 if (!options.annotations)
                 {
                     outputInfo.pixelType = options.exrPixelType;
+                    offscreenBufferOptions.colorType = outputInfo.pixelType;
                 }
             }
 #endif
@@ -497,8 +495,10 @@ namespace mrv
                     outputInfo.layout.endian != memory::getEndian());
                 CHECK_GL;
 
+                LOG_WARNING("Data Window=" << dataWindow );
                 glReadPixels(
-                    0, 0, outputInfo.size.w, outputInfo.size.h, format, type,
+                    dataWindow.min.x, dataWindow.min.y,
+                    outputInfo.size.w, outputInfo.size.h, format, type,
                     outputImage->getData());
                 CHECK_GL;
             }
