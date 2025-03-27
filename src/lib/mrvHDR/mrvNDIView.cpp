@@ -14,6 +14,8 @@
 //     https://www.fltk.org/bugs.php
 //
 
+//#define USE_UINT16 1
+
 #include <atomic>
 #include <chrono>
 #include <condition_variable>
@@ -348,11 +350,72 @@ namespace mrv
             uint16_t* p_y = (uint16_t*)video_frame;
             const uint16_t* p_uv = p_y + w * h;
             const uint16_t* p_alpha = p_uv + w * h;
+
+#ifdef USE_UINT16
+           uint16_t* rgba = (uint16_t*) data;
+
+            // Determine BT.601 or BT.709 based on resolution
+            bool useBT709 = (w >= 1280 && h >= 720);
+
+            // BT.601 coefficients
+            int Kr601 = 299; // 0.299 * 1000
+            int Kb601 = 114; // 0.114 * 1000
+            int Kg601 = 1000 - Kr601 - Kb601; // 0.587 * 1000
+
+            // BT.709 coefficients
+            int Kr709 = 2126; // 0.2126 * 10000
+            int Kb709 = 722;  // 0.0722 * 10000
+            int Kg709 = 10000 - Kr709 - Kb709; // 0.7152 * 10000
+                        
+            for (int y = 0; y < h; ++y)
+            {
+                for (int x = 0; x < w; ++x)
+                {
+                    const int yw = y * w;
+                    const int index_y = yw + x;
+                    const int index_uv = yw + (x / 2) * 2;  // UV is subsampled (4:2:2)
+                    const int index_alpha = index_y;
+
+                    // Extract Y, U, V, and Alpha
+                    int Y = p_y[index_y];
+                    int U = (p_uv[index_uv] - 32768); // Center U around 0
+                    int V = (p_uv[index_uv + 1] - 32768); // Center V around 0
+                    int A = p_alpha[index_alpha];
+
+                    // Convert YUV to RGB
+                    int R, G, B;
+
+                    if (useBT709) {
+                        R = (Y * 10000 + V * 14746) / 10000;
+                        G = (Y * 10000 - U * 3363 - V * 6140) / 10000;
+                        B = (Y * 10000 + U * 17933) / 10000;
+                    } else {
+                        R = (Y * 1000 + V * 1402) / 1000;
+                        G = (Y * 1000 - U * 344 - V * 714) / 1000;
+                        B = (Y * 1000 + U * 1772) / 1000;
+                    }
+                                
+                    // Clamp values to valid U16 range
+                    R = std::clamp(R, 0, 65535);
+                    G = std::clamp(G, 0, 65535);
+                    B = std::clamp(B, 0, 65535);
+                    A = std::clamp(A, 0, 65535);
+            
+                    // Store as RGBA_U16
+                    int rgba_index = (yw + x) * 4;
+                    rgba[rgba_index] = static_cast<uint16_t>(R);
+                    rgba[rgba_index + 1] = static_cast<uint16_t>(G);
+                    rgba[rgba_index + 2] = static_cast<uint16_t>(B);
+                    rgba[rgba_index + 3] = static_cast<uint16_t>(A);
+                }
+            }
+#else
             half* rgba = (half*) data;
                     
             // Determine BT.601 or BT.709 based on resolution
             bool useBT709 = (w >= 1280 && h >= 720);
-                    
+
+            
             // Coefficients
             float Kr = useBT709 ? 0.2126f : 0.299f;
             float Kb = useBT709 ? 0.0722f : 0.114f;
@@ -376,6 +439,11 @@ namespace mrv
                     float G = Yf - 0.344f * Uf - 0.714f * Vf;
                     float B = Yf + 1.772f * Uf;
 
+                    // Clamp to [0, 1] to prevent oversaturation
+                    R = std::max(0.0f, std::min(1.0f, R));
+                    G = std::max(0.0f, std::min(1.0f, G));
+                    B = std::max(0.0f, std::min(1.0f, B));
+
                     // Store as RGBA float
                     int rgba_index = index_y * 4;
                     rgba[rgba_index] = R;
@@ -384,6 +452,7 @@ namespace mrv
                     rgba[rgba_index + 3] = A;
                 }
             }
+#endif
         }
     }
 
@@ -392,8 +461,12 @@ namespace mrv
         VkImageTiling tiling, VkImageUsageFlags usage, VkFlags required_props)
     {
         TLRENDER_P();
-        
+
+#ifdef USE_UINT16
+        const VkFormat tex_format = VK_FORMAT_R16G16B16A16_UNORM;
+#else
         const VkFormat tex_format = VK_FORMAT_R16G16B16A16_SFLOAT;
+#endif
         uint32_t tex_width = 1, tex_height = 1;
         if (p.image)
         {
@@ -504,7 +577,11 @@ namespace mrv
     void NDIView::prepare_textures()
     {
         VkResult result;
+#ifdef USE_UINT16
+        const VkFormat tex_format = VK_FORMAT_R16G16B16A16_UNORM;
+#else
         const VkFormat tex_format = VK_FORMAT_R16G16B16A16_SFLOAT;
+#endif
         const float tex_colors[DEMO_TEXTURE_COUNT][2 * 4 * sizeof(half)] = {
             {0.4F, 0.4F, 0.4F, 1.F, 0.6F, 0.6F, 0.6F, 0.1F}
         };
