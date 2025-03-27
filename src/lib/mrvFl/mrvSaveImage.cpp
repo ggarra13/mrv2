@@ -193,8 +193,6 @@ namespace mrv
                 {
                     std::stringstream s(i->second);
                     s >> dataWindow;
-                    outputInfo.size.w = dataWindow.max.x - dataWindow.min.x + 1;
-                    outputInfo.size.h = dataWindow.max.y - dataWindow.min.y + 1;
                 }
                 i = tags.find("Display Window");
                 if (i != tags.end())
@@ -202,6 +200,11 @@ namespace mrv
                     std::stringstream s(i->second);
                     s >> displayWindow;
                 }
+                if (options.exrSaveContents == SaveContents::kDisplayWindow)
+                    dataWindow = displayWindow;
+                
+                outputInfo.size.w = dataWindow.max.x - dataWindow.min.x + 1;
+                outputInfo.size.h = dataWindow.max.y - dataWindow.min.y + 1;
             }
 
             {

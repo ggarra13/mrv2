@@ -431,12 +431,10 @@ namespace mrv
         options.exrCompression = static_cast<Imf::Compression>(value);
         value = saveOptions.Contents->value();
         options.exrSaveContents = static_cast<mrv::SaveContents>(value);
-        value = saveOptions.PixelRatio->value();
         options.zipCompressionLevel =
             static_cast<int>(saveOptions.ZipCompressionLevel->value());
         options.dwaCompressionLevel = saveOptions.DWACompressionLevel->value();
 #endif
-        options.pixelRatio     = static_cast<mrv::SavePixelRatio>(value);
 
         options.noRename = !rename;
 

@@ -43,11 +43,6 @@ void mrv2_enums(py::module& m)
         .value("Same_Size", mrv::SaveResolution::kSameSize)
         .value("Half_Size", mrv::SaveResolution::kHalfSize)
         .value("Quarter_Size", mrv::SaveResolution::kQuarterSize);
-    
-    py::enum_<mrv::SavePixelRatio>(io, "SavePixelRatio")
-        .value("Keep", mrv::SavePixelRatio::kKeep)
-        .value("Reset", mrv::SavePixelRatio::kReset)
-        .value("Reset_And_Resize", mrv::SavePixelRatio::kResetAndResize);
 
 #ifdef TLRENDER_FFMPEG
     py::enum_<ffmpeg::Profile>(io, "Profile")
