@@ -100,6 +100,420 @@ namespace
 namespace mrv
 {
 #if defined(TLRENDER_LIBPLACEBO)
+    struct PlaceboVKTexture
+    {
+        PlaceboVKTexture(
+            VkImage image,
+            VkImageView imageView,
+            VkSampler sampler,
+            std::string name,
+            std::string samplerName,
+            VkImageType type);
+
+        VkImage image = VK_NULL_HANDLE;         // Vulkan image handle
+        VkImageView imageView = VK_NULL_HANDLE; // View for shader access
+        VkSampler sampler = VK_NULL_HANDLE;     // Sampler for texture samplin
+        std::string name;
+        std::string samplerName;
+        VkImageType type; // VK_IMAGE_TYPE_1D, 2D or 3D
+    };
+    
+    PlaceboVKTexture::PlaceboVKTexture(
+        VkImage image,
+        VkImageView imageView,
+        VkSampler sampler,
+        std::string name,
+        std::string samplerName,
+        VkImageType type)
+        : image(image),
+          imageView(imageView),
+          sampler(sampler),
+          name(name),
+          samplerName(samplerName),
+          type(type) {}
+    
+    VkImage createImage(
+        VkDevice device,
+        VkPhysicalDevice physicalDevice,
+        uint32_t width,
+        uint32_t height,
+        uint32_t depth,
+        VkFormat format,
+        VkImageType imageType) {
+        VkImageCreateInfo imageInfo = {};
+        imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+        imageInfo.imageType = imageType;
+        imageInfo.format = format;
+        imageInfo.extent.width = width;
+        imageInfo.extent.height = height;
+        imageInfo.extent.depth = depth;
+        imageInfo.mipLevels = 1;
+        imageInfo.arrayLayers = 1;
+        imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
+        imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
+        imageInfo.usage = VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+        imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+        imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+
+        VkImage image;
+        if (vkCreateImage(device, &imageInfo, nullptr, &image) != VK_SUCCESS) {
+            throw std::runtime_error("Failed to create image");
+        }
+        return image;
+    }
+
+    VkDeviceMemory allocateAndBindImageMemory(
+        VkDevice device,
+        VkPhysicalDevice physicalDevice,
+        VkImage image) {
+        VkMemoryRequirements memRequirements;
+        vkGetImageMemoryRequirements(device, image, &memRequirements);
+
+        VkPhysicalDeviceMemoryProperties memProperties;
+        vkGetPhysicalDeviceMemoryProperties(physicalDevice, &memProperties);
+
+        uint32_t memoryTypeIndex = 0;
+        for (uint32_t i = 0; i < memProperties.memoryTypeCount; ++i) {
+            if ((memRequirements.memoryTypeBits & (1 << i)) &&
+                (memProperties.memoryTypes[i].propertyFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)) {
+                memoryTypeIndex = i;
+                break;
+            }
+        }
+
+        VkMemoryAllocateInfo allocInfo = {};
+        allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+        allocInfo.allocationSize = memRequirements.size;
+        allocInfo.memoryTypeIndex = memoryTypeIndex;
+
+        VkDeviceMemory imageMemory;
+        if (vkAllocateMemory(device, &allocInfo, nullptr, &imageMemory) != VK_SUCCESS) {
+            throw std::runtime_error("Failed to allocate image memory");
+        }
+
+        vkBindImageMemory(device, image, imageMemory, 0);
+        return imageMemory;
+    }
+    
+    VkCommandBuffer beginSingleTimeCommands(VkDevice device, VkCommandPool commandPool) {
+        VkCommandBufferAllocateInfo allocInfo = {};
+        allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+        allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+        allocInfo.commandPool = commandPool;
+        allocInfo.commandBufferCount = 1;
+
+        VkCommandBuffer commandBuffer;
+        vkAllocateCommandBuffers(device, &allocInfo, &commandBuffer);
+
+        VkCommandBufferBeginInfo beginInfo = {};
+        beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+        beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+
+        vkBeginCommandBuffer(commandBuffer, &beginInfo);
+        return commandBuffer;
+    }
+
+    void endSingleTimeCommands(
+        VkDevice device,
+        VkQueue queue,
+        VkCommandPool commandPool,
+        VkCommandBuffer commandBuffer) {
+        vkEndCommandBuffer(commandBuffer);
+
+        VkSubmitInfo submitInfo = {};
+        submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+        submitInfo.commandBufferCount = 1;
+        submitInfo.pCommandBuffers = &commandBuffer;
+
+        vkQueueSubmit(queue, 1, &submitInfo, VK_NULL_HANDLE);
+        vkQueueWaitIdle(queue);
+
+        vkFreeCommandBuffers(device, commandPool, 1, &commandBuffer);
+    }
+    
+    void transitionImageLayout(
+        VkDevice device,
+        VkQueue queue,
+        VkCommandPool commandPool,
+        VkImage image,
+        VkFormat format,
+        VkImageLayout oldLayout,
+        VkImageLayout newLayout) {
+        VkCommandBuffer commandBuffer = beginSingleTimeCommands(device, commandPool);
+
+        VkImageMemoryBarrier barrier = {};
+        barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+        barrier.oldLayout = oldLayout;
+        barrier.newLayout = newLayout;
+        barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+        barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+        barrier.image = image;
+        barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        barrier.subresourceRange.baseMipLevel = 0;
+        barrier.subresourceRange.levelCount = 1;
+        barrier.subresourceRange.baseArrayLayer = 0;
+        barrier.subresourceRange.layerCount = 1;
+
+        VkPipelineStageFlags sourceStage;
+        VkPipelineStageFlags destinationStage;
+
+        if (oldLayout == VK_IMAGE_LAYOUT_UNDEFINED && newLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL) {
+            barrier.srcAccessMask = 0;
+            barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+            sourceStage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+            destinationStage = VK_PIPELINE_STAGE_TRANSFER_BIT;
+        } else if (oldLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL && newLayout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL) {
+            barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+            barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+            sourceStage = VK_PIPELINE_STAGE_TRANSFER_BIT;
+            destinationStage = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+        } else {
+            throw std::runtime_error("Unsupported layout transition");
+        }
+
+        vkCmdPipelineBarrier(
+            commandBuffer, sourceStage, destinationStage,
+            0, 0, nullptr, 0, nullptr, 1, &barrier);
+
+        endSingleTimeCommands(device, queue, commandPool, commandBuffer);
+    }
+
+    void createBuffer(
+        VkDevice device,
+        VkPhysicalDevice physicalDevice,
+        VkDeviceSize size,
+        VkBufferUsageFlags usage,
+        VkMemoryPropertyFlags properties,
+        VkBuffer& buffer,
+        VkDeviceMemory& bufferMemory) {
+        VkBufferCreateInfo bufferInfo = {};
+        bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+        bufferInfo.size = size;
+        bufferInfo.usage = usage;
+        bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+        if (vkCreateBuffer(device, &bufferInfo, nullptr, &buffer) != VK_SUCCESS) {
+            throw std::runtime_error("Failed to create buffer");
+        }
+
+        VkMemoryRequirements memRequirements;
+        vkGetBufferMemoryRequirements(device, buffer, &memRequirements);
+
+        VkPhysicalDeviceMemoryProperties memProperties;
+        vkGetPhysicalDeviceMemoryProperties(physicalDevice, &memProperties);
+
+        uint32_t memoryTypeIndex = 0;
+        for (uint32_t i = 0; i < memProperties.memoryTypeCount; ++i) {
+            if ((memRequirements.memoryTypeBits & (1 << i)) &&
+                (memProperties.memoryTypes[i].propertyFlags & properties) == properties) {
+                memoryTypeIndex = i;
+                break;
+            }
+        }
+
+        VkMemoryAllocateInfo allocInfo = {};
+        allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+        allocInfo.allocationSize = memRequirements.size;
+        allocInfo.memoryTypeIndex = memoryTypeIndex;
+
+        if (vkAllocateMemory(device, &allocInfo, nullptr, &bufferMemory) != VK_SUCCESS) {
+            throw std::runtime_error("Failed to allocate buffer memory");
+        }
+
+        vkBindBufferMemory(device, buffer, bufferMemory, 0);
+    }
+    
+    void uploadTextureData(
+        VkDevice device,
+        VkPhysicalDevice physicalDevice,
+        VkQueue queue,
+        VkCommandPool commandPool,
+        VkImage image,
+        uint32_t width,
+        uint32_t height,
+        uint32_t depth,
+        VkFormat format,
+        const void* data) {
+        VkDeviceSize imageSize = width * height * depth * 4 * sizeof(float); // Assuming RGBA float data
+
+        // Create staging buffer
+        VkBuffer stagingBuffer;
+        VkDeviceMemory stagingBufferMemory;
+
+        createBuffer(
+            device, physicalDevice, imageSize,
+            VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+            stagingBuffer, stagingBufferMemory);
+
+        // Copy data to staging buffer
+        void* mappedData;
+        vkMapMemory(device, stagingBufferMemory, 0, imageSize, 0, &mappedData);
+        memcpy(mappedData, data, static_cast<size_t>(imageSize));
+        vkUnmapMemory(device, stagingBufferMemory);
+
+        // Copy staging buffer to image
+        VkCommandBuffer commandBuffer = beginSingleTimeCommands(device, commandPool);
+
+        VkBufferImageCopy region = {};
+        region.bufferOffset = 0;
+        region.bufferRowLength = 0;
+        region.bufferImageHeight = 0;
+        region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        region.imageSubresource.mipLevel = 0;
+        region.imageSubresource.baseArrayLayer = 0;
+        region.imageSubresource.layerCount = 1;
+        region.imageOffset = {0, 0, 0};
+        region.imageExtent = {width, height, depth};
+
+        vkCmdCopyBufferToImage(
+            commandBuffer, stagingBuffer, image,
+            VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
+
+        endSingleTimeCommands(device, queue, commandPool, commandBuffer);
+
+        // Clean up staging buffer
+        vkDestroyBuffer(device, stagingBuffer, nullptr);
+        vkFreeMemory(device, stagingBufferMemory, nullptr);
+    }
+    
+    VkImageView createImageView(VkDevice device, VkImage image,
+                                VkFormat format, VkImageType imageType) {
+        VkImageViewCreateInfo viewInfo = {};
+        viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+        viewInfo.image = image;
+        viewInfo.viewType = (imageType == VK_IMAGE_TYPE_1D) ? VK_IMAGE_VIEW_TYPE_1D :
+                            (imageType == VK_IMAGE_TYPE_2D) ? VK_IMAGE_VIEW_TYPE_2D :
+                            VK_IMAGE_VIEW_TYPE_3D;
+        viewInfo.format = format;
+        viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        viewInfo.subresourceRange.baseMipLevel = 0;
+        viewInfo.subresourceRange.levelCount = 1;
+        viewInfo.subresourceRange.baseArrayLayer = 0;
+        viewInfo.subresourceRange.layerCount = 1;
+
+        VkImageView imageView;
+        if (vkCreateImageView(device, &viewInfo, nullptr, &imageView) != VK_SUCCESS) {
+            throw std::runtime_error("Failed to create image view");
+        }
+        return imageView;
+    }
+    
+    VkSampler createSampler(VkDevice device) {
+        VkSamplerCreateInfo samplerInfo = {};
+        samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+        samplerInfo.magFilter = VK_FILTER_LINEAR;
+        samplerInfo.minFilter = VK_FILTER_LINEAR;
+        samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+        samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+        samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+        samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+        samplerInfo.mipLodBias = 0.0f;
+        samplerInfo.anisotropyEnable = VK_FALSE;
+        samplerInfo.maxAnisotropy = 1.0f;
+        samplerInfo.compareEnable = VK_FALSE;
+        samplerInfo.minLod = 0.0f;
+        samplerInfo.maxLod = 0.0f;
+        samplerInfo.borderColor = VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK;
+        samplerInfo.unnormalizedCoordinates = VK_FALSE;
+
+        VkSampler sampler;
+        if (vkCreateSampler(device, &samplerInfo, nullptr, &sampler) != VK_SUCCESS) {
+            throw std::runtime_error("Failed to create sampler");
+        }
+        return sampler;
+    }
+    
+    void addGPUTextures(
+        std::vector<PlaceboVKTexture>& textures,
+        const pl_shader_res* res,
+        VkDevice device,
+        VkPhysicalDevice physicalDevice,
+        VkQueue queue,
+        VkCommandPool commandPool)
+    {
+        for (unsigned i = 0; i < res->num_descriptors; ++i) {
+            const pl_shader_desc* sd = &res->descriptors[i];
+            switch (sd->desc.type) {
+            case PL_DESC_STORAGE_IMG:
+                throw std::runtime_error("Unimplemented storage image");
+            case PL_DESC_SAMPLED_TEX: {
+                pl_tex tex = reinterpret_cast<pl_tex>(sd->binding.object);
+                pl_fmt fmt = tex->params.format;
+
+                int dims = pl_tex_params_dimension(tex->params);
+                assert(dims >= 1 && dims <= 3);
+
+                const char* textureName = sd->desc.name;
+                const char* samplerName = sd->desc.name;
+
+                // Map libplacebo format to Vulkan format
+                VkFormat vkFormat = VK_FORMAT_R32G32B32A32_SFLOAT; // Default for 3D
+                if (dims == 2) vkFormat = VK_FORMAT_R32G32B32_SFLOAT;
+                if (dims == 1) vkFormat = VK_FORMAT_R32_SFLOAT;
+
+                // Texture dimensions
+                uint32_t width = tex->params.w;
+                uint32_t height = (dims >= 2) ? tex->params.h : 1;
+                uint32_t depth = (dims == 3) ? tex->params.d : 1;
+
+                assert(width > 0);
+                if (dims >= 2) assert(height > 0);
+                if (dims == 3) assert(depth > 0);
+
+                // Get texture data from libplacebo
+                const void* values = pl_tex_dummy_data(tex);
+                if (!values) {
+                    throw std::runtime_error("Could not read pl_tex_dummy_data");
+                }
+
+                // Determine image type
+                VkImageType imageType = (dims == 1) ? VK_IMAGE_TYPE_1D :
+                                        (dims == 2) ? VK_IMAGE_TYPE_2D :
+                                        VK_IMAGE_TYPE_3D;
+
+                // Create Vulkan image
+                VkImage image = createImage(
+                    device, physicalDevice, width, height, depth, vkFormat, imageType);
+
+                // Allocate and bind memory for the image
+                VkDeviceMemory imageMemory = allocateAndBindImageMemory(
+                device, physicalDevice, image);
+
+                // Transition image layout to TRANSFER_DST_OPTIMAL
+                transitionImageLayout(
+                    device, queue, commandPool, image, vkFormat,
+                    VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+
+                // Upload texture data
+                uploadTextureData(
+                    device, physicalDevice, queue,
+                    commandPool, image, width, height, depth,
+                    vkFormat, values);
+
+                // Transition image layout to SHADER_READ_ONLY_OPTIMAL
+                transitionImageLayout(
+                    device, queue, commandPool, image, vkFormat,
+                    VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
+                // Create image view
+                VkImageView imageView = createImageView(device, image,
+                                                        vkFormat, imageType);
+
+                // Create sampler (equivalent to GL_LINEAR)
+                VkSampler sampler = createSampler(device);
+
+                // Add to texture list
+                textures.emplace_back(image, imageView, sampler,
+                                      textureName, samplerName, imageType);
+                break;
+            }
+            default:
+                throw std::runtime_error("Unknown texture type");
+            }
+        }
+    }
+    
     struct LibPlaceboData
     {
         LibPlaceboData();
@@ -107,6 +521,8 @@ namespace mrv
 
         pl_log log;
         pl_gpu gpu;
+
+        std::vector<PlaceboVKTexture> textures;
     };
 
     LibPlaceboData::LibPlaceboData()
@@ -389,8 +805,12 @@ namespace mrv
                     float A = p_alpha[index_alpha] / 65535.0f;
 
                     float R, G, B;
-                    
-                    float Y_linear = Yf; // \@todo: apply_inverse_pq(Yf); ?
+
+                    float Y_linear;
+                    if (p.hasHDR)
+                        Y_linear = apply_inverse_pq(Yf);
+                    else
+                        Y_linear = Yf;
                     
                     if (useBT709)
                     {
@@ -1544,7 +1964,7 @@ namespace mrv
             m_device, &pPipelineLayoutCreateInfo, NULL, &m_pipeline_layout);
         VK_CHECK_RESULT(result);
     }
-
+                
     void NDIView::_create_HDR_shader()
     {
         TLRENDER_P();
@@ -1572,7 +1992,8 @@ namespace mrv
         cmap.gamut_mapping = nullptr; //&pl_gamut_map_perceptual;
 
         // Hable and ACES are best for HDR
-        cmap.tone_mapping_function = &pl_tone_map_hable;
+        //   &pl_tone_map_hable;
+        cmap.tone_mapping_function = &pl_tone_map_st2094_10;
                     
         // PL_GAMUT_MAP_CONSTANTS is defined in wrong order for C++
         cmap.gamut_constants = { 0 };
@@ -1641,8 +2062,9 @@ namespace mrv
             }
             else if (m_color_space == VK_COLOR_SPACE_DOLBYVISION_EXT)
             {
-                // \@todo:  How to handle this?
-                // dst_colorspace.transfer = PL_COLOR_TRC_DOLBYVISION;
+                // \@todo:  How to handle this? PL_COLOR_TRC_DOLBYVISION does
+                //          not exist.
+                // dst_colorspace.transfer = ??? 
             }
         }
         else
@@ -1860,6 +2282,16 @@ namespace mrv
         s << res->glsl << std::endl;
         p.hdrColorsDef = s.str();
         
+        try
+        {
+            addGPUTextures(p.placeboData->textures, res,
+                           m_device, m_gpu, m_queue, m_cmd_pool);
+        }
+        catch(const std::exception& e)
+        {
+            throw e;
+        }
+                        
 
         {
             std::stringstream s;
