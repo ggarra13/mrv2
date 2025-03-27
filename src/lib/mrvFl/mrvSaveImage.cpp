@@ -2,9 +2,11 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <algorithm> // For std::clamp
 #include <string>
 #include <sstream>
 #include <filesystem>
+#include <vector>
 namespace fs = std::filesystem;
 
 #include <tlIO/System.h>
@@ -466,9 +468,9 @@ namespace mrv
             else
             {
                 // Get the videoData
-                const auto& videoData =
-                    timeline->getVideo(currentTime).future.get();
-
+                auto videoData = timeline->getVideo(currentTime).future.get();
+                videoData.layers[0].image->setPixelAspectRatio(1.F);
+                
                 // Render the video.
                 gl::OffscreenBufferBinding binding(buffer);
                 CHECK_GL;
@@ -513,7 +515,6 @@ namespace mrv
                 glReadPixels(X, Y, outputImage->getWidth(),
                              outputImage->getHeight(), format, type,
                              outputImage->getData());
-                
                 CHECK_GL;
             }
 
