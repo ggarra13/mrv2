@@ -61,6 +61,20 @@ namespace
 
 namespace
 {
+    float apply_inverse_pq(float x) {
+        float m1 = 0.8359375f;
+        float m2 = 18.8515625f;
+        float c1 = 0.8359375f;
+        float c2 = 18.6875f;
+        float c3 = 2.402f;
+
+        if (x <= c1) {
+            return x / m1;
+        } else {
+            return pow((x + c2) / c3, 1.0f / m2);
+        }
+    }
+    
     // Function to unescape &quot; back to normal quotes (")
     std::string unescape_quotes_from_xml(const std::string& xml_escaped_str)
     {
@@ -322,7 +336,7 @@ namespace mrv
         vkDestroyShaderModule(m_device, m_frag_shader_module, NULL);
         m_frag_shader_module = VK_NULL_HANDLE;
 
-        if (p.createHDRShader)
+        if (p.hasHDR)
         {
             _create_HDR_shader();
         }
@@ -350,66 +364,6 @@ namespace mrv
             uint16_t* p_y = (uint16_t*)video_frame;
             const uint16_t* p_uv = p_y + w * h;
             const uint16_t* p_alpha = p_uv + w * h;
-
-#ifdef USE_UINT16
-           uint16_t* rgba = (uint16_t*) data;
-
-            // Determine BT.601 or BT.709 based on resolution
-            bool useBT709 = (w >= 1280 && h >= 720);
-
-            // BT.601 coefficients
-            int Kr601 = 299; // 0.299 * 1000
-            int Kb601 = 114; // 0.114 * 1000
-            int Kg601 = 1000 - Kr601 - Kb601; // 0.587 * 1000
-
-            // BT.709 coefficients
-            int Kr709 = 2126; // 0.2126 * 10000
-            int Kb709 = 722;  // 0.0722 * 10000
-            int Kg709 = 10000 - Kr709 - Kb709; // 0.7152 * 10000
-                        
-            for (int y = 0; y < h; ++y)
-            {
-                for (int x = 0; x < w; ++x)
-                {
-                    const int yw = y * w;
-                    const int index_y = yw + x;
-                    const int index_uv = yw + (x / 2) * 2;  // UV is subsampled (4:2:2)
-                    const int index_alpha = index_y;
-
-                    // Extract Y, U, V, and Alpha
-                    int Y = p_y[index_y];
-                    int U = (p_uv[index_uv] - 32768); // Center U around 0
-                    int V = (p_uv[index_uv + 1] - 32768); // Center V around 0
-                    int A = p_alpha[index_alpha];
-
-                    // Convert YUV to RGB
-                    int R, G, B;
-
-                    if (useBT709) {
-                        R = (Y * 10000 + V * 14746) / 10000;
-                        G = (Y * 10000 - U * 3363 - V * 6140) / 10000;
-                        B = (Y * 10000 + U * 17933) / 10000;
-                    } else {
-                        R = (Y * 1000 + V * 1402) / 1000;
-                        G = (Y * 1000 - U * 344 - V * 714) / 1000;
-                        B = (Y * 1000 + U * 1772) / 1000;
-                    }
-                                
-                    // Clamp values to valid U16 range
-                    R = std::clamp(R, 0, 65535);
-                    G = std::clamp(G, 0, 65535);
-                    B = std::clamp(B, 0, 65535);
-                    A = std::clamp(A, 0, 65535);
-            
-                    // Store as RGBA_U16
-                    int rgba_index = (yw + x) * 4;
-                    rgba[rgba_index] = static_cast<uint16_t>(R);
-                    rgba[rgba_index + 1] = static_cast<uint16_t>(G);
-                    rgba[rgba_index + 2] = static_cast<uint16_t>(B);
-                    rgba[rgba_index + 3] = static_cast<uint16_t>(A);
-                }
-            }
-#else
             half* rgba = (half*) data;
                     
             // Determine BT.601 or BT.709 based on resolution
@@ -430,19 +384,34 @@ namespace mrv
 
                     // Extract Y, U, V, and Alpha
                     float Yf = p_y[index_y] / 65535.0f;
-                    float Uf = (p_uv[index_uv] - 32768) / 32768.0f;
-                    float Vf = (p_uv[index_uv + 1] - 32768) / 32768.0f;
+                    float Uf = (p_uv[index_uv] - 32768) / 65535.0f;
+                    float Vf = (p_uv[index_uv + 1] - 32768) / 65535.0f;
                     float A = p_alpha[index_alpha] / 65535.0f;
 
-                    // YUV to RGB conversion
-                    float R = Yf + 1.402f * Vf;
-                    float G = Yf - 0.344f * Uf - 0.714f * Vf;
-                    float B = Yf + 1.772f * Uf;
+                    float R, G, B;
+                    
+                    float Y_linear = Yf; // \@todo: apply_inverse_pq(Yf); ?
+                    
+                    if (useBT709)
+                    {
+                        // BT.709 typical multipliers
+                        // (Exact values differ slightly in various references)
+                        R = Y_linear + 1.5748f * Vf;
+                        G = Y_linear - 0.1873f * Uf - 0.4681f * Vf;
+                        B = Y_linear + 1.8556f * Uf;
+                    }
+                    else
+                    {
+                        // BT.601
+                        R = Y_linear + 1.402f * Vf;
+                        G = Y_linear - 0.344f * Uf - 0.714f * Vf;
+                        B = Y_linear + 1.772f * Uf;
+                    }
 
-                    // Clamp to [0, 1] to prevent oversaturation
-                    R = std::max(0.0f, std::min(1.0f, R));
-                    G = std::max(0.0f, std::min(1.0f, G));
-                    B = std::max(0.0f, std::min(1.0f, B));
+                    // Clamp to [0, 1] to prevent oversaturation (not needed)
+                    // R = std::max(0.0f, std::min(1.0f, R));
+                    // G = std::max(0.0f, std::min(1.0f, G));
+                    // B = std::max(0.0f, std::min(1.0f, B));
 
                     // Store as RGBA float
                     int rgba_index = index_y * 4;
@@ -452,7 +421,6 @@ namespace mrv
                     rgba[rgba_index + 3] = A;
                 }
             }
-#endif
         }
     }
 
@@ -918,7 +886,7 @@ namespace mrv
         // Compile to SPIR-V
         try
         {
-
+            std::cerr << frag_shader_glsl << std::endl;
             std::vector<uint32_t> spirv = compile_glsl_to_spirv(
                 frag_shader_glsl,
                 shaderc_fragment_shader, // Shader type
@@ -1580,7 +1548,6 @@ namespace mrv
     void NDIView::_create_HDR_shader()
     {
         TLRENDER_P();
-        return;
         
 #if defined(TLRENDER_LIBPLACEBO)
         pl_shader_params shader_params;
@@ -1603,7 +1570,9 @@ namespace mrv
 
         // defaults, generates LUTs if state is set.
         cmap.gamut_mapping = nullptr; //&pl_gamut_map_perceptual;
-        cmap.tone_mapping_function = nullptr; // pl_tone_mapping clip
+
+        // Hable and ACES are best for HDR
+        cmap.tone_mapping_function = &pl_tone_map_hable;
                     
         // PL_GAMUT_MAP_CONSTANTS is defined in wrong order for C++
         cmap.gamut_constants = { 0 };
@@ -1625,7 +1594,7 @@ namespace mrv
         cmap.contrast_smoothness = 3.5f;
 
         const image::HDRData& data = p.hdrData;
-                
+        
         pl_color_space src_colorspace;
         memset(&src_colorspace, 0, sizeof(pl_color_space));
         src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
@@ -1661,16 +1630,25 @@ namespace mrv
     
         pl_color_space dst_colorspace;
         memset(&dst_colorspace, 0, sizeof(pl_color_space));
-        dst_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
-        dst_colorspace.transfer  = PL_COLOR_TRC_PQ;
-        if (m_color_space == VK_COLOR_SPACE_HDR10_HLG_EXT)
+
+        if (p.hdrMonitorFound)
         {
-            dst_colorspace.transfer = PL_COLOR_TRC_HLG;
+            dst_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
+            dst_colorspace.transfer  = PL_COLOR_TRC_PQ;
+            if (m_color_space == VK_COLOR_SPACE_HDR10_HLG_EXT)
+            {
+                dst_colorspace.transfer = PL_COLOR_TRC_HLG;
+            }
+            else if (m_color_space == VK_COLOR_SPACE_DOLBYVISION_EXT)
+            {
+                // \@todo:  How to handle this?
+                // dst_colorspace.transfer = PL_COLOR_TRC_DOLBYVISION;
+            }
         }
-        else if (m_color_space == VK_COLOR_SPACE_DOLBYVISION_EXT)
+        else
         {
-            // \@todo:  How to handle this?
-            // dst_colorspace.transfer = PL_COLOR_TRC_DOLBYVISION;
+            dst_colorspace.primaries = PL_COLOR_PRIM_BT_709;
+            dst_colorspace.transfer  = PL_COLOR_TRC_BT_1886;
         }
         
         pl_color_space_infer(&dst_colorspace);
@@ -1698,6 +1676,12 @@ namespace mrv
         std::string hdrColorsDef;
         
         std::stringstream s;
+
+        std::cerr << "num_vertex_attribs=" << res->num_vertex_attribs
+                  << std::endl
+                  << "num_descriptors=" << res->num_descriptors << std::endl
+                  << "num_variables=" << res->num_variables << std::endl
+                  << "num_constants=" << res->num_constants << std::endl;
         
         for (int i = 0; i < res->num_descriptors; i++)
         {
