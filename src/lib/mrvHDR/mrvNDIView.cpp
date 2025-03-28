@@ -394,6 +394,43 @@ namespace mrv
     
     void NDIView::addGPUTextures(const pl_shader_res* res)
     {
+        // Clean up existing resources
+        if (m_desc_layout != VK_NULL_HANDLE) {
+            vkDestroyDescriptorSetLayout(m_device, m_desc_layout, nullptr);
+            m_desc_layout = VK_NULL_HANDLE;
+        }
+        if (m_pipeline_layout != VK_NULL_HANDLE) {
+            vkDestroyPipelineLayout(m_device, m_pipeline_layout, nullptr);
+            m_pipeline_layout = VK_NULL_HANDLE;
+        }
+        if (m_pipeline != VK_NULL_HANDLE) {
+            vkDestroyPipeline(m_device, m_pipeline, nullptr);
+            m_pipeline = VK_NULL_HANDLE;
+        }
+        if (m_desc_pool != VK_NULL_HANDLE) {
+            vkDestroyDescriptorPool(m_device, m_desc_pool, nullptr);
+            m_desc_pool = VK_NULL_HANDLE;
+        }
+        if (m_desc_set != VK_NULL_HANDLE) {
+            // Descriptor sets are freed with the pool, no need to destroy individually
+            m_desc_set = VK_NULL_HANDLE;
+        }
+        if (m_frag_shader_module != VK_NULL_HANDLE) {
+            vkDestroyShaderModule(m_device, m_frag_shader_module, nullptr);
+            m_frag_shader_module = VK_NULL_HANDLE;
+        }
+    
+        // Remove any existing libplacebo textures, keep m_textures[0]
+        if (m_textures.size() > 1) {
+            for (size_t i = 1; i < m_textures.size(); ++i) {
+                vkDestroyImageView(m_device, m_textures[i].view, nullptr);
+                vkDestroyImage(m_device, m_textures[i].image, nullptr);
+                vkFreeMemory(m_device, m_textures[i].mem, nullptr);
+                vkDestroySampler(m_device, m_textures[i].sampler, nullptr);
+            }
+            m_textures.resize(1); // Keep only main texture
+        }
+
         for (unsigned i = 0; i < res->num_descriptors; ++i) {
             const pl_shader_desc* sd = &res->descriptors[i];
             switch (sd->desc.type) {
@@ -496,7 +533,7 @@ namespace mrv
         struct pl_gpu_dummy_params gpu_dummy;
         memset(&gpu_dummy, 0, sizeof(pl_gpu_dummy_params));
     
-        gpu_dummy.glsl.version = 410;
+        gpu_dummy.glsl.version = 450;
         gpu_dummy.glsl.gles = false;
         gpu_dummy.glsl.vulkan = false;
         gpu_dummy.glsl.compute = false;
@@ -711,6 +748,8 @@ namespace mrv
 
         vkDestroyShaderModule(m_device, m_frag_shader_module, NULL);
         m_frag_shader_module = VK_NULL_HANDLE;
+        
+        prepare_textures(); // Always initialize main image texture
 
         if (p.hasHDR)
         {
@@ -722,7 +761,12 @@ namespace mrv
             p.hdrColorsDef.clear();
         }
         
-        prepare();
+        prepare_vertices();
+        prepare_descriptor_layout();
+        prepare_render_pass();
+        prepare_pipeline();
+        prepare_descriptor_pool();
+        prepare_descriptor_set();
     }
     
 
@@ -1234,6 +1278,7 @@ namespace mrv
             return m_frag_shader_module;
 
         TLRENDER_P();
+
         // Example GLSL vertex shader
         std::string frag_shader_glsl = tl::string::Format(R"(
         #version 450
@@ -1244,11 +1289,10 @@ namespace mrv
         // Output color
         layout(location = 0) out vec4 outColor;
 
-        // Texture sampler (bound via descriptor set)
+        // Main image to display
         layout(binding = 0) uniform sampler2D textureSampler;
 
         {0}
-
 
         void main() {
             outColor = texture(textureSampler, inTexCoord);
@@ -1269,6 +1313,7 @@ namespace mrv
         catch (const std::exception& e)
         {
             std::cerr << e.what() << std::endl;
+            m_frag_shader_module = VK_NULL_HANDLE;
         }
         return m_frag_shader_module;
     }
@@ -1397,58 +1442,97 @@ namespace mrv
         vkDestroyPipelineCache(m_device, m_pipelineCache, NULL);
     }
 
-    void NDIView::prepare_descriptor_pool()
+    void NDIView::prepare_descriptor_layout()
     {
-        VkDescriptorPoolSize type_count = {};
-        type_count.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        type_count.descriptorCount = m_textures.size();
+        TLRENDER_P();
+        
+        std::vector<VkDescriptorSetLayoutBinding> bindings;
+    
+        // Main texture at binding 0
+        VkDescriptorSetLayoutBinding mainBinding = {};
+        mainBinding.binding = 0;
+        mainBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+        mainBinding.descriptorCount = 1;
+        mainBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+        mainBinding.pImmutableSamplers = nullptr;
+        bindings.push_back(mainBinding);
 
-        VkDescriptorPoolCreateInfo descriptor_pool = {};
-        descriptor_pool.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-        descriptor_pool.pNext = NULL;
-        descriptor_pool.maxSets = 1;
-        descriptor_pool.poolSizeCount = 1;
-        descriptor_pool.pPoolSizes = &type_count;
-
-        VkResult result;
-
-        result = vkCreateDescriptorPool(
-            m_device, &descriptor_pool, NULL, &m_desc_pool);
-        VK_CHECK_RESULT(result);
-    }
-
-    void NDIView::prepare_descriptor_set()
-    {
-        VkDescriptorImageInfo tex_descs[m_textures.size()];
-        VkResult result;
-        uint32_t i;
-
-        VkDescriptorSetAllocateInfo alloc_info = {};
-        alloc_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-        alloc_info.pNext = NULL;
-        alloc_info.descriptorPool = m_desc_pool;
-        alloc_info.descriptorSetCount = 1;
-        alloc_info.pSetLayouts = &m_desc_layout;
-
-        result = vkAllocateDescriptorSets(m_device, &alloc_info, &m_desc_set);
-        VK_CHECK_RESULT(result);
-
-        memset(&tex_descs, 0, sizeof(tex_descs));
-        for (i = 0; i < m_textures.size(); i++)
-        {
-            tex_descs[i].sampler = m_textures[i].sampler;
-            tex_descs[i].imageView = m_textures[i].view;
-            tex_descs[i].imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        // Additional libplacebo textures starting at binding 1
+        if (p.hasHDR) {
+            for (uint32_t i = 1; i < m_textures.size(); ++i) {
+                VkDescriptorSetLayoutBinding binding = {};
+                binding.binding = i; // Matches libplacebo’s binding = i + 1 in GLSL
+                binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+                binding.descriptorCount = 1;
+                binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+                binding.pImmutableSamplers = nullptr;
+                bindings.push_back(binding);
+            }
         }
 
-        VkWriteDescriptorSet write = {};
-        write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-        write.dstSet = m_desc_set;
-        write.descriptorCount = m_textures.size();
-        write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        write.pImageInfo = tex_descs;
+        VkDescriptorSetLayoutCreateInfo layoutInfo = {};
+        layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+        layoutInfo.bindingCount = static_cast<uint32_t>(bindings.size());
+        layoutInfo.pBindings = bindings.data();
 
-        vkUpdateDescriptorSets(m_device, 1, &write, 0, NULL);
+        VkResult result = vkCreateDescriptorSetLayout(m_device, &layoutInfo,
+                                                      nullptr, &m_desc_layout);
+        VK_CHECK_RESULT(result);
+        
+        VkPipelineLayoutCreateInfo pipelineLayoutInfo = {};
+        pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+        pipelineLayoutInfo.setLayoutCount = 1;
+        pipelineLayoutInfo.pSetLayouts = &m_desc_layout;
+
+        result = vkCreatePipelineLayout(m_device, &pipelineLayoutInfo, nullptr, &m_pipeline_layout);
+        VK_CHECK_RESULT(result);
+    }
+    
+    void NDIView::prepare_descriptor_pool()
+    {
+        VkDescriptorPoolSize poolSize = {};
+        poolSize.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+        poolSize.descriptorCount = static_cast<uint32_t>(m_textures.size()); // One per texture
+
+        VkDescriptorPoolCreateInfo poolInfo = {};
+        poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+        poolInfo.maxSets = 1;
+        poolInfo.poolSizeCount = 1;
+        poolInfo.pPoolSizes = &poolSize;
+
+        VkResult result = vkCreateDescriptorPool(m_device, &poolInfo, nullptr, &m_desc_pool);
+        VK_CHECK_RESULT(result);
+    }
+    
+    void NDIView::prepare_descriptor_set()
+    {
+        VkDescriptorSetAllocateInfo allocInfo = {};
+        allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+        allocInfo.descriptorPool = m_desc_pool;
+        allocInfo.descriptorSetCount = 1;
+        allocInfo.pSetLayouts = &m_desc_layout;
+
+        VkResult result = vkAllocateDescriptorSets(m_device, &allocInfo,
+                                                   &m_desc_set);
+        VK_CHECK_RESULT(result);
+
+        std::vector<VkDescriptorImageInfo> imageInfos(m_textures.size());
+        std::vector<VkWriteDescriptorSet> writes(m_textures.size());
+        for (uint32_t i = 0; i < m_textures.size(); ++i)
+        {
+            imageInfos[i].sampler = m_textures[i].sampler;
+            imageInfos[i].imageView = m_textures[i].view;
+            imageInfos[i].imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+
+            writes[i].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            writes[i].dstSet = m_desc_set;
+            writes[i].dstBinding = i; // 0 for main, 1+ for libplacebo
+            writes[i].descriptorCount = 1;
+            writes[i].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+            writes[i].pImageInfo = &imageInfos[i];
+        }
+
+        vkUpdateDescriptorSets(m_device, static_cast<uint32_t>(writes.size()), writes.data(), 0, nullptr);
     }
 
     void NDIView::_exitThreads()
@@ -1883,41 +1967,6 @@ namespace mrv
             }
         }
     }
-
-    void NDIView::prepare_descriptor_layout()
-    {
-        VkDescriptorSetLayoutBinding layout_binding = {};
-        layout_binding.binding = 0;
-        layout_binding.descriptorType =
-            VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        layout_binding.descriptorCount = m_textures.size();
-        layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-        layout_binding.pImmutableSamplers = NULL;
-
-        VkDescriptorSetLayoutCreateInfo descriptor_layout = {};
-        descriptor_layout.sType =
-            VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-        descriptor_layout.pNext = NULL;
-        descriptor_layout.bindingCount = 1;
-        descriptor_layout.pBindings = &layout_binding;
-
-        VkResult result;
-
-        result = vkCreateDescriptorSetLayout(
-            m_device, &descriptor_layout, NULL, &m_desc_layout);
-        VK_CHECK_RESULT(result);
-
-        VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = {};
-        pPipelineLayoutCreateInfo.sType =
-            VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-        pPipelineLayoutCreateInfo.pNext = NULL;
-        pPipelineLayoutCreateInfo.setLayoutCount = 1;
-        pPipelineLayoutCreateInfo.pSetLayouts = &m_desc_layout;
-
-        result = vkCreatePipelineLayout(
-            m_device, &pPipelineLayoutCreateInfo, NULL, &m_pipeline_layout);
-        VK_CHECK_RESULT(result);
-    }
                 
     void NDIView::_create_HDR_shader()
     {
@@ -1943,11 +1992,11 @@ namespace mrv
         memset(&cmap, 0, sizeof(pl_color_map_params));
 
         // defaults, generates LUTs if state is set.
-        cmap.gamut_mapping = nullptr; //&pl_gamut_map_perceptual;
+        cmap.gamut_mapping = nullptr; // &pl_gamut_map_perceptual;
 
         // Hable and ACES are best for HDR
         //   &pl_tone_map_hable;
-        cmap.tone_mapping_function = &pl_tone_map_st2094_10;
+        cmap.tone_mapping_function = &pl_tone_map_st2094_40;
                     
         // PL_GAMUT_MAP_CONSTANTS is defined in wrong order for C++
         cmap.gamut_constants = { 0 };
@@ -1956,6 +2005,23 @@ namespace mrv
         cmap.gamut_constants.colorimetric_gamma  = 1.80f; 
         cmap.gamut_constants.softclip_knee  = 0.70f;
         cmap.gamut_constants.softclip_desat = 0.35f;
+                    
+        cmap.tone_constants  = { 0 };
+        cmap.tone_constants.knee_adaptation   = 0.4f;
+        cmap.tone_constants.knee_minimum      = 0.1f;
+        cmap.tone_constants.knee_maximum      = 0.8f;
+        cmap.tone_constants.knee_default      = 0.4f;
+        cmap.tone_constants.knee_offset       = 1.0f;
+                    
+        cmap.tone_constants.slope_tuning      = 1.5f;
+        cmap.tone_constants.slope_offset      = 0.2f;
+                    
+        cmap.tone_constants.spline_contrast   = 0.5f;
+                    
+        cmap.tone_constants.reinhard_contrast = 0.5f;
+        cmap.tone_constants.linear_knee       = 0.3f;
+
+        cmap.tone_constants.exposure          = 1.0f;
                     
         cmap.metadata   = PL_HDR_METADATA_ANY;
         cmap.lut3d_size[0] = 48;
