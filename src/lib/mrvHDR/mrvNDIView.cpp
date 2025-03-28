@@ -866,8 +866,8 @@ namespace mrv
         VkResult result;
         bool pass;
 
-        tex_obj->tex_width = tex_width;
-        tex_obj->tex_height = tex_height;
+        tex_obj->width = tex_width;
+        tex_obj->height = tex_height;
 
         VkImageCreateInfo image_create_info = {};
         image_create_info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -893,6 +893,7 @@ namespace mrv
             vkCreateImage(m_device, &image_create_info, NULL, &tex_obj->image);
         VK_CHECK_RESULT(result);
 
+        VkMemoryRequirements m_mem_reqs;
         vkGetImageMemoryRequirements(m_device, tex_obj->image, &m_mem_reqs);
 
         mem_alloc.allocationSize = m_mem_reqs.size;
@@ -1625,6 +1626,8 @@ namespace mrv
         vkQueueWaitIdle(m_queue); // Synchronize before CPU write
 
         void* data;
+        VkMemoryRequirements m_mem_reqs;
+        vkGetImageMemoryRequirements(m_device, m_textures[0].image, &m_mem_reqs);
         vkMapMemory(m_device, m_textures[0].mem, 0, m_mem_reqs.size, 0, &data);
 
         if (p.image)
