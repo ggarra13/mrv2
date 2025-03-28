@@ -1712,11 +1712,9 @@ namespace mrv
         TLRENDER_P();
         while (p.videoThread.running)
         {
-            {
-                std::unique_lock<std::mutex> lock(p.findMutex.mutex);
-                if (p.currentNDISource.empty())
-                    continue;
-            }
+            std::unique_lock<std::mutex> lock(p.findMutex.mutex);
+            if (p.currentNDISource.empty())
+                continue;
             // We now have at least one source, so we create a receiver to
             // look at it.
 
@@ -1724,6 +1722,7 @@ namespace mrv
             NDI_recv_create_desc.p_ndi_recv_name = "mrv2 HDR Receiver";
             NDI_recv_create_desc.source_to_connect_to =
                 p.currentNDISource.c_str();
+            lock.unlock(); // Explicitly unlock before creating receiver
             NDI_recv_create_desc.color_format = NDIlib_recv_color_format_best;
 
             

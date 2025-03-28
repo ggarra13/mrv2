@@ -16,6 +16,8 @@
 
 #include <memory>
 
+#include <half.h>
+
 #include <tlCore/Util.h>
 
 #include <FL/Fl_Vk_Window.H>
