@@ -99,11 +99,15 @@ namespace mrv
 {
 #if defined(TLRENDER_LIBPLACEBO)
     VkImage NDIView::createImage(
+        VkImageType imageType,
         uint32_t width,
         uint32_t height,
         uint32_t depth,
         VkFormat format,
-        VkImageType imageType) {
+        VkImageTiling tiling,
+        VkImageUsageFlags usage
+        ) {
+            
         VkImageCreateInfo imageInfo = {};
         imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
         imageInfo.imageType = imageType;
@@ -114,8 +118,8 @@ namespace mrv
         imageInfo.mipLevels = 1;
         imageInfo.arrayLayers = 1;
         imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
-        imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
-        imageInfo.usage = VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+        imageInfo.tiling = tiling;
+        imageInfo.usage = usage;
         imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
         imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 
@@ -431,7 +435,8 @@ namespace mrv
                                         VK_IMAGE_TYPE_3D;
 
                 // Create Vulkan image
-                VkImage image = createImage(width, height, depth, imageFormat, imageType);
+                VkImage image = createImage(imageType,
+                                            width, height, depth, imageFormat);
 
                 // Allocate and bind memory for the image
                 VkDeviceMemory imageMemory = allocateAndBindImageMemory(image);
@@ -824,7 +829,13 @@ namespace mrv
         tex_obj->width = tex_width;
         tex_obj->height = tex_height;
         tex_obj->depth  = tex_depth;
-        tex_obj->image = createImage(tex_width, tex_height, 0, tex_format, VK_IMAGE_TYPE_2D);
+        tex_obj->image = createImage(VK_IMAGE_TYPE_2D,
+                                     tex_width,
+                                     tex_height,
+                                     tex_depth,
+                                     tex_format,
+                                     tiling,
+                                     usage);
         
         VkMemoryRequirements memRequirements;
         vkGetImageMemoryRequirements(m_device, tex_obj->image, &memRequirements);
@@ -1565,11 +1576,9 @@ namespace mrv
         vkQueueWaitIdle(m_queue); // Synchronize before CPU write
 
         void* data;
-        VkDeviceSize imageSize = m_textures[0].width *
-                                 m_textures[0].height *
-                                 m_textures[0].depth * 4 *
-                                 sizeof(float); // Assuming RGBA float data
-        vkMapMemory(m_device, m_textures[0].mem, 0, imageSize, 0, &data);
+        VkMemoryRequirements m_mem_reqs;
+        vkGetImageMemoryRequirements(m_device, m_textures[0].image, &m_mem_reqs);
+        vkMapMemory(m_device, m_textures[0].mem, 0, m_mem_reqs.size, 0, &data);
 
         if (p.image)
         {

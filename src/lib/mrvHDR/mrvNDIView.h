@@ -89,11 +89,15 @@ namespace mrv
         void start();
 
         VkImage createImage(
+            VkImageType imageType,
             uint32_t width,
             uint32_t height,
             uint32_t depth,
             VkFormat format,
-            VkImageType imageType);
+            VkImageTiling tiling = VK_IMAGE_TILING_OPTIMAL,
+            VkImageUsageFlags usage = VK_IMAGE_USAGE_SAMPLED_BIT |
+            VK_IMAGE_USAGE_TRANSFER_DST_BIT
+            );
         
         VkDeviceMemory allocateAndBindImageMemory(VkImage image);
         
