@@ -20,7 +20,7 @@
 
 #include <FL/Fl_Vk_Window.H>
 
-#define DEMO_TEXTURE_COUNT 1
+struct pl_shader_res;
 
 namespace tl
 {
@@ -55,7 +55,7 @@ namespace mrv
 
         //! This is for holding a mesh
         Fl_Vk_Mesh m_vertices;
-        Fl_Vk_Texture m_textures[DEMO_TEXTURE_COUNT];
+        std::vector<Fl_Vk_Texture> m_textures;
 
         void init_vk_swapchain() FL_OVERRIDE;
 
@@ -87,6 +87,21 @@ namespace mrv
 
         void _create_HDR_shader();
         void start();
+
+        VkImage createImage(
+            VkImageType imageType,
+            uint32_t width,
+            uint32_t height,
+            uint32_t depth,
+            VkFormat format,
+            VkImageTiling tiling = VK_IMAGE_TILING_OPTIMAL,
+            VkImageUsageFlags usage = VK_IMAGE_USAGE_SAMPLED_BIT |
+            VK_IMAGE_USAGE_TRANSFER_DST_BIT
+            );
+        
+        VkDeviceMemory allocateAndBindImageMemory(VkImage image);
+        
+        void addGPUTextures(const pl_shader_res*);
         
         TLRENDER_PRIVATE();
     };
