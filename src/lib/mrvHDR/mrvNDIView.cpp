@@ -14,8 +14,6 @@
 //     https://www.fltk.org/bugs.php
 //
 
-//#define USE_UINT16 1
-
 #include <atomic>
 #include <chrono>
 #include <condition_variable>
@@ -100,41 +98,7 @@ namespace
 namespace mrv
 {
 #if defined(TLRENDER_LIBPLACEBO)
-    struct PlaceboVKTexture
-    {
-        PlaceboVKTexture(
-            VkImage image,
-            VkImageView imageView,
-            VkSampler sampler,
-            std::string name,
-            std::string samplerName,
-            VkImageType type);
-
-        VkImage image = VK_NULL_HANDLE;         // Vulkan image handle
-        VkImageView imageView = VK_NULL_HANDLE; // View for shader access
-        VkSampler sampler = VK_NULL_HANDLE;     // Sampler for texture samplin
-        std::string name;
-        std::string samplerName;
-        VkImageType type; // VK_IMAGE_TYPE_1D, 2D or 3D
-    };
-    
-    PlaceboVKTexture::PlaceboVKTexture(
-        VkImage image,
-        VkImageView imageView,
-        VkSampler sampler,
-        std::string name,
-        std::string samplerName,
-        VkImageType type)
-        : image(image),
-          imageView(imageView),
-          sampler(sampler),
-          name(name),
-          samplerName(samplerName),
-          type(type) {}
-    
-    VkImage createImage(
-        VkDevice device,
-        VkPhysicalDevice physicalDevice,
+    VkImage NDIView::createImage(
         uint32_t width,
         uint32_t height,
         uint32_t depth,
@@ -156,21 +120,18 @@ namespace mrv
         imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 
         VkImage image;
-        if (vkCreateImage(device, &imageInfo, nullptr, &image) != VK_SUCCESS) {
+        if (vkCreateImage(m_device, &imageInfo, nullptr, &image) != VK_SUCCESS) {
             throw std::runtime_error("Failed to create image");
         }
         return image;
     }
 
-    VkDeviceMemory allocateAndBindImageMemory(
-        VkDevice device,
-        VkPhysicalDevice physicalDevice,
-        VkImage image) {
+    VkDeviceMemory NDIView::allocateAndBindImageMemory(VkImage image) {
         VkMemoryRequirements memRequirements;
-        vkGetImageMemoryRequirements(device, image, &memRequirements);
+        vkGetImageMemoryRequirements(m_device, image, &memRequirements);
 
         VkPhysicalDeviceMemoryProperties memProperties;
-        vkGetPhysicalDeviceMemoryProperties(physicalDevice, &memProperties);
+        vkGetPhysicalDeviceMemoryProperties(m_gpu, &memProperties);
 
         uint32_t memoryTypeIndex = 0;
         for (uint32_t i = 0; i < memProperties.memoryTypeCount; ++i) {
@@ -187,23 +148,23 @@ namespace mrv
         allocInfo.memoryTypeIndex = memoryTypeIndex;
 
         VkDeviceMemory imageMemory;
-        if (vkAllocateMemory(device, &allocInfo, nullptr, &imageMemory) != VK_SUCCESS) {
+        if (vkAllocateMemory(m_device, &allocInfo, nullptr, &imageMemory) != VK_SUCCESS) {
             throw std::runtime_error("Failed to allocate image memory");
         }
 
-        vkBindImageMemory(device, image, imageMemory, 0);
+        vkBindImageMemory(m_device, image, imageMemory, 0);
         return imageMemory;
     }
     
-    VkCommandBuffer beginSingleTimeCommands(VkDevice device, VkCommandPool commandPool) {
+    VkCommandBuffer beginSingleTimeCommands(VkDevice m_device, VkCommandPool m_cmd_pool) {
         VkCommandBufferAllocateInfo allocInfo = {};
         allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
         allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-        allocInfo.commandPool = commandPool;
+        allocInfo.commandPool = m_cmd_pool;
         allocInfo.commandBufferCount = 1;
 
         VkCommandBuffer commandBuffer;
-        vkAllocateCommandBuffers(device, &allocInfo, &commandBuffer);
+        vkAllocateCommandBuffers(m_device, &allocInfo, &commandBuffer);
 
         VkCommandBufferBeginInfo beginInfo = {};
         beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -214,9 +175,9 @@ namespace mrv
     }
 
     void endSingleTimeCommands(
-        VkDevice device,
-        VkQueue queue,
-        VkCommandPool commandPool,
+        VkDevice m_device,
+        VkQueue m_queue,
+        VkCommandPool m_cmd_pool,
         VkCommandBuffer commandBuffer) {
         vkEndCommandBuffer(commandBuffer);
 
@@ -225,21 +186,24 @@ namespace mrv
         submitInfo.commandBufferCount = 1;
         submitInfo.pCommandBuffers = &commandBuffer;
 
-        vkQueueSubmit(queue, 1, &submitInfo, VK_NULL_HANDLE);
-        vkQueueWaitIdle(queue);
+        vkQueueSubmit(m_queue, 1, &submitInfo, VK_NULL_HANDLE);
+        vkQueueWaitIdle(m_queue);
 
-        vkFreeCommandBuffers(device, commandPool, 1, &commandBuffer);
+        vkFreeCommandBuffers(m_device, m_cmd_pool, 1, &commandBuffer);
     }
-    
+
+    //
+    // \@todo: change for set_image_layout
+    //
     void transitionImageLayout(
-        VkDevice device,
-        VkQueue queue,
-        VkCommandPool commandPool,
+        VkDevice m_device,
+        VkQueue m_queue,
+        VkCommandPool m_cmd_pool,
         VkImage image,
         VkFormat format,
         VkImageLayout oldLayout,
         VkImageLayout newLayout) {
-        VkCommandBuffer commandBuffer = beginSingleTimeCommands(device, commandPool);
+        VkCommandBuffer commandBuffer = beginSingleTimeCommands(m_device, m_cmd_pool);
 
         VkImageMemoryBarrier barrier = {};
         barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
@@ -275,12 +239,12 @@ namespace mrv
             commandBuffer, sourceStage, destinationStage,
             0, 0, nullptr, 0, nullptr, 1, &barrier);
 
-        endSingleTimeCommands(device, queue, commandPool, commandBuffer);
+        endSingleTimeCommands(m_device, m_queue, m_cmd_pool, commandBuffer);
     }
 
     void createBuffer(
-        VkDevice device,
-        VkPhysicalDevice physicalDevice,
+        VkDevice m_device,
+        VkPhysicalDevice m_gpu,
         VkDeviceSize size,
         VkBufferUsageFlags usage,
         VkMemoryPropertyFlags properties,
@@ -292,15 +256,15 @@ namespace mrv
         bufferInfo.usage = usage;
         bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-        if (vkCreateBuffer(device, &bufferInfo, nullptr, &buffer) != VK_SUCCESS) {
+        if (vkCreateBuffer(m_device, &bufferInfo, nullptr, &buffer) != VK_SUCCESS) {
             throw std::runtime_error("Failed to create buffer");
         }
 
         VkMemoryRequirements memRequirements;
-        vkGetBufferMemoryRequirements(device, buffer, &memRequirements);
+        vkGetBufferMemoryRequirements(m_device, buffer, &memRequirements);
 
         VkPhysicalDeviceMemoryProperties memProperties;
-        vkGetPhysicalDeviceMemoryProperties(physicalDevice, &memProperties);
+        vkGetPhysicalDeviceMemoryProperties(m_gpu, &memProperties);
 
         uint32_t memoryTypeIndex = 0;
         for (uint32_t i = 0; i < memProperties.memoryTypeCount; ++i) {
@@ -316,18 +280,18 @@ namespace mrv
         allocInfo.allocationSize = memRequirements.size;
         allocInfo.memoryTypeIndex = memoryTypeIndex;
 
-        if (vkAllocateMemory(device, &allocInfo, nullptr, &bufferMemory) != VK_SUCCESS) {
+        if (vkAllocateMemory(m_device, &allocInfo, nullptr, &bufferMemory) != VK_SUCCESS) {
             throw std::runtime_error("Failed to allocate buffer memory");
         }
 
-        vkBindBufferMemory(device, buffer, bufferMemory, 0);
+        vkBindBufferMemory(m_device, buffer, bufferMemory, 0);
     }
     
     void uploadTextureData(
-        VkDevice device,
-        VkPhysicalDevice physicalDevice,
-        VkQueue queue,
-        VkCommandPool commandPool,
+        VkDevice m_device,
+        VkPhysicalDevice m_gpu,
+        VkQueue m_queue,
+        VkCommandPool m_cmd_pool,
         VkImage image,
         uint32_t width,
         uint32_t height,
@@ -341,19 +305,19 @@ namespace mrv
         VkDeviceMemory stagingBufferMemory;
 
         createBuffer(
-            device, physicalDevice, imageSize,
+            m_device, m_gpu, imageSize,
             VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
             VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
             stagingBuffer, stagingBufferMemory);
 
         // Copy data to staging buffer
         void* mappedData;
-        vkMapMemory(device, stagingBufferMemory, 0, imageSize, 0, &mappedData);
+        vkMapMemory(m_device, stagingBufferMemory, 0, imageSize, 0, &mappedData);
         memcpy(mappedData, data, static_cast<size_t>(imageSize));
-        vkUnmapMemory(device, stagingBufferMemory);
+        vkUnmapMemory(m_device, stagingBufferMemory);
 
         // Copy staging buffer to image
-        VkCommandBuffer commandBuffer = beginSingleTimeCommands(device, commandPool);
+        VkCommandBuffer commandBuffer = beginSingleTimeCommands(m_device, m_cmd_pool);
 
         VkBufferImageCopy region = {};
         region.bufferOffset = 0;
@@ -370,14 +334,14 @@ namespace mrv
             commandBuffer, stagingBuffer, image,
             VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
 
-        endSingleTimeCommands(device, queue, commandPool, commandBuffer);
+        endSingleTimeCommands(m_device, m_queue, m_cmd_pool, commandBuffer);
 
         // Clean up staging buffer
-        vkDestroyBuffer(device, stagingBuffer, nullptr);
-        vkFreeMemory(device, stagingBufferMemory, nullptr);
+        vkDestroyBuffer(m_device, stagingBuffer, nullptr);
+        vkFreeMemory(m_device, stagingBufferMemory, nullptr);
     }
     
-    VkImageView createImageView(VkDevice device, VkImage image,
+    VkImageView createImageView(VkDevice m_device, VkImage image,
                                 VkFormat format, VkImageType imageType) {
         VkImageViewCreateInfo viewInfo = {};
         viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
@@ -393,13 +357,13 @@ namespace mrv
         viewInfo.subresourceRange.layerCount = 1;
 
         VkImageView imageView;
-        if (vkCreateImageView(device, &viewInfo, nullptr, &imageView) != VK_SUCCESS) {
+        if (vkCreateImageView(m_device, &viewInfo, nullptr, &imageView) != VK_SUCCESS) {
             throw std::runtime_error("Failed to create image view");
         }
         return imageView;
     }
     
-    VkSampler createSampler(VkDevice device) {
+    VkSampler createSampler(VkDevice m_device) {
         VkSamplerCreateInfo samplerInfo = {};
         samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
         samplerInfo.magFilter = VK_FILTER_LINEAR;
@@ -418,19 +382,13 @@ namespace mrv
         samplerInfo.unnormalizedCoordinates = VK_FALSE;
 
         VkSampler sampler;
-        if (vkCreateSampler(device, &samplerInfo, nullptr, &sampler) != VK_SUCCESS) {
+        if (vkCreateSampler(m_device, &samplerInfo, nullptr, &sampler) != VK_SUCCESS) {
             throw std::runtime_error("Failed to create sampler");
         }
         return sampler;
     }
     
-    void addGPUTextures(
-        std::vector<PlaceboVKTexture>& textures,
-        const pl_shader_res* res,
-        VkDevice device,
-        VkPhysicalDevice physicalDevice,
-        VkQueue queue,
-        VkCommandPool commandPool)
+    void NDIView::addGPUTextures(const pl_shader_res* res)
     {
         for (unsigned i = 0; i < res->num_descriptors; ++i) {
             const pl_shader_desc* sd = &res->descriptors[i];
@@ -448,9 +406,9 @@ namespace mrv
                 const char* samplerName = sd->desc.name;
 
                 // Map libplacebo format to Vulkan format
-                VkFormat vkFormat = VK_FORMAT_R32G32B32A32_SFLOAT; // Default for 3D
-                if (dims == 2) vkFormat = VK_FORMAT_R32G32B32_SFLOAT;
-                if (dims == 1) vkFormat = VK_FORMAT_R32_SFLOAT;
+                VkFormat imageFormat = VK_FORMAT_R32G32B32A32_SFLOAT; // Default for 3D
+                if (dims == 2) imageFormat = VK_FORMAT_R32G32B32_SFLOAT;
+                if (dims == 1) imageFormat = VK_FORMAT_R32_SFLOAT;
 
                 // Texture dimensions
                 uint32_t width = tex->params.w;
@@ -473,39 +431,38 @@ namespace mrv
                                         VK_IMAGE_TYPE_3D;
 
                 // Create Vulkan image
-                VkImage image = createImage(
-                    device, physicalDevice, width, height, depth, vkFormat, imageType);
+                VkImage image = createImage(width, height, depth, imageFormat, imageType);
 
                 // Allocate and bind memory for the image
-                VkDeviceMemory imageMemory = allocateAndBindImageMemory(
-                device, physicalDevice, image);
+                VkDeviceMemory imageMemory = allocateAndBindImageMemory(image);
 
                 // Transition image layout to TRANSFER_DST_OPTIMAL
                 transitionImageLayout(
-                    device, queue, commandPool, image, vkFormat,
+                    m_device, m_queue, m_cmd_pool, image, imageFormat,
                     VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 
                 // Upload texture data
                 uploadTextureData(
-                    device, physicalDevice, queue,
-                    commandPool, image, width, height, depth,
-                    vkFormat, values);
+                    m_device, m_gpu, m_queue,
+                    m_cmd_pool, image, width, height, depth,
+                    imageFormat, values);
 
                 // Transition image layout to SHADER_READ_ONLY_OPTIMAL
                 transitionImageLayout(
-                    device, queue, commandPool, image, vkFormat,
+                    m_device, m_queue, m_cmd_pool, image, imageFormat,
                     VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
                 // Create image view
-                VkImageView imageView = createImageView(device, image,
-                                                        vkFormat, imageType);
+                VkImageView imageView = createImageView(m_device, image,
+                                                        imageFormat, imageType);
 
                 // Create sampler (equivalent to GL_LINEAR)
-                VkSampler sampler = createSampler(device);
+                VkSampler sampler = createSampler(m_device);
 
-                // Add to texture list
-                textures.emplace_back(image, imageView, sampler,
-                                      textureName, samplerName, imageType);
+                Fl_Vk_Texture texture(imageType, imageFormat,
+                                      image, imageView, sampler,
+                                      textureName, samplerName);
+                m_textures.push_back(texture);
                 break;
             }
             default:
@@ -521,8 +478,6 @@ namespace mrv
 
         pl_log log;
         pl_gpu gpu;
-
-        std::vector<PlaceboVKTexture> textures;
     };
 
     LibPlaceboData::LibPlaceboData()
@@ -855,7 +810,7 @@ namespace mrv
 #else
         const VkFormat tex_format = VK_FORMAT_R16G16B16A16_SFLOAT;
 #endif
-        uint32_t tex_width = 1, tex_height = 1;
+        uint32_t tex_width = 1, tex_height = 1, tex_depth = 1;
         if (p.image)
         {
             const auto& info = p.image->getInfo();
@@ -866,38 +821,22 @@ namespace mrv
         VkResult result;
         bool pass;
 
-        tex_obj->tex_width = tex_width;
-        tex_obj->tex_height = tex_height;
-
-        VkImageCreateInfo image_create_info = {};
-        image_create_info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
-        image_create_info.pNext = NULL;
-        image_create_info.imageType = VK_IMAGE_TYPE_2D;
-        image_create_info.format = tex_format;
-        image_create_info.extent = {tex_width, tex_height, 1};
-        image_create_info.mipLevels = 1;
-        image_create_info.arrayLayers = 1;
-        image_create_info.samples = VK_SAMPLE_COUNT_1_BIT;
-        image_create_info.tiling = tiling;
-        image_create_info.usage = usage;
-        image_create_info.flags = 0;
-        image_create_info.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        tex_obj->width = tex_width;
+        tex_obj->height = tex_height;
+        tex_obj->depth  = tex_depth;
+        tex_obj->image = createImage(tex_width, tex_height, 0, tex_format, VK_IMAGE_TYPE_2D);
+        
+        VkMemoryRequirements memRequirements;
+        vkGetImageMemoryRequirements(m_device, tex_obj->image, &memRequirements);
 
         VkMemoryAllocateInfo mem_alloc = {};
         mem_alloc.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
         mem_alloc.pNext = NULL;
         mem_alloc.allocationSize = 0;
         mem_alloc.memoryTypeIndex = 0;
-
-        result =
-            vkCreateImage(m_device, &image_create_info, NULL, &tex_obj->image);
-        VK_CHECK_RESULT(result);
-
-        vkGetImageMemoryRequirements(m_device, tex_obj->image, &m_mem_reqs);
-
-        mem_alloc.allocationSize = m_mem_reqs.size;
+        mem_alloc.allocationSize = memRequirements.size;
         pass = memory_type_from_properties(
-            m_mem_reqs.memoryTypeBits, required_props,
+            memRequirements.memoryTypeBits, required_props,
             &mem_alloc.memoryTypeIndex);
 
         /* allocate memory */
@@ -970,7 +909,7 @@ namespace mrv
 #else
         const VkFormat tex_format = VK_FORMAT_R16G16B16A16_SFLOAT;
 #endif
-        const float tex_colors[DEMO_TEXTURE_COUNT][2 * 4 * sizeof(half)] = {
+        const float tex_colors[1][2 * 4 * sizeof(half)] = {
             {0.4F, 0.4F, 0.4F, 1.F, 0.6F, 0.6F, 0.6F, 0.1F}
         };
 
@@ -978,7 +917,8 @@ namespace mrv
         VkFormatProperties props;
         vkGetPhysicalDeviceFormatProperties(m_gpu, tex_format, &props);
 
-        for (int i = 0; i < DEMO_TEXTURE_COUNT; i++)
+        m_textures.resize(1);
+        for (int i = 0; i < m_textures.size(); i++)
         {
             if ((props.linearTilingFeatures &
                  VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT) &&
@@ -1449,7 +1389,7 @@ namespace mrv
     {
         VkDescriptorPoolSize type_count = {};
         type_count.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        type_count.descriptorCount = DEMO_TEXTURE_COUNT;
+        type_count.descriptorCount = m_textures.size();
 
         VkDescriptorPoolCreateInfo descriptor_pool = {};
         descriptor_pool.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
@@ -1467,7 +1407,7 @@ namespace mrv
 
     void NDIView::prepare_descriptor_set()
     {
-        VkDescriptorImageInfo tex_descs[DEMO_TEXTURE_COUNT];
+        VkDescriptorImageInfo tex_descs[m_textures.size()];
         VkResult result;
         uint32_t i;
 
@@ -1482,7 +1422,7 @@ namespace mrv
         VK_CHECK_RESULT(result);
 
         memset(&tex_descs, 0, sizeof(tex_descs));
-        for (i = 0; i < DEMO_TEXTURE_COUNT; i++)
+        for (i = 0; i < m_textures.size(); i++)
         {
             tex_descs[i].sampler = m_textures[i].sampler;
             tex_descs[i].imageView = m_textures[i].view;
@@ -1492,7 +1432,7 @@ namespace mrv
         VkWriteDescriptorSet write = {};
         write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
         write.dstSet = m_desc_set;
-        write.descriptorCount = DEMO_TEXTURE_COUNT;
+        write.descriptorCount = m_textures.size();
         write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
         write.pImageInfo = tex_descs;
 
@@ -1625,7 +1565,11 @@ namespace mrv
         vkQueueWaitIdle(m_queue); // Synchronize before CPU write
 
         void* data;
-        vkMapMemory(m_device, m_textures[0].mem, 0, m_mem_reqs.size, 0, &data);
+        VkDeviceSize imageSize = m_textures[0].width *
+                                 m_textures[0].height *
+                                 m_textures[0].depth * 4 *
+                                 sizeof(float); // Assuming RGBA float data
+        vkMapMemory(m_device, m_textures[0].mem, 0, imageSize, 0, &data);
 
         if (p.image)
         {
@@ -1905,7 +1849,7 @@ namespace mrv
             m_vertices.mem = VK_NULL_HANDLE;
         }
 
-        for (uint32_t i = 0; i < DEMO_TEXTURE_COUNT; i++)
+        for (uint32_t i = 0; i < m_textures.size(); i++)
         {
             if (m_textures[i].view != VK_NULL_HANDLE)
             {
@@ -1936,7 +1880,7 @@ namespace mrv
         layout_binding.binding = 0;
         layout_binding.descriptorType =
             VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        layout_binding.descriptorCount = DEMO_TEXTURE_COUNT;
+        layout_binding.descriptorCount = m_textures.size();
         layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
         layout_binding.pImmutableSamplers = NULL;
 
@@ -2099,6 +2043,10 @@ namespace mrv
         
         std::stringstream s;
 
+        s << "#define textureLod(t, p, b) texture(t, p)"
+          << std::endl
+          << std::endl;
+                        
         std::cerr << "num_vertex_attribs=" << res->num_vertex_attribs
                   << std::endl
                   << "num_descriptors=" << res->num_descriptors << std::endl
@@ -2284,8 +2232,7 @@ namespace mrv
         
         try
         {
-            addGPUTextures(p.placeboData->textures, res,
-                           m_device, m_gpu, m_queue, m_cmd_pool);
+            addGPUTextures(res);
         }
         catch(const std::exception& e)
         {
