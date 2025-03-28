@@ -725,6 +725,10 @@ namespace mrv
             std::cerr << "No HDR monitor found or configured for SDR!"
                       << std::endl;
         }
+        else
+        {
+            std::cerr << "HDR monitor found" << std::endl;
+        }
         
         // If the format list includes just one entry of VK_FORMAT_UNDEFINED,
         // the surface has no prefresulted format.  Otherwise, at least one
@@ -849,16 +853,12 @@ namespace mrv
     }
 
     void NDIView::prepare_texture_image(
-        const float* tex_colors, Fl_Vk_Texture* tex_obj,
+        const half* tex_colors, Fl_Vk_Texture* tex_obj,
         VkImageTiling tiling, VkImageUsageFlags usage, VkFlags required_props)
     {
         TLRENDER_P();
 
-#ifdef USE_UINT16
-        const VkFormat tex_format = VK_FORMAT_R16G16B16A16_UNORM;
-#else
         const VkFormat tex_format = VK_FORMAT_R16G16B16A16_SFLOAT;
-#endif
         uint32_t tex_width = 1, tex_height = 1, tex_depth = 1;
         if (p.image)
         {
@@ -960,15 +960,11 @@ namespace mrv
     void NDIView::prepare_textures()
     {
         VkResult result;
-#ifdef USE_UINT16
-        const VkFormat tex_format = VK_FORMAT_R16G16B16A16_UNORM;
-#else
         const VkFormat tex_format = VK_FORMAT_R16G16B16A16_SFLOAT;
-#endif
-        const float tex_colors[1][2 * 4 * sizeof(half)] = {
+        const half tex_colors[1][2 * 4 * sizeof(half)] = {
             {0.4F, 0.4F, 0.4F, 1.F, 0.6F, 0.6F, 0.6F, 0.1F}
         };
-
+        
         // Query if image supports texture format
         VkFormatProperties props;
         vkGetPhysicalDeviceFormatProperties(m_gpu, tex_format, &props);
@@ -1146,16 +1142,16 @@ namespace mrv
         m_vertices.vi.vertexAttributeDescriptionCount = 2;
         m_vertices.vi.pVertexAttributeDescriptions = m_vertices.vi_attrs;
 
-        m_vertices.vi_bindings[0].binding = VERTEX_BUFFER_BIND_ID;
+        m_vertices.vi_bindings[0].binding = 0;
         m_vertices.vi_bindings[0].stride = sizeof(vertices[0]);
         m_vertices.vi_bindings[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 
-        m_vertices.vi_attrs[0].binding = VERTEX_BUFFER_BIND_ID;
+        m_vertices.vi_attrs[0].binding = 0;
         m_vertices.vi_attrs[0].location = 0;
         m_vertices.vi_attrs[0].format = VK_FORMAT_R32G32_SFLOAT;
         m_vertices.vi_attrs[0].offset = 0;
 
-        m_vertices.vi_attrs[1].binding = VERTEX_BUFFER_BIND_ID;
+        m_vertices.vi_attrs[1].binding = 0;
         m_vertices.vi_attrs[1].location = 1;
         m_vertices.vi_attrs[1].format = VK_FORMAT_R32G32_SFLOAT;
         m_vertices.vi_attrs[1].offset = sizeof(float) * 2;
@@ -1591,8 +1587,6 @@ namespace mrv
 
     void NDIView::prepare()
     {
-        TLRENDER_P();
-
         prepare_textures();
         prepare_vertices();
         prepare_descriptor_layout();
@@ -1701,13 +1695,12 @@ namespace mrv
     {
         TLRENDER_P();
 
-
         update_texture();
 
         // Draw the triangle
         VkDeviceSize offsets[1] = {0};
         vkCmdBindVertexBuffers(
-            m_draw_cmd, VERTEX_BUFFER_BIND_ID, 1, &m_vertices.buf, offsets);
+            m_draw_cmd, 0, 1, &m_vertices.buf, offsets);
 
         vkCmdDraw(m_draw_cmd, 4, 1, 0, 0);
 

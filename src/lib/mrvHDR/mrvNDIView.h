@@ -78,7 +78,7 @@ namespace mrv
         void _videoThread();
         void _audioThread();
         void prepare_texture_image(
-            const float* tex_colors, Fl_Vk_Texture* tex_obj,
+            const half* tex_colors, Fl_Vk_Texture* tex_obj,
             VkImageTiling tiling, VkImageUsageFlags usage,
             VkFlags required_props);
 
