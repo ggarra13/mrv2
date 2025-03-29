@@ -248,7 +248,7 @@ namespace mrv
 
     void createBuffer(
         VkDevice m_device,
-        VkPhysicalDevice m_gpu,
+        VkPhysicalDevice m_gpu, 
         VkDeviceSize size,
         VkBufferUsageFlags usage,
         VkMemoryPropertyFlags properties,
@@ -317,7 +317,7 @@ namespace mrv
         // Copy data to staging buffer
         void* mappedData;
         vkMapMemory(m_device, stagingBufferMemory, 0, imageSize, 0, &mappedData);
-        memcpy(mappedData, data, static_cast<size_t>(imageSize));
+        std::memcpy(mappedData, data, static_cast<size_t>(imageSize));
         vkUnmapMemory(m_device, stagingBufferMemory);
 
         // Copy staging buffer to image
@@ -345,8 +345,8 @@ namespace mrv
         vkFreeMemory(m_device, stagingBufferMemory, nullptr);
     }
     
-    VkImageView createImageView(VkDevice m_device, VkImage image,
-                                VkFormat format, VkImageType imageType) {
+    VkImageView NDIView::createImageView(VkImage image,
+                                         VkFormat format, VkImageType imageType) {
         VkImageViewCreateInfo viewInfo = {};
         viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
         viewInfo.image = image;
@@ -367,7 +367,7 @@ namespace mrv
         return imageView;
     }
     
-    VkSampler createSampler(VkDevice m_device) {
+    VkSampler NDIView::createSampler() {
         VkSamplerCreateInfo samplerInfo = {};
         samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
         samplerInfo.magFilter = VK_FILTER_LINEAR;
@@ -1810,6 +1810,8 @@ void main() {
 
                         if (attr_mrv2)
                         {
+                            if (!p.hasHDR)
+                                init = true;
                             p.hasHDR = true;
                             const std::string& jsonString =
                                 unescape_quotes_from_xml(attr_mrv2->value());
@@ -1821,12 +1823,15 @@ void main() {
                                 j.get<image::HDRData>();
                             if (p.hdrData != hdrData)
                             {
+                                // \@ todo: 
                                 p.hdrData = hdrData;
                                 init = true;
                             }
                         }
                         else
                         {
+                            if (p.hasHDR)
+                                init = true;
                             p.hasHDR= false;
                         }
                     
