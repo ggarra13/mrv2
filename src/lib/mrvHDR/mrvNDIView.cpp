@@ -1240,15 +1240,16 @@ namespace mrv
             return m_vert_shader_module;
 
         std::string vertex_shader_glsl = R"(
-        #version 450
-        layout(location = 0) in vec2 inPos;
-        layout(location = 1) in vec2 inTexCoord;
-        layout(location = 0) out vec2 outTexCoord;
-        void main() {
-            gl_Position = vec4(inPos, 0.0, 1.0);
-            outTexCoord = inTexCoord;
-        }
-    )";
+ #version 450
+ layout(location = 0) in vec2 inPos;
+ layout(location = 1) in vec2 inTexCoord;
+ layout(location = 0) out vec2 outTexCoord;
+
+ void main() {
+      gl_Position = vec4(inPos, 0.0, 1.0);
+      outTexCoord = inTexCoord;
+ }
+ )";
 
         try
         {
@@ -1277,24 +1278,24 @@ namespace mrv
 
         // Example GLSL vertex shader
         std::string frag_shader_glsl = tl::string::Format(R"(
-        #version 450
+#version 450
 
-        // Input from vertex shader
-        layout(location = 0) in vec2 inTexCoord;
+// Input from vertex shader
+layout(location = 0) in vec2 inTexCoord;
 
-        // Output color
-        layout(location = 0) out vec4 outColor;
+// Output color
+layout(location = 0) out vec4 outColor;
 
-        // Main image to display
-        layout(binding = 0) uniform sampler2D textureSampler;
+// Main image to display
+layout(binding = 0) uniform sampler2D textureSampler;
 
-        {0}
+{0}
 
-        void main() {
-            outColor = texture(textureSampler, inTexCoord);
-            {1}
-        }
-    )").arg(p.hdrColorsDef).arg(p.hdrColors);
+void main() {
+     outColor = texture(textureSampler, inTexCoord);
+     {1}
+}
+)").arg(p.hdrColorsDef).arg(p.hdrColors);
         // Compile to SPIR-V
         try
         {
@@ -1602,6 +1603,7 @@ namespace mrv
 
         if (p.hdrMonitorFound && p.hasHDR)
         {
+            // This will make the FLTK swapchain call vk->SetHDRMetadataEXT();
             const image::HDRData& data = p.hdrData;
             m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
             m_hdr_metadata.displayPrimaryRed = {
@@ -1776,8 +1778,13 @@ namespace mrv
                         doc.parse<0>((char*)video_frame.p_metadata);
 
                         // Get root node
+                        
                         rapidxml::xml_node<>* root =
                             doc.first_node("ndi_color_info");
+                        if (!root)
+                        {
+                            return;
+                        }
 
                         // Get attributes
                         rapidxml::xml_attribute<>* attr_transfer =
@@ -1837,12 +1844,13 @@ namespace mrv
                     {
                         start();
                     }
-                        
+                    
                     if (video_frame.p_data)
                     {
                         _copy(video_frame.p_data);
                         redraw();
                     }
+                    
                     NDIlib_recv_free_video(p.NDI_recv, &video_frame);
                     break;
 
@@ -1985,10 +1993,6 @@ namespace mrv
 
         // defaults, generates LUTs if state is set.
         cmap.gamut_mapping = nullptr; // &pl_gamut_map_perceptual;
-
-        // Hable and ACES are best for HDR
-        //   &pl_tone_map_hable;
-        cmap.tone_mapping_function = &pl_tone_map_st2094_40;
                     
         // PL_GAMUT_MAP_CONSTANTS is defined in wrong order for C++
         cmap.gamut_constants = { 0 };
@@ -1997,6 +2001,10 @@ namespace mrv
         cmap.gamut_constants.colorimetric_gamma  = 1.80f; 
         cmap.gamut_constants.softclip_knee  = 0.70f;
         cmap.gamut_constants.softclip_desat = 0.35f;
+
+        // Hable and ACES are best for HDR
+        //   &pl_tone_map_hable;
+        cmap.tone_mapping_function = nullptr;
                     
         cmap.tone_constants  = { 0 };
         cmap.tone_constants.knee_adaptation   = 0.4f;
@@ -2015,15 +2023,6 @@ namespace mrv
 
         cmap.tone_constants.exposure          = 1.0f;
                     
-        cmap.metadata   = PL_HDR_METADATA_ANY;
-        cmap.lut3d_size[0] = 48;
-        cmap.lut3d_size[1] = 32;
-        cmap.lut3d_size[2] = 256;
-        cmap.lut_size = 256;
-        cmap.visualize_rect.x0 = 0;
-        cmap.visualize_rect.y0 = 0;
-        cmap.visualize_rect.x1 = 1;
-        cmap.visualize_rect.y1 = 1;
         cmap.contrast_smoothness = 3.5f;
 
         const image::HDRData& data = p.hdrData;
@@ -2033,7 +2032,7 @@ namespace mrv
         src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
         src_colorspace.transfer  = PL_COLOR_TRC_PQ;
 
-                
+        cmap.metadata   = PL_HDR_METADATA_ANY;
         pl_hdr_metadata& hdr = src_colorspace.hdr;
         hdr.min_luma = data.displayMasteringLuminance.getMin();
         hdr.max_luma = data.displayMasteringLuminance.getMax();
@@ -2066,6 +2065,15 @@ namespace mrv
 
         if (p.hdrMonitorFound)
         {
+            cmap.lut3d_size[0] = 0;
+            cmap.lut3d_size[1] = 0;
+            cmap.lut3d_size[2] = 0;
+            cmap.lut_size = 0;
+            cmap.visualize_rect.x0 = 0;
+            cmap.visualize_rect.y0 = 0;
+            cmap.visualize_rect.x1 = 1;
+            cmap.visualize_rect.y1 = 1;
+        
             dst_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
             dst_colorspace.transfer  = PL_COLOR_TRC_PQ;
             if (m_color_space == VK_COLOR_SPACE_HDR10_HLG_EXT)
@@ -2077,12 +2085,26 @@ namespace mrv
                 // \@todo:  How to handle this? PL_COLOR_TRC_DOLBYVISION does
                 //          not exist.
                 // dst_colorspace.transfer = ??? 
+                dst_colorspace.transfer  = PL_COLOR_TRC_PQ;
             }
         }
         else
         {
+            cmap.lut3d_size[0] = 48;
+            cmap.lut3d_size[1] = 32;
+            cmap.lut3d_size[2] = 256;
+            cmap.lut_size = 256;
+            cmap.visualize_rect.x0 = 0;
+            cmap.visualize_rect.y0 = 0;
+            cmap.visualize_rect.x1 = 1;
+            cmap.visualize_rect.y1 = 1;
+            cmap.contrast_smoothness = 3.5f;
+        
             dst_colorspace.primaries = PL_COLOR_PRIM_BT_709;
             dst_colorspace.transfer  = PL_COLOR_TRC_BT_1886;
+
+            // \@todo: use different tone mapping functions
+            cmap.tone_mapping_function = &pl_tone_map_st2094_40;
         }
         
         pl_color_space_infer(&dst_colorspace);

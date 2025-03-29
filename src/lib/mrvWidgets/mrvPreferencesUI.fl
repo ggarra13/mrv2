@@ -92,8 +92,8 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {216 239 853 467} type Double hide resizable
-      code0 {main = m;}
+      xywh {216 239 853 467} type Double resizable
+      code0 {main = m;} visible
     } {
       Fl_Group {} {open
         xywh {0 0 853 466} box FLAT_BOX
@@ -710,8 +710,8 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
               }
             }
             Fl_Group {} {
-              label Render open
-              xywh {288 37 555 369} box EMBOSSED_BOX align 5
+              label Render
+              xywh {288 37 555 369} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label Render
@@ -779,7 +779,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                 }
               }
               Fl_Group {} {
-                label HDR open
+                label HDR
                 xywh {303 256 530 140} box ROUNDED_BOX
               } {
                 Fl_Choice uiPrefsChromaticities {
@@ -1405,6 +1405,29 @@ v->uiOCIO_Display_View->do_callback();}
               }
             }
             Fl_Group {} {
+              label NDI open
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5
+            } {
+              Fl_Group {} {open
+                xywh {328 71 478 314}
+              } {
+                Fl_Choice uiPrefsNDIShowVideo {
+                  label {Show While Streaming} open selected
+                  tooltip {Viewports can be drawn with blitting or with OpenGL shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {511 98 140 25} down_box BORDER_BOX align 132 textcolor 32
+                  class {mrv::Choice}
+                } {
+                  MenuItem {} {
+                    label No
+                    xywh {50 50 100 20}
+                  }
+                  MenuItem {} {
+                    label Yes
+                    xywh {50 50 100 20}
+                  }
+                }
+              }
+            }
+            Fl_Group {} {
               label Network
               xywh {288 37 555 360} align 5 hide
             } {
@@ -1545,7 +1568,7 @@ v->uiOCIO_Display_View->do_callback();}
                   }
                 }
                 Fl_Choice uiPrefsColorAccuracy {
-                  label {Color Buffers' Accuracy} open
+                  label {Color Buffers' Accuracy}
                   tooltip {Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves all float information, Half Float preserves most float information and Fast works in 8-bits.  Automatic selects the accuracy based on image depth.} xywh {511 167 140 25} down_box BORDER_BOX align 132 textcolor 32
                   class {mrv::Choice}
                 } {
@@ -1567,7 +1590,7 @@ v->uiOCIO_Display_View->do_callback();}
                   }
                 }
                 Fl_Choice uiPrefsBlitViewports {
-                  label {Blit Viewports} open
+                  label {Blit Viewports}
                   tooltip {Viewports can be drawn with blitting or with OpenGL shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {513 243 140 25} down_box BORDER_BOX align 132 textcolor 32
                   class {mrv::Choice}
                 } {
@@ -1751,7 +1774,7 @@ mrv::Preferences::load(false, false);}
               label OK
               user_data m user_data_type {ViewerUI*}
               callback {v->uiPrefs->uiMain->hide();
-mrv::Preferences::run();} selected
+mrv::Preferences::run();}
               tooltip {Accept settings but don't save.  They will get saved when exiting the program.} xywh {648 418 132 31}
             }
           }
@@ -1811,6 +1834,7 @@ o->add( _("OCIO") );
 o->add( _("OCIO Defaults") );
 o->add( _("Loading") );
 o->add( _("Path Mappings") );
+o->add( _("NDI") );
 o->add( _("Network") );
 o->add( _("Video") );
 o->add( _("Audio") );

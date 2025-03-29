@@ -188,6 +188,12 @@ namespace mrv
         TLRENDER_P();
         MRV2_GL();
 
+        const auto outputDevice = App::app->outputDevice();
+        if (outputDevice && !p.ui->uiPrefs->uiPrefsNDIShowVideo)
+        {
+            p.showVideo = false;
+        }
+        
         make_current(); // needed to work with GLFW
 
         if (!valid())
