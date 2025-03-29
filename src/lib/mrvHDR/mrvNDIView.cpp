@@ -245,6 +245,57 @@ namespace mrv
 
         endSingleTimeCommands(m_device, m_queue, m_cmd_pool, commandBuffer);
     }
+        
+    void transitionImageLayoutNew(
+        VkDevice m_device,
+        VkQueue m_queue,
+        VkCommandPool m_cmd_pool,
+        VkImage image,
+        VkImageAspectFlags aspectMask,
+        VkImageLayout oldLayout,
+        VkImageLayout newLayout,
+        VkAccessFlags srcAccessMask,
+        VkPipelineStageFlags srcStageMask,
+        VkAccessFlags dstAccessMask,
+        VkPipelineStageFlags dstStageMask)
+    {
+        VkCommandBuffer commandBuffer = beginSingleTimeCommands(m_device, m_cmd_pool);
+
+        VkImageMemoryBarrier barrier = {};
+        barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+        barrier.srcAccessMask = srcAccessMask;
+        barrier.dstAccessMask = dstAccessMask;
+        barrier.oldLayout = oldLayout;
+        barrier.newLayout = newLayout;
+        barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+        barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+        barrier.image = image;
+        barrier.subresourceRange.aspectMask = aspectMask;
+        barrier.subresourceRange.baseMipLevel = 0;
+        barrier.subresourceRange.levelCount = 1;
+        barrier.subresourceRange.baseArrayLayer = 0;
+        barrier.subresourceRange.layerCount = 1;
+
+        // if (oldLayout == VK_IMAGE_LAYOUT_UNDEFINED && newLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL) {
+        //     barrier.srcAccessMask = 0;
+        //     barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+        //     srcStageMask = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+        //     dstStageMask = VK_PIPELINE_STAGE_TRANSFER_BIT;
+        // } else if (oldLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL && newLayout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL) {
+        //     barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+        //     barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+        //     srcStageMask = VK_PIPELINE_STAGE_TRANSFER_BIT;
+        //     dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+        // } else {
+        //     throw std::runtime_error("Unsupported layout transition");
+        // }
+
+        vkCmdPipelineBarrier(
+            commandBuffer, srcStageMask, dstStageMask,
+            0, 0, nullptr, 0, nullptr, 1, &barrier);
+
+        endSingleTimeCommands(m_device, m_queue, m_cmd_pool, commandBuffer);
+    }
 
     void NDIView::createBuffer(
         VkDeviceSize size,
