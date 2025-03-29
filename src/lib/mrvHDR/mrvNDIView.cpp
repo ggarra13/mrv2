@@ -246,9 +246,7 @@ namespace mrv
         endSingleTimeCommands(m_device, m_queue, m_cmd_pool, commandBuffer);
     }
 
-    void createBuffer(
-        VkDevice m_device,
-        VkPhysicalDevice m_gpu, 
+    void NDIView::createBuffer(
         VkDeviceSize size,
         VkBufferUsageFlags usage,
         VkMemoryPropertyFlags properties,
@@ -304,8 +302,7 @@ namespace mrv
         VkBuffer stagingBuffer;
         VkDeviceMemory stagingBufferMemory;
 
-        createBuffer(
-            m_device, m_gpu, imageSize,
+        createBuffer(imageSize,
             VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
             VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
             stagingBuffer, stagingBufferMemory);

@@ -102,12 +102,12 @@ namespace mrv
             );
         
         VkDeviceMemory allocateAndBindImageMemory(VkImage image);
-        // void createBuffer(
-        //     VkDeviceSize size,
-        //     VkBufferUsageFlags usage,
-        //     VkMemoryPropertyFlags properties,
-        //     VkBuffer& buffer,
-        //     VkDeviceMemory& bufferMemory);
+        void createBuffer(
+             VkDeviceSize size,
+             VkBufferUsageFlags usage,
+             VkMemoryPropertyFlags properties,
+             VkBuffer& buffer,
+             VkDeviceMemory& bufferMemory);
         
         void uploadTextureData(VkImage image,
                                 uint32_t width,
