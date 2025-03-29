@@ -335,6 +335,7 @@ namespace mrv
         uint32_t depth,
         VkFormat format,
         const void* data) {
+        VkResult result;
         VkDeviceSize imageSize = width * height * depth * 4 * sizeof(float); // Assuming RGBA float data
 
         // Create staging buffer
@@ -348,7 +349,9 @@ namespace mrv
 
         // Copy data to staging buffer
         void* mappedData;
-        vkMapMemory(m_device, stagingBufferMemory, 0, imageSize, 0, &mappedData);
+        result = vkMapMemory(m_device, stagingBufferMemory, 0, imageSize, 0, &mappedData);
+        VK_CHECK_RESULT(result);
+        
         std::memcpy(mappedData, data, static_cast<size_t>(imageSize));
         vkUnmapMemory(m_device, stagingBufferMemory);
 
@@ -777,14 +780,12 @@ namespace mrv
         p.image = image::Image::create(p.info);
 
         destroy_resources();
-
-        vkDestroyShaderModule(m_device, m_frag_shader_module, NULL);
-        m_frag_shader_module = VK_NULL_HANDLE;
         
         // Always init main image.
         // We must init first, before HDR shader, which may create
         // additional images.
         prepare_main_texture();
+        
         
         if (p.hasHDR)
         {
@@ -1326,6 +1327,7 @@ void main() {
         // Compile to SPIR-V
         try
         {
+            // std::cerr << frag_shader_glsl << std::endl;
             std::vector<uint32_t> spirv = compile_glsl_to_spirv(
                 frag_shader_glsl,
                 shaderc_fragment_shader, // Shader type
@@ -1614,7 +1616,22 @@ void main() {
 
     void NDIView::prepare()
     {
+        TLRENDER_P();
+        
+        vkDestroyShaderModule(m_device, m_frag_shader_module, NULL);
+        m_frag_shader_module = VK_NULL_HANDLE;
+        
+        destroy_textures();
         prepare_main_texture();
+        if (p.hasHDR)
+        {
+            create_HDR_shader();
+        }
+        else
+        {
+            p.hdrColors.clear();
+            p.hdrColorsDef.clear();
+        }
         prepare_vertices();
         prepare_descriptor_layout();
         prepare_render_pass();
@@ -1627,6 +1644,8 @@ void main() {
     {
         TLRENDER_P();
 
+        VkResult result;
+        
         if (p.hdrMonitorFound && p.hasHDR)
         {
             // This will make the FLTK swapchain call vk->SetHDRMetadataEXT();
@@ -1687,10 +1706,11 @@ void main() {
         vkQueueWaitIdle(m_queue); // Synchronize before CPU write
 
         void* data;
-        VkMemoryRequirements m_mem_reqs;
-        vkGetImageMemoryRequirements(m_device, m_textures[0].image, &m_mem_reqs);
-        vkMapMemory(m_device, m_textures[0].mem, 0, m_mem_reqs.size, 0, &data);
-
+        VkMemoryRequirements mem_reqs;
+        vkGetImageMemoryRequirements(m_device, m_textures[0].image, &mem_reqs);
+        result = vkMapMemory(m_device, m_textures[0].mem, 0, mem_reqs.size, 0, &data);
+        VK_CHECK_RESULT(result);
+        
         if (p.image)
         {
             std::memcpy(data, p.image->getData(), p.image->getDataByteCount());
@@ -1794,7 +1814,6 @@ void main() {
                         p.info.size.pixelAspectRatio != pixelAspectRatio ||
                         p.fourCC != video_frame.FourCC)
                     {
-                        std::cerr << "init res changed = " << init << std::endl;
                         init = true;
                     }
 
@@ -1834,13 +1853,13 @@ void main() {
                                 p.matrixName = attr_matrix->value();
                             if (attr_primaries)
                                 p.primariesName = attr_primaries->value();
-
+                                
                             if (!p.hasHDR)
                                 init = true;
-                                
+                            p.hasHDR = true;
+                            
                             if (attr_mrv2)
                             {
-                                p.hasHDR = true;
                                 const std::string& jsonString =
                                 unescape_quotes_from_xml(attr_mrv2->value());
                             
@@ -1859,9 +1878,6 @@ void main() {
                         }
                         else
                         {
-                            if (p.hasHDR)
-                                init = true;
-                            p.hasHDR= false;
                         }
                     
                         // Display color information
@@ -1878,11 +1894,18 @@ void main() {
                         //           << hdrData.primaries[2] << " "
                         //           << hdrData.primaries[3] << std::endl;
                     }
+                    else
+                    {
+                        if (p.hasHDR)
+                            init = true;
+                        p.hasHDR = false;
+                    }
 
                         
                     if (init)
                     {
                         std::cerr << "init = " << init << std::endl;
+                        std::cerr << "hasHDR = " << p.hasHDR << std::endl;
                         start();
                     }
                     
@@ -1970,8 +1993,20 @@ void main() {
         }
     }
 
+
+    void NDIView::destroy_textures()
+    {
+        for (uint32_t i = 0; i < m_textures.size(); i++)
+        {
+            destroy_texture_image(m_textures[i]);
+        }
+        m_textures.clear();
+    }
+
     void NDIView::destroy_resources()
     {
+        vkDeviceWaitIdle(m_device);  // waits for all queue on the device
+        
         if (m_vertices.buf != VK_NULL_HANDLE)
         {
             vkDestroyBuffer(m_device, m_vertices.buf, NULL);
@@ -1983,12 +2018,9 @@ void main() {
             vkFreeMemory(m_device, m_vertices.mem, NULL);
             m_vertices.mem = VK_NULL_HANDLE;
         }
-        
-        for (uint32_t i = 0; i < m_textures.size(); i++)
-        {
-            destroy_texture_image(m_textures[i]);
-        }
-        m_textures.clear();
+
+        vkDestroyShaderModule(m_device, m_frag_shader_module, NULL);
+        m_frag_shader_module = VK_NULL_HANDLE;
     }
                 
     void NDIView::create_HDR_shader()

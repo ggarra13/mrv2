@@ -89,6 +89,7 @@ namespace mrv
 
         void create_HDR_shader();
         void start();
+        void destroy_textures();
 
         VkImage createImage(
             VkImageType imageType,
