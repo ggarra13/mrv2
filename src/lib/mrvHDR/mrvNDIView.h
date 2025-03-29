@@ -87,7 +87,7 @@ namespace mrv
         VkShaderModule prepare_vs();
         VkShaderModule prepare_fs();
 
-        void _create_HDR_shader();
+        void create_HDR_shader();
         void start();
 
         VkImage createImage(
@@ -102,6 +102,22 @@ namespace mrv
             );
         
         VkDeviceMemory allocateAndBindImageMemory(VkImage image);
+        // void createBuffer(
+        //     VkDeviceSize size,
+        //     VkBufferUsageFlags usage,
+        //     VkMemoryPropertyFlags properties,
+        //     VkBuffer& buffer,
+        //     VkDeviceMemory& bufferMemory);
+        
+        // void uploadTextureData(VkImage image,
+        //                        uint32_t width,
+        //                        uint32_t height,
+        //                        uint32_t depth,
+        //                        VkFormat format,
+        //                        const void* data);
+        
+        //VkImageView createImageView(VkImage image, VkFormat format, VkImageType imageType);
+        VkSampler createSampler();
         
         void addGPUTextures(const pl_shader_res*);
         

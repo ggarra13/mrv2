@@ -499,7 +499,7 @@ namespace mrv
                                                         imageFormat, imageType);
 
                 // Create sampler (equivalent to GL_LINEAR)
-                VkSampler sampler = createSampler(m_device);
+                VkSampler sampler = createSampler();
 
                 Fl_Vk_Texture texture(imageType, imageFormat,
                                       image, imageView, sampler,
@@ -753,11 +753,14 @@ namespace mrv
         vkDestroyShaderModule(m_device, m_frag_shader_module, NULL);
         m_frag_shader_module = VK_NULL_HANDLE;
         
-        prepare_main_texture(); // Always initialize main image texture
-
+        // Always init main image.
+        // We must init first, before HDR shader, which may create
+        // additional images.
+        prepare_main_texture();
+        
         if (p.hasHDR)
         {
-            _create_HDR_shader();
+            create_HDR_shader();
         }
         else
         {
@@ -1953,7 +1956,7 @@ void main() {
         m_textures.clear();
     }
                 
-    void NDIView::_create_HDR_shader()
+    void NDIView::create_HDR_shader()
     {
         TLRENDER_P();
         
