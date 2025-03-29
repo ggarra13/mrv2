@@ -61,7 +61,7 @@ namespace mrv
 
         void init_vk_swapchain() FL_OVERRIDE;
 
-        void prepare_textures();
+        void prepare_main_texture();
         void prepare_vertices();
         void prepare_descriptor_layout();
         void prepare_render_pass();
@@ -79,10 +79,10 @@ namespace mrv
         void _findThread();
         void _videoThread();
         void _audioThread();
-        void prepare_texture_image(
-            const half* tex_colors, Fl_Vk_Texture* tex_obj,
-            VkImageTiling tiling, VkImageUsageFlags usage,
-            VkFlags required_props);
+        void prepare_texture_image(Fl_Vk_Texture* tex_obj,
+                                   VkImageTiling tiling,
+                                   VkImageUsageFlags usage,
+                                   VkFlags required_props);
 
         VkShaderModule prepare_vs();
         VkShaderModule prepare_fs();

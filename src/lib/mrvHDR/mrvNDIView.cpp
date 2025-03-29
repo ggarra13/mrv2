@@ -204,9 +204,9 @@ namespace mrv
         VkQueue m_queue,
         VkCommandPool m_cmd_pool,
         VkImage image,
-        VkFormat format,
         VkImageLayout oldLayout,
-        VkImageLayout newLayout) {
+        VkImageLayout newLayout)
+    {
         VkCommandBuffer commandBuffer = beginSingleTimeCommands(m_device, m_cmd_pool);
 
         VkImageMemoryBarrier barrier = {};
@@ -480,7 +480,7 @@ namespace mrv
 
                 // Transition image layout to TRANSFER_DST_OPTIMAL
                 transitionImageLayout(
-                    m_device, m_queue, m_cmd_pool, image, imageFormat,
+                    m_device, m_queue, m_cmd_pool, image, 
                     VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 
                 // Upload texture data
@@ -491,7 +491,7 @@ namespace mrv
 
                 // Transition image layout to SHADER_READ_ONLY_OPTIMAL
                 transitionImageLayout(
-                    m_device, m_queue, m_cmd_pool, image, imageFormat,
+                    m_device, m_queue, m_cmd_pool, image, 
                     VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
                 // Create image view
@@ -753,7 +753,7 @@ namespace mrv
         vkDestroyShaderModule(m_device, m_frag_shader_module, NULL);
         m_frag_shader_module = VK_NULL_HANDLE;
         
-        prepare_textures(); // Always initialize main image texture
+        prepare_main_texture(); // Always initialize main image texture
 
         if (p.hasHDR)
         {
@@ -852,9 +852,10 @@ namespace mrv
         }
     }
 
-    void NDIView::prepare_texture_image(
-        const half* tex_colors, Fl_Vk_Texture* tex_obj,
-        VkImageTiling tiling, VkImageUsageFlags usage, VkFlags required_props)
+    void NDIView::prepare_texture_image(Fl_Vk_Texture* tex_obj,
+                                        VkImageTiling tiling,
+                                        VkImageUsageFlags usage,
+                                        VkFlags required_props)
     {
         TLRENDER_P();
 
@@ -882,7 +883,8 @@ namespace mrv
                                      usage);
         
         VkMemoryRequirements memRequirements;
-        vkGetImageMemoryRequirements(m_device, tex_obj->image, &memRequirements);
+        vkGetImageMemoryRequirements(m_device, tex_obj->image,
+                                     &memRequirements);
 
         VkMemoryAllocateInfo mem_alloc = {};
         mem_alloc.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
@@ -957,89 +959,83 @@ namespace mrv
         vkFreeCommandBuffers(m_device, m_cmd_pool, 1, &cmd);
     }
 
-    void NDIView::prepare_textures()
+    void NDIView::prepare_main_texture()
     {
         VkResult result;
         const VkFormat tex_format = VK_FORMAT_R16G16B16A16_SFLOAT;
-        const half tex_colors[1][2 * 4 * sizeof(half)] = {
-            {0.4F, 0.4F, 0.4F, 1.F, 0.6F, 0.6F, 0.6F, 0.1F}
-        };
         
         // Query if image supports texture format
         VkFormatProperties props;
         vkGetPhysicalDeviceFormatProperties(m_gpu, tex_format, &props);
 
         m_textures.resize(1);
-        for (int i = 0; i < m_textures.size(); i++)
+
+        if ((props.linearTilingFeatures &
+             VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT) &&
+            !m_use_staging_buffer)
         {
-            if ((props.linearTilingFeatures &
-                 VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT) &&
-                !m_use_staging_buffer)
-            {
-                /* Device can texture using linear textures */
-                prepare_texture_image(
-                    tex_colors[i], &m_textures[i], VK_IMAGE_TILING_LINEAR,
-                    VK_IMAGE_USAGE_SAMPLED_BIT,
-                    VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                        VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-            }
-            else if (
-                props.optimalTilingFeatures &
-                VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT)
-            {
-                Fl::fatal("m_use_staging_buffer is unimplemented");
-            }
-            else
-            {
-                /* Can't support VK_FORMAT_B8G8R8A8_UNORM !? */
-                Fl::fatal(
-                    "No support for B8G8R8A8_UNORM as texture image format");
-            }
-
-            VkSamplerCreateInfo sampler = {};
-            sampler.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
-            sampler.pNext = NULL;
-            sampler.magFilter = VK_FILTER_NEAREST;
-            sampler.minFilter = VK_FILTER_NEAREST;
-            sampler.mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST;
-            sampler.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-            sampler.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-            sampler.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-            sampler.mipLodBias = 0.0f;
-            sampler.anisotropyEnable = VK_FALSE;
-            sampler.maxAnisotropy = 1;
-            sampler.compareOp = VK_COMPARE_OP_NEVER;
-            sampler.minLod = 0.0f;
-            sampler.maxLod = 0.0f;
-            sampler.borderColor = VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
-            sampler.unnormalizedCoordinates = VK_FALSE;
-
-            VkImageViewCreateInfo view = {};
-            view.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-            view.pNext = NULL;
-            view.image = VK_NULL_HANDLE;
-            view.viewType = VK_IMAGE_VIEW_TYPE_2D;
-            view.format = tex_format;
-            view.components = {
-                VK_COMPONENT_SWIZZLE_R,
-                VK_COMPONENT_SWIZZLE_G,
-                VK_COMPONENT_SWIZZLE_B,
-                VK_COMPONENT_SWIZZLE_A,
-            };
-            view.subresourceRange = {VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1};
-            view.flags = 0;
-
-            /* create sampler */
-            result = vkCreateSampler(
-                m_device, &sampler, NULL, &m_textures[i].sampler);
-            VK_CHECK_RESULT(result);
-
-            /* create image view */
-            view.image = m_textures[i].image;
-            result =
-                vkCreateImageView(m_device, &view, NULL, &m_textures[i].view);
-            VK_CHECK_RESULT(result);
+            /* Device can texture using linear textures */
+            prepare_texture_image(&m_textures[0],
+                                  VK_IMAGE_TILING_LINEAR,
+                                  VK_IMAGE_USAGE_SAMPLED_BIT,
+                                  VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+                                  VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
         }
+        else if (props.optimalTilingFeatures &
+                 VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT)
+        {
+            Fl::fatal("m_use_staging_buffer is unimplemented");
+        }
+        else
+        {
+            /* Can't support VK_FORMAT_B8G8R8A8_UNORM !? */
+            Fl::fatal("No support for B8G8R8A8_UNORM as texture image format");
+        }
+
+        VkSamplerCreateInfo samplerInfo = {};
+        samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+        samplerInfo.pNext = NULL;
+        samplerInfo.magFilter = VK_FILTER_LINEAR;
+        samplerInfo.minFilter = VK_FILTER_LINEAR;
+        samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+        samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+        samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+        samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+        samplerInfo.mipLodBias = 0.0f;
+        samplerInfo.anisotropyEnable = VK_FALSE;
+        samplerInfo.maxAnisotropy = 1.0f;
+        samplerInfo.compareEnable = VK_FALSE;
+        samplerInfo.compareOp = VK_COMPARE_OP_NEVER;
+        samplerInfo.minLod = 0.0f;
+        samplerInfo.maxLod = 0.0f;
+        samplerInfo.borderColor = VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
+        samplerInfo.unnormalizedCoordinates = VK_FALSE;
+
+        /* create sampler */
+        result = vkCreateSampler(m_device, &samplerInfo, NULL,
+                                 &m_textures[0].sampler);
+        VK_CHECK_RESULT(result);
+
+        /* create image view */
+
+        VkImageViewCreateInfo viewInfo = {};
+        viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+        viewInfo.pNext = NULL;
+        viewInfo.image = VK_NULL_HANDLE;
+        viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+        viewInfo.format = tex_format;
+        viewInfo.components = {
+            VK_COMPONENT_SWIZZLE_R,
+            VK_COMPONENT_SWIZZLE_G,
+            VK_COMPONENT_SWIZZLE_B,
+            VK_COMPONENT_SWIZZLE_A,
+        };
+        viewInfo.subresourceRange = {VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1};
+        viewInfo.flags = 0;
+        viewInfo.image = m_textures[0].image;
+        
+        result = vkCreateImageView(m_device, &viewInfo, NULL, &m_textures[0].view);
+        VK_CHECK_RESULT(result);
     }
 
     void NDIView::prepare_vertices()
@@ -1299,7 +1295,6 @@ void main() {
         // Compile to SPIR-V
         try
         {
-            std::cerr << frag_shader_glsl << std::endl;
             std::vector<uint32_t> spirv = compile_glsl_to_spirv(
                 frag_shader_glsl,
                 shaderc_fragment_shader, // Shader type
@@ -1588,7 +1583,7 @@ void main() {
 
     void NDIView::prepare()
     {
-        prepare_textures();
+        prepare_main_texture();
         prepare_vertices();
         prepare_descriptor_layout();
         prepare_render_pass();
@@ -1643,10 +1638,14 @@ void main() {
 
         // Transition to GENERAL for CPU writes
         set_image_layout(
-            update_cmd, m_textures[0].image, VK_IMAGE_ASPECT_COLOR_BIT,
-            VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_IMAGE_LAYOUT_GENERAL,
-            VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-            VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT);
+            update_cmd, m_textures[0].image,
+            VK_IMAGE_ASPECT_COLOR_BIT,
+            VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+            VK_IMAGE_LAYOUT_GENERAL,
+            VK_ACCESS_SHADER_READ_BIT,
+            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+            VK_ACCESS_HOST_WRITE_BIT,
+            VK_PIPELINE_STAGE_HOST_BIT);
 
         vkEndCommandBuffer(update_cmd);
         VkSubmitInfo submitInfo = {};
@@ -1674,10 +1673,14 @@ void main() {
 
         // Transition back to SHADER_READ_ONLY_OPTIMAL
         set_image_layout(
-            update_cmd, m_textures[0].image, VK_IMAGE_ASPECT_COLOR_BIT,
-            VK_IMAGE_LAYOUT_GENERAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-            VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT,
-            VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+            update_cmd, m_textures[0].image,
+            VK_IMAGE_ASPECT_COLOR_BIT,
+            VK_IMAGE_LAYOUT_GENERAL,
+            VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+            VK_ACCESS_HOST_WRITE_BIT,
+            VK_PIPELINE_STAGE_HOST_BIT,
+            VK_ACCESS_SHADER_READ_BIT,
+            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
 
         vkEndCommandBuffer(update_cmd);
         submitInfo.pCommandBuffers = &update_cmd;
@@ -1945,27 +1948,9 @@ void main() {
 
         for (uint32_t i = 0; i < m_textures.size(); i++)
         {
-            if (m_textures[i].view != VK_NULL_HANDLE)
-            {
-                vkDestroyImageView(m_device, m_textures[i].view, NULL);
-                m_textures[i].view = VK_NULL_HANDLE;
-            }
-            if (m_textures[i].image != VK_NULL_HANDLE)
-            {
-                vkDestroyImage(m_device, m_textures[i].image, NULL);
-                m_textures[i].image = VK_NULL_HANDLE;
-            }
-            if (m_textures[i].mem != VK_NULL_HANDLE)
-            {
-                vkFreeMemory(m_device, m_textures[i].mem, NULL);
-                m_textures[i].mem = VK_NULL_HANDLE;
-            }
-            if (m_textures[i].sampler != VK_NULL_HANDLE)
-            {
-                vkDestroySampler(m_device, m_textures[i].sampler, NULL);
-                m_textures[i].sampler = VK_NULL_HANDLE;
-            }
+            destroy_texture_image(m_textures[i]);
         }
+        m_textures.clear();
     }
                 
     void NDIView::_create_HDR_shader()
@@ -2128,9 +2113,6 @@ void main() {
             throw std::runtime_error("pl_shader_finalize failed!");
         }
 
-        std::string hdrColors;
-        std::string hdrColorsDef;
-        
         std::stringstream s;
 
         s << "#define textureLod(t, p, b) texture(t, p)"
