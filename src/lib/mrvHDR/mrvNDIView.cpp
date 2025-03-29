@@ -1,17 +1,5 @@
 //
-// Tiny Vulkan demo program for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
-//
-// This library is free software. Distribution and use rights are outlined in
-// the file "COPYING" which should have been included with this file.  If this
-// file is missing or damaged, see the license at:
-//
-//     https://www.fltk.org/COPYING.php
-//
-// Please see the following page on how to report bugs and issues:
-//
-//     https://www.fltk.org/bugs.php
 //
 
 #include <atomic>
@@ -466,11 +454,10 @@ namespace mrv
     
         // Remove any existing libplacebo textures, keep m_textures[0]
         if (m_textures.size() > 1) {
+            vkQueueWaitIdle(m_queue); // Wait for completion
+            
             for (size_t i = 1; i < m_textures.size(); ++i) {
-                vkDestroyImageView(m_device, m_textures[i].view, nullptr);
-                vkDestroyImage(m_device, m_textures[i].image, nullptr);
-                vkFreeMemory(m_device, m_textures[i].mem, nullptr);
-                vkDestroySampler(m_device, m_textures[i].sampler, nullptr);
+                destroy_texture_image(m_textures[i]);
             }
             m_textures.resize(1); // Keep only main texture
         }
@@ -1807,6 +1794,7 @@ void main() {
                         p.info.size.pixelAspectRatio != pixelAspectRatio ||
                         p.fourCC != video_frame.FourCC)
                     {
+                        std::cerr << "init res changed = " << init << std::endl;
                         init = true;
                     }
 
@@ -1825,49 +1813,48 @@ void main() {
                         doc.parse<0>((char*)video_frame.p_metadata);
 
                         // Get root node
-                        
                         rapidxml::xml_node<>* root =
                             doc.first_node("ndi_color_info");
-                        if (!root)
-                        {
-                            return;
-                        }
 
                         // Get attributes
-                        rapidxml::xml_attribute<>* attr_transfer =
-                            root->first_attribute("transfer");
-                        rapidxml::xml_attribute<>* attr_matrix =
-                            root->first_attribute("matrix");
-                        rapidxml::xml_attribute<>* attr_primaries =
-                            root->first_attribute("primaries");
-                        rapidxml::xml_attribute<>* attr_mrv2 =
-                            root->first_attribute("mrv2");
-
-                        if (attr_transfer)
-                            p.transferName = attr_transfer->value();
-                        if (attr_matrix)
-                            p.matrixName = attr_matrix->value();
-                        if (attr_primaries)
-                            p.primariesName = attr_primaries->value();
-
-                        if (attr_mrv2)
+                        if (root)
                         {
+                            rapidxml::xml_attribute<>* attr_transfer =
+                                root->first_attribute("transfer");
+                            rapidxml::xml_attribute<>* attr_matrix =
+                                root->first_attribute("matrix");
+                            rapidxml::xml_attribute<>* attr_primaries =
+                                root->first_attribute("primaries");
+                            rapidxml::xml_attribute<>* attr_mrv2 =
+                                root->first_attribute("mrv2");
+
+                            if (attr_transfer)
+                                p.transferName = attr_transfer->value();
+                            if (attr_matrix)
+                                p.matrixName = attr_matrix->value();
+                            if (attr_primaries)
+                                p.primariesName = attr_primaries->value();
+
                             if (!p.hasHDR)
                                 init = true;
-                            p.hasHDR = true;
-                            const std::string& jsonString =
+                                
+                            if (attr_mrv2)
+                            {
+                                p.hasHDR = true;
+                                const std::string& jsonString =
                                 unescape_quotes_from_xml(attr_mrv2->value());
                             
-                            const nlohmann::json& j =
-                                nlohmann::json::parse(jsonString);
+                                const nlohmann::json& j =
+                                    nlohmann::json::parse(jsonString);
                             
-                            const image::HDRData& hdrData =
-                                j.get<image::HDRData>();
-                            if (p.hdrData != hdrData)
-                            {
-                                // \@ todo: 
-                                p.hdrData = hdrData;
-                                init = true;
+                                const image::HDRData& hdrData =
+                                    j.get<image::HDRData>();
+                                if (p.hdrData != hdrData)
+                                {
+                                    // \@ todo: 
+                                    p.hdrData = hdrData;
+                                    init = true;
+                                }
                             }
                         }
                         else
@@ -1891,9 +1878,11 @@ void main() {
                         //           << hdrData.primaries[2] << " "
                         //           << hdrData.primaries[3] << std::endl;
                     }
+
                         
                     if (init)
                     {
+                        std::cerr << "init = " << init << std::endl;
                         start();
                     }
                     
@@ -1994,7 +1983,7 @@ void main() {
             vkFreeMemory(m_device, m_vertices.mem, NULL);
             m_vertices.mem = VK_NULL_HANDLE;
         }
-
+        
         for (uint32_t i = 0; i < m_textures.size(); i++)
         {
             destroy_texture_image(m_textures[i]);
