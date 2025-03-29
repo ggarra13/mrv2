@@ -779,7 +779,26 @@ namespace mrv
         
         p.image = image::Image::create(p.info);
 
-        destroy_resources();
+        vkDeviceWaitIdle(m_device);  // waits for all queue on the device
+        
+        if (m_vertices.buf != VK_NULL_HANDLE)
+        {
+            vkDestroyBuffer(m_device, m_vertices.buf, NULL);
+            m_vertices.buf = VK_NULL_HANDLE;
+        }
+
+        if (m_vertices.mem != VK_NULL_HANDLE)
+        {
+            vkFreeMemory(m_device, m_vertices.mem, NULL);
+            m_vertices.mem = VK_NULL_HANDLE;
+        }
+
+        vkDestroyShaderModule(m_device, m_frag_shader_module, NULL);
+        m_frag_shader_module = VK_NULL_HANDLE;
+
+        destroy_textures();
+        
+        // destroy_resources();
         
         // Always init main image.
         // We must init first, before HDR shader, which may create
@@ -1617,11 +1636,6 @@ void main() {
     void NDIView::prepare()
     {
         TLRENDER_P();
-        
-        vkDestroyShaderModule(m_device, m_frag_shader_module, NULL);
-        m_frag_shader_module = VK_NULL_HANDLE;
-        
-        destroy_textures();
         prepare_main_texture();
         if (p.hasHDR)
         {
@@ -2005,22 +2019,8 @@ void main() {
 
     void NDIView::destroy_resources()
     {
-        vkDeviceWaitIdle(m_device);  // waits for all queue on the device
-        
-        if (m_vertices.buf != VK_NULL_HANDLE)
-        {
-            vkDestroyBuffer(m_device, m_vertices.buf, NULL);
-            m_vertices.buf = VK_NULL_HANDLE;
-        }
 
-        if (m_vertices.mem != VK_NULL_HANDLE)
-        {
-            vkFreeMemory(m_device, m_vertices.mem, NULL);
-            m_vertices.mem = VK_NULL_HANDLE;
-        }
-
-        vkDestroyShaderModule(m_device, m_frag_shader_module, NULL);
-        m_frag_shader_module = VK_NULL_HANDLE;
+        Fl_Vk_Window::destroy_resources();
     }
                 
     void NDIView::create_HDR_shader()
