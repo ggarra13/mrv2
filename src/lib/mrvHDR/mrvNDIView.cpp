@@ -495,8 +495,7 @@ namespace mrv
                     VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
                 // Create image view
-                VkImageView imageView = createImageView(m_device, image,
-                                                        imageFormat, imageType);
+                VkImageView imageView = createImageView(image, imageFormat, imageType);
 
                 // Create sampler (equivalent to GL_LINEAR)
                 VkSampler sampler = createSampler();

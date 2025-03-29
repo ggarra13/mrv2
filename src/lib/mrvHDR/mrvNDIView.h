@@ -116,7 +116,7 @@ namespace mrv
         //                        VkFormat format,
         //                        const void* data);
         
-        //VkImageView createImageView(VkImage image, VkFormat format, VkImageType imageType);
+        VkImageView createImageView(VkImage image, VkFormat format, VkImageType imageType);
         VkSampler createSampler();
         
         void addGPUTextures(const pl_shader_res*);
