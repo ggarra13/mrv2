@@ -291,11 +291,7 @@ namespace mrv
         vkBindBufferMemory(m_device, buffer, bufferMemory, 0);
     }
     
-    void uploadTextureData(
-        VkDevice m_device,
-        VkPhysicalDevice m_gpu,
-        VkQueue m_queue,
-        VkCommandPool m_cmd_pool,
+    void NDIView::uploadTextureData(
         VkImage image,
         uint32_t width,
         uint32_t height,
@@ -484,9 +480,7 @@ namespace mrv
                     VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 
                 // Upload texture data
-                uploadTextureData(
-                    m_device, m_gpu, m_queue,
-                    m_cmd_pool, image, width, height, depth,
+                uploadTextureData(image, width, height, depth,
                     imageFormat, values);
 
                 // Transition image layout to SHADER_READ_ONLY_OPTIMAL

@@ -109,12 +109,12 @@ namespace mrv
         //     VkBuffer& buffer,
         //     VkDeviceMemory& bufferMemory);
         
-        // void uploadTextureData(VkImage image,
-        //                        uint32_t width,
-        //                        uint32_t height,
-        //                        uint32_t depth,
-        //                        VkFormat format,
-        //                        const void* data);
+        void uploadTextureData(VkImage image,
+                                uint32_t width,
+                                uint32_t height,
+                                uint32_t depth,
+                                VkFormat format,
+                                const void* data);
         
         VkImageView createImageView(VkImage image, VkFormat format, VkImageType imageType);
         VkSampler createSampler();
