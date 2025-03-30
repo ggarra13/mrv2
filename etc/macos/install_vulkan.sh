@@ -24,3 +24,6 @@ rm -rf /tmp/InstallVulkan-*
 
 
 export VULKAN_SDK=~/VulkanSDK/${SDK_VERSION}/macOS
+export VK_LAYER_PATH=$VULKAN_SDK/lib
+export VK_ICD_FILENAMES=$VULKAN_SDK/share/vulkan/icd.d/MoltenVK_icd.json
+export PATH=${VULKAN_SDK}/bin:$PATH
