@@ -697,39 +697,39 @@ namespace mrv
         {
             std::cerr << "No HDR monitor found or configured for SDR!"
                       << std::endl;
+            bool foundLinear = false;
+            for (const auto& format : formats)
+            {
+                // Prefer UNORM with SRGB_NONLINEAR (linear output intent)
+                if (format.format == VK_FORMAT_B8G8R8A8_UNORM &&
+                    format.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
+                {
+                    m_format = VK_FORMAT_B8G8R8A8_UNORM;
+                    m_color_space = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+                    foundLinear = true;
+                    break;
+                }
+            }
+            if (!foundLinear)
+            {
+                // Fallback to first supported format (usually works)
+                m_format = formats[0].format;
+                m_color_space = formats[0].colorSpace;
+                std::cerr << "No ideal linear format found, using fallback: "
+                          << m_format << ", " << m_color_space << std::endl;
+            }
         }
         else
         {
             std::cerr << "HDR monitor found" << std::endl;
         }
         
+        // Handle undefined format case
         if (formatCount == 1 && formats[0].format == VK_FORMAT_UNDEFINED)
         {
             m_format = VK_FORMAT_B8G8R8A8_UNORM;
-            m_color_space = VK_COLOR_SPACE_PASS_THROUGH_EXT;
+            m_color_space = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
         }
-        else
-        {
-            // Look for SRGB format first
-            bool srgbFound = false;
-            for (const auto& format : formats)
-            {
-                if (format.format == VK_FORMAT_B8G8R8A8_SRGB &&
-                    format.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
-                {
-                    m_format = VK_FORMAT_B8G8R8A8_UNORM;
-                    m_color_space = VK_COLOR_SPACE_PASS_THROUGH_EXT;
-                    srgbFound = true;
-                    break;
-                }
-            }
-            if (!srgbFound)
-            {
-                m_format = formats[0].format;        // Fallback to first format if no SRGB
-                m_color_space = formats[0].colorSpace;
-            }
-        }
-        
     }
     
 
@@ -1179,7 +1179,7 @@ void main() {
         // Compile to SPIR-V
         try
         {
-            std::cerr << frag_shader_glsl << std::endl;
+            // std::cerr << frag_shader_glsl << std::endl;
             std::vector<uint32_t> spirv = compile_glsl_to_spirv(
                 frag_shader_glsl,
                 shaderc_fragment_shader, // Shader type
@@ -2072,11 +2072,11 @@ void main() {
           << std::endl
           << std::endl;
                         
-        std::cerr << "num_vertex_attribs=" << res->num_vertex_attribs
-                  << std::endl
-                  << "num_descriptors=" << res->num_descriptors << std::endl
-                  << "num_variables=" << res->num_variables << std::endl
-                  << "num_constants=" << res->num_constants << std::endl;
+        // std::cerr << "num_vertex_attribs=" << res->num_vertex_attribs
+        //           << std::endl
+        //           << "num_descriptors=" << res->num_descriptors << std::endl
+        //           << "num_variables=" << res->num_variables << std::endl
+        //           << "num_constants=" << res->num_constants << std::endl;
         
         for (int i = 0; i < res->num_descriptors; i++)
         {
