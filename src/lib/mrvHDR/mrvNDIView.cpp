@@ -179,6 +179,25 @@ namespace mrv
         m_queueCondition.notify_one();
     }
 
+
+    void endSingleTimeCommands2(
+        VkDevice m_device,
+        VkQueue m_queue,
+        VkCommandPool m_cmd_pool,
+        VkCommandBuffer commandBuffer) {
+        vkEndCommandBuffer(commandBuffer);
+
+        VkSubmitInfo submitInfo = {};
+        submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+        submitInfo.commandBufferCount = 1;
+        submitInfo.pCommandBuffers = &commandBuffer;
+
+        vkQueueSubmit(m_queue, 1, &submitInfo, VK_NULL_HANDLE);
+        vkQueueWaitIdle(m_queue);
+
+        vkFreeCommandBuffers(m_device, m_cmd_pool, 1, &commandBuffer);
+    }
+
     //
     // \@todo: change for set_image_layout
     //
@@ -222,7 +241,7 @@ namespace mrv
             commandBuffer, sourceStage, destinationStage,
             0, 0, nullptr, 0, nullptr, 1, &barrier);
 
-        endSingleTimeCommands(commandBuffer);
+        endSingleTimeCommands2(m_device, m_queue, m_cmd_pool, commandBuffer);
     }
 
     void NDIView::createBuffer(
@@ -313,7 +332,7 @@ namespace mrv
             commandBuffer, stagingBuffer, image,
             VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
 
-        endSingleTimeCommands(commandBuffer);
+        endSingleTimeCommands2(m_device, m_queue, m_cmd_pool, commandBuffer);
 
         // Clean up staging buffer
         vkDestroyBuffer(m_device, stagingBuffer, nullptr);
