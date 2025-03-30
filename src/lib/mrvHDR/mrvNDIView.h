@@ -91,6 +91,13 @@ namespace mrv
         void start();
         void destroy_textures();
 
+        VkCommandBuffer beginSingleTimeCommands();
+        void endSingleTimeCommands(VkCommandBuffer commandBuffer);
+        
+        void transitionImageLayout(VkImage image,
+                                   VkImageLayout oldLayout,
+                                   VkImageLayout newLayout);
+        
         VkImage createImage(
             VkImageType imageType,
             uint32_t width,
