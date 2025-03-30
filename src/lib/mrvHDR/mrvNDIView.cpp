@@ -29,14 +29,12 @@
 #include <FL/platform.H>
 #include <FL/Fl.H>
 
-#if defined(TLRENDER_LIBPLACEBO)
 extern "C"
 {
 #include <libplacebo/dummy.h>
 #include <libplacebo/shaders/colorspace.h>
 #include <libplacebo/shaders.h>
 }
-#endif
 
 
 namespace
@@ -84,7 +82,6 @@ namespace
 
 namespace mrv
 {
-#if defined(TLRENDER_LIBPLACEBO)
     VkImage NDIView::createImage(
         VkImageType imageType,
         uint32_t width,
@@ -421,7 +418,6 @@ namespace mrv
                 int dims = pl_tex_params_dimension(tex->params);
                 assert(dims >= 1 && dims <= 3);
 
-                const char* textureName = sd->desc.name;
                 const char* samplerName = sd->desc.name;
 
                 // Map libplacebo format to Vulkan format
@@ -553,7 +549,6 @@ namespace mrv
         pl_gpu_dummy_destroy(&gpu);
         pl_log_destroy(&log);
     }
-#endif // TLRENDER_LIBPLACEBO
 
     
     struct NDIView::Private
@@ -708,16 +703,33 @@ namespace mrv
             std::cerr << "HDR monitor found" << std::endl;
         }
         
-        // If the format list includes just one entry of VK_FORMAT_UNDEFINED,
-        // the surface has no prefresulted format.  Otherwise, at least one
-        // supported format will be returned.
-        if (formatCount == 1 && formats[0].format == VK_FORMAT_UNDEFINED) {
+        if (formatCount == 1 && formats[0].format == VK_FORMAT_UNDEFINED)
+        {
             m_format = VK_FORMAT_B8G8R8A8_UNORM;
-        } else {
-            m_format = formats[0].format;
+            m_color_space = VK_COLOR_SPACE_PASS_THROUGH_EXT;
         }
-        m_color_space = formats[0].colorSpace;
-
+        else
+        {
+            // Look for SRGB format first
+            bool srgbFound = false;
+            for (const auto& format : formats)
+            {
+                if (format.format == VK_FORMAT_B8G8R8A8_SRGB &&
+                    format.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
+                {
+                    m_format = VK_FORMAT_B8G8R8A8_UNORM;
+                    m_color_space = VK_COLOR_SPACE_PASS_THROUGH_EXT;
+                    srgbFound = true;
+                    break;
+                }
+            }
+            if (!srgbFound)
+            {
+                m_format = formats[0].format;        // Fallback to first format if no SRGB
+                m_color_space = formats[0].colorSpace;
+            }
+        }
+        
     }
     
 
@@ -799,94 +811,10 @@ namespace mrv
         }
     }
 
-    void NDIView::prepare_texture_image(Fl_Vk_Texture& texture,
-                                        VkImageTiling tiling,
-                                        VkImageUsageFlags usage,
-                                        VkFlags required_props)
-    {
-        TLRENDER_P();
-
-        const VkFormat tex_format = VK_FORMAT_R16G16B16A16_SFLOAT;
-        uint32_t tex_width = 1, tex_height = 1;
-        if (p.image)
-        {
-            const auto& info = p.image->getInfo();
-            tex_width = p.info.size.w;
-            tex_height = p.info.size.h;
-        }
-        
-        VkResult result;
-        
-        texture.width = tex_width;
-        texture.height = tex_height;
-        texture.image = createImage(VK_IMAGE_TYPE_2D,
-                                    tex_width,
-                                    tex_height,
-                                    1,
-                                    tex_format,
-                                    tiling,
-                                    usage);
-        
-        VkMemoryRequirements memRequirements;
-        vkGetImageMemoryRequirements(m_device, texture.image,
-                                     &memRequirements);
-
-        VkMemoryAllocateInfo mem_alloc = {};
-        mem_alloc.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-        mem_alloc.pNext = NULL;
-        mem_alloc.allocationSize = 0;
-        mem_alloc.memoryTypeIndex = 0;
-        mem_alloc.allocationSize = memRequirements.size;
-        
-        memory_type_from_properties(memRequirements.memoryTypeBits,
-                                    required_props,
-                                    &mem_alloc.memoryTypeIndex);
-
-        /* allocate memory */
-        result = vkAllocateMemory(m_device, &mem_alloc, NULL, &texture.mem);
-        VK_CHECK_RESULT(result);
-
-        /* bind memory */
-        result = vkBindImageMemory(m_device, texture.image, texture.mem, 0);
-        VK_CHECK_RESULT(result);
-
-        // if (required_props & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
-        // {
-        //     VkImageSubresource subres = {};
-        //     subres.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-        //     subres.mipLevel = 0;
-        //     subres.arrayLayer = 0;
-        //     VkSubresourceLayout layout;
-        //     void* data;
-        //     int32_t x, y;
-
-        //     vkGetImageSubresourceLayout(
-        //         m_device, texture.image, &subres, &layout);
-
-        //     result = vkMapMemory(
-        //         m_device, texture.mem, 0, mem_alloc.allocationSize, 0, &data);
-        //     VK_CHECK_RESULT(result);
-
-        //     vkUnmapMemory(m_device, texture.mem);
-        // }
-
-        VkCommandBuffer cmd = beginSingleTimeCommands();
-
-        // Initial transition to shader-readable layout
-        set_image_layout(
-            cmd, texture.image, VK_IMAGE_ASPECT_COLOR_BIT,
-            VK_IMAGE_LAYOUT_UNDEFINED, // Initial layout
-            VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-            0,                          // No previous access
-            VK_PIPELINE_STAGE_HOST_BIT, // Host stage
-            VK_ACCESS_SHADER_READ_BIT,  // Shader read
-            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
-
-        endSingleTimeCommands(cmd);
-    }
-
     void NDIView::prepare_main_texture()
     {
+        TLRENDER_P();
+        
         VkResult result;
         const VkFormat tex_format = VK_FORMAT_R16G16B16A16_SFLOAT;
         
@@ -900,12 +828,62 @@ namespace mrv
              VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT) &&
             !m_use_staging_buffer)
         {
-            /* Device can texture using linear textures */
-            prepare_texture_image(m_textures[0],
-                                  VK_IMAGE_TILING_LINEAR,
-                                  VK_IMAGE_USAGE_SAMPLED_BIT,
-                                  VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                                  VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+            uint32_t tex_width = 1, tex_height = 1;
+            if (p.image)
+            {
+                const auto& info = p.image->getInfo();
+                tex_width = p.info.size.w;
+                tex_height = p.info.size.h;
+            }
+        
+            m_textures[0].width = tex_width;
+            m_textures[0].height = tex_height;
+            m_textures[0].image = createImage(VK_IMAGE_TYPE_2D,
+                                        tex_width,
+                                        tex_height,
+                                        1,
+                                        tex_format,
+                                        VK_IMAGE_TILING_LINEAR,
+                                        VK_IMAGE_USAGE_SAMPLED_BIT);
+        
+            VkMemoryRequirements memRequirements;
+            vkGetImageMemoryRequirements(m_device, m_textures[0].image,
+                                         &memRequirements);
+
+            VkMemoryAllocateInfo mem_alloc = {};
+            mem_alloc.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+            mem_alloc.pNext = NULL;
+            mem_alloc.allocationSize = 0;
+            mem_alloc.memoryTypeIndex = 0;
+            mem_alloc.allocationSize = memRequirements.size;
+        
+            memory_type_from_properties(memRequirements.memoryTypeBits,
+                                        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+                                        VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+                                        &mem_alloc.memoryTypeIndex);
+
+            /* allocate memory */
+            result = vkAllocateMemory(m_device, &mem_alloc, NULL, &m_textures[0].mem);
+            VK_CHECK_RESULT(result);
+
+            /* bind memory */
+            result = vkBindImageMemory(m_device, m_textures[0].image, m_textures[0].mem, 0);
+            VK_CHECK_RESULT(result);
+
+            VkCommandBuffer cmd = beginSingleTimeCommands();
+
+            // Initial transition to shader-readable layout
+            set_image_layout(
+                cmd, m_textures[0].image, VK_IMAGE_ASPECT_COLOR_BIT,
+                VK_IMAGE_LAYOUT_UNDEFINED, // Initial layout
+                VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                0,                          // No previous access
+                VK_PIPELINE_STAGE_HOST_BIT, // Host stage
+                VK_ACCESS_SHADER_READ_BIT,  // Shader read
+                VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+
+            endSingleTimeCommands(cmd);
+
         }
         else if (props.optimalTilingFeatures &
                  VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT)
@@ -918,29 +896,8 @@ namespace mrv
             Fl::fatal("No support for B8G8R8A8_UNORM as texture image format");
         }
 
-        VkSamplerCreateInfo samplerInfo = {};
-        samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
-        samplerInfo.pNext = NULL;
-        samplerInfo.magFilter = VK_FILTER_LINEAR;
-        samplerInfo.minFilter = VK_FILTER_LINEAR;
-        samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
-        samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-        samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-        samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-        samplerInfo.mipLodBias = 0.0f;
-        samplerInfo.anisotropyEnable = VK_FALSE;
-        samplerInfo.maxAnisotropy = 1.0f;
-        samplerInfo.compareEnable = VK_FALSE;
-        samplerInfo.compareOp = VK_COMPARE_OP_NEVER;
-        samplerInfo.minLod = 0.0f;
-        samplerInfo.maxLod = 0.0f;
-        samplerInfo.borderColor = VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
-        samplerInfo.unnormalizedCoordinates = VK_FALSE;
-
         /* create sampler */
-        result = vkCreateSampler(m_device, &samplerInfo, NULL,
-                                 &m_textures[0].sampler);
-        VK_CHECK_RESULT(result);
+        m_textures[0].sampler = createSampler();
 
         /* create image view */
 
@@ -1222,7 +1179,7 @@ void main() {
         // Compile to SPIR-V
         try
         {
-            // std::cerr << frag_shader_glsl << std::endl;
+            std::cerr << frag_shader_glsl << std::endl;
             std::vector<uint32_t> spirv = compile_glsl_to_spirv(
                 frag_shader_glsl,
                 shaderc_fragment_shader, // Shader type
@@ -1653,7 +1610,7 @@ void main() {
     void NDIView::vk_draw_begin()
     {
         // Change background color here
-        m_clearColor = { 1.0, 0.0, 0.0, 0.0 };
+        m_clearColor = { 0.0, 0.0, 0.0, 0.0 };
         Fl_Vk_Window::vk_draw_begin();
     }
     
@@ -1941,7 +1898,6 @@ void main() {
     {
         TLRENDER_P();
         
-#if defined(TLRENDER_LIBPLACEBO)
         pl_shader_params shader_params;
         memset(&shader_params, 0, sizeof(pl_shader_params));
     
@@ -1998,33 +1954,42 @@ void main() {
         
         pl_color_space src_colorspace;
         memset(&src_colorspace, 0, sizeof(pl_color_space));
-        src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
-        src_colorspace.transfer  = PL_COLOR_TRC_PQ;
 
-        cmap.metadata   = PL_HDR_METADATA_ANY;
-        pl_hdr_metadata& hdr = src_colorspace.hdr;
-        hdr.min_luma = data.displayMasteringLuminance.getMin();
-        hdr.max_luma = data.displayMasteringLuminance.getMax();
-        hdr.prim.red.x = data.primaries[image::HDRPrimaries::Red][0];
-        hdr.prim.red.y = data.primaries[image::HDRPrimaries::Red][1];
-        hdr.prim.green.x = data.primaries[image::HDRPrimaries::Green][0];
-        hdr.prim.green.y = data.primaries[image::HDRPrimaries::Green][1];
-        hdr.prim.blue.x = data.primaries[image::HDRPrimaries::Blue][0];
-        hdr.prim.blue.y = data.primaries[image::HDRPrimaries::Blue][1];
-        hdr.prim.white.x = data.primaries[image::HDRPrimaries::White][0];
-        hdr.prim.white.y = data.primaries[image::HDRPrimaries::White][1];
-        hdr.max_cll = data.maxCLL;
-        hdr.max_fall = data.maxFALL;
-        hdr.scene_max[0] = data.sceneMax[0];
-        hdr.scene_max[1] = data.sceneMax[1];
-        hdr.scene_max[2] = data.sceneMax[2];
-        hdr.scene_avg = data.sceneAvg;
-        hdr.ootf.target_luma = data.ootf.targetLuma;
-        hdr.ootf.knee_x = data.ootf.kneeX;
-        hdr.ootf.knee_y = data.ootf.kneeY;
-        hdr.ootf.num_anchors = data.ootf.numAnchors;
-        for (int i = 0; i < hdr.ootf.num_anchors; i++)
-            hdr.ootf.anchors[i] = data.ootf.anchors[i];
+        if (p.hasHDR)
+        {
+            src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
+            src_colorspace.transfer  = PL_COLOR_TRC_PQ;
+            cmap.metadata   = PL_HDR_METADATA_ANY;
+            pl_hdr_metadata& hdr = src_colorspace.hdr;
+            hdr.min_luma = data.displayMasteringLuminance.getMin();
+            hdr.max_luma = data.displayMasteringLuminance.getMax();
+            hdr.prim.red.x = data.primaries[image::HDRPrimaries::Red][0];
+            hdr.prim.red.y = data.primaries[image::HDRPrimaries::Red][1];
+            hdr.prim.green.x = data.primaries[image::HDRPrimaries::Green][0];
+            hdr.prim.green.y = data.primaries[image::HDRPrimaries::Green][1];
+            hdr.prim.blue.x = data.primaries[image::HDRPrimaries::Blue][0];
+            hdr.prim.blue.y = data.primaries[image::HDRPrimaries::Blue][1];
+            hdr.prim.white.x = data.primaries[image::HDRPrimaries::White][0];
+            hdr.prim.white.y = data.primaries[image::HDRPrimaries::White][1];
+            hdr.max_cll = data.maxCLL;
+            hdr.max_fall = data.maxFALL;
+            hdr.scene_max[0] = data.sceneMax[0];
+            hdr.scene_max[1] = data.sceneMax[1];
+            hdr.scene_max[2] = data.sceneMax[2];
+            hdr.scene_avg = data.sceneAvg;
+            hdr.ootf.target_luma = data.ootf.targetLuma;
+            hdr.ootf.knee_x = data.ootf.kneeX;
+            hdr.ootf.knee_y = data.ootf.kneeY;
+            hdr.ootf.num_anchors = data.ootf.numAnchors;
+            for (int i = 0; i < hdr.ootf.num_anchors; i++)
+                hdr.ootf.anchors[i] = data.ootf.anchors[i];
+        }
+        else
+        {
+            src_colorspace.primaries = PL_COLOR_PRIM_BT_709;
+            src_colorspace.transfer  = PL_COLOR_TRC_SRGB;
+        }
+        
         pl_color_space_infer(&src_colorspace);
                 
                     
@@ -2070,10 +2035,13 @@ void main() {
             cmap.contrast_smoothness = 3.5f;
         
             dst_colorspace.primaries = PL_COLOR_PRIM_BT_709;
-            dst_colorspace.transfer  = PL_COLOR_TRC_BT_1886;
+            dst_colorspace.transfer  = PL_COLOR_TRC_SRGB;
 
-            // \@todo: use different tone mapping functions
-            cmap.tone_mapping_function = &pl_tone_map_st2094_40;
+            if (p.hasHDR)
+                cmap.tone_mapping_function = &pl_tone_map_st2094_40;
+            else
+                cmap.tone_mapping_function = nullptr;
+                
         }
         
         pl_color_space_infer(&dst_colorspace);
@@ -2084,6 +2052,7 @@ void main() {
         color_map_args.src = src_colorspace;
         color_map_args.dst = dst_colorspace;
         color_map_args.prelinearized = false;
+            
 
         pl_shader_obj state = NULL;
         color_map_args.state = &state;  // with NULL and tonemap_clip works
@@ -2103,11 +2072,11 @@ void main() {
           << std::endl
           << std::endl;
                         
-        // std::cerr << "num_vertex_attribs=" << res->num_vertex_attribs
-        //           << std::endl
-        //           << "num_descriptors=" << res->num_descriptors << std::endl
-        //           << "num_variables=" << res->num_variables << std::endl
-        //           << "num_constants=" << res->num_constants << std::endl;
+        std::cerr << "num_vertex_attribs=" << res->num_vertex_attribs
+                  << std::endl
+                  << "num_descriptors=" << res->num_descriptors << std::endl
+                  << "num_variables=" << res->num_variables << std::endl
+                  << "num_constants=" << res->num_constants << std::endl;
         
         for (int i = 0; i < res->num_descriptors; i++)
         {
@@ -2303,7 +2272,6 @@ void main() {
         }
 
         pl_shader_free(&shader);
-#endif
     }
     
 } // namespace mrv
