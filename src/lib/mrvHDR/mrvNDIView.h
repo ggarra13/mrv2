@@ -85,7 +85,7 @@ namespace mrv
         void _findThread();
         void _videoThread();
         void _audioThread();
-        void prepare_texture_image(Fl_Vk_Texture* tex_obj,
+        void prepare_texture_image(Fl_Vk_Texture& tex_obj,
                                    VkImageTiling tiling,
                                    VkImageUsageFlags usage,
                                    VkFlags required_props);
@@ -94,7 +94,6 @@ namespace mrv
         VkShaderModule prepare_fs();
 
         void create_HDR_shader();
-        void start();
         void destroy_textures();
 
         VkCommandBuffer beginSingleTimeCommands();

@@ -25,7 +25,6 @@
 namespace
 {
     const char* kModule = "main";
-    const double kTimeout = 0.005;
 } // namespace
 
 namespace mrv
@@ -40,11 +39,6 @@ namespace mrv
         exit(-1);
     }
 #endif
-
-    namespace
-    {
-        const float errorTimeout = 5.F;
-    }
 
     struct Options
     {

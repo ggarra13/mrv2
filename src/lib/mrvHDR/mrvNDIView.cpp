@@ -42,7 +42,6 @@ extern "C"
 namespace
 {
     const char* kModule = "ndi_viewer";
-    const double kTimeout = 0.005;
 } // namespace
 
 namespace
@@ -371,41 +370,42 @@ namespace mrv
     
     void NDIView::addGPUTextures(const pl_shader_res* res)
     {
-        // Clean up existing resources
-        if (m_desc_layout != VK_NULL_HANDLE) {
-            vkDestroyDescriptorSetLayout(m_device, m_desc_layout, nullptr);
-            m_desc_layout = VK_NULL_HANDLE;
-        }
-        if (m_pipeline_layout != VK_NULL_HANDLE) {
-            vkDestroyPipelineLayout(m_device, m_pipeline_layout, nullptr);
-            m_pipeline_layout = VK_NULL_HANDLE;
-        }
-        if (m_pipeline != VK_NULL_HANDLE) {
-            vkDestroyPipeline(m_device, m_pipeline, nullptr);
-            m_pipeline = VK_NULL_HANDLE;
-        }
-        if (m_desc_pool != VK_NULL_HANDLE) {
-            vkDestroyDescriptorPool(m_device, m_desc_pool, nullptr);
-            m_desc_pool = VK_NULL_HANDLE;
-        }
-        if (m_desc_set != VK_NULL_HANDLE) {
-            // Descriptor sets are freed with the pool, no need to destroy individually
-            m_desc_set = VK_NULL_HANDLE;
-        }
-        if (m_frag_shader_module != VK_NULL_HANDLE) {
-            vkDestroyShaderModule(m_device, m_frag_shader_module, nullptr);
-            m_frag_shader_module = VK_NULL_HANDLE;
-        }
+        // // Clean up existing resources
+        // if (m_desc_layout != VK_NULL_HANDLE) {
+        //     vkDestroyDescriptorSetLayout(m_device, m_desc_layout, nullptr);
+        //     m_desc_layout = VK_NULL_HANDLE;
+        // }
+        // if (m_pipeline_layout != VK_NULL_HANDLE) {
+        //     vkDestroyPipelineLayout(m_device, m_pipeline_layout, nullptr);
+        //     m_pipeline_layout = VK_NULL_HANDLE;
+        // }
+        // if (m_pipeline != VK_NULL_HANDLE) {
+        //     vkDestroyPipeline(m_device, m_pipeline, nullptr);
+        //     m_pipeline = VK_NULL_HANDLE;
+        // }
+        // if (m_desc_pool != VK_NULL_HANDLE) {
+        //     vkDestroyDescriptorPool(m_device, m_desc_pool, nullptr);
+        //     m_desc_pool = VK_NULL_HANDLE;
+        // }
+        // if (m_desc_set != VK_NULL_HANDLE) {
+        //     // Descriptor sets are freed with the pool, no need to
+        //     // destroy individually
+        //     m_desc_set = VK_NULL_HANDLE;
+        // }
+        // if (m_frag_shader_module != VK_NULL_HANDLE) {
+        //     vkDestroyShaderModule(m_device, m_frag_shader_module, nullptr);
+        //     m_frag_shader_module = VK_NULL_HANDLE;
+        // }
     
         // Remove any existing libplacebo textures, keep m_textures[0]
-        if (m_textures.size() > 1) {
-            vkQueueWaitIdle(m_queue); // Wait for completion
+        // if (m_textures.size() > 1) {
+        //     vkQueueWaitIdle(m_queue); // Wait for completion
             
-            for (size_t i = 1; i < m_textures.size(); ++i) {
-                destroy_texture_image(m_textures[i]);
-            }
-            m_textures.resize(1); // Keep only main texture
-        }
+        //     for (size_t i = 1; i < m_textures.size(); ++i) {
+        //         destroy_texture_image(m_textures[i]);
+        //     }
+        //     m_textures.resize(1); // Keep only main texture
+        // }
 
         for (unsigned i = 0; i < res->num_descriptors; ++i) {
             const pl_shader_desc* sd = &res->descriptors[i];
@@ -561,6 +561,9 @@ namespace mrv
         std::vector<std::string> NDIsources;
         std::string currentNDISource;
 
+
+        bool init = false;
+        
         struct FindMutex
         {
             std::mutex mutex;
@@ -609,7 +612,6 @@ namespace mrv
 
         // Full mrv2 image data (we try to use this)
         bool hdrMonitorFound = false;
-        bool createHDRShader = false;
         bool hasHDR = false;
         image::HDRData hdrData;
 
@@ -714,57 +716,6 @@ namespace mrv
         m_color_space = formats[0].colorSpace;
 
     }
-
-    void NDIView::start()
-    {
-        TLRENDER_P();
-        
-        p.image = image::Image::create(p.info);
-
-        vkDeviceWaitIdle(m_device);  // waits for all queue on the device
-        
-        if (m_vertices.buf != VK_NULL_HANDLE)
-        {
-            vkDestroyBuffer(m_device, m_vertices.buf, NULL);
-            m_vertices.buf = VK_NULL_HANDLE;
-        }
-
-        if (m_vertices.mem != VK_NULL_HANDLE)
-        {
-            vkFreeMemory(m_device, m_vertices.mem, NULL);
-            m_vertices.mem = VK_NULL_HANDLE;
-        }
-
-        vkDestroyShaderModule(m_device, m_frag_shader_module, NULL);
-        m_frag_shader_module = VK_NULL_HANDLE;
-
-        destroy_textures();
-        
-        // destroy_resources();
-        
-        // Always init main image.
-        // We must init first, before HDR shader, which may create
-        // additional images.
-        prepare_main_texture();
-        
-        
-        if (p.hasHDR)
-        {
-            create_HDR_shader();
-        }
-        else
-        {
-            p.hdrColors.clear();
-            p.hdrColorsDef.clear();
-        }
-        
-        prepare_vertices();
-        prepare_descriptor_layout();
-        prepare_render_pass();
-        prepare_pipeline();
-        prepare_descriptor_pool();
-        prepare_descriptor_set();
-    }
     
 
     void NDIView::_copy(const uint8_t* video_frame)
@@ -845,7 +796,7 @@ namespace mrv
         }
     }
 
-    void NDIView::prepare_texture_image(Fl_Vk_Texture* tex_obj,
+    void NDIView::prepare_texture_image(Fl_Vk_Texture& texture,
                                         VkImageTiling tiling,
                                         VkImageUsageFlags usage,
                                         VkFlags required_props)
@@ -853,30 +804,28 @@ namespace mrv
         TLRENDER_P();
 
         const VkFormat tex_format = VK_FORMAT_R16G16B16A16_SFLOAT;
-        uint32_t tex_width = 1, tex_height = 1, tex_depth = 1;
+        uint32_t tex_width = 1, tex_height = 1;
         if (p.image)
         {
             const auto& info = p.image->getInfo();
-            tex_width = info.size.w;
-            tex_height = info.size.h;
+            tex_width = p.info.size.w;
+            tex_height = p.info.size.h;
         }
         
         VkResult result;
-        bool pass;
-
-        tex_obj->width = tex_width;
-        tex_obj->height = tex_height;
-        tex_obj->depth  = tex_depth;
-        tex_obj->image = createImage(VK_IMAGE_TYPE_2D,
-                                     tex_width,
-                                     tex_height,
-                                     tex_depth,
-                                     tex_format,
-                                     tiling,
-                                     usage);
+        
+        texture.width = tex_width;
+        texture.height = tex_height;
+        texture.image = createImage(VK_IMAGE_TYPE_2D,
+                                    tex_width,
+                                    tex_height,
+                                    1,
+                                    tex_format,
+                                    tiling,
+                                    usage);
         
         VkMemoryRequirements memRequirements;
-        vkGetImageMemoryRequirements(m_device, tex_obj->image,
+        vkGetImageMemoryRequirements(m_device, texture.image,
                                      &memRequirements);
 
         VkMemoryAllocateInfo mem_alloc = {};
@@ -886,53 +835,43 @@ namespace mrv
         mem_alloc.memoryTypeIndex = 0;
         mem_alloc.allocationSize = memRequirements.size;
         
-        pass = memory_type_from_properties(
-            memRequirements.memoryTypeBits, required_props,
-            &mem_alloc.memoryTypeIndex);
+        memory_type_from_properties(memRequirements.memoryTypeBits,
+                                    required_props,
+                                    &mem_alloc.memoryTypeIndex);
 
         /* allocate memory */
-        result = vkAllocateMemory(m_device, &mem_alloc, NULL, &tex_obj->mem);
+        result = vkAllocateMemory(m_device, &mem_alloc, NULL, &texture.mem);
         VK_CHECK_RESULT(result);
 
         /* bind memory */
-        result = vkBindImageMemory(m_device, tex_obj->image, tex_obj->mem, 0);
+        result = vkBindImageMemory(m_device, texture.image, texture.mem, 0);
         VK_CHECK_RESULT(result);
 
-        if (required_props & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
-        {
-            VkImageSubresource subres = {};
-            subres.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-            subres.mipLevel = 0;
-            subres.arrayLayer = 0;
-            VkSubresourceLayout layout;
-            void* data;
-            int32_t x, y;
+        // if (required_props & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
+        // {
+        //     VkImageSubresource subres = {};
+        //     subres.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        //     subres.mipLevel = 0;
+        //     subres.arrayLayer = 0;
+        //     VkSubresourceLayout layout;
+        //     void* data;
+        //     int32_t x, y;
 
-            vkGetImageSubresourceLayout(
-                m_device, tex_obj->image, &subres, &layout);
+        //     vkGetImageSubresourceLayout(
+        //         m_device, texture.image, &subres, &layout);
 
-            result = vkMapMemory(
-                m_device, tex_obj->mem, 0, mem_alloc.allocationSize, 0, &data);
-            VK_CHECK_RESULT(result);
+        //     result = vkMapMemory(
+        //         m_device, texture.mem, 0, mem_alloc.allocationSize, 0, &data);
+        //     VK_CHECK_RESULT(result);
 
-            vkUnmapMemory(m_device, tex_obj->mem);
-        }
+        //     vkUnmapMemory(m_device, texture.mem);
+        // }
 
-        VkCommandBuffer cmd;
-        VkCommandBufferAllocateInfo cmdAllocInfo = {};
-        cmdAllocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-        cmdAllocInfo.commandPool = m_cmd_pool;
-        cmdAllocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-        cmdAllocInfo.commandBufferCount = 1;
-        vkAllocateCommandBuffers(m_device, &cmdAllocInfo, &cmd);
-
-        VkCommandBufferBeginInfo cmdBeginInfo = {};
-        cmdBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-        vkBeginCommandBuffer(cmd, &cmdBeginInfo);
+        VkCommandBuffer cmd = beginSingleTimeCommands();
 
         // Initial transition to shader-readable layout
         set_image_layout(
-            cmd, tex_obj->image, VK_IMAGE_ASPECT_COLOR_BIT,
+            cmd, texture.image, VK_IMAGE_ASPECT_COLOR_BIT,
             VK_IMAGE_LAYOUT_UNDEFINED, // Initial layout
             VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
             0,                          // No previous access
@@ -940,16 +879,7 @@ namespace mrv
             VK_ACCESS_SHADER_READ_BIT,  // Shader read
             VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
 
-        // Submit the command buffer to apply the transition
-        vkEndCommandBuffer(cmd);
-        VkSubmitInfo submit_info = {};
-        submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-        submit_info.commandBufferCount = 1;
-        submit_info.pCommandBuffers = &cmd;
-        vkQueueSubmit(m_queue, 1, &submit_info, VK_NULL_HANDLE);
-        vkQueueWaitIdle(m_queue); // Wait for completion
-
-        vkFreeCommandBuffers(m_device, m_cmd_pool, 1, &cmd);
+        endSingleTimeCommands(cmd);
     }
 
     void NDIView::prepare_main_texture()
@@ -968,7 +898,7 @@ namespace mrv
             !m_use_staging_buffer)
         {
             /* Device can texture using linear textures */
-            prepare_texture_image(&m_textures[0],
+            prepare_texture_image(m_textures[0],
                                   VK_IMAGE_TILING_LINEAR,
                                   VK_IMAGE_USAGE_SAMPLED_BIT,
                                   VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
@@ -1049,6 +979,7 @@ namespace mrv
         if (p.image)
         {
             renderSize = p.image->getSize();
+            renderSize.w *= renderSize.pixelAspectRatio;
         }
 
         float aspectRender = renderSize.w / static_cast<float>(renderSize.h);
@@ -1578,15 +1509,24 @@ void main() {
     void NDIView::prepare()
     {
         TLRENDER_P();
-        prepare_main_texture();
-        if (p.hasHDR)
+
+        vkDeviceWaitIdle(m_device);  // waits for all queue on the device
+
+        // Always destroy textures to ensure they’re recreated with current size
+        destroy_textures();
+        
         {
-            create_HDR_shader();
-        }
-        else
-        {
-            p.hdrColors.clear();
-            p.hdrColorsDef.clear();
+            std::unique_lock<std::mutex> lock(p.videoMutex.mutex);
+            prepare_main_texture();
+            if (p.hasHDR)
+            {
+                create_HDR_shader();
+            }
+            else
+            {
+                p.hdrColors.clear();
+                p.hdrColorsDef.clear();
+            }
         }
         prepare_vertices();
         prepare_descriptor_layout();
@@ -1594,6 +1534,8 @@ void main() {
         prepare_pipeline();
         prepare_descriptor_pool();
         prepare_descriptor_set();
+
+        m_swapchain_needs_recreation = false;
     }
 
     void NDIView::update_texture()
@@ -1661,19 +1603,33 @@ void main() {
         vkQueueSubmit(m_queue, 1, &submitInfo, VK_NULL_HANDLE);
         vkQueueWaitIdle(m_queue); // Synchronize before CPU write
 
-        void* data;
-        VkMemoryRequirements mem_reqs;
-        vkGetImageMemoryRequirements(m_device, m_textures[0].image, &mem_reqs);
-        result = vkMapMemory(m_device, m_textures[0].mem, 0, mem_reqs.size, 0, &data);
+        void* mappedData;
+        result = vkMapMemory(m_device, m_textures[0].mem, 0, VK_WHOLE_SIZE, 0,
+                             &mappedData);
         VK_CHECK_RESULT(result);
-        
+            
         if (p.image)
         {
-            std::memcpy(data, p.image->getData(), p.image->getDataByteCount());
+            const size_t dataSize = m_textures[0].width * m_textures[0].height * 4 * sizeof(half);
+            const size_t byteCount = p.image->getDataByteCount();
+
+            if (dataSize == byteCount)
+            {
+                std::memcpy(mappedData, p.image->getData(), dataSize);
+            }
+            else
+            {
+                
+                // std::cerr << "UPDATE image = " << p.image->getWidth() << "x" << p.image->getHeight()
+                //           << std::endl;
+                // std::cerr << "UPDATE txt   = " << m_textures[0].width << "x" << m_textures[0].height
+                //           << std::endl;
+                m_swapchain_needs_recreation = true;
+            }
         }
         
         vkUnmapMemory(m_device, m_textures[0].mem);
-
+        
         // Reallocate command buffer for second transition
         vkAllocateCommandBuffers(m_device, &cmdAllocInfo, &update_cmd);
         vkBeginCommandBuffer(update_cmd, &cmdBeginInfo);
@@ -1700,6 +1656,7 @@ void main() {
     void NDIView::vk_draw_begin()
     {
         // Change background color here
+        m_clearColor = { 1.0, 0.0, 0.0, 0.0 };
         Fl_Vk_Window::vk_draw_begin();
     }
     
@@ -1767,20 +1724,11 @@ void main() {
                 
                     if (p.info.size.w != video_frame.xres ||
                         p.info.size.h != video_frame.yres ||
-                        p.info.size.pixelAspectRatio != pixelAspectRatio ||
-                        p.fourCC != video_frame.FourCC)
+                        p.info.size.pixelAspectRatio != pixelAspectRatio)
                     {
                         init = true;
                     }
-
-                    p.info.size.w = video_frame.xres;
-                    p.info.size.h = video_frame.yres;
-                    p.info.size.pixelAspectRatio = pixelAspectRatio;
-                    p.info.layout.mirror.y = true;
-                    p.info.pixelType = image::PixelType::RGBA_F16;
-                    p.info.videoLevels = image::VideoLevels::FullRange;
-                    p.fourCC = video_frame.FourCC;
-
+                    
                     if (video_frame.p_metadata)
                     {   
                         // Parsing XML metadata
@@ -1834,7 +1782,9 @@ void main() {
                         }
                         else
                         {
-                            p.hasHDR= false;
+                            if (p.hasHDR)
+                                init = true;
+                            p.hasHDR = false;
                         }
                     
                         // Display color information
@@ -1857,15 +1807,21 @@ void main() {
                             init = true;
                         p.hasHDR = false;
                     }
-
-                        
+                    
                     if (init)
                     {
-                        std::cerr << "init = " << init << std::endl;
-                        std::cerr << "hasHDR = " << p.hasHDR << std::endl;
-                        start();
+                        std::unique_lock<std::mutex> lock(p.videoMutex.mutex);
+                        p.info.size.w = video_frame.xres;
+                        p.info.size.h = video_frame.yres;
+                        p.info.size.pixelAspectRatio = pixelAspectRatio;
+                        p.info.layout.mirror.y = true;
+                        p.info.pixelType = image::PixelType::RGBA_F16;
+                        p.info.videoLevels = image::VideoLevels::FullRange;
+                        p.fourCC = video_frame.FourCC;
+                        p.image = image::Image::create(p.info);
+                        m_swapchain_needs_recreation = true;
                     }
-                    
+                        
                     if (video_frame.p_data)
                     {
                         _copy(video_frame.p_data);
@@ -1953,16 +1909,38 @@ void main() {
 
     void NDIView::destroy_textures()
     {
+        std::cerr << "----------------------------- DESTROY TEXTURES" << std::endl;
         for (uint32_t i = 0; i < m_textures.size(); i++)
         {
             destroy_texture_image(m_textures[i]);
         }
         m_textures.clear();
+        std::cerr << "----------------------------- DESTROY TEXTURES END" << std::endl;
     }
 
     void NDIView::destroy_resources()
     {
+
+        std::cerr << "---------- DESTROY RESOURCES" << std::endl;
+        vkDestroyShaderModule(m_device, m_frag_shader_module, NULL);
+        m_frag_shader_module = VK_NULL_HANDLE;
+
+        if (m_vertices.buf != VK_NULL_HANDLE)
+        {
+            vkDestroyBuffer(m_device, m_vertices.buf, NULL);
+            m_vertices.buf = VK_NULL_HANDLE;
+        }
+
+        if (m_vertices.mem != VK_NULL_HANDLE)
+        {
+            vkFreeMemory(m_device, m_vertices.mem, NULL);
+            m_vertices.mem = VK_NULL_HANDLE;
+        }
+
+        destroy_textures();
+        
         Fl_Vk_Window::destroy_resources();
+        std::cerr << "---------- DESTROY RESOURCES END" << std::endl;
     }
                 
     void NDIView::create_HDR_shader()
@@ -2325,15 +2303,13 @@ void main() {
                         
 
         {
-            std::stringstream s;
-            s << "outColor = " << res->name << "(outColor);"
-              << std::endl;
-            p.hdrColors = s.str();
+            p.hdrColors = "outColor = ";
+            p.hdrColors += res->name;
+            p.hdrColors += "(outColor);\n";
         }
 
         pl_shader_free(&shader);
 #endif
-        return;
     }
     
 } // namespace mrv
