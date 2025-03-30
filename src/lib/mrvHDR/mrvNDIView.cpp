@@ -1613,17 +1613,14 @@ void main() {
             const size_t dataSize = m_textures[0].width * m_textures[0].height * 4 * sizeof(half);
             const size_t byteCount = p.image->getDataByteCount();
 
+            // Make sure the texture and the image have the same data size.
+            // If not, recalculate the swapchain (call destroy_resources and prepare).
             if (dataSize == byteCount)
             {
                 std::memcpy(mappedData, p.image->getData(), dataSize);
             }
             else
             {
-                
-                // std::cerr << "UPDATE image = " << p.image->getWidth() << "x" << p.image->getHeight()
-                //           << std::endl;
-                // std::cerr << "UPDATE txt   = " << m_textures[0].width << "x" << m_textures[0].height
-                //           << std::endl;
                 m_swapchain_needs_recreation = true;
             }
         }
@@ -1911,20 +1908,15 @@ void main() {
     {
         vkQueueWaitIdle(m_queue); // Wait for completion
         
-        std::cerr << "----------------------------- DESTROY TEXTURES" << std::endl;
         for (uint32_t i = 0; i < m_textures.size(); i++)
         {
-            std::cerr << "\tDestroying texture " << i << std::endl;
             destroy_texture_image(m_textures[i]);
         }
         m_textures.clear();
-        std::cerr << "----------------------------- DESTROY TEXTURES END" << std::endl;
     }
 
     void NDIView::destroy_resources()
     {
-
-        std::cerr << "---------- DESTROY RESOURCES" << std::endl;
         vkDestroyShaderModule(m_device, m_frag_shader_module, NULL);
         m_frag_shader_module = VK_NULL_HANDLE;
 
@@ -1943,7 +1935,6 @@ void main() {
         destroy_textures();
         
         Fl_Vk_Window::destroy_resources();
-        std::cerr << "---------- DESTROY RESOURCES END" << std::endl;
     }
                 
     void NDIView::create_HDR_shader()
@@ -2112,11 +2103,11 @@ void main() {
           << std::endl
           << std::endl;
                         
-        std::cerr << "num_vertex_attribs=" << res->num_vertex_attribs
-                  << std::endl
-                  << "num_descriptors=" << res->num_descriptors << std::endl
-                  << "num_variables=" << res->num_variables << std::endl
-                  << "num_constants=" << res->num_constants << std::endl;
+        // std::cerr << "num_vertex_attribs=" << res->num_vertex_attribs
+        //           << std::endl
+        //           << "num_descriptors=" << res->num_descriptors << std::endl
+        //           << "num_variables=" << res->num_variables << std::endl
+        //           << "num_constants=" << res->num_constants << std::endl;
         
         for (int i = 0; i < res->num_descriptors; i++)
         {
