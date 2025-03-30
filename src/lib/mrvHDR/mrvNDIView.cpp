@@ -370,6 +370,8 @@ namespace mrv
     
     void NDIView::addGPUTextures(const pl_shader_res* res)
     {
+        // vkDeviceWaitIdle(m_device);  // waits for all queue on the device
+        
         // // Clean up existing resources
         // if (m_desc_layout != VK_NULL_HANDLE) {
         //     vkDestroyDescriptorSetLayout(m_device, m_desc_layout, nullptr);
@@ -397,9 +399,9 @@ namespace mrv
         //     m_frag_shader_module = VK_NULL_HANDLE;
         // }
     
-        // Remove any existing libplacebo textures, keep m_textures[0]
+        // // Remove any existing libplacebo textures, keep m_textures[0]
         // if (m_textures.size() > 1) {
-        //     vkQueueWaitIdle(m_queue); // Wait for completion
+        //     // vkQueueWaitIdle(m_queue); // Wait for completion
             
         //     for (size_t i = 1; i < m_textures.size(); ++i) {
         //         destroy_texture_image(m_textures[i]);
@@ -476,7 +478,8 @@ namespace mrv
 
                 Fl_Vk_Texture texture(imageType, imageFormat,
                                       image, imageView, sampler,
-                                      textureName, samplerName);
+                                      imageMemory, samplerName,
+                                      width, height, depth);
                 m_textures.push_back(texture);
                 break;
             }
@@ -1511,9 +1514,6 @@ void main() {
         TLRENDER_P();
 
         vkDeviceWaitIdle(m_device);  // waits for all queue on the device
-
-        // Always destroy textures to ensure they’re recreated with current size
-        destroy_textures();
         
         {
             std::unique_lock<std::mutex> lock(p.videoMutex.mutex);
@@ -1909,9 +1909,12 @@ void main() {
 
     void NDIView::destroy_textures()
     {
+        vkQueueWaitIdle(m_queue); // Wait for completion
+        
         std::cerr << "----------------------------- DESTROY TEXTURES" << std::endl;
         for (uint32_t i = 0; i < m_textures.size(); i++)
         {
+            std::cerr << "\tDestroying texture " << i << std::endl;
             destroy_texture_image(m_textures[i]);
         }
         m_textures.clear();
