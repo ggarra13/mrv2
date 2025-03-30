@@ -92,8 +92,8 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {216 239 853 467} type Double resizable
-      code0 {main = m;} visible
+      xywh {216 239 853 467} type Double hide resizable
+      code0 {main = m;}
     } {
       Fl_Group {} {open
         xywh {0 0 853 466} box FLAT_BOX
@@ -1405,29 +1405,6 @@ v->uiOCIO_Display_View->do_callback();}
               }
             }
             Fl_Group {} {
-              label NDI open
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5
-            } {
-              Fl_Group {} {open
-                xywh {328 71 478 314}
-              } {
-                Fl_Choice uiPrefsNDIShowVideo {
-                  label {Show While Streaming} open selected
-                  tooltip {Viewports can be drawn with blitting or with OpenGL shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {511 98 140 25} down_box BORDER_BOX align 132 textcolor 32
-                  class {mrv::Choice}
-                } {
-                  MenuItem {} {
-                    label No
-                    xywh {50 50 100 20}
-                  }
-                  MenuItem {} {
-                    label Yes
-                    xywh {50 50 100 20}
-                  }
-                }
-              }
-            }
-            Fl_Group {} {
               label Network
               xywh {288 37 555 360} align 5 hide
             } {
@@ -1834,14 +1811,14 @@ o->add( _("OCIO") );
 o->add( _("OCIO Defaults") );
 o->add( _("Loading") );
 o->add( _("Path Mappings") );
-o->add( _("NDI") );
 o->add( _("Network") );
 o->add( _("Video") );
 o->add( _("Audio") );
 o->add( _("ComfyUI") );
 o->add( _("Errors") );
 o->add( _("Behavior") );
-o->select( item );} {}
+o->select( item );} {selected
+    }
   }
   Function {fill_audio_apis(Fl_Choice* o)} {} {
     code {o->clear();
