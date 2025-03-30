@@ -420,8 +420,8 @@ msgstr ""
 
 msgid ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/"
-"rt.rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/rt."
+"rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
 
@@ -1295,30 +1295,6 @@ msgstr ""
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr ""
 
-msgid "Print the log to the console."
-msgstr ""
-
-msgid "Show this message."
-msgstr ""
-
-msgid "Cannot parse option \"{0}\": {1}"
-msgstr ""
-
-msgid "Cannot parse argument \"{0}\": {1}"
-msgstr ""
-
-msgid "Usage:\n"
-msgstr ""
-
-msgid " [option]..."
-msgstr ""
-
-msgid "Arguments:\n"
-msgstr ""
-
-msgid "Options:\n"
-msgstr ""
-
 msgid "Play timelines, movies, and image sequences."
 msgstr ""
 
@@ -1455,6 +1431,30 @@ msgid "Python Error: "
 msgstr ""
 
 msgid "Filename '{0}' does not exist or does not have read permissions."
+msgstr ""
+
+msgid "Print the log to the console."
+msgstr ""
+
+msgid "Show this message."
+msgstr ""
+
+msgid "Cannot parse option \"{0}\": {1}"
+msgstr ""
+
+msgid "Cannot parse argument \"{0}\": {1}"
+msgstr ""
+
+msgid "Usage:\n"
+msgstr ""
+
+msgid " [option]..."
+msgstr ""
+
+msgid "Arguments:\n"
+msgstr ""
+
+msgid "Options:\n"
 msgstr ""
 
 msgid "Files"
@@ -2770,6 +2770,12 @@ msgid "Unsupported output format"
 msgstr ""
 
 msgid "Empty video data at time {0}.  Repeating frame."
+msgstr ""
+
+msgid "Render size: {0}"
+msgstr ""
+
+msgid "Image Layer '{0}' info: {1} {2}"
 msgstr ""
 
 msgid "Unsupported output format: "
@@ -5214,6 +5220,12 @@ msgstr ""
 msgid "Float"
 msgstr ""
 
+msgid "Data Window"
+msgstr ""
+
+msgid "Display Window"
+msgstr ""
+
 msgid "Save Image Options"
 msgstr ""
 
@@ -5239,6 +5251,12 @@ msgid "ZIP Compression"
 msgstr ""
 
 msgid "DWA Compression"
+msgstr ""
+
+msgid "Contents"
+msgstr ""
+
+msgid "OpenEXR's Contents to Save"
 msgstr ""
 
 msgid "0.00 None"
@@ -6029,8 +6047,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
+"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
+"exr"
 msgstr ""
 
 msgid "Maximum Images Apart"
@@ -6579,12 +6597,6 @@ msgid "Invalid Values"
 msgstr ""
 
 msgid "Toggle HDR tonemap"
-msgstr ""
-
-msgid "Display Window"
-msgstr ""
-
-msgid "Data Window"
 msgstr ""
 
 msgid "Compare Wipe"

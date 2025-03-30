@@ -1524,30 +1524,6 @@ msgstr "Annulla"
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Canali: {1} {2} {3}"
 
-msgid "Print the log to the console."
-msgstr "Stampa il log sulla console."
-
-msgid "Show this message."
-msgstr "Mostra questo messaggio."
-
-msgid "Cannot parse option \"{0}\": {1}"
-msgstr "Impossibile analizzare l'opzione \"{0}\": {1}"
-
-msgid "Cannot parse argument \"{0}\": {1}"
-msgstr "Impossibile analizzare l'argomento \"{0}\": {1}"
-
-msgid "Usage:\n"
-msgstr "Uso:\n"
-
-msgid " [option]..."
-msgstr "[opzione]..."
-
-msgid "Arguments:\n"
-msgstr "Argomenti:\n"
-
-msgid "Options:\n"
-msgstr "Opzioni:\n"
-
 msgid "Play timelines, movies, and image sequences."
 msgstr "Gioca timeline, film e sequenze di immagini."
 
@@ -1692,6 +1668,30 @@ msgstr "Errore di Python:"
 
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr "Il nome file '{0}' non esiste o non ha permessi di lettura."
+
+msgid "Print the log to the console."
+msgstr "Stampa il log sulla console."
+
+msgid "Show this message."
+msgstr "Mostra questo messaggio."
+
+msgid "Cannot parse option \"{0}\": {1}"
+msgstr "Impossibile analizzare l'opzione \"{0}\": {1}"
+
+msgid "Cannot parse argument \"{0}\": {1}"
+msgstr "Impossibile analizzare l'argomento \"{0}\": {1}"
+
+msgid "Usage:\n"
+msgstr "Uso:\n"
+
+msgid " [option]..."
+msgstr "[opzione]..."
+
+msgid "Arguments:\n"
+msgstr "Argomenti:\n"
+
+msgid "Options:\n"
+msgstr "Opzioni:\n"
 
 msgid "Files"
 msgstr "File"
@@ -2464,7 +2464,7 @@ msgid "Load an image or movie file"
 msgstr "Carica un file immagine o filmato"
 
 msgid "Audio Stream #%d"
-msgstr "Flusso audio #%d"
+msgstr "ऑडियो स्ट्रीम #%d"
 
 msgid "FourCC"
 msgstr "Quattro CC"
@@ -3064,6 +3064,12 @@ msgstr "Formato di output non supportato"
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "Dati video vuoti al momento {0}. Ripetizione della cornice."
+
+msgid "Render size: {0}"
+msgstr "रेंडर आकार: {0}"
+
+msgid "Image Layer '{0}' info: {1} {2}"
+msgstr "छवि परत '{0}' जानकारी: {1} {2}"
 
 msgid "Unsupported output format: "
 msgstr "Formato di output non supportato: "
@@ -5688,6 +5694,12 @@ msgstr "Metà"
 msgid "Float"
 msgstr "Punto di fluttuazione"
 
+msgid "Data Window"
+msgstr "Finestra dati"
+
+msgid "Display Window"
+msgstr "Visualizza finestra"
+
 msgid "Save Image Options"
 msgstr "Salva le opzioni immagine"
 
@@ -5714,6 +5726,12 @@ msgstr "Compressione ZIP"
 
 msgid "DWA Compression"
 msgstr "Compressione DWA"
+
+msgid "Contents"
+msgstr "सामग्री"
+
+msgid "OpenEXR's Contents to Save"
+msgstr "OpenEXR की सामग्री सहेजने के लिए"
 
 msgid "0.00 None"
 msgstr "0.00 Nessuna"
@@ -7182,12 +7200,6 @@ msgstr "Valori non validi"
 
 msgid "Toggle HDR tonemap"
 msgstr "Commuta mappa tonale HDR"
-
-msgid "Display Window"
-msgstr "Visualizza finestra"
-
-msgid "Data Window"
-msgstr "Finestra dati"
 
 msgid "Compare Wipe"
 msgstr "Confronta Wipe"

@@ -1539,30 +1539,6 @@ msgstr "Cancel"
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Channels: {1} {2} {3}"
 
-msgid "Print the log to the console."
-msgstr "Print the log to the console."
-
-msgid "Show this message."
-msgstr "Show this message."
-
-msgid "Cannot parse option \"{0}\": {1}"
-msgstr "Cannot parse option \"{0}\": {1}"
-
-msgid "Cannot parse argument \"{0}\": {1}"
-msgstr "Cannot parse argument \"{0}\": {1}"
-
-msgid "Usage:\n"
-msgstr "Usage:\n"
-
-msgid " [option]..."
-msgstr " [option]..."
-
-msgid "Arguments:\n"
-msgstr "Arguments:\n"
-
-msgid "Options:\n"
-msgstr "Options:\n"
-
 msgid "Play timelines, movies, and image sequences."
 msgstr "Play timelines, movies, and image sequences."
 
@@ -1703,6 +1679,30 @@ msgstr "Python Error: "
 
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr "Filename '{0}' does not exist or does not have read permissions."
+
+msgid "Print the log to the console."
+msgstr "Print the log to the console."
+
+msgid "Show this message."
+msgstr "Show this message."
+
+msgid "Cannot parse option \"{0}\": {1}"
+msgstr "Cannot parse option \"{0}\": {1}"
+
+msgid "Cannot parse argument \"{0}\": {1}"
+msgstr "Cannot parse argument \"{0}\": {1}"
+
+msgid "Usage:\n"
+msgstr "Usage:\n"
+
+msgid " [option]..."
+msgstr " [option]..."
+
+msgid "Arguments:\n"
+msgstr "Arguments:\n"
+
+msgid "Options:\n"
+msgstr "Options:\n"
 
 msgid "Files"
 msgstr "Files"
@@ -3052,6 +3052,12 @@ msgstr "Unsupported output format"
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "Empty video data at time {0}.  Repeating frame."
+
+msgid "Render size: {0}"
+msgstr "Render size: {0}"
+
+msgid "Image Layer '{0}' info: {1} {2}"
+msgstr "Image Layer '{0}' info: {1} {2}"
 
 msgid "Unsupported output format: "
 msgstr "Unsupported output format: "
@@ -5674,6 +5680,12 @@ msgstr "Half"
 msgid "Float"
 msgstr "Float"
 
+msgid "Data Window"
+msgstr "Data Window"
+
+msgid "Display Window"
+msgstr "Display Window"
+
 msgid "Save Image Options"
 msgstr "Save Image Options"
 
@@ -5700,6 +5712,12 @@ msgstr "ZIP Compression"
 
 msgid "DWA Compression"
 msgstr "DWA Compression"
+
+msgid "Contents"
+msgstr "Contents"
+
+msgid "OpenEXR's Contents to Save"
+msgstr "OpenEXR's Contents to Save"
 
 msgid "0.00 None"
 msgstr "0.00 None"
@@ -7136,12 +7154,6 @@ msgstr "Invalid Values"
 
 msgid "Toggle HDR tonemap"
 msgstr "Toggle HDR tonemap"
-
-msgid "Display Window"
-msgstr "Display Window"
-
-msgid "Data Window"
-msgstr "Data Window"
 
 msgid "Compare Wipe"
 msgstr "Compare Wipe"

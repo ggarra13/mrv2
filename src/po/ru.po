@@ -1545,30 +1545,6 @@ msgstr "Отмена"
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Каналы: {1} {2} {3}"
 
-msgid "Print the log to the console."
-msgstr "Распечатайте журнал на консоли."
-
-msgid "Show this message."
-msgstr "Покажите это сообщение."
-
-msgid "Cannot parse option \"{0}\": {1}"
-msgstr "Невозможно обработать вариант \" {0}\": {1}"
-
-msgid "Cannot parse argument \"{0}\": {1}"
-msgstr "Невозможно обдумать аргумент \" {0}: {1}"
-
-msgid "Usage:\n"
-msgstr "Использование:\n"
-
-msgid " [option]..."
-msgstr "[вариант]..."
-
-msgid "Arguments:\n"
-msgstr "Аргументы:\n"
-
-msgid "Options:\n"
-msgstr "Параметры:\n"
-
 msgid "Play timelines, movies, and image sequences."
 msgstr "Воспроизвести графики, фильмы и последовательности изображений."
 
@@ -1715,6 +1691,30 @@ msgstr "Ошибка Python:"
 
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr "Файловое имя \" {0}\" не существует или не имеет разрешения на чтение."
+
+msgid "Print the log to the console."
+msgstr "Распечатайте журнал на консоли."
+
+msgid "Show this message."
+msgstr "Покажите это сообщение."
+
+msgid "Cannot parse option \"{0}\": {1}"
+msgstr "Невозможно обработать вариант \" {0}\": {1}"
+
+msgid "Cannot parse argument \"{0}\": {1}"
+msgstr "Невозможно обдумать аргумент \" {0}: {1}"
+
+msgid "Usage:\n"
+msgstr "Использование:\n"
+
+msgid " [option]..."
+msgstr "[вариант]..."
+
+msgid "Arguments:\n"
+msgstr "Аргументы:\n"
+
+msgid "Options:\n"
+msgstr "Параметры:\n"
 
 msgid "Files"
 msgstr "Файлы"
@@ -2486,7 +2486,7 @@ msgid "Load an image or movie file"
 msgstr "Загрузить изображение или файл фильма"
 
 msgid "Audio Stream #%d"
-msgstr "Звуковой поток #%d"
+msgstr "Аудиопоток #%d"
 
 msgid "FourCC"
 msgstr "Четыре комитета по координации (КК)"
@@ -3075,6 +3075,12 @@ msgstr "Неподдерживаемый формат вывода"
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "Пустые видеоданные в момент {0} Повторяю рамку."
+
+msgid "Render size: {0}"
+msgstr "Размер рендеринга: {0}"
+
+msgid "Image Layer '{0}' info: {1} {2}"
+msgstr "Информация о слое изображения '{0}': {1} {2}"
 
 msgid "Unsupported output format: "
 msgstr "Неподдерживаемый формат вывода: "
@@ -3996,7 +4002,6 @@ msgstr "Редакция/HDR/Неверные значения"
 
 msgid "Render/HDR/Ignore Chromaticities"
 msgstr "Редакция/HDR/Игнорировать хроматизм"
-
 
 msgid "Render/HDR/Toggle Tonemap"
 msgstr "Редакция/HDR/Тональность"
@@ -5703,6 +5708,12 @@ msgstr "Половина"
 msgid "Float"
 msgstr "Число с плавающей точкой"
 
+msgid "Data Window"
+msgstr "Окно данных"
+
+msgid "Display Window"
+msgstr "Показать окно"
+
 msgid "Save Image Options"
 msgstr "Сохранить параметры изображения"
 
@@ -5729,6 +5740,12 @@ msgstr "ZIP Компрессия"
 
 msgid "DWA Compression"
 msgstr "DWA - подавление"
+
+msgid "Contents"
+msgstr "Содержимое"
+
+msgid "OpenEXR's Contents to Save"
+msgstr "Содержимое OpenEXR для сохранения"
 
 msgid "0.00 None"
 msgstr "0,00 Нет"
@@ -5844,7 +5861,6 @@ msgstr "Игнорировать"
 msgid "Apply"
 msgstr "Применить"
 
-
 msgid "Never"
 msgstr "Никогда"
 
@@ -5853,7 +5869,6 @@ msgstr "ST2094_40"
 
 msgid "ST2094_10"
 msgstr "ST2094_10"
-
 
 msgid "Clip"
 msgstr "Обрезка"
@@ -5864,7 +5879,6 @@ msgstr "BT2390"
 msgid "BT2446A"
 msgstr "BT2446A"
 
-
 msgid "Spline"
 msgstr "Сплайн"
 
@@ -5873,7 +5887,6 @@ msgstr "Рейнхард"
 
 msgid "Mobius"
 msgstr "Мёбиус"
-
 
 msgid "Linear Light"
 msgstr "Линейный свет"
@@ -6323,10 +6336,8 @@ msgstr "Минимизация фильтра"
 msgid "Magnify Filter"
 msgstr "Увеличить фильтр"
 
-
 msgid "HDR"
 msgstr "HDR"
-
 
 msgid "Chromaticities"
 msgstr "Хроматичности"
@@ -7180,12 +7191,6 @@ msgstr "Неверные значения"
 
 msgid "Toggle HDR tonemap"
 msgstr "Скриншот"
-
-msgid "Display Window"
-msgstr "Показать окно"
-
-msgid "Data Window"
-msgstr "Окно данных"
 
 msgid "Compare Wipe"
 msgstr "Сравнить сетку"

@@ -250,29 +250,43 @@ function( is_system_lib TARGET ISSYSLIB )
 
 endfunction()
 
+set(INSTALLED_LIBRARIES "" CACHE INTERNAL "List of installed libraries")
+
 #
 # Function used to install a library  with all .so dependencies
 #
 function(install_library_with_deps LIBRARY)
-
+    list(FIND INSTALLED_LIBRARIES "${LIBRARY}" already_installed)
+    if (already_installed GREATER -1)
+        message(STATUS "SKIPPED (already installed) ${LIBRARY}")
+        return()
+    endif()
+    
     is_system_lib (${LIBRARY} sys_lib)
     if ( ${sys_lib} EQUAL 1 )
 	message( STATUS "SKIPPED installing ${LIBRARY}" )
 	return()
     endif()
-
+    
     file(INSTALL
 	DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
 	TYPE SHARED_LIBRARY
 	FOLLOW_SYMLINK_CHAIN
 	FILES "${LIBRARY}"
-	)
+    )
+
+    list(APPEND INSTALLED_LIBRARIES "${LIBRARY}")
+    set(INSTALLED_LIBRARIES "${INSTALLED_LIBRARIES}" CACHE INTERNAL "List of installed libraries")
+
 endfunction()
 
 #
 # Function used to get runtime dependencies as cmake GET_RUNTIME_DEPENDENCIES is
 # broken.
 #
+
+set(PROCESSED_LIBRARIES "" CACHE INTERNAL "List of processed libraries")
+
 function( get_runtime_dependencies TARGET )
 
     foreach (exe ${TARGET})
@@ -284,10 +298,19 @@ function( get_runtime_dependencies TARGET )
 		string (REGEX REPLACE "^.* => | \(.*\)" "" pruned ${line})
 		string (STRIP ${pruned} dep_filename)
 		if (IS_ABSOLUTE ${dep_filename})
-		    is_system_lib (${dep_filename} sys_lib)
-		    if (sys_lib EQUAL 0 OR INSTALL_SYSLIBS STREQUAL "true")
-			install_library_with_deps( ${dep_filename} )
-		    endif()
+
+		    list(FIND PROCESSED_LIBRARIES "${dep_filename}" already_processed)
+                    if (already_processed EQUAL -1)
+                        list(APPEND PROCESSED_LIBRARIES "${dep_filename}")
+                        set(PROCESSED_LIBRARIES "${PROCESSED_LIBRARIES}" CACHE INTERNAL "List of processed libraries")
+
+			is_system_lib (${dep_filename} sys_lib)
+			if (sys_lib EQUAL 0 OR INSTALL_SYSLIBS STREQUAL "true")
+			    install_library_with_deps( ${dep_filename} )
+			endif()
+                    else()
+                        message(STATUS "Skipping already processed ${dep_filename}")
+                    endif()
 		else()
 		    is_system_lib (${dep_filename} sys_lib)
 		    if (sys_lib EQUAL 0)

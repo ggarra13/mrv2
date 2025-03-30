@@ -1521,30 +1521,6 @@ msgstr "取消"
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Channels: {1} {2} {3}"
 
-msgid "Print the log to the console."
-msgstr "打印到控制台的日志 。"
-
-msgid "Show this message."
-msgstr "显示此消息 。"
-
-msgid "Cannot parse option \"{0}\": {1}"
-msgstr "无法分析“ {0} ” 选项 : {1}"
-
-msgid "Cannot parse argument \"{0}\": {1}"
-msgstr "无法分析参数“ {0} ” : {1}"
-
-msgid "Usage:\n"
-msgstr "用法 :\n"
-
-msgid " [option]..."
-msgstr "[选择]..."
-
-msgid "Arguments:\n"
-msgstr "参数 :\n"
-
-msgid "Options:\n"
-msgstr "选项 :\n"
-
 msgid "Play timelines, movies, and image sequences."
 msgstr "播放时间轴、影片和图像序列"
 
@@ -1684,6 +1660,30 @@ msgstr "Python 错误 :"
 
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr "文件名 '{0}' 不存在, 或者没有读取权限 。"
+
+msgid "Print the log to the console."
+msgstr "打印到控制台的日志 。"
+
+msgid "Show this message."
+msgstr "显示此消息 。"
+
+msgid "Cannot parse option \"{0}\": {1}"
+msgstr "无法分析“ {0} ” 选项 : {1}"
+
+msgid "Cannot parse argument \"{0}\": {1}"
+msgstr "无法分析参数“ {0} ” : {1}"
+
+msgid "Usage:\n"
+msgstr "用法 :\n"
+
+msgid " [option]..."
+msgstr "[选择]..."
+
+msgid "Arguments:\n"
+msgstr "参数 :\n"
+
+msgid "Options:\n"
+msgstr "选项 :\n"
 
 msgid "Files"
 msgstr "文件"
@@ -3002,6 +3002,12 @@ msgstr "不支持的不支持输出格式"
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "时间 {0} 空视频数据 重复帧"
 
+msgid "Render size: {0}"
+msgstr "渲染尺寸：{0}"
+
+msgid "Image Layer '{0}' info: {1} {2}"
+msgstr "图像层 '{0}' 信息：{1} {2}"
+
 msgid "Unsupported output format: "
 msgstr "不支持的不支持输出格式: "
 
@@ -3903,7 +3909,6 @@ msgstr "渲染/HDR/无效值"
 
 msgid "Render/HDR/Ignore Chromaticities"
 msgstr "招标/HDR/忽略颜色"
-
 
 msgid "Render/HDR/Toggle Tonemap"
 msgstr "渲染/HDR/切换色调映射"
@@ -5591,6 +5596,12 @@ msgstr "Half"
 msgid "Float"
 msgstr "Float"
 
+msgid "Data Window"
+msgstr "数据窗口"
+
+msgid "Display Window"
+msgstr "显示窗口"
+
 msgid "Save Image Options"
 msgstr "保存图像选项"
 
@@ -5617,6 +5628,12 @@ msgstr "ZIP 压缩"
 
 msgid "DWA Compression"
 msgstr "DWA 压缩"
+
+msgid "Contents"
+msgstr "内容"
+
+msgid "OpenEXR's Contents to Save"
+msgstr "OpenEXR 要保存的内容"
 
 msgid "0.00 None"
 msgstr "0.00 None"
@@ -5732,7 +5749,6 @@ msgstr "忽略"
 msgid "Apply"
 msgstr "应用"
 
-
 msgid "Never"
 msgstr "从不"
 
@@ -5741,7 +5757,6 @@ msgstr "ST2094_40"
 
 msgid "ST2094_10"
 msgstr "ST2094_10"
-
 
 msgid "Clip"
 msgstr "剪切"
@@ -5752,7 +5767,6 @@ msgstr "BT2390"
 msgid "BT2446A"
 msgstr "BT2446A"
 
-
 msgid "Spline"
 msgstr "样条曲线"
 
@@ -5761,7 +5775,6 @@ msgstr "Reinhard"
 
 msgid "Mobius"
 msgstr "莫比乌斯"
-
 
 msgid "Linear Light"
 msgstr "线性光"
@@ -6173,10 +6186,8 @@ msgstr "Minify Filter"
 msgid "Magnify Filter"
 msgstr "Magnify Filter"
 
-
 msgid "HDR"
 msgstr "HDR"
-
 
 msgid "Chromaticities"
 msgstr "色度"
@@ -6973,12 +6984,6 @@ msgstr "无效值"
 
 msgid "Toggle HDR tonemap"
 msgstr "切换 HRD 音速映射"
-
-msgid "Display Window"
-msgstr "显示窗口"
-
-msgid "Data Window"
-msgstr "数据窗口"
 
 msgid "Compare Wipe"
 msgstr "比较擦除"

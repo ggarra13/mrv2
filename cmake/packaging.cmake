@@ -19,7 +19,7 @@ set( CPACK_PACKAGE_CONTACT "ggarra13@gmail.com")
 # Experimental support in CPack for multithreading. 0 uses all cores.
 #
 if(NOT APPLE)
-    set( CPACK_THREADS 0 )
+    set( CPACK_THREADS 16 )
 else()
     set( CPACK_THREADS 1 )
 endif()
@@ -70,6 +70,9 @@ set(MRV2_DIR ${CMAKE_SOURCE_DIR})
 # This is the root of mrv2
 #
 file(REAL_PATH "${MRV2_DIR}/.." MRV2_ROOT)
+
+set(CPACK_VERBOSE ON)
+set(CPACK_FILTER_IGNORE_FILES "/.git/;/build/;/CMakeFiles/;.o;.a;.lib")
 
 #
 # \@bug:

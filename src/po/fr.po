@@ -1499,30 +1499,6 @@ msgstr "Annuler"
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Chaînes: {1} {2} {3}"
 
-msgid "Print the log to the console."
-msgstr "Imprimez le journal sur la console."
-
-msgid "Show this message."
-msgstr "Montrez ce message."
-
-msgid "Cannot parse option \"{0}\": {1}"
-msgstr "Impossible d'analyser l'option « {0} »: {1}"
-
-msgid "Cannot parse argument \"{0}\": {1}"
-msgstr "Impossible d'analyser l'argument « {0} »: {1}"
-
-msgid "Usage:\n"
-msgstr "Utilisation :\n"
-
-msgid " [option]..."
-msgstr "[option]..."
-
-msgid "Arguments:\n"
-msgstr "Arguments:\n"
-
-msgid "Options:\n"
-msgstr "Options :\n"
-
 msgid "Play timelines, movies, and image sequences."
 msgstr "Jouez des chronologies, des films et des séquences d'images."
 
@@ -1668,6 +1644,30 @@ msgstr "Erreur de Python :"
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr ""
 "Le nom de fichier '{0}' n'existe pas ou n'a pas de permission de lecture."
+
+msgid "Print the log to the console."
+msgstr "Imprimez le journal sur la console."
+
+msgid "Show this message."
+msgstr "Montrez ce message."
+
+msgid "Cannot parse option \"{0}\": {1}"
+msgstr "Impossible d'analyser l'option « {0} »: {1}"
+
+msgid "Cannot parse argument \"{0}\": {1}"
+msgstr "Impossible d'analyser l'argument « {0} »: {1}"
+
+msgid "Usage:\n"
+msgstr "Utilisation :\n"
+
+msgid " [option]..."
+msgstr "[option]..."
+
+msgid "Arguments:\n"
+msgstr "Arguments:\n"
+
+msgid "Options:\n"
+msgstr "Options :\n"
 
 msgid "Files"
 msgstr "Fichiers"
@@ -2440,7 +2440,7 @@ msgid "Load an image or movie file"
 msgstr "Charger une image ou un fichier de film"
 
 msgid "Audio Stream #%d"
-msgstr "Flux audio #%d"
+msgstr "Flux audio n°%d"
 
 msgid "FourCC"
 msgstr "FourCC"
@@ -3036,6 +3036,12 @@ msgstr "Format de sortie non supporté"
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "Données vidéo vides au moment {0}. Cadre répétitif."
+
+msgid "Render size: {0}"
+msgstr "Taille de rendu : {0}"
+
+msgid "Image Layer '{0}' info: {1} {2}"
+msgstr "Informations de la couche d'image '{0}' : {1} {2}"
 
 msgid "Unsupported output format: "
 msgstr "Format de sortie non supporté: "
@@ -5664,6 +5670,12 @@ msgstr "Demi"
 msgid "Float"
 msgstr "Flux flottants"
 
+msgid "Data Window"
+msgstr "Fenêtre de données"
+
+msgid "Display Window"
+msgstr "Affiche la fenêtre"
+
 msgid "Save Image Options"
 msgstr "Enregistrer les options d'image"
 
@@ -5690,6 +5702,12 @@ msgstr "Compression ZIP"
 
 msgid "DWA Compression"
 msgstr "Compression DWA"
+
+msgid "Contents"
+msgstr "Contenu"
+
+msgid "OpenEXR's Contents to Save"
+msgstr "Contenu OpenEXR à enregistrer"
 
 msgid "0.00 None"
 msgstr "0,00 Aucun"
@@ -7170,12 +7188,6 @@ msgstr "Valeurs non valides"
 
 msgid "Toggle HDR tonemap"
 msgstr "Commutation de la carte de tons HDR"
-
-msgid "Display Window"
-msgstr "Affiche la fenêtre"
-
-msgid "Data Window"
-msgstr "Fenêtre de données"
 
 msgid "Compare Wipe"
 msgstr "Comparer Essuie-glace"

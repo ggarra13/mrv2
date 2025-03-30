@@ -1489,30 +1489,6 @@ msgstr "Abbrechen"
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Kanle: {1} {2} {3}"
 
-msgid "Print the log to the console."
-msgstr "Drucken Sie das Protokoll auf der Konsole."
-
-msgid "Show this message."
-msgstr "Zeigen Sie diese Nachricht."
-
-msgid "Cannot parse option \"{0}\": {1}"
-msgstr "Die Option \"{0}\" kann nicht analysiert werden: {1}"
-
-msgid "Cannot parse argument \"{0}\": {1}"
-msgstr "Das Argument \"{0}\" kann nicht analysiert werden: {1}"
-
-msgid "Usage:\n"
-msgstr "Verwendung:\n"
-
-msgid " [option]..."
-msgstr "[Option]..."
-
-msgid "Arguments:\n"
-msgstr "Argumente:\n"
-
-msgid "Options:\n"
-msgstr "Optionen:\n"
-
 msgid "Play timelines, movies, and image sequences."
 msgstr "Zeitleisten, Filme und Bildsequenzen abspielen."
 
@@ -1659,6 +1635,30 @@ msgstr "Python-Fehler:"
 
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr "Dateiname '{0}' existiert nicht oder hat keine Leseberechtigungen."
+
+msgid "Print the log to the console."
+msgstr "Drucken Sie das Protokoll auf der Konsole."
+
+msgid "Show this message."
+msgstr "Zeigen Sie diese Nachricht."
+
+msgid "Cannot parse option \"{0}\": {1}"
+msgstr "Die Option \"{0}\" kann nicht analysiert werden: {1}"
+
+msgid "Cannot parse argument \"{0}\": {1}"
+msgstr "Das Argument \"{0}\" kann nicht analysiert werden: {1}"
+
+msgid "Usage:\n"
+msgstr "Verwendung:\n"
+
+msgid " [option]..."
+msgstr "[Option]..."
+
+msgid "Arguments:\n"
+msgstr "Argumente:\n"
+
+msgid "Options:\n"
+msgstr "Optionen:\n"
 
 msgid "Files"
 msgstr "Dateien"
@@ -2432,7 +2432,7 @@ msgid "Load an image or movie file"
 msgstr "Ein Bild oder eine Filmdatei laden"
 
 msgid "Audio Stream #%d"
-msgstr "Streaming Media"
+msgstr "Audio-Stream #%d"
 
 msgid "FourCC"
 msgstr ""
@@ -3036,6 +3036,12 @@ msgstr "Nicht unterstütztes Ausgabeformat"
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "Leere Videodaten zur Zeit {0}. Wiederholungsbild."
+
+msgid "Render size: {0}"
+msgstr "Rendergröße: {0}"
+
+msgid "Image Layer '{0}' info: {1} {2}"
+msgstr "Bildschicht '{0}' Info: {1} {2}"
 
 msgid "Unsupported output format: "
 msgstr "Nicht unterstütztes Ausgabeformat: "
@@ -5657,6 +5663,12 @@ msgstr "Hlfte"
 msgid "Float"
 msgstr "Float"
 
+msgid "Data Window"
+msgstr "Datenfenster"
+
+msgid "Display Window"
+msgstr "Fenster anzeigen"
+
 msgid "Save Image Options"
 msgstr "Bild-Optionen speichern"
 
@@ -5683,6 +5695,12 @@ msgstr "ZIP-Kompression"
 
 msgid "DWA Compression"
 msgstr "DWA-Kompression"
+
+msgid "Contents"
+msgstr "Inhalte"
+
+msgid "OpenEXR's Contents to Save"
+msgstr "OpenEXR-Inhalte zum Speichern"
 
 msgid "0.00 None"
 msgstr "0,00 Keine"
@@ -5798,7 +5816,6 @@ msgstr "Ignorieren"
 msgid "Apply"
 msgstr "Anwenden"
 
-
 msgid "Never"
 msgstr "Nie"
 
@@ -5807,7 +5824,6 @@ msgstr "ST2094_40"
 
 msgid "ST2094_10"
 msgstr "ST2094_10"
-
 
 msgid "Clip"
 msgstr "Clip"
@@ -5818,7 +5834,6 @@ msgstr "BT2390"
 msgid "BT2446A"
 msgstr "BT2446A"
 
-
 msgid "Spline"
 msgstr "Spline"
 
@@ -5827,7 +5842,6 @@ msgstr "Reinhard"
 
 msgid "Mobius"
 msgstr "Mobius"
-
 
 msgid "Linear Light"
 msgstr "Lineares Licht"
@@ -6288,10 +6302,8 @@ msgstr "Filter verkleinern"
 msgid "Magnify Filter"
 msgstr "Filter vergrern"
 
-
 msgid "HDR"
 msgstr "HDR"
-
 
 msgid "Chromaticities"
 msgstr "Farbtemperatur"
@@ -7143,12 +7155,6 @@ msgstr "Ungltige Werte"
 
 msgid "Toggle HDR tonemap"
 msgstr "HDR-Tonkarte umschalten"
-
-msgid "Display Window"
-msgstr "Fenster anzeigen"
-
-msgid "Data Window"
-msgstr "Datenfenster"
 
 msgid "Compare Wipe"
 msgstr "Vergleiche Wipe"

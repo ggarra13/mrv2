@@ -1516,30 +1516,6 @@ msgstr "キャンセル"
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - チャンネル: {1} {2} {3}"
 
-msgid "Print the log to the console."
-msgstr "イベントをコンソールにログ出力します"
-
-msgid "Show this message."
-msgstr "このヘルプメッセージを表示"
-
-msgid "Cannot parse option \"{0}\": {1}"
-msgstr "オプション \"{0}\" を解析できません: {1}"
-
-msgid "Cannot parse argument \"{0}\": {1}"
-msgstr "引数 \"{0}\" を解析できません: {1}"
-
-msgid "Usage:\n"
-msgstr "使用方法:\n"
-
-msgid " [option]..."
-msgstr " [オプション]..."
-
-msgid "Arguments:\n"
-msgstr "引数:\n"
-
-msgid "Options:\n"
-msgstr "オプション:\n"
-
 msgid "Play timelines, movies, and image sequences."
 msgstr "動画や音楽を再生します"
 
@@ -1679,6 +1655,30 @@ msgstr "パイソン"
 
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr "ファイル名 '{0}' が存在しないか、読み取り権限がありません。"
+
+msgid "Print the log to the console."
+msgstr "イベントをコンソールにログ出力します"
+
+msgid "Show this message."
+msgstr "このヘルプメッセージを表示"
+
+msgid "Cannot parse option \"{0}\": {1}"
+msgstr "オプション \"{0}\" を解析できません: {1}"
+
+msgid "Cannot parse argument \"{0}\": {1}"
+msgstr "引数 \"{0}\" を解析できません: {1}"
+
+msgid "Usage:\n"
+msgstr "使用方法:\n"
+
+msgid " [option]..."
+msgstr " [オプション]..."
+
+msgid "Arguments:\n"
+msgstr "引数:\n"
+
+msgid "Options:\n"
+msgstr "オプション:\n"
 
 msgid "Files"
 msgstr "ファイル"
@@ -3006,9 +3006,14 @@ msgstr "サポートされていない出力形式: %1%"
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "時刻 {0} にビデオデータがありません。フレームを繰り返します。"
 
+msgid "Render size: {0}"
+msgstr "レンダーサイズ: {0}"
+
+msgid "Image Layer '{0}' info: {1} {2}"
+msgstr "画像レイヤー '{0}' 情報: {1} {2}"
+
 msgid "Unsupported output format: "
 msgstr "サポートされていない出力形式: %1%"
-
 
 msgid "Reading preferences from \"{0}{1}\"."
 msgstr "\"{0}{1}\" から設定を読み込み中です。"
@@ -3033,7 +3038,6 @@ msgstr "OCIO ファイルから設定をインポート"
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "OCIO 環境変数から OCIO 設定を設定しています。"
 
-
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "パス マッピングが「{0}{1}」から読み込まれました。"
 
@@ -3057,7 +3061,6 @@ msgstr "取り外し"
 
 msgid "OCIO config is now:"
 msgstr "WPML は今"
-
 
 msgid "OCIO file \"{0}\" not found or not readable."
 msgstr "OCIO ファイル「{0}」が見つかりません、または読み込めません。"
@@ -3916,7 +3919,6 @@ msgstr "レンダー/HDR/無効な値"
 
 msgid "Render/HDR/Ignore Chromaticities"
 msgstr "レンダー/HDR/色度を無視"
-
 
 msgid "Render/HDR/Toggle Tonemap"
 msgstr "レンダリング/HDR/トゥーンマップの切り替え"
@@ -5571,6 +5573,12 @@ msgstr "ハーフ"
 msgid "Float"
 msgstr "フロート"
 
+msgid "Data Window"
+msgstr "データウィンドウ"
+
+msgid "Display Window"
+msgstr "表示ウィンドウ"
+
 msgid "Save Image Options"
 msgstr "画像保存オプション"
 
@@ -5597,6 +5605,12 @@ msgstr "ZIP圧縮"
 
 msgid "DWA Compression"
 msgstr "DWA圧縮"
+
+msgid "Contents"
+msgstr "内容"
+
+msgid "OpenEXR's Contents to Save"
+msgstr "保存するOpenEXRの内容"
 
 msgid "0.00 None"
 msgstr "0.00 なし"
@@ -5712,7 +5726,6 @@ msgstr "無視"
 msgid "Apply"
 msgstr "適用"
 
-
 msgid "Never"
 msgstr "決して"
 
@@ -5721,7 +5734,6 @@ msgstr "ST2094_40"
 
 msgid "ST2094_10"
 msgstr "ST2094_10"
-
 
 msgid "Clip"
 msgstr "クリップ"
@@ -5732,7 +5744,6 @@ msgstr "BT2390"
 msgid "BT2446A"
 msgstr "BT2446A"
 
-
 msgid "Spline"
 msgstr "スプライン"
 
@@ -5741,7 +5752,6 @@ msgstr "ラインハート"
 
 msgid "Mobius"
 msgstr "メビウス"
-
 
 msgid "Linear Light"
 msgstr "リニア ライト"
@@ -6160,10 +6170,8 @@ msgstr "縮小フィルタ"
 msgid "Magnify Filter"
 msgstr "拡大フィルタ"
 
-
 msgid "HDR"
 msgstr "HDR"
-
 
 msgid "Chromaticities"
 msgstr "色度"
@@ -6960,12 +6968,6 @@ msgstr "無効な値"
 
 msgid "Toggle HDR tonemap"
 msgstr "HDR トーンマップの切り替え"
-
-msgid "Display Window"
-msgstr "表示ウィンドウ"
-
-msgid "Data Window"
-msgstr "データウィンドウ"
 
 msgid "Compare Wipe"
 msgstr "比較ワイプ"

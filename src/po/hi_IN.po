@@ -1509,30 +1509,6 @@ msgstr "रद्द करें"
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - चैनल्स: {1} {2} {3}"
 
-msgid "Print the log to the console."
-msgstr "कंसोल में लॉग छापें."
-
-msgid "Show this message."
-msgstr "यह संदेश भेजें."
-
-msgid "Cannot parse option \"{0}\": {1}"
-msgstr "\"{0}\" विकल्प का विश्लेषण नहीं कर सकता: {1}"
-
-msgid "Cannot parse argument \"{0}\": {1}"
-msgstr "तर्क \"{0}\" का विश्लेषण नहीं कर सकता है: {1}"
-
-msgid "Usage:\n"
-msgstr "उपयोग:\n"
-
-msgid " [option]..."
-msgstr "[ option]..."
-
-msgid "Arguments:\n"
-msgstr "आर्गुमेंट्सः\n"
-
-msgid "Options:\n"
-msgstr "विकल्प:\n"
-
 msgid "Play timelines, movies, and image sequences."
 msgstr "समयरेखा, फिल्में, और छवि अनुक्रम खेलें."
 
@@ -1678,6 +1654,30 @@ msgstr "पायथन त्रुटि:"
 
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr "फ़ाइलनाम '{0}' मौजूद नहीं है या पढ़ने की अनुमति नहीं है."
+
+msgid "Print the log to the console."
+msgstr "कंसोल में लॉग छापें."
+
+msgid "Show this message."
+msgstr "यह संदेश भेजें."
+
+msgid "Cannot parse option \"{0}\": {1}"
+msgstr "\"{0}\" विकल्प का विश्लेषण नहीं कर सकता: {1}"
+
+msgid "Cannot parse argument \"{0}\": {1}"
+msgstr "तर्क \"{0}\" का विश्लेषण नहीं कर सकता है: {1}"
+
+msgid "Usage:\n"
+msgstr "उपयोग:\n"
+
+msgid " [option]..."
+msgstr "[ option]..."
+
+msgid "Arguments:\n"
+msgstr "आर्गुमेंट्सः\n"
+
+msgid "Options:\n"
+msgstr "विकल्प:\n"
 
 msgid "Files"
 msgstr "फ़ाइल"
@@ -3034,6 +3034,12 @@ msgstr "असमर्थित आउटपुट प्रारूप"
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "{0} समय पर वीडियो आँकड़ा खाली करें"
+
+msgid "Render size: {0}"
+msgstr "रेंडर आकार: {0}"
+
+msgid "Image Layer '{0}' info: {1} {2}"
+msgstr "छवि परत '{0}' जानकारी: {1} {2}"
 
 msgid "Unsupported output format: "
 msgstr "असमर्थित आउटपुट प्रारूप: "
@@ -5632,6 +5638,12 @@ msgstr "आधा"
 msgid "Float"
 msgstr "फ्लोटिंग पाइंट"
 
+msgid "Data Window"
+msgstr "डाटा विंडो"
+
+msgid "Display Window"
+msgstr "विंडो प्रदर्शित करें"
+
 msgid "Save Image Options"
 msgstr "छवि विकल्प सहेजें"
 
@@ -5658,6 +5670,12 @@ msgstr "संपीडन"
 
 msgid "DWA Compression"
 msgstr "DWA संपीडन"
+
+msgid "Contents"
+msgstr "सामग्री"
+
+msgid "OpenEXR's Contents to Save"
+msgstr "OpenEXR की सामग्री सहेजने के लिए"
 
 msgid "0.00 None"
 msgstr "0.00 कुछ नहीं"
@@ -7094,12 +7112,6 @@ msgstr "अवैध मान"
 
 msgid "Toggle HDR tonemap"
 msgstr "HDR वर्तनीमैप टॉगल करें"
-
-msgid "Display Window"
-msgstr "विंडो प्रदर्शित करें"
-
-msgid "Data Window"
-msgstr "डाटा विंडो"
 
 msgid "Compare Wipe"
 msgstr "सर्प पोंछना प्रभाव"

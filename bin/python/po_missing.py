@@ -82,7 +82,7 @@ class POMissingTranslations:
         found = False
         try:
             for entry in po:
-                if not entry.fuzzy and entry.msgstr != '':
+                if entry.msgstr != '' and not entry.fuzzy:
                     continue
 
                 found = True
@@ -95,7 +95,7 @@ class POMissingTranslations:
             print('Saving untraslated strings to',po_output)
             out.save(po_output)
         else:
-            print('No untranslated strings for', self.code)
+            print('No untranslated strings for', self.code, 'in', po_input)
 
 
 def find_missing_msgstr(lang):
