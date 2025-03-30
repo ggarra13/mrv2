@@ -37,6 +37,12 @@ namespace mrv
 {
     using namespace tl;
 
+    struct TextureUploadResources {
+        VkBuffer stagingBuffer;
+        VkDeviceMemory stagingBufferMemory;
+        VkFence fence; // To track completion
+    };
+    
     class NDIView : public Fl_Vk_Window
     {
         void vk_draw_begin() FL_OVERRIDE;
@@ -92,7 +98,12 @@ namespace mrv
         void destroy_textures();
 
         VkCommandBuffer beginSingleTimeCommands();
-        void endSingleTimeCommands(VkCommandBuffer commandBuffer);
+        void endSingleTimeCommands(VkCommandBuffer commandBuffer,
+                                   VkFence fence);
+
+
+        void cleanupCompletedTransitions();
+        void cleanupCompletedUploads();
         
         void transitionImageLayout(VkImage image,
                                    VkImageLayout oldLayout,
@@ -129,6 +140,7 @@ namespace mrv
         
         void addGPUTextures(const pl_shader_res*);
         
+    protected:
         TLRENDER_PRIVATE();
     };
 
