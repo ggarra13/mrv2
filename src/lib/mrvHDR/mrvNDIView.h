@@ -98,8 +98,7 @@ namespace mrv
         void destroy_textures();
 
         VkCommandBuffer beginSingleTimeCommands();
-        void endSingleTimeCommands(VkCommandBuffer commandBuffer,
-                                   VkFence fence);
+        void endSingleTimeCommands(VkCommandBuffer commandBuffer);
 
 
         void cleanupCompletedTransitions();

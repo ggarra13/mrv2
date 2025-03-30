@@ -9,7 +9,6 @@
 #include <mutex>
 #include <regex>
 #include <thread>
-#include <vector>
 
 #include "half.h"
 
@@ -86,98 +85,6 @@ namespace
 
 namespace mrv
 {
-    struct ImageTransitionResources {
-        VkFence fence; // To track completion (optional)
-    };
-    
-    struct LibPlaceboData
-    {
-        LibPlaceboData();
-        ~LibPlaceboData();
-
-        pl_log log;
-        pl_gpu gpu;
-    };
-    
-    struct NDIView::Private
-    {
-        NDIlib_find_instance_t NDI_find = nullptr;
-        NDIlib_recv_instance_t NDI_recv = nullptr;
-
-        std::vector<std::string> NDIsources;
-        std::string currentNDISource;
-
-        struct FindMutex
-        {
-            std::mutex mutex;
-        };
-        FindMutex findMutex;
-        struct FindThread
-        {
-            std::condition_variable cv;
-            std::thread thread;
-            std::atomic<bool> running;
-        };
-        FindThread findThread;
-
-        struct VideoMutex
-        {
-            std::mutex mutex;
-        };
-        VideoMutex videoMutex;
-        struct VideoThread
-        {
-            std::chrono::steady_clock::time_point logTimer;
-            std::condition_variable cv;
-            std::thread thread;
-            std::atomic<bool> running;
-        };
-        VideoThread videoThread;
-
-        struct AudioMutex
-        {
-            std::mutex mutex;
-        };
-        AudioMutex audioMutex;
-        struct AudioThread
-        {
-            std::chrono::steady_clock::time_point logTimer;
-            std::condition_variable cv;
-            std::thread thread;
-            std::atomic<bool> running;
-        };
-        AudioThread audioThread;
-
-        // Standard NDI attributes (we don't use this)
-        std::string    primariesName;
-        std::string    transferName;
-        std::string    matrixName;
-
-        // Full mrv2 image data (we try to use this)
-        bool hdrMonitorFound = false;
-        bool createHDRShader = false;
-        bool hasHDR = false;
-
-        image::HDRData hdrData;
-
-        std::mutex uploadCleanupMutex;
-        std::vector<TextureUploadResources> pendingUploads;
-
-        std::mutex transitionCleanupMutex;
-        std::vector<ImageTransitionResources> pendingTransitions;
-
-        NDIlib_FourCC_video_type_e fourCC =	NDIlib_FourCC_type_UYVY;
-
-        // tlRender variables
-        image::Info   info;
-        std::shared_ptr<image::Image> image;
-
-        // LibPlacebo variables
-        std::shared_ptr<LibPlaceboData> placeboData;
-        std::string hdrColors;
-        std::string hdrColorsDef;
-    };
-    
 #if defined(TLRENDER_LIBPLACEBO)
     VkImage NDIView::createImage(
         VkImageType imageType,
@@ -241,8 +148,7 @@ namespace mrv
         return imageMemory;
     }
     
-    VkCommandBuffer NDIView::beginSingleTimeCommands()
-    {
+    VkCommandBuffer NDIView::beginSingleTimeCommands() {
         VkCommandBufferAllocateInfo allocInfo = {};
         allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
         allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
@@ -260,9 +166,7 @@ namespace mrv
         return commandBuffer;
     }
 
-    void NDIView::endSingleTimeCommands(
-        VkCommandBuffer commandBuffer,
-        VkFence fence) {
+    void NDIView::endSingleTimeCommands(VkCommandBuffer commandBuffer) {
         vkEndCommandBuffer(commandBuffer);
 
         VkSubmitInfo submitInfo = {};
@@ -270,19 +174,20 @@ namespace mrv
         submitInfo.commandBufferCount = 1;
         submitInfo.pCommandBuffers = &commandBuffer;
 
-        std::lock_guard<std::mutex> lock(m_queueMutex); // Synchronize queue access
-        vkQueueSubmit(m_queue, 1, &submitInfo, fence);
-        // Note: We don’t wait here; the fence will signal completion later
+        vkQueueSubmit(m_queue, 1, &submitInfo, VK_NULL_HANDLE);
+        vkQueueWaitIdle(m_queue);
 
         vkFreeCommandBuffers(m_device, m_cmd_pool, 1, &commandBuffer);
     }
 
-    void NDIView::transitionImageLayout(VkImage image,
-                                        VkImageLayout oldLayout,
-                                        VkImageLayout newLayout)
+    //
+    // \@todo: change for set_image_layout
+    //
+    void NDIView::transitionImageLayout(
+        VkImage image,
+        VkImageLayout oldLayout,
+        VkImageLayout newLayout)
     {
-        TLRENDER_P();
-        
         VkCommandBuffer commandBuffer = beginSingleTimeCommands();
 
         VkImageMemoryBarrier barrier = {};
@@ -319,42 +224,9 @@ namespace mrv
             commandBuffer, sourceStage, destinationStage,
             0, 0, nullptr, 0, nullptr, 1, &barrier);
 
-    VkFence fence = VK_NULL_HANDLE;
-    VkFenceCreateInfo fenceInfo = {};
-    fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-    fenceInfo.flags = 0; // Create unsignaled
-    VkResult result = vkCreateFence(m_device, &fenceInfo, nullptr, &fence);
-    VK_CHECK_RESULT(result);
-
-    // Submit the command buffer with the fence
-    endSingleTimeCommands(commandBuffer, fence);
-
-    // Store the fence for later cleanup
-    {
-        std::lock_guard<std::mutex> lock(p.transitionCleanupMutex); // Protect shared cleanup list
-        p.pendingTransitions.push_back({fence}); // Add to a list of pending transitions
+        endSingleTimeCommands(commandBuffer);
     }
 
-    // Optionally, clean up completed transitions here (see below)
-    cleanupCompletedTransitions();
-    
-    }
-
-// Helper function to clean up completed transitions
-    void NDIView::cleanupCompletedTransitions() {
-        TLRENDER_P();
-        std::lock_guard<std::mutex> lock(p.transitionCleanupMutex);
-        for (auto it = p.pendingTransitions.begin();
-             it != p.pendingTransitions.end();) {
-            if (vkGetFenceStatus(m_device, it->fence) == VK_SUCCESS) {
-                vkDestroyFence(m_device, it->fence, nullptr);
-                it = p.pendingTransitions.erase(it);
-            } else {
-                ++it;
-            }
-        }
-    }
-    
     void NDIView::createBuffer(
         VkDeviceSize size,
         VkBufferUsageFlags usage,
@@ -404,35 +276,26 @@ namespace mrv
         uint32_t height,
         uint32_t depth,
         VkFormat format,
-        const void* data)
-    {
-        TLRENDER_P();
-        
+        const void* data) {
         VkResult result;
         VkDeviceSize imageSize = width * height * depth * 4 * sizeof(float); // Assuming RGBA float data
-        
-        // Create staging buffer and fence
-        TextureUploadResources resources = {};
+
+        // Create staging buffer
+        VkBuffer stagingBuffer;
+        VkDeviceMemory stagingBufferMemory;
+
         createBuffer(imageSize,
-                     VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
-                     VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                     VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-                     resources.stagingBuffer, resources.stagingBufferMemory);
-        
-        // Create a fence to track when the GPU is done with the upload
-        VkFenceCreateInfo fenceInfo = {};
-        fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-        fenceInfo.flags = 0; // Create unsignaled
-        result = vkCreateFence(m_device, &fenceInfo, nullptr, &resources.fence);
-        VK_CHECK_RESULT(result);
-        
+            VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+            stagingBuffer, stagingBufferMemory);
+
         // Copy data to staging buffer
         void* mappedData;
-        result = vkMapMemory(m_device, resources.stagingBufferMemory, 0, imageSize, 0, &mappedData);
+        result = vkMapMemory(m_device, stagingBufferMemory, 0, imageSize, 0, &mappedData);
         VK_CHECK_RESULT(result);
         
         std::memcpy(mappedData, data, static_cast<size_t>(imageSize));
-        vkUnmapMemory(m_device, resources.stagingBufferMemory);
+        vkUnmapMemory(m_device, stagingBufferMemory);
 
         // Copy staging buffer to image
         VkCommandBuffer commandBuffer = beginSingleTimeCommands();
@@ -449,36 +312,14 @@ namespace mrv
         region.imageExtent = {width, height, depth};
 
         vkCmdCopyBufferToImage(
-            commandBuffer, resources.stagingBuffer, image,
+            commandBuffer, stagingBuffer, image,
             VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
 
-        endSingleTimeCommands(commandBuffer, resources.fence);
+        endSingleTimeCommands(commandBuffer);
 
-        // Store the resources for later cleanup (e.g., in a list or queue)
-        {
-            std::lock_guard<std::mutex> lock(p.uploadCleanupMutex); // Protect shared cleanup list
-            p.pendingUploads.push_back(resources); // Add to a list of pending uploads
-        }
-    
-        // Optionally, clean up completed uploads here (see below)
-        cleanupCompletedUploads();
-    }
-    
-    // Helper function to clean up completed uploads
-    void NDIView::cleanupCompletedUploads() {
-        TLRENDER_P();
-        std::lock_guard<std::mutex> lock(p.uploadCleanupMutex);
-        for (auto it = p.pendingUploads.begin(); it != p.pendingUploads.end();)
-        {
-            if (vkGetFenceStatus(m_device, it->fence) == VK_SUCCESS) {
-                vkDestroyFence(m_device, it->fence, nullptr);
-                vkDestroyBuffer(m_device, it->stagingBuffer, nullptr);
-                vkFreeMemory(m_device, it->stagingBufferMemory, nullptr);
-                it = p.pendingUploads.erase(it);
-            } else {
-                ++it;
-            }
-        }
+        // Clean up staging buffer
+        vkDestroyBuffer(m_device, stagingBuffer, nullptr);
+        vkFreeMemory(m_device, stagingBufferMemory, nullptr);
     }
     
     VkImageView NDIView::createImageView(VkImage image,
@@ -644,6 +485,15 @@ namespace mrv
             }
         }
     }
+    
+    struct LibPlaceboData
+    {
+        LibPlaceboData();
+        ~LibPlaceboData();
+
+        pl_log log;
+        pl_gpu gpu;
+    };
 
     LibPlaceboData::LibPlaceboData()
     {
@@ -702,6 +552,78 @@ namespace mrv
     }
 #endif // TLRENDER_LIBPLACEBO
 
+    
+    struct NDIView::Private
+    {
+        NDIlib_find_instance_t NDI_find = nullptr;
+        NDIlib_recv_instance_t NDI_recv = nullptr;
+
+        std::vector<std::string> NDIsources;
+        std::string currentNDISource;
+
+        struct FindMutex
+        {
+            std::mutex mutex;
+        };
+        FindMutex findMutex;
+        struct FindThread
+        {
+            std::condition_variable cv;
+            std::thread thread;
+            std::atomic<bool> running;
+        };
+        FindThread findThread;
+
+        struct VideoMutex
+        {
+            std::mutex mutex;
+        };
+        VideoMutex videoMutex;
+        struct VideoThread
+        {
+            std::chrono::steady_clock::time_point logTimer;
+            std::condition_variable cv;
+            std::thread thread;
+            std::atomic<bool> running;
+        };
+        VideoThread videoThread;
+
+        struct AudioMutex
+        {
+            std::mutex mutex;
+        };
+        AudioMutex audioMutex;
+        struct AudioThread
+        {
+            std::chrono::steady_clock::time_point logTimer;
+            std::condition_variable cv;
+            std::thread thread;
+            std::atomic<bool> running;
+        };
+        AudioThread audioThread;
+
+        // Standard NDI attributes (we don't use this)
+        std::string    primariesName;
+        std::string    transferName;
+        std::string    matrixName;
+
+        // Full mrv2 image data (we try to use this)
+        bool hdrMonitorFound = false;
+        bool createHDRShader = false;
+        bool hasHDR = false;
+        image::HDRData hdrData;
+
+        NDIlib_FourCC_video_type_e fourCC =	NDIlib_FourCC_type_UYVY;
+
+        // tlRender variables
+        image::Info   info;
+        std::shared_ptr<image::Image> image;
+
+        // LibPlacebo variables
+        std::shared_ptr<LibPlaceboData> placeboData;
+        std::string hdrColors;
+        std::string hdrColorsDef;
+    };
 
     NDIView::~NDIView()
     {
