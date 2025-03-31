@@ -5,7 +5,7 @@ code_name {.cxx}
 decl {\#include "mrvHDR/mrvNDIView.h"} {public global
 }
 
-decl {\#include "FL/Fl_Sys_Menu_Bar.H"} {selected public global
+decl {\#include "FL/Fl_Sys_Menu_Bar.H"} {public global
 }
 
 class HDRUI {open
@@ -13,14 +13,13 @@ class HDRUI {open
   Function {make_window()} {open
   } {
     Fl_Window uiMain {open
-      xywh {1022 453 727 532} type Double resizable visible
+      xywh {617 244 727 532} type Double resizable visible
     } {
       Fl_Flex {} {open
-        xywh {0 0 727 532} fixed_size_tuples {1  0 24 }
+        xywh {0 0 727 532} resizable fixed_size_tuples {1  0 24 }
       } {
-        Fl_Menu_Bar uiMenuBar {open
+        Fl_Menu_Bar uiMenuBar {open selected
           xywh {0 0 727 24}
-          class Fl_Sys_Menu_Bar
         } {}
         Fl_Group uiView {open
           xywh {0 24 727 508} resizable

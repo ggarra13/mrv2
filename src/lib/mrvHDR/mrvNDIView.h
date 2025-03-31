@@ -30,19 +30,19 @@ namespace tl
     {
         class Image;
     }
-}
-
+} // namespace tl
 
 namespace mrv
 {
     using namespace tl;
 
-    struct TextureUploadResources {
+    struct TextureUploadResources
+    {
         VkBuffer stagingBuffer;
         VkDeviceMemory stagingBufferMemory;
         VkFence fence; // To track completion
     };
-    
+
     class NDIView : public Fl_Vk_Window
     {
         void vk_draw_begin() FL_OVERRIDE;
@@ -68,6 +68,7 @@ namespace mrv
         void init_vk_swapchain() FL_OVERRIDE;
 
         void prepare_main_texture();
+        void prepare_shader();
         void prepare_vertices();
         void prepare_descriptor_layout();
         void prepare_render_pass();
@@ -76,7 +77,7 @@ namespace mrv
         void prepare_descriptor_set();
 
         void update_texture();
-        
+
     private:
         void _init();
         void _copy(const uint8_t* video_frame);
@@ -89,51 +90,40 @@ namespace mrv
         VkShaderModule prepare_vs();
         VkShaderModule prepare_fs();
 
-        void create_HDR_shader();
         void destroy_textures();
 
         VkCommandBuffer beginSingleTimeCommands();
         void endSingleTimeCommands(VkCommandBuffer commandBuffer);
 
-
         void cleanupCompletedTransitions();
         void cleanupCompletedUploads();
-        
-        void transitionImageLayout(VkImage image,
-                                   VkImageLayout oldLayout,
-                                   VkImageLayout newLayout);
-        
+
+        void transitionImageLayout(
+            VkImage image, VkImageLayout oldLayout, VkImageLayout newLayout);
+
         VkImage createImage(
-            VkImageType imageType,
-            uint32_t width,
-            uint32_t height,
-            uint32_t depth,
-            VkFormat format,
+            VkImageType imageType, uint32_t width, uint32_t height,
+            uint32_t depth, VkFormat format,
             VkImageTiling tiling = VK_IMAGE_TILING_OPTIMAL,
             VkImageUsageFlags usage = VK_IMAGE_USAGE_SAMPLED_BIT |
-            VK_IMAGE_USAGE_TRANSFER_DST_BIT
-            );
-        
+                                      VK_IMAGE_USAGE_TRANSFER_DST_BIT);
+
         VkDeviceMemory allocateAndBindImageMemory(VkImage image);
         void createBuffer(
-             VkDeviceSize size,
-             VkBufferUsageFlags usage,
-             VkMemoryPropertyFlags properties,
-             VkBuffer& buffer,
-             VkDeviceMemory& bufferMemory);
-        
-        void uploadTextureData(VkImage image,
-                                uint32_t width,
-                                uint32_t height,
-                                uint32_t depth,
-                                VkFormat format,
-                                const void* data);
-        
-        VkImageView createImageView(VkImage image, VkFormat format, VkImageType imageType);
+            VkDeviceSize size, VkBufferUsageFlags usage,
+            VkMemoryPropertyFlags properties, VkBuffer& buffer,
+            VkDeviceMemory& bufferMemory);
+
+        void uploadTextureData(
+            VkImage image, uint32_t width, uint32_t height, uint32_t depth,
+            VkFormat format, const void* data);
+
+        VkImageView
+        createImageView(VkImage image, VkFormat format, VkImageType imageType);
         VkSampler createSampler();
-        
+
         void addGPUTextures(const pl_shader_res*);
-        
+
     protected:
         TLRENDER_PRIVATE();
     };

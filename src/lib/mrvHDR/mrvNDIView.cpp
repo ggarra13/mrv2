@@ -753,6 +753,7 @@ namespace mrv
         else
         {
             std::cerr << "HDR monitor found" << std::endl;
+            return;
         }
 
         // Handle undefined format case
@@ -1189,20 +1190,25 @@ namespace mrv
         // Example GLSL vertex shader
         std::string frag_shader_glsl = tl::string::Format(R"(
 #version 450
+#extension GL_KHR_shader_subgroup_basic : enable
+#extension GL_KHR_shader_subgroup_vote : enable
+#extension GL_KHR_shader_subgroup_arithmetic : enable
+#extension GL_KHR_shader_subgroup_ballot : enable
+#extension GL_KHR_shader_subgroup_shuffle : enable
+#extension GL_KHR_shader_subgroup_clustered : enable
+#extension GL_KHR_shader_subgroup_quad : enable
+#extension GL_ARB_texture_gather : enable
 
 // Input from vertex shader
 layout(location = 0) in vec2 inTexCoord;
-
-// Output color
 layout(location = 0) out vec4 outColor;
-
-// Main image to display
-layout(binding = 0) uniform sampler2D textureSampler;
-
 {0}
 
+// Main image to display
+layout(binding = 0) uniform sampler2D inTexture;
+
 void main() {
-     outColor = texture(textureSampler, inTexCoord);
+     vec4 tmp = texture(inTexture, inTexCoord);
      {1}
 }
 )")
@@ -1211,7 +1217,7 @@ void main() {
         // Compile to SPIR-V
         try
         {
-            // std::cerr << frag_shader_glsl << std::endl;
+            std::cerr << frag_shader_glsl << std::endl;
             std::vector<uint32_t> spirv = compile_glsl_to_spirv(
                 frag_shader_glsl,
                 shaderc_fragment_shader, // Shader type
@@ -1523,15 +1529,7 @@ void main() {
         {
             std::unique_lock<std::mutex> lock(p.videoMutex.mutex);
             prepare_main_texture();
-            if (p.hasHDR)
-            {
-                create_HDR_shader();
-            }
-            else
-            {
-                p.hdrColors.clear();
-                p.hdrColorsDef.clear();
-            }
+            prepare_shader();
         }
         prepare_vertices();
         prepare_descriptor_layout();
@@ -1935,7 +1933,7 @@ void main() {
         Fl_Vk_Window::destroy_resources();
     }
 
-    void NDIView::create_HDR_shader()
+    void NDIView::prepare_shader()
     {
         TLRENDER_P();
 
@@ -1956,7 +1954,7 @@ void main() {
         memset(&cmap, 0, sizeof(pl_color_map_params));
 
         // defaults, generates LUTs if state is set.
-        cmap.gamut_mapping = nullptr; // &pl_gamut_map_perceptual;
+        cmap.gamut_mapping = &pl_gamut_map_perceptual;
 
         // PL_GAMUT_MAP_CONSTANTS is defined in wrong order for C++
         cmap.gamut_constants = {0};
@@ -2058,6 +2056,28 @@ void main() {
                 // dst_colorspace.transfer = ???
                 dst_colorspace.transfer = PL_COLOR_TRC_PQ;
             }
+
+            if (p.hasHDR)
+                cmap.tone_mapping_function = nullptr;
+            else
+            {
+                // cmap.tone_mapping_function = &pl_tone_map_clip;  // works
+                cmap.tone_mapping_function = &pl_tone_map_hable;
+                // cmap.tone_mapping_function = &pl_tone_map_st2094_40;
+
+                // \@bug: MoltenVK compile error
+                // cmap.tone_mapping_function = &pl_tone_map_reinhard;
+
+                cmap.lut3d_size[0] = 16;
+                cmap.lut3d_size[1] = 16;
+                cmap.lut3d_size[2] = 16;
+                cmap.lut_size = 256;
+                cmap.visualize_rect.x0 = 0;
+                cmap.visualize_rect.y0 = 0;
+                cmap.visualize_rect.x1 = 1;
+                cmap.visualize_rect.y1 = 1;
+                cmap.contrast_smoothness = 3.5f;
+            }
         }
         else
         {
@@ -2087,8 +2107,8 @@ void main() {
 
         color_map_args.src = src_colorspace;
         color_map_args.dst = dst_colorspace;
-        color_map_args.prelinearized = false;
 
+        color_map_args.prelinearized = false;
         pl_shader_obj state = NULL;
         color_map_args.state = &state; // with NULL and tonemap_clip works
 
@@ -2103,8 +2123,8 @@ void main() {
 
         std::stringstream s;
 
-        s << "#define textureLod(t, p, b) texture(t, p)" << std::endl
-          << std::endl;
+        // s << "#define textureLod(t, p, b) texture(t, p)" << std::endl
+        //   << std::endl;
 
         // std::cerr << "num_vertex_attribs=" << res->num_vertex_attribs
         //           << std::endl
@@ -2169,7 +2189,8 @@ void main() {
         }
 
         s << "//" << std::endl
-          << "// Variables" << "//" << std::endl
+          << "// Variables" << std::endl
+          << "//" << std::endl
           << std::endl;
         // \@todo: add uniform bindings
         // s << "layout(binding = 2) uniform UBO {\n";
@@ -2259,6 +2280,7 @@ void main() {
           << std::endl;
         for (int i = 0; i < res->num_constants; ++i)
         {
+            s << "layout(constant_id=" << i << ") ";
             const struct pl_shader_const constant = res->constants[i];
             switch (constant.type)
             {
@@ -2295,7 +2317,7 @@ void main() {
         {
             p.hdrColors = "outColor = ";
             p.hdrColors += res->name;
-            p.hdrColors += "(outColor);\n";
+            p.hdrColors += "(tmp);\n";
         }
 
         pl_shader_free(&shader);
