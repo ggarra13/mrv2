@@ -1202,10 +1202,10 @@ namespace mrv
 // Input from vertex shader
 layout(location = 0) in vec2 inTexCoord;
 layout(location = 0) out vec4 outColor;
-{0}
 
 // Main image to display
 layout(binding = 0) uniform sampler2D inTexture;
+{0}
 
 void main() {
      vec4 tmp = texture(inTexture, inTexCoord);
@@ -2123,8 +2123,8 @@ void main() {
 
         std::stringstream s;
 
-        // s << "#define textureLod(t, p, b) texture(t, p)" << std::endl
-        //   << std::endl;
+        s << "#define textureLod(t, p, b) texture(t, p)" << std::endl
+          << std::endl;
 
         // std::cerr << "num_vertex_attribs=" << res->num_vertex_attribs
         //           << std::endl
@@ -2168,7 +2168,7 @@ void main() {
                     break;
                 }
 
-                s << "layout(binding=" << (i + 1) << ") uniform " << prefix
+                s << "layout(binding = " << (i + 1) << ") uniform " << prefix
                   << type << " " << desc->name << ";" << std::endl;
                 break;
             }
