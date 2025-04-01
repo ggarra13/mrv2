@@ -56,6 +56,7 @@ namespace mrv
         void prepare() FL_OVERRIDE;
         void destroy_resources() FL_OVERRIDE;
         std::vector<const char*> get_required_extensions() FL_OVERRIDE;
+        std::vector<const char*> get_optional_extensions() FL_OVERRIDE;
         std::vector<const char*> get_device_extensions() FL_OVERRIDE;
 
     protected:

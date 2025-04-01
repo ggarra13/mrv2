@@ -656,128 +656,18 @@ namespace mrv
 
         Fl_Vk_Window::init_vk_swapchain();
 
-        VkResult result;
-        uint32_t formatCount;
-        result = vkGetPhysicalDeviceSurfaceFormatsKHR(
-            m_gpu, m_surface, &formatCount, NULL);
-        VK_CHECK_RESULT(result);
-
-        std::vector<VkSurfaceFormatKHR> formats(formatCount);
-        result = vkGetPhysicalDeviceSurfaceFormatsKHR(
-            m_gpu, m_surface, &formatCount, formats.data());
-        VK_CHECK_RESULT(result);
-
         // Look for HDR10 or HLG if present
-        unsigned i = 0;
-        std::vector<int> scores(formats.size());
-        for (const auto& format : formats)
+        p.hdrMonitorFound = false;
+        switch (m_color_space)
         {
-            scores[i] = 0;
-            if (m_validate)
-            {
-                // std::cerr << "[" << i << "] format ="
-                //           << string_VkFormat(format.format) << std::endl
-                //           << "color space = "
-                //           << string_VkColorSpaceKHR(format.colorSpace)
-                //           << std::endl;
-            }
-            switch (format.colorSpace)
-            {
-            case VK_COLOR_SPACE_HDR10_ST2084_EXT:
-                scores[i] += 5000;
-                p.hdrMonitorFound = true;
-                break;
-            case VK_COLOR_SPACE_HDR10_HLG_EXT:
-                scores[i] += 1000;
-                p.hdrMonitorFound = true;
-                break;
-            case VK_COLOR_SPACE_DOLBYVISION_EXT:
-                scores[i] += 10000;
-                p.hdrMonitorFound = true;
-                break;
-            default:
-                break;
-            }
-
-            switch (format.format)
-            {
-            case VK_FORMAT_UNDEFINED:
-            case VK_FORMAT_R8G8B8_UNORM:
-            case VK_FORMAT_B8G8R8_UNORM:
-            case VK_FORMAT_R8G8B8A8_UNORM:
-            case VK_FORMAT_B8G8R8A8_UNORM:
-            case VK_FORMAT_A8B8G8R8_UNORM_PACK32:
-                break;
-
-            case VK_FORMAT_A2R10G10B10_UNORM_PACK32:
-            case VK_FORMAT_A2B10G10R10_UNORM_PACK32:
-                scores[i] += 100;
-                break;
-                // Accept 16-bit formats for everything
-            case VK_FORMAT_R16G16B16_UNORM:
-            case VK_FORMAT_R16G16B16A16_UNORM:
-                scores[i] += 200;
-                break;
-            default:
-                break;
-            }
-
-            ++i;
+        case VK_COLOR_SPACE_HDR10_ST2084_EXT:
+        case VK_COLOR_SPACE_HDR10_HLG_EXT:
+        case VK_COLOR_SPACE_DOLBYVISION_EXT:
+            p.hdrMonitorFound = true;
+            break;
+        default:
+            break;
         }
-
-        if (!p.hdrMonitorFound)
-        {
-            std::cerr << "No HDR monitor found or configured for SDR!"
-                      << std::endl;
-            bool foundLinear = false;
-            for (const auto& format : formats)
-            {
-                // Prefer UNORM with SRGB_NONLINEAR (linear output intent)
-                if (format.format == VK_FORMAT_B8G8R8A8_UNORM &&
-                    format.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
-                {
-                    m_format = VK_FORMAT_B8G8R8A8_UNORM;
-                    m_color_space = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
-                    foundLinear = true;
-                    break;
-                }
-            }
-            if (!foundLinear)
-            {
-                // Fallback to first supported format (usually works)
-                m_format = formats[0].format;
-                m_color_space = formats[0].colorSpace;
-                std::cerr << "No ideal linear format found, using fallback"
-                          << std::endl;
-            }
-        }
-        else
-        {
-            std::cout << "HDR monitor found" << std::endl;
-            // Default clips and washed out colors
-            int best_score = 0;
-            for (unsigned i = 0; i < formats.size(); ++i)
-            {
-                if (scores[i] > best_score)
-                {
-                    best_score = scores[i];
-                    m_format = formats[i].format;
-                    m_color_space = formats[i].colorSpace;
-                }
-            }
-        }
-
-        // Handle undefined format case
-        if (formatCount == 1 && formats[0].format == VK_FORMAT_UNDEFINED)
-        {
-            m_format = VK_FORMAT_B8G8R8A8_UNORM;
-            m_color_space = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
-        }
-
-        std::cout << "\tSelected format = " << string_VkFormat(m_format)
-                  << std::endl
-                  << "\tSelected color space = "
-                  << string_VkColorSpaceKHR(m_color_space) << std::endl;
     }
 
     void NDIView::_copy(const uint8_t* video_frame)
@@ -1003,12 +893,17 @@ namespace mrv
         {
             // Image is too tall, shrink Y
             scaleY = aspectViewport / aspectRender;
+            
         }
-        
-        vertices.push_back({-scaleX, -scaleY, 0.F, 0.F});
-        vertices.push_back({ scaleX, -scaleY, 1.F, 0.F});
-        vertices.push_back({ scaleX,  scaleY, 1.F, 1.F});
-        vertices.push_back({-scaleX,  scaleY, 0.F, 1.F});
+
+        vertices.push_back({-scaleX, -scaleY, 0.F, 0.F}); // v0
+        vertices.push_back({ scaleX, -scaleY, 1.F, 0.F}); // v1
+        vertices.push_back({ scaleX,  scaleY, 1.F, 1.F}); // v2
+
+        vertices.push_back({-scaleX, -scaleY, 0.F, 0.F}); // v0
+        vertices.push_back({-scaleX,  scaleY, 0.F, 1.F}); // v3
+        vertices.push_back({ scaleX,  scaleY, 1.F, 1.F}); // v2
+
             
         VkDeviceSize buffer_size = sizeof(vertices[0]) * vertices.size();
 
@@ -1281,7 +1176,8 @@ void main() {
 
         memset(&ia, 0, sizeof(ia));
         ia.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-        ia.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN;
+        ia.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+        ia.primitiveRestartEnable = VK_FALSE;
 
         memset(&rs, 0, sizeof(rs));
         rs.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
@@ -1501,6 +1397,7 @@ void main() {
 #endif
         m_use_staging_buffer = false;
         m_clearColor = {0.F, 0.F, 0.F, 0.F};
+        m_depthStencil = 1.F;
 
         mode(FL_RGB | FL_DOUBLE | FL_ALPHA);
         m_vert_shader_module = VK_NULL_HANDLE;
@@ -1677,10 +1574,10 @@ void main() {
         update_texture();
 
         // Draw the triangle
-        VkDeviceSize offsets[1] = {0};
-        vkCmdBindVertexBuffers(m_draw_cmd, 0, 1, &m_vertices.buf, offsets);
+        VkDeviceSize offset = 0;
+        vkCmdBindVertexBuffers(m_draw_cmd, 0, 1, &m_vertices.buf, &offset);
 
-        vkCmdDraw(m_draw_cmd, 4, 1, 0, 0);
+        vkCmdDraw(m_draw_cmd, 6, 1, 0, 0);
 
         Fl_Window::draw();
     }
@@ -1690,6 +1587,13 @@ void main() {
         std::vector<const char*> out;
         out = Fl_Vk_Window::get_required_extensions();
         out.push_back("VK_EXT_swapchain_colorspace");
+        return out;
+    }
+
+    std::vector<const char*> NDIView::get_optional_extensions()
+    {
+        std::vector<const char*> out;
+        out = Fl_Vk_Window::get_optional_extensions();
         return out;
     }
 
