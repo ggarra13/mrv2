@@ -5,6 +5,7 @@
 #include <atomic>
 #include <chrono>
 #include <condition_variable>
+#include <fstream>
 #include <limits>
 #include <mutex>
 #include <regex>
@@ -27,6 +28,7 @@
 
 // Must come last due to X11 macros
 #include <FL/platform.H>
+#include <FL/vk.H>
 #include <FL/Fl.H>
 
 extern "C"
@@ -393,45 +395,6 @@ namespace mrv
 
     void NDIView::addGPUTextures(const pl_shader_res* res)
     {
-        // vkDeviceWaitIdle(m_device);  // waits for all queue on the device
-
-        // // Clean up existing resources
-        // if (m_desc_layout != VK_NULL_HANDLE) {
-        //     vkDestroyDescriptorSetLayout(m_device, m_desc_layout, nullptr);
-        //     m_desc_layout = VK_NULL_HANDLE;
-        // }
-        // if (m_pipeline_layout != VK_NULL_HANDLE) {
-        //     vkDestroyPipelineLayout(m_device, m_pipeline_layout, nullptr);
-        //     m_pipeline_layout = VK_NULL_HANDLE;
-        // }
-        // if (m_pipeline != VK_NULL_HANDLE) {
-        //     vkDestroyPipeline(m_device, m_pipeline, nullptr);
-        //     m_pipeline = VK_NULL_HANDLE;
-        // }
-        // if (m_desc_pool != VK_NULL_HANDLE) {
-        //     vkDestroyDescriptorPool(m_device, m_desc_pool, nullptr);
-        //     m_desc_pool = VK_NULL_HANDLE;
-        // }
-        // if (m_desc_set != VK_NULL_HANDLE) {
-        //     // Descriptor sets are freed with the pool, no need to
-        //     // destroy individually
-        //     m_desc_set = VK_NULL_HANDLE;
-        // }
-        // if (m_frag_shader_module != VK_NULL_HANDLE) {
-        //     vkDestroyShaderModule(m_device, m_frag_shader_module, nullptr);
-        //     m_frag_shader_module = VK_NULL_HANDLE;
-        // }
-
-        // // Remove any existing libplacebo textures, keep m_textures[0]
-        // if (m_textures.size() > 1) {
-        //     // vkQueueWaitIdle(m_queue); // Wait for completion
-
-        //     for (size_t i = 1; i < m_textures.size(); ++i) {
-        //         destroy_texture_image(m_textures[i]);
-        //     }
-        //     m_textures.resize(1); // Keep only main texture
-        // }
-
         for (unsigned i = 0; i < res->num_descriptors; ++i)
         {
             const pl_shader_desc* sd = &res->descriptors[i];
@@ -705,23 +668,61 @@ namespace mrv
         VK_CHECK_RESULT(result);
 
         // Look for HDR10 or HLG if present
+        unsigned i = 0;
+        std::vector<int> scores(formats.size());
         for (const auto& format : formats)
         {
+            scores[i] = 0;
+            if (m_validate)
+            {
+                // std::cerr << "[" << i << "] format ="
+                //           << string_VkFormat(format.format) << std::endl
+                //           << "color space = "
+                //           << string_VkColorSpaceKHR(format.colorSpace)
+                //           << std::endl;
+            }
             switch (format.colorSpace)
             {
             case VK_COLOR_SPACE_HDR10_ST2084_EXT:
+                scores[i] += 5000;
+                p.hdrMonitorFound = true;
+                break;
             case VK_COLOR_SPACE_HDR10_HLG_EXT:
+                scores[i] += 1000;
+                p.hdrMonitorFound = true;
+                break;
             case VK_COLOR_SPACE_DOLBYVISION_EXT:
-                m_format = format.format;
-                m_color_space = format.colorSpace;
+                scores[i] += 10000;
                 p.hdrMonitorFound = true;
                 break;
             default:
                 break;
             }
 
-            if (p.hdrMonitorFound)
+            switch (format.format)
+            {
+            case VK_FORMAT_UNDEFINED:
+            case VK_FORMAT_R8G8B8_UNORM:
+            case VK_FORMAT_B8G8R8_UNORM:
+            case VK_FORMAT_R8G8B8A8_UNORM:
+            case VK_FORMAT_B8G8R8A8_UNORM:
+            case VK_FORMAT_A8B8G8R8_UNORM_PACK32:
                 break;
+
+            case VK_FORMAT_A2R10G10B10_UNORM_PACK32:
+            case VK_FORMAT_A2B10G10R10_UNORM_PACK32:
+                scores[i] += 100;
+                break;
+                // Accept 16-bit formats for everything
+            case VK_FORMAT_R16G16B16_UNORM:
+            case VK_FORMAT_R16G16B16A16_UNORM:
+                scores[i] += 200;
+                break;
+            default:
+                break;
+            }
+
+            ++i;
         }
 
         if (!p.hdrMonitorFound)
@@ -746,14 +747,24 @@ namespace mrv
                 // Fallback to first supported format (usually works)
                 m_format = formats[0].format;
                 m_color_space = formats[0].colorSpace;
-                std::cerr << "No ideal linear format found, using fallback: "
-                          << m_format << ", " << m_color_space << std::endl;
+                std::cerr << "No ideal linear format found, using fallback"
+                          << std::endl;
             }
         }
         else
         {
-            std::cerr << "HDR monitor found" << std::endl;
-            return;
+            std::cout << "HDR monitor found" << std::endl;
+            // Default clips and washed out colors
+            int best_score = 0;
+            for (unsigned i = 0; i < formats.size(); ++i)
+            {
+                if (scores[i] > best_score)
+                {
+                    best_score = scores[i];
+                    m_format = formats[i].format;
+                    m_color_space = formats[i].colorSpace;
+                }
+            }
         }
 
         // Handle undefined format case
@@ -762,6 +773,11 @@ namespace mrv
             m_format = VK_FORMAT_B8G8R8A8_UNORM;
             m_color_space = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
         }
+
+        std::cout << "\tSelected format = " << string_VkFormat(m_format)
+                  << std::endl
+                  << "\tSelected color space = "
+                  << string_VkColorSpaceKHR(m_color_space) << std::endl;
     }
 
     void NDIView::_copy(const uint8_t* video_frame)
@@ -1208,7 +1224,7 @@ layout(binding = 0) uniform sampler2D inTexture;
 {0}
 
 void main() {
-     vec4 tmp = texture(inTexture, inTexCoord);
+     vec4 tmp = texture(inTexture, inTexCoord, 0.0);
      {1}
 }
 )")
@@ -1217,7 +1233,6 @@ void main() {
         // Compile to SPIR-V
         try
         {
-            std::cerr << frag_shader_glsl << std::endl;
             std::vector<uint32_t> spirv = compile_glsl_to_spirv(
                 frag_shader_glsl,
                 shaderc_fragment_shader, // Shader type
@@ -1479,9 +1494,8 @@ void main() {
     {
         TLRENDER_P();
 
-        // Some Vulkan settings
 #ifdef NDEBUG
-        m_validate = false;
+        m_validate = true;
 #else
         m_validate = true;
 #endif
@@ -1549,9 +1563,9 @@ void main() {
 
         if (p.hdrMonitorFound && p.hasHDR)
         {
+            m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
             // This will make the FLTK swapchain call vk->SetHDRMetadataEXT();
             const image::HDRData& data = p.hdrData;
-            m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
             m_hdr_metadata.displayPrimaryRed = {
                 data.primaries[image::HDRPrimaries::Red][0],
                 data.primaries[image::HDRPrimaries::Red][1],
@@ -1671,6 +1685,22 @@ void main() {
         Fl_Window::draw();
     }
 
+    std::vector<const char*> NDIView::get_required_extensions()
+    {
+        std::vector<const char*> out;
+        out = Fl_Vk_Window::get_required_extensions();
+        out.push_back("VK_EXT_swapchain_colorspace");
+        return out;
+    }
+
+    std::vector<const char*> NDIView::get_device_extensions()
+    {
+        std::vector<const char*> out;
+        out = Fl_Vk_Window::get_device_extensions();
+        out.push_back(VK_EXT_HDR_METADATA_EXTENSION_NAME);
+        return out;
+    }
+
     void NDIView::_videoThread()
     {
         TLRENDER_P();
@@ -1724,76 +1754,67 @@ void main() {
                     if (video_frame.p_metadata)
                     {
                         // Parsing XML metadata
-                        rapidxml::xml_document<> doc;
-                        doc.parse<0>((char*)video_frame.p_metadata);
-
-                        // Get root node
-                        rapidxml::xml_node<>* root =
-                            doc.first_node("ndi_color_info");
-
-                        // Get attributes
-                        if (root)
+                        try
                         {
-                            rapidxml::xml_attribute<>* attr_transfer =
-                                root->first_attribute("transfer");
-                            rapidxml::xml_attribute<>* attr_matrix =
-                                root->first_attribute("matrix");
-                            rapidxml::xml_attribute<>* attr_primaries =
-                                root->first_attribute("primaries");
-                            rapidxml::xml_attribute<>* attr_mrv2 =
-                                root->first_attribute("mrv2");
+                            rapidxml::xml_document<> doc;
+                            doc.parse<0>((char*)video_frame.p_metadata);
 
-                            if (attr_transfer)
-                                p.transferName = attr_transfer->value();
-                            if (attr_matrix)
-                                p.matrixName = attr_matrix->value();
-                            if (attr_primaries)
-                                p.primariesName = attr_primaries->value();
+                            // Get root node
+                            rapidxml::xml_node<>* root =
+                                doc.first_node("ndi_color_info");
 
-                            if (!p.hasHDR)
-                                init = true;
-                            p.hasHDR = true;
-
-                            if (attr_mrv2)
+                            // Get attributes
+                            if (root)
                             {
-                                const std::string& jsonString =
-                                    unescape_quotes_from_xml(
-                                        attr_mrv2->value());
+                                rapidxml::xml_attribute<>* attr_transfer =
+                                    root->first_attribute("transfer");
+                                rapidxml::xml_attribute<>* attr_matrix =
+                                    root->first_attribute("matrix");
+                                rapidxml::xml_attribute<>* attr_primaries =
+                                    root->first_attribute("primaries");
+                                rapidxml::xml_attribute<>* attr_mrv2 =
+                                    root->first_attribute("mrv2");
 
-                                const nlohmann::json& j =
-                                    nlohmann::json::parse(jsonString);
+                                if (attr_transfer)
+                                    p.transferName = attr_transfer->value();
+                                if (attr_matrix)
+                                    p.matrixName = attr_matrix->value();
+                                if (attr_primaries)
+                                    p.primariesName = attr_primaries->value();
 
-                                const image::HDRData& hdrData =
-                                    j.get<image::HDRData>();
-                                if (p.hdrData != hdrData)
-                                {
-                                    // \@ todo:
-                                    p.hdrData = hdrData;
+                                if (!p.hasHDR)
                                     init = true;
+                                p.hasHDR = true;
+
+                                if (attr_mrv2)
+                                {
+                                    const std::string& jsonString =
+                                        unescape_quotes_from_xml(
+                                            attr_mrv2->value());
+
+                                    const nlohmann::json& j =
+                                        nlohmann::json::parse(jsonString);
+
+                                    const image::HDRData& hdrData =
+                                        j.get<image::HDRData>();
+                                    if (p.hdrData != hdrData)
+                                    {
+                                        // \@ todo:
+                                        p.hdrData = hdrData;
+                                        init = true;
+                                    }
                                 }
                             }
+                            else
+                            {
+                                if (p.hasHDR)
+                                    init = true;
+                                p.hasHDR = false;
+                            }
                         }
-                        else
+                        catch (const std::exception& e)
                         {
-                            if (p.hasHDR)
-                                init = true;
-                            p.hasHDR = false;
                         }
-
-                        // Display color information
-                        // fprintf(
-                        //     stderr,
-                        //     "Video metadata color info (transfer: %s, matrix:
-                        //     "
-                        //     "%s, primaries: %s)\n",
-                        //     attr_transfer->value(), attr_matrix->value(),
-                        //     attr_primaries->value());
-
-                        // std::cerr << "primaries--------" << std::endl;
-                        // std::cerr << hdrData.primaries[0] << " "
-                        //           << hdrData.primaries[1] << " "
-                        //           << hdrData.primaries[2] << " "
-                        //           << hdrData.primaries[3] << std::endl;
                     }
                     else
                     {
@@ -1954,7 +1975,7 @@ void main() {
         memset(&cmap, 0, sizeof(pl_color_map_params));
 
         // defaults, generates LUTs if state is set.
-        cmap.gamut_mapping = &pl_gamut_map_perceptual;
+        cmap.gamut_mapping = nullptr; // &pl_gamut_map_perceptual;
 
         // PL_GAMUT_MAP_CONSTANTS is defined in wrong order for C++
         cmap.gamut_constants = {0};
@@ -2034,15 +2055,6 @@ void main() {
 
         if (p.hdrMonitorFound)
         {
-            cmap.lut3d_size[0] = 0;
-            cmap.lut3d_size[1] = 0;
-            cmap.lut3d_size[2] = 0;
-            cmap.lut_size = 0;
-            cmap.visualize_rect.x0 = 0;
-            cmap.visualize_rect.y0 = 0;
-            cmap.visualize_rect.x1 = 1;
-            cmap.visualize_rect.y1 = 1;
-
             dst_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
             dst_colorspace.transfer = PL_COLOR_TRC_PQ;
             if (m_color_space == VK_COLOR_SPACE_HDR10_HLG_EXT)
@@ -2056,28 +2068,7 @@ void main() {
                 // dst_colorspace.transfer = ???
                 dst_colorspace.transfer = PL_COLOR_TRC_PQ;
             }
-
-            if (p.hasHDR)
-                cmap.tone_mapping_function = nullptr;
-            else
-            {
-                // cmap.tone_mapping_function = &pl_tone_map_clip;  // works
-                cmap.tone_mapping_function = &pl_tone_map_hable;
-                // cmap.tone_mapping_function = &pl_tone_map_st2094_40;
-
-                // \@bug: MoltenVK compile error
-                // cmap.tone_mapping_function = &pl_tone_map_reinhard;
-
-                cmap.lut3d_size[0] = 16;
-                cmap.lut3d_size[1] = 16;
-                cmap.lut3d_size[2] = 16;
-                cmap.lut_size = 256;
-                cmap.visualize_rect.x0 = 0;
-                cmap.visualize_rect.y0 = 0;
-                cmap.visualize_rect.x1 = 1;
-                cmap.visualize_rect.y1 = 1;
-                cmap.contrast_smoothness = 3.5f;
-            }
+            cmap.tone_mapping_function = nullptr;
         }
         else
         {
@@ -2123,8 +2114,8 @@ void main() {
 
         std::stringstream s;
 
-        s << "#define textureLod(t, p, b) texture(t, p)" << std::endl
-          << std::endl;
+        // s << "#define textureLod(t, p, b) texture(t, p)" << std::endl
+        //   << std::endl;
 
         // std::cerr << "num_vertex_attribs=" << res->num_vertex_attribs
         //           << std::endl
@@ -2311,7 +2302,9 @@ void main() {
         }
         catch (const std::exception& e)
         {
-            throw e;
+            std::cerr << e.what() << std::endl;
+            pl_shader_free(&shader);
+            return;
         }
 
         {

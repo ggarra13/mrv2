@@ -12,10 +12,16 @@
 #
 
 
-
 . $PWD/etc/build_dir.sh
 
 rm -rf $BUILD_DIR/install/include/FL
+
+dir=$BUILD_DIR/deps/FLTK/src/FLTK/
+cd $dir
+
+git pull
+
+cd -
 
 dir=$BUILD_DIR/deps/FLTK/src/FLTK-build/
 if [[ ! -d $dir ]]; then
@@ -26,11 +32,13 @@ if [[ ! -d $dir ]]; then
     exit 1
 fi
 
+
 cd $dir
 
 #
-#  Rebuild FLTK
+#  Rebuild latest FLTK
 #
+
 cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
 
 cd -

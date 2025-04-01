@@ -29,6 +29,18 @@ fi
 
 source "$dir/environment.sh"
 
+
+KERNEL=`uname`
+
+if [[ $KERNEL == *Darwin* ]]; then
+    if [ -z $VK_LAYER_PATH ]; then
+	export VK_LAYER_PATH=/usr/local/opt/vulkan-profiles/share/vulkan/explicit_layer.d:/usr/local/opt/vulkan-validationlayers/share/vulkan/explicit_layer.d
+    fi
+    if [ -z $VK_ICD_FILENAMES ]; then
+	export VK_ICD_FILENAMES=/usr/local/etc/vulkan/icd.d/MoltenVK_icd.json
+    fi
+fi
+
 #
 # Start up mrv2
 #

@@ -187,6 +187,8 @@ if [ -z "$TLRENDER_VK" ]; then
 	    if [ -d "$VULKAN_ROOT" ]; then
 		SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sort -r | grep -o "$VULKAN_ROOT/[0-9]*\..*"| sed -e "s#$VULKAN_ROOT/##" | head -1)
 		export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/macOS
+	    else
+		export VULKAN_SDK=/usr/local
 	    fi
 	fi
     fi

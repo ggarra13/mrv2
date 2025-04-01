@@ -107,13 +107,13 @@ namespace mrv
         MRV2_GL();
 
 #ifdef __APPLE__
-        // On Apple, there's no OpenGL BACK buffer. 
+        // On Apple, there's no OpenGL BACK buffer.
 #    undef GL_BACK_LEFT
 #    undef GL_BACK_RIGHT
 #    define GL_BACK_LEFT GL_FRONT_LEFT
 #    define GL_BACK_RIGHT GL_FRONT_RIGHT
 #endif
-               
+
         if (auto context = gl.context.lock())
         {
 
@@ -187,6 +187,15 @@ namespace mrv
     {
         TLRENDER_P();
         MRV2_GL();
+
+#ifdef __APPLE__
+        // My poor macOS Intel from 2022 cannot stream and do tonemapping.
+        auto outputDevice = App::app->outputDevice();
+        if (outputDevice && p.hdrOptions.tonemap)
+        {
+            return;
+        }
+#endif
 
         make_current(); // needed to work with GLFW
 
