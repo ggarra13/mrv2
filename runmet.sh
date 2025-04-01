@@ -16,13 +16,6 @@
 
 rm -rf $BUILD_DIR/install/include/FL
 
-dir=$BUILD_DIR/deps/FLTK/src/FLTK/
-cd $dir
-
-git pull
-
-cd -
-
 dir=$BUILD_DIR/deps/FLTK/src/FLTK-build/
 if [[ ! -d $dir ]]; then
     echo "FLTK directory"
