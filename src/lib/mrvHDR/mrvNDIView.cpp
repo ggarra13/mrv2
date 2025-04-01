@@ -1,6 +1,3 @@
-//
-//
-//
 
 #include <atomic>
 #include <chrono>
@@ -1128,6 +1125,7 @@ void main() {
         // Compile to SPIR-V
         try
         {
+            std::cerr << frag_shader_glsl << std::endl;
             std::vector<uint32_t> spirv = compile_glsl_to_spirv(
                 frag_shader_glsl,
                 shaderc_fragment_shader, // Shader type
@@ -1284,20 +1282,15 @@ void main() {
         bindings.push_back(mainBinding);
 
         // Additional libplacebo textures starting at binding 1
-        if (p.hasHDR)
+        for (uint32_t i = 1; i < m_textures.size(); ++i)
         {
-            for (uint32_t i = 1; i < m_textures.size(); ++i)
-            {
-                VkDescriptorSetLayoutBinding binding = {};
-                binding.binding =
-                    i; // Matches libplacebo’s binding = i + 1 in GLSL
-                binding.descriptorType =
-                    VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-                binding.descriptorCount = 1;
-                binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-                binding.pImmutableSamplers = nullptr;
-                bindings.push_back(binding);
-            }
+            VkDescriptorSetLayoutBinding binding = {};
+            binding.binding = i; // Matches libplacebo’s binding = i + 1 in GLSL
+            binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+            binding.descriptorCount = 1;
+            binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+            binding.pImmutableSamplers = nullptr;
+            bindings.push_back(binding);
         }
 
         VkDescriptorSetLayoutCreateInfo layoutInfo = {};
@@ -1461,6 +1454,7 @@ void main() {
         if (p.hdrMonitorFound && p.hasHDR)
         {
             m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
+
             // This will make the FLTK swapchain call vk->SetHDRMetadataEXT();
             const image::HDRData& data = p.hdrData;
             m_hdr_metadata.displayPrimaryRed = {
@@ -1912,6 +1906,15 @@ void main() {
 
         cmap.contrast_smoothness = 3.5f;
 
+        cmap.lut3d_size[0] = 48;
+        cmap.lut3d_size[1] = 32;
+        cmap.lut3d_size[2] = 256;
+        cmap.lut_size = 256;
+        cmap.visualize_rect.x0 = 0;
+        cmap.visualize_rect.y0 = 0;
+        cmap.visualize_rect.x1 = 1;
+        cmap.visualize_rect.y1 = 1;
+
         const image::HDRData& data = p.hdrData;
 
         pl_color_space src_colorspace;
@@ -1949,7 +1952,12 @@ void main() {
         else
         {
             src_colorspace.primaries = PL_COLOR_PRIM_BT_709;
-            src_colorspace.transfer = PL_COLOR_TRC_SRGB;
+            src_colorspace.transfer =
+                PL_COLOR_TRC_SRGB; // SDR uses sRGB-like gamma
+
+            // Optional: Explicitly set SDR luminance range
+            src_colorspace.hdr.max_luma = 100.0f; // Typical SDR max (~100 nits)
+            src_colorspace.hdr.min_luma = 0.01f;  // Typical SDR black level
         }
 
         pl_color_space_infer(&src_colorspace);
@@ -1972,19 +1980,24 @@ void main() {
                 // dst_colorspace.transfer = ???
                 dst_colorspace.transfer = PL_COLOR_TRC_PQ;
             }
-            cmap.tone_mapping_function = nullptr;
+
+            // For SDR content on HDR monitor, enable tone mapping to fit SDR
+            // into HDR
+            if (!p.hasHDR)
+            {
+                cmap.tone_mapping_function =
+                    &pl_tone_map_reinhard; // Simple SDR-to-HDR mapping
+                cmap.metadata = PL_HDR_METADATA_NONE; // Simplify
+            }
+            else
+            {
+                // cmap.tone_mapping_function = &pl_tone_map_habble;  // crashes
+                // shader
+                cmap.tone_mapping_function = &pl_tone_map_st2094_40;
+            }
         }
         else
         {
-            cmap.lut3d_size[0] = 48;
-            cmap.lut3d_size[1] = 32;
-            cmap.lut3d_size[2] = 256;
-            cmap.lut_size = 256;
-            cmap.visualize_rect.x0 = 0;
-            cmap.visualize_rect.y0 = 0;
-            cmap.visualize_rect.x1 = 1;
-            cmap.visualize_rect.y1 = 1;
-            cmap.contrast_smoothness = 3.5f;
 
             dst_colorspace.primaries = PL_COLOR_PRIM_BT_709;
             dst_colorspace.transfer = PL_COLOR_TRC_SRGB;
