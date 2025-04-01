@@ -804,11 +804,11 @@ namespace mrv
                 m_device, m_textures[0].image, m_textures[0].mem, 0);
             VK_CHECK_RESULT(result);
 
-            VkCommandBuffer cmd = beginSingleTimeCommands();
+            VkCommandBuffer commandBuffer = beginSingleTimeCommands();
 
             // Initial transition to shader-readable layout
             set_image_layout(
-                cmd, m_textures[0].image, VK_IMAGE_ASPECT_COLOR_BIT,
+                commandBuffer, m_textures[0].image, VK_IMAGE_ASPECT_COLOR_BIT,
                 VK_IMAGE_LAYOUT_UNDEFINED, // Initial layout
                 VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
                 0,                          // No previous access
@@ -816,7 +816,7 @@ namespace mrv
                 VK_ACCESS_SHADER_READ_BIT,  // Shader read
                 VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
 
-            endSingleTimeCommands(cmd);
+            endSingleTimeCommands(commandBuffer);
         }
         else if (
             props.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT)
@@ -1098,14 +1098,6 @@ namespace mrv
         // Example GLSL vertex shader
         std::string frag_shader_glsl = tl::string::Format(R"(
 #version 450
-#extension GL_KHR_shader_subgroup_basic : enable
-#extension GL_KHR_shader_subgroup_vote : enable
-#extension GL_KHR_shader_subgroup_arithmetic : enable
-#extension GL_KHR_shader_subgroup_ballot : enable
-#extension GL_KHR_shader_subgroup_shuffle : enable
-#extension GL_KHR_shader_subgroup_clustered : enable
-#extension GL_KHR_shader_subgroup_quad : enable
-#extension GL_ARB_texture_gather : enable
 
 // Input from vertex shader
 layout(location = 0) in vec2 inTexCoord;
@@ -1697,7 +1689,6 @@ void main() {
                                         j.get<image::HDRData>();
                                     if (p.hdrData != hdrData)
                                     {
-                                        // \@ todo:
                                         p.hdrData = hdrData;
                                         init = true;
                                     }
@@ -1952,12 +1943,9 @@ void main() {
         else
         {
             src_colorspace.primaries = PL_COLOR_PRIM_BT_709;
-            src_colorspace.transfer =
-                PL_COLOR_TRC_SRGB; // SDR uses sRGB-like gamma
 
-            // Optional: Explicitly set SDR luminance range
-            src_colorspace.hdr.max_luma = 100.0f; // Typical SDR max (~100 nits)
-            src_colorspace.hdr.min_luma = 0.01f;  // Typical SDR black level
+            // SDR uses sRGB-like gamma
+            src_colorspace.transfer = PL_COLOR_TRC_SRGB;
         }
 
         pl_color_space_infer(&src_colorspace);
@@ -1991,8 +1979,6 @@ void main() {
             }
             else
             {
-                // cmap.tone_mapping_function = &pl_tone_map_habble;  // crashes
-                // shader
                 cmap.tone_mapping_function = &pl_tone_map_st2094_40;
             }
         }
@@ -2030,9 +2016,6 @@ void main() {
         }
 
         std::stringstream s;
-
-        // s << "#define textureLod(t, p, b) texture(t, p)" << std::endl
-        //   << std::endl;
 
         // std::cerr << "num_vertex_attribs=" << res->num_vertex_attribs
         //           << std::endl
