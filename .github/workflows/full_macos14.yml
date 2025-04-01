@@ -1,6 +1,9 @@
 name: MacOS M1
 
-on: [push]
+on:
+  push:
+    branches-ignore:
+      - vulkan
 
 jobs:
   ###################################

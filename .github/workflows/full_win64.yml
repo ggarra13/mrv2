@@ -1,7 +1,10 @@
 
 name: Win64
 
-on: [push]
+on:
+  push:
+    branches-ignore:
+      - vulkan
 
 jobs:
   ###################################

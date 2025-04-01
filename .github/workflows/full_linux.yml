@@ -1,6 +1,9 @@
 name: Linux
 
-on: [push]
+on:
+  push:
+    branches-ignore:
+      - vulkan
 
 jobs:
   ###################################
