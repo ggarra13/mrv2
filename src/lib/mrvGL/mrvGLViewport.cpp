@@ -188,15 +188,6 @@ namespace mrv
         TLRENDER_P();
         MRV2_GL();
 
-#ifdef __APPLE__
-        // My poor macOS Intel from 2022 cannot stream and do tonemapping.
-        auto outputDevice = App::app->outputDevice();
-        if (outputDevice && p.hdrOptions.tonemap)
-        {
-            return;
-        }
-#endif
-
         make_current(); // needed to work with GLFW
 
         if (!valid())

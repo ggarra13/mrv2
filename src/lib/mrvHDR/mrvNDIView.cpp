@@ -1117,7 +1117,7 @@ void main() {
         // Compile to SPIR-V
         try
         {
-            std::cerr << frag_shader_glsl << std::endl;
+            // std::cerr << frag_shader_glsl << std::endl;
             std::vector<uint32_t> spirv = compile_glsl_to_spirv(
                 frag_shader_glsl,
                 shaderc_fragment_shader, // Shader type
@@ -1572,7 +1572,6 @@ void main() {
     {
         std::vector<const char*> out;
         out = Fl_Vk_Window::get_required_extensions();
-        out.push_back("VK_EXT_swapchain_colorspace");
         return out;
     }
 
@@ -1973,8 +1972,7 @@ void main() {
             // into HDR
             if (!p.hasHDR)
             {
-                cmap.tone_mapping_function =
-                    &pl_tone_map_reinhard; // Simple SDR-to-HDR mapping
+                cmap.tone_mapping_function = &pl_tone_map_st2094_40;
                 cmap.metadata = PL_HDR_METADATA_NONE; // Simplify
             }
             else
