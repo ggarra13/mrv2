@@ -657,6 +657,7 @@ namespace mrv
         p.hdrMonitorFound = false;
         switch (m_color_space)
         {
+        case VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT:
         case VK_COLOR_SPACE_HDR10_ST2084_EXT:
         case VK_COLOR_SPACE_HDR10_HLG_EXT:
         case VK_COLOR_SPACE_DOLBYVISION_EXT:
@@ -1863,7 +1864,7 @@ void main() {
         memset(&cmap, 0, sizeof(pl_color_map_params));
 
         // defaults, generates LUTs if state is set.
-        cmap.gamut_mapping = nullptr; // &pl_gamut_map_perceptual;
+        cmap.gamut_mapping = &pl_gamut_map_perceptual;
 
         // PL_GAMUT_MAP_CONSTANTS is defined in wrong order for C++
         cmap.gamut_constants = {0};
@@ -1956,7 +1957,12 @@ void main() {
         {
             dst_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
             dst_colorspace.transfer = PL_COLOR_TRC_PQ;
-            if (m_color_space == VK_COLOR_SPACE_HDR10_HLG_EXT)
+            if (m_color_space == VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
+            {
+                dst_colorspace.primaries = PL_COLOR_PRIM_DISPLAY_P3;
+                dst_colorspace.transfer = PL_COLOR_TRC_BT_1886;
+            }
+            else if (m_color_space == VK_COLOR_SPACE_HDR10_HLG_EXT)
             {
                 dst_colorspace.transfer = PL_COLOR_TRC_HLG;
             }
@@ -1977,7 +1983,7 @@ void main() {
             }
             else
             {
-                cmap.tone_mapping_function = &pl_tone_map_st2094_40;
+                cmap.tone_mapping_function = &pl_tone_map_auto;
             }
         }
         else
