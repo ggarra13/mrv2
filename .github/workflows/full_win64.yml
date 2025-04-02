@@ -89,6 +89,10 @@ jobs:
       run: |
         icacls "ssh\id_rsa" /inheritance:r /grant:r "%USERNAME%:R"
         
+    - name: Add SourceForge to known_hosts
+      shell: bash
+      run: ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
+      
     - name: Set executable permissions
       run: |
         chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh

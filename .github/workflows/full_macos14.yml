@@ -84,6 +84,9 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan github.com >> ~/.ssh/known_hosts
       
+    - name: Add SourceForge to known_hosts
+      run: ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
+
     - name: Set executable permissions
       run: |
         chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
