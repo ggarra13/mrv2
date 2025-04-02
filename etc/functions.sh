@@ -234,7 +234,7 @@ send_to_packages()
     local package=$stage/$1
     if [[ "$CMAKE_TARGET" != "" ]]; then
 	package_dir=$PWD/packages/$BUILD_DIR
-	mkdir -p $pakage_dir
+	mkdir -p $package_dir
 	if [[ -e $package ]]; then
 	    echo "Installing $package in $PWD/packages"
 	    run_cmd mv $package $package_dir

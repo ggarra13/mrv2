@@ -192,6 +192,15 @@ function( is_system_lib TARGET ISSYSLIB )
 	libpulse-simple
 	librtaudio
     )
+
+    set(_macos_libs )
+    if (APPLE)
+	set(_macos_libs
+	    X11
+	    tcl
+	    tk
+	)
+    endif()
     
     #
     # List of system libraries that should not be distributed
@@ -211,7 +220,7 @@ function( is_system_lib TARGET ISSYSLIB )
 	libgcc_s
 	libgpg-error
 	libm
-	libmount        # was accepted before - broke in Fedora 42
+	libmount        # was accepted before - broke in Fedora 42, Wayland lib
 	libpthread
 	libresolv
 	librt
@@ -228,6 +237,7 @@ function( is_system_lib TARGET ISSYSLIB )
 	${_x11_libs}
 	${_opengl_libs}
 	${_vulkan_libs}
+	${_macos_libs}
     )
 
     
