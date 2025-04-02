@@ -31,7 +31,6 @@ else
 fi
 
 echo "SSH KEY IS: ${SSH_KEY}"
-cat $SSH_KEY
 
 get_kernel
 
@@ -87,9 +86,10 @@ upload_file()
     echo
     echo "Uploading $1 as $2..."
     echo
-    scp -i $SSH_KEY $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$2 2>&1 | tee scp_error.log
+    scp -i $SSH_KEY -o StrictHostKeyChecking=no $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$2 2>&1 | tee scp_error.log
     if [[ $? -ne 0 ]]; then
-        echo "SCP command failed. Check scp_error.log for details."
+        echo "SCP command failed. Error log:"
+	cat scp_error.log
         exit 1
     fi
     echo

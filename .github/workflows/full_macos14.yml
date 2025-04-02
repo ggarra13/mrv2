@@ -52,6 +52,9 @@ jobs:
     - name: Set permissions on SSH key
       run: chmod 600 ssh/id_rsa
       
+    - name: Add SourceForge to known_hosts
+      run: ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
+
     - name: Set executable permissions
       run: |
         chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
