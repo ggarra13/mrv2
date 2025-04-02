@@ -61,8 +61,9 @@ echo "mrv2 VERSION=$mrv2_VERSION"
 #
 # Go to packages directory
 #
-mkdir -p packages
-cd packages
+package_dir=packages/$BUILD_DIR
+mkdir -p $package_dir
+cd $package_dir
 
 # Read all the files of this version
 files=$(ls -1 *v${mrv2_VERSION}*)

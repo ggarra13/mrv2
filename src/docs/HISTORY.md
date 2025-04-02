@@ -23,6 +23,9 @@ v1.3.7
 - Made OpenEXRs keep the Data Window and Display Window when saving.
 - Fixed OpenEXR saving when channel count was different than 4.
 - Added the option in the Save Image Options for OpenEXR to allow saving the Data Window or flatten the image to save the full Display Window.
+- Updated Svt-Av1 to v3.0.2.
+- Updated FFmpeg to v7.1.1.
+- Updated build to work with CMake 4.0.
 
   
 v1.3.6
