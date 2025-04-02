@@ -8,15 +8,29 @@ rm -f /usr/bin/mrv2
 #
 startup="@CPACK_INSTALL_PREFIX@/bin/mrv2.sh"
 
+#
+# Make sure script is executable
+#
+chmod a+x "$startup"
+
 echo "Creating symlink from $startup to /usr/bin/mrv2"
 ln -s "$startup" /usr/bin/mrv2
 echo "Creating symlink from $startup to /usr/bin/mrv2-v@mrv2_VERSION@"
 ln -s "$startup" /usr/bin/mrv2-v@mrv2_VERSION@
 
-#
-# Make sure script is executable
-#
-chmod a+x "$startup"
+startup="@CPACK_INSTALL_PREFIX@/bin/hdr.sh"
+if [[ -e $startup ]]; then
+    #
+    # Make sure script is executable
+    #
+    chmod a+x "$startup"
+    
+    echo "Creating symlink from $startup to /usr/bin/hdr"
+    ln -s "$startup" /usr/bin/hdr
+    echo "Creating symlink from $startup to /usr/bin/hdr-v@mrv2_VERSION@"
+    ln -s "$startup" /usr/bin/hdr-v@mrv2_VERSION@
+fi
+
 
 #
 # Install Desktop icon
@@ -106,12 +120,20 @@ copy_desktop_shortcut()
 shortcut="mrv2-v@mrv2_VERSION@.desktop"
 copy_desktop_shorcut $shortcut
 
-shortcut="hdr-v@mrv2_VERSION@.desktop"
-copy_desktop_shorcut $shortcut
+if [[ -e /usr/bin/hdr-v@mrv2_VERSION@ ]]; then
+    shortcut="hdr-v@mrv2_VERSION@.desktop"
+    copy_desktop_shorcut $shortcut
+fi
 
 #
 # Copy unversioned shortcut for Wayland to applications
 #
+if [[ -e /usr/bin/hdr-v@mrv2_VERSION@ ]]; then
+    shortcut="hdr.desktop"
+    appshortcut="${appdir}/${shortcut}"
+    cp -f "${appshortcut}" /usr/share/applications
+fi
+
 shortcut="mrv2.desktop"
 appshortcut="${appdir}/${shortcut}"
 cp -f "${appshortcut}" /usr/share/applications
@@ -126,15 +148,6 @@ xdg-mime default "${appshortcut}" video/mp4 video/mpeg video/quicktime video/x-f
 # Associate Image formats
 #
 xdg-mime default "${appshortcut}" image/x-cin image/x-dpx image/jpeg image/png image/x-tiff image/x-tga image/x-exr image/x-sxr
-
-
-#
-# Copy unversioned shortcut for Wayland
-#
-shortcut="hdr.desktop"
-appshortcut="${appdir}/${shortcut}"
-cp -f "${appshortcut}" /usr/share/applications
-
 
 echo "Updating desktop database..."
 update-desktop-database
