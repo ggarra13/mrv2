@@ -29,7 +29,9 @@ else
 	fi
     fi
 fi
+
 echo "SSH KEY IS: ${SSH_KEY}"
+cat $SSH_KEY
 
 get_kernel
 

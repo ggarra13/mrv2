@@ -18,12 +18,8 @@ set( CPACK_PACKAGE_CONTACT "ggarra13@gmail.com")
 #
 # Experimental support in CPack for multithreading. 0 uses all cores.
 #
-if(NOT APPLE)
-    set( CPACK_THREADS 0 )
-else()
-    set( CPACK_THREADS 1 )
-endif()
-
+set( CPACK_THREADS 0 )
+    
 set( MRV2_OS_BITS 32 )
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm" OR CMAKE_SYSTEM_PROCESSOR MATCHES "aarch")
     if(CMAKE_SIZEOF_VOID_P EQUAL 8)
