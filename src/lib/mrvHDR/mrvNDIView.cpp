@@ -25,7 +25,7 @@
 
 // Must come last due to X11 macros
 #include <FL/platform.H>
-#include <FL/vk.H>
+#include <FL/vk.h>
 #include <FL/Fl.H>
 
 extern "C"
@@ -665,6 +665,16 @@ namespace mrv
             break;
         default:
             break;
+        }
+
+        if (p.hdrMonitorFound)
+        {
+            std::cout << "HDR monitor found" << std::endl;
+        }
+        else
+        {
+            std::cout << "HDR monitor not found or not configured"
+                      << std::endl;
         }
     }
 
@@ -2021,11 +2031,11 @@ void main() {
 
         std::stringstream s;
 
-        // std::cerr << "num_vertex_attribs=" << res->num_vertex_attribs
-        //           << std::endl
-        //           << "num_descriptors=" << res->num_descriptors << std::endl
-        //           << "num_variables=" << res->num_variables << std::endl
-        //           << "num_constants=" << res->num_constants << std::endl;
+        std::cerr << "num_vertex_attribs=" << res->num_vertex_attribs
+                  << std::endl
+                  << "num_descriptors=" << res->num_descriptors << std::endl
+                  << "num_variables=" << res->num_variables << std::endl
+                  << "num_constants=" << res->num_constants << std::endl;
 
         for (int i = 0; i < res->num_descriptors; i++)
         {
