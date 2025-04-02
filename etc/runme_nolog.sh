@@ -176,6 +176,10 @@ if [ -z "$TLRENDER_STB" ]; then
     export TLRENDER_STB=ON
 fi
 
+if [ -z "$TLRENDER_SVTAV1" ]; then
+    export TLRENDER_SVTAV1=ON
+fi
+
 if [ -z "$TLRENDER_TIFF" ]; then
     export TLRENDER_TIFF=ON
 fi
@@ -289,7 +293,8 @@ if [[ $TLRENDER_FFMPEG == ON || $TLRENDER_FFMPEG == 1 ]]; then
     echo "FFmpeg License ..................... ${FFMPEG_GPL} 	(Use -gpl flag)"
     echo "    FFmpeg minimal.................. ${TLRENDER_FFMPEG_MINIMAL}         (TLRENDER_FFMPEG_MINIMAL)"
     echo "    FFmpeg network support ......... ${TLRENDER_NET} 	(TLRENDER_NET)"
-    echo "    AV1 codec support .............. ${TLRENDER_AV1} 	(TLRENDER_AV1)"
+    echo "    dav1d decodec support .......... ${TLRENDER_AV1} 	(TLRENDER_AV1)"
+    echo "    SvtAv1 codec support. .......... ${TLRENDER_SVTAV1} 	(TLRENDER_SVTAV1)"
     echo "    HAP codec support .............. ${TLRENDER_HAP} 	(TLRENDER_HAP)"
     echo "    VPX codec support .............. ${TLRENDER_VPX} 	(TLRENDER_VPX)"
     echo "    X264 codec support ............. ${TLRENDER_X264} 	(Use -gpl flag)"
@@ -369,6 +374,7 @@ cmd="cmake -G '${CMAKE_GENERATOR}'
 	   -D TLRENDER_NFD=OFF
 	   -D TLRENDER_RAW=${TLRENDER_RAW}
            -D TLRENDER_STB=${TLRENDER_STB}
+           -D TLRENDER_SVTAV1=${TLRENDER_SVTAV1}
 	   -D TLRENDER_TIFF=${TLRENDER_TIFF}
 	   -D TLRENDER_USD=${TLRENDER_USD}
 	   -D TLRENDER_VPX=${TLRENDER_VPX}

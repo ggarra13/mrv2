@@ -169,6 +169,10 @@ if(TLRENDER_STB)
     add_definitions(-DTLRENDER_STB)
 endif()
 
+if(TLRENDER_SVTAV1)
+    add_definitions(-DTLRENDER_SVTAV1)
+endif()
+
 if(TLRENDER_TIFF)
     add_definitions(-DTLRENDER_TIFF)
 endif()

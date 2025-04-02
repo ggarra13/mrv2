@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0400
+version 1.0500
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
@@ -207,7 +207,7 @@ v->hide();}
       }
     }
     Fl_Window uiAdvancedSettings {
-      label {Advanced Settings} open
+      label {Advanced Settings}
       xywh {1185 376 411 310} type Double hide hotspot modal
     } {
       Fl_Check_Button Override {
@@ -223,11 +223,11 @@ settings->setValue("SaveMovie/Override", value);}
         callback {int value = o->value();
 
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Color Range", value);} open
+settings->setValue("SaveMovie/Color Range", value);}
         tooltip {FFMpeg's Color Range for the codec selected} xywh {130 60 170 29} down_box BORDER_BOX
       } {
         MenuItem {} {
-          label {TV (Legal Range)} selected
+          label {TV (Legal Range)}
           xywh {0 0 100 20}
         }
         MenuItem {} {
@@ -339,7 +339,7 @@ settings->setValue("SaveMovie/Color Primaries", value);}
         callback {int value = o->value();
 
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Color TRC", value);} open
+settings->setValue("SaveMovie/Color TRC", value);}
         tooltip {FFMpeg's Color Transfer Function settings for the codec selected.} xywh {129 190 170 29} down_box BORDER_BOX
       } {
         MenuItem {} {
@@ -828,12 +828,17 @@ else
   v->deactivate();
 }} {}
   }
-  Function {add_profiles(Fl_Choice* o)} {} {
+  Function {add_profiles(Fl_Choice* o)} {open
+  } {
     code {auto entries = tl::ffmpeg::getProfileLabels();
 for (auto entry : entries)
 {
 \#ifndef TLRENDER_X264
    if (entry == "H264")
+      continue;
+\#endif
+\#ifndef TLRENDER_SVTAV1
+   if (entry == "AV1")
       continue;
 \#endif
     o->add(gettext(entry.c_str()));
@@ -857,7 +862,8 @@ for (auto entry : entries)
             }
         }
     }
-    o->value(0);} {}
+    o->value(0);} {selected
+    }
   }
   Function {add_resolution(Fl_Choice* o)} {} {
     code {const auto& settings = mrv::App::app->settings();
