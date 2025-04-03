@@ -997,6 +997,16 @@ namespace mrv
                     (Fl_Callback*)next_annotation_cb, ui,
                     FL_MENU_DIVIDER | mode);
 
+                int mode = FL_MENU_TOGGLE;
+                bool visible = ui->uiView->getShowAnnotations();
+                idx = menu->add(
+                    _("Playback/Annotation/Toggle Visible"),
+                    kShapeFrameClear.hotkey(),
+                    (Fl_Callback*)toggle_visible_annotation_cb, ui, mode);
+                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+                if (visible)
+                    item->set();
+
                 menu->add(
                     _("Playback/Annotation/Clear"), kShapeFrameClear.hotkey(),
                     (Fl_Callback*)annotation_clear_cb, ui);

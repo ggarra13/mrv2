@@ -26,7 +26,8 @@ v1.3.7
 - Updated Svt-Av1 to v3.0.2.
 - Updated FFmpeg to v7.1.1.
 - Updated build to work with CMake 4.0.
-
+- Added Playback->Annotation->Toggle Visible to toggle on or off the annotations
+  without deleting them.
   
 v1.3.6
 ======
