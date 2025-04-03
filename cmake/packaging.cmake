@@ -86,7 +86,8 @@ if( APPLE )
     # set(CPACK_DMG_FORMAT "UDBZ")
     # set(CPACK_DMG_FILESYSTEM "APFS")
 
-    # set( INSTALL_NAME ${PROJECT_NAME} )
+    set( INSTALL_NAME ${PROJECT_NAME} )
+    set( HDR_INSTALL_NAME hdr )
 
     # configure_file(
     # 	${MRV2_DIR}/etc/macOS/Info.plist.in
