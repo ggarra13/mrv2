@@ -82,7 +82,7 @@ files=$(ls -1 *v${mrv2_VERSION}*)
 
 
 if [[ $KERNEL == *Msys* ]]; then
-    pacman -Sy openssh --noconfirm
+    pacman -Sy openssh rsync --noconfirm
 fi
 
 
