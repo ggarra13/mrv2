@@ -39,7 +39,6 @@
 
 #include "mrViewer.h"
 
-
 namespace
 {
     const char* kModule = "save";
@@ -333,9 +332,12 @@ namespace mrv
             if (newFile != file)
             {
                 if (fs::exists(newFile))
-                    throw(string::Format(_("New file {0} already exist!  "
-                                           "Cannot overwrite it."))
-                              .arg(newFile));
+                {
+                    throw std::runtime_error(
+                        string::Format(_("New file {0} already exist!  "
+                                         "Cannot overwrite it."))
+                            .arg(newFile));
+                }
             }
 
             path = file::Path(newFile);

@@ -1,8 +1,8 @@
 # These settings were mostly taken from gemini.google.com
 preset:slow
 crf:23
-filmgrain:1
+filmgrain:on
 deblock-strength:0
 aq-mode:0
 rc_lookahead:25
-allow_sw:1
+allow_sw:on
