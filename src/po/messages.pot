@@ -420,8 +420,8 @@ msgstr ""
 
 msgid ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/"
-"rt.rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/rt."
+"rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
 
@@ -3726,6 +3726,9 @@ msgstr ""
 msgid "Playback/Go to/Next Annotation"
 msgstr ""
 
+msgid "Playback/Annotation/Toggle Visible"
+msgstr ""
+
 msgid "Playback/Annotation/Clear"
 msgstr ""
 
@@ -5220,12 +5223,6 @@ msgstr ""
 msgid "Float"
 msgstr ""
 
-msgid "Data Window"
-msgstr ""
-
-msgid "Display Window"
-msgstr ""
-
 msgid "Save Image Options"
 msgstr ""
 
@@ -5251,12 +5248,6 @@ msgid "ZIP Compression"
 msgstr ""
 
 msgid "DWA Compression"
-msgstr ""
-
-msgid "Contents"
-msgstr ""
-
-msgid "OpenEXR's Contents to Save"
 msgstr ""
 
 msgid "0.00 None"
@@ -5373,7 +5364,7 @@ msgstr ""
 msgid "Apply"
 msgstr ""
 
-msgid "Never"
+msgid "Manual"
 msgstr ""
 
 msgid "ST2094_40"
@@ -6047,8 +6038,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
+"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
+"exr"
 msgstr ""
 
 msgid "Maximum Images Apart"
@@ -6599,6 +6590,12 @@ msgstr ""
 msgid "Toggle HDR tonemap"
 msgstr ""
 
+msgid "Display Window"
+msgstr ""
+
+msgid "Data Window"
+msgstr ""
+
 msgid "Compare Wipe"
 msgstr ""
 
@@ -6672,6 +6669,9 @@ msgid "Annotation Clear All Frames"
 msgstr ""
 
 msgid "Annotation Frame Step Backwards"
+msgstr ""
+
+msgid "Toggle Show Annotations"
 msgstr ""
 
 msgid "Frame Step Backwards"

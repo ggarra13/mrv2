@@ -78,7 +78,7 @@ jobs:
         
     - name: Install MSYS2 Dependencies
       run: |
-        pacman -S --noconfirm nasm
+        pacman -S --noconfirm nasm rsync
       
     - name: Build mrv2
       run: |

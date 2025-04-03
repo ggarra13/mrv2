@@ -508,13 +508,13 @@ msgstr "unsupported operand type(s) for {0}: RationalTime and {1}"
 
 msgid ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/"
-"rt.rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/rt."
+"rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/"
-"rt.rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/rt."
+"rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 
 msgid ""
@@ -4075,6 +4075,10 @@ msgstr "Playback/Go to/Previous Annotation"
 msgid "Playback/Go to/Next Annotation"
 msgstr "Playback/Go to/Next Annotation"
 
+#, fuzzy
+msgid "Playback/Annotation/Toggle Visible"
+msgstr "Playback/Annotation/Clear All"
+
 msgid "Playback/Annotation/Clear"
 msgstr "Playback/Annotation/Clear"
 
@@ -5728,12 +5732,6 @@ msgstr "Half"
 msgid "Float"
 msgstr "Float"
 
-msgid "Data Window"
-msgstr "Data Window"
-
-msgid "Display Window"
-msgstr "Display Window"
-
 msgid "Save Image Options"
 msgstr "Save Image Options"
 
@@ -5760,12 +5758,6 @@ msgstr "ZIP Compression"
 
 msgid "DWA Compression"
 msgstr "DWA Compression"
-
-msgid "Contents"
-msgstr "Contents"
-
-msgid "OpenEXR's Contents to Save"
-msgstr "OpenEXR's Contents to Save"
 
 msgid "0.00 None"
 msgstr "0.00 None"
@@ -5881,8 +5873,8 @@ msgstr "Ignore"
 msgid "Apply"
 msgstr "Apply"
 
-msgid "Never"
-msgstr "Never"
+msgid "Manual"
+msgstr ""
 
 msgid "ST2094_40"
 msgstr "ST2094_40"
@@ -6615,14 +6607,14 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
+"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
+"exr"
 msgstr ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
+"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
+"exr"
 
 msgid "Maximum Images Apart"
 msgstr "Maximum Images Apart"
@@ -7196,6 +7188,12 @@ msgstr "Invalid Values"
 msgid "Toggle HDR tonemap"
 msgstr "Toggle HDR tonemap"
 
+msgid "Display Window"
+msgstr "Display Window"
+
+msgid "Data Window"
+msgstr "Data Window"
+
 msgid "Compare Wipe"
 msgstr "Compare Wipe"
 
@@ -7270,6 +7268,10 @@ msgstr "Annotation Clear All Frames"
 
 msgid "Annotation Frame Step Backwards"
 msgstr "Annotation Frame Step Backwards"
+
+#, fuzzy
+msgid "Toggle Show Annotations"
+msgstr "Toggle Annotation Panel"
 
 msgid "Frame Step Backwards"
 msgstr "Frame Step Backwards"
@@ -7591,6 +7593,15 @@ msgstr "Toggle Hotkeys Window"
 
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
+
+#~ msgid "Contents"
+#~ msgstr "Contents"
+
+#~ msgid "OpenEXR's Contents to Save"
+#~ msgstr "OpenEXR's Contents to Save"
+
+#~ msgid "Never"
+#~ msgstr "Never"
 
 #~ msgid "Could not initialize NDI"
 #~ msgstr "Could not initialize NDI"
