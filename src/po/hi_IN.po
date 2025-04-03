@@ -488,8 +488,8 @@ msgstr "{0} के लिए असमर्थित TLS प्रकार: �
 
 msgid ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/rt."
-"rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/"
+"rt.rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
 "\n"
@@ -646,8 +646,9 @@ msgid ""
 ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
 msgstr ""
 "\n"
-"'other' (:class:`~RationalTime`) को :attr:`start_time`/:attr:"
-"`end_time_exclusive` और बाउंड आर्ग्यूमेंट्स के अनुसार क्लैंप करें।\n"
+"'other' (:class:`~RationalTime`) "
+"को :attr:`start_time`/:attr:`end_time_exclusive` और बाउंड आर्ग्यूमेंट्स के अनुसार क्लैंप "
+"करें।\n"
 
 msgid ""
 "\n"
@@ -655,8 +656,9 @@ msgid ""
 ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
 msgstr ""
 "\n"
-"'other' (:class:`~TimeRange`) को :attr:`start_time`/:attr:"
-"`end_time_exclusive` और बाउंड आर्ग्यूमेंट्स के अनुसार क्लैंप करें।\n"
+"'other' (:class:`~TimeRange`) "
+"को :attr:`start_time`/:attr:`end_time_exclusive` और बाउंड आर्ग्यूमेंट्स के अनुसार क्लैंप "
+"करें।\n"
 
 msgid ""
 "\n"
@@ -5662,6 +5664,12 @@ msgstr "आधा"
 msgid "Float"
 msgstr "फ्लोटिंग पाइंट"
 
+msgid "Data Window"
+msgstr "डाटा विंडो"
+
+msgid "Display Window"
+msgstr "विंडो प्रदर्शित करें"
+
 msgid "Save Image Options"
 msgstr "छवि विकल्प सहेजें"
 
@@ -5688,6 +5696,12 @@ msgstr "संपीडन"
 
 msgid "DWA Compression"
 msgstr "DWA संपीडन"
+
+msgid "Contents"
+msgstr "सामग्री"
+
+msgid "OpenEXR's Contents to Save"
+msgstr "OpenEXR की सामग्री सहेजने के लिए"
 
 msgid "0.00 None"
 msgstr "0.00 कुछ नहीं"
@@ -5803,8 +5817,8 @@ msgstr "अनदेखा करें"
 msgid "Apply"
 msgstr "लागू करें"
 
-msgid "Manual"
-msgstr ""
+msgid "Never"
+msgstr "कभी नहीं"
 
 msgid "ST2094_40"
 msgstr "एसटी2094_40"
@@ -6513,8 +6527,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
-"exr"
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
 msgstr ""
 "क्लिप संस्करणों से मेल खाने के लिए उपयोग किया जाने वाला नियमित अभिव्यक्ति (रेगुलर "
 "एक्सप्रेशन)। इसमें तीन चीजें (प्रिफिक्स, संख्या, और सफिक्स) का समूह होना चाहिए। यदि इसे "
@@ -7091,12 +7105,6 @@ msgstr "अवैध मान"
 msgid "Toggle HDR tonemap"
 msgstr "HDR वर्तनीमैप टॉगल करें"
 
-msgid "Display Window"
-msgstr "विंडो प्रदर्शित करें"
-
-msgid "Data Window"
-msgstr "डाटा विंडो"
-
 msgid "Compare Wipe"
 msgstr "सर्प पोंछना प्रभाव"
 
@@ -7496,15 +7504,6 @@ msgstr "यदि आप विंडो को बन्द करना चा
 
 msgid "Toggle About Window"
 msgstr "विंडो के बारे में टॉगल करें"
-
-#~ msgid "Contents"
-#~ msgstr "सामग्री"
-
-#~ msgid "OpenEXR's Contents to Save"
-#~ msgstr "OpenEXR की सामग्री सहेजने के लिए"
-
-#~ msgid "Never"
-#~ msgstr "कभी नहीं"
 
 #~ msgid "Could not initialize NDI"
 #~ msgstr "नेडीआई प्रारंभ नहीं कर सका"

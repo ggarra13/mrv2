@@ -366,3 +366,17 @@ if(TLRENDER_USD)
         COMPONENT applications)
 endif()
 
+if (APPLE)
+    # Define variables for bundle directories in the build dir
+    set(MRV2_BUNDLE_DIR ${CMAKE_BINARY_DIR}/mrv2.app)
+
+    # Create the mrv2.app bundle structure
+    file(MAKE_DIRECTORY ${MRV2_BUNDLE_DIR}/Contents/MacOS)
+    file(MAKE_DIRECTORY ${MRV2_BUNDLE_DIR}/Contents/Resources)
+
+    
+    # Copy the real executables into the bundles
+    add_custom_command(TARGET mrv2 POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:mrv2> ${MRV2_BUNDLE_DIR}/Contents/MacOS/
+    )
+endif()

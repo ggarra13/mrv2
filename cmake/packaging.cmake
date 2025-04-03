@@ -110,14 +110,10 @@ if( APPLE )
     # Create the mrv2.app bundle structure
     file(MAKE_DIRECTORY ${MRV2_BUNDLE_DIR}/Contents/MacOS)
     file(MAKE_DIRECTORY ${MRV2_BUNDLE_DIR}/Contents/Resources)
-
     
-    # Copy the real executables into the bundles
-    add_custom_command(TARGET mrv2 POST_BUILD
-	COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:mrv2> ${MRV2_BUNDLE_DIR}/Contents/MacOS/
-    )
-
     # Copy the shell scripts into the bundles and make them executable
+    message(STATUS "${MRV2_DIR}/etc/macOS/mrv2.sh" )
+    message(STATUS "${MRV2_BUNDLE_DIR}/Contents/MacOS/mrv2" )
     configure_file(${MRV2_DIR}/etc/macOS/mrv2.sh ${MRV2_BUNDLE_DIR}/Contents/MacOS/mrv2 COPYONLY)
     
     configure_file(

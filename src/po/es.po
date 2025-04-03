@@ -524,13 +524,13 @@ msgstr "tipo(s) de operaciones no soportadas para {0}: RationalTime y {1}"
 
 msgid ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/rt."
-"rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/"
+"rt.rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
 "\n"
-"La clase RationalTime representa una medida de tiempo de :math:`rt.value/rt."
-"rate` segundos.\n"
+"La clase RationalTime representa una medida de tiempo de :math:`rt.value/"
+"rt.rate` segundos.\n"
 "Puede ser re-escalada a otra razón de :class:`~RationalTime`.\n"
 
 msgid ""
@@ -612,8 +612,8 @@ msgstr "Convierta a timecode (``HH:MM:SS;FRAME``)"
 msgid ""
 "Convert a timecode string (``HH:MM:SS;FRAME``) into a :class:`~RationalTime`."
 msgstr ""
-"Convierta un texto con timecode (``HH:MM:SS;FRAME``) a :class:"
-"`~RationalTime`."
+"Convierta un texto con timecode (``HH:MM:SS;FRAME``) "
+"a :class:`~RationalTime`."
 
 msgid ""
 "Convert a time with microseconds string (``HH:MM:ss`` where ``ss`` is an "
@@ -5792,6 +5792,12 @@ msgstr "Half"
 msgid "Float"
 msgstr "Coma flotante"
 
+msgid "Data Window"
+msgstr "Ventana de Datos"
+
+msgid "Display Window"
+msgstr "Ventana de Display"
+
 msgid "Save Image Options"
 msgstr "Opciones de Guardar Imagen"
 
@@ -5818,6 +5824,12 @@ msgstr "Compresión Zip"
 
 msgid "DWA Compression"
 msgstr "Compresión DWA"
+
+msgid "Contents"
+msgstr "Contenido"
+
+msgid "OpenEXR's Contents to Save"
+msgstr "Contenido de OpenEXR para guardar"
 
 msgid "0.00 None"
 msgstr "0,00 Ninguno"
@@ -5933,8 +5945,8 @@ msgstr "Ignorar"
 msgid "Apply"
 msgstr "Usar"
 
-msgid "Manual"
-msgstr ""
+msgid "Never"
+msgstr "Nunca"
 
 msgid "ST2094_40"
 msgstr "ST2094_40"
@@ -6681,14 +6693,14 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
-"exr"
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
 msgstr ""
 "Expresión regular usada para distinguir versiones del clip.  Debe tener tres "
 "groupos (prefijo, número y sufijo).  Si se deja en su valor estándar (_v), "
 "automáticamente se creará una para encontrar versiones que definidas con _v "
-"en el nombre del archivo, la carpeta o ambos. Por ejemplo: gizmo_v001.0001."
-"exr"
+"en el nombre del archivo, la carpeta o ambos. Por ejemplo: "
+"gizmo_v001.0001.exr"
 
 msgid "Maximum Images Apart"
 msgstr "Máximas Imágenes Aparte"
@@ -7267,12 +7279,6 @@ msgstr "Valores Inválidos"
 msgid "Toggle HDR tonemap"
 msgstr "Alternar mapeo de tonos de HDR"
 
-msgid "Display Window"
-msgstr "Ventana de Display"
-
-msgid "Data Window"
-msgstr "Ventana de Datos"
-
 msgid "Compare Wipe"
 msgstr "Comparar Limpiaparabrisas"
 
@@ -7672,15 +7678,6 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
-
-#~ msgid "Contents"
-#~ msgstr "Contenido"
-
-#~ msgid "OpenEXR's Contents to Save"
-#~ msgstr "Contenido de OpenEXR para guardar"
-
-#~ msgid "Never"
-#~ msgstr "Nunca"
 
 #~ msgid "Could not initialize NDI"
 #~ msgstr "No pude inicializar NDI"
