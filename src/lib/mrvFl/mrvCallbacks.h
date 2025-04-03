@@ -248,6 +248,7 @@ namespace mrv
     void set_pen_color_cb(Fl_Button*, ViewerUI* ui);
     void flip_pen_color_cb(Fl_Button*, ViewerUI* ui);
     void toggle_annotation_cb(Fl_Menu_* m, ViewerUI* ui);
+    void toggle_visible_annotation_cb(Fl_Menu_* m, ViewerUI* ui);
     void annotation_clear_cb(Fl_Menu_*, ViewerUI* ui);
     void annotation_clear_all_cb(Fl_Menu_*, ViewerUI* ui);
 

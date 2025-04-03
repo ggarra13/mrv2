@@ -2251,6 +2251,14 @@ namespace mrv
         }
     }
 
+    void toggle_visible_annotation_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        bool value = !ui->uiView->getShowAnnotations();
+        ui->uiView->setShowAnnotations(value);
+        ui->uiView->redrawWindows();
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
     void annotation_clear_cb(Fl_Menu_*, ViewerUI* ui)
     {
         const auto player = ui->uiView->getTimelinePlayer();

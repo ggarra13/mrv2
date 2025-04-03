@@ -190,7 +190,6 @@ namespace mrv
 
     Hotkey kHudToggle(true, false, false, false, 'h');
 
-    
     Hotkey kOCIOPresetsToggle(false, false, false, false, 0);
     Hotkey kOCIOInTopBarToggle(false, false, false, false, 't');
     Hotkey kOCIOInputColorSpace(false, false, false, false, 0);
@@ -231,7 +230,6 @@ namespace mrv
     Hotkey kUITransparencyMore(true, false, false, false, '.');
     Hotkey kUITransparencyLess(true, false, false, false, ',');
 
-    
     Hotkey kToggleTimelineEditable(false, false, false, false, 0);
     Hotkey kToggleEditAssociatedClips(false, false, false, false, 0);
     Hotkey kToggleTimelineFrameView(false, false, false, false, 0);
@@ -449,6 +447,7 @@ namespace mrv
         HotkeyEntry(_("Annotation Clear Frame"), &kShapeFrameClear),
         HotkeyEntry(_("Annotation Clear All Frames"), &kShapeFrameClearAll),
         HotkeyEntry(_("Annotation Frame Step Backwards"), &kShapeFrameStepBack),
+        HotkeyEntry(_("Toggle Show Annotations"), &kToggleShowAnnotations),
 
         HotkeyEntry(_("Frame Step Backwards"), &kFrameStepBack),
         HotkeyEntry(_("Frame Step FPS Backwards"), &kFrameStepFPSBack),
