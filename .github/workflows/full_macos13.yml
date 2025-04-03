@@ -47,7 +47,9 @@ jobs:
       run: chmod 600 ssh/id_rsa
       
     - name: Add SourceForge to known_hosts
-      run: ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
+      run: |
+        mkdir -p ~/.ssh
+        ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
       
     - name: Set executable permissions
       run: |
