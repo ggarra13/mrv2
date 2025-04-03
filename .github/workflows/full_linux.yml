@@ -23,6 +23,15 @@ jobs:
 
     - name: Update
       run: sudo apt-get update
+
+    - name: AT START Check OpenSSL, SSH and libcrypto
+      run: |
+        echo "OpenSSL version:"
+        openssl version
+        echo "ssh version:"
+        ssh -V
+        echo "libcrypto version"
+        ldd $(which scp) | grep libcrypto
       
     - name: Install OpenGL dev
       run: sudo apt-get install -y xorg-dev libglu1-mesa-dev mesa-common-dev
@@ -53,7 +62,7 @@ jobs:
       
     - name: Install python dependencies
       run: sudo apt-get install -y libssl-dev libffi-dev python3
-
+      
     - name: Synchronize clock
       run: |
         sudo apt-get install -y ntp
@@ -80,6 +89,15 @@ jobs:
     # - name: Install cmake
     #   run: |
     #      ./etc/install_cmake.sh
+
+    - name: AT END Check OpenSSL, SSH and libcrypto
+      run: |
+        echo "OpenSSL version:"
+        openssl version
+        echo "ssh version:"
+        ssh -V
+        echo "libcrypto version"
+        ldd $(which scp) | grep libcrypto
 
     - name: Build mrv2
       run: |
