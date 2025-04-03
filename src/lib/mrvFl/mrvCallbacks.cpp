@@ -505,7 +505,14 @@ namespace mrv
         options.ffmpegAudioCodec = static_cast<tl::ffmpeg::AudioCodec>(value);
 #endif
 
-        save_movie(file, ui, options);
+        try
+        {
+            save_movie(file, ui, options);
+        }
+        catch (const std::exception& e)
+        {
+            LOG_ERROR(e.what());
+        }
     }
 
     void save_movie_cb(Fl_Menu_* w, ViewerUI* ui)
@@ -696,7 +703,14 @@ namespace mrv
         }
         else
         {
-            save_movie(file, ui, options);
+            try
+            {
+                save_movie(file, ui, options);
+            }
+            catch (const std::exception& e)
+            {
+                LOG_ERROR(e.what());
+            }
         }
     }
 
@@ -909,7 +923,14 @@ namespace mrv
         }
         else
         {
-            save_movie(file, ui, options);
+            try
+            {
+                save_movie(file, ui, options);
+            }
+            catch (const std::exception& e)
+            {
+                LOG_ERROR(e.what());
+            }
         }
     }
 

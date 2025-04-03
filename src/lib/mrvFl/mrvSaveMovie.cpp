@@ -333,9 +333,10 @@ namespace mrv
             {
                 if (fs::exists(newFile))
                 {
-                    LOG_ERROR(string::Format(_("New file {0} already exist!  "
-                                               "Cannot overwrite it."))
-                                  .arg(newFile));
+                    throw std::runtime_error(
+                        string::Format(_("New file {0} already exist!  "
+                                         "Cannot overwrite it."))
+                            .arg(newFile));
                 }
             }
 
