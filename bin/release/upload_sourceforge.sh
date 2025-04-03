@@ -85,6 +85,10 @@ if [[ $KERNEL == *Msys* ]]; then
     pacman -Sy openssh rsync --noconfirm
 fi
 
+echo "OpenSSL version:"
+openssl version
+echo "ssh version:"
+ssh -V
 
 echo "Proceed with uploading..."
 
