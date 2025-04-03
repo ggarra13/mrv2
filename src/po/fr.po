@@ -499,14 +499,14 @@ msgstr "type(s) d'opérande non supporté(s) pour {0}: RationalTime et {1}"
 
 msgid ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/"
-"rt.rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/rt."
+"rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
 "\n"
-"La classe RationalTime représente une mesure du temps de :math:`rt.value/"
-"rt.rate` secondes. Elle peut être redimensionnée en un "
-"autre :class:`~RationalTime`.\n"
+"La classe RationalTime représente une mesure du temps de :math:`rt.value/rt."
+"rate` secondes. Elle peut être redimensionnée en un autre :class:"
+"`~RationalTime`.\n"
 
 msgid ""
 "\n"
@@ -581,8 +581,8 @@ msgstr "Convertir en code-temps (``HH:MM:SS;FRAME``)"
 msgid ""
 "Convert a timecode string (``HH:MM:SS;FRAME``) into a :class:`~RationalTime`."
 msgstr ""
-"Convertir une chaîne de code-temps (``HH:MM:SS;FRAME``) "
-"en :class:`~RationalTime`."
+"Convertir une chaîne de code-temps (``HH:MM:SS;FRAME``) en :class:"
+"`~RationalTime`."
 
 msgid ""
 "Convert a time with microseconds string (``HH:MM:ss`` where ``ss`` is an "
@@ -602,8 +602,8 @@ msgstr ""
 "\n"
 "La classe TimeRange représente une plage de temps. Elle code l'heure de "
 "début et la durée, ce qui signifie que :meth:`end_time_inclusive` (dernière "
-"partie d'un échantillon dans la plage de temps) "
-"et :meth:`end_time_exclusive` peuvent être calculés.\n"
+"partie d'un échantillon dans la plage de temps) et :meth:"
+"`end_time_exclusive` peuvent être calculés.\n"
 
 msgid ""
 "\n"
@@ -652,8 +652,8 @@ msgid ""
 ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
 msgstr ""
 "\n"
-"Clamp «autre» (:classe:`~RationalTime`) "
-"selon :attr:`start_time`/:attr:`end_time_exclusive` et arguments liés.\n"
+"Clamp «autre» (:classe:`~RationalTime`) selon :attr:`start_time`/:attr:"
+"`end_time_exclusive` et arguments liés.\n"
 
 msgid ""
 "\n"
@@ -661,8 +661,8 @@ msgid ""
 ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
 msgstr ""
 "\n"
-"Clamp «autre» (:classe:`~TimeRange`) "
-"selon :attr:`start_time`/:attr:`end_time_exclusive` et arguments liés.\n"
+"Clamp «autre» (:classe:`~TimeRange`) selon :attr:`start_time`/:attr:"
+"`end_time_exclusive` et arguments liés.\n"
 
 msgid ""
 "\n"
@@ -4080,6 +4080,10 @@ msgstr "Remise en ligne/Allez-y./Annotation précédente"
 msgid "Playback/Go to/Next Annotation"
 msgstr "Remise en ligne/Allez-y./Prochaine annotation"
 
+#, fuzzy
+msgid "Playback/Annotation/Toggle Visible"
+msgstr "Remise en ligne/Annotation/Tout effacer"
+
 msgid "Playback/Annotation/Clear"
 msgstr "Remise en ligne/Annotation/Effacer"
 
@@ -5744,12 +5748,6 @@ msgstr "Demi"
 msgid "Float"
 msgstr "Flux flottants"
 
-msgid "Data Window"
-msgstr "Fenêtre de données"
-
-msgid "Display Window"
-msgstr "Affiche la fenêtre"
-
 msgid "Save Image Options"
 msgstr "Enregistrer les options d'image"
 
@@ -5776,12 +5774,6 @@ msgstr "Compression ZIP"
 
 msgid "DWA Compression"
 msgstr "Compression DWA"
-
-msgid "Contents"
-msgstr "Contenu"
-
-msgid "OpenEXR's Contents to Save"
-msgstr "Contenu OpenEXR à enregistrer"
 
 msgid "0.00 None"
 msgstr "0,00 Aucun"
@@ -5897,8 +5889,8 @@ msgstr "Ignorer"
 msgid "Apply"
 msgstr "Appliquer"
 
-msgid "Never"
-msgstr "Jamais"
+msgid "Manual"
+msgstr ""
 
 msgid "ST2094_40"
 msgstr "ST2094_40"
@@ -6658,8 +6650,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
+"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
+"exr"
 msgstr ""
 "Expression régulière utilisée pour correspondre aux versions de clip. Il "
 "faut grouper trois choses (préfixe, numéro et suffixe). Si elle est laissée "
@@ -7256,6 +7248,12 @@ msgstr "Valeurs non valides"
 msgid "Toggle HDR tonemap"
 msgstr "Commutation de la carte de tons HDR"
 
+msgid "Display Window"
+msgstr "Affiche la fenêtre"
+
+msgid "Data Window"
+msgstr "Fenêtre de données"
+
 msgid "Compare Wipe"
 msgstr "Comparer Essuie-glace"
 
@@ -7330,6 +7328,10 @@ msgstr "Annulation Effacer tous les cadres"
 
 msgid "Annotation Frame Step Backwards"
 msgstr "Cadre d'annotation marche vers l'arrière"
+
+#, fuzzy
+msgid "Toggle Show Annotations"
+msgstr "Commutation du panneau d'annotation"
 
 msgid "Frame Step Backwards"
 msgstr "Frame marche vers l'arrière"
@@ -7651,6 +7653,15 @@ msgstr "Activer la fenêtre des touches d'amorçage"
 
 msgid "Toggle About Window"
 msgstr "Commutation à propos de la fenêtre"
+
+#~ msgid "Contents"
+#~ msgstr "Contenu"
+
+#~ msgid "OpenEXR's Contents to Save"
+#~ msgstr "Contenu OpenEXR à enregistrer"
+
+#~ msgid "Never"
+#~ msgstr "Jamais"
 
 #~ msgid "Could not initialize NDI"
 #~ msgstr "Impossible d'initialisation de NDI"
