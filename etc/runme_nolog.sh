@@ -173,38 +173,43 @@ if [ -z "$TLRENDER_USD" ]; then
     export TLRENDER_USD=ON
 fi
 
-if [ -z "$TLRENDER_VK" ]; then
-    if [ -z "$VULKAN_SDK" ]; then
-	export VULKAN_SDK=/crapola_of_dir
-	if [[ $KERNEL == *Msys* ]]; then
-	    export VULKAN_SDK=/C/VulkanSDK
-	elif [[ $KERNEL == *Linux* ]]; then
-	    if [[ -d VulkanSDK ]]; then
-		export VULKAN_ROOT=$PWD/VulkanSDK
-		SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sort -r | grep -o "$VULKAN_ROOT/[0-9]*\..*"| sed -e "s#$VULKAN_ROOT/##" | head -1)
-		export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/
-	    else
-		export VULKAN_SDK=/usr/
-	    fi
-	elif [[ $KERNEL == *Darwin* ]]; then
-	    VULKAN_ROOT=$HOME/VulkanSDK
-	    if [ -d "$VULKAN_ROOT" ]; then
-		SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sort -r | grep -o "$VULKAN_ROOT/[0-9]*\..*"| sed -e "s#$VULKAN_ROOT/##" | head -1)
-		export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/macOS
-	    else
-		export VULKAN_SDK=/usr/local
-	    fi
+if [ -z "$VULKAN_SDK" ]; then
+    export VULKAN_SDK=/crapola_of_dir
+    if [[ $KERNEL == *Msys* ]]; then
+	export VULKAN_SDK=/C/VulkanSDK
+    elif [[ $KERNEL == *Linux* ]]; then
+	if [[ -d VulkanSDK ]]; then
+	    export VULKAN_ROOT=$PWD/VulkanSDK
+	    SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sort -r | grep -o "$VULKAN_ROOT/[0-9]*\..*"| sed -e "s#$VULKAN_ROOT/##" | head -1)
+	    export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/
+	else
+	    export VULKAN_SDK=/usr/
+	fi
+    elif [[ $KERNEL == *Darwin* ]]; then
+	VULKAN_ROOT=$HOME/VulkanSDK
+	if [ -d "$VULKAN_ROOT" ]; then
+	    SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sort -r | grep -o "$VULKAN_ROOT/[0-9]*\..*"| sed -e "s#$VULKAN_ROOT/##" | head -1)
+	    export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/macOS
+	else
+	    export VULKAN_SDK=/usr/local
 	fi
     fi
 fi
-
-if [ -d "${VULKAN_SDK}/include/vulkan/" ]; then
-    export TLRENDER_VK=ON
+    
+if [ -z "$TLRENDER_VK" ]; then
+    if [ -d "${VULKAN_SDK}/include/vulkan/" ]; then
+	export TLRENDER_VK=ON
+    else
+	export TLRENDER_VK=OFF
+	echo "VULKAN NOT FOUND at ${VULKAN_SDK}/include/vulkan"
+    fi
 else
-    export TLRENDER_VK=OFF
-    echo "VULKAN NOT FOUND at ${VULKAN_SDK}/include/vulkan"
-    exit 1
+    if [ ! -d "${VULKAN_SDK}/include/vulkan/" ]; then
+	echo "VULKAN NOT FOUND at ${VULKAN_SDK}/include/vulkan"
+	exit 1
+    fi
 fi
+
     
 if [ -z "$TLRENDER_VPX" ]; then
     export TLRENDER_VPX=ON

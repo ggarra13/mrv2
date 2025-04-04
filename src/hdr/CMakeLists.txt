@@ -36,7 +36,11 @@ set(LIBRARIES
 if (WIN32)
     list(APPEND LIBRARIES ${FLTK_LIBRARIES})
 else()
-    list(APPEND LIBRARIES ${FLTK_LIBRARIES} fltk::vk-shared)
+    if(FLTK_BUILD_SHARED_LIBS)
+	list(APPEND LIBRARIES ${FLTK_LIBRARIES} fltk::vk-shared)
+    else()
+	list(APPEND LIBRARIES ${FLTK_LIBRARIES} fltk::vk)
+    endif()
 endif()
 
 if( APPLE )

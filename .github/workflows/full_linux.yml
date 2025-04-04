@@ -115,15 +115,6 @@ jobs:
     #   run: |
     #      ./etc/install_cmake.sh
 
-    - name: AT END Check OpenSSL, SSH and libcrypto
-      run: |
-        echo "OpenSSL version:"
-        openssl version
-        echo "ssh version:"
-        ssh -V
-        echo "libcrypto version"
-        ldd $(which scp) | grep libcrypto
-
     - name: Build mrv2
       run: |
         ./etc/runme_nolog.sh -t package
