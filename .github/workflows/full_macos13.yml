@@ -28,7 +28,7 @@ jobs:
       run: brew install ninja
       
     - name: Install automake
-      run: brew install automake curl
+      run: brew install automake curl rsync
 
     - name: Install GNU sed
       run: brew install gnu-sed
@@ -74,7 +74,9 @@ jobs:
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           
     - name: Add SourceForge to known_hosts
-      run: ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
+      run: |
+        mkdir -p ~/.ssh
+        ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
       
     - name: Set executable permissions
       run: |

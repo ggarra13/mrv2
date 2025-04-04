@@ -8,6 +8,13 @@ echo "RUNNING upload_sourceforge.sh......"
 
 . etc/build_dir.sh
 
+#
+# Unset LD_LIBRARY_PATH and DYLD_LIBRARY_PATH just in case so we don't use
+# an incorrect library that is not on the system
+#
+unset LD_LIBRARY_PATH
+unset DYLD_LIBRARY_PATH
+
 branch=$(git rev-parse --abbrev-ref HEAD)
 if [[ "$branch" != "beta" && "$branch" != "upload_test" ]]; then
     echo "You are not on the beta branch.  Will not make a release."
@@ -75,9 +82,13 @@ files=$(ls -1 *v${mrv2_VERSION}*)
 
 
 if [[ $KERNEL == *Msys* ]]; then
-    pacman -Sy openssh --noconfirm
+    pacman -Sy openssh rsync --noconfirm
 fi
 
+echo "OpenSSL version:"
+openssl version
+echo "ssh version:"
+ssh -V
 
 echo "Proceed with uploading..."
 
@@ -86,10 +97,11 @@ upload_file()
     echo
     echo "Uploading $1 as $2..."
     echo
-    scp -i $SSH_KEY -o StrictHostKeyChecking=no $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$2 2>&1 | tee scp_error.log
+    
+    rsync -avz -e "ssh -i $SSH_KEY -o StrictHostKeyChecking=no" $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$2 2>&1 | tee rsync_error.log
     if [[ $? -ne 0 ]]; then
-        echo "SCP command failed. Error log:"
-	cat scp_error.log
+        echo "rsync command failed. Error log:"
+	cat rsync_error.log
         exit 1
     fi
     echo

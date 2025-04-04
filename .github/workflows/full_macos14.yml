@@ -31,7 +31,7 @@ jobs:
       run: brew install ninja
       
     - name: Install automake
-      run: brew install automake curl
+      run: brew install automake curl rsync
 
     - name: Install GNU sed
       run: brew install gnu-sed

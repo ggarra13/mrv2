@@ -91,7 +91,9 @@ jobs:
         
     - name: Add SourceForge to known_hosts
       shell: bash
-      run: ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
+      run: |
+        mkdir -p ~/.ssh
+        ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
       
     - name: Set executable permissions
       run: |
@@ -103,7 +105,7 @@ jobs:
         
     - name: Install MSYS2 Dependencies
       run: |
-        pacman -S --noconfirm nasm
+        pacman -S --noconfirm nasm rsync
       
     - name: Build mrv2
       run: |

@@ -84,22 +84,89 @@ set( CPACK_INSTALL_SCRIPT ${MRV2_ROOT}/cmake/dummy.cmake )
 set( CPACK_PRE_BUILD_SCRIPTS ${MRV2_ROOT}/cmake/prepackage.cmake )
 
 if( APPLE )
-    set(CPACK_GENERATOR Bundle )
+    # set(CPACK_GENERATOR Bundle )
 
-    set(CPACK_DMG_FORMAT "UDBZ")
-    set(CPACK_DMG_FILESYSTEM "APFS")
+    # set(CPACK_DMG_FORMAT "UDBZ")
+    # set(CPACK_DMG_FILESYSTEM "APFS")
 
     set( INSTALL_NAME ${PROJECT_NAME} )
+    set( HDR_INSTALL_NAME hdr )
 
+    # configure_file(
+    # 	${MRV2_DIR}/etc/macOS/Info.plist.in
+    # 	${PROJECT_BINARY_DIR}/Info.plist )
+
+    # set(CPACK_PACKAGE_ICON ${MRV2_DIR}/etc/macOS/mrv2.icns )
+    # set(CPACK_BUNDLE_NAME ${INSTALL_NAME} )
+    # set(CPACK_BUNDLE_ICON ${MRV2_DIR}/etc/macOS/mrv2.icns )
+    # set(CPACK_BUNDLE_PLIST ${PROJECT_BINARY_DIR}/Info.plist )
+    # set(CPACK_BUNDLE_STARTUP_COMMAND ${MRV2_DIR}/etc/macOS/startup.sh)
+
+
+    ##############################
+    # New Method using Dragndrop #
+    ##############################
+
+    # Define variables for bundle directories in the build dir
+    set(MRV2_BUNDLE_DIR ${CMAKE_BINARY_DIR}/mrv2.app)
+
+    # Create the mrv2.app bundle structure
+    file(MAKE_DIRECTORY ${MRV2_BUNDLE_DIR}/Contents/MacOS)
+    file(MAKE_DIRECTORY ${MRV2_BUNDLE_DIR}/Contents/Resources)
+    
+    # Copy the shell scripts into the bundles and make them executable
+    message(STATUS "${MRV2_DIR}/etc/macOS/mrv2.sh" )
+    message(STATUS "${MRV2_BUNDLE_DIR}/Contents/MacOS/mrv2" )
+    configure_file(${MRV2_DIR}/etc/macOS/mrv2.sh ${MRV2_BUNDLE_DIR}/Contents/MacOS/mrv2 COPYONLY)
+    
     configure_file(
-	${MRV2_DIR}/etc/macOS/Info.plist.in
-	${PROJECT_BINARY_DIR}/Info.plist )
+     	${MRV2_DIR}/etc/macOS/mrv2.plist.in
+     	${MRV2_BUNDLE_DIR}/Contents/Info.plist )
 
-    set(CPACK_PACKAGE_ICON ${MRV2_DIR}/etc/macOS/mrv2.icns )
-    set(CPACK_BUNDLE_NAME ${INSTALL_NAME} )
-    set(CPACK_BUNDLE_ICON ${MRV2_DIR}/etc/macOS/mrv2.icns )
-    set(CPACK_BUNDLE_PLIST ${PROJECT_BINARY_DIR}/Info.plist )
-    set(CPACK_BUNDLE_STARTUP_COMMAND ${MRV2_DIR}/etc/macOS/startup.sh)
+    
+    install(DIRECTORY ${MRV2_BUNDLE_DIR}
+	DESTINATION .
+	USE_SOURCE_PERMISSIONS
+	COMPONENT applications
+    )
+    
+
+    #
+    # set(HDR_BUNDLE_DIR ${CMAKE_BINARY_DIR}/hdr.app)
+    #
+    # Create the hdr.app bundle structure
+    # file(MAKE_DIRECTORY ${HDR_BUNDLE_DIR}/Contents/MacOS)
+    # file(MAKE_DIRECTORY ${HDR_BUNDLE_DIR}/Contents/Resources)
+    #
+    # add_custom_command(TARGET hdr POST_BUILD
+    # 	COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:hdr> ${HDR_BUNDLE_DIR}/Contents/MacOS/
+    # )
+    
+    # Copy the shell scripts into the bundles and make them executable
+    # configure_file(${MRV2_DIR}/etc/macOS/hdr.sh ${HDR_BUNDLE_DIR}/Contents/MacOS/hdr)
+    # 
+    # configure_file(
+    #  	${MRV2_DIR}/etc/macOS/hdr.plist.in
+    #  	${HDR_BUNDLE_DIR}/Contents/Info.plist )
+    #
+    #install(DIRECTORY ${HDR_BUNDLE_DIR}
+    # 	DESTINATION .
+    # 	USE_SOURCE_PERMISSIONS
+    # 	COMPONENT applications
+    # )
+
+    # Configure CPack for DragNDrop
+    set(CPACK_GENERATOR "DragNDrop")
+    set(CPACK_DMG_VOLUME_NAME "mrv2 Installer")
+    set(CPACK_DMG_FORMAT "UDZO")
+
+    # Set the volume icon
+    set(CPACK_DMG_VOLUME_ICON ${MRV2_DIR}/etc/macOS/mrv2.icns)
+    
+    set(CPACK_COMPONENTS_ALL "macos_bundles")
+    set(CPACK_INSTALL_CMAKE_PROJECTS "${CMAKE_BINARY_DIR};${CMAKE_PROJECT_NAME};applications;/")
+    set(CPACK_INSTALLED_DIRECTORIES "${CMAKE_BINARY_DIR}/install;.")
+
 elseif(UNIX)
     
     #

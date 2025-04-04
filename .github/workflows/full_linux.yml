@@ -24,7 +24,7 @@ jobs:
       run: |
         echo "Machine name: $RUNNER_NAME"
 
-    - name: Update
+    - name: Update repos
       run: |
         sudo add-apt-repository universe -y
         sudo apt-get update || { echo "apt-get update failed"; exit 1; }
@@ -48,7 +48,7 @@ jobs:
       run: sudo apt-get install -y libwayland-dev wayland-protocols libdbus-1-dev libxkbcommon-dev libegl-dev libgtk-3-dev
 
     - name: Install curl and openssl
-      run: sudo apt-get install -y curl openssl libunistring-dev
+      run: sudo apt-get install -y curl openssl rsync libunistring-dev
       
     - name: Install ninja-build
       run: sudo apt-get install -y ninja-build
@@ -58,7 +58,7 @@ jobs:
       
     - name: Install python dependencies
       run: sudo apt-get install -y libssl-dev libffi-dev python3
-        
+      
     # - name: Install vulkan
     #   if: github.ref_name == 'vulkan'
     #   run: |
@@ -103,7 +103,9 @@ jobs:
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           
     - name: Add SourceForge to known_hosts
-      run: ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
+      run: |
+        mkdir -p ~/.ssh
+        ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
       
     - name: Set executable permissions
       run: |
@@ -112,6 +114,15 @@ jobs:
     # - name: Install cmake
     #   run: |
     #      ./etc/install_cmake.sh
+
+    - name: AT END Check OpenSSL, SSH and libcrypto
+      run: |
+        echo "OpenSSL version:"
+        openssl version
+        echo "ssh version:"
+        ssh -V
+        echo "libcrypto version"
+        ldd $(which scp) | grep libcrypto
 
     - name: Build mrv2
       run: |

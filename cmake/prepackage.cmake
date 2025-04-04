@@ -196,7 +196,7 @@ if(UNIX)
     set(MRV2_PYTHON_LIBDIR "")
     if (MRV2_PYTHON_LIB_DIRS STREQUAL "")
 	message(WARNING "Could not locate any python version in:")
-	message(FATAL_ERROR "${CPACK_PREPACKAGE}/lib/python*")
+	message(WARNING "${CPACK_PREPACKAGE}/lib/python*")
     else()
 	list(GET MRV2_PYTHON_LIB_DIRS -1 MRV2_PYTHON_LIB_DIR)
     endif()
@@ -220,6 +220,7 @@ if(UNIX)
 	# Get DYLIB dependencies of components
 	#
 	get_macos_runtime_dependencies( "${MRV2_EXES}" )
+	
     else()
 	#
 	# Get DSO dependencies of components
@@ -298,3 +299,56 @@ endforeach()
 
 file(GLOB MRV2_UNUSED_PYTHON_DIRS ${MRV2_PYTHON_GLOBS})
 remove_python_directories( "${MRV2_UNUSED_PYTHON_DIRS}" )
+
+
+if (APPLE)
+    #
+    # Pre-pare mrv2.app
+    #
+    file(COPY ${CPACK_PREPACKAGE}/bin
+	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
+    file(COPY ${CPACK_PREPACKAGE}/colors
+	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
+    file(COPY ${CPACK_PREPACKAGE}/docs
+	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
+    file(COPY ${CPACK_PREPACKAGE}/icons
+	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
+    file(COPY ${CPACK_PREPACKAGE}/lib
+	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
+    file(COPY ${CPACK_PREPACKAGE}/libraries
+	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
+    file(COPY ${CPACK_PREPACKAGE}/ocio
+	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
+    file(COPY ${CPACK_PREPACKAGE}/plugin
+	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
+    file(COPY ${CPACK_PREPACKAGE}/presets
+	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
+    file(COPY ${CPACK_PREPACKAGE}/python
+	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
+    file(COPY ${CPACK_PREPACKAGE}/share
+	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
+
+    if (EXISTS ${CPACK_PREPACKAGE}/hdr.app)
+	# file(COPY ${CPACK_PREPACKAGE}/lib
+	#     DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
+    endif()
+    
+    #
+    # Clean up main staging area
+    #
+    file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/bin)
+    file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/colors)
+    file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/docs)
+    file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/icons)
+    file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/lib)
+    if (EXISTS ${CPACK_PREPACKAGE}/libraries)
+	file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/libraries)
+    endif()
+    file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/ocio)
+    if (EXISTS ${CPACK_PREPACKAGE}/plugin)
+	file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/plugin)
+    endif()
+    file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/presets)
+    file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/python)
+    file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/share)
+endif()
