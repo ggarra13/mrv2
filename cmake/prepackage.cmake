@@ -204,7 +204,7 @@ if(UNIX)
     set(MRV2_PYTHON_SITE_PACKAGES_DIR "${MRV2_PYTHON_LIB_DIR}/site-packages")
 
     set( MRV2_EXES "${CPACK_PREPACKAGE}/bin/mrv2" )
-    
+    list(APPEND MRV2_EXES "${CPACK_PREPACKAGE}/bin/hdr" )
 	
     #
     # We need to get the dependencies of the python DSOs to avoid
@@ -309,18 +309,24 @@ if (APPLE)
 	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
     file(COPY ${CPACK_PREPACKAGE}/colors
 	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
-    file(COPY ${CPACK_PREPACKAGE}/docs
-	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
+    if (EXISTS ${CPACK_PREPACKAGE}/docs)
+	file(COPY ${CPACK_PREPACKAGE}/docs
+	    DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
+    endif()
     file(COPY ${CPACK_PREPACKAGE}/icons
 	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
     file(COPY ${CPACK_PREPACKAGE}/lib
 	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
-    file(COPY ${CPACK_PREPACKAGE}/libraries
-	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
+    if (EXISTS ${CPACK_PREPACKAGE}/libraries)
+	file(COPY ${CPACK_PREPACKAGE}/libraries
+	    DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
+    endif()
     file(COPY ${CPACK_PREPACKAGE}/ocio
 	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
-    file(COPY ${CPACK_PREPACKAGE}/plugin
-	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
+    if (EXISTS ${CPACK_PREPACKAGE}/plugin)
+	file(COPY ${CPACK_PREPACKAGE}/plugin
+	    DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
+    endif()
     file(COPY ${CPACK_PREPACKAGE}/presets
 	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
     file(COPY ${CPACK_PREPACKAGE}/python
