@@ -39,7 +39,7 @@ if(UNIX AND NOT APPLE)
     list(APPEND LIBRARIES "util" "c" )
 endif()
 
-add_executable(mrv2 WIN32 ${SOURCES} ${HEADERS})
+add_executable(mrv2 WIN32  ${SOURCES} ${HEADERS})
 
 target_link_libraries(mrv2 PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
 target_link_directories( mrv2 BEFORE PUBLIC ${CMAKE_INSTALL_PREFIX}/lib /usr/local/lib )
@@ -373,10 +373,4 @@ if (APPLE)
     # Create the mrv2.app bundle structure
     file(MAKE_DIRECTORY ${MRV2_BUNDLE_DIR}/Contents/MacOS)
     file(MAKE_DIRECTORY ${MRV2_BUNDLE_DIR}/Contents/Resources)
-
-    
-    # Copy the real executables into the bundles
-    add_custom_command(TARGET mrv2 POST_BUILD
-	COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:mrv2> ${MRV2_BUNDLE_DIR}/Contents/MacOS/
-    )
 endif()
