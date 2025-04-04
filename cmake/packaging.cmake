@@ -131,37 +131,40 @@ if( APPLE )
     )
     
 
-    #
-    # set(HDR_BUNDLE_DIR ${CMAKE_BINARY_DIR}/hdr.app)
-    #
-    # Create the hdr.app bundle structure
-    # file(MAKE_DIRECTORY ${HDR_BUNDLE_DIR}/Contents/MacOS)
-    # file(MAKE_DIRECTORY ${HDR_BUNDLE_DIR}/Contents/Resources)
-    #
-    # add_custom_command(TARGET hdr POST_BUILD
-    # 	COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:hdr> ${HDR_BUNDLE_DIR}/Contents/MacOS/
-    # )
     
-    # Copy the shell scripts into the bundles and make them executable
-    # configure_file(${MRV2_DIR}/etc/macOS/hdr.sh ${HDR_BUNDLE_DIR}/Contents/MacOS/hdr)
-    # 
-    # configure_file(
-    #  	${MRV2_DIR}/etc/macOS/hdr.plist.in
-    #  	${HDR_BUNDLE_DIR}/Contents/Info.plist )
-    #
-    #install(DIRECTORY ${HDR_BUNDLE_DIR}
-    # 	DESTINATION .
-    # 	USE_SOURCE_PERMISSIONS
-    # 	COMPONENT applications
-    # )
+    set(HDR_BUNDLE_DIR ${CMAKE_BINARY_DIR}/hdr.app)
+    if (EXISTS ${HDR_BUNDLE_DIR})
+	# Create the hdr.app bundle structure
+	file(MAKE_DIRECTORY ${HDR_BUNDLE_DIR}/Contents/MacOS)
+	file(MAKE_DIRECTORY ${HDR_BUNDLE_DIR}/Contents/Resources)
+    
+	# Copy the shell scripts into the bundles and make them executable
+	configure_file(${MRV2_DIR}/etc/macOS/hdr.sh ${HDR_BUNDLE_DIR}/Contents/MacOS/hdr COPYONLY)
+    
+	configure_file(
+     	    ${MRV2_DIR}/etc/macOS/hdr.plist.in
+     	    ${HDR_BUNDLE_DIR}/Contents/Info.plist )
+	
+	install(DIRECTORY ${HDR_BUNDLE_DIR}
+	    DESTINATION .
+	    USE_SOURCE_PERMISSIONS
+	    COMPONENT applications
+	)
+    endif()
 
     # Configure CPack for DragNDrop
     set(CPACK_GENERATOR "DragNDrop")
+
+    # Package settings
+    set(CPACK_PACKAGE_ICON ${MRV2_DIR}/etc/macOS/mrv2.icns )
+
+    # DragNDrop settings
     set(CPACK_DMG_VOLUME_NAME "mrv2 Installer")
     set(CPACK_DMG_FORMAT "UDZO")
-
-    # Set the volume icon
+    Set(CPACK_DMG_VOLUME_NAME ${CPACK_PACKAGE_FILE_NAME})
     set(CPACK_DMG_VOLUME_ICON ${MRV2_DIR}/etc/macOS/mrv2.icns)
+    
+    
     
     set(CPACK_COMPONENTS_ALL "macos_bundles")
     set(CPACK_INSTALL_CMAKE_PROJECTS "${CMAKE_BINARY_DIR};${CMAKE_PROJECT_NAME};applications;/")

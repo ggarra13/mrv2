@@ -10,10 +10,12 @@ FLTK_WRAP_UI( hdr ${FL_SOURCES} )
 
 set(HEADERS
     mrvHDRApp.h
+    mrvRoot.h
 )
 set(SOURCES
     ${hdr_FLTK_UI_SRCS}
     mrvHDRApp.cpp
+    mrvRoot.cpp
     main.cpp)
 
 files_to_absolute_paths()
@@ -30,7 +32,6 @@ endif()
 set(LIBRARIES
     mrvBaseApp
     mrvHDR
-    mrvCore
     ${Intl_LIBRARIES})
 
 if (WIN32)
@@ -159,4 +160,13 @@ if ( NOT WIN32 )
         GROUP_READ GROUP_EXECUTE
         WORLD_READ WORLD_EXECUTE
 	COMPONENT applications )
+endif()
+
+if (APPLE)
+    # Define variables for bundle directories in the build dir
+    set(HDR_BUNDLE_DIR ${CMAKE_BINARY_DIR}/mrv2.app)
+
+    # Create the mrv2.app bundle structure
+    file(MAKE_DIRECTORY ${HDR_BUNDLE_DIR}/Contents/MacOS)
+    file(MAKE_DIRECTORY ${HDR_BUNDLE_DIR}/Contents/Resources)
 endif()
