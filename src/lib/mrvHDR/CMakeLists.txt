@@ -11,19 +11,12 @@ set(SOURCES
 )
 
 find_package(Intl REQUIRED)
-find_package(Vulkan REQUIRED
-    COMPONENTS
-    glslang
-    shaderc_combined
-    SPIRV-Tools)
+find_package(Vulkan REQUIRED)
 find_package(libplacebo REQUIRED)
 find_package(NDI REQUIRED)
 
 set(LIBRARIES ${FLTK_LIBRARIES}
     Vulkan::Vulkan
-    Vulkan::shaderc_combined
-    Vulkan::SPIRV-Tools
-    Vulkan::glslang
     libplacebo
     NDI
     ${Intl_LIBRARIES}

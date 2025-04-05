@@ -1574,30 +1574,6 @@ msgstr "Annulla"
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Canali: {1} {2} {3}"
 
-msgid "Print the log to the console."
-msgstr "Stampa il log sulla console."
-
-msgid "Show this message."
-msgstr "Mostra questo messaggio."
-
-msgid "Cannot parse option \"{0}\": {1}"
-msgstr "Impossibile analizzare l'opzione \"{0}\": {1}"
-
-msgid "Cannot parse argument \"{0}\": {1}"
-msgstr "Impossibile analizzare l'argomento \"{0}\": {1}"
-
-msgid "Usage:\n"
-msgstr "Uso:\n"
-
-msgid " [option]..."
-msgstr "[opzione]..."
-
-msgid "Arguments:\n"
-msgstr "Argomenti:\n"
-
-msgid "Options:\n"
-msgstr "Opzioni:\n"
-
 msgid "Play timelines, movies, and image sequences."
 msgstr "Gioca timeline, film e sequenze di immagini."
 
@@ -1742,6 +1718,30 @@ msgstr "Errore di Python:"
 
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr "Il nome file '{0}' non esiste o non ha permessi di lettura."
+
+msgid "Print the log to the console."
+msgstr "Stampa il log sulla console."
+
+msgid "Show this message."
+msgstr "Mostra questo messaggio."
+
+msgid "Cannot parse option \"{0}\": {1}"
+msgstr "Impossibile analizzare l'opzione \"{0}\": {1}"
+
+msgid "Cannot parse argument \"{0}\": {1}"
+msgstr "Impossibile analizzare l'argomento \"{0}\": {1}"
+
+msgid "Usage:\n"
+msgstr "Uso:\n"
+
+msgid " [option]..."
+msgstr "[opzione]..."
+
+msgid "Arguments:\n"
+msgstr "Argomenti:\n"
+
+msgid "Options:\n"
+msgstr "Opzioni:\n"
 
 msgid "Files"
 msgstr "File"

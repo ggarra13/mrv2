@@ -1566,30 +1566,6 @@ msgstr "キャンセル"
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - チャンネル: {1} {2} {3}"
 
-msgid "Print the log to the console."
-msgstr "イベントをコンソールにログ出力します"
-
-msgid "Show this message."
-msgstr "このヘルプメッセージを表示"
-
-msgid "Cannot parse option \"{0}\": {1}"
-msgstr "オプション \"{0}\" を解析できません: {1}"
-
-msgid "Cannot parse argument \"{0}\": {1}"
-msgstr "引数 \"{0}\" を解析できません: {1}"
-
-msgid "Usage:\n"
-msgstr "使用方法:\n"
-
-msgid " [option]..."
-msgstr " [オプション]..."
-
-msgid "Arguments:\n"
-msgstr "引数:\n"
-
-msgid "Options:\n"
-msgstr "オプション:\n"
-
 msgid "Play timelines, movies, and image sequences."
 msgstr "動画や音楽を再生します"
 
@@ -1730,6 +1706,30 @@ msgstr "パイソン"
 
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr "ファイル名 '{0}' が存在しないか、読み取り権限がありません。"
+
+msgid "Print the log to the console."
+msgstr "イベントをコンソールにログ出力します"
+
+msgid "Show this message."
+msgstr "このヘルプメッセージを表示"
+
+msgid "Cannot parse option \"{0}\": {1}"
+msgstr "オプション \"{0}\" を解析できません: {1}"
+
+msgid "Cannot parse argument \"{0}\": {1}"
+msgstr "引数 \"{0}\" を解析できません: {1}"
+
+msgid "Usage:\n"
+msgstr "使用方法:\n"
+
+msgid " [option]..."
+msgstr " [オプション]..."
+
+msgid "Arguments:\n"
+msgstr "引数:\n"
+
+msgid "Options:\n"
+msgstr "オプション:\n"
 
 msgid "Files"
 msgstr "ファイル"

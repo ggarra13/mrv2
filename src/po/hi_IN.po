@@ -1546,30 +1546,6 @@ msgstr "रद्द करें"
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - चैनल्स: {1} {2} {3}"
 
-msgid "Print the log to the console."
-msgstr "कंसोल में लॉग छापें."
-
-msgid "Show this message."
-msgstr "यह संदेश भेजें."
-
-msgid "Cannot parse option \"{0}\": {1}"
-msgstr "\"{0}\" विकल्प का विश्लेषण नहीं कर सकता: {1}"
-
-msgid "Cannot parse argument \"{0}\": {1}"
-msgstr "तर्क \"{0}\" का विश्लेषण नहीं कर सकता है: {1}"
-
-msgid "Usage:\n"
-msgstr "उपयोग:\n"
-
-msgid " [option]..."
-msgstr "[ option]..."
-
-msgid "Arguments:\n"
-msgstr "आर्गुमेंट्सः\n"
-
-msgid "Options:\n"
-msgstr "विकल्प:\n"
-
 msgid "Play timelines, movies, and image sequences."
 msgstr "समयरेखा, फिल्में, और छवि अनुक्रम खेलें."
 
@@ -1710,6 +1686,30 @@ msgstr "पायथन त्रुटि:"
 
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr "फ़ाइलनाम '{0}' मौजूद नहीं है या पढ़ने की अनुमति नहीं है."
+
+msgid "Print the log to the console."
+msgstr "कंसोल में लॉग छापें."
+
+msgid "Show this message."
+msgstr "यह संदेश भेजें."
+
+msgid "Cannot parse option \"{0}\": {1}"
+msgstr "\"{0}\" विकल्प का विश्लेषण नहीं कर सकता: {1}"
+
+msgid "Cannot parse argument \"{0}\": {1}"
+msgstr "तर्क \"{0}\" का विश्लेषण नहीं कर सकता है: {1}"
+
+msgid "Usage:\n"
+msgstr "उपयोग:\n"
+
+msgid " [option]..."
+msgstr "[ option]..."
+
+msgid "Arguments:\n"
+msgstr "आर्गुमेंट्सः\n"
+
+msgid "Options:\n"
+msgstr "विकल्प:\n"
 
 msgid "Files"
 msgstr "फ़ाइल"

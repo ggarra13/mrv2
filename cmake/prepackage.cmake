@@ -592,10 +592,7 @@ if (APPLE)
 	message(STATUS "VULKAN_SDK set to ${VULKAN_SDK}")
 	install_vulkan_lib_glob("libMoltenVK*" hdr)
 	install_vulkan_lib_glob("libvulkan*" hdr)
-	install_vulkan_lib_glob("libglslang*" hdr)
-	install_vulkan_lib_glob("libshaderc_combined*" hdr)
-	install_vulkan_lib_glob("libSPIRV-Tools*" hdr)
-
+	
 	install_vulkan_icd_filenames(hdr)
 	# install_vulkan_layers(hdr)
     endif()
