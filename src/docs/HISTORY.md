@@ -26,7 +26,6 @@ v1.3.7
 - Added Playback->Annotation->Toggle Visible to toggle on or off the annotations
   without deleting them.
 - Fixed a crash when saving a movie file and the container did not support it and the file was already present.
-- Fixed setting presets for FFmpeg v7.1.1.
 - Removed non-existant YUV440" pixel format from VP9.
 - Revamped macOS install to support installing multiple applications.
   
