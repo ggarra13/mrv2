@@ -35,6 +35,10 @@ if [ -z "$BUILD_X11" ]; then
     export BUILD_X11=ON
 fi
 
+if [ -z "$MRV2_HDR" ]; then
+    export MRV2_HDR=OFF
+fi
+
 if [ -z "$MRV2_PYFLTK" ]; then
     export MRV2_PYFLTK=ON
 fi
