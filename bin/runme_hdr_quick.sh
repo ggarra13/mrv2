@@ -59,5 +59,5 @@ export TLRENDER_X11=ON
 echo
 echo "Saving compile log to $BUILD_DIR/compile.log ..."
 echo
-cmd="./etc/runme_nolog.sh --ask $params --dir $KERNEL-vulkan 2>&1 | tee $BUILD_DIR/compile.log"
+cmd="./etc/runme_nolog.sh --ask $params --dir $KERNEL-vulkan-quick 2>&1 | tee $KERNEL-vulkan-quick/compile.log"
 run_cmd $cmd

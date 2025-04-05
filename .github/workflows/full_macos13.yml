@@ -99,7 +99,7 @@ jobs:
         retry_wait_seconds: 15 # Wait between attempts
         # The command to retry is the one that invokes CPack via the build system
         command: |
-          runmeq.sh -t package
+          ./runmeq.sh -t package
       
     - name: Upload binaries
       if: github.ref_name == 'beta'
