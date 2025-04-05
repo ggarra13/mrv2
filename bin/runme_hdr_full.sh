@@ -31,6 +31,9 @@
 params=$*
 
 KERNEL=`uname`
+if [[ $KERNEL == *MSYS* || $KERNEL == *MINGW* ]]; then
+    export KERNEL=Msys
+fi
 export BUILD_ROOT=${KERNEL}-vulkan
 
 #
