@@ -204,9 +204,6 @@ elseif(UNIX)
     #
     configure_file( ${MRV2_DIR}/etc/Linux/mrv2.main.desktop.in
 	"${PROJECT_BINARY_DIR}/etc/mrv2.desktop" )
-    configure_file( ${MRV2_DIR}/etc/Linux/hdr.main.desktop.in
-	"${PROJECT_BINARY_DIR}/etc/hdr.desktop" )
-
     install(FILES "${PROJECT_BINARY_DIR}/etc/mrv2-v${mrv2_VERSION}.desktop"
 	DESTINATION share/applications COMPONENT applications)
     install(FILES "${PROJECT_BINARY_DIR}/etc/mrv2.desktop"
@@ -217,6 +214,20 @@ elseif(UNIX)
 	DESTINATION share/applications COMPONENT applications)
     install(DIRECTORY ${MRV2_DIR}/share/icons
 	DESTINATION share/ COMPONENT applications)
+
+    if (EXISTS "${CMAKE_INSTALL_PREFIX}/bin/hdr")
+	configure_file( ${MRV2_DIR}/etc/Linux/hdr.main.desktop.in
+	    "${PROJECT_BINARY_DIR}/etc/hdr.desktop")
+	configure_file( ${MRV2_DIR}/etc/Linux/hdr.desktop.in
+	    "${PROJECT_BINARY_DIR}/etc/hdr-v${mrv2_VERSION}.desktop")
+    
+	install(FILES "${PROJECT_BINARY_DIR}/etc/hdr-v${mrv2_VERSION}.desktop"
+	    DESTINATION share/applications COMPONENT applications)
+    
+	install(FILES "${PROJECT_BINARY_DIR}/etc/hdr.desktop"
+	    DESTINATION share/applications COMPONENT applications)
+    endif()
+
 
     set(CPACK_INSTALL_PREFIX /usr/local/${mrv2ShortName})
 

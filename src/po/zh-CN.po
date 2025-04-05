@@ -13,6 +13,1496 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid ""
+"\n"
+"USD module.\n"
+"\n"
+"Contains all classes and enums related to USD (Universal Scene Description). \n"
+msgstr ""
+"\n"
+"USD 模块。\n"
+"\n"
+"包含所有与 USD（通用场景描述）相关的类和枚举。\n"
+
+msgid "Renderer Name"
+msgstr "渲染器命名"
+
+msgid "Render Width"
+msgstr "宽度"
+
+msgid "Models' complexity."
+msgstr "模型复杂度"
+
+msgid "Draw mode  :class:`mrv2.usd.DrawMode`."
+msgstr "绘制模式 :class: `mrv2.usd.DrawMode`"
+
+msgid "Enable Lighting"
+msgstr "开启照明"
+
+msgid "Enable Scene Lights"
+msgstr "开启场景灯光"
+
+msgid "Enable Scene Materials"
+msgstr "开启场景材质"
+
+msgid "Enable sRGB"
+msgstr "开启sRGB"
+
+msgid "Stage Cache Count"
+msgstr "阶段缓存计数"
+
+msgid "Disk Cache Byte Count"
+msgstr "磁盘缓存字节计数"
+
+msgid "USD Render Options."
+msgstr "USD 渲染选项"
+
+msgid "Get USD Render Options."
+msgstr "获取 USD 渲染选项"
+
+msgid "Set USD Render Options."
+msgstr "设定 USD 渲染选项"
+
+msgid ""
+"\n"
+"UI module.\n"
+"\n"
+"Contains all classes and enums related to UI (User Interface). \n"
+msgstr ""
+"\n"
+"UI 模块。\n"
+"\n"
+"包含所有与 UI（用户界面）相关的类和枚举。\n"
+
+msgid "Refresh menus."
+msgstr "刷新菜单"
+
+msgid ""
+"\n"
+"Timeline module.\n"
+"\n"
+"Contains all functions related to the timeline control.\n"
+msgstr ""
+"\n"
+"时间轴模块。\n"
+"\n"
+"包含所有与时间轴控制相关的功能。\n"
+
+msgid "Play forwards."
+msgstr "向前播"
+
+msgid "Play backwards."
+msgstr "向后播"
+
+msgid "Seek to a time in timeline."
+msgstr "定位到时间轴上的时间戳"
+
+msgid "Seek to a frame in timeline."
+msgstr "定位到时间轴上的一帧"
+
+msgid "Seek to a second in timeline."
+msgstr "定位到时间轴上的秒"
+
+msgid "Time range of the timeline."
+msgstr "时间轴范围"
+
+msgid "Selected time range of the timeline."
+msgstr "选择时间轴范围"
+
+msgid "Set the selected time range of the timeline."
+msgstr "设定所选择的时间范围"
+
+msgid "Set the in time of the selected time range of the timeline."
+msgstr "设定开始时间戳"
+
+msgid "Set the in frame of the selected time range of the timeline."
+msgstr "设定开始帧"
+
+msgid "Set the in seconds of the selected time range of the timeline."
+msgstr "设置开始时间秒数"
+
+msgid "Set the out time of the selected time range of the timeline."
+msgstr "设定结束时间戳"
+
+msgid "Set the out frame of the selected time range of the timeline."
+msgstr "设定结束帧"
+
+msgid "Set the out seconds of the selected time range of the timeline."
+msgstr "设定结束时间秒数"
+
+msgid "Current time in timeline."
+msgstr "当前时间戳"
+
+msgid "Current frame in timeline."
+msgstr "当前帧"
+
+msgid "Current seconds in timeline."
+msgstr "当前秒数"
+
+msgid "Return current loop mode of timeline."
+msgstr "返回当前时间循环模式"
+
+msgid "Set current loop mode of timeline."
+msgstr "设置当前时间循环模式"
+
+msgid "Gets the current FPS of timeline."
+msgstr "获取当前FPS帧率"
+
+msgid "Gets the default speed of the timeline."
+msgstr "获得时间轴的默认速度"
+
+msgid "Set current FPS of timeline."
+msgstr "FPS帧率"
+
+msgid "Value less than 0"
+msgstr "值小于0"
+
+msgid ""
+"\n"
+"Settings module.\n"
+"\n"
+"Contains all settings functions.\n"
+msgstr ""
+"\n"
+"设置模式\n"
+"\n"
+"包括所有设置选项\n"
+
+msgid "Returns whether to check for updates at start up."
+msgstr "返回是否在启动时检查更新"
+
+msgid "Retrieve the cache memory setting in gigabytes."
+msgstr "获取缓存大小(GB)"
+
+msgid "Set the cache memory setting in gigabytes."
+msgstr "设置缓存大小(GB)"
+
+msgid "Retrieve Read Ahead cache in seconds."
+msgstr "获取读头缓存(秒)"
+
+msgid "Set Read Ahead cache in seconds."
+msgstr "设置读头缓存(秒)"
+
+msgid "Retrieve Read Behind cache in seconds."
+msgstr "获取读尾缓存(秒)"
+
+msgid "Set Read Behind cache in seconds."
+msgstr "设置读尾缓存(秒)"
+
+msgid "Set file sequence audio."
+msgstr "设置文件序列音频"
+
+msgid "Get file sequence audio."
+msgstr "获取文件序列音频"
+
+msgid "Set file sequence audio file name."
+msgstr "设置文件序列音频文件名"
+
+msgid "Get file sequence audio file name."
+msgstr "获取文件序列音频文件名"
+
+msgid "Set file sequence audio directory."
+msgstr "设置文件序列音频目录"
+
+msgid "Get file sequence audio directory."
+msgstr "获取文件序列音频目录"
+
+msgid "Set maximum file sequence digits."
+msgstr "设定最大文件序列位数"
+
+msgid "Get maximum file sequence digits."
+msgstr "获取最大文件序列位数"
+
+msgid "Set Timer Mode."
+msgstr "设定定时器模式"
+
+msgid "Get Timer Mode."
+msgstr "获取定时器模式"
+
+msgid "Set Audio Buffer Frame Count."
+msgstr "设定音频缓冲帧数"
+
+msgid "Get Audio Buffer Frame Count."
+msgstr "获取音频缓冲帧数"
+
+msgid "Set Video Request Count."
+msgstr "设定视频请求数"
+
+msgid "Get Video Request Count."
+msgstr "获取视频请求数"
+
+msgid "Set Audio Request Count."
+msgstr "设定音频请求数"
+
+msgid "Get Audio Request Count."
+msgstr "获取音频请求数"
+
+msgid "Set Sequence Thread Count."
+msgstr "设置序列线程数"
+
+msgid "Get Sequence Thread Count."
+msgstr "获取序列线程数"
+
+msgid "Set FFmpeg YUV To RGB Conversion."
+msgstr "设置FFmpeg YUV到RGB转换"
+
+msgid "Get FFmpeg YUV To RGB Conversion."
+msgstr "获取FFmpeg YUV到RGB转换"
+
+msgid "Set FFmpeg Color Accuracy."
+msgstr "设置FFmpeg颜色准确度"
+
+msgid "Get FFmpeg Color Accuracy."
+msgstr "获取FFmpeg颜色准确度"
+
+msgid "Set FFmpeg Thread Count."
+msgstr "设置FFmpeg线程数"
+
+msgid "Get FFmpeg Thread Count."
+msgstr "获取FFmpeg线程数"
+
+msgid "No session name established, cannot save."
+msgstr "未建立会话名称, 无法保存"
+
+msgid ""
+"\n"
+"Session module.\n"
+"\n"
+"Used to manage everything related to sessions.\n"
+msgstr ""
+"\n"
+"会话模式\n"
+"\n"
+"会话相关的所有设置\n"
+
+msgid "Returns the current session metadata."
+msgstr "返回当前会话元数据"
+
+msgid "Returns the current metadata for a key."
+msgstr "返回当前key元数据"
+
+msgid "Sets all the session metadata for a session."
+msgstr "设置会话的全部会话元数据 。"
+
+msgid "Sets the session metadata for a key."
+msgstr "设置密钥的会话元数据 。"
+
+msgid "Clears the current session metadata."
+msgstr "清除当前会话元数据 。"
+
+msgid "Returns current session file."
+msgstr "返回当前会话文件 。"
+
+msgid "Sets the current session file."
+msgstr "设置当前会话文件 。"
+
+msgid "Open a session file."
+msgstr "打开会话文件 。"
+
+msgid "Save a session file."
+msgstr "保存会话文件 。"
+
+msgid "Duplicated Python plugin {0} in {1} and {2}."
+msgstr "复制的Python插件 {0} in {1} {2}"
+
+msgid ""
+"Expected a tuple containing a Python function and a string with menu options"
+" in it."
+msgstr "需要一个tuple, 包含py函数和string菜单选项"
+
+msgid ""
+"Expected a handle to a Python function or to a tuple containing a Python "
+"function and a string with menu options in it."
+msgstr "需要一个Python函数的handle或是tuple,包含py函数和string菜单选项"
+
+msgid ""
+"Please override the menus method by returning a valid dict of key menus, "
+"values methods."
+msgstr "请返回有效的字典, 包含菜单键值和函数, 以覆盖菜单"
+
+msgid ""
+"\n"
+"Plugin module.\n"
+"\n"
+"Contains all classes related to python plugins.\n"
+"\n"
+msgstr ""
+"\n"
+"Plugin module.\n"
+"\n"
+"Contains all classes related to python plugins.\n"
+"\n"
+
+msgid ""
+"Whether a plugin is active or not.  If not overriden, the default is True."
+msgstr "插件是否开启,默认为True"
+
+msgid ""
+"\n"
+"Dictionary of menu entries with callbacks, like:\n"
+"\n"
+"def menus(self):\n"
+"    menus = { \"New Menu/Hello\" : self.run }\n"
+"    return menus\n"
+"\n"
+msgstr ""
+"\n"
+"Dictionary of menu entries with callbacks, like:\n"
+"\n"
+"def menus(self):\n"
+"  menus = { \"New Menu/Hello\" : self.run }\n"
+"  return menus\n"
+"\n"
+
+msgid ""
+"\n"
+"\n"
+"import mrv2\n"
+"from mrv2 import plugin\n"
+"\n"
+"class DemoPlugin(plugin.Plugin):\n"
+"    def __init__(self):\n"
+"        \"\"\"\n"
+"        Constructor for DemoPlugin.\n"
+"\n"
+"        Define your own variables here.\n"
+"        \"\"\"\n"
+"        super().__init__()\n"
+"\n"
+"    def run(self):\n"
+"        \"\"\"\n"
+"        Example method used for the callback.\n"
+"        \"\"\"\n"
+"        print(\"Hello from Python plugin\")\n"
+"\n"
+"    def active(self):\n"
+"        \"\"\"\n"
+"        Optional method to return whether the plug-in is active or not.\n"
+"\n"
+"\n"
+"        :return: True if the plug-in is active, False otherwise.\n"
+"        :rtype: bool\n"
+"\n"
+"        \"\"\"\n"
+"        return True\n"
+"\n"
+"    def menus(self):\n"
+"        \"\"\"\n"
+"        Dictionary of menu entries as keys with callbacks as values.\n"
+"\n"
+"\n"
+"        :return: A dictionary of menu entries and their corresponding callbacks.\n"
+"        :rtype: dict\n"
+"\n"
+"        \"\"\"\n"
+"        menus = {\"New Menu/Hello\": self.run}\n"
+"        return menus\n"
+"\n"
+msgstr ""
+"\n"
+"\n"
+"import mrv2\n"
+"from mrv2 import plugin\n"
+"\n"
+"class DemoPlugin(plugin.Plugin):\n"
+"    def __init__(self):\n"
+"        \"\"\"\n"
+"        DemoPlugin 的构造函数。\n"
+"\n"
+"        在这里定义你自己的变量。\n"
+"        \"\"\"\n"
+"        super().__init__()\n"
+"\n"
+"    def run(self):\n"
+"        \"\"\"\n"
+"        用于回调的示例方法。\n"
+"        \"\"\"\n"
+"        print(\"Hello from Python plugin\")\n"
+"\n"
+"    def active(self):\n"
+"        \"\"\"\n"
+"        可选方法，用于返回插件是否处于活动状态。\n"
+"\n"
+"\n"
+"        :return: 如果插件处于活动状态，则返回 True，否则返回 False。\n"
+"        :rtype: bool\n"
+"\n"
+"        \"\"\"\n"
+"        return True\n"
+"\n"
+"    def menus(self):\n"
+"        \"\"\"\n"
+"        菜单项的字典，键是菜单项，值是回调函数。\n"
+"\n"
+"\n"
+"        :return: 一个包含菜单项及其对应回调的字典。\n"
+"        :rtype: dict\n"
+"\n"
+"        \"\"\"\n"
+"        menus = {\"New Menu/Hello\": self.run}\n"
+"        return menus\n"
+"\n"
+
+msgid "No playlist matched item."
+msgstr "没有符合播放列表的项目"
+
+msgid "No playlist matched file name."
+msgstr "没有符合播放列表的文件名"
+
+msgid "No playlist loaded."
+msgstr "未载入播放列表"
+
+msgid "No playlist selected."
+msgstr "未选择播放列表"
+
+msgid "Not an EDL playlist to add clips to."
+msgstr "不是可添加Clip片段的播放列表"
+
+msgid "Could not find clip in loaded clips."
+msgstr "无法在已加载的片段中找到"
+
+msgid ""
+"\n"
+"Playlist module.\n"
+"\n"
+"Contains all functions and classes related to the playlists.\n"
+msgstr ""
+"\n"
+"播放列表选项\n"
+"\n"
+"包含播放列表相关的函数和类\n"
+
+msgid "List playlist items."
+msgstr "列出播放列表项目"
+
+msgid "Select a playlist by FileModelItem."
+msgstr "根据FileModelItem选择播放列表"
+
+msgid "Select a playlist by fileName."
+msgstr "根据文件选择播放列表"
+
+msgid "Select a playlist by index."
+msgstr "根据索引选择播放列表"
+
+msgid "Add a clip to currently selected Playlist EDL."
+msgstr "在现有的播放列表添加片段"
+
+msgid "Save current .otio file with relative paths."
+msgstr "保存.otio文件"
+
+msgid "unsupported operand type(s) for {0}: RationalTime and {1}"
+msgstr "不支持的操作类型 {0}: RationalTime 和{1}"
+
+msgid ""
+"\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/rt.rate` seconds.\n"
+"It can be rescaled into another :class:`~RationalTime`'s rate.\n"
+msgstr ""
+"\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/rt.rate` seconds.\n"
+"It can be rescaled into another :class:`~RationalTime`'s rate.\n"
+
+msgid ""
+"\n"
+"Returns true if the time is invalid. The time is considered invalid if the value or the rate are a NaN value\n"
+"or if the rate is less than or equal to zero.\n"
+msgstr ""
+"\n"
+"Returns true if the time is invalid. The time is considered invalid if the value or the rate are a NaN value\n"
+"or if the rate is less than or equal to zero.\n"
+
+msgid "Returns the time value for time converted to new_rate."
+msgstr "返回转换为new_rate的时间值"
+
+msgid "Returns the time for time converted to new_rate."
+msgstr "返回转换为new_rate的时间"
+
+msgid "Returns the time value for \"self\" converted to new_rate."
+msgstr "返回从\"self\"转换为new_rate的时间值"
+
+msgid ""
+"\n"
+"Compute the duration of samples from first to last (excluding last). This is not the same as distance.\n"
+"\n"
+"For example, the duration of a clip from frame 10 to frame 15 is 5 frames. Result will be in the rate of start_time.\n"
+msgstr ""
+"\n"
+"Compute the duration of samples from first to last (excluding last). This is not the same as distance.\n"
+"\n"
+"For example, the duration of a clip from frame 10 to frame 15 is 5 frames. Result will be in the rate of start_time.\n"
+
+msgid ""
+"\n"
+"Compute the duration of samples from first to last (including last). This is not the same as distance.\n"
+"\n"
+"For example, the duration of a clip from frame 10 to frame 15 is 6 frames. Result will be in the rate of start_time.\n"
+msgstr ""
+"\n"
+"Compute the duration of samples from first to last (including last). This is not the same as distance.\n"
+"\n"
+"For example, the duration of a clip from frame 10 to frame 15 is 6 frames. Result will be in the rate of start_time.\n"
+
+msgid "Returns true if the rate is valid for use with timecode."
+msgstr "返回true, 如果rate是有效的时间编码率"
+
+msgid ""
+"Returns the first valid timecode rate that has the least difference from the"
+" given value."
+msgstr "返回第一个与给定值最小差的有效时间编码率。"
+
+msgid "Turn a frame number and rate into a :class:`~RationalTime` object."
+msgstr ": class: `~ RationalTime`"
+
+msgid "Returns the frame number based on the current rate."
+msgstr "根据当前速率返回框架编号。"
+
+msgid "Returns the frame number based on the given rate."
+msgstr "根据给定的速率返回框架编号。"
+
+msgid "Convert to timecode (``HH:MM:SS;FRAME``)"
+msgstr "转换为时间码（``HH:MM:SS;帧``）"
+
+msgid ""
+"Convert a timecode string (``HH:MM:SS;FRAME``) into a "
+":class:`~RationalTime`."
+msgstr "将时间码字符串（``HH:MM:SS;帧``）转换为:class:`~RationalTime`。"
+
+msgid ""
+"Convert a time with microseconds string (``HH:MM:ss`` where ``ss`` is an "
+"integer or a decimal number) into a :class:`~RationalTime`."
+msgstr "将带有微秒字符串的时间（``HH:MM:ss``，其中``ss``是整数或十进制数）转换为：class:`~RationalTime`。"
+
+msgid ""
+"\n"
+"The TimeRange class represents a range in time. It encodes the start time and the duration,\n"
+"meaning that :meth:`end_time_inclusive` (last portion of a sample in the time range) and\n"
+":meth:`end_time_exclusive` can be computed.\n"
+msgstr ""
+"\n"
+"TimeRange 类表示时间范围。它对开始时间和持续时间进行编码，\n"
+"这意味着可以计算 :meth:`end_time_inclusive`（时间范围内样本的最后一部分）和\n"
+":meth:`end_time_exclusive`。\n"
+
+msgid ""
+"\n"
+"The time of the last sample containing data in the time range.\n"
+"\n"
+"If the time range starts at (0, 24) with duration (10, 24), this will be\n"
+"(9, 24)\n"
+"\n"
+"If the time range starts at (0, 24) with duration (10.5, 24):\n"
+"(10, 24)\n"
+"\n"
+"In other words, the last frame with data, even if the last frame is fractional.\n"
+msgstr ""
+"\n"
+"时间范围内包含数据的最后一个样本的时间。\n"
+"\n"
+"如果时间范围从 (0, 24) 开始，持续时间为 (10, 24)，则为\n"
+"(9, 24)\n"
+"\n"
+"如果时间范围从 (0, 24) 开始，持续时间为 (10.5, 24):\n"
+"(10, 24)\n"
+"\n"
+"换句话说，最后一帧包含数据，即使最后一帧是小数。\n"
+
+msgid ""
+"\n"
+"Time of the first sample outside the time range.\n"
+"\n"
+"If start frame is 10 and duration is 5, then end_time_exclusive is 15,\n"
+"because the last time with data in this range is 14.\n"
+"\n"
+"If start frame is 10 and duration is 5.5, then end_time_exclusive is\n"
+"15.5, because the last time with data in this range is 15.\n"
+msgstr ""
+"\n"
+"时间范围之外的第一个样本的时间。\n"
+"\n"
+"如果起始帧为 10 且持续时间为 5，则 end_time_exclusive 为 15，\n"
+"因为此范围内数据的最后一次时间为 14。\n"
+"\n"
+"如果起始帧为 10 且持续时间为 5.5，则 end_time_exclusive 为\n"
+"15.5，因为此范围内数据的最后一次时间为 15。\n"
+
+msgid ""
+"Construct a new :class:`~TimeRange` that is this one extended by other."
+msgstr "构造一个新的：class:`~TimeRange`，它是这个被其他扩展的。"
+
+msgid ""
+"\n"
+"Clamp 'other' (:class:`~RationalTime`) according to\n"
+":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
+msgstr ""
+"\n"
+"根据\n"
+":attr:`start_time`/:attr:`end_time_exclusive` 和绑定参数限制‘其他’(:class:`~RationalTime`)。\n"
+
+msgid ""
+"\n"
+"Clamp 'other' (:class:`~TimeRange`) according to\n"
+":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
+msgstr ""
+"\n"
+"根据\n"
+":attr:`start_time`/:attr:`end_time_exclusive` 和绑定参数限制‘其他’(:class:`~TimeRange`)。\n"
+
+msgid ""
+"\n"
+"The start of `this` precedes `other`.\n"
+"`other` precedes the end of `this`.\n"
+"::\n"
+"\n"
+"         other\n"
+"           |\n"
+"           *\n"
+"   [      this      ]\n"
+"\n"
+msgstr ""
+"\n"
+"`this` 的开始在 `other` 之前。\n"
+"`other` 在 `this` 的结束之前。\n"
+"::\n"
+"\n"
+"         other\n"
+"           |\n"
+"           *\n"
+"   [      this      ]\n"
+"\n"
+
+msgid ""
+"\n"
+"The start of `this` precedes start of `other`.\n"
+"The end of `this` antecedes end of `other`.\n"
+"::\n"
+"\n"
+"        [ other ]\n"
+"   [      this      ]\n"
+"\n"
+"The converse would be ``other.contains(this)``\n"
+msgstr ""
+"\n"
+"`this` 的开始在 `other` 的开始之前。\n"
+"`this` 的结束在 `other` 的结束之前。\n"
+"::\n"
+"\n"
+"        [ other ]\n"
+"   [      this      ]\n"
+"\n"
+"相反的情况是 ``other.contains(this)``\n"
+
+msgid ""
+"\n"
+"`this` contains `other`.\n"
+"::\n"
+"\n"
+"        other\n"
+"         |\n"
+"         *\n"
+"   [    this    ]\n"
+"\n"
+msgstr ""
+"\n"
+"`this` 包含 `other`。\n"
+"::\n"
+"\n"
+"        other\n"
+"         |\n"
+"         *\n"
+"   [    this    ]\n"
+"\n"
+
+msgid ""
+"\n"
+"The start of `this` strictly precedes end of `other` by a value >= `epsilon_s`.\n"
+"The end of `this` strictly antecedes start of `other` by a value >= `epsilon_s`.\n"
+"::\n"
+"\n"
+"   [ this ]\n"
+"       [ other ]\n"
+"\n"
+"The converse would be ``other.overlaps(this)``\n"
+msgstr ""
+"\n"
+"`this` 的开始严格在 `other` 的结束之前，间隔值 >= `epsilon_s`。\n"
+"`this` 的结束严格在 `other` 的开始之前，间隔值 >= `epsilon_s`。\n"
+"::\n"
+"\n"
+"   [ this ]\n"
+"       [ other ]\n"
+"\n"
+"相反的情况是 ``other.overlaps(this)``\n"
+
+msgid ""
+"\n"
+"The end of `this` strictly precedes `other` by a value >= `epsilon_s`.\n"
+"::\n"
+"\n"
+"             other\n"
+"               |\n"
+"   [ this ]    *\n"
+"\n"
+msgstr ""
+"\n"
+"`this` 的结束严格在 `other` 之前，间隔值 >= `epsilon_s`。\n"
+"::\n"
+"\n"
+"             other\n"
+"               |\n"
+"   [ this ]    *\n"
+
+msgid ""
+"\n"
+"The end of `this` strictly equals the start of `other` and\n"
+"the start of `this` strictly equals the end of `other`.\n"
+"::\n"
+"\n"
+"   [this][other]\n"
+"\n"
+"The converse would be ``other.meets(this)``\n"
+msgstr ""
+"\n"
+"`this` 的结束严格等于 `other` 的开始，且\n"
+"`this` 的开始严格等于 `other` 的结束。\n"
+"::\n"
+"\n"
+"   [this][other]\n"
+"\n"
+"相反的情况是 ``other.meets(this)``\n"
+
+msgid ""
+"\n"
+"The start of `this` strictly equals `other`.\n"
+"::\n"
+"\n"
+"   other\n"
+"     |\n"
+"     *\n"
+"     [ this ]\n"
+"\n"
+msgstr ""
+"\n"
+"`this` 的开始严格等于 `other`。\n"
+"::\n"
+"\n"
+"   other\n"
+"     |\n"
+"     *\n"
+"     [ this ]\n"
+"\n"
+
+msgid ""
+"\n"
+"The start of `this` strictly equals the start of `other`.\n"
+"The end of `this` strictly precedes the end of `other` by a value >= `epsilon_s`.\n"
+"::\n"
+"\n"
+"   [ this ]\n"
+"   [    other    ]\n"
+"\n"
+"The converse would be ``other.begins(this)``\n"
+msgstr ""
+"\n"
+"`this` 的开始严格等于 `other` 的开始。\n"
+"`this` 的结束严格在 `other` 的结束之前，差值 >= `epsilon_s`。\n"
+"::\n"
+"\n"
+"   [ this ]\n"
+"   [    other    ]\n"
+"\n"
+"相反的情况是 ``other.begins(this)``\n"
+
+msgid ""
+"\n"
+"The end of `this` strictly equals `other`.\n"
+"::\n"
+"\n"
+"        other\n"
+"          |\n"
+"          *\n"
+"   [ this ]\n"
+"\n"
+msgstr ""
+"\n"
+"`this` 的结束严格等于 `other`。\n"
+"::\n"
+"\n"
+"        other\n"
+"          |\n"
+"          *\n"
+"   [ this ]\n"
+"\n"
+
+msgid ""
+"\n"
+"The start of `this` strictly antecedes the start of `other` by a value >= `epsilon_s`.\n"
+"The end of `this` strictly equals the end of `other`.\n"
+"::\n"
+"\n"
+"           [ this ]\n"
+"   [     other    ]\n"
+"\n"
+"The converse would be ``other.finishes(this)``\n"
+msgstr ""
+"\n"
+"`this` 的开始严格早于 `other` 的开始，且相差值 >= `epsilon_s`。\n"
+"`this` 的结束严格等于 `other` 的结束。\n"
+"::\n"
+"\n"
+"           [ this ]\n"
+"   [     other    ]\n"
+"\n"
+"反之，则是 ``other.finishes(this)``\n"
+
+msgid ""
+"\n"
+"The start of `this` precedes or equals the end of `other` by a value >= `epsilon_s`.\n"
+"The end of `this` antecedes or equals the start of `other` by a value >= `epsilon_s`.\n"
+"::\n"
+"\n"
+"   [    this    ]           OR      [    other    ]\n"
+"        [     other    ]                    [     this    ]\n"
+"\n"
+"The converse would be ``other.finishes(this)``\n"
+msgstr ""
+"\n"
+"`this` 的开始早于或等于 `other` 的结束，差值 >= `epsilon_s`。\n"
+"`this` 的结束早于或等于 `other` 的开始，差值 >= `epsilon_s`。\n"
+"::\n"
+"\n"
+"   [    this    ]           或      [    other    ]\n"
+"        [     other    ]                    [     this    ]\n"
+"\n"
+"反之，则是 ``other.finishes(this)``\n"
+
+msgid ""
+"\n"
+"Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\\s (exclusive).\n"
+"\n"
+"For example, if start_time is 1 and end_time is 10, the returned will have a duration of 9.\n"
+msgstr ""
+"\n"
+"从开始和结束 :class:`~RationalTime`\\s（不包括）创建一个 :class:`~TimeRange`。\n"
+"\n"
+"例如，如果 start_time 为 1 且 end_time 为 10，则返回的持续时间为 9。\n"
+
+msgid ""
+"\n"
+"Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\\s (inclusive).\n"
+"\n"
+"For example, if start_time is 1 and end_time is 10, the returned will have a duration of 10.\n"
+msgstr ""
+"\n"
+"从开始和结束 :class:`~RationalTime`\\s（含）创建一个 :class:`~TimeRange`。\n"
+"\n"
+"例如，如果 start_time 为 1 且 end_time 为 10，则返回的持续时间为 10。\n"
+
+msgid ""
+"\n"
+"Media module.\n"
+"\n"
+"Contains all classes and enums related to media. \n"
+msgstr ""
+"\n"
+"媒体模块。\n"
+"\n"
+"包含与媒体相关的所有类和枚举。\n"
+
+msgid "Compare mode :class:`mrv2.media.CompareMode`."
+msgstr "对比模式: class: `mrv2.media.CompareMode`"
+
+msgid "Wipe center in X and Y :class:`mrv2.math.Vector2f`."
+msgstr "Wipe center in X and Y :class:`mrv2.math.Vector2f`."
+
+msgid "Wipe Rotation."
+msgstr "Wipe旋转"
+
+msgid "Overlay ( A over B )"
+msgstr "覆盖 ( A over B )"
+
+msgid "Comparison options."
+msgstr "比较选项"
+
+msgid ""
+"\n"
+"Math module.\n"
+"\n"
+"Contains all math classes.\n"
+msgstr ""
+"\n"
+"数学模块。\n"
+"\n"
+"包含所有数学课程。\n"
+
+msgid "Vector of 2 integers."
+msgstr "2整数的矢量"
+
+msgid "Vector of 2 floats."
+msgstr "2浮点数的矢量"
+
+msgid "Vector of 3 floats."
+msgstr "3浮点数的矢量"
+
+msgid "Vector of 4 floats."
+msgstr "4浮点数的矢量"
+
+msgid "Size of 2 integers."
+msgstr "2整数的大小"
+
+msgid ""
+"\n"
+"Image module.\n"
+"\n"
+"Contains all classes and enums related to image controls. \n"
+msgstr ""
+"\n"
+"图像模块。\n"
+"\n"
+"包含与图像控件相关的所有类和枚举。\n"
+
+msgid "Red Channel."
+msgstr "红通道"
+
+msgid "Green Channel."
+msgstr "绿通道"
+
+msgid "Blue Channel."
+msgstr "蓝通道"
+
+msgid "Alpha Channel."
+msgstr "Alpha通道"
+
+msgid "Image mirroring."
+msgstr "图像镜像"
+
+msgid "Flip image on X."
+msgstr "翻转 X"
+
+msgid "Flip image on Y."
+msgstr "翻转 Y"
+
+msgid "Enabled Levels."
+msgstr "启用Levels"
+
+msgid "Add a :class:`mrv2.math.Vector3f` to image."
+msgstr "Add a :class:`mrv2.math.Vector3f` to image."
+
+msgid "Change a :class:`mrv2.math.Vector3f` of brightness to image."
+msgstr "Change a :class:`mrv2.math.Vector3f` of brightness to image."
+
+msgid "Change a :class:`mrv2.math.Vector3f` of contrast to image."
+msgstr "Change a :class:`mrv2.math.Vector3f` of contrast to image."
+
+msgid "Change a :class:`mrv2.math.Vector3f` of saturation to image."
+msgstr "Change a :class:`mrv2.math.Vector3f` of saturation to image."
+
+msgid "Change tint of image to image between 0 and 1."
+msgstr "图片之间的过渡值(0-1)"
+
+msgid "Invert the color values."
+msgstr "反转颜色值"
+
+msgid "Color values."
+msgstr "颜色值"
+
+msgid "In Low Level value."
+msgstr "In Low Level值"
+
+msgid "In High Level value."
+msgstr "In High Level值"
+
+msgid "Gamma Level value."
+msgstr "Gamma 值"
+
+msgid "Out Low Level value."
+msgstr "Out Low Level值"
+
+msgid "Out High Level value."
+msgstr "Out High Level值"
+
+msgid "Levels values."
+msgstr "Levels值"
+
+msgid "Enabled EXR display."
+msgstr "开启EXR显示"
+
+msgid "Exposure value."
+msgstr "曝光值"
+
+msgid "Defog value."
+msgstr "Defog值"
+
+msgid "kneeLow value."
+msgstr "kneeLow值"
+
+msgid "kneeHigh value."
+msgstr "kneeHigh值"
+
+msgid "EXR display values."
+msgstr "EXR 显示值"
+
+msgid "Enabled Soft Clip."
+msgstr "启用软剪切"
+
+msgid "Soft clip value."
+msgstr "软剪切值"
+
+msgid "Minify filter :class:`mrv2.image.ImageFilter`."
+msgstr "Minify filter :class:`mrv2.image.ImageFilter`."
+
+msgid "Magnify filter :class:`mrv2.image.ImageFilter`."
+msgstr "Magnify filter :class:`mrv2.image.ImageFilter`."
+
+msgid "Image filters."
+msgstr "图像过滤器"
+
+msgid "Color channels :class:`mrv2.image.Channels`."
+msgstr "Color channels :class:`mrv2.image.Channels`."
+
+msgid "Mirror on X, Y or both :class:`mrv2.image.Mirror`."
+msgstr "Mirror on X, Y or both :class:`mrv2.image.Mirror`."
+
+msgid "Color options :class:`mrv2.image.Color`."
+msgstr "Color options :class:`mrv2.image.Color`."
+
+msgid "Levels options :class:`mrv2.image.Levels`."
+msgstr "Levels options :class:`mrv2.image.Levels`."
+
+msgid "EXR Display options :class:`mrv2.image.EXRDisplay`.."
+msgstr "EXR Display options :class:`mrv2.image.EXRDisplay`.."
+
+msgid "Soft Clip options :class:`mrv2.image.SoftClip`.."
+msgstr "Soft Clip options :class:`mrv2.image.SoftClip`.."
+
+msgid "Display options."
+msgstr "显示选项"
+
+msgid "LUT enabled."
+msgstr "开启LUT"
+
+msgid "LUT filename."
+msgstr "LUT文件名"
+
+msgid "LUT transformation order."
+msgstr "LUT变换顺序"
+
+msgid "LUT options."
+msgstr "LUT选项"
+
+msgid "Video Levels."
+msgstr "视频Levels"
+
+msgid "Alpha blending algorithm"
+msgstr "Alpha 混合算法"
+
+msgid "Image Filters"
+msgstr "图像过滤器"
+
+msgid "Image options."
+msgstr "图像选项"
+
+msgid "Environment Map type."
+msgstr "环境贴图类型"
+
+msgid "Horizontal aperture"
+msgstr "水平光圈"
+
+msgid "Vertical aperture"
+msgstr "垂直光圈"
+
+msgid "Focal Length"
+msgstr "Focal Length"
+
+msgid "Rotation on X"
+msgstr "旋转X"
+
+msgid "Rotation on Y"
+msgstr "旋转Y"
+
+msgid "Subdivision on X"
+msgstr "细分X"
+
+msgid "Subdivision on Y"
+msgstr "细分Y"
+
+msgid "Spin"
+msgstr "旋转"
+
+msgid "EnvironmentMap options."
+msgstr "环境贴图选项"
+
+msgid "Stereo 3d input :class:`mrv2.image.StereoInput`.."
+msgstr "Stereo 3d input :class:`mrv2.image.StereoInput`.."
+
+msgid "Stereo 3d output :class:`mrv2.image.StereoOutput`.."
+msgstr "Stereo 3d output :class:`mrv2.image.StereoOutput`.."
+
+msgid "Separation between left and right eye."
+msgstr "左眼右眼独立"
+
+msgid "Swap left and right eye"
+msgstr "左眼右眼互换"
+
+msgid "Stereo3D options."
+msgstr "Stereo3D 选项"
+
+msgid "Background type :class:`mrv2.image.Background`.."
+msgstr "Background type :class:`mrv2.image.Background`.."
+
+msgid "Checkers Color0 :class:`mrv2.image.Color4f`.."
+msgstr "Checkers Color0: class: `mrv2.image.Color4f`.."
+
+msgid "Checkers Color1 :class:`mrv2.image.Color4f`.."
+msgstr "Checkers Color1: class: `mrv2.image.Color4f`.."
+
+msgid "Checkers Size :class:`mrv2.math.Size2i`.."
+msgstr "Checkers Size: class: `mrv2.math.Size2i`.."
+
+msgid "Background options."
+msgstr "背景选项"
+
+msgid "Gets the current background options."
+msgstr "获取当前背景选项"
+
+msgid "Sets the current background options."
+msgstr "设置当前背景选项"
+
+msgid "Gets the current OCIO config file."
+msgstr "获取当前OCIO配置文件"
+
+msgid "Sets the current OCIO config file."
+msgstr "设置当前OCIO配置文件"
+
+msgid "Gets the current input color space."
+msgstr "获取当前输入的颜色空间"
+
+msgid "Gets a list of all input color spaces."
+msgstr "获取所有输入颜色空间的列表"
+
+msgid "Set the input color space."
+msgstr "设置输入颜色空间"
+
+msgid "Gets the current Display/View."
+msgstr "获取当前显示/视图"
+
+msgid "Gets the list of Displays/Views."
+msgstr "获取显示/视图列表"
+
+msgid "Set an OCIO Display/View."
+msgstr "设置 OCIO 显示/视图。"
+
+msgid "Gets the current OCIO look."
+msgstr "获取当前 OCIO 显示"
+
+msgid "Gets a list of all OCIO looks."
+msgstr "获取所有 OCIO 显示列表"
+
+msgid "Set the OCIO look by name."
+msgstr "设置 OCIO 显示名称"
+
+msgid "Return all the files."
+msgstr "返回所有文件"
+
+msgid "Return all the active files."
+msgstr "返回所有活动文件"
+
+msgid "Return the A file item."
+msgstr "返回A文件"
+
+msgid "Return the A file index."
+msgstr "返回A文件索引"
+
+msgid "Return the list of B files."
+msgstr "返回B文件列表"
+
+msgid "Return the list of B indexes."
+msgstr "返回B文件列表索引"
+
+msgid "Close the current A file."
+msgstr "关闭当前A文件"
+
+msgid "Close all files."
+msgstr "关闭所有文件"
+
+msgid "Set the A file index."
+msgstr "设置A文件索引"
+
+msgid "Set a new B file index."
+msgstr "设置B文件新的索引"
+
+msgid "Set a new stereo file index."
+msgstr "设置新的立体声文件索引"
+
+msgid "Toggle the B file index."
+msgstr "开关B文件索引"
+
+msgid "Clear the B indexes."
+msgstr "清理B索引"
+
+msgid "Return the list of layers."
+msgstr "返回层列表"
+
+msgid "Set layer for file item."
+msgstr "设置文件项的层"
+
+msgid "Set compare time."
+msgstr "设置比较时间"
+
+msgid "Get compare time."
+msgstr "获取比较时间"
+
+msgid "Set the first version for current media."
+msgstr "设置当前媒体的第一个版本"
+
+msgid "Set the previous version for current media."
+msgstr "设置当前媒体的上一个版本"
+
+msgid "Set the next version for current media."
+msgstr "设置当前媒体的下一个版本"
+
+msgid "Set the last version for current media."
+msgstr "设置当前媒体的最后版本"
+
+msgid "Path :class:`mrv2.Path` to the File Media."
+msgstr "Path :class:`mrv2.Path` to the File Media."
+
+msgid "Audio path :class:`mrv2.Path` to the File Media if any."
+msgstr "Audio path :class:`mrv2.Path` to the File Media if any."
+
+msgid "Time range :class:`mrv2.TimeRange` of the File Media."
+msgstr "Time range :class:`mrv2.TimeRange` of the File Media."
+
+msgid "Speed (FPS) of the File Media."
+msgstr "媒体文件的速度(FPS)"
+
+msgid "Playback state :class:`mrv2.timeline.Playbacks` of the File Media."
+msgstr "Playback state :class:`mrv2.timeline.Playbacks` of the File Media."
+
+msgid "Loop state :class:`mrv2.timeline.Loop` of the File Media."
+msgstr "Loop state :class:`mrv2.timeline.Loop` of the File Media."
+
+msgid "Current time :class:`mrv2.RationalTime` of the File Media."
+msgstr "Current time :class:`mrv2.RationalTime` of the File Media."
+
+msgid "In/Out range :class:`mrv2.TimeRange` of the File Media."
+msgstr "内/外部范围 :class:`mrv2.TimeRange' of the File Media."
+
+msgid "Video layer of the File Media."
+msgstr "文件媒体视频层"
+
+msgid "Volume of the File Media."
+msgstr "文件媒体音量"
+
+msgid "Mute state of the File Media."
+msgstr "文件媒体静音状态"
+
+msgid "Audio offset of the File Media."
+msgstr "文件媒体音频偏移"
+
+msgid "Class used to hold a media item."
+msgstr "用于持有媒体项目的类"
+
+msgid "Save annotations."
+msgstr "保存注释"
+
+msgid "Save resolution."
+msgstr "保存分辨率"
+
+msgid "FFmpeg Profile."
+msgstr "FFmpeg Profile"
+
+msgid "FFmpeg Preset."
+msgstr "FFmpeg Preset"
+
+msgid "FFmpeg Pixel Format."
+msgstr "FFmpeg Pixel格式"
+
+msgid "FFmpeg video encoding with hardware if possible."
+msgstr "FFmpeg video encoding with hardware if possible."
+
+msgid "FFmpeg Override color characteristics."
+msgstr "FFmpeg Override color characteristics."
+
+msgid "FFmpeg Color Range."
+msgstr "FFmpeg 颜色范围"
+
+msgid "FFmpeg Color Space."
+msgstr "FFmpeg 颜色空间"
+
+msgid "FFmpeg Color Primaries."
+msgstr "FFmpeg Color Primaries."
+
+msgid "FFmpeg Color Transfer Characteristics."
+msgstr "FFmpeg Color Transfer Characteristics."
+
+msgid "FFmpeg Audio Codec."
+msgstr "FFmpeg Audio Codec."
+
+msgid "OpenEXR's Compression."
+msgstr "OpenEXR 压缩"
+
+msgid "OpenEXR's Pixel Type."
+msgstr "OpenEXR Pixel 类型"
+
+msgid "OpenEXR's Zip Compression Level."
+msgstr "OpenEXR Zip 压缩率"
+
+msgid "OpenEXR's DWA Compression Level."
+msgstr "OpenEXR DWA 压缩率"
+
+msgid ""
+"\n"
+"Command module.\n"
+"\n"
+"Used to run main commands and get arguments and set the display, image, compare, LUT options.\n"
+msgstr ""
+"\n"
+"Command module.\n"
+"\n"
+"Used to run main commands and get arguments and set the display, image, compare, LUT options.\n"
+
+msgid ""
+"Get command-line arguments passed as single quoted string to -pythonArgs."
+msgstr "-pythonArgs"
+
+msgid "Open file with optional audio."
+msgstr "用可选音频打开文件"
+
+msgid "Compare two file items with a compare mode."
+msgstr "用比较模式比较两个文件"
+
+msgid "Close the file item."
+msgstr "关闭文件项"
+
+msgid "Close all file items."
+msgstr "关闭所有文件项"
+
+msgid "Return the root path to the insallation of mrv2."
+msgstr "Return the root path to the insallation of mrv2."
+
+msgid "Return the path to preferences of mrv2."
+msgstr "Return the path to preferences of mrv2."
+
+msgid "Return the display options."
+msgstr "返回显示选项"
+
+msgid "Set the display options."
+msgstr "设置显示选项"
+
+msgid "Return the LUT options."
+msgstr "返回LUT选项"
+
+msgid "Set the LUT options."
+msgstr "设置LUT选项"
+
+msgid "Return the image options."
+msgstr "返回图像选项"
+
+msgid "Set the image options."
+msgstr "设置图像选项"
+
+msgid "Return the environment map options."
+msgstr "返回环境贴图选项"
+
+msgid "Set the environment map options."
+msgstr "设置环境贴图选项"
+
+msgid "Set the compare options."
+msgstr "设置比较选项"
+
+msgid "Set the stereo 3D options."
+msgstr "设置stereo 3D选项"
+
+msgid "Get the language of mrv2."
+msgstr "获取 mrv2 语言."
+
+msgid "Get the layers of the timeline (GUI)."
+msgstr "获取当前时间轴的层 (GUI)."
+
+msgid "Get the version of mrv2."
+msgstr "获取 mrv2 版本"
+
+msgid ""
+"Call Fl::check to update the GUI and return the number of seconds that "
+"elapsed."
+msgstr ""
+"Call Fl::check to update the GUI and return the number of seconds that "
+"elapsed."
+
+msgid "Returns true if audio is muted."
+msgstr "Returns true if audio is muted."
+
+msgid "Runs the same or a new mrv2 with a session file."
+msgstr "Runs the same or a new mrv2 with a session file."
+
+msgid "Set the muting of the audio."
+msgstr "设定音频静音"
+
+msgid "Toggle Image Auto Normalize."
+msgstr "开关图像自动归一化"
+
+msgid "Toggle Data Window."
+msgstr "开关数据窗口"
+
+msgid "Toggle Display Window."
+msgstr "开关显示窗口"
+
+msgid "Toggle Ignored Display Window on OpenEXRs."
+msgstr "开关忽略OpenEXR的显示窗口"
+
+msgid "Toggle Image invalid values."
+msgstr "开关图像无效值"
+
+msgid "Toggle Safe Areas."
+msgstr "开关安全区"
+
+msgid "Get the playback volume."
+msgstr "获取音量"
+
+msgid "Set the playback volume."
+msgstr "设置音量"
+
+msgid "Save a movie or sequence from the front layer."
+msgstr "从前层保存一个影片或序列"
+
+msgid "Save a single frame."
+msgstr "保存一个框架 。"
+
+msgid "Save multiple annotation frames."
+msgstr "保存多个注解框 。"
+
+msgid "Save multiple frames."
+msgstr "保存多个帧 。"
+
+msgid "Save an .otio file from the current selected image."
+msgstr "从选中图片保存.otio文件"
+
+msgid "Save a PDF document with all annotations and notes."
+msgstr "保存PDF文件,带有所有注释"
+
+msgid ""
+"\n"
+"Annotations module.\n"
+"\n"
+"Contains all functions and classes related to the annotationss.\n"
+msgstr ""
+"\n"
+"注释模块\n"
+"\n"
+"Contains all functions and classes related to the annotationss.\n"
+
+msgid "Add notes annotations to current clip at a certain time."
+msgstr "在某个时间将注释添加到当前剪辑中"
+
+msgid "Add notes annotations to current clip at a certain frame."
+msgstr "在某帧将注释添加到当前剪辑中"
+
+msgid "Add notes annotations to current clip at certain seconds."
+msgstr "在某秒将注释添加到当前剪辑中"
+
+msgid "Get all times for annotations."
+msgstr "获取所有时间的注释 。"
+
 msgid "Open with Audio"
 msgstr "打开音频"
 
@@ -30,6 +1520,30 @@ msgstr "取消"
 
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Channels: {1} {2} {3}"
+
+msgid "Print the log to the console."
+msgstr "打印到控制台的日志 。"
+
+msgid "Show this message."
+msgstr "显示此消息 。"
+
+msgid "Cannot parse option \"{0}\": {1}"
+msgstr "无法分析“ {0} ” 选项 : {1}"
+
+msgid "Cannot parse argument \"{0}\": {1}"
+msgstr "无法分析参数“ {0} ” : {1}"
+
+msgid "Usage:\n"
+msgstr "用法 :\n"
+
+msgid " [option]..."
+msgstr "[选择]..."
+
+msgid "Arguments:\n"
+msgstr "参数 :\n"
+
+msgid "Options:\n"
+msgstr "选项 :\n"
 
 msgid "Play timelines, movies, and image sequences."
 msgstr "播放时间轴、影片和图像序列"
@@ -104,11 +1618,11 @@ msgid "Python Script to run and exit."
 msgstr "运行和退出 Python 脚本"
 
 msgid ""
-"Python Arguments to pass to the Python script as a single quoted string like "
-"\"arg1 'arg2 asd' arg3\", stored in cmd.argv."
+"Python Arguments to pass to the Python script as a single quoted string like"
+" \"arg1 'arg2 asd' arg3\", stored in cmd.argv."
 msgstr ""
-"Python Arguments to pass to the Python script as a single quoted string like "
-"\"arg1 'arg2 asd' arg3\", stored in cmd.argv."
+"Python Arguments to pass to the Python script as a single quoted string like"
+" \"arg1 'arg2 asd' arg3\", stored in cmd.argv."
 
 msgid "Reset settings to defaults."
 msgstr "重置设置为默认值"
@@ -171,30 +1685,6 @@ msgstr "Python 错误 :"
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr "文件名 '{0}' 不存在, 或者没有读取权限 。"
 
-msgid "Print the log to the console."
-msgstr "打印到控制台的日志 。"
-
-msgid "Show this message."
-msgstr "显示此消息 。"
-
-msgid "Cannot parse option \"{0}\": {1}"
-msgstr "无法分析“ {0} ” 选项 : {1}"
-
-msgid "Cannot parse argument \"{0}\": {1}"
-msgstr "无法分析参数“ {0} ” : {1}"
-
-msgid "Usage:\n"
-msgstr "用法 :\n"
-
-msgid " [option]..."
-msgstr "[选择]..."
-
-msgid "Arguments:\n"
-msgstr "参数 :\n"
-
-msgid "Options:\n"
-msgstr "选项 :\n"
-
 msgid "Files"
 msgstr "文件"
 
@@ -209,6 +1699,148 @@ msgstr "网络"
 
 msgid "Stereo 3D"
 msgstr "Stereo 3D"
+
+msgid "Type"
+msgstr "类型"
+
+msgid "Client"
+msgstr "客户端"
+
+msgid "Server"
+msgstr "服务器"
+
+msgid "Host"
+msgstr "Host"
+
+msgid "Host name or IP to connect to.  For example: 127.0.0.1"
+msgstr "要连接的主机名或 IP 。 例如: 127.0.1"
+
+msgid "Previously used Hosts"
+msgstr "先前使用过的主机"
+
+msgid "Port"
+msgstr "端口"
+
+msgid ""
+"Port to connect to.  Make sure your firewall and router allows read/write "
+"through it."
+msgstr "要连接的端口。 请确定您的防火墙和路由器允许通过它读写"
+
+msgid "Connect"
+msgstr "连接"
+
+msgid "Create"
+msgstr "创建"
+
+msgid "Disconnect"
+msgstr "断开连接"
+
+msgid "Shutdown"
+msgstr "关闭"
+
+msgid "&File/&Open"
+msgstr "&File/&Open"
+
+msgid "&File/&Save"
+msgstr "&File/&Save"
+
+msgid "&Edit/&Undo"
+msgstr "&Edit/&Undo"
+
+msgid "&Edit/Cu&t"
+msgstr "&Edit/Cu&t"
+
+msgid "&Edit/&Copy"
+msgstr "&Edit/&Copy"
+
+msgid "&Edit/&Paste"
+msgstr "&Edit/&Paste"
+
+msgid "&Edit/&Delete"
+msgstr "&Edit/&Delete"
+
+msgid "&Edit/&Comment Selection"
+msgstr "&Edit/&Comment Selection"
+
+msgid "&Edit/&Uncomment Selection"
+msgstr "&Edit/&Uncomment Selection"
+
+msgid "&Search/&Find..."
+msgstr "&Search/&Find..."
+
+msgid "&Search/F&ind Again"
+msgstr "&Search/F&ind Again"
+
+msgid "&Search/&Replace"
+msgstr "&Search/&Replace"
+
+msgid "&Search/&Replace Again"
+msgstr "&Search/&Replace Again"
+
+msgid "Clear/&Output"
+msgstr "Clear/&Output"
+
+msgid "Clear/&Editor"
+msgstr "Clear/&Editor"
+
+msgid "Editor/&Run Code"
+msgstr "Editor/&Run Code"
+
+msgid "Editor/Toggle &Line Numbers"
+msgstr "Editor/Toggle &Line Numbers"
+
+msgid "Editor/&Jump to Error"
+msgstr "Editor/&Jump to Error"
+
+msgid "Editor/&External Editor"
+msgstr "Editor/&External Editor"
+
+msgid "Scripts/Add To Script List"
+msgstr "脚本/添加到脚本列表"
+
+msgid "Scripts/%s"
+msgstr "脚本/%s"
+
+msgid ""
+"Type in your python code here.  Select an area to execute just a portion of "
+"it.  Press Keypad Enter to run it."
+msgstr "在此输入 python 代码。 选择一个区域执行它的一部分。 按Enter 键运行"
+
+msgid "Python file {0} already exists.  Do you want to overwrite it?"
+msgstr "Python 文件 {0} 已经存在。 您想要覆盖它吗?"
+
+msgid "No"
+msgstr "否"
+
+msgid "Yes"
+msgstr "是"
+
+msgid "Failed to open the file for writing."
+msgstr "打开文件失败 。"
+
+msgid "Failed to write to the file."
+msgstr "写入文件失败"
+
+msgid "The stream is in an unrecoverable error state."
+msgstr "Stream处于无法恢复的错误状态 。"
+
+msgid "Type your editor command"
+msgstr "键入编辑器命令"
+
+msgid "{0} will be replaced with the line number.  {1} with the file name"
+msgstr "{0} 将被替换为行号 。 {1} 将替换为文件名"
+
+msgid "Regular expression error: {0}"
+msgstr "正则表达式错误: {0}"
+
+msgid "Could not open python editor: {0}"
+msgstr "无法打开 python 编辑器: {0}"
+
+msgid "Search String:"
+msgstr "搜索字符串 :"
+
+msgid "No occurrences of '%s' found!"
+msgstr "找不到 '%s' 发生事件!"
 
 msgid "Input"
 msgstr "投入"
@@ -248,6 +1880,21 @@ msgstr "串流 {0} {1}..."
 
 msgid "Stop streaming"
 msgstr "停止流流"
+
+msgid "Renderer"
+msgstr "渲染器"
+
+msgid "Complexity"
+msgstr "复杂程度"
+
+msgid "Draw Mode"
+msgstr "绘制模式"
+
+msgid "Stage Cache"
+msgstr "缓存"
+
+msgid "Disk Cache in GB"
+msgstr "磁盘缓存 (GB)"
 
 msgid "Toggle other eye stereo image."
 msgstr "切换其它眼睛立体图像 。"
@@ -356,8 +2003,7 @@ msgid ""
 "any like that, you should set them to 1, press Enter and reload the movie "
 "file."
 msgstr ""
-"此值控制 FFmpeg 使用的线程数。 对于大多数影片来说, 它应该保留在 0 。 有些影片"
-"会显示黑帧，这时应该设置为 1, 按 Enter 键重载影片"
+"此值控制 FFmpeg 使用的线程数。 对于大多数影片来说, 它应该保留在 0 。 有些影片会显示黑帧，这时应该设置为 1, 按 Enter 键重载影片"
 
 msgid "Default Settings"
 msgstr "默认设置"
@@ -366,12 +2012,6 @@ msgid ""
 "This will reset all your settings to their default.  Are you sure you want "
 "to continue?"
 msgstr "这将您的所有设置重置为默认值。 您确定要继续吗?"
-
-msgid "Yes"
-msgstr "是"
-
-msgid "No"
-msgstr "否"
 
 msgid "Drop a clip here to create a playlist."
 msgstr "拖拽一个片段来创建播放列表"
@@ -391,9 +2031,6 @@ msgstr "关闭当前 EDL"
 
 msgid "Clear the messages"
 msgstr "清除信息"
-
-msgid "Type"
-msgstr "类型"
 
 msgid "Turn off image warping."
 msgstr "关闭图像扭曲"
@@ -425,18 +2062,12 @@ msgstr "V. 光圈"
 msgid "Vertical Aperture of the Projection."
 msgstr "投影的垂直光圈"
 
-msgid "Focal Length"
-msgstr "Focal Length"
-
 msgid ""
 "Focal Length of the Projection. Use Shift + left mouse button to change or "
 "the mousewheel."
 msgstr "投影焦距。 使用 Shift + 鼠标左键或鼠标轮修改"
 
 msgid "Rotation"
-msgstr "旋转"
-
-msgid "Spin"
 msgstr "旋转"
 
 msgid "Spin with middle mouse instead of rotating with it."
@@ -946,9 +2577,7 @@ msgid ""
 "Wipe between the A and B files\n"
 "\n"
 "Use the Option key + left mouse button to move the wipe in X or in Y"
-msgstr ""
-"在 A 和 B 文件之间擦拭 使用 Option键 + 鼠标左键 + 鼠标左键来移动 X 或 Y 中的"
-"擦拭"
+msgstr "在 A 和 B 文件之间擦拭 使用 Option键 + 鼠标左键 + 鼠标左键来移动 X 或 Y 中的擦拭"
 
 msgid ""
 "Wipe between the A and B files\n"
@@ -1192,6 +2821,51 @@ msgstr "无法附加视频轨道 {0}"
 msgid "Could not append audio track {0}"
 msgstr "无法附加音频轨道 {0}"
 
+msgid "Server started at port {0}."
+msgstr "服务器启动于端口 {0}"
+
+msgid "Server stopped."
+msgstr "服务器已停止"
+
+msgid "A client connected from {0}"
+msgstr "从 {0} 连接到客户端"
+
+msgid "Client at {0} disconnected."
+msgstr "断开 {0} 的客户端"
+
+msgid "Server protocol version is {0}.  Client protocol version is {1}"
+msgstr "服务器协议版本为 {0}。 客户端协议版本为 {1}"
+
+msgid "Remote file {0} does not exist on local filesystem."
+msgstr "本地文件系统不存在远程文件 {0} 。"
+
+msgid "Remote files are less than local files."
+msgstr "远程文件少于本地文件 。"
+
+msgid "Remote file {0} matches file name {1} but not path."
+msgstr "远程文件 {0} 匹配文件名 {1}, 但不是路径 。"
+
+msgid "Remote file {0} does not match local filename."
+msgstr "远程文件 {0} 不匹配本地文件名 。"
+
+msgid "Removing {0} from message publisher."
+msgstr "正在从信件发布器中删除 {0} 。"
+
+msgid "Server listening on port "
+msgstr "在端口监听服务器"
+
+msgid "ComfyUI listening on port "
+msgstr "ComfyUI 在端口监听"
+
+msgid "Connected to server at {0}, port {1}"
+msgstr "已连接到 {0} 服务器, 端口 {1} 服务器"
+
+msgid "Server connection lost."
+msgstr "服务器连接丢失 。"
+
+msgid "Exception caught: "
+msgstr "抓获的异常:"
+
 msgid "ERROR:\t"
 msgstr "错误:"
 
@@ -1202,9 +2876,6 @@ msgid ""
 "Regular expression created from {0}.  It is:\n"
 "{1}"
 msgstr "从 {0} 创建的正则表达式。 它是 : {1}"
-
-msgid "Regular expression error: {0}"
-msgstr "正则表达式错误: {0}"
 
 msgid "Iteration {0} will check version={1}"
 msgstr "迭代 {0} 将检查版本 {1} 。"
@@ -1228,9 +2899,6 @@ msgstr "打开文件 {0} 以写入失败 。"
 
 msgid "Failed to write to the file {0}."
 msgstr "写入文件 {0} 失败 。"
-
-msgid "The stream is in an unrecoverable error state."
-msgstr "Stream处于无法恢复的错误状态 。"
 
 msgid "Session saved to \"{0}\"."
 msgstr "会话已保存到\"{0}\"。"
@@ -1257,7 +2925,8 @@ msgid "ProRes profiles need a .mov movie extension.  Changing it to .mov."
 msgstr "ProRes 配置需要.mov 的格式扩展。 将其修改为.mov 。"
 
 msgid ""
-"VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to .mp4"
+"VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to "
+".mp4"
 msgstr "VP9 配置需要一个.mp4,.mkv 或.webm 的格式扩展。 将其修改为. mp4"
 
 msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
@@ -1931,6 +3600,15 @@ msgstr "编辑文本注释"
 msgid "No item selected"
 msgstr "未选中项目"
 
+msgid "%s - Page %d"
+msgstr "%s - 第%d页"
+
+msgid "Frame {0} - TC: {1} - S: {2}"
+msgstr "帧 {0} - 时间码 : {1} - 秒数: {2}"
+
+msgid "Image too big.  Will save the viewport size."
+msgstr "图像太大。 将保存视图的大小 。"
+
 msgid "Scrub"
 msgstr "Scrub"
 
@@ -1989,8 +3667,8 @@ msgid "Unknown action mode in "
 msgstr "未知行为模式 "
 
 msgid ""
-"Cannot create an annotation here for all frames.  A current frame annotation "
-"already exists."
+"Cannot create an annotation here for all frames.  A current frame annotation"
+" already exists."
 msgstr "无法在此创建所有帧的注释。 当前帧注释已经存在 。"
 
 msgid ""
@@ -2292,9 +3970,8 @@ msgstr "播放/转到/上一个注释"
 msgid "Playback/Go to/Next Annotation"
 msgstr "播放/转到/下一个注释"
 
-#, fuzzy
 msgid "Playback/Annotation/Toggle Visible"
-msgstr "播放/注释/全部清除"
+msgstr "播放/注释/切换可见性"
 
 msgid "Playback/Annotation/Clear"
 msgstr "播放/注释/清除"
@@ -2653,8 +4330,8 @@ msgid "Detail mode"
 msgstr "详细细节模式"
 
 msgid ""
-"Could not create directory '%s'. You may not have permission to perform this "
-"operation."
+"Could not create directory '%s'. You may not have permission to perform this"
+" operation."
 msgstr "无法创建目录 “%s ” 。 您可能没有执行此操作的权限 。"
 
 msgid "An error ocurred while trying to delete '%s'. %s"
@@ -2844,6 +4521,21 @@ msgstr "11月"
 msgid "Dec"
 msgstr "12月"
 
+msgid "Replace"
+msgstr "替换"
+
+msgid "Find:"
+msgstr "查找 :"
+
+msgid "Replace:"
+msgstr "替换:"
+
+msgid "Replace All"
+msgstr "全部替换"
+
+msgid "Replace Next"
+msgstr "替换下一个"
+
 msgid "Build Environment:"
 msgstr "建设环境:"
 
@@ -2952,8 +4644,7 @@ msgid "No GNOME Shell Hotkey for Float On Top.  Setting it globally to '{0}'"
 msgstr "GNOME Shell 没有顶部浮点的 GNOME Shell 热键。 设置为“ {0} ”"
 
 msgid ""
-"This will disable events for mrv2, allowing them to pass through to windows "
-"below it.\n"
+"This will disable events for mrv2, allowing them to pass through to windows below it.\n"
 "\n"
 "Give window focus to disable."
 msgstr ""
@@ -2965,8 +4656,7 @@ msgid "Continue"
 msgstr "继续"
 
 msgid ""
-"This will disable events for mrv2, allowing them to pass through to windows "
-"below it.\n"
+"This will disable events for mrv2, allowing them to pass through to windows below it.\n"
 "\n"
 "Give window focus (click on the taskbar icon)\n"
 "to disable."
@@ -3140,8 +4830,7 @@ msgstr "保存注释"
 
 msgid ""
 "Save Annotations burned into the movie or sequence.\n"
-"It also allows saving OpenEXRs from an 8-bit movie and changing OpenEXR's "
-"pixel type.\n"
+"It also allows saving OpenEXRs from an 8-bit movie and changing OpenEXR's pixel type.\n"
 "\n"
 "Furthermore, it allows saving A/B or Tiled comparisons and baking OCIO.\n"
 "\n"
@@ -3653,12 +5342,10 @@ msgid ""
 "      Y = 0.2126 R + 0.7152 G + 0.0722 B\n"
 "Y' (Lumma) is the weighted pixel value according to:\n"
 "      Y' = ( R + G + B ) / 3.0\n"
-"L (Lightness) is the human perception of luminance of the image which is non "
-"linear.\n"
+"L (Lightness) is the human perception of luminance of the image which is non linear.\n"
 "According to CIE No.15.2:\n"
 "      L = (116 * Y ^ 1/3 - 16) / 100\n"
-"A pixel of Y = 0.18 (L = 0.5) will appear about half as bright as Y = L = "
-"1.0 (white)."
+"A pixel of Y = 0.18 (L = 0.5) will appear about half as bright as Y = L = 1.0 (white)."
 msgstr ""
 "切换亮度计算。\n"
 "Y（亮度）是根据 Rec709 计算的像素值：\n"
@@ -4191,11 +5878,8 @@ msgstr "单一实例"
 
 msgid ""
 "When selected, only a single mrv2 instance is allowed.\n"
-"If you try to open several mrv2s with different images, all these images "
-"will be sent to the already open mrv2."
-msgstr ""
-"选中时, 仅允许单个的 mrv2 实例。 如果您尝试用不同的图像打开多个 mrv2, 所有这"
-"些图像都会被发送到已经打开的 mrv2 中 。"
+"If you try to open several mrv2s with different images, all these images will be sent to the already open mrv2."
+msgstr "选中时, 仅允许单个的 mrv2 实例。 如果您尝试用不同的图像打开多个 mrv2, 所有这些图像都会被发送到已经打开的 mrv2 中 。"
 
 msgid "Auto Refit Image"
 msgstr "自动缩放图像"
@@ -4204,9 +5888,7 @@ msgid ""
 "When selected, mrv2 will apply a fit image operation on each video played.  "
 "This effectively means the video will be resized automatically based on the "
 "size of the window."
-msgstr ""
-"当选中时, drv2 将在播放的每段视频上应用一个适合的图像操作。 这实际上意味着视"
-"频将根据窗口大小自动调整大小 。"
+msgstr "当选中时, drv2 将在播放的每段视频上应用一个适合的图像操作。 这实际上意味着视频将根据窗口大小自动调整大小 。"
 
 msgid "Raise on Enter"
 msgstr "进入时唤起"
@@ -4253,7 +5935,8 @@ msgid "Topbar"
 msgstr "顶栏"
 
 msgid ""
-"When selected, mrv2 will start with its channel, gain, gamma toolbar visible."
+"When selected, mrv2 will start with its channel, gain, gamma toolbar "
+"visible."
 msgstr "选中时, mrv2 将从通道开始, gain Gamma 工具栏可见 。"
 
 msgid "Pixel Toolbar"
@@ -4277,9 +5960,7 @@ msgstr "macOS 菜单"
 msgid ""
 "This is a macOS setting only.  When selected the menus will appear on the "
 "system toolbar instead of the mrv2 toolbar."
-msgstr ""
-"这只是一个 macOS 设置。 当选中时, 菜单将出现在系统工具栏上, 而不是在 mrv2 工"
-"具栏上 。"
+msgstr "这只是一个 macOS 设置。 当选中时, 菜单将出现在系统工具栏上, 而不是在 mrv2 工具栏上 。"
 
 msgid "Tool Dock"
 msgstr "Tool Dock"
@@ -4290,7 +5971,8 @@ msgstr "选中时, mrv2 将从Tool dock打开开始 。"
 msgid "Only One Panel"
 msgstr "只有一个面板"
 
-msgid "When selected, mrv2 will start with the only one panel option selected."
+msgid ""
+"When selected, mrv2 will start with the only one panel option selected."
 msgstr "选中时, mrv2 将使用唯一选中的一个面板选项开始 。"
 
 msgid "View Window"
@@ -4385,9 +6067,7 @@ msgstr "使用本地文件选择器"
 msgid ""
 "If selected, the natlve file chooser will be used.  If unselected, mrv2's "
 "standard file chooser will be used."
-msgstr ""
-"如果选中的话, 将使用 natlve 文件选择器。 如果未选中, 将使用 mrv2 的标准文件选"
-"择器 。"
+msgstr "如果选中的话, 将使用 natlve 文件选择器。 如果未选中, 将使用 mrv2 的标准文件选择器 。"
 
 msgid "Fonts"
 msgstr "字体"
@@ -4462,12 +6142,10 @@ msgid "Fixed Position"
 msgstr "固定位置"
 
 msgid ""
-"When this option is set, mrv2 will open in the position you set here (except "
-"if the window goes out of the Desktop).  If Always Save on Exit is on, the "
+"When this option is set, mrv2 will open in the position you set here (except"
+" if the window goes out of the Desktop).  If Always Save on Exit is on, the "
 "values are recakculated upon exiting the program."
-msgstr ""
-"当设置此选项时, 将按您设置的位置打开 mrv2 ( 除非窗口退出桌面 ) 。 如果总是在"
-"退出时保存开启, 则退出程序时会重新刷新"
+msgstr "当设置此选项时, 将按您设置的位置打开 mrv2 ( 除非窗口退出桌面 ) 。 如果总是在退出时保存开启, 则退出程序时会重新刷新"
 
 msgid "X:"
 msgstr "X:"
@@ -4482,9 +6160,7 @@ msgid ""
 "When this option is on, mrv2 will always open to the size you set in W and "
 "H.  If Always Save on Exit is on, the values are recalculated upon exiting "
 "the program."
-msgstr ""
-"当此选项启用时, mrv2 总是会打开您在 W 和 H 中设定的大小。 如果总是在退出时保"
-"存, 退出程序时会重新刷新"
+msgstr "当此选项启用时, mrv2 总是会打开您在 W 和 H 中设定的大小。 如果总是在退出时保存, 退出程序时会重新刷新"
 
 msgid "W:"
 msgstr "W :"
@@ -4499,9 +6175,7 @@ msgid ""
 "Fills the Fixed Position and and Fixed Size values with the current values "
 "of the viewer.  Remember to also check the boxes for Fixed Position and/or "
 "Fixed Size depending what you want to save."
-msgstr ""
-"以当前值填充固定位置和固定大小值。 记住要检查固定位置和/ 或固定大小的框, 取决"
-"于您要保存的内容 。"
+msgstr "以当前值填充固定位置和固定大小值。 记住要检查固定位置和/ 或固定大小的框, 取决于您要保存的内容 。"
 
 msgid "Render"
 msgstr "渲染"
@@ -4564,8 +6238,8 @@ msgid "Remove EDLs in Temporary Folder on Exit"
 msgstr "退出时删除临时文件夹中的 EDL"
 
 msgid ""
-"When selected, temporary EDLs (Playlists) will be removed from the temporary "
-"folder."
+"When selected, temporary EDLs (Playlists) will be removed from the temporary"
+" folder."
 msgstr "选中时, 临时 EDL( 播放列表) 将从临时文件夹中删除 。"
 
 msgid "Video Start Frame"
@@ -4627,12 +6301,10 @@ msgid "Scrub Sensitivity"
 msgstr "Scrub Sensitivity"
 
 msgid ""
-"This setting controls the sensitivity of scrubbing (SHIFT and then the mouse "
-"right and left).  Smaller values make the mouse move jump more frames while "
-"higher values does the opposite."
-msgstr ""
-"此设置控制了scrubbing的灵敏度( SHIFT+鼠标左右键) 。 小值会使鼠标移动更多的"
-"帧, 而高值则相反 。"
+"This setting controls the sensitivity of scrubbing (SHIFT and then the mouse"
+" right and left).  Smaller values make the mouse move jump more frames while"
+" higher values does the opposite."
+msgstr "此设置控制了scrubbing的灵敏度( SHIFT+鼠标左右键) 。 小值会使鼠标移动更多的帧, 而高值则相反 。"
 
 msgid "Default View"
 msgstr "默认视图"
@@ -4673,9 +6345,7 @@ msgstr "OCIO 配置文件"
 msgid ""
 "This is the path to your config.ocio file.  It can be set with the "
 "environment variable OCIO, which takes precedence over any saved setting."
-msgstr ""
-"这是您配置的 ocio 文件的路径。 它可以设置为环境变量OCIO, 环境变量OCIO 优先于"
-"任何保存的设置 。"
+msgstr "这是您配置的 ocio 文件的路径。 它可以设置为环境变量OCIO, 环境变量OCIO 优先于任何保存的设置 。"
 
 msgid "Built-in Configs"
 msgstr "内建配置"
@@ -4687,10 +6357,9 @@ msgid "Use Default Display and View"
 msgstr "使用默认显示和视图"
 
 msgid ""
-"When this option is on, and your config.ocio has a default display and view, "
-"it will be used to be set as default."
-msgstr ""
-"当此选项打开时, 您的 config. ocio 有默认显示和视图时, 它将被设置为默认 。"
+"When this option is on, and your config.ocio has a default display and view,"
+" it will be used to be set as default."
+msgstr "当此选项打开时, 您的 config. ocio 有默认显示和视图时, 它将被设置为默认 。"
 
 msgid "Use Active Views and Active Displays"
 msgstr "使用活动视图和活动显示"
@@ -4715,8 +6384,8 @@ msgid "16-bits"
 msgstr "16 位"
 
 msgid ""
-"The name of the OCIO default image color space for 16-bit images (cin, tiff, "
-"etc.)"
+"The name of the OCIO default image color space for 16-bit images (cin, tiff,"
+" etc.)"
 msgstr "16位图像( cin、 tiff 等) OCIO 默认图像颜色空间的名称"
 
 msgid "32-bits"
@@ -4730,7 +6399,8 @@ msgstr "OCIO 32 位整数图像( Openexr 整数等) 的默认图像色彩空间�
 msgid "half"
 msgstr "half"
 
-msgid "The name of the OCIO default image color space for OpenEXR half images."
+msgid ""
+"The name of the OCIO default image color space for OpenEXR half images."
 msgstr "OpenEXR 半图像的 OCIO 默认图像颜色空间的名称 。"
 
 msgid "float"
@@ -4759,13 +6429,11 @@ msgstr "版本 Regex"
 msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
-"automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: "
+"automatically be created a regular expression to match versions defined with"
+" _v in the name of the file, directory or both. For example: "
 "gizmo_v001.0001.exr"
 msgstr ""
-"用于匹配剪辑版本的正则表达式。必须分组三部分（前缀、数字和后缀）。如果保持默"
-"认值(_v)，它会自动创建一个正则表达式来匹配文件、目录或两者名称中带有_v定义的"
-"版本。例如：gizmo_v001.0001.exr"
+"用于匹配剪辑版本的正则表达式。必须分组三部分（前缀、数字和后缀）。如果保持默认值(_v)，它会自动创建一个正则表达式来匹配文件、目录或两者名称中带有_v定义的版本。例如：gizmo_v001.0001.exr"
 
 msgid "Maximum Images Apart"
 msgstr "最大图像版本差"
@@ -4784,9 +6452,7 @@ msgstr "路径映射"
 msgid ""
 "Use Up and Down arrows to move the selected line up and down.  Double click "
 "to change item.  Click on an empty area to unselect."
-msgstr ""
-"使用向上和向下箭头向上和向下移动选定行。双击以修改项目。单击空区域以取消选"
-"择。"
+msgstr "使用向上和向下箭头向上和向下移动选定行。双击以修改项目。单击空区域以取消选择。"
 
 msgid "Add Paths"
 msgstr "添加路径"
@@ -4834,8 +6500,7 @@ msgid ""
 "all float information, Half Float preserves most float information and Fast "
 "works in 8-bits.  Automatic selects the accuracy based on image depth."
 msgstr ""
-"颜色缓冲器可以是浮点、 半浮点、 快速或自动。 浮点保存所有浮点信息, 半浮点保存"
-"大多数浮点信息, 快速工作为 8 位。 根据图像深度自动选择精度 。"
+"颜色缓冲器可以是浮点、 半浮点、 快速或自动。 浮点保存所有浮点信息, 半浮点保存大多数浮点信息, 快速工作为 8 位。 根据图像深度自动选择精度 。"
 
 msgid "Blit Viewports"
 msgstr "Blit 视图"
@@ -4843,9 +6508,7 @@ msgstr "Blit 视图"
 msgid ""
 "Viewports can be drawn with blitting or with OpenGL shaders.  Depending on "
 "graphics card and OS one can perform better then the other."
-msgstr ""
-"可以通过闪烁或 OpenGL 遮光镜来绘制视图。 取决于图形卡和操作系统, 一个可以表现"
-"得比另一个更好 。"
+msgstr "可以通过闪烁或 OpenGL 遮光镜来绘制视图。 取决于图形卡和操作系统, 一个可以表现得比另一个更好 。"
 
 msgid "Blit Timeline"
 msgstr "Blit 时间线"
@@ -4853,9 +6516,7 @@ msgstr "Blit 时间线"
 msgid ""
 "Timeline can be drawn with blitting or with OpenGL shaders.  Depending on "
 "graphics card and OS one can perform better then the other."
-msgstr ""
-"时间线可以通过闪烁或 OpenGL 遮光镜来绘制。 取决于图形卡和操作系统, 一个可以表"
-"现得比另一个更好 。"
+msgstr "时间线可以通过闪烁或 OpenGL 遮光镜来绘制。 取决于图形卡和操作系统, 一个可以表现得比另一个更好 。"
 
 msgid ""
 "For changes to take effect, you will need to re-open any movies already "
@@ -4886,7 +6547,8 @@ msgid "Use ComfyUI Pipe"
 msgstr "使用ComfyUI 管道"
 
 msgid ""
-"This setting opens a pipe to communicate with ComfyUI's mrv2_save_exr_node.py"
+"This setting opens a pipe to communicate with ComfyUI's "
+"mrv2_save_exr_node.py"
 msgstr "此设置打开管道, 以便与 ComfyUI 的 drv2_ save_ exr_ node 进行通讯 。"
 
 msgid "Errors"
@@ -4907,7 +6569,8 @@ msgstr "调整日志窗口发生错误时的行为 。"
 msgid "Check for Updates"
 msgstr "检查更新"
 
-msgid "Allows you to automatically download updates of mrv2 when it starts up."
+msgid ""
+"Allows you to automatically download updates of mrv2 when it starts up."
 msgstr "允许您在 mrv2 启动时自动下载更新 。"
 
 msgid "Reset settings to the default."
@@ -5001,11 +6664,11 @@ msgstr "单击可删除选中的预设"
 
 msgid ""
 "Select, Add or Delete an OCIO Preset that stores: config filename, Input "
-"Color Space, View, Look, LUT settings and Defaults for 8-bits, 16-bits, 32-"
-"bits, half and float images. "
+"Color Space, View, Look, LUT settings and Defaults for 8-bits, 16-bits, "
+"32-bits, half and float images. "
 msgstr ""
-"选择、添加或删除 OCIO 预设存储点: 配置文件名、 输入颜色空间、 视图、 查看、 "
-"LUT 设置以及 8 位、 16 位、 32 位、 一半 和浮点图像的默认值"
+"选择、添加或删除 OCIO 预设存储点: 配置文件名、 输入颜色空间、 视图、 查看、 LUT 设置以及 8 位、 16 位、 32 位、 一半 "
+"和浮点图像的默认值"
 
 msgid "Summary"
 msgstr "摘要"
@@ -5400,9 +7063,8 @@ msgstr "删除所有帧批注"
 msgid "Annotation Frame Step Backwards"
 msgstr "下一个批注的帧"
 
-#, fuzzy
 msgid "Toggle Show Annotations"
-msgstr "开关注释面板"
+msgstr "切换显示注释"
 
 msgid "Frame Step Backwards"
 msgstr "下一帧"
@@ -5635,9 +7297,6 @@ msgstr "冲刷模式"
 msgid "Area Selection Mode"
 msgstr "区域选择模式"
 
-msgid "Draw Mode"
-msgstr "绘制模式"
-
 msgid "Erase Mode"
 msgstr "擦除模式"
 
@@ -5727,1734 +7386,6 @@ msgstr "开关热键窗口"
 
 msgid "Toggle About Window"
 msgstr "开关关于窗口"
-
-#~ msgid ""
-#~ "\n"
-#~ "USD module.\n"
-#~ "\n"
-#~ "Contains all classes and enums related to USD (Universal Scene "
-#~ "Description). \n"
-#~ msgstr ""
-#~ "\n"
-#~ "USD 模块。\n"
-#~ "\n"
-#~ "包含所有与 USD（通用场景描述）相关的类和枚举。\n"
-
-#~ msgid "Renderer Name"
-#~ msgstr "渲染器命名"
-
-#~ msgid "Render Width"
-#~ msgstr "宽度"
-
-#~ msgid "Models' complexity."
-#~ msgstr "模型复杂度"
-
-#~ msgid "Draw mode  :class:`mrv2.usd.DrawMode`."
-#~ msgstr "绘制模式 :class: `mrv2.usd.DrawMode`"
-
-#~ msgid "Enable Lighting"
-#~ msgstr "开启照明"
-
-#~ msgid "Enable Scene Lights"
-#~ msgstr "开启场景灯光"
-
-#~ msgid "Enable Scene Materials"
-#~ msgstr "开启场景材质"
-
-#~ msgid "Enable sRGB"
-#~ msgstr "开启sRGB"
-
-#~ msgid "Stage Cache Count"
-#~ msgstr "阶段缓存计数"
-
-#~ msgid "Disk Cache Byte Count"
-#~ msgstr "磁盘缓存字节计数"
-
-#~ msgid "USD Render Options."
-#~ msgstr "USD 渲染选项"
-
-#~ msgid "Get USD Render Options."
-#~ msgstr "获取 USD 渲染选项"
-
-#~ msgid "Set USD Render Options."
-#~ msgstr "设定 USD 渲染选项"
-
-#~ msgid ""
-#~ "\n"
-#~ "UI module.\n"
-#~ "\n"
-#~ "Contains all classes and enums related to UI (User Interface). \n"
-#~ msgstr ""
-#~ "\n"
-#~ "UI 模块。\n"
-#~ "\n"
-#~ "包含所有与 UI（用户界面）相关的类和枚举。\n"
-
-#~ msgid "Refresh menus."
-#~ msgstr "刷新菜单"
-
-#~ msgid ""
-#~ "\n"
-#~ "Timeline module.\n"
-#~ "\n"
-#~ "Contains all functions related to the timeline control.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "时间轴模块。\n"
-#~ "\n"
-#~ "包含所有与时间轴控制相关的功能。\n"
-
-#~ msgid "Play forwards."
-#~ msgstr "向前播"
-
-#~ msgid "Play backwards."
-#~ msgstr "向后播"
-
-#~ msgid "Seek to a time in timeline."
-#~ msgstr "定位到时间轴上的时间戳"
-
-#~ msgid "Seek to a frame in timeline."
-#~ msgstr "定位到时间轴上的一帧"
-
-#~ msgid "Seek to a second in timeline."
-#~ msgstr "定位到时间轴上的秒"
-
-#~ msgid "Time range of the timeline."
-#~ msgstr "时间轴范围"
-
-#~ msgid "Selected time range of the timeline."
-#~ msgstr "选择时间轴范围"
-
-#~ msgid "Set the selected time range of the timeline."
-#~ msgstr "设定所选择的时间范围"
-
-#~ msgid "Set the in time of the selected time range of the timeline."
-#~ msgstr "设定开始时间戳"
-
-#~ msgid "Set the in frame of the selected time range of the timeline."
-#~ msgstr "设定开始帧"
-
-#~ msgid "Set the in seconds of the selected time range of the timeline."
-#~ msgstr "设置开始时间秒数"
-
-#~ msgid "Set the out time of the selected time range of the timeline."
-#~ msgstr "设定结束时间戳"
-
-#~ msgid "Set the out frame of the selected time range of the timeline."
-#~ msgstr "设定结束帧"
-
-#~ msgid "Set the out seconds of the selected time range of the timeline."
-#~ msgstr "设定结束时间秒数"
-
-#~ msgid "Current time in timeline."
-#~ msgstr "当前时间戳"
-
-#~ msgid "Current frame in timeline."
-#~ msgstr "当前帧"
-
-#~ msgid "Current seconds in timeline."
-#~ msgstr "当前秒数"
-
-#~ msgid "Return current loop mode of timeline."
-#~ msgstr "返回当前时间循环模式"
-
-#~ msgid "Set current loop mode of timeline."
-#~ msgstr "设置当前时间循环模式"
-
-#~ msgid "Gets the current FPS of timeline."
-#~ msgstr "获取当前FPS帧率"
-
-#~ msgid "Gets the default speed of the timeline."
-#~ msgstr "获得时间轴的默认速度"
-
-#~ msgid "Set current FPS of timeline."
-#~ msgstr "FPS帧率"
-
-#~ msgid "Value less than 0"
-#~ msgstr "值小于0"
-
-#~ msgid ""
-#~ "\n"
-#~ "Settings module.\n"
-#~ "\n"
-#~ "Contains all settings functions.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "设置模式\n"
-#~ "\n"
-#~ "包括所有设置选项\n"
-
-#~ msgid "Returns whether to check for updates at start up."
-#~ msgstr "返回是否在启动时检查更新"
-
-#~ msgid "Retrieve the cache memory setting in gigabytes."
-#~ msgstr "获取缓存大小(GB)"
-
-#~ msgid "Set the cache memory setting in gigabytes."
-#~ msgstr "设置缓存大小(GB)"
-
-#~ msgid "Retrieve Read Ahead cache in seconds."
-#~ msgstr "获取读头缓存(秒)"
-
-#~ msgid "Set Read Ahead cache in seconds."
-#~ msgstr "设置读头缓存(秒)"
-
-#~ msgid "Retrieve Read Behind cache in seconds."
-#~ msgstr "获取读尾缓存(秒)"
-
-#~ msgid "Set Read Behind cache in seconds."
-#~ msgstr "设置读尾缓存(秒)"
-
-#~ msgid "Set file sequence audio."
-#~ msgstr "设置文件序列音频"
-
-#~ msgid "Get file sequence audio."
-#~ msgstr "获取文件序列音频"
-
-#~ msgid "Set file sequence audio file name."
-#~ msgstr "设置文件序列音频文件名"
-
-#~ msgid "Get file sequence audio file name."
-#~ msgstr "获取文件序列音频文件名"
-
-#~ msgid "Set file sequence audio directory."
-#~ msgstr "设置文件序列音频目录"
-
-#~ msgid "Get file sequence audio directory."
-#~ msgstr "获取文件序列音频目录"
-
-#~ msgid "Set maximum file sequence digits."
-#~ msgstr "设定最大文件序列位数"
-
-#~ msgid "Get maximum file sequence digits."
-#~ msgstr "获取最大文件序列位数"
-
-#~ msgid "Set Timer Mode."
-#~ msgstr "设定定时器模式"
-
-#~ msgid "Get Timer Mode."
-#~ msgstr "获取定时器模式"
-
-#~ msgid "Set Audio Buffer Frame Count."
-#~ msgstr "设定音频缓冲帧数"
-
-#~ msgid "Get Audio Buffer Frame Count."
-#~ msgstr "获取音频缓冲帧数"
-
-#~ msgid "Set Video Request Count."
-#~ msgstr "设定视频请求数"
-
-#~ msgid "Get Video Request Count."
-#~ msgstr "获取视频请求数"
-
-#~ msgid "Set Audio Request Count."
-#~ msgstr "设定音频请求数"
-
-#~ msgid "Get Audio Request Count."
-#~ msgstr "获取音频请求数"
-
-#~ msgid "Set Sequence Thread Count."
-#~ msgstr "设置序列线程数"
-
-#~ msgid "Get Sequence Thread Count."
-#~ msgstr "获取序列线程数"
-
-#~ msgid "Set FFmpeg YUV To RGB Conversion."
-#~ msgstr "设置FFmpeg YUV到RGB转换"
-
-#~ msgid "Get FFmpeg YUV To RGB Conversion."
-#~ msgstr "获取FFmpeg YUV到RGB转换"
-
-#~ msgid "Set FFmpeg Color Accuracy."
-#~ msgstr "设置FFmpeg颜色准确度"
-
-#~ msgid "Get FFmpeg Color Accuracy."
-#~ msgstr "获取FFmpeg颜色准确度"
-
-#~ msgid "Set FFmpeg Thread Count."
-#~ msgstr "设置FFmpeg线程数"
-
-#~ msgid "Get FFmpeg Thread Count."
-#~ msgstr "获取FFmpeg线程数"
-
-#~ msgid "No session name established, cannot save."
-#~ msgstr "未建立会话名称, 无法保存"
-
-#~ msgid ""
-#~ "\n"
-#~ "Session module.\n"
-#~ "\n"
-#~ "Used to manage everything related to sessions.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "会话模式\n"
-#~ "\n"
-#~ "会话相关的所有设置\n"
-
-#~ msgid "Returns the current session metadata."
-#~ msgstr "返回当前会话元数据"
-
-#~ msgid "Returns the current metadata for a key."
-#~ msgstr "返回当前key元数据"
-
-#~ msgid "Sets all the session metadata for a session."
-#~ msgstr "设置会话的全部会话元数据 。"
-
-#~ msgid "Sets the session metadata for a key."
-#~ msgstr "设置密钥的会话元数据 。"
-
-#~ msgid "Clears the current session metadata."
-#~ msgstr "清除当前会话元数据 。"
-
-#~ msgid "Returns current session file."
-#~ msgstr "返回当前会话文件 。"
-
-#~ msgid "Sets the current session file."
-#~ msgstr "设置当前会话文件 。"
-
-#~ msgid "Open a session file."
-#~ msgstr "打开会话文件 。"
-
-#~ msgid "Save a session file."
-#~ msgstr "保存会话文件 。"
-
-#~ msgid "Duplicated Python plugin {0} in {1} and {2}."
-#~ msgstr "复制的Python插件 {0} in {1} {2}"
-
-#~ msgid ""
-#~ "Expected a tuple containing a Python function and a string with menu "
-#~ "options in it."
-#~ msgstr "需要一个tuple, 包含py函数和string菜单选项"
-
-#~ msgid ""
-#~ "Expected a handle to a Python function or to a tuple containing a Python "
-#~ "function and a string with menu options in it."
-#~ msgstr "需要一个Python函数的handle或是tuple,包含py函数和string菜单选项"
-
-#~ msgid ""
-#~ "Please override the menus method by returning a valid dict of key menus, "
-#~ "values methods."
-#~ msgstr "请返回有效的字典, 包含菜单键值和函数, 以覆盖菜单"
-
-#~ msgid ""
-#~ "\n"
-#~ "Plugin module.\n"
-#~ "\n"
-#~ "Contains all classes related to python plugins.\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Plugin module.\n"
-#~ "\n"
-#~ "Contains all classes related to python plugins.\n"
-#~ "\n"
-
-#~ msgid ""
-#~ "Whether a plugin is active or not.  If not overriden, the default is True."
-#~ msgstr "插件是否开启,默认为True"
-
-#~ msgid ""
-#~ "\n"
-#~ "Dictionary of menu entries with callbacks, like:\n"
-#~ "\n"
-#~ "def menus(self):\n"
-#~ "    menus = { \"New Menu/Hello\" : self.run }\n"
-#~ "    return menus\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Dictionary of menu entries with callbacks, like:\n"
-#~ "\n"
-#~ "def menus(self):\n"
-#~ "  menus = { \"New Menu/Hello\" : self.run }\n"
-#~ "  return menus\n"
-#~ "\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "import mrv2\n"
-#~ "from mrv2 import plugin\n"
-#~ "\n"
-#~ "class DemoPlugin(plugin.Plugin):\n"
-#~ "    def __init__(self):\n"
-#~ "        \"\"\"\n"
-#~ "        Constructor for DemoPlugin.\n"
-#~ "\n"
-#~ "        Define your own variables here.\n"
-#~ "        \"\"\"\n"
-#~ "        super().__init__()\n"
-#~ "\n"
-#~ "    def run(self):\n"
-#~ "        \"\"\"\n"
-#~ "        Example method used for the callback.\n"
-#~ "        \"\"\"\n"
-#~ "        print(\"Hello from Python plugin\")\n"
-#~ "\n"
-#~ "    def active(self):\n"
-#~ "        \"\"\"\n"
-#~ "        Optional method to return whether the plug-in is active or not.\n"
-#~ "\n"
-#~ "\n"
-#~ "        :return: True if the plug-in is active, False otherwise.\n"
-#~ "        :rtype: bool\n"
-#~ "\n"
-#~ "        \"\"\"\n"
-#~ "        return True\n"
-#~ "\n"
-#~ "    def menus(self):\n"
-#~ "        \"\"\"\n"
-#~ "        Dictionary of menu entries as keys with callbacks as values.\n"
-#~ "\n"
-#~ "\n"
-#~ "        :return: A dictionary of menu entries and their corresponding "
-#~ "callbacks.\n"
-#~ "        :rtype: dict\n"
-#~ "\n"
-#~ "        \"\"\"\n"
-#~ "        menus = {\"New Menu/Hello\": self.run}\n"
-#~ "        return menus\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "import mrv2\n"
-#~ "from mrv2 import plugin\n"
-#~ "\n"
-#~ "class DemoPlugin(plugin.Plugin):\n"
-#~ "    def __init__(self):\n"
-#~ "        \"\"\"\n"
-#~ "        DemoPlugin 的构造函数。\n"
-#~ "\n"
-#~ "        在这里定义你自己的变量。\n"
-#~ "        \"\"\"\n"
-#~ "        super().__init__()\n"
-#~ "\n"
-#~ "    def run(self):\n"
-#~ "        \"\"\"\n"
-#~ "        用于回调的示例方法。\n"
-#~ "        \"\"\"\n"
-#~ "        print(\"Hello from Python plugin\")\n"
-#~ "\n"
-#~ "    def active(self):\n"
-#~ "        \"\"\"\n"
-#~ "        可选方法，用于返回插件是否处于活动状态。\n"
-#~ "\n"
-#~ "\n"
-#~ "        :return: 如果插件处于活动状态，则返回 True，否则返回 False。\n"
-#~ "        :rtype: bool\n"
-#~ "\n"
-#~ "        \"\"\"\n"
-#~ "        return True\n"
-#~ "\n"
-#~ "    def menus(self):\n"
-#~ "        \"\"\"\n"
-#~ "        菜单项的字典，键是菜单项，值是回调函数。\n"
-#~ "\n"
-#~ "\n"
-#~ "        :return: 一个包含菜单项及其对应回调的字典。\n"
-#~ "        :rtype: dict\n"
-#~ "\n"
-#~ "        \"\"\"\n"
-#~ "        menus = {\"New Menu/Hello\": self.run}\n"
-#~ "        return menus\n"
-#~ "\n"
-
-#~ msgid "No playlist matched item."
-#~ msgstr "没有符合播放列表的项目"
-
-#~ msgid "No playlist matched file name."
-#~ msgstr "没有符合播放列表的文件名"
-
-#~ msgid "No playlist loaded."
-#~ msgstr "未载入播放列表"
-
-#~ msgid "No playlist selected."
-#~ msgstr "未选择播放列表"
-
-#~ msgid "Not an EDL playlist to add clips to."
-#~ msgstr "不是可添加Clip片段的播放列表"
-
-#~ msgid "Could not find clip in loaded clips."
-#~ msgstr "无法在已加载的片段中找到"
-
-#~ msgid ""
-#~ "\n"
-#~ "Playlist module.\n"
-#~ "\n"
-#~ "Contains all functions and classes related to the playlists.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "播放列表选项\n"
-#~ "\n"
-#~ "包含播放列表相关的函数和类\n"
-
-#~ msgid "List playlist items."
-#~ msgstr "列出播放列表项目"
-
-#~ msgid "Select a playlist by FileModelItem."
-#~ msgstr "根据FileModelItem选择播放列表"
-
-#~ msgid "Select a playlist by fileName."
-#~ msgstr "根据文件选择播放列表"
-
-#~ msgid "Select a playlist by index."
-#~ msgstr "根据索引选择播放列表"
-
-#~ msgid "Add a clip to currently selected Playlist EDL."
-#~ msgstr "在现有的播放列表添加片段"
-
-#~ msgid "Save current .otio file with relative paths."
-#~ msgstr "保存.otio文件"
-
-#~ msgid "unsupported operand type(s) for {0}: RationalTime and {1}"
-#~ msgstr "不支持的操作类型 {0}: RationalTime 和{1}"
-
-#~ msgid ""
-#~ "\n"
-#~ "The RationalTime class represents a measure of time of :math:`rt.value/"
-#~ "rt.rate` seconds.\n"
-#~ "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "The RationalTime class represents a measure of time of :math:`rt.value/"
-#~ "rt.rate` seconds.\n"
-#~ "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Returns true if the time is invalid. The time is considered invalid if "
-#~ "the value or the rate are a NaN value\n"
-#~ "or if the rate is less than or equal to zero.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Returns true if the time is invalid. The time is considered invalid if "
-#~ "the value or the rate are a NaN value\n"
-#~ "or if the rate is less than or equal to zero.\n"
-
-#~ msgid "Returns the time value for time converted to new_rate."
-#~ msgstr "返回转换为new_rate的时间值"
-
-#~ msgid "Returns the time for time converted to new_rate."
-#~ msgstr "返回转换为new_rate的时间"
-
-#~ msgid "Returns the time value for \"self\" converted to new_rate."
-#~ msgstr "返回从\"self\"转换为new_rate的时间值"
-
-#~ msgid ""
-#~ "\n"
-#~ "Compute the duration of samples from first to last (excluding last). This "
-#~ "is not the same as distance.\n"
-#~ "\n"
-#~ "For example, the duration of a clip from frame 10 to frame 15 is 5 "
-#~ "frames. Result will be in the rate of start_time.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Compute the duration of samples from first to last (excluding last). This "
-#~ "is not the same as distance.\n"
-#~ "\n"
-#~ "For example, the duration of a clip from frame 10 to frame 15 is 5 "
-#~ "frames. Result will be in the rate of start_time.\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Compute the duration of samples from first to last (including last). This "
-#~ "is not the same as distance.\n"
-#~ "\n"
-#~ "For example, the duration of a clip from frame 10 to frame 15 is 6 "
-#~ "frames. Result will be in the rate of start_time.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Compute the duration of samples from first to last (including last). This "
-#~ "is not the same as distance.\n"
-#~ "\n"
-#~ "For example, the duration of a clip from frame 10 to frame 15 is 6 "
-#~ "frames. Result will be in the rate of start_time.\n"
-
-#~ msgid "Returns true if the rate is valid for use with timecode."
-#~ msgstr "返回true, 如果rate是有效的时间编码率"
-
-#~ msgid ""
-#~ "Returns the first valid timecode rate that has the least difference from "
-#~ "the given value."
-#~ msgstr "返回第一个与给定值最小差的有效时间编码率。"
-
-#~ msgid "Turn a frame number and rate into a :class:`~RationalTime` object."
-#~ msgstr ": class: `~ RationalTime`"
-
-#~ msgid "Returns the frame number based on the current rate."
-#~ msgstr "根据当前速率返回框架编号。"
-
-#~ msgid "Returns the frame number based on the given rate."
-#~ msgstr "根据给定的速率返回框架编号。"
-
-#~ msgid "Convert to timecode (``HH:MM:SS;FRAME``)"
-#~ msgstr "转换为时间码（``HH:MM:SS;帧``）"
-
-#~ msgid ""
-#~ "Convert a timecode string (``HH:MM:SS;FRAME``) into "
-#~ "a :class:`~RationalTime`."
-#~ msgstr "将时间码字符串（``HH:MM:SS;帧``）转换为:class:`~RationalTime`。"
-
-#~ msgid ""
-#~ "Convert a time with microseconds string (``HH:MM:ss`` where ``ss`` is an "
-#~ "integer or a decimal number) into a :class:`~RationalTime`."
-#~ msgstr ""
-#~ "将带有微秒字符串的时间（``HH:MM:ss``，其中``ss``是整数或十进制数）转换为："
-#~ "class:`~RationalTime`。"
-
-#~ msgid ""
-#~ "\n"
-#~ "The TimeRange class represents a range in time. It encodes the start time "
-#~ "and the duration,\n"
-#~ "meaning that :meth:`end_time_inclusive` (last portion of a sample in the "
-#~ "time range) and\n"
-#~ ":meth:`end_time_exclusive` can be computed.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "TimeRange 类表示时间范围。它对开始时间和持续时间进行编码，\n"
-#~ "这意味着可以计算 :meth:`end_time_inclusive`（时间范围内样本的最后一部分）"
-#~ "和\n"
-#~ ":meth:`end_time_exclusive`。\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The time of the last sample containing data in the time range.\n"
-#~ "\n"
-#~ "If the time range starts at (0, 24) with duration (10, 24), this will be\n"
-#~ "(9, 24)\n"
-#~ "\n"
-#~ "If the time range starts at (0, 24) with duration (10.5, 24):\n"
-#~ "(10, 24)\n"
-#~ "\n"
-#~ "In other words, the last frame with data, even if the last frame is "
-#~ "fractional.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "时间范围内包含数据的最后一个样本的时间。\n"
-#~ "\n"
-#~ "如果时间范围从 (0, 24) 开始，持续时间为 (10, 24)，则为\n"
-#~ "(9, 24)\n"
-#~ "\n"
-#~ "如果时间范围从 (0, 24) 开始，持续时间为 (10.5, 24):\n"
-#~ "(10, 24)\n"
-#~ "\n"
-#~ "换句话说，最后一帧包含数据，即使最后一帧是小数。\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Time of the first sample outside the time range.\n"
-#~ "\n"
-#~ "If start frame is 10 and duration is 5, then end_time_exclusive is 15,\n"
-#~ "because the last time with data in this range is 14.\n"
-#~ "\n"
-#~ "If start frame is 10 and duration is 5.5, then end_time_exclusive is\n"
-#~ "15.5, because the last time with data in this range is 15.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "时间范围之外的第一个样本的时间。\n"
-#~ "\n"
-#~ "如果起始帧为 10 且持续时间为 5，则 end_time_exclusive 为 15，\n"
-#~ "因为此范围内数据的最后一次时间为 14。\n"
-#~ "\n"
-#~ "如果起始帧为 10 且持续时间为 5.5，则 end_time_exclusive 为\n"
-#~ "15.5，因为此范围内数据的最后一次时间为 15。\n"
-
-#~ msgid ""
-#~ "Construct a new :class:`~TimeRange` that is this one extended by other."
-#~ msgstr "构造一个新的：class:`~TimeRange`，它是这个被其他扩展的。"
-
-#~ msgid ""
-#~ "\n"
-#~ "Clamp 'other' (:class:`~RationalTime`) according to\n"
-#~ ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "根据\n"
-#~ ":attr:`start_time`/:attr:`end_time_exclusive` 和绑定参数限制‘其"
-#~ "他’(:class:`~RationalTime`)。\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Clamp 'other' (:class:`~TimeRange`) according to\n"
-#~ ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "根据\n"
-#~ ":attr:`start_time`/:attr:`end_time_exclusive` 和绑定参数限制‘其"
-#~ "他’(:class:`~TimeRange`)。\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The start of `this` precedes `other`.\n"
-#~ "`other` precedes the end of `this`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "         other\n"
-#~ "           |\n"
-#~ "           *\n"
-#~ "   [      this      ]\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "`this` 的开始在 `other` 之前。\n"
-#~ "`other` 在 `this` 的结束之前。\n"
-#~ "::\n"
-#~ "\n"
-#~ "         other\n"
-#~ "           |\n"
-#~ "           *\n"
-#~ "   [      this      ]\n"
-#~ "\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The start of `this` precedes start of `other`.\n"
-#~ "The end of `this` antecedes end of `other`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "        [ other ]\n"
-#~ "   [      this      ]\n"
-#~ "\n"
-#~ "The converse would be ``other.contains(this)``\n"
-#~ msgstr ""
-#~ "\n"
-#~ "`this` 的开始在 `other` 的开始之前。\n"
-#~ "`this` 的结束在 `other` 的结束之前。\n"
-#~ "::\n"
-#~ "\n"
-#~ "        [ other ]\n"
-#~ "   [      this      ]\n"
-#~ "\n"
-#~ "相反的情况是 ``other.contains(this)``\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "`this` contains `other`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "        other\n"
-#~ "         |\n"
-#~ "         *\n"
-#~ "   [    this    ]\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "`this` 包含 `other`。\n"
-#~ "::\n"
-#~ "\n"
-#~ "        other\n"
-#~ "         |\n"
-#~ "         *\n"
-#~ "   [    this    ]\n"
-#~ "\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The start of `this` strictly precedes end of `other` by a value >= "
-#~ "`epsilon_s`.\n"
-#~ "The end of `this` strictly antecedes start of `other` by a value >= "
-#~ "`epsilon_s`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "   [ this ]\n"
-#~ "       [ other ]\n"
-#~ "\n"
-#~ "The converse would be ``other.overlaps(this)``\n"
-#~ msgstr ""
-#~ "\n"
-#~ "`this` 的开始严格在 `other` 的结束之前，间隔值 >= `epsilon_s`。\n"
-#~ "`this` 的结束严格在 `other` 的开始之前，间隔值 >= `epsilon_s`。\n"
-#~ "::\n"
-#~ "\n"
-#~ "   [ this ]\n"
-#~ "       [ other ]\n"
-#~ "\n"
-#~ "相反的情况是 ``other.overlaps(this)``\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The end of `this` strictly precedes `other` by a value >= `epsilon_s`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "             other\n"
-#~ "               |\n"
-#~ "   [ this ]    *\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "`this` 的结束严格在 `other` 之前，间隔值 >= `epsilon_s`。\n"
-#~ "::\n"
-#~ "\n"
-#~ "             other\n"
-#~ "               |\n"
-#~ "   [ this ]    *\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The end of `this` strictly equals the start of `other` and\n"
-#~ "the start of `this` strictly equals the end of `other`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "   [this][other]\n"
-#~ "\n"
-#~ "The converse would be ``other.meets(this)``\n"
-#~ msgstr ""
-#~ "\n"
-#~ "`this` 的结束严格等于 `other` 的开始，且\n"
-#~ "`this` 的开始严格等于 `other` 的结束。\n"
-#~ "::\n"
-#~ "\n"
-#~ "   [this][other]\n"
-#~ "\n"
-#~ "相反的情况是 ``other.meets(this)``\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The start of `this` strictly equals `other`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "   other\n"
-#~ "     |\n"
-#~ "     *\n"
-#~ "     [ this ]\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "`this` 的开始严格等于 `other`。\n"
-#~ "::\n"
-#~ "\n"
-#~ "   other\n"
-#~ "     |\n"
-#~ "     *\n"
-#~ "     [ this ]\n"
-#~ "\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The start of `this` strictly equals the start of `other`.\n"
-#~ "The end of `this` strictly precedes the end of `other` by a value >= "
-#~ "`epsilon_s`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "   [ this ]\n"
-#~ "   [    other    ]\n"
-#~ "\n"
-#~ "The converse would be ``other.begins(this)``\n"
-#~ msgstr ""
-#~ "\n"
-#~ "`this` 的开始严格等于 `other` 的开始。\n"
-#~ "`this` 的结束严格在 `other` 的结束之前，差值 >= `epsilon_s`。\n"
-#~ "::\n"
-#~ "\n"
-#~ "   [ this ]\n"
-#~ "   [    other    ]\n"
-#~ "\n"
-#~ "相反的情况是 ``other.begins(this)``\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The end of `this` strictly equals `other`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "        other\n"
-#~ "          |\n"
-#~ "          *\n"
-#~ "   [ this ]\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "`this` 的结束严格等于 `other`。\n"
-#~ "::\n"
-#~ "\n"
-#~ "        other\n"
-#~ "          |\n"
-#~ "          *\n"
-#~ "   [ this ]\n"
-#~ "\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The start of `this` strictly antecedes the start of `other` by a value >= "
-#~ "`epsilon_s`.\n"
-#~ "The end of `this` strictly equals the end of `other`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "           [ this ]\n"
-#~ "   [     other    ]\n"
-#~ "\n"
-#~ "The converse would be ``other.finishes(this)``\n"
-#~ msgstr ""
-#~ "\n"
-#~ "`this` 的开始严格早于 `other` 的开始，且相差值 >= `epsilon_s`。\n"
-#~ "`this` 的结束严格等于 `other` 的结束。\n"
-#~ "::\n"
-#~ "\n"
-#~ "           [ this ]\n"
-#~ "   [     other    ]\n"
-#~ "\n"
-#~ "反之，则是 ``other.finishes(this)``\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The start of `this` precedes or equals the end of `other` by a value >= "
-#~ "`epsilon_s`.\n"
-#~ "The end of `this` antecedes or equals the start of `other` by a value >= "
-#~ "`epsilon_s`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "   [    this    ]           OR      [    other    ]\n"
-#~ "        [     other    ]                    [     this    ]\n"
-#~ "\n"
-#~ "The converse would be ``other.finishes(this)``\n"
-#~ msgstr ""
-#~ "\n"
-#~ "`this` 的开始早于或等于 `other` 的结束，差值 >= `epsilon_s`。\n"
-#~ "`this` 的结束早于或等于 `other` 的开始，差值 >= `epsilon_s`。\n"
-#~ "::\n"
-#~ "\n"
-#~ "   [    this    ]           或      [    other    ]\n"
-#~ "        [     other    ]                    [     this    ]\n"
-#~ "\n"
-#~ "反之，则是 ``other.finishes(this)``\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Creates a :class:`~TimeRange` from start and "
-#~ "end :class:`~RationalTime`\\s (exclusive).\n"
-#~ "\n"
-#~ "For example, if start_time is 1 and end_time is 10, the returned will "
-#~ "have a duration of 9.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "从开始和结束 :class:`~RationalTime`\\s（不包括）创建一"
-#~ "个 :class:`~TimeRange`。\n"
-#~ "\n"
-#~ "例如，如果 start_time 为 1 且 end_time 为 10，则返回的持续时间为 9。\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Creates a :class:`~TimeRange` from start and "
-#~ "end :class:`~RationalTime`\\s (inclusive).\n"
-#~ "\n"
-#~ "For example, if start_time is 1 and end_time is 10, the returned will "
-#~ "have a duration of 10.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "从开始和结束 :class:`~RationalTime`\\s（含）创建一"
-#~ "个 :class:`~TimeRange`。\n"
-#~ "\n"
-#~ "例如，如果 start_time 为 1 且 end_time 为 10，则返回的持续时间为 10。\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Media module.\n"
-#~ "\n"
-#~ "Contains all classes and enums related to media. \n"
-#~ msgstr ""
-#~ "\n"
-#~ "媒体模块。\n"
-#~ "\n"
-#~ "包含与媒体相关的所有类和枚举。\n"
-
-#~ msgid "Compare mode :class:`mrv2.media.CompareMode`."
-#~ msgstr "对比模式: class: `mrv2.media.CompareMode`"
-
-#~ msgid "Wipe center in X and Y :class:`mrv2.math.Vector2f`."
-#~ msgstr "Wipe center in X and Y :class:`mrv2.math.Vector2f`."
-
-#~ msgid "Wipe Rotation."
-#~ msgstr "Wipe旋转"
-
-#~ msgid "Overlay ( A over B )"
-#~ msgstr "覆盖 ( A over B )"
-
-#~ msgid "Comparison options."
-#~ msgstr "比较选项"
-
-#~ msgid ""
-#~ "\n"
-#~ "Math module.\n"
-#~ "\n"
-#~ "Contains all math classes.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "数学模块。\n"
-#~ "\n"
-#~ "包含所有数学课程。\n"
-
-#~ msgid "Vector of 2 integers."
-#~ msgstr "2整数的矢量"
-
-#~ msgid "Vector of 2 floats."
-#~ msgstr "2浮点数的矢量"
-
-#~ msgid "Vector of 3 floats."
-#~ msgstr "3浮点数的矢量"
-
-#~ msgid "Vector of 4 floats."
-#~ msgstr "4浮点数的矢量"
-
-#~ msgid "Size of 2 integers."
-#~ msgstr "2整数的大小"
-
-#~ msgid ""
-#~ "\n"
-#~ "Image module.\n"
-#~ "\n"
-#~ "Contains all classes and enums related to image controls. \n"
-#~ msgstr ""
-#~ "\n"
-#~ "图像模块。\n"
-#~ "\n"
-#~ "包含与图像控件相关的所有类和枚举。\n"
-
-#~ msgid "Red Channel."
-#~ msgstr "红通道"
-
-#~ msgid "Green Channel."
-#~ msgstr "绿通道"
-
-#~ msgid "Blue Channel."
-#~ msgstr "蓝通道"
-
-#~ msgid "Alpha Channel."
-#~ msgstr "Alpha通道"
-
-#~ msgid "Image mirroring."
-#~ msgstr "图像镜像"
-
-#~ msgid "Flip image on X."
-#~ msgstr "翻转 X"
-
-#~ msgid "Flip image on Y."
-#~ msgstr "翻转 Y"
-
-#~ msgid "Enabled Levels."
-#~ msgstr "启用Levels"
-
-#~ msgid "Add a :class:`mrv2.math.Vector3f` to image."
-#~ msgstr "Add a :class:`mrv2.math.Vector3f` to image."
-
-#~ msgid "Change a :class:`mrv2.math.Vector3f` of brightness to image."
-#~ msgstr "Change a :class:`mrv2.math.Vector3f` of brightness to image."
-
-#~ msgid "Change a :class:`mrv2.math.Vector3f` of contrast to image."
-#~ msgstr "Change a :class:`mrv2.math.Vector3f` of contrast to image."
-
-#~ msgid "Change a :class:`mrv2.math.Vector3f` of saturation to image."
-#~ msgstr "Change a :class:`mrv2.math.Vector3f` of saturation to image."
-
-#~ msgid "Change tint of image to image between 0 and 1."
-#~ msgstr "图片之间的过渡值(0-1)"
-
-#~ msgid "Invert the color values."
-#~ msgstr "反转颜色值"
-
-#~ msgid "Color values."
-#~ msgstr "颜色值"
-
-#~ msgid "In Low Level value."
-#~ msgstr "In Low Level值"
-
-#~ msgid "In High Level value."
-#~ msgstr "In High Level值"
-
-#~ msgid "Gamma Level value."
-#~ msgstr "Gamma 值"
-
-#~ msgid "Out Low Level value."
-#~ msgstr "Out Low Level值"
-
-#~ msgid "Out High Level value."
-#~ msgstr "Out High Level值"
-
-#~ msgid "Levels values."
-#~ msgstr "Levels值"
-
-#~ msgid "Enabled EXR display."
-#~ msgstr "开启EXR显示"
-
-#~ msgid "Exposure value."
-#~ msgstr "曝光值"
-
-#~ msgid "Defog value."
-#~ msgstr "Defog值"
-
-#~ msgid "kneeLow value."
-#~ msgstr "kneeLow值"
-
-#~ msgid "kneeHigh value."
-#~ msgstr "kneeHigh值"
-
-#~ msgid "EXR display values."
-#~ msgstr "EXR 显示值"
-
-#~ msgid "Enabled Soft Clip."
-#~ msgstr "启用软剪切"
-
-#~ msgid "Soft clip value."
-#~ msgstr "软剪切值"
-
-#~ msgid "Minify filter :class:`mrv2.image.ImageFilter`."
-#~ msgstr "Minify filter :class:`mrv2.image.ImageFilter`."
-
-#~ msgid "Magnify filter :class:`mrv2.image.ImageFilter`."
-#~ msgstr "Magnify filter :class:`mrv2.image.ImageFilter`."
-
-#~ msgid "Image filters."
-#~ msgstr "图像过滤器"
-
-#~ msgid "Color channels :class:`mrv2.image.Channels`."
-#~ msgstr "Color channels :class:`mrv2.image.Channels`."
-
-#~ msgid "Mirror on X, Y or both :class:`mrv2.image.Mirror`."
-#~ msgstr "Mirror on X, Y or both :class:`mrv2.image.Mirror`."
-
-#~ msgid "Color options :class:`mrv2.image.Color`."
-#~ msgstr "Color options :class:`mrv2.image.Color`."
-
-#~ msgid "Levels options :class:`mrv2.image.Levels`."
-#~ msgstr "Levels options :class:`mrv2.image.Levels`."
-
-#~ msgid "EXR Display options :class:`mrv2.image.EXRDisplay`.."
-#~ msgstr "EXR Display options :class:`mrv2.image.EXRDisplay`.."
-
-#~ msgid "Soft Clip options :class:`mrv2.image.SoftClip`.."
-#~ msgstr "Soft Clip options :class:`mrv2.image.SoftClip`.."
-
-#~ msgid "Display options."
-#~ msgstr "显示选项"
-
-#~ msgid "LUT enabled."
-#~ msgstr "开启LUT"
-
-#~ msgid "LUT filename."
-#~ msgstr "LUT文件名"
-
-#~ msgid "LUT transformation order."
-#~ msgstr "LUT变换顺序"
-
-#~ msgid "LUT options."
-#~ msgstr "LUT选项"
-
-#~ msgid "Video Levels."
-#~ msgstr "视频Levels"
-
-#~ msgid "Alpha blending algorithm"
-#~ msgstr "Alpha 混合算法"
-
-#~ msgid "Image Filters"
-#~ msgstr "图像过滤器"
-
-#~ msgid "Image options."
-#~ msgstr "图像选项"
-
-#~ msgid "Environment Map type."
-#~ msgstr "环境贴图类型"
-
-#~ msgid "Horizontal aperture"
-#~ msgstr "水平光圈"
-
-#~ msgid "Vertical aperture"
-#~ msgstr "垂直光圈"
-
-#~ msgid "Rotation on X"
-#~ msgstr "旋转X"
-
-#~ msgid "Rotation on Y"
-#~ msgstr "旋转Y"
-
-#~ msgid "Subdivision on X"
-#~ msgstr "细分X"
-
-#~ msgid "Subdivision on Y"
-#~ msgstr "细分Y"
-
-#~ msgid "EnvironmentMap options."
-#~ msgstr "环境贴图选项"
-
-#~ msgid "Stereo 3d input :class:`mrv2.image.StereoInput`.."
-#~ msgstr "Stereo 3d input :class:`mrv2.image.StereoInput`.."
-
-#~ msgid "Stereo 3d output :class:`mrv2.image.StereoOutput`.."
-#~ msgstr "Stereo 3d output :class:`mrv2.image.StereoOutput`.."
-
-#~ msgid "Separation between left and right eye."
-#~ msgstr "左眼右眼独立"
-
-#~ msgid "Swap left and right eye"
-#~ msgstr "左眼右眼互换"
-
-#~ msgid "Stereo3D options."
-#~ msgstr "Stereo3D 选项"
-
-#~ msgid "Background type :class:`mrv2.image.Background`.."
-#~ msgstr "Background type :class:`mrv2.image.Background`.."
-
-#~ msgid "Checkers Color0 :class:`mrv2.image.Color4f`.."
-#~ msgstr "Checkers Color0: class: `mrv2.image.Color4f`.."
-
-#~ msgid "Checkers Color1 :class:`mrv2.image.Color4f`.."
-#~ msgstr "Checkers Color1: class: `mrv2.image.Color4f`.."
-
-#~ msgid "Checkers Size :class:`mrv2.math.Size2i`.."
-#~ msgstr "Checkers Size: class: `mrv2.math.Size2i`.."
-
-#~ msgid "Background options."
-#~ msgstr "背景选项"
-
-#~ msgid "Gets the current background options."
-#~ msgstr "获取当前背景选项"
-
-#~ msgid "Sets the current background options."
-#~ msgstr "设置当前背景选项"
-
-#~ msgid "Gets the current OCIO config file."
-#~ msgstr "获取当前OCIO配置文件"
-
-#~ msgid "Sets the current OCIO config file."
-#~ msgstr "设置当前OCIO配置文件"
-
-#~ msgid "Gets the current input color space."
-#~ msgstr "获取当前输入的颜色空间"
-
-#~ msgid "Gets a list of all input color spaces."
-#~ msgstr "获取所有输入颜色空间的列表"
-
-#~ msgid "Set the input color space."
-#~ msgstr "设置输入颜色空间"
-
-#~ msgid "Gets the current Display/View."
-#~ msgstr "获取当前显示/视图"
-
-#~ msgid "Gets the list of Displays/Views."
-#~ msgstr "获取显示/视图列表"
-
-#~ msgid "Set an OCIO Display/View."
-#~ msgstr "设置 OCIO 显示/视图。"
-
-#~ msgid "Gets the current OCIO look."
-#~ msgstr "获取当前 OCIO 显示"
-
-#~ msgid "Gets a list of all OCIO looks."
-#~ msgstr "获取所有 OCIO 显示列表"
-
-#~ msgid "Set the OCIO look by name."
-#~ msgstr "设置 OCIO 显示名称"
-
-#~ msgid "Return all the files."
-#~ msgstr "返回所有文件"
-
-#~ msgid "Return all the active files."
-#~ msgstr "返回所有活动文件"
-
-#~ msgid "Return the A file item."
-#~ msgstr "返回A文件"
-
-#~ msgid "Return the A file index."
-#~ msgstr "返回A文件索引"
-
-#~ msgid "Return the list of B files."
-#~ msgstr "返回B文件列表"
-
-#~ msgid "Return the list of B indexes."
-#~ msgstr "返回B文件列表索引"
-
-#~ msgid "Close the current A file."
-#~ msgstr "关闭当前A文件"
-
-#~ msgid "Close all files."
-#~ msgstr "关闭所有文件"
-
-#~ msgid "Set the A file index."
-#~ msgstr "设置A文件索引"
-
-#~ msgid "Set a new B file index."
-#~ msgstr "设置B文件新的索引"
-
-#~ msgid "Set a new stereo file index."
-#~ msgstr "设置新的立体声文件索引"
-
-#~ msgid "Toggle the B file index."
-#~ msgstr "开关B文件索引"
-
-#~ msgid "Clear the B indexes."
-#~ msgstr "清理B索引"
-
-#~ msgid "Return the list of layers."
-#~ msgstr "返回层列表"
-
-#~ msgid "Set layer for file item."
-#~ msgstr "设置文件项的层"
-
-#~ msgid "Set compare time."
-#~ msgstr "设置比较时间"
-
-#~ msgid "Get compare time."
-#~ msgstr "获取比较时间"
-
-#~ msgid "Set the first version for current media."
-#~ msgstr "设置当前媒体的第一个版本"
-
-#~ msgid "Set the previous version for current media."
-#~ msgstr "设置当前媒体的上一个版本"
-
-#~ msgid "Set the next version for current media."
-#~ msgstr "设置当前媒体的下一个版本"
-
-#~ msgid "Set the last version for current media."
-#~ msgstr "设置当前媒体的最后版本"
-
-#~ msgid "Path :class:`mrv2.Path` to the File Media."
-#~ msgstr "Path :class:`mrv2.Path` to the File Media."
-
-#~ msgid "Audio path :class:`mrv2.Path` to the File Media if any."
-#~ msgstr "Audio path :class:`mrv2.Path` to the File Media if any."
-
-#~ msgid "Time range :class:`mrv2.TimeRange` of the File Media."
-#~ msgstr "Time range :class:`mrv2.TimeRange` of the File Media."
-
-#~ msgid "Speed (FPS) of the File Media."
-#~ msgstr "媒体文件的速度(FPS)"
-
-#~ msgid "Playback state :class:`mrv2.timeline.Playbacks` of the File Media."
-#~ msgstr "Playback state :class:`mrv2.timeline.Playbacks` of the File Media."
-
-#~ msgid "Loop state :class:`mrv2.timeline.Loop` of the File Media."
-#~ msgstr "Loop state :class:`mrv2.timeline.Loop` of the File Media."
-
-#~ msgid "Current time :class:`mrv2.RationalTime` of the File Media."
-#~ msgstr "Current time :class:`mrv2.RationalTime` of the File Media."
-
-#~ msgid "In/Out range :class:`mrv2.TimeRange` of the File Media."
-#~ msgstr "内/外部范围 :class:`mrv2.TimeRange' of the File Media."
-
-#~ msgid "Video layer of the File Media."
-#~ msgstr "文件媒体视频层"
-
-#~ msgid "Volume of the File Media."
-#~ msgstr "文件媒体音量"
-
-#~ msgid "Mute state of the File Media."
-#~ msgstr "文件媒体静音状态"
-
-#~ msgid "Audio offset of the File Media."
-#~ msgstr "文件媒体音频偏移"
-
-#~ msgid "Class used to hold a media item."
-#~ msgstr "用于持有媒体项目的类"
-
-#~ msgid "Save annotations."
-#~ msgstr "保存注释"
-
-#~ msgid "Save resolution."
-#~ msgstr "保存分辨率"
-
-#~ msgid "FFmpeg Profile."
-#~ msgstr "FFmpeg Profile"
-
-#~ msgid "FFmpeg Preset."
-#~ msgstr "FFmpeg Preset"
-
-#~ msgid "FFmpeg Pixel Format."
-#~ msgstr "FFmpeg Pixel格式"
-
-#~ msgid "FFmpeg video encoding with hardware if possible."
-#~ msgstr "FFmpeg video encoding with hardware if possible."
-
-#~ msgid "FFmpeg Override color characteristics."
-#~ msgstr "FFmpeg Override color characteristics."
-
-#~ msgid "FFmpeg Color Range."
-#~ msgstr "FFmpeg 颜色范围"
-
-#~ msgid "FFmpeg Color Space."
-#~ msgstr "FFmpeg 颜色空间"
-
-#~ msgid "FFmpeg Color Primaries."
-#~ msgstr "FFmpeg Color Primaries."
-
-#~ msgid "FFmpeg Color Transfer Characteristics."
-#~ msgstr "FFmpeg Color Transfer Characteristics."
-
-#~ msgid "FFmpeg Audio Codec."
-#~ msgstr "FFmpeg Audio Codec."
-
-#~ msgid "OpenEXR's Compression."
-#~ msgstr "OpenEXR 压缩"
-
-#~ msgid "OpenEXR's Pixel Type."
-#~ msgstr "OpenEXR Pixel 类型"
-
-#~ msgid "OpenEXR's Zip Compression Level."
-#~ msgstr "OpenEXR Zip 压缩率"
-
-#~ msgid "OpenEXR's DWA Compression Level."
-#~ msgstr "OpenEXR DWA 压缩率"
-
-#~ msgid ""
-#~ "\n"
-#~ "Command module.\n"
-#~ "\n"
-#~ "Used to run main commands and get arguments and set the display, image, "
-#~ "compare, LUT options.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Command module.\n"
-#~ "\n"
-#~ "Used to run main commands and get arguments and set the display, image, "
-#~ "compare, LUT options.\n"
-
-#~ msgid ""
-#~ "Get command-line arguments passed as single quoted string to -pythonArgs."
-#~ msgstr "-pythonArgs"
-
-#~ msgid "Open file with optional audio."
-#~ msgstr "用可选音频打开文件"
-
-#~ msgid "Compare two file items with a compare mode."
-#~ msgstr "用比较模式比较两个文件"
-
-#~ msgid "Close the file item."
-#~ msgstr "关闭文件项"
-
-#~ msgid "Close all file items."
-#~ msgstr "关闭所有文件项"
-
-#~ msgid "Return the root path to the insallation of mrv2."
-#~ msgstr "Return the root path to the insallation of mrv2."
-
-#~ msgid "Return the path to preferences of mrv2."
-#~ msgstr "Return the path to preferences of mrv2."
-
-#~ msgid "Return the display options."
-#~ msgstr "返回显示选项"
-
-#~ msgid "Set the display options."
-#~ msgstr "设置显示选项"
-
-#~ msgid "Return the LUT options."
-#~ msgstr "返回LUT选项"
-
-#~ msgid "Set the LUT options."
-#~ msgstr "设置LUT选项"
-
-#~ msgid "Return the image options."
-#~ msgstr "返回图像选项"
-
-#~ msgid "Set the image options."
-#~ msgstr "设置图像选项"
-
-#~ msgid "Return the environment map options."
-#~ msgstr "返回环境贴图选项"
-
-#~ msgid "Set the environment map options."
-#~ msgstr "设置环境贴图选项"
-
-#~ msgid "Set the compare options."
-#~ msgstr "设置比较选项"
-
-#~ msgid "Set the stereo 3D options."
-#~ msgstr "设置stereo 3D选项"
-
-#~ msgid "Get the language of mrv2."
-#~ msgstr "获取 mrv2 语言."
-
-#~ msgid "Get the layers of the timeline (GUI)."
-#~ msgstr "获取当前时间轴的层 (GUI)."
-
-#~ msgid "Get the version of mrv2."
-#~ msgstr "获取 mrv2 版本"
-
-#~ msgid ""
-#~ "Call Fl::check to update the GUI and return the number of seconds that "
-#~ "elapsed."
-#~ msgstr ""
-#~ "Call Fl::check to update the GUI and return the number of seconds that "
-#~ "elapsed."
-
-#~ msgid "Returns true if audio is muted."
-#~ msgstr "Returns true if audio is muted."
-
-#~ msgid "Runs the same or a new mrv2 with a session file."
-#~ msgstr "Runs the same or a new mrv2 with a session file."
-
-#~ msgid "Set the muting of the audio."
-#~ msgstr "设定音频静音"
-
-#~ msgid "Toggle Image Auto Normalize."
-#~ msgstr "开关图像自动归一化"
-
-#~ msgid "Toggle Data Window."
-#~ msgstr "开关数据窗口"
-
-#~ msgid "Toggle Display Window."
-#~ msgstr "开关显示窗口"
-
-#~ msgid "Toggle Ignored Display Window on OpenEXRs."
-#~ msgstr "开关忽略OpenEXR的显示窗口"
-
-#~ msgid "Toggle Image invalid values."
-#~ msgstr "开关图像无效值"
-
-#~ msgid "Toggle Safe Areas."
-#~ msgstr "开关安全区"
-
-#~ msgid "Get the playback volume."
-#~ msgstr "获取音量"
-
-#~ msgid "Set the playback volume."
-#~ msgstr "设置音量"
-
-#~ msgid "Save a movie or sequence from the front layer."
-#~ msgstr "从前层保存一个影片或序列"
-
-#~ msgid "Save a single frame."
-#~ msgstr "保存一个框架 。"
-
-#~ msgid "Save multiple annotation frames."
-#~ msgstr "保存多个注解框 。"
-
-#~ msgid "Save multiple frames."
-#~ msgstr "保存多个帧 。"
-
-#~ msgid "Save an .otio file from the current selected image."
-#~ msgstr "从选中图片保存.otio文件"
-
-#~ msgid "Save a PDF document with all annotations and notes."
-#~ msgstr "保存PDF文件,带有所有注释"
-
-#~ msgid ""
-#~ "\n"
-#~ "Annotations module.\n"
-#~ "\n"
-#~ "Contains all functions and classes related to the annotationss.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "注释模块\n"
-#~ "\n"
-#~ "Contains all functions and classes related to the annotationss.\n"
-
-#~ msgid "Add notes annotations to current clip at a certain time."
-#~ msgstr "在某个时间将注释添加到当前剪辑中"
-
-#~ msgid "Add notes annotations to current clip at a certain frame."
-#~ msgstr "在某帧将注释添加到当前剪辑中"
-
-#~ msgid "Add notes annotations to current clip at certain seconds."
-#~ msgstr "在某秒将注释添加到当前剪辑中"
-
-#~ msgid "Get all times for annotations."
-#~ msgstr "获取所有时间的注释 。"
-
-#~ msgid "Client"
-#~ msgstr "客户端"
-
-#~ msgid "Server"
-#~ msgstr "服务器"
-
-#~ msgid "Host"
-#~ msgstr "Host"
-
-#~ msgid "Host name or IP to connect to.  For example: 127.0.0.1"
-#~ msgstr "要连接的主机名或 IP 。 例如: 127.0.1"
-
-#~ msgid "Previously used Hosts"
-#~ msgstr "先前使用过的主机"
-
-#~ msgid "Port"
-#~ msgstr "端口"
-
-#~ msgid ""
-#~ "Port to connect to.  Make sure your firewall and router allows read/write "
-#~ "through it."
-#~ msgstr "要连接的端口。 请确定您的防火墙和路由器允许通过它读写"
-
-#~ msgid "Connect"
-#~ msgstr "连接"
-
-#~ msgid "Create"
-#~ msgstr "创建"
-
-#~ msgid "Disconnect"
-#~ msgstr "断开连接"
-
-#~ msgid "Shutdown"
-#~ msgstr "关闭"
-
-#~ msgid "&File/&Open"
-#~ msgstr "&File/&Open"
-
-#~ msgid "&File/&Save"
-#~ msgstr "&File/&Save"
-
-#~ msgid "&Edit/&Undo"
-#~ msgstr "&Edit/&Undo"
-
-#~ msgid "&Edit/Cu&t"
-#~ msgstr "&Edit/Cu&t"
-
-#~ msgid "&Edit/&Copy"
-#~ msgstr "&Edit/&Copy"
-
-#~ msgid "&Edit/&Paste"
-#~ msgstr "&Edit/&Paste"
-
-#~ msgid "&Edit/&Delete"
-#~ msgstr "&Edit/&Delete"
-
-#~ msgid "&Edit/&Comment Selection"
-#~ msgstr "&Edit/&Comment Selection"
-
-#~ msgid "&Edit/&Uncomment Selection"
-#~ msgstr "&Edit/&Uncomment Selection"
-
-#~ msgid "&Search/&Find..."
-#~ msgstr "&Search/&Find..."
-
-#~ msgid "&Search/F&ind Again"
-#~ msgstr "&Search/F&ind Again"
-
-#~ msgid "&Search/&Replace"
-#~ msgstr "&Search/&Replace"
-
-#~ msgid "&Search/&Replace Again"
-#~ msgstr "&Search/&Replace Again"
-
-#~ msgid "Clear/&Output"
-#~ msgstr "Clear/&Output"
-
-#~ msgid "Clear/&Editor"
-#~ msgstr "Clear/&Editor"
-
-#~ msgid "Editor/&Run Code"
-#~ msgstr "Editor/&Run Code"
-
-#~ msgid "Editor/Toggle &Line Numbers"
-#~ msgstr "Editor/Toggle &Line Numbers"
-
-#~ msgid "Editor/&Jump to Error"
-#~ msgstr "Editor/&Jump to Error"
-
-#~ msgid "Editor/&External Editor"
-#~ msgstr "Editor/&External Editor"
-
-#~ msgid "Scripts/Add To Script List"
-#~ msgstr "脚本/添加到脚本列表"
-
-#~ msgid "Scripts/%s"
-#~ msgstr "脚本/%s"
-
-#~ msgid ""
-#~ "Type in your python code here.  Select an area to execute just a portion "
-#~ "of it.  Press Keypad Enter to run it."
-#~ msgstr "在此输入 python 代码。 选择一个区域执行它的一部分。 按Enter 键运行"
-
-#~ msgid "Python file {0} already exists.  Do you want to overwrite it?"
-#~ msgstr "Python 文件 {0} 已经存在。 您想要覆盖它吗?"
-
-#~ msgid "Failed to open the file for writing."
-#~ msgstr "打开文件失败 。"
-
-#~ msgid "Failed to write to the file."
-#~ msgstr "写入文件失败"
-
-#~ msgid "Type your editor command"
-#~ msgstr "键入编辑器命令"
-
-#~ msgid "{0} will be replaced with the line number.  {1} with the file name"
-#~ msgstr "{0} 将被替换为行号 。 {1} 将替换为文件名"
-
-#~ msgid "Could not open python editor: {0}"
-#~ msgstr "无法打开 python 编辑器: {0}"
-
-#~ msgid "Search String:"
-#~ msgstr "搜索字符串 :"
-
-#~ msgid "No occurrences of '%s' found!"
-#~ msgstr "找不到 '%s' 发生事件!"
-
-#~ msgid "Renderer"
-#~ msgstr "渲染器"
-
-#~ msgid "Complexity"
-#~ msgstr "复杂程度"
-
-#~ msgid "Stage Cache"
-#~ msgstr "缓存"
-
-#~ msgid "Disk Cache in GB"
-#~ msgstr "磁盘缓存 (GB)"
-
-#~ msgid "Server started at port {0}."
-#~ msgstr "服务器启动于端口 {0}"
-
-#~ msgid "Server stopped."
-#~ msgstr "服务器已停止"
-
-#~ msgid "A client connected from {0}"
-#~ msgstr "从 {0} 连接到客户端"
-
-#~ msgid "Client at {0} disconnected."
-#~ msgstr "断开 {0} 的客户端"
-
-#~ msgid "Server protocol version is {0}.  Client protocol version is {1}"
-#~ msgstr "服务器协议版本为 {0}。 客户端协议版本为 {1}"
-
-#~ msgid "Remote file {0} does not exist on local filesystem."
-#~ msgstr "本地文件系统不存在远程文件 {0} 。"
-
-#~ msgid "Remote files are less than local files."
-#~ msgstr "远程文件少于本地文件 。"
-
-#~ msgid "Remote file {0} matches file name {1} but not path."
-#~ msgstr "远程文件 {0} 匹配文件名 {1}, 但不是路径 。"
-
-#~ msgid "Remote file {0} does not match local filename."
-#~ msgstr "远程文件 {0} 不匹配本地文件名 。"
-
-#~ msgid "Removing {0} from message publisher."
-#~ msgstr "正在从信件发布器中删除 {0} 。"
-
-#~ msgid "Server listening on port "
-#~ msgstr "在端口监听服务器"
-
-#~ msgid "ComfyUI listening on port "
-#~ msgstr "ComfyUI 在端口监听"
-
-#~ msgid "Connected to server at {0}, port {1}"
-#~ msgstr "已连接到 {0} 服务器, 端口 {1} 服务器"
-
-#~ msgid "Server connection lost."
-#~ msgstr "服务器连接丢失 。"
-
-#~ msgid "Exception caught: "
-#~ msgstr "抓获的异常:"
-
-#~ msgid "%s - Page %d"
-#~ msgstr "%s - 第%d页"
-
-#~ msgid "Frame {0} - TC: {1} - S: {2}"
-#~ msgstr "帧 {0} - 时间码 : {1} - 秒数: {2}"
-
-#~ msgid "Image too big.  Will save the viewport size."
-#~ msgstr "图像太大。 将保存视图的大小 。"
-
-#~ msgid "Replace"
-#~ msgstr "替换"
-
-#~ msgid "Find:"
-#~ msgstr "查找 :"
-
-#~ msgid "Replace:"
-#~ msgstr "替换:"
-
-#~ msgid "Replace All"
-#~ msgstr "全部替换"
-
-#~ msgid "Replace Next"
-#~ msgstr "替换下一个"
 
 #~ msgid "Could not initialize NDI"
 #~ msgstr "无法初始化 NDI"

@@ -14,6 +14,1483 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid ""
+"\n"
+"USD module.\n"
+"\n"
+"Contains all classes and enums related to USD (Universal Scene Description). \n"
+msgstr ""
+"\n"
+"Modulo USD. Contiene todas as classes e enums relacionados ao USD (Descrio Universal da Cena).\n"
+
+msgid "Renderer Name"
+msgstr "Nome do remetente"
+
+msgid "Render Width"
+msgstr "Largura de rendio"
+
+msgid "Models' complexity."
+msgstr "Complexidade dos modelos."
+
+msgid "Draw mode  :class:`mrv2.usd.DrawMode`."
+msgstr "Modo de desenho :classe:`mrv2.usd.DrawMode`."
+
+msgid "Enable Lighting"
+msgstr "Activar a Iluminao"
+
+msgid "Enable Scene Lights"
+msgstr "Activar as Luzes da Cena"
+
+msgid "Enable Scene Materials"
+msgstr "Activar os Materiais da Cena"
+
+msgid "Enable sRGB"
+msgstr "Activar o sRGB"
+
+msgid "Stage Cache Count"
+msgstr "Contagem de cache de estgio"
+
+msgid "Disk Cache Byte Count"
+msgstr "Contagem de Bytes de Cache de Disco"
+
+msgid "USD Render Options."
+msgstr "Opes de Render USD."
+
+msgid "Get USD Render Options."
+msgstr "Obter Opes de Render USD."
+
+msgid "Set USD Render Options."
+msgstr "Definir opes de rendibilidade em USD."
+
+msgid ""
+"\n"
+"UI module.\n"
+"\n"
+"Contains all classes and enums related to UI (User Interface). \n"
+msgstr ""
+"\n"
+"Mdulo UI. Contm todas as classes e enums relacionados  UI (Interface de usurio).\n"
+
+msgid "Refresh menus."
+msgstr "Actualizar menus."
+
+msgid ""
+"\n"
+"Timeline module.\n"
+"\n"
+"Contains all functions related to the timeline control.\n"
+msgstr ""
+"\n"
+"Mdulo da linha de tempo. Contm todas as funes relacionadas com o controle da linha de tempo.\n"
+
+msgid "Play forwards."
+msgstr "Jogue para a frente."
+
+msgid "Play backwards."
+msgstr "Toca para trs."
+
+msgid "Seek to a time in timeline."
+msgstr "Procurar uma hora na linha do tempo."
+
+msgid "Seek to a frame in timeline."
+msgstr "Procure uma moldura na linha do tempo."
+
+msgid "Seek to a second in timeline."
+msgstr "Procura um segundo na linha do tempo."
+
+msgid "Time range of the timeline."
+msgstr "Intervalo de tempo da linha do tempo."
+
+msgid "Selected time range of the timeline."
+msgstr "Gama de tempo selecionado da linha do tempo."
+
+msgid "Set the selected time range of the timeline."
+msgstr "Defina o intervalo de tempo selecionado da linha de tempo."
+
+msgid "Set the in time of the selected time range of the timeline."
+msgstr "Defina o tempo no intervalo de tempo selecionado da linha de tempo."
+
+msgid "Set the in frame of the selected time range of the timeline."
+msgstr "Defina o quadro do intervalo de tempo selecionado da linha de tempo."
+
+msgid "Set the in seconds of the selected time range of the timeline."
+msgstr ""
+"Defina em segundos o intervalo de tempo selecionado da linha de tempo."
+
+msgid "Set the out time of the selected time range of the timeline."
+msgstr ""
+"Defina o tempo de sada do intervalo de tempo selecionado da linha de tempo."
+
+msgid "Set the out frame of the selected time range of the timeline."
+msgstr ""
+"Defina o quadro de sada do intervalo de tempo selecionado da linha de tempo."
+
+msgid "Set the out seconds of the selected time range of the timeline."
+msgstr ""
+"Defina os segundos de sada do intervalo de tempo selecionado da linha de "
+"tempo."
+
+msgid "Current time in timeline."
+msgstr "Hora atual na linha do tempo."
+
+msgid "Current frame in timeline."
+msgstr "Quadro actual na linha do tempo."
+
+msgid "Current seconds in timeline."
+msgstr "Segundos atuais na linha do tempo."
+
+msgid "Return current loop mode of timeline."
+msgstr "Retornar o modo de loop atual da linha do tempo."
+
+msgid "Set current loop mode of timeline."
+msgstr "Definir o modo de loop atual da linha do tempo."
+
+msgid "Gets the current FPS of timeline."
+msgstr "Obtm o FPS atual da linha do tempo."
+
+msgid "Gets the default speed of the timeline."
+msgstr "Obtm a velocidade padro da linha do tempo."
+
+msgid "Set current FPS of timeline."
+msgstr "Defina o FPS atual da linha do tempo."
+
+msgid "Value less than 0"
+msgstr "Valor inferior a 0"
+
+msgid ""
+"\n"
+"Settings module.\n"
+"\n"
+"Contains all settings functions.\n"
+msgstr ""
+"\n"
+"Mdulo de configuraes. Contm todas as funes de configurao.\n"
+
+msgid "Returns whether to check for updates at start up."
+msgstr "Devolve se deve verificar se h atualizaes no incio."
+
+msgid "Retrieve the cache memory setting in gigabytes."
+msgstr "Recuperar a configurao da memria de cache em gigabytes."
+
+msgid "Set the cache memory setting in gigabytes."
+msgstr "Defina a configurao da memria do cache em gigabytes."
+
+msgid "Retrieve Read Ahead cache in seconds."
+msgstr "Recuperar o cache Read Ahead em segundos."
+
+msgid "Set Read Ahead cache in seconds."
+msgstr "Set Read Ahead cache em segundos."
+
+msgid "Retrieve Read Behind cache in seconds."
+msgstr "Recuperar Ler o cache Atrs em segundos."
+
+msgid "Set Read Behind cache in seconds."
+msgstr "Set Ler o cache Atrs em segundos."
+
+msgid "Set file sequence audio."
+msgstr "Definir udio de sequncia de ficheiros."
+
+msgid "Get file sequence audio."
+msgstr "Obter udio de sequncia de ficheiros."
+
+msgid "Set file sequence audio file name."
+msgstr "Definir o nome do ficheiro de udio da sequncia de ficheiros."
+
+msgid "Get file sequence audio file name."
+msgstr "Obter o nome do arquivo de sequncia de udio."
+
+msgid "Set file sequence audio directory."
+msgstr "Definir o diretrio de udio de sequncia de ficheiros."
+
+msgid "Get file sequence audio directory."
+msgstr "Obter o diretrio de udio de sequncia de arquivos."
+
+msgid "Set maximum file sequence digits."
+msgstr "Definir os dgitos mximos de sequncia de ficheiros."
+
+msgid "Get maximum file sequence digits."
+msgstr "Obter dgitos mximos de sequncia de arquivos."
+
+msgid "Set Timer Mode."
+msgstr "Definir o Modo de Temporizao."
+
+msgid "Get Timer Mode."
+msgstr "Traz o Modo Temporizador."
+
+msgid "Set Audio Buffer Frame Count."
+msgstr "Defina a contagem de molduras de udio."
+
+msgid "Get Audio Buffer Frame Count."
+msgstr "Obter udio Buffer Frame Contagem."
+
+msgid "Set Video Request Count."
+msgstr "Defina a contagem de solicitaes de vdeo."
+
+msgid "Get Video Request Count."
+msgstr "Obtenha a contagem de solicitao de vdeo."
+
+msgid "Set Audio Request Count."
+msgstr "Defina a contagem de pedidos de udio."
+
+msgid "Get Audio Request Count."
+msgstr "Obtenha a contagem de pedidos de udio."
+
+msgid "Set Sequence Thread Count."
+msgstr "Defina a contagem de linhas de sequncia."
+
+msgid "Get Sequence Thread Count."
+msgstr "Obter contagem de linhas de sequncia."
+
+msgid "Set FFmpeg YUV To RGB Conversion."
+msgstr "Definir o YUV FFmpeg para converso RGB."
+
+msgid "Get FFmpeg YUV To RGB Conversion."
+msgstr "Obter YUV FFmpeg para converso RGB."
+
+msgid "Set FFmpeg Color Accuracy."
+msgstr "Defina a preciso da cor FFmpeg."
+
+msgid "Get FFmpeg Color Accuracy."
+msgstr "Obter preciso de cor FFmpeg."
+
+msgid "Set FFmpeg Thread Count."
+msgstr "Ajuste a contagem de fios FFmpeg."
+
+msgid "Get FFmpeg Thread Count."
+msgstr "Chame a contagem de fios FFmpeg."
+
+msgid "No session name established, cannot save."
+msgstr "Nenhum nome de sesso estabelecido, no pode salvar."
+
+msgid ""
+"\n"
+"Session module.\n"
+"\n"
+"Used to manage everything related to sessions.\n"
+msgstr ""
+"\n"
+"Mdulo de sesso. Usado para gerenciar tudo relacionado s sesses.\n"
+
+msgid "Returns the current session metadata."
+msgstr "Retorna os metadados da sesso atual."
+
+msgid "Returns the current metadata for a key."
+msgstr "Retorna os metadados atuais para uma chave."
+
+msgid "Sets all the session metadata for a session."
+msgstr "Defini todos os metadados da sesso para uma sesso."
+
+msgid "Sets the session metadata for a key."
+msgstr "Defina os metadados da sesso para uma chave."
+
+msgid "Clears the current session metadata."
+msgstr "Limpa os metadados da sesso atual."
+
+msgid "Returns current session file."
+msgstr "Retorna o ficheiro de sesso actual."
+
+msgid "Sets the current session file."
+msgstr "Define o ficheiro de sesso actual."
+
+msgid "Open a session file."
+msgstr "Abra um ficheiro de sesso."
+
+msgid "Save a session file."
+msgstr "Gravar um ficheiro de sesso."
+
+msgid "Duplicated Python plugin {0} in {1} and {2}."
+msgstr "Complemento Python duplicado {0} em {1} e {2}."
+
+msgid ""
+"Expected a tuple containing a Python function and a string with menu options"
+" in it."
+msgstr ""
+"Esperava um tuple contendo uma funo Python e uma string com opes de menu "
+"nela."
+
+msgid ""
+"Expected a handle to a Python function or to a tuple containing a Python "
+"function and a string with menu options in it."
+msgstr ""
+"Expected a handle to a Python function or to a tuple containing a Python "
+"function and a string with menu options in it."
+
+msgid ""
+"Please override the menus method by returning a valid dict of key menus, "
+"values methods."
+msgstr ""
+"Por favor, anule o mtodo de menus retornando um dito vlido de menus chaves, "
+"mtodos de valores."
+
+msgid ""
+"\n"
+"Plugin module.\n"
+"\n"
+"Contains all classes related to python plugins.\n"
+"\n"
+msgstr ""
+"\n"
+"Mdulo de plugin. Contm todas as classes relacionadas com plugins de python.\n"
+
+msgid ""
+"Whether a plugin is active or not.  If not overriden, the default is True."
+msgstr "Se um plugin est ativo ou no. Se no for anulado, o padro  True."
+
+msgid ""
+"\n"
+"Dictionary of menu entries with callbacks, like:\n"
+"\n"
+"def menus(self):\n"
+"    menus = { \"New Menu/Hello\" : self.run }\n"
+"    return menus\n"
+"\n"
+msgstr ""
+"\n"
+"Dicionrio de entradas de menus com callbacks, como:\n"
+"\n"
+"def menus(self):\n"
+"    menus = { \"New Menu/Olá\" : self.run }\n"
+"    return menus\n"
+"\n"
+
+msgid ""
+"\n"
+"\n"
+"import mrv2\n"
+"from mrv2 import plugin\n"
+"\n"
+"class DemoPlugin(plugin.Plugin):\n"
+"    def __init__(self):\n"
+"        \"\"\"\n"
+"        Constructor for DemoPlugin.\n"
+"\n"
+"        Define your own variables here.\n"
+"        \"\"\"\n"
+"        super().__init__()\n"
+"\n"
+"    def run(self):\n"
+"        \"\"\"\n"
+"        Example method used for the callback.\n"
+"        \"\"\"\n"
+"        print(\"Hello from Python plugin\")\n"
+"\n"
+"    def active(self):\n"
+"        \"\"\"\n"
+"        Optional method to return whether the plug-in is active or not.\n"
+"\n"
+"\n"
+"        :return: True if the plug-in is active, False otherwise.\n"
+"        :rtype: bool\n"
+"\n"
+"        \"\"\"\n"
+"        return True\n"
+"\n"
+"    def menus(self):\n"
+"        \"\"\"\n"
+"        Dictionary of menu entries as keys with callbacks as values.\n"
+"\n"
+"\n"
+"        :return: A dictionary of menu entries and their corresponding callbacks.\n"
+"        :rtype: dict\n"
+"\n"
+"        \"\"\"\n"
+"        menus = {\"New Menu/Hello\": self.run}\n"
+"        return menus\n"
+"\n"
+msgstr ""
+"\n"
+"\n"
+"import mrv2\n"
+"from mrv2 import plugin\n"
+"\n"
+"class DemoPlugin(plugin.Plugin):\n"
+"    def __init__(self):\n"
+"        \"\"\"\n"
+"        Construtor para DemoPlugin.\n"
+"\n"
+"        Defina suas próprias variáveis aqui.\n"
+"        \"\"\"\n"
+"        super().__init__()\n"
+"\n"
+"    def run(self):\n"
+"        \"\"\"\n"
+"        Método de exemplo usado para o callback.\n"
+"        \"\"\"\n"
+"        print(\"Olá do plugin Python\")\n"
+"\n"
+"    def active(self):\n"
+"        \"\"\"\n"
+"        Método opcional para retornar se o plug-in está ativo ou não.\n"
+"\n"
+"\n"
+"        :return: True se o plug-in estiver ativo, False caso contrário.\n"
+"        :rtype: bool\n"
+"\n"
+"        \"\"\"\n"
+"        return True\n"
+"\n"
+"    def menus(self):\n"
+"        \"\"\"\n"
+"        Dicionário de entradas de menu como chaves com callbacks como valores.\n"
+"\n"
+"\n"
+"        :return: Um dicionário de entradas de menu e seus respectivos callbacks.\n"
+"        :rtype: dict\n"
+"\n"
+"        \"\"\"\n"
+"        menus = {\"Novo Menu/Olá\": self.run}\n"
+"        return menus\n"
+"\n"
+
+msgid "No playlist matched item."
+msgstr "Nenhum item correspondente  lista de reproduo."
+
+msgid "No playlist matched file name."
+msgstr "Nenhuma lista de reproduo correspondeu ao nome do ficheiro."
+
+msgid "No playlist loaded."
+msgstr "Nenhuma lista de reproduo carregada."
+
+msgid "No playlist selected."
+msgstr "Nenhuma lista de reproduo seleccionada."
+
+msgid "Not an EDL playlist to add clips to."
+msgstr "No  uma lista de reproduo EDL para adicionar clipes."
+
+msgid "Could not find clip in loaded clips."
+msgstr "No foi possvel encontrar o clipe em clipes carregados."
+
+msgid ""
+"\n"
+"Playlist module.\n"
+"\n"
+"Contains all functions and classes related to the playlists.\n"
+msgstr ""
+"\n"
+"Mdulo Lista de Reproduo. Contm todas as funes e classes relacionadas com as listas de reproduo.\n"
+
+msgid "List playlist items."
+msgstr "Listar os itens da lista de reproduo."
+
+msgid "Select a playlist by FileModelItem."
+msgstr "Selecione uma lista de reproduo por FileModelItem."
+
+msgid "Select a playlist by fileName."
+msgstr "Selecione uma lista de reproduo por nome de arquivo."
+
+msgid "Select a playlist by index."
+msgstr "Selecione uma lista de reproduo por ndice."
+
+msgid "Add a clip to currently selected Playlist EDL."
+msgstr "Adicione um clipe  Lista de Reproduo EDL selecionada atualmente."
+
+msgid "Save current .otio file with relative paths."
+msgstr "Gravar o ficheiro.otio atual com caminhos relativos."
+
+msgid "unsupported operand type(s) for {0}: RationalTime and {1}"
+msgstr "Tipo(s) de pera no suportados para {0}: RationalTime e {1}"
+
+msgid ""
+"\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/rt.rate` seconds.\n"
+"It can be rescaled into another :class:`~RationalTime`'s rate.\n"
+msgstr ""
+"\n"
+"A classe RationalTime representa uma medida do tempo de :math:`rt.value/rt.rate` segundos. Pode ser redimensionada para outra :class:`~RationalTime` taxa.\n"
+
+msgid ""
+"\n"
+"Returns true if the time is invalid. The time is considered invalid if the value or the rate are a NaN value\n"
+"or if the rate is less than or equal to zero.\n"
+msgstr ""
+"\n"
+"Devolve true se o tempo  invlido. O tempo  considerado invlido se o valor ou a taxa so um valor NaN ou se a taxa  inferior ou igual a zero.\n"
+
+msgid "Returns the time value for time converted to new_rate."
+msgstr "Devolve o valor de tempo para o tempo convertido para new_rate."
+
+msgid "Returns the time for time converted to new_rate."
+msgstr "Devolve o tempo para o tempo convertido para new_rate."
+
+msgid "Returns the time value for \"self\" converted to new_rate."
+msgstr "Devolve o valor de tempo para \"self\" convertido para new_rate."
+
+msgid ""
+"\n"
+"Compute the duration of samples from first to last (excluding last). This is not the same as distance.\n"
+"\n"
+"For example, the duration of a clip from frame 10 to frame 15 is 5 frames. Result will be in the rate of start_time.\n"
+msgstr ""
+"\n"
+"Calcule a durao das amostras do primeiro ao ltimo (excluindo o ltimo). Isto no  o mesmo que a distncia. Por exemplo, a durao de um clipe do quadro 10 para o quadro 15  de 5 quadros. O resultado ser na taxa de start_time.\n"
+
+msgid ""
+"\n"
+"Compute the duration of samples from first to last (including last). This is not the same as distance.\n"
+"\n"
+"For example, the duration of a clip from frame 10 to frame 15 is 6 frames. Result will be in the rate of start_time.\n"
+msgstr ""
+"\n"
+"Calcule a durao das amostras do primeiro ao ltimo (incluindo o ltimo). Isto no  o mesmo que a distncia. Por exemplo, a durao de um clipe do quadro 10 para o quadro 15  de 6 quadros. O resultado ser na taxa de start_time.\n"
+
+msgid "Returns true if the rate is valid for use with timecode."
+msgstr "Devolve true se a taxa for vlida para uso com o tempocode."
+
+msgid ""
+"Returns the first valid timecode rate that has the least difference from the"
+" given value."
+msgstr ""
+"Retorna a primeira taxa de cdigo de tempo vlida que tem a menor diferena do "
+"valor dado."
+
+msgid "Turn a frame number and rate into a :class:`~RationalTime` object."
+msgstr "Vire um nmero de quadro e taxa em um objeto :class:`~RationalTime`."
+
+msgid "Returns the frame number based on the current rate."
+msgstr "Retorna o nmero de quadro com base na taxa atual."
+
+msgid "Returns the frame number based on the given rate."
+msgstr "Devolve o nmero de quadro com base na taxa dada."
+
+msgid "Convert to timecode (``HH:MM:SS;FRAME``)"
+msgstr "Converter para cdigo de tempo (``HH:MM:SS;FRAME``)"
+
+msgid ""
+"Convert a timecode string (``HH:MM:SS;FRAME``) into a "
+":class:`~RationalTime`."
+msgstr ""
+"Converta uma cadeia de cdigo de tempo (``HH:MM:SS;FRAME``) em uma "
+":class:`~RationalTime`."
+
+msgid ""
+"Convert a time with microseconds string (``HH:MM:ss`` where ``ss`` is an "
+"integer or a decimal number) into a :class:`~RationalTime`."
+msgstr ""
+"Converta uma string de tempo com microssegundos (``HH:MM:ss`` onde ``ss`` é "
+"um número inteiro ou decimal) em um :class:`~RationalTime`."
+
+msgid ""
+"\n"
+"The TimeRange class represents a range in time. It encodes the start time and the duration,\n"
+"meaning that :meth:`end_time_inclusive` (last portion of a sample in the time range) and\n"
+":meth:`end_time_exclusive` can be computed.\n"
+msgstr ""
+"\n"
+"A classe TimeRange representa um intervalo de tempo. Ela codifica o tempo de início e a duração,\n"
+"significando que :meth:`end_time_inclusive` (última parte de uma amostra no intervalo de tempo) e\n"
+":meth:`end_time_exclusive` podem ser computados.\n"
+
+msgid ""
+"\n"
+"The time of the last sample containing data in the time range.\n"
+"\n"
+"If the time range starts at (0, 24) with duration (10, 24), this will be\n"
+"(9, 24)\n"
+"\n"
+"If the time range starts at (0, 24) with duration (10.5, 24):\n"
+"(10, 24)\n"
+"\n"
+"In other words, the last frame with data, even if the last frame is fractional.\n"
+msgstr ""
+"\n"
+"O tempo da última amostra contendo dados no intervalo de tempo.\n"
+"\n"
+"Se o intervalo de tempo começa em (0, 24) com duração (10, 24), isso será\n"
+"(9, 24)\n"
+"\n"
+"Se o intervalo de tempo começa em (0, 24) com duração (10.5, 24):\n"
+"(10, 24)\n"
+"\n"
+"Em outras palavras, o último quadro com dados, mesmo que o último quadro seja fracionário.\n"
+
+msgid ""
+"\n"
+"Time of the first sample outside the time range.\n"
+"\n"
+"If start frame is 10 and duration is 5, then end_time_exclusive is 15,\n"
+"because the last time with data in this range is 14.\n"
+"\n"
+"If start frame is 10 and duration is 5.5, then end_time_exclusive is\n"
+"15.5, because the last time with data in this range is 15.\n"
+msgstr ""
+"\n"
+"Tempo da primeira amostra fora do intervalo de tempo.\n"
+"\n"
+"Se o quadro inicial é 10 e a duração é 5, então end_time_exclusive é 15,\n"
+"porque o último tempo com dados neste intervalo é 14.\n"
+"\n"
+"Se o quadro inicial é 10 e a duração é 5.5, então end_time_exclusive é\n"
+"15.5, porque o último tempo com dados neste intervalo é 15.\n"
+
+msgid ""
+"Construct a new :class:`~TimeRange` that is this one extended by other."
+msgstr "Construir um novo :class:`~TimeRange` que  este extendido por outro."
+
+msgid ""
+"\n"
+"Clamp 'other' (:class:`~RationalTime`) according to\n"
+":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
+msgstr ""
+"\n"
+"Limite 'other' (:class:`~RationalTime`) de acordo com\n"
+":attr:`start_time`/:attr:`end_time_exclusive` e argumentos de limite.\n"
+
+msgid ""
+"\n"
+"Clamp 'other' (:class:`~TimeRange`) according to\n"
+":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
+msgstr ""
+"\n"
+"Limite 'outros' (:classe:`~TimeRange`) de acordo com:attr:`start_time`/:attr:`end_time_exclusive` e argumentos vinculados.\n"
+
+msgid ""
+"\n"
+"The start of `this` precedes `other`.\n"
+"`other` precedes the end of `this`.\n"
+"::\n"
+"\n"
+"         other\n"
+"           |\n"
+"           *\n"
+"   [      this      ]\n"
+"\n"
+msgstr ""
+"\n"
+"O início de `this` precede `other`.\n"
+"`other` precede o final de `this`.\n"
+"::\n"
+"\n"
+"         other\n"
+"           |\n"
+"           *\n"
+"   [      this      ]\n"
+"\n"
+
+msgid ""
+"\n"
+"The start of `this` precedes start of `other`.\n"
+"The end of `this` antecedes end of `other`.\n"
+"::\n"
+"\n"
+"        [ other ]\n"
+"   [      this      ]\n"
+"\n"
+"The converse would be ``other.contains(this)``\n"
+msgstr ""
+"\n"
+"O início de `this` precede o início de `other`.\n"
+"O final de `this` antecede o final de `other`.\n"
+"::\n"
+"\n"
+"        [ other ]\n"
+"   [      this      ]\n"
+"\n"
+"A situação oposta seria ``other.contains(this)``\n"
+
+msgid ""
+"\n"
+"`this` contains `other`.\n"
+"::\n"
+"\n"
+"        other\n"
+"         |\n"
+"         *\n"
+"   [    this    ]\n"
+"\n"
+msgstr ""
+"\n"
+"`this` contém `other`.\n"
+"::\n"
+"\n"
+"        other\n"
+"         |\n"
+"         *\n"
+"   [    this    ]\n"
+"\n"
+
+msgid ""
+"\n"
+"The start of `this` strictly precedes end of `other` by a value >= `epsilon_s`.\n"
+"The end of `this` strictly antecedes start of `other` by a value >= `epsilon_s`.\n"
+"::\n"
+"\n"
+"   [ this ]\n"
+"       [ other ]\n"
+"\n"
+"The converse would be ``other.overlaps(this)``\n"
+msgstr ""
+"\n"
+"O início de `this` precede estritamente o final de `other` por um valor >= `epsilon_s`.\n"
+"O final de `this` precede estritamente o início de `other` por um valor >= `epsilon_s`.\n"
+"::\n"
+"\n"
+"   [ this ]\n"
+"       [ other ]\n"
+"\n"
+"A conversão seria ``other.overlaps(this)``\n"
+
+msgid ""
+"\n"
+"The end of `this` strictly precedes `other` by a value >= `epsilon_s`.\n"
+"::\n"
+"\n"
+"             other\n"
+"               |\n"
+"   [ this ]    *\n"
+"\n"
+msgstr ""
+"\n"
+"O final de `this` precede estritamente `other` por um valor >= `epsilon_s`.\n"
+"::\n"
+"\n"
+"             other\n"
+"               |\n"
+"   [ this ]    *\n"
+
+msgid ""
+"\n"
+"The end of `this` strictly equals the start of `other` and\n"
+"the start of `this` strictly equals the end of `other`.\n"
+"::\n"
+"\n"
+"   [this][other]\n"
+"\n"
+"The converse would be ``other.meets(this)``\n"
+msgstr ""
+"\n"
+"O final de `this` é estritamente igual ao início de `other` e\n"
+"o início de `this` é estritamente igual ao final de `other`.\n"
+"::\n"
+"\n"
+"   [this][other]\n"
+"\n"
+"A recíproca seria ``other.meets(this)``\n"
+
+msgid ""
+"\n"
+"The start of `this` strictly equals `other`.\n"
+"::\n"
+"\n"
+"   other\n"
+"     |\n"
+"     *\n"
+"     [ this ]\n"
+"\n"
+msgstr ""
+"\n"
+"O início de `this` é estritamente igual a `other`.\n"
+"::\n"
+"\n"
+"   other\n"
+"     |\n"
+"     *\n"
+"     [ this ]\n"
+"\n"
+
+msgid ""
+"\n"
+"The start of `this` strictly equals the start of `other`.\n"
+"The end of `this` strictly precedes the end of `other` by a value >= `epsilon_s`.\n"
+"::\n"
+"\n"
+"   [ this ]\n"
+"   [    other    ]\n"
+"\n"
+"The converse would be ``other.begins(this)``\n"
+msgstr ""
+"\n"
+"O início de `this` é estritamente igual ao início de `other`.\n"
+"O fim de `this` é estritamente anterior ao fim de `other` por um valor >= `epsilon_s`.\n"
+"::\n"
+"\n"
+"   [ this ]\n"
+"   [    other    ]\n"
+"\n"
+"A conversão seria ``other.begins(this)``\n"
+
+msgid ""
+"\n"
+"The end of `this` strictly equals `other`.\n"
+"::\n"
+"\n"
+"        other\n"
+"          |\n"
+"          *\n"
+"   [ this ]\n"
+"\n"
+msgstr ""
+"\n"
+"O fim de `this` é estritamente igual a `other`.\n"
+"::\n"
+"\n"
+"        other\n"
+"          |\n"
+"          *\n"
+"   [ this ]\n"
+
+msgid ""
+"\n"
+"The start of `this` strictly antecedes the start of `other` by a value >= `epsilon_s`.\n"
+"The end of `this` strictly equals the end of `other`.\n"
+"::\n"
+"\n"
+"           [ this ]\n"
+"   [     other    ]\n"
+"\n"
+"The converse would be ``other.finishes(this)``\n"
+msgstr ""
+"\n"
+"O início de `this` antecipa estritamente o início de `other` por um valor >= `epsilon_s`.\n"
+"O fim de `this` é estritamente igual ao fim de `other`.\n"
+"::\n"
+"\n"
+"           [ this ]\n"
+"   [     other    ]\n"
+"\n"
+"A situação oposta seria ``other.finishes(this)``\n"
+
+msgid ""
+"\n"
+"The start of `this` precedes or equals the end of `other` by a value >= `epsilon_s`.\n"
+"The end of `this` antecedes or equals the start of `other` by a value >= `epsilon_s`.\n"
+"::\n"
+"\n"
+"   [    this    ]           OR      [    other    ]\n"
+"        [     other    ]                    [     this    ]\n"
+"\n"
+"The converse would be ``other.finishes(this)``\n"
+msgstr ""
+"\n"
+"O início de `this` precede ou é igual ao fim de `other` por um valor >= `epsilon_s`.\n"
+"O fim de `this` antecipa ou é igual ao início de `other` por um valor >= `epsilon_s`.\n"
+"::\n"
+"\n"
+"   [    this    ]           OU      [    other    ]\n"
+"        [     other    ]                    [     this    ]\n"
+"\n"
+"A situação oposta seria ``other.finishes(this)``\n"
+
+msgid ""
+"\n"
+"Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\\s (exclusive).\n"
+"\n"
+"For example, if start_time is 1 and end_time is 10, the returned will have a duration of 9.\n"
+msgstr ""
+"\n"
+"Criar um :class:`~TimeRange` a partir de :class:`~RationalTime`\\s de início e fim (exclusivo).\n"
+"\n"
+"Por exemplo, se start_time é 1 e end_time é 10, a duração retornada será 9.\n"
+
+msgid ""
+"\n"
+"Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\\s (inclusive).\n"
+"\n"
+"For example, if start_time is 1 and end_time is 10, the returned will have a duration of 10.\n"
+msgstr ""
+"\n"
+"Cria um :class:`~TimeRange` do incio e do fim :class:`~RationalTime`\\s (inclusive).\n"
+"\n"
+"Por exemplo, se o start_time for 1 e o end_time  10, o retorno ter uma durao de 10.\n"
+
+msgid ""
+"\n"
+"Media module.\n"
+"\n"
+"Contains all classes and enums related to media. \n"
+msgstr ""
+"\n"
+"Mdulo de mdia. Contm todas as classes e enums relacionados  mdia.\n"
+
+msgid "Compare mode :class:`mrv2.media.CompareMode`."
+msgstr "Comparar modo :classe:`mrv2.media.CompareMode`."
+
+msgid "Wipe center in X and Y :class:`mrv2.math.Vector2f`."
+msgstr "Centro de limpeza em X e Y :classe: `mrv2.math.Vector2f`."
+
+msgid "Wipe Rotation."
+msgstr "Limpe a rotao."
+
+msgid "Overlay ( A over B )"
+msgstr "Sobreposio ( A sobre B )"
+
+msgid "Comparison options."
+msgstr "Opes de comparao."
+
+msgid ""
+"\n"
+"Math module.\n"
+"\n"
+"Contains all math classes.\n"
+msgstr ""
+"\n"
+"Contm todas as aulas de matemtica.\n"
+
+msgid "Vector of 2 integers."
+msgstr "Vector de 2 inteiros."
+
+msgid "Vector of 2 floats."
+msgstr "Vector de 2 carroas."
+
+msgid "Vector of 3 floats."
+msgstr "Vector de 3 carroas."
+
+msgid "Vector of 4 floats."
+msgstr "Vector de 4 carroas."
+
+msgid "Size of 2 integers."
+msgstr "Tamanho de 2 inteiros."
+
+msgid ""
+"\n"
+"Image module.\n"
+"\n"
+"Contains all classes and enums related to image controls. \n"
+msgstr ""
+"\n"
+"Mdulo de imagem. Contm todas as classes e enums relacionados aos controles de imagem.\n"
+
+msgid "Red Channel."
+msgstr "Canal Vermelho."
+
+msgid "Green Channel."
+msgstr "Canal Verde."
+
+msgid "Blue Channel."
+msgstr "Canal Azul."
+
+msgid "Alpha Channel."
+msgstr "Canal Alfa."
+
+msgid "Image mirroring."
+msgstr "Espelho de imagem."
+
+msgid "Flip image on X."
+msgstr "Vire a imagem em X."
+
+msgid "Flip image on Y."
+msgstr "Vire a imagem em Y."
+
+msgid "Enabled Levels."
+msgstr "Nveis Activados."
+
+msgid "Add a :class:`mrv2.math.Vector3f` to image."
+msgstr "Adicione um :class:`mrv2.math.Vector3f`  imagem."
+
+msgid "Change a :class:`mrv2.math.Vector3f` of brightness to image."
+msgstr "Mudar um :class:`mrv2.math.Vector3f` de brilho para imagem."
+
+msgid "Change a :class:`mrv2.math.Vector3f` of contrast to image."
+msgstr "Mudar um :class:`mrv2.math.Vector3f` de contraste com a imagem."
+
+msgid "Change a :class:`mrv2.math.Vector3f` of saturation to image."
+msgstr "Mudar um :class:`mrv2.math.Vector3f` de saturao para imagem."
+
+msgid "Change tint of image to image between 0 and 1."
+msgstr "Mudar o corante da imagem para a imagem entre 0 e 1."
+
+msgid "Invert the color values."
+msgstr "Inverta os valores de cor."
+
+msgid "Color values."
+msgstr "Valores de cor."
+
+msgid "In Low Level value."
+msgstr "Em valor de nvel baixo."
+
+msgid "In High Level value."
+msgstr "Em valor de alto nvel."
+
+msgid "Gamma Level value."
+msgstr "Valor do nvel gama."
+
+msgid "Out Low Level value."
+msgstr "Fora de valor de nvel baixo."
+
+msgid "Out High Level value."
+msgstr "Fora de valor de alto nvel."
+
+msgid "Levels values."
+msgstr "Valores de nveis."
+
+msgid "Enabled EXR display."
+msgstr "Display EXR habilitado."
+
+msgid "Exposure value."
+msgstr "Valor da exposio."
+
+msgid "Defog value."
+msgstr "Valor de defog."
+
+msgid "kneeLow value."
+msgstr "O valor do joelho  baixo."
+
+msgid "kneeHigh value."
+msgstr "joelhoAlto valor."
+
+msgid "EXR display values."
+msgstr "Valores de exibio do EXR."
+
+msgid "Enabled Soft Clip."
+msgstr "Clipe suave habilitado."
+
+msgid "Soft clip value."
+msgstr "Valor de clipe suave."
+
+msgid "Minify filter :class:`mrv2.image.ImageFilter`."
+msgstr "Minify filter :class:`mrv2.image.ImageFilter`."
+
+msgid "Magnify filter :class:`mrv2.image.ImageFilter`."
+msgstr "Ampliar filtro :classe:`mrv2.image.ImageFilter`."
+
+msgid "Image filters."
+msgstr "Filtros de imagem."
+
+msgid "Color channels :class:`mrv2.image.Channels`."
+msgstr "Canais de cores :classe:`mrv2.image.Channels`."
+
+msgid "Mirror on X, Y or both :class:`mrv2.image.Mirror`."
+msgstr "Espelho em X, Y ou ambos :classe:`mrv2.imagem.Mirror`."
+
+msgid "Color options :class:`mrv2.image.Color`."
+msgstr "Opes de cor :classe:`mrv2.image.Color`."
+
+msgid "Levels options :class:`mrv2.image.Levels`."
+msgstr "Opes de nveis :classe: `mrv2.image.Levels`."
+
+msgid "EXR Display options :class:`mrv2.image.EXRDisplay`.."
+msgstr "EXR Opes de exibio :classe:`mrv2.image.EXRDisplay`.."
+
+msgid "Soft Clip options :class:`mrv2.image.SoftClip`.."
+msgstr "Opes de clipe suave :classe:`mrv2.image.SoftClip`.."
+
+msgid "Display options."
+msgstr "Opes de exibio."
+
+msgid "LUT enabled."
+msgstr "LUT activado."
+
+msgid "LUT filename."
+msgstr "Nome do ficheiro LUT."
+
+msgid "LUT transformation order."
+msgstr "Ordem de transformao LUT."
+
+msgid "LUT options."
+msgstr "Opes de luto."
+
+msgid "Video Levels."
+msgstr "Nveis de vdeo."
+
+msgid "Alpha blending algorithm"
+msgstr "Algoritmo de mistura Alfa"
+
+msgid "Image Filters"
+msgstr "Filtros de Imagens"
+
+msgid "Image options."
+msgstr "Opes de imagem."
+
+msgid "Environment Map type."
+msgstr "Tipo de mapa de ambiente."
+
+msgid "Horizontal aperture"
+msgstr "Abertura horizontal"
+
+msgid "Vertical aperture"
+msgstr "Abertura vertical"
+
+msgid "Focal Length"
+msgstr "Comprimento focal"
+
+msgid "Rotation on X"
+msgstr "Rotao em X"
+
+msgid "Rotation on Y"
+msgstr "Rotao em Y"
+
+msgid "Subdivision on X"
+msgstr "Subdiviso X"
+
+msgid "Subdivision on Y"
+msgstr "Subdiviso em Y"
+
+msgid "Spin"
+msgstr "Giro"
+
+msgid "EnvironmentMap options."
+msgstr "Opes EnvironmentMap."
+
+msgid "Stereo 3d input :class:`mrv2.image.StereoInput`.."
+msgstr "Input estereo 3d :class:`mrv2.image.StereoInput`.."
+
+msgid "Stereo 3d output :class:`mrv2.image.StereoOutput`.."
+msgstr "Sada estereo 3d :class:`mrv2.image.StereoOutput`.."
+
+msgid "Separation between left and right eye."
+msgstr "Separao entre o olho esquerdo e o direito."
+
+msgid "Swap left and right eye"
+msgstr "Intercambiar o olho esquerdo e direito"
+
+msgid "Stereo3D options."
+msgstr "Opes estereo3D."
+
+msgid "Background type :class:`mrv2.image.Background`.."
+msgstr "Tipo de fundo :classe:`mrv2.image.background`.."
+
+msgid "Checkers Color0 :class:`mrv2.image.Color4f`.."
+msgstr "Checkers Color0 :class:`mrv2.image.Color4f`.."
+
+msgid "Checkers Color1 :class:`mrv2.image.Color4f`.."
+msgstr "Checkers Color1 :class:`mrv2.image.Color4f`.."
+
+msgid "Checkers Size :class:`mrv2.math.Size2i`.."
+msgstr "Tamanho das damas:`mrv2.math.Size2i`.."
+
+msgid "Background options."
+msgstr "Opes de fundo."
+
+msgid "Gets the current background options."
+msgstr "Obtm as opes de fundo atuais."
+
+msgid "Sets the current background options."
+msgstr "Define as opes de fundo atuais."
+
+msgid "Gets the current OCIO config file."
+msgstr "Obtm o arquivo de configurao atual do OCIO."
+
+msgid "Sets the current OCIO config file."
+msgstr "Define o arquivo de configurao atual do OCIO."
+
+msgid "Gets the current input color space."
+msgstr "Obtm o espao de cor de entrada atual."
+
+msgid "Gets a list of all input color spaces."
+msgstr "Obtm uma lista de todos os espaos de cor de entrada."
+
+msgid "Set the input color space."
+msgstr "Defina o espao de cores de entrada."
+
+msgid "Gets the current Display/View."
+msgstr "Obtm o Display actual/Vista."
+
+msgid "Gets the list of Displays/Views."
+msgstr "Obtm a lista de Displays/Visualizaes."
+
+msgid "Set an OCIO Display/View."
+msgstr "Definir um Display OCIO/Vista."
+
+msgid "Gets the current OCIO look."
+msgstr "Tem a aparncia atual da OCIO."
+
+msgid "Gets a list of all OCIO looks."
+msgstr "Recebe uma lista de todos os looks da OCIO."
+
+msgid "Set the OCIO look by name."
+msgstr "Defina o olhar OCIO por nome."
+
+msgid "Return all the files."
+msgstr "Devolver todos os ficheiros."
+
+msgid "Return all the active files."
+msgstr "Retornar todos os ficheiros ativos."
+
+msgid "Return the A file item."
+msgstr "Devolver o item de arquivo A."
+
+msgid "Return the A file index."
+msgstr "Retornar o ndice de ficheiro A."
+
+msgid "Return the list of B files."
+msgstr "Devolver a lista de ficheiros B."
+
+msgid "Return the list of B indexes."
+msgstr "Devolver a lista de ndices B."
+
+msgid "Close the current A file."
+msgstr "Feche o ficheiro A atual."
+
+msgid "Close all files."
+msgstr "Fecha todos os ficheiros."
+
+msgid "Set the A file index."
+msgstr "Defina o ndice de arquivo A."
+
+msgid "Set a new B file index."
+msgstr "Defina um novo ndice de ficheiro B."
+
+msgid "Set a new stereo file index."
+msgstr "Defina um novo ndice de ficheiros estreo."
+
+msgid "Toggle the B file index."
+msgstr "Comuta o ndice de ficheiro B."
+
+msgid "Clear the B indexes."
+msgstr "Limpa os ndices B."
+
+msgid "Return the list of layers."
+msgstr "Devolver a lista de camadas."
+
+msgid "Set layer for file item."
+msgstr "Defina a camada para o item do ficheiro."
+
+msgid "Set compare time."
+msgstr "Ajuste o tempo de comparao."
+
+msgid "Get compare time."
+msgstr "Comparar o tempo."
+
+msgid "Set the first version for current media."
+msgstr "Defina a primeira verso para a mdia atual."
+
+msgid "Set the previous version for current media."
+msgstr "Defina a verso anterior para a mdia atual."
+
+msgid "Set the next version for current media."
+msgstr "Defina a prxima verso para a mdia atual."
+
+msgid "Set the last version for current media."
+msgstr "Defina a ltima verso para a mdia atual."
+
+msgid "Path :class:`mrv2.Path` to the File Media."
+msgstr "Caminho :class:`mrv2.Path` para a mdia de arquivo."
+
+msgid "Audio path :class:`mrv2.Path` to the File Media if any."
+msgstr "Caminho de udio :class:`mrv2.Path` para a mdia de arquivo, se houver."
+
+msgid "Time range :class:`mrv2.TimeRange` of the File Media."
+msgstr "Intervalo de tempo : classe: `mrv2.TimeRange` da mdia de arquivo."
+
+msgid "Speed (FPS) of the File Media."
+msgstr "Velocidade (FPS) da mdia de arquivo."
+
+msgid "Playback state :class:`mrv2.timeline.Playbacks` of the File Media."
+msgstr ""
+"Estado de reproduo :class:`mrv2.timeline.Reprodues` da mdia de arquivo."
+
+msgid "Loop state :class:`mrv2.timeline.Loop` of the File Media."
+msgstr "Loop state :class:`mrv2.timeline.Loop` da mdia de arquivo."
+
+msgid "Current time :class:`mrv2.RationalTime` of the File Media."
+msgstr "Hora atual :class:`mrv2.RationalTime` da mdia de arquivo."
+
+msgid "In/Out range :class:`mrv2.TimeRange` of the File Media."
+msgstr "In/Out range :class:`mrv2.TimeRange` da mdia de arquivo."
+
+msgid "Video layer of the File Media."
+msgstr "Camada de vdeo da mdia de arquivo."
+
+msgid "Volume of the File Media."
+msgstr "Volume da mdia de arquivo."
+
+msgid "Mute state of the File Media."
+msgstr "Estado mudo da mdia de arquivo."
+
+msgid "Audio offset of the File Media."
+msgstr "Desvio de udio da Mdia de Ficheiros."
+
+msgid "Class used to hold a media item."
+msgstr "Classe usada para segurar um item de mdia."
+
+msgid "Save annotations."
+msgstr "Salve anotaes."
+
+msgid "Save resolution."
+msgstr "Salve a resoluo."
+
+msgid "FFmpeg Profile."
+msgstr "Perfil FFmpeg."
+
+msgid "FFmpeg Preset."
+msgstr "FFmpeg Preset."
+
+msgid "FFmpeg Pixel Format."
+msgstr "Formato FFmpeg Pixel."
+
+msgid "FFmpeg video encoding with hardware if possible."
+msgstr "Codificao de vdeo FFmpeg com hardware, se possvel."
+
+msgid "FFmpeg Override color characteristics."
+msgstr "FFmpeg Override caractersticas de cor."
+
+msgid "FFmpeg Color Range."
+msgstr "Gama de cores FFmpeg."
+
+msgid "FFmpeg Color Space."
+msgstr "Espao de cores FFmpeg."
+
+msgid "FFmpeg Color Primaries."
+msgstr "Primarias de cores FFmpeg."
+
+msgid "FFmpeg Color Transfer Characteristics."
+msgstr "Caractersticas de transferncia de cores FFmpeg."
+
+msgid "FFmpeg Audio Codec."
+msgstr "Cdigo de udio FFmpeg."
+
+msgid "OpenEXR's Compression."
+msgstr "Compresso do OpenEXR."
+
+msgid "OpenEXR's Pixel Type."
+msgstr "Tipo Pixel do OpenEXR."
+
+msgid "OpenEXR's Zip Compression Level."
+msgstr "Nvel de compresso Zip da OpenEXR."
+
+msgid "OpenEXR's DWA Compression Level."
+msgstr "Nvel de compresso DWA da OpenEXR."
+
+msgid ""
+"\n"
+"Command module.\n"
+"\n"
+"Used to run main commands and get arguments and set the display, image, compare, LUT options.\n"
+msgstr ""
+"\n"
+"Mdulo de comandos. Usado para executar comandos principais e obter argumentos e definir a exibio, imagem, comparar, LUT opes.\n"
+
+msgid ""
+"Get command-line arguments passed as single quoted string to -pythonArgs."
+msgstr ""
+"Obter argumentos de linha de comando passados como uma nica string citada "
+"para -pythonArgs."
+
+msgid "Open file with optional audio."
+msgstr "Abrir arquivo com udio opcional."
+
+msgid "Compare two file items with a compare mode."
+msgstr "Compare dois itens de arquivo com um modo de comparao."
+
+msgid "Close the file item."
+msgstr "Fecha o item do ficheiro."
+
+msgid "Close all file items."
+msgstr "Fechar todos os itens do ficheiro."
+
+msgid "Return the root path to the insallation of mrv2."
+msgstr "Retorne o caminho da raiz para a insalao de mrv2."
+
+msgid "Return the path to preferences of mrv2."
+msgstr "Retornar o caminho para as preferncias do mrv2."
+
+msgid "Return the display options."
+msgstr "Devolver as opes de exibio."
+
+msgid "Set the display options."
+msgstr "Defina as opes de exibio."
+
+msgid "Return the LUT options."
+msgstr "Devolver as opes LUT."
+
+msgid "Set the LUT options."
+msgstr "Defina as opes LUT."
+
+msgid "Return the image options."
+msgstr "Devolver as opes de imagem."
+
+msgid "Set the image options."
+msgstr "Defina as opes de imagem."
+
+msgid "Return the environment map options."
+msgstr "Devolver as opes de mapa de ambiente."
+
+msgid "Set the environment map options."
+msgstr "Defina as opes de mapa de ambiente."
+
+msgid "Set the compare options."
+msgstr "Defina as opes de comparao."
+
+msgid "Set the stereo 3D options."
+msgstr "Definir as opes 3D estreo."
+
+msgid "Get the language of mrv2."
+msgstr "Obter a linguagem de mrv2."
+
+msgid "Get the layers of the timeline (GUI)."
+msgstr "Obter as camadas da linha do tempo (GUI)."
+
+msgid "Get the version of mrv2."
+msgstr "Obter a verso do mrv2."
+
+msgid ""
+"Call Fl::check to update the GUI and return the number of seconds that "
+"elapsed."
+msgstr ""
+"Chame Fl::check para atualizar a GUI e devolver o nmero de segundos que "
+"decorreram."
+
+msgid "Returns true if audio is muted."
+msgstr "Devolve true se o udio for silenciado."
+
+msgid "Runs the same or a new mrv2 with a session file."
+msgstr "Executa o mesmo ou um novo mrv2 com um arquivo de sesso."
+
+msgid "Set the muting of the audio."
+msgstr "Ajuste o silenciamento do udio."
+
+msgid "Toggle Image Auto Normalize."
+msgstr "Alternar a Normalizao Automtica da Imagem."
+
+msgid "Toggle Data Window."
+msgstr "Activar a Janela de Dados."
+
+msgid "Toggle Display Window."
+msgstr "Comutar a janela de exibio."
+
+msgid "Toggle Ignored Display Window on OpenEXRs."
+msgstr "Alterna a janela de exibio ignorada no OpenEXRs."
+
+msgid "Toggle Image invalid values."
+msgstr "Alternar valores invlidos da imagem."
+
+msgid "Toggle Safe Areas."
+msgstr "Alternar reas Seguras."
+
+msgid "Get the playback volume."
+msgstr "Obter o volume de reproduo."
+
+msgid "Set the playback volume."
+msgstr "Defina o volume de reproduo."
+
+msgid "Save a movie or sequence from the front layer."
+msgstr "Salve um filme ou sequncia da camada frontal."
+
+msgid "Save a single frame."
+msgstr "Salve uma única moldura."
+
+msgid "Save multiple annotation frames."
+msgstr "Salvar múltiplos quadros de anotação."
+
+msgid "Save multiple frames."
+msgstr "Salvar vários quadros."
+
+msgid "Save an .otio file from the current selected image."
+msgstr "Gravar um ficheiro.otio da imagem selecionada."
+
+msgid "Save a PDF document with all annotations and notes."
+msgstr "Gravar um documento PDF com todas as anotaes e notas."
+
+msgid ""
+"\n"
+"Annotations module.\n"
+"\n"
+"Contains all functions and classes related to the annotationss.\n"
+msgstr ""
+"\n"
+"Mdulo de anotaes. Contm todas as funes e classes relacionadas com as anotaes.\n"
+
+msgid "Add notes annotations to current clip at a certain time."
+msgstr "Adicionar anotaes de notas ao clipe atual em um determinado momento."
+
+msgid "Add notes annotations to current clip at a certain frame."
+msgstr "Adicionar anotaes de notas ao clipe atual em uma determinada moldura."
+
+msgid "Add notes annotations to current clip at certain seconds."
+msgstr "Adicionar anotaes de notas ao clipe atual em certos segundos."
+
+msgid "Get all times for annotations."
+msgstr "Obter todos os tempos para anotações."
+
 msgid "Open with Audio"
 msgstr "Abrir com udio"
 
@@ -31,6 +1508,30 @@ msgstr "Cancelar"
 
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Canais: {1} {2} {3}"
+
+msgid "Print the log to the console."
+msgstr "Imprima o log para o console."
+
+msgid "Show this message."
+msgstr "Mostra esta mensagem."
+
+msgid "Cannot parse option \"{0}\": {1}"
+msgstr "Não foi possível analisar a opção \"{0}\": {1}"
+
+msgid "Cannot parse argument \"{0}\": {1}"
+msgstr "Não foi possível analisar o argumento \"{0}\": {1}"
+
+msgid "Usage:\n"
+msgstr "Utilização:\n"
+
+msgid " [option]..."
+msgstr "[Opção]..."
+
+msgid "Arguments:\n"
+msgstr "Argumentos:\n"
+
+msgid "Options:\n"
+msgstr "Opções:\n"
 
 msgid "Play timelines, movies, and image sequences."
 msgstr "Reproduzir linhas de tempo, filmes e sequncias de imagens."
@@ -107,11 +1608,11 @@ msgid "Python Script to run and exit."
 msgstr "Python Script para executar e sair."
 
 msgid ""
-"Python Arguments to pass to the Python script as a single quoted string like "
-"\"arg1 'arg2 asd' arg3\", stored in cmd.argv."
+"Python Arguments to pass to the Python script as a single quoted string like"
+" \"arg1 'arg2 asd' arg3\", stored in cmd.argv."
 msgstr ""
-"Argumentos de Python para passar para o script de Python como uma nica corda "
-"citada como \"arg1 'arg2 asd' arg3\", armazenada em cmd.argv."
+"Argumentos de Python para passar para o script de Python como uma nica corda"
+" citada como \"arg1 'arg2 asd' arg3\", armazenada em cmd.argv."
 
 msgid "Reset settings to defaults."
 msgstr "Reiniciar as configuraes para valores padro."
@@ -176,30 +1677,6 @@ msgstr "Erro de Python:"
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr "O nome de arquivo '{0}' no existe ou no tem permisses de leitura."
 
-msgid "Print the log to the console."
-msgstr "Imprima o log para o console."
-
-msgid "Show this message."
-msgstr "Mostra esta mensagem."
-
-msgid "Cannot parse option \"{0}\": {1}"
-msgstr "Não foi possível analisar a opção \"{0}\": {1}"
-
-msgid "Cannot parse argument \"{0}\": {1}"
-msgstr "Não foi possível analisar o argumento \"{0}\": {1}"
-
-msgid "Usage:\n"
-msgstr "Utilização:\n"
-
-msgid " [option]..."
-msgstr "[Opção]..."
-
-msgid "Arguments:\n"
-msgstr "Argumentos:\n"
-
-msgid "Options:\n"
-msgstr "Opções:\n"
-
 msgid "Files"
 msgstr "Ficheiros"
 
@@ -214,6 +1691,152 @@ msgstr "Rede"
 
 msgid "Stereo 3D"
 msgstr "Stereo 3D"
+
+msgid "Type"
+msgstr "Tipo"
+
+msgid "Client"
+msgstr "Cliente"
+
+msgid "Server"
+msgstr "Servidor"
+
+msgid "Host"
+msgstr "Anfitrio"
+
+msgid "Host name or IP to connect to.  For example: 127.0.0.1"
+msgstr "Nome do host ou IP para se conectar. Por exemplo: 127.0.0.1"
+
+msgid "Previously used Hosts"
+msgstr "Hosts anteriormente usados"
+
+msgid "Port"
+msgstr "Porto"
+
+msgid ""
+"Port to connect to.  Make sure your firewall and router allows read/write "
+"through it."
+msgstr ""
+"Porto para se conectar. Certifique-se de que o firewall e o router permitem "
+"ler/escrever atravs dele."
+
+msgid "Connect"
+msgstr "Conectar"
+
+msgid "Create"
+msgstr "Criar"
+
+msgid "Disconnect"
+msgstr "Desligar"
+
+msgid "Shutdown"
+msgstr "Desligamento"
+
+msgid "&File/&Open"
+msgstr "Ficheiro/Abrir"
+
+msgid "&File/&Save"
+msgstr "Ficheiro/Gravar"
+
+msgid "&Edit/&Undo"
+msgstr "Editar/Desfazer"
+
+msgid "&Edit/Cu&t"
+msgstr "Editar/Cut"
+
+msgid "&Edit/&Copy"
+msgstr "Editar/Copiado"
+
+msgid "&Edit/&Paste"
+msgstr "Editar/Colar"
+
+msgid "&Edit/&Delete"
+msgstr "Editar/Excluir"
+
+msgid "&Edit/&Comment Selection"
+msgstr "Editar/Seleco de Comentrios"
+
+msgid "&Edit/&Uncomment Selection"
+msgstr "Editar/Descomentar a Seleco"
+
+msgid "&Search/&Find..."
+msgstr "Procurar/Encontra..."
+
+msgid "&Search/F&ind Again"
+msgstr "Procurar/Procurar de novo"
+
+msgid "&Search/&Replace"
+msgstr "Procurar/Substituir"
+
+msgid "&Search/&Replace Again"
+msgstr "Procurar/Substituir novamente"
+
+msgid "Clear/&Output"
+msgstr "Limpar/Sada"
+
+msgid "Clear/&Editor"
+msgstr "Limpar/Editor"
+
+msgid "Editor/&Run Code"
+msgstr "Editor/Executar o Cdigo"
+
+msgid "Editor/Toggle &Line Numbers"
+msgstr "Editor/Alterar os nmeros de linha"
+
+msgid "Editor/&Jump to Error"
+msgstr "Editor/Saltar para o Erro"
+
+msgid "Editor/&External Editor"
+msgstr "Editor/Editor externo"
+
+msgid "Scripts/Add To Script List"
+msgstr "Scripts/Adicionar  Lista de Scripts"
+
+msgid "Scripts/%s"
+msgstr "Scripts/%s"
+
+msgid ""
+"Type in your python code here.  Select an area to execute just a portion of "
+"it.  Press Keypad Enter to run it."
+msgstr ""
+"Digite aqui o seu cdigo de python. Selecione uma rea para executar apenas "
+"uma poro dele. Pressione o teclado Entrar para execut- lo."
+
+msgid "Python file {0} already exists.  Do you want to overwrite it?"
+msgstr "O ficheiro Python {0} j existe. Deseja sobrescrev-lo?"
+
+msgid "No"
+msgstr "No"
+
+msgid "Yes"
+msgstr "Yes"
+
+msgid "Failed to open the file for writing."
+msgstr "No foi possvel abrir o ficheiro para escrita."
+
+msgid "Failed to write to the file."
+msgstr "No foi possvel escrever no ficheiro."
+
+msgid "The stream is in an unrecoverable error state."
+msgstr "O stream est num estado de erro irrecupervel."
+
+msgid "Type your editor command"
+msgstr "Digite o seu comando editor"
+
+msgid "{0} will be replaced with the line number.  {1} with the file name"
+msgstr "{0} ser substitudo pelo nmero de linha. {1} com o nome do ficheiro"
+
+msgid "Regular expression error: {0}"
+msgstr "Erro de expresso regular: {0}"
+
+msgid "Could not open python editor: {0}"
+msgstr "No foi possvel abrir o editor do python: {0}"
+
+msgid "Search String:"
+msgstr "Chave de Pesquisa:"
+
+msgid "No occurrences of '%s' found!"
+msgstr "No foram encontradas ocorrncias de \"%s\"!"
 
 msgid "Input"
 msgstr "Entrada"
@@ -253,6 +1876,21 @@ msgstr "Fluxo {0} {1}..."
 
 msgid "Stop streaming"
 msgstr "Pára de transmitir"
+
+msgid "Renderer"
+msgstr "Renderer"
+
+msgid "Complexity"
+msgstr "Complexidade"
+
+msgid "Draw Mode"
+msgstr "Modo de desenho"
+
+msgid "Stage Cache"
+msgstr "Cache em estgio"
+
+msgid "Disk Cache in GB"
+msgstr "Cache de disco em GB"
 
 msgid "Toggle other eye stereo image."
 msgstr "Comutar outra imagem estreo dos olhos."
@@ -376,14 +2014,8 @@ msgid ""
 "This will reset all your settings to their default.  Are you sure you want "
 "to continue?"
 msgstr ""
-"Isto ir redefinir todas as suas configuraes para o seu padro. Tem certeza de "
-"que deseja continuar?"
-
-msgid "Yes"
-msgstr "Yes"
-
-msgid "No"
-msgstr "No"
+"Isto ir redefinir todas as suas configuraes para o seu padro. Tem certeza de"
+" que deseja continuar?"
 
 msgid "Drop a clip here to create a playlist."
 msgstr "Largue um clipe aqui para criar uma lista de reproduo."
@@ -405,9 +2037,6 @@ msgstr "Fechar o EDL atual."
 
 msgid "Clear the messages"
 msgstr "Limpar as mensagens"
-
-msgid "Type"
-msgstr "Tipo"
 
 msgid "Turn off image warping."
 msgstr "Desligue a deformao da imagem."
@@ -439,21 +2068,15 @@ msgstr "V. Apertura"
 msgid "Vertical Aperture of the Projection."
 msgstr "Apertura Vertical da Projeo."
 
-msgid "Focal Length"
-msgstr "Comprimento focal"
-
 msgid ""
 "Focal Length of the Projection. Use Shift + left mouse button to change or "
 "the mousewheel."
 msgstr ""
-"Comprimento focal da projeo. Use Shift + boto esquerdo do mouse para alterar "
-"ou a roda do mouse."
+"Comprimento focal da projeo. Use Shift + boto esquerdo do mouse para alterar"
+" ou a roda do mouse."
 
 msgid "Rotation"
 msgstr "Rotao"
-
-msgid "Spin"
-msgstr "Giro"
 
 msgid "Spin with middle mouse instead of rotating with it."
 msgstr "Gire com o mouse do meio em vez de girar com ele."
@@ -963,16 +2586,16 @@ msgid ""
 "\n"
 "Use the Option key + left mouse button to move the wipe in X or in Y"
 msgstr ""
-"Limpar entre os arquivos A e B Use a tecla Opo + boto esquerdo do mouse para "
-"mover o limpar em X ou em Y"
+"Limpar entre os arquivos A e B Use a tecla Opo + boto esquerdo do mouse para"
+" mover o limpar em X ou em Y"
 
 msgid ""
 "Wipe between the A and B files\n"
 "\n"
 "Use the Alt key + left mouse button to move the wipe in X or in Y."
 msgstr ""
-"Limpar entre os arquivos A e B Use a tecla Alt + boto esquerdo do mouse para "
-"mover o limpar em X ou em Y."
+"Limpar entre os arquivos A e B Use a tecla Alt + boto esquerdo do mouse para"
+" mover o limpar em X ou em Y."
 
 msgid "Overlay the A and B files with optional transparencyy"
 msgstr "Superposio dos arquivos A e B com transparncia opcional"
@@ -1149,7 +2772,8 @@ msgstr "Prximo:"
 
 msgid ""
 "Selects the number of fading frames following the frame of the annotation."
-msgstr "Seleciona o nmero de quadros desvanecidos seguindo o quadro da anotao."
+msgstr ""
+"Seleciona o nmero de quadros desvanecidos seguindo o quadro da anotao."
 
 msgid "Frames"
 msgstr "Quadros"
@@ -1214,6 +2838,52 @@ msgstr "No foi possvel anexar a faixa de vdeo {0}"
 msgid "Could not append audio track {0}"
 msgstr "No foi possvel anexar a faixa de udio {0}"
 
+msgid "Server started at port {0}."
+msgstr "O servidor comeou na porta {0}."
+
+msgid "Server stopped."
+msgstr "O servidor parou."
+
+msgid "A client connected from {0}"
+msgstr "Um cliente conectado a partir de {0}"
+
+msgid "Client at {0} disconnected."
+msgstr "Cliente em {0} desconectado."
+
+msgid "Server protocol version is {0}.  Client protocol version is {1}"
+msgstr "Server protocol version is {0}. Client protocol version is {1}"
+
+msgid "Remote file {0} does not exist on local filesystem."
+msgstr "O arquivo remoto {0} no existe no sistema de arquivos local."
+
+msgid "Remote files are less than local files."
+msgstr "Arquivos remotos so menos que arquivos locais."
+
+msgid "Remote file {0} matches file name {1} but not path."
+msgstr ""
+"O ficheiro remoto {0} corresponde ao nome do ficheiro {1} mas no ao caminho."
+
+msgid "Remote file {0} does not match local filename."
+msgstr "O ficheiro remoto {0} no corresponde ao nome do ficheiro local."
+
+msgid "Removing {0} from message publisher."
+msgstr "Remover {0} do editor de mensagens."
+
+msgid "Server listening on port "
+msgstr "A escuta do servidor na porta"
+
+msgid "ComfyUI listening on port "
+msgstr "ComfyUI ouvindo no porto"
+
+msgid "Connected to server at {0}, port {1}"
+msgstr "Conectado ao servidor em {0}, porto {1}"
+
+msgid "Server connection lost."
+msgstr "Conexo do servidor perdida."
+
+msgid "Exception caught: "
+msgstr "Exceo capturada:"
+
 msgid "ERROR:\t"
 msgstr "ERROR:"
 
@@ -1225,9 +2895,6 @@ msgid ""
 "{1}"
 msgstr "Expresso regular criada a partir de {0}. : {1}"
 
-msgid "Regular expression error: {0}"
-msgstr "Erro de expresso regular: {0}"
-
 msgid "Iteration {0} will check version={1}"
 msgstr "Iterao {0} ir verificar a verso={1}"
 
@@ -1235,8 +2902,8 @@ msgid ""
 "No versioning in this clip.  Please create an image or directory named with "
 "a versioning string."
 msgstr ""
-"Nenhuma verso neste clipe. Por favor, crie uma imagem ou diretrio com o nome "
-"de uma string de verso."
+"Nenhuma verso neste clipe. Por favor, crie uma imagem ou diretrio com o nome"
+" de uma string de verso."
 
 msgid "Example:  gizmo_v003.0001.exr"
 msgstr "Exemplo: gizmo_v003.001.exr"
@@ -1252,9 +2919,6 @@ msgstr "No foi possvel abrir o ficheiro {0} para escrita."
 
 msgid "Failed to write to the file {0}."
 msgstr "No foi possvel escrever no ficheiro {0}."
-
-msgid "The stream is in an unrecoverable error state."
-msgstr "O stream est num estado de erro irrecupervel."
 
 msgid "Session saved to \"{0}\"."
 msgstr "Sesso salva em \"{0}\"."
@@ -1278,10 +2942,12 @@ msgid "Saving pictures to {0}."
 msgstr "Salvar imagens para {0}."
 
 msgid "ProRes profiles need a .mov movie extension.  Changing it to .mov."
-msgstr "Perfis ProRes precisam de uma extensão de filme.mov. Mudá-lo para.mov."
+msgstr ""
+"Perfis ProRes precisam de uma extensão de filme.mov. Mudá-lo para.mov."
 
 msgid ""
-"VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to .mp4"
+"VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to "
+".mp4"
 msgstr ""
 "O perfil VP9 precisa de uma extenso de filme.mp4,.mkv ou.webm. Mud-lo "
 "para.mp4"
@@ -1516,8 +3182,8 @@ msgid ""
 "Need to reboot mrv2 to change language to {0}.  Are you sure you want to "
 "continue?"
 msgstr ""
-"Precisa reiniciar o mrv2 para mudar a linguagem para {0}. Tem certeza de que "
-"deseja continuar?"
+"Precisa reiniciar o mrv2 para mudar a linguagem para {0}. Tem certeza de que"
+" deseja continuar?"
 
 msgid "Set Language to {0}, Numbers to {1}"
 msgstr "Definir a linguagem para {0}, os nmeros para {1}"
@@ -1972,6 +3638,15 @@ msgstr "Editar Anotao de Texto"
 msgid "No item selected"
 msgstr "Nenhum elemento seleccionado"
 
+msgid "%s - Page %d"
+msgstr "%s - Pgina %d"
+
+msgid "Frame {0} - TC: {1} - S: {2}"
+msgstr "Quadro {0} - CT: {1} - S: {2}"
+
+msgid "Image too big.  Will save the viewport size."
+msgstr "Imagem muito grande. Vai salvar o tamanho da vista."
+
 msgid "Scrub"
 msgstr "Esfregar"
 
@@ -2030,11 +3705,11 @@ msgid "Unknown action mode in "
 msgstr "Modo de ao desconhecido em"
 
 msgid ""
-"Cannot create an annotation here for all frames.  A current frame annotation "
-"already exists."
+"Cannot create an annotation here for all frames.  A current frame annotation"
+" already exists."
 msgstr ""
-"No  possvel criar uma anotao aqui para todos os quadros. J existe uma anotao "
-"actual."
+"No  possvel criar uma anotao aqui para todos os quadros. J existe uma anotao"
+" actual."
 
 msgid ""
 "Cannot create an annotation here for current frame.  An all frames "
@@ -2337,9 +4012,8 @@ msgstr "Reproduo/V para/Anotao anterior"
 msgid "Playback/Go to/Next Annotation"
 msgstr "Reproduo/V para/Prxima Anotao"
 
-#, fuzzy
 msgid "Playback/Annotation/Toggle Visible"
-msgstr "Reproduo/Anotao/Limpar tudo"
+msgstr "Reprodução/Anotação/Alternar visibilidade"
 
 msgid "Playback/Annotation/Clear"
 msgstr "Reproduo/Anotao/Limpar"
@@ -2698,11 +4372,11 @@ msgid "Detail mode"
 msgstr "Modo de detalhe"
 
 msgid ""
-"Could not create directory '%s'. You may not have permission to perform this "
-"operation."
+"Could not create directory '%s'. You may not have permission to perform this"
+" operation."
 msgstr ""
-"No foi possvel criar o diretrio %s. Poder no ter permisso para executar esta "
-"operao."
+"No foi possvel criar o diretrio %s. Poder no ter permisso para executar esta"
+" operao."
 
 msgid "An error ocurred while trying to delete '%s'. %s"
 msgstr "Um erro ocorreu ao tentar excluir \"%s\". %s"
@@ -2890,6 +4564,21 @@ msgstr "nov"
 msgid "Dec"
 msgstr "dez"
 
+msgid "Replace"
+msgstr "Substituir"
+
+msgid "Find:"
+msgstr "Procurar:"
+
+msgid "Replace:"
+msgstr "Substituir:"
+
+msgid "Replace All"
+msgstr "Substituir Todos"
+
+msgid "Replace Next"
+msgstr "Substituir Prxima"
+
 msgid "Build Environment:"
 msgstr "Construir Ambiente:"
 
@@ -2992,8 +4681,8 @@ msgid ""
 "Wayland does not support Float on Top.  Use your Window Manager to set a "
 "hotkey for it."
 msgstr ""
-"O Wayland não suporta Float on Top. Use o seu Gestor de Janelas para definir "
-"uma tecla quente para ele."
+"O Wayland não suporta Float on Top. Use o seu Gestor de Janelas para definir"
+" uma tecla quente para ele."
 
 msgid "Session: "
 msgstr "Sesso:"
@@ -3004,13 +4693,11 @@ msgstr ""
 "\"{0}\""
 
 msgid ""
-"This will disable events for mrv2, allowing them to pass through to windows "
-"below it.\n"
+"This will disable events for mrv2, allowing them to pass through to windows below it.\n"
 "\n"
 "Give window focus to disable."
 msgstr ""
-"Isto irá desativar eventos para mrv2, permitindo que eles passem para "
-"janelas abaixo dele.\n"
+"Isto irá desativar eventos para mrv2, permitindo que eles passem para janelas abaixo dele.\n"
 "\n"
 "Dê foco na janela para desativar."
 
@@ -3018,14 +4705,12 @@ msgid "Continue"
 msgstr "Continuar"
 
 msgid ""
-"This will disable events for mrv2, allowing them to pass through to windows "
-"below it.\n"
+"This will disable events for mrv2, allowing them to pass through to windows below it.\n"
 "\n"
 "Give window focus (click on the taskbar icon)\n"
 "to disable."
 msgstr ""
-"Isto irá desativar eventos para mrv2, permitindo que eles passem para "
-"janelas abaixo dele.\n"
+"Isto irá desativar eventos para mrv2, permitindo que eles passem para janelas abaixo dele.\n"
 "\n"
 "Dar foco à janela (clique no ícone da barra de tarefas)\n"
 "para desactivar."
@@ -3194,16 +4879,14 @@ msgstr "Salvar anotaes"
 
 msgid ""
 "Save Annotations burned into the movie or sequence.\n"
-"It also allows saving OpenEXRs from an 8-bit movie and changing OpenEXR's "
-"pixel type.\n"
+"It also allows saving OpenEXRs from an 8-bit movie and changing OpenEXR's pixel type.\n"
 "\n"
 "Furthermore, it allows saving A/B or Tiled comparisons and baking OCIO.\n"
 "\n"
 "However, it is limited to the size of your screen."
 msgstr ""
 "Salvar anotações gravadas no filme ou sequência.\n"
-"Também permite salvar OpenEXRs a partir de um filme de 8 bits e alterar o "
-"tipo de pixel do OpenEXR.\n"
+"Também permite salvar OpenEXRs a partir de um filme de 8 bits e alterar o tipo de pixel do OpenEXR.\n"
 "\n"
 "Além disso, permite salvar comparações A/B ou em mosaico e aplicar OCIO.\n"
 "\n"
@@ -3717,24 +5400,20 @@ msgid ""
 "      Y = 0.2126 R + 0.7152 G + 0.0722 B\n"
 "Y' (Lumma) is the weighted pixel value according to:\n"
 "      Y' = ( R + G + B ) / 3.0\n"
-"L (Lightness) is the human perception of luminance of the image which is non "
-"linear.\n"
+"L (Lightness) is the human perception of luminance of the image which is non linear.\n"
 "According to CIE No.15.2:\n"
 "      L = (116 * Y ^ 1/3 - 16) / 100\n"
-"A pixel of Y = 0.18 (L = 0.5) will appear about half as bright as Y = L = "
-"1.0 (white)."
+"A pixel of Y = 0.18 (L = 0.5) will appear about half as bright as Y = L = 1.0 (white)."
 msgstr ""
 "Alternar o cálculo do brilho.\n"
 "Y (Luminância) é o valor do pixel de acordo com o Rec709:\n"
 "      Y = 0,2126 R + 0,7152 G + 0,0722 B\n"
 "Y' (Lumma) é o valor ponderado do pixel de acordo com:\n"
 "      Y' = ( R + G + B ) / 3,0\n"
-"L (Claridade) é a percepção humana da luminância da imagem, que é não "
-"linear.\n"
+"L (Claridade) é a percepção humana da luminância da imagem, que é não linear.\n"
 "De acordo com a CIE No.15.2:\n"
 "      L = (116 * Y ^ 1/3 - 16) / 100\n"
-"Um pixel de Y = 0,18 (L = 0,5) parecerá aproximadamente metade tão brilhante "
-"quanto Y = L = 1,0 (branco)."
+"Um pixel de Y = 0,18 (L = 0,5) parecerá aproximadamente metade tão brilhante quanto Y = L = 1,0 (branco)."
 
 msgid "Luminance of image pixel under mouse."
 msgstr "Luminncia do pixel da imagem sob o mouse."
@@ -4263,8 +5942,7 @@ msgstr "Instncia nica"
 
 msgid ""
 "When selected, only a single mrv2 instance is allowed.\n"
-"If you try to open several mrv2s with different images, all these images "
-"will be sent to the already open mrv2."
+"If you try to open several mrv2s with different images, all these images will be sent to the already open mrv2."
 msgstr ""
 "Quando selecionado, apenas uma nica instncia mrv2  permitida. Se voc tentar "
 "abrir vrios mrv2s com imagens diferentes, todas estas imagens sero enviadas "
@@ -4331,10 +6009,11 @@ msgid "Topbar"
 msgstr "Barra superior"
 
 msgid ""
-"When selected, mrv2 will start with its channel, gain, gamma toolbar visible."
+"When selected, mrv2 will start with its channel, gain, gamma toolbar "
+"visible."
 msgstr ""
-"Quando selecionado, o mrv2 comear com seu canal, ganho, barra de ferramentas "
-"gama visvel."
+"Quando selecionado, o mrv2 comear com seu canal, ganho, barra de ferramentas"
+" gama visvel."
 
 msgid "Pixel Toolbar"
 msgstr "Barra do Pixel"
@@ -4360,8 +6039,8 @@ msgid ""
 "This is a macOS setting only.  When selected the menus will appear on the "
 "system toolbar instead of the mrv2 toolbar."
 msgstr ""
-"Esta  apenas uma configurao macOS. Quando selecionado, os menus aparecero na "
-"barra de ferramentas do sistema em vez da barra de ferramentas mrv2."
+"Esta  apenas uma configurao macOS. Quando selecionado, os menus aparecero na"
+" barra de ferramentas do sistema em vez da barra de ferramentas mrv2."
 
 msgid "Tool Dock"
 msgstr "Dock da Ferramenta"
@@ -4373,7 +6052,8 @@ msgstr ""
 msgid "Only One Panel"
 msgstr "Apenas um painel"
 
-msgid "When selected, mrv2 will start with the only one panel option selected."
+msgid ""
+"When selected, mrv2 will start with the only one panel option selected."
 msgstr ""
 "Quando selecionado, o mrv2 comear com a nica opo de painel selecionada."
 
@@ -4393,7 +6073,8 @@ msgid "Crop"
 msgstr "Cultivo"
 
 msgid "Allows you to select a standard cropping area around image."
-msgstr "Permite que voc selecione uma rea de recorte padro em torno da imagem."
+msgstr ""
+"Permite que voc selecione uma rea de recorte padro em torno da imagem."
 
 msgid "Auto Frame"
 msgstr "Quadro Automtico"
@@ -4510,8 +6191,8 @@ msgstr "Recarregar o Tema"
 msgid ""
 "Reload color theme from mrv2.colors file again to refresh change in colors"
 msgstr ""
-"Recarregar o tema de cores do arquivo mrv2.colors novamente para atualizar a "
-"mudana de cores"
+"Recarregar o tema de cores do arquivo mrv2.colors novamente para atualizar a"
+" mudana de cores"
 
 msgid "Selects the background color of areas outside the current image."
 msgstr "Seleciona a cor de fundo das reas fora da imagem atual."
@@ -4558,8 +6239,8 @@ msgid "Fixed Position"
 msgstr "Posio fixa"
 
 msgid ""
-"When this option is set, mrv2 will open in the position you set here (except "
-"if the window goes out of the Desktop).  If Always Save on Exit is on, the "
+"When this option is set, mrv2 will open in the position you set here (except"
+" if the window goes out of the Desktop).  If Always Save on Exit is on, the "
 "values are recakculated upon exiting the program."
 msgstr ""
 "Quando esta opo estiver definida, o mrv2 abrir- se-  na posio que voc "
@@ -4663,8 +6344,8 @@ msgid "Remove EDLs in Temporary Folder on Exit"
 msgstr "Remover EDLs na pasta temporria na sada"
 
 msgid ""
-"When selected, temporary EDLs (Playlists) will be removed from the temporary "
-"folder."
+"When selected, temporary EDLs (Playlists) will be removed from the temporary"
+" folder."
 msgstr ""
 "Quando selecionado, os EDLs temporrios (Listas de Reproduo) sero removidos "
 "da pasta temporria."
@@ -4691,15 +6372,16 @@ msgid ""
 "Start playback when scrubbing so that audio can be heard.  Scrubbing can be "
 "less smooth."
 msgstr ""
-"Comece a reproduo ao limpar para que o udio possa ser ouvido. A esfregadeira "
-"pode ser menos suave."
+"Comece a reproduo ao limpar para que o udio possa ser ouvido. A esfregadeira"
+" pode ser menos suave."
 
 msgid "Single Click Playback"
 msgstr "Reproduo de Single ClickName"
 
 msgid ""
 "Start Playback when single clicking the left mouse button on the view window"
-msgstr "Iniciar a reproduo quando clicar um s boto do mouse na janela da vista"
+msgstr ""
+"Iniciar a reproduo quando clicar um s boto do mouse na janela da vista"
 
 msgid "Auto Hide Pixel Bar"
 msgstr "Ocultar automaticamente a barra de pixels"
@@ -4708,8 +6390,9 @@ msgid ""
 "The Pixel Bar can slow down playback at high resolutions.  When this option "
 "is on, the pixel toolbar will be hidden automatically."
 msgstr ""
-"A Barra de pixels pode atrasar a reproduo em altas resolues. Quando esta opo "
-"estiver ligada, a barra de ferramentas de pixels ser oculta automaticamente."
+"A Barra de pixels pode atrasar a reproduo em altas resolues. Quando esta opo"
+" estiver ligada, a barra de ferramentas de pixels ser oculta "
+"automaticamente."
 
 msgid "Sequences"
 msgstr "Sequncias"
@@ -4731,13 +6414,13 @@ msgid "Scrub Sensitivity"
 msgstr "Sensibilidade ao Esfregar"
 
 msgid ""
-"This setting controls the sensitivity of scrubbing (SHIFT and then the mouse "
-"right and left).  Smaller values make the mouse move jump more frames while "
-"higher values does the opposite."
+"This setting controls the sensitivity of scrubbing (SHIFT and then the mouse"
+" right and left).  Smaller values make the mouse move jump more frames while"
+" higher values does the opposite."
 msgstr ""
 "Esta configurao controla a sensibilidade da limpeza (SHIFT e, em seguida, o "
-"mouse  direita e  esquerda). Valores menores fazem com que o mouse mova pule "
-"mais molduras enquanto valores mais elevados fazem o oposto."
+"mouse  direita e  esquerda). Valores menores fazem com que o mouse mova pule"
+" mais molduras enquanto valores mais elevados fazem o oposto."
 
 msgid "Default View"
 msgstr "Visualizao padro"
@@ -4779,8 +6462,8 @@ msgid ""
 "This is the path to your config.ocio file.  It can be set with the "
 "environment variable OCIO, which takes precedence over any saved setting."
 msgstr ""
-"Este  o caminho para o ficheiro config.ocio. Pode ser definido com a varivel "
-"ambiente OCIO, que tem prioridade sobre qualquer configurao salva."
+"Este  o caminho para o ficheiro config.ocio. Pode ser definido com a varivel"
+" ambiente OCIO, que tem prioridade sobre qualquer configurao salva."
 
 msgid "Built-in Configs"
 msgstr "Condies incorporadas"
@@ -4792,11 +6475,11 @@ msgid "Use Default Display and View"
 msgstr "Usar Apresentação e Visualização padrão"
 
 msgid ""
-"When this option is on, and your config.ocio has a default display and view, "
-"it will be used to be set as default."
+"When this option is on, and your config.ocio has a default display and view,"
+" it will be used to be set as default."
 msgstr ""
-"Quando esta opção estiver ligada, e o seu config.ocio tiver uma visualização "
-"e visualização padrão, será usado para ser definido como padrão."
+"Quando esta opção estiver ligada, e o seu config.ocio tiver uma visualização"
+" e visualização padrão, será usado para ser definido como padrão."
 
 msgid "Use Active Views and Active Displays"
 msgstr "Usar Visualizaes Ativas e Displays Ativos"
@@ -4818,15 +6501,15 @@ msgid ""
 "The name of the OCIO default image color space for 8 bit images (jpg, bmp, "
 "etc)."
 msgstr ""
-"O nome do espaço de cores padrão da imagem OCIO para imagens de 8 bits (jpg, "
-"bmp, etc)."
+"O nome do espaço de cores padrão da imagem OCIO para imagens de 8 bits (jpg,"
+" bmp, etc)."
 
 msgid "16-bits"
 msgstr "16 bits"
 
 msgid ""
-"The name of the OCIO default image color space for 16-bit images (cin, tiff, "
-"etc.)"
+"The name of the OCIO default image color space for 16-bit images (cin, tiff,"
+" etc.)"
 msgstr ""
 "O nome do espaço de cores padrão da imagem OCIO para imagens de 16 bits "
 "(cin, tiff, etc.)"
@@ -4844,10 +6527,11 @@ msgstr ""
 msgid "half"
 msgstr "metade"
 
-msgid "The name of the OCIO default image color space for OpenEXR half images."
+msgid ""
+"The name of the OCIO default image color space for OpenEXR half images."
 msgstr ""
-"O nome do espaço de cores padrão da imagem OCIO para a metade das imagens do "
-"OpenEXR."
+"O nome do espaço de cores padrão da imagem OCIO para a metade das imagens do"
+" OpenEXR."
 
 msgid "float"
 msgstr "Ponto flutuante"
@@ -4877,13 +6561,13 @@ msgstr "Verso Regex"
 msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
-"automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: "
+"automatically be created a regular expression to match versions defined with"
+" _v in the name of the file, directory or both. For example: "
 "gizmo_v001.0001.exr"
 msgstr ""
-"Expressão regular usada para combinar as versões do clipe. Deve agrupar três "
-"coisas (prefixo, número e sufixo). Se for deixada no seu valor padrão (_v), "
-"será automaticamente criada uma expressão regular para combinar as versões "
+"Expressão regular usada para combinar as versões do clipe. Deve agrupar três"
+" coisas (prefixo, número e sufixo). Se for deixada no seu valor padrão (_v),"
+" será automaticamente criada uma expressão regular para combinar as versões "
 "definidas com _v no nome do arquivo, diretório ou ambos. Por exemplo: "
 "gizmo_v001.0001.exr"
 
@@ -4989,15 +6673,16 @@ msgid ""
 "For changes to take effect, you will need to re-open any movies already "
 "playing or reload mrv2."
 msgstr ""
-"Para que as alteraes entrem em vigor, voc precisar reabrir todos os filmes j "
-"reproduzidos ou recarregar mrv2."
+"Para que as alteraes entrem em vigor, voc precisar reabrir todos os filmes j"
+" reproduzidos ou recarregar mrv2."
 
 msgid "API"
 msgstr "API"
 
 msgid "Audio API to use for platforms that support multiple APIs (Linux only)"
 msgstr ""
-"API de udio para usar para plataformas que suportam vrias APIs (apenas Linux)"
+"API de udio para usar para plataformas que suportam vrias APIs (apenas "
+"Linux)"
 
 msgid "Output Device"
 msgstr "Dispositivo de sada"
@@ -5019,7 +6704,8 @@ msgid "Use ComfyUI Pipe"
 msgstr "Usar Tubo ComfyUI"
 
 msgid ""
-"This setting opens a pipe to communicate with ComfyUI's mrv2_save_exr_node.py"
+"This setting opens a pipe to communicate with ComfyUI's "
+"mrv2_save_exr_node.py"
 msgstr ""
 "Esta configurao abre um tubo para se comunicar com o mrv2_save_exr_node.py "
 "do ComfyUI"
@@ -5043,7 +6729,8 @@ msgstr "Ajusta como a Janela de Registro se comporta em caso de erro."
 msgid "Check for Updates"
 msgstr "Verificar as Atualizaes"
 
-msgid "Allows you to automatically download updates of mrv2 when it starts up."
+msgid ""
+"Allows you to automatically download updates of mrv2 when it starts up."
 msgstr ""
 "Permite que voc baixe automaticamente as atualizaes do mrv2 quando ele "
 "comear."
@@ -5140,12 +6827,12 @@ msgstr "Clique para apagar o predefinido selecionado."
 
 msgid ""
 "Select, Add or Delete an OCIO Preset that stores: config filename, Input "
-"Color Space, View, Look, LUT settings and Defaults for 8-bits, 16-bits, 32-"
-"bits, half and float images. "
+"Color Space, View, Look, LUT settings and Defaults for 8-bits, 16-bits, "
+"32-bits, half and float images. "
 msgstr ""
 "Select, Add or Delete an OCIO Preset that stores: config filename, Input "
-"Color Space, View, Look, LUT settings and Defaults for 8-bits, 16-bits, 32-"
-"bits, half and float images."
+"Color Space, View, Look, LUT settings and Defaults for 8-bits, 16-bits, "
+"32-bits, half and float images."
 
 msgid "Summary"
 msgstr "Resumo"
@@ -5540,9 +7227,8 @@ msgstr "Anotao Limpar todos os quadros"
 msgid "Annotation Frame Step Backwards"
 msgstr "Quadro de anotao Passo para trs"
 
-#, fuzzy
 msgid "Toggle Show Annotations"
-msgstr "Comutar o Painel de Anotao"
+msgstr "Alternar exibição de anotações"
 
 msgid "Frame Step Backwards"
 msgstr "Passo para trs da moldura"
@@ -5775,9 +7461,6 @@ msgstr "Modo de arranque"
 msgid "Area Selection Mode"
 msgstr "Modo de Seleco de reas"
 
-msgid "Draw Mode"
-msgstr "Modo de desenho"
-
 msgid "Erase Mode"
 msgstr "Modo de eliminao"
 
@@ -5868,1763 +7551,12 @@ msgstr "Alternar a janela de teclas instantneas"
 msgid "Toggle About Window"
 msgstr "Alternar Sobre a Janela"
 
-#~ msgid ""
-#~ "\n"
-#~ "USD module.\n"
-#~ "\n"
-#~ "Contains all classes and enums related to USD (Universal Scene "
-#~ "Description). \n"
-#~ msgstr ""
-#~ "\n"
-#~ "Modulo USD. Contiene todas as classes e enums relacionados ao USD "
-#~ "(Descrio Universal da Cena).\n"
-
-#~ msgid "Renderer Name"
-#~ msgstr "Nome do remetente"
-
-#~ msgid "Render Width"
-#~ msgstr "Largura de rendio"
-
-#~ msgid "Models' complexity."
-#~ msgstr "Complexidade dos modelos."
-
-#~ msgid "Draw mode  :class:`mrv2.usd.DrawMode`."
-#~ msgstr "Modo de desenho :classe:`mrv2.usd.DrawMode`."
-
-#~ msgid "Enable Lighting"
-#~ msgstr "Activar a Iluminao"
-
-#~ msgid "Enable Scene Lights"
-#~ msgstr "Activar as Luzes da Cena"
-
-#~ msgid "Enable Scene Materials"
-#~ msgstr "Activar os Materiais da Cena"
-
-#~ msgid "Enable sRGB"
-#~ msgstr "Activar o sRGB"
-
-#~ msgid "Stage Cache Count"
-#~ msgstr "Contagem de cache de estgio"
-
-#~ msgid "Disk Cache Byte Count"
-#~ msgstr "Contagem de Bytes de Cache de Disco"
-
-#~ msgid "USD Render Options."
-#~ msgstr "Opes de Render USD."
-
-#~ msgid "Get USD Render Options."
-#~ msgstr "Obter Opes de Render USD."
-
-#~ msgid "Set USD Render Options."
-#~ msgstr "Definir opes de rendibilidade em USD."
-
-#~ msgid ""
-#~ "\n"
-#~ "UI module.\n"
-#~ "\n"
-#~ "Contains all classes and enums related to UI (User Interface). \n"
-#~ msgstr ""
-#~ "\n"
-#~ "Mdulo UI. Contm todas as classes e enums relacionados  UI (Interface de "
-#~ "usurio).\n"
-
-#~ msgid "Refresh menus."
-#~ msgstr "Actualizar menus."
-
-#~ msgid ""
-#~ "\n"
-#~ "Timeline module.\n"
-#~ "\n"
-#~ "Contains all functions related to the timeline control.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Mdulo da linha de tempo. Contm todas as funes relacionadas com o controle "
-#~ "da linha de tempo.\n"
-
-#~ msgid "Play forwards."
-#~ msgstr "Jogue para a frente."
-
-#~ msgid "Play backwards."
-#~ msgstr "Toca para trs."
-
-#~ msgid "Seek to a time in timeline."
-#~ msgstr "Procurar uma hora na linha do tempo."
-
-#~ msgid "Seek to a frame in timeline."
-#~ msgstr "Procure uma moldura na linha do tempo."
-
-#~ msgid "Seek to a second in timeline."
-#~ msgstr "Procura um segundo na linha do tempo."
-
-#~ msgid "Time range of the timeline."
-#~ msgstr "Intervalo de tempo da linha do tempo."
-
-#~ msgid "Selected time range of the timeline."
-#~ msgstr "Gama de tempo selecionado da linha do tempo."
-
-#~ msgid "Set the selected time range of the timeline."
-#~ msgstr "Defina o intervalo de tempo selecionado da linha de tempo."
-
-#~ msgid "Set the in time of the selected time range of the timeline."
-#~ msgstr "Defina o tempo no intervalo de tempo selecionado da linha de tempo."
-
-#~ msgid "Set the in frame of the selected time range of the timeline."
-#~ msgstr ""
-#~ "Defina o quadro do intervalo de tempo selecionado da linha de tempo."
-
-#~ msgid "Set the in seconds of the selected time range of the timeline."
-#~ msgstr ""
-#~ "Defina em segundos o intervalo de tempo selecionado da linha de tempo."
-
-#~ msgid "Set the out time of the selected time range of the timeline."
-#~ msgstr ""
-#~ "Defina o tempo de sada do intervalo de tempo selecionado da linha de "
-#~ "tempo."
-
-#~ msgid "Set the out frame of the selected time range of the timeline."
-#~ msgstr ""
-#~ "Defina o quadro de sada do intervalo de tempo selecionado da linha de "
-#~ "tempo."
-
-#~ msgid "Set the out seconds of the selected time range of the timeline."
-#~ msgstr ""
-#~ "Defina os segundos de sada do intervalo de tempo selecionado da linha de "
-#~ "tempo."
-
-#~ msgid "Current time in timeline."
-#~ msgstr "Hora atual na linha do tempo."
-
-#~ msgid "Current frame in timeline."
-#~ msgstr "Quadro actual na linha do tempo."
-
-#~ msgid "Current seconds in timeline."
-#~ msgstr "Segundos atuais na linha do tempo."
-
-#~ msgid "Return current loop mode of timeline."
-#~ msgstr "Retornar o modo de loop atual da linha do tempo."
-
-#~ msgid "Set current loop mode of timeline."
-#~ msgstr "Definir o modo de loop atual da linha do tempo."
-
-#~ msgid "Gets the current FPS of timeline."
-#~ msgstr "Obtm o FPS atual da linha do tempo."
-
-#~ msgid "Gets the default speed of the timeline."
-#~ msgstr "Obtm a velocidade padro da linha do tempo."
-
-#~ msgid "Set current FPS of timeline."
-#~ msgstr "Defina o FPS atual da linha do tempo."
-
-#~ msgid "Value less than 0"
-#~ msgstr "Valor inferior a 0"
-
-#~ msgid ""
-#~ "\n"
-#~ "Settings module.\n"
-#~ "\n"
-#~ "Contains all settings functions.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Mdulo de configuraes. Contm todas as funes de configurao.\n"
-
-#~ msgid "Returns whether to check for updates at start up."
-#~ msgstr "Devolve se deve verificar se h atualizaes no incio."
-
-#~ msgid "Retrieve the cache memory setting in gigabytes."
-#~ msgstr "Recuperar a configurao da memria de cache em gigabytes."
-
-#~ msgid "Set the cache memory setting in gigabytes."
-#~ msgstr "Defina a configurao da memria do cache em gigabytes."
-
-#~ msgid "Retrieve Read Ahead cache in seconds."
-#~ msgstr "Recuperar o cache Read Ahead em segundos."
-
-#~ msgid "Set Read Ahead cache in seconds."
-#~ msgstr "Set Read Ahead cache em segundos."
-
-#~ msgid "Retrieve Read Behind cache in seconds."
-#~ msgstr "Recuperar Ler o cache Atrs em segundos."
-
-#~ msgid "Set Read Behind cache in seconds."
-#~ msgstr "Set Ler o cache Atrs em segundos."
-
-#~ msgid "Set file sequence audio."
-#~ msgstr "Definir udio de sequncia de ficheiros."
-
-#~ msgid "Get file sequence audio."
-#~ msgstr "Obter udio de sequncia de ficheiros."
-
-#~ msgid "Set file sequence audio file name."
-#~ msgstr "Definir o nome do ficheiro de udio da sequncia de ficheiros."
-
-#~ msgid "Get file sequence audio file name."
-#~ msgstr "Obter o nome do arquivo de sequncia de udio."
-
-#~ msgid "Set file sequence audio directory."
-#~ msgstr "Definir o diretrio de udio de sequncia de ficheiros."
-
-#~ msgid "Get file sequence audio directory."
-#~ msgstr "Obter o diretrio de udio de sequncia de arquivos."
-
-#~ msgid "Set maximum file sequence digits."
-#~ msgstr "Definir os dgitos mximos de sequncia de ficheiros."
-
-#~ msgid "Get maximum file sequence digits."
-#~ msgstr "Obter dgitos mximos de sequncia de arquivos."
-
-#~ msgid "Set Timer Mode."
-#~ msgstr "Definir o Modo de Temporizao."
-
-#~ msgid "Get Timer Mode."
-#~ msgstr "Traz o Modo Temporizador."
-
-#~ msgid "Set Audio Buffer Frame Count."
-#~ msgstr "Defina a contagem de molduras de udio."
-
-#~ msgid "Get Audio Buffer Frame Count."
-#~ msgstr "Obter udio Buffer Frame Contagem."
-
-#~ msgid "Set Video Request Count."
-#~ msgstr "Defina a contagem de solicitaes de vdeo."
-
-#~ msgid "Get Video Request Count."
-#~ msgstr "Obtenha a contagem de solicitao de vdeo."
-
-#~ msgid "Set Audio Request Count."
-#~ msgstr "Defina a contagem de pedidos de udio."
-
-#~ msgid "Get Audio Request Count."
-#~ msgstr "Obtenha a contagem de pedidos de udio."
-
-#~ msgid "Set Sequence Thread Count."
-#~ msgstr "Defina a contagem de linhas de sequncia."
-
-#~ msgid "Get Sequence Thread Count."
-#~ msgstr "Obter contagem de linhas de sequncia."
-
-#~ msgid "Set FFmpeg YUV To RGB Conversion."
-#~ msgstr "Definir o YUV FFmpeg para converso RGB."
-
-#~ msgid "Get FFmpeg YUV To RGB Conversion."
-#~ msgstr "Obter YUV FFmpeg para converso RGB."
-
-#~ msgid "Set FFmpeg Color Accuracy."
-#~ msgstr "Defina a preciso da cor FFmpeg."
-
-#~ msgid "Get FFmpeg Color Accuracy."
-#~ msgstr "Obter preciso de cor FFmpeg."
-
-#~ msgid "Set FFmpeg Thread Count."
-#~ msgstr "Ajuste a contagem de fios FFmpeg."
-
-#~ msgid "Get FFmpeg Thread Count."
-#~ msgstr "Chame a contagem de fios FFmpeg."
-
-#~ msgid "No session name established, cannot save."
-#~ msgstr "Nenhum nome de sesso estabelecido, no pode salvar."
-
-#~ msgid ""
-#~ "\n"
-#~ "Session module.\n"
-#~ "\n"
-#~ "Used to manage everything related to sessions.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Mdulo de sesso. Usado para gerenciar tudo relacionado s sesses.\n"
-
-#~ msgid "Returns the current session metadata."
-#~ msgstr "Retorna os metadados da sesso atual."
-
-#~ msgid "Returns the current metadata for a key."
-#~ msgstr "Retorna os metadados atuais para uma chave."
-
-#~ msgid "Sets all the session metadata for a session."
-#~ msgstr "Defini todos os metadados da sesso para uma sesso."
-
-#~ msgid "Sets the session metadata for a key."
-#~ msgstr "Defina os metadados da sesso para uma chave."
-
-#~ msgid "Clears the current session metadata."
-#~ msgstr "Limpa os metadados da sesso atual."
-
-#~ msgid "Returns current session file."
-#~ msgstr "Retorna o ficheiro de sesso actual."
-
-#~ msgid "Sets the current session file."
-#~ msgstr "Define o ficheiro de sesso actual."
-
-#~ msgid "Open a session file."
-#~ msgstr "Abra um ficheiro de sesso."
-
-#~ msgid "Save a session file."
-#~ msgstr "Gravar um ficheiro de sesso."
-
-#~ msgid "Duplicated Python plugin {0} in {1} and {2}."
-#~ msgstr "Complemento Python duplicado {0} em {1} e {2}."
-
-#~ msgid ""
-#~ "Expected a tuple containing a Python function and a string with menu "
-#~ "options in it."
-#~ msgstr ""
-#~ "Esperava um tuple contendo uma funo Python e uma string com opes de menu "
-#~ "nela."
-
-#~ msgid ""
-#~ "Expected a handle to a Python function or to a tuple containing a Python "
-#~ "function and a string with menu options in it."
-#~ msgstr ""
-#~ "Expected a handle to a Python function or to a tuple containing a Python "
-#~ "function and a string with menu options in it."
-
-#~ msgid ""
-#~ "Please override the menus method by returning a valid dict of key menus, "
-#~ "values methods."
-#~ msgstr ""
-#~ "Por favor, anule o mtodo de menus retornando um dito vlido de menus "
-#~ "chaves, mtodos de valores."
-
-#~ msgid ""
-#~ "\n"
-#~ "Plugin module.\n"
-#~ "\n"
-#~ "Contains all classes related to python plugins.\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Mdulo de plugin. Contm todas as classes relacionadas com plugins de "
-#~ "python.\n"
-
-#~ msgid ""
-#~ "Whether a plugin is active or not.  If not overriden, the default is True."
-#~ msgstr "Se um plugin est ativo ou no. Se no for anulado, o padro  True."
-
-#~ msgid ""
-#~ "\n"
-#~ "Dictionary of menu entries with callbacks, like:\n"
-#~ "\n"
-#~ "def menus(self):\n"
-#~ "    menus = { \"New Menu/Hello\" : self.run }\n"
-#~ "    return menus\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Dicionrio de entradas de menus com callbacks, como:\n"
-#~ "\n"
-#~ "def menus(self):\n"
-#~ "    menus = { \"New Menu/Olá\" : self.run }\n"
-#~ "    return menus\n"
-#~ "\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "import mrv2\n"
-#~ "from mrv2 import plugin\n"
-#~ "\n"
-#~ "class DemoPlugin(plugin.Plugin):\n"
-#~ "    def __init__(self):\n"
-#~ "        \"\"\"\n"
-#~ "        Constructor for DemoPlugin.\n"
-#~ "\n"
-#~ "        Define your own variables here.\n"
-#~ "        \"\"\"\n"
-#~ "        super().__init__()\n"
-#~ "\n"
-#~ "    def run(self):\n"
-#~ "        \"\"\"\n"
-#~ "        Example method used for the callback.\n"
-#~ "        \"\"\"\n"
-#~ "        print(\"Hello from Python plugin\")\n"
-#~ "\n"
-#~ "    def active(self):\n"
-#~ "        \"\"\"\n"
-#~ "        Optional method to return whether the plug-in is active or not.\n"
-#~ "\n"
-#~ "\n"
-#~ "        :return: True if the plug-in is active, False otherwise.\n"
-#~ "        :rtype: bool\n"
-#~ "\n"
-#~ "        \"\"\"\n"
-#~ "        return True\n"
-#~ "\n"
-#~ "    def menus(self):\n"
-#~ "        \"\"\"\n"
-#~ "        Dictionary of menu entries as keys with callbacks as values.\n"
-#~ "\n"
-#~ "\n"
-#~ "        :return: A dictionary of menu entries and their corresponding "
-#~ "callbacks.\n"
-#~ "        :rtype: dict\n"
-#~ "\n"
-#~ "        \"\"\"\n"
-#~ "        menus = {\"New Menu/Hello\": self.run}\n"
-#~ "        return menus\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "import mrv2\n"
-#~ "from mrv2 import plugin\n"
-#~ "\n"
-#~ "class DemoPlugin(plugin.Plugin):\n"
-#~ "    def __init__(self):\n"
-#~ "        \"\"\"\n"
-#~ "        Construtor para DemoPlugin.\n"
-#~ "\n"
-#~ "        Defina suas próprias variáveis aqui.\n"
-#~ "        \"\"\"\n"
-#~ "        super().__init__()\n"
-#~ "\n"
-#~ "    def run(self):\n"
-#~ "        \"\"\"\n"
-#~ "        Método de exemplo usado para o callback.\n"
-#~ "        \"\"\"\n"
-#~ "        print(\"Olá do plugin Python\")\n"
-#~ "\n"
-#~ "    def active(self):\n"
-#~ "        \"\"\"\n"
-#~ "        Método opcional para retornar se o plug-in está ativo ou não.\n"
-#~ "\n"
-#~ "\n"
-#~ "        :return: True se o plug-in estiver ativo, False caso contrário.\n"
-#~ "        :rtype: bool\n"
-#~ "\n"
-#~ "        \"\"\"\n"
-#~ "        return True\n"
-#~ "\n"
-#~ "    def menus(self):\n"
-#~ "        \"\"\"\n"
-#~ "        Dicionário de entradas de menu como chaves com callbacks como "
-#~ "valores.\n"
-#~ "\n"
-#~ "\n"
-#~ "        :return: Um dicionário de entradas de menu e seus respectivos "
-#~ "callbacks.\n"
-#~ "        :rtype: dict\n"
-#~ "\n"
-#~ "        \"\"\"\n"
-#~ "        menus = {\"Novo Menu/Olá\": self.run}\n"
-#~ "        return menus\n"
-#~ "\n"
-
-#~ msgid "No playlist matched item."
-#~ msgstr "Nenhum item correspondente  lista de reproduo."
-
-#~ msgid "No playlist matched file name."
-#~ msgstr "Nenhuma lista de reproduo correspondeu ao nome do ficheiro."
-
-#~ msgid "No playlist loaded."
-#~ msgstr "Nenhuma lista de reproduo carregada."
-
-#~ msgid "No playlist selected."
-#~ msgstr "Nenhuma lista de reproduo seleccionada."
-
-#~ msgid "Not an EDL playlist to add clips to."
-#~ msgstr "No  uma lista de reproduo EDL para adicionar clipes."
-
-#~ msgid "Could not find clip in loaded clips."
-#~ msgstr "No foi possvel encontrar o clipe em clipes carregados."
-
-#~ msgid ""
-#~ "\n"
-#~ "Playlist module.\n"
-#~ "\n"
-#~ "Contains all functions and classes related to the playlists.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Mdulo Lista de Reproduo. Contm todas as funes e classes relacionadas com "
-#~ "as listas de reproduo.\n"
-
-#~ msgid "List playlist items."
-#~ msgstr "Listar os itens da lista de reproduo."
-
-#~ msgid "Select a playlist by FileModelItem."
-#~ msgstr "Selecione uma lista de reproduo por FileModelItem."
-
-#~ msgid "Select a playlist by fileName."
-#~ msgstr "Selecione uma lista de reproduo por nome de arquivo."
-
-#~ msgid "Select a playlist by index."
-#~ msgstr "Selecione uma lista de reproduo por ndice."
-
-#~ msgid "Add a clip to currently selected Playlist EDL."
-#~ msgstr "Adicione um clipe  Lista de Reproduo EDL selecionada atualmente."
-
-#~ msgid "Save current .otio file with relative paths."
-#~ msgstr "Gravar o ficheiro.otio atual com caminhos relativos."
-
-#~ msgid "unsupported operand type(s) for {0}: RationalTime and {1}"
-#~ msgstr "Tipo(s) de pera no suportados para {0}: RationalTime e {1}"
-
-#~ msgid ""
-#~ "\n"
-#~ "The RationalTime class represents a measure of time of :math:`rt.value/"
-#~ "rt.rate` seconds.\n"
-#~ "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "A classe RationalTime representa uma medida do tempo de :math:`rt.value/"
-#~ "rt.rate` segundos. Pode ser redimensionada para "
-#~ "outra :class:`~RationalTime` taxa.\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Returns true if the time is invalid. The time is considered invalid if "
-#~ "the value or the rate are a NaN value\n"
-#~ "or if the rate is less than or equal to zero.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Devolve true se o tempo  invlido. O tempo  considerado invlido se o valor "
-#~ "ou a taxa so um valor NaN ou se a taxa  inferior ou igual a zero.\n"
-
-#~ msgid "Returns the time value for time converted to new_rate."
-#~ msgstr "Devolve o valor de tempo para o tempo convertido para new_rate."
-
-#~ msgid "Returns the time for time converted to new_rate."
-#~ msgstr "Devolve o tempo para o tempo convertido para new_rate."
-
-#~ msgid "Returns the time value for \"self\" converted to new_rate."
-#~ msgstr "Devolve o valor de tempo para \"self\" convertido para new_rate."
-
-#~ msgid ""
-#~ "\n"
-#~ "Compute the duration of samples from first to last (excluding last). This "
-#~ "is not the same as distance.\n"
-#~ "\n"
-#~ "For example, the duration of a clip from frame 10 to frame 15 is 5 "
-#~ "frames. Result will be in the rate of start_time.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Calcule a durao das amostras do primeiro ao ltimo (excluindo o ltimo). "
-#~ "Isto no  o mesmo que a distncia. Por exemplo, a durao de um clipe do "
-#~ "quadro 10 para o quadro 15  de 5 quadros. O resultado ser na taxa de "
-#~ "start_time.\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Compute the duration of samples from first to last (including last). This "
-#~ "is not the same as distance.\n"
-#~ "\n"
-#~ "For example, the duration of a clip from frame 10 to frame 15 is 6 "
-#~ "frames. Result will be in the rate of start_time.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Calcule a durao das amostras do primeiro ao ltimo (incluindo o ltimo). "
-#~ "Isto no  o mesmo que a distncia. Por exemplo, a durao de um clipe do "
-#~ "quadro 10 para o quadro 15  de 6 quadros. O resultado ser na taxa de "
-#~ "start_time.\n"
-
-#~ msgid "Returns true if the rate is valid for use with timecode."
-#~ msgstr "Devolve true se a taxa for vlida para uso com o tempocode."
-
-#~ msgid ""
-#~ "Returns the first valid timecode rate that has the least difference from "
-#~ "the given value."
-#~ msgstr ""
-#~ "Retorna a primeira taxa de cdigo de tempo vlida que tem a menor diferena "
-#~ "do valor dado."
-
-#~ msgid "Turn a frame number and rate into a :class:`~RationalTime` object."
-#~ msgstr "Vire um nmero de quadro e taxa em um objeto :class:`~RationalTime`."
-
-#~ msgid "Returns the frame number based on the current rate."
-#~ msgstr "Retorna o nmero de quadro com base na taxa atual."
-
-#~ msgid "Returns the frame number based on the given rate."
-#~ msgstr "Devolve o nmero de quadro com base na taxa dada."
-
-#~ msgid "Convert to timecode (``HH:MM:SS;FRAME``)"
-#~ msgstr "Converter para cdigo de tempo (``HH:MM:SS;FRAME``)"
-
-#~ msgid ""
-#~ "Convert a timecode string (``HH:MM:SS;FRAME``) into "
-#~ "a :class:`~RationalTime`."
-#~ msgstr ""
-#~ "Converta uma cadeia de cdigo de tempo (``HH:MM:SS;FRAME``) em "
-#~ "uma :class:`~RationalTime`."
-
-#~ msgid ""
-#~ "Convert a time with microseconds string (``HH:MM:ss`` where ``ss`` is an "
-#~ "integer or a decimal number) into a :class:`~RationalTime`."
-#~ msgstr ""
-#~ "Converta uma string de tempo com microssegundos (``HH:MM:ss`` onde ``ss`` "
-#~ "é um número inteiro ou decimal) em um :class:`~RationalTime`."
-
-#~ msgid ""
-#~ "\n"
-#~ "The TimeRange class represents a range in time. It encodes the start time "
-#~ "and the duration,\n"
-#~ "meaning that :meth:`end_time_inclusive` (last portion of a sample in the "
-#~ "time range) and\n"
-#~ ":meth:`end_time_exclusive` can be computed.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "A classe TimeRange representa um intervalo de tempo. Ela codifica o tempo "
-#~ "de início e a duração,\n"
-#~ "significando que :meth:`end_time_inclusive` (última parte de uma amostra "
-#~ "no intervalo de tempo) e\n"
-#~ ":meth:`end_time_exclusive` podem ser computados.\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The time of the last sample containing data in the time range.\n"
-#~ "\n"
-#~ "If the time range starts at (0, 24) with duration (10, 24), this will be\n"
-#~ "(9, 24)\n"
-#~ "\n"
-#~ "If the time range starts at (0, 24) with duration (10.5, 24):\n"
-#~ "(10, 24)\n"
-#~ "\n"
-#~ "In other words, the last frame with data, even if the last frame is "
-#~ "fractional.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "O tempo da última amostra contendo dados no intervalo de tempo.\n"
-#~ "\n"
-#~ "Se o intervalo de tempo começa em (0, 24) com duração (10, 24), isso "
-#~ "será\n"
-#~ "(9, 24)\n"
-#~ "\n"
-#~ "Se o intervalo de tempo começa em (0, 24) com duração (10.5, 24):\n"
-#~ "(10, 24)\n"
-#~ "\n"
-#~ "Em outras palavras, o último quadro com dados, mesmo que o último quadro "
-#~ "seja fracionário.\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Time of the first sample outside the time range.\n"
-#~ "\n"
-#~ "If start frame is 10 and duration is 5, then end_time_exclusive is 15,\n"
-#~ "because the last time with data in this range is 14.\n"
-#~ "\n"
-#~ "If start frame is 10 and duration is 5.5, then end_time_exclusive is\n"
-#~ "15.5, because the last time with data in this range is 15.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Tempo da primeira amostra fora do intervalo de tempo.\n"
-#~ "\n"
-#~ "Se o quadro inicial é 10 e a duração é 5, então end_time_exclusive é 15,\n"
-#~ "porque o último tempo com dados neste intervalo é 14.\n"
-#~ "\n"
-#~ "Se o quadro inicial é 10 e a duração é 5.5, então end_time_exclusive é\n"
-#~ "15.5, porque o último tempo com dados neste intervalo é 15.\n"
-
-#~ msgid ""
-#~ "Construct a new :class:`~TimeRange` that is this one extended by other."
-#~ msgstr ""
-#~ "Construir um novo :class:`~TimeRange` que  este extendido por outro."
-
-#~ msgid ""
-#~ "\n"
-#~ "Clamp 'other' (:class:`~RationalTime`) according to\n"
-#~ ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Limite 'other' (:class:`~RationalTime`) de acordo com\n"
-#~ ":attr:`start_time`/:attr:`end_time_exclusive` e argumentos de limite.\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Clamp 'other' (:class:`~TimeRange`) according to\n"
-#~ ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Limite 'outros' (:classe:`~TimeRange`) de acordo "
-#~ "com:attr:`start_time`/:attr:`end_time_exclusive` e argumentos "
-#~ "vinculados.\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The start of `this` precedes `other`.\n"
-#~ "`other` precedes the end of `this`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "         other\n"
-#~ "           |\n"
-#~ "           *\n"
-#~ "   [      this      ]\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "O início de `this` precede `other`.\n"
-#~ "`other` precede o final de `this`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "         other\n"
-#~ "           |\n"
-#~ "           *\n"
-#~ "   [      this      ]\n"
-#~ "\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The start of `this` precedes start of `other`.\n"
-#~ "The end of `this` antecedes end of `other`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "        [ other ]\n"
-#~ "   [      this      ]\n"
-#~ "\n"
-#~ "The converse would be ``other.contains(this)``\n"
-#~ msgstr ""
-#~ "\n"
-#~ "O início de `this` precede o início de `other`.\n"
-#~ "O final de `this` antecede o final de `other`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "        [ other ]\n"
-#~ "   [      this      ]\n"
-#~ "\n"
-#~ "A situação oposta seria ``other.contains(this)``\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "`this` contains `other`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "        other\n"
-#~ "         |\n"
-#~ "         *\n"
-#~ "   [    this    ]\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "`this` contém `other`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "        other\n"
-#~ "         |\n"
-#~ "         *\n"
-#~ "   [    this    ]\n"
-#~ "\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The start of `this` strictly precedes end of `other` by a value >= "
-#~ "`epsilon_s`.\n"
-#~ "The end of `this` strictly antecedes start of `other` by a value >= "
-#~ "`epsilon_s`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "   [ this ]\n"
-#~ "       [ other ]\n"
-#~ "\n"
-#~ "The converse would be ``other.overlaps(this)``\n"
-#~ msgstr ""
-#~ "\n"
-#~ "O início de `this` precede estritamente o final de `other` por um valor "
-#~ ">= `epsilon_s`.\n"
-#~ "O final de `this` precede estritamente o início de `other` por um valor "
-#~ ">= `epsilon_s`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "   [ this ]\n"
-#~ "       [ other ]\n"
-#~ "\n"
-#~ "A conversão seria ``other.overlaps(this)``\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The end of `this` strictly precedes `other` by a value >= `epsilon_s`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "             other\n"
-#~ "               |\n"
-#~ "   [ this ]    *\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "O final de `this` precede estritamente `other` por um valor >= "
-#~ "`epsilon_s`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "             other\n"
-#~ "               |\n"
-#~ "   [ this ]    *\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The end of `this` strictly equals the start of `other` and\n"
-#~ "the start of `this` strictly equals the end of `other`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "   [this][other]\n"
-#~ "\n"
-#~ "The converse would be ``other.meets(this)``\n"
-#~ msgstr ""
-#~ "\n"
-#~ "O final de `this` é estritamente igual ao início de `other` e\n"
-#~ "o início de `this` é estritamente igual ao final de `other`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "   [this][other]\n"
-#~ "\n"
-#~ "A recíproca seria ``other.meets(this)``\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The start of `this` strictly equals `other`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "   other\n"
-#~ "     |\n"
-#~ "     *\n"
-#~ "     [ this ]\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "O início de `this` é estritamente igual a `other`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "   other\n"
-#~ "     |\n"
-#~ "     *\n"
-#~ "     [ this ]\n"
-#~ "\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The start of `this` strictly equals the start of `other`.\n"
-#~ "The end of `this` strictly precedes the end of `other` by a value >= "
-#~ "`epsilon_s`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "   [ this ]\n"
-#~ "   [    other    ]\n"
-#~ "\n"
-#~ "The converse would be ``other.begins(this)``\n"
-#~ msgstr ""
-#~ "\n"
-#~ "O início de `this` é estritamente igual ao início de `other`.\n"
-#~ "O fim de `this` é estritamente anterior ao fim de `other` por um valor >= "
-#~ "`epsilon_s`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "   [ this ]\n"
-#~ "   [    other    ]\n"
-#~ "\n"
-#~ "A conversão seria ``other.begins(this)``\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The end of `this` strictly equals `other`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "        other\n"
-#~ "          |\n"
-#~ "          *\n"
-#~ "   [ this ]\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "O fim de `this` é estritamente igual a `other`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "        other\n"
-#~ "          |\n"
-#~ "          *\n"
-#~ "   [ this ]\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The start of `this` strictly antecedes the start of `other` by a value >= "
-#~ "`epsilon_s`.\n"
-#~ "The end of `this` strictly equals the end of `other`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "           [ this ]\n"
-#~ "   [     other    ]\n"
-#~ "\n"
-#~ "The converse would be ``other.finishes(this)``\n"
-#~ msgstr ""
-#~ "\n"
-#~ "O início de `this` antecipa estritamente o início de `other` por um valor "
-#~ ">= `epsilon_s`.\n"
-#~ "O fim de `this` é estritamente igual ao fim de `other`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "           [ this ]\n"
-#~ "   [     other    ]\n"
-#~ "\n"
-#~ "A situação oposta seria ``other.finishes(this)``\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The start of `this` precedes or equals the end of `other` by a value >= "
-#~ "`epsilon_s`.\n"
-#~ "The end of `this` antecedes or equals the start of `other` by a value >= "
-#~ "`epsilon_s`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "   [    this    ]           OR      [    other    ]\n"
-#~ "        [     other    ]                    [     this    ]\n"
-#~ "\n"
-#~ "The converse would be ``other.finishes(this)``\n"
-#~ msgstr ""
-#~ "\n"
-#~ "O início de `this` precede ou é igual ao fim de `other` por um valor >= "
-#~ "`epsilon_s`.\n"
-#~ "O fim de `this` antecipa ou é igual ao início de `other` por um valor >= "
-#~ "`epsilon_s`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "   [    this    ]           OU      [    other    ]\n"
-#~ "        [     other    ]                    [     this    ]\n"
-#~ "\n"
-#~ "A situação oposta seria ``other.finishes(this)``\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Creates a :class:`~TimeRange` from start and "
-#~ "end :class:`~RationalTime`\\s (exclusive).\n"
-#~ "\n"
-#~ "For example, if start_time is 1 and end_time is 10, the returned will "
-#~ "have a duration of 9.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Criar um :class:`~TimeRange` a partir de :class:`~RationalTime`\\s de "
-#~ "início e fim (exclusivo).\n"
-#~ "\n"
-#~ "Por exemplo, se start_time é 1 e end_time é 10, a duração retornada será "
-#~ "9.\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Creates a :class:`~TimeRange` from start and "
-#~ "end :class:`~RationalTime`\\s (inclusive).\n"
-#~ "\n"
-#~ "For example, if start_time is 1 and end_time is 10, the returned will "
-#~ "have a duration of 10.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Cria um :class:`~TimeRange` do incio e do fim :class:`~RationalTime`\\s "
-#~ "(inclusive).\n"
-#~ "\n"
-#~ "Por exemplo, se o start_time for 1 e o end_time  10, o retorno ter uma "
-#~ "durao de 10.\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Media module.\n"
-#~ "\n"
-#~ "Contains all classes and enums related to media. \n"
-#~ msgstr ""
-#~ "\n"
-#~ "Mdulo de mdia. Contm todas as classes e enums relacionados  mdia.\n"
-
-#~ msgid "Compare mode :class:`mrv2.media.CompareMode`."
-#~ msgstr "Comparar modo :classe:`mrv2.media.CompareMode`."
-
-#~ msgid "Wipe center in X and Y :class:`mrv2.math.Vector2f`."
-#~ msgstr "Centro de limpeza em X e Y :classe: `mrv2.math.Vector2f`."
-
-#~ msgid "Wipe Rotation."
-#~ msgstr "Limpe a rotao."
-
-#~ msgid "Overlay ( A over B )"
-#~ msgstr "Sobreposio ( A sobre B )"
-
-#~ msgid "Comparison options."
-#~ msgstr "Opes de comparao."
-
-#~ msgid ""
-#~ "\n"
-#~ "Math module.\n"
-#~ "\n"
-#~ "Contains all math classes.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Contm todas as aulas de matemtica.\n"
-
-#~ msgid "Vector of 2 integers."
-#~ msgstr "Vector de 2 inteiros."
-
-#~ msgid "Vector of 2 floats."
-#~ msgstr "Vector de 2 carroas."
-
-#~ msgid "Vector of 3 floats."
-#~ msgstr "Vector de 3 carroas."
-
-#~ msgid "Vector of 4 floats."
-#~ msgstr "Vector de 4 carroas."
-
-#~ msgid "Size of 2 integers."
-#~ msgstr "Tamanho de 2 inteiros."
-
-#~ msgid ""
-#~ "\n"
-#~ "Image module.\n"
-#~ "\n"
-#~ "Contains all classes and enums related to image controls. \n"
-#~ msgstr ""
-#~ "\n"
-#~ "Mdulo de imagem. Contm todas as classes e enums relacionados aos "
-#~ "controles de imagem.\n"
-
-#~ msgid "Red Channel."
-#~ msgstr "Canal Vermelho."
-
-#~ msgid "Green Channel."
-#~ msgstr "Canal Verde."
-
-#~ msgid "Blue Channel."
-#~ msgstr "Canal Azul."
-
-#~ msgid "Alpha Channel."
-#~ msgstr "Canal Alfa."
-
-#~ msgid "Image mirroring."
-#~ msgstr "Espelho de imagem."
-
-#~ msgid "Flip image on X."
-#~ msgstr "Vire a imagem em X."
-
-#~ msgid "Flip image on Y."
-#~ msgstr "Vire a imagem em Y."
-
-#~ msgid "Enabled Levels."
-#~ msgstr "Nveis Activados."
-
-#~ msgid "Add a :class:`mrv2.math.Vector3f` to image."
-#~ msgstr "Adicione um :class:`mrv2.math.Vector3f`  imagem."
-
-#~ msgid "Change a :class:`mrv2.math.Vector3f` of brightness to image."
-#~ msgstr "Mudar um :class:`mrv2.math.Vector3f` de brilho para imagem."
-
-#~ msgid "Change a :class:`mrv2.math.Vector3f` of contrast to image."
-#~ msgstr "Mudar um :class:`mrv2.math.Vector3f` de contraste com a imagem."
-
-#~ msgid "Change a :class:`mrv2.math.Vector3f` of saturation to image."
-#~ msgstr "Mudar um :class:`mrv2.math.Vector3f` de saturao para imagem."
-
-#~ msgid "Change tint of image to image between 0 and 1."
-#~ msgstr "Mudar o corante da imagem para a imagem entre 0 e 1."
-
-#~ msgid "Invert the color values."
-#~ msgstr "Inverta os valores de cor."
-
-#~ msgid "Color values."
-#~ msgstr "Valores de cor."
-
-#~ msgid "In Low Level value."
-#~ msgstr "Em valor de nvel baixo."
-
-#~ msgid "In High Level value."
-#~ msgstr "Em valor de alto nvel."
-
-#~ msgid "Gamma Level value."
-#~ msgstr "Valor do nvel gama."
-
-#~ msgid "Out Low Level value."
-#~ msgstr "Fora de valor de nvel baixo."
-
-#~ msgid "Out High Level value."
-#~ msgstr "Fora de valor de alto nvel."
-
-#~ msgid "Levels values."
-#~ msgstr "Valores de nveis."
-
-#~ msgid "Enabled EXR display."
-#~ msgstr "Display EXR habilitado."
-
-#~ msgid "Exposure value."
-#~ msgstr "Valor da exposio."
-
-#~ msgid "Defog value."
-#~ msgstr "Valor de defog."
-
-#~ msgid "kneeLow value."
-#~ msgstr "O valor do joelho  baixo."
-
-#~ msgid "kneeHigh value."
-#~ msgstr "joelhoAlto valor."
-
-#~ msgid "EXR display values."
-#~ msgstr "Valores de exibio do EXR."
-
-#~ msgid "Enabled Soft Clip."
-#~ msgstr "Clipe suave habilitado."
-
-#~ msgid "Soft clip value."
-#~ msgstr "Valor de clipe suave."
-
-#~ msgid "Minify filter :class:`mrv2.image.ImageFilter`."
-#~ msgstr "Minify filter :class:`mrv2.image.ImageFilter`."
-
-#~ msgid "Magnify filter :class:`mrv2.image.ImageFilter`."
-#~ msgstr "Ampliar filtro :classe:`mrv2.image.ImageFilter`."
-
-#~ msgid "Image filters."
-#~ msgstr "Filtros de imagem."
-
-#~ msgid "Color channels :class:`mrv2.image.Channels`."
-#~ msgstr "Canais de cores :classe:`mrv2.image.Channels`."
-
-#~ msgid "Mirror on X, Y or both :class:`mrv2.image.Mirror`."
-#~ msgstr "Espelho em X, Y ou ambos :classe:`mrv2.imagem.Mirror`."
-
-#~ msgid "Color options :class:`mrv2.image.Color`."
-#~ msgstr "Opes de cor :classe:`mrv2.image.Color`."
-
-#~ msgid "Levels options :class:`mrv2.image.Levels`."
-#~ msgstr "Opes de nveis :classe: `mrv2.image.Levels`."
-
-#~ msgid "EXR Display options :class:`mrv2.image.EXRDisplay`.."
-#~ msgstr "EXR Opes de exibio :classe:`mrv2.image.EXRDisplay`.."
-
-#~ msgid "Soft Clip options :class:`mrv2.image.SoftClip`.."
-#~ msgstr "Opes de clipe suave :classe:`mrv2.image.SoftClip`.."
-
-#~ msgid "Display options."
-#~ msgstr "Opes de exibio."
-
-#~ msgid "LUT enabled."
-#~ msgstr "LUT activado."
-
-#~ msgid "LUT filename."
-#~ msgstr "Nome do ficheiro LUT."
-
-#~ msgid "LUT transformation order."
-#~ msgstr "Ordem de transformao LUT."
-
-#~ msgid "LUT options."
-#~ msgstr "Opes de luto."
-
-#~ msgid "Video Levels."
-#~ msgstr "Nveis de vdeo."
-
-#~ msgid "Alpha blending algorithm"
-#~ msgstr "Algoritmo de mistura Alfa"
-
-#~ msgid "Image Filters"
-#~ msgstr "Filtros de Imagens"
-
-#~ msgid "Image options."
-#~ msgstr "Opes de imagem."
-
-#~ msgid "Environment Map type."
-#~ msgstr "Tipo de mapa de ambiente."
-
-#~ msgid "Horizontal aperture"
-#~ msgstr "Abertura horizontal"
-
-#~ msgid "Vertical aperture"
-#~ msgstr "Abertura vertical"
-
-#~ msgid "Rotation on X"
-#~ msgstr "Rotao em X"
-
-#~ msgid "Rotation on Y"
-#~ msgstr "Rotao em Y"
-
-#~ msgid "Subdivision on X"
-#~ msgstr "Subdiviso X"
-
-#~ msgid "Subdivision on Y"
-#~ msgstr "Subdiviso em Y"
-
-#~ msgid "EnvironmentMap options."
-#~ msgstr "Opes EnvironmentMap."
-
-#~ msgid "Stereo 3d input :class:`mrv2.image.StereoInput`.."
-#~ msgstr "Input estereo 3d :class:`mrv2.image.StereoInput`.."
-
-#~ msgid "Stereo 3d output :class:`mrv2.image.StereoOutput`.."
-#~ msgstr "Sada estereo 3d :class:`mrv2.image.StereoOutput`.."
-
-#~ msgid "Separation between left and right eye."
-#~ msgstr "Separao entre o olho esquerdo e o direito."
-
-#~ msgid "Swap left and right eye"
-#~ msgstr "Intercambiar o olho esquerdo e direito"
-
-#~ msgid "Stereo3D options."
-#~ msgstr "Opes estereo3D."
-
-#~ msgid "Background type :class:`mrv2.image.Background`.."
-#~ msgstr "Tipo de fundo :classe:`mrv2.image.background`.."
-
-#~ msgid "Checkers Color0 :class:`mrv2.image.Color4f`.."
-#~ msgstr "Checkers Color0 :class:`mrv2.image.Color4f`.."
-
-#~ msgid "Checkers Color1 :class:`mrv2.image.Color4f`.."
-#~ msgstr "Checkers Color1 :class:`mrv2.image.Color4f`.."
-
-#~ msgid "Checkers Size :class:`mrv2.math.Size2i`.."
-#~ msgstr "Tamanho das damas:`mrv2.math.Size2i`.."
-
-#~ msgid "Background options."
-#~ msgstr "Opes de fundo."
-
-#~ msgid "Gets the current background options."
-#~ msgstr "Obtm as opes de fundo atuais."
-
-#~ msgid "Sets the current background options."
-#~ msgstr "Define as opes de fundo atuais."
-
-#~ msgid "Gets the current OCIO config file."
-#~ msgstr "Obtm o arquivo de configurao atual do OCIO."
-
-#~ msgid "Sets the current OCIO config file."
-#~ msgstr "Define o arquivo de configurao atual do OCIO."
-
-#~ msgid "Gets the current input color space."
-#~ msgstr "Obtm o espao de cor de entrada atual."
-
-#~ msgid "Gets a list of all input color spaces."
-#~ msgstr "Obtm uma lista de todos os espaos de cor de entrada."
-
-#~ msgid "Set the input color space."
-#~ msgstr "Defina o espao de cores de entrada."
-
-#~ msgid "Gets the current Display/View."
-#~ msgstr "Obtm o Display actual/Vista."
-
-#~ msgid "Gets the list of Displays/Views."
-#~ msgstr "Obtm a lista de Displays/Visualizaes."
-
-#~ msgid "Set an OCIO Display/View."
-#~ msgstr "Definir um Display OCIO/Vista."
-
-#~ msgid "Gets the current OCIO look."
-#~ msgstr "Tem a aparncia atual da OCIO."
-
-#~ msgid "Gets a list of all OCIO looks."
-#~ msgstr "Recebe uma lista de todos os looks da OCIO."
-
-#~ msgid "Set the OCIO look by name."
-#~ msgstr "Defina o olhar OCIO por nome."
-
-#~ msgid "Return all the files."
-#~ msgstr "Devolver todos os ficheiros."
-
-#~ msgid "Return all the active files."
-#~ msgstr "Retornar todos os ficheiros ativos."
-
-#~ msgid "Return the A file item."
-#~ msgstr "Devolver o item de arquivo A."
-
-#~ msgid "Return the A file index."
-#~ msgstr "Retornar o ndice de ficheiro A."
-
-#~ msgid "Return the list of B files."
-#~ msgstr "Devolver a lista de ficheiros B."
-
-#~ msgid "Return the list of B indexes."
-#~ msgstr "Devolver a lista de ndices B."
-
-#~ msgid "Close the current A file."
-#~ msgstr "Feche o ficheiro A atual."
-
-#~ msgid "Close all files."
-#~ msgstr "Fecha todos os ficheiros."
-
-#~ msgid "Set the A file index."
-#~ msgstr "Defina o ndice de arquivo A."
-
-#~ msgid "Set a new B file index."
-#~ msgstr "Defina um novo ndice de ficheiro B."
-
-#~ msgid "Set a new stereo file index."
-#~ msgstr "Defina um novo ndice de ficheiros estreo."
-
-#~ msgid "Toggle the B file index."
-#~ msgstr "Comuta o ndice de ficheiro B."
-
-#~ msgid "Clear the B indexes."
-#~ msgstr "Limpa os ndices B."
-
-#~ msgid "Return the list of layers."
-#~ msgstr "Devolver a lista de camadas."
-
-#~ msgid "Set layer for file item."
-#~ msgstr "Defina a camada para o item do ficheiro."
-
-#~ msgid "Set compare time."
-#~ msgstr "Ajuste o tempo de comparao."
-
-#~ msgid "Get compare time."
-#~ msgstr "Comparar o tempo."
-
-#~ msgid "Set the first version for current media."
-#~ msgstr "Defina a primeira verso para a mdia atual."
-
-#~ msgid "Set the previous version for current media."
-#~ msgstr "Defina a verso anterior para a mdia atual."
-
-#~ msgid "Set the next version for current media."
-#~ msgstr "Defina a prxima verso para a mdia atual."
-
-#~ msgid "Set the last version for current media."
-#~ msgstr "Defina a ltima verso para a mdia atual."
-
-#~ msgid "Path :class:`mrv2.Path` to the File Media."
-#~ msgstr "Caminho :class:`mrv2.Path` para a mdia de arquivo."
-
-#~ msgid "Audio path :class:`mrv2.Path` to the File Media if any."
-#~ msgstr ""
-#~ "Caminho de udio :class:`mrv2.Path` para a mdia de arquivo, se houver."
-
-#~ msgid "Time range :class:`mrv2.TimeRange` of the File Media."
-#~ msgstr "Intervalo de tempo : classe: `mrv2.TimeRange` da mdia de arquivo."
-
-#~ msgid "Speed (FPS) of the File Media."
-#~ msgstr "Velocidade (FPS) da mdia de arquivo."
-
-#~ msgid "Playback state :class:`mrv2.timeline.Playbacks` of the File Media."
-#~ msgstr ""
-#~ "Estado de reproduo :class:`mrv2.timeline.Reprodues` da mdia de arquivo."
-
-#~ msgid "Loop state :class:`mrv2.timeline.Loop` of the File Media."
-#~ msgstr "Loop state :class:`mrv2.timeline.Loop` da mdia de arquivo."
-
-#~ msgid "Current time :class:`mrv2.RationalTime` of the File Media."
-#~ msgstr "Hora atual :class:`mrv2.RationalTime` da mdia de arquivo."
-
-#~ msgid "In/Out range :class:`mrv2.TimeRange` of the File Media."
-#~ msgstr "In/Out range :class:`mrv2.TimeRange` da mdia de arquivo."
-
-#~ msgid "Video layer of the File Media."
-#~ msgstr "Camada de vdeo da mdia de arquivo."
-
-#~ msgid "Volume of the File Media."
-#~ msgstr "Volume da mdia de arquivo."
-
-#~ msgid "Mute state of the File Media."
-#~ msgstr "Estado mudo da mdia de arquivo."
-
-#~ msgid "Audio offset of the File Media."
-#~ msgstr "Desvio de udio da Mdia de Ficheiros."
-
-#~ msgid "Class used to hold a media item."
-#~ msgstr "Classe usada para segurar um item de mdia."
-
-#~ msgid "Save annotations."
-#~ msgstr "Salve anotaes."
-
-#~ msgid "Save resolution."
-#~ msgstr "Salve a resoluo."
-
-#~ msgid "FFmpeg Profile."
-#~ msgstr "Perfil FFmpeg."
-
-#~ msgid "FFmpeg Preset."
-#~ msgstr "FFmpeg Preset."
-
-#~ msgid "FFmpeg Pixel Format."
-#~ msgstr "Formato FFmpeg Pixel."
-
-#~ msgid "FFmpeg video encoding with hardware if possible."
-#~ msgstr "Codificao de vdeo FFmpeg com hardware, se possvel."
-
-#~ msgid "FFmpeg Override color characteristics."
-#~ msgstr "FFmpeg Override caractersticas de cor."
-
-#~ msgid "FFmpeg Color Range."
-#~ msgstr "Gama de cores FFmpeg."
-
-#~ msgid "FFmpeg Color Space."
-#~ msgstr "Espao de cores FFmpeg."
-
-#~ msgid "FFmpeg Color Primaries."
-#~ msgstr "Primarias de cores FFmpeg."
-
-#~ msgid "FFmpeg Color Transfer Characteristics."
-#~ msgstr "Caractersticas de transferncia de cores FFmpeg."
-
-#~ msgid "FFmpeg Audio Codec."
-#~ msgstr "Cdigo de udio FFmpeg."
-
-#~ msgid "OpenEXR's Compression."
-#~ msgstr "Compresso do OpenEXR."
-
-#~ msgid "OpenEXR's Pixel Type."
-#~ msgstr "Tipo Pixel do OpenEXR."
-
-#~ msgid "OpenEXR's Zip Compression Level."
-#~ msgstr "Nvel de compresso Zip da OpenEXR."
-
-#~ msgid "OpenEXR's DWA Compression Level."
-#~ msgstr "Nvel de compresso DWA da OpenEXR."
-
-#~ msgid ""
-#~ "\n"
-#~ "Command module.\n"
-#~ "\n"
-#~ "Used to run main commands and get arguments and set the display, image, "
-#~ "compare, LUT options.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Mdulo de comandos. Usado para executar comandos principais e obter "
-#~ "argumentos e definir a exibio, imagem, comparar, LUT opes.\n"
-
-#~ msgid ""
-#~ "Get command-line arguments passed as single quoted string to -pythonArgs."
-#~ msgstr ""
-#~ "Obter argumentos de linha de comando passados como uma nica string citada "
-#~ "para -pythonArgs."
-
-#~ msgid "Open file with optional audio."
-#~ msgstr "Abrir arquivo com udio opcional."
-
-#~ msgid "Compare two file items with a compare mode."
-#~ msgstr "Compare dois itens de arquivo com um modo de comparao."
-
-#~ msgid "Close the file item."
-#~ msgstr "Fecha o item do ficheiro."
-
-#~ msgid "Close all file items."
-#~ msgstr "Fechar todos os itens do ficheiro."
-
-#~ msgid "Return the root path to the insallation of mrv2."
-#~ msgstr "Retorne o caminho da raiz para a insalao de mrv2."
-
-#~ msgid "Return the path to preferences of mrv2."
-#~ msgstr "Retornar o caminho para as preferncias do mrv2."
-
-#~ msgid "Return the display options."
-#~ msgstr "Devolver as opes de exibio."
-
-#~ msgid "Set the display options."
-#~ msgstr "Defina as opes de exibio."
-
-#~ msgid "Return the LUT options."
-#~ msgstr "Devolver as opes LUT."
-
-#~ msgid "Set the LUT options."
-#~ msgstr "Defina as opes LUT."
-
-#~ msgid "Return the image options."
-#~ msgstr "Devolver as opes de imagem."
-
-#~ msgid "Set the image options."
-#~ msgstr "Defina as opes de imagem."
-
-#~ msgid "Return the environment map options."
-#~ msgstr "Devolver as opes de mapa de ambiente."
-
-#~ msgid "Set the environment map options."
-#~ msgstr "Defina as opes de mapa de ambiente."
-
-#~ msgid "Set the compare options."
-#~ msgstr "Defina as opes de comparao."
-
-#~ msgid "Set the stereo 3D options."
-#~ msgstr "Definir as opes 3D estreo."
-
-#~ msgid "Get the language of mrv2."
-#~ msgstr "Obter a linguagem de mrv2."
-
-#~ msgid "Get the layers of the timeline (GUI)."
-#~ msgstr "Obter as camadas da linha do tempo (GUI)."
-
-#~ msgid "Get the version of mrv2."
-#~ msgstr "Obter a verso do mrv2."
-
-#~ msgid ""
-#~ "Call Fl::check to update the GUI and return the number of seconds that "
-#~ "elapsed."
-#~ msgstr ""
-#~ "Chame Fl::check para atualizar a GUI e devolver o nmero de segundos que "
-#~ "decorreram."
-
-#~ msgid "Returns true if audio is muted."
-#~ msgstr "Devolve true se o udio for silenciado."
-
-#~ msgid "Runs the same or a new mrv2 with a session file."
-#~ msgstr "Executa o mesmo ou um novo mrv2 com um arquivo de sesso."
-
-#~ msgid "Set the muting of the audio."
-#~ msgstr "Ajuste o silenciamento do udio."
-
-#~ msgid "Toggle Image Auto Normalize."
-#~ msgstr "Alternar a Normalizao Automtica da Imagem."
-
-#~ msgid "Toggle Data Window."
-#~ msgstr "Activar a Janela de Dados."
-
-#~ msgid "Toggle Display Window."
-#~ msgstr "Comutar a janela de exibio."
-
-#~ msgid "Toggle Ignored Display Window on OpenEXRs."
-#~ msgstr "Alterna a janela de exibio ignorada no OpenEXRs."
-
-#~ msgid "Toggle Image invalid values."
-#~ msgstr "Alternar valores invlidos da imagem."
-
-#~ msgid "Toggle Safe Areas."
-#~ msgstr "Alternar reas Seguras."
-
-#~ msgid "Get the playback volume."
-#~ msgstr "Obter o volume de reproduo."
-
-#~ msgid "Set the playback volume."
-#~ msgstr "Defina o volume de reproduo."
-
-#~ msgid "Save a movie or sequence from the front layer."
-#~ msgstr "Salve um filme ou sequncia da camada frontal."
-
-#~ msgid "Save a single frame."
-#~ msgstr "Salve uma única moldura."
-
-#~ msgid "Save multiple annotation frames."
-#~ msgstr "Salvar múltiplos quadros de anotação."
-
-#~ msgid "Save multiple frames."
-#~ msgstr "Salvar vários quadros."
-
-#~ msgid "Save an .otio file from the current selected image."
-#~ msgstr "Gravar um ficheiro.otio da imagem selecionada."
-
-#~ msgid "Save a PDF document with all annotations and notes."
-#~ msgstr "Gravar um documento PDF com todas as anotaes e notas."
-
-#~ msgid ""
-#~ "\n"
-#~ "Annotations module.\n"
-#~ "\n"
-#~ "Contains all functions and classes related to the annotationss.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Mdulo de anotaes. Contm todas as funes e classes relacionadas com as "
-#~ "anotaes.\n"
-
-#~ msgid "Add notes annotations to current clip at a certain time."
-#~ msgstr ""
-#~ "Adicionar anotaes de notas ao clipe atual em um determinado momento."
-
-#~ msgid "Add notes annotations to current clip at a certain frame."
-#~ msgstr ""
-#~ "Adicionar anotaes de notas ao clipe atual em uma determinada moldura."
-
-#~ msgid "Add notes annotations to current clip at certain seconds."
-#~ msgstr "Adicionar anotaes de notas ao clipe atual em certos segundos."
-
-#~ msgid "Get all times for annotations."
-#~ msgstr "Obter todos os tempos para anotações."
-
-#~ msgid "Client"
-#~ msgstr "Cliente"
-
-#~ msgid "Server"
-#~ msgstr "Servidor"
-
-#~ msgid "Host"
-#~ msgstr "Anfitrio"
-
-#~ msgid "Host name or IP to connect to.  For example: 127.0.0.1"
-#~ msgstr "Nome do host ou IP para se conectar. Por exemplo: 127.0.0.1"
-
-#~ msgid "Previously used Hosts"
-#~ msgstr "Hosts anteriormente usados"
-
-#~ msgid "Port"
-#~ msgstr "Porto"
-
-#~ msgid ""
-#~ "Port to connect to.  Make sure your firewall and router allows read/write "
-#~ "through it."
-#~ msgstr ""
-#~ "Porto para se conectar. Certifique-se de que o firewall e o router "
-#~ "permitem ler/escrever atravs dele."
-
-#~ msgid "Connect"
-#~ msgstr "Conectar"
-
-#~ msgid "Create"
-#~ msgstr "Criar"
-
-#~ msgid "Disconnect"
-#~ msgstr "Desligar"
-
-#~ msgid "Shutdown"
-#~ msgstr "Desligamento"
-
-#~ msgid "&File/&Open"
-#~ msgstr "Ficheiro/Abrir"
-
-#~ msgid "&File/&Save"
-#~ msgstr "Ficheiro/Gravar"
-
-#~ msgid "&Edit/&Undo"
-#~ msgstr "Editar/Desfazer"
-
-#~ msgid "&Edit/Cu&t"
-#~ msgstr "Editar/Cut"
-
-#~ msgid "&Edit/&Copy"
-#~ msgstr "Editar/Copiado"
-
-#~ msgid "&Edit/&Paste"
-#~ msgstr "Editar/Colar"
-
-#~ msgid "&Edit/&Delete"
-#~ msgstr "Editar/Excluir"
-
-#~ msgid "&Edit/&Comment Selection"
-#~ msgstr "Editar/Seleco de Comentrios"
-
-#~ msgid "&Edit/&Uncomment Selection"
-#~ msgstr "Editar/Descomentar a Seleco"
-
-#~ msgid "&Search/&Find..."
-#~ msgstr "Procurar/Encontra..."
-
-#~ msgid "&Search/F&ind Again"
-#~ msgstr "Procurar/Procurar de novo"
-
-#~ msgid "&Search/&Replace"
-#~ msgstr "Procurar/Substituir"
-
-#~ msgid "&Search/&Replace Again"
-#~ msgstr "Procurar/Substituir novamente"
-
-#~ msgid "Clear/&Output"
-#~ msgstr "Limpar/Sada"
-
-#~ msgid "Clear/&Editor"
-#~ msgstr "Limpar/Editor"
-
-#~ msgid "Editor/&Run Code"
-#~ msgstr "Editor/Executar o Cdigo"
-
-#~ msgid "Editor/Toggle &Line Numbers"
-#~ msgstr "Editor/Alterar os nmeros de linha"
-
-#~ msgid "Editor/&Jump to Error"
-#~ msgstr "Editor/Saltar para o Erro"
-
-#~ msgid "Editor/&External Editor"
-#~ msgstr "Editor/Editor externo"
-
-#~ msgid "Scripts/Add To Script List"
-#~ msgstr "Scripts/Adicionar  Lista de Scripts"
-
-#~ msgid "Scripts/%s"
-#~ msgstr "Scripts/%s"
-
-#~ msgid ""
-#~ "Type in your python code here.  Select an area to execute just a portion "
-#~ "of it.  Press Keypad Enter to run it."
-#~ msgstr ""
-#~ "Digite aqui o seu cdigo de python. Selecione uma rea para executar apenas "
-#~ "uma poro dele. Pressione o teclado Entrar para execut- lo."
-
-#~ msgid "Python file {0} already exists.  Do you want to overwrite it?"
-#~ msgstr "O ficheiro Python {0} j existe. Deseja sobrescrev-lo?"
-
-#~ msgid "Failed to open the file for writing."
-#~ msgstr "No foi possvel abrir o ficheiro para escrita."
-
-#~ msgid "Failed to write to the file."
-#~ msgstr "No foi possvel escrever no ficheiro."
-
-#~ msgid "Type your editor command"
-#~ msgstr "Digite o seu comando editor"
-
-#~ msgid "{0} will be replaced with the line number.  {1} with the file name"
-#~ msgstr "{0} ser substitudo pelo nmero de linha. {1} com o nome do ficheiro"
-
-#~ msgid "Could not open python editor: {0}"
-#~ msgstr "No foi possvel abrir o editor do python: {0}"
-
-#~ msgid "Search String:"
-#~ msgstr "Chave de Pesquisa:"
-
-#~ msgid "No occurrences of '%s' found!"
-#~ msgstr "No foram encontradas ocorrncias de \"%s\"!"
-
-#~ msgid "Renderer"
-#~ msgstr "Renderer"
-
-#~ msgid "Complexity"
-#~ msgstr "Complexidade"
-
-#~ msgid "Stage Cache"
-#~ msgstr "Cache em estgio"
-
-#~ msgid "Disk Cache in GB"
-#~ msgstr "Cache de disco em GB"
-
-#~ msgid "Server started at port {0}."
-#~ msgstr "O servidor comeou na porta {0}."
-
-#~ msgid "Server stopped."
-#~ msgstr "O servidor parou."
-
-#~ msgid "A client connected from {0}"
-#~ msgstr "Um cliente conectado a partir de {0}"
-
-#~ msgid "Client at {0} disconnected."
-#~ msgstr "Cliente em {0} desconectado."
-
-#~ msgid "Server protocol version is {0}.  Client protocol version is {1}"
-#~ msgstr "Server protocol version is {0}. Client protocol version is {1}"
-
-#~ msgid "Remote file {0} does not exist on local filesystem."
-#~ msgstr "O arquivo remoto {0} no existe no sistema de arquivos local."
-
-#~ msgid "Remote files are less than local files."
-#~ msgstr "Arquivos remotos so menos que arquivos locais."
-
-#~ msgid "Remote file {0} matches file name {1} but not path."
-#~ msgstr ""
-#~ "O ficheiro remoto {0} corresponde ao nome do ficheiro {1} mas no ao "
-#~ "caminho."
-
-#~ msgid "Remote file {0} does not match local filename."
-#~ msgstr "O ficheiro remoto {0} no corresponde ao nome do ficheiro local."
-
-#~ msgid "Removing {0} from message publisher."
-#~ msgstr "Remover {0} do editor de mensagens."
-
-#~ msgid "Server listening on port "
-#~ msgstr "A escuta do servidor na porta"
-
-#~ msgid "ComfyUI listening on port "
-#~ msgstr "ComfyUI ouvindo no porto"
-
-#~ msgid "Connected to server at {0}, port {1}"
-#~ msgstr "Conectado ao servidor em {0}, porto {1}"
-
-#~ msgid "Server connection lost."
-#~ msgstr "Conexo do servidor perdida."
-
-#~ msgid "Exception caught: "
-#~ msgstr "Exceo capturada:"
-
-#~ msgid "%s - Page %d"
-#~ msgstr "%s - Pgina %d"
-
-#~ msgid "Frame {0} - TC: {1} - S: {2}"
-#~ msgstr "Quadro {0} - CT: {1} - S: {2}"
-
-#~ msgid "Image too big.  Will save the viewport size."
-#~ msgstr "Imagem muito grande. Vai salvar o tamanho da vista."
-
-#~ msgid "Replace"
-#~ msgstr "Substituir"
-
-#~ msgid "Find:"
-#~ msgstr "Procurar:"
-
-#~ msgid "Replace:"
-#~ msgstr "Substituir:"
-
-#~ msgid "Replace All"
-#~ msgstr "Substituir Todos"
-
-#~ msgid "Replace Next"
-#~ msgstr "Substituir Prxima"
-
 #~ msgid "Could not initialize NDI"
 #~ msgstr "No foi possvel inicializar o NDI"
 
 #~ msgid "You cannot set Window click through with a totally opaque window."
 #~ msgstr ""
-#~ "Você não pode definir Window clicar através de uma janela totalmente "
-#~ "opaca."
+#~ "Você não pode definir Window clicar através de uma janela totalmente opaca."
 
 #~ msgid "Linux Distribution: "
 #~ msgstr "Distribuição Linux:"
