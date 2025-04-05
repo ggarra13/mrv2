@@ -14,6 +14,1483 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid ""
+"\n"
+"USD module.\n"
+"\n"
+"Contains all classes and enums related to USD (Universal Scene Description). \n"
+msgstr ""
+"\n"
+"यूएसडी मॉड्यूल. अमेरिकाडी से संबंधित सभी वर्ग और ई-मैक्स्स (प्रयोगात्मक दृश्य वर्णन) से संबंधित हैं.\n"
+
+msgid "Renderer Name"
+msgstr "रेंडरर नाम"
+
+msgid "Render Width"
+msgstr "रेंडर चौड़ाई"
+
+msgid "Models' complexity."
+msgstr "मॉडल की जटिलता।"
+
+msgid "Draw mode  :class:`mrv2.usd.DrawMode`."
+msgstr "ड्रा मोड :क्लास:mrv2.usd.DrawMode`."
+
+msgid "Enable Lighting"
+msgstr "हल्कािंग सक्षम करें"
+
+msgid "Enable Scene Lights"
+msgstr "दृश्य प्रकाश सक्षम करें"
+
+msgid "Enable Scene Materials"
+msgstr "दृश्य वस्तु सक्षम करें"
+
+msgid "Enable sRGB"
+msgstr "एसआरबी सक्षम करें"
+
+msgid "Stage Cache Count"
+msgstr "स्टेज कैश गिनती"
+
+msgid "Disk Cache Byte Count"
+msgstr "डिस्क कैश बाइट गणना करें"
+
+msgid "USD Render Options."
+msgstr "यूएस डी रेंडर विकल्प."
+
+msgid "Get USD Render Options."
+msgstr "यूएस डी रेंडर विकल्प प्राप्त करें."
+
+msgid "Set USD Render Options."
+msgstr "यूएसडी रेंडर विकल्प सेट करें."
+
+msgid ""
+"\n"
+"UI module.\n"
+"\n"
+"Contains all classes and enums related to UI (User Interface). \n"
+msgstr ""
+"\n"
+"यूआई मॉड्यूल. सभी वर्गों और एनमैक्स्स में यूआई (उपयोक्ता इंटरफेस) से संबंधित है.\n"
+
+msgid "Refresh menus."
+msgstr "मेन्यू ताज़ा करें."
+
+msgid ""
+"\n"
+"Timeline module.\n"
+"\n"
+"Contains all functions related to the timeline control.\n"
+msgstr ""
+"\n"
+"टाइमलाइन मॉड्यूल. समय रेखा नियंत्रण से संबंधित सभी फंक्शन समाहित हैं.\n"
+
+msgid "Play forwards."
+msgstr "आगे बढ़ें."
+
+msgid "Play backwards."
+msgstr "पीछे से खेलें."
+
+msgid "Seek to a time in timeline."
+msgstr "समय रेखा में एक समय करने की कोशिश करें."
+
+msgid "Seek to a frame in timeline."
+msgstr "समय रेखा में फ्रेम के लिए कोशिश करें."
+
+msgid "Seek to a second in timeline."
+msgstr "समय रेखा में एक सेकंड के लिए कोशिश करें."
+
+msgid "Time range of the timeline."
+msgstr "समय रेखा की समय सीमा."
+
+msgid "Selected time range of the timeline."
+msgstr "समय रेखा की चयनित समय सीमा."
+
+msgid "Set the selected time range of the timeline."
+msgstr "समय रेखा के चयनित समय सीमा सेट करें."
+
+msgid "Set the in time of the selected time range of the timeline."
+msgstr "समय रेखा के समय में चयनित समय सीमा का सेट करें."
+
+msgid "Set the in frame of the selected time range of the timeline."
+msgstr "समय रेखा के फ्रेम में सेट करें."
+
+msgid "Set the in seconds of the selected time range of the timeline."
+msgstr "समय रेखा के सेकण्ड में चयनित समय सीमा का सेट करें."
+
+msgid "Set the out time of the selected time range of the timeline."
+msgstr "समय रेखा के समय सीमा सेट करें."
+
+msgid "Set the out frame of the selected time range of the timeline."
+msgstr "समयरेखा के बाहर का फ्रेम सेट करें."
+
+msgid "Set the out seconds of the selected time range of the timeline."
+msgstr "समय रेखा के समय सीमा से बाहर के समय को सेट करें."
+
+msgid "Current time in timeline."
+msgstr "समय रेखा में मौजूदा समय."
+
+msgid "Current frame in timeline."
+msgstr "समय रेखा में मौजूदा फ्रेम"
+
+msgid "Current seconds in timeline."
+msgstr "समय रेखा में मौजूदा सेकण्ड."
+
+msgid "Return current loop mode of timeline."
+msgstr "समय रेखा के मौजूदा लूप मोड को वापस लें."
+
+msgid "Set current loop mode of timeline."
+msgstr "समय रेखा के मौजूदा लूप मोड को सेट करें."
+
+msgid "Gets the current FPS of timeline."
+msgstr "समय रेखा के मौजूदा एफपीएस मिलता है."
+
+msgid "Gets the default speed of the timeline."
+msgstr "समय रेखा की तयशुदा गति प्राप्त करता है."
+
+msgid "Set current FPS of timeline."
+msgstr "समय रेखा के वर्तमान एफपीएस सेट करें."
+
+msgid "Value less than 0"
+msgstr "0 से कम"
+
+msgid ""
+"\n"
+"Settings module.\n"
+"\n"
+"Contains all settings functions.\n"
+msgstr ""
+"\n"
+"विन्यास मॉड्यूल. सभी विन्यासों में समाहित हैं.\n"
+
+msgid "Returns whether to check for updates at start up."
+msgstr "वापस आता है कि क्या अद्यतन शुरू होने पर अद्यतन के लिए जांच करें."
+
+msgid "Retrieve the cache memory setting in gigabytes."
+msgstr "टाइटगाबाइट्स में कैश मेमोरी सेटिंग पुनःप्राप्त करें."
+
+msgid "Set the cache memory setting in gigabytes."
+msgstr "टाइटगाबाइट्स में कैश मेमोरी सेटिंग सेट करें."
+
+msgid "Retrieve Read Ahead cache in seconds."
+msgstr "आगे के कैश को सेकण्ड में पढ़ें."
+
+msgid "Set Read Ahead cache in seconds."
+msgstr "सेकण्ड में आगे कैश पढ़िए ।"
+
+msgid "Retrieve Read Behind cache in seconds."
+msgstr "सेकण्ड में कैश के पीछे पढ़ें."
+
+msgid "Set Read Behind cache in seconds."
+msgstr "सेकण्ड में कैश के पीछे पढ़ने के लिए सेट करें."
+
+msgid "Set file sequence audio."
+msgstr "फ़ाइल अनुक्रम ऑडियो सेट करें."
+
+msgid "Get file sequence audio."
+msgstr "फ़ाइल अनुक्रम ऑडियो प्राप्त करें."
+
+msgid "Set file sequence audio file name."
+msgstr "फ़ाइल अनुक्रम ऑडियो फ़ाइल नाम सेट करें."
+
+msgid "Get file sequence audio file name."
+msgstr "फ़ाइल अनुक्रम ऑडियो फ़ाइल नाम प्राप्त करें."
+
+msgid "Set file sequence audio directory."
+msgstr "फ़ाइल अनुक्रम ऑडियो डिरेक्ट्री सेट करें."
+
+msgid "Get file sequence audio directory."
+msgstr "फ़ाइल अनुक्रम ऑडियो डिरेक्ट्री प्राप्त करें."
+
+msgid "Set maximum file sequence digits."
+msgstr "अधिकतम फ़ाइल अनुक्रम संख्या सेट करें."
+
+msgid "Get maximum file sequence digits."
+msgstr "अधिकतम फ़ाइल अनुक्रम प्राप्त करें."
+
+msgid "Set Timer Mode."
+msgstr "टाइमर मोड सेट करें."
+
+msgid "Get Timer Mode."
+msgstr "टाइमर मोड जाओ."
+
+msgid "Set Audio Buffer Frame Count."
+msgstr "ऑडियो बफर फ्रेम गिनती सेट करें."
+
+msgid "Get Audio Buffer Frame Count."
+msgstr "ऑडियो बफर फ्रेम गिनती प्राप्त करें."
+
+msgid "Set Video Request Count."
+msgstr "वीडियो निवेदन गिनती सेट करें."
+
+msgid "Get Video Request Count."
+msgstr "वीडियो निवेदन गिनती प्राप्त करें."
+
+msgid "Set Audio Request Count."
+msgstr "ऑडियो निवेदन गिनती सेट करें."
+
+msgid "Get Audio Request Count."
+msgstr "ऑडियो निवेदन गिनती प्राप्त करें."
+
+msgid "Set Sequence Thread Count."
+msgstr "अनुक्रम थ्रेड गिनती सेट करें."
+
+msgid "Get Sequence Thread Count."
+msgstr "अनुक्रम थ्रेड गिनती प्राप्त करें."
+
+msgid "Set FFmpeg YUV To RGB Conversion."
+msgstr "FFMGOG>] को RGB में सेट करें."
+
+msgid "Get FFmpeg YUV To RGB Conversion."
+msgstr "FFPEG>] को RGB परिवर्तन के लिए प्राप्त करें."
+
+msgid "Set FFmpeg Color Accuracy."
+msgstr "एफ़एफएमपी रंग शुद्धता सेट करें."
+
+msgid "Get FFmpeg Color Accuracy."
+msgstr "FFGGe रंग शुद्धता प्राप्त करें."
+
+msgid "Set FFmpeg Thread Count."
+msgstr "एफ़एफजीजी लड़ी गिनती सेट करें."
+
+msgid "Get FFmpeg Thread Count."
+msgstr "FFeg लड़ी गिनती प्राप्त करें."
+
+msgid "No session name established, cannot save."
+msgstr "कोई सत्र नाम स्थापित नहीं है, सहेज नहीं सकता."
+
+msgid ""
+"\n"
+"Session module.\n"
+"\n"
+"Used to manage everything related to sessions.\n"
+msgstr ""
+"\n"
+"सत्र मॉड्यूल. सत्रों से संबंधित सभी वस्तुओं का प्रबंधन करने के लिए इस्तेमाल किया जाता है.\n"
+
+msgid "Returns the current session metadata."
+msgstr "वर्तमान सत्र मेटाडाटा वापस लेता है."
+
+msgid "Returns the current metadata for a key."
+msgstr "वर्तमान मेटाडाटा को कुंजी के लिए लौटाता है."
+
+msgid "Sets all the session metadata for a session."
+msgstr "सत्र के लिए सभी पाठ मेटाडाटा सेट करता है."
+
+msgid "Sets the session metadata for a key."
+msgstr "मेटाडाटा सत्र को कुंजी के लिए सेट करता है."
+
+msgid "Clears the current session metadata."
+msgstr "वर्तमान सत्र मेटाडाटा साफ करता है."
+
+msgid "Returns current session file."
+msgstr "वर्तमान सत्र फ़ाइल बताता है."
+
+msgid "Sets the current session file."
+msgstr "मौज़ूदा सत्र फ़ाइल सेट करता है."
+
+msgid "Open a session file."
+msgstr "सत्र फ़ाइल खोलें."
+
+msgid "Save a session file."
+msgstr "एक सत्र फ़ाइल सहेजें."
+
+msgid "Duplicated Python plugin {0} in {1} and {2}."
+msgstr "दोहरी पाइथन प्लगिन {0} को {1} और {2} में."
+
+msgid ""
+"Expected a tuple containing a Python function and a string with menu options"
+" in it."
+msgstr "किसी पायथन फंक्शन तथा मेन्यू विकल्प के साथ एक वाक्यांश वांछित है."
+
+msgid ""
+"Expected a handle to a Python function or to a tuple containing a Python "
+"function and a string with menu options in it."
+msgstr ""
+"पायथन फंक्शन या टीपील में पायथन फंक्शन तथा मेन्यू विकल्प के साथ एक वाक्यांश "
+"वांछित है."
+
+msgid ""
+"Please override the menus method by returning a valid dict of key menus, "
+"values methods."
+msgstr ""
+"कृपया मेन्यू विधि को कुंजी मेन्यू के वैध हस्ताक्षर, मूल्य पद्धति में वापस "
+"लाने के द्वारा ओवरराइड करें."
+
+msgid ""
+"\n"
+"Plugin module.\n"
+"\n"
+"Contains all classes related to python plugins.\n"
+"\n"
+msgstr ""
+"\n"
+"प्लगइन. सभी वर्ग को पायथन से संबंधित.\n"
+
+msgid ""
+"Whether a plugin is active or not.  If not overriden, the default is True."
+msgstr ""
+"क्या प्लगिन सक्रिय है या नहीं. यदि ओवरराइड नहीं है, तयशुदा रूप से सही है."
+
+msgid ""
+"\n"
+"Dictionary of menu entries with callbacks, like:\n"
+"\n"
+"def menus(self):\n"
+"    menus = { \"New Menu/Hello\" : self.run }\n"
+"    return menus\n"
+"\n"
+msgstr ""
+"\n"
+"कॉलबैक्स के साथ मेनू प्रविष्टियों का डिक्शनरी, जैसे:\n"
+"\n"
+"def menus(self):\n"
+"    menus = { \"New Menu/Hello\" : self.run }\n"
+"    return menus\n"
+"\n"
+
+msgid ""
+"\n"
+"\n"
+"import mrv2\n"
+"from mrv2 import plugin\n"
+"\n"
+"class DemoPlugin(plugin.Plugin):\n"
+"    def __init__(self):\n"
+"        \"\"\"\n"
+"        Constructor for DemoPlugin.\n"
+"\n"
+"        Define your own variables here.\n"
+"        \"\"\"\n"
+"        super().__init__()\n"
+"\n"
+"    def run(self):\n"
+"        \"\"\"\n"
+"        Example method used for the callback.\n"
+"        \"\"\"\n"
+"        print(\"Hello from Python plugin\")\n"
+"\n"
+"    def active(self):\n"
+"        \"\"\"\n"
+"        Optional method to return whether the plug-in is active or not.\n"
+"\n"
+"\n"
+"        :return: True if the plug-in is active, False otherwise.\n"
+"        :rtype: bool\n"
+"\n"
+"        \"\"\"\n"
+"        return True\n"
+"\n"
+"    def menus(self):\n"
+"        \"\"\"\n"
+"        Dictionary of menu entries as keys with callbacks as values.\n"
+"\n"
+"\n"
+"        :return: A dictionary of menu entries and their corresponding callbacks.\n"
+"        :rtype: dict\n"
+"\n"
+"        \"\"\"\n"
+"        menus = {\"New Menu/Hello\": self.run}\n"
+"        return menus\n"
+"\n"
+msgstr ""
+"\n"
+"\n"
+"import mrv2\n"
+"from mrv2 import plugin\n"
+"\n"
+"class DemoPlugin(plugin.Plugin):\n"
+"    def __init__(self):\n"
+"        \"\"\"\n"
+"        DemoPlugin के लिए कंस्ट्रक्टर।\n"
+"\n"
+"        यहां अपनी वेरिएबल्स परिभाषित करें।\n"
+"        \"\"\"\n"
+"        super().__init__()\n"
+"\n"
+"    def run(self):\n"
+"        \"\"\"\n"
+"        कॉलबैक्स के लिए उपयोग में लाया गया उदाहरण विधि।\n"
+"        \"\"\"\n"
+"        print(\"Python प्लगइन से नमस्ते\")\n"
+"\n"
+"    def active(self):\n"
+"        \"\"\"\n"
+"        वैकल्पिक विधि जो लौटाती है कि प्लगइन सक्रिय है या नहीं।\n"
+"\n"
+"\n"
+"        :return: यदि प्लगइन सक्रिय है तो True, अन्यथा False।\n"
+"        :rtype: bool\n"
+"\n"
+"        \"\"\"\n"
+"        return True\n"
+"\n"
+"    def menus(self):\n"
+"        \"\"\"\n"
+"        मेनू प्रविष्टियों का एक डिक्शनरी जो कुंजियों के रूप में होती है और कॉलबैक्स के रूप में मानों के साथ होती है।\n"
+"\n"
+"\n"
+"        :return: मेनू प्रविष्टियों और उनके संबंधित कॉलबैक्स का एक डिक्शनरी।\n"
+"        :rtype: dict\n"
+"\n"
+"        \"\"\"\n"
+"        menus = {\"New Menu/Hello\": self.run}\n"
+"        return menus\n"
+"\n"
+
+msgid "No playlist matched item."
+msgstr "कोई गीत- सूची नहीं मिला"
+
+msgid "No playlist matched file name."
+msgstr "कोई गीत- सूची नहीं मिला"
+
+msgid "No playlist loaded."
+msgstr "कोई गीत- सूची नहीं लोड हो गया."
+
+msgid "No playlist selected."
+msgstr "कोई गीत नहीं चुना गया है."
+
+msgid "Not an EDL playlist to add clips to."
+msgstr "EDL गीतसूची को क्लिप करने के लिए नहीं जोड़ता."
+
+msgid "Could not find clip in loaded clips."
+msgstr "लोड क्लिप में क्लिप नहीं पा सका."
+
+msgid ""
+"\n"
+"Playlist module.\n"
+"\n"
+"Contains all functions and classes related to the playlists.\n"
+msgstr ""
+"\n"
+"गीत- सूची मॉड्यूल. गीत- सूची से संबंधित सभी क्रियाओं तथा क्लासों को रखता है.\n"
+
+msgid "List playlist items."
+msgstr "गीत- सूची वस्तुओं की सूची दें."
+
+msgid "Select a playlist by FileModelItem."
+msgstr "फ़ाइल- स्कवेयरएम द्वारा गीत- सूची चुनें."
+
+msgid "Select a playlist by fileName."
+msgstr "फ़ाइलों के द्वारा गीत- सूची चुनें."
+
+msgid "Select a playlist by index."
+msgstr "निर्देशिका द्वारा गीत- सूची चुनें."
+
+msgid "Add a clip to currently selected Playlist EDL."
+msgstr "वर्तमान में चयनित गीत- सूची ईएल में क्लिप जोड़ें."
+
+msgid "Save current .otio file with relative paths."
+msgstr "वर्तमान फ़ाइल को सापेक्ष पथ से सहेजें."
+
+msgid "unsupported operand type(s) for {0}: RationalTime and {1}"
+msgstr "{0} के लिए असमर्थित TLS प्रकार: भूल गया समय और {1}"
+
+msgid ""
+"\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/rt.rate` seconds.\n"
+"It can be rescaled into another :class:`~RationalTime`'s rate.\n"
+msgstr ""
+"\n"
+"पूर्ण समय वर्ग किसी भी समय का प्रतिनिधित्व करता है:\n"
+
+msgid ""
+"\n"
+"Returns true if the time is invalid. The time is considered invalid if the value or the rate are a NaN value\n"
+"or if the rate is less than or equal to zero.\n"
+msgstr ""
+"\n"
+"Returns true if the time is invalid. The time is considered invalid if the value or the rate are a NaN value or if the rate is less than or equal to zero.\n"
+
+msgid "Returns the time value for time converted to new_rate."
+msgstr "समय मूल्य को नया_ रंग में बदलता है."
+
+msgid "Returns the time for time converted to new_rate."
+msgstr "नए_ लिंक में समय बदले जाने के लिए समय बताता है."
+
+msgid "Returns the time value for \"self\" converted to new_rate."
+msgstr "\" स्वयं\" के लिए समय मूल्य लौटाता है नए_BAR_"
+
+msgid ""
+"\n"
+"Compute the duration of samples from first to last (excluding last). This is not the same as distance.\n"
+"\n"
+"For example, the duration of a clip from frame 10 to frame 15 is 5 frames. Result will be in the rate of start_time.\n"
+msgstr ""
+"\n"
+"सैंपलों की अवधि को पहले से लेकर अंतिम (अंतिम को छोड़कर) की गणना करें। यह दूरी के समान नहीं है।\n"
+"\n"
+"उदाहरण के लिए, फ्रेम 10 से फ्रेम 15 तक के क्लिप की अवधि 5 फ्रेम है। परिणाम start_time की दर में होगा।\n"
+
+msgid ""
+"\n"
+"Compute the duration of samples from first to last (including last). This is not the same as distance.\n"
+"\n"
+"For example, the duration of a clip from frame 10 to frame 15 is 6 frames. Result will be in the rate of start_time.\n"
+msgstr ""
+"\n"
+"सैंपलों की अवधि को पहले से लेकर अंतिम (अंतिम को शामिल करते हुए) की गणना करें। यह दूरी के समान नहीं है।\n"
+"\n"
+"उदाहरण के लिए, फ्रेम 10 से फ्रेम 15 तक के क्लिप की अवधि 6 फ्रेम है। परिणाम start_time की दर में होगा।\n"
+
+msgid "Returns true if the rate is valid for use with timecode."
+msgstr "समयकोड के साथ उपयोग के लिए सही पलटता है यदि दर वैध है."
+
+msgid ""
+"Returns the first valid timecode rate that has the least difference from the"
+" given value."
+msgstr "प्रथम वैध समयकोड दर बताता है जो दिए गए मूल्य से कम से कम अलग है."
+
+msgid "Turn a frame number and rate into a :class:`~RationalTime` object."
+msgstr "फ्रेम संख्या तथा दर को एक में करें:क्लास: 02-RETTTEST."
+
+msgid "Returns the frame number based on the current rate."
+msgstr "वर्तमान दर पर आधारित फ्रेम संख्या बताता है."
+
+msgid "Returns the frame number based on the given rate."
+msgstr "दिए गए दर पर आधारित फ्रेम संख्या बताता है."
+
+msgid "Convert to timecode (``HH:MM:SS;FRAME``)"
+msgstr "समयकोड में बदलें (USHH:MS; FSUSUD)"
+
+msgid ""
+"Convert a timecode string (``HH:MM:SS;FRAME``) into a "
+":class:`~RationalTime`."
+msgstr ""
+"समयकोड स्ट्रिंग (``HH:MM:SS;FRAME``) को :class:`~RationalTime` में परिवर्तित"
+" करें।"
+
+msgid ""
+"Convert a time with microseconds string (``HH:MM:ss`` where ``ss`` is an "
+"integer or a decimal number) into a :class:`~RationalTime`."
+msgstr ""
+"सूक्ष्मसेकंड के साथ समय स्ट्रिंग (``HH:MM:ss`` जहाँ ``ss`` एक पूर्णांक या "
+"दशमलव संख्या है) को :class:`~RationalTime` में परिवर्तित करें।"
+
+msgid ""
+"\n"
+"The TimeRange class represents a range in time. It encodes the start time and the duration,\n"
+"meaning that :meth:`end_time_inclusive` (last portion of a sample in the time range) and\n"
+":meth:`end_time_exclusive` can be computed.\n"
+msgstr ""
+"\n"
+"TimeRange क्लास समय की एक सीमा का प्रतिनिधित्व करता है। यह प्रारंभिक समय और अवधि को एन्कोड करता है,\n"
+"जिसका मतलब है कि :meth:`end_time_inclusive` (समय सीमा में एक सैंपल का अंतिम भाग) और\n"
+":meth:`end_time_exclusive` की गणना की जा सकती है।\n"
+
+msgid ""
+"\n"
+"The time of the last sample containing data in the time range.\n"
+"\n"
+"If the time range starts at (0, 24) with duration (10, 24), this will be\n"
+"(9, 24)\n"
+"\n"
+"If the time range starts at (0, 24) with duration (10.5, 24):\n"
+"(10, 24)\n"
+"\n"
+"In other words, the last frame with data, even if the last frame is fractional.\n"
+msgstr ""
+"\n"
+"समय सीमा में डेटा वाला अंतिम सैंपल का समय।\n"
+"\n"
+"यदि समय सीमा (0, 24) से शुरू होती है और अवधि (10, 24) है, तो यह होगा\n"
+"(9, 24)\n"
+"\n"
+"यदि समय सीमा (0, 24) से शुरू होती है और अवधि (10.5, 24) है:\n"
+"(10, 24)\n"
+"\n"
+"दूसरे शब्दों में, डेटा के साथ अंतिम फ्रेम, भले ही अंतिम फ्रेम आंशिक हो।\n"
+
+msgid ""
+"\n"
+"Time of the first sample outside the time range.\n"
+"\n"
+"If start frame is 10 and duration is 5, then end_time_exclusive is 15,\n"
+"because the last time with data in this range is 14.\n"
+"\n"
+"If start frame is 10 and duration is 5.5, then end_time_exclusive is\n"
+"15.5, because the last time with data in this range is 15.\n"
+msgstr ""
+"\n"
+"समय सीमा के बाहर पहले सैंपल का समय।\n"
+"\n"
+"यदि प्रारंभिक फ्रेम 10 है और अवधि 5 है, तो end_time_exclusive 15 होगा,\n"
+"क्योंकि इस सीमा में डेटा के साथ अंतिम समय 14 है।\n"
+"\n"
+"यदि प्रारंभिक फ्रेम 10 है और अवधि 5.5 है, तो end_time_exclusive 15.5 होगा,\n"
+"क्योंकि इस सीमा में डेटा के साथ अंतिम समय 15 है।\n"
+
+msgid ""
+"Construct a new :class:`~TimeRange` that is this one extended by other."
+msgstr ""
+"एक नया :class:`~TimeRange` बनाएं जो कि इस एक को अन्य द्वारा विस्तारित किया "
+"गया हो।"
+
+msgid ""
+"\n"
+"Clamp 'other' (:class:`~RationalTime`) according to\n"
+":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
+msgstr ""
+"\n"
+"'other' (:class:`~RationalTime`) को :attr:`start_time`/:attr:`end_time_exclusive` और बाउंड आर्ग्यूमेंट्स के अनुसार क्लैंप करें।\n"
+
+msgid ""
+"\n"
+"Clamp 'other' (:class:`~TimeRange`) according to\n"
+":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
+msgstr ""
+"\n"
+"'other' (:class:`~TimeRange`) को :attr:`start_time`/:attr:`end_time_exclusive` और बाउंड आर्ग्यूमेंट्स के अनुसार क्लैंप करें।\n"
+
+msgid ""
+"\n"
+"The start of `this` precedes `other`.\n"
+"`other` precedes the end of `this`.\n"
+"::\n"
+"\n"
+"         other\n"
+"           |\n"
+"           *\n"
+"   [      this      ]\n"
+"\n"
+msgstr ""
+"\n"
+"`this` की शुरुआत `other` से पहले होती है।\n"
+"`other` `this` के अंत से पहले होता है।\n"
+"::\n"
+"\n"
+"         other\n"
+"           |\n"
+"           *\n"
+"   [      this      ]\n"
+"\n"
+
+msgid ""
+"\n"
+"The start of `this` precedes start of `other`.\n"
+"The end of `this` antecedes end of `other`.\n"
+"::\n"
+"\n"
+"        [ other ]\n"
+"   [      this      ]\n"
+"\n"
+"The converse would be ``other.contains(this)``\n"
+msgstr ""
+"\n"
+"`this` की शुरुआत `other` की शुरुआत से पहले होती है।\n"
+"`this` का अंत `other` के अंत से पहले होता है।\n"
+"::\n"
+"\n"
+"        [ other ]\n"
+"   [      this      ]\n"
+"\n"
+"विपरीत स्थिति ``other.contains(this)`` होगी।\n"
+
+msgid ""
+"\n"
+"`this` contains `other`.\n"
+"::\n"
+"\n"
+"        other\n"
+"         |\n"
+"         *\n"
+"   [    this    ]\n"
+"\n"
+msgstr ""
+"\n"
+"`this` में `other` शामिल है।\n"
+"::\n"
+"\n"
+"        other\n"
+"         |\n"
+"         *\n"
+"   [    this    ]\n"
+"\n"
+
+msgid ""
+"\n"
+"The start of `this` strictly precedes end of `other` by a value >= `epsilon_s`.\n"
+"The end of `this` strictly antecedes start of `other` by a value >= `epsilon_s`.\n"
+"::\n"
+"\n"
+"   [ this ]\n"
+"       [ other ]\n"
+"\n"
+"The converse would be ``other.overlaps(this)``\n"
+msgstr ""
+"\n"
+"`this` की शुरुआत `other` के अंत से एक मान >= `epsilon_s` द्वारा स्पष्ट रूप से पहले होती है।\n"
+"`this` का अंत `other` की शुरुआत से एक मान >= `epsilon_s` द्वारा स्पष्ट रूप से पहले होता है।\n"
+"::\n"
+"\n"
+"   [ this ]\n"
+"       [ other ]\n"
+"\n"
+"विपरीत स्थिति ``other.overlaps(this)`` होगी।\n"
+
+msgid ""
+"\n"
+"The end of `this` strictly precedes `other` by a value >= `epsilon_s`.\n"
+"::\n"
+"\n"
+"             other\n"
+"               |\n"
+"   [ this ]    *\n"
+"\n"
+msgstr ""
+"\n"
+"`this` का अंत `other` से एक मान >= `epsilon_s` द्वारा स्पष्ट रूप से पहले होता है।\n"
+"::\n"
+"\n"
+"             other\n"
+"               |\n"
+"   [ this ]    *\n"
+"\n"
+
+msgid ""
+"\n"
+"The end of `this` strictly equals the start of `other` and\n"
+"the start of `this` strictly equals the end of `other`.\n"
+"::\n"
+"\n"
+"   [this][other]\n"
+"\n"
+"The converse would be ``other.meets(this)``\n"
+msgstr ""
+"\n"
+"`this` का अंत `other` की शुरुआत के समान होता है और\n"
+"`this` की शुरुआत `other` के अंत के समान होती है।\n"
+"::\n"
+"\n"
+"   [this][other]\n"
+"\n"
+"विपरीत स्थिति ``other.meets(this)`` होगी।\n"
+
+msgid ""
+"\n"
+"The start of `this` strictly equals `other`.\n"
+"::\n"
+"\n"
+"   other\n"
+"     |\n"
+"     *\n"
+"     [ this ]\n"
+"\n"
+msgstr ""
+"\n"
+"`this` की शुरुआत `other` के समान होती है।\n"
+"::\n"
+"\n"
+"   other\n"
+"     |\n"
+"     *\n"
+"     [ this ]\n"
+"\n"
+
+msgid ""
+"\n"
+"The start of `this` strictly equals the start of `other`.\n"
+"The end of `this` strictly precedes the end of `other` by a value >= `epsilon_s`.\n"
+"::\n"
+"\n"
+"   [ this ]\n"
+"   [    other    ]\n"
+"\n"
+"The converse would be ``other.begins(this)``\n"
+msgstr ""
+"\n"
+"`this` की शुरुआत `other` की शुरुआत के समान होती है।\n"
+"`this` का अंत `other` के अंत से एक मान >= `epsilon_s` द्वारा स्पष्ट रूप से पहले होता है।\n"
+"::\n"
+"\n"
+"   [ this ]\n"
+"   [    other    ]\n"
+"\n"
+"विपरीत स्थिति ``other.begins(this)`` होगी।\n"
+
+msgid ""
+"\n"
+"The end of `this` strictly equals `other`.\n"
+"::\n"
+"\n"
+"        other\n"
+"          |\n"
+"          *\n"
+"   [ this ]\n"
+"\n"
+msgstr ""
+"\n"
+"`this` का अंत `other` के समान होता है।\n"
+"::\n"
+"\n"
+"        other\n"
+"          |\n"
+"          *\n"
+"   [ this ]\n"
+"\n"
+
+msgid ""
+"\n"
+"The start of `this` strictly antecedes the start of `other` by a value >= `epsilon_s`.\n"
+"The end of `this` strictly equals the end of `other`.\n"
+"::\n"
+"\n"
+"           [ this ]\n"
+"   [     other    ]\n"
+"\n"
+"The converse would be ``other.finishes(this)``\n"
+msgstr ""
+"\n"
+"`this` की शुरुआत `other` की शुरुआत से एक मान >= `epsilon_s` द्वारा स्पष्ट रूप से पहले होती है।\n"
+"`this` का अंत `other` के अंत के समान होता है।\n"
+"::\n"
+"\n"
+"           [ this ]\n"
+"   [     other    ]\n"
+"\n"
+"विपरीत स्थिति ``other.finishes(this)`` होगी।\n"
+
+msgid ""
+"\n"
+"The start of `this` precedes or equals the end of `other` by a value >= `epsilon_s`.\n"
+"The end of `this` antecedes or equals the start of `other` by a value >= `epsilon_s`.\n"
+"::\n"
+"\n"
+"   [    this    ]           OR      [    other    ]\n"
+"        [     other    ]                    [     this    ]\n"
+"\n"
+"The converse would be ``other.finishes(this)``\n"
+msgstr ""
+"\n"
+"`this` की शुरुआत `other` के अंत से एक मान >= `epsilon_s` द्वारा पहले या समान होती है।\n"
+"`this` का अंत `other` की शुरुआत से एक मान >= `epsilon_s` द्वारा पहले या समान होता है।\n"
+"::\n"
+"\n"
+"   [    this    ]           OR      [    other    ]\n"
+"        [     other    ]                    [     this    ]\n"
+"\n"
+"विपरीत स्थिति ``other.finishes(this)`` होगी।\n"
+
+msgid ""
+"\n"
+"Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\\s (exclusive).\n"
+"\n"
+"For example, if start_time is 1 and end_time is 10, the returned will have a duration of 9.\n"
+msgstr ""
+"\n"
+"एक :class:`~TimeRange` बनाता है जो प्रारंभ और अंत :class:`~RationalTime`\\s (विशेष रूप से) से होता है।\n"
+"\n"
+"उदाहरण के लिए, यदि start_time 1 है और end_time 10 है, तो प्राप्त परिणाम की अवधि 9 होगी।\n"
+
+msgid ""
+"\n"
+"Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\\s (inclusive).\n"
+"\n"
+"For example, if start_time is 1 and end_time is 10, the returned will have a duration of 10.\n"
+msgstr ""
+"\n"
+"एक :class:`~TimeRange` बनाता है जो प्रारंभ और अंत :class:`~RationalTime`\\s (समावेशी) से होता है।\n"
+"\n"
+"उदाहरण के लिए, यदि start_time 1 है और end_time 10 है, तो प्राप्त परिणाम की अवधि 10 होगी।\n"
+
+msgid ""
+"\n"
+"Media module.\n"
+"\n"
+"Contains all classes and enums related to media. \n"
+msgstr ""
+"\n"
+"मीडिया मॉड्यूल. मीडिया से संबंधित सभी क्लासों तथा एनमैक्स्स शामिल हैं.\n"
+
+msgid "Compare mode :class:`mrv2.media.CompareMode`."
+msgstr "मोड से तुलना करें:क्लास:`mrv2.media.CompareMode`."
+
+msgid "Wipe center in X and Y :class:`mrv2.math.Vector2f`."
+msgstr "X तथा Y:क्लास में केंद्र को मिटाएँ:`mrv2.math.Vector2f`"
+
+msgid "Wipe Rotation."
+msgstr "घूर्णन पोंछना."
+
+msgid "Overlay ( A over B )"
+msgstr "लेम्बिया (उब से ऊपर)"
+
+msgid "Comparison options."
+msgstr "तुलना विकल्प."
+
+msgid ""
+"\n"
+"Math module.\n"
+"\n"
+"Contains all math classes.\n"
+msgstr ""
+"\n"
+"गणित मॉड्यूल. सभी गणित क्लासों में.\n"
+
+msgid "Vector of 2 integers."
+msgstr "2 पूर्णांक के सदिश."
+
+msgid "Vector of 2 floats."
+msgstr "2 फ्लोट के सदिश."
+
+msgid "Vector of 3 floats."
+msgstr "3 फ्लोट के सदिश."
+
+msgid "Vector of 4 floats."
+msgstr "4 फ्लोट के सदिश."
+
+msgid "Size of 2 integers."
+msgstr "2 पूर्णांकों का आकार."
+
+msgid ""
+"\n"
+"Image module.\n"
+"\n"
+"Contains all classes and enums related to image controls. \n"
+msgstr ""
+"\n"
+"छवि मॉड्यूल. छवि नियंत्रण से संबंधित सभी क्लासों तथा अक्षरों को समाहित करता है.\n"
+
+msgid "Red Channel."
+msgstr "रेड चैनल."
+
+msgid "Green Channel."
+msgstr "हरा चैनल."
+
+msgid "Blue Channel."
+msgstr "ब्लू चैनल."
+
+msgid "Alpha Channel."
+msgstr "अल्फा चैनल."
+
+msgid "Image mirroring."
+msgstr "छवि चमक रहा है."
+
+msgid "Flip image on X."
+msgstr "एक्स में छवि पलटें."
+
+msgid "Flip image on Y."
+msgstr "Y में छवि पलटें."
+
+msgid "Enabled Levels."
+msgstr "स्तर सक्षम करें"
+
+msgid "Add a :class:`mrv2.math.Vector3f` to image."
+msgstr "एक अंश जोड़ें: `mrv2.math.Vector3f`."
+
+msgid "Change a :class:`mrv2.math.Vector3f` of brightness to image."
+msgstr ""
+"एक को बदलें:क्लास: `mrv2.math.Vector3f` इससे छवि के लिए चमकीलापन का प्रमाण "
+"दें."
+
+msgid "Change a :class:`mrv2.math.Vector3f` of contrast to image."
+msgstr "एक को बदलें:क्लास: `mrv2.math.Vector3f` इस छवि के कंट्रास्ट के लिए."
+
+msgid "Change a :class:`mrv2.math.Vector3f` of saturation to image."
+msgstr "एक को बदलें:क्लास: `mrv2.math.Vector3f` of छवि में."
+
+msgid "Change tint of image to image between 0 and 1."
+msgstr "0 और 1 के बीच छवि के टिंट बदलें."
+
+msgid "Invert the color values."
+msgstr "रंग मूल्य उलटें."
+
+msgid "Color values."
+msgstr "रंग मूल्य."
+
+msgid "In Low Level value."
+msgstr "कम स्तर मूल्य में."
+
+msgid "In High Level value."
+msgstr "उच्च स्तर मूल्य में."
+
+msgid "Gamma Level value."
+msgstr "गामा स्तर मूल्य."
+
+msgid "Out Low Level value."
+msgstr "कम स्तर मूल्य."
+
+msgid "Out High Level value."
+msgstr "उच्च स्तर मूल्य."
+
+msgid "Levels values."
+msgstr "स्तर मूल्य."
+
+msgid "Enabled EXR display."
+msgstr "ईएक्सआर प्रदर्शन सक्षम करें."
+
+msgid "Exposure value."
+msgstr "एक्सपोज़र मूल्य."
+
+msgid "Defog value."
+msgstr "हर्ट मूल्य."
+
+msgid "kneeLow value."
+msgstr "घुटने मूल्य."
+
+msgid "kneeHigh value."
+msgstr "घुटने उत्तम मूल्य."
+
+msgid "EXR display values."
+msgstr "ईएक्सआर प्रदर्शन मूल्य."
+
+msgid "Enabled Soft Clip."
+msgstr "सॉफ्ट क्लिपिंग सक्षम करें."
+
+msgid "Soft clip value."
+msgstr "सॉफ्ट क्लिप मूल्य."
+
+msgid "Minify filter :class:`mrv2.image.ImageFilter`."
+msgstr "न्यूनतम फ़िल्टर:क्लास: `mrv2.image.ImageFilter`."
+
+msgid "Magnify filter :class:`mrv2.image.ImageFilter`."
+msgstr "आवधिक फिल्टर:क्लास: `mrv2.image.ImageFilter`."
+
+msgid "Image filters."
+msgstr "छवि फिल्टर."
+
+msgid "Color channels :class:`mrv2.image.Channels`."
+msgstr "रंग चैनल:`mrv2.image.Channels`"
+
+msgid "Mirror on X, Y or both :class:`mrv2.image.Mirror`."
+msgstr "एक्स, y या दोनों:क्लास: `mrv2.image.Mirror`"
+
+msgid "Color options :class:`mrv2.image.Color`."
+msgstr "रंग विकल्प :क्लास: `mrv2.image.Color`"
+
+msgid "Levels options :class:`mrv2.image.Levels`."
+msgstr "स्तर विकल्प :क्लास: `mrv2.image.Levels`."
+
+msgid "EXR Display options :class:`mrv2.image.EXRDisplay`.."
+msgstr "EXR प्रदर्शक विकल्प :क्लास: `mrv2.image.EXRDisplay`.."
+
+msgid "Soft Clip options :class:`mrv2.image.SoftClip`.."
+msgstr "सादा क्लिप विकल्प:क्लास: `mrv2.image.SoftClip`.."
+
+msgid "Display options."
+msgstr "प्रदर्शक विकल्प."
+
+msgid "LUT enabled."
+msgstr "LUTसी सक्षम है."
+
+msgid "LUT filename."
+msgstr "एल सिवाय फ़ाइल- नाम."
+
+msgid "LUT transformation order."
+msgstr "क्रम में परिवर्तन."
+
+msgid "LUT options."
+msgstr "अतिरिक्त विकल्प:"
+
+msgid "Video Levels."
+msgstr "वीडियो स्तर."
+
+msgid "Alpha blending algorithm"
+msgstr "अल्फा ब्लेंड एल्गोरिदम"
+
+msgid "Image Filters"
+msgstr "छवि फ़िल्टर्स"
+
+msgid "Image options."
+msgstr "परियोजना विकल्प."
+
+msgid "Environment Map type."
+msgstr "एनवायरनमेंट नक्शा क़िस्म."
+
+msgid "Horizontal aperture"
+msgstr "आड़ा (H)"
+
+msgid "Vertical aperture"
+msgstr "खड़ा (V)"
+
+msgid "Focal Length"
+msgstr "फोकल लंबाई"
+
+msgid "Rotation on X"
+msgstr "X पर घुमाव"
+
+msgid "Rotation on Y"
+msgstr "Y पर घुमाव"
+
+msgid "Subdivision on X"
+msgstr "एक्स पर उप- विभाजन"
+
+msgid "Subdivision on Y"
+msgstr "Y पर उप- विभाजन"
+
+msgid "Spin"
+msgstr "स्पिन"
+
+msgid "EnvironmentMap options."
+msgstr "वातावरण नक्शा विकल्प."
+
+msgid "Stereo 3d input :class:`mrv2.image.StereoInput`.."
+msgstr "स्टीरियो 3डी इनपुट:क्लास: `mrv2.image.StereoInput`.."
+
+msgid "Stereo 3d output :class:`mrv2.image.StereoOutput`.."
+msgstr "स्टीरियो 3डी आउटपुट:क्लास: `mrv2.image.StereoOutput`."
+
+msgid "Separation between left and right eye."
+msgstr "बाईं ओर और दाएँ और बाएँ की आँख के बीच जुदाई"
+
+msgid "Swap left and right eye"
+msgstr "बाएँ और दाएँ की आँख बदलें"
+
+msgid "Stereo3D options."
+msgstr "स्टीरियो3डी विकल्प."
+
+msgid "Background type :class:`mrv2.image.Background`.."
+msgstr "पृष्ठभूमि क़िस्म:`mrv2.image.Background`."
+
+msgid "Checkers Color0 :class:`mrv2.image.Color4f`.."
+msgstr "चेकर्स रंग0:क्लास: `mrv2.image.Color4f`."
+
+msgid "Checkers Color1 :class:`mrv2.image.Color4f`.."
+msgstr "चेकर्स रंग1:क्लास: `mrv2.image.Color4f`.."
+
+msgid "Checkers Size :class:`mrv2.math.Size2i`.."
+msgstr "चेकर्स आकार:`mrv2.math.Size2i`.."
+
+msgid "Background options."
+msgstr "पृष्ठभूमि विकल्प."
+
+msgid "Gets the current background options."
+msgstr "वर्तमान पृष्ठभूमि विकल्प बताता है."
+
+msgid "Sets the current background options."
+msgstr "मौज़ूदा पृष्ठभूमि विकल्प नियत करता है."
+
+msgid "Gets the current OCIO config file."
+msgstr "वर्तमान ओआईआईओ कॉन्फ़िग फ़ाइल बताता है."
+
+msgid "Sets the current OCIO config file."
+msgstr "मौज़ूदा ओसीआईओ कॉन्फ़िग फ़ाइल सेट करता है."
+
+msgid "Gets the current input color space."
+msgstr "वर्तमान इनपुट रंग जगह बताता है."
+
+msgid "Gets a list of all input color spaces."
+msgstr "सभी इनपुट रंग स्पेसेस की सूची प्राप्त करता है."
+
+msgid "Set the input color space."
+msgstr "इनपुट रंग जगह नियत करें."
+
+msgid "Gets the current Display/View."
+msgstr "वर्तमान प्रदर्शक/ दृश्य बताता है."
+
+msgid "Gets the list of Displays/Views."
+msgstr "प्रदर्शक/ दृश्य की सूची प्राप्त करता है."
+
+msgid "Set an OCIO Display/View."
+msgstr "OCIO प्रदर्शन सेट करें/दृश्य."
+
+msgid "Gets the current OCIO look."
+msgstr "वर्तमान ओसीआईओ देखो मिलता है."
+
+msgid "Gets a list of all OCIO looks."
+msgstr "सभी OCOIO रूप की सूची मिलता है."
+
+msgid "Set the OCIO look by name."
+msgstr "ओसीआईओ नाम द्वारा सेट करें."
+
+msgid "Return all the files."
+msgstr "सभी फ़ाइलों को वापस करें."
+
+msgid "Return all the active files."
+msgstr "सभी सक्रिय फ़ाइलों को वापस करें."
+
+msgid "Return the A file item."
+msgstr "एक फ़ाइल वस्तु वापस करें."
+
+msgid "Return the A file index."
+msgstr "एक फ़ाइल इंडेक्स वापस करें."
+
+msgid "Return the list of B files."
+msgstr "बी फ़ाइलों की सूची वापस करें."
+
+msgid "Return the list of B indexes."
+msgstr "B इंडेक्स सूची की सूची वापस करें."
+
+msgid "Close the current A file."
+msgstr "वर्तमान फ़ाइल बंद करें"
+
+msgid "Close all files."
+msgstr "बंद करें सभी फ़ाइल."
+
+msgid "Set the A file index."
+msgstr "एक फ़ाइल निर्देशिका सेट करें."
+
+msgid "Set a new B file index."
+msgstr "नई बी फ़ाइल निर्देशिका सेट करें."
+
+msgid "Set a new stereo file index."
+msgstr "नई स्टीरियो फ़ाइल निर्देशिका सेट करें."
+
+msgid "Toggle the B file index."
+msgstr "बी फ़ाइल निर्देशिका टॉगल करें."
+
+msgid "Clear the B indexes."
+msgstr "बी इंडेक्स्स साफ करें."
+
+msgid "Return the list of layers."
+msgstr "परतों की सूची वापस करें."
+
+msgid "Set layer for file item."
+msgstr "फ़ाइल मद के लिए परत सेट करें."
+
+msgid "Set compare time."
+msgstr "तुलना करने के लिए समय सेट करें."
+
+msgid "Get compare time."
+msgstr "समय तुलना करें."
+
+msgid "Set the first version for current media."
+msgstr "वर्तमान मीडिया के लिए प्रथम संस्करण सेट करें."
+
+msgid "Set the previous version for current media."
+msgstr "वर्तमान मीडिया के लिए पिछले संस्करण सेट करें."
+
+msgid "Set the next version for current media."
+msgstr "वर्तमान मीडिया के लिए अगला संस्करण सेट करें."
+
+msgid "Set the last version for current media."
+msgstr "वर्तमान मीडिया के लिए अंतिम संस्करण सेट करें."
+
+msgid "Path :class:`mrv2.Path` to the File Media."
+msgstr "पथ:क्लास: `mrv2.Path` फ़ाइल मीडिया."
+
+msgid "Audio path :class:`mrv2.Path` to the File Media if any."
+msgstr "ऑडियो पथ:क्लास: `mrv2.Path` फ़ाइल मीडिया के लिए यदि कोई भी हो."
+
+msgid "Time range :class:`mrv2.TimeRange` of the File Media."
+msgstr "समय सीमा:`mrv2.TimeRange`"
+
+msgid "Speed (FPS) of the File Media."
+msgstr "फ़ाइल मीडिया की गति (एफपीएस)."
+
+msgid "Playback state :class:`mrv2.timeline.Playbacks` of the File Media."
+msgstr "प्लेबैक स्थिति :क्लासव2. समय-लाइन. फ़ाइल मीडिया का प्लेयर"
+
+msgid "Loop state :class:`mrv2.timeline.Loop` of the File Media."
+msgstr "लूप स्थिति :क्लास:`mrv2.timeline.Loop` समय. फ़ाइल मीडिया का लूप."
+
+msgid "Current time :class:`mrv2.RationalTime` of the File Media."
+msgstr "मौज़ूदा समय:क्लास:`mrv2.RationalTime` फ़ाइल मीडिया काक्लास समय."
+
+msgid "In/Out range :class:`mrv2.TimeRange` of the File Media."
+msgstr "में/ बाहर सीमा:क्लास:`mrv2.TimeRange` फ़ाइल मीडिया का समय."
+
+msgid "Video layer of the File Media."
+msgstr "फ़ाइल मीडिया का वीडियो परत."
+
+msgid "Volume of the File Media."
+msgstr "फ़ाइल मीडिया का आवाज."
+
+msgid "Mute state of the File Media."
+msgstr "फ़ाइल मीडिया की मौन स्थिति."
+
+msgid "Audio offset of the File Media."
+msgstr "फ़ाइल मीडिया का ऑडियो ऑफसेट."
+
+msgid "Class used to hold a media item."
+msgstr "मीडिया वस्तु रखने के लिए प्रयुक्त वर्ग."
+
+msgid "Save annotations."
+msgstr "एनोटेशन सहेजें."
+
+msgid "Save resolution."
+msgstr "सहेजें रिसॉल्यूशन."
+
+msgid "FFmpeg Profile."
+msgstr "एफ़एफ़एमपी प्रोफ़ाइल."
+
+msgid "FFmpeg Preset."
+msgstr "एफ़एफ़एमपी प्रीसेट."
+
+msgid "FFmpeg Pixel Format."
+msgstr "एफ़एफएमपी पिक्सेल प्रारूप."
+
+msgid "FFmpeg video encoding with hardware if possible."
+msgstr "यदि संभव हो तो हार्डवेयर के साथ FFएमपीजी वीडियो एनकोडिंग."
+
+msgid "FFmpeg Override color characteristics."
+msgstr "FFGGECT रंग विशेषताओं को ओवरराइड करता है."
+
+msgid "FFmpeg Color Range."
+msgstr "FFMeg रंग सीमा."
+
+msgid "FFmpeg Color Space."
+msgstr "एफ़एफएमपी रंग जगह."
+
+msgid "FFmpeg Color Primaries."
+msgstr "FFEGe रंग PRERST."
+
+msgid "FFmpeg Color Transfer Characteristics."
+msgstr "एफ़एफएमपी रंग ट्रांसफर्स."
+
+msgid "FFmpeg Audio Codec."
+msgstr "एफ़एफएमपी ऑडियो कोडेक."
+
+msgid "OpenEXR's Compression."
+msgstr "ओपनईएक्सआर संपीडन."
+
+msgid "OpenEXR's Pixel Type."
+msgstr "ओपनईएक्सआर पिक्सेल क़िस्म."
+
+msgid "OpenEXR's Zip Compression Level."
+msgstr "एक्सआर संपीडन स्तर खोलें."
+
+msgid "OpenEXR's DWA Compression Level."
+msgstr "डीईईएक्सआर संपीडन स्तर खोलें."
+
+msgid ""
+"\n"
+"Command module.\n"
+"\n"
+"Used to run main commands and get arguments and set the display, image, compare, LUT options.\n"
+msgstr ""
+"\n"
+"कमांड मॉड्यूल. मुख्य कमांड चलाने और तर्क पाने के लिए प्रयोग में आता है, छवि से तुलना करें, LUTF विकल्प.\n"
+
+msgid ""
+"Get command-line arguments passed as single quoted string to -pythonArgs."
+msgstr ""
+"कमांड लाइन आर्गुमेंट पास करें जैसा कि उद्धृत वाक्यांश - आईक्वेंगर को उद्धृत "
+"किया गया है."
+
+msgid "Open file with optional audio."
+msgstr "फ़ाइल को वैकल्पिक ऑडियो के साथ खोलें."
+
+msgid "Compare two file items with a compare mode."
+msgstr "तुलना मोड के साथ दो फ़ाइल मद की तुलना करें."
+
+msgid "Close the file item."
+msgstr "फ़ाइल वस्तु बन्द करें."
+
+msgid "Close all file items."
+msgstr "सभी फ़ाइलों को बंद करें"
+
+msgid "Return the root path to the insallation of mrv2."
+msgstr "mrv2 की अंतिम प्रक्रिया के लिए रूट पथ वापस करें."
+
+msgid "Return the path to preferences of mrv2."
+msgstr "mrv2 की वरीयता के लिए पथ वापस करें."
+
+msgid "Return the display options."
+msgstr "प्रदर्शक विकल्प वापस करें."
+
+msgid "Set the display options."
+msgstr "प्रदर्शक विकल्प नियत करें."
+
+msgid "Return the LUT options."
+msgstr "LUTF विकल्प वापस करें."
+
+msgid "Set the LUT options."
+msgstr "LUTF विकल्प सेट करें."
+
+msgid "Return the image options."
+msgstr "छवि विकल्प वापस करें."
+
+msgid "Set the image options."
+msgstr "छवि फ़ाइल नाम प्रदर्शित करने के लिए यह विकल्प सेट करें."
+
+msgid "Return the environment map options."
+msgstr "एनवायरनमेंट नक्शा विकल्प वापस करें."
+
+msgid "Set the environment map options."
+msgstr "एनवायरनमेंट नक्शा विकल्प सेट करें."
+
+msgid "Set the compare options."
+msgstr "तुलना विकल्प सेट करें."
+
+msgid "Set the stereo 3D options."
+msgstr "स्टीरियो 3डी विकल्प सेट करें."
+
+msgid "Get the language of mrv2."
+msgstr "mrv2 की भाषा प्राप्त करें."
+
+msgid "Get the layers of the timeline (GUI)."
+msgstr "समय रेखा की परतों (जीयूआई) प्राप्त करें."
+
+msgid "Get the version of mrv2."
+msgstr "mrv2 का संस्करण प्राप्त करें."
+
+msgid ""
+"Call Fl::check to update the GUI and return the number of seconds that "
+"elapsed."
+msgstr ""
+"काल फ्लॉप: जीयूआई को अद्यतन करने के लिए चेक करें तथा सेकण्डों की संख्या वापस"
+" करें."
+
+msgid "Returns true if audio is muted."
+msgstr "यदि ऑडियो मौन हो तो सही वापस आता है."
+
+msgid "Runs the same or a new mrv2 with a session file."
+msgstr "एक सत्र फ़ाइल के साथ एक ही या एक नया mrv2 चलाता है."
+
+msgid "Set the muting of the audio."
+msgstr "ऑडियो का उल्लंघन सेट."
+
+msgid "Toggle Image Auto Normalize."
+msgstr "छवि को स्वचालिताइज़ करना टॉगल करें."
+
+msgid "Toggle Data Window."
+msgstr "डाटा विंडो टॉगल करें."
+
+msgid "Toggle Display Window."
+msgstr "विंडो प्रदर्शन टॉगल करें."
+
+msgid "Toggle Ignored Display Window on OpenEXRs."
+msgstr "ओपनएक्सआर( डबल्यू) पर प्रदर्शन को नज़रअंदाज़ किया जा सकता है."
+
+msgid "Toggle Image invalid values."
+msgstr "छवि अवैध मूल्य टॉगल करें."
+
+msgid "Toggle Safe Areas."
+msgstr "सुरक्षित क्षेत्रों को टॉगल करें."
+
+msgid "Get the playback volume."
+msgstr "प्लेबैक आवाज प्राप्त करें."
+
+msgid "Set the playback volume."
+msgstr "प्लेबैक आवाज सेट करें."
+
+msgid "Save a movie or sequence from the front layer."
+msgstr "एक फिल्म या अनुक्रम को सामने की परत से सहेजें."
+
+msgid "Save a single frame."
+msgstr "एक एकल फ्रेम सहेजें."
+
+msgid "Save multiple annotation frames."
+msgstr "बहुत से एनोटेशन फ्रेम सहेजें."
+
+msgid "Save multiple frames."
+msgstr "कई फ्रेम सहेजें."
+
+msgid "Save an .otio file from the current selected image."
+msgstr "वर्तमान चयनित छवि में से फ़ाइल सहेजें."
+
+msgid "Save a PDF document with all annotations and notes."
+msgstr "सभी एनोटेशन्स तथा नोट्स के साथ पीडीएफ़ दस्तावेज़ सहेजें."
+
+msgid ""
+"\n"
+"Annotations module.\n"
+"\n"
+"Contains all functions and classes related to the annotationss.\n"
+msgstr ""
+"\n"
+"व्याख्याएँ मॉड्यूल. व्याख्याओं से संबंधित सभी फंक्शन तथा वर्ग समाहित हैं.\n"
+
+msgid "Add notes annotations to current clip at a certain time."
+msgstr "कुछ समय में मौजूदा क्लिप में नोट्स जोड़ें."
+
+msgid "Add notes annotations to current clip at a certain frame."
+msgstr "कुछ फ्रेम में मौजूदा क्लिप में नोट्स जोड़ें."
+
+msgid "Add notes annotations to current clip at certain seconds."
+msgstr "कुछ सेकंड में नोटों को वर्तमान क्लिप में जोड़ें."
+
+msgid "Get all times for annotations."
+msgstr "व्याख्या के लिए हर बार मिलता है."
+
 msgid "Open with Audio"
 msgstr "ऑडियो के साथ खोलें"
 
@@ -105,7 +1582,8 @@ msgid "Seek to the given time, in value/fps format.  Example: 50/30."
 msgstr "दिए गए समय की खोज करें, मूल्य/fpe फॉर्मेट में. उदाहरण: 50/30."
 
 msgid "Set the in/out points range in start/end/fps format, like 23/120/24."
-msgstr "प्रारंभ/ आउट बिन्दुओं में अनुक्रम सीमा सेट करें, जैसे कि 2/120/24 में."
+msgstr ""
+"प्रारंभ/ आउट बिन्दुओं में अनुक्रम सीमा सेट करें, जैसे कि 2/120/24 में."
 
 msgid "OpenColorIO input color space."
 msgstr "कलरआई इनपुट रंग जगह खोलें."
@@ -129,11 +1607,12 @@ msgid "Python Script to run and exit."
 msgstr "चलाने के लिए पायथन स्क्रिप्ट."
 
 msgid ""
-"Python Arguments to pass to the Python script as a single quoted string like "
-"\"arg1 'arg2 asd' arg3\", stored in cmd.argv."
+"Python Arguments to pass to the Python script as a single quoted string like"
+" \"arg1 'arg2 asd' arg3\", stored in cmd.argv."
 msgstr ""
-"पायथन स्क्रिप्ट को पास करने के लिए फंक्शन आर्गुमेंट्स एक एकल के रूप में उद्धृत वाक्यांश \"arg1' "
-"ag1' ag3\" जैसे कि 'arg3\" को, सेमीवी में भंडारित किया गया है."
+"पायथन स्क्रिप्ट को पास करने के लिए फंक्शन आर्गुमेंट्स एक एकल के रूप में "
+"उद्धृत वाक्यांश \"arg1' ag1' ag3\" जैसे कि 'arg3\" को, सेमीवी में भंडारित "
+"किया गया है."
 
 msgid "Reset settings to defaults."
 msgstr "डिफ़ॉल्ट में सेटिंग फिर सेट करें."
@@ -142,11 +1621,14 @@ msgid "Reset hotkeys to defaults."
 msgstr "डिफ़ॉल्ट में गर्मकीस रीसेट करें."
 
 msgid "Start a server.  Use -port to specify a port number."
-msgstr "सर्वर प्रारंभ करें. पोर्ट क्रमांक निर्दिष्ट करने के लिए -पोर्ट का प्रयोग करें."
+msgstr ""
+"सर्वर प्रारंभ करें. पोर्ट क्रमांक निर्दिष्ट करने के लिए -पोर्ट का प्रयोग "
+"करें."
 
 msgid "Connect to a server at <value>.  Use -port to specify a port number."
 msgstr ""
-"<value> सर्वर से कनेक्ट करें. एक पोर्ट नंबर निर्दिष्ट करने के लिए -port का प्रयोग करें."
+"<value> सर्वर से कनेक्ट करें. एक पोर्ट नंबर निर्दिष्ट करने के लिए -port का "
+"प्रयोग करें."
 
 msgid ""
 "Port number for the server to listen to or for the client to connect to."
@@ -212,17 +1694,212 @@ msgstr "नेटवर्क"
 msgid "Stereo 3D"
 msgstr "Stereo 3D"
 
-msgid "Toggle other eye stereo image."
-msgstr "अन्य आँख स्टीरियो छवि टॉगल करें."
+msgid "Type"
+msgstr "क़िस्म"
+
+msgid "Client"
+msgstr "क्लाइंट"
+
+msgid "Server"
+msgstr "सर्वर"
+
+msgid "Host"
+msgstr "होस्ट"
+
+msgid "Host name or IP to connect to.  For example: 127.0.0.1"
+msgstr "जिससे जुड़ना है होस्ट नाम या आईपी को. उदाहरण के लिए: 127. 0"
+
+msgid "Previously used Hosts"
+msgstr "पहले प्रयोग में लिए गए होस्ट"
+
+msgid "Port"
+msgstr "पोर्ट"
+
+msgid ""
+"Port to connect to.  Make sure your firewall and router allows read/write "
+"through it."
+msgstr ""
+"कनेक्ट करने के लिए पोर्ट. कृपया सुनिश्चित करें कि आपका फायरवाल तथा राउटर "
+"इसके माध्यम से पढ़ने/ लिखें."
+
+msgid "Connect"
+msgstr "कनेक्ट"
+
+msgid "Create"
+msgstr "बनाएँ"
+
+msgid "Disconnect"
+msgstr "डिस्कनेक्ट"
+
+msgid "Shutdown"
+msgstr "बन्दकरें"
+
+msgid "&File/&Open"
+msgstr "फ़ाइल/खोलें"
+
+msgid "&File/&Save"
+msgstr "फ़ाइल/सहेजें"
+
+msgid "&Edit/&Undo"
+msgstr "संपादन/पहले जैसा"
+
+msgid "&Edit/Cu&t"
+msgstr "संपादन/Cut"
+
+msgid "&Edit/&Copy"
+msgstr "संपादन/नक़ल"
+
+msgid "&Edit/&Paste"
+msgstr "संपादन/चिपकाएँ"
+
+msgid "&Edit/&Delete"
+msgstr "संपादन/मिटाएँ"
+
+msgid "&Edit/&Comment Selection"
+msgstr "संपादन/टिप्पणी चयन"
+
+msgid "&Edit/&Uncomment Selection"
+msgstr "संपादन/चयन में कोई प्रविष्टियां नहीं"
+
+msgid "&Search/&Find..."
+msgstr "ढूंढें/ढूंढें..."
+
+msgid "&Search/F&ind Again"
+msgstr "ढूंढें/फिर से ढूंढें"
+
+msgid "&Search/&Replace"
+msgstr "ढूंढें/बदलें"
+
+msgid "&Search/&Replace Again"
+msgstr "ढूंढें/फिर से बदलें"
+
+msgid "Clear/&Output"
+msgstr "साफ करें/आउटपुट"
+
+msgid "Clear/&Editor"
+msgstr "साफ करें/संपादक"
+
+msgid "Editor/&Run Code"
+msgstr "संपादक/चलाएँ कोड"
+
+msgid "Editor/Toggle &Line Numbers"
+msgstr "संपादक/पंक्ति संख्याएं टॉगल करें"
+
+msgid "Editor/&Jump to Error"
+msgstr "संपादक/त्रुटि पर जाएँ"
+
+msgid "Editor/&External Editor"
+msgstr "संपादक/बाहरी संपादक"
+
+msgid "Scripts/Add To Script List"
+msgstr "स्क्रिप्ट्स/स्क्रिप्ट सूची में जोड़ें"
+
+msgid "Scripts/%s"
+msgstr "स्क्रिप्ट्स/%s"
+
+msgid ""
+"Type in your python code here.  Select an area to execute just a portion of "
+"it.  Press Keypad Enter to run it."
+msgstr ""
+"अपने पायथन कोड में टाइप करें. इसके सिर्फ एक क्षेत्र को चलाने के लिए चुनें. "
+"इसे चलाने के लिए कुंजी पैड को दबाएँ."
+
+msgid "Python file {0} already exists.  Do you want to overwrite it?"
+msgstr ""
+"पायथन फ़ाइल {0} पहले से ही मौजूद है. क्या आप इसके ऊपर लिखना चाहते हैं?"
+
+msgid "No"
+msgstr "नहीं"
+
+msgid "Yes"
+msgstr "हाँ"
+
+msgid "Failed to open the file for writing."
+msgstr "लिखने के लिए फ़ाइल खोलने में असफल."
+
+msgid "Failed to write to the file."
+msgstr "फ़ाइल को लिखने में असफल."
+
+msgid "The stream is in an unrecoverable error state."
+msgstr "स्ट्रीम एक अनपेक्षित त्रुटि स्थिति में है."
+
+msgid "Type your editor command"
+msgstr "अपना संपादक कमांड टाइप करें"
+
+msgid "{0} will be replaced with the line number.  {1} with the file name"
+msgstr "{0} को रेखा संख्या से प्रतिस्थापित किया जाएगा. फ़ाइल नाम के साथ {1}"
+
+msgid "Regular expression error: {0}"
+msgstr "नियमित (रेगुलर) एक्सप्रेशन. त्रुटि: {0}"
+
+msgid "Could not open python editor: {0}"
+msgstr "पायथन संपादक खोल नहीं सका: {0}"
+
+msgid "Search String:"
+msgstr "खोज स्ट्रिंग:"
+
+msgid "No occurrences of '%s' found!"
+msgstr "'%s' की कोई उपस्थिति नहीं पाई गई!"
 
 msgid "Input"
 msgstr "इनपुट"
 
-msgid "Image"
-msgstr "छवि"
+msgid "NDI Connection"
+msgstr "वीएनसी कनेक्शन"
+
+msgid "None"
+msgstr "कुछ नहीं"
+
+msgid "Fast Format"
+msgstr "तीव्र फ़ॉर्मेट"
+
+msgid "Best Format"
+msgstr "सर्वोत्तम फार्मेट"
+
+msgid "With Audio"
+msgstr "ऑडियो के साथ"
+
+msgid "Without Audio"
+msgstr "बिना ऑडियो"
 
 msgid "Output"
 msgstr "आउटपुट"
+
+msgid "Start streaming"
+msgstr "स्ट्रीम शुरू कर रहा है"
+
+msgid "With Metadata"
+msgstr "मेटाडाटा से"
+
+msgid "Without Metadata"
+msgstr "बिना मेटाडाटा"
+
+msgid "Streaming {0} {1}..."
+msgstr "{0} स्ट्रीम कर रहा है {1}"
+
+msgid "Stop streaming"
+msgstr "स्ट्रीम जारी करना बन्द करें"
+
+msgid "Renderer"
+msgstr "रेंडरर"
+
+msgid "Complexity"
+msgstr "जटिलता"
+
+msgid "Draw Mode"
+msgstr "मोड आरेखित करें"
+
+msgid "Stage Cache"
+msgstr "चरण कैश"
+
+msgid "Disk Cache in GB"
+msgstr "GB में डिस्क कैश"
+
+msgid "Toggle other eye stereo image."
+msgstr "अन्य आँख स्टीरियो छवि टॉगल करें."
+
+msgid "Image"
+msgstr "छवि"
 
 msgid "Anaglyph"
 msgstr "आनाएएसिलिकusa. kgm"
@@ -315,8 +1992,9 @@ msgid ""
 "When this setting is on, color accuracy is chosen when decoding YUV420_P8 "
 "movies that have Color Space as 'unknown', at the cost of some performance."
 msgstr ""
-"जब यह सेटिंग चालू किया जाता है, रंग सटीकता चुना जाता है जब माफ कर दिया जाता है "
-"YUV420_P8 फिल्म जिसमें रंग जगह है 'अज्ञात' के रूप में, कुछ प्रदर्शन की कीमत पर."
+"जब यह सेटिंग चालू किया जाता है, रंग सटीकता चुना जाता है जब माफ कर दिया जाता "
+"है YUV420_P8 फिल्म जिसमें रंग जगह है 'अज्ञात' के रूप में, कुछ प्रदर्शन की "
+"कीमत पर."
 
 msgid "FFmpeg I/O threads"
 msgstr "एफ़एफएमपी आई/लड़ियाँ"
@@ -327,9 +2005,10 @@ msgid ""
 "any like that, you should set them to 1, press Enter and reload the movie "
 "file."
 msgstr ""
-"यह मूल्य उस लड़ी की संख्या को नियंत्रित करता है जो FFpe प्रयोग करती है. अधिकांश फिल्मों के "
-"लिए, इसे 0 पर छोड़ दिया जाना चाहिए. कुछ फिल्मों में काला फ्रेम दिखाई देगा. किसी भी तरह "
-"के लिए, आपको उन्हें 1 दबाएँ और फिल्म फ़ाइल को फिर से लोड करना चाहिए."
+"यह मूल्य उस लड़ी की संख्या को नियंत्रित करता है जो FFpe प्रयोग करती है. "
+"अधिकांश फिल्मों के लिए, इसे 0 पर छोड़ दिया जाना चाहिए. कुछ फिल्मों में काला "
+"फ्रेम दिखाई देगा. किसी भी तरह के लिए, आपको उन्हें 1 दबाएँ और फिल्म फ़ाइल को "
+"फिर से लोड करना चाहिए."
 
 msgid "Default Settings"
 msgstr "डिफ़ॉल्ट विन्यास"
@@ -338,14 +2017,8 @@ msgid ""
 "This will reset all your settings to their default.  Are you sure you want "
 "to continue?"
 msgstr ""
-"यह आपकी सभी सेटिंग को डिफ़ॉल्ट रूप में रीसेट करेगा. क्या आप सुनिश्चित हैं कि आप जारी रखना "
-"चाहते हैं?"
-
-msgid "Yes"
-msgstr "हाँ"
-
-msgid "No"
-msgstr "नहीं"
+"यह आपकी सभी सेटिंग को डिफ़ॉल्ट रूप में रीसेट करेगा. क्या आप सुनिश्चित हैं कि"
+" आप जारी रखना चाहते हैं?"
 
 msgid "Drop a clip here to create a playlist."
 msgstr "गीत- सूची बनाने के लिए क्लिप यहाँ डालें."
@@ -365,12 +2038,6 @@ msgstr "मौज़ूदा ईएल को बन्द करें."
 
 msgid "Clear the messages"
 msgstr "संदेशों को साफ करें"
-
-msgid "Type"
-msgstr "क़िस्म"
-
-msgid "None"
-msgstr "कुछ नहीं"
 
 msgid "Turn off image warping."
 msgstr "छवि रैप बंद करें."
@@ -402,21 +2069,15 @@ msgstr "वी. एपर्चर"
 msgid "Vertical Aperture of the Projection."
 msgstr "परियोजना का लंबवत एपर्चर."
 
-msgid "Focal Length"
-msgstr "फोकल लंबाई"
-
 msgid ""
 "Focal Length of the Projection. Use Shift + left mouse button to change or "
 "the mousewheel."
 msgstr ""
-"परियोजना की फोकल लंबाई. शिफ़्ट + बायाँ माउस बटन का उपयोग बदलने या माउस व्हील को "
-"बदलने के लिए करें."
+"परियोजना की फोकल लंबाई. शिफ़्ट + बायाँ माउस बटन का उपयोग बदलने या माउस व्हील"
+" को बदलने के लिए करें."
 
 msgid "Rotation"
 msgstr "परिक्रमण"
-
-msgid "Spin"
-msgstr "स्पिन"
 
 msgid "Spin with middle mouse instead of rotating with it."
 msgstr "इसके जरिए घुमाने के बजाए मध्य माउस के साथ स्पिन."
@@ -424,11 +2085,14 @@ msgstr "इसके जरिए घुमाने के बजाए मध�
 msgid ""
 "Rotation in X of the projection.  Use middle mouse button to move around."
 msgstr ""
-"प्रस्थिति पट्टी के X पर घुमाव. चारों ओर ले जाने के लिए मध्य माउस बटन का प्रयोग करें."
+"प्रस्थिति पट्टी के X पर घुमाव. चारों ओर ले जाने के लिए मध्य माउस बटन का "
+"प्रयोग करें."
 
 msgid ""
 "Rotation in Y of the projection.  Use middle mouse button to move around."
-msgstr "प्रस्थिति पट्टी के Y में घुमाव. चारों ओर ले जाने के लिए मध्य माउस बटन का प्रयोग करें."
+msgstr ""
+"प्रस्थिति पट्टी के Y में घुमाव. चारों ओर ले जाने के लिए मध्य माउस बटन का "
+"प्रयोग करें."
 
 msgid "Subdivisions"
 msgstr "उप- विभाजन"
@@ -926,7 +2590,9 @@ msgid ""
 "Wipe between the A and B files\n"
 "\n"
 "Use the Option key + left mouse button to move the wipe in X or in Y"
-msgstr "एक्स में या Y में मिटाने के लिए विकल्प कुंजी + बायाँ माउस बटन का इस्तेमाल करें"
+msgstr ""
+"एक्स में या Y में मिटाने के लिए विकल्प कुंजी + बायाँ माउस बटन का इस्तेमाल "
+"करें"
 
 msgid ""
 "Wipe between the A and B files\n"
@@ -953,7 +2619,8 @@ msgid "Wipe"
 msgstr "पट्टी पोंछना प्रभाव"
 
 msgid "Use the Option key + left mouse button to move the wipe in X."
-msgstr "एक्स में मिटाने के लिए विकल्प कुंजी + बायाँ माउस बटन का इस्तेमाल करें."
+msgstr ""
+"एक्स में मिटाने के लिए विकल्प कुंजी + बायाँ माउस बटन का इस्तेमाल करें."
 
 msgid "Use the Alt key + left mouse button to move the wipe in X."
 msgstr "एक्स में मिटाने के लिए ऑल्ट कुंजी + बायाँ माउस बटन का उपयोग करें."
@@ -965,13 +2632,16 @@ msgid "Use the Alt key + left mouse button to move the wipe in Y."
 msgstr "ऑल्ट कुंजी + Y में मिटाने के लिए बायाँ माउस बटन का उपयोग करें."
 
 msgid "Wipe Rotation.  Use Shift + left mouse button along X to rotate wipe."
-msgstr "घुमाव पोंछना है. विंडो को घुमाने के लिए शिफ्ट + बायाँ माउस बटन का प्रयोग करें."
+msgstr ""
+"घुमाव पोंछना है. विंडो को घुमाने के लिए शिफ्ट + बायाँ माउस बटन का प्रयोग "
+"करें."
 
 msgid "Overlay"
 msgstr "सीमा"
 
 msgid "Use the Option key + left mouse button to change transparency."
-msgstr "पारदर्शिता को बदलने के लिए विकल्प कुंजी + बायाँ माउस बटन का उपयोग करें."
+msgstr ""
+"पारदर्शिता को बदलने के लिए विकल्प कुंजी + बायाँ माउस बटन का उपयोग करें."
 
 msgid "Use the Alt key + left mouse button to change transparency."
 msgstr "पारदर्शिता बदलने के लिए आल्ट कुंजी + बायाँ माउस बटन का उपयोग करें."
@@ -1070,7 +2740,9 @@ msgid "Laser"
 msgstr "Laser"
 
 msgid "Makes the following annotation dissapear a second after drawn."
-msgstr "निम्नलिखित एनोटेशन आरेखित करता है निकाले जाने के बाद एक दूसरे को समेट लेता है."
+msgstr ""
+"निम्नलिखित एनोटेशन आरेखित करता है निकाले जाने के बाद एक दूसरे को समेट लेता "
+"है."
 
 msgid "Color:"
 msgstr "रंगः"
@@ -1170,6 +2842,51 @@ msgstr "वीडियो ट्रैक {0} को जोड़ नहीं 
 msgid "Could not append audio track {0}"
 msgstr "ऑडियो ट्रैक {0} जोड़ नहीं सका"
 
+msgid "Server started at port {0}."
+msgstr "सर्वर पोर्ट {0} पर प्रारंभ किया."
+
+msgid "Server stopped."
+msgstr "सर्वर बंद."
+
+msgid "A client connected from {0}"
+msgstr "{0} से जुड़ा एक क्लाइंट"
+
+msgid "Client at {0} disconnected."
+msgstr "{0} में क्लाएंट डिसकनेक्टेड."
+
+msgid "Server protocol version is {0}.  Client protocol version is {1}"
+msgstr "सर्वर प्रोटोकॉल संस्करण {0} क्लाएंट संस्करण {1} है"
+
+msgid "Remote file {0} does not exist on local filesystem."
+msgstr "रिमोट फ़ाइल {0} स्थानीय सिस्टम पर मौजूद नहीं है."
+
+msgid "Remote files are less than local files."
+msgstr "रिमोट फ़ाइलें स्थानीय फ़ाइलों से कम हैं."
+
+msgid "Remote file {0} matches file name {1} but not path."
+msgstr "रिमोट फ़ाइल {0} नाम {1} लेकिन पथ नहीं है."
+
+msgid "Remote file {0} does not match local filename."
+msgstr "रिमोट फ़ाइल {0} स्थानीय फ़ाइलनाम से मेल नहीं खाता."
+
+msgid "Removing {0} from message publisher."
+msgstr "{0} को संदेश से हटा रहा है."
+
+msgid "Server listening on port "
+msgstr "पोर्ट पर सर्वर सुन रहा है"
+
+msgid "ComfyUI listening on port "
+msgstr "पोर्ट पर कॉमफ्यूयूयूआई सुन रहा है"
+
+msgid "Connected to server at {0}, port {1}"
+msgstr "{0} से कनेक्टेड, पोर्ट {1} पर"
+
+msgid "Server connection lost."
+msgstr "सर्वर कनेक्शन टूटा."
+
+msgid "Exception caught: "
+msgstr "एक्सेप्शन पकड़ा:"
+
 msgid "ERROR:\t"
 msgstr "त्रुटि:"
 
@@ -1181,9 +2898,6 @@ msgid ""
 "{1}"
 msgstr "{0} से नियमित एक्सप्रेशन बनाया गया है. यह है: {1}"
 
-msgid "Regular expression error: {0}"
-msgstr "नियमित (रेगुलर) एक्सप्रेशन. त्रुटि: {0}"
-
 msgid "Iteration {0} will check version={1}"
 msgstr "यह प्रोशनरेशन {0} संस्करण={1} जाँच करेगा"
 
@@ -1191,7 +2905,8 @@ msgid ""
 "No versioning in this clip.  Please create an image or directory named with "
 "a versioning string."
 msgstr ""
-"इस क्लिप में कोई संस्करण नहीं है. कृपया संस्करणिंग स्ट्रिंग के साथ एक छवि या निर्देशिका बनाएँ."
+"इस क्लिप में कोई संस्करण नहीं है. कृपया संस्करणिंग स्ट्रिंग के साथ एक छवि या"
+" निर्देशिका बनाएँ."
 
 msgid "Example:  gizmo_v003.0001.exr"
 msgstr "उदाहरण: gizmo_v0003.0001.exr"
@@ -1207,9 +2922,6 @@ msgstr "फ़ाइल {0} को लिखने के लिए खोलन
 
 msgid "Failed to write to the file {0}."
 msgstr "फ़ाइल {0} में लिखने में असफल."
-
-msgid "The stream is in an unrecoverable error state."
-msgstr "स्ट्रीम एक अनपेक्षित त्रुटि स्थिति में है."
 
 msgid "Session saved to \"{0}\"."
 msgstr "सत्र \"{0}\" में सहेजा गया"
@@ -1234,29 +2946,31 @@ msgstr "{0} में छवि सहेज रहा है"
 
 msgid "ProRes profiles need a .mov movie extension.  Changing it to .mov."
 msgstr ""
-"प्रोग्रेसिव प्रोफ़ाइल को एक एम्व फिल्म विस्तार की आवश्यकता है. इसे परिवर्तित करने के लिए "
-"इसे परिवर्तित करें."
+"प्रोग्रेसिव प्रोफ़ाइल को एक एम्व फिल्म विस्तार की आवश्यकता है. इसे परिवर्तित"
+" करने के लिए इसे परिवर्तित करें."
 
 msgid ""
-"VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to .mp4"
+"VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to "
+".mp4"
 msgstr ""
-"VP9 प्रोफ़ाइल को एक.एमपी4, mkv या. webmm फिल्म विस्तार की जरूरत है. इसे बदलने के लिए "
-"बदलें"
+"VP9 प्रोफ़ाइल को एक.एमपी4, mkv या. webmm फिल्म विस्तार की जरूरत है. इसे "
+"बदलने के लिए बदलें"
 
 msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
 msgstr ""
-"AV1 प्रोफ़ाइल को एक _BAR_एमपी4 या.mkv फिल्म विस्तार की जरूरत है _BAR_ इसे बदलने के "
-"लिए बदलें"
+"AV1 प्रोफ़ाइल को एक _BAR_एमपी4 या.mkv फिल्म विस्तार की जरूरत है _BAR_ इसे "
+"बदलने के लिए बदलें"
 
 msgid ""
 "GoPro Cineform profile needs a .mkv movie extension.  Changing it to .mkv"
 msgstr ""
-"जाओप्रोफ़ॉर्मेशन प्रोफ़ाइल को एक.mkv फिल्म विस्तार की जरूरत है. इसे.mkv पर परिवर्तित करने "
-"के लिए"
+"जाओप्रोफ़ॉर्मेशन प्रोफ़ाइल को एक.mkv फिल्म विस्तार की जरूरत है. इसे.mkv पर "
+"परिवर्तित करने के लिए"
 
 msgid "HAP profile needs a .mov extension.  Changing it to .mov"
 msgstr ""
-"HAP प्रोफाइल एक.mov विस्तार की जरूरत है. इसे में परिवर्तित करने के लिए इसे परिवर्तित करें."
+"HAP प्रोफाइल एक.mov विस्तार की जरूरत है. इसे में परिवर्तित करने के लिए इसे "
+"परिवर्तित करें."
 
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "नया फ़ाइल {0} पहले से मौजूद है! इसपर लिख नहीं सकता"
@@ -1339,7 +3053,8 @@ msgstr "{0} सहेजने में असमर्थ."
 msgid ""
 "FFmpeg YUV to RGB Conversion is on in Settings Panel.  mrv2 will play back "
 "movies slower."
-msgstr "FFGGROS ROMOS परिवर्तन के लिए सेटिंग फलक में है. mrv2 फिल्म धीमी खेलेगा."
+msgstr ""
+"FFGGROS ROMOS परिवर्तन के लिए सेटिंग फलक में है. mrv2 फिल्म धीमी खेलेगा."
 
 msgid "Could not open color theme from \"{0}\"."
 msgstr "\"{0}\" से रंग प्रसंग खोल नहीं सका."
@@ -1414,7 +3129,8 @@ msgid "Could not split '{0}' into display and view."
 msgstr "'{0}' को प्रदर्शक व दृश्य में विभाजित नहीं कर सका."
 
 msgid "No default view for display '{0}'.  Does display exist?"
-msgstr "'{0}' प्रदर्शित करने के लिए कोई डिफ़ॉल्ट दृश्य नहीं. क्या प्रदर्शक मौजूद है?"
+msgstr ""
+"'{0}' प्रदर्शित करने के लिए कोई डिफ़ॉल्ट दृश्य नहीं. क्या प्रदर्शक मौजूद है?"
 
 msgid "Setting OCIO Preset '{0}'."
 msgstr "ओसीआईओ '{0}' सेट किया जा रहा है."
@@ -1471,8 +3187,8 @@ msgid ""
 "Need to reboot mrv2 to change language to {0}.  Are you sure you want to "
 "continue?"
 msgstr ""
-"{0} में भाषा को बदलने के लिए mrv2 की आवश्यकता है क्या आप सुनिश्चित हैं कि आप जारी रखना "
-"चाहते हैं?"
+"{0} में भाषा को बदलने के लिए mrv2 की आवश्यकता है क्या आप सुनिश्चित हैं कि आप"
+" जारी रखना चाहते हैं?"
 
 msgid "Set Language to {0}, Numbers to {1}"
 msgstr "भाषा {0} के लिए, संख्या {1} पर सेट करें"
@@ -1610,15 +3326,15 @@ msgid ""
 "Hotkey \"%s\" already used in \"%s\".\n"
 "Do you want to override it?"
 msgstr ""
-"\"%s\" को \"%s\" में पहले से ही प्रयोग किया जा रहा है. क्या आप इसे ओवरराइड करना चाहते "
-"हैं?"
+"\"%s\" को \"%s\" में पहले से ही प्रयोग किया जा रहा है. क्या आप इसे ओवरराइड "
+"करना चाहते हैं?"
 
 msgid ""
 "Corruption in hotkeys preferences. Hotkey '{0}' for {1} will not be "
 "available.  Already used in {2}."
 msgstr ""
-"गर्मकी वरीयताएँ में भ्रष्टाचार. {1} के लिए हॉटकी '{0}' उपलब्ध नहीं होगा. पहले से ही {2} "
-"में इस्तेमाल किया जा चुका है."
+"गर्मकी वरीयताएँ में भ्रष्टाचार. {1} के लिए हॉटकी '{0}' उपलब्ध नहीं होगा. "
+"पहले से ही {2} में इस्तेमाल किया जा चुका है."
 
 msgid "Allows you to select different image channels or layers."
 msgstr "आपको भिन्न छवि चैनल या परतों को चुनने देता है."
@@ -1638,7 +3354,8 @@ msgstr "यहाँ पर छवि के संतृप्ति समा�
 msgid ""
 "Allows you to adjust gamma curve for display.\n"
 "Value is:  pow( 2, 1/x )."
-msgstr "प्रदर्शन के लिए गामा वक्र को समायोजित करने देता है. मान है: po( 2, 1/ x)."
+msgstr ""
+"प्रदर्शन के लिए गामा वक्र को समायोजित करने देता है. मान है: po( 2, 1/ x)."
 
 msgid "Toggle Edit Mode."
 msgstr "संपादन मोड टॉगल करें."
@@ -1918,14 +3635,23 @@ msgid ""
 "You have EDLs in the current session.  These will not be saved in the "
 "session file.  Do you want to continue?"
 msgstr ""
-"आपके पास वर्तमान सत्र में ईएलडीएल है. ये सत्र फ़ाइल में सहेजा नहीं जाएगा. क्या आप जारी "
-"रखना चाहते हैं?"
+"आपके पास वर्तमान सत्र में ईएलडीएल है. ये सत्र फ़ाइल में सहेजा नहीं जाएगा. "
+"क्या आप जारी रखना चाहते हैं?"
 
 msgid "Edit Text Annotation"
 msgstr "पाठ व्याख्या संपादित करें"
 
 msgid "No item selected"
 msgstr "कोई वस्तु चुना नहीं गया"
+
+msgid "%s - Page %d"
+msgstr "%s - पृष्ठ %d"
+
+msgid "Frame {0} - TC: {1} - S: {2}"
+msgstr "फ्रेम {0} - समयकोड: {1} - S: {2}"
+
+msgid "Image too big.  Will save the viewport size."
+msgstr "छवि बहुत बड़ा है. व्यूपोर्ट आकार सहेजेगा."
 
 msgid "Scrub"
 msgstr "स्क्रैप"
@@ -1985,16 +3711,18 @@ msgid "Unknown action mode in "
 msgstr "अज्ञात क्रिया विधि इंच"
 
 msgid ""
-"Cannot create an annotation here for all frames.  A current frame annotation "
-"already exists."
+"Cannot create an annotation here for all frames.  A current frame annotation"
+" already exists."
 msgstr ""
-"सभी फ्रेमों के लिए यहाँ एक एनोटेशन बना नहीं सकता. एक वर्तमान फ्रेम व्याख्या पहले से ही "
-"मौजूद है."
+"सभी फ्रेमों के लिए यहाँ एक एनोटेशन बना नहीं सकता. एक वर्तमान फ्रेम व्याख्या "
+"पहले से ही मौजूद है."
 
 msgid ""
 "Cannot create an annotation here for current frame.  An all frames "
 "annotation already exists."
-msgstr "वर्तमान फ्रेम के लिए यहाँ एक एनोटेशन बना नहीं सकता. सभी फ्रेम पहले से ही मौजूद है."
+msgstr ""
+"वर्तमान फ्रेम के लिए यहाँ एक एनोटेशन बना नहीं सकता. सभी फ्रेम पहले से ही "
+"मौजूद है."
 
 msgid "Play"
 msgstr "बजाएँ"
@@ -2290,9 +4018,8 @@ msgstr "प्लेबैक/GenericName"
 msgid "Playback/Go to/Next Annotation"
 msgstr "प्लेबैक/GenericName"
 
-#, fuzzy
 msgid "Playback/Annotation/Toggle Visible"
-msgstr "प्लेबैक/व्याख्या/सभी साफ करें"
+msgstr "प्लेबैक/एनोटेशन/दृश्यता टॉगल करें"
 
 msgid "Playback/Annotation/Clear"
 msgstr "प्लेबैक/व्याख्या/साफ करें"
@@ -2543,14 +4270,16 @@ msgstr "सिंक/स्वीकारें/ऑडियो"
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
 "function and a string with menu options in it."
-msgstr "'{0}' में एक फंक्शन या टीप के रूप में वांछित है जिसमें पायथन फंक्शन तथा मेन्यू विकल्प हैं."
+msgstr ""
+"'{0}' में एक फंक्शन या टीप के रूप में वांछित है जिसमें पायथन फंक्शन तथा "
+"मेन्यू विकल्प हैं."
 
 msgid ""
 "In '{0}' expected a function a tuple containing a Python function and a "
 "string with menu options in it."
 msgstr ""
-"'{0}' में एक फंक्शन Tuple की उम्मीद है जिसमें पायथन फंक्शन है तथा इसमें मेन्यू विकल्प के साथ "
-"वाक्यांश."
+"'{0}' में एक फंक्शन Tuple की उम्मीद है जिसमें पायथन फंक्शन है तथा इसमें "
+"मेन्यू विकल्प के साथ वाक्यांश."
 
 msgid "Help/Documentation"
 msgstr "मदद/दस्तावेज़ीकरण"
@@ -2649,10 +4378,11 @@ msgid "Detail mode"
 msgstr "विवरण विधि"
 
 msgid ""
-"Could not create directory '%s'. You may not have permission to perform this "
-"operation."
+"Could not create directory '%s'. You may not have permission to perform this"
+" operation."
 msgstr ""
-"'%s' निर्देशिका निर्मित नहीं कर सका. आपके पास इस संक्रिया को चलाने की अनुमति नहीं है."
+"'%s' निर्देशिका निर्मित नहीं कर सका. आपके पास इस संक्रिया को चलाने की अनुमति"
+" नहीं है."
 
 msgid "An error ocurred while trying to delete '%s'. %s"
 msgstr "'%s' को मिटाने की कोशिश में एक त्रुटि हुई. %s"
@@ -2840,6 +4570,21 @@ msgstr "नवंबर"
 msgid "Dec"
 msgstr "डिवाइस"
 
+msgid "Replace"
+msgstr "बदलें"
+
+msgid "Find:"
+msgstr "ढूंढें:"
+
+msgid "Replace:"
+msgstr "बदलें:"
+
+msgid "Replace All"
+msgstr "सभी बदलें"
+
+msgid "Replace Next"
+msgstr "अगला बदलें"
+
 msgid "Build Environment:"
 msgstr "वातावरण बिल्ड करें:"
 
@@ -2940,18 +4685,19 @@ msgid ""
 "Wayland does not support Float on Top.  Use your Window Manager to set a "
 "hotkey for it."
 msgstr ""
-"पथलैंड ऊपरी पर फ्लोट समर्थित नहीं करता. अपने विंडो प्रबंधक का उपयोग इसके लिए गर्मकी सेट "
-"करने के लिए करें."
+"पथलैंड ऊपरी पर फ्लोट समर्थित नहीं करता. अपने विंडो प्रबंधक का उपयोग इसके लिए"
+" गर्मकी सेट करने के लिए करें."
 
 msgid "Session: "
 msgstr "सत्र:"
 
 msgid "No GNOME Shell Hotkey for Float On Top.  Setting it globally to '{0}'"
-msgstr "फ्लोट के लिए कोई गनोम शैलकी ऊपरी पर नहीं. इसे दुनिया भर में '{0}' पर सेट करें"
+msgstr ""
+"फ्लोट के लिए कोई गनोम शैलकी ऊपरी पर नहीं. इसे दुनिया भर में '{0}' पर सेट "
+"करें"
 
 msgid ""
-"This will disable events for mrv2, allowing them to pass through to windows "
-"below it.\n"
+"This will disable events for mrv2, allowing them to pass through to windows below it.\n"
 "\n"
 "Give window focus to disable."
 msgstr ""
@@ -2963,8 +4709,7 @@ msgid "Continue"
 msgstr "जारी रखें"
 
 msgid ""
-"This will disable events for mrv2, allowing them to pass through to windows "
-"below it.\n"
+"This will disable events for mrv2, allowing them to pass through to windows below it.\n"
 "\n"
 "Give window focus (click on the taskbar icon)\n"
 "to disable."
@@ -3027,6 +4772,442 @@ msgstr "औसत"
 
 msgid "Track #%d - %s"
 msgstr "ट्रैक #%d - %s"
+
+msgid "Same Size"
+msgstr "एक जैसे आकार"
+
+msgid "Half Size"
+msgstr "आधा आकार"
+
+msgid "Quarter Size"
+msgstr "चौथाई आकार"
+
+msgid "TV (Legal Range)"
+msgstr "TV (लाइग सीमा)"
+
+msgid "PC (Full Range)"
+msgstr "PC (पूरा सीमा)"
+
+msgid "BGR"
+msgstr "BGR"
+
+msgid "bt709"
+msgstr "bt709"
+
+msgid "FCC"
+msgstr "FCC"
+
+msgid "SMPTE240m"
+msgstr "SMPTE240m"
+
+msgid "bt601"
+msgstr "bt601"
+
+msgid "bt2020"
+msgstr "bt2020"
+
+msgid "unspecified"
+msgstr "अ- निर्दिष्ट"
+
+msgid "reserved"
+msgstr "सुरक्षित"
+
+msgid "bt470m"
+msgstr "bt470m"
+
+msgid "SMPTE170m"
+msgstr "SMPTE170m"
+
+msgid "Film"
+msgstr "फ़िल्म"
+
+msgid "SMPTE428"
+msgstr "SMPTE428"
+
+msgid "SMPTE431"
+msgstr "SMPTE431"
+
+msgid "SMPTE432"
+msgstr "SMPTE432"
+
+msgid "EBU3213"
+msgstr "EBU3213"
+
+msgid "gamma22"
+msgstr "gamma22"
+
+msgid "gamma28"
+msgstr "gamma28"
+
+msgid "smpte240m"
+msgstr "smpte240m"
+
+msgid "linear"
+msgstr "linear"
+
+msgid "log"
+msgstr "log"
+
+msgid "logsqrt"
+msgstr "logsqrt"
+
+msgid "iec61966-2-4"
+msgstr "iec61966-2-4"
+
+msgid "bt1361"
+msgstr "bt1361"
+
+msgid "iec61966-2-1"
+msgstr "iec61966-2-1"
+
+msgid "bt2020-10"
+msgstr "bt2020-10"
+
+msgid "bt2020-12"
+msgstr "bt2020-12"
+
+msgid "smpte2084"
+msgstr "smpte2084"
+
+msgid "arib-std-b67"
+msgstr "arib-std-b67"
+
+msgid "Save Movie Options"
+msgstr "मूवी विकल्प सहेजें"
+
+msgid "Common Settings"
+msgstr "सामान्य विन्यास"
+
+msgid "Save Annotations"
+msgstr "व्याख्याएँ सहेजें"
+
+msgid ""
+"Save Annotations burned into the movie or sequence.\n"
+"It also allows saving OpenEXRs from an 8-bit movie and changing OpenEXR's pixel type.\n"
+"\n"
+"Furthermore, it allows saving A/B or Tiled comparisons and baking OCIO.\n"
+"\n"
+"However, it is limited to the size of your screen."
+msgstr ""
+"फिल्म या अनुक्रम में जले हुए एनोटेशन सहेजें।\n"
+"यह 8-बिट फिल्म से OpenEXR को सहेजने और OpenEXR के पिक्सेल प्रकार को बदलने की भी अनुमति देता है।\n"
+"\n"
+"इसके अलावा, यह A/B या टाइल्ड तुलना सहेजने और OCIO को बेक करने की अनुमति देता है।\n"
+"\n"
+"हालाँकि, यह आपकी स्क्रीन के आकार तक सीमित है।"
+
+msgid "Video Options"
+msgstr "वीडियो विकल्प"
+
+msgid "Resolution"
+msgstr "रिसॉल्यूशन"
+
+msgid "Resolution of movie to save."
+msgstr "बचाने के लिए फिल्म का प्रस्ताव."
+
+msgid "Hardware Codec"
+msgstr "हार्डवेयर कोडेक"
+
+msgid "Profile"
+msgstr "प्रोफाइल"
+
+msgid "FFMpeg's Profile settings."
+msgstr "FFMPg का प्रोफ़ाइल सेटिंग."
+
+msgid "?"
+msgstr "?"
+
+msgid "Help on Profile"
+msgstr "प्रोफाइल पर मदद"
+
+msgid "Pixel Format"
+msgstr "पिक्सेल प्रारूप"
+
+msgid "FFMpeg's Pixel Format for the codec selected"
+msgstr "चुने गए कोडेकों के लिए FFMOg के पिक्सेल प्रारूप"
+
+msgid "Help on Pixel Format"
+msgstr "पिक्सेल प्रारूप में मदद"
+
+msgid "Preset"
+msgstr "प्रीसेट"
+
+msgid "FFMpeg's Preset setting for the codec selected."
+msgstr "चुने गए कोडेकों के लिए FFMPEREGEGENK विन्यास."
+
+msgid "Help on Preset"
+msgstr "प्रीसेट पर मदद"
+
+msgid "Advanced Settings"
+msgstr "विस्तृत विन्यास"
+
+msgid "Help on Advance Settings"
+msgstr "उन्नत विन्यास पर मदद"
+
+msgid "Audio Options"
+msgstr "ऑडियो विकल्प"
+
+msgid "FFMpeg's Audio Codec settings."
+msgstr "एफएफएमपी का ऑडियो कोडेक विन्यास."
+
+msgid "Note that while saving with audio, the audio will not be heard."
+msgstr "नोट करें कि ऑडियो के साथ सहेजते समय, ऑडियो सुना नहीं जाएगा."
+
+msgid "Help Window"
+msgstr "मदद विंडो"
+
+msgid "Override"
+msgstr "ओवरराइड"
+
+msgid "Select this to override all the parameters below."
+msgstr "नीचे दिए गए सभी पैरामीटर्स को ओवरराइड करने के लिए इसे चुनें."
+
+msgid "Color Range"
+msgstr "रंग सीमाएं"
+
+msgid "FFMpeg's Color Range for the codec selected"
+msgstr "चुने गए कोडेकों के लिए FFMOGE का रंग सीमा"
+
+msgid "FFMpeg's Color Space for the codec selected"
+msgstr "चुने गए कोडेकों के लिए FFMOGE का रंग जगह"
+
+msgid "FFMpeg's Color Primaries setting for the codec selected."
+msgstr "चुने गए कोडेकों के लिए FFMPENK का रंग सेट."
+
+msgid "FFMpeg's Color Transfer Function settings for the codec selected."
+msgstr "FFMOG का रंग ट्रांसफर सूची चुने गए codec के लिए फंक्शन सेटिंग."
+
+msgid "Profile Help"
+msgstr "प्रोफ़ाइल मदद"
+
+msgid ""
+"\n"
+"  The Profile setting allows you to select\n"
+"  the codec and profile for video saving.\n"
+"\n"
+"  Each profile has its benefits and drawbacks.\n"
+"\n"
+"  None - This is mpeg4 compatible with DVD movies.\n"
+"  H264 - Only if mrv2 has been compiled as GPL.  One\n"
+"         of the most popular codecs, but it is now\n"
+"         becoming obsolete.\n"
+"  ProRes - ProRes is a family of codecs developed by \n"
+"           Apple.\n"
+"           The Normal version strikes a balance \n"
+"           between quality and file size.  \n"
+"  ProRes_Proxy - Most compressed ProRes, offering the\n"
+"                 smallest file size.  \n"
+"                 Good for offline editing.\n"
+"  ProRes_LT - More compressed than normal ProRes but \n"
+"              less than Proxy.  Good for offline \n"
+"              editing.\n"
+"  ProRes_HQ - Less compressed then normal ProRes.  \n"
+"              Often used for mastering and final \n"
+"              delivery.\n"
+"  ProRes_4444 - Highest quality ProRes format, \n"
+"                offering full 4:4:4\n"
+"                chroma sampling (color information \n"
+"                for each pixel).\n"
+"                Preserves the most detail and color \n"
+"                accuracy, ideal for high-end workflows \n"
+"                like color grading and visual effects.\n"
+"                Supports alpha channels for \n"
+"                compositing graphics with \n"
+"                transparency.\n"
+"  ProRes_XQ - Highest quality version of ProRes 4444, \n"
+"              designed for high-dynamic-range (HDR) \n"
+"              imagery.\n"
+"  VP9 - Codec developed by Google.  High compression \n"
+"        ratio.\n"
+"        It supports a whole range of pixel formats to\n"
+"        balance disk space vs. quality.\n"
+"        Good for high-end delivery for either Web or \n"
+"        online review.\n"
+"  Cineform - codec developed by GoPro, that rivals \n"
+"             ProRes in features, except for HDR.  \n"
+"             It was discontinued in 2021, but most \n"
+"             packages may support it.\n"
+"             It does not compress as well as ProRes \n"
+"             or VP9.\n"
+"             It supports alpha channels for \n"
+"             compositing graphics with transparency.\n"
+"  AV1 - New generation codec which is gaining support from\n"
+"        Google, Netflix and Amazon.  Compresses better than VP9 \n"
+"        or H264 for the same quality but requires more computer\n"
+"        resources.  Optimal for video reviews.\n"
+"  HAP - RGB/A codec which is optimized for fast playback with\n"
+"        CPU decoding.  It does not compress that well.\n"
+"        It needs hap-alpha* presets to save alpha channel.\n"
+"\n"
+"  Hardware encoding is only supported on newer MacBook\n"
+"  Pro with M1 or newer chips.  H264, Prores, VP9 and\n"
+"  AV1 are supported or soon will be.\n"
+"  "
+msgstr ""
+"\n"
+"  प्रोफाइल सेटिंग आपको वीडियो सेविंग के लिए कोडेक और प्रोफाइल चुनने की अनुमति देती है।\n"
+"\n"
+"  प्रत्येक प्रोफाइल के अपने लाभ और हानियाँ हैं।\n"
+"\n"
+"  None - यह mpeg4 है जो DVD फिल्मों के साथ संगत है।\n"
+"  H264 - केवल यदि mrv2 को GPL के रूप में संकलित किया गया है।  एक\n"
+"         सबसे लोकप्रिय कोडेक्स में से एक है, लेकिन अब यह\n"
+"         अप्रचलित हो रहा है।\n"
+"  ProRes - ProRes कोडेक्स का एक परिवार है जिसे \n"
+"           Apple द्वारा विकसित किया गया है।\n"
+"           नॉर्मल संस्करण गुणवत्ता और फ़ाइल आकार के बीच संतुलन \n"
+"           बनाता है।\n"
+"  ProRes_Proxy - सबसे संकुचित ProRes, सबसे छोटे फ़ाइल आकार की पेशकश करता है।\n"
+"                 ऑफ़लाइन संपादन के लिए अच्छा है।\n"
+"  ProRes_LT - सामान्य ProRes से अधिक संकुचित लेकिन \n"
+"              Proxy से कम।  ऑफ़लाइन \n"
+"              संपादन के लिए अच्छा है।\n"
+"  ProRes_HQ - सामान्य ProRes की तुलना में कम संकुचित।\n"
+"              अक्सर मास्टरिंग और अंतिम \n"
+"              वितरण के लिए उपयोग किया जाता है।\n"
+"  ProRes_4444 - ProRes का सबसे उच्च गुणवत्ता वाला स्वरूप, \n"
+"                पूर्ण 4:4:4 रंग सैंपलिंग (प्रत्येक पिक्सेल के लिए रंग जानकारी) प्रदान करता है।\n"
+"                सबसे अधिक विवरण और रंग सटीकता को बनाए रखता है, उच्च-स्तरीय वर्कफ़्लो के लिए आदर्श \n"
+"                जैसे कि रंग ग्रेडिंग और दृश्य प्रभाव।\n"
+"                पारदर्शिता के साथ ग्राफिक्स को कंपोज़ करने के लिए एल्पा चैनलों का समर्थन करता है।\n"
+"  ProRes_XQ - ProRes 4444 का सबसे उच्च गुणवत्ता वाला संस्करण, \n"
+"              उच्च-गति-रेंज (HDR) इमेजरी के लिए डिज़ाइन किया गया।\n"
+"  VP9 - Google द्वारा विकसित कोडेक।  उच्च संपीड़न \n"
+"        अनुपात।\n"
+"        यह डिस्क स्थान बनाम गुणवत्ता को संतुलित करने के लिए विभिन्न पिक्सेल स्वरूपों की एक श्रृंखला का समर्थन करता है।\n"
+"        वेब या ऑनलाइन समीक्षा के लिए उच्च-स्तरीय वितरण के लिए अच्छा है।\n"
+"  Cineform - GoPro द्वारा विकसित कोडेक, जो ProRes के साथ सुविधाओं में प्रतिस्पर्धा करता है, HDR को छोड़कर।\n"
+"             इसे 2021 में समाप्त कर दिया गया था, लेकिन अधिकांश \n"
+"             पैकेज इसका समर्थन कर सकते हैं।\n"
+"             यह ProRes या VP9 की तुलना में उतना संकुचित नहीं करता है।\n"
+"             यह पारदर्शिता के साथ ग्राफिक्स को कंपोज़ करने के लिए एल्पा चैनलों का समर्थन करता है।\n"
+"  AV1 - नई पीढ़ी का कोडेक जो Google, Netflix और Amazon से समर्थन प्राप्त कर रहा है।  समान गुणवत्ता के लिए VP9 \n"
+"        या H264 की तुलना में बेहतर संपीड़न करता है लेकिन अधिक कंप्यूटर संसाधनों की आवश्यकता होती है।\n"
+"        वीडियो समीक्षाओं के लिए आदर्श।\n"
+"  HAP - RGB/A कोडेक जो तेज़ प्लेबैक के लिए ऑप्टिमाइज़ किया गया है\n"
+"        CPU डिकोडिंग के साथ।  यह उतना अच्छा संकुचित नहीं करता है।\n"
+"        इसे एल्पा चैनल को सहेजने के लिए hap-alpha* प्रीसेट की आवश्यकता होती है।\n"
+"\n"
+"  हार्डवेयर एन्कोडिंग केवल नए MacBook Pro के साथ M1 या नए चिप्स पर समर्थित है।  H264, Prores, VP9 और\n"
+"  AV1 समर्थित हैं या जल्द ही होंगे।\n"
+"  "
+
+msgid "Pixel Format Help"
+msgstr "पिक्सेल प्रारूप मदद"
+
+msgid ""
+"\n"
+"  The Pixel Format specifies how the video is encoded in the\n"
+"  file.  Each codec and profile has a number of pixel formats \n"
+"  it supports.\n"
+"  There are two main types of pixel formats supported:\n"
+"\n"
+"      - YUV (Luminance, Cr, Cb)\n"
+"      - BGR (RGB with reversed channels)\n"
+"      - RGB\n"
+"\n"
+"  In addition, some codecs support alpha channel (transparency),\n"
+"  like BGRA.\n"
+"\n"
+"  The other element of the codec is the 'P' which indicates the\n"
+"  channels are stored in planar order, instead of each component\n"
+"  interleaved.\n"
+"\n"
+"  Finally, the number in the pixel format name indicates the\n"
+"  number of bits the pixel format uses to encode.  \n"
+"  Normal values for that are 8, 10, 12 and 16.\n"
+"\n"
+"  "
+msgstr ""
+"\n"
+" पिक्सेल प्रारूप निर्दिष्ट करता है कि वीडियो को फ़ाइल में कैसे एनकोड किया जाता है। प्रत्येक कोडेक और प्रोफ़ाइल में कई पिक्सेल प्रारूप होते हैं जिन्हें वह समर्थन करता है।\n"
+" दो मुख्य प्रकार के पिक्सेल प्रारूप समर्थित हैं:\n"
+"\n"
+" - YUV (ल्यूमिनेंस, Cr, Cb)\n"
+" - BGR (उलटे चैनलों के साथ RGB)\n"
+" - RGB\n"
+"\n"
+" इसके अलावा, कुछ कोडेक अल्फा चैनल (पारदर्शिता) का समर्थन करते हैं,\n"
+" जैसे BGRA.\n"
+"\n"
+" कोडेक का दूसरा तत्व 'P' है जो इंगित करता है कि\n"
+" चैनल प्रत्येक घटक\n"
+" इंटरलीव्ड के बजाय प्लानर ऑर्डर में संग्रहीत हैं।\n"
+"\n"
+" अंत में, पिक्सेल प्रारूप नाम में संख्या पिक्सेल प्रारूप द्वारा उपयोग किए जाने वाले बिट्स की संख्या को इंगित करती है एनकोड करें। \n"
+" इसके लिए सामान्य मान 8, 10, 12 और 16 हैं।\n"
+"\n"
+" "
+
+msgid "Preset Help"
+msgstr "प्रीसेट मदद"
+
+msgid ""
+"\n"
+"\n"
+"  The Preset setting allows you to store and pass\n"
+"  flags to FFmpeg (the video engine that mrv2 uses) to \n"
+"  easily control the quality and size of the video besides\n"
+"  the pixel format.\n"
+"\n"
+"  When choosing the quality you should set in this order:\n"
+"    - Profile\n"
+"    - Pixel Format\n"
+"    - Preset\n"
+"\n"
+"  The preset files are stored in the presets/ directory of the \n"
+"  mrv2 install but you can configure the directory by using the\n"
+"  environment variable $STUDIOPATH/presets.\n"
+"\n"
+"  The naming of the files is the name of the profile-preset.pst.\n"
+"\n"
+"  The format is very simple, with comments and colon separated \n"
+"  options.\n"
+"  "
+msgstr ""
+"\n"
+"\n"
+" प्रीसेट सेटिंग आपको FFmpeg (वीडियो इंजन जिसका mrv2 उपयोग करता है) में फ़्लैग स्टोर करने और पास करने की अनुमति देती है ताकि पिक्सेल फ़ॉर्मेट के अलावा वीडियो की गुणवत्ता और आकार को आसानी से नियंत्रित किया जा सके।\n"
+"\n"
+" गुणवत्ता चुनते समय आपको इस क्रम में सेट करना चाहिए:\n"
+" - प्रोफ़ाइल\n"
+" - पिक्सेल फ़ॉर्मेट\n"
+" - प्रीसेट\n"
+"\n"
+" प्रीसेट फ़ाइलें mrv2 इंस्टॉल की presets/ निर्देशिका में संग्रहीत हैं लेकिन आप पर्यावरण चर $STUDIOPATH/presets का उपयोग करके निर्देशिका को कॉन्फ़िगर कर सकते हैं।\n"
+"\n"
+" फ़ाइलों का नामकरण प्रोफ़ाइल-preset.pst का नाम है।\n"
+"\n"
+" फ़ॉर्मेट बहुत सरल है, जिसमें टिप्पणियाँ और कोलन अलग-अलग विकल्प हैं।\n"
+" "
+
+msgid "Advanced Settings Help"
+msgstr "उन्नत विन्यास मदद"
+
+msgid ""
+"\n"
+"\n"
+"  The Advanced Settings allows you store \n"
+"  metadata in the movie file to determine where \n"
+"  and how it was created.  Useful to indicate, \n"
+"  for example, if a set of 8-bit images were \n"
+"  bt709 or some other color space.\n"
+"\n"
+"  If you don't know what those settings do, \n"
+"  DON'T MESS WITH THEM!\n"
+"  "
+msgstr ""
+"\n"
+"\n"
+"विस्तृत विन्यास आपको भंडारित करने देता है\n"
+"फिल्म फ़ाइल में मेटाडाटा निर्धारित करने के लिए यह निर्धारित करने हेतु कि कहाँ जाएँ\n"
+"और उसे हर तरह के सामान से वुसअत दी\n"
+"उदाहरण के लिए, यदि 8 बिट छवियों का सेट होता है\n"
+"Bt709 या कुछ अन्य रंग जगह.\n"
+"\n"
+"आप नहीं जानते कि उन सेटिंग क्या करते हैं,\n"
+"एम के साथ मत बनो!\n"
+"  "
 
 msgid "1/9"
 msgstr "1/9"
@@ -3149,7 +5330,8 @@ msgid ""
 "Switch RGBA display between floating point, hexadecimal (0..0xff) and "
 "decimal (0..255)."
 msgstr ""
-"फ्लोटिंग पाइंट, हेक्साडेसीमल (0.. 0xf) तथा दशमलव के बीच आरजीबीए प्रदर्शन स्विच करें."
+"फ्लोटिंग पाइंट, हेक्साडेसीमल (0.. 0xf) तथा दशमलव के बीच आरजीबीए प्रदर्शन "
+"स्विच करें."
 
 msgid "Red value of image pixel under mouse."
 msgstr "माउस के अंतर्गत छवि पिक्सेल का पुनः आकार."
@@ -3168,7 +5350,8 @@ msgstr "माउस के अंतर्गत छवि पिक्से�
 
 msgid ""
 "Switch pixel color space information display for the pixel under the cursor."
-msgstr "संकेतक के नीचे पिक्सेल के लिए पिक्सेल के रंग जगह सूचना प्रदर्शक बदलें."
+msgstr ""
+"संकेतक के नीचे पिक्सेल के लिए पिक्सेल के रंग जगह सूचना प्रदर्शक बदलें."
 
 msgid "Hue value of image pixel under mouse."
 msgstr "माउस के अंतर्गत छवि पिक्सेल का वर्ण मूल्य."
@@ -3200,12 +5383,10 @@ msgid ""
 "      Y = 0.2126 R + 0.7152 G + 0.0722 B\n"
 "Y' (Lumma) is the weighted pixel value according to:\n"
 "      Y' = ( R + G + B ) / 3.0\n"
-"L (Lightness) is the human perception of luminance of the image which is non "
-"linear.\n"
+"L (Lightness) is the human perception of luminance of the image which is non linear.\n"
 "According to CIE No.15.2:\n"
 "      L = (116 * Y ^ 1/3 - 16) / 100\n"
-"A pixel of Y = 0.18 (L = 0.5) will appear about half as bright as Y = L = "
-"1.0 (white)."
+"A pixel of Y = 0.18 (L = 0.5) will appear about half as bright as Y = L = 1.0 (white)."
 msgstr ""
 "स्विच चमक गणना.\n"
 "Y (ल्यूमिनेंस) Rec709 के अनुसार पिक्सेल मान है:\n"
@@ -3394,7 +5575,8 @@ msgstr "गामा इनपुट"
 msgid ""
 "Allows you to adjust gamma curve for display.\n"
 "Value is:  pow( 2, 1/x );"
-msgstr "प्रदर्शन के लिए गामा वक्र समायोजित करने देता है. मान है: po( 2, 1/ x);"
+msgstr ""
+"प्रदर्शन के लिए गामा वक्र समायोजित करने देता है. मान है: po( 2, 1/ x);"
 
 msgid "ICS, View, Look"
 msgstr "ICS, दृश्य, रूप"
@@ -3453,15 +5635,6 @@ msgstr "प्रस्थिति पट्टी दिखायें (_S)"
 msgid "Current tool being used."
 msgstr "मौज़ूदा औज़ार उपयोग में लिया जा रहा है."
 
-msgid "Same Size"
-msgstr "एक जैसे आकार"
-
-msgid "Half Size"
-msgstr "आधा आकार"
-
-msgid "Quarter Size"
-msgstr "चौथाई आकार"
-
 msgid "Half"
 msgstr "आधा"
 
@@ -3477,40 +5650,11 @@ msgstr "विंडो प्रदर्शित करें"
 msgid "Save Image Options"
 msgstr "छवि विकल्प सहेजें"
 
-msgid "Common Settings"
-msgstr "सामान्य विन्यास"
-
-msgid "Save Annotations"
-msgstr "व्याख्याएँ सहेजें"
-
-msgid ""
-"Save Annotations burned into the movie or sequence.\n"
-"It also allows saving OpenEXRs from an 8-bit movie and changing OpenEXR's "
-"pixel type.\n"
-"\n"
-"Furthermore, it allows saving A/B or Tiled comparisons and baking OCIO.\n"
-"\n"
-"However, it is limited to the size of your screen."
-msgstr ""
-"फिल्म या अनुक्रम में जले हुए एनोटेशन सहेजें।\n"
-"यह 8-बिट फिल्म से OpenEXR को सहेजने और OpenEXR के पिक्सेल प्रकार को बदलने की भी अनुमति "
-"देता है।\n"
-"\n"
-"इसके अलावा, यह A/B या टाइल्ड तुलना सहेजने और OCIO को बेक करने की अनुमति देता है।\n"
-"\n"
-"हालाँकि, यह आपकी स्क्रीन के आकार तक सीमित है।"
-
 msgid "Annotation Frames Only"
 msgstr "सिर्फ व्याख्या ढांचा"
 
 msgid "Save only the annotation frames, not the whole sequence."
 msgstr "सिर्फ एनोटेशन फ्रेम को सहेजें, पूरे अनुक्रम को नहीं."
-
-msgid "Resolution"
-msgstr "रिसॉल्यूशन"
-
-msgid "Resolution of movie to save."
-msgstr "बचाने के लिए फिल्म का प्रस्ताव."
 
 msgid "OpenEXR Options"
 msgstr "ओपनईएक्सआर विकल्प"
@@ -3753,8 +5897,8 @@ msgid ""
 "This will reset all your preferences to their default values.  Are you sure "
 "you want to continue?"
 msgstr ""
-"यह आपकी सभी पसंद को उनके डिफ़ॉल्ट मान में रीसेट करेगा. क्या आप सुनिश्चित हैं कि आप जारी "
-"रखना चाहते हैं?"
+"यह आपकी सभी पसंद को उनके डिफ़ॉल्ट मान में रीसेट करेगा. क्या आप सुनिश्चित हैं"
+" कि आप जारी रखना चाहते हैं?"
 
 msgid "User Interface"
 msgstr "प्रयोक्ता अंतरफलक"
@@ -3769,7 +5913,8 @@ msgid ""
 "When selected, mrv2's window will always show up on top of other windows on "
 "the desktop."
 msgstr ""
-"जब चुना जाता है, mrv2 का विंडो हमेशा डेस्कटॉप पर अन्य विंडो के शीर्ष पर दिखाई देता है."
+"जब चुना जाता है, mrv2 का विंडो हमेशा डेस्कटॉप पर अन्य विंडो के शीर्ष पर "
+"दिखाई देता है."
 
 msgid "Secondary on Top"
 msgstr "ऊपरी पर द्वितीयक"
@@ -3779,11 +5924,11 @@ msgstr "एकल उदाहरण"
 
 msgid ""
 "When selected, only a single mrv2 instance is allowed.\n"
-"If you try to open several mrv2s with different images, all these images "
-"will be sent to the already open mrv2."
+"If you try to open several mrv2s with different images, all these images will be sent to the already open mrv2."
 msgstr ""
-"जब चुना जाता है, केवल एक mrrv2 उदाहरण स्वीकार्य है. यदि आप भिन्न छवियों से कई mrv2 "
-"खोलने की कोशिश करते हैं, इन सभी छवियों को पहले से ही खुला mvv2 में भेजा जाएगा."
+"जब चुना जाता है, केवल एक mrrv2 उदाहरण स्वीकार्य है. यदि आप भिन्न छवियों से "
+"कई mrv2 खोलने की कोशिश करते हैं, इन सभी छवियों को पहले से ही खुला mvv2 में "
+"भेजा जाएगा."
 
 msgid "Auto Refit Image"
 msgstr "छवि स्वचलित फिर से लोड करें"
@@ -3793,8 +5938,9 @@ msgid ""
 "This effectively means the video will be resized automatically based on the "
 "size of the window."
 msgstr ""
-"जब चुना जाता है, mrv2 प्रत्येक वीडियो लोड पर फिट छवि ऑपरेशन लागू करेगा. इसका मतलब है "
-"कि वीडियो का आकार स्वचालित रूप से विंडो के आकार पर आधारित किया जाएगा."
+"जब चुना जाता है, mrv2 प्रत्येक वीडियो लोड पर फिट छवि ऑपरेशन लागू करेगा. इसका"
+" मतलब है कि वीडियो का आकार स्वचालित रूप से विंडो के आकार पर आधारित किया "
+"जाएगा."
 
 msgid "Raise on Enter"
 msgstr "एंटर चालू करें"
@@ -3802,7 +5948,9 @@ msgstr "एंटर चालू करें"
 msgid ""
 "When selected, mrv2 will raise the window to the front once you enter the "
 "view window."
-msgstr "जब चुना जाता है, mrv2 विंडो को सामने ले जाता है जब आप दृश्य विंडो में प्रवेश करते हैं."
+msgstr ""
+"जब चुना जाता है, mrv2 विंडो को सामने ले जाता है जब आप दृश्य विंडो में प्रवेश"
+" करते हैं."
 
 msgid "Normal"
 msgstr "सामान्य"
@@ -3841,9 +5989,11 @@ msgid "Topbar"
 msgstr "शीर्षबार"
 
 msgid ""
-"When selected, mrv2 will start with its channel, gain, gamma toolbar visible."
+"When selected, mrv2 will start with its channel, gain, gamma toolbar "
+"visible."
 msgstr ""
-"जब चयनित होता है, mrv2 इसके चैनल से शुरू होगा, प्राप्त करने के लिए गामा औज़ार दृश्य."
+"जब चयनित होता है, mrv2 इसके चैनल से शुरू होगा, प्राप्त करने के लिए गामा "
+"औज़ार दृश्य."
 
 msgid "Pixel Toolbar"
 msgstr "पिक्सेल औज़ार पट्टी"
@@ -3867,8 +6017,8 @@ msgid ""
 "This is a macOS setting only.  When selected the menus will appear on the "
 "system toolbar instead of the mrv2 toolbar."
 msgstr ""
-"यह एक एमआईएस सेटिंग है. जब चयनित मेन्यू औज़ार पट्टियों के बजाय तंत्र औज़ार पट्टियों पर प्रकट "
-"होगा."
+"यह एक एमआईएस सेटिंग है. जब चयनित मेन्यू औज़ार पट्टियों के बजाय तंत्र औज़ार "
+"पट्टियों पर प्रकट होगा."
 
 msgid "Tool Dock"
 msgstr "औजार डॉक"
@@ -3879,7 +6029,8 @@ msgstr "जब चयनित होता है, mrv2 कार्रवा�
 msgid "Only One Panel"
 msgstr "सिर्फ एक फलक"
 
-msgid "When selected, mrv2 will start with the only one panel option selected."
+msgid ""
+"When selected, mrv2 will start with the only one panel option selected."
 msgstr "जब चयनित होता है, mrv2 सिर्फ एक फलक से शुरू होगा जो चुना गया है."
 
 msgid "View Window"
@@ -3910,7 +6061,9 @@ msgid "Safe Areas"
 msgstr "सुरक्षित क्षेत्र"
 
 msgid "When mrv2 starts, the safe area display will be active by default."
-msgstr "जब एमrv2 शुरू होता है, सुरक्षित क्षेत्र प्रदर्शित डिफ़ॉल्ट द्वारा सक्रिय किया जाएगा."
+msgstr ""
+"जब एमrv2 शुरू होता है, सुरक्षित क्षेत्र प्रदर्शित डिफ़ॉल्ट द्वारा सक्रिय "
+"किया जाएगा."
 
 msgid "OCIO in Top Bar"
 msgstr "ऊपरी बार में ओआईओ"
@@ -3919,7 +6072,8 @@ msgid ""
 "When mrv2 starts, OCIO should start in the top bar instead of color "
 "adjustments."
 msgstr ""
-"जब mrv2 शुरू होता है, OCIO को रंग समायोजन के बजाए शीर्ष बार में प्रारंभ होना चाहिए."
+"जब mrv2 शुरू होता है, OCIO को रंग समायोजन के बजाए शीर्ष बार में प्रारंभ होना"
+" चाहिए."
 
 msgid "Zoom Speed"
 msgstr "ज़ूम गति"
@@ -3931,7 +6085,8 @@ msgid ""
 "This area specifies which elements should be shown as a HUD overlay on the "
 "view screen."
 msgstr ""
-"यह क्षेत्र निर्दिष्ट करता है कि कौन से तत्वों को दृश्य स्क्रीन पर HUDR के रूप में दिखाया जाए."
+"यह क्षेत्र निर्दिष्ट करता है कि कौन से तत्वों को दृश्य स्क्रीन पर HUDR के "
+"रूप में दिखाया जाए."
 
 msgid "Frame"
 msgstr "फ्रेम"
@@ -3957,7 +6112,8 @@ msgstr "यात्रियों के लिए एक क्लिक क�
 msgid ""
 "When using mrv2's file chooser, a single click on a folder will open it."
 msgstr ""
-"जब mrv2 का फ़ाइल चयनक इस्तेमाल किया जाता है, एक फ़ोल्डर पर एक क्लिक इसे खोल देगा."
+"जब mrv2 का फ़ाइल चयनक इस्तेमाल किया जाता है, एक फ़ोल्डर पर एक क्लिक इसे खोल "
+"देगा."
 
 msgid "Thumbnails Active"
 msgstr "लघु छवि सक्रिय"
@@ -3969,7 +6125,8 @@ msgid "USD Thumbnails"
 msgstr "यूएसडी लघु छवि"
 
 msgid "Show Thumbnails for USD files (can be slow if they are big)"
-msgstr "यूएसडी फ़ाइलों के लिए लघु छवि दिखाएँ (यदि वे बड़े हैं तो धीमा हो सकता है)"
+msgstr ""
+"यूएसडी फ़ाइलों के लिए लघु छवि दिखाएँ (यदि वे बड़े हैं तो धीमा हो सकता है)"
 
 msgid "Use Native File Chooser"
 msgstr "नेटिव फ़ाइल चयनक इस्तेमाल करें"
@@ -3978,8 +6135,8 @@ msgid ""
 "If selected, the natlve file chooser will be used.  If unselected, mrv2's "
 "standard file chooser will be used."
 msgstr ""
-"यदि चयनित किया जाता है,lv फ़ाइल चयनक इस्तेमाल किया जाएगा. यदि नहीं चुना गया है, "
-"mrv2 का मानक फ़ाइल चयनक इस्तेमाल किया जाएगा."
+"यदि चयनित किया जाता है,lv फ़ाइल चयनक इस्तेमाल किया जाएगा. यदि नहीं चुना गया "
+"है, mrv2 का मानक फ़ाइल चयनक इस्तेमाल किया जाएगा."
 
 msgid "Fonts"
 msgstr "फ़ॉन्ट्स"
@@ -4049,19 +6206,20 @@ msgid ""
 "When this option is set, mrv2 will save its position and size upon exiting "
 "the program."
 msgstr ""
-"जब यह विकल्प सेट किया जाता है, mrv2 प्रोग्राम से बाहर होने पर अपनी स्थिति तथा आकार "
-"सहेजेगा."
+"जब यह विकल्प सेट किया जाता है, mrv2 प्रोग्राम से बाहर होने पर अपनी स्थिति "
+"तथा आकार सहेजेगा."
 
 msgid "Fixed Position"
 msgstr "स्थिर स्थिति"
 
 msgid ""
-"When this option is set, mrv2 will open in the position you set here (except "
-"if the window goes out of the Desktop).  If Always Save on Exit is on, the "
+"When this option is set, mrv2 will open in the position you set here (except"
+" if the window goes out of the Desktop).  If Always Save on Exit is on, the "
 "values are recakculated upon exiting the program."
 msgstr ""
-"जब यह विकल्प सेट किया जाता है, mrv2 स्थिति में खोलेगा (यदि विंडो डेस्कटॉप से बाहर जाता "
-"है). यदि बाहर निकलने पर हमेशा सहेजें तो मान फिर से प्रारंभ हो जाता है."
+"जब यह विकल्प सेट किया जाता है, mrv2 स्थिति में खोलेगा (यदि विंडो डेस्कटॉप से"
+" बाहर जाता है). यदि बाहर निकलने पर हमेशा सहेजें तो मान फिर से प्रारंभ हो "
+"जाता है."
 
 msgid "X:"
 msgstr "X:"
@@ -4077,9 +6235,9 @@ msgid ""
 "H.  If Always Save on Exit is on, the values are recalculated upon exiting "
 "the program."
 msgstr ""
-"जब यह विकल्प चालू होगा, mrv2 उस आकार के लिए हमेशा खुला रहेगा जो आपने डबल्यू और एच. में "
-"सेट किया है यदि हमेशा बाहर होने पर सहेजें, मूल्य प्रोग्राम से बाहर होने पर फिर से गणना "
-"किया जाता है."
+"जब यह विकल्प चालू होगा, mrv2 उस आकार के लिए हमेशा खुला रहेगा जो आपने डबल्यू "
+"और एच. में सेट किया है यदि हमेशा बाहर होने पर सहेजें, मूल्य प्रोग्राम से "
+"बाहर होने पर फिर से गणना किया जाता है."
 
 msgid "W:"
 msgstr "W:"
@@ -4096,8 +6254,8 @@ msgid ""
 "Fixed Size depending what you want to save."
 msgstr ""
 "Fills the Fixed Position and Fixed Size values with the current values of "
-"the viewer. Remember to also check the boxes for Fixed Position and/or Fixed "
-"Size depending what you want to save."
+"the viewer. Remember to also check the boxes for Fixed Position and/or Fixed"
+" Size depending what you want to save."
 
 msgid "Render"
 msgstr "रेंडर"
@@ -4160,9 +6318,10 @@ msgid "Remove EDLs in Temporary Folder on Exit"
 msgstr "बाहर होने पर अस्थाई फ़ोल्डर में EDL को मिटाएँ"
 
 msgid ""
-"When selected, temporary EDLs (Playlists) will be removed from the temporary "
-"folder."
-msgstr "जब चुना जाता है, अस्थायी EDL (Playlist) अस्थायी फ़ोल्डर से हटा दिया जाएगा."
+"When selected, temporary EDLs (Playlists) will be removed from the temporary"
+" folder."
+msgstr ""
+"जब चुना जाता है, अस्थायी EDL (Playlist) अस्थायी फ़ोल्डर से हटा दिया जाएगा."
 
 msgid "Video Start Frame"
 msgstr "वीडियो प्रारंभ फ्रेम"
@@ -4186,14 +6345,16 @@ msgid ""
 "Start playback when scrubbing so that audio can be heard.  Scrubbing can be "
 "less smooth."
 msgstr ""
-"प्लेबैक को रोकने के दौरान प्रारंभ करें ताकि ऑडियो सुना जा सके. स्क्रैबिंग कम नरम हो सकता है."
+"प्लेबैक को रोकने के दौरान प्रारंभ करें ताकि ऑडियो सुना जा सके. स्क्रैबिंग कम"
+" नरम हो सकता है."
 
 msgid "Single Click Playback"
 msgstr "एकल क्लिकबैक"
 
 msgid ""
 "Start Playback when single clicking the left mouse button on the view window"
-msgstr "जब एकल माउस बटन को दृश्य विंडो में क्लिक करते हो तो प्लेबैक प्रारंभ करें"
+msgstr ""
+"जब एकल माउस बटन को दृश्य विंडो में क्लिक करते हो तो प्लेबैक प्रारंभ करें"
 
 msgid "Auto Hide Pixel Bar"
 msgstr "पिक्सेल पट्टी स्वतः छुपाएँ"
@@ -4202,8 +6363,8 @@ msgid ""
 "The Pixel Bar can slow down playback at high resolutions.  When this option "
 "is on, the pixel toolbar will be hidden automatically."
 msgstr ""
-"पिक्सेल पट्टी उच्च रेज़ोल्यूशन्स में प्लेबैक को धीमा कर सकता है. जब यह विकल्प चालू होगा, "
-"पिक्सेल औज़ार- पट्टी स्वचलित छुपाई जाएगी."
+"पिक्सेल पट्टी उच्च रेज़ोल्यूशन्स में प्लेबैक को धीमा कर सकता है. जब यह "
+"विकल्प चालू होगा, पिक्सेल औज़ार- पट्टी स्वचलित छुपाई जाएगी."
 
 msgid "Sequences"
 msgstr "अनुक्रम"
@@ -4212,7 +6373,9 @@ msgid "Speed"
 msgstr "गति"
 
 msgid "Frames Per Second value for sequences that don't have embedded speed."
-msgstr "फ्रेम पर निर्भर करता है कि अनुक्रमों के लिए दूसरा मूल्य है जो एम्बेडेड गति नहीं है."
+msgstr ""
+"फ्रेम पर निर्भर करता है कि अनुक्रमों के लिए दूसरा मूल्य है जो एम्बेडेड गति "
+"नहीं है."
 
 msgid "Looping Mode"
 msgstr "लूपिंग मोड"
@@ -4224,12 +6387,13 @@ msgid "Scrub Sensitivity"
 msgstr "छवियाँ सक्षम करें"
 
 msgid ""
-"This setting controls the sensitivity of scrubbing (SHIFT and then the mouse "
-"right and left).  Smaller values make the mouse move jump more frames while "
-"higher values does the opposite."
+"This setting controls the sensitivity of scrubbing (SHIFT and then the mouse"
+" right and left).  Smaller values make the mouse move jump more frames while"
+" higher values does the opposite."
 msgstr ""
-"यह सेटिंग क्लीबिंग (SHIT और उसके बाद माउस दाहिने और बाएँ की ओर) को नियंत्रित करता है. "
-"छोटे मान माउस को अधिक फ्रेम बनाता है जबकि उच्चतर मान विपरीत होता है."
+"यह सेटिंग क्लीबिंग (SHIT और उसके बाद माउस दाहिने और बाएँ की ओर) को नियंत्रित"
+" करता है. छोटे मान माउस को अधिक फ्रेम बनाता है जबकि उच्चतर मान विपरीत होता "
+"है."
 
 msgid "Default View"
 msgstr "डिफ़ॉल्ट दृश्य"
@@ -4271,8 +6435,8 @@ msgid ""
 "This is the path to your config.ocio file.  It can be set with the "
 "environment variable OCIO, which takes precedence over any saved setting."
 msgstr ""
-"यह आपके कॉन्फ़िग फ़ाइल का पथ है. यह एनवायरनमेंट वेरिएबल ओआईओ के साथ सेट किया जा सकता "
-"है, जो किसी भी सहेजे गए विन्यास से ज़्यादा उपयुक्‍त बनाता है."
+"यह आपके कॉन्फ़िग फ़ाइल का पथ है. यह एनवायरनमेंट वेरिएबल ओआईओ के साथ सेट किया"
+" जा सकता है, जो किसी भी सहेजे गए विन्यास से ज़्यादा उपयुक्‍त बनाता है."
 
 msgid "Built-in Configs"
 msgstr "अंतर्निर्मित कॉन्फ़िग्स"
@@ -4284,11 +6448,11 @@ msgid "Use Default Display and View"
 msgstr "डिफ़ॉल्ट प्रदर्शन व दृश्य इस्तेमाल करें"
 
 msgid ""
-"When this option is on, and your config.ocio has a default display and view, "
-"it will be used to be set as default."
+"When this option is on, and your config.ocio has a default display and view,"
+" it will be used to be set as default."
 msgstr ""
-"जब यह विकल्प चालू होगा, आपके कॉन्फ़िग फ़ाइल को डिफ़ॉल्ट रूप में प्रदर्शित तथा देखें, यह "
-"डिफ़ॉल्ट रूप में नियत किया जाएगा."
+"जब यह विकल्प चालू होगा, आपके कॉन्फ़िग फ़ाइल को डिफ़ॉल्ट रूप में प्रदर्शित "
+"तथा देखें, यह डिफ़ॉल्ट रूप में नियत किया जाएगा."
 
 msgid "Use Active Views and Active Displays"
 msgstr "सक्रिय दृश्य तथा सक्रिय प्रदर्शनों का प्रयोग करें"
@@ -4297,8 +6461,8 @@ msgid ""
 "When this option is off, OCIO files with active_views: and active_displays: "
 "are not taken into account."
 msgstr ""
-"जब इस विकल्प को बन्द किया जाता है, OCO फ़ाइलें सक्रिय_ दृश्य के साथ बंद हो जाता है. तथा "
-"सक्रिय_hosts: हिसाब में नहीं लिया जाता है."
+"जब इस विकल्प को बन्द किया जाता है, OCO फ़ाइलें सक्रिय_ दृश्य के साथ बंद हो "
+"जाता है. तथा सक्रिय_hosts: हिसाब में नहीं लिया जाता है."
 
 msgid "OCIO Defaults"
 msgstr "OCOO डिफ़ॉल्ट"
@@ -4309,14 +6473,15 @@ msgstr "8- बिट"
 msgid ""
 "The name of the OCIO default image color space for 8 bit images (jpg, bmp, "
 "etc)."
-msgstr "ओसीआई छवि रंग जगह का नाम 8 बिट छवियों के लिए (सामान्य, एमम्प इत्यादि)."
+msgstr ""
+"ओसीआई छवि रंग जगह का नाम 8 बिट छवियों के लिए (सामान्य, एमम्प इत्यादि)."
 
 msgid "16-bits"
 msgstr "16-बिट"
 
 msgid ""
-"The name of the OCIO default image color space for 16-bit images (cin, tiff, "
-"etc.)"
+"The name of the OCIO default image color space for 16-bit images (cin, tiff,"
+" etc.)"
 msgstr "OCOIO छवि रंग जगह का नाम जो 16 बिट छवियों के लिए होता है (स्की, आदि.)"
 
 msgid "32-bits"
@@ -4330,7 +6495,8 @@ msgstr "OCIO छवि रंग जगह का नाम जो 32- बिट
 msgid "half"
 msgstr "आधा"
 
-msgid "The name of the OCIO default image color space for OpenEXR half images."
+msgid ""
+"The name of the OCIO default image color space for OpenEXR half images."
 msgstr "ओसीआईओ डिफ़ॉल्ट छवि रंग जगह ओपनईएक्सआर छवियों के लिए."
 
 msgid "float"
@@ -4339,7 +6505,8 @@ msgstr "फ्लोटिंग पाइंट"
 msgid ""
 "The name of the OCIO default image color space for half and float images "
 "(OpenEXR, hdr, dpx, etc.)"
-msgstr "OCOIO छवि रंग जगह का नाम आधे तथा फ्लोट छवियों के लिए (ओएक्सआर, hdr, आदि)."
+msgstr ""
+"OCOIO छवि रंग जगह का नाम आधे तथा फ्लोट छवियों के लिए (ओएक्सआर, hdr, आदि)."
 
 msgid "Default Look"
 msgstr "डिफ़ॉल्ट रूप"
@@ -4359,15 +6526,15 @@ msgstr "संस्करण रेगिक्स"
 msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
-"automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: "
+"automatically be created a regular expression to match versions defined with"
+" _v in the name of the file, directory or both. For example: "
 "gizmo_v001.0001.exr"
 msgstr ""
-"क्लिप संस्करणों से मेल खाने के लिए उपयोग किया जाने वाला नियमित अभिव्यक्ति (रेगुलर "
-"एक्सप्रेशन)। इसमें तीन चीजें (प्रिफिक्स, संख्या, और सफिक्स) का समूह होना चाहिए। यदि इसे "
-"इसकी डिफ़ॉल्ट वैल्यू (_v) पर छोड़ा जाता है, तो यह स्वतः ही एक नियमित अभिव्यक्ति बनाएगा "
-"जो फ़ाइल, डायरेक्टरी या दोनों के नाम में _v के साथ परिभाषित संस्करणों से मेल खाएगा। "
-"उदाहरण के लिए: gizmo_v001.0001.exr"
+"क्लिप संस्करणों से मेल खाने के लिए उपयोग किया जाने वाला नियमित अभिव्यक्ति "
+"(रेगुलर एक्सप्रेशन)। इसमें तीन चीजें (प्रिफिक्स, संख्या, और सफिक्स) का समूह "
+"होना चाहिए। यदि इसे इसकी डिफ़ॉल्ट वैल्यू (_v) पर छोड़ा जाता है, तो यह स्वतः "
+"ही एक नियमित अभिव्यक्ति बनाएगा जो फ़ाइल, डायरेक्टरी या दोनों के नाम में _v "
+"के साथ परिभाषित संस्करणों से मेल खाएगा। उदाहरण के लिए: gizmo_v001.0001.exr"
 
 msgid "Maximum Images Apart"
 msgstr "अधिकतम छवियाँ इसके अलावा"
@@ -4376,7 +6543,8 @@ msgid ""
 "When searching for a version, this value is the maximum version apart from "
 "each other when searching the first or last version."
 msgstr ""
-"संस्करण के लिए खोज रहा है, यह मान एक दूसरे से अलग है जब पहली या अंतिम संस्करण खोज रहा है."
+"संस्करण के लिए खोज रहा है, यह मान एक दूसरे से अलग है जब पहली या अंतिम "
+"संस्करण खोज रहा है."
 
 msgid "Missing Frame"
 msgstr "फ्रेम गुम है"
@@ -4388,8 +6556,8 @@ msgid ""
 "Use Up and Down arrows to move the selected line up and down.  Double click "
 "to change item.  Click on an empty area to unselect."
 msgstr ""
-"चुने गए पंक्तियों को ऊपर और नीचे ले जाने के लिये उपर और निचे तीर हटाएँ. वस्तू बदलने के लिये "
-"दो बार क्लिक करें. खाली जगहपर माउस का बटण दबाये."
+"चुने गए पंक्तियों को ऊपर और नीचे ले जाने के लिये उपर और निचे तीर हटाएँ. "
+"वस्तू बदलने के लिये दो बार क्लिक करें. खाली जगहपर माउस का बटण दबाये."
 
 msgid "Add Paths"
 msgstr "पथ जोड़ें"
@@ -4428,8 +6596,8 @@ msgid ""
 "Turns on and off Monitor's Vsync.  VSync off can display movies faster, at "
 "the cost of potential tearing in the image."
 msgstr ""
-"मॉनीटर व बंद बारी है. वीसिंक बंद फिल्म तेजी से दिखा सकते हैं, छवि में संभावित चीरने की "
-"कीमत पर."
+"मॉनीटर व बंद बारी है. वीसिंक बंद फिल्म तेजी से दिखा सकते हैं, छवि में "
+"संभावित चीरने की कीमत पर."
 
 msgid "Color Buffers' Accuracy"
 msgstr "रंग बफर्स शुद्धता"
@@ -4439,9 +6607,9 @@ msgid ""
 "all float information, Half Float preserves most float information and Fast "
 "works in 8-bits.  Automatic selects the accuracy based on image depth."
 msgstr ""
-"रंग बफर फ्लोट, आधा फ्लोट, तेज या स्वचालित हो सकता है. फ्लोट सभी फ्लोट जानकारी बनाए "
-"रखता है, आधा फ्लोट जानकारी बनाए रखता है तथा 8- बिट पर तीव्र कार्य करता है. स्वचालित "
-"छवि गहराई पर आधारित सटीकता का चयन करता है."
+"रंग बफर फ्लोट, आधा फ्लोट, तेज या स्वचालित हो सकता है. फ्लोट सभी फ्लोट "
+"जानकारी बनाए रखता है, आधा फ्लोट जानकारी बनाए रखता है तथा 8- बिट पर तीव्र "
+"कार्य करता है. स्वचालित छवि गहराई पर आधारित सटीकता का चयन करता है."
 
 msgid "Blit Viewports"
 msgstr "विन्यास"
@@ -4450,8 +6618,8 @@ msgid ""
 "Viewports can be drawn with blitting or with OpenGL shaders.  Depending on "
 "graphics card and OS one can perform better then the other."
 msgstr ""
-"दृश्य शुरु करने या ओपनजीएल shader के साथ बनाया जा सकता है. ग्राफ़िक्स कार्ड और ओएस पर "
-"निर्भर किया जा सकता है तब दूसरा बेहतर कर सकता है."
+"दृश्य शुरु करने या ओपनजीएल shader के साथ बनाया जा सकता है. ग्राफ़िक्स कार्ड "
+"और ओएस पर निर्भर किया जा सकता है तब दूसरा बेहतर कर सकता है."
 
 msgid "Blit Timeline"
 msgstr "ब्लिट टाइम-लाइन"
@@ -4460,22 +6628,24 @@ msgid ""
 "Timeline can be drawn with blitting or with OpenGL shaders.  Depending on "
 "graphics card and OS one can perform better then the other."
 msgstr ""
-"टाइमलाइन्स को ओपनजीएल shader के साथ या ओपनजीएल shader के साथ बनाया जा सकता है. "
-"ग्राफ़िक्स कार्ड और ओएस पर निर्भर किया जा सकता है तो दूसरे को बेहतर कर सकता है."
+"टाइमलाइन्स को ओपनजीएल shader के साथ या ओपनजीएल shader के साथ बनाया जा सकता "
+"है. ग्राफ़िक्स कार्ड और ओएस पर निर्भर किया जा सकता है तो दूसरे को बेहतर कर "
+"सकता है."
 
 msgid ""
 "For changes to take effect, you will need to re-open any movies already "
 "playing or reload mrv2."
 msgstr ""
-"परिवर्तनों को प्रभाव में लाने के लिए, आपको पहले से ही किसी भी फिल्म को फिर से खोलना "
-"होगा या mrv2 को फिर से लोड करना होगा."
+"परिवर्तनों को प्रभाव में लाने के लिए, आपको पहले से ही किसी भी फिल्म को फिर "
+"से खोलना होगा या mrv2 को फिर से लोड करना होगा."
 
 msgid "API"
 msgstr "API"
 
 msgid "Audio API to use for platforms that support multiple APIs (Linux only)"
 msgstr ""
-"प्लेटफ़ॉर्म के लिए उपयोग में ऑडियो एपीआई जो कई एपीआई्स (सिर्फ लिनक्स) का समर्थन करता है"
+"प्लेटफ़ॉर्म के लिए उपयोग में ऑडियो एपीआई जो कई एपीआई्स (सिर्फ लिनक्स) का "
+"समर्थन करता है"
 
 msgid "Output Device"
 msgstr "आउटपुट उपकरण"
@@ -4490,15 +6660,18 @@ msgid ""
 "Here are the current settings to interact with ComfyUI.  It requires "
 "installation of mrv2's comfyUI nodes."
 msgstr ""
-"यहाँ कॉमफयूआई के साथ व्यवहार करने के लिए वर्तमान सेटिंग हैं. यह mrv2 के Brv2 नोड्स की "
-"स्थापना की आवश्यकता है."
+"यहाँ कॉमफयूआई के साथ व्यवहार करने के लिए वर्तमान सेटिंग हैं. यह mrv2 के Brv2"
+" नोड्स की स्थापना की आवश्यकता है."
 
 msgid "Use ComfyUI Pipe"
 msgstr "कॉमफयू वीआई पाइप इस्तेमाल करें"
 
 msgid ""
-"This setting opens a pipe to communicate with ComfyUI's mrv2_save_exr_node.py"
-msgstr "यह सेटिंग कॉमफयूयू से संपर्क करने के लिए एक पाइप खोलती है मैं हूँ mrv2_und_und."
+"This setting opens a pipe to communicate with ComfyUI's "
+"mrv2_save_exr_node.py"
+msgstr ""
+"यह सेटिंग कॉमफयूयू से संपर्क करने के लिए एक पाइप खोलती है मैं हूँ "
+"mrv2_und_und."
 
 msgid "Errors"
 msgstr "त्रुटियाँ"
@@ -4513,14 +6686,17 @@ msgid "On Error"
 msgstr "त्रुटि पर"
 
 msgid "Adjusts how Log Window behaves in case of error."
-msgstr "त्रुटि के मामले में लॉग विंडो बर्ताव कैसे दिखाता है यह एडजस्ट करता है."
+msgstr ""
+"त्रुटि के मामले में लॉग विंडो बर्ताव कैसे दिखाता है यह एडजस्ट करता है."
 
 msgid "Check for Updates"
 msgstr "अद्यतन के लिए जाँचें"
 
-msgid "Allows you to automatically download updates of mrv2 when it starts up."
+msgid ""
+"Allows you to automatically download updates of mrv2 when it starts up."
 msgstr ""
-"जब यह चालू होता है तो आपको एमरवी2 की अद्यतनों को स्वचालित डाउनलोड करने देता है."
+"जब यह चालू होता है तो आपको एमरवी2 की अद्यतनों को स्वचालित डाउनलोड करने देता "
+"है."
 
 msgid "Reset settings to the default."
 msgstr "डिफ़ॉल्ट में सेटिंग फिर सेट करें."
@@ -4534,7 +6710,9 @@ msgstr "अंतिम सहेजे वरीयता में सेट�
 msgid ""
 "Accept settings but don't save.  They will get saved when exiting the "
 "program."
-msgstr "विन्यास स्वीकारें, लेकिन सहेज नहीं सकते. प्रोग्राम से बाहर निकलने पर वे सहेजा जाएगा."
+msgstr ""
+"विन्यास स्वीकारें, लेकिन सहेज नहीं सकते. प्रोग्राम से बाहर निकलने पर वे "
+"सहेजा जाएगा."
 
 msgid "Module"
 msgstr "मोड्यूल"
@@ -4599,9 +6777,6 @@ msgstr "स्थानीय पथ"
 msgid "Okay"
 msgstr "ठीक है"
 
-msgid "Preset"
-msgstr "प्रीसेट"
-
 msgid "OCIO Presets"
 msgstr "ओसीआईएस"
 
@@ -4616,12 +6791,12 @@ msgstr "चुने गए प्रीसेट को मिटाने क�
 
 msgid ""
 "Select, Add or Delete an OCIO Preset that stores: config filename, Input "
-"Color Space, View, Look, LUT settings and Defaults for 8-bits, 16-bits, 32-"
-"bits, half and float images. "
+"Color Space, View, Look, LUT settings and Defaults for 8-bits, 16-bits, "
+"32-bits, half and float images. "
 msgstr ""
-"चुनें, या जोड़ें एक ओसीआईव्यू जिस भंडार को भंडारित करते हैं: कॉन्फ़िग फ़ाइल नाम, इनपुट रंग "
-"स्पेस, दृश्य, Lbbits तथा 8 बिट के लिए डिफ़ॉल्ट तथा 8 बिट के लिए डिफ़ॉल्ट, 32- बिट तथा "
-"डिफ़ॉल्ट छवि को मिटाएँ."
+"चुनें, या जोड़ें एक ओसीआईव्यू जिस भंडार को भंडारित करते हैं: कॉन्फ़िग फ़ाइल "
+"नाम, इनपुट रंग स्पेस, दृश्य, Lbbits तथा 8 बिट के लिए डिफ़ॉल्ट तथा 8 बिट के "
+"लिए डिफ़ॉल्ट, 32- बिट तथा डिफ़ॉल्ट छवि को मिटाएँ."
 
 msgid "Summary"
 msgstr "सारांश"
@@ -5016,9 +7191,8 @@ msgstr "सभी फ्रेमों को व्याख्या कर�
 msgid "Annotation Frame Step Backwards"
 msgstr "फ्रेम चरण पीछे की तरफ व्याख्या करें"
 
-#, fuzzy
 msgid "Toggle Show Annotations"
-msgstr "व्याख्या फलक टॉगल करें"
+msgstr "एनोटेशन दिखाने को टॉगल करें"
 
 msgid "Frame Step Backwards"
 msgstr "फ्रेम चरण पीछे"
@@ -5251,9 +7425,6 @@ msgstr "स्क्रैप मोड"
 msgid "Area Selection Mode"
 msgstr "क्षेत्र चयन विधि"
 
-msgid "Draw Mode"
-msgstr "मोड आरेखित करें"
-
 msgid "Erase Mode"
 msgstr "मिटाने का मोड"
 
@@ -5344,2171 +7515,6 @@ msgstr "यदि आप विंडो को बन्द करना चा
 msgid "Toggle About Window"
 msgstr "विंडो के बारे में टॉगल करें"
 
-#~ msgid "TV (Legal Range)"
-#~ msgstr "TV (लाइग सीमा)"
-
-#~ msgid "PC (Full Range)"
-#~ msgstr "PC (पूरा सीमा)"
-
-#~ msgid "BGR"
-#~ msgstr "BGR"
-
-#~ msgid "bt709"
-#~ msgstr "bt709"
-
-#~ msgid "FCC"
-#~ msgstr "FCC"
-
-#~ msgid "SMPTE240m"
-#~ msgstr "SMPTE240m"
-
-#~ msgid "bt601"
-#~ msgstr "bt601"
-
-#~ msgid "bt2020"
-#~ msgstr "bt2020"
-
-#~ msgid "unspecified"
-#~ msgstr "अ- निर्दिष्ट"
-
-#~ msgid "reserved"
-#~ msgstr "सुरक्षित"
-
-#~ msgid "bt470m"
-#~ msgstr "bt470m"
-
-#~ msgid "SMPTE170m"
-#~ msgstr "SMPTE170m"
-
-#~ msgid "Film"
-#~ msgstr "फ़िल्म"
-
-#~ msgid "SMPTE428"
-#~ msgstr "SMPTE428"
-
-#~ msgid "SMPTE431"
-#~ msgstr "SMPTE431"
-
-#~ msgid "SMPTE432"
-#~ msgstr "SMPTE432"
-
-#~ msgid "EBU3213"
-#~ msgstr "EBU3213"
-
-#~ msgid "gamma22"
-#~ msgstr "gamma22"
-
-#~ msgid "gamma28"
-#~ msgstr "gamma28"
-
-#~ msgid "smpte240m"
-#~ msgstr "smpte240m"
-
-#~ msgid "linear"
-#~ msgstr "linear"
-
-#~ msgid "log"
-#~ msgstr "log"
-
-#~ msgid "logsqrt"
-#~ msgstr "logsqrt"
-
-#~ msgid "iec61966-2-4"
-#~ msgstr "iec61966-2-4"
-
-#~ msgid "bt1361"
-#~ msgstr "bt1361"
-
-#~ msgid "iec61966-2-1"
-#~ msgstr "iec61966-2-1"
-
-#~ msgid "bt2020-10"
-#~ msgstr "bt2020-10"
-
-#~ msgid "bt2020-12"
-#~ msgstr "bt2020-12"
-
-#~ msgid "smpte2084"
-#~ msgstr "smpte2084"
-
-#~ msgid "arib-std-b67"
-#~ msgstr "arib-std-b67"
-
-#~ msgid "Save Movie Options"
-#~ msgstr "मूवी विकल्प सहेजें"
-
-#~ msgid "Video Options"
-#~ msgstr "वीडियो विकल्प"
-
-#~ msgid "Hardware Codec"
-#~ msgstr "हार्डवेयर कोडेक"
-
-#~ msgid "Profile"
-#~ msgstr "प्रोफाइल"
-
-#~ msgid "FFMpeg's Profile settings."
-#~ msgstr "FFMPg का प्रोफ़ाइल सेटिंग."
-
-#~ msgid "?"
-#~ msgstr "?"
-
-#~ msgid "Help on Profile"
-#~ msgstr "प्रोफाइल पर मदद"
-
-#~ msgid "Pixel Format"
-#~ msgstr "पिक्सेल प्रारूप"
-
-#~ msgid "FFMpeg's Pixel Format for the codec selected"
-#~ msgstr "चुने गए कोडेकों के लिए FFMOg के पिक्सेल प्रारूप"
-
-#~ msgid "Help on Pixel Format"
-#~ msgstr "पिक्सेल प्रारूप में मदद"
-
-#~ msgid "FFMpeg's Preset setting for the codec selected."
-#~ msgstr "चुने गए कोडेकों के लिए FFMPEREGEGENK विन्यास."
-
-#~ msgid "Help on Preset"
-#~ msgstr "प्रीसेट पर मदद"
-
-#~ msgid "Advanced Settings"
-#~ msgstr "विस्तृत विन्यास"
-
-#~ msgid "Help on Advance Settings"
-#~ msgstr "उन्नत विन्यास पर मदद"
-
-#~ msgid "Audio Options"
-#~ msgstr "ऑडियो विकल्प"
-
-#~ msgid "FFMpeg's Audio Codec settings."
-#~ msgstr "एफएफएमपी का ऑडियो कोडेक विन्यास."
-
-#~ msgid "Note that while saving with audio, the audio will not be heard."
-#~ msgstr "नोट करें कि ऑडियो के साथ सहेजते समय, ऑडियो सुना नहीं जाएगा."
-
-#~ msgid "Help Window"
-#~ msgstr "मदद विंडो"
-
-#~ msgid "Override"
-#~ msgstr "ओवरराइड"
-
-#~ msgid "Select this to override all the parameters below."
-#~ msgstr "नीचे दिए गए सभी पैरामीटर्स को ओवरराइड करने के लिए इसे चुनें."
-
-#~ msgid "Color Range"
-#~ msgstr "रंग सीमाएं"
-
-#~ msgid "FFMpeg's Color Range for the codec selected"
-#~ msgstr "चुने गए कोडेकों के लिए FFMOGE का रंग सीमा"
-
-#~ msgid "FFMpeg's Color Space for the codec selected"
-#~ msgstr "चुने गए कोडेकों के लिए FFMOGE का रंग जगह"
-
-#~ msgid "FFMpeg's Color Primaries setting for the codec selected."
-#~ msgstr "चुने गए कोडेकों के लिए FFMPENK का रंग सेट."
-
-#~ msgid "FFMpeg's Color Transfer Function settings for the codec selected."
-#~ msgstr "FFMOG का रंग ट्रांसफर सूची चुने गए codec के लिए फंक्शन सेटिंग."
-
-#~ msgid "Profile Help"
-#~ msgstr "प्रोफ़ाइल मदद"
-
-#~ msgid ""
-#~ "\n"
-#~ "  The Profile setting allows you to select\n"
-#~ "  the codec and profile for video saving.\n"
-#~ "\n"
-#~ "  Each profile has its benefits and drawbacks.\n"
-#~ "\n"
-#~ "  None - This is mpeg4 compatible with DVD movies.\n"
-#~ "  H264 - Only if mrv2 has been compiled as GPL.  One\n"
-#~ "         of the most popular codecs, but it is now\n"
-#~ "         becoming obsolete.\n"
-#~ "  ProRes - ProRes is a family of codecs developed by \n"
-#~ "           Apple.\n"
-#~ "           The Normal version strikes a balance \n"
-#~ "           between quality and file size.  \n"
-#~ "  ProRes_Proxy - Most compressed ProRes, offering the\n"
-#~ "                 smallest file size.  \n"
-#~ "                 Good for offline editing.\n"
-#~ "  ProRes_LT - More compressed than normal ProRes but \n"
-#~ "              less than Proxy.  Good for offline \n"
-#~ "              editing.\n"
-#~ "  ProRes_HQ - Less compressed then normal ProRes.  \n"
-#~ "              Often used for mastering and final \n"
-#~ "              delivery.\n"
-#~ "  ProRes_4444 - Highest quality ProRes format, \n"
-#~ "                offering full 4:4:4\n"
-#~ "                chroma sampling (color information \n"
-#~ "                for each pixel).\n"
-#~ "                Preserves the most detail and color \n"
-#~ "                accuracy, ideal for high-end workflows \n"
-#~ "                like color grading and visual effects.\n"
-#~ "                Supports alpha channels for \n"
-#~ "                compositing graphics with \n"
-#~ "                transparency.\n"
-#~ "  ProRes_XQ - Highest quality version of ProRes 4444, \n"
-#~ "              designed for high-dynamic-range (HDR) \n"
-#~ "              imagery.\n"
-#~ "  VP9 - Codec developed by Google.  High compression \n"
-#~ "        ratio.\n"
-#~ "        It supports a whole range of pixel formats to\n"
-#~ "        balance disk space vs. quality.\n"
-#~ "        Good for high-end delivery for either Web or \n"
-#~ "        online review.\n"
-#~ "  Cineform - codec developed by GoPro, that rivals \n"
-#~ "             ProRes in features, except for HDR.  \n"
-#~ "             It was discontinued in 2021, but most \n"
-#~ "             packages may support it.\n"
-#~ "             It does not compress as well as ProRes \n"
-#~ "             or VP9.\n"
-#~ "             It supports alpha channels for \n"
-#~ "             compositing graphics with transparency.\n"
-#~ "  AV1 - New generation codec which is gaining support from\n"
-#~ "        Google, Netflix and Amazon.  Compresses better than VP9 \n"
-#~ "        or H264 for the same quality but requires more computer\n"
-#~ "        resources.  Optimal for video reviews.\n"
-#~ "  HAP - RGB/A codec which is optimized for fast playback with\n"
-#~ "        CPU decoding.  It does not compress that well.\n"
-#~ "        It needs hap-alpha* presets to save alpha channel.\n"
-#~ "\n"
-#~ "  Hardware encoding is only supported on newer MacBook\n"
-#~ "  Pro with M1 or newer chips.  H264, Prores, VP9 and\n"
-#~ "  AV1 are supported or soon will be.\n"
-#~ "  "
-#~ msgstr ""
-#~ "\n"
-#~ "  प्रोफाइल सेटिंग आपको वीडियो सेविंग के लिए कोडेक और प्रोफाइल चुनने की अनुमति देती "
-#~ "है।\n"
-#~ "\n"
-#~ "  प्रत्येक प्रोफाइल के अपने लाभ और हानियाँ हैं।\n"
-#~ "\n"
-#~ "  None - यह mpeg4 है जो DVD फिल्मों के साथ संगत है।\n"
-#~ "  H264 - केवल यदि mrv2 को GPL के रूप में संकलित किया गया है।  एक\n"
-#~ "         सबसे लोकप्रिय कोडेक्स में से एक है, लेकिन अब यह\n"
-#~ "         अप्रचलित हो रहा है।\n"
-#~ "  ProRes - ProRes कोडेक्स का एक परिवार है जिसे \n"
-#~ "           Apple द्वारा विकसित किया गया है।\n"
-#~ "           नॉर्मल संस्करण गुणवत्ता और फ़ाइल आकार के बीच संतुलन \n"
-#~ "           बनाता है।\n"
-#~ "  ProRes_Proxy - सबसे संकुचित ProRes, सबसे छोटे फ़ाइल आकार की पेशकश करता है।\n"
-#~ "                 ऑफ़लाइन संपादन के लिए अच्छा है।\n"
-#~ "  ProRes_LT - सामान्य ProRes से अधिक संकुचित लेकिन \n"
-#~ "              Proxy से कम।  ऑफ़लाइन \n"
-#~ "              संपादन के लिए अच्छा है।\n"
-#~ "  ProRes_HQ - सामान्य ProRes की तुलना में कम संकुचित।\n"
-#~ "              अक्सर मास्टरिंग और अंतिम \n"
-#~ "              वितरण के लिए उपयोग किया जाता है।\n"
-#~ "  ProRes_4444 - ProRes का सबसे उच्च गुणवत्ता वाला स्वरूप, \n"
-#~ "                पूर्ण 4:4:4 रंग सैंपलिंग (प्रत्येक पिक्सेल के लिए रंग जानकारी) प्रदान "
-#~ "करता है।\n"
-#~ "                सबसे अधिक विवरण और रंग सटीकता को बनाए रखता है, उच्च-स्तरीय "
-#~ "वर्कफ़्लो के लिए आदर्श \n"
-#~ "                जैसे कि रंग ग्रेडिंग और दृश्य प्रभाव।\n"
-#~ "                पारदर्शिता के साथ ग्राफिक्स को कंपोज़ करने के लिए एल्पा चैनलों का "
-#~ "समर्थन करता है।\n"
-#~ "  ProRes_XQ - ProRes 4444 का सबसे उच्च गुणवत्ता वाला संस्करण, \n"
-#~ "              उच्च-गति-रेंज (HDR) इमेजरी के लिए डिज़ाइन किया गया।\n"
-#~ "  VP9 - Google द्वारा विकसित कोडेक।  उच्च संपीड़न \n"
-#~ "        अनुपात।\n"
-#~ "        यह डिस्क स्थान बनाम गुणवत्ता को संतुलित करने के लिए विभिन्न पिक्सेल स्वरूपों की "
-#~ "एक श्रृंखला का समर्थन करता है।\n"
-#~ "        वेब या ऑनलाइन समीक्षा के लिए उच्च-स्तरीय वितरण के लिए अच्छा है।\n"
-#~ "  Cineform - GoPro द्वारा विकसित कोडेक, जो ProRes के साथ सुविधाओं में प्रतिस्पर्धा "
-#~ "करता है, HDR को छोड़कर।\n"
-#~ "             इसे 2021 में समाप्त कर दिया गया था, लेकिन अधिकांश \n"
-#~ "             पैकेज इसका समर्थन कर सकते हैं।\n"
-#~ "             यह ProRes या VP9 की तुलना में उतना संकुचित नहीं करता है।\n"
-#~ "             यह पारदर्शिता के साथ ग्राफिक्स को कंपोज़ करने के लिए एल्पा चैनलों का "
-#~ "समर्थन करता है।\n"
-#~ "  AV1 - नई पीढ़ी का कोडेक जो Google, Netflix और Amazon से समर्थन प्राप्त कर रहा "
-#~ "है।  समान गुणवत्ता के लिए VP9 \n"
-#~ "        या H264 की तुलना में बेहतर संपीड़न करता है लेकिन अधिक कंप्यूटर संसाधनों की "
-#~ "आवश्यकता होती है।\n"
-#~ "        वीडियो समीक्षाओं के लिए आदर्श।\n"
-#~ "  HAP - RGB/A कोडेक जो तेज़ प्लेबैक के लिए ऑप्टिमाइज़ किया गया है\n"
-#~ "        CPU डिकोडिंग के साथ।  यह उतना अच्छा संकुचित नहीं करता है।\n"
-#~ "        इसे एल्पा चैनल को सहेजने के लिए hap-alpha* प्रीसेट की आवश्यकता होती है।\n"
-#~ "\n"
-#~ "  हार्डवेयर एन्कोडिंग केवल नए MacBook Pro के साथ M1 या नए चिप्स पर समर्थित है।  "
-#~ "H264, Prores, VP9 और\n"
-#~ "  AV1 समर्थित हैं या जल्द ही होंगे।\n"
-#~ "  "
-
-#~ msgid "Pixel Format Help"
-#~ msgstr "पिक्सेल प्रारूप मदद"
-
-#~ msgid ""
-#~ "\n"
-#~ "  The Pixel Format specifies how the video is encoded in the\n"
-#~ "  file.  Each codec and profile has a number of pixel formats \n"
-#~ "  it supports.\n"
-#~ "  There are two main types of pixel formats supported:\n"
-#~ "\n"
-#~ "      - YUV (Luminance, Cr, Cb)\n"
-#~ "      - BGR (RGB with reversed channels)\n"
-#~ "      - RGB\n"
-#~ "\n"
-#~ "  In addition, some codecs support alpha channel (transparency),\n"
-#~ "  like BGRA.\n"
-#~ "\n"
-#~ "  The other element of the codec is the 'P' which indicates the\n"
-#~ "  channels are stored in planar order, instead of each component\n"
-#~ "  interleaved.\n"
-#~ "\n"
-#~ "  Finally, the number in the pixel format name indicates the\n"
-#~ "  number of bits the pixel format uses to encode.  \n"
-#~ "  Normal values for that are 8, 10, 12 and 16.\n"
-#~ "\n"
-#~ "  "
-#~ msgstr ""
-#~ "\n"
-#~ " पिक्सेल प्रारूप निर्दिष्ट करता है कि वीडियो को फ़ाइल में कैसे एनकोड किया जाता है। "
-#~ "प्रत्येक कोडेक और प्रोफ़ाइल में कई पिक्सेल प्रारूप होते हैं जिन्हें वह समर्थन करता है।\n"
-#~ " दो मुख्य प्रकार के पिक्सेल प्रारूप समर्थित हैं:\n"
-#~ "\n"
-#~ " - YUV (ल्यूमिनेंस, Cr, Cb)\n"
-#~ " - BGR (उलटे चैनलों के साथ RGB)\n"
-#~ " - RGB\n"
-#~ "\n"
-#~ " इसके अलावा, कुछ कोडेक अल्फा चैनल (पारदर्शिता) का समर्थन करते हैं,\n"
-#~ " जैसे BGRA.\n"
-#~ "\n"
-#~ " कोडेक का दूसरा तत्व 'P' है जो इंगित करता है कि\n"
-#~ " चैनल प्रत्येक घटक\n"
-#~ " इंटरलीव्ड के बजाय प्लानर ऑर्डर में संग्रहीत हैं।\n"
-#~ "\n"
-#~ " अंत में, पिक्सेल प्रारूप नाम में संख्या पिक्सेल प्रारूप द्वारा उपयोग किए जाने वाले बिट्स की "
-#~ "संख्या को इंगित करती है एनकोड करें। \n"
-#~ " इसके लिए सामान्य मान 8, 10, 12 और 16 हैं।\n"
-#~ "\n"
-#~ " "
-
-#~ msgid "Preset Help"
-#~ msgstr "प्रीसेट मदद"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "  The Preset setting allows you to store and pass\n"
-#~ "  flags to FFmpeg (the video engine that mrv2 uses) to \n"
-#~ "  easily control the quality and size of the video besides\n"
-#~ "  the pixel format.\n"
-#~ "\n"
-#~ "  When choosing the quality you should set in this order:\n"
-#~ "    - Profile\n"
-#~ "    - Pixel Format\n"
-#~ "    - Preset\n"
-#~ "\n"
-#~ "  The preset files are stored in the presets/ directory of the \n"
-#~ "  mrv2 install but you can configure the directory by using the\n"
-#~ "  environment variable $STUDIOPATH/presets.\n"
-#~ "\n"
-#~ "  The naming of the files is the name of the profile-preset.pst.\n"
-#~ "\n"
-#~ "  The format is very simple, with comments and colon separated \n"
-#~ "  options.\n"
-#~ "  "
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ " प्रीसेट सेटिंग आपको FFmpeg (वीडियो इंजन जिसका mrv2 उपयोग करता है) में फ़्लैग स्टोर "
-#~ "करने और पास करने की अनुमति देती है ताकि पिक्सेल फ़ॉर्मेट के अलावा वीडियो की गुणवत्ता "
-#~ "और आकार को आसानी से नियंत्रित किया जा सके।\n"
-#~ "\n"
-#~ " गुणवत्ता चुनते समय आपको इस क्रम में सेट करना चाहिए:\n"
-#~ " - प्रोफ़ाइल\n"
-#~ " - पिक्सेल फ़ॉर्मेट\n"
-#~ " - प्रीसेट\n"
-#~ "\n"
-#~ " प्रीसेट फ़ाइलें mrv2 इंस्टॉल की presets/ निर्देशिका में संग्रहीत हैं लेकिन आप पर्यावरण चर "
-#~ "$STUDIOPATH/presets का उपयोग करके निर्देशिका को कॉन्फ़िगर कर सकते हैं।\n"
-#~ "\n"
-#~ " फ़ाइलों का नामकरण प्रोफ़ाइल-preset.pst का नाम है।\n"
-#~ "\n"
-#~ " फ़ॉर्मेट बहुत सरल है, जिसमें टिप्पणियाँ और कोलन अलग-अलग विकल्प हैं।\n"
-#~ " "
-
-#~ msgid "Advanced Settings Help"
-#~ msgstr "उन्नत विन्यास मदद"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "  The Advanced Settings allows you store \n"
-#~ "  metadata in the movie file to determine where \n"
-#~ "  and how it was created.  Useful to indicate, \n"
-#~ "  for example, if a set of 8-bit images were \n"
-#~ "  bt709 or some other color space.\n"
-#~ "\n"
-#~ "  If you don't know what those settings do, \n"
-#~ "  DON'T MESS WITH THEM!\n"
-#~ "  "
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "विस्तृत विन्यास आपको भंडारित करने देता है\n"
-#~ "फिल्म फ़ाइल में मेटाडाटा निर्धारित करने के लिए यह निर्धारित करने हेतु कि कहाँ जाएँ\n"
-#~ "और उसे हर तरह के सामान से वुसअत दी\n"
-#~ "उदाहरण के लिए, यदि 8 बिट छवियों का सेट होता है\n"
-#~ "Bt709 या कुछ अन्य रंग जगह.\n"
-#~ "\n"
-#~ "आप नहीं जानते कि उन सेटिंग क्या करते हैं,\n"
-#~ "एम के साथ मत बनो!\n"
-#~ "  "
-
-#~ msgid ""
-#~ "\n"
-#~ "USD module.\n"
-#~ "\n"
-#~ "Contains all classes and enums related to USD (Universal Scene "
-#~ "Description). \n"
-#~ msgstr ""
-#~ "\n"
-#~ "यूएसडी मॉड्यूल. अमेरिकाडी से संबंधित सभी वर्ग और ई-मैक्स्स (प्रयोगात्मक दृश्य वर्णन) से "
-#~ "संबंधित हैं.\n"
-
-#~ msgid "Renderer Name"
-#~ msgstr "रेंडरर नाम"
-
-#~ msgid "Render Width"
-#~ msgstr "रेंडर चौड़ाई"
-
-#~ msgid "Models' complexity."
-#~ msgstr "मॉडल की जटिलता।"
-
-#~ msgid "Draw mode  :class:`mrv2.usd.DrawMode`."
-#~ msgstr "ड्रा मोड :क्लास:mrv2.usd.DrawMode`."
-
-#~ msgid "Enable Lighting"
-#~ msgstr "हल्कािंग सक्षम करें"
-
-#~ msgid "Enable Scene Lights"
-#~ msgstr "दृश्य प्रकाश सक्षम करें"
-
-#~ msgid "Enable Scene Materials"
-#~ msgstr "दृश्य वस्तु सक्षम करें"
-
-#~ msgid "Enable sRGB"
-#~ msgstr "एसआरबी सक्षम करें"
-
-#~ msgid "Stage Cache Count"
-#~ msgstr "स्टेज कैश गिनती"
-
-#~ msgid "Disk Cache Byte Count"
-#~ msgstr "डिस्क कैश बाइट गणना करें"
-
-#~ msgid "USD Render Options."
-#~ msgstr "यूएस डी रेंडर विकल्प."
-
-#~ msgid "Get USD Render Options."
-#~ msgstr "यूएस डी रेंडर विकल्प प्राप्त करें."
-
-#~ msgid "Set USD Render Options."
-#~ msgstr "यूएसडी रेंडर विकल्प सेट करें."
-
-#~ msgid ""
-#~ "\n"
-#~ "UI module.\n"
-#~ "\n"
-#~ "Contains all classes and enums related to UI (User Interface). \n"
-#~ msgstr ""
-#~ "\n"
-#~ "यूआई मॉड्यूल. सभी वर्गों और एनमैक्स्स में यूआई (उपयोक्ता इंटरफेस) से संबंधित है.\n"
-
-#~ msgid "Refresh menus."
-#~ msgstr "मेन्यू ताज़ा करें."
-
-#~ msgid ""
-#~ "\n"
-#~ "Timeline module.\n"
-#~ "\n"
-#~ "Contains all functions related to the timeline control.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "टाइमलाइन मॉड्यूल. समय रेखा नियंत्रण से संबंधित सभी फंक्शन समाहित हैं.\n"
-
-#~ msgid "Play forwards."
-#~ msgstr "आगे बढ़ें."
-
-#~ msgid "Play backwards."
-#~ msgstr "पीछे से खेलें."
-
-#~ msgid "Seek to a time in timeline."
-#~ msgstr "समय रेखा में एक समय करने की कोशिश करें."
-
-#~ msgid "Seek to a frame in timeline."
-#~ msgstr "समय रेखा में फ्रेम के लिए कोशिश करें."
-
-#~ msgid "Seek to a second in timeline."
-#~ msgstr "समय रेखा में एक सेकंड के लिए कोशिश करें."
-
-#~ msgid "Time range of the timeline."
-#~ msgstr "समय रेखा की समय सीमा."
-
-#~ msgid "Selected time range of the timeline."
-#~ msgstr "समय रेखा की चयनित समय सीमा."
-
-#~ msgid "Set the selected time range of the timeline."
-#~ msgstr "समय रेखा के चयनित समय सीमा सेट करें."
-
-#~ msgid "Set the in time of the selected time range of the timeline."
-#~ msgstr "समय रेखा के समय में चयनित समय सीमा का सेट करें."
-
-#~ msgid "Set the in frame of the selected time range of the timeline."
-#~ msgstr "समय रेखा के फ्रेम में सेट करें."
-
-#~ msgid "Set the in seconds of the selected time range of the timeline."
-#~ msgstr "समय रेखा के सेकण्ड में चयनित समय सीमा का सेट करें."
-
-#~ msgid "Set the out time of the selected time range of the timeline."
-#~ msgstr "समय रेखा के समय सीमा सेट करें."
-
-#~ msgid "Set the out frame of the selected time range of the timeline."
-#~ msgstr "समयरेखा के बाहर का फ्रेम सेट करें."
-
-#~ msgid "Set the out seconds of the selected time range of the timeline."
-#~ msgstr "समय रेखा के समय सीमा से बाहर के समय को सेट करें."
-
-#~ msgid "Current time in timeline."
-#~ msgstr "समय रेखा में मौजूदा समय."
-
-#~ msgid "Current frame in timeline."
-#~ msgstr "समय रेखा में मौजूदा फ्रेम"
-
-#~ msgid "Current seconds in timeline."
-#~ msgstr "समय रेखा में मौजूदा सेकण्ड."
-
-#~ msgid "Return current loop mode of timeline."
-#~ msgstr "समय रेखा के मौजूदा लूप मोड को वापस लें."
-
-#~ msgid "Set current loop mode of timeline."
-#~ msgstr "समय रेखा के मौजूदा लूप मोड को सेट करें."
-
-#~ msgid "Gets the current FPS of timeline."
-#~ msgstr "समय रेखा के मौजूदा एफपीएस मिलता है."
-
-#~ msgid "Gets the default speed of the timeline."
-#~ msgstr "समय रेखा की तयशुदा गति प्राप्त करता है."
-
-#~ msgid "Set current FPS of timeline."
-#~ msgstr "समय रेखा के वर्तमान एफपीएस सेट करें."
-
-#~ msgid "Value less than 0"
-#~ msgstr "0 से कम"
-
-#~ msgid ""
-#~ "\n"
-#~ "Settings module.\n"
-#~ "\n"
-#~ "Contains all settings functions.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "विन्यास मॉड्यूल. सभी विन्यासों में समाहित हैं.\n"
-
-#~ msgid "Returns whether to check for updates at start up."
-#~ msgstr "वापस आता है कि क्या अद्यतन शुरू होने पर अद्यतन के लिए जांच करें."
-
-#~ msgid "Retrieve the cache memory setting in gigabytes."
-#~ msgstr "टाइटगाबाइट्स में कैश मेमोरी सेटिंग पुनःप्राप्त करें."
-
-#~ msgid "Set the cache memory setting in gigabytes."
-#~ msgstr "टाइटगाबाइट्स में कैश मेमोरी सेटिंग सेट करें."
-
-#~ msgid "Retrieve Read Ahead cache in seconds."
-#~ msgstr "आगे के कैश को सेकण्ड में पढ़ें."
-
-#~ msgid "Set Read Ahead cache in seconds."
-#~ msgstr "सेकण्ड में आगे कैश पढ़िए ।"
-
-#~ msgid "Retrieve Read Behind cache in seconds."
-#~ msgstr "सेकण्ड में कैश के पीछे पढ़ें."
-
-#~ msgid "Set Read Behind cache in seconds."
-#~ msgstr "सेकण्ड में कैश के पीछे पढ़ने के लिए सेट करें."
-
-#~ msgid "Set file sequence audio."
-#~ msgstr "फ़ाइल अनुक्रम ऑडियो सेट करें."
-
-#~ msgid "Get file sequence audio."
-#~ msgstr "फ़ाइल अनुक्रम ऑडियो प्राप्त करें."
-
-#~ msgid "Set file sequence audio file name."
-#~ msgstr "फ़ाइल अनुक्रम ऑडियो फ़ाइल नाम सेट करें."
-
-#~ msgid "Get file sequence audio file name."
-#~ msgstr "फ़ाइल अनुक्रम ऑडियो फ़ाइल नाम प्राप्त करें."
-
-#~ msgid "Set file sequence audio directory."
-#~ msgstr "फ़ाइल अनुक्रम ऑडियो डिरेक्ट्री सेट करें."
-
-#~ msgid "Get file sequence audio directory."
-#~ msgstr "फ़ाइल अनुक्रम ऑडियो डिरेक्ट्री प्राप्त करें."
-
-#~ msgid "Set maximum file sequence digits."
-#~ msgstr "अधिकतम फ़ाइल अनुक्रम संख्या सेट करें."
-
-#~ msgid "Get maximum file sequence digits."
-#~ msgstr "अधिकतम फ़ाइल अनुक्रम प्राप्त करें."
-
-#~ msgid "Set Timer Mode."
-#~ msgstr "टाइमर मोड सेट करें."
-
-#~ msgid "Get Timer Mode."
-#~ msgstr "टाइमर मोड जाओ."
-
-#~ msgid "Set Audio Buffer Frame Count."
-#~ msgstr "ऑडियो बफर फ्रेम गिनती सेट करें."
-
-#~ msgid "Get Audio Buffer Frame Count."
-#~ msgstr "ऑडियो बफर फ्रेम गिनती प्राप्त करें."
-
-#~ msgid "Set Video Request Count."
-#~ msgstr "वीडियो निवेदन गिनती सेट करें."
-
-#~ msgid "Get Video Request Count."
-#~ msgstr "वीडियो निवेदन गिनती प्राप्त करें."
-
-#~ msgid "Set Audio Request Count."
-#~ msgstr "ऑडियो निवेदन गिनती सेट करें."
-
-#~ msgid "Get Audio Request Count."
-#~ msgstr "ऑडियो निवेदन गिनती प्राप्त करें."
-
-#~ msgid "Set Sequence Thread Count."
-#~ msgstr "अनुक्रम थ्रेड गिनती सेट करें."
-
-#~ msgid "Get Sequence Thread Count."
-#~ msgstr "अनुक्रम थ्रेड गिनती प्राप्त करें."
-
-#~ msgid "Set FFmpeg YUV To RGB Conversion."
-#~ msgstr "FFMGOG>] को RGB में सेट करें."
-
-#~ msgid "Get FFmpeg YUV To RGB Conversion."
-#~ msgstr "FFPEG>] को RGB परिवर्तन के लिए प्राप्त करें."
-
-#~ msgid "Set FFmpeg Color Accuracy."
-#~ msgstr "एफ़एफएमपी रंग शुद्धता सेट करें."
-
-#~ msgid "Get FFmpeg Color Accuracy."
-#~ msgstr "FFGGe रंग शुद्धता प्राप्त करें."
-
-#~ msgid "Set FFmpeg Thread Count."
-#~ msgstr "एफ़एफजीजी लड़ी गिनती सेट करें."
-
-#~ msgid "Get FFmpeg Thread Count."
-#~ msgstr "FFeg लड़ी गिनती प्राप्त करें."
-
-#~ msgid "No session name established, cannot save."
-#~ msgstr "कोई सत्र नाम स्थापित नहीं है, सहेज नहीं सकता."
-
-#~ msgid ""
-#~ "\n"
-#~ "Session module.\n"
-#~ "\n"
-#~ "Used to manage everything related to sessions.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "सत्र मॉड्यूल. सत्रों से संबंधित सभी वस्तुओं का प्रबंधन करने के लिए इस्तेमाल किया जाता है.\n"
-
-#~ msgid "Returns the current session metadata."
-#~ msgstr "वर्तमान सत्र मेटाडाटा वापस लेता है."
-
-#~ msgid "Returns the current metadata for a key."
-#~ msgstr "वर्तमान मेटाडाटा को कुंजी के लिए लौटाता है."
-
-#~ msgid "Sets all the session metadata for a session."
-#~ msgstr "सत्र के लिए सभी पाठ मेटाडाटा सेट करता है."
-
-#~ msgid "Sets the session metadata for a key."
-#~ msgstr "मेटाडाटा सत्र को कुंजी के लिए सेट करता है."
-
-#~ msgid "Clears the current session metadata."
-#~ msgstr "वर्तमान सत्र मेटाडाटा साफ करता है."
-
-#~ msgid "Returns current session file."
-#~ msgstr "वर्तमान सत्र फ़ाइल बताता है."
-
-#~ msgid "Sets the current session file."
-#~ msgstr "मौज़ूदा सत्र फ़ाइल सेट करता है."
-
-#~ msgid "Open a session file."
-#~ msgstr "सत्र फ़ाइल खोलें."
-
-#~ msgid "Save a session file."
-#~ msgstr "एक सत्र फ़ाइल सहेजें."
-
-#~ msgid "Duplicated Python plugin {0} in {1} and {2}."
-#~ msgstr "दोहरी पाइथन प्लगिन {0} को {1} और {2} में."
-
-#~ msgid ""
-#~ "Expected a tuple containing a Python function and a string with menu "
-#~ "options in it."
-#~ msgstr "किसी पायथन फंक्शन तथा मेन्यू विकल्प के साथ एक वाक्यांश वांछित है."
-
-#~ msgid ""
-#~ "Expected a handle to a Python function or to a tuple containing a Python "
-#~ "function and a string with menu options in it."
-#~ msgstr ""
-#~ "पायथन फंक्शन या टीपील में पायथन फंक्शन तथा मेन्यू विकल्प के साथ एक वाक्यांश वांछित है."
-
-#~ msgid ""
-#~ "Please override the menus method by returning a valid dict of key menus, "
-#~ "values methods."
-#~ msgstr ""
-#~ "कृपया मेन्यू विधि को कुंजी मेन्यू के वैध हस्ताक्षर, मूल्य पद्धति में वापस लाने के द्वारा "
-#~ "ओवरराइड करें."
-
-#~ msgid ""
-#~ "\n"
-#~ "Plugin module.\n"
-#~ "\n"
-#~ "Contains all classes related to python plugins.\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "प्लगइन. सभी वर्ग को पायथन से संबंधित.\n"
-
-#~ msgid ""
-#~ "Whether a plugin is active or not.  If not overriden, the default is True."
-#~ msgstr "क्या प्लगिन सक्रिय है या नहीं. यदि ओवरराइड नहीं है, तयशुदा रूप से सही है."
-
-#~ msgid ""
-#~ "\n"
-#~ "Dictionary of menu entries with callbacks, like:\n"
-#~ "\n"
-#~ "def menus(self):\n"
-#~ "    menus = { \"New Menu/Hello\" : self.run }\n"
-#~ "    return menus\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "कॉलबैक्स के साथ मेनू प्रविष्टियों का डिक्शनरी, जैसे:\n"
-#~ "\n"
-#~ "def menus(self):\n"
-#~ "    menus = { \"New Menu/Hello\" : self.run }\n"
-#~ "    return menus\n"
-#~ "\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "import mrv2\n"
-#~ "from mrv2 import plugin\n"
-#~ "\n"
-#~ "class DemoPlugin(plugin.Plugin):\n"
-#~ "    def __init__(self):\n"
-#~ "        \"\"\"\n"
-#~ "        Constructor for DemoPlugin.\n"
-#~ "\n"
-#~ "        Define your own variables here.\n"
-#~ "        \"\"\"\n"
-#~ "        super().__init__()\n"
-#~ "\n"
-#~ "    def run(self):\n"
-#~ "        \"\"\"\n"
-#~ "        Example method used for the callback.\n"
-#~ "        \"\"\"\n"
-#~ "        print(\"Hello from Python plugin\")\n"
-#~ "\n"
-#~ "    def active(self):\n"
-#~ "        \"\"\"\n"
-#~ "        Optional method to return whether the plug-in is active or not.\n"
-#~ "\n"
-#~ "\n"
-#~ "        :return: True if the plug-in is active, False otherwise.\n"
-#~ "        :rtype: bool\n"
-#~ "\n"
-#~ "        \"\"\"\n"
-#~ "        return True\n"
-#~ "\n"
-#~ "    def menus(self):\n"
-#~ "        \"\"\"\n"
-#~ "        Dictionary of menu entries as keys with callbacks as values.\n"
-#~ "\n"
-#~ "\n"
-#~ "        :return: A dictionary of menu entries and their corresponding "
-#~ "callbacks.\n"
-#~ "        :rtype: dict\n"
-#~ "\n"
-#~ "        \"\"\"\n"
-#~ "        menus = {\"New Menu/Hello\": self.run}\n"
-#~ "        return menus\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "import mrv2\n"
-#~ "from mrv2 import plugin\n"
-#~ "\n"
-#~ "class DemoPlugin(plugin.Plugin):\n"
-#~ "    def __init__(self):\n"
-#~ "        \"\"\"\n"
-#~ "        DemoPlugin के लिए कंस्ट्रक्टर।\n"
-#~ "\n"
-#~ "        यहां अपनी वेरिएबल्स परिभाषित करें।\n"
-#~ "        \"\"\"\n"
-#~ "        super().__init__()\n"
-#~ "\n"
-#~ "    def run(self):\n"
-#~ "        \"\"\"\n"
-#~ "        कॉलबैक्स के लिए उपयोग में लाया गया उदाहरण विधि।\n"
-#~ "        \"\"\"\n"
-#~ "        print(\"Python प्लगइन से नमस्ते\")\n"
-#~ "\n"
-#~ "    def active(self):\n"
-#~ "        \"\"\"\n"
-#~ "        वैकल्पिक विधि जो लौटाती है कि प्लगइन सक्रिय है या नहीं।\n"
-#~ "\n"
-#~ "\n"
-#~ "        :return: यदि प्लगइन सक्रिय है तो True, अन्यथा False।\n"
-#~ "        :rtype: bool\n"
-#~ "\n"
-#~ "        \"\"\"\n"
-#~ "        return True\n"
-#~ "\n"
-#~ "    def menus(self):\n"
-#~ "        \"\"\"\n"
-#~ "        मेनू प्रविष्टियों का एक डिक्शनरी जो कुंजियों के रूप में होती है और कॉलबैक्स के रूप "
-#~ "में मानों के साथ होती है।\n"
-#~ "\n"
-#~ "\n"
-#~ "        :return: मेनू प्रविष्टियों और उनके संबंधित कॉलबैक्स का एक डिक्शनरी।\n"
-#~ "        :rtype: dict\n"
-#~ "\n"
-#~ "        \"\"\"\n"
-#~ "        menus = {\"New Menu/Hello\": self.run}\n"
-#~ "        return menus\n"
-#~ "\n"
-
-#~ msgid "No playlist matched item."
-#~ msgstr "कोई गीत- सूची नहीं मिला"
-
-#~ msgid "No playlist matched file name."
-#~ msgstr "कोई गीत- सूची नहीं मिला"
-
-#~ msgid "No playlist loaded."
-#~ msgstr "कोई गीत- सूची नहीं लोड हो गया."
-
-#~ msgid "No playlist selected."
-#~ msgstr "कोई गीत नहीं चुना गया है."
-
-#~ msgid "Not an EDL playlist to add clips to."
-#~ msgstr "EDL गीतसूची को क्लिप करने के लिए नहीं जोड़ता."
-
-#~ msgid "Could not find clip in loaded clips."
-#~ msgstr "लोड क्लिप में क्लिप नहीं पा सका."
-
-#~ msgid ""
-#~ "\n"
-#~ "Playlist module.\n"
-#~ "\n"
-#~ "Contains all functions and classes related to the playlists.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "गीत- सूची मॉड्यूल. गीत- सूची से संबंधित सभी क्रियाओं तथा क्लासों को रखता है.\n"
-
-#~ msgid "List playlist items."
-#~ msgstr "गीत- सूची वस्तुओं की सूची दें."
-
-#~ msgid "Select a playlist by FileModelItem."
-#~ msgstr "फ़ाइल- स्कवेयरएम द्वारा गीत- सूची चुनें."
-
-#~ msgid "Select a playlist by fileName."
-#~ msgstr "फ़ाइलों के द्वारा गीत- सूची चुनें."
-
-#~ msgid "Select a playlist by index."
-#~ msgstr "निर्देशिका द्वारा गीत- सूची चुनें."
-
-#~ msgid "Add a clip to currently selected Playlist EDL."
-#~ msgstr "वर्तमान में चयनित गीत- सूची ईएल में क्लिप जोड़ें."
-
-#~ msgid "Save current .otio file with relative paths."
-#~ msgstr "वर्तमान फ़ाइल को सापेक्ष पथ से सहेजें."
-
-#~ msgid "unsupported operand type(s) for {0}: RationalTime and {1}"
-#~ msgstr "{0} के लिए असमर्थित TLS प्रकार: भूल गया समय और {1}"
-
-#~ msgid ""
-#~ "\n"
-#~ "The RationalTime class represents a measure of time of :math:`rt.value/"
-#~ "rt.rate` seconds.\n"
-#~ "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "पूर्ण समय वर्ग किसी भी समय का प्रतिनिधित्व करता है:\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Returns true if the time is invalid. The time is considered invalid if "
-#~ "the value or the rate are a NaN value\n"
-#~ "or if the rate is less than or equal to zero.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Returns true if the time is invalid. The time is considered invalid if "
-#~ "the value or the rate are a NaN value or if the rate is less than or "
-#~ "equal to zero.\n"
-
-#~ msgid "Returns the time value for time converted to new_rate."
-#~ msgstr "समय मूल्य को नया_ रंग में बदलता है."
-
-#~ msgid "Returns the time for time converted to new_rate."
-#~ msgstr "नए_ लिंक में समय बदले जाने के लिए समय बताता है."
-
-#~ msgid "Returns the time value for \"self\" converted to new_rate."
-#~ msgstr "\" स्वयं\" के लिए समय मूल्य लौटाता है नए_BAR_"
-
-#~ msgid ""
-#~ "\n"
-#~ "Compute the duration of samples from first to last (excluding last). This "
-#~ "is not the same as distance.\n"
-#~ "\n"
-#~ "For example, the duration of a clip from frame 10 to frame 15 is 5 "
-#~ "frames. Result will be in the rate of start_time.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "सैंपलों की अवधि को पहले से लेकर अंतिम (अंतिम को छोड़कर) की गणना करें। यह दूरी के समान "
-#~ "नहीं है।\n"
-#~ "\n"
-#~ "उदाहरण के लिए, फ्रेम 10 से फ्रेम 15 तक के क्लिप की अवधि 5 फ्रेम है। परिणाम "
-#~ "start_time की दर में होगा।\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Compute the duration of samples from first to last (including last). This "
-#~ "is not the same as distance.\n"
-#~ "\n"
-#~ "For example, the duration of a clip from frame 10 to frame 15 is 6 "
-#~ "frames. Result will be in the rate of start_time.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "सैंपलों की अवधि को पहले से लेकर अंतिम (अंतिम को शामिल करते हुए) की गणना करें। यह दूरी "
-#~ "के समान नहीं है।\n"
-#~ "\n"
-#~ "उदाहरण के लिए, फ्रेम 10 से फ्रेम 15 तक के क्लिप की अवधि 6 फ्रेम है। परिणाम "
-#~ "start_time की दर में होगा।\n"
-
-#~ msgid "Returns true if the rate is valid for use with timecode."
-#~ msgstr "समयकोड के साथ उपयोग के लिए सही पलटता है यदि दर वैध है."
-
-#~ msgid ""
-#~ "Returns the first valid timecode rate that has the least difference from "
-#~ "the given value."
-#~ msgstr "प्रथम वैध समयकोड दर बताता है जो दिए गए मूल्य से कम से कम अलग है."
-
-#~ msgid "Turn a frame number and rate into a :class:`~RationalTime` object."
-#~ msgstr "फ्रेम संख्या तथा दर को एक में करें:क्लास: 02-RETTTEST."
-
-#~ msgid "Returns the frame number based on the current rate."
-#~ msgstr "वर्तमान दर पर आधारित फ्रेम संख्या बताता है."
-
-#~ msgid "Returns the frame number based on the given rate."
-#~ msgstr "दिए गए दर पर आधारित फ्रेम संख्या बताता है."
-
-#~ msgid "Convert to timecode (``HH:MM:SS;FRAME``)"
-#~ msgstr "समयकोड में बदलें (USHH:MS; FSUSUD)"
-
-#~ msgid ""
-#~ "Convert a timecode string (``HH:MM:SS;FRAME``) into "
-#~ "a :class:`~RationalTime`."
-#~ msgstr ""
-#~ "समयकोड स्ट्रिंग (``HH:MM:SS;FRAME``) को :class:`~RationalTime` में परिवर्तित करें।"
-
-#~ msgid ""
-#~ "Convert a time with microseconds string (``HH:MM:ss`` where ``ss`` is an "
-#~ "integer or a decimal number) into a :class:`~RationalTime`."
-#~ msgstr ""
-#~ "सूक्ष्मसेकंड के साथ समय स्ट्रिंग (``HH:MM:ss`` जहाँ ``ss`` एक पूर्णांक या दशमलव संख्या "
-#~ "है) को :class:`~RationalTime` में परिवर्तित करें।"
-
-#~ msgid ""
-#~ "\n"
-#~ "The TimeRange class represents a range in time. It encodes the start time "
-#~ "and the duration,\n"
-#~ "meaning that :meth:`end_time_inclusive` (last portion of a sample in the "
-#~ "time range) and\n"
-#~ ":meth:`end_time_exclusive` can be computed.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "TimeRange क्लास समय की एक सीमा का प्रतिनिधित्व करता है। यह प्रारंभिक समय और "
-#~ "अवधि को एन्कोड करता है,\n"
-#~ "जिसका मतलब है कि :meth:`end_time_inclusive` (समय सीमा में एक सैंपल का अंतिम "
-#~ "भाग) और\n"
-#~ ":meth:`end_time_exclusive` की गणना की जा सकती है।\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The time of the last sample containing data in the time range.\n"
-#~ "\n"
-#~ "If the time range starts at (0, 24) with duration (10, 24), this will be\n"
-#~ "(9, 24)\n"
-#~ "\n"
-#~ "If the time range starts at (0, 24) with duration (10.5, 24):\n"
-#~ "(10, 24)\n"
-#~ "\n"
-#~ "In other words, the last frame with data, even if the last frame is "
-#~ "fractional.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "समय सीमा में डेटा वाला अंतिम सैंपल का समय।\n"
-#~ "\n"
-#~ "यदि समय सीमा (0, 24) से शुरू होती है और अवधि (10, 24) है, तो यह होगा\n"
-#~ "(9, 24)\n"
-#~ "\n"
-#~ "यदि समय सीमा (0, 24) से शुरू होती है और अवधि (10.5, 24) है:\n"
-#~ "(10, 24)\n"
-#~ "\n"
-#~ "दूसरे शब्दों में, डेटा के साथ अंतिम फ्रेम, भले ही अंतिम फ्रेम आंशिक हो।\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Time of the first sample outside the time range.\n"
-#~ "\n"
-#~ "If start frame is 10 and duration is 5, then end_time_exclusive is 15,\n"
-#~ "because the last time with data in this range is 14.\n"
-#~ "\n"
-#~ "If start frame is 10 and duration is 5.5, then end_time_exclusive is\n"
-#~ "15.5, because the last time with data in this range is 15.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "समय सीमा के बाहर पहले सैंपल का समय।\n"
-#~ "\n"
-#~ "यदि प्रारंभिक फ्रेम 10 है और अवधि 5 है, तो end_time_exclusive 15 होगा,\n"
-#~ "क्योंकि इस सीमा में डेटा के साथ अंतिम समय 14 है।\n"
-#~ "\n"
-#~ "यदि प्रारंभिक फ्रेम 10 है और अवधि 5.5 है, तो end_time_exclusive 15.5 होगा,\n"
-#~ "क्योंकि इस सीमा में डेटा के साथ अंतिम समय 15 है।\n"
-
-#~ msgid ""
-#~ "Construct a new :class:`~TimeRange` that is this one extended by other."
-#~ msgstr ""
-#~ "एक नया :class:`~TimeRange` बनाएं जो कि इस एक को अन्य द्वारा विस्तारित किया "
-#~ "गया हो।"
-
-#~ msgid ""
-#~ "\n"
-#~ "Clamp 'other' (:class:`~RationalTime`) according to\n"
-#~ ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "'other' (:class:`~RationalTime`) "
-#~ "को :attr:`start_time`/:attr:`end_time_exclusive` और बाउंड आर्ग्यूमेंट्स के अनुसार "
-#~ "क्लैंप करें।\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Clamp 'other' (:class:`~TimeRange`) according to\n"
-#~ ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "'other' (:class:`~TimeRange`) "
-#~ "को :attr:`start_time`/:attr:`end_time_exclusive` और बाउंड आर्ग्यूमेंट्स के अनुसार "
-#~ "क्लैंप करें।\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The start of `this` precedes `other`.\n"
-#~ "`other` precedes the end of `this`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "         other\n"
-#~ "           |\n"
-#~ "           *\n"
-#~ "   [      this      ]\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "`this` की शुरुआत `other` से पहले होती है।\n"
-#~ "`other` `this` के अंत से पहले होता है।\n"
-#~ "::\n"
-#~ "\n"
-#~ "         other\n"
-#~ "           |\n"
-#~ "           *\n"
-#~ "   [      this      ]\n"
-#~ "\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The start of `this` precedes start of `other`.\n"
-#~ "The end of `this` antecedes end of `other`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "        [ other ]\n"
-#~ "   [      this      ]\n"
-#~ "\n"
-#~ "The converse would be ``other.contains(this)``\n"
-#~ msgstr ""
-#~ "\n"
-#~ "`this` की शुरुआत `other` की शुरुआत से पहले होती है।\n"
-#~ "`this` का अंत `other` के अंत से पहले होता है।\n"
-#~ "::\n"
-#~ "\n"
-#~ "        [ other ]\n"
-#~ "   [      this      ]\n"
-#~ "\n"
-#~ "विपरीत स्थिति ``other.contains(this)`` होगी।\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "`this` contains `other`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "        other\n"
-#~ "         |\n"
-#~ "         *\n"
-#~ "   [    this    ]\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "`this` में `other` शामिल है।\n"
-#~ "::\n"
-#~ "\n"
-#~ "        other\n"
-#~ "         |\n"
-#~ "         *\n"
-#~ "   [    this    ]\n"
-#~ "\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The start of `this` strictly precedes end of `other` by a value >= "
-#~ "`epsilon_s`.\n"
-#~ "The end of `this` strictly antecedes start of `other` by a value >= "
-#~ "`epsilon_s`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "   [ this ]\n"
-#~ "       [ other ]\n"
-#~ "\n"
-#~ "The converse would be ``other.overlaps(this)``\n"
-#~ msgstr ""
-#~ "\n"
-#~ "`this` की शुरुआत `other` के अंत से एक मान >= `epsilon_s` द्वारा स्पष्ट रूप से पहले "
-#~ "होती है।\n"
-#~ "`this` का अंत `other` की शुरुआत से एक मान >= `epsilon_s` द्वारा स्पष्ट रूप से पहले "
-#~ "होता है।\n"
-#~ "::\n"
-#~ "\n"
-#~ "   [ this ]\n"
-#~ "       [ other ]\n"
-#~ "\n"
-#~ "विपरीत स्थिति ``other.overlaps(this)`` होगी।\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The end of `this` strictly precedes `other` by a value >= `epsilon_s`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "             other\n"
-#~ "               |\n"
-#~ "   [ this ]    *\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "`this` का अंत `other` से एक मान >= `epsilon_s` द्वारा स्पष्ट रूप से पहले होता है।\n"
-#~ "::\n"
-#~ "\n"
-#~ "             other\n"
-#~ "               |\n"
-#~ "   [ this ]    *\n"
-#~ "\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The end of `this` strictly equals the start of `other` and\n"
-#~ "the start of `this` strictly equals the end of `other`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "   [this][other]\n"
-#~ "\n"
-#~ "The converse would be ``other.meets(this)``\n"
-#~ msgstr ""
-#~ "\n"
-#~ "`this` का अंत `other` की शुरुआत के समान होता है और\n"
-#~ "`this` की शुरुआत `other` के अंत के समान होती है।\n"
-#~ "::\n"
-#~ "\n"
-#~ "   [this][other]\n"
-#~ "\n"
-#~ "विपरीत स्थिति ``other.meets(this)`` होगी।\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The start of `this` strictly equals `other`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "   other\n"
-#~ "     |\n"
-#~ "     *\n"
-#~ "     [ this ]\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "`this` की शुरुआत `other` के समान होती है।\n"
-#~ "::\n"
-#~ "\n"
-#~ "   other\n"
-#~ "     |\n"
-#~ "     *\n"
-#~ "     [ this ]\n"
-#~ "\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The start of `this` strictly equals the start of `other`.\n"
-#~ "The end of `this` strictly precedes the end of `other` by a value >= "
-#~ "`epsilon_s`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "   [ this ]\n"
-#~ "   [    other    ]\n"
-#~ "\n"
-#~ "The converse would be ``other.begins(this)``\n"
-#~ msgstr ""
-#~ "\n"
-#~ "`this` की शुरुआत `other` की शुरुआत के समान होती है।\n"
-#~ "`this` का अंत `other` के अंत से एक मान >= `epsilon_s` द्वारा स्पष्ट रूप से पहले "
-#~ "होता है।\n"
-#~ "::\n"
-#~ "\n"
-#~ "   [ this ]\n"
-#~ "   [    other    ]\n"
-#~ "\n"
-#~ "विपरीत स्थिति ``other.begins(this)`` होगी।\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The end of `this` strictly equals `other`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "        other\n"
-#~ "          |\n"
-#~ "          *\n"
-#~ "   [ this ]\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "`this` का अंत `other` के समान होता है।\n"
-#~ "::\n"
-#~ "\n"
-#~ "        other\n"
-#~ "          |\n"
-#~ "          *\n"
-#~ "   [ this ]\n"
-#~ "\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The start of `this` strictly antecedes the start of `other` by a value >= "
-#~ "`epsilon_s`.\n"
-#~ "The end of `this` strictly equals the end of `other`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "           [ this ]\n"
-#~ "   [     other    ]\n"
-#~ "\n"
-#~ "The converse would be ``other.finishes(this)``\n"
-#~ msgstr ""
-#~ "\n"
-#~ "`this` की शुरुआत `other` की शुरुआत से एक मान >= `epsilon_s` द्वारा स्पष्ट रूप से "
-#~ "पहले होती है।\n"
-#~ "`this` का अंत `other` के अंत के समान होता है।\n"
-#~ "::\n"
-#~ "\n"
-#~ "           [ this ]\n"
-#~ "   [     other    ]\n"
-#~ "\n"
-#~ "विपरीत स्थिति ``other.finishes(this)`` होगी।\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The start of `this` precedes or equals the end of `other` by a value >= "
-#~ "`epsilon_s`.\n"
-#~ "The end of `this` antecedes or equals the start of `other` by a value >= "
-#~ "`epsilon_s`.\n"
-#~ "::\n"
-#~ "\n"
-#~ "   [    this    ]           OR      [    other    ]\n"
-#~ "        [     other    ]                    [     this    ]\n"
-#~ "\n"
-#~ "The converse would be ``other.finishes(this)``\n"
-#~ msgstr ""
-#~ "\n"
-#~ "`this` की शुरुआत `other` के अंत से एक मान >= `epsilon_s` द्वारा पहले या समान "
-#~ "होती है।\n"
-#~ "`this` का अंत `other` की शुरुआत से एक मान >= `epsilon_s` द्वारा पहले या समान "
-#~ "होता है।\n"
-#~ "::\n"
-#~ "\n"
-#~ "   [    this    ]           OR      [    other    ]\n"
-#~ "        [     other    ]                    [     this    ]\n"
-#~ "\n"
-#~ "विपरीत स्थिति ``other.finishes(this)`` होगी।\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Creates a :class:`~TimeRange` from start and "
-#~ "end :class:`~RationalTime`\\s (exclusive).\n"
-#~ "\n"
-#~ "For example, if start_time is 1 and end_time is 10, the returned will "
-#~ "have a duration of 9.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "एक :class:`~TimeRange` बनाता है जो प्रारंभ और अंत :class:`~RationalTime`\\s "
-#~ "(विशेष रूप से) से होता है।\n"
-#~ "\n"
-#~ "उदाहरण के लिए, यदि start_time 1 है और end_time 10 है, तो प्राप्त परिणाम की "
-#~ "अवधि 9 होगी।\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Creates a :class:`~TimeRange` from start and "
-#~ "end :class:`~RationalTime`\\s (inclusive).\n"
-#~ "\n"
-#~ "For example, if start_time is 1 and end_time is 10, the returned will "
-#~ "have a duration of 10.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "एक :class:`~TimeRange` बनाता है जो प्रारंभ और अंत :class:`~RationalTime`\\s "
-#~ "(समावेशी) से होता है।\n"
-#~ "\n"
-#~ "उदाहरण के लिए, यदि start_time 1 है और end_time 10 है, तो प्राप्त परिणाम की "
-#~ "अवधि 10 होगी।\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Media module.\n"
-#~ "\n"
-#~ "Contains all classes and enums related to media. \n"
-#~ msgstr ""
-#~ "\n"
-#~ "मीडिया मॉड्यूल. मीडिया से संबंधित सभी क्लासों तथा एनमैक्स्स शामिल हैं.\n"
-
-#~ msgid "Compare mode :class:`mrv2.media.CompareMode`."
-#~ msgstr "मोड से तुलना करें:क्लास:`mrv2.media.CompareMode`."
-
-#~ msgid "Wipe center in X and Y :class:`mrv2.math.Vector2f`."
-#~ msgstr "X तथा Y:क्लास में केंद्र को मिटाएँ:`mrv2.math.Vector2f`"
-
-#~ msgid "Wipe Rotation."
-#~ msgstr "घूर्णन पोंछना."
-
-#~ msgid "Overlay ( A over B )"
-#~ msgstr "लेम्बिया (उब से ऊपर)"
-
-#~ msgid "Comparison options."
-#~ msgstr "तुलना विकल्प."
-
-#~ msgid ""
-#~ "\n"
-#~ "Math module.\n"
-#~ "\n"
-#~ "Contains all math classes.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "गणित मॉड्यूल. सभी गणित क्लासों में.\n"
-
-#~ msgid "Vector of 2 integers."
-#~ msgstr "2 पूर्णांक के सदिश."
-
-#~ msgid "Vector of 2 floats."
-#~ msgstr "2 फ्लोट के सदिश."
-
-#~ msgid "Vector of 3 floats."
-#~ msgstr "3 फ्लोट के सदिश."
-
-#~ msgid "Vector of 4 floats."
-#~ msgstr "4 फ्लोट के सदिश."
-
-#~ msgid "Size of 2 integers."
-#~ msgstr "2 पूर्णांकों का आकार."
-
-#~ msgid ""
-#~ "\n"
-#~ "Image module.\n"
-#~ "\n"
-#~ "Contains all classes and enums related to image controls. \n"
-#~ msgstr ""
-#~ "\n"
-#~ "छवि मॉड्यूल. छवि नियंत्रण से संबंधित सभी क्लासों तथा अक्षरों को समाहित करता है.\n"
-
-#~ msgid "Red Channel."
-#~ msgstr "रेड चैनल."
-
-#~ msgid "Green Channel."
-#~ msgstr "हरा चैनल."
-
-#~ msgid "Blue Channel."
-#~ msgstr "ब्लू चैनल."
-
-#~ msgid "Alpha Channel."
-#~ msgstr "अल्फा चैनल."
-
-#~ msgid "Image mirroring."
-#~ msgstr "छवि चमक रहा है."
-
-#~ msgid "Flip image on X."
-#~ msgstr "एक्स में छवि पलटें."
-
-#~ msgid "Flip image on Y."
-#~ msgstr "Y में छवि पलटें."
-
-#~ msgid "Enabled Levels."
-#~ msgstr "स्तर सक्षम करें"
-
-#~ msgid "Add a :class:`mrv2.math.Vector3f` to image."
-#~ msgstr "एक अंश जोड़ें: `mrv2.math.Vector3f`."
-
-#~ msgid "Change a :class:`mrv2.math.Vector3f` of brightness to image."
-#~ msgstr ""
-#~ "एक को बदलें:क्लास: `mrv2.math.Vector3f` इससे छवि के लिए चमकीलापन का प्रमाण दें."
-
-#~ msgid "Change a :class:`mrv2.math.Vector3f` of contrast to image."
-#~ msgstr "एक को बदलें:क्लास: `mrv2.math.Vector3f` इस छवि के कंट्रास्ट के लिए."
-
-#~ msgid "Change a :class:`mrv2.math.Vector3f` of saturation to image."
-#~ msgstr "एक को बदलें:क्लास: `mrv2.math.Vector3f` of छवि में."
-
-#~ msgid "Change tint of image to image between 0 and 1."
-#~ msgstr "0 और 1 के बीच छवि के टिंट बदलें."
-
-#~ msgid "Invert the color values."
-#~ msgstr "रंग मूल्य उलटें."
-
-#~ msgid "Color values."
-#~ msgstr "रंग मूल्य."
-
-#~ msgid "In Low Level value."
-#~ msgstr "कम स्तर मूल्य में."
-
-#~ msgid "In High Level value."
-#~ msgstr "उच्च स्तर मूल्य में."
-
-#~ msgid "Gamma Level value."
-#~ msgstr "गामा स्तर मूल्य."
-
-#~ msgid "Out Low Level value."
-#~ msgstr "कम स्तर मूल्य."
-
-#~ msgid "Out High Level value."
-#~ msgstr "उच्च स्तर मूल्य."
-
-#~ msgid "Levels values."
-#~ msgstr "स्तर मूल्य."
-
-#~ msgid "Enabled EXR display."
-#~ msgstr "ईएक्सआर प्रदर्शन सक्षम करें."
-
-#~ msgid "Exposure value."
-#~ msgstr "एक्सपोज़र मूल्य."
-
-#~ msgid "Defog value."
-#~ msgstr "हर्ट मूल्य."
-
-#~ msgid "kneeLow value."
-#~ msgstr "घुटने मूल्य."
-
-#~ msgid "kneeHigh value."
-#~ msgstr "घुटने उत्तम मूल्य."
-
-#~ msgid "EXR display values."
-#~ msgstr "ईएक्सआर प्रदर्शन मूल्य."
-
-#~ msgid "Enabled Soft Clip."
-#~ msgstr "सॉफ्ट क्लिपिंग सक्षम करें."
-
-#~ msgid "Soft clip value."
-#~ msgstr "सॉफ्ट क्लिप मूल्य."
-
-#~ msgid "Minify filter :class:`mrv2.image.ImageFilter`."
-#~ msgstr "न्यूनतम फ़िल्टर:क्लास: `mrv2.image.ImageFilter`."
-
-#~ msgid "Magnify filter :class:`mrv2.image.ImageFilter`."
-#~ msgstr "आवधिक फिल्टर:क्लास: `mrv2.image.ImageFilter`."
-
-#~ msgid "Image filters."
-#~ msgstr "छवि फिल्टर."
-
-#~ msgid "Color channels :class:`mrv2.image.Channels`."
-#~ msgstr "रंग चैनल:`mrv2.image.Channels`"
-
-#~ msgid "Mirror on X, Y or both :class:`mrv2.image.Mirror`."
-#~ msgstr "एक्स, y या दोनों:क्लास: `mrv2.image.Mirror`"
-
-#~ msgid "Color options :class:`mrv2.image.Color`."
-#~ msgstr "रंग विकल्प :क्लास: `mrv2.image.Color`"
-
-#~ msgid "Levels options :class:`mrv2.image.Levels`."
-#~ msgstr "स्तर विकल्प :क्लास: `mrv2.image.Levels`."
-
-#~ msgid "EXR Display options :class:`mrv2.image.EXRDisplay`.."
-#~ msgstr "EXR प्रदर्शक विकल्प :क्लास: `mrv2.image.EXRDisplay`.."
-
-#~ msgid "Soft Clip options :class:`mrv2.image.SoftClip`.."
-#~ msgstr "सादा क्लिप विकल्प:क्लास: `mrv2.image.SoftClip`.."
-
-#~ msgid "Display options."
-#~ msgstr "प्रदर्शक विकल्प."
-
-#~ msgid "LUT enabled."
-#~ msgstr "LUTसी सक्षम है."
-
-#~ msgid "LUT filename."
-#~ msgstr "एल सिवाय फ़ाइल- नाम."
-
-#~ msgid "LUT transformation order."
-#~ msgstr "क्रम में परिवर्तन."
-
-#~ msgid "LUT options."
-#~ msgstr "अतिरिक्त विकल्प:"
-
-#~ msgid "Video Levels."
-#~ msgstr "वीडियो स्तर."
-
-#~ msgid "Alpha blending algorithm"
-#~ msgstr "अल्फा ब्लेंड एल्गोरिदम"
-
-#~ msgid "Image Filters"
-#~ msgstr "छवि फ़िल्टर्स"
-
-#~ msgid "Image options."
-#~ msgstr "परियोजना विकल्प."
-
-#~ msgid "Environment Map type."
-#~ msgstr "एनवायरनमेंट नक्शा क़िस्म."
-
-#~ msgid "Horizontal aperture"
-#~ msgstr "आड़ा (H)"
-
-#~ msgid "Vertical aperture"
-#~ msgstr "खड़ा (V)"
-
-#~ msgid "Rotation on X"
-#~ msgstr "X पर घुमाव"
-
-#~ msgid "Rotation on Y"
-#~ msgstr "Y पर घुमाव"
-
-#~ msgid "Subdivision on X"
-#~ msgstr "एक्स पर उप- विभाजन"
-
-#~ msgid "Subdivision on Y"
-#~ msgstr "Y पर उप- विभाजन"
-
-#~ msgid "EnvironmentMap options."
-#~ msgstr "वातावरण नक्शा विकल्प."
-
-#~ msgid "Stereo 3d input :class:`mrv2.image.StereoInput`.."
-#~ msgstr "स्टीरियो 3डी इनपुट:क्लास: `mrv2.image.StereoInput`.."
-
-#~ msgid "Stereo 3d output :class:`mrv2.image.StereoOutput`.."
-#~ msgstr "स्टीरियो 3डी आउटपुट:क्लास: `mrv2.image.StereoOutput`."
-
-#~ msgid "Separation between left and right eye."
-#~ msgstr "बाईं ओर और दाएँ और बाएँ की आँख के बीच जुदाई"
-
-#~ msgid "Swap left and right eye"
-#~ msgstr "बाएँ और दाएँ की आँख बदलें"
-
-#~ msgid "Stereo3D options."
-#~ msgstr "स्टीरियो3डी विकल्प."
-
-#~ msgid "Background type :class:`mrv2.image.Background`.."
-#~ msgstr "पृष्ठभूमि क़िस्म:`mrv2.image.Background`."
-
-#~ msgid "Checkers Color0 :class:`mrv2.image.Color4f`.."
-#~ msgstr "चेकर्स रंग0:क्लास: `mrv2.image.Color4f`."
-
-#~ msgid "Checkers Color1 :class:`mrv2.image.Color4f`.."
-#~ msgstr "चेकर्स रंग1:क्लास: `mrv2.image.Color4f`.."
-
-#~ msgid "Checkers Size :class:`mrv2.math.Size2i`.."
-#~ msgstr "चेकर्स आकार:`mrv2.math.Size2i`.."
-
-#~ msgid "Background options."
-#~ msgstr "पृष्ठभूमि विकल्प."
-
-#~ msgid "Gets the current background options."
-#~ msgstr "वर्तमान पृष्ठभूमि विकल्प बताता है."
-
-#~ msgid "Sets the current background options."
-#~ msgstr "मौज़ूदा पृष्ठभूमि विकल्प नियत करता है."
-
-#~ msgid "Gets the current OCIO config file."
-#~ msgstr "वर्तमान ओआईआईओ कॉन्फ़िग फ़ाइल बताता है."
-
-#~ msgid "Sets the current OCIO config file."
-#~ msgstr "मौज़ूदा ओसीआईओ कॉन्फ़िग फ़ाइल सेट करता है."
-
-#~ msgid "Gets the current input color space."
-#~ msgstr "वर्तमान इनपुट रंग जगह बताता है."
-
-#~ msgid "Gets a list of all input color spaces."
-#~ msgstr "सभी इनपुट रंग स्पेसेस की सूची प्राप्त करता है."
-
-#~ msgid "Set the input color space."
-#~ msgstr "इनपुट रंग जगह नियत करें."
-
-#~ msgid "Gets the current Display/View."
-#~ msgstr "वर्तमान प्रदर्शक/ दृश्य बताता है."
-
-#~ msgid "Gets the list of Displays/Views."
-#~ msgstr "प्रदर्शक/ दृश्य की सूची प्राप्त करता है."
-
-#~ msgid "Set an OCIO Display/View."
-#~ msgstr "OCIO प्रदर्शन सेट करें/दृश्य."
-
-#~ msgid "Gets the current OCIO look."
-#~ msgstr "वर्तमान ओसीआईओ देखो मिलता है."
-
-#~ msgid "Gets a list of all OCIO looks."
-#~ msgstr "सभी OCOIO रूप की सूची मिलता है."
-
-#~ msgid "Set the OCIO look by name."
-#~ msgstr "ओसीआईओ नाम द्वारा सेट करें."
-
-#~ msgid "Return all the files."
-#~ msgstr "सभी फ़ाइलों को वापस करें."
-
-#~ msgid "Return all the active files."
-#~ msgstr "सभी सक्रिय फ़ाइलों को वापस करें."
-
-#~ msgid "Return the A file item."
-#~ msgstr "एक फ़ाइल वस्तु वापस करें."
-
-#~ msgid "Return the A file index."
-#~ msgstr "एक फ़ाइल इंडेक्स वापस करें."
-
-#~ msgid "Return the list of B files."
-#~ msgstr "बी फ़ाइलों की सूची वापस करें."
-
-#~ msgid "Return the list of B indexes."
-#~ msgstr "B इंडेक्स सूची की सूची वापस करें."
-
-#~ msgid "Close the current A file."
-#~ msgstr "वर्तमान फ़ाइल बंद करें"
-
-#~ msgid "Close all files."
-#~ msgstr "बंद करें सभी फ़ाइल."
-
-#~ msgid "Set the A file index."
-#~ msgstr "एक फ़ाइल निर्देशिका सेट करें."
-
-#~ msgid "Set a new B file index."
-#~ msgstr "नई बी फ़ाइल निर्देशिका सेट करें."
-
-#~ msgid "Set a new stereo file index."
-#~ msgstr "नई स्टीरियो फ़ाइल निर्देशिका सेट करें."
-
-#~ msgid "Toggle the B file index."
-#~ msgstr "बी फ़ाइल निर्देशिका टॉगल करें."
-
-#~ msgid "Clear the B indexes."
-#~ msgstr "बी इंडेक्स्स साफ करें."
-
-#~ msgid "Return the list of layers."
-#~ msgstr "परतों की सूची वापस करें."
-
-#~ msgid "Set layer for file item."
-#~ msgstr "फ़ाइल मद के लिए परत सेट करें."
-
-#~ msgid "Set compare time."
-#~ msgstr "तुलना करने के लिए समय सेट करें."
-
-#~ msgid "Get compare time."
-#~ msgstr "समय तुलना करें."
-
-#~ msgid "Set the first version for current media."
-#~ msgstr "वर्तमान मीडिया के लिए प्रथम संस्करण सेट करें."
-
-#~ msgid "Set the previous version for current media."
-#~ msgstr "वर्तमान मीडिया के लिए पिछले संस्करण सेट करें."
-
-#~ msgid "Set the next version for current media."
-#~ msgstr "वर्तमान मीडिया के लिए अगला संस्करण सेट करें."
-
-#~ msgid "Set the last version for current media."
-#~ msgstr "वर्तमान मीडिया के लिए अंतिम संस्करण सेट करें."
-
-#~ msgid "Path :class:`mrv2.Path` to the File Media."
-#~ msgstr "पथ:क्लास: `mrv2.Path` फ़ाइल मीडिया."
-
-#~ msgid "Audio path :class:`mrv2.Path` to the File Media if any."
-#~ msgstr "ऑडियो पथ:क्लास: `mrv2.Path` फ़ाइल मीडिया के लिए यदि कोई भी हो."
-
-#~ msgid "Time range :class:`mrv2.TimeRange` of the File Media."
-#~ msgstr "समय सीमा:`mrv2.TimeRange`"
-
-#~ msgid "Speed (FPS) of the File Media."
-#~ msgstr "फ़ाइल मीडिया की गति (एफपीएस)."
-
-#~ msgid "Playback state :class:`mrv2.timeline.Playbacks` of the File Media."
-#~ msgstr "प्लेबैक स्थिति :क्लासव2. समय-लाइन. फ़ाइल मीडिया का प्लेयर"
-
-#~ msgid "Loop state :class:`mrv2.timeline.Loop` of the File Media."
-#~ msgstr "लूप स्थिति :क्लास:`mrv2.timeline.Loop` समय. फ़ाइल मीडिया का लूप."
-
-#~ msgid "Current time :class:`mrv2.RationalTime` of the File Media."
-#~ msgstr "मौज़ूदा समय:क्लास:`mrv2.RationalTime` फ़ाइल मीडिया काक्लास समय."
-
-#~ msgid "In/Out range :class:`mrv2.TimeRange` of the File Media."
-#~ msgstr "में/ बाहर सीमा:क्लास:`mrv2.TimeRange` फ़ाइल मीडिया का समय."
-
-#~ msgid "Video layer of the File Media."
-#~ msgstr "फ़ाइल मीडिया का वीडियो परत."
-
-#~ msgid "Volume of the File Media."
-#~ msgstr "फ़ाइल मीडिया का आवाज."
-
-#~ msgid "Mute state of the File Media."
-#~ msgstr "फ़ाइल मीडिया की मौन स्थिति."
-
-#~ msgid "Audio offset of the File Media."
-#~ msgstr "फ़ाइल मीडिया का ऑडियो ऑफसेट."
-
-#~ msgid "Class used to hold a media item."
-#~ msgstr "मीडिया वस्तु रखने के लिए प्रयुक्त वर्ग."
-
-#~ msgid "Save annotations."
-#~ msgstr "एनोटेशन सहेजें."
-
-#~ msgid "Save resolution."
-#~ msgstr "सहेजें रिसॉल्यूशन."
-
-#~ msgid "FFmpeg Profile."
-#~ msgstr "एफ़एफ़एमपी प्रोफ़ाइल."
-
-#~ msgid "FFmpeg Preset."
-#~ msgstr "एफ़एफ़एमपी प्रीसेट."
-
-#~ msgid "FFmpeg Pixel Format."
-#~ msgstr "एफ़एफएमपी पिक्सेल प्रारूप."
-
-#~ msgid "FFmpeg video encoding with hardware if possible."
-#~ msgstr "यदि संभव हो तो हार्डवेयर के साथ FFएमपीजी वीडियो एनकोडिंग."
-
-#~ msgid "FFmpeg Override color characteristics."
-#~ msgstr "FFGGECT रंग विशेषताओं को ओवरराइड करता है."
-
-#~ msgid "FFmpeg Color Range."
-#~ msgstr "FFMeg रंग सीमा."
-
-#~ msgid "FFmpeg Color Space."
-#~ msgstr "एफ़एफएमपी रंग जगह."
-
-#~ msgid "FFmpeg Color Primaries."
-#~ msgstr "FFEGe रंग PRERST."
-
-#~ msgid "FFmpeg Color Transfer Characteristics."
-#~ msgstr "एफ़एफएमपी रंग ट्रांसफर्स."
-
-#~ msgid "FFmpeg Audio Codec."
-#~ msgstr "एफ़एफएमपी ऑडियो कोडेक."
-
-#~ msgid "OpenEXR's Compression."
-#~ msgstr "ओपनईएक्सआर संपीडन."
-
-#~ msgid "OpenEXR's Pixel Type."
-#~ msgstr "ओपनईएक्सआर पिक्सेल क़िस्म."
-
-#~ msgid "OpenEXR's Zip Compression Level."
-#~ msgstr "एक्सआर संपीडन स्तर खोलें."
-
-#~ msgid "OpenEXR's DWA Compression Level."
-#~ msgstr "डीईईएक्सआर संपीडन स्तर खोलें."
-
-#~ msgid ""
-#~ "\n"
-#~ "Command module.\n"
-#~ "\n"
-#~ "Used to run main commands and get arguments and set the display, image, "
-#~ "compare, LUT options.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "कमांड मॉड्यूल. मुख्य कमांड चलाने और तर्क पाने के लिए प्रयोग में आता है, छवि से तुलना करें, "
-#~ "LUTF विकल्प.\n"
-
-#~ msgid ""
-#~ "Get command-line arguments passed as single quoted string to -pythonArgs."
-#~ msgstr ""
-#~ "कमांड लाइन आर्गुमेंट पास करें जैसा कि उद्धृत वाक्यांश - आईक्वेंगर को उद्धृत किया गया है."
-
-#~ msgid "Open file with optional audio."
-#~ msgstr "फ़ाइल को वैकल्पिक ऑडियो के साथ खोलें."
-
-#~ msgid "Compare two file items with a compare mode."
-#~ msgstr "तुलना मोड के साथ दो फ़ाइल मद की तुलना करें."
-
-#~ msgid "Close the file item."
-#~ msgstr "फ़ाइल वस्तु बन्द करें."
-
-#~ msgid "Close all file items."
-#~ msgstr "सभी फ़ाइलों को बंद करें"
-
-#~ msgid "Return the root path to the insallation of mrv2."
-#~ msgstr "mrv2 की अंतिम प्रक्रिया के लिए रूट पथ वापस करें."
-
-#~ msgid "Return the path to preferences of mrv2."
-#~ msgstr "mrv2 की वरीयता के लिए पथ वापस करें."
-
-#~ msgid "Return the display options."
-#~ msgstr "प्रदर्शक विकल्प वापस करें."
-
-#~ msgid "Set the display options."
-#~ msgstr "प्रदर्शक विकल्प नियत करें."
-
-#~ msgid "Return the LUT options."
-#~ msgstr "LUTF विकल्प वापस करें."
-
-#~ msgid "Set the LUT options."
-#~ msgstr "LUTF विकल्प सेट करें."
-
-#~ msgid "Return the image options."
-#~ msgstr "छवि विकल्प वापस करें."
-
-#~ msgid "Set the image options."
-#~ msgstr "छवि फ़ाइल नाम प्रदर्शित करने के लिए यह विकल्प सेट करें."
-
-#~ msgid "Return the environment map options."
-#~ msgstr "एनवायरनमेंट नक्शा विकल्प वापस करें."
-
-#~ msgid "Set the environment map options."
-#~ msgstr "एनवायरनमेंट नक्शा विकल्प सेट करें."
-
-#~ msgid "Set the compare options."
-#~ msgstr "तुलना विकल्प सेट करें."
-
-#~ msgid "Set the stereo 3D options."
-#~ msgstr "स्टीरियो 3डी विकल्प सेट करें."
-
-#~ msgid "Get the language of mrv2."
-#~ msgstr "mrv2 की भाषा प्राप्त करें."
-
-#~ msgid "Get the layers of the timeline (GUI)."
-#~ msgstr "समय रेखा की परतों (जीयूआई) प्राप्त करें."
-
-#~ msgid "Get the version of mrv2."
-#~ msgstr "mrv2 का संस्करण प्राप्त करें."
-
-#~ msgid ""
-#~ "Call Fl::check to update the GUI and return the number of seconds that "
-#~ "elapsed."
-#~ msgstr "काल फ्लॉप: जीयूआई को अद्यतन करने के लिए चेक करें तथा सेकण्डों की संख्या वापस करें."
-
-#~ msgid "Returns true if audio is muted."
-#~ msgstr "यदि ऑडियो मौन हो तो सही वापस आता है."
-
-#~ msgid "Runs the same or a new mrv2 with a session file."
-#~ msgstr "एक सत्र फ़ाइल के साथ एक ही या एक नया mrv2 चलाता है."
-
-#~ msgid "Set the muting of the audio."
-#~ msgstr "ऑडियो का उल्लंघन सेट."
-
-#~ msgid "Toggle Image Auto Normalize."
-#~ msgstr "छवि को स्वचालिताइज़ करना टॉगल करें."
-
-#~ msgid "Toggle Data Window."
-#~ msgstr "डाटा विंडो टॉगल करें."
-
-#~ msgid "Toggle Display Window."
-#~ msgstr "विंडो प्रदर्शन टॉगल करें."
-
-#~ msgid "Toggle Ignored Display Window on OpenEXRs."
-#~ msgstr "ओपनएक्सआर( डबल्यू) पर प्रदर्शन को नज़रअंदाज़ किया जा सकता है."
-
-#~ msgid "Toggle Image invalid values."
-#~ msgstr "छवि अवैध मूल्य टॉगल करें."
-
-#~ msgid "Toggle Safe Areas."
-#~ msgstr "सुरक्षित क्षेत्रों को टॉगल करें."
-
-#~ msgid "Get the playback volume."
-#~ msgstr "प्लेबैक आवाज प्राप्त करें."
-
-#~ msgid "Set the playback volume."
-#~ msgstr "प्लेबैक आवाज सेट करें."
-
-#~ msgid "Save a movie or sequence from the front layer."
-#~ msgstr "एक फिल्म या अनुक्रम को सामने की परत से सहेजें."
-
-#~ msgid "Save a single frame."
-#~ msgstr "एक एकल फ्रेम सहेजें."
-
-#~ msgid "Save multiple annotation frames."
-#~ msgstr "बहुत से एनोटेशन फ्रेम सहेजें."
-
-#~ msgid "Save multiple frames."
-#~ msgstr "कई फ्रेम सहेजें."
-
-#~ msgid "Save an .otio file from the current selected image."
-#~ msgstr "वर्तमान चयनित छवि में से फ़ाइल सहेजें."
-
-#~ msgid "Save a PDF document with all annotations and notes."
-#~ msgstr "सभी एनोटेशन्स तथा नोट्स के साथ पीडीएफ़ दस्तावेज़ सहेजें."
-
-#~ msgid ""
-#~ "\n"
-#~ "Annotations module.\n"
-#~ "\n"
-#~ "Contains all functions and classes related to the annotationss.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "व्याख्याएँ मॉड्यूल. व्याख्याओं से संबंधित सभी फंक्शन तथा वर्ग समाहित हैं.\n"
-
-#~ msgid "Add notes annotations to current clip at a certain time."
-#~ msgstr "कुछ समय में मौजूदा क्लिप में नोट्स जोड़ें."
-
-#~ msgid "Add notes annotations to current clip at a certain frame."
-#~ msgstr "कुछ फ्रेम में मौजूदा क्लिप में नोट्स जोड़ें."
-
-#~ msgid "Add notes annotations to current clip at certain seconds."
-#~ msgstr "कुछ सेकंड में नोटों को वर्तमान क्लिप में जोड़ें."
-
-#~ msgid "Get all times for annotations."
-#~ msgstr "व्याख्या के लिए हर बार मिलता है."
-
-#~ msgid "Client"
-#~ msgstr "क्लाइंट"
-
-#~ msgid "Server"
-#~ msgstr "सर्वर"
-
-#~ msgid "Host"
-#~ msgstr "होस्ट"
-
-#~ msgid "Host name or IP to connect to.  For example: 127.0.0.1"
-#~ msgstr "जिससे जुड़ना है होस्ट नाम या आईपी को. उदाहरण के लिए: 127. 0"
-
-#~ msgid "Previously used Hosts"
-#~ msgstr "पहले प्रयोग में लिए गए होस्ट"
-
-#~ msgid "Port"
-#~ msgstr "पोर्ट"
-
-#~ msgid ""
-#~ "Port to connect to.  Make sure your firewall and router allows read/write "
-#~ "through it."
-#~ msgstr ""
-#~ "कनेक्ट करने के लिए पोर्ट. कृपया सुनिश्चित करें कि आपका फायरवाल तथा राउटर इसके माध्यम "
-#~ "से पढ़ने/ लिखें."
-
-#~ msgid "Connect"
-#~ msgstr "कनेक्ट"
-
-#~ msgid "Create"
-#~ msgstr "बनाएँ"
-
-#~ msgid "Disconnect"
-#~ msgstr "डिस्कनेक्ट"
-
-#~ msgid "Shutdown"
-#~ msgstr "बन्दकरें"
-
-#~ msgid "&File/&Open"
-#~ msgstr "फ़ाइल/खोलें"
-
-#~ msgid "&File/&Save"
-#~ msgstr "फ़ाइल/सहेजें"
-
-#~ msgid "&Edit/&Undo"
-#~ msgstr "संपादन/पहले जैसा"
-
-#~ msgid "&Edit/Cu&t"
-#~ msgstr "संपादन/Cut"
-
-#~ msgid "&Edit/&Copy"
-#~ msgstr "संपादन/नक़ल"
-
-#~ msgid "&Edit/&Paste"
-#~ msgstr "संपादन/चिपकाएँ"
-
-#~ msgid "&Edit/&Delete"
-#~ msgstr "संपादन/मिटाएँ"
-
-#~ msgid "&Edit/&Comment Selection"
-#~ msgstr "संपादन/टिप्पणी चयन"
-
-#~ msgid "&Edit/&Uncomment Selection"
-#~ msgstr "संपादन/चयन में कोई प्रविष्टियां नहीं"
-
-#~ msgid "&Search/&Find..."
-#~ msgstr "ढूंढें/ढूंढें..."
-
-#~ msgid "&Search/F&ind Again"
-#~ msgstr "ढूंढें/फिर से ढूंढें"
-
-#~ msgid "&Search/&Replace"
-#~ msgstr "ढूंढें/बदलें"
-
-#~ msgid "&Search/&Replace Again"
-#~ msgstr "ढूंढें/फिर से बदलें"
-
-#~ msgid "Clear/&Output"
-#~ msgstr "साफ करें/आउटपुट"
-
-#~ msgid "Clear/&Editor"
-#~ msgstr "साफ करें/संपादक"
-
-#~ msgid "Editor/&Run Code"
-#~ msgstr "संपादक/चलाएँ कोड"
-
-#~ msgid "Editor/Toggle &Line Numbers"
-#~ msgstr "संपादक/पंक्ति संख्याएं टॉगल करें"
-
-#~ msgid "Editor/&Jump to Error"
-#~ msgstr "संपादक/त्रुटि पर जाएँ"
-
-#~ msgid "Editor/&External Editor"
-#~ msgstr "संपादक/बाहरी संपादक"
-
-#~ msgid "Scripts/Add To Script List"
-#~ msgstr "स्क्रिप्ट्स/स्क्रिप्ट सूची में जोड़ें"
-
-#~ msgid "Scripts/%s"
-#~ msgstr "स्क्रिप्ट्स/%s"
-
-#~ msgid ""
-#~ "Type in your python code here.  Select an area to execute just a portion "
-#~ "of it.  Press Keypad Enter to run it."
-#~ msgstr ""
-#~ "अपने पायथन कोड में टाइप करें. इसके सिर्फ एक क्षेत्र को चलाने के लिए चुनें. इसे चलाने के लिए "
-#~ "कुंजी पैड को दबाएँ."
-
-#~ msgid "Python file {0} already exists.  Do you want to overwrite it?"
-#~ msgstr "पायथन फ़ाइल {0} पहले से ही मौजूद है. क्या आप इसके ऊपर लिखना चाहते हैं?"
-
-#~ msgid "Failed to open the file for writing."
-#~ msgstr "लिखने के लिए फ़ाइल खोलने में असफल."
-
-#~ msgid "Failed to write to the file."
-#~ msgstr "फ़ाइल को लिखने में असफल."
-
-#~ msgid "Type your editor command"
-#~ msgstr "अपना संपादक कमांड टाइप करें"
-
-#~ msgid "{0} will be replaced with the line number.  {1} with the file name"
-#~ msgstr "{0} को रेखा संख्या से प्रतिस्थापित किया जाएगा. फ़ाइल नाम के साथ {1}"
-
-#~ msgid "Could not open python editor: {0}"
-#~ msgstr "पायथन संपादक खोल नहीं सका: {0}"
-
-#~ msgid "Search String:"
-#~ msgstr "खोज स्ट्रिंग:"
-
-#~ msgid "No occurrences of '%s' found!"
-#~ msgstr "'%s' की कोई उपस्थिति नहीं पाई गई!"
-
-#~ msgid "NDI Connection"
-#~ msgstr "वीएनसी कनेक्शन"
-
-#~ msgid "Fast Format"
-#~ msgstr "तीव्र फ़ॉर्मेट"
-
-#~ msgid "Best Format"
-#~ msgstr "सर्वोत्तम फार्मेट"
-
-#~ msgid "With Audio"
-#~ msgstr "ऑडियो के साथ"
-
-#~ msgid "Without Audio"
-#~ msgstr "बिना ऑडियो"
-
-#~ msgid "Start streaming"
-#~ msgstr "स्ट्रीम शुरू कर रहा है"
-
-#~ msgid "With Metadata"
-#~ msgstr "मेटाडाटा से"
-
-#~ msgid "Without Metadata"
-#~ msgstr "बिना मेटाडाटा"
-
-#~ msgid "Streaming {0} {1}..."
-#~ msgstr "{0} स्ट्रीम कर रहा है {1}"
-
-#~ msgid "Stop streaming"
-#~ msgstr "स्ट्रीम जारी करना बन्द करें"
-
-#~ msgid "Renderer"
-#~ msgstr "रेंडरर"
-
-#~ msgid "Complexity"
-#~ msgstr "जटिलता"
-
-#~ msgid "Stage Cache"
-#~ msgstr "चरण कैश"
-
-#~ msgid "Disk Cache in GB"
-#~ msgstr "GB में डिस्क कैश"
-
-#~ msgid "Server started at port {0}."
-#~ msgstr "सर्वर पोर्ट {0} पर प्रारंभ किया."
-
-#~ msgid "Server stopped."
-#~ msgstr "सर्वर बंद."
-
-#~ msgid "A client connected from {0}"
-#~ msgstr "{0} से जुड़ा एक क्लाइंट"
-
-#~ msgid "Client at {0} disconnected."
-#~ msgstr "{0} में क्लाएंट डिसकनेक्टेड."
-
-#~ msgid "Server protocol version is {0}.  Client protocol version is {1}"
-#~ msgstr "सर्वर प्रोटोकॉल संस्करण {0} क्लाएंट संस्करण {1} है"
-
-#~ msgid "Remote file {0} does not exist on local filesystem."
-#~ msgstr "रिमोट फ़ाइल {0} स्थानीय सिस्टम पर मौजूद नहीं है."
-
-#~ msgid "Remote files are less than local files."
-#~ msgstr "रिमोट फ़ाइलें स्थानीय फ़ाइलों से कम हैं."
-
-#~ msgid "Remote file {0} matches file name {1} but not path."
-#~ msgstr "रिमोट फ़ाइल {0} नाम {1} लेकिन पथ नहीं है."
-
-#~ msgid "Remote file {0} does not match local filename."
-#~ msgstr "रिमोट फ़ाइल {0} स्थानीय फ़ाइलनाम से मेल नहीं खाता."
-
-#~ msgid "Removing {0} from message publisher."
-#~ msgstr "{0} को संदेश से हटा रहा है."
-
-#~ msgid "Server listening on port "
-#~ msgstr "पोर्ट पर सर्वर सुन रहा है"
-
-#~ msgid "ComfyUI listening on port "
-#~ msgstr "पोर्ट पर कॉमफ्यूयूयूआई सुन रहा है"
-
-#~ msgid "Connected to server at {0}, port {1}"
-#~ msgstr "{0} से कनेक्टेड, पोर्ट {1} पर"
-
-#~ msgid "Server connection lost."
-#~ msgstr "सर्वर कनेक्शन टूटा."
-
-#~ msgid "Exception caught: "
-#~ msgstr "एक्सेप्शन पकड़ा:"
-
-#~ msgid "%s - Page %d"
-#~ msgstr "%s - पृष्ठ %d"
-
-#~ msgid "Frame {0} - TC: {1} - S: {2}"
-#~ msgstr "फ्रेम {0} - समयकोड: {1} - S: {2}"
-
-#~ msgid "Image too big.  Will save the viewport size."
-#~ msgstr "छवि बहुत बड़ा है. व्यूपोर्ट आकार सहेजेगा."
-
-#~ msgid "Replace"
-#~ msgstr "बदलें"
-
-#~ msgid "Find:"
-#~ msgstr "ढूंढें:"
-
-#~ msgid "Replace:"
-#~ msgstr "बदलें:"
-
-#~ msgid "Replace All"
-#~ msgstr "सभी बदलें"
-
-#~ msgid "Replace Next"
-#~ msgstr "अगला बदलें"
-
 #~ msgid "Could not initialize NDI"
 #~ msgstr "नेडीआई प्रारंभ नहीं कर सका"
 
@@ -7516,7 +7522,8 @@ msgstr "विंडो के बारे में टॉगल करें"
 #~ msgstr "59.952"
 
 #~ msgid "You cannot set Window click through with a totally opaque window."
-#~ msgstr "आप विंडो क्लिक को पूरी तरह अपारदर्शी विंडो के द्वारा नियत नहीं कर सकते."
+#~ msgstr ""
+#~ "आप विंडो क्लिक को पूरी तरह अपारदर्शी विंडो के द्वारा नियत नहीं कर सकते."
 
 #~ msgid "Linux Distribution: "
 #~ msgstr "लिनक्स वितरण:"
