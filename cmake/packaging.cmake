@@ -147,7 +147,6 @@ if( APPLE )
 	    DESTINATION ${HDR_BUNDLE_DIR}/Contents/Resources)
     
 	# Copy the shell scripts into the bundles and make them executable
-	message(STATUS "Copying ${MRV2_DIR}/etc/macOS/hdr.sh ${HDR_BUNDLE_DIR}/Contents/MacOS/hdr")
 	configure_file(${MRV2_DIR}/etc/macOS/hdr.sh ${HDR_BUNDLE_DIR}/Contents/MacOS/hdr COPYONLY)
     
 	configure_file(
@@ -196,6 +195,8 @@ elseif(UNIX)
     #
     configure_file( ${MRV2_DIR}/etc/Linux/mrv2.desktop.in
 	"${PROJECT_BINARY_DIR}/etc/mrv2-v${mrv2_VERSION}.desktop" )
+    configure_file( ${MRV2_DIR}/etc/Linux/hdr.desktop.in
+	"${PROJECT_BINARY_DIR}/etc/hdr-v${mrv2_VERSION}.desktop" )
 
     #
     # This desktop file is for Wayland to set its icon correctly.
@@ -215,10 +216,9 @@ elseif(UNIX)
 	configure_file( ${MRV2_DIR}/etc/Linux/hdr.desktop.in
 	    "${PROJECT_BINARY_DIR}/etc/hdr-v${mrv2_VERSION}.desktop")
     
-	install(FILES "${PROJECT_BINARY_DIR}/etc/hdr-v${mrv2_VERSION}.desktop"
-	    DESTINATION share/applications COMPONENT applications)
-    
 	install(FILES "${PROJECT_BINARY_DIR}/etc/hdr.desktop"
+	    DESTINATION share/applications COMPONENT applications)
+	install(FILES "${PROJECT_BINARY_DIR}/etc/hdr-v${mrv2_VERSION}.desktop"
 	    DESTINATION share/applications COMPONENT applications)
     endif()
 
