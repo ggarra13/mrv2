@@ -30,6 +30,7 @@ v1.3.7
 - Revamped macOS install to support installing multiple applications.
 - Updated ZLIB to v1.3.1.
 - Made PNG link statically to avoid macOS issues.
+- Updated Poco to 1.14.1.
 
   
 v1.3.6

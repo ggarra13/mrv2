@@ -6,7 +6,7 @@ include( ExternalProject )
 
 # Stable TAG
 set( POCO_REPOSITORY "https://github.com/pocoproject/poco.git" )
-set( POCO_GIT_TAG poco-1.12.4-release )
+set( POCO_GIT_TAG poco-1.14.1-release )
 
 set( POCO_SHARED_LIBS OFF )
 set( POCO_OPENSSL OFF )
