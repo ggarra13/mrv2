@@ -147,7 +147,6 @@ if( APPLE )
 	    DESTINATION ${HDR_BUNDLE_DIR}/Contents/Resources)
     
 	# Copy the shell scripts into the bundles and make them executable
-	message(STATUS "Copying ${MRV2_DIR}/etc/macOS/hdr.sh ${HDR_BUNDLE_DIR}/Contents/MacOS/hdr")
 	configure_file(${MRV2_DIR}/etc/macOS/hdr.sh ${HDR_BUNDLE_DIR}/Contents/MacOS/hdr COPYONLY)
     
 	configure_file(
