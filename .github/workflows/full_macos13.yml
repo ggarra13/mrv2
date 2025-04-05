@@ -88,7 +88,18 @@ jobs:
 
     - name: Build mrv2
       run: |
-        ./etc/runme_nolog.sh -D TLRENDER_USD=OFF -t package
+        ./etc/runme_nolog.sh -D TLRENDER_USD=OFF
+
+    - name: Bundle Package Target with Retry
+      if: github.ref_name == 'beta'
+      uses: nick-invision/retry@v2
+      with:
+        timeout_seconds: 600 # Max time for all attempts
+        max_attempts: 3
+        retry_wait_seconds: 15 # Wait between attempts
+        # The command to retry is the one that invokes CPack via the build system
+        command: |
+          runmeq.sh -t package
       
     - name: Upload binaries
       if: github.ref_name == 'beta'

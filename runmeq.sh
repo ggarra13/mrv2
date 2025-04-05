@@ -83,10 +83,6 @@ fi
 
 cd $dir
 
-if [[ "$CMAKE_TARGET" == "package" && $KERNEL == *Darwin* ]]; then
-    sleep 10
-fi
-
 run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t ${CMAKE_TARGET}
 
 cd -
