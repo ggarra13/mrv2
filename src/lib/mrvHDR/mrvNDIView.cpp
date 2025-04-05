@@ -688,7 +688,9 @@ namespace mrv
         const std::size_t h = p.info.size.h;
         uint8_t* const data = p.image->getData();
 
-        if (p.fourCC == NDIlib_FourCC_type_PA16)
+        switch (p.fourCC)
+        {
+        case NDIlib_FourCC_type_PA16:
         {
             uint16_t* p_y = (uint16_t*)video_frame;
             const uint16_t* p_uv = p_y + w * h;
@@ -742,11 +744,6 @@ namespace mrv
                         B = Y_linear + 1.772f * Uf;
                     }
 
-                    // Clamp to [0, 1] to prevent oversaturation (not needed)
-                    // R = std::max(0.0f, std::min(1.0f, R));
-                    // G = std::max(0.0f, std::min(1.0f, G));
-                    // B = std::max(0.0f, std::min(1.0f, B));
-
                     // Store as RGBA float
                     int rgba_index = index_y * 4;
                     rgba[rgba_index] = R;
@@ -755,6 +752,72 @@ namespace mrv
                     rgba[rgba_index + 3] = A;
                 }
             }
+            break;
+        }
+        case NDIlib_FourCC_type_P216:
+        {
+            uint16_t* p_y = (uint16_t*)video_frame;
+            const uint16_t* p_uv = p_y + w * h;
+            half* rgba = (half*)data;
+
+            // Determine BT.601 or BT.709 based on resolution
+            bool useBT709 = (w >= 1280 && h >= 720);
+
+            // Coefficients
+            float Kr = useBT709 ? 0.2126f : 0.299f;
+            float Kb = useBT709 ? 0.0722f : 0.114f;
+            float Kg = 1.0f - Kr - Kb;
+
+            for (int y = 0; y < h; ++y)
+            {
+                for (int x = 0; x < w; ++x)
+                {
+                    const int yw = y * w;
+                    int index_y = yw + x;
+                    int index_uv = yw + (x / 2) * 2;
+
+                    // Extract Y, U, V, and Alpha
+                    float Yf = p_y[index_y] / 65535.0f;
+                    float Uf = (p_uv[index_uv] - 32768) / 65535.0f;
+                    float Vf = (p_uv[index_uv + 1] - 32768) / 65535.0f;
+
+                    float R, G, B;
+
+                    float Y_linear;
+                    if (p.hasHDR)
+                        Y_linear = apply_inverse_pq(Yf);
+                    else
+                        Y_linear = Yf;
+
+                    if (useBT709)
+                    {
+                        // BT.709 typical multipliers
+                        // (Exact values differ slightly in various references)
+                        R = Y_linear + 1.5748f * Vf;
+                        G = Y_linear - 0.1873f * Uf - 0.4681f * Vf;
+                        B = Y_linear + 1.8556f * Uf;
+                    }
+                    else
+                    {
+                        // BT.601
+                        R = Y_linear + 1.402f * Vf;
+                        G = Y_linear - 0.344f * Uf - 0.714f * Vf;
+                        B = Y_linear + 1.772f * Uf;
+                    }
+
+                    // Store as RGBA float
+                    int rgba_index = index_y * 4;
+                    rgba[rgba_index] = R;
+                    rgba[rgba_index + 1] = G;
+                    rgba[rgba_index + 2] = B;
+                    rgba[rgba_index + 3] = 1.0F;
+                }
+            }
+            break;
+        }
+        default:
+            std::cerr << "Unknown format" << std::endl;
+            break;
         }
     }
 
@@ -1625,13 +1688,16 @@ void main() {
             NDI_recv_create_desc.p_ndi_recv_name = "mrv2 HDR Receiver";
             NDI_recv_create_desc.source_to_connect_to =
                 p.currentNDISource.c_str();
-            lock.unlock(); // Explicitly unlock before creating receiver
             NDI_recv_create_desc.color_format = NDIlib_recv_color_format_best;
 
             // Create the receiver
             p.NDI_recv = NDIlib_recv_create(&NDI_recv_create_desc);
             if (!p.NDI_recv)
+            {
                 continue;
+            }
+
+            lock.unlock(); // Explicitly unlock after creating receiver
 
             // The descriptors
             NDIlib_video_frame_t video_frame;
