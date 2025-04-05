@@ -1741,26 +1741,14 @@ void main() {
                             // Get attributes
                             if (root)
                             {
-                                rapidxml::xml_attribute<>* attr_transfer =
-                                    root->first_attribute("transfer");
-                                rapidxml::xml_attribute<>* attr_matrix =
-                                    root->first_attribute("matrix");
-                                rapidxml::xml_attribute<>* attr_primaries =
-                                    root->first_attribute("primaries");
                                 rapidxml::xml_attribute<>* attr_mrv2 =
                                     root->first_attribute("mrv2");
-
-                                if (attr_transfer)
-                                    p.transferName = attr_transfer->value();
-                                if (attr_matrix)
-                                    p.matrixName = attr_matrix->value();
-                                if (attr_primaries)
-                                    p.primariesName = attr_primaries->value();
 
                                 if (!p.hasHDR)
                                     init = true;
                                 p.hasHDR = true;
 
+                                image::HDRData hdrData;
                                 if (attr_mrv2)
                                 {
                                     const std::string& jsonString =
@@ -1770,13 +1758,40 @@ void main() {
                                     const nlohmann::json& j =
                                         nlohmann::json::parse(jsonString);
 
-                                    const image::HDRData& hdrData =
-                                        j.get<image::HDRData>();
-                                    if (p.hdrData != hdrData)
-                                    {
-                                        p.hdrData = hdrData;
-                                        init = true;
-                                    }
+                                    hdrData = j.get<image::HDRData>();
+                                }
+                                else
+                                {
+                                    rapidxml::xml_attribute<>* attr_transfer =
+                                        root->first_attribute("transfer");
+                                    rapidxml::xml_attribute<>* attr_matrix =
+                                        root->first_attribute("matrix");
+                                    rapidxml::xml_attribute<>* attr_primaries =
+                                        root->first_attribute("primaries");
+
+                                    if (attr_transfer)
+                                        p.transferName = attr_transfer->value();
+                                    if (attr_matrix)
+                                        p.matrixName = attr_matrix->value();
+                                    if (attr_primaries)
+                                        p.primariesName =
+                                            attr_primaries->value();
+
+                                    // std::cerr << "primaries="
+                                    //           << p.primariesName
+                                    //           << std::endl;
+                                    // std::cerr << "transferName="
+                                    //           << p.transferName
+                                    //           << std::endl;
+                                    // std::cerr << "matrixName="
+                                    //           << p.matrixName
+                                    //           << std::endl;
+                                }
+
+                                if (p.hdrData != hdrData)
+                                {
+                                    p.hdrData = hdrData;
+                                    init = true;
                                 }
                             }
                             else
@@ -1789,16 +1804,6 @@ void main() {
                         catch (const std::exception& e)
                         {
                         }
-
-                        // Display color information
-                        // fprintf(
-                        //     stderr,
-                        //     "Video metadata color info (transfer: %s, matrix:
-                        //     "
-                        //     "%s, primaries: %s)\n",
-                        //     attr_transfer->value(), attr_matrix->value(),
-                        //     attr_primaries->value());
-
                         // std::cerr << "primaries--------" << std::endl;
                         // std::cerr << hdrData.primaries[0] << " "
                         //           << hdrData.primaries[1] << " "
@@ -1891,8 +1896,12 @@ void main() {
                     NDIlib_find_get_current_sources(p.NDI_find, &no_sources);
             }
 
+            static std::regex kRemoteRegex(
+                ".*REMOTE.*", std::regex_constants::icase);
             for (int i = 0; i < no_sources; ++i)
             {
+                if (std::regex_match(sources[i].p_ndi_name, kRemoteRegex))
+                    continue;
                 p.NDIsources.push_back(sources[i].p_ndi_name);
             }
 
@@ -2006,6 +2015,8 @@ void main() {
         {
             src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
             src_colorspace.transfer = PL_COLOR_TRC_PQ;
+            if (p.transferName == "bt_2100_hlg")
+                src_colorspace.transfer = PL_COLOR_TRC_HLG;
             cmap.metadata = PL_HDR_METADATA_ANY;
             pl_hdr_metadata& hdr = src_colorspace.hdr;
             hdr.min_luma = data.displayMasteringLuminance.getMin();
