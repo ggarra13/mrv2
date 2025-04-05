@@ -4,7 +4,7 @@
 
 include( ExternalProject )
 
-set(FLTK_GIT_REPOSITORY "git@github.com:ggarra13/fltk.git")
+set(FLTK_GIT_REPOSITORY "https://github.com/ggarra13/fltk.git")
 set(FLTK_GIT_TAG vulkan)
 
 # The cutting EDGE!
