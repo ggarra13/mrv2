@@ -48,7 +48,7 @@ parser.add_argument('language', type=str,
 args = parser.parse_args()
 lang = args.language
 
-if not lang in LANGUAGES:
+if not lang in ['all'] + LANGUAGES:
     print(f'Invalid language "{lang}"')
     print(f'Valid ones are:\n\t{", ".join(LANGUAGES)}')
     exit(1)
@@ -67,7 +67,7 @@ class POMergeMissing:
             
         if not os.path.exists(missing_po):
             print(missing_po,'does not exist!')
-            exit(1)
+            return
             
         # Load both PO files
         source_po = polib.pofile(missing_po)  # The PO file containing the replacement translations
@@ -112,7 +112,11 @@ def merge_missing(lang):
         missing.merge(merged_po, plugin_po, out_po)
 
 if __name__ == "__main__":
-    merge_missing(lang)    
+    if lang == 'all':
+        for lang in LANGUAGES:
+            merge_missing(lang)
+    else:
+        merge_missing(lang)    
 
 
 
