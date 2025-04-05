@@ -208,10 +208,6 @@ elseif(UNIX)
 	DESTINATION share/applications COMPONENT applications)
     install(FILES "${PROJECT_BINARY_DIR}/etc/mrv2.desktop"
 	DESTINATION share/applications COMPONENT applications)
-    install(FILES "${PROJECT_BINARY_DIR}/etc/hdr-v${mrv2_VERSION}.desktop"
-	DESTINATION share/applications COMPONENT applications)
-    install(FILES "${PROJECT_BINARY_DIR}/etc/hdr.desktop"
-	DESTINATION share/applications COMPONENT applications)
     install(DIRECTORY ${MRV2_DIR}/share/icons
 	DESTINATION share/ COMPONENT applications)
 
@@ -221,10 +217,9 @@ elseif(UNIX)
 	configure_file( ${MRV2_DIR}/etc/Linux/hdr.desktop.in
 	    "${PROJECT_BINARY_DIR}/etc/hdr-v${mrv2_VERSION}.desktop")
     
-	install(FILES "${PROJECT_BINARY_DIR}/etc/hdr-v${mrv2_VERSION}.desktop"
-	    DESTINATION share/applications COMPONENT applications)
-    
 	install(FILES "${PROJECT_BINARY_DIR}/etc/hdr.desktop"
+	    DESTINATION share/applications COMPONENT applications)
+	install(FILES "${PROJECT_BINARY_DIR}/etc/hdr-v${mrv2_VERSION}.desktop"
 	    DESTINATION share/applications COMPONENT applications)
     endif()
 
