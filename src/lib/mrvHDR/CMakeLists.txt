@@ -11,17 +11,14 @@ set(SOURCES
 )
 
 find_package(Intl REQUIRED)
-find_package(Vulkan REQUIRED)
 find_package(libplacebo REQUIRED)
 find_package(NDI REQUIRED)
 
-set(LIBRARIES ${FLTK_LIBRARIES}
-    Vulkan::Vulkan
+set(LIBRARIES ${FLTK_vk_LIBRARY} ${FLTK_LIBRARIES} 
     libplacebo
     NDI
     ${Intl_LIBRARIES}
 )
-
 
 add_library(mrvHDR ${SOURCES} ${HEADERS})
 
