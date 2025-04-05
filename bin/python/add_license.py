@@ -18,6 +18,7 @@ import stat
 import shutil
 
 CPP_DIRS = [
+    "src/hdr",
     "src/main",
     "src/lib/mrvApp",
     "src/lib/mrvCore",
@@ -27,6 +28,7 @@ CPP_DIRS = [
     "src/lib/mrvFl",
     "src/lib/mrvFlU",
     "src/lib/mrvGL",
+    "src/lib/mrvHDR",
     "src/lib/mrvNetwork",
     "src/lib/mrvPanels",
     "src/lib/mrvPy",

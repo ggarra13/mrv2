@@ -92,8 +92,8 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {216 239 853 467} type Double resizable
-      code0 {main = m;} visible
+      xywh {216 239 853 467} type Double hide resizable
+      code0 {main = m;}
     } {
       Fl_Group {} {open
         xywh {0 0 853 466} box FLAT_BOX
@@ -710,16 +710,16 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
               }
             }
             Fl_Group {} {
-              label Render open
-              xywh {288 37 555 369} box EMBOSSED_BOX align 5
+              label Render
+              xywh {288 37 555 369} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label Render
-                xywh {302 52 531 170} box ROUNDED_BOX
+                xywh {302 62 531 170} box ROUNDED_BOX
               } {
                 Fl_Choice uiPrefsVideoLevels {
                   label {Video Levels} open
-                  xywh {514 66 135 25} down_box BORDER_BOX
+                  xywh {514 76 135 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label {From File}
@@ -736,7 +736,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                 }
                 Fl_Choice uiPrefsAlphaBlend {
                   label {Alpha Blend}
-                  xywh {514 96 135 25} down_box BORDER_BOX
+                  xywh {514 106 135 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label None
@@ -753,7 +753,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                 }
                 Fl_Choice uiPrefsMinifyFilter {
                   label {Minify Filter}
-                  xywh {514 149 135 25} down_box BORDER_BOX
+                  xywh {514 159 135 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label Nearest
@@ -766,7 +766,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                 }
                 Fl_Choice uiPrefsMagnifyFilter {
                   label {Magnify Filter}
-                  xywh {514 182 135 25} down_box BORDER_BOX
+                  xywh {514 192 135 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label Nearest
@@ -779,12 +779,12 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                 }
               }
               Fl_Group {} {
-                label HDR open
-                xywh {307 240 530 160} box ROUNDED_BOX
+                label HDR
+                xywh {303 256 530 140} box ROUNDED_BOX
               } {
                 Fl_Choice uiPrefsChromaticities {
                   label Chromaticities open
-                  xywh {517 259 135 25} down_box BORDER_BOX
+                  xywh {513 275 135 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label Ignore
@@ -797,7 +797,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                 }
                 Fl_Choice uiPrefsTonemap {
                   label Tonemap open
-                  xywh {517 304 135 25} down_box BORDER_BOX
+                  xywh {513 312 135 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label Never
@@ -809,8 +809,8 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                   }
                 }
                 Fl_Choice uiPrefsTonemapAlgorithm {
-                  label {Tonemap Algorithm} open selected
-                  xywh {517 351 135 25} down_box BORDER_BOX
+                  label {Tonemap Algorithm} open
+                  xywh {513 349 135 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label ST2094_40
@@ -1545,7 +1545,7 @@ v->uiOCIO_Display_View->do_callback();}
                   }
                 }
                 Fl_Choice uiPrefsColorAccuracy {
-                  label {Color Buffers' Accuracy} open
+                  label {Color Buffers' Accuracy}
                   tooltip {Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves all float information, Half Float preserves most float information and Fast works in 8-bits.  Automatic selects the accuracy based on image depth.} xywh {511 167 140 25} down_box BORDER_BOX align 132 textcolor 32
                   class {mrv::Choice}
                 } {
@@ -1567,7 +1567,7 @@ v->uiOCIO_Display_View->do_callback();}
                   }
                 }
                 Fl_Choice uiPrefsBlitViewports {
-                  label {Blit Viewports} open
+                  label {Blit Viewports}
                   tooltip {Viewports can be drawn with blitting or with OpenGL shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {513 243 140 25} down_box BORDER_BOX align 132 textcolor 32
                   class {mrv::Choice}
                 } {
@@ -1817,7 +1817,8 @@ o->add( _("Audio") );
 o->add( _("ComfyUI") );
 o->add( _("Errors") );
 o->add( _("Behavior") );
-o->select( item );} {}
+o->select( item );} {selected
+    }
   }
   Function {fill_audio_apis(Fl_Choice* o)} {} {
     code {o->clear();

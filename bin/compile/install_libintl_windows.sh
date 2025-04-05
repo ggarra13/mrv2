@@ -16,19 +16,17 @@ else
 fi
 
 
-run_pacman=
 if [[ ! -e /mingw64/bin/gettext.exe ||
 	  ! -e /mingw64/lib/libiconv.dll.a ||
 	  ! -e /mingw64/lib/libintl.dll.a ]]; then
-    echo "Installing libssl, libiconv, libintl, subversion, swig and gettext thru Msys..."
-    run_pacman=1
+    echo "Installing libssl, libiconv, libintl, subversion, swig, diffutils, nasm and gettext thru Msys..."
     pacman -Syu --noconfirm
 fi
 
 #
 # Install 
 #
-pacman -Sy libsqlite swig mingw-w64-x86_64-gettext --noconfirm
+pacman -Sy libsqlite swig diffutils mingw-w64-x86_64-gettext --noconfirm
 
 mkdir -p $BUILD_DIR/install/bin
 mkdir -p $BUILD_DIR/install/lib

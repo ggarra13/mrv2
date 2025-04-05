@@ -41,7 +41,7 @@ if ( UNIX )
     link_directories(${CMAKE_INSTALL_PREFIX}/lib)
 endif()
 
-
+find_package(Vulkan OPTIONAL_COMPONENTS glslang shaderc_combined SPIRV-Tools)
 find_package(FLTK CONFIG REQUIRED)
 
 
@@ -50,13 +50,16 @@ if(FLTK_BUILD_SHARED_LIBS)
 	add_definitions(-D FL_DLL)
 	set(FLTK_LIBRARIES fltk::fltk-shared )
 	set(FLTK_gl_LIBRARY )
+	set(FLTK_vk_LIBRARY )
     else()
 	set(FLTK_LIBRARIES fltk::fltk-shared fltk::images-shared )
 	set(FLTK_gl_LIBRARY fltk::gl-shared)
+	set(FLTK_vk_LIBRARY fltk::vk-shared)
     endif()
 else()
     set(FLTK_LIBRARIES fltk::fltk fltk::images )
     set(FLTK_gl_LIBRARY fltk::gl )
+    set(FLTK_vk_LIBRARY fltk::vk )
 endif()
 
 #
@@ -68,17 +71,12 @@ else()
     set(FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid)
 endif()
 
-if(WIN32 AND FLTK_BUILD_SHARED_LIBS)
-    add_definitions(-DFL_DLL)
-endif()
-
-
 message( STATUS "Found FLTK: ${FLTK_INCLUDE_DIR}" )
 message( STATUS "FLTK LIBRARIES: ${FLTK_gl_LIBRARY} ${FLTK_LIBRARIES}" )
 message( STATUS "FLTK_FLUID_EXECUTABLE: ${FLTK_FLUID_EXECUTABLE}" )
 
 
-find_package(Intl)
+find_package(Intl REQUIRED)
 find_package(tlRender REQUIRED)
 find_package(nlohmann_json REQUIRED)
 find_package(glfw3 REQUIRED)
@@ -234,7 +232,6 @@ set( mrv2_FLUID_INCLUDE_DIR
 # We are currently not using boost anymore, but we might use it again if
 # we turn on python's USD support.
 #
-file(GLOB mrv2_BOOST_DIRS "${CMAKE_INSTALL_PREFIX}/include/boost*")
 
 set( mrv2_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/lib   # for mrv2 includes (search here first)
@@ -242,7 +239,6 @@ set( mrv2_INCLUDE_DIRS
     ${CMAKE_PREFIX_PATH}/include/OpenEXR
     ${CMAKE_PREFIX_PATH}/include/Imath
     ${CMAKE_PREFIX_PATH}/include/opentimelineio/deps
-    ${mrv2_BOOST_DIRS}
     ${CMAKE_PREFIX_PATH}/include/tlRender
     ${CMAKE_PREFIX_PATH}/include
     ${tlRender_INCLUDE_DIRS}
@@ -344,6 +340,13 @@ add_subdirectory( ${CMAKE_CURRENT_SOURCE_DIR}/lib )
 # Add main source
 #
 add_subdirectory( main )
+
+#
+# Add hdr source
+#
+if (TLRENDER_NDI AND TLRENDER_FFMPEG AND TLRENDER_VK ANd MRV2_HDR)
+    add_subdirectory( hdr )
+endif()
 
 #
 # Add the packaging logic

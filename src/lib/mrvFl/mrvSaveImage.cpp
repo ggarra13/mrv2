@@ -178,6 +178,12 @@ namespace mrv
             
             auto tags = ui->uiView->getTags();
 
+
+            std::shared_ptr<image::Image> outputImage;
+
+            outputInfo.pixelType = info.video[layerId].pixelType;
+            outputInfo.size.pixelAspectRatio = 1.0;
+
             math::Box2i displayWindow(0, 0, renderSize.w, renderSize.h);
             math::Box2i dataWindow(0, 0, renderSize.w, renderSize.h);
             if (!options.annotations && saveEXR)
@@ -200,8 +206,6 @@ namespace mrv
                 outputInfo.size.w = dataWindow.max.x - dataWindow.min.x + 1;
                 outputInfo.size.h = dataWindow.max.y - dataWindow.min.y + 1;
             }
-
-            std::shared_ptr<image::Image> outputImage;
 
             {
 

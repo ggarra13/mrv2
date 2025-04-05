@@ -26,7 +26,17 @@ dynlib="$rsrc/lib"
 # echo "rsrc=$rsrc"
 # echo "dynlib=$dynlib"
 
+export DYLD_PRINT_LIBRARIES=1
 export DYLD_LIBRARY_PATH="$dynlib:${DYLD_LIBRARY_PATH}"
 export DYLD_FALLBACK_LIBRARY_PATH=$dynlib
 export DYLD_FRAMEWORK_PATH=$dynlib
+
+#
+# Set the MoltenVK ICD filename
+#
+export VK_ICD_FILENAMES=$rsrc/etc/vulkan/icd.d/MoltenVK_icd.json:$VK_ICD_FILENAMES
+
+# The first /opt/homebrew is for MacOS Silicon
+# The second  /usr/local is for MacOS Intel
+export VK_LAYER_PATH=/opt/homebrew/share/vulkan/explicit_layers.d:/usr/local/opt/vulkan-validationlayers/share/vulkan/explicit_layer.d:$VK_LAYER_PATHx
 exec "$rsrc/bin/hdr" $*

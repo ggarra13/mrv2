@@ -14,8 +14,8 @@ namespace tl
     {
         class ICmdLineArg;
         class ICmdLineOption;
-    }
-}
+    } // namespace app
+} // namespace tl
 
 namespace mrv
 {
@@ -24,7 +24,6 @@ namespace mrv
     {
         using namespace tl;
         using namespace tl::app;
-        
 
         //! Application options.
         struct Options
@@ -66,7 +65,7 @@ namespace mrv
 
             //! Get unused arguments
             const std::vector<std::string> getUnusedArgs() const;
-            
+
         protected:
             const std::string& _getCmdLineName() const;
 
@@ -87,5 +86,5 @@ namespace mrv
 
             TLRENDER_PRIVATE();
         };
-    }
-}
+    } // namespace app
+} // namespace mrv
