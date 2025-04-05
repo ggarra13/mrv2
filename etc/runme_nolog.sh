@@ -293,6 +293,9 @@ echo "Build FLTK shared................... ${FLTK_BUILD_SHARED} 	(FLTK_BUILD_SHA
 echo "Build embedded Python............... ${MRV2_PYBIND11} 	(MRV2_PYBIND11)"
 echo "Build mrv2 Network connections...... ${MRV2_NETWORK} 	(MRV2_NETWORK)"
 echo "Build PDF........................... ${MRV2_PDF} 	(MRV2_PDF)"
+if [[ $MRV2_HDR == ON || $MRV2_HDR == 1 ]]; then
+    echo "MRV2_HDR............................ ${MRV2_HDR} 	(MRV2_HDR)"
+fi
 echo
 echo "tlRender Options"
 echo
