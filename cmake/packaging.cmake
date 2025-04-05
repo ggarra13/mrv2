@@ -67,6 +67,9 @@ set(MRV2_DIR ${CMAKE_SOURCE_DIR})
 #
 file(REAL_PATH "${MRV2_DIR}/.." MRV2_ROOT)
 
+set(CPACK_VERBOSE ON)
+set(CPACK_FILTER_IGNORE_FILES "/.git/;/build/;/CMakeFiles/;.o;.a;.lib")
+
 #
 # \@bug:
 # This dummy (empty) install script is needed so variables get passed to
@@ -111,9 +114,11 @@ if( APPLE )
     file(MAKE_DIRECTORY ${MRV2_BUNDLE_DIR}/Contents/MacOS)
     file(MAKE_DIRECTORY ${MRV2_BUNDLE_DIR}/Contents/Resources)
     
+    # Copy the icon
+    file(COPY ${MRV2_DIR}/etc/macOS/mrv2.icns
+	DESTINATION ${MRV2_BUNDLE_DIR}/Contents/Resources)
+	
     # Copy the shell scripts into the bundles and make them executable
-    message(STATUS "${MRV2_DIR}/etc/macOS/mrv2.sh" )
-    message(STATUS "${MRV2_BUNDLE_DIR}/Contents/MacOS/mrv2" )
     configure_file(${MRV2_DIR}/etc/macOS/mrv2.sh ${MRV2_BUNDLE_DIR}/Contents/MacOS/mrv2 COPYONLY)
     
     configure_file(
@@ -128,37 +133,47 @@ if( APPLE )
     )
     
 
-    #
-    # set(HDR_BUNDLE_DIR ${CMAKE_BINARY_DIR}/hdr.app)
-    #
-    # Create the hdr.app bundle structure
-    # file(MAKE_DIRECTORY ${HDR_BUNDLE_DIR}/Contents/MacOS)
-    # file(MAKE_DIRECTORY ${HDR_BUNDLE_DIR}/Contents/Resources)
-    #
-    # add_custom_command(TARGET hdr POST_BUILD
-    # 	COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:hdr> ${HDR_BUNDLE_DIR}/Contents/MacOS/
-    # )
     
-    # Copy the shell scripts into the bundles and make them executable
-    # configure_file(${MRV2_DIR}/etc/macOS/hdr.sh ${HDR_BUNDLE_DIR}/Contents/MacOS/hdr)
-    # 
-    # configure_file(
-    #  	${MRV2_DIR}/etc/macOS/hdr.plist.in
-    #  	${HDR_BUNDLE_DIR}/Contents/Info.plist )
-    #
-    #install(DIRECTORY ${HDR_BUNDLE_DIR}
-    # 	DESTINATION .
-    # 	USE_SOURCE_PERMISSIONS
-    # 	COMPONENT applications
-    # )
+    if (EXISTS ${CMAKE_INSTALL_PREFIX}/bin/hdr)
+	
+	set(HDR_BUNDLE_DIR ${CMAKE_BINARY_DIR}/hdr.app)
+	
+	# Create the hdr.app bundle structure
+	file(MAKE_DIRECTORY ${HDR_BUNDLE_DIR}/Contents/MacOS)
+	file(MAKE_DIRECTORY ${HDR_BUNDLE_DIR}/Contents/Resources)
+
+	# Copy the icon
+	file(COPY ${MRV2_DIR}/etc/macOS/hdr.icns
+	    DESTINATION ${HDR_BUNDLE_DIR}/Contents/Resources)
+    
+	# Copy the shell scripts into the bundles and make them executable
+	message(STATUS "Copying ${MRV2_DIR}/etc/macOS/hdr.sh ${HDR_BUNDLE_DIR}/Contents/MacOS/hdr")
+	configure_file(${MRV2_DIR}/etc/macOS/hdr.sh ${HDR_BUNDLE_DIR}/Contents/MacOS/hdr COPYONLY)
+    
+	configure_file(
+     	    ${MRV2_DIR}/etc/macOS/hdr.plist.in
+     	    ${HDR_BUNDLE_DIR}/Contents/Info.plist )
+	
+	install(DIRECTORY ${HDR_BUNDLE_DIR}
+	    DESTINATION .
+	    USE_SOURCE_PERMISSIONS
+	    COMPONENT applications
+	)
+    endif()
 
     # Configure CPack for DragNDrop
     set(CPACK_GENERATOR "DragNDrop")
+
+    # Package settings
+    set(CPACK_PACKAGE_ICON ${MRV2_DIR}/etc/macOS/mrv2.icns )
+
+    # DragNDrop settings
     set(CPACK_DMG_VOLUME_NAME "mrv2 Installer")
     set(CPACK_DMG_FORMAT "UDZO")
-
-    # Set the volume icon
+    Set(CPACK_DMG_VOLUME_NAME ${CPACK_PACKAGE_FILE_NAME})
     set(CPACK_DMG_VOLUME_ICON ${MRV2_DIR}/etc/macOS/mrv2.icns)
+    
+    
     
     set(CPACK_COMPONENTS_ALL "macos_bundles")
     set(CPACK_INSTALL_CMAKE_PROJECTS "${CMAKE_BINARY_DIR};${CMAKE_PROJECT_NAME};applications;/")
@@ -181,16 +196,24 @@ elseif(UNIX)
     #
     configure_file( ${MRV2_DIR}/etc/Linux/mrv2.desktop.in
 	"${PROJECT_BINARY_DIR}/etc/mrv2-v${mrv2_VERSION}.desktop" )
+    configure_file( ${MRV2_DIR}/etc/Linux/hdr.desktop.in
+	"${PROJECT_BINARY_DIR}/etc/hdr-v${mrv2_VERSION}.desktop" )
 
     #
     # This desktop file is for Wayland to set its icon correctly.
     #
     configure_file( ${MRV2_DIR}/etc/Linux/mrv2.main.desktop.in
 	"${PROJECT_BINARY_DIR}/etc/mrv2.desktop" )
+    configure_file( ${MRV2_DIR}/etc/Linux/hdr.main.desktop.in
+	"${PROJECT_BINARY_DIR}/etc/hdr.desktop" )
 
     install(FILES "${PROJECT_BINARY_DIR}/etc/mrv2-v${mrv2_VERSION}.desktop"
 	DESTINATION share/applications COMPONENT applications)
     install(FILES "${PROJECT_BINARY_DIR}/etc/mrv2.desktop"
+	DESTINATION share/applications COMPONENT applications)
+    install(FILES "${PROJECT_BINARY_DIR}/etc/hdr-v${mrv2_VERSION}.desktop"
+	DESTINATION share/applications COMPONENT applications)
+    install(FILES "${PROJECT_BINARY_DIR}/etc/hdr.desktop"
 	DESTINATION share/applications COMPONENT applications)
     install(DIRECTORY ${MRV2_DIR}/share/icons
 	DESTINATION share/ COMPONENT applications)

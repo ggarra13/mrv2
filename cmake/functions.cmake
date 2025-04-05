@@ -58,6 +58,22 @@ endfunction()
 function( is_system_lib TARGET ISSYSLIB )
 
     #
+    # Vulkan Libs to distribute on Linux and macOS
+    # 
+    set(_vulkan_libs
+	libglslang
+	libshaderc_combined
+	libSPIRV-Tools
+	libSPIRV-Tools-opt
+    )
+
+    if (APPLE)
+	list(APPEND _vulkan_libs
+	    libMoltenVK
+	    libvulkan)
+    endif()
+    
+    #
     # List of libraries that are accepted to distribute
     #
     set( _acceptedlibs
@@ -76,7 +92,8 @@ function( is_system_lib TARGET ISSYSLIB )
 	libraw
 	libraw_r
 	libtbb
-	libusd )
+	libusd 
+	${_vulkan_libs})
 
     #
     # List of system kde libraries that should not be distributed
@@ -182,10 +199,6 @@ function( is_system_lib TARGET ISSYSLIB )
 	nvidia
     )
 
-    set(_vulkan_libs
-	libvulkan
-    )
-
     set(_audio_libs
 	libasound
 	libpulse
@@ -203,7 +216,7 @@ function( is_system_lib TARGET ISSYSLIB )
     endif()
     
     #
-    # List of system libraries that should not be distributed
+    # List of system libraries that should *NOT* be distributed
     #
     set(_syslibs
 	linux-vdso
@@ -236,7 +249,6 @@ function( is_system_lib TARGET ISSYSLIB )
 	${_qt_libs}
 	${_x11_libs}
 	${_opengl_libs}
-	${_vulkan_libs}
 	${_macos_libs}
     )
 

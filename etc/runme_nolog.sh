@@ -92,6 +92,10 @@ if [ -z "$TLRENDER_EXR" ]; then
     export TLRENDER_EXR=ON
 fi
 
+if [ -z "$TLRENDER_GL" ]; then
+    export TLRENDER_GL=ON
+fi
+
 if [ -z "$TLRENDER_HAP" ]; then
     export TLRENDER_HAP=ON
 fi
@@ -122,25 +126,6 @@ fi
 
 if [ -z "$TLRENDER_NDI_SDK" ]; then
     if [[ $KERNEL == *Linux* ]]; then
-	export TLRENDER_NDI_SDK="$HOME/code/lib/NDI SDK for Linux/"
-    elif [[ $KERNEL == *Msys* ]]; then
-	export TLRENDER_NDI_SDK="C:/Program Files/NDI/NDI 6 SDK/"
-    else
-	export TLRENDER_NDI_SDK="/Library/NDI SDK for Apple/"
-    fi
-fi
-
-if [ -z "$TLRENDER_NDI_ADVANCED" ]; then
-    export TLRENDER_NDI_ADVANCED=ON
-    if [ -d "${TLRENDER_NDI_SDK}" ]; then
-	if [[ "${TLRENDER_NDI_SDK}" == *Advanced* ]]; then
-	    export TLRENDER_NDI_ADVANCED=ON
-	fi
-    fi
-fi
-
-if [[ $TLRENDER_NDI_ADVANCED == ON || $TLRENDER_NDI_ADVANCED == 1 ]]; then
-    if [[ $KERNEL == *Linux* ]]; then
 	export TLRENDER_NDI_SDK="$HOME/code/lib/NDI Advanced SDK for Linux/"
     elif [[ $KERNEL == *Msys* ]]; then
 	export TLRENDER_NDI_SDK="C:/Program Files/NDI/NDI 6 Advanced SDK/"
@@ -154,12 +139,6 @@ if [ -z "$TLRENDER_NDI" ]; then
 	export TLRENDER_NDI=ON
     else
 	echo "TLRENDER_NDI_SDK not found at ${TLRENDER_NDI_SDK}!"
-	export TLRENDER_NDI=OFF
-    fi
-fi
-
-if [[ $TLRENDER_NDI == ON || $TLRENDER_NDI == 1 ]]; then
-    if [[ $TLRENDER_FFMPEG != ON && $TLRENDER_FFMPEG != 1 ]]; then
 	export TLRENDER_NDI=OFF
     fi
 fi
@@ -188,6 +167,44 @@ if [ -z "$TLRENDER_USD" ]; then
     export TLRENDER_USD=ON
 fi
 
+if [ -z "$VULKAN_SDK" ]; then
+    export VULKAN_SDK=/crapola_of_dir
+    if [[ $KERNEL == *Msys* ]]; then
+	export VULKAN_SDK=/C/VulkanSDK
+    elif [[ $KERNEL == *Linux* ]]; then
+	if [[ -d VulkanSDK ]]; then
+	    export VULKAN_ROOT=$PWD/VulkanSDK
+	    SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sort -r | grep -o "$VULKAN_ROOT/[0-9]*\..*"| sed -e "s#$VULKAN_ROOT/##" | head -1)
+	    export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/
+	else
+	    export VULKAN_SDK=/usr/
+	fi
+    elif [[ $KERNEL == *Darwin* ]]; then
+	VULKAN_ROOT=$HOME/VulkanSDK
+	if [ -d "$VULKAN_ROOT" ]; then
+	    SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sort -r | grep -o "$VULKAN_ROOT/[0-9]*\..*"| sed -e "s#$VULKAN_ROOT/##" | head -1)
+	    export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/macOS
+	else
+	    export VULKAN_SDK=/usr/local
+	fi
+    fi
+fi
+    
+if [ -z "$TLRENDER_VK" ]; then
+    if [ -d "${VULKAN_SDK}/include/vulkan/" ]; then
+	export TLRENDER_VK=ON
+    else
+	export TLRENDER_VK=OFF
+	echo "VULKAN NOT FOUND at ${VULKAN_SDK}/include/vulkan"
+    fi
+else
+    if [ ! -d "${VULKAN_SDK}/include/vulkan/" ]; then
+	echo "VULKAN NOT FOUND at ${VULKAN_SDK}/include/vulkan"
+	exit 1
+    fi
+fi
+
+    
 if [ -z "$TLRENDER_VPX" ]; then
     export TLRENDER_VPX=ON
 fi
@@ -252,14 +269,6 @@ if [[ $KERNEL == *Msys* ]]; then
     fi
 fi
 
-if command -v swig > /dev/null 2>&1; then
-    swig -version
-else
-    echo
-    echo "swig NOT found!!! Cannot compile pyFLTK."
-    echo
-    exit 1
-fi
 
 mkdir -p $BUILD_DIR/install
 
@@ -306,7 +315,9 @@ echo
 echo "NDI support ........................ ${TLRENDER_NDI} 	(TLRENDER_NDI)"
 if [[ $TLRENDER_NDI == ON || $TLRENDER_NDI == 1 ]]; then
     echo "NDI SDK ${TLRENDER_NDI_SDK} 	(TLRENDER_NDI_SDK}"
-    echo "NDI SDK Advanced ................... ${TLRENDER_NDI_ADVANCED} 	(TLRENDER_NDI_ADVANCED)"
+    if [[ $TLRENDER_VK == ON ]]; then
+	echo "VULKAN_SDK    .................. ${VULKAN_SDK} 	(env. variable)"
+    fi
 fi
 
 echo
@@ -330,6 +341,15 @@ mkdir -p $BUILD_DIR/install
 #
 if [[ $KERNEL == *Msys* ]]; then
     . $PWD/etc/windows/compile_dlls.sh
+fi
+
+if command -v swig > /dev/null 2>&1; then
+    swig -version
+else
+    echo
+    echo "swig NOT found!!! Cannot compile pyFLTK."
+    echo
+    exit 1
 fi
 
 #
@@ -364,6 +384,7 @@ cmd="cmake -G '${CMAKE_GENERATOR}'
            -D TLRENDER_EXR=${TLRENDER_EXR}
            -D TLRENDER_FFMPEG=${TLRENDER_FFMPEG}
            -D TLRENDER_FFMPEG_MINIMAL=${TLRENDER_FFMPEG_MINIMAL}
+	   -D TLRENDER_GL=${TLRENDER_GL}
            -D TLRENDER_HAP=${TLRENDER_HAP}
            -D TLRENDER_JPEG=${TLRENDER_JPEG}
            -D TLRENDER_LIBPLACEBO=${TLRENDER_LIBPLACEBO}
@@ -377,6 +398,7 @@ cmd="cmake -G '${CMAKE_GENERATOR}'
            -D TLRENDER_SVTAV1=${TLRENDER_SVTAV1}
 	   -D TLRENDER_TIFF=${TLRENDER_TIFF}
 	   -D TLRENDER_USD=${TLRENDER_USD}
+	   -D TLRENDER_VK=${TLRENDER_VK}
 	   -D TLRENDER_VPX=${TLRENDER_VPX}
 	   -D TLRENDER_WAYLAND=${TLRENDER_WAYLAND}
            -D TLRENDER_X11=${TLRENDER_X11}

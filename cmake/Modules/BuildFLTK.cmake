@@ -4,17 +4,11 @@
 
 include( ExternalProject )
 
-set(FLTK_GIT_REPOSITORY "https://github.com/fltk/fltk.git")
+set(FLTK_GIT_REPOSITORY "git@github.com:ggarra13/fltk.git")
+set(FLTK_GIT_TAG vulkan)
 
 # The cutting EDGE!
 #set( FLTK_GIT_TAG master )
-
-#set(FLTK_GIT_TAG 257435dca0c64b667ba82b885f9ef42c5c20962c)   # needs patch
-#set(FLTK_GIT_TAG 24aec69f27aedeead49ed629b7d434b8846826d3)   # broken
-
-
-#set(FLTK_GIT_TAG 13a7073a1e007ce5b71ef70bced1a9b15158820d)  # broken cmake 4
-set(FLTK_GIT_TAG 8b28e38942ce8b61966da90af644c9948a007eda)
 
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
     # If we are building pyFLTK compile shared
@@ -94,7 +88,10 @@ ExternalProject_Add(
     -DCMAKE_C_FLAGS=${FLTK_C_FLAGS}
     -DCMAKE_CXX_FLAGS=${FLTK_CXX_FLAGS}
     -DCMAKE_INSTALL_MESSAGE=${CMAKE_INSTALL_MESSAGE}
+    -DFLTK_BUILD_VK=${TLRENDER_VK}
+    -DFLTK_BUILD_GL=${TLRENDER_GL}
     -DFLTK_BUILD_EXAMPLES=OFF
+    -DFLTK_BUILD_FLUID=ON
     -DFLTK_BUILD_FLTK_OPTIONS=OFF
     -DFLTK_BUILD_HTML_DOCS=OFF
     -DFLTK_BUILD_TEST=OFF
