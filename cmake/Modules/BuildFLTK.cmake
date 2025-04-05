@@ -4,7 +4,13 @@
 
 include( ExternalProject )
 
-set(FLTK_GIT_REPOSITORY "https://github.com/ggarra13/fltk.git")
+set(USER_NAME $ENV{USER})
+if (USER_NAME STREQUAL "gga" OR USER_NAME STREQUAL "User-PC" OR
+	USER_NAME STREQUAL "ggarra13")
+    set(FLTK_GIT_REPOSITORY "git@github.com:ggarra13/fltk.git")
+else()
+    set(FLTK_GIT_REPOSITORY "https://github.com/ggarra13/fltk.git")
+endif()
 set(FLTK_GIT_TAG vulkan)
 
 # The cutting EDGE!
