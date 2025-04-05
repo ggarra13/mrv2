@@ -9,11 +9,13 @@ set(FL_SOURCES
 FLTK_WRAP_UI( hdr ${FL_SOURCES} )
 
 set(HEADERS
+    mrvEnv.h
     mrvHDRApp.h
     mrvRoot.h
 )
 set(SOURCES
     ${hdr_FLTK_UI_SRCS}
+    mrvEnv.cpp
     mrvHDRApp.cpp
     mrvRoot.cpp
     main.cpp)
