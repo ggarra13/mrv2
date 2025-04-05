@@ -24,7 +24,7 @@ jobs:
       run: |
         echo "Machine name: $RUNNER_NAME"
 
-    - name: Update
+    - name: Update repos
       run: |
         sudo add-apt-repository universe -y
         sudo apt-get update || { echo "apt-get update failed"; exit 1; }
@@ -58,7 +58,7 @@ jobs:
       
     - name: Install python dependencies
       run: sudo apt-get install -y libssl-dev libffi-dev python3
-        
+      
     # - name: Install vulkan
     #   if: github.ref_name == 'vulkan'
     #   run: |

@@ -35,6 +35,10 @@ if [ -z "$BUILD_X11" ]; then
     export BUILD_X11=ON
 fi
 
+if [ -z "$MRV2_HDR" ]; then
+    export MRV2_HDR=OFF
+fi
+
 if [ -z "$MRV2_PYFLTK" ]; then
     export MRV2_PYFLTK=ON
 fi
@@ -143,12 +147,6 @@ if [ -z "$TLRENDER_NDI" ]; then
     fi
 fi
 
-if [[ $TLRENDER_NDI == ON || $TLRENDER_NDI == 1 ]]; then
-    if [[ $TLRENDER_FFMPEG != ON && $TLRENDER_FFMPEG != 1 ]]; then
-	export TLRENDER_NDI=OFF
-    fi
-fi
-
 if [ -z "$TLRENDER_NET" ]; then
     export TLRENDER_NET=ON
 fi
@@ -173,38 +171,43 @@ if [ -z "$TLRENDER_USD" ]; then
     export TLRENDER_USD=ON
 fi
 
-if [ -z "$TLRENDER_VK" ]; then
-    if [ -z "$VULKAN_SDK" ]; then
-	export VULKAN_SDK=/crapola_of_dir
-	if [[ $KERNEL == *Msys* ]]; then
-	    export VULKAN_SDK=/C/VulkanSDK
-	elif [[ $KERNEL == *Linux* ]]; then
-	    if [[ -d VulkanSDK ]]; then
-		export VULKAN_ROOT=$PWD/VulkanSDK
-		SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sort -r | grep -o "$VULKAN_ROOT/[0-9]*\..*"| sed -e "s#$VULKAN_ROOT/##" | head -1)
-		export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/
-	    else
-		export VULKAN_SDK=/usr/
-	    fi
-	elif [[ $KERNEL == *Darwin* ]]; then
-	    VULKAN_ROOT=$HOME/VulkanSDK
-	    if [ -d "$VULKAN_ROOT" ]; then
-		SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sort -r | grep -o "$VULKAN_ROOT/[0-9]*\..*"| sed -e "s#$VULKAN_ROOT/##" | head -1)
-		export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/macOS
-	    else
-		export VULKAN_SDK=/usr/local
-	    fi
+if [ -z "$VULKAN_SDK" ]; then
+    export VULKAN_SDK=/crapola_of_dir
+    if [[ $KERNEL == *Msys* ]]; then
+	export VULKAN_SDK=/C/VulkanSDK
+    elif [[ $KERNEL == *Linux* ]]; then
+	if [[ -d VulkanSDK ]]; then
+	    export VULKAN_ROOT=$PWD/VulkanSDK
+	    SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sort -r | grep -o "$VULKAN_ROOT/[0-9]*\..*"| sed -e "s#$VULKAN_ROOT/##" | head -1)
+	    export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/
+	else
+	    export VULKAN_SDK=/usr/
+	fi
+    elif [[ $KERNEL == *Darwin* ]]; then
+	VULKAN_ROOT=$HOME/VulkanSDK
+	if [ -d "$VULKAN_ROOT" ]; then
+	    SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sort -r | grep -o "$VULKAN_ROOT/[0-9]*\..*"| sed -e "s#$VULKAN_ROOT/##" | head -1)
+	    export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/macOS
+	else
+	    export VULKAN_SDK=/usr/local
 	fi
     fi
 fi
-
-if [ -d "${VULKAN_SDK}/include/vulkan/" ]; then
-    export TLRENDER_VK=ON
+    
+if [ -z "$TLRENDER_VK" ]; then
+    if [ -d "${VULKAN_SDK}/include/vulkan/" ]; then
+	export TLRENDER_VK=ON
+    else
+	export TLRENDER_VK=OFF
+	echo "VULKAN NOT FOUND at ${VULKAN_SDK}/include/vulkan"
+    fi
 else
-    export TLRENDER_VK=OFF
-    echo "VULKAN NOT FOUND at ${VULKAN_SDK}/include/vulkan"
-    exit 1
+    if [ ! -d "${VULKAN_SDK}/include/vulkan/" ]; then
+	echo "VULKAN NOT FOUND at ${VULKAN_SDK}/include/vulkan"
+	exit 1
+    fi
 fi
+
     
 if [ -z "$TLRENDER_VPX" ]; then
     export TLRENDER_VPX=ON
@@ -294,6 +297,9 @@ echo "Build FLTK shared................... ${FLTK_BUILD_SHARED} 	(FLTK_BUILD_SHA
 echo "Build embedded Python............... ${MRV2_PYBIND11} 	(MRV2_PYBIND11)"
 echo "Build mrv2 Network connections...... ${MRV2_NETWORK} 	(MRV2_NETWORK)"
 echo "Build PDF........................... ${MRV2_PDF} 	(MRV2_PDF)"
+if [[ $MRV2_HDR == ON || $MRV2_HDR == 1 ]]; then
+    echo "MRV2_HDR............................ ${MRV2_HDR} 	(MRV2_HDR)"
+fi
 echo
 echo "tlRender Options"
 echo
@@ -372,6 +378,7 @@ cmd="cmake -G '${CMAKE_GENERATOR}'
 	   -D BUILD_X11=${BUILD_X11}
 	   -D BUILD_WAYLAND=${BUILD_WAYLAND}
 
+	   -D MRV2_HDR=${MRV2_HDR}
 	   -D MRV2_NETWORK=${MRV2_NETWORK}
 	   -D MRV2_PYFLTK=${MRV2_PYFLTK}
 	   -D MRV2_PYBIND11=${MRV2_PYBIND11}

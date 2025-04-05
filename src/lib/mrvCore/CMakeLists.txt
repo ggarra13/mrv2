@@ -57,7 +57,8 @@ set(LIBRARIES tlRender Imath::Imath ${FLTK_LIBRARIES} )
 
 if( WIN32 )
     list( APPEND HEADERS
-	mrvEnv.h
+	mrvEnv.h)
+    list( APPEND SOURCES
 	win32/mrvSignalHandler.cpp
         mrvFileManager.cpp
 	mrvEnv.cpp )

@@ -9,11 +9,15 @@ set(FL_SOURCES
 FLTK_WRAP_UI( hdr ${FL_SOURCES} )
 
 set(HEADERS
+    mrvEnv.h
     mrvHDRApp.h
+    mrvRoot.h
 )
 set(SOURCES
     ${hdr_FLTK_UI_SRCS}
+    mrvEnv.cpp
     mrvHDRApp.cpp
+    mrvRoot.cpp
     main.cpp)
 
 files_to_absolute_paths()
@@ -30,13 +34,16 @@ endif()
 set(LIBRARIES
     mrvBaseApp
     mrvHDR
-    mrvCore
     ${Intl_LIBRARIES})
 
 if (WIN32)
     list(APPEND LIBRARIES ${FLTK_LIBRARIES})
 else()
-    list(APPEND LIBRARIES ${FLTK_LIBRARIES} fltk::vk-shared)
+    if(FLTK_BUILD_SHARED_LIBS)
+	list(APPEND LIBRARIES ${FLTK_LIBRARIES} fltk::vk-shared)
+    else()
+	list(APPEND LIBRARIES ${FLTK_LIBRARIES} fltk::vk)
+    endif()
 endif()
 
 if( APPLE )

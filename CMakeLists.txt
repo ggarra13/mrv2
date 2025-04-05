@@ -101,7 +101,11 @@ if (NOT BUILD_PYTHON AND (TLRENDER_AV1 OR TLRENDER_LIBPLACEBO))
     get_filename_component(PYTHON_DIR "${PYTHON_EXECUTABLE}" DIRECTORY)
     
     # Add the extracted directory to the PATH environment variable
-    set(ENV{PATH} "${PYTHON_DIR};${PYTHON_DIR}/Scripts;$ENV{PATH}")
+    if (WIN32)
+	set(ENV{PATH} "${PYTHON_DIR};${PYTHON_DIR}/Scripts;$ENV{PATH}")
+    else()
+	set(ENV{PATH} "${PYTHON_DIR}:${PYTHON_DIR}/Scripts:$ENV{PATH}")
+    endif()
 endif()
 
 find_program(MESON_EXECUTABLE NAMES meson.exe meson)

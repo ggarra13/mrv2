@@ -232,7 +232,6 @@ set( mrv2_FLUID_INCLUDE_DIR
 # We are currently not using boost anymore, but we might use it again if
 # we turn on python's USD support.
 #
-file(GLOB mrv2_BOOST_DIRS "${CMAKE_INSTALL_PREFIX}/include/boost*")
 
 set( mrv2_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/lib   # for mrv2 includes (search here first)
@@ -240,7 +239,6 @@ set( mrv2_INCLUDE_DIRS
     ${CMAKE_PREFIX_PATH}/include/OpenEXR
     ${CMAKE_PREFIX_PATH}/include/Imath
     ${CMAKE_PREFIX_PATH}/include/opentimelineio/deps
-    ${mrv2_BOOST_DIRS}
     ${CMAKE_PREFIX_PATH}/include/tlRender
     ${CMAKE_PREFIX_PATH}/include
     ${tlRender_INCLUDE_DIRS}
@@ -346,7 +344,7 @@ add_subdirectory( main )
 #
 # Add hdr source
 #
-if (TLRENDER_NDI AND TLRENDER_FFMPEG AND TLRENDER_VK)
+if (TLRENDER_NDI AND TLRENDER_FFMPEG AND TLRENDER_VK AND MRV2_HDR)
     add_subdirectory( hdr )
 endif()
 

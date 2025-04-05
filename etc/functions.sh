@@ -236,7 +236,7 @@ send_to_packages()
 	package_dir=$PWD/packages/$BUILD_DIR
 	mkdir -p $package_dir
 	if [[ -e $package ]]; then
-	    echo "Installing $package in $PWD/packages"
+	    echo "Installing $package in $package_dir"
 	    run_cmd mv $package $package_dir
 	else
 	    echo "ERROR package $1 was not created in $stage."

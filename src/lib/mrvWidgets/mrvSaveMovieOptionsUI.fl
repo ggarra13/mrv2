@@ -656,7 +656,8 @@ v->add("YUV_420P_10LE");
 v->add("YUV_422P_10LE");
 v->add("YUV_444P_10LE");} {}
   }
-  Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {} {
+  Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {open
+  } {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
 if (!item || !item->label()) return;
 
@@ -727,12 +728,10 @@ else if (codec == "VP9")
    
    v->add("YUV_420P_10LE");
    v->add("YUV_422P_10LE");
-   v->add("YUV_440P_10LE");
    v->add("YUV_444P_10LE");
    
    v->add("YUV_420P_12LE");
    v->add("YUV_422P_12LE");
-   v->add("YUV_440P_12LE");
    v->add("YUV_444P_12LE");
    
    v->add("GBRP");
@@ -773,7 +772,8 @@ if (v->size() > 0)
         }
     }
     v->value(0);
-}} {}
+}} {selected
+    }
   }
   Function {add_presets(Fl_Choice* o, Fl_Choice* v)} {} {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
@@ -828,8 +828,7 @@ else
   v->deactivate();
 }} {}
   }
-  Function {add_profiles(Fl_Choice* o)} {open
-  } {
+  Function {add_profiles(Fl_Choice* o)} {} {
     code {auto entries = tl::ffmpeg::getProfileLabels();
 for (auto entry : entries)
 {
@@ -862,8 +861,7 @@ for (auto entry : entries)
             }
         }
     }
-    o->value(0);} {selected
-    }
+    o->value(0);} {}
   }
   Function {add_resolution(Fl_Choice* o)} {} {
     code {const auto& settings = mrv::App::app->settings();

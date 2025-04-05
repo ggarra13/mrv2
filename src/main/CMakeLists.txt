@@ -39,7 +39,7 @@ if(UNIX AND NOT APPLE)
     list(APPEND LIBRARIES "util" "c" )
 endif()
 
-add_executable(mrv2 WIN32 ${SOURCES} ${HEADERS})
+add_executable(mrv2 WIN32  ${SOURCES} ${HEADERS})
 
 target_link_libraries(mrv2 PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
 target_link_directories( mrv2 BEFORE PUBLIC ${CMAKE_INSTALL_PREFIX}/lib /usr/local/lib )
@@ -297,36 +297,47 @@ if ( NOT WIN32 )
     configure_file(${CMAKE_SOURCE_DIR}/bin/environment.sh.in
 	${CMAKE_INSTALL_PREFIX}/bin/environment.sh @ONLY)
     
-    # Configure python.sh with python version
-    configure_file(${CMAKE_SOURCE_DIR}/bin/python.sh.in
-	${CMAKE_INSTALL_PREFIX}/bin/python.sh @ONLY)
-
-    # Configure python.sh with python version
-    configure_file(${CMAKE_SOURCE_DIR}/bin/pip.sh.in
-	${CMAKE_INSTALL_PREFIX}/bin/pip.sh @ONLY)
-    
-    file(CHMOD ${CMAKE_INSTALL_PREFIX}/bin/python.sh
-        PERMISSIONS 
-        OWNER_READ OWNER_WRITE OWNER_EXECUTE
-        GROUP_READ GROUP_EXECUTE
-        WORLD_READ WORLD_EXECUTE )
-    
-    file(CHMOD ${CMAKE_INSTALL_PREFIX}/bin/pip.sh
-        PERMISSIONS 
-        OWNER_READ OWNER_WRITE OWNER_EXECUTE
-        GROUP_READ GROUP_EXECUTE
-        WORLD_READ WORLD_EXECUTE )
-    
     install( FILES
 	${CMAKE_SOURCE_DIR}/bin/mrv2.sh
 	${CMAKE_INSTALL_PREFIX}/bin/environment.sh
-	${CMAKE_INSTALL_PREFIX}/bin/python.sh
 	DESTINATION bin
         PERMISSIONS 
         OWNER_READ OWNER_WRITE OWNER_EXECUTE
         GROUP_READ GROUP_EXECUTE
         WORLD_READ WORLD_EXECUTE
 	COMPONENT applications )
+
+    if(BUILD_PYTHON)
+    	# Configure python.sh with python version
+	configure_file(${CMAKE_SOURCE_DIR}/bin/python.sh.in
+	${CMAKE_INSTALL_PREFIX}/bin/python.sh @ONLY)
+
+        # Configure pip.sh with python version
+	configure_file(${CMAKE_SOURCE_DIR}/bin/pip.sh.in
+	    ${CMAKE_INSTALL_PREFIX}/bin/pip.sh @ONLY)
+    
+	file(CHMOD ${CMAKE_INSTALL_PREFIX}/bin/python.sh
+            PERMISSIONS 
+            OWNER_READ OWNER_WRITE OWNER_EXECUTE
+            GROUP_READ GROUP_EXECUTE
+            WORLD_READ WORLD_EXECUTE )
+    
+	file(CHMOD ${CMAKE_INSTALL_PREFIX}/bin/pip.sh
+            PERMISSIONS 
+            OWNER_READ OWNER_WRITE OWNER_EXECUTE
+            GROUP_READ GROUP_EXECUTE
+            WORLD_READ WORLD_EXECUTE )
+    
+	install( FILES
+	    ${CMAKE_INSTALL_PREFIX}/bin/pip.sh
+	    ${CMAKE_INSTALL_PREFIX}/bin/python.sh
+	    DESTINATION bin
+            PERMISSIONS 
+            OWNER_READ OWNER_WRITE OWNER_EXECUTE
+            GROUP_READ GROUP_EXECUTE
+            WORLD_READ WORLD_EXECUTE
+	    COMPONENT applications )
+    endif()
 
     if(APPLE)
 	install( FILES
@@ -366,3 +377,11 @@ if(TLRENDER_USD)
         COMPONENT applications)
 endif()
 
+if (APPLE)
+    # Define variables for bundle directories in the build dir
+    set(MRV2_BUNDLE_DIR ${CMAKE_BINARY_DIR}/mrv2.app)
+
+    # Create the mrv2.app bundle structure
+    file(MAKE_DIRECTORY ${MRV2_BUNDLE_DIR}/Contents/MacOS)
+    file(MAKE_DIRECTORY ${MRV2_BUNDLE_DIR}/Contents/Resources)
+endif()

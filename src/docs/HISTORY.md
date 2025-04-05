@@ -9,7 +9,6 @@ v1.3.7
   stopped.
 - Fixed Render->Minify Filter and Render->Magnify Filter toggling from the
   menu entries (Shift + F was working fine).
-- Added 'hdr' stand-alone utility based on NDI and Vulkan.
 - Fixed Render->Minify and Magnify filter toggling.
 - Fixed Render->Minify and Magnify saving in preferences.
 - Added full support for Japanese language in the UI.
@@ -26,6 +25,9 @@ v1.3.7
 - Updated build to work with CMake 4.0.
 - Added Playback->Annotation->Toggle Visible to toggle on or off the annotations
   without deleting them.
+- Fixed a crash when saving a movie file and the container did not support it and the file was already present.
+- Removed non-existant YUV440" pixel format from VP9.
+- Revamped macOS install to support installing multiple applications.
   
 v1.3.6
 ======

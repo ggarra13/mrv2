@@ -60,7 +60,6 @@ if [[ "$CMAKE_TARGET" == "mo" ]]; then
     cd $dir
 
     run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE
-    run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t pot
     run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t mo
 
     sleep 5
