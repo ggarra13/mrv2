@@ -583,9 +583,10 @@ if (APPLE)
 	install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/libintl*")
 	install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/libndi*")
 	install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/libplacebo*")
-	install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/libpng*")
 	install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/libz*")
-	install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/png.framework*")
+	
+	# install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/libpng*")
+	# install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/png.framework*")
 
 	# Vulkan libraries For Apple Silicon or Intel machines
 	set(VULKAN_SDK $ENV{VULKAN_SDK})
