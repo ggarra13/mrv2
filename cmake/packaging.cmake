@@ -114,9 +114,11 @@ if( APPLE )
     file(MAKE_DIRECTORY ${MRV2_BUNDLE_DIR}/Contents/MacOS)
     file(MAKE_DIRECTORY ${MRV2_BUNDLE_DIR}/Contents/Resources)
     
+    # Copy the icon
+    file(COPY ${MRV2_DIR}/etc/macOS/mrv2.icns
+	DESTINATION ${MRV2_BUNDLE_DIR}/Contents/Resources)
+	
     # Copy the shell scripts into the bundles and make them executable
-    message(STATUS "${MRV2_DIR}/etc/macOS/mrv2.sh" )
-    message(STATUS "${MRV2_BUNDLE_DIR}/Contents/MacOS/mrv2" )
     configure_file(${MRV2_DIR}/etc/macOS/mrv2.sh ${MRV2_BUNDLE_DIR}/Contents/MacOS/mrv2 COPYONLY)
     
     configure_file(
@@ -132,13 +134,20 @@ if( APPLE )
     
 
     
-    set(HDR_BUNDLE_DIR ${CMAKE_BINARY_DIR}/hdr.app)
-    if (EXISTS ${HDR_BUNDLE_DIR})
+    if (EXISTS ${CMAKE_INSTALL_PREFIX}/bin/hdr)
+	
+	set(HDR_BUNDLE_DIR ${CMAKE_BINARY_DIR}/hdr.app)
+	
 	# Create the hdr.app bundle structure
 	file(MAKE_DIRECTORY ${HDR_BUNDLE_DIR}/Contents/MacOS)
 	file(MAKE_DIRECTORY ${HDR_BUNDLE_DIR}/Contents/Resources)
+
+	# Copy the icon
+	file(COPY ${MRV2_DIR}/etc/macOS/hdr.icns
+	    DESTINATION ${HDR_BUNDLE_DIR}/Contents/Resources)
     
 	# Copy the shell scripts into the bundles and make them executable
+	message(STATUS "Copying ${MRV2_DIR}/etc/macOS/hdr.sh ${HDR_BUNDLE_DIR}/Contents/MacOS/hdr")
 	configure_file(${MRV2_DIR}/etc/macOS/hdr.sh ${HDR_BUNDLE_DIR}/Contents/MacOS/hdr COPYONLY)
     
 	configure_file(

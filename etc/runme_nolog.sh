@@ -143,12 +143,6 @@ if [ -z "$TLRENDER_NDI" ]; then
     fi
 fi
 
-if [[ $TLRENDER_NDI == ON || $TLRENDER_NDI == 1 ]]; then
-    if [[ $TLRENDER_FFMPEG != ON && $TLRENDER_FFMPEG != 1 ]]; then
-	export TLRENDER_NDI=OFF
-    fi
-fi
-
 if [ -z "$TLRENDER_NET" ]; then
     export TLRENDER_NET=ON
 fi

@@ -195,8 +195,7 @@ if(UNIX)
     #
     set(MRV2_PYTHON_LIBDIR "")
     if (MRV2_PYTHON_LIB_DIRS STREQUAL "")
-	message(WARNING "Could not locate any python version in:")
-	message(WARNING "${CPACK_PREPACKAGE}/lib/python*")
+	message(WARNING "Could not locate any python version in:\n${CPACK_PREPACKAGE}/lib/python*")
     else()
 	list(GET MRV2_PYTHON_LIB_DIRS -1 MRV2_PYTHON_LIB_DIR)
     endif()
@@ -204,8 +203,11 @@ if(UNIX)
     set(MRV2_PYTHON_SITE_PACKAGES_DIR "${MRV2_PYTHON_LIB_DIR}/site-packages")
 
     set( MRV2_EXES "${CPACK_PREPACKAGE}/bin/mrv2" )
-    list(APPEND MRV2_EXES "${CPACK_PREPACKAGE}/bin/hdr" )
-	
+
+    if (EXISTS "${CPACK_PREPACKAGE}/bin/hdr")
+	list(APPEND MRV2_EXES "${CPACK_PREPACKAGE}/bin/hdr" )
+    endif()
+    
     #
     # We need to get the dependencies of the python DSOs to avoid
     # issues like openssl and libcrypto changing between Rocky Linux
@@ -305,8 +307,28 @@ if (APPLE)
     #
     # Pre-pare mrv2.app
     #
-    file(COPY ${CPACK_PREPACKAGE}/bin
-	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
+    function(install_mrv2_bin_glob _binglob)
+	file(GLOB _bins "${_binglob}")
+	foreach( _bin ${_bins} )
+	    file(COPY ${_bin}
+		DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources/bin)
+	endforeach()
+    endfunction()
+	
+    file(COPY ${CPACK_PREPACKAGE}/bin/mrv2.sh
+	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources/bin)
+    file(COPY ${CPACK_PREPACKAGE}/bin/mrv2
+	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources/bin)
+    file(COPY ${CPACK_PREPACKAGE}/bin/environment.sh
+	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources/bin)
+    file(COPY ${CPACK_PREPACKAGE}/bin/install_dmg.sh
+	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources/bin)
+    
+    if (EXISTS ${CPACK_PREPACKAGE}/python.sh)
+	install_mrv2_bin_glob("${CPACK_PREPACKAGE}/python*")
+	install_mrv2_bin_glob("${CPACK_PREPACKAGE}/pip*")
+    endif()
+	
     file(COPY ${CPACK_PREPACKAGE}/colors
 	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
     if (EXISTS ${CPACK_PREPACKAGE}/docs)
@@ -334,9 +356,248 @@ if (APPLE)
     file(COPY ${CPACK_PREPACKAGE}/share
 	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
 
+    #
+    # Pre-pare hdr.app if present
+    #
     if (EXISTS ${CPACK_PREPACKAGE}/hdr.app)
-	# file(COPY ${CPACK_PREPACKAGE}/lib
-	#     DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
+	#
+	# Function to install a glob of libraries in hdr.app
+	#
+	function(install_hdr_lib_glob _libglob)
+	    file(GLOB _libs "${_libglob}")
+	    foreach( _lib ${_libs} )
+		file(COPY ${_lib}
+		    DESTINATION ${CPACK_PREPACKAGE}/hdr.app/Contents/Resources/lib)
+	    endforeach()
+	endfunction()
+    
+	function(install_vulkan_lib_glob _libglob APPNAME)
+	    if (DEFINED VULKAN_SDK AND EXISTS ${VULKAN_SDK})
+		set(_vulkan_found FALSE)
+		file(GLOB _libs "${VULKAN_SDK}/lib/${_libglob}.dylib")
+		foreach( _lib ${_libs} )
+		    file(COPY ${_lib}
+			DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/lib
+			FOLLOW_SYMLINK_CHAIN)
+		    set(_vulkan_found TRUE)
+		endforeach()
+		if(NOT _vulkan_found)
+		    message(FATAL_ERROR "VULKAN_SDK set to ${VULKAN_SDK} but ${_libglob} not found")
+		endif()
+		return()
+	    endif()
+	    set(_vulkan_found FALSE)
+	    file(GLOB _libs "/opt/homebrew/lib/${_libglob}.dylib")
+	    foreach( _lib ${_libs} )
+		file(COPY ${_lib}
+		    DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/lib
+		    FOLLOW_SYMLINK_CHAIN)
+		set(_vulkan_found TRUE)
+	    endforeach()
+	    if (NOT _vulkan_found)
+		file(GLOB _libs "/usr/local/lib/${_libglob}.dylib")
+		foreach( _lib ${_libs} )
+		    file(COPY ${_lib}
+			DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/lib
+			FOLLOW_SYMLINK_CHAIN)
+		endforeach()
+	    endif()
+	endfunction()
+	
+	function(install_vulkan_icd_filenames APPNAME)
+	    #
+	    # Try Vulkan SDK first
+	    #
+	    set(_vulkan_found FALSE)
+	    if (DEFINED VULKAN_SDK AND EXISTS ${VULKAN_SDK})
+		file(GLOB _libs "${VULKAN_SDK}/etc/")
+		foreach( _lib ${_libs} )
+		    file(COPY ${_lib}
+			DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/
+			FOLLOW_SYMLINK_CHAIN)
+		    set(_vulkan_found TRUE)
+		endforeach()
+		if(NOT _vulkan_found)
+		    message(FATAL_ERROR "VULKAN_SDK set to ${VULKAN_SDK} but ${VULKAN_SDK}/etc/vulkan/icd.d/*.json not found")
+		endif()
+		return()
+	    endif()
+
+	    #
+	    # Try /usr/local next
+	    #
+	    
+	    file(GLOB _libs "/opt/homebrew/etc/vulkan")
+	    foreach( _lib ${_libs} )
+		file(COPY ${_lib}
+		    DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/
+		    FOLLOW_SYMLINK_CHAIN)
+		set(_vulkan_found TRUE)
+	    endforeach()
+	    if(_vulkan_found)
+		return()
+	    endif()
+	    
+	    file(GLOB _libs "/usr/local/etc/vulkan")
+	    foreach( _lib ${_libs} )
+		file(COPY ${_lib}
+		    DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/etc/
+		    FOLLOW_SYMLINK_CHAIN)
+		set(_vulkan_found TRUE)
+	    endforeach()
+	    if(_vulkan_found)
+		return()
+	    endif()
+
+	    
+	    #
+	    # Try user's home dir next
+	    #
+	    set(HOME $ENV{HOME})
+	    file(GLOB _libs "${HOME}/etc/vulkan/")
+	    foreach( _lib ${_libs} )
+		file(COPY ${_lib}
+		    DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/etc/
+		    FOLLOW_SYMLINK_CHAIN)
+		set(_vulkan_found TRUE)
+	    endforeach()
+	    if(_vulkan_found)
+		return()
+	    endif()
+
+	    #
+	    # Try System's location last
+	    #
+	    file(GLOB _libs "/etc/vulkan/")
+	    foreach( _lib ${_libs} )
+		file(COPY ${_lib}
+		    DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/etc/
+		    FOLLOW_SYMLINK_CHAIN)
+		set(_vulkan_found TRUE)
+	    endforeach()
+	    
+	    if(NOT _vulkan_found)
+		message(FATAL_ERROR "Could not locate /etc/vulkan/icd.d/*.json")
+	    endif()
+	endfunction()
+	
+	function(install_vulkan_layers APPNAME)
+	    #
+	    # Try Vulkan SDK first
+	    #
+	    set(_vulkan_found FALSE)
+	    if (DEFINED VULKAN_SDK AND EXISTS ${VULKAN_SDK})
+		file(GLOB _dirs "${VULKAN_SDK}/share/vulkan/*_layer.d")
+		foreach( _dir ${_dirs} )
+		    file(COPY ${_dir}
+			DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/share/vulkan
+			FOLLOW_SYMLINK_CHAIN)
+		    set(_vulkan_found TRUE)
+		endforeach()
+		if(_vulkan_found)
+		    return()
+		endif()
+		file(GLOB _dirs "${VULKAN_SDK}/etc/vulkan/*_layer.d")
+		foreach( _dir ${_dirs} )
+		    file(COPY ${_dir}
+			DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/share/vulkan
+			FOLLOW_SYMLINK_CHAIN)
+		    set(_vulkan_found TRUE)
+		endforeach()
+		if(NOT _vulkan_found)
+		    message(FATAL_ERROR "VULKAN_SDK set to ${VULKAN_SDK} but ${VULKAN_SDK}/share/vulkan/*layer.d not found")
+		endif()
+		return()
+	    endif()
+
+	    #
+	    # Try /usr/local next
+	    #
+	    
+	    file(GLOB _dirs "/opt/homebrew/vulkan-validationlayers/share/vulkan/*_layer.d")
+	    foreach( _dir ${_dirs} )
+		file(COPY ${_dir}
+		    DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/share/vulkan
+		    FOLLOW_SYMLINK_CHAIN)
+		set(_vulkan_found TRUE)
+	    endforeach()
+	    if(_vulkan_found)
+		message(STATUS "VULKAN_SDK set to ${VULKAN_SDK} but ${VULKAN_SDKw}/share/vulkan/*layer.d not found")
+		return()
+	    endif()
+
+	    file(GLOB _dirs "/usr/local/opt/vulkan-validationlayers/share/vulkan/")
+	    foreach( _dir ${_dirs} )
+		file(COPY ${_dir}
+		    DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/share/
+		    FOLLOW_SYMLINK_CHAIN)
+		set(_vulkan_found TRUE)
+	    endforeach()
+	    if(_vulkan_found)
+		return()
+	    endif()
+	    
+	    #
+	    # Try user's home dir next
+	    #
+	    set(HOME $ENV{HOME})
+	    file(GLOB _dirs "${HOME}/share/vulkan/*_layer.d")
+	    foreach( _dir ${_dirs} )
+		file(COPY ${_dir}
+		    DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/share/vulkan
+		    FOLLOW_SYMLINK_CHAIN)
+		set(_vulkan_found TRUE)
+	    endforeach()
+	    if(_vulkan_found)
+		return()
+	    endif()
+
+	    #
+	    # Try System's location last
+	    #
+	    file(GLOB _dirs "/etc/vulkan/*_layer.d")
+	    foreach( _dir ${_dirs} )
+		file(COPY ${_dir}
+		    DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/share/vulkan
+		    FOLLOW_SYMLINK_CHAIN)
+		set(_vulkan_found TRUE)
+	    endforeach()
+	    
+	    if(NOT _vulkan_found)
+		message(FATAL_ERROR "Could not locate vulkan/*_layer.d")
+	    endif()
+	endfunction()
+    
+	file(COPY ${CPACK_PREPACKAGE}/bin/hdr.sh
+	    DESTINATION ${CPACK_PREPACKAGE}/hdr.app/Contents/Resources/bin)
+	file(COPY ${CPACK_PREPACKAGE}/bin/hdr
+	    DESTINATION ${CPACK_PREPACKAGE}/hdr.app/Contents/Resources/bin)
+	file(COPY ${CPACK_PREPACKAGE}/bin/environment.sh
+	    DESTINATION ${CPACK_PREPACKAGE}/hdr.app/Contents/Resources/bin)
+
+	#
+	# Common libraries
+	#
+	install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/libfltk*")
+	install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/libglslang*")
+	install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/libintl*")
+	install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/libndi*")
+	install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/libplacebo*")
+	install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/libpng*")
+	install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/libz*")
+	install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/png.framework*")
+
+	# Vulkan libraries For Apple Silicon or Intel machines
+	set(VULKAN_SDK $ENV{VULKAN_SDK})
+	message(STATUS "VULKAN_SDK set to ${VULKAN_SDK}")
+	install_vulkan_lib_glob("libMoltenVK*" hdr)
+	install_vulkan_lib_glob("libvulkan*" hdr)
+	install_vulkan_lib_glob("libglslang*" hdr)
+	install_vulkan_lib_glob("libshaderc_combined*" hdr)
+	install_vulkan_lib_glob("libSPIRV-Tools*" hdr)
+
+	install_vulkan_icd_filenames(hdr)
+	# install_vulkan_layers(hdr)
     endif()
     
     #

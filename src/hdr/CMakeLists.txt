@@ -161,12 +161,3 @@ if ( NOT WIN32 )
         WORLD_READ WORLD_EXECUTE
 	COMPONENT applications )
 endif()
-
-if (APPLE)
-    # Define variables for bundle directories in the build dir
-    set(HDR_BUNDLE_DIR ${CMAKE_BINARY_DIR}/mrv2.app)
-
-    # Create the mrv2.app bundle structure
-    file(MAKE_DIRECTORY ${HDR_BUNDLE_DIR}/Contents/MacOS)
-    file(MAKE_DIRECTORY ${HDR_BUNDLE_DIR}/Contents/Resources)
-endif()
