@@ -687,6 +687,7 @@ namespace mrv
         const std::size_t w = p.info.size.w;
         const std::size_t h = p.info.size.h;
         uint8_t* const data = p.image->getData();
+        half* rgba = (half*)data;
 
         switch (p.fourCC)
         {
@@ -695,7 +696,6 @@ namespace mrv
             uint16_t* p_y = (uint16_t*)video_frame;
             const uint16_t* p_uv = p_y + w * h;
             const uint16_t* p_alpha = p_uv + w * h;
-            half* rgba = (half*)data;
 
             // Determine BT.601 or BT.709 based on resolution
             bool useBT709 = (w >= 1280 && h >= 720);
@@ -758,7 +758,6 @@ namespace mrv
         {
             uint16_t* p_y = (uint16_t*)video_frame;
             const uint16_t* p_uv = p_y + w * h;
-            half* rgba = (half*)data;
 
             // Determine BT.601 or BT.709 based on resolution
             bool useBT709 = (w >= 1280 && h >= 720);
@@ -813,6 +812,16 @@ namespace mrv
                     rgba[rgba_index + 3] = 1.0F;
                 }
             }
+            break;
+        }
+        case NDIlib_FourCC_type_UYVY:
+        {
+            std::cerr << "UYVY" << std::endl;
+            break;
+        }
+        case NDIlib_FourCC_type_UYVA:
+        {
+            std::cerr << "UYVA" << std::endl;
             break;
         }
         default:
