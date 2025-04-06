@@ -64,8 +64,7 @@ if(APPLE)
     set( Python_BUILD make -j ${NPROCS} )
     set( Python_INSTALL
 	COMMAND make -j ${NPROCS} install
-	COMMAND ${Python_ENV} ${Python_EXECUTABLE} -m ensurepip --upgrade
-	COMMAND ${Python_ENV} ${Python_EXECUTABLE} -m pip install meson)
+	COMMAND ${Python_ENV} ${Python_EXECUTABLE} -m ensurepip --upgrade)
 
 elseif(UNIX)
 

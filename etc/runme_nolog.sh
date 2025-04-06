@@ -236,6 +236,14 @@ if [ -z "$FLTK_BUILD_SHARED" ]; then
     fi
 fi
 
+#
+# Clean our environment
+#
+unset DYLD_LIBRARY_PATH
+unset LD_LIBRARY_PATH
+unset PYTHONPATH
+unset PYTHONLIBDIR
+
 echo
 echo
 echo "Building summary"
