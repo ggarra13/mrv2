@@ -241,8 +241,7 @@ fi
 #
 unset DYLD_LIBRARY_PATH
 unset LD_LIBRARY_PATH
-echo "PATH=$PATH"
-echo "PYTHONPATH=$PYTHONPATH"
+unset PYTHONPATH
 
 echo
 echo
