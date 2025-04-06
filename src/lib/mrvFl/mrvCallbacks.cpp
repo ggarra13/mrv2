@@ -1928,6 +1928,14 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
+    void toggle_ocio_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        timeline::OCIOOptions options = ui->uiView->getOCIOOptions();
+        options.enabled = !options.enabled;
+        ui->uiView->setOCIOOptions(options);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
     void toggle_ocio_topbar_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         if (ui->uiOCIO->visible())

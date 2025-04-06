@@ -195,6 +195,7 @@ namespace mrv
     Hotkey kOCIOInputColorSpace(false, false, false, false, 0);
     Hotkey kOCIODisplay(false, false, false, false, 0);
     Hotkey kOCIOView(false, false, false, false, 0);
+    Hotkey kOCIOToggle(false, false, true, false, 'p');
 
     Hotkey kToggleReel(false, false, false, false, FL_F + 4);
     Hotkey kToggleMediaInfo(false, false, false, false, FL_F + 5);
@@ -541,11 +542,13 @@ namespace mrv
         HotkeyEntry(_("Saturation Less"), &kSaturationLess),
         HotkeyEntry(_("Gamma More"), &kGammaMore),
         HotkeyEntry(_("Gamma Less"), &kGammaLess),
+
         HotkeyEntry(_("OCIO Presets"), &kOCIOPresetsToggle),
         HotkeyEntry(_("OCIO In Top Bar"), &kOCIOInTopBarToggle),
         HotkeyEntry(_("OCIO Input Color Space"), &kOCIOInputColorSpace),
         HotkeyEntry(_("OCIO Display"), &kOCIODisplay),
         HotkeyEntry(_("OCIO View"), &kOCIOView),
+        HotkeyEntry(_("OCIO Toggle"), &kOCIOToggle),
 
         HotkeyEntry(_("Scrub Mode"), &kScrubMode),
         HotkeyEntry(_("Area Selection Mode"), &kAreaMode),

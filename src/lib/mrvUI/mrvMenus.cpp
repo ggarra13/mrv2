@@ -1465,6 +1465,14 @@ namespace mrv
         if (ui->uiOCIO->visible())
             item->set();
 
+        const timeline::OCIOOptions OCIOoptions = ui->uiView->getOCIOOptions();
+        idx = menu->add(
+            _("OCIO/Toggle"), kOCIOToggle.hotkey(),
+            (Fl_Callback*)toggle_ocio_cb, ui, FL_MENU_TOGGLE);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (OCIOoptions.enabled)
+            item->set();
+
         std::string ics = string::commentCharacter(ocio::ics(), '/');
         std::string look = ocio::look();
 
