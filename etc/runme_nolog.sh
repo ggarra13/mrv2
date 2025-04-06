@@ -243,6 +243,7 @@ unset DYLD_LIBRARY_PATH
 unset LD_LIBRARY_PATH
 unset PYTHONPATH
 unset PYTHONLIBDIR
+echo "PATH=$PATH"
 
 echo
 echo
