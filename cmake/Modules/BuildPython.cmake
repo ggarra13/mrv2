@@ -136,10 +136,10 @@ ExternalProject_Add(
 
 set(TLRENDER_USD_PYTHON ${Python_EXECUTABLE})
 
-if (UNIX)
-    set( ENV{PATH} "${CMAKE_INSTALL_PREFIX}/install/bin:$ENV{PATH}" )
+if (WIN32)
+    set( ENV{PATH} "${CMAKE_INSTALL_PREFIX}/bin;${CMAKE_INSTALL_PREFIX}/bin/Scripts/;$ENV{PATH}" )
 else()
-    set( ENV{PATH} "${CMAKE_INSTALL_PREFIX}/install/bin;$ENV{PATH}" )
+    set( ENV{PATH} "${CMAKE_INSTALL_PREFIX}/bin:$ENV{PATH}" )
 endif()
 
 set( PYTHON_DEP Python )
