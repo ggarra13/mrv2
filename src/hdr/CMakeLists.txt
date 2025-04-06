@@ -12,6 +12,7 @@ set(HEADERS
     mrvEnv.h
     mrvHDRApp.h
     mrvRoot.h
+    ${hdr_FLTK_UI_SRCS}
 )
 set(SOURCES
     ${hdr_FLTK_UI_SRCS}
