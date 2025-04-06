@@ -31,6 +31,8 @@ v1.3.7
 - Updated ZLIB to v1.3.1.
 - Made PNG link statically to avoid macOS issues.
 - Updated Poco to 1.14.1.
+- Added hotkey to toggle OCIO on and off.  By default, it is Alt + p (mnemonic
+  pass through).
 
   
 v1.3.6
