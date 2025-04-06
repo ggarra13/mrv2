@@ -237,10 +237,8 @@ if [ -z "$FLTK_BUILD_SHARED" ]; then
 fi
 
 #
-# Clean our environment
+# Clean python path to avoid clashes, mainly, with macOS meson
 #
-unset DYLD_LIBRARY_PATH
-unset LD_LIBRARY_PATH
 unset PYTHONPATH
 
 echo
