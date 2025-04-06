@@ -34,7 +34,7 @@ fi
 if [[ $KERNEL != *Msys* ]]; then
     chmod a+x $PWD/$BUILD_DIR/install/bin/mrv2.sh
     has_hdr=0
-    if [[ -e $PWD/$BUILD_DIR/install/bin/hdr.sh ]]; then
+    if [[ -e $PWD/$BUILD_DIR/install/bin/hdrsh ]]; then
 	has_hdr=1
 	chmod a+x $PWD/$BUILD_DIR/install/bin/hdr.sh
     fi
@@ -42,14 +42,14 @@ if [[ $KERNEL != *Msys* ]]; then
 	if [[ $CMAKE_BUILD_TYPE == Debug ]]; then
 	    run_cmd rm -f ~/bin/mrv2-dbg
 	    run_cmd ln -s $PWD/$BUILD_DIR/install/bin/mrv2.sh ~/bin/mrv2-dbg
-	    if [ $has_hdr ]; then
+	    if [ $has_hdr == 1 ]; then
 		run_cmd rm -f ~/bin/hdr-dbg
 		run_cmd ln -s $PWD/$BUILD_DIR/install/bin/hdr.sh ~/bin/hdr-dbg
 	    fi
 	else
 	    run_cmd rm -f ~/bin/mrv2
 	    run_cmd ln -s $PWD/$BUILD_DIR/install/bin/mrv2.sh ~/bin/mrv2
-	    if [ $has_hdr ]; then
+	    if [ $has_hdr == 1 ]; then
 		run_cmd rm -f ~/bin/hdr
 		run_cmd ln -s $PWD/$BUILD_DIR/install/bin/hdr.sh ~/bin/hdr
 	    fi

@@ -64,8 +64,7 @@ if(APPLE)
     set( Python_BUILD make -j ${NPROCS} )
     set( Python_INSTALL
 	COMMAND make -j ${NPROCS} install
-	COMMAND ${Python_ENV} ${Python_EXECUTABLE} -m ensurepip --upgrade
-	COMMAND ${Python_ENV} ${Python_EXECUTABLE} -m pip install meson)
+	COMMAND ${Python_ENV} ${Python_EXECUTABLE} -m ensurepip --upgrade)
 
 elseif(UNIX)
 
@@ -137,10 +136,13 @@ ExternalProject_Add(
 
 set(TLRENDER_USD_PYTHON ${Python_EXECUTABLE})
 
-if (UNIX)
-    set( ENV{PATH} "${CMAKE_INSTALL_PREFIX}/install/bin:$ENV{PATH}" )
+if (WIN32)
+    set( ENV{PATH} "${CMAKE_INSTALL_PREFIX}/bin;${CMAKE_INSTALL_PREFIX}/bin/Scripts/;$ENV{PATH}" )
 else()
-    set( ENV{PATH} "${CMAKE_INSTALL_PREFIX}/install/bin;$ENV{PATH}" )
+    set( ENV{PATH} "${CMAKE_INSTALL_PREFIX}/bin:$ENV{PATH}" )
+    if (UNIX AND NOT APPLE)
+	set( ENV{PYTHONPATH} "${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION}:${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION}/site-packages:$ENV{PYTHONPATH}" )
+    endif()
 endif()
 
 set( PYTHON_DEP Python )

@@ -28,6 +28,10 @@ v1.3.7
 - Fixed a crash when saving a movie file and the container did not support it and the file was already present.
 - Removed non-existant YUV440" pixel format from VP9.
 - Revamped macOS install to support installing multiple applications.
+- Updated ZLIB to v1.3.1.
+- Made PNG link statically to avoid macOS issues.
+- Updated Poco to 1.14.1.
+
   
 v1.3.6
 ======

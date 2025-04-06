@@ -236,6 +236,11 @@ if [ -z "$FLTK_BUILD_SHARED" ]; then
     fi
 fi
 
+#
+# Clean python path to avoid clashes, mainly, with macOS meson
+#
+unset PYTHONPATH
+
 echo
 echo
 echo "Building summary"

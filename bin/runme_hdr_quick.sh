@@ -30,6 +30,12 @@
 #
 params=$*
 
+KERNEL=`uname`
+if [[ $KERNEL == *MSYS* || $KERNEL == *MINGW* ]]; then
+    export KERNEL=Msys
+fi
+BUILD_ROOT=${KERNEL}-vulkan-quick/
+
 #
 # Find out our build dir
 #
@@ -57,7 +63,7 @@ export TLRENDER_WAYLAND=ON
 export TLRENDER_X11=ON
 
 echo
-echo "Saving compile log to $BUILD_DIR/compile.log ..."
+echo "Saving compile log to ${BUILD_DIR}/compile.log ..."
 echo
-cmd="./etc/runme_nolog.sh --ask $params --dir $KERNEL-vulkan 2>&1 | tee $BUILD_DIR/compile.log"
+cmd="./etc/runme_nolog.sh --ask $params --dir ${KERNEL}-vulkan-quick 2>&1 | tee $BUILD_DIR/compile.log"
 run_cmd $cmd

@@ -9,1544 +9,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-
-msgid ""
-"\n"
-"USD module.\n"
-"\n"
-"Contains all classes and enums related to USD (Universal Scene "
-"Description). \n"
-msgstr ""
-"\n"
-"USDモジュール。\n"
-"\n"
-"USD（Universal Scene Description）に関連するすべてのクラスと列挙型を含みま"
-"す。\n"
-
-msgid "Renderer Name"
-msgstr "レンダラー"
-
-msgid "Render Width"
-msgstr "レンダリング"
-
-msgid "Models' complexity."
-msgstr "便利です。"
-
-msgid "Draw mode  :class:`mrv2.usd.DrawMode`."
-msgstr "描画モード"
-
-msgid "Enable Lighting"
-msgstr "ライティングを有効に"
-
-msgid "Enable Scene Lights"
-msgstr "シーンの光"
-
-msgid "Enable Scene Materials"
-msgstr "シーンマテリアルを有効にする"
-
-msgid "Enable sRGB"
-msgstr "有効"
-
-msgid "Stage Cache Count"
-msgstr "ステージキャッシュ数"
-
-msgid "Disk Cache Byte Count"
-msgstr "ディスクキャッシュ"
-
-msgid "USD Render Options."
-msgstr "USD レンダリング オプション。"
-
-msgid "Get USD Render Options."
-msgstr "USD レンダリング オプションを取得します。"
-
-msgid "Set USD Render Options."
-msgstr "USD レンダリング オプションを設定します。"
-
-msgid ""
-"\n"
-"UI module.\n"
-"\n"
-"Contains all classes and enums related to UI (User Interface). \n"
-msgstr ""
-"\n"
-"UIモジュール。\n"
-"\n"
-"UI（ユーザーインターフェース）に関連するすべてのクラスと列挙型を含みます。\n"
-
-msgid "Refresh menus."
-msgstr "メニュー"
-
-msgid ""
-"\n"
-"Timeline module.\n"
-"\n"
-"Contains all functions related to the timeline control.\n"
-msgstr ""
-"\n"
-"タイムラインモジュールを有効にする\n"
-"\n"
-"すべての機能は、特定のサイトに関連します。\n"
-
-msgid "Play forwards."
-msgstr "捜査を進める"
-
-msgid "Play backwards."
-msgstr "逆回転"
-
-msgid "Seek to a time in timeline."
-msgstr "タイムラインに表示"
-
-msgid "Seek to a frame in timeline."
-msgstr "フレームと、"
-
-msgid "Seek to a second in timeline."
-msgstr "1秒"
-
-msgid "Time range of the timeline."
-msgstr "時間の範囲"
-
-msgid "Selected time range of the timeline."
-msgstr "タイムラインの選択した時間範囲。"
-
-msgid "Set the selected time range of the timeline."
-msgstr "選択した時間帯の予約"
-
-msgid "Set the in time of the selected time range of the timeline."
-msgstr "選択した時間帯の予約"
-
-msgid "Set the in frame of the selected time range of the timeline."
-msgstr "選択した時間帯の予約"
-
-msgid "Set the in seconds of the selected time range of the timeline."
-msgstr "選択した時間帯の予約"
-
-msgid "Set the out time of the selected time range of the timeline."
-msgstr "カスタム時間範囲の時間単位を指定します。"
-
-msgid "Set the out frame of the selected time range of the timeline."
-msgstr "目次の枠のデザインを設定できます。"
-
-msgid "Set the out seconds of the selected time range of the timeline."
-msgstr "選択した時間帯の予約"
-
-msgid "Current time in timeline."
-msgstr "時刻設定"
-
-msgid "Current frame in timeline."
-msgstr "タイムライン内の現在のフレーム"
-
-msgid "Current seconds in timeline."
-msgstr "タイムラインに表示"
-
-msgid "Return current loop mode of timeline."
-msgstr "電流ループゲイン "
-
-msgid "Set current loop mode of timeline."
-msgstr "現在に設定"
-
-msgid "Gets the current FPS of timeline."
-msgstr "当月を取得します。"
-
-msgid "Gets the default speed of the timeline."
-msgstr "アニメーションの速度"
-
-msgid "Set current FPS of timeline."
-msgstr "現在に設定"
-
-msgid "Value less than 0"
-msgstr "値が以下より小さい場合"
-
-msgid ""
-"\n"
-"Settings module.\n"
-"\n"
-"Contains all settings functions.\n"
-msgstr ""
-"\n"
-"モジュールごとの通知設定\n"
-"\n"
-"すべての設定\n"
-"\n"
-
-msgid "Returns whether to check for updates at start up."
-msgstr "アップデートをチェックする"
-
-msgid "Retrieve the cache memory setting in gigabytes."
-msgstr "資源は回収したのですか？"
-
-msgid "Set the cache memory setting in gigabytes."
-msgstr "キャッシュ メモリには、最近アクセスしたデータのコピーが格納されます。"
-
-msgid "Retrieve Read Ahead cache in seconds."
-msgstr "高い可用性を実現"
-
-msgid "Set Read Ahead cache in seconds."
-msgstr "高い可用性を実現"
-
-msgid "Retrieve Read Behind cache in seconds."
-msgstr "高い可用性を実現"
-
-msgid "Set Read Behind cache in seconds."
-msgstr "高い可用性を実現"
-
-msgid "Set file sequence audio."
-msgstr "ファイルを設定"
-
-msgid "Get file sequence audio."
-msgstr "ファイル一覧(ファイル名)取得"
-
-msgid "Set file sequence audio file name."
-msgstr "音声ファイル名"
-
-msgid "Get file sequence audio file name."
-msgstr "音声ファイル名"
-
-msgid "Set file sequence audio directory."
-msgstr "ファイルを設定"
-
-msgid "Get file sequence audio directory."
-msgstr "ファイル一覧(ファイル名)取得"
-
-msgid "Set maximum file sequence digits."
-msgstr "最大ファイルサイズ"
-
-msgid "Get maximum file sequence digits."
-msgstr "最大ファイルサイズ"
-
-msgid "Set Timer Mode."
-msgstr "タイマーをセット"
-
-msgid "Get Timer Mode."
-msgstr "タイマーモードを取得"
-
-msgid "Set Audio Buffer Frame Count."
-msgstr "フレームカウントを同期"
-
-msgid "Get Audio Buffer Frame Count."
-msgstr "フレームカウントを同期"
-
-msgid "Set Video Request Count."
-msgstr "ビデオ設定"
-
-msgid "Get Video Request Count."
-msgstr "ネットワーク要求カウント合計"
-
-msgid "Set Audio Request Count."
-msgstr "ネットワーク要求カウント合計"
-
-msgid "Get Audio Request Count."
-msgstr "ネットワーク要求カウント合計"
-
-msgid "Set Sequence Thread Count."
-msgstr "スレッドの数"
-
-msgid "Get Sequence Thread Count."
-msgstr "スレッドの数"
-
-msgid "Set FFmpeg YUV To RGB Conversion."
-msgstr "FFmpeg YUV から RGB への変換を設定します。"
-
-msgid "Get FFmpeg YUV To RGB Conversion."
-msgstr "FFmpeg YUV から RGB への変換を取得します。"
-
-msgid "Set FFmpeg Color Accuracy."
-msgstr "FFmpeg のカラー精度を設定します。"
-
-msgid "Get FFmpeg Color Accuracy."
-msgstr "FFmpeg のカラー精度を取得します。"
-
-msgid "Set FFmpeg Thread Count."
-msgstr "スレッドの数"
-
-msgid "Get FFmpeg Thread Count."
-msgstr "スレッドの数"
-
-msgid "No session name established, cannot save."
-msgstr "セッション名"
-
-msgid ""
-"\n"
-"Session module.\n"
-"\n"
-"Used to manage everything related to sessions.\n"
-msgstr ""
-"\n"
-"セッションモジュール。\n"
-"\n"
-"セッションに関連するすべてを管理するために使用されます。\n"
-
-msgid "Returns the current session metadata."
-msgstr "現在のセッション"
-
-msgid "Returns the current metadata for a key."
-msgstr "現在の日付を返します。"
-
-msgid "Sets all the session metadata for a session."
-msgstr "熱い風呂に入ったので、それだけいっそう気分がいい。"
-
-msgid "Sets the session metadata for a key."
-msgstr "指定したセルに文字色を設定します。"
-
-msgid "Clears the current session metadata."
-msgstr "現在のセッション"
-
-msgid "Returns current session file."
-msgstr "現在のセッション"
-
-msgid "Sets the current session file."
-msgstr "現在のセッション"
-
-msgid "Open a session file."
-msgstr "ファイルを開きます"
-
-msgid "Save a session file."
-msgstr "Q&Aセッション"
-
-msgid "Duplicated Python plugin {0} in {1} and {2}."
-msgstr "重複したPythonプラグイン {0} が {1} と {2} にあります。"
-
-msgid ""
-"Expected a tuple containing a Python function and a string with menu options "
-"in it."
-msgstr "Python 関数とメニュー オプションを含む文字列を含むタプルが必要です。"
-
-msgid ""
-"Expected a handle to a Python function or to a tuple containing a Python "
-"function and a string with menu options in it."
-msgstr ""
-"Python 関数へのハンドル、または Python 関数とメニュー オプションを含む文字列"
-"を含むタプルへのハンドルが必要です。"
-
-msgid ""
-"Please override the menus method by returning a valid dict of key menus, "
-"values methods."
-msgstr ""
-"キーメニュー、値メソッドの有効な辞書を返すことによって、メニューメソッドを"
-"オーバーライドしてください"
-
-msgid ""
-"\n"
-"Plugin module.\n"
-"\n"
-"Contains all classes related to python plugins.\n"
-"\n"
-msgstr ""
-"\n"
-"プラグインモジュール。\n"
-"\n"
-"Pythonプラグインに関連するすべてのクラスを含みます。\n"
-"\n"
-
-msgid ""
-"Whether a plugin is active or not.  If not overriden, the default is True."
-msgstr "コンフィギュレーションがアクティブかどうかを示します"
-
-msgid ""
-"\n"
-"Dictionary of menu entries with callbacks, like:\n"
-"\n"
-"def menus(self):\n"
-"    menus = { \"New Menu/Hello\" : self.run }\n"
-"    return menus\n"
-"\n"
-msgstr ""
-"\n"
-"コールバック付きのメニューエントリの辞書。例えば：\n"
-"\n"
-"def menus(self):\n"
-"    menus = { \"New Menu/Hello\" : self.run }\n"
-"    return menus\n"
-"\n"
-
-msgid ""
-"\n"
-"\n"
-"import mrv2\n"
-"from mrv2 import plugin\n"
-"\n"
-"class DemoPlugin(plugin.Plugin):\n"
-"    def __init__(self):\n"
-"        \"\"\"\n"
-"        Constructor for DemoPlugin.\n"
-"\n"
-"        Define your own variables here.\n"
-"        \"\"\"\n"
-"        super().__init__()\n"
-"\n"
-"    def run(self):\n"
-"        \"\"\"\n"
-"        Example method used for the callback.\n"
-"        \"\"\"\n"
-"        print(\"Hello from Python plugin\")\n"
-"\n"
-"    def active(self):\n"
-"        \"\"\"\n"
-"        Optional method to return whether the plug-in is active or not.\n"
-"\n"
-"\n"
-"        :return: True if the plug-in is active, False otherwise.\n"
-"        :rtype: bool\n"
-"\n"
-"        \"\"\"\n"
-"        return True\n"
-"\n"
-"    def menus(self):\n"
-"        \"\"\"\n"
-"        Dictionary of menu entries as keys with callbacks as values.\n"
-"\n"
-"\n"
-"        :return: A dictionary of menu entries and their corresponding "
-"callbacks.\n"
-"        :rtype: dict\n"
-"\n"
-"        \"\"\"\n"
-"        menus = {\"New Menu/Hello\": self.run}\n"
-"        return menus\n"
-"\n"
-msgstr ""
-"\n"
-"\n"
-"import mrv2\n"
-"from mrv2 import plugin\n"
-"\n"
-"class DemoPlugin(plugin.Plugin):\n"
-"    def __init__(self):\n"
-"        \"\"\"\n"
-"        DemoPluginのコンストラクタ。\n"
-"\n"
-"        ここで独自の変数を定義してください。\n"
-"        \"\"\"\n"
-"        super().__init__()\n"
-"\n"
-"    def run(self):\n"
-"        \"\"\"\n"
-"        コールバック用のサンプルメソッド。\n"
-"        \"\"\"\n"
-"        print(\"Pythonプラグインからこんにちは\")\n"
-"\n"
-"    def active(self):\n"
-"        \"\"\"\n"
-"        プラグインがアクティブかどうかを返すオプションのメソッド。\n"
-"\n"
-"\n"
-"        :return: プラグインがアクティブならTrue、そうでなければFalse。\n"
-"        :rtype: bool\n"
-"\n"
-"        \"\"\"\n"
-"        return True\n"
-"\n"
-"    def menus(self):\n"
-"        \"\"\"\n"
-"        メニューエントリをキー、対応するコールバックを値とする辞書。\n"
-"\n"
-"\n"
-"        :return: メニューエントリとその対応するコールバックの辞書。\n"
-"        :rtype: dict\n"
-"\n"
-"        \"\"\"\n"
-"        menus = {\"New Menu/Hello\": self.run}\n"
-"        return menus\n"
-"\n"
-
-msgid "No playlist matched item."
-msgstr "プレイリストが見つかりません"
-
-msgid "No playlist matched file name."
-msgstr "プレイリストが見つかりません"
-
-msgid "No playlist loaded."
-msgstr "プレイリストが見つかりません"
-
-msgid "No playlist selected."
-msgstr "プレイリストが見つかりません"
-
-msgid "Not an EDL playlist to add clips to."
-msgstr "クリップを追加するための EDL プレイリストではありません。"
-
-msgid "Could not find clip in loaded clips."
-msgstr "見つからない"
-
-msgid ""
-"\n"
-"Playlist module.\n"
-"\n"
-"Contains all functions and classes related to the playlists.\n"
-msgstr ""
-"\n"
-"プレイリスト\n"
-"\n"
-"すべての機能は、特定のサイトに関連します。\n"
-
-msgid "List playlist items."
-msgstr "%1 プレイリストにアイテムを追加"
-
-msgid "Select a playlist by FileModelItem."
-msgstr "選択する"
-
-msgid "Select a playlist by fileName."
-msgstr "ファイル名を入力または選択:"
-
-msgid "Select a playlist by index."
-msgstr "索引ページのスタイルを選択します。"
-
-msgid "Add a clip to currently selected Playlist EDL."
-msgstr "現在選択されているレイヤーにトランスフォームを追加します"
-
-msgid "Save current .otio file with relative paths."
-msgstr "現在の .otio ファイルを相対パスで保存します。"
-
-msgid "unsupported operand type(s) for {0}: RationalTime and {1}"
-msgstr "{0} に対するオペランド型がサポートされていません: RationalTime と {1}"
-
-msgid ""
-"\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/"
-"rt.rate` seconds.\n"
-"It can be rescaled into another :class:`~RationalTime`'s rate.\n"
-msgstr ""
-"\n"
-"RationalTime クラスは、時間の単位を :math:`rt.value/rt.rate` 秒として表しま"
-"す。\n"
-"別の :class:`~RationalTime` のレートに再スケールすることができます。\n"
-
-msgid ""
-"\n"
-"Returns true if the time is invalid. The time is considered invalid if the "
-"value or the rate are a NaN value\n"
-"or if the rate is less than or equal to zero.\n"
-msgstr ""
-"\n"
-"時間が無効である場合に true を返します。値またはレートが NaN の場合、\n"
-"またはレートが 0 以下の場合、時間は無効と見なされます。\n"
-
-msgid "Returns the time value for time converted to new_rate."
-msgstr "新しいレートに変換された時間の値を返します。"
-
-msgid "Returns the time for time converted to new_rate."
-msgstr "すべての文字を大文字に変換した文字列を返します。"
-
-msgid "Returns the time value for \"self\" converted to new_rate."
-msgstr "\"self\" の時間を新しいレートに変換した値を返します。"
-
-msgid ""
-"\n"
-"Compute the duration of samples from first to last (excluding last). This is "
-"not the same as distance.\n"
-"\n"
-"For example, the duration of a clip from frame 10 to frame 15 is 5 frames. "
-"Result will be in the rate of start_time.\n"
-msgstr ""
-"\n"
-"最初から最後まで（最後は除く）のサンプルの長さを計算します。これは距離とは異"
-"なります。\n"
-"\n"
-"例えば、フレーム 10 からフレーム 15 までのクリップの長さは 5 フレームです。結"
-"果は start_time のレートで返されます。\n"
-
-msgid ""
-"\n"
-"Compute the duration of samples from first to last (including last). This is "
-"not the same as distance.\n"
-"\n"
-"For example, the duration of a clip from frame 10 to frame 15 is 6 frames. "
-"Result will be in the rate of start_time.\n"
-msgstr ""
-"\n"
-"最初から最後まで（最後を含む）のサンプルの長さを計算します。これは距離とは異"
-"なります。\n"
-"\n"
-"例えば、フレーム 10 からフレーム 15 までのクリップの長さは 6 フレームです。結"
-"果は start_time のレートで返されます。\n"
-
-msgid "Returns true if the rate is valid for use with timecode."
-msgstr "テーブルのセルのテキストを返す。"
-
-msgid ""
-"Returns the first valid timecode rate that has the least difference from the "
-"given value."
-msgstr ""
-"指定された値から最小の差を持つ最初の有効なタイムコードレートを返します。"
-
-msgid "Turn a frame number and rate into a :class:`~RationalTime` object."
-msgstr ""
-"フレーム番号とレートを :class:`~RationalTime` オブジェクトに変換します。"
-
-msgid "Returns the frame number based on the current rate."
-msgstr "現在のレートに基づいてフレーム番号を返します。"
-
-msgid "Returns the frame number based on the given rate."
-msgstr "与えられたリストの要素数を返します。"
-
-msgid "Convert to timecode (``HH:MM:SS;FRAME``)"
-msgstr "タイムコードに変換（``HH:MM:SS;FRAME``）"
-
-msgid ""
-"Convert a timecode string (``HH:MM:SS;FRAME``) into a :class:`~RationalTime`."
-msgstr ""
-"タイムコード文字列（``HH:MM:SS;FRAME``）を :class:`~RationalTime` に変換しま"
-"す。"
-
-msgid ""
-"Convert a time with microseconds string (``HH:MM:ss`` where ``ss`` is an "
-"integer or a decimal number) into a :class:`~RationalTime`."
-msgstr ""
-"マイクロ秒付きの時間文字列（``HH:MM:ss``、ここで``ss``は整数または小数）"
-"を :class:`~RationalTime` に変換します。"
-
-msgid ""
-"\n"
-"The TimeRange class represents a range in time. It encodes the start time "
-"and the duration,\n"
-"meaning that :meth:`end_time_inclusive` (last portion of a sample in the "
-"time range) and\n"
-":meth:`end_time_exclusive` can be computed.\n"
-msgstr ""
-"\n"
-"TimeRange クラスは時間の範囲を表します。開始時間と期間をエンコードし、\n"
-":meth:`end_time_inclusive`（時間範囲内のサンプルの最後の部分）と\n"
-":meth:`end_time_exclusive` を計算できるようにします。\n"
-
-msgid ""
-"\n"
-"The time of the last sample containing data in the time range.\n"
-"\n"
-"If the time range starts at (0, 24) with duration (10, 24), this will be\n"
-"(9, 24)\n"
-"\n"
-"If the time range starts at (0, 24) with duration (10.5, 24):\n"
-"(10, 24)\n"
-"\n"
-"In other words, the last frame with data, even if the last frame is "
-"fractional.\n"
-msgstr ""
-"\n"
-"時間範囲内でデータを含む最後のサンプルの時間。\n"
-"\n"
-"時間範囲が (0, 24) から始まり、期間が (10, 24) の場合、これは\n"
-"(9, 24) になります。\n"
-"\n"
-"時間範囲が (0, 24) から始まり、期間が (10.5, 24) の場合：\n"
-"(10, 24) になります。\n"
-"\n"
-"言い換えれば、最後のフレームが分数であっても、データを含む最後のフレームで"
-"す。\n"
-
-msgid ""
-"\n"
-"Time of the first sample outside the time range.\n"
-"\n"
-"If start frame is 10 and duration is 5, then end_time_exclusive is 15,\n"
-"because the last time with data in this range is 14.\n"
-"\n"
-"If start frame is 10 and duration is 5.5, then end_time_exclusive is\n"
-"15.5, because the last time with data in this range is 15.\n"
-msgstr ""
-"\n"
-"時間範囲外の最初のサンプルの時間。\n"
-"\n"
-"開始フレームが 10 で、期間が 5 の場合、end_time_exclusive は 15 です。\n"
-"なぜなら、この範囲内でデータがある最後の時間は 14 だからです。\n"
-"\n"
-"開始フレームが 10 で、期間が 5.5 の場合、end_time_exclusive は\n"
-"15.5 です。なぜなら、この範囲内でデータがある最後の時間は 15 だからです。\n"
-
-msgid "Construct a new :class:`~TimeRange` that is this one extended by other."
-msgstr "この :class:`~TimeRange` を他のもので拡張した新しいものを構築します。"
-
-msgid ""
-"\n"
-"Clamp 'other' (:class:`~RationalTime`) according to\n"
-":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
-msgstr ""
-"\n"
-"引数 'other' (:class:`~RationalTime`) "
-"を :attr:`start_time`/:attr:`end_time_exclusive` および境界引数に従ってクラン"
-"プします。\n"
-
-msgid ""
-"\n"
-"Clamp 'other' (:class:`~TimeRange`) according to\n"
-":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
-msgstr ""
-"\n"
-"引数 'other' (:class:`~TimeRange`) "
-"を :attr:`start_time`/:attr:`end_time_exclusive` および境界引数に従ってクラン"
-"プします。\n"
-
-msgid ""
-"\n"
-"The start of `this` precedes `other`.\n"
-"`other` precedes the end of `this`.\n"
-"::\n"
-"\n"
-"         other\n"
-"           |\n"
-"           *\n"
-"   [      this      ]\n"
-"\n"
-msgstr ""
-"\n"
-"`this` の開始が `other` より前です。\n"
-"`other` は `this` の終了より前です。\n"
-"::\n"
-"\n"
-"         other\n"
-"           |\n"
-"           *\n"
-"   [      this      ]\n"
-
-msgid ""
-"\n"
-"The start of `this` precedes start of `other`.\n"
-"The end of `this` antecedes end of `other`.\n"
-"::\n"
-"\n"
-"        [ other ]\n"
-"   [      this      ]\n"
-"\n"
-"The converse would be ``other.contains(this)``\n"
-msgstr ""
-"\n"
-"`this` の開始が `other` の開始より前です。\n"
-"`this` の終了が `other` の終了より前です。\n"
-"::\n"
-"\n"
-"        [ other ]\n"
-"   [      this      ]\n"
-"\n"
-"逆は ``other.contains(this)`` です。\n"
-
-msgid ""
-"\n"
-"`this` contains `other`.\n"
-"::\n"
-"\n"
-"        other\n"
-"         |\n"
-"         *\n"
-"   [    this    ]\n"
-"\n"
-msgstr ""
-"\n"
-"`this` は `other` を含みます。\n"
-"::\n"
-"\n"
-"        other\n"
-"         |\n"
-"         *\n"
-"   [    this    ]\n"
-
-msgid ""
-"\n"
-"The start of `this` strictly precedes end of `other` by a value >= "
-"`epsilon_s`.\n"
-"The end of `this` strictly antecedes start of `other` by a value >= "
-"`epsilon_s`.\n"
-"::\n"
-"\n"
-"   [ this ]\n"
-"       [ other ]\n"
-"\n"
-"The converse would be ``other.overlaps(this)``\n"
-msgstr ""
-"\n"
-"`this` の開始は `other` の終了より厳密に前で、値は >= `epsilon_s` です。\n"
-"`this` の終了は `other` の開始より厳密に前で、値は >= `epsilon_s` です。\n"
-"::\n"
-"\n"
-"   [ this ]\n"
-"       [ other ]\n"
-"\n"
-"逆は ``other.overlaps(this)`` です。\n"
-
-msgid ""
-"\n"
-"The end of `this` strictly precedes `other` by a value >= `epsilon_s`.\n"
-"::\n"
-"\n"
-"             other\n"
-"               |\n"
-"   [ this ]    *\n"
-"\n"
-msgstr ""
-"\n"
-"`this` の終了は `other` より厳密に前で、値は >= `epsilon_s` です。\n"
-"::\n"
-"\n"
-"             other\n"
-"               |\n"
-"   [ this ]    *\n"
-
-msgid ""
-"\n"
-"The end of `this` strictly equals the start of `other` and\n"
-"the start of `this` strictly equals the end of `other`.\n"
-"::\n"
-"\n"
-"   [this][other]\n"
-"\n"
-"The converse would be ``other.meets(this)``\n"
-msgstr ""
-"\n"
-"`this`の終了点が`other`の開始点と厳密に等しく、\n"
-"`this`の開始点が`other`の終了点と厳密に等しい。\n"
-"::\n"
-"\n"
-"   [this][other]\n"
-"\n"
-"逆は``other.meets(this)``となる\n"
-
-msgid ""
-"\n"
-"The start of `this` strictly equals `other`.\n"
-"::\n"
-"\n"
-"   other\n"
-"     |\n"
-"     *\n"
-"     [ this ]\n"
-"\n"
-msgstr ""
-"\n"
-"`this`の開始点が`other`と厳密に等しい。\n"
-"::\n"
-"\n"
-"   other\n"
-"     |\n"
-"     *\n"
-"     [ this ]\n"
-"\n"
-
-msgid ""
-"\n"
-"The start of `this` strictly equals the start of `other`.\n"
-"The end of `this` strictly precedes the end of `other` by a value >= "
-"`epsilon_s`.\n"
-"::\n"
-"\n"
-"   [ this ]\n"
-"   [    other    ]\n"
-"\n"
-"The converse would be ``other.begins(this)``\n"
-msgstr ""
-"\n"
-"`this`の開始点が`other`の開始点と厳密に等しい。\n"
-"`this`の終了点は`other`の終了点より`epsilon_s`以上の値だけ厳密に先行する。\n"
-"::\n"
-"\n"
-"   [ this ]\n"
-"   [    other    ]\n"
-"\n"
-"逆は``other.begins(this)``となる\n"
-
-msgid ""
-"\n"
-"The end of `this` strictly equals `other`.\n"
-"::\n"
-"\n"
-"        other\n"
-"          |\n"
-"          *\n"
-"   [ this ]\n"
-"\n"
-msgstr ""
-"\n"
-"`this`の終了点が`other`と厳密に等しい。\n"
-"::\n"
-"\n"
-"        other\n"
-"          |\n"
-"          *\n"
-"   [ this ]\n"
-"\n"
-
-msgid ""
-"\n"
-"The start of `this` strictly antecedes the start of `other` by a value >= "
-"`epsilon_s`.\n"
-"The end of `this` strictly equals the end of `other`.\n"
-"::\n"
-"\n"
-"           [ this ]\n"
-"   [     other    ]\n"
-"\n"
-"The converse would be ``other.finishes(this)``\n"
-msgstr ""
-"\n"
-"`this`の開始点は`other`の開始点より`epsilon_s`以上の値だけ厳密に先行する。\n"
-"`this`の終了点は`other`の終了点と厳密に等しい。\n"
-"::\n"
-"\n"
-"           [ this ]\n"
-"   [     other    ]\n"
-"\n"
-"逆は``other.finishes(this)``となる\n"
-
-msgid ""
-"\n"
-"The start of `this` precedes or equals the end of `other` by a value >= "
-"`epsilon_s`.\n"
-"The end of `this` antecedes or equals the start of `other` by a value >= "
-"`epsilon_s`.\n"
-"::\n"
-"\n"
-"   [    this    ]           OR      [    other    ]\n"
-"        [     other    ]                    [     this    ]\n"
-"\n"
-"The converse would be ``other.finishes(this)``\n"
-msgstr ""
-"\n"
-"`this`の開始点は`other`の終了点以前であるか、`epsilon_s`以上の値だけ等し"
-"い。\n"
-"`this`の終了点は`other`の開始点以後であるか、`epsilon_s`以上の値だけ等し"
-"い。\n"
-"::\n"
-"\n"
-"   [    this    ]           OR      [    other    ]\n"
-"        [     other    ]                    [     this    ]\n"
-"\n"
-"逆は``other.overlaps(this)``となる\n"
-
-msgid ""
-"\n"
-"Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\\s "
-"(exclusive).\n"
-"\n"
-"For example, if start_time is 1 and end_time is 10, the returned will have a "
-"duration of 9.\n"
-msgstr ""
-"\n"
-"開始と終了の:class:`~RationalTime`から:class:`~TimeRange`を作成します (排他"
-"的)。\n"
-"\n"
-"例えば、start_timeが1でend_timeが10の場合、返されるもののdurationは9になりま"
-"す。\n"
-
-msgid ""
-"\n"
-"Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\\s "
-"(inclusive).\n"
-"\n"
-"For example, if start_time is 1 and end_time is 10, the returned will have a "
-"duration of 10.\n"
-msgstr ""
-"\n"
-"開始と終了の:class:`~RationalTime`から:class:`~TimeRange`を作成します (包括"
-"的)。\n"
-"\n"
-"例えば、start_timeが1でend_timeが10の場合、返されるもののdurationは10になりま"
-"す。\n"
-
-msgid ""
-"\n"
-"Media module.\n"
-"\n"
-"Contains all classes and enums related to media. \n"
-msgstr ""
-"\n"
-"メディアモジュール。\n"
-"\n"
-"メディアに関連するすべてのクラスとenumを含みます。\n"
-
-msgid "Compare mode :class:`mrv2.media.CompareMode`."
-msgstr "比較モード :class:`mrv2.media.CompareMode`。"
-
-msgid "Wipe center in X and Y :class:`mrv2.math.Vector2f`."
-msgstr "XおよびYのワイプ中心 :class:`mrv2.math.Vector2f`。"
-
-msgid "Wipe Rotation."
-msgstr "動画回転"
-
-msgid "Overlay ( A over B )"
-msgstr "オーバーレイ ( A over B )"
-
-msgid "Comparison options."
-msgstr "比較"
-
-msgid ""
-"\n"
-"Math module.\n"
-"\n"
-"Contains all math classes.\n"
-msgstr ""
-"\n"
-"数学モジュール。\n"
-"\n"
-"すべての数学クラスを含みます。\n"
-
-msgid "Vector of 2 integers."
-msgstr "請求項２ １に記載のベクターとを"
-
-msgid "Vector of 2 floats."
-msgstr "請求項２ １に記載のベクターとを"
-
-msgid "Vector of 3 floats."
-msgstr "請求項２ １に記載のベクターとを"
-
-msgid "Vector of 4 floats."
-msgstr "請求項２ １に記載のベクターとを"
-
-msgid "Size of 2 integers."
-msgstr "ボールのサイズ"
-
-msgid ""
-"\n"
-"Image module.\n"
-"\n"
-"Contains all classes and enums related to image controls. \n"
-msgstr ""
-"\n"
-"イメージモジュール。\n"
-"\n"
-"イメージコントロールに関連するすべてのクラスとenumを含みます。\n"
-
-msgid "Red Channel."
-msgstr "レッドチャネル"
-
-msgid "Green Channel."
-msgstr "グリーンチャネル"
-
-msgid "Blue Channel."
-msgstr "ブルーチャネル"
-
-msgid "Alpha Channel."
-msgstr "アルファチャンネル"
-
-msgid "Image mirroring."
-msgstr "ミラーリング"
-
-msgid "Flip image on X."
-msgstr "画像を反転"
-
-msgid "Flip image on Y."
-msgstr "画像を反転"
-
-msgid "Enabled Levels."
-msgstr "有効"
-
-msgid "Add a :class:`mrv2.math.Vector3f` to image."
-msgstr "ラッピングするHTML要素にクラスを追加します。"
-
-msgid "Change a :class:`mrv2.math.Vector3f` of brightness to image."
-msgstr "イメージに明るさの:class:`mrv2.math.Vector3f`を変更します。"
-
-msgid "Change a :class:`mrv2.math.Vector3f` of contrast to image."
-msgstr "イメージにコントラストの:class:`mrv2.math.Vector3f`を変更します。"
-
-msgid "Change a :class:`mrv2.math.Vector3f` of saturation to image."
-msgstr "イメージに彩度の:class:`mrv2.math.Vector3f`を変更します。"
-
-msgid "Change tint of image to image between 0 and 1."
-msgstr "背景画像の暗さ。0から1の間で選択してください"
-
-msgid "Invert the color values."
-msgstr "透明な色の値を報告"
-
-msgid "Color values."
-msgstr "透明な色の値を報告"
-
-msgid "In Low Level value."
-msgstr "低レベル"
-
-msgid "In High Level value."
-msgstr "高レベル"
-
-msgid "Gamma Level value."
-msgstr "ガンマレベル"
-
-msgid "Out Low Level value."
-msgstr "低レベル"
-
-msgid "Out High Level value."
-msgstr "高レベル"
-
-msgid "Levels values."
-msgstr "現在のチャンネルのレベル値をリセットします。"
-
-msgid "Enabled EXR display."
-msgstr "EXR表示を有効にしました。"
-
-msgid "Exposure value."
-msgstr "出力露出値：%.1f"
-
-msgid "Defog value."
-msgstr "値"
-
-msgid "kneeLow value."
-msgstr "値"
-
-msgid "kneeHigh value."
-msgstr "値"
-
-msgid "EXR display values."
-msgstr "値を表示"
-
-msgid "Enabled Soft Clip."
-msgstr "ソフトクリッピング"
-
-msgid "Soft clip value."
-msgstr "ソフトクリッピング"
-
-msgid "Minify filter :class:`mrv2.image.ImageFilter`."
-msgstr "縮小フィルター :class:`mrv2.image.ImageFilter`。"
-
-msgid "Magnify filter :class:`mrv2.image.ImageFilter`."
-msgstr "拡大フィルター :class:`mrv2.image.ImageFilter`。"
-
-msgid "Image filters."
-msgstr "フィルター"
-
-msgid "Color channels :class:`mrv2.image.Channels`."
-msgstr "カラーチャンネル :class:`mrv2.image.Channels`。"
-
-msgid "Mirror on X, Y or both :class:`mrv2.image.Mirror`."
-msgstr "X、Y、または両方のミラー :class:`mrv2.image.Mirror`。"
-
-msgid "Color options :class:`mrv2.image.Color`."
-msgstr "カラーオプション :class:`mrv2.image.Color`。"
-
-msgid "Levels options :class:`mrv2.image.Levels`."
-msgstr "卸売レベル オプション"
-
-msgid "EXR Display options :class:`mrv2.image.EXRDisplay`.."
-msgstr "EXR表示オプション :class:`mrv2.image.EXRDisplay`。"
-
-msgid "Soft Clip options :class:`mrv2.image.SoftClip`.."
-msgstr "ソフトクリップオプション :class:`mrv2.image.SoftClip`。"
-
-msgid "Display options."
-msgstr "表示オプション"
-
-msgid "LUT enabled."
-msgstr "LUT が有効です。"
-
-msgid "LUT filename."
-msgstr "LUT ファイル名。"
-
-msgid "LUT transformation order."
-msgstr "LUT変換順序。"
-
-msgid "LUT options."
-msgstr "Lut"
-
-msgid "Video Levels."
-msgstr "動画: 会員レベル"
-
-msgid "Alpha blending algorithm"
-msgstr "アルファブレンドアルゴリズム"
-
-msgid "Image Filters"
-msgstr "フィルター"
-
-msgid "Image options."
-msgstr "スライダー画像オプション"
-
-msgid "Environment Map type."
-msgstr "地図の種類"
-
-msgid "Horizontal aperture"
-msgstr "絞り"
-
-msgid "Vertical aperture"
-msgstr "絞り"
-
-msgid "Focal Length"
-msgstr "焦点距離"
-
-msgid "Rotation on X"
-msgstr "X軸上の回転（+/-）"
-
-msgid "Rotation on Y"
-msgstr "Y軸上の回転（+/-）"
-
-msgid "Subdivision on X"
-msgstr "ç¾å¨ã®ã¬ã¤ã¤ã¼(L)"
-
-msgid "Subdivision on Y"
-msgstr "é ã(H)"
-
-msgid "Spin"
-msgstr "スピン"
-
-msgid "EnvironmentMap options."
-msgstr "オプション"
-
-msgid "Stereo 3d input :class:`mrv2.image.StereoInput`.."
-msgstr "ステレオ3D入力 :class:`mrv2.image.StereoInput`。"
-
-msgid "Stereo 3d output :class:`mrv2.image.StereoOutput`.."
-msgstr "ステレオ3D出力 :class:`mrv2.image.StereoOutput`。"
-
-msgid "Separation between left and right eye."
-msgstr "左眼と右眼の差。"
-
-msgid "Swap left and right eye"
-msgstr "左右"
-
-msgid "Stereo3D options."
-msgstr "オプション"
-
-msgid "Background type :class:`mrv2.image.Background`.."
-msgstr "背景の種類"
-
-msgid "Checkers Color0 :class:`mrv2.image.Color4f`.."
-msgstr "チェッカーColor0 :class:`mrv2.image.Color4f`。"
-
-msgid "Checkers Color1 :class:`mrv2.image.Color4f`.."
-msgstr "チェッカーColor1 :class:`mrv2.image.Color4f`。"
-
-msgid "Checkers Size :class:`mrv2.math.Size2i`.."
-msgstr "チェッカーサイズ :class:`mrv2.math.Size2i`。"
-
-msgid "Background options."
-msgstr "背景オプション"
-
-msgid "Gets the current background options."
-msgstr "背景オプション"
-
-msgid "Sets the current background options."
-msgstr "背景オプション"
-
-msgid "Gets the current OCIO config file."
-msgstr "当月を取得します。"
-
-msgid "Sets the current OCIO config file."
-msgstr "設定ファイル"
-
-msgid "Gets the current input color space."
-msgstr "現在のカラースペース:"
-
-msgid "Gets a list of all input color spaces."
-msgstr "すべてのカテゴリーをリスト表示します。"
-
-msgid "Set the input color space."
-msgstr "色空間"
-
-msgid "Gets the current Display/View."
-msgstr "現在の表示/ビューを取得します。"
-
-msgid "Gets the list of Displays/Views."
-msgstr "表示/ビューのリストを取得します。"
-
-msgid "Set an OCIO Display/View."
-msgstr "OCIO表示/ビューを設定します。"
-
-msgid "Gets the current OCIO look."
-msgstr "今だ"
-
-msgid "Gets a list of all OCIO looks."
-msgstr "すべてのカテゴリーをリスト表示します。"
-
-msgid "Set the OCIO look by name."
-msgstr "名前順"
-
-msgid "Return all the files."
-msgstr "[ファイル]"
-
-msgid "Return all the active files."
-msgstr "行動不能にします。"
-
-msgid "Return the A file item."
-msgstr "カップを片づけろ！"
-
-msgid "Return the A file index."
-msgstr "カップを片づけろ！"
-
-msgid "Return the list of B files."
-msgstr "注文リストへ戻る"
-
-msgid "Return the list of B indexes."
-msgstr "注文リストへ戻る"
-
-msgid "Close the current A file."
-msgstr "現在のタブを閉じます"
-
-msgid "Close all files."
-msgstr "開いているファイルをすべて閉じます。"
-
-msgid "Set the A file index."
-msgstr "要約ファイルの索引を再構築します"
-
-msgid "Set a new B file index."
-msgstr "新しいインデックスを定義します。"
-
-msgid "Set a new stereo file index."
-msgstr "新しいインデックスを定義します。"
-
-msgid "Toggle the B file index."
-msgstr "ウィジェットバーを切り替える"
-
-msgid "Clear the B indexes."
-msgstr "場所をあけろ"
-
-msgid "Return the list of layers."
-msgstr "リストへ戻る"
-
-msgid "Set layer for file item."
-msgstr "図およびテキスト用のレイヤー"
-
-msgid "Set compare time."
-msgstr "比較時間を設定します。"
-
-msgid "Get compare time."
-msgstr "比較時間を取得します。"
-
-msgid "Set the first version for current media."
-msgstr "最初の年を設定"
-
-msgid "Set the previous version for current media."
-msgstr "還原到以前的版本"
-
-msgid "Set the next version for current media."
-msgstr "現在のメディアの次のバージョンを設定します。"
-
-msgid "Set the last version for current media."
-msgstr "最後の年を設定"
-
-msgid "Path :class:`mrv2.Path` to the File Media."
-msgstr "ファイルメディアへのパス :class:`mrv2.Path`。"
-
-msgid "Audio path :class:`mrv2.Path` to the File Media if any."
-msgstr "ファイルメディアへのオーディオパス :class:`mrv2.Path` (もしあれば)。"
-
-msgid "Time range :class:`mrv2.TimeRange` of the File Media."
-msgstr "ファイルメディアの時間範囲 :class:`mrv2.TimeRange`。"
-
-msgid "Speed (FPS) of the File Media."
-msgstr "ファイルメディアの速度 (FPS)。"
-
-msgid "Playback state :class:`mrv2.timeline.Playbacks` of the File Media."
-msgstr "ファイルメディアの再生状態 :class:`mrv2.timeline.Playbacks`。"
-
-msgid "Loop state :class:`mrv2.timeline.Loop` of the File Media."
-msgstr "ファイルメディアのループ状態 :class:`mrv2.timeline.Loop`。"
-
-msgid "Current time :class:`mrv2.RationalTime` of the File Media."
-msgstr "ファイルメディアの現在の時間 :class:`mrv2.RationalTime`。"
-
-msgid "In/Out range :class:`mrv2.TimeRange` of the File Media."
-msgstr "ファイルメディアのIn/Out範囲 :class:`mrv2.TimeRange`。"
-
-msgid "Video layer of the File Media."
-msgstr "ビデオレイヤー"
-
-msgid "Volume of the File Media."
-msgstr "ファイルメディアの音量。"
-
-msgid "Mute state of the File Media."
-msgstr "最先端の技術。"
-
-msgid "Audio offset of the File Media."
-msgstr "ファイルのオーディオサンプルレートです。"
-
-msgid "Class used to hold a media item."
-msgstr "メディア項目。"
-
-msgid "Save annotations."
-msgstr "注釈"
-
-msgid "Save resolution."
-msgstr "高解像度"
-
-msgid "FFmpeg Profile."
-msgstr "プロファイル"
-
-msgid "FFmpeg Preset."
-msgstr "プリセット"
-
-msgid "FFmpeg Pixel Format."
-msgstr "ピクセル形式"
-
-msgid "FFmpeg video encoding with hardware if possible."
-msgstr "可能であれば、ハードウェアによるFFmpegビデオエンコーディング。"
-
-msgid "FFmpeg Override color characteristics."
-msgstr "配色を上書き"
-
-msgid "FFmpeg Color Range."
-msgstr "カラー範囲"
-
-msgid "FFmpeg Color Space."
-msgstr "色空間"
-
-msgid "FFmpeg Color Primaries."
-msgstr "マスタ表示色の原色が見つかりません。"
-
-msgid "FFmpeg Color Transfer Characteristics."
-msgstr "色を移植"
-
-msgid "FFmpeg Audio Codec."
-msgstr "オーディオ コーデック"
-
-msgid "OpenEXR's Compression."
-msgstr "OpenEXRの圧縮。"
-
-msgid "OpenEXR's Pixel Type."
-msgstr "ピクセルタイプ"
-
-msgid "OpenEXR's Zip Compression Level."
-msgstr "圧縮レベル"
-
-msgid "OpenEXR's DWA Compression Level."
-msgstr "圧縮レベル"
-
-msgid ""
-"\n"
-"Command module.\n"
-"\n"
-"Used to run main commands and get arguments and set the display, image, "
-"compare, LUT options.\n"
-msgstr ""
-"\n"
-"コマンドモジュール。\n"
-"\n"
-"メインコマンドを実行し、引数を取得し、表示、画像、比較、LUTオプションを設定す"
-"るために使用されます。\n"
-
-msgid ""
-"Get command-line arguments passed as single quoted string to -pythonArgs."
-msgstr ""
-"コマンドライン引数を、-pythonArgs に単一引用符で囲まれた文字列として渡しま"
-"す。"
-
-msgid "Open file with optional audio."
-msgstr "オプションのオーディオ付きでファイルを開きます。"
-
-msgid "Compare two file items with a compare mode."
-msgstr "有料プランのある商品を先に表示する"
-
-msgid "Close the file item."
-msgstr "インプットファイルを閉じる"
-
-msgid "Close all file items."
-msgstr "展開を閉じる"
-
-msgid "Return the root path to the insallation of mrv2."
-msgstr "残りの６枚は箱へと戻します。"
-
-msgid "Return the path to preferences of mrv2."
-msgstr "平和への道"
-
-msgid "Return the display options."
-msgstr "表示オプション"
-
-msgid "Set the display options."
-msgstr "地図表示オプションを設定します。"
-
-msgid "Return the LUT options."
-msgstr "カップを片づけろ！"
-
-msgid "Set the LUT options."
-msgstr "一般的なオプションを設定"
-
-msgid "Return the image options."
-msgstr "スライダー画像オプション"
-
-msgid "Set the image options."
-msgstr "スライダー画像オプション"
-
-msgid "Return the environment map options."
-msgstr "マップ オプション"
-
-msgid "Set the environment map options."
-msgstr "マップ オプション"
-
-msgid "Set the compare options."
-msgstr "オプションを比較"
-
-msgid "Set the stereo 3D options."
-msgstr "一般的なオプションを設定"
-
-msgid "Get the language of mrv2."
-msgstr "詳しい説明"
-
-msgid "Get the layers of the timeline (GUI)."
-msgstr "タイムラインフィルターのスキーマ"
-
-msgid "Get the version of mrv2."
-msgstr "必要なバージョンを取得する"
-
-msgid ""
-"Call Fl::check to update the GUI and return the number of seconds that "
-"elapsed."
-msgstr "午前 0 時を基点とする経過時間を秒数で返します。"
-
-msgid "Returns true if audio is muted."
-msgstr "値が文字列の場合、TRUE を返します。"
-
-msgid "Runs the same or a new mrv2 with a session file."
-msgstr "クライアントは新しい外観となりますが、同じように機能します。"
-
-msgid "Set the muting of the audio."
-msgstr "2 音声ファイルの長さを調整する"
-
-msgid "Toggle Image Auto Normalize."
-msgstr "用語のトグル画像"
-
-msgid "Toggle Data Window."
-msgstr "スキャンデータウィンドウ"
-
-msgid "Toggle Display Window."
-msgstr "ショーウインドー"
-
-msgid "Toggle Ignored Display Window on OpenEXRs."
-msgstr "ショーウインドー"
-
-msgid "Toggle Image invalid values."
-msgstr "無効な値:"
-
-msgid "Toggle Safe Areas."
-msgstr "安全地帯"
-
-msgid "Get the playback volume."
-msgstr "再生音量の調整モード"
-
-msgid "Set the playback volume."
-msgstr "再生音量の調整モード"
-
-msgid "Save a movie or sequence from the front layer."
-msgstr "正面からの紫外線"
-
-msgid "Save a single frame."
-msgstr "静止画または単一フレームの画像です。"
-
-msgid "Save multiple annotation frames."
-msgstr "複数のアノテーションフレームを保存します。"
-
-msgid "Save multiple frames."
-msgstr "Visioffice 2 は、1人の患者に対して複数のフレームを処理します。"
-
-msgid "Save an .otio file from the current selected image."
-msgstr "現在のイメージから開始"
-
-msgid "Save a PDF document with all annotations and notes."
-msgstr "例 1PDF ドキュメントを公開する"
-
-msgid ""
-"\n"
-"Annotations module.\n"
-"\n"
-"Contains all functions and classes related to the annotationss.\n"
-msgstr ""
-"\n"
-"アノテーションモジュール。\n"
-"\n"
-"アノテーションに関連するすべての関数とクラスを含みます。\n"
-
-msgid "Add notes annotations to current clip at a certain time."
-msgstr ""
-"移行ジョブは、特定の時間に毎日起動するようにスケジュールすることができます。"
-
-msgid "Add notes annotations to current clip at a certain frame."
-msgstr "特定のフレームで、現在のクリップに注釈アノテーションを追加します。"
-
-msgid "Add notes annotations to current clip at certain seconds."
-msgstr "特定の秒数で、現在のクリップに注釈アノテーションを追加します。"
-
-msgid "Get all times for annotations."
-msgstr "注釈のテキスト オプション"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 msgid "Open with Audio"
 msgstr "オーディオでエラーが発生しました"
@@ -1746,152 +210,6 @@ msgstr "ネットワーク"
 msgid "Stereo 3D"
 msgstr "Stereo 3D"
 
-msgid "Type"
-msgstr "種類"
-
-msgid "Client"
-msgstr "クライアント"
-
-msgid "Server"
-msgstr "サーバー"
-
-msgid "Host"
-msgstr "主催者"
-
-msgid "Host name or IP to connect to.  For example: 127.0.0.1"
-msgstr "ローカル ホスト名または IP アドレス"
-
-msgid "Previously used Hosts"
-msgstr "これまでに使ったタグ"
-
-msgid "Port"
-msgstr "ポート"
-
-msgid ""
-"Port to connect to.  Make sure your firewall and router allows read/write "
-"through it."
-msgstr ""
-"接続するポート。ファイアウォールやルーターが読み書きを許可していることを確認"
-"してください。"
-
-msgid "Connect"
-msgstr "接続"
-
-msgid "Create"
-msgstr "作成"
-
-msgid "Disconnect"
-msgstr "接続解除"
-
-msgid "Shutdown"
-msgstr "シャットダウン"
-
-msgid "&File/&Open"
-msgstr "&ファイル/&開く"
-
-msgid "&File/&Save"
-msgstr "&ファイル/&保存"
-
-msgid "&Edit/&Undo"
-msgstr "編集/元に戻す"
-
-msgid "&Edit/Cu&t"
-msgstr "&編集/切り取り"
-
-msgid "&Edit/&Copy"
-msgstr "&編集/&コピー"
-
-msgid "&Edit/&Paste"
-msgstr "&編集/&貼り付け"
-
-msgid "&Edit/&Delete"
-msgstr "&編集/&削除"
-
-msgid "&Edit/&Comment Selection"
-msgstr "&編集/&選択範囲にコメント"
-
-msgid "&Edit/&Uncomment Selection"
-msgstr "&編集/&選択範囲のコメント解除"
-
-msgid "&Search/&Find..."
-msgstr "&検索/&検索..."
-
-msgid "&Search/F&ind Again"
-msgstr "&検索/&再検索"
-
-msgid "&Search/&Replace"
-msgstr "&検索/&置換"
-
-msgid "&Search/&Replace Again"
-msgstr "&検索/&再置換"
-
-msgid "Clear/&Output"
-msgstr "クリア/&出力"
-
-msgid "Clear/&Editor"
-msgstr "クリア/&エディタ"
-
-msgid "Editor/&Run Code"
-msgstr "エディタ/&コード実行"
-
-msgid "Editor/Toggle &Line Numbers"
-msgstr "エディタ/行番号の切り替え"
-
-msgid "Editor/&Jump to Error"
-msgstr "エディタ/&エラーにジャンプ"
-
-msgid "Editor/&External Editor"
-msgstr "エディタ/&外部エディタ"
-
-msgid "Scripts/Add To Script List"
-msgstr "スクリプト/スクリプトリストに追加"
-
-msgid "Scripts/%s"
-msgstr "スクリプト/%s"
-
-msgid ""
-"Type in your python code here.  Select an area to execute just a portion of "
-"it.  Press Keypad Enter to run it."
-msgstr ""
-"ここにPythonコードを入力してください。実行したい部分を選択して、キーのEnterを"
-"押すことでその部分だけ実行できます。"
-
-msgid "Python file {0} already exists.  Do you want to overwrite it?"
-msgstr "Python ファイル {0} はすでに存在します。上書きしますか?"
-
-msgid "No"
-msgstr "No"
-
-msgid "Yes"
-msgstr "Yes"
-
-msgid "Failed to open the file for writing."
-msgstr "ファイルを書き込みのために開けませんでしたNAME OF TRANSLATORS"
-
-msgid "Failed to write to the file."
-msgstr "ファイルへの書き込みに失敗しました。"
-
-msgid "The stream is in an unrecoverable error state."
-msgstr "[14] VaranManagerクラスがエラー状態です"
-
-msgid "Type your editor command"
-msgstr "編集長には"
-
-msgid "{0} will be replaced with the line number.  {1} with the file name"
-msgstr "{0} は行番号に置き換えられます。{1} はファイル名に置き換えられます"
-
-msgid "Regular expression error: {0}"
-msgstr "正規表現エラー: {0}"
-
-msgid "Could not open python editor: {0}"
-msgstr "Python エディタを開けませんでした: {0}"
-
-msgid "Search String:"
-msgstr "検索文字列:"
-
-msgid "No occurrences of '%s' found!"
-msgstr "「%s」は見つかりませんでした。"
-
 msgid "Input"
 msgstr "インプット"
 
@@ -1930,21 +248,6 @@ msgstr "{0} {1}をストリーミング中..."
 
 msgid "Stop streaming"
 msgstr "ストリーミング"
-
-msgid "Renderer"
-msgstr "レンダラー"
-
-msgid "Complexity"
-msgstr "難易度"
-
-msgid "Draw Mode"
-msgstr "描画モード"
-
-msgid "Stage Cache"
-msgstr "キャッシュ"
-
-msgid "Disk Cache in GB"
-msgstr "ディスクキャッシュ"
 
 msgid "Toggle other eye stereo image."
 msgstr "右 - 左ステレオ画像"
@@ -2070,6 +373,12 @@ msgid ""
 msgstr ""
 "お使いのテーマのデフォルトスタイルを復元します。本当に実行してよいですか ?"
 
+msgid "Yes"
+msgstr "Yes"
+
+msgid "No"
+msgstr "No"
+
 msgid "Drop a clip here to create a playlist."
 msgstr "いかにプレイリストを作るか   "
 
@@ -2088,6 +397,9 @@ msgstr "現在のEDLを閉じます。"
 
 msgid "Clear the messages"
 msgstr "アプリをクリアする"
+
+msgid "Type"
+msgstr "種類"
 
 msgid "Turn off image warping."
 msgstr "OFF にする"
@@ -2119,6 +431,9 @@ msgstr "            絞り"
 msgid "Vertical Aperture of the Projection."
 msgstr "投影法の種類"
 
+msgid "Focal Length"
+msgstr "焦点距離"
+
 msgid ""
 "Focal Length of the Projection. Use Shift + left mouse button to change or "
 "the mousewheel."
@@ -2126,6 +441,9 @@ msgstr "マウスの左ボタンを放して %1 の 2 番目の端点の位置�
 
 msgid "Rotation"
 msgstr "回転"
+
+msgid "Spin"
+msgstr "スピン"
 
 msgid "Spin with middle mouse instead of rotating with it."
 msgstr "マウスの中ボタンに割り当てる動作を指定します。"
@@ -2886,54 +1204,6 @@ msgstr "ビデオトラック {0} を追加できませんでした"
 msgid "Could not append audio track {0}"
 msgstr "オーディオトラック {0} を追加できませんでした"
 
-msgid "Server started at port {0}."
-msgstr "サーバーはポート {0} で起動しました。"
-
-msgid "Server stopped."
-msgstr "サーバを停止しました"
-
-msgid "A client connected from {0}"
-msgstr "クライアントが {0} から接続しました"
-
-msgid "Client at {0} disconnected."
-msgstr "{0} の接続解除"
-
-msgid "Server protocol version is {0}.  Client protocol version is {1}"
-msgstr ""
-"サーバープロトコルのバージョンは {0} です。クライアントプロトコルのバージョン"
-"は {1} です"
-
-msgid "Remote file {0} does not exist on local filesystem."
-msgstr "リモートファイル {0} はローカルファイルシステムに存在しません。"
-
-msgid "Remote files are less than local files."
-msgstr "ローカルファイルのみがサポートされています。"
-
-msgid "Remote file {0} matches file name {1} but not path."
-msgstr ""
-"リモートファイル {0} はファイル名 {1} と一致しますが、パスは一致しません。"
-
-msgid "Remote file {0} does not match local filename."
-msgstr "リモートファイル {0} はローカルファイル名と一致しません。"
-
-msgid "Removing {0} from message publisher."
-msgstr "メッセージパブリッシャーから {0} を削除しています。"
-
-msgid "Server listening on port "
-msgstr "サーバーはポートでリッスンしています "
-
-msgid "ComfyUI listening on port "
-msgstr "ComfyUI はポートでリッスンしています "
-
-msgid "Connected to server at {0}, port {1}"
-msgstr "サーバー ({0}, ポート {1}) に接続しました"
-
-msgid "Server connection lost."
-msgstr "サーバー接続"
-
-msgid "Exception caught: "
-msgstr "未知の例外を検出: "
-
 msgid "ERROR:\t"
 msgstr "ERROR:\t"
 
@@ -2946,6 +1216,9 @@ msgid ""
 msgstr ""
 "{0} から作成された正規表現。それは:\n"
 "{1}"
+
+msgid "Regular expression error: {0}"
+msgstr "正規表現エラー: {0}"
 
 msgid "Iteration {0} will check version={1}"
 msgstr "イテレーション {0} はバージョン={1} をチェックします"
@@ -2971,6 +1244,9 @@ msgstr "ファイル {0} を書き込み用に開けませんでした。"
 
 msgid "Failed to write to the file {0}."
 msgstr "ファイル {0} に書き込めませんでした。"
+
+msgid "The stream is in an unrecoverable error state."
+msgstr "[14] VaranManagerクラスがエラー状態です"
 
 msgid "Session saved to \"{0}\"."
 msgstr "セッションは \"{0}\" に保存されました。"
@@ -3692,15 +1968,6 @@ msgstr "テキスト注釈"
 
 msgid "No item selected"
 msgstr "アイテムが選択されていません"
-
-msgid "%s - Page %d"
-msgstr "%s - ページ %d"
-
-msgid "Frame {0} - TC: {1} - S: {2}"
-msgstr "フレーム {0} - TC: {1} - S: {2}"
-
-msgid "Image too big.  Will save the viewport size."
-msgstr "彼らが都を守ってくれます"
 
 msgid "Scrub"
 msgstr "スクラブ"
@@ -4618,21 +2885,6 @@ msgstr "11月"
 
 msgid "Dec"
 msgstr "12月"
-
-msgid "Replace"
-msgstr "置換"
-
-msgid "Find:"
-msgstr "検索: "
-
-msgid "Replace:"
-msgstr "置換:"
-
-msgid "Replace All"
-msgstr "すべて置換"
-
-msgid "Replace Next"
-msgstr "置換"
 
 msgid "Build Environment:"
 msgstr "ビルド環境："
@@ -6597,8 +4849,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
+"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
+"exr"
 msgstr ""
 "クリップバージョンに一致するための正規表現です。プレフィックス、番号、サ"
 "フィックスの3つをグループ化する必要があります。デフォルト値(_v)のままにする"
@@ -7485,6 +5737,9 @@ msgstr "スクラブ モード"
 msgid "Area Selection Mode"
 msgstr "エリア選択モード"
 
+msgid "Draw Mode"
+msgstr "描画モード"
+
 msgid "Erase Mode"
 msgstr "消去モード"
 
@@ -7574,3 +5829,1758 @@ msgstr "ホットキーウィンドウを切り替え"
 
 msgid "Toggle About Window"
 msgstr "バージョン情報ウィンドウを切り替え"
+
+#~ msgid ""
+#~ "\n"
+#~ "USD module.\n"
+#~ "\n"
+#~ "Contains all classes and enums related to USD (Universal Scene "
+#~ "Description). \n"
+#~ msgstr ""
+#~ "\n"
+#~ "USDモジュール。\n"
+#~ "\n"
+#~ "USD（Universal Scene Description）に関連するすべてのクラスと列挙型を含みま"
+#~ "す。\n"
+
+#~ msgid "Renderer Name"
+#~ msgstr "レンダラー"
+
+#~ msgid "Render Width"
+#~ msgstr "レンダリング"
+
+#~ msgid "Models' complexity."
+#~ msgstr "便利です。"
+
+#~ msgid "Draw mode  :class:`mrv2.usd.DrawMode`."
+#~ msgstr "描画モード"
+
+#~ msgid "Enable Lighting"
+#~ msgstr "ライティングを有効に"
+
+#~ msgid "Enable Scene Lights"
+#~ msgstr "シーンの光"
+
+#~ msgid "Enable Scene Materials"
+#~ msgstr "シーンマテリアルを有効にする"
+
+#~ msgid "Enable sRGB"
+#~ msgstr "有効"
+
+#~ msgid "Stage Cache Count"
+#~ msgstr "ステージキャッシュ数"
+
+#~ msgid "Disk Cache Byte Count"
+#~ msgstr "ディスクキャッシュ"
+
+#~ msgid "USD Render Options."
+#~ msgstr "USD レンダリング オプション。"
+
+#~ msgid "Get USD Render Options."
+#~ msgstr "USD レンダリング オプションを取得します。"
+
+#~ msgid "Set USD Render Options."
+#~ msgstr "USD レンダリング オプションを設定します。"
+
+#~ msgid ""
+#~ "\n"
+#~ "UI module.\n"
+#~ "\n"
+#~ "Contains all classes and enums related to UI (User Interface). \n"
+#~ msgstr ""
+#~ "\n"
+#~ "UIモジュール。\n"
+#~ "\n"
+#~ "UI（ユーザーインターフェース）に関連するすべてのクラスと列挙型を含みま"
+#~ "す。\n"
+
+#~ msgid "Refresh menus."
+#~ msgstr "メニュー"
+
+#~ msgid ""
+#~ "\n"
+#~ "Timeline module.\n"
+#~ "\n"
+#~ "Contains all functions related to the timeline control.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "タイムラインモジュールを有効にする\n"
+#~ "\n"
+#~ "すべての機能は、特定のサイトに関連します。\n"
+
+#~ msgid "Play forwards."
+#~ msgstr "捜査を進める"
+
+#~ msgid "Play backwards."
+#~ msgstr "逆回転"
+
+#~ msgid "Seek to a time in timeline."
+#~ msgstr "タイムラインに表示"
+
+#~ msgid "Seek to a frame in timeline."
+#~ msgstr "フレームと、"
+
+#~ msgid "Seek to a second in timeline."
+#~ msgstr "1秒"
+
+#~ msgid "Time range of the timeline."
+#~ msgstr "時間の範囲"
+
+#~ msgid "Selected time range of the timeline."
+#~ msgstr "タイムラインの選択した時間範囲。"
+
+#~ msgid "Set the selected time range of the timeline."
+#~ msgstr "選択した時間帯の予約"
+
+#~ msgid "Set the in time of the selected time range of the timeline."
+#~ msgstr "選択した時間帯の予約"
+
+#~ msgid "Set the in frame of the selected time range of the timeline."
+#~ msgstr "選択した時間帯の予約"
+
+#~ msgid "Set the in seconds of the selected time range of the timeline."
+#~ msgstr "選択した時間帯の予約"
+
+#~ msgid "Set the out time of the selected time range of the timeline."
+#~ msgstr "カスタム時間範囲の時間単位を指定します。"
+
+#~ msgid "Set the out frame of the selected time range of the timeline."
+#~ msgstr "目次の枠のデザインを設定できます。"
+
+#~ msgid "Set the out seconds of the selected time range of the timeline."
+#~ msgstr "選択した時間帯の予約"
+
+#~ msgid "Current time in timeline."
+#~ msgstr "時刻設定"
+
+#~ msgid "Current frame in timeline."
+#~ msgstr "タイムライン内の現在のフレーム"
+
+#~ msgid "Current seconds in timeline."
+#~ msgstr "タイムラインに表示"
+
+#~ msgid "Return current loop mode of timeline."
+#~ msgstr "電流ループゲイン "
+
+#~ msgid "Set current loop mode of timeline."
+#~ msgstr "現在に設定"
+
+#~ msgid "Gets the current FPS of timeline."
+#~ msgstr "当月を取得します。"
+
+#~ msgid "Gets the default speed of the timeline."
+#~ msgstr "アニメーションの速度"
+
+#~ msgid "Set current FPS of timeline."
+#~ msgstr "現在に設定"
+
+#~ msgid "Value less than 0"
+#~ msgstr "値が以下より小さい場合"
+
+#~ msgid ""
+#~ "\n"
+#~ "Settings module.\n"
+#~ "\n"
+#~ "Contains all settings functions.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "モジュールごとの通知設定\n"
+#~ "\n"
+#~ "すべての設定\n"
+#~ "\n"
+
+#~ msgid "Returns whether to check for updates at start up."
+#~ msgstr "アップデートをチェックする"
+
+#~ msgid "Retrieve the cache memory setting in gigabytes."
+#~ msgstr "資源は回収したのですか？"
+
+#~ msgid "Set the cache memory setting in gigabytes."
+#~ msgstr ""
+#~ "キャッシュ メモリには、最近アクセスしたデータのコピーが格納されます。"
+
+#~ msgid "Retrieve Read Ahead cache in seconds."
+#~ msgstr "高い可用性を実現"
+
+#~ msgid "Set Read Ahead cache in seconds."
+#~ msgstr "高い可用性を実現"
+
+#~ msgid "Retrieve Read Behind cache in seconds."
+#~ msgstr "高い可用性を実現"
+
+#~ msgid "Set Read Behind cache in seconds."
+#~ msgstr "高い可用性を実現"
+
+#~ msgid "Set file sequence audio."
+#~ msgstr "ファイルを設定"
+
+#~ msgid "Get file sequence audio."
+#~ msgstr "ファイル一覧(ファイル名)取得"
+
+#~ msgid "Set file sequence audio file name."
+#~ msgstr "音声ファイル名"
+
+#~ msgid "Get file sequence audio file name."
+#~ msgstr "音声ファイル名"
+
+#~ msgid "Set file sequence audio directory."
+#~ msgstr "ファイルを設定"
+
+#~ msgid "Get file sequence audio directory."
+#~ msgstr "ファイル一覧(ファイル名)取得"
+
+#~ msgid "Set maximum file sequence digits."
+#~ msgstr "最大ファイルサイズ"
+
+#~ msgid "Get maximum file sequence digits."
+#~ msgstr "最大ファイルサイズ"
+
+#~ msgid "Set Timer Mode."
+#~ msgstr "タイマーをセット"
+
+#~ msgid "Get Timer Mode."
+#~ msgstr "タイマーモードを取得"
+
+#~ msgid "Set Audio Buffer Frame Count."
+#~ msgstr "フレームカウントを同期"
+
+#~ msgid "Get Audio Buffer Frame Count."
+#~ msgstr "フレームカウントを同期"
+
+#~ msgid "Set Video Request Count."
+#~ msgstr "ビデオ設定"
+
+#~ msgid "Get Video Request Count."
+#~ msgstr "ネットワーク要求カウント合計"
+
+#~ msgid "Set Audio Request Count."
+#~ msgstr "ネットワーク要求カウント合計"
+
+#~ msgid "Get Audio Request Count."
+#~ msgstr "ネットワーク要求カウント合計"
+
+#~ msgid "Set Sequence Thread Count."
+#~ msgstr "スレッドの数"
+
+#~ msgid "Get Sequence Thread Count."
+#~ msgstr "スレッドの数"
+
+#~ msgid "Set FFmpeg YUV To RGB Conversion."
+#~ msgstr "FFmpeg YUV から RGB への変換を設定します。"
+
+#~ msgid "Get FFmpeg YUV To RGB Conversion."
+#~ msgstr "FFmpeg YUV から RGB への変換を取得します。"
+
+#~ msgid "Set FFmpeg Color Accuracy."
+#~ msgstr "FFmpeg のカラー精度を設定します。"
+
+#~ msgid "Get FFmpeg Color Accuracy."
+#~ msgstr "FFmpeg のカラー精度を取得します。"
+
+#~ msgid "Set FFmpeg Thread Count."
+#~ msgstr "スレッドの数"
+
+#~ msgid "Get FFmpeg Thread Count."
+#~ msgstr "スレッドの数"
+
+#~ msgid "No session name established, cannot save."
+#~ msgstr "セッション名"
+
+#~ msgid ""
+#~ "\n"
+#~ "Session module.\n"
+#~ "\n"
+#~ "Used to manage everything related to sessions.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "セッションモジュール。\n"
+#~ "\n"
+#~ "セッションに関連するすべてを管理するために使用されます。\n"
+
+#~ msgid "Returns the current session metadata."
+#~ msgstr "現在のセッション"
+
+#~ msgid "Returns the current metadata for a key."
+#~ msgstr "現在の日付を返します。"
+
+#~ msgid "Sets all the session metadata for a session."
+#~ msgstr "熱い風呂に入ったので、それだけいっそう気分がいい。"
+
+#~ msgid "Sets the session metadata for a key."
+#~ msgstr "指定したセルに文字色を設定します。"
+
+#~ msgid "Clears the current session metadata."
+#~ msgstr "現在のセッション"
+
+#~ msgid "Returns current session file."
+#~ msgstr "現在のセッション"
+
+#~ msgid "Sets the current session file."
+#~ msgstr "現在のセッション"
+
+#~ msgid "Open a session file."
+#~ msgstr "ファイルを開きます"
+
+#~ msgid "Save a session file."
+#~ msgstr "Q&Aセッション"
+
+#~ msgid "Duplicated Python plugin {0} in {1} and {2}."
+#~ msgstr "重複したPythonプラグイン {0} が {1} と {2} にあります。"
+
+#~ msgid ""
+#~ "Expected a tuple containing a Python function and a string with menu "
+#~ "options in it."
+#~ msgstr ""
+#~ "Python 関数とメニュー オプションを含む文字列を含むタプルが必要です。"
+
+#~ msgid ""
+#~ "Expected a handle to a Python function or to a tuple containing a Python "
+#~ "function and a string with menu options in it."
+#~ msgstr ""
+#~ "Python 関数へのハンドル、または Python 関数とメニュー オプションを含む文字"
+#~ "列を含むタプルへのハンドルが必要です。"
+
+#~ msgid ""
+#~ "Please override the menus method by returning a valid dict of key menus, "
+#~ "values methods."
+#~ msgstr ""
+#~ "キーメニュー、値メソッドの有効な辞書を返すことによって、メニューメソッドを"
+#~ "オーバーライドしてください"
+
+#~ msgid ""
+#~ "\n"
+#~ "Plugin module.\n"
+#~ "\n"
+#~ "Contains all classes related to python plugins.\n"
+#~ "\n"
+#~ msgstr ""
+#~ "\n"
+#~ "プラグインモジュール。\n"
+#~ "\n"
+#~ "Pythonプラグインに関連するすべてのクラスを含みます。\n"
+#~ "\n"
+
+#~ msgid ""
+#~ "Whether a plugin is active or not.  If not overriden, the default is True."
+#~ msgstr "コンフィギュレーションがアクティブかどうかを示します"
+
+#~ msgid ""
+#~ "\n"
+#~ "Dictionary of menu entries with callbacks, like:\n"
+#~ "\n"
+#~ "def menus(self):\n"
+#~ "    menus = { \"New Menu/Hello\" : self.run }\n"
+#~ "    return menus\n"
+#~ "\n"
+#~ msgstr ""
+#~ "\n"
+#~ "コールバック付きのメニューエントリの辞書。例えば：\n"
+#~ "\n"
+#~ "def menus(self):\n"
+#~ "    menus = { \"New Menu/Hello\" : self.run }\n"
+#~ "    return menus\n"
+#~ "\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "import mrv2\n"
+#~ "from mrv2 import plugin\n"
+#~ "\n"
+#~ "class DemoPlugin(plugin.Plugin):\n"
+#~ "    def __init__(self):\n"
+#~ "        \"\"\"\n"
+#~ "        Constructor for DemoPlugin.\n"
+#~ "\n"
+#~ "        Define your own variables here.\n"
+#~ "        \"\"\"\n"
+#~ "        super().__init__()\n"
+#~ "\n"
+#~ "    def run(self):\n"
+#~ "        \"\"\"\n"
+#~ "        Example method used for the callback.\n"
+#~ "        \"\"\"\n"
+#~ "        print(\"Hello from Python plugin\")\n"
+#~ "\n"
+#~ "    def active(self):\n"
+#~ "        \"\"\"\n"
+#~ "        Optional method to return whether the plug-in is active or not.\n"
+#~ "\n"
+#~ "\n"
+#~ "        :return: True if the plug-in is active, False otherwise.\n"
+#~ "        :rtype: bool\n"
+#~ "\n"
+#~ "        \"\"\"\n"
+#~ "        return True\n"
+#~ "\n"
+#~ "    def menus(self):\n"
+#~ "        \"\"\"\n"
+#~ "        Dictionary of menu entries as keys with callbacks as values.\n"
+#~ "\n"
+#~ "\n"
+#~ "        :return: A dictionary of menu entries and their corresponding "
+#~ "callbacks.\n"
+#~ "        :rtype: dict\n"
+#~ "\n"
+#~ "        \"\"\"\n"
+#~ "        menus = {\"New Menu/Hello\": self.run}\n"
+#~ "        return menus\n"
+#~ "\n"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "import mrv2\n"
+#~ "from mrv2 import plugin\n"
+#~ "\n"
+#~ "class DemoPlugin(plugin.Plugin):\n"
+#~ "    def __init__(self):\n"
+#~ "        \"\"\"\n"
+#~ "        DemoPluginのコンストラクタ。\n"
+#~ "\n"
+#~ "        ここで独自の変数を定義してください。\n"
+#~ "        \"\"\"\n"
+#~ "        super().__init__()\n"
+#~ "\n"
+#~ "    def run(self):\n"
+#~ "        \"\"\"\n"
+#~ "        コールバック用のサンプルメソッド。\n"
+#~ "        \"\"\"\n"
+#~ "        print(\"Pythonプラグインからこんにちは\")\n"
+#~ "\n"
+#~ "    def active(self):\n"
+#~ "        \"\"\"\n"
+#~ "        プラグインがアクティブかどうかを返すオプションのメソッド。\n"
+#~ "\n"
+#~ "\n"
+#~ "        :return: プラグインがアクティブならTrue、そうでなければFalse。\n"
+#~ "        :rtype: bool\n"
+#~ "\n"
+#~ "        \"\"\"\n"
+#~ "        return True\n"
+#~ "\n"
+#~ "    def menus(self):\n"
+#~ "        \"\"\"\n"
+#~ "        メニューエントリをキー、対応するコールバックを値とする辞書。\n"
+#~ "\n"
+#~ "\n"
+#~ "        :return: メニューエントリとその対応するコールバックの辞書。\n"
+#~ "        :rtype: dict\n"
+#~ "\n"
+#~ "        \"\"\"\n"
+#~ "        menus = {\"New Menu/Hello\": self.run}\n"
+#~ "        return menus\n"
+#~ "\n"
+
+#~ msgid "No playlist matched item."
+#~ msgstr "プレイリストが見つかりません"
+
+#~ msgid "No playlist matched file name."
+#~ msgstr "プレイリストが見つかりません"
+
+#~ msgid "No playlist loaded."
+#~ msgstr "プレイリストが見つかりません"
+
+#~ msgid "No playlist selected."
+#~ msgstr "プレイリストが見つかりません"
+
+#~ msgid "Not an EDL playlist to add clips to."
+#~ msgstr "クリップを追加するための EDL プレイリストではありません。"
+
+#~ msgid "Could not find clip in loaded clips."
+#~ msgstr "見つからない"
+
+#~ msgid ""
+#~ "\n"
+#~ "Playlist module.\n"
+#~ "\n"
+#~ "Contains all functions and classes related to the playlists.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "プレイリスト\n"
+#~ "\n"
+#~ "すべての機能は、特定のサイトに関連します。\n"
+
+#~ msgid "List playlist items."
+#~ msgstr "%1 プレイリストにアイテムを追加"
+
+#~ msgid "Select a playlist by FileModelItem."
+#~ msgstr "選択する"
+
+#~ msgid "Select a playlist by fileName."
+#~ msgstr "ファイル名を入力または選択:"
+
+#~ msgid "Select a playlist by index."
+#~ msgstr "索引ページのスタイルを選択します。"
+
+#~ msgid "Add a clip to currently selected Playlist EDL."
+#~ msgstr "現在選択されているレイヤーにトランスフォームを追加します"
+
+#~ msgid "Save current .otio file with relative paths."
+#~ msgstr "現在の .otio ファイルを相対パスで保存します。"
+
+#~ msgid "unsupported operand type(s) for {0}: RationalTime and {1}"
+#~ msgstr ""
+#~ "{0} に対するオペランド型がサポートされていません: RationalTime と {1}"
+
+#~ msgid ""
+#~ "\n"
+#~ "The RationalTime class represents a measure of time of :math:`rt.value/rt."
+#~ "rate` seconds.\n"
+#~ "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "RationalTime クラスは、時間の単位を :math:`rt.value/rt.rate` 秒として表し"
+#~ "ます。\n"
+#~ "別の :class:`~RationalTime` のレートに再スケールすることができます。\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Returns true if the time is invalid. The time is considered invalid if "
+#~ "the value or the rate are a NaN value\n"
+#~ "or if the rate is less than or equal to zero.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "時間が無効である場合に true を返します。値またはレートが NaN の場合、\n"
+#~ "またはレートが 0 以下の場合、時間は無効と見なされます。\n"
+
+#~ msgid "Returns the time value for time converted to new_rate."
+#~ msgstr "新しいレートに変換された時間の値を返します。"
+
+#~ msgid "Returns the time for time converted to new_rate."
+#~ msgstr "すべての文字を大文字に変換した文字列を返します。"
+
+#~ msgid "Returns the time value for \"self\" converted to new_rate."
+#~ msgstr "\"self\" の時間を新しいレートに変換した値を返します。"
+
+#~ msgid ""
+#~ "\n"
+#~ "Compute the duration of samples from first to last (excluding last). This "
+#~ "is not the same as distance.\n"
+#~ "\n"
+#~ "For example, the duration of a clip from frame 10 to frame 15 is 5 "
+#~ "frames. Result will be in the rate of start_time.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "最初から最後まで（最後は除く）のサンプルの長さを計算します。これは距離とは"
+#~ "異なります。\n"
+#~ "\n"
+#~ "例えば、フレーム 10 からフレーム 15 までのクリップの長さは 5 フレームで"
+#~ "す。結果は start_time のレートで返されます。\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Compute the duration of samples from first to last (including last). This "
+#~ "is not the same as distance.\n"
+#~ "\n"
+#~ "For example, the duration of a clip from frame 10 to frame 15 is 6 "
+#~ "frames. Result will be in the rate of start_time.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "最初から最後まで（最後を含む）のサンプルの長さを計算します。これは距離とは"
+#~ "異なります。\n"
+#~ "\n"
+#~ "例えば、フレーム 10 からフレーム 15 までのクリップの長さは 6 フレームで"
+#~ "す。結果は start_time のレートで返されます。\n"
+
+#~ msgid "Returns true if the rate is valid for use with timecode."
+#~ msgstr "テーブルのセルのテキストを返す。"
+
+#~ msgid ""
+#~ "Returns the first valid timecode rate that has the least difference from "
+#~ "the given value."
+#~ msgstr ""
+#~ "指定された値から最小の差を持つ最初の有効なタイムコードレートを返します。"
+
+#~ msgid "Turn a frame number and rate into a :class:`~RationalTime` object."
+#~ msgstr ""
+#~ "フレーム番号とレートを :class:`~RationalTime` オブジェクトに変換します。"
+
+#~ msgid "Returns the frame number based on the current rate."
+#~ msgstr "現在のレートに基づいてフレーム番号を返します。"
+
+#~ msgid "Returns the frame number based on the given rate."
+#~ msgstr "与えられたリストの要素数を返します。"
+
+#~ msgid "Convert to timecode (``HH:MM:SS;FRAME``)"
+#~ msgstr "タイムコードに変換（``HH:MM:SS;FRAME``）"
+
+#~ msgid ""
+#~ "Convert a timecode string (``HH:MM:SS;FRAME``) into a :class:"
+#~ "`~RationalTime`."
+#~ msgstr ""
+#~ "タイムコード文字列（``HH:MM:SS;FRAME``）を :class:`~RationalTime` に変換し"
+#~ "ます。"
+
+#~ msgid ""
+#~ "Convert a time with microseconds string (``HH:MM:ss`` where ``ss`` is an "
+#~ "integer or a decimal number) into a :class:`~RationalTime`."
+#~ msgstr ""
+#~ "マイクロ秒付きの時間文字列（``HH:MM:ss``、ここで``ss``は整数または小数）"
+#~ "を :class:`~RationalTime` に変換します。"
+
+#~ msgid ""
+#~ "\n"
+#~ "The TimeRange class represents a range in time. It encodes the start time "
+#~ "and the duration,\n"
+#~ "meaning that :meth:`end_time_inclusive` (last portion of a sample in the "
+#~ "time range) and\n"
+#~ ":meth:`end_time_exclusive` can be computed.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "TimeRange クラスは時間の範囲を表します。開始時間と期間をエンコードし、\n"
+#~ ":meth:`end_time_inclusive`（時間範囲内のサンプルの最後の部分）と\n"
+#~ ":meth:`end_time_exclusive` を計算できるようにします。\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "The time of the last sample containing data in the time range.\n"
+#~ "\n"
+#~ "If the time range starts at (0, 24) with duration (10, 24), this will be\n"
+#~ "(9, 24)\n"
+#~ "\n"
+#~ "If the time range starts at (0, 24) with duration (10.5, 24):\n"
+#~ "(10, 24)\n"
+#~ "\n"
+#~ "In other words, the last frame with data, even if the last frame is "
+#~ "fractional.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "時間範囲内でデータを含む最後のサンプルの時間。\n"
+#~ "\n"
+#~ "時間範囲が (0, 24) から始まり、期間が (10, 24) の場合、これは\n"
+#~ "(9, 24) になります。\n"
+#~ "\n"
+#~ "時間範囲が (0, 24) から始まり、期間が (10.5, 24) の場合：\n"
+#~ "(10, 24) になります。\n"
+#~ "\n"
+#~ "言い換えれば、最後のフレームが分数であっても、データを含む最後のフレームで"
+#~ "す。\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Time of the first sample outside the time range.\n"
+#~ "\n"
+#~ "If start frame is 10 and duration is 5, then end_time_exclusive is 15,\n"
+#~ "because the last time with data in this range is 14.\n"
+#~ "\n"
+#~ "If start frame is 10 and duration is 5.5, then end_time_exclusive is\n"
+#~ "15.5, because the last time with data in this range is 15.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "時間範囲外の最初のサンプルの時間。\n"
+#~ "\n"
+#~ "開始フレームが 10 で、期間が 5 の場合、end_time_exclusive は 15 です。\n"
+#~ "なぜなら、この範囲内でデータがある最後の時間は 14 だからです。\n"
+#~ "\n"
+#~ "開始フレームが 10 で、期間が 5.5 の場合、end_time_exclusive は\n"
+#~ "15.5 です。なぜなら、この範囲内でデータがある最後の時間は 15 だからで"
+#~ "す。\n"
+
+#~ msgid ""
+#~ "Construct a new :class:`~TimeRange` that is this one extended by other."
+#~ msgstr ""
+#~ "この :class:`~TimeRange` を他のもので拡張した新しいものを構築します。"
+
+#~ msgid ""
+#~ "\n"
+#~ "Clamp 'other' (:class:`~RationalTime`) according to\n"
+#~ ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "引数 'other' (:class:`~RationalTime`) を :attr:`start_time`/:attr:"
+#~ "`end_time_exclusive` および境界引数に従ってクランプします。\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Clamp 'other' (:class:`~TimeRange`) according to\n"
+#~ ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "引数 'other' (:class:`~TimeRange`) を :attr:`start_time`/:attr:"
+#~ "`end_time_exclusive` および境界引数に従ってクランプします。\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "The start of `this` precedes `other`.\n"
+#~ "`other` precedes the end of `this`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "         other\n"
+#~ "           |\n"
+#~ "           *\n"
+#~ "   [      this      ]\n"
+#~ "\n"
+#~ msgstr ""
+#~ "\n"
+#~ "`this` の開始が `other` より前です。\n"
+#~ "`other` は `this` の終了より前です。\n"
+#~ "::\n"
+#~ "\n"
+#~ "         other\n"
+#~ "           |\n"
+#~ "           *\n"
+#~ "   [      this      ]\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "The start of `this` precedes start of `other`.\n"
+#~ "The end of `this` antecedes end of `other`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "        [ other ]\n"
+#~ "   [      this      ]\n"
+#~ "\n"
+#~ "The converse would be ``other.contains(this)``\n"
+#~ msgstr ""
+#~ "\n"
+#~ "`this` の開始が `other` の開始より前です。\n"
+#~ "`this` の終了が `other` の終了より前です。\n"
+#~ "::\n"
+#~ "\n"
+#~ "        [ other ]\n"
+#~ "   [      this      ]\n"
+#~ "\n"
+#~ "逆は ``other.contains(this)`` です。\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "`this` contains `other`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "        other\n"
+#~ "         |\n"
+#~ "         *\n"
+#~ "   [    this    ]\n"
+#~ "\n"
+#~ msgstr ""
+#~ "\n"
+#~ "`this` は `other` を含みます。\n"
+#~ "::\n"
+#~ "\n"
+#~ "        other\n"
+#~ "         |\n"
+#~ "         *\n"
+#~ "   [    this    ]\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "The start of `this` strictly precedes end of `other` by a value >= "
+#~ "`epsilon_s`.\n"
+#~ "The end of `this` strictly antecedes start of `other` by a value >= "
+#~ "`epsilon_s`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "   [ this ]\n"
+#~ "       [ other ]\n"
+#~ "\n"
+#~ "The converse would be ``other.overlaps(this)``\n"
+#~ msgstr ""
+#~ "\n"
+#~ "`this` の開始は `other` の終了より厳密に前で、値は >= `epsilon_s` です。\n"
+#~ "`this` の終了は `other` の開始より厳密に前で、値は >= `epsilon_s` です。\n"
+#~ "::\n"
+#~ "\n"
+#~ "   [ this ]\n"
+#~ "       [ other ]\n"
+#~ "\n"
+#~ "逆は ``other.overlaps(this)`` です。\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "The end of `this` strictly precedes `other` by a value >= `epsilon_s`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "             other\n"
+#~ "               |\n"
+#~ "   [ this ]    *\n"
+#~ "\n"
+#~ msgstr ""
+#~ "\n"
+#~ "`this` の終了は `other` より厳密に前で、値は >= `epsilon_s` です。\n"
+#~ "::\n"
+#~ "\n"
+#~ "             other\n"
+#~ "               |\n"
+#~ "   [ this ]    *\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "The end of `this` strictly equals the start of `other` and\n"
+#~ "the start of `this` strictly equals the end of `other`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "   [this][other]\n"
+#~ "\n"
+#~ "The converse would be ``other.meets(this)``\n"
+#~ msgstr ""
+#~ "\n"
+#~ "`this`の終了点が`other`の開始点と厳密に等しく、\n"
+#~ "`this`の開始点が`other`の終了点と厳密に等しい。\n"
+#~ "::\n"
+#~ "\n"
+#~ "   [this][other]\n"
+#~ "\n"
+#~ "逆は``other.meets(this)``となる\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "The start of `this` strictly equals `other`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "   other\n"
+#~ "     |\n"
+#~ "     *\n"
+#~ "     [ this ]\n"
+#~ "\n"
+#~ msgstr ""
+#~ "\n"
+#~ "`this`の開始点が`other`と厳密に等しい。\n"
+#~ "::\n"
+#~ "\n"
+#~ "   other\n"
+#~ "     |\n"
+#~ "     *\n"
+#~ "     [ this ]\n"
+#~ "\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "The start of `this` strictly equals the start of `other`.\n"
+#~ "The end of `this` strictly precedes the end of `other` by a value >= "
+#~ "`epsilon_s`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "   [ this ]\n"
+#~ "   [    other    ]\n"
+#~ "\n"
+#~ "The converse would be ``other.begins(this)``\n"
+#~ msgstr ""
+#~ "\n"
+#~ "`this`の開始点が`other`の開始点と厳密に等しい。\n"
+#~ "`this`の終了点は`other`の終了点より`epsilon_s`以上の値だけ厳密に先行す"
+#~ "る。\n"
+#~ "::\n"
+#~ "\n"
+#~ "   [ this ]\n"
+#~ "   [    other    ]\n"
+#~ "\n"
+#~ "逆は``other.begins(this)``となる\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "The end of `this` strictly equals `other`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "        other\n"
+#~ "          |\n"
+#~ "          *\n"
+#~ "   [ this ]\n"
+#~ "\n"
+#~ msgstr ""
+#~ "\n"
+#~ "`this`の終了点が`other`と厳密に等しい。\n"
+#~ "::\n"
+#~ "\n"
+#~ "        other\n"
+#~ "          |\n"
+#~ "          *\n"
+#~ "   [ this ]\n"
+#~ "\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "The start of `this` strictly antecedes the start of `other` by a value >= "
+#~ "`epsilon_s`.\n"
+#~ "The end of `this` strictly equals the end of `other`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "           [ this ]\n"
+#~ "   [     other    ]\n"
+#~ "\n"
+#~ "The converse would be ``other.finishes(this)``\n"
+#~ msgstr ""
+#~ "\n"
+#~ "`this`の開始点は`other`の開始点より`epsilon_s`以上の値だけ厳密に先行す"
+#~ "る。\n"
+#~ "`this`の終了点は`other`の終了点と厳密に等しい。\n"
+#~ "::\n"
+#~ "\n"
+#~ "           [ this ]\n"
+#~ "   [     other    ]\n"
+#~ "\n"
+#~ "逆は``other.finishes(this)``となる\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "The start of `this` precedes or equals the end of `other` by a value >= "
+#~ "`epsilon_s`.\n"
+#~ "The end of `this` antecedes or equals the start of `other` by a value >= "
+#~ "`epsilon_s`.\n"
+#~ "::\n"
+#~ "\n"
+#~ "   [    this    ]           OR      [    other    ]\n"
+#~ "        [     other    ]                    [     this    ]\n"
+#~ "\n"
+#~ "The converse would be ``other.finishes(this)``\n"
+#~ msgstr ""
+#~ "\n"
+#~ "`this`の開始点は`other`の終了点以前であるか、`epsilon_s`以上の値だけ等し"
+#~ "い。\n"
+#~ "`this`の終了点は`other`の開始点以後であるか、`epsilon_s`以上の値だけ等し"
+#~ "い。\n"
+#~ "::\n"
+#~ "\n"
+#~ "   [    this    ]           OR      [    other    ]\n"
+#~ "        [     other    ]                    [     this    ]\n"
+#~ "\n"
+#~ "逆は``other.overlaps(this)``となる\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`"
+#~ "\\s (exclusive).\n"
+#~ "\n"
+#~ "For example, if start_time is 1 and end_time is 10, the returned will "
+#~ "have a duration of 9.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "開始と終了の:class:`~RationalTime`から:class:`~TimeRange`を作成します (排"
+#~ "他的)。\n"
+#~ "\n"
+#~ "例えば、start_timeが1でend_timeが10の場合、返されるもののdurationは9になり"
+#~ "ます。\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`"
+#~ "\\s (inclusive).\n"
+#~ "\n"
+#~ "For example, if start_time is 1 and end_time is 10, the returned will "
+#~ "have a duration of 10.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "開始と終了の:class:`~RationalTime`から:class:`~TimeRange`を作成します (包"
+#~ "括的)。\n"
+#~ "\n"
+#~ "例えば、start_timeが1でend_timeが10の場合、返されるもののdurationは10にな"
+#~ "ります。\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Media module.\n"
+#~ "\n"
+#~ "Contains all classes and enums related to media. \n"
+#~ msgstr ""
+#~ "\n"
+#~ "メディアモジュール。\n"
+#~ "\n"
+#~ "メディアに関連するすべてのクラスとenumを含みます。\n"
+
+#~ msgid "Compare mode :class:`mrv2.media.CompareMode`."
+#~ msgstr "比較モード :class:`mrv2.media.CompareMode`。"
+
+#~ msgid "Wipe center in X and Y :class:`mrv2.math.Vector2f`."
+#~ msgstr "XおよびYのワイプ中心 :class:`mrv2.math.Vector2f`。"
+
+#~ msgid "Wipe Rotation."
+#~ msgstr "動画回転"
+
+#~ msgid "Overlay ( A over B )"
+#~ msgstr "オーバーレイ ( A over B )"
+
+#~ msgid "Comparison options."
+#~ msgstr "比較"
+
+#~ msgid ""
+#~ "\n"
+#~ "Math module.\n"
+#~ "\n"
+#~ "Contains all math classes.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "数学モジュール。\n"
+#~ "\n"
+#~ "すべての数学クラスを含みます。\n"
+
+#~ msgid "Vector of 2 integers."
+#~ msgstr "請求項２ １に記載のベクターとを"
+
+#~ msgid "Vector of 2 floats."
+#~ msgstr "請求項２ １に記載のベクターとを"
+
+#~ msgid "Vector of 3 floats."
+#~ msgstr "請求項２ １に記載のベクターとを"
+
+#~ msgid "Vector of 4 floats."
+#~ msgstr "請求項２ １に記載のベクターとを"
+
+#~ msgid "Size of 2 integers."
+#~ msgstr "ボールのサイズ"
+
+#~ msgid ""
+#~ "\n"
+#~ "Image module.\n"
+#~ "\n"
+#~ "Contains all classes and enums related to image controls. \n"
+#~ msgstr ""
+#~ "\n"
+#~ "イメージモジュール。\n"
+#~ "\n"
+#~ "イメージコントロールに関連するすべてのクラスとenumを含みます。\n"
+
+#~ msgid "Red Channel."
+#~ msgstr "レッドチャネル"
+
+#~ msgid "Green Channel."
+#~ msgstr "グリーンチャネル"
+
+#~ msgid "Blue Channel."
+#~ msgstr "ブルーチャネル"
+
+#~ msgid "Alpha Channel."
+#~ msgstr "アルファチャンネル"
+
+#~ msgid "Image mirroring."
+#~ msgstr "ミラーリング"
+
+#~ msgid "Flip image on X."
+#~ msgstr "画像を反転"
+
+#~ msgid "Flip image on Y."
+#~ msgstr "画像を反転"
+
+#~ msgid "Enabled Levels."
+#~ msgstr "有効"
+
+#~ msgid "Add a :class:`mrv2.math.Vector3f` to image."
+#~ msgstr "ラッピングするHTML要素にクラスを追加します。"
+
+#~ msgid "Change a :class:`mrv2.math.Vector3f` of brightness to image."
+#~ msgstr "イメージに明るさの:class:`mrv2.math.Vector3f`を変更します。"
+
+#~ msgid "Change a :class:`mrv2.math.Vector3f` of contrast to image."
+#~ msgstr "イメージにコントラストの:class:`mrv2.math.Vector3f`を変更します。"
+
+#~ msgid "Change a :class:`mrv2.math.Vector3f` of saturation to image."
+#~ msgstr "イメージに彩度の:class:`mrv2.math.Vector3f`を変更します。"
+
+#~ msgid "Change tint of image to image between 0 and 1."
+#~ msgstr "背景画像の暗さ。0から1の間で選択してください"
+
+#~ msgid "Invert the color values."
+#~ msgstr "透明な色の値を報告"
+
+#~ msgid "Color values."
+#~ msgstr "透明な色の値を報告"
+
+#~ msgid "In Low Level value."
+#~ msgstr "低レベル"
+
+#~ msgid "In High Level value."
+#~ msgstr "高レベル"
+
+#~ msgid "Gamma Level value."
+#~ msgstr "ガンマレベル"
+
+#~ msgid "Out Low Level value."
+#~ msgstr "低レベル"
+
+#~ msgid "Out High Level value."
+#~ msgstr "高レベル"
+
+#~ msgid "Levels values."
+#~ msgstr "現在のチャンネルのレベル値をリセットします。"
+
+#~ msgid "Enabled EXR display."
+#~ msgstr "EXR表示を有効にしました。"
+
+#~ msgid "Exposure value."
+#~ msgstr "出力露出値：%.1f"
+
+#~ msgid "Defog value."
+#~ msgstr "値"
+
+#~ msgid "kneeLow value."
+#~ msgstr "値"
+
+#~ msgid "kneeHigh value."
+#~ msgstr "値"
+
+#~ msgid "EXR display values."
+#~ msgstr "値を表示"
+
+#~ msgid "Enabled Soft Clip."
+#~ msgstr "ソフトクリッピング"
+
+#~ msgid "Soft clip value."
+#~ msgstr "ソフトクリッピング"
+
+#~ msgid "Minify filter :class:`mrv2.image.ImageFilter`."
+#~ msgstr "縮小フィルター :class:`mrv2.image.ImageFilter`。"
+
+#~ msgid "Magnify filter :class:`mrv2.image.ImageFilter`."
+#~ msgstr "拡大フィルター :class:`mrv2.image.ImageFilter`。"
+
+#~ msgid "Image filters."
+#~ msgstr "フィルター"
+
+#~ msgid "Color channels :class:`mrv2.image.Channels`."
+#~ msgstr "カラーチャンネル :class:`mrv2.image.Channels`。"
+
+#~ msgid "Mirror on X, Y or both :class:`mrv2.image.Mirror`."
+#~ msgstr "X、Y、または両方のミラー :class:`mrv2.image.Mirror`。"
+
+#~ msgid "Color options :class:`mrv2.image.Color`."
+#~ msgstr "カラーオプション :class:`mrv2.image.Color`。"
+
+#~ msgid "Levels options :class:`mrv2.image.Levels`."
+#~ msgstr "卸売レベル オプション"
+
+#~ msgid "EXR Display options :class:`mrv2.image.EXRDisplay`.."
+#~ msgstr "EXR表示オプション :class:`mrv2.image.EXRDisplay`。"
+
+#~ msgid "Soft Clip options :class:`mrv2.image.SoftClip`.."
+#~ msgstr "ソフトクリップオプション :class:`mrv2.image.SoftClip`。"
+
+#~ msgid "Display options."
+#~ msgstr "表示オプション"
+
+#~ msgid "LUT enabled."
+#~ msgstr "LUT が有効です。"
+
+#~ msgid "LUT filename."
+#~ msgstr "LUT ファイル名。"
+
+#~ msgid "LUT transformation order."
+#~ msgstr "LUT変換順序。"
+
+#~ msgid "LUT options."
+#~ msgstr "Lut"
+
+#~ msgid "Video Levels."
+#~ msgstr "動画: 会員レベル"
+
+#~ msgid "Alpha blending algorithm"
+#~ msgstr "アルファブレンドアルゴリズム"
+
+#~ msgid "Image Filters"
+#~ msgstr "フィルター"
+
+#~ msgid "Image options."
+#~ msgstr "スライダー画像オプション"
+
+#~ msgid "Environment Map type."
+#~ msgstr "地図の種類"
+
+#~ msgid "Horizontal aperture"
+#~ msgstr "絞り"
+
+#~ msgid "Vertical aperture"
+#~ msgstr "絞り"
+
+#~ msgid "Rotation on X"
+#~ msgstr "X軸上の回転（+/-）"
+
+#~ msgid "Rotation on Y"
+#~ msgstr "Y軸上の回転（+/-）"
+
+#~ msgid "Subdivision on X"
+#~ msgstr "ç¾å¨ã®ã¬ã¤ã¤ã¼(L)"
+
+#~ msgid "Subdivision on Y"
+#~ msgstr "é ã(H)"
+
+#~ msgid "EnvironmentMap options."
+#~ msgstr "オプション"
+
+#~ msgid "Stereo 3d input :class:`mrv2.image.StereoInput`.."
+#~ msgstr "ステレオ3D入力 :class:`mrv2.image.StereoInput`。"
+
+#~ msgid "Stereo 3d output :class:`mrv2.image.StereoOutput`.."
+#~ msgstr "ステレオ3D出力 :class:`mrv2.image.StereoOutput`。"
+
+#~ msgid "Separation between left and right eye."
+#~ msgstr "左眼と右眼の差。"
+
+#~ msgid "Swap left and right eye"
+#~ msgstr "左右"
+
+#~ msgid "Stereo3D options."
+#~ msgstr "オプション"
+
+#~ msgid "Background type :class:`mrv2.image.Background`.."
+#~ msgstr "背景の種類"
+
+#~ msgid "Checkers Color0 :class:`mrv2.image.Color4f`.."
+#~ msgstr "チェッカーColor0 :class:`mrv2.image.Color4f`。"
+
+#~ msgid "Checkers Color1 :class:`mrv2.image.Color4f`.."
+#~ msgstr "チェッカーColor1 :class:`mrv2.image.Color4f`。"
+
+#~ msgid "Checkers Size :class:`mrv2.math.Size2i`.."
+#~ msgstr "チェッカーサイズ :class:`mrv2.math.Size2i`。"
+
+#~ msgid "Background options."
+#~ msgstr "背景オプション"
+
+#~ msgid "Gets the current background options."
+#~ msgstr "背景オプション"
+
+#~ msgid "Sets the current background options."
+#~ msgstr "背景オプション"
+
+#~ msgid "Gets the current OCIO config file."
+#~ msgstr "当月を取得します。"
+
+#~ msgid "Sets the current OCIO config file."
+#~ msgstr "設定ファイル"
+
+#~ msgid "Gets the current input color space."
+#~ msgstr "現在のカラースペース:"
+
+#~ msgid "Gets a list of all input color spaces."
+#~ msgstr "すべてのカテゴリーをリスト表示します。"
+
+#~ msgid "Set the input color space."
+#~ msgstr "色空間"
+
+#~ msgid "Gets the current Display/View."
+#~ msgstr "現在の表示/ビューを取得します。"
+
+#~ msgid "Gets the list of Displays/Views."
+#~ msgstr "表示/ビューのリストを取得します。"
+
+#~ msgid "Set an OCIO Display/View."
+#~ msgstr "OCIO表示/ビューを設定します。"
+
+#~ msgid "Gets the current OCIO look."
+#~ msgstr "今だ"
+
+#~ msgid "Gets a list of all OCIO looks."
+#~ msgstr "すべてのカテゴリーをリスト表示します。"
+
+#~ msgid "Set the OCIO look by name."
+#~ msgstr "名前順"
+
+#~ msgid "Return all the files."
+#~ msgstr "[ファイル]"
+
+#~ msgid "Return all the active files."
+#~ msgstr "行動不能にします。"
+
+#~ msgid "Return the A file item."
+#~ msgstr "カップを片づけろ！"
+
+#~ msgid "Return the A file index."
+#~ msgstr "カップを片づけろ！"
+
+#~ msgid "Return the list of B files."
+#~ msgstr "注文リストへ戻る"
+
+#~ msgid "Return the list of B indexes."
+#~ msgstr "注文リストへ戻る"
+
+#~ msgid "Close the current A file."
+#~ msgstr "現在のタブを閉じます"
+
+#~ msgid "Close all files."
+#~ msgstr "開いているファイルをすべて閉じます。"
+
+#~ msgid "Set the A file index."
+#~ msgstr "要約ファイルの索引を再構築します"
+
+#~ msgid "Set a new B file index."
+#~ msgstr "新しいインデックスを定義します。"
+
+#~ msgid "Set a new stereo file index."
+#~ msgstr "新しいインデックスを定義します。"
+
+#~ msgid "Toggle the B file index."
+#~ msgstr "ウィジェットバーを切り替える"
+
+#~ msgid "Clear the B indexes."
+#~ msgstr "場所をあけろ"
+
+#~ msgid "Return the list of layers."
+#~ msgstr "リストへ戻る"
+
+#~ msgid "Set layer for file item."
+#~ msgstr "図およびテキスト用のレイヤー"
+
+#~ msgid "Set compare time."
+#~ msgstr "比較時間を設定します。"
+
+#~ msgid "Get compare time."
+#~ msgstr "比較時間を取得します。"
+
+#~ msgid "Set the first version for current media."
+#~ msgstr "最初の年を設定"
+
+#~ msgid "Set the previous version for current media."
+#~ msgstr "還原到以前的版本"
+
+#~ msgid "Set the next version for current media."
+#~ msgstr "現在のメディアの次のバージョンを設定します。"
+
+#~ msgid "Set the last version for current media."
+#~ msgstr "最後の年を設定"
+
+#~ msgid "Path :class:`mrv2.Path` to the File Media."
+#~ msgstr "ファイルメディアへのパス :class:`mrv2.Path`。"
+
+#~ msgid "Audio path :class:`mrv2.Path` to the File Media if any."
+#~ msgstr ""
+#~ "ファイルメディアへのオーディオパス :class:`mrv2.Path` (もしあれば)。"
+
+#~ msgid "Time range :class:`mrv2.TimeRange` of the File Media."
+#~ msgstr "ファイルメディアの時間範囲 :class:`mrv2.TimeRange`。"
+
+#~ msgid "Speed (FPS) of the File Media."
+#~ msgstr "ファイルメディアの速度 (FPS)。"
+
+#~ msgid "Playback state :class:`mrv2.timeline.Playbacks` of the File Media."
+#~ msgstr "ファイルメディアの再生状態 :class:`mrv2.timeline.Playbacks`。"
+
+#~ msgid "Loop state :class:`mrv2.timeline.Loop` of the File Media."
+#~ msgstr "ファイルメディアのループ状態 :class:`mrv2.timeline.Loop`。"
+
+#~ msgid "Current time :class:`mrv2.RationalTime` of the File Media."
+#~ msgstr "ファイルメディアの現在の時間 :class:`mrv2.RationalTime`。"
+
+#~ msgid "In/Out range :class:`mrv2.TimeRange` of the File Media."
+#~ msgstr "ファイルメディアのIn/Out範囲 :class:`mrv2.TimeRange`。"
+
+#~ msgid "Video layer of the File Media."
+#~ msgstr "ビデオレイヤー"
+
+#~ msgid "Volume of the File Media."
+#~ msgstr "ファイルメディアの音量。"
+
+#~ msgid "Mute state of the File Media."
+#~ msgstr "最先端の技術。"
+
+#~ msgid "Audio offset of the File Media."
+#~ msgstr "ファイルのオーディオサンプルレートです。"
+
+#~ msgid "Class used to hold a media item."
+#~ msgstr "メディア項目。"
+
+#~ msgid "Save annotations."
+#~ msgstr "注釈"
+
+#~ msgid "Save resolution."
+#~ msgstr "高解像度"
+
+#~ msgid "FFmpeg Profile."
+#~ msgstr "プロファイル"
+
+#~ msgid "FFmpeg Preset."
+#~ msgstr "プリセット"
+
+#~ msgid "FFmpeg Pixel Format."
+#~ msgstr "ピクセル形式"
+
+#~ msgid "FFmpeg video encoding with hardware if possible."
+#~ msgstr "可能であれば、ハードウェアによるFFmpegビデオエンコーディング。"
+
+#~ msgid "FFmpeg Override color characteristics."
+#~ msgstr "配色を上書き"
+
+#~ msgid "FFmpeg Color Range."
+#~ msgstr "カラー範囲"
+
+#~ msgid "FFmpeg Color Space."
+#~ msgstr "色空間"
+
+#~ msgid "FFmpeg Color Primaries."
+#~ msgstr "マスタ表示色の原色が見つかりません。"
+
+#~ msgid "FFmpeg Color Transfer Characteristics."
+#~ msgstr "色を移植"
+
+#~ msgid "FFmpeg Audio Codec."
+#~ msgstr "オーディオ コーデック"
+
+#~ msgid "OpenEXR's Compression."
+#~ msgstr "OpenEXRの圧縮。"
+
+#~ msgid "OpenEXR's Pixel Type."
+#~ msgstr "ピクセルタイプ"
+
+#~ msgid "OpenEXR's Zip Compression Level."
+#~ msgstr "圧縮レベル"
+
+#~ msgid "OpenEXR's DWA Compression Level."
+#~ msgstr "圧縮レベル"
+
+#~ msgid ""
+#~ "\n"
+#~ "Command module.\n"
+#~ "\n"
+#~ "Used to run main commands and get arguments and set the display, image, "
+#~ "compare, LUT options.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "コマンドモジュール。\n"
+#~ "\n"
+#~ "メインコマンドを実行し、引数を取得し、表示、画像、比較、LUTオプションを設"
+#~ "定するために使用されます。\n"
+
+#~ msgid ""
+#~ "Get command-line arguments passed as single quoted string to -pythonArgs."
+#~ msgstr ""
+#~ "コマンドライン引数を、-pythonArgs に単一引用符で囲まれた文字列として渡しま"
+#~ "す。"
+
+#~ msgid "Open file with optional audio."
+#~ msgstr "オプションのオーディオ付きでファイルを開きます。"
+
+#~ msgid "Compare two file items with a compare mode."
+#~ msgstr "有料プランのある商品を先に表示する"
+
+#~ msgid "Close the file item."
+#~ msgstr "インプットファイルを閉じる"
+
+#~ msgid "Close all file items."
+#~ msgstr "展開を閉じる"
+
+#~ msgid "Return the root path to the insallation of mrv2."
+#~ msgstr "残りの６枚は箱へと戻します。"
+
+#~ msgid "Return the path to preferences of mrv2."
+#~ msgstr "平和への道"
+
+#~ msgid "Return the display options."
+#~ msgstr "表示オプション"
+
+#~ msgid "Set the display options."
+#~ msgstr "地図表示オプションを設定します。"
+
+#~ msgid "Return the LUT options."
+#~ msgstr "カップを片づけろ！"
+
+#~ msgid "Set the LUT options."
+#~ msgstr "一般的なオプションを設定"
+
+#~ msgid "Return the image options."
+#~ msgstr "スライダー画像オプション"
+
+#~ msgid "Set the image options."
+#~ msgstr "スライダー画像オプション"
+
+#~ msgid "Return the environment map options."
+#~ msgstr "マップ オプション"
+
+#~ msgid "Set the environment map options."
+#~ msgstr "マップ オプション"
+
+#~ msgid "Set the compare options."
+#~ msgstr "オプションを比較"
+
+#~ msgid "Set the stereo 3D options."
+#~ msgstr "一般的なオプションを設定"
+
+#~ msgid "Get the language of mrv2."
+#~ msgstr "詳しい説明"
+
+#~ msgid "Get the layers of the timeline (GUI)."
+#~ msgstr "タイムラインフィルターのスキーマ"
+
+#~ msgid "Get the version of mrv2."
+#~ msgstr "必要なバージョンを取得する"
+
+#~ msgid ""
+#~ "Call Fl::check to update the GUI and return the number of seconds that "
+#~ "elapsed."
+#~ msgstr "午前 0 時を基点とする経過時間を秒数で返します。"
+
+#~ msgid "Returns true if audio is muted."
+#~ msgstr "値が文字列の場合、TRUE を返します。"
+
+#~ msgid "Runs the same or a new mrv2 with a session file."
+#~ msgstr "クライアントは新しい外観となりますが、同じように機能します。"
+
+#~ msgid "Set the muting of the audio."
+#~ msgstr "2 音声ファイルの長さを調整する"
+
+#~ msgid "Toggle Image Auto Normalize."
+#~ msgstr "用語のトグル画像"
+
+#~ msgid "Toggle Data Window."
+#~ msgstr "スキャンデータウィンドウ"
+
+#~ msgid "Toggle Display Window."
+#~ msgstr "ショーウインドー"
+
+#~ msgid "Toggle Ignored Display Window on OpenEXRs."
+#~ msgstr "ショーウインドー"
+
+#~ msgid "Toggle Image invalid values."
+#~ msgstr "無効な値:"
+
+#~ msgid "Toggle Safe Areas."
+#~ msgstr "安全地帯"
+
+#~ msgid "Get the playback volume."
+#~ msgstr "再生音量の調整モード"
+
+#~ msgid "Set the playback volume."
+#~ msgstr "再生音量の調整モード"
+
+#~ msgid "Save a movie or sequence from the front layer."
+#~ msgstr "正面からの紫外線"
+
+#~ msgid "Save a single frame."
+#~ msgstr "静止画または単一フレームの画像です。"
+
+#~ msgid "Save multiple annotation frames."
+#~ msgstr "複数のアノテーションフレームを保存します。"
+
+#~ msgid "Save multiple frames."
+#~ msgstr "Visioffice 2 は、1人の患者に対して複数のフレームを処理します。"
+
+#~ msgid "Save an .otio file from the current selected image."
+#~ msgstr "現在のイメージから開始"
+
+#~ msgid "Save a PDF document with all annotations and notes."
+#~ msgstr "例 1PDF ドキュメントを公開する"
+
+#~ msgid ""
+#~ "\n"
+#~ "Annotations module.\n"
+#~ "\n"
+#~ "Contains all functions and classes related to the annotationss.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "アノテーションモジュール。\n"
+#~ "\n"
+#~ "アノテーションに関連するすべての関数とクラスを含みます。\n"
+
+#~ msgid "Add notes annotations to current clip at a certain time."
+#~ msgstr ""
+#~ "移行ジョブは、特定の時間に毎日起動するようにスケジュールすることができま"
+#~ "す。"
+
+#~ msgid "Add notes annotations to current clip at a certain frame."
+#~ msgstr "特定のフレームで、現在のクリップに注釈アノテーションを追加します。"
+
+#~ msgid "Add notes annotations to current clip at certain seconds."
+#~ msgstr "特定の秒数で、現在のクリップに注釈アノテーションを追加します。"
+
+#~ msgid "Get all times for annotations."
+#~ msgstr "注釈のテキスト オプション"
+
+#~ msgid "Client"
+#~ msgstr "クライアント"
+
+#~ msgid "Server"
+#~ msgstr "サーバー"
+
+#~ msgid "Host"
+#~ msgstr "主催者"
+
+#~ msgid "Host name or IP to connect to.  For example: 127.0.0.1"
+#~ msgstr "ローカル ホスト名または IP アドレス"
+
+#~ msgid "Previously used Hosts"
+#~ msgstr "これまでに使ったタグ"
+
+#~ msgid "Port"
+#~ msgstr "ポート"
+
+#~ msgid ""
+#~ "Port to connect to.  Make sure your firewall and router allows read/write "
+#~ "through it."
+#~ msgstr ""
+#~ "接続するポート。ファイアウォールやルーターが読み書きを許可していることを確"
+#~ "認してください。"
+
+#~ msgid "Connect"
+#~ msgstr "接続"
+
+#~ msgid "Create"
+#~ msgstr "作成"
+
+#~ msgid "Disconnect"
+#~ msgstr "接続解除"
+
+#~ msgid "Shutdown"
+#~ msgstr "シャットダウン"
+
+#~ msgid "&File/&Open"
+#~ msgstr "&ファイル/&開く"
+
+#~ msgid "&File/&Save"
+#~ msgstr "&ファイル/&保存"
+
+#~ msgid "&Edit/&Undo"
+#~ msgstr "編集/元に戻す"
+
+#~ msgid "&Edit/Cu&t"
+#~ msgstr "&編集/切り取り"
+
+#~ msgid "&Edit/&Copy"
+#~ msgstr "&編集/&コピー"
+
+#~ msgid "&Edit/&Paste"
+#~ msgstr "&編集/&貼り付け"
+
+#~ msgid "&Edit/&Delete"
+#~ msgstr "&編集/&削除"
+
+#~ msgid "&Edit/&Comment Selection"
+#~ msgstr "&編集/&選択範囲にコメント"
+
+#~ msgid "&Edit/&Uncomment Selection"
+#~ msgstr "&編集/&選択範囲のコメント解除"
+
+#~ msgid "&Search/&Find..."
+#~ msgstr "&検索/&検索..."
+
+#~ msgid "&Search/F&ind Again"
+#~ msgstr "&検索/&再検索"
+
+#~ msgid "&Search/&Replace"
+#~ msgstr "&検索/&置換"
+
+#~ msgid "&Search/&Replace Again"
+#~ msgstr "&検索/&再置換"
+
+#~ msgid "Clear/&Output"
+#~ msgstr "クリア/&出力"
+
+#~ msgid "Clear/&Editor"
+#~ msgstr "クリア/&エディタ"
+
+#~ msgid "Editor/&Run Code"
+#~ msgstr "エディタ/&コード実行"
+
+#~ msgid "Editor/Toggle &Line Numbers"
+#~ msgstr "エディタ/行番号の切り替え"
+
+#~ msgid "Editor/&Jump to Error"
+#~ msgstr "エディタ/&エラーにジャンプ"
+
+#~ msgid "Editor/&External Editor"
+#~ msgstr "エディタ/&外部エディタ"
+
+#~ msgid "Scripts/Add To Script List"
+#~ msgstr "スクリプト/スクリプトリストに追加"
+
+#~ msgid "Scripts/%s"
+#~ msgstr "スクリプト/%s"
+
+#~ msgid ""
+#~ "Type in your python code here.  Select an area to execute just a portion "
+#~ "of it.  Press Keypad Enter to run it."
+#~ msgstr ""
+#~ "ここにPythonコードを入力してください。実行したい部分を選択して、キーの"
+#~ "Enterを押すことでその部分だけ実行できます。"
+
+#~ msgid "Python file {0} already exists.  Do you want to overwrite it?"
+#~ msgstr "Python ファイル {0} はすでに存在します。上書きしますか?"
+
+#~ msgid "Failed to open the file for writing."
+#~ msgstr "ファイルを書き込みのために開けませんでしたNAME OF TRANSLATORS"
+
+#~ msgid "Failed to write to the file."
+#~ msgstr "ファイルへの書き込みに失敗しました。"
+
+#~ msgid "Type your editor command"
+#~ msgstr "編集長には"
+
+#~ msgid "{0} will be replaced with the line number.  {1} with the file name"
+#~ msgstr "{0} は行番号に置き換えられます。{1} はファイル名に置き換えられます"
+
+#~ msgid "Could not open python editor: {0}"
+#~ msgstr "Python エディタを開けませんでした: {0}"
+
+#~ msgid "Search String:"
+#~ msgstr "検索文字列:"
+
+#~ msgid "No occurrences of '%s' found!"
+#~ msgstr "「%s」は見つかりませんでした。"
+
+#~ msgid "Renderer"
+#~ msgstr "レンダラー"
+
+#~ msgid "Complexity"
+#~ msgstr "難易度"
+
+#~ msgid "Stage Cache"
+#~ msgstr "キャッシュ"
+
+#~ msgid "Disk Cache in GB"
+#~ msgstr "ディスクキャッシュ"
+
+#~ msgid "Server started at port {0}."
+#~ msgstr "サーバーはポート {0} で起動しました。"
+
+#~ msgid "Server stopped."
+#~ msgstr "サーバを停止しました"
+
+#~ msgid "A client connected from {0}"
+#~ msgstr "クライアントが {0} から接続しました"
+
+#~ msgid "Client at {0} disconnected."
+#~ msgstr "{0} の接続解除"
+
+#~ msgid "Server protocol version is {0}.  Client protocol version is {1}"
+#~ msgstr ""
+#~ "サーバープロトコルのバージョンは {0} です。クライアントプロトコルのバー"
+#~ "ジョンは {1} です"
+
+#~ msgid "Remote file {0} does not exist on local filesystem."
+#~ msgstr "リモートファイル {0} はローカルファイルシステムに存在しません。"
+
+#~ msgid "Remote files are less than local files."
+#~ msgstr "ローカルファイルのみがサポートされています。"
+
+#~ msgid "Remote file {0} matches file name {1} but not path."
+#~ msgstr ""
+#~ "リモートファイル {0} はファイル名 {1} と一致しますが、パスは一致しません。"
+
+#~ msgid "Remote file {0} does not match local filename."
+#~ msgstr "リモートファイル {0} はローカルファイル名と一致しません。"
+
+#~ msgid "Removing {0} from message publisher."
+#~ msgstr "メッセージパブリッシャーから {0} を削除しています。"
+
+#~ msgid "Server listening on port "
+#~ msgstr "サーバーはポートでリッスンしています "
+
+#~ msgid "ComfyUI listening on port "
+#~ msgstr "ComfyUI はポートでリッスンしています "
+
+#~ msgid "Connected to server at {0}, port {1}"
+#~ msgstr "サーバー ({0}, ポート {1}) に接続しました"
+
+#~ msgid "Server connection lost."
+#~ msgstr "サーバー接続"
+
+#~ msgid "Exception caught: "
+#~ msgstr "未知の例外を検出: "
+
+#~ msgid "%s - Page %d"
+#~ msgstr "%s - ページ %d"
+
+#~ msgid "Frame {0} - TC: {1} - S: {2}"
+#~ msgstr "フレーム {0} - TC: {1} - S: {2}"
+
+#~ msgid "Image too big.  Will save the viewport size."
+#~ msgstr "彼らが都を守ってくれます"
+
+#~ msgid "Replace"
+#~ msgstr "置換"
+
+#~ msgid "Find:"
+#~ msgstr "検索: "
+
+#~ msgid "Replace:"
+#~ msgstr "置換:"
+
+#~ msgid "Replace All"
+#~ msgstr "すべて置換"
+
+#~ msgid "Replace Next"
+#~ msgstr "置換"

@@ -30,6 +30,12 @@
 #
 params=$*
 
+KERNEL=`uname`
+if [[ $KERNEL == *MSYS* || $KERNEL == *MINGW* ]]; then
+    export KERNEL=Msys
+fi
+export BUILD_ROOT=${KERNEL}-vulkan
+
 #
 # Find out our build dir
 #
@@ -41,7 +47,6 @@ params=$*
 #
 export FLAGS=""
 export CMAKE_FLAGS=""
-
 
 
 export MRV2_HDR=ON

@@ -18,8 +18,12 @@ set( CPACK_PACKAGE_CONTACT "ggarra13@gmail.com")
 #
 # Experimental support in CPack for multithreading. 0 uses all cores.
 #
-set( CPACK_THREADS 0 )
-    
+if (APPLE)
+    set( CPACK_THREADS 1 )
+else()
+    set( CPACK_THREADS 0 )
+endif()
+
 set( MRV2_OS_BITS 32 )
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm" OR CMAKE_SYSTEM_PROCESSOR MATCHES "aarch")
     if(CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -291,6 +295,13 @@ else()
 	list(PREPEND CPACK_PRE_BUILD_SCRIPTS ${MRV2_ROOT}/cmake/copy_pdbs.cmake )
     endif()
 
+
+    if (MRV2_HDR)
+	install(FILES
+	    C:/Windows/System32/vulkan-1.dll
+	    DESTINATION bin
+	    COMPONENT applications)
+    endif()
     
     set(CPACK_PACKAGE_INSTALL_DIRECTORY "mrv2-v${mrv2_VERSION}" )
     
