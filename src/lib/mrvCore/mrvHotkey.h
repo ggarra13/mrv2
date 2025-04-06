@@ -134,7 +134,7 @@ namespace mrv
     extern Hotkey kAutoNormalize;
     extern Hotkey kInvalidValues;
     extern Hotkey kToggleHDRTonemap;
-    
+
     extern Hotkey kDisplayWindow;
     extern Hotkey kDataWindow;
 
@@ -265,6 +265,7 @@ namespace mrv
 
     extern Hotkey kHudToggle;
 
+    extern Hotkey kOCIOToggle;
     extern Hotkey kOCIOPresetsToggle;
     extern Hotkey kOCIOInTopBarToggle;
 
@@ -338,8 +339,7 @@ namespace mrv
 
     extern Hotkey kRotatePlus90;
     extern Hotkey kRotateMinus90;
-    
-    
+
     /**
      * @brief Struct used to hold a hotkey entry.
      *

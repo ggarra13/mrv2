@@ -221,6 +221,7 @@ namespace mrv
     // From OCIO Menus
     void ocio_presets_cb(Fl_Menu_* w, ViewerUI* ui);
 
+    void toggle_ocio_cb(Fl_Menu_*, ViewerUI* ui);
     void toggle_ocio_topbar_cb(Fl_Menu_*, ViewerUI* ui);
 
     void current_ocio_ics_cb(Fl_Menu_*, ViewerUI* ui);
