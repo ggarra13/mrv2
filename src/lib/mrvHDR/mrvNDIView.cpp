@@ -1805,16 +1805,6 @@ void main() {
                                     if (attr_primaries)
                                         p.primariesName =
                                             attr_primaries->value();
-
-                                    // std::cerr << "primaries="
-                                    //           << p.primariesName
-                                    //           << std::endl;
-                                    // std::cerr << "transferName="
-                                    //           << p.transferName
-                                    //           << std::endl;
-                                    // std::cerr << "matrixName="
-                                    //           << p.matrixName
-                                    //           << std::endl;
                                 }
 
                                 if (p.hdrData != hdrData)
@@ -2046,7 +2036,9 @@ void main() {
             src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
             src_colorspace.transfer = PL_COLOR_TRC_PQ;
             if (p.transferName == "bt_2100_hlg")
+            {
                 src_colorspace.transfer = PL_COLOR_TRC_HLG;
+            }
             cmap.metadata = PL_HDR_METADATA_ANY;
             pl_hdr_metadata& hdr = src_colorspace.hdr;
             hdr.min_luma = data.displayMasteringLuminance.getMin();
@@ -2165,11 +2157,11 @@ void main() {
         // s << "#define textureLod(t, p, b) texture(t, p)" << std::endl
         //   << std::endl;
 
-        std::cerr << "num_vertex_attribs=" << res->num_vertex_attribs
-                  << std::endl
-                  << "num_descriptors=" << res->num_descriptors << std::endl
-                  << "num_variables=" << res->num_variables << std::endl
-                  << "num_constants=" << res->num_constants << std::endl;
+        // std::cerr << "num_vertex_attribs=" << res->num_vertex_attribs
+        //           << std::endl
+        //           << "num_descriptors=" << res->num_descriptors << std::endl
+        //           << "num_variables=" << res->num_variables << std::endl
+        //           << "num_constants=" << res->num_constants << std::endl;
 
         for (int i = 0; i < res->num_descriptors; i++)
         {
