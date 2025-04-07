@@ -119,7 +119,7 @@ namespace mrv
 
         void uploadTextureData(
             VkImage image, uint32_t width, uint32_t height, uint32_t depth,
-            VkFormat format, const void* data);
+            VkFormat format, const int pix_fmt_size, const void* data);
 
         VkImageView
         createImageView(VkImage image, VkFormat format, VkImageType imageType);
