@@ -1,7 +1,7 @@
 # Hindi translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.7\n"
@@ -4204,7 +4204,7 @@ msgid "OCIO/In Top Bar"
 msgstr "OCIO/शीर्ष पट्टी में"
 
 msgid "OCIO/Toggle"
-msgstr ""
+msgstr "OCIO/टॉगल"
 
 msgid "OCIO/Current"
 msgstr "OCIO/मौज़ूदा"
@@ -7408,9 +7408,8 @@ msgstr "OCO प्रदर्शन"
 msgid "OCIO View"
 msgstr "OCO दृश्य"
 
-#, fuzzy
 msgid "OCIO Toggle"
-msgstr "ओआईआईओ कॉन्फ़िग फ़ाइल"
+msgstr "OCIO टॉगल"
 
 msgid "Scrub Mode"
 msgstr "स्क्रैप मोड"

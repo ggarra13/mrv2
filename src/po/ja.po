@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.3.6\n"
@@ -4243,7 +4243,7 @@ msgid "OCIO/In Top Bar"
 msgstr "OCIO/トップバーに"
 
 msgid "OCIO/Toggle"
-msgstr ""
+msgstr "OCIO/切り替え"
 
 msgid "OCIO/Current"
 msgstr "OCIO/現在"
@@ -7480,9 +7480,8 @@ msgstr "OCIO 表示"
 msgid "OCIO View"
 msgstr "OCIO ビュー"
 
-#, fuzzy
 msgid "OCIO Toggle"
-msgstr "OCIO設定ファイル"
+msgstr "OCIO 切り替え"
 
 msgid "Scrub Mode"
 msgstr "スクラブ モード"

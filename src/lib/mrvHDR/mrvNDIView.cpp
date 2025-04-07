@@ -293,10 +293,10 @@ namespace mrv
         VkResult result;
 
         const int channels = 4; // RGBA
-            
-        VkDeviceSize imageSize = width * height * depth * channels *
-                                 pixel_fmt_size;
-        
+
+        VkDeviceSize imageSize =
+            width * height * depth * channels * pixel_fmt_size;
+
         // Create staging buffer
         VkBuffer stagingBuffer;
         VkDeviceMemory stagingBufferMemory;
@@ -426,9 +426,10 @@ namespace mrv
                 else if (dims == 3)
                 {
                     pixel_fmt_size = sizeof(uint16_t);
-                    imageFormat = VK_FORMAT_R16G16B16A16_UNORM; // Default for 3D
+                    imageFormat =
+                        VK_FORMAT_R16G16B16A16_UNORM; // Default for 3D
                 }
-                
+
                 // Texture dimensions
                 uint32_t width = tex->params.w;
                 uint32_t height = (dims >= 2) ? tex->params.h : 1;
@@ -451,25 +452,25 @@ namespace mrv
                 // Determine image type
                 VkImageType imageType = (dims == 1)   ? VK_IMAGE_TYPE_1D
                                         : (dims == 2) ? VK_IMAGE_TYPE_2D
-                                        : VK_IMAGE_TYPE_3D;
-                
+                                                      : VK_IMAGE_TYPE_3D;
+
                 // Create Vulkan image
                 VkImage image =
                     createImage(imageType, width, height, depth, imageFormat);
 
                 // Allocate and bind memory for the image
                 VkDeviceMemory imageMemory = allocateAndBindImageMemory(image);
-                
+
                 // Transition image layout to TRANSFER_DST_OPTIMAL
                 transitionImageLayout(
                     image, VK_IMAGE_LAYOUT_UNDEFINED,
                     VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-                
+
                 // Upload texture data
                 uploadTextureData(
-                    image, width, height, depth, imageFormat,
-                    pixel_fmt_size, values);
-                
+                    image, width, height, depth, imageFormat, pixel_fmt_size,
+                    values);
+
                 // Transition image layout to SHADER_READ_ONLY_OPTIMAL
                 transitionImageLayout(
                     image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
@@ -478,10 +479,10 @@ namespace mrv
                 // Create image view
                 VkImageView imageView =
                     createImageView(image, imageFormat, imageType);
-                
+
                 // Create sampler (equivalent to GL_LINEAR)
                 VkSampler sampler = createSampler();
-                
+
                 Fl_Vk_Texture texture(
                     imageType, imageFormat, image, imageView, sampler,
                     imageMemory, samplerName, width, height, depth);
@@ -733,7 +734,7 @@ namespace mrv
 
                     float R, G, B;
 
-                    float Y_linear= Yf;
+                    float Y_linear = Yf;
                     // if (p.hasHDR)
                     //     Y_linear = apply_inverse_pq(Yf);
                     // else
@@ -793,7 +794,7 @@ namespace mrv
 
                     float R, G, B;
 
-                    float Y_linear= Yf;
+                    float Y_linear = Yf;
                     // if (p.hasHDR)
                     //     Y_linear = apply_inverse_pq(Yf);
                     // else
@@ -1531,7 +1532,7 @@ void main() {
             {
                 prepare_shader();
             }
-            catch(const std::exception& e)
+            catch (const std::exception& e)
             {
                 std::cerr << "ERROR: " << e.what() << std::endl;
             }
@@ -1774,7 +1775,7 @@ void main() {
                                 if (!p.hasHDR)
                                     init = true;
                                 p.hasHDR = true;
-                                
+
                                 rapidxml::xml_attribute<>* attr_transfer =
                                     root->first_attribute("transfer");
                                 if (attr_transfer)
@@ -2001,8 +2002,8 @@ void main() {
         memset(&cmap, 0, sizeof(pl_color_map_params));
 
         // defaults, generates LUTs if state is set.
-        cmap.gamut_mapping = &pl_gamut_map_perceptual;  // this crashes
-        //cmap.gamut_mapping = nullptr;  // this works
+        cmap.gamut_mapping = &pl_gamut_map_perceptual; // this crashes
+        // cmap.gamut_mapping = nullptr;  // this works
 
         // PL_GAMUT_MAP_CONSTANTS is defined in wrong order for C++
         cmap.gamut_constants = {0};
@@ -2130,7 +2131,7 @@ void main() {
             cmap.contrast_smoothness = 3.5f;
 
             dst_colorspace.primaries = PL_COLOR_PRIM_BT_709;
-            dst_colorspace.transfer  = PL_COLOR_TRC_BT_1886;
+            dst_colorspace.transfer = PL_COLOR_TRC_BT_1886;
 
             if (p.hasHDR)
                 cmap.tone_mapping_function = &pl_tone_map_st2094_40;

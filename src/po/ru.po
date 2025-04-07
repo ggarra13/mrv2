@@ -1,7 +1,7 @@
 # Russian translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.8\n"
@@ -4289,7 +4289,7 @@ msgid "OCIO/In Top Bar"
 msgstr "OCIO/В топ-баре"
 
 msgid "OCIO/Toggle"
-msgstr ""
+msgstr "OCIO/Переключить"
 
 msgid "OCIO/Current"
 msgstr "OCIO/Текущая"
@@ -7554,9 +7554,8 @@ msgstr "Выставка OCIO"
 msgid "OCIO View"
 msgstr "Вид OCIO"
 
-#, fuzzy
 msgid "OCIO Toggle"
-msgstr "Файл OCIO Conpig"
+msgstr "Переключить OCIO"
 
 msgid "Scrub Mode"
 msgstr "Режим скруба"

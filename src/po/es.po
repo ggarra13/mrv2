@@ -2,7 +2,7 @@
 # Traducciones al español para el paquete mrv2.
 # This file is distributed under the same license as the mrv2 package.
 # Gonzalo Garramuño <ggarra13@gmail.com>, 2023.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.8\n"
@@ -4314,7 +4314,7 @@ msgid "OCIO/In Top Bar"
 msgstr "OCIO/En Barra Superior"
 
 msgid "OCIO/Toggle"
-msgstr ""
+msgstr "OCIO/Permutar"
 
 msgid "OCIO/Current"
 msgstr "OCIO/Seteos Actuales"
@@ -7584,9 +7584,8 @@ msgstr "OCIO Display"
 msgid "OCIO View"
 msgstr "OCIO Vista"
 
-#, fuzzy
 msgid "OCIO Toggle"
-msgstr "Archivo Config de OCIO"
+msgstr "Permutar OCIO"
 
 msgid "Scrub Mode"
 msgstr "Modo de Fregado"

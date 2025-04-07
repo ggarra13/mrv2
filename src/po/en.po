@@ -1,7 +1,7 @@
 # English translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.6\n"
@@ -4253,7 +4253,7 @@ msgid "OCIO/In Top Bar"
 msgstr "OCIO/In Top Bar"
 
 msgid "OCIO/Toggle"
-msgstr ""
+msgstr "OCIO/Toggle"
 
 msgid "OCIO/Current"
 msgstr "OCIO/Current"
@@ -7505,9 +7505,8 @@ msgstr "OCIO Display"
 msgid "OCIO View"
 msgstr "OCIO View"
 
-#, fuzzy
 msgid "OCIO Toggle"
-msgstr "OCIO Config File"
+msgstr "OCIO Toggle"
 
 msgid "Scrub Mode"
 msgstr "Scrub Mode"

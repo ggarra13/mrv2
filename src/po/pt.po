@@ -1,7 +1,7 @@
 # Portuguese translations for mrv2 package
 # This file is distributed under the same license as the mrv2 package.
 # Gonzalo Garramuño <ggarra13@gmail.com>, 2023.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.7\n"
@@ -4235,7 +4235,7 @@ msgid "OCIO/In Top Bar"
 msgstr "OCIO/Na barra superior"
 
 msgid "OCIO/Toggle"
-msgstr ""
+msgstr "OCIO/Alternar"
 
 msgid "OCIO/Current"
 msgstr "OCIO/Atual"
@@ -7505,9 +7505,8 @@ msgstr "Display OCIO"
 msgid "OCIO View"
 msgstr "Visualizao OCIO"
 
-#, fuzzy
 msgid "OCIO Toggle"
-msgstr "Ficheiro de Configurao OCIO"
+msgstr "Alternar OCIO"
 
 msgid "Scrub Mode"
 msgstr "Modo de arranque"

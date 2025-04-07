@@ -1,6 +1,6 @@
 # AI Simplified Chinese translations for mrv2 package
 # This file is distributed under the same license as the mrv2 package.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.5\n"
@@ -4182,7 +4182,7 @@ msgid "OCIO/In Top Bar"
 msgstr "OCIO/在顶栏"
 
 msgid "OCIO/Toggle"
-msgstr ""
+msgstr "OCIO/切换"
 
 msgid "OCIO/Current"
 msgstr "OCIO/目前"
@@ -7357,9 +7357,8 @@ msgstr "OCIO 显示"
 msgid "OCIO View"
 msgstr "OCIO 视图"
 
-#, fuzzy
 msgid "OCIO Toggle"
-msgstr "OCIO 配置文件"
+msgstr "切换 OCIO"
 
 msgid "Scrub Mode"
 msgstr "冲刷模式"
