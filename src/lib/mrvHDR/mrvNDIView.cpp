@@ -1214,7 +1214,6 @@ void main() {
         // Compile to SPIR-V
         try
         {
-            std::cerr << frag_shader_glsl << std::endl;
             // std::cerr << frag_shader_glsl << std::endl;
             std::vector<uint32_t> spirv = compile_glsl_to_spirv(
                 frag_shader_glsl,

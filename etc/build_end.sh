@@ -34,7 +34,7 @@ fi
 if [[ $KERNEL != *Msys* ]]; then
     chmod a+x $PWD/$BUILD_DIR/install/bin/mrv2.sh
     has_hdr=0
-    if [[ -e $PWD/$BUILD_DIR/install/bin/hdrsh ]]; then
+    if [[ -e $PWD/$BUILD_DIR/install/bin/hdr.sh ]]; then
 	has_hdr=1
 	chmod a+x $PWD/$BUILD_DIR/install/bin/hdr.sh
     fi
