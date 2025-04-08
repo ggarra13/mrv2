@@ -29,7 +29,7 @@
 
 # Directories and backup files
 BUILD-*
-*_vulkan*
+*-vulkan*
 tlRender/build*
 tlRender/debug_tests
 Qt5

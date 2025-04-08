@@ -3,19 +3,14 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
-set(FL_SOURCES
-    mrvHDRView.fl)
-
-FLTK_WRAP_UI( hdr ${FL_SOURCES} )
-
 set(HEADERS
+    mrvContextObject.h
     mrvEnv.h
     mrvHDRApp.h
     mrvRoot.h
-    ${hdr_FLTK_UI_SRCS}
 )
 set(SOURCES
-    ${hdr_FLTK_UI_SRCS}
+    mrvContextObject.cpp
     mrvEnv.cpp
     mrvHDRApp.cpp
     mrvRoot.cpp
@@ -35,6 +30,7 @@ endif()
 set(LIBRARIES
     mrvBaseApp
     mrvHDR
+    mrvHDRWidgets
     ${Intl_LIBRARIES})
 
 if (WIN32)
