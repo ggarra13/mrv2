@@ -30,11 +30,12 @@
 #
 params=$*
 
-KERNEL=`uname`
-if [[ $KERNEL == *MSYS* || $KERNEL == *MINGW* ]]; then
-    export KERNEL=Msys
-fi
-export BUILD_ROOT=${KERNEL}-vulkan
+
+. etc/functions.sh
+
+get_kernel
+
+export BUILD_ROOT=${KERNEL}-vulkan-${ARCH}
 
 #
 # Find out our build dir
@@ -54,5 +55,5 @@ export MRV2_HDR=ON
 echo
 echo "Saving compile log to $BUILD_DIR/compile.log ..."
 echo
-cmd="./etc/runme_nolog.sh --ask $params -D MRV2_HDR=ON --dir $KERNEL-vulkan 2>&1 | tee $BUILD_DIR/compile.log"
+cmd="./etc/runme_nolog.sh --ask $params -D MRV2_HDR=ON --dir $BUILD_ROOT 2>&1 | tee $BUILD_DIR/compile.log"
 run_cmd $cmd

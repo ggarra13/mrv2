@@ -25,6 +25,7 @@ if(MRV2_PYBIND11)
     add_subdirectory(mrvPy)
 endif()
 if(TLRENDER_VK AND TLRENDER_NDI AND MRV2_HDR)
+    add_subdirectory(mrvHDRWidgets)
     add_subdirectory(mrvHDR)
 endif()
 

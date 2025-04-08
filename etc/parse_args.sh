@@ -159,6 +159,11 @@ if [[ "$NOARGS" == "" ]]; then
 		shift
 		continue
 		;;
+	    -vk|--vk|--vulkan)
+		export BUILD_ROOT=${KERNEL}-vulkan-${ARCH}
+		shift
+		continue
+		;;
 	    -j)
 		shift
 		export CPU_CORES=$1

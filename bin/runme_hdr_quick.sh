@@ -24,17 +24,16 @@
 # It will also log the compilation on $BUILD_DIR/compile.log
 #
 
-
 #
 # Store the parameters for passing them later
 #
 params=$*
 
-KERNEL=`uname`
-if [[ $KERNEL == *MSYS* || $KERNEL == *MINGW* ]]; then
-    export KERNEL=Msys
-fi
-BUILD_ROOT=${KERNEL}-vulkan-quick/
+
+. etc/functions.sh
+
+get_kernel
+export BUILD_ROOT=${KERNEL}-vulkan-${ARCH}
 
 #
 # Find out our build dir
