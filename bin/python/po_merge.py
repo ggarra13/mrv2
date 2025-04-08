@@ -91,9 +91,9 @@ class POMergeMissing:
 
 def merge_missing(lang):
 
-    main_po = f'src/po/{lang}.po'
-    merged_po = f'src/po/{lang}.po'
-    missing_po = f'src/po/{lang}_missing.po'
+    main_po = f'src/mrv2/po/{lang}.po'
+    merged_po = f'src/mrv2/po/{lang}.po'
+    missing_po = f'src/mrv2/xpo/{lang}_missing.po'
     missing = POMergeMissing()
     missing.merge(merged_po, main_po, missing_po)
     
@@ -106,9 +106,9 @@ def merge_missing(lang):
         merged = code + '.po'
         plugin = code + '.po'
         out_po = code + '_missing.po'
-        merged_po = f'src/po/python/plug-ins/locale/{lang}/LC_MESSAGES/{merged}'
-        plugin_po = f'src/po/python/plug-ins/locale/{lang}/LC_MESSAGES/{plugin}'
-        out_po = f'src/po/python/plug-ins/locale/{lang}/LC_MESSAGES/{out_po}'
+        merged_po = f'src/po/mrv2/python/plug-ins/locale/{lang}/LC_MESSAGES/{merged}'
+        plugin_po = f'src/po/mrv2/python/plug-ins/locale/{lang}/LC_MESSAGES/{plugin}'
+        out_po = f'src/po/mrv2/python/plug-ins/locale/{lang}/LC_MESSAGES/{out_po}'
         missing.merge(merged_po, plugin_po, out_po)
 
 if __name__ == "__main__":
