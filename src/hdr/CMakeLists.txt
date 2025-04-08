@@ -16,8 +16,8 @@ set(SOURCES
     mrvRoot.cpp
     main.cpp)
 
-files_to_absolute_paths()
-set( PO_SOURCES ${PO_FILES} ${PO_SOURCES} PARENT_SCOPE)
+hdr_files_to_absolute_paths()
+set( PO_HDR_SOURCES ${PO_HDR_FILES} ${PO_HDR_SOURCES} PARENT_SCOPE)
 
 find_package(Intl REQUIRED)
 

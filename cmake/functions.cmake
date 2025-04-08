@@ -413,6 +413,42 @@ macro( files_to_absolute_paths )
 endmacro()
 
 #
+# Macro used to turn a list of .cpp/.h files into an absolute path for
+# fluid files, and shortened relative paths for others.
+#
+# @bug: We need to do this on Windows, as xgettext chokes on too many
+#       long paths.
+#
+macro( hdr_files_to_absolute_paths )
+    set( PO_HDR_FILES )
+    set( _exclude_regex "\\.mm" ) # macOS .mm files are not considered
+    set( _no_short_name_regex "\\.cxx" ) # .cxx are fluid generated files
+    set( PO_HDR_ABS_FILES  )
+    foreach( filename ${SOURCES} ${HEADERS} )
+	file(REAL_PATH ${filename} _abs_file )
+	set( _matched )
+	string( REGEX MATCH ${_exclude_regex} _matched ${_abs_file} )
+	if ( _matched )
+            continue()
+	endif()
+	set( _short_name ${_abs_file} )
+	set( _matched )
+	foreach( match ${_no_short_name_regex} )
+	    string( REGEX MATCH ${match} _matched ${_abs_file} )
+	endforeach()
+	if ( NOT _matched )
+	    string( REGEX REPLACE ".*/lib/" "" _short_name ${_abs_file} )
+	endif()
+	set( PO_HDR_FILES ${_short_name} ${PO_HDR_FILES} )
+        set( PO_HDR_SOURCES ${PO_HDR_FILES} ${PO_HDR_SOURCES} PARENT_SCOPE)
+        set( PO_HDR_ABS_FILES ${_abs_file} ${PO_HDR_ABS_FILES}  )
+        set( PO_HDR_ABS_SOURCES
+	    ${PO_HDR_ABS_FILES}
+	    ${PO_HDR_ABS_SOURCES} PARENT_SCOPE)
+    endforeach()
+endmacro()
+
+#
 # This function is to be used to link against libstdc++fs on 
 #
 function( set_required_build_settings_for_GCC8 )
