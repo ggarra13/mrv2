@@ -23,8 +23,9 @@ set(LIBRARIES ${FLTK_vk_LIBRARY} ${FLTK_LIBRARIES}
 )
 
 add_library(mrvHDR ${SOURCES} ${HEADERS})
+hdr_files_to_absolute_paths()
 
-files_to_absolute_paths()
+
 target_link_libraries(mrvHDR PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE} )
 set_target_properties(mrvHDR PROPERTIES FOLDER lib)
 

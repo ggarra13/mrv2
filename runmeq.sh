@@ -54,8 +54,6 @@ fi
 
 
 if [[ "$CMAKE_TARGET" == "mo" ]]; then
-
-    clean_mo_files
     
     cd $dir
 

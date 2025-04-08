@@ -100,21 +100,21 @@ class POMissingTranslations:
 
 def find_missing_msgstr(lang):
 
-    main_po = f'src/po/{lang}.po'
-    out_po = f'src/po/{lang}_missing.po'
+    main_po = f'src/po/mrv2/{lang}.po'
+    out_po = f'src/po/mrv2/{lang}_missing.po'
     missing = POMissingTranslations(lang)
     missing.find_missing_msgstr(main_po, out_po)
     
     cwd = os.getcwd()
-    os.chdir('src/python/plug-ins')
+    os.chdir('src/po/mrv2/python/plug-ins')
     plugins = glob.glob('*.py')
     os.chdir(cwd)
     for plugin in plugins:
         code   = plugin[:-3]
         plugin = code + '.po'
         out_po = code + '_missing.po'
-        plugin_po = f'src/po/python/plug-ins/locale/{lang}/LC_MESSAGES/{plugin}'
-        out_po = f'src/po/python/plug-ins/locale/{lang}/LC_MESSAGES/{out_po}'
+        plugin_po = f'src/po/mrv2/python/plug-ins/locale/{lang}/LC_MESSAGES/{plugin}'
+        out_po = f'src/po/mrv2/python/plug-ins/locale/{lang}/LC_MESSAGES/{out_po}'
         missing.find_missing_msgstr(plugin_po, out_po)
 
 
