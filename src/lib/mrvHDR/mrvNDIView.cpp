@@ -734,7 +734,7 @@ namespace mrv
 
                     float R, G, B;
 
-                    float Y_linear = Yf;
+                    const float Y_linear = Yf;
                     // if (p.hasHDR)
                     //     Y_linear = apply_inverse_pq(Yf);
                     // else
@@ -794,7 +794,7 @@ namespace mrv
 
                     float R, G, B;
 
-                    float Y_linear = Yf;
+                    const float Y_linear = Yf;
                     // if (p.hasHDR)
                     //     Y_linear = apply_inverse_pq(Yf);
                     // else
