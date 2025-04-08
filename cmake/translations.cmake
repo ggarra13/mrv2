@@ -88,9 +88,9 @@ function(create_translation_for TARGET SOURCES)
 	
 	set( _moDir "${ROOT_DIR}/share/locale/${lang}/LC_MESSAGES" )
 	set( _moFile "${_moDir}/${TARGET}-v${mrv2_VERSION}.mo" )
-	set( _poDir  "${ROOT_DIR}/${TARGET}/po" )
+	set( _poDir  "${ROOT_DIR}/po/${TARGET}" )
 	set( _poFile "${_poDir}/${lang}.po" )
-	message(STATUS "_poFile=${_poDir}")
+	message(STATUS "_poFile=${_poFile}")
 	message(STATUS "_moFile=${_moFile}")
 
 	if (NOT EXISTS ${_poFile} )
