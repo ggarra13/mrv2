@@ -90,8 +90,6 @@ function(create_translation_for TARGET SOURCES)
 	set( _moFile "${_moDir}/${TARGET}-v${mrv2_VERSION}.mo" )
 	set( _poDir  "${ROOT_DIR}/po/${TARGET}" )
 	set( _poFile "${_poDir}/${lang}.po" )
-	message(STATUS "_poFile=${_poFile}")
-	message(STATUS "_moFile=${_moFile}")
 
 	if (NOT EXISTS ${_poFile} )
 	    message( STATUS "${_poFile} does not exist.  Calling msginit" )
@@ -186,6 +184,13 @@ function(create_translation_for TARGET SOURCES)
 endfunction()
 
 
+create_translation_for(mrv2 "${PO_SOURCES}")
+
+if (MRV2_HDR)
+    message(FATAL_ERROR "PO_HDR_SOURCES=${PO_HDR_SOURCES}")
+    create_translation_for(hdr "${PO_HDR_SOURCES}")
+endif()
+
 set(hdr_pot_target)
 
 if (MRV2_HDR)
@@ -194,28 +199,13 @@ if (MRV2_HDR)
     if(UNIX AND NOT APPLE)
 	set(hdr_pot_depends hdr)
     endif()
-
-    add_custom_target(
-	hdr_pot
-	COMMAND xgettext --package-name=mrv2 --package-version="v${mrv2_VERSION}" --copyright-holder="Contributors to the mrv2 Project" --msgid-bugs-address="ggarra13@gmail.com" -d hdr -c++ -k_ ${PO_HDR_SOURCES} -o "${_absPotFile}"
-	WORKING_DIRECTORY "${ROOT_DIR}/lib"
-	COMMENT Running xgettext for pot target
-	DEPENDS ${hdr_pot_depends}
-    )
     
-endif()
-
-
-create_translation_for(mrv2 "${PO_SOURCES}")
-
-if (MRV2_HDR)
-    create_translation_for(hdr "${PO_HDR_SOURCES}")
 endif()
 
 
 add_custom_target(
     pot
-    DEPENDS ${pot_files} mrv2_pot
+    DEPENDS ${pot_files} mrv2_pot ${hdr_pot_target}
 )
 
 add_custom_target(
@@ -226,5 +216,5 @@ add_custom_target(
 
 add_custom_target(
     mo
-    DEPENDS ${mo_files} po mrv2_pot
+    DEPENDS ${mo_files} po mrv2_pot ${hdr_pot_target}
     )

@@ -6,16 +6,15 @@
 set(FL_SOURCES
     mrvHDRView.fl)
 
-FLTK_WRAP_UI( hdr ${FL_SOURCES} )
+FLTK_WRAP_UI( mrvHDRWidgets ${FL_SOURCES} )
 
 set(HEADERS
-    ${hdr_FLTK_UI_SRCS}
+    ${mrvHDRWidgets_FLTK_UI_SRCS}
 )
 set(SOURCES
-    ${hdr_FLTK_UI_SRCS})
+    ${mrvHDRWidgets_FLTK_UI_SRCS})
 
 hdr_files_to_absolute_paths()
-set( PO_HDR_SOURCES ${PO_HDR_FILES} ${PO_HDR_SOURCES} PARENT_SCOPE)
 
 find_package(Intl REQUIRED)
 

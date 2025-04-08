@@ -17,7 +17,6 @@ set(SOURCES
     main.cpp)
 
 hdr_files_to_absolute_paths()
-set( PO_HDR_SOURCES ${PO_HDR_FILES} ${PO_HDR_SOURCES} PARENT_SCOPE)
 
 find_package(Intl REQUIRED)
 

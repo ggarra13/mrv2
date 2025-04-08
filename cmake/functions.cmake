@@ -445,6 +445,7 @@ macro( hdr_files_to_absolute_paths )
         set( PO_HDR_ABS_SOURCES
 	    ${PO_HDR_ABS_FILES}
 	    ${PO_HDR_ABS_SOURCES} PARENT_SCOPE)
+	message(STATUS "PO_HDR_SOURCES=${PO_HDR_SOURCES}")
     endforeach()
 endmacro()
 
