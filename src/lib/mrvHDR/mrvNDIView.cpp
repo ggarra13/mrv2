@@ -18,12 +18,17 @@
 
 #include <FL/Fl_Vk_Window.H>
 #include <FL/Fl_Vk_Utils.H>
+#include <FL/Fl_Menu_.H>
 
 #include <rapidxml/rapidxml.hpp>
 
 #include <tlDevice/NDI/NDI.h>
 
-#include "mrvHDR/mrvNDIView.h"
+#include "mrvCore/mrvI8N.h"
+#include "mrvHDR/mrvNDICallbacks.h"
+
+#include "hdr/mrvHDRApp.h"
+#include "mrvNDIView.h"
 
 // Must come last due to X11 macros
 #include <FL/platform.H>
@@ -36,6 +41,8 @@ extern "C"
 #include <libplacebo/shaders/colorspace.h>
 #include <libplacebo/shaders.h>
 }
+
+#include "mrvHDRView.h"
 
 namespace
 {
@@ -565,7 +572,8 @@ namespace mrv
         NDIlib_find_instance_t NDI_find = nullptr;
         NDIlib_recv_instance_t NDI_recv = nullptr;
 
-        std::vector<std::string> NDIsources;
+        std::shared_ptr<observer::List<std::string> > NDISources;
+        std::shared_ptr<observer::ListObserver<std::string> > NDISourcesObserver;
         std::string currentNDISource;
 
         bool init = false;
@@ -734,7 +742,7 @@ namespace mrv
 
                     float R, G, B;
 
-                    float Y_linear = Yf;
+                    const float Y_linear = Yf;
                     // if (p.hasHDR)
                     //     Y_linear = apply_inverse_pq(Yf);
                     // else
@@ -794,7 +802,7 @@ namespace mrv
 
                     float R, G, B;
 
-                    float Y_linear = Yf;
+                    const float Y_linear = Yf;
                     // if (p.hasHDR)
                     //     Y_linear = apply_inverse_pq(Yf);
                     // else
@@ -1496,6 +1504,20 @@ void main() {
 
         p.placeboData.reset(new LibPlaceboData);
 
+        p.NDISources = observer::List<std::string>::create();
+            
+        p.NDISourcesObserver = 
+            observer::ListObserver<std::string>::create(
+                this->observeNDISources(),
+                [this](const std::vector<std::string>& sources)
+                    {
+                        TLRENDER_P();
+
+                        fill_menu_bar(HDRApp::ui->uiMenuBar);
+                    },
+                observer::CallbackAction::Suppress
+                );
+            
         p.findThread.running = true;
         p.findThread.thread = std::thread(
             [this]
@@ -1509,6 +1531,12 @@ void main() {
                     std::cerr << e.what() << std::endl;
                 }
             });
+    }
+
+    std::shared_ptr<observer::IList<std::string> >
+    NDIView::observeNDISources() const
+    {
+        return _p->NDISources;
     }
 
     void NDIView::_startThreads()
@@ -1805,16 +1833,6 @@ void main() {
                                     if (attr_primaries)
                                         p.primariesName =
                                             attr_primaries->value();
-
-                                    // std::cerr << "primaries="
-                                    //           << p.primariesName
-                                    //           << std::endl;
-                                    // std::cerr << "transferName="
-                                    //           << p.transferName
-                                    //           << std::endl;
-                                    // std::cerr << "matrixName="
-                                    //           << p.matrixName
-                                    //           << std::endl;
                                 }
 
                                 if (p.hdrData != hdrData)
@@ -1916,7 +1934,6 @@ void main() {
             uint32_t no_sources = 0;
 
             std::unique_lock lock(p.findMutex.mutex);
-            p.NDIsources.clear();
 
             // Get the updated list of sources
             while (!no_sources)
@@ -1927,23 +1944,20 @@ void main() {
 
             static std::regex kRemoteRegex(
                 ".*REMOTE.*", std::regex_constants::icase);
+            
+            std::vector<std::string> NDIsources;
             for (int i = 0; i < no_sources; ++i)
             {
                 if (std::regex_match(sources[i].p_ndi_name, kRemoteRegex))
                     continue;
-                p.NDIsources.push_back(sources[i].p_ndi_name);
+                NDIsources.push_back(sources[i].p_ndi_name);
             }
 
-            if (!p.NDIsources.empty())
+            p.NDISources->setIfChanged(NDIsources);
+            
+            if (NDIsources.size() == 1)
             {
-                std::string oldSource = p.currentNDISource;
-                p.currentNDISource = p.NDIsources[0];
-
-                if (p.currentNDISource != oldSource)
-                {
-                    _exitThreads();
-                    _startThreads();
-                }
+                setNDISource(NDIsources[0]);
             }
         }
     }
@@ -2002,8 +2016,7 @@ void main() {
         memset(&cmap, 0, sizeof(pl_color_map_params));
 
         // defaults, generates LUTs if state is set.
-        cmap.gamut_mapping = &pl_gamut_map_perceptual; // this crashes
-        // cmap.gamut_mapping = nullptr;  // this works
+        cmap.gamut_mapping = &pl_gamut_map_perceptual;
 
         // PL_GAMUT_MAP_CONSTANTS is defined in wrong order for C++
         cmap.gamut_constants = {0};
@@ -2046,7 +2059,9 @@ void main() {
             src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
             src_colorspace.transfer = PL_COLOR_TRC_PQ;
             if (p.transferName == "bt_2100_hlg")
+            {
                 src_colorspace.transfer = PL_COLOR_TRC_HLG;
+            }
             cmap.metadata = PL_HDR_METADATA_ANY;
             pl_hdr_metadata& hdr = src_colorspace.hdr;
             hdr.min_luma = data.displayMasteringLuminance.getMin();
@@ -2165,11 +2180,11 @@ void main() {
         // s << "#define textureLod(t, p, b) texture(t, p)" << std::endl
         //   << std::endl;
 
-        std::cerr << "num_vertex_attribs=" << res->num_vertex_attribs
-                  << std::endl
-                  << "num_descriptors=" << res->num_descriptors << std::endl
-                  << "num_variables=" << res->num_variables << std::endl
-                  << "num_constants=" << res->num_constants << std::endl;
+        // std::cerr << "num_vertex_attribs=" << res->num_vertex_attribs
+        //           << std::endl
+        //           << "num_descriptors=" << res->num_descriptors << std::endl
+        //           << "num_variables=" << res->num_variables << std::endl
+        //           << "num_constants=" << res->num_constants << std::endl;
 
         for (int i = 0; i < res->num_descriptors; i++)
         {
@@ -2363,4 +2378,37 @@ void main() {
         pl_shader_free(&shader);
     }
 
+    void NDIView::setNDISource(const std::string& source)
+    {
+        TLRENDER_P();
+
+        if (p.currentNDISource != source)
+        {
+            std::cerr << "Changing source to " << source << std::endl;
+            p.currentNDISource = source;
+            
+            _exitThreads();
+            _startThreads();
+        }
+    }
+        
+    void NDIView::fill_menu_bar(Fl_Menu_* menu)
+    {
+        TLRENDER_P();
+        
+        HDRUI* ui = HDRApp::ui;
+        
+        menu->clear();
+        const auto& sources = p.NDISources->get();
+        for (auto& source : sources)
+        {
+            std::string entry = _("Connection/");
+            entry += source;
+            menu->add(entry.c_str(), 0,
+                      (Fl_Callback*) select_ndi_source_cb, ui);
+        }
+        menu->menu_end();
+        menu->redraw();
+    }
+    
 } // namespace mrv

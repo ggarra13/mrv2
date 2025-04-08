@@ -19,13 +19,15 @@
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvRoot.h"
 
+#include "hdr/mrvContextObject.h"
 #include "hdr/mrvHDRApp.h"
-#include "mrvHDRView.h"
 
 namespace
 {
     const char* kModule = "main";
 } // namespace
+
+#include "mrvHDRView.h"
 
 namespace mrv
 {
@@ -50,6 +52,7 @@ namespace mrv
     struct HDRApp::Private
     {
         Options options;
+        ContextObject* contextObject = nullptr;
 
         float volume = 1.F;
         bool mute = false;
@@ -152,6 +155,9 @@ namespace mrv
         Fl::set_fonts("-*");
         Fl::lock(); // needed for NDI and multithreaded logging
 
+        // Create the context object
+        p.contextObject = new ContextObject(context);
+        
         // Create the Settings
         // p.settings = new SettingsObject();
 
@@ -185,6 +191,10 @@ namespace mrv
     void HDRApp::_cleanResources()
     {
         TLRENDER_P();
+
+        delete p.contextObject;
+        p.contextObject = nullptr;
+        
         delete ui;
         ui = nullptr;
         

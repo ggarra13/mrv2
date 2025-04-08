@@ -14,12 +14,16 @@
 //     https://www.fltk.org/bugs.php
 //
 
+#pragma once
+
 #include <memory>
 
 #include <half.h>
 
 #include <tlCore/Util.h>
+#include <tlCore/ListObserver.h>
 
+class Fl_Menu_;
 #include <FL/Fl_Vk_Window.H>
 
 struct pl_shader_res;
@@ -36,13 +40,6 @@ namespace mrv
 {
     using namespace tl;
 
-    struct TextureUploadResources
-    {
-        VkBuffer stagingBuffer;
-        VkDeviceMemory stagingBufferMemory;
-        VkFence fence; // To track completion
-    };
-
     class NDIView : public Fl_Vk_Window
     {
         void vk_draw_begin() FL_OVERRIDE;
@@ -53,8 +50,17 @@ namespace mrv
         NDIView(int w, int h, const char* l = 0);
         virtual ~NDIView();
 
+        //! Observe the NDI sources
+        std::shared_ptr<observer::IList<std::string> >
+        observeNDISources() const;
+
+        //! Set a new NDI Source
+        void setNDISource(const std::string&);
+
+        
         void prepare() FL_OVERRIDE;
         void destroy_resources() FL_OVERRIDE;
+        
         std::vector<const char*> get_required_extensions() FL_OVERRIDE;
         std::vector<const char*> get_optional_extensions() FL_OVERRIDE;
         std::vector<const char*> get_device_extensions() FL_OVERRIDE;
@@ -89,6 +95,8 @@ namespace mrv
         void _findThread();
         void _videoThread();
         void _audioThread();
+
+        void fill_menu_bar(Fl_Menu_*);
 
         VkShaderModule prepare_vs();
         VkShaderModule prepare_fs();

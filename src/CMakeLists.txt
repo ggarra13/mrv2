@@ -226,6 +226,7 @@ add_definitions(
 # Directory of generated .cxx/.h built from .fl files
 set( mrv2_FLUID_INCLUDE_DIR
     ${CMAKE_CURRENT_BINARY_DIR}/lib/mrvWidgets
+    ${CMAKE_CURRENT_BINARY_DIR}/lib/mrvHDRWidgets
 )
 
 #
