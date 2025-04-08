@@ -20,10 +20,6 @@ function(create_translation_for TARGET SOURCES)
     file( MAKE_DIRECTORY "${ROOT_DIR}/po/${TARGET}" )
     set( _absPotFile "${ROOT_DIR}/po/${TARGET}/messages.pot" )
 
-    set( pot_files )
-    set( po_files )
-    set( mo_files )
-
 
     #
     # Get all python plug-ins and create output directory for python .pot files
@@ -184,10 +180,14 @@ function(create_translation_for TARGET SOURCES)
 endfunction()
 
 
+
+set( pot_files )
+set( po_files )
+set( mo_files )
+    
 create_translation_for(mrv2 "${PO_SOURCES}")
 
 if (MRV2_HDR)
-    message(FATAL_ERROR "PO_HDR_SOURCES=${PO_HDR_SOURCES}")
     create_translation_for(hdr "${PO_HDR_SOURCES}")
 endif()
 

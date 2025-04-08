@@ -305,6 +305,12 @@ install( DIRECTORY python/plug-ins/demos
 set( PO_SOURCES )
 set( PO_ABS_SOURCES )
 
+#
+#
+#
+set( PO_HDR_SOURCES )
+set( PO_HDR_ABS_SOURCES )
+
 # Retrieve the current Git branch name
 execute_process(
     COMMAND git rev-parse --abbrev-ref HEAD
