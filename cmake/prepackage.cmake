@@ -315,6 +315,17 @@ if (APPLE)
 	endforeach()
     endfunction()
 	
+    function(copy_mo_files TARGET)
+	file(GLOB _langs "${CPACK_PREPACKAGE}/share/locale/*")
+	foreach( _fulldir ${_langs} )
+	    string(REGEX REPLACE ".*/locale/" "" _lang ${_fulldir})
+	    set(_langdir share/locale/${_lang}/LC_MESSAGES)
+	    file(MAKE_DIRECTORY ${CPACK_PREPACKAGE}/${TARGET}.app/Contents/Resources/${_langdir}/)
+	    file(COPY ${CPACK_PREPACKAGE}/${_langdir}/${TARGET}-v${mrv2_VERSION}.mo
+		DESTINATION ${CPACK_PREPACKAGE}/${TARGET}.app/Contents/Resources/${_langdir})
+	endforeach()
+    endfunction()
+    
     file(COPY ${CPACK_PREPACKAGE}/bin/mrv2.sh
 	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources/bin)
     file(COPY ${CPACK_PREPACKAGE}/bin/mrv2
@@ -353,8 +364,11 @@ if (APPLE)
 	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
     file(COPY ${CPACK_PREPACKAGE}/python
 	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
-    file(COPY ${CPACK_PREPACKAGE}/share
-	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
+
+    copy_mo_files(mrv2)
+	
+    # file(COPY ${CPACK_PREPACKAGE}/share
+    # 	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
 
     #
     # Pre-pare hdr.app if present
@@ -575,6 +589,7 @@ if (APPLE)
 	file(COPY ${CPACK_PREPACKAGE}/bin/environment.sh
 	    DESTINATION ${CPACK_PREPACKAGE}/hdr.app/Contents/Resources/bin)
 
+
 	#
 	# Common libraries
 	#
@@ -584,9 +599,6 @@ if (APPLE)
 	install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/libndi*")
 	install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/libplacebo*")
 	install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/libz*")
-	
-	# install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/libpng*")
-	# install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/png.framework*")
 
 	# Vulkan libraries For Apple Silicon or Intel machines
 	set(VULKAN_SDK $ENV{VULKAN_SDK})
@@ -596,6 +608,8 @@ if (APPLE)
 	
 	install_vulkan_icd_filenames(hdr)
 	# install_vulkan_layers(hdr)
+	
+	copy_mo_files(hdr)
     endif()
     
     #

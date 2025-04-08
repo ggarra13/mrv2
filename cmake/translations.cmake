@@ -93,7 +93,8 @@ function(create_translation_for TARGET SOURCES)
 		msginit --input=${_absPotFile} --no-translator --locale=${lang} --output=${_poFile} )
 	endif()
 
-	list(APPEND mo_files ${_moFile} )
+	list(APPEND mo_files ${_moFile})
+	list(APPEND po_files ${_poFile})
 
 	#
 	# We remove the mo dir as we version the .mo files, so we don't want to
@@ -153,9 +154,9 @@ function(create_translation_for TARGET SOURCES)
 		    COMMENT "Creating ${_moFile}"
 		)
 		
-		list(APPEND pot_files ${_potFile} )
-		list(APPEND po_files ${_poFile} )
-		list(APPEND mo_files ${_moFile} )
+		list(APPEND pot_files ${_potFile})
+		list(APPEND po_files ${_poFile})
+		list(APPEND mo_files ${_moFile})
 	    endforeach()
 	endif()
     endforeach()
@@ -177,6 +178,14 @@ function(create_translation_for TARGET SOURCES)
 	COMMENT Running xgettext for pot target
 	DEPENDS ${_abspot_dep}
     )
+
+    #
+    # Send the variables to the PARENT_SCOPE (ie. outside the function)
+    #
+    set(pot_files ${pot_files} PARENT_SCOPE)
+    set(po_files ${po_files} PARENT_SCOPE)
+    set(mo_files ${mo_files} PARENT_SCOPE)
+    
 endfunction()
 
 
