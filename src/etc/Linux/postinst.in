@@ -89,6 +89,8 @@ for i in $ICON_SIZES; do
     echo "   Installing icon size ${i}x${i}"
     cp ${sharedir}/icons/hicolor/${i}x${i}/apps/mrv2.png /usr/share/icons/hicolor/${i}x${i}/apps/mrv2-v@mrv2_VERSION@.png
     cp ${sharedir}/icons/hicolor/${i}x${i}/apps/mrv2.png /usr/share/icons/hicolor/${i}x${i}/apps/mrv2.png
+    cp ${sharedir}/icons/hicolor/${i}x${i}/apps/hdr.png /usr/share/icons/hicolor/${i}x${i}/apps/hdr-v@mrv2_VERSION@.png
+    cp ${sharedir}/icons/hicolor/${i}x${i}/apps/hdr.png /usr/share/icons/hicolor/${i}x${i}/apps/hdr.png
 done
 
 copy_desktop_shortcut()

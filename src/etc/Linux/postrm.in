@@ -16,7 +16,7 @@ if [[ -L /usr/bin/mrv2 ]]; then
     if [ "$fullpath" == "$installpath" ]; then
 	echo "Removing symlink from /usr/bin/mrv2"
 	rm -f /usr/bin/mrv2
-	if [[ $has_hdr ]]; then
+	if [[ $has_hdr == 1 ]]; then
 	    rm -f /usr/bin/hdr
 	fi
 	removed=1
@@ -40,7 +40,7 @@ if [[ -n "$closest_version" && $removed == 1 ]]; then
     # Create a new symbolic link pointing to the closest version
     ln -s "/usr/local/$closest_version/bin/mrv2.sh" "/usr/bin/mrv2"
     echo "Created a new symbolic link: $closest_version -> /usr/bin/mrv2"
-    if [[ $has_hdr ]]; then
+    if [[ $has_hdr == 1 ]]; then
 	ln -s "/usr/local/$closest_version/bin/hdr.sh" "/usr/bin/hdr"
 	echo "Created a new symbolic link: $closest_version -> /usr/bin/hdr"
     fi
@@ -49,7 +49,7 @@ else
 	echo "No suitable version found to create a symbolic link."
 	echo "Removing /usr/share/applications/mrv2.desktop and mrv2.png"
 	rm -f /usr/share/applications/mrv2.desktop
-	if [[ $has_hdr ]]; then
+	if [[ $has_hdr == 1 ]]; then
 	    rm -f /usr/share/applications/hdr.desktop
 	fi
 	
@@ -59,7 +59,7 @@ else
 	for i in $ICON_SIZES; do
 	    icons_dir=${sharedir}/icons/hicolor/${i}x${i}/apps/
 	    rm -f $icons_dir/mrv2.png
-	    if [[ $has_hdr ]]; then
+	    if [[ $has_hdr == 1 ]]; then
 		rm -f $icons_dir/hdr.png
 	    fi
 	done
@@ -94,8 +94,8 @@ appdir=${sharedir}/applications
 for i in $ICON_SIZES; do
     icons_dir=${sharedir}/icons/hicolor/${i}x${i}/apps/
     rm $icons_dir/mrv2-v@mrv2_VERSION@.png
-    if [[ $has_hdr ]]; then
-	rm $icons_dir/hdr-v@mrv2_VERSION@.png
+    if [[ $has_hdr == 1 ]]; then
+	rm -f $icons_dir/hdr-v@mrv2_VERSION@.png
     fi
 done
 
@@ -104,7 +104,7 @@ done
 #
 rm -f ${appdir}/mrv2-v@mrv2_VERSION@.desktop
 
-if [[ $has_hdr ]]; then
+if [[ $has_hdr == 1 ]]; then
     rm -f ${appdir}/hdr-v@mrv2_VERSION@.desktop
 fi
 
