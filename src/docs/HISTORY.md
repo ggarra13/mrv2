@@ -1,21 +1,16 @@
 v1.3.7
 ======
 
-- Fixed Ghost Previous and Ghost Next not being in sync on the Secondary 
-  viewport.
-- Made stepping with Next Annotation and Previous Annotation loop once they 
-  reach the final and first annotation respectively.
-- Fixed opening Secondary Window not displaying the video when the video was
-  stopped.
-- Fixed Render->Minify Filter and Render->Magnify Filter toggling from the
-  menu entries (Shift + F was working fine).
+- Fixed Ghost Previous and Ghost Next not being in sync on the Secondary viewport.
+- Made stepping with Next Annotation and Previous Annotation loop once they reach the final and first annotation respectively.
+- Fixed opening Secondary Window not displaying the video when the video was stopped.
+- Fixed Render->Minify Filter and Render->Magnify Filter toggling from the menu entries (Shift + F was working fine).
 - Fixed Render->Minify and Magnify filter toggling.
 - Fixed Render->Minify and Magnify saving in preferences.
 - Added full support for Japanese language in the UI.
 - Fixed some warnings when starting mrv2 with PYTHONHOME set on Linux.
 - Removed the "export FLTK_BACKEND=x11" line as Wayland now is mature enough.
-- Fixed tonemapping not turning off when switching from an HDR movie to aces
-  SDR one.
+- Fixed tonemapping not turning off when switching from an HDR movie to aces SDR one.
 - Fixed playing movies that have frames of 0 duration.
 - Added Preferences->Render->HDR to control chromaticities and tonemapping.
 - Fixed tags not getting saved when using save image or save movie.
@@ -23,16 +18,16 @@ v1.3.7
 - Fixed OpenEXR saving when channel count was different than 4.
 - Added the option in the Save Image Options for OpenEXR to allow saving the Data Window or flatten the image to save the full Display Window.
 - Updated build to work with CMake 4.0.
-- Added Playback->Annotation->Toggle Visible to toggle on or off the annotations
-  without deleting them.
+- Added Playback->Annotation->Toggle Visible to toggle on or off the annotation without deleting them.
 - Fixed a crash when saving a movie file and the container did not support it and the file was already present.
 - Removed non-existant YUV440" pixel format from VP9.
 - Revamped macOS install to support installing multiple applications.
 - Updated ZLIB to v1.3.1.
 - Made PNG link statically to avoid macOS issues.
 - Updated Poco to 1.14.1.
-- Added hotkey to toggle OCIO on and off.  By default, it is Alt + p (mnemonic
-  pass through).
+- Added hotkey to toggle OCIO on and off.  By default, it is Alt + p (mnemonic pass through).
+- Added hotkey entry for Compare None.  It was already present, but missing from Hotkey listing.  It is not set to any hotkey by default.
+- Added a (currently in beta) hdr tool, to show the content of mrv2's viewport in full HDR (High Dynammic Range) by using the NDI Output's Best Format.  The way it works is that you stream your video through mrv2's NDI output and watch it in the hdr tool which works with Vulkan.  It is primarily made to wotk locally, albeit it can also work across the network.  NOTE: it has been tested only on masOS Intel and it is currently not available on macOS arm64.  LIMITATIONS:  it works well for FullHD content albeit 4K content tends to lag and it is mostly useful for single frames.
 
   
 v1.3.6

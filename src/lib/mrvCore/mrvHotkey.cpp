@@ -419,6 +419,7 @@ namespace mrv
         HotkeyEntry(_("Toggle HDR tonemap"), &kToggleHDRTonemap),
         HotkeyEntry(_("Display Window"), &kDisplayWindow),
         HotkeyEntry(_("Data Window"), &kDataWindow),
+        HotkeyEntry(_("Compare None"), &kCompareNone),
         HotkeyEntry(_("Compare Wipe"), &kCompareWipe),
         HotkeyEntry(_("Compare Overlay"), &kCompareOverlay),
         HotkeyEntry(_("Compare Difference"), &kCompareDifference),

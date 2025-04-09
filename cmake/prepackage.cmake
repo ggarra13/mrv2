@@ -365,11 +365,11 @@ if (APPLE)
     file(COPY ${CPACK_PREPACKAGE}/python
 	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
 
+    #
+    # Install .mo translation files
+    #
     copy_mo_files(mrv2)
-	
-    # file(COPY ${CPACK_PREPACKAGE}/share
-    # 	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
-
+    
     #
     # Pre-pare hdr.app if present
     #
@@ -608,7 +608,10 @@ if (APPLE)
 	
 	install_vulkan_icd_filenames(hdr)
 	# install_vulkan_layers(hdr)
-	
+
+	#
+	# Install .mo translation files
+	#
 	copy_mo_files(hdr)
     endif()
     
