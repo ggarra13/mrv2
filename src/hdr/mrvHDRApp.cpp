@@ -2,16 +2,6 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <FL/platform.H>
-#include <FL/filename.H>
-#include <FL/fl_ask.H>
-#include <FL/Fl.H>
-
-#ifdef __linux__
-#    undef None // macro defined in X11 config files
-#    undef Status
-#endif
-
 #include <tlIO/System.h>
 
 #include <tlDevice/NDI/NDI.h>
@@ -22,12 +12,22 @@
 #include "hdr/mrvContextObject.h"
 #include "hdr/mrvHDRApp.h"
 
+#include <FL/platform.H>
+#include <FL/filename.H>
+#include <FL/fl_ask.H>
+#include <FL/Fl.H>
+
+#ifdef __linux__
+#    undef None // macro defined in X11 config files
+#    undef Status
+#endif
+
+#include "mrvHDRView.h"
+
 namespace
 {
     const char* kModule = "main";
 } // namespace
-
-#include "mrvHDRView.h"
 
 namespace mrv
 {
@@ -140,13 +140,14 @@ namespace mrv
         // Not required, but "correct" (see the SDK documentation).
         if (!NDIlib_initialize())
         {
-            // Cannot run NDI. Most likely because the CPU is not sufficient (see SDK documentation).
-            // you can check this directly with a call to NDIlib_is_supported_CPU()
+            // Cannot run NDI. Most likely because the CPU is not sufficient
+            // (see SDK documentation). you can check this directly with a call
+            // to NDIlib_is_supported_CPU()
             std::cerr << "Cannot run NDI." << std::endl;
             _exit = -1;
             return;
         }
-    
+
         // Initialize FLTK.
         Fl::scheme("gtk+");
         Fl::option(Fl::OPTION_VISIBLE_FOCUS, false);
@@ -157,7 +158,7 @@ namespace mrv
 
         // Create the context object
         p.contextObject = new ContextObject(context);
-        
+
         // Create the Settings
         // p.settings = new SettingsObject();
 
@@ -194,10 +195,10 @@ namespace mrv
 
         delete p.contextObject;
         p.contextObject = nullptr;
-        
+
         delete ui;
         ui = nullptr;
-        
+
         // Not required, but nice
         NDIlib_destroy();
     }
@@ -230,12 +231,12 @@ namespace mrv
         if (!ui)
             return 0;
 
-        while(ui->uiMain->shown())
+        while (ui->uiMain->shown())
         {
             Fl::check();
         }
         return 0;
-//        return Fl::run();
+        //        return Fl::run();
     }
 
     void HDRApp::setVolume(float value)

@@ -28,8 +28,8 @@ endif()
 
 set(LIBRARIES
     mrvBaseApp
-    mrvHDR
     mrvHDRWidgets
+    mrvHDR
     ${Intl_LIBRARIES})
 
 if (WIN32)

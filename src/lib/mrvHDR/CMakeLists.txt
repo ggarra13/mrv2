@@ -19,6 +19,7 @@ find_package(NDI REQUIRED)
 set(LIBRARIES ${FLTK_vk_LIBRARY} ${FLTK_LIBRARIES} 
     libplacebo
     NDI
+    mrvHDRWidgets
     ${Intl_LIBRARIES}
 )
 

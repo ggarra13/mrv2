@@ -1,5 +1,7 @@
+#pragma once
 
 class HDRUI;
+class Fl_Menu_;
 
 namespace mrv
 {

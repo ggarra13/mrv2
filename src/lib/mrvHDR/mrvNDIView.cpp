@@ -16,10 +16,6 @@
 #include <tlCore/HDR.h>
 #include <tlCore/StringFormat.h>
 
-#include <FL/Fl_Vk_Window.H>
-#include <FL/Fl_Vk_Utils.H>
-#include <FL/Fl_Menu_.H>
-
 #include <rapidxml/rapidxml.hpp>
 
 #include <tlDevice/NDI/NDI.h>
@@ -30,11 +26,6 @@
 #include "hdr/mrvHDRApp.h"
 #include "mrvNDIView.h"
 
-// Must come last due to X11 macros
-#include <FL/platform.H>
-#include <FL/vk.h>
-#include <FL/Fl.H>
-
 extern "C"
 {
 #include <libplacebo/dummy.h>
@@ -43,6 +34,18 @@ extern "C"
 }
 
 #include "mrvHDRView.h"
+
+// Must come last due to X11 macros
+#include <FL/platform.H>
+#include <FL/vk.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Vk_Window.H>
+#include <FL/Fl_Vk_Utils.H>
+#include <FL/Fl_Menu_.H>
+#ifdef __linux__
+#    undef None // macro defined in X11 config files
+#    undef Status
+#endif
 
 namespace
 {
@@ -573,7 +576,8 @@ namespace mrv
         NDIlib_recv_instance_t NDI_recv = nullptr;
 
         std::shared_ptr<observer::List<std::string> > NDISources;
-        std::shared_ptr<observer::ListObserver<std::string> > NDISourcesObserver;
+        std::shared_ptr<observer::ListObserver<std::string> >
+            NDISourcesObserver;
         std::string currentNDISource;
 
         bool init = false;
@@ -1505,19 +1509,17 @@ void main() {
         p.placeboData.reset(new LibPlaceboData);
 
         p.NDISources = observer::List<std::string>::create();
-            
-        p.NDISourcesObserver = 
-            observer::ListObserver<std::string>::create(
-                this->observeNDISources(),
-                [this](const std::vector<std::string>& sources)
-                    {
-                        TLRENDER_P();
 
-                        fill_menu_bar(HDRApp::ui->uiMenuBar);
-                    },
-                observer::CallbackAction::Suppress
-                );
-            
+        p.NDISourcesObserver = observer::ListObserver<std::string>::create(
+            this->observeNDISources(),
+            [this](const std::vector<std::string>& sources)
+            {
+                TLRENDER_P();
+
+                fill_menu_bar(HDRApp::ui->uiMenuBar);
+            },
+            observer::CallbackAction::Suppress);
+
         p.findThread.running = true;
         p.findThread.thread = std::thread(
             [this]
@@ -1944,7 +1946,7 @@ void main() {
 
             static std::regex kRemoteRegex(
                 ".*REMOTE.*", std::regex_constants::icase);
-            
+
             std::vector<std::string> NDIsources;
             for (int i = 0; i < no_sources; ++i)
             {
@@ -1954,7 +1956,7 @@ void main() {
             }
 
             p.NDISources->setIfChanged(NDIsources);
-            
+
             if (NDIsources.size() == 1)
             {
                 setNDISource(NDIsources[0]);
@@ -2386,29 +2388,28 @@ void main() {
         {
             std::cerr << "Changing source to " << source << std::endl;
             p.currentNDISource = source;
-            
+
             _exitThreads();
             _startThreads();
         }
     }
-        
+
     void NDIView::fill_menu_bar(Fl_Menu_* menu)
     {
         TLRENDER_P();
-        
+
         HDRUI* ui = HDRApp::ui;
-        
+
         menu->clear();
         const auto& sources = p.NDISources->get();
         for (auto& source : sources)
         {
             std::string entry = _("Connection/");
             entry += source;
-            menu->add(entry.c_str(), 0,
-                      (Fl_Callback*) select_ndi_source_cb, ui);
+            menu->add(entry.c_str(), 0, (Fl_Callback*)select_ndi_source_cb, ui);
         }
         menu->menu_end();
         menu->redraw();
     }
-    
+
 } // namespace mrv
