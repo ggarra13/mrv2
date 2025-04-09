@@ -167,15 +167,15 @@ function(create_translation_for TARGET SOURCES)
     # lead to lots of .pot commits.
     #
     set(_abspot_dep )
+    set(_pot_target ${TARGET}_pot)
     if(UNIX AND NOT APPLE)
-	set(${TARGET}_pot_depends ${TARGET})
 	set(_abspot_dep ${TARGET}_pot_depends )
     endif()
     add_custom_target(
-	${TARGET}_pot
+	${_pot_target}
 	COMMAND xgettext --package-name=${TARGET} --package-version="v${mrv2_VERSION}" --copyright-holder="Contributors to the mrv2 Project" --msgid-bugs-address="ggarra13@gmail.com" -d ${TARGET} -c++ -k_ ${SOURCES} -o "${_absPotFile}"
 	WORKING_DIRECTORY "${ROOT_DIR}/lib"
-	COMMENT Running xgettext for pot target
+	COMMENT Running xgettext for ${TARGET}_pot target
 	DEPENDS ${_abspot_dep}
     )
 
@@ -196,20 +196,12 @@ set( mo_files )
     
 create_translation_for(mrv2 "${PO_SOURCES}")
 
+set(hdr_pot_target)
 if (MRV2_HDR)
     create_translation_for(hdr "${PO_HDR_SOURCES}")
-endif()
-
-set(hdr_pot_target)
-
-if (MRV2_HDR)
     set(hdr_pot_target hdr_pot)
-    set(hdr_pot_depends )
-    if(UNIX AND NOT APPLE)
-	set(hdr_pot_depends hdr)
-    endif()
-    
 endif()
+
 
 
 add_custom_target(
