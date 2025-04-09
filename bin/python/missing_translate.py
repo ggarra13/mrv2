@@ -83,17 +83,28 @@ def search_languages(langs):
         print("=================== Translate to", lang, "====================")
 
         #
+        # Handle the main hdr .po files
+        #
+        root = "src/po/hdr"
+        hdr_po = os.path.join(root, lang + ".po")
+        
+        #
         # Handle the main mrv2 .po files
         #
-        root = "src/po"
+        root = "src/po/mrv2"
         mrv2_po = os.path.join(root, lang + ".po")
-        po_files = [mrv2_po]
+
+        #
+        # Check them
+        #
+        po_files = [mrv2_po, hdr_po]
+        
 
 
         #
         # Get list of plugins and their basenames
         #
-        plugin_dir = 'src/python/plug-ins'
+        plugin_dir = 'src/po/mrv2/python/plug-ins'
         plugins = glob.glob(os.path.join(plugin_dir, "*.py"))
         basenames = [os.path.basename(os.path.splitext(f)[0]) for f in plugins]
         

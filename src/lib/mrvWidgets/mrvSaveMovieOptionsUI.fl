@@ -25,10 +25,10 @@ decl {\#include "tlCore/String.h"} {public global
 decl {\#include "mrvCore/mrvI8N.h"} {public global
 }
 
-decl {\#include "mrvCore/mrvHome.h"} {public global
+decl {\#include "mrvCore/mrvHome.h"} {selected public global
 }
 
-decl {\#include "mrvApp/mrvSettingsObject.h"} {public global
+decl {\#include "mrvApp/mrvSettingsObject.h"} {selected public global
 }
 
 decl {\#include "mrViewer.h"} {public global
@@ -457,7 +457,8 @@ uiMain->show();
 while (uiMain->visible())
   Fl::check();} {}
   }
-  Function {help_profile_cb()} {} {
+  Function {help_profile_cb()} {open
+  } {
     code {uiHelpWindow->label(_("Profile Help"));
 auto buffer = uiHelp->buffer();
 buffer->text(_(R"(
@@ -577,8 +578,7 @@ options.
 )"));
 uiHelpWindow->show();} {}
   }
-  Function {help_advanced_settings_cb()} {open
-  } {
+  Function {help_advanced_settings_cb()} {} {
     code {uiHelpWindow->label(_("Advanced Settings Help"));
 auto buffer = uiHelp->buffer();
 buffer->text(_(R"(
@@ -656,8 +656,7 @@ v->add("YUV_420P_10LE");
 v->add("YUV_422P_10LE");
 v->add("YUV_444P_10LE");} {}
   }
-  Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {open
-  } {
+  Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {} {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
 if (!item || !item->label()) return;
 
@@ -717,6 +716,32 @@ else if (codec == "ProRes_4444")
    }
 \#endif
 }
+else if (codec == "DNxHD")
+{      
+   v->add("YUV_422P");
+   v->add("YUV_422P_10LE");
+}
+else if (codec == "DNxHR_LB")
+{      
+   v->add("YUV_422P");
+}
+else if (codec == "DNxHR_SQ")
+{      
+   v->add("YUV_422P");
+}
+else if (codec == "DNxHR_HQ")
+{      
+   v->add("YUV_422P");
+}
+else if (codec == "DNxHR_HQX")
+{      
+   v->add("YUV_422P_10LE");
+}
+else if (codec == "DNxHR_444")
+{      
+   v->add("YUV_444P_10LE");
+   v->add("GBRP_10LE");
+}
 else if (codec == "VP9")
 { 
    v->add("YUV_420P");
@@ -772,10 +797,10 @@ if (v->size() > 0)
         }
     }
     v->value(0);
-}} {selected
-    }
+}} {}
   }
-  Function {add_presets(Fl_Choice* o, Fl_Choice* v)} {} {
+  Function {add_presets(Fl_Choice* o, Fl_Choice* v)} {open
+  } {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
 if (!item || !item->label()) return;
 

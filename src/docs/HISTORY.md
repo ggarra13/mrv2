@@ -28,6 +28,8 @@ v1.3.7
 - Added hotkey to toggle OCIO on and off.  By default, it is Alt + p (mnemonic pass through).
 - Added hotkey entry for Compare None.  It was already present, but missing from Hotkey listing.  It is not set to any hotkey by default.
 - Added a (currently in beta) hdr tool, to show the content of mrv2's viewport in full HDR (High Dynammic Range) by using the NDI Output's Best Format.  The way it works is that you stream your video through mrv2's NDI output and watch it in the hdr tool which works with Vulkan.  It is primarily made to wotk locally, albeit it can also work across the network.  NOTE: it has been tested only on masOS Intel and it is currently not available on macOS arm64.  LIMITATIONS:  it works well for FullHD content albeit 4K content tends to lag and it is mostly useful for single frames.
+- Fixed the Windows uninstaller not deleting the hard-links it created.
+- Added support for writing out DNxHD and DNxHR (needs documenting, but they are similar to ProRes). 
 
   
 v1.3.6

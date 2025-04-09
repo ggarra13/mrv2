@@ -16,7 +16,15 @@ Var bUnCheckAll
 
 Page Custom LVPageCreate LVPageLeave
 
-
+Function Log
+  Exch $0 ; Get message from stack
+  Push $1
+  StrCpy $1 "$INSTDIR\install_log.txt"
+  FileOpen $1 $1 "a"
+  FileWrite $1 "$0$\r$\n"
+  FileClose $1
+  Pop $1
+FunctionEnd
 
 
 Function AddCheckedListViewItemWith1SubItem
@@ -138,14 +146,28 @@ Delete '$LOCALAPPDATA\IconCache.db'
 Call DeleteIconCacheFiles
 
 ;
-; Create link to .exe
+; Create link to the .exe's
 ;
 ${CreateLinkFile} "$INSTDIR\bin\${mrv2_KEY}" "$INSTDIR\bin\${mrv2_EXE}" "$bCheckAll"
+${CreateLinkFile} "$INSTDIR\bin\${hdr_KEY}" "$INSTDIR\bin\${hdr_EXE}" "$bCheckAll"
 
 ;
 ; Open Firewall
 ;
-nsExec::Exec 'netsh advfirewall firewall add rule name="${mrv2_KEY}" dir=in action=allow program="$INSTDIR\bin\${mrv2_EXE}" enable=yes profile=any'
+; MessageBox MB_OK "Executing: $R1"
+
+nsExec::Exec 'netsh advfirewall firewall delete rule name="${mrv2_KEY}" program="$INSTDIR\bin\${mrv2_EXE}"'
+nsExec::Exec 'netsh advfirewall firewall delete rule name="${hdr_KEY}"'
+
+# Construct the command string first for easier debugging
+StrCpy $R0 '"$INSTDIR\bin\${mrv2_EXE}"'
+StrCpy $R1 'netsh advfirewall firewall add rule name="${mrv2_KEY}" dir=in action=allow program=$R0 enable=yes profile=any'
+nsExec::Exec $R1
+
+# Construct the command string first for easier debugging
+StrCpy $R0 '"$INSTDIR\bin\${hdr_EXE}"'
+StrCpy $R1 'netsh advfirewall firewall add rule name="${hdr_KEY}" dir=in action=allow program=$R0 enable=yes profile=any'
+nsExec::Exec $R1
 
 ; MessageBox MB_YESNO "Do you want to set file associations?" IDYES yes
 ;      Abort

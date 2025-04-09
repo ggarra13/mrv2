@@ -353,6 +353,7 @@ else()
     #
     # To call uninstall first if the same version has been installed.
     #
+
     set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON )
 
     include("${MRV2_ROOT}/cmake/nsis/NSISRegistry.cmake")
