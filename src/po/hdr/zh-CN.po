@@ -15,4 +15,4 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "Connection/"
-msgstr ""
+msgstr "连接/"

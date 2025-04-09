@@ -7235,7 +7235,6 @@ msgstr "Ungltige Werte"
 msgid "Toggle HDR tonemap"
 msgstr "HDR-Tonkarte umschalten"
 
-#, fuzzy
 msgid "Compare None"
 msgstr "Vergleich Keine"
 
