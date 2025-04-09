@@ -118,11 +118,11 @@ copy_desktop_shortcut()
 # Copy versioned shortcut to applications and desktop
 #
 shortcut="mrv2-v@mrv2_VERSION@.desktop"
-copy_desktop_shorcut $shortcut
+copy_desktop_shortcut $shortcut
 
 if [[ -e /usr/bin/hdr-v@mrv2_VERSION@ ]]; then
     shortcut="hdr-v@mrv2_VERSION@.desktop"
-    copy_desktop_shorcut $shortcut
+    copy_desktop_shortcut $shortcut
 fi
 
 #
