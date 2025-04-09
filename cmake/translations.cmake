@@ -169,7 +169,7 @@ function(create_translation_for TARGET SOURCES)
     set(_abspot_dep )
     set(_pot_target ${TARGET}_pot)
     if(UNIX AND NOT APPLE)
-	set(_abspot_dep ${TARGET}_pot_depends )
+	set(_abspot_dep ${TARGET} )
     endif()
     add_custom_target(
 	${_pot_target}
