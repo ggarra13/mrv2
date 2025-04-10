@@ -1,3 +1,10 @@
+v1.3.8
+======
+
+- Added proper support for all possible texture types of OpenGL that libplacebo might use.
+- Same for Vulkan's hdr utility.
+
+
 v1.3.7
 ======
 

@@ -73,7 +73,7 @@ namespace
     }
 
     // Function to unescape &quot; back to normal quotes (")
-    std::string unescape_quotes_from_xml(const std::string& xml_escaped_str)
+    inline std::string unescape_quotes_from_xml(const std::string& xml_escaped_str)
     {
         std::string json_str;
         size_t pos = 0;
@@ -92,6 +92,69 @@ namespace
         }
         return json_str;
     }
+    
+    VkFormat to_vk_format(pl_fmt fmt)
+    {
+        int size = fmt->internal_size / fmt->num_components;
+
+        switch (fmt->num_components) {
+        case 1:
+            if (fmt->type == PL_FMT_FLOAT) {
+                return size == 2 ? VK_FORMAT_R16_SFLOAT : VK_FORMAT_R32_SFLOAT;
+            } else if (fmt->type == PL_FMT_UINT) {
+                return size == 4 ? VK_FORMAT_R32_UINT : (size == 2 ? VK_FORMAT_R16_UINT : VK_FORMAT_R8_UINT);
+            } else if (fmt->type == PL_FMT_SINT) {
+                return size == 4 ? VK_FORMAT_R32_SINT : (size == 2 ? VK_FORMAT_R16_SINT : VK_FORMAT_R8_SINT);
+            } else if (fmt->type == PL_FMT_UNORM) {
+                return size == 2 ? VK_FORMAT_R16_UNORM : VK_FORMAT_R8_UNORM;
+            } else if (fmt->type == PL_FMT_SNORM) {
+                return size == 2 ? VK_FORMAT_R16_SNORM : VK_FORMAT_R8_SNORM;
+            }
+            break;
+        case 2:
+            if (fmt->type == PL_FMT_FLOAT) {
+                return size == 2 ? VK_FORMAT_R16G16_SFLOAT : VK_FORMAT_R32G32_SFLOAT;
+            } else if (fmt->type == PL_FMT_UINT) {
+                return size == 4 ? VK_FORMAT_R32G32_UINT : (size == 2 ? VK_FORMAT_R16G16_UINT : VK_FORMAT_R8G8_UINT);
+            } else if (fmt->type == PL_FMT_SINT) {
+                return size == 4 ? VK_FORMAT_R32G32_SINT : (size == 2 ? VK_FORMAT_R16G16_SINT : VK_FORMAT_R8G8_SINT);
+            } else if (fmt->type == PL_FMT_UNORM) {
+                return size == 2 ? VK_FORMAT_R16G16_UNORM : VK_FORMAT_R8G8_UNORM;
+            } else if (fmt->type == PL_FMT_SNORM) {
+                return size == 2 ? VK_FORMAT_R16G16_SNORM : VK_FORMAT_R8G8_SNORM;
+            }
+            break;
+        case 3:
+            if (fmt->type == PL_FMT_FLOAT) {
+                return size == 2 ? VK_FORMAT_R16G16B16_SFLOAT : VK_FORMAT_R32G32B32_SFLOAT;
+            } else if (fmt->type == PL_FMT_UINT) {
+                return size == 4 ? VK_FORMAT_R32G32B32_UINT : (size == 2 ? VK_FORMAT_R16G16B16_UINT : VK_FORMAT_R8G8B8_UINT);
+            } else if (fmt->type == PL_FMT_SINT) {
+                return size == 4 ? VK_FORMAT_R32G32B32_SINT : (size == 2 ? VK_FORMAT_R16G16B16_SINT : VK_FORMAT_R8G8B8_SINT);
+            } else if (fmt->type == PL_FMT_UNORM) {
+                return size == 2 ? VK_FORMAT_R16G16B16_UNORM : VK_FORMAT_R8G8B8_UNORM;
+            } else if (fmt->type == PL_FMT_SNORM) {
+                return size == 2 ? VK_FORMAT_R16G16B16_SNORM : VK_FORMAT_R8G8B8_SNORM;
+            }
+            break;
+        case 4:
+            if (fmt->type == PL_FMT_FLOAT) {
+                return size == 2 ? VK_FORMAT_R16G16B16A16_SFLOAT : VK_FORMAT_R32G32B32A32_SFLOAT;
+            } else if (fmt->type == PL_FMT_UINT) {
+                return size == 4 ? VK_FORMAT_R32G32B32A32_UINT : (size == 2 ? VK_FORMAT_R16G16B16A16_UINT : VK_FORMAT_R8G8B8A8_UINT);
+            } else if (fmt->type == PL_FMT_SINT) {
+                return size == 4 ? VK_FORMAT_R32G32B32A32_SINT : (size == 2 ? VK_FORMAT_R16G16B16A16_SINT : VK_FORMAT_R8G8B8A8_SINT);
+            } else if (fmt->type == PL_FMT_UNORM) {
+                return size == 2 ? VK_FORMAT_R16G16B16A16_UNORM : VK_FORMAT_R8G8B8A8_UNORM;
+            } else if (fmt->type == PL_FMT_SNORM) {
+                return size == 2 ? VK_FORMAT_R16G16B16A16_SNORM : VK_FORMAT_R8G8B8A8_SNORM;
+            }
+            break;
+        }
+
+        return VK_FORMAT_UNDEFINED;
+    }
+
 } // namespace
 
 namespace mrv
@@ -404,7 +467,7 @@ namespace mrv
         }
         return sampler;
     }
-
+    
     void NDIView::addGPUTextures(const pl_shader_res* res)
     {
         for (unsigned i = 0; i < res->num_descriptors; ++i)
@@ -417,29 +480,17 @@ namespace mrv
             case PL_DESC_SAMPLED_TEX:
             {
                 pl_tex tex = reinterpret_cast<pl_tex>(sd->binding.object);
+                pl_fmt fmt = tex->params.format;
 
                 int dims = pl_tex_params_dimension(tex->params);
                 assert(dims >= 1 && dims <= 3);
 
                 const char* samplerName = sd->desc.name;
+                int size = fmt->internal_size / fmt->num_components;
 
                 // Map libplacebo format to Vulkan format
-                VkFormat imageFormat;
-
-                int pixel_fmt_size;
-                pixel_fmt_size = sizeof(float);
-                imageFormat = VK_FORMAT_R32G32B32A32_SFLOAT; // Default for 3D
-                if (dims == 2)
-                    imageFormat = VK_FORMAT_R32G32B32_SFLOAT;
-                if (dims == 1)
-                    imageFormat = VK_FORMAT_R32_SFLOAT;
-                else if (dims == 3)
-                {
-                    pixel_fmt_size = sizeof(uint16_t);
-                    imageFormat =
-                        VK_FORMAT_R16G16B16A16_UNORM; // Default for 3D
-                }
-
+                VkFormat imageFormat = to_vk_format(fmt);
+                
                 // Texture dimensions
                 uint32_t width = tex->params.w;
                 uint32_t height = (dims >= 2) ? tex->params.h : 1;
@@ -478,8 +529,7 @@ namespace mrv
 
                 // Upload texture data
                 uploadTextureData(
-                    image, width, height, depth, imageFormat, pixel_fmt_size,
-                    values);
+                    image, width, height, depth, imageFormat, size, values);
 
                 // Transition image layout to SHADER_READ_ONLY_OPTIMAL
                 transitionImageLayout(
