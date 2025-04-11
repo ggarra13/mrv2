@@ -1,0 +1,630 @@
+{
+    "OTIO_SCHEMA": "Timeline.1", 
+    "metadata": {},
+    "name": "MultipleClips",
+    "tracks": {
+        "OTIO_SCHEMA": "Stack.1", 
+        "children": [
+            {
+                "OTIO_SCHEMA": "Track.1", 
+                "children": [
+                    {
+                        "OTIO_SCHEMA": "Clip.1",
+                        "media_reference": {
+                            "OTIO_SCHEMA": "ExternalReference.1",
+                            "available_range": {
+                                "OTIO_SCHEMA": "TimeRange.1",
+                                "duration": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 44100,
+                                    "value": 44100
+                                },
+                                "start_time": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 44100,
+                                    "value": 0
+                                }
+                            },
+                            "target_url": "AudioToneStereo.wav"
+                        },
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 44100
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 0
+                            }
+                        },
+                        "name": "AudioToneStereo"
+                    },
+                    {
+                        "OTIO_SCHEMA": "Gap.1",
+                        "name": "Gap",
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 44100
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 0
+                            }
+                        }
+                    },
+                    {
+                        "OTIO_SCHEMA": "Clip.1",
+                        "media_reference": {
+                            "OTIO_SCHEMA": "ExternalReference.1",
+                            "available_range": {
+                                "OTIO_SCHEMA": "TimeRange.1",
+                                "duration": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 44100,
+                                    "value": 44100
+                                },
+                                "start_time": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 44100,
+                                    "value": 0
+                                }
+                            },
+                            "target_url": "AudioToneLeft.wav"
+                        },
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 44100
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 0
+                            }
+                        },
+                        "name": "AudioToneLeft"
+                    },
+                    {
+                        "OTIO_SCHEMA": "Gap.1",
+                        "name": "Gap",
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 44100
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 0
+                            }
+                        }
+                    },
+                    {
+                        "OTIO_SCHEMA": "Clip.1",
+                        "media_reference": {
+                            "OTIO_SCHEMA": "ExternalReference.1",
+                            "available_range": {
+                                "OTIO_SCHEMA": "TimeRange.1",
+                                "duration": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 44100,
+                                    "value": 44100
+                                },
+                                "start_time": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 44100,
+                                    "value": 0
+                                }
+                            },
+                            "target_url": "AudioToneRight.wav"
+                        },
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 44100
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 0
+                            }
+                        },
+                        "name": "AudioToneRight"
+                    },
+                    {
+                        "OTIO_SCHEMA": "Gap.1",
+                        "name": "Gap",
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 44100
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 0
+                            }
+                        }
+                    },
+                    {
+                        "OTIO_SCHEMA": "Clip.1",
+                        "media_reference": {
+                            "OTIO_SCHEMA": "ExternalReference.1",
+                            "available_range": {
+                                "OTIO_SCHEMA": "TimeRange.1",
+                                "duration": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 44100,
+                                    "value": 44100
+                                },
+                                "start_time": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 44100,
+                                    "value": 0
+                                }
+                            },
+                            "target_url": "AudioToneStereo.wav"
+                        },
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 22050
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 0
+                            }
+                        },
+                        "name": "AudioToneStereo - First Half"
+                    },
+                    {
+                        "OTIO_SCHEMA": "Gap.1",
+                        "name": "Gap",
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 44100
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 0
+                            }
+                        }
+                    },
+                    {
+                        "OTIO_SCHEMA": "Clip.1",
+                        "media_reference": {
+                            "OTIO_SCHEMA": "ExternalReference.1",
+                            "available_range": {
+                                "OTIO_SCHEMA": "TimeRange.1",
+                                "duration": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 44100,
+                                    "value": 44100
+                                },
+                                "start_time": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 44100,
+                                    "value": 0
+                                }
+                            },
+                            "target_url": "AudioToneLeft.wav"
+                        },
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 22050
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 0
+                            }
+                        },
+                        "name": "AudioToneLeft - First Half"
+                    },
+                    {
+                        "OTIO_SCHEMA": "Gap.1",
+                        "name": "Gap",
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 44100
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 0
+                            }
+                        }
+                    },
+                    {
+                        "OTIO_SCHEMA": "Clip.1",
+                        "media_reference": {
+                            "OTIO_SCHEMA": "ExternalReference.1",
+                            "available_range": {
+                                "OTIO_SCHEMA": "TimeRange.1",
+                                "duration": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 44100,
+                                    "value": 44100
+                                },
+                                "start_time": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 44100,
+                                    "value": 0
+                                }
+                            },
+                            "target_url": "AudioToneRight.wav"
+                        },
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 22050
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 0
+                            }
+                        },
+                        "name": "AudioToneRight - First Half"
+                    },
+                    {
+                        "OTIO_SCHEMA": "Gap.1",
+                        "name": "Gap",
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 44100
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 0
+                            }
+                        }
+                    },
+                    {
+                        "OTIO_SCHEMA": "Clip.1",
+                        "media_reference": {
+                            "OTIO_SCHEMA": "ExternalReference.1",
+                            "available_range": {
+                                "OTIO_SCHEMA": "TimeRange.1",
+                                "duration": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 44100,
+                                    "value": 44100
+                                },
+                                "start_time": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 44100,
+                                    "value": 0
+                                }
+                            },
+                            "target_url": "AudioToneStereo.wav"
+                        },
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 22050
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 22050
+                            }
+                        },
+                        "name": "AudioToneStereo - Second Half"
+                    },
+                    {
+                        "OTIO_SCHEMA": "Gap.1",
+                        "name": "Gap",
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 44100
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 0
+                            }
+                        }
+                    },
+                    {
+                        "OTIO_SCHEMA": "Clip.1",
+                        "media_reference": {
+                            "OTIO_SCHEMA": "ExternalReference.1",
+                            "available_range": {
+                                "OTIO_SCHEMA": "TimeRange.1",
+                                "duration": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 44100,
+                                    "value": 44100
+                                },
+                                "start_time": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 44100,
+                                    "value": 0
+                                }
+                            },
+                            "target_url": "AudioToneLeft.wav"
+                        },
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 22050
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 22050
+                            }
+                        },
+                        "name": "AudioToneLeft - Second Half"
+                    },
+                    {
+                        "OTIO_SCHEMA": "Gap.1",
+                        "name": "Gap",
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 44100
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 0
+                            }
+                        }
+                    },
+                    {
+                        "OTIO_SCHEMA": "Clip.1",
+                        "media_reference": {
+                            "OTIO_SCHEMA": "ExternalReference.1",
+                            "available_range": {
+                                "OTIO_SCHEMA": "TimeRange.1",
+                                "duration": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 44100,
+                                    "value": 44100
+                                },
+                                "start_time": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 44100,
+                                    "value": 0
+                                }
+                            },
+                            "target_url": "AudioToneRight.wav"
+                        },
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 22050
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 22050
+                            }
+                        },
+                        "name": "AudioToneRight - Second Half"
+                    },
+                    {
+                        "OTIO_SCHEMA": "Gap.1",
+                        "name": "Gap",
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 44100
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 0
+                            }
+                        }
+                    },
+                    {
+                        "OTIO_SCHEMA": "Clip.1",
+                        "media_reference": {
+                            "OTIO_SCHEMA": "ExternalReference.1",
+                            "available_range": {
+                                "OTIO_SCHEMA": "TimeRange.1",
+                                "duration": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 44100,
+                                    "value": 44100
+                                },
+                                "start_time": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 44100,
+                                    "value": 0
+                                }
+                            },
+                            "target_url": "AudioToneStereo.wav"
+                        },
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 22050
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 11025
+                            }
+                        },
+                        "name": "AudioToneStereo - Middle"
+                    },
+                    {
+                        "OTIO_SCHEMA": "Gap.1",
+                        "name": "Gap",
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 44100
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 0
+                            }
+                        }
+                    },
+                    {
+                        "OTIO_SCHEMA": "Clip.1",
+                        "media_reference": {
+                            "OTIO_SCHEMA": "ExternalReference.1",
+                            "available_range": {
+                                "OTIO_SCHEMA": "TimeRange.1",
+                                "duration": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 44100,
+                                    "value": 44100
+                                },
+                                "start_time": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 44100,
+                                    "value": 0
+                                }
+                            },
+                            "target_url": "AudioToneLeft.wav"
+                        },
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 22050
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 11025
+                            }
+                        },
+                        "name": "AudioToneLeft - Middle"
+                    },
+                    {
+                        "OTIO_SCHEMA": "Gap.1",
+                        "name": "Gap",
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 44100
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 0
+                            }
+                        }
+                    },
+                    {
+                        "OTIO_SCHEMA": "Clip.1",
+                        "media_reference": {
+                            "OTIO_SCHEMA": "ExternalReference.1",
+                            "available_range": {
+                                "OTIO_SCHEMA": "TimeRange.1",
+                                "duration": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 44100,
+                                    "value": 44100
+                                },
+                                "start_time": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 44100,
+                                    "value": 0
+                                }
+                            },
+                            "target_url": "AudioToneRight.wav"
+                        },
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 22050
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 11025
+                            }
+                        },
+                        "name": "AudioToneRight - Middle"
+                    },
+                    {
+                        "OTIO_SCHEMA": "Gap.1",
+                        "name": "Gap",
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 44100
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 0
+                            }
+                        }
+                    }
+                ],
+                "kind": "Audio", 
+                "name": "Audio"
+            }
+        ], 
+        "name": "Stack"
+    }
+}

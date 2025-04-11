@@ -1,0 +1,7 @@
+Does work:
+
+https://dpel-assets.aswf.io/asc-stem2/ASC_StEM2_178_2K_24_100nits_Rec709_Stereo.mp4
+
+Does not work:
+
+https://h056.video-stream-hosting.de/medienasa-live/_definst_/mp4:punktum_high/playlist.m3u8
