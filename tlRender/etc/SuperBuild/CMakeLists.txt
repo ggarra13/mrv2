@@ -5,8 +5,6 @@ if(POLICY CMP0135)
     cmake_policy(SET CMP0135 NEW)
 endif()
 
-project(tlRender-SuperBuild)
-
 # Build options.
 set(TLRENDER_PYTHON FALSE CACHE BOOL "Enable Python support (for OTIO Python adapters)")
 set(TLRENDER_API "GL_4_1" CACHE STRING "Graphics API (GL_4_1, GL_4_1_Debug, GLES_2)")
@@ -53,31 +51,7 @@ set(TLRENDER_GPROF FALSE CACHE BOOL "Enable gprof code profiling")
 
 # Configure.
 #
-# \bug Add the OpenColorIO cmake modules.
 
-
-# Determine a repository root based on the current source directory.
-get_filename_component(REPO_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../" ABSOLUTE)
-
-# Compute absolute module paths.
-get_filename_component(MODULE_PATH1 "${REPO_ROOT}/cmake/Modules" ABSOLUTE)
-get_filename_component(MODULE_PATH2 "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules" ABSOLUTE)
-get_filename_component(MODULE_PATH3 "${CMAKE_CURRENT_SOURCE_DIR}/cmake/" ABSOLUTE)
-get_filename_component(MODULE_PATH4 "${CMAKE_INSTALL_PREFIX}/share/OpenColorIO/cmake/modules" ABSOLUTE)
-
-# Prepend to the CMAKE_MODULE_PATH.
-list(PREPEND CMAKE_MODULE_PATH
-    ${MODULE_PATH1}
-    ${MODULE_PATH2}
-    ${MODULE_PATH3}
-    ${MODULE_PATH4}
-)
-
-message(STATUS "Resolved CMAKE_MODULE_PATH=${CMAKE_MODULE_PATH}")
-
-# List all files (non-recursive) in the directory pointed by MODULE_PATH2
-file(GLOB MODULE_FILES "${MODULE_PATH2}/*")
-message(FATAL_ERROR "Files in MODULE_PATH2: ${MODULE_FILES}")
 
 if(NOT CMAKE_CXX_STANDARD)
     set(CMAKE_CXX_STANDARD 17)

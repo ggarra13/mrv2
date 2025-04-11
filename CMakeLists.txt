@@ -45,6 +45,24 @@ else()
 endif()
 
 
+# Determine a repository root based on the current source directory.
+get_filename_component(REPO_ROOT "${PROJECT_SOURCE_DIR}/tlRender" ABSOLUTE)
+get_filename_component(SUPERBUILD_ROOT "${REPO_ROOT}/etc/SuperBuild" ABSOLUTE)
+
+# Compute absolute module paths.
+get_filename_component(MODULE_PATH1 "${REPO_ROOT}/cmake/Modules" ABSOLUTE)
+get_filename_component(MODULE_PATH2 "${SUPERBUILD_ROOT}/cmake/Modules" ABSOLUTE)
+get_filename_component(MODULE_PATH3 "${SUPERBUILD_ROOT}/cmake/" ABSOLUTE)
+get_filename_component(MODULE_PATH4 "${CMAKE_INSTALL_PREFIX}/share/OpenColorIO/cmake/modules" ABSOLUTE)
+
+# Prepend to the CMAKE_MODULE_PATH.
+list(PREPEND CMAKE_MODULE_PATH
+    ${MODULE_PATH1}
+    ${MODULE_PATH2}
+    ${MODULE_PATH3}
+    ${MODULE_PATH4}
+)
+
 #
 # Fetch the tlRender library as a submodule with git.
 #
