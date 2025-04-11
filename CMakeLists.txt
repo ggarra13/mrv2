@@ -63,6 +63,19 @@ list(PREPEND CMAKE_MODULE_PATH
     ${MODULE_PATH4}
 )
 
+file(GLOB MODULE_FILES "${REPO_ROOT}/*")
+message(STATUS "Files in ${REPO_ROOT}: ${MODULE_FILES}")
+message(STATUS "Files in tlRender_ROOT: ${MODULE_FILES}")
+
+file(GLOB MODULE_FILES "${SUPERBUILD_ROOT}/*")
+message(STATUS "Files in ${SUPERBUILD_ROOT}: ${MODULE_FILES}")
+message(STATUS "Files in SUPERBUILD_ROOT: ${MODULE_FILES}")
+
+# List all files (non-recursive) in the directory pointed by MODULE_PATH2
+file(GLOB MODULE_FILES "${MODULE_PATH2}/*")
+message(STATUS "Files in ${MODULE_PATH2}: ${MODULE_FILES}")
+message(STATUS "Files in MODULE_PATH2: ${MODULE_FILES}")
+
 #
 # Fetch the tlRender library as a submodule with git.
 #
