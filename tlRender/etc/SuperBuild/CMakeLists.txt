@@ -56,9 +56,9 @@ set(TLRENDER_LOCAL FALSE CACHE BOOL "Use ggarra13 local repos")
 #
 # \bug Add the OpenColorIO cmake modules.
 list(PREPEND CMAKE_MODULE_PATH
-    ${PROJECT_SOURCE_DIR}/../../cmake/Modules
-    ${PROJECT_SOURCE_DIR}/cmake/Modules
-    ${PROJECT_SOURCE_DIR}/cmake/
+    ${PROJECT_SOURCE_DIR}/tlRender/../../cmake/Modules
+    ${PROJECT_SOURCE_DIR}/tlRender/cmake/Modules
+    ${PROJECT_SOURCE_DIR}/tlRender/cmake/
     ${CMAKE_INSTALL_PREFIX}/share/OpenColorIO/cmake/modules)
 if(NOT CMAKE_CXX_STANDARD)
     set(CMAKE_CXX_STANDARD 17)

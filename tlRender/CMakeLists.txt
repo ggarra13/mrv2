@@ -96,16 +96,16 @@ if(TLRENDER_TESTS)
 endif()
 
 include_directories(
-    ${PROJECT_SOURCE_DIR}/deps
-    ${PROJECT_SOURCE_DIR}/lib
-    ${PROJECT_SOURCE_DIR}/etc
-    ${PROJECT_SOURCE_DIR}/tests)
+    ${PROJECT_SOURCE_DIR}/tlRender/deps
+    ${PROJECT_SOURCE_DIR}/tlRender/lib
+    ${PROJECT_SOURCE_DIR}/tlRender/etc
+    ${PROJECT_SOURCE_DIR}/tlRender/tests)
 if ("${TLRENDER_API}" STREQUAL "GL_4_1")
-    include_directories(${PROJECT_SOURCE_DIR}/deps/glad_GL_4_1/include)
+    include_directories(${PROJECT_SOURCE_DIR}/tlRender/deps/glad_GL_4_1/include)
 elseif ("${TLRENDER_API}" STREQUAL "GL_4_1_Debug")
-    include_directories(${PROJECT_SOURCE_DIR}/deps/glad_GL_4_1_Debug/include)
+    include_directories(${PROJECT_SOURCE_DIR}/tlRender/deps/glad_GL_4_1_Debug/include)
 elseif ("${TLRENDER_API}" STREQUAL "GLES_2")
-    include_directories(${PROJECT_SOURCE_DIR}/deps/glad_GLES_2/include)
+    include_directories(${PROJECT_SOURCE_DIR}/tlRender/deps/glad_GLES_2/include)
 endif()
 include_directories(${CMAKE_INSTALL_PREFIX}/include)  # for FLTK
 
