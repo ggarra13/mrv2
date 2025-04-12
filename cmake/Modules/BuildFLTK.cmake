@@ -11,7 +11,7 @@ if (USER_NAME STREQUAL "gga" OR USER_NAME STREQUAL "User-PC" OR
 else()
     set(FLTK_GIT_REPOSITORY "https://github.com/ggarra13/fltk.git")
 endif()
-set(FLTK_GIT_TAG vulkan)
+set(FLTK_GIT_TAG 15f16b3baf245d01621b3191982d4dbac99608c4)  # was vulkan
 
 # The cutting EDGE!
 #set( FLTK_GIT_TAG master )
