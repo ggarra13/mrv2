@@ -10,19 +10,6 @@ set(USD_GIT_TAG v25.02a) # was 24.08
 string(TOLOWER ${CMAKE_BUILD_TYPE} cmake_build_type)
 
 set(USD_PATCH_COMMAND )
-if (WIN32)
-     set(USD_PATCH_COMMAND
- 	${CMAKE_COMMAND} -E copy_if_different
- 	${CMAKE_CURRENT_SOURCE_DIR}/USD-patch/cmake/macros/Private.cmake
- 	${CMAKE_CURRENT_BINARY_DIR}/USD/src/USD/cmake/macros)
-endif()
-
-# if (UNIX AND NOT APPLE)
-#     set(USD_PATCH_COMMAND
-# 	${CMAKE_COMMAND} -E copy_if_different
-# 	${CMAKE_CURRENT_SOURCE_DIR}/USD-patch/build_scripts/build_usd.py
-# 	${CMAKE_CURRENT_BINARY_DIR}/USD/src/USD/build_scripts/build_usd.py)
-# endif()
 
 if( "${cmake_build_type}" STREQUAL "relwithdebinfo" )
     set(cmake_build_type relwithdebuginfo)
