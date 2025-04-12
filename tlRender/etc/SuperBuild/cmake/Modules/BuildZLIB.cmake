@@ -5,7 +5,7 @@ set(ZLIB_GIT_TAG "v1.3.1")
 
 if(WIN32)
     list(APPEND ZLIB_PATCH COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${CMAKE_CURRENT_SOURCE_DIR}/ZLIB-patch/zconf.h.cmakein
+        ${CMAKE_CURRENT_SOURCE_DIR}/patches/ZLIB-patch/zconf.h.cmakein
         ${CMAKE_CURRENT_BINARY_DIR}/ZLIB/src/ZLIB/zconf.h.cmakein)
 endif()
 

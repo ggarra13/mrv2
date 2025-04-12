@@ -6032,7 +6032,7 @@ bool RtApiWasapi::probeDeviceOpen(
         stream_.callbackInfo.priority = 0;
 
     ///! TODO: RTAUDIO_MINIMIZE_LATENCY // Provide stream buffers directly to
-    ///callback ! TODO: RTAUDIO_HOG_DEVICE       // Exclusive mode
+    /// callback ! TODO: RTAUDIO_HOG_DEVICE       // Exclusive mode
 
     methodResult = SUCCESS;
 

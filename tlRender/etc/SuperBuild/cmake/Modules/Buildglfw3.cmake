@@ -16,7 +16,7 @@ set(glfw3_PATCH)
 if(TLRENDER_GLFW_DISABLE_MACOS_APP_DELEGATE)
     list(APPEND glfw3_PATCH
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${CMAKE_CURRENT_SOURCE_DIR}/glfw3-patch/src/cocoa_init.m
+        ${CMAKE_CURRENT_SOURCE_DIR}/patches/glfw3-patch/src/cocoa_init.m
         ${CMAKE_CURRENT_BINARY_DIR}/glfw3/src/glfw3/src/cocoa_init.m)
 endif()
 

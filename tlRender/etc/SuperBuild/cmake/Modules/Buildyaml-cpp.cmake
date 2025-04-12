@@ -5,7 +5,7 @@ set(yaml-cpp_GIT_TAG "yaml-cpp-0.7.0")
 
 # \@todo: Patch for cmake 4.0 (remove later)
 set(yaml-cpp_PATCH ${CMAKE_COMMAND} -E copy_if_different
-    ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp-patch/CMakeLists.txt
+    ${CMAKE_CURRENT_SOURCE_DIR}/patches/yaml-cpp-patch/CMakeLists.txt
     ${CMAKE_CURRENT_BINARY_DIR}/yaml-cpp/src/yaml-cpp/CMakeLists.txt )
     
 set(yaml-cpp_ARGS
