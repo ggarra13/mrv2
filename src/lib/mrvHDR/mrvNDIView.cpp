@@ -422,11 +422,10 @@ namespace mrv
 
     void NDIView::uploadTextureData(
         VkImage image, uint32_t width, uint32_t height, uint32_t depth,
-        VkFormat format, const int pixel_fmt_size, const void* data)
+        VkFormat format, const int channels,
+        const int pixel_fmt_size, const void* data)
     {
         VkResult result;
-
-        const int channels = 4; // RGBA
 
         VkDeviceSize imageSize =
             width * height * depth * channels * pixel_fmt_size;
@@ -548,6 +547,7 @@ namespace mrv
 
                 const char* samplerName = sd->desc.name;
                 int size = fmt->internal_size / fmt->num_components;
+                int channels = fmt->num_components;
 
                 // Map libplacebo format to Vulkan format
                 VkFormat imageFormat = to_vk_format(fmt);
@@ -590,7 +590,8 @@ namespace mrv
 
                 // Upload texture data
                 uploadTextureData(
-                    image, width, height, depth, imageFormat, size, values);
+                    image, width, height, depth, imageFormat,
+                    channels, size, values);
 
                 // Transition image layout to SHADER_READ_ONLY_OPTIMAL
                 transitionImageLayout(

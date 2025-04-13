@@ -1191,6 +1191,7 @@ namespace tl
                             case PL_FMT_UNORM:
                                 switch (size)
                                 {
+                                case 2:
                                     internalFormat = GL_RGBA16;
                                     break;
                                 default:

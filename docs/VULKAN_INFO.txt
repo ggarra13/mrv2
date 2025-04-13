@@ -690,9 +690,8 @@ Vulkan vertex attributes are explicitly described — that means this struct-to-
 Here’s where you write Vulkan-specific glue to describe how to interpret your packed buffer.
 
 Step 1: Vertex binding + attribute descriptions (example for Pos3_F32_UV_U16)
-cpp
-Copy
-Edit
+-----------------------------------------------------------------------------
+
 VkVertexInputBindingDescription bindingDesc{};
 bindingDesc.binding = 0;
 bindingDesc.stride = 3 * sizeof(float) + 2 * sizeof(uint16_t);
@@ -715,27 +714,27 @@ attribDescs.push_back({
     VK_FORMAT_R16G16_UNORM,
     static_cast<uint32_t>(3 * sizeof(float))
 });
+
+
 You’d encapsulate this in a function:
 
-cpp
-Copy
-Edit
 void getVertexInputDescriptions(VBOType type,
     VkVertexInputBindingDescription& binding,
     std::vector<VkVertexInputAttributeDescription>& attributes);
+    
 Step 2: Buffer creation (typical Vulkan boilerplate)
-cpp
-Copy
-Edit
+----------------------------------------------------
+
 VkBuffer vertexBuffer;
 VkDeviceMemory vertexBufferMemory;
 createVertexBuffer(device, physicalDevice, data.data(), data.size(), vertexBuffer, vertexBufferMemory);
+
+
 🧠 Encapsulation strategy
+
+
 You could encapsulate Vulkan the same way you did OpenGL, for example:
 
-cpp
-Copy
-Edit
 namespace vk
 {
     std::vector<uint8_t> convert(const geom::TriangleMesh2& mesh, gfx::VBOType type);
