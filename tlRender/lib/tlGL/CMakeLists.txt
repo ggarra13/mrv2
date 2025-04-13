@@ -17,7 +17,6 @@ set(PRIVATE_HEADERS)
 set(SOURCE
     Init.cpp
     Mesh.cpp
-    Mesh.cpp
     OffscreenBuffer.cpp
     Shader.cpp
     Texture.cpp

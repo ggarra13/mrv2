@@ -292,7 +292,7 @@ namespace mrv
         VkCommandBufferAllocateInfo allocInfo = {};
         allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
         allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-        allocInfo.commandPool = m_cmd_pool;
+        allocInfo.commandPool = ctx.command_pool;
         allocInfo.commandBufferCount = 1;
 
         VkCommandBuffer commandBuffer;
@@ -318,12 +318,9 @@ namespace mrv
         vkQueueSubmit(ctx.queue, 1, &submitInfo, VK_NULL_HANDLE);
         vkQueueWaitIdle(ctx.queue);
 
-        vkFreeCommandBuffers(ctx.device, m_cmd_pool, 1, &commandBuffer);
+        vkFreeCommandBuffers(ctx.device, ctx.command_pool, 1, &commandBuffer);
     }
 
-    //
-    // \@todo: change for set_image_layout
-    //
     void NDIView::transitionImageLayout(
         VkImage image, VkImageLayout oldLayout, VkImageLayout newLayout)
     {
@@ -1733,7 +1730,7 @@ void main() {
         VkCommandBuffer update_cmd;
         VkCommandBufferAllocateInfo cmdAllocInfo = {};
         cmdAllocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-        cmdAllocInfo.commandPool = m_cmd_pool;
+        cmdAllocInfo.commandPool = ctx.command_pool;
         cmdAllocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
         cmdAllocInfo.commandBufferCount = 1;
         vkAllocateCommandBuffers(ctx.device, &cmdAllocInfo, &update_cmd);
@@ -1799,7 +1796,7 @@ void main() {
         vkQueueSubmit(ctx.queue, 1, &submitInfo, VK_NULL_HANDLE);
         vkQueueWaitIdle(ctx.queue); // Synchronize before rendering
 
-        vkFreeCommandBuffers(ctx.device, m_cmd_pool, 1, &update_cmd);
+        vkFreeCommandBuffers(ctx.device, ctx.command_pool, 1, &update_cmd);
     }
 
     void NDIView::vk_draw_begin()
