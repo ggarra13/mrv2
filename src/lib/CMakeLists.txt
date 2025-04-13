@@ -17,9 +17,9 @@ add_subdirectory(mrvDraw)        # mrvCore
 if(MRV2_PDF)
     add_subdirectory(mrvPDF)     # mrvWidgets
 endif()
-add_subdirectory(mrvFl)   # mrvEdit, mrvUI, mrvGL, mrvPDF
 add_subdirectory(mrvNetwork) # mrvFl, Poco::Net
 add_subdirectory(mrvEdit)    # mrvWidgets, mrvNetwork
+add_subdirectory(mrvFl)      # mrvEdit, mrvUI, mrvGL, mrvPDF
 add_subdirectory(mrvPanels)  # mrvFl, mrvEdit
 add_subdirectory(mrvBaseApp) # tlBaseApp, tlCore, RtAudio, freetype, Imath::Imath
 add_subdirectory(mrvApp)  # mrvBaseApp, mrvPanels, mrvDraw, mrvFLU, mrvOptions
