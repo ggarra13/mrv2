@@ -93,68 +93,127 @@ namespace
         return json_str;
     }
     
+
     VkFormat to_vk_format(pl_fmt fmt)
     {
         int size = fmt->internal_size / fmt->num_components;
 
-        switch (fmt->num_components) {
+        switch (fmt->num_components)
+        {
         case 1:
-            if (fmt->type == PL_FMT_FLOAT) {
+            if (fmt->type == PL_FMT_FLOAT)
+            {
                 return size == 2 ? VK_FORMAT_R16_SFLOAT : VK_FORMAT_R32_SFLOAT;
-            } else if (fmt->type == PL_FMT_UINT) {
-                return size == 4 ? VK_FORMAT_R32_UINT : (size == 2 ? VK_FORMAT_R16_UINT : VK_FORMAT_R8_UINT);
-            } else if (fmt->type == PL_FMT_SINT) {
-                return size == 4 ? VK_FORMAT_R32_SINT : (size == 2 ? VK_FORMAT_R16_SINT : VK_FORMAT_R8_SINT);
-            } else if (fmt->type == PL_FMT_UNORM) {
+            }
+            else if (fmt->type == PL_FMT_UINT)
+            {
+                return size == 4 ? VK_FORMAT_R32_UINT :
+                    (size == 2 ? VK_FORMAT_R16_UINT : VK_FORMAT_R8_UINT);
+            }
+            else if (fmt->type == PL_FMT_SINT)
+            {
+                return size == 4 ? VK_FORMAT_R32_SINT :
+                    (size == 2 ? VK_FORMAT_R16_SINT : VK_FORMAT_R8_SINT);
+            }
+            else if (fmt->type == PL_FMT_UNORM)
+            {
                 return size == 2 ? VK_FORMAT_R16_UNORM : VK_FORMAT_R8_UNORM;
-            } else if (fmt->type == PL_FMT_SNORM) {
+            }
+            else if (fmt->type == PL_FMT_SNORM)
+            {
                 return size == 2 ? VK_FORMAT_R16_SNORM : VK_FORMAT_R8_SNORM;
             }
             break;
         case 2:
-            if (fmt->type == PL_FMT_FLOAT) {
-                return size == 2 ? VK_FORMAT_R16G16_SFLOAT : VK_FORMAT_R32G32_SFLOAT;
-            } else if (fmt->type == PL_FMT_UINT) {
-                return size == 4 ? VK_FORMAT_R32G32_UINT : (size == 2 ? VK_FORMAT_R16G16_UINT : VK_FORMAT_R8G8_UINT);
-            } else if (fmt->type == PL_FMT_SINT) {
-                return size == 4 ? VK_FORMAT_R32G32_SINT : (size == 2 ? VK_FORMAT_R16G16_SINT : VK_FORMAT_R8G8_SINT);
-            } else if (fmt->type == PL_FMT_UNORM) {
-                return size == 2 ? VK_FORMAT_R16G16_UNORM : VK_FORMAT_R8G8_UNORM;
-            } else if (fmt->type == PL_FMT_SNORM) {
-                return size == 2 ? VK_FORMAT_R16G16_SNORM : VK_FORMAT_R8G8_SNORM;
+            if (fmt->type == PL_FMT_FLOAT)
+            {
+                return size == 2 ? VK_FORMAT_R16G16_SFLOAT :
+                    VK_FORMAT_R32G32_SFLOAT;
+            }
+            else if (fmt->type == PL_FMT_UINT)
+            {
+                return size == 4 ? VK_FORMAT_R32G32_UINT :
+                    (size == 2 ? VK_FORMAT_R16G16_UINT : VK_FORMAT_R8G8_UINT);
+            }
+            else if (fmt->type == PL_FMT_SINT)
+            {
+                return size == 4 ? VK_FORMAT_R32G32_SINT :
+                    (size == 2 ? VK_FORMAT_R16G16_SINT : VK_FORMAT_R8G8_SINT);
+            }
+            else if (fmt->type == PL_FMT_UNORM)
+            {
+                return size == 2 ? VK_FORMAT_R16G16_UNORM :
+                    VK_FORMAT_R8G8_UNORM;
+            }
+            else if (fmt->type == PL_FMT_SNORM)
+            {
+                return size == 2 ? VK_FORMAT_R16G16_SNORM :
+                    VK_FORMAT_R8G8_SNORM;
             }
             break;
         case 3:
-            if (fmt->type == PL_FMT_FLOAT) {
-                return size == 2 ? VK_FORMAT_R16G16B16_SFLOAT : VK_FORMAT_R32G32B32_SFLOAT;
-            } else if (fmt->type == PL_FMT_UINT) {
-                return size == 4 ? VK_FORMAT_R32G32B32_UINT : (size == 2 ? VK_FORMAT_R16G16B16_UINT : VK_FORMAT_R8G8B8_UINT);
-            } else if (fmt->type == PL_FMT_SINT) {
-                return size == 4 ? VK_FORMAT_R32G32B32_SINT : (size == 2 ? VK_FORMAT_R16G16B16_SINT : VK_FORMAT_R8G8B8_SINT);
-            } else if (fmt->type == PL_FMT_UNORM) {
-                return size == 2 ? VK_FORMAT_R16G16B16_UNORM : VK_FORMAT_R8G8B8_UNORM;
-            } else if (fmt->type == PL_FMT_SNORM) {
-                return size == 2 ? VK_FORMAT_R16G16B16_SNORM : VK_FORMAT_R8G8B8_SNORM;
+            if (fmt->type == PL_FMT_FLOAT)
+            {
+                return size == 2 ? VK_FORMAT_R16G16B16_SFLOAT :
+                    VK_FORMAT_R32G32B32_SFLOAT;
+            }
+            else if (fmt->type == PL_FMT_UINT)
+            {
+                return size == 4 ? VK_FORMAT_R32G32B32_UINT :
+                    (size == 2 ? VK_FORMAT_R16G16B16_UINT :
+                     VK_FORMAT_R8G8B8_UINT);
+            }
+            else if (fmt->type == PL_FMT_SINT)
+            {
+                return size == 4 ? VK_FORMAT_R32G32B32_SINT :
+                    (size == 2 ? VK_FORMAT_R16G16B16_SINT :
+                     VK_FORMAT_R8G8B8_SINT);
+            }
+            else if (fmt->type == PL_FMT_UNORM)
+            {
+                return size == 2 ? VK_FORMAT_R16G16B16_UNORM :
+                    VK_FORMAT_R8G8B8_UNORM;
+            }
+            else if (fmt->type == PL_FMT_SNORM)
+            {
+                return size == 2 ? VK_FORMAT_R16G16B16_SNORM :
+                    VK_FORMAT_R8G8B8_SNORM;
             }
             break;
         case 4:
-            if (fmt->type == PL_FMT_FLOAT) {
-                return size == 2 ? VK_FORMAT_R16G16B16A16_SFLOAT : VK_FORMAT_R32G32B32A32_SFLOAT;
-            } else if (fmt->type == PL_FMT_UINT) {
-                return size == 4 ? VK_FORMAT_R32G32B32A32_UINT : (size == 2 ? VK_FORMAT_R16G16B16A16_UINT : VK_FORMAT_R8G8B8A8_UINT);
-            } else if (fmt->type == PL_FMT_SINT) {
-                return size == 4 ? VK_FORMAT_R32G32B32A32_SINT : (size == 2 ? VK_FORMAT_R16G16B16A16_SINT : VK_FORMAT_R8G8B8A8_SINT);
-            } else if (fmt->type == PL_FMT_UNORM) {
-                return size == 2 ? VK_FORMAT_R16G16B16A16_UNORM : VK_FORMAT_R8G8B8A8_UNORM;
-            } else if (fmt->type == PL_FMT_SNORM) {
-                return size == 2 ? VK_FORMAT_R16G16B16A16_SNORM : VK_FORMAT_R8G8B8A8_SNORM;
+            if (fmt->type == PL_FMT_FLOAT)
+            {
+                return size == 2 ? VK_FORMAT_R16G16B16A16_SFLOAT :
+                    VK_FORMAT_R32G32B32A32_SFLOAT;
+            }
+            else if (fmt->type == PL_FMT_UINT)
+            {
+                return size == 4 ? VK_FORMAT_R32G32B32A32_UINT :
+                    (size == 2 ? VK_FORMAT_R16G16B16A16_UINT :
+                     VK_FORMAT_R8G8B8A8_UINT);
+            }
+            else if (fmt->type == PL_FMT_SINT)
+            {
+                return size == 4 ? VK_FORMAT_R32G32B32A32_SINT :
+                    (size == 2 ? VK_FORMAT_R16G16B16A16_SINT :
+                     VK_FORMAT_R8G8B8A8_SINT);
+            }
+            else if (fmt->type == PL_FMT_UNORM)
+            {
+                return size == 2 ? VK_FORMAT_R16G16B16A16_UNORM :
+                    VK_FORMAT_R8G8B8A8_UNORM;
+            }
+            else if (fmt->type == PL_FMT_SNORM)
+            {
+                return size == 2 ? VK_FORMAT_R16G16B16A16_SNORM :
+                    VK_FORMAT_R8G8B8A8_SNORM;
             }
             break;
         }
 
         return VK_FORMAT_UNDEFINED;
     }
-
+    
 } // namespace
 
 namespace mrv
@@ -228,7 +287,7 @@ namespace mrv
         VkCommandBufferAllocateInfo allocInfo = {};
         allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
         allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-        allocInfo.commandPool = m_cmd_pool;
+        allocInfo.commandPool = ctx.command_pool;
         allocInfo.commandBufferCount = 1;
 
         VkCommandBuffer commandBuffer;
@@ -254,12 +313,9 @@ namespace mrv
         vkQueueSubmit(ctx.queue, 1, &submitInfo, VK_NULL_HANDLE);
         vkQueueWaitIdle(ctx.queue);
 
-        vkFreeCommandBuffers(ctx.device, m_cmd_pool, 1, &commandBuffer);
+        vkFreeCommandBuffers(ctx.device, ctx.command_pool, 1, &commandBuffer);
     }
 
-    //
-    // \@todo: change for set_image_layout
-    //
     void NDIView::transitionImageLayout(
         VkImage image, VkImageLayout oldLayout, VkImageLayout newLayout)
     {
@@ -1668,7 +1724,7 @@ void main() {
         VkCommandBuffer update_cmd;
         VkCommandBufferAllocateInfo cmdAllocInfo = {};
         cmdAllocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-        cmdAllocInfo.commandPool = m_cmd_pool;
+        cmdAllocInfo.commandPool = ctx.command_pool;
         cmdAllocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
         cmdAllocInfo.commandBufferCount = 1;
         vkAllocateCommandBuffers(ctx.device, &cmdAllocInfo, &update_cmd);
@@ -1734,7 +1790,7 @@ void main() {
         vkQueueSubmit(ctx.queue, 1, &submitInfo, VK_NULL_HANDLE);
         vkQueueWaitIdle(ctx.queue); // Synchronize before rendering
 
-        vkFreeCommandBuffers(ctx.device, m_cmd_pool, 1, &update_cmd);
+        vkFreeCommandBuffers(ctx.device, ctx.command_pool, 1, &update_cmd);
     }
 
     void NDIView::vk_draw_begin()
