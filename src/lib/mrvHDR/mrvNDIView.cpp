@@ -2083,9 +2083,9 @@ void main() {
     {
         vkQueueWaitIdle(ctx.queue); // Wait for completion
 
-        for (uint32_t i = 0; i < m_textures.size(); i++)
+        for (auto& texture : m_textures)
         {
-            destroy_texture_image(m_textures[i]);
+            destroy_texture_image(texture);
         }
         m_textures.clear();
     }
