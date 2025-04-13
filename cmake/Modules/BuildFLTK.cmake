@@ -12,7 +12,7 @@ else()
     set(FLTK_GIT_REPOSITORY "https://github.com/ggarra13/fltk.git")
 endif()
 #set(FLTK_GIT_TAG 15f16b3baf245d01621b3191982d4dbac99608c4)  # was vulkan
-set(FLTK_GIT_TAG vk)
+set(FLTK_GIT_TAG 4cbad1d57ce9d7a76d987c16daba598d8be8137c)
 
 # The cutting EDGE!
 #set( FLTK_GIT_TAG master )
