@@ -16,10 +16,11 @@ find_package(Intl REQUIRED)
 find_package(libplacebo REQUIRED)
 find_package(NDI REQUIRED)
 
-set(LIBRARIES ${FLTK_vk_LIBRARY} ${FLTK_LIBRARIES} 
+set(LIBRARIES 
     libplacebo
-    NDI
     mrvHDRWidgets
+    NDI
+    ${FLTK_vk_LIBRARY} ${FLTK_LIBRARIES} 
     ${Intl_LIBRARIES}
 )
 
