@@ -1,0 +1,1074 @@
+Can this OpenGL code be encasulapted similarly for Vulkan?
+
+{
+    namespace gl
+    {
+        TLRENDER_ENUM_IMPL(
+            VBOType,
+            "Pos2_F32",
+            "Pos2_F32_UV_U16",
+            "Pos2_F32_Color_F32",
+            "Pos3_F32",
+            "Pos3_F32_UV_U16",
+            "Pos3_F32_UV_U16_Normal_U10",
+            "Pos3_F32_UV_U16_Normal_U10_Color_U8",
+            "Pos3_F32_UV_F32_Normal_F32",
+            "Pos3_F32_UV_F32_Normal_F32_Color_F32",
+            "Pos3_F32_Color_U8");
+        TLRENDER_ENUM_SERIALIZE_IMPL(VBOType);
+
+        namespace
+        {
+            struct PackedNormal
+            {
+                unsigned int x : 10;
+                unsigned int y : 10;
+                unsigned int z : 10;
+                unsigned int unused : 2;
+            };
+
+            struct PackedColor
+            {
+                unsigned int r : 8;
+                unsigned int g : 8;
+                unsigned int b : 8;
+                unsigned int a : 8;
+            };
+        }
+
+        std::size_t getByteCount(VBOType value)
+        {
+            const std::array<size_t, static_cast<size_t>(VBOType::Count)> data =
+            {
+                2 * sizeof(float),
+                2 * sizeof(float) + 2 * sizeof(uint16_t),
+                2 * sizeof(float) + 4 * sizeof(float),
+                3 * sizeof(float),
+                3 * sizeof(float) + 2 * sizeof(uint16_t),
+                3 * sizeof(float) + 2 * sizeof(uint16_t) + sizeof(PackedNormal),
+                3 * sizeof(float) + 2 * sizeof(uint16_t) + sizeof(PackedNormal) + sizeof(PackedColor),
+                3 * sizeof(float) + 2 * sizeof(float) + 3 * sizeof(float),
+                3 * sizeof(float) + 2 * sizeof(float) + 3 * sizeof(float) + 4 * sizeof(float),
+                3 * sizeof(float) + sizeof(PackedColor)
+            };
+            return data[static_cast<size_t>(value)];
+        }
+
+        std::vector<uint8_t> convert(
+            const geom::TriangleMesh2& mesh,
+            gl::VBOType type)
+        {
+            return convert(
+                mesh,
+                type,
+                math::SizeTRange(0, mesh.triangles.size() > 0 ? (mesh.triangles.size() - 1) : 0));
+        }
+
+        std::vector<uint8_t> convert(
+            const geom::TriangleMesh2& mesh,
+            gl::VBOType type,
+            const math::SizeTRange& range)
+        {
+            const size_t vertexByteCount = gl::getByteCount(type);
+            std::vector<uint8_t> out((range.getMax() - range.getMin() + 1) * 3 * vertexByteCount);
+            uint8_t* p = out.data();
+            switch (type)
+            {
+            case gl::VBOType::Pos2_F32:
+                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                {
+                    const geom::Vertex2* vertices[] =
+                    {
+                        &mesh.triangles[i].v[0],
+                        &mesh.triangles[i].v[1],
+                        &mesh.triangles[i].v[2]
+                    };
+                    for (size_t k = 0; k < 3; ++k)
+                    {
+                        const size_t v = vertices[k]->v;
+                        float* pf = reinterpret_cast<float*>(p);
+                        pf[0] = v ? mesh.v[v - 1].x : 0.F;
+                        pf[1] = v ? mesh.v[v - 1].y : 0.F;
+                        p += 2 * sizeof(float);
+                    }
+                }
+                break;
+            case gl::VBOType::Pos2_F32_UV_U16:
+                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                {
+                    const geom::Vertex2* vertices[] =
+                    {
+                        &mesh.triangles[i].v[0],
+                        &mesh.triangles[i].v[1],
+                        &mesh.triangles[i].v[2]
+                    };
+                    for (size_t k = 0; k < 3; ++k)
+                    {
+                        const size_t v = vertices[k]->v;
+                        float* pf = reinterpret_cast<float*>(p);
+                        pf[0] = v ? mesh.v[v - 1].x : 0.F;
+                        pf[1] = v ? mesh.v[v - 1].y : 0.F;
+                        p += 2 * sizeof(float);
+
+                        const size_t t = vertices[k]->t;
+                        uint16_t* pu16 = reinterpret_cast<uint16_t*>(p);
+                        pu16[0] = t ? math::clamp(static_cast<int>(mesh.t[t - 1].x * 65535.F), 0, 65535) : 0;
+                        pu16[1] = t ? math::clamp(static_cast<int>(mesh.t[t - 1].y * 65535.F), 0, 65535) : 0;
+                        p += 2 * sizeof(uint16_t);
+                    }
+                }
+                break;
+            case gl::VBOType::Pos2_F32_Color_F32:
+                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                {
+                    const geom::Vertex2* vertices[] =
+                    {
+                        &mesh.triangles[i].v[0],
+                        &mesh.triangles[i].v[1],
+                        &mesh.triangles[i].v[2]
+                    };
+                    for (size_t k = 0; k < 3; ++k)
+                    {
+                        const size_t v = vertices[k]->v;
+                        float* pf = reinterpret_cast<float*>(p);
+                        pf[0] = v ? mesh.v[v - 1].x : 0.F;
+                        pf[1] = v ? mesh.v[v - 1].y : 0.F;
+                        p += 2 * sizeof(float);
+
+                        const size_t c = vertices[k]->c;
+                        pf = reinterpret_cast<float*>(p);
+                        pf[0] = c ? mesh.c[c - 1].x : 1.F;
+                        pf[1] = c ? mesh.c[c - 1].y : 1.F;
+                        pf[2] = c ? mesh.c[c - 1].z : 1.F;
+                        pf[3] = c ? mesh.c[c - 1].w : 1.F;
+                        p += 4 * sizeof(float);
+                    }
+                }
+                break;
+            default: break;
+            }
+            return out;
+        }
+
+        std::vector<uint8_t> convert(
+            const geom::TriangleMesh3& mesh,
+            gl::VBOType type)
+        {
+            return convert(
+                mesh,
+                type,
+                math::SizeTRange(0, mesh.triangles.size() > 0 ? (mesh.triangles.size() - 1) : 0));
+        }
+
+        std::vector<uint8_t> convert(
+            const geom::TriangleMesh3& mesh,
+            gl::VBOType type,
+            const math::SizeTRange& range)
+        {
+            const size_t vertexByteCount = gl::getByteCount(type);
+            std::vector<uint8_t> out((range.getMax() - range.getMin() + 1) * 3 * vertexByteCount);
+            uint8_t* p = out.data();
+            switch (type)
+            {
+            case gl::VBOType::Pos3_F32:
+                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                {
+                    const geom::Vertex3* vertices[] =
+                    {
+                        &mesh.triangles[i].v[0],
+                        &mesh.triangles[i].v[1],
+                        &mesh.triangles[i].v[2]
+                    };
+                    for (size_t k = 0; k < 3; ++k)
+                    {
+                        const size_t v = vertices[k]->v;
+                        float* pf = reinterpret_cast<float*>(p);
+                        pf[0] = v ? mesh.v[v - 1].x : 0.F;
+                        pf[1] = v ? mesh.v[v - 1].y : 0.F;
+                        pf[2] = v ? mesh.v[v - 1].z : 0.F;
+                        p += 3 * sizeof(float);
+                    }
+                }
+                break;
+            case gl::VBOType::Pos3_F32_UV_U16:
+                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                {
+                    const geom::Vertex3* vertices[] =
+                    {
+                        &mesh.triangles[i].v[0],
+                        &mesh.triangles[i].v[1],
+                        &mesh.triangles[i].v[2]
+                    };
+                    for (size_t k = 0; k < 3; ++k)
+                    {
+                        const size_t v = vertices[k]->v;
+                        float* pf = reinterpret_cast<float*>(p);
+                        pf[0] = v ? mesh.v[v - 1].x : 0.F;
+                        pf[1] = v ? mesh.v[v - 1].y : 0.F;
+                        pf[2] = v ? mesh.v[v - 1].z : 0.F;
+                        p += 3 * sizeof(float);
+
+                        const size_t t = vertices[k]->t;
+                        uint16_t* pu16 = reinterpret_cast<uint16_t*>(p);
+                        pu16[0] = t ? math::clamp(static_cast<int>(mesh.t[t - 1].x * 65535.F), 0, 65535) : 0;
+                        pu16[1] = t ? math::clamp(static_cast<int>(mesh.t[t - 1].y * 65535.F), 0, 65535) : 0;
+                        p += 2 * sizeof(uint16_t);
+                    }
+                }
+                break;
+            case gl::VBOType::Pos3_F32_UV_U16_Normal_U10:
+                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                {
+                    const geom::Vertex3* vertices[] =
+                    {
+                        &mesh.triangles[i].v[0],
+                        &mesh.triangles[i].v[1],
+                        &mesh.triangles[i].v[2]
+                    };
+                    for (size_t k = 0; k < 3; ++k)
+                    {
+                        const size_t v = vertices[k]->v;
+                        float* pf = reinterpret_cast<float*>(p);
+                        pf[0] = v ? mesh.v[v - 1].x : 0.F;
+                        pf[1] = v ? mesh.v[v - 1].y : 0.F;
+                        pf[2] = v ? mesh.v[v - 1].z : 0.F;
+                        p += 3 * sizeof(float);
+
+                        const size_t t = vertices[k]->t;
+                        uint16_t* pu16 = reinterpret_cast<uint16_t*>(p);
+                        pu16[0] = t ? math::clamp(static_cast<int>(mesh.t[t - 1].x * 65535.F), 0, 65535) : 0;
+                        pu16[1] = t ? math::clamp(static_cast<int>(mesh.t[t - 1].y * 65535.F), 0, 65535) : 0;
+                        p += 2 * sizeof(uint16_t);
+
+                        const size_t n = vertices[k]->n;
+                        auto packedNormal = reinterpret_cast<PackedNormal*>(p);
+                        packedNormal->x = n ? math::clamp(static_cast<int>(mesh.n[n - 1].x * 511.F), -512, 511) : 0;
+                        packedNormal->y = n ? math::clamp(static_cast<int>(mesh.n[n - 1].y * 511.F), -512, 511) : 0;
+                        packedNormal->z = n ? math::clamp(static_cast<int>(mesh.n[n - 1].z * 511.F), -512, 511) : 0;
+                        p += sizeof(PackedNormal);
+                    }
+                }
+                break;
+            case gl::VBOType::Pos3_F32_UV_U16_Normal_U10_Color_U8:
+                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                {
+                    const geom::Vertex3* vertices[] =
+                    {
+                        &mesh.triangles[i].v[0],
+                        &mesh.triangles[i].v[1],
+                        &mesh.triangles[i].v[2]
+                    };
+                    for (size_t k = 0; k < 3; ++k)
+                    {
+                        const size_t v = vertices[k]->v;
+                        float* pf = reinterpret_cast<float*>(p);
+                        pf[0] = v ? mesh.v[v - 1].x : 0.F;
+                        pf[1] = v ? mesh.v[v - 1].y : 0.F;
+                        pf[2] = v ? mesh.v[v - 1].z : 0.F;
+                        p += 3 * sizeof(float);
+
+                        const size_t t = vertices[k]->t;
+                        uint16_t* pu16 = reinterpret_cast<uint16_t*>(p);
+                        pu16[0] = t ? math::clamp(static_cast<int>(mesh.t[t - 1].x * 65535.F), 0, 65535) : 0;
+                        pu16[1] = t ? math::clamp(static_cast<int>(mesh.t[t - 1].y * 65535.F), 0, 65535) : 0;
+                        p += 2 * sizeof(uint16_t);
+
+                        const size_t n = vertices[k]->n;
+                        auto packedNormal = reinterpret_cast<PackedNormal*>(p);
+                        packedNormal->x = n ? math::clamp(static_cast<int>(mesh.n[n - 1].x * 511.F), -512, 511) : 0;
+                        packedNormal->y = n ? math::clamp(static_cast<int>(mesh.n[n - 1].y * 511.F), -512, 511) : 0;
+                        packedNormal->z = n ? math::clamp(static_cast<int>(mesh.n[n - 1].z * 511.F), -512, 511) : 0;
+                        p += sizeof(PackedNormal);
+
+                        const size_t c = vertices[k]->c;
+                        auto packedColor = reinterpret_cast<PackedColor*>(p);
+                        packedColor->r = c ? math::clamp(static_cast<int>(mesh.c[c - 1].x * 255.F), 0, 255) : 255;
+                        packedColor->g = c ? math::clamp(static_cast<int>(mesh.c[c - 1].y * 255.F), 0, 255) : 255;
+                        packedColor->b = c ? math::clamp(static_cast<int>(mesh.c[c - 1].z * 255.F), 0, 255) : 255;
+                        packedColor->a = c ? math::clamp(static_cast<int>(mesh.c[c - 1].w * 255.F), 0, 255) : 255;
+                        p += sizeof(PackedColor);
+                    }
+                }
+                break;
+            case gl::VBOType::Pos3_F32_UV_F32_Normal_F32:
+                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                {
+                    const geom::Vertex3* vertices[] =
+                    {
+                        &mesh.triangles[i].v[0],
+                        &mesh.triangles[i].v[1],
+                        &mesh.triangles[i].v[2]
+                    };
+                    for (size_t k = 0; k < 3; ++k)
+                    {
+                        const size_t v = vertices[k]->v;
+                        float* pf = reinterpret_cast<float*>(p);
+                        pf[0] = v ? mesh.v[v - 1].x : 0.F;
+                        pf[1] = v ? mesh.v[v - 1].y : 0.F;
+                        pf[2] = v ? mesh.v[v - 1].z : 0.F;
+                        p += 3 * sizeof(float);
+
+                        const size_t t = vertices[k]->t;
+                        pf = reinterpret_cast<float*>(p);
+                        pf[0] = t ? mesh.t[t - 1].x : 0.F;
+                        pf[1] = t ? mesh.t[t - 1].y : 0.F;
+                        p += 2 * sizeof(float);
+
+                        const size_t n = vertices[k]->n;
+                        pf = reinterpret_cast<float*>(p);
+                        pf[0] = n ? mesh.n[n - 1].x : 0.F;
+                        pf[1] = n ? mesh.n[n - 1].y : 0.F;
+                        pf[2] = n ? mesh.n[n - 1].z : 0.F;
+                        p += 3 * sizeof(float);
+                    }
+                }
+                break;
+            case gl::VBOType::Pos3_F32_UV_F32_Normal_F32_Color_F32:
+                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                {
+                    const geom::Vertex3* vertices[] =
+                    {
+                        &mesh.triangles[i].v[0],
+                        &mesh.triangles[i].v[1],
+                        &mesh.triangles[i].v[2]
+                    };
+                    for (size_t k = 0; k < 3; ++k)
+                    {
+                        const size_t v = vertices[k]->v;
+                        float* pf = reinterpret_cast<float*>(p);
+                        pf[0] = v ? mesh.v[v - 1].x : 0.F;
+                        pf[1] = v ? mesh.v[v - 1].y : 0.F;
+                        pf[2] = v ? mesh.v[v - 1].z : 0.F;
+                        p += 3 * sizeof(float);
+
+                        const size_t t = vertices[k]->t;
+                        pf = reinterpret_cast<float*>(p);
+                        pf[0] = t ? mesh.t[t - 1].x : 0.F;
+                        pf[1] = t ? mesh.t[t - 1].y : 0.F;
+                        p += 2 * sizeof(float);
+
+                        const size_t n = vertices[k]->n;
+                        pf = reinterpret_cast<float*>(p);
+                        pf[0] = n ? mesh.n[n - 1].x : 0.F;
+                        pf[1] = n ? mesh.n[n - 1].y : 0.F;
+                        pf[2] = n ? mesh.n[n - 1].z : 0.F;
+                        p += 3 * sizeof(float);
+
+                        const size_t c = vertices[k]->c;
+                        pf = reinterpret_cast<float*>(p);
+                        pf[0] = c ? mesh.c[c - 1].x : 1.F;
+                        pf[1] = c ? mesh.c[c - 1].y : 1.F;
+                        pf[2] = c ? mesh.c[c - 1].z : 1.F;
+                        pf[3] = c ? mesh.c[c - 1].w : 1.F;
+                        p += 4 * sizeof(float);
+                    }
+                }
+                break;
+            default: break;
+            }
+            return out;
+        }
+
+        struct VBO::Private
+        {
+            std::size_t size = 0;
+            VBOType type = VBOType::First;
+            GLuint vbo = 0;
+        };
+
+        void VBO::_init(std::size_t size, VBOType type)
+        {
+            TLRENDER_P();
+            p.size = size;
+            p.type = type;
+            glGenBuffers(1, &p.vbo);
+            glBindBuffer(GL_ARRAY_BUFFER, p.vbo);
+            glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizei>(p.size * getByteCount(type)), NULL, GL_DYNAMIC_DRAW);
+        }
+
+        VBO::VBO() :
+            _p(new Private)
+        {}
+
+        VBO::~VBO()
+        {
+            TLRENDER_P();
+            if (p.vbo)
+            {
+                glDeleteBuffers(1, &p.vbo);
+                p.vbo = 0;
+            }
+        }
+
+        std::shared_ptr<VBO> VBO::create(std::size_t size, VBOType type)
+        {
+            auto out = std::shared_ptr<VBO>(new VBO);
+            out->_init(size, type);
+            return out;
+        }
+
+        size_t VBO::getSize() const
+        {
+            return _p->size;
+        }
+
+        VBOType VBO::getType() const
+        {
+            return _p->type;
+        }
+
+        unsigned int VBO::getID() const
+        {
+            return _p->vbo;
+        }
+
+        void VBO::copy(const std::vector<uint8_t>& data)
+        {
+            glBindBuffer(GL_ARRAY_BUFFER, _p->vbo);
+            glBufferSubData(GL_ARRAY_BUFFER, 0, static_cast<GLsizei>(data.size()), (void*)data.data());
+        }
+
+        void VBO::copy(const std::vector<uint8_t>& data, std::size_t offset, std::size_t size)
+        {
+            glBindBuffer(GL_ARRAY_BUFFER, _p->vbo);
+            glBufferSubData(GL_ARRAY_BUFFER, offset, static_cast<GLsizei>(size), (void*)data.data());
+        }
+
+        struct VAO::Private
+        {
+            GLuint vao = 0;
+        };
+
+        void VAO::_init(VBOType type, unsigned int vbo)
+        {
+            TLRENDER_P();
+
+#if defined(TLRENDER_API_GL_4_1)
+            glGenVertexArrays(1, &p.vao);
+            glBindVertexArray(p.vao);
+#elif defined(TLRENDER_API_GLES_2)
+            glGenVertexArraysOES(1, &p.vao);
+            glBindVertexArrayOES(p.vao);
+#endif // TLRENDER_API_GL_4_1
+            glBindBuffer(GL_ARRAY_BUFFER, vbo);
+            const std::size_t byteCount = getByteCount(type);
+            switch (type)
+            {
+            case VBOType::Pos2_F32:
+                glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, static_cast<GLsizei>(byteCount), (GLvoid*)0);
+                glEnableVertexAttribArray(0);
+                break;
+            case VBOType::Pos2_F32_UV_U16:
+                glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, static_cast<GLsizei>(byteCount), (GLvoid*)0);
+                glEnableVertexAttribArray(0);
+                glVertexAttribPointer(1, 2, GL_UNSIGNED_SHORT, GL_TRUE, static_cast<GLsizei>(byteCount), (GLvoid*)8);
+                glEnableVertexAttribArray(1);
+                break;
+            case VBOType::Pos2_F32_Color_F32:
+                glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, static_cast<GLsizei>(byteCount), (GLvoid*)0);
+                glEnableVertexAttribArray(0);
+                glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, static_cast<GLsizei>(byteCount), (GLvoid*)8);
+                glEnableVertexAttribArray(1);
+                break;
+            case VBOType::Pos3_F32:
+                glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, static_cast<GLsizei>(byteCount), (GLvoid*)0);
+                glEnableVertexAttribArray(0);
+                break;
+            case VBOType::Pos3_F32_UV_U16:
+                glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, static_cast<GLsizei>(byteCount), (GLvoid*)0);
+                glEnableVertexAttribArray(0);
+                glVertexAttribPointer(1, 2, GL_UNSIGNED_SHORT, GL_TRUE, static_cast<GLsizei>(byteCount), (GLvoid*)12);
+                glEnableVertexAttribArray(1);
+                break;
+            case VBOType::Pos3_F32_UV_F32_Normal_F32:
+                glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, static_cast<GLsizei>(byteCount), (GLvoid*)0);
+                glEnableVertexAttribArray(0);
+                glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, static_cast<GLsizei>(byteCount), (GLvoid*)12);
+                glEnableVertexAttribArray(1);
+                glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, static_cast<GLsizei>(byteCount), (GLvoid*)20);
+                glEnableVertexAttribArray(2);
+                break;
+            case VBOType::Pos3_F32_UV_F32_Normal_F32_Color_F32:
+                glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, static_cast<GLsizei>(byteCount), (GLvoid*)0);
+                glEnableVertexAttribArray(0);
+                glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, static_cast<GLsizei>(byteCount), (GLvoid*)12);
+                glEnableVertexAttribArray(1);
+                glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, static_cast<GLsizei>(byteCount), (GLvoid*)20);
+                glEnableVertexAttribArray(2);
+                glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, static_cast<GLsizei>(byteCount), (GLvoid*)32);
+                glEnableVertexAttribArray(3);
+                break;
+            case VBOType::Pos3_F32_Color_U8:
+                glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, static_cast<GLsizei>(byteCount), (GLvoid*)0);
+                glEnableVertexAttribArray(0);
+                glVertexAttribPointer(1, 4, GL_UNSIGNED_BYTE, GL_TRUE, static_cast<GLsizei>(byteCount), (GLvoid*)12);
+                glEnableVertexAttribArray(1);
+                break;
+            default: break;
+            }
+        }
+
+        VAO::VAO() :
+            _p(new Private)
+        {}
+
+        VAO::~VAO()
+        {
+            TLRENDER_P();
+            if (p.vao)
+            {
+#if defined(TLRENDER_API_GL_4_1)
+                glDeleteVertexArrays(1, &p.vao);
+#elif defined(TLRENDER_API_GLES_2)
+                glDeleteVertexArraysOES(1, &p.vao);
+#endif // TLRENDER_API_GL_4_1
+                p.vao = 0;
+            }
+        }
+
+        std::shared_ptr<VAO> VAO::create(VBOType type, unsigned int vbo)
+        {
+            auto out = std::shared_ptr<VAO>(new VAO);
+            out->_init(type, vbo);
+            return out;
+        }
+
+        unsigned int VAO::getID() const
+        {
+            return _p->vao;
+        }
+
+        void VAO::bind()
+        {
+#if defined(TLRENDER_API_GL_4_1)
+            glBindVertexArray(_p->vao);
+#elif defined(TLRENDER_API_GLES_2)
+            glBindVertexArrayOES(_p->vao);
+#endif // TLRENDER_API_GL_4_1
+        }
+
+        void VAO::draw(unsigned int mode, std::size_t offset, std::size_t size)
+        {
+            glDrawArrays(mode, static_cast<GLsizei>(offset), static_cast<GLsizei>(size));
+        }
+    }
+ChatGPT said:
+Yes, this OpenGL code pattern — which encapsulates vertex buffer data serialization from structured mesh data — can absolutely be adapted for Vulkan with a similar design.
+
+✅ What's Already Good for Vulkan
+Your current code is:
+
+Cleanly modularized around VBO types.
+
+Generic and data-oriented, decoupled from actual OpenGL API calls.
+
+Focused on packing mesh data into a raw byte buffer, which Vulkan also expects for its vkCmdBindVertexBuffers.
+
+🔁 Vulkan Adaptation Strategy
+Vulkan doesn't use glVertexAttribPointer — you define VkVertexInputBindingDescription and VkVertexInputAttributeDescription instead. But the underlying data layout in memory is essentially the same.
+
+🔧 Vulkan-specific changes
+Here's what you'd typically adapt:
+
+1. Rename & Abstract Away OpenGL-Specific References
+cpp
+Copy
+Edit
+namespace gfx // Instead of gl
+{
+    enum class VBOType { ... };
+    std::size_t getByteCount(VBOType);
+    std::vector<uint8_t> convert(const geom::TriangleMesh3&, VBOType, const math::SizeTRange&);
+}
+This keeps your packing logic reusable for both APIs.
+
+2. Create Vulkan-compatible Vertex Descriptions
+You’ll need helper functions for this:
+
+cpp
+Copy
+Edit
+VkVertexInputBindingDescription getBindingDescription(VBOType type);
+std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions(VBOType type);
+You can match these descriptions to your layout, e.g.:
+
+cpp
+Copy
+Edit
+case VBOType::Pos3_F32_UV_U16_Normal_U10:
+    // Binding at location 0: vec3 position
+    // Binding at location 1: u16vec2 UVs (normalized)
+    // Binding at location 2: packed normal (U10)
+3. Align Memory Formats with Vulkan-friendly Types
+Some Vulkan drivers are picky about memory alignment and padding. For instance:
+
+Packed formats like your PackedNormal (10-10-10-2) should match VK_FORMAT_A2B10G10R10_UNORM_PACK32 if used directly.
+
+U16 UVs should use VK_FORMAT_R16G16_UNORM.
+
+So make sure the packing in your std::vector<uint8_t> matches the VkFormat used in attribute descriptions.
+
+4. Integrate With Vulkan Buffer Upload
+Once you get your packed vertex buffer:
+
+cpp
+Copy
+Edit
+std::vector<uint8_t> vertexData = gfx::convert(mesh, VBOType::Pos3_F32_UV_U16);
+
+// Upload to GPU (host-visible buffer, or staging + device-local)
+You'd use:
+
+cpp
+Copy
+Edit
+vkCreateBuffer(...)
+vkAllocateMemory(...)
+memcpy(...)
+vkBindBufferMemory(...)
+🧠 Summary
+✅ Yes, you can encapsulate Vulkan VBO logic similarly.
+💡 Your current convert() function is Vulkan-ready as long as:
+
+You generate correct Vk*Description metadata alongside it.
+
+You ensure memory layout compatibility with Vulkan formats.
+
+You separate data-packing from graphics API logic (which you already are doing 👍).
+
+If you'd like, I can help sketch out the Vulkan version of getBindingDescription() and getAttributeDescriptions() for any of your VBO types. Want to try that with, say, Pos3_F32_UV_U16_Normal_U10?
+
+
+
+
+
+
+You said:
+Yes, please.
+
+
+ChatGPT said:
+Yes, your OpenGL mesh packing logic can absolutely be encapsulated similarly for Vulkan. In fact, the buffer creation, format layout, and data interleaving that you're doing in OpenGL is very close to what Vulkan expects for its vertex input bindings and attribute descriptions — it just requires more explicit setup.
+
+Let’s break this down and start sketching how your code structure would adapt to Vulkan.
+
+✅ 1. Enum-based VBO layout types
+Your VBOType enum and getByteCount() logic is reusable — you can move this part into a shared module (perhaps rename the namespace from gl to gfx or render) and share it between OpenGL and Vulkan.
+
+cpp
+Copy
+Edit
+namespace gfx {
+    enum class VBOType {
+        Pos2_F32,
+        Pos2_F32_UV_U16,
+        Pos2_F32_Color_F32,
+        Pos3_F32,
+        Pos3_F32_UV_U16,
+        Pos3_F32_UV_U16_Normal_U10,
+        Pos3_F32_UV_U16_Normal_U10_Color_U8,
+        Pos3_F32_UV_F32_Normal_F32,
+        Pos3_F32_UV_F32_Normal_F32_Color_F32,
+        Pos3_F32_Color_U8,
+        Count
+    };
+
+    size_t getByteCount(VBOType type);
+}
+That getByteCount() function is Vulkan-ready as-is.
+
+✅ 2. Interleaved data buffer generation
+Your convert() functions that flatten a TriangleMesh into interleaved std::vector<uint8_t> work for Vulkan too — because Vulkan expects tightly packed vertex buffers. So you can keep the logic but:
+
+You may want to ensure memory alignment (Vulkan loves alignment).
+
+You might want to support staging buffers (we'll get to that below).
+
+Vulkan vertex attributes are explicitly described — that means this struct-to-format mapping must be externalized.
+
+✅ 3. Vulkan-specific encapsulation layer
+Here’s where you write Vulkan-specific glue to describe how to interpret your packed buffer.
+
+Step 1: Vertex binding + attribute descriptions (example for Pos3_F32_UV_U16)
+cpp
+Copy
+Edit
+VkVertexInputBindingDescription bindingDesc{};
+bindingDesc.binding = 0;
+bindingDesc.stride = 3 * sizeof(float) + 2 * sizeof(uint16_t);
+bindingDesc.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+
+std::vector<VkVertexInputAttributeDescription> attribDescs;
+
+// Position (vec3)
+attribDescs.push_back({
+    0,  // location
+    0,  // binding
+    VK_FORMAT_R32G32B32_SFLOAT,
+    0   // offset
+});
+
+// UV (vec2 half)
+attribDescs.push_back({
+    1,
+    0,
+    VK_FORMAT_R16G16_UNORM,
+    static_cast<uint32_t>(3 * sizeof(float))
+});
+You’d encapsulate this in a function:
+
+cpp
+Copy
+Edit
+void getVertexInputDescriptions(VBOType type,
+    VkVertexInputBindingDescription& binding,
+    std::vector<VkVertexInputAttributeDescription>& attributes);
+Step 2: Buffer creation (typical Vulkan boilerplate)
+cpp
+Copy
+Edit
+VkBuffer vertexBuffer;
+VkDeviceMemory vertexBufferMemory;
+createVertexBuffer(device, physicalDevice, data.data(), data.size(), vertexBuffer, vertexBufferMemory);
+🧠 Encapsulation strategy
+You could encapsulate Vulkan the same way you did OpenGL, for example:
+
+cpp
+Copy
+Edit
+namespace vk
+{
+    std::vector<uint8_t> convert(const geom::TriangleMesh2& mesh, gfx::VBOType type);
+    void createVertexBuffer(VkDevice device, VkPhysicalDevice physicalDevice,
+                            const std::vector<uint8_t>& data,
+                            VkBuffer& buffer, VkDeviceMemory& memory);
+    void getVertexInputDescriptions(gfx::VBOType type,
+                                     VkVertexInputBindingDescription& binding,
+                                     std::vector<VkVertexInputAttributeDescription>& attributes);
+}
+This keeps your mesh processing logic separate from both backends, with thin adapters over them.
+
+🚀 Final thoughts
+Vulkan’s verbosity works in your favor here — it forces explicit layout declaration, which aligns nicely with your VBOType model.
+
+You’re already structuring the data in an interleaved, tightly packed form that’s ideal for Vulkan.
+
+The only major addition is the VkVertexInput* structs that tell Vulkan how to interpret that buffer.
+
+Optional: You could add VkFormat gfx::getFormat(...) helper functions to map from your type layouts to Vulkan formats like VK_FORMAT_R32G32B32_SFLOAT.
+
+Would you like a working example for one specific VBOType, like Pos3_F32_UV_U16, fully encapsulated Vulkan-style?
+
+
+
+
+
+
+You said:
+I noticed that, even though you said it could be encapsulated, you had to use device and physicalDevice.  What's the best approach to handle them without passing them?  As static variables?
+
+
+ChatGPT said:
+Great observation — this hits right at the heart of Vulkan's explicit API design. In Vulkan, you must interact with objects like VkDevice and VkPhysicalDevice to create resources like buffers, images, etc., so the need to pass them around is a reality of the API. But you're asking about a clean way to manage that without cluttering every function signature.
+
+There are a few idiomatic approaches for this. Let's break down the best practices:
+
+✅ 1. Encapsulate device handles in a context or state object
+This is the most robust, maintainable, and extensible solution.
+
+Create a VkContext or VulkanDevice struct/class:
+cpp
+Copy
+Edit
+struct VulkanContext {
+    VkDevice device;
+    VkPhysicalDevice physicalDevice;
+    VkQueue graphicsQueue;
+    VkCommandPool commandPool;
+    // ... any other global Vulkan objects
+
+    // Optional: allocator or VMA if you're using it
+};
+Then instead of passing both device and physicalDevice, you pass a reference or pointer to this VulkanContext.
+
+Example usage:
+cpp
+Copy
+Edit
+void createVertexBuffer(VulkanContext& ctx,
+                        const std::vector<uint8_t>& data,
+                        VkBuffer& buffer, VkDeviceMemory& memory);
+Benefits:
+
+Cleaner APIs.
+
+Central place to configure Vulkan handles.
+
+Easy to add more parameters later (like queues, allocator, etc.).
+
+✅ 2. Use a singleton context (carefully)
+If you're working on a small project, prototype, or prefer a more global/static setup, you could define a static context.
+
+cpp
+Copy
+Edit
+namespace vk
+{
+    static VulkanContext gContext;
+
+    void init(VulkanContext context) {
+        gContext = context;
+    }
+
+    void createVertexBuffer(const std::vector<uint8_t>& data,
+                            VkBuffer& buffer, VkDeviceMemory& memory) {
+        // Use gContext.device, gContext.physicalDevice
+    }
+}
+Pros:
+
+Easy to use.
+
+No need to pass context around.
+
+Cons:
+
+Less flexible.
+
+Can introduce tight coupling and globals that are hard to test/debug.
+
+Still, it's totally acceptable for tools, editors, or projects where you control the full context.
+
+🚫 Avoid: Free-floating static VkDevice/VkPhysicalDevice variables
+While tempting, defining individual static VkDevice or VkPhysicalDevice variables outside a context structure can get messy fast, especially when you need to add more Vulkan handles later (e.g., queues, allocators, etc.). It also makes it harder to switch between multiple devices or contexts, if you ever need that.
+
+🧪 Bonus: Pair it with an allocator (like VMA)
+If you use Vulkan Memory Allocator (VMA), you can simplify memory handling and store the allocator handle in your VulkanContext.
+
+Summary
+Approach	Clean	Flexible	Global Access	Recommended
+Struct VulkanContext	✅	✅	⚠️ (if static)	✅ Yes
+Singleton VulkanContext	✅	⚠️	✅	👍 For tools
+Static device vars	⚠️	❌	✅	❌ Avoid
+Would you like a minimal VulkanContext class/struct + init + sample buffer creation code?
+
+
+
+
+
+
+You said:
+I need to have at least two windows with Vulkan.  So I assume VulkanContext will be the best approach?
+
+
+ChatGPT said:
+Yes, you're absolutely right — having at least two Vulkan windows (which usually means two swapchains and maybe two surfaces, command buffers, etc.) means that a VulkanContext per window is the cleanest and most scalable solution.
+
+✅ Recommended Structure
+You want to split global (shared) Vulkan state from per-window state. Here’s how:
+
+🔧 1. Global Context (VulkanDeviceContext or VulkanInstanceContext)
+This holds device-level stuff that's common across all windows:
+
+cpp
+Copy
+Edit
+struct VulkanDeviceContext {
+    VkInstance instance;
+    VkPhysicalDevice physicalDevice;
+    VkDevice device;
+    VkQueue graphicsQueue;
+    VkQueue presentQueue;
+    VkCommandPool commandPool;
+    // Optional: allocator (like VMA), debug utils, etc.
+};
+🪟 2. Per-Window Context (VulkanWindowContext or VulkanSwapchainContext)
+Each window has its own surface, swapchain, render pass, framebuffers, etc.
+
+struct VulkanWindowContext {
+    VkSurfaceKHR surface;
+    VkSwapchainKHR swapchain;
+    std::vector<VkImage> swapchainImages;
+    std::vector<VkImageView> imageViews;
+    std::vector<VkFramebuffer> framebuffers;
+
+    VkRenderPass renderPass;
+
+    uint32_t width, height;
+    GLFWwindow* glfwWindow; // or your windowing system handle
+
+    // Pointer to the shared device context
+    VulkanDeviceContext* deviceContext;
+};
+🔄 Relationship
+You create one VulkanDeviceContext.
+
+Then you create one VulkanWindowContext per window, passing in a pointer to the shared device context.
+
+Each window uses the same VkDevice, but a different VkSurfaceKHR, VkSwapchainKHR, and its own rendering setup.
+
+🧠 Example Usage
+cpp
+Copy
+Edit
+VulkanDeviceContext deviceContext;
+initVulkanDeviceContext(deviceContext);
+
+VulkanWindowContext window1, window2;
+initWindowContext(window1, &deviceContext, winHandle1);
+initWindowContext(window2, &deviceContext, winHandle2);
+
+// render loop
+drawFrame(window1);
+drawFrame(window2);
+⚠️ Considerations
+You'll share VkDevice, queues, and command pool if you want to conserve resources.
+
+You can also create separate command pools per window if needed.
+
+Make sure to synchronize presentation and rendering correctly for each window (fences/semaphores per swapchain).
+
+Bonus: Cleanup Strategy
+Both contexts should have destroy() methods so you can easily free everything in the correct order.
+
+cpp
+Copy
+Edit
+void cleanupWindow(VulkanWindowContext& win);
+void cleanupDevice(VulkanDeviceContext& dev);
+Want a minimal code example with both contexts initialized?
+
+
+
+
+
+
+You said:
+I have another problem.  The code I am working with uses GLFW for creating OpenGL off-screen buffers to render to for thumbnails in a separate thread.  Is there a way to port that to Vulkan?
+
+
+ChatGPT said:
+Yes — it's definitely possible to port your off-screen OpenGL thumbnail rendering to Vulkan, but there are some design differences you’ll need to navigate. Off-screen rendering is more manual in Vulkan, but also more flexible and powerful.
+
+Let’s break it down:
+
+🧠 The Goal
+You currently:
+
+Use GLFW + OpenGL to create hidden windows or Pbuffers to render thumbnails off-screen in a thread.
+
+Render to textures and read them back (probably with glReadPixels).
+
+You want to:
+
+Port that to Vulkan — off-screen render-to-texture (in threads), without showing anything on-screen.
+
+✅ Vulkan Equivalent: Headless Framebuffer Rendering
+What you need:
+No surface / no swapchain (headless rendering).
+
+Create an image + image view with VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT.
+
+Create a framebuffer using this image.
+
+Create a render pass targeting it.
+
+Render into it using Vulkan commands.
+
+Copy the image to a buffer, map and read it back to CPU.
+
+This is 100% possible and works great for thumbnail or background rendering.
+
+🎨 Key Vulkan Objects per Thumbnail Renderer:
+VkImage (off-screen color attachment)
+
+VkImageView
+
+VkRenderPass
+
+VkFramebuffer
+
+VkCommandBuffer
+
+VkFence or VkSemaphore (for sync)
+
+VkBuffer (to read back to CPU)
+
+You can fully do this without a window or surface, and run each in a separate thread, each with its own command pool.
+
+🔄 Comparison with OpenGL+GLFW
+Feature	OpenGL (GLFW)	Vulkan
+Offscreen buffer	Pbuffer / hidden window	Headless VkImage with VkFramebuffer
+Threaded use	Easy, implicit context per thread	Manual: command pools, queues, sync
+Readback	glReadPixels	vkCmdCopyImageToBuffer + vkMapMemory
+Window required	Yes, even if hidden	No surface needed
+🔁 Reusing the Current Architecture?
+You can still use GLFW for windowing, but not required for offscreen Vulkan.
+
+Instead of creating hidden windows per thumbnail thread, create a thumbnail renderer class that encapsulates a Vulkan image and all supporting render objects.
+
+⚙️ Optional: Reuse Swapchain Infrastructure?
+If you already have Vulkan code for swapchain rendering, you can reuse your:
+
+Device
+
+Render pass
+
+Command buffer logic
+
+But instead of using swapchain images, render to a custom image+framebuffer.
+
+🧪 Do You Want a Minimal Offscreen Vulkan Renderer Example?
+I can give you a minimal working example (C++) of a Vulkan offscreen render pass that:
+
+Draws into an image
+
+Copies the pixels to CPU memory
+
+Does not require a window or a swapchain
+
+Let me know and I’ll write it up!
+
+ChatGPT said:
+Vulkan Offscreen Renderer
+-------------------------
+
+// Minimal Vulkan Offscreen Renderer Example (Headless Thumbnail Rendering)
+// Requirements: Vulkan SDK
+
+#include <vulkan/vulkan.h>
+#include <vector>
+#include <iostream>
+#include <cassert>
+
+#define VK_CHECK(x) \
+    do { \
+        VkResult err = x; \
+        if (err) { \
+            std::cerr << "Fatal : VkResult is " << err << " at " << __FILE__ << ":" << __LINE__ << std::endl; \
+            abort(); \
+        } \
+    } while (0)
+
+struct VulkanOffscreenContext {
+    VkInstance instance;
+    VkPhysicalDevice physicalDevice;
+    VkDevice device;
+    VkQueue graphicsQueue;
+    VkCommandPool commandPool;
+    VkCommandBuffer commandBuffer;
+    VkImage image;
+    VkDeviceMemory imageMemory;
+    VkImageView imageView;
+    VkRenderPass renderPass;
+    VkFramebuffer framebuffer;
+    VkBuffer stagingBuffer;
+    VkDeviceMemory stagingMemory;
+    uint32_t width = 512;
+    uint32_t height = 512;
+
+    void init();
+    void cleanup();
+
+Answer in chat instead
+Here's a minimal Vulkan offscreen renderer skeleton that you can use for headless rendering (like generating thumbnails). It includes all the necessary Vulkan structures for rendering to an image without a window. You can build on this by adding render passes, shaders, and r
