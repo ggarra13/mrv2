@@ -180,7 +180,7 @@ namespace mrv
         imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 
         VkImage image;
-        if (vkCreateImage(m_device, &imageInfo, nullptr, &image) != VK_SUCCESS)
+        if (vkCreateImage(ctx.device, &imageInfo, nullptr, &image) != VK_SUCCESS)
         {
             throw std::runtime_error("Failed to create image");
         }
@@ -190,10 +190,10 @@ namespace mrv
     VkDeviceMemory NDIView::allocateAndBindImageMemory(VkImage image)
     {
         VkMemoryRequirements memRequirements;
-        vkGetImageMemoryRequirements(m_device, image, &memRequirements);
+        vkGetImageMemoryRequirements(ctx.device, image, &memRequirements);
 
         VkPhysicalDeviceMemoryProperties memProperties;
-        vkGetPhysicalDeviceMemoryProperties(m_gpu, &memProperties);
+        vkGetPhysicalDeviceMemoryProperties(ctx.gpu, &memProperties);
 
         uint32_t memoryTypeIndex = 0;
         for (uint32_t i = 0; i < memProperties.memoryTypeCount; ++i)
@@ -213,13 +213,13 @@ namespace mrv
         allocInfo.memoryTypeIndex = memoryTypeIndex;
 
         VkDeviceMemory imageMemory;
-        if (vkAllocateMemory(m_device, &allocInfo, nullptr, &imageMemory) !=
+        if (vkAllocateMemory(ctx.device, &allocInfo, nullptr, &imageMemory) !=
             VK_SUCCESS)
         {
             throw std::runtime_error("Failed to allocate image memory");
         }
 
-        vkBindImageMemory(m_device, image, imageMemory, 0);
+        vkBindImageMemory(ctx.device, image, imageMemory, 0);
         return imageMemory;
     }
 
@@ -232,7 +232,7 @@ namespace mrv
         allocInfo.commandBufferCount = 1;
 
         VkCommandBuffer commandBuffer;
-        vkAllocateCommandBuffers(m_device, &allocInfo, &commandBuffer);
+        vkAllocateCommandBuffers(ctx.device, &allocInfo, &commandBuffer);
 
         VkCommandBufferBeginInfo beginInfo = {};
         beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -251,10 +251,10 @@ namespace mrv
         submitInfo.commandBufferCount = 1;
         submitInfo.pCommandBuffers = &commandBuffer;
 
-        vkQueueSubmit(m_queue, 1, &submitInfo, VK_NULL_HANDLE);
-        vkQueueWaitIdle(m_queue);
+        vkQueueSubmit(ctx.queue, 1, &submitInfo, VK_NULL_HANDLE);
+        vkQueueWaitIdle(ctx.queue);
 
-        vkFreeCommandBuffers(m_device, m_cmd_pool, 1, &commandBuffer);
+        vkFreeCommandBuffers(ctx.device, m_cmd_pool, 1, &commandBuffer);
     }
 
     //
@@ -321,17 +321,17 @@ namespace mrv
         bufferInfo.usage = usage;
         bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-        if (vkCreateBuffer(m_device, &bufferInfo, nullptr, &buffer) !=
+        if (vkCreateBuffer(ctx.device, &bufferInfo, nullptr, &buffer) !=
             VK_SUCCESS)
         {
             throw std::runtime_error("Failed to create buffer");
         }
 
         VkMemoryRequirements memRequirements;
-        vkGetBufferMemoryRequirements(m_device, buffer, &memRequirements);
+        vkGetBufferMemoryRequirements(ctx.device, buffer, &memRequirements);
 
         VkPhysicalDeviceMemoryProperties memProperties;
-        vkGetPhysicalDeviceMemoryProperties(m_gpu, &memProperties);
+        vkGetPhysicalDeviceMemoryProperties(ctx.gpu, &memProperties);
 
         uint32_t memoryTypeIndex = 0;
         for (uint32_t i = 0; i < memProperties.memoryTypeCount; ++i)
@@ -350,13 +350,13 @@ namespace mrv
         allocInfo.allocationSize = memRequirements.size;
         allocInfo.memoryTypeIndex = memoryTypeIndex;
 
-        if (vkAllocateMemory(m_device, &allocInfo, nullptr, &bufferMemory) !=
+        if (vkAllocateMemory(ctx.device, &allocInfo, nullptr, &bufferMemory) !=
             VK_SUCCESS)
         {
             throw std::runtime_error("Failed to allocate buffer memory");
         }
 
-        vkBindBufferMemory(m_device, buffer, bufferMemory, 0);
+        vkBindBufferMemory(ctx.device, buffer, bufferMemory, 0);
     }
 
     void NDIView::uploadTextureData(
@@ -383,11 +383,11 @@ namespace mrv
         // Copy data to staging buffer
         void* mappedData;
         result = vkMapMemory(
-            m_device, stagingBufferMemory, 0, imageSize, 0, &mappedData);
+            ctx.device, stagingBufferMemory, 0, imageSize, 0, &mappedData);
         VK_CHECK_RESULT(result);
 
         std::memcpy(mappedData, data, static_cast<size_t>(imageSize));
-        vkUnmapMemory(m_device, stagingBufferMemory);
+        vkUnmapMemory(ctx.device, stagingBufferMemory);
 
         // Copy staging buffer to image
         VkCommandBuffer commandBuffer = beginSingleTimeCommands();
@@ -410,8 +410,8 @@ namespace mrv
         endSingleTimeCommands(commandBuffer);
 
         // Clean up staging buffer
-        vkDestroyBuffer(m_device, stagingBuffer, nullptr);
-        vkFreeMemory(m_device, stagingBufferMemory, nullptr);
+        vkDestroyBuffer(ctx.device, stagingBuffer, nullptr);
+        vkFreeMemory(ctx.device, stagingBufferMemory, nullptr);
     }
 
     VkImageView NDIView::createImageView(
@@ -432,7 +432,7 @@ namespace mrv
         viewInfo.subresourceRange.layerCount = 1;
 
         VkImageView imageView;
-        if (vkCreateImageView(m_device, &viewInfo, nullptr, &imageView) !=
+        if (vkCreateImageView(ctx.device, &viewInfo, nullptr, &imageView) !=
             VK_SUCCESS)
         {
             throw std::runtime_error("Failed to create image view");
@@ -460,7 +460,7 @@ namespace mrv
         samplerInfo.unnormalizedCoordinates = VK_FALSE;
 
         VkSampler sampler;
-        if (vkCreateSampler(m_device, &samplerInfo, nullptr, &sampler) !=
+        if (vkCreateSampler(ctx.device, &samplerInfo, nullptr, &sampler) !=
             VK_SUCCESS)
         {
             throw std::runtime_error("Failed to create sampler");
@@ -705,8 +705,8 @@ namespace mrv
         if (p.findThread.thread.joinable())
             p.findThread.thread.join();
 
-        vkDestroyShaderModule(m_device, m_frag_shader_module, NULL);
-        vkDestroyShaderModule(m_device, m_vert_shader_module, NULL);
+        vkDestroyShaderModule(ctx.device, m_frag_shader_module, NULL);
+        vkDestroyShaderModule(ctx.device, m_vert_shader_module, NULL);
     }
 
     NDIView::NDIView(int x, int y, int w, int h, const char* l) :
@@ -913,7 +913,7 @@ namespace mrv
 
         // Query if image supports texture format
         VkFormatProperties props;
-        vkGetPhysicalDeviceFormatProperties(m_gpu, tex_format, &props);
+        vkGetPhysicalDeviceFormatProperties(ctx.gpu, tex_format, &props);
 
         m_textures.resize(1);
 
@@ -937,7 +937,7 @@ namespace mrv
 
             VkMemoryRequirements memRequirements;
             vkGetImageMemoryRequirements(
-                m_device, m_textures[0].image, &memRequirements);
+                ctx.device, m_textures[0].image, &memRequirements);
 
             VkMemoryAllocateInfo mem_alloc = {};
             mem_alloc.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
@@ -954,12 +954,12 @@ namespace mrv
 
             /* allocate memory */
             result = vkAllocateMemory(
-                m_device, &mem_alloc, NULL, &m_textures[0].mem);
+                ctx.device, &mem_alloc, NULL, &m_textures[0].mem);
             VK_CHECK_RESULT(result);
 
             /* bind memory */
             result = vkBindImageMemory(
-                m_device, m_textures[0].image, m_textures[0].mem, 0);
+                ctx.device, m_textures[0].image, m_textures[0].mem, 0);
             VK_CHECK_RESULT(result);
 
             VkCommandBuffer cmd = beginSingleTimeCommands();
@@ -1009,7 +1009,7 @@ namespace mrv
         viewInfo.image = m_textures[0].image;
 
         result =
-            vkCreateImageView(m_device, &viewInfo, NULL, &m_textures[0].view);
+            vkCreateImageView(ctx.device, &viewInfo, NULL, &m_textures[0].view);
         VK_CHECK_RESULT(result);
     }
 
@@ -1083,10 +1083,10 @@ namespace mrv
 
         memset(&m_vertices, 0, sizeof(m_vertices));
 
-        result = vkCreateBuffer(m_device, &buf_info, NULL, &m_vertices.buf);
+        result = vkCreateBuffer(ctx.device, &buf_info, NULL, &m_vertices.buf);
         VK_CHECK_RESULT(result);
 
-        vkGetBufferMemoryRequirements(m_device, m_vertices.buf, &mem_reqs);
+        vkGetBufferMemoryRequirements(ctx.device, m_vertices.buf, &mem_reqs);
         VK_CHECK_RESULT(result);
 
         mem_alloc.allocationSize = mem_reqs.size;
@@ -1096,19 +1096,19 @@ namespace mrv
                 VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
             &mem_alloc.memoryTypeIndex);
 
-        result = vkAllocateMemory(m_device, &mem_alloc, NULL, &m_vertices.mem);
+        result = vkAllocateMemory(ctx.device, &mem_alloc, NULL, &m_vertices.mem);
         VK_CHECK_RESULT(result);
 
         result = vkMapMemory(
-            m_device, m_vertices.mem, 0, mem_alloc.allocationSize, 0, &data);
+            ctx.device, m_vertices.mem, 0, mem_alloc.allocationSize, 0, &data);
         VK_CHECK_RESULT(result);
 
         std::memcpy(data, vertices.data(), static_cast<size_t>(buffer_size));
 
-        vkUnmapMemory(m_device, m_vertices.mem);
+        vkUnmapMemory(ctx.device, m_vertices.mem);
 
         result =
-            vkBindBufferMemory(m_device, m_vertices.buf, m_vertices.mem, 0);
+            vkBindBufferMemory(ctx.device, m_vertices.buf, m_vertices.mem, 0);
         VK_CHECK_RESULT(result);
 
         m_vertices.vi.sType =
@@ -1207,7 +1207,7 @@ namespace mrv
         rp_info.pDependencies = NULL;
 
         VkResult result;
-        result = vkCreateRenderPass(m_device, &rp_info, NULL, &m_renderPass);
+        result = vkCreateRenderPass(ctx.device, &rp_info, NULL, &m_renderPass);
         VK_CHECK_RESULT(result);
     }
 
@@ -1236,7 +1236,7 @@ namespace mrv
                 "vertex_shader.glsl"   // Filename for error reporting
             );
 
-            m_vert_shader_module = create_shader_module(m_device, spirv);
+            m_vert_shader_module = create_shader_module(ctx.device, spirv);
         }
         catch (const std::exception& e)
         {
@@ -1283,7 +1283,7 @@ void main() {
                 shaderc_fragment_shader, // Shader type
                 "frag_shader.glsl"       // Filename for error reporting
             );
-            m_frag_shader_module = create_shader_module(m_device, spirv);
+            m_frag_shader_module = create_shader_module(ctx.device, spirv);
         }
         catch (const std::exception& e)
         {
@@ -1409,13 +1409,13 @@ void main() {
         pipelineCache.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
 
         result = vkCreatePipelineCache(
-            m_device, &pipelineCache, NULL, &m_pipelineCache);
+            ctx.device, &pipelineCache, NULL, &ctx.pipeline_cache);
         VK_CHECK_RESULT(result);
         result = vkCreateGraphicsPipelines(
-            m_device, m_pipelineCache, 1, &pipeline, NULL, &m_pipeline);
+            ctx.device, ctx.pipeline_cache, 1, &pipeline, NULL, &m_pipeline);
         VK_CHECK_RESULT(result);
 
-        vkDestroyPipelineCache(m_device, m_pipelineCache, NULL);
+        vkDestroyPipelineCache(ctx.device, ctx.pipeline_cache, NULL);
     }
 
     void NDIView::prepare_descriptor_layout()
@@ -1456,7 +1456,7 @@ void main() {
         layoutInfo.pBindings = bindings.data();
 
         VkResult result = vkCreateDescriptorSetLayout(
-            m_device, &layoutInfo, nullptr, &m_desc_layout);
+            ctx.device, &layoutInfo, nullptr, &m_desc_layout);
         VK_CHECK_RESULT(result);
 
         VkPipelineLayoutCreateInfo pipelineLayoutInfo = {};
@@ -1466,7 +1466,7 @@ void main() {
         pipelineLayoutInfo.pSetLayouts = &m_desc_layout;
 
         result = vkCreatePipelineLayout(
-            m_device, &pipelineLayoutInfo, nullptr, &m_pipeline_layout);
+            ctx.device, &pipelineLayoutInfo, nullptr, &m_pipeline_layout);
         VK_CHECK_RESULT(result);
     }
 
@@ -1484,7 +1484,7 @@ void main() {
         poolInfo.pPoolSizes = &poolSize;
 
         VkResult result =
-            vkCreateDescriptorPool(m_device, &poolInfo, nullptr, &m_desc_pool);
+            vkCreateDescriptorPool(ctx.device, &poolInfo, nullptr, &m_desc_pool);
         VK_CHECK_RESULT(result);
     }
 
@@ -1497,7 +1497,7 @@ void main() {
         allocInfo.pSetLayouts = &m_desc_layout;
 
         VkResult result =
-            vkAllocateDescriptorSets(m_device, &allocInfo, &m_desc_set);
+            vkAllocateDescriptorSets(ctx.device, &allocInfo, &m_desc_set);
         VK_CHECK_RESULT(result);
 
         std::vector<VkDescriptorImageInfo> imageInfos(m_textures.size());
@@ -1519,7 +1519,7 @@ void main() {
         }
 
         vkUpdateDescriptorSets(
-            m_device, static_cast<uint32_t>(writes.size()), writes.data(), 0,
+            ctx.device, static_cast<uint32_t>(writes.size()), writes.data(), 0,
             nullptr);
     }
 
@@ -1603,7 +1603,7 @@ void main() {
     {
         TLRENDER_P();
 
-        vkDeviceWaitIdle(m_device); // waits for all queue on the device
+        vkDeviceWaitIdle(ctx.device); // waits for all queue on the device
 
         {
             std::unique_lock<std::mutex> lock(p.videoMutex.mutex);
@@ -1671,7 +1671,7 @@ void main() {
         cmdAllocInfo.commandPool = m_cmd_pool;
         cmdAllocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
         cmdAllocInfo.commandBufferCount = 1;
-        vkAllocateCommandBuffers(m_device, &cmdAllocInfo, &update_cmd);
+        vkAllocateCommandBuffers(ctx.device, &cmdAllocInfo, &update_cmd);
 
         VkCommandBufferBeginInfo cmdBeginInfo = {};
         cmdBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -1689,12 +1689,12 @@ void main() {
         submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
         submitInfo.commandBufferCount = 1;
         submitInfo.pCommandBuffers = &update_cmd;
-        vkQueueSubmit(m_queue, 1, &submitInfo, VK_NULL_HANDLE);
-        vkQueueWaitIdle(m_queue); // Synchronize before CPU write
+        vkQueueSubmit(ctx.queue, 1, &submitInfo, VK_NULL_HANDLE);
+        vkQueueWaitIdle(ctx.queue); // Synchronize before CPU write
 
         void* mappedData;
         result = vkMapMemory(
-            m_device, m_textures[0].mem, 0, VK_WHOLE_SIZE, 0, &mappedData);
+            ctx.device, m_textures[0].mem, 0, VK_WHOLE_SIZE, 0, &mappedData);
         VK_CHECK_RESULT(result);
 
         if (p.image)
@@ -1716,10 +1716,10 @@ void main() {
             }
         }
 
-        vkUnmapMemory(m_device, m_textures[0].mem);
+        vkUnmapMemory(ctx.device, m_textures[0].mem);
 
         // Reallocate command buffer for second transition
-        vkAllocateCommandBuffers(m_device, &cmdAllocInfo, &update_cmd);
+        vkAllocateCommandBuffers(ctx.device, &cmdAllocInfo, &update_cmd);
         vkBeginCommandBuffer(update_cmd, &cmdBeginInfo);
 
         // Transition back to SHADER_READ_ONLY_OPTIMAL
@@ -1731,10 +1731,10 @@ void main() {
 
         vkEndCommandBuffer(update_cmd);
         submitInfo.pCommandBuffers = &update_cmd;
-        vkQueueSubmit(m_queue, 1, &submitInfo, VK_NULL_HANDLE);
-        vkQueueWaitIdle(m_queue); // Synchronize before rendering
+        vkQueueSubmit(ctx.queue, 1, &submitInfo, VK_NULL_HANDLE);
+        vkQueueWaitIdle(ctx.queue); // Synchronize before rendering
 
-        vkFreeCommandBuffers(m_device, m_cmd_pool, 1, &update_cmd);
+        vkFreeCommandBuffers(ctx.device, m_cmd_pool, 1, &update_cmd);
     }
 
     void NDIView::vk_draw_begin()
@@ -2016,29 +2016,29 @@ void main() {
 
     void NDIView::destroy_textures()
     {
-        vkQueueWaitIdle(m_queue); // Wait for completion
+        vkQueueWaitIdle(ctx.queue); // Wait for completion
 
-        for (uint32_t i = 0; i < m_textures.size(); i++)
+        for(auto& texture : m_textures)
         {
-            destroy_texture_image(m_textures[i]);
+            destroy_texture_image(texture);
         }
         m_textures.clear();
     }
 
     void NDIView::destroy_resources()
     {
-        vkDestroyShaderModule(m_device, m_frag_shader_module, NULL);
+        vkDestroyShaderModule(ctx.device, m_frag_shader_module, NULL);
         m_frag_shader_module = VK_NULL_HANDLE;
 
         if (m_vertices.buf != VK_NULL_HANDLE)
         {
-            vkDestroyBuffer(m_device, m_vertices.buf, NULL);
+            vkDestroyBuffer(ctx.device, m_vertices.buf, NULL);
             m_vertices.buf = VK_NULL_HANDLE;
         }
 
         if (m_vertices.mem != VK_NULL_HANDLE)
         {
-            vkFreeMemory(m_device, m_vertices.mem, NULL);
+            vkFreeMemory(ctx.device, m_vertices.mem, NULL);
             m_vertices.mem = VK_NULL_HANDLE;
         }
 
