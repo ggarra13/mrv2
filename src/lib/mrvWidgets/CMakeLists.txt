@@ -125,7 +125,12 @@ set(SOURCES
 )
 
 
-list(APPEND LIBRARIES mrvFlmm mrvCore ${FLTK_LIBRARIES} ${FLTK_gl_LIBRARIES} ${JASPER_LIBRARIES} MINIZIP::minizip)
+list(APPEND LIBRARIES mrvFlmm mrvCore ${FLTK_LIBRARIES})
+list(APPEND LIBRARIES_PRIVATE  ${JASPER_LIBRARIES} MINIZIP::minizip)
+
+if(TLRENDER_GL)
+    list(APPEND LIBRARIES ${FLTK_gl_LIBRARIES})
+endif()
 
 set(DISTRO_VERSION "")
 if(UNIX AND NOT APPLE)
@@ -202,7 +207,9 @@ if( WIN32 )
     list(APPEND LIBRARIES Crypt32.lib)
 endif()
 
-target_link_libraries(mrvWidgets PUBLIC ${LIBRARIES} )
+target_link_libraries(mrvWidgets
+    PUBLIC ${LIBRARIES}
+    PRIVATE ${LIBRARIES_PRIVATE})
 set_target_properties(mrvWidgets PROPERTIES FOLDER lib)
 
 install(TARGETS mrvWidgets

@@ -946,6 +946,9 @@ namespace tl
                                 type = GL_BYTE;
                             }
                             break;
+                        default:
+                            type = GL_BYTE;
+                            break;
                         }
 
                         if (fmt->num_components == 1)
@@ -1010,6 +1013,9 @@ namespace tl
                                     break;
                                 }
                                 break;
+                            default:
+                                internalFormat = GL_R8;
+                                break;
                             }
                         }
                         else if (fmt->num_components == 2)
@@ -1073,6 +1079,9 @@ namespace tl
                                     break;
                                 }
                                 break;
+                            default:
+                                internalFormat = GL_RG8;
+                                break;
                             }
                         }
                         else if (fmt->num_components == 3)
@@ -1130,6 +1139,9 @@ namespace tl
                                     internalFormat = GL_RGB16;
                                 else
                                     internalFormat = GL_RGB8;
+                                break;
+                            default:
+                                internalFormat = GL_RGB8;
                                 break;
                             }
                         }
@@ -1192,6 +1204,9 @@ namespace tl
                                     internalFormat = GL_RGBA8;
                                     break;
                                 }
+                                break;
+                            default:
+                                internalFormat = GL_RGBA8;
                                 break;
                             }
                         }
