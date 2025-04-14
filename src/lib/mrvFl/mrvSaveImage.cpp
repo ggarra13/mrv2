@@ -320,7 +320,7 @@ namespace mrv
             }
             
             outputInfo = writerPlugin->getWriteInfo(outputInfo);
-            if (image::PixelType::None == outputInfo.pixelType)
+            if (image::PixelType::kNone == outputInfo.pixelType)
             {
                 outputInfo.pixelType = image::PixelType::RGB_U8;
                 offscreenBufferOptions.colorType = image::PixelType::RGB_U8;

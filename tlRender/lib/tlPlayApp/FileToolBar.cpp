@@ -55,7 +55,7 @@ namespace tl
 
             p.layout =
                 ui::HorizontalLayout::create(context, shared_from_this());
-            p.layout->setSpacingRole(ui::SizeRole::None);
+            p.layout->setSpacingRole(ui::SizeRole::kNone);
             p.buttons["Open"]->setParent(p.layout);
             p.buttons["OpenSeparateAudio"]->setParent(p.layout);
             p.buttons["Close"]->setParent(p.layout);

@@ -12,7 +12,7 @@ namespace tl
     {
         inline bool Info::isValid() const
         {
-            return channelCount > 0 && dataType != DataType::None &&
+            return channelCount > 0 && dataType != DataType::kNone &&
                    sampleRate > 0;
         }
 

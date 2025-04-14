@@ -493,7 +493,7 @@ namespace tl
             {
                 takeKeyFocus();
 
-                p.mouse.mode = Private::MouseMode::None;
+                p.mouse.mode = Private::MouseMode::kNone;
 
                 const math::Box2i& g = _geometry;
                 if (p.editable)
@@ -559,7 +559,7 @@ namespace tl
             IWidget::mouseReleaseEvent(event);
             TLRENDER_P();
             p.scrub->setIfChanged(false);
-            p.mouse.mode = Private::MouseMode::None;
+            p.mouse.mode = Private::MouseMode::kNone;
             if (!p.mouse.items.empty() && p.mouse.currentDropTarget != -1)
             {
                 const auto& dropTarget =
@@ -1068,7 +1068,7 @@ namespace tl
         {
             if (p)
             {
-                p->setSelectRole(ui::ColorRole::None);
+                p->setSelectRole(ui::ColorRole::kNone);
                 p->setGeometry(geometry);
             }
         }

@@ -81,14 +81,14 @@ namespace tl
             p.overlaySlider->setDefaultValue(.5F);
 
             auto layout = ui::VerticalLayout::create(context);
-            layout->setSpacingRole(ui::SizeRole::None);
+            layout->setSpacingRole(ui::SizeRole::kNone);
 
             p.widgetLayout = ui::GridLayout::create(context, layout);
             p.widgetLayout->setMarginRole(ui::SizeRole::MarginSmall);
-            p.widgetLayout->setSpacingRole(ui::SizeRole::None);
+            p.widgetLayout->setSpacingRole(ui::SizeRole::kNone);
 
             auto vLayout = ui::VerticalLayout::create(context, layout);
-            vLayout->setSpacingRole(ui::SizeRole::None);
+            vLayout->setSpacingRole(ui::SizeRole::kNone);
             auto bellows = ui::Bellows::create("Wipe", context, vLayout);
             auto gridLayout = ui::GridLayout::create(context);
             gridLayout->setMarginRole(ui::SizeRole::MarginSmall);

@@ -49,7 +49,7 @@ namespace tl
             scrollWidget->setVStretch(ui::Stretch::Expanding);
 
             auto layout = ui::VerticalLayout::create(context);
-            layout->setSpacingRole(ui::SizeRole::None);
+            layout->setSpacingRole(ui::SizeRole::kNone);
             scrollWidget->setParent(layout);
             auto hLayout = ui::HorizontalLayout::create(context, layout);
             hLayout->setMarginRole(ui::SizeRole::MarginInside);

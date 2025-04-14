@@ -12,11 +12,11 @@ namespace mrv
 {
 
     enum class Stereo3DInput {
-        None,
+        kNone,
         Image,
 
         Count,
-        First = None
+        First = kNone
     };
     TLRENDER_ENUM(Stereo3DInput);
     TLRENDER_ENUM_SERIALIZE(Stereo3DInput);
@@ -41,7 +41,7 @@ namespace mrv
     struct Stereo3DOptions
     {
 
-        Stereo3DInput input = Stereo3DInput::None;
+        Stereo3DInput input = Stereo3DInput::kNone;
         Stereo3DOutput output = Stereo3DOutput::Anaglyph;
         float eyeSeparation = 0.F;
         bool swapEyes = false;

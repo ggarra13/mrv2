@@ -46,7 +46,7 @@ void mrv2_enums(py::module& m)
 
 #ifdef TLRENDER_FFMPEG
     py::enum_<ffmpeg::Profile>(io, "Profile")
-        .value("kNone", ffmpeg::Profile::None)
+        .value("kNone", ffmpeg::Profile::kNone)
 #    ifdef TLRENDER_X264
         .value("H264", ffmpeg::Profile::H264)
 #    endif
@@ -61,7 +61,7 @@ void mrv2_enums(py::module& m)
         .value("AV1", ffmpeg::Profile::AV1);
 
     py::enum_<ffmpeg::AudioCodec>(io, "AudioCodec")
-        .value("kNone", ffmpeg::AudioCodec::None)
+        .value("kNone", ffmpeg::AudioCodec::kNone)
         .value("AAC", ffmpeg::AudioCodec::AAC)
         .value("AC3", ffmpeg::AudioCodec::AC3)
         .value("True_HD", ffmpeg::AudioCodec::True_HD)
@@ -95,7 +95,7 @@ void mrv2_enums(py::module& m)
     py::module image = m.def_submodule("image");
 
     py::enum_<image::PixelType>(image, "PixelType")
-        .value("kNone", image::PixelType::None)
+        .value("kNone", image::PixelType::kNone)
         .value("L_U8", image::PixelType::L_U8)
         .value("L_U16", image::PixelType::L_U16)
         .value("L_U32", image::PixelType::L_U32)
@@ -163,7 +163,7 @@ void mrv2_enums(py::module& m)
         .export_values();
 
     py::enum_<timeline::AlphaBlend>(image, "AlphaBlend")
-        .value("kNone", timeline::AlphaBlend::None)
+        .value("kNone", timeline::AlphaBlend::kNone)
         .value("Straight", timeline::AlphaBlend::Straight)
         .value("Premultiplied", timeline::AlphaBlend::Premultiplied)
         .export_values();
@@ -185,7 +185,7 @@ void mrv2_enums(py::module& m)
     //.export_values();
 
     py::enum_<mrv::Stereo3DInput>(image, "Stereo3DInput")
-        .value("kNone", mrv::Stereo3DInput::None)
+        .value("kNone", mrv::Stereo3DInput::kNone)
         .value("Image", mrv::Stereo3DInput::Image)
         .export_values();
 
@@ -237,7 +237,7 @@ void mrv2_enums(py::module& m)
         .export_values();
 
     py::enum_<timeline::FileSequenceAudio>(timeline, "FileSequenceAudio")
-        .value("kNone", timeline::FileSequenceAudio::None)
+        .value("kNone", timeline::FileSequenceAudio::kNone)
         .value("BaseName", timeline::FileSequenceAudio::BaseName)
         .value("FileName", timeline::FileSequenceAudio::FileName)
         .value("Directory", timeline::FileSequenceAudio::Directory)

@@ -59,7 +59,7 @@ namespace tl
             p.clearButton = ui::ToolButton::create("Clear", context);
 
             p.layout = ui::VerticalLayout::create(context);
-            p.layout->setSpacingRole(ui::SizeRole::None);
+            p.layout->setSpacingRole(ui::SizeRole::kNone);
             p.scrollWidget->setParent(p.layout);
             auto hLayout = ui::HorizontalLayout::create(context, p.layout);
             hLayout->setMarginRole(ui::SizeRole::MarginInside);

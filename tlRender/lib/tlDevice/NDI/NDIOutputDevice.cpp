@@ -135,7 +135,7 @@ namespace tl
             {
                 // Video variables
                 math::Size2i size;
-                device::PixelType outputPixelType = device::PixelType::None;
+                device::PixelType outputPixelType = device::PixelType::kNone;
                 device::HDRMode hdrMode = device::HDRMode::FromFile;
                 image::HDRData hdrData;
                 math::Size2i sourceViewportSize;
@@ -195,7 +195,7 @@ namespace tl
 
             p.window = gl::GLFWWindow::create(
                 "tl::ndi::OutputDevice", math::Size2i(1, 1), context,
-                static_cast<int>(gl::GLFWWindowOptions::None));
+                static_cast<int>(gl::GLFWWindowOptions::kNone));
             p.thread.running = true;
             p.thread.thread = std::thread(
                 [this]
@@ -906,7 +906,7 @@ namespace tl
         {
             TLRENDER_P();
             if (config.deviceIndex != -1 && config.displayModeIndex != -1 &&
-                config.pixelType != device::PixelType::None)
+                config.pixelType != device::PixelType::kNone)
             {
                 if (size.w == 0 || size.h == 0 || !p.player)
                     return;
@@ -1856,7 +1856,7 @@ namespace tl
                 hdrData = device::getHDRData(p.thread.videoData[0]);
                 break;
             case device::HDRMode::Count:
-            case device::HDRMode::None:
+            case device::HDRMode::kNone:
                 break;
             }
 
@@ -1901,7 +1901,7 @@ namespace tl
                         "tl::ndi::OutputDevice",
                         string::Format("Unknown primaries.  Using {0}.")
                             .arg(primariesName),
-                        log::Type::Status, kModule);
+                        log::Type::kStatus, kModule);
                 }
 
                 switch (hdrData->eotf)

@@ -63,7 +63,7 @@ namespace tl
 
                 std::future<io::VideoData> image;
                 std::future<io::VideoData> imageB;
-                Transition transition = Transition::None;
+                Transition transition = Transition::kNone;
                 float transitionValue = 0.F;
             };
             struct VideoRequest

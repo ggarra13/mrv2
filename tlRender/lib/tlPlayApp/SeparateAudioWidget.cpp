@@ -48,7 +48,7 @@ namespace tl
             p.cancelButton = ui::PushButton::create("Cancel", context);
 
             p.layout = ui::VerticalLayout::create(context, shared_from_this());
-            p.layout->setSpacingRole(ui::SizeRole::None);
+            p.layout->setSpacingRole(ui::SizeRole::kNone);
             auto label =
                 ui::Label::create("Open Separate Audio", context, p.layout);
             label->setMarginRole(ui::SizeRole::MarginSmall);
@@ -63,7 +63,7 @@ namespace tl
             p.audioFileEdit->setParent(groupBox);
             auto spacer =
                 ui::Spacer::create(ui::Orientation::Vertical, context, vLayout);
-            spacer->setSpacingRole(ui::SizeRole::None);
+            spacer->setSpacingRole(ui::SizeRole::kNone);
             spacer->setVStretch(ui::Stretch::Expanding);
             ui::Divider::create(ui::Orientation::Vertical, context, p.layout);
             auto hLayout = ui::HorizontalLayout::create(context, p.layout);
@@ -71,7 +71,7 @@ namespace tl
             hLayout->setSpacingRole(ui::SizeRole::SpacingSmall);
             spacer = ui::Spacer::create(
                 ui::Orientation::Horizontal, context, hLayout);
-            spacer->setSpacingRole(ui::SizeRole::None);
+            spacer->setSpacingRole(ui::SizeRole::kNone);
             spacer->setHStretch(ui::Stretch::Expanding);
             p.okButton->setParent(hLayout);
             p.cancelButton->setParent(hLayout);

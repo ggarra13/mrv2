@@ -589,7 +589,7 @@ namespace tl
                                     value.pixelTypeIndex <
                                         value.pixelTypes.size()
                                 ? value.pixelTypes[value.pixelTypeIndex]
-                                : bmd::PixelType::None;
+                                : bmd::PixelType::kNone;
                         config.boolOptions = value.boolOptions;
                         p.bmdOutputDevice->setConfig(config);
                         p.bmdOutputDevice->setEnabled(value.deviceEnabled);

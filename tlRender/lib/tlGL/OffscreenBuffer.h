@@ -19,13 +19,13 @@ namespace tl
 
         //! Offscreen buffer depth size.
         enum class OffscreenDepth {
-            None,
+            kNone,
             _16,
             _24,
             _32,
 
             Count,
-            First = None
+            First = kNone
         };
         TLRENDER_ENUM(OffscreenDepth);
         TLRENDER_ENUM_SERIALIZE(OffscreenDepth);
@@ -39,25 +39,25 @@ namespace tl
 
         //! Offscreen buffer stencil size.
         enum class OffscreenStencil {
-            None,
+            kNone,
             _8,
 
             Count,
-            First = None
+            First = kNone
         };
         TLRENDER_ENUM(OffscreenStencil);
         TLRENDER_ENUM_SERIALIZE(OffscreenStencil);
 
         //! Offscreen buffer multisampling.
         enum class OffscreenSampling {
-            None,
+            kNone,
             _2,
             _4,
             _8,
             _16,
 
             Count,
-            First = None
+            First = kNone
         };
         TLRENDER_ENUM(OffscreenSampling);
         TLRENDER_ENUM_SERIALIZE(OffscreenSampling);
@@ -65,11 +65,11 @@ namespace tl
         //! Offscreen buffer options.
         struct OffscreenBufferOptions
         {
-            image::PixelType colorType = image::PixelType::None;
+            image::PixelType colorType = image::PixelType::kNone;
             timeline::ImageFilters colorFilters;
-            OffscreenDepth depth = OffscreenDepth::None;
-            OffscreenStencil stencil = OffscreenStencil::None;
-            OffscreenSampling sampling = OffscreenSampling::None;
+            OffscreenDepth depth = OffscreenDepth::kNone;
+            OffscreenStencil stencil = OffscreenStencil::kNone;
+            OffscreenSampling sampling = OffscreenSampling::kNone;
 
             bool operator==(const OffscreenBufferOptions&) const;
             bool operator!=(const OffscreenBufferOptions&) const;

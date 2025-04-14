@@ -101,7 +101,7 @@ namespace tl
                     tiffCompression = COMPRESSION_NONE;
                     /*switch (_p->options.compression)
                     {
-                    case Compression::None:
+                    case Compression::kNone:
                         compression = COMPRESSION_NONE;
                         break;
                     case Compression::RLE:

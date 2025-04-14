@@ -53,10 +53,10 @@ namespace tl
             bool doRender = false;
             std::shared_ptr<gl::OffscreenBuffer> buffer;
 
-            enum class MouseMode { None, View, Wipe };
+            enum class MouseMode { kNone, View, Wipe };
             struct MouseData
             {
-                MouseMode mode = MouseMode::None;
+                MouseMode mode = MouseMode::kNone;
                 math::Vector2i viewPos;
             };
             MouseData mouse;
@@ -544,13 +544,13 @@ namespace tl
         {
             IWidget::mouseReleaseEvent(event);
             TLRENDER_P();
-            p.mouse.mode = Private::MouseMode::None;
+            p.mouse.mode = Private::MouseMode::kNone;
         }
 
         void TimelineViewport::scrollEvent(ui::ScrollEvent& event)
         {
             TLRENDER_P();
-            if (static_cast<int>(ui::KeyModifier::None) == event.modifiers)
+            if (static_cast<int>(ui::KeyModifier::kNone) == event.modifiers)
             {
                 event.accept = true;
                 const double mult = 1.1;
@@ -610,7 +610,7 @@ namespace tl
         {
             IWidget::_releaseMouse();
             TLRENDER_P();
-            p.mouse.mode = Private::MouseMode::None;
+            p.mouse.mode = Private::MouseMode::kNone;
         }
 
         math::Size2i TimelineViewport::_getRenderSize() const

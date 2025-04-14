@@ -29,7 +29,7 @@ namespace tl
         {
             IDeckLinkOutput* dlOutput = nullptr;
             math::Size2i size;
-            PixelType pixelType = PixelType::None;
+            PixelType pixelType = PixelType::kNone;
             otime::RationalTime frameRate = time::invalidTime;
             audio::Info audioInfo;
 

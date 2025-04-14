@@ -167,7 +167,7 @@ namespace tl
 
             const math::Box2i& g = _geometry;
             ui::ColorRole colorRole = getSelectRole();
-            if (colorRole != ui::ColorRole::None)
+            if (colorRole != ui::ColorRole::kNone)
             {
                 event.render->drawMesh(
                     ui::border(g, p.size.border * 2), math::Vector2i(),

@@ -145,7 +145,7 @@ namespace tl
                     _scanlineSize =
                         tiffWidth * tiffSamples * tiffSampleDepth / 8;
 
-                    image::PixelType pixelType = image::PixelType::None;
+                    image::PixelType pixelType = image::PixelType::kNone;
                     switch (tiffPhotometric)
                     {
                     case PHOTOMETRIC_MINISWHITE:
@@ -166,7 +166,7 @@ namespace tl
                         }
                         break;
                     }
-                    if (image::PixelType::None == pixelType)
+                    if (image::PixelType::kNone == pixelType)
                     {
                         throw std::runtime_error(
                             string::Format("{0}: Cannot open").arg(fileName));

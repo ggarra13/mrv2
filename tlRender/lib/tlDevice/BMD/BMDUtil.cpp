@@ -24,7 +24,7 @@ namespace tl
 
         PixelType fromBMD(BMDPixelFormat value)
         {
-            PixelType out = PixelType::None;
+            PixelType out = PixelType::kNone;
             switch (value)
             {
             case bmdFormat8BitBGRA:
@@ -547,7 +547,7 @@ namespace tl
 
         PixelType getOutputType(PixelType value)
         {
-            PixelType out = PixelType::None;
+            PixelType out = PixelType::kNone;
             switch (value)
             {
             case PixelType::_8BitBGRA:
@@ -575,7 +575,7 @@ namespace tl
             const std::array<
                 image::PixelType, static_cast<size_t>(PixelType::Count)>
                 data = {
-                    image::PixelType::None, image::PixelType::RGBA_U8,
+                    image::PixelType::kNone, image::PixelType::RGBA_U8,
                     image::PixelType::RGBA_U8, image::PixelType::RGB_U16,
                     image::PixelType::RGB_U16, image::PixelType::RGB_U16,
                     // image::PixelType::RGB_U10,

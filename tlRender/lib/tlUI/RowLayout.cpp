@@ -13,7 +13,7 @@ namespace tl
         struct RowLayout::Private
         {
             Orientation orientation = Orientation::Horizontal;
-            SizeRole marginRole = SizeRole::None;
+            SizeRole marginRole = SizeRole::kNone;
             SizeRole spacingRole = SizeRole::Spacing;
 
             struct SizeData

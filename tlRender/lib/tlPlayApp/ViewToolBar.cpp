@@ -50,7 +50,7 @@ namespace tl
 
             p.layout =
                 ui::HorizontalLayout::create(context, shared_from_this());
-            p.layout->setSpacingRole(ui::SizeRole::None);
+            p.layout->setSpacingRole(ui::SizeRole::kNone);
             p.buttons["Frame"]->setParent(p.layout);
             p.buttons["Zoom1To1"]->setParent(p.layout);
 

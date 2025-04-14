@@ -54,7 +54,7 @@ namespace tl
                 ui::ButtonGroup::create(ui::ButtonGroupType::Click, context);
 
             p.layout = ui::VerticalLayout::create(context);
-            p.layout->setSpacingRole(ui::SizeRole::None);
+            p.layout->setSpacingRole(ui::SizeRole::kNone);
             setWidget(p.layout);
 
             _menuUpdate();

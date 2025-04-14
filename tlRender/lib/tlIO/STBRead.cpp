@@ -54,7 +54,7 @@ namespace tl
 
                         info.pixelType = image::getIntType(n, bits);
 
-                        if (image::PixelType::None == info.pixelType)
+                        if (image::PixelType::kNone == info.pixelType)
                         {
                             throw std::runtime_error(
                                 string::Format("{0}: {1}")
@@ -86,7 +86,7 @@ namespace tl
                                 bits = 16;
 
                             info.pixelType = image::getIntType(n, bits);
-                            if (image::PixelType::None == info.pixelType)
+                            if (image::PixelType::kNone == info.pixelType)
                             {
                                 throw std::runtime_error(
                                     string::Format("{0}: {1}")

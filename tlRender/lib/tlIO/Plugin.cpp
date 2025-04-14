@@ -111,7 +111,7 @@ namespace tl
         bool IPlugin::_isWriteCompatible(
             const image::Info& info, const Options& options) const
         {
-            return info.pixelType != image::PixelType::None &&
+            return info.pixelType != image::PixelType::kNone &&
                    info == getWriteInfo(info, options);
         }
     } // namespace io

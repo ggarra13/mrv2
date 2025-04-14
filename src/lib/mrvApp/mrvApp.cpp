@@ -769,7 +769,7 @@ namespace mrv
                         value.pixelTypeIndex >= 0 &&
                                 value.pixelTypeIndex < value.pixelTypes.size()
                             ? value.pixelTypes[value.pixelTypeIndex]
-                            : device::PixelType::None;
+                            : device::PixelType::kNone;
                     config.boolOptions = value.boolOptions;
                     p.outputDevice->setConfig(config);
                     p.outputDevice->setEnabled(value.deviceEnabled);
@@ -853,7 +853,7 @@ namespace mrv
                         LOG_WARNING(msg);
                         break;
                     }
-                    case log::Type::Status:
+                    case log::Type::kStatus:
                     {
                         if (msg == lastStatusMessage)
                             continue;

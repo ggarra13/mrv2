@@ -543,7 +543,7 @@ namespace mrv
                     mvp = _createTexturedRectangle();
                 }
 
-                if (p.imageOptions[0].alphaBlend == timeline::AlphaBlend::None)
+                if (p.imageOptions[0].alphaBlend == timeline::AlphaBlend::kNone)
                 {
                     glDisable(GL_BLEND);
                 }
@@ -587,7 +587,7 @@ namespace mrv
                     }
                 }
 
-                if (p.imageOptions[0].alphaBlend == timeline::AlphaBlend::None)
+                if (p.imageOptions[0].alphaBlend == timeline::AlphaBlend::kNone)
                 {
                     glEnable(GL_BLEND);
                 }
@@ -660,8 +660,8 @@ namespace mrv
                     offscreenBufferOptions.colorFilters =
                         p.displayOptions[0].imageFilters;
                 }
-                offscreenBufferOptions.depth = gl::OffscreenDepth::None;
-                offscreenBufferOptions.stencil = gl::OffscreenStencil::None;
+                offscreenBufferOptions.depth = gl::OffscreenDepth::kNone;
+                offscreenBufferOptions.stencil = gl::OffscreenStencil::kNone;
                 if (gl::doCreate(
                         gl.overlay, renderSize, offscreenBufferOptions))
                 {
@@ -802,8 +802,8 @@ namespace mrv
                     offscreenBufferOptions.colorFilters =
                         p.displayOptions[0].imageFilters;
                 }
-                offscreenBufferOptions.depth = gl::OffscreenDepth::None;
-                offscreenBufferOptions.stencil = gl::OffscreenStencil::None;
+                offscreenBufferOptions.depth = gl::OffscreenDepth::kNone;
+                offscreenBufferOptions.stencil = gl::OffscreenStencil::kNone;
                 if (gl::doCreate(
                         gl.annotation, viewportSize, offscreenBufferOptions))
                 {

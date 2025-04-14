@@ -55,7 +55,7 @@ namespace tl
             DroppedFramesData droppedFramesData;
 
             enum class MouseMode { None, View, Wipe };
-            MouseMode mouseMode = MouseMode::None;
+            MouseMode mouseMode = MouseMode::kNone;
             math::Vector2i mousePos;
             math::Vector2i mousePress;
             math::Vector2i viewPosMousePress;
@@ -534,14 +534,14 @@ namespace tl
         {
             TLRENDER_P();
             event->accept();
-            p.mouseMode = Private::MouseMode::None;
+            p.mouseMode = Private::MouseMode::kNone;
         }
 
         void TimelineViewport::leaveEvent(QEvent* event)
         {
             TLRENDER_P();
             event->accept();
-            p.mouseMode = Private::MouseMode::None;
+            p.mouseMode = Private::MouseMode::kNone;
         }
 
         void TimelineViewport::mousePressEvent(QMouseEvent* event)
@@ -570,7 +570,7 @@ namespace tl
         void TimelineViewport::mouseReleaseEvent(QMouseEvent*)
         {
             TLRENDER_P();
-            p.mouseMode = Private::MouseMode::None;
+            p.mouseMode = Private::MouseMode::kNone;
         }
 
         void TimelineViewport::mouseMoveEvent(QMouseEvent* event)

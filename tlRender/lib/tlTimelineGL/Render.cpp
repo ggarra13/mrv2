@@ -14,13 +14,6 @@
 #include <tlCore/String.h>
 #include <tlCore/StringFormat.h>
 
-#if defined(TLRENDER_FFMPEG)
-extern "C"
-{
-#    include <libavutil/pixfmt.h>
-}
-#endif
-
 #if defined(TLRENDER_LIBPLACEBO)
 extern "C"
 {
@@ -1198,6 +1191,7 @@ namespace tl
                             case PL_FMT_UNORM:
                                 switch (size)
                                 {
+                                case 2:
                                     internalFormat = GL_RGBA16;
                                     break;
                                 default:

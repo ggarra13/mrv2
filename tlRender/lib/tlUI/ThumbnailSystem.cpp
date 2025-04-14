@@ -331,7 +331,7 @@ namespace tl
             {
                 p.window = gl::GLFWWindow::create(
                     "tl::ui::ThumbnailGenerator", math::Size2i(1, 1), context,
-                    static_cast<int>(gl::GLFWWindowOptions::None));
+                    static_cast<int>(gl::GLFWWindowOptions::kNone));
             }
 
             p.infoThread.running = true;

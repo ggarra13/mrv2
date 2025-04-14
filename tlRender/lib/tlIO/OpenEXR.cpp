@@ -141,7 +141,7 @@ namespace tl
             {
                 std::vector<Layer> out;
                 std::vector<const Imf::Channel*> reserved;
-                if (channelGrouping != ChannelGrouping::None)
+                if (channelGrouping != ChannelGrouping::kNone)
                 {
                     // Look for known channel configurations then convert the
                     // remainder.

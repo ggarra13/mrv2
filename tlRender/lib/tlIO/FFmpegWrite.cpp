@@ -728,7 +728,7 @@ namespace tl
                 ss >> audioCodec;
                 switch (audioCodec)
                 {
-                case AudioCodec::None:
+                case AudioCodec::kNone:
                     avAudioCodecID = AV_CODEC_ID_NONE;
                     break;
                 case AudioCodec::AAC:
@@ -1137,7 +1137,7 @@ namespace tl
             if (!info.video.empty())
             {
                 AVCodecID avCodecID = AV_CODEC_ID_MPEG4;
-                Profile profile = Profile::None;
+                Profile profile = Profile::kNone;
                 int avProfile = FF_PROFILE_UNKNOWN;
                 auto option = options.find("FFmpeg/WriteProfile");
                 if (option != options.end())

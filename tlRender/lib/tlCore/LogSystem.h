@@ -15,7 +15,7 @@ namespace tl
     namespace log
     {
         //! Log types.
-        enum class Type { Message, Warning, Error, Status };
+        enum class Type { Message, Warning, Error, kStatus };
 
         //! Log item.
         struct Item
@@ -31,7 +31,7 @@ namespace tl
         };
 
         //! String conversion options.
-        enum class StringConvert { None = 0, Time = 1, Prefix = 2 };
+        enum class StringConvert { kNone = 0, Time = 1, Prefix = 2 };
 
         //! Convert a log item to a string.
         std::string toString(const Item&, size_t options = 0);

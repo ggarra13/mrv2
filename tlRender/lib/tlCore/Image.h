@@ -58,7 +58,7 @@ namespace tl
 
         //! Image pixel types.
         enum class PixelType {
-            None,
+            kNone,
 
             L_U8,
             L_U16,
@@ -96,7 +96,7 @@ namespace tl
             ARGB_4444_Premult,
 
             Count,
-            First = None
+            First = kNone
         };
         TLRENDER_ENUM(PixelType);
         TLRENDER_ENUM_SERIALIZE(PixelType);
@@ -240,7 +240,7 @@ namespace tl
             bool isValidDeepCompression = false;
             int compressionNumScanlines = 0;
             Size size;
-            PixelType pixelType = PixelType::None;
+            PixelType pixelType = PixelType::kNone;
             VideoLevels videoLevels = VideoLevels::FullRange;
             YUVCoefficients yuvCoefficients = YUVCoefficients::REC709;
             Layout layout;

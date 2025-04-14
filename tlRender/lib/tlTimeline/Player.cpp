@@ -170,7 +170,7 @@ namespace tl
                                 audioSystem->getDefaultOutputInfo();
                             if (p.audioThread.info.channelCount > 0 &&
                                 p.audioThread.info.dataType !=
-                                    audio::DataType::None &&
+                                    audio::DataType::kNone &&
                                 p.audioThread.info.sampleRate > 0)
                             {
                                 try

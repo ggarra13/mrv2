@@ -563,7 +563,7 @@ namespace mrv
 #endif
 
                 outputInfo = writerPlugin->getWriteInfo(outputInfo);
-                if (image::PixelType::None == outputInfo.pixelType)
+                if (image::PixelType::kNone == outputInfo.pixelType)
                 {
                     outputInfo.pixelType = image::PixelType::RGB_U8;
                     offscreenBufferOptions.colorType = image::PixelType::RGB_U8;
@@ -653,7 +653,7 @@ namespace mrv
             if (hasVideo && savingMovie)
             {
                 if (static_cast<ffmpeg::AudioCodec>(options.ffmpegAudioCodec) ==
-                        ffmpeg::AudioCodec::None ||
+                        ffmpeg::AudioCodec::kNone ||
                     !hasAudio)
                     snprintf(
                         title, 1024,

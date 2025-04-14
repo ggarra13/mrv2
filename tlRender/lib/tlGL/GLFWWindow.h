@@ -20,7 +20,7 @@ namespace tl
     {
         //! GLFW window options.
         enum class GLFWWindowOptions {
-            None = 0,
+            kNone = 0,
             Visible = 1,
             DoubleBuffer = 2,
             MakeCurrent = 4

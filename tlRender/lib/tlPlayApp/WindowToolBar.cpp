@@ -54,7 +54,7 @@ namespace tl
 
             p.layout =
                 ui::HorizontalLayout::create(context, shared_from_this());
-            p.layout->setSpacingRole(ui::SizeRole::None);
+            p.layout->setSpacingRole(ui::SizeRole::kNone);
             p.buttons["FullScreen"]->setParent(p.layout);
             p.buttons["Secondary"]->setParent(p.layout);
 

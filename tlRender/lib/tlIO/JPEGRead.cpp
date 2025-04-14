@@ -149,7 +149,7 @@ namespace tl
 
                     image::PixelType pixelType = image::getIntType(
                         _jpeg.decompress.out_color_components, 8);
-                    if (image::PixelType::None == pixelType)
+                    if (image::PixelType::kNone == pixelType)
                     {
                         throw std::runtime_error(
                             string::Format("{0}: File not supported")
