@@ -181,8 +181,8 @@ namespace mrv
             _("Window/Presentation"), kTogglePresentation.hotkey(),
             (Fl_Callback*)toggle_presentation_cb, ui, FL_MENU_TOGGLE);
 
-        const Viewport* uiView = ui->uiView;
-        const Viewport* uiView2 = nullptr;
+        const MyViewport* uiView = ui->uiView;
+        const MyViewport* uiView2 = nullptr;
         if (ui->uiSecondary && ui->uiSecondary->window()->visible())
             uiView2 = ui->uiSecondary->viewport();
 

@@ -58,7 +58,7 @@ namespace mrv
     {
         int ret = 0;
         std::string msg;
-        Viewport* view = ui->uiView;
+        MyViewport* view = ui->uiView;
 
         file::Path path(file);
 
@@ -565,7 +565,7 @@ namespace mrv
         const ViewerUI* ui, SaveOptions options)
     {
         int ret = 0;
-        Viewport* view = ui->uiView;
+        MyViewport* view = ui->uiView;
         bool presentation = view->getPresentationMode();
         bool hud = view->getHudActive();
 
@@ -609,7 +609,7 @@ namespace mrv
         const ViewerUI* ui, SaveOptions options)
     {
         int ret = 0;
-        Viewport* view = ui->uiView;
+        MyViewport* view = ui->uiView;
         bool presentation = view->getPresentationMode();
         bool hud = view->getHudActive();
 
@@ -654,7 +654,7 @@ namespace mrv
         std::string msg;
 
         int ret = 0;
-        Viewport* view = ui->uiView;
+        MyViewport* view = ui->uiView;
         bool presentation = view->getPresentationMode();
         bool hud = view->getHudActive();
 

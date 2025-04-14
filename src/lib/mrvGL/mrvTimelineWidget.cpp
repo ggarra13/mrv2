@@ -226,7 +226,7 @@ namespace mrv
     };
 
     TimelineWidget::TimelineWidget(int X, int Y, int W, int H, const char* L) :
-        Fl_SuperClass(X, Y, W, H, L),
+        GLWindow(X, Y, W, H, L),
         _p(new Private)
     {
         int fl_double = FL_DOUBLE; // _WIN32 needs this

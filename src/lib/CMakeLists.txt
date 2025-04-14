@@ -12,7 +12,8 @@ if(TLRENDER_VK)
     # tlVk, tlTimeline, tlTimelineUI, tlUI
     # mrvUI, mrvEdit, mrvWidgets, mrvDraw, mrvCore, FLTK_vk
     add_subdirectory(mrvVk)
-elseif(TLRENDER_GL)
+endif()
+if(TLRENDER_GL)
     # tlGL, tlTimeline, tlTimelineUI, tlUI, glfw
     # mrvUI, mrvEdit, mrvWidgets, mrvDraw, mrvCore, FLTK_gl
     add_subdirectory(mrvGL)

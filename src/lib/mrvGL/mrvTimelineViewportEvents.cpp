@@ -72,7 +72,7 @@ namespace mrv
 
     void TimelineViewport::laserFade_cb(LaserFadeData* data)
     {
-        TimelineViewport* view = data->view;
+        TimelineMyViewport* view = data->view;
         view->laserFade(data);
     }
 
@@ -109,7 +109,7 @@ namespace mrv
         _p->ui->uiView->redraw();
         if (_p->ui->uiSecondary && _p->ui->uiSecondary->window()->visible())
         {
-            Viewport* view = _p->ui->uiSecondary->viewport();
+            MyViewport* view = _p->ui->uiSecondary->viewport();
             view->redraw();
         }
     }
@@ -771,7 +771,7 @@ namespace mrv
         }
     }
 
-    void TimelineViewport::_handleViewSpinning_cb(TimelineViewport* t) noexcept
+    void TimelineViewport::_handleViewSpinning_cb(TimelineMyViewport* t) noexcept
     {
         t->handleViewSpinning();
     }

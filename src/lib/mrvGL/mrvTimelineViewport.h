@@ -19,11 +19,7 @@
 
 #include <tlCore/ValueObserver.h>
 
-// FLTK includes
-#ifdef TLRENDER_GL
-#    include "mrvGL/mrvGLWindow.h"
-#    define Fl_SuperClass GLWindow
-#endif
+#include "mrvGL/mrvGLWindow.h"
 
 class ViewerUI;
 
@@ -35,7 +31,7 @@ namespace mrv
 
     class TimelinePlayer;
 
-    class TimelineViewport : public Fl_SuperClass
+    class TimelineViewport : public GLWindow
     {
         TLRENDER_NON_COPYABLE(TimelineViewport);
 

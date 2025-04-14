@@ -85,7 +85,7 @@ namespace mrv
     save_movie(const std::string& file, const ViewerUI* ui, SaveOptions options)
     {
         std::string msg;
-        Viewport* view = ui->uiView;
+        MyViewport* view = ui->uiView;
         bool presentation = view->getPresentationMode();
         bool hud = view->getHudActive();
 

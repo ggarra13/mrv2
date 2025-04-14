@@ -14,10 +14,7 @@
 
 #include "mrvFl/mrvTimelinePlayer.h"
 
-#ifdef TLRENDER_GL
-#    include "mrvGL/mrvGLWindow.h"
-#    define Fl_SuperClass GLWindow
-#endif
+#include "mrvGL/mrvGLWindow.h"
 
 namespace tl
 {
@@ -34,7 +31,7 @@ namespace mrv
     using namespace tl;
 
     //! Timeline widget.
-    class TimelineWidget : public Fl_SuperClass
+    class TimelineWidget : public GLWindow
     {
     public:
         TimelineWidget(int X, int Y, int W, int H, const char* L = 0);

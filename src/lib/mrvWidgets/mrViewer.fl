@@ -46,9 +46,6 @@ decl {\#include "mrvWidgets/mrvVolumeSlider.h"} {public global
 decl {\#include "mrvWidgets/mrvResizableBar.h"} {public global
 }
 
-decl {\#include "mrvWidgets/mrvSecondaryWindow.h"} {public global
-}
-
 decl {\#include "mrvWidgets/mrvSlider.h"} {public global
 }
 
@@ -79,10 +76,37 @@ decl {\#include "mrvFl/mrvPreferences.h"} {public global
 decl {\#include "mrvUI/mrvUtil.h"} {public global
 }
 
+decl {\#ifdef TLRENDER_VK} {public global
+}
+
 decl {\#include "mrvVk/mrvVkViewport.h"} {public global
 }
 
-decl {\#include "mrvVk/mrvTimelineWidget.h"} {selected public global
+decl {\#include "mrvVk/mrvTimelineWidget.h"} {public global
+}
+
+decl {\#endif} {public global
+}
+
+decl {\#ifdef TLRENDER_GL} {public global
+}
+
+decl {\#include "mrvGL/mrvGLViewport.h"} {public global
+}
+
+decl {\#include "mrvGL/mrvTimelineWidget.h"} {public global
+}
+
+decl {\#endif} {public global
+}
+
+decl {\#define MyViewport mrv::vk::Viewport} {public global
+}
+
+decl {\#define MyTimelineWidget mrv::vk::TimelineWidget} {public global
+}
+
+decl {\#include "mrvWidgets/mrvSecondaryWindow.h"} {selected public global
 }
 
 decl {\#include "mrvPanels/mrvPanelsCallbacks.h"} {public global
@@ -828,7 +852,7 @@ if (reason == FL_REASON_CLOSED)
         xywh {0 0 933 608} box FLAT_BOX resizable fixed_size_tuples {5  0 30  1 29  3 29  4 30  5 25 }
       } {
         Fl_Group uiMenuGroup {
-          label MenuBar open
+          label MenuBar
           xywh {0 0 933 30} box FLAT_BOX labeltype NO_LABEL
         } {
           Fl_Group {} {open
@@ -1092,7 +1116,7 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
             code1 {uiMain->workspace = uiViewGroup;}
             class Fl_Flex
           } {
-            Fl_Group uiToolsGroup {open
+            Fl_Group uiToolsGroup {
               xywh {0 59 42 435} box FLAT_BOX
             } {
               Fl_Button uiScrub {
@@ -1294,7 +1318,7 @@ settings->setValue( mrv::kPenColorA, a);}
             Fl_Group uiView {open
               xywh {42 59 621 435} color 56 labeltype NO_LABEL resizable
               code0 {o->main( this );}
-              class {mrv::Viewport}
+              class MyViewport
             } {}
             Fl_Group uiDockGroup {
               xywh {663 59 270 435} box FLAT_BOX hide
@@ -1313,13 +1337,13 @@ settings->setValue( mrv::kPenColorA, a);}
               } {}
             }
           }
-          Fl_Group uiTimelineGroup {
+          Fl_Group uiTimelineGroup {open
             xywh {0 494 933 30} box FLAT_BOX color 51
             class {mrv::TimelineGroup}
           } {
             Fl_Group uiTimeline {open
               xywh {0 502 933 22} labeltype NO_LABEL resizable
-              class {mrv::TimelineWidget}
+              class MyTimelineWidget
             } {}
           }
         }

@@ -64,7 +64,7 @@ namespace
         return out;
     }
 
-    void stop_playback_while_scrubbing_cb(mrv::TimelineViewport* view)
+    void stop_playback_while_scrubbing_cb(mrv::TimelineMyViewport* view)
     {
         view->stopPlaybackWhileScrubbing();
     }
@@ -103,14 +103,14 @@ namespace mrv
     short TimelineViewport::Private::ghostNext = 5;
     short TimelineViewport::Private::ghostPrevious = 5;
 
-    static void drawTimeoutText_cb(TimelineViewport* view)
+    static void drawTimeoutText_cb(TimelineMyViewport* view)
     {
         view->clearHelpText();
     }
 
     TimelineViewport::TimelineViewport(
         int X, int Y, int W, int H, const char* L) :
-        Fl_SuperClass(X, Y, W, H, L),
+        GLWindow(X, Y, W, H, L),
         _p(new Private)
     {
         TLRENDER_P();
@@ -120,7 +120,7 @@ namespace mrv
     }
 
     TimelineViewport::TimelineViewport(int W, int H, const char* L) :
-        Fl_SuperClass(W, H, L),
+        GLWindow(W, H, L),
         _p(new Private)
     {
         TLRENDER_P();
@@ -470,7 +470,7 @@ namespace mrv
 
     void TimelineViewport::resize(int X, int Y, int W, int H)
     {
-        Fl_SuperClass::resize(X, Y, W, H);
+        GLWindow::resize(X, Y, W, H);
         if (hasFrameView())
         {
             _frameView();
@@ -833,7 +833,7 @@ namespace mrv
 
         if (p.ui->uiSecondary && p.ui->uiSecondary->viewport())
         {
-            Viewport* view = p.ui->uiSecondary->viewport();
+            MyViewport* view = p.ui->uiSecondary->viewport();
             view->setOCIOOptions(value);
         }
         auto display = p.ui->uiTimeline->getDisplayOptions();
@@ -1172,7 +1172,7 @@ namespace mrv
         {
             // Only hide the cursor if we are NOT on the view widgets.
             auto primary = p.ui->uiView;
-            Viewport* secondary = nullptr;
+            MyViewport* secondary = nullptr;
             if (p.ui->uiSecondary && p.ui->uiSecondary->window()->visible())
             {
                 secondary = p.ui->uiSecondary->viewport();
@@ -1488,7 +1488,7 @@ namespace mrv
 
     math::Size2i TimelineViewport::getViewportSize() const noexcept
     {
-        TimelineViewport* t = const_cast< TimelineViewport* >(this);
+        TimelineMyViewport* t = const_cast< TimelineViewport* >(this);
         return math::Size2i(t->pixel_w(), t->pixel_h());
     }
 
@@ -1842,7 +1842,7 @@ namespace mrv
 
     math::Vector2i TimelineViewport::_getFocus(int X, int Y) const noexcept
     {
-        TimelineViewport* self = const_cast< TimelineViewport* >(this);
+        TimelineMyViewport* self = const_cast< TimelineViewport* >(this);
         math::Vector2i pos;
         const float devicePixelRatio = self->pixels_per_unit();
         pos.x = X * devicePixelRatio;
@@ -1857,7 +1857,7 @@ namespace mrv
 
     math::Vector2f TimelineViewport::_getFocusf(int X, int Y) const noexcept
     {
-        TimelineViewport* self = const_cast< TimelineViewport* >(this);
+        TimelineMyViewport* self = const_cast< TimelineViewport* >(this);
         math::Vector2f pos;
         const float devicePixelRatio = self->pixels_per_unit();
         pos.x = X * devicePixelRatio;
@@ -1909,7 +1909,7 @@ namespace mrv
 
             // If we have Mirror X or Mirror Y on, flip the coordinates
             const auto o = p.ui->app->displayOptions();
-            TimelineViewport* self = const_cast< TimelineViewport* >(this);
+            TimelineMyViewport* self = const_cast< TimelineViewport* >(this);
             const float devicePixelRatio = self->pixels_per_unit();
             const auto& renderSize = getRenderSize();
             if (renderSize.isValid())
@@ -2137,7 +2137,7 @@ namespace mrv
         _p->ui->uiView->redraw();
         if (_hasSecondaryViewport())
         {
-            Viewport* view = _p->ui->uiSecondary->viewport();
+            MyViewport* view = _p->ui->uiSecondary->viewport();
             view->valid(0);
             view->redraw();
         }
@@ -2358,7 +2358,7 @@ namespace mrv
     {
         TLRENDER_P();
         MainWindow* w;
-        TimelineViewport* view;
+        TimelineMyViewport* view;
 
         bool secondary = _hasSecondaryViewport();
         if (secondary)

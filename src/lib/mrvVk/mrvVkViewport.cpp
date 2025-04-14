@@ -93,7 +93,6 @@ namespace mrv
         TLRENDER_P();
         MRV2_VK();
         vk.render.reset();
-        vk.outline.reset();
         vk.lines.reset();
 #ifdef USE_ONE_PIXEL_LINES
         vk.outline.reset();
@@ -118,7 +117,7 @@ namespace mrv
         if (auto context = vk.context.lock())
         {
 
-            vk.render = timeline_tk::Render::create(context);
+            vk.render = timeline_vk::Render::create(&ctx, context);
             p.fontSystem = image::FontSystem::create(context);
 
 #ifdef USE_ONE_PIXEL_LINES
@@ -131,8 +130,9 @@ namespace mrv
             {
                 const std::string& vertexSource = timeline_vk::vertexSource();
                 vk.shader =
-                    vk::Shader::create(vertexSource, textureFragmentSource());
-                vk.annotationShader = vk::Shader::create(
+                    vk::Shader::create(&ctx, vertexSource,
+                                       textureFragmentSource());
+                vk.annotationShader = vk::Shader::create(&ctx,
                     vertexSource, annotationFragmentSource());
             }
             catch (const std::exception& e)
@@ -1214,7 +1214,7 @@ namespace mrv
                 }
                 else
                 {
-                    // Viewport* self = const_cast<Viewport*>(this);
+                    // MyViewport* self = const_cast<Viewport*>(this);
                     // self->make_current();
                     vk::OffscreenBufferBinding binding(vk.buffer);
                     //glReadPixels(pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);

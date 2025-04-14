@@ -14,7 +14,7 @@ namespace mrv
     {
         ViewerUI* ui = App::ui;
 
-        Viewport* view = ui->uiView;
+        MyViewport* view = ui->uiView;
 
         auto player = view->getTimelinePlayer();
         if (!player)
@@ -60,7 +60,7 @@ namespace mrv
     {
         ViewerUI* ui = App::ui;
 
-        Viewport* view = ui->uiView;
+        MyViewport* view = ui->uiView;
 
         auto player = view->getTimelinePlayer();
         if (!player)

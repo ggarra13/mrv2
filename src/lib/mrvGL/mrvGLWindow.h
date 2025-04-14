@@ -6,7 +6,7 @@
 
 #include <FL/Fl_Gl_Window.H>
 
-#include "mrvGL/mrvEnums.h"
+#include "mrvOptions/mrvEnums.h"
 
 namespace mrv
 {

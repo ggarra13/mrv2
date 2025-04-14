@@ -1585,7 +1585,7 @@ namespace mrv
         // Toolbars
         //
 
-        Viewport* view = ui->uiView;
+        MyViewport* view = ui->uiView;
 
         // Only redisplay the tool bars if not on Presentation
         // Mode. (User changed Preferences while on Presentation mode).

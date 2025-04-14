@@ -6,7 +6,7 @@
 
 #include <FL/Fl_Vk_Window.H>
 
-#include "mrvVk/mrvEnums.h"
+#include "mrvOptions/mrvEnums.h"
 
 namespace mrv
 {
