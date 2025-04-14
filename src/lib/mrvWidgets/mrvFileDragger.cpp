@@ -12,6 +12,8 @@
 #include "mrViewer.h"
 
 #include <FL/platform.H>
+#undef Status
+#undef None
 
 namespace mrv
 {

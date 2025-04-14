@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0400
+version 1.0500
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
@@ -7,12 +7,7 @@ i18n_gnu_function gettext
 i18n_gnu_static_function gettext_noop
 header_name {.h}
 code_name {.cxx}
-snap {
-  ver 1
-  current_suite FLTK
-  current_preset 0
-}
-decl {\#include "mrvGL/mrvTimelineViewport.h"} {public global
+decl {\#include "mrvVk/mrvTimelineViewport.h"} {selected public global
 }
 
 decl {\#include "mrvWidgets/mrvButton.h"} {public global
@@ -34,7 +29,7 @@ class HUDUI {open
 mrv::hudClass = nullptr;
 delete o;
 ViewerUI* ui = mrv::App::ui;
-ui->uiMain->fill_menu( ui->uiMenuBar );} open selected
+ui->uiMain->fill_menu( ui->uiMenuBar );} open
       xywh {623 335 621 359} type Double non_modal size_range {621 359 621 359} visible
     } {
       Fl_Check_Button uiHudActive {

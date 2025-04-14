@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0402
+version 1.0500
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
@@ -79,10 +79,10 @@ decl {\#include "mrvFl/mrvPreferences.h"} {public global
 decl {\#include "mrvUI/mrvUtil.h"} {public global
 }
 
-decl {\#include "mrvGL/mrvGLViewport.h"} {public global
+decl {\#include "mrvVk/mrvGLViewport.h"} {public global
 }
 
-decl {\#include "mrvGL/mrvTimelineWidget.h"} {public global
+decl {\#include "mrvVk/mrvTimelineWidget.h"} {selected public global
 }
 
 decl {\#include "mrvPanels/mrvPanelsCallbacks.h"} {public global
@@ -834,7 +834,7 @@ if (reason == FL_REASON_CLOSED)
           Fl_Group {} {open
             xywh {0 0 892 30}
           } {
-            Fl_Menu_Bar uiMenuBar {selected
+            Fl_Menu_Bar uiMenuBar {
               xywh {0 0 813 30} labeltype NO_LABEL
               class {mrv::MenuBar}
             } {}

@@ -8,7 +8,11 @@ add_subdirectory(mrvFlmm)        # FLTK
 add_subdirectory(mrvWidgets)     # mrvFlmm mrvCore FLTK FLTK_gl MINIzip
 add_subdirectory(mrvFLU)         # mrvWidgets, FLTK, Intl
 add_subdirectory(mrvUI)          # mrvWidgets, Xrandr, wayland-client
-if(TLRENDER_GL)
+if(TLRENDER_VK)
+    # tlVk, tlTimeline, tlTimelineUI, tlUI
+    # mrvUI, mrvEdit, mrvWidgets, mrvDraw, mrvCore, FLTK_vk
+    add_subdirectory(mrvVk)
+elseif(TLRENDER_GL)
     # tlGL, tlTimeline, tlTimelineUI, tlUI, glfw
     # mrvUI, mrvEdit, mrvWidgets, mrvDraw, mrvCore, FLTK_gl
     add_subdirectory(mrvGL)
