@@ -1479,10 +1479,10 @@ void main() {
         Fl_Window::draw();
     }
 
-    std::vector<const char*> NDIView::get_required_extensions()
+    std::vector<const char*> NDIView::get_instance_extensions()
     {
         std::vector<const char*> out;
-        out = Fl_Vk_Window::get_required_extensions();
+        out = Fl_Vk_Window::get_instance_extensions();
         return out;
     }
 
