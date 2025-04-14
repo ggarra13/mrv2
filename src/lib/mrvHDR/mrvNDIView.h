@@ -103,9 +103,6 @@ namespace mrv
 
         void destroy_textures();
 
-        void cleanupCompletedTransitions();
-        void cleanupCompletedUploads();
-
         void uploadTextureData(
             VkImage image, uint32_t width, uint32_t height, uint32_t depth,
             VkFormat format, const int channels,

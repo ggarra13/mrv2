@@ -912,9 +912,6 @@ namespace mrv
     // m_format, m_depth (optionally) -> creates m_renderPass
     void NDIView::prepare_render_pass()
     {
-        bool has_depth = mode() & FL_DEPTH;
-        bool has_stencil = mode() & FL_STENCIL;
-
         VkAttachmentDescription attachments[2];
         attachments[0] = VkAttachmentDescription();
         attachments[0].format = m_format;
@@ -946,35 +943,10 @@ namespace mrv
         subpass.pColorAttachments = &color_reference;
         subpass.pResolveAttachments = NULL;
 
-        if (has_depth || has_stencil)
-        {
-            attachments[1].format = m_depth.format;
-            attachments[1].samples = VK_SAMPLE_COUNT_1_BIT;
-            attachments[1].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-            attachments[1].storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-            if (has_stencil)
-            {
-                attachments[1].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-            }
-            else
-            {
-                attachments[1].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-            }
-            attachments[1].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-            attachments[1].initialLayout =
-                VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-            attachments[1].finalLayout =
-                VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-
-            subpass.pDepthStencilAttachment = &depth_reference;
-            subpass.preserveAttachmentCount = 0;
-            subpass.pPreserveAttachments = NULL;
-        }
-
         VkRenderPassCreateInfo rp_info = {};
         rp_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
         rp_info.pNext = NULL;
-        rp_info.attachmentCount = (has_depth || has_stencil) ? 2 : 1;
+        rp_info.attachmentCount = 1;
         rp_info.pAttachments = attachments;
         rp_info.subpassCount = 1;
         rp_info.pSubpasses = &subpass;
@@ -1132,16 +1104,13 @@ void main() {
         dynamicStateEnables[dynamicState.dynamicStateCount++] =
             VK_DYNAMIC_STATE_SCISSOR;
 
-        bool has_depth = mode() & FL_DEPTH;
-        bool has_stencil = mode() & FL_STENCIL;
-
         memset(&ds, 0, sizeof(ds));
         ds.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
-        ds.depthTestEnable = has_depth ? VK_TRUE : VK_FALSE;
-        ds.depthWriteEnable = has_depth ? VK_TRUE : VK_FALSE;
+        ds.depthTestEnable = VK_FALSE;
+        ds.depthWriteEnable = VK_FALSE;
         ds.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
         ds.depthBoundsTestEnable = VK_FALSE;
-        ds.stencilTestEnable = has_stencil ? VK_TRUE : VK_FALSE;
+        ds.stencilTestEnable = VK_FALSE;
         ds.back.failOp = VK_STENCIL_OP_KEEP;
         ds.back.passOp = VK_STENCIL_OP_KEEP;
         ds.back.compareOp = VK_COMPARE_OP_ALWAYS;
