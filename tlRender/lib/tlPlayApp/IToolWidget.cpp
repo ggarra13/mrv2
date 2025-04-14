@@ -48,15 +48,15 @@ namespace tl
             p.closeButton->setIcon("Close");
 
             p.layout = ui::VerticalLayout::create(context, shared_from_this());
-            p.layout->setSpacingRole(ui::SizeRole::None);
+            p.layout->setSpacingRole(ui::SizeRole::kNone);
             auto hLayout = ui::HorizontalLayout::create(context, p.layout);
-            hLayout->setSpacingRole(ui::SizeRole::None);
+            hLayout->setSpacingRole(ui::SizeRole::kNone);
             // hLayout->setBackgroundRole(ui::ColorRole::Button);
             p.icon->setParent(hLayout);
             p.label->setParent(hLayout);
             p.closeButton->setParent(hLayout);
             p.toolLayout = ui::VerticalLayout::create(context, p.layout);
-            p.toolLayout->setSpacingRole(ui::SizeRole::None);
+            p.toolLayout->setSpacingRole(ui::SizeRole::kNone);
             p.toolLayout->setHStretch(ui::Stretch::Expanding);
             p.toolLayout->setVStretch(ui::Stretch::Expanding);
 

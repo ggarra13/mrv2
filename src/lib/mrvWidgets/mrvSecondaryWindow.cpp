@@ -6,7 +6,7 @@
 #include "mrvWidgets/mrvSecondaryWindow.h"
 #include "mrvWidgets/mrvMainWindow.h"
 
-#include "mrvGL/mrvGLViewport.h"
+#include "mrvVk/mrvVkViewport.h"
 
 #include "mrvApp/mrvApp.h"
 #include "mrvApp/mrvSettingsObject.h"

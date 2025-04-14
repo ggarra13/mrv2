@@ -5,5 +5,3 @@
 #pragma once
 
 #include <FL/Fl_Vk_Window.H>
-#undef None
-#undef Status

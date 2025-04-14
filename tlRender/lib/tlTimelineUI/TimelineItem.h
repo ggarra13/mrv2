@@ -19,7 +19,7 @@ namespace tl
     namespace timelineui
     {
         //! Track types.
-        enum class TrackType { None, Video, Audio };
+        enum class TrackType { kNone, Video, Audio };
 
         //! Timeline item.
         //!

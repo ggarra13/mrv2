@@ -21,6 +21,17 @@
 #include "mrvMainWindow.h"
 #include "mrvPreferencesUI.h"
 
+#ifdef FLTK_USE_WAYLAND
+#    include <regex>
+#    include <cairo/cairo.h>
+#    include <wayland-client.h>
+#endif
+
+#include "mrvFl/mrvIO.h"
+
+#include "mrViewer.h"
+#include "mrvCore/mrvOS.h"
+
 #include <FL/names.h>
 #include <FL/platform.H>
 #include <FL/fl_utf8.h>
@@ -34,17 +45,6 @@
 #    include <X11/extensions/scrnsaver.h>
 #    include <X11/extensions/shape.h>
 #endif
-
-#ifdef FLTK_USE_WAYLAND
-#    include <regex>
-#    include <cairo/cairo.h>
-#    include <wayland-client.h>
-#endif
-
-#include "mrvFl/mrvIO.h"
-
-#include "mrViewer.h"
-#include "mrvCore/mrvOS.h"
 
 namespace
 {

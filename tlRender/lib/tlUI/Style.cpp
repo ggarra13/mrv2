@@ -62,7 +62,7 @@ namespace tl
         std::map<ColorRole, image::Color4f> defaultColorRoles()
         {
             std::map<ColorRole, image::Color4f> out;
-            out[ColorRole::None] = image::Color4f();
+            out[ColorRole::kNone] = image::Color4f();
 
             out[ColorRole::Window] = image::Color4f(.2F, .2F, .2F);
             out[ColorRole::Base] = image::Color4f(.17F, .17F, .17F);
@@ -223,7 +223,7 @@ namespace tl
             for (auto i = json.begin(); i != json.end(); ++i)
             {
                 std::stringstream ss(i.key());
-                ColorRole colorRole = ColorRole::None;
+                ColorRole colorRole = ColorRole::kNone;
                 ss >> colorRole;
                 std::stringstream ss2(std::string(i.value()));
                 image::Color4f color;

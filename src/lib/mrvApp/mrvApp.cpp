@@ -38,8 +38,6 @@ namespace py = pybind11;
 #include "mrvWidgets/mrvLogDisplay.h"
 #include "mrvWidgets/mrvPythonOutput.h"
 
-#include "mrvGL/mrvGLViewport.h"
-
 #if defined(TLRENDER_USD)
 #    include "mrvOptions/mrvUSD.h"
 #endif // TLRENDER_USD
@@ -520,7 +518,11 @@ namespace mrv
         DBG;
         Fl::option(Fl::OPTION_VISIBLE_FOCUS, false);
         DBG;
+#ifdef TLRENDER_VK
+        Fl::use_high_res_VK(true);
+#else
         Fl::use_high_res_GL(true);
+#endif
         DBG;
 
         
@@ -769,7 +771,7 @@ namespace mrv
                         value.pixelTypeIndex >= 0 &&
                                 value.pixelTypeIndex < value.pixelTypes.size()
                             ? value.pixelTypes[value.pixelTypeIndex]
-                            : device::PixelType::None;
+                            : device::PixelType::kNone;
                     config.boolOptions = value.boolOptions;
                     p.outputDevice->setConfig(config);
                     p.outputDevice->setEnabled(value.deviceEnabled);
@@ -853,7 +855,7 @@ namespace mrv
                         LOG_WARNING(msg);
                         break;
                     }
-                    case log::Type::Status:
+                    case log::Type::kStatus:
                     {
                         if (msg == lastStatusMessage)
                             continue;

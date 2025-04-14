@@ -108,7 +108,7 @@ namespace tl
 
         struct IItem::Private
         {
-            ui::ColorRole selectRole = ui::ColorRole::None;
+            ui::ColorRole selectRole = ui::ColorRole::kNone;
             std::shared_ptr<observer::ValueObserver<bool> > timeUnitsObserver;
         };
 

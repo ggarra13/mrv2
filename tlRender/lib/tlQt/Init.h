@@ -12,7 +12,7 @@ namespace tl
     namespace qt
     {
         //! Surface formats.
-        enum class DefaultSurfaceFormat { None, OpenGL_4_1_CoreProfile };
+        enum class DefaultSurfaceFormat { kNone, OpenGL_4_1_CoreProfile };
 
         //! Initialize the library. This needs to be called before the Qt
         //! application is created.

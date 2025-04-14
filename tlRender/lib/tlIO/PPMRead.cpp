@@ -75,7 +75,7 @@ namespace tl
                     }
                     const size_t bitDepth = maxValue < 256 ? 8 : 16;
                     _info.pixelType = image::getIntType(channelCount, bitDepth);
-                    if (image::PixelType::None == _info.pixelType)
+                    if (image::PixelType::kNone == _info.pixelType)
                     {
                         throw std::runtime_error(
                             string::Format("{0}: {1}")

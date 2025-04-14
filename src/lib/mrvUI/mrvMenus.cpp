@@ -733,7 +733,7 @@ namespace mrv
                 _("Render/Alpha Blend/None"), kAlphaBlendNone.hotkey(),
                 (Fl_Callback*)alpha_blend_none_cb, ui, mode);
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-            if (imageOptions.alphaBlend == timeline::AlphaBlend::None)
+            if (imageOptions.alphaBlend == timeline::AlphaBlend::kNone)
                 item->set();
 
             idx = menu->add(

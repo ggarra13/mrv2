@@ -232,7 +232,7 @@ namespace tl
             if (auto context = p.context.lock())
             {
                 auto logSystem = context->getSystem<log::System>();
-                logSystem->print("ndi::System", msg, log::Type::Status, "ndi");
+                logSystem->print("ndi::System", msg, log::Type::kStatus, "ndi");
             }
 
             return fullpath;

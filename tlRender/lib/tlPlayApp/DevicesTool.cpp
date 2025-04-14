@@ -104,7 +104,7 @@ namespace tl
             p.maxFALLSlider->setRange(math::FloatRange(0.F, 10000.F));
 
             auto layout = ui::VerticalLayout::create(context);
-            layout->setSpacingRole(ui::SizeRole::None);
+            layout->setSpacingRole(ui::SizeRole::kNone);
 
             auto bellows = ui::Bellows::create("Output", context, layout);
             auto gridLayout = ui::GridLayout::create(context);

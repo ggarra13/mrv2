@@ -158,7 +158,7 @@ namespace tl
         {
             size_t textureCount = 0;
             int textureSize = 0;
-            image::PixelType textureType = image::PixelType::None;
+            image::PixelType textureType = image::PixelType::kNone;
             int border = 0;
             TextureAtlasID id = 0;
             std::vector<std::shared_ptr<Texture> > textures;

@@ -22,7 +22,7 @@ namespace tl
         struct GridLayout::Private
         {
             std::map<std::shared_ptr<IWidget>, GridPos> gridPos;
-            SizeRole marginRole = SizeRole::None;
+            SizeRole marginRole = SizeRole::kNone;
             SizeRole spacingRole = SizeRole::Spacing;
 
             struct SizeData

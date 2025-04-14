@@ -416,12 +416,12 @@ namespace tl
             p.toolsWidget->hide();
 
             p.layout = ui::VerticalLayout::create(context, shared_from_this());
-            p.layout->setSpacingRole(ui::SizeRole::None);
+            p.layout->setSpacingRole(ui::SizeRole::kNone);
             p.menuBar->setParent(p.layout);
             p.dividers["MenuBar"] = ui::Divider::create(
                 ui::Orientation::Vertical, context, p.layout);
             auto hLayout = ui::HorizontalLayout::create(context, p.layout);
-            hLayout->setSpacingRole(ui::SizeRole::None);
+            hLayout->setSpacingRole(ui::SizeRole::kNone);
             p.fileToolBar->setParent(hLayout);
             p.dividers["File"] = ui::Divider::create(
                 ui::Orientation::Horizontal, context, hLayout);
@@ -439,10 +439,10 @@ namespace tl
                 ui::Orientation::Vertical, context, p.layout);
             p.splitter = ui::Splitter::create(
                 ui::Orientation::Vertical, context, p.layout);
-            p.splitter->setSpacingRole(ui::SizeRole::None);
+            p.splitter->setSpacingRole(ui::SizeRole::kNone);
             p.splitter2 = ui::Splitter::create(
                 ui::Orientation::Horizontal, context, p.splitter);
-            p.splitter2->setSpacingRole(ui::SizeRole::None);
+            p.splitter2->setSpacingRole(ui::SizeRole::kNone);
             p.viewport->setParent(p.splitter2);
             p.toolsWidget->setParent(p.splitter2);
             p.timelineWidget->setParent(p.splitter);
@@ -452,7 +452,7 @@ namespace tl
             p.bottomLayout->setMarginRole(ui::SizeRole::MarginInside);
             p.bottomLayout->setSpacingRole(ui::SizeRole::SpacingSmall);
             hLayout = ui::HorizontalLayout::create(context, p.bottomLayout);
-            hLayout->setSpacingRole(ui::SizeRole::None);
+            hLayout->setSpacingRole(ui::SizeRole::kNone);
             reverseButton->setParent(hLayout);
             stopButton->setParent(hLayout);
             forwardButton->setParent(hLayout);
@@ -476,7 +476,7 @@ namespace tl
             p.dividers["Status"] = ui::Divider::create(
                 ui::Orientation::Vertical, context, p.layout);
             p.statusLayout = ui::HorizontalLayout::create(context, p.layout);
-            p.statusLayout->setSpacingRole(ui::SizeRole::None);
+            p.statusLayout->setSpacingRole(ui::SizeRole::kNone);
             p.statusLabel->setParent(p.statusLayout);
             ui::Divider::create(
                 ui::Orientation::Horizontal, context, p.statusLayout);

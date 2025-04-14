@@ -4,7 +4,6 @@
 
 #pragma once
 
-#
 
 #include <tlCore/Box.h>
 #include <tlCore/Matrix.h>

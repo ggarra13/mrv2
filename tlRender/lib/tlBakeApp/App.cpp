@@ -212,11 +212,11 @@ namespace tl
                 _outputInfo.size.w = _renderSize.w;
                 _outputInfo.size.h = _renderSize.h;
                 _outputInfo.pixelType =
-                    _options.outputPixelType != image::PixelType::None
+                    _options.outputPixelType != image::PixelType::kNone
                         ? _options.outputPixelType
                         : info.video[0].pixelType;
                 _outputInfo = _writerPlugin->getWriteInfo(_outputInfo);
-                if (image::PixelType::None == _outputInfo.pixelType)
+                if (image::PixelType::kNone == _outputInfo.pixelType)
                 {
                     _outputInfo.pixelType = image::PixelType::RGB_U8;
                 }

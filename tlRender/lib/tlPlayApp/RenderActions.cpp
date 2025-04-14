@@ -76,7 +76,7 @@ namespace tl
                     {
                         auto imageOptions =
                             app->getRenderModel()->getImageOptions();
-                        imageOptions.alphaBlend = timeline::AlphaBlend::None;
+                        imageOptions.alphaBlend = timeline::AlphaBlend::kNone;
                         app->getRenderModel()->setImageOptions(imageOptions);
                     }
                 });

@@ -278,7 +278,7 @@ namespace tl
 
         audio::DataType toAudioType(AVSampleFormat value)
         {
-            audio::DataType out = audio::DataType::None;
+            audio::DataType out = audio::DataType::kNone;
             switch (value)
             {
             case AV_SAMPLE_FMT_S16:

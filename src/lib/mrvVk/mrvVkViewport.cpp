@@ -34,9 +34,9 @@
 #include "mrvVk/mrvVkViewportPrivate.h"
 #include "mrvVk/mrvVkDefines.h"
 // #include "mrvVk/mrvVkErrors.h"
-// #include "mrvVk/mrvVkUtil.h"
-// #include "mrvVk/mrvVkShaders.h"
-// #include "mrvVk/mrvVkShape.h"
+#include "mrvVk/mrvVkUtil.h"
+#include "mrvVk/mrvVkShaders.h"
+#include "mrvVk/mrvVkShape.h"
 #include "mrvVk/mrvTimelineViewport.h"
 #include "mrvVk/mrvTimelineViewportPrivate.h"
 #include "mrvVk/mrvVkViewport.h"
@@ -78,6 +78,15 @@ namespace mrv
         _vk->context = context;
     }
 
+    void Viewport::prepare()
+    {
+    }
+    
+    void Viewport::destroy_resources()
+    {
+        Fl_Vk_Window::destroy_resources();
+    }
+    
     //! Refresh window by clearing the associated resources.
     void Viewport::refresh()
     {
@@ -167,7 +176,7 @@ namespace mrv
             _initializeVK();
             
 
-            if (p.ui->uiPrefs->uiPrefsOpenVKVsync->value() ==
+            if (p.ui->uiPrefs->uiPrefsOpenGLVsync->value() ==
                 MonitorVSync::kVSyncNone)
                 swap_interval(0);
             else
@@ -309,11 +318,11 @@ namespace mrv
                     image->setPixelAspectRatio(p.pixelAspectRatio);
                 }
 
-                if (p.stereo3DOptions.output == Stereo3DOutput::OpenVK &&
+                if (p.stereo3DOptions.output == Stereo3DOutput::Vulkan &&
                     p.stereo3DOptions.input == Stereo3DInput::Image &&
                     p.videoData.size() > 1 && p.showVideo)
                 {
-                    _drawStereoOpenVK();
+                    _drawStereoVulkan();
                 }
                 else
                 {
@@ -437,13 +446,13 @@ namespace mrv
         }
 
         
-        // glDrawBuffer(VK_BACK_LEFT);
+        // glDrawBuffer(GL_BACK_LEFT);
         
 
         // glViewport(0, 0, VKsizei(viewportSize.w), VKsizei(viewportSize.h));
         // glClearStencil(0);
         // glClearColor(r, g, b, a);
-        // glClear(VK_COLOR_BUFFER_BIT | VK_STENCIL_BUFFER_BIT);
+        // glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         
 
         const auto& player = getTimelinePlayer();
@@ -515,9 +524,9 @@ namespace mrv
                     mvp = _createTexturedRectangle();
                 }
 
-                if (p.imageOptions[0].alphaBlend == timeline::AlphaBlend::None)
+                if (p.imageOptions[0].alphaBlend == timeline::AlphaBlend::kNone)
                 {
-                    //glDisable(VK_BLEND);
+                    //glDisable(GL_BLEND);
                 }
 
                 vk.shader->bind();
@@ -538,18 +547,18 @@ namespace mrv
                 if (vk.vao && vk.vbo)
                 {
                     vk.vao->bind();
-                    vk.vao->draw(VK_TRIANVKES, 0, vk.vbo->getSize());
+                    // vk.vao->draw(GL_TRIANGLES, 0, vk.vbo->getSize());
                 }
 
-                if (p.stereo3DOptions.output == Stereo3DOutput::OpenVK &&
+                if (p.stereo3DOptions.output == Stereo3DOutput::Vulkan &&
                     p.stereo3DOptions.input == Stereo3DInput::Image)
                 {
                     vk.shader->bind();
                     vk.shader->setUniform("transform.mvp", mvp);
                     vk.shader->setUniform("opacity", alpha);
 
-                    // glActiveTexture(VK_TEXTURE0);
-                    // glBindTexture(VK_TEXTURE_2D, vk.stereoBuffer->getColorID());
+                    // glActiveTexture(GL_TEXTURE0);
+                    // glBindTexture(GL_TEXTURE_2D, vk.stereoBuffer->getColorID());
 
                     if (vk.vao && vk.vbo)
                     {
@@ -558,7 +567,7 @@ namespace mrv
                     }
                 }
 
-                if (p.imageOptions[0].alphaBlend == timeline::AlphaBlend::None)
+                if (p.imageOptions[0].alphaBlend == timeline::AlphaBlend::kNone)
                 {
                     // glEnable(GL_BLEND);
                 }
@@ -570,19 +579,19 @@ namespace mrv
                 else
                     mvp = _createTexturedRectangle();
 
-                const VKint viewportX = p.viewPos.x;
-                const VKint viewportY = p.viewPos.y;
-                const VKsizei sizeW = renderSize.w * p.viewZoom;
-                const VKsizei sizeH = renderSize.h * p.viewZoom;
+                const uint32_t viewportX = p.viewPos.x;
+                const uint32_t viewportY = p.viewPos.y;
+                const size_t sizeW = renderSize.w * p.viewZoom;
+                const size_t sizeH = renderSize.h * p.viewZoom;
                 if (sizeW > 0 && sizeH > 0)
                 {
                     // glViewport(viewportX, viewportY, sizeW, sizeH);
 
-                    // glBindFramebuffer(VK_READ_FRAMEBUFFER, vk.buffer->getID());
-                    // glBindFramebuffer(VK_DRAW_FRAMEBUFFER, 0); // 0 is screen
+                    // glBindFramebuffer(GL_READ_FRAMEBUFFER, vk.buffer->getID());
+                    // glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // 0 is screen
 
                     // Blit the offscreen buffer contents to the viewport
-                    VKenum filter = VK_FILTER_NEAREST;
+                    VkFilter filter = VK_FILTER_NEAREST;
                     if (!p.displayOptions.empty())
                     {
                         const auto& filters = p.displayOptions[0].imageFilters;
@@ -597,24 +606,24 @@ namespace mrv
                     // glBlitFramebuffer(
                     //     0, 0, renderSize.w, renderSize.h, viewportX, viewportY,
                     //     sizeW + viewportX, sizeH + viewportY,
-                    //     VK_COLOR_BUFFER_BIT, filter);
+                    //     GL_COLOR_BUFFER_BIT, filter);
 
-                    // if (p.stereo3DOptions.output == Stereo3DOutput::OpenVK &&
+                    // if (p.stereo3DOptions.output == Stereo3DOutput::Vulkan &&
                     //     p.stereo3DOptions.input == Stereo3DInput::Image)
                     // {
                     //     glBindFramebuffer(
-                    //         VK_READ_FRAMEBUFFER, vk.stereoBuffer->getID());
+                    //         GL_READ_FRAMEBUFFER, vk.stereoBuffer->getID());
                     //     glBindFramebuffer(
-                    //         VK_DRAW_FRAMEBUFFER, 0); // 0 is screen
+                    //         GL_DRAW_FRAMEBUFFER, 0); // 0 is screen
                     //     glDrawBuffer(VK_BACK_RIGHT);
                     //     glBlitFramebuffer(
                     //         0, 0, renderSize.w, renderSize.h, viewportX,
                     //         viewportY, sizeW + viewportX, sizeH + viewportY,
-                    //         VK_COLOR_BUFFER_BIT, filter);
+                    //         GL_COLOR_BUFFER_BIT, filter);
                     // }
 
                     // glViewport(
-                    //     0, 0, VKsizei(viewportSize.w), VKsizei(viewportSize.h));
+                    //     0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
                 }
             }
 
@@ -631,8 +640,8 @@ namespace mrv
                     offscreenBufferOptions.colorFilters =
                         p.displayOptions[0].imageFilters;
                 }
-                offscreenBufferOptions.depth = vk::OffscreenDepth::None;
-                offscreenBufferOptions.stencil = vk::OffscreenStencil::None;
+                offscreenBufferOptions.depth = vk::OffscreenDepth::kNone;
+                offscreenBufferOptions.stencil = vk::OffscreenStencil::kNone;
                 if (vk::doCreate(
                         vk.overlay, renderSize, offscreenBufferOptions))
                 {
@@ -651,24 +660,24 @@ namespace mrv
                 
 
                 // // Copy data to PBO:
-                // glBindBuffer(VK_PIXEL_PACK_BUFFER, vk.overlayPBO);
+                // glBindBuffer(GL_PIXEL_PACK_BUFFER, vk.overlayPBO);
                 
                 // glReadPixels(
-                //     0, 0, renderSize.w, renderSize.h, VK_RGBA, VK_UNSIGNED_BYTE,
+                //     0, 0, renderSize.w, renderSize.h, GL_RGBA, GL_UNSIGNED_BYTE,
                 //     nullptr);
                 
-                // glBindBuffer(VK_PIXEL_PACK_BUFFER, 0);
+                // glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
                 
 
                 // Create a fence for the overlay PBO
-                // vk.overlayFence = glFenceSync(VK_SYNC_GPU_COMMANDS_COMPLETE, 0);
+                // vk.overlayFence = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
                 
 
                 // Wait for the fence to complete before compositing
                 // VKenum waitReturn =
-                //     glClientWaitSync(vk.overlayFence, 0, VK_TIMEOUT_IGNORED);
+                //     glClientWaitSync(vk.overlayFence, 0, GL_TIMEOUT_IGNORED);
                 
-                // if (waitReturn == VK_TIMEOUT_EXPIRED)
+                // if (waitReturn == GL_TIMEOUT_EXPIRED)
                 // {
                 //     LOG_ERROR("glClientWaitSync: Timeout occurred!");
                 // }
@@ -773,8 +782,8 @@ namespace mrv
                     offscreenBufferOptions.colorFilters =
                         p.displayOptions[0].imageFilters;
                 }
-                offscreenBufferOptions.depth = vk::OffscreenDepth::None;
-                offscreenBufferOptions.stencil = vk::OffscreenStencil::None;
+                offscreenBufferOptions.depth = vk::OffscreenDepth::kNone;
+                offscreenBufferOptions.stencil = vk::OffscreenStencil::kNone;
                 if (vk::doCreate(
                         vk.annotation, viewportSize, offscreenBufferOptions))
                 {
@@ -823,17 +832,17 @@ namespace mrv
         }
 
         // Set up 1:1 projection
-        Fl_Gl_Window::draw_begin();
+        VkWindow::draw_begin();
 
         // Draw FLTK children
         Fl_Window::draw();
 
-        glViewport(0, 0, VKsizei(viewportSize.w), VKsizei(viewportSize.h));
+        // glViewport(0, 0, VKsizei(viewportSize.w), VKsizei(viewportSize.h));
         if (p.showAnnotations)
         {
             // Draw the text shape annotations to the viewport.
-            glBindFramebuffer(VK_FRAMEBUFFER, 0);
-            glDrawBuffer(VK_BACK_LEFT);
+            // glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            // glDrawBuffer(GL_BACK_LEFT);
 
             float pixel_unit = pixels_per_unit();
             math::Vector2f pos;
@@ -843,7 +852,7 @@ namespace mrv
                 p.viewPos.x / pixel_unit, p.viewPos.y / pixel_unit, 0.F));
             vm = vm * math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
 
-            _drawVK1TextShapes(vm, p.viewZoom);
+            // _drawGL1TextShapes(vm, p.viewZoom);
 
             // Create a new image with to read the vk.overlay composited
             // results.
@@ -864,7 +873,7 @@ namespace mrv
                 // OpenVK1 text.
                 // On Apple, we render to a new OpenVK1 context and
                 // composite manually, but we cannot handle auto fit properly.
-                glBindFramebuffer(VK_FRAMEBUFFER, vk.overlay->getID());
+                // glBindFramebuffer(GL_FRAMEBUFFER, vk.overlay->getID());
 
                 if (!p.frameView)
                 {
@@ -880,18 +889,18 @@ namespace mrv
                     vm = vm *
                          math::scale(math::Vector3f(viewZoom, viewZoom, 1.F));
                 }
-                _drawVK1TextShapes(vm, viewZoom);
+                // _drawGL1TextShapes(vm, viewZoom);
                 // On Windows, X11, Wayland we can let the gfx card handle it.
-                glReadPixels(
-                    0, 0, renderSize.w, renderSize.h, VK_RGBA, VK_UNSIGNED_BYTE,
-                    overlayImage->getData());
+                // glReadPixels(
+                //     0, 0, renderSize.w, renderSize.h, GL_RGBA, GL_UNSIGNED_BYTE,
+                //     overlayImage->getData());
 #    else
                 // On Apple, we must do the composite ourselves.
                 // As this is extremaly expensive, we will only do
                 // it when playback is stopped.
                 if (_isPlaybackStopped())
                 {
-                    glReadBuffer(VK_BACK_LEFT);
+                    // glReadBuffer(GL_BACK_LEFT);
 
                     math::Vector2f pos;
                     math::Size2i tmpSize(
@@ -909,9 +918,9 @@ namespace mrv
                     auto tmp =
                         image::Image::create(tmpSize.w, tmpSize.h, pixelType);
                     tmp->zero();
-                    glReadPixels(
-                        pos.x, pos.y, tmpSize.w, tmpSize.h, VK_RGBA,
-                        VK_UNSIGNED_BYTE, tmp->getData());
+                    // glReadPixels(
+                    //     pos.x, pos.y, tmpSize.w, tmpSize.h, GL_RGBA,
+                    //     GL_UNSIGNED_BYTE, tmp->getData());
 
                     resizeImage(
                         overlayImage->getData(), tmp->getData(), tmpSize.w,
@@ -941,12 +950,12 @@ namespace mrv
                 }
 #    endif
                 outputDevice->setOverlay(overlayImage);
-                glBindFramebuffer(VK_FRAMEBUFFER, 0);
+                // glBindFramebuffer(GL_FRAMEBUFFER, 0);
             }
         }
-        Fl_Gl_Window::draw_end(); // Restore VK state
+        VkWindow::draw_end(); // Restore VK state
 #else
-        Fl_Gl_Window::draw();
+        VkWindow::draw();
 #endif
     }
 
@@ -1073,8 +1082,8 @@ namespace mrv
         {
 
             // For faster access, we muse use BGRA.
-            constexpr VKenum format = VK_BGRA;
-            constexpr VKenum type = VK_FLOAT;
+            // constexpr VKenum format = GL_BGRA;
+            // constexpr VKenum type = GL_FLOAT;
 
 
             vk::OffscreenBufferBinding binding(vk.buffer);
@@ -1106,18 +1115,18 @@ namespace mrv
         {
             if (!p.rawImage)
             {
-                glUnmapBuffer(VK_PIXEL_PACK_BUFFER);
+                // glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
 
-                // Create a new fence
-                vk.pboFences[vk.nextPBOIndex] =
-                    glFenceSync(VK_SYNC_GPU_COMMANDS_COMPLETE, 0);
+                // // Create a new fence
+                // vk.pboFences[vk.nextPBOIndex] =
+                //     glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
                 p.image = nullptr;
                 p.rawImage = true;
             }
         }
 
         // back to conventional pixel operation
-        glBindBuffer(VK_PIXEL_PACK_BUFFER, 0);
+        // glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
     }
 
     void Viewport::_readPixel(image::Color4f& rgba) const noexcept
@@ -1178,8 +1187,8 @@ namespace mrv
                 return;
             }
 
-            glPixelStorei(VK_PACK_ALIGNMENT, 1);
-            glPixelStorei(VK_PACK_SWAP_BYTES, VK_FALSE);
+            // glPixelStorei(GL_PACK_ALIGNMENT, 1);
+            // glPixelStorei(GL_PACK_SWAP_BYTES, GL_FALSE);
 
             // We use ReadPixels when the movie is stopped or has only a
             // a single frame.
@@ -1190,7 +1199,7 @@ namespace mrv
                 update = true;
             }
 
-            const VKenum type = VK_FLOAT;
+            // const VKenum type = GL_FLOAT;
 
             if (update)
             {
@@ -1198,17 +1207,17 @@ namespace mrv
                 if (_isEnvironmentMap())
                 {
                     pos = _getFocus();
-                    glBindFramebuffer(VK_FRAMEBUFFER, 0);
-                    glReadBuffer(VK_FRONT);
-                    glReadPixels(pos.x, pos.y, 1, 1, VK_RGBA, type, &rgba);
+                    // glBindFramebuffer(GL_FRAMEBUFFER, 0);
+                    // glReadBuffer(GL_FRONT);
+                    // glReadPixels(pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);
                     return;
                 }
                 else
                 {
-                    Viewport* self = const_cast<Viewport*>(this);
-                    self->make_current();
+                    // Viewport* self = const_cast<Viewport*>(this);
+                    // self->make_current();
                     vk::OffscreenBufferBinding binding(vk.buffer);
-                    glReadPixels(pos.x, pos.y, 1, 1, VK_RGBA, type, &rgba);
+                    //glReadPixels(pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);
                     return;
                 }
             }
@@ -1249,6 +1258,7 @@ namespace mrv
         auto shape = annotation->lastShape().get();
         if (!shape)
             return;
+        
         Message value;
         if (dynamic_cast< VKArrowShape* >(shape))
         {

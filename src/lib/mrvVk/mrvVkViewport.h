@@ -35,11 +35,14 @@ namespace mrv
         void setContext(const std::weak_ptr<system::Context>& context);
 
         //! Refresh window by clearing the associated resources.
-        void refresh() override;
+        void refresh() FL_OVERRIDE;
+
+        void prepare() FL_OVERRIDE;
+        void destroy_resources() FL_OVERRIDE;
 
     protected:
-        void _initializeGL();
-        void _initializeGLResources();
+        void _initializeVK();
+        void _initializeVKResources();
 
         void _createPBOs(const math::Size2i& renderSize);
         void _createOverlayPBO(const math::Size2i& renderSize);
@@ -137,6 +140,6 @@ namespace mrv
         
     private:
         struct VKPrivate;
-        std::unique_ptr<VKPrivate> _gl;
+        std::unique_ptr<VKPrivate> _vk;
     };
 } // namespace mrv

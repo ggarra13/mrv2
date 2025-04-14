@@ -18,9 +18,9 @@
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvMultilineInput.h"
 
-#include "mrvGL/mrvGLShape.h"
-#include "mrvGL/mrvTimelineViewport.h"
-#include "mrvGL/mrvTimelineViewportPrivate.h"
+#include "mrvVk/mrvVkShape.h"
+#include "mrvVk/mrvTimelineViewport.h"
+#include "mrvVk/mrvTimelineViewportPrivate.h"
 
 #include "mrvPanels/mrvComparePanel.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"
@@ -237,7 +237,7 @@ namespace mrv
                 case ActionMode::kRectangle:
                 case ActionMode::kFilledRectangle:
                 {
-                    auto shape = dynamic_cast< GLRectangleShape* >(s.get());
+                    auto shape = dynamic_cast< VKRectangleShape* >(s.get());
                     if (!shape)
                         return;
 
@@ -252,7 +252,7 @@ namespace mrv
                 case ActionMode::kPolygon:
                 case ActionMode::kFilledPolygon:
                 {
-                    auto shape = dynamic_cast< GLPathShape* >(s.get());
+                    auto shape = dynamic_cast< VKPathShape* >(s.get());
                     if (!shape)
                         return;
 
@@ -265,7 +265,7 @@ namespace mrv
                 }
                 case ActionMode::kDraw:
                 {
-                    auto shape = dynamic_cast< GLPathShape* >(s.get());
+                    auto shape = dynamic_cast< VKPathShape* >(s.get());
                     if (!shape)
                         return;
 
@@ -276,7 +276,7 @@ namespace mrv
                 }
                 case ActionMode::kErase:
                 {
-                    auto shape = dynamic_cast< GLErasePathShape* >(s.get());
+                    auto shape = dynamic_cast< VKErasePathShape* >(s.get());
                     if (!shape)
                         return;
 
@@ -287,7 +287,7 @@ namespace mrv
                 }
                 case ActionMode::kArrow:
                 {
-                    auto shape = dynamic_cast< GLArrowShape* >(s.get());
+                    auto shape = dynamic_cast< VKArrowShape* >(s.get());
                     if (!shape)
                         return;
 
@@ -321,7 +321,7 @@ namespace mrv
                 case ActionMode::kFilledCircle:
                 case ActionMode::kCircle:
                 {
-                    auto shape = dynamic_cast< GLCircleShape* >(s.get());
+                    auto shape = dynamic_cast< VKCircleShape* >(s.get());
                     if (!shape)
                         return;
 
@@ -339,7 +339,7 @@ namespace mrv
                     if (w)
                     {
                         auto pos = math::Vector2i(p.event_x, p.event_y);
-#ifdef USE_OPENGL2
+#ifdef USE_OPENVK2
                         w->pos = pos;
 #else
                         w->Fl_Widget::position(pos.x, pos.y);
@@ -396,10 +396,10 @@ namespace mrv
             const image::Color4f color(r / 255.F, g / 255.F, b / 255.F, alpha);
             fl_font(w->textfont(), w->textsize());
 
-#ifdef USE_OPENGL2
-            auto shape = std::make_shared< GL2TextShape >();
+#ifdef USE_OPENVK2
+            auto shape = std::make_shared< VK2TextShape >();
 #else
-            auto shape = std::make_shared< GLTextShape >(p.fontSystem);
+            auto shape = std::make_shared< VKTextShape >(p.fontSystem);
 #endif
 
             draw::Point pnt(_getRasterf());
@@ -417,7 +417,7 @@ namespace mrv
 
             const float pixels_unit = pixels_per_unit();
 
-#ifdef USE_OPENGL2
+#ifdef USE_OPENVK2
             shape->font = w->textfont();
             shape->fontSize = w->textsize() / p.viewZoom * pixels_unit;
 
@@ -562,7 +562,7 @@ namespace mrv
                 {
                 case ActionMode::kDraw:
                 {
-                    auto shape = std::make_shared< GLPathShape >();
+                    auto shape = std::make_shared< VKPathShape >();
                     shape->pen_size = pen_size;
                     shape->color = color;
                     shape->soft = softBrush;
@@ -574,7 +574,7 @@ namespace mrv
                 }
                 case ActionMode::kErase:
                 {
-                    auto shape = std::make_shared< GLErasePathShape >();
+                    auto shape = std::make_shared< VKErasePathShape >();
                     shape->pen_size = pen_size * 3.5F;
                     shape->color = color;
                     shape->soft = softBrush;
@@ -585,7 +585,7 @@ namespace mrv
                 }
                 case ActionMode::kArrow:
                 {
-                    auto shape = std::make_shared< GLArrowShape >();
+                    auto shape = std::make_shared< VKArrowShape >();
                     shape->pen_size = pen_size;
                     shape->soft = softBrush;
                     shape->color = color;
@@ -601,10 +601,10 @@ namespace mrv
                 }
                 case ActionMode::kFilledPolygon:
                 {
-                    std::shared_ptr<GLFilledPolygonShape> shape;
+                    std::shared_ptr<VKFilledPolygonShape> shape;
                     if (p.lastEvent != FL_DRAG)
                     {
-                        shape = std::make_shared< GLFilledPolygonShape >();
+                        shape = std::make_shared< VKFilledPolygonShape >();
                         shape->pen_size = pen_size;
                         shape->soft = false;
                         shape->color = color;
@@ -616,7 +616,7 @@ namespace mrv
                     {
                         auto s = annotation->lastShape();
                         shape =
-                            std::dynamic_pointer_cast<GLFilledPolygonShape>(s);
+                            std::dynamic_pointer_cast<VKFilledPolygonShape>(s);
                         if (!shape)
                             return;
                         shape->pts.push_back(pnt);
@@ -632,10 +632,10 @@ namespace mrv
                 }
                 case ActionMode::kPolygon:
                 {
-                    std::shared_ptr<GLPolygonShape> shape;
+                    std::shared_ptr<VKPolygonShape> shape;
                     if (p.lastEvent != FL_DRAG)
                     {
-                        shape = std::make_shared< GLPolygonShape >();
+                        shape = std::make_shared< VKPolygonShape >();
                         shape->pen_size = pen_size;
                         shape->soft = false;
                         shape->color = color;
@@ -645,7 +645,7 @@ namespace mrv
                     else
                     {
                         auto s = annotation->lastShape();
-                        shape = std::dynamic_pointer_cast<GLPolygonShape>(s);
+                        shape = std::dynamic_pointer_cast<VKPolygonShape>(s);
                         if (!shape)
                             return;
                     }
@@ -662,7 +662,7 @@ namespace mrv
                 }
                 case ActionMode::kFilledCircle:
                 {
-                    auto shape = std::make_shared< GLFilledCircleShape >();
+                    auto shape = std::make_shared< VKFilledCircleShape >();
                     shape->pen_size = pen_size;
                     shape->soft = softBrush;
                     shape->color = color;
@@ -676,7 +676,7 @@ namespace mrv
                 }
                 case ActionMode::kCircle:
                 {
-                    auto shape = std::make_shared< GLCircleShape >();
+                    auto shape = std::make_shared< VKCircleShape >();
                     shape->pen_size = pen_size;
                     shape->soft = softBrush;
                     shape->color = color;
@@ -690,7 +690,7 @@ namespace mrv
                 }
                 case ActionMode::kFilledRectangle:
                 {
-                    auto shape = std::make_shared< GLFilledRectangleShape >();
+                    auto shape = std::make_shared< VKFilledRectangleShape >();
                     shape->pen_size = pen_size;
                     shape->soft = softBrush;
                     shape->color = color;
@@ -706,7 +706,7 @@ namespace mrv
                 }
                 case ActionMode::kRectangle:
                 {
-                    auto shape = std::make_shared< GLRectangleShape >();
+                    auto shape = std::make_shared< VKRectangleShape >();
                     shape->pen_size = pen_size;
                     shape->soft = softBrush;
                     shape->color = color;
@@ -734,7 +734,7 @@ namespace mrv
                     {
                         w->take_focus();
                         w->pos = pos;
-#ifdef USE_OPENGL2
+#ifdef USE_OPENVK2
                         w->textfont((Fl_Font)font);
 #else
                         w->Fl_Widget::position(pos.x, pos.y);
@@ -747,7 +747,7 @@ namespace mrv
                     w = new MultilineInput(
                         pos.x, pos.y, 20, 30 * pct * p.viewZoom);
                     w->take_focus();
-#ifdef USE_OPENGL2
+#ifdef USE_OPENVK2
                     w->textfont((Fl_Font)font);
 #endif
                     w->textsize(fontSize);
@@ -1674,8 +1674,8 @@ namespace mrv
 
         const float devicePixelRatio = pixels_per_unit();
 
-#ifdef USE_OPENGL2
-        auto shape = dynamic_cast<GL2TextShape*>(s.get());
+#ifdef USE_OPENVK2
+        auto shape = dynamic_cast<VK2TextShape*>(s.get());
         if (!shape)
             return;
 
@@ -1702,7 +1702,7 @@ namespace mrv
         w->value(shape->text.c_str(), shape->text.size());
         w->recalc();
 #else
-        auto shape = dynamic_cast<GLTextShape*>(s.get());
+        auto shape = dynamic_cast<VKTextShape*>(s.get());
         if (!shape)
             return;
 

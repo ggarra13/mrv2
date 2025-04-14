@@ -23,6 +23,6 @@ namespace tl
         enum class VAlign { Top, Center, Bottom };
 
         //! Updates.
-        enum Update { None = 0, Size = 1, Draw = 2 };
+        enum Update { kNone = 0, Size = 1, Draw = 2 };
     } // namespace ui
 } // namespace tl

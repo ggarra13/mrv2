@@ -15,7 +15,7 @@ namespace tl
     {
         //! Size roles.
         enum class SizeRole {
-            None,
+            kNone,
             Margin,
             MarginSmall,
             MarginLarge,
@@ -36,7 +36,7 @@ namespace tl
             DragLength,
 
             Count,
-            First = None
+            First = kNone
         };
         TLRENDER_ENUM(SizeRole);
         TLRENDER_ENUM_SERIALIZE(SizeRole);
@@ -46,7 +46,7 @@ namespace tl
 
         //! Color roles.
         enum class ColorRole {
-            None,
+            kNone,
 
             Window,
             Base,
@@ -80,7 +80,7 @@ namespace tl
             Yellow,
 
             Count,
-            First = None
+            First = kNone
         };
         TLRENDER_ENUM(ColorRole);
         TLRENDER_ENUM_SERIALIZE(ColorRole);
@@ -90,13 +90,13 @@ namespace tl
 
         //! Font roles.
         enum class FontRole {
-            None,
+            kNone,
             Label,
             Mono,
             Title,
 
             Count,
-            First = None
+            First = kNone
         };
         TLRENDER_ENUM(FontRole);
         TLRENDER_ENUM_SERIALIZE(FontRole);

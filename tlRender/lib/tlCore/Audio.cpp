@@ -51,19 +51,19 @@ namespace tl
         DataType getIntType(size_t value)
         {
             const std::array<DataType, 9> data = {
-                DataType::None, DataType::S8,   DataType::S16,
-                DataType::None, DataType::S32,  DataType::None,
-                DataType::None, DataType::None, DataType::None};
-            return value < data.size() ? data[value] : DataType::None;
+                DataType::kNone, DataType::S8,   DataType::S16,
+                DataType::kNone, DataType::S32,  DataType::kNone,
+                DataType::kNone, DataType::kNone, DataType::kNone};
+            return value < data.size() ? data[value] : DataType::kNone;
         }
 
         DataType getFloatType(size_t value)
         {
             const std::array<DataType, 9> data = {
-                DataType::None, DataType::None, DataType::None,
-                DataType::None, DataType::F32,  DataType::None,
-                DataType::None, DataType::None, DataType::F64};
-            return value < data.size() ? data[value] : DataType::None;
+                DataType::kNone, DataType::kNone, DataType::kNone,
+                DataType::kNone, DataType::F32,  DataType::kNone,
+                DataType::kNone, DataType::kNone, DataType::F64};
+            return value < data.size() ? data[value] : DataType::kNone;
         }
 
         Info::Info() {}

@@ -113,7 +113,7 @@ namespace tl
 
         PixelType getIntType(std::size_t channelCount, std::size_t bitDepth)
         {
-            PixelType out = PixelType::None;
+            PixelType out = PixelType::kNone;
             switch (channelCount)
             {
             case 1:
@@ -181,7 +181,7 @@ namespace tl
 
         PixelType getFloatType(std::size_t channelCount, std::size_t bitDepth)
         {
-            PixelType out = PixelType::None;
+            PixelType out = PixelType::kNone;
             switch (channelCount)
             {
             case 1:
@@ -242,7 +242,7 @@ namespace tl
                     [abs(getChannelCount(value) - getChannelCount(type)) +
                      abs(getBitDepth(value) - getBitDepth(type))] = type;
             }
-            return !diff.empty() ? diff.begin()->second : PixelType::None;
+            return !diff.empty() ? diff.begin()->second : PixelType::kNone;
         }
 
         size_t getAlignedByteCount(size_t value, size_t alignment)

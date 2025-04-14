@@ -50,7 +50,7 @@ namespace tl
 
             p.layout =
                 ui::HorizontalLayout::create(context, shared_from_this());
-            p.layout->setSpacingRole(ui::SizeRole::None);
+            p.layout->setSpacingRole(ui::SizeRole::kNone);
             for (const auto& button : p.buttons)
             {
                 button.second->setParent(p.layout);

@@ -29,7 +29,7 @@ namespace tl
         //! \bug Disable 10-bit YUV since the BMD conversion function
         //! shows artifacts.
         enum class PixelType {
-            None,
+            kNone,
             _8BitBGRA, // BMD and NDI
             _8BitYUV,  // BMD and NDI
             // These are BMD formats
@@ -48,7 +48,7 @@ namespace tl
             _8BitRGBA,  // NDI
             _8BitRGBX,  // NDI
             Count,
-            First = None
+            First = kNone
         };
         TLRENDER_ENUM(PixelType);
         TLRENDER_ENUM_SERIALIZE(PixelType);
@@ -84,11 +84,11 @@ namespace tl
 
         //! Device options.
         enum class Option {
-            None,
+            kNone,
             _444SDIVideoOutput,
 
             Count,
-            First = None
+            First = kNone
         };
         TLRENDER_ENUM(Option);
         TLRENDER_ENUM_SERIALIZE(Option);
@@ -101,7 +101,7 @@ namespace tl
         {
             int deviceIndex = -1;
             int displayModeIndex = -1;
-            PixelType pixelType = PixelType::None;
+            PixelType pixelType = PixelType::kNone;
             BoolOptions boolOptions;
             bool noAudio = false;
             bool noMetadata = false;
@@ -112,12 +112,12 @@ namespace tl
 
         //! HDR mode.
         enum class HDRMode {
-            None,
+            kNone,
             FromFile,
             Custom,
 
             Count,
-            First = None
+            First = kNone
         };
         TLRENDER_ENUM(HDRMode);
         TLRENDER_ENUM_SERIALIZE(HDRMode);

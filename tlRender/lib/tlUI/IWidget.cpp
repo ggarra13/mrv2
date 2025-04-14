@@ -286,7 +286,7 @@ namespace tl
         void IWidget::drawEvent(const math::Box2i&, const DrawEvent& event)
         {
             _updates &= ~static_cast<int>(Update::Draw);
-            if (_backgroundRole != ColorRole::None)
+            if (_backgroundRole != ColorRole::kNone)
             {
                 event.render->drawRect(
                     _geometry, event.style->getColorRole(_backgroundRole));

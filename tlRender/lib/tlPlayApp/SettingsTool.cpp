@@ -1156,7 +1156,7 @@ namespace tl
             auto styleWidget = StyleSettingsWidget::create(app, context);
             auto miscWidget = MiscSettingsWidget::create(app, context);
             auto vLayout = ui::VerticalLayout::create(context);
-            vLayout->setSpacingRole(ui::SizeRole::None);
+            vLayout->setSpacingRole(ui::SizeRole::kNone);
             auto bellows = ui::Bellows::create("Cache", context, vLayout);
             bellows->setWidget(cacheWidget);
             bellows = ui::Bellows::create("File Sequences", context, vLayout);
@@ -1186,7 +1186,7 @@ namespace tl
             p.resetButton = ui::ToolButton::create("Default Settings", context);
 
             p.layout = ui::VerticalLayout::create(context);
-            p.layout->setSpacingRole(ui::SizeRole::None);
+            p.layout->setSpacingRole(ui::SizeRole::kNone);
             p.scrollWidget->setParent(p.layout);
             auto hLayout = ui::HorizontalLayout::create(context, p.layout);
             hLayout->setMarginRole(ui::SizeRole::MarginInside);

@@ -59,7 +59,7 @@ namespace tl
                 VkFormat out;
                 //                 switch (depth)
                 //                 {
-                //                 case OffscreenDepth::None:
+                //                 case OffscreenDepth::kNone:
                 //                     switch (stencil)
                 //                     {
                 //                     case OffscreenStencil::_8:
@@ -76,7 +76,7 @@ namespace tl
                 //                 case OffscreenDepth::_24:
                 //                     switch (stencil)
                 //                     {
-                //                     case OffscreenStencil::None:
+                //                     case OffscreenStencil::kNone:
                 //                         out = GL_DEPTH_COMPONENT24;
                 //                         break;
                 //                     case OffscreenStencil::_8:
@@ -89,7 +89,7 @@ namespace tl
                 //                 case OffscreenDepth::_32:
                 //                     switch (stencil)
                 //                     {
-                //                     case OffscreenStencil::None:
+                //                     case OffscreenStencil::kNone:
                 //                         out = GL_DEPTH_COMPONENT32F;
                 //                         break;
                 //                     case OffscreenStencil::_8:
@@ -175,7 +175,7 @@ namespace tl
             // #endif // TLRENDER_API_GL_4_1
 
             // Create the color texture.
-            if (p.options.colorType != image::PixelType::None)
+            if (p.options.colorType != image::PixelType::kNone)
             {
                 // glGenTextures(1, &p.colorID);
                 // if (!p.colorID)
@@ -219,8 +219,8 @@ namespace tl
             }
 
             // Create the depth/stencil buffer.
-            // if (p.options.depth != OffscreenDepth::None ||
-            //     p.options.stencil != OffscreenStencil::None)
+            // if (p.options.depth != OffscreenDepth::kNone ||
+            //     p.options.stencil != OffscreenStencil::kNone)
             // {
             // glGenRenderbuffers(1, &p.depthStencilID);
             // if (!p.depthStencilID)
@@ -262,7 +262,7 @@ namespace tl
             //             if (p.depthStencilID)
             //             {
             //                 const GLenum attachment =
-            //                     p.options.stencil != OffscreenStencil::None
+            //                     p.options.stencil != OffscreenStencil::kNone
             //                         ?
             // #if defined(TLRENDER_API_GL_4_1)
             //                         GL_DEPTH_STENCIL_ATTACHMENT

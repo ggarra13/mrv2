@@ -2090,7 +2090,7 @@ namespace mrv
     {
         App* app = ui->app;
         timeline::ImageOptions o = app->imageOptions();
-        o.alphaBlend = timeline::AlphaBlend::None;
+        o.alphaBlend = timeline::AlphaBlend::kNone;
         app->setImageOptions(o);
     }
 

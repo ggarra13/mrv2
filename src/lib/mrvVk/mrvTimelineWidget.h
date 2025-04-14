@@ -92,6 +92,10 @@ namespace mrv
         void resize(int X, int Y, int W, int H) FL_OVERRIDE;
         void draw() FL_OVERRIDE;
         int handle(int) FL_OVERRIDE;
+
+        void prepare() FL_OVERRIDE;
+        void destroy_resources() FL_OVERRIDE;
+        
         //! @}
 
         //! Hide the thumbnail at least until user enters the timeline slider
@@ -107,7 +111,7 @@ namespace mrv
         //! Set the time units.
         void setUnits(TimeUnits);
 
-        //! Refresh the GL objects
+        //! Refresh the VK objects
         void refresh();
 
         //! Get whether the timeline is editable.
@@ -146,8 +150,8 @@ namespace mrv
         void timerEvent();
 
     private:
-        void _initializeGLResources();
-        void _initializeGL();
+        void _initializeVKResources();
+        void _initializeVK();
         void _thumbnailEvent();
 
         void _createThumbnailWindow();

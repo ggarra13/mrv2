@@ -17,7 +17,7 @@ namespace tl
             std::string text;
             std::vector<std::string> lines;
             ColorRole textRole = ColorRole::Text;
-            SizeRole marginRole = SizeRole::None;
+            SizeRole marginRole = SizeRole::kNone;
             FontRole fontRole = FontRole::Label;
 
             struct SizeData

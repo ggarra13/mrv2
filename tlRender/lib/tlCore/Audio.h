@@ -23,7 +23,7 @@ namespace tl
 
         //! Audio data types.
         enum class DataType {
-            None,
+            kNone,
             S8,
             S16,
             S32,
@@ -31,7 +31,7 @@ namespace tl
             F64,
 
             Count,
-            First = None
+            First = kNone
         };
         TLRENDER_ENUM(DataType);
         TLRENDER_ENUM_SERIALIZE(DataType);
@@ -105,7 +105,7 @@ namespace tl
 
             std::string name = "Default";
             size_t channelCount = 0;
-            DataType dataType = DataType::None;
+            DataType dataType = DataType::kNone;
             size_t sampleRate = 0;
             unsigned currentTrack = 0;
             unsigned trackCount = 1;

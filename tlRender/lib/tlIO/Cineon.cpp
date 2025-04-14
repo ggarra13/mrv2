@@ -278,7 +278,7 @@ namespace tl
             default:
                 break;
             }
-            if (image::PixelType::None == imageInfo.pixelType)
+            if (image::PixelType::kNone == imageInfo.pixelType)
             {
                 throw std::runtime_error(string::Format("{0}: {1}")
                                              .arg(io->getFileName())

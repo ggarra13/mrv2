@@ -691,7 +691,7 @@ namespace mrv
         _p->timelineWidget->setDisplayOptions(value);
     }
 
-    void TimelineWidget::_initializeVkResources()
+    void TimelineWidget::_initializeVKResources()
     {
         TLRENDER_P();
 
@@ -699,7 +699,7 @@ namespace mrv
         {
             try
             {
-                p.render = timeline_vk::Render::create(context);
+                p.render = timeline_vk::Render::create(&ctx, context);
                 
                 const std::string vertexSource =
                     "#version 410\n"
@@ -732,7 +732,8 @@ namespace mrv
                     "    fColor = texture(textureSampler, fTexture);\n"
                     "    fColor.a *= opacity;\n"
                     "}\n";
-                p.shader = vk::Shader::create(vertexSource, fragmentSource);
+                p.shader = vk::Shader::create(&ctx,
+                                              vertexSource, fragmentSource);
                 
             }
             catch (const std::exception& e)
@@ -746,13 +747,22 @@ namespace mrv
         }
     }
 
+    void TimelineWidget::prepare()
+    {
+    }
+    
+    void TimelineWidget::destroy_resources()
+    {
+        Fl_Vk_Window::destroy_resources();
+    }
+    
     void TimelineWidget::_initializeVK()
     {
         // Clean up all resources
         refresh();
 
         // Reinitialize them
-        _initializeVkResources();
+        _initializeVKResources();
     }
 
     void TimelineWidget::resize(int X, int Y, int W, int H)
@@ -784,13 +794,13 @@ namespace mrv
         TLRENDER_P();
         const math::Size2i renderSize(pixel_w(), pixel_h());
 
-        make_current();
+        // make_current();
 
-        if (!valid())
-        {
-            _initializeVk();
-            valid(1);
-        }
+        // if (!valid())
+        // {
+        //     _initializeVk();
+        //     valid(1);
+        // }
 
         std::vector<int> markers;
         if (p.player && p.player->hasAnnotations())

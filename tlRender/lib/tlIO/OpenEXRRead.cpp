@@ -315,7 +315,7 @@ namespace tl
                         default:
                             break;
                         }
-                        if (image::PixelType::None == info.pixelType)
+                        if (image::PixelType::kNone == info.pixelType)
                         {
                             throw std::runtime_error(
                                 string::Format("{0}: Unsupported image type")

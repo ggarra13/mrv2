@@ -5,8 +5,6 @@
 #pragma once
 
 #include <FL/Fl_Vk_Window.H>
-#undef None
-#undef Status
 
 #include "mrvVk/mrvEnums.h"
 
@@ -25,8 +23,9 @@ namespace mrv
 
         void show() FL_OVERRIDE;
 
-        void valid(int) {};
-
+        void valid(int x) {};
+        int valid() const { return 1; }
+        
 #ifdef __APPLE__
     protected:
         void set_window_transparency(double alpha);

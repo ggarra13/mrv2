@@ -22,14 +22,14 @@ namespace tl
     {
         //! File sequence.
         enum class FileSequenceAudio {
-            None,      //!< No audio
+            kNone,      //!< No audio
             BaseName,  //!< Search for an audio file with the same base name as
                        //!< the file sequence
             FileName,  //!< Use the given audio file name
             Directory, //!< Use the first audio file in the given directory
 
             Count,
-            First = None
+            First = kNone
         };
         TLRENDER_ENUM(FileSequenceAudio);
         TLRENDER_ENUM_SERIALIZE(FileSequenceAudio);

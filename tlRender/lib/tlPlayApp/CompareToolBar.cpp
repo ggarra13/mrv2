@@ -55,7 +55,7 @@ namespace tl
 
             p.layout =
                 ui::HorizontalLayout::create(context, shared_from_this());
-            p.layout->setSpacingRole(ui::SizeRole::None);
+            p.layout->setSpacingRole(ui::SizeRole::kNone);
             for (size_t i = 0; i < enums.size(); ++i)
             {
                 p.buttons[enums[i]]->setParent(p.layout);

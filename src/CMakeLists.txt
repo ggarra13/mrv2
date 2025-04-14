@@ -182,6 +182,10 @@ if(TLRENDER_USD)
     endif()
 endif()
 
+if(TLRENDER_VK)
+    add_definitions(-DTLRENDER_VK)
+endif()
+
 if(TLRENDER_WAYLAND)
     add_definitions(-DTLRENDER_WAYLAND -DFLTK_USE_WAYLAND)
 endif()

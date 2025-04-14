@@ -33,12 +33,12 @@ namespace tl
         //! References:
         //! - https://microsoft.github.io/Win2D/html/PremultipliedAlpha.htm
         enum class AlphaBlend {
-            None,
+            kNone,
             Straight,
             Premultiplied,
 
             Count,
-            First = None
+            First = kNone
         };
         TLRENDER_ENUM(AlphaBlend);
         TLRENDER_ENUM_SERIALIZE(AlphaBlend);

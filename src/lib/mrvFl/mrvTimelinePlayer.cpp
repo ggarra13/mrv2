@@ -16,10 +16,6 @@
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvIO.h"
 
-#ifdef TLRENDER_GL
-#    include "mrvGL/mrvTimelineViewport.h"
-#endif
-
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvNetwork/mrvTCP.h"
