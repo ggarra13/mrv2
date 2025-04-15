@@ -33,6 +33,7 @@ namespace mrv
         VkWindow::VkWindow(int W, int H, const char* L) :
             Fl_Vk_Window(W, H, L)
         {
+            m_validate = true;
         }
         
 
@@ -420,30 +421,30 @@ namespace mrv
             // Background color
             m_clearColor = { 0.0, 0.0, 0.0, 0.0 };
 
-            Fl_Vk_Window::vk_draw_begin();
+            // Fl_Vk_Window::vk_draw_begin();
         }
 
-void VkWindow::draw() {
-    if (!shown() || w() <= 0 || h() <= 0) return;
+        void VkWindow::draw() {
+            if (!shown() || w() <= 0 || h() <= 0) return;
 
-    // // Draw the shape
-    // VkDeviceSize offsets[1] = {0};
-    // vkCmdBindVertexBuffers(m_draw_cmd, 0, 1,
-    //                        &m_mesh.buf, offsets);
+            // Draw the shape
+            VkDeviceSize offsets[1] = {0};
+            vkCmdBindVertexBuffers(m_draw_cmd, 0, 1,
+                                   &m_mesh.buf, offsets);
 
-    // vkCmdDraw(m_draw_cmd, sides * 3, 1, 0, 0);
-}
+            vkCmdDraw(m_draw_cmd, sides * 3, 1, 0, 0);
+        }
 
-void VkWindow::destroy_resources() {
-    m_mesh.destroy(device());
+        void VkWindow::destroy_resources() {
+            m_mesh.destroy(device());
 
-    Fl_Vk_Window::destroy_resources();
-}
+            Fl_Vk_Window::destroy_resources();
+        }
 
 
-void VkWindow::show()
-{
-    Fl_Vk_Window::show();
+        void VkWindow::show()
+        {
+            Fl_Vk_Window::show();
 
 #ifdef FLTK_USE_WAYLAND
             // Not sure if this is needed

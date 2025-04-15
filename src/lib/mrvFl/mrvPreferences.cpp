@@ -153,7 +153,6 @@ namespace mrv
                 settings->setValue(keyS, value);
             }
         }
-        DBG3;
 
         // If reading a version 7 or earlier, make sure to set ffmpeg color
         // accuracy off to avoid issues of users complaining about playback
