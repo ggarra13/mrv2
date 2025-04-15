@@ -18,6 +18,8 @@
 #include "mrvCore/mrvLocale.h"
 #include "mrvCore/mrvString.h"
 
+#include "mrvFl/mrvColorAreaInfo.h"
+
 #include "mrvColorInfo.h"
 #include "mrViewer.h"
 
