@@ -144,6 +144,7 @@ if [ -z "$TLRENDER_NDI" ]; then
     else
 	echo "TLRENDER_NDI_SDK not found at ${TLRENDER_NDI_SDK}!"
 	export TLRENDER_NDI=OFF
+	export MRV2_HDR=OFF
     fi
 fi
 
@@ -205,7 +206,8 @@ if [ -z "$TLRENDER_VK" ]; then
 else
     if [ ! -d "${VULKAN_SDK}/include/vulkan/" ]; then
 	echo "VULKAN NOT FOUND at ${VULKAN_SDK}/include/vulkan"
-	exit 1
+	export TLRENDER_VK=OFF
+	export MRV2_HDR=OFF
     fi
 fi
 
