@@ -70,6 +70,7 @@ namespace mrv
             // playback slow
             fl_double = 0;
 #endif
+            std::cerr << "initialize viewport" << std::endl;
 
             // mode(FL_RGB | fl_double | FL_ALPHA | FL_STENCIL | stereo);
         }
@@ -83,11 +84,12 @@ namespace mrv
 
         void Viewport::prepare()
         {
+            VkWindow::prepare();
         }
     
         void Viewport::destroy_resources()
         {
-            Fl_Vk_Window::destroy_resources();
+            VkWindow::destroy_resources();
         }
     
         //! Refresh window by clearing the associated resources.

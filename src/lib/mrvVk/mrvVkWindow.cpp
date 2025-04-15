@@ -421,7 +421,7 @@ namespace mrv
             // Background color
             m_clearColor = { 0.0, 0.0, 0.0, 0.0 };
 
-            // Fl_Vk_Window::vk_draw_begin();
+            Fl_Vk_Window::vk_draw_begin();
         }
 
         void VkWindow::draw() {

@@ -752,11 +752,12 @@ namespace mrv
 
         void TimelineWidget::prepare()
         {
+            VkWindow::prepare();
         }
     
         void TimelineWidget::destroy_resources()
         {
-            Fl_Vk_Window::destroy_resources();
+            VkWindow::destroy_resources();
         }
     
         void TimelineWidget::_initializeVK()
