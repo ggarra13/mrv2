@@ -1,0 +1,72 @@
+🔵 Global Objects
+These are initialized once per application (or once per Vulkan instance) and typically last for the whole runtime.
+
+VkInstance
+Represents the connection between your application and the Vulkan library.
+
+VkPhysicalDevice
+Represents a physical GPU and its capabilities.
+
+VkDevice (Logical Device)
+Interface to a physical device, through which almost all Vulkan commands go.
+
+VkQueue
+Represents a queue on the logical device for submitting work (graphics, compute, etc.).
+
+VkCommandPool (usually per-thread or per-frame)
+Allocates command buffers. You might have multiple, but they persist across frames.
+
+VkDescriptorSetLayout, VkPipelineLayout, VkShaderModule, VkPipelineCache
+Created during pipeline setup; usually global.
+
+🟡 Per-Window (Per-Swapchain) Objects
+These are tied to the swapchain, which is generally tied to a window/surface. If a window is resized or recreated, these may need to be destroyed and recreated.
+
+VkSurfaceKHR
+Represents the OS window surface to render to.
+
+VkSwapchainKHR
+The actual swapchain used to present images to the window.
+
+VkImage / VkImageView (swapchain images)
+Images that the swapchain presents. These are owned by the swapchain.
+
+VkFramebuffer
+Ties together image views for rendering (used in render passes).
+
+VkRenderPass
+Describes rendering operations over framebuffer attachments.
+
+VkDepthStencilImage, VkDepthStencilImageView
+Typically per-window if you use a depth buffer per swapchain image.
+
+VkSemaphore, VkFence
+Used for synchronization, often recreated per frame but part of per-window lifetime.
+
+🔴 Local (Throw-Away) Objects
+These are short-lived or easily recreated every frame or command submission. They’re used temporarily and can be discarded or reallocated regularly.
+
+VkCommandBuffer
+Allocated from a VkCommandPool, used per frame. Usually recorded every frame and reset.
+
+VkDescriptorSet
+Allocated from VkDescriptorPool. Sometimes reused across frames, but often updated or reset frequently.
+
+Temporary Buffers / Staging Resources
+Like staging buffers for uploading data to GPU memory—created and destroyed as needed.
+
+Per-frame semaphores and fences
+Often destroyed and recreated with frames-in-flight or after a few frames.
+
+
+-----------------
+
+VkInstance	Global	vkCreateInstance	vkDestroyInstance (after destroying VkDevice)
+VkPhysicalDevice	Global	Enumerated by VkInstance	Implicitly by VkInstance destruction
+VkSurfaceKHR	Per-Window	Platform-specific vkCreate*SurfaceKHR	vkDestroySurfaceKHR
+VkSwapchainKHR	Per-Window	vkCreateSwapchainKHR	vkDestroySwapchainKHR
+VkFramebuffer	Per-Window	vkCreateFramebuffer	vkDestroyFramebuffer
+VkCommandBuffer	Local	vkAllocateCommandBuffers (from VkCommandPool)	Implicitly by VkCommandPool destruction or vkFreeCommandBuffers (if pool allows)
+VkDescriptorSet	Local	vkAllocateDescriptorSets (from VkDescriptorPool)	Implicitly by VkDescriptorPool destruction or vkFreeDescriptorSets (if pool allows)
+VkCommandPool	Local	vkCreateCommandPool	vkDestroyCommandPool
+VkDescriptorPool	Local	vkCreateDescriptorPool	vkDestroyDescriptorPool

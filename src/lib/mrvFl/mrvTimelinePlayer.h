@@ -6,14 +6,14 @@
 
 #include <tlTimeline/Player.h>
 
+#include "mrvWidgets/mrvBackend.h"
+
 namespace mrv
 {
     namespace draw
     {
         class Annotation;
     }
-
-    class TimelineViewport;
 
     using namespace tl;
 
@@ -327,7 +327,7 @@ namespace mrv
         //! \name Viewport link
         ///@{
 
-        void setTimelineViewport(TimelineViewport*);
+        void setTimelineViewport(MyViewport*);
 
         ///@}
 
@@ -390,7 +390,7 @@ namespace mrv
         static void timerEvent_cb(void* d);
 
     private:
-        TimelineViewport* timelineViewport = nullptr;
+        MyViewport* timelineViewport = nullptr;
 
         TLRENDER_PRIVATE();
     };

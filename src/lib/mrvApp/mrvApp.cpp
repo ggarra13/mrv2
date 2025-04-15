@@ -38,8 +38,6 @@ namespace py = pybind11;
 #include "mrvWidgets/mrvLogDisplay.h"
 #include "mrvWidgets/mrvPythonOutput.h"
 
-#include "mrvGL/mrvGLViewport.h"
-
 #if defined(TLRENDER_USD)
 #    include "mrvOptions/mrvUSD.h"
 #endif // TLRENDER_USD
@@ -520,7 +518,11 @@ namespace mrv
         DBG;
         Fl::option(Fl::OPTION_VISIBLE_FOCUS, false);
         DBG;
+#ifdef TLRENDER_VK
+        Fl::use_high_res_VK(true);
+#else
         Fl::use_high_res_GL(true);
+#endif
         DBG;
 
         

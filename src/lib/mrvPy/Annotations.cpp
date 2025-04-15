@@ -23,7 +23,7 @@ namespace mrv2
         void add(const otime::RationalTime& time, const std::string& note)
         {
             ViewerUI* ui = App::ui;
-            Viewport* view = ui->uiView;
+            MyViewport* view = ui->uiView;
             if (!view)
                 return;
             auto player = view->getTimelinePlayer();
@@ -36,7 +36,7 @@ namespace mrv2
         void add(const int64_t& frame, const std::string& note)
         {
             ViewerUI* ui = App::ui;
-            Viewport* view = ui->uiView;
+            MyViewport* view = ui->uiView;
             if (!view)
                 return;
             auto player = view->getTimelinePlayer();
@@ -51,7 +51,7 @@ namespace mrv2
         void add(const double& seconds, const std::string& note)
         {
             ViewerUI* ui = App::ui;
-            Viewport* view = ui->uiView;
+            MyViewport* view = ui->uiView;
             if (!view)
                 return;
             auto player = view->getTimelinePlayer();
@@ -67,7 +67,7 @@ namespace mrv2
             std::vector< otime::RationalTime > out;
             
             ViewerUI* ui = App::ui;
-            Viewport* view = ui->uiView;
+            MyViewport* view = ui->uiView;
             if (!view)
                 return out;
             auto player = view->getTimelinePlayer();

@@ -153,7 +153,6 @@ namespace mrv
                 settings->setValue(keyS, value);
             }
         }
-        DBG3;
 
         // If reading a version 7 or earlier, make sure to set ffmpeg color
         // accuracy off to avoid issues of users complaining about playback
@@ -1585,7 +1584,7 @@ namespace mrv
         // Toolbars
         //
 
-        Viewport* view = ui->uiView;
+        MyViewport* view = ui->uiView;
 
         // Only redisplay the tool bars if not on Presentation
         // Mode. (User changed Preferences while on Presentation mode).

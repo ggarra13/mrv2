@@ -59,7 +59,7 @@ namespace mrv
 
     void Histogram::update(const area::Info& info)
     {
-        Viewport* view = ui->uiView;
+        MyViewport* view = ui->uiView;
         const auto& renderSize = view->getRenderSize();
         const image::Color4f* image = view->image();
 

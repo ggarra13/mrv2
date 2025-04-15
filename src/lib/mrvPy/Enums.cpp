@@ -74,7 +74,7 @@ void mrv2_enums(py::module& m)
 
 #ifdef TLRENDER_EXR
     py::enum_<Imf::Compression>(io, "Compression")
-        .value("kNone", Imf::NO_COMPRESSION)
+        .value("None", Imf::NO_COMPRESSION)
         .value("RLE", Imf::RLE_COMPRESSION)
         .value("ZIPS", Imf::ZIPS_COMPRESSION)
         .value("ZIP", Imf::ZIP_COMPRESSION)
@@ -179,7 +179,7 @@ void mrv2_enums(py::module& m)
         .export_values();
 
     py::enum_<mrv::EnvironmentMapOptions::Type>(image, "EnvironmentMapType")
-        .value("kNone", mrv::EnvironmentMapOptions::Type::kNone)
+        .value("None", mrv::EnvironmentMapOptions::Type::kNone)
         .value("Spherical", mrv::EnvironmentMapOptions::Type::kSpherical)
         .value("Cubic", mrv::EnvironmentMapOptions::Type::kCubic);
     //.export_values();
@@ -194,7 +194,7 @@ void mrv2_enums(py::module& m)
         .value("Scanlines", mrv::Stereo3DOutput::Scanlines)
         .value("Columns", mrv::Stereo3DOutput::Columns)
         .value("Checkerboard", mrv::Stereo3DOutput::Checkerboard)
-        .value("OpenGL", mrv::Stereo3DOutput::OpenGL)
+        .value("Glasses", mrv::Stereo3DOutput::Glasses)
         .export_values();
 
     py::module media = m.def_submodule("media");

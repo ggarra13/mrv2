@@ -2,8 +2,6 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include "mrvGL/mrvGLViewport.h"
-
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvColorInfo.h"
 #include "mrvWidgets/mrvHorSlider.h"

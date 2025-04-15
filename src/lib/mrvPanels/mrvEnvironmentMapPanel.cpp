@@ -9,8 +9,6 @@
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvCollapsibleGroup.h"
 
-#include "mrvGL/mrvTimelineViewport.h"
-
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvApp/mrvSettingsObject.h"

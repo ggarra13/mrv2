@@ -26,8 +26,7 @@ namespace mrv
         Scanlines,
         Columns,
         Checkerboard,
-        OpenGL,
-
+        Glasses,
         Count,
         First = Anaglyph
     };

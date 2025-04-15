@@ -61,7 +61,7 @@ namespace mrv
         void prepare() FL_OVERRIDE;
         void destroy_resources() FL_OVERRIDE;
         
-        std::vector<const char*> get_required_extensions() FL_OVERRIDE;
+        std::vector<const char*> get_instance_extensions() FL_OVERRIDE;
         std::vector<const char*> get_optional_extensions() FL_OVERRIDE;
         std::vector<const char*> get_device_extensions() FL_OVERRIDE;
 
@@ -102,36 +102,6 @@ namespace mrv
         VkShaderModule prepare_fs();
 
         void destroy_textures();
-
-        VkCommandBuffer beginSingleTimeCommands();
-        void endSingleTimeCommands(VkCommandBuffer commandBuffer);
-
-        void cleanupCompletedTransitions();
-        void cleanupCompletedUploads();
-
-        void transitionImageLayout(
-            VkImage image, VkImageLayout oldLayout, VkImageLayout newLayout);
-
-        VkImage createImage(
-            VkImageType imageType, uint32_t width, uint32_t height,
-            uint32_t depth, VkFormat format,
-            VkImageTiling tiling = VK_IMAGE_TILING_OPTIMAL,
-            VkImageUsageFlags usage = VK_IMAGE_USAGE_SAMPLED_BIT |
-                                      VK_IMAGE_USAGE_TRANSFER_DST_BIT);
-
-        VkDeviceMemory allocateAndBindImageMemory(VkImage image);
-        void createBuffer(
-            VkDeviceSize size, VkBufferUsageFlags usage,
-            VkMemoryPropertyFlags properties, VkBuffer& buffer,
-            VkDeviceMemory& bufferMemory);
-
-        void uploadTextureData(
-            VkImage image, uint32_t width, uint32_t height, uint32_t depth,
-            VkFormat format, const int pix_fmt_size, const void* data);
-
-        VkImageView
-        createImageView(VkImage image, VkFormat format, VkImageType imageType);
-        VkSampler createSampler();
 
         void addGPUTextures(const pl_shader_res*);
 

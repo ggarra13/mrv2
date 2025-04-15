@@ -9,8 +9,6 @@
 
 #include "mrvFl/mrvColorAreaInfo.h"
 
-#include "mrvGL/mrvGLViewport.h"
-
 #include "mrvPanels/mrvPanelsCallbacks.h"
 #include "mrvPanels/mrvHistogramPanel.h"
 

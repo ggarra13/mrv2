@@ -61,20 +61,6 @@ namespace tl
             const std::vector<std::shared_ptr<vk::Texture> >&,
             size_t offset = 0);
 
-#if defined(TLRENDER_OCIO) || defined(TLRENDER_LIBPLACEBO)
-        struct OCIOTexture
-        {
-            OCIOTexture(
-                unsigned id, std::string name, std::string sampler,
-                unsigned type);
-
-            unsigned id = -1;
-            std::string name;
-            std::string sampler;
-            unsigned type = -1;
-        };
-#endif
-
 #if defined(TLRENDER_OCIO)
         struct OCIOData
         {
@@ -87,7 +73,7 @@ namespace tl
             OCIO::ConstGPUProcessorRcPtr gpuProcessor;
             OCIO::GpuShaderDescRcPtr icsDesc;
             OCIO::GpuShaderDescRcPtr shaderDesc;
-            std::vector<OCIOTexture> textures;
+            std::vector<Fl_Vk_Texture> textures;
         };
 
         struct OCIOLUTData
@@ -99,7 +85,7 @@ namespace tl
             OCIO::ConstProcessorRcPtr processor;
             OCIO::ConstGPUProcessorRcPtr gpuProcessor;
             OCIO::GpuShaderDescRcPtr shaderDesc;
-            std::vector<OCIOTexture> textures;
+            std::vector<Fl_Vk_Texture> textures;
         };
 
 #endif // TLRENDER_OCIO
@@ -112,12 +98,16 @@ namespace tl
 
             pl_log log;
             pl_gpu gpu;
-            std::vector<OCIOTexture> textures;
+            std::vector<Fl_Vk_Texture> textures;
         };
 #endif
 
         struct Render::Private
         {
+            const Fl_Vk_Context* ctx = nullptr;
+
+            bool hdrMonitorFound = false;
+            
             math::Size2i renderSize;
             timeline::OCIOOptions ocioOptions;
             timeline::LUTOptions lutOptions;

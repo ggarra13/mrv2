@@ -12,11 +12,19 @@
 #include <tlCore/StringFormat.h>
 #include <tlCore/Time.h>
 
-#include <tlGL/Init.h>
-#include <tlGL/Util.h>
-#include <tlGL/GLFWWindow.h>
+#include "mrvCore/mrvBackend.h"
 
-#include <tlTimelineGL/Render.h>
+#ifdef VULKAN_BACKEND
+#  include <tlVk/Init.h>
+#  include <tlVk/Util.h>
+#  include <tlTimelineVk/Render.h>
+#else
+#  include <tlGL/Init.h>
+#  include <tlGL/Util.h>
+#  include <tlGL/GLFWWindow.h>
+#  include <tlTimelineGL/Render.h>
+#endif
+
 
 #include "mrvCore/mrvImage.h"
 #include "mrvCore/mrvLocale.h"
@@ -79,7 +87,7 @@ namespace mrv
     save_movie(const std::string& file, const ViewerUI* ui, SaveOptions options)
     {
         std::string msg;
-        Viewport* view = ui->uiView;
+        MyViewport* view = ui->uiView;
         bool presentation = view->getPresentationMode();
         bool hud = view->getHudActive();
 
@@ -363,9 +371,14 @@ namespace mrv
                     string::Format("{0}: Saving over same file being played!")
                         .arg(file));
             }
-
+            
+#ifdef VULKAN_BACKEND
+            vk::OffscreenBufferOptions offscreenBufferOptions;
+            std::shared_ptr<timeline_vk::Render> render;
+#else
             gl::OffscreenBufferOptions offscreenBufferOptions;
             std::shared_ptr<timeline_gl::Render> render;
+#endif
             image::Size renderSize;
             int layerId = ui->uiColorChannel->value();
             if (layerId < 0)
@@ -415,6 +428,11 @@ namespace mrv
             }
 
             bool interactive = view->visible_r();
+            
+#ifdef VULKAN_BACKEND
+            // \@todo: need to get context here
+            //render = timeline_vk::Render::create(context);
+#else
             std::shared_ptr<gl::GLFWWindow> window;
             if (!interactive)
             {
@@ -426,6 +444,7 @@ namespace mrv
 
             // Create the renderer.
             render = timeline_gl::Render::create(context);
+#endif
             offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
 
             // Create the writer.
@@ -697,6 +716,9 @@ namespace mrv
             // Don't send any tcp updates
             tcp->lock();
 
+#ifdef VULKAN_BACKEND
+
+#else
             GLenum format = gl::getReadPixelsFormat(outputInfo.pixelType);
             GLenum type = gl::getReadPixelsType(outputInfo.pixelType);
             if (hasVideo)
@@ -712,11 +734,16 @@ namespace mrv
                           .arg(offscreenBufferOptions.colorType);
                 LOG_STATUS(msg);
             }
+#endif
 
             // Turn off hud so it does not get captured by glReadPixels.
             view->setHudActive(false);
 
             math::Size2i offscreenBufferSize(renderSize.w, renderSize.h);
+
+#ifdef VULKAN_BACKEND
+            std::shared_ptr<vk::OffscreenBuffer> buffer;
+#else
             std::shared_ptr<gl::OffscreenBuffer> buffer;
 
             if (hasVideo)
@@ -730,7 +757,7 @@ namespace mrv
                 buffer = gl::OffscreenBuffer::create(
                     offscreenBufferSize, offscreenBufferOptions);
             }
-
+#endif
             size_t totalSamples = 0;
             size_t currentSampleCount =
                 startTime.rescaled_to(sampleRate).value();
@@ -881,6 +908,9 @@ namespace mrv
 
                         delete rgb;
 #else
+                        
+#  ifdef VULKAN_BACKEND
+#  else
                         GLenum imageBuffer = GL_FRONT;
 
                         // @note: Wayland does not work like Windows, macOS or
@@ -897,6 +927,8 @@ namespace mrv
                         glReadPixels(
                             X, Y, outputInfo.size.w, outputInfo.size.h, format,
                             type, outputImage->getData());
+#  endif
+                        
 #endif
                     }
                     else
@@ -925,6 +957,8 @@ namespace mrv
                                 view->flush();
                             }
 
+#ifdef VULKAN_BACKEND
+#else
                             // back to conventional pixel operation
                             glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
                             // CHECK_GL;
@@ -962,6 +996,7 @@ namespace mrv
                             glReadPixels(
                                 0, 0, outputInfo.size.w, outputInfo.size.h,
                                 format, type, outputImage->getData());
+#endif
                         }
                     }
 

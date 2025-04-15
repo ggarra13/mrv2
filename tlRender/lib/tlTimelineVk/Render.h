@@ -10,7 +10,17 @@
 
 #include <tlCore/LRUCache.h>
 
-class Fl_Vk_Context;
+#if defined(TLRENDER_OCIO)
+#    include <OpenColorIO/OpenColorIO.h>
+#endif // TLRENDER_OCIO
+
+#if defined(TLRENDER_OCIO)
+namespace OCIO = OCIO_NAMESPACE;
+#endif // TLRENDER_OCIO
+
+#include <FL/Fl_Vk_Window.H>
+
+struct pl_shader_res;
 
 namespace tl
 {
@@ -142,6 +152,18 @@ namespace tl
                 const std::shared_ptr<timeline::ImageOptions>&,
                 const timeline::DisplayOptions&);
 
+#if defined(TLRENDER_LIBPLACEBO)
+            void _addTextures(
+                std::vector<Fl_Vk_Texture>& textures,
+                const pl_shader_res* res);
+#endif
+                
+#if defined(TLRENDER_OCIO)
+            void _addTextures(
+                std::vector<Fl_Vk_Texture>& textures,
+                const OCIO::GpuShaderDescRcPtr& shaderDesc);
+#endif
+                
             TLRENDER_PRIVATE();
         };
     } // namespace timeline_vk
