@@ -4,14 +4,14 @@
 
 set(HEADERS
     mrvVkDefines.h
-    # mrvGErrors.h
-    # mrvGLJson.h
-    # mrvGLLines.h
-    # mrvGLOutline.h
-    # mrvGLShaders.h
-    # mrvGLShape.h
-    # mrvGLTextEdit.h
-    # mrvGLUtil.h
+    # mrvVkErrors.h
+    # mrvVkJson.h
+    mrvVkLines.h
+    # mrvVkOutline.h
+    # mrvVkShaders.h
+    mrvVkShape.h
+    # mrvVkTextEdit.h
+    # mrvVkUtil.h
     mrvVkViewport.h
     mrvVkViewportPrivate.h
     mrvVkWindow.h
@@ -24,15 +24,15 @@ set(SOURCES
     # mrvVk2TextShape.cpp
     # mrvVkErrors.cpp
     # mrvVkJson.cpp
-    # mrvVkLines.cpp
+    mrvVkLines.cpp
     # mrvVkOutline.cpp
     # mrvVkShaders.cpp
-    # mrvVkShape.cpp
+    mrvVkShape.cpp
     # mrvVkTextEdit.cpp
     # mrvVkUtil.cpp
     mrvVkViewport.cpp
-    # mrvVkViewportDraw.cpp
-    # mrvVkViewportPrims.cpp
+    mrvVkViewportDraw.cpp
+    mrvVkViewportPrims.cpp
     mrvVkWindow.cpp
     mrvTimelineViewportEvents.cpp
     mrvTimelineViewport.cpp

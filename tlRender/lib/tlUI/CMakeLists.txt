@@ -159,7 +159,7 @@ set(SOURCE
 set(LIBRARIES_PRIVATE)
 
 add_library(tlUI ${HEADERS} ${HEADERS_PRIVATE} ${SOURCE})
-target_link_libraries(tlUI PUBLIC tlTimelineGL PRIVATE ${LIBRARIES_PRIVATE})
+target_link_libraries(tlUI PUBLIC tlTimelineGL tlTimelineVk PRIVATE ${LIBRARIES_PRIVATE})
 set_target_properties(tlUI PROPERTIES FOLDER lib)
 set_target_properties(tlUI PROPERTIES PUBLIC_HEADER "${HEADERS}")
 

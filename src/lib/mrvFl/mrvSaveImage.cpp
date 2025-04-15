@@ -15,7 +15,7 @@ namespace fs = std::filesystem;
 #include <tlCore/StringFormat.h>
 #include <tlCore/Time.h>
 
-#include "mrvWidgets/mrvBackend.h"
+#include "mrvCore/mrvBackend.h"
 
 #ifdef VULKAN_BACKEND
 #  include <tlVk/Init.h>
