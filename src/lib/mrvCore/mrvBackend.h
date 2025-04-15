@@ -1,9 +1,11 @@
 #pragma once
 
 
-
-#define VULKAN_BACKEND
-// #define OPENGL_BACKEND 1
+#ifdef TLRENDER_GL
+#  define OPENGL_BACKEND 1
+#else
+#  define VULKAN_BACKEND 1
+#endif
 
 
 #if !defined(VULKAN_BACKEND) && !defined(OPENGL_BACKEND)

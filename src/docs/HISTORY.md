@@ -3,7 +3,9 @@ v1.3.8
 
 - Added proper support for all possible texture types of OpenGL that libplacebo might use.
 - Same for Vulkan's hdr utility.
-
+- Flattened tlRender from a submodule to a directory to start working on porting
+it to Vulkan.
+- Added mrvCore/mrvBackend.h to select which backend should mrv2 use.  By default, we still use opengl.
 
 v1.3.7
 ======
