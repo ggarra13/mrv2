@@ -27,11 +27,29 @@ namespace mrv
 
             void valid(int x) {};
             int valid() const { return 1; }
+
+            void draw() FL_OVERRIDE;
+            void vk_draw_begin() FL_OVERRIDE;
+            void prepare() FL_OVERRIDE;
+            void destroy_resources() FL_OVERRIDE;
         
 #ifdef __APPLE__
         protected:
             void set_window_transparency(double alpha);
 #endif
+
+            Fl_Vk_Mesh m_mesh;
+            int sides = 3;
+            
+            VkShaderModule prepare_vs();
+            VkShaderModule prepare_fs();
+            
+            void prepare_vertices();
+            void prepare_descriptor_layout();
+            void prepare_render_pass();
+            void prepare_pipeline();
+            void prepare_descriptor_pool() {};
+            void prepare_descriptor_set()  {};
         };
 
     } // namespace vulkan

@@ -45,9 +45,10 @@ endif()
     
 add_definitions( -DGL_SILENCE_DEPRECATION )
 
-set(LIBRARIES tlGL tlTimeline tlTimelineUI tlUI glfw)
+# tlGL, tlTimeline, tlTimelineUI, tlUI, glfw
+set(LIBRARIES ) 
 set(LIBRARIES_PRIVATE )
-list( APPEND LIBRARIES mrvUI mrvWidgets mrvDraw mrvCore ${FLTK_gl_LIBRARY} )
+list(APPEND LIBRARIES mrvUI mrvWidgets mrvDraw mrvCore ${FLTK_gl_LIBRARY} )
 
 add_library(mrvGL ${SOURCES} ${HEADERS})
 files_to_absolute_paths()

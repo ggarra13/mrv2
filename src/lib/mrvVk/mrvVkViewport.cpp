@@ -71,7 +71,7 @@ namespace mrv
             fl_double = 0;
 #endif
 
-            mode(FL_RGB | fl_double | FL_ALPHA | FL_STENCIL | stereo);
+            // mode(FL_RGB | fl_double | FL_ALPHA | FL_STENCIL | stereo);
         }
 
         Viewport::~Viewport() {}
@@ -174,6 +174,8 @@ namespace mrv
             TLRENDER_P();
             MRV2_VK();
 
+            return VkWindow::draw();
+            
             if (!valid())
             {
                 _initializeVK();

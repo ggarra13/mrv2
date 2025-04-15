@@ -43,9 +43,9 @@ if(APPLE)
     list(APPEND SOURCES mrvVkWindow.mm)
 endif()
 
-set(LIBRARIES tlVk tlTimeline tlTimelineUI tlUI)
+set(LIBRARIES mrvUI mrvWidgets mrvDraw mrvCore ${FLTK_vk_LIBRARY} )
 set(LIBRARIES_PRIVATE )
-list( APPEND LIBRARIES mrvUI mrvWidgets mrvDraw mrvCore ${FLTK_vk_LIBRARY} )
+list(APPEND LIBRARIES tlTimelineVk tlVk tlTimeline tlTimelineUI tlUI)
 
 add_library(mrvVk ${SOURCES} ${HEADERS})
 files_to_absolute_paths()

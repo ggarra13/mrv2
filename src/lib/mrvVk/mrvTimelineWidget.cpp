@@ -256,7 +256,7 @@ namespace mrv
                 }
             }
 #endif
-            mode(FL_RGB | FL_ALPHA | FL_STENCIL | fl_double);
+            // mode(FL_RGB | FL_ALPHA | FL_STENCIL | fl_double);
         }
 
         void TimelineWidget::setContext(
@@ -795,6 +795,9 @@ namespace mrv
         void TimelineWidget::draw()
         {
             TLRENDER_P();
+
+            return VkWindow::draw();
+            
             const math::Size2i renderSize(pixel_w(), pixel_h());
 
             // make_current();
