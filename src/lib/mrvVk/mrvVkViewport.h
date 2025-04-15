@@ -93,11 +93,6 @@ namespace mrv
                 const std::vector<std::shared_ptr<draw::Annotation>>& annotations,
                 const math::Size2i& renderSize);
 
-#ifdef USE_OPENGL2
-            void _drawGL1TextShapes(const tl::math::Matrix4x4f&,
-                                    const double viewZoom);
-#endif
-
             void _pushAnnotationShape(const std::string& cmd) const override;
 
             void _readPixel(image::Color4f& rgba) const noexcept override;

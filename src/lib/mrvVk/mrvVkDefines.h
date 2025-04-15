@@ -4,15 +4,12 @@
 
 #pragma once
 
-// // Set it draw selection rectangle with GL_LINE_STRIP
-// #define USE_ONE_PIXEL_LINES 1
+// Set it draw selection rectangle with GL_LINE_STRIP
+#define USE_ONE_PIXEL_LINES 1
 
 // // Set it to draw text shapes with opengl2 instead of
 // // tlRender's OpenGL 3 freetype routines
 // #define USE_OPENGL2 1
-
-// // Set it to debug OpenGL issues with the CHECK_GL macro.
-// // #define USE_GL_CHECKS 1
 
 // #define MRV2_DEBUG_GL 1  // Set this to debug OpenGL errors with a callback
 

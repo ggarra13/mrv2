@@ -486,25 +486,6 @@ namespace mrv
                 w->Fl_Widget::position(pos.x, pos.y);
             }
 
-            // Flag for FLTK's opengl1 text annotations drawings
-            bool draw_opengl1 = false;
-
-#ifdef USE_OPENVK2
-            for (const auto& annotation : annotations)
-            {
-                for (const auto& shape : annotation->shapes)
-                {
-                    if (dynamic_cast<VK2TextShape*>(shape.get()))
-                    {
-                        draw_opengl1 = true;
-                        break;
-                    }
-                }
-                if (draw_opengl1 == true)
-                    break;
-            }
-#endif
-
             const auto& currentTime = player->currentTime();
 
             if (vk.buffer && vk.shader)
@@ -688,10 +669,7 @@ namespace mrv
                     math::Matrix4x4f overlayMVP;
                     _compositeOverlay(vk.overlay, overlayMVP, viewportSize);
 
-                    if (!draw_opengl1)
-                    {
-                        outputDevice->setOverlay(vk.annotationImage);
-                    }
+                    outputDevice->setOverlay(vk.annotationImage);
                 }
 
                 // math::Box2i selection = p.colorAreaInfo.box = p.selection;
@@ -826,140 +804,8 @@ namespace mrv
                     _drawHelpText();
             }
 
-#ifdef USE_OPENVK2
-
-            if (!draw_opengl1)
-            {
-                Fl_Gl_Window::draw();
-                return;
-            }
-
-            // Set up 1:1 projection
-            VkWindow::draw_begin();
-
             // Draw FLTK children
             Fl_Window::draw();
-
-            // glViewport(0, 0, VKsizei(viewportSize.w), VKsizei(viewportSize.h));
-            if (p.showAnnotations)
-            {
-                // Draw the text shape annotations to the viewport.
-                // glBindFramebuffer(GL_FRAMEBUFFER, 0);
-                // glDrawBuffer(GL_BACK_LEFT);
-
-                float pixel_unit = pixels_per_unit();
-                math::Vector2f pos;
-                pos.x = p.viewPos.x / pixel_unit;
-                pos.y = p.viewPos.y / pixel_unit;
-                math::Matrix4x4f vm = math::translate(math::Vector3f(
-                                                          p.viewPos.x / pixel_unit, p.viewPos.y / pixel_unit, 0.F));
-                vm = vm * math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
-
-                // _drawGL1TextShapes(vm, p.viewZoom);
-
-                // Create a new image with to read the vk.overlay composited
-                // results.
-                // This is the image we send to the outputDevice.
-                const image::PixelType pixelType = image::PixelType::RGBA_U8;
-                auto overlayImage =
-                    image::Image::create(renderSize.w, renderSize.h, pixelType);
-                auto outputDevice = App::app->outputDevice();
-                if (outputDevice)
-                {
-                    math::Matrix4x4f vm;
-                    float viewZoom = 1.0;
-                    float scale = 1.F;
-
-#    ifndef __APPLE__
-                    // Now, draw the text shape annotations to the overlay frame
-                    // buffer.  This accumulates the OpenVK3 drawings with the
-                    // OpenVK1 text.
-                    // On Apple, we render to a new OpenVK1 context and
-                    // composite manually, but we cannot handle auto fit properly.
-                    // glBindFramebuffer(GL_FRAMEBUFFER, vk.overlay->getID());
-
-                    if (!p.frameView)
-                    {
-                        const math::Size2i& deviceSize = outputDevice->getSize();
-                        if (viewportSize.isValid() && deviceSize.isValid())
-                        {
-                            scale *=
-                                deviceSize.w / static_cast<float>(viewportSize.w);
-                        }
-                        viewZoom = p.viewZoom * scale;
-                        vm = math::translate(
-                            math::Vector3f(pos.x * scale, pos.y * scale, 0.F));
-                        vm = vm *
-                             math::scale(math::Vector3f(viewZoom, viewZoom, 1.F));
-                    }
-                    // _drawGL1TextShapes(vm, viewZoom);
-                    // On Windows, X11, Wayland we can let the gfx card handle it.
-                    // glReadPixels(
-                    //     0, 0, renderSize.w, renderSize.h, GL_RGBA, GL_UNSIGNED_BYTE,
-                    //     overlayImage->getData());
-#    else
-                    // On Apple, we must do the composite ourselves.
-                    // As this is extremaly expensive, we will only do
-                    // it when playback is stopped.
-                    if (_isPlaybackStopped())
-                    {
-                        // glReadBuffer(GL_BACK_LEFT);
-
-                        math::Vector2f pos;
-                        math::Size2i tmpSize(
-                            renderSize.w * p.viewZoom, renderSize.h * p.viewZoom);
-                        if (!p.frameView)
-                        {
-                            pos = math::Vector2f(
-                                p.viewPos.x * scale, p.viewPos.y * scale);
-                        }
-                        pos = _getRasterf(pos.x, pos.y);
-
-                        //
-                        //
-                        //
-                        auto tmp =
-                            image::Image::create(tmpSize.w, tmpSize.h, pixelType);
-                        tmp->zero();
-                        // glReadPixels(
-                        //     pos.x, pos.y, tmpSize.w, tmpSize.h, GL_RGBA,
-                        //     GL_UNSIGNED_BYTE, tmp->getData());
-
-                        resizeImage(
-                            overlayImage->getData(), tmp->getData(), tmpSize.w,
-                            tmpSize.h, renderSize.w, renderSize.h);
-
-                        // Composite the OpenVK3 annotations and the OpenVK1 text
-                        // image into overlayImage.
-                        VKubyte* source = vk.annotationImage->getData();
-                        VKubyte* result = overlayImage->getData();
-                        for (int y = 0; y < renderSize.h; ++y)
-                        {
-                            for (int x = 0; x < renderSize.w; ++x)
-                            {
-                                const float alpha = result[3] / 255.F;
-                                result[0] =
-                                    source[0] * (1.F - alpha) + result[0] * alpha;
-                                result[1] =
-                                    source[1] * (1.F - alpha) + result[1] * alpha;
-                                result[2] =
-                                    source[2] * (1.F - alpha) + result[2] * alpha;
-                                result[3] =
-                                    source[3] * (1.F - alpha) + result[3] * alpha;
-                                source += 4;
-                                result += 4;
-                            }
-                        }
-                    }
-#    endif
-                    outputDevice->setOverlay(overlayImage);
-                    // glBindFramebuffer(GL_FRAMEBUFFER, 0);
-                }
-            }
-            VkWindow::draw_end(); // Restore VK state
-#else
-            VkWindow::draw();
-#endif
         }
 
         void Viewport::_calculateColorAreaFullValues(area::Info& info) noexcept

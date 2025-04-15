@@ -7,7 +7,7 @@ set(HEADERS
     # mrvVkErrors.h
     # mrvVkJson.h
     mrvVkLines.h
-    # mrvVkOutline.h
+    mrvVkOutline.h
     # mrvVkShaders.h
     mrvVkShape.h
     # mrvVkTextEdit.h
@@ -25,7 +25,7 @@ set(SOURCES
     # mrvVkErrors.cpp
     # mrvVkJson.cpp
     mrvVkLines.cpp
-    # mrvVkOutline.cpp
+    mrvVkOutline.cpp
     # mrvVkShaders.cpp
     mrvVkShape.cpp
     # mrvVkTextEdit.cpp
