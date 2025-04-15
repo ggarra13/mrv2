@@ -36,7 +36,7 @@ if [ -z "$BUILD_X11" ]; then
 fi
 
 if [ -z "$MRV2_HDR" ]; then
-    export MRV2_HDR=OFF
+    export MRV2_HDR=ON
 fi
 
 if [ -z "$MRV2_PYFLTK" ]; then
@@ -199,6 +199,7 @@ if [ -z "$TLRENDER_VK" ]; then
 	export TLRENDER_VK=ON
     else
 	export TLRENDER_VK=OFF
+	export MRV2_HDR=OFF
 	echo "VULKAN NOT FOUND at ${VULKAN_SDK}/include/vulkan"
     fi
 else

@@ -11,7 +11,7 @@ if (USER_NAME STREQUAL "gga" OR USER_NAME STREQUAL "User-PC" OR
 else()
     set(FLTK_GIT_REPOSITORY "https://github.com/ggarra13/fltk.git")
 endif()
-set(FLTK_GIT_TAG 2a1a13ebf88026513ee79f4e12fbdbcd24a93d1d)
+set(FLTK_GIT_TAG f847c63161211d72b7ea14e2af2cdbd486a3a679)
 #set(FLTK_GIT_TAG vk)
 
 # The cutting EDGE!

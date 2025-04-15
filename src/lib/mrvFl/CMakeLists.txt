@@ -48,22 +48,22 @@ set(SOURCES
 add_library(mrvFl ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-set( LIBRARIES mrvEdit mrvUI )
+set(LIBRARIES mrvEdit mrvUI )
 
 if(TLRENDER_GL)
-    list( APPEND LIBRARIES mrvGL )
+    list(APPEND LIBRARIES mrvGL )
 endif()
 
 if(TLRENDER_VK)
-    list( APPEND LIBRARIES mrvVk )
+    list(APPEND LIBRARIES mrvVk )
 endif()
 
 if(MRV2_PDF)
-    list( APPEND LIBRARIES mrvPDF )
+    list(APPEND LIBRARIES mrvPDF )
 endif()
 
 if(MRV2_PYBIND11)
-    list( APPEND LIBRARIES pybind11::embed )
+    list(APPEND LIBRARIES pybind11::embed )
     if(UNIX AND NOT APPLE)
 	# Needed for python3.10 on Rocky and Ubuntu 20.04
 	list( APPEND LIBRARIES "util" )
