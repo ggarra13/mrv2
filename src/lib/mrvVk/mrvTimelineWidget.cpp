@@ -231,32 +231,32 @@ namespace mrv
             VkWindow(X, Y, W, H, L),
             _p(new Private)
         {
-            int fl_double = FL_DOUBLE; // _WIN32 needs this
+            int fl_double = FL_DOUBLE; // _WIN32 needs this (and Vulkan too it seems)
 
             // Do not use FL_DOUBLE on APPLE as it makes playback slow
-#if defined(__APPLE__) || defined(__linux__)
-            fl_double = 0;
-            if (desktop::XWayland())
-            {
-                fl_double = FL_DOUBLE; // needed
-            }
-            else if (desktop::Wayland())
-            {
-                // For faster playback, we won't set this window to FL_DOUBLE.
-                // FLTK's EVk Wayland already uses two buffers.
-                fl_double = 0;
-            }
-            else
-            {
-                if (desktop::X11())
-                {
-                    // For faster playback, we won't set this window to FL_DOUBLE.
-                    // FLTK's X11 already uses two buffers.
-                    fl_double = 0;
-                }
-            }
-#endif
-            // mode(FL_RGB | FL_ALPHA | FL_STENCIL | fl_double);
+// #if defined(__APPLE__) || defined(__linux__)
+//             fl_double = 0;
+//             if (desktop::XWayland())
+//             {
+//                 fl_double = FL_DOUBLE; // needed
+//             }
+//             else if (desktop::Wayland())
+//             {
+//                 // For faster playback, we won't set this window to FL_DOUBLE.
+//                 // FLTK's EVk Wayland already uses two buffers.
+//                 fl_double = 0;
+//             }
+//             else
+//             {
+//                 if (desktop::X11())
+//                 {
+//                     // For faster playback, we won't set this window to FL_DOUBLE.
+//                     // FLTK's X11 already uses two buffers.
+//                     fl_double = 0;
+//                 }
+//             }
+// #endif
+            mode(FL_RGB | FL_ALPHA | FL_DOUBLE);
         }
 
         void TimelineWidget::setContext(
