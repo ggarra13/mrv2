@@ -171,7 +171,7 @@ namespace mrv
         };
     } // namespace
 
-    namespace vk
+    namespace vulkan
     {
     
         struct TimelineWidget::Private
@@ -1879,6 +1879,6 @@ namespace mrv
             }
         }
 
-    } // namespace vk
+    } // namespace vulkan
 
 } // namespace mrv

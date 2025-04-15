@@ -10,6 +10,20 @@
 
 namespace mrv
 {
+    namespace vk
+    {
+        class Viewport;
+    }
+
+    namespace gl
+    {
+        class Viewport;
+    }
+}
+
+
+namespace mrv
+{
     class MainWindow;
 
     //! Secondary window.

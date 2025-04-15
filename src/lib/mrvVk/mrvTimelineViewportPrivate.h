@@ -18,7 +18,7 @@ class Fl_Menu_Button;
 
 namespace mrv
 {
-    namespace vk
+    namespace vulkan
     {
 
         struct TimelineViewport::Private

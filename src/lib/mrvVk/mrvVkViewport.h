@@ -13,7 +13,7 @@
 
 namespace mrv
 {
-    namespace vk
+    namespace vulkan
     {
 
         //
@@ -145,6 +145,6 @@ namespace mrv
             std::unique_ptr<VKPrivate> _vk;
         };
         
-    }  // namespace vk
+    }  // namespace vulkan
     
 } // namespace mrv

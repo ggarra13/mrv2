@@ -20,28 +20,33 @@ namespace
 
 namespace mrv
 {
-
-    VkWindow::VkWindow(int X, int Y, int W, int H, const char* L) :
-        Fl_Vk_Window(X, Y, W, H, L)
+    namespace vulkan
     {
-    }
 
-    VkWindow::VkWindow(int W, int H, const char* L) :
-        Fl_Vk_Window(W, H, L)
-    {
-    }
+        VkWindow::VkWindow(int X, int Y, int W, int H, const char* L) :
+            Fl_Vk_Window(X, Y, W, H, L)
+        {
+        }
 
-    void VkWindow::show()
-    {
-        Fl_Vk_Window::show();
+        VkWindow::VkWindow(int W, int H, const char* L) :
+            Fl_Vk_Window(W, H, L)
+        {
+        }
+
+        void VkWindow::show()
+        {
+            Fl_Vk_Window::show();
 
 #ifdef FLTK_USE_WAYLAND
-        // Not sure if this is needed
-        if (fl_wl_display())
-        {
-            wl_surface_set_opaque_region(fl_wl_surface(fl_wl_xid(this)), NULL);
-        }
+            // Not sure if this is needed
+            if (fl_wl_display())
+            {
+                wl_surface_set_opaque_region(fl_wl_surface(fl_wl_xid(this)), NULL);
+            }
 #endif
+        }
+
     }
 
+    
 } // namespace mrv

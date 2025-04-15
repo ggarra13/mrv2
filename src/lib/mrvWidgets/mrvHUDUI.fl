@@ -7,7 +7,7 @@ i18n_gnu_function gettext
 i18n_gnu_static_function gettext_noop
 header_name {.h}
 code_name {.cxx}
-decl {\#include "mrvVk/mrvTimelineViewport.h"} {selected public global
+decl {\#include "mrvWidgets/mrvBackend.h"} {public global
 }
 
 decl {\#include "mrvWidgets/mrvButton.h"} {public global
@@ -16,12 +16,12 @@ decl {\#include "mrvWidgets/mrvButton.h"} {public global
 decl {\#include "mrvFl/mrvCallbacks.h"} {private local
 }
 
-decl {\#include "mrViewer.h"} {private local
+decl {\#include "mrViewer.h"} {selected private local
 }
 
 class HUDUI {open
 } {
-  Function {make_window(mrv::TimelineViewport* view)} {open
+  Function {make_window(MyViewport* view)} {open
   } {
     Fl_Window {} {
       label HUD
@@ -30,7 +30,7 @@ mrv::hudClass = nullptr;
 delete o;
 ViewerUI* ui = mrv::App::ui;
 ui->uiMain->fill_menu( ui->uiMenuBar );} open
-      xywh {623 335 621 359} type Double non_modal size_range {621 359 621 359} visible
+      xywh {623 335 621 359} type Double hide non_modal size_range {621 359 621 359}
     } {
       Fl_Check_Button uiHudActive {
         label Active
@@ -123,7 +123,7 @@ ui->uiMain->fill_menu( ui->uiMenuBar );} open
       }
     }
   }
-  Function {HUDUI(mrv::TimelineViewport* v)} {open
+  Function {HUDUI(MyViewport* v)} {open
   } {
     code {auto w = make_window(v);
 w->show();} {}

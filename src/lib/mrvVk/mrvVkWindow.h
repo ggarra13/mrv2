@@ -10,25 +10,30 @@
 
 namespace mrv
 {
-
-    //
-    // This class implements coomon Vulkan functionality
-    //
-    class VkWindow : public Fl_Vk_Window
+    namespace vulkan
     {
 
-    public:
-        VkWindow(int X, int Y, int W, int H, const char* L = 0);
-        VkWindow(int W, int H, const char* L = 0);
+        //
+        // This class implements coomon Vulkan functionality
+        //
+        class VkWindow : public Fl_Vk_Window
+        {
 
-        void show() FL_OVERRIDE;
+        public:
+            VkWindow(int X, int Y, int W, int H, const char* L = 0);
+            VkWindow(int W, int H, const char* L = 0);
 
-        void valid(int x) {};
-        int valid() const { return 1; }
+            void show() FL_OVERRIDE;
+
+            void valid(int x) {};
+            int valid() const { return 1; }
         
 #ifdef __APPLE__
-    protected:
-        void set_window_transparency(double alpha);
+        protected:
+            void set_window_transparency(double alpha);
 #endif
-    };
+        };
+
+    } // namespace vulkan
+    
 } // namespace mrv

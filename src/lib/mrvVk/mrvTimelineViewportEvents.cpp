@@ -75,7 +75,7 @@ namespace mrv
     
         void TimelineViewport::laserFade_cb(LaserFadeData* data)
         {
-            TimelineMyViewport* view = data->view;
+            TimelineViewport* view = data->view;
             view->laserFade(data);
         }
 
@@ -774,7 +774,7 @@ namespace mrv
             }
         }
 
-        void TimelineViewport::_handleViewSpinning_cb(TimelineMyViewport* t) noexcept
+        void TimelineViewport::_handleViewSpinning_cb(TimelineViewport* t) noexcept
         {
             t->handleViewSpinning();
         }

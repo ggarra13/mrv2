@@ -25,14 +25,13 @@ class ViewerUI;
 
 namespace mrv
 {
-    using namespace tl;
-
     class MultilineInput;
 
     class TimelinePlayer;
 
-    namespace vk
+    namespace vulkan
     {
+        using namespace tl;
     
         class TimelineViewport : public VkWindow
         {
@@ -478,6 +477,6 @@ namespace mrv
             TLRENDER_PRIVATE();
         };
 
-    }  // namespace vk
+    }  // namespace vulkan
     
 } // namespace mrv

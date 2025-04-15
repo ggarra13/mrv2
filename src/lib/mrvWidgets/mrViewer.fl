@@ -22,6 +22,9 @@ decl {\#include "mrvCore/mrvI8N.h"} {public global
 decl {\#include "mrvWidgets/mrvAudioButton.h"} {public global
 }
 
+decl {\#include "mrvWidgets/mrvBackend.h"} {selected public global
+}
+
 decl {\#include "mrvWidgets/mrvButton.h"} {public global
 }
 
@@ -76,37 +79,7 @@ decl {\#include "mrvFl/mrvPreferences.h"} {public global
 decl {\#include "mrvUI/mrvUtil.h"} {public global
 }
 
-decl {\#ifdef TLRENDER_VK} {public global
-}
-
-decl {\#include "mrvVk/mrvVkViewport.h"} {public global
-}
-
-decl {\#include "mrvVk/mrvTimelineWidget.h"} {public global
-}
-
-decl {\#endif} {public global
-}
-
-decl {\#ifdef TLRENDER_GL} {public global
-}
-
-decl {\#include "mrvGL/mrvGLViewport.h"} {public global
-}
-
-decl {\#include "mrvGL/mrvTimelineWidget.h"} {public global
-}
-
-decl {\#endif} {public global
-}
-
-decl {\#define MyViewport mrv::vk::Viewport} {public global
-}
-
-decl {\#define MyTimelineWidget mrv::vk::TimelineWidget} {public global
-}
-
-decl {\#include "mrvWidgets/mrvSecondaryWindow.h"} {selected public global
+decl {\#include "mrvWidgets/mrvSecondaryWindow.h"} {public global
 }
 
 decl {\#include "mrvPanels/mrvPanelsCallbacks.h"} {public global

@@ -30,7 +30,7 @@ namespace mrv
 {
     using namespace tl;
 
-    namespace vk
+    namespace vulkan
     {
     
         //! Timeline widget.

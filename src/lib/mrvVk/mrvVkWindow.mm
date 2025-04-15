@@ -7,8 +7,11 @@
 
 namespace mrv
 {
-  void VkWindow::set_window_transparency(double alpha)
-  {
-    [fl_xid(this) setAlphaValue:alpha];	
-  }
+    namespace vulkan
+    {
+	void VkWindow::set_window_transparency(double alpha)
+	{
+		[fl_xid(this) setAlphaValue:alpha];	
+	}
+     }
 }
