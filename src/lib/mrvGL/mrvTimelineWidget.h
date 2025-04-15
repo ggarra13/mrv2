@@ -12,8 +12,6 @@
 
 #include <tlTimelineUI/IItem.h>
 
-#include "mrvFl/mrvTimelinePlayer.h"
-
 #include "mrvGL/mrvGLWindow.h"
 
 namespace tl
@@ -28,173 +26,181 @@ class ViewerUI;
 
 namespace mrv
 {
-    using namespace tl;
 
-    //! Timeline widget.
-    class TimelineWidget : public GLWindow
+    class TimelinePlayer;
+    
+    namespace opengl
     {
-    public:
-        TimelineWidget(int X, int Y, int W, int H, const char* L = 0);
-
-        ~TimelineWidget() override;
-
-        //! Set tlRender's context
-        void setContext(
-            const std::shared_ptr<system::Context>&,
-            const std::shared_ptr<timeline::TimeUnitsModel>&, ViewerUI*);
-
-        void setStyle(const std::shared_ptr<ui::Style>& = nullptr);
-
-        //! Get timelineUI's timelineWidget item options
-        timelineui::ItemOptions getItemOptions() const;
+        using namespace tl;
         
-        //! Get timelineUI's timelineWidget display options
-        timelineui::DisplayOptions getDisplayOptions() const;
+        //! Timeline widget.
+        class TimelineWidget : public GLWindow
+        {
+        public:
+            TimelineWidget(int X, int Y, int W, int H, const char* L = 0);
 
-        //! Set the timeline player.
-        void setTimelinePlayer(TimelinePlayer*);
+            ~TimelineWidget() override;
 
-        //! Get whether the view is framed automatically.
-        bool hasFrameView() const;
+            //! Set tlRender's context
+            void setContext(
+                const std::shared_ptr<system::Context>&,
+                const std::shared_ptr<timeline::TimeUnitsModel>&, ViewerUI*);
 
-        //! Set whether the to frame the view.
-        void setFrameView(bool);
+            void setStyle(const std::shared_ptr<ui::Style>& = nullptr);
 
-        //! Set whether the scroll bars are visible.
-        void setScrollBarsVisible(bool);
-
-        //! Set whether to automatically scroll to the current frame.
-        void setScrollToCurrentFrame(bool);
-
-        //! Set the mouse scroll key modifier.
-        void setScrollKeyModifier(ui::KeyModifier);
-
-        //! Set whether thumbnails are enabled.
-        void setThumbnails(bool);
-
-        //! Set the mouse wheel scale.
-        void setMouseWheelScale(float);
-
-        //! Set whether to stop playback when scrubbing.
-        void setStopOnScrub(bool);
-
-        //! Set the Display options.
-        void setItemOptions(const timelineui::ItemOptions&);
+            //! Get timelineUI's timelineWidget item options
+            timelineui::ItemOptions getItemOptions() const;
         
-        //! Set the Display options.
-        void setDisplayOptions(const timelineui::DisplayOptions&);
+            //! Get timelineUI's timelineWidget display options
+            timelineui::DisplayOptions getDisplayOptions() const;
 
-        //! Frame the view.
-        void frameView();
+            //! Set the timeline player.
+            void setTimelinePlayer(TimelinePlayer*);
 
-        //! @{ Standard FLTK functions
-        void resize(int X, int Y, int W, int H) FL_OVERRIDE;
-        void draw() FL_OVERRIDE;
-        int handle(int) FL_OVERRIDE;
-        //! @}
+            //! Get whether the view is framed automatically.
+            bool hasFrameView() const;
 
-        //! Hide the thumbnail at least until user enters the timeline slider
-        //! again.
-        void hideThumbnail();
+            //! Set whether the to frame the view.
+            void setFrameView(bool);
 
-        //! Request a new thumbnail and reposition on timeline.
-        int requestThumbnail(bool fetch = true);
+            //! Set whether the scroll bars are visible.
+            void setScrollBarsVisible(bool);
 
-        //! Reposition timeline based on last event or hide it.
-        void repositionThumbnail();
+            //! Set whether to automatically scroll to the current frame.
+            void setScrollToCurrentFrame(bool);
 
-        //! Set the time units.
-        void setUnits(TimeUnits);
+            //! Set the mouse scroll key modifier.
+            void setScrollKeyModifier(ui::KeyModifier);
 
-        //! Refresh the GL objects
-        void refresh();
+            //! Set whether thumbnails are enabled.
+            void setThumbnails(bool);
 
-        //! Get whether the timeline is editable.
-        bool isEditable() const;
+            //! Set the mouse wheel scale.
+            void setMouseWheelScale(float);
 
-        //! Toggle timeline editable
-        void setEditable(bool);
+            //! Set whether to stop playback when scrubbing.
+            void setStopOnScrub(bool);
 
-        int mousePressEvent(int button, bool, int modifiers);
-        int mouseReleaseEvent(int X, int Y, int button, bool, int modifiers);
-
-        void mouseMoveEvent(int X, int Y);
-        void scrollEvent(const float X, const float Y, const int modifiers);
-        int mouseDragEvent(int X, int Y);
-        int keyPressEvent(unsigned key, const int modifiers);
-        int keyReleaseEvent(unsigned key, const int modifiers);
-
-        void moveCallback(const std::vector<tl::timeline::MoveData>&);
-
-        void continuePlaying();
-
-    protected:
-
-        const float pixelRatio() const;
+            //! Set the Display options.
+            void setItemOptions(const timelineui::ItemOptions&);
         
-        int enterEvent();
-        int leaveEvent();
-        int mousePressEvent();
-        int mouseReleaseEvent();
-        int mouseMoveEvent();
-        int wheelEvent();
-        int keyPressEvent();
-        int keyReleaseEvent();
+            //! Set the Display options.
+            void setDisplayOptions(const timelineui::DisplayOptions&);
 
-        static void timerEvent_cb(void* data);
-        void timerEvent();
+            //! Frame the view.
+            void frameView();
 
-    private:
-        void _initializeGLResources();
-        void _initializeGL();
-        void _thumbnailEvent();
+            //! @{ Standard FLTK functions
+            void resize(int X, int Y, int W, int H) FL_OVERRIDE;
+            void draw() FL_OVERRIDE;
+            int handle(int) FL_OVERRIDE;
+            //! @}
 
-        void _createThumbnailWindow();
-        void _getThumbnailPosition(int& X, int& Y, int& W, int& H);
+            //! Hide the thumbnail at least until user enters the timeline slider
+            //! again.
+            void hideThumbnail();
 
-        void _setTimeUnits(tl::timeline::TimeUnits);
+            //! Request a new thumbnail and reposition on timeline.
+            int requestThumbnail(bool fetch = true);
 
-        void _cancelThumbnailRequests();
+            //! Reposition timeline based on last event or hide it.
+            void repositionThumbnail();
+
+            //! Set the time units.
+            void setUnits(TimeUnits);
+
+            //! Refresh the GL objects
+            void refresh();
+
+            //! Get whether the timeline is editable.
+            bool isEditable() const;
+
+            //! Toggle timeline editable
+            void setEditable(bool);
+
+            int mousePressEvent(int button, bool, int modifiers);
+            int mouseReleaseEvent(int X, int Y, int button, bool, int modifiers);
+
+            void mouseMoveEvent(int X, int Y);
+            void scrollEvent(const float X, const float Y, const int modifiers);
+            int mouseDragEvent(int X, int Y);
+            int keyPressEvent(unsigned key, const int modifiers);
+            int keyReleaseEvent(unsigned key, const int modifiers);
+
+            void moveCallback(const std::vector<tl::timeline::MoveData>&);
+
+            void continuePlaying();
+
+        protected:
+
+            const float pixelRatio() const;
         
-        void _tickEvent();
-        void _tickEvent(
-            const std::shared_ptr<ui::IWidget>&, bool visible, bool enabled,
-            const ui::TickEvent&);
+            int enterEvent();
+            int leaveEvent();
+            int mousePressEvent();
+            int mouseReleaseEvent();
+            int mouseMoveEvent();
+            int wheelEvent();
+            int keyPressEvent();
+            int keyReleaseEvent();
 
-        bool _getSizeUpdate(const std::shared_ptr<ui::IWidget>&) const;
-        void _sizeHintEvent();
-        void _sizeHintEvent(
-            const std::shared_ptr<ui::IWidget>&, const ui::SizeHintEvent&);
+            static void timerEvent_cb(void* data);
+            void timerEvent();
 
-        void _setGeometry();
+        private:
+            void _initializeGLResources();
+            void _initializeGL();
+            void _thumbnailEvent();
 
-        void _clipEvent();
-        void _clipEvent(
-            const std::shared_ptr<ui::IWidget>&, const math::Box2i&,
-            bool clipped);
+            void _createThumbnailWindow();
+            void _getThumbnailPosition(int& X, int& Y, int& W, int& H);
 
-        bool _getDrawUpdate(const std::shared_ptr<ui::IWidget>&) const;
-        void _drawEvent(
-            const std::shared_ptr<ui::IWidget>&, const math::Box2i&,
-            const ui::DrawEvent&);
+            void _setTimeUnits(tl::timeline::TimeUnits);
 
-        int _toUI(int) const;
-        math::Vector2i _toUI(const math::Vector2i&) const;
-        int _fromUI(int) const;
-        math::Vector2i _fromUI(const math::Vector2i&) const;
+            void _cancelThumbnailRequests();
+        
+            void _tickEvent();
+            void _tickEvent(
+                const std::shared_ptr<ui::IWidget>&, bool visible, bool enabled,
+                const ui::TickEvent&);
 
-        unsigned _changeKey(unsigned key);
+            bool _getSizeUpdate(const std::shared_ptr<ui::IWidget>&) const;
+            void _sizeHintEvent();
+            void _sizeHintEvent(
+                const std::shared_ptr<ui::IWidget>&, const ui::SizeHintEvent&);
 
-        otime::RationalTime _posToTime(int) noexcept;
+            void _setGeometry();
 
-        //! Function used to send a seek to the network.
-        int _seek();
+            void _clipEvent();
+            void _clipEvent(
+                const std::shared_ptr<ui::IWidget>&, const math::Box2i&,
+                bool clipped);
 
-        void _styleUpdate();
+            bool _getDrawUpdate(const std::shared_ptr<ui::IWidget>&) const;
+            void _drawEvent(
+                const std::shared_ptr<ui::IWidget>&, const math::Box2i&,
+                const ui::DrawEvent&);
 
-        void _deleteThumbnails();
-        void _thumbnailsUpdate();
+            int _toUI(int) const;
+            math::Vector2i _toUI(const math::Vector2i&) const;
+            int _fromUI(int) const;
+            math::Vector2i _fromUI(const math::Vector2i&) const;
 
-        TLRENDER_PRIVATE();
-    };
+            unsigned _changeKey(unsigned key);
+
+            otime::RationalTime _posToTime(int) noexcept;
+
+            //! Function used to send a seek to the network.
+            int _seek();
+
+            void _styleUpdate();
+
+            void _deleteThumbnails();
+            void _thumbnailsUpdate();
+
+            TLRENDER_PRIVATE();
+        };
+
+    } // namespace opengl
+    
 } // namespace mrv

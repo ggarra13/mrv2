@@ -8,7 +8,6 @@
 #include "mrvCore/mrvString.h"
 
 #include "mrvFl/mrvColorAreaInfo.h"
-#include "mrvFl/mrvLaserFadeData.h"
 
 #include "mrvOptions/mrvStereo3DOptions.h"
 #include "mrvOptions/mrvEnvironmentMapOptions.h"
@@ -28,6 +27,8 @@ namespace mrv
     class MultilineInput;
 
     class TimelinePlayer;
+
+    class LaserFadeData;
 
     namespace vulkan
     {

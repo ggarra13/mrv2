@@ -54,6 +54,10 @@ if(TLRENDER_GL)
     list( APPEND LIBRARIES mrvGL )
 endif()
 
+if(TLRENDER_VK)
+    list( APPEND LIBRARIES mrvVk )
+endif()
+
 if(MRV2_PDF)
     list( APPEND LIBRARIES mrvPDF )
 endif()

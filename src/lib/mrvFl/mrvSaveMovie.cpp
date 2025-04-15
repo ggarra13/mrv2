@@ -12,7 +12,9 @@
 #include <tlCore/StringFormat.h>
 #include <tlCore/Time.h>
 
-#ifdef TLRENDER_VK
+#include "mrvWidgets/mrvBackend.h"
+
+#ifdef VULKAN_BACKEND
 #  include <tlVk/Init.h>
 #  include <tlVk/Util.h>
 #  include <tlTimelineVk/Render.h>
@@ -370,7 +372,7 @@ namespace mrv
                         .arg(file));
             }
             
-#ifdef TLRENDER_VK
+#ifdef VULKAN_BACKEND
             vk::OffscreenBufferOptions offscreenBufferOptions;
             std::shared_ptr<timeline_vk::Render> render;
 #else
@@ -427,7 +429,7 @@ namespace mrv
 
             bool interactive = view->visible_r();
             
-#ifdef TLRENDER_VK
+#ifdef VULKAN_BACKEND
             // \@todo: need to get context here
             //render = timeline_vk::Render::create(context);
 #else
@@ -714,7 +716,7 @@ namespace mrv
             // Don't send any tcp updates
             tcp->lock();
 
-#ifdef TLRENDER_VK
+#ifdef VULKAN_BACKEND
 
 #else
             GLenum format = gl::getReadPixelsFormat(outputInfo.pixelType);
@@ -739,7 +741,7 @@ namespace mrv
 
             math::Size2i offscreenBufferSize(renderSize.w, renderSize.h);
 
-#ifdef TLRENDER_VK
+#ifdef VULKAN_BACKEND
             std::shared_ptr<vk::OffscreenBuffer> buffer;
 #else
             std::shared_ptr<gl::OffscreenBuffer> buffer;
@@ -907,7 +909,7 @@ namespace mrv
                         delete rgb;
 #else
                         
-#  ifdef TLRENDER_VK
+#  ifdef VULKAN_BACKEND
 #  else
                         GLenum imageBuffer = GL_FRONT;
 
@@ -955,7 +957,7 @@ namespace mrv
                                 view->flush();
                             }
 
-#ifdef TLRENDER_VK
+#ifdef VULKAN_BACKEND
 #else
                             // back to conventional pixel operation
                             glUnmapBuffer(GL_PIXEL_PACK_BUFFER);

@@ -64,7 +64,7 @@ namespace
         return out;
     }
 
-    void stop_playback_while_scrubbing_cb(mrv::TimelineViewport* view)
+    void stop_playback_while_scrubbing_cb(mrv::vulkan::TimelineViewport* view)
     {
         view->stopPlaybackWhileScrubbing();
     }
@@ -113,7 +113,7 @@ namespace mrv
 
         TimelineViewport::TimelineViewport(
             int X, int Y, int W, int H, const char* L) :
-            Fl_SuperClass(X, Y, W, H, L),
+            VkWindow(X, Y, W, H, L),
             _p(new Private)
         {
             TLRENDER_P();
@@ -123,7 +123,7 @@ namespace mrv
         }
 
         TimelineViewport::TimelineViewport(int W, int H, const char* L) :
-            Fl_SuperClass(W, H, L),
+            VkWindow(W, H, L),
             _p(new Private)
         {
             TLRENDER_P();
@@ -473,7 +473,7 @@ namespace mrv
 
         void TimelineViewport::resize(int X, int Y, int W, int H)
         {
-            Fl_SuperClass::resize(X, Y, W, H);
+            VkWindow::resize(X, Y, W, H);
             if (hasFrameView())
             {
                 _frameView();
@@ -2361,7 +2361,7 @@ namespace mrv
         {
             TLRENDER_P();
             MainWindow* w;
-            TimelineViewport* view;
+            MyViewport* view;
 
             bool secondary = _hasSecondaryViewport();
             if (secondary)
@@ -2432,7 +2432,7 @@ namespace mrv
             {
                 if (!p.fullScreen)
                     _setFullScreen(false);
-                if (p.ui->uiView == this)
+                if (reinterpret_cast<MyViewport*>(this) == p.ui->uiView)
                     Fl::add_timeout(
                         0.01, (Fl_Timeout_Handler)restore_ui_state, p.ui);
                 p.presentation = false;
@@ -2571,7 +2571,7 @@ namespace mrv
         {
             TLRENDER_P();
 
-            if (this != p.ui->uiView)
+            if (reinterpret_cast<const MyViewport*>(this) != p.ui->uiView)
                 return;
 
             if (screen != p.previous_screen)

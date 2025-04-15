@@ -10,23 +10,26 @@
 
 namespace mrv
 {
-
-    //
-    // This class implements coomon OpenGL functionality
-    //
-    class GLWindow : public Fl_Gl_Window
+    namespace opengl
     {
+        //
+        // This class implements coomon OpenGL functionality
+        //
+        class GLWindow : public Fl_Gl_Window
+        {
 
-    public:
-        GLWindow(int X, int Y, int W, int H, const char* L = 0);
-        GLWindow(int W, int H, const char* L = 0);
+        public:
+            GLWindow(int X, int Y, int W, int H, const char* L = 0);
+            GLWindow(int W, int H, const char* L = 0);
 
-        void make_current();
-        void show() FL_OVERRIDE;
+            void make_current();
+            void show() FL_OVERRIDE;
 
 #ifdef __APPLE__
-    protected:
-        void set_window_transparency(double alpha);
+        protected:
+            void set_window_transparency(double alpha);
 #endif
-    };
+        };
+
+    }
 } // namespace mrv

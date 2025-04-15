@@ -194,11 +194,7 @@ void mrv2_enums(py::module& m)
         .value("Scanlines", mrv::Stereo3DOutput::Scanlines)
         .value("Columns", mrv::Stereo3DOutput::Columns)
         .value("Checkerboard", mrv::Stereo3DOutput::Checkerboard)
-#ifdef TLRENDER_VK
-        .value("OpenGL", mrv::Stereo3DOutput::Vulkan)
-#else
-        .value("OpenGL", mrv::Stereo3DOutput::OpenGL)
-#endif
+        .value("Glasses", mrv::Stereo3DOutput::Glasses)
         .export_values();
 
     py::module media = m.def_submodule("media");

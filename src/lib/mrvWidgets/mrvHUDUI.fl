@@ -34,7 +34,7 @@ ui->uiMain->fill_menu( ui->uiMenuBar );} open
     } {
       Fl_Check_Button uiHudActive {
         label Active
-        user_data view user_data_type {mrv::TimelineViewport*}
+        user_data view user_data_type {MyViewport*}
         callback {v->setHudActive(!v->getHudActive());}
         xywh {274 14 20 20} box UP_BOX down_box DOWN_BOX align 8
         code0 {o->value( view->getHudActive() );}
@@ -45,77 +45,77 @@ ui->uiMain->fill_menu( ui->uiMenuBar );} open
       } {
         Fl_Check_Button uiHudFilename {
           label Filename
-          user_data view user_data_type {mrv::TimelineViewport*}
+          user_data view user_data_type {MyViewport*}
           callback {v->toggleHudDisplay(mrv::HudDisplay::kFilename);}
           xywh {63 128 20 20} box UP_BOX down_box DOWN_BOX align 8
           code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kFilename);}
         }
         Fl_Check_Button uiHudDirectory {
           label Directory
-          user_data view user_data_type {mrv::TimelineViewport*}
+          user_data view user_data_type {MyViewport*}
           callback {v->toggleHudDisplay(mrv::HudDisplay::kDirectory);}
           xywh {63 79 20 20} box UP_BOX down_box DOWN_BOX align 8
           code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kDirectory);}
         }
         Fl_Check_Button uiHudFrame {
           label Frame
-          user_data view user_data_type {mrv::TimelineViewport*}
+          user_data view user_data_type {MyViewport*}
           callback {v->toggleHudDisplay(mrv::HudDisplay::kFrame);}
           xywh {63 178 20 20} box UP_BOX down_box DOWN_BOX align 8
           code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kFrame);}
         }
         Fl_Check_Button uiHudFrameRange {
           label {Frame Range}
-          user_data view user_data_type {mrv::TimelineViewport*}
+          user_data view user_data_type {MyViewport*}
           callback {v->toggleHudDisplay(mrv::HudDisplay::kFrameRange);}
           xywh {238 179 20 20} box UP_BOX down_box DOWN_BOX align 8
           code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kFrameRange);}
         }
         Fl_Check_Button uiHudFrameCount {
           label {Frame Count}
-          user_data view user_data_type {mrv::TimelineViewport*}
+          user_data view user_data_type {MyViewport*}
           callback {v->toggleHudDisplay(mrv::HudDisplay::kFrameCount);}
           xywh {408 129 20 20} box UP_BOX down_box DOWN_BOX align 8
           code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kFrameCount);}
         }
         Fl_Check_Button uiHudResolution {
           label Resolution
-          user_data view user_data_type {mrv::TimelineViewport*}
+          user_data view user_data_type {MyViewport*}
           callback {v->toggleHudDisplay(mrv::HudDisplay::kResolution);}
           xywh {238 80 20 20} box UP_BOX down_box DOWN_BOX align 8
           code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kResolution);}
         }
         Fl_Check_Button uiHudTimecode {
           label Timecode
-          user_data view user_data_type {mrv::TimelineViewport*}
+          user_data view user_data_type {MyViewport*}
           callback {v->toggleHudDisplay(mrv::HudDisplay::kTimecode);}
           xywh {408 181 20 18} box UP_BOX down_box DOWN_BOX align 8
           code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kTimecode);}
         }
         Fl_Check_Button uiHudFPS {
           label FPS
-          user_data view user_data_type {mrv::TimelineViewport*}
+          user_data view user_data_type {MyViewport*}
           callback {v->toggleHudDisplay(mrv::HudDisplay::kFPS);}
           xywh {238 129 20 20} box UP_BOX down_box DOWN_BOX align 8
           code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kFPS);}
         }
         Fl_Check_Button uiHudMemory {
           label Memory
-          user_data view user_data_type {mrv::TimelineViewport*}
+          user_data view user_data_type {MyViewport*}
           callback {v->toggleHudDisplay(mrv::HudDisplay::kMemory);}
           xywh {62 233 20 20} box UP_BOX down_box DOWN_BOX align 8
           code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kMemory);}
         }
         Fl_Check_Button uiHudCache {
           label Cache
-          user_data view user_data_type {mrv::TimelineViewport*}
+          user_data view user_data_type {MyViewport*}
           callback {v->toggleHudDisplay(mrv::HudDisplay::kCache);}
           xywh {237 235 20 20} box UP_BOX down_box DOWN_BOX align 8
           code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kCache);}
         }
         Fl_Check_Button uiHudAttributes {
           label Attributes
-          user_data view user_data_type {mrv::TimelineViewport*}
+          user_data view user_data_type {MyViewport*}
           callback {v->toggleHudDisplay(mrv::HudDisplay::kAttributes);}
           xywh {408 80 20 20} box UP_BOX down_box DOWN_BOX align 8
           code0 {o->value( view->getHudDisplay() & mrv::HudDisplay::kAttributes);}

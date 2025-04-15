@@ -550,7 +550,7 @@ namespace mrv
         _p->player->setAudioOffset(value);
     }
 
-    void TimelinePlayer::setTimelineViewport(TimelineViewport* view)
+    void TimelinePlayer::setTimelineViewport(MyViewport* view)
     {
         timelineViewport = view;
     }

@@ -15,7 +15,9 @@ namespace fs = std::filesystem;
 #include <tlCore/StringFormat.h>
 #include <tlCore/Time.h>
 
-#ifdef TLRENDER_VK
+#include "mrvWidgets/mrvBackend.h"
+
+#ifdef VULKAN_BACKEND
 #  include <tlVk/Init.h>
 #  include <tlVk/Util.h>
 #  include <tlTimelineVk/Render.h>
@@ -23,6 +25,7 @@ namespace fs = std::filesystem;
 #  include <tlGL/Init.h>
 #  include <tlGL/Util.h>
 #  include <tlTimelineGL/Render.h>
+#  include "mrvGL/mrvGLErrors.h"
 #endif
 
 #include "mrvCore/mrvImage.h"
@@ -111,7 +114,7 @@ namespace mrv
                 throw std::runtime_error("No video information");
             }
 
-#ifdef TLRENDER_VK
+#ifdef VULKAN_BACKEND
             vk::OffscreenBufferOptions offscreenBufferOptions;
             std::shared_ptr<timeline_vk::Render> render;
 #else
@@ -165,7 +168,7 @@ namespace mrv
 
                     
             // Create the renderer.
-#ifdef TLRENDER_VK
+#ifdef VULKAN_BACKEND
             // \@todo: Vulkan
             //render = timeline_vk::Render::create(context);
 #else
@@ -392,10 +395,10 @@ namespace mrv
             // Don't send any tcp updates
             tcp->lock();
 
-#ifdef TLRENDER_VK
+#ifdef VULKAN_BACKEND
 #else
-            const GLenum format = vk::getReadPixelsFormat(outputInfo.pixelType);
-            const GLenum type = vk::getReadPixelsType(outputInfo.pixelType);
+            const GLenum format = gl::getReadPixelsFormat(outputInfo.pixelType);
+            const GLenum type = gl::getReadPixelsType(outputInfo.pixelType);
             if (GL_NONE == format || GL_NONE == type)
             {
                 throw std::runtime_error(
@@ -413,13 +416,13 @@ namespace mrv
 
             math::Size2i offscreenBufferSize(renderSize.w, renderSize.h);
 
-#ifdef TLRENDER_VK
+#ifdef VULKAN_BACKEND
 #else
             view->make_current();
             gl::initGLAD();
-#endif
-            auto buffer = vk::OffscreenBuffer::create(
+            auto buffer = gl::OffscreenBuffer::create(
                 offscreenBufferSize, offscreenBufferOptions);
+#endif
 
             if (options.annotations)
             {
@@ -469,7 +472,7 @@ namespace mrv
                 delete rgb;
 #else
 
-#    ifdef TLRENDER_VK
+#    ifdef VULKAN_BACKEND
 #    else
                 GLenum imageBuffer = GL_FRONT;
 
@@ -498,9 +501,12 @@ namespace mrv
                 // Get the videoData
                 auto videoData = timeline->getVideo(currentTime).future.get();
                 videoData.layers[0].image->setPixelAspectRatio(1.F);
-                
+
+#ifdef VULKAN_BACKEND
+#else
                 // Render the video.
-                vk::OffscreenBufferBinding binding(buffer);
+                gl::OffscreenBufferBinding binding(buffer);
+#endif
                 
                 {
                     locale::SetAndRestore saved;
@@ -519,7 +525,7 @@ namespace mrv
                     render->end();
                 }
 
-#    ifdef TLRENDER_VK
+#    ifdef VULKAN_BACKEND
 #    else
                 glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
                 

@@ -8,7 +8,6 @@
 #include "mrvCore/mrvString.h"
 
 #include "mrvFl/mrvColorAreaInfo.h"
-#include "mrvFl/mrvLaserFadeData.h"
 
 #include "mrvOptions/mrvStereo3DOptions.h"
 #include "mrvOptions/mrvEnvironmentMapOptions.h"
@@ -27,6 +26,8 @@ namespace mrv
 {
     using namespace tl;
 
+    class LaserFadeData;
+    
     class MultilineInput;
 
     class TimelinePlayer;

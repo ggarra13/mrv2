@@ -28,6 +28,7 @@
 #include "mrvNetwork/mrvDummyClient.h"
 
 #include "mrvFl/mrvCallbacks.h"
+#include "mrvFl/mrvLaserFadeData.h"
 #include "mrvFl/mrvOCIO.h"
 #include "mrvFl/mrvTimelinePlayer.h"
 
@@ -64,7 +65,7 @@ namespace
         return out;
     }
 
-    void stop_playback_while_scrubbing_cb(mrv::TimelineViewport* view)
+    void stop_playback_while_scrubbing_cb(mrv::opengl::TimelineViewport* view)
     {
         view->stopPlaybackWhileScrubbing();
     }
@@ -2361,7 +2362,7 @@ namespace mrv
         {
             TLRENDER_P();
             MainWindow* w;
-            TimelineViewport* view;
+            MyViewport* view;
 
             bool secondary = _hasSecondaryViewport();
             if (secondary)
@@ -2432,7 +2433,7 @@ namespace mrv
             {
                 if (!p.fullScreen)
                     _setFullScreen(false);
-                if (p.ui->uiView == this)
+                if (p.ui->uiView == reinterpret_cast<MyViewport*>(this))
                     Fl::add_timeout(
                         0.01, (Fl_Timeout_Handler)restore_ui_state, p.ui);
                 p.presentation = false;
@@ -2571,7 +2572,7 @@ namespace mrv
         {
             TLRENDER_P();
 
-            if (this != p.ui->uiView)
+            if (reinterpret_cast<const MyViewport*>(this) != p.ui->uiView)
                 return;
 
             if (screen != p.previous_screen)

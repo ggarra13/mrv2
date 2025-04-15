@@ -1725,9 +1725,8 @@ namespace tl
                     color_map_args.prelinearized = false;
 
                     pl_shader_obj state = NULL;
-                    color_map_args.state =
-                        &state; // with NULL and tonemap_clip works
-
+                    color_map_args.state = &state;
+                    
                     pl_shader_color_map_ex(shader, &cmap, &color_map_args);
 
                     const pl_shader_res* res = pl_shader_finalize(shader);

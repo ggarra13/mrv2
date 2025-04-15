@@ -6,7 +6,7 @@
 
 #include <tlVk/OffscreenBuffer.h>
 
-#include <mrvDraw/Shape.h>
+#include <mrvDraw/Annotation.h>
 
 #include "mrvVk/mrvVkDefines.h"
 #include "mrvVk/mrvTimelineViewport.h"

@@ -24,7 +24,7 @@
 namespace mrv
 {
 
-    namespace gl
+    namespace opengl
     {
 
         void Viewport::_createCubicEnvironmentMap()
@@ -202,6 +202,6 @@ namespace mrv
             return _projectionMatrix();
         }
 
-    } namespace gl
+    } // namespace opengl
     
 } // namespace mrv

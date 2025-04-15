@@ -19,7 +19,7 @@
 
 namespace mrv
 {
-    namespace vk
+    namespace vulkan
     {
         
         struct Viewport::VKPrivate
@@ -56,7 +56,7 @@ namespace mrv
             bool init_debug = false;
         };
         
-    }
+    }  // namespace vulkan
 
 //! Define a variable, "gl", that references the private implementation.
 #define MRV2_VK() auto& vk = *_vk

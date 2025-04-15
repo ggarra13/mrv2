@@ -223,62 +223,6 @@ namespace
 namespace mrv
 {
 
-    void NDIView::uploadTextureData(
-        VkImage image, uint32_t width, uint32_t height, uint32_t depth,
-        VkFormat format, const int channels,
-        const int pixel_fmt_size, const void* data)
-    {
-        VkResult result;
-
-        VkDeviceSize imageSize =
-            width * height * depth * channels * pixel_fmt_size;
-
-        // Create staging buffer
-        VkBuffer stagingBuffer;
-        VkDeviceMemory stagingBufferMemory;
-
-        createBuffer(
-            device(), gpu(),
-            imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
-            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-            stagingBuffer, stagingBufferMemory);
-
-        // Copy data to staging buffer
-        void* mappedData;
-        result = vkMapMemory(
-            device(), stagingBufferMemory, 0, imageSize, 0, &mappedData);
-        VK_CHECK_RESULT(result);
-
-        std::memcpy(mappedData, data, static_cast<size_t>(imageSize));
-        vkUnmapMemory(device(), stagingBufferMemory);
-
-        // Copy staging buffer to image
-        VkCommandBuffer commandBuffer = beginSingleTimeCommands(device(), commandPool());
-
-        VkBufferImageCopy region = {};
-        region.bufferOffset = 0;
-        region.bufferRowLength = 0;
-        region.bufferImageHeight = 0;
-        region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-        region.imageSubresource.mipLevel = 0;
-        region.imageSubresource.baseArrayLayer = 0;
-        region.imageSubresource.layerCount = 1;
-        region.imageOffset = {0, 0, 0};
-        region.imageExtent = {width, height, depth};
-
-        vkCmdCopyBufferToImage(
-            commandBuffer, stagingBuffer, image,
-            VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
-
-        endSingleTimeCommands(commandBuffer, device(),
-                              commandPool(), queue());
-
-        // Clean up staging buffer
-        vkDestroyBuffer(device(), stagingBuffer, nullptr);
-        vkFreeMemory(device(), stagingBufferMemory, nullptr);
-    }
-
     void NDIView::addGPUTextures(const pl_shader_res* res)
     {
         for (unsigned i = 0; i < res->num_descriptors; ++i)
@@ -342,6 +286,7 @@ namespace mrv
 
                 // Upload texture data
                 uploadTextureData(
+                    device(), gpu(), commandPool(), queue(),
                     image, width, height, depth, imageFormat,
                     channels, size, values);
 
@@ -545,7 +490,7 @@ namespace mrv
 
         // Look for HDR10 or HLG if present
         p.hdrMonitorFound = false;
-        switch (m_color_space)
+        switch (colorSpace())
         {
         case VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT:
         case VK_COLOR_SPACE_HDR10_ST2084_EXT:
@@ -909,12 +854,12 @@ namespace mrv
         m_vertices.vi_attrs[1].offset = sizeof(float) * 2;
     }
 
-    // m_format, m_depth (optionally) -> creates m_renderPass
+    // ctx.format + m_depth (optionally) -> creates m_renderPass
     void NDIView::prepare_render_pass()
     {
         VkAttachmentDescription attachments[2];
         attachments[0] = VkAttachmentDescription();
-        attachments[0].format = m_format;
+        attachments[0].format = ctx.format;
         attachments[0].samples = VK_SAMPLE_COUNT_1_BIT;
         attachments[0].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
         attachments[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -928,11 +873,6 @@ namespace mrv
         VkAttachmentReference color_reference = {};
         color_reference.attachment = 0;
         color_reference.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-
-        VkAttachmentReference depth_reference = {};
-        depth_reference.attachment = 1;
-        depth_reference.layout =
-            VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
         VkSubpassDescription subpass = {};
         subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
@@ -1876,16 +1816,16 @@ void main() {
         {
             dst_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
             dst_colorspace.transfer = PL_COLOR_TRC_PQ;
-            if (m_color_space == VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
+            if (colorSpace() == VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
             {
                 dst_colorspace.primaries = PL_COLOR_PRIM_DISPLAY_P3;
                 dst_colorspace.transfer = PL_COLOR_TRC_BT_1886;
             }
-            else if (m_color_space == VK_COLOR_SPACE_HDR10_HLG_EXT)
+            else if (colorSpace() == VK_COLOR_SPACE_HDR10_HLG_EXT)
             {
                 dst_colorspace.transfer = PL_COLOR_TRC_HLG;
             }
-            else if (m_color_space == VK_COLOR_SPACE_DOLBYVISION_EXT)
+            else if (colorSpace() == VK_COLOR_SPACE_DOLBYVISION_EXT)
             {
                 // \@todo:  How to handle this? PL_COLOR_TRC_DOLBYVISION does
                 //          not exist.

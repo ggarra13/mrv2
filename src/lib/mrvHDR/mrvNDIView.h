@@ -103,11 +103,6 @@ namespace mrv
 
         void destroy_textures();
 
-        void uploadTextureData(
-            VkImage image, uint32_t width, uint32_t height, uint32_t depth,
-            VkFormat format, const int channels,
-            const int pix_fmt_size, const void* data);
-
         void addGPUTextures(const pl_shader_res*);
 
     protected:

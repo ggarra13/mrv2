@@ -12,8 +12,6 @@
 
 #include <tlTimelineUI/IItem.h>
 
-#include "mrvFl/mrvTimelinePlayer.h"
-
 #include "mrvVk/mrvVkWindow.h"
 
 namespace tl
@@ -28,11 +26,13 @@ class ViewerUI;
 
 namespace mrv
 {
-    using namespace tl;
+
+    class TimelinePlayer;
 
     namespace vulkan
     {
-    
+        using namespace tl;
+        
         //! Timeline widget.
         class TimelineWidget : public VkWindow
         {

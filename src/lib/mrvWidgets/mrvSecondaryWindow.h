@@ -6,21 +6,7 @@
 
 #include <mrvFl/mrvTimelinePlayer.h>
 
-#include "mrViewer.h"
-
-namespace mrv
-{
-    namespace vk
-    {
-        class Viewport;
-    }
-
-    namespace gl
-    {
-        class Viewport;
-    }
-}
-
+#include "mrvWidgets/mrvBackend.h"
 
 namespace mrv
 {

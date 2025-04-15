@@ -340,7 +340,7 @@ namespace mrv
                         image->setPixelAspectRatio(p.pixelAspectRatio);
                     }
 
-                    if (p.stereo3DOptions.output == Stereo3DOutput::OpenGL &&
+                    if (p.stereo3DOptions.output == Stereo3DOutput::Glasses &&
                         p.stereo3DOptions.input == Stereo3DInput::Image &&
                         p.videoData.size() > 1 && p.showVideo)
                     {
@@ -572,7 +572,7 @@ namespace mrv
                         gl.vao->draw(GL_TRIANGLES, 0, gl.vbo->getSize());
                     }
 
-                    if (p.stereo3DOptions.output == Stereo3DOutput::OpenGL &&
+                    if (p.stereo3DOptions.output == Stereo3DOutput::Glasses &&
                         p.stereo3DOptions.input == Stereo3DInput::Image)
                     {
                         gl.shader->bind();
@@ -631,7 +631,7 @@ namespace mrv
                             sizeW + viewportX, sizeH + viewportY,
                             GL_COLOR_BUFFER_BIT, filter);
 
-                        if (p.stereo3DOptions.output == Stereo3DOutput::OpenGL &&
+                        if (p.stereo3DOptions.output == Stereo3DOutput::Glasses &&
                             p.stereo3DOptions.input == Stereo3DInput::Image)
                         {
                             glBindFramebuffer(

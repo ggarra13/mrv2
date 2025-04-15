@@ -1324,6 +1324,6 @@ namespace mrv
             }
         }
 
-    } // namespace gl
+    } // namespace opengl
 
 } // namespace mrv

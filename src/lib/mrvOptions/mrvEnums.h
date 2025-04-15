@@ -14,7 +14,7 @@ namespace mrv
         kAccuracyFast
     };
 
-    enum MonitorVSync { kVSynckNone, kVSyncAlways, kVSyncPresentationOnly };
+    enum MonitorVSync { kVSyncNone, kVSyncAlways, kVSyncPresentationOnly };
 
     enum PixelDisplay { kRGBA_Float, kRGBA_Hex, kRGBA_Decimal };
 

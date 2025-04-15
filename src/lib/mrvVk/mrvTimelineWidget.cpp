@@ -289,7 +289,7 @@ namespace mrv
             p.timelineWidget->setFrameView(true);
             p.timelineWidget->setScrollBarsVisible(false);
             p.timelineWidget->setMoveCallback(std::bind(
-                                                  &mrv::TimelineWidget::moveCallback, this, std::placeholders::_1));
+                                                  &mrv::vulkan::TimelineWidget::moveCallback, this, std::placeholders::_1));
 
             timelineui::DisplayOptions displayOptions;
             displayOptions.trackInfo =

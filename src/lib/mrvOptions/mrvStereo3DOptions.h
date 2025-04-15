@@ -26,11 +26,7 @@ namespace mrv
         Scanlines,
         Columns,
         Checkerboard,
-#ifdef TLRENDER_VK
-        Vulkan,
-#else
-        OpenGL,
-#endif
+        Glasses,
         Count,
         First = Anaglyph
     };

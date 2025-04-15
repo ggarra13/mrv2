@@ -13,6 +13,7 @@
 #include "mrViewer.h"
 
 #include "mrvFl/mrvCallbacks.h"
+#include "mrvFl/mrvLaserFadeData.h"
 #include "mrvFl/mrvTimelinePlayer.h"
 
 #include "mrvWidgets/mrvHorSlider.h"
@@ -70,12 +71,12 @@ namespace mrv
         }
     } // namespace
 
-    namespace vk
+    namespace vulkan
     {
     
         void TimelineViewport::laserFade_cb(LaserFadeData* data)
         {
-            TimelineViewport* view = data->view;
+            MyViewport* view = data->view;
             view->laserFade(data);
         }
 
@@ -976,7 +977,7 @@ namespace mrv
             }
 #endif
 
-            int ret = Fl_SuperClass::handle(event);
+            int ret = VkWindow::handle(event);
             if ((event == FL_KEYDOWN || event == FL_KEYUP ||
                  (event == FL_PUSH && ret == 1)) &&
                 Fl::focus() != this)
@@ -1177,7 +1178,7 @@ namespace mrv
                     tcp->pushMessage("Laser Fade", 0);
 
                     LaserFadeData* laserData = new LaserFadeData;
-                    laserData->view = this;
+                    laserData->view = reinterpret_cast<MyViewport*>(this);
                     laserData->annotation = annotation;
                     laserData->shape = s;
 
@@ -1566,7 +1567,9 @@ namespace mrv
                 }
 
                 bool primary = true;
-                if (p.ui->uiSecondary && p.ui->uiSecondary->viewport() == this)
+                if (p.ui->uiSecondary &&
+                    p.ui->uiSecondary->viewport() ==
+                    reinterpret_cast<MyViewport*>(this))
                     primary = false;
 
                 if (!p.ui->uiMenuGroup->visible() || !primary)
@@ -1763,6 +1766,6 @@ namespace mrv
                 pos.y = renderSize.h - 1;
         }
 
-    } // namespace vk
+    } // namespace vulkan
     
 } // namespace mrv
