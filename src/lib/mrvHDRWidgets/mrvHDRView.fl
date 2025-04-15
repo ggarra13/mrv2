@@ -13,7 +13,7 @@ class HDRUI {open
   Function {make_window()} {open
   } {
     Fl_Window uiMain {open
-      xywh {617 244 727 532} type Double resizable visible
+      xywh {617 244 727 532} type Double resizable xclass hdr visible
     } {
       Fl_Flex {} {open
         xywh {0 0 727 532} resizable fixed_size_tuples {1  0 24 }
@@ -22,7 +22,7 @@ class HDRUI {open
           xywh {0 0 727 24}
         } {}
         Fl_Group uiView {open
-          xywh {0 24 727 508} resizable
+          tooltip {Use mrv2's NDI Output to stream the content to this application.} xywh {0 24 727 508} resizable
           class {mrv::NDIView}
         } {}
       }
