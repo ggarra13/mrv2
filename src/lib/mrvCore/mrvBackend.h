@@ -1,10 +1,13 @@
 #pragma once
 
-
-#if 1 //def TLRENDER_GL
-#  define OPENGL_BACKEND 1
+#if defined(MRV2_BACKEND_GL)
+#define OPENGL_BACKEND 1
+#elif defined(MRV2_BACKEND_VK)
+#define VULKAN_BACKEND 1
+#elif defined(MRV2_BACKEND_BOTH)
+#define BOTH_BACKEND 1
 #else
-#  define VULKAN_BACKEND 1
+#error "MRV2_BACKEND not defined properly"
 #endif
 
 

@@ -15,7 +15,6 @@
 # Use runme.sh for that.
 #
 #
-
 if [[ !$RUNME ]]; then
     . $PWD/etc/build_dir.sh
 fi
@@ -33,6 +32,10 @@ fi
 
 if [ -z "$BUILD_X11" ]; then
     export BUILD_X11=ON
+fi
+
+if [ -z "$MRV2_BACKEND" ]; then
+    export MRV2_BACKEND=GL
 fi
 
 if [ -z "$MRV2_HDR" ]; then
@@ -54,6 +57,7 @@ fi
 if [ -z "$MRV2_PDF" ]; then
     export MRV2_PDF=ON
 fi
+
 
 if [ -z "$MRV2_PYTHON" ]; then
     if [[ $BUILD_PYTHON == ON || $BUILD_PYTHON == 1 ]]; then
@@ -172,6 +176,7 @@ if [ -z "$TLRENDER_USD" ]; then
     export TLRENDER_USD=ON
 fi
 
+echo A
 if [ -z "$VULKAN_SDK" ]; then
     export VULKAN_SDK=/crapola_of_dir
     if [[ $KERNEL == *Msys* ]]; then
@@ -211,6 +216,7 @@ else
     fi
 fi
 
+echo C
     
 if [ -z "$TLRENDER_VPX" ]; then
     export TLRENDER_VPX=ON
@@ -239,6 +245,7 @@ if [ -z "$FLTK_BUILD_SHARED" ]; then
     fi
 fi
 
+echo D
 #
 # Clean python path to avoid clashes, mainly, with macOS meson
 #
@@ -306,6 +313,7 @@ echo "Build embedded Python............... ${MRV2_PYBIND11} 	(MRV2_PYBIND11)"
 echo "Build mrv2 Network connections...... ${MRV2_NETWORK} 	(MRV2_NETWORK)"
 echo "Build PDF........................... ${MRV2_PDF} 	(MRV2_PDF)"
 echo "Build hdr application............... ${MRV2_HDR} 	(MRV2_HDR)"
+echo "mrv2 BACKEND........................ ${MRV2_BACKEND} 	(MRV2_BACKEND)"
 echo
 echo "tlRender Options"
 echo
@@ -384,6 +392,7 @@ cmd="cmake -G '${CMAKE_GENERATOR}'
 	   -D BUILD_X11=${BUILD_X11}
 	   -D BUILD_WAYLAND=${BUILD_WAYLAND}
 
+	   -D MRV2_BACKEND=${MRV2_BACKEND}
 	   -D MRV2_HDR=${MRV2_HDR}
 	   -D MRV2_NETWORK=${MRV2_NETWORK}
 	   -D MRV2_PYFLTK=${MRV2_PYFLTK}

@@ -26,14 +26,14 @@ namespace mrv
     using namespace tl;
 
     class LaserFadeData;
-    
+
     class MultilineInput;
 
     class TimelinePlayer;
 
     namespace opengl
     {
-    
+
         class TimelineViewport : public GLWindow
         {
             TLRENDER_NON_COPYABLE(TimelineViewport);
@@ -78,10 +78,11 @@ namespace mrv
             //! Get the background options.
             const timeline::BackgroundOptions&
             getBackgroundOptions() const noexcept;
-        
+
             //! Observe the background options.
-            std::shared_ptr<observer::IValue<timeline::BackgroundOptions> > observeBackgroundOptions() const;
-        
+            std::shared_ptr<observer::IValue<timeline::BackgroundOptions> >
+            observeBackgroundOptions() const;
+
             //! Set the background options.
             void setBackgroundOptions(const timeline::BackgroundOptions& value);
 
@@ -103,8 +104,8 @@ namespace mrv
             timeline::LUTOptions& lutOptions() noexcept;
 
             //! Set the image options.
-            void
-            setImageOptions(const std::vector<timeline::ImageOptions>&) noexcept;
+            void setImageOptions(
+                const std::vector<timeline::ImageOptions>&) noexcept;
 
             //! Set the display options.
             void setDisplayOptions(
@@ -120,7 +121,7 @@ namespace mrv
             void setHDROptions(const timeline::HDROptions&) noexcept;
 
             const timeline::HDROptions& getHDROptions() const noexcept;
-        
+
             //! Set the timeline players.
             void setTimelinePlayer(TimelinePlayer*) noexcept;
 
@@ -200,14 +201,15 @@ namespace mrv
             EnvironmentMapOptions getEnvironmentMapOptions() const noexcept;
 
             //! Set the environment map options
-            void setEnvironmentMapOptions(const EnvironmentMapOptions& o) noexcept;
+            void
+            setEnvironmentMapOptions(const EnvironmentMapOptions& o) noexcept;
 
             //! Resize the window to screen
             void resizeWindow() noexcept;
 
             //! Set auto resizing of the window.
             void setResizeWindow(bool active) noexcept;
-        
+
             //! Set auto frame the view.
             void setFrameView(bool active) noexcept;
 
@@ -272,7 +274,8 @@ namespace mrv
             void updateVideoLayers(int idx = 0) noexcept;
 
             //! This signal is emitted when the position and zoom change.
-            void viewPosAndZoomChanged(const tl::math::Vector2i&, float) noexcept;
+            void
+            viewPosAndZoomChanged(const tl::math::Vector2i&, float) noexcept;
 
             //! This signal is emitted when the view is framed.
             void frameViewActivated() noexcept;
@@ -315,9 +318,10 @@ namespace mrv
             void refreshWindows();
 
             //! Refresh window by clearing the associated resources.
-            virtual void refresh() {};
+            virtual void refresh(){};
 
-            //! FLTK Callback to handle view spinning whne in Environment Map mode.
+            //! FLTK Callback to handle view spinning whne in Environment Map
+            //! mode.
             static void _handleViewSpinning_cb(TimelineViewport* t) noexcept;
 
             //! Handle view spinning when in Environment Map mode.
@@ -347,7 +351,8 @@ namespace mrv
 
             //! Edit a text shape.
             void editText(
-                const std::shared_ptr< draw::Shape >&, const int index) noexcept;
+                const std::shared_ptr< draw::Shape >&,
+                const int index) noexcept;
 
             //! Update the playback buttons.
             void updatePlaybackButtons() const noexcept;
@@ -371,7 +376,7 @@ namespace mrv
             void _init();
 
             void _updateDevices() const noexcept;
-        
+
             virtual void _readPixel(image::Color4f& rgba) const noexcept = 0;
             math::Vector2i _getViewportCenter() const noexcept;
 
@@ -389,7 +394,7 @@ namespace mrv
 
             //! Get the render projection matrix.
             math::Matrix4x4f _renderProjectionMatrix() const noexcept;
-        
+
             //! Get the full projection matrix.
             math::Matrix4x4f _projectionMatrix() const noexcept;
 
@@ -444,10 +449,12 @@ namespace mrv
 
             void _updateViewRotation(const math::Vector2f& spin) noexcept;
 
-            void _updateDisplayOptions(const timeline::DisplayOptions& d) noexcept;
+            void
+            _updateDisplayOptions(const timeline::DisplayOptions& d) noexcept;
 
             void _updateMonitorDisplayView(
-                const int screen, const timeline::OCIOOptions& o) const noexcept;
+                const int screen,
+                const timeline::OCIOOptions& o) const noexcept;
 
             void _pushColorMessage(const std::string& command, float value);
 
@@ -458,14 +465,15 @@ namespace mrv
             void _setFullScreen(bool active) noexcept;
 
             void _getPixelValue(
-                image::Color4f& rgba, const std::shared_ptr<image::Image>& image,
+                image::Color4f& rgba,
+                const std::shared_ptr<image::Image>& image,
                 const math::Vector2i& pos) const noexcept;
             void _calculateColorAreaRawValues(area::Info& info) const noexcept;
 
-            void
-            hsv_to_info(const image::Color4f& hsv, area::Info& info) const noexcept;
-            image::Color4f
-            rgba_to_hsv(int hsv_colorspace, image::Color4f& rgba) const noexcept;
+            void hsv_to_info(
+                const image::Color4f& hsv, area::Info& info) const noexcept;
+            image::Color4f rgba_to_hsv(
+                int hsv_colorspace, image::Color4f& rgba) const noexcept;
 
             void _scrub(float change) noexcept;
 
@@ -478,6 +486,6 @@ namespace mrv
             TLRENDER_PRIVATE();
         };
 
-    }  // namespace opengl
-    
+    } // namespace opengl
+
 } // namespace mrv

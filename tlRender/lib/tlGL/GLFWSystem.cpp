@@ -64,6 +64,7 @@ namespace tl
                      .arg(glfwMinor)
                      .arg(glfwRevision));
 
+#ifdef __linux__
             int platform_hint = GLFW_PLATFORM_X11;
             if (isWayland())
             {
@@ -72,6 +73,8 @@ namespace tl
 
             if (glfwPlatformSupported(platform_hint) == GLFW_TRUE)
                 glfwInitHint(GLFW_PLATFORM, platform_hint);
+#endif
+            
             if (!glfwInit())
             {
                 //! \todo Only log the error for now so that non-OpenGL

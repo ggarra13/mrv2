@@ -19,7 +19,6 @@
 #include "mrvCore/mrvLocale.h"
 #include "mrvCore/mrvString.h"
 
-
 #include "mrvColorInfo.h"
 #include "mrViewer.h"
 
@@ -332,8 +331,11 @@ namespace mrv
         locale::SetAndRestore saved;
         text.imbue(std::locale(saved.stored()));
         text << "@b\t" << std::fixed << std::setw(7) << std::setprecision(2)
-             << kR << "R" << "\t" << kG << "G" << "\t" << kB << "B" << "\t"
-             << kA << "A" << "\n"
+             << kR << "R"
+             << "\t" << kG << "G"
+             << "\t" << kB << "B"
+             << "\t" << kA << "A"
+             << "\n"
              << _("Maximum") << ":\t@c" << info.rgba.max.r << "\t@c"
              << info.rgba.max.g << "\t@c" << info.rgba.max.b << "\t@c"
              << info.rgba.max.a << "\n"
@@ -353,38 +355,60 @@ namespace mrv
         switch (c->uiBColorType->value() + 1)
         {
         case color::kITU_709:
-            text << kH << "7" << "\t@c" << kS << "0" << "\t@c" << kL << "9";
+            text << kH << "7"
+                 << "\t@c" << kS << "0"
+                 << "\t@c" << kL << "9";
             break;
         case color::kITU_601:
-            text << kH << "6" << "\t@c" << kS << "0" << "\t@c" << kL << "1";
+            text << kH << "6"
+                 << "\t@c" << kS << "0"
+                 << "\t@c" << kL << "1";
             break;
         case color::kYIQ:
-            text << kH << "Y" << "\t@c" << kS << "I" << "\t@c" << kL << "Q";
+            text << kH << "Y"
+                 << "\t@c" << kS << "I"
+                 << "\t@c" << kL << "Q";
             break;
         case color::kYDbDr:
-            text << kH << "Y" << "\t@c" << kS << "Db" << "\t@c" << kL << "Dr";
+            text << kH << "Y"
+                 << "\t@c" << kS << "Db"
+                 << "\t@c" << kL << "Dr";
             break;
         case color::kYUV:
-            text << kH << "Y" << "\t@c" << kS << "U" << "\t@c" << kL << "V";
+            text << kH << "Y"
+                 << "\t@c" << kS << "U"
+                 << "\t@c" << kL << "V";
             break;
         case color::kCIE_Luv:
-            text << kH << "L" << "\t@c" << kS << "u" << "\t@c" << kL << "v";
+            text << kH << "L"
+                 << "\t@c" << kS << "u"
+                 << "\t@c" << kL << "v";
             break;
         case color::kCIE_Lab:
-            text << kH << "L" << "\t@c" << kS << "a" << "\t@c" << kL << "b";
+            text << kH << "L"
+                 << "\t@c" << kS << "a"
+                 << "\t@c" << kL << "b";
             break;
         case color::kCIE_xyY:
-            text << kH << "x" << "\t@c" << kS << "y" << "\t@c" << kL << "Y";
+            text << kH << "x"
+                 << "\t@c" << kS << "y"
+                 << "\t@c" << kL << "Y";
             break;
         case color::kCIE_XYZ:
-            text << kH << "X" << "\t@c" << kS << "Y" << "\t@c" << kL << "Z";
+            text << kH << "X"
+                 << "\t@c" << kS << "Y"
+                 << "\t@c" << kL << "Z";
             break;
         case color::kHSL:
-            text << kH << "H" << "\t@c" << kS << "S" << "\t@c" << kL << "L";
+            text << kH << "H"
+                 << "\t@c" << kS << "S"
+                 << "\t@c" << kL << "L";
             break;
         case color::kHSV:
         default:
-            text << kH << "H" << "\t@c" << kS << "S" << "\t@c" << kV << "V";
+            text << kH << "H"
+                 << "\t@c" << kS << "S"
+                 << "\t@c" << kV << "V";
             break;
         }
 
