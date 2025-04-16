@@ -1323,6 +1323,7 @@ void main() {
             // This will make the FLTK swapchain call vk->SetHDRMetadataEXT();
             const image::HDRData& data = p.hdrData;
 
+            VkHdrMetadataEXT old_hdr_metadata = m_hdr_metadata;
             m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
             m_hdr_metadata.displayPrimaryRed = {
                 data.primaries[image::HDRPrimaries::Red][0],
@@ -1347,6 +1348,9 @@ void main() {
                 data.displayMasteringLuminance.getMin();
             m_hdr_metadata.maxContentLightLevel = data.maxCLL;
             m_hdr_metadata.maxFrameAverageLightLevel = data.maxFALL;
+
+            if (!is_equal_hdr_metadata(m_hdr_metadata, old_hdr_metadata))
+                m_hdr_metadata_changed = true; // Mark as changed
         }
 
         // Transition to GENERAL for CPU writes
