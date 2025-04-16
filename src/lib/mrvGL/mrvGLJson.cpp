@@ -11,6 +11,7 @@ namespace mrv
 {
     namespace draw
     {
+#if defined(OPENGL_BACKEND) || defined(BOTH_BACKEND)
         std::shared_ptr< Shape > messageToShape(const Message& json)
         {
             std::string type = json["type"];
@@ -200,5 +201,6 @@ namespace mrv
                 value.shapes.push_back(messageToShape(shape));
             }
         }
+#endif
     } // namespace draw
 } // namespace mrv

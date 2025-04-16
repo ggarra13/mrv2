@@ -29,8 +29,15 @@
 #include "mrvFl/mrvStereo3DAux.h"
 #include "mrvFl/mrvCallbacks.h"
 
+#ifdef OPENGL_BACKEND
 #include "mrvGL/mrvGLShape.h"
 #include "mrvGL/mrvGLTextEdit.h"
+#endif
+
+#ifdef VULKAN_BACKEND
+#include "mrvVk/mrvVkShape.h"
+#include "mrvVk/mrvVkTextEdit.h"
+#endif
 
 #include "mrvUI/mrvAsk.h"
 #include "mrvUI/mrvDesktop.h"
@@ -2934,6 +2941,7 @@ namespace mrv
 
         for (const auto& shape : annotation->shapes)
         {
+#ifdef OPENGL_BACKEND
 #ifdef USE_OPENGL2
             if (auto s = dynamic_cast<GL2TextShape*>(shape.get()))
             {
@@ -2944,6 +2952,14 @@ namespace mrv
             {
                 window.add(s->text);
             }
+#endif
+            
+#ifdef VULKAN_BACKEND
+            if (auto s = dynamic_cast<VKTextShape*>(shape.get()))
+            {
+                window.add(s->text);
+            }
+#endif
         }
         window.textAnnotations.menu_end();
 

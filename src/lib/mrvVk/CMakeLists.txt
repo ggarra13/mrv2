@@ -5,12 +5,12 @@
 set(HEADERS
     mrvVkDefines.h
     # mrvVkErrors.h
-    # mrvVkJson.h
+    mrvVkJson.h
     mrvVkLines.h
     mrvVkOutline.h
-    # mrvVkShaders.h
+    mrvVkShaders.h       # done
     mrvVkShape.h
-    # mrvVkTextEdit.h
+    mrvVkTextEdit.h      # done
     # mrvVkUtil.h
     mrvVkViewport.h
     mrvVkViewportPrivate.h
@@ -23,12 +23,12 @@ set(HEADERS
 set(SOURCES
     # mrvVk2TextShape.cpp
     # mrvVkErrors.cpp
-    # mrvVkJson.cpp
+    mrvVkJson.cpp
     mrvVkLines.cpp
     mrvVkOutline.cpp
-    # mrvVkShaders.cpp
+    mrvVkShaders.cpp        # done?
     mrvVkShape.cpp
-    # mrvVkTextEdit.cpp
+    mrvVkTextEdit.cpp       # done
     # mrvVkUtil.cpp
     mrvVkViewport.cpp
     mrvVkViewportDraw.cpp

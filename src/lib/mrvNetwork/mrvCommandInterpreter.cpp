@@ -12,10 +12,16 @@
 #include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvLaserFadeData.h"
 
-#ifdef TLRENDER_GL
+#if defined(OPENGL_BACKEND) || defined(BOTH_BACKEND)
 #    include "mrvGL/mrvGLUtil.h"
 #    include "mrvGL/mrvGLJson.h"
 #endif
+
+#if defined(VULKAN_BACKEND)
+#    include "mrvVk/mrvVkUtil.h"
+#    include "mrvVk/mrvVkJson.h"
+#endif
+
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 

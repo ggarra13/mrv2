@@ -12,6 +12,7 @@ namespace mrv
 {
     namespace draw
     {
+#if defined(OPENGL_BACKEND) || defined(BOTH_BACKEND)
         //! Translate a nlohmann::json message to a draw::Shape.
         std::shared_ptr< Shape > messageToShape(const Message&);
 
@@ -21,6 +22,7 @@ namespace mrv
         void to_json(nlohmann::json& json, const Annotation& value);
 
         void from_json(const nlohmann::json& json, Annotation& value);
+#endif
     } // namespace draw
 
 } // namespace mrv

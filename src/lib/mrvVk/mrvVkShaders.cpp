@@ -4,7 +4,7 @@
 
 #include <tlCore/StringFormat.h>
 
-#include "mrvGLShaders.h"
+#include "mrvVk/mrvVkShaders.h"
 
 namespace mrv
 {
