@@ -14,11 +14,11 @@
 #include <FL/Fl_Box.H>
 #include <FL/Enumerations.H>
 
+#include "mrvCore/mrvColorAreaInfo.h"
 #include "mrvCore/mrvColorSpaces.h"
 #include "mrvCore/mrvLocale.h"
 #include "mrvCore/mrvString.h"
 
-#include "mrvFl/mrvColorAreaInfo.h"
 
 #include "mrvColorInfo.h"
 #include "mrViewer.h"

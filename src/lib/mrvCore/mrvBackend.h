@@ -1,7 +1,7 @@
 #pragma once
 
 
-#if 0 //def TLRENDER_GL
+#if 1 //def TLRENDER_GL
 #  define OPENGL_BACKEND 1
 #else
 #  define VULKAN_BACKEND 1

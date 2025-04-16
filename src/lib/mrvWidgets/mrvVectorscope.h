@@ -10,7 +10,7 @@
 #include <tlCore/Color.h>
 #include <tlCore/Image.h>
 
-#include "mrvFl/mrvColorAreaInfo.h"
+#include "mrvCore/mrvColorAreaInfo.h"
 
 class ViewerUI;
 

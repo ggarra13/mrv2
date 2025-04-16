@@ -802,10 +802,10 @@ namespace mrv
         memset(&m_vertices, 0, sizeof(m_vertices));
 
         result = vkCreateBuffer(device(), &buf_info, NULL, &m_vertices.buf);
-        VK_CHECK_RESULT(result);
+        VK_CHECK(result);
 
         vkGetBufferMemoryRequirements(device(), m_vertices.buf, &mem_reqs);
-        VK_CHECK_RESULT(result);
+        VK_CHECK(result);
 
         mem_alloc.allocationSize = mem_reqs.size;
         pass = memory_type_from_properties(
@@ -817,11 +817,11 @@ namespace mrv
 
         result =
             vkAllocateMemory(device(), &mem_alloc, NULL, &m_vertices.mem);
-        VK_CHECK_RESULT(result);
+        VK_CHECK(result);
 
         result = vkMapMemory(
             device(), m_vertices.mem, 0, mem_alloc.allocationSize, 0, &data);
-        VK_CHECK_RESULT(result);
+        VK_CHECK(result);
 
         std::memcpy(data, vertices.data(), static_cast<size_t>(buffer_size));
 
@@ -829,7 +829,7 @@ namespace mrv
 
         result =
             vkBindBufferMemory(device(), m_vertices.buf, m_vertices.mem, 0);
-        VK_CHECK_RESULT(result);
+        VK_CHECK(result);
 
         m_vertices.vi.sType =
             VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
@@ -895,7 +895,7 @@ namespace mrv
 
         VkResult result;
         result = vkCreateRenderPass(device(), &rp_info, NULL, &m_renderPass);
-        VK_CHECK_RESULT(result);
+        VK_CHECK(result);
     }
 
     VkShaderModule NDIView::prepare_vs()
@@ -1094,10 +1094,10 @@ void main() {
 
         result = vkCreatePipelineCache(
             device(), &pipelineCacheCreateInfo, NULL, &pipelineCache());
-        VK_CHECK_RESULT(result);
+        VK_CHECK(result);
         result = vkCreateGraphicsPipelines(
             device(), pipelineCache(), 1, &pipeline, NULL, &m_pipeline);
-        VK_CHECK_RESULT(result);
+        VK_CHECK(result);
 
         vkDestroyPipelineCache(device(), pipelineCache(), NULL);
     }
@@ -1141,7 +1141,7 @@ void main() {
 
         VkResult result = vkCreateDescriptorSetLayout(
             device(), &layoutInfo, nullptr, &m_desc_layout);
-        VK_CHECK_RESULT(result);
+        VK_CHECK(result);
 
         VkPipelineLayoutCreateInfo pipelineLayoutInfo = {};
         pipelineLayoutInfo.sType =
@@ -1151,7 +1151,7 @@ void main() {
 
         result = vkCreatePipelineLayout(
             device(), &pipelineLayoutInfo, nullptr, &m_pipeline_layout);
-        VK_CHECK_RESULT(result);
+        VK_CHECK(result);
     }
 
     void NDIView::prepare_descriptor_pool()
@@ -1169,7 +1169,7 @@ void main() {
 
         VkResult result = vkCreateDescriptorPool(
             device(), &poolInfo, nullptr, &m_desc_pool);
-        VK_CHECK_RESULT(result);
+        VK_CHECK(result);
     }
 
     void NDIView::prepare_descriptor_set()
@@ -1182,7 +1182,7 @@ void main() {
 
         VkResult result =
             vkAllocateDescriptorSets(device(), &allocInfo, &m_desc_set);
-        VK_CHECK_RESULT(result);
+        VK_CHECK(result);
 
         std::vector<VkDescriptorImageInfo> imageInfos(m_textures.size());
         std::vector<VkWriteDescriptorSet> writes(m_textures.size());
@@ -1363,7 +1363,7 @@ void main() {
         void* mappedData;
         result = vkMapMemory(
             device(), m_textures[0].mem, 0, VK_WHOLE_SIZE, 0, &mappedData);
-        VK_CHECK_RESULT(result);
+        VK_CHECK(result);
 
         if (p.image)
         {
