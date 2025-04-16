@@ -16,6 +16,8 @@ set(MRV2_PYBIND11 TRUE CACHE BOOL "Enable pybind11 building" )
 set(MRV2_PYFLTK   TRUE CACHE BOOL "Enable pyFLTK binding" )
 set(MRV2_NETWORK TRUE CACHE BOOL "Enable Networking in mrv2" )
 set(MRV2_PDF TRUE CACHE BOOL "Enable PDF creation in mrv2" )
+set(MRV2_BACKEND "GL" CACHE STRING "Select backend: GL, VK, BOTH")
+set_property(CACHE MRV2_BACKEND PROPERTY STRINGS GL VK BOTH)
 
 option(GIT_SUBMODULE "Check tlRender submodule during build if missing" ON)
 
