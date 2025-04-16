@@ -11,7 +11,7 @@ if (USER_NAME STREQUAL "gga" OR USER_NAME STREQUAL "User-PC" OR
 else()
     set(FLTK_GIT_REPOSITORY "https://github.com/ggarra13/fltk.git")
 endif()
-set(FLTK_GIT_TAG f847c63161211d72b7ea14e2af2cdbd486a3a679)
+set(FLTK_GIT_TAG 57aa1280e76db6bb6e019f519a7b2749f4f70320)
 #set(FLTK_GIT_TAG vk)  # Cutting edge!
 
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
