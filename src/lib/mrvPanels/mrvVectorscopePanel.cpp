@@ -4,9 +4,9 @@
 
 #include "FL/Fl_Choice.H"
 
-#include "mrvWidgets/mrvVectorscope.h"
+#include "mrvCore/mrvColorAreaInfo.h"
 
-#include "mrvFl/mrvColorAreaInfo.h"
+#include "mrvWidgets/mrvVectorscope.h"
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 #include "mrvPanels/mrvVectorscopePanel.h"

@@ -8,8 +8,6 @@
 
 #include "mrvPanelsCallbacks.h"
 
-#include "mrvFl/mrvColorAreaInfo.h"
-
 #include "mrvPanels/mrvColorAreaPanel.h"
 
 #include "mrViewer.h"

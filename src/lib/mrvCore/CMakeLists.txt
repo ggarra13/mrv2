@@ -5,6 +5,7 @@
 set(HEADERS
     mrvActionMode.h
     mrvBackend.h
+    mrvColorAreaInfo.h
     mrvColorSpaces.h
     mrvCPU.h
     mrvEnv.h
