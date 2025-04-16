@@ -166,7 +166,7 @@ namespace mrv
                     
             VkResult result;
             result = vkCreateRenderPass(device(), &rp_info, NULL, &m_renderPass);
-            VK_CHECK_RESULT(result);
+            VK_CHECK(result);
         }
         
         void VkWindow::prepare_vertices()
@@ -228,10 +228,10 @@ namespace mrv
             memset(&m_mesh, 0, sizeof(m_mesh));
 
             result = vkCreateBuffer(device(), &buf_info, NULL, &m_mesh.buf);
-            VK_CHECK_RESULT(result);
+            VK_CHECK(result);
 
             vkGetBufferMemoryRequirements(device(), m_mesh.buf, &m_mem_reqs);
-            VK_CHECK_RESULT(result);
+            VK_CHECK(result);
 
             mem_alloc.allocationSize = m_mem_reqs.size;
             pass = memory_type_from_properties(gpu(),
@@ -241,18 +241,18 @@ namespace mrv
                                                &mem_alloc.memoryTypeIndex);
 
             result = vkAllocateMemory(device(), &mem_alloc, NULL, &m_mesh.mem);
-            VK_CHECK_RESULT(result);
+            VK_CHECK(result);
 
             result = vkMapMemory(device(), m_mesh.mem, 0,
                                  mem_alloc.allocationSize, 0, &data);
-            VK_CHECK_RESULT(result);
+            VK_CHECK(result);
 
             memcpy(data, vertices.data(), static_cast<size_t>(buffer_size));
 
             vkUnmapMemory(device(), m_mesh.mem);
 
             result = vkBindBufferMemory(device(), m_mesh.buf, m_mesh.mem, 0);
-            VK_CHECK_RESULT(result);
+            VK_CHECK(result);
 
             m_mesh.vi.sType =
                 VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
@@ -382,10 +382,10 @@ namespace mrv
 
             result = vkCreatePipelineCache(device(), &pipelineCacheCreateInfo, NULL,
                                            &pipelineCache());
-            VK_CHECK_RESULT(result);
+            VK_CHECK(result);
             result = vkCreateGraphicsPipelines(device(), pipelineCache(), 1,
                                                &pipeline, NULL, &m_pipeline);
-            VK_CHECK_RESULT(result);
+            VK_CHECK(result);
 
             vkDestroyPipelineCache(device(), pipelineCache(), NULL);
 
@@ -402,7 +402,7 @@ namespace mrv
 
             result = vkCreatePipelineLayout(device(), &pPipelineLayoutCreateInfo, NULL,
                                             &m_pipeline_layout);
-            VK_CHECK_RESULT(result);
+            VK_CHECK(result);
         }
 
         void VkWindow::prepare()
