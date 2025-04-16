@@ -10,6 +10,7 @@
 
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvFl/mrvIO.h"
+#include "mrvFl/mrvLaserFadeData.h"
 
 #ifdef TLRENDER_GL
 #    include "mrvGL/mrvGLUtil.h"
@@ -29,6 +30,7 @@
 
 #include "mrViewer.h"
 #include "mrvFl/mrvOCIO.h"
+
 
 namespace
 {
@@ -735,7 +737,7 @@ namespace mrv
                 laserData->shape = shape;
 
                 Fl::add_timeout(
-                    0.0, (Fl_Timeout_Handler)TimelineViewport::laserFade_cb,
+                    0.0, (Fl_Timeout_Handler)MyViewport::laserFade_cb,
                     laserData);
 
                 // Create annotation menus if not there already

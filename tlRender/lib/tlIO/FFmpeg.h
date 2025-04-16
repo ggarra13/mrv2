@@ -25,7 +25,7 @@ namespace tl
     {
         //! Profiles.
         enum class Profile {
-            None,
+            kNone,
             H264,
             ProRes,
             ProRes_Proxy,
@@ -51,7 +51,7 @@ namespace tl
 
         //! Audio Codecs.
         enum class AudioCodec {
-            None,
+            kNone,
             AAC,
             AC3,
             True_HD,

@@ -16,10 +16,6 @@
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvIO.h"
 
-#ifdef TLRENDER_GL
-#    include "mrvGL/mrvTimelineViewport.h"
-#endif
-
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvNetwork/mrvTCP.h"
@@ -554,7 +550,7 @@ namespace mrv
         _p->player->setAudioOffset(value);
     }
 
-    void TimelinePlayer::setTimelineViewport(TimelineViewport* view)
+    void TimelinePlayer::setTimelineViewport(MyViewport* view)
     {
         timelineViewport = view;
     }

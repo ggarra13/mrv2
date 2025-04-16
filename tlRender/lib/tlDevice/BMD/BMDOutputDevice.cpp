@@ -94,7 +94,7 @@ namespace tl
                 std::unique_ptr<DLWrapper> dl;
 
                 math::Size2i size;
-                PixelType outputPixelType = PixelType::None;
+                PixelType outputPixelType = PixelType::kNone;
                 HDRMode hdrMode = HDRMode::FromFile;
                 image::HDRData hdrData;
                 math::Vector2i viewPos;
@@ -130,7 +130,7 @@ namespace tl
 
             p.window = gl::GLFWWindow::create(
                 "tl::bmd::OutputDevice", math::Size2i(1, 1), context,
-                static_cast<int>(gl::GLFWWindowOptions::None));
+                static_cast<int>(gl::GLFWWindowOptions::kNone));
             p.thread.running = true;
             p.thread.thread = std::thread(
                 [this]
@@ -733,7 +733,7 @@ namespace tl
         {
             TLRENDER_P();
             if (config.deviceIndex != -1 && config.displayModeIndex != -1 &&
-                config.pixelType != PixelType::None)
+                config.pixelType != PixelType::kNone)
             {
                 std::string modelName;
                 {

@@ -15,12 +15,12 @@ namespace tl
     {
         //! Channel grouping.
         enum class ChannelGrouping {
-            None,
+            kNone,
             Known,
             All,
 
             Count,
-            First = None
+            First = kNone
         };
         TLRENDER_ENUM(ChannelGrouping);
         TLRENDER_ENUM_SERIALIZE(ChannelGrouping);

@@ -23,7 +23,7 @@ namespace tl
             std::shared_ptr<image::Image> imageB;
             ImageOptions imageOptionsB;
 
-            Transition transition = Transition::None;
+            Transition transition = Transition::kNone;
             float transitionValue = 0.F;
 
             bool operator==(const VideoLayer&) const;

@@ -15,9 +15,18 @@ namespace fs = std::filesystem;
 #include <tlCore/StringFormat.h>
 #include <tlCore/Time.h>
 
-#include <tlGL/Init.h>
-#include <tlGL/Util.h>
-#include <tlTimelineGL/Render.h>
+#include "mrvCore/mrvBackend.h"
+
+#ifdef VULKAN_BACKEND
+#  include <tlVk/Init.h>
+#  include <tlVk/Util.h>
+#  include <tlTimelineVk/Render.h>
+#else
+#  include <tlGL/Init.h>
+#  include <tlGL/Util.h>
+#  include <tlTimelineGL/Render.h>
+#  include "mrvGL/mrvGLErrors.h"
+#endif
 
 #include "mrvCore/mrvImage.h"
 #include "mrvCore/mrvLocale.h"
@@ -26,8 +35,6 @@ namespace fs = std::filesystem;
 #include "mrvCore/mrvWait.h"
 
 #include "mrvWidgets/mrvProgressReport.h"
-
-#include "mrvGL/mrvGLErrors.h"
 
 #include "mrvNetwork/mrvTCP.h"
 
@@ -54,7 +61,7 @@ namespace mrv
     {
         int ret = 0;
         std::string msg;
-        Viewport* view = ui->uiView;
+        MyViewport* view = ui->uiView;
 
         file::Path path(file);
 
@@ -107,8 +114,13 @@ namespace mrv
                 throw std::runtime_error("No video information");
             }
 
+#ifdef VULKAN_BACKEND
+            vk::OffscreenBufferOptions offscreenBufferOptions;
+            std::shared_ptr<timeline_vk::Render> render;
+#else
             gl::OffscreenBufferOptions offscreenBufferOptions;
             std::shared_ptr<timeline_gl::Render> render;
+#endif
             image::Size renderSize;
 
             int layerId = ui->uiColorChannel->value();
@@ -156,7 +168,12 @@ namespace mrv
 
                     
             // Create the renderer.
+#ifdef VULKAN_BACKEND
+            // \@todo: Vulkan
+            //render = timeline_vk::Render::create(context);
+#else
             render = timeline_gl::Render::create(context);
+#endif
             offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
 
             // Create the writer.
@@ -320,7 +337,7 @@ namespace mrv
             }
             
             outputInfo = writerPlugin->getWriteInfo(outputInfo);
-            if (image::PixelType::None == outputInfo.pixelType)
+            if (image::PixelType::kNone == outputInfo.pixelType)
             {
                 outputInfo.pixelType = image::PixelType::RGB_U8;
                 offscreenBufferOptions.colorType = image::PixelType::RGB_U8;
@@ -378,6 +395,8 @@ namespace mrv
             // Don't send any tcp updates
             tcp->lock();
 
+#ifdef VULKAN_BACKEND
+#else
             const GLenum format = gl::getReadPixelsFormat(outputInfo.pixelType);
             const GLenum type = gl::getReadPixelsType(outputInfo.pixelType);
             if (GL_NONE == format || GL_NONE == type)
@@ -385,7 +404,7 @@ namespace mrv
                 throw std::runtime_error(
                     string::Format("{0}: Cannot open").arg(file));
             }
-
+#endif
             {
                 std::string msg = tl::string::Format(_("OpenGL info: {0}"))
                                       .arg(offscreenBufferOptions.colorType);
@@ -397,11 +416,13 @@ namespace mrv
 
             math::Size2i offscreenBufferSize(renderSize.w, renderSize.h);
 
+#ifdef VULKAN_BACKEND
+#else
             view->make_current();
             gl::initGLAD();
-
             auto buffer = gl::OffscreenBuffer::create(
                 offscreenBufferSize, offscreenBufferOptions);
+#endif
 
             if (options.annotations)
             {
@@ -451,6 +472,8 @@ namespace mrv
                 delete rgb;
 #else
 
+#    ifdef VULKAN_BACKEND
+#    else
                 GLenum imageBuffer = GL_FRONT;
 
                 // @note: Wayland does not work like Windows, macOS or
@@ -465,28 +488,32 @@ namespace mrv
 
                 glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
-                CHECK_GL;
+                
                 glReadPixels(
                     X, Y, outputInfo.size.w, outputInfo.size.h, format, type,
                     outputImage->getData());
+#    endif
 #endif
-                CHECK_GL;
+                
             }
             else
             {
                 // Get the videoData
                 auto videoData = timeline->getVideo(currentTime).future.get();
                 videoData.layers[0].image->setPixelAspectRatio(1.F);
-                
+
+#ifdef VULKAN_BACKEND
+#else
                 // Render the video.
                 gl::OffscreenBufferBinding binding(buffer);
-                CHECK_GL;
+#endif
+                
                 {
                     locale::SetAndRestore saved;
                     render->begin(offscreenBufferSize);
                     render->setOCIOOptions(view->getOCIOOptions());
                     render->setLUTOptions(view->lutOptions());
-                    CHECK_GL;
+                    
                     render->drawVideo(
                         {videoData},
                         {math::Box2i(0, 0, renderSize.w, renderSize.h)},
@@ -494,19 +521,20 @@ namespace mrv
                         {timeline::DisplayOptions()},
                         timeline::CompareOptions(),
                         ui->uiView->getBackgroundOptions());
-                    CHECK_GL;
+                    
                     render->end();
                 }
 
+#    ifdef VULKAN_BACKEND
+#    else
                 glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
-                CHECK_GL;
+                
 
                 glPixelStorei(GL_PACK_ALIGNMENT, outputInfo.layout.alignment);
-                CHECK_GL;
+                
                 glPixelStorei(
                     GL_PACK_SWAP_BYTES,
                     outputInfo.layout.endian != memory::getEndian());
-                CHECK_GL;
 
                 X = dataWindow.min.x;
 
@@ -522,7 +550,9 @@ namespace mrv
                 glReadPixels(X, Y, outputImage->getWidth(),
                              outputImage->getHeight(), format, type,
                              outputImage->getData());
-                CHECK_GL;
+#endif
+
+                
             }
 
             outputImage->setTags(tags);
@@ -541,7 +571,7 @@ namespace mrv
         const ViewerUI* ui, SaveOptions options)
     {
         int ret = 0;
-        Viewport* view = ui->uiView;
+        MyViewport* view = ui->uiView;
         bool presentation = view->getPresentationMode();
         bool hud = view->getHudActive();
 
@@ -585,7 +615,7 @@ namespace mrv
         const ViewerUI* ui, SaveOptions options)
     {
         int ret = 0;
-        Viewport* view = ui->uiView;
+        MyViewport* view = ui->uiView;
         bool presentation = view->getPresentationMode();
         bool hud = view->getHudActive();
 
@@ -630,7 +660,7 @@ namespace mrv
         std::string msg;
 
         int ret = 0;
-        Viewport* view = ui->uiView;
+        MyViewport* view = ui->uiView;
         bool presentation = view->getPresentationMode();
         bool hud = view->getHudActive();
 

@@ -3,22 +3,23 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 set(HEADERS
-  mrvEnvironmentMapOptions.h
-  mrvEnvironmentMapOptionsInline.h
-  mrvFilesPanelOptions.h
-  mrvFilesPanelOptionsInline.h
-  mrvStereo3DOptions.h
-  mrvStereo3DOptionsInline.h
-  mrvUSD.h
-  )
+    mrvEnums.h
+    mrvEnvironmentMapOptions.h
+    mrvEnvironmentMapOptionsInline.h
+    mrvFilesPanelOptions.h
+    mrvFilesPanelOptionsInline.h
+    mrvStereo3DOptions.h
+    mrvStereo3DOptionsInline.h
+    mrvUSD.h
+)
 
 set(SOURCES
-  mrvEnvironmentMapOptions.cpp
-  mrvFilesPanelOptions.cpp
-  mrvStereo3DOptions.cpp
-  mrvUSD.cpp
-  mrvUSDInline.cpp
-  )
+    mrvEnvironmentMapOptions.cpp
+    mrvFilesPanelOptions.cpp
+    mrvStereo3DOptions.cpp
+    mrvUSD.cpp
+    mrvUSDInline.cpp
+)
 
 add_library(mrvOptions ${SOURCES} ${HEADERS})
 

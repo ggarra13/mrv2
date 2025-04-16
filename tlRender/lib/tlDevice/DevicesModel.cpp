@@ -182,7 +182,7 @@ namespace tl
                 data.displayModeIndex = p.displayModeIndex;
             }
 
-            data.pixelTypes.push_back(PixelType::None);
+            data.pixelTypes.push_back(PixelType::kNone);
             if (!p.deviceInfo.empty() && p.deviceIndex >= 1 &&
                 (p.deviceIndex - 1) < p.deviceInfo.size())
             {

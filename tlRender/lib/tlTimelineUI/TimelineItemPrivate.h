@@ -31,7 +31,7 @@ namespace tl
             struct Track
             {
                 int index = 0;
-                TrackType type = TrackType::None;
+                TrackType type = TrackType::kNone;
                 otime::TimeRange timeRange;
                 std::shared_ptr<ui::Label> label;
                 std::shared_ptr<ui::Label> durationLabel;
@@ -62,7 +62,7 @@ namespace tl
             };
             DrawData draw;
 
-            enum class MouseMode { None, CurrentTime, Item };
+            enum class MouseMode { kNone, CurrentTime, Item };
             struct MouseItemData
             {
                 MouseItemData();
@@ -85,7 +85,7 @@ namespace tl
             };
             struct MouseData
             {
-                MouseMode mode = MouseMode::None;
+                MouseMode mode = MouseMode::kNone;
                 std::vector<std::shared_ptr<MouseItemData> > items;
                 std::vector<MouseItemDropTarget> dropTargets;
                 int currentDropTarget = -1;

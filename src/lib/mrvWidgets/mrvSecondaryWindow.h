@@ -6,12 +6,11 @@
 
 #include <mrvFl/mrvTimelinePlayer.h>
 
-class ViewerUI;
+#include "mrvWidgets/mrvBackend.h"
 
 namespace mrv
 {
     class MainWindow;
-    class Viewport;
 
     //! Secondary window.
     class SecondaryWindow
@@ -28,7 +27,7 @@ namespace mrv
         MainWindow* window() const;
 
         //! Get the viewport.
-        Viewport* viewport() const;
+        MyViewport* viewport() const;
 
     private:
         TLRENDER_PRIVATE();

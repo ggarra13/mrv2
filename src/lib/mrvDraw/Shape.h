@@ -15,7 +15,16 @@
 #include <tlTimeline/IRender.h>
 
 #include "mrvDraw/Point.h"
-#include "mrvGL/mrvGLLines.h"
+
+#include "mrvCore/mrvBackend.h"
+
+#ifdef TLRENDER_VK
+#  include "mrvVk/mrvVkLines.h"
+#endif
+
+#ifdef TLRENDER_GL
+#  include "mrvGL/mrvGLLines.h"
+#endif
 
 namespace mrv
 {
@@ -37,9 +46,17 @@ namespace mrv
 
             virtual ~Shape() {};
 
+#ifdef TLRENDER_GL
             virtual void draw(
                 const std::shared_ptr<tl::timeline::IRender>&,
-                const std::shared_ptr<opengl::Lines>&) = 0;
+                const std::shared_ptr<opengl::Lines>&) {};
+#endif
+            
+#ifdef TLRENDER_VK
+            virtual void draw(
+                const std::shared_ptr<tl::timeline::IRender>&,
+                const std::shared_ptr<vulkan::Lines>&) {};
+#endif
 
         public:
             math::Matrix4x4f matrix;
@@ -57,9 +74,17 @@ namespace mrv
                 Shape() {};
             virtual ~PathShape() {};
 
+#ifdef TLRENDER_GL
             virtual void draw(
                 const std::shared_ptr<tl::timeline::IRender>&,
-                const std::shared_ptr<opengl::Lines>&) = 0;
+                const std::shared_ptr<opengl::Lines>&) {};
+#endif
+            
+#ifdef TLRENDER_VK
+            virtual void draw(
+                const std::shared_ptr<tl::timeline::IRender>&,
+                const std::shared_ptr<vulkan::Lines>&) {};
+#endif
 
             PointList pts;
         };
@@ -71,9 +96,6 @@ namespace mrv
                 Shape() {};
             virtual ~NoteShape() {};
 
-            void draw(
-                const std::shared_ptr<tl::timeline::IRender>&,
-                const std::shared_ptr<opengl::Lines>&) override {};
 
         public:
             std::string text;

@@ -21,10 +21,13 @@ if(MRV2_PYBIND11)
     list(APPEND LIBRARIES mrvPy)
 endif()
 
-list(APPEND LIBRARIES
-    mrvApp
-    ${Intl_LIBRARIES}
-    ${FLTK_LIBRARIES})
+list(APPEND LIBRARIES mrvApp)
+
+if(TLRENDER_VK)
+    list(APPEND LIBRARIES ${FLTK_vk_LIBRARY})
+endif()
+
+list(APPEND LIBRARIES ${FLTK_LIBRARIES} ${Intl_LIBRARIES})
 
 
 if( APPLE )
@@ -46,16 +49,19 @@ target_link_directories( mrv2 BEFORE PUBLIC ${CMAKE_INSTALL_PREFIX}/lib /usr/loc
 
 set(PRUNE_SYMBOLS )
 set(EXCLUDE_LIBRARIES )
-if(WIN32)
-    set(PRUNE_SYMBOLS "/OPT:REF" "/OPT:ICF")
-elseif(APPLE)
-    set(PRUNE_SYMBOLS "-Wl,-dead_strip")
-else(UNIX)
-    set(PRUNE_SYMBOLS "-Wl,--gc-sections")
-    set(EXCLUDE_LIBRARIES "-Wl,--exclude-libs=ALL")
-endif()
 
-target_link_options(mrv2 PUBLIC ${EXCLUDE_LIBRARIES} PRIVATE ${PRUNE_SYMBOLS})
+#
+# For Vulkan development we turn off strip symbols
+#
+# if(WIN32)
+#     set(PRUNE_SYMBOLS "/OPT:REF" "/OPT:ICF")
+# elseif(APPLE)
+#     set(PRUNE_SYMBOLS "-Wl,-dead_strip")
+# else(UNIX)
+#     set(PRUNE_SYMBOLS "-Wl,--gc-sections")
+#     set(EXCLUDE_LIBRARIES "-Wl,--exclude-libs=ALL")
+# endif()
+# target_link_options(mrv2 PUBLIC ${EXCLUDE_LIBRARIES} PRIVATE ${PRUNE_SYMBOLS})
 
 install(TARGETS mrv2
     RUNTIME DESTINATION bin COMPONENT applications

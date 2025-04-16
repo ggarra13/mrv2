@@ -110,7 +110,7 @@ namespace tl
             case PixelType::_16BitPA16:
                 out = size * 64 / 8;
                 break;
-            case PixelType::None:
+            case PixelType::kNone:
             case PixelType::Count:
                 break;
             }
@@ -122,7 +122,7 @@ namespace tl
             const std::array<
                 image::PixelType, static_cast<size_t>(PixelType::Count)>
                 data = {
-                    image::PixelType::None,
+                    image::PixelType::kNone,
                     image::PixelType::RGBA_U8, // 8BitBGRA
                     image::PixelType::RGBA_U8, // 8BitYUV
                     image::PixelType::RGB_U16, // 10BitRGB
@@ -169,7 +169,7 @@ namespace tl
             case PixelType::_12BitRGBLE:
                 out = size.w * size.h * 3 * sizeof(uint16_t);
                 break;
-            case PixelType::None:
+            case PixelType::kNone:
                 break;
             case PixelType::Count:
                 break;

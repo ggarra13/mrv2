@@ -361,7 +361,7 @@ namespace tl
 
             switch (imageOptions.alphaBlend)
             {
-            case timeline::AlphaBlend::None:
+            case timeline::AlphaBlend::kNone:
                 glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ONE, GL_ZERO);
                 break;
             case timeline::AlphaBlend::Straight:

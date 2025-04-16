@@ -2,7 +2,7 @@
 // Copyright (c) 2021-2024 Darby Johnston
 // All rights reserved.
 
-#include <tlTimelineGL/RenderPrivate.h>
+#include <tlTimelineVk/RenderPrivate.h>
 
 #include <tlGL/GL.h>
 #include <tlGL/Mesh.h>
@@ -12,7 +12,7 @@
 
 namespace tl
 {
-    namespace timeline_tk
+    namespace timeline_vk
     {
         void Render::drawVideo(
             const std::vector<timeline::VideoData>& videoData,
@@ -196,16 +196,16 @@ namespace tl
                 pts[i].y = sin(rad) * radius + y;
             }
 
-            gl::SetAndRestore stencilTest(GL_STENCIL_TEST, GL_TRUE);
+            // gl::SetAndRestore stencilTest(GL_STENCIL_TEST, GL_TRUE);
 
-            glViewport(
-                p.viewport.x(),
-                p.renderSize.h - p.viewport.h() - p.viewport.y(),
-                p.viewport.w(), p.viewport.h());
-            glClear(GL_STENCIL_BUFFER_BIT);
-            glStencilFunc(GL_ALWAYS, 1, 0xFF);
-            glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-            glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+            // glViewport(
+            //     p.viewport.x(),
+            //     p.renderSize.h - p.viewport.h() - p.viewport.y(),
+            //     p.viewport.w(), p.viewport.h());
+            // glClear(GL_STENCIL_BUFFER_BIT);
+            // glStencilFunc(GL_ALWAYS, 1, 0xFF);
+            // glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+            // glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
             p.shaders["wipe"]->bind();
             p.shaders["wipe"]->setUniform(
                 "color", image::Color4f(1.F, 0.F, 0.F));
@@ -227,12 +227,12 @@ namespace tl
                 if (p.vaos["wipe"])
                 {
                     p.vaos["wipe"]->bind();
-                    p.vaos["wipe"]->draw(
-                        GL_TRIANGLES, 0, p.vbos["wipe"]->getSize());
+                    // p.vaos["wipe"]->draw(
+                    //     GL_TRIANGLES, 0, p.vbos["wipe"]->getSize());
                 }
             }
-            glStencilFunc(GL_EQUAL, 1, 0xFF);
-            glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+            // glStencilFunc(GL_EQUAL, 1, 0xFF);
+            // glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
             if (!videoData.empty() && !boxes.empty())
             {
                 _drawVideo(
@@ -245,13 +245,13 @@ namespace tl
                                             : timeline::DisplayOptions());
             }
 
-            glViewport(
-                p.viewport.x(),
-                p.renderSize.h - p.viewport.h() - p.viewport.y(),
-                p.viewport.w(), p.viewport.h());
-            glClear(GL_STENCIL_BUFFER_BIT);
-            glStencilFunc(GL_ALWAYS, 1, 0xFF);
-            glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+            // glViewport(
+            //     p.viewport.x(),
+            //     p.renderSize.h - p.viewport.h() - p.viewport.y(),
+            //     p.viewport.w(), p.viewport.h());
+            // glClear(GL_STENCIL_BUFFER_BIT);
+            // glStencilFunc(GL_ALWAYS, 1, 0xFF);
+            // glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
             p.shaders["wipe"]->bind();
             p.shaders["wipe"]->setUniform(
                 "color", image::Color4f(0.F, 1.F, 0.F));
@@ -277,8 +277,8 @@ namespace tl
                         GL_TRIANGLES, 0, p.vbos["wipe"]->getSize());
                 }
             }
-            glStencilFunc(GL_EQUAL, 1, 0xFF);
-            glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+            // glStencilFunc(GL_EQUAL, 1, 0xFF);
+            // glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
             if (videoData.size() > 1 && boxes.size() > 1)
             {
                 _drawVideo(
@@ -316,7 +316,7 @@ namespace tl
             {
                 const math::Size2i offscreenBufferSize(
                     boxes[0].w(), boxes[0].h());
-                gl::OffscreenBufferOptions offscreenBufferOptions;
+                vk::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
                 if (!displayOptions.empty())
                 {
@@ -327,20 +327,20 @@ namespace tl
                         p.buffers["overlay"], offscreenBufferSize,
                         offscreenBufferOptions))
                 {
-                    p.buffers["overlay"] = gl::OffscreenBuffer::create(
+                    p.buffers["overlay"] = vk::OffscreenBuffer::create(
                         offscreenBufferSize, offscreenBufferOptions);
                 }
 
                 if (p.buffers["overlay"])
                 {
-                    const gl::SetAndRestore scissorTest(
-                        GL_SCISSOR_TEST, GL_FALSE);
+                    // const gl::SetAndRestore scissorTest(
+                    //     GL_SCISSOR_TEST, GL_FALSE);
 
-                    gl::OffscreenBufferBinding binding(p.buffers["overlay"]);
-                    glViewport(
-                        0, 0, offscreenBufferSize.w, offscreenBufferSize.h);
-                    glClearColor(0.F, 0.F, 0.F, 0.F);
-                    glClear(GL_COLOR_BUFFER_BIT);
+                    // gl::OffscreenBufferBinding binding(p.buffers["overlay"]);
+                    // glViewport(
+                    //     0, 0, offscreenBufferSize.w, offscreenBufferSize.h);
+                    // glClearColor(0.F, 0.F, 0.F, 0.F);
+                    // glClear(GL_COLOR_BUFFER_BIT);
 
                     p.shaders["display"]->bind();
                     p.shaders["display"]->setUniform(
@@ -368,13 +368,13 @@ namespace tl
 
                 if (p.buffers["overlay"])
                 {
-                    glBlendFuncSeparate(
-                        GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
+                    // glBlendFuncSeparate(
+                    //     GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 
-                    glViewport(
-                        p.viewport.x(),
-                        p.renderSize.h - p.viewport.h() - p.viewport.y(),
-                        p.viewport.w(), p.viewport.h());
+                    // glViewport(
+                    //     p.viewport.x(),
+                    //     p.renderSize.h - p.viewport.h() - p.viewport.y(),
+                    //     p.viewport.w(), p.viewport.h());
 
                     p.shaders["overlay"]->bind();
                     p.shaders["overlay"]->setUniform(
@@ -382,9 +382,9 @@ namespace tl
                         image::Color4f(1.F, 1.F, 1.F, compareOptions.overlay));
                     p.shaders["overlay"]->setUniform("textureSampler", 0);
 
-                    glActiveTexture(static_cast<GLenum>(GL_TEXTURE0));
-                    glBindTexture(
-                        GL_TEXTURE_2D, p.buffers["overlay"]->getColorID());
+                    // glActiveTexture(static_cast<GLenum>(GL_TEXTURE0));
+                    // glBindTexture(
+                    //     GL_TEXTURE_2D, p.buffers["overlay"]->getColorID());
 
                     if (p.vbos["video"])
                     {
@@ -395,8 +395,8 @@ namespace tl
                     if (p.vaos["video"])
                     {
                         p.vaos["video"]->bind();
-                        p.vaos["video"]->draw(
-                            GL_TRIANGLES, 0, p.vbos["video"]->getSize());
+                        // p.vaos["video"]->draw(
+                        //     GL_TRIANGLES, 0, p.vbos["video"]->getSize());
                     }
                 }
             }
@@ -414,7 +414,7 @@ namespace tl
             {
                 const math::Size2i offscreenBufferSize(
                     boxes[0].w(), boxes[0].h());
-                gl::OffscreenBufferOptions offscreenBufferOptions;
+                vk::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
                 if (!displayOptions.empty())
                 {
@@ -425,21 +425,21 @@ namespace tl
                         p.buffers["difference0"], offscreenBufferSize,
                         offscreenBufferOptions))
                 {
-                    p.buffers["difference0"] = gl::OffscreenBuffer::create(
+                    p.buffers["difference0"] = vk::OffscreenBuffer::create(
                         offscreenBufferSize, offscreenBufferOptions);
                 }
 
                 if (p.buffers["difference0"])
                 {
-                    const gl::SetAndRestore scissorTest(
-                        GL_SCISSOR_TEST, GL_FALSE);
+                    // const gl::SetAndRestore scissorTest(
+                    //     GL_SCISSOR_TEST, GL_FALSE);
 
-                    gl::OffscreenBufferBinding binding(
-                        p.buffers["difference0"]);
-                    glViewport(
-                        0, 0, offscreenBufferSize.w, offscreenBufferSize.h);
-                    glClearColor(0.F, 0.F, 0.F, 0.F);
-                    glClear(GL_COLOR_BUFFER_BIT);
+                    // gl::OffscreenBufferBinding binding(
+                    //     p.buffers["difference0"]);
+                    // glViewport(
+                    //     0, 0, offscreenBufferSize.w, offscreenBufferSize.h);
+                    // glClearColor(0.F, 0.F, 0.F, 0.F);
+                    // glClear(GL_COLOR_BUFFER_BIT);
 
                     p.shaders["display"]->bind();
                     p.shaders["display"]->setUniform(
@@ -467,7 +467,7 @@ namespace tl
 
                 if (videoData.size() > 1)
                 {
-                    offscreenBufferOptions = gl::OffscreenBufferOptions();
+                    offscreenBufferOptions = vk::OffscreenBufferOptions();
                     offscreenBufferOptions.colorType =
                         p.renderOptions.colorBuffer;
                     if (displayOptions.size() > 1)
@@ -479,21 +479,21 @@ namespace tl
                             p.buffers["difference1"], offscreenBufferSize,
                             offscreenBufferOptions))
                     {
-                        p.buffers["difference1"] = gl::OffscreenBuffer::create(
+                        p.buffers["difference1"] = vk::OffscreenBuffer::create(
                             offscreenBufferSize, offscreenBufferOptions);
                     }
 
                     if (p.buffers["difference1"])
                     {
-                        const gl::SetAndRestore scissorTest(
-                            GL_SCISSOR_TEST, GL_FALSE);
+                        // const gl::SetAndRestore scissorTest(
+                        //     GL_SCISSOR_TEST, GL_FALSE);
 
-                        gl::OffscreenBufferBinding binding(
-                            p.buffers["difference1"]);
-                        glViewport(
-                            0, 0, offscreenBufferSize.w, offscreenBufferSize.h);
-                        glClearColor(0.F, 0.F, 0.F, 0.F);
-                        glClear(GL_COLOR_BUFFER_BIT);
+                        // gl::OffscreenBufferBinding binding(
+                        //     p.buffers["difference1"]);
+                        // glViewport(
+                        //     0, 0, offscreenBufferSize.w, offscreenBufferSize.h);
+                        // glClearColor(0.F, 0.F, 0.F, 0.F);
+                        // glClear(GL_COLOR_BUFFER_BIT);
 
                         p.shaders["display"]->bind();
                         p.shaders["display"]->setUniform(
@@ -524,25 +524,25 @@ namespace tl
 
                 if (p.buffers["difference0"] && p.buffers["difference1"])
                 {
-                    glBlendFuncSeparate(
-                        GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
+                    // glBlendFuncSeparate(
+                    //     GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 
-                    glViewport(
-                        p.viewport.x(),
-                        p.renderSize.h - p.viewport.h() - p.viewport.y(),
-                        p.viewport.w(), p.viewport.h());
+                    // glViewport(
+                    //     p.viewport.x(),
+                    //     p.renderSize.h - p.viewport.h() - p.viewport.y(),
+                    //     p.viewport.w(), p.viewport.h());
 
                     p.shaders["difference"]->bind();
                     p.shaders["difference"]->setUniform("textureSampler", 0);
                     p.shaders["difference"]->setUniform("textureSamplerB", 1);
 
-                    glActiveTexture(static_cast<GLenum>(GL_TEXTURE0));
-                    glBindTexture(
-                        GL_TEXTURE_2D, p.buffers["difference0"]->getColorID());
+                    // glActiveTexture(static_cast<GLenum>(GL_TEXTURE0));
+                    // glBindTexture(
+                    //     GL_TEXTURE_2D, p.buffers["difference0"]->getColorID());
 
-                    glActiveTexture(static_cast<GLenum>(GL_TEXTURE1));
-                    glBindTexture(
-                        GL_TEXTURE_2D, p.buffers["difference1"]->getColorID());
+                    // glActiveTexture(static_cast<GLenum>(GL_TEXTURE1));
+                    // glBindTexture(
+                    //     GL_TEXTURE_2D, p.buffers["difference1"]->getColorID());
 
                     if (p.vbos["video"])
                     {
@@ -619,8 +619,8 @@ namespace tl
         {
             TLRENDER_P();
 
-            GLint viewportPrev[4] = {0, 0, 0, 0};
-            glGetIntegerv(GL_VIEWPORT, viewportPrev);
+            // GLint viewportPrev[4] = {0, 0, 0, 0};
+            // glGetIntegerv(GL_VIEWPORT, viewportPrev);
 
             const auto transform = math::ortho(
                 0.F, static_cast<float>(box.w()), static_cast<float>(box.h()),
@@ -629,25 +629,25 @@ namespace tl
             p.shaders["image"]->setUniform("transform.mvp", transform);
 
             const math::Size2i& offscreenBufferSize = box.getSize();
-            gl::OffscreenBufferOptions offscreenBufferOptions;
+            vk::OffscreenBufferOptions offscreenBufferOptions;
             offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
             offscreenBufferOptions.colorFilters = displayOptions.imageFilters;
             if (doCreate(
                     p.buffers["video"], offscreenBufferSize,
                     offscreenBufferOptions))
             {
-                p.buffers["video"] = gl::OffscreenBuffer::create(
+                p.buffers["video"] = vk::OffscreenBuffer::create(
                     offscreenBufferSize, offscreenBufferOptions);
             }
 
             if (p.buffers["video"])
             {
-                const gl::SetAndRestore scissorTest(GL_SCISSOR_TEST, GL_FALSE);
+                // const gl::SetAndRestore scissorTest(GL_SCISSOR_TEST, GL_FALSE);
 
-                gl::OffscreenBufferBinding binding(p.buffers["video"]);
-                glViewport(0, 0, offscreenBufferSize.w, offscreenBufferSize.h);
-                glClearColor(0.F, 0.F, 0.F, 0.F);
-                glClear(GL_COLOR_BUFFER_BIT);
+                // gl::OffscreenBufferBinding binding(p.buffers["video"]);
+                // glViewport(0, 0, offscreenBufferSize.w, offscreenBufferSize.h);
+                // glClearColor(0.F, 0.F, 0.F, 0.F);
+                // glClear(GL_COLOR_BUFFER_BIT);
 
                 for (const auto& layer : videoData.layers)
                 {
@@ -661,29 +661,29 @@ namespace tl
                                     p.buffers["dissolve"], offscreenBufferSize,
                                     offscreenBufferOptions))
                             {
-                                p.buffers["dissolve"] =
-                                    gl::OffscreenBuffer::create(
-                                        offscreenBufferSize,
-                                        offscreenBufferOptions);
+                                // p.buffers["dissolve"] =
+                                //     gl::OffscreenBuffer::create(
+                                //         offscreenBufferSize,
+                                //         offscreenBufferOptions);
                             }
                             if (doCreate(
                                     p.buffers["dissolve2"], offscreenBufferSize,
                                     offscreenBufferOptions))
                             {
-                                p.buffers["dissolve2"] =
-                                    gl::OffscreenBuffer::create(
-                                        offscreenBufferSize,
-                                        offscreenBufferOptions);
+                                // p.buffers["dissolve2"] =
+                                //     gl::OffscreenBuffer::create(
+                                //         offscreenBufferSize,
+                                //         offscreenBufferOptions);
                             }
                             if (p.buffers["dissolve"])
                             {
-                                gl::OffscreenBufferBinding binding(
-                                    p.buffers["dissolve"]);
-                                glViewport(
-                                    0, 0, offscreenBufferSize.w,
-                                    offscreenBufferSize.h);
-                                glClearColor(0.F, 0.F, 0.F, 0.F);
-                                glClear(GL_COLOR_BUFFER_BIT);
+                                // gl::OffscreenBufferBinding binding(
+                                //     p.buffers["dissolve"]);
+                                // glViewport(
+                                //     0, 0, offscreenBufferSize.w,
+                                //     offscreenBufferSize.h);
+                                // glClearColor(0.F, 0.F, 0.F, 0.F);
+                                // glClear(GL_COLOR_BUFFER_BIT);
                                 float v = 1.F - layer.transitionValue;
                                 auto dissolveImageOptions =
                                     imageOptions.get() ? *imageOptions
@@ -702,13 +702,13 @@ namespace tl
                             }
                             if (p.buffers["dissolve2"])
                             {
-                                gl::OffscreenBufferBinding binding(
-                                    p.buffers["dissolve2"]);
-                                glViewport(
-                                    0, 0, offscreenBufferSize.w,
-                                    offscreenBufferSize.h);
-                                glClearColor(0.F, 0.F, 0.F, 0.F);
-                                glClear(GL_COLOR_BUFFER_BIT);
+                                // gl::OffscreenBufferBinding binding(
+                                //     p.buffers["dissolve2"]);
+                                // glViewport(
+                                //     0, 0, offscreenBufferSize.w,
+                                //     offscreenBufferSize.h);
+                                // glClearColor(0.F, 0.F, 0.F, 0.F);
+                                // glClear(GL_COLOR_BUFFER_BIT);
                                 float v = layer.transitionValue;
                                 auto dissolveImageOptions =
                                     imageOptions.get() ? *imageOptions
@@ -727,9 +727,9 @@ namespace tl
                             }
                             if (p.buffers["dissolve"] && p.buffers["dissolve2"])
                             {
-                                glBlendFuncSeparate(
-                                    GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
-                                    GL_ONE);
+                                // glBlendFuncSeparate(
+                                //     GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
+                                //     GL_ONE);
 
                                 p.shaders["dissolve"]->bind();
                                 p.shaders["dissolve"]->setUniform(
@@ -739,11 +739,11 @@ namespace tl
                                 p.shaders["dissolve"]->setUniform(
                                     "textureSampler", 0);
 
-                                glActiveTexture(
-                                    static_cast<GLenum>(GL_TEXTURE0));
-                                glBindTexture(
-                                    GL_TEXTURE_2D,
-                                    p.buffers["dissolve"]->getColorID());
+                                // glActiveTexture(
+                                //     static_cast<GLenum>(GL_TEXTURE0));
+                                // glBindTexture(
+                                //     GL_TEXTURE_2D,
+                                //     p.buffers["dissolve"]->getColorID());
                                 if (p.vbos["video"])
                                 {
                                     p.vbos["video"]->copy(convert(
@@ -762,9 +762,9 @@ namespace tl
                                         p.vbos["video"]->getSize());
                                 }
 
-                                glBindTexture(
-                                    GL_TEXTURE_2D,
-                                    p.buffers["dissolve2"]->getColorID());
+                                // glBindTexture(
+                                //     GL_TEXTURE_2D,
+                                //     p.buffers["dissolve2"]->getColorID());
                                 if (p.vbos["video"])
                                 {
                                     p.vbos["video"]->copy(convert(
@@ -835,13 +835,13 @@ namespace tl
 
             if (p.buffers["video"])
             {
-                glBlendFuncSeparate(
-                    GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
-                    GL_ONE_MINUS_SRC_ALPHA);
+                // glBlendFuncSeparate(
+                //     GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
+                //     GL_ONE_MINUS_SRC_ALPHA);
 
-                glViewport(
-                    viewportPrev[0], viewportPrev[1], viewportPrev[2],
-                    viewportPrev[3]);
+                // glViewport(
+                //     viewportPrev[0], viewportPrev[1], viewportPrev[2],
+                //     viewportPrev[3]);
 
                 p.shaders["display"]->bind();
                 p.shaders["display"]->setUniform("textureSampler", 0);
@@ -924,18 +924,18 @@ namespace tl
                 p.shaders["display"]->setUniform(
                     "invalidValues", displayOptions.invalidValues);
 
-                glActiveTexture(static_cast<GLenum>(GL_TEXTURE0));
-                glBindTexture(GL_TEXTURE_2D, p.buffers["video"]->getColorID());
+                // glActiveTexture(static_cast<GLenum>(GL_TEXTURE0));
+                // glBindTexture(GL_TEXTURE_2D, p.buffers["video"]->getColorID());
                 size_t texturesOffset = 1;
 #if defined(TLRENDER_OCIO)
                 if (p.ocioData)
                 {
                     for (size_t i = 0; i < p.ocioData->textures.size(); ++i)
                     {
-                        glActiveTexture(GL_TEXTURE0 + texturesOffset + i);
-                        glBindTexture(
-                            p.ocioData->textures[i].type,
-                            p.ocioData->textures[i].id);
+                        // glActiveTexture(GL_TEXTURE0 + texturesOffset + i);
+                        // glBindTexture(
+                        //     p.ocioData->textures[i].type,
+                        //     p.ocioData->textures[i].id);
                     }
                     texturesOffset += p.ocioData->textures.size();
                 }
@@ -943,10 +943,10 @@ namespace tl
                 {
                     for (size_t i = 0; i < p.lutData->textures.size(); ++i)
                     {
-                        glActiveTexture(GL_TEXTURE0 + texturesOffset + i);
-                        glBindTexture(
-                            p.lutData->textures[i].type,
-                            p.lutData->textures[i].id);
+                        // glActiveTexture(GL_TEXTURE0 + texturesOffset + i);
+                        // glBindTexture(
+                        //     p.lutData->textures[i].type,
+                        //     p.lutData->textures[i].id);
                     }
                     texturesOffset += p.lutData->textures.size();
                 }
@@ -956,10 +956,10 @@ namespace tl
                 {
                     for (size_t i = 0; i < p.placeboData->textures.size(); ++i)
                     {
-                        glActiveTexture(GL_TEXTURE0 + texturesOffset + i);
-                        glBindTexture(
-                            p.placeboData->textures[i].type,
-                            p.placeboData->textures[i].id);
+                        // glActiveTexture(GL_TEXTURE0 + texturesOffset + i);
+                        // glBindTexture(
+                        //     p.placeboData->textures[i].type,
+                        //     p.placeboData->textures[i].id);
                     }
                     texturesOffset += p.ocioData->textures.size();
                 }
@@ -973,8 +973,8 @@ namespace tl
                 if (p.vaos["video"])
                 {
                     p.vaos["video"]->bind();
-                    p.vaos["video"]->draw(
-                        GL_TRIANGLES, 0, p.vbos["video"]->getSize());
+                    // p.vaos["video"]->draw(
+                    //     GL_TRIANGLES, 0, p.vbos["video"]->getSize());
                 }
             }
 

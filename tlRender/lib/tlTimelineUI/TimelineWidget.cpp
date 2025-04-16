@@ -48,10 +48,10 @@ namespace tl
             std::function<void(const std::vector<timeline::MoveData>&)>
                 moveCallback;
 
-            enum class MouseMode { None, Scroll };
+            enum class MouseMode { kNone, Scroll };
             struct MouseData
             {
-                MouseMode mode = MouseMode::None;
+                MouseMode mode = MouseMode::kNone;
                 math::Vector2i scrollPos;
                 std::chrono::steady_clock::time_point wheelTimer;
             };
@@ -93,7 +93,7 @@ namespace tl
 
             p.window = gl::GLFWWindow::create(
                 "tl::timelineui::TimelineWidget", math::Size2i(1, 1), context,
-                static_cast<int>(gl::GLFWWindowOptions::None));
+                static_cast<int>(gl::GLFWWindowOptions::kNone));
 
             p.scrollWidget = ui::ScrollWidget::create(
                 context, ui::ScrollType::Both, shared_from_this());
@@ -500,7 +500,7 @@ namespace tl
             }
             else
             {
-                p.mouse.mode = Private::MouseMode::None;
+                p.mouse.mode = Private::MouseMode::kNone;
             }
         }
 
@@ -508,7 +508,7 @@ namespace tl
         {
             IWidget::mouseReleaseEvent(event);
             TLRENDER_P();
-            p.mouse.mode = Private::MouseMode::None;
+            p.mouse.mode = Private::MouseMode::kNone;
         }
 
         void TimelineWidget::scrollEvent(ui::ScrollEvent& event)
@@ -568,7 +568,7 @@ namespace tl
         {
             IWidget::_releaseMouse();
             TLRENDER_P();
-            p.mouse.mode = Private::MouseMode::None;
+            p.mouse.mode = Private::MouseMode::kNone;
         }
 
         void TimelineWidget::_setViewZoom(
@@ -691,7 +691,7 @@ namespace tl
         {
             TLRENDER_P();
             if (p.timelineItem && p.scrollToCurrentFrame->get() &&
-                !p.scrub->get() && Private::MouseMode::None == p.mouse.mode)
+                !p.scrub->get() && Private::MouseMode::kNone == p.mouse.mode)
             {
                 const int pos = p.timelineItem->timeToPos(p.currentTime);
                 const math::Box2i vp = p.scrollWidget->getViewport();

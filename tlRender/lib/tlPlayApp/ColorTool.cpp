@@ -90,7 +90,7 @@ namespace tl
             p.fileEdit->setParent(gridLayout);
             gridLayout->setGridPos(p.fileEdit, 1, 1);
             auto vLayout = ui::VerticalLayout::create(context, p.layout);
-            vLayout->setSpacingRole(ui::SizeRole::None);
+            vLayout->setSpacingRole(ui::SizeRole::kNone);
             p.tabBar->setParent(vLayout);
             p.tabLayout = ui::StackLayout::create(context, vLayout);
             for (const auto& tab : tabs)
@@ -1009,7 +1009,7 @@ namespace tl
             p.softClipWidget = SoftClipWidget::create(app, context);
 
             auto layout = ui::VerticalLayout::create(context);
-            layout->setSpacingRole(ui::SizeRole::None);
+            layout->setSpacingRole(ui::SizeRole::kNone);
             p.bellows["OCIO"] = ui::Bellows::create("OCIO", context);
             p.bellows["OCIO"]->setParent(layout);
             p.bellows["OCIO"]->setWidget(p.ocioWidget);

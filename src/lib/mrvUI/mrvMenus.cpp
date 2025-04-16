@@ -181,8 +181,8 @@ namespace mrv
             _("Window/Presentation"), kTogglePresentation.hotkey(),
             (Fl_Callback*)toggle_presentation_cb, ui, FL_MENU_TOGGLE);
 
-        const Viewport* uiView = ui->uiView;
-        const Viewport* uiView2 = nullptr;
+        const MyViewport* uiView = ui->uiView;
+        const MyViewport* uiView2 = nullptr;
         if (ui->uiSecondary && ui->uiSecondary->window()->visible())
             uiView2 = ui->uiSecondary->viewport();
 
@@ -733,7 +733,7 @@ namespace mrv
                 _("Render/Alpha Blend/None"), kAlphaBlendNone.hotkey(),
                 (Fl_Callback*)alpha_blend_none_cb, ui, mode);
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-            if (imageOptions.alphaBlend == timeline::AlphaBlend::None)
+            if (imageOptions.alphaBlend == timeline::AlphaBlend::kNone)
                 item->set();
 
             idx = menu->add(

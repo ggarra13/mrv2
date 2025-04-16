@@ -39,7 +39,7 @@ namespace tl
             }
             switch (item.type)
             {
-            case Type::Status:
+            case Type::kStatus:
             case Type::Message:
                 ss << item.message;
                 break;

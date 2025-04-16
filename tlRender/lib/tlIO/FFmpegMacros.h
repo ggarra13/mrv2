@@ -24,5 +24,5 @@
     if (auto logSystem = _logSystem.lock())                                    \
     {                                                                          \
         logSystem->print(                                                      \
-            "tl::io::ffmpeg::Plugin", x, log::Type::Status, kModule);          \
+            "tl::io::ffmpeg::Plugin", x, log::Type::kStatus, kModule);          \
     }

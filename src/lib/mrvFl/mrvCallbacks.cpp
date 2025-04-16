@@ -1329,7 +1329,7 @@ namespace mrv
 
     void toggle_presentation_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        Viewport* view = ui->uiView;
+        MyViewport* view = ui->uiView;
         bool presentation = view->getPresentationMode();
         view->setPresentationMode(!presentation);
 
@@ -1360,7 +1360,7 @@ namespace mrv
     void toggle_secondary_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         MainWindow* window;
-        Viewport* view;
+        MyViewport* view;
 
         if (ui->uiSecondary)
         {
@@ -1772,7 +1772,7 @@ namespace mrv
     {
         if (!hudClass)
         {
-            Viewport* view = ui->uiView;
+            MyViewport* view = ui->uiView;
             Fl_Group::current(view);
             hudClass = new HUDUI(view);
         }
@@ -1921,7 +1921,7 @@ namespace mrv
     {
         if (!OCIOPresetsClass)
         {
-            Viewport* view = ui->uiView;
+            MyViewport* view = ui->uiView;
             Fl_Group::current(view);
             OCIOPresetsClass = new OCIOPresetsUI();
         }
@@ -2090,7 +2090,7 @@ namespace mrv
     {
         App* app = ui->app;
         timeline::ImageOptions o = app->imageOptions();
-        o.alphaBlend = timeline::AlphaBlend::None;
+        o.alphaBlend = timeline::AlphaBlend::kNone;
         app->setImageOptions(o);
     }
 
@@ -2849,7 +2849,7 @@ namespace mrv
 
     void clear_note_annotation_cb(ViewerUI* ui)
     {
-        Viewport* view = ui->uiView;
+        MyViewport* view = ui->uiView;
         if (!view)
             return;
         auto player = view->getTimelinePlayer();
@@ -2879,7 +2879,7 @@ namespace mrv
 
     void add_note_annotation_cb(ViewerUI* ui, const std::string& text)
     {
-        Viewport* view = ui->uiView;
+        MyViewport* view = ui->uiView;
         if (!view)
             return;
         auto player = view->getTimelinePlayer();

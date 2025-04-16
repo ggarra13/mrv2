@@ -134,7 +134,7 @@ namespace mrv
     mrvLOG_INFO(                                                               \
         kModule, __FUNCTION__ << "(" << __LINE__ << ") " << msg << std::endl)
 
-#if defined(NDEBUG)
+#if 1 //defined(NDEBUG)
 // #    define DBGM3(msg)
 // #    define DBGM2(msg)
 // #    define DBGM1(msg)

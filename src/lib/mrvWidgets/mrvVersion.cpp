@@ -25,8 +25,6 @@
 #    include <string.h>
 
 #    include <FL/platform.H>
-#    undef Status
-#    undef None
 
 #endif
 

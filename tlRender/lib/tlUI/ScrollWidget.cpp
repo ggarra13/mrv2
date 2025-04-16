@@ -58,7 +58,7 @@ namespace tl
             }
 
             p.layout = GridLayout::create(context, shared_from_this());
-            p.layout->setSpacingRole(SizeRole::None);
+            p.layout->setSpacingRole(SizeRole::kNone);
             p.layout->setStretch(Stretch::Expanding);
             p.scrollArea->setParent(p.layout);
             p.layout->setGridPos(p.scrollArea, 0, 0);

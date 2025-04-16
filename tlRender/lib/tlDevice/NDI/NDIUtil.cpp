@@ -90,7 +90,7 @@ namespace tl
 
         device::PixelType fromNDI(NDIlib_FourCC_video_type_e value)
         {
-            device::PixelType out = device::PixelType::None;
+            device::PixelType out = device::PixelType::kNone;
             switch (value)
             {
             case NDIlib_FourCC_video_type_BGRA:
@@ -138,7 +138,7 @@ namespace tl
 
         device::PixelType getOutputType(device::PixelType value)
         {
-            device::PixelType out = device::PixelType::None;
+            device::PixelType out = device::PixelType::kNone;
             switch (value)
             {
             case device::PixelType::_8BitBGRA:
@@ -163,7 +163,7 @@ namespace tl
             case device::PixelType::_10BitRGBXLE:
             case device::PixelType::_12BitRGB:
             case device::PixelType::_12BitRGBLE:
-            case device::PixelType::None:
+            case device::PixelType::kNone:
             case device::PixelType::Count:
                 throw std::runtime_error(
                     "getOutputType device::PixelType unsupported");

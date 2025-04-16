@@ -181,7 +181,7 @@ namespace tl
                                                 : image::Size())
                     .arg(
                         !p.ioInfo.video.empty() ? p.ioInfo.video[0].pixelType
-                                                : image::PixelType::None)
+                                                : image::PixelType::kNone)
                     .arg(p.ioInfo.audio.channelCount)
                     .arg(p.ioInfo.audio.dataType)
                     .arg(p.ioInfo.audio.sampleRate));

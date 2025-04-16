@@ -225,7 +225,7 @@ namespace tl
                 const audio::DataType fileDataType =
                     toAudioType(static_cast<AVSampleFormat>(
                         _avCodecParameters[_avStream]->format));
-                if (audio::DataType::None == fileDataType)
+                if (audio::DataType::kNone == fileDataType)
                 {
                     throw std::runtime_error(
                         string::Format("{0}: Unsupported audio format")

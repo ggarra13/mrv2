@@ -27,8 +27,6 @@
 
 #include "mrViewer.h"
 
-#include <FL/platform.H>
-
 namespace
 {
     const char* kModule = "filebutton";

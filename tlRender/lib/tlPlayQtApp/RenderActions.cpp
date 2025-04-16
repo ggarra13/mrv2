@@ -64,7 +64,7 @@ namespace tl
             p.actions["AlphaBlend/None"] = new QAction(this);
             p.actions["AlphaBlend/None"]->setData(
                 QVariant::fromValue<timeline::AlphaBlend>(
-                    timeline::AlphaBlend::None));
+                    timeline::AlphaBlend::kNone));
             p.actions["AlphaBlend/None"]->setCheckable(true);
             p.actions["AlphaBlend/None"]->setText(tr("None"));
             p.actions["AlphaBlend/Straight"] = new QAction(this);

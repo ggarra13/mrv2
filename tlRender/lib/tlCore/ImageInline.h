@@ -122,7 +122,7 @@ namespace tl
 
         inline bool Info::isValid() const
         {
-            return size.isValid() && pixelType != PixelType::None;
+            return size.isValid() && pixelType != PixelType::kNone;
         }
 
         inline bool Info::operator==(const Info& other) const

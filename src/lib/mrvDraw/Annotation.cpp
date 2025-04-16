@@ -4,10 +4,6 @@
 
 #include <algorithm>
 
-#ifdef TLRENDER_GL
-#    include "mrvGL/mrvGLUtil.h"
-#endif
-
 #include "Annotation.h"
 
 namespace mrv

@@ -241,7 +241,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        Viewport* view = p.ui->uiView;
+        MyViewport* view = p.ui->uiView;
         view->setLUTOptions(p.lutOptions);
         view->setDisplayOptions({p.displayOptions});
         view->updateDisplayOptions();
@@ -275,7 +275,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        Viewport* view = p.ui->uiView;
+        MyViewport* view = p.ui->uiView;
         view->setCompareOptions(p.compareOptions);
         if (p.ui->uiSecondary)
         {
@@ -427,7 +427,7 @@ namespace mrv
             c->uiVolume->redraw();
         }
 
-        Viewport* view = p.ui->uiView;
+        MyViewport* view = p.ui->uiView;
         view->setCompareOptions(p.compareOptions);
 
         p.ocioOptions = view->getOCIOOptions();

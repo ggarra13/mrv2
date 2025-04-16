@@ -221,12 +221,11 @@ namespace tl
 
         unsigned int getTextureFilter(timeline::ImageFilter value)
         {
-            return 0;
-            // const std::array<
-            //     GLenum,
-            //     static_cast<std::size_t>(timeline::ImageFilter::Count)> data
-            //     = {GL_NEAREST, GL_LINEAR};
-            // return data[static_cast<std::size_t>(value)];
+            const std::array<
+                VkFilter,
+                static_cast<std::size_t>(timeline::ImageFilter::Count)> data
+                = {VK_FILTER_NEAREST, VK_FILTER_LINEAR};
+            return data[static_cast<std::size_t>(value)];
         }
 
         struct Texture::Private

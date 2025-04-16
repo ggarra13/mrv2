@@ -168,7 +168,7 @@ namespace tl
                     _info.size.h = _header.height;
                     _info.pixelType = image::getIntType(
                         _header.channels, 1 == _header.bytes ? 8 : 16);
-                    if (image::PixelType::None == _info.pixelType)
+                    if (image::PixelType::kNone == _info.pixelType)
                     {
                         throw std::runtime_error(
                             string::Format("{0}: {1}")

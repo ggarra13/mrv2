@@ -55,7 +55,7 @@ namespace tl
             setCheckable(true);
             setHStretch(ui::Stretch::Expanding);
             setAcceptsKeyFocus(true);
-            _buttonRole = ui::ColorRole::None;
+            _buttonRole = ui::ColorRole::kNone;
             p.item = item;
         }
 

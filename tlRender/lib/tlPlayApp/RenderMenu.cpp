@@ -76,7 +76,7 @@ namespace tl
 
                         _p->menus["AlphaBlend"]->setItemChecked(
                             _p->actions["AlphaBlendNone"],
-                            timeline::AlphaBlend::None == value.alphaBlend);
+                            timeline::AlphaBlend::kNone == value.alphaBlend);
                         _p->menus["AlphaBlend"]->setItemChecked(
                             _p->actions["AlphaBlendStraight"],
                             timeline::AlphaBlend::Straight == value.alphaBlend);

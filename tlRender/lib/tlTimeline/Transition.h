@@ -17,11 +17,11 @@ namespace tl
     {
         //! Transitions.
         enum class Transition {
-            None,
+            kNone,
             Dissolve,
 
             Count,
-            First = None
+            First = kNone
         };
         TLRENDER_ENUM(Transition);
         TLRENDER_ENUM_SERIALIZE(Transition);

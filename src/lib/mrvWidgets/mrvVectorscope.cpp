@@ -66,7 +66,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        Viewport* view = p.ui->uiView;
+        MyViewport* view = p.ui->uiView;
         const auto& newRenderSize = view->getRenderSize();
         const image::Color4f* viewImage = view->image();
         p.box = info.box;
