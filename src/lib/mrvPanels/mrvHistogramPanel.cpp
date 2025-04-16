@@ -4,10 +4,10 @@
 
 #include "FL/Fl_Choice.H"
 
+#include "mrvCore/mrvColorAreaInfo.h"
+
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvHistogram.h"
-
-#include "mrvFl/mrvColorAreaInfo.h"
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 #include "mrvPanels/mrvHistogramPanel.h"

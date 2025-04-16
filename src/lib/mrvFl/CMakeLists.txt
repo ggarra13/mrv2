@@ -4,7 +4,6 @@
 
 set(HEADERS
     mrvCallbacks.h
-    mrvColorAreaInfo.h
     mrvColorSchemes.h
     mrvContextObject.h
     mrvFileRequester.h

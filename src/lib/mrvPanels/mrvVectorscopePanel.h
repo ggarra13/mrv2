@@ -4,9 +4,9 @@
 
 #pragma once
 
-#include "mrvPanelWidget.h"
+#include "mrvCore/mrvColorAreaInfo.h"
 
-#include "mrvFl/mrvColorAreaInfo.h"
+#include "mrvPanelWidget.h"
 
 namespace mrv
 {

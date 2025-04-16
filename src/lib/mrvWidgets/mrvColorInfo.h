@@ -7,16 +7,13 @@
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Box.H>
 
-#include "mrvBrowser.h"
-#include "mrvPopupMenu.h"
+#include "mrvCore/mrvColorAreaInfo.h"
+
+#include "mrvWidgets/mrvBrowser.h"
+#include "mrvWidgets/mrvPopupMenu.h"
 
 namespace mrv
 {
-    namespace area
-    {
-        class Info;
-    }
-
     class ColorWidget;
     class ColorBrowser;
 

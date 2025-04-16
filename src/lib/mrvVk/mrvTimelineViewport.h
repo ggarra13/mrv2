@@ -5,9 +5,8 @@
 #pragma once
 
 #include "mrvCore/mrvActionMode.h"
+#include "mrvCore/mrvColorAreaInfo.h"
 #include "mrvCore/mrvString.h"
-
-#include "mrvFl/mrvColorAreaInfo.h"
 
 #include "mrvOptions/mrvStereo3DOptions.h"
 #include "mrvOptions/mrvEnvironmentMapOptions.h"
