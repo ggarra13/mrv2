@@ -427,16 +427,44 @@ namespace mrv
         void VkWindow::draw() {
             if (!shown() || w() <= 0 || h() <= 0) return;
 
-            // Draw the shape
-            VkDeviceSize offsets[1] = {0};
-            vkCmdBindVertexBuffers(m_draw_cmd, 0, 1,
-                                   &m_mesh.buf, offsets);
+            VkCommandBuffer cmd = getCurrentCommandBuffer();
+            if (!m_swapchain || !cmd || !isFrameActive()) {
+                return;
+            }
 
-            vkCmdDraw(m_draw_cmd, sides * 3, 1, 0, 0);
+
+            vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline);
+
+            VkViewport viewport = {};
+            viewport.width = static_cast<float>(w());
+            viewport.height = static_cast<float>(h());
+            viewport.minDepth = 0.0f;
+            viewport.maxDepth = 1.0f;
+            vkCmdSetViewport(cmd, 0, 1, &viewport);
+            
+            VkRect2D scissor = {};
+            scissor.extent.width = w();
+            scissor.extent.height = h();
+            vkCmdSetScissor(cmd, 0, 1, &scissor);
+
+            VkDeviceSize offsets[1] = {0};
+            vkCmdBindVertexBuffers(cmd, 0, 1, &m_mesh.buf, offsets);
+            vkCmdDraw(cmd, 3 * sides, 1, 0, 0); // Draw shape
+            
+            vkCmdEndRenderPass(cmd);
         }
 
         void VkWindow::destroy_resources() {
             m_mesh.destroy(device());
+            
+            if (m_pipeline != VK_NULL_HANDLE) {
+                vkDestroyPipeline(device(), m_pipeline, nullptr);
+                m_pipeline = VK_NULL_HANDLE;
+            }
+            if (m_pipeline_layout != VK_NULL_HANDLE) {
+                vkDestroyPipelineLayout(device(), m_pipeline_layout, nullptr);
+                m_pipeline_layout = VK_NULL_HANDLE;
+            }
 
             Fl_Vk_Window::destroy_resources();
         }
