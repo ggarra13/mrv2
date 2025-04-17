@@ -71,10 +71,20 @@ namespace mrv
         VkShaderModule m_frag_shader_module;
 
         //! This is for holding a mesh
-        Fl_Vk_Mesh m_vertices;
+        Fl_Vk_Mesh m_mesh;
         std::vector<Fl_Vk_Texture> m_textures;
 
-        void init_vk_swapchain() FL_OVERRIDE;
+        //! Memory for descriptor sets
+        VkDescriptorPool      m_desc_pool;
+
+        //! Describe texture bindings whithin desc. set  
+        VkDescriptorSetLayout m_desc_layout;
+        
+        //! Actual data bound to shaders like texture or
+        //! uniform buffers
+        VkDescriptorSet       m_desc_set; 
+
+        void init_colorspace() FL_OVERRIDE;
 
         void prepare_main_texture();
         void prepare_shader();

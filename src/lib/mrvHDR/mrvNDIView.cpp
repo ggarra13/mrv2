@@ -482,11 +482,11 @@ namespace mrv
         _init();
     }
 
-    void NDIView::init_vk_swapchain()
+    void NDIView::init_colorspace()
     {
         TLRENDER_P();
 
-        Fl_Vk_Window::init_vk_swapchain();
+        Fl_Vk_Window::init_colorspace();
 
         // Look for HDR10 or HLG if present
         p.hdrMonitorFound = false;
@@ -676,9 +676,8 @@ namespace mrv
 
         m_textures.resize(1);
 
-        if ((props.linearTilingFeatures &
-             VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT) &&
-            !m_use_staging_buffer)
+        if (props.linearTilingFeatures &
+            VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT)
         {
             uint32_t tex_width = 1, tex_height = 1;
             if (p.image)
@@ -711,11 +710,6 @@ namespace mrv
                 VK_PIPELINE_STAGE_HOST_BIT, // Host stage
                 VK_ACCESS_SHADER_READ_BIT,  // Shader read
                 VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
-        }
-        else if (
-            props.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT)
-        {
-            Fl::fatal("m_use_staging_buffer is unimplemented");
         }
         else
         {
@@ -799,12 +793,12 @@ namespace mrv
         bool pass;
         void* data;
 
-        memset(&m_vertices, 0, sizeof(m_vertices));
+        memset(&m_mesh, 0, sizeof(m_mesh));
 
-        result = vkCreateBuffer(device(), &buf_info, NULL, &m_vertices.buf);
+        result = vkCreateBuffer(device(), &buf_info, NULL, &m_mesh.buf);
         VK_CHECK(result);
 
-        vkGetBufferMemoryRequirements(device(), m_vertices.buf, &mem_reqs);
+        vkGetBufferMemoryRequirements(device(), m_mesh.buf, &mem_reqs);
         VK_CHECK(result);
 
         mem_alloc.allocationSize = mem_reqs.size;
@@ -816,42 +810,42 @@ namespace mrv
             &mem_alloc.memoryTypeIndex);
 
         result =
-            vkAllocateMemory(device(), &mem_alloc, NULL, &m_vertices.mem);
+            vkAllocateMemory(device(), &mem_alloc, NULL, &m_mesh.mem);
         VK_CHECK(result);
 
         result = vkMapMemory(
-            device(), m_vertices.mem, 0, mem_alloc.allocationSize, 0, &data);
+            device(), m_mesh.mem, 0, mem_alloc.allocationSize, 0, &data);
         VK_CHECK(result);
 
         std::memcpy(data, vertices.data(), static_cast<size_t>(buffer_size));
 
-        vkUnmapMemory(device(), m_vertices.mem);
+        vkUnmapMemory(device(), m_mesh.mem);
 
         result =
-            vkBindBufferMemory(device(), m_vertices.buf, m_vertices.mem, 0);
+            vkBindBufferMemory(device(), m_mesh.buf, m_mesh.mem, 0);
         VK_CHECK(result);
 
-        m_vertices.vi.sType =
+        m_mesh.vi.sType =
             VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-        m_vertices.vi.pNext = NULL;
-        m_vertices.vi.vertexBindingDescriptionCount = 1;
-        m_vertices.vi.pVertexBindingDescriptions = m_vertices.vi_bindings;
-        m_vertices.vi.vertexAttributeDescriptionCount = 2;
-        m_vertices.vi.pVertexAttributeDescriptions = m_vertices.vi_attrs;
+        m_mesh.vi.pNext = NULL;
+        m_mesh.vi.vertexBindingDescriptionCount = 1;
+        m_mesh.vi.pVertexBindingDescriptions = m_mesh.vi_bindings;
+        m_mesh.vi.vertexAttributeDescriptionCount = 2;
+        m_mesh.vi.pVertexAttributeDescriptions = m_mesh.vi_attrs;
 
-        m_vertices.vi_bindings[0].binding = 0;
-        m_vertices.vi_bindings[0].stride = sizeof(vertices[0]);
-        m_vertices.vi_bindings[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+        m_mesh.vi_bindings[0].binding = 0;
+        m_mesh.vi_bindings[0].stride = sizeof(vertices[0]);
+        m_mesh.vi_bindings[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 
-        m_vertices.vi_attrs[0].binding = 0;
-        m_vertices.vi_attrs[0].location = 0;
-        m_vertices.vi_attrs[0].format = VK_FORMAT_R32G32_SFLOAT;
-        m_vertices.vi_attrs[0].offset = 0;
+        m_mesh.vi_attrs[0].binding = 0;
+        m_mesh.vi_attrs[0].location = 0;
+        m_mesh.vi_attrs[0].format = VK_FORMAT_R32G32_SFLOAT;
+        m_mesh.vi_attrs[0].offset = 0;
 
-        m_vertices.vi_attrs[1].binding = 0;
-        m_vertices.vi_attrs[1].location = 1;
-        m_vertices.vi_attrs[1].format = VK_FORMAT_R32G32_SFLOAT;
-        m_vertices.vi_attrs[1].offset = sizeof(float) * 2;
+        m_mesh.vi_attrs[1].binding = 0;
+        m_mesh.vi_attrs[1].location = 1;
+        m_mesh.vi_attrs[1].format = VK_FORMAT_R32G32_SFLOAT;
+        m_mesh.vi_attrs[1].offset = sizeof(float) * 2;
     }
 
     // ctx.format + m_depth (optionally) -> creates m_renderPass
@@ -1009,7 +1003,7 @@ void main() {
         pipeline.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
         pipeline.layout = m_pipeline_layout;
 
-        vi = m_vertices.vi;
+        vi = m_mesh.vi;
 
         memset(&ia, 0, sizeof(ia));
         ia.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
@@ -1230,7 +1224,6 @@ void main() {
 #else
         m_validate = true;
 #endif
-        m_use_staging_buffer = false;
         m_clearColor = {0.F, 0.F, 0.F, 0.F};
 
         mode(FL_RGB | FL_DOUBLE | FL_ALPHA);
@@ -1414,13 +1407,35 @@ void main() {
 
         update_texture();
 
+        VkCommandBuffer cmd = getCurrentCommandBuffer();
+        if (!m_swapchain || !cmd || !isFrameActive()) {
+            return;
+        }
+
+        vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline);
+        vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                m_pipeline_layout, 0, 1, &m_desc_set, 0,
+                                nullptr);
+        
+        VkViewport viewport = {};
+        viewport.width = static_cast<float>(w());
+        viewport.height = static_cast<float>(h());
+        viewport.minDepth = 0.0f;
+        viewport.maxDepth = 1.0f;
+        vkCmdSetViewport(cmd, 0, 1, &viewport);
+
+        VkRect2D scissor = {};
+        scissor.extent.width = w();
+        scissor.extent.height = h();
+        vkCmdSetScissor(cmd, 0, 1, &scissor);
+    
         // Draw the triangle
         VkDeviceSize offset = 0;
-        vkCmdBindVertexBuffers(m_draw_cmd, 0, 1, &m_vertices.buf, &offset);
+        vkCmdBindVertexBuffers(cmd, 0, 1, &m_mesh.buf, &offset);
 
-        vkCmdDraw(m_draw_cmd, 6, 1, 0, 0);
+        vkCmdDraw(cmd, 6, 1, 0, 0);
 
-        Fl_Window::draw();
+        vkCmdEndRenderPass(cmd);
     }
 
     std::vector<const char*> NDIView::get_instance_extensions()
@@ -1694,16 +1709,16 @@ void main() {
         vkDestroyShaderModule(device(), m_frag_shader_module, NULL);
         m_frag_shader_module = VK_NULL_HANDLE;
 
-        if (m_vertices.buf != VK_NULL_HANDLE)
+        if (m_mesh.buf != VK_NULL_HANDLE)
         {
-            vkDestroyBuffer(device(), m_vertices.buf, NULL);
-            m_vertices.buf = VK_NULL_HANDLE;
+            vkDestroyBuffer(device(), m_mesh.buf, NULL);
+            m_mesh.buf = VK_NULL_HANDLE;
         }
 
-        if (m_vertices.mem != VK_NULL_HANDLE)
+        if (m_mesh.mem != VK_NULL_HANDLE)
         {
-            vkFreeMemory(device(), m_vertices.mem, NULL);
-            m_vertices.mem = VK_NULL_HANDLE;
+            vkFreeMemory(device(), m_mesh.mem, NULL);
+            m_mesh.mem = VK_NULL_HANDLE;
         }
 
         destroy_textures();
