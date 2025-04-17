@@ -463,9 +463,6 @@ namespace mrv
         p.findThread.running = false;
         if (p.findThread.thread.joinable())
             p.findThread.thread.join();
-
-        vkDestroyShaderModule(device(), m_frag_shader_module, NULL);
-        vkDestroyShaderModule(device(), m_vert_shader_module, NULL);
     }
 
     NDIView::NDIView(int x, int y, int w, int h, const char* l) :
@@ -1094,6 +1091,7 @@ void main() {
         VK_CHECK(result);
 
         vkDestroyPipelineCache(device(), pipelineCache(), NULL);
+        pipelineCache() = VK_NULL_HANDLE;
     }
 
     void NDIView::prepare_descriptor_layout()
@@ -1219,11 +1217,6 @@ void main() {
         TLRENDER_P();
 
         // Some Vulkan settings
-#ifdef NDEBUG
-        m_validate = false;
-#else
-        m_validate = true;
-#endif
         m_clearColor = {0.F, 0.F, 0.F, 0.F};
 
         mode(FL_RGB | FL_DOUBLE | FL_ALPHA);
@@ -1706,9 +1699,18 @@ void main() {
 
     void NDIView::destroy_resources()
     {
-        vkDestroyShaderModule(device(), m_frag_shader_module, NULL);
-        m_frag_shader_module = VK_NULL_HANDLE;
-
+        if (m_frag_shader_module != VK_NULL_HANDLE)
+        {
+            vkDestroyShaderModule(device(), m_frag_shader_module, NULL);
+            m_frag_shader_module = VK_NULL_HANDLE;
+        }
+        
+        if (m_vert_shader_module != VK_NULL_HANDLE)
+        {
+            vkDestroyShaderModule(device(), m_vert_shader_module, NULL);
+            m_vert_shader_module = VK_NULL_HANDLE;
+        }
+        
         if (m_mesh.buf != VK_NULL_HANDLE)
         {
             vkDestroyBuffer(device(), m_mesh.buf, NULL);
@@ -1722,8 +1724,24 @@ void main() {
         }
 
         destroy_textures();
-
-        Fl_Vk_Window::destroy_resources();
+        
+        if (m_pipeline_layout != VK_NULL_HANDLE)
+        {
+            vkDestroyPipelineLayout(device(), m_pipeline_layout, nullptr);
+            m_pipeline_layout = VK_NULL_HANDLE;
+        }
+    
+        if (m_desc_layout != VK_NULL_HANDLE)
+        {
+            vkDestroyDescriptorSetLayout(device(), m_desc_layout, nullptr);
+            m_desc_layout = VK_NULL_HANDLE;
+        }
+    
+        if (m_desc_pool != VK_NULL_HANDLE)
+        {
+            vkDestroyDescriptorPool(device(), m_desc_pool, nullptr);
+            m_desc_pool = VK_NULL_HANDLE;
+        }
     }
 
     void NDIView::prepare_shader()

@@ -28,10 +28,10 @@ namespace mrv
             void valid(int x) {};
             int valid() const { return 1; }
 
-            void draw() FL_OVERRIDE;
-            void vk_draw_begin() FL_OVERRIDE;
-            void prepare() FL_OVERRIDE;
-            void destroy_resources() FL_OVERRIDE;
+            virtual void draw() FL_OVERRIDE;
+            virtual void vk_draw_begin() FL_OVERRIDE;
+            virtual void prepare() FL_OVERRIDE;
+            virtual void destroy_resources() FL_OVERRIDE;
         
 #ifdef __APPLE__
         protected:
@@ -43,6 +43,9 @@ namespace mrv
             
             VkShaderModule prepare_vs();
             VkShaderModule prepare_fs();
+
+            VkShaderModule m_frag_shader;
+            VkShaderModule m_vert_shader;
             
             void prepare_vertices();
             void prepare_descriptor_layout();

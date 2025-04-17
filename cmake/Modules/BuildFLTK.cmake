@@ -11,7 +11,7 @@ if (USER_NAME STREQUAL "gga" OR USER_NAME STREQUAL "User-PC" OR
 else()
     set(FLTK_GIT_REPOSITORY "https://github.com/ggarra13/fltk.git")
 endif()
-set(FLTK_GIT_TAG c32372251efd968bb2dece5c22109f5ae2d65d23)
+set(FLTK_GIT_TAG e1a7d125fc21a6aeeb36859576705cebdf9468f5)
 #set(FLTK_GIT_TAG vk)  # Cutting edge!
 
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
@@ -60,6 +60,20 @@ if(TLRENDER_JPEG)
     set(FLTK_DEPENDENCIES libjpeg-turbo ${FLTK_DEPENDENCIES})
 endif()
 
+#
+# Determine whether to build fltk-gl
+#
+set(FLTK_BUILD_GL ${TLRENDER_GL})
+
+#
+# Determine whether to build fltk-vk
+#
+set(FLTK_BUILD_VK OFF)
+if (MRV2_HDR OR MRV2_BACKEND STREQUAL "VK" OR MRV2_BACKEND STREQUAL "BOTH")
+    set(FLTK_BUILD_VK ON)
+endif()
+
+
 set(FLTK_PATCH
 )
     
@@ -92,8 +106,8 @@ ExternalProject_Add(
     -DCMAKE_C_FLAGS=${FLTK_C_FLAGS}
     -DCMAKE_CXX_FLAGS=${FLTK_CXX_FLAGS}
     -DCMAKE_INSTALL_MESSAGE=${CMAKE_INSTALL_MESSAGE}
-    -DFLTK_BUILD_VK=${TLRENDER_VK}
-    -DFLTK_BUILD_GL=${TLRENDER_GL}
+    -DFLTK_BUILD_VK=${FLTK_BUILD_VK}
+    -DFLTK_BUILD_GL=${FLTK_BUILD_GL}
     -DFLTK_BUILD_EXAMPLES=OFF
     -DFLTK_BUILD_FLUID=ON
     -DFLTK_BUILD_FLTK_OPTIONS=OFF

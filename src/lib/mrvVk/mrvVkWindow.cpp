@@ -28,17 +28,23 @@ namespace mrv
             Fl_Vk_Window(X, Y, W, H, L)
         {
             m_validate = true;
+
+            m_frag_shader = m_vert_shader = VK_NULL_HANDLE;
         }
 
         VkWindow::VkWindow(int W, int H, const char* L) :
             Fl_Vk_Window(W, H, L)
         {
             m_validate = true;
+            
+            m_frag_shader = m_vert_shader = VK_NULL_HANDLE;
         }
         
 
         VkShaderModule VkWindow::prepare_vs() {
-            VkShaderModule out = VK_NULL_HANDLE;
+            if (m_vert_shader != VK_NULL_HANDLE)
+                return m_vert_shader;
+            
             // Example GLSL vertex shader
             std::string vertex_shader_glsl = R"(
         #version 450
@@ -55,15 +61,16 @@ namespace mrv
                     "vertex_shader.glsl"    // Filename for error reporting
                     );
 
-                out = create_shader_module(device(), spirv);
+                m_vert_shader = create_shader_module(device(), spirv);
             } catch (const std::exception& e) {
                 std::cerr << e.what() << std::endl;
             }
-            return out;
+            return m_vert_shader;
         }
 
         VkShaderModule VkWindow::prepare_fs() {
-            VkShaderModule out = VK_NULL_HANDLE;
+            if (m_frag_shader != VK_NULL_HANDLE)
+                return m_frag_shader;
             // Example GLSL vertex shader
             std::string frag_shader_glsl = R"(
         #version 450
@@ -84,12 +91,13 @@ namespace mrv
                     "frag_shader.glsl"    // Filename for error reporting
                     );
                 // Assuming you have a VkDevice 'device' already created
-                out = create_shader_module(device(), spirv);
+                m_frag_shader = create_shader_module(device(), spirv);
     
             } catch (const std::exception& e) {
                 std::cerr << e.what() << std::endl;
+                m_frag_shader = VK_NULL_HANDLE;
             }
-            return out;
+            return m_frag_shader;
         }
 
         // m_depth (optionally) -> creates m_renderPass
@@ -388,6 +396,7 @@ namespace mrv
             VK_CHECK(result);
 
             vkDestroyPipelineCache(device(), pipelineCache(), NULL);
+            pipelineCache() = VK_NULL_HANDLE;
 
         }
 
@@ -457,6 +466,14 @@ namespace mrv
         void VkWindow::destroy_resources() {
             m_mesh.destroy(device());
             
+            if (m_vert_shader != VK_NULL_HANDLE) {
+                vkDestroyShaderModule(device(), m_vert_shader, nullptr);
+                m_vert_shader = VK_NULL_HANDLE;
+            }
+            if (m_frag_shader != VK_NULL_HANDLE) {
+                vkDestroyShaderModule(device(), m_frag_shader, nullptr);
+                m_frag_shader = VK_NULL_HANDLE;
+            }
             if (m_pipeline != VK_NULL_HANDLE) {
                 vkDestroyPipeline(device(), m_pipeline, nullptr);
                 m_pipeline = VK_NULL_HANDLE;
@@ -465,8 +482,6 @@ namespace mrv
                 vkDestroyPipelineLayout(device(), m_pipeline_layout, nullptr);
                 m_pipeline_layout = VK_NULL_HANDLE;
             }
-
-            Fl_Vk_Window::destroy_resources();
         }
 
 
