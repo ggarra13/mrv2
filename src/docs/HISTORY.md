@@ -6,6 +6,11 @@ v1.3.8
 - Flattened tlRender from a submodule to a directory to start working on porting
 it to Vulkan.
 - Added mrvCore/mrvBackend.h to select which backend should mrv2 use.  By default, we still use opengl.
+- Fixed hdr view utility to handle HDR10 and HLG properly on HDR10 monitors, as it would lead to a crash.
+- Fixed hdr view utility sometimes crashing at start up on macOS.
+- Fixed vkSetHdrMetadataEXT not being active.
+- Fixed HDR monitor scoring selection to prefer HDR10 and HLG over P3_NONLINEAR.
+
 
 v1.3.7
 ======

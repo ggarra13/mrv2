@@ -39,13 +39,10 @@ extern "C"
 #include <FL/platform.H>
 #include <FL/vk.h>
 #include <FL/Fl.H>
+#include <FL/vk_enum_string_helper.h>
 #include <FL/Fl_Vk_Window.H>
 #include <FL/Fl_Vk_Utils.H>
 #include <FL/Fl_Menu_.H>
-#ifdef __linux__
-#    undef None // macro defined in X11 config files
-#    undef Status
-#endif
 
 namespace
 {
@@ -241,7 +238,7 @@ namespace mrv
                 assert(dims >= 1 && dims <= 3);
 
                 const char* samplerName = sd->desc.name;
-                int size = fmt->internal_size / fmt->num_components;
+                int pixel_fmt_size = fmt->internal_size / fmt->num_components;
                 int channels = fmt->num_components;
 
                 // Map libplacebo format to Vulkan format
@@ -288,7 +285,7 @@ namespace mrv
                 uploadTextureData(
                     device(), gpu(), commandPool(), queue(),
                     image, width, height, depth, imageFormat,
-                    channels, size, values);
+                    channels, pixel_fmt_size, values);
 
                 // Transition image layout to SHADER_READ_ONLY_OPTIMAL
                 transitionImageLayout(device(), commandPool(), queue(), 
@@ -502,6 +499,7 @@ namespace mrv
         if (p.hdrMonitorFound)
         {
             std::cout << "HDR monitor found" << std::endl;
+            std::cout << string_VkColorSpaceKHR(colorSpace()) << std::endl;
         }
         else
         {
@@ -1110,20 +1108,17 @@ void main() {
         bindings.push_back(mainBinding);
 
         // Additional libplacebo textures starting at binding 1
-        if (p.hasHDR)
+        for (uint32_t i = 1; i < m_textures.size(); ++i)
         {
-            for (uint32_t i = 1; i < m_textures.size(); ++i)
-            {
-                VkDescriptorSetLayoutBinding binding = {};
-                binding.binding =
-                    i; // Matches libplacebo’s binding = i + 1 in GLSL
-                binding.descriptorType =
-                    VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-                binding.descriptorCount = 1;
-                binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-                binding.pImmutableSamplers = nullptr;
-                bindings.push_back(binding);
-            }
+            VkDescriptorSetLayoutBinding binding = {};
+            binding.binding =
+                i; // Matches libplacebo’s binding = i + 1 in GLSL
+            binding.descriptorType =
+                VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+            binding.descriptorCount = 1;
+            binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+            binding.pImmutableSamplers = nullptr;
+            bindings.push_back(binding);
         }
 
         VkDescriptorSetLayoutCreateInfo layoutInfo = {};
@@ -1305,11 +1300,10 @@ void main() {
 
         if (p.hdrMonitorFound && p.hasHDR)
         {
-
             // This will make the FLTK swapchain call vk->SetHDRMetadataEXT();
             const image::HDRData& data = p.hdrData;
+            auto m_previous_hdr_metadata = m_hdr_metadata;
 
-            VkHdrMetadataEXT old_hdr_metadata = m_hdr_metadata;
             m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
             m_hdr_metadata.displayPrimaryRed = {
                 data.primaries[image::HDRPrimaries::Red][0],
@@ -1335,8 +1329,10 @@ void main() {
             m_hdr_metadata.maxContentLightLevel = data.maxCLL;
             m_hdr_metadata.maxFrameAverageLightLevel = data.maxFALL;
 
-            if (!is_equal_hdr_metadata(m_hdr_metadata, old_hdr_metadata))
+#ifndef __APPLE__
+            if (!is_equal_hdr_metadata(m_hdr_metadata, m_previous_hdr_metadata))
                 m_hdr_metadata_changed = true; // Mark as changed
+#endif
         }
 
         // Transition to GENERAL for CPU writes
@@ -1575,11 +1571,6 @@ void main() {
                         catch (const std::exception& e)
                         {
                         }
-                        // std::cerr << "primaries--------" << std::endl;
-                        // std::cerr << hdrData.primaries[0] << " "
-                        //           << hdrData.primaries[1] << " "
-                        //           << hdrData.primaries[2] << " "
-                        //           << hdrData.primaries[3] << std::endl;
                     }
                     else
                     {
@@ -1775,8 +1766,6 @@ void main() {
         cmap.gamut_constants.softclip_knee = 0.70f;
         cmap.gamut_constants.softclip_desat = 0.35f;
 
-        // Hable and ACES are best for HDR
-        //   &pl_tone_map_hable;
         cmap.tone_mapping_function = nullptr;
 
         cmap.tone_constants = {0};
@@ -1926,9 +1915,6 @@ void main() {
 
         std::stringstream s;
 
-        // s << "#define textureLod(t, p, b) texture(t, p)" << std::endl
-        //   << std::endl;
-
         // std::cerr << "num_vertex_attribs=" << res->num_vertex_attribs
         //           << std::endl
         //           << "num_descriptors=" << res->num_descriptors << std::endl
@@ -1971,7 +1957,7 @@ void main() {
                     break;
                 }
 
-                s << "layout(binding=" << (i + 1) << ") uniform " << prefix
+                s << "layout(binding = " << (i + 1) << ") uniform " << prefix
                   << type << " " << desc->name << ";" << std::endl;
                 break;
             }
