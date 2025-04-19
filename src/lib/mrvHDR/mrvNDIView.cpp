@@ -52,6 +52,7 @@ namespace
 
 namespace
 {
+    // \@bug: not needed?
     float apply_inverse_pq(float x)
     {
         float m1 = 0.8359375f;
@@ -1334,10 +1335,8 @@ void main() {
             m_hdr_metadata.maxContentLightLevel = data.maxCLL;
             m_hdr_metadata.maxFrameAverageLightLevel = data.maxFALL;
 
-#ifndef __APPLE__
             if (!is_equal_hdr_metadata(m_hdr_metadata, m_previous_hdr_metadata))
                 m_hdr_metadata_changed = true; // Mark as changed
-#endif
         }
 
         // Transition to GENERAL for CPU writes
@@ -2127,6 +2126,9 @@ void main() {
         {
             std::cerr << "Changing source to " << source << std::endl;
             p.currentNDISource = source;
+            
+            HDRUI* ui = HDRApp::ui;
+            fill_menu(ui->uiMenuBar);
 
             _exitThreads();
             _startThreads();
@@ -2189,15 +2191,15 @@ void main() {
         mode = FL_MENU_TOGGLE;
         idx = menu->add(_("Window/Fullscreen"), 0, (Fl_Callback*)
                         toggle_fullscreen_cb, ui, mode);
-        if (fullscreen_active())
+        if (ui->uiMain->fullscreen_active())
         {
             item = (Fl_Menu_Item*)&menu->menu()[idx];
             item->set();
         }
         
         mode = FL_MENU_TOGGLE;
-        menu->add(_("HDR/Apply Metadata"), 0,
-                  (Fl_Callback*)apply_metadata_cb, ui, mode);
+        idx = menu->add(_("HDR/Apply Metadata"), 0,
+                        (Fl_Callback*)apply_metadata_cb, ui, mode);
         if (p.useHDRMetadata)
         {
             item = (Fl_Menu_Item*)&menu->menu()[idx];
@@ -2218,13 +2220,16 @@ void main() {
     void NDIView::toggle_fullscreen()
     {
         TLRENDER_P();
-        if (fullscreen_active())
+
+        HDRUI* ui = HDRApp::ui;
+        
+        if (ui->uiMain->fullscreen_active())
         {
-            fullscreen_off();
+            ui->uiMain->fullscreen_off();
         }
         else
         {
-            fullscreen();
+            ui->uiMain->fullscreen();
         }
     }
 
