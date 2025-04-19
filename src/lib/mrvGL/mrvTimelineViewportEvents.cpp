@@ -1086,6 +1086,8 @@ namespace mrv
                     p.popupMenu->popup();
 
                     _updateCursor();
+
+                    delete p.popupMenu;
                     p.popupMenu = nullptr;
                 }
                 return 1;

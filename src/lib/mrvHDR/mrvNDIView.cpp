@@ -43,6 +43,7 @@ extern "C"
 #include <FL/Fl_Vk_Window.H>
 #include <FL/Fl_Vk_Utils.H>
 #include <FL/Fl_Menu_.H>
+#include <FL/Fl_Menu_Button.H>
 
 namespace
 {
@@ -378,6 +379,10 @@ namespace mrv
 
     struct NDIView::Private
     {
+        // FLTK state variables
+        bool useHDRMetadata = false;
+
+        
         NDIlib_find_instance_t NDI_find = nullptr;
         NDIlib_recv_instance_t NDI_recv = nullptr;
 
@@ -1231,7 +1236,7 @@ void main() {
             {
                 TLRENDER_P();
 
-                fill_menu_bar(HDRApp::ui->uiMenuBar);
+                fill_menu(HDRApp::ui->uiMenuBar);
             },
             observer::CallbackAction::Suppress);
 
@@ -1298,7 +1303,7 @@ void main() {
 
         VkResult result;
 
-        if (p.hdrMonitorFound && p.hasHDR)
+        if (p.hdrMonitorFound && p.hasHDR && p.useHDRMetadata)
         {
             // This will make the FLTK swapchain call vk->SetHDRMetadataEXT();
             const image::HDRData& data = p.hdrData;
@@ -2128,22 +2133,99 @@ void main() {
         }
     }
 
-    void NDIView::fill_menu_bar(Fl_Menu_* menu)
+    int NDIView::handle(int event)
+    {
+        switch(event)
+        {
+        case FL_PUSH:
+            if (Fl::event_button3())
+            {
+                Fl_Group::current(0);
+            
+                Fl_Menu_Button* popupMenu = new Fl_Menu_Button(0, 0, 0, 0);
+
+                popupMenu->textsize(12);
+                popupMenu->type(Fl_Menu_Button::POPUP3);
+
+                fill_menu(popupMenu);
+                popupMenu->popup();
+                
+                delete popupMenu;
+                popupMenu = nullptr;
+                return 1;
+            }
+        default:
+            return Fl_Vk_Window::handle(event);
+        return 0;
+        }
+    }
+
+    void NDIView::fill_menu(Fl_Menu_* menu)
     {
         TLRENDER_P();
 
+        int idx;
+        int mode = 0;
         HDRUI* ui = HDRApp::ui;
+        Fl_Menu_Item* item = nullptr;
 
         menu->clear();
         const auto& sources = p.NDISources->get();
+
+        mode = FL_MENU_RADIO;
+        
         for (auto& source : sources)
         {
             std::string entry = _("Connection/");
             entry += source;
-            menu->add(entry.c_str(), 0, (Fl_Callback*)select_ndi_source_cb, ui);
+            idx = menu->add(entry.c_str(), 0, (Fl_Callback*)select_ndi_source_cb, ui, mode);
+            if (source == p.currentNDISource)
+            {
+                item = (Fl_Menu_Item*)&menu->menu()[idx];
+                item->set();
+            }
         }
+
+        mode = FL_MENU_TOGGLE;
+        idx = menu->add(_("Window/Fullscreen"), 0, (Fl_Callback*)
+                        toggle_fullscreen_cb, ui, mode);
+        if (fullscreen_active())
+        {
+            item = (Fl_Menu_Item*)&menu->menu()[idx];
+            item->set();
+        }
+        
+        mode = FL_MENU_TOGGLE;
+        menu->add(_("HDR/Apply Metadata"), 0,
+                  (Fl_Callback*)apply_metadata_cb, ui, mode);
+        if (p.useHDRMetadata)
+        {
+            item = (Fl_Menu_Item*)&menu->menu()[idx];
+            item->set();
+        }
+        
         menu->menu_end();
         menu->redraw();
+    }
+
+    void NDIView::toggle_hdr_metadata()
+    {
+        TLRENDER_P();
+        p.useHDRMetadata = !p.useHDRMetadata;
+        redraw();
+    }
+    
+    void NDIView::toggle_fullscreen()
+    {
+        TLRENDER_P();
+        if (fullscreen_active())
+        {
+            fullscreen_off();
+        }
+        else
+        {
+            fullscreen();
+        }
     }
 
 } // namespace mrv
