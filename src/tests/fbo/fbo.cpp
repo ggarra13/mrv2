@@ -211,10 +211,11 @@ void vk_shape_window::prepare_mesh()
     bool pass;
     void *data;
     
-    memory_type_from_properties(gpu(),
-                                vertex_mem_reqs.memoryTypeBits,
-                                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-                                &mem_alloc.memoryTypeIndex);
+    mem_alloc.memoryTypeIndex =
+        findMemoryType(gpu(),
+                       vertex_mem_reqs.memoryTypeBits,
+                       VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+                       VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
     result = vkAllocateMemory(device(), &mem_alloc, NULL, &m_mesh.mem);
     VK_CHECK(result);
