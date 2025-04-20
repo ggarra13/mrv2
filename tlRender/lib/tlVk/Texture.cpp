@@ -78,70 +78,50 @@ namespace tl
             //             return data[static_cast<std::size_t>(value)];
         }
 
-        unsigned int getTextureInternalFormat(image::PixelType type)
+        VkFormat getTextureInternalFormat(image::PixelType type)
         {
-            return 0;
+            const std::array<
+                VkFormat,
+                static_cast<std::size_t>(image::PixelType::Count)>
+                data = {
+                VK_FORMAT_UNDEFINED,
+                
+                VK_FORMAT_R8_UNORM,
+                VK_FORMAT_R16_UNORM,
+                VK_FORMAT_R32_UINT,
+                VK_FORMAT_R16_SFLOAT,
+                VK_FORMAT_R32_SFLOAT,
 
-            //             const std::array<
-            //                 GLenum,
-            //                 static_cast<std::size_t>(image::PixelType::Count)>
-            //                 data = {
-            //                     GL_NONE,
+                VK_FORMAT_R8G8_UNORM,
+                VK_FORMAT_R16G16_UNORM,
+                VK_FORMAT_R32G32_UINT,
+                VK_FORMAT_R16G16_SFLOAT,
+                VK_FORMAT_R32G32_SFLOAT,
+                
+                VK_FORMAT_R8G8B8_UNORM,
+                VK_FORMAT_A2R10G10B10_UNORM_PACK32,
+                VK_FORMAT_R16G16B16_UNORM,
+                VK_FORMAT_R32G32B32_UINT,
+                VK_FORMAT_R16G16B16_SFLOAT,
+                VK_FORMAT_R32G32B32_SFLOAT,
+                
+                VK_FORMAT_R8G8B8A8_UNORM,
+                VK_FORMAT_R16G16B16A16_UNORM,
+                VK_FORMAT_R32G32B32A32_UINT,
+                VK_FORMAT_R16G16B16A16_SFLOAT,
+                VK_FORMAT_R32G32B32A32_SFLOAT,
 
-            // #if defined(TLRENDER_API_GL_4_1)
-            //                     GL_R8,     GL_R16,    GL_R32I,    GL_R16F,
-            //                     GL_R32F,
+                VK_FORMAT_UNDEFINED,   // VK_FORMAT_G8_B8R8_2PLANE_420_UNORM 
+                VK_FORMAT_UNDEFINED,   // VK_FORMAT_G8_B8R8_2PLANE_422_UNORM
+                VK_FORMAT_UNDEFINED,   // VK_FORMAT_G8_B8_R8_3PLANE_444_UNORM
 
-            //                     GL_RG8,    GL_RG16,   GL_RG32I,   GL_RG16F,
-            //                     GL_RG32F,
+                VK_FORMAT_UNDEFINED,   // VK_FORMAT_G16_B16R16_2PLANE_420_UNORM
+                VK_FORMAT_UNDEFINED,   // VK_FORMAT_G16_B16R16_2PLANE_422_UNORM
+                VK_FORMAT_UNDEFINED,   // VK_FORMAT_G16_B16_R16_3PLANE_444_UNORM
 
-            //                     GL_RGB8,   GL_RGB10,  GL_RGB16,   GL_RGB32I,
-            //                     GL_RGB16F, GL_RGB32F,
-
-            //                     GL_RGBA8,  GL_RGBA16, GL_RGBA32I, GL_RGBA16F,
-            //                     GL_RGBA32F,
-
-            //                     GL_NONE,   GL_NONE,   GL_NONE,    GL_NONE,
-            //                     GL_NONE, GL_NONE,
-
-            //                     GL_RGBA
-            // #elif defined(TLRENDER_API_GLES_2)
-            //                     GL_LUMINANCE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-
-            //                     GL_LUMINANCE_ALPHA,
-            //                     GL_NONE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-
-            //                     GL_RGB,
-            //                     GL_NONE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-
-            //                     GL_RGBA,
-            //                     GL_NONE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-
-            //                     GL_NONE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-
-            //                     GL_NONE
-            // #endif // TLRENDER_API_GL_4_1
-            //                 };
-            //             return data[static_cast<std::size_t>(type)];
+                VK_FORMAT_R8G8B8A8_UNORM
+            };
+            return data[static_cast<std::size_t>(type)];
         }
 
         unsigned int getTextureType(image::PixelType value)
@@ -218,8 +198,8 @@ namespace tl
         {
             return !(*this == other);
         }
-
-        unsigned int getTextureFilter(timeline::ImageFilter value)
+        
+        VkFilter getTextureFilter(timeline::ImageFilter value)
         {
             const std::array<
                 VkFilter,

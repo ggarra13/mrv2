@@ -28,14 +28,14 @@ namespace tl
         protected:
             void _init();
 
-            Shader();
+            Shader(Fl_Vk_Context& ctx);
 
         public:
             ~Shader();
 
             //! Create a new shader.
             static std::shared_ptr<Shader> create(
-                const Fl_Vk_Context* ctx, const std::string& vertexSource,
+                Fl_Vk_Context& ctx, const std::string& vertexSource,
                 const std::string& fragmentSource);
 
             //! Get the vertex shader source.
@@ -92,6 +92,8 @@ namespace tl
             ///@}
 
         private:
+            Fl_Vk_Context& ctx;
+
             TLRENDER_PRIVATE();
         };
     } // namespace vk

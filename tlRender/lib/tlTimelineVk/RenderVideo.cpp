@@ -328,7 +328,7 @@ namespace tl
                         offscreenBufferOptions))
                 {
                     p.buffers["overlay"] = vk::OffscreenBuffer::create(
-                        offscreenBufferSize, offscreenBufferOptions);
+                        ctx, offscreenBufferSize, offscreenBufferOptions);
                 }
 
                 if (p.buffers["overlay"])
@@ -426,7 +426,7 @@ namespace tl
                         offscreenBufferOptions))
                 {
                     p.buffers["difference0"] = vk::OffscreenBuffer::create(
-                        offscreenBufferSize, offscreenBufferOptions);
+                        ctx, offscreenBufferSize, offscreenBufferOptions);
                 }
 
                 if (p.buffers["difference0"])
@@ -480,7 +480,7 @@ namespace tl
                             offscreenBufferOptions))
                     {
                         p.buffers["difference1"] = vk::OffscreenBuffer::create(
-                            offscreenBufferSize, offscreenBufferOptions);
+                            ctx, offscreenBufferSize, offscreenBufferOptions);
                     }
 
                     if (p.buffers["difference1"])
@@ -637,7 +637,7 @@ namespace tl
                     offscreenBufferOptions))
             {
                 p.buffers["video"] = vk::OffscreenBuffer::create(
-                    offscreenBufferSize, offscreenBufferOptions);
+                    ctx, offscreenBufferSize, offscreenBufferOptions);
             }
 
             if (p.buffers["video"])

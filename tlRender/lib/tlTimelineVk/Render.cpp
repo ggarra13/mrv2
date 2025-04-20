@@ -539,14 +539,12 @@ namespace tl
 #endif // TLRENDER_LIBPLACEBO
 
         void Render::_init(
-            const Fl_Vk_Context* vulkanContext,
             const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<TextureCache>& textureCache)
         {
             IRender::_init(context);
             TLRENDER_P();
 
-            p.ctx = vulkanContext;
             p.textureCache = textureCache;
             if (!p.textureCache)
             {
@@ -554,26 +552,27 @@ namespace tl
             }
 
             // p.glyphTextureAtlas = vk::TextureAtlas::create(
-            //     p.ctx, 1, 4096, image::PixelType::L_U8,
+            //     ctx, 1, 4096, image::PixelType::L_U8,
             //     timeline::ImageFilter::Linear);
 
             p.logTimer = std::chrono::steady_clock::now();
         }
 
-        Render::Render() :
-            _p(new Private)
+        Render::Render(Fl_Vk_Context& context) :
+            _p(new Private),
+            ctx(context)
         {
         }
 
         Render::~Render() {}
 
         std::shared_ptr<Render> Render::create(
-            const Fl_Vk_Context* vulkanContext,
+            Fl_Vk_Context& vulkanContext,
             const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<TextureCache>& textureCache)
         {
-            auto out = std::shared_ptr<Render>(new Render);
-            out->_init(vulkanContext, context, textureCache);
+            auto out = std::shared_ptr<Render>(new Render(vulkanContext));
+            out->_init(context, textureCache);
             return out;
         }
 
@@ -600,52 +599,52 @@ namespace tl
             if (!p.shaders["rect"])
             {
                 p.shaders["rect"] = vk::Shader::create(
-                    p.ctx, vertexSource(), meshFragmentSource());
+                    ctx, vertexSource(), meshFragmentSource());
             }
             if (!p.shaders["mesh"])
             {
                 p.shaders["mesh"] = vk::Shader::create(
-                    p.ctx, vertexSource(), meshFragmentSource());
+                    ctx, vertexSource(), meshFragmentSource());
             }
             if (!p.shaders["colorMesh"])
             {
                 p.shaders["colorMesh"] = vk::Shader::create(
-                    p.ctx, colorMeshVertexSource(), colorMeshFragmentSource());
+                    ctx, colorMeshVertexSource(), colorMeshFragmentSource());
             }
             if (!p.shaders["text"])
             {
                 p.shaders["text"] = vk::Shader::create(
-                    p.ctx, vertexSource(), textFragmentSource());
+                    ctx, vertexSource(), textFragmentSource());
             }
             if (!p.shaders["texture"])
             {
                 p.shaders["texture"] = vk::Shader::create(
-                    p.ctx, vertexSource(), textureFragmentSource());
+                    ctx, vertexSource(), textureFragmentSource());
             }
             if (!p.shaders["image"])
             {
                 p.shaders["image"] = vk::Shader::create(
-                    p.ctx, vertexSource(), imageFragmentSource());
+                    ctx, vertexSource(), imageFragmentSource());
             }
             if (!p.shaders["wipe"])
             {
                 p.shaders["wipe"] = vk::Shader::create(
-                    p.ctx, vertexSource(), meshFragmentSource());
+                    ctx, vertexSource(), meshFragmentSource());
             }
             if (!p.shaders["overlay"])
             {
                 p.shaders["overlay"] = vk::Shader::create(
-                    p.ctx, vertexSource(), textureFragmentSource());
+                    ctx, vertexSource(), textureFragmentSource());
             }
             if (!p.shaders["difference"])
             {
                 p.shaders["difference"] = vk::Shader::create(
-                    p.ctx, vertexSource(), differenceFragmentSource());
+                    ctx, vertexSource(), differenceFragmentSource());
             }
             if (!p.shaders["dissolve"])
             {
                 p.shaders["dissolve"] = vk::Shader::create(
-                    p.ctx, vertexSource(), textureFragmentSource());
+                    ctx, vertexSource(), textureFragmentSource());
             }
             _displayShader();
 
@@ -911,43 +910,43 @@ namespace tl
                 
                 // Create Vulkan image
                 VkImage image =
-                    createImage(p.ctx->device, imageType, width,
+                    createImage(ctx.device, imageType, width,
                                 height, depth, imageFormat);
                 
                 // Allocate and bind memory for the image
                 VkDeviceMemory imageMemory =
-                    allocateAndBindImageMemory(p.ctx->device,
-                                               p.ctx->gpu,
+                    allocateAndBindImageMemory(ctx.device,
+                                               ctx.gpu,
                                                image);
                 
                 // Transition image layout to TRANSFER_DST_OPTIMAL
-                transitionImageLayout(p.ctx->device, p.ctx->commandPool,
-                                      p.ctx->queue, 
+                transitionImageLayout(ctx.device, ctx.commandPool,
+                                      ctx.queue, 
                                       image, VK_IMAGE_LAYOUT_UNDEFINED,
                                       VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
                 
                 // Upload texture data
                 uploadTextureData(
-                    p.ctx->device, p.ctx->gpu, p.ctx->commandPool,
-                    p.ctx->queue,
+                    ctx.device, ctx.gpu, ctx.commandPool,
+                    ctx.queue,
                     image, width, height, depth, imageFormat,
                     channels, sizeof(float), values);
                     
 
                 // Transition image layout to SHADER_READ_ONLY_OPTIMAL
-                transitionImageLayout(p.ctx->device, p.ctx->commandPool,
-                                      p.ctx->queue, 
+                transitionImageLayout(ctx.device, ctx.commandPool,
+                                      ctx.queue, 
                                       image,
                                       VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                                       VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
                     
                 // Create image view
                 VkImageView imageView =
-                    createImageView(p.ctx->device, image, imageFormat,
+                    createImageView(ctx.device, image, imageFormat,
                                     imageType);
 
                 // Create sampler
-                VkSampler sampler = createSampler(p.ctx->device);
+                VkSampler sampler = createSampler(ctx.device);
                     
                 Fl_Vk_Texture texture(
                     VK_IMAGE_TYPE_3D, imageFormat, image,
@@ -1012,42 +1011,42 @@ namespace tl
                    
                 // Create Vulkan image
                 VkImage image =
-                    createImage(p.ctx->device, imageType, width,
+                    createImage(ctx.device, imageType, width,
                                 height, depth, imageFormat);
                 
                 // Allocate and bind memory for the image
                 VkDeviceMemory imageMemory =
-                    allocateAndBindImageMemory(p.ctx->device,
-                                               p.ctx->gpu,
+                    allocateAndBindImageMemory(ctx.device,
+                                               ctx.gpu,
                                                image);
                 
                 // Transition image layout to TRANSFER_DST_OPTIMAL
-                transitionImageLayout(p.ctx->device, p.ctx->commandPool,
-                                      p.ctx->queue, 
+                transitionImageLayout(ctx.device, ctx.commandPool,
+                                      ctx.queue, 
                                       image, VK_IMAGE_LAYOUT_UNDEFINED,
                                       VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
                 
                 // Upload texture data
                 uploadTextureData(
-                    p.ctx->device, p.ctx->gpu, p.ctx->commandPool,
-                    p.ctx->queue,
+                    ctx.device, ctx.gpu, ctx.commandPool,
+                    ctx.queue,
                     image, width, height, depth, imageFormat,
                     channels, sizeof(float), values);
                     
 
                 // Transition image layout to SHADER_READ_ONLY_OPTIMAL
-                transitionImageLayout(p.ctx->device, p.ctx->commandPool,
-                                      p.ctx->queue, image,
+                transitionImageLayout(ctx.device, ctx.commandPool,
+                                      ctx.queue, image,
                                       VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                                       VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
                     
                 // Create image view
                 VkImageView imageView =
-                    createImageView(p.ctx->device, image, imageFormat,
+                    createImageView(ctx.device, image, imageFormat,
                                     imageType);
 
                 // Create sampler
-                VkSampler sampler = createSampler(p.ctx->device);
+                VkSampler sampler = createSampler(ctx.device);
                     
                 Fl_Vk_Texture texture(
                     VK_IMAGE_TYPE_3D, imageFormat, image,
@@ -1133,42 +1132,42 @@ namespace tl
 
                     // Create Vulkan image
                     VkImage image =
-                        createImage(p.ctx->device, imageType, width,
+                        createImage(ctx.device, imageType, width,
                                     height, depth, imageFormat);
 
                     // Allocate and bind memory for the image
                     VkDeviceMemory imageMemory =
-                        allocateAndBindImageMemory(p.ctx->device,
-                                                   p.ctx->gpu,
+                        allocateAndBindImageMemory(ctx.device,
+                                                   ctx.gpu,
                                                    image);
 
                     // Transition image layout to TRANSFER_DST_OPTIMAL
-                    transitionImageLayout(p.ctx->device, p.ctx->commandPool,
-                                          p.ctx->queue, 
+                    transitionImageLayout(ctx.device, ctx.commandPool,
+                                          ctx.queue, 
                                           image, VK_IMAGE_LAYOUT_UNDEFINED,
                                           VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 
                     // Upload texture data
                     uploadTextureData(
-                        p.ctx->device, p.ctx->gpu, p.ctx->commandPool,
-                        p.ctx->queue,
+                        ctx.device, ctx.gpu, ctx.commandPool,
+                        ctx.queue,
                         image, width, height, depth, imageFormat,
                         channels, size, values);
 
                     // Transition image layout to SHADER_READ_ONLY_OPTIMAL
-                    transitionImageLayout(p.ctx->device, p.ctx->commandPool,
-                                          p.ctx->queue, 
+                    transitionImageLayout(ctx.device, ctx.commandPool,
+                                          ctx.queue, 
                                           image,
                                           VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                                           VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
                         
                     // Create image view
                     VkImageView imageView =
-                        createImageView(p.ctx->device, image, imageFormat,
+                        createImageView(ctx.device, image, imageFormat,
                                         imageType);
 
                     // Create sampler
-                    VkSampler sampler = createSampler(p.ctx->device);
+                    VkSampler sampler = createSampler(ctx.device);
 
                     Fl_Vk_Texture texture(
                         imageType, imageFormat, image, imageView, sampler,
@@ -1613,16 +1612,16 @@ namespace tl
                 {
                     dst_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
                     dst_colorspace.transfer = PL_COLOR_TRC_PQ;
-                    if (p.ctx->colorSpace == VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
+                    if (ctx.colorSpace == VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
                     {
                         dst_colorspace.primaries = PL_COLOR_PRIM_DISPLAY_P3;
                         dst_colorspace.transfer = PL_COLOR_TRC_BT_1886;
                     }
-                    else if (p.ctx->colorSpace == VK_COLOR_SPACE_HDR10_HLG_EXT)
+                    else if (ctx.colorSpace == VK_COLOR_SPACE_HDR10_HLG_EXT)
                     {
                         dst_colorspace.transfer = PL_COLOR_TRC_HLG;
                     }
-                    else if (p.ctx->colorSpace == VK_COLOR_SPACE_DOLBYVISION_EXT)
+                    else if (ctx.colorSpace == VK_COLOR_SPACE_DOLBYVISION_EXT)
                     {
                         // \@todo:  How to handle this?
                         // PL_COLOR_TRC_DOLBYVISION does not exist.
@@ -1939,7 +1938,7 @@ namespace tl
                         "tl::vk::GLRender", "Creating display shader");
                 }
                 p.shaders["display"] =
-                    vk::Shader::create(p.ctx, vertexSource(), source);
+                    vk::Shader::create(ctx, vertexSource(), source);
             }
             p.shaders["display"]->bind();
             p.shaders["display"]->setUniform("transform.mvp", p.transform);

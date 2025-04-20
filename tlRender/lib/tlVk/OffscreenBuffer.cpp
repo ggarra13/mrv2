@@ -56,53 +56,60 @@ namespace tl
             VkFormat getBufferInternalFormat(
                 OffscreenDepth depth, OffscreenStencil stencil)
             {
-                VkFormat out;
-                //                 switch (depth)
-                //                 {
-                //                 case OffscreenDepth::kNone:
-                //                     switch (stencil)
-                //                     {
-                //                     case OffscreenStencil::_8:
-                //                         out = GL_STENCIL_INDEX8;
-                //                         break;
-                //                     default:
-                //                         break;
-                //                     }
-                //                     break;
-                //                 case OffscreenDepth::_16:
-                //                     out = GL_DEPTH_COMPONENT16;
-                //                     break;
-                // #if defined(TLRENDER_API_GL_4_1)
-                //                 case OffscreenDepth::_24:
-                //                     switch (stencil)
-                //                     {
-                //                     case OffscreenStencil::kNone:
-                //                         out = GL_DEPTH_COMPONENT24;
-                //                         break;
-                //                     case OffscreenStencil::_8:
-                //                         out = GL_DEPTH24_STENCIL8;
-                //                         break;
-                //                     default:
-                //                         break;
-                //                     }
-                //                     break;
-                //                 case OffscreenDepth::_32:
-                //                     switch (stencil)
-                //                     {
-                //                     case OffscreenStencil::kNone:
-                //                         out = GL_DEPTH_COMPONENT32F;
-                //                         break;
-                //                     case OffscreenStencil::_8:
-                //                         out = GL_DEPTH32F_STENCIL8;
-                //                         break;
-                //                     default:
-                //                         break;
-                //                     }
-                //                     break;
-                // #endif // TLRENDER_API_GL_4_1
-                //                 default:
-                //                     break;
-                //                 }
+                VkFormat out = VK_FORMAT_D32_SFLOAT_S8_UINT;
+                switch (depth)
+                {
+                case OffscreenDepth::kNone:
+                    switch (stencil)
+                    {
+                    case OffscreenStencil::_8:
+                        out = VK_FORMAT_S8_UINT;
+                        break;
+                    default:
+                        break;
+                    }
+                    break;
+                case OffscreenDepth::_16:
+                    out = VK_FORMAT_D16_UNORM;
+                    switch (stencil)
+                    {
+                    case OffscreenStencil::_8:
+                        out = VK_FORMAT_D16_UNORM_S8_UINT;
+                        break;
+                    default:
+                        break;
+                    }
+                    break;
+                case OffscreenDepth::_24:
+                    switch (stencil)
+                    {
+                    case OffscreenStencil::kNone:
+                        // No pure D24 depth format in Vulkan, fallback
+                        out = VK_FORMAT_D24_UNORM_S8_UINT;
+                        break;
+                    case OffscreenStencil::_8:
+                        out = VK_FORMAT_D24_UNORM_S8_UINT;
+                        break;
+                    default:
+                        break;
+                    }
+                    break;
+                case OffscreenDepth::_32:
+                    switch (stencil)
+                    {
+                    case OffscreenStencil::kNone:
+                        out = VK_FORMAT_D32_SFLOAT;
+                        break;
+                    case OffscreenStencil::_8:
+                        out = VK_FORMAT_D32_SFLOAT_S8_UINT;
+                        break;
+                    default:
+                        break;
+                    }
+                    break;
+                default:
+                    break;
+                }
                 return out;
             }
         } // namespace
@@ -125,18 +132,34 @@ namespace tl
         {
             math::Size2i size;
             OffscreenBufferOptions options;
-            uint32_t id = 0;
-            uint32_t colorID = 0;
-            uint32_t depthStencilID = 0;
+
+            // Vulkan handles
+            VkFormat colorFormat = VK_FORMAT_R8G8B8A8_UNORM;
+            VkFormat depthFormat = VK_FORMAT_D32_SFLOAT_S8_UINT;
+
+            VkImage image = VK_NULL_HANDLE;
+            VkDeviceMemory imageMemory = VK_NULL_HANDLE;
+            VkImageView imageView = VK_NULL_HANDLE;
+            
+            VkImage depthImage = VK_NULL_HANDLE;
+            VkDeviceMemory depthMemory = VK_NULL_HANDLE;
+            VkImageView depthImageView = VK_NULL_HANDLE;
+
+            VkRenderPass renderPass = VK_NULL_HANDLE;
+            VkFramebuffer framebuffer = VK_NULL_HANDLE;
         };
 
         void OffscreenBuffer::_init(
             const math::Size2i& size, const OffscreenBufferOptions& options)
         {
             TLRENDER_P();
-
             p.size = size;
             p.options = options;
+            p.colorFormat = getTextureInternalFormat(p.options.colorType);
+            p.depthFormat = getBufferInternalFormat(p.options.depth,
+                                                    p.options.stencil);
+            
+            initialize();
 
             // Get maximum texture resolution for gfx card
             // GLint glMaxTexDim;
@@ -147,32 +170,6 @@ namespace tl
             // if (p.size.h > glMaxTexDim)
             //     p.size.h = glMaxTexDim;
 
-            // GLenum target = GL_TEXTURE_2D;
-
-            // #if defined(TLRENDER_API_GL_4_1)
-            //             size_t samples = 0;
-            //             switch (p.options.sampling)
-            //             {
-            //             case OffscreenSampling::_2:
-            //                 samples = 2;
-            //                 target = GL_TEXTURE_2D_MULTISAMPLE;
-            //                 break;
-            //             case OffscreenSampling::_4:
-            //                 samples = 4;
-            //                 target = GL_TEXTURE_2D_MULTISAMPLE;
-            //                 break;
-            //             case OffscreenSampling::_8:
-            //                 samples = 8;
-            //                 target = GL_TEXTURE_2D_MULTISAMPLE;
-            //                 break;
-            //             case OffscreenSampling::_16:
-            //                 samples = 16;
-            //                 target = GL_TEXTURE_2D_MULTISAMPLE;
-            //                 break;
-            //             default:
-            //                 break;
-            //             }
-            // #endif // TLRENDER_API_GL_4_1
 
             // Create the color texture.
             if (p.options.colorType != image::PixelType::kNone)
@@ -217,101 +214,116 @@ namespace tl
                     break;
                 }
             }
-
-            // Create the depth/stencil buffer.
-            // if (p.options.depth != OffscreenDepth::kNone ||
-            //     p.options.stencil != OffscreenStencil::kNone)
-            // {
-            // glGenRenderbuffers(1, &p.depthStencilID);
-            // if (!p.depthStencilID)
-            // {
-            //     throw std::runtime_error(
-            //         getErrorLabel(Error::RenderBuffer));
-            // }
-            //                 glBindRenderbuffer(GL_RENDERBUFFER,
-            //                 p.depthStencilID);
-            // #if defined(TLRENDER_API_GL_4_1)
-            //                 glRenderbufferStorageMultisample(
-            //                     GL_RENDERBUFFER,
-            //                     static_cast<GLsizei>(samples),
-            //                     getBufferInternalFormat(p.options.depth,
-            //                     p.options.stencil), p.size.w, p.size.h);
-            // #elif defined(TLRENDER_API_GLES_2)
-            //                 glRenderbufferStorage(
-            //                     GL_RENDERBUFFER,
-            //                     getBufferInternalFormat(p.options.depth,
-            //                     p.options.stencil), p.size.w, p.size.h);
-            // #endif // TLRENDER_API_GL_4_1
-            //                 glBindRenderbuffer(GL_RENDERBUFFER, 0);
-            //             }
-
-            //             // Create the FBO.
-            //             glGenFramebuffers(1, &p.id);
-            //             if (!p.id)
-            //             {
-            //                 throw
-            //                 std::runtime_error(getErrorLabel(Error::Create));
-            //             }
-            //             const OffscreenBufferBinding
-            //             binding(shared_from_this()); if (p.colorID)
-            //             {
-            //                 glFramebufferTexture2D(
-            //                     GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, target,
-            //                     p.colorID, 0);
-            //             }
-            //             if (p.depthStencilID)
-            //             {
-            //                 const GLenum attachment =
-            //                     p.options.stencil != OffscreenStencil::kNone
-            //                         ?
-            // #if defined(TLRENDER_API_GL_4_1)
-            //                         GL_DEPTH_STENCIL_ATTACHMENT
-            //                         :
-            // #elif defined(TLRENDER_API_GLES_2)
-            //                         GL_STENCIL_ATTACHMENT
-            //                         :
-            // #endif // TLRENDER_API_GL_4_1
-            //                         GL_DEPTH_ATTACHMENT;
-            //                 glFramebufferRenderbuffer(
-            //                     GL_FRAMEBUFFER, attachment, GL_RENDERBUFFER,
-            //                     p.depthStencilID);
-            //             }
-            // GLenum error = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-            // if (error != GL_FRAMEBUFFER_COMPLETE)
-            // {
-            //     throw std::runtime_error(getErrorLabel(Error::Init));
-            // }
         }
 
-        OffscreenBuffer::OffscreenBuffer() :
-            _p(new Private)
+        OffscreenBuffer::OffscreenBuffer(Fl_Vk_Context& context) :
+            _p(new Private),
+            ctx(context)
         {
         }
 
         OffscreenBuffer::~OffscreenBuffer()
         {
             TLRENDER_P();
-            // if (p.id)
-            // {
-            //     glDeleteFramebuffers(1, &p.id);
-            //     p.id = 0;
-            // }
-            // if (p.colorID)
-            // {
-            //     glDeleteTextures(1, &p.colorID);
-            //     p.colorID = 0;
-            // }
-            // if (p.depthStencilID)
-            // {
-            //     glDeleteRenderbuffers(1, &p.depthStencilID);
-            //     p.depthStencilID = 0;
-            // }
+
+            cleanup();
         }
 
+        void OffscreenBuffer::cleanup()
+        {
+            TLRENDER_P();
+            
+            VkDevice device = ctx.device;
+            if (p.framebuffer != VK_NULL_HANDLE)
+                vkDestroyFramebuffer(device, p.framebuffer, nullptr);
+            if (p.renderPass != VK_NULL_HANDLE)
+                vkDestroyRenderPass(device, p.renderPass, nullptr);
+            if (p.imageView != VK_NULL_HANDLE)
+                vkDestroyImageView(device, p.imageView, nullptr);
+            if (p.image != VK_NULL_HANDLE)
+                vkDestroyImage(device, p.image, nullptr);
+            if (p.imageMemory != VK_NULL_HANDLE)
+                vkFreeMemory(device, p.imageMemory, nullptr);
+            if (p.depthImageView != VK_NULL_HANDLE)
+                vkDestroyImageView(device, p.depthImageView, nullptr);
+            if (p.depthImage != VK_NULL_HANDLE)
+                vkDestroyImage(device, p.depthImage, nullptr);
+            if (p.depthMemory != VK_NULL_HANDLE)
+                vkFreeMemory(device, p.depthMemory, nullptr);
+        }
+        
+        void OffscreenBuffer::initialize()
+        {
+            createImage();
+            createImageView();
+            createDepthImage();
+            createDepthImageView();
+            createRenderPass();
+            createFramebuffer();
+        }
+
+        void OffscreenBuffer::createDepthImage()
+        {
+            TLRENDER_P();
+            
+            VkImageCreateInfo imageInfo = {};
+            imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+            imageInfo.imageType = VK_IMAGE_TYPE_2D;
+            imageInfo.extent = {
+                static_cast<uint32_t>(p.size.w),
+                static_cast<uint32_t>(p.size.h), 1
+            };
+            imageInfo.mipLevels = 1;
+            imageInfo.arrayLayers = 1;
+            imageInfo.format = p.depthFormat;
+            imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
+            imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            imageInfo.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
+            imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
+            imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+            if (vkCreateImage(ctx.device, &imageInfo, nullptr,
+                              &p.depthImage) != VK_SUCCESS)
+                throw std::runtime_error("Failed to create depth image");
+
+            VkMemoryRequirements memReq;
+            vkGetImageMemoryRequirements(ctx.device, p.depthImage, &memReq);
+
+            VkMemoryAllocateInfo allocInfo{};
+            allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+            allocInfo.allocationSize = memReq.size;
+            allocInfo.memoryTypeIndex = findMemoryType(memReq.memoryTypeBits,
+                                                       VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+
+            if (vkAllocateMemory(ctx.device, &allocInfo, nullptr,
+                                 &p.depthMemory) != VK_SUCCESS)
+                throw std::runtime_error("Failed to allocate depth memory");
+
+            vkBindImageMemory(ctx.device, p.depthImage, p.depthMemory, 0);
+        }
+
+        void OffscreenBuffer::createDepthImageView() {
+            TLRENDER_P();
+            
+            VkImageViewCreateInfo viewInfo = {};
+            viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+            viewInfo.image = p.depthImage;
+            viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+            viewInfo.format = p.depthFormat;
+            viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
+            viewInfo.subresourceRange.levelCount = 1;
+            viewInfo.subresourceRange.layerCount = 1;
+            
+            if (vkCreateImageView(ctx.device, &viewInfo, nullptr,
+                                  &p.depthImageView) != VK_SUCCESS)
+                throw std::runtime_error("Failed to create depth image view");
+        }
+        
         std::shared_ptr<OffscreenBuffer> OffscreenBuffer::create(
+            Fl_Vk_Context& context,
             const math::Size2i& size, const OffscreenBufferOptions& options)
         {
-            auto out = std::shared_ptr<OffscreenBuffer>(new OffscreenBuffer);
+            auto out = std::shared_ptr<OffscreenBuffer>(new OffscreenBuffer(context));
             out->_init(size, options);
             return out;
         }
@@ -335,20 +347,181 @@ namespace tl
         {
             return _p->options;
         }
-
-        uint32_t OffscreenBuffer::getID() const
+        
+        VkImageView      OffscreenBuffer::getImageView() const
         {
-            return _p->id;
+            return _p->imageView;
+        }
+        
+        VkImage          OffscreenBuffer::getImage() const
+        {
+            return _p->image;
         }
 
-        uint32_t OffscreenBuffer::getColorID() const
+        VkFramebuffer    OffscreenBuffer::getFramebuffer() const
         {
-            return _p->colorID;
+            return _p->framebuffer;
+        }
+        
+        VkRenderPass     OffscreenBuffer::getRenderPass() const
+        {
+            return _p->renderPass;
+        }
+        
+        VkExtent2D OffscreenBuffer::getExtent() const
+        {
+            return { static_cast<uint32_t>(_p->size.w),
+                     static_cast<uint32_t>(_p->size.h) };
+        }
+        
+        void OffscreenBuffer::createImage()
+        {
+            TLRENDER_P();
+            
+            VkImageCreateInfo info{};
+            info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+            info.imageType = VK_IMAGE_TYPE_2D;
+            info.extent.width = static_cast<uint32_t>(p.size.w);
+            info.extent.height = static_cast<uint32_t>(p.size.h);
+            info.extent.depth = 1;
+            info.mipLevels = 1;
+            info.arrayLayers = 1;
+            info.format = p.colorFormat;
+            info.tiling = VK_IMAGE_TILING_OPTIMAL;
+            info.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            info.usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
+                         VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
+            info.samples = VK_SAMPLE_COUNT_1_BIT;
+            info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+            if (vkCreateImage(ctx.device, &info, nullptr, &p.image) !=
+                VK_SUCCESS)
+                throw std::runtime_error("Failed to create offscreen image");
+
+            VkMemoryRequirements memReq;
+            vkGetImageMemoryRequirements(ctx.device, p.image, &memReq);
+
+            VkMemoryAllocateInfo allocInfo{};
+            allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+            allocInfo.allocationSize = memReq.size;
+            allocInfo.memoryTypeIndex = findMemoryType(memReq.memoryTypeBits,
+                                                       VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+
+            if (vkAllocateMemory(ctx.device, &allocInfo, nullptr,
+                                 &p.imageMemory) != VK_SUCCESS)
+                throw std::runtime_error("Failed to allocate offscreen image memory");
+
+            vkBindImageMemory(ctx.device, p.image, p.imageMemory, 0);
         }
 
-        void OffscreenBuffer::bind()
+        void OffscreenBuffer::createImageView()
         {
-            // glBindFramebuffer(GL_FRAMEBUFFER, _p->id);
+            TLRENDER_P();
+            
+            VkImageViewCreateInfo viewInfo{};
+            viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+            viewInfo.image = p.image;
+            viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+            viewInfo.format = p.colorFormat;
+            viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            viewInfo.subresourceRange.levelCount = 1;
+            viewInfo.subresourceRange.layerCount = 1;
+
+            if (vkCreateImageView(ctx.device, &viewInfo, nullptr,
+                                  &p.imageView)
+                != VK_SUCCESS)
+                throw std::runtime_error("Failed to create image view");
+        }
+
+        void OffscreenBuffer::createRenderPass()
+        {
+            TLRENDER_P();
+            
+            VkAttachmentDescription colorAttachment{};
+            colorAttachment.format = p.colorFormat;
+            colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
+            colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+            colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            colorAttachment.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            
+            VkAttachmentDescription depthAttachment{};
+            depthAttachment.format = p.depthFormat;
+            depthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
+            depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+            depthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            depthAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+            depthAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            depthAttachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
+            VkAttachmentReference colorRef{};
+            colorRef.attachment = 0;
+            colorRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+            VkAttachmentReference depthRef{};
+            depthRef.attachment = 1;
+            depthRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+    
+            VkSubpassDescription subpass{};
+            subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+            subpass.colorAttachmentCount = 1;
+            subpass.pColorAttachments = &colorRef;
+            subpass.pDepthStencilAttachment = &depthRef;
+
+            std::array<VkAttachmentDescription, 2> attachments = {
+                colorAttachment,
+                depthAttachment
+            };
+
+            VkRenderPassCreateInfo rpInfo{};
+            rpInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+            rpInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
+            rpInfo.pAttachments = attachments.data();
+            rpInfo.subpassCount = 1;
+            rpInfo.pSubpasses = &subpass;
+
+            if (vkCreateRenderPass(ctx.device, &rpInfo, nullptr, &p.renderPass)
+                != VK_SUCCESS)
+                throw std::runtime_error("Failed to create render pass");
+        }
+
+        void OffscreenBuffer::createFramebuffer()
+        {
+            TLRENDER_P();
+            
+            std::array<VkImageView, 2> attachments = {
+                p.imageView,
+                p.depthImageView
+            };
+    
+            VkFramebufferCreateInfo fbInfo{};
+            fbInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+            fbInfo.renderPass = p.renderPass;
+            fbInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
+            fbInfo.pAttachments = attachments.data();
+            fbInfo.width = p.size.w;
+            fbInfo.height = p.size.h;
+            fbInfo.layers = 1;
+
+            if (vkCreateFramebuffer(ctx.device, &fbInfo, nullptr,
+                                    &p.framebuffer) != VK_SUCCESS)
+                throw std::runtime_error("Failed to create framebuffer");
+        }
+        
+        uint32_t OffscreenBuffer::findMemoryType(uint32_t typeFilter,
+                                                 VkMemoryPropertyFlags properties)
+        {
+            VkPhysicalDeviceMemoryProperties memProps;
+            vkGetPhysicalDeviceMemoryProperties(ctx.gpu, &memProps);
+
+            for (uint32_t i = 0; i < memProps.memoryTypeCount; i++) {
+                if ((typeFilter & (1 << i)) &&
+                    (memProps.memoryTypes[i].propertyFlags & properties) == properties) {
+                    return i;
+                }
+            }
+            throw std::runtime_error("Failed to find suitable memory type");
         }
 
         bool doCreate(
@@ -384,4 +557,29 @@ namespace tl
             // glBindFramebuffer(GL_FRAMEBUFFER, _p->previous);
         }
     } // namespace vk
+
+
+    /* Usage:
+       
+       vk::OffscreenBuffer fbo(ctx, size, OffscreenOptions);
+       
+       // Clear red + clear depth/stencil
+       VkClearValue clearValues[2];
+       clearValues[0].color = { 1.f, 0.f, 0.f, 1.f };
+       clearValues[1].depthStencil = { 1.0f, 0 };
+
+       VkRenderPassBeginInfo rpBegin{};
+       rpBegin.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+       rpBegin.renderPass = fbo.getRenderPass();
+       rpBegin.framebuffer = fbo.getFramebuffer();
+       rpBegin.renderArea.extent = fbo.getExtent();
+       rpBegin.clearValueCount = 2;
+       rpBegin.pClearValues = clearValues;
+
+       vkCmdBeginRenderPass(cmdBuffer, &rpBegin, VK_SUBPASS_CONTENTS_INLINE);
+       // Draw commands here...
+       vkCmdEndRenderPass(cmdBuffer);
+
+    */
+
 } // namespace tl

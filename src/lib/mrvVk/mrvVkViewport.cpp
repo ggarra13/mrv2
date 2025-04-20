@@ -120,7 +120,7 @@ namespace mrv
             if (auto context = vk.context.lock())
             {
 
-                vk.render = timeline_vk::Render::create(&ctx, context);
+                vk.render = timeline_vk::Render::create(ctx, context);
                 p.fontSystem = image::FontSystem::create(context);
 
 #ifdef USE_ONE_PIXEL_LINES
@@ -133,9 +133,9 @@ namespace mrv
                 {
                     const std::string& vertexSource = timeline_vk::vertexSource();
                     vk.shader =
-                        vk::Shader::create(&ctx, vertexSource,
+                        vk::Shader::create(ctx, vertexSource,
                                            textureFragmentSource());
-                    vk.annotationShader = vk::Shader::create(&ctx,
+                    vk.annotationShader = vk::Shader::create(ctx,
                                                              vertexSource, annotationFragmentSource());
                 }
                 catch (const std::exception& e)
@@ -285,7 +285,7 @@ namespace mrv
                     {
                     
                         vk.buffer = vk::OffscreenBuffer::create(
-                            renderSize, offscreenBufferOptions);
+                            ctx, renderSize, offscreenBufferOptions);
                     
                         _createPBOs(renderSize);
                     
@@ -299,7 +299,7 @@ namespace mrv
                                 offscreenBufferOptions))
                         {
                             vk.stereoBuffer = vk::OffscreenBuffer::create(
-                                renderSize, offscreenBufferOptions);
+                                ctx, renderSize, offscreenBufferOptions);
                         }
                     }
                 
@@ -632,7 +632,7 @@ namespace mrv
                             vk.overlay, renderSize, offscreenBufferOptions))
                     {
                         vk.overlay = vk::OffscreenBuffer::create(
-                            renderSize, offscreenBufferOptions);
+                            ctx, renderSize, offscreenBufferOptions);
                     
                         _createOverlayPBO(renderSize);
                     
@@ -771,7 +771,7 @@ namespace mrv
                             vk.annotation, viewportSize, offscreenBufferOptions))
                     {
                         vk.annotation = vk::OffscreenBuffer::create(
-                            viewportSize, offscreenBufferOptions);
+                            ctx, viewportSize, offscreenBufferOptions);
                     }
 
                     _drawAnnotations(

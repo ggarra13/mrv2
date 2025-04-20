@@ -40,18 +40,17 @@ namespace tl
 
         protected:
             void _init(
-                const Fl_Vk_Context* ctx,
                 const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<TextureCache>&);
 
-            Render();
+            Render(Fl_Vk_Context& ctx);
 
         public:
             virtual ~Render();
 
             //! Create a new renderer.
             static std::shared_ptr<Render> create(
-                const Fl_Vk_Context* ctx,
+                Fl_Vk_Context& ctx,
                 const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<TextureCache>& = nullptr);
 
@@ -163,6 +162,7 @@ namespace tl
                 std::vector<Fl_Vk_Texture>& textures,
                 const OCIO::GpuShaderDescRcPtr& shaderDesc);
 #endif
+            Fl_Vk_Context ctx;
                 
             TLRENDER_PRIVATE();
         };

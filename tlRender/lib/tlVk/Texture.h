@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <tlVk/Vk.h>
+
 #include <tlTimeline/ImageOptions.h>
 
 #include <tlCore/Image.h>
@@ -12,16 +14,10 @@ namespace tl
 {
     namespace vk
     {
-        //! Get the OpenGL texture format.
-        unsigned int getTextureFormat(image::PixelType);
+        //! Get the Vulkan internal texture format.
+        VkFormat    getTextureInternalFormat(image::PixelType);
 
-        //! Get the OpenGL internal texture format.
-        unsigned int getTextureInternalFormat(image::PixelType);
-
-        //! Get the OpenGL texture type.
-        unsigned int getTextureType(image::PixelType);
-
-        //! OpenGL texture options.
+        //! Vulkan texture options.
         struct TextureOptions
         {
             timeline::ImageFilters filters;
@@ -31,10 +27,10 @@ namespace tl
             bool operator!=(const TextureOptions&) const;
         };
 
-        //! Get the OpenGL texture filter.
-        unsigned int getTextureFilter(timeline::ImageFilter);
+        //! Get the Vulkan texture filter.
+        VkFilter getTextureFilter(timeline::ImageFilter);
 
-        //! OpenGL texture.
+        //! Vulkan texture.
         class Texture : public std::enable_shared_from_this<Texture>
         {
             TLRENDER_NON_COPYABLE(Texture);
@@ -52,7 +48,7 @@ namespace tl
             static std::shared_ptr<Texture> create(
                 const image::Info&, const TextureOptions& = TextureOptions());
 
-            //! Get the OpenGL texture ID.
+            //! Get the Vulkan texture ID.
             unsigned int getID() const;
 
             //! Get the image information.

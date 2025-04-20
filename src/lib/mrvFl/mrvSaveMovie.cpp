@@ -743,6 +743,12 @@ namespace mrv
 
 #ifdef VULKAN_BACKEND
             std::shared_ptr<vk::OffscreenBuffer> buffer;
+            Fl_Vk_Context ctx;  // \@todo: fill-in
+            if (hasVideo)
+            {
+                buffer = vk::OffscreenBuffer::create(
+                    ctx, offscreenBufferSize, offscreenBufferOptions);
+            }
 #else
             std::shared_ptr<gl::OffscreenBuffer> buffer;
 

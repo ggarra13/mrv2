@@ -1,8 +1,11 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Copyright (c) 2021-2024 Darby Johnston
+// Copyright (c) 2025-Present Gonzalo Garramuño
 // All rights reserved.
 
 #pragma once
+
+#include <tlVk/Vk.h>
 
 #include <tlTimeline/ImageOptions.h>
 
@@ -35,6 +38,8 @@ namespace tl
         const OffscreenDepth offscreenDepthDefault = OffscreenDepth::_16;
 #elif defined(TLRENDER_API_GLES_2)
         const OffscreenDepth offscreenDepthDefault = OffscreenDepth::_24;
+#else
+        const OffscreenDepth offscreenDepthDefault = OffscreenDepth::_16;
 #endif // TLRENDER_API_GL_4_1
 
         //! Offscreen buffer stencil size.
@@ -82,16 +87,18 @@ namespace tl
             TLRENDER_NON_COPYABLE(OffscreenBuffer);
 
         protected:
-            void _init(const math::Size2i&, const OffscreenBufferOptions&);
+            void _init(const math::Size2i&,
+                       const OffscreenBufferOptions&);
 
-            OffscreenBuffer();
+            OffscreenBuffer(Fl_Vk_Context& context);
 
         public:
             ~OffscreenBuffer();
 
             //! Create a new offscreen buffer.
             static std::shared_ptr<OffscreenBuffer>
-            create(const math::Size2i&, const OffscreenBufferOptions&);
+            create(Fl_Vk_Context& context, const math::Size2i&,
+                   const OffscreenBufferOptions&);
 
             //! Get the offscreen buffer size.
             const math::Size2i& getSize() const;
@@ -105,16 +112,28 @@ namespace tl
             //! Get the options.
             const OffscreenBufferOptions& getOptions() const;
 
-            //! Get the offscreen buffer ID.
-            unsigned int getID() const;
-
-            //! Get the color texture ID.
-            unsigned int getColorID() const;
-
-            //! Bind the offscreen buffer.
-            void bind();
-
+            //! Vulkan Accessors
+            VkImageView      getImageView() const;
+            VkImage          getImage() const;
+            VkFramebuffer    getFramebuffer() const;
+            VkRenderPass     getRenderPass() const;
+            VkExtent2D       getExtent() const;
+            
         private:
+            Fl_Vk_Context& ctx;
+            
+            void cleanup();
+            void initialize();
+            void createImage();
+            void createImageView();
+            void createDepthImage();
+            void createDepthImageView();
+            void createRenderPass();
+            void createFramebuffer();
+
+            uint32_t findMemoryType(uint32_t typeFilter,
+                                    VkMemoryPropertyFlags properties);
+            
             TLRENDER_PRIVATE();
         };
 

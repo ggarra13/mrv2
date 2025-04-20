@@ -18,7 +18,6 @@ namespace tl
     {
         struct Shader::Private
         {
-            const Fl_Vk_Context* ctx = nullptr;
             std::string vertexSource;
             std::string fragmentSource;
             VkShaderModule vertex;
@@ -37,7 +36,7 @@ namespace tl
                     "vertex_shader.glsl"   // Filename for error reporting
                 );
 
-                p.vertex = create_shader_module(p.ctx->device, spirv);
+                p.vertex = create_shader_module(ctx.device, spirv);
             }
             catch (const std::exception& e)
             {
@@ -54,7 +53,7 @@ namespace tl
                 );
 
                 // Assuming you have a VkDevice 'device' already created
-                p.fragment = create_shader_module(p.ctx->device, spirv);
+                p.fragment = create_shader_module(ctx.device, spirv);
             }
             catch (const std::exception& e)
             {
@@ -63,8 +62,9 @@ namespace tl
             }
         }
 
-        Shader::Shader() :
-            _p(new Private)
+        Shader::Shader(Fl_Vk_Context& context) :
+            _p(new Private),
+            ctx(context)
         {
         }
 
@@ -74,11 +74,10 @@ namespace tl
         }
 
         std::shared_ptr<Shader> Shader::create(
-            const Fl_Vk_Context* ctx, const std::string& vertexSource,
+            Fl_Vk_Context& ctx, const std::string& vertexSource,
             const std::string& fragmentSource)
         {
-            auto out = std::shared_ptr<Shader>(new Shader);
-            out->_p->ctx = ctx;
+            auto out = std::shared_ptr<Shader>(new Shader(ctx));
             out->_p->vertexSource = vertexSource;
             out->_p->fragmentSource = fragmentSource;
             out->_init();

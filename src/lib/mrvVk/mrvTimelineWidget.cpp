@@ -702,7 +702,7 @@ namespace mrv
             {
                 try
                 {
-                    p.render = timeline_vk::Render::create(&ctx, context);
+                    p.render = timeline_vk::Render::create(ctx, context);
                 
                     const std::string vertexSource =
                         "#version 410\n"
@@ -735,7 +735,7 @@ namespace mrv
                         "    fColor = texture(textureSampler, fTexture);\n"
                         "    fColor.a *= opacity;\n"
                         "}\n";
-                    p.shader = vk::Shader::create(&ctx,
+                    p.shader = vk::Shader::create(ctx,
                                                   vertexSource, fragmentSource);
                 
                 }
@@ -842,7 +842,7 @@ namespace mrv
                                 p.buffer, renderSize, offscreenBufferOptions))
                         {
                             p.buffer = vk::OffscreenBuffer::create(
-                                renderSize, offscreenBufferOptions);
+                                ctx, renderSize, offscreenBufferOptions);
                         }
                     }
                     else

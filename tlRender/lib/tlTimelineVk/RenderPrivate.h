@@ -104,8 +104,6 @@ namespace tl
 
         struct Render::Private
         {
-            const Fl_Vk_Context* ctx = nullptr;
-
             bool hdrMonitorFound = false;
             
             math::Size2i renderSize;
