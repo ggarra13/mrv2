@@ -852,7 +852,7 @@ namespace mrv
 
                     if (p.render && p.buffer)
                     {
-                        vk::OffscreenBufferBinding binding(p.buffer);
+                        // vk::OffscreenBufferBinding binding(p.buffer);
                         timeline::RenderOptions renderOptions;
                         renderOptions.clearColor =
                             p.style->getColorRole(ui::ColorRole::Window);

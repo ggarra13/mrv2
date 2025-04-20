@@ -331,7 +331,7 @@ namespace mrv
                     }
                     else
                     {
-                        vk::OffscreenBufferBinding binding(vk.buffer);
+                        // vk::OffscreenBufferBinding binding(vk.buffer);
 
                         locale::SetAndRestore saved;
                         timeline::RenderOptions renderOptions;
@@ -937,7 +937,7 @@ namespace mrv
                 // constexpr VKenum type = GL_FLOAT;
 
 
-                vk::OffscreenBufferBinding binding(vk.buffer);
+                // vk::OffscreenBufferBinding binding(vk.buffer);
                 const auto& renderSize = vk.buffer->getSize();
 
                 // bool update = _shouldUpdatePixelBar();

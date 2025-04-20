@@ -252,7 +252,7 @@ namespace mrv
             {
                 locale::SetAndRestore saved;
 
-                vk::OffscreenBufferBinding binding(vk.buffer);
+                // vk::OffscreenBufferBinding binding(vk.buffer);
                 vk.render->begin(renderSize);
                 vk.render->setOCIOOptions(p.ocioOptions);
                 vk.render->setLUTOptions(p.lutOptions);
@@ -278,7 +278,7 @@ namespace mrv
 
             {
                 locale::SetAndRestore saved;
-                vk::OffscreenBufferBinding binding(vk.stereoBuffer);
+                // vk::OffscreenBufferBinding binding(vk.stereoBuffer);
 
                 vk.render->begin(renderSize);
                 vk.render->setOCIOOptions(p.ocioOptions);
@@ -423,7 +423,7 @@ namespace mrv
             TLRENDER_P();
             MRV2_VK();
 
-            vk::OffscreenBufferBinding binding(overlay);
+            // vk::OffscreenBufferBinding binding(overlay);
             
 
             timeline::RenderOptions renderOptions;

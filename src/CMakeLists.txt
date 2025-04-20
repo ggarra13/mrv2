@@ -358,13 +358,17 @@ add_subdirectory( ${CMAKE_CURRENT_SOURCE_DIR}/lib )
 #
 # Add main source
 #
-add_subdirectory( main )
+add_subdirectory(main)
 
 #
 # Add hdr source
 #
 if (TLRENDER_NDI AND TLRENDER_FFMPEG AND TLRENDER_VK AND MRV2_HDR)
-    add_subdirectory( hdr )
+    add_subdirectory(hdr)
+endif()
+
+if (TLRENDER_VK AND MRV2_TESTS)
+    add_subdirectory(tests)
 endif()
 
 #

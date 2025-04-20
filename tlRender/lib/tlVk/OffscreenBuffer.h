@@ -117,7 +117,12 @@ namespace tl
             VkImage          getImage() const;
             VkFramebuffer    getFramebuffer() const;
             VkRenderPass     getRenderPass() const;
+            VkSampler        getSampler() const;
             VkExtent2D       getExtent() const;
+
+            //! Offscreen image transitions.
+            void transitionToShaderRead(VkCommandBuffer cmd);
+            void transitionToColorAttachment(VkCommandBuffer cmd);
             
         private:
             Fl_Vk_Context& ctx;
@@ -130,6 +135,7 @@ namespace tl
             void createDepthImageView();
             void createRenderPass();
             void createFramebuffer();
+            void createSampler();
 
             uint32_t findMemoryType(uint32_t typeFilter,
                                     VkMemoryPropertyFlags properties);
@@ -141,18 +147,5 @@ namespace tl
         bool doCreate(
             const std::shared_ptr<OffscreenBuffer>&, const math::Size2i&,
             const OffscreenBufferOptions&);
-
-        //! Offscreen buffer binding.
-        class OffscreenBufferBinding
-        {
-        public:
-            explicit OffscreenBufferBinding(
-                const std::shared_ptr<OffscreenBuffer>&);
-
-            ~OffscreenBufferBinding();
-
-        private:
-            TLRENDER_PRIVATE();
-        };
     } // namespace vk
 } // namespace tl
