@@ -162,7 +162,7 @@ namespace tl
                 std::vector<Fl_Vk_Texture>& textures,
                 const OCIO::GpuShaderDescRcPtr& shaderDesc);
 #endif
-            Fl_Vk_Context ctx;
+            Fl_Vk_Context& ctx;
                 
             TLRENDER_PRIVATE();
         };

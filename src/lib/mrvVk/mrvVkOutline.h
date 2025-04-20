@@ -9,6 +9,8 @@
 #include <tlCore/Box.h>
 #include <tlCore/Color.h>
 
+#include <FL/Fl_Vk_Window.H>
+
 namespace mrv
 {
     namespace vulkan
@@ -23,6 +25,7 @@ namespace mrv
             ~Outline();
 
             void drawRect(
+                Fl_Vk_Context& ctx,
                 const math::Box2i&, const image::Color4f&,
                 const math::Matrix4x4f& mvp);
 

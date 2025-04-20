@@ -152,7 +152,7 @@ namespace tl
             std::list<Stats> stats;
             std::chrono::steady_clock::time_point logTimer;
 
-            void drawTextMesh(const geom::TriangleMesh2&);
+            void drawTextMesh(Fl_Vk_Context& ctx, const geom::TriangleMesh2&);
         };
     } // namespace timeline_vk
 } // namespace tl

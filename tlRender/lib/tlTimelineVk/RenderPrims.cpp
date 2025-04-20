@@ -67,7 +67,7 @@ namespace tl
 
                 if (!p.vaos["mesh"] && p.vbos["mesh"])
                 {
-                    p.vaos["mesh"] = vk::VAO::create(
+                    p.vaos["mesh"] = vk::VAO::create(ctx,
                         p.vbos["mesh"]->getType(), p.vbos["mesh"]->getID());
                 }
                 if (p.vaos["mesh"] && p.vbos["mesh"])
@@ -113,7 +113,7 @@ namespace tl
 
                 if (!p.vaos["colorMesh"] && p.vbos["colorMesh"])
                 {
-                    p.vaos["colorMesh"] = vk::VAO::create(
+                    p.vaos["colorMesh"] = vk::VAO::create(ctx,
                         p.vbos["colorMesh"]->getType(),
                         p.vbos["colorMesh"]->getID());
                 }
@@ -125,7 +125,8 @@ namespace tl
             }
         }
 
-        void Render::Private::drawTextMesh(const geom::TriangleMesh2& mesh)
+        void Render::Private::drawTextMesh(Fl_Vk_Context& ctx,
+                                           const geom::TriangleMesh2& mesh)
         {
             const size_t size = mesh.triangles.size();
             currentStats.textTriangles += size;
@@ -144,7 +145,7 @@ namespace tl
                 }
                 if (!vaos["text"] && vbos["text"])
                 {
-                    vaos["text"] = vk::VAO::create(
+                    vaos["text"] = vk::VAO::create(ctx,
                         vbos["text"]->getType(), vbos["text"]->getID());
                 }
                 if (vaos["text"] && vbos["text"])
@@ -212,7 +213,7 @@ namespace tl
                             // glBindTexture(
                             //     GL_TEXTURE_2D, textures[textureIndex]);
 
-                            p.drawTextMesh(mesh);
+                            p.drawTextMesh(ctx, mesh);
                             mesh = geom::TriangleMesh2();
                             meshIndex = 0;
                         }
@@ -260,7 +261,7 @@ namespace tl
                     x += glyph->advance;
                 }
             }
-            p.drawTextMesh(mesh);
+            p.drawTextMesh(ctx, mesh);
         }
 
         void Render::drawTexture(

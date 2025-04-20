@@ -948,7 +948,7 @@ namespace mrv
             redrawWindows();
         }
 
-        void TimelineViewport::_updatePixelBar() const noexcept
+        void TimelineViewport::_updatePixelBar() noexcept
         {
             TLRENDER_P();
 

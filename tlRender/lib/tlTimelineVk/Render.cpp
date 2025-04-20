@@ -649,22 +649,22 @@ namespace tl
             _displayShader();
 
             p.vbos["rect"] = vk::VBO::create(2 * 3, vk::VBOType::Pos2_F32);
-            p.vaos["rect"] = vk::VAO::create(
+            p.vaos["rect"] = vk::VAO::create(ctx,
                 p.vbos["rect"]->getType(), p.vbos["rect"]->getID());
             p.vbos["texture"] =
                 vk::VBO::create(2 * 3, vk::VBOType::Pos2_F32_UV_U16);
-            p.vaos["texture"] = vk::VAO::create(
+            p.vaos["texture"] = vk::VAO::create(ctx,
                 p.vbos["texture"]->getType(), p.vbos["texture"]->getID());
             p.vbos["image"] =
                 vk::VBO::create(2 * 3, vk::VBOType::Pos2_F32_UV_U16);
-            p.vaos["image"] = vk::VAO::create(
+            p.vaos["image"] = vk::VAO::create(ctx,
                 p.vbos["image"]->getType(), p.vbos["image"]->getID());
             p.vbos["wipe"] = vk::VBO::create(1 * 3, vk::VBOType::Pos2_F32);
-            p.vaos["wipe"] = vk::VAO::create(
+            p.vaos["wipe"] = vk::VAO::create(ctx,
                 p.vbos["wipe"]->getType(), p.vbos["wipe"]->getID());
             p.vbos["video"] =
                 vk::VBO::create(2 * 3, vk::VBOType::Pos2_F32_UV_U16);
-            p.vaos["video"] = vk::VAO::create(
+            p.vaos["video"] = vk::VAO::create(ctx,
                 p.vbos["video"]->getType(), p.vbos["video"]->getID());
 
             setViewport(math::Box2i(0, 0, renderSize.w, renderSize.h));

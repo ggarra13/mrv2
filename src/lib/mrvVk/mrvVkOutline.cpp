@@ -41,6 +41,7 @@ namespace mrv
         Outline::~Outline() {}
 
         void Outline::drawRect(
+            Fl_Vk_Context& ctx,
             const math::Box2i& bbox, const image::Color4f& color,
             const math::Matrix4x4f& mvp)
         {
@@ -61,7 +62,7 @@ namespace mrv
 
             if (!p.vao)
             {
-                p.vao = VAO::create(p.vbo->getType(), p.vbo->getID());
+                p.vao = VAO::create(ctx, p.vbo->getType(), p.vbo->getID());
             }
 
             p.shader->bind();

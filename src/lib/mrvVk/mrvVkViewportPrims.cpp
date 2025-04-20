@@ -43,7 +43,7 @@ namespace mrv
             }
             if (!vk.vao && vk.vbo)
             {
-                vk.vao = vk::VAO::create(vk.vbo->getType(), vk.vbo->getID());
+                vk.vao = vk::VAO::create(ctx, vk.vbo->getType(), vk.vbo->getID());
             }
         }
 
@@ -67,7 +67,7 @@ namespace mrv
             }
             if (!vk.vao && vk.vbo)
             {
-                vk.vao = vk::VAO::create(vk.vbo->getType(), vk.vbo->getID());
+                vk.vao = vk::VAO::create(ctx, vk.vbo->getType(), vk.vbo->getID());
             }
         }
 
@@ -194,7 +194,7 @@ namespace mrv
 
             if (!vk.vao && vk.vbo)
             {
-                vk.vao = vk::VAO::create(vk.vbo->getType(), vk.vbo->getID());
+                vk.vao = vk::VAO::create(ctx, vk.vbo->getType(), vk.vbo->getID());
                 
             }
 

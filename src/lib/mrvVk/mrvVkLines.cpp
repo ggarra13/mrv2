@@ -2,6 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <FL/Fl_Vk_Window.H>
+
 #include <tlCore/Mesh.h>
 
 #include <tlVk/Mesh.h>
@@ -11,6 +13,7 @@
 // #include "mrvGL/mrvGLErrors.h"
 #include "mrvVk/mrvVkShaders.h"
 #include "mrvVk/mrvVkLines.h"
+
 
 namespace tl
 {
@@ -45,6 +48,7 @@ namespace mrv
         Lines::~Lines() {}
 
         void Lines::drawLines(
+            Fl_Vk_Context& ctx,
             const std::shared_ptr<timeline::IRender>& render,
             const draw::PointList& pts, const image::Color4f& color,
             const float width, const bool soft,
@@ -172,7 +176,7 @@ namespace mrv
 
             if (!p.vao && p.vbo)
             {
-                p.vao = vk::VAO::create(p.vbo->getType(), p.vbo->getID());
+                p.vao = vk::VAO::create(ctx, p.vbo->getType(), p.vbo->getID());
                 
             }
 
@@ -206,6 +210,7 @@ namespace mrv
         }
 
         void Lines::drawLine(
+            Fl_Vk_Context& ctx,
             const std::shared_ptr<timeline::IRender>& render,
             const math::Vector2i& start, const math::Vector2i& end,
             const image::Color4f& color, const float width)
@@ -217,12 +222,13 @@ namespace mrv
             line.push_back(Point(end.x, end.y));
 
             drawLines(
-                render, line, color, width, false,
+                ctx, render, line, color, width, false,
                 Polyline2D::JointStyle::MITER, Polyline2D::EndCapStyle::BUTT,
                 false);
         }
 
         void Lines::drawPoints(
+            Fl_Vk_Context& ctx,
             const std::vector<math::Vector2f>& pnts,
             const image::Color4f& color, const int size)
         {
@@ -246,7 +252,7 @@ namespace mrv
 
             if (!p.vao && p.vbo)
             {
-                p.vao = vk::VAO::create(p.vbo->getType(), p.vbo->getID());
+                p.vao = vk::VAO::create(ctx, p.vbo->getType(), p.vbo->getID());
             }
 
             if (p.vao && p.vbo)
@@ -258,6 +264,7 @@ namespace mrv
         }
 
         void Lines::drawCircle(
+            Fl_Vk_Context& ctx,
             const std::shared_ptr<timeline::IRender>& render,
             const math::Vector2f& center, const float radius, const float width,
             const image::Color4f& color, const bool soft)
@@ -276,12 +283,13 @@ namespace mrv
             }
 
             drawLines(
-                render, verts, color, width, soft,
+                ctx, render, verts, color, width, soft,
                 draw::Polyline2D::JointStyle::ROUND,
                 draw::Polyline2D::EndCapStyle::JOINT);
         }
 
         void Lines::drawCursor(
+            Fl_Vk_Context& ctx,
             const std::shared_ptr<timeline::IRender>& render,
             const math::Vector2f& center, const float radius,
             const image::Color4f& color)
@@ -289,10 +297,10 @@ namespace mrv
             float lineWidth = 2.0;
             if (radius <= 2.0)
                 lineWidth = 1.0f;
-            drawCircle(render, center, radius, lineWidth, color, false);
+            drawCircle(ctx, render, center, radius, lineWidth, color, false);
             image::Color4f black(0.F, 0.F, 0.F, 1.F);
             if (radius > 2.0F)
-                drawCircle(render, center, radius - 2.0F, 2.0, black, false);
+                drawCircle(ctx, render, center, radius - 2.0F, 2.0, black, false);
         }
 
     } // namespace opengl

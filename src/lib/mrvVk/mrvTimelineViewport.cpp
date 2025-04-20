@@ -2070,7 +2070,7 @@ namespace mrv
             c->uiPixelL->value(float_printf(buf, hsv.a));
         }
 
-        void TimelineViewport::updatePixelBar() const noexcept
+        void TimelineViewport::updatePixelBar() noexcept
         {
             TLRENDER_P();
             const Fl_Widget* belowmouse = Fl::belowmouse();

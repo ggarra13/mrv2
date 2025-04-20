@@ -66,7 +66,7 @@ namespace mrv
             // glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
         }
 
-        void Viewport::_drawScanlines(int left, int right) const noexcept
+        void Viewport::_drawScanlines(int left, int right) noexcept
         {
             TLRENDER_P();
             MRV2_VK();
@@ -92,9 +92,8 @@ namespace mrv
             image::Color4f color(1, 1, 1, 1);
             for (size_t y = 0; y < H; y += 2)
             {
-                vk.lines->drawLine(
-                    vk.render, math::Vector2i(0, y), math::Vector2i(W, y), color,
-                    1);
+                vk.lines->drawLine(ctx, vk.render, math::Vector2i(0, y),
+                                   math::Vector2i(W, y), color, 1);
             }
 
             if (p.stereo3DOptions.eyeSeparation != 0.F)
@@ -120,7 +119,7 @@ namespace mrv
                 ;
         }
 
-        void Viewport::_drawCheckerboard(int left, int right) const noexcept
+        void Viewport::_drawCheckerboard(int left, int right) noexcept
         {
             TLRENDER_P();
             MRV2_VK();
@@ -157,7 +156,7 @@ namespace mrv
                 }
             }
 
-            vk.lines->drawPoints(pnts, color, 5);
+            vk.lines->drawPoints(ctx, pnts, color, 5);
 
             if (p.stereo3DOptions.eyeSeparation != 0.F)
             {
@@ -181,7 +180,7 @@ namespace mrv
             // glDisable(GL_STENCIL_TEST);
         }
 
-        void Viewport::_drawColumns(int left, int right) const noexcept
+        void Viewport::_drawColumns(int left, int right) noexcept
         {
             TLRENDER_P();
             MRV2_VK();
@@ -207,7 +206,7 @@ namespace mrv
             image::Color4f color(1, 1, 1, 1);
             for (size_t x = 0; x < W; x += 2)
             {
-                vk.lines->drawLine(
+                vk.lines->drawLine(ctx,
                     vk.render, math::Vector2i(x, 0), math::Vector2i(x, H), color,
                     1);
             }
@@ -304,7 +303,7 @@ namespace mrv
             }
         }
 
-        void Viewport::_drawStereo3D() const noexcept
+        void Viewport::_drawStereo3D() noexcept
         {
             TLRENDER_P();
             const bool swap = p.stereo3DOptions.swapEyes;
@@ -335,7 +334,7 @@ namespace mrv
         }
 
         void
-        Viewport::_drawMissingFrame(const math::Size2i& renderSize) const noexcept
+        Viewport::_drawMissingFrame(const math::Size2i& renderSize) noexcept
         {
             TLRENDER_P();
             MRV2_VK();
@@ -349,16 +348,16 @@ namespace mrv
             if (p.missingFrameType == MissingFrameType::kScratchedFrame)
             {
                 image::Color4f color(1, 0, 0, 0.8);
-                vk.lines->drawLine(
+                vk.lines->drawLine(ctx,
                     vk.render, math::Vector2i(0, 0),
                     math::Vector2i(renderSize.w, renderSize.h), color, 4);
-                vk.lines->drawLine(
+                vk.lines->drawLine(ctx,
                     vk.render, math::Vector2i(0, renderSize.h),
                     math::Vector2i(renderSize.w, 0), color, 4);
             }
         }
 
-        void Viewport::_drawCursor(const math::Matrix4x4f& mvp) const noexcept
+        void Viewport::_drawCursor(const math::Matrix4x4f& mvp) noexcept
         {
             MRV2_VK();
             TLRENDER_P();
@@ -369,16 +368,16 @@ namespace mrv
             p.mousePos = _getFocus();
             const auto& pos = _getRasterf();
             vk.render->setTransform(mvp);
-            vk.lines->drawCursor(vk.render, pos, pen_size, color);
+            vk.lines->drawCursor(ctx, vk.render, pos, pen_size, color);
         }
 
         void Viewport::_drawRectangleOutline(
             const math::Box2i& box, const image::Color4f& color,
-            const math::Matrix4x4f& mvp) const noexcept
+            const math::Matrix4x4f& mvp) noexcept
         {
             MRV2_VK();
 #ifdef USE_ONE_PIXEL_LINES
-            vk.outline->drawRect(box, color, mvp);
+            vk.outline->drawRect(ctx, box, color, mvp);
             
 #else
             int width = 2 / _p->viewZoom; //* renderSize.w / viewportSize.w;
@@ -386,7 +385,7 @@ namespace mrv
                 width = 2;
             vk.render->setTransform(mvp);
             
-            drawRectOutline(vk.render, box, color, width);
+            drawRectOutline(ctx, vk.render, box, color, width);
             
 #endif
         }
@@ -574,11 +573,12 @@ namespace mrv
             if (vk.vao && vk.vbo)
             {
                 vk.vao->bind();
-                // vk.vao->draw(GL_TRIANGLES, 0, vk.vbo->getSize());
+                // vk.vao->draw(ctx, GL_TRIANGLES, 0, vk.vbo->getSize());
             }
         }
 
-        void Viewport::_drawCropMask(const math::Size2i& renderSize) const noexcept
+        void
+        Viewport::_drawCropMask(const math::Size2i& renderSize) const noexcept
         {
             MRV2_VK();
 
@@ -633,7 +633,7 @@ namespace mrv
         void Viewport::_drawSafeAreas(
             const float percentX, const float percentY,
             const float pixelAspectRatio, const image::Color4f& color,
-            const math::Matrix4x4f& mvp, const char* label) const noexcept
+            const math::Matrix4x4f& mvp, const char* label) noexcept
         {
             MRV2_VK();
             const auto& renderSize = getRenderSize();
@@ -670,7 +670,7 @@ namespace mrv
             int width = 2 / _p->viewZoom; //* renderSize.w / viewportSize.w;
 
 #ifdef USE_ONE_PIXEL_LINES
-            vk.outline->drawRect(box, color, mvp);
+            vk.outline->drawRect(ctx, box, color, mvp);
 #else
             if (width < 2)
                 width = 2;
@@ -691,7 +691,7 @@ namespace mrv
             vk.render->drawText(glyphs, pos, color);
         }
 
-        void Viewport::_drawSafeAreas() const noexcept
+        void Viewport::_drawSafeAreas() noexcept
         {
             TLRENDER_P();
             if (!p.player)
@@ -1044,7 +1044,7 @@ namespace mrv
             }
         }
 
-        void Viewport::_drawWindowArea(const std::string& dw) const noexcept
+        void Viewport::_drawWindowArea(const std::string& dw) noexcept
         {
             TLRENDER_P();
             MRV2_VK();
@@ -1075,7 +1075,7 @@ namespace mrv
 #endif
         }
 
-        void Viewport::_drawDataWindow() const noexcept
+        void Viewport::_drawDataWindow() noexcept
         {
             TLRENDER_P();
             ;
@@ -1087,7 +1087,7 @@ namespace mrv
             _drawWindowArea(dw);
         }
 
-        void Viewport::_drawDisplayWindow() const noexcept
+        void Viewport::_drawDisplayWindow() noexcept
         {
             TLRENDER_P();
 
@@ -1099,7 +1099,8 @@ namespace mrv
             _drawWindowArea(dw);
         }
 
-        void Viewport::_drawOverlays(const math::Size2i& renderSize) const noexcept
+        void
+        Viewport::_drawOverlays(const math::Size2i& renderSize) const noexcept
         {
             TLRENDER_P();
             if (p.masking > 0.0001F)

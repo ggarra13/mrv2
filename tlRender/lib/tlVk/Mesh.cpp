@@ -3,8 +3,9 @@
 // All rights reserved.
 
 #include <tlVk/Mesh.h>
-
 #include <tlVk/Vk.h>
+
+#include <FL/Fl_Vk_Utils.H>
 
 #include <tlCore/Error.h>
 #include <tlCore/Math.h>
@@ -423,12 +424,14 @@ namespace tl
             }
             return out;
         }
-
+        
         struct VBO::Private
         {
             std::size_t size = 0;
             VBOType type = VBOType::First;
-            uint32_t vbo = 0;
+            std::vector<uint8_t> data; // Actual converted vertex data in Vulkan layout
+            VkVertexInputBindingDescription bindingDesc;
+            std::vector<VkVertexInputAttributeDescription> attributes;
         };
 
         void VBO::_init(std::size_t size, VBOType type)
@@ -436,8 +439,174 @@ namespace tl
             TLRENDER_P();
             p.size = size;
             p.type = type;
+            
+            p.bindingDesc = {};
+            p.bindingDesc.binding = 0;
+            p.bindingDesc.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+            
+            switch (type)
+            {
+            case VBOType::Pos2_F32:
+                p.bindingDesc.stride = 2 * sizeof(float);
+                
+                p.attributes.push_back({
+                        0,  // location
+                        0,  // binding
+                        VK_FORMAT_R32G32_SFLOAT,
+                        0   // offset
+                    });
+                break;
+            case VBOType::Pos2_F32_UV_U16:
+                p.bindingDesc.stride = 2 * sizeof(float) + 2 * sizeof(uint16_t);
+                
+                p.attributes.push_back({
+                        0,  // location
+                        0,  // binding
+                        VK_FORMAT_R32G32B32_SFLOAT,
+                        0   // offset
+                    });
+                
+                p.attributes.push_back({
+                        1,
+                        0,
+                        VK_FORMAT_R16G16_UNORM,
+                        static_cast<uint32_t>(2 * sizeof(float))
+                    });
+                break;
+            case VBOType::Pos2_F32_Color_F32:
+                p.bindingDesc.stride = 2 * sizeof(float) + 4 * sizeof(float);
+                
+                p.attributes.push_back({
+                        0,  // location
+                        0,  // binding
+                        VK_FORMAT_R32G32B32_SFLOAT,
+                        0   // offset
+                    });
+                
+                p.attributes.push_back({
+                        1,
+                        0,
+                        VK_FORMAT_R32G32B32A32_SFLOAT,
+                        static_cast<uint32_t>(3 * sizeof(float))
+                    });
+                break;
+            case VBOType::Pos3_F32:
+                p.bindingDesc.stride = 3 * sizeof(float);
+                
+                p.attributes.push_back({
+                        0,  // location
+                        0,  // binding
+                        VK_FORMAT_R32G32B32_SFLOAT,
+                        0   // offset
+                    });
+                break;
+            case VBOType::Pos3_F32_UV_U16:
+                p.bindingDesc.stride = 3 * sizeof(float) + 2 * sizeof(uint16_t);
+                
+                p.attributes.push_back({
+                        0,  // location
+                        0,  // binding
+                        VK_FORMAT_R32G32B32_SFLOAT,
+                        0   // offset
+                    });
+                
+                p.attributes.push_back({
+                        1,
+                        0,
+                        VK_FORMAT_R16G16_UNORM,
+                        static_cast<uint32_t>(3 * sizeof(float))
+                    });
+                break;
+            case VBOType::Pos3_F32_UV_F32_Normal_F32:
+                p.bindingDesc.stride = 3 * sizeof(float) + 2 * sizeof(float) +
+                                       3 * sizeof(float);
+                
+                p.attributes.push_back({
+                        0,  // location
+                        0,  // binding
+                        VK_FORMAT_R32G32B32_SFLOAT,
+                        0   // offset
+                    });
+                
+                p.attributes.push_back({
+                        1,
+                        0,
+                        VK_FORMAT_R32G32_SFLOAT,
+                        static_cast<uint32_t>(3 * sizeof(float))
+                    });
+                
+                p.attributes.push_back({
+                        2,  // location
+                        0,  // binding
+                        VK_FORMAT_R32G32B32_SFLOAT,
+                        static_cast<uint32_t>(6 * sizeof(float))
+                    });
+                break;
+            case VBOType::Pos3_F32_UV_F32_Normal_F32_Color_F32:
+                p.bindingDesc.stride = 3 * sizeof(float) + 2 * sizeof(float) +
+                                       3 * sizeof(float) + 4 * sizeof(float);
+                
+                p.attributes.push_back({
+                        0,  // location
+                        0,  // binding
+                        VK_FORMAT_R32G32B32_SFLOAT,
+                        0   // offset
+                    });
+                
+                p.attributes.push_back({
+                        1,
+                        0,
+                        VK_FORMAT_R32G32_SFLOAT,
+                        static_cast<uint32_t>(3 * sizeof(float))
+                    });
+                
+                p.attributes.push_back({
+                        2,  // location
+                        0,  // binding
+                        VK_FORMAT_R32G32B32_SFLOAT,
+                        static_cast<uint32_t>(5 * sizeof(float))
+                    });
+                
+                p.attributes.push_back({
+                        3,  // location
+                        0,  // binding
+                        VK_FORMAT_R32G32B32A32_SFLOAT,
+                        static_cast<uint32_t>(8 * sizeof(float))
+                    });
+                break;
+            case VBOType::Pos3_F32_Color_U8:
+                p.bindingDesc.stride = 3 * sizeof(float) + 2 * sizeof(uint8_t);
+                
+                p.attributes.push_back({
+                        0,  // location
+                        0,  // binding
+                        VK_FORMAT_R32G32B32_SFLOAT,
+                        0   // offset
+                    });
+                
+                p.attributes.push_back({
+                        1,
+                        0,
+                        VK_FORMAT_R8G8B8A8_UNORM,
+                        static_cast<uint32_t>(3 * sizeof(float))
+                    });
+                break;
+            default:
+                break;
+            }
         }
 
+        const VkVertexInputBindingDescription VBO::getBindingDescription() const
+        {
+            return _p->bindingDesc;
+        }
+        
+        const std::vector<VkVertexInputAttributeDescription>&
+        VBO::getAttributes() const
+        {
+            return _p->attributes;
+        }
+        
         VBO::VBO() :
             _p(new Private)
         {
@@ -445,11 +614,6 @@ namespace tl
 
         VBO::~VBO()
         {
-            TLRENDER_P();
-            if (p.vbo)
-            {
-                p.vbo = 0;
-            }
         }
 
         std::shared_ptr<VBO> VBO::create(std::size_t size, VBOType type)
@@ -463,6 +627,11 @@ namespace tl
         {
             return _p->size;
         }
+        
+        const std::vector<uint8_t>& VBO::getData() const
+        {
+            return _p->data;
+        }
 
         VBOType VBO::getType() const
         {
@@ -471,52 +640,37 @@ namespace tl
 
         unsigned int VBO::getID() const
         {
-            return _p->vbo;
+            return 0;  // unused in Vulkan
         }
 
-        void VBO::copy(const std::vector<uint8_t>& data) {}
+        void VBO::copy(const std::vector<uint8_t>& data)
+        {
+            _p->data = data;
+        }
 
         void VBO::copy(
             const std::vector<uint8_t>& data, std::size_t offset,
             std::size_t size)
         {
+            _p->data = data;
         }
 
         struct VAO::Private
         {
-            uint32_t vao = 0;
+            VkBuffer buffer;
+            VkDeviceMemory memory;
+            
+            uint32_t vao = 0;  // unused in Vulkan
         };
 
         void VAO::_init(VBOType type, unsigned int vbo)
         {
             TLRENDER_P();
-
-            const std::size_t byteCount = getByteCount(type);
-            switch (type)
-            {
-            case VBOType::Pos2_F32:
-                break;
-            case VBOType::Pos2_F32_UV_U16:
-                break;
-            case VBOType::Pos2_F32_Color_F32:
-                break;
-            case VBOType::Pos3_F32:
-                break;
-            case VBOType::Pos3_F32_UV_U16:
-                break;
-            case VBOType::Pos3_F32_UV_F32_Normal_F32:
-                break;
-            case VBOType::Pos3_F32_UV_F32_Normal_F32_Color_F32:
-                break;
-            case VBOType::Pos3_F32_Color_U8:
-                break;
-            default:
-                break;
-            }
         }
 
-        VAO::VAO() :
-            _p(new Private)
+        VAO::VAO(Fl_Vk_Context& context) :
+            _p(new Private),
+            ctx(context)
         {
         }
 
@@ -525,9 +679,10 @@ namespace tl
             TLRENDER_P();
         }
 
-        std::shared_ptr<VAO> VAO::create(VBOType type, unsigned int vbo)
+        std::shared_ptr<VAO> VAO::create(Fl_Vk_Context& context,
+                                         VBOType type, unsigned int vbo)
         {
-            auto out = std::shared_ptr<VAO>(new VAO);
+            auto out = std::shared_ptr<VAO>(new VAO(context));
             out->_init(type, vbo);
             return out;
         }
@@ -536,11 +691,71 @@ namespace tl
         {
             return _p->vao;
         }
+        
+        void VAO::upload(const std::vector<uint8_t>& vertexData)
+        {
+            TLRENDER_P();
+            
+            // 1. Create Buffer
+            VkBufferCreateInfo bufferInfo = {};
+            bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+            bufferInfo.size = vertexData.size();
+            bufferInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
+            bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
+            VkDevice device = ctx.device;
+            VkPhysicalDevice gpu = ctx.gpu;
+            
+            if (vkCreateBuffer(device, &bufferInfo, nullptr, &p.buffer) !=
+                VK_SUCCESS)
+            {
+                throw std::runtime_error("failed to create vertex buffer!");
+            }
+
+            // 2. Allocate memory
+            VkMemoryRequirements memRequirements;
+            vkGetBufferMemoryRequirements(device, p.buffer, &memRequirements);
+
+            VkMemoryAllocateInfo allocInfo = {};
+            allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+            allocInfo.allocationSize = memRequirements.size;
+            allocInfo.memoryTypeIndex = findMemoryType(
+                gpu,
+                memRequirements.memoryTypeBits,
+                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+                VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
+                );
+
+            if (vkAllocateMemory(device, &allocInfo, nullptr,
+                                 &p.memory) != VK_SUCCESS)
+            {
+                throw std::runtime_error("failed to allocate vertex buffer memory!");
+            }
+
+            // 3. Bind buffer + memory
+            vkBindBufferMemory(device, p.buffer, p.memory, 0);
+
+            // 4. Copy data to memory
+            void* mappedData;
+            vkMapMemory(device, p.memory, 0, vertexData.size(), 0, &mappedData);
+            memcpy(mappedData, vertexData.data(), vertexData.size());
+            vkUnmapMemory(device, p.memory);
+        }
+        
         void VAO::bind() {}
 
         void VAO::draw(unsigned int mode, std::size_t offset, std::size_t size)
         {
+            // old opengl function
+        }
+
+        void VAO::draw(VkCommandBuffer& cmd, VkDeviceSize* offsets,
+                       std::size_t size)
+        {
+            TLRENDER_P();
+            
+            vkCmdBindVertexBuffers(cmd, 0, 1, &p.buffer, offsets);
+            vkCmdDraw(cmd, size, 1, 0,  0);
         }
     } // namespace vk
 } // namespace tl

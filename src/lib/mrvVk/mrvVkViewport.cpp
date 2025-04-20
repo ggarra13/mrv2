@@ -924,7 +924,7 @@ namespace mrv
                 _calculateColorAreaRawValues(info);
         }
 
-        void Viewport::_mapBuffer() const noexcept
+        void Viewport::_mapBuffer() noexcept
         {
             MRV2_VK();
             TLRENDER_P();
@@ -957,7 +957,7 @@ namespace mrv
             }
         }
 
-        void Viewport::_unmapBuffer() const noexcept
+        void Viewport::_unmapBuffer() noexcept
         {
             MRV2_VK();
             TLRENDER_P();
@@ -980,7 +980,7 @@ namespace mrv
             // glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
         }
 
-        void Viewport::_readPixel(image::Color4f& rgba) const noexcept
+        void Viewport::_readPixel(image::Color4f& rgba)
         {
 
             TLRENDER_P();
