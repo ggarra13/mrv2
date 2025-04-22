@@ -109,6 +109,12 @@ namespace tl
             //! Get the offscreen buffer height.
             int getHeight() const;
 
+            //! Returns true if the buffer has depth.
+            bool hasDepth() const;
+            
+            //! Returns true if the buffer has depth.
+            bool hasStencil() const;
+            
             //! Get the options.
             const OffscreenBufferOptions& getOptions() const;
 

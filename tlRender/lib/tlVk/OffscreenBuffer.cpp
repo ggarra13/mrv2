@@ -356,6 +356,16 @@ namespace tl
             return _p->size.h;
         }
 
+        bool OffscreenBuffer::hasDepth() const
+        {
+            return (_p->options.depth != OffscreenDepth::kNone);
+        }
+        
+        bool OffscreenBuffer::hasStencil() const
+        {
+            return (_p->options.stencil != OffscreenStencil::kNone);
+        }
+
         const OffscreenBufferOptions& OffscreenBuffer::getOptions() const
         {
             return _p->options;

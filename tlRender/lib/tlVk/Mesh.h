@@ -90,7 +90,7 @@ namespace tl
 
             const std::vector<uint8_t>& getData() const;
 
-            const VkVertexInputBindingDescription getBindingDescription() const;
+            const VkVertexInputBindingDescription* getBindingDescription() const;
             const std::vector<VkVertexInputAttributeDescription>&
             getAttributes() const;
             

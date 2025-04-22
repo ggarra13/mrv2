@@ -462,7 +462,7 @@ namespace tl
                 p.attributes.push_back({
                         0,  // location
                         0,  // binding
-                        VK_FORMAT_R32G32B32_SFLOAT,
+                        VK_FORMAT_R32G32_SFLOAT,
                         0   // offset
                     });
                 
@@ -479,7 +479,7 @@ namespace tl
                 p.attributes.push_back({
                         0,  // location
                         0,  // binding
-                        VK_FORMAT_R32G32B32_SFLOAT,
+                        VK_FORMAT_R32G32_SFLOAT,
                         0   // offset
                     });
                 
@@ -487,7 +487,7 @@ namespace tl
                         1,
                         0,
                         VK_FORMAT_R32G32B32A32_SFLOAT,
-                        static_cast<uint32_t>(3 * sizeof(float))
+                        static_cast<uint32_t>(2 * sizeof(float))
                     });
                 break;
             case VBOType::Pos3_F32:
@@ -499,7 +499,7 @@ namespace tl
                         VK_FORMAT_R32G32B32_SFLOAT,
                         0   // offset
                     });
-                break;
+                break; 
             case VBOType::Pos3_F32_UV_U16:
                 p.bindingDesc.stride = 3 * sizeof(float) + 2 * sizeof(uint16_t);
                 
@@ -575,7 +575,7 @@ namespace tl
                     });
                 break;
             case VBOType::Pos3_F32_Color_U8:
-                p.bindingDesc.stride = 3 * sizeof(float) + 2 * sizeof(uint8_t);
+                p.bindingDesc.stride = 3 * sizeof(float) + 4 * sizeof(uint8_t);
                 
                 p.attributes.push_back({
                         0,  // location
@@ -596,9 +596,9 @@ namespace tl
             }
         }
 
-        const VkVertexInputBindingDescription VBO::getBindingDescription() const
+        const VkVertexInputBindingDescription* VBO::getBindingDescription() const
         {
-            return _p->bindingDesc;
+            return &_p->bindingDesc;
         }
         
         const std::vector<VkVertexInputAttributeDescription>&
@@ -677,6 +677,14 @@ namespace tl
         VAO::~VAO()
         {
             TLRENDER_P();
+
+            VkDevice device = ctx.device;
+
+            if (p.buffer != VK_NULL_HANDLE)
+                vkDestroyBuffer(device, p.buffer, nullptr);
+
+            if (p.memory)
+                vkFreeMemory(device, p.memory, nullptr);
         }
 
         std::shared_ptr<VAO> VAO::create(Fl_Vk_Context& context,
