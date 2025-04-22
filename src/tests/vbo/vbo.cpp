@@ -718,8 +718,7 @@ void vk_shape_window::draw() {
     scissor.extent.height = h();
     vkCmdSetScissor(cmd, 0, 1, &scissor);
 
-    VkDeviceSize offsets[1] = {0};
-    vao->draw(cmd, offsets, vbo->getSize() * 3);
+    vao->draw(cmd, vbo);
     vkCmdEndRenderPass(cmd);
 }
 

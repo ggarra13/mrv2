@@ -142,9 +142,11 @@ namespace tl
             //! Draw the vertex array object.
             void draw(unsigned int mode, std::size_t offset, std::size_t size);
 
+            //! Draw the vertex array object, by uploading the vertex buffer object.
+            void draw(VkCommandBuffer& cmd, const std::shared_ptr<VBO>& vbo);
+            
             //! Draw the vertex array object.
-            void draw(VkCommandBuffer& cmd, VkDeviceSize* offsets,
-                      std::size_t size);
+            void draw(VkCommandBuffer& cmd, std::size_t size);
 
         private:
             Fl_Vk_Context& ctx;

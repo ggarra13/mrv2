@@ -756,14 +756,19 @@ namespace tl
         {
             // old opengl function
         }
-
-        void VAO::draw(VkCommandBuffer& cmd, VkDeviceSize* offsets,
-                       std::size_t size)
+        
+        void VAO::draw(VkCommandBuffer& cmd, std::size_t size)
         {
             TLRENDER_P();
-            
+
+            VkDeviceSize offsets[1] = {0};
             vkCmdBindVertexBuffers(cmd, 0, 1, &p.buffer, offsets);
             vkCmdDraw(cmd, size, 1, 0,  0);
+        }
+
+        void VAO::draw(VkCommandBuffer& cmd, const std::shared_ptr<VBO>& vbo)
+        {
+            draw(cmd, vbo->getSize() * 3);
         }
     } // namespace vk
 } // namespace tl

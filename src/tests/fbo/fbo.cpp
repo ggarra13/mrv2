@@ -854,8 +854,7 @@ void vk_shape_window::draw() {
     scissor.extent = extent;
     vkCmdSetScissor(cmdBuffer, 0, 1, &scissor);
     
-    VkDeviceSize offsets[1] = {0};
-    vao->draw(cmdBuffer, offsets, vbo->getSize() * 3);
+    vao->draw(cmdBuffer, vbo);
     
     vkCmdEndRenderPass(cmdBuffer);
     
@@ -898,6 +897,7 @@ void vk_shape_window::draw() {
     scissor.extent.height = h();
     vkCmdSetScissor(cmd, 0, 1, &scissor);
 
+    VkDeviceSize offsets[1] = {0};
     vkCmdBindVertexBuffers(cmd, 0, 1, &m_mesh.buf, offsets);
     vkCmdDraw(cmd, 3 * sides, 1, 0, 0); // Draw shape
     
