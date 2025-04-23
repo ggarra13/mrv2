@@ -311,12 +311,12 @@ namespace tl
             std::vector<std::shared_ptr<vk::Texture> > textures;
             if (!imageOptions.cache)
             {
-                textures = getTextures(info, imageOptions.imageFilters);
+                textures = getTextures(ctx, info, imageOptions.imageFilters);
                 copyTextures(image, textures);
             }
             else if (!p.textureCache->get(image, textures))
             {
-                textures = getTextures(info, imageOptions.imageFilters);
+                textures = getTextures(ctx, info, imageOptions.imageFilters);
                 copyTextures(image, textures);
                 p.textureCache->add(image, textures, image->getDataByteCount());
             }

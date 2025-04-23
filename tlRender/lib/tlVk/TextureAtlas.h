@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <tlVk/Vk.h>
+
 #include <tlTimeline/ImageOptions.h>
 
 #include <tlCore/Image.h>
@@ -37,14 +39,14 @@ namespace tl
                 image::PixelType textureType, timeline::ImageFilter filter,
                 int border);
 
-            TextureAtlas();
+            TextureAtlas(Fl_Vk_Context& ctx);
 
         public:
             ~TextureAtlas();
 
             //! Create a new texture atlas.
             static std::shared_ptr<TextureAtlas> create(
-                size_t textureCount, int textureSize,
+                Fl_Vk_Context& ctx, size_t textureCount, int textureSize,
                 image::PixelType textureType,
                 timeline::ImageFilter filter = timeline::ImageFilter::Linear,
                 int border = 1);
@@ -62,6 +64,8 @@ namespace tl
             float getPercentageUsed() const;
 
         private:
+            Fl_Vk_Context& ctx;
+
             TLRENDER_PRIVATE();
         };
     } // namespace vk

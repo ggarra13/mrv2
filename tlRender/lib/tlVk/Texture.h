@@ -15,7 +15,7 @@ namespace tl
     namespace vk
     {
         //! Get the Vulkan internal texture format.
-        VkFormat    getTextureInternalFormat(image::PixelType);
+        VkFormat getTextureInternalFormat(image::PixelType);
 
         //! Vulkan texture options.
         struct TextureOptions
@@ -39,14 +39,15 @@ namespace tl
             void
             _init(const image::Info&, const TextureOptions& = TextureOptions());
 
-            Texture();
+            Texture(Fl_Vk_Context& ctx);
 
         public:
             ~Texture();
 
             //! Create a new texture.
             static std::shared_ptr<Texture> create(
-                const image::Info&, const TextureOptions& = TextureOptions());
+                Fl_Vk_Context& ctx, const image::Info&,
+                const TextureOptions& = TextureOptions());
 
             //! Get the Vulkan texture ID.
             unsigned int getID() const;
@@ -80,6 +81,8 @@ namespace tl
             void bind();
 
         private:
+            Fl_Vk_Context& ctx;
+
             TLRENDER_PRIVATE();
         };
     } // namespace vk

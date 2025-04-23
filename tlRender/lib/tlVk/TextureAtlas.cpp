@@ -195,7 +195,7 @@ namespace tl
                 textureOptions.filters.minify = filter;
                 textureOptions.filters.magnify = filter;
                 auto texture = Texture::create(
-                    image::Info(textureSize, textureSize, textureType),
+                    ctx, image::Info(textureSize, textureSize, textureType),
                     textureOptions);
                 p.textures.push_back(texture);
 
@@ -209,18 +209,20 @@ namespace tl
             }
         }
 
-        TextureAtlas::TextureAtlas() :
-            _p(new Private)
+        TextureAtlas::TextureAtlas(Fl_Vk_Context& context) :
+            _p(new Private),
+            ctx(context)
         {
         }
 
         TextureAtlas::~TextureAtlas() {}
 
         std::shared_ptr<TextureAtlas> TextureAtlas::create(
-            size_t textureCount, int textureSize, image::PixelType textureType,
-            timeline::ImageFilter filter, int border)
+            Fl_Vk_Context& ctx, size_t textureCount, int textureSize,
+            image::PixelType textureType, timeline::ImageFilter filter,
+            int border)
         {
-            auto out = std::shared_ptr<TextureAtlas>(new TextureAtlas);
+            auto out = std::shared_ptr<TextureAtlas>(new TextureAtlas(ctx));
             out->_init(textureCount, textureSize, textureType, filter, border);
             return out;
         }

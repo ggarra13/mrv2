@@ -168,8 +168,8 @@ namespace tl
         }
 
         std::vector<std::shared_ptr<vk::Texture> > getTextures(
-            const image::Info& info, const timeline::ImageFilters& imageFilters,
-            size_t offset)
+            Fl_Vk_Context& ctx, const image::Info& info,
+            const timeline::ImageFilters& imageFilters, size_t offset)
         {
             std::vector<std::shared_ptr<vk::Texture> > out;
             vk::TextureOptions options;
@@ -181,68 +181,68 @@ namespace tl
             case image::PixelType::YUV_420P_U8:
             {
                 auto infoTmp = image::Info(info.size, image::PixelType::L_U8);
-                out.push_back(vk::Texture::create(infoTmp, options));
+                out.push_back(vk::Texture::create(ctx, infoTmp, options));
                 infoTmp = image::Info(
                     image::Size(info.size.w / 2, info.size.h / 2),
                     image::PixelType::L_U8);
-                out.push_back(vk::Texture::create(infoTmp, options));
-                out.push_back(vk::Texture::create(infoTmp, options));
+                out.push_back(vk::Texture::create(ctx, infoTmp, options));
+                out.push_back(vk::Texture::create(ctx, infoTmp, options));
                 break;
             }
             case image::PixelType::YUV_422P_U8:
             {
                 auto infoTmp = image::Info(info.size, image::PixelType::L_U8);
-                out.push_back(vk::Texture::create(infoTmp, options));
+                out.push_back(vk::Texture::create(ctx, infoTmp, options));
                 infoTmp = image::Info(
                     image::Size(info.size.w / 2, info.size.h),
                     image::PixelType::L_U8);
-                out.push_back(vk::Texture::create(infoTmp, options));
-                out.push_back(vk::Texture::create(infoTmp, options));
+                out.push_back(vk::Texture::create(ctx, infoTmp, options));
+                out.push_back(vk::Texture::create(ctx, infoTmp, options));
                 break;
             }
             case image::PixelType::YUV_444P_U8:
             {
                 auto infoTmp = image::Info(info.size, image::PixelType::L_U8);
-                out.push_back(vk::Texture::create(infoTmp, options));
+                out.push_back(vk::Texture::create(ctx, infoTmp, options));
                 infoTmp = image::Info(info.size, image::PixelType::L_U8);
-                out.push_back(vk::Texture::create(infoTmp, options));
-                out.push_back(vk::Texture::create(infoTmp, options));
+                out.push_back(vk::Texture::create(ctx, infoTmp, options));
+                out.push_back(vk::Texture::create(ctx, infoTmp, options));
                 break;
             }
             case image::PixelType::YUV_420P_U16:
             {
                 auto infoTmp = image::Info(info.size, image::PixelType::L_U16);
-                out.push_back(vk::Texture::create(infoTmp, options));
+                out.push_back(vk::Texture::create(ctx, infoTmp, options));
                 infoTmp = image::Info(
                     image::Size(info.size.w / 2, info.size.h / 2),
                     image::PixelType::L_U16);
-                out.push_back(vk::Texture::create(infoTmp, options));
-                out.push_back(vk::Texture::create(infoTmp, options));
+                out.push_back(vk::Texture::create(ctx, infoTmp, options));
+                out.push_back(vk::Texture::create(ctx, infoTmp, options));
                 break;
             }
             case image::PixelType::YUV_422P_U16:
             {
                 auto infoTmp = image::Info(info.size, image::PixelType::L_U16);
-                out.push_back(vk::Texture::create(infoTmp, options));
+                out.push_back(vk::Texture::create(ctx, infoTmp, options));
                 infoTmp = image::Info(
                     image::Size(info.size.w / 2, info.size.h),
                     image::PixelType::L_U16);
-                out.push_back(vk::Texture::create(infoTmp, options));
-                out.push_back(vk::Texture::create(infoTmp, options));
+                out.push_back(vk::Texture::create(ctx, infoTmp, options));
+                out.push_back(vk::Texture::create(ctx, infoTmp, options));
                 break;
             }
             case image::PixelType::YUV_444P_U16:
             {
                 auto infoTmp = image::Info(info.size, image::PixelType::L_U16);
-                out.push_back(vk::Texture::create(infoTmp, options));
+                out.push_back(vk::Texture::create(ctx, infoTmp, options));
                 infoTmp = image::Info(info.size, image::PixelType::L_U16);
-                out.push_back(vk::Texture::create(infoTmp, options));
-                out.push_back(vk::Texture::create(infoTmp, options));
+                out.push_back(vk::Texture::create(ctx, infoTmp, options));
+                out.push_back(vk::Texture::create(ctx, infoTmp, options));
                 break;
             }
             default:
             {
-                auto texture = vk::Texture::create(info, options);
+                auto texture = vk::Texture::create(ctx, info, options);
                 out.push_back(texture);
                 break;
             }
@@ -833,7 +833,8 @@ namespace tl
             for (auto i : p.shaders)
             {
                 i.second->bind();
-                i.second->setUniform("transform.mvp", value);
+                i.second->setUniform(
+                    "transform.mvp", value, VK_SHADER_STAGE_VERTEX_BIT);
             }
         }
 
@@ -1895,7 +1896,8 @@ namespace tl
                     vk::Shader::create(ctx, vertexSource(), source);
             }
             p.shaders["display"]->bind();
-            p.shaders["display"]->setUniform("transform.mvp", p.transform);
+            p.shaders["display"]->setUniform(
+                "transform.mvp", p.transform, VK_SHADER_STAGE_VERTEX_BIT);
             size_t texturesOffset = 1;
 #if defined(TLRENDER_OCIO)
             if (p.ocioData)

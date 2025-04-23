@@ -147,6 +147,11 @@ namespace tl
             samplers.insert({name, sb});
         }
 
+        const VkDescriptorSet& Shader::getDescriptorSet() const
+        {
+            return descriptorSet;
+        }
+
         void Shader::createDescriptorSet()
         {
             VkDevice device = ctx.device;

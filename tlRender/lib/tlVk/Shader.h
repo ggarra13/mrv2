@@ -50,6 +50,9 @@ namespace tl
             //! Get the Vulkan fragment module.
             const VkShaderModule& getFragment() const;
 
+            //! Get the Vulkan description set.
+            const VkDescriptorSet& getDescriptorSet() const;
+
             //! Bind the shader.
             void bind();
 

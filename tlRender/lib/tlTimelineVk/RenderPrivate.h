@@ -48,7 +48,7 @@ namespace tl
         std::string differenceFragmentSource();
 
         std::vector<std::shared_ptr<vk::Texture> > getTextures(
-            const image::Info&, const timeline::ImageFilters&,
+            Fl_Vk_Context&, const image::Info&, const timeline::ImageFilters&,
             size_t offset = 0);
 
         void copyTextures(
@@ -105,7 +105,7 @@ namespace tl
         struct Render::Private
         {
             bool hdrMonitorFound = false;
-            
+
             math::Size2i renderSize;
             timeline::OCIOOptions ocioOptions;
             timeline::LUTOptions lutOptions;

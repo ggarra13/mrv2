@@ -81,46 +81,44 @@ namespace tl
         VkFormat getTextureInternalFormat(image::PixelType type)
         {
             const std::array<
-                VkFormat,
-                static_cast<std::size_t>(image::PixelType::Count)>
+                VkFormat, static_cast<std::size_t>(image::PixelType::Count)>
                 data = {
-                VK_FORMAT_UNDEFINED,
-                
-                VK_FORMAT_R8_UNORM,
-                VK_FORMAT_R16_UNORM,
-                VK_FORMAT_R32_UINT,
-                VK_FORMAT_R16_SFLOAT,
-                VK_FORMAT_R32_SFLOAT,
+                    VK_FORMAT_UNDEFINED,
 
-                VK_FORMAT_R8G8_UNORM,
-                VK_FORMAT_R16G16_UNORM,
-                VK_FORMAT_R32G32_UINT,
-                VK_FORMAT_R16G16_SFLOAT,
-                VK_FORMAT_R32G32_SFLOAT,
-                
-                VK_FORMAT_R8G8B8_UNORM,
-                VK_FORMAT_A2R10G10B10_UNORM_PACK32,
-                VK_FORMAT_R16G16B16_UNORM,
-                VK_FORMAT_R32G32B32_UINT,
-                VK_FORMAT_R16G16B16_SFLOAT,
-                VK_FORMAT_R32G32B32_SFLOAT,
-                
-                VK_FORMAT_R8G8B8A8_UNORM,
-                VK_FORMAT_R16G16B16A16_UNORM,
-                VK_FORMAT_R32G32B32A32_UINT,
-                VK_FORMAT_R16G16B16A16_SFLOAT,
-                VK_FORMAT_R32G32B32A32_SFLOAT,
+                    VK_FORMAT_R8_UNORM,
+                    VK_FORMAT_R16_UNORM,
+                    VK_FORMAT_R32_UINT,
+                    VK_FORMAT_R16_SFLOAT,
+                    VK_FORMAT_R32_SFLOAT,
 
-                VK_FORMAT_UNDEFINED,   // VK_FORMAT_G8_B8R8_2PLANE_420_UNORM 
-                VK_FORMAT_UNDEFINED,   // VK_FORMAT_G8_B8R8_2PLANE_422_UNORM
-                VK_FORMAT_UNDEFINED,   // VK_FORMAT_G8_B8_R8_3PLANE_444_UNORM
+                    VK_FORMAT_R8G8_UNORM,
+                    VK_FORMAT_R16G16_UNORM,
+                    VK_FORMAT_R32G32_UINT,
+                    VK_FORMAT_R16G16_SFLOAT,
+                    VK_FORMAT_R32G32_SFLOAT,
 
-                VK_FORMAT_UNDEFINED,   // VK_FORMAT_G16_B16R16_2PLANE_420_UNORM
-                VK_FORMAT_UNDEFINED,   // VK_FORMAT_G16_B16R16_2PLANE_422_UNORM
-                VK_FORMAT_UNDEFINED,   // VK_FORMAT_G16_B16_R16_3PLANE_444_UNORM
+                    VK_FORMAT_R8G8B8_UNORM,
+                    VK_FORMAT_A2R10G10B10_UNORM_PACK32,
+                    VK_FORMAT_R16G16B16_UNORM,
+                    VK_FORMAT_R32G32B32_UINT,
+                    VK_FORMAT_R16G16B16_SFLOAT,
+                    VK_FORMAT_R32G32B32_SFLOAT,
 
-                VK_FORMAT_R8G8B8A8_UNORM
-            };
+                    VK_FORMAT_R8G8B8A8_UNORM,
+                    VK_FORMAT_R16G16B16A16_UNORM,
+                    VK_FORMAT_R32G32B32A32_UINT,
+                    VK_FORMAT_R16G16B16A16_SFLOAT,
+                    VK_FORMAT_R32G32B32A32_SFLOAT,
+
+                    VK_FORMAT_UNDEFINED, // VK_FORMAT_G8_B8R8_2PLANE_420_UNORM
+                    VK_FORMAT_UNDEFINED, // VK_FORMAT_G8_B8R8_2PLANE_422_UNORM
+                    VK_FORMAT_UNDEFINED, // VK_FORMAT_G8_B8_R8_3PLANE_444_UNORM
+
+                    VK_FORMAT_UNDEFINED, // VK_FORMAT_G16_B16R16_2PLANE_420_UNORM
+                    VK_FORMAT_UNDEFINED, // VK_FORMAT_G16_B16R16_2PLANE_422_UNORM
+                    VK_FORMAT_UNDEFINED, // VK_FORMAT_G16_B16_R16_3PLANE_444_UNORM
+
+                    VK_FORMAT_R8G8B8A8_UNORM};
             return data[static_cast<std::size_t>(type)];
         }
 
@@ -198,13 +196,13 @@ namespace tl
         {
             return !(*this == other);
         }
-        
+
         VkFilter getTextureFilter(timeline::ImageFilter value)
         {
             const std::array<
                 VkFilter,
-                static_cast<std::size_t>(timeline::ImageFilter::Count)> data
-                = {VK_FILTER_NEAREST, VK_FILTER_LINEAR};
+                static_cast<std::size_t>(timeline::ImageFilter::Count)>
+                data = {VK_FILTER_NEAREST, VK_FILTER_LINEAR};
             return data[static_cast<std::size_t>(value)];
         }
 
@@ -256,8 +254,9 @@ namespace tl
             //                 getTextureType(p.info.pixelType), NULL);
         }
 
-        Texture::Texture() :
-            _p(new Private)
+        Texture::Texture(Fl_Vk_Context& context) :
+            _p(new Private),
+            ctx(context)
         {
         }
 
@@ -276,10 +275,11 @@ namespace tl
             }
         }
 
-        std::shared_ptr<Texture>
-        Texture::create(const image::Info& info, const TextureOptions& options)
+        std::shared_ptr<Texture> Texture::create(
+            Fl_Vk_Context& ctx, const image::Info& info,
+            const TextureOptions& options)
         {
-            auto out = std::shared_ptr<Texture>(new Texture);
+            auto out = std::shared_ptr<Texture>(new Texture(ctx));
             out->_init(info, options);
             return out;
         }
