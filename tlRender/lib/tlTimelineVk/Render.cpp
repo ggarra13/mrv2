@@ -156,7 +156,7 @@ namespace
         return VK_FORMAT_UNDEFINED;
     }
 
-}
+} // namespace
 
 namespace tl
 {
@@ -649,32 +649,28 @@ namespace tl
             _displayShader();
 
             p.vbos["rect"] = vk::VBO::create(2 * 3, vk::VBOType::Pos2_F32);
-            p.vaos["rect"] = vk::VAO::create(ctx,
-                p.vbos["rect"]->getType(), p.vbos["rect"]->getID());
+            p.vaos["rect"] = vk::VAO::create(ctx);
             p.vbos["texture"] =
                 vk::VBO::create(2 * 3, vk::VBOType::Pos2_F32_UV_U16);
-            p.vaos["texture"] = vk::VAO::create(ctx,
-                p.vbos["texture"]->getType(), p.vbos["texture"]->getID());
+            p.vaos["texture"] = vk::VAO::create(ctx);
             p.vbos["image"] =
                 vk::VBO::create(2 * 3, vk::VBOType::Pos2_F32_UV_U16);
-            p.vaos["image"] = vk::VAO::create(ctx,
-                p.vbos["image"]->getType(), p.vbos["image"]->getID());
+            p.vaos["image"] = vk::VAO::create(ctx);
             p.vbos["wipe"] = vk::VBO::create(1 * 3, vk::VBOType::Pos2_F32);
-            p.vaos["wipe"] = vk::VAO::create(ctx,
-                p.vbos["wipe"]->getType(), p.vbos["wipe"]->getID());
+            p.vaos["wipe"] = vk::VAO::create(ctx);
             p.vbos["video"] =
                 vk::VBO::create(2 * 3, vk::VBOType::Pos2_F32_UV_U16);
-            p.vaos["video"] = vk::VAO::create(ctx,
-                p.vbos["video"]->getType(), p.vbos["video"]->getID());
+            p.vaos["video"] = vk::VAO::create(ctx);
 
             setViewport(math::Box2i(0, 0, renderSize.w, renderSize.h));
             if (renderOptions.clear)
             {
                 clearViewport(renderOptions.clearColor);
             }
-            setTransform(math::ortho(
-                0.F, static_cast<float>(renderSize.w),
-                static_cast<float>(renderSize.h), 0.F, -1.F, 1.F));
+            setTransform(
+                math::ortho(
+                    0.F, static_cast<float>(renderSize.w),
+                    static_cast<float>(renderSize.h), 0.F, -1.F, 1.F));
         }
 
         void Render::end()
@@ -733,17 +729,18 @@ namespace tl
 
                     context->log(
                         string::Format("tl::timeline::GLRender {0}").arg(this),
-                        string::Format("\n"
-                                       "    Average render time: {0}ms\n"
-                                       "    Average rectangle count: {1}\n"
-                                       "    Average mesh count: {2}\n"
-                                       "    Average mesh triangles: {3}\n"
-                                       "    Average text count: {4}\n"
-                                       "    Average text triangles: {5}\n"
-                                       "    Average texture count: {6}\n"
-                                       "    Average image count: {7}\n"
-                                       "    Glyph texture atlas: {8}%\n"
-                                       "    Glyph IDs: {9}")
+                        string::Format(
+                            "\n"
+                            "    Average render time: {0}ms\n"
+                            "    Average rectangle count: {1}\n"
+                            "    Average mesh count: {2}\n"
+                            "    Average mesh triangles: {3}\n"
+                            "    Average text count: {4}\n"
+                            "    Average text triangles: {5}\n"
+                            "    Average texture count: {6}\n"
+                            "    Average image count: {7}\n"
+                            "    Glyph texture atlas: {8}%\n"
+                            "    Glyph IDs: {9}")
                             .arg(average.time)
                             .arg(average.rects)
                             .arg(average.meshes)
@@ -842,18 +839,19 @@ namespace tl
 
         namespace
         {
-            // void setTextureParameters(GLenum textureType, GLenum interpolation)
+            // void setTextureParameters(GLenum textureType, GLenum
+            // interpolation)
             // {
-                // glTexParameteri(
-                //     textureType, GL_TEXTURE_MIN_FILTER, interpolation);
-                // glTexParameteri(
-                //     textureType, GL_TEXTURE_MAG_FILTER, interpolation);
-                // glTexParameteri(
-                //     textureType, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-                // glTexParameteri(
-                //     textureType, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-                // glTexParameteri(
-                //     textureType, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+            // glTexParameteri(
+            //     textureType, GL_TEXTURE_MIN_FILTER, interpolation);
+            // glTexParameteri(
+            //     textureType, GL_TEXTURE_MAG_FILTER, interpolation);
+            // glTexParameteri(
+            //     textureType, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            // glTexParameteri(
+            //     textureType, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            // glTexParameteri(
+            //     textureType, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
             // }
             //
             // void setTextureParameters(
@@ -865,8 +863,8 @@ namespace tl
             //                          : GL_LINEAR);
             // }
 
-        }
-        
+        } // namespace
+
 #if defined(TLRENDER_OCIO)
 
         void Render::_addTextures(
@@ -874,7 +872,7 @@ namespace tl
             const OCIO::GpuShaderDescRcPtr& shaderDesc)
         {
             TLRENDER_P();
-            
+
             // Create 3D textures.
             const unsigned num3DTextures = shaderDesc->getNum3DTextures();
             for (unsigned i = 0; i < num3DTextures; ++i)
@@ -899,58 +897,50 @@ namespace tl
                     throw std::runtime_error(
                         "The OCIO texture values are missing");
                 }
-                   
+
                 VkFormat imageFormat = VK_FORMAT_R32G32B32_SFLOAT;
                 VkImageType imageType = VK_IMAGE_TYPE_3D;
 
-                const uint32_t width  = edgelen;
+                const uint32_t width = edgelen;
                 const uint32_t height = edgelen;
-                const uint32_t depth  = edgelen;
+                const uint32_t depth = edgelen;
                 const uint16_t channels = 3;
-                
+
                 // Create Vulkan image
-                VkImage image =
-                    createImage(ctx.device, imageType, width,
-                                height, depth, imageFormat);
-                
+                VkImage image = createImage(
+                    ctx.device, imageType, width, height, depth, imageFormat);
+
                 // Allocate and bind memory for the image
                 VkDeviceMemory imageMemory =
-                    allocateAndBindImageMemory(ctx.device,
-                                               ctx.gpu,
-                                               image);
-                
+                    allocateAndBindImageMemory(ctx.device, ctx.gpu, image);
+
                 // Transition image layout to TRANSFER_DST_OPTIMAL
-                transitionImageLayout(ctx.device, ctx.commandPool,
-                                      ctx.queue, 
-                                      image, VK_IMAGE_LAYOUT_UNDEFINED,
-                                      VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-                
+                transitionImageLayout(
+                    ctx.device, ctx.commandPool, ctx.queue, image,
+                    VK_IMAGE_LAYOUT_UNDEFINED,
+                    VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+
                 // Upload texture data
                 uploadTextureData(
-                    ctx.device, ctx.gpu, ctx.commandPool,
-                    ctx.queue,
-                    image, width, height, depth, imageFormat,
-                    channels, sizeof(float), values);
-                    
+                    ctx.device, ctx.gpu, ctx.commandPool, ctx.queue, image,
+                    width, height, depth, imageFormat, channels, sizeof(float),
+                    values);
 
                 // Transition image layout to SHADER_READ_ONLY_OPTIMAL
-                transitionImageLayout(ctx.device, ctx.commandPool,
-                                      ctx.queue, 
-                                      image,
-                                      VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                                      VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-                    
+                transitionImageLayout(
+                    ctx.device, ctx.commandPool, ctx.queue, image,
+                    VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                    VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
                 // Create image view
                 VkImageView imageView =
-                    createImageView(ctx.device, image, imageFormat,
-                                    imageType);
+                    createImageView(ctx.device, image, imageFormat, imageType);
 
                 // Create sampler
                 VkSampler sampler = createSampler(ctx.device);
-                    
+
                 Fl_Vk_Texture texture(
-                    VK_IMAGE_TYPE_3D, imageFormat, image,
-                    imageView, sampler,
+                    VK_IMAGE_TYPE_3D, imageFormat, image, imageView, sampler,
                     imageMemory, samplerName, width, height, depth);
                 textures.push_back(texture);
             }
@@ -988,14 +978,13 @@ namespace tl
 
                 uint16_t channels = 3;
                 VkFormat imageFormat = VK_FORMAT_R32G32B32_SFLOAT;
-                if (OCIO::GpuShaderCreator::TEXTURE_RED_CHANNEL ==
-                    channel)
+                if (OCIO::GpuShaderCreator::TEXTURE_RED_CHANNEL == channel)
                 {
                     channels = 1;
                     imageFormat = VK_FORMAT_R32_SFLOAT;
                 }
-                
-                const uint32_t depth  = 1;
+
+                const uint32_t depth = 1;
                 VkImageType imageType;
                 switch (dimensions)
                 {
@@ -1008,49 +997,42 @@ namespace tl
                 default:
                     throw std::runtime_error("Unknown OCIO image type");
                 }
-                   
+
                 // Create Vulkan image
-                VkImage image =
-                    createImage(ctx.device, imageType, width,
-                                height, depth, imageFormat);
-                
+                VkImage image = createImage(
+                    ctx.device, imageType, width, height, depth, imageFormat);
+
                 // Allocate and bind memory for the image
                 VkDeviceMemory imageMemory =
-                    allocateAndBindImageMemory(ctx.device,
-                                               ctx.gpu,
-                                               image);
-                
+                    allocateAndBindImageMemory(ctx.device, ctx.gpu, image);
+
                 // Transition image layout to TRANSFER_DST_OPTIMAL
-                transitionImageLayout(ctx.device, ctx.commandPool,
-                                      ctx.queue, 
-                                      image, VK_IMAGE_LAYOUT_UNDEFINED,
-                                      VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-                
+                transitionImageLayout(
+                    ctx.device, ctx.commandPool, ctx.queue, image,
+                    VK_IMAGE_LAYOUT_UNDEFINED,
+                    VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+
                 // Upload texture data
                 uploadTextureData(
-                    ctx.device, ctx.gpu, ctx.commandPool,
-                    ctx.queue,
-                    image, width, height, depth, imageFormat,
-                    channels, sizeof(float), values);
-                    
+                    ctx.device, ctx.gpu, ctx.commandPool, ctx.queue, image,
+                    width, height, depth, imageFormat, channels, sizeof(float),
+                    values);
 
                 // Transition image layout to SHADER_READ_ONLY_OPTIMAL
-                transitionImageLayout(ctx.device, ctx.commandPool,
-                                      ctx.queue, image,
-                                      VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                                      VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-                    
+                transitionImageLayout(
+                    ctx.device, ctx.commandPool, ctx.queue, image,
+                    VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                    VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
                 // Create image view
                 VkImageView imageView =
-                    createImageView(ctx.device, image, imageFormat,
-                                    imageType);
+                    createImageView(ctx.device, image, imageFormat, imageType);
 
                 // Create sampler
                 VkSampler sampler = createSampler(ctx.device);
-                    
+
                 Fl_Vk_Texture texture(
-                    VK_IMAGE_TYPE_3D, imageFormat, image,
-                    imageView, sampler,
+                    VK_IMAGE_TYPE_3D, imageFormat, image, imageView, sampler,
                     imageMemory, samplerName, width, height, depth);
                 textures.push_back(texture);
             }
@@ -1059,11 +1041,10 @@ namespace tl
 
 #if defined(TLRENDER_LIBPLACEBO)
         void Render::_addTextures(
-            std::vector<Fl_Vk_Texture>& textures,
-            const pl_shader_res* res)
+            std::vector<Fl_Vk_Texture>& textures, const pl_shader_res* res)
         {
             TLRENDER_P();
-                
+
             // Create 3D textures.
             // glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
             // glPixelStorei(GL_UNPACK_SWAP_BYTES, 0);
@@ -1076,8 +1057,7 @@ namespace tl
                     throw "Unimplemented img";
                 case PL_DESC_SAMPLED_TEX:
                 {
-                    pl_tex tex =
-                        reinterpret_cast<pl_tex>(sd->binding.object);
+                    pl_tex tex = reinterpret_cast<pl_tex>(sd->binding.object);
                     pl_fmt fmt = tex->params.format;
 
                     int dims = pl_tex_params_dimension(tex->params);
@@ -1125,46 +1105,40 @@ namespace tl
                     }
 
                     // Determine image type
-                    VkImageType imageType = (dims == 1) ? VK_IMAGE_TYPE_1D
-                                            : (dims == 2)
-                                            ? VK_IMAGE_TYPE_2D
-                                            : VK_IMAGE_TYPE_3D;
+                    VkImageType imageType = (dims == 1)   ? VK_IMAGE_TYPE_1D
+                                            : (dims == 2) ? VK_IMAGE_TYPE_2D
+                                                          : VK_IMAGE_TYPE_3D;
 
                     // Create Vulkan image
-                    VkImage image =
-                        createImage(ctx.device, imageType, width,
-                                    height, depth, imageFormat);
+                    VkImage image = createImage(
+                        ctx.device, imageType, width, height, depth,
+                        imageFormat);
 
                     // Allocate and bind memory for the image
                     VkDeviceMemory imageMemory =
-                        allocateAndBindImageMemory(ctx.device,
-                                                   ctx.gpu,
-                                                   image);
+                        allocateAndBindImageMemory(ctx.device, ctx.gpu, image);
 
                     // Transition image layout to TRANSFER_DST_OPTIMAL
-                    transitionImageLayout(ctx.device, ctx.commandPool,
-                                          ctx.queue, 
-                                          image, VK_IMAGE_LAYOUT_UNDEFINED,
-                                          VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+                    transitionImageLayout(
+                        ctx.device, ctx.commandPool, ctx.queue, image,
+                        VK_IMAGE_LAYOUT_UNDEFINED,
+                        VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 
                     // Upload texture data
                     uploadTextureData(
-                        ctx.device, ctx.gpu, ctx.commandPool,
-                        ctx.queue,
-                        image, width, height, depth, imageFormat,
-                        channels, size, values);
+                        ctx.device, ctx.gpu, ctx.commandPool, ctx.queue, image,
+                        width, height, depth, imageFormat, channels, size,
+                        values);
 
                     // Transition image layout to SHADER_READ_ONLY_OPTIMAL
-                    transitionImageLayout(ctx.device, ctx.commandPool,
-                                          ctx.queue, 
-                                          image,
-                                          VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                                          VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-                        
+                    transitionImageLayout(
+                        ctx.device, ctx.commandPool, ctx.queue, image,
+                        VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
                     // Create image view
-                    VkImageView imageView =
-                        createImageView(ctx.device, image, imageFormat,
-                                        imageType);
+                    VkImageView imageView = createImageView(
+                        ctx.device, image, imageFormat, imageType);
 
                     // Create sampler
                     VkSampler sampler = createSampler(ctx.device);
@@ -1208,16 +1182,13 @@ namespace tl
                 }
                 if (!p.ocioData->config)
                 {
-                    throw std::runtime_error(
-                        "Cannot get OCIO configuration");
+                    throw std::runtime_error("Cannot get OCIO configuration");
                 }
-                p.ocioData->icsDesc =
-                    OCIO::GpuShaderDesc::CreateShaderDesc();
+                p.ocioData->icsDesc = OCIO::GpuShaderDesc::CreateShaderDesc();
                 if (!p.ocioData->icsDesc)
                 {
                     p.ocioData.reset();
-                    throw std::runtime_error(
-                        "Cannot create OCIO transform");
+                    throw std::runtime_error("Cannot create OCIO transform");
                 }
                 if (!p.ocioOptions.input.empty())
                 {
@@ -1227,15 +1198,12 @@ namespace tl
                     OCIO::ConstColorSpaceRcPtr dstCS =
                         p.ocioData->config->getColorSpace(
                             OCIO::ROLE_SCENE_LINEAR);
-                    p.ocioData->processor =
-                        p.ocioData->config->getProcessor(
-                            p.ocioData->config->getCurrentContext(), srcCS,
-                            dstCS);
+                    p.ocioData->processor = p.ocioData->config->getProcessor(
+                        p.ocioData->config->getCurrentContext(), srcCS, dstCS);
                     if (!p.ocioData->processor)
                     {
                         p.ocioData.reset();
-                        throw std::runtime_error(
-                            "Cannot get OCIO processor");
+                        throw std::runtime_error("Cannot get OCIO processor");
                     }
 
                     p.ocioData->gpuProcessor =
@@ -1259,14 +1227,12 @@ namespace tl
                     p.ocioData->icsDesc->setLanguage(
                         OCIO::GPU_LANGUAGE_GLSL_4_0);
                     p.ocioData->icsDesc->setFunctionName("ocioICSFunc");
-                    p.ocioData->icsDesc->setResourcePrefix(
-                        "ocioICS"); // ocio?
+                    p.ocioData->icsDesc->setResourcePrefix("ocioICS"); // ocio?
                     p.ocioData->gpuProcessor->extractGpuShaderInfo(
                         p.ocioData->icsDesc);
                     try
                     {
-                        _addTextures(
-                            p.ocioData->textures, p.ocioData->icsDesc);
+                        _addTextures(p.ocioData->textures, p.ocioData->icsDesc);
                     }
                     catch (const std::exception& e)
                     {
@@ -1280,11 +1246,9 @@ namespace tl
                     p.ocioData->transform->setSrc(OCIO::ROLE_SCENE_LINEAR);
                     p.ocioData->transform->setDisplay(
                         p.ocioOptions.display.c_str());
-                    p.ocioData->transform->setView(
-                        p.ocioOptions.view.c_str());
+                    p.ocioData->transform->setView(p.ocioOptions.view.c_str());
 
-                    p.ocioData->lvp =
-                        OCIO::LegacyViewingPipeline::Create();
+                    p.ocioData->lvp = OCIO::LegacyViewingPipeline::Create();
                     if (!p.ocioData->lvp)
                     {
                         p.ocioData.reset();
@@ -1303,8 +1267,7 @@ namespace tl
                     if (!p.ocioData->processor)
                     {
                         p.ocioData.reset();
-                        throw std::runtime_error(
-                            "Cannot get OCIO processor");
+                        throw std::runtime_error("Cannot get OCIO processor");
                     }
                     p.ocioData->gpuProcessor =
                         p.ocioData->processor->getOptimizedGPUProcessor(
@@ -1325,8 +1288,7 @@ namespace tl
                     }
                     p.ocioData->shaderDesc->setLanguage(
                         OCIO::GPU_LANGUAGE_GLSL_4_0);
-                    p.ocioData->shaderDesc->setFunctionName(
-                        "ocioDisplayFunc");
+                    p.ocioData->shaderDesc->setFunctionName("ocioDisplayFunc");
                     p.ocioData->shaderDesc->setResourcePrefix("ocio");
                     p.ocioData->gpuProcessor->extractGpuShaderInfo(
                         p.ocioData->shaderDesc);
@@ -1376,8 +1338,7 @@ namespace tl
                 if (!p.lutData->transform)
                 {
                     p.lutData.reset();
-                    throw std::runtime_error(
-                        "Cannot create OCIO transform");
+                    throw std::runtime_error("Cannot create OCIO transform");
                 }
                 p.lutData->transform->setSrc(p.lutOptions.fileName.c_str());
                 p.lutData->transform->validate();
@@ -1394,27 +1355,23 @@ namespace tl
                 if (!p.lutData->gpuProcessor)
                 {
                     p.lutData.reset();
-                    throw std::runtime_error(
-                        "Cannot get OCIO GPU processor");
+                    throw std::runtime_error("Cannot get OCIO GPU processor");
                 }
-                p.lutData->shaderDesc =
-                    OCIO::GpuShaderDesc::CreateShaderDesc();
+                p.lutData->shaderDesc = OCIO::GpuShaderDesc::CreateShaderDesc();
                 if (!p.lutData->shaderDesc)
                 {
                     p.lutData.reset();
                     throw std::runtime_error(
                         "Cannot create OCIO shader description");
                 }
-                p.lutData->shaderDesc->setLanguage(
-                    OCIO::GPU_LANGUAGE_GLSL_4_0);
+                p.lutData->shaderDesc->setLanguage(OCIO::GPU_LANGUAGE_GLSL_4_0);
                 p.lutData->shaderDesc->setFunctionName("lutFunc");
                 p.lutData->shaderDesc->setResourcePrefix("lut");
                 p.lutData->gpuProcessor->extractGpuShaderInfo(
                     p.lutData->shaderDesc);
                 try
                 {
-                    _addTextures(
-                        p.lutData->textures, p.lutData->shaderDesc);
+                    _addTextures(p.lutData->textures, p.lutData->shaderDesc);
                 }
                 catch (const std::exception& e)
                 {
@@ -1562,7 +1519,7 @@ namespace tl
                 if (hasHDR)
                 {
                     cmap.metadata = PL_HDR_METADATA_ANY;
-                    
+
                     pl_hdr_metadata& hdr = src_colorspace.hdr;
                     hdr.min_luma = data.displayMasteringLuminance.getMin();
                     hdr.max_luma = data.displayMasteringLuminance.getMax();
@@ -1600,7 +1557,7 @@ namespace tl
                     src_colorspace.primaries = PL_COLOR_PRIM_BT_709;
 
                     // SDR uses sRGB-like gamma
-                    src_colorspace.transfer = PL_COLOR_TRC_SRGB;  // right?
+                    src_colorspace.transfer = PL_COLOR_TRC_SRGB; // right?
                 }
 
                 pl_color_space_infer(&src_colorspace);
@@ -1612,7 +1569,8 @@ namespace tl
                 {
                     dst_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
                     dst_colorspace.transfer = PL_COLOR_TRC_PQ;
-                    if (ctx.colorSpace == VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
+                    if (ctx.colorSpace ==
+                        VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
                     {
                         dst_colorspace.primaries = PL_COLOR_PRIM_DISPLAY_P3;
                         dst_colorspace.transfer = PL_COLOR_TRC_BT_1886;
@@ -1690,7 +1648,8 @@ namespace tl
                             cmap.tone_mapping_function = &pl_tone_map_linear;
                             break;
                         case timeline::HDRTonemapAlgorithm::LinearLight:
-                            cmap.tone_mapping_function = &pl_tone_map_linear_light;
+                            cmap.tone_mapping_function =
+                                &pl_tone_map_linear_light;
                             break;
                         case timeline::HDRTonemapAlgorithm::ST2094_40:
                         default:
@@ -1801,8 +1760,7 @@ namespace tl
                 // s << "layout(binding = 2) uniform UBO {\n";
                 for (int i = 0; i < res->num_variables; ++i)
                 {
-                    const struct pl_shader_var shader_var =
-                        res->variables[i];
+                    const struct pl_shader_var shader_var = res->variables[i];
                     const struct pl_var var = shader_var.var;
                     std::string glsl_type = pl_var_glsl_type_name(var);
                     s << "const " << glsl_type << " " << var.name;
@@ -1842,8 +1800,7 @@ namespace tl
                                         s << m[index];
 
                                         // Check if it's the last element
-                                        if (!(r == dim_m - 1 &&
-                                              c == dim_v - 1))
+                                        if (!(r == dim_m - 1 && c == dim_v - 1))
                                         {
                                             s << ", ";
                                         }
@@ -1886,8 +1843,7 @@ namespace tl
                 for (int i = 0; i < res->num_constants; ++i)
                 {
                     // s << "layout(constant_id=" << i << ") ";
-                    const struct pl_shader_const constant =
-                        res->constants[i];
+                    const struct pl_shader_const constant = res->constants[i];
                     switch (constant.type)
                     {
                     case PL_VAR_SINT:
@@ -1897,12 +1853,11 @@ namespace tl
                     case PL_VAR_UINT:
                         s << "const uint " << constant.name << " = "
                           << *(reinterpret_cast<const unsigned*>(
-                                   constant.data));
+                                 constant.data));
                         break;
                     case PL_VAR_FLOAT:
                         s << "const float " << constant.name << " = "
-                          << *(reinterpret_cast<const float*>(
-                                   constant.data));
+                          << *(reinterpret_cast<const float*>(constant.data));
                         break;
                     default:
                         break;
@@ -1934,8 +1889,7 @@ namespace tl
                     p.lutOptions.order, toneMapDef, toneMap);
                 if (auto context = _context.lock())
                 {
-                    context->log(
-                        "tl::vk::GLRender", "Creating display shader");
+                    context->log("tl::vk::GLRender", "Creating display shader");
                 }
                 p.shaders["display"] =
                     vk::Shader::create(ctx, vertexSource(), source);
@@ -1975,5 +1929,5 @@ namespace tl
             texturesOffset += p.placeboData->textures.size();
 #endif
         }
-    } // namespace timeline_gl
+    } // namespace timeline_vk
 } // namespace tl

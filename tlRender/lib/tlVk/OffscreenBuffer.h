@@ -87,8 +87,7 @@ namespace tl
             TLRENDER_NON_COPYABLE(OffscreenBuffer);
 
         protected:
-            void _init(const math::Size2i&,
-                       const OffscreenBufferOptions&);
+            void _init(const math::Size2i&, const OffscreenBufferOptions&);
 
             OffscreenBuffer(Fl_Vk_Context& context);
 
@@ -96,9 +95,9 @@ namespace tl
             ~OffscreenBuffer();
 
             //! Create a new offscreen buffer.
-            static std::shared_ptr<OffscreenBuffer>
-            create(Fl_Vk_Context& context, const math::Size2i&,
-                   const OffscreenBufferOptions&);
+            static std::shared_ptr<OffscreenBuffer> create(
+                Fl_Vk_Context& context, const math::Size2i&,
+                const OffscreenBufferOptions&);
 
             //! Get the offscreen buffer size.
             const math::Size2i& getSize() const;
@@ -111,28 +110,36 @@ namespace tl
 
             //! Returns true if the buffer has depth.
             bool hasDepth() const;
-            
+
             //! Returns true if the buffer has depth.
             bool hasStencil() const;
-            
+
             //! Get the options.
             const OffscreenBufferOptions& getOptions() const;
 
             //! Vulkan Accessors
-            VkImageView      getImageView() const;
-            VkImage          getImage() const;
-            VkFramebuffer    getFramebuffer() const;
-            VkRenderPass     getRenderPass() const;
-            VkSampler        getSampler() const;
-            VkExtent2D       getExtent() const;
+            VkImageView getImageView() const;
+            VkImage getImage() const;
+            VkFramebuffer getFramebuffer() const;
+            VkRenderPass getRenderPass() const;
+            VkSampler getSampler() const;
+            VkExtent2D getExtent() const;
+            VkViewport getViewport() const;
+            VkRect2D getScissor() const;
 
             //! Offscreen image transitions.
             void transitionToShaderRead(VkCommandBuffer cmd);
             void transitionToColorAttachment(VkCommandBuffer cmd);
-            
+
+            //! Set up the internal viewport and scissor.
+            void setupViewportAndScissor();
+
+            //! Apply internal viewport and scissor to command buffer.
+            void setupViewportAndScissor(VkCommandBuffer cmd);
+
         private:
             Fl_Vk_Context& ctx;
-            
+
             void cleanup();
             void initialize();
             void createImage();
@@ -143,9 +150,9 @@ namespace tl
             void createFramebuffer();
             void createSampler();
 
-            uint32_t findMemoryType(uint32_t typeFilter,
-                                    VkMemoryPropertyFlags properties);
-            
+            uint32_t findMemoryType(
+                uint32_t typeFilter, VkMemoryPropertyFlags properties);
+
             TLRENDER_PRIVATE();
         };
 

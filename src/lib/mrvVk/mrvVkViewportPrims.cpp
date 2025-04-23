@@ -33,8 +33,8 @@ namespace mrv
             const size_t numTriangles = mesh.triangles.size();
             if (!vk.vbo || (vk.vbo && vk.vbo->getSize() != numTriangles * 3))
             {
-                vk.vbo =
-                    vk::VBO::create(numTriangles * 3, vk::VBOType::Pos3_F32_UV_U16);
+                vk.vbo = vk::VBO::create(
+                    numTriangles * 3, vk::VBOType::Pos3_F32_UV_U16);
                 vk.vao.reset();
             }
             if (vk.vbo)
@@ -43,7 +43,8 @@ namespace mrv
             }
             if (!vk.vao && vk.vbo)
             {
-                vk.vao = vk::VAO::create(ctx, vk.vbo->getType(), vk.vbo->getID());
+                vk.vao = vk::VAO::create(ctx);
+                vk.vao->upload(vk.vbo->getData());
             }
         }
 
@@ -57,8 +58,8 @@ namespace mrv
             const size_t numTriangles = mesh.triangles.size();
             if (!vk.vbo || (vk.vbo && vk.vbo->getSize() != numTriangles * 3))
             {
-                vk.vbo =
-                    vk::VBO::create(numTriangles * 3, vk::VBOType::Pos3_F32_UV_U16);
+                vk.vbo = vk::VBO::create(
+                    numTriangles * 3, vk::VBOType::Pos3_F32_UV_U16);
                 vk.vao.reset();
             }
             if (vk.vbo)
@@ -67,7 +68,8 @@ namespace mrv
             }
             if (!vk.vao && vk.vbo)
             {
-                vk.vao = vk::VAO::create(ctx, vk.vbo->getType(), vk.vbo->getID());
+                vk.vao = vk::VAO::create(ctx);
+                vk.vao->upload(vk.vbo->getData());
             }
         }
 
@@ -139,8 +141,8 @@ namespace mrv
             Imath::V3f u = s.cross(f);
 
             Imath::M44f lookAtMatrix(
-                s.x, s.y, s.z, 0.0f, u.x, u.y, u.z, 0.0f, -f.x, -f.y, -f.z, 0.0f,
-                s.dot(eye), u.dot(eye), f.dot(eye), 1.0f);
+                s.x, s.y, s.z, 0.0f, u.x, u.y, u.z, 0.0f, -f.x, -f.y, -f.z,
+                0.0f, s.dot(eye), u.dot(eye), f.dot(eye), 1.0f);
 
             // Combine the perspective and look at matrices
             pm = lookAtMatrix * pm;
@@ -149,9 +151,10 @@ namespace mrv
             const Imath::M44f vpm = vm * pm;
 
             const auto mvp = math::Matrix4x4f(
-                vpm[0][0], vpm[0][1], vpm[0][2], vpm[0][3], vpm[1][0], vpm[1][1],
-                vpm[1][2], vpm[1][3], vpm[2][0], vpm[2][1], vpm[2][2], vpm[2][3],
-                vpm[3][0], vpm[3][1], vpm[3][2], vpm[3][3]);
+                vpm[0][0], vpm[0][1], vpm[0][2], vpm[0][3], vpm[1][0],
+                vpm[1][1], vpm[1][2], vpm[1][3], vpm[2][0], vpm[2][1],
+                vpm[2][2], vpm[2][3], vpm[3][0], vpm[3][1], vpm[3][2],
+                vpm[3][3]);
             switch (p.environmentMapOptions.type)
             {
             case EnvironmentMapOptions::kSpherical:
@@ -170,37 +173,33 @@ namespace mrv
         {
             TLRENDER_P();
             MRV2_VK();
-            
 
             const auto& renderSize = getRenderSize();
-            
 
             const auto& mesh =
                 geom::box(math::Box2i(0, 0, renderSize.w, renderSize.h));
             const size_t numTriangles = mesh.triangles.size();
             if (!vk.vbo || (vk.vbo && vk.vbo->getSize() != numTriangles * 3))
             {
-                vk.vbo =
-                    vk::VBO::create(numTriangles * 3, vk::VBOType::Pos2_F32_UV_U16);
-                
+                vk.vbo = vk::VBO::create(
+                    numTriangles * 3, vk::VBOType::Pos2_F32_UV_U16);
+
                 vk.vao.reset();
-                
             }
             if (vk.vbo)
             {
                 vk.vbo->copy(convert(mesh, vk::VBOType::Pos2_F32_UV_U16));
-                
             }
 
             if (!vk.vao && vk.vbo)
             {
-                vk.vao = vk::VAO::create(ctx, vk.vbo->getType(), vk.vbo->getID());
-                
+                vk.vao = vk::VAO::create(ctx);
+                vk.vao->upload(vk.vbo->getData());
             }
 
             return _projectionMatrix();
         }
 
     } // namespace vulkan
-    
+
 } // namespace mrv

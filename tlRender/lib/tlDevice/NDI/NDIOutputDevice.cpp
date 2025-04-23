@@ -38,11 +38,20 @@ namespace tl
         namespace
         {
             const std::chrono::milliseconds timeout(8);
-            const char* kModule = "ndi";
+            const char* kModule = "ndi ";
         } // namespace
 
         namespace
         {
+            inline bool is_equal(float x, float y)
+            {
+                int intNum1 = (int)(x * 1000 + 0.5);
+                int intNum2 = (int)(y * 1000 + 0.5);
+
+                // Compare the resulting integers.
+                return intNum1 == intNum2;
+            }
+
             inline float fadeValue(double sample, double in, double out)
             {
                 return (sample - in) / (out - in);
@@ -1067,10 +1076,11 @@ namespace tl
                 {
                     context->log(
                         "tl::ndi::OutputDevice",
-                        string::Format("\n"
-                                       "    #{0} {1}\n"
-                                       "    video: {2} {3}\n"
-                                       "    audio: {4} {5} {6}")
+                        string::Format(
+                            "\n"
+                            "    #{0} {1}\n"
+                            "    video: {2} {3}\n"
+                            "    audio: {4} {5} {6}")
                             .arg(config.deviceIndex)
                             .arg(config.displayModeIndex)
                             .arg(p.thread.size)
@@ -1724,8 +1734,8 @@ namespace tl
                     viewZoom = zoom;
                     sourceViewportSize = renderSize;
                 }
-                const math::Matrix4x4f& translateMatrix =
-                    math::translate(math::Vector3f(
+                const math::Matrix4x4f& translateMatrix = math::translate(
+                    math::Vector3f(
                         viewPos.x,
                         static_cast<float>(
                             -viewPos.y - (renderSize.h * (viewZoom - 1.0))),
@@ -1741,8 +1751,8 @@ namespace tl
 
                 // Create translation matrix for centering the image (image
                 // origin at top-left)
-                const math::Matrix4x4f& centeringMatrix =
-                    math::translate(math::Vector3f(
+                const math::Matrix4x4f& centeringMatrix = math::translate(
+                    math::Vector3f(
                         -renderSize.w / 2.0f, -renderSize.h / 2.0f, 0.0f));
 
                 // Create offset transform
@@ -1866,42 +1876,120 @@ namespace tl
                 std::string transferName = "bt_2020";
                 std::string matrixName = "bt_2020";
                 const auto& primaries = hdrData->primaries;
-                if (primaries[0].x == 0.708F && primaries[0].y == 0.292F &&
-                    primaries[1].x == 0.170F && primaries[1].y == 0.797F &&
-                    primaries[2].x == 0.131F && primaries[2].y == 0.046F &&
-                    primaries[3].x == 0.3127F && primaries[3].y == 0.3290F)
+                if (is_equal(primaries[0].x, 0.708F) &&
+                    is_equal(primaries[0].y, 0.292F) &&
+                    is_equal(primaries[1].x, 0.170F) &&
+                    is_equal(primaries[1].y, 0.797F) &&
+                    is_equal(primaries[2].x, 0.131F) &&
+                    is_equal(primaries[2].y, 0.046F) &&
+                    is_equal(primaries[3].x, 0.3127F) &&
+                    is_equal(primaries[3].y, 0.3290F))
                 {
                     primariesName = "bt_2020";
                 }
                 else if (
-                    primaries[0].x == 0.640F && primaries[0].y == 0.330F &&
-                    primaries[1].x == 0.300F && primaries[1].y == 0.600F &&
-                    primaries[2].x == 0.150F && primaries[2].y == 0.060F &&
-                    primaries[3].x == 0.3127F && primaries[3].y == 0.3290F)
+                    is_equal(primaries[0].x, 0.640F) &&
+                    is_equal(primaries[0].y, 0.330F) &&
+                    is_equal(primaries[1].x, 0.300F) &&
+                    is_equal(primaries[1].y, 0.600F) &&
+                    is_equal(primaries[2].x, 0.150F) &&
+                    is_equal(primaries[2].y, 0.060F) &&
+                    is_equal(primaries[3].x, 0.3127F) &&
+                    is_equal(primaries[3].y, 0.3290F))
                 {
                     primariesName = "bt_709";
                 }
                 else if (
-                    primaries[0].x == 0.630F && primaries[0].y == 0.340F &&
-                    primaries[1].x == 0.310F && primaries[1].y == 0.595F &&
-                    primaries[2].x == 0.155F && primaries[2].y == 0.070F &&
-                    primaries[3].x == 0.3127F && primaries[3].y == 0.3290F)
+                    is_equal(primaries[0].x, 0.630F) &&
+                    is_equal(primaries[0].y, 0.340F) &&
+                    is_equal(primaries[1].x, 0.310F) &&
+                    is_equal(primaries[1].y, 0.595F) &&
+                    is_equal(primaries[2].x, 0.155F) &&
+                    is_equal(primaries[2].y, 0.070F) &&
+                    is_equal(primaries[3].x, 0.3127F) &&
+                    is_equal(primaries[3].y, 0.3290F))
                 {
                     primariesName = "bt_601";
+                }
+                else if (
+                    is_equal(primaries[0].x, 0.680F) &&
+                    is_equal(primaries[0].y, 0.320F) &&
+                    is_equal(primaries[1].x, 0.265F) &&
+                    is_equal(primaries[1].y, 0.690F) &&
+                    is_equal(primaries[2].x, 0.150F) &&
+                    is_equal(primaries[2].y, 0.060F) &&
+                    is_equal(primaries[3].x, 0.314F) &&
+                    is_equal(primaries[3].y, 0.351F))
+                {
+                    // primariesName = "dci-p3";
+                    primariesName = "bt_2020";
+                    if (auto context = p.context.lock())
+                    {
+                        auto logSystem = context->getLogSystem();
+                        logSystem->print(
+                            "tl::ndi::OutputDevice",
+                            string::Format(
+                                "DCI-P3 (Theatrical) "
+                                "primaries unsupported. "
+                                "Using {0} for NDI compatible "
+                                "devices.")
+                                .arg(primariesName),
+                            log::Type::kStatus, kModule);
+                    }
+                }
+                else if (
+                    is_equal(primaries[0].x, 0.680F) &&
+                    is_equal(primaries[0].y, 0.320F) &&
+                    is_equal(primaries[1].x, 0.265F) &&
+                    is_equal(primaries[1].y, 0.690F) &&
+                    is_equal(primaries[2].x, 0.150F) &&
+                    is_equal(primaries[2].y, 0.060F) &&
+                    is_equal(primaries[3].x, 0.3127F) &&
+                    is_equal(primaries[3].y, 0.3290F))
+                {
+                    // primariesName = "dci-p3 (D65)";
+                    primariesName = "bt_2020";
+                    if (auto context = p.context.lock())
+                    {
+                        auto logSystem = context->getLogSystem();
+                        logSystem->print(
+                            "tl::ndi::OutputDevice",
+                            string::Format(
+                                "DCI-P3 (D65) "
+                                "primaries unsupported. "
+                                "Using {0} for NDI compatible "
+                                "devices.")
+                                .arg(primariesName),
+                            log::Type::kStatus, kModule);
+                    }
                 }
                 else
                 {
                     primariesName = "bt_2020";
-                }
-
-                if (auto context = p.context.lock())
-                {
-                    auto logSystem = context->getLogSystem();
-                    logSystem->print(
-                        "tl::ndi::OutputDevice",
-                        string::Format("Unknown primaries.  Using {0}.")
-                            .arg(primariesName),
-                        log::Type::kStatus, kModule);
+                    if (auto context = p.context.lock())
+                    {
+                        auto logSystem = context->getLogSystem();
+                        logSystem->print(
+                            "tl::ndi::OutputDevice",
+                            string::Format(
+                                "Unknown primaries:\n"
+                                "{0}, {1}\n"
+                                "{2}, {3}\n"
+                                "{4}, {5}\n"
+                                "{6}, {7}\n"
+                                "Using {8} for NDI compatible "
+                                "devices.")
+                                .arg(primaries[0].x)
+                                .arg(primaries[0].y)
+                                .arg(primaries[1].x)
+                                .arg(primaries[1].y)
+                                .arg(primaries[2].x)
+                                .arg(primaries[2].y)
+                                .arg(primaries[3].x)
+                                .arg(primaries[3].y)
+                                .arg(primariesName),
+                            log::Type::kStatus, kModule);
+                    }
                 }
 
                 switch (hdrData->eotf)
@@ -1936,8 +2024,9 @@ namespace tl
                     auto logSystem = context->getLogSystem();
                     logSystem->print(
                         "tl::ndi::OutputDevice",
-                        string::Format("primaries={0} transfer={1} "
-                                       "matrix={2}.")
+                        string::Format(
+                            "primaries={0} transfer={1} "
+                            "matrix={2}.")
                             .arg(primariesName)
                             .arg(transferName)
                             .arg(matrixName),
@@ -1948,12 +2037,13 @@ namespace tl
 
                 nlohmann::json j = *hdrData;
                 const std::string mrv2_json = escape_quotes_for_xml(j.dump());
-                p.thread.metadata = string::Format("<ndi_color_info "
-                                                   " transfer=\"{0}\" "
-                                                   " matrix=\"{1}\" "
-                                                   " primaries=\"{2}\" "
-                                                   " mrv2=\"{3}\" "
-                                                   "/>\n")
+                p.thread.metadata = string::Format(
+                                        "<ndi_color_info "
+                                        " transfer=\"{0}\" "
+                                        " matrix=\"{1}\" "
+                                        " primaries=\"{2}\" "
+                                        " mrv2=\"{3}\" "
+                                        "/>\n")
                                         .arg(transferName)
                                         .arg(matrixName)
                                         .arg(primariesName)

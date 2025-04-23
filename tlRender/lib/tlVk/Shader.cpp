@@ -20,8 +20,8 @@ namespace tl
         {
             std::string vertexSource;
             std::string fragmentSource;
-            VkShaderModule vertex;
-            VkShaderModule fragment;
+            VkShaderModule vertex = VK_NULL_HANDLE;
+            VkShaderModule fragment = VK_NULL_HANDLE;
         };
 
         void Shader::_init()
@@ -71,6 +71,14 @@ namespace tl
         Shader::~Shader()
         {
             TLRENDER_P();
+
+            VkDevice device = ctx.device;
+
+            if (p.fragment != VK_NULL_HANDLE)
+                vkDestroyShaderModule(device, p.fragment, nullptr);
+
+            if (p.vertex != VK_NULL_HANDLE)
+                vkDestroyShaderModule(device, p.vertex, nullptr);
         }
 
         std::shared_ptr<Shader> Shader::create(
@@ -82,6 +90,16 @@ namespace tl
             out->_p->fragmentSource = fragmentSource;
             out->_init();
             return out;
+        }
+
+        const VkShaderModule& Shader::getVertex() const
+        {
+            return _p->vertex;
+        }
+
+        const VkShaderModule& Shader::getFragment() const
+        {
+            return _p->fragment;
         }
 
         const std::string& Shader::getVertexSource() const

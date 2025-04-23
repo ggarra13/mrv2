@@ -9,7 +9,7 @@ set(SOURCES
     fbo.cpp)
 
 
-set(LIBRARIES tlRender::tlVk tlRender)
+set(LIBRARIES tlRender)
 
 list(APPEND LIBRARIES ${FLTK_vk_LIBRARY} ${FLTK_LIBRARIES})
 

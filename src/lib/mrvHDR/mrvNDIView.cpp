@@ -16,12 +16,16 @@
 #include <tlCore/HDR.h>
 #include <tlCore/StringFormat.h>
 
+#include <tlVk/Mesh.h>
+
 #include <rapidxml/rapidxml.hpp>
 
 #include <tlDevice/NDI/NDI.h>
 
 #include "mrvCore/mrvI8N.h"
+
 #include "mrvHDR/mrvNDICallbacks.h"
+#include "mrvHDR/mrvOS.h"
 
 #include "hdr/mrvHDRApp.h"
 #include "mrvNDIView.h"
@@ -271,27 +275,29 @@ namespace mrv
                                                       : VK_IMAGE_TYPE_3D;
 
                 // Create Vulkan image
-                VkImage image =
-                    createImage(device(), imageType, width, height, depth, imageFormat);
+                VkImage image = createImage(
+                    device(), imageType, width, height, depth, imageFormat);
 
                 // Allocate and bind memory for the image
-                VkDeviceMemory imageMemory = allocateAndBindImageMemory(device(), gpu(),
-                                                                        image);
+                VkDeviceMemory imageMemory =
+                    allocateAndBindImageMemory(device(), gpu(), image);
 
                 // Transition image layout to TRANSFER_DST_OPTIMAL
-                transitionImageLayout(device(), commandPool(), queue(), 
-                    image, VK_IMAGE_LAYOUT_UNDEFINED,
+                transitionImageLayout(
+                    device(), commandPool(), queue(), image,
+                    VK_IMAGE_LAYOUT_UNDEFINED,
                     VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 
                 // Upload texture data
                 uploadTextureData(
-                    device(), gpu(), commandPool(), queue(),
-                    image, width, height, depth, imageFormat,
-                    channels, pixel_fmt_size, values);
+                    device(), gpu(), commandPool(), queue(), image, width,
+                    height, depth, imageFormat, channels, pixel_fmt_size,
+                    values);
 
                 // Transition image layout to SHADER_READ_ONLY_OPTIMAL
-                transitionImageLayout(device(), commandPool(), queue(), 
-                    image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                transitionImageLayout(
+                    device(), commandPool(), queue(), image,
+                    VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                     VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
                 // Create image view
@@ -383,7 +389,6 @@ namespace mrv
         // FLTK state variables
         bool useHDRMetadata = false;
 
-        
         NDIlib_find_instance_t NDI_find = nullptr;
         NDIlib_recv_instance_t NDI_recv = nullptr;
 
@@ -435,17 +440,22 @@ namespace mrv
         };
         AudioThread audioThread;
 
-        // Standard NDI attributes (we don't use this)
+        // Standard NDI attributes
         std::string primariesName;
         std::string transferName;
         std::string matrixName;
 
         // Full mrv2 image data (we try to use this)
         bool hdrMonitorFound = false;
+        bool isP3Display = false;
+
         bool hasHDR = false;
         image::HDRData hdrData;
 
         NDIlib_FourCC_video_type_e fourCC = NDIlib_FourCC_type_UYVY;
+
+        // Vulkan variables
+        VkColorSpaceKHR lastColorSpace;
 
         // tlRender variables
         image::Info info;
@@ -455,6 +465,10 @@ namespace mrv
         std::shared_ptr<LibPlaceboData> placeboData;
         std::string hdrColors;
         std::string hdrColorsDef;
+
+        // Rendering variables
+        std::shared_ptr<tl::vk::VBO> vbo;
+        std::shared_ptr<tl::vk::VAO> vao;
     };
 
     NDIView::~NDIView()
@@ -490,27 +504,47 @@ namespace mrv
 
         // Look for HDR10 or HLG if present
         p.hdrMonitorFound = false;
+
+        bool valid_colorspace = false;
         switch (colorSpace())
         {
         case VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT:
         case VK_COLOR_SPACE_HDR10_ST2084_EXT:
         case VK_COLOR_SPACE_HDR10_HLG_EXT:
         case VK_COLOR_SPACE_DOLBYVISION_EXT:
-            p.hdrMonitorFound = true;
+            valid_colorspace = true;
             break;
         default:
             break;
         }
 
-        if (p.hdrMonitorFound)
+        if (valid_colorspace)
         {
-            std::cout << "HDR monitor found" << std::endl;
-            std::cout << string_VkColorSpaceKHR(colorSpace()) << std::endl;
+            if (is_hdr_display_active())
+            {
+                p.hdrMonitorFound = true;
+                std::cout << "HDR monitor found" << std::endl;
+                std::cout << string_VkColorSpaceKHR(colorSpace()) << std::endl;
+            }
+            else
+            {
+#ifdef __APPLE__
+                // Intel macOS have a P3 display of 500 nits.
+                // Not enough for HDR, but we will mark it as HDR and
+                // tonemap with libplacebo, which gives a better picture than
+                // just OpenGL.
+                colorSpace() = VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT;
+                p.hdrMonitorFound = true;
+                p.isP3Display = true;
+#endif
+            }
         }
         else
         {
             std::cout << "HDR monitor not found or not configured" << std::endl;
         }
+
+        p.lastColorSpace = colorSpace();
     }
 
     void NDIView::_copy(const uint8_t* video_frame)
@@ -556,7 +590,7 @@ namespace mrv
 
                     float R, G, B;
 
-                    const float Y_linear = Yf;
+                    float Y_linear = Yf;
                     // if (p.hasHDR)
                     //     Y_linear = apply_inverse_pq(Yf);
                     // else
@@ -616,7 +650,7 @@ namespace mrv
 
                     float R, G, B;
 
-                    const float Y_linear = Yf;
+                    float Y_linear = Yf;
                     // if (p.hasHDR)
                     //     Y_linear = apply_inverse_pq(Yf);
                     // else
@@ -677,8 +711,7 @@ namespace mrv
 
         m_textures.resize(1);
 
-        if (props.linearTilingFeatures &
-            VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT)
+        if (props.linearTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT)
         {
             uint32_t tex_width = 1, tex_height = 1;
             if (p.image)
@@ -690,21 +723,18 @@ namespace mrv
 
             m_textures[0].width = tex_width;
             m_textures[0].height = tex_height;
-            m_textures[0].image = createImage(device(),
-                VK_IMAGE_TYPE_2D, tex_width, tex_height, 1, tex_format,
-                VK_IMAGE_TILING_LINEAR, VK_IMAGE_USAGE_SAMPLED_BIT);
-            m_textures[0].mem = allocateAndBindImageMemory(device(),
-                                                           gpu(),
-                                                           m_textures[0].image,
-                                                           VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                                                           VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+            m_textures[0].image = createImage(
+                device(), VK_IMAGE_TYPE_2D, tex_width, tex_height, 1,
+                tex_format, VK_IMAGE_TILING_LINEAR, VK_IMAGE_USAGE_SAMPLED_BIT);
+            m_textures[0].mem = allocateAndBindImageMemory(
+                device(), gpu(), m_textures[0].image,
+                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+                    VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
             // Initial transition to shader-readable layout
             set_image_layout(
-                device(),
-                commandPool(),
-                queue(),
-                m_textures[0].image, VK_IMAGE_ASPECT_COLOR_BIT,
+                device(), commandPool(), queue(), m_textures[0].image,
+                VK_IMAGE_ASPECT_COLOR_BIT,
                 VK_IMAGE_LAYOUT_UNDEFINED, // Initial layout
                 VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
                 0,                          // No previous access
@@ -722,8 +752,8 @@ namespace mrv
         m_textures[0].sampler = createSampler(device());
 
         /* create image view */
-        m_textures[0].view = createImageView(device(), m_textures[0].image, tex_format,
-                                             VK_IMAGE_TYPE_2D);
+        m_textures[0].view = createImageView(
+            device(), m_textures[0].image, tex_format, VK_IMAGE_TYPE_2D);
     }
 
     void NDIView::prepare_vertices()
@@ -763,88 +793,31 @@ namespace mrv
             scaleY = aspectViewport / aspectRender;
             
         }
-
-        vertices.push_back({-scaleX, -scaleY, 0.F, 0.F}); // v0
-        vertices.push_back({ scaleX, -scaleY, 1.F, 0.F}); // v1
-        vertices.push_back({ scaleX,  scaleY, 1.F, 1.F}); // v2
-
-        vertices.push_back({-scaleX, -scaleY, 0.F, 0.F}); // v0
-        vertices.push_back({-scaleX,  scaleY, 0.F, 1.F}); // v3
-        vertices.push_back({ scaleX,  scaleY, 1.F, 1.F}); // v2
-
-            
-        VkDeviceSize buffer_size = sizeof(vertices[0]) * vertices.size();
-
-        // clang-format on
-        VkBufferCreateInfo buf_info = {};
-        buf_info.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-        buf_info.pNext = NULL;
-        buf_info.size = buffer_size;
-        buf_info.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
-        buf_info.flags = 0;
-
-        VkMemoryAllocateInfo mem_alloc = {};
-        mem_alloc.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-        mem_alloc.pNext = NULL;
-        mem_alloc.allocationSize = 0;
-        mem_alloc.memoryTypeIndex = 0;
-
-        VkMemoryRequirements mem_reqs;
-        VkResult result;
-        bool pass;
-        void* data;
-
-        memset(&m_mesh, 0, sizeof(m_mesh));
-
-        result = vkCreateBuffer(device(), &buf_info, NULL, &m_mesh.buf);
-        VK_CHECK(result);
-
-        vkGetBufferMemoryRequirements(device(), m_mesh.buf, &mem_reqs);
-        VK_CHECK(result);
-
-        mem_alloc.allocationSize = mem_reqs.size;
-        mem_alloc.memoryTypeIndex = findMemoryType(gpu(),
-                                                   mem_reqs.memoryTypeBits,
-                                                   VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                                                   VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
         
-        result =
-            vkAllocateMemory(device(), &mem_alloc, NULL, &m_mesh.mem);
-        VK_CHECK(result);
+        using namespace tl;
 
-        result = vkMapMemory(
-            device(), m_mesh.mem, 0, mem_alloc.allocationSize, 0, &data);
-        VK_CHECK(result);
+        const geom::TriangleMesh2& mesh = geom::box(
+            math::Box2f(-scaleX, -scaleY, scaleX * 2, scaleY * 2));
+        
+        const size_t numTriangles = mesh.triangles.size();
+    
+        if (!p.vbo || (p.vbo && p.vbo->getSize() != numTriangles * 3))
+        {
+            p.vbo = vk::VBO::create(numTriangles * 3,
+                                    vk::VBOType::Pos2_F32_UV_U16);
+            p.vao.reset();
+        }
+        if (p.vbo)
+        {
+            p.vbo->copy(convert(mesh, vk::VBOType::Pos2_F32_UV_U16));
+        }
 
-        std::memcpy(data, vertices.data(), static_cast<size_t>(buffer_size));
+        if (!p.vao && p.vbo)
+        {
+            p.vao = vk::VAO::create(ctx);
+            p.vao->upload(p.vbo->getData());
+        }
 
-        vkUnmapMemory(device(), m_mesh.mem);
-
-        result =
-            vkBindBufferMemory(device(), m_mesh.buf, m_mesh.mem, 0);
-        VK_CHECK(result);
-
-        m_mesh.vi.sType =
-            VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-        m_mesh.vi.pNext = NULL;
-        m_mesh.vi.vertexBindingDescriptionCount = 1;
-        m_mesh.vi.pVertexBindingDescriptions = m_mesh.vi_bindings;
-        m_mesh.vi.vertexAttributeDescriptionCount = 2;
-        m_mesh.vi.pVertexAttributeDescriptions = m_mesh.vi_attrs;
-
-        m_mesh.vi_bindings[0].binding = 0;
-        m_mesh.vi_bindings[0].stride = sizeof(vertices[0]);
-        m_mesh.vi_bindings[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
-
-        m_mesh.vi_attrs[0].binding = 0;
-        m_mesh.vi_attrs[0].location = 0;
-        m_mesh.vi_attrs[0].format = VK_FORMAT_R32G32_SFLOAT;
-        m_mesh.vi_attrs[0].offset = 0;
-
-        m_mesh.vi_attrs[1].binding = 0;
-        m_mesh.vi_attrs[1].location = 1;
-        m_mesh.vi_attrs[1].format = VK_FORMAT_R32G32_SFLOAT;
-        m_mesh.vi_attrs[1].offset = sizeof(float) * 2;
     }
 
     // ctx.format + m_depth (optionally) -> creates m_renderPass
@@ -975,41 +948,43 @@ void main() {
 
     void NDIView::prepare_pipeline()
     {
-        VkGraphicsPipelineCreateInfo pipeline;
-        VkPipelineCacheCreateInfo pipelineCacheCreateInfo;
+        TLRENDER_P();
+        
+        VkGraphicsPipelineCreateInfo pipeline = {};
+        VkPipelineCacheCreateInfo pipelineCacheCreateInfo = {};
 
-        VkPipelineVertexInputStateCreateInfo vi;
-        VkPipelineInputAssemblyStateCreateInfo ia;
-        VkPipelineRasterizationStateCreateInfo rs;
-        VkPipelineColorBlendStateCreateInfo cb;
-        VkPipelineDepthStencilStateCreateInfo ds;
-        VkPipelineViewportStateCreateInfo vp;
-        VkPipelineMultisampleStateCreateInfo ms;
+        VkPipelineVertexInputStateCreateInfo vi = {};
+        VkPipelineInputAssemblyStateCreateInfo ia = {};
+        VkPipelineRasterizationStateCreateInfo rs = {};
+        VkPipelineColorBlendStateCreateInfo cb = {};
+        VkPipelineDepthStencilStateCreateInfo ds = {};
+        VkPipelineViewportStateCreateInfo vp = {};
+        VkPipelineMultisampleStateCreateInfo ms = {};
         VkDynamicState dynamicStateEnables[(
             VK_DYNAMIC_STATE_STENCIL_REFERENCE - VK_DYNAMIC_STATE_VIEWPORT +
             1)];
-        VkPipelineDynamicStateCreateInfo dynamicState;
+        VkPipelineDynamicStateCreateInfo dynamicState = {};
 
         VkResult result;
 
         memset(dynamicStateEnables, 0, sizeof dynamicStateEnables);
-        memset(&dynamicState, 0, sizeof dynamicState);
         dynamicState.sType =
             VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
         dynamicState.pDynamicStates = dynamicStateEnables;
 
-        memset(&pipeline, 0, sizeof(pipeline));
         pipeline.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
         pipeline.layout = m_pipeline_layout;
 
-        vi = m_mesh.vi;
+        vi.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+        vi.vertexBindingDescriptionCount = 1;
+        vi.pVertexBindingDescriptions = p.vbo->getBindingDescription();
+        vi.vertexAttributeDescriptionCount = p.vbo->getAttributes().size();
+        vi.pVertexAttributeDescriptions = p.vbo->getAttributes().data();
 
-        memset(&ia, 0, sizeof(ia));
         ia.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
         ia.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
         // ia.primitiveRestartEnable = VK_FALSE;
 
-        memset(&rs, 0, sizeof(rs));
         rs.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
         rs.polygonMode = VK_POLYGON_MODE_FILL;
         rs.cullMode = VK_CULL_MODE_NONE;
@@ -1019,7 +994,6 @@ void main() {
         rs.depthBiasEnable = VK_FALSE;
         rs.lineWidth = 1.0f;
 
-        memset(&cb, 0, sizeof(cb));
         cb.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
         VkPipelineColorBlendAttachmentState att_state[1];
         memset(att_state, 0, sizeof(att_state));
@@ -1028,7 +1002,6 @@ void main() {
         cb.attachmentCount = 1;
         cb.pAttachments = att_state;
 
-        memset(&vp, 0, sizeof(vp));
         vp.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
         vp.viewportCount = 1;
         dynamicStateEnables[dynamicState.dynamicStateCount++] =
@@ -1037,7 +1010,6 @@ void main() {
         dynamicStateEnables[dynamicState.dynamicStateCount++] =
             VK_DYNAMIC_STATE_SCISSOR;
 
-        memset(&ds, 0, sizeof(ds));
         ds.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
         ds.depthTestEnable = VK_FALSE;
         ds.depthWriteEnable = VK_FALSE;
@@ -1049,7 +1021,6 @@ void main() {
         ds.back.compareOp = VK_COMPARE_OP_ALWAYS;
         ds.front = ds.back;
 
-        memset(&ms, 0, sizeof(ms));
         ms.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
         ms.pSampleMask = NULL;
         ms.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
@@ -1082,18 +1053,20 @@ void main() {
         pipeline.renderPass = m_renderPass;
         pipeline.pDynamicState = &dynamicState;
 
-        memset(&pipelineCacheCreateInfo, 0, sizeof(pipelineCacheCreateInfo));
-        pipelineCacheCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
-
+        VkPipelineCache pipelineCache;
+        
+        pipelineCacheCreateInfo.sType =
+            VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
+        
         result = vkCreatePipelineCache(
-            device(), &pipelineCacheCreateInfo, NULL, &pipelineCache());
+            device(), &pipelineCacheCreateInfo, NULL, &pipelineCache);
         VK_CHECK(result);
+        
         result = vkCreateGraphicsPipelines(
-            device(), pipelineCache(), 1, &pipeline, NULL, &m_pipeline);
+            device(), pipelineCache, 1, &pipeline, NULL, &m_pipeline);
         VK_CHECK(result);
 
-        vkDestroyPipelineCache(device(), pipelineCache(), NULL);
-        pipelineCache() = VK_NULL_HANDLE;
+        vkDestroyPipelineCache(device(), pipelineCache, NULL);
     }
 
     void NDIView::prepare_descriptor_layout()
@@ -1115,10 +1088,8 @@ void main() {
         for (uint32_t i = 1; i < m_textures.size(); ++i)
         {
             VkDescriptorSetLayoutBinding binding = {};
-            binding.binding =
-                i; // Matches libplacebo’s binding = i + 1 in GLSL
-            binding.descriptorType =
-                VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+            binding.binding = i; // Matches libplacebo’s binding = i + 1 in GLSL
+            binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
             binding.descriptorCount = 1;
             binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
             binding.pImmutableSamplers = nullptr;
@@ -1158,8 +1129,8 @@ void main() {
         poolInfo.poolSizeCount = 1;
         poolInfo.pPoolSizes = &poolSize;
 
-        VkResult result = vkCreateDescriptorPool(
-            device(), &poolInfo, nullptr, &m_desc_pool);
+        VkResult result =
+            vkCreateDescriptorPool(device(), &poolInfo, nullptr, &m_desc_pool);
         VK_CHECK(result);
     }
 
@@ -1216,6 +1187,7 @@ void main() {
         TLRENDER_P();
 
         // Some Vulkan settings
+        m_validate = true;
         m_clearColor = {0.F, 0.F, 0.F, 0.F};
 
         mode(FL_RGB | FL_DOUBLE | FL_ALPHA);
@@ -1247,7 +1219,7 @@ void main() {
                 {
                     _findThread();
                 }
-                catch (std::exception& e)
+                catch (const std::exception& e)
                 {
                     std::cerr << e.what() << std::endl;
                 }
@@ -1339,14 +1311,11 @@ void main() {
 
         // Transition to GENERAL for CPU writes
         set_image_layout(
-            device(),
-            commandPool(),
-            queue(),
-            m_textures[0].image, VK_IMAGE_ASPECT_COLOR_BIT,
-            VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_IMAGE_LAYOUT_GENERAL,
-            VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-            VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT);
-
+            device(), commandPool(), queue(), m_textures[0].image,
+            VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+            VK_IMAGE_LAYOUT_GENERAL, VK_ACCESS_SHADER_READ_BIT,
+            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, VK_ACCESS_HOST_WRITE_BIT,
+            VK_PIPELINE_STAGE_HOST_BIT);
 
         void* mappedData;
         result = vkMapMemory(
@@ -1376,13 +1345,11 @@ void main() {
 
         // Transition back to SHADER_READ_ONLY_OPTIMAL
         set_image_layout(
-            device(),
-            commandPool(),
-            queue(),
-            m_textures[0].image, VK_IMAGE_ASPECT_COLOR_BIT,
-            VK_IMAGE_LAYOUT_GENERAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-            VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT,
-            VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+            device(), commandPool(), queue(), m_textures[0].image,
+            VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_GENERAL,
+            VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_ACCESS_HOST_WRITE_BIT,
+            VK_PIPELINE_STAGE_HOST_BIT, VK_ACCESS_SHADER_READ_BIT,
+            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
     }
 
     void NDIView::vk_draw_begin()
@@ -1399,15 +1366,16 @@ void main() {
         update_texture();
 
         VkCommandBuffer cmd = getCurrentCommandBuffer();
-        if (!m_swapchain || !cmd || !isFrameActive()) {
+        if (!m_swapchain || !cmd || !isFrameActive())
+        {
             return;
         }
 
         vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline);
-        vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
-                                m_pipeline_layout, 0, 1, &m_desc_set, 0,
-                                nullptr);
-        
+        vkCmdBindDescriptorSets(
+            cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline_layout, 0, 1,
+            &m_desc_set, 0, nullptr);
+
         VkViewport viewport = {};
         viewport.width = static_cast<float>(w());
         viewport.height = static_cast<float>(h());
@@ -1419,12 +1387,9 @@ void main() {
         scissor.extent.width = w();
         scissor.extent.height = h();
         vkCmdSetScissor(cmd, 0, 1, &scissor);
-    
-        // Draw the triangle
-        VkDeviceSize offset = 0;
-        vkCmdBindVertexBuffers(cmd, 0, 1, &m_mesh.buf, &offset);
 
-        vkCmdDraw(cmd, 6, 1, 0, 0);
+        // Draw the rectangle
+        p.vao->draw(cmd, p.vbo);
 
         vkCmdEndRenderPass(cmd);
     }
@@ -1529,7 +1494,28 @@ void main() {
                                 rapidxml::xml_attribute<>* attr_transfer =
                                     root->first_attribute("transfer");
                                 if (attr_transfer)
+                                {
                                     p.transferName = attr_transfer->value();
+
+                                    if (p.hdrMonitorFound &&
+                                        colorSpace() != VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
+                                    {
+                                        if (p.transferName == "bt_2100_hlg")
+                                        {
+                                            colorSpace() = VK_COLOR_SPACE_HDR10_HLG_EXT;
+                                        }
+                                        else
+                                        {
+                                            colorSpace() = VK_COLOR_SPACE_HDR10_ST2084_EXT;
+                                        }
+
+                                        if (p.lastColorSpace != colorSpace())
+                                        {
+                                            p.lastColorSpace = colorSpace();
+                                            m_swapchain_needs_recreation = true;
+                                        }
+                                    }
+                                }
 
                                 image::HDRData hdrData;
                                 if (attr_mrv2)
@@ -1692,44 +1678,37 @@ void main() {
 
     void NDIView::destroy_resources()
     {
+        TLRENDER_P();
+        
         if (m_frag_shader_module != VK_NULL_HANDLE)
         {
             vkDestroyShaderModule(device(), m_frag_shader_module, NULL);
             m_frag_shader_module = VK_NULL_HANDLE;
         }
-        
+
         if (m_vert_shader_module != VK_NULL_HANDLE)
         {
             vkDestroyShaderModule(device(), m_vert_shader_module, NULL);
             m_vert_shader_module = VK_NULL_HANDLE;
         }
-        
-        if (m_mesh.buf != VK_NULL_HANDLE)
-        {
-            vkDestroyBuffer(device(), m_mesh.buf, NULL);
-            m_mesh.buf = VK_NULL_HANDLE;
-        }
 
-        if (m_mesh.mem != VK_NULL_HANDLE)
-        {
-            vkFreeMemory(device(), m_mesh.mem, NULL);
-            m_mesh.mem = VK_NULL_HANDLE;
-        }
+        p.vao.reset();
+        p.vbo.reset();
 
         destroy_textures();
-        
+
         if (m_pipeline_layout != VK_NULL_HANDLE)
         {
             vkDestroyPipelineLayout(device(), m_pipeline_layout, nullptr);
             m_pipeline_layout = VK_NULL_HANDLE;
         }
-    
+
         if (m_desc_layout != VK_NULL_HANDLE)
         {
             vkDestroyDescriptorSetLayout(device(), m_desc_layout, nullptr);
             m_desc_layout = VK_NULL_HANDLE;
         }
-    
+
         if (m_desc_pool != VK_NULL_HANDLE)
         {
             vkDestroyDescriptorPool(device(), m_desc_pool, nullptr);
@@ -1802,6 +1781,7 @@ void main() {
             {
                 src_colorspace.transfer = PL_COLOR_TRC_HLG;
             }
+                
             cmap.metadata = PL_HDR_METADATA_ANY;
             pl_hdr_metadata& hdr = src_colorspace.hdr;
             hdr.min_luma = data.displayMasteringLuminance.getMin();
@@ -2124,7 +2104,7 @@ void main() {
         {
             std::cerr << "Changing source to " << source << std::endl;
             p.currentNDISource = source;
-            
+
             HDRUI* ui = HDRApp::ui;
             fill_menu(ui->uiMenuBar);
 
@@ -2135,13 +2115,13 @@ void main() {
 
     int NDIView::handle(int event)
     {
-        switch(event)
+        switch (event)
         {
         case FL_PUSH:
             if (Fl::event_button3())
             {
                 Fl_Group::current(0);
-            
+
                 Fl_Menu_Button* popupMenu = new Fl_Menu_Button(0, 0, 0, 0);
 
                 popupMenu->textsize(12);
@@ -2149,14 +2129,14 @@ void main() {
 
                 fill_menu(popupMenu);
                 popupMenu->popup();
-                
+
                 delete popupMenu;
                 popupMenu = nullptr;
                 return 1;
             }
         default:
             return Fl_Vk_Window::handle(event);
-        return 0;
+            return 0;
         }
     }
 
@@ -2173,12 +2153,13 @@ void main() {
         const auto& sources = p.NDISources->get();
 
         mode = FL_MENU_RADIO;
-        
+
         for (auto& source : sources)
         {
             std::string entry = _("Connection/");
             entry += source;
-            idx = menu->add(entry.c_str(), 0, (Fl_Callback*)select_ndi_source_cb, ui, mode);
+            idx = menu->add(
+                entry.c_str(), 0, (Fl_Callback*)select_ndi_source_cb, ui, mode);
             if (source == p.currentNDISource)
             {
                 item = (Fl_Menu_Item*)&menu->menu()[idx];
@@ -2187,23 +2168,25 @@ void main() {
         }
 
         mode = FL_MENU_TOGGLE;
-        idx = menu->add(_("Window/Fullscreen"), 0, (Fl_Callback*)
-                        toggle_fullscreen_cb, ui, mode);
+        idx = menu->add(
+            _("Window/Fullscreen"), 0, (Fl_Callback*)toggle_fullscreen_cb, ui,
+            mode);
         if (ui->uiMain->fullscreen_active())
         {
             item = (Fl_Menu_Item*)&menu->menu()[idx];
             item->set();
         }
-        
+
         mode = FL_MENU_TOGGLE;
-        idx = menu->add(_("HDR/Apply Metadata"), 0,
-                        (Fl_Callback*)apply_metadata_cb, ui, mode);
+        idx = menu->add(
+            _("HDR/Pass through Metadata to Display"), 0, (Fl_Callback*)apply_metadata_cb, ui,
+            mode);
         if (p.useHDRMetadata)
         {
             item = (Fl_Menu_Item*)&menu->menu()[idx];
             item->set();
         }
-        
+
         menu->menu_end();
         menu->redraw();
     }
@@ -2212,15 +2195,42 @@ void main() {
     {
         TLRENDER_P();
         p.useHDRMetadata = !p.useHDRMetadata;
+        m_swapchain_needs_recreation = true;
+
+        if (p.useHDRMetadata)
+        {
+            if (p.transferName == "bt_2100_hlg")
+            {
+                colorSpace() = VK_COLOR_SPACE_HDR10_HLG_EXT;
+            }
+            else
+            {
+                colorSpace() = VK_COLOR_SPACE_HDR10_ST2084_EXT;
+            }
+        }
+        else
+        {
+            if (p.isP3Display)
+            {
+                colorSpace() = VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT;
+            }
+        }
+        
+            
+        if (p.lastColorSpace != colorSpace())
+        {
+            p.lastColorSpace = colorSpace();
+        }
+            
         redraw();
     }
-    
+
     void NDIView::toggle_fullscreen()
     {
         TLRENDER_P();
 
         HDRUI* ui = HDRApp::ui;
-        
+
         if (ui->uiMain->fullscreen_active())
         {
             ui->uiMain->fullscreen_off();

@@ -47,6 +47,7 @@
 
 #include <tlVk/Mesh.h>
 #include <tlVk/OffscreenBuffer.h>
+#include <tlVk/Shader.h>
 
 #include <tlCore/Size.h>
 
@@ -61,73 +62,116 @@
 #include <FL/Fl_Vk_Window.H>
 #include <FL/Fl_Vk_Utils.H>
 
-class vk_shape_window : public Fl_Vk_Window {
+std::string vertex_shader_glsl = R"(
+        #version 450
+        layout(location = 0) in vec3 inPos;
+        layout(location = 1) in vec2 inTexCoord;
+        layout(location = 0) out vec2 outTexCoord;
+        void main() {
+            gl_Position = vec4(inPos, 1.0);
+            outTexCoord = inTexCoord;
+        }
+)";
+
+// Example GLSL vertex shader
+std::string frag_shader_glsl = R"(
+        #version 450
+
+        // Input from vertex shader
+        layout(location = 0) in vec2 inTexCoord;
+
+        // Output color
+        layout(location = 0) out vec4 outColor;
+
+        // Texture sampler (bound via descriptor set)
+        layout(binding = 0) uniform sampler2D textureSampler;
+
+        void main() {
+            outColor = texture(textureSampler, inTexCoord);
+        }
+)";
+
+// FBO shaders (just paint white)
+std::string fbo_vertex_shader_glsl = R"(
+        #version 450
+        layout(location = 0) in vec3 inPos;
+        void main() {
+            gl_Position = vec4(inPos, 1.0);
+        }
+)";
+
+// Example GLSL vertex shader
+std::string fbo_frag_shader_glsl = R"(
+        #version 450
+        // Output color
+        layout(location = 0) out vec4 outColor;
+
+        void main() {
+            outColor = vec4(1, 1, 1, 1);
+        }
+)";
+
+class vk_shape_window : public Fl_Vk_Window
+{
     void draw() FL_OVERRIDE;
+
 public:
     int sides;
-    vk_shape_window(int x,int y,int w,int h,const char *l=0);
-    vk_shape_window(int w,int h,const char *l=0);
+    vk_shape_window(int x, int y, int w, int h, const char* l = 0);
+    vk_shape_window(int w, int h, const char* l = 0);
 
-    virtual void hide() FL_OVERRIDE;
-    
     const char* application_name() FL_OVERRIDE { return "vk_shape_textured"; };
     void prepare() FL_OVERRIDE;
     void destroy_resources() FL_OVERRIDE;
 
-
     void destroy_mesh();
     void prepare_mesh();
-    
+
 protected:
-    //! Shaders used in demo
-    VkShaderModule m_vert_shader_fbo_module;
-    VkShaderModule m_frag_shader_fbo_module;
-    
-    VkShaderModule m_vert_shader_module;
-    VkShaderModule m_frag_shader_module;
     uint32_t frame_counter = 0;
 
     //! This is for the fbo pipeline
     VkPipeline m_fbo_pipeline;
     VkPipelineLayout m_fbo_pipeline_layout;
-    
-    //! This is for holding a mesh
-    Fl_Vk_Mesh m_mesh;
 
     //! Memory for descriptor sets
-    VkDescriptorPool      m_desc_pool;
+    VkDescriptorPool m_desc_pool;
 
-    //! Describe texture bindings whithin desc. set  
+    //! Describe texture bindings whithin desc. set
     VkDescriptorSetLayout m_desc_layout;
 
     //! Actual data bound to shaders like texture or
     //! uniform buffers
-    VkDescriptorSet       m_desc_set; 
-    
+    VkDescriptorSet m_desc_set;
+
 private:
     void _init();
+
+    void destroy_fbo_pipeline();
 
     void prepare_textures();
     void prepare_descriptor_layout();
     void prepare_render_pass();
+    void prepare_shaders();
     void prepare_fbo_pipeline();
     void prepare_pipeline();
     void prepare_descriptor_pool();
     void prepare_descriptor_set();
-    void prepare_texture_image(const uint32_t *tex_colors,
-                               Fl_Vk_Texture* tex_obj,
-                               VkImageTiling tiling,
-                               VkImageUsageFlags usage,
-                               VkFlags required_props);
+    void prepare_texture_image(
+        const uint32_t* tex_colors, Fl_Vk_Texture* tex_obj,
+        VkImageTiling tiling, VkImageUsageFlags usage, VkFlags required_props);
 
-    VkShaderModule prepare_vs();
-    VkShaderModule prepare_fs();
-    VkShaderModule prepare_fbo_vs();
-    VkShaderModule prepare_fbo_fs();
+    //! Shaders used in demo
 
-    std::shared_ptr<tl::vk::OffscreenBuffer> fbo;
+    std::shared_ptr<tl::vk::OffscreenBuffer> fbo std::shared_ptr<tl::vk::VBO>
+        fbo_vbo;
+    std::shared_ptr<tl::vk::VAO> fbo_vao;
+    ;
+    std::shared_ptr<tl::vk::Shader> fboShader;
+
     std::shared_ptr<tl::vk::VBO> vbo;
     std::shared_ptr<tl::vk::VAO> vao;
+    std::shared_ptr<tl::vk::Shader> shader;
 };
 
 void vk_shape_window::_init()
@@ -136,31 +180,45 @@ void vk_shape_window::_init()
     sides = 3;
     // Turn on validations
     m_validate = true;
-    m_vert_shader_module = VK_NULL_HANDLE;
-    m_frag_shader_module = VK_NULL_HANDLE;
+    m_fbo_pipeline = VK_NULL_HANDLE;
+    m_fbo_pipeline_layout = VK_NULL_HANDLE;
 }
 
-vk_shape_window::vk_shape_window(int x,int y,int w,int h,const char *l) :
-Fl_Vk_Window(x,y,w,h,l) {
-    _init();
-}
-
-vk_shape_window::vk_shape_window(int w,int h,const char *l) :
-Fl_Vk_Window(w,h,l)
+vk_shape_window::vk_shape_window(int x, int y, int w, int h, const char* l) :
+    Fl_Vk_Window(x, y, w, h, l)
 {
     _init();
 }
 
-void vk_shape_window::hide()
+vk_shape_window::vk_shape_window(int w, int h, const char* l) :
+    Fl_Vk_Window(w, h, l)
 {
-    fbo.reset();
-    vao.reset();
-    vbo.reset();
-    Fl_Vk_Window::hide();
+    _init();
 }
 
 void vk_shape_window::prepare_mesh()
 {
+    using namespace tl;
+
+    geom::TriangleMesh2 mesh = geom::box(math::Box2f(-.5F, -0.5F, 1.F, 1.F));
+    const size_t numTriangles = mesh.triangles.size();
+    if (!fbo_vbo || (fbo_vbo && fbo_vbo->getSize() != numTriangles * 3))
+    {
+        fbo_vbo =
+            vk::VBO::create(numTriangles * 3, vk::VBOType::Pos2_F32_UV_U16);
+        fbo_vao.reset();
+    }
+    if (fbo_vbo)
+    {
+        fbo_vbo->copy(convert(mesh, vk::VBOType::Pos2_F32_UV_U16));
+    }
+
+    if (!fbo_vao && fbo_vbo)
+    {
+        fbo_vao = vk::VAO::create(ctx);
+        fbo_vao->upload(fbo_vbo->getData());
+    }
+
     // clang-format off
     struct Vertex
     {
@@ -200,99 +258,46 @@ void vk_shape_window::prepare_mesh()
         // Third vertex: next outer vertex (wrap around for the last side)
         vertices.push_back(outerVertices[(i + 1) % sides]);
     }
-    
-    using namespace tl;
 
-    vbo.reset();
-    vao.reset();
-
-    const size_t numTriangles = sides;
-    
-    geom::TriangleMesh2 mesh = geom::box(math::Box2f(-.5F, -0.5F, 1.F, 1.F));    
-    if (!vbo || (vbo && vbo->getSize() != numTriangles * 3))
     {
-        vbo = vk::VBO::create(numTriangles * 3, vk::VBOType::Pos2_F32_UV_U16);
-        vao.reset();
+        geom::TriangleMesh3 mesh;
+        geom::Triangle3 triangle;
+
+        mesh.triangles.reserve(sides);
+        for (int i = 0; i < sides; ++i)
+        {
+            triangle.v[0].v = 1 + i * 3;
+            triangle.v[1].v = 2 + i * 3;
+            triangle.v[2].v = 3 + i * 3;
+            triangle.v[0].t = triangle.v[0].v;
+            triangle.v[1].t = triangle.v[1].v;
+            triangle.v[2].t = triangle.v[2].v;
+            mesh.triangles.push_back(triangle);
+        }
+    
+        for (const auto& vertex : vertices)
+        {
+            mesh.v.push_back(math::Vector3f(vertex.x, vertex.y, vertex.z));
+            mesh.t.push_back(math::Vector2f(vertex.u, vertex.v));
+        }
+    
+        if (!vbo || (vbo && vbo->getSize() != sides * 3))
+        {
+            vbo = vk::VBO::create(sides * 3, vk::VBOType::Pos3_F32_UV_U16);
+            vao.reset();
+        }
+        if (vbo)
+        {
+            vbo->copy(convert(mesh, vk::VBOType::Pos3_F32_UV_U16));
+        }
+
+        if (!vao && vbo)
+        {
+            vao = vk::VAO::create(ctx);
+            vao->upload(vbo->getData());
+        }
     }
-    if (vbo)
-    {
-        vbo->copy(convert(mesh, vk::VBOType::Pos2_F32_UV_U16));
-    }
-
-    if (!vao && vbo)
-    {
-        vao = vk::VAO::create(ctx, vbo->getType(), vbo->getID());
-        vao->upload(vbo->getData());
-    }
     
-    VkResult result;
-    VkDeviceSize buffer_size = sizeof(vertices[0]) * vertices.size();
-    
-    // clang-format on
-    VkBufferCreateInfo buf_info = {};
-    buf_info.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-    buf_info.pNext = NULL;
-    buf_info.size = buffer_size;
-    buf_info.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
-    buf_info.flags = 0;
-
-    result = vkCreateBuffer(device(), &buf_info, NULL, &m_mesh.buf);
-    VK_CHECK(result);
-    
-    // Use a local variable instead of overwriting m_mem_reqs
-    VkMemoryRequirements vertex_mem_reqs;
-    vkGetBufferMemoryRequirements(device(), m_mesh.buf, &vertex_mem_reqs);
-    
-    VkMemoryAllocateInfo mem_alloc = {};
-    mem_alloc.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-    mem_alloc.pNext = NULL;
-    mem_alloc.allocationSize = vertex_mem_reqs.size;
-    mem_alloc.memoryTypeIndex = 0;
-    
-    bool pass;
-    void *data;
-    
-    mem_alloc.memoryTypeIndex =
-        findMemoryType(gpu(),
-                       vertex_mem_reqs.memoryTypeBits,
-                       VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                       VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
-    result = vkAllocateMemory(device(), &mem_alloc, NULL, &m_mesh.mem);
-    VK_CHECK(result);
-
-    result = vkMapMemory(device(), m_mesh.mem, 0,
-                         mem_alloc.allocationSize, 0, &data);
-    VK_CHECK(result);
-
-    memcpy(data, vertices.data(), static_cast<size_t>(buffer_size));
-
-    vkUnmapMemory(device(), m_mesh.mem);
-
-    result = vkBindBufferMemory(device(), m_mesh.buf, m_mesh.mem, 0);
-    VK_CHECK(result);
-
-    m_mesh.vi.sType =
-        VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-    m_mesh.vi.pNext = NULL;
-    m_mesh.vi.vertexBindingDescriptionCount = 1;
-    m_mesh.vi.pVertexBindingDescriptions = m_mesh.vi_bindings;
-    m_mesh.vi.vertexAttributeDescriptionCount = 2;
-    m_mesh.vi.pVertexAttributeDescriptions = m_mesh.vi_attrs;
-
-    m_mesh.vi_bindings[0].binding = 0;
-    m_mesh.vi_bindings[0].stride = sizeof(vertices[0]);
-    m_mesh.vi_bindings[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
-
-    m_mesh.vi_attrs[0].binding = 0;
-    m_mesh.vi_attrs[0].location = 0;
-    m_mesh.vi_attrs[0].format = VK_FORMAT_R32G32B32_SFLOAT;
-    m_mesh.vi_attrs[0].offset = 0;
-
-    m_mesh.vi_attrs[1].binding = 0;
-    m_mesh.vi_attrs[1].location = 1;
-    m_mesh.vi_attrs[1].format = VK_FORMAT_R32G32_SFLOAT;
-    m_mesh.vi_attrs[1].offset = sizeof(float) * 3;  // skip 3 vertex coords    
 }
 
 // m_depth (optionally) -> creates m_renderPass
@@ -372,134 +377,25 @@ void vk_shape_window::prepare_render_pass()
     VK_CHECK(result);
 }
 
-VkShaderModule vk_shape_window::prepare_vs() {
-    if (m_vert_shader_module != VK_NULL_HANDLE)
-        return m_vert_shader_module;
-    
-    // Example GLSL vertex shader
-    std::string vertex_shader_glsl = R"(
-        #version 450
-        layout(location = 0) in vec3 inPos;
-        layout(location = 1) in vec2 inTexCoord;
-        layout(location = 0) out vec2 outTexCoord;
-        void main() {
-            gl_Position = vec4(inPos, 1.0);
-            outTexCoord = inTexCoord;
-        }
-    )";
-    
-    try {
-        std::vector<uint32_t> spirv = compile_glsl_to_spirv(
-            vertex_shader_glsl,
-            shaderc_vertex_shader,  // Shader type
-            "vertex_shader.glsl"    // Filename for error reporting
-        );
 
-        m_vert_shader_module = create_shader_module(device(), spirv);
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl;
-        m_vert_shader_module = VK_NULL_HANDLE;
-    }
-    return m_vert_shader_module;
+void vk_shape_window::prepare_shaders()
+{
+    if (!fboShader)
+        fboShader = tl::vk::Shader::create(ctx, fbo_vertex_shader_glsl,
+                                           fbo_frag_shader_glsl);
+
+    if (!shader)
+        shader = tl::vk::Shader::create(ctx, vertex_shader_glsl,
+                                        frag_shader_glsl);
 }
 
-VkShaderModule vk_shape_window::prepare_fbo_vs() {
-    if (m_vert_shader_fbo_module != VK_NULL_HANDLE)
-        return m_vert_shader_fbo_module;
+void vk_shape_window::destroy_fbo_pipeline()
+{
+    vkDestroyPipelineLayout(device(), m_fbo_pipeline_layout, nullptr);
+    m_fbo_pipeline_layout = VK_NULL_HANDLE;
     
-    // Example GLSL vertex shader
-    std::string vertex_shader_glsl = R"(
-        #version 450
-        layout(location = 0) in vec3 inPos;
-        void main() {
-            gl_Position = vec4(inPos, 1.0);
-        }
-    )";
-    
-    try {
-        std::vector<uint32_t> spirv = compile_glsl_to_spirv(
-            vertex_shader_glsl,
-            shaderc_vertex_shader,  // Shader type
-            "vertex_shader.glsl"    // Filename for error reporting
-        );
-
-        m_vert_shader_fbo_module = create_shader_module(device(), spirv);
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl;
-        m_vert_shader_fbo_module = VK_NULL_HANDLE;
-    }
-    return m_vert_shader_fbo_module;
-}
-
-VkShaderModule vk_shape_window::prepare_fbo_fs() {
-    if (m_frag_shader_fbo_module != VK_NULL_HANDLE)
-        return m_frag_shader_fbo_module;
-    
-    // Example GLSL vertex shader
-    std::string frag_shader_glsl = R"(
-        #version 450
-        // Output color
-        layout(location = 0) out vec4 outColor;
-
-        void main() {
-            outColor = vec4(1, 1, 1, 1);
-        }
-    )";
-    // Compile to SPIR-V
-    try {
-
-        std::vector<uint32_t> spirv = compile_glsl_to_spirv(
-            frag_shader_glsl,
-            shaderc_fragment_shader,  // Shader type
-            "frag_shader.glsl"    // Filename for error reporting
-        );
-        // Assuming you have a VkDevice 'device' already created
-        m_frag_shader_fbo_module = create_shader_module(device(), spirv);
-    
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl;
-        m_frag_shader_fbo_module = VK_NULL_HANDLE;
-    }
-    return m_frag_shader_fbo_module;
-}
-
-VkShaderModule vk_shape_window::prepare_fs() {
-    if (m_frag_shader_module != VK_NULL_HANDLE)
-        return m_frag_shader_module;
-    
-    // Example GLSL vertex shader
-    std::string frag_shader_glsl = R"(
-        #version 450
-
-        // Input from vertex shader
-        layout(location = 0) in vec2 inTexCoord;
-
-        // Output color
-        layout(location = 0) out vec4 outColor;
-
-        // Texture sampler (bound via descriptor set)
-        layout(binding = 0) uniform sampler2D textureSampler;
-
-        void main() {
-            outColor = texture(textureSampler, inTexCoord);
-        }
-    )";
-    // Compile to SPIR-V
-    try {
-
-        std::vector<uint32_t> spirv = compile_glsl_to_spirv(
-            frag_shader_glsl,
-            shaderc_fragment_shader,  // Shader type
-            "frag_shader.glsl"    // Filename for error reporting
-        );
-        // Assuming you have a VkDevice 'device' already created
-        m_frag_shader_module = create_shader_module(device(), spirv);
-    
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl;
-        m_frag_shader_module = VK_NULL_HANDLE;
-    }
-    return m_frag_shader_module;
+    vkDestroyPipeline(device(), m_fbo_pipeline, nullptr);
+    m_fbo_pipeline = VK_NULL_HANDLE;
 }
 
 void vk_shape_window::prepare_fbo_pipeline() {
@@ -529,9 +425,9 @@ void vk_shape_window::prepare_fbo_pipeline() {
     pPipelineLayoutCreateInfo.pNext = NULL;
     pPipelineLayoutCreateInfo.setLayoutCount = 0;
 
-    result = vkCreatePipelineLayout(device(), &pPipelineLayoutCreateInfo, NULL,
+    result = vkCreatePipelineLayout(device(), &pPipelineLayoutCreateInfo,
+                                    NULL,
                                     &m_fbo_pipeline_layout);
-
     
     memset(&pipeline, 0, sizeof(pipeline));
     pipeline.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
@@ -540,9 +436,9 @@ void vk_shape_window::prepare_fbo_pipeline() {
     vi.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
     vi.pNext = NULL;
     vi.vertexBindingDescriptionCount = 1;
-    vi.pVertexBindingDescriptions = vbo->getBindingDescription();
-    vi.vertexAttributeDescriptionCount = vbo->getAttributes().size();
-    vi.pVertexAttributeDescriptions = vbo->getAttributes().data();
+    vi.pVertexBindingDescriptions = fbo_vbo->getBindingDescription();
+    vi.vertexAttributeDescriptionCount = fbo_vbo->getAttributes().size();
+    vi.pVertexAttributeDescriptions = fbo_vbo->getAttributes().data();
 
     memset(&ia, 0, sizeof(ia));
     ia.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
@@ -603,12 +499,12 @@ void vk_shape_window::prepare_fbo_pipeline() {
 
     shaderStages[0].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
     shaderStages[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
-    shaderStages[0].module = prepare_fbo_vs();
+    shaderStages[0].module = fboShader->getVertex();
     shaderStages[0].pName = "main";
 
     shaderStages[1].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
     shaderStages[1].stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-    shaderStages[1].module = prepare_fbo_fs();
+    shaderStages[1].module = fboShader->getFragment();
     shaderStages[1].pName = "main";
 
     pipeline.pVertexInputState = &vi;
@@ -663,7 +559,12 @@ void vk_shape_window::prepare_pipeline() {
     pipeline.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
     pipeline.layout = m_pipeline_layout;
 
-    vi = m_mesh.vi;
+    vi.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+    vi.pNext = NULL;
+    vi.vertexBindingDescriptionCount = 1;
+    vi.pVertexBindingDescriptions = vbo->getBindingDescription();
+    vi.vertexAttributeDescriptionCount = vbo->getAttributes().size();
+    vi.pVertexAttributeDescriptions = vbo->getAttributes().data();
     
     memset(&ia, 0, sizeof(ia));
     ia.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
@@ -724,12 +625,12 @@ void vk_shape_window::prepare_pipeline() {
 
     shaderStages[0].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
     shaderStages[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
-    shaderStages[0].module = prepare_vs();
+    shaderStages[0].module = shader->getVertex();
     shaderStages[0].pName = "main";
 
     shaderStages[1].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
     shaderStages[1].stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-    shaderStages[1].module = prepare_fs();
+    shaderStages[1].module = shader->getFragment();
     shaderStages[1].pName = "main";
 
     pipeline.pVertexInputState = &vi;
@@ -797,6 +698,7 @@ void vk_shape_window::prepare()
     prepare_mesh();
     prepare_descriptor_layout();
     prepare_render_pass();
+    prepare_shaders();
     prepare_pipeline();
     prepare_descriptor_pool();
     prepare_descriptor_set();
@@ -838,23 +740,11 @@ void vk_shape_window::draw() {
     
     vkCmdBindPipeline(cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS,
                       m_fbo_pipeline);
-    
-    VkExtent2D extent = fbo->getExtent();
 
     // Draw commands here...
-    VkViewport viewport = {};
-    viewport.width = static_cast<float>(extent.width);
-    viewport.height = static_cast<float>(extent.height);
-    viewport.minDepth = 0.0f;
-    viewport.maxDepth = 1.0f;
+    fbo->setupViewportAndScissor(cmdBuffer);
     
-    vkCmdSetViewport(cmdBuffer, 0, 1, &viewport);
-
-    VkRect2D scissor = {};
-    scissor.extent = extent;
-    vkCmdSetScissor(cmdBuffer, 0, 1, &scissor);
-    
-    vao->draw(cmdBuffer, vbo);
+    fbo_vao->draw(cmdBuffer, fbo_vbo);
     
     vkCmdEndRenderPass(cmdBuffer);
     
@@ -863,6 +753,8 @@ void vk_shape_window::draw() {
     
     endSingleTimeCommands(cmdBuffer, device(), commandPool(), queue());
 
+    destroy_fbo_pipeline();
+    
     
     vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline);
 
@@ -885,21 +777,19 @@ void vk_shape_window::draw() {
     vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
                             m_pipeline_layout, 0, 1, &m_desc_set, 0, nullptr);
 
-    viewport = {};
+    VkViewport viewport = {};
     viewport.width = static_cast<float>(w());
     viewport.height = static_cast<float>(h());
     viewport.minDepth = 0.0f;
     viewport.maxDepth = 1.0f;
     vkCmdSetViewport(cmd, 0, 1, &viewport);
 
-    scissor = {};
+    VkRect2D scissor = {};
     scissor.extent.width = w();
     scissor.extent.height = h();
     vkCmdSetScissor(cmd, 0, 1, &scissor);
 
-    VkDeviceSize offsets[1] = {0};
-    vkCmdBindVertexBuffers(cmd, 0, 1, &m_mesh.buf, offsets);
-    vkCmdDraw(cmd, 3 * sides, 1, 0, 0); // Draw shape
+    vao->draw(cmd, vbo);
     
     vkCmdEndRenderPass(cmd);
     
@@ -911,7 +801,8 @@ void vk_shape_window::draw() {
 
 void vk_shape_window::destroy_mesh()
 {
-    m_mesh.destroy(device());
+    vao.reset();
+    vbo.reset();
 }
 
 void vk_shape_window::destroy_resources()
@@ -939,18 +830,6 @@ void vk_shape_window::destroy_resources()
         m_desc_pool = VK_NULL_HANDLE;
     }
     
-    if (m_vert_shader_module != VK_NULL_HANDLE)
-    {
-        vkDestroyShaderModule(device(), m_vert_shader_module, nullptr);
-        m_vert_shader_module = VK_NULL_HANDLE;
-    }
-    
-    if (m_frag_shader_module != VK_NULL_HANDLE)
-    {
-        vkDestroyShaderModule(device(), m_frag_shader_module, nullptr);
-        m_frag_shader_module = VK_NULL_HANDLE;
-    }
-    
     if (m_fbo_pipeline != VK_NULL_HANDLE)
     {
         vkDestroyPipeline(device(), m_fbo_pipeline, nullptr);
@@ -962,18 +841,14 @@ void vk_shape_window::destroy_resources()
         vkDestroyPipelineLayout(device(), m_fbo_pipeline_layout, nullptr);
         m_fbo_pipeline_layout = VK_NULL_HANDLE;
     }
+
+    shader.reset();
+    fboShader.reset();
+
+    fbo.reset();
+    fbo_vao.reset();
+    fbo_vbo.reset();
     
-    if (m_vert_shader_fbo_module != VK_NULL_HANDLE)
-    {
-        vkDestroyShaderModule(device(), m_vert_shader_fbo_module, nullptr);
-        m_vert_shader_module = VK_NULL_HANDLE;
-    }
-    
-    if (m_frag_shader_fbo_module != VK_NULL_HANDLE)
-    {
-        vkDestroyShaderModule(device(), m_frag_shader_fbo_module, nullptr);
-        m_frag_shader_fbo_module = VK_NULL_HANDLE;
-    }
 }
 
 

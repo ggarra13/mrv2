@@ -27,7 +27,6 @@ if [[ "$CMAKE_TARGET" == "package" ]]; then
     fi
 fi
 
-
 #
 # Create symbolic links to start-up shell scripts
 #

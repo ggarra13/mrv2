@@ -14,7 +14,6 @@
 #include "mrvVk/mrvVkShaders.h"
 #include "mrvVk/mrvVkLines.h"
 
-
 namespace tl
 {
     namespace timeline_vk
@@ -139,71 +138,66 @@ namespace mrv
                 mesh.v.push_back(math::Vector2f(draw[i].x, draw[i].y));
 
             const math::Matrix4x4f& mvp = render->getTransform();
-            
+
             if (soft)
             {
                 p.softShader->bind();
-                
+
                 p.softShader->setUniform("transform.mvp", mvp);
-                
+
                 p.softShader->setUniform("color", color);
-                
             }
             else
             {
                 p.hardShader->bind();
-                
+
                 p.hardShader->setUniform("transform.mvp", mvp);
-                
+
                 p.hardShader->setUniform("color", color);
-                
             }
 
             if (!p.vbo || (p.vbo && (p.vbo->getSize() != numTriangles * 3 ||
                                      p.vbo->getType() != vboType)))
             {
                 p.vbo = vk::VBO::create(numTriangles * 3, vboType);
-                
+
                 p.vao.reset();
-                
             }
 
             if (p.vbo)
             {
                 p.vbo->copy(convert(mesh, vboType));
-                
             }
 
             if (!p.vao && p.vbo)
             {
-                p.vao = vk::VAO::create(ctx, p.vbo->getType(), p.vbo->getID());
-                
+                p.vao = vk::VAO::create(ctx);
+                p.vao->upload(p.vbo->getData());
             }
 
             if (p.vao && p.vbo)
             {
-                p.vao->bind();
-                
+                // p.vao->bind();
+
                 // p.vao->draw(GL_TRIANGLES, 0, p.vbo->getSize());
-                
 
                 // #ifndef NDEBUG
                 //             if (!soft)
                 //             {
                 //                 p.wireShader->bind();
-                //                 
+                //
                 //                 p.wireShader->setUniform("transform.mvp",
-                //                 mvp); 
+                //                 mvp);
                 //                 p.wireShader->setUniform("color",
-                //                 image::Color4f(1, 0, 0, 1)); 
+                //                 image::Color4f(1, 0, 0, 1));
                 //                 glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-                //                 
+                //
                 //                 p.vao->bind();
-                //                 
+                //
                 //                 p.vao->draw(GL_TRIANGLES, 0,
-                //                 p.vbo->getSize()); 
+                //                 p.vbo->getSize());
                 //                 glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-                //                 
+                //
                 //             }
                 // #endif
             }
@@ -228,8 +222,7 @@ namespace mrv
         }
 
         void Lines::drawPoints(
-            Fl_Vk_Context& ctx,
-            const std::vector<math::Vector2f>& pnts,
+            Fl_Vk_Context& ctx, const std::vector<math::Vector2f>& pnts,
             const image::Color4f& color, const int size)
         {
             TLRENDER_P();
@@ -252,7 +245,8 @@ namespace mrv
 
             if (!p.vao && p.vbo)
             {
-                p.vao = vk::VAO::create(ctx, p.vbo->getType(), p.vbo->getID());
+                p.vao = vk::VAO::create(ctx);
+                p.vao->upload(p.vbo->getData());
             }
 
             if (p.vao && p.vbo)
@@ -300,8 +294,9 @@ namespace mrv
             drawCircle(ctx, render, center, radius, lineWidth, color, false);
             image::Color4f black(0.F, 0.F, 0.F, 1.F);
             if (radius > 2.0F)
-                drawCircle(ctx, render, center, radius - 2.0F, 2.0, black, false);
+                drawCircle(
+                    ctx, render, center, radius - 2.0F, 2.0, black, false);
         }
 
-    } // namespace opengl
+    } // namespace vulkan
 } // namespace mrv

@@ -46,8 +46,9 @@ namespace tl
             {
                 p.shaders["mesh"]->bind();
                 const auto transform =
-                    p.transform * math::translate(math::Vector3f(
-                                      position.x, position.y, 0.F));
+                    p.transform *
+                    math::translate(
+                        math::Vector3f(position.x, position.y, 0.F));
                 p.shaders["mesh"]->setUniform("transform.mvp", transform);
                 p.shaders["mesh"]->setUniform("color", color);
 
@@ -67,8 +68,7 @@ namespace tl
 
                 if (!p.vaos["mesh"] && p.vbos["mesh"])
                 {
-                    p.vaos["mesh"] = vk::VAO::create(ctx,
-                        p.vbos["mesh"]->getType(), p.vbos["mesh"]->getID());
+                    p.vaos["mesh"] = vk::VAO::create(ctx);
                 }
                 if (p.vaos["mesh"] && p.vbos["mesh"])
                 {
@@ -90,8 +90,9 @@ namespace tl
             {
                 p.shaders["colorMesh"]->bind();
                 const auto transform =
-                    p.transform * math::translate(math::Vector3f(
-                                      position.x, position.y, 0.F));
+                    p.transform *
+                    math::translate(
+                        math::Vector3f(position.x, position.y, 0.F));
                 p.shaders["colorMesh"]->setUniform("transform.mvp", transform);
                 p.shaders["colorMesh"]->setUniform("color", color);
 
@@ -113,9 +114,7 @@ namespace tl
 
                 if (!p.vaos["colorMesh"] && p.vbos["colorMesh"])
                 {
-                    p.vaos["colorMesh"] = vk::VAO::create(ctx,
-                        p.vbos["colorMesh"]->getType(),
-                        p.vbos["colorMesh"]->getID());
+                    p.vaos["colorMesh"] = vk::VAO::create(ctx);
                 }
                 if (p.vaos["colorMesh"] && p.vbos["colorMesh"])
                 {
@@ -125,8 +124,8 @@ namespace tl
             }
         }
 
-        void Render::Private::drawTextMesh(Fl_Vk_Context& ctx,
-                                           const geom::TriangleMesh2& mesh)
+        void Render::Private::drawTextMesh(
+            Fl_Vk_Context& ctx, const geom::TriangleMesh2& mesh)
         {
             const size_t size = mesh.triangles.size();
             currentStats.textTriangles += size;
@@ -145,8 +144,7 @@ namespace tl
                 }
                 if (!vaos["text"] && vbos["text"])
                 {
-                    vaos["text"] = vk::VAO::create(ctx,
-                        vbos["text"]->getType(), vbos["text"]->getID());
+                    vaos["text"] = vk::VAO::create(ctx);
                 }
                 if (vaos["text"] && vbos["text"])
                 {
@@ -230,14 +228,22 @@ namespace tl
                         mesh.v.push_back(math::Vector2f(max.x + 1, min.y));
                         mesh.v.push_back(math::Vector2f(max.x + 1, max.y + 1));
                         mesh.v.push_back(math::Vector2f(min.x, max.y + 1));
-                        mesh.t.push_back(math::Vector2f(
-                            item.textureU.getMin(), item.textureV.getMin()));
-                        mesh.t.push_back(math::Vector2f(
-                            item.textureU.getMax(), item.textureV.getMin()));
-                        mesh.t.push_back(math::Vector2f(
-                            item.textureU.getMax(), item.textureV.getMax()));
-                        mesh.t.push_back(math::Vector2f(
-                            item.textureU.getMin(), item.textureV.getMax()));
+                        mesh.t.push_back(
+                            math::Vector2f(
+                                item.textureU.getMin(),
+                                item.textureV.getMin()));
+                        mesh.t.push_back(
+                            math::Vector2f(
+                                item.textureU.getMax(),
+                                item.textureV.getMin()));
+                        mesh.t.push_back(
+                            math::Vector2f(
+                                item.textureU.getMax(),
+                                item.textureV.getMax()));
+                        mesh.t.push_back(
+                            math::Vector2f(
+                                item.textureU.getMin(),
+                                item.textureV.getMax()));
 
                         geom::Triangle2 triangle;
                         triangle.v[0].v = meshIndex + 1;

@@ -90,10 +90,11 @@ namespace tl
 
             const std::vector<uint8_t>& getData() const;
 
-            const VkVertexInputBindingDescription* getBindingDescription() const;
+            const VkVertexInputBindingDescription*
+            getBindingDescription() const;
             const std::vector<VkVertexInputAttributeDescription>&
             getAttributes() const;
-            
+
             //! \name Copy
             //! Copy data to the vertex buffer object.
             ///@{
@@ -115,7 +116,7 @@ namespace tl
             TLRENDER_NON_COPYABLE(VAO);
 
         protected:
-            void _init(VBOType, unsigned int vbo);
+            void _init();
 
             VAO(Fl_Vk_Context& ctx);
 
@@ -123,8 +124,7 @@ namespace tl
             ~VAO();
 
             //! Create a new object.
-            static std::shared_ptr<VAO> create(Fl_Vk_Context& ctx,
-                                               VBOType, unsigned int vbo);
+            static std::shared_ptr<VAO> create(Fl_Vk_Context& ctx);
 
             //! Get the OpenGL ID.
             unsigned int getID() const;
@@ -138,19 +138,20 @@ namespace tl
 
             //! Upload data
             void upload(const std::vector<uint8_t>& data);
-            
+
             //! Draw the vertex array object.
             void draw(unsigned int mode, std::size_t offset, std::size_t size);
 
-            //! Draw the vertex array object, by uploading the vertex buffer object.
+            //! Draw the vertex array object, by uploading the vertex buffer
+            //! object.
             void draw(VkCommandBuffer& cmd, const std::shared_ptr<VBO>& vbo);
-            
+
             //! Draw the vertex array object.
             void draw(VkCommandBuffer& cmd, std::size_t size);
 
         private:
             Fl_Vk_Context& ctx;
-            
+
             TLRENDER_PRIVATE();
         };
     } // namespace vk
