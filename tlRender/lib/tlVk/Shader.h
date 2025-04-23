@@ -53,48 +53,62 @@ namespace tl
             //! Bind the shader.
             void bind();
 
-            //! \name Uniforms
+            //! \name Uniform
             //! Set uniform values.
             ///@{
 
-            void setUniform(int, int);
-            void setUniform(int, float);
-            void setUniform(int, const math::Vector2f&);
-            void setUniform(int, const math::Vector3f&);
-            void setUniform(int, const math::Vector4f&);
-            void setUniform(int, const math::Matrix3x3f&);
-            void setUniform(int, const math::Matrix4x4f&);
-            void setUniform(int, const image::Color4f&);
-            void setUniform(int, const float[4]);
+            template <typename T>
+            void createUniform(
+                const std::string&, const T& value,
+                const VkShaderStageFlags stageFlags =
+                    VK_SHADER_STAGE_FRAGMENT_BIT);
 
-            void setUniform(int, const std::vector<int>&);
-            void setUniform(int, const std::vector<float>&);
-            void setUniform(int, const std::vector<math::Vector3f>&);
-            void setUniform(int, const std::vector<math::Vector4f>&);
-
-            void setUniform(const std::string&, int);
-            void setUniform(const std::string&, float);
-            void setUniform(const std::string&, const math::Vector2f&);
-            void setUniform(const std::string&, const math::Vector3f&);
-            void setUniform(const std::string&, const math::Vector4f&);
-            void setUniform(const std::string&, const math::Matrix3x3f&);
-            void setUniform(const std::string&, const math::Matrix4x4f&);
-            void setUniform(const std::string&, const image::Color4f&);
-            void setUniform(const std::string&, const float[4]);
-
-            void setUniform(const std::string&, const std::vector<int>&);
-            void setUniform(const std::string&, const std::vector<float>&);
-            void
-            setUniform(const std::string&, const std::vector<math::Vector3f>&);
-            void
-            setUniform(const std::string&, const std::vector<math::Vector4f>&);
-
+            template <typename T>
+            void setUniform(
+                const std::string&, const T& value,
+                const VkShaderStageFlags stageFlags =
+                    VK_SHADER_STAGE_FRAGMENT_BIT);
             ///@}
+
+            void setTexture(
+                const std::string& name, VkImageView imageView,
+                VkSampler sampler, VkShaderStageFlags stageFlags);
+
+            void createDescriptorSet();
 
         private:
             Fl_Vk_Context& ctx;
+            uint32_t current_binding_index = 0;
+
+            VkDescriptorSetLayout descriptorSetLayout = VK_NULL_HANDLE;
+            VkDescriptorPool descriptorPool = VK_NULL_HANDLE;
+            VkDescriptorSet descriptorSet = VK_NULL_HANDLE;
+
+            struct UBO
+            {
+                VkDescriptorBufferInfo bufferInfo;
+                VkDescriptorSetLayoutBinding layoutBinding;
+
+                VkBuffer buffer;
+                VkDeviceMemory memory;
+                size_t size;
+            };
+            std::map<std::string, UBO> ubos;
+
+            struct SamplerBinding
+            {
+                VkImageView imageView;
+                VkSampler sampler;
+                uint32_t binding;             // binding location in the shader
+                uint32_t descriptorCount = 1; // for arrays if needed
+                VkDescriptorImageInfo imageInfo;
+                VkDescriptorSetLayoutBinding layoutBinding;
+            };
+            std::map<std::string, SamplerBinding> samplers;
 
             TLRENDER_PRIVATE();
         };
     } // namespace vk
 } // namespace tl
+
+#include <tlVk/ShaderInline.h>

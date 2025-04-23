@@ -79,6 +79,13 @@ namespace tl
 
             if (p.vertex != VK_NULL_HANDLE)
                 vkDestroyShaderModule(device, p.vertex, nullptr);
+
+            if (descriptorSetLayout != VK_NULL_HANDLE)
+                vkDestroyDescriptorSetLayout(
+                    device, descriptorSetLayout, nullptr);
+
+            if (descriptorPool != VK_NULL_HANDLE)
+                vkDestroyDescriptorPool(device, descriptorPool, nullptr);
         }
 
         std::shared_ptr<Shader> Shader::create(
@@ -117,172 +124,120 @@ namespace tl
             // glUseProgram(_p->program);
         }
 
-        void Shader::setUniform(int location, int value)
+        void Shader::setTexture(
+            const std::string& name, VkImageView imageView, VkSampler sampler,
+            VkShaderStageFlags stageFlags)
         {
-            // glUniform1i(location, value);
+            SamplerBinding sb;
+            sb.imageView = imageView;
+            sb.sampler = sampler;
+            sb.binding = current_binding_index++;
+
+            sb.imageInfo.imageView = imageView;
+            sb.imageInfo.sampler = sampler;
+            sb.imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+
+            sb.layoutBinding.binding = sb.binding;
+            sb.layoutBinding.descriptorCount = 1;
+            sb.layoutBinding.descriptorType =
+                VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+            sb.layoutBinding.stageFlags = stageFlags;
+            sb.layoutBinding.pImmutableSamplers = nullptr;
+
+            samplers.insert({name, sb});
         }
 
-        void Shader::setUniform(int location, float value)
+        void Shader::createDescriptorSet()
         {
-            // glUniform1f(location, value);
-        }
+            VkDevice device = ctx.device;
 
-        void Shader::setUniform(int location, const math::Vector2f& value)
-        {
-            // glUniform2fv(location, 1, &value.x);
-        }
+            std::vector<VkDescriptorSetLayoutBinding> bindings;
+            std::vector<VkDescriptorPoolSize> poolSizes;
 
-        void Shader::setUniform(int location, const math::Vector3f& value)
-        {
-            // glUniform3fv(location, 1, &value.x);
-        }
+            // UBOs
+            for (const auto& [_, ubo] : ubos)
+            {
+                bindings.push_back(ubo.layoutBinding);
 
-        void Shader::setUniform(int location, const math::Vector4f& value)
-        {
-            // glUniform4fv(location, 1, &value.x);
-        }
+                VkDescriptorPoolSize poolSize{};
+                poolSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+                poolSize.descriptorCount = 1; // or more if you support arrays
+                poolSizes.push_back(poolSize);
+            }
 
-        void Shader::setUniform(int location, const math::Matrix3x3f& value)
-        {
-            // glUniformMatrix3fv(location, 1, GL_FALSE, value.e);
-        }
+            // Samplers
+            for (const auto& [_, sampler] : samplers)
+            {
+                bindings.push_back(sampler.layoutBinding);
 
-        void Shader::setUniform(int location, const math::Matrix4x4f& value)
-        {
-            // glUniformMatrix4fv(location, 1, GL_FALSE, value.e);
-        }
+                VkDescriptorPoolSize poolSize{};
+                poolSize.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+                poolSize.descriptorCount = 1;
+                poolSizes.push_back(poolSize);
+            }
 
-        void Shader::setUniform(int location, const image::Color4f& value)
-        {
-            // glUniform4fv(location, 1, &value.r);
-        }
+            // Create descriptor pool.
+            VkDescriptorPoolCreateInfo poolInfo = {};
+            poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+            poolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
+            poolInfo.pPoolSizes = poolSizes.data();
+            poolInfo.maxSets = 1; // adjust if allocating multiple sets at once
 
-        void Shader::setUniform(int location, const float value[4])
-        {
-            // glUniform4fv(location, 1, value);
-        }
+            vkCreateDescriptorPool(device, &poolInfo, nullptr, &descriptorPool);
 
-        void Shader::setUniform(int location, const std::vector<int>& value)
-        {
-            // glUniform1iv(location, value.size(), &value[0]);
-        }
+            // Create descriptor set layout.
+            VkDescriptorSetLayoutCreateInfo layout_info = {};
+            layout_info.sType =
+                VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+            layout_info.bindingCount = static_cast<uint32_t>(bindings.size());
+            layout_info.pBindings = bindings.data();
 
-        void Shader::setUniform(int location, const std::vector<float>& value)
-        {
-            // glUniform1fv(location, value.size(), &value[0]);
-        }
+            vkCreateDescriptorSetLayout(
+                device, &layout_info, nullptr, &descriptorSetLayout);
 
-        void Shader::setUniform(
-            int location, const std::vector<math::Vector3f>& value)
-        {
-            // glUniform3fv(location, value.size(), &value[0].x);
-        }
+            // Allocate descriptor set.
+            VkDescriptorSetAllocateInfo allocInfo{};
+            allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+            allocInfo.descriptorPool = descriptorPool;
+            allocInfo.descriptorSetCount = 1;
+            allocInfo.pSetLayouts = &descriptorSetLayout;
 
-        void Shader::setUniform(
-            int location, const std::vector<math::Vector4f>& value)
-        {
-            // glUniform4fv(location, value.size(), &value[0].x);
-        }
+            vkAllocateDescriptorSets(device, &allocInfo, &descriptorSet);
 
-        void Shader::setUniform(const std::string& name, int value)
-        {
-            // const GLint location =
-            //     glGetUniformLocation(_p->program, name.c_str());
-            // glUniform1i(location, value);
-        }
+            std::vector<VkWriteDescriptorSet> writes;
 
-        void Shader::setUniform(const std::string& name, float value)
-        {
-            // const GLint location =
-            //     glGetUniformLocation(_p->program, name.c_str());
-            // glUniform1f(location, value);
-        }
+            // Allocate descriptor set and update with buffer infos
+            for (const auto& [_, ubo] : ubos)
+            {
+                VkWriteDescriptorSet write = {};
+                write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                write.dstSet = descriptorSet;
+                write.dstBinding = ubo.layoutBinding.binding;
+                write.dstArrayElement = 0;
+                write.descriptorCount = 1;
+                write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+                write.pBufferInfo = &ubo.bufferInfo;
+                vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
+            }
 
-        void
-        Shader::setUniform(const std::string& name, const math::Vector2f& value)
-        {
-            // const GLint location =
-            //     glGetUniformLocation(_p->program, name.c_str());
-            // glUniform2fv(location, 1, &value.x);
-        }
+            // Samplers
+            for (const auto& [_, sampler] : samplers)
+            {
+                VkWriteDescriptorSet write = {};
+                write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                write.dstSet = descriptorSet;
+                write.dstBinding = sampler.layoutBinding.binding;
+                write.dstArrayElement = 0;
+                write.descriptorCount = 1;
+                write.descriptorType =
+                    VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+                write.pImageInfo = &sampler.imageInfo;
+                writes.push_back(write);
+            }
 
-        void
-        Shader::setUniform(const std::string& name, const math::Vector3f& value)
-        {
-            // const GLint location =
-            //     glGetUniformLocation(_p->program, name.c_str());
-            // glUniform3fv(location, 1, &value.x);
-        }
-
-        void
-        Shader::setUniform(const std::string& name, const math::Vector4f& value)
-        {
-            // const GLint location =
-            //     glGetUniformLocation(_p->program, name.c_str());
-            // glUniform4fv(location, 1, &value.x);
-        }
-
-        void Shader::setUniform(
-            const std::string& name, const math::Matrix3x3f& value)
-        {
-            // const GLint location =
-            //     glGetUniformLocation(_p->program, name.c_str());
-            // glUniformMatrix3fv(location, 1, GL_FALSE, value.e);
-        }
-
-        void Shader::setUniform(
-            const std::string& name, const math::Matrix4x4f& value)
-        {
-            // const GLint location =
-            //     glGetUniformLocation(_p->program, name.c_str());
-            // glUniformMatrix4fv(location, 1, GL_FALSE, value.e);
-        }
-
-        void
-        Shader::setUniform(const std::string& name, const image::Color4f& value)
-        {
-            // const GLint location =
-            //     glGetUniformLocation(_p->program, name.c_str());
-            // glUniform4fv(location, 1, &value.r);
-        }
-
-        void Shader::setUniform(const std::string& name, const float value[4])
-        {
-            // const GLint location =
-            //     glGetUniformLocation(_p->program, name.c_str());
-            // glUniform4fv(location, 1, value);
-        }
-
-        void Shader::setUniform(
-            const std::string& name, const std::vector<int>& value)
-        {
-            // const GLint location =
-            //     glGetUniformLocation(_p->program, name.c_str());
-            // glUniform1iv(location, value.size(), &value[0]);
-        }
-
-        void Shader::setUniform(
-            const std::string& name, const std::vector<float>& value)
-        {
-            // const GLint location =
-            //     glGetUniformLocation(_p->program, name.c_str());
-            // glUniform1fv(location, value.size(), &value[0]);
-        }
-
-        void Shader::setUniform(
-            const std::string& name, const std::vector<math::Vector3f>& value)
-        {
-            // const GLint location =
-            //     glGetUniformLocation(_p->program, name.c_str());
-            // glUniform3fv(location, value.size(), &value[0].x);
-        }
-
-        void Shader::setUniform(
-            const std::string& name, const std::vector<math::Vector4f>& value)
-        {
-            // const GLint location =
-            //     glGetUniformLocation(_p->program, name.c_str());
-            // glUniform4fv(location, value.size(), &value[0].x);
+            vkUpdateDescriptorSets(
+                device, static_cast<uint32_t>(writes.size()), writes.data(), 0,
+                nullptr);
         }
     } // namespace vk
 } // namespace tl

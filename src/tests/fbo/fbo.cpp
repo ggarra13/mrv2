@@ -163,10 +163,9 @@ private:
 
     //! Shaders used in demo
 
-    std::shared_ptr<tl::vk::OffscreenBuffer> fbo std::shared_ptr<tl::vk::VBO>
-        fbo_vbo;
+    std::shared_ptr<tl::vk::OffscreenBuffer> fbo;
+    std::shared_ptr<tl::vk::VBO> fbo_vbo;
     std::shared_ptr<tl::vk::VAO> fbo_vao;
-    ;
     std::shared_ptr<tl::vk::Shader> fboShader;
 
     std::shared_ptr<tl::vk::VBO> vbo;
@@ -715,12 +714,15 @@ void vk_shape_window::draw() {
         return;
     }
     
-    math::Size2i size(320, 240);
+    math::Size2i renderSize(320, 240);
     vk::OffscreenBufferOptions options;
     options.colorType = vk::offscreenColorDefault;
-    fbo = vk::OffscreenBuffer::create(ctx, size, options);
+    if (vk::doCreate(fbo, renderSize, options))
+    {
+        fbo = vk::OffscreenBuffer::create(ctx, renderSize, options);
+    }
     
-    // Clear red + clear depth/stencil
+    // Clear yellow
     VkClearValue clearValues[1];
     clearValues[0].color = { 1.f, 1.f, 0.f, 1.f };
 
