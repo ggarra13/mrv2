@@ -1110,7 +1110,7 @@ int main(int argc, char **argv) {
     window.end();
     window.show(argc,argv);
 
-    //Fl::add_timeout(0.005, (Fl_Timeout_Handler)change_ubo_cb, &sw);
+    Fl::add_timeout(0.005, (Fl_Timeout_Handler)change_ubo_cb, &sw);
 
     return Fl::run();
 }
