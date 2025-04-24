@@ -42,8 +42,14 @@ namespace tl
             catch (const std::exception& e)
             {
                 std::cerr << p.name << " failed compilation " << std::endl
-                          << e.what() << " for " << std::endl
-                          << p.vertexSource << std::endl;
+                          << e.what() << " for " << std::endl;
+                const auto& lines = tl::string::split(p.vertexSource, '\n',
+                                                      string::SplitOptions::KeepEmpty);
+                uint32_t i = 1;
+                for (const auto& line : lines)
+                {
+                    std::cerr << i++ << ": " << line << std::endl;
+                }
                 p.vertex = VK_NULL_HANDLE;
             }
 
@@ -61,8 +67,14 @@ namespace tl
             catch (const std::exception& e)
             {
                 std::cerr << p.name << " failed compilation " << std::endl
-                          << e.what() << " for " << std::endl
-                          << p.fragmentSource << std::endl;
+                          << e.what() << " for " << std::endl;
+                auto lines = tl::string::split(p.fragmentSource, '\n',
+                                               string::SplitOptions::KeepEmpty);
+                uint32_t i = 1;
+                for (const auto& line : lines)
+                {
+                    std::cerr << i++ << ": " << line << std::endl;
+                }
                 p.fragment = VK_NULL_HANDLE;
             }
         }

@@ -29,260 +29,257 @@ namespace tl
 
         std::string meshFragmentSource()
         {
-            return "#version 410\n"
-                   "\n"
-                   "out vec4 outColor;\n"
-                   "\n"
-                   "uniform vec4 color;\n"
-                   "\n"
-                   "void main()\n"
-                   "{\n"
-                   "\n"
-                   "    outColor = color;\n"
-                   "}\n";
+            return R"(#version 450
+                   
+layout(location = 0) out vec4 outColor;
+                 
+layout(set = 0, binding = 0, std140) uniform ColorUBO {
+        uniform vec4 color;
+} ubo;
+                 
+void main()
+{
+         outColor = ubo.color;
+})";
         }
 
         std::string colorMeshVertexSource()
         {
-            return "#version 410\n"
-                   "\n"
-                   "layout(location = 0) in vec3 vPos;\n"
-                   "layout(location = 1) in vec4 vColor;\n"
-                   "out vec4 fColor;\n"
-                   "\n"
-                   "struct Transform\n"
-                   "{\n"
-                   "    mat4 mvp;\n"
-                   "};\n"
-                   "\n"
-                   "uniform Transform transform;\n"
-                   "\n"
-                   "void main()\n"
-                   "{\n"
-                   "    gl_Position = transform.mvp * vec4(vPos, 1.0);\n"
-                   "    fColor = vColor;\n"
-                   "}\n";
+            return R"(#version 450
+                 
+layout(location = 0) in vec3 vPos;
+layout(location = 1) in vec4 vColor;
+layout(location = 0) out vec4 fColor;
+
+layout(set = 0, binding = 0, std140) uniform TransformUBO {
+    mat4 mvp;
+} transform;
+                 
+void main()
+{
+    gl_Position = transform.mvp * vec4(vPos, 1.0);
+    fColor = vColor;
+})";
         }
 
         std::string colorMeshFragmentSource()
         {
-            return "#version 410\n"
-                   "\n"
-                   "in vec4 fColor;\n"
-                   "out vec4 outColor;\n"
-                   "\n"
-                   "uniform vec4 color;\n"
-                   "\n"
-                   "void main()\n"
-                   "{\n"
-                   "\n"
-                   "    outColor = fColor * color;\n"
-                   "}\n";
+            return R"(#version 450
+                 
+layout(location = 0) in vec4 fColor;
+layout(location = 1) out vec4 outColor;
+                 
+layout(set = 0, binding = 0, std140) uniform ColorUBO {
+    vec4 color;
+} ubo;
+
+void main()
+{
+    outColor = fColor * ubo.color;
+})";
         }
 
         std::string textFragmentSource()
         {
-            return "#version 410\n"
-                   "\n"
-                   "in vec2 fTexture;\n"
-                   "out vec4 outColor;\n"
-                   "\n"
-                   "uniform vec4 color;\n"
-                   "uniform sampler2D textureSampler;\n"
-                   "\n"
-                   "void main()\n"
-                   "{\n"
-                   "\n"
-                   "    outColor.r = color.r;\n"
-                   "    outColor.g = color.g;\n"
-                   "    outColor.b = color.b;\n"
-                   "    outColor.a = color.a * texture(textureSampler, "
-                   "fTexture).r;\n"
-                   "}\n";
+            return R"(#version 450
+                 
+layout(location = 0) in vec2 fTexture;
+layout(location = 1) out vec4 outColor;
+
+layout(set = 0, binding = 0, std140) uniform ColorUBO {
+    vec4 color;
+} ubo;
+                 
+layout(binding = 1) uniform sampler2D textureSampler;
+                 
+void main()
+{
+     outColor.r = ubo.color.r;
+     outColor.g = ubo.color.g;
+     outColor.b = ubo.color.b;
+     outColor.a = ubo.color.a * texture(textureSampler, fTexture).r;
+})";
         }
 
         std::string textureFragmentSource()
         {
-            return "#version 410\n"
-                   "\n"
-                   "in vec2 fTexture;\n"
-                   "out vec4 outColor;\n"
-                   "\n"
-                   "uniform vec4 color;\n"
-                   "uniform sampler2D textureSampler;\n"
-                   "\n"
-                   "void main()\n"
-                   "{\n"
-                   "\n"
-                   "    outColor = texture(textureSampler, fTexture) * color;\n"
-                   "}\n";
+            return R"(#version 450
+                 
+layout(location = 0) in vec2 fTexture;
+layout(location = 1) out vec4 outColor;
+
+layout(set = 0, binding = 0, std140) uniform ColorUBO {
+    vec4 color;
+} ubo;
+                 
+layout(binding = 1) uniform sampler2D textureSampler;
+                 
+void main()
+{
+     outColor = texture(textureSampler, fTexture) * ubo.color;
+})";
         }
 
         namespace
         {
-            const std::string pixelType =
-                "// enum tl::image::PixelType\n"
-                "const uint PixelType_None              = 0;\n"
-                "const uint PixelType_L_U8              = 1;\n"
-                "const uint PixelType_L_U16             = 2;\n"
-                "const uint PixelType_L_U32             = 3;\n"
-                "const uint PixelType_L_F16             = 4;\n"
-                "const uint PixelType_L_F32             = 5;\n"
-                "const uint PixelType_LA_U8             = 6;\n"
-                "const uint PixelType_LA_U32            = 7;\n"
-                "const uint PixelType_LA_U16            = 8;\n"
-                "const uint PixelType_LA_F16            = 9;\n"
-                "const uint PixelType_LA_F32            = 10;\n"
-                "const uint PixelType_RGB_U8            = 11;\n"
-                "const uint PixelType_RGB_U10           = 12;\n"
-                "const uint PixelType_RGB_U16           = 13;\n"
-                "const uint PixelType_RGB_U32           = 14;\n"
-                "const uint PixelType_RGB_F16           = 15;\n"
-                "const uint PixelType_RGB_F32           = 16;\n"
-                "const uint PixelType_RGBA_U8           = 17;\n"
-                "const uint PixelType_RGBA_U16          = 18;\n"
-                "const uint PixelType_RGBA_U32          = 19;\n"
-                "const uint PixelType_RGBA_F16          = 20;\n"
-                "const uint PixelType_RGBA_F32          = 21;\n"
-                "const uint PixelType_YUV_420P_U8       = 22;\n"
-                "const uint PixelType_YUV_422P_U8       = 23;\n"
-                "const uint PixelType_YUV_444P_U8       = 24;\n"
-                "const uint PixelType_YUV_420P_U16      = 25;\n"
-                "const uint PixelType_YUV_422P_U16      = 26;\n"
-                "const uint PixelType_YUV_444P_U16      = 27;\n"
-                "const uint PixelType_ARGB_4444_Premult = 28;\n";
+            const std::string pixelType = R"(
+              // enum tl::image::PixelType
+              const uint PixelType_None              = 0;
+              const uint PixelType_L_U8              = 1;
+              const uint PixelType_L_U16             = 2;
+              const uint PixelType_L_U32             = 3;
+              const uint PixelType_L_F16             = 4;
+              const uint PixelType_L_F32             = 5;
+              const uint PixelType_LA_U8             = 6;
+              const uint PixelType_LA_U32            = 7;
+              const uint PixelType_LA_U16            = 8;
+              const uint PixelType_LA_F16            = 9;
+              const uint PixelType_LA_F32            = 10;
+              const uint PixelType_RGB_U8            = 11;
+              const uint PixelType_RGB_U10           = 12;
+              const uint PixelType_RGB_U16           = 13;
+              const uint PixelType_RGB_U32           = 14;
+              const uint PixelType_RGB_F16           = 15;
+              const uint PixelType_RGB_F32           = 16;
+              const uint PixelType_RGBA_U8           = 17;
+              const uint PixelType_RGBA_U16          = 18;
+              const uint PixelType_RGBA_U32          = 19;
+              const uint PixelType_RGBA_F16          = 20;
+              const uint PixelType_RGBA_F32          = 21;
+              const uint PixelType_YUV_420P_U8       = 22;
+              const uint PixelType_YUV_422P_U8       = 23;
+              const uint PixelType_YUV_444P_U8       = 24;
+              const uint PixelType_YUV_420P_U16      = 25;
+              const uint PixelType_YUV_422P_U16      = 26;
+              const uint PixelType_YUV_444P_U16      = 27;
+              const uint PixelType_ARGB_4444_Premult = 28;
+)";
 
-            const std::string videoLevels =
-                "// enum tl::image::VideoLevels\n"
-                "const uint VideoLevels_FullRange  = 0;\n"
-                "const uint VideoLevels_LegalRange = 1;\n";
-
-            const std::string sampleTexture =
-                "vec4 sampleTexture("
-                "    vec2 textureCoord,\n"
-                "    int pixelType,\n"
-                "    int videoLevels,\n"
-                "    vec4 yuvCoefficients,\n"
-                "    int imageChannels,\n"
-                "    sampler2D s0,\n"
-                "    sampler2D s1,\n"
-                "    sampler2D s2)\n"
-                "{\n"
-                "    vec4 c;\n"
-                "    if (PixelType_YUV_420P_U8 == pixelType ||\n"
-                "        PixelType_YUV_422P_U8 == pixelType ||\n"
-                "        PixelType_YUV_444P_U8 == pixelType ||\n"
-                "        PixelType_YUV_420P_U16 == pixelType ||\n"
-                "        PixelType_YUV_422P_U16 == pixelType ||\n"
-                "        PixelType_YUV_444P_U16 == pixelType)\n"
-                "    {\n"
-                "        if (VideoLevels_FullRange == videoLevels)\n"
-                "        {\n"
-                "            float y  = texture(s0, textureCoord).r;\n"
-                "            float cb = texture(s1, textureCoord).r - 0.5;\n"
-                "            float cr = texture(s2, textureCoord).r - 0.5;\n"
-                "            c.r = y + (yuvCoefficients.x * cr);\n"
-                "            c.g = y - (yuvCoefficients.y * cr) - "
-                "(yuvCoefficients.z * cb);\n"
-                "            c.b = y + (yuvCoefficients.w * cb);\n"
-                "        }\n"
-                "        else if (VideoLevels_LegalRange == videoLevels)\n"
-                "        {\n"
-                "            float y  = (texture(s0, textureCoord).r - (16.0 / "
-                "255.0)) * (255.0 / (235.0 - 16.0));\n"
-                "            float cb = (texture(s1, textureCoord).r - (16.0 / "
-                "255.0)) * (255.0 / (240.0 - 16.0)) - 0.5;\n"
-                "            float cr = (texture(s2, textureCoord).r - (16.0 / "
-                "255.0)) * (255.0 / (240.0 - 16.0)) - 0.5;\n"
-                "            c.r = y + (yuvCoefficients.x * cr);\n"
-                "            c.g = y - (yuvCoefficients.y * cr) - "
-                "(yuvCoefficients.z * cb);\n"
-                "            c.b = y + (yuvCoefficients.w * cb);\n"
-                "        }\n"
-                "        c.a = 1.0;\n"
-                "    }\n"
-                "    else\n"
-                "    {\n"
-                "        c = texture(s0, textureCoord);\n"
-                "\n"
-                "        // Video levels.\n"
-                "        if (VideoLevels_LegalRange == videoLevels)\n"
-                "        {\n"
-                "            c.r = (c.r - (16.0 / 255.0)) * (255.0 / (235.0 - "
-                "16.0));\n"
-                "            c.g = (c.g - (16.0 / 255.0)) * (255.0 / (240.0 - "
-                "16.0));\n"
-                "            c.b = (c.b - (16.0 / 255.0)) * (255.0 / (240.0 - "
-                "16.0));\n"
-                "        }\n"
-                "\n"
-                "        // Swizzle for the image channels.\n"
-                "        if (1 == imageChannels)\n"
-                "        {\n"
-                "            c.g = c.b = c.r;\n"
-                "            c.a = 1.0;\n"
-                "        }\n"
-                "        else if (2 == imageChannels)\n"
-                "        {\n"
-                "            c.a = c.g;\n"
-                "            c.g = c.b = c.r;\n"
-                "        }\n"
-                "        else if (3 == imageChannels)\n"
-                "        {\n"
-                "            c.a = 1.0;\n"
-                "        }\n"
-                "    }\n"
-                "    return c;\n"
-                "}\n";
+            const std::string videoLevels = R"(
+              // enum tl::image::VideoLevels
+              const uint VideoLevels_FullRange  = 0;
+              const uint VideoLevels_LegalRange = 1;
+)";
+            
+            const std::string sampleTexture = R"(
+vec4 sampleTexture(
+              vec2 textureCoord,
+              int pixelType,
+              int videoLevels,
+              vec4 yuvCoefficients,
+              int imageChannels,
+              sampler2D s0,
+              sampler2D s1,
+              sampler2D s2)
+{
+       vec4 c;
+       if (PixelType_YUV_420P_U8 == pixelType ||
+           PixelType_YUV_422P_U8 == pixelType ||
+           PixelType_YUV_444P_U8 == pixelType ||
+           PixelType_YUV_420P_U16 == pixelType ||
+           PixelType_YUV_422P_U16 == pixelType ||
+           PixelType_YUV_444P_U16 == pixelType)
+       {
+           if (VideoLevels_FullRange == videoLevels)
+           {
+                float y  = texture(s0, textureCoord).r;
+                float cb = texture(s1, textureCoord).r - 0.5;
+                float cr = texture(s2, textureCoord).r - 0.5;
+                c.r = y + (yuvCoefficients.x * cr);
+                c.g = y - (yuvCoefficients.y * cr) - (yuvCoefficients.z * cb);
+                c.b = y + (yuvCoefficients.w * cb);
+            }
+            else if (VideoLevels_LegalRange == videoLevels)
+            {
+                 float y  = (texture(s0, textureCoord).r - (16.0 / 255.0)) * (255.0 / (235.0 - 16.0));
+                 float cb = (texture(s1, textureCoord).r - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0)) - 0.5;
+                 float cr = (texture(s2, textureCoord).r - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0)) - 0.5;
+                 c.r = y + (yuvCoefficients.x * cr);
+                 c.g = y - (yuvCoefficients.y * cr) - (yuvCoefficients.z * cb);
+                 c.b = y + (yuvCoefficients.w * cb);
+             }
+             c.a = 1.0;
+        }
+        else
+        {
+             c = texture(s0, textureCoord);
+              
+             // Video levels.
+             if (VideoLevels_LegalRange == videoLevels)
+             {
+                  c.r = (c.r - (16.0 / 255.0)) * (255.0 / (235.0 - 16.0));
+                          c.g = (c.g - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0));
+                          c.b = (c.b - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0));
+             }
+              
+             // Swizzle for the image channels.
+             if (1 == imageChannels)
+             {
+                 c.g = c.b = c.r;
+                 c.a = 1.0;
+             }
+             else if (2 == imageChannels)
+             {
+                 c.a = c.g;
+                 c.g = c.b = c.r;
+             }
+             else if (3 == imageChannels)
+             {
+                 c.a = 1.0;
+             }
+         }
+         return c;
+ })";
         } // namespace
 
         std::string imageFragmentSource()
         {
-            return string::Format("#version 410\n"
-                                  "\n"
-                                  "in vec2 fTexture;\n"
-                                  "out vec4 outColor;\n"
-                                  "\n"
-                                  "{0}\n"
-                                  "\n"
-                                  "{1}\n"
-                                  "\n"
-                                  "{2}\n"
-                                  "\n"
-                                  "uniform vec4      color;\n"
-                                  "uniform int       pixelType;\n"
-                                  "uniform int       videoLevels;\n"
-                                  "uniform vec4      yuvCoefficients;\n"
-                                  "uniform int       imageChannels;\n"
-                                  "uniform int       mirrorX;\n"
-                                  "uniform int       mirrorY;\n"
-                                  "uniform sampler2D textureSampler0;\n"
-                                  "uniform sampler2D textureSampler1;\n"
-                                  "uniform sampler2D textureSampler2;\n"
-                                  "\n"
-                                  "void main()\n"
-                                  "{\n"
-                                  "    vec2 t = fTexture;\n"
-                                  "    if (1 == mirrorX)\n"
-                                  "    {\n"
-                                  "        t.x = 1.0 - t.x;\n"
-                                  "    }\n"
-                                  "    if (0 == mirrorY)\n"
-                                  "    {\n"
-                                  "        t.y = 1.0 - t.y;\n"
-                                  "    }\n"
-                                  "    outColor = sampleTexture("
-                                  "        t,\n"
-                                  "        pixelType,\n"
-                                  "        videoLevels,\n"
-                                  "        yuvCoefficients,\n"
-                                  "        imageChannels,\n"
-                                  "        textureSampler0,\n"
-                                  "        textureSampler1,\n"
-                                  "        textureSampler2) *\n"
-                                  "        color;\n"
-                                  //"    outColor.a = 1.0;\n"
-                                  "}\n")
+            return string::Format(R"(#version 450
+                                
+layout(location = 0) in vec2 fTexture;
+layout(location = 1) out vec4 outColor;
+                                
+                                {0}
+                                
+                                {1}
+                                
+                                {2}
+
+layout(set = 0, binding = 0, std140) uniform Fragment {
+                                vec4      color;
+                                int       pixelType;
+                                int       videoLevels;
+                                vec4      yuvCoefficients;
+                                int       imageChannels;
+                                int       mirrorX;
+                                int       mirrorY;
+} frag;
+
+layout(binding = 0) uniform sampler2D textureSampler0;
+layout(binding = 1) uniform sampler2D textureSampler1;
+layout(binding = 2) uniform sampler2D textureSampler2;
+                                
+void main()
+{
+    vec2 t = fTexture;
+    if (1 == frag.mirrorX)
+    {
+        t.x = 1.0 - t.x;
+    }
+    if (0 == frag.mirrorY)
+    {
+        t.y = 1.0 - t.y;
+    }
+    outColor = sampleTexture(t,
+                             frag.pixelType,
+                             frag.videoLevels,
+                             frag.yuvCoefficients,
+                             frag.imageChannels,
+                             textureSampler0,
+                             textureSampler1,
+                             textureSampler2) * frag.color;
+     // outColor.a = 1.0;
+})")
                 .arg(pixelType)
                 .arg(videoLevels)
                 .arg(sampleTexture);
@@ -318,271 +315,291 @@ namespace tl
             default:
                 break;
             }
-            return string::Format(
-                       "#version 410\n"
-                       "\n"
-                       "in vec2 fTexture;\n"
-                       "out vec4 outColor;\n"
-                       "\n"
-                       "// enum tl::timeline::Channels\n"
-                       "const uint Channels_Color = 0;\n"
-                       "const uint Channels_Red   = 1;\n"
-                       "const uint Channels_Green = 2;\n"
-                       "const uint Channels_Blue  = 3;\n"
-                       "const uint Channels_Alpha = 4;\n"
-                       "const uint Channels_Lumma = 5;\n"
-                       "\n"
-                       "struct Levels\n"
-                       "{\n"
-                       "    float inLow;\n"
-                       "    float inHigh;\n"
-                       "    float gamma;\n"
-                       "    float outLow;\n"
-                       "    float outHigh;\n"
-                       "};\n"
-                       "\n"
-                       "struct EXRDisplay\n"
-                       "{\n"
-                       "    float v;\n"
-                       "    float d;\n"
-                       "    float k;\n"
-                       "    float f;\n"
-                       "    float g;\n"
-                       "};\n"
-                       "\n"
-                       "struct Normalize\n"
-                       "{\n"
-                       "    vec4 minimum;\n"
-                       "    vec4 maximum;\n"
-                       "};\n"
-                       "\n"
-                       "{0}\n"
-                       "\n"
-                       "uniform sampler2D textureSampler;\n"
-                       "\n"
-                       "uniform int        channels;\n"
-                       "uniform int        mirrorX;\n"
-                       "uniform int        mirrorY;\n"
-                       "uniform bool       colorEnabled;\n"
-                       "uniform vec3       colorAdd;\n"
-                       "uniform mat4       colorMatrix;\n"
-                       "uniform bool       colorInvert;\n"
-                       "uniform bool       levelsEnabled;\n"
-                       "uniform Levels     levels;\n"
-                       "uniform bool       exrDisplayEnabled;\n"
-                       "uniform EXRDisplay exrDisplay;\n"
-                       "uniform float      softClip;\n"
-                       "uniform int        videoLevels;\n"
-                       "uniform bool       normalizeEnabled;\n"
-                       "uniform Normalize  normalizeDisplay;\n"
-                       "uniform bool       invalidValues;\n"
-                       "\n"
-                       "vec4 colorFunc(vec4 value, vec3 add, mat4 m)\n"
-                       "{\n"
-                       "    vec4 tmp;\n"
-                       "    tmp[0] = value[0] + add[0];\n"
-                       "    tmp[1] = value[1] + add[1];\n"
-                       "    tmp[2] = value[2] + add[2];\n"
-                       "    tmp[3] = 1.0;\n"
-                       "    tmp *= m;\n"
-                       "    tmp[3] = value[3];\n"
-                       "    return tmp;\n"
-                       "}\n"
-                       "\n"
-                       "vec4 levelsFunc(vec4 value, Levels data)\n"
-                       "{\n"
-                       "    vec4 tmp;\n"
-                       "    tmp[0] = (value[0] - data.inLow) / data.inHigh;\n"
-                       "    tmp[1] = (value[1] - data.inLow) / data.inHigh;\n"
-                       "    tmp[2] = (value[2] - data.inLow) / data.inHigh;\n"
-                       "    if (tmp[0] >= 0.0)\n"
-                       "        tmp[0] = pow(tmp[0], data.gamma);\n"
-                       "    if (tmp[1] >= 0.0)\n"
-                       "        tmp[1] = pow(tmp[1], data.gamma);\n"
-                       "    if (tmp[2] >= 0.0)\n"
-                       "        tmp[2] = pow(tmp[2], data.gamma);\n"
-                       "    value[0] = tmp[0] * data.outHigh + data.outLow;\n"
-                       "    value[1] = tmp[1] * data.outHigh + data.outLow;\n"
-                       "    value[2] = tmp[2] * data.outHigh + data.outLow;\n"
-                       "    return value;\n"
-                       "}\n"
-                       "\n"
-                       "vec4 softClipFunc(vec4 value, float softClip)\n"
-                       "{\n"
-                       "    float tmp = 1.0 - softClip;\n"
-                       "    if (value[0] > tmp)\n"
-                       "        value[0] = tmp + (1.0 - exp(-(value[0] - tmp) "
-                       "/ softClip)) * softClip;\n"
-                       "    if (value[1] > tmp)\n"
-                       "        value[1] = tmp + (1.0 - exp(-(value[1] - tmp) "
-                       "/ softClip)) * softClip;\n"
-                       "    if (value[2] > tmp)\n"
-                       "        value[2] = tmp + (1.0 - exp(-(value[2] - tmp) "
-                       "/ softClip)) * softClip;\n"
-                       "    return value;\n"
-                       "}\n"
-                       "\n"
-                       "float knee(float value, float f)\n"
-                       "{\n"
-                       "    return log(value * f + 1.0) / f;\n"
-                       "}\n"
-                       "\n"
-                       "vec4 exrDisplayFunc(vec4 value, EXRDisplay data)\n"
-                       "{\n"
-                       "    value[0] = max(0.0, value[0] - data.d) * data.v;\n"
-                       "    value[1] = max(0.0, value[1] - data.d) * data.v;\n"
-                       "    value[2] = max(0.0, value[2] - data.d) * data.v;\n"
-                       "    if (value[0] > data.k)\n"
-                       "        value[0] = data.k + knee(value[0] - data.k, "
-                       "data.f);\n"
-                       "    if (value[1] > data.k)\n"
-                       "        value[1] = data.k + knee(value[1] - data.k, "
-                       "data.f);\n"
-                       "    if (value[2] > data.k)\n"
-                       "        value[2] = data.k + knee(value[2] - data.k, "
-                       "data.f);\n"
-                       "    if (value[0] > 0.0) value[0] = pow(value[0], "
-                       "data.g);\n"
-                       "    if (value[1] > 0.0) value[1] = pow(value[1], "
-                       "data.g);\n"
-                       "    if (value[2] > 0.0) value[2] = pow(value[2], "
-                       "data.g);\n"
-                       "    float s = pow(2, -3.5 * data.g);\n"
-                       "    value[0] *= s;\n"
-                       "    value[1] *= s;\n"
-                       "    value[2] *= s;\n"
-                       "    return value;\n"
-                       "}\n"
-                       "\n"
-                       "vec4 normalizeFunc(vec4 value, Normalize data)\n"
-                       "{\n"
-                       "    value[0] = (value[0] - data.minimum[0]) / "
-                       "(data.maximum[0] - data.minimum[0]);\n"
-                       "    value[1] = (value[1] - data.minimum[1]) / "
-                       "(data.maximum[1] - data.minimum[1]);\n"
-                       "    value[2] = (value[2] - data.minimum[2]) / "
-                       "(data.maximum[2] - data.minimum[2]);\n"
-                       "    value[3] = (value[3] - data.minimum[3]) / "
-                       "(data.maximum[3] - data.minimum[3]);\n"
-                       "    return value;\n"
-                       "}\n"
-                       "\n"
-                       "{1}\n"
-                       "\n"
-                       "{2}\n"
-                       "\n"
-                       "{3}\n"
-                       "\n"
-                       "{4}\n"
-                       "\n"
-                       "void main()\n"
-                       "{\n"
-                       "    vec2 t = fTexture;\n"
-                       "    if (1 == mirrorX)\n"
-                       "    {\n"
-                       "        t.x = 1.0 - t.x;\n"
-                       "    }\n"
-                       "    if (1 == mirrorY)\n"
-                       "    {\n"
-                       "        t.y = 1.0 - t.y;\n"
-                       "    }\n"
-                       "\n"
-                       "    outColor = texture(textureSampler, t);\n"
-                       "\n"
-                       "    // Video levels.\n"
-                       "    if (VideoLevels_LegalRange == videoLevels)\n"
-                       "    {\n"
-                       "        const float scale = (940.0 - 64.0) / 1023.0;\n"
-                       "        const float offset = 64.0 / 1023.0;\n"
-                       "        outColor.r = outColor.r * scale + offset;\n"
-                       "        outColor.g = outColor.g * scale + offset;\n"
-                       "        outColor.b = outColor.b * scale + offset;\n"
-                       "    }\n"
-                       "\n"
-                       "    // Apply color tranform to linear space and LUT.\n"
-                       "    {5}\n"
-                       "    {6}\n"
-                       "\n"
-                       "    // Apply color transformations.\n"
-                       "    if (colorEnabled)\n"
-                       "    {\n"
-                       "        outColor = colorFunc(outColor, colorAdd, "
-                       "colorMatrix);\n"
-                       "    }\n"
-                       "    if (colorInvert)\n"
-                       "    {\n"
-                       "        outColor.r = 1.0 - outColor.r;\n"
-                       "        outColor.g = 1.0 - outColor.g;\n"
-                       "        outColor.b = 1.0 - outColor.b;\n"
-                       "    }\n"
-                       "    if (exrDisplayEnabled)\n"
-                       "    {\n"
-                       "        outColor = exrDisplayFunc(outColor, "
-                       "exrDisplay);\n"
-                       "    }\n"
-                       "    if (softClip > 0.0)\n"
-                       "    {\n"
-                       "        outColor = softClipFunc(outColor, softClip);\n"
-                       "    }\n"
-                       "\n"
-                       "    // Call libplacebo tonemapping\n"
-                       "    {7}\n"
-                       "\n"
-                       "    // Apply OCIO Display/View.\n"
-                       "    {8}\n"
-                       "\n"
-                       "    if (levelsEnabled)\n"
-                       "    {\n"
-                       "        outColor = levelsFunc(outColor, levels);\n"
-                       "    }\n"
-                       "    if (normalizeEnabled)\n"
-                       "    {\n"
-                       "        outColor = normalizeFunc(outColor, "
-                       "normalizeDisplay);\n"
-                       "    }\n"
-                       "    if (invalidValues)\n"
-                       "    {\n"
-                       "        if (outColor.r < 0.0 || outColor.r > 1.0 ||\n"
-                       "            outColor.g < 0.0 || outColor.g > 1.0 ||\n"
-                       "            outColor.b < 0.0 || outColor.b > 1.0 ||\n"
-                       "            outColor.a < 0.0 || outColor.a > 1.0)\n"
-                       "        {\n"
-                       "           outColor.r = 1.0f;\n"
-                       "           outColor.g *= 0.5f;\n"
-                       "           outColor.b *= 0.5f;\n"
-                       "        }\n"
-                       "    }\n"
-                       "    // Swizzle for the channels display.\n"
-                       "    if (Channels_Red == channels)\n"
-                       "    {\n"
-                       "        outColor.g = outColor.r;\n"
-                       "        outColor.b = outColor.r;\n"
-                       "    }\n"
-                       "    else if (Channels_Green == channels)\n"
-                       "    {\n"
-                       "        outColor.r = outColor.g;\n"
-                       "        outColor.b = outColor.g;\n"
-                       "    }\n"
-                       "    else if (Channels_Blue == channels)\n"
-                       "    {\n"
-                       "        outColor.r = outColor.b;\n"
-                       "        outColor.g = outColor.b;\n"
-                       "    }\n"
-                       "    else if (Channels_Alpha == channels)\n"
-                       "    {\n"
-                       "        outColor.r = outColor.a;\n"
-                       "        outColor.g = outColor.a;\n"
-                       "        outColor.b = outColor.a;\n"
-                       "    }\n"
-                       "    else if (Channels_Lumma == channels)\n"
-                       "    {\n"
-                       "        float t = (outColor.r + outColor.g + "
-                       "outColor.b) / 3.0;\n"
-                       "        outColor.r = t;\n"
-                       "        outColor.g = t;\n"
-                       "        outColor.b = t;\n"
-                       "    }\n"
-                       "}\n")
+            return string::Format(R"(#version 450
+                     
+layout(location = 0) in vec2 fTexture;
+layout(location = 1) out vec4 outColor;
+
+// enum tl::timeline::Channels
+const uint Channels_Color = 0;
+const uint Channels_Red   = 1;
+const uint Channels_Green = 2;
+const uint Channels_Blue  = 3;
+const uint Channels_Alpha = 4;
+const uint Channels_Lumma = 5;
+
+struct Levels
+{
+    bool  enabled;
+    float inLow;
+    float inHigh;
+    float gamma;
+    float outLow;
+    float outHigh;
+};
+
+layout(set = 0, binding = 0, std140) uniform LevelsUBO
+{
+  Levels data;
+} uboLevels;
+
+struct EXRDisplay
+{
+    bool enabled;
+    float v;
+    float d;
+    float k;
+    float f;
+    float g;
+};
+
+layout(set = 0, binding = 1, std140) uniform EXRDisplayUBO
+{
+  EXRDisplay data;
+} uboEXRDisplay;
+
+
+struct Normalize
+{
+    bool enabled;
+    vec4 minimum;
+    vec4 maximum;
+};
+
+layout(set = 0, binding = 2, std140) uniform NormalizeUBO
+{
+  Normalize data;
+} uboNormalize;
+
+struct Color
+{
+    bool  enabled;
+    vec3  add;
+    mat4  matrix;
+    bool  invert;
+};
+
+layout(set = 0, binding = 3, std140) uniform ColorUBO
+{
+   Color data;
+} uboColor;
+
+{0}
+
+layout(binding = 4) uniform sampler2D textureSampler;
+
+layout(set = 0, binding = 5, std140) uniform UBO
+{
+    int        channels;
+    int        mirrorX;
+    int        mirrorY;
+    float      softClip;
+    int        videoLevels;
+    bool       invalidValues;
+} ubo;
+
+vec4 colorFunc(vec4 value, vec3 add, mat4 m)
+{
+    vec4 tmp;
+    tmp[0] = value[0] + add[0];
+    tmp[1] = value[1] + add[1];
+    tmp[2] = value[2] + add[2];
+    tmp[3] = 1.0;
+    tmp *= m;
+    tmp[3] = value[3];
+    return tmp;
+}
+
+vec4 levelsFunc(vec4 value, Levels data)
+{
+    vec4 tmp;
+    tmp[0] = (value[0] - data.inLow) / data.inHigh;
+    tmp[1] = (value[1] - data.inLow) / data.inHigh;
+    tmp[2] = (value[2] - data.inLow) / data.inHigh;
+    if (tmp[0] >= 0.0)
+        tmp[0] = pow(tmp[0], data.gamma);
+    if (tmp[1] >= 0.0)
+        tmp[1] = pow(tmp[1], data.gamma);
+    if (tmp[2] >= 0.0)
+        tmp[2] = pow(tmp[2], data.gamma);
+    value[0] = tmp[0] * data.outHigh + data.outLow;
+    value[1] = tmp[1] * data.outHigh + data.outLow;
+    value[2] = tmp[2] * data.outHigh + data.outLow;
+    return value;
+}
+
+vec4 softClipFunc(vec4 value, float softClip)
+{
+    float tmp = 1.0 - softClip;
+    if (value[0] > tmp)
+        value[0] = tmp + (1.0 - exp(-(value[0] - tmp) 
+/ softClip)) * softClip;
+    if (value[1] > tmp)
+        value[1] = tmp + (1.0 - exp(-(value[1] - tmp) 
+/ softClip)) * softClip;
+    if (value[2] > tmp)
+        value[2] = tmp + (1.0 - exp(-(value[2] - tmp) 
+/ softClip)) * softClip;
+    return value;
+}
+
+float knee(float value, float f)
+{
+    return log(value * f + 1.0) / f;
+}
+
+vec4 exrDisplayFunc(vec4 value, EXRDisplay data)
+{
+    value[0] = max(0.0, value[0] - data.d) * data.v;
+    value[1] = max(0.0, value[1] - data.d) * data.v;
+    value[2] = max(0.0, value[2] - data.d) * data.v;
+    if (value[0] > data.k)
+        value[0] = data.k + knee(value[0] - data.k, 
+data.f);
+    if (value[1] > data.k)
+        value[1] = data.k + knee(value[1] - data.k, 
+data.f);
+    if (value[2] > data.k)
+        value[2] = data.k + knee(value[2] - data.k, 
+data.f);
+    if (value[0] > 0.0) value[0] = pow(value[0], 
+data.g);
+    if (value[1] > 0.0) value[1] = pow(value[1], 
+data.g);
+    if (value[2] > 0.0) value[2] = pow(value[2], 
+data.g);
+    float s = pow(2, -3.5 * data.g);
+    value[0] *= s;
+    value[1] *= s;
+    value[2] *= s;
+    return value;
+}
+
+vec4 normalizeFunc(vec4 value, Normalize data)
+{
+    value[0] = (value[0] - data.minimum[0]) / 
+(data.maximum[0] - data.minimum[0]);
+    value[1] = (value[1] - data.minimum[1]) / 
+(data.maximum[1] - data.minimum[1]);
+    value[2] = (value[2] - data.minimum[2]) / 
+(data.maximum[2] - data.minimum[2]);
+    value[3] = (value[3] - data.minimum[3]) / 
+(data.maximum[3] - data.minimum[3]);
+    return value;
+}
+
+{1}
+
+{2}
+
+{3}
+
+{4}
+
+void main()
+{
+    vec2 t = fTexture;
+    if (1 == ubo.mirrorX)
+    {
+        t.x = 1.0 - t.x;
+    }
+    if (1 == ubo.mirrorY)
+    {
+        t.y = 1.0 - t.y;
+    }
+
+    outColor = texture(textureSampler, t);
+
+    // Video levels.
+    if (VideoLevels_LegalRange == ubo.videoLevels)
+    {
+        const float scale = (940.0 - 64.0) / 1023.0;
+        const float offset = 64.0 / 1023.0;
+        outColor.r = outColor.r * scale + offset;
+        outColor.g = outColor.g * scale + offset;
+        outColor.b = outColor.b * scale + offset;
+    }
+
+    // Apply color tranform to linear space and LUT.
+    {5}
+    {6}
+
+    // Apply color transformations.
+    if (uboColor.data.enabled)
+    {
+        outColor = colorFunc(outColor, uboColor.data.add, uboColor.data.matrix);
+    }
+    if (uboColor.data.invert)
+    {
+        outColor.r = 1.0 - outColor.r;
+        outColor.g = 1.0 - outColor.g;
+        outColor.b = 1.0 - outColor.b;
+    }
+    if (uboEXRDisplay.data.enabled)
+    {
+        outColor = exrDisplayFunc(outColor, uboEXRDisplay.data);
+    }
+    if (ubo.softClip > 0.0)
+    {
+        outColor = softClipFunc(outColor, ubo.softClip);
+    }
+
+    // Call libplacebo tonemapping
+    {7}
+
+    // Apply OCIO Display/View.
+    {8}
+
+    if (uboLevels.data.enabled)
+    {
+        outColor = levelsFunc(outColor, uboLevels.data);
+    }
+    if (uboNormalize.data.enabled)
+    {
+        outColor = normalizeFunc(outColor, uboNormalize.data);
+    }
+    if (ubo.invalidValues)
+    {
+        if (outColor.r < 0.0 || outColor.r > 1.0 ||
+            outColor.g < 0.0 || outColor.g > 1.0 ||
+            outColor.b < 0.0 || outColor.b > 1.0 ||
+            outColor.a < 0.0 || outColor.a > 1.0)
+        {
+           outColor.r = 1.0f;
+           outColor.g *= 0.5f;
+           outColor.b *= 0.5f;
+        }
+    }
+    // Swizzle for the channels display.
+    if (Channels_Red == ubo.channels)
+    {
+        outColor.g = outColor.r;
+        outColor.b = outColor.r;
+    }
+    else if (Channels_Green == ubo.channels)
+    {
+        outColor.r = outColor.g;
+        outColor.b = outColor.g;
+    }
+    else if (Channels_Blue == ubo.channels)
+    {
+        outColor.r = outColor.b;
+        outColor.g = outColor.b;
+    }
+    else if (Channels_Alpha == ubo.channels)
+    {
+        outColor.r = outColor.a;
+        outColor.g = outColor.a;
+        outColor.b = outColor.a;
+    }
+    else if (Channels_Lumma == ubo.channels)
+    {
+        float t = (outColor.r + outColor.g + outColor.b) / 3.0;
+        outColor.r = t;
+        outColor.g = t;
+        outColor.b = t;
+    }
+})")
                 .arg(args[0])
                 .arg(args[1])
                 .arg(args[2])
@@ -596,23 +613,23 @@ namespace tl
 
         std::string differenceFragmentSource()
         {
-            return "#version 410\n"
-                   "\n"
-                   "in vec2 fTexture;\n"
-                   "out vec4 outColor;\n"
-                   "\n"
-                   "uniform sampler2D textureSampler;\n"
-                   "uniform sampler2D textureSamplerB;\n"
-                   "\n"
-                   "void main()\n"
-                   "{\n"
-                   "    vec4 c = texture(textureSampler, fTexture);\n"
-                   "    vec4 cB = texture(textureSamplerB, fTexture);\n"
-                   "    outColor.r = abs(c.r - cB.r);\n"
-                   "    outColor.g = abs(c.g - cB.g);\n"
-                   "    outColor.b = abs(c.b - cB.b);\n"
-                   "    outColor.a = max(c.a, cB.a);\n"
-                   "}\n";
+            return R"(#version 450
+                 
+layout(location = 0) in vec2 fTexture;
+layout(location = 1) out vec4 outColor;
+                 
+layout(binding = 0) uniform sampler2D textureSampler;
+layout(binding = 1) uniform sampler2D textureSamplerB;
+                 
+void main()
+{
+    vec4 c = texture(textureSampler, fTexture);
+    vec4 cB = texture(textureSamplerB, fTexture);
+    outColor.r = abs(c.r - cB.r);
+    outColor.g = abs(c.g - cB.g);
+    outColor.b = abs(c.b - cB.b);
+    outColor.a = max(c.a, cB.a);
+})";
         }
     } // namespace timeline_vlk
 } // namespace tl

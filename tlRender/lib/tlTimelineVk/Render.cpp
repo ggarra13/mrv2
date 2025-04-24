@@ -599,52 +599,52 @@ namespace tl
             if (!p.shaders["rect"])
             {
                 p.shaders["rect"] = vlk::Shader::create(
-                    ctx, vertexSource(), meshFragmentSource());
+                    ctx, vertexSource(), meshFragmentSource(), "rect");
             }
             if (!p.shaders["mesh"])
             {
                 p.shaders["mesh"] = vlk::Shader::create(
-                    ctx, vertexSource(), meshFragmentSource());
+                    ctx, vertexSource(), meshFragmentSource(), "mesh");
             }
             if (!p.shaders["colorMesh"])
             {
                 p.shaders["colorMesh"] = vlk::Shader::create(
-                    ctx, colorMeshVertexSource(), colorMeshFragmentSource());
+                    ctx, colorMeshVertexSource(), colorMeshFragmentSource(), "colorMesh");
             }
             if (!p.shaders["text"])
             {
                 p.shaders["text"] = vlk::Shader::create(
-                    ctx, vertexSource(), textFragmentSource());
+                    ctx, vertexSource(), textFragmentSource(), "text");
             }
             if (!p.shaders["texture"])
             {
                 p.shaders["texture"] = vlk::Shader::create(
-                    ctx, vertexSource(), textureFragmentSource());
+                    ctx, vertexSource(), textureFragmentSource(), "texture");
             }
             if (!p.shaders["image"])
             {
                 p.shaders["image"] = vlk::Shader::create(
-                    ctx, vertexSource(), imageFragmentSource());
+                    ctx, vertexSource(), imageFragmentSource(), "image");
             }
             if (!p.shaders["wipe"])
             {
                 p.shaders["wipe"] = vlk::Shader::create(
-                    ctx, vertexSource(), meshFragmentSource());
+                    ctx, vertexSource(), meshFragmentSource(), "wipe");
             }
             if (!p.shaders["overlay"])
             {
                 p.shaders["overlay"] = vlk::Shader::create(
-                    ctx, vertexSource(), textureFragmentSource());
+                    ctx, vertexSource(), textureFragmentSource(), "overlay");
             }
             if (!p.shaders["difference"])
             {
                 p.shaders["difference"] = vlk::Shader::create(
-                    ctx, vertexSource(), differenceFragmentSource());
+                    ctx, vertexSource(), differenceFragmentSource(), "difference");
             }
             if (!p.shaders["dissolve"])
             {
                 p.shaders["dissolve"] = vlk::Shader::create(
-                    ctx, vertexSource(), textureFragmentSource());
+                    ctx, vertexSource(), textureFragmentSource(), "dissolve");
             }
             _displayShader();
 
@@ -1395,10 +1395,7 @@ namespace tl
             p.hdrOptions = value;
 
 #if defined(TLRENDER_LIBPLACEBO)
-            if (p.hdrOptions.tonemap)
-            {
-                p.placeboData.reset(new LibPlaceboData);
-            }
+            p.placeboData.reset(new LibPlaceboData);
 #endif // TLRENDER_LIBPLACEBO
 
             p.shaders["display"].reset();
@@ -1438,452 +1435,455 @@ namespace tl
                 }
 #endif // TLRENDER_OCIO
 #if defined(TLRENDER_LIBPLACEBO)
-                pl_shader_params shader_params;
-                memset(&shader_params, 0, sizeof(pl_shader_params));
-
-                shader_params.id = 1;
-                shader_params.gpu = p.placeboData->gpu;
-                shader_params.dynamic_constants = false;
-
-                pl_shader shader =
-                    pl_shader_alloc(p.placeboData->log, &shader_params);
-                if (!shader)
+                if (p.placeboData)
                 {
-                    throw std::runtime_error("pl_shader_alloc failed!");
-                }
+                    pl_shader_params shader_params;
+                    memset(&shader_params, 0, sizeof(pl_shader_params));
 
-                pl_color_map_params cmap;
-                memset(&cmap, 0, sizeof(pl_color_map_params));
+                    shader_params.id = 1;
+                    shader_params.gpu = p.placeboData->gpu;
+                    shader_params.dynamic_constants = false;
 
-                // defaults, generates LUTs if state is set.
-                cmap.gamut_mapping = &pl_gamut_map_perceptual;
-
-                // PL_GAMUT_MAP_CONSTANTS is defined in wrong order for C++
-                cmap.gamut_constants = {0};
-                cmap.gamut_constants.perceptual_deadzone = 0.3F;
-                cmap.gamut_constants.perceptual_strength = 0.8F;
-                cmap.gamut_constants.colorimetric_gamma = 1.80f;
-                cmap.gamut_constants.softclip_knee = 0.70f;
-                cmap.gamut_constants.softclip_desat = 0.35f;
-
-                cmap.tone_mapping_function = nullptr;
-
-                cmap.tone_constants = {0};
-                cmap.tone_constants.knee_adaptation = 0.4f;
-                cmap.tone_constants.knee_minimum = 0.1f;
-                cmap.tone_constants.knee_maximum = 0.8f;
-                cmap.tone_constants.knee_default = 0.4f;
-                cmap.tone_constants.knee_offset = 1.0f;
-
-                cmap.tone_constants.slope_tuning = 1.5f;
-                cmap.tone_constants.slope_offset = 0.2f;
-
-                cmap.tone_constants.spline_contrast = 0.5f;
-
-                cmap.tone_constants.reinhard_contrast = 0.5f;
-                cmap.tone_constants.linear_knee = 0.3f;
-
-                cmap.tone_constants.exposure = 1.0f;
-
-                cmap.contrast_smoothness = 3.5f;
-
-                const image::HDRData& data = p.hdrOptions.hdrData;
-
-                pl_color_space src_colorspace;
-                memset(&src_colorspace, 0, sizeof(pl_color_space));
-
-                bool hasHDR = false;
-                switch (data.eotf)
-                {
-                case image::EOTFType::EOTF_BT2100_PQ: // PQ (HDR10)
-                case image::EOTFType::EOTF_BT2020:    // PQ (HDR10)
-                    src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
-                    src_colorspace.transfer = PL_COLOR_TRC_PQ;
-                    hasHDR = true;
-                    break;
-                case image::EOTFType::EOTF_BT2100_HLG: // HLG
-                    src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
-                    src_colorspace.transfer = PL_COLOR_TRC_HLG;
-                    hasHDR = true;
-                    break;
-                case image::EOTFType::EOTF_BT709:
-                    src_colorspace.primaries = PL_COLOR_PRIM_BT_709;
-                    src_colorspace.transfer = PL_COLOR_TRC_BT_1886;
-                    break;
-                case image::EOTFType::EOTF_BT601:
-                default:
-                    src_colorspace.primaries = PL_COLOR_PRIM_BT_709;
-                    src_colorspace.transfer = PL_COLOR_TRC_SRGB;
-                    break;
-                }
-
-                if (hasHDR)
-                {
-                    cmap.metadata = PL_HDR_METADATA_ANY;
-
-                    pl_hdr_metadata& hdr = src_colorspace.hdr;
-                    hdr.min_luma = data.displayMasteringLuminance.getMin();
-                    hdr.max_luma = data.displayMasteringLuminance.getMax();
-                    hdr.prim.red.x =
-                        data.primaries[image::HDRPrimaries::Red][0];
-                    hdr.prim.red.y =
-                        data.primaries[image::HDRPrimaries::Red][1];
-                    hdr.prim.green.x =
-                        data.primaries[image::HDRPrimaries::Green][0];
-                    hdr.prim.green.y =
-                        data.primaries[image::HDRPrimaries::Green][1];
-                    hdr.prim.blue.x =
-                        data.primaries[image::HDRPrimaries::Blue][0];
-                    hdr.prim.blue.y =
-                        data.primaries[image::HDRPrimaries::Blue][1];
-                    hdr.prim.white.x =
-                        data.primaries[image::HDRPrimaries::White][0];
-                    hdr.prim.white.y =
-                        data.primaries[image::HDRPrimaries::White][1];
-                    hdr.max_cll = data.maxCLL;
-                    hdr.max_fall = data.maxFALL;
-                    hdr.scene_max[0] = data.sceneMax[0];
-                    hdr.scene_max[1] = data.sceneMax[1];
-                    hdr.scene_max[2] = data.sceneMax[2];
-                    hdr.scene_avg = data.sceneAvg;
-                    hdr.ootf.target_luma = data.ootf.targetLuma;
-                    hdr.ootf.knee_x = data.ootf.kneeX;
-                    hdr.ootf.knee_y = data.ootf.kneeY;
-                    hdr.ootf.num_anchors = data.ootf.numAnchors;
-                    for (int i = 0; i < hdr.ootf.num_anchors; i++)
-                        hdr.ootf.anchors[i] = data.ootf.anchors[i];
-                }
-                else
-                {
-                    src_colorspace.primaries = PL_COLOR_PRIM_BT_709;
-
-                    // SDR uses sRGB-like gamma
-                    src_colorspace.transfer = PL_COLOR_TRC_SRGB; // right?
-                }
-
-                pl_color_space_infer(&src_colorspace);
-
-                pl_color_space dst_colorspace;
-                memset(&dst_colorspace, 0, sizeof(pl_color_space));
-
-                if (p.hdrMonitorFound)
-                {
-                    dst_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
-                    dst_colorspace.transfer = PL_COLOR_TRC_PQ;
-                    if (ctx.colorSpace ==
-                        VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
+                    pl_shader shader =
+                        pl_shader_alloc(p.placeboData->log, &shader_params);
+                    if (!shader)
                     {
-                        dst_colorspace.primaries = PL_COLOR_PRIM_DISPLAY_P3;
-                        dst_colorspace.transfer = PL_COLOR_TRC_BT_1886;
-                    }
-                    else if (ctx.colorSpace == VK_COLOR_SPACE_HDR10_HLG_EXT)
-                    {
-                        dst_colorspace.transfer = PL_COLOR_TRC_HLG;
-                    }
-                    else if (ctx.colorSpace == VK_COLOR_SPACE_DOLBYVISION_EXT)
-                    {
-                        // \@todo:  How to handle this?
-                        // PL_COLOR_TRC_DOLBYVISION does not exist.
-                        // dst_colorspace.transfer = ???
-                        dst_colorspace.transfer = PL_COLOR_TRC_PQ;
+                        throw std::runtime_error("pl_shader_alloc failed!");
                     }
 
-                    // For SDR content on HDR monitor, enable tone mapping
-                    // to fit SDR into HDR
-                    if (!hasHDR)
-                    {
-                        cmap.tone_mapping_function = &pl_tone_map_st2094_40;
-                        cmap.metadata = PL_HDR_METADATA_NONE; // Simplify
-                    }
-                    else
-                    {
-                        cmap.tone_mapping_function = &pl_tone_map_auto;
-                    }
-                }
-                else
-                {
-                    cmap.lut3d_size[0] = 48;
-                    cmap.lut3d_size[1] = 32;
-                    cmap.lut3d_size[2] = 256;
-                    cmap.lut_size = 256;
-                    cmap.visualize_rect.x0 = 0;
-                    cmap.visualize_rect.y0 = 0;
-                    cmap.visualize_rect.x1 = 1;
-                    cmap.visualize_rect.y1 = 1;
+                    pl_color_map_params cmap;
+                    memset(&cmap, 0, sizeof(pl_color_map_params));
+
+                    // defaults, generates LUTs if state is set.
+                    cmap.gamut_mapping = &pl_gamut_map_perceptual;
+
+                    // PL_GAMUT_MAP_CONSTANTS is defined in wrong order for C++
+                    cmap.gamut_constants = {0};
+                    cmap.gamut_constants.perceptual_deadzone = 0.3F;
+                    cmap.gamut_constants.perceptual_strength = 0.8F;
+                    cmap.gamut_constants.colorimetric_gamma = 1.80f;
+                    cmap.gamut_constants.softclip_knee = 0.70f;
+                    cmap.gamut_constants.softclip_desat = 0.35f;
+
+                    cmap.tone_mapping_function = nullptr;
+
+                    cmap.tone_constants = {0};
+                    cmap.tone_constants.knee_adaptation = 0.4f;
+                    cmap.tone_constants.knee_minimum = 0.1f;
+                    cmap.tone_constants.knee_maximum = 0.8f;
+                    cmap.tone_constants.knee_default = 0.4f;
+                    cmap.tone_constants.knee_offset = 1.0f;
+
+                    cmap.tone_constants.slope_tuning = 1.5f;
+                    cmap.tone_constants.slope_offset = 0.2f;
+
+                    cmap.tone_constants.spline_contrast = 0.5f;
+
+                    cmap.tone_constants.reinhard_contrast = 0.5f;
+                    cmap.tone_constants.linear_knee = 0.3f;
+
+                    cmap.tone_constants.exposure = 1.0f;
+
                     cmap.contrast_smoothness = 3.5f;
 
-                    dst_colorspace.primaries = PL_COLOR_PRIM_BT_709;
-                    dst_colorspace.transfer = PL_COLOR_TRC_BT_1886;
+                    const image::HDRData& data = p.hdrOptions.hdrData;
+
+                    pl_color_space src_colorspace;
+                    memset(&src_colorspace, 0, sizeof(pl_color_space));
+
+                    bool hasHDR = false;
+                    switch (data.eotf)
+                    {
+                    case image::EOTFType::EOTF_BT2100_PQ: // PQ (HDR10)
+                    case image::EOTFType::EOTF_BT2020:    // PQ (HDR10)
+                        src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
+                        src_colorspace.transfer = PL_COLOR_TRC_PQ;
+                        hasHDR = true;
+                        break;
+                    case image::EOTFType::EOTF_BT2100_HLG: // HLG
+                        src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
+                        src_colorspace.transfer = PL_COLOR_TRC_HLG;
+                        hasHDR = true;
+                        break;
+                    case image::EOTFType::EOTF_BT709:
+                        src_colorspace.primaries = PL_COLOR_PRIM_BT_709;
+                        src_colorspace.transfer = PL_COLOR_TRC_BT_1886;
+                        break;
+                    case image::EOTFType::EOTF_BT601:
+                    default:
+                        src_colorspace.primaries = PL_COLOR_PRIM_BT_709;
+                        src_colorspace.transfer = PL_COLOR_TRC_SRGB;
+                        break;
+                    }
 
                     if (hasHDR)
                     {
-                        switch (p.hdrOptions.algorithm)
+                        cmap.metadata = PL_HDR_METADATA_ANY;
+
+                        pl_hdr_metadata& hdr = src_colorspace.hdr;
+                        hdr.min_luma = data.displayMasteringLuminance.getMin();
+                        hdr.max_luma = data.displayMasteringLuminance.getMax();
+                        hdr.prim.red.x =
+                            data.primaries[image::HDRPrimaries::Red][0];
+                        hdr.prim.red.y =
+                            data.primaries[image::HDRPrimaries::Red][1];
+                        hdr.prim.green.x =
+                            data.primaries[image::HDRPrimaries::Green][0];
+                        hdr.prim.green.y =
+                            data.primaries[image::HDRPrimaries::Green][1];
+                        hdr.prim.blue.x =
+                            data.primaries[image::HDRPrimaries::Blue][0];
+                        hdr.prim.blue.y =
+                            data.primaries[image::HDRPrimaries::Blue][1];
+                        hdr.prim.white.x =
+                            data.primaries[image::HDRPrimaries::White][0];
+                        hdr.prim.white.y =
+                            data.primaries[image::HDRPrimaries::White][1];
+                        hdr.max_cll = data.maxCLL;
+                        hdr.max_fall = data.maxFALL;
+                        hdr.scene_max[0] = data.sceneMax[0];
+                        hdr.scene_max[1] = data.sceneMax[1];
+                        hdr.scene_max[2] = data.sceneMax[2];
+                        hdr.scene_avg = data.sceneAvg;
+                        hdr.ootf.target_luma = data.ootf.targetLuma;
+                        hdr.ootf.knee_x = data.ootf.kneeX;
+                        hdr.ootf.knee_y = data.ootf.kneeY;
+                        hdr.ootf.num_anchors = data.ootf.numAnchors;
+                        for (int i = 0; i < hdr.ootf.num_anchors; i++)
+                            hdr.ootf.anchors[i] = data.ootf.anchors[i];
+                    }
+                    else
+                    {
+                        src_colorspace.primaries = PL_COLOR_PRIM_BT_709;
+
+                        // SDR uses sRGB-like gamma
+                        src_colorspace.transfer = PL_COLOR_TRC_SRGB; // right?
+                    }
+
+                    pl_color_space_infer(&src_colorspace);
+
+                    pl_color_space dst_colorspace;
+                    memset(&dst_colorspace, 0, sizeof(pl_color_space));
+
+                    if (p.hdrMonitorFound)
+                    {
+                        dst_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
+                        dst_colorspace.transfer = PL_COLOR_TRC_PQ;
+                        if (ctx.colorSpace ==
+                            VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
                         {
-                        case timeline::HDRTonemapAlgorithm::Clip:
-                            break;
-                        case timeline::HDRTonemapAlgorithm::ST2094_10:
-                            cmap.tone_mapping_function = &pl_tone_map_st2094_10;
-                            break;
-                        case timeline::HDRTonemapAlgorithm::BT2390:
-                            cmap.tone_mapping_function = &pl_tone_map_bt2390;
-                            break;
-                        case timeline::HDRTonemapAlgorithm::BT2446A:
-                            cmap.tone_mapping_function = &pl_tone_map_bt2446a;
-                            break;
-                        case timeline::HDRTonemapAlgorithm::Spline:
-                            cmap.tone_mapping_function = &pl_tone_map_spline;
-                            break;
-                        case timeline::HDRTonemapAlgorithm::Reinhard:
-                            cmap.tone_mapping_function = &pl_tone_map_reinhard;
-                            break;
-                        case timeline::HDRTonemapAlgorithm::Mobius:
-                            cmap.tone_mapping_function = &pl_tone_map_mobius;
-                            break;
-                        case timeline::HDRTonemapAlgorithm::Hable:
-                            cmap.tone_mapping_function = &pl_tone_map_hable;
-                            break;
-                        case timeline::HDRTonemapAlgorithm::Gamma:
-                            cmap.tone_mapping_function = &pl_tone_map_gamma;
-                            break;
-                        case timeline::HDRTonemapAlgorithm::Linear:
-                            cmap.tone_mapping_function = &pl_tone_map_linear;
-                            break;
-                        case timeline::HDRTonemapAlgorithm::LinearLight:
-                            cmap.tone_mapping_function =
-                                &pl_tone_map_linear_light;
-                            break;
-                        case timeline::HDRTonemapAlgorithm::ST2094_40:
-                        default:
+                            dst_colorspace.primaries = PL_COLOR_PRIM_DISPLAY_P3;
+                            dst_colorspace.transfer = PL_COLOR_TRC_BT_1886;
+                        }
+                        else if (ctx.colorSpace == VK_COLOR_SPACE_HDR10_HLG_EXT)
+                        {
+                            dst_colorspace.transfer = PL_COLOR_TRC_HLG;
+                        }
+                        else if (ctx.colorSpace == VK_COLOR_SPACE_DOLBYVISION_EXT)
+                        {
+                            // \@todo:  How to handle this?
+                            // PL_COLOR_TRC_DOLBYVISION does not exist.
+                            // dst_colorspace.transfer = ???
+                            dst_colorspace.transfer = PL_COLOR_TRC_PQ;
+                        }
+
+                        // For SDR content on HDR monitor, enable tone mapping
+                        // to fit SDR into HDR
+                        if (!hasHDR)
+                        {
                             cmap.tone_mapping_function = &pl_tone_map_st2094_40;
-                            break;
+                            cmap.metadata = PL_HDR_METADATA_NONE; // Simplify
+                        }
+                        else
+                        {
+                            cmap.tone_mapping_function = &pl_tone_map_auto;
                         }
                     }
                     else
                     {
-                        cmap.tone_mapping_function = nullptr;
-                    }
-                }
+                        cmap.lut3d_size[0] = 48;
+                        cmap.lut3d_size[1] = 32;
+                        cmap.lut3d_size[2] = 256;
+                        cmap.lut_size = 256;
+                        cmap.visualize_rect.x0 = 0;
+                        cmap.visualize_rect.y0 = 0;
+                        cmap.visualize_rect.x1 = 1;
+                        cmap.visualize_rect.y1 = 1;
+                        cmap.contrast_smoothness = 3.5f;
 
-                pl_color_space_infer(&dst_colorspace);
+                        dst_colorspace.primaries = PL_COLOR_PRIM_BT_709;
+                        dst_colorspace.transfer = PL_COLOR_TRC_BT_1886;
 
-                pl_color_map_args color_map_args;
-                memset(&color_map_args, 0, sizeof(pl_color_map_args));
-
-                color_map_args.src = src_colorspace;
-                color_map_args.dst = dst_colorspace;
-                color_map_args.prelinearized = false;
-
-                pl_shader_obj state = NULL;
-                color_map_args.state = &state;
-
-                pl_shader_color_map_ex(shader, &cmap, &color_map_args);
-
-                const pl_shader_res* res = pl_shader_finalize(shader);
-                if (!res)
-                {
-                    pl_shader_free(&shader);
-                    throw std::runtime_error("pl_shader_finalize failed!");
-                }
-
-                std::stringstream s;
-
-                // std::cerr << "num_vertex_attribs=" <<
-                // res->num_vertex_attribs
-                //           << std::endl
-                //           << "num_descriptors="
-                //           << res->num_descriptors << std::endl
-                //           << "num_variables=" << res->num_variables
-                //           << std::endl
-                //           << "num_constants="
-                //           << res->num_constants << std::endl;
-
-                for (int i = 0; i < res->num_descriptors; i++)
-                {
-                    const pl_shader_desc* sd = &res->descriptors[i];
-                    const pl_desc* desc = &sd->desc;
-                    switch (desc->type)
-                    {
-                    case PL_DESC_SAMPLED_TEX:
-                    case PL_DESC_STORAGE_IMG:
-                    {
-                        static const char* types[] = {
-                            "sampler1D",
-                            "sampler2D",
-                            "sampler3D",
-                        };
-
-                        pl_desc_binding binding = sd->binding;
-                        pl_tex tex = (pl_tex)binding.object;
-                        int dims = pl_tex_params_dimension(tex->params);
-                        const char* type = types[dims - 1];
-
-                        char prefix = ' ';
-                        switch (tex->params.format->type)
+                        if (hasHDR)
                         {
-                        case PL_FMT_UINT:
-                            prefix = 'u';
-                            break;
-                        case PL_FMT_SINT:
-                            prefix = 'i';
-                            break;
-                        case PL_FMT_FLOAT:
-                        case PL_FMT_UNORM:
-                        case PL_FMT_SNORM:
-                        default:
-                            break;
-                        }
-
-                        s << "layout(binding=" << (i + 1) << ") uniform "
-                          << prefix << type << " " << desc->name << ";"
-                          << std::endl;
-                        break;
-                    }
-                    case PL_DESC_BUF_UNIFORM:
-                        throw "buf uniform";
-                        break;
-                    case PL_DESC_BUF_STORAGE:
-                        throw "buf storage";
-                    case PL_DESC_BUF_TEXEL_UNIFORM:
-                        throw "buf texel uniform";
-                    case PL_DESC_BUF_TEXEL_STORAGE:
-                        throw "buf texel storage";
-                    case PL_DESC_INVALID:
-                    case PL_DESC_TYPE_COUNT:
-                        throw "invalid or count";
-                        break;
-                    }
-                }
-
-                s << "//" << std::endl
-                  << "// Variables" << "//" << std::endl
-                  << std::endl;
-                // \@todo: add uniform bindings
-                // s << "layout(binding = 2) uniform UBO {\n";
-                for (int i = 0; i < res->num_variables; ++i)
-                {
-                    const struct pl_shader_var shader_var = res->variables[i];
-                    const struct pl_var var = shader_var.var;
-                    std::string glsl_type = pl_var_glsl_type_name(var);
-                    s << "const " << glsl_type << " " << var.name;
-                    if (!shader_var.data)
-                    {
-                        s << ";" << std::endl;
-                    }
-                    else
-                    {
-                        int dim_v = var.dim_v;
-                        int dim_m = var.dim_m;
-                        switch (var.type)
-                        {
-                        case PL_VAR_SINT:
-                        {
-                            int* m = (int*)shader_var.data;
-                            s << " = " << m[0] << ";" << std::endl;
-                            break;
-                        }
-                        case PL_VAR_UINT:
-                        {
-                            unsigned* m = (unsigned*)shader_var.data;
-                            s << " = " << m[0] << ";" << std::endl;
-                            break;
-                        }
-                        case PL_VAR_FLOAT:
-                        {
-                            float* m = (float*)shader_var.data;
-                            if (dim_m > 1 && dim_v > 1)
+                            switch (p.hdrOptions.algorithm)
                             {
-                                s << " = " << glsl_type << "(";
-                                for (int c = 0; c < dim_v; ++c)
+                            case timeline::HDRTonemapAlgorithm::Clip:
+                                break;
+                            case timeline::HDRTonemapAlgorithm::ST2094_10:
+                                cmap.tone_mapping_function = &pl_tone_map_st2094_10;
+                                break;
+                            case timeline::HDRTonemapAlgorithm::BT2390:
+                                cmap.tone_mapping_function = &pl_tone_map_bt2390;
+                                break;
+                            case timeline::HDRTonemapAlgorithm::BT2446A:
+                                cmap.tone_mapping_function = &pl_tone_map_bt2446a;
+                                break;
+                            case timeline::HDRTonemapAlgorithm::Spline:
+                                cmap.tone_mapping_function = &pl_tone_map_spline;
+                                break;
+                            case timeline::HDRTonemapAlgorithm::Reinhard:
+                                cmap.tone_mapping_function = &pl_tone_map_reinhard;
+                                break;
+                            case timeline::HDRTonemapAlgorithm::Mobius:
+                                cmap.tone_mapping_function = &pl_tone_map_mobius;
+                                break;
+                            case timeline::HDRTonemapAlgorithm::Hable:
+                                cmap.tone_mapping_function = &pl_tone_map_hable;
+                                break;
+                            case timeline::HDRTonemapAlgorithm::Gamma:
+                                cmap.tone_mapping_function = &pl_tone_map_gamma;
+                                break;
+                            case timeline::HDRTonemapAlgorithm::Linear:
+                                cmap.tone_mapping_function = &pl_tone_map_linear;
+                                break;
+                            case timeline::HDRTonemapAlgorithm::LinearLight:
+                                cmap.tone_mapping_function =
+                                    &pl_tone_map_linear_light;
+                                break;
+                            case timeline::HDRTonemapAlgorithm::ST2094_40:
+                            default:
+                                cmap.tone_mapping_function = &pl_tone_map_st2094_40;
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            cmap.tone_mapping_function = nullptr;
+                        }
+                    }
+
+                    pl_color_space_infer(&dst_colorspace);
+
+                    pl_color_map_args color_map_args;
+                    memset(&color_map_args, 0, sizeof(pl_color_map_args));
+
+                    color_map_args.src = src_colorspace;
+                    color_map_args.dst = dst_colorspace;
+                    color_map_args.prelinearized = false;
+
+                    pl_shader_obj state = NULL;
+                    color_map_args.state = &state;
+
+                    pl_shader_color_map_ex(shader, &cmap, &color_map_args);
+
+                    const pl_shader_res* res = pl_shader_finalize(shader);
+                    if (!res)
+                    {
+                        pl_shader_free(&shader);
+                        throw std::runtime_error("pl_shader_finalize failed!");
+                    }
+
+                    std::stringstream s;
+
+                    // std::cerr << "num_vertex_attribs=" <<
+                    // res->num_vertex_attribs
+                    //           << std::endl
+                    //           << "num_descriptors="
+                    //           << res->num_descriptors << std::endl
+                    //           << "num_variables=" << res->num_variables
+                    //           << std::endl
+                    //           << "num_constants="
+                    //           << res->num_constants << std::endl;
+
+                    for (int i = 0; i < res->num_descriptors; i++)
+                    {
+                        const pl_shader_desc* sd = &res->descriptors[i];
+                        const pl_desc* desc = &sd->desc;
+                        switch (desc->type)
+                        {
+                        case PL_DESC_SAMPLED_TEX:
+                        case PL_DESC_STORAGE_IMG:
+                        {
+                            static const char* types[] = {
+                                "sampler1D",
+                                "sampler2D",
+                                "sampler3D",
+                            };
+
+                            pl_desc_binding binding = sd->binding;
+                            pl_tex tex = (pl_tex)binding.object;
+                            int dims = pl_tex_params_dimension(tex->params);
+                            const char* type = types[dims - 1];
+
+                            char prefix = ' ';
+                            switch (tex->params.format->type)
+                            {
+                            case PL_FMT_UINT:
+                                prefix = 'u';
+                                break;
+                            case PL_FMT_SINT:
+                                prefix = 'i';
+                                break;
+                            case PL_FMT_FLOAT:
+                            case PL_FMT_UNORM:
+                            case PL_FMT_SNORM:
+                            default:
+                                break;
+                            }
+
+                            s << "layout(binding=" << (i + 1) << ") uniform "
+                              << prefix << type << " " << desc->name << ";"
+                              << std::endl;
+                            break;
+                        }
+                        case PL_DESC_BUF_UNIFORM:
+                            throw "buf uniform";
+                            break;
+                        case PL_DESC_BUF_STORAGE:
+                            throw "buf storage";
+                        case PL_DESC_BUF_TEXEL_UNIFORM:
+                            throw "buf texel uniform";
+                        case PL_DESC_BUF_TEXEL_STORAGE:
+                            throw "buf texel storage";
+                        case PL_DESC_INVALID:
+                        case PL_DESC_TYPE_COUNT:
+                            throw "invalid or count";
+                            break;
+                        }
+                    }
+
+                    s << "//" << std::endl
+                      << "// Variables" << "//" << std::endl
+                      << std::endl;
+                    // \@todo: add uniform bindings
+                    // s << "layout(binding = 2) uniform UBO {\n";
+                    for (int i = 0; i < res->num_variables; ++i)
+                    {
+                        const struct pl_shader_var shader_var = res->variables[i];
+                        const struct pl_var var = shader_var.var;
+                        std::string glsl_type = pl_var_glsl_type_name(var);
+                        s << "const " << glsl_type << " " << var.name;
+                        if (!shader_var.data)
+                        {
+                            s << ";" << std::endl;
+                        }
+                        else
+                        {
+                            int dim_v = var.dim_v;
+                            int dim_m = var.dim_m;
+                            switch (var.type)
+                            {
+                            case PL_VAR_SINT:
+                            {
+                                int* m = (int*)shader_var.data;
+                                s << " = " << m[0] << ";" << std::endl;
+                                break;
+                            }
+                            case PL_VAR_UINT:
+                            {
+                                unsigned* m = (unsigned*)shader_var.data;
+                                s << " = " << m[0] << ";" << std::endl;
+                                break;
+                            }
+                            case PL_VAR_FLOAT:
+                            {
+                                float* m = (float*)shader_var.data;
+                                if (dim_m > 1 && dim_v > 1)
                                 {
-                                    for (int r = 0; r < dim_m; ++r)
+                                    s << " = " << glsl_type << "(";
+                                    for (int c = 0; c < dim_v; ++c)
                                     {
-                                        int index = c * dim_m + r;
-                                        s << m[index];
+                                        for (int r = 0; r < dim_m; ++r)
+                                        {
+                                            int index = c * dim_m + r;
+                                            s << m[index];
+
+                                            // Check if it's the last element
+                                            if (!(r == dim_m - 1 && c == dim_v - 1))
+                                            {
+                                                s << ", ";
+                                            }
+                                        }
+                                    }
+                                    s << ");" << std::endl;
+                                }
+                                else if (dim_v > 1)
+                                {
+                                    s << " = " << glsl_type << "(";
+                                    for (int c = 0; c < dim_v; ++c)
+                                    {
+                                        s << m[c];
 
                                         // Check if it's the last element
-                                        if (!(r == dim_m - 1 && c == dim_v - 1))
+                                        if (!(c == dim_v - 1))
                                         {
                                             s << ", ";
                                         }
                                     }
+                                    s << ");" << std::endl;
                                 }
-                                s << ");" << std::endl;
-                            }
-                            else if (dim_v > 1)
-                            {
-                                s << " = " << glsl_type << "(";
-                                for (int c = 0; c < dim_v; ++c)
+                                else
                                 {
-                                    s << m[c];
-
-                                    // Check if it's the last element
-                                    if (!(c == dim_v - 1))
-                                    {
-                                        s << ", ";
-                                    }
+                                    s << " = " << m[0] << ";" << std::endl;
                                 }
-                                s << ");" << std::endl;
+                                break;
                             }
-                            else
-                            {
-                                s << " = " << m[0] << ";" << std::endl;
+                            default:
+                                break;
                             }
-                            break;
                         }
+                    }
+
+                    s << std::endl
+                      << "//" << std::endl
+                      << "// Constants" << std::endl
+                      << "//" << std::endl
+                      << std::endl;
+                    for (int i = 0; i < res->num_constants; ++i)
+                    {
+                        // s << "layout(constant_id=" << i << ") ";
+                        const struct pl_shader_const constant = res->constants[i];
+                        switch (constant.type)
+                        {
+                        case PL_VAR_SINT:
+                            s << "const int " << constant.name << " = "
+                              << *(reinterpret_cast<const int*>(constant.data));
+                            break;
+                        case PL_VAR_UINT:
+                            s << "const uint " << constant.name << " = "
+                              << *(reinterpret_cast<const unsigned*>(
+                                       constant.data));
+                            break;
+                        case PL_VAR_FLOAT:
+                            s << "const float " << constant.name << " = "
+                              << *(reinterpret_cast<const float*>(constant.data));
+                            break;
                         default:
                             break;
                         }
+                        s << ";" << std::endl;
                     }
-                }
 
-                s << std::endl
-                  << "//" << std::endl
-                  << "// Constants" << std::endl
-                  << "//" << std::endl
-                  << std::endl;
-                for (int i = 0; i < res->num_constants; ++i)
-                {
-                    // s << "layout(constant_id=" << i << ") ";
-                    const struct pl_shader_const constant = res->constants[i];
-                    switch (constant.type)
+                    s << res->glsl << std::endl;
+                    toneMapDef = s.str();
+
+                    try
                     {
-                    case PL_VAR_SINT:
-                        s << "const int " << constant.name << " = "
-                          << *(reinterpret_cast<const int*>(constant.data));
-                        break;
-                    case PL_VAR_UINT:
-                        s << "const uint " << constant.name << " = "
-                          << *(reinterpret_cast<const unsigned*>(
-                                 constant.data));
-                        break;
-                    case PL_VAR_FLOAT:
-                        s << "const float " << constant.name << " = "
-                          << *(reinterpret_cast<const float*>(constant.data));
-                        break;
-                    default:
-                        break;
+                        _addTextures(p.placeboData->textures, res);
                     }
-                    s << ";" << std::endl;
-                }
+                    catch (const std::exception& e)
+                    {
+                        std::cerr << e.what() << std::endl;
+                        pl_shader_free(&shader);
+                        return;
+                    }
+                    toneMap = "outColor = ";
+                    toneMap += res->name;
+                    toneMap += "(tmp);\n";
 
-                s << res->glsl << std::endl;
-                toneMapDef = s.str();
-
-                try
-                {
-                    _addTextures(p.placeboData->textures, res);
-                }
-                catch (const std::exception& e)
-                {
-                    std::cerr << e.what() << std::endl;
                     pl_shader_free(&shader);
-                    return;
                 }
-                toneMap = "outColor = ";
-                toneMap += res->name;
-                toneMap += "(tmp);\n";
-
-                pl_shader_free(&shader);
 #endif
                 const std::string source = displayFragmentSource(
                     ocioICSDef, ocioICS, ocioDef, ocio, lutDef, lut,
@@ -1893,7 +1893,7 @@ namespace tl
                     context->log("tl::vlk::GLRender", "Creating display shader");
                 }
                 p.shaders["display"] =
-                    vlk::Shader::create(ctx, vertexSource(), source);
+                    vlk::Shader::create(ctx, vertexSource(), source, "display");
             }
             p.shaders["display"]->bind();
             p.shaders["display"]->setUniform(
@@ -1922,13 +1922,16 @@ namespace tl
             }
 #endif // TLRENDER_OCIO
 #if defined(TLRENDER_LIBPLACEBO)
-            for (size_t i = 0; i < p.placeboData->textures.size(); ++i)
+            if (p.placeboData)
             {
-                p.shaders["display"]->setUniform(
-                    p.placeboData->textures[i].samplerName,
-                    static_cast<int>(texturesOffset + i));
+                for (size_t i = 0; i < p.placeboData->textures.size(); ++i)
+                {
+                    p.shaders["display"]->setUniform(
+                        p.placeboData->textures[i].samplerName,
+                        static_cast<int>(texturesOffset + i));
+                }
+                texturesOffset += p.placeboData->textures.size();
             }
-            texturesOffset += p.placeboData->textures.size();
 #endif
         }
     } // namespace timeline_vlk

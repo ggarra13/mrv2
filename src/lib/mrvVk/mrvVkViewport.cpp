@@ -135,14 +135,15 @@ namespace mrv
                 try
                 {
                     const std::string& vertexSource = timeline_vlk::vertexSource();
-                    vk.shader =
-                        vlk::Shader::create(ctx, vertexSource,
-                                            textureFragmentSource(),
-                                            "composite");
-                    vk.annotationShader = vlk::Shader::create(ctx,
-                                                              vertexSource,
-                                                              annotationFragmentSource(),
-                                                              "annotation");
+                    vk.shader = vlk::Shader::create(ctx,
+                                                    vertexSource,
+                                                    textureFragmentSource(),
+                                                    "composite");
+                    vk.annotationShader =
+                        vlk::Shader::create(ctx,
+                                            vertexSource,
+                                            annotationFragmentSource(),
+                                            "annotation");
                 }
                 catch (const std::exception& e)
                 {
