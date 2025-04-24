@@ -12,24 +12,19 @@ namespace tl
     {
         std::string vertexSource()
         {
-            return "#version 410\n"
-                   "\n"
-                   "in vec3 vPos;\n"
-                   "in vec2 vTexture;\n"
-                   "out vec2 fTexture;\n"
-                   "\n"
-                   "struct Transform\n"
-                   "{\n"
-                   "    mat4 mvp;\n"
-                   "};\n"
-                   "\n"
-                   "uniform Transform transform;\n"
-                   "\n"
-                   "void main()\n"
-                   "{\n"
-                   "    gl_Position = transform.mvp * vec4(vPos, 1.0);\n"
-                   "    fTexture = vTexture;\n"
-                   "}\n";
+            return R"(#version 450
+                   layout(location = 0) in vec3 vPos;
+                   layout(location = 1) in vec2 vTexture;
+                   layout(location = 0) out vec2 fTexture;
+                   layout(set = 0, binding = 0, std140) uniform Transform {
+                      mat4 mvp;
+                    } transform;
+
+                   void main()
+                   {
+                       gl_Position = transform.mvp * vec4(vPos, 1.0);
+                       fTexture = vTexture;
+                   })";
         }
 
         std::string meshFragmentSource()

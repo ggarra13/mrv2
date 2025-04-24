@@ -18,6 +18,7 @@ namespace tl
     {
         struct Shader::Private
         {
+            std::string name;
             std::string vertexSource;
             std::string fragmentSource;
             VkShaderModule vertex = VK_NULL_HANDLE;
@@ -40,7 +41,9 @@ namespace tl
             }
             catch (const std::exception& e)
             {
-                std::cerr << e.what() << std::endl;
+                std::cerr << p.name << " failed compilation " << std::endl
+                          << e.what() << " for " << std::endl
+                          << p.vertexSource << std::endl;
                 p.vertex = VK_NULL_HANDLE;
             }
 
@@ -57,7 +60,9 @@ namespace tl
             }
             catch (const std::exception& e)
             {
-                std::cerr << e.what() << std::endl;
+                std::cerr << p.name << " failed compilation " << std::endl
+                          << e.what() << " for " << std::endl
+                          << p.fragmentSource << std::endl;
                 p.fragment = VK_NULL_HANDLE;
             }
         }
@@ -96,11 +101,12 @@ namespace tl
 
         std::shared_ptr<Shader> Shader::create(
             Fl_Vk_Context& ctx, const std::string& vertexSource,
-            const std::string& fragmentSource)
+            const std::string& fragmentSource, const std::string& name)
         {
             auto out = std::shared_ptr<Shader>(new Shader(ctx));
             out->_p->vertexSource = vertexSource;
             out->_p->fragmentSource = fragmentSource;
+            out->_p->name = name;
             out->_init();
             return out;
         }

@@ -28,10 +28,10 @@ namespace mrv
             ~Viewport();
         
             //! Virual draw method
-            void draw() override;
+            void draw() FL_OVERRIDE;
 
             //! Virtual handle event method
-            int handle(int event) override;
+            int handle(int event) FL_OVERRIDE;
 
             //! Set the internal system context for the widget.
             void setContext(const std::weak_ptr<system::Context>& context);

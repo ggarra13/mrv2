@@ -82,11 +82,14 @@ namespace mrv
 
         void Viewport::prepare()
         {
+            _initializeVK();
             VkWindow::prepare();
         }
     
         void Viewport::destroy_resources()
         {
+            refresh();
+            
             VkWindow::destroy_resources();
         }
     
@@ -134,9 +137,12 @@ namespace mrv
                     const std::string& vertexSource = timeline_vlk::vertexSource();
                     vk.shader =
                         vlk::Shader::create(ctx, vertexSource,
-                                           textureFragmentSource());
+                                            textureFragmentSource(),
+                                            "composite");
                     vk.annotationShader = vlk::Shader::create(ctx,
-                                                             vertexSource, annotationFragmentSource());
+                                                              vertexSource,
+                                                              annotationFragmentSource(),
+                                                              "annotation");
                 }
                 catch (const std::exception& e)
                 {
@@ -174,20 +180,6 @@ namespace mrv
             TLRENDER_P();
             MRV2_VK();
 
-            return VkWindow::draw();
-            
-            if (!valid())
-            {
-                _initializeVK();
-            
-
-                if (p.ui->uiPrefs->uiPrefsOpenGLVsync->value() ==
-                    MonitorVSync::kVSyncNone)
-                    swap_interval(0);
-                else
-                    swap_interval(1);
-            }
-        
 
             const auto& viewportSize = getViewportSize();
             const auto& renderSize = getRenderSize();

@@ -37,7 +37,8 @@ namespace tl
             //! Create a new shader.
             static std::shared_ptr<Shader> create(
                 Fl_Vk_Context& ctx, const std::string& vertexSource,
-                const std::string& fragmentSource);
+                const std::string& fragmentSource,
+                const std::string& name = "");
 
             //! Get the vertex shader source.
             const std::string& getVertexSource() const;

@@ -27,17 +27,19 @@ namespace mrv
         VkWindow::VkWindow(int X, int Y, int W, int H, const char* L) :
             Fl_Vk_Window(X, Y, W, H, L)
         {
-            m_validate = true;
-
-            m_frag_shader = m_vert_shader = VK_NULL_HANDLE;
+            _init();
         }
 
         VkWindow::VkWindow(int W, int H, const char* L) :
             Fl_Vk_Window(W, H, L)
         {
+            _init();
+        }
+
+        void VkWindow::_init()
+        {
             m_validate = true;
         }
-        
 
 
         // m_depth (optionally) -> creates m_renderPass
@@ -115,12 +117,6 @@ namespace mrv
             VkResult result;
             result = vkCreateRenderPass(device(), &rp_info, NULL, &m_renderPass);
             VK_CHECK(result);
-        }
-        
-
-        void VkWindow::prepare()
-        {
-            prepare_render_pass();
         }
 
 
