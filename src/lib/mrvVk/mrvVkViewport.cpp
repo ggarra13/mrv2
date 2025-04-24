@@ -186,8 +186,6 @@ namespace mrv
                     swap_interval(0);
                 else
                     swap_interval(1);
-
-                valid(1);
             }
         
 
@@ -287,7 +285,7 @@ namespace mrv
                         vk.buffer = vlk::OffscreenBuffer::create(
                             ctx, renderSize, offscreenBufferOptions);
                     
-                        _createPBOs(renderSize);
+                        //_createPBOs(renderSize);
                     
                     }
                 
