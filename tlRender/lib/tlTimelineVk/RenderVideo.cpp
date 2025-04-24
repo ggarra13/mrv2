@@ -101,12 +101,14 @@ namespace tl
                     mesh.v.push_back(math::Vector2f(box.max.x, box.min.y));
                     mesh.v.push_back(math::Vector2f(box.max.x, box.max.y));
                     mesh.v.push_back(math::Vector2f(box.min.x, box.max.y));
-                    mesh.c.push_back(math::Vector4f(
-                        options.color0.r, options.color0.g, options.color0.b,
-                        options.color0.a));
-                    mesh.c.push_back(math::Vector4f(
-                        options.color1.r, options.color1.g, options.color1.b,
-                        options.color1.a));
+                    mesh.c.push_back(
+                        math::Vector4f(
+                            options.color0.r, options.color0.g,
+                            options.color0.b, options.color0.a));
+                    mesh.c.push_back(
+                        math::Vector4f(
+                            options.color1.r, options.color1.g,
+                            options.color1.b, options.color1.a));
                     mesh.triangles.push_back({
                         geom::Vertex2(1, 0, 1),
                         geom::Vertex2(2, 0, 1),
@@ -369,7 +371,8 @@ namespace tl
                 if (p.buffers["overlay"])
                 {
                     // glBlendFuncSeparate(
-                    //     GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
+                    //     GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
+                    //     GL_ONE);
 
                     // glViewport(
                     //     p.viewport.x(),
@@ -491,7 +494,8 @@ namespace tl
                         // gl::OffscreenBufferBinding binding(
                         //     p.buffers["difference1"]);
                         // glViewport(
-                        //     0, 0, offscreenBufferSize.w, offscreenBufferSize.h);
+                        //     0, 0, offscreenBufferSize.w,
+                        //     offscreenBufferSize.h);
                         // glClearColor(0.F, 0.F, 0.F, 0.F);
                         // glClear(GL_COLOR_BUFFER_BIT);
 
@@ -538,11 +542,13 @@ namespace tl
 
                     // glActiveTexture(static_cast<GLenum>(GL_TEXTURE0));
                     // glBindTexture(
-                    //     GL_TEXTURE_2D, p.buffers["difference0"]->getColorID());
+                    //     GL_TEXTURE_2D,
+                    //     p.buffers["difference0"]->getColorID());
 
                     // glActiveTexture(static_cast<GLenum>(GL_TEXTURE1));
                     // glBindTexture(
-                    //     GL_TEXTURE_2D, p.buffers["difference1"]->getColorID());
+                    //     GL_TEXTURE_2D,
+                    //     p.buffers["difference1"]->getColorID());
 
                     if (p.vbos["video"])
                     {
@@ -626,7 +632,8 @@ namespace tl
                 0.F, static_cast<float>(box.w()), static_cast<float>(box.h()),
                 0.F, -1.F, 1.F);
             p.shaders["image"]->bind();
-            p.shaders["image"]->setUniform("transform.mvp", transform);
+            p.shaders["image"]->setUniform(
+                "transform.mvp", transform, VK_SHADER_STAGE_VERTEX_BIT);
 
             const math::Size2i& offscreenBufferSize = box.getSize();
             vk::OffscreenBufferOptions offscreenBufferOptions;
@@ -642,11 +649,12 @@ namespace tl
 
             if (p.buffers["video"])
             {
-                // const gl::SetAndRestore scissorTest(GL_SCISSOR_TEST, GL_FALSE);
+                // const gl::SetAndRestore scissorTest(GL_SCISSOR_TEST,
+                // GL_FALSE);
 
                 // gl::OffscreenBufferBinding binding(p.buffers["video"]);
-                // glViewport(0, 0, offscreenBufferSize.w, offscreenBufferSize.h);
-                // glClearColor(0.F, 0.F, 0.F, 0.F);
+                // glViewport(0, 0, offscreenBufferSize.w,
+                // offscreenBufferSize.h); glClearColor(0.F, 0.F, 0.F, 0.F);
                 // glClear(GL_COLOR_BUFFER_BIT);
 
                 for (const auto& layer : videoData.layers)
@@ -733,7 +741,8 @@ namespace tl
 
                                 p.shaders["dissolve"]->bind();
                                 p.shaders["dissolve"]->setUniform(
-                                    "transform.mvp", transform);
+                                    "transform.mvp", transform,
+                                    VK_SHADER_STAGE_VERTEX_BIT);
                                 p.shaders["dissolve"]->setUniform(
                                     "color", image::Color4f(1.F, 1.F, 1.F));
                                 p.shaders["dissolve"]->setUniform(
@@ -925,7 +934,8 @@ namespace tl
                     "invalidValues", displayOptions.invalidValues);
 
                 // glActiveTexture(static_cast<GLenum>(GL_TEXTURE0));
-                // glBindTexture(GL_TEXTURE_2D, p.buffers["video"]->getColorID());
+                // glBindTexture(GL_TEXTURE_2D,
+                // p.buffers["video"]->getColorID());
                 size_t texturesOffset = 1;
 #if defined(TLRENDER_OCIO)
                 if (p.ocioData)
@@ -979,7 +989,8 @@ namespace tl
             }
 
             p.shaders["image"]->bind();
-            p.shaders["image"]->setUniform("transform.mvp", p.transform);
+            p.shaders["image"]->setUniform(
+                "transform.mvp", p.transform, VK_SHADER_STAGE_VERTEX_BIT);
         }
-    } // namespace timeline_tk
+    } // namespace timeline_vk
 } // namespace tl

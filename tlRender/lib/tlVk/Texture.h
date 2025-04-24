@@ -39,6 +39,11 @@ namespace tl
             void
             _init(const image::Info&, const TextureOptions& = TextureOptions());
 
+            void _init(
+                const uint32_t width, const uint32_t height,
+                const uint32_t depth, const VkFormat format,
+                const TextureOptions& = TextureOptions());
+
             Texture(Fl_Vk_Context& ctx);
 
         public:
@@ -47,6 +52,12 @@ namespace tl
             //! Create a new texture.
             static std::shared_ptr<Texture> create(
                 Fl_Vk_Context& ctx, const image::Info&,
+                const TextureOptions& = TextureOptions());
+
+            static std::shared_ptr<Texture> create(
+                Fl_Vk_Context& ctx, const VkImageType type,
+                const uint32_t width, const uint32_t height,
+                const uint32_t depth, const VkFormat format,
                 const TextureOptions& = TextureOptions());
 
             //! Get the Vulkan texture ID.
@@ -64,6 +75,9 @@ namespace tl
             //! Get the height.
             int getHeight() const;
 
+            //! Get the depth.
+            int getDepth() const;
+
             //! Get the pixel type.
             image::PixelType getPixelType() const;
 
@@ -74,14 +88,37 @@ namespace tl
             void copy(const std::shared_ptr<image::Image>&);
             void copy(const std::shared_ptr<image::Image>&, int x, int y);
             void copy(const uint8_t*, const image::Info&);
+            void copy(const uint8_t*, const std::size_t);
 
             ///@}
+
+            // void upload(const void* data, size_t size);
+
+            void transition(
+                VkImageLayout newLayout, VkAccessFlags srcAccess,
+                VkPipelineStageFlags srcStage, VkAccessFlags dstAccess,
+                VkPipelineStageFlags dstStage);
+
+            VkDescriptorImageInfo getDescriptorInfo() const;
+
+            VkImageView getImageView() const;
+
+            VkSampler getSampler() const;
+
+            VkImage getImage() const;
+
+            VkImageLayout getImageLayout() const;
 
             //! Bind the texture.
             void bind();
 
         private:
             Fl_Vk_Context& ctx;
+
+            void createImage();
+            void allocateMemory();
+            void createImageView();
+            void createSampler();
 
             TLRENDER_PRIVATE();
         };

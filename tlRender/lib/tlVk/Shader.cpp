@@ -86,6 +86,12 @@ namespace tl
 
             if (descriptorPool != VK_NULL_HANDLE)
                 vkDestroyDescriptorPool(device, descriptorPool, nullptr);
+
+            for (auto& [_, ubo] : ubos)
+            {
+                vkDestroyBuffer(device, ubo.buffer, nullptr);
+                vkFreeMemory(device, ubo.memory, nullptr);
+            }
         }
 
         std::shared_ptr<Shader> Shader::create(
@@ -119,37 +125,66 @@ namespace tl
             return _p->fragmentSource;
         }
 
+        const VkDescriptorSet& Shader::getDescriptorSet() const
+        {
+            return descriptorSet;
+        }
+
+        const VkDescriptorSetLayout& Shader::getDescriptorSetLayout() const
+        {
+            return descriptorSetLayout;
+        }
+
+        const VkDescriptorPool& Shader::getDescriptorPool() const
+        {
+            return descriptorPool;
+        }
+
         void Shader::bind()
         {
             // glUseProgram(_p->program);
         }
 
-        void Shader::setTexture(
-            const std::string& name, VkImageView imageView, VkSampler sampler,
-            VkShaderStageFlags stageFlags)
+        void Shader::addTexture(
+            const std::string& name, const VkShaderStageFlags stageFlags)
         {
-            SamplerBinding sb;
-            sb.imageView = imageView;
-            sb.sampler = sampler;
-            sb.binding = current_binding_index++;
-
-            sb.imageInfo.imageView = imageView;
-            sb.imageInfo.sampler = sampler;
-            sb.imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-
-            sb.layoutBinding.binding = sb.binding;
-            sb.layoutBinding.descriptorCount = 1;
-            sb.layoutBinding.descriptorType =
-                VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-            sb.layoutBinding.stageFlags = stageFlags;
-            sb.layoutBinding.pImmutableSamplers = nullptr;
-
-            samplers.insert({name, sb});
+            TextureBinding t;
+            t.binding = current_binding_index++;
+            t.stageFlags = stageFlags;
+            textureBindings.insert(std::make_pair(name, t));
         }
 
-        const VkDescriptorSet& Shader::getDescriptorSet() const
+        void Shader::setTexture(
+            const std::string& name, const std::shared_ptr<Texture>& texture)
         {
-            return descriptorSet;
+
+            auto it = textureBindings.find(name);
+            if (it == textureBindings.end())
+            {
+                std::string err =
+                    "Could not find " + name + " in texture bindings";
+                throw std::runtime_error(err);
+            }
+
+            VkDevice device = ctx.device;
+
+            uint32_t binding = it->second.binding;
+
+            VkDescriptorImageInfo imageInfo{};
+            imageInfo.imageView = texture->getImageView();
+            imageInfo.sampler = texture->getSampler();
+            imageInfo.imageLayout = texture->getImageLayout();
+
+            VkWriteDescriptorSet write{};
+            write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            write.dstSet = descriptorSet; // previously created set
+            write.dstBinding = binding;
+            write.dstArrayElement = 0;
+            write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+            write.descriptorCount = 1;
+            write.pImageInfo = &imageInfo;
+
+            vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
         }
 
         void Shader::createDescriptorSet()
@@ -163,17 +198,26 @@ namespace tl
             for (const auto& [_, ubo] : ubos)
             {
                 bindings.push_back(ubo.layoutBinding);
-
-                VkDescriptorPoolSize poolSize{};
+                dr < poolSize{};
                 poolSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
                 poolSize.descriptorCount = 1; // or more if you support arrays
                 poolSizes.push_back(poolSize);
             }
 
             // Samplers
-            for (const auto& [_, sampler] : samplers)
+
+            for (const auto& [_, texture] : textureBindings)
             {
-                bindings.push_back(sampler.layoutBinding);
+                VkDescriptorSetLayoutBinding layoutBinding = {};
+
+                layoutBinding.binding = texture.binding;
+                layoutBinding.descriptorCount = 1;
+                layoutBinding.descriptorType =
+                    VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+                layoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+                layoutBinding.pImmutableSamplers = nullptr;
+
+                bindings.push_back(layoutBinding);
 
                 VkDescriptorPoolSize poolSize{};
                 poolSize.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
@@ -222,21 +266,24 @@ namespace tl
                 write.descriptorCount = 1;
                 write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
                 write.pBufferInfo = &ubo.bufferInfo;
-                vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
+                writes.push_back(write);
             }
 
-            // Samplers
-            for (const auto& [_, sampler] : samplers)
+            for (const auto& [_, texBinding] : textureBindings)
             {
-                VkWriteDescriptorSet write = {};
+                VkWriteDescriptorSet write{};
                 write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
                 write.dstSet = descriptorSet;
-                write.dstBinding = sampler.layoutBinding.binding;
+                write.dstBinding = texBinding.binding;
                 write.dstArrayElement = 0;
-                write.descriptorCount = 1;
                 write.descriptorType =
                     VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-                write.pImageInfo = &sampler.imageInfo;
+                write.descriptorCount = 1;
+
+                VkDescriptorImageInfo imageInfo =
+                    texBinding.texture->getDescriptorInfo();
+                write.pImageInfo = &imageInfo;
+
                 writes.push_back(write);
             }
 

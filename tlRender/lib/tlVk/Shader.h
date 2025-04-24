@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include <tlVk/Texture.h>
 #include <tlVk/Vk.h>
 
 #include <tlCore/Color.h>
@@ -53,6 +54,12 @@ namespace tl
             //! Get the Vulkan description set.
             const VkDescriptorSet& getDescriptorSet() const;
 
+            //! Get the Vulkan description set.
+            const VkDescriptorSetLayout& getDescriptorSetLayout() const;
+
+            //! Get the Vulkan description set.
+            const VkDescriptorPool& getDescriptorPool() const;
+
             //! Bind the shader.
             void bind();
 
@@ -73,9 +80,12 @@ namespace tl
                     VK_SHADER_STAGE_FRAGMENT_BIT);
             ///@}
 
+            void addTexture(
+                const std::string& name, const VkShaderStageFlags stageFlags =
+                                             VK_SHADER_STAGE_FRAGMENT_BIT);
             void setTexture(
-                const std::string& name, VkImageView imageView,
-                VkSampler sampler, VkShaderStageFlags stageFlags);
+                const std::string& name,
+                const std::shared_ptr<Texture>& texture);
 
             void createDescriptorSet();
 
@@ -98,16 +108,14 @@ namespace tl
             };
             std::map<std::string, UBO> ubos;
 
-            struct SamplerBinding
+            struct TextureBinding
             {
-                VkImageView imageView;
-                VkSampler sampler;
-                uint32_t binding;             // binding location in the shader
-                uint32_t descriptorCount = 1; // for arrays if needed
-                VkDescriptorImageInfo imageInfo;
-                VkDescriptorSetLayoutBinding layoutBinding;
+                uint32_t binding;
+                VkShaderStageFlags stageFlags;
+                std::shared_ptr<Texture> texture;
             };
-            std::map<std::string, SamplerBinding> samplers;
+
+            std::map<std::string, TextureBinding> textureBindings;
 
             TLRENDER_PRIVATE();
         };
