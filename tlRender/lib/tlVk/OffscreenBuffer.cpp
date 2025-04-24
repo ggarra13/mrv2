@@ -16,7 +16,7 @@
 
 namespace tl
 {
-    namespace vk
+    namespace vlk
     {
         TLRENDER_ENUM_IMPL(OffscreenDepth, "None", "16", "24", "32");
         TLRENDER_ENUM_SERIALIZE_IMPL(OffscreenDepth);
@@ -662,5 +662,5 @@ namespace tl
             out |= offscreenBuffer && offscreenBuffer->getOptions() != options;
             return out;
         }
-    } // namespace vk
+    } // namespace vlk
 } // namespace tl

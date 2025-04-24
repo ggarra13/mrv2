@@ -160,19 +160,19 @@ namespace
 
 namespace tl
 {
-    namespace timeline_vk
+    namespace timeline_vlk
     {
         namespace
         {
             const int pboSizeMin = 1024;
         }
 
-        std::vector<std::shared_ptr<vk::Texture> > getTextures(
+        std::vector<std::shared_ptr<vlk::Texture> > getTextures(
             Fl_Vk_Context& ctx, const image::Info& info,
             const timeline::ImageFilters& imageFilters, size_t offset)
         {
-            std::vector<std::shared_ptr<vk::Texture> > out;
-            vk::TextureOptions options;
+            std::vector<std::shared_ptr<vlk::Texture> > out;
+            vlk::TextureOptions options;
             options.filters = imageFilters;
             options.pbo =
                 info.size.w >= pboSizeMin || info.size.h >= pboSizeMin;
@@ -181,68 +181,68 @@ namespace tl
             case image::PixelType::YUV_420P_U8:
             {
                 auto infoTmp = image::Info(info.size, image::PixelType::L_U8);
-                out.push_back(vk::Texture::create(ctx, infoTmp, options));
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
                 infoTmp = image::Info(
                     image::Size(info.size.w / 2, info.size.h / 2),
                     image::PixelType::L_U8);
-                out.push_back(vk::Texture::create(ctx, infoTmp, options));
-                out.push_back(vk::Texture::create(ctx, infoTmp, options));
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
                 break;
             }
             case image::PixelType::YUV_422P_U8:
             {
                 auto infoTmp = image::Info(info.size, image::PixelType::L_U8);
-                out.push_back(vk::Texture::create(ctx, infoTmp, options));
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
                 infoTmp = image::Info(
                     image::Size(info.size.w / 2, info.size.h),
                     image::PixelType::L_U8);
-                out.push_back(vk::Texture::create(ctx, infoTmp, options));
-                out.push_back(vk::Texture::create(ctx, infoTmp, options));
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
                 break;
             }
             case image::PixelType::YUV_444P_U8:
             {
                 auto infoTmp = image::Info(info.size, image::PixelType::L_U8);
-                out.push_back(vk::Texture::create(ctx, infoTmp, options));
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
                 infoTmp = image::Info(info.size, image::PixelType::L_U8);
-                out.push_back(vk::Texture::create(ctx, infoTmp, options));
-                out.push_back(vk::Texture::create(ctx, infoTmp, options));
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
                 break;
             }
             case image::PixelType::YUV_420P_U16:
             {
                 auto infoTmp = image::Info(info.size, image::PixelType::L_U16);
-                out.push_back(vk::Texture::create(ctx, infoTmp, options));
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
                 infoTmp = image::Info(
                     image::Size(info.size.w / 2, info.size.h / 2),
                     image::PixelType::L_U16);
-                out.push_back(vk::Texture::create(ctx, infoTmp, options));
-                out.push_back(vk::Texture::create(ctx, infoTmp, options));
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
                 break;
             }
             case image::PixelType::YUV_422P_U16:
             {
                 auto infoTmp = image::Info(info.size, image::PixelType::L_U16);
-                out.push_back(vk::Texture::create(ctx, infoTmp, options));
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
                 infoTmp = image::Info(
                     image::Size(info.size.w / 2, info.size.h),
                     image::PixelType::L_U16);
-                out.push_back(vk::Texture::create(ctx, infoTmp, options));
-                out.push_back(vk::Texture::create(ctx, infoTmp, options));
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
                 break;
             }
             case image::PixelType::YUV_444P_U16:
             {
                 auto infoTmp = image::Info(info.size, image::PixelType::L_U16);
-                out.push_back(vk::Texture::create(ctx, infoTmp, options));
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
                 infoTmp = image::Info(info.size, image::PixelType::L_U16);
-                out.push_back(vk::Texture::create(ctx, infoTmp, options));
-                out.push_back(vk::Texture::create(ctx, infoTmp, options));
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
                 break;
             }
             default:
             {
-                auto texture = vk::Texture::create(ctx, info, options);
+                auto texture = vlk::Texture::create(ctx, info, options);
                 out.push_back(texture);
                 break;
             }
@@ -252,7 +252,7 @@ namespace tl
 
         void copyTextures(
             const std::shared_ptr<image::Image>& image,
-            const std::vector<std::shared_ptr<vk::Texture> >& textures,
+            const std::vector<std::shared_ptr<vlk::Texture> >& textures,
             size_t offset)
         {
             const auto& info = image->getInfo();
@@ -365,7 +365,7 @@ namespace tl
 
         void setActiveTextures(
             const image::Info& info,
-            const std::vector<std::shared_ptr<vk::Texture> >& textures,
+            const std::vector<std::shared_ptr<vlk::Texture> >& textures,
             size_t offset)
         {
             switch (info.pixelType)
@@ -551,7 +551,7 @@ namespace tl
                 p.textureCache = std::make_shared<TextureCache>();
             }
 
-            // p.glyphTextureAtlas = vk::TextureAtlas::create(
+            // p.glyphTextureAtlas = vlk::TextureAtlas::create(
             //     ctx, 1, 4096, image::PixelType::L_U8,
             //     timeline::ImageFilter::Linear);
 
@@ -598,69 +598,69 @@ namespace tl
 
             if (!p.shaders["rect"])
             {
-                p.shaders["rect"] = vk::Shader::create(
+                p.shaders["rect"] = vlk::Shader::create(
                     ctx, vertexSource(), meshFragmentSource());
             }
             if (!p.shaders["mesh"])
             {
-                p.shaders["mesh"] = vk::Shader::create(
+                p.shaders["mesh"] = vlk::Shader::create(
                     ctx, vertexSource(), meshFragmentSource());
             }
             if (!p.shaders["colorMesh"])
             {
-                p.shaders["colorMesh"] = vk::Shader::create(
+                p.shaders["colorMesh"] = vlk::Shader::create(
                     ctx, colorMeshVertexSource(), colorMeshFragmentSource());
             }
             if (!p.shaders["text"])
             {
-                p.shaders["text"] = vk::Shader::create(
+                p.shaders["text"] = vlk::Shader::create(
                     ctx, vertexSource(), textFragmentSource());
             }
             if (!p.shaders["texture"])
             {
-                p.shaders["texture"] = vk::Shader::create(
+                p.shaders["texture"] = vlk::Shader::create(
                     ctx, vertexSource(), textureFragmentSource());
             }
             if (!p.shaders["image"])
             {
-                p.shaders["image"] = vk::Shader::create(
+                p.shaders["image"] = vlk::Shader::create(
                     ctx, vertexSource(), imageFragmentSource());
             }
             if (!p.shaders["wipe"])
             {
-                p.shaders["wipe"] = vk::Shader::create(
+                p.shaders["wipe"] = vlk::Shader::create(
                     ctx, vertexSource(), meshFragmentSource());
             }
             if (!p.shaders["overlay"])
             {
-                p.shaders["overlay"] = vk::Shader::create(
+                p.shaders["overlay"] = vlk::Shader::create(
                     ctx, vertexSource(), textureFragmentSource());
             }
             if (!p.shaders["difference"])
             {
-                p.shaders["difference"] = vk::Shader::create(
+                p.shaders["difference"] = vlk::Shader::create(
                     ctx, vertexSource(), differenceFragmentSource());
             }
             if (!p.shaders["dissolve"])
             {
-                p.shaders["dissolve"] = vk::Shader::create(
+                p.shaders["dissolve"] = vlk::Shader::create(
                     ctx, vertexSource(), textureFragmentSource());
             }
             _displayShader();
 
-            p.vbos["rect"] = vk::VBO::create(2 * 3, vk::VBOType::Pos2_F32);
-            p.vaos["rect"] = vk::VAO::create(ctx);
+            p.vbos["rect"] = vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32);
+            p.vaos["rect"] = vlk::VAO::create(ctx);
             p.vbos["texture"] =
-                vk::VBO::create(2 * 3, vk::VBOType::Pos2_F32_UV_U16);
-            p.vaos["texture"] = vk::VAO::create(ctx);
+                vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32_UV_U16);
+            p.vaos["texture"] = vlk::VAO::create(ctx);
             p.vbos["image"] =
-                vk::VBO::create(2 * 3, vk::VBOType::Pos2_F32_UV_U16);
-            p.vaos["image"] = vk::VAO::create(ctx);
-            p.vbos["wipe"] = vk::VBO::create(1 * 3, vk::VBOType::Pos2_F32);
-            p.vaos["wipe"] = vk::VAO::create(ctx);
+                vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32_UV_U16);
+            p.vaos["image"] = vlk::VAO::create(ctx);
+            p.vbos["wipe"] = vlk::VBO::create(1 * 3, vlk::VBOType::Pos2_F32);
+            p.vaos["wipe"] = vlk::VAO::create(ctx);
             p.vbos["video"] =
-                vk::VBO::create(2 * 3, vk::VBOType::Pos2_F32_UV_U16);
-            p.vaos["video"] = vk::VAO::create(ctx);
+                vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32_UV_U16);
+            p.vaos["video"] = vlk::VAO::create(ctx);
 
             setViewport(math::Box2i(0, 0, renderSize.w, renderSize.h));
             if (renderOptions.clear)
@@ -1890,10 +1890,10 @@ namespace tl
                     p.lutOptions.order, toneMapDef, toneMap);
                 if (auto context = _context.lock())
                 {
-                    context->log("tl::vk::GLRender", "Creating display shader");
+                    context->log("tl::vlk::GLRender", "Creating display shader");
                 }
                 p.shaders["display"] =
-                    vk::Shader::create(ctx, vertexSource(), source);
+                    vlk::Shader::create(ctx, vertexSource(), source);
             }
             p.shaders["display"]->bind();
             p.shaders["display"]->setUniform(
@@ -1931,5 +1931,5 @@ namespace tl
             texturesOffset += p.placeboData->textures.size();
 #endif
         }
-    } // namespace timeline_vk
+    } // namespace timeline_vlk
 } // namespace tl

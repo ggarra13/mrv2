@@ -116,6 +116,9 @@ protected:
     //! This is for holding one texture for the shader.
     Fl_Vk_Texture m_texture;
 
+    //! This is for swapchain pipeline
+    VkPipelineLayout m_pipeline_layout;
+    
     //! Memory for descriptor sets
     VkDescriptorPool m_desc_pool;
 
@@ -142,9 +145,9 @@ private:
         const uint32_t* tex_colors, Fl_Vk_Texture* tex_obj,
         VkImageTiling tiling, VkImageUsageFlags usage, VkFlags required_props);
 
-    std::shared_ptr<tl::vk::Shader> shader;
-    std::shared_ptr<tl::vk::VBO> vbo;
-    std::shared_ptr<tl::vk::VAO> vao;
+    std::shared_ptr<tl::vlk::Shader> shader;
+    std::shared_ptr<tl::vlk::VBO> vbo;
+    std::shared_ptr<tl::vlk::VAO> vao;
 };
 
 static void texture_cb(vk_shape_window* w)
@@ -373,17 +376,17 @@ void vk_shape_window::prepare_mesh()
 
     if (!vbo || (vbo && vbo->getSize() != numTriangles * 3))
     {
-        vbo = vk::VBO::create(numTriangles * 3, vk::VBOType::Pos2_F32_UV_U16);
+        vbo = vlk::VBO::create(numTriangles * 3, vlk::VBOType::Pos2_F32_UV_U16);
         vao.reset();
     }
     if (vbo)
     {
-        vbo->copy(convert(mesh, vk::VBOType::Pos2_F32_UV_U16));
+        vbo->copy(convert(mesh, vlk::VBOType::Pos2_F32_UV_U16));
     }
 
     if (!vao && vbo)
     {
-        vao = vk::VAO::create(ctx);
+        vao = vlk::VAO::create(ctx);
         vao->upload(vbo->getData());
     }
 }
@@ -469,7 +472,7 @@ void vk_shape_window::prepare_shader()
     if (!shader)
     {
         shader =
-            tl::vk::Shader::create(ctx, vertex_shader_glsl, frag_shader_glsl);
+            tl::vlk::Shader::create(ctx, vertex_shader_glsl, frag_shader_glsl);
     }
 }
 

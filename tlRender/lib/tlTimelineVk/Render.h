@@ -25,12 +25,12 @@ struct pl_shader_res;
 namespace tl
 {
     //! Timeline Vulkan support
-    namespace timeline_vk
+    namespace timeline_vlk
     {
         //! Texture cache.
         typedef memory::LRUCache<
             std::shared_ptr<image::Image>,
-            std::vector<std::shared_ptr<vk::Texture> > >
+            std::vector<std::shared_ptr<vlk::Texture> > >
             TextureCache;
 
         //! Vulkan renderer.
@@ -166,5 +166,5 @@ namespace tl
                 
             TLRENDER_PRIVATE();
         };
-    } // namespace timeline_vk
+    } // namespace timeline_vlk
 } // namespace tl

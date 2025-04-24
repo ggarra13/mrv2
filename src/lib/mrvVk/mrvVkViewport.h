@@ -87,7 +87,7 @@ namespace mrv
             void _drawCursor(const math::Matrix4x4f& mvp) noexcept;
 
             void _drawAnnotations(
-                const std::shared_ptr<tl::vk::OffscreenBuffer>& overlay,
+                const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay,
                 const math::Matrix4x4f& renderMVP,
                 const otime::RationalTime& time,
                 const std::vector<std::shared_ptr<draw::Annotation>>& annotations,
@@ -128,11 +128,11 @@ namespace mrv
                 const math::Size2i& viewportSize);
         
             void _compositeAnnotations(
-                const std::shared_ptr<tl::vk::OffscreenBuffer>&,
+                const std::shared_ptr<tl::vlk::OffscreenBuffer>&,
                 const math::Matrix4x4f& orthoMatrix,
                 const math::Size2i& viewportSize);
         
-            void _compositeOverlay(const std::shared_ptr<tl::vk::OffscreenBuffer>&,
+            void _compositeOverlay(const std::shared_ptr<tl::vlk::OffscreenBuffer>&,
                                    const math::Matrix4x4f& identity,
                                    const math::Size2i& viewportSize);
         

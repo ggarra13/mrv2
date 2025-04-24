@@ -209,10 +209,10 @@ namespace mrv
             timelineui::DisplayOptions displayOptions;
             std::shared_ptr<timelineui::TimelineWidget> timelineWidget;
             std::shared_ptr<TimelineWindow> timelineWindow;
-            std::shared_ptr<tl::vk::Shader> shader;
-            std::shared_ptr<tl::vk::OffscreenBuffer> buffer;
-            std::shared_ptr<vk::VBO> vbo;
-            std::shared_ptr<vk::VAO> vao;
+            std::shared_ptr<tl::vlk::Shader> shader;
+            std::shared_ptr<tl::vlk::OffscreenBuffer> buffer;
+            std::shared_ptr<vlk::VBO> vbo;
+            std::shared_ptr<vlk::VAO> vao;
             std::chrono::steady_clock::time_point mouseWheelTimer;
 
             //! Flags
@@ -702,7 +702,7 @@ namespace mrv
             {
                 try
                 {
-                    p.render = timeline_vk::Render::create(ctx, context);
+                    p.render = timeline_vlk::Render::create(ctx, context);
                 
                     const std::string vertexSource =
                         "#version 410\n"
@@ -735,7 +735,7 @@ namespace mrv
                         "    fColor = texture(textureSampler, fTexture);\n"
                         "    fColor.a *= opacity;\n"
                         "}\n";
-                    p.shader = vk::Shader::create(ctx,
+                    p.shader = vlk::Shader::create(ctx,
                                                   vertexSource, fragmentSource);
                 
                 }
@@ -835,13 +835,13 @@ namespace mrv
                 {
                     if (renderSize.isValid())
                     {
-                        vk::OffscreenBufferOptions offscreenBufferOptions;
+                        vlk::OffscreenBufferOptions offscreenBufferOptions;
                         offscreenBufferOptions.colorType =
                             image::PixelType::RGBA_U8;
-                        if (vk::doCreate(
+                        if (vlk::doCreate(
                                 p.buffer, renderSize, offscreenBufferOptions))
                         {
-                            p.buffer = vk::OffscreenBuffer::create(
+                            p.buffer = vlk::OffscreenBuffer::create(
                                 ctx, renderSize, offscreenBufferOptions);
                         }
                     }
@@ -852,7 +852,7 @@ namespace mrv
 
                     if (p.render && p.buffer)
                     {
-                        // vk::OffscreenBufferBinding binding(p.buffer);
+                        // vlk::OffscreenBufferBinding binding(p.buffer);
                         timeline::RenderOptions renderOptions;
                         renderOptions.clearColor =
                             p.style->getColorRole(ui::ColorRole::Window);
@@ -903,19 +903,19 @@ namespace mrv
                     //     geom::box(math::Box2i(0, 0, renderSize.w, renderSize.h));
                     // if (!p.vbo)
                     // {
-                    //     p.vbo = vk::VBO::create(
+                    //     p.vbo = vlk::VBO::create(
                     //         mesh.triangles.size() * 3,
-                    //         vk::VBOType::Pos2_F32_UV_U16);
+                    //         vlk::VBOType::Pos2_F32_UV_U16);
                     // }
                     // if (p.vbo)
                     // {
-                    //     p.vbo->copy(convert(mesh, vk::VBOType::Pos2_F32_UV_U16));
+                    //     p.vbo->copy(convert(mesh, vlk::VBOType::Pos2_F32_UV_U16));
                     // }
 
                     // if (!p.vao && p.vbo)
                     // {
-                    //     p.vao = vk::VAO::create(
-                    //         vk::VBOType::Pos2_F32_UV_U16, p.vbo->getID());
+                    //     p.vao = vlk::VAO::create(
+                    //         vlk::VBOType::Pos2_F32_UV_U16, p.vbo->getID());
                     // }
                     // if (p.vao && p.vbo)
                     // {

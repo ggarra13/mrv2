@@ -16,10 +16,10 @@
 
 namespace tl
 {
-    namespace timeline_vk
+    namespace timeline_vlk
     {
         extern std::string vertexSource();
-    } // namespace timeline_vk
+    } // namespace timeline_vlk
 
 } // namespace tl
 
@@ -33,10 +33,10 @@ namespace mrv
 
         struct Lines::Private
         {
-            std::shared_ptr<vk::Shader> softShader = nullptr;
-            std::shared_ptr<vk::Shader> hardShader = nullptr;
-            std::shared_ptr<vk::VBO> vbo;
-            std::shared_ptr<vk::VAO> vao;
+            std::shared_ptr<vlk::Shader> softShader = nullptr;
+            std::shared_ptr<vlk::Shader> hardShader = nullptr;
+            std::shared_ptr<vlk::VBO> vbo;
+            std::shared_ptr<vlk::VAO> vao;
         };
 
         Lines::Lines() :
@@ -62,10 +62,10 @@ namespace mrv
                 try
                 {
                     const std::string& vertexSource =
-                        tl::timeline_vk::vertexSource();
-                    // p.softShader = vk::Shader::create(
+                        tl::timeline_vlk::vertexSource();
+                    // p.softShader = vlk::Shader::create(
                     //     vertexSource, mrv::softFragmentSource());
-                    // p.hardShader = vk::Shader::create(
+                    // p.hardShader = vlk::Shader::create(
                     //     vertexSource, mrv::hardFragmentSource());
                 }
                 catch (const std::exception& e)
@@ -99,11 +99,11 @@ namespace mrv
 
             mesh.triangles.reserve(numTriangles);
 
-            tl::vk::VBOType vboType = vk::VBOType::Pos2_F32;
+            tl::vlk::VBOType vboType = vlk::VBOType::Pos2_F32;
             geom::Triangle2 triangle;
             if (numUVs > 0)
             {
-                vboType = vk::VBOType::Pos2_F32_UV_U16;
+                vboType = vlk::VBOType::Pos2_F32_UV_U16;
                 for (size_t i = 0; i < numTriangles; ++i)
                 {
                     Polyline2D::IndexTriangle t = triangles[i];
@@ -159,7 +159,7 @@ namespace mrv
             if (!p.vbo || (p.vbo && (p.vbo->getSize() != numTriangles * 3 ||
                                      p.vbo->getType() != vboType)))
             {
-                p.vbo = vk::VBO::create(numTriangles * 3, vboType);
+                p.vbo = vlk::VBO::create(numTriangles * 3, vboType);
 
                 p.vao.reset();
             }
@@ -171,7 +171,7 @@ namespace mrv
 
             if (!p.vao && p.vbo)
             {
-                p.vao = vk::VAO::create(ctx);
+                p.vao = vlk::VAO::create(ctx);
                 p.vao->upload(p.vbo->getData());
             }
 
@@ -228,10 +228,10 @@ namespace mrv
             TLRENDER_P();
 
             const size_t numPoints = pnts.size();
-            const tl::vk::VBOType vboType = vk::VBOType::Pos2_F32;
+            const tl::vlk::VBOType vboType = vlk::VBOType::Pos2_F32;
             if (!p.vbo || (p.vbo && p.vbo->getSize() != numPoints))
             {
-                p.vbo = vk::VBO::create(numPoints, vboType);
+                p.vbo = vlk::VBO::create(numPoints, vboType);
                 p.vao.reset();
             }
             if (p.vbo)
@@ -245,7 +245,7 @@ namespace mrv
 
             if (!p.vao && p.vbo)
             {
-                p.vao = vk::VAO::create(ctx);
+                p.vao = vlk::VAO::create(ctx);
                 p.vao->upload(p.vbo->getData());
             }
 

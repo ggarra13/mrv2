@@ -19,7 +19,7 @@
 
 namespace tl
 {
-    namespace vk
+    namespace vlk
     {
         //! Vulkan shader.
         class Shader : public std::enable_shared_from_this<Shader>
@@ -119,7 +119,7 @@ namespace tl
 
             TLRENDER_PRIVATE();
         };
-    } // namespace vk
+    } // namespace vlk
 } // namespace tl
 
 #include <tlVk/ShaderInline.h>

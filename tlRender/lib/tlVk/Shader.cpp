@@ -14,7 +14,7 @@
 
 namespace tl
 {
-    namespace vk
+    namespace vlk
     {
         struct Shader::Private
         {
@@ -291,5 +291,5 @@ namespace tl
                 device, static_cast<uint32_t>(writes.size()), writes.data(), 0,
                 nullptr);
         }
-    } // namespace vk
+    } // namespace vlk
 } // namespace tl

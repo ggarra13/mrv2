@@ -30,14 +30,14 @@ namespace mrv
             //! Vulkan Offscreen buffers
             image::PixelType colorBufferType = image::PixelType::RGBA_F32;
 
-            std::shared_ptr<timeline_vk::Render> render;
-            std::shared_ptr<tl::vk::OffscreenBuffer> buffer;
-            std::shared_ptr<tl::vk::OffscreenBuffer> stereoBuffer;
-            std::shared_ptr<tl::vk::OffscreenBuffer> annotation;
+            std::shared_ptr<timeline_vlk::Render> render;
+            std::shared_ptr<tl::vlk::OffscreenBuffer> buffer;
+            std::shared_ptr<tl::vlk::OffscreenBuffer> stereoBuffer;
+            std::shared_ptr<tl::vlk::OffscreenBuffer> annotation;
             std::shared_ptr<tl::image::Image> annotationImage; // only used on APPLE
-            std::shared_ptr<tl::vk::OffscreenBuffer> overlay;
-            std::shared_ptr<vk::Shader> shader;
-            std::shared_ptr<vk::Shader> annotationShader;
+            std::shared_ptr<tl::vlk::OffscreenBuffer> overlay;
+            std::shared_ptr<vlk::Shader> shader;
+            std::shared_ptr<vlk::Shader> annotationShader;
 
             int currentPBOIndex = 0;
             int nextPBOIndex = 1;
@@ -45,8 +45,8 @@ namespace mrv
             VkFence pboFences[2] = {0, 0};
             uint32_t overlayPBO = 0;
             VkFence overlayFence;
-            std::shared_ptr<vk::VBO> vbo;
-            std::shared_ptr<vk::VAO> vao;
+            std::shared_ptr<vlk::VBO> vbo;
+            std::shared_ptr<vlk::VAO> vao;
 
 #ifdef USE_ONE_PIXEL_LINES
             std::shared_ptr<vulkan::Outline> outline;

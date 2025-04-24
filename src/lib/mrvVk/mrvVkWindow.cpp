@@ -261,14 +261,6 @@ namespace mrv
             result = vkBindBufferMemory(device(), m_mesh.buf, m_mesh.mem, 0);
             VK_CHECK(result);
 
-            m_mesh.vi.sType =
-                VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-            m_mesh.vi.pNext = NULL;
-            m_mesh.vi.vertexBindingDescriptionCount = 1;
-            m_mesh.vi.pVertexBindingDescriptions = m_mesh.vi_bindings;
-            m_mesh.vi.vertexAttributeDescriptionCount = 1;
-            m_mesh.vi.pVertexAttributeDescriptions = m_mesh.vi_attrs;
-
             m_mesh.vi_bindings[0].binding = 0;
             m_mesh.vi_bindings[0].stride = sizeof(vertices[0]);
             m_mesh.vi_bindings[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
@@ -280,23 +272,22 @@ namespace mrv
         }
 
         void VkWindow::prepare_pipeline() {
-            VkGraphicsPipelineCreateInfo pipeline;
-            VkPipelineCacheCreateInfo pipelineCacheCreateInfo;
+            VkGraphicsPipelineCreateInfo pipeline = {};
+            VkPipelineCacheCreateInfo pipelineCacheCreateInfo = {};
 
-            VkPipelineVertexInputStateCreateInfo vi;
-            VkPipelineInputAssemblyStateCreateInfo ia;
-            VkPipelineRasterizationStateCreateInfo rs;
-            VkPipelineColorBlendStateCreateInfo cb;
-            VkPipelineDepthStencilStateCreateInfo ds;
-            VkPipelineViewportStateCreateInfo vp;
-            VkPipelineMultisampleStateCreateInfo ms;
+            VkPipelineVertexInputStateCreateInfo vi = {};
+            VkPipelineInputAssemblyStateCreateInfo ia = {};
+            VkPipelineRasterizationStateCreateInfo rs = {};
+            VkPipelineColorBlendStateCreateInfo cb = {};
+            VkPipelineDepthStencilStateCreateInfo ds = {};
+            VkPipelineViewportStateCreateInfo vp = {};
+            VkPipelineMultisampleStateCreateInfo ms = {};
             VkDynamicState dynamicStateEnables[(VK_DYNAMIC_STATE_STENCIL_REFERENCE - VK_DYNAMIC_STATE_VIEWPORT + 1)];
-            VkPipelineDynamicStateCreateInfo dynamicState;
+            VkPipelineDynamicStateCreateInfo dynamicState = {};
 
             VkResult result;
     
             memset(dynamicStateEnables, 0, sizeof dynamicStateEnables);
-            memset(&dynamicState, 0, sizeof dynamicState);
             dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
             dynamicState.pDynamicStates = dynamicStateEnables;
 
@@ -304,7 +295,12 @@ namespace mrv
             pipeline.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
             pipeline.layout = m_pipeline_layout;
 
-            vi = m_mesh.vi;
+            vi.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+            vi.pNext = NULL;
+            vi.vertexBindingDescriptionCount = 1;
+            vi.pVertexBindingDescriptions = m_mesh.vi_bindings;
+            vi.vertexAttributeDescriptionCount = 1;
+            vi.pVertexAttributeDescriptions = m_mesh.vi_attrs;
 
             memset(&ia, 0, sizeof(ia));
             ia.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
@@ -387,16 +383,15 @@ namespace mrv
             memset(&pipelineCacheCreateInfo, 0, sizeof(pipelineCacheCreateInfo));
             pipelineCacheCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
 
+            VkPipelineCache pipelineCache;
             result = vkCreatePipelineCache(device(), &pipelineCacheCreateInfo, NULL,
-                                           &pipelineCache());
+                                           &pipelineCache);
             VK_CHECK(result);
-            result = vkCreateGraphicsPipelines(device(), pipelineCache(), 1,
+            result = vkCreateGraphicsPipelines(device(), pipelineCache, 1,
                                                &pipeline, NULL, &m_pipeline);
             VK_CHECK(result);
 
-            vkDestroyPipelineCache(device(), pipelineCache(), NULL);
-            pipelineCache() = VK_NULL_HANDLE;
-
+            vkDestroyPipelineCache(device(), pipelineCache, NULL);
         }
 
         void VkWindow::prepare_descriptor_layout() {

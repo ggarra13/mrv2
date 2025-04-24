@@ -14,9 +14,9 @@ namespace tl
     }
 
     //! Vulkan support
-    namespace vk
+    namespace vlk
     {
         //! Initialize the library.
         void init(const std::shared_ptr<system::Context>&);
-    } // namespace vk
+    } // namespace vlk
 } // namespace tl

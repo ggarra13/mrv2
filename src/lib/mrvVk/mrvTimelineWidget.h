@@ -205,6 +205,6 @@ namespace mrv
             TLRENDER_PRIVATE();
         };
 
-    }  // namespace vk
+    }  // namespace vlk
     
 } // namespace mrv

@@ -3,7 +3,7 @@
 
 namespace tl
 {
-    namespace vk
+    namespace vlk
     {
 
         template <typename T>
@@ -75,5 +75,5 @@ namespace tl
             }
         }
 
-    } // namespace vk
+    } // namespace vlk
 } // namespace tl

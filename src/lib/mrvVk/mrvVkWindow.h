@@ -40,6 +40,8 @@ namespace mrv
 
             Fl_Vk_Mesh m_mesh;
             int sides = 3;
+
+            VkPipelineLayout m_pipeline_layout;
             
             VkShaderModule prepare_vs();
             VkShaderModule prepare_fs();

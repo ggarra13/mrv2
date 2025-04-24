@@ -8,7 +8,7 @@
 
 namespace tl
 {
-    namespace timeline_vk
+    namespace timeline_vlk
     {
         void
         Render::drawRect(const math::Box2i& box, const image::Color4f& color)
@@ -58,17 +58,17 @@ namespace tl
                     (p.vbos["mesh"] && p.vbos["mesh"]->getSize() < size * 3))
                 {
                     p.vbos["mesh"] =
-                        vk::VBO::create(size * 3, vk::VBOType::Pos2_F32);
+                        vlk::VBO::create(size * 3, vlk::VBOType::Pos2_F32);
                     p.vaos["mesh"].reset();
                 }
                 if (p.vbos["mesh"])
                 {
-                    p.vbos["mesh"]->copy(convert(mesh, vk::VBOType::Pos2_F32));
+                    p.vbos["mesh"]->copy(convert(mesh, vlk::VBOType::Pos2_F32));
                 }
 
                 if (!p.vaos["mesh"] && p.vbos["mesh"])
                 {
-                    p.vaos["mesh"] = vk::VAO::create(ctx);
+                    p.vaos["mesh"] = vlk::VAO::create(ctx);
                 }
                 if (p.vaos["mesh"] && p.vbos["mesh"])
                 {
@@ -102,19 +102,19 @@ namespace tl
                     (p.vbos["colorMesh"] &&
                      p.vbos["colorMesh"]->getSize() < size * 3))
                 {
-                    p.vbos["colorMesh"] = vk::VBO::create(
-                        size * 3, vk::VBOType::Pos2_F32_Color_F32);
+                    p.vbos["colorMesh"] = vlk::VBO::create(
+                        size * 3, vlk::VBOType::Pos2_F32_Color_F32);
                     p.vaos["colorMesh"].reset();
                 }
                 if (p.vbos["colorMesh"])
                 {
                     p.vbos["colorMesh"]->copy(
-                        convert(mesh, vk::VBOType::Pos2_F32_Color_F32));
+                        convert(mesh, vlk::VBOType::Pos2_F32_Color_F32));
                 }
 
                 if (!p.vaos["colorMesh"] && p.vbos["colorMesh"])
                 {
-                    p.vaos["colorMesh"] = vk::VAO::create(ctx);
+                    p.vaos["colorMesh"] = vlk::VAO::create(ctx);
                 }
                 if (p.vaos["colorMesh"] && p.vbos["colorMesh"])
                 {
@@ -135,7 +135,7 @@ namespace tl
                     (vbos["text"] && vbos["text"]->getSize() < size * 3))
                 {
                     vbos["text"] =
-                        vk::VBO::create(size * 3, vk::VBOType::Pos2_F32_UV_U16);
+                        vlk::VBO::create(size * 3, vlk::VBOType::Pos2_F32_UV_U16);
                     vaos["text"].reset();
                 }
                 if (vbos["text"])
@@ -144,7 +144,7 @@ namespace tl
                 }
                 if (!vaos["text"] && vbos["text"])
                 {
-                    vaos["text"] = vk::VAO::create(ctx);
+                    vaos["text"] = vlk::VAO::create(ctx);
                 }
                 if (vaos["text"] && vbos["text"])
                 {
@@ -192,13 +192,13 @@ namespace tl
 
                     if (glyph->image && glyph->image->isValid())
                     {
-                        vk::TextureAtlasID id = 0;
+                        vlk::TextureAtlasID id = 0;
                         const auto i = p.glyphIDs.find(glyph->info);
                         if (i != p.glyphIDs.end())
                         {
                             id = i->second;
                         }
-                        vk::TextureAtlasItem item;
+                        vlk::TextureAtlasItem item;
                         if (!p.glyphTextureAtlas->getItem(id, item))
                         {
                             id = p.glyphTextureAtlas->addItem(
@@ -308,7 +308,7 @@ namespace tl
             ++(p.currentStats.images);
 
             const auto& info = image->getInfo();
-            std::vector<std::shared_ptr<vk::Texture> > textures;
+            std::vector<std::shared_ptr<vlk::Texture> > textures;
             if (!imageOptions.cache)
             {
                 textures = getTextures(ctx, info, imageOptions.imageFilters);
@@ -397,5 +397,5 @@ namespace tl
                 //     GL_TRIANGLES, 0, p.vbos["image"]->getSize());
             }
         }
-    } // namespace timeline_vk
+    } // namespace timeline_vlk
 } // namespace tl

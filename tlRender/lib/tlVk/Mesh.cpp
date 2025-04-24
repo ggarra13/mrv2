@@ -16,7 +16,7 @@
 
 namespace tl
 {
-    namespace vk
+    namespace vlk
     {
         TLRENDER_ENUM_IMPL(
             VBOType, "Pos2_F32", "Pos2_F32_UV_U16", "Pos2_F32_Color_F32",
@@ -64,7 +64,7 @@ namespace tl
         }
 
         std::vector<uint8_t>
-        convert(const geom::TriangleMesh2& mesh, vk::VBOType type)
+        convert(const geom::TriangleMesh2& mesh, vlk::VBOType type)
         {
             return convert(
                 mesh, type,
@@ -74,16 +74,16 @@ namespace tl
         }
 
         std::vector<uint8_t> convert(
-            const geom::TriangleMesh2& mesh, vk::VBOType type,
+            const geom::TriangleMesh2& mesh, vlk::VBOType type,
             const math::SizeTRange& range)
         {
-            const size_t vertexByteCount = vk::getByteCount(type);
+            const size_t vertexByteCount = vlk::getByteCount(type);
             std::vector<uint8_t> out(
                 (range.getMax() - range.getMin() + 1) * 3 * vertexByteCount);
             uint8_t* p = out.data();
             switch (type)
             {
-            case vk::VBOType::Pos2_F32:
+            case vlk::VBOType::Pos2_F32:
                 for (size_t i = range.getMin(); i <= range.getMax(); ++i)
                 {
                     const geom::Vertex2* vertices[] = {
@@ -99,7 +99,7 @@ namespace tl
                     }
                 }
                 break;
-            case vk::VBOType::Pos2_F32_UV_U16:
+            case vlk::VBOType::Pos2_F32_UV_U16:
                 for (size_t i = range.getMin(); i <= range.getMax(); ++i)
                 {
                     const geom::Vertex2* vertices[] = {
@@ -129,7 +129,7 @@ namespace tl
                     }
                 }
                 break;
-            case vk::VBOType::Pos2_F32_Color_F32:
+            case vlk::VBOType::Pos2_F32_Color_F32:
                 for (size_t i = range.getMin(); i <= range.getMax(); ++i)
                 {
                     const geom::Vertex2* vertices[] = {
@@ -160,7 +160,7 @@ namespace tl
         }
 
         std::vector<uint8_t>
-        convert(const geom::TriangleMesh3& mesh, vk::VBOType type)
+        convert(const geom::TriangleMesh3& mesh, vlk::VBOType type)
         {
             return convert(
                 mesh, type,
@@ -170,16 +170,16 @@ namespace tl
         }
 
         std::vector<uint8_t> convert(
-            const geom::TriangleMesh3& mesh, vk::VBOType type,
+            const geom::TriangleMesh3& mesh, vlk::VBOType type,
             const math::SizeTRange& range)
         {
-            const size_t vertexByteCount = vk::getByteCount(type);
+            const size_t vertexByteCount = vlk::getByteCount(type);
             std::vector<uint8_t> out(
                 (range.getMax() - range.getMin() + 1) * 3 * vertexByteCount);
             uint8_t* p = out.data();
             switch (type)
             {
-            case vk::VBOType::Pos3_F32:
+            case vlk::VBOType::Pos3_F32:
                 for (size_t i = range.getMin(); i <= range.getMax(); ++i)
                 {
                     const geom::Vertex3* vertices[] = {
@@ -196,7 +196,7 @@ namespace tl
                     }
                 }
                 break;
-            case vk::VBOType::Pos3_F32_UV_U16:
+            case vlk::VBOType::Pos3_F32_UV_U16:
                 for (size_t i = range.getMin(); i <= range.getMax(); ++i)
                 {
                     const geom::Vertex3* vertices[] = {
@@ -227,7 +227,7 @@ namespace tl
                     }
                 }
                 break;
-            case vk::VBOType::Pos3_F32_UV_U16_Normal_U10:
+            case vlk::VBOType::Pos3_F32_UV_U16_Normal_U10:
                 for (size_t i = range.getMin(); i <= range.getMax(); ++i)
                 {
                     const geom::Vertex3* vertices[] = {
@@ -277,7 +277,7 @@ namespace tl
                     }
                 }
                 break;
-            case vk::VBOType::Pos3_F32_UV_U16_Normal_U10_Color_U8:
+            case vlk::VBOType::Pos3_F32_UV_U16_Normal_U10_Color_U8:
                 for (size_t i = range.getMin(); i <= range.getMax(); ++i)
                 {
                     const geom::Vertex3* vertices[] = {
@@ -351,7 +351,7 @@ namespace tl
                     }
                 }
                 break;
-            case vk::VBOType::Pos3_F32_UV_F32_Normal_F32:
+            case vlk::VBOType::Pos3_F32_UV_F32_Normal_F32:
                 for (size_t i = range.getMin(); i <= range.getMax(); ++i)
                 {
                     const geom::Vertex3* vertices[] = {
@@ -381,7 +381,7 @@ namespace tl
                     }
                 }
                 break;
-            case vk::VBOType::Pos3_F32_UV_F32_Normal_F32_Color_F32:
+            case vlk::VBOType::Pos3_F32_UV_F32_Normal_F32_Color_F32:
                 for (size_t i = range.getMin(); i <= range.getMax(); ++i)
                 {
                     const geom::Vertex3* vertices[] = {
@@ -747,5 +747,5 @@ namespace tl
         {
             draw(cmd, vbo->getSize() * 3);
         }
-    } // namespace vk
+    } // namespace vlk
 } // namespace tl

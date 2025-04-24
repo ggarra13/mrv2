@@ -33,8 +33,8 @@ namespace mrv
             const size_t numTriangles = mesh.triangles.size();
             if (!vk.vbo || (vk.vbo && vk.vbo->getSize() != numTriangles * 3))
             {
-                vk.vbo = vk::VBO::create(
-                    numTriangles * 3, vk::VBOType::Pos3_F32_UV_U16);
+                vk.vbo = vlk::VBO::create(
+                    numTriangles * 3, vlk::VBOType::Pos3_F32_UV_U16);
                 vk.vao.reset();
             }
             if (vk.vbo)
@@ -43,7 +43,7 @@ namespace mrv
             }
             if (!vk.vao && vk.vbo)
             {
-                vk.vao = vk::VAO::create(ctx);
+                vk.vao = vlk::VAO::create(ctx);
                 vk.vao->upload(vk.vbo->getData());
             }
         }
@@ -58,8 +58,8 @@ namespace mrv
             const size_t numTriangles = mesh.triangles.size();
             if (!vk.vbo || (vk.vbo && vk.vbo->getSize() != numTriangles * 3))
             {
-                vk.vbo = vk::VBO::create(
-                    numTriangles * 3, vk::VBOType::Pos3_F32_UV_U16);
+                vk.vbo = vlk::VBO::create(
+                    numTriangles * 3, vlk::VBOType::Pos3_F32_UV_U16);
                 vk.vao.reset();
             }
             if (vk.vbo)
@@ -68,7 +68,7 @@ namespace mrv
             }
             if (!vk.vao && vk.vbo)
             {
-                vk.vao = vk::VAO::create(ctx);
+                vk.vao = vlk::VAO::create(ctx);
                 vk.vao->upload(vk.vbo->getData());
             }
         }
@@ -181,19 +181,19 @@ namespace mrv
             const size_t numTriangles = mesh.triangles.size();
             if (!vk.vbo || (vk.vbo && vk.vbo->getSize() != numTriangles * 3))
             {
-                vk.vbo = vk::VBO::create(
-                    numTriangles * 3, vk::VBOType::Pos2_F32_UV_U16);
+                vk.vbo = vlk::VBO::create(
+                    numTriangles * 3, vlk::VBOType::Pos2_F32_UV_U16);
 
                 vk.vao.reset();
             }
             if (vk.vbo)
             {
-                vk.vbo->copy(convert(mesh, vk::VBOType::Pos2_F32_UV_U16));
+                vk.vbo->copy(convert(mesh, vlk::VBOType::Pos2_F32_UV_U16));
             }
 
             if (!vk.vao && vk.vbo)
             {
-                vk.vao = vk::VAO::create(ctx);
+                vk.vao = vlk::VAO::create(ctx);
                 vk.vao->upload(vk.vbo->getData());
             }
 

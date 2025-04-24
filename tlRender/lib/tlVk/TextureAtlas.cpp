@@ -8,7 +8,7 @@
 
 namespace tl
 {
-    namespace vk
+    namespace vlk
     {
         namespace
         {
@@ -434,5 +434,5 @@ namespace tl
                 removeFromAtlas(node->children[1]);
             }
         }
-    } // namespace vk
+    } // namespace vlk
 } // namespace tl

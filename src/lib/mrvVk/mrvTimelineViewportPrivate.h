@@ -186,6 +186,6 @@ namespace mrv
             std::shared_ptr<image::Image> overlayImage;
         };
 
-    }  // namespace vk
+    }  // namespace vlk
     
 } // namespace mrv

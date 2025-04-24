@@ -14,7 +14,7 @@
 
 namespace tl
 {
-    namespace vk
+    namespace vlk
     {
         //! Default offscreen buffer color type.
         const image::PixelType offscreenColorDefault =
@@ -160,5 +160,5 @@ namespace tl
         bool doCreate(
             const std::shared_ptr<OffscreenBuffer>&, const math::Size2i&,
             const OffscreenBufferOptions&);
-    } // namespace vk
+    } // namespace vlk
 } // namespace tl

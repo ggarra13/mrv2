@@ -12,7 +12,7 @@
 
 namespace tl
 {
-    namespace timeline_vk
+    namespace timeline_vlk
     {
         void Render::drawVideo(
             const std::vector<timeline::VideoData>& videoData,
@@ -318,7 +318,7 @@ namespace tl
             {
                 const math::Size2i offscreenBufferSize(
                     boxes[0].w(), boxes[0].h());
-                vk::OffscreenBufferOptions offscreenBufferOptions;
+                vlk::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
                 if (!displayOptions.empty())
                 {
@@ -329,7 +329,7 @@ namespace tl
                         p.buffers["overlay"], offscreenBufferSize,
                         offscreenBufferOptions))
                 {
-                    p.buffers["overlay"] = vk::OffscreenBuffer::create(
+                    p.buffers["overlay"] = vlk::OffscreenBuffer::create(
                         ctx, offscreenBufferSize, offscreenBufferOptions);
                 }
 
@@ -417,7 +417,7 @@ namespace tl
             {
                 const math::Size2i offscreenBufferSize(
                     boxes[0].w(), boxes[0].h());
-                vk::OffscreenBufferOptions offscreenBufferOptions;
+                vlk::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
                 if (!displayOptions.empty())
                 {
@@ -428,7 +428,7 @@ namespace tl
                         p.buffers["difference0"], offscreenBufferSize,
                         offscreenBufferOptions))
                 {
-                    p.buffers["difference0"] = vk::OffscreenBuffer::create(
+                    p.buffers["difference0"] = vlk::OffscreenBuffer::create(
                         ctx, offscreenBufferSize, offscreenBufferOptions);
                 }
 
@@ -470,7 +470,7 @@ namespace tl
 
                 if (videoData.size() > 1)
                 {
-                    offscreenBufferOptions = vk::OffscreenBufferOptions();
+                    offscreenBufferOptions = vlk::OffscreenBufferOptions();
                     offscreenBufferOptions.colorType =
                         p.renderOptions.colorBuffer;
                     if (displayOptions.size() > 1)
@@ -482,7 +482,7 @@ namespace tl
                             p.buffers["difference1"], offscreenBufferSize,
                             offscreenBufferOptions))
                     {
-                        p.buffers["difference1"] = vk::OffscreenBuffer::create(
+                        p.buffers["difference1"] = vlk::OffscreenBuffer::create(
                             ctx, offscreenBufferSize, offscreenBufferOptions);
                     }
 
@@ -636,14 +636,14 @@ namespace tl
                 "transform.mvp", transform, VK_SHADER_STAGE_VERTEX_BIT);
 
             const math::Size2i& offscreenBufferSize = box.getSize();
-            vk::OffscreenBufferOptions offscreenBufferOptions;
+            vlk::OffscreenBufferOptions offscreenBufferOptions;
             offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
             offscreenBufferOptions.colorFilters = displayOptions.imageFilters;
             if (doCreate(
                     p.buffers["video"], offscreenBufferSize,
                     offscreenBufferOptions))
             {
-                p.buffers["video"] = vk::OffscreenBuffer::create(
+                p.buffers["video"] = vlk::OffscreenBuffer::create(
                     ctx, offscreenBufferSize, offscreenBufferOptions);
             }
 
@@ -992,5 +992,5 @@ namespace tl
             p.shaders["image"]->setUniform(
                 "transform.mvp", p.transform, VK_SHADER_STAGE_VERTEX_BIT);
         }
-    } // namespace timeline_vk
+    } // namespace timeline_vlk
 } // namespace tl

@@ -373,8 +373,8 @@ namespace mrv
             }
             
 #ifdef VULKAN_BACKEND
-            vk::OffscreenBufferOptions offscreenBufferOptions;
-            std::shared_ptr<timeline_vk::Render> render;
+            vlk::OffscreenBufferOptions offscreenBufferOptions;
+            std::shared_ptr<timeline_vlk::Render> render;
 #else
             gl::OffscreenBufferOptions offscreenBufferOptions;
             std::shared_ptr<timeline_gl::Render> render;
@@ -431,7 +431,7 @@ namespace mrv
             
 #ifdef VULKAN_BACKEND
             // \@todo: need to get context here
-            //render = timeline_vk::Render::create(context);
+            //render = timeline_vlk::Render::create(context);
 #else
             std::shared_ptr<gl::GLFWWindow> window;
             if (!interactive)
@@ -742,11 +742,11 @@ namespace mrv
             math::Size2i offscreenBufferSize(renderSize.w, renderSize.h);
 
 #ifdef VULKAN_BACKEND
-            std::shared_ptr<vk::OffscreenBuffer> buffer;
+            std::shared_ptr<vlk::OffscreenBuffer> buffer;
             Fl_Vk_Context ctx;  // \@todo: fill-in
             if (hasVideo)
             {
-                buffer = vk::OffscreenBuffer::create(
+                buffer = vlk::OffscreenBuffer::create(
                     ctx, offscreenBufferSize, offscreenBufferOptions);
             }
 #else

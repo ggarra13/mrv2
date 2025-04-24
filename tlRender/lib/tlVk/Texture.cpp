@@ -15,7 +15,7 @@
 
 namespace tl
 {
-    namespace vk
+    namespace vlk
     {
         unsigned int getTextureFormat(image::PixelType value)
         {
@@ -700,5 +700,5 @@ namespace tl
                 vkCreateSampler(device, &samplerInfo, nullptr, &p.sampler));
         }
 
-    } // namespace vk
+    } // namespace vlk
 } // namespace tl

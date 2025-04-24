@@ -12,11 +12,11 @@
 
 namespace tl
 {
-    namespace timeline_vk
+    namespace timeline_vlk
     {
         extern std::string vertexSource();
         extern std::string meshFragmentSource();
-    } // namespace timeline_vk
+    } // namespace timeline_vlk
 } // namespace tl
 
 namespace mrv
@@ -24,13 +24,13 @@ namespace mrv
     namespace vulkan
     {
 
-        using namespace tl::vk;
+        using namespace tl::vlk;
 
         struct Outline::Private
         {
-            std::shared_ptr<vk::Shader> shader;
-            std::shared_ptr<vk::VBO> vbo;
-            std::shared_ptr<vk::VAO> vao;
+            std::shared_ptr<vlk::Shader> shader;
+            std::shared_ptr<vlk::VBO> vbo;
+            std::shared_ptr<vlk::VAO> vao;
         };
 
         Outline::Outline() :
@@ -49,8 +49,8 @@ namespace mrv
             if (!p.shader)
             {
                 // p.shader = Shader::create(
-                //     timeline_vk::vertexSource(),
-                //     timeline_vk::meshFragmentSource());
+                //     timeline_vlk::vertexSource(),
+                //     timeline_vlk::meshFragmentSource());
             }
 
             if (!p.vbo)

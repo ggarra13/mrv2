@@ -8,7 +8,7 @@
 
 namespace tl
 {
-    namespace timeline_vk
+    namespace timeline_vlk
     {
         std::string vertexSource()
         {
@@ -619,5 +619,5 @@ namespace tl
                    "    outColor.a = max(c.a, cB.a);\n"
                    "}\n";
         }
-    } // namespace timeline_vk
+    } // namespace timeline_vlk
 } // namespace tl

@@ -134,6 +134,9 @@ protected:
     VkPipeline m_fbo_pipeline;
     VkPipelineLayout m_fbo_pipeline_layout;
 
+    //! This is for swapchain pipeline
+    VkPipelineLayout m_pipeline_layout;
+
     //! Memory for descriptor sets
     VkDescriptorPool m_desc_pool;
 
@@ -163,14 +166,14 @@ private:
 
     //! Shaders used in demo
 
-    std::shared_ptr<tl::vk::OffscreenBuffer> fbo;
-    std::shared_ptr<tl::vk::VBO> fbo_vbo;
-    std::shared_ptr<tl::vk::VAO> fbo_vao;
-    std::shared_ptr<tl::vk::Shader> fboShader;
+    std::shared_ptr<tl::vlk::OffscreenBuffer> fbo;
+    std::shared_ptr<tl::vlk::VBO> fbo_vbo;
+    std::shared_ptr<tl::vlk::VAO> fbo_vao;
+    std::shared_ptr<tl::vlk::Shader> fboShader;
 
-    std::shared_ptr<tl::vk::VBO> vbo;
-    std::shared_ptr<tl::vk::VAO> vao;
-    std::shared_ptr<tl::vk::Shader> shader;
+    std::shared_ptr<tl::vlk::VBO> vbo;
+    std::shared_ptr<tl::vlk::VAO> vao;
+    std::shared_ptr<tl::vlk::Shader> shader;
 };
 
 void vk_shape_window::_init()
@@ -204,17 +207,17 @@ void vk_shape_window::prepare_mesh()
     if (!fbo_vbo || (fbo_vbo && fbo_vbo->getSize() != numTriangles * 3))
     {
         fbo_vbo =
-            vk::VBO::create(numTriangles * 3, vk::VBOType::Pos2_F32_UV_U16);
+            vlk::VBO::create(numTriangles * 3, vlk::VBOType::Pos2_F32_UV_U16);
         fbo_vao.reset();
     }
     if (fbo_vbo)
     {
-        fbo_vbo->copy(convert(mesh, vk::VBOType::Pos2_F32_UV_U16));
+        fbo_vbo->copy(convert(mesh, vlk::VBOType::Pos2_F32_UV_U16));
     }
 
     if (!fbo_vao && fbo_vbo)
     {
-        fbo_vao = vk::VAO::create(ctx);
+        fbo_vao = vlk::VAO::create(ctx);
         fbo_vao->upload(fbo_vbo->getData());
     }
 
@@ -282,17 +285,17 @@ void vk_shape_window::prepare_mesh()
     
         if (!vbo || (vbo && vbo->getSize() != sides * 3))
         {
-            vbo = vk::VBO::create(sides * 3, vk::VBOType::Pos3_F32_UV_U16);
+            vbo = vlk::VBO::create(sides * 3, vlk::VBOType::Pos3_F32_UV_U16);
             vao.reset();
         }
         if (vbo)
         {
-            vbo->copy(convert(mesh, vk::VBOType::Pos3_F32_UV_U16));
+            vbo->copy(convert(mesh, vlk::VBOType::Pos3_F32_UV_U16));
         }
 
         if (!vao && vbo)
         {
-            vao = vk::VAO::create(ctx);
+            vao = vlk::VAO::create(ctx);
             vao->upload(vbo->getData());
         }
     }
@@ -380,11 +383,11 @@ void vk_shape_window::prepare_render_pass()
 void vk_shape_window::prepare_shaders()
 {
     if (!fboShader)
-        fboShader = tl::vk::Shader::create(ctx, fbo_vertex_shader_glsl,
+        fboShader = tl::vlk::Shader::create(ctx, fbo_vertex_shader_glsl,
                                            fbo_frag_shader_glsl);
 
     if (!shader)
-        shader = tl::vk::Shader::create(ctx, vertex_shader_glsl,
+        shader = tl::vlk::Shader::create(ctx, vertex_shader_glsl,
                                         frag_shader_glsl);
 }
 
@@ -715,11 +718,11 @@ void vk_shape_window::draw() {
     }
     
     math::Size2i renderSize(320, 240);
-    vk::OffscreenBufferOptions options;
-    options.colorType = vk::offscreenColorDefault;
-    if (vk::doCreate(fbo, renderSize, options))
+    vlk::OffscreenBufferOptions options;
+    options.colorType = vlk::offscreenColorDefault;
+    if (vlk::doCreate(fbo, renderSize, options))
     {
-        fbo = vk::OffscreenBuffer::create(ctx, renderSize, options);
+        fbo = vlk::OffscreenBuffer::create(ctx, renderSize, options);
     }
     
     // Clear yellow

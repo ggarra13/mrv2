@@ -81,11 +81,13 @@ namespace mrv
         VkShaderModule m_vert_shader_module;
         VkShaderModule m_frag_shader_module;
 
-        //! This is for holding a mesh
-        Fl_Vk_Mesh m_mesh;
+        //! This is for holding the textures
         std::vector<Fl_Vk_Texture> m_textures;
 
-        //! Memory for descriptor sets
+        //! This is for swapchain pipeline layout.
+        VkPipelineLayout      m_pipeline_layout;
+
+        //! Memory for descriptor sets.
         VkDescriptorPool      m_desc_pool;
 
         //! Describe texture bindings whithin desc. set  

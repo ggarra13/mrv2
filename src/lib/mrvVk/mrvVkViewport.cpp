@@ -120,7 +120,7 @@ namespace mrv
             if (auto context = vk.context.lock())
             {
 
-                vk.render = timeline_vk::Render::create(ctx, context);
+                vk.render = timeline_vlk::Render::create(ctx, context);
                 p.fontSystem = image::FontSystem::create(context);
 
 #ifdef USE_ONE_PIXEL_LINES
@@ -131,11 +131,11 @@ namespace mrv
 
                 try
                 {
-                    const std::string& vertexSource = timeline_vk::vertexSource();
+                    const std::string& vertexSource = timeline_vlk::vertexSource();
                     vk.shader =
-                        vk::Shader::create(ctx, vertexSource,
+                        vlk::Shader::create(ctx, vertexSource,
                                            textureFragmentSource());
-                    vk.annotationShader = vk::Shader::create(ctx,
+                    vk.annotationShader = vlk::Shader::create(ctx,
                                                              vertexSource, annotationFragmentSource());
                 }
                 catch (const std::exception& e)
@@ -270,7 +270,7 @@ namespace mrv
                     }
 
                 
-                    vk::OffscreenBufferOptions offscreenBufferOptions;
+                    vlk::OffscreenBufferOptions offscreenBufferOptions;
                     offscreenBufferOptions.colorType = vk.colorBufferType;
 
                     if (!p.displayOptions.empty())
@@ -278,13 +278,13 @@ namespace mrv
                         offscreenBufferOptions.colorFilters =
                             p.displayOptions[0].imageFilters;
                     }
-                    offscreenBufferOptions.depth = vk::OffscreenDepth::_24;
-                    offscreenBufferOptions.stencil = vk::OffscreenStencil::_8;
+                    offscreenBufferOptions.depth = vlk::OffscreenDepth::_24;
+                    offscreenBufferOptions.stencil = vlk::OffscreenStencil::_8;
                 
-                    if (vk::doCreate(vk.buffer, renderSize, offscreenBufferOptions))
+                    if (vlk::doCreate(vk.buffer, renderSize, offscreenBufferOptions))
                     {
                     
-                        vk.buffer = vk::OffscreenBuffer::create(
+                        vk.buffer = vlk::OffscreenBuffer::create(
                             ctx, renderSize, offscreenBufferOptions);
                     
                         _createPBOs(renderSize);
@@ -294,11 +294,11 @@ namespace mrv
 
                     if (can_do(FL_STEREO))
                     {
-                        if (vk::doCreate(
+                        if (vlk::doCreate(
                                 vk.stereoBuffer, renderSize,
                                 offscreenBufferOptions))
                         {
-                            vk.stereoBuffer = vk::OffscreenBuffer::create(
+                            vk.stereoBuffer = vlk::OffscreenBuffer::create(
                                 ctx, renderSize, offscreenBufferOptions);
                         }
                     }
@@ -331,7 +331,7 @@ namespace mrv
                     }
                     else
                     {
-                        // vk::OffscreenBufferBinding binding(vk.buffer);
+                        // vlk::OffscreenBufferBinding binding(vk.buffer);
 
                         locale::SetAndRestore saved;
                         timeline::RenderOptions renderOptions;
@@ -619,19 +619,19 @@ namespace mrv
                 auto outputDevice = App::app->outputDevice();
                 if (outputDevice && vk.buffer && p.showAnnotations)
                 {
-                    vk::OffscreenBufferOptions offscreenBufferOptions;
+                    vlk::OffscreenBufferOptions offscreenBufferOptions;
                     offscreenBufferOptions.colorType = image::PixelType::RGBA_U8;
                     if (!p.displayOptions.empty())
                     {
                         offscreenBufferOptions.colorFilters =
                             p.displayOptions[0].imageFilters;
                     }
-                    offscreenBufferOptions.depth = vk::OffscreenDepth::kNone;
-                    offscreenBufferOptions.stencil = vk::OffscreenStencil::kNone;
-                    if (vk::doCreate(
+                    offscreenBufferOptions.depth = vlk::OffscreenDepth::kNone;
+                    offscreenBufferOptions.stencil = vlk::OffscreenStencil::kNone;
+                    if (vlk::doCreate(
                             vk.overlay, renderSize, offscreenBufferOptions))
                     {
-                        vk.overlay = vk::OffscreenBuffer::create(
+                        vk.overlay = vlk::OffscreenBuffer::create(
                             ctx, renderSize, offscreenBufferOptions);
                     
                         _createOverlayPBO(renderSize);
@@ -758,19 +758,19 @@ namespace mrv
 
                 if (p.showAnnotations && !annotations.empty())
                 {
-                    vk::OffscreenBufferOptions offscreenBufferOptions;
+                    vlk::OffscreenBufferOptions offscreenBufferOptions;
                     offscreenBufferOptions.colorType = image::PixelType::RGBA_U8;
                     if (!p.displayOptions.empty())
                     {
                         offscreenBufferOptions.colorFilters =
                             p.displayOptions[0].imageFilters;
                     }
-                    offscreenBufferOptions.depth = vk::OffscreenDepth::kNone;
-                    offscreenBufferOptions.stencil = vk::OffscreenStencil::kNone;
-                    if (vk::doCreate(
+                    offscreenBufferOptions.depth = vlk::OffscreenDepth::kNone;
+                    offscreenBufferOptions.stencil = vlk::OffscreenStencil::kNone;
+                    if (vlk::doCreate(
                             vk.annotation, viewportSize, offscreenBufferOptions))
                     {
-                        vk.annotation = vk::OffscreenBuffer::create(
+                        vk.annotation = vlk::OffscreenBuffer::create(
                             ctx, viewportSize, offscreenBufferOptions);
                     }
 
@@ -937,7 +937,7 @@ namespace mrv
                 // constexpr VKenum type = GL_FLOAT;
 
 
-                // vk::OffscreenBufferBinding binding(vk.buffer);
+                // vlk::OffscreenBufferBinding binding(vk.buffer);
                 const auto& renderSize = vk.buffer->getSize();
 
                 // bool update = _shouldUpdatePixelBar();
@@ -1067,7 +1067,7 @@ namespace mrv
                     {
                         // MyViewport* self = const_cast<Viewport*>(this);
                         // self->make_current();
-                        //vk::OffscreenBufferBinding binding(vk.buffer);
+                        //vlk::OffscreenBufferBinding binding(vk.buffer);
                         //glReadPixels(pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);
                         return;
                     }

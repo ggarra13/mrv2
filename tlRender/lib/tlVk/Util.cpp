@@ -13,7 +13,7 @@
 
 namespace tl
 {
-    namespace tk
+    namespace vlk
     {
         unsigned int getReadPixelsFormat(image::PixelType value)
         {

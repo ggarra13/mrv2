@@ -10,7 +10,7 @@
 
 namespace tl
 {
-    namespace tk
+    namespace vlk
     {
         //! Get the glReadPixels format.
         unsigned int getReadPixelsFormat(image::PixelType);

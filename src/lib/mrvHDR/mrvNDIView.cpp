@@ -467,8 +467,8 @@ namespace mrv
         std::string hdrColorsDef;
 
         // Rendering variables
-        std::shared_ptr<tl::vk::VBO> vbo;
-        std::shared_ptr<tl::vk::VAO> vao;
+        std::shared_ptr<tl::vlk::VBO> vbo;
+        std::shared_ptr<tl::vlk::VAO> vao;
     };
 
     NDIView::~NDIView()
@@ -759,15 +759,9 @@ namespace mrv
     void NDIView::prepare_vertices()
     {
         TLRENDER_P();
-
-        // clang-format off
-        struct Vertex
-        {
-            float x, y;
-            float u, v;      // UV coordinates
-        };
-
-        std::vector<Vertex> vertices;
+                
+        using namespace tl;
+        
         const math::Size2i viewportSize = { pixel_w(), pixel_h() };
         image::Size renderSize = { pixel_w(), pixel_h() };
         
@@ -793,8 +787,6 @@ namespace mrv
             scaleY = aspectViewport / aspectRender;
             
         }
-        
-        using namespace tl;
 
         const geom::TriangleMesh2& mesh = geom::box(
             math::Box2f(-scaleX, -scaleY, scaleX * 2, scaleY * 2));
@@ -803,18 +795,18 @@ namespace mrv
     
         if (!p.vbo || (p.vbo && p.vbo->getSize() != numTriangles * 3))
         {
-            p.vbo = vk::VBO::create(numTriangles * 3,
-                                    vk::VBOType::Pos2_F32_UV_U16);
+            p.vbo = vlk::VBO::create(numTriangles * 3,
+                                     vlk::VBOType::Pos2_F32_UV_U16);
             p.vao.reset();
         }
         if (p.vbo)
         {
-            p.vbo->copy(convert(mesh, vk::VBOType::Pos2_F32_UV_U16));
+            p.vbo->copy(convert(mesh, vlk::VBOType::Pos2_F32_UV_U16));
         }
 
         if (!p.vao && p.vbo)
         {
-            p.vao = vk::VAO::create(ctx);
+            p.vao = vlk::VAO::create(ctx);
             p.vao->upload(p.vbo->getData());
         }
 

@@ -12,7 +12,7 @@
 
 namespace tl
 {
-    namespace vk
+    namespace vlk
     {
         //! Get the Vulkan internal texture format.
         VkFormat getTextureInternalFormat(image::PixelType);
@@ -122,5 +122,5 @@ namespace tl
 
             TLRENDER_PRIVATE();
         };
-    } // namespace vk
+    } // namespace vlk
 } // namespace tl

@@ -12,7 +12,7 @@ namespace std
 
 namespace tl
 {
-    namespace vk
+    namespace vlk
     {
 
         struct PipelineDesc
@@ -77,39 +77,41 @@ namespace tl
             }
 #undef VK_MEMSET
         };
-
-    } // namespace vk
-    template <> struct hash<PipelineDesc>
-    {
-        std::size_t operator()(const PipelineDesc& desc) const
+    
+        template <> struct hash<PipelineDesc>
         {
-            std::size_t h = 0;
+            std::size_t operator()(const PipelineDesc& desc) const
+                {
+                    std::size_t h = 0;
 
-            // Combine hashes of all relevant members
-            hash_combine(h, desc.vertShader);
-            hash_combine(h, desc.fragShader);
-            hash_combine(h, desc.layout);
-            hash_combine(h, desc.renderPass);
+                    // Combine hashes of all relevant members
+                    hash_combine(h, desc.vertShader);
+                    hash_combine(h, desc.fragShader);
+                    hash_combine(h, desc.layout);
+                    hash_combine(h, desc.renderPass);
 
-            // You can hash the structs directly via memory if POD:
-#define VK_HASH(PROPERTY)                                                      \
-    h ^= std::hash<std::string_view>()(std::string_view(                       \
-        reinterpret_cast<const char*>(&desc.PROPERTY),                         \
-        sizeof(desc.PROPERTY)));
-            VK_HASH(depthStencil);
-            VK_HASH(colorBlend);
-            VK_HASH(rasterization);
-            VK_HASH(inputAssembly);
-            VK_HASH(multisample);
-            VK_HASH(viewport);
-            VK_HASH(dynamicState);
+                    // You can hash the structs directly via memory if POD:
+#define VK_HASH(PROPERTY)                                               \
+                    h ^= std::hash<std::string_view>()(                 \
+                        std::string_view(                               \
+                            reinterpret_cast<const char*>(&desc.PROPERTY), \
+                            sizeof(desc.PROPERTY)));
+                    VK_HASH(depthStencil);
+                    VK_HASH(colorBlend);
+                    VK_HASH(rasterization);
+                    VK_HASH(inputAssembly);
+                    VK_HASH(multisample);
+                    VK_HASH(viewport);
+                    VK_HASH(dynamicState);
 
 #undef VK_HASH
 
-            return h;
-        }
-    };
+                    return h;
+                }
+        };
 
-    std::unordered_map<PipelineDesc, VkPipeline> gfxPipelineCache;
+        std::unordered_map<PipelineDesc, VkPipeline> gfxPipelineCache;
 
+    } // namespace vlk
+    
 } // namespace tl

@@ -251,7 +251,7 @@ namespace mrv
             {
                 locale::SetAndRestore saved;
 
-                // vk::OffscreenBufferBinding binding(vk.buffer);
+                // vlk::OffscreenBufferBinding binding(vk.buffer);
                 vk.render->begin(renderSize);
                 vk.render->setOCIOOptions(p.ocioOptions);
                 vk.render->setLUTOptions(p.lutOptions);
@@ -277,7 +277,7 @@ namespace mrv
 
             {
                 locale::SetAndRestore saved;
-                // vk::OffscreenBufferBinding binding(vk.stereoBuffer);
+                // vlk::OffscreenBufferBinding binding(vk.stereoBuffer);
 
                 vk.render->begin(renderSize);
                 vk.render->setOCIOOptions(p.ocioOptions);
@@ -414,7 +414,7 @@ namespace mrv
         }
 
         void Viewport::_drawAnnotations(
-            const std::shared_ptr<tl::vk::OffscreenBuffer>& overlay,
+            const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay,
             const math::Matrix4x4f& renderMVP, const otime::RationalTime& time,
             const std::vector<std::shared_ptr<draw::Annotation>>& annotations,
             const math::Size2i& renderSize)
@@ -422,7 +422,7 @@ namespace mrv
             TLRENDER_P();
             MRV2_VK();
 
-            // vk::OffscreenBufferBinding binding(overlay);
+            // vlk::OffscreenBufferBinding binding(overlay);
             
 
             timeline::RenderOptions renderOptions;
@@ -487,7 +487,7 @@ namespace mrv
             TLRENDER_P();
             MRV2_VK();
 
-            // vk::SetAndRestore(GL_BLEND, GL_TRUE);
+            // vlk::SetAndRestore(GL_BLEND, GL_TRUE);
 
             // glBlendFuncSeparate(
             //     GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA,
@@ -509,7 +509,7 @@ namespace mrv
         }
 
         void Viewport::_compositeOverlay(
-            const std::shared_ptr<tl::vk::OffscreenBuffer>& overlay,
+            const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay,
             const math::Matrix4x4f& mvp, const math::Size2i& viewportSize)
         {
             MRV2_VK();
@@ -559,7 +559,7 @@ namespace mrv
         }
 
         void Viewport::_compositeAnnotations(
-            const std::shared_ptr<tl::vk::OffscreenBuffer>& overlay,
+            const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay,
             const math::Matrix4x4f& orthoMatrix, const math::Size2i& viewportSize)
         {
             MRV2_VK();
@@ -1176,7 +1176,7 @@ namespace mrv
             //     glGenBuffers(2, vk.pboIDs);
             //     
 
-            //     const vk::OffscreenBufferOptions& options = vk.buffer->getOptions();
+            //     const vlk::OffscreenBufferOptions& options = vk.buffer->getOptions();
             //     const size_t dataSize = renderSize.w * renderSize.h *
             //                             image::getChannelCount(options.colorType) *
             //                             image::getBitDepth(options.colorType);

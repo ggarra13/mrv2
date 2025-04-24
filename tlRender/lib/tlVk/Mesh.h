@@ -21,7 +21,7 @@ namespace tl
         struct TriangleMesh3;
     } // namespace geom
 
-    namespace vk
+    namespace vlk
     {
         //! Vertex buffer object types.
         enum class VBOType {
@@ -47,20 +47,20 @@ namespace tl
 
         //! Convert a triangle mesh to vertex buffer data.
         std::vector<uint8_t>
-        convert(const geom::TriangleMesh2& mesh, vk::VBOType type);
+        convert(const geom::TriangleMesh2& mesh, vlk::VBOType type);
 
         //! Convert a triangle mesh to vertex buffer data.
         std::vector<uint8_t> convert(
-            const geom::TriangleMesh2& mesh, vk::VBOType type,
+            const geom::TriangleMesh2& mesh, vlk::VBOType type,
             const math::SizeTRange& range);
 
         //! Convert a triangle mesh to vertex buffer data.
         std::vector<uint8_t>
-        convert(const geom::TriangleMesh3& mesh, vk::VBOType type);
+        convert(const geom::TriangleMesh3& mesh, vlk::VBOType type);
 
         //! Convert a triangle mesh to vertex buffer data.
         std::vector<uint8_t> convert(
-            const geom::TriangleMesh3& mesh, vk::VBOType type,
+            const geom::TriangleMesh3& mesh, vlk::VBOType type,
             const math::SizeTRange& range);
 
         //! OpenGL vertex buffer object.
@@ -154,5 +154,5 @@ namespace tl
 
             TLRENDER_PRIVATE();
         };
-    } // namespace vk
+    } // namespace vlk
 } // namespace tl

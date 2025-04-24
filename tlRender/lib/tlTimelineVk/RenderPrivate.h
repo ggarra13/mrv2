@@ -30,7 +30,7 @@ namespace OCIO = OCIO_NAMESPACE;
 
 namespace tl
 {
-    namespace timeline_vk
+    namespace timeline_vlk
     {
         std::string vertexSource();
         std::string meshFragmentSource();
@@ -47,18 +47,18 @@ namespace tl
             const std::string& toneMap);
         std::string differenceFragmentSource();
 
-        std::vector<std::shared_ptr<vk::Texture> > getTextures(
+        std::vector<std::shared_ptr<vlk::Texture> > getTextures(
             Fl_Vk_Context&, const image::Info&, const timeline::ImageFilters&,
             size_t offset = 0);
 
         void copyTextures(
             const std::shared_ptr<image::Image>&,
-            const std::vector<std::shared_ptr<vk::Texture> >&,
+            const std::vector<std::shared_ptr<vlk::Texture> >&,
             size_t offset = 0);
 
         void setActiveTextures(
             const image::Info& info,
-            const std::vector<std::shared_ptr<vk::Texture> >&,
+            const std::vector<std::shared_ptr<vlk::Texture> >&,
             size_t offset = 0);
 
 #if defined(TLRENDER_OCIO)
@@ -127,14 +127,14 @@ namespace tl
             bool clipRectEnabled = false;
             math::Box2i clipRect;
 
-            std::map<std::string, std::shared_ptr<vk::Shader> > shaders;
-            std::map<std::string, std::shared_ptr<vk::OffscreenBuffer> >
+            std::map<std::string, std::shared_ptr<vlk::Shader> > shaders;
+            std::map<std::string, std::shared_ptr<vlk::OffscreenBuffer> >
                 buffers;
             std::shared_ptr<TextureCache> textureCache;
-            std::shared_ptr<vk::TextureAtlas> glyphTextureAtlas;
-            std::map<image::GlyphInfo, vk::TextureAtlasID> glyphIDs;
-            std::map<std::string, std::shared_ptr<vk::VBO> > vbos;
-            std::map<std::string, std::shared_ptr<vk::VAO> > vaos;
+            std::shared_ptr<vlk::TextureAtlas> glyphTextureAtlas;
+            std::map<image::GlyphInfo, vlk::TextureAtlasID> glyphIDs;
+            std::map<std::string, std::shared_ptr<vlk::VBO> > vbos;
+            std::map<std::string, std::shared_ptr<vlk::VAO> > vaos;
 
             std::chrono::steady_clock::time_point timer;
             struct Stats
@@ -154,5 +154,5 @@ namespace tl
 
             void drawTextMesh(Fl_Vk_Context& ctx, const geom::TriangleMesh2&);
         };
-    } // namespace timeline_vk
+    } // namespace timeline_vlk
 } // namespace tl

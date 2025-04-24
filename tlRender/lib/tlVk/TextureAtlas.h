@@ -13,7 +13,7 @@
 
 namespace tl
 {
-    namespace vk
+    namespace vlk
     {
         //! Texture atlas item.
         struct TextureAtlasItem
@@ -68,5 +68,5 @@ namespace tl
 
             TLRENDER_PRIVATE();
         };
-    } // namespace vk
+    } // namespace vlk
 } // namespace tl

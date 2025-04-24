@@ -115,8 +115,8 @@ namespace mrv
             }
 
 #ifdef VULKAN_BACKEND
-            vk::OffscreenBufferOptions offscreenBufferOptions;
-            std::shared_ptr<timeline_vk::Render> render;
+            vlk::OffscreenBufferOptions offscreenBufferOptions;
+            std::shared_ptr<timeline_vlk::Render> render;
 #else
             gl::OffscreenBufferOptions offscreenBufferOptions;
             std::shared_ptr<timeline_gl::Render> render;
@@ -170,7 +170,7 @@ namespace mrv
             // Create the renderer.
 #ifdef VULKAN_BACKEND
             // \@todo: Vulkan
-            //render = timeline_vk::Render::create(context);
+            //render = timeline_vlk::Render::create(context);
 #else
             render = timeline_gl::Render::create(context);
 #endif
@@ -418,7 +418,7 @@ namespace mrv
 
 #ifdef VULKAN_BACKEND
             Fl_Vk_Context ctx;  // \@todo: fill-in
-            auto buffer = vk::OffscreenBuffer::create(
+            auto buffer = vlk::OffscreenBuffer::create(
                 ctx, offscreenBufferSize, offscreenBufferOptions);
 #else
             view->make_current();
