@@ -198,7 +198,7 @@ namespace tl
             for (const auto& [_, ubo] : ubos)
             {
                 bindings.push_back(ubo.layoutBinding);
-                dr < poolSize{};
+                VkDescriptorPoolSize poolSize = {};
                 poolSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
                 poolSize.descriptorCount = 1; // or more if you support arrays
                 poolSizes.push_back(poolSize);

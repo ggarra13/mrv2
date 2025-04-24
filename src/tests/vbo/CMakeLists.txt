@@ -8,7 +8,7 @@ set(HEADERS
 set(SOURCES
     vbo.cpp)
 
-
+find_package(tlRender REQUIRED)
 set(LIBRARIES tlRender)
 
 list(APPEND LIBRARIES ${FLTK_vk_LIBRARY} ${FLTK_LIBRARIES})
@@ -25,10 +25,10 @@ add_executable(vbo WIN32 ${SOURCES} ${HEADERS})
 target_include_directories( vbo BEFORE PRIVATE . )
 
 target_link_libraries(vbo PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
-target_link_directories( vbo BEFORE PUBLIC ${CMAKE_INSTALL_PREFIX}/lib /usr/local/lib )
+target_link_directories(vbo BEFORE PUBLIC ${CMAKE_INSTALL_PREFIX}/lib /usr/local/lib )
 
 install(TARGETS vbo
-    RUNTIME DESTINATION bin COMPONENT applications
+    RUNTIME DESTINATION bin/tests COMPONENT tests
     LIBRARY DESTINATION lib COMPONENT libraries
     ARCHIVE DESTINATION lib COMPONENT libraries )
 

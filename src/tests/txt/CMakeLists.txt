@@ -28,7 +28,7 @@ target_link_libraries(txt PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
 target_link_directories(txt BEFORE PUBLIC ${CMAKE_INSTALL_PREFIX}/lib /usr/local/lib )
 
 install(TARGETS txt
-    RUNTIME DESTINATION bin COMPONENT applications
+    RUNTIME DESTINATION bin/tests COMPONENT tests
     LIBRARY DESTINATION lib COMPONENT libraries
     ARCHIVE DESTINATION lib COMPONENT libraries )
 
