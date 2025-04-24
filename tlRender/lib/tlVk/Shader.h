@@ -81,11 +81,15 @@ namespace tl
             ///@}
 
             void addTexture(
-                const std::string& name, const VkShaderStageFlags stageFlags =
-                                             VK_SHADER_STAGE_FRAGMENT_BIT);
+                const std::string& name, 
+                const std::shared_ptr<Texture>& texture,
+                const VkShaderStageFlags stageFlags =
+                VK_SHADER_STAGE_FRAGMENT_BIT);
             void setTexture(
                 const std::string& name,
-                const std::shared_ptr<Texture>& texture);
+                const std::shared_ptr<Texture>& texture,
+                const VkShaderStageFlags stageFlags =
+                VK_SHADER_STAGE_FRAGMENT_BIT);
 
             void createDescriptorSet();
 

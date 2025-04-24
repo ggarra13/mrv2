@@ -90,7 +90,9 @@ std::string frag_shader_glsl = R"(
         }
 )";
 
-// FBO shaders (just paint white)
+//
+// FBO shaders
+//
 std::string fbo_vertex_shader_glsl = R"(
         #version 450
         layout(location = 0) in vec3 inPos;
@@ -117,6 +119,7 @@ void main() {
 
 class vk_shape_window : public Fl_Vk_Window
 {
+    void vk_draw_begin() FL_OVERRIDE;
     void draw() FL_OVERRIDE;
 
 public:
@@ -134,17 +137,11 @@ public:
     uint32_t frame_counter = 0;
 
 protected:
-    //! This is for the fbo pipeline
-    VkPipeline m_fbo_pipeline;
-    VkPipelineLayout m_fbo_pipeline_layout;
-    
     //! This is for swapchain pipeline
     VkPipelineLayout m_pipeline_layout;
 
 private:
     void _init();
-
-    void destroy_fbo_pipeline();
 
     void prepare_textures();
     void prepare_descriptor_layout();
@@ -154,20 +151,13 @@ private:
     void prepare_pipeline();
     void prepare_descriptor_pool();
     void prepare_descriptor_set();
-    void prepare_texture_image(
-        const uint32_t* tex_colors, Fl_Vk_Texture* tex_obj,
-        VkImageTiling tiling, VkImageUsageFlags usage, VkFlags required_props);
-
+    
     //! Shaders used in demo
-
-    std::shared_ptr<tl::vlk::OffscreenBuffer> fbo;
-    std::shared_ptr<tl::vlk::VBO> fbo_vbo;
-    std::shared_ptr<tl::vlk::VAO> fbo_vao;
-    std::shared_ptr<tl::vlk::Shader> fboShader;
-
     std::shared_ptr<tl::vlk::VBO> vbo;
     std::shared_ptr<tl::vlk::VAO> vao;
     std::shared_ptr<tl::vlk::Shader> shader;
+
+    std::shared_ptr<tl::vlk::Texture> texture;
 };
 
 void vk_shape_window::_init()
@@ -176,8 +166,7 @@ void vk_shape_window::_init()
     sides = 3;
     // Turn on validations
     m_validate = true;
-    m_fbo_pipeline = VK_NULL_HANDLE;
-    m_fbo_pipeline_layout = VK_NULL_HANDLE;
+
 }
 
 vk_shape_window::vk_shape_window(int x, int y, int w, int h, const char* l) :
@@ -192,28 +181,27 @@ vk_shape_window::vk_shape_window(int w, int h, const char* l) :
     _init();
 }
 
+void vk_shape_window::prepare_textures()
+{
+    using namespace tl;
+    
+    image::Info info(320, 240, image::PixelType::RGBA_U8);
+    texture = vlk::Texture::create(ctx, info);
+    size_t size = info.size.w * info.size.h * 4 * sizeof(uint8_t);
+    std::vector<uint8_t> data(size);
+    for (int y = 0; y < info.size.h; ++y)
+    {
+        size_t rowSize = info.size.w * 4 * sizeof(uint8_t);
+        uint8_t* ptr = data.data() + y * rowSize;
+        int value = y % 2 == 0 ? 255 : 128;
+        memset(ptr, value, rowSize);
+    }
+    texture->copy(data.data(), size);
+}
+
 void vk_shape_window::prepare_mesh()
 {
     using namespace tl;
-
-    geom::TriangleMesh2 mesh = geom::box(math::Box2f(-.5F, -0.5F, 1.F, 1.F));
-    const size_t numTriangles = mesh.triangles.size();
-    if (!fbo_vbo || (fbo_vbo && fbo_vbo->getSize() != numTriangles * 3))
-    {
-        fbo_vbo =
-            vlk::VBO::create(numTriangles * 3, vlk::VBOType::Pos2_F32_UV_U16);
-        fbo_vao.reset();
-    }
-    if (fbo_vbo)
-    {
-        fbo_vbo->copy(convert(mesh, vlk::VBOType::Pos2_F32_UV_U16));
-    }
-
-    if (!fbo_vao && fbo_vbo)
-    {
-        fbo_vao = vlk::VAO::create(ctx);
-        fbo_vao->upload(fbo_vbo->getData());
-    }
 
     // clang-format off
     struct Vertex
@@ -310,8 +298,8 @@ void vk_shape_window::prepare_render_pass()
     attachments[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
     attachments[0].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     attachments[0].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    attachments[0].initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-    attachments[0].finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+    attachments[0].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED; // Start undefined
+    attachments[0].finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR; // Final layout for presentation
 
     attachments[1] = VkAttachmentDescription();
 
@@ -376,180 +364,9 @@ void vk_shape_window::prepare_render_pass()
 
 void vk_shape_window::prepare_shaders()
 {
-    if (!fboShader)
-        fboShader = tl::vlk::Shader::create(ctx, fbo_vertex_shader_glsl,
-                                           fbo_frag_shader_glsl);
-
     if (!shader)
         shader = tl::vlk::Shader::create(ctx, vertex_shader_glsl,
-                                        frag_shader_glsl);
-}
-
-void vk_shape_window::destroy_fbo_pipeline()
-{
-    vkDestroyPipelineLayout(device(), m_fbo_pipeline_layout, nullptr);
-    m_fbo_pipeline_layout = VK_NULL_HANDLE;
-    
-    vkDestroyPipeline(device(), m_fbo_pipeline, nullptr);
-    m_fbo_pipeline = VK_NULL_HANDLE;
-}
-
-void vk_shape_window::prepare_fbo_pipeline() {
-    VkGraphicsPipelineCreateInfo pipeline;
-    VkPipelineCacheCreateInfo pipelineCacheCreateInfo;
-
-    VkPipelineVertexInputStateCreateInfo vi = {};
-    VkPipelineInputAssemblyStateCreateInfo ia;
-    VkPipelineRasterizationStateCreateInfo rs;
-    VkPipelineColorBlendStateCreateInfo cb;
-    VkPipelineDepthStencilStateCreateInfo ds;
-    VkPipelineViewportStateCreateInfo vp;
-    VkPipelineMultisampleStateCreateInfo ms;
-    VkDynamicState dynamicStateEnables[(VK_DYNAMIC_STATE_STENCIL_REFERENCE - VK_DYNAMIC_STATE_VIEWPORT + 1)];
-    VkPipelineDynamicStateCreateInfo dynamicState;
-
-    VkResult result;
-    
-    memset(dynamicStateEnables, 0, sizeof dynamicStateEnables);
-    memset(&dynamicState, 0, sizeof dynamicState);
-    dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
-    dynamicState.pDynamicStates = dynamicStateEnables;
-
-    frame_counter += 10;
-    float b = (frame_counter % 255) / 255.F;
-    float r = 1.F - b;
-
-    using namespace tl;
-    struct UBO
-    {
-        math::Vector3f blue;
-        math::Vector3f red;
-    };
-
-    UBO ubo;
-    ubo.blue = math::Vector3f(0, 0, b);
-    ubo.red  = math::Vector3f(r, 0, 0);
-    
-    fboShader->setUniform("ubo", ubo);
-    if (fboShader->getDescriptorSet() == VK_NULL_HANDLE)
-        fboShader->createDescriptorSet();
-
-    VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = {};
-    pPipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-    pPipelineLayoutCreateInfo.pNext = NULL;
-    pPipelineLayoutCreateInfo.setLayoutCount = 1;
-    pPipelineLayoutCreateInfo.pSetLayouts = &fboShader->getDescriptorSetLayout();
-
-    result = vkCreatePipelineLayout(device(), &pPipelineLayoutCreateInfo,
-                                    NULL,
-                                    &m_fbo_pipeline_layout);
-    
-    memset(&pipeline, 0, sizeof(pipeline));
-    pipeline.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-    pipeline.layout = m_fbo_pipeline_layout;
-
-    vi.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-    vi.pNext = NULL;
-    vi.vertexBindingDescriptionCount = 1;
-    vi.pVertexBindingDescriptions = fbo_vbo->getBindingDescription();
-    vi.vertexAttributeDescriptionCount = fbo_vbo->getAttributes().size();
-    vi.pVertexAttributeDescriptions = fbo_vbo->getAttributes().data();
-
-    memset(&ia, 0, sizeof(ia));
-    ia.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-    ia.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-
-    memset(&rs, 0, sizeof(rs));
-    rs.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
-    rs.polygonMode = VK_POLYGON_MODE_FILL;
-    rs.cullMode = VK_CULL_MODE_NONE;
-    rs.frontFace = VK_FRONT_FACE_CLOCKWISE;
-    rs.depthClampEnable = VK_FALSE;
-    rs.rasterizerDiscardEnable = VK_FALSE;
-    rs.depthBiasEnable = VK_FALSE;
-    rs.lineWidth = 1.0f;
-
-    memset(&cb, 0, sizeof(cb));
-    cb.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-    VkPipelineColorBlendAttachmentState att_state[1];
-    memset(att_state, 0, sizeof(att_state));
-    att_state[0].colorWriteMask = 0xf;
-    att_state[0].blendEnable = VK_FALSE;
-    cb.attachmentCount = 1;
-    cb.pAttachments = att_state;
-
-    memset(&vp, 0, sizeof(vp));
-    vp.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-    vp.viewportCount = 1;
-    dynamicStateEnables[dynamicState.dynamicStateCount++] =
-        VK_DYNAMIC_STATE_VIEWPORT;
-    vp.scissorCount = 1;
-    dynamicStateEnables[dynamicState.dynamicStateCount++] =
-        VK_DYNAMIC_STATE_SCISSOR;
-
-    bool has_depth = fbo->hasDepth();
-    bool has_stencil = fbo->hasStencil();
-    
-    memset(&ds, 0, sizeof(ds));
-    ds.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
-    ds.depthTestEnable = has_depth ? VK_TRUE : VK_FALSE;
-    ds.depthWriteEnable = has_depth ? VK_TRUE : VK_FALSE;
-    ds.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
-    ds.depthBoundsTestEnable = VK_FALSE;
-    ds.stencilTestEnable = has_stencil ? VK_TRUE : VK_FALSE;
-    ds.back.failOp = VK_STENCIL_OP_KEEP;
-    ds.back.passOp = VK_STENCIL_OP_KEEP;
-    ds.back.compareOp = VK_COMPARE_OP_ALWAYS;
-    ds.front = ds.back;
-
-    memset(&ms, 0, sizeof(ms));
-    ms.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
-    ms.pSampleMask = NULL;
-    ms.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
-
-    // Two stages: vs and fs
-    pipeline.stageCount = 2;
-    VkPipelineShaderStageCreateInfo shaderStages[2];
-    memset(&shaderStages, 0, 2 * sizeof(VkPipelineShaderStageCreateInfo));
-
-    shaderStages[0].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-    shaderStages[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
-    shaderStages[0].module = fboShader->getVertex();
-    shaderStages[0].pName = "main";
-
-    shaderStages[1].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-    shaderStages[1].stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-    shaderStages[1].module = fboShader->getFragment();
-    shaderStages[1].pName = "main";
-    
-    pipeline.pVertexInputState = &vi;
-    pipeline.pInputAssemblyState = &ia;
-    pipeline.pRasterizationState = &rs;
-    pipeline.pColorBlendState = &cb;
-    pipeline.pMultisampleState = &ms;
-    pipeline.pViewportState = &vp;
-    pipeline.pDepthStencilState = &ds;
-    pipeline.pStages = shaderStages;
-    pipeline.renderPass = fbo->getRenderPass();
-    pipeline.pDynamicState = &dynamicState;
-
-    memset(&pipelineCacheCreateInfo, 0, sizeof(pipelineCacheCreateInfo));
-    pipelineCacheCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
-
-
-
-        
-    VkPipelineCache pipelineCache;
-    
-    result = vkCreatePipelineCache(device(), &pipelineCacheCreateInfo, NULL,
-                                   &pipelineCache);
-    VK_CHECK(result);
-    
-    result = vkCreateGraphicsPipelines(device(), pipelineCache, 1,
-                                       &pipeline, NULL, &m_fbo_pipeline);
-    VK_CHECK(result);
-
-    vkDestroyPipelineCache(device(), pipelineCache, NULL);
+                                         frag_shader_glsl);
 }
 
 void vk_shape_window::prepare_pipeline() {
@@ -686,13 +503,21 @@ void vk_shape_window::prepare_descriptor_set() {
 
 void vk_shape_window::prepare()
 {
+    prepare_shaders();
+    prepare_textures();
     prepare_mesh();
     prepare_descriptor_layout();
     prepare_render_pass();
-    prepare_shaders();
     prepare_pipeline();
     prepare_descriptor_pool();
     prepare_descriptor_set();
+}
+
+void vk_shape_window::vk_draw_begin()
+{
+    m_clearColor = { 0.4, 0.4, 0.4, 0 };
+    
+    Fl_Vk_Window::vk_draw_begin();
 }
 
 void vk_shape_window::draw() {
@@ -706,60 +531,19 @@ void vk_shape_window::draw() {
         return;
     }
     
-    math::Size2i renderSize(4096, 2980);
-    vlk::OffscreenBufferOptions options;
-    options.colorType = vlk::offscreenColorDefault;
-    if (vlk::doCreate(fbo, renderSize, options))
-    {
-        fbo = vlk::OffscreenBuffer::create(ctx, renderSize, options);
-    }
-    
-    // Clear yellow
-    VkClearValue clearValues[1];
-    clearValues[0].color = { 1.f, 1.f, 0.f, 1.f };
-
-    VkRenderPassBeginInfo rpBegin{};
-    rpBegin.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-    rpBegin.renderPass = fbo->getRenderPass();
-    rpBegin.framebuffer = fbo->getFramebuffer();
-    rpBegin.renderArea.extent = fbo->getExtent();
-    rpBegin.clearValueCount = 1;
-    rpBegin.pClearValues = clearValues;
-
-    VkCommandBuffer cmdBuffer = beginSingleTimeCommands(device(), commandPool());
-    
-    vkCmdBeginRenderPass(cmdBuffer, &rpBegin, VK_SUBPASS_CONTENTS_INLINE);
-
-    prepare_fbo_pipeline();
-    
-    vkCmdBindPipeline(cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS,
-                      m_fbo_pipeline);
-    
-    vkCmdBindDescriptorSets(cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS,
-                            m_fbo_pipeline_layout, 0, 1, &fboShader->getDescriptorSet(), 0, nullptr);
-
-    // Draw commands here...
-    fbo->setupViewportAndScissor(cmdBuffer);
-    
-    fbo_vao->draw(cmdBuffer, fbo_vbo);
-    
-    vkCmdEndRenderPass(cmdBuffer);
-    
-    // After rendering
-    fbo->transitionToShaderRead(cmdBuffer);
-    
-    endSingleTimeCommands(cmdBuffer, device(), commandPool(), queue());
-
-    destroy_fbo_pipeline();
-    
-    
     vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline);
 
+    texture->transition(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                        VK_ACCESS_TRANSFER_WRITE_BIT,
+                        VK_PIPELINE_STAGE_TRANSFER_BIT,
+                        VK_ACCESS_SHADER_READ_BIT,
+                        VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+    
     VkDescriptorImageInfo tex_descs[1];
     memset(&tex_descs, 0, sizeof(tex_descs));
-    tex_descs[0].sampler = fbo->getSampler();
-    tex_descs[0].imageView = fbo->getImageView();
-    tex_descs[0].imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    tex_descs[0].sampler = texture->getSampler();
+    tex_descs[0].imageView = texture->getImageView();
+    tex_descs[0].imageLayout = texture->getImageLayout();
 
     VkWriteDescriptorSet write = {};
     write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
@@ -769,7 +553,6 @@ void vk_shape_window::draw() {
     write.pImageInfo = tex_descs;
 
     vkUpdateDescriptorSets(device(), 1, &write, 0, NULL);
-
     
     vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
                             m_pipeline_layout, 0, 1,
@@ -788,13 +571,6 @@ void vk_shape_window::draw() {
     vkCmdSetScissor(cmd, 0, 1, &scissor);
 
     vao->draw(cmd, vbo);
-    
-    vkCmdEndRenderPass(cmd);
-    
-    // Before next render
-    // cmdBuffer = beginSingleTimeCommands(device(), commandPool());
-    // fbo->transitionToColorAttachment(cmdBuffer);
-    // endSingleTimeCommands(cmdBuffer, device(), commandPool(), queue());
 }
 
 void vk_shape_window::destroy_mesh()
@@ -816,31 +592,15 @@ void vk_shape_window::destroy_resources()
         m_pipeline_layout = VK_NULL_HANDLE;
     }
     
-    if (m_fbo_pipeline != VK_NULL_HANDLE)
-    {
-        vkDestroyPipeline(device(), m_fbo_pipeline, nullptr);
-        m_fbo_pipeline = VK_NULL_HANDLE;
-    }
-    
-    if (m_fbo_pipeline_layout != VK_NULL_HANDLE)
-    {
-        vkDestroyPipelineLayout(device(), m_fbo_pipeline_layout, nullptr);
-        m_fbo_pipeline_layout = VK_NULL_HANDLE;
-    }
-
     shader.reset();
-    fboShader.reset();
-
-    fbo.reset();
-    fbo_vao.reset();
-    fbo_vbo.reset();
-    
+    texture.reset();    
 }
 
 
 void vk_shape_window::prepare_descriptor_layout()
 {
-    shader->addTexture("samplerTexture");
+    shader->setTexture("samplerTexture", texture);
+    
     if (shader->getDescriptorSet() == VK_NULL_HANDLE)
         shader->createDescriptorSet();
 
@@ -867,11 +627,6 @@ void sides_cb(Fl_Widget *o, void *p) {
   sw->redraw();
 }
 
-void change_ubo_cb(void *p) {
-  vk_shape_window *sw = (vk_shape_window *)p;
-  sw->redraw();
-  Fl::repeat_timeout(0.005, (Fl_Timeout_Handler)change_ubo_cb, sw);
-}
 
 int main(int argc, char **argv) {
     Fl::use_high_res_VK(1);
@@ -890,8 +645,6 @@ int main(int argc, char **argv) {
     slider.callback(sides_cb,&sw);
     window.end();
     window.show(argc,argv);
-
-    Fl::add_timeout(0.005, (Fl_Timeout_Handler)change_ubo_cb, &sw);
     
     return Fl::run();
 }

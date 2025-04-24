@@ -146,51 +146,54 @@ namespace tl
         }
 
         void Shader::addTexture(
-            const std::string& name, const VkShaderStageFlags stageFlags)
+            const std::string& name, const std::shared_ptr<Texture>& texture,
+            const VkShaderStageFlags stageFlags)
         {
             TextureBinding t;
             t.binding = current_binding_index++;
+            t.texture = texture;
             t.stageFlags = stageFlags;
             textureBindings.insert(std::make_pair(name, t));
         }
 
         void Shader::setTexture(
-            const std::string& name, const std::shared_ptr<Texture>& texture)
+            const std::string& name, const std::shared_ptr<Texture>& texture,
+            const VkShaderStageFlags stageFlags)
         {
 
             auto it = textureBindings.find(name);
             if (it == textureBindings.end())
             {
-                std::string err =
-                    "Could not find " + name + " in texture bindings";
-                throw std::runtime_error(err);
+                addTexture(name, texture, stageFlags);
             }
+            else
+            {
+                VkDevice device = ctx.device;
 
-            VkDevice device = ctx.device;
+                uint32_t binding = it->second.binding;
 
-            uint32_t binding = it->second.binding;
+                VkDescriptorImageInfo imageInfo{};
+                imageInfo.imageView = texture->getImageView();
+                imageInfo.sampler = texture->getSampler();
+                imageInfo.imageLayout = texture->getImageLayout();
 
-            VkDescriptorImageInfo imageInfo{};
-            imageInfo.imageView = texture->getImageView();
-            imageInfo.sampler = texture->getSampler();
-            imageInfo.imageLayout = texture->getImageLayout();
+                VkWriteDescriptorSet write{};
+                write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                write.dstSet = descriptorSet; // previously created set
+                write.dstBinding = binding;
+                write.dstArrayElement = 0;
+                write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+                write.descriptorCount = 1;
+                write.pImageInfo = &imageInfo;
 
-            VkWriteDescriptorSet write{};
-            write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-            write.dstSet = descriptorSet; // previously created set
-            write.dstBinding = binding;
-            write.dstArrayElement = 0;
-            write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-            write.descriptorCount = 1;
-            write.pImageInfo = &imageInfo;
-
-            vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
+                vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
+            }
         }
 
         void Shader::createDescriptorSet()
         {
             VkDevice device = ctx.device;
-
+            
             std::vector<VkDescriptorSetLayoutBinding> bindings;
             std::vector<VkDescriptorPoolSize> poolSizes;
 
@@ -203,9 +206,8 @@ namespace tl
                 poolSize.descriptorCount = 1; // or more if you support arrays
                 poolSizes.push_back(poolSize);
             }
-
-            // Samplers
-
+            
+            // Textures
             for (const auto& [_, texture] : textureBindings)
             {
                 VkDescriptorSetLayoutBinding layoutBinding = {};
@@ -214,7 +216,7 @@ namespace tl
                 layoutBinding.descriptorCount = 1;
                 layoutBinding.descriptorType =
                     VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-                layoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+                layoutBinding.stageFlags = texture.stageFlags;
                 layoutBinding.pImmutableSamplers = nullptr;
 
                 bindings.push_back(layoutBinding);

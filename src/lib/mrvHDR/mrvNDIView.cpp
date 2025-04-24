@@ -812,7 +812,7 @@ namespace mrv
 
     }
 
-    // ctx.format + m_depth (optionally) -> creates m_renderPass
+    // creates m_renderPass
     void NDIView::prepare_render_pass()
     {
         VkAttachmentDescription attachments[2];
@@ -823,8 +823,8 @@ namespace mrv
         attachments[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
         attachments[0].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
         attachments[0].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-        attachments[0].initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-        attachments[0].finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+        attachments[0].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED; // Start undefined
+        attachments[0].finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR; // Final layout for presentation
 
         attachments[1] = VkAttachmentDescription();
 
@@ -1382,8 +1382,6 @@ void main() {
 
         // Draw the rectangle
         p.vao->draw(cmd, p.vbo);
-
-        vkCmdEndRenderPass(cmd);
     }
 
     std::vector<const char*> NDIView::get_instance_extensions()

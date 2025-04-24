@@ -16,69 +16,104 @@
 namespace tl
 {
     namespace vlk
-    {
-        unsigned int getTextureFormat(image::PixelType value)
+    {                           
+        
+
+        std::size_t getDataByteCount(const VkImageType type,
+                                     uint32_t w,
+                                     uint32_t h,
+                                     uint32_t d,
+                                     VkFormat format)
         {
-            return 0;
+            std::size_t out = 0;
+            switch(type)
+            {
+            case VK_IMAGE_TYPE_1D:
+                h = d = 1;
+                break;
+            case VK_IMAGE_TYPE_2D:
+                d = 1;
+                break;
+            default:
+                break;
+            }
+            
+            switch (format)
+            {
+            case VK_FORMAT_R8_UNORM:
+                out = w * h * d * sizeof(uint8_t);
+                break;
+            case VK_FORMAT_R16_UNORM:
+                out = w * h * d * sizeof(uint16_t);
+                break;
+            case VK_FORMAT_R32_UINT:
+                out = w * h * d * sizeof(uint32_t);
+                break;
+            case VK_FORMAT_R16_SFLOAT:
+                out = w * h * d * sizeof(uint16_t);
+                break;
+            case VK_FORMAT_R32_SFLOAT:
+                out = w * h * d * sizeof(float);
+                break;
 
-            //             const std::array<
-            //                 GLenum,
-            //                 static_cast<std::size_t>(image::PixelType::Count)>
-            //                 data = {
-            //                     GL_NONE,
-
-            // #if defined(TLRENDER_API_GL_4_1)
-            //                     GL_RED,  GL_RED,  GL_RED,  GL_RED,  GL_RED,
-
-            //                     GL_RG,   GL_RG,   GL_RG,   GL_RG,   GL_RG,
-
-            //                     GL_RGB,  GL_RGBA, GL_RGB,  GL_RGB,  GL_RGB,
-            //                     GL_RGB,
-
-            //                     GL_RGBA, GL_RGBA, GL_RGBA, GL_RGBA, GL_RGBA,
-
-            //                     GL_NONE, GL_NONE, GL_NONE, GL_NONE, GL_NONE,
-            //                     GL_NONE,
-
-            //                     GL_BGRA
-            // #elif defined(TLRENDER_API_GLES_2)
-            //                     GL_LUMINANCE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-
-            //                     GL_LUMINANCE_ALPHA,
-            //                     GL_NONE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-
-            //                     GL_RGB,
-            //                     GL_NONE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-
-            //                     GL_RGBA,
-            //                     GL_NONE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-
-            //                     GL_NONE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-
-            //                     GL_NONE
-            // #endif // TLRENDER_API_GL_4_1
-            //                 };
-            //             return data[static_cast<std::size_t>(value)];
+            case VK_FORMAT_R8G8_UNORM:
+                out = 2 * w * h * d * sizeof(uint8_t);
+                break;
+            case VK_FORMAT_R16G16_UNORM:
+                out = 2 * w * h * d * sizeof(uint16_t);
+                break;
+            case VK_FORMAT_R32G32_UINT:
+                out = 2 * w * h * d * sizeof(uint32_t);
+                break;
+            case VK_FORMAT_R16G16_SFLOAT:
+                out = 2 * w * h * d * sizeof(uint16_t);
+                break;
+            case VK_FORMAT_R32G32_SFLOAT:
+                out = 2 * w * h * d * sizeof(float);
+                break;
+                
+            case VK_FORMAT_R8G8B8_UNORM:
+                out = 3 * w * h * d * sizeof(uint8_t);
+                break;
+            case VK_FORMAT_R16G16B16_UNORM:
+                out = 3 * w * h * d * sizeof(uint16_t);
+                break;
+            case VK_FORMAT_R32G32B32_UINT:
+                out = 3 * w * h * d * sizeof(uint32_t);
+                break;
+            case VK_FORMAT_R16G16B16_SFLOAT:
+                out = 3 * w * h * d * sizeof(uint16_t);
+                break;
+            case VK_FORMAT_R32G32B32_SFLOAT:
+                out = 3 * w * h * d * sizeof(float);
+                break;
+                
+            case VK_FORMAT_A2R10G10B10_UNORM_PACK32:
+                out = 32 * w * h * d;
+                break;
+                
+            case VK_FORMAT_R8G8B8A8_UNORM:
+                out = 4 * w * h * d * sizeof(uint8_t);
+                break;
+            case VK_FORMAT_R16G16B16A16_UNORM:
+                out = 4 * w * h * d * sizeof(uint16_t);
+                break;
+            case VK_FORMAT_R32G32B32A32_UINT:
+                out = 4 * w * h * d * sizeof(uint32_t);
+                break;
+            case VK_FORMAT_R16G16B16A16_SFLOAT:
+                out = 4 * w * h * d * sizeof(uint16_t);
+                break;
+            case VK_FORMAT_R32G32B32A32_SFLOAT:
+                out = 4 * w * h * d * sizeof(float);
+                break;
+                
+            default:
+                break;
+            }
+            return out;
         }
+        
 
         VkFormat getTextureInternalFormat(image::PixelType type)
         {
@@ -122,71 +157,6 @@ namespace tl
 
                     VK_FORMAT_R8G8B8A8_UNORM};
             return data[static_cast<std::size_t>(type)];
-        }
-
-        unsigned int getTextureType(image::PixelType value)
-        {
-            return 0;
-            //             const std::array<
-            //                 GLenum,
-            //                 static_cast<std::size_t>(image::PixelType::Count)>
-            //                 data = {
-            //                     GL_NONE,
-
-            // #if defined(TLRENDER_API_GL_4_1)
-            //                     GL_UNSIGNED_BYTE,
-            //                     GL_UNSIGNED_SHORT,
-            //                     GL_UNSIGNED_INT,
-            //                     GL_HALF_FLOAT,
-            //                     GL_FLOAT,
-
-            //                     GL_UNSIGNED_BYTE,
-            //                     GL_UNSIGNED_SHORT,
-            //                     GL_UNSIGNED_INT,
-            //                     GL_HALF_FLOAT,
-            //                     GL_FLOAT,
-
-            //                     GL_UNSIGNED_BYTE,
-            //                     GL_UNSIGNED_INT_10_10_10_2,
-            //                     GL_UNSIGNED_SHORT,
-            //                     GL_UNSIGNED_INT,
-            //                     GL_HALF_FLOAT,
-            //                     GL_FLOAT,
-
-            //                     GL_UNSIGNED_BYTE,
-            //                     GL_UNSIGNED_SHORT,
-            //                     GL_UNSIGNED_INT,
-            //                     GL_HALF_FLOAT,
-            //                     GL_FLOAT,
-
-            //                     GL_NONE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-            //                     GL_NONE,
-
-            //                     GL_UNSIGNED_SHORT_4_4_4_4_REV
-            // #elif defined(TLRENDER_API_GLES_2)
-            //                     GL_UNSIGNED_BYTE, GL_NONE, GL_NONE, GL_NONE,
-            //                     GL_NONE,
-
-            //                     GL_UNSIGNED_BYTE, GL_NONE, GL_NONE, GL_NONE,
-            //                     GL_NONE,
-
-            //                     GL_UNSIGNED_BYTE, GL_NONE, GL_NONE, GL_NONE,
-            //                     GL_NONE, GL_NONE,
-
-            //                     GL_UNSIGNED_BYTE, GL_NONE, GL_NONE, GL_NONE,
-            //                     GL_NONE,
-
-            //                     GL_NONE,          GL_NONE, GL_NONE, GL_NONE,
-            //                     GL_NONE, GL_NONE,
-
-            //                     GL_NONE
-            // #endif // TLRENDER_API_GL_4_1
-            //                 };
-            //             return data[static_cast<std::size_t>(value)];
         }
 
         bool TextureOptions::operator==(const TextureOptions& other) const
@@ -351,6 +321,11 @@ namespace tl
             return _p->info.pixelType;
         }
 
+        VkFormat Texture::getFormat() const
+        {
+            return _p->format;
+        }
+        
         VkImageView Texture::getImageView() const
         {
             return _p->imageView;
@@ -373,7 +348,7 @@ namespace tl
             VkDescriptorImageInfo out = {};
             out.sampler = p.sampler;
             out.imageView = p.imageView;
-            out.imageLayout = p.currentLayout;
+            out.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
             return out;
         }
 
@@ -430,6 +405,7 @@ namespace tl
             p.currentLayout = newLayout;
         }
 
+        //! Used in TextureAtlas
         void
         Texture::copy(const std::shared_ptr<image::Image>& data, int x, int y)
         {
@@ -592,7 +568,7 @@ namespace tl
             TLRENDER_P();
             copy(data->getData(), data->getDataByteCount());
         }
-
+        
         void Texture::bind()
         {
             // glBindTexture(GL_TEXTURE_2D, _p->id);
@@ -602,20 +578,53 @@ namespace tl
         {
             TLRENDER_P();
 
-            VkImageCreateInfo imageInfo{};
+            VkPhysicalDeviceImageFormatInfo2 formatInfo = {};
+            formatInfo.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2;
+            formatInfo.format = p.format;
+            formatInfo.type = p.imageType;
+            formatInfo.tiling = p.options.tiling;
+            formatInfo.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT |
+                               VK_IMAGE_USAGE_SAMPLED_BIT;
+            formatInfo.flags = 0;
+
+            VkImageFormatProperties2 imageProperties = {};
+            imageProperties.sType = VK_STRUCTURE_TYPE_IMAGE_FORMAT_PROPERTIES_2;
+
+            VkPhysicalDevice gpu = ctx.gpu;
+            
+            VkResult result = vkGetPhysicalDeviceImageFormatProperties2(
+                gpu,
+                &formatInfo,
+                &imageProperties
+                );
+            
+            if (result != VK_SUCCESS)
+            {
+                switch(p.format)
+                {
+                case VK_FORMAT_R8G8B8_UNORM:
+                    p.format = VK_FORMAT_R8G8B8A8_UNORM;
+                    break;
+                case VK_FORMAT_R16G16B16_UNORM:
+                    p.format = VK_FORMAT_R16G16B16A16_UNORM;
+                    break;
+                case VK_FORMAT_R16G16B16_SFLOAT:
+                    p.format = VK_FORMAT_R16G16B16A16_SFLOAT;
+                    break;
+                }
+            }
+            
+            VkImageCreateInfo imageInfo = {};
             imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
             imageInfo.imageType = p.imageType;
-
             imageInfo.extent.width = p.info.size.w;
             imageInfo.extent.height = p.info.size.h;
             imageInfo.extent.depth = p.depth;
             imageInfo.mipLevels = 1;
             imageInfo.arrayLayers = p.arrayLayers;
             imageInfo.format = p.format;
-            imageInfo.tiling =
-                VK_IMAGE_TILING_LINEAR; // for host-visible (can switch to
-                                        // optimal if staging)
-            imageInfo.initialLayout = VK_IMAGE_LAYOUT_PREINITIALIZED;
+            imageInfo.tiling = p.options.tiling;
+            imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
             imageInfo.usage =
                 VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
             imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;

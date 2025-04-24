@@ -22,6 +22,7 @@ namespace tl
         {
             timeline::ImageFilters filters;
             bool pbo = false;
+            VkImageTiling tiling = VK_IMAGE_TILING_LINEAR;
 
             bool operator==(const TextureOptions&) const;
             bool operator!=(const TextureOptions&) const;
@@ -86,14 +87,14 @@ namespace tl
             ///@{
 
             void copy(const std::shared_ptr<image::Image>&);
-            void copy(const std::shared_ptr<image::Image>&, int x, int y);
             void copy(const uint8_t*, const image::Info&);
             void copy(const uint8_t*, const std::size_t);
 
+            //! \@todo:
+            void copy(const std::shared_ptr<image::Image>&, int x, int y);
+
             ///@}
-
-            // void upload(const void* data, size_t size);
-
+            
             void transition(
                 VkImageLayout newLayout, VkAccessFlags srcAccess,
                 VkPipelineStageFlags srcStage, VkAccessFlags dstAccess,
@@ -101,6 +102,8 @@ namespace tl
 
             VkDescriptorImageInfo getDescriptorInfo() const;
 
+            VkFormat getFormat() const;
+            
             VkImageView getImageView() const;
 
             VkSampler getSampler() const;
@@ -108,6 +111,7 @@ namespace tl
             VkImage getImage() const;
 
             VkImageLayout getImageLayout() const;
+
 
             //! Bind the texture.
             void bind();
