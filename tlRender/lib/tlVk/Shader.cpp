@@ -449,6 +449,67 @@ namespace tl
             }
         }
 
+        void Shader::debugVertexDescriptorSets()
+        {
+            
+            // UBOs
+            for (const auto& [name, ubo] : ubos)
+            {
+                if ((ubo.layoutBinding.stageFlags & VK_SHADER_STAGE_VERTEX_BIT) == 0)
+                    continue;
+                std::cerr << name << std::endl;
+                std::cerr << "\tbinding " << ubo.layoutBinding.binding << " = UNIFORM_BUFFER" << std::endl;
+            }
+            
+            // Textures
+            for (const auto& [name, texture] : textureBindings)
+            {
+                if ((texture.stageFlags & VK_SHADER_STAGE_VERTEX_BIT) == 0)
+                    continue;
+                std::cerr << name << std::endl;
+                std::cerr << "\tbinding " << texture.binding << " = COMBINED_IMAGE_SAMPLER" << std::endl;
+            }
+            
+            // FBOs
+            for (const auto& [name, fbo] : fboBindings)
+            {
+                if ((fbo.stageFlags & VK_SHADER_STAGE_VERTEX_BIT) == 0)
+                    continue;
+                std::cerr << name << std::endl;
+                std::cerr << "\tbinding " << fbo.binding << " = COMBINED_IMAGE_SAMPLER" << std::endl;
+            }
+        }
+
+        void Shader::debugFragmentDescriptorSets()
+        {   
+            // UBOs
+            for (const auto& [name, ubo] : ubos)
+            {
+                if ((ubo.layoutBinding.stageFlags & VK_SHADER_STAGE_FRAGMENT_BIT) == 0)
+                    continue;
+                std::cerr << name << std::endl;
+                std::cerr << "\tbinding " << ubo.layoutBinding.binding << " = UNIFORM_BUFFER" << std::endl;
+            }
+            
+            // Textures
+            for (const auto& [name, texture] : textureBindings)
+            {
+                if ((texture.stageFlags & VK_SHADER_STAGE_FRAGMENT_BIT) == 0)
+                    continue;
+                std::cerr << name << std::endl;
+                std::cerr << "\tbinding " << texture.binding << " = COMBINED_IMAGE_SAMPLER" << std::endl;
+            }
+            
+            // FBOs
+            for (const auto& [name, fbo] : fboBindings)
+            {
+                if ((fbo.stageFlags & VK_SHADER_STAGE_FRAGMENT_BIT) == 0)
+                    continue;
+                std::cerr << name << std::endl;
+                std::cerr << "\tbinding " << fbo.binding << " = COMBINED_IMAGE_SAMPLER" << std::endl;
+            }
+        }
+
         void Shader::debugDescriptorSets()
         {
             if (ubos.empty() && textureBindings.empty() && fboBindings.empty())
@@ -509,8 +570,14 @@ namespace tl
 
         void Shader::debug()
         {
-            debugDescriptorSets();
-            debugPointers();
+            std::cerr << "====================================" << std::endl;
+            std::cerr << getVertexSource() << std::endl;
+            debugVertexDescriptorSets();
+            std::cerr << "------------------------------------" << std::endl;
+            std::cerr << getFragmentSource() << std::endl;
+            std::cerr << "------------------------------------" << std::endl;
+            debugFragmentDescriptorSets();
+            // debugPointers();
         }
 
         

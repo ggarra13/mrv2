@@ -33,7 +33,7 @@ namespace tl
                    
 layout(location = 0) out vec4 outColor;
                  
-layout(set = 0, binding = 0, std140) uniform ColorUBO {
+layout(set = 0, binding = 1, std140) uniform ColorUBO {
         uniform vec4 color;
 } ubo;
                  
@@ -69,7 +69,7 @@ void main()
 layout(location = 0) in vec4 fColor;
 layout(location = 1) out vec4 outColor;
                  
-layout(set = 0, binding = 0, std140) uniform ColorUBO {
+layout(set = 0, binding = 1, std140) uniform ColorUBO {
     vec4 color;
 } ubo;
 
@@ -86,11 +86,12 @@ void main()
 layout(location = 0) in vec2 fTexture;
 layout(location = 1) out vec4 outColor;
 
-layout(set = 0, binding = 0, std140) uniform ColorUBO {
+layout(binding = 1) uniform sampler2D textureSampler;
+
+layout(set = 0, binding = 2, std140) uniform ColorUBO {
     vec4 color;
 } ubo;
                  
-layout(binding = 1) uniform sampler2D textureSampler;
                  
 void main()
 {
@@ -108,11 +109,11 @@ void main()
 layout(location = 0) in vec2 fTexture;
 layout(location = 1) out vec4 outColor;
 
-layout(set = 0, binding = 0, std140) uniform ColorUBO {
+layout(binding = 1) uniform sampler2D textureSampler;
+
+layout(set = 0, binding = 2, std140) uniform ColorUBO {
     vec4 color;
 } ubo;
-                 
-layout(binding = 1) uniform sampler2D textureSampler;
                  
 void main()
 {

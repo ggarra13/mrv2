@@ -84,13 +84,14 @@ namespace mrv
         {
             MRV2_VK();
             
-            image::Info info(320, 240, image::PixelType::RGBA_U8);
-            auto texture = vlk::Texture::create(ctx, info);
-
             math::Matrix4x4f mvp;
-            vk.shader->setUniform("transform.mvp", mvp);
-            vk.shader->setTexture("samplerTexture", texture);
+            vk.shader->createUniform("transform.mvp", mvp, vlk::kShaderVertex);
+            vk.shader->addFBO("textureSampler");  // default is fragment
+            float opacity = 1.0;
+            vk.shader->createUniform("opacity", opacity);
+            
             vk.shader->createDescriptorSets();
+            vk.shader->debug();
 
             VkResult result;
     
@@ -102,11 +103,6 @@ namespace mrv
             
             result = vkCreatePipelineLayout(device(), &pPipelineLayoutCreateInfo, NULL,
                                             &vk.pipeline_layout);
-        }
-        
-        // OKAY!
-        void Viewport::prepare_descriptor_pools()
-        {
         }
         
         void Viewport::prepare_pipeline()
@@ -243,27 +239,12 @@ namespace mrv
         }
 
 
-        //! OKAY!
-        void Viewport::prepare_descriptor_sets()
-        {
-            MRV2_VK();
-        }
-
         void Viewport::prepare()
         {
             _initializeVK();
             
             prepare_render_pass(); // Main swapchain render pass
-
-            // Prepare layouts and pools *before* creating pipelines and allocating sets
             prepare_descriptor_layout(); // Main shader layout
-            prepare_descriptor_pools(); // Both FBO and main pools
-
-            // Main swapchain pipeline (has to be created in draw AFTER vk.vbo)
-            // prepare_pipeline(); 
-
-            // Prepare descriptor sets *after* pools and layouts are ready
-            prepare_descriptor_sets(); // Allocate and initially update sets
         }
     
         void Viewport::destroy_resources()
@@ -331,39 +312,10 @@ namespace mrv
 
                 try
                 {
-                    const std::string& vertexSource = timeline_vlk::vertexSource();
 
-        //             std::string vrt = R"(
-        // #version 450
-        // layout(location = 0) in vec3 inPos;
-        // void main() {
-        //     gl_Position = vec4(inPos, 1.0);
-        // })";
-//                     std::string frg = R"(
-//         #version 450
-//         // Output color
-//         layout(location = 0) out vec4 outColor;
-
-//         void main() {
-//             outColor = vec4(1, 1, 1, 1);
-//         }
-// )";
                     
-std::string vrt = R"(
-        #version 450
-        layout(location = 0) in vec3 vPos;
-        layout(location = 1) in vec2 inTexCoord;
-        layout(location = 0) out vec2 outTexCoord;
-        layout(set = 0, binding = 0, std140) uniform Transform {
-             mat4 mvp;
-         } transform;
-        void main() {
-            gl_Position = transform.mvp * vec4(vPos, 1.0);
-            outTexCoord = inTexCoord;
-        }
-)";
-
-std::string frg = R"(
+// Fragment shader
+std::string frag_shader_glsl = R"(
         #version 450
 
         // Input from vertex shader
@@ -373,28 +325,23 @@ std::string frg = R"(
         layout(location = 0) out vec4 outColor;
 
         // Texture sampler (bound via descriptor set)
-        layout(binding = 0) uniform sampler2D textureSampler;
+        layout(binding = 1) uniform sampler2D textureSampler;
 
         void main() {
-            outColor = texture(textureSampler, inTexCoord);
+            outColor = vec4(0, 0.5, 0, 1) + texture(textureSampler, inTexCoord);
         }
-)";
+    )";
                     
-                    // vk.shader = vlk::Shader::create(ctx,
-                    //                                 vrt,
-                    //                                 frg,
-                    //                                 "composite");
-                    
-                    vk.shader = vlk::Shader::create(ctx,
-                                                    vrt,
-                                                    frg,
-                                                    "composite");
-                    std::cerr << vk.shader->getVertexSource() << std::endl;
-                    
+                    const std::string& vertexSource = timeline_vlk::vertexSource();                   
                     // vk.shader = vlk::Shader::create(ctx,
                     //                                 vertexSource,
-                    //                                 textureFragmentSource(),
-                    //                                 "composite");
+                    //                                 frag_shader_glsl,
+                    //                                 "composite");         
+                    
+                    vk.shader = vlk::Shader::create(ctx,
+                                                    vertexSource,
+                                                    textureFragmentSource(),
+                                                    "composite");
 
                     
                     // vk.annotationShader =
@@ -556,7 +503,17 @@ std::string frg = R"(
     
             // --- Update Descriptor Set for the SECOND pass (Composition) ---
             // This updates the descriptor set for the CURRENT frame index on the CPU.
+            vk.shader->setUniform("transform.mvp", mvp, currentFrameIndex, vlk::kShaderVertex);
             vk.shader->setFBO("textureSampler", vk.buffer, currentFrameIndex);
+#ifdef __APPLE__
+            vk.shader->setUniform("opacity", 1.0F, currentFrameIndex);
+            set_window_transparency(alpha);
+#else
+            if (desktop::Wayland())
+                vk.shader->setUniform("opacity", alpha, currentFrameIndex);
+            else if (desktop::X11() || desktop::Windows())
+                vk.shader->setUniform("opacity", 1.0F, currentFrameIndex);
+#endif
 
             // --- Bind Descriptor Set for the SECOND pass ---
             // Record the command to bind the descriptor set for the CURRENT frame index
@@ -588,8 +545,6 @@ std::string frg = R"(
 
             // Draw FLTK children
             // Fl_Window::draw();
-
-            std::cerr << "END DRAW" << std::endl;
         }
         
         void Viewport::prepare_fbo_pipeline()

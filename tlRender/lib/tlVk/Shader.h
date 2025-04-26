@@ -126,7 +126,13 @@ namespace tl
             //! Create desciptor set bindings for all frames
             void createDescriptorSets();
 
-            //! Print out a list of descriptor set bindings.
+            //! Print out a list of descriptor set bindings for vertex shader.
+            void debugVertexDescriptorSets();
+            
+            //! Print out a list of descriptor set bindings for fragment shader.
+            void debugFragmentDescriptorSets();
+            
+            //! Print out a list of descriptor set bindings for both shaders types.
             void debugDescriptorSets();
 
             //! Print out a list of pointers for all frames.

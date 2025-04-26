@@ -1849,7 +1849,7 @@ namespace mrv
             math::Vector2i pos;
             const float devicePixelRatio = self->pixels_per_unit();
             pos.x = X * devicePixelRatio;
-            pos.y = (h() - 1 - Y) * devicePixelRatio;
+            pos.y = Y * devicePixelRatio;
             return pos;
         }
 
@@ -1864,7 +1864,7 @@ namespace mrv
             math::Vector2f pos;
             const float devicePixelRatio = self->pixels_per_unit();
             pos.x = X * devicePixelRatio;
-            pos.y = (h() - 1 - Y) * devicePixelRatio;
+            pos.y = Y * devicePixelRatio;
             return pos;
         }
 
@@ -3562,7 +3562,7 @@ namespace mrv
             const math::Matrix4x4f& transformOffsetMatrix = math::translate(
                 math::Vector3f(transformOffset.x, transformOffset.y, 0.F));
 
-            const math::Matrix4x4f& pm = math::ortho(
+            math::Matrix4x4f pm = math::ortho(
                 0.F, static_cast<float>(viewportSize.w), 0.F,
                 static_cast<float>(viewportSize.h), -1.F, 1.F);
             return pm * vm * transformOffsetMatrix * rotateMatrix * centerMatrix;
