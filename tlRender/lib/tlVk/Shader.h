@@ -70,16 +70,16 @@ namespace tl
             const VkShaderModule& getFragment() const;
 
             //! Get the Vulkan description set for current frame.
-            const VkDescriptorSet& getDescriptorSet(int frameIndex) const;
+            const VkDescriptorSet& getDescriptorSet() const;
 
             //! Get the Vulkan description set layout for current frame.
             const VkDescriptorSetLayout& getDescriptorSetLayout() const;
 
             //! Get the Vulkan description pool for current frame.
-            const VkDescriptorPool& getDescriptorPool(int frameIndex) const;
+            const VkDescriptorPool& getDescriptorPool() const;
 
             //! Bind the shader.
-            void bind();
+            void bind(uint32_t value = 0);
 
             //! \name Uniform
             //! Set uniform values.
@@ -95,7 +95,6 @@ namespace tl
             template <typename T>
             void setUniform(
                 const std::string&, const T& value,
-                const int frameIndex = 0,
                 const ShaderFlags stageFlags = kShaderFragment);
             ///@}
 
@@ -108,7 +107,6 @@ namespace tl
             void setTexture(
                 const std::string& name,
                 const std::shared_ptr<Texture>& texture,
-                const int frameIndex = 0,
                 const ShaderFlags stageFlags = kShaderFragment);
 
             //! Add and FBO to list of shader parameters.
@@ -120,7 +118,6 @@ namespace tl
             void setFBO(
                 const std::string& name,
                 const std::shared_ptr<OffscreenBuffer>&,
-                const int frameIndex = 0,
                 const ShaderFlags stageFlags = kShaderFragment);
             
             //! Create desciptor set bindings for all frames
@@ -143,9 +140,17 @@ namespace tl
             
         private:
             Fl_Vk_Context& ctx;
+
+            //! Counter used in binding UBOs, Textures and FBOs.
             uint32_t current_binding_index = 0;
 
+            //! Descriptor set layout shared across sets and pools.
             VkDescriptorSetLayout descriptorSetLayout = VK_NULL_HANDLE;
+
+            //! Internal variable used to point all resources to the right
+            //! frame in flight.
+            uint32_t frameIndex = 0;
+            
             std::vector<VkDescriptorPool> descriptorPools;
             std::vector<VkDescriptorSet> descriptorSets;
 

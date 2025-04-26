@@ -541,12 +541,13 @@ void vk_shape_window::draw() {
                         VK_PIPELINE_STAGE_TRANSFER_BIT,
                         VK_ACCESS_SHADER_READ_BIT,
                         VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
-    
-    shader->setTexture("samplerTexture", texture, currentFrameIndex);
+
+    shader->bind(currentFrameIndex);
+    shader->setTexture("samplerTexture", texture);
     
     vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
                             m_pipeline_layout, 0, 1,
-                            &shader->getDescriptorSet(currentFrameIndex), 0, nullptr);
+                            &shader->getDescriptorSet(), 0, nullptr);
 
     VkViewport viewport = {};
     viewport.width = static_cast<float>(w());

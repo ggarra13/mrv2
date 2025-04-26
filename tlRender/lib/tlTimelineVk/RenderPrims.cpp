@@ -277,7 +277,7 @@ namespace tl
             TLRENDER_P();
             ++(p.currentStats.textures);
 
-            p.shaders["texture"]->bind();
+            p.shaders["texture"]->bind(p.frameIndex);
             p.shaders["texture"]->setUniform("color", color);
             p.shaders["texture"]->setUniform("textureSampler", 0);
 
@@ -320,12 +320,23 @@ namespace tl
                 copyTextures(image, textures);
                 p.textureCache->add(image, textures, image->getDataByteCount());
             }
-            setActiveTextures(info, textures);
+            // setActiveTextures(info, textures);
 
-            p.shaders["image"]->bind();
-            p.shaders["image"]->setUniform("color", color);
-            p.shaders["image"]->setUniform(
-                "pixelType", static_cast<int>(info.pixelType));
+            p.shaders["image"]->bind(p.frameIndex);
+            
+            struct Fragment
+            {
+                image::Color4f color;
+                int pixelType;
+                int videoLevels;
+                math::Vector4f yuvCoefficients;
+                int imageChannels;
+                int mirrorX;
+                int mirrorY;
+            };
+            Fragment frag;
+            frag.color = color;
+            frag.pixelType = static_cast<int>(info.pixelType);
             image::VideoLevels videoLevels = info.videoLevels;
             switch (imageOptions.videoLevels)
             {
@@ -338,15 +349,13 @@ namespace tl
             default:
                 break;
             }
-            p.shaders["image"]->setUniform(
-                "videoLevels", static_cast<int>(videoLevels));
-            p.shaders["image"]->setUniform(
-                "yuvCoefficients",
-                image::getYUVCoefficients(info.yuvCoefficients));
-            p.shaders["image"]->setUniform(
-                "imageChannels", image::getChannelCount(info.pixelType));
-            p.shaders["image"]->setUniform("mirrorX", info.layout.mirror.x);
-            p.shaders["image"]->setUniform("mirrorY", info.layout.mirror.y);
+            frag.videoLevels = static_cast<int>(videoLevels);
+            frag.yuvCoefficients = image::getYUVCoefficients(info.yuvCoefficients);
+            frag.imageChannels = image::getChannelCount(info.pixelType);
+            frag.mirrorX = info.layout.mirror.x;
+            frag.mirrorY = info.layout.mirror.y;
+            p.shaders["image"]->setUniform("frag", frag);
+            
             switch (info.pixelType)
             {
             case image::PixelType::YUV_420P_U8:
@@ -355,17 +364,36 @@ namespace tl
             case image::PixelType::YUV_420P_U16:
             case image::PixelType::YUV_422P_U16:
             case image::PixelType::YUV_444P_U16:
-                p.shaders["image"]->setUniform("textureSampler0", 0);
-                p.shaders["image"]->setUniform("textureSampler1", 1);
-                p.shaders["image"]->setUniform("textureSampler2", 2);
+                textures[0]->transition(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                                        VK_ACCESS_TRANSFER_WRITE_BIT,
+                                        VK_PIPELINE_STAGE_TRANSFER_BIT,
+                                        VK_ACCESS_SHADER_READ_BIT,
+                                        VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+                textures[1]->transition(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                                        VK_ACCESS_TRANSFER_WRITE_BIT,
+                                        VK_PIPELINE_STAGE_TRANSFER_BIT,
+                                        VK_ACCESS_SHADER_READ_BIT,
+                                        VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+                textures[2]->transition(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                                        VK_ACCESS_TRANSFER_WRITE_BIT,
+                                        VK_PIPELINE_STAGE_TRANSFER_BIT,
+                                        VK_ACCESS_SHADER_READ_BIT,
+                                        VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+                p.shaders["image"]->setTexture("textureSampler0", textures[0]);
+                p.shaders["image"]->setTexture("textureSampler1", textures[1]);
+                p.shaders["image"]->setTexture("textureSampler2", textures[2]);
                 break;
             default:
-                p.shaders["image"]->setUniform("textureSampler0", 0);
-                p.shaders["image"]->setUniform("textureSampler1", 0);
-                p.shaders["image"]->setUniform("textureSampler2", 0);
+                textures[0]->transition(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                                        VK_ACCESS_TRANSFER_WRITE_BIT,
+                                        VK_PIPELINE_STAGE_TRANSFER_BIT,
+                                        VK_ACCESS_SHADER_READ_BIT,
+                                        VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+                p.shaders["image"]->setTexture("textureSampler0", textures[0]);
+                p.shaders["image"]->setTexture("textureSampler1", textures[0]);
+                p.shaders["image"]->setTexture("textureSampler2", textures[0]);
                 break;
             }
-
             switch (imageOptions.alphaBlend)
             {
             case timeline::AlphaBlend::kNone:
@@ -390,11 +418,186 @@ namespace tl
                 p.vbos["image"]->copy(
                     convert(geom::box(box), p.vbos["image"]->getType()));
             }
+
+
+            //
+            // Create pipeline
+            //
+
+            VkDevice device = ctx.device;
+
+            auto shader = p.shaders["image"];
+            
+            if (!p.pipelineLayouts["image"])
+            {
+                VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = {};
+                pPipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+                pPipelineLayoutCreateInfo.pNext = NULL;
+                pPipelineLayoutCreateInfo.setLayoutCount = 1;
+                pPipelineLayoutCreateInfo.pSetLayouts = &shader->getDescriptorSetLayout();
+                
+                VkPipelineLayout pipelineLayout;
+                VkResult result = vkCreatePipelineLayout(device, &pPipelineLayoutCreateInfo,
+                                                         NULL,
+                                                         &pipelineLayout);
+                VK_CHECK(result);
+
+                p.pipelineLayouts["image"] = pipelineLayout;
+            }
+
+            if (!p.pipelines["image"])
+            {
+            
+                VkGraphicsPipelineCreateInfo pipeline;
+
+                VkPipelineVertexInputStateCreateInfo vi = {};
+                VkPipelineInputAssemblyStateCreateInfo ia;
+                VkPipelineRasterizationStateCreateInfo rs;
+                VkPipelineColorBlendStateCreateInfo cb;
+                VkPipelineDepthStencilStateCreateInfo ds;
+                VkPipelineViewportStateCreateInfo vp;
+                VkPipelineMultisampleStateCreateInfo ms;
+                VkDynamicState dynamicStateEnables[(VK_DYNAMIC_STATE_STENCIL_REFERENCE - VK_DYNAMIC_STATE_VIEWPORT + 1)];
+                VkPipelineDynamicStateCreateInfo dynamicState;
+
+
+                memset(dynamicStateEnables, 0, sizeof dynamicStateEnables);
+                memset(&dynamicState, 0, sizeof dynamicState);
+                dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+                dynamicState.pDynamicStates = dynamicStateEnables;
+
+                memset(&pipeline, 0, sizeof(pipeline));
+                pipeline.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+                pipeline.layout = p.pipelineLayouts["image"]; 
+
+                vi.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+                vi.pNext = NULL;
+                vi.vertexBindingDescriptionCount = 1;
+                vi.pVertexBindingDescriptions = p.vbos["image"]->getBindingDescription(); // Use FBO mesh binding
+                vi.vertexAttributeDescriptionCount = p.vbos["image"]->getAttributes().size();
+                vi.pVertexAttributeDescriptions = p.vbos["image"]->getAttributes().data();
+
+                memset(&ia, 0, sizeof(ia));
+                ia.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
+                ia.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+
+                memset(&rs, 0, sizeof(rs));
+                rs.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+                rs.polygonMode = VK_POLYGON_MODE_FILL;
+                rs.cullMode = VK_CULL_MODE_NONE;
+                rs.frontFace = VK_FRONT_FACE_CLOCKWISE;
+                rs.depthClampEnable = VK_FALSE;
+                rs.rasterizerDiscardEnable = VK_FALSE;
+                rs.depthBiasEnable = VK_FALSE;
+                rs.lineWidth = 1.0f;
+
+                memset(&cb, 0, sizeof(cb));
+                cb.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+                VkPipelineColorBlendAttachmentState att_state[1];
+                memset(att_state, 0, sizeof(att_state));
+                att_state[0].colorWriteMask = 0xf;
+                att_state[0].blendEnable = VK_FALSE;
+                cb.attachmentCount = 1;
+                cb.pAttachments = att_state;
+
+                memset(&vp, 0, sizeof(vp));
+                vp.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+                vp.viewportCount = 1;
+                dynamicStateEnables[dynamicState.dynamicStateCount++] =
+                    VK_DYNAMIC_STATE_VIEWPORT;
+                vp.scissorCount = 1;
+                dynamicStateEnables[dynamicState.dynamicStateCount++] =
+                    VK_DYNAMIC_STATE_SCISSOR;
+
+                bool has_depth = p.fbo->hasDepth(); // Check FBO depth
+                bool has_stencil = p.fbo->hasStencil(); // Check FBO stencil
+
+                memset(&ds, 0, sizeof(ds));
+                ds.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+                ds.depthTestEnable = has_depth ? VK_TRUE : VK_FALSE;
+                ds.depthWriteEnable = has_depth ? VK_TRUE : VK_FALSE;
+                ds.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
+                ds.depthBoundsTestEnable = VK_FALSE;
+                ds.stencilTestEnable = has_stencil ? VK_TRUE : VK_FALSE;
+                ds.back.failOp = VK_STENCIL_OP_KEEP;
+                ds.back.passOp = VK_STENCIL_OP_KEEP;
+                ds.back.compareOp = VK_COMPARE_OP_ALWAYS;
+                ds.front = ds.back;
+
+                memset(&ms, 0, sizeof(ms));
+                ms.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
+                ms.pSampleMask = NULL;
+                ms.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
+
+                // Two stages: vs and fs
+                pipeline.stageCount = 2;
+                VkPipelineShaderStageCreateInfo shaderStages[2];
+                memset(&shaderStages, 0, 2 * sizeof(VkPipelineShaderStageCreateInfo));
+
+                shaderStages[0].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+                shaderStages[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
+                shaderStages[0].module = shader->getVertex();
+                shaderStages[0].pName = "main";
+
+                shaderStages[1].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+                shaderStages[1].stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+                shaderStages[1].module = shader->getFragment();
+                shaderStages[1].pName = "main";
+
+                pipeline.pVertexInputState = &vi;
+                pipeline.pInputAssemblyState = &ia;
+                pipeline.pRasterizationState = &rs;
+                pipeline.pColorBlendState = &cb;
+                pipeline.pMultisampleState = &ms;
+                pipeline.pViewportState = &vp;
+                pipeline.pDepthStencilState = &ds;
+                pipeline.pStages = shaderStages;
+                pipeline.renderPass = p.fbo->getRenderPass(); // Use FBO's render pass
+                pipeline.pDynamicState = &dynamicState;
+
+                // Create a temporary pipeline cache
+                VkPipelineCacheCreateInfo pipelineCacheCreateInfo{};
+                pipelineCacheCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
+                VkPipelineCache pipelineCache;
+                VkResult result;
+                result = vkCreatePipelineCache(device, &pipelineCacheCreateInfo, NULL,
+                                               &pipelineCache);
+                VK_CHECK(result);
+
+                VkPipeline graphicsPipeline;
+                result = vkCreateGraphicsPipelines(device, pipelineCache, 1,
+                                                   &pipeline, NULL, &graphicsPipeline);
+                VK_CHECK(result);
+
+                // Destroy the temporary pipeline cache
+                vkDestroyPipelineCache(device, pipelineCache, NULL);
+                p.pipelines["image"] = graphicsPipeline;
+            }
+            
+            vkCmdBindPipeline(p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
+                              p.pipelines["image"]);
+            
+            vkCmdBindDescriptorSets(p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                    p.pipelineLayouts["image"], 0, 1,
+                                    &shader->getDescriptorSet(), 0, nullptr);
+
+            // VkViewport viewport = {};
+            // viewport.width = static_cast<float>(p.renderSize.w);
+            // viewport.height = static_cast<float>(p.renderSize.h);
+            // viewport.minDepth = 0.0f;
+            // viewport.maxDepth = 1.0f;
+            // vkCmdSetViewport(p.cmd, 0, 1, &viewport);
+
+            // VkRect2D scissor = {};
+            // scissor.extent = p.fbo->getExtent();
+            
+            // vkCmdSetScissor(p.cmd, 0, 1, &scissor);
+    
+
             if (p.vaos["image"])
             {
-                p.vaos["image"]->bind();
-                // p.vaos["image"]->draw(
-                //     GL_TRIANGLES, 0, p.vbos["image"]->getSize());
+                p.vaos["image"]->upload(p.vbos["image"]->getData());
+                p.vaos["image"]->draw(p.cmd, p.vbos["image"]);
             }
         }
     } // namespace timeline_vlk

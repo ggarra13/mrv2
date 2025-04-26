@@ -233,12 +233,26 @@ vec4 sampleTexture(
  })";
         } // namespace
 
+
+        std::string dummyFragmentSource()
+        {
+            return R"(#version 450
+                 
+layout(location = 0) in vec2 fTexture;  
+layout(location = 0) out vec4 outColor;
+                 
+void main()
+{
+         outColor = vec4(1, 0, 1, 1);
+})";
+        }
+        
         std::string imageFragmentSource()
         {
             return string::Format(R"(#version 450
                                 
 layout(location = 0) in vec2 fTexture;
-layout(location = 1) out vec4 outColor;
+layout(location = 0) out vec4 outColor;
                                 
                                 {0}
                                 
@@ -246,7 +260,7 @@ layout(location = 1) out vec4 outColor;
                                 
                                 {2}
 
-layout(set = 0, binding = 0, std140) uniform Fragment {
+layout(set = 0, binding = 1, std140) uniform Fragment {
                                 vec4      color;
                                 int       pixelType;
                                 int       videoLevels;
@@ -256,9 +270,9 @@ layout(set = 0, binding = 0, std140) uniform Fragment {
                                 int       mirrorY;
 } frag;
 
-layout(binding = 0) uniform sampler2D textureSampler0;
-layout(binding = 1) uniform sampler2D textureSampler1;
-layout(binding = 2) uniform sampler2D textureSampler2;
+layout(binding = 2) uniform sampler2D textureSampler0;
+layout(binding = 3) uniform sampler2D textureSampler1;
+layout(binding = 4) uniform sampler2D textureSampler2;
                                 
 void main()
 {

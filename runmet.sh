@@ -15,7 +15,7 @@ set +e
 
 . $PWD/etc/build_dir.sh
 
-rm -rf $BUILD_DIR/install/include/FL
+# rm -rf $BUILD_DIR/install/include/FL
 
 dir=$BUILD_DIR/deps/FLTK/src/FLTK-build/
 if [[ ! -d $dir ]]; then

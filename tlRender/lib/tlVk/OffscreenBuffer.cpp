@@ -162,9 +162,8 @@ namespace tl
 
             p.size = size;
             p.options = options;
-            p.colorFormat = getTextureInternalFormat(p.options.colorType);
-            p.depthFormat =
-                getBufferInternalFormat(p.options.depth, p.options.stencil);
+            p.colorFormat = getTextureFormat(p.options.colorType);
+            p.depthFormat = getBufferInternalFormat(p.options.depth, p.options.stencil);
 
             // Get maximum texture resolution for gfx card
             VkPhysicalDeviceProperties props;

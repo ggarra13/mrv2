@@ -26,13 +26,14 @@ namespace tl
             public:
                 File(
                     const std::string& fileName, const file::MemoryRead* memory,
-                    const bool autoNormalize)
+                    const bool autoNormalize, const bool flipY)
                 {
                     image::Info info;
                     int res = 0, w = 0, h = 0, n = 0, bits = 8;
 
                     _memory = memory;
                     _autoNormalize = autoNormalize;
+                    _flipY = flipY;
 
                     if (memory)
                     {
@@ -117,7 +118,8 @@ namespace tl
                     const size_t bytes =
                         image::getBitDepth(imageInfo.pixelType) / 8;
 
-                    stbi_set_flip_vertically_on_load(1);
+                    
+                    stbi_set_flip_vertically_on_load(_flipY);
 
                     int x = 0, y = 0, n = 1;
                     stbi_uc* data = nullptr;
@@ -187,6 +189,7 @@ namespace tl
             private:
                 io::Info _info;
                 bool _autoNormalize = false;
+                bool _flipY = true;
                 const file::MemoryRead* _memory;
             };
         } // namespace
@@ -203,6 +206,11 @@ namespace tl
             {
                 _autoNormalize =
                     static_cast<bool>(std::atoi(option->second.c_str()));
+            }
+            option = options.find("FlipY");
+            if (option != options.end())
+            {
+                _flipY = static_cast<bool>(std::atoi(option->second.c_str()));
             }
         }
 
@@ -236,7 +244,7 @@ namespace tl
         io::Info Read::_getInfo(
             const std::string& fileName, const file::MemoryRead* memory)
         {
-            io::Info out = File(fileName, memory, false).getInfo();
+            io::Info out = File(fileName, memory, false, _flipY).getInfo();
             out.videoTime =
                 otime::TimeRange::range_from_start_end_time_inclusive(
                     otime::RationalTime(_startFrame, _defaultSpeed),
@@ -248,7 +256,7 @@ namespace tl
             const std::string& fileName, const file::MemoryRead* memory,
             const otime::RationalTime& time, const io::Options&)
         {
-            return File(fileName, memory, _autoNormalize).read(fileName, time);
+            return File(fileName, memory, _autoNormalize, _flipY).read(fileName, time);
         }
     } // namespace stb
 } // namespace tl

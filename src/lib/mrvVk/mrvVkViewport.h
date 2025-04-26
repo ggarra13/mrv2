@@ -140,15 +140,9 @@ namespace mrv
                                    const math::Size2i& viewportSize);
         protected:
             // Pipelines and layouts are managed outside the per-frame draw loop
-            void destroy_fbo_pipeline();
-            void prepare_fbo_pipeline(); // Still need this, but called elsewhere
 
             void prepare_pipeline();
             void prepare_descriptor_layout(); // For the main shader (composition)
-
-            // Descriptor pool/set preparation needs to be updated for per-frame sets
-            void prepare_descriptor_pools(); // Create both pools
-            void prepare_descriptor_sets(); // Allocate and initially update per-frame sets
             
         private:
             struct VKPrivate;

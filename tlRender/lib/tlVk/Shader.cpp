@@ -24,6 +24,7 @@ namespace tl
             std::string fragmentSource;
             VkShaderModule vertex = VK_NULL_HANDLE;
             VkShaderModule fragment = VK_NULL_HANDLE;
+            uint32_t frame = 0;
         };
 
         void Shader::_init()
@@ -84,14 +85,12 @@ namespace tl
             _p(new Private),
             ctx(context)
         {
-            descriptorPools.resize(MAX_FRAMES_IN_FLIGHT);
-            descriptorSets.resize(MAX_FRAMES_IN_FLIGHT);
         }
 
         Shader::~Shader()
         {
             TLRENDER_P();
-
+            
             VkDevice device = ctx.device;
 
             if (p.fragment != VK_NULL_HANDLE)
@@ -104,6 +103,7 @@ namespace tl
             {
                 vkDestroyDescriptorSetLayout(
                     device, descriptorSetLayout, nullptr);
+                descriptorSetLayout = VK_NULL_HANDLE;
             }
             
             for (auto& pool : descriptorPools) // Destroy all pools
@@ -112,6 +112,7 @@ namespace tl
                  {
                     vkResetDescriptorPool(device, pool, 0);
                     vkDestroyDescriptorPool(device, pool, nullptr);
+                    pool = VK_NULL_HANDLE;
                  }
             }
             
@@ -120,9 +121,15 @@ namespace tl
                 for(size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) // Destroy buffers and memories for all frames
                 {
                     if (ubo.buffers[i] != VK_NULL_HANDLE)
+                    {
                         vkDestroyBuffer(device, ubo.buffers[i], nullptr);
+                        ubo.buffers[i] = VK_NULL_HANDLE;
+                    }
                     if (ubo.memories[i] != VK_NULL_HANDLE)
+                    {
                         vkFreeMemory(device, ubo.memories[i], nullptr);
+                        ubo.memories[i] = VK_NULL_HANDLE;
+                    }
                 }
             }
         }
@@ -159,13 +166,9 @@ namespace tl
             return _p->fragmentSource;
         }
 
-        const VkDescriptorSet& Shader::getDescriptorSet(int frameIndex) const
+        const VkDescriptorSet& Shader::getDescriptorSet() const
         {
-            if (frameIndex < 0 || frameIndex >= MAX_FRAMES_IN_FLIGHT)
-            {
-                throw std::out_of_range("Invalid frame index");
-            }
-            return descriptorSets[frameIndex];
+           return descriptorSets[frameIndex];
         }
 
         const VkDescriptorSetLayout& Shader::getDescriptorSetLayout() const
@@ -173,18 +176,18 @@ namespace tl
             return descriptorSetLayout;
         }
 
-        const VkDescriptorPool& Shader::getDescriptorPool(int frameIndex) const
+        const VkDescriptorPool& Shader::getDescriptorPool() const
         {
-            if (frameIndex < 0 || frameIndex >= MAX_FRAMES_IN_FLIGHT)
-            {
-                throw std::out_of_range("Invalid frame index");
-            }
             return descriptorPools[frameIndex];
         }
 
-        void Shader::bind()
+        void Shader::bind(uint32_t value)
         {
-            // glUseProgram(_p->program);
+            if (value > MAX_FRAMES_IN_FLIGHT)
+            {
+                throw std::runtime_error("Invalid value for bind.");
+            }
+            frameIndex = value;
         }
 
         void Shader::addTexture(
@@ -198,13 +201,8 @@ namespace tl
 
         void Shader::setTexture(
             const std::string& name, const std::shared_ptr<Texture>& texture,
-            const int frameIndex,
             const ShaderFlags stageFlags)
         {
-            if (frameIndex < 0 || frameIndex > MAX_FRAMES_IN_FLIGHT)
-            {
-                throw std::runtime_error("Invalid frame index in setTexture");
-            }
             
             auto it = textureBindings.find(name);
             if (it == textureBindings.end())
@@ -260,14 +258,8 @@ namespace tl
         
         void Shader::setFBO(
             const std::string& name, const std::shared_ptr<OffscreenBuffer>& fbo,
-            const int frameIndex,
             const ShaderFlags stageFlags)
         {
-            if (frameIndex < 0 || frameIndex >= MAX_FRAMES_IN_FLIGHT)
-            {
-                throw std::out_of_range("Invalid frame index in setFBO");
-            }
-            
             if (!fbo)
             {
                 throw std::runtime_error(tl::string::Format("Cannot set FBO '{0}': provided FBO pointer is null.").arg(name));
@@ -306,12 +298,15 @@ namespace tl
         }
         
         void Shader::createDescriptorSets()
-        {
+        {   
             VkDevice device = ctx.device;
             
             std::vector<VkDescriptorSetLayoutBinding> bindings;
             std::vector<VkDescriptorPoolSize> poolSizes;
 
+            descriptorPools.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
+            descriptorSets.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
+            
             // UBOs
             for (const auto& [_, ubo] : ubos)
             {
@@ -458,7 +453,7 @@ namespace tl
                 if ((ubo.layoutBinding.stageFlags & VK_SHADER_STAGE_VERTEX_BIT) == 0)
                     continue;
                 std::cerr << name << std::endl;
-                std::cerr << "\tbinding " << ubo.layoutBinding.binding << " = UNIFORM_BUFFER" << std::endl;
+                std::cerr << "\tbinding " << ubo.layoutBinding.binding << " = UNIFORM_BUFFER size=" << ubo.size << std::endl;
             }
             
             // Textures
@@ -488,7 +483,7 @@ namespace tl
                 if ((ubo.layoutBinding.stageFlags & VK_SHADER_STAGE_FRAGMENT_BIT) == 0)
                     continue;
                 std::cerr << name << std::endl;
-                std::cerr << "\tbinding " << ubo.layoutBinding.binding << " = UNIFORM_BUFFER" << std::endl;
+                std::cerr << "\tbinding " << ubo.layoutBinding.binding << " = UNIFORM_BUFFER size=" << ubo.size << std::endl;
             }
             
             // Textures

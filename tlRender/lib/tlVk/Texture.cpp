@@ -115,7 +115,7 @@ namespace tl
         }
         
 
-        VkFormat getTextureInternalFormat(image::PixelType type)
+        VkFormat getTextureFormat(image::PixelType type)
         {
             const std::array<
                 VkFormat, static_cast<std::size_t>(image::PixelType::Count)>
@@ -198,6 +198,7 @@ namespace tl
             VkSampler sampler = VK_NULL_HANDLE;
 
             VkFormat format = VK_FORMAT_UNDEFINED;
+            VkFormat internalFormat = VK_FORMAT_UNDEFINED;
 
             bool hostVisible = true;
         };
@@ -211,7 +212,7 @@ namespace tl
             {
                 throw std::runtime_error("Invalid texture");
             }
-            p.format = getTextureInternalFormat(info.pixelType);
+            p.format = p.internalFormat = getTextureFormat(info.pixelType);
             p.options = options;
 
             createImage();
@@ -229,7 +230,7 @@ namespace tl
             p.info.size.w = width;
             p.info.size.h = height;
             p.depth = depth;
-            p.format = format;
+            p.format = p.internalFormat = format;
             p.options = options;
 
             if (depth == 0 && height == 0 && width > 0)
@@ -321,9 +322,14 @@ namespace tl
             return _p->info.pixelType;
         }
 
-        VkFormat Texture::getFormat() const
+        VkFormat Texture::getSourceFormat() const
         {
             return _p->format;
+        }
+        
+        VkFormat Texture::getInternalFormat() const
+        {
+            return _p->internalFormat;
         }
         
         VkImageView Texture::getImageView() const
@@ -474,11 +480,46 @@ namespace tl
 
             if ((p.memoryFlags & memFlags) == memFlags)
             {
-                // Host-visible upload (like glTexSubImage2D)
+                VkImageSubresource subresource = {};
+                subresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT; // Or appropriate aspect
+                subresource.mipLevel = 0; // The mip level you are mapping
+                subresource.arrayLayer = 0; // The array layer you are mapping
+
+                VkSubresourceLayout subresourceLayout;
+                vkGetImageSubresourceLayout(device, p.image, &subresource,
+                                            &subresourceLayout);
+                
                 void* mapped;
-                VK_CHECK(vkMapMemory(device, p.memory, 0, size, 0, &mapped));
-                std::memcpy(mapped, data, size);
-                vkUnmapMemory(device, p.memory);
+                if (size == subresourceLayout.size)
+                {
+                    // Host-visible upload (like glTexSubImage2D)
+                    VK_CHECK(vkMapMemory(device, p.memory, 0, size, 0, &mapped));
+                    std::memcpy(mapped, data, size);
+                    vkUnmapMemory(device, p.memory);
+                }
+                else
+                {
+                    // Map based on layout offset and size
+                    VK_CHECK(vkMapMemory(device, p.memory, subresourceLayout.offset,
+                                         subresourceLayout.size, 0, &mapped));
+
+                    // Assuming 'data' is a pointer to your tightly packed source pixel data
+                    size_t pixel_size = image::getBitDepth(p.info.pixelType) / 8 *
+                                        image::getChannelCount(p.info.pixelType);
+                    uint32_t row_byte_size = static_cast<uint32_t>(p.info.size.w) * pixel_size;
+                    for (uint32_t y = 0; y < static_cast<uint32_t>(p.info.size.h); ++y) {
+                        // Source row start in your tightly packed data
+                        const void* src_row = static_cast<const uint8_t*>(data) + y * row_byte_size;
+
+                        // Destination row start in the mapped memory, using the rowPitch
+                        void* dst_row = static_cast<uint8_t*>(mapped) + y * subresourceLayout.rowPitch;
+
+                        // Copy the actual pixel data for this row (excluding padding)
+                        std::memcpy(dst_row, src_row, row_byte_size);
+                    }
+
+                    vkUnmapMemory(device, p.memory);
+                }
             }
             else
             {
@@ -603,13 +644,13 @@ namespace tl
                 switch(p.format)
                 {
                 case VK_FORMAT_R8G8B8_UNORM:
-                    p.format = VK_FORMAT_R8G8B8A8_UNORM;
+                    p.internalFormat = VK_FORMAT_R8G8B8A8_UNORM;
                     break;
                 case VK_FORMAT_R16G16B16_UNORM:
-                    p.format = VK_FORMAT_R16G16B16A16_UNORM;
+                    p.internalFormat = VK_FORMAT_R16G16B16A16_UNORM;
                     break;
                 case VK_FORMAT_R16G16B16_SFLOAT:
-                    p.format = VK_FORMAT_R16G16B16A16_SFLOAT;
+                    p.internalFormat = VK_FORMAT_R16G16B16A16_SFLOAT;
                     break;
                 }
             }
@@ -622,7 +663,7 @@ namespace tl
             imageInfo.extent.depth = p.depth;
             imageInfo.mipLevels = 1;
             imageInfo.arrayLayers = p.arrayLayers;
-            imageInfo.format = p.format;
+            imageInfo.format = p.internalFormat;
             imageInfo.tiling = p.options.tiling;
             imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
             imageInfo.usage =
@@ -680,7 +721,7 @@ namespace tl
                 break;
             }
 
-            viewInfo.format = p.format;
+            viewInfo.format = p.internalFormat;
             viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
             viewInfo.subresourceRange.baseMipLevel = 0;
             viewInfo.subresourceRange.levelCount = 1;

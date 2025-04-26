@@ -6,6 +6,7 @@
 
 #include <tlTimeline/IRender.h>
 
+#include <tlVk/OffscreenBuffer.h>
 #include <tlVk/Texture.h>
 
 #include <tlCore/LRUCache.h>
@@ -57,9 +58,18 @@ namespace tl
             //! Get the texture cache.
             const std::shared_ptr<TextureCache>& getTextureCache() const;
 
+            //! Useless begin function
             void begin(
                 const math::Size2i&, const timeline::RenderOptions& =
-                                         timeline::RenderOptions()) override;
+                timeline::RenderOptions()) override;
+
+            //! Proper Vulkan begin function
+            void begin(
+                VkCommandBuffer& cmd,
+                const std::shared_ptr<vlk::OffscreenBuffer> fbo,
+                const uint32_t frameIndex,
+                const math::Size2i&, const timeline::RenderOptions& =
+                                         timeline::RenderOptions());
             void end() override;
 
             math::Size2i getRenderSize() const override;

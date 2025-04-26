@@ -33,6 +33,7 @@ namespace tl
     namespace timeline_vlk
     {
         std::string vertexSource();
+        std::string dummyFragmentSource();
         std::string meshFragmentSource();
         std::string colorMeshVertexSource();
         std::string colorMeshFragmentSource();
@@ -104,6 +105,12 @@ namespace tl
 
         struct Render::Private
         {
+            // Vulkan variables
+            VkCommandBuffer cmd;
+            std::shared_ptr<vlk::OffscreenBuffer> fbo;
+            uint32_t frameIndex;
+
+                
             bool hdrMonitorFound = false;
 
             math::Size2i renderSize;
@@ -130,6 +137,8 @@ namespace tl
             std::map<std::string, std::shared_ptr<vlk::Shader> > shaders;
             std::map<std::string, std::shared_ptr<vlk::OffscreenBuffer> >
                 buffers;
+            std::map<std::string, VkPipelineLayout> pipelineLayouts;
+            std::map<std::string, VkPipeline> pipelines;
             std::shared_ptr<TextureCache> textureCache;
             std::shared_ptr<vlk::TextureAtlas> glyphTextureAtlas;
             std::map<image::GlyphInfo, vlk::TextureAtlasID> glyphIDs;

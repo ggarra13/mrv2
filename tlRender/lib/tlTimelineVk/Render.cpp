@@ -3,6 +3,7 @@
 // All rights reserved.
 
 #include "FL/Fl_Vk_Utils.H"
+#include "FL/vk_enum_string_helper.h"
 
 #include <tlTimelineVk/RenderPrivate.h>
 
@@ -256,6 +257,11 @@ namespace tl
             size_t offset)
         {
             const auto& info = image->getInfo();
+            std::cerr << info.pixelType << " internal="
+                      << string_VkFormat(textures[0]->getInternalFormat())
+                      << " source="
+                      << string_VkFormat(textures[0]->getSourceFormat())
+                      << std::endl;
             switch (info.pixelType)
             {
             case image::PixelType::YUV_420P_U8:
@@ -354,6 +360,127 @@ namespace tl
                 }
                 break;
             }
+            case image::PixelType::RGB_U8:
+            {
+                if (textures[0]->getInternalFormat() == VK_FORMAT_R8G8B8A8_UNORM)
+                {
+                    const std::size_t w = info.size.w;
+                    const std::size_t h = info.size.h;
+                    const uint8_t* src = image->getData();
+                    std::vector<uint8_t> dst(w * h * 4);
+                    uint8_t* out = dst.data();
+                    for (std::size_t y = 0; y < h; ++y)
+                    {
+                        for (std::size_t x = 0; x < w; ++x)
+                        {
+                            *out++ = *src++;
+                            *out++ = *src++;
+                            *out++ = *src++;
+
+                            *out++ = 255;
+                        }
+                    }
+                    textures[0]->copy(dst.data(), dst.size());
+                }
+                else
+                {
+                    textures[0]->copy(image);
+                }
+                break;
+            }
+            case image::PixelType::RGB_U16:
+            {
+                if (textures[0]->getInternalFormat() == VK_FORMAT_R16G16B16A16_UNORM)
+                {
+                    const std::size_t w = info.size.w;
+                    const std::size_t h = info.size.h;
+                    const uint16_t* src = reinterpret_cast<uint16_t*>(image->getData());
+                    std::vector<uint16_t> dst(w * h * 4);
+                    uint16_t* out = dst.data();
+                    for (std::size_t y = 0; y < h; ++y)
+                    {
+                        for (std::size_t x = 0; x < w; ++x)
+                        {
+                            *out++ = *src++;
+                            *out++ = *src++;
+                            *out++ = *src++;
+
+                            *out++ = 65535;
+                        }
+                    }
+                    textures[0]->copy(reinterpret_cast<uint8_t*>(dst.data()),
+                                      dst.size() * sizeof(uint16_t));
+                }
+                else
+                {
+                    textures[0]->copy(image);
+                }
+                break;
+            }
+            case image::PixelType::RGB_F16:
+            {
+                if (textures[0]->getInternalFormat() == VK_FORMAT_R16G16B16A16_SFLOAT)
+                {
+                    const std::size_t w = info.size.w;
+                    const std::size_t h = info.size.h;
+                    const uint16_t* src = reinterpret_cast<uint16_t*>(image->getData());
+                    std::vector<uint16_t> dst(w * h * 4);
+                    uint16_t* out = dst.data();
+                    for (std::size_t y = 0; y < h; ++y)
+                    {
+                        for (std::size_t x = 0; x < w; ++x)
+                        {
+                            *out++ = *src++;
+                            *out++ = *src++;
+                            *out++ = *src++;
+
+                            *out++ = 0x3C00; // 1.0 in IEEE 754
+                        }
+                    }
+                    textures[0]->copy(reinterpret_cast<uint8_t*>(dst.data()),
+                                      dst.size() * sizeof(uint16_t));
+                }
+                else
+                {
+                    textures[0]->copy(image);
+                }
+                break;
+            }
+            case image::PixelType::RGB_U10:
+            {
+                // Convert from GL_UNSIGNED_INT_10_10_10_2
+                if (textures[0]->getInternalFormat() == VK_FORMAT_A2R10G10B10_UNORM_PACK32)
+                {
+                    std::cerr << "convert" << std::endl;
+                    const std::size_t w = info.size.w;
+                    const std::size_t h = info.size.h;
+                    const uint32_t* src = reinterpret_cast<uint32_t*>(image->getData());
+                    std::vector<uint32_t> dst(w * h);
+                    uint32_t* out = dst.data();
+                    for (std::size_t y = 0; y < h; ++y)
+                    {
+                        for (std::size_t x = 0; x < w; ++x)
+                        {
+                            const uint32_t pixel = src[y * w + x];
+                            
+                            // OpenGL packing: R (bits 0-9), G (10-19), B (20-29), A (30-31)
+                            const uint32_t r = (pixel >> 0)  & 0x3FF;
+                            const uint32_t g = (pixel >> 10) & 0x3FF;
+                            const uint32_t b = (pixel >> 20) & 0x3FF;
+                            const uint32_t a = (pixel >> 30) & 0x3;
+                            
+                            // Vulkan expects: A (bits 30-31), B (20-29), G (10-19), R (0-9)
+                            const uint32_t vk_pixel = (a << 30) | (r << 20) | (g << 10) |
+                                                      (b << 0);
+
+                            reinterpret_cast<uint32_t*>(out)[y * w + x] = vk_pixel;
+                        }
+                    }
+                    textures[0]->copy(reinterpret_cast<uint8_t*>(dst.data()),
+                                      dst.size() * sizeof(uint32_t));
+                }
+            }
+            break;
             default:
                 if (1 == textures.size())
                 {
@@ -363,99 +490,6 @@ namespace tl
             }
         }
 
-        void setActiveTextures(
-            const image::Info& info,
-            const std::vector<std::shared_ptr<vlk::Texture> >& textures,
-            size_t offset)
-        {
-            switch (info.pixelType)
-            {
-            case image::PixelType::YUV_420P_U8:
-                if (3 == textures.size())
-                {
-                    // glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 +
-                    // offset)); textures[0]->bind(); glActiveTexture(
-                    //     static_cast<GLenum>(GL_TEXTURE0 + 1 + offset));
-                    // textures[1]->bind();
-                    // glActiveTexture(
-                    //     static_cast<GLenum>(GL_TEXTURE0 + 2 + offset));
-                    // textures[2]->bind();
-                }
-                break;
-            case image::PixelType::YUV_422P_U8:
-                if (3 == textures.size())
-                {
-                    // glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 +
-                    // offset)); textures[0]->bind(); glActiveTexture(
-                    //     static_cast<GLenum>(GL_TEXTURE0 + 1 + offset));
-                    // textures[1]->bind();
-                    // glActiveTexture(
-                    //     static_cast<GLenum>(GL_TEXTURE0 + 2 + offset));
-                    // textures[2]->bind();
-                }
-                break;
-            case image::PixelType::YUV_444P_U8:
-                if (3 == textures.size())
-                {
-                    // glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 +
-                    // offset)); textures[0]->bind(); glActiveTexture(
-                    //     static_cast<GLenum>(GL_TEXTURE0 + 1 + offset));
-                    // textures[1]->bind();
-                    // glActiveTexture(
-                    //     static_cast<GLenum>(GL_TEXTURE0 + 2 + offset));
-                    // textures[2]->bind();
-                }
-                break;
-            case image::PixelType::YUV_420P_U16:
-                if (3 == textures.size())
-                {
-                    // glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 +
-                    // offset)); textures[0]->bind(); glActiveTexture(
-                    //     static_cast<GLenum>(GL_TEXTURE0 + 1 + offset));
-                    // textures[1]->bind();
-                    // glActiveTexture(
-                    //     static_cast<GLenum>(GL_TEXTURE0 + 2 + offset));
-                    // textures[2]->bind();
-                }
-                break;
-            case image::PixelType::YUV_422P_U16:
-                if (3 == textures.size())
-                {
-                    // glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 +
-                    // offset)); textures[0]->bind(); glActiveTexture(
-                    //     static_cast<GLenum>(GL_TEXTURE0 + 1 + offset));
-                    // textures[1]->bind();
-                    // glActiveTexture(
-                    //     static_cast<GLenum>(GL_TEXTURE0 + 2 + offset));
-                    // textures[2]->bind();
-                }
-                break;
-            case image::PixelType::YUV_444P_U16:
-                if (3 == textures.size())
-                {
-                    // glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 +
-                    // offset)); textures[0]->bind(); glActiveTexture(
-                    //     static_cast<GLenum>(GL_TEXTURE0 + 1 + offset));
-                    // textures[1]->bind();
-                    // glActiveTexture(
-                    //     static_cast<GLenum>(GL_TEXTURE0 + 2 + offset));
-                    // textures[2]->bind();
-                }
-                break;
-            default:
-                if (1 == textures.size())
-                {
-                    // glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 +
-                    // offset)); textures[0]->bind(); glActiveTexture(
-                    //     static_cast<GLenum>(GL_TEXTURE0 + 1 + offset));
-                    // glBindTexture(GL_TEXTURE_2D, 0);
-                    // glActiveTexture(
-                    //     static_cast<GLenum>(GL_TEXTURE0 + 2 + offset));
-                    // glBindTexture(GL_TEXTURE_2D, 0);
-                }
-                break;
-            }
-        }
 
 #if defined(TLRENDER_OCIO)
         OCIOData::~OCIOData()
@@ -564,7 +598,22 @@ namespace tl
         {
         }
 
-        Render::~Render() {}
+        Render::~Render()
+        {
+            TLRENDER_P();
+
+            VkDevice device = ctx.device;
+            
+            for (auto& [_, pipeline] : p.pipelines)
+            {
+                vkDestroyPipeline(device, pipeline, nullptr);
+            }
+            
+            for (auto& [_, pipelineLayout] : p.pipelineLayouts)
+            {
+                vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
+            }
+        }
 
         std::shared_ptr<Render> Render::create(
             Fl_Vk_Context& vulkanContext,
@@ -582,6 +631,22 @@ namespace tl
         }
 
         void Render::begin(
+            VkCommandBuffer& cmd,
+            std::shared_ptr<vlk::OffscreenBuffer> fbo,
+            const uint32_t frameIndex,
+            const math::Size2i& renderSize,
+            const timeline::RenderOptions& renderOptions)
+        {
+            TLRENDER_P();
+            
+            p.cmd = cmd;
+            p.fbo = fbo;
+            p.frameIndex = frameIndex;
+
+            begin(renderSize, renderOptions);
+        }
+        
+        void Render::begin(
             const math::Size2i& renderSize,
             const timeline::RenderOptions& renderOptions)
         {
@@ -596,77 +661,167 @@ namespace tl
             // glEnable(GL_BLEND);
             // glBlendEquation(GL_FUNC_ADD);
 
+            math::Matrix4x4f transform;
             if (!p.shaders["rect"])
             {
                 p.shaders["rect"] = vlk::Shader::create(
                     ctx, vertexSource(), meshFragmentSource(), "rect");
+                p.shaders["rect"]->createUniform(
+                    "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["rect"]->createDescriptorSets();
             }
             if (!p.shaders["mesh"])
             {
                 p.shaders["mesh"] = vlk::Shader::create(
                     ctx, vertexSource(), meshFragmentSource(), "mesh");
+                p.shaders["mesh"]->createUniform(
+                    "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["mesh"]->createDescriptorSets();
             }
             if (!p.shaders["colorMesh"])
             {
                 p.shaders["colorMesh"] = vlk::Shader::create(
                     ctx, colorMeshVertexSource(), colorMeshFragmentSource(), "colorMesh");
+                p.shaders["colorMesh"]->createUniform(
+                    "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["colorMesh"]->createDescriptorSets();
             }
             if (!p.shaders["text"])
             {
                 p.shaders["text"] = vlk::Shader::create(
                     ctx, vertexSource(), textFragmentSource(), "text");
+                p.shaders["text"]->createUniform(
+                    "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["text"]->createDescriptorSets();
             }
             if (!p.shaders["texture"])
             {
                 p.shaders["texture"] = vlk::Shader::create(
                     ctx, vertexSource(), textureFragmentSource(), "texture");
+                p.shaders["texture"]->createUniform(
+                    "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["texture"]->createDescriptorSets();
+            }
+            if (!p.shaders["dummy"])
+            {
+                p.shaders["dummy"] = vlk::Shader::create(
+                    ctx, vertexSource(), dummyFragmentSource(), "dummy");
+                p.shaders["dummy"]->createUniform(
+                    "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["dummy"]->createDescriptorSets();
             }
             if (!p.shaders["image"])
             {
                 p.shaders["image"] = vlk::Shader::create(
                     ctx, vertexSource(), imageFragmentSource(), "image");
+                p.shaders["image"]->createUniform(
+                    "transform.mvp", transform, vlk::kShaderVertex);
+                struct Fragment
+                {
+                    image::Color4f color;
+                    int pixelType;
+                    int videoLevels;
+                    math::Vector4f yuvCoefficients;
+                    int imageChannels = 0;
+                    int mirrorX = 0;
+                    int mirrorY = 0;
+                };
+                Fragment values;
+                p.shaders["image"]->createUniform("frag", values);
+                p.shaders["image"]->addTexture("textureSampler0");
+                p.shaders["image"]->addTexture("textureSampler1");
+                p.shaders["image"]->addTexture("textureSampler2");
+                p.shaders["image"]->createDescriptorSets();
             }
             if (!p.shaders["wipe"])
             {
                 p.shaders["wipe"] = vlk::Shader::create(
                     ctx, vertexSource(), meshFragmentSource(), "wipe");
+                p.shaders["wipe"]->createUniform(
+                    "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["wipe"]->createDescriptorSets();
             }
             if (!p.shaders["overlay"])
             {
                 p.shaders["overlay"] = vlk::Shader::create(
                     ctx, vertexSource(), textureFragmentSource(), "overlay");
+                p.shaders["overlay"]->createUniform(
+                    "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["overlay"]->createDescriptorSets();
             }
             if (!p.shaders["difference"])
             {
                 p.shaders["difference"] = vlk::Shader::create(
                     ctx, vertexSource(), differenceFragmentSource(), "difference");
+                p.shaders["difference"]->createUniform(
+                    "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["difference"]->createDescriptorSets();
             }
             if (!p.shaders["dissolve"])
             {
                 p.shaders["dissolve"] = vlk::Shader::create(
                     ctx, vertexSource(), textureFragmentSource(), "dissolve");
+                p.shaders["dissolve"]->createUniform(
+                    "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["dissolve"]->createUniform(
+                    "color", image::Color4f(1.F, 1.F, 1.F));
+                p.shaders["dissolve"]->addTexture("textureSampler");
+                
+                p.shaders["dissolve"]->createDescriptorSets();
             }
             _displayShader();
 
-            p.vbos["rect"] = vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32);
-            p.vaos["rect"] = vlk::VAO::create(ctx);
-            p.vbos["texture"] =
-                vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32_UV_U16);
-            p.vaos["texture"] = vlk::VAO::create(ctx);
-            p.vbos["image"] =
-                vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32_UV_U16);
-            p.vaos["image"] = vlk::VAO::create(ctx);
-            p.vbos["wipe"] = vlk::VBO::create(1 * 3, vlk::VBOType::Pos2_F32);
-            p.vaos["wipe"] = vlk::VAO::create(ctx);
-            p.vbos["video"] =
-                vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32_UV_U16);
-            p.vaos["video"] = vlk::VAO::create(ctx);
-
-            setViewport(math::Box2i(0, 0, renderSize.w, renderSize.h));
-            if (renderOptions.clear)
+            if (!p.vbos["rect"] || p.vbos["rect"]->getSize() != 6)
             {
-                clearViewport(renderOptions.clearColor);
+                p.vbos["rect"] = vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32);
+                p.vaos["rect"] = vlk::VAO::create(ctx);
             }
+            
+            if (!p.vbos["texture"] || p.vbos["texture"]->getSize() != 6)
+            {
+                p.vbos["texture"] =
+                    vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32_UV_U16);
+                p.vaos["texture"] = vlk::VAO::create(ctx);
+            }
+            if (!p.vbos["image"] || p.vbos["image"]->getSize() != 6)
+            {
+                p.vbos["image"] =
+                    vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32_UV_U16);
+                p.vaos["image"] = vlk::VAO::create(ctx);
+            }
+            if (!p.vbos["image"] || p.vbos["image"]->getSize() != 3)
+            {
+                p.vbos["wipe"] = vlk::VBO::create(1 * 3, vlk::VBOType::Pos2_F32);
+                p.vaos["wipe"] = vlk::VAO::create(ctx);
+            }
+            if (!p.vbos["video"] || p.vbos["video"]->getSize() != 6)
+            {
+                p.vbos["video"] =
+                    vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32_UV_U16);
+                p.vaos["video"] = vlk::VAO::create(ctx);
+            }
+            
+            const image::Color4f& color = renderOptions.clearColor;
+
+            // Clear yellow (assuming this clear value is for the FBO)
+            VkClearValue clearValues[2];
+            clearValues[0].color = { color.r, color.g, color.b, color.a }; // Clear color for the FBO
+            clearValues[1].depthStencil = { 1.F, 0 };
+            
+            VkRenderPassBeginInfo rpBegin{};
+            rpBegin.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+            rpBegin.renderPass = p.fbo->getRenderPass();
+            rpBegin.framebuffer = p.fbo->getFramebuffer(/*currentFrameIndex*/); // Pass frame index if needed
+            rpBegin.renderArea.offset = {0, 0}; // Assuming render area starts at 0,0
+            rpBegin.renderArea.extent = p.fbo->getExtent(); // Use FBO extent
+            rpBegin.clearValueCount = 1 + static_cast<uint16_t>(p.fbo->hasDepth() || p.fbo->hasStencil());
+            rpBegin.pClearValues = clearValues;
+
+            // Begin the first render pass instance within the single command buffer
+            vkCmdBeginRenderPass(p.cmd, &rpBegin, VK_SUBPASS_CONTENTS_INLINE);
+            
+            // setViewport(math::Box2i(0, 0, renderSize.w, renderSize.h));
+            p.fbo->setupViewportAndScissor(p.cmd);
             setTransform(
                 math::ortho(
                     0.F, static_cast<float>(renderSize.w),
@@ -683,7 +838,9 @@ namespace tl
             // p.vaos["mesh"].reset();
             // p.vbos["text"].reset();
             // p.vaos["text"].reset();
-
+  
+            vkCmdEndRenderPass(p.cmd);
+            
             const auto now = std::chrono::steady_clock::now();
             const auto diff =
                 std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -781,8 +938,27 @@ namespace tl
 
         void Render::clearViewport(const image::Color4f& value)
         {
-            // glClearColor(value.r, value.g, value.b, value.a);
-            // glClear(GL_COLOR_BUFFER_BIT);
+            TLRENDER_P();
+            
+            // Clear yellow (assuming this clear value is for the FBO)
+            VkClearValue clearValues[2];
+            clearValues[0].color = { value.r, value.g, value.b, value.a }; // Clear color for the FBO
+            clearValues[1].depthStencil = { 1.F, 0 };
+
+            VkRenderPassBeginInfo rpBegin{};
+            rpBegin.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+            rpBegin.renderPass = p.fbo->getRenderPass(); // Use the FBO's render pass
+            // Use the FBO's framebuffer for THIS frame if using per-frame FBO attachments,
+            // otherwise use the static one if vk.buffer->getFramebuffer() is static.
+            rpBegin.framebuffer = p.fbo->getFramebuffer(/*currentFrameIndex*/); // Pass frame index if needed
+            rpBegin.renderArea.offset = {0, 0}; // Assuming render area starts at 0,0
+            rpBegin.renderArea.extent = p.fbo->getExtent(); // Use FBO extent
+            rpBegin.clearValueCount = 1 + static_cast<uint16_t>(p.fbo->hasDepth() || p.fbo->hasStencil());
+            rpBegin.pClearValues = clearValues;
+
+            // Begin the first render pass instance within the single command buffer
+            vkCmdBeginRenderPass(p.cmd, &rpBegin, VK_SUBPASS_CONTENTS_INLINE);    
+            vkCmdEndRenderPass(p.cmd);
         }
 
         bool Render::getClipRectEnabled() const
@@ -832,7 +1008,7 @@ namespace tl
             p.transform = value;
             for (auto i : p.shaders)
             {
-                i.second->bind();
+                i.second->bind(p.frameIndex);
                 i.second->setUniform(
                     "transform.mvp", value, vlk::kShaderVertex);
             }
@@ -1895,8 +2071,8 @@ namespace tl
                 p.shaders["display"] =
                     vlk::Shader::create(ctx, vertexSource(), source, "display");
             }
-            p.shaders["display"]->bind();
-            p.shaders["display"]->setUniform(
+            p.shaders["display"]->bind(p.frameIndex);
+            p.shaders["display"]->createUniform(
                 "transform.mvp", p.transform, vlk::kShaderVertex);
             size_t texturesOffset = 1;
 #if defined(TLRENDER_OCIO)
@@ -1933,6 +2109,9 @@ namespace tl
                 texturesOffset += p.placeboData->textures.size();
             }
 #endif
+            p.shaders["display"]->createDescriptorSets();
+            p.shaders["display"]->setUniform(
+                "transform.mvp", p.transform, vlk::kShaderVertex);
         }
     } // namespace timeline_vlk
 } // namespace tl

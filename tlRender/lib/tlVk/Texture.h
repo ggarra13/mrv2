@@ -14,8 +14,8 @@ namespace tl
 {
     namespace vlk
     {
-        //! Get the Vulkan internal texture format.
-        VkFormat getTextureInternalFormat(image::PixelType);
+        //! Get the Vulkan's source texture format.
+        VkFormat getTextureFormat(image::PixelType);
 
         //! Vulkan texture options.
         struct TextureOptions
@@ -102,7 +102,11 @@ namespace tl
 
             VkDescriptorImageInfo getDescriptorInfo() const;
 
-            VkFormat getFormat() const;
+            //! Vulkan's internal format representation.
+            VkFormat getInternalFormat() const;
+
+            //! Image's original source format.
+            VkFormat getSourceFormat() const;
             
             VkImageView getImageView() const;
 
@@ -112,6 +116,9 @@ namespace tl
 
             VkImageLayout getImageLayout() const;
 
+            //! If internal format is different from the source format, unpack it to
+            //! correct the difference.
+            void unpack();
 
             //! Bind the texture.
             void bind();

@@ -4,9 +4,9 @@
 
 #include <tlTimelineVk/RenderPrivate.h>
 
-#include <tlGL/GL.h>
-#include <tlGL/Mesh.h>
-#include <tlGL/Util.h>
+#include <tlVk/Vk.h>
+#include <tlVk/Mesh.h>
+#include <tlVk/Util.h>
 
 #include <tlCore/Math.h>
 
@@ -275,8 +275,8 @@ namespace tl
                 if (p.vaos["wipe"])
                 {
                     p.vaos["wipe"]->bind();
-                    p.vaos["wipe"]->draw(
-                        GL_TRIANGLES, 0, p.vbos["wipe"]->getSize());
+                    // p.vaos["wipe"]->draw(
+                    //     GL_TRIANGLES, 0, p.vbos["wipe"]->getSize());
                 }
             }
             // glStencilFunc(GL_EQUAL, 1, 0xFF);
@@ -559,8 +559,8 @@ namespace tl
                     if (p.vaos["video"])
                     {
                         p.vaos["video"]->bind();
-                        p.vaos["video"]->draw(
-                            GL_TRIANGLES, 0, p.vbos["video"]->getSize());
+                        // p.vaos["video"]->draw(
+                        //     GL_TRIANGLES, 0, p.vbos["video"]->getSize());
                     }
                 }
             }
@@ -631,7 +631,7 @@ namespace tl
             const auto transform = math::ortho(
                 0.F, static_cast<float>(box.w()), static_cast<float>(box.h()),
                 0.F, -1.F, 1.F);
-            p.shaders["image"]->bind();
+            p.shaders["image"]->bind(p.frameIndex);
             p.shaders["image"]->setUniform(
                 "transform.mvp", transform, vlk::kShaderVertex);
 
@@ -739,7 +739,7 @@ namespace tl
                                 //     GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
                                 //     GL_ONE);
 
-                                p.shaders["dissolve"]->bind();
+                                p.shaders["dissolve"]->bind(p.frameIndex);
                                 p.shaders["dissolve"]->setUniform(
                                     "transform.mvp", transform, vlk::kShaderVertex);
                                 p.shaders["dissolve"]->setUniform(
@@ -765,9 +765,9 @@ namespace tl
                                 if (p.vaos["video"])
                                 {
                                     p.vaos["video"]->bind();
-                                    p.vaos["video"]->draw(
-                                        GL_TRIANGLES, 0,
-                                        p.vbos["video"]->getSize());
+                                    // p.vaos["video"]->draw(
+                                    //     GL_TRIANGLES, 0,
+                                    //     p.vbos["video"]->getSize());
                                 }
 
                                 // glBindTexture(
@@ -786,9 +786,9 @@ namespace tl
                                 if (p.vaos["video"])
                                 {
                                     p.vaos["video"]->bind();
-                                    p.vaos["video"]->draw(
-                                        GL_TRIANGLES, 0,
-                                        p.vbos["video"]->getSize());
+                                    // p.vaos["video"]->draw(
+                                    //     GL_TRIANGLES, 0,
+                                    //     p.vbos["video"]->getSize());
                                 }
                             }
                         }
@@ -841,6 +841,7 @@ namespace tl
                 }
             }
 
+#if 0
             if (p.buffers["video"])
             {
                 // glBlendFuncSeparate(
@@ -851,7 +852,7 @@ namespace tl
                 //     viewportPrev[0], viewportPrev[1], viewportPrev[2],
                 //     viewportPrev[3]);
 
-                p.shaders["display"]->bind();
+                p.shaders["display"]->bind(p.frameIndex);
                 p.shaders["display"]->setUniform("textureSampler", 0);
                 p.shaders["display"]->setUniform(
                     "channels", static_cast<int>(displayOptions.channels));
@@ -981,15 +982,15 @@ namespace tl
                 }
                 if (p.vaos["video"])
                 {
-                    p.vaos["video"]->bind();
                     // p.vaos["video"]->draw(
                     //     GL_TRIANGLES, 0, p.vbos["video"]->getSize());
                 }
             }
 
-            p.shaders["image"]->bind();
+            p.shaders["image"]->bind(p.frameIndex);
             p.shaders["image"]->setUniform(
                 "transform.mvp", p.transform, vlk::kShaderVertex);
+#endif
         }
     } // namespace timeline_vlk
 } // namespace tl

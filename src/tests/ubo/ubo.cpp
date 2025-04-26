@@ -765,8 +765,8 @@ void vk_shape_window::draw() {
     VkCommandBuffer cmd = getCurrentCommandBuffer(); // Get the command buffer started by vk_draw_begin()
     vkCmdEndRenderPass(cmd);  // end the clear screen command pass.
     
-    uint32_t currentFrameIndex = m_currentFrameIndex; // Get the current frame index
-
+    shader->bind(m_currentFrameIndex);
+    fboShader->bind(m_currentFrameIndex);
     
     math::Size2i renderSize(4096, 2980);
     vlk::OffscreenBufferOptions options;
@@ -814,11 +814,11 @@ void vk_shape_window::draw() {
     UBO ubo; ubo.redColor = math::Vector3f(r, 0, 0); ubo.blueColor = math::Vector3f(0, 0, b);
 
     // Update UBO for this frame/set (this updates fboShader's DescriptorSet).
-    fboShader->setUniform("ubo", ubo, currentFrameIndex); // Update UBO for this frame/set
+    fboShader->setUniform("ubo", ubo); // Update UBO for this frame/set
      
     vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
                              m_fbo_pipeline_layout, 0, 1,
-                             &fboShader->getDescriptorSet(currentFrameIndex), // Bind the set for THIS frame
+                             &fboShader->getDescriptorSet(), // Bind the set for THIS frame
                              0, nullptr);
      
     fbo->setupViewportAndScissor(cmd);
@@ -847,13 +847,13 @@ void vk_shape_window::draw() {
 
     // --- Update Descriptor Set for the SECOND pass (Composition) ---
     // This updates the descriptor set for the CURRENT frame index on the CPU.
-    shader->setFBO("textureSampler", fbo, currentFrameIndex);
+    shader->setFBO("textureSampler", fbo);
 
     // --- Bind Descriptor Set for the SECOND pass ---
     // Record the command to bind the descriptor set for the CURRENT frame index
     vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
                             m_pipeline_layout, 0, 1,
-                            &shader->getDescriptorSet(currentFrameIndex), // Bind the set for THIS frame
+                            &shader->getDescriptorSet(), // Bind the set for THIS frame
                             0, nullptr);
 
     // Set dynamic state (viewport, scissor) for the composition pass

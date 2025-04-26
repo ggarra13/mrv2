@@ -18,9 +18,9 @@ const uint Channels_Green = 2;
 const uint Channels_Blue  = 3;
 const uint Channels_Alpha = 4;
  
-layout(set = 0, binding = 0) uniform ChannelsUBO {
-     int channels;
-} channelsUBO;
+layout(set = 0, binding = 2) uniform ChannelsUBO {
+     int value;
+} channels;
  
 vec4 swizzleFunc(vec4 c, int channels)
 {
@@ -56,29 +56,31 @@ const uint Stereo_Checkerboard = 1;
 const uint Stereo_Scanlines    = 2;
 const uint Stereo_Columns      = 3;
 const uint Stereo_OpenGL       = 4;
- 
-layout(set = 0, binding = 0) uniform int stereo;
-layout(set = 0, binding = 1) uniform int width;
-layout(set = 0, binding = 2) uniform int height;
+
+layout(set = 0, binding = 3) uniform OpacityUBO {
+     uniform int stereo;
+     uniform int width;
+     uniform int height;
+} ubo; 
  
 vec4 stereoFunc(vec4 c, vec2 st)
 {
     int x = 0;
     // Swizzle for the channels display.
-    if (Stereo_Scanlines == stereo)
+    if (Stereo_Scanlines == ubo.stereo)
     {
-         float f = st.y * height;
+         float f = st.y * ubo.height;
          x = int( mod( f, 2 ) );
     }
-    else if (Stereo_Columns == stereo)
+    else if (Stereo_Columns == ubo.stereo)
     {
-         float f2 = st.x * width;
+         float f2 = st.x * ubo.width;
          x = int( mod( f2, 2 ) );
     }
-    else if (Stereo_Checkerboard == stereo)
+    else if (Stereo_Checkerboard == ubo.stereo)
     {
-         float f = st.y * height;
-         float f2 = st.x * width;
+         float f = st.y * ubo.height;
+         float f2 = st.x * ubo.width;
          x = int( mod( floor( f2 ) + floor( f ), 2 ) < 1 );
     }
     if (x == 1)
@@ -97,9 +99,9 @@ return R"(#version 450
 
 layout(location = 0) in vec2 fTexture;
 
-layout(set = 0, binding = 1) uniform sampler2D textureSampler;
+layout(binding = 1) uniform sampler2D textureSampler;
 
-layout(set = 0, binding = 2) uniform OpacityUBO {
+layout(binding = 2) uniform OpacityUBO {
      float opacity;
 } ubo;
 
@@ -121,17 +123,20 @@ std::string stereoFragmentSource()
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 fColor;
 
-layout(set = 0, binding = 0) uniform float opacity;
-                  
+layout(binding = 1) uniform sampler2D textureSampler;
+
+layout(set = 0, binding = 2) uniform OpacityUBO {
+     float opacity;
+} ubo;
+
 {0}
                   
-layout(binding = 1) uniform sampler2D textureSampler;
                   
 void main()
 {
     fColor = texture(textureSampler, fTexture);
     fColor = stereoFunc(fColor, fTexture);
-    fColor.a *= opacity;
+    fColor.a *= ubo.opacity;
 })")
             .arg(stereoSource);
     }
@@ -143,15 +148,15 @@ void main()
                   
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 fColor;
+
+layout(binding = 1) uniform sampler2D textureSampler;
                   
-{0}
-                  
-layout(binding = 0) uniform sampler2D textureSampler;
+{0}                  
                   
 void main()
 {
      fColor = texture(textureSampler, fTexture);
-     fColor = swizzleFunc(fColor, channelsUBO.channels);
+     fColor = swizzleFunc(fColor, channels.value);
 })").arg(swizzleSource);
 
     }
@@ -164,7 +169,9 @@ void main()
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 fColor;
               
-layout(set = 0, binding = 0) uniform vec4  color;
+layout(set = 0, binding = 1) uniform OpacityUBO {
+     vec4 color;
+} ubo;
 
 void main()
 {
@@ -173,7 +180,7 @@ void main()
      float radius = 0.75;
      float feather = 0.25;
      float mult = smoothstep(radius - feather, radius + feather, ratio);
-     fColor = color;
+     fColor = ubo.color;
      fColor.a *= mult;
 })";
     }
@@ -186,11 +193,13 @@ void main()
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 fColor;
               
-uniform vec4  color;
+layout(set = 0, binding = 1) uniform OpacityUBO {
+     vec4 color;
+} ubo;
               
 void main()
 {
-     fColor = color;
+     fColor = ubo.color;
 })";
     }
 

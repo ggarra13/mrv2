@@ -11,6 +11,10 @@ namespace tl
             const std::string& name, const T& value,
             const ShaderFlags stageFlags)
         {
+            auto it = ubos.find(name);
+            if (it != ubos.end())
+                return;
+            
             UBO ubo;
             ubo.size = sizeof(value);
             
@@ -64,14 +68,8 @@ namespace tl
         template <typename T>
         void Shader::setUniform(
             const std::string& name, const T& value,
-            const int frameIndex,
             const ShaderFlags stageFlags)
         {
-            if (frameIndex < 0 || frameIndex >= MAX_FRAMES_IN_FLIGHT)
-            {
-                throw std::out_of_range("Invalid frame index");
-            }
-            
             auto it = ubos.find(name);
             if (it == ubos.end())
             {
