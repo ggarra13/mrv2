@@ -11,6 +11,7 @@
 #
 #
 
+set +e
 
 . $PWD/etc/build_dir.sh
 

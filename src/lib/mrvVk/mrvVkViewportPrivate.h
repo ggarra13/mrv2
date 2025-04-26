@@ -26,7 +26,15 @@ namespace mrv
         {
             std::weak_ptr<system::Context> context;
 
-            // GL variables
+            //! Vulkan variables
+            VkPipelineLayout fbo_pipeline_layout = VK_NULL_HANDLE;
+            VkPipeline       fbo_pipeline  = VK_NULL_HANDLE;
+            VkDescriptorPool fbo_desc_pool = VK_NULL_HANDLE; // Pool for FBO shader's descriptor sets
+
+            //! This is for swapchain pipeline
+            VkPipelineLayout pipeline_layout = VK_NULL_HANDLE;
+            
+            // tlRender variables
             //! Vulkan Offscreen buffers
             image::PixelType colorBufferType = image::PixelType::RGBA_F32;
 

@@ -10,6 +10,7 @@
 #
 #
 
+set +e
 
 if [[ ! $RUNME ]]; then
     . etc/build_dir.sh

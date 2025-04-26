@@ -24,7 +24,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -46,8 +46,6 @@
 #include <tlVk/Mesh.h>
 #include <tlVk/OffscreenBuffer.h>
 #include <tlVk/Shader.h>
-
-#define MAX_FRAMES_IN_FLIGHT 5
 
 #include <tlCore/Size.h>
 #include <tlCore/Vector.h>
@@ -125,7 +123,7 @@ public:
     int sides;
     vk_shape_window(int x, int y, int w, int h, const char* l = 0);
     vk_shape_window(int w, int h, const char* l = 0);
-
+    
     const char* application_name() FL_OVERRIDE { return "vk_shape_textured"; };
     void prepare() FL_OVERRIDE;
     
@@ -146,17 +144,6 @@ protected:
     //! This is for swapchain pipeline
     VkPipelineLayout m_pipeline_layout;
 
-    //! Memory for descriptor pools (need one for FBO shader UBO, and one for main shader texture)
-    VkDescriptorPool m_fbo_desc_pool; // Pool for FBO shader's descriptor sets
-    VkDescriptorPool m_main_desc_pool; // Pool for main shader's descriptor sets
-
-    //! Describe texture bindings within desc. set
-    VkDescriptorSetLayout m_main_desc_layout; // Layout for main shader's descriptor sets
-
-    //! Actual data bound to shaders like texture or
-    //! uniform buffers
-    std::vector<VkDescriptorSet> m_main_desc_sets; // Per-frame descriptor sets for the main pipeline
-    
 private:
     void _init();
 
@@ -191,12 +178,11 @@ void vk_shape_window::_init()
     sides = 3;
     // Turn on validations
     m_validate = true;
+    
     m_fbo_pipeline = VK_NULL_HANDLE;
     m_fbo_pipeline_layout = VK_NULL_HANDLE;
+    
     m_pipeline_layout = VK_NULL_HANDLE;
-    m_fbo_desc_pool = VK_NULL_HANDLE;
-    m_main_desc_pool = VK_NULL_HANDLE;
-    m_main_desc_layout = VK_NULL_HANDLE;
 }
 
 vk_shape_window::vk_shape_window(int x, int y, int w, int h, const char* l) :
@@ -212,7 +198,8 @@ vk_shape_window::vk_shape_window(int w, int h, const char* l) :
 }
 
 void vk_shape_window::prepare_mesh()
-{    using namespace tl;
+{
+    using namespace tl;
 
     geom::TriangleMesh2 mesh = geom::box(math::Box2f(-.5F, -0.5F, 1.F, 1.F));
     const size_t numTriangles = mesh.triangles.size();
@@ -394,11 +381,11 @@ void vk_shape_window::prepare_shaders()
 {
     if (!fboShader)
         fboShader = tl::vlk::Shader::create(ctx, fbo_vertex_shader_glsl,
-                                           fbo_frag_shader_glsl);
+                                            fbo_frag_shader_glsl, "fboShader");
 
     if (!shader)
         shader = tl::vlk::Shader::create(ctx, vertex_shader_glsl,
-                                        frag_shader_glsl);
+                                         frag_shader_glsl, "composite");
 }
 
 void vk_shape_window::destroy_fbo_pipeline()
@@ -467,13 +454,12 @@ void vk_shape_window::prepare_fbo_pipeline() {
     ubo.blueColor = math::Vector3f(0, 0, b);
 
     // Assuming fboShader manages its own descriptor sets
-    fboShader->setUniform("ubo", ubo);
+    fboShader->createUniform("ubo", ubo);
     // createDescriptorSet for fboShader should ideally happen outside prepare_fbo_pipeline,
     // possibly in prepare_descriptor_sets if per-frame, or in prepare if static.
     // Let's assume fboShader->createDescriptorSet() creates a static set for now.
-    if (fboShader->getDescriptorSet() == VK_NULL_HANDLE)
-        fboShader->createDescriptorSet();
-
+    fboShader->createDescriptorSets();
+    fboShader->debugDescriptorSets();
 
     VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = {};
     pPipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
@@ -735,61 +721,9 @@ void vk_shape_window::prepare_pipeline() {
 
 
 void vk_shape_window::prepare_descriptor_pools() {
-    // Create descriptor pool for FBO shader (UBO)
-    VkDescriptorPoolSize fbo_pool_size = {};
-    fbo_pool_size.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-    fbo_pool_size.descriptorCount = MAX_FRAMES_IN_FLIGHT; // If FBO UBO changes per frame
-
-    VkDescriptorPoolCreateInfo fbo_pool_info = {};
-    fbo_pool_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-    fbo_pool_info.pNext = NULL;
-    fbo_pool_info.maxSets = MAX_FRAMES_IN_FLIGHT; // One set per frame for the FBO shader
-    fbo_pool_info.poolSizeCount = 1;
-    fbo_pool_info.pPoolSizes = &fbo_pool_size;
-
-    VkResult result = vkCreateDescriptorPool(device(), &fbo_pool_info, NULL, &m_fbo_desc_pool);
-    VK_CHECK(result);
-
-    // Create descriptor pool for main shader (Combined Image Sampler)
-    VkDescriptorPoolSize main_pool_size = {};
-    main_pool_size.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-    main_pool_size.descriptorCount = MAX_FRAMES_IN_FLIGHT; // One texture sampler per frame
-
-    VkDescriptorPoolCreateInfo main_pool_info = {};
-    main_pool_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-    main_pool_info.pNext = NULL;
-    main_pool_info.maxSets = MAX_FRAMES_IN_FLIGHT; // One set per frame for the main shader
-    main_pool_info.poolSizeCount = 1;
-    main_pool_info.pPoolSizes = &main_pool_size;
-
-    result = vkCreateDescriptorPool(device(), &main_pool_info, NULL, &m_main_desc_pool);
-    VK_CHECK(result);
 }
 
 void vk_shape_window::prepare_descriptor_sets() {
-    VkResult result;
-    
-    // Prepare descriptor sets for the main shader (composition)
-    m_main_desc_sets.resize(MAX_FRAMES_IN_FLIGHT);
-    std::vector<VkDescriptorSetLayout> layouts(MAX_FRAMES_IN_FLIGHT, m_main_desc_layout); // Use the main layout
-
-    VkDescriptorSetAllocateInfo alloc_info = {};
-    alloc_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-    alloc_info.pNext = NULL;
-    alloc_info.descriptorPool = m_main_desc_pool; // Allocate from the main pool
-    alloc_info.descriptorSetCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
-    alloc_info.pSetLayouts = layouts.data();
-
-    result = vkAllocateDescriptorSets(device(), &alloc_info, m_main_desc_sets.data());
-    VK_CHECK(result);
-
-    // You would also allocate descriptor sets for the FBO shader here if its UBO changes per frame
-    // fboShader->createDescriptorSets(MAX_FRAMES_IN_FLIGHT, m_fbo_desc_pool); // Example
-
-    // Initial update of descriptor sets.
-    // You might update with placeholder data or the initial state here.
-    // The actual FBO texture reference update happens in the draw loop.
-    // For the FBO shader's UBO, if it's per-frame, you would update its sets here initially too.
 }
 
 void vk_shape_window::prepare()
@@ -814,8 +748,6 @@ void vk_shape_window::prepare()
 
     // Prepare descriptor sets *after* pools and layouts are ready
     prepare_descriptor_sets(); // Allocate and initially update sets
-
-     // Initialize fbo here or in a dedicated fbo setup function
 }
 
 void vk_shape_window::draw() {
@@ -845,7 +777,6 @@ void vk_shape_window::draw() {
     if (vlk::doCreate(fbo, renderSize, options))
     {
         fbo = vlk::OffscreenBuffer::create(ctx, renderSize, options);
-        destroy_fbo_pipeline();
         prepare_fbo_pipeline();
     }
 
@@ -879,22 +810,17 @@ void vk_shape_window::draw() {
     frame_counter += 10;
     float b = (frame_counter % 255) / 255.F;
     float r = 1.F - b;
-     struct UBO { math::Vector3f redColor; math::Vector3f blueColor; };
-     UBO ubo; ubo.redColor = math::Vector3f(r, 0, 0); ubo.blueColor = math::Vector3f(0, 0, b);
+    struct UBO { math::Vector3f redColor; math::Vector3f blueColor; };
+    UBO ubo; ubo.redColor = math::Vector3f(r, 0, 0); ubo.blueColor = math::Vector3f(0, 0, b);
+
+    // Update UBO for this frame/set (this updates fboShader's DescriptorSet).
+    fboShader->setUniform("ubo", ubo, currentFrameIndex); // Update UBO for this frame/set
      
-     // Update UBO for this frame/set (this updates fboShader's DescriptorSet).
-     fboShader->setUniform("ubo", ubo);
-
-     // WAS:
-     // fboShader->setUniform("ubo", ubo, currentFrameIndex); // Update UBO for this frame/set
-     // fboShader->updateDescriptorSet(device(), currentFrameIndex); // Update the set for this frame
-
     vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
-                            m_fbo_pipeline_layout, 0, 1,
-                            //&fboShader->getDescriptorSet(currentFrameIndex), // Bind the set for THIS frame
-                            &fboShader->getDescriptorSet(), // Bind the set for THIS frame
-                            0, nullptr);
-
+                             m_fbo_pipeline_layout, 0, 1,
+                             &fboShader->getDescriptorSet(currentFrameIndex), // Bind the set for THIS frame
+                             0, nullptr);
+     
     fbo->setupViewportAndScissor(cmd);
 
     // Draw commands here (draw the content into the FBO)
@@ -912,8 +838,7 @@ void vk_shape_window::draw() {
     // srcStageMask=COLOR_ATTACHMENT_OUTPUT_BIT, dstStageMask=FRAGMENT_SHADER_BIT,
     // srcAccessMask=COLOR_ATTACHMENT_WRITE_BIT, dstAccessMask=SHADER_READ_BIT.
     fbo->transitionToShaderRead(cmd);
-
-
+    
     // --- Second Render Pass: Render to Swapchain (Composition) ---
     begin_render_pass();
 
@@ -922,31 +847,13 @@ void vk_shape_window::draw() {
 
     // --- Update Descriptor Set for the SECOND pass (Composition) ---
     // This updates the descriptor set for the CURRENT frame index on the CPU.
-    VkDescriptorImageInfo tex_descs = {}; // No array needed for a single write
-    // Get the sampler and image view from the FBO (these should be valid)
-    tex_descs.sampler = fbo->getSampler();
-    tex_descs.imageView = fbo->getImageView();
-    // The layout MUST be the one the image is in *at the time of binding*
-    // which is VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL due to the barrier recorded earlier.
-    tex_descs.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-
-    VkWriteDescriptorSet write = {};
-    write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    // Update the descriptor set for the CURRENT frame index from the per-frame vector
-    write.dstSet = m_main_desc_sets[currentFrameIndex]; // Use the set for THIS frame
-    write.dstBinding = 0; // Your binding index for the FBO texture in the composition shader
-    write.descriptorCount = 1;
-    write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-    write.pImageInfo = &tex_descs;
-
-    // Call vkUpdateDescriptorSets on the CPU. This is safe because vk_draw_begin() waited on the fence.
-    vkUpdateDescriptorSets(device(), 1, &write, 0, NULL);
+    shader->setFBO("textureSampler", fbo, currentFrameIndex);
 
     // --- Bind Descriptor Set for the SECOND pass ---
     // Record the command to bind the descriptor set for the CURRENT frame index
     vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
                             m_pipeline_layout, 0, 1,
-                            &m_main_desc_sets[currentFrameIndex], // Bind the set for THIS frame
+                            &shader->getDescriptorSet(currentFrameIndex), // Bind the set for THIS frame
                             0, nullptr);
 
     // Set dynamic state (viewport, scissor) for the composition pass
@@ -979,44 +886,20 @@ void vk_shape_window::destroy_resources()
 {
     if (device() == VK_NULL_HANDLE)
         return;
-
-    // Wait for the device to be idle before destroying resources
-    vkDeviceWaitIdle(device());
-
-    destroy_mesh();
-
-    // Destroy descriptor sets *before* destroying pools
-    m_main_desc_sets.clear(); // This doesn't free the sets, just clears the vector
-
-    // Descriptor sets allocated from pools must be freed or the pool reset
-    if (m_main_desc_pool != VK_NULL_HANDLE) {
-         vkResetDescriptorPool(device(), m_main_desc_pool, 0); // Reset main pool
-         vkDestroyDescriptorPool(device(), m_main_desc_pool, nullptr);
-         m_main_desc_pool = VK_NULL_HANDLE;
-     }
     
-    if (m_fbo_desc_pool != VK_NULL_HANDLE) {
-         vkResetDescriptorPool(device(), m_fbo_desc_pool, 0); // Reset FBO pool
-         vkDestroyDescriptorPool(device(), m_fbo_desc_pool, nullptr);
-         m_fbo_desc_pool = VK_NULL_HANDLE;
-     }
-
-    if (m_main_desc_layout != VK_NULL_HANDLE)
-    {
-        vkDestroyDescriptorSetLayout(device(), m_main_desc_layout, nullptr);
-        m_main_desc_layout = VK_NULL_HANDLE;
-    }
-
-    if (m_pipeline_layout != VK_NULL_HANDLE)
-    {
-        vkDestroyPipelineLayout(device(), m_pipeline_layout, nullptr);
-        m_pipeline_layout = VK_NULL_HANDLE;
-    }
-
+    destroy_mesh();
+    
     if (m_pipeline != VK_NULL_HANDLE)
     {
         vkDestroyPipeline(device(), m_pipeline, nullptr);
         m_pipeline = VK_NULL_HANDLE;
+    }
+
+    // Destroy descriptor sets *before* destroying pools
+    if (m_pipeline_layout != VK_NULL_HANDLE)
+    {
+        vkDestroyPipelineLayout(device(), m_pipeline_layout, nullptr);
+        m_pipeline_layout = VK_NULL_HANDLE;
     }
 
     // Destroy FBO pipeline and layout (handled by destroy_fbo_pipeline)
@@ -1032,41 +915,23 @@ void vk_shape_window::destroy_resources()
 
 void vk_shape_window::prepare_descriptor_layout()
 {
-    // Layout for the main shader (composition) - uses a combined image sampler (the FBO texture)
-    VkDescriptorSetLayoutBinding main_layout_binding = {};
-    main_layout_binding.binding = 0;
-    main_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-    main_layout_binding.descriptorCount = 1;
-    main_layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT; // Used in fragment shader
-    main_layout_binding.pImmutableSamplers = NULL;
+    shader->addFBO("textureSampler"); 
 
-    VkDescriptorSetLayoutCreateInfo main_descriptor_layout_info = {};
-    main_descriptor_layout_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-    main_descriptor_layout_info.pNext = NULL;
-    main_descriptor_layout_info.bindingCount = 1;
-    main_descriptor_layout_info.pBindings = &main_layout_binding;
+    // Create the descriptor set layout and allocate descriptor sets/pools for each frame
+    shader->createDescriptorSets();
 
-    VkResult result = vkCreateDescriptorSetLayout(device(), &main_descriptor_layout_info, NULL,
-                                         &m_main_desc_layout);
-    VK_CHECK(result);
+    VkResult result;
+    
+    VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = {};
+    pPipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+    pPipelineLayoutCreateInfo.pNext = NULL;
+    pPipelineLayoutCreateInfo.setLayoutCount = 1;
+    pPipelineLayoutCreateInfo.pSetLayouts = &shader->getDescriptorSetLayout();
 
-    // Main pipeline layout references the main descriptor set layout
-    VkPipelineLayoutCreateInfo main_pipeline_layout_info = {};
-    main_pipeline_layout_info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-    main_pipeline_layout_info.pNext = NULL;
-    main_pipeline_layout_info.setLayoutCount = 1;
-    main_pipeline_layout_info.pSetLayouts = &m_main_desc_layout;
-
-    result = vkCreatePipelineLayout(device(), &main_pipeline_layout_info, NULL,
+    result = vkCreatePipelineLayout(device(), &pPipelineLayoutCreateInfo, NULL,
                                     &m_pipeline_layout);
     VK_CHECK(result);
-
-    // --- FBO Shader Descriptor Set Layout ---
-    // The FBO shader uses a UBO. Its layout should be handled by the fboShader class.
-    // Assuming fboShader->getDescriptorSetLayout() provides the layout for the UBO.
-    // This layout needs to be used when creating the m_fbo_pipeline_layout.
-    // This is already handled correctly in prepare_fbo_pipeline().
-}
+ }
 
 // when you change the data, as in this callback, you must call redraw():
 void sides_cb(Fl_Widget *o, void *p) {
@@ -1096,7 +961,7 @@ int main(int argc, char **argv) {
     Fl::use_high_res_VK(1);
 
     Fl_Window window(300, 330);
-
+  
     vk_shape_window sw(10, 10, 280, 280);
 
     Fl_Hor_Slider slider(50, 295, window.w()-60, 30, "Sides:");
@@ -1110,7 +975,7 @@ int main(int argc, char **argv) {
     window.end();
     window.show(argc,argv);
 
-    Fl::add_timeout(0.005, (Fl_Timeout_Handler)change_ubo_cb, &sw);
+    Fl::add_timeout(0.05, (Fl_Timeout_Handler)change_ubo_cb, &sw);
 
     return Fl::run();
 }

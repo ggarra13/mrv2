@@ -551,9 +551,9 @@ namespace tl
                 p.textureCache = std::make_shared<TextureCache>();
             }
 
-            // p.glyphTextureAtlas = vlk::TextureAtlas::create(
-            //     ctx, 1, 4096, image::PixelType::L_U8,
-            //     timeline::ImageFilter::Linear);
+            p.glyphTextureAtlas = vlk::TextureAtlas::create(
+                ctx, 1, 4096, image::PixelType::L_U8,
+                timeline::ImageFilter::Linear);
 
             p.logTimer = std::chrono::steady_clock::now();
         }
@@ -834,7 +834,7 @@ namespace tl
             {
                 i.second->bind();
                 i.second->setUniform(
-                    "transform.mvp", value, VK_SHADER_STAGE_VERTEX_BIT);
+                    "transform.mvp", value, vlk::kShaderVertex);
             }
         }
 
@@ -1897,7 +1897,7 @@ namespace tl
             }
             p.shaders["display"]->bind();
             p.shaders["display"]->setUniform(
-                "transform.mvp", p.transform, VK_SHADER_STAGE_VERTEX_BIT);
+                "transform.mvp", p.transform, vlk::kShaderVertex);
             size_t texturesOffset = 1;
 #if defined(TLRENDER_OCIO)
             if (p.ocioData)

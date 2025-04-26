@@ -135,6 +135,7 @@ namespace mrv
 
             void continuePlaying();
 
+            
         protected:
 
             const float pixelRatio() const;

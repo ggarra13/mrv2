@@ -26,13 +26,13 @@ set(SOURCES
     mrvVkJson.cpp
     mrvVkLines.cpp
     mrvVkOutline.cpp
-    mrvVkShaders.cpp        # done?
+    mrvVkShaders.cpp        # done
     mrvVkShape.cpp
     mrvVkTextEdit.cpp       # done
     # mrvVkUtil.cpp
     mrvVkViewport.cpp
     mrvVkViewportDraw.cpp
-    mrvVkViewportPrims.cpp
+    mrvVkViewportPrims.cpp  # done
     mrvVkWindow.cpp
     mrvTimelineViewportEvents.cpp
     mrvTimelineViewport.cpp

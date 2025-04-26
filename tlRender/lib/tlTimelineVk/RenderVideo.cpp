@@ -633,7 +633,7 @@ namespace tl
                 0.F, -1.F, 1.F);
             p.shaders["image"]->bind();
             p.shaders["image"]->setUniform(
-                "transform.mvp", transform, VK_SHADER_STAGE_VERTEX_BIT);
+                "transform.mvp", transform, vlk::kShaderVertex);
 
             const math::Size2i& offscreenBufferSize = box.getSize();
             vlk::OffscreenBufferOptions offscreenBufferOptions;
@@ -741,8 +741,7 @@ namespace tl
 
                                 p.shaders["dissolve"]->bind();
                                 p.shaders["dissolve"]->setUniform(
-                                    "transform.mvp", transform,
-                                    VK_SHADER_STAGE_VERTEX_BIT);
+                                    "transform.mvp", transform, vlk::kShaderVertex);
                                 p.shaders["dissolve"]->setUniform(
                                     "color", image::Color4f(1.F, 1.F, 1.F));
                                 p.shaders["dissolve"]->setUniform(
@@ -990,7 +989,7 @@ namespace tl
 
             p.shaders["image"]->bind();
             p.shaders["image"]->setUniform(
-                "transform.mvp", p.transform, VK_SHADER_STAGE_VERTEX_BIT);
+                "transform.mvp", p.transform, vlk::kShaderVertex);
         }
     } // namespace timeline_vlk
 } // namespace tl

@@ -27,15 +27,13 @@ namespace mrv
 
             void valid(int x) {};
             int valid() const { return 1; }
-
-            void prepare() FL_OVERRIDE { prepare_render_pass(); };
-            void destroy_resources() FL_OVERRIDE {};
         
 #ifdef __APPLE__
         protected:
             void set_window_transparency(double alpha);
 #endif
-            void prepare_render_pass();
+            //! Main swapchain render pass (common to all Vulkan windows).
+            void prepare_render_pass(); 
 
             void _init();
         };

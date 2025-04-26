@@ -45,6 +45,8 @@ namespace mrv
             {
                 vk.vao = vlk::VAO::create(ctx);
                 vk.vao->upload(vk.vbo->getData());
+
+                prepare_pipeline();
             }
         }
 
@@ -70,6 +72,8 @@ namespace mrv
             {
                 vk.vao = vlk::VAO::create(ctx);
                 vk.vao->upload(vk.vbo->getData());
+                
+                prepare_pipeline();
             }
         }
 
@@ -195,6 +199,8 @@ namespace mrv
             {
                 vk.vao = vlk::VAO::create(ctx);
                 vk.vao->upload(vk.vbo->getData());
+                
+                prepare_pipeline();
             }
 
             return _projectionMatrix();

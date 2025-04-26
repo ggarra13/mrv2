@@ -530,6 +530,9 @@ void vk_shape_window::draw() {
     if (!m_swapchain || !cmd || !isFrameActive()) {
         return;
     }
+
+    uint32_t currentFrameIndex = m_currentFrameIndex;
+    
     
     vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline);
 
@@ -539,24 +542,11 @@ void vk_shape_window::draw() {
                         VK_ACCESS_SHADER_READ_BIT,
                         VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
     
-    VkDescriptorImageInfo tex_descs[1];
-    memset(&tex_descs, 0, sizeof(tex_descs));
-    tex_descs[0].sampler = texture->getSampler();
-    tex_descs[0].imageView = texture->getImageView();
-    tex_descs[0].imageLayout = texture->getImageLayout();
-
-    VkWriteDescriptorSet write = {};
-    write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    write.dstSet = shader->getDescriptorSet();
-    write.descriptorCount = 1;
-    write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-    write.pImageInfo = tex_descs;
-
-    vkUpdateDescriptorSets(device(), 1, &write, 0, NULL);
+    shader->setTexture("samplerTexture", texture, currentFrameIndex);
     
     vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
                             m_pipeline_layout, 0, 1,
-                            &shader->getDescriptorSet(), 0, nullptr);
+                            &shader->getDescriptorSet(currentFrameIndex), 0, nullptr);
 
     VkViewport viewport = {};
     viewport.width = static_cast<float>(w());
@@ -599,12 +589,11 @@ void vk_shape_window::destroy_resources()
 
 void vk_shape_window::prepare_descriptor_layout()
 {
-    shader->setTexture("samplerTexture", texture);
-    
-    if (shader->getDescriptorSet() == VK_NULL_HANDLE)
-        shader->createDescriptorSet();
-
     VkResult result;
+
+    
+    shader->addTexture("samplerTexture", tl::vlk::kShaderFragment);
+    shader->createDescriptorSets();
     
     VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = {};
     pPipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;

@@ -80,16 +80,213 @@ namespace mrv
             _vk->context = context;
         }
 
+        void Viewport::prepare_descriptor_layout()
+        {
+            MRV2_VK();
+            
+            image::Info info(320, 240, image::PixelType::RGBA_U8);
+            auto texture = vlk::Texture::create(ctx, info);
+
+            math::Matrix4x4f mvp;
+            vk.shader->setUniform("transform.mvp", mvp);
+            vk.shader->setTexture("samplerTexture", texture);
+            vk.shader->createDescriptorSets();
+
+            VkResult result;
+    
+            VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = {};
+            pPipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+            pPipelineLayoutCreateInfo.pNext = NULL;
+            pPipelineLayoutCreateInfo.setLayoutCount = 1;
+            pPipelineLayoutCreateInfo.pSetLayouts = &vk.shader->getDescriptorSetLayout();
+            
+            result = vkCreatePipelineLayout(device(), &pPipelineLayoutCreateInfo, NULL,
+                                            &vk.pipeline_layout);
+        }
+        
+        // OKAY!
+        void Viewport::prepare_descriptor_pools()
+        {
+        }
+        
+        void Viewport::prepare_pipeline()
+        {
+            MRV2_VK();
+
+            if (m_pipeline != VK_NULL_HANDLE)
+            {
+                vkDestroyPipeline(device(), m_pipeline, nullptr);
+            }
+            
+            VkGraphicsPipelineCreateInfo pipeline;
+
+            VkPipelineVertexInputStateCreateInfo vi = {};
+            VkPipelineInputAssemblyStateCreateInfo ia = {};
+            VkPipelineRasterizationStateCreateInfo rs = {};
+            VkPipelineColorBlendStateCreateInfo cb = {};
+            VkPipelineDepthStencilStateCreateInfo ds = {};
+            VkPipelineViewportStateCreateInfo vp = {};
+            VkPipelineMultisampleStateCreateInfo ms = {};
+            VkDynamicState dynamicStateEnables[(VK_DYNAMIC_STATE_STENCIL_REFERENCE - VK_DYNAMIC_STATE_VIEWPORT + 1)];
+            VkPipelineDynamicStateCreateInfo dynamicState = {};
+
+            VkResult result;
+
+            memset(dynamicStateEnables, 0, sizeof dynamicStateEnables);
+            memset(&dynamicState, 0, sizeof dynamicState);
+            dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+            dynamicState.pDynamicStates = dynamicStateEnables;
+
+            memset(&pipeline, 0, sizeof(pipeline));
+            pipeline.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+            pipeline.layout = vk.pipeline_layout; // Use the main pipeline layout
+            
+            vi.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+            vi.pNext = NULL;
+            vi.vertexBindingDescriptionCount = 1;
+            vi.pVertexBindingDescriptions = vk.vbo->getBindingDescription(); // Use main mesh binding
+            vi.vertexAttributeDescriptionCount = vk.vbo->getAttributes().size();
+            vi.pVertexAttributeDescriptions = vk.vbo->getAttributes().data();
+
+            memset(&ia, 0, sizeof(ia));
+            ia.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
+            ia.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+
+            memset(&rs, 0, sizeof(rs));
+            rs.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+            rs.polygonMode = VK_POLYGON_MODE_FILL;
+            rs.cullMode = VK_CULL_MODE_BACK_BIT;
+            rs.frontFace = VK_FRONT_FACE_CLOCKWISE;
+            rs.depthClampEnable = VK_FALSE;
+            rs.rasterizerDiscardEnable = VK_FALSE;
+            rs.depthBiasEnable = VK_FALSE;
+            rs.lineWidth = 1.0f;
+
+            memset(&cb, 0, sizeof(cb));
+            cb.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+            VkPipelineColorBlendAttachmentState att_state[1];
+            memset(att_state, 0, sizeof(att_state));
+            att_state[0].colorWriteMask = 0xf;
+            att_state[0].blendEnable = VK_FALSE;
+            cb.attachmentCount = 1;
+            cb.pAttachments = att_state;
+
+            memset(&vp, 0, sizeof(vp));
+            vp.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+            vp.viewportCount = 1;
+            dynamicStateEnables[dynamicState.dynamicStateCount++] =
+                VK_DYNAMIC_STATE_VIEWPORT;
+            vp.scissorCount = 1;
+            dynamicStateEnables[dynamicState.dynamicStateCount++] =
+                VK_DYNAMIC_STATE_SCISSOR;
+
+            bool has_depth = mode() & FL_DEPTH; // Check window depth
+            bool has_stencil = mode() & FL_STENCIL; // Check window stencil
+
+            memset(&ds, 0, sizeof(ds));
+            ds.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+            ds.depthTestEnable = has_depth ? VK_TRUE : VK_FALSE;
+            ds.depthWriteEnable = has_depth ? VK_TRUE : VK_FALSE;
+            ds.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
+            ds.depthBoundsTestEnable = VK_FALSE;
+            ds.stencilTestEnable = has_stencil ? VK_TRUE : VK_FALSE;
+            ds.back.failOp = VK_STENCIL_OP_KEEP;
+            ds.back.passOp = VK_STENCIL_OP_KEEP;
+            ds.back.compareOp = VK_COMPARE_OP_ALWAYS;
+            ds.front = ds.back;
+
+            memset(&ms, 0, sizeof(ms));
+            ms.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
+            ms.pSampleMask = NULL;
+            ms.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
+
+            // Two stages: vs and fs
+            pipeline.stageCount = 2;
+            VkPipelineShaderStageCreateInfo shaderStages[2];
+            memset(&shaderStages, 0, 2 * sizeof(VkPipelineShaderStageCreateInfo));
+
+            shaderStages[0].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+            shaderStages[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
+            shaderStages[0].module = vk.shader->getVertex(); // Use main vertex shader
+            shaderStages[0].pName = "main";
+
+            shaderStages[1].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+            shaderStages[1].stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+            shaderStages[1].module = vk.shader->getFragment(); // Use main fragment shader
+            shaderStages[1].pName = "main";
+
+            pipeline.pVertexInputState = &vi;
+            pipeline.pInputAssemblyState = &ia;
+            pipeline.pRasterizationState = &rs;
+            pipeline.pColorBlendState = &cb;
+            pipeline.pMultisampleState = &ms;
+            pipeline.pViewportState = &vp;
+            pipeline.pDepthStencilState = &ds;
+            pipeline.pStages = shaderStages;
+            pipeline.renderPass = m_renderPass; // Use main render pass (swapchain)
+            pipeline.pDynamicState = &dynamicState;
+
+            // Create a temporary pipeline cache
+            VkPipelineCacheCreateInfo pipelineCacheCreateInfo{};
+            pipelineCacheCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
+            VkPipelineCache pipelineCache;
+            result = vkCreatePipelineCache(device(), &pipelineCacheCreateInfo, NULL, &pipelineCache);
+            VK_CHECK(result);
+
+
+            result = vkCreateGraphicsPipelines(device(), pipelineCache, 1,
+                                               &pipeline, NULL, &m_pipeline);
+            VK_CHECK(result);
+
+            // Destroy the temporary pipeline cache
+            vkDestroyPipelineCache(device(), pipelineCache, NULL);
+        }
+
+
+        //! OKAY!
+        void Viewport::prepare_descriptor_sets()
+        {
+            MRV2_VK();
+        }
+
         void Viewport::prepare()
         {
             _initializeVK();
-            VkWindow::prepare();
+            
+            prepare_render_pass(); // Main swapchain render pass
+
+            // Prepare layouts and pools *before* creating pipelines and allocating sets
+            prepare_descriptor_layout(); // Main shader layout
+            prepare_descriptor_pools(); // Both FBO and main pools
+
+            // Main swapchain pipeline (has to be created in draw AFTER vk.vbo)
+            // prepare_pipeline(); 
+
+            // Prepare descriptor sets *after* pools and layouts are ready
+            prepare_descriptor_sets(); // Allocate and initially update sets
         }
     
         void Viewport::destroy_resources()
         {
-            refresh();
+            MRV2_VK();
             
+            refresh();
+
+            if (vk.pipeline_layout != VK_NULL_HANDLE)
+            {
+                vkDestroyPipelineLayout(device(), vk.pipeline_layout, nullptr);
+                vk.pipeline_layout = VK_NULL_HANDLE;
+            }
+
+            if (m_pipeline != VK_NULL_HANDLE)
+            {
+                vkDestroyPipeline(device(), m_pipeline, nullptr);
+                m_pipeline = VK_NULL_HANDLE;
+            }
+
+            // Destroy FBO pipeline and layout (handled by destroy_fbo_pipeline)
+            destroy_fbo_pipeline();
+
             VkWindow::destroy_resources();
         }
     
@@ -135,15 +332,76 @@ namespace mrv
                 try
                 {
                     const std::string& vertexSource = timeline_vlk::vertexSource();
+
+        //             std::string vrt = R"(
+        // #version 450
+        // layout(location = 0) in vec3 inPos;
+        // void main() {
+        //     gl_Position = vec4(inPos, 1.0);
+        // })";
+//                     std::string frg = R"(
+//         #version 450
+//         // Output color
+//         layout(location = 0) out vec4 outColor;
+
+//         void main() {
+//             outColor = vec4(1, 1, 1, 1);
+//         }
+// )";
+                    
+std::string vrt = R"(
+        #version 450
+        layout(location = 0) in vec3 vPos;
+        layout(location = 1) in vec2 inTexCoord;
+        layout(location = 0) out vec2 outTexCoord;
+        layout(set = 0, binding = 0, std140) uniform Transform {
+             mat4 mvp;
+         } transform;
+        void main() {
+            gl_Position = transform.mvp * vec4(vPos, 1.0);
+            outTexCoord = inTexCoord;
+        }
+)";
+
+std::string frg = R"(
+        #version 450
+
+        // Input from vertex shader
+        layout(location = 0) in vec2 inTexCoord;
+
+        // Output color
+        layout(location = 0) out vec4 outColor;
+
+        // Texture sampler (bound via descriptor set)
+        layout(binding = 0) uniform sampler2D textureSampler;
+
+        void main() {
+            outColor = texture(textureSampler, inTexCoord);
+        }
+)";
+                    
+                    // vk.shader = vlk::Shader::create(ctx,
+                    //                                 vrt,
+                    //                                 frg,
+                    //                                 "composite");
+                    
                     vk.shader = vlk::Shader::create(ctx,
-                                                    vertexSource,
-                                                    textureFragmentSource(),
+                                                    vrt,
+                                                    frg,
                                                     "composite");
-                    vk.annotationShader =
-                        vlk::Shader::create(ctx,
-                                            vertexSource,
-                                            annotationFragmentSource(),
-                                            "annotation");
+                    std::cerr << vk.shader->getVertexSource() << std::endl;
+                    
+                    // vk.shader = vlk::Shader::create(ctx,
+                    //                                 vertexSource,
+                    //                                 textureFragmentSource(),
+                    //                                 "composite");
+
+                    
+                    // vk.annotationShader =
+                    //     vlk::Shader::create(ctx,
+                    //                         vertexSource,
+                    //                         annotationFragmentSource(),
+                    //                         "annotation");
                 }
                 catch (const std::exception& e)
                 {
@@ -176,12 +434,21 @@ namespace mrv
             return TimelineViewport::handle(event);
         }
 
+        void Viewport::vk_draw_begin()
+        {
+            m_clearColor = { 1.0, 0.0, 0, 0 };
+            m_depthStencil = 1.0;
+
+            VkWindow::vk_draw_begin();
+        }
+
         void Viewport::draw()
         {
             TLRENDER_P();
             MRV2_VK();
 
-
+            VkCommandBuffer cmd = getCurrentCommandBuffer(); // Get the command buffer started by vk_draw_begin()
+            
             const auto& viewportSize = getViewportSize();
             const auto& renderSize = getRenderSize();
 
@@ -197,610 +464,291 @@ namespace mrv
                 getBackgroundOptions().type == timeline::Background::Transparent;
 
         
-            try
+            if (renderSize.isValid())
             {
-                if (renderSize.isValid())
+                vkCmdEndRenderPass(cmd);  // end the clear screen command pass.
+                
+                vk.colorBufferType = image::PixelType::RGBA_U8;
+                
+                
+                vlk::OffscreenBufferOptions offscreenBufferOptions;
+                offscreenBufferOptions.colorType = vk.colorBufferType;
+                
+                if (!p.displayOptions.empty())
                 {
-                    vk.colorBufferType = image::PixelType::RGBA_U8;
-                    int accuracy = p.ui->uiPrefs->uiPrefsColorAccuracy->value();
-                    switch (accuracy)
-                    {
-                    case kAccuracyFloat32:
-                        vk.colorBufferType = image::PixelType::RGBA_F32;
-                        hasAlpha = true;
-                        break;
-                    case kAccuracyFloat16:
-                        vk.colorBufferType = image::PixelType::RGBA_F16;
-                        hasAlpha = true;
-                        break;
-                    case kAccuracyAuto:
-                        image::PixelType pixelType = image::PixelType::RGBA_U8;
-                        auto& video = p.videoData[0];
-                        if (p.missingFrame &&
-                            p.missingFrameType != MissingFrameType::kBlackFrame)
-                        {
-                            video = p.lastVideoData;
-                        }
-
-                        if (!video.layers.empty() && video.layers[0].image &&
-                            video.layers[0].image->isValid())
-                        {
-                            pixelType = video.layers[0].image->getPixelType();
-                            switch (pixelType)
-                            {
-                            case image::PixelType::RGBA_F32:
-                            case image::PixelType::LA_F32:
-                                hasAlpha = true;
-                            case image::PixelType::RGB_F32:
-                            case image::PixelType::L_F32:
-                                vk.colorBufferType = image::PixelType::RGBA_F32;
-                                break;
-                            case image::PixelType::RGBA_F16:
-                            case image::PixelType::LA_F16:
-                                hasAlpha = true;
-                            case image::PixelType::RGB_F16:
-                            case image::PixelType::L_F16:
-                                vk.colorBufferType = image::PixelType::RGBA_F16;
-                                break;
-                            case image::PixelType::RGBA_U16:
-                            case image::PixelType::LA_U16:
-                                hasAlpha = true;
-                            case image::PixelType::RGB_U16:
-                            case image::PixelType::L_U16:
-                                vk.colorBufferType = image::PixelType::RGBA_U16;
-                                break;
-                            case image::PixelType::RGBA_U8:
-                            case image::PixelType::LA_U8:
-                                hasAlpha = true;
-                                break;
-                            default:
-                                break;
-                            }
-                        }
-                        break;
-                    }
-
-                
-                    vlk::OffscreenBufferOptions offscreenBufferOptions;
-                    offscreenBufferOptions.colorType = vk.colorBufferType;
-
-                    if (!p.displayOptions.empty())
-                    {
-                        offscreenBufferOptions.colorFilters =
-                            p.displayOptions[0].imageFilters;
-                    }
-                    offscreenBufferOptions.depth = vlk::OffscreenDepth::_24;
-                    offscreenBufferOptions.stencil = vlk::OffscreenStencil::_8;
-                
-                    if (vlk::doCreate(vk.buffer, renderSize, offscreenBufferOptions))
-                    {
-                    
-                        vk.buffer = vlk::OffscreenBuffer::create(
-                            ctx, renderSize, offscreenBufferOptions);
-                    
-                        //_createPBOs(renderSize);
-                    
-                    }
-                
-
-                    if (can_do(FL_STEREO))
-                    {
-                        if (vlk::doCreate(
-                                vk.stereoBuffer, renderSize,
-                                offscreenBufferOptions))
-                        {
-                            vk.stereoBuffer = vlk::OffscreenBuffer::create(
-                                ctx, renderSize, offscreenBufferOptions);
-                        }
-                    }
-                
+                    offscreenBufferOptions.colorFilters =
+                        p.displayOptions[0].imageFilters;
                 }
-                else
-                {
-                    vk.buffer.reset();
-                    vk.stereoBuffer.reset();
+                offscreenBufferOptions.depth = vlk::OffscreenDepth::_24;
+                offscreenBufferOptions.stencil = vlk::OffscreenStencil::_8;
                 
-                }
-            
-
-                if (vk.buffer && vk.render)
+                if (vlk::doCreate(vk.buffer, renderSize, offscreenBufferOptions))
                 {
-
-                    if (p.pixelAspectRatio > 0.F && !p.videoData.empty() &&
-                        !p.videoData[0].layers.empty())
-                    {
-                        auto image = p.videoData[0].layers[0].image;
-                        p.videoData[0].size.pixelAspectRatio = p.pixelAspectRatio;
-                        image->setPixelAspectRatio(p.pixelAspectRatio);
-                    }
-
-                    if (p.stereo3DOptions.output == Stereo3DOutput::Glasses &&
-                        p.stereo3DOptions.input == Stereo3DInput::Image &&
-                        p.videoData.size() > 1 && p.showVideo)
-                    {
-                        _drawStereoVulkan();
-                    }
-                    else
-                    {
-                        // vlk::OffscreenBufferBinding binding(vk.buffer);
-
-                        locale::SetAndRestore saved;
-                        timeline::RenderOptions renderOptions;
-                        renderOptions.colorBuffer = vk.colorBufferType;
-
-                        vk.render->begin(renderSize, renderOptions);
-
-                        if (p.showVideo)
-                        {
-                            int screen = this->screen_num();
-                            if (screen >= 0 && !p.monitorOCIOOptions.empty() &&
-                                screen < p.monitorOCIOOptions.size())
-                            {
-                                timeline::OCIOOptions o = p.ocioOptions;
-                                o.display = p.monitorOCIOOptions[screen].display;
-                                o.view = p.monitorOCIOOptions[screen].view;
-                                vk.render->setOCIOOptions(o);
-
-                                _updateMonitorDisplayView(screen, o);
-                            }
-                            else
-                            {
-                                vk.render->setOCIOOptions(p.ocioOptions);
-                                _updateMonitorDisplayView(screen, p.ocioOptions);
-                            }
-
-                            vk.render->setLUTOptions(p.lutOptions);
-                            vk.render->setHDROptions(p.hdrOptions);
-                            if (p.missingFrame &&
-                                p.missingFrameType != MissingFrameType::kBlackFrame)
-                            {
-                                _drawMissingFrame(renderSize);
-                            }
-                            else
-                            {
-                                if (p.stereo3DOptions.input ==
-                                    Stereo3DInput::Image &&
-                                    p.videoData.size() > 1)
-                                {
-                                    _drawStereo3D();
-                                }
-                                else
-                                {
-                                    vk.render->drawVideo(
-                                        p.videoData,
-                                        timeline::getBoxes(
-                                            p.compareOptions.mode, p.videoData),
-                                        p.imageOptions, p.displayOptions,
-                                        p.compareOptions, getBackgroundOptions());
-                                }
-                            }
-                            _drawOverlays(renderSize);
-                            vk.render->end();
-                        }
-                    }
-                }
-            }
-            catch (const std::exception& e)
-            {
-                LOG_ERROR(e.what());
-                vk.buffer.reset();
-                vk.stereoBuffer.reset();
-            }
-        
-
-            float r = 0.F, g = 0.F, b = 0.F, a = 0.F;
-
-            if (!p.presentation)
-            {
-                Fl_Color c = p.ui->uiPrefs->uiPrefsViewBG->color();
-
-                uint8_t ur = 0, ug = 0, ub = 0, ua = 0;
-                Fl::get_color(c, ur, ug, ub, ua);
-
-                r = ur / 255.0f;
-                g = ug / 255.0f;
-                b = ub / 255.0f;
-                a = alpha;
-
-                if (desktop::Wayland())
-                {
-                    p.ui->uiViewGroup->color(fl_rgb_color(ur, ug, ub));
-                    p.ui->uiViewGroup->redraw();
+                    
+                    vk.buffer = vlk::OffscreenBuffer::create(
+                        ctx, renderSize, offscreenBufferOptions);
+                    
+                    destroy_fbo_pipeline();
+                    // prepare_fbo_pipeline();
+                    
                 }
             }
             else
             {
-                if (desktop::Wayland())
-                {
-                    p.ui->uiViewGroup->color(fl_rgb_color(0, 0, 0));
-                    p.ui->uiViewGroup->redraw();
-                }
-
-                // Hide the cursor if in presentation time after 3 seconds of
-                // inactivity.
-                const auto& time = std::chrono::high_resolution_clock::now();
-                const auto elapsedTime =
-                    std::chrono::duration_cast<std::chrono::milliseconds>(
-                        time - p.presentationTime)
-                    .count();
-                if (elapsedTime >= 3000)
-                {
-                    // If user is changing preferences or hotkeys, keep
-                    // the default cursor.
-                    if (p.ui->uiPrefs->uiMain->visible() ||
-                        p.ui->uiHotkey->uiMain->visible() ||
-                        p.ui->uiAbout->uiMain->visible())
-                    {
-                        window()->cursor(FL_CURSOR_DEFAULT);
-                    }
-                    else
-                    {
-                        window()->cursor(FL_CURSOR_NONE);
-                    }
-                    p.presentationTime = time;
-                }
+                vk.buffer.reset();
+                vk.stereoBuffer.reset();
+                
+                vkCmdEndRenderPass(cmd);
             }
+            
 
-        
-            // glDrawBuffer(GL_BACK_LEFT);
-        
-
-            // glViewport(0, 0, VKsizei(viewportSize.w), VKsizei(viewportSize.h));
-            // glClearStencil(0);
-            // glClearColor(r, g, b, a);
-            // glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-        
-
-            const auto& player = getTimelinePlayer();
-            if (!player)
+            
+            if (!vk.buffer)
             {
-#ifdef __APPLE__
-                set_window_transparency(alpha);
-#endif
-                Fl_Vk_Window::draw();
+                begin_render_pass();
                 return;
             }
+            
+            // --- First Render Pass: Render to FBO ---
 
-            _updateDevices();
+            // Clear yellow (assuming this clear value is for the FBO)
+            VkClearValue fboClearValues[2];
+            fboClearValues[0].color = { 1.f, 1.f, 0.f, 1.f }; // Clear color for the FBO
+            fboClearValues[1].depthStencil = { 1.f, 0 }; // Clear depth for the FBO
 
-            const auto& annotations =
-                player->getAnnotations(p.ghostPrevious, p.ghostNext);
+            VkRenderPassBeginInfo fboRpBegin{};
+            fboRpBegin.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+            fboRpBegin.renderPass = vk.buffer->getRenderPass(); // Use the FBO's render pass
+            // Use the FBO's framebuffer for THIS frame if using per-frame FBO attachments,
+            // otherwise use the static one if vk.buffer->getFramebuffer() is static.
+            fboRpBegin.framebuffer = vk.buffer->getFramebuffer(/*currentFrameIndex*/); // Pass frame index if needed
+            fboRpBegin.renderArea.offset = {0, 0}; // Assuming render area starts at 0,0
+            fboRpBegin.renderArea.extent = vk.buffer->getExtent(); // Use FBO extent
+            fboRpBegin.clearValueCount = 2;
+            fboRpBegin.pClearValues = fboClearValues;
 
-            MultilineInput* w = getMultilineInput();
-            if (w)
+            // Begin the first render pass instance within the single command buffer
+            vkCmdBeginRenderPass(cmd, &fboRpBegin, VK_SUBPASS_CONTENTS_INLINE);
+
+            // Bind the FBO pipeline (created/managed outside this draw loop)
+            // vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, vk.fbo_pipeline);
+    
+            vkCmdEndRenderPass(cmd);
+            
+            math::Matrix4x4f mvp;
+
+            const float rotation = _getRotation();
+                
+            mvp = _createTexturedRectangle();
+
+            
+            vk.buffer->transitionToShaderRead(cmd);
+            
+
+
+            
+            begin_render_pass();
+            
+            uint32_t currentFrameIndex = m_currentFrameIndex; // Get the current frame index
+            
+            // Bind the main composition pipeline (created/managed outside this draw loop)
+            vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline);
+    
+            // --- Update Descriptor Set for the SECOND pass (Composition) ---
+            // This updates the descriptor set for the CURRENT frame index on the CPU.
+            vk.shader->setFBO("textureSampler", vk.buffer, currentFrameIndex);
+
+            // --- Bind Descriptor Set for the SECOND pass ---
+            // Record the command to bind the descriptor set for the CURRENT frame index
+            vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                    vk.pipeline_layout, 0, 1,
+                                    &vk.shader->getDescriptorSet(currentFrameIndex),
+                                    // Bind the set for THIS frame
+                                    0, nullptr);
+
+            VkViewport viewport = {};
+            viewport.width = static_cast<float>(w());
+            viewport.height = static_cast<float>(h());
+            viewport.minDepth = 0.0f;
+            viewport.maxDepth = 1.0f;
+            vkCmdSetViewport(cmd, 0, 1, &viewport);
+                
+            VkRect2D scissor = {};
+            scissor.extent.width = w();
+            scissor.extent.height = h();
+            vkCmdSetScissor(cmd, 0, 1, &scissor);
+            
+
+
+            if (vk.vao && vk.vbo)
             {
-                std_any value;
-                int font_size = App::app->settings()->getValue<int>(kFontSize);
-                double pixels_unit = pixels_per_unit();
-                double pct = renderSize.h / 1024.F;
-                double fontSize = font_size * pct * p.viewZoom / pixels_unit;
-                w->textsize(fontSize);
-                math::Vector2i pos(w->pos.x, w->pos.y);
-                w->Fl_Widget::position(pos.x, pos.y);
-            }
-
-            const auto& currentTime = player->currentTime();
-
-            if (vk.buffer && vk.shader)
-            {
-                math::Matrix4x4f mvp;
-
-                const float rotation = _getRotation();
-                if (p.presentation ||
-                    p.ui->uiPrefs->uiPrefsBlitViewports->value() == kNoBlit ||
-                    p.environmentMapOptions.type != EnvironmentMapOptions::kNone ||
-                    rotation != 0.F || (transparent && hasAlpha))
-                {
-                    if (p.environmentMapOptions.type !=
-                        EnvironmentMapOptions::kNone)
-                    {
-                        mvp = _createEnvironmentMap();
-                    }
-                    else
-                    {
-                        mvp = _createTexturedRectangle();
-                    }
-
-                    if (p.imageOptions[0].alphaBlend == timeline::AlphaBlend::kNone)
-                    {
-                        //glDisable(GL_BLEND);
-                    }
-
-                    vk.shader->bind();
-                    vk.shader->setUniform("transform.mvp", mvp);
-#ifdef __APPLE__
-                    vk.shader->setUniform("opacity", 1.0F);
-                    set_window_transparency(alpha);
-#else
-                    if (desktop::Wayland())
-                        vk.shader->setUniform("opacity", alpha);
-                    else if (desktop::X11() || desktop::Windows())
-                        vk.shader->setUniform("opacity", 1.0F);
-#endif
-
-                    //glActiveTexture(GL_TEXTURE0);
-                    //glBindTexture(GL_TEXTURE_2D, vk.buffer->getColorID());
-
-                    if (vk.vao && vk.vbo)
-                    {
-                        vk.vao->bind();
-                        // vk.vao->draw(GL_TRIANGLES, 0, vk.vbo->getSize());
-                    }
-
-                    if (p.stereo3DOptions.output == Stereo3DOutput::Glasses &&
-                        p.stereo3DOptions.input == Stereo3DInput::Image)
-                    {
-                        vk.shader->bind();
-                        vk.shader->setUniform("transform.mvp", mvp);
-                        vk.shader->setUniform("opacity", alpha);
-
-                        // glActiveTexture(GL_TEXTURE0);
-                        // glBindTexture(GL_TEXTURE_2D, vk.stereoBuffer->getColorID());
-
-                        if (vk.vao && vk.vbo)
-                        {
-                            vk.vao->bind();
-                            // vk.vao->draw(GL_TRIANGLES, 0, vk.vbo->getSize());
-                        }
-                    }
-
-                    if (p.imageOptions[0].alphaBlend == timeline::AlphaBlend::kNone)
-                    {
-                        // glEnable(GL_BLEND);
-                    }
-                }
-                else
-                {
-                    if (annotations.empty())
-                        mvp = _projectionMatrix();
-                    else
-                        mvp = _createTexturedRectangle();
-
-                    const uint32_t viewportX = p.viewPos.x;
-                    const uint32_t viewportY = p.viewPos.y;
-                    const size_t sizeW = renderSize.w * p.viewZoom;
-                    const size_t sizeH = renderSize.h * p.viewZoom;
-                    if (sizeW > 0 && sizeH > 0)
-                    {
-                        // glViewport(viewportX, viewportY, sizeW, sizeH);
-
-                        // glBindFramebuffer(GL_READ_FRAMEBUFFER, vk.buffer->getID());
-                        // glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // 0 is screen
-
-                        // Blit the offscreen buffer contents to the viewport
-                        VkFilter filter = VK_FILTER_NEAREST;
-                        if (!p.displayOptions.empty())
-                        {
-                            const auto& filters = p.displayOptions[0].imageFilters;
-                            if (p.viewZoom < 1.0f &&
-                                filters.minify == timeline::ImageFilter::Linear)
-                                filter = VK_FILTER_LINEAR;
-                            else if (
-                                p.viewZoom > 1.0f &&
-                                filters.magnify == timeline::ImageFilter::Linear)
-                                filter = VK_FILTER_LINEAR;
-                        }
-                        // glBlitFramebuffer(
-                        //     0, 0, renderSize.w, renderSize.h, viewportX, viewportY,
-                        //     sizeW + viewportX, sizeH + viewportY,
-                        //     GL_COLOR_BUFFER_BIT, filter);
-
-                        // if (p.stereo3DOptions.output == Stereo3DOutput::Glasses &&
-                        //     p.stereo3DOptions.input == Stereo3DInput::Image)
-                        // {
-                        //     glBindFramebuffer(
-                        //         GL_READ_FRAMEBUFFER, vk.stereoBuffer->getID());
-                        //     glBindFramebuffer(
-                        //         GL_DRAW_FRAMEBUFFER, 0); // 0 is screen
-                        //     glDrawBuffer(VK_BACK_RIGHT);
-                        //     glBlitFramebuffer(
-                        //         0, 0, renderSize.w, renderSize.h, viewportX,
-                        //         viewportY, sizeW + viewportX, sizeH + viewportY,
-                        //         GL_COLOR_BUFFER_BIT, filter);
-                        // }
-
-                        // glViewport(
-                        //     0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
-                    }
-                }
-
-                //
-                // Draw annotations for output device in an overlay buffer.
-                //
-                auto outputDevice = App::app->outputDevice();
-                if (outputDevice && vk.buffer && p.showAnnotations)
-                {
-                    vlk::OffscreenBufferOptions offscreenBufferOptions;
-                    offscreenBufferOptions.colorType = image::PixelType::RGBA_U8;
-                    if (!p.displayOptions.empty())
-                    {
-                        offscreenBufferOptions.colorFilters =
-                            p.displayOptions[0].imageFilters;
-                    }
-                    offscreenBufferOptions.depth = vlk::OffscreenDepth::kNone;
-                    offscreenBufferOptions.stencil = vlk::OffscreenStencil::kNone;
-                    if (vlk::doCreate(
-                            vk.overlay, renderSize, offscreenBufferOptions))
-                    {
-                        vk.overlay = vlk::OffscreenBuffer::create(
-                            ctx, renderSize, offscreenBufferOptions);
-                    
-                        _createOverlayPBO(renderSize);
-                    
-                    }
-                
-
-                    const math::Matrix4x4f& renderMVP = _renderProjectionMatrix();
-                    _drawAnnotations(
-                        vk.overlay, renderMVP, currentTime, annotations,
-                        renderSize);
-                
-
-                    // // Copy data to PBO:
-                    // glBindBuffer(GL_PIXEL_PACK_BUFFER, vk.overlayPBO);
-                
-                    // glReadPixels(
-                    //     0, 0, renderSize.w, renderSize.h, GL_RGBA, GL_UNSIGNED_BYTE,
-                    //     nullptr);
-                
-                    // glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
-                
-
-                    // Create a fence for the overlay PBO
-                    // vk.overlayFence = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
-                
-
-                    // Wait for the fence to complete before compositing
-                    // VKenum waitReturn =
-                    //     glClientWaitSync(vk.overlayFence, 0, GL_TIMEOUT_IGNORED);
-                
-                    // if (waitReturn == GL_TIMEOUT_EXPIRED)
-                    // {
-                    //     LOG_ERROR("glClientWaitSync: Timeout occurred!");
-                    // }
-
-                    math::Matrix4x4f overlayMVP;
-                    _compositeOverlay(vk.overlay, overlayMVP, viewportSize);
-
-                    outputDevice->setOverlay(vk.annotationImage);
-                }
-
-                // math::Box2i selection = p.colorAreaInfo.box = p.selection;
-                // if (selection.max.x >= 0)
-                // {
-                //     // Check min < max
-                //     if (selection.min.x > selection.max.x)
-                //     {
-                //         int tmp = selection.max.x;
-                //         selection.max.x = selection.min.x;
-                //         selection.min.x = tmp;
-                //     }
-                //     if (selection.min.y > selection.max.y)
-                //     {
-                //         int tmp = selection.max.y;
-                //         selection.max.y = selection.min.y;
-                //         selection.min.y = tmp;
-                //     }
-                //     // Copy it again in case it changed
-                //     p.colorAreaInfo.box = selection;
-
-                //     if (panel::colorAreaPanel || panel::histogramPanel ||
-                //         panel::vectorscopePanel)
-                //     {
-                //         _mapBuffer();
-
-                //         if (panel::colorAreaPanel)
-                //         {
-                //             _calculateColorArea(p.colorAreaInfo);
-                //             panel::colorAreaPanel->update(p.colorAreaInfo);
-                //         }
-                //         if (panel::histogramPanel)
-                //         {
-                //             panel::histogramPanel->update(p.colorAreaInfo);
-                //         }
-                //         if (panel::vectorscopePanel)
-                //         {
-                //             panel::vectorscopePanel->update(p.colorAreaInfo);
-                //         }
-                //     }
-                //     else
-                //     {
-                //         p.image = nullptr;
-                //     }
-                // }
-                // else
-                // {
-                //     p.image = nullptr;
-                // }
-
-                // // Update the pixel bar from here only if we are playing a movie
-                // // and one that is not 1 frames long.
-                // bool update = !_shouldUpdatePixelBar();
-                // if (update)
-                //     updatePixelBar();
-
-                // _unmapBuffer();
-
-                // update = _isPlaybackStopped() || _isSingleFrame();
-                // if (update)
-                //     updatePixelBar();
-
-                // if (p.selection.max.x >= 0)
-                // {
-                //     Fl_Color c = p.ui->uiPrefs->uiPrefsViewSelection->color();
-                //     uint8_t r, g, b;
-                //     Fl::get_color(c, r, g, b);
-
-                //     const image::Color4f color(r / 255.F, g / 255.F, b / 255.F);
-
-                //     math::Box2i selection = p.selection;
-                //     if (selection.min == selection.max)
-                //     {
-                //         selection.max.x++;
-                //         selection.max.y++;
-                //     }
-                //     _drawRectangleOutline(selection, color, mvp);
-                // }
-
-                if (panel::annotationsPanel)
-                {
-                    panel::annotationsPanel->notes->value("");
-                }
-
-                if (p.showAnnotations && !annotations.empty())
-                {
-                    vlk::OffscreenBufferOptions offscreenBufferOptions;
-                    offscreenBufferOptions.colorType = image::PixelType::RGBA_U8;
-                    if (!p.displayOptions.empty())
-                    {
-                        offscreenBufferOptions.colorFilters =
-                            p.displayOptions[0].imageFilters;
-                    }
-                    offscreenBufferOptions.depth = vlk::OffscreenDepth::kNone;
-                    offscreenBufferOptions.stencil = vlk::OffscreenStencil::kNone;
-                    if (vlk::doCreate(
-                            vk.annotation, viewportSize, offscreenBufferOptions))
-                    {
-                        vk.annotation = vlk::OffscreenBuffer::create(
-                            ctx, viewportSize, offscreenBufferOptions);
-                    }
-
-                    _drawAnnotations(
-                        vk.annotation, mvp, currentTime, annotations, viewportSize);
-
-                    const math::Matrix4x4f orthoMatrix = math::ortho(
-                        0.F, static_cast<float>(renderSize.w), 0.F,
-                        static_cast<float>(renderSize.h), -1.F, 1.F);
-                    _compositeAnnotations(vk.annotation, orthoMatrix, viewportSize);
-                }
-
-                if (p.dataWindow)
-                    _drawDataWindow();
-                if (p.displayWindow)
-                    _drawDisplayWindow();
-
-                if (p.safeAreas)
-                    _drawSafeAreas();
-
-                if (p.actionMode != ActionMode::kScrub &&
-                    p.actionMode != ActionMode::kText &&
-                    p.actionMode != ActionMode::kSelection &&
-                    p.actionMode != ActionMode::kRotate && Fl::belowmouse() == this)
-                {
-                    _drawCursor(mvp);
-                }
-
-                if (p.hudActive && p.hud != HudDisplay::kNone)
-                    _drawHUD(alpha);
-
-                if (!p.helpText.empty())
-                    _drawHelpText();
+                // Draw calls for the composition geometry (e.g., a screen-filling quad)
+                vk.vao->draw(cmd, vk.vbo);
             }
 
             // Draw FLTK children
-            Fl_Window::draw();
-        }
+            // Fl_Window::draw();
 
+            std::cerr << "END DRAW" << std::endl;
+        }
+        
+        void Viewport::prepare_fbo_pipeline()
+        {
+            MRV2_VK();
+            
+            // Ensure FBO and its render pass are valid before creating the pipeline
+            if (!vk.buffer || vk.buffer->getRenderPass() == VK_NULL_HANDLE) {
+                // Handle error: FBO not created or invalid
+                fprintf(stderr, "Error: FBO or its render pass is invalid when preparing FBO pipeline.\n");
+                return;
+            }
+
+            // Destroy existing pipeline and layout if they exist
+            destroy_fbo_pipeline();
+
+            VkGraphicsPipelineCreateInfo pipeline;
+            // VkPipelineCacheCreateInfo pipelineCacheCreateInfo; // Not strictly needed for a single pipeline
+
+            VkPipelineVertexInputStateCreateInfo vi = {};
+            VkPipelineInputAssemblyStateCreateInfo ia = {};
+            VkPipelineRasterizationStateCreateInfo rs = {};
+            VkPipelineColorBlendStateCreateInfo cb = {};
+            VkPipelineDepthStencilStateCreateInfo ds = {};
+            VkPipelineViewportStateCreateInfo vp = {};
+            VkPipelineMultisampleStateCreateInfo ms;
+            VkDynamicState dynamicStateEnables[(VK_DYNAMIC_STATE_STENCIL_REFERENCE - VK_DYNAMIC_STATE_VIEWPORT + 1)];
+            VkPipelineDynamicStateCreateInfo dynamicState;
+
+            VkResult result;
+
+            memset(dynamicStateEnables, 0, sizeof dynamicStateEnables);
+            memset(&dynamicState, 0, sizeof dynamicState);
+            dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+            dynamicState.pDynamicStates = dynamicStateEnables;
+
+
+            VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = {};
+            pPipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+            pPipelineLayoutCreateInfo.pNext = NULL;
+            pPipelineLayoutCreateInfo.setLayoutCount = 0;
+            pPipelineLayoutCreateInfo.pSetLayouts = NULL; // Use FBO shader's layout
+
+            result = vkCreatePipelineLayout(device(), &pPipelineLayoutCreateInfo,
+                                            NULL,
+                                            &vk.fbo_pipeline_layout);
+            VK_CHECK(result);
+
+
+            memset(&pipeline, 0, sizeof(pipeline));
+            pipeline.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+            pipeline.layout = vk.fbo_pipeline_layout; // Use the new FBO pipeline layout
+
+            vi.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+            vi.pNext = NULL;
+            vi.vertexBindingDescriptionCount = 0;
+            vi.vertexAttributeDescriptionCount = 0;
+            
+            // vi.vertexBindingDescriptionCount = 1;
+            // vi.pVertexBindingDescriptions = fbo_vbo->getBindingDescription(); // Use FBO mesh binding
+            // vi.vertexAttributeDescriptionCount = fbo_vbo->getAttributes().size();
+            // vi.pVertexAttributeDescriptions = fbo_vbo->getAttributes().data();
+
+            memset(&ia, 0, sizeof(ia));
+            ia.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
+            ia.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+
+            memset(&rs, 0, sizeof(rs));
+            rs.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+            rs.polygonMode = VK_POLYGON_MODE_FILL;
+            rs.cullMode = VK_CULL_MODE_NONE;
+            rs.frontFace = VK_FRONT_FACE_CLOCKWISE;
+            rs.depthClampEnable = VK_FALSE;
+            rs.rasterizerDiscardEnable = VK_FALSE;
+            rs.depthBiasEnable = VK_FALSE;
+            rs.lineWidth = 1.0f;
+
+            memset(&cb, 0, sizeof(cb));
+            cb.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+            VkPipelineColorBlendAttachmentState att_state[1];
+            memset(att_state, 0, sizeof(att_state));
+            att_state[0].colorWriteMask = 0xf;
+            att_state[0].blendEnable = VK_FALSE;
+            cb.attachmentCount = 1;
+            cb.pAttachments = att_state;
+
+            memset(&vp, 0, sizeof(vp));
+            vp.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+            vp.viewportCount = 1;
+            dynamicStateEnables[dynamicState.dynamicStateCount++] =
+                VK_DYNAMIC_STATE_VIEWPORT;
+            vp.scissorCount = 1;
+            dynamicStateEnables[dynamicState.dynamicStateCount++] =
+                VK_DYNAMIC_STATE_SCISSOR;
+
+            bool has_depth = vk.buffer->hasDepth(); // Check FBO depth
+            bool has_stencil = vk.buffer->hasStencil(); // Check FBO stencil
+
+            memset(&ds, 0, sizeof(ds));
+            ds.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+            ds.depthTestEnable = has_depth ? VK_TRUE : VK_FALSE;
+            ds.depthWriteEnable = has_depth ? VK_TRUE : VK_FALSE;
+            ds.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
+            ds.depthBoundsTestEnable = VK_FALSE;
+            ds.stencilTestEnable = has_stencil ? VK_TRUE : VK_FALSE;
+            ds.back.failOp = VK_STENCIL_OP_KEEP;
+            ds.back.passOp = VK_STENCIL_OP_KEEP;
+            ds.back.compareOp = VK_COMPARE_OP_ALWAYS;
+            ds.front = ds.back;
+
+            memset(&ms, 0, sizeof(ms));
+            ms.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
+            ms.pSampleMask = NULL;
+            ms.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
+
+            // Two stages: vs and fs
+            pipeline.stageCount = 0;
+            // pipeline.stageCount = 2;
+            VkPipelineShaderStageCreateInfo shaderStages[2];
+            memset(&shaderStages, 0, 2 * sizeof(VkPipelineShaderStageCreateInfo));
+
+            // shaderStages[0].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+            // shaderStages[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
+            // shaderStages[0].module = fboShader->getVertex(); // Use FBO vertex shader
+            // shaderStages[0].pName = "main";
+
+            // shaderStages[1].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+            // shaderStages[1].stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+            // shaderStages[1].module = fboShader->getFragment(); // Use FBO fragment shader
+            // shaderStages[1].pName = "main";
+
+            pipeline.pVertexInputState = &vi;
+            pipeline.pInputAssemblyState = &ia;
+            pipeline.pRasterizationState = &rs;
+            pipeline.pColorBlendState = &cb;
+            pipeline.pMultisampleState = &ms;
+            pipeline.pViewportState = &vp;
+            pipeline.pDepthStencilState = &ds;
+            pipeline.pStages = shaderStages;
+            pipeline.renderPass = vk.buffer->getRenderPass(); // Use FBO's render pass
+            pipeline.pDynamicState = &dynamicState;
+
+
+            // Create a temporary pipeline cache
+            VkPipelineCacheCreateInfo pipelineCacheCreateInfo{};
+            pipelineCacheCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
+            VkPipelineCache pipelineCache;
+            result = vkCreatePipelineCache(device(), &pipelineCacheCreateInfo, NULL, &pipelineCache);
+            VK_CHECK(result);
+
+
+            result = vkCreateGraphicsPipelines(device(), pipelineCache, 1,
+                                               &pipeline, NULL, &vk.fbo_pipeline);
+            VK_CHECK(result);
+
+            // Destroy the temporary pipeline cache
+            vkDestroyPipelineCache(device(), pipelineCache, NULL);
+        }
+        
         void Viewport::_calculateColorAreaFullValues(area::Info& info) noexcept
         {
             TLRENDER_P();
@@ -1175,6 +1123,24 @@ namespace mrv
             tcp->pushMessage(msg);
         }
 
+
+        void Viewport::destroy_fbo_pipeline()
+        {
+            MRV2_VK();
+            
+            if (vk.fbo_pipeline_layout != VK_NULL_HANDLE)
+            {
+                vkDestroyPipelineLayout(device(), vk.fbo_pipeline_layout, nullptr);
+                vk.fbo_pipeline_layout = VK_NULL_HANDLE;
+            }
+
+            if (vk.fbo_pipeline != VK_NULL_HANDLE)
+            {
+                vkDestroyPipeline(device(), vk.fbo_pipeline, nullptr);
+                vk.fbo_pipeline = VK_NULL_HANDLE;
+            }
+        }
+        
     }  // namespace vulkan
         
 } // namespace mrv

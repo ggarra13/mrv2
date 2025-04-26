@@ -26,7 +26,10 @@ namespace mrv
         public:
             Viewport(int X, int Y, int W, int H, const char* L = 0);
             ~Viewport();
-        
+
+            //! Vitual draw begin method
+            void vk_draw_begin() FL_OVERRIDE;
+            
             //! Virual draw method
             void draw() FL_OVERRIDE;
 
@@ -135,7 +138,18 @@ namespace mrv
             void _compositeOverlay(const std::shared_ptr<tl::vlk::OffscreenBuffer>&,
                                    const math::Matrix4x4f& identity,
                                    const math::Size2i& viewportSize);
-        
+        protected:
+            // Pipelines and layouts are managed outside the per-frame draw loop
+            void destroy_fbo_pipeline();
+            void prepare_fbo_pipeline(); // Still need this, but called elsewhere
+
+            void prepare_pipeline();
+            void prepare_descriptor_layout(); // For the main shader (composition)
+
+            // Descriptor pool/set preparation needs to be updated for per-frame sets
+            void prepare_descriptor_pools(); // Create both pools
+            void prepare_descriptor_sets(); // Allocate and initially update per-frame sets
+            
         private:
             struct VKPrivate;
             std::unique_ptr<VKPrivate> _vk;

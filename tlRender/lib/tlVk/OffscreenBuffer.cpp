@@ -196,7 +196,7 @@ namespace tl
 
             VkDevice device = ctx.device;
             vkQueueWaitIdle(ctx.queue);
-
+            
             if (p.sampler != VK_NULL_HANDLE)
                 vkDestroySampler(device, p.sampler, nullptr);
             if (p.framebuffer != VK_NULL_HANDLE)
@@ -414,6 +414,16 @@ namespace tl
             return _p->sampler;
         }
 
+        VkRect2D OffscreenBuffer::getScissor() const
+        {
+            return _p->scissor;
+        }
+
+        VkViewport OffscreenBuffer::getViewport() const
+        {
+            return _p->viewport;
+        }
+
         void OffscreenBuffer::createImage()
         {
             TLRENDER_P();
@@ -438,7 +448,7 @@ namespace tl
             if (vkCreateImage(ctx.device, &info, nullptr, &p.image) !=
                 VK_SUCCESS)
                 throw std::runtime_error("Failed to create offscreen image");
-
+            
             VkMemoryRequirements memReq;
             vkGetImageMemoryRequirements(ctx.device, p.image, &memReq);
 
@@ -579,7 +589,7 @@ namespace tl
         void OffscreenBuffer::transitionToShaderRead(VkCommandBuffer cmd)
         {
             TLRENDER_P();
-
+            
             VkImageMemoryBarrier barrier{};
             barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
             barrier.oldLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
