@@ -213,21 +213,22 @@ vec4 sampleTexture(
                           c.b = (c.b - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0));
              }
               
+             // This was needed in OpenGL, but not for Vulkan
              // Swizzle for the image channels.
-             if (1 == imageChannels)
-             {
-                 c.g = c.b = c.r;
-                 c.a = 1.0;
-             }
-             else if (2 == imageChannels)
-             {
-                 c.a = c.g;
-                 c.g = c.b = c.r;
-             }
-             else if (3 == imageChannels)
-             {
-                 c.a = 1.0;
-             }
+             // if (1 == imageChannels)
+             // {
+             //     c.g = c.b = c.r;
+             //     c.a = 1.0;
+             // }
+             // else if (2 == imageChannels)
+             // {
+             //     c.a = c.g;
+             //     c.g = c.b = c.r;
+             // }
+             // else if (3 == imageChannels)
+             // {
+             //     c.a = 1.0;
+             // }
          }
          return c;
  })";
@@ -260,7 +261,7 @@ layout(location = 0) out vec4 outColor;
                                 
                                 {2}
 
-layout(set = 0, binding = 1, std140) uniform Fragment {
+layout(set = 0, binding = 1, std140) uniform UBO {
                                 vec4      color;
                                 int       pixelType;
                                 int       videoLevels;
@@ -268,7 +269,7 @@ layout(set = 0, binding = 1, std140) uniform Fragment {
                                 int       imageChannels;
                                 int       mirrorX;
                                 int       mirrorY;
-} frag;
+} ubo;
 
 layout(binding = 2) uniform sampler2D textureSampler0;
 layout(binding = 3) uniform sampler2D textureSampler1;
@@ -277,22 +278,22 @@ layout(binding = 4) uniform sampler2D textureSampler2;
 void main()
 {
     vec2 t = fTexture;
-    if (1 == frag.mirrorX)
+    if (1 == ubo.mirrorX)
     {
         t.x = 1.0 - t.x;
     }
-    if (0 == frag.mirrorY)
+    if (1 == ubo.mirrorY)
     {
         t.y = 1.0 - t.y;
     }
     outColor = sampleTexture(t,
-                             frag.pixelType,
-                             frag.videoLevels,
-                             frag.yuvCoefficients,
-                             frag.imageChannels,
+                             ubo.pixelType,
+                             ubo.videoLevels,
+                             ubo.yuvCoefficients,
+                             ubo.imageChannels,
                              textureSampler0,
                              textureSampler1,
-                             textureSampler2) * frag.color;
+                             textureSampler2) * ubo.color;
      // outColor.a = 1.0;
 })")
                 .arg(pixelType)
@@ -335,6 +336,9 @@ void main()
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 outColor;
 
+
+layout(binding = 1) uniform sampler2D textureSampler;
+
 // enum tl::timeline::Channels
 const uint Channels_Color = 0;
 const uint Channels_Red   = 1;
@@ -353,7 +357,7 @@ struct Levels
     float outHigh;
 };
 
-layout(set = 0, binding = 0, std140) uniform LevelsUBO
+layout(set = 0, binding = 2, std140) uniform LevelsUBO
 {
   Levels data;
 } uboLevels;
@@ -368,7 +372,7 @@ struct EXRDisplay
     float g;
 };
 
-layout(set = 0, binding = 1, std140) uniform EXRDisplayUBO
+layout(set = 0, binding = 3, std140) uniform EXRDisplayUBO
 {
   EXRDisplay data;
 } uboEXRDisplay;
@@ -381,7 +385,7 @@ struct Normalize
     vec4 maximum;
 };
 
-layout(set = 0, binding = 2, std140) uniform NormalizeUBO
+layout(set = 0, binding = 4, std140) uniform NormalizeUBO
 {
   Normalize data;
 } uboNormalize;
@@ -394,16 +398,14 @@ struct Color
     bool  invert;
 };
 
-layout(set = 0, binding = 3, std140) uniform ColorUBO
+layout(set = 0, binding = 5, std140) uniform ColorUBO
 {
    Color data;
 } uboColor;
 
 {0}
 
-layout(binding = 4) uniform sampler2D textureSampler;
-
-layout(set = 0, binding = 5, std140) uniform UBO
+layout(set = 0, binding = 6, std140) uniform UBO
 {
     int        channels;
     int        mirrorX;

@@ -27,7 +27,6 @@ namespace tl
             if (!videoData.empty() && !videoData.front().layers.empty())
             {
                 _drawBackground(boxes, backgroundOptions);
-                return;
             }
             switch (compareOptions.mode)
             {
@@ -102,7 +101,7 @@ namespace tl
                         box, options.color0, options.color1,
                         options.checkersSize);
                     _createMesh("colorMesh", mesh);
-                    _createPipeline(p.fbo, "checkers", "colorMeshPos2", "colorMesh");
+                    _createPipeline(p.fbo, "checkers", "colorMesh", "colorMesh");
                     drawColorMesh(mesh,
                         math::Vector2i(), image::Color4f(1.F, 1.F, 1.F));
                     break;
@@ -133,7 +132,7 @@ namespace tl
                         geom::Vertex2(1, 0, 1),
                     });
                     _createMesh("colorMesh", mesh);
-                    _createPipeline(p.fbo, "gradient", "colorMeshPos2", "colorMesh");
+                    _createPipeline(p.fbo, "gradient", "colorMesh", "colorMesh");
                     drawColorMesh(
                         mesh, math::Vector2i(), image::Color4f(1.F, 1.F, 1.F));
                     break;
@@ -635,6 +634,7 @@ namespace tl
         {
             TLRENDER_P();
 
+            // \@todo: \@bug: there's no such call in Vulkan.
             // GLint viewportPrev[4] = {0, 0, 0, 0};
             // glGetIntegerv(GL_VIEWPORT, viewportPrev);
 
@@ -659,6 +659,8 @@ namespace tl
 
             if (p.buffers["video"])
             {
+                p.buffers["video"]->beginRenderPass(p.cmd);
+                
                 // const gl::SetAndRestore scissorTest(GL_SCISSOR_TEST,
                 // GL_FALSE);
 
@@ -849,7 +851,6 @@ namespace tl
                 }
             }
 
-#if 0
             if (p.buffers["video"])
             {
                 // glBlendFuncSeparate(
@@ -860,113 +861,54 @@ namespace tl
                 //     viewportPrev[0], viewportPrev[1], viewportPrev[2],
                 //     viewportPrev[3]);
 
-                p.shaders["display"]->bind(p.frameIndex);
-                p.shaders["display"]->setUniform("textureSampler", 0);
-                p.shaders["display"]->setUniform(
-                    "channels", static_cast<int>(displayOptions.channels));
-                p.shaders["display"]->setUniform(
-                    "mirrorX", displayOptions.mirror.x);
-                p.shaders["display"]->setUniform(
-                    "mirrorY", displayOptions.mirror.y);
-                const bool colorMatrixEnabled =
-                    displayOptions.color != timeline::Color() &&
-                    displayOptions.color.enabled;
-                p.shaders["display"]->setUniform(
-                    "colorEnabled", colorMatrixEnabled);
-                p.shaders["display"]->setUniform(
-                    "colorAdd", displayOptions.color.add);
-                if (colorMatrixEnabled)
-                {
-                    p.shaders["display"]->setUniform(
-                        "colorMatrix", color(displayOptions.color));
-                }
-                p.shaders["display"]->setUniform(
-                    "colorInvert", displayOptions.color.enabled
-                                       ? displayOptions.color.invert
-                                       : false);
-                p.shaders["display"]->setUniform(
-                    "levelsEnabled", displayOptions.levels.enabled);
-                p.shaders["display"]->setUniform(
-                    "levels.inLow", displayOptions.levels.inLow);
-                p.shaders["display"]->setUniform(
-                    "levels.inHigh", displayOptions.levels.inHigh);
-                p.shaders["display"]->setUniform(
-                    "levels.gamma", displayOptions.levels.gamma > 0.F
-                                        ? (1.F / displayOptions.levels.gamma)
-                                        : 1000000.F);
-                p.shaders["display"]->setUniform(
-                    "levels.outLow", displayOptions.levels.outLow);
-                p.shaders["display"]->setUniform(
-                    "levels.outHigh", displayOptions.levels.outHigh);
-                p.shaders["display"]->setUniform(
-                    "exrDisplayEnabled", displayOptions.exrDisplay.enabled);
-                if (displayOptions.exrDisplay.enabled)
-                {
-                    const float v = powf(
-                        2.F, displayOptions.exrDisplay.exposure + 2.47393F);
-                    const float d = displayOptions.exrDisplay.defog;
-                    const float k =
-                        powf(2.F, displayOptions.exrDisplay.kneeLow);
-                    const float f = knee2(
-                        powf(2.F, displayOptions.exrDisplay.kneeHigh) - k,
-                        powf(2.F, 3.5F) - k);
-                    p.shaders["display"]->setUniform("exrDisplay.v", v);
-                    p.shaders["display"]->setUniform("exrDisplay.d", d);
-                    p.shaders["display"]->setUniform("exrDisplay.k", k);
-                    p.shaders["display"]->setUniform("exrDisplay.f", f);
-                    const float gamma =
-                        displayOptions.levels.gamma > 0.F
-                            ? (1.F / displayOptions.levels.gamma)
-                            : 1000000.F;
-                    p.shaders["display"]->setUniform("exrDisplay.g", gamma);
-                }
-                p.shaders["display"]->setUniform(
-                    "softClip", displayOptions.softClip.enabled
-                                    ? displayOptions.softClip.value
-                                    : 0.F);
-                p.shaders["display"]->setUniform(
-                    "videoLevels",
-                    static_cast<int>(displayOptions.videoLevels));
-                p.shaders["display"]->setUniform(
-                    "normalizeEnabled", displayOptions.normalize.enabled);
-                if (displayOptions.normalize.enabled)
-                {
-                    p.shaders["display"]->setUniform(
-                        "normalizeDisplay.minimum",
-                        displayOptions.normalize.minimum);
-                    p.shaders["display"]->setUniform(
-                        "normalizeDisplay.maximum",
-                        displayOptions.normalize.maximum);
-                }
-                p.shaders["display"]->setUniform(
-                    "invalidValues", displayOptions.invalidValues);
+                p.buffers["video"]->endRenderPass(p.cmd);
+            
+                p.buffers["video"]->transitionToShaderRead(p.cmd);
+                
+                _createPipeline(p.fbo, "display", "display", "video");
 
-                // glActiveTexture(static_cast<GLenum>(GL_TEXTURE0));
-                // glBindTexture(GL_TEXTURE_2D,
-                // p.buffers["video"]->getColorID());
-                size_t texturesOffset = 1;
+                p.fbo->beginRenderPass(p.cmd);
+                
+                p.fbo->setupViewportAndScissor(p.cmd);
+
+                p.shaders["display"]->bind(p.frameIndex);
+                p.shaders["display"]->setFBO("textureSampler", p.buffers["video"]);
+                p.shaders["display"]->setUniform("uboLevels", displayOptions.levels);
+                p.shaders["display"]->setUniform("uboNormalize", displayOptions.normalize);
+                p.shaders["display"]->setUniform("uboColor", displayOptions.color);
+                p.shaders["display"]->setUniform("uboEXRDisplay", displayOptions.exrDisplay);
+                struct UBO
+                {
+                    int   channels;
+                    int   mirrorX;
+                    int   mirrorY;
+                    float softClip;
+                    int   videoLevels;
+                    bool  invalidValues;
+                };
+                UBO ubo;
+                ubo.channels = static_cast<int>(displayOptions.channels);
+                ubo.mirrorX  = displayOptions.mirror.x;
+                ubo.mirrorY  = displayOptions.mirror.y;
+                ubo.softClip = displayOptions.softClip.enabled ? displayOptions.softClip.value : 0.F;
+                ubo.videoLevels = static_cast<int>(displayOptions.videoLevels);
+                ubo.invalidValues = displayOptions.invalidValues;
+                p.shaders["display"]->setUniform("ubo", ubo);
+                
 #if defined(TLRENDER_OCIO)
                 if (p.ocioData)
                 {
                     for (size_t i = 0; i < p.ocioData->textures.size(); ++i)
                     {
-                        // glActiveTexture(GL_TEXTURE0 + texturesOffset + i);
-                        // glBindTexture(
-                        //     p.ocioData->textures[i].type,
-                        //     p.ocioData->textures[i].id);
+                        p.shaders["display"]->setTexture("sampler", p.ocioData->textures[i]);
                     }
-                    texturesOffset += p.ocioData->textures.size();
                 }
                 if (p.lutData)
                 {
                     for (size_t i = 0; i < p.lutData->textures.size(); ++i)
                     {
-                        // glActiveTexture(GL_TEXTURE0 + texturesOffset + i);
-                        // glBindTexture(
-                        //     p.lutData->textures[i].type,
-                        //     p.lutData->textures[i].id);
+                        p.shaders["display"]->setTexture("sampler", p.lutData->textures[i]);
                     }
-                    texturesOffset += p.lutData->textures.size();
                 }
 #endif // TLRENDER_OCIO
 #if defined(TLRENDER_LIBPLACEBO)
@@ -974,15 +916,13 @@ namespace tl
                 {
                     for (size_t i = 0; i < p.placeboData->textures.size(); ++i)
                     {
-                        // glActiveTexture(GL_TEXTURE0 + texturesOffset + i);
-                        // glBindTexture(
-                        //     p.placeboData->textures[i].type,
-                        //     p.placeboData->textures[i].id);
+                        p.shaders["display"]->setTexture("sampler", p.placeboData->textures[i]);
                     }
-                    texturesOffset += p.ocioData->textures.size();
                 }
 #endif // TLRENDER_LIBPLACEBO
 
+                _bindDescriptorSets("display", "display");
+            
                 if (p.vbos["video"])
                 {
                     p.vbos["video"]->copy(convert(
@@ -994,12 +934,9 @@ namespace tl
                     p.vaos["video"]->upload(p.vbos["video"]->getData());
                     p.vaos["video"]->draw(p.cmd, p.vbos["video"]);
                 }
+                
+                p.fbo->endRenderPass(p.cmd);
             }
-
-            p.shaders["image"]->bind(p.frameIndex);
-            p.shaders["image"]->setUniform(
-                "transform.mvp", p.transform, vlk::kShaderVertex);
-#endif
         }
     } // namespace timeline_vlk
 } // namespace tl

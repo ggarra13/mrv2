@@ -184,6 +184,7 @@ namespace tl
 
             TextureOptions options;
 
+            std::string name;
             uint32_t arrayLayers = 1; // unused.
 
             VkImageLayout currentLayout = VK_IMAGE_LAYOUT_UNDEFINED;
@@ -223,7 +224,7 @@ namespace tl
 
         void Texture::_init(
             const uint32_t width, const uint32_t height, const uint32_t depth,
-            const VkFormat format, const TextureOptions& options)
+            const VkFormat format, const std::string& name, const TextureOptions& options)
         {
             TLRENDER_P();
 
@@ -232,6 +233,7 @@ namespace tl
             p.depth = depth;
             p.format = p.internalFormat = format;
             p.options = options;
+            p.name = name;
 
             if (depth == 0 && height == 0 && width > 0)
                 p.imageType = VK_IMAGE_TYPE_1D;
@@ -285,10 +287,10 @@ namespace tl
         std::shared_ptr<Texture> Texture::create(
             Fl_Vk_Context& ctx, const VkImageType type, const uint32_t width,
             const uint32_t height, const uint32_t depth, const VkFormat format,
-            const TextureOptions& options)
+            const std::string& name, const TextureOptions& options)
         {
             auto out = std::shared_ptr<Texture>(new Texture(ctx));
-            out->_init(width, height, depth, format, options);
+            out->_init(width, height, depth, format, name, options);
             return out;
         }
 
@@ -320,6 +322,11 @@ namespace tl
         image::PixelType Texture::getPixelType() const
         {
             return _p->info.pixelType;
+        }
+        
+        const std::string& Texture::getName() const
+        {
+            return _p->name;
         }
 
         VkFormat Texture::getSourceFormat() const

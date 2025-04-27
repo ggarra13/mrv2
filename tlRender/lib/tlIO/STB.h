@@ -52,7 +52,6 @@ namespace tl
 
         private:
             bool _autoNormalize = false;
-            bool _flipY = true;
         };
 
         //! STB writer.

@@ -483,15 +483,18 @@ namespace tl
                 throw std::runtime_error("Failed to create image view");
         }
 
-        void OffscreenBuffer::createRenderPass()
+        void OffscreenBuffer::createRenderPass(VkAttachmentLoadOp colorLoadOp,
+                                               VkAttachmentStoreOp colorStoreOp,
+                                               VkAttachmentLoadOp depthLoadOp,
+                                               VkAttachmentStoreOp depthStoreOp)
         {
             TLRENDER_P();
 
             VkAttachmentDescription colorAttachment{};
             colorAttachment.format = p.colorFormat;
             colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-            colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-            colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+            colorAttachment.loadOp = colorLoadOp;
+            colorAttachment.storeOp = colorStoreOp;
             colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
             colorAttachment.finalLayout =
                 VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
@@ -520,8 +523,8 @@ namespace tl
                 VkAttachmentDescription depthAttachment{};
                 depthAttachment.format = p.depthFormat;
                 depthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-                depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-                depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+                depthAttachment.loadOp = depthLoadOp;
+                depthAttachment.storeOp = depthStoreOp;
                 depthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
                 depthAttachment.stencilStoreOp =
                     VK_ATTACHMENT_STORE_OP_DONT_CARE;
@@ -613,9 +616,11 @@ namespace tl
 
             p.viewport = {};
             p.viewport.x = 0.0f;
-            p.viewport.y = 0.0f;
+            // Set the y origin to the bottom of the framebuffer
+            p.viewport.y = static_cast<float>(p.size.h);
             p.viewport.width = static_cast<float>(p.size.w);
-            p.viewport.height = static_cast<float>(p.size.h);
+            // Use a negative height to flip the y-axis
+            p.viewport.height = -static_cast<float>(p.size.h);
             p.viewport.minDepth = 0.0f;
             p.viewport.maxDepth = 1.0f;
 
@@ -625,7 +630,43 @@ namespace tl
                 static_cast<uint32_t>(p.size.w),
                 static_cast<uint32_t>(p.size.h)};
         }
+        
+        void OffscreenBuffer::beginRenderPass(VkCommandBuffer cmd, VkSubpassContents contents)
+        {
+            TLRENDER_P();
 
+            std::vector<VkClearValue> clearValues;
+            VkClearValue colorClear = {};
+            colorClear.color = { { 0.0f, 0.0f, 0.0f, 0.0f } }; // Black clear
+            clearValues.push_back(colorClear);
+
+            if (p.depthFormat != VK_FORMAT_UNDEFINED)
+            {
+                VkClearValue depthClear = {};
+                depthClear.depthStencil = { 1.0f, 0 };
+                clearValues.push_back(depthClear);
+            }
+
+            VkRenderPassBeginInfo beginInfo = {};
+            beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+            beginInfo.renderPass = p.renderPass;
+            beginInfo.framebuffer = p.framebuffer;
+            beginInfo.renderArea.offset = { 0, 0 };
+            beginInfo.renderArea.extent = {
+                static_cast<uint32_t>(p.size.w),
+                static_cast<uint32_t>(p.size.h) };
+            beginInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
+            beginInfo.pClearValues = clearValues.data();
+
+            vkCmdBeginRenderPass(cmd, &beginInfo, contents);
+        }
+
+        void OffscreenBuffer::endRenderPass(VkCommandBuffer cmd)
+        {
+            vkCmdEndRenderPass(cmd);
+        }
+
+        
         void OffscreenBuffer::setupViewportAndScissor(VkCommandBuffer cmd)
         {
             TLRENDER_P();

@@ -1355,13 +1355,13 @@ void main() {
     {
         TLRENDER_P();
 
-        update_texture();
-
         VkCommandBuffer cmd = getCurrentCommandBuffer();
         if (!m_swapchain || !cmd || !isFrameActive())
         {
             return;
         }
+
+        update_texture();
 
         vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline);
         vkCmdBindDescriptorSets(

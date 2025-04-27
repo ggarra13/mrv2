@@ -353,7 +353,7 @@ namespace mrv
 
         void Viewport::vk_draw_begin()
         {
-            m_clearColor = { 1.0, 0.0, 0, 0 };
+            m_clearColor = { 0.F, 0.F, 0.F, 0.F };
             m_depthStencil = 1.0;
 
             VkWindow::vk_draw_begin();
@@ -364,8 +364,12 @@ namespace mrv
             TLRENDER_P();
             MRV2_VK();
 
-            VkCommandBuffer cmd = getCurrentCommandBuffer(); // Get the command buffer started by vk_draw_begin()
-            vkCmdEndRenderPass(cmd);  // end the clear screen command pass.
+             // Get the command buffer started for the current frame.
+            VkCommandBuffer cmd = getCurrentCommandBuffer();
+
+            // Stop the current (default) render pass.
+            vkCmdEndRenderPass(cmd);
+            
             vk.cmd = cmd;
             
             const auto& viewportSize = getViewportSize();
@@ -402,9 +406,9 @@ namespace mrv
                 
                 if (vlk::doCreate(vk.buffer, renderSize, offscreenBufferOptions))
                 {
-                    
                     vk.buffer = vlk::OffscreenBuffer::create(
                         ctx, renderSize, offscreenBufferOptions);
+                    vk.vbo.reset();
                 }
             }
             else
@@ -417,6 +421,8 @@ namespace mrv
             
             if (!vk.buffer)
             {
+                // Must begin a dummy render pass, as vk_end_draw()
+                // will call vkCmdEndRenderPass.
                 begin_render_pass();
                 return;
             }
@@ -434,9 +440,7 @@ namespace mrv
             locale::SetAndRestore saved;
             timeline::RenderOptions renderOptions;
             renderOptions.colorBuffer = vk.colorBufferType;
-            renderOptions.clear = true;
-            renderOptions.clearColor = image::Color4f(1, 1, 0, 1);
-
+            
             vk.render->begin(cmd, vk.buffer, m_currentFrameIndex,
                              renderSize, renderOptions);
             vk.render->drawVideo(
@@ -458,7 +462,7 @@ namespace mrv
                 
             mvp = _createTexturedRectangle();
 
-            
+
             // --- Final Render Pass: Render to Swapchain (Composition) ---
             begin_render_pass();
 
@@ -510,7 +514,7 @@ namespace mrv
                 // Draw calls for the composition geometry (e.g., a screen-filling quad)
                 vk.vao->draw(cmd, vk.vbo);
             }
-
+            
             // Draw FLTK children
             // Fl_Window::draw();
         }
@@ -680,9 +684,6 @@ namespace mrv
                     p.rawImage = true;
                 }
             }
-
-            // back to conventional pixel operation
-            // glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
         }
 
         void Viewport::_readPixel(image::Color4f& rgba)

@@ -100,6 +100,13 @@ namespace tl
                 vkDestroyShaderModule(device, p.vertex, nullptr);
             
             
+            if (descriptorSetLayout != VK_NULL_HANDLE)
+            {
+                vkDestroyDescriptorSetLayout(
+                    device, descriptorSetLayout, nullptr);
+                descriptorSetLayout = VK_NULL_HANDLE;
+            }
+            
             for (auto& [_, ubo] : ubos)
             {
                 for(size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) // Destroy buffers and memories for all frames
@@ -125,13 +132,6 @@ namespace tl
                     vkDestroyDescriptorPool(device, pool, nullptr);
                     pool = VK_NULL_HANDLE;
                  }
-            }
-            
-            if (descriptorSetLayout != VK_NULL_HANDLE)
-            {
-                vkDestroyDescriptorSetLayout(
-                    device, descriptorSetLayout, nullptr);
-                descriptorSetLayout = VK_NULL_HANDLE;
             }
         }
 
@@ -305,8 +305,7 @@ namespace tl
 
             if (descriptorSetLayout != VK_NULL_HANDLE)
             {
-                std::cerr << shaderName << ": createDescriptorSets called more than once!" << std::endl;
-                abort();
+                throw std::runtime_error(shaderName + ": createDescriptorSets called more than once!");
             }
             
             std::vector<VkDescriptorSetLayoutBinding> bindings;

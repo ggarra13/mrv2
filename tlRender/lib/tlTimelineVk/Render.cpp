@@ -257,11 +257,6 @@ namespace tl
             size_t offset)
         {
             const auto& info = image->getInfo();
-            std::cerr << info.pixelType << " internal="
-                      << string_VkFormat(textures[0]->getInternalFormat())
-                      << " source="
-                      << string_VkFormat(textures[0]->getSourceFormat())
-                      << std::endl;
             switch (info.pixelType)
             {
             case image::PixelType::YUV_420P_U8:
@@ -448,10 +443,10 @@ namespace tl
             }
             case image::PixelType::RGB_U10:
             {
-                // Convert from GL_UNSIGNED_INT_10_10_10_2
+                // \@bug:
+                // \@todo: Fix -- Convert from GL_UNSIGNED_INT_10_10_10_2
                 if (textures[0]->getInternalFormat() == VK_FORMAT_A2R10G10B10_UNORM_PACK32)
                 {
-                    std::cerr << "convert" << std::endl;
                     const std::size_t w = info.size.w;
                     const std::size_t h = info.size.h;
                     const uint32_t* src = reinterpret_cast<uint32_t*>(image->getData());
@@ -562,11 +557,6 @@ namespace tl
 
         LibPlaceboData::~LibPlaceboData()
         {
-            for (size_t i = 0; i < textures.size(); ++i)
-            {
-                // glDeleteTextures(1, &textures[i].id);
-            }
-
             pl_gpu_dummy_destroy(&gpu);
             pl_log_destroy(&log);
         }
@@ -690,15 +680,6 @@ namespace tl
                 p.shaders["colorMesh"]->createUniform("color", color);
                 p.shaders["colorMesh"]->createDescriptorSets();
             }
-            // if (!p.shaders["colorMeshPos2"])
-            // {
-            //     p.shaders["colorMeshPos2"] = vlk::Shader::create(
-            //         ctx, colorMeshPos2VertexSource(), colorMeshFragmentSource(), "colorMesh");
-            //     p.shaders["colorMeshPos2"]->createUniform(
-            //         "transform.mvp", transform, vlk::kShaderVertex);
-            //     p.shaders["colorMeshPos2"]->createUniform("color", color);
-            //     p.shaders["colorMeshPos2"]->createDescriptorSets();
-            // }
             if (!p.shaders["text"])
             {
                 p.shaders["text"] = vlk::Shader::create(
@@ -725,18 +706,18 @@ namespace tl
                     ctx, vertexSource(), imageFragmentSource(), "image");
                 p.shaders["image"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
-                struct Fragment
+                struct UBO
                 {
                     image::Color4f color;
                     int pixelType;
                     int videoLevels;
                     math::Vector4f yuvCoefficients;
-                    int imageChannels = 0;
-                    int mirrorX = 0;
-                    int mirrorY = 0;
+                    int imageChannels;
+                    int mirrorX;
+                    int mirrorY;
                 };
-                Fragment values;
-                p.shaders["image"]->createUniform("frag", values);
+                UBO ubo;
+                p.shaders["image"]->createUniform("ubo", ubo);
                 p.shaders["image"]->addTexture("textureSampler0");
                 p.shaders["image"]->addTexture("textureSampler1");
                 p.shaders["image"]->addTexture("textureSampler2");
@@ -815,31 +796,30 @@ namespace tl
                 p.vaos["video"] = vlk::VAO::create(ctx);
             }
             
-            const image::Color4f& bgColor = renderOptions.clearColor;
+            // const image::Color4f& bgColor = renderOptions.clearColor;
 
-            // Clear yellow (assuming this clear value is for the FBO)
-            VkClearValue clearValues[2];
-            clearValues[0].color = { bgColor.r, bgColor.g, bgColor.b, bgColor.a }; // Clear color for the FBO
-            clearValues[1].depthStencil = { 1.F, 0 };
+            // // Clear yellow (assuming this clear value is for the FBO)
+            // VkClearValue clearValues[2];
+            // clearValues[0].color = { bgColor.r, bgColor.g, bgColor.b, bgColor.a }; // Clear color for the FBO
+            // clearValues[1].depthStencil = { 1.F, 0 };
             
-            VkRenderPassBeginInfo rpBegin{};
-            rpBegin.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-            rpBegin.renderPass = p.fbo->getRenderPass();
-            rpBegin.framebuffer = p.fbo->getFramebuffer(/*currentFrameIndex*/); // Pass frame index if needed
-            rpBegin.renderArea.offset = {0, 0}; // Assuming render area starts at 0,0
-            rpBegin.renderArea.extent = p.fbo->getExtent(); // Use FBO extent
-            rpBegin.clearValueCount = renderOptions.clear + static_cast<uint16_t>(p.fbo->hasDepth() || p.fbo->hasStencil());
-            rpBegin.pClearValues = clearValues;
+            // VkRenderPassBeginInfo rpBegin{};
+            // rpBegin.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+            // rpBegin.renderPass = p.fbo->getRenderPass();
+            // rpBegin.framebuffer = p.fbo->getFramebuffer(/*currentFrameIndex*/); // Pass frame index if needed
+            // rpBegin.renderArea.offset = {0, 0}; // Assuming render area starts at 0,0
+            // rpBegin.renderArea.extent = p.fbo->getExtent(); // Use FBO extent
+            // rpBegin.clearValueCount = renderOptions.clear + static_cast<uint16_t>(p.fbo->hasDepth() || p.fbo->hasStencil());
+            // rpBegin.pClearValues = clearValues;
 
-            // Begin the first render pass instance within the single command buffer
-            vkCmdBeginRenderPass(p.cmd, &rpBegin, VK_SUBPASS_CONTENTS_INLINE);
+            // // Begin the first render pass instance within the single command buffer
+            // vkCmdBeginRenderPass(p.cmd, &rpBegin, VK_SUBPASS_CONTENTS_INLINE);
             
-            // setViewport(math::Box2i(0, 0, renderSize.w, renderSize.h));
-            p.fbo->setupViewportAndScissor(p.cmd);
+            // p.fbo->setupViewportAndScissor(p.cmd);
             setTransform(
                 math::ortho(
                     0.F, static_cast<float>(renderSize.w),
-                    static_cast<float>(renderSize.h), 0.F, -1.F, 1.F));
+                    0.F, static_cast<float>(renderSize.h), -1.F, 1.F));
         }
 
         void Render::end()
@@ -852,8 +832,6 @@ namespace tl
             // p.vaos["mesh"].reset();
             // p.vbos["text"].reset();
             // p.vaos["text"].reset();
-  
-            vkCmdEndRenderPass(p.cmd);
             
             const auto now = std::chrono::steady_clock::now();
             const auto diff =
@@ -1038,38 +1016,10 @@ namespace tl
             }
         }
 
-        namespace
-        {
-            // void setTextureParameters(GLenum textureType, GLenum
-            // interpolation)
-            // {
-            // glTexParameteri(
-            //     textureType, GL_TEXTURE_MIN_FILTER, interpolation);
-            // glTexParameteri(
-            //     textureType, GL_TEXTURE_MAG_FILTER, interpolation);
-            // glTexParameteri(
-            //     textureType, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            // glTexParameteri(
-            //     textureType, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            // glTexParameteri(
-            //     textureType, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-            // }
-            //
-            // void setTextureParameters(
-            //     GLenum textureType, OCIO::Interpolation interpolation)
-            // {
-            //     setTextureParameters(
-            //         textureType, OCIO::INTERP_NEAREST == interpolation
-            //                          ? GL_NEAREST
-            //                          : GL_LINEAR);
-            // }
-
-        } // namespace
-
 #if defined(TLRENDER_OCIO)
 
         void Render::_addTextures(
-            std::vector<Fl_Vk_Texture>& textures,
+            std::vector<std::shared_ptr<vlk::Texture> >& textures,
             const OCIO::GpuShaderDescRcPtr& shaderDesc)
         {
             TLRENDER_P();
@@ -1100,49 +1050,16 @@ namespace tl
                 }
 
                 VkFormat imageFormat = VK_FORMAT_R32G32B32_SFLOAT;
-                VkImageType imageType = VK_IMAGE_TYPE_3D;
-
                 const uint32_t width = edgelen;
                 const uint32_t height = edgelen;
                 const uint32_t depth = edgelen;
                 const uint16_t channels = 3;
 
-                // Create Vulkan image
-                VkImage image = createImage(
-                    ctx.device, imageType, width, height, depth, imageFormat);
 
-                // Allocate and bind memory for the image
-                VkDeviceMemory imageMemory =
-                    allocateAndBindImageMemory(ctx.device, ctx.gpu, image);
-
-                // Transition image layout to TRANSFER_DST_OPTIMAL
-                transitionImageLayout(
-                    ctx.device, ctx.commandPool, ctx.queue, image,
-                    VK_IMAGE_LAYOUT_UNDEFINED,
-                    VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-
-                // Upload texture data
-                uploadTextureData(
-                    ctx.device, ctx.gpu, ctx.commandPool, ctx.queue, image,
-                    width, height, depth, imageFormat, channels, sizeof(float),
-                    values);
-
-                // Transition image layout to SHADER_READ_ONLY_OPTIMAL
-                transitionImageLayout(
-                    ctx.device, ctx.commandPool, ctx.queue, image,
-                    VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                    VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-
-                // Create image view
-                VkImageView imageView =
-                    createImageView(ctx.device, image, imageFormat, imageType);
-
-                // Create sampler
-                VkSampler sampler = createSampler(ctx.device);
-
-                Fl_Vk_Texture texture(
-                    VK_IMAGE_TYPE_3D, imageFormat, image, imageView, sampler,
-                    imageMemory, samplerName, width, height, depth);
+                
+                auto texture = vlk::Texture::create(ctx, VK_IMAGE_TYPE_3D, width, height,
+                                                    depth, imageFormat, samplerName);
+                texture->copy(reinterpret_cast<const uint8_t*>(values), width * height * depth * channels * sizeof(float));
                 textures.push_back(texture);
             }
 
@@ -1185,12 +1102,12 @@ namespace tl
                     imageFormat = VK_FORMAT_R32_SFLOAT;
                 }
 
-                const uint32_t depth = 1;
                 VkImageType imageType;
                 switch (dimensions)
                 {
                 case OCIO::GpuShaderDesc::TEXTURE_1D:
                     imageType = VK_IMAGE_TYPE_1D;
+                    if (height == 0) height = 1;
                     break;
                 case OCIO::GpuShaderDesc::TEXTURE_2D:
                     imageType = VK_IMAGE_TYPE_2D;
@@ -1199,42 +1116,9 @@ namespace tl
                     throw std::runtime_error("Unknown OCIO image type");
                 }
 
-                // Create Vulkan image
-                VkImage image = createImage(
-                    ctx.device, imageType, width, height, depth, imageFormat);
-
-                // Allocate and bind memory for the image
-                VkDeviceMemory imageMemory =
-                    allocateAndBindImageMemory(ctx.device, ctx.gpu, image);
-
-                // Transition image layout to TRANSFER_DST_OPTIMAL
-                transitionImageLayout(
-                    ctx.device, ctx.commandPool, ctx.queue, image,
-                    VK_IMAGE_LAYOUT_UNDEFINED,
-                    VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-
-                // Upload texture data
-                uploadTextureData(
-                    ctx.device, ctx.gpu, ctx.commandPool, ctx.queue, image,
-                    width, height, depth, imageFormat, channels, sizeof(float),
-                    values);
-
-                // Transition image layout to SHADER_READ_ONLY_OPTIMAL
-                transitionImageLayout(
-                    ctx.device, ctx.commandPool, ctx.queue, image,
-                    VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                    VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-
-                // Create image view
-                VkImageView imageView =
-                    createImageView(ctx.device, image, imageFormat, imageType);
-
-                // Create sampler
-                VkSampler sampler = createSampler(ctx.device);
-
-                Fl_Vk_Texture texture(
-                    VK_IMAGE_TYPE_3D, imageFormat, image, imageView, sampler,
-                    imageMemory, samplerName, width, height, depth);
+                auto texture = vlk::Texture::create(ctx, imageType, width, height,
+                                                    0, imageFormat, samplerName);
+                texture->copy(reinterpret_cast<const uint8_t*>(values), width * height * channels * sizeof(float));
                 textures.push_back(texture);
             }
         }
@@ -1242,7 +1126,7 @@ namespace tl
 
 #if defined(TLRENDER_LIBPLACEBO)
         void Render::_addTextures(
-            std::vector<Fl_Vk_Texture>& textures, const pl_shader_res* res)
+            std::vector<std::shared_ptr<vlk::Texture> >& textures, const pl_shader_res* res)
         {
             TLRENDER_P();
 
@@ -1267,17 +1151,6 @@ namespace tl
                     const char* textureName = sd->desc.name;
                     const char* samplerName = sd->desc.name;
                     const int channels = fmt->num_components;
-
-                    // std::cerr << "fmt->type=" << fmt->type << std::endl;
-                    // std::cerr << "fmt->num_components=" <<
-                    // fmt->component_depth << std::endl; for (int i = 0; i
-                    // < fmt->num_components; ++i)
-                    // {
-                    //     std::cerr << "fmt->component_depth[" << i << "]="
-                    //     << fmt->component_depth[i] << std::endl;
-                    // }
-                    // std::cerr << "fmt->internal_size=" <<
-                    // fmt->internal_size << std::endl;
 
                     // Defaults
                     unsigned textureId = 0;
@@ -1309,44 +1182,13 @@ namespace tl
                     VkImageType imageType = (dims == 1)   ? VK_IMAGE_TYPE_1D
                                             : (dims == 2) ? VK_IMAGE_TYPE_2D
                                                           : VK_IMAGE_TYPE_3D;
-
-                    // Create Vulkan image
-                    VkImage image = createImage(
-                        ctx.device, imageType, width, height, depth,
-                        imageFormat);
-
-                    // Allocate and bind memory for the image
-                    VkDeviceMemory imageMemory =
-                        allocateAndBindImageMemory(ctx.device, ctx.gpu, image);
-
-                    // Transition image layout to TRANSFER_DST_OPTIMAL
-                    transitionImageLayout(
-                        ctx.device, ctx.commandPool, ctx.queue, image,
-                        VK_IMAGE_LAYOUT_UNDEFINED,
-                        VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-
-                    // Upload texture data
-                    uploadTextureData(
-                        ctx.device, ctx.gpu, ctx.commandPool, ctx.queue, image,
-                        width, height, depth, imageFormat, channels, size,
-                        values);
-
-                    // Transition image layout to SHADER_READ_ONLY_OPTIMAL
-                    transitionImageLayout(
-                        ctx.device, ctx.commandPool, ctx.queue, image,
-                        VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-
-                    // Create image view
-                    VkImageView imageView = createImageView(
-                        ctx.device, image, imageFormat, imageType);
-
-                    // Create sampler
-                    VkSampler sampler = createSampler(ctx.device);
-
-                    Fl_Vk_Texture texture(
-                        imageType, imageFormat, image, imageView, sampler,
-                        imageMemory, samplerName, width, height, depth);
+                    if (imageType == VK_IMAGE_TYPE_1D)
+                        height = depth = 1;
+                    else if (imageType == VK_IMAGE_TYPE_2D)
+                        depth = 1;
+                    auto texture = vlk::Texture::create(ctx, imageType, width, height, depth,
+                                                        imageFormat, samplerName);
+                    texture->copy(reinterpret_cast<const uint8_t*>(values), width * height * depth * fmt->internal_size);
                     textures.push_back(texture);
                     break;
                 }
@@ -1608,6 +1450,11 @@ namespace tl
 
             if (!p.shaders["display"])
             {
+                if (p.pipelines["display"])
+                    p.pipelines["display"] = VK_NULL_HANDLE;
+                if (p.pipelineLayouts["display"])
+                    p.pipelineLayouts["display"] = VK_NULL_HANDLE;
+                
                 std::string ocioICSDef;
                 std::string ocioICS;
                 std::string ocioDef;
@@ -1895,8 +1742,8 @@ namespace tl
                     //           << std::endl
                     //           << "num_constants="
                     //           << res->num_constants << std::endl;
-
-                    for (int i = 0; i < res->num_descriptors; i++)
+                    int i = 0;
+                    for (i = 0; i < res->num_descriptors; i++)
                     {
                         const pl_shader_desc* sd = &res->descriptors[i];
                         const pl_desc* desc = &sd->desc;
@@ -1954,86 +1801,83 @@ namespace tl
                     }
 
                     s << "//" << std::endl
-                      << "// Variables" << "//" << std::endl
+                      << "// Variables"
+                      << "//" << std::endl
                       << std::endl;
-                    // \@todo: add uniform bindings
-                    // s << "layout(binding = 2) uniform UBO {\n";
-                    for (int i = 0; i < res->num_variables; ++i)
+                    s << "layout(set = 0, binding = " << i + 1 << ", std140) uniform Placebo {\n";
+                    for (i = 0; i < res->num_variables; ++i)
                     {
                         const struct pl_shader_var shader_var = res->variables[i];
                         const struct pl_var var = shader_var.var;
                         std::string glsl_type = pl_var_glsl_type_name(var);
-                        s << "const " << glsl_type << " " << var.name;
-                        if (!shader_var.data)
-                        {
-                            s << ";" << std::endl;
-                        }
-                        else
-                        {
-                            int dim_v = var.dim_v;
-                            int dim_m = var.dim_m;
-                            switch (var.type)
-                            {
-                            case PL_VAR_SINT:
-                            {
-                                int* m = (int*)shader_var.data;
-                                s << " = " << m[0] << ";" << std::endl;
-                                break;
-                            }
-                            case PL_VAR_UINT:
-                            {
-                                unsigned* m = (unsigned*)shader_var.data;
-                                s << " = " << m[0] << ";" << std::endl;
-                                break;
-                            }
-                            case PL_VAR_FLOAT:
-                            {
-                                float* m = (float*)shader_var.data;
-                                if (dim_m > 1 && dim_v > 1)
-                                {
-                                    s << " = " << glsl_type << "(";
-                                    for (int c = 0; c < dim_v; ++c)
-                                    {
-                                        for (int r = 0; r < dim_m; ++r)
-                                        {
-                                            int index = c * dim_m + r;
-                                            s << m[index];
+                        s << "const " << glsl_type << " " << var.name << ";" << std::endl;
+                        // else
+                        // {
+                        //     int dim_v = var.dim_v;
+                        //     int dim_m = var.dim_m;
+                        //     switch (var.type)
+                        //     {
+                        //     case PL_VAR_SINT:
+                        //     {
+                        //         int* m = (int*)shader_var.data;
+                        //         s << " = " << m[0] << ";" << std::endl;
+                        //         break;
+                        //     }
+                        //     case PL_VAR_UINT:
+                        //     {
+                        //         unsigned* m = (unsigned*)shader_var.data;
+                        //         s << " = " << m[0] << ";" << std::endl;
+                        //         break;
+                        //     }
+                        //     case PL_VAR_FLOAT:
+                        //     {
+                        //         float* m = (float*)shader_var.data;
+                        //         if (dim_m > 1 && dim_v > 1)
+                        //         {
+                        //             s << " = " << glsl_type << "(";
+                        //             for (int c = 0; c < dim_v; ++c)
+                        //             {
+                        //                 for (int r = 0; r < dim_m; ++r)
+                        //                 {
+                        //                     int index = c * dim_m + r;
+                        //                     s << m[index];
 
-                                            // Check if it's the last element
-                                            if (!(r == dim_m - 1 && c == dim_v - 1))
-                                            {
-                                                s << ", ";
-                                            }
-                                        }
-                                    }
-                                    s << ");" << std::endl;
-                                }
-                                else if (dim_v > 1)
-                                {
-                                    s << " = " << glsl_type << "(";
-                                    for (int c = 0; c < dim_v; ++c)
-                                    {
-                                        s << m[c];
+                        //                     // Check if it's the last element
+                        //                     if (!(r == dim_m - 1 && c == dim_v - 1))
+                        //                     {
+                        //                         s << ", ";
+                        //                     }
+                        //                 }
+                        //             }
+                        //             s << ");" << std::endl;
+                        //         }
+                        //         else if (dim_v > 1)
+                        //         {
+                        //             s << " = " << glsl_type << "(";
+                        //             for (int c = 0; c < dim_v; ++c)
+                        //             {
+                        //                 s << m[c];
 
-                                        // Check if it's the last element
-                                        if (!(c == dim_v - 1))
-                                        {
-                                            s << ", ";
-                                        }
-                                    }
-                                    s << ");" << std::endl;
-                                }
-                                else
-                                {
-                                    s << " = " << m[0] << ";" << std::endl;
-                                }
-                                break;
-                            }
-                            default:
-                                break;
-                            }
-                        }
+                        //                 // Check if it's the last element
+                        //                 if (!(c == dim_v - 1))
+                        //                 {
+                        //                     s << ", ";
+                        //                 }
+                        //             }
+                        //             s << ");" << std::endl;
+                        //         }
+                        //         else
+                        //         {
+                        //             s << " = " << m[0] << ";" << std::endl;
+                        //         }
+                        //         break;
+                        //     }
+                        //     default:
+                        //         break;
+                        //     }
+                        // }
                     }
+                    s << "} uboPlacebo;\n";
 
                     s << std::endl
                       << "//" << std::endl
@@ -2096,46 +1940,51 @@ namespace tl
                     vlk::Shader::create(ctx, vertexSource(), source, "display");
                 p.shaders["display"]->createUniform(
                     "transform.mvp", p.transform, vlk::kShaderVertex);
-                p.shaders["display"]->bind(p.frameIndex);
-                size_t texturesOffset = 1;
+                p.shaders["display"]->addFBO("textureSampler");
+                timeline::DisplayOptions display;
+                p.shaders["display"]->createUniform("uboLevels", display.levels);
+                p.shaders["display"]->createUniform("uboEXRDisplay", display.exrDisplay);
+                p.shaders["display"]->createUniform("uboNormalize", display.normalize);
+                p.shaders["display"]->createUniform("uboColor", display.color);
+                struct UBO
+                {
+                    int   channels = 0;
+                    int   mirrorX = false;
+                    int   mirrorY = false;
+                    float softClip = 0.F;
+                    int   videoLevels = 0;
+                    bool  invalidValues = false;
+                };
+                UBO ubo;
+                p.shaders["display"]->createUniform("ubo", ubo);
 #if defined(TLRENDER_OCIO)
                 if (p.ocioData)
                 {
-                    for (size_t i = 0; i < p.ocioData->textures.size(); ++i)
+                    for (const auto& texture : p.ocioData->textures)
                     {
-                        p.shaders["display"]->setUniform(
-                            p.ocioData->textures[i].samplerName,
-                            static_cast<int>(texturesOffset + i));
+                        p.shaders["display"]->addTexture(texture->getName());
                     }
-                    texturesOffset += p.ocioData->textures.size();
                 }
                 if (p.lutData)
                 {
-                    for (size_t i = 0; i < p.lutData->textures.size(); ++i)
+                    for (const auto& texture : p.lutData->textures)
                     {
-                        p.shaders["display"]->setUniform(
-                            p.lutData->textures[i].samplerName,
-                            static_cast<int>(texturesOffset + i));
+                        p.shaders["display"]->addTexture(texture->getName());
                     }
-                    texturesOffset += p.lutData->textures.size();
                 }
 #endif // TLRENDER_OCIO
 #if defined(TLRENDER_LIBPLACEBO)
                 if (p.placeboData)
                 {
-                    for (size_t i = 0; i < p.placeboData->textures.size(); ++i)
+                    for (const auto& texture : p.placeboData->textures)
                     {
-                        p.shaders["display"]->setUniform(
-                            p.placeboData->textures[i].samplerName,
-                            static_cast<int>(texturesOffset + i));
+                        p.shaders["display"]->addTexture(texture->getName());
                     }
-                    texturesOffset += p.placeboData->textures.size();
                 }
 #endif
                 p.shaders["display"]->createDescriptorSets();
+                //p.shaders["display"]->debug();
             }
-            p.shaders["display"]->setUniform(
-                "transform.mvp", p.transform, vlk::kShaderVertex);
         }
     } // namespace timeline_vlk
 } // namespace tl

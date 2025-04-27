@@ -323,11 +323,10 @@ namespace tl
                 copyTextures(image, textures);
                 p.textureCache->add(image, textures, image->getDataByteCount());
             }
-            // setActiveTextures(info, textures);
 
             p.shaders["image"]->bind(p.frameIndex);
             
-            struct Fragment
+            struct UBO
             {
                 image::Color4f color;
                 int pixelType;
@@ -337,9 +336,9 @@ namespace tl
                 int mirrorX;
                 int mirrorY;
             };
-            Fragment frag;
-            frag.color = color;
-            frag.pixelType = static_cast<int>(info.pixelType);
+            UBO ubo;
+            ubo.color = color;
+            ubo.pixelType = static_cast<int>(info.pixelType);
             image::VideoLevels videoLevels = info.videoLevels;
             switch (imageOptions.videoLevels)
             {
@@ -352,12 +351,12 @@ namespace tl
             default:
                 break;
             }
-            frag.videoLevels = static_cast<int>(videoLevels);
-            frag.yuvCoefficients = image::getYUVCoefficients(info.yuvCoefficients);
-            frag.imageChannels = image::getChannelCount(info.pixelType);
-            frag.mirrorX = info.layout.mirror.x;
-            frag.mirrorY = info.layout.mirror.y;
-            p.shaders["image"]->setUniform("frag", frag);
+            ubo.videoLevels = static_cast<int>(videoLevels);
+            ubo.yuvCoefficients = image::getYUVCoefficients(info.yuvCoefficients);
+            ubo.imageChannels = image::getChannelCount(info.pixelType);
+            ubo.mirrorX = info.layout.mirror.x;
+            ubo.mirrorY = info.layout.mirror.y;
+            p.shaders["image"]->setUniform("ubo", ubo);
             
             switch (info.pixelType)
             {
@@ -424,22 +423,10 @@ namespace tl
 
 
             //
-            // Create pipeline ( \@todo: change p.fbo for p.buffer[] )
+            // Create pipeline
             //
-            _createPipeline(p.fbo, "image", "image", "image");
-
-            // VkViewport viewport = {};
-            // viewport.width = static_cast<float>(p.renderSize.w);
-            // viewport.height = static_cast<float>(p.renderSize.h);
-            // viewport.minDepth = 0.0f;
-            // viewport.maxDepth = 1.0f;
-            // vkCmdSetViewport(p.cmd, 0, 1, &viewport);
-
-            // VkRect2D scissor = {};
-            // scissor.extent = p.fbo->getExtent();
-            
-            // vkCmdSetScissor(p.cmd, 0, 1, &scissor);
-    
+            _createPipeline(p.buffers["video"], "image", "image", "image");
+            _bindDescriptorSets("image", "image");
 
             if (p.vaos["image"])
             {
@@ -449,6 +436,15 @@ namespace tl
             }
         }
 
+
+        void Render::_bindDescriptorSets(const std::string& pipelineName,
+                                         const std::string& shaderName)
+        {
+            TLRENDER_P();
+            vkCmdBindDescriptorSets(p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                    p.pipelineLayouts[pipelineName], 0, 1,
+                                    &p.shaders[shaderName]->getDescriptorSet(), 0, nullptr);
+        }
 
         void Render::_createMesh(const std::string& meshName,
                                  const geom::TriangleMesh2& mesh)
@@ -490,7 +486,7 @@ namespace tl
             TLRENDER_P();
             
             VkDevice device = ctx.device;
-
+            
             auto shader = p.shaders[shaderName];
             
             if (!p.pipelineLayouts[pipelineName])
@@ -502,7 +498,8 @@ namespace tl
                 pPipelineLayoutCreateInfo.pSetLayouts = &shader->getDescriptorSetLayout();
                 
                 VkPipelineLayout pipelineLayout;
-                VkResult result = vkCreatePipelineLayout(device, &pPipelineLayoutCreateInfo,
+                VkResult result = vkCreatePipelineLayout(device,
+                                                         &pPipelineLayoutCreateInfo,
                                                          NULL,
                                                          &pipelineLayout);
                 VK_CHECK(result);
@@ -617,7 +614,7 @@ namespace tl
                 pipeline.pViewportState = &vp;
                 pipeline.pDepthStencilState = &ds;
                 pipeline.pStages = shaderStages;
-                pipeline.renderPass = p.fbo->getRenderPass(); // Use FBO's render pass
+                pipeline.renderPass = fbo->getRenderPass(); // Use FBO's render pass
                 pipeline.pDynamicState = &dynamicState;
 
                 // Create a temporary pipeline cache
@@ -639,15 +636,10 @@ namespace tl
                 p.pipelines[pipelineName] = graphicsPipeline;
             }
             
-            
-            p.fbo->setupViewportAndScissor(p.cmd);
-            
             vkCmdBindPipeline(p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
                               p.pipelines[pipelineName]);
-            
-            vkCmdBindDescriptorSets(p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
-                                    p.pipelineLayouts[pipelineName], 0, 1,
-                                    &shader->getDescriptorSet(), 0, nullptr);
+
+            fbo->setupViewportAndScissor(p.cmd);
         }
 
     } // namespace timeline_vlk

@@ -127,6 +127,16 @@ namespace tl
             VkViewport getViewport() const;
             VkRect2D getScissor() const;
 
+            //! Create render pass.
+            void createRenderPass(VkAttachmentLoadOp colorLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR,
+                                  VkAttachmentStoreOp colorStoreOp = VK_ATTACHMENT_STORE_OP_STORE,
+                                  VkAttachmentLoadOp depthLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR,
+                                  VkAttachmentStoreOp depthStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE);
+            
+            //! Command buffer to start/end a render pass.
+            void beginRenderPass(VkCommandBuffer cmd, VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE);
+            void endRenderPass(VkCommandBuffer cmd);
+            
             //! Offscreen image transitions.
             void transitionToShaderRead(VkCommandBuffer cmd);
             void transitionToColorAttachment(VkCommandBuffer cmd);
@@ -146,7 +156,6 @@ namespace tl
             void createImageView();
             void createDepthImage();
             void createDepthImageView();
-            void createRenderPass();
             void createFramebuffer();
             void createSampler();
 

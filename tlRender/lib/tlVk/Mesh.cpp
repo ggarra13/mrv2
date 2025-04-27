@@ -15,8 +15,6 @@
 #include <array>
 #include <stdexcept>
 
-#define MAX_FRAMES_IN_FLIGHT 5
-
 namespace tl
 {
     namespace vlk
@@ -709,10 +707,19 @@ namespace tl
             VkBuffer& buffer = p.buffers[p.frameIndex];
             VkDeviceMemory& memory = p.memories[p.frameIndex];
 
+            if (buffer != VK_NULL_HANDLE)
+            {
+                vkDestroyBuffer(device, buffer, nullptr);
+            }
+            if (memory != VK_NULL_HANDLE)
+            {
+                vkFreeMemory(device, memory, nullptr);
+            }
+            
             if (vkCreateBuffer(device, &bufferInfo, nullptr, &buffer) !=
                 VK_SUCCESS)
             {
-                throw std::runtime_error("failed to create vertex buffer!");
+                throw std::runtime_error("Failed to create vertex buffer!");
             }
 
             // 2. Allocate memory

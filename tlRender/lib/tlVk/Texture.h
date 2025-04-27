@@ -43,6 +43,7 @@ namespace tl
             void _init(
                 const uint32_t width, const uint32_t height,
                 const uint32_t depth, const VkFormat format,
+                const std::string& name,
                 const TextureOptions& = TextureOptions());
 
             Texture(Fl_Vk_Context& ctx);
@@ -59,6 +60,7 @@ namespace tl
                 Fl_Vk_Context& ctx, const VkImageType type,
                 const uint32_t width, const uint32_t height,
                 const uint32_t depth, const VkFormat format,
+                const std::string& name = "sampler1",
                 const TextureOptions& = TextureOptions());
 
             //! Get the Vulkan texture ID.
@@ -81,6 +83,9 @@ namespace tl
 
             //! Get the pixel type.
             image::PixelType getPixelType() const;
+
+            //! Get the name.
+            const std::string& getName() const;
 
             //! \name Copy
             //! Copy image data to the texture.

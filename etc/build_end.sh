@@ -39,15 +39,25 @@ if [[ $KERNEL != *Msys* ]]; then
     fi
     if [ -d ~/bin ] && [ -w ~/bin ]; then
 	if [[ $CMAKE_BUILD_TYPE == Debug ]]; then
-	    run_cmd rm -f ~/bin/mrv2-dbg
-	    run_cmd ln -s $PWD/$BUILD_DIR/install/bin/mrv2.sh ~/bin/mrv2-dbg
+	    if [ $MRV2_BACKEND == "VK" ]; then
+		run_cmd rm -f ~/bin/vmrv2-dbg
+		run_cmd ln -s $PWD/$BUILD_DIR/install/bin/mrv2.sh ~/bin/vmrv2-dbg
+	    else
+		run_cmd rm -f ~/bin/mrv2-dbg
+		run_cmd ln -s $PWD/$BUILD_DIR/install/bin/mrv2.sh ~/bin/mrv2-dbg
+	    fi
 	    if [ $has_hdr == 1 ]; then
 		run_cmd rm -f ~/bin/hdr-dbg
 		run_cmd ln -s $PWD/$BUILD_DIR/install/bin/hdr.sh ~/bin/hdr-dbg
 	    fi
 	else
-	    run_cmd rm -f ~/bin/mrv2
-	    run_cmd ln -s $PWD/$BUILD_DIR/install/bin/mrv2.sh ~/bin/mrv2
+	    if [ $MRV2_BACKEND == "VK" ]; then
+		run_cmd rm -f ~/bin/vmrv2
+		run_cmd ln -s $PWD/$BUILD_DIR/install/bin/mrv2.sh ~/bin/vmrv2
+	    else
+		run_cmd rm -f ~/bin/mrv2
+		run_cmd ln -s $PWD/$BUILD_DIR/install/bin/mrv2.sh ~/bin/mrv2
+	    fi
 	    if [ $has_hdr == 1 ]; then
 		run_cmd rm -f ~/bin/hdr
 		run_cmd ln -s $PWD/$BUILD_DIR/install/bin/hdr.sh ~/bin/hdr

@@ -14,8 +14,7 @@ namespace tl
             auto it = ubos.find(name);
             if (it != ubos.end())
             {
-                std::cerr << name << " for shader " << shaderName << " already created." << std::endl;
-                abort();
+                throw std::runtime_error(name + " for shader " + shaderName + " already created.");
             }
             
             UBO ubo;
@@ -39,6 +38,7 @@ namespace tl
 
                 VkMemoryRequirements mem_reqs;
                 vkCreateBuffer(device, &ubo_buf_info, nullptr, &ubo.buffers[i]);
+            
                 vkGetBufferMemoryRequirements(device, ubo.buffers[i], &mem_reqs);
 
                 VkMemoryAllocateInfo ubo_alloc_info = {};
@@ -76,31 +76,33 @@ namespace tl
             auto it = ubos.find(name);
             if (it == ubos.end())
             {
-                createUniform<T>(name, value, stageFlags);
-                it = ubos.find(name); // Find again after adding
-                if (it == ubos.end()) return; // Should not happen
+                throw std::runtime_error(shaderName + ": parameter '"+ name + "' was not created");
             }
             
             VkDevice device = ctx.device;
 
+            const UBO& ubo = it->second;
+            if (ubo.size != sizeof(value))
+            {
+                throw std::runtime_error(shaderName + ": parameter '"+ name + "' passed is different size than created ");
+            }
+            
             void* data;
-            vkMapMemory(device, it->second.memories[frameIndex], 0, sizeof(T), 0, &data);
+            vkMapMemory(device, ubo.memories[frameIndex], 0, sizeof(T), 0, &data);
             memcpy(data, &value, sizeof(T));
-            vkUnmapMemory(device, it->second.memories[frameIndex]);
+            vkUnmapMemory(device, ubo.memories[frameIndex]);
 
             
-            // The descriptor set was already updated in createDescriptorSets,
-            // but we need to update the bufferInfo in the descriptor set for the current frame
-            // This might require re-writing the descriptor set.
+            // We need to update the bufferInfo in the descriptor set for the current frame
             // Alternatively, you could use dynamic uniform buffers.
 
             // For this approach, we re-write the descriptor set for this binding and frame
-            VkDescriptorBufferInfo bufferInfo = it->second.bufferInfos[frameIndex]; // Use the buffer info for this frame
+            VkDescriptorBufferInfo bufferInfo = ubo.bufferInfos[frameIndex]; // Use the buffer info for this frame
 
             VkWriteDescriptorSet write{};
             write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
             write.dstSet = descriptorSets[frameIndex]; // Update the set for this frame
-            write.dstBinding = it->second.layoutBinding.binding;
+            write.dstBinding = ubo.layoutBinding.binding;
             write.dstArrayElement = 0;
             write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
             write.descriptorCount = 1;

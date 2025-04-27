@@ -171,16 +171,18 @@ namespace tl
                 const std::string& pipelineName,
                 const std::string& shaderName,
                 const std::string& meshName);
+            void _bindDescriptorSets(const std::string& pipelineName,
+                                     const std::string& shaderName);
             
 #if defined(TLRENDER_LIBPLACEBO)
             void _addTextures(
-                std::vector<Fl_Vk_Texture>& textures,
+                std::vector<std::shared_ptr<vlk::Texture> >& textures,
                 const pl_shader_res* res);
 #endif
                 
 #if defined(TLRENDER_OCIO)
             void _addTextures(
-                std::vector<Fl_Vk_Texture>& textures,
+                std::vector<std::shared_ptr<vlk::Texture >>& textures,
                 const OCIO::GpuShaderDescRcPtr& shaderDesc);
 #endif
             Fl_Vk_Context& ctx;

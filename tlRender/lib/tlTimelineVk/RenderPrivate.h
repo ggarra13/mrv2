@@ -16,6 +16,7 @@ extern "C"
 #include <tlVk/Mesh.h>
 #include <tlVk/OffscreenBuffer.h>
 #include <tlVk/Shader.h>
+#include <tlVk/Texture.h>
 #include <tlVk/TextureAtlas.h>
 
 #if defined(TLRENDER_OCIO)
@@ -74,7 +75,7 @@ namespace tl
             OCIO::ConstGPUProcessorRcPtr gpuProcessor;
             OCIO::GpuShaderDescRcPtr icsDesc;
             OCIO::GpuShaderDescRcPtr shaderDesc;
-            std::vector<Fl_Vk_Texture> textures;
+            std::vector<std::shared_ptr<vlk::Texture> > textures;
         };
 
         struct OCIOLUTData
@@ -86,7 +87,7 @@ namespace tl
             OCIO::ConstProcessorRcPtr processor;
             OCIO::ConstGPUProcessorRcPtr gpuProcessor;
             OCIO::GpuShaderDescRcPtr shaderDesc;
-            std::vector<Fl_Vk_Texture> textures;
+            std::vector<std::shared_ptr<vlk::Texture> > textures;
         };
 
 #endif // TLRENDER_OCIO
@@ -99,7 +100,7 @@ namespace tl
 
             pl_log log;
             pl_gpu gpu;
-            std::vector<Fl_Vk_Texture> textures;
+            std::vector<std::shared_ptr<vlk::Texture> > textures;
         };
 #endif
 
