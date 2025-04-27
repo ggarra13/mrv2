@@ -48,7 +48,7 @@ namespace mrv
 
         void Lines::drawLines(
             Fl_Vk_Context& ctx,
-            const std::shared_ptr<timeline::IRender>& render,
+            const std::shared_ptr<timeline_vlk::Render>& render,
             const draw::PointList& pts, const image::Color4f& color,
             const float width, const bool soft,
             const draw::Polyline2D::JointStyle jointStyle,
@@ -139,19 +139,21 @@ namespace mrv
 
             const math::Matrix4x4f& mvp = render->getTransform();
 
+            VkCommandBuffer cmd = render->getCommandBuffer();
+            const uint32_t frameIndex = render->getFrameIndex();
             if (soft)
             {
-                p.softShader->bind();
+                p.softShader->bind(frameIndex);
 
-                p.softShader->setUniform("transform.mvp", mvp);
+                p.softShader->setUniform("transform.mvp", mvp, vlk::kShaderVertex);
 
                 p.softShader->setUniform("color", color);
             }
             else
             {
-                p.hardShader->bind();
+                p.hardShader->bind(frameIndex);
 
-                p.hardShader->setUniform("transform.mvp", mvp);
+                p.hardShader->setUniform("transform.mvp", mvp, vlk::kShaderVertex);
 
                 p.hardShader->setUniform("color", color);
             }
@@ -172,14 +174,14 @@ namespace mrv
             if (!p.vao && p.vbo)
             {
                 p.vao = vlk::VAO::create(ctx);
+                p.vao->bind(frameIndex);
                 p.vao->upload(p.vbo->getData());
             }
 
             if (p.vao && p.vbo)
             {
-                // p.vao->bind();
-
-                // p.vao->draw(GL_TRIANGLES, 0, p.vbo->getSize());
+                p.vao->draw(cmd, p.vbo);
+                
 
                 // #ifndef NDEBUG
                 //             if (!soft)
@@ -205,7 +207,7 @@ namespace mrv
 
         void Lines::drawLine(
             Fl_Vk_Context& ctx,
-            const std::shared_ptr<timeline::IRender>& render,
+            const std::shared_ptr<timeline_vlk::Render>& render,
             const math::Vector2i& start, const math::Vector2i& end,
             const image::Color4f& color, const float width)
         {
@@ -221,7 +223,7 @@ namespace mrv
                 false);
         }
 
-        void Lines::drawPoints(
+        void Lines::drawPoints(VkCommandBuffer& cmd, uint32_t frameIndex,
             Fl_Vk_Context& ctx, const std::vector<math::Vector2f>& pnts,
             const image::Color4f& color, const int size)
         {
@@ -251,7 +253,7 @@ namespace mrv
 
             if (p.vao && p.vbo)
             {
-                p.vao->bind();
+                p.vao->bind(frameIndex);
                 // glPointSize(size);
                 // p.vao->draw(GL_POINTS, 0, p.vbo->getSize());
             }
@@ -259,7 +261,7 @@ namespace mrv
 
         void Lines::drawCircle(
             Fl_Vk_Context& ctx,
-            const std::shared_ptr<timeline::IRender>& render,
+            const std::shared_ptr<timeline_vlk::Render>& render,
             const math::Vector2f& center, const float radius, const float width,
             const image::Color4f& color, const bool soft)
         {
@@ -284,7 +286,7 @@ namespace mrv
 
         void Lines::drawCursor(
             Fl_Vk_Context& ctx,
-            const std::shared_ptr<timeline::IRender>& render,
+            const std::shared_ptr<timeline_vlk::Render>& render,
             const math::Vector2f& center, const float radius,
             const image::Color4f& color)
         {
@@ -294,8 +296,7 @@ namespace mrv
             drawCircle(ctx, render, center, radius, lineWidth, color, false);
             image::Color4f black(0.F, 0.F, 0.F, 1.F);
             if (radius > 2.0F)
-                drawCircle(
-                    ctx, render, center, radius - 2.0F, 2.0, black, false);
+                drawCircle(ctx, render, center, radius - 2.0F, 2.0, black, false);
         }
 
     } // namespace vulkan

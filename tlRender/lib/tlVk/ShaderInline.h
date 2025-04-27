@@ -13,7 +13,10 @@ namespace tl
         {
             auto it = ubos.find(name);
             if (it != ubos.end())
-                return;
+            {
+                std::cerr << name << " for shader " << shaderName << " already created." << std::endl;
+                abort();
+            }
             
             UBO ubo;
             ubo.size = sizeof(value);

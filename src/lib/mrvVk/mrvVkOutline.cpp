@@ -41,6 +41,8 @@ namespace mrv
         Outline::~Outline() {}
 
         void Outline::drawRect(
+            VkCommandBuffer& cmd,
+            const uint32_t frameIndex,
             Fl_Vk_Context& ctx, const math::Box2i& bbox,
             const image::Color4f& color, const math::Matrix4x4f& mvp)
         {
@@ -64,7 +66,7 @@ namespace mrv
                 p.vao = VAO::create(ctx);
             }
 
-            p.shader->bind();
+            p.shader->bind(frameIndex);
             p.shader->setUniform("color", color);
             p.shader->setUniform("transform.mvp", mvp);
 
@@ -98,9 +100,9 @@ namespace mrv
             }
             if (p.vao && p.vbo)
             {
+                p.vao->bind(frameIndex);
                 p.vao->upload(p.vbo->getData());
-                p.vao->bind();
-                // p.vao->draw(GL_LINES, 0, p.vbo->getSize());
+                p.vao->draw(cmd, p.vbo);
             }
         }
 

@@ -156,7 +156,7 @@ namespace mrv
                 }
             }
 
-            vk.lines->drawPoints(ctx, pnts, color, 5);
+            vk.lines->drawPoints(vk.cmd, m_currentFrameIndex, ctx, pnts, color, 5);
 
             if (p.stereo3DOptions.eyeSeparation != 0.F)
             {
@@ -377,7 +377,7 @@ namespace mrv
         {
             MRV2_VK();
 #ifdef USE_ONE_PIXEL_LINES
-            vk.outline->drawRect(ctx, box, color, mvp);
+            vk.outline->drawRect(vk.cmd, m_currentFrameIndex, ctx, box, color, mvp);
             
 #else
             int width = 2 / _p->viewZoom; //* renderSize.w / viewportSize.w;
@@ -500,7 +500,7 @@ namespace mrv
             // glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
             
 
-            vk.annotationShader->bind();
+            vk.annotationShader->bind(m_currentFrameIndex);
             vk.annotationShader->setUniform("transform.mvp", mvp);
             timeline::Channels channels = timeline::Channels::Color;
             if (!p.displayOptions.empty())
@@ -572,8 +572,8 @@ namespace mrv
 
             if (vk.vao && vk.vbo)
             {
-                vk.vao->bind();
-                // vk.vao->draw(ctx, GL_TRIANGLES, 0, vk.vbo->getSize());
+                vk.vao->bind(m_currentFrameIndex);
+                vk.vao->draw(vk.cmd, vk.vbo);
             }
         }
 
@@ -674,7 +674,7 @@ namespace mrv
             int width = 2 / _p->viewZoom; //* renderSize.w / viewportSize.w;
 
 #ifdef USE_ONE_PIXEL_LINES
-            vk.outline->drawRect(ctx, box, color, mvp);
+            vk.outline->drawRect(vk.cmd, m_currentFrameIndex, ctx, box, color, mvp);
 #else
             if (width < 2)
                 width = 2;

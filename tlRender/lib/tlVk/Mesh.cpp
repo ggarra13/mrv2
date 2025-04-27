@@ -13,6 +13,9 @@
 #include <tlCore/String.h>
 
 #include <array>
+#include <stdexcept>
+
+#define MAX_FRAMES_IN_FLIGHT 5
 
 namespace tl
 {
@@ -429,8 +432,9 @@ namespace tl
         {
             std::size_t size = 0;
             VBOType type = VBOType::First;
-            std::vector<uint8_t>
-                data; // Actual converted vertex data in Vulkan layout
+
+            // Actual converted vertex data in Vulkan layout
+            std::vector<uint8_t> data; 
             VkVertexInputBindingDescription bindingDesc;
             std::vector<VkVertexInputAttributeDescription> attributes;
         };
@@ -438,6 +442,7 @@ namespace tl
         void VBO::_init(std::size_t size, VBOType type)
         {
             TLRENDER_P();
+            
             p.size = size;
             p.type = type;
 
@@ -636,15 +641,18 @@ namespace tl
 
         struct VAO::Private
         {
-            VkBuffer buffer = VK_NULL_HANDLE;
-            VkDeviceMemory memory = VK_NULL_HANDLE;
-
-            uint32_t vao = 0; // unused in Vulkan
+            uint32_t frameIndex = 0;
+            
+            std::vector<VkBuffer> buffers;
+            std::vector<VkDeviceMemory> memories;
         };
 
         void VAO::_init()
         {
             TLRENDER_P();
+
+            p.buffers.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
+            p.memories.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
         }
 
         VAO::VAO(Fl_Vk_Context& context) :
@@ -659,11 +667,23 @@ namespace tl
 
             VkDevice device = ctx.device;
 
-            if (p.buffer != VK_NULL_HANDLE)
-                vkDestroyBuffer(device, p.buffer, nullptr);
+            for (auto& buffer : p.buffers)
+            {
+                if (buffer != VK_NULL_HANDLE)
+                {
+                    vkDestroyBuffer(device, buffer, nullptr);
+                    buffer = VK_NULL_HANDLE;
+                }
+            }
 
-            if (p.memory != VK_NULL_HANDLE)
-                vkFreeMemory(device, p.memory, nullptr);
+            for (auto& memory : p.memories)
+            {
+                if (memory != VK_NULL_HANDLE)
+                {
+                    vkFreeMemory(device, memory, nullptr);
+                    memory = VK_NULL_HANDLE;
+                }
+            }
         }
 
         std::shared_ptr<VAO> VAO::create(Fl_Vk_Context& context)
@@ -671,11 +691,6 @@ namespace tl
             auto out = std::shared_ptr<VAO>(new VAO(context));
             out->_init();
             return out;
-        }
-
-        unsigned int VAO::getID() const
-        {
-            return _p->vao;
         }
 
         void VAO::upload(const std::vector<uint8_t>& vertexData)
@@ -691,8 +706,10 @@ namespace tl
 
             VkDevice device = ctx.device;
             VkPhysicalDevice gpu = ctx.gpu;
+            VkBuffer& buffer = p.buffers[p.frameIndex];
+            VkDeviceMemory& memory = p.memories[p.frameIndex];
 
-            if (vkCreateBuffer(device, &bufferInfo, nullptr, &p.buffer) !=
+            if (vkCreateBuffer(device, &bufferInfo, nullptr, &buffer) !=
                 VK_SUCCESS)
             {
                 throw std::runtime_error("failed to create vertex buffer!");
@@ -700,7 +717,7 @@ namespace tl
 
             // 2. Allocate memory
             VkMemoryRequirements memRequirements;
-            vkGetBufferMemoryRequirements(device, p.buffer, &memRequirements);
+            vkGetBufferMemoryRequirements(device, buffer, &memRequirements);
 
             VkMemoryAllocateInfo allocInfo = {};
             allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
@@ -710,28 +727,30 @@ namespace tl
                 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
                     VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
-            if (vkAllocateMemory(device, &allocInfo, nullptr, &p.memory) !=
+            if (vkAllocateMemory(device, &allocInfo, nullptr, &memory) !=
                 VK_SUCCESS)
             {
                 throw std::runtime_error(
-                    "failed to allocate vertex buffer memory!");
+                    "Failed to allocate vertex buffer memory!");
             }
 
             // 3. Bind buffer + memory
-            vkBindBufferMemory(device, p.buffer, p.memory, 0);
+            vkBindBufferMemory(device, buffer, memory, 0);
 
             // 4. Copy data to memory
             void* mappedData;
-            vkMapMemory(device, p.memory, 0, vertexData.size(), 0, &mappedData);
+            vkMapMemory(device, memory, 0, vertexData.size(), 0, &mappedData);
             memcpy(mappedData, vertexData.data(), vertexData.size());
-            vkUnmapMemory(device, p.memory);
+            vkUnmapMemory(device, memory);
         }
 
-        void VAO::bind() {}
-
-        void VAO::draw(unsigned int mode, std::size_t offset, std::size_t size)
+        void VAO::bind(uint32_t value)
         {
-            // old opengl function
+            TLRENDER_P();
+            if (value >= MAX_FRAMES_IN_FLIGHT)
+                throw std::runtime_error("VAO::bind value bigger than MAX_FRAMES_IN_FLIGHT");
+
+            p.frameIndex = value;
         }
 
         void VAO::draw(VkCommandBuffer& cmd, std::size_t size)
@@ -739,7 +758,7 @@ namespace tl
             TLRENDER_P();
 
             VkDeviceSize offsets[1] = {0};
-            vkCmdBindVertexBuffers(cmd, 0, 1, &p.buffer, offsets);
+            vkCmdBindVertexBuffers(cmd, 0, 1, &p.buffers[p.frameIndex], offsets);
             vkCmdDraw(cmd, size, 1, 0, 0);
         }
 

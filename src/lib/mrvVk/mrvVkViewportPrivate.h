@@ -26,12 +26,9 @@ namespace mrv
         {
             std::weak_ptr<system::Context> context;
 
-            //! Vulkan variables
-            VkPipelineLayout fbo_pipeline_layout = VK_NULL_HANDLE;
-            VkPipeline       fbo_pipeline  = VK_NULL_HANDLE;
-
             //! This is for swapchain pipeline
             VkPipelineLayout pipeline_layout = VK_NULL_HANDLE;
+            VkCommandBuffer  cmd = VK_NULL_HANDLE;
             
             // tlRender variables
             //! Vulkan Offscreen buffers

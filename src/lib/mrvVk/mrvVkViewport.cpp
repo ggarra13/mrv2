@@ -366,6 +366,7 @@ namespace mrv
 
             VkCommandBuffer cmd = getCurrentCommandBuffer(); // Get the command buffer started by vk_draw_begin()
             vkCmdEndRenderPass(cmd);  // end the clear screen command pass.
+            vk.cmd = cmd;
             
             const auto& viewportSize = getViewportSize();
             const auto& renderSize = getRenderSize();
@@ -445,7 +446,6 @@ namespace mrv
                 p.imageOptions, p.displayOptions,
                 p.compareOptions, getBackgroundOptions());
             vk.render->end();
-
             
             vk.buffer->transitionToShaderRead(cmd);
             

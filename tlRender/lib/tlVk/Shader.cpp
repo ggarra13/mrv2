@@ -19,12 +19,10 @@ namespace tl
     {
         struct Shader::Private
         {
-            std::string name;
             std::string vertexSource;
             std::string fragmentSource;
             VkShaderModule vertex = VK_NULL_HANDLE;
             VkShaderModule fragment = VK_NULL_HANDLE;
-            uint32_t frame = 0;
         };
 
         void Shader::_init()
@@ -43,7 +41,7 @@ namespace tl
             }
             catch (const std::exception& e)
             {
-                std::cerr << p.name << " failed compilation " << std::endl
+                std::cerr << shaderName << " failed compilation " << std::endl
                           << e.what() << " for " << std::endl;
                 const auto& lines = tl::string::split(p.vertexSource, '\n',
                                                       string::SplitOptions::KeepEmpty);
@@ -68,7 +66,7 @@ namespace tl
             }
             catch (const std::exception& e)
             {
-                std::cerr << p.name << " failed compilation " << std::endl
+                std::cerr << shaderName << " failed compilation " << std::endl
                           << e.what() << " for " << std::endl;
                 auto lines = tl::string::split(p.fragmentSource, '\n',
                                                string::SplitOptions::KeepEmpty);
@@ -85,6 +83,8 @@ namespace tl
             _p(new Private),
             ctx(context)
         {
+            descriptorPools.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
+            descriptorSets.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
         }
 
         Shader::~Shader()
@@ -92,29 +92,13 @@ namespace tl
             TLRENDER_P();
             
             VkDevice device = ctx.device;
-
+            
             if (p.fragment != VK_NULL_HANDLE)
                 vkDestroyShaderModule(device, p.fragment, nullptr);
 
             if (p.vertex != VK_NULL_HANDLE)
                 vkDestroyShaderModule(device, p.vertex, nullptr);
-
-            if (descriptorSetLayout != VK_NULL_HANDLE)
-            {
-                vkDestroyDescriptorSetLayout(
-                    device, descriptorSetLayout, nullptr);
-                descriptorSetLayout = VK_NULL_HANDLE;
-            }
             
-            for (auto& pool : descriptorPools) // Destroy all pools
-            {
-                 if (pool != VK_NULL_HANDLE)
-                 {
-                    vkResetDescriptorPool(device, pool, 0);
-                    vkDestroyDescriptorPool(device, pool, nullptr);
-                    pool = VK_NULL_HANDLE;
-                 }
-            }
             
             for (auto& [_, ubo] : ubos)
             {
@@ -132,6 +116,23 @@ namespace tl
                     }
                 }
             }
+
+            for (auto& pool : descriptorPools) // Destroy all pools
+            {
+                 if (pool != VK_NULL_HANDLE)
+                 {
+                    vkResetDescriptorPool(device, pool, 0);
+                    vkDestroyDescriptorPool(device, pool, nullptr);
+                    pool = VK_NULL_HANDLE;
+                 }
+            }
+            
+            if (descriptorSetLayout != VK_NULL_HANDLE)
+            {
+                vkDestroyDescriptorSetLayout(
+                    device, descriptorSetLayout, nullptr);
+                descriptorSetLayout = VK_NULL_HANDLE;
+            }
         }
 
         std::shared_ptr<Shader> Shader::create(
@@ -141,7 +142,7 @@ namespace tl
             auto out = std::shared_ptr<Shader>(new Shader(ctx));
             out->_p->vertexSource = vertexSource;
             out->_p->fragmentSource = fragmentSource;
-            out->_p->name = name;
+            out->shaderName = name;
             out->_init();
             return out;
         }
@@ -183,8 +184,9 @@ namespace tl
 
         void Shader::bind(uint32_t value)
         {
-            if (value > MAX_FRAMES_IN_FLIGHT)
+            if (value >= MAX_FRAMES_IN_FLIGHT)
             {
+                std::cerr << "value (" << value << ") >= " << MAX_FRAMES_IN_FLIGHT << std::endl;
                 throw std::runtime_error("Invalid value for bind.");
             }
             frameIndex = value;
@@ -300,12 +302,15 @@ namespace tl
         void Shader::createDescriptorSets()
         {   
             VkDevice device = ctx.device;
+
+            if (descriptorSetLayout != VK_NULL_HANDLE)
+            {
+                std::cerr << shaderName << ": createDescriptorSets called more than once!" << std::endl;
+                abort();
+            }
             
             std::vector<VkDescriptorSetLayoutBinding> bindings;
             std::vector<VkDescriptorPoolSize> poolSizes;
-
-            descriptorPools.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
-            descriptorSets.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
             
             // UBOs
             for (const auto& [_, ubo] : ubos)
@@ -565,7 +570,9 @@ namespace tl
 
         void Shader::debug()
         {
-            std::cerr << "====================================" << std::endl;
+            TLRENDER_P();
+            
+            std::cerr << shaderName << " ================================" << std::endl;
             std::cerr << getVertexSource() << std::endl;
             debugVertexDescriptorSets();
             std::cerr << "------------------------------------" << std::endl;

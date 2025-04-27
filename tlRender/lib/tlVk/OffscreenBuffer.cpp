@@ -194,7 +194,6 @@ namespace tl
             TLRENDER_P();
 
             VkDevice device = ctx.device;
-            vkQueueWaitIdle(ctx.queue);
             
             if (p.sampler != VK_NULL_HANDLE)
                 vkDestroySampler(device, p.sampler, nullptr);

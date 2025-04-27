@@ -58,7 +58,7 @@ namespace tl
             //! Get the texture cache.
             const std::shared_ptr<TextureCache>& getTextureCache() const;
 
-            //! Useless begin function
+            //! Overriden begin function
             void begin(
                 const math::Size2i&, const timeline::RenderOptions& =
                 timeline::RenderOptions()) override;
@@ -72,6 +72,9 @@ namespace tl
                                          timeline::RenderOptions());
             void end() override;
 
+            VkCommandBuffer getCommandBuffer() const;
+            uint32_t        getFrameIndex() const;
+            
             math::Size2i getRenderSize() const override;
             void setRenderSize(const math::Size2i&) override;
             math::Box2i getViewport() const override;
@@ -161,6 +164,14 @@ namespace tl
                 const std::shared_ptr<timeline::ImageOptions>&,
                 const timeline::DisplayOptions&);
 
+            void _createMesh(const std::string& meshName,
+                             const geom::TriangleMesh2& mesh);
+            void _createPipeline(
+                const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
+                const std::string& pipelineName,
+                const std::string& shaderName,
+                const std::string& meshName);
+            
 #if defined(TLRENDER_LIBPLACEBO)
             void _addTextures(
                 std::vector<Fl_Vk_Texture>& textures,

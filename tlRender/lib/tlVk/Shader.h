@@ -28,8 +28,6 @@ namespace tl
             kShaderFragment = 2,
         };
         
-        const int MAX_FRAMES_IN_FLIGHT = 10;
-        
         inline VkShaderStageFlags getVulkanShaderFlags(ShaderFlags stageFlags)
         {
             VkShaderStageFlags out = 0;
@@ -79,7 +77,7 @@ namespace tl
             const VkDescriptorPool& getDescriptorPool() const;
 
             //! Bind the shader.
-            void bind(uint32_t value = 0);
+            void bind(uint32_t value);
 
             //! \name Uniform
             //! Set uniform values.
@@ -185,6 +183,8 @@ namespace tl
 
             std::map<std::string, FBOBinding> fboBindings;
 
+            std::string shaderName = "Shader";
+            
             TLRENDER_PRIVATE();
         };
     } // namespace vlk

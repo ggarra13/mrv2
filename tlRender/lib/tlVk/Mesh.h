@@ -126,21 +126,17 @@ namespace tl
             //! Create a new object.
             static std::shared_ptr<VAO> create(Fl_Vk_Context& ctx);
 
-            //! Get the OpenGL ID.
-            unsigned int getID() const;
-
             //! Bind the vertex array object.
-            void bind();
+            void bind(uint32_t frameIndex);
 
-            //! Vulkan accessors
+            //! Get Mesh buffer.
             VkBuffer getBuffer() const;
+
+            //! Get device memory.
             VkDeviceMemory getDeviceMemory() const;
 
-            //! Upload data
+            //! Upload mesh data.
             void upload(const std::vector<uint8_t>& data);
-
-            //! Draw the vertex array object.
-            void draw(unsigned int mode, std::size_t offset, std::size_t size);
 
             //! Draw the vertex array object, by uploading the vertex buffer
             //! object.

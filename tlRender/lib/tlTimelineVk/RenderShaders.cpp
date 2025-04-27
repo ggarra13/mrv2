@@ -42,12 +42,12 @@ void main()
          outColor = ubo.color;
 })";
         }
-
+        
         std::string colorMeshVertexSource()
         {
             return R"(#version 450
                  
-layout(location = 0) in vec3 vPos;
+layout(location = 0) in vec2 vPos;
 layout(location = 1) in vec4 vColor;
 layout(location = 0) out vec4 fColor;
 
@@ -57,7 +57,7 @@ layout(set = 0, binding = 0, std140) uniform TransformUBO {
                  
 void main()
 {
-    gl_Position = transform.mvp * vec4(vPos, 1.0);
+    gl_Position = transform.mvp * vec4(vPos, 0.0, 1.0);
     fColor = vColor;
 })";
         }
@@ -67,7 +67,7 @@ void main()
             return R"(#version 450
                  
 layout(location = 0) in vec4 fColor;
-layout(location = 1) out vec4 outColor;
+layout(location = 0) out vec4 outColor;
                  
 layout(set = 0, binding = 1, std140) uniform ColorUBO {
     vec4 color;
@@ -84,7 +84,7 @@ void main()
             return R"(#version 450
                  
 layout(location = 0) in vec2 fTexture;
-layout(location = 1) out vec4 outColor;
+layout(location = 0) out vec4 outColor;
 
 layout(binding = 1) uniform sampler2D textureSampler;
 
@@ -107,7 +107,7 @@ void main()
             return R"(#version 450
                  
 layout(location = 0) in vec2 fTexture;
-layout(location = 1) out vec4 outColor;
+layout(location = 0) out vec4 outColor;
 
 layout(binding = 1) uniform sampler2D textureSampler;
 
@@ -333,7 +333,7 @@ void main()
             return string::Format(R"(#version 450
                      
 layout(location = 0) in vec2 fTexture;
-layout(location = 1) out vec4 outColor;
+layout(location = 0) out vec4 outColor;
 
 // enum tl::timeline::Channels
 const uint Channels_Color = 0;
@@ -631,7 +631,7 @@ void main()
             return R"(#version 450
                  
 layout(location = 0) in vec2 fTexture;
-layout(location = 1) out vec4 outColor;
+layout(location = 0) out vec4 outColor;
                  
 layout(binding = 0) uniform sampler2D textureSampler;
 layout(binding = 1) uniform sampler2D textureSamplerB;

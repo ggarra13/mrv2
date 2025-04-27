@@ -27,6 +27,7 @@ namespace tl
             if (!videoData.empty() && !videoData.front().layers.empty())
             {
                 _drawBackground(boxes, backgroundOptions);
+                return;
             }
             switch (compareOptions.mode)
             {
@@ -80,20 +81,32 @@ namespace tl
             const std::vector<math::Box2i>& boxes,
             const timeline::BackgroundOptions& options)
         {
+            TLRENDER_P();
+            
             for (const auto& box : boxes)
             {
                 switch (options.type)
                 {
                 case timeline::Background::Solid:
+                {
+                    // Working.
+                    const auto& mesh = geom::box(box);
+                    _createMesh("rect", mesh);
+                    _createPipeline(p.fbo, "solid", "rect", "rect");
                     drawRect(box, options.color0);
                     break;
+                }
                 case timeline::Background::Checkers:
-                    drawColorMesh(
-                        geom::checkers(
-                            box, options.color0, options.color1,
-                            options.checkersSize),
+                {
+                    const auto& mesh = geom::checkers(
+                        box, options.color0, options.color1,
+                        options.checkersSize);
+                    _createMesh("colorMesh", mesh);
+                    _createPipeline(p.fbo, "checkers", "colorMeshPos2", "colorMesh");
+                    drawColorMesh(mesh,
                         math::Vector2i(), image::Color4f(1.F, 1.F, 1.F));
                     break;
+                }
                 case timeline::Background::Gradient:
                 {
                     geom::TriangleMesh2 mesh;
@@ -119,6 +132,8 @@ namespace tl
                         geom::Vertex2(4, 0, 2),
                         geom::Vertex2(1, 0, 1),
                     });
+                    _createMesh("colorMesh", mesh);
+                    _createPipeline(p.fbo, "gradient", "colorMeshPos2", "colorMesh");
                     drawColorMesh(
                         mesh, math::Vector2i(), image::Color4f(1.F, 1.F, 1.F));
                     break;
@@ -208,7 +223,7 @@ namespace tl
             // glStencilFunc(GL_ALWAYS, 1, 0xFF);
             // glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
             // glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-            p.shaders["wipe"]->bind();
+            p.shaders["wipe"]->bind(p.frameIndex);
             p.shaders["wipe"]->setUniform(
                 "color", image::Color4f(1.F, 0.F, 0.F));
             {
@@ -228,9 +243,7 @@ namespace tl
                 }
                 if (p.vaos["wipe"])
                 {
-                    p.vaos["wipe"]->bind();
-                    // p.vaos["wipe"]->draw(
-                    //     GL_TRIANGLES, 0, p.vbos["wipe"]->getSize());
+                    p.vaos["wipe"]->bind(p.frameIndex);
                 }
             }
             // glStencilFunc(GL_EQUAL, 1, 0xFF);
@@ -254,7 +267,7 @@ namespace tl
             // glClear(GL_STENCIL_BUFFER_BIT);
             // glStencilFunc(GL_ALWAYS, 1, 0xFF);
             // glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-            p.shaders["wipe"]->bind();
+            p.shaders["wipe"]->bind(p.frameIndex);
             p.shaders["wipe"]->setUniform(
                 "color", image::Color4f(0.F, 1.F, 0.F));
             {
@@ -274,9 +287,9 @@ namespace tl
                 }
                 if (p.vaos["wipe"])
                 {
-                    p.vaos["wipe"]->bind();
-                    // p.vaos["wipe"]->draw(
-                    //     GL_TRIANGLES, 0, p.vbos["wipe"]->getSize());
+                    p.vaos["wipe"]->bind(p.frameIndex);
+                    p.vaos["wipe"]->upload(p.vbos["wipe"]->getData());
+                    p.vaos["wipe"]->draw(p.cmd, p.vbos["wipe"]);
                 }
             }
             // glStencilFunc(GL_EQUAL, 1, 0xFF);
@@ -344,7 +357,7 @@ namespace tl
                     // glClearColor(0.F, 0.F, 0.F, 0.F);
                     // glClear(GL_COLOR_BUFFER_BIT);
 
-                    p.shaders["display"]->bind();
+                    p.shaders["display"]->bind(p.frameIndex);
                     p.shaders["display"]->setUniform(
                         "transform.mvp",
                         math::ortho(
@@ -363,7 +376,7 @@ namespace tl
                         !displayOptions.empty() ? displayOptions[0]
                                                 : timeline::DisplayOptions());
 
-                    p.shaders["display"]->bind();
+                    p.shaders["display"]->bind(p.frameIndex);
                     p.shaders["display"]->setUniform(
                         "transform.mvp", p.transform);
                 }
@@ -379,7 +392,7 @@ namespace tl
                     //     p.renderSize.h - p.viewport.h() - p.viewport.y(),
                     //     p.viewport.w(), p.viewport.h());
 
-                    p.shaders["overlay"]->bind();
+                    p.shaders["overlay"]->bind(p.frameIndex);
                     p.shaders["overlay"]->setUniform(
                         "color",
                         image::Color4f(1.F, 1.F, 1.F, compareOptions.overlay));
@@ -397,9 +410,9 @@ namespace tl
                     }
                     if (p.vaos["video"])
                     {
-                        p.vaos["video"]->bind();
-                        // p.vaos["video"]->draw(
-                        //     GL_TRIANGLES, 0, p.vbos["video"]->getSize());
+                        p.vaos["video"]->bind(p.frameIndex);
+                        p.vaos["video"]->upload(p.vbos["video"]->getData());
+                        p.vaos["video"]->draw(p.cmd, p.vbos["video"]);
                     }
                 }
             }
@@ -444,7 +457,7 @@ namespace tl
                     // glClearColor(0.F, 0.F, 0.F, 0.F);
                     // glClear(GL_COLOR_BUFFER_BIT);
 
-                    p.shaders["display"]->bind();
+                    p.shaders["display"]->bind(p.frameIndex);
                     p.shaders["display"]->setUniform(
                         "transform.mvp",
                         math::ortho(
@@ -463,7 +476,7 @@ namespace tl
                         !displayOptions.empty() ? displayOptions[0]
                                                 : timeline::DisplayOptions());
 
-                    p.shaders["display"]->bind();
+                    p.shaders["display"]->bind(p.frameIndex);
                     p.shaders["display"]->setUniform(
                         "transform.mvp", p.transform);
                 }
@@ -499,7 +512,7 @@ namespace tl
                         // glClearColor(0.F, 0.F, 0.F, 0.F);
                         // glClear(GL_COLOR_BUFFER_BIT);
 
-                        p.shaders["display"]->bind();
+                        p.shaders["display"]->bind(p.frameIndex);
                         p.shaders["display"]->setUniform(
                             "transform.mvp",
                             math::ortho(
@@ -536,16 +549,13 @@ namespace tl
                     //     p.renderSize.h - p.viewport.h() - p.viewport.y(),
                     //     p.viewport.w(), p.viewport.h());
 
-                    p.shaders["difference"]->bind();
-                    p.shaders["difference"]->setUniform("textureSampler", 0);
-                    p.shaders["difference"]->setUniform("textureSamplerB", 1);
+                    p.shaders["difference"]->bind(p.frameIndex);
+                    p.shaders["difference"]->setFBO("textureSampler", p.buffers["difference0"]);
+                    p.shaders["difference"]->setFBO("textureSamplerB", p.buffers["difference1"]);
 
-                    // glActiveTexture(static_cast<GLenum>(GL_TEXTURE0));
                     // glBindTexture(
                     //     GL_TEXTURE_2D,
                     //     p.buffers["difference0"]->getColorID());
-
-                    // glActiveTexture(static_cast<GLenum>(GL_TEXTURE1));
                     // glBindTexture(
                     //     GL_TEXTURE_2D,
                     //     p.buffers["difference1"]->getColorID());
@@ -558,9 +568,9 @@ namespace tl
                     }
                     if (p.vaos["video"])
                     {
-                        p.vaos["video"]->bind();
-                        // p.vaos["video"]->draw(
-                        //     GL_TRIANGLES, 0, p.vbos["video"]->getSize());
+                        p.vaos["video"]->bind(p.frameIndex);
+                        p.vaos["video"]->upload(p.vbos["video"]->getData());
+                        p.vaos["video"]->draw(p.cmd, p.vbos["video"]);
                     }
                 }
             }
@@ -744,8 +754,8 @@ namespace tl
                                     "transform.mvp", transform, vlk::kShaderVertex);
                                 p.shaders["dissolve"]->setUniform(
                                     "color", image::Color4f(1.F, 1.F, 1.F));
-                                p.shaders["dissolve"]->setUniform(
-                                    "textureSampler", 0);
+                                p.shaders["dissolve"]->setFBO(
+                                    "textureSampler", p.buffers["dissolve"]);
 
                                 // glActiveTexture(
                                 //     static_cast<GLenum>(GL_TEXTURE0));
@@ -764,10 +774,9 @@ namespace tl
                                 }
                                 if (p.vaos["video"])
                                 {
-                                    p.vaos["video"]->bind();
-                                    // p.vaos["video"]->draw(
-                                    //     GL_TRIANGLES, 0,
-                                    //     p.vbos["video"]->getSize());
+                                    p.vaos["video"]->bind(p.frameIndex);
+                                    p.vaos["video"]->upload(p.vbos["video"]->getData());
+                                    p.vaos["video"]->draw(p.cmd, p.vbos["video"]);
                                 }
 
                                 // glBindTexture(
@@ -785,10 +794,9 @@ namespace tl
                                 }
                                 if (p.vaos["video"])
                                 {
-                                    p.vaos["video"]->bind();
-                                    // p.vaos["video"]->draw(
-                                    //     GL_TRIANGLES, 0,
-                                    //     p.vbos["video"]->getSize());
+                                    p.vaos["video"]->bind(p.frameIndex);
+                                    p.vaos["video"]->upload(p.vbos["video"]->getData());
+                                    p.vaos["video"]->draw(p.cmd, p.vbos["video"]);
                                 }
                             }
                         }
@@ -982,8 +990,9 @@ namespace tl
                 }
                 if (p.vaos["video"])
                 {
-                    // p.vaos["video"]->draw(
-                    //     GL_TRIANGLES, 0, p.vbos["video"]->getSize());
+                    p.vaos["video"]->bind(p.frameIndex);
+                    p.vaos["video"]->upload(p.vbos["video"]->getData());
+                    p.vaos["video"]->draw(p.cmd, p.vbos["video"]);
                 }
             }
 

@@ -661,13 +661,15 @@ namespace tl
             // glEnable(GL_BLEND);
             // glBlendEquation(GL_FUNC_ADD);
 
-            math::Matrix4x4f transform;
+            const math::Matrix4x4f transform;
+            const image::Color4f color(0.F, 0.F, 0.F, 0.F);
             if (!p.shaders["rect"])
             {
                 p.shaders["rect"] = vlk::Shader::create(
                     ctx, vertexSource(), meshFragmentSource(), "rect");
                 p.shaders["rect"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["rect"]->createUniform("color", color);
                 p.shaders["rect"]->createDescriptorSets();
             }
             if (!p.shaders["mesh"])
@@ -676,6 +678,7 @@ namespace tl
                     ctx, vertexSource(), meshFragmentSource(), "mesh");
                 p.shaders["mesh"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["mesh"]->createUniform("color", color);
                 p.shaders["mesh"]->createDescriptorSets();
             }
             if (!p.shaders["colorMesh"])
@@ -684,14 +687,26 @@ namespace tl
                     ctx, colorMeshVertexSource(), colorMeshFragmentSource(), "colorMesh");
                 p.shaders["colorMesh"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["colorMesh"]->createUniform("color", color);
                 p.shaders["colorMesh"]->createDescriptorSets();
             }
+            // if (!p.shaders["colorMeshPos2"])
+            // {
+            //     p.shaders["colorMeshPos2"] = vlk::Shader::create(
+            //         ctx, colorMeshPos2VertexSource(), colorMeshFragmentSource(), "colorMesh");
+            //     p.shaders["colorMeshPos2"]->createUniform(
+            //         "transform.mvp", transform, vlk::kShaderVertex);
+            //     p.shaders["colorMeshPos2"]->createUniform("color", color);
+            //     p.shaders["colorMeshPos2"]->createDescriptorSets();
+            // }
             if (!p.shaders["text"])
             {
                 p.shaders["text"] = vlk::Shader::create(
                     ctx, vertexSource(), textFragmentSource(), "text");
                 p.shaders["text"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["text"]->addTexture("textureSampler");
+                p.shaders["text"]->createUniform("color", color);
                 p.shaders["text"]->createDescriptorSets();
             }
             if (!p.shaders["texture"])
@@ -700,15 +715,9 @@ namespace tl
                     ctx, vertexSource(), textureFragmentSource(), "texture");
                 p.shaders["texture"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["texture"]->addTexture("textureSampler");
+                p.shaders["texture"]->createUniform("color", color);
                 p.shaders["texture"]->createDescriptorSets();
-            }
-            if (!p.shaders["dummy"])
-            {
-                p.shaders["dummy"] = vlk::Shader::create(
-                    ctx, vertexSource(), dummyFragmentSource(), "dummy");
-                p.shaders["dummy"]->createUniform(
-                    "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["dummy"]->createDescriptorSets();
             }
             if (!p.shaders["image"])
             {
@@ -739,6 +748,7 @@ namespace tl
                     ctx, vertexSource(), meshFragmentSource(), "wipe");
                 p.shaders["wipe"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["wipe"]->createUniform("color", color);
                 p.shaders["wipe"]->createDescriptorSets();
             }
             if (!p.shaders["overlay"])
@@ -747,14 +757,19 @@ namespace tl
                     ctx, vertexSource(), textureFragmentSource(), "overlay");
                 p.shaders["overlay"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["overlay"]->addTexture("textureSampler");
+                p.shaders["overlay"]->createUniform("color", color);
                 p.shaders["overlay"]->createDescriptorSets();
             }
             if (!p.shaders["difference"])
             {
                 p.shaders["difference"] = vlk::Shader::create(
-                    ctx, vertexSource(), differenceFragmentSource(), "difference");
+                    ctx, vertexSource(), differenceFragmentSource(),
+                    "difference");
                 p.shaders["difference"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["difference"]->addTexture("textureSampler");
+                p.shaders["difference"]->addTexture("textureSamplerB");
                 p.shaders["difference"]->createDescriptorSets();
             }
             if (!p.shaders["dissolve"])
@@ -763,10 +778,9 @@ namespace tl
                     ctx, vertexSource(), textureFragmentSource(), "dissolve");
                 p.shaders["dissolve"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["dissolve"]->addTexture("textureSampler");
                 p.shaders["dissolve"]->createUniform(
                     "color", image::Color4f(1.F, 1.F, 1.F));
-                p.shaders["dissolve"]->addTexture("textureSampler");
-                
                 p.shaders["dissolve"]->createDescriptorSets();
             }
             _displayShader();
@@ -789,7 +803,7 @@ namespace tl
                     vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32_UV_U16);
                 p.vaos["image"] = vlk::VAO::create(ctx);
             }
-            if (!p.vbos["image"] || p.vbos["image"]->getSize() != 3)
+            if (!p.vbos["wipe"] || p.vbos["wipe"]->getSize() != 3)
             {
                 p.vbos["wipe"] = vlk::VBO::create(1 * 3, vlk::VBOType::Pos2_F32);
                 p.vaos["wipe"] = vlk::VAO::create(ctx);
@@ -801,11 +815,11 @@ namespace tl
                 p.vaos["video"] = vlk::VAO::create(ctx);
             }
             
-            const image::Color4f& color = renderOptions.clearColor;
+            const image::Color4f& bgColor = renderOptions.clearColor;
 
             // Clear yellow (assuming this clear value is for the FBO)
             VkClearValue clearValues[2];
-            clearValues[0].color = { color.r, color.g, color.b, color.a }; // Clear color for the FBO
+            clearValues[0].color = { bgColor.r, bgColor.g, bgColor.b, bgColor.a }; // Clear color for the FBO
             clearValues[1].depthStencil = { 1.F, 0 };
             
             VkRenderPassBeginInfo rpBegin{};
@@ -814,7 +828,7 @@ namespace tl
             rpBegin.framebuffer = p.fbo->getFramebuffer(/*currentFrameIndex*/); // Pass frame index if needed
             rpBegin.renderArea.offset = {0, 0}; // Assuming render area starts at 0,0
             rpBegin.renderArea.extent = p.fbo->getExtent(); // Use FBO extent
-            rpBegin.clearValueCount = 1 + static_cast<uint16_t>(p.fbo->hasDepth() || p.fbo->hasStencil());
+            rpBegin.clearValueCount = renderOptions.clear + static_cast<uint16_t>(p.fbo->hasDepth() || p.fbo->hasStencil());
             rpBegin.pClearValues = clearValues;
 
             // Begin the first render pass instance within the single command buffer
@@ -912,6 +926,16 @@ namespace tl
             }
         }
 
+        VkCommandBuffer Render::getCommandBuffer() const
+        {
+            return _p->cmd;
+        }
+        
+        uint32_t        Render::getFrameIndex() const
+        {
+            return _p->frameIndex;
+        }
+        
         math::Size2i Render::getRenderSize() const
         {
             return _p->renderSize;
@@ -2070,46 +2094,46 @@ namespace tl
                 }
                 p.shaders["display"] =
                     vlk::Shader::create(ctx, vertexSource(), source, "display");
-            }
-            p.shaders["display"]->bind(p.frameIndex);
-            p.shaders["display"]->createUniform(
-                "transform.mvp", p.transform, vlk::kShaderVertex);
-            size_t texturesOffset = 1;
+                p.shaders["display"]->createUniform(
+                    "transform.mvp", p.transform, vlk::kShaderVertex);
+                p.shaders["display"]->bind(p.frameIndex);
+                size_t texturesOffset = 1;
 #if defined(TLRENDER_OCIO)
-            if (p.ocioData)
-            {
-                for (size_t i = 0; i < p.ocioData->textures.size(); ++i)
+                if (p.ocioData)
                 {
-                    p.shaders["display"]->setUniform(
-                        p.ocioData->textures[i].samplerName,
-                        static_cast<int>(texturesOffset + i));
+                    for (size_t i = 0; i < p.ocioData->textures.size(); ++i)
+                    {
+                        p.shaders["display"]->setUniform(
+                            p.ocioData->textures[i].samplerName,
+                            static_cast<int>(texturesOffset + i));
+                    }
+                    texturesOffset += p.ocioData->textures.size();
                 }
-                texturesOffset += p.ocioData->textures.size();
-            }
-            if (p.lutData)
-            {
-                for (size_t i = 0; i < p.lutData->textures.size(); ++i)
+                if (p.lutData)
                 {
-                    p.shaders["display"]->setUniform(
-                        p.lutData->textures[i].samplerName,
-                        static_cast<int>(texturesOffset + i));
+                    for (size_t i = 0; i < p.lutData->textures.size(); ++i)
+                    {
+                        p.shaders["display"]->setUniform(
+                            p.lutData->textures[i].samplerName,
+                            static_cast<int>(texturesOffset + i));
+                    }
+                    texturesOffset += p.lutData->textures.size();
                 }
-                texturesOffset += p.lutData->textures.size();
-            }
 #endif // TLRENDER_OCIO
 #if defined(TLRENDER_LIBPLACEBO)
-            if (p.placeboData)
-            {
-                for (size_t i = 0; i < p.placeboData->textures.size(); ++i)
+                if (p.placeboData)
                 {
-                    p.shaders["display"]->setUniform(
-                        p.placeboData->textures[i].samplerName,
-                        static_cast<int>(texturesOffset + i));
+                    for (size_t i = 0; i < p.placeboData->textures.size(); ++i)
+                    {
+                        p.shaders["display"]->setUniform(
+                            p.placeboData->textures[i].samplerName,
+                            static_cast<int>(texturesOffset + i));
+                    }
+                    texturesOffset += p.placeboData->textures.size();
                 }
-                texturesOffset += p.placeboData->textures.size();
-            }
 #endif
-            p.shaders["display"]->createDescriptorSets();
+                p.shaders["display"]->createDescriptorSets();
+            }
             p.shaders["display"]->setUniform(
                 "transform.mvp", p.transform, vlk::kShaderVertex);
         }

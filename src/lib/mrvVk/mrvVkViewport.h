@@ -135,9 +135,10 @@ namespace mrv
                 const math::Matrix4x4f& orthoMatrix,
                 const math::Size2i& viewportSize);
         
-            void _compositeOverlay(const std::shared_ptr<tl::vlk::OffscreenBuffer>&,
-                                   const math::Matrix4x4f& identity,
-                                   const math::Size2i& viewportSize);
+            void _compositeOverlay(
+                const std::shared_ptr<tl::vlk::OffscreenBuffer>&,
+                const math::Matrix4x4f& identity,
+                const math::Size2i& viewportSize);
         protected:
             // Pipelines and layouts are managed outside the per-frame draw loop
 

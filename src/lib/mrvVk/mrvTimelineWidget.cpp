@@ -884,10 +884,10 @@ namespace mrv
 
                 if (p.buffer)
                 {
-                    p.shader->bind();
-                    const auto pm = math::ortho(
-                        0.F, static_cast<float>(renderSize.w), 0.F,
-                        static_cast<float>(renderSize.h), -1.F, 1.F);
+                    // p.shader->bind(frameIndex);
+                    // const auto pm = math::ortho(
+                    //     0.F, static_cast<float>(renderSize.w), 0.F,
+                    //     static_cast<float>(renderSize.h), -1.F, 1.F);
                     // p.shader->setUniform("transform.mvp", pm);
                     // p.shader->setUniform("opacity", alpha);
 
@@ -918,7 +918,7 @@ namespace mrv
                     // }
                     // if (p.vao && p.vbo)
                     // {
-                    //     p.vao->bind();
+                    //     p.vao->bind(frameIndex);
                     //     p.vao->draw(Vk_TRIANGLES, 0, p.vbo->getSize());
                     // }
                 }

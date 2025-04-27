@@ -25,6 +25,8 @@ namespace mrv
             ~Outline();
 
             void drawRect(
+                VkCommandBuffer& cmd,
+                const uint32_t frameIndex,
                 Fl_Vk_Context& ctx,
                 const math::Box2i&, const image::Color4f&,
                 const math::Matrix4x4f& mvp);

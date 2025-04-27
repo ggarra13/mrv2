@@ -16,7 +16,7 @@ namespace tl
             TLRENDER_P();
             ++(p.currentStats.rects);
 
-            p.shaders["rect"]->bind();
+            p.shaders["rect"]->bind(p.frameIndex);
             p.shaders["rect"]->setUniform("color", color);
 
             // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -28,9 +28,9 @@ namespace tl
             }
             if (p.vaos["rect"])
             {
-                p.vaos["rect"]->bind();
-                // p.vaos["rect"]->draw(
-                //     GL_TRIANGLES, 0, p.vbos["rect"]->getSize());
+                p.vaos["rect"]->bind(p.frameIndex);
+                p.vaos["rect"]->upload(p.vbos["rect"]->getData());
+                p.vaos["rect"]->draw(p.cmd, p.vbos["rect"]);
             }
         }
 
@@ -44,7 +44,7 @@ namespace tl
             p.currentStats.meshTriangles += mesh.triangles.size();
             if (size > 0)
             {
-                p.shaders["mesh"]->bind();
+                p.shaders["mesh"]->bind(p.frameIndex);
                 const auto transform =
                     p.transform *
                     math::translate(
@@ -72,12 +72,13 @@ namespace tl
                 }
                 if (p.vaos["mesh"] && p.vbos["mesh"])
                 {
-                    p.vaos["mesh"]->bind();
-                    // p.vaos["mesh"]->draw(GL_TRIANGLES, 0, size * 3);
+                    p.vaos["mesh"]->bind(p.frameIndex);
+                    p.vaos["mesh"]->upload(p.vbos["mesh"]->getData());
+                    p.vaos["mesh"]->draw(p.cmd, p.vbos["mesh"]);
                 }
             }
         }
-
+        
         void Render::drawColorMesh(
             const geom::TriangleMesh2& mesh, const math::Vector2i& position,
             const image::Color4f& color)
@@ -88,12 +89,12 @@ namespace tl
             p.currentStats.meshTriangles += mesh.triangles.size();
             if (size > 0)
             {
-                p.shaders["colorMesh"]->bind();
+                p.shaders["colorMesh"]->bind(p.frameIndex);
                 const auto transform =
                     p.transform *
                     math::translate(
                         math::Vector3f(position.x, position.y, 0.F));
-                p.shaders["colorMesh"]->setUniform("transform.mvp", transform);
+                p.shaders["colorMesh"]->setUniform("transform.mvp", transform, vlk::kShaderVertex);
                 p.shaders["colorMesh"]->setUniform("color", color);
 
                 // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -118,8 +119,9 @@ namespace tl
                 }
                 if (p.vaos["colorMesh"] && p.vbos["colorMesh"])
                 {
-                    p.vaos["colorMesh"]->bind();
-                    // p.vaos["colorMesh"]->draw(GL_TRIANGLES, 0, size * 3);
+                    p.vaos["colorMesh"]->bind(p.frameIndex);
+                    p.vaos["colorMesh"]->upload(p.vbos["colorMesh"]->getData());
+                    p.vaos["colorMesh"]->draw(p.cmd, p.vbos["colorMesh"]);
                 }
             }
         }
@@ -148,8 +150,9 @@ namespace tl
                 }
                 if (vaos["text"] && vbos["text"])
                 {
-                    vaos["text"]->bind();
-                    // vaos["text"]->draw(GL_TRIANGLES, 0, size * 3);
+                    vaos["text"]->bind(frameIndex);
+                    vaos["text"]->upload(vbos["text"]->getData());
+                    vaos["text"]->draw(cmd, vbos["text"]);
                 }
             }
         }
@@ -161,7 +164,7 @@ namespace tl
             TLRENDER_P();
             ++(p.currentStats.text);
 
-            p.shaders["text"]->bind();
+            p.shaders["text"]->bind(p.frameIndex);
             p.shaders["text"]->setUniform("color", color);
             p.shaders["text"]->setUniform("textureSampler", 0);
 
@@ -293,7 +296,7 @@ namespace tl
             }
             if (p.vaos["texture"])
             {
-                p.vaos["texture"]->bind();
+                p.vaos["texture"]->bind(p.frameIndex);
                 // p.vaos["texture"]->draw(
                 //     GL_TRIANGLES, 0, p.vbos["texture"]->getSize());
             }
@@ -421,14 +424,76 @@ namespace tl
 
 
             //
-            // Create pipeline
+            // Create pipeline ( \@todo: change p.fbo for p.buffer[] )
             //
+            _createPipeline(p.fbo, "image", "image", "image");
 
+            // VkViewport viewport = {};
+            // viewport.width = static_cast<float>(p.renderSize.w);
+            // viewport.height = static_cast<float>(p.renderSize.h);
+            // viewport.minDepth = 0.0f;
+            // viewport.maxDepth = 1.0f;
+            // vkCmdSetViewport(p.cmd, 0, 1, &viewport);
+
+            // VkRect2D scissor = {};
+            // scissor.extent = p.fbo->getExtent();
+            
+            // vkCmdSetScissor(p.cmd, 0, 1, &scissor);
+    
+
+            if (p.vaos["image"])
+            {
+                p.vaos["image"]->bind(p.frameIndex);
+                p.vaos["image"]->upload(p.vbos["image"]->getData());
+                p.vaos["image"]->draw(p.cmd, p.vbos["image"]);
+            }
+        }
+
+
+        void Render::_createMesh(const std::string& meshName,
+                                 const geom::TriangleMesh2& mesh)
+        {
+            TLRENDER_P();
+            
+            const size_t size = mesh.triangles.size();
+            if (!p.vbos[meshName] ||
+                (p.vbos[meshName] &&
+                 p.vbos[meshName]->getSize() < size * 3))
+            {
+                p.vbos[meshName] = vlk::VBO::create(
+                    size * 3, vlk::VBOType::Pos2_F32_Color_F32);
+                p.vaos[meshName].reset();
+            }
+            if (p.vbos[meshName])
+            {
+                p.vbos[meshName]->copy(
+                    convert(mesh, vlk::VBOType::Pos2_F32_Color_F32));
+            }
+
+            if (!p.vaos[meshName] && p.vbos[meshName])
+            {
+                p.vaos[meshName] = vlk::VAO::create(ctx);
+            }
+            if (p.vaos[meshName] && p.vbos[meshName])
+            {
+                p.vaos[meshName]->bind(p.frameIndex);
+                p.vaos[meshName]->upload(p.vbos[meshName]->getData());
+            }
+        }
+        
+        void Render::_createPipeline(
+            const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
+            const std::string& pipelineName,
+            const std::string& shaderName,
+            const std::string& meshName)
+        {
+            TLRENDER_P();
+            
             VkDevice device = ctx.device;
 
-            auto shader = p.shaders["image"];
+            auto shader = p.shaders[shaderName];
             
-            if (!p.pipelineLayouts["image"])
+            if (!p.pipelineLayouts[pipelineName])
             {
                 VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = {};
                 pPipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
@@ -442,10 +507,10 @@ namespace tl
                                                          &pipelineLayout);
                 VK_CHECK(result);
 
-                p.pipelineLayouts["image"] = pipelineLayout;
+                p.pipelineLayouts[pipelineName] = pipelineLayout;
             }
 
-            if (!p.pipelines["image"])
+            if (!p.pipelines[pipelineName])
             {
             
                 VkGraphicsPipelineCreateInfo pipeline;
@@ -468,14 +533,14 @@ namespace tl
 
                 memset(&pipeline, 0, sizeof(pipeline));
                 pipeline.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-                pipeline.layout = p.pipelineLayouts["image"]; 
+                pipeline.layout = p.pipelineLayouts[pipelineName]; 
 
                 vi.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
                 vi.pNext = NULL;
                 vi.vertexBindingDescriptionCount = 1;
-                vi.pVertexBindingDescriptions = p.vbos["image"]->getBindingDescription(); // Use FBO mesh binding
-                vi.vertexAttributeDescriptionCount = p.vbos["image"]->getAttributes().size();
-                vi.pVertexAttributeDescriptions = p.vbos["image"]->getAttributes().data();
+                vi.pVertexBindingDescriptions = p.vbos[meshName]->getBindingDescription(); // Use FBO mesh binding
+                vi.vertexAttributeDescriptionCount = p.vbos[meshName]->getAttributes().size();
+                vi.pVertexAttributeDescriptions = p.vbos[meshName]->getAttributes().data();
 
                 memset(&ia, 0, sizeof(ia));
                 ia.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
@@ -509,8 +574,8 @@ namespace tl
                 dynamicStateEnables[dynamicState.dynamicStateCount++] =
                     VK_DYNAMIC_STATE_SCISSOR;
 
-                bool has_depth = p.fbo->hasDepth(); // Check FBO depth
-                bool has_stencil = p.fbo->hasStencil(); // Check FBO stencil
+                bool has_depth = fbo->hasDepth(); // Check FBO depth
+                bool has_stencil = fbo->hasStencil(); // Check FBO stencil
 
                 memset(&ds, 0, sizeof(ds));
                 ds.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
@@ -571,34 +636,19 @@ namespace tl
 
                 // Destroy the temporary pipeline cache
                 vkDestroyPipelineCache(device, pipelineCache, NULL);
-                p.pipelines["image"] = graphicsPipeline;
+                p.pipelines[pipelineName] = graphicsPipeline;
             }
+            
+            
+            p.fbo->setupViewportAndScissor(p.cmd);
             
             vkCmdBindPipeline(p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
-                              p.pipelines["image"]);
+                              p.pipelines[pipelineName]);
             
             vkCmdBindDescriptorSets(p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
-                                    p.pipelineLayouts["image"], 0, 1,
+                                    p.pipelineLayouts[pipelineName], 0, 1,
                                     &shader->getDescriptorSet(), 0, nullptr);
-
-            // VkViewport viewport = {};
-            // viewport.width = static_cast<float>(p.renderSize.w);
-            // viewport.height = static_cast<float>(p.renderSize.h);
-            // viewport.minDepth = 0.0f;
-            // viewport.maxDepth = 1.0f;
-            // vkCmdSetViewport(p.cmd, 0, 1, &viewport);
-
-            // VkRect2D scissor = {};
-            // scissor.extent = p.fbo->getExtent();
-            
-            // vkCmdSetScissor(p.cmd, 0, 1, &scissor);
-    
-
-            if (p.vaos["image"])
-            {
-                p.vaos["image"]->upload(p.vbos["image"]->getData());
-                p.vaos["image"]->draw(p.cmd, p.vbos["image"]);
-            }
         }
+
     } // namespace timeline_vlk
 } // namespace tl
