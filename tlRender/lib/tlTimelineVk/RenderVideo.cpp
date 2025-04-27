@@ -28,6 +28,7 @@ namespace tl
             {
                 _drawBackground(boxes, backgroundOptions);
             }
+            return;
             switch (compareOptions.mode)
             {
             case timeline::CompareMode::A:
@@ -88,11 +89,14 @@ namespace tl
                 {
                 case timeline::Background::Solid:
                 {
-                    // Working.
                     const auto& mesh = geom::box(box);
                     _createMesh("rect", mesh);
                     _createPipeline(p.fbo, "solid", "rect", "rect");
+                    p.shaders["rect"]->bind(p.frameIndex);
+                    _bindDescriptorSets("solid", "rect");
+                    p.fbo->beginRenderPass(p.cmd);
                     drawRect(box, options.color0);
+                    p.fbo->endRenderPass(p.cmd);
                     break;
                 }
                 case timeline::Background::Checkers:
@@ -102,8 +106,12 @@ namespace tl
                         options.checkersSize);
                     _createMesh("colorMesh", mesh);
                     _createPipeline(p.fbo, "checkers", "colorMesh", "colorMesh");
+                    p.shaders["colorMesh"]->bind(p.frameIndex);
+                    _bindDescriptorSets("checkers", "colorMesh");
+                    p.fbo->beginRenderPass(p.cmd);
                     drawColorMesh(mesh,
                         math::Vector2i(), image::Color4f(1.F, 1.F, 1.F));
+                    p.fbo->endRenderPass(p.cmd);
                     break;
                 }
                 case timeline::Background::Gradient:
@@ -133,8 +141,12 @@ namespace tl
                     });
                     _createMesh("colorMesh", mesh);
                     _createPipeline(p.fbo, "gradient", "colorMesh", "colorMesh");
+                    p.shaders["colorMesh"]->bind(p.frameIndex);
+                    _bindDescriptorSets("gradient", "colorMesh");
+                    p.fbo->beginRenderPass(p.cmd);
                     drawColorMesh(
                         mesh, math::Vector2i(), image::Color4f(1.F, 1.F, 1.F));
+                    p.fbo->endRenderPass(p.cmd);
                     break;
                 }
                 default:

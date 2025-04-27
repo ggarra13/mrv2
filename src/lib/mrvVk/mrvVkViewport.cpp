@@ -353,7 +353,7 @@ namespace mrv
 
         void Viewport::vk_draw_begin()
         {
-            m_clearColor = { 0.F, 0.F, 0.F, 0.F };
+            m_clearColor = { 1.F, 0.F, 0.F, 0.F };
             m_depthStencil = 1.0;
 
             VkWindow::vk_draw_begin();
@@ -366,8 +366,6 @@ namespace mrv
 
              // Get the command buffer started for the current frame.
             VkCommandBuffer cmd = getCurrentCommandBuffer();
-
-            // Stop the current (default) render pass.
             vkCmdEndRenderPass(cmd);
             
             vk.cmd = cmd;
@@ -392,6 +390,65 @@ namespace mrv
                 
                 vk.colorBufferType = image::PixelType::RGBA_U8;
                 
+                int accuracy = p.ui->uiPrefs->uiPrefsColorAccuracy->value();
+                switch (accuracy)
+                {
+                case kAccuracyFloat32:
+                    vk.colorBufferType = image::PixelType::RGBA_F32;
+                    hasAlpha = true;
+                    break;
+                case kAccuracyFloat16:
+                    vk.colorBufferType = image::PixelType::RGBA_F16;
+                    hasAlpha = true;
+                    break;
+                case kAccuracyAuto:
+                    image::PixelType pixelType = image::PixelType::RGBA_U8;
+                    auto& video = p.videoData[0];
+                    if (p.missingFrame &&
+                        p.missingFrameType != MissingFrameType::kBlackFrame)
+                    {
+                        video = p.lastVideoData;
+                    }
+
+                    if (!video.layers.empty() && video.layers[0].image &&
+                        video.layers[0].image->isValid())
+                    {
+                        pixelType = video.layers[0].image->getPixelType();
+                        switch (pixelType)
+                        {
+                        case image::PixelType::RGBA_F32:
+                        case image::PixelType::LA_F32:
+                            hasAlpha = true;
+                        case image::PixelType::RGB_F32:
+                        case image::PixelType::L_F32:
+                            vk.colorBufferType = image::PixelType::RGBA_F32;
+                            break;
+                        case image::PixelType::RGBA_F16:
+                        case image::PixelType::LA_F16:
+                            hasAlpha = true;
+                        case image::PixelType::RGB_F16:
+                        case image::PixelType::L_F16:
+                            vk.colorBufferType = image::PixelType::RGBA_F16;
+                            break;
+                        case image::PixelType::RGBA_U16:
+                        case image::PixelType::LA_U16:
+                            hasAlpha = true;
+                        case image::PixelType::RGB_U16:
+                        case image::PixelType::L_U16:
+                            vk.colorBufferType = image::PixelType::RGBA_U16;
+                            break;
+                        case image::PixelType::RGBA_U8:
+                        case image::PixelType::LA_U8:
+                            hasAlpha = true;
+                            break;
+                        default:
+                            break;
+                        }
+                    }
+                    break;
+                }
+
+
                 
                 vlk::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = vk.colorBufferType;
@@ -409,6 +466,7 @@ namespace mrv
                     vk.buffer = vlk::OffscreenBuffer::create(
                         ctx, renderSize, offscreenBufferOptions);
                     vk.vbo.reset();
+                    vk.vao.reset();
                 }
             }
             else
@@ -440,6 +498,8 @@ namespace mrv
             locale::SetAndRestore saved;
             timeline::RenderOptions renderOptions;
             renderOptions.colorBuffer = vk.colorBufferType;
+            renderOptions.clear = true;
+            renderOptions.clearColor = image::Color4f(0,0,1,0);
             
             vk.render->begin(cmd, vk.buffer, m_currentFrameIndex,
                              renderSize, renderOptions);

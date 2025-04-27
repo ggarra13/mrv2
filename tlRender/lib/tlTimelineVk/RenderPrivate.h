@@ -34,6 +34,7 @@ namespace tl
     namespace timeline_vlk
     {
         std::string vertexSource();
+        std::string vertex2Source();
         std::string dummyFragmentSource();
         std::string meshFragmentSource();
         std::string colorMeshVertexSource();

@@ -656,7 +656,7 @@ namespace tl
             if (!p.shaders["rect"])
             {
                 p.shaders["rect"] = vlk::Shader::create(
-                    ctx, vertexSource(), meshFragmentSource(), "rect");
+                    ctx, vertex2Source(), meshFragmentSource(), "rect");
                 p.shaders["rect"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
                 p.shaders["rect"]->createUniform("color", color);
@@ -796,26 +796,12 @@ namespace tl
                 p.vaos["video"] = vlk::VAO::create(ctx);
             }
             
-            // const image::Color4f& bgColor = renderOptions.clearColor;
 
-            // // Clear yellow (assuming this clear value is for the FBO)
-            // VkClearValue clearValues[2];
-            // clearValues[0].color = { bgColor.r, bgColor.g, bgColor.b, bgColor.a }; // Clear color for the FBO
-            // clearValues[1].depthStencil = { 1.F, 0 };
+            if (renderOptions.clear)
+            {
+                clearViewport(renderOptions.clearColor);
+            }
             
-            // VkRenderPassBeginInfo rpBegin{};
-            // rpBegin.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-            // rpBegin.renderPass = p.fbo->getRenderPass();
-            // rpBegin.framebuffer = p.fbo->getFramebuffer(/*currentFrameIndex*/); // Pass frame index if needed
-            // rpBegin.renderArea.offset = {0, 0}; // Assuming render area starts at 0,0
-            // rpBegin.renderArea.extent = p.fbo->getExtent(); // Use FBO extent
-            // rpBegin.clearValueCount = renderOptions.clear + static_cast<uint16_t>(p.fbo->hasDepth() || p.fbo->hasStencil());
-            // rpBegin.pClearValues = clearValues;
-
-            // // Begin the first render pass instance within the single command buffer
-            // vkCmdBeginRenderPass(p.cmd, &rpBegin, VK_SUBPASS_CONTENTS_INLINE);
-            
-            // p.fbo->setupViewportAndScissor(p.cmd);
             setTransform(
                 math::ortho(
                     0.F, static_cast<float>(renderSize.w),

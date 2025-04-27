@@ -441,6 +441,14 @@ namespace tl
                                          const std::string& shaderName)
         {
             TLRENDER_P();
+            if (!p.shaders[shaderName])
+            {
+                throw std::runtime_error("Undefined shader " + shaderName);
+            }
+            if (!p.pipelineLayouts[pipelineName])
+            {
+                throw std::runtime_error("Undefined pipelineLayout " + pipelineName);
+            }
             vkCmdBindDescriptorSets(p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
                                     p.pipelineLayouts[pipelineName], 0, 1,
                                     &p.shaders[shaderName]->getDescriptorSet(), 0, nullptr);
