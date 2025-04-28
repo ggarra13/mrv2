@@ -561,12 +561,12 @@ void main()
     if (uboColor.data.enabled)
     {
         outColor = colorFunc(outColor, uboColor.data.add, uboColor.data.matrix);
-    }
-    if (uboColor.data.invert)
-    {
-        outColor.r = 1.0 - outColor.r;
-        outColor.g = 1.0 - outColor.g;
-        outColor.b = 1.0 - outColor.b;
+        if (uboColor.data.invert)
+        {
+            outColor.r = 1.0 - outColor.r;
+            outColor.g = 1.0 - outColor.g;
+            outColor.b = 1.0 - outColor.b;
+        }
     }
     if (ubo.softClip > 0.0)
     {

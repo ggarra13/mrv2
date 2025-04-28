@@ -428,7 +428,7 @@ namespace tl
             //
             // Create pipeline
             //
-            _createPipeline(p.buffers["video"], "image", "image", "image");
+            _createPipeline(fbo, "image", "image", "image");
             _bindDescriptorSets("image", "image");
             fbo->setupViewportAndScissor(p.cmd);
 

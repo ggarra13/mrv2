@@ -6,6 +6,7 @@
 #include "FL/vk_enum_string_helper.h"
 
 #include <tlTimelineVk/RenderPrivate.h>
+#include <tlTimelineVk/RenderStructs.h>
 
 #include <tlVk/Vk.h>
 #include <tlVk/Mesh.h>
@@ -707,21 +708,14 @@ namespace tl
                     ctx, vertexSource(), imageFragmentSource(), "image");
                 p.shaders["image"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
-                struct UBO
-                {
-                    alignas(16) math::Vector4f yuvCoefficients;
-                    alignas(16) image::Color4f color;
-                    alignas(4)  int32_t pixelType;
-                    alignas(4)  int32_t videoLevels;
-                    alignas(4)  int32_t imageChannels;
-                    alignas(4)  int32_t mirrorX;
-                    alignas(4)  int32_t mirrorY;
-                };
-                UBO ubo;
+                
+                UBOTexture ubo;
                 p.shaders["image"]->createUniform("ubo", ubo);
+
                 p.shaders["image"]->addTexture("textureSampler0");
                 p.shaders["image"]->addTexture("textureSampler1");
                 p.shaders["image"]->addTexture("textureSampler2");
+
                 p.shaders["image"]->createDescriptorSets();
             }
             if (!p.shaders["wipe"])
@@ -750,8 +744,8 @@ namespace tl
                     "difference");
                 p.shaders["difference"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["difference"]->addTexture("textureSampler");
-                p.shaders["difference"]->addTexture("textureSamplerB");
+                p.shaders["difference"]->addFBO("textureSampler");
+                p.shaders["difference"]->addFBO("textureSamplerB");
                 p.shaders["difference"]->createDescriptorSets();
             }
             if (!p.shaders["dissolve"])
@@ -760,7 +754,7 @@ namespace tl
                     ctx, vertexSource(), textureFragmentSource(), "dissolve");
                 p.shaders["dissolve"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["dissolve"]->addTexture("textureSampler");
+                p.shaders["dissolve"]->addFBO("textureSampler");
                 p.shaders["dissolve"]->createUniform(
                     "color", image::Color4f(1.F, 1.F, 1.F));
                 p.shaders["dissolve"]->createDescriptorSets();
@@ -1803,7 +1797,7 @@ namespace tl
                         const struct pl_shader_var shader_var = res->variables[i];
                         const struct pl_var var = shader_var.var;
                         std::string glsl_type = pl_var_glsl_type_name(var);
-                        s << "const " << glsl_type << " " << var.name << ";" << std::endl;
+                        s << glsl_type << " " << var.name << ";" << std::endl;
                         // else
                         // {
                         //     int dim_v = var.dim_v;
@@ -1934,31 +1928,21 @@ namespace tl
                 p.shaders["display"]->createUniform(
                     "transform.mvp", p.transform, vlk::kShaderVertex);
                 p.shaders["display"]->addFBO("textureSampler");
-                timeline::DisplayOptions display;
-                p.shaders["display"]->createUniform("uboLevels", display.levels);
-                p.shaders["display"]->createUniform("uboEXRDisplay", display.exrDisplay);
-                p.shaders["display"]->createUniform("uboNormalize", display.normalize);
-                struct UBOColor
-                {
-                    alignas(4)  bool enabled;
-                    alignas(16) math::Vector3f add;
-                    alignas(16) math::Matrix4x4f matrix;
-                    alignas(4)  bool invert;
-                };
+                
+                UBOLevels uboLevels;                
+                p.shaders["display"]->createUniform("uboLevels", uboLevels);
 
+                // \@unused in mrv2 (used to keep reference of gain UI)
+                timeline::EXRDisplay exrDisplay;
+                p.shaders["display"]->createUniform("uboEXRDisplay", exrDisplay);
+                
+                UBONormalize uboNormalize;
+                p.shaders["display"]->createUniform("uboNormalize", uboNormalize);
+                
                 UBOColor uboColor;
-                uboColor.enabled = false;
                 p.shaders["display"]->createUniform("uboColor", uboColor);
-                struct UBO
-                {
-                    alignas(4) int   channels;
-                    alignas(4) int   mirrorX;
-                    alignas(4) int   mirrorY;
-                    alignas(4) float softClip;
-                    alignas(4) int   videoLevels;
-                    alignas(4) int   invalidValues;
-                };
-                UBO ubo;
+
+                UBOOptions ubo;
                 p.shaders["display"]->createUniform("ubo", ubo);
 #if defined(TLRENDER_OCIO)
                 if (p.ocioData)

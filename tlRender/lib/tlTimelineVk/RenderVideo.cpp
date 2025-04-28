@@ -3,6 +3,7 @@
 // All rights reserved.
 
 #include <tlTimelineVk/RenderPrivate.h>
+#include <tlTimelineVk/RenderStructs.h>
 
 #include <tlVk/Vk.h>
 #include <tlVk/Mesh.h>
@@ -682,29 +683,24 @@ namespace tl
                                     p.buffers["dissolve"], offscreenBufferSize,
                                     offscreenBufferOptions))
                             {
-                                // p.buffers["dissolve"] =
-                                //     gl::OffscreenBuffer::create(
-                                //         offscreenBufferSize,
-                                //         offscreenBufferOptions);
+                                p.buffers["dissolve"] =
+                                    vlk::OffscreenBuffer::create(
+                                        ctx,
+                                        offscreenBufferSize,
+                                        offscreenBufferOptions);
                             }
                             if (doCreate(
                                     p.buffers["dissolve2"], offscreenBufferSize,
                                     offscreenBufferOptions))
                             {
-                                // p.buffers["dissolve2"] =
-                                //     gl::OffscreenBuffer::create(
-                                //         offscreenBufferSize,
-                                //         offscreenBufferOptions);
+                                p.buffers["dissolve2"] =
+                                    vlk::OffscreenBuffer::create(
+                                        ctx,
+                                        offscreenBufferSize,
+                                        offscreenBufferOptions);
                             }
                             if (p.buffers["dissolve"])
                             {
-                                // gl::OffscreenBufferBinding binding(
-                                //     p.buffers["dissolve"]);
-                                // glViewport(
-                                //     0, 0, offscreenBufferSize.w,
-                                //     offscreenBufferSize.h);
-                                // glClearColor(0.F, 0.F, 0.F, 0.F);
-                                // glClear(GL_COLOR_BUFFER_BIT);
                                 float v = 1.F - layer.transitionValue;
                                 auto dissolveImageOptions =
                                     imageOptions.get() ? *imageOptions
@@ -724,13 +720,6 @@ namespace tl
                             }
                             if (p.buffers["dissolve2"])
                             {
-                                // gl::OffscreenBufferBinding binding(
-                                //     p.buffers["dissolve2"]);
-                                // glViewport(
-                                //     0, 0, offscreenBufferSize.w,
-                                //     offscreenBufferSize.h);
-                                // glClearColor(0.F, 0.F, 0.F, 0.F);
-                                // glClear(GL_COLOR_BUFFER_BIT);
                                 float v = layer.transitionValue;
                                 auto dissolveImageOptions =
                                     imageOptions.get() ? *imageOptions
@@ -753,6 +742,13 @@ namespace tl
                                 // glBlendFuncSeparate(
                                 //     GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
                                 //     GL_ONE);
+                
+                                p.buffers["dissolve"]->transitionToShaderRead(p.cmd);
+                                p.buffers["dissolve2"]->transitionToShaderRead(p.cmd);
+                                _createPipeline(p.buffers["video"],
+                                                "video", "dissolve", "video", true);
+                                p.buffers["dissolve"]->beginRenderPass(p.cmd);
+                                p.buffers["dissolve"]->setupViewportAndScissor(p.cmd);
 
                                 p.shaders["dissolve"]->bind(p.frameIndex);
                                 p.shaders["dissolve"]->setUniform(
@@ -787,6 +783,7 @@ namespace tl
                                 // glBindTexture(
                                 //     GL_TEXTURE_2D,
                                 //     p.buffers["dissolve2"]->getColorID());
+                                
                                 if (p.vbos["video"])
                                 {
                                     p.vbos["video"]->copy(convert(
@@ -803,6 +800,10 @@ namespace tl
                                     p.vaos["video"]->upload(p.vbos["video"]->getData());
                                     p.vaos["video"]->draw(p.cmd, p.vbos["video"]);
                                 }
+                                p.buffers["video"]->endRenderPass(p.cmd);
+                                
+                                p.buffers["dissolve"]->transitionToColorAttachment(p.cmd);
+                                p.buffers["dissolve2"]->transitionToColorAttachment(p.cmd);
                             }
                         }
                         else if (layer.image)
@@ -877,42 +878,39 @@ namespace tl
 
                 p.shaders["display"]->bind(p.frameIndex);
                 p.shaders["display"]->setFBO("textureSampler", p.buffers["video"]);
-                timeline::Levels uboLevels = displayOptions.levels;
+
+                UBOLevels uboLevels;
+                uboLevels.enabled = displayOptions.levels.enabled;
+                uboLevels.inLow = displayOptions.levels.inLow;
+                uboLevels.inHigh = displayOptions.levels.inHigh;
+                uboLevels.gamma = displayOptions.levels.gamma;
+                uboLevels.outLow = displayOptions.levels.outLow;
+                uboLevels.outHigh = displayOptions.levels.outHigh;
                 uboLevels.gamma = uboLevels.gamma > 0.F ?
                                   (1.F / uboLevels.gamma) : 1000000.F;
                 p.shaders["display"]->setUniform("uboLevels", uboLevels);
-                p.shaders["display"]->setUniform("uboNormalize", displayOptions.normalize);
-                struct UBOColor
-                {
-                    alignas(4)  bool enabled;
-                    alignas(16) math::Vector3f add;
-                    alignas(16) math::Matrix4x4f matrix;
-                    alignas(4)  bool invert;
-                };
+
+                UBONormalize uboNormalize;
+                uboNormalize.enabled = displayOptions.normalize.enabled;
+                uboNormalize.minimum = displayOptions.normalize.minimum;
+                uboNormalize.maximum = displayOptions.normalize.maximum;
+    
+                p.shaders["display"]->setUniform("uboNormalize", uboNormalize);
 
                 UBOColor uboColor;
                 const bool colorMatrixEnabled =
                     displayOptions.color != timeline::Color() &&
                     displayOptions.color.enabled;
                 uboColor.enabled = colorMatrixEnabled;
-                uboColor.add = uboColor.enabled ? displayOptions.color.add :
-                               math::Vector3f(0.F, 0.F, 0.F);
+                uboColor.add = displayOptions.color.add;
                 uboColor.matrix = color(displayOptions.color);
                 uboColor.invert = displayOptions.color.invert;
                 
-                
                 p.shaders["display"]->setUniform("uboColor", uboColor);
                 p.shaders["display"]->setUniform("uboEXRDisplay", displayOptions.exrDisplay);
-                struct UBO
-                {
-                    alignas(4) int   channels;
-                    alignas(4) int   mirrorX;
-                    alignas(4) int   mirrorY;
-                    alignas(4) float softClip;
-                    alignas(4) int   videoLevels;
-                    alignas(4) int   invalidValues;
-                };
-                UBO ubo;
+
+                
+                UBOOptions ubo;
                 ubo.channels = static_cast<int>(displayOptions.channels);
                 ubo.mirrorX  = displayOptions.mirror.x;
                 ubo.mirrorY  = displayOptions.mirror.y;

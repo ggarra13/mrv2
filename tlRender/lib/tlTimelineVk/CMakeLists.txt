@@ -1,7 +1,8 @@
 set(HEADERS
     Render.h)
 set(PRIVATE_HEADERS
-    RenderPrivate.h)
+    RenderPrivate.h
+    RenderStructs.h)
 
 set(SOURCE
     Render.cpp
