@@ -877,19 +877,40 @@ namespace tl
 
                 p.shaders["display"]->bind(p.frameIndex);
                 p.shaders["display"]->setFBO("textureSampler", p.buffers["video"]);
-
-                p.shaders["display"]->setUniform("uboLevels", displayOptions.levels);
+                timeline::Levels uboLevels = displayOptions.levels;
+                uboLevels.gamma = uboLevels.gamma > 0.F ?
+                                  (1.F / uboLevels.gamma) : 1000000.F;
+                p.shaders["display"]->setUniform("uboLevels", uboLevels);
                 p.shaders["display"]->setUniform("uboNormalize", displayOptions.normalize);
-                p.shaders["display"]->setUniform("uboColor", displayOptions.color);
+                struct UBOColor
+                {
+                    alignas(4)  bool enabled;
+                    alignas(16) math::Vector3f add;
+                    alignas(16) math::Matrix4x4f matrix;
+                    alignas(4)  bool invert;
+                };
+
+                UBOColor uboColor;
+                const bool colorMatrixEnabled =
+                    displayOptions.color != timeline::Color() &&
+                    displayOptions.color.enabled;
+                uboColor.enabled = colorMatrixEnabled;
+                uboColor.add = uboColor.enabled ? displayOptions.color.add :
+                               math::Vector3f(0.F, 0.F, 0.F);
+                uboColor.matrix = color(displayOptions.color);
+                uboColor.invert = displayOptions.color.invert;
+                
+                
+                p.shaders["display"]->setUniform("uboColor", uboColor);
                 p.shaders["display"]->setUniform("uboEXRDisplay", displayOptions.exrDisplay);
                 struct UBO
                 {
-                    int   channels;
-                    int   mirrorX;
-                    int   mirrorY;
-                    float softClip;
-                    int   videoLevels;
-                    int   invalidValues;
+                    alignas(4) int   channels;
+                    alignas(4) int   mirrorX;
+                    alignas(4) int   mirrorY;
+                    alignas(4) float softClip;
+                    alignas(4) int   videoLevels;
+                    alignas(4) int   invalidValues;
                 };
                 UBO ubo;
                 ubo.channels = static_cast<int>(displayOptions.channels);

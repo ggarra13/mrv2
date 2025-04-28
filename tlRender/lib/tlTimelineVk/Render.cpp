@@ -26,6 +26,7 @@ extern "C"
 #endif
 
 #include <array>
+#include <cstdint>
 #include <list>
 
 #define _USE_MATH_DEFINES
@@ -708,13 +709,13 @@ namespace tl
                     "transform.mvp", transform, vlk::kShaderVertex);
                 struct UBO
                 {
-                    image::Color4f color;
-                    int pixelType;
-                    int videoLevels;
-                    math::Vector4f yuvCoefficients;
-                    int imageChannels;
-                    int mirrorX;
-                    int mirrorY;
+                    alignas(16) math::Vector4f yuvCoefficients;
+                    alignas(16) image::Color4f color;
+                    alignas(4)  int32_t pixelType;
+                    alignas(4)  int32_t videoLevels;
+                    alignas(4)  int32_t imageChannels;
+                    alignas(4)  int32_t mirrorX;
+                    alignas(4)  int32_t mirrorY;
                 };
                 UBO ubo;
                 p.shaders["image"]->createUniform("ubo", ubo);
@@ -1937,15 +1938,25 @@ namespace tl
                 p.shaders["display"]->createUniform("uboLevels", display.levels);
                 p.shaders["display"]->createUniform("uboEXRDisplay", display.exrDisplay);
                 p.shaders["display"]->createUniform("uboNormalize", display.normalize);
-                p.shaders["display"]->createUniform("uboColor", display.color);
+                struct UBOColor
+                {
+                    alignas(4)  bool enabled;
+                    alignas(16) math::Vector3f add;
+                    alignas(16) math::Matrix4x4f matrix;
+                    alignas(4)  bool invert;
+                };
+
+                UBOColor uboColor;
+                uboColor.enabled = false;
+                p.shaders["display"]->createUniform("uboColor", uboColor);
                 struct UBO
                 {
-                    int   channels;
-                    int   mirrorX;
-                    int   mirrorY;
-                    float softClip;
-                    int   videoLevels;
-                    int   invalidValues;
+                    alignas(4) int   channels;
+                    alignas(4) int   mirrorX;
+                    alignas(4) int   mirrorY;
+                    alignas(4) float softClip;
+                    alignas(4) int   videoLevels;
+                    alignas(4) int   invalidValues;
                 };
                 UBO ubo;
                 p.shaders["display"]->createUniform("ubo", ubo);

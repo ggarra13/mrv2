@@ -6,6 +6,8 @@
 
 #include <tlVk/Vk.h>
 
+#include <cstdint>
+
 namespace tl
 {
     namespace timeline_vlk
@@ -166,14 +168,13 @@ namespace tl
 
             p.shaders["text"]->bind(p.frameIndex);
             p.shaders["text"]->setUniform("color", color);
-            p.shaders["text"]->setUniform("textureSampler", 0);
 
             // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-            // glActiveTexture(static_cast<GLenum>(GL_TEXTURE0));
             uint8_t textureIndex = 0;
             // const auto textures = p.glyphTextureAtlas->getTextures();
-            // glBindTexture(GL_TEXTURE_2D, textures[textureIndex]);
+            // p.shaders["text"]->setTexture("textureSampler",
+            //                               textures[textureIndex]);
 
             int x = 0;
             int32_t rsbDeltaPrev = 0;
@@ -329,13 +330,13 @@ namespace tl
             
             struct UBO
             {
-                image::Color4f color;
-                int pixelType;
-                int videoLevels;
-                math::Vector4f yuvCoefficients;
-                int imageChannels;
-                int mirrorX;
-                int mirrorY;
+                alignas(16) math::Vector4f yuvCoefficients;
+                alignas(16) image::Color4f color;
+                alignas(4)  int32_t pixelType;
+                alignas(4)  int32_t videoLevels;
+                alignas(4)  int32_t imageChannels;
+                alignas(4)  int32_t mirrorX;
+                alignas(4)  int32_t mirrorY;
             };
             UBO ubo;
             ubo.color = color;

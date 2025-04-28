@@ -33,13 +33,13 @@ namespace tl
         struct Color
         {
         public:
-            bool enabled = false;
-            math::Vector3f add = math::Vector3f(0.F, 0.F, 0.F);
-            math::Vector3f brightness = math::Vector3f(1.F, 1.F, 1.F);
-            math::Vector3f contrast = math::Vector3f(1.F, 1.F, 1.F);
-            math::Vector3f saturation = math::Vector3f(1.F, 1.F, 1.F);
-            float tint = 0.F;
-            bool invert = false;
+            alignas(4)  bool enabled = false;
+            alignas(16) math::Vector3f add = math::Vector3f(0.F, 0.F, 0.F);
+            alignas(16) math::Vector3f brightness = math::Vector3f(1.F, 1.F, 1.F);
+            alignas(16) math::Vector3f contrast = math::Vector3f(1.F, 1.F, 1.F);
+            alignas(16) math::Vector3f saturation = math::Vector3f(1.F, 1.F, 1.F);
+            alignas(4)  float tint = 0.F;
+            alignas(4)  bool invert = false;
 
             bool operator==(const Color&) const;
             bool operator!=(const Color&) const;
@@ -63,12 +63,12 @@ namespace tl
         //! Levels values.
         struct Levels
         {
-            bool enabled = false;
-            float inLow = 0.F;
-            float inHigh = 1.F;
-            float gamma = 1.F;
-            float outLow = 0.F;
-            float outHigh = 1.F;
+            alignas(4)  bool enabled = false;
+            alignas(4)  float inLow = 0.F;
+            alignas(4)  float inHigh = 1.F;
+            alignas(4)  float gamma = 1.F;
+            alignas(4)  float outLow = 0.F;
+            alignas(4)  float outHigh = 1.F;
 
             bool operator==(const Levels&) const;
             bool operator!=(const Levels&) const;
@@ -78,11 +78,11 @@ namespace tl
         //! testing.
         struct EXRDisplay
         {
-            bool enabled = false;
-            float exposure = 0.F;
-            float defog = 0.F;
-            float kneeLow = 0.F;
-            float kneeHigh = 5.F;
+            alignas(4) bool enabled = false;
+            alignas(4) float exposure = 0.F;
+            alignas(4) float defog = 0.F;
+            alignas(4) float kneeLow = 0.F;
+            alignas(4) float kneeHigh = 5.F;
 
             bool operator==(const EXRDisplay&) const;
             bool operator!=(const EXRDisplay&) const;
@@ -101,9 +101,9 @@ namespace tl
         //! Autonormalize.
         struct Normalize
         {
-            bool enabled = false;
-            math::Vector4f minimum = math::Vector4f(0.F, 0.F, 0.F, 0.F);
-            math::Vector4f maximum = math::Vector4f(1.F, 1.F, 1.F, 1.F);
+            alignas(4) bool enabled = false;
+            alignas(16) math::Vector4f minimum = math::Vector4f(0.F, 0.F, 0.F, 0.F);
+            alignas(16) math::Vector4f maximum = math::Vector4f(1.F, 1.F, 1.F, 1.F);
 
             bool operator==(const Normalize&) const;
             bool operator!=(const Normalize&) const;

@@ -137,10 +137,14 @@ namespace tl
             VkViewport getViewport() const;
             VkRect2D getScissor() const;
             
-            //! Command buffer to start/end a render pass.
-            void beginRenderPass(VkCommandBuffer cmd, VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE);
+            //! Start/end a normal render pass.
+            void beginRenderPass(VkCommandBuffer cmd,
+                                 VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE);
             void endRenderPass(VkCommandBuffer cmd);
-            void beginCompositingRenderPass(VkCommandBuffer cmd, VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE);
+
+            //! Start/end a compositing pass.
+            void beginCompositingRenderPass(VkCommandBuffer cmd,
+                                            VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE);
             void endCompositingRenderPass(VkCommandBuffer cmd);
             
             //! Offscreen image transitions.

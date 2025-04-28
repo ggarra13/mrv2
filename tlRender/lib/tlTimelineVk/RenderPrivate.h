@@ -63,7 +63,7 @@ namespace tl
             const image::Info& info,
             const std::vector<std::shared_ptr<vlk::Texture> >&,
             size_t offset = 0);
-
+        
 #if defined(TLRENDER_OCIO)
         struct OCIOData
         {

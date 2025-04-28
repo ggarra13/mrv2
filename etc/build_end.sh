@@ -51,7 +51,7 @@ if [[ $KERNEL != *Msys* ]]; then
 		run_cmd ln -s $PWD/$BUILD_DIR/install/bin/hdr.sh ~/bin/hdr-dbg
 	    fi
 	else
-	    if [ $MRV2_BACKEND == "VK" ]; then
+	    if [ "$MRV2_BACKEND" == "VK" ]; then
 		run_cmd rm -f ~/bin/vmrv2
 		run_cmd ln -s $PWD/$BUILD_DIR/install/bin/mrv2.sh ~/bin/vmrv2
 	    else
