@@ -428,7 +428,7 @@ layout(set = 0, binding = 6, std140) uniform UBO
     int        mirrorY;
     float      softClip;
     int        videoLevels;
-    bool       invalidValues;
+    int        invalidValues;
 } ubo;
 
 vec4 colorFunc(vec4 value, vec3 add, mat4 m)
@@ -543,95 +543,91 @@ void main()
 
     outColor = texture(textureSampler, t);
 
-    // Video levels.
-    if (VideoLevels_LegalRange == ubo.videoLevels)
-    {
-        const float scale = (940.0 - 64.0) / 1023.0;
-        const float offset = 64.0 / 1023.0;
-        outColor.r = outColor.r * scale + offset;
-        outColor.g = outColor.g * scale + offset;
-        outColor.b = outColor.b * scale + offset;
-    }
+    // // Video levels.
+    // if (VideoLevels_LegalRange == ubo.videoLevels)
+    // {
+    //     const float scale = (940.0 - 64.0) / 1023.0;
+    //     const float offset = 64.0 / 1023.0;
+    //     outColor.r = outColor.r * scale + offset;
+    //     outColor.g = outColor.g * scale + offset;
+    //     outColor.b = outColor.b * scale + offset;
+    // }
 
-    // Apply color tranform to linear space and LUT.
-    {5}
-    {6}
+    // // Apply color tranform to linear space and LUT.
+    // {5}
+    // {6}
 
-    // Apply color transformations.
-    if (uboColor.data.enabled)
-    {
-        outColor = colorFunc(outColor, uboColor.data.add, uboColor.data.matrix);
-    }
-    if (uboColor.data.invert)
-    {
-        outColor.r = 1.0 - outColor.r;
-        outColor.g = 1.0 - outColor.g;
-        outColor.b = 1.0 - outColor.b;
-    }
-    if (uboEXRDisplay.data.enabled)
-    {
-        outColor = exrDisplayFunc(outColor, uboEXRDisplay.data);
-    }
-    if (ubo.softClip > 0.0)
-    {
-        outColor = softClipFunc(outColor, ubo.softClip);
-    }
+    // // Apply color transformations.
+    // if (uboColor.data.enabled)
+    // {
+    //     outColor = colorFunc(outColor, uboColor.data.add, uboColor.data.matrix);
+    // }
+    // if (uboColor.data.invert)
+    // {
+    //     outColor.r = 1.0 - outColor.r;
+    //     outColor.g = 1.0 - outColor.g;
+    //     outColor.b = 1.0 - outColor.b;
+    // }
+    // if (ubo.softClip > 0.0)
+    // {
+    //     outColor = softClipFunc(outColor, ubo.softClip);
+    // }
 
-    // Call libplacebo tonemapping
-    {7}
+    // // // Call libplacebo tonemapping
+    // {7}
 
-    // Apply OCIO Display/View.
-    {8}
+    // // // Apply OCIO Display/View.
+    // {8}
 
-    if (uboLevels.data.enabled)
-    {
-        outColor = levelsFunc(outColor, uboLevels.data);
-    }
-    if (uboNormalize.data.enabled)
-    {
-        outColor = normalizeFunc(outColor, uboNormalize.data);
-    }
-    if (ubo.invalidValues)
-    {
-        if (outColor.r < 0.0 || outColor.r > 1.0 ||
-            outColor.g < 0.0 || outColor.g > 1.0 ||
-            outColor.b < 0.0 || outColor.b > 1.0 ||
-            outColor.a < 0.0 || outColor.a > 1.0)
-        {
-           outColor.r = 1.0f;
-           outColor.g *= 0.5f;
-           outColor.b *= 0.5f;
-        }
-    }
-    // Swizzle for the channels display.
-    if (Channels_Red == ubo.channels)
-    {
-        outColor.g = outColor.r;
-        outColor.b = outColor.r;
-    }
-    else if (Channels_Green == ubo.channels)
-    {
-        outColor.r = outColor.g;
-        outColor.b = outColor.g;
-    }
-    else if (Channels_Blue == ubo.channels)
-    {
-        outColor.r = outColor.b;
-        outColor.g = outColor.b;
-    }
-    else if (Channels_Alpha == ubo.channels)
-    {
-        outColor.r = outColor.a;
-        outColor.g = outColor.a;
-        outColor.b = outColor.a;
-    }
-    else if (Channels_Lumma == ubo.channels)
-    {
-        float t = (outColor.r + outColor.g + outColor.b) / 3.0;
-        outColor.r = t;
-        outColor.g = t;
-        outColor.b = t;
-    }
+    // if (uboLevels.data.enabled)
+    // {
+    //     outColor = levelsFunc(outColor, uboLevels.data);
+    // }
+    // if (uboNormalize.data.enabled)
+    // {
+    //     outColor = normalizeFunc(outColor, uboNormalize.data);
+    // }
+    // if (ubo.invalidValues == 1)
+    // {
+    //     if (outColor.r < 0.0 || outColor.r > 1.0 ||
+    //         outColor.g < 0.0 || outColor.g > 1.0 ||
+    //         outColor.b < 0.0 || outColor.b > 1.0 ||
+    //         outColor.a < 0.0 || outColor.a > 1.0)
+    //     {
+    //        outColor.r = 1.0f;
+    //        outColor.g *= 0.5f;
+    //        outColor.b *= 0.5f;
+    //     }
+    // }
+    // // Swizzle for the channels display.
+    // if (Channels_Red == ubo.channels)
+    // {
+    //     outColor.g = outColor.r;
+    //     outColor.b = outColor.r;
+    // }
+    // else if (Channels_Green == ubo.channels)
+    // {
+    //     outColor.r = outColor.g;
+    //     outColor.b = outColor.g;
+    // }
+    // else if (Channels_Blue == ubo.channels)
+    // {
+    //     outColor.r = outColor.b;
+    //     outColor.g = outColor.b;
+    // }
+    // else if (Channels_Alpha == ubo.channels)
+    // {
+    //     outColor.r = outColor.a;
+    //     outColor.g = outColor.a;
+    //     outColor.b = outColor.a;
+    // }
+    // else if (Channels_Lumma == ubo.channels)
+    // {
+    //     float t = (outColor.r + outColor.g + outColor.b) / 3.0;
+    //     outColor.r = t;
+    //     outColor.g = t;
+    //     outColor.b = t;
+    // }
 })")
                 .arg(args[0])
                 .arg(args[1])

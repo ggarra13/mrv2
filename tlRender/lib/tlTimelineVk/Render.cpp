@@ -1437,9 +1437,15 @@ namespace tl
             if (!p.shaders["display"])
             {
                 if (p.pipelines["display"])
+                {
+                    vkDestroyPipeline(ctx.device, p.pipelines["display"], nullptr);
                     p.pipelines["display"] = VK_NULL_HANDLE;
+                }
                 if (p.pipelineLayouts["display"])
+                {
+                    vkDestroyPipelineLayout(ctx.device, p.pipelineLayouts["display"], nullptr);
                     p.pipelineLayouts["display"] = VK_NULL_HANDLE;
+                }
                 
                 std::string ocioICSDef;
                 std::string ocioICS;
@@ -1934,12 +1940,12 @@ namespace tl
                 p.shaders["display"]->createUniform("uboColor", display.color);
                 struct UBO
                 {
-                    int   channels = 0;
-                    int   mirrorX = false;
-                    int   mirrorY = false;
-                    float softClip = 0.F;
-                    int   videoLevels = 0;
-                    bool  invalidValues = false;
+                    int   channels;
+                    int   mirrorX;
+                    int   mirrorY;
+                    float softClip;
+                    int   videoLevels;
+                    int   invalidValues;
                 };
                 UBO ubo;
                 p.shaders["display"]->createUniform("ubo", ubo);

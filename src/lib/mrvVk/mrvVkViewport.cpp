@@ -460,13 +460,15 @@ namespace mrv
                 }
                 offscreenBufferOptions.depth = vlk::OffscreenDepth::_24;
                 offscreenBufferOptions.stencil = vlk::OffscreenStencil::_8;
+                offscreenBufferOptions.allowCompositing = true;
                 
                 if (vlk::doCreate(vk.buffer, renderSize, offscreenBufferOptions))
                 {
                     vk.buffer = vlk::OffscreenBuffer::create(
                         ctx, renderSize, offscreenBufferOptions);
+                    // As render resolution might have changed,
+                    // we need to reset the quad size.
                     vk.vbo.reset();
-                    vk.vao.reset();
                 }
             }
             else
@@ -511,9 +513,7 @@ namespace mrv
                 p.compareOptions, getBackgroundOptions());
             vk.render->end();
             
-            vk.buffer->transitionToShaderRead(cmd);
-            
-
+            // vk.buffer->transitionToShaderRead(cmd);
 
             
             math::Matrix4x4f mvp;
@@ -574,6 +574,12 @@ namespace mrv
                 // Draw calls for the composition geometry (e.g., a screen-filling quad)
                 vk.vao->draw(cmd, vk.vbo);
             }
+
+            end_render_pass();
+            
+            // Correctly transition from SHADER_READ to COLOR_ATTACHMENT
+            // vk.buffer->transitionToColorAttachment(cmd);
+            
             
             // Draw FLTK children
             // Fl_Window::draw();

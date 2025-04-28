@@ -107,7 +107,13 @@ namespace tl
                 const std::shared_ptr<image::Image>&, const math::Box2i&,
                 const image::Color4f& = image::Color4f(1.F, 1.F, 1.F),
                 const timeline::ImageOptions& =
-                    timeline::ImageOptions()) override;
+                timeline::ImageOptions()) override {};
+            void drawImage(
+                const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
+                const std::shared_ptr<image::Image>&, const math::Box2i&,
+                const image::Color4f& = image::Color4f(1.F, 1.F, 1.F),
+                const timeline::ImageOptions& =
+                timeline::ImageOptions());
             void drawVideo(
                 const std::vector<timeline::VideoData>&,
                 const std::vector<math::Box2i>&,
@@ -170,7 +176,14 @@ namespace tl
                 const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
                 const std::string& pipelineName,
                 const std::string& shaderName,
-                const std::string& meshName);
+                const std::string& meshName,
+                const bool enableBlending = false,
+                const VkBlendFactor srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA,
+                const VkBlendFactor dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                const VkBlendOp     colorBlendOp = VK_BLEND_OP_ADD,
+                const VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
+                const VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO,
+                const VkBlendOp     alphaBlendOp = VK_BLEND_OP_ADD);
             void _bindDescriptorSets(const std::string& pipelineName,
                                      const std::string& shaderName);
             

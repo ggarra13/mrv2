@@ -303,6 +303,7 @@ namespace tl
         }
 
         void Render::drawImage(
+            const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
             const std::shared_ptr<image::Image>& image, const math::Box2i& box,
             const image::Color4f& color,
             const timeline::ImageOptions& imageOptions)
@@ -415,6 +416,7 @@ namespace tl
                 break;
             }
 
+            fbo->beginRenderPass(p.cmd);
             if (p.vbos["image"])
             {
                 p.vbos["image"]->copy(
@@ -427,6 +429,7 @@ namespace tl
             //
             _createPipeline(p.buffers["video"], "image", "image", "image");
             _bindDescriptorSets("image", "image");
+            fbo->setupViewportAndScissor(p.cmd);
 
             if (p.vaos["image"])
             {
@@ -434,6 +437,7 @@ namespace tl
                 p.vaos["image"]->upload(p.vbos["image"]->getData());
                 p.vaos["image"]->draw(p.cmd, p.vbos["image"]);
             }
+            fbo->endRenderPass(p.cmd);
         }
 
 
@@ -489,13 +493,26 @@ namespace tl
             const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
             const std::string& pipelineName,
             const std::string& shaderName,
-            const std::string& meshName)
+            const std::string& meshName,
+            const bool enableBlending,
+            const VkBlendFactor srcColorBlendFactor,
+            const VkBlendFactor dstColorBlendFactor,
+            const VkBlendOp     colorBlendOp,
+            const VkBlendFactor srcAlphaBlendFactor,
+            const VkBlendFactor dstAlphaBlendFactor,
+            const VkBlendOp     alphaBlendOp)
         {
             TLRENDER_P();
             
             VkDevice device = ctx.device;
             
             auto shader = p.shaders[shaderName];
+
+            if (!p.shaders[shaderName])
+                throw std::runtime_error("createPipeline failed with unknown shader " + shaderName);
+            
+            if (!p.vbos[meshName])
+                throw std::runtime_error("createPipeline failed with unknown mesh " + meshName);
             
             if (!p.pipelineLayouts[pipelineName])
             {
@@ -515,6 +532,7 @@ namespace tl
                 p.pipelineLayouts[pipelineName] = pipelineLayout;
             }
 
+           
             if (!p.pipelines[pipelineName])
             {
             
@@ -523,7 +541,6 @@ namespace tl
                 VkPipelineVertexInputStateCreateInfo vi = {};
                 VkPipelineInputAssemblyStateCreateInfo ia;
                 VkPipelineRasterizationStateCreateInfo rs;
-                VkPipelineColorBlendStateCreateInfo cb;
                 VkPipelineDepthStencilStateCreateInfo ds;
                 VkPipelineViewportStateCreateInfo vp;
                 VkPipelineMultisampleStateCreateInfo ms;
@@ -561,14 +578,31 @@ namespace tl
                 rs.depthBiasEnable = VK_FALSE;
                 rs.lineWidth = 1.0f;
 
-                memset(&cb, 0, sizeof(cb));
+                // Color blending
+                VkPipelineColorBlendAttachmentState colorBlendAttachment = {};
+                colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT |
+                                                      VK_COLOR_COMPONENT_G_BIT |
+                                                      VK_COLOR_COMPONENT_B_BIT |
+                                                      VK_COLOR_COMPONENT_A_BIT;
+                if (enableBlending)
+                {
+                    colorBlendAttachment.blendEnable = VK_TRUE;
+                    colorBlendAttachment.srcColorBlendFactor = srcColorBlendFactor;
+                    colorBlendAttachment.dstColorBlendFactor = dstColorBlendFactor;
+                    colorBlendAttachment.colorBlendOp = colorBlendOp;
+                    colorBlendAttachment.srcAlphaBlendFactor = srcAlphaBlendFactor;
+                    colorBlendAttachment.dstAlphaBlendFactor = dstAlphaBlendFactor;
+                    colorBlendAttachment.alphaBlendOp = alphaBlendOp;
+                }
+                else
+                {
+                    colorBlendAttachment.blendEnable = VK_FALSE;
+                }
+                
+                VkPipelineColorBlendStateCreateInfo cb = {};
                 cb.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-                VkPipelineColorBlendAttachmentState att_state[1];
-                memset(att_state, 0, sizeof(att_state));
-                att_state[0].colorWriteMask = 0xf;
-                att_state[0].blendEnable = VK_FALSE;
                 cb.attachmentCount = 1;
-                cb.pAttachments = att_state;
+                cb.pAttachments = &colorBlendAttachment;
 
                 memset(&vp, 0, sizeof(vp));
                 vp.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
@@ -581,18 +615,21 @@ namespace tl
 
                 bool has_depth = fbo->hasDepth(); // Check FBO depth
                 bool has_stencil = fbo->hasStencil(); // Check FBO stencil
-
+                
                 memset(&ds, 0, sizeof(ds));
                 ds.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
                 ds.depthTestEnable = has_depth ? VK_TRUE : VK_FALSE;
+
                 ds.depthWriteEnable = has_depth ? VK_TRUE : VK_FALSE;
+                ds.stencilTestEnable = has_stencil ? VK_TRUE : VK_FALSE;
                 ds.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
                 ds.depthBoundsTestEnable = VK_FALSE;
-                ds.stencilTestEnable = has_stencil ? VK_TRUE : VK_FALSE;
-                ds.back.failOp = VK_STENCIL_OP_KEEP;
-                ds.back.passOp = VK_STENCIL_OP_KEEP;
-                ds.back.compareOp = VK_COMPARE_OP_ALWAYS;
-                ds.front = ds.back;
+                ds.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
+                ds.depthBoundsTestEnable = VK_FALSE;
+                ds.front.failOp = VK_STENCIL_OP_KEEP;
+                ds.front.passOp = VK_STENCIL_OP_KEEP;
+                ds.front.compareOp = VK_COMPARE_OP_ALWAYS;
+                ds.back = ds.front;
 
                 memset(&ms, 0, sizeof(ms));
                 ms.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
@@ -622,7 +659,9 @@ namespace tl
                 pipeline.pViewportState = &vp;
                 pipeline.pDepthStencilState = &ds;
                 pipeline.pStages = shaderStages;
-                pipeline.renderPass = fbo->getRenderPass(); // Use FBO's render pass
+                pipeline.renderPass = enableBlending ?
+                                      fbo->getCompositingRenderPass() :
+                                      fbo->getRenderPass(); // Use FBO's render pass
                 pipeline.pDynamicState = &dynamicState;
 
                 // Create a temporary pipeline cache

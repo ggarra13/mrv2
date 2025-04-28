@@ -75,6 +75,7 @@ namespace tl
             OffscreenDepth depth = OffscreenDepth::kNone;
             OffscreenStencil stencil = OffscreenStencil::kNone;
             OffscreenSampling sampling = OffscreenSampling::kNone;
+            bool      allowCompositing = false;
 
             bool operator==(const OffscreenBufferOptions&) const;
             bool operator!=(const OffscreenBufferOptions&) const;
@@ -118,29 +119,36 @@ namespace tl
             const OffscreenBufferOptions& getOptions() const;
 
             //! Vulkan Accessors
+            VkImageLayout getImageLayout() const;
+
+            VkImageLayout getDepthLayout() const;
+            
             VkImageView getImageView() const;
             VkImage getImage() const;
+            
             VkFramebuffer getFramebuffer() const;
             VkRenderPass getRenderPass() const;
+            
+            VkFramebuffer getCompositingFramebuffer() const;
+            VkRenderPass getCompositingRenderPass() const;
+            
             VkSampler getSampler() const;
             VkExtent2D getExtent() const;
             VkViewport getViewport() const;
             VkRect2D getScissor() const;
-
-            //! Create render pass.
-            void createRenderPass(VkAttachmentLoadOp colorLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR,
-                                  VkAttachmentStoreOp colorStoreOp = VK_ATTACHMENT_STORE_OP_STORE,
-                                  VkAttachmentLoadOp depthLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR,
-                                  VkAttachmentStoreOp depthStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE);
             
             //! Command buffer to start/end a render pass.
             void beginRenderPass(VkCommandBuffer cmd, VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE);
             void endRenderPass(VkCommandBuffer cmd);
+            void beginCompositingRenderPass(VkCommandBuffer cmd, VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE);
+            void endCompositingRenderPass(VkCommandBuffer cmd);
             
             //! Offscreen image transitions.
             void transitionToShaderRead(VkCommandBuffer cmd);
             void transitionToColorAttachment(VkCommandBuffer cmd);
-
+            
+            void transitionDepthToShaderRead(VkCommandBuffer cmd);
+            
             //! Set up the internal viewport and scissor.
             void setupViewportAndScissor();
 
@@ -156,6 +164,12 @@ namespace tl
             void createImageView();
             void createDepthImage();
             void createDepthImageView();
+            void createRenderPass(VkAttachmentLoadOp colorLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR,
+                                  VkAttachmentStoreOp colorStoreOp = VK_ATTACHMENT_STORE_OP_STORE,
+                                  VkAttachmentLoadOp depthLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR,
+                                  VkAttachmentStoreOp depthStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE);
+            void createCompositingRenderPass();
+            void createCompositingFramebuffer();
             void createFramebuffer();
             void createSampler();
 
