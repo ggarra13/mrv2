@@ -364,9 +364,7 @@ add_subdirectory(main)
 # Add hdr source
 #
 if (TLRENDER_NDI AND TLRENDER_FFMPEG AND TLRENDER_VK AND MRV2_HDR)
-    if (NOT MRV2_BACKEND STREQUAL "VK" AND NOT MRV2_BACKEND STREQUAL "BOTH")
-	add_subdirectory(hdr)
-    endif()
+    add_subdirectory(hdr)
 endif()
 
 if (MRV2_BACKEND STREQUAL "VK" OR MRV2_BACKEND STREQUAL "BOTH")

@@ -58,18 +58,18 @@ namespace mrv
 
     namespace vulkan
     {
-    
+
         Viewport::Viewport(int X, int Y, int W, int H, const char* L) :
             TimelineViewport(X, Y, W, H, L),
             _vk(new VKPrivate)
         {
             int stereo = 0;
-            int fl_double = FL_DOUBLE; // needed on Linux and _WIN32 
-// #if defined(__APPLE__)
-//             // \bug: Do not use FL_DOUBLE on APPLE as it makes
-//             // playback slow
-//             fl_double = 0;
-// #endif
+            int fl_double = FL_DOUBLE; // needed on Linux and _WIN32
+                                       // #if defined(__APPLE__)
+            //             // \bug: Do not use FL_DOUBLE on APPLE as it makes
+            //             // playback slow
+            //             fl_double = 0;
+            // #endif
             mode(FL_RGB | fl_double | FL_ALPHA | FL_STENCIL | stereo);
         }
 
@@ -80,22 +80,30 @@ namespace mrv
             _vk->context = context;
         }
 
+        int Viewport::log_level() const
+        {
+            return 4;
+        }
+
         void Viewport::prepare_descriptor_layout()
         {
             MRV2_VK();
 
             VkResult result;
-    
+
             VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = {};
-            pPipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+            pPipelineLayoutCreateInfo.sType =
+                VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
             pPipelineLayoutCreateInfo.pNext = NULL;
             pPipelineLayoutCreateInfo.setLayoutCount = 1;
-            pPipelineLayoutCreateInfo.pSetLayouts = &vk.shader->getDescriptorSetLayout();
-            
-            result = vkCreatePipelineLayout(device(), &pPipelineLayoutCreateInfo, NULL,
-                                            &vk.pipeline_layout);
+            pPipelineLayoutCreateInfo.pSetLayouts =
+                &vk.shader->getDescriptorSetLayout();
+
+            result = vkCreatePipelineLayout(
+                device(), &pPipelineLayoutCreateInfo, NULL,
+                &vk.pipeline_layout);
         }
-        
+
         void Viewport::prepare_pipeline()
         {
             MRV2_VK();
@@ -104,7 +112,7 @@ namespace mrv
             {
                 vkDestroyPipeline(device(), m_pipeline, nullptr);
             }
-            
+
             VkGraphicsPipelineCreateInfo pipeline;
 
             VkPipelineVertexInputStateCreateInfo vi = {};
@@ -114,33 +122,41 @@ namespace mrv
             VkPipelineDepthStencilStateCreateInfo ds = {};
             VkPipelineViewportStateCreateInfo vp = {};
             VkPipelineMultisampleStateCreateInfo ms = {};
-            VkDynamicState dynamicStateEnables[(VK_DYNAMIC_STATE_STENCIL_REFERENCE - VK_DYNAMIC_STATE_VIEWPORT + 1)];
+            VkDynamicState dynamicStateEnables[(
+                VK_DYNAMIC_STATE_STENCIL_REFERENCE - VK_DYNAMIC_STATE_VIEWPORT +
+                1)];
             VkPipelineDynamicStateCreateInfo dynamicState = {};
 
             VkResult result;
 
             memset(dynamicStateEnables, 0, sizeof dynamicStateEnables);
             memset(&dynamicState, 0, sizeof dynamicState);
-            dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+            dynamicState.sType =
+                VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
             dynamicState.pDynamicStates = dynamicStateEnables;
 
             memset(&pipeline, 0, sizeof(pipeline));
             pipeline.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-            pipeline.layout = vk.pipeline_layout; // Use the main pipeline layout
-            
-            vi.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+            pipeline.layout =
+                vk.pipeline_layout; // Use the main pipeline layout
+
+            vi.sType =
+                VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
             vi.pNext = NULL;
             vi.vertexBindingDescriptionCount = 1;
-            vi.pVertexBindingDescriptions = vk.vbo->getBindingDescription(); // Use main mesh binding
+            vi.pVertexBindingDescriptions =
+                vk.vbo->getBindingDescription(); // Use main mesh binding
             vi.vertexAttributeDescriptionCount = vk.vbo->getAttributes().size();
             vi.pVertexAttributeDescriptions = vk.vbo->getAttributes().data();
 
             memset(&ia, 0, sizeof(ia));
-            ia.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
+            ia.sType =
+                VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
             ia.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
 
             memset(&rs, 0, sizeof(rs));
-            rs.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+            rs.sType =
+                VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
             rs.polygonMode = VK_POLYGON_MODE_FILL;
             rs.cullMode = VK_CULL_MODE_BACK_BIT;
             rs.frontFace = VK_FRONT_FACE_CLOCKWISE;
@@ -167,11 +183,12 @@ namespace mrv
             dynamicStateEnables[dynamicState.dynamicStateCount++] =
                 VK_DYNAMIC_STATE_SCISSOR;
 
-            bool has_depth = mode() & FL_DEPTH; // Check window depth
+            bool has_depth = mode() & FL_DEPTH;     // Check window depth
             bool has_stencil = mode() & FL_STENCIL; // Check window stencil
 
             memset(&ds, 0, sizeof(ds));
-            ds.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+            ds.sType =
+                VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
             ds.depthTestEnable = has_depth ? VK_TRUE : VK_FALSE;
             ds.depthWriteEnable = has_depth ? VK_TRUE : VK_FALSE;
             ds.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
@@ -190,16 +207,21 @@ namespace mrv
             // Two stages: vs and fs
             pipeline.stageCount = 2;
             VkPipelineShaderStageCreateInfo shaderStages[2];
-            memset(&shaderStages, 0, 2 * sizeof(VkPipelineShaderStageCreateInfo));
+            memset(
+                &shaderStages, 0, 2 * sizeof(VkPipelineShaderStageCreateInfo));
 
-            shaderStages[0].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+            shaderStages[0].sType =
+                VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
             shaderStages[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
-            shaderStages[0].module = vk.shader->getVertex(); // Use main vertex shader
+            shaderStages[0].module =
+                vk.shader->getVertex(); // Use main vertex shader
             shaderStages[0].pName = "main";
 
-            shaderStages[1].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+            shaderStages[1].sType =
+                VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
             shaderStages[1].stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-            shaderStages[1].module = vk.shader->getFragment(); // Use main fragment shader
+            shaderStages[1].module =
+                vk.shader->getFragment(); // Use main fragment shader
             shaderStages[1].pName = "main";
 
             pipeline.pVertexInputState = &vi;
@@ -210,39 +232,39 @@ namespace mrv
             pipeline.pViewportState = &vp;
             pipeline.pDepthStencilState = &ds;
             pipeline.pStages = shaderStages;
-            pipeline.renderPass = m_renderPass; // Use main render pass (swapchain)
+            pipeline.renderPass =
+                m_renderPass; // Use main render pass (swapchain)
             pipeline.pDynamicState = &dynamicState;
 
             // Create a temporary pipeline cache
             VkPipelineCacheCreateInfo pipelineCacheCreateInfo{};
-            pipelineCacheCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
+            pipelineCacheCreateInfo.sType =
+                VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
             VkPipelineCache pipelineCache;
-            result = vkCreatePipelineCache(device(), &pipelineCacheCreateInfo, NULL, &pipelineCache);
+            result = vkCreatePipelineCache(
+                device(), &pipelineCacheCreateInfo, NULL, &pipelineCache);
             VK_CHECK(result);
 
-
-            result = vkCreateGraphicsPipelines(device(), pipelineCache, 1,
-                                               &pipeline, NULL, &m_pipeline);
+            result = vkCreateGraphicsPipelines(
+                device(), pipelineCache, 1, &pipeline, NULL, &m_pipeline);
             VK_CHECK(result);
 
             // Destroy the temporary pipeline cache
             vkDestroyPipelineCache(device(), pipelineCache, NULL);
         }
 
-
         void Viewport::prepare()
         {
             _initializeVK();
-            
-            prepare_render_pass(); // Main swapchain render pass
+
+            prepare_render_pass();       // Main swapchain render pass
             prepare_descriptor_layout(); // Main shader layout
         }
-    
+
         void Viewport::destroy_resources()
         {
             MRV2_VK();
 
-            
             refresh();
 
             if (vk.pipeline_layout != VK_NULL_HANDLE)
@@ -259,7 +281,7 @@ namespace mrv
 
             VkWindow::destroy_resources();
         }
-    
+
         //! Refresh window by clearing the associated resources.
         void Viewport::refresh()
         {
@@ -267,7 +289,7 @@ namespace mrv
             MRV2_VK();
 
             wait_device();
-            
+
             vk.render.reset();
             vk.lines.reset();
 #ifdef USE_ONE_PIXEL_LINES
@@ -303,30 +325,28 @@ namespace mrv
                 vk.lines = std::make_shared<vulkan::Lines>();
 
                 try
-                {      
-                    const std::string& vertexSource = timeline_vlk::vertexSource();
-                    vk.shader = vlk::Shader::create(ctx,
-                                                    vertexSource,
-                                                    textureFragmentSource(),
-                                                    "composite");
-            
+                {
+                    const std::string& vertexSource =
+                        timeline_vlk::vertexSource();
+                    vk.shader = vlk::Shader::create(
+                        ctx, vertexSource, textureFragmentSource(),
+                        "composite");
+
                     // Create parameters for shader.
                     math::Matrix4x4f mvp;
-                    vk.shader->createUniform("transform.mvp", mvp, vlk::kShaderVertex);
-                    vk.shader->addFBO("textureSampler");  // default is fragment
+                    vk.shader->createUniform(
+                        "transform.mvp", mvp, vlk::kShaderVertex);
+                    vk.shader->addFBO("textureSampler"); // default is fragment
                     float opacity = 1.0;
                     vk.shader->createUniform("opacity", opacity);
                     vk.shader->createDescriptorSets();
-            
 
-                    
-                    vk.annotationShader =
-                        vlk::Shader::create(ctx,
-                                            vertexSource,
-                                            annotationFragmentSource(),
-                                            "annotation");
-                    vk.annotationShader->createUniform("transform.mvp", mvp, vlk::kShaderVertex);
-                    int channels = 0;  // Color
+                    vk.annotationShader = vlk::Shader::create(
+                        ctx, vertexSource, annotationFragmentSource(),
+                        "annotation");
+                    vk.annotationShader->createUniform(
+                        "transform.mvp", mvp, vlk::kShaderVertex);
+                    int channels = 0; // Color
                     vk.annotationShader->createUniform("channels", channels);
                     vk.annotationShader->createDescriptorSets();
                 }
@@ -353,7 +373,7 @@ namespace mrv
 
         void Viewport::vk_draw_begin()
         {
-            m_clearColor = { 1.F, 0.F, 0.F, 0.F };
+            m_clearColor = {1.F, 0.F, 0.F, 0.F};
             m_depthStencil = 1.0;
 
             VkWindow::vk_draw_begin();
@@ -364,12 +384,12 @@ namespace mrv
             TLRENDER_P();
             MRV2_VK();
 
-             // Get the command buffer started for the current frame.
+            // Get the command buffer started for the current frame.
             VkCommandBuffer cmd = getCurrentCommandBuffer();
             vkCmdEndRenderPass(cmd);
-            
+
             vk.cmd = cmd;
-            
+
             const auto& viewportSize = getViewportSize();
             const auto& renderSize = getRenderSize();
 
@@ -381,15 +401,14 @@ namespace mrv
             }
 
             const bool transparent =
-                hasAlpha ||
-                getBackgroundOptions().type == timeline::Background::Transparent;
+                hasAlpha || getBackgroundOptions().type ==
+                                timeline::Background::Transparent;
 
-        
             if (renderSize.isValid())
             {
-                
+
                 vk.colorBufferType = image::PixelType::RGBA_U8;
-                
+
                 int accuracy = p.ui->uiPrefs->uiPrefsColorAccuracy->value();
                 switch (accuracy)
                 {
@@ -448,11 +467,10 @@ namespace mrv
                     break;
                 }
 
-
-                
                 vlk::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = vk.colorBufferType;
-                
+                std::cerr << vk.colorBufferType << std::endl;
+
                 if (!p.displayOptions.empty())
                 {
                     offscreenBufferOptions.colorFilters =
@@ -461,8 +479,9 @@ namespace mrv
                 offscreenBufferOptions.depth = vlk::OffscreenDepth::_24;
                 offscreenBufferOptions.stencil = vlk::OffscreenStencil::_8;
                 offscreenBufferOptions.allowCompositing = true;
-                
-                if (vlk::doCreate(vk.buffer, renderSize, offscreenBufferOptions))
+
+                if (vlk::doCreate(
+                        vk.buffer, renderSize, offscreenBufferOptions))
                 {
                     vk.buffer = vlk::OffscreenBuffer::create(
                         ctx, renderSize, offscreenBufferOptions);
@@ -476,9 +495,7 @@ namespace mrv
                 vk.buffer.reset();
                 vk.stereoBuffer.reset();
             }
-            
 
-            
             if (!vk.buffer)
             {
                 // Must begin a dummy render pass, as vk_end_draw()
@@ -487,7 +504,6 @@ namespace mrv
                 return;
             }
 
-            
             if (p.pixelAspectRatio > 0.F && !p.videoData.empty() &&
                 !p.videoData[0].layers.empty())
             {
@@ -496,32 +512,28 @@ namespace mrv
                 image->setPixelAspectRatio(p.pixelAspectRatio);
             }
 
-                
             locale::SetAndRestore saved;
             timeline::RenderOptions renderOptions;
             renderOptions.colorBuffer = vk.colorBufferType;
             renderOptions.clear = true;
-            renderOptions.clearColor = image::Color4f(0,0,1,0);
-            
-            vk.render->begin(cmd, vk.buffer, m_currentFrameIndex,
-                             renderSize, renderOptions);
+            renderOptions.clearColor = image::Color4f(0, 0, 1, 0);
+
+            vk.render->begin(
+                cmd, vk.buffer, m_currentFrameIndex, renderSize, renderOptions);
             vk.render->drawVideo(
                 p.videoData,
-                timeline::getBoxes(
-                    p.compareOptions.mode, p.videoData),
-                p.imageOptions, p.displayOptions,
-                p.compareOptions, getBackgroundOptions());
+                timeline::getBoxes(p.compareOptions.mode, p.videoData),
+                p.imageOptions, p.displayOptions, p.compareOptions,
+                getBackgroundOptions());
             vk.render->end();
-            
+
             // vk.buffer->transitionToShaderRead(cmd);
 
-            
             math::Matrix4x4f mvp;
 
             const float rotation = _getRotation();
-                
-            mvp = _createTexturedRectangle();
 
+            mvp = _createTexturedRectangle();
 
             // --- Final Render Pass: Render to Swapchain (Composition) ---
             begin_render_pass();
@@ -529,12 +541,14 @@ namespace mrv
             // Bind the shaders to the current frame index.
             vk.shader->bind(m_currentFrameIndex);
             vk.annotationShader->bind(m_currentFrameIndex);
-            
-            // Bind the main composition pipeline (created/managed outside this draw loop)
+
+            // Bind the main composition pipeline (created/managed outside this
+            // draw loop)
             vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline);
-    
+
             // --- Update Descriptor Set for the SECOND pass (Composition) ---
-            // This updates the descriptor set for the CURRENT frame index on the CPU.
+            // This updates the descriptor set for the CURRENT frame index on
+            // the CPU.
             vk.shader->setUniform("transform.mvp", mvp, vlk::kShaderVertex);
             vk.shader->setFBO("textureSampler", vk.buffer);
 #ifdef __APPLE__
@@ -546,14 +560,15 @@ namespace mrv
             else if (desktop::X11() || desktop::Windows())
                 vk.shader->setUniform("opacity", 1.0F);
 #endif
-    
+
             // --- Bind Descriptor Set for the SECOND pass ---
-            // Record the command to bind the descriptor set for the CURRENT frame index
-            vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
-                                    vk.pipeline_layout, 0, 1,
-                                    &vk.shader->getDescriptorSet(),
-                                    // Bind the set for THIS frame
-                                    0, nullptr);
+            // Record the command to bind the descriptor set for the CURRENT
+            // frame index
+            vkCmdBindDescriptorSets(
+                cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, vk.pipeline_layout, 0, 1,
+                &vk.shader->getDescriptorSet(),
+                // Bind the set for THIS frame
+                0, nullptr);
 
             VkViewport viewport = {};
             viewport.width = static_cast<float>(w());
@@ -561,37 +576,36 @@ namespace mrv
             viewport.minDepth = 0.0f;
             viewport.maxDepth = 1.0f;
             vkCmdSetViewport(cmd, 0, 1, &viewport);
-                
+
             VkRect2D scissor = {};
             scissor.extent.width = w();
             scissor.extent.height = h();
             vkCmdSetScissor(cmd, 0, 1, &scissor);
-            
-
 
             if (vk.vao && vk.vbo)
             {
-                // Draw calls for the composition geometry (e.g., a screen-filling quad)
+                // Draw calls for the composition geometry (e.g., a
+                // screen-filling quad)
                 vk.vao->draw(cmd, vk.vbo);
             }
 
             end_render_pass();
-            
+
             // Correctly transition from SHADER_READ to COLOR_ATTACHMENT
             // vk.buffer->transitionToColorAttachment(cmd);
-            
-            
+
             // Draw FLTK children
             // Fl_Window::draw();
         }
-        
+
         void Viewport::_calculateColorAreaFullValues(area::Info& info) noexcept
         {
             TLRENDER_P();
             MRV2_VK();
 
             PixelToolBarClass* c = p.ui->uiPixelWindow;
-            BrightnessType brightness_type = (BrightnessType)c->uiLType->value();
+            BrightnessType brightness_type =
+                (BrightnessType)c->uiLType->value();
             int hsv_colorspace = c->uiBColorType->value() + 1;
 
             const int maxX = info.box.max.x;
@@ -678,7 +692,7 @@ namespace mrv
             info.rgba.min.a = std::numeric_limits<float>::max();
 
             info.rgba.mean.r = info.rgba.mean.g = info.rgba.mean.b =
-            info.rgba.mean.a = 0.F;
+                info.rgba.mean.a = 0.F;
 
             info.hsv.max.r = std::numeric_limits<float>::min();
             info.hsv.max.g = std::numeric_limits<float>::min();
@@ -690,8 +704,8 @@ namespace mrv
             info.hsv.min.b = std::numeric_limits<float>::max();
             info.hsv.min.a = std::numeric_limits<float>::max();
 
-            info.hsv.mean.r = info.hsv.mean.g = info.hsv.mean.b = info.hsv.mean.a =
-                              0.F;
+            info.hsv.mean.r = info.hsv.mean.g = info.hsv.mean.b =
+                info.hsv.mean.a = 0.F;
 
             if (p.ui->uiPixelWindow->uiPixelValue->value() == PixelValue::kFull)
                 _calculateColorAreaFullValues(info);
@@ -711,7 +725,6 @@ namespace mrv
                 // constexpr VKenum format = GL_BGRA;
                 // constexpr VKenum type = GL_FLOAT;
 
-
                 // vlk::OffscreenBufferBinding binding(vk.buffer);
                 const auto& renderSize = vk.buffer->getSize();
 
@@ -724,7 +737,6 @@ namespace mrv
                 // "nextIndex" is used to update pixels in the other PBO
                 vk.currentPBOIndex = (vk.currentPBOIndex + 1) % 2;
                 vk.nextPBOIndex = (vk.currentPBOIndex + 1) % 2;
-
             }
             else
             {
@@ -784,7 +796,8 @@ namespace mrv
                         {
                             _getPixelValue(pixelB, imageB, pos);
 
-                            if (layer.transition == timeline::Transition::Dissolve)
+                            if (layer.transition ==
+                                timeline::Transition::Dissolve)
                             {
                                 float f2 = layer.transitionValue;
                                 float f = 1.0 - f2;
@@ -832,15 +845,17 @@ namespace mrv
                         pos = _getFocus();
                         // glBindFramebuffer(GL_FRAMEBUFFER, 0);
                         // glReadBuffer(GL_FRONT);
-                        // glReadPixels(pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);
+                        // glReadPixels(pos.x, pos.y, 1, 1, GL_RGBA, type,
+                        // &rgba);
                         return;
                     }
                     else
                     {
                         // MyViewport* self = const_cast<Viewport*>(this);
                         // self->make_current();
-                        //vlk::OffscreenBufferBinding binding(vk.buffer);
-                        //glReadPixels(pos.x, pos.y, 1, 1, GL_RGBA, type, &rgba);
+                        // vlk::OffscreenBufferBinding binding(vk.buffer);
+                        // glReadPixels(pos.x, pos.y, 1, 1, GL_RGBA, type,
+                        // &rgba);
                         return;
                     }
                 }
@@ -881,7 +896,7 @@ namespace mrv
             auto shape = annotation->lastShape().get();
             if (!shape)
                 return;
-        
+
             Message value;
             if (dynamic_cast< VKArrowShape* >(shape))
             {
@@ -956,6 +971,6 @@ namespace mrv
             tcp->pushMessage(msg);
         }
 
-    }  // namespace vulkan
-        
+    } // namespace vulkan
+
 } // namespace mrv

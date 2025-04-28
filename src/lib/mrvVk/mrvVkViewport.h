@@ -29,7 +29,9 @@ namespace mrv
 
             //! Vitual draw begin method
             void vk_draw_begin() FL_OVERRIDE;
-            
+
+            int log_level() const FL_OVERRIDE;
+
             //! Virual draw method
             void draw() FL_OVERRIDE;
 
@@ -51,7 +53,7 @@ namespace mrv
 
             void _createPBOs(const math::Size2i& renderSize);
             void _createOverlayPBO(const math::Size2i& renderSize);
-        
+
             void _createCubicEnvironmentMap();
 
             void _createSphericalEnvironmentMap();
@@ -93,7 +95,8 @@ namespace mrv
                 const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay,
                 const math::Matrix4x4f& renderMVP,
                 const otime::RationalTime& time,
-                const std::vector<std::shared_ptr<draw::Annotation>>& annotations,
+                const std::vector<std::shared_ptr<draw::Annotation>>&
+                    annotations,
                 const math::Size2i& renderSize);
 
             void _pushAnnotationShape(const std::string& cmd) const override;
@@ -107,8 +110,8 @@ namespace mrv
                 const math::Matrix4x4f& mvp) noexcept;
             void _drawText(
                 const std::vector<std::shared_ptr<image::Glyph> >&,
-                math::Vector2i&,
-                const int16_t lineHeight, const image::Color4f&) const noexcept;
+                math::Vector2i&, const int16_t lineHeight,
+                const image::Color4f&) const noexcept;
             void _drawSafeAreas() noexcept;
             void _drawSafeAreas(
                 const float percentX, const float percentY,
@@ -129,27 +132,29 @@ namespace mrv
             void _compositeAnnotations(
                 const math::Matrix4x4f& shaderMatrix,
                 const math::Size2i& viewportSize);
-        
+
             void _compositeAnnotations(
                 const std::shared_ptr<tl::vlk::OffscreenBuffer>&,
                 const math::Matrix4x4f& orthoMatrix,
                 const math::Size2i& viewportSize);
-        
+
             void _compositeOverlay(
                 const std::shared_ptr<tl::vlk::OffscreenBuffer>&,
                 const math::Matrix4x4f& identity,
                 const math::Size2i& viewportSize);
+
         protected:
             // Pipelines and layouts are managed outside the per-frame draw loop
 
             void prepare_pipeline();
-            void prepare_descriptor_layout(); // For the main shader (composition)
-            
+            void
+            prepare_descriptor_layout(); // For the main shader (composition)
+
         private:
             struct VKPrivate;
             std::unique_ptr<VKPrivate> _vk;
         };
-        
-    }  // namespace vulkan
-    
+
+    } // namespace vulkan
+
 } // namespace mrv
