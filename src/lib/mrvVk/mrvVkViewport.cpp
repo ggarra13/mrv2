@@ -372,14 +372,6 @@ namespace mrv
             return TimelineViewport::handle(event);
         }
 
-        void Viewport::vk_draw_begin()
-        {
-            m_clearColor = {1.F, 0.F, 0.F, 0.F};
-            m_depthStencil = 1.0;
-
-            VkWindow::vk_draw_begin();
-        }
-
         void Viewport::draw()
         {
             TLRENDER_P();
@@ -527,13 +519,75 @@ namespace mrv
                 getBackgroundOptions());
             vk.render->end();
 
+            float r = 0.F, g = 0.F, b = 0.F, a = 0.F;
+
+            if (!p.presentation)
+            {
+                Fl_Color c = p.ui->uiPrefs->uiPrefsViewBG->color();
+
+                uint8_t ur = 0, ug = 0, ub = 0, ua = 0;
+                Fl::get_color(c, ur, ug, ub, ua);
+
+                r = ur / 255.0f;
+                g = ug / 255.0f;
+                b = ub / 255.0f;
+                a = alpha;
+
+                if (desktop::Wayland())
+                {
+                    p.ui->uiViewGroup->color(fl_rgb_color(ur, ug, ub));
+                    p.ui->uiViewGroup->redraw();
+                }
+            }
+            else
+            {
+                if (desktop::Wayland())
+                {
+                    p.ui->uiViewGroup->color(fl_rgb_color(0, 0, 0));
+                    p.ui->uiViewGroup->redraw();
+                }
+
+                // Hide the cursor if in presentation time after 3 seconds of
+                // inactivity.
+                const auto& time = std::chrono::high_resolution_clock::now();
+                const auto elapsedTime =
+                    std::chrono::duration_cast<std::chrono::milliseconds>(
+                        time - p.presentationTime)
+                        .count();
+                if (elapsedTime >= 3000)
+                {
+                    // If user is changing preferences or hotkeys, keep
+                    // the default cursor.
+                    if (p.ui->uiPrefs->uiMain->visible() ||
+                        p.ui->uiHotkey->uiMain->visible() ||
+                        p.ui->uiAbout->uiMain->visible())
+                    {
+                        window()->cursor(FL_CURSOR_DEFAULT);
+                    }
+                    else
+                    {
+                        window()->cursor(FL_CURSOR_NONE);
+                    }
+                    p.presentationTime = time;
+                }
+            }
+
+            m_clearColor = {r, g, b, a};
+
             // vk.buffer->transitionToShaderRead(cmd);
 
             math::Matrix4x4f mvp;
 
             const float rotation = _getRotation();
 
-            mvp = _createTexturedRectangle();
+            if (p.environmentMapOptions.type != EnvironmentMapOptions::kNone)
+            {
+                mvp = _createEnvironmentMap();
+            }
+            else
+            {
+                mvp = _createTexturedRectangle();
+            }
 
             // --- Final Render Pass: Render to Swapchain (Composition) ---
             begin_render_pass();
@@ -591,9 +645,6 @@ namespace mrv
             }
 
             end_render_pass();
-
-            // Correctly transition from SHADER_READ to COLOR_ATTACHMENT
-            // vk.buffer->transitionToColorAttachment(cmd);
 
             // Draw FLTK children
             // Fl_Window::draw();

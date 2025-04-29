@@ -44,6 +44,7 @@ namespace mrv
             if (!vk.vao && vk.vbo)
             {
                 vk.vao = vlk::VAO::create(ctx);
+                vkDeviceWaitIdle(device());
                 prepare_pipeline();
             }
         }
@@ -69,6 +70,8 @@ namespace mrv
             if (!vk.vao && vk.vbo)
             {
                 vk.vao = vlk::VAO::create(ctx);
+
+                vkDeviceWaitIdle(device());
                 prepare_pipeline();
             }
         }
@@ -194,6 +197,8 @@ namespace mrv
             if (!vk.vao && vk.vbo)
             {
                 vk.vao = vlk::VAO::create(ctx);
+
+                vkDeviceWaitIdle(device());
                 prepare_pipeline();
             }
 

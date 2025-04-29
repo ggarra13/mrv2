@@ -27,9 +27,7 @@ namespace mrv
             Viewport(int X, int Y, int W, int H, const char* L = 0);
             ~Viewport();
 
-            //! Vitual draw begin method
-            void vk_draw_begin() FL_OVERRIDE;
-
+            //! Virtual log level method
             int log_level() const FL_OVERRIDE;
 
             //! Virual draw method
