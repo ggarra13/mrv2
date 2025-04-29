@@ -10,6 +10,8 @@
 #include <tlCore/Error.h>
 #include <tlCore/String.h>
 
+#include <FL/Fl_Vk_Utils.H>
+
 #include <array>
 #include <sstream>
 #include <iostream>
@@ -118,9 +120,11 @@ namespace tl
         bool OffscreenBufferOptions::operator==(
             const OffscreenBufferOptions& other) const
         {
-            return colorType == other.colorType &&
-                   colorFilters == other.colorFilters && depth == other.depth &&
-                   stencil == other.stencil && sampling == other.sampling;
+            return (colorType == other.colorType &&
+                    colorFilters == other.colorFilters && depth == other.depth &&
+                    stencil == other.stencil && sampling == other.sampling &&
+                    allowCompositing == other.allowCompositing &&
+                    pbo == other.pbo);
         }
 
         bool OffscreenBufferOptions::operator!=(
@@ -129,12 +133,25 @@ namespace tl
             return !(*this == other);
         }
 
+        static constexpr int NUM_PBO_BUFFERS = 3;
+
+        struct StagingBuffer {
+            VkBuffer buffer;
+            VkDeviceMemory memory;
+            void* mappedPtr = nullptr;
+            VkFence fence = VK_NULL_HANDLE;
+        };
+        
         struct OffscreenBuffer::Private
         {
             uint32_t frameIndex = 0;
 
             math::Size2i size;
             OffscreenBufferOptions options;
+
+            // PBO for reading from main FBO.
+            uint32_t currentPBO = 3;
+            std::vector<StagingBuffer> pboRing;
 
             // Vulkan handles
             VkFormat colorFormat = VK_FORMAT_R8G8B8A8_UNORM;
@@ -229,6 +246,16 @@ namespace tl
             if (p.depthMemory != VK_NULL_HANDLE)
                 vkFreeMemory(device, p.depthMemory, nullptr);
 
+            for (auto& pbo : p.pboRing)
+            {
+                if (pbo.buffer != VK_NULL_HANDLE)
+                    vkDestroyBuffer(device, pbo.buffer, nullptr);
+                if (pbo.fence != VK_NULL_HANDLE)
+                    vkDestroyFence(device, pbo.fence, nullptr);
+                if (pbo.memory != VK_NULL_HANDLE)
+                    vkFreeMemory(device, pbo.memory, nullptr);
+            }
+
             // Reset layouts
             p.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
             p.depthLayout = VK_IMAGE_LAYOUT_UNDEFINED;
@@ -253,6 +280,10 @@ namespace tl
             {
                 createCompositingRenderPass();
                 createCompositingFramebuffer();
+            }
+            if (p.options.pbo)
+            {
+                createStagingBuffers();
             }
             createSampler();
         }
@@ -970,7 +1001,132 @@ namespace tl
             // Track layout
             p.depthLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
         }
+        
+        void OffscreenBuffer::createStagingBuffers()
+        {
+            TLRENDER_P();
 
+            // Calculate bufferSize
+            image::Info info(p.size.w, p.size.h, p.options.colorType);
+            VkDeviceSize bufferSize = image::getDataByteCount(info);
+            
+            VkDevice device = ctx.device;
+
+            // Create Staging buffers
+            p.pboRing.resize(NUM_PBO_BUFFERS);
+            for (int i = 0; i < NUM_PBO_BUFFERS; ++i)
+            {
+                auto& pbo = p.pboRing[i];
+
+                VkBufferCreateInfo bufferInfo = {};
+                bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+                bufferInfo.size = bufferSize;
+                bufferInfo.usage = VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+                bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+                vkCreateBuffer(device, &bufferInfo, nullptr, &pbo.buffer);
+
+                VkMemoryRequirements memReq;
+                vkGetBufferMemoryRequirements(device, pbo.buffer, &memReq);
+
+                VkMemoryAllocateInfo allocInfo = {};
+                allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+                allocInfo.allocationSize = memReq.size;
+                allocInfo.memoryTypeIndex =
+                    findMemoryType(
+                    memReq.memoryTypeBits,
+                    VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+                        VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+                vkAllocateMemory(device, &allocInfo, nullptr, &pbo.memory);
+                vkBindBufferMemory(device, pbo.buffer, pbo.memory, 0);
+
+                vkMapMemory(
+                    device, pbo.memory, 0, bufferSize, 0, &pbo.mappedPtr);
+
+                VkFenceCreateInfo fenceInfo{
+                    VK_STRUCTURE_TYPE_FENCE_CREATE_INFO};
+                fenceInfo.flags =
+                    VK_FENCE_CREATE_SIGNALED_BIT; // allow reuse on first frame
+                vkCreateFence(device, &fenceInfo, nullptr, &pbo.fence);
+            }
+        }
+
+        void OffscreenBuffer::readPixels(VkCommandBuffer cmd,
+                                         uint32_t w, uint32_t h)
+        {
+            TLRENDER_P();
+            
+            VkDevice device = ctx.device;
+            VkCommandPool commandPool = ctx.commandPool;
+            VkQueue  queue  = ctx.queue;
+            
+            auto& pbo = p.pboRing[p.currentPBO];
+            vkWaitForFences(device, 1, &pbo.fence, VK_TRUE, UINT64_MAX);
+            vkResetFences(device, 1, &pbo.fence);
+
+            // Transition image to TRANSFER_SRC
+            transitionImageLayout(cmd, device, commandPool, queue,
+                                  p.image,
+                                  VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+                                  VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+
+            // Setup copy region
+            VkBufferImageCopy region{};
+            region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            region.imageSubresource.mipLevel = 0;
+            region.imageSubresource.baseArrayLayer = 0;
+            region.imageSubresource.layerCount = 1;
+            region.imageOffset = {0, 0, 0};
+
+            if (w == 0) w = p.size.w;
+            if (h == 0) h = p.size.h;
+            
+            region.imageExtent = {w, h, 1};
+
+            vkCmdCopyImageToBuffer(cmd, p.image,
+                                   VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                                   pbo.buffer, 1, &region);
+
+            // Transition back if needed
+            transitionImageLayout(cmd, device, commandPool, queue, p.image,
+                                  VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                                  VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+        }
+
+        void OffscreenBuffer::submitReadback(VkCommandBuffer cmd)
+        {
+            TLRENDER_P();
+            
+            VkSubmitInfo submitInfo{VK_STRUCTURE_TYPE_SUBMIT_INFO};
+            submitInfo.commandBufferCount = 1;
+            submitInfo.pCommandBuffers = &cmd;
+
+            // Should we use another queue?
+            VkQueue transferQueue = ctx.queue;
+            
+            vkQueueSubmit(transferQueue, 1, &submitInfo,
+                          p.pboRing[p.currentPBO].fence);
+            p.currentPBO = (p.currentPBO + 1) % NUM_PBO_BUFFERS;
+        }
+
+        void* OffscreenBuffer::getLatestReadPixels()
+        {
+            TLRENDER_P();
+
+            VkDevice device = ctx.device;
+            
+            int readIndex = (p.currentPBO + NUM_PBO_BUFFERS - 1) %
+                            NUM_PBO_BUFFERS;
+            auto& pbo = p.pboRing[readIndex];
+
+            if (vkGetFenceStatus(device, pbo.fence) == VK_SUCCESS)
+            {
+                return pbo.mappedPtr; // valid data
+            }
+            return nullptr; // not ready yet
+        }
+
+        
         bool doCreate(
             const std::shared_ptr<OffscreenBuffer>& offscreenBuffer,
             const math::Size2i& size, const OffscreenBufferOptions& options)

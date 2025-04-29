@@ -1,3 +1,6 @@
+
+#pragma once
+
 #include <tlVk/Vk.h>
 
 #include <array>

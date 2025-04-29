@@ -283,7 +283,8 @@ namespace mrv
                     allocateAndBindImageMemory(device(), gpu(), image);
 
                 // Transition image layout to TRANSFER_DST_OPTIMAL
-                transitionImageLayout(
+                VkCommandBuffer cmd = beginSingleTimeCommands(device(), commandPool());
+                transitionImageLayout(cmd,
                     device(), commandPool(), queue(), image,
                     VK_IMAGE_LAYOUT_UNDEFINED,
                     VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
@@ -295,10 +296,12 @@ namespace mrv
                     values);
 
                 // Transition image layout to SHADER_READ_ONLY_OPTIMAL
-                transitionImageLayout(
+                transitionImageLayout(cmd,
                     device(), commandPool(), queue(), image,
                     VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                     VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
+                endSingleTimeCommands(cmd, device(), commandPool(), queue());
 
                 // Create image view
                 VkImageView imageView =
@@ -732,8 +735,9 @@ namespace mrv
                     VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
             // Initial transition to shader-readable layout
+            VkCommandBuffer cmd = beginSingleTimeCommands(device(), commandPool());
             set_image_layout(
-                device(), commandPool(), queue(), m_textures[0].image,
+                cmd, device(), commandPool(), queue(), m_textures[0].image,
                 VK_IMAGE_ASPECT_COLOR_BIT,
                 VK_IMAGE_LAYOUT_UNDEFINED, // Initial layout
                 VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
@@ -741,6 +745,7 @@ namespace mrv
                 VK_PIPELINE_STAGE_HOST_BIT, // Host stage
                 VK_ACCESS_SHADER_READ_BIT,  // Shader read
                 VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+            endSingleTimeCommands(cmd, device(), commandPool(), queue());
         }
         else
         {
@@ -1263,7 +1268,7 @@ void main() {
         m_swapchain_needs_recreation = false;
     }
 
-    void NDIView::update_texture()
+    void NDIView::update_texture(VkCommandBuffer cmd)
     {
         TLRENDER_P();
 
@@ -1306,7 +1311,7 @@ void main() {
 
         // Transition to GENERAL for CPU writes
         set_image_layout(
-            device(), commandPool(), queue(), m_textures[0].image,
+            cmd, device(), commandPool(), queue(), m_textures[0].image,
             VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
             VK_IMAGE_LAYOUT_GENERAL, VK_ACCESS_SHADER_READ_BIT,
             VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, VK_ACCESS_HOST_WRITE_BIT,
@@ -1340,7 +1345,7 @@ void main() {
 
         // Transition back to SHADER_READ_ONLY_OPTIMAL
         set_image_layout(
-            device(), commandPool(), queue(), m_textures[0].image,
+            cmd, device(), commandPool(), queue(), m_textures[0].image,
             VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_GENERAL,
             VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_ACCESS_HOST_WRITE_BIT,
             VK_PIPELINE_STAGE_HOST_BIT, VK_ACCESS_SHADER_READ_BIT,
@@ -1364,7 +1369,7 @@ void main() {
             return;
         }
 
-        update_texture();
+        update_texture(cmd);
 
         vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline);
         vkCmdBindDescriptorSets(

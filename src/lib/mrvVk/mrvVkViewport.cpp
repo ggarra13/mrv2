@@ -9,8 +9,10 @@
 
 #include <tlDevice/IOutput.h>
 
-#include <tlVk/OffscreenBuffer.h>
 #include <tlTimelineVk/RenderPrivate.h>
+
+#include <tlVk/PipelineCreationState.h>
+#include <tlVk/OffscreenBuffer.h>
 #include <tlVk/Init.h>
 #include <tlVk/Util.h>
 
@@ -82,7 +84,7 @@ namespace mrv
 
         int Viewport::log_level() const
         {
-            return 4;
+            return 0;
         }
 
         void Viewport::prepare_descriptor_layout()
@@ -256,8 +258,7 @@ namespace mrv
 
         void Viewport::prepare()
         {
-            _initializeVK();
-
+            prepare_shaders();
             prepare_render_pass();       // Main swapchain render pass
             prepare_descriptor_layout(); // Main shader layout
         }
@@ -266,7 +267,7 @@ namespace mrv
         {
             MRV2_VK();
 
-            refresh();
+            vk.vbo.reset();
 
             if (vk.pipeline_layout != VK_NULL_HANDLE)
             {
@@ -283,32 +284,40 @@ namespace mrv
             VkWindow::destroy_resources();
         }
 
-        //! Refresh window by clearing the associated resources.
-        void Viewport::refresh()
+        void Viewport::hide()
         {
             TLRENDER_P();
             MRV2_VK();
 
             wait_device();
-
+            
+            // Destroy main render
             vk.render.reset();
+
+            // Destroy auxiliary render classes
             vk.lines.reset();
 #ifdef USE_ONE_PIXEL_LINES
             vk.outline.reset();
 #endif
+            // Destroy Buffers
             vk.buffer.reset();
             vk.annotation.reset();
             vk.overlay.reset();
+
+            // Destroy shaders
             vk.shader.reset();
             vk.annotationShader.reset();
+
+            // Destroy meshes
             vk.vbo.reset();
             vk.vao.reset();
+            
             p.fontSystem.reset();
-            vk.currentPBOIndex = 0;
-            vk.nextPBOIndex = 1;
+            
+            TimelineViewport::hide();
         }
 
-        void Viewport::_initializeVKResources()
+        void Viewport::prepare_shaders()
         {
             TLRENDER_P();
             MRV2_VK();
@@ -316,32 +325,41 @@ namespace mrv
             if (auto context = vk.context.lock())
             {
 
-                vk.render = timeline_vlk::Render::create(ctx, context);
-                p.fontSystem = image::FontSystem::create(context);
+                if (!vk.render)
+                    vk.render = timeline_vlk::Render::create(ctx, context);
+
+                if (!p.fontSystem)
+                    p.fontSystem = image::FontSystem::create(context);
 
 #ifdef USE_ONE_PIXEL_LINES
-                vk.outline = std::make_shared<vulkan::Outline>();
+                if (!vk.outline)
+                    vk.outline = std::make_shared<vulkan::Outline>();
 #endif
+                if (!vk.lines)
+                    vk.lines = std::make_shared<vulkan::Lines>();
 
-                vk.lines = std::make_shared<vulkan::Lines>();
 
-                try
+                const std::string& vertexSource =
+                    timeline_vlk::vertexSource();
+
+                math::Matrix4x4f mvp;
+                if (!vk.shader)
                 {
-                    const std::string& vertexSource =
-                        timeline_vlk::vertexSource();
                     vk.shader = vlk::Shader::create(
                         ctx, vertexSource, textureFragmentSource(),
                         "composite");
 
                     // Create parameters for shader.
-                    math::Matrix4x4f mvp;
                     vk.shader->createUniform(
                         "transform.mvp", mvp, vlk::kShaderVertex);
                     vk.shader->addFBO("textureSampler"); // default is fragment
                     float opacity = 1.0;
                     vk.shader->createUniform("opacity", opacity);
                     vk.shader->createDescriptorSets();
+                }
 
+                if (!vk.annotationShader)
+                {
                     vk.annotationShader = vlk::Shader::create(
                         ctx, vertexSource, annotationFragmentSource(),
                         "annotation");
@@ -351,20 +369,8 @@ namespace mrv
                     vk.annotationShader->createUniform("channels", channels);
                     vk.annotationShader->createDescriptorSets();
                 }
-                catch (const std::exception& e)
-                {
-                    LOG_ERROR(e.what());
-                }
+
             }
-        }
-
-        void Viewport::_initializeVK()
-        {
-            MRV2_VK();
-
-            refresh();
-
-            _initializeVKResources();
         }
 
         int Viewport::handle(int event)
@@ -377,10 +383,11 @@ namespace mrv
             TLRENDER_P();
             MRV2_VK();
 
+            
             // Get the command buffer started for the current frame.
             VkCommandBuffer cmd = getCurrentCommandBuffer();
-            vkCmdEndRenderPass(cmd);
-
+            end_render_pass(cmd);
+            
             vk.cmd = cmd;
 
             const auto& viewportSize = getViewportSize();
@@ -490,11 +497,9 @@ namespace mrv
 
             if (!vk.buffer)
             {
-                // Must begin a dummy render pass, as vk_end_draw()
-                // will call vkCmdEndRenderPass.
-                begin_render_pass();
                 return;
             }
+            
 
             if (p.pixelAspectRatio > 0.F && !p.videoData.empty() &&
                 !p.videoData[0].layers.empty())
@@ -574,8 +579,6 @@ namespace mrv
 
             m_clearColor = {r, g, b, a};
 
-            // vk.buffer->transitionToShaderRead(cmd);
-
             math::Matrix4x4f mvp;
 
             const float rotation = _getRotation();
@@ -590,8 +593,8 @@ namespace mrv
             }
 
             // --- Final Render Pass: Render to Swapchain (Composition) ---
-            begin_render_pass();
-
+            begin_render_pass(cmd);
+            
             // Bind the shaders to the current frame index.
             vk.shader->bind(m_currentFrameIndex);
             vk.annotationShader->bind(m_currentFrameIndex);
@@ -644,7 +647,7 @@ namespace mrv
                 vk.vao->draw(cmd, vk.vbo);
             }
 
-            end_render_pass();
+            end_render_pass(cmd);
 
             // Draw FLTK children
             // Fl_Window::draw();

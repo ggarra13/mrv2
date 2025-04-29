@@ -108,7 +108,7 @@ namespace mrv
         void prepare_descriptor_pool();
         void prepare_descriptor_set();
 
-        void update_texture();
+        void update_texture(VkCommandBuffer);
 
     private:
         void _init();

@@ -33,22 +33,19 @@ namespace mrv
             //! Virual draw method
             void draw() FL_OVERRIDE;
 
-            //! Virtual handle event method
+            //! Virtual handle event method.
             int handle(int event) FL_OVERRIDE;
+
+            //! Virtual hide method.  Destroys ALL resources.
+            void hide() FL_OVERRIDE;
 
             //! Set the internal system context for the widget.
             void setContext(const std::weak_ptr<system::Context>& context);
-
-            //! Refresh window by clearing the associated resources.
-            void refresh() FL_OVERRIDE;
 
             void prepare() FL_OVERRIDE;
             void destroy_resources() FL_OVERRIDE;
 
         protected:
-            void _initializeVK();
-            void _initializeVKResources();
-
             void _createPBOs(const math::Size2i& renderSize);
             void _createOverlayPBO(const math::Size2i& renderSize);
 
@@ -145,9 +142,11 @@ namespace mrv
             // Pipelines and layouts are managed outside the per-frame draw loop
 
             void prepare_pipeline();
-            void
-            prepare_descriptor_layout(); // For the main shader (composition)
+            void prepare_descriptor_layout();
+            void prepare_shaders();
+            void prepare_render();
 
+            
         private:
             struct VKPrivate;
             std::unique_ptr<VKPrivate> _vk;

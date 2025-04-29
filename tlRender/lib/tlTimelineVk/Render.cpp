@@ -662,6 +662,7 @@ namespace tl
             p.renderOptions = renderOptions;
             p.textureCache->setMax(renderOptions.textureCacheByteCount);
 
+            // \@todo: reproduce this in first pipeline.
             // glEnable(GL_BLEND);
             // glBlendEquation(GL_FUNC_ADD);
 

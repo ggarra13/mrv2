@@ -76,6 +76,7 @@ namespace tl
             OffscreenStencil stencil = OffscreenStencil::kNone;
             OffscreenSampling sampling = OffscreenSampling::kNone;
             bool      allowCompositing = false;
+            bool      pbo = false;
 
             bool operator==(const OffscreenBufferOptions&) const;
             bool operator!=(const OffscreenBufferOptions&) const;
@@ -159,6 +160,13 @@ namespace tl
             //! Apply internal viewport and scissor to command buffer.
             void setupViewportAndScissor(VkCommandBuffer cmd);
 
+            //! Read-back PBO like functionality.
+            void createStagingBuffers();
+            void readPixels(VkCommandBuffer cmd,
+                            uint32_t w = 0, uint32_t h = 0);
+            void submitReadback(VkCommandBuffer cmd);
+            void* getLatestReadPixels();
+            
         private:
             Fl_Vk_Context& ctx;
 
