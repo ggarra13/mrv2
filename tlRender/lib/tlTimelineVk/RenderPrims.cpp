@@ -503,13 +503,14 @@ namespace tl
 
             VkDevice device = ctx.device;
 
-            auto shader = p.shaders[shaderName];
+            const auto& shader = p.shaders[shaderName];
+            const auto& mesh = p.vbos[meshName];
 
-            if (!p.shaders[shaderName])
+            if (!shader)
                 throw std::runtime_error(
                     "createPipeline failed with unknown shader " + shaderName);
 
-            if (!p.vbos[meshName])
+            if (!mesh)
                 throw std::runtime_error(
                     "createPipeline failed with unknown mesh " + meshName);
 
@@ -531,8 +532,6 @@ namespace tl
                 p.pipelineLayouts[pipelineName] = pipelineLayout;
             }
 
-            const auto& mesh = p.vbos[meshName];
-
             // Elements of new Pipeline
             vlk::VertexInputStateInfo vi;
             vi.bindingDescriptions = mesh->getBindingDescription();
@@ -549,8 +548,8 @@ namespace tl
 
             vlk::DepthStencilStateInfo ds;
             
-            bool has_depth = fbo->hasDepth();     // Check FBO depth
-            bool has_stencil = fbo->hasStencil(); // Check FBO stencil
+            bool has_depth = fbo->hasDepth();     // Check if FBO has depth
+            bool has_stencil = fbo->hasStencil(); // Check if FBO has stencil
 
             ds.depthTestEnable = has_depth ? VK_TRUE : VK_FALSE;
             ds.depthWriteEnable = has_depth ? VK_TRUE : VK_FALSE;
@@ -587,7 +586,7 @@ namespace tl
             cb.attachments.push_back(colorBlendAttachment);
 
             //
-            // Actual pipeline creation parameters
+            // Pass pipeline creation parameters to pipelineState.
             //
             vlk::PipelineCreationState pipelineState;
             pipelineState.vertexInputState = vi;
@@ -605,12 +604,12 @@ namespace tl
             pipelineState.layout = p.pipelineLayouts[pipelineName];
 
             VkPipeline pipeline = VK_NULL_HANDLE;
+            
             if (p.pipelines.count(pipelineName) == 0)
             {
                 pipeline = pipelineState.create(device);
                 auto pair = std::make_pair(pipelineState, pipeline);
                 p.pipelines[pipelineName] = pair;
-                std::cerr << "CREATE pipeline " << pipelineName << std::endl;
             }
             else
             {
@@ -618,8 +617,6 @@ namespace tl
                 auto oldPipelineState = pair.first;
                 if (pipelineState != oldPipelineState)
                 {
-                    std::cerr << "DIFFERENT pipeline " << pipelineName
-                              << std::endl;
                     vkDeviceWaitIdle(device);
                     vkDestroyPipeline(device, pair.second, nullptr);
                     pipeline = pipelineState.create(device);
@@ -628,7 +625,6 @@ namespace tl
                 }
                 else
                 {
-                    std::cerr << "SAME pipeline " << pipelineName << std::endl;
                     pipeline = pair.second;
                 }
             }

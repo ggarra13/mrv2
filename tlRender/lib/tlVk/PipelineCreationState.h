@@ -123,6 +123,18 @@ namespace tl
             float depthBiasSlopeFactor = 0.F;
             float lineWidth = 1.F;
 
+            RasterizationStateInfo()
+                {
+                    memset(this, 0, sizeof(RasterizationStateInfo));
+                    polygonMode = VK_POLYGON_MODE_FILL;
+                    cullMode = VK_CULL_MODE_NONE;
+                    frontFace = VK_FRONT_FACE_CLOCKWISE;
+                    depthClampEnable = VK_FALSE;
+                    rasterizerDiscardEnable = VK_FALSE;
+                    depthBiasEnable = VK_FALSE;
+                    lineWidth = 1.F;
+                }
+
             // Add comparison operators (==, !=)
             bool operator==(const RasterizationStateInfo& other) const
             {
@@ -159,7 +171,17 @@ namespace tl
             VkColorComponentFlags colorWriteMask =
                 VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
                 VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-
+            
+            ColorBlendAttachmentStateInfo()
+                {
+                    memset(this, 0, sizeof(ColorBlendAttachmentStateInfo));
+                    colorWriteMask = VK_COLOR_COMPONENT_R_BIT |
+                                     VK_COLOR_COMPONENT_G_BIT |
+                                     VK_COLOR_COMPONENT_B_BIT |
+                                     VK_COLOR_COMPONENT_A_BIT;
+                    blendEnable = VK_FALSE;
+                }
+            
             // Add comparison operators (==, !=)
             bool operator==(const ColorBlendAttachmentStateInfo& other) const
             {
@@ -257,15 +279,23 @@ namespace tl
         {
             // Corresponds to VkPipelineDepthStencilStateInfo
             VkPipelineDepthStencilStateCreateFlags flags = 0;
-            VkBool32 depthTestEnable = VK_TRUE;
+            VkBool32 depthTestEnable = VK_FALSE;
             VkBool32 depthWriteEnable = VK_FALSE;
             VkCompareOp depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
             VkBool32 depthBoundsTestEnable = VK_FALSE;
-            VkBool32 stencilTestEnable = VK_TRUE;
+            VkBool32 stencilTestEnable = VK_FALSE;
             VkStencilOpState front = {};
             VkStencilOpState back = {};
             float minDepthBounds = 0.F;
             float maxDepthBounds = 0.F;
+
+            DepthStencilStateInfo()
+                {
+                    front.failOp = VK_STENCIL_OP_KEEP;
+                    front.passOp = VK_STENCIL_OP_KEEP;
+                    front.compareOp = VK_COMPARE_OP_ALWAYS;
+                    back = front;
+                }
 
             // Add comparison operators (==, !=)
             bool operator==(const DepthStencilStateInfo& other) const
@@ -418,7 +448,6 @@ namespace tl
 
                 if (vertexInputState.has_value())
                 {
-                    std::cerr << "\thas vertexInputState" << std::endl;
                     // The optional has a value, so this state is enabled.
                     const auto& vi_info = this->vertexInputState.value();
 
@@ -456,7 +485,6 @@ namespace tl
                     tempInputAssemblyStateInfo{};
                 if (inputAssemblyState.has_value())
                 {
-                    std::cerr << "\thas inputAssemblyState" << std::endl;
                     // The optional has a value, so this state is enabled.
                     const auto& ia = this->inputAssemblyState.value();
                     tempInputAssemblyStateInfo.sType =
@@ -475,7 +503,6 @@ namespace tl
                 VkPipelineViewportStateCreateInfo tempViewportStateInfo{};
                 if (viewportState.has_value())
                 {
-                    std::cerr << "\thas viewportState" << std::endl;
                     // The optional has a value, so this state is enabled.
                     const auto& vp = this->viewportState.value();
                     tempViewportStateInfo.sType =
@@ -495,7 +522,6 @@ namespace tl
                     tempRasterizationStateInfo = {};
                 if (rasterizationState.has_value())
                 {
-                    std::cerr << "\thas rasterizationState" << std::endl;
                     const auto& rs = this->rasterizationState.value();
                     tempRasterizationStateInfo.sType =
                         VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
@@ -529,7 +555,6 @@ namespace tl
                     {};
                 if (multisampleState.has_value())
                 {
-                    std::cerr << "\thas multisampleState" << std::endl;
                     const auto& ms = this->multisampleState.value();
                     tempMultisampleStateInfo.sType =
                         VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
@@ -558,7 +583,6 @@ namespace tl
                     tempDepthStencilStateInfo = {};
                 if (depthStencilState.has_value())
                 {
-                    std::cerr << "\thas depthStencilState" << std::endl;
                     const auto& ds = this->depthStencilState.value();
                     tempDepthStencilStateInfo.sType =
                         VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
@@ -593,7 +617,6 @@ namespace tl
                     tempColorBlendAttachments;
                 if (colorBlendState.has_value())
                 {
-                    std::cerr << "\thas colorBlendState" << std::endl;
                     const auto& cb = this->colorBlendState.value();
                     tempColorBlendStateInfo.sType =
                         VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
@@ -633,7 +656,6 @@ namespace tl
                 VkPipelineDynamicStateCreateInfo tempDynamicStateInfo = {};
                 if (dynamicState.has_value())
                 {
-                    std::cerr << "\thas dynamicState" << std::endl;
                     const auto& ds = this->dynamicState.value();
                     tempDynamicStateInfo.sType =
                         VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
