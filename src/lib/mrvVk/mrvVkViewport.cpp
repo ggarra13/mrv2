@@ -292,7 +292,7 @@ namespace mrv
             MRV2_VK();
 
             wait_device();
-            
+
             // Destroy main render
             vk.render.reset();
 
@@ -313,9 +313,9 @@ namespace mrv
             // Destroy meshes
             vk.vbo.reset();
             vk.vao.reset();
-            
+
             p.fontSystem.reset();
-            
+
             TimelineViewport::hide();
         }
 
@@ -340,9 +340,7 @@ namespace mrv
                 if (!vk.lines)
                     vk.lines = std::make_shared<vulkan::Lines>();
 
-
-                const std::string& vertexSource =
-                    timeline_vlk::vertexSource();
+                const std::string& vertexSource = timeline_vlk::vertexSource();
 
                 math::Matrix4x4f mvp;
                 if (!vk.shader)
@@ -371,7 +369,6 @@ namespace mrv
                     vk.annotationShader->createUniform("channels", channels);
                     vk.annotationShader->createDescriptorSets();
                 }
-
             }
         }
 
@@ -385,11 +382,10 @@ namespace mrv
             TLRENDER_P();
             MRV2_VK();
 
-            
             // Get the command buffer started for the current frame.
             VkCommandBuffer cmd = getCurrentCommandBuffer();
             end_render_pass(cmd);
-            
+
             vk.cmd = cmd;
 
             const auto& viewportSize = getViewportSize();
@@ -502,7 +498,6 @@ namespace mrv
             {
                 return;
             }
-            
 
             if (p.pixelAspectRatio > 0.F && !p.videoData.empty() &&
                 !p.videoData[0].layers.empty())
@@ -512,21 +507,7 @@ namespace mrv
                 image->setPixelAspectRatio(p.pixelAspectRatio);
             }
 
-            locale::SetAndRestore saved;
-            timeline::RenderOptions renderOptions;
-            renderOptions.colorBuffer = vk.colorBufferType;
-            renderOptions.clear = true;
-            renderOptions.clearColor = image::Color4f(0, 0, 1, 0);
-
-            vk.render->begin(
-                cmd, vk.buffer, m_currentFrameIndex, renderSize, renderOptions);
-            vk.render->drawVideo(
-                p.videoData,
-                timeline::getBoxes(p.compareOptions.mode, p.videoData),
-                p.imageOptions, p.displayOptions, p.compareOptions,
-                getBackgroundOptions());
-            vk.render->end();
-
+            // Get the background colors
             float r = 0.F, g = 0.F, b = 0.F, a = 0.F;
 
             if (!p.presentation)
@@ -580,6 +561,32 @@ namespace mrv
                 }
             }
 
+            locale::SetAndRestore saved;
+            timeline::RenderOptions renderOptions;
+            renderOptions.colorBuffer = vk.colorBufferType;
+
+            if (transparent)
+            {
+                renderOptions.clear = true;
+                renderOptions.clearColor = image::Color4f(r, g, b, 0);
+            }
+
+#ifdef __APPLE__
+#    ifdef __x86_64__ // macOS Intel
+            // MoltenVK has 2048 samplers only.  1.0 * memory::gigabyte would
+            // make it raise validation errors.
+            renderOptions.textureCacheByteCount = 0.1 * memory::gigabyte;
+#    endif
+#endif
+            vk.render->begin(
+                cmd, vk.buffer, m_currentFrameIndex, renderSize, renderOptions);
+            vk.render->drawVideo(
+                p.videoData,
+                timeline::getBoxes(p.compareOptions.mode, p.videoData),
+                p.imageOptions, p.displayOptions, p.compareOptions,
+                getBackgroundOptions());
+            vk.render->end();
+
             m_clearColor = {r, g, b, a};
 
             math::Matrix4x4f mvp;
@@ -597,7 +604,7 @@ namespace mrv
 
             // --- Final Render Pass: Render to Swapchain (Composition) ---
             begin_render_pass(cmd);
-            
+
             // Bind the shaders to the current frame index.
             vk.shader->bind(m_currentFrameIndex);
             vk.annotationShader->bind(m_currentFrameIndex);
@@ -659,7 +666,7 @@ namespace mrv
             bool update = !_shouldUpdatePixelBar();
             if (update)
                 updatePixelBar();
-            
+
             // Draw FLTK children
             // Fl_Window::draw();
         }
@@ -851,16 +858,17 @@ namespace mrv
                 }
                 else
                 {
-                    VkCommandBuffer cmd = beginSingleTimeCommands(device(), commandPool());
-                    
+                    VkCommandBuffer cmd =
+                        beginSingleTimeCommands(device(), commandPool());
+
                     vk.buffer->readPixels(cmd, pos.x, pos.y, 1, 1);
-                    
+
                     vkEndCommandBuffer(cmd);
-                    
+
                     vk.buffer->submitReadback(cmd);
-                    
+
                     wait_queue();
-                        
+
                     vkFreeCommandBuffers(device(), commandPool(), 1, &cmd);
 
                     void* data = vk.buffer->getLatestReadPixels();
@@ -869,10 +877,10 @@ namespace mrv
                         LOG_ERROR("Could not get pixel under mouse");
                         return;
                     }
-                        
+
                     auto options = vk.buffer->getOptions();
-                    
-                    switch(options.colorType)
+
+                    switch (options.colorType)
                     {
                     case image::PixelType::RGB_F32:
                     {
@@ -1014,16 +1022,17 @@ namespace mrv
                                   << std::endl;
                         break;
                     }
-                        
-                        //endSingleTimeCommands(cmd, device(), commandPool(), queue());
-                        
-                        // MyViewport* self = const_cast<Viewport*>(this);
-                        // self->make_current();
-                        // vlk::OffscreenBufferBinding binding(vk.buffer);
-                        // glReadPixels(pos.x, pos.y, 1, 1, GL_RGBA, type,
-                        // &rgba);
-                        return;
-                    }
+
+                    // endSingleTimeCommands(cmd, device(), commandPool(),
+                    // queue());
+
+                    // MyViewport* self = const_cast<Viewport*>(this);
+                    // self->make_current();
+                    // vlk::OffscreenBufferBinding binding(vk.buffer);
+                    // glReadPixels(pos.x, pos.y, 1, 1, GL_RGBA, type,
+                    // &rgba);
+                    return;
+                }
 
                 // if (p.image)
                 // {

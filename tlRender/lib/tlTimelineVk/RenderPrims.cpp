@@ -255,20 +255,15 @@ namespace tl
         }
 
         void Render::drawTexture(
-            unsigned int id, const math::Box2i& box,
-            const image::Color4f& color)
+            const std::shared_ptr<vlk::Texture>& texture,
+            const math::Box2i& box, const image::Color4f& color)
         {
             TLRENDER_P();
             ++(p.currentStats.textures);
 
             p.shaders["texture"]->bind(p.frameIndex);
             p.shaders["texture"]->setUniform("color", color);
-            p.shaders["texture"]->setUniform("textureSampler", 0);
-
-            // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-            // glActiveTexture(static_cast<GLenum>(GL_TEXTURE0));
-            // glBindTexture(GL_TEXTURE_2D, id);
+            p.shaders["texture"]->setUniform("textureSampler", texture);
 
             if (p.vbos["texture"])
             {
@@ -278,8 +273,7 @@ namespace tl
             if (p.vaos["texture"])
             {
                 p.vaos["texture"]->bind(p.frameIndex);
-                // p.vaos["texture"]->draw(
-                //     GL_TRIANGLES, 0, p.vbos["texture"]->getSize());
+                p.vaos["texture"]->draw(p.cmd, p.vbos["texture"]);
             }
         }
 

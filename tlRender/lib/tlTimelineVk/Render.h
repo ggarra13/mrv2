@@ -104,7 +104,11 @@ namespace tl
                 const math::Vector2i& position, const image::Color4f&) override;
             void drawTexture(
                 unsigned int, const math::Box2i&,
-                const image::Color4f& = image::Color4f(1.F, 1.F, 1.F)) override;
+                const image::Color4f& =
+                    image::Color4f(1.F, 1.F, 1.F)) override {};
+            void drawTexture(
+                const std::shared_ptr<vlk::Texture>&, const math::Box2i&,
+                const image::Color4f& = image::Color4f(1.F, 1.F, 1.F));
             void drawImage(
                 const std::shared_ptr<image::Image>&, const math::Box2i&,
                 const image::Color4f& = image::Color4f(1.F, 1.F, 1.F),
