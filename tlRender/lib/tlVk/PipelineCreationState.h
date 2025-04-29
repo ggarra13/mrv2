@@ -361,56 +361,39 @@ namespace tl
             {
                 // Compare all members recursively, including optional states
                 // and vectors
-                std::cerr << "pre stages" << std::endl;
                 if (!(stages == other.stages))
                     return false;
-                std::cerr << "past stages" << std::endl;
                 if (!(vertexInputState == other.vertexInputState))
                     return false;
-                std::cerr << "past vi" << std::endl;
                 if (!(inputAssemblyState == other.inputAssemblyState))
                     return false;
-                std::cerr << "past ia" << std::endl;
                 if (!(viewportState == other.viewportState))
                     return false;
-                std::cerr << "past vs" << std::endl;
                 if (!(rasterizationState == other.rasterizationState))
                     return false;
-                std::cerr << "past rs" << std::endl;
                 if (!(multisampleState == other.multisampleState))
                     return false;
-                std::cerr << "past ms" << std::endl;
                 if (!(depthStencilState == other.depthStencilState))
                     return false;
-                std::cerr << "past ds" << std::endl;
                 if (!(colorBlendState == other.colorBlendState))
                     return false;
-                std::cerr << "past cb" << std::endl;
                 if (!(dynamicState == other.dynamicState))
                     return false;
-                std::cerr << "past dynamicState" << std::endl;
 
                 // Compare other direct members
                 if (layout != other.layout)
                     return false; // WARNING: Comparing handles might not be
                                   // robust
-                std::cerr << "past layout" << std::endl;
 
                 if (renderPass != other.renderPass)
                     return false; // WARNING: Comparing handles might not be
-                                  // robust
-                std::cerr << "past renderPass" << std::endl;
+                                  // robust;
 
                 if (subpass != other.subpass)
                     return false;
-                std::cerr << "past subpass" << std::endl;
 
-                // if (basePipelineHandle != other.basePipelineHandle) return
-                // false; // WARNING: Comparing handles might not be robust if
-                // (basePipelineIndex != other.basePipelineIndex) return false;
                 if (flags != other.flags)
                     return false;
-                std::cerr << "past flags is EQUAL!" << std::endl;
 
                 return true; // All compared fields match
             }
@@ -425,7 +408,7 @@ namespace tl
             // data
             VkPipeline create(VkDevice device) const
             {
-                VkGraphicsPipelineCreateInfo createInfo{};
+                VkGraphicsPipelineCreateInfo createInfo = {};
                 createInfo.sType =
                     VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
                 // Declare a temporary VkPipelineVertexInputStateCreateInfo
@@ -509,7 +492,7 @@ namespace tl
                 }
 
                 VkPipelineRasterizationStateCreateInfo
-                    tempRasterizationStateInfo{};
+                    tempRasterizationStateInfo = {};
                 if (rasterizationState.has_value())
                 {
                     std::cerr << "\thas rasterizationState" << std::endl;
@@ -681,8 +664,6 @@ namespace tl
                     tempShaderStages.push_back(tempShaderStage);
                 }
 
-                std::cerr << "has " << tempShaderStages.size()
-                          << std::endl;
                 createInfo.stageCount =
                     static_cast<uint32_t>(tempShaderStages.size());
                 createInfo.pStages = tempShaderStages.data();

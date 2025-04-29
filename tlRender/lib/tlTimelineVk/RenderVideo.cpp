@@ -29,7 +29,7 @@ namespace tl
             //! and a valid layer?
             if (!videoData.empty() && !videoData.front().layers.empty())
             {
-                _drawBackground(boxes, backgroundOptions);
+                //_drawBackground(boxes, backgroundOptions);
             }
             return;
             switch (compareOptions.mode)

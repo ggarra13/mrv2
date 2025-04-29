@@ -937,23 +937,15 @@ namespace tl
         {
             TLRENDER_P();
 
-            // Clear yellow (assuming this clear value is for the FBO)
             VkClearValue clearValues[2];
-            clearValues[0].color = {
-                value.r, value.g, value.b, value.a}; // Clear color for the FBO
+            clearValues[0].color = {value.r, value.g, value.b, value.a};
             clearValues[1].depthStencil = {1.F, 0};
 
             VkRenderPassBeginInfo rpBegin{};
             rpBegin.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-            rpBegin.renderPass =
-                p.fbo->getRenderPass(); // Use the FBO's render pass
-            // Use the FBO's framebuffer for THIS frame if using per-frame FBO
-            // attachments, otherwise use the static one if
-            // vk.buffer->getFramebuffer() is static.
-            rpBegin.framebuffer = p.fbo->getFramebuffer(
-                /*currentFrameIndex*/); // Pass frame index if needed
-            rpBegin.renderArea.offset = {
-                0, 0}; // Assuming render area starts at 0,0
+            rpBegin.renderPass = p.fbo->getRenderPass(); // Use the FBO's render pass
+            rpBegin.framebuffer = p.fbo->getFramebuffer(/*currentFrameIndex*/); 
+            rpBegin.renderArea.offset = {0, 0}; 
             rpBegin.renderArea.extent = p.fbo->getExtent(); // Use FBO extent
             rpBegin.clearValueCount =
                 1 +

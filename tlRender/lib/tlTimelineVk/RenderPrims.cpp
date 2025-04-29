@@ -548,6 +548,7 @@ namespace tl
             vlk::RasterizationStateInfo rs;
 
             vlk::DepthStencilStateInfo ds;
+            
             bool has_depth = fbo->hasDepth();     // Check FBO depth
             bool has_stencil = fbo->hasStencil(); // Check FBO stencil
 
