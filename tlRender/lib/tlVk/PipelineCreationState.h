@@ -435,10 +435,9 @@ namespace tl
 
                 if (vertexInputState.has_value())
                 {
+                    std::cerr << "\thas vertexInputState" << std::endl;
                     // The optional has a value, so this state is enabled.
-                    const auto& vi_info =
-                        this->vertexInputState
-                            .value(); // Get the VertexInputStateInfo
+                    const auto& vi_info = this->vertexInputState.value();
 
                     // Populate the temporary Vulkan struct using data from our
                     // stored info
@@ -449,10 +448,8 @@ namespace tl
                     tempVertexInputStateInfo.vertexBindingDescriptionCount =
                         static_cast<uint32_t>(
                             vi_info.bindingDescriptions.size());
+                    
                     // Get a pointer to the start of the data in our std::vector
-                    // .data() returns a pointer to the first element, or
-                    // nullptr if the vector is empty (which is correct for
-                    // count 0)
                     tempVertexInputStateInfo.pVertexBindingDescriptions =
                         vi_info.bindingDescriptions.data();
 
@@ -476,6 +473,7 @@ namespace tl
                     tempInputAssemblyStateInfo{};
                 if (inputAssemblyState.has_value())
                 {
+                    std::cerr << "\thas inputAssemblyState" << std::endl;
                     // The optional has a value, so this state is enabled.
                     const auto& ia = this->inputAssemblyState.value();
                     tempInputAssemblyStateInfo.sType =
@@ -494,6 +492,7 @@ namespace tl
                 VkPipelineViewportStateCreateInfo tempViewportStateInfo{};
                 if (viewportState.has_value())
                 {
+                    std::cerr << "\thas viewportState" << std::endl;
                     // The optional has a value, so this state is enabled.
                     const auto& vp = this->viewportState.value();
                     tempViewportStateInfo.sType =
@@ -513,6 +512,7 @@ namespace tl
                     tempRasterizationStateInfo{};
                 if (rasterizationState.has_value())
                 {
+                    std::cerr << "\thas rasterizationState" << std::endl;
                     const auto& rs = this->rasterizationState.value();
                     tempRasterizationStateInfo.sType =
                         VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
@@ -546,6 +546,7 @@ namespace tl
                     {};
                 if (multisampleState.has_value())
                 {
+                    std::cerr << "\thas multisampleState" << std::endl;
                     const auto& ms = this->multisampleState.value();
                     tempMultisampleStateInfo.sType =
                         VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
@@ -574,6 +575,7 @@ namespace tl
                     tempDepthStencilStateInfo = {};
                 if (depthStencilState.has_value())
                 {
+                    std::cerr << "\thas depthStencilState" << std::endl;
                     const auto& ds = this->depthStencilState.value();
                     tempDepthStencilStateInfo.sType =
                         VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
@@ -608,6 +610,7 @@ namespace tl
                     tempColorBlendAttachments;
                 if (colorBlendState.has_value())
                 {
+                    std::cerr << "\thas colorBlendState" << std::endl;
                     const auto& cb = this->colorBlendState.value();
                     tempColorBlendStateInfo.sType =
                         VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
@@ -647,6 +650,7 @@ namespace tl
                 VkPipelineDynamicStateCreateInfo tempDynamicStateInfo = {};
                 if (dynamicState.has_value())
                 {
+                    std::cerr << "\thas dynamicState" << std::endl;
                     const auto& ds = this->dynamicState.value();
                     tempDynamicStateInfo.sType =
                         VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
@@ -677,6 +681,8 @@ namespace tl
                     tempShaderStages.push_back(tempShaderStage);
                 }
 
+                std::cerr << "has " << tempShaderStages.size()
+                          << std::endl;
                 createInfo.stageCount =
                     static_cast<uint32_t>(tempShaderStages.size());
                 createInfo.pStages = tempShaderStages.data();

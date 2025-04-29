@@ -563,6 +563,7 @@ namespace tl
             dynamicState.dynamicStates = {
                 VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR};
 
+            // Get the vertex and fragment shaders
             std::vector<vlk::PipelineCreationState::ShaderStageInfo>
                 shaderStages(2);
 
@@ -608,7 +609,7 @@ namespace tl
                 pipeline = pipelineState.create(device);
                 auto pair = std::make_pair(pipelineState, pipeline);
                 p.pipelines[pipelineName] = pair;
-                std::cerr << "create pipeline " << pipelineName << std::endl;
+                std::cerr << "CREATE pipeline " << pipelineName << std::endl;
             }
             else
             {
@@ -616,7 +617,7 @@ namespace tl
                 auto oldPipelineState = pair.first;
                 if (pipelineState != oldPipelineState)
                 {
-                    std::cerr << "different pipeline " << pipelineName
+                    std::cerr << "DIFFERENT pipeline " << pipelineName
                               << std::endl;
                     vkDeviceWaitIdle(device);
                     vkDestroyPipeline(device, pair.second, nullptr);
@@ -626,7 +627,7 @@ namespace tl
                 }
                 else
                 {
-                    std::cerr << "same pipeline " << pipelineName << std::endl;
+                    std::cerr << "SAME pipeline " << pipelineName << std::endl;
                     pipeline = pair.second;
                 }
             }
