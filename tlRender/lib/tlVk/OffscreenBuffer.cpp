@@ -609,6 +609,13 @@ namespace tl
 
             VkDevice device = ctx.device;
 
+            if (p.imageLayout != VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL &&
+                p.imageLayout != VK_IMAGE_LAYOUT_UNDEFINED)
+            {
+                std::cerr << "Image layout = " << p.imageLayout << std::endl;
+                throw std::runtime_error("image Layout in wrong state");
+            }
+
             VkAttachmentDescription colorAttachment{};
             colorAttachment.format = p.colorFormat;
             colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;

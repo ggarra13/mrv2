@@ -359,7 +359,8 @@ namespace tl
             }
             case image::PixelType::RGB_U8:
             {
-                if (textures[0]->getInternalFormat() == VK_FORMAT_R8G8B8A8_UNORM)
+                if (textures[0]->getInternalFormat() ==
+                    VK_FORMAT_R8G8B8A8_UNORM)
                 {
                     const std::size_t w = info.size.w;
                     const std::size_t h = info.size.h;
@@ -387,11 +388,13 @@ namespace tl
             }
             case image::PixelType::RGB_U16:
             {
-                if (textures[0]->getInternalFormat() == VK_FORMAT_R16G16B16A16_UNORM)
+                if (textures[0]->getInternalFormat() ==
+                    VK_FORMAT_R16G16B16A16_UNORM)
                 {
                     const std::size_t w = info.size.w;
                     const std::size_t h = info.size.h;
-                    const uint16_t* src = reinterpret_cast<uint16_t*>(image->getData());
+                    const uint16_t* src =
+                        reinterpret_cast<uint16_t*>(image->getData());
                     std::vector<uint16_t> dst(w * h * 4);
                     uint16_t* out = dst.data();
                     for (std::size_t y = 0; y < h; ++y)
@@ -405,8 +408,9 @@ namespace tl
                             *out++ = 65535;
                         }
                     }
-                    textures[0]->copy(reinterpret_cast<uint8_t*>(dst.data()),
-                                      dst.size() * sizeof(uint16_t));
+                    textures[0]->copy(
+                        reinterpret_cast<uint8_t*>(dst.data()),
+                        dst.size() * sizeof(uint16_t));
                 }
                 else
                 {
@@ -416,11 +420,13 @@ namespace tl
             }
             case image::PixelType::RGB_F16:
             {
-                if (textures[0]->getInternalFormat() == VK_FORMAT_R16G16B16A16_SFLOAT)
+                if (textures[0]->getInternalFormat() ==
+                    VK_FORMAT_R16G16B16A16_SFLOAT)
                 {
                     const std::size_t w = info.size.w;
                     const std::size_t h = info.size.h;
-                    const uint16_t* src = reinterpret_cast<uint16_t*>(image->getData());
+                    const uint16_t* src =
+                        reinterpret_cast<uint16_t*>(image->getData());
                     std::vector<uint16_t> dst(w * h * 4);
                     uint16_t* out = dst.data();
                     for (std::size_t y = 0; y < h; ++y)
@@ -434,8 +440,9 @@ namespace tl
                             *out++ = 0x3C00; // 1.0 in IEEE 754
                         }
                     }
-                    textures[0]->copy(reinterpret_cast<uint8_t*>(dst.data()),
-                                      dst.size() * sizeof(uint16_t));
+                    textures[0]->copy(
+                        reinterpret_cast<uint8_t*>(dst.data()),
+                        dst.size() * sizeof(uint16_t));
                 }
                 else
                 {
@@ -447,11 +454,13 @@ namespace tl
             {
                 // \@bug:
                 // \@todo: Fix -- Convert from GL_UNSIGNED_INT_10_10_10_2
-                if (textures[0]->getInternalFormat() == VK_FORMAT_A2R10G10B10_UNORM_PACK32)
+                if (textures[0]->getInternalFormat() ==
+                    VK_FORMAT_A2R10G10B10_UNORM_PACK32)
                 {
                     const std::size_t w = info.size.w;
                     const std::size_t h = info.size.h;
-                    const uint32_t* src = reinterpret_cast<uint32_t*>(image->getData());
+                    const uint32_t* src =
+                        reinterpret_cast<uint32_t*>(image->getData());
                     std::vector<uint32_t> dst(w * h);
                     uint32_t* out = dst.data();
                     for (std::size_t y = 0; y < h; ++y)
@@ -459,22 +468,26 @@ namespace tl
                         for (std::size_t x = 0; x < w; ++x)
                         {
                             const uint32_t pixel = src[y * w + x];
-                            
-                            // OpenGL packing: R (bits 0-9), G (10-19), B (20-29), A (30-31)
-                            const uint32_t r = (pixel >> 0)  & 0x3FF;
+
+                            // OpenGL packing: R (bits 0-9), G (10-19), B
+                            // (20-29), A (30-31)
+                            const uint32_t r = (pixel >> 0) & 0x3FF;
                             const uint32_t g = (pixel >> 10) & 0x3FF;
                             const uint32_t b = (pixel >> 20) & 0x3FF;
                             const uint32_t a = (pixel >> 30) & 0x3;
-                            
-                            // Vulkan expects: A (bits 30-31), B (20-29), G (10-19), R (0-9)
-                            const uint32_t vk_pixel = (a << 30) | (r << 20) | (g << 10) |
-                                                      (b << 0);
 
-                            reinterpret_cast<uint32_t*>(out)[y * w + x] = vk_pixel;
+                            // Vulkan expects: A (bits 30-31), B (20-29), G
+                            // (10-19), R (0-9)
+                            const uint32_t vk_pixel =
+                                (a << 30) | (r << 20) | (g << 10) | (b << 0);
+
+                            reinterpret_cast<uint32_t*>(out)[y * w + x] =
+                                vk_pixel;
                         }
                     }
-                    textures[0]->copy(reinterpret_cast<uint8_t*>(dst.data()),
-                                      dst.size() * sizeof(uint32_t));
+                    textures[0]->copy(
+                        reinterpret_cast<uint8_t*>(dst.data()),
+                        dst.size() * sizeof(uint32_t));
                 }
             }
             break;
@@ -486,7 +499,6 @@ namespace tl
                 break;
             }
         }
-
 
 #if defined(TLRENDER_OCIO)
         OCIOData::~OCIOData()
@@ -595,12 +607,12 @@ namespace tl
             TLRENDER_P();
 
             VkDevice device = ctx.device;
-            
+
             for (auto& [_, pipeline] : p.pipelines)
             {
-                vkDestroyPipeline(device, pipeline, nullptr);
+                vkDestroyPipeline(device, pipeline.second, nullptr);
             }
-            
+
             for (auto& [_, pipelineLayout] : p.pipelineLayouts)
             {
                 vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
@@ -623,21 +635,19 @@ namespace tl
         }
 
         void Render::begin(
-            VkCommandBuffer& cmd,
-            std::shared_ptr<vlk::OffscreenBuffer> fbo,
-            const uint32_t frameIndex,
-            const math::Size2i& renderSize,
+            VkCommandBuffer& cmd, std::shared_ptr<vlk::OffscreenBuffer> fbo,
+            const uint32_t frameIndex, const math::Size2i& renderSize,
             const timeline::RenderOptions& renderOptions)
         {
             TLRENDER_P();
-            
+
             p.cmd = cmd;
             p.fbo = fbo;
             p.frameIndex = frameIndex;
 
             begin(renderSize, renderOptions);
         }
-        
+
         void Render::begin(
             const math::Size2i& renderSize,
             const timeline::RenderOptions& renderOptions)
@@ -676,7 +686,8 @@ namespace tl
             if (!p.shaders["colorMesh"])
             {
                 p.shaders["colorMesh"] = vlk::Shader::create(
-                    ctx, colorMeshVertexSource(), colorMeshFragmentSource(), "colorMesh");
+                    ctx, colorMeshVertexSource(), colorMeshFragmentSource(),
+                    "colorMesh");
                 p.shaders["colorMesh"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
                 p.shaders["colorMesh"]->createUniform("color", color);
@@ -708,7 +719,7 @@ namespace tl
                     ctx, vertexSource(), imageFragmentSource(), "image");
                 p.shaders["image"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
-                
+
                 UBOTexture ubo;
                 p.shaders["image"]->createUniform("ubo", ubo);
 
@@ -763,10 +774,11 @@ namespace tl
 
             if (!p.vbos["rect"] || p.vbos["rect"]->getSize() != 6)
             {
-                p.vbos["rect"] = vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32);
+                p.vbos["rect"] =
+                    vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32);
                 p.vaos["rect"] = vlk::VAO::create(ctx);
             }
-            
+
             if (!p.vbos["texture"] || p.vbos["texture"]->getSize() != 6)
             {
                 p.vbos["texture"] =
@@ -781,7 +793,8 @@ namespace tl
             }
             if (!p.vbos["wipe"] || p.vbos["wipe"]->getSize() != 3)
             {
-                p.vbos["wipe"] = vlk::VBO::create(1 * 3, vlk::VBOType::Pos2_F32);
+                p.vbos["wipe"] =
+                    vlk::VBO::create(1 * 3, vlk::VBOType::Pos2_F32);
                 p.vaos["wipe"] = vlk::VAO::create(ctx);
             }
             if (!p.vbos["video"] || p.vbos["video"]->getSize() != 6)
@@ -790,17 +803,16 @@ namespace tl
                     vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32_UV_U16);
                 p.vaos["video"] = vlk::VAO::create(ctx);
             }
-            
 
             if (renderOptions.clear)
             {
                 clearViewport(renderOptions.clearColor);
             }
-            
+
             setTransform(
                 math::ortho(
-                    0.F, static_cast<float>(renderSize.w),
-                    0.F, static_cast<float>(renderSize.h), -1.F, 1.F));
+                    0.F, static_cast<float>(renderSize.w), 0.F,
+                    static_cast<float>(renderSize.h), -1.F, 1.F));
         }
 
         void Render::end()
@@ -813,7 +825,7 @@ namespace tl
             // p.vaos["mesh"].reset();
             // p.vbos["text"].reset();
             // p.vaos["text"].reset();
-            
+
             const auto now = std::chrono::steady_clock::now();
             const auto diff =
                 std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -889,12 +901,12 @@ namespace tl
         {
             return _p->cmd;
         }
-        
-        uint32_t        Render::getFrameIndex() const
+
+        uint32_t Render::getFrameIndex() const
         {
             return _p->frameIndex;
         }
-        
+
         math::Size2i Render::getRenderSize() const
         {
             return _p->renderSize;
@@ -922,25 +934,33 @@ namespace tl
         void Render::clearViewport(const image::Color4f& value)
         {
             TLRENDER_P();
-            
+
             // Clear yellow (assuming this clear value is for the FBO)
             VkClearValue clearValues[2];
-            clearValues[0].color = { value.r, value.g, value.b, value.a }; // Clear color for the FBO
-            clearValues[1].depthStencil = { 1.F, 0 };
+            clearValues[0].color = {
+                value.r, value.g, value.b, value.a}; // Clear color for the FBO
+            clearValues[1].depthStencil = {1.F, 0};
 
             VkRenderPassBeginInfo rpBegin{};
             rpBegin.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-            rpBegin.renderPass = p.fbo->getRenderPass(); // Use the FBO's render pass
-            // Use the FBO's framebuffer for THIS frame if using per-frame FBO attachments,
-            // otherwise use the static one if vk.buffer->getFramebuffer() is static.
-            rpBegin.framebuffer = p.fbo->getFramebuffer(/*currentFrameIndex*/); // Pass frame index if needed
-            rpBegin.renderArea.offset = {0, 0}; // Assuming render area starts at 0,0
+            rpBegin.renderPass =
+                p.fbo->getRenderPass(); // Use the FBO's render pass
+            // Use the FBO's framebuffer for THIS frame if using per-frame FBO
+            // attachments, otherwise use the static one if
+            // vk.buffer->getFramebuffer() is static.
+            rpBegin.framebuffer = p.fbo->getFramebuffer(
+                /*currentFrameIndex*/); // Pass frame index if needed
+            rpBegin.renderArea.offset = {
+                0, 0}; // Assuming render area starts at 0,0
             rpBegin.renderArea.extent = p.fbo->getExtent(); // Use FBO extent
-            rpBegin.clearValueCount = 1 + static_cast<uint16_t>(p.fbo->hasDepth() || p.fbo->hasStencil());
+            rpBegin.clearValueCount =
+                1 +
+                static_cast<uint16_t>(p.fbo->hasDepth() || p.fbo->hasStencil());
             rpBegin.pClearValues = clearValues;
 
-            // Begin the first render pass instance within the single command buffer
-            vkCmdBeginRenderPass(p.cmd, &rpBegin, VK_SUBPASS_CONTENTS_INLINE);    
+            // Begin the first render pass instance within the single command
+            // buffer
+            vkCmdBeginRenderPass(p.cmd, &rpBegin, VK_SUBPASS_CONTENTS_INLINE);
             vkCmdEndRenderPass(p.cmd);
         }
 
@@ -1036,11 +1056,12 @@ namespace tl
                 const uint32_t depth = edgelen;
                 const uint16_t channels = 3;
 
-
-                
-                auto texture = vlk::Texture::create(ctx, VK_IMAGE_TYPE_3D, width, height,
-                                                    depth, imageFormat, samplerName);
-                texture->copy(reinterpret_cast<const uint8_t*>(values), width * height * depth * channels * sizeof(float));
+                auto texture = vlk::Texture::create(
+                    ctx, VK_IMAGE_TYPE_3D, width, height, depth, imageFormat,
+                    samplerName);
+                texture->copy(
+                    reinterpret_cast<const uint8_t*>(values),
+                    width * height * depth * channels * sizeof(float));
                 textures.push_back(texture);
             }
 
@@ -1088,7 +1109,8 @@ namespace tl
                 {
                 case OCIO::GpuShaderDesc::TEXTURE_1D:
                     imageType = VK_IMAGE_TYPE_1D;
-                    if (height == 0) height = 1;
+                    if (height == 0)
+                        height = 1;
                     break;
                 case OCIO::GpuShaderDesc::TEXTURE_2D:
                     imageType = VK_IMAGE_TYPE_2D;
@@ -1097,9 +1119,11 @@ namespace tl
                     throw std::runtime_error("Unknown OCIO image type");
                 }
 
-                auto texture = vlk::Texture::create(ctx, imageType, width, height,
-                                                    0, imageFormat, samplerName);
-                texture->copy(reinterpret_cast<const uint8_t*>(values), width * height * channels * sizeof(float));
+                auto texture = vlk::Texture::create(
+                    ctx, imageType, width, height, 0, imageFormat, samplerName);
+                texture->copy(
+                    reinterpret_cast<const uint8_t*>(values),
+                    width * height * channels * sizeof(float));
                 textures.push_back(texture);
             }
         }
@@ -1107,7 +1131,8 @@ namespace tl
 
 #if defined(TLRENDER_LIBPLACEBO)
         void Render::_addTextures(
-            std::vector<std::shared_ptr<vlk::Texture> >& textures, const pl_shader_res* res)
+            std::vector<std::shared_ptr<vlk::Texture> >& textures,
+            const pl_shader_res* res)
         {
             TLRENDER_P();
 
@@ -1167,12 +1192,26 @@ namespace tl
                         height = depth = 1;
                     else if (imageType == VK_IMAGE_TYPE_2D)
                         depth = 1;
-                    auto texture = vlk::Texture::create(ctx, imageType, width, height, depth,
-                                                        imageFormat, samplerName);
-                    texture->copy(reinterpret_cast<const uint8_t*>(values), width * height * depth * fmt->internal_size);
+                    auto texture = vlk::Texture::create(
+                        ctx, imageType, width, height, depth, imageFormat,
+                        samplerName);
+                    texture->copy(
+                        reinterpret_cast<const uint8_t*>(values),
+                        width * height * depth * fmt->internal_size);
                     textures.push_back(texture);
                     break;
                 }
+                case PL_DESC_BUF_UNIFORM:
+                    break;
+                case PL_DESC_BUF_STORAGE:
+                    break;
+                case PL_DESC_BUF_TEXEL_UNIFORM:
+                    break;
+                case PL_DESC_BUF_TEXEL_STORAGE:
+                    break;
+                case PL_DESC_INVALID:
+                case PL_DESC_TYPE_COUNT:
+                    break;
                 }
             }
         }
@@ -1431,17 +1470,6 @@ namespace tl
 
             if (!p.shaders["display"])
             {
-                if (p.pipelines["display"])
-                {
-                    vkDestroyPipeline(ctx.device, p.pipelines["display"], nullptr);
-                    p.pipelines["display"] = VK_NULL_HANDLE;
-                }
-                if (p.pipelineLayouts["display"])
-                {
-                    vkDestroyPipelineLayout(ctx.device, p.pipelineLayouts["display"], nullptr);
-                    p.pipelineLayouts["display"] = VK_NULL_HANDLE;
-                }
-                
                 std::string ocioICSDef;
                 std::string ocioICS;
                 std::string ocioDef;
@@ -1613,7 +1641,8 @@ namespace tl
                         {
                             dst_colorspace.transfer = PL_COLOR_TRC_HLG;
                         }
-                        else if (ctx.colorSpace == VK_COLOR_SPACE_DOLBYVISION_EXT)
+                        else if (
+                            ctx.colorSpace == VK_COLOR_SPACE_DOLBYVISION_EXT)
                         {
                             // \@todo:  How to handle this?
                             // PL_COLOR_TRC_DOLBYVISION does not exist.
@@ -1655,22 +1684,28 @@ namespace tl
                             case timeline::HDRTonemapAlgorithm::Clip:
                                 break;
                             case timeline::HDRTonemapAlgorithm::ST2094_10:
-                                cmap.tone_mapping_function = &pl_tone_map_st2094_10;
+                                cmap.tone_mapping_function =
+                                    &pl_tone_map_st2094_10;
                                 break;
                             case timeline::HDRTonemapAlgorithm::BT2390:
-                                cmap.tone_mapping_function = &pl_tone_map_bt2390;
+                                cmap.tone_mapping_function =
+                                    &pl_tone_map_bt2390;
                                 break;
                             case timeline::HDRTonemapAlgorithm::BT2446A:
-                                cmap.tone_mapping_function = &pl_tone_map_bt2446a;
+                                cmap.tone_mapping_function =
+                                    &pl_tone_map_bt2446a;
                                 break;
                             case timeline::HDRTonemapAlgorithm::Spline:
-                                cmap.tone_mapping_function = &pl_tone_map_spline;
+                                cmap.tone_mapping_function =
+                                    &pl_tone_map_spline;
                                 break;
                             case timeline::HDRTonemapAlgorithm::Reinhard:
-                                cmap.tone_mapping_function = &pl_tone_map_reinhard;
+                                cmap.tone_mapping_function =
+                                    &pl_tone_map_reinhard;
                                 break;
                             case timeline::HDRTonemapAlgorithm::Mobius:
-                                cmap.tone_mapping_function = &pl_tone_map_mobius;
+                                cmap.tone_mapping_function =
+                                    &pl_tone_map_mobius;
                                 break;
                             case timeline::HDRTonemapAlgorithm::Hable:
                                 cmap.tone_mapping_function = &pl_tone_map_hable;
@@ -1679,7 +1714,8 @@ namespace tl
                                 cmap.tone_mapping_function = &pl_tone_map_gamma;
                                 break;
                             case timeline::HDRTonemapAlgorithm::Linear:
-                                cmap.tone_mapping_function = &pl_tone_map_linear;
+                                cmap.tone_mapping_function =
+                                    &pl_tone_map_linear;
                                 break;
                             case timeline::HDRTonemapAlgorithm::LinearLight:
                                 cmap.tone_mapping_function =
@@ -1687,7 +1723,8 @@ namespace tl
                                 break;
                             case timeline::HDRTonemapAlgorithm::ST2094_40:
                             default:
-                                cmap.tone_mapping_function = &pl_tone_map_st2094_40;
+                                cmap.tone_mapping_function =
+                                    &pl_tone_map_st2094_40;
                                 break;
                             }
                         }
@@ -1791,10 +1828,12 @@ namespace tl
                       << "// Variables"
                       << "//" << std::endl
                       << std::endl;
-                    s << "layout(set = 0, binding = " << i + 1 << ", std140) uniform Placebo {\n";
+                    s << "layout(set = 0, binding = " << i + 1
+                      << ", std140) uniform Placebo {\n";
                     for (i = 0; i < res->num_variables; ++i)
                     {
-                        const struct pl_shader_var shader_var = res->variables[i];
+                        const struct pl_shader_var shader_var =
+                            res->variables[i];
                         const struct pl_var var = shader_var.var;
                         std::string glsl_type = pl_var_glsl_type_name(var);
                         s << glsl_type << " " << var.name << ";" << std::endl;
@@ -1830,7 +1869,8 @@ namespace tl
                         //                     s << m[index];
 
                         //                     // Check if it's the last element
-                        //                     if (!(r == dim_m - 1 && c == dim_v - 1))
+                        //                     if (!(r == dim_m - 1 && c ==
+                        //                     dim_v - 1))
                         //                     {
                         //                         s << ", ";
                         //                     }
@@ -1874,7 +1914,8 @@ namespace tl
                     for (int i = 0; i < res->num_constants; ++i)
                     {
                         // s << "layout(constant_id=" << i << ") ";
-                        const struct pl_shader_const constant = res->constants[i];
+                        const struct pl_shader_const constant =
+                            res->constants[i];
                         switch (constant.type)
                         {
                         case PL_VAR_SINT:
@@ -1884,11 +1925,12 @@ namespace tl
                         case PL_VAR_UINT:
                             s << "const uint " << constant.name << " = "
                               << *(reinterpret_cast<const unsigned*>(
-                                       constant.data));
+                                     constant.data));
                             break;
                         case PL_VAR_FLOAT:
                             s << "const float " << constant.name << " = "
-                              << *(reinterpret_cast<const float*>(constant.data));
+                              << *(reinterpret_cast<const float*>(
+                                     constant.data));
                             break;
                         default:
                             break;
@@ -1921,24 +1963,27 @@ namespace tl
                     p.lutOptions.order, toneMapDef, toneMap);
                 if (auto context = _context.lock())
                 {
-                    context->log("tl::vlk::GLRender", "Creating display shader");
+                    context->log(
+                        "tl::vlk::GLRender", "Creating display shader");
                 }
                 p.shaders["display"] =
                     vlk::Shader::create(ctx, vertexSource(), source, "display");
                 p.shaders["display"]->createUniform(
                     "transform.mvp", p.transform, vlk::kShaderVertex);
                 p.shaders["display"]->addFBO("textureSampler");
-                
-                UBOLevels uboLevels;                
+
+                UBOLevels uboLevels;
                 p.shaders["display"]->createUniform("uboLevels", uboLevels);
 
                 // \@unused in mrv2 (used to keep reference of gain UI)
                 timeline::EXRDisplay exrDisplay;
-                p.shaders["display"]->createUniform("uboEXRDisplay", exrDisplay);
-                
+                p.shaders["display"]->createUniform(
+                    "uboEXRDisplay", exrDisplay);
+
                 UBONormalize uboNormalize;
-                p.shaders["display"]->createUniform("uboNormalize", uboNormalize);
-                
+                p.shaders["display"]->createUniform(
+                    "uboNormalize", uboNormalize);
+
                 UBOColor uboColor;
                 p.shaders["display"]->createUniform("uboColor", uboColor);
 
@@ -1970,7 +2015,7 @@ namespace tl
                 }
 #endif
                 p.shaders["display"]->createDescriptorSets();
-                //p.shaders["display"]->debug();
+                // p.shaders["display"]->debug();
             }
         }
     } // namespace timeline_vlk

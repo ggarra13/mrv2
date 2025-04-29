@@ -15,6 +15,7 @@ extern "C"
 
 #include <tlVk/Mesh.h>
 #include <tlVk/OffscreenBuffer.h>
+#include <tlVk/PipelineCreationState.h>
 #include <tlVk/Shader.h>
 #include <tlVk/Texture.h>
 #include <tlVk/TextureAtlas.h>
@@ -24,6 +25,7 @@ extern "C"
 #endif // TLRENDER_OCIO
 
 #include <list>
+#include <map>
 
 #if defined(TLRENDER_OCIO)
 namespace OCIO = OCIO_NAMESPACE;
@@ -63,7 +65,7 @@ namespace tl
             const image::Info& info,
             const std::vector<std::shared_ptr<vlk::Texture> >&,
             size_t offset = 0);
-        
+
 #if defined(TLRENDER_OCIO)
         struct OCIOData
         {
@@ -112,7 +114,6 @@ namespace tl
             std::shared_ptr<vlk::OffscreenBuffer> fbo;
             uint32_t frameIndex;
 
-                
             bool hdrMonitorFound = false;
 
             math::Size2i renderSize;
@@ -140,7 +141,9 @@ namespace tl
             std::map<std::string, std::shared_ptr<vlk::OffscreenBuffer> >
                 buffers;
             std::map<std::string, VkPipelineLayout> pipelineLayouts;
-            std::map<std::string, VkPipeline> pipelines;
+            std::map<
+                std::string, std::pair<vlk::PipelineCreationState, VkPipeline>>
+                pipelines;
             std::shared_ptr<TextureCache> textureCache;
             std::shared_ptr<vlk::TextureAtlas> glyphTextureAtlas;
             std::map<image::GlyphInfo, vlk::TextureAtlasID> glyphIDs;

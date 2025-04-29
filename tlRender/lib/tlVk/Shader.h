@@ -22,20 +22,22 @@ namespace tl
 {
     namespace vlk
     {
-        enum ShaderFlags
-        {
-            kShaderVertex   = 1,
+        enum ShaderFlags {
+            kShaderVertex = 1,
             kShaderFragment = 2,
         };
-        
+
         inline VkShaderStageFlags getVulkanShaderFlags(ShaderFlags stageFlags)
         {
             VkShaderStageFlags out = 0;
-            out  = (stageFlags & kShaderFragment ? VK_SHADER_STAGE_FRAGMENT_BIT : 0);
-            out |= (stageFlags & kShaderVertex ? VK_SHADER_STAGE_VERTEX_BIT : 0);
+            out =
+                (stageFlags & kShaderFragment ? VK_SHADER_STAGE_FRAGMENT_BIT
+                                              : 0);
+            out |=
+                (stageFlags & kShaderVertex ? VK_SHADER_STAGE_VERTEX_BIT : 0);
             return out;
         }
-        
+
         //! Vulkan shader.
         class Shader : public std::enable_shared_from_this<Shader>
         {
@@ -54,6 +56,9 @@ namespace tl
                 Fl_Vk_Context& ctx, const std::string& vertexSource,
                 const std::string& fragmentSource,
                 const std::string& name = "");
+
+            //! Get the shader name.
+            const std::string& getName() const;
 
             //! Get the vertex shader source.
             const std::string& getVertexSource() const;
@@ -89,7 +94,7 @@ namespace tl
                 const std::string&, const T& value,
                 const ShaderFlags stageFlags = kShaderFragment);
 
-            //! Set and upload a uniform UBO variable 
+            //! Set and upload a uniform UBO variable
             template <typename T>
             void setUniform(
                 const std::string&, const T& value,
@@ -98,7 +103,7 @@ namespace tl
 
             //! Add a textire to shader parameters.
             void addTexture(
-                const std::string& name, 
+                const std::string& name,
                 const ShaderFlags stageFlags = kShaderFragment);
 
             //! Attach and upload a texture to shader parameters.
@@ -117,17 +122,18 @@ namespace tl
                 const std::string& name,
                 const std::shared_ptr<OffscreenBuffer>&,
                 const ShaderFlags stageFlags = kShaderFragment);
-            
+
             //! Create desciptor set bindings for all frames
             void createDescriptorSets();
 
             //! Print out a list of descriptor set bindings for vertex shader.
             void debugVertexDescriptorSets();
-            
+
             //! Print out a list of descriptor set bindings for fragment shader.
             void debugFragmentDescriptorSets();
-            
-            //! Print out a list of descriptor set bindings for both shaders types.
+
+            //! Print out a list of descriptor set bindings for both shaders
+            //! types.
             void debugDescriptorSets();
 
             //! Print out a list of pointers for all frames.
@@ -135,7 +141,7 @@ namespace tl
 
             //! Print out all debug info.
             void debug();
-            
+
         private:
             Fl_Vk_Context& ctx;
 
@@ -148,19 +154,18 @@ namespace tl
             //! Internal variable used to point all resources to the right
             //! frame in flight.
             uint32_t frameIndex = 0;
-            
+
             std::vector<VkDescriptorPool> descriptorPools;
             std::vector<VkDescriptorSet> descriptorSets;
 
             struct UBO
             {
                 VkDescriptorSetLayoutBinding layoutBinding;
-                
 
                 std::vector<VkBuffer> buffers;
                 std::vector<VkDeviceMemory> memories;
                 std::vector<VkDescriptorBufferInfo> bufferInfos;
-                
+
                 size_t size;
             };
             std::map<std::string, UBO> ubos;
@@ -173,18 +178,18 @@ namespace tl
             };
 
             std::map<std::string, TextureBinding> textureBindings;
-            
+
             struct FBOBinding
             {
                 uint32_t binding;
                 VkShaderStageFlags stageFlags;
-                std::shared_ptr<OffscreenBuffer> fbo;  // fbo can be shared
+                std::shared_ptr<OffscreenBuffer> fbo; // fbo can be shared
             };
 
             std::map<std::string, FBOBinding> fboBindings;
 
             std::string shaderName = "Shader";
-            
+
             TLRENDER_PRIVATE();
         };
     } // namespace vlk

@@ -1,5 +1,4 @@
 set(HEADERS
-    GraphicsPipeline.h
     Init.h
     Mesh.h
     OffscreenBuffer.h

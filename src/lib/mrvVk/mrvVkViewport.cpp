@@ -143,9 +143,10 @@ namespace mrv
             vi.sType =
                 VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
             vi.pNext = NULL;
-            vi.vertexBindingDescriptionCount = 1;
+            vi.vertexBindingDescriptionCount =
+                vk.vbo->getBindingDescription().size();
             vi.pVertexBindingDescriptions =
-                vk.vbo->getBindingDescription(); // Use main mesh binding
+                vk.vbo->getBindingDescription().data();
             vi.vertexAttributeDescriptionCount = vk.vbo->getAttributes().size();
             vi.pVertexAttributeDescriptions = vk.vbo->getAttributes().data();
 
@@ -469,7 +470,6 @@ namespace mrv
 
                 vlk::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = vk.colorBufferType;
-                std::cerr << vk.colorBufferType << std::endl;
 
                 if (!p.displayOptions.empty())
                 {
@@ -527,7 +527,7 @@ namespace mrv
                 getBackgroundOptions());
             vk.render->end();
 
-            // vk.buffer->transitionToShaderRead(cmd);
+            vk.buffer->transitionToShaderRead(cmd);
 
             math::Matrix4x4f mvp;
 
@@ -586,13 +586,14 @@ namespace mrv
             {
                 // Draw calls for the composition geometry (e.g., a
                 // screen-filling quad)
+                vk.vao->bind(m_currentFrameIndex);
                 vk.vao->draw(cmd, vk.vbo);
             }
 
             end_render_pass();
 
             // Correctly transition from SHADER_READ to COLOR_ATTACHMENT
-            // vk.buffer->transitionToColorAttachment(cmd);
+            vk.buffer->transitionToColorAttachment(cmd);
 
             // Draw FLTK children
             // Fl_Window::draw();

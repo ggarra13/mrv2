@@ -44,8 +44,6 @@ namespace mrv
             if (!vk.vao && vk.vbo)
             {
                 vk.vao = vlk::VAO::create(ctx);
-                vk.vao->upload(vk.vbo->getData());
-
                 prepare_pipeline();
             }
         }
@@ -71,8 +69,6 @@ namespace mrv
             if (!vk.vao && vk.vbo)
             {
                 vk.vao = vlk::VAO::create(ctx);
-                vk.vao->upload(vk.vbo->getData());
-                
                 prepare_pipeline();
             }
         }
@@ -198,8 +194,6 @@ namespace mrv
             if (!vk.vao && vk.vbo)
             {
                 vk.vao = vlk::VAO::create(ctx);
-                vk.vao->upload(vk.vbo->getData());
-                
                 prepare_pipeline();
             }
 

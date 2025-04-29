@@ -759,12 +759,12 @@ namespace mrv
     void NDIView::prepare_vertices()
     {
         TLRENDER_P();
-                
+
         using namespace tl;
-        
-        const math::Size2i viewportSize = { pixel_w(), pixel_h() };
-        image::Size renderSize = { pixel_w(), pixel_h() };
-        
+
+        const math::Size2i viewportSize = {pixel_w(), pixel_h()};
+        image::Size renderSize = {pixel_w(), pixel_h()};
+
         if (p.image)
         {
             renderSize = p.image->getSize();
@@ -772,12 +772,14 @@ namespace mrv
         }
 
         float aspectRender = renderSize.w / static_cast<float>(renderSize.h);
-        float aspectViewport = viewportSize.w / static_cast<float>(viewportSize.h);
+        float aspectViewport =
+            viewportSize.w / static_cast<float>(viewportSize.h);
 
         float scaleX = 1.0F;
         float scaleY = 1.0F;
 
-        if (aspectRender < aspectViewport) {
+        if (aspectRender < aspectViewport)
+        {
             // Image is too wide, shrink X
             scaleX = aspectRender / aspectViewport;
         }
@@ -785,18 +787,17 @@ namespace mrv
         {
             // Image is too tall, shrink Y
             scaleY = aspectViewport / aspectRender;
-            
         }
 
-        const geom::TriangleMesh2& mesh = geom::box(
-            math::Box2f(-scaleX, -scaleY, scaleX * 2, scaleY * 2));
-        
+        const geom::TriangleMesh2& mesh =
+            geom::box(math::Box2f(-scaleX, -scaleY, scaleX * 2, scaleY * 2));
+
         const size_t numTriangles = mesh.triangles.size();
-    
+
         if (!p.vbo || (p.vbo && p.vbo->getSize() != numTriangles * 3))
         {
-            p.vbo = vlk::VBO::create(numTriangles * 3,
-                                     vlk::VBOType::Pos2_F32_UV_U16);
+            p.vbo = vlk::VBO::create(
+                numTriangles * 3, vlk::VBOType::Pos2_F32_UV_U16);
             p.vao.reset();
         }
         if (p.vbo)
@@ -809,7 +810,6 @@ namespace mrv
             p.vao = vlk::VAO::create(ctx);
             p.vao->upload(p.vbo->getData());
         }
-
     }
 
     // creates m_renderPass
@@ -823,8 +823,10 @@ namespace mrv
         attachments[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
         attachments[0].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
         attachments[0].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-        attachments[0].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED; // Start undefined
-        attachments[0].finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR; // Final layout for presentation
+        attachments[0].initialLayout =
+            VK_IMAGE_LAYOUT_UNDEFINED; // Start undefined
+        attachments[0].finalLayout =
+            VK_IMAGE_LAYOUT_PRESENT_SRC_KHR; // Final layout for presentation
 
         attachments[1] = VkAttachmentDescription();
 
@@ -941,7 +943,7 @@ void main() {
     void NDIView::prepare_pipeline()
     {
         TLRENDER_P();
-        
+
         VkGraphicsPipelineCreateInfo pipeline = {};
         VkPipelineCacheCreateInfo pipelineCacheCreateInfo = {};
 
@@ -968,8 +970,9 @@ void main() {
         pipeline.layout = m_pipeline_layout;
 
         vi.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-        vi.vertexBindingDescriptionCount = 1;
-        vi.pVertexBindingDescriptions = p.vbo->getBindingDescription();
+        vi.vertexBindingDescriptionCount =
+            p.vbo->getBindingDescription().size();
+        vi.pVertexBindingDescriptions = p.vbo->getBindingDescription().data();
         vi.vertexAttributeDescriptionCount = p.vbo->getAttributes().size();
         vi.pVertexAttributeDescriptions = p.vbo->getAttributes().data();
 
@@ -1046,14 +1049,14 @@ void main() {
         pipeline.pDynamicState = &dynamicState;
 
         VkPipelineCache pipelineCache;
-        
+
         pipelineCacheCreateInfo.sType =
             VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
-        
+
         result = vkCreatePipelineCache(
             device(), &pipelineCacheCreateInfo, NULL, &pipelineCache);
         VK_CHECK(result);
-        
+
         result = vkCreateGraphicsPipelines(
             device(), pipelineCache, 1, &pipeline, NULL, &m_pipeline);
         VK_CHECK(result);
@@ -1488,15 +1491,18 @@ void main() {
                                     p.transferName = attr_transfer->value();
 
                                     if (p.hdrMonitorFound &&
-                                        colorSpace() != VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
+                                        colorSpace() !=
+                                            VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
                                     {
                                         if (p.transferName == "bt_2100_hlg")
                                         {
-                                            colorSpace() = VK_COLOR_SPACE_HDR10_HLG_EXT;
+                                            colorSpace() =
+                                                VK_COLOR_SPACE_HDR10_HLG_EXT;
                                         }
                                         else
                                         {
-                                            colorSpace() = VK_COLOR_SPACE_HDR10_ST2084_EXT;
+                                            colorSpace() =
+                                                VK_COLOR_SPACE_HDR10_ST2084_EXT;
                                         }
 
                                         if (p.lastColorSpace != colorSpace())
@@ -1669,7 +1675,7 @@ void main() {
     void NDIView::destroy_resources()
     {
         TLRENDER_P();
-        
+
         if (m_frag_shader_module != VK_NULL_HANDLE)
         {
             vkDestroyShaderModule(device(), m_frag_shader_module, NULL);
@@ -1771,7 +1777,7 @@ void main() {
             {
                 src_colorspace.transfer = PL_COLOR_TRC_HLG;
             }
-                
+
             cmap.metadata = PL_HDR_METADATA_ANY;
             pl_hdr_metadata& hdr = src_colorspace.hdr;
             hdr.min_luma = data.displayMasteringLuminance.getMin();
@@ -2169,8 +2175,8 @@ void main() {
 
         mode = FL_MENU_TOGGLE;
         idx = menu->add(
-            _("HDR/Pass through Metadata to Display"), 0, (Fl_Callback*)apply_metadata_cb, ui,
-            mode);
+            _("HDR/Pass through Metadata to Display"), 0,
+            (Fl_Callback*)apply_metadata_cb, ui, mode);
         if (p.useHDRMetadata)
         {
             item = (Fl_Menu_Item*)&menu->menu()[idx];
@@ -2205,13 +2211,12 @@ void main() {
                 colorSpace() = VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT;
             }
         }
-        
-            
+
         if (p.lastColorSpace != colorSpace())
         {
             p.lastColorSpace = colorSpace();
         }
-            
+
         redraw();
     }
 

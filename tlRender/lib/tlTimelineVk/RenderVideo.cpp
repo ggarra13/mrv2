@@ -23,12 +23,15 @@ namespace tl
             const timeline::CompareOptions& compareOptions,
             const timeline::BackgroundOptions& backgroundOptions)
         {
+            TLRENDER_P();
+
             //! \todo Render the background only if there is valid video data
             //! and a valid layer?
             if (!videoData.empty() && !videoData.front().layers.empty())
             {
                 _drawBackground(boxes, backgroundOptions);
             }
+            return;
             switch (compareOptions.mode)
             {
             case timeline::CompareMode::A:
@@ -82,7 +85,7 @@ namespace tl
             const timeline::BackgroundOptions& options)
         {
             TLRENDER_P();
-            
+
             for (const auto& box : boxes)
             {
                 switch (options.type)
@@ -95,6 +98,7 @@ namespace tl
                     p.shaders["rect"]->bind(p.frameIndex);
                     _bindDescriptorSets("solid", "rect");
                     p.fbo->beginRenderPass(p.cmd);
+                    p.fbo->setupViewportAndScissor(p.cmd);
                     drawRect(box, options.color0);
                     p.fbo->endRenderPass(p.cmd);
                     break;
@@ -105,12 +109,13 @@ namespace tl
                         box, options.color0, options.color1,
                         options.checkersSize);
                     _createMesh("colorMesh", mesh);
-                    _createPipeline(p.fbo, "checkers", "colorMesh", "colorMesh");
-                    p.shaders["colorMesh"]->bind(p.frameIndex);
-                    _bindDescriptorSets("checkers", "colorMesh");
+                    _createPipeline(
+                        p.fbo, "checkers", "colorMesh", "colorMesh");
                     p.fbo->beginRenderPass(p.cmd);
-                    drawColorMesh(mesh,
-                        math::Vector2i(), image::Color4f(1.F, 1.F, 1.F));
+                    p.fbo->setupViewportAndScissor(p.cmd);
+                    drawColorMesh(
+                        "checkers", mesh, math::Vector2i(),
+                        image::Color4f(1.F, 1.F, 1.F));
                     p.fbo->endRenderPass(p.cmd);
                     break;
                 }
@@ -140,12 +145,13 @@ namespace tl
                         geom::Vertex2(1, 0, 1),
                     });
                     _createMesh("colorMesh", mesh);
-                    _createPipeline(p.fbo, "gradient", "colorMesh", "colorMesh");
-                    p.shaders["colorMesh"]->bind(p.frameIndex);
-                    _bindDescriptorSets("gradient", "colorMesh");
+                    _createPipeline(
+                        p.fbo, "gradient", "colorMesh", "colorMesh");
                     p.fbo->beginRenderPass(p.cmd);
+                    p.fbo->setupViewportAndScissor(p.cmd);
                     drawColorMesh(
-                        mesh, math::Vector2i(), image::Color4f(1.F, 1.F, 1.F));
+                        "gradient", mesh, math::Vector2i(),
+                        image::Color4f(1.F, 1.F, 1.F));
                     p.fbo->endRenderPass(p.cmd);
                     break;
                 }
@@ -561,8 +567,10 @@ namespace tl
                     //     p.viewport.w(), p.viewport.h());
 
                     p.shaders["difference"]->bind(p.frameIndex);
-                    p.shaders["difference"]->setFBO("textureSampler", p.buffers["difference0"]);
-                    p.shaders["difference"]->setFBO("textureSamplerB", p.buffers["difference1"]);
+                    p.shaders["difference"]->setFBO(
+                        "textureSampler", p.buffers["difference0"]);
+                    p.shaders["difference"]->setFBO(
+                        "textureSamplerB", p.buffers["difference1"]);
 
                     // glBindTexture(
                     //     GL_TEXTURE_2D,
@@ -685,8 +693,7 @@ namespace tl
                             {
                                 p.buffers["dissolve"] =
                                     vlk::OffscreenBuffer::create(
-                                        ctx,
-                                        offscreenBufferSize,
+                                        ctx, offscreenBufferSize,
                                         offscreenBufferOptions);
                             }
                             if (doCreate(
@@ -695,8 +702,7 @@ namespace tl
                             {
                                 p.buffers["dissolve2"] =
                                     vlk::OffscreenBuffer::create(
-                                        ctx,
-                                        offscreenBufferSize,
+                                        ctx, offscreenBufferSize,
                                         offscreenBufferOptions);
                             }
                             if (p.buffers["dissolve"])
@@ -708,8 +714,7 @@ namespace tl
                                 dissolveImageOptions.alphaBlend =
                                     timeline::AlphaBlend::Straight;
                                 drawImage(
-                                    p.buffers["dissolve"],
-                                    layer.image,
+                                    p.buffers["dissolve"], layer.image,
                                     image::getBox(
                                         layer.image->getAspect(),
                                         math::Box2i(
@@ -727,8 +732,7 @@ namespace tl
                                 dissolveImageOptions.alphaBlend =
                                     timeline::AlphaBlend::Straight;
                                 drawImage(
-                                    p.buffers["dissolve2"],
-                                    layer.imageB,
+                                    p.buffers["dissolve2"], layer.imageB,
                                     image::getBox(
                                         layer.imageB->getAspect(),
                                         math::Box2i(
@@ -742,17 +746,22 @@ namespace tl
                                 // glBlendFuncSeparate(
                                 //     GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
                                 //     GL_ONE);
-                
-                                p.buffers["dissolve"]->transitionToShaderRead(p.cmd);
-                                p.buffers["dissolve2"]->transitionToShaderRead(p.cmd);
-                                _createPipeline(p.buffers["video"],
-                                                "video", "dissolve", "video", true);
+
+                                p.buffers["dissolve"]->transitionToShaderRead(
+                                    p.cmd);
+                                p.buffers["dissolve2"]->transitionToShaderRead(
+                                    p.cmd);
+                                _createPipeline(
+                                    p.buffers["video"], "video", "dissolve",
+                                    "video", true);
                                 p.buffers["dissolve"]->beginRenderPass(p.cmd);
-                                p.buffers["dissolve"]->setupViewportAndScissor(p.cmd);
+                                p.buffers["dissolve"]->setupViewportAndScissor(
+                                    p.cmd);
 
                                 p.shaders["dissolve"]->bind(p.frameIndex);
                                 p.shaders["dissolve"]->setUniform(
-                                    "transform.mvp", transform, vlk::kShaderVertex);
+                                    "transform.mvp", transform,
+                                    vlk::kShaderVertex);
                                 p.shaders["dissolve"]->setUniform(
                                     "color", image::Color4f(1.F, 1.F, 1.F));
                                 p.shaders["dissolve"]->setFBO(
@@ -776,14 +785,16 @@ namespace tl
                                 if (p.vaos["video"])
                                 {
                                     p.vaos["video"]->bind(p.frameIndex);
-                                    p.vaos["video"]->upload(p.vbos["video"]->getData());
-                                    p.vaos["video"]->draw(p.cmd, p.vbos["video"]);
+                                    p.vaos["video"]->upload(
+                                        p.vbos["video"]->getData());
+                                    p.vaos["video"]->draw(
+                                        p.cmd, p.vbos["video"]);
                                 }
 
                                 // glBindTexture(
                                 //     GL_TEXTURE_2D,
                                 //     p.buffers["dissolve2"]->getColorID());
-                                
+
                                 if (p.vbos["video"])
                                 {
                                     p.vbos["video"]->copy(convert(
@@ -797,20 +808,23 @@ namespace tl
                                 if (p.vaos["video"])
                                 {
                                     p.vaos["video"]->bind(p.frameIndex);
-                                    p.vaos["video"]->upload(p.vbos["video"]->getData());
-                                    p.vaos["video"]->draw(p.cmd, p.vbos["video"]);
+                                    p.vaos["video"]->upload(
+                                        p.vbos["video"]->getData());
+                                    p.vaos["video"]->draw(
+                                        p.cmd, p.vbos["video"]);
                                 }
                                 p.buffers["video"]->endRenderPass(p.cmd);
-                                
-                                p.buffers["dissolve"]->transitionToColorAttachment(p.cmd);
-                                p.buffers["dissolve2"]->transitionToColorAttachment(p.cmd);
+
+                                p.buffers["dissolve"]
+                                    ->transitionToColorAttachment(p.cmd);
+                                p.buffers["dissolve2"]
+                                    ->transitionToColorAttachment(p.cmd);
                             }
                         }
                         else if (layer.image)
                         {
                             drawImage(
-                                p.buffers["video"],
-                                layer.image,
+                                p.buffers["video"], layer.image,
                                 image::getBox(
                                     layer.image->getAspect(),
                                     math::Box2i(
@@ -824,8 +838,7 @@ namespace tl
                         else if (layer.imageB)
                         {
                             drawImage(
-                                p.buffers["video"],
-                                layer.imageB,
+                                p.buffers["video"], layer.imageB,
                                 image::getBox(
                                     layer.imageB->getAspect(),
                                     math::Box2i(
@@ -842,8 +855,7 @@ namespace tl
                         if (layer.image)
                         {
                             drawImage(
-                                p.buffers["video"],
-                                layer.image,
+                                p.buffers["video"], layer.image,
                                 image::getBox(
                                     layer.image->getAspect(),
                                     math::Box2i(
@@ -860,24 +872,25 @@ namespace tl
 
             if (p.buffers["video"])
             {
-    
+
                 // glBlendFuncSeparate(
                 //     GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
                 //     GL_ONE_MINUS_SRC_ALPHA);
-                
+
                 // Prepare video buffer for sampling in FBO pass.
                 p.buffers["video"]->transitionToShaderRead(p.cmd);
 
                 //                     pipeline    shader    mesh
                 _createPipeline(p.fbo, "display", "display", "video", true);
-                
+
                 // Begin the new compositing render pass.
                 p.fbo->beginCompositingRenderPass(p.cmd);
-                
+
                 p.fbo->setupViewportAndScissor(p.cmd);
 
                 p.shaders["display"]->bind(p.frameIndex);
-                p.shaders["display"]->setFBO("textureSampler", p.buffers["video"]);
+                p.shaders["display"]->setFBO(
+                    "textureSampler", p.buffers["video"]);
 
                 UBOLevels uboLevels;
                 uboLevels.enabled = displayOptions.levels.enabled;
@@ -886,15 +899,15 @@ namespace tl
                 uboLevels.gamma = displayOptions.levels.gamma;
                 uboLevels.outLow = displayOptions.levels.outLow;
                 uboLevels.outHigh = displayOptions.levels.outHigh;
-                uboLevels.gamma = uboLevels.gamma > 0.F ?
-                                  (1.F / uboLevels.gamma) : 1000000.F;
+                uboLevels.gamma =
+                    uboLevels.gamma > 0.F ? (1.F / uboLevels.gamma) : 1000000.F;
                 p.shaders["display"]->setUniform("uboLevels", uboLevels);
 
                 UBONormalize uboNormalize;
                 uboNormalize.enabled = displayOptions.normalize.enabled;
                 uboNormalize.minimum = displayOptions.normalize.minimum;
                 uboNormalize.maximum = displayOptions.normalize.maximum;
-    
+
                 p.shaders["display"]->setUniform("uboNormalize", uboNormalize);
 
                 UBOColor uboColor;
@@ -905,33 +918,37 @@ namespace tl
                 uboColor.add = displayOptions.color.add;
                 uboColor.matrix = color(displayOptions.color);
                 uboColor.invert = displayOptions.color.invert;
-                
-                p.shaders["display"]->setUniform("uboColor", uboColor);
-                p.shaders["display"]->setUniform("uboEXRDisplay", displayOptions.exrDisplay);
 
-                
+                p.shaders["display"]->setUniform("uboColor", uboColor);
+                p.shaders["display"]->setUniform(
+                    "uboEXRDisplay", displayOptions.exrDisplay);
+
                 UBOOptions ubo;
                 ubo.channels = static_cast<int>(displayOptions.channels);
-                ubo.mirrorX  = displayOptions.mirror.x;
-                ubo.mirrorY  = displayOptions.mirror.y;
-                ubo.softClip = displayOptions.softClip.enabled ? displayOptions.softClip.value : 0.F;
+                ubo.mirrorX = displayOptions.mirror.x;
+                ubo.mirrorY = displayOptions.mirror.y;
+                ubo.softClip = displayOptions.softClip.enabled
+                                   ? displayOptions.softClip.value
+                                   : 0.F;
                 ubo.videoLevels = static_cast<int>(displayOptions.videoLevels);
                 ubo.invalidValues = displayOptions.invalidValues;
                 p.shaders["display"]->setUniform("ubo", ubo);
-                
+
 #if defined(TLRENDER_OCIO)
                 if (p.ocioData)
                 {
                     for (size_t i = 0; i < p.ocioData->textures.size(); ++i)
                     {
-                        p.shaders["display"]->setTexture("sampler", p.ocioData->textures[i]);
+                        p.shaders["display"]->setTexture(
+                            "sampler", p.ocioData->textures[i]);
                     }
                 }
                 if (p.lutData)
                 {
                     for (size_t i = 0; i < p.lutData->textures.size(); ++i)
                     {
-                        p.shaders["display"]->setTexture("sampler", p.lutData->textures[i]);
+                        p.shaders["display"]->setTexture(
+                            "sampler", p.lutData->textures[i]);
                     }
                 }
 #endif // TLRENDER_OCIO
@@ -940,13 +957,14 @@ namespace tl
                 {
                     for (size_t i = 0; i < p.placeboData->textures.size(); ++i)
                     {
-                        p.shaders["display"]->setTexture("sampler", p.placeboData->textures[i]);
+                        p.shaders["display"]->setTexture(
+                            "sampler", p.placeboData->textures[i]);
                     }
                 }
 #endif // TLRENDER_LIBPLACEBO
 
                 _bindDescriptorSets("display", "display");
-            
+
                 if (p.vbos["video"])
                 {
                     p.vbos["video"]->copy(convert(
@@ -958,7 +976,7 @@ namespace tl
                     p.vaos["video"]->upload(p.vbos["video"]->getData());
                     p.vaos["video"]->draw(p.cmd, p.vbos["video"]);
                 }
-                
+
                 p.fbo->endCompositingRenderPass(p.cmd);
                 p.buffers["video"]->transitionToColorAttachment(p.cmd);
             }

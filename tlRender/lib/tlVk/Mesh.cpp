@@ -432,26 +432,24 @@ namespace tl
             VBOType type = VBOType::First;
 
             // Actual converted vertex data in Vulkan layout
-            std::vector<uint8_t> data; 
-            VkVertexInputBindingDescription bindingDesc;
+            std::vector<uint8_t> data;
+            std::vector<VkVertexInputBindingDescription> bindingDesc;
             std::vector<VkVertexInputAttributeDescription> attributes;
         };
 
         void VBO::_init(std::size_t size, VBOType type)
         {
             TLRENDER_P();
-            
+
             p.size = size;
             p.type = type;
 
-            p.bindingDesc = {};
-            p.bindingDesc.binding = 0;
-            p.bindingDesc.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+            p.bindingDesc.resize(1);
 
             switch (type)
             {
             case VBOType::Pos2_F32:
-                p.bindingDesc.stride = 2 * sizeof(float);
+                p.bindingDesc[0].stride = 2 * sizeof(float);
 
                 p.attributes.push_back({
                     0, // location
@@ -461,7 +459,8 @@ namespace tl
                 });
                 break;
             case VBOType::Pos2_F32_UV_U16:
-                p.bindingDesc.stride = 2 * sizeof(float) + 2 * sizeof(uint16_t);
+                p.bindingDesc[0].stride =
+                    2 * sizeof(float) + 2 * sizeof(uint16_t);
 
                 p.attributes.push_back({
                     0, // location
@@ -475,7 +474,7 @@ namespace tl
                      static_cast<uint32_t>(2 * sizeof(float))});
                 break;
             case VBOType::Pos2_F32_Color_F32:
-                p.bindingDesc.stride = 2 * sizeof(float) + 4 * sizeof(float);
+                p.bindingDesc[0].stride = 2 * sizeof(float) + 4 * sizeof(float);
 
                 p.attributes.push_back({
                     0, // location
@@ -489,7 +488,7 @@ namespace tl
                      static_cast<uint32_t>(2 * sizeof(float))});
                 break;
             case VBOType::Pos3_F32:
-                p.bindingDesc.stride = 3 * sizeof(float);
+                p.bindingDesc[0].stride = 3 * sizeof(float);
 
                 p.attributes.push_back({
                     0, // location
@@ -499,7 +498,8 @@ namespace tl
                 });
                 break;
             case VBOType::Pos3_F32_UV_U16:
-                p.bindingDesc.stride = 3 * sizeof(float) + 2 * sizeof(uint16_t);
+                p.bindingDesc[0].stride =
+                    3 * sizeof(float) + 2 * sizeof(uint16_t);
 
                 p.attributes.push_back({
                     0, // location
@@ -513,7 +513,7 @@ namespace tl
                      static_cast<uint32_t>(3 * sizeof(float))});
                 break;
             case VBOType::Pos3_F32_UV_F32_Normal_F32:
-                p.bindingDesc.stride =
+                p.bindingDesc[0].stride =
                     3 * sizeof(float) + 2 * sizeof(float) + 3 * sizeof(float);
 
                 p.attributes.push_back({
@@ -534,8 +534,9 @@ namespace tl
                      static_cast<uint32_t>(6 * sizeof(float))});
                 break;
             case VBOType::Pos3_F32_UV_F32_Normal_F32_Color_F32:
-                p.bindingDesc.stride = 3 * sizeof(float) + 2 * sizeof(float) +
-                                       3 * sizeof(float) + 4 * sizeof(float);
+                p.bindingDesc[0].stride = 3 * sizeof(float) +
+                                          2 * sizeof(float) +
+                                          3 * sizeof(float) + 4 * sizeof(float);
 
                 p.attributes.push_back({
                     0, // location
@@ -561,7 +562,8 @@ namespace tl
                      static_cast<uint32_t>(8 * sizeof(float))});
                 break;
             case VBOType::Pos3_F32_Color_U8:
-                p.bindingDesc.stride = 3 * sizeof(float) + 4 * sizeof(uint8_t);
+                p.bindingDesc[0].stride =
+                    3 * sizeof(float) + 4 * sizeof(uint8_t);
 
                 p.attributes.push_back({
                     0, // location
@@ -579,10 +581,10 @@ namespace tl
             }
         }
 
-        const VkVertexInputBindingDescription*
+        const std::vector<VkVertexInputBindingDescription>&
         VBO::getBindingDescription() const
         {
-            return &_p->bindingDesc;
+            return _p->bindingDesc;
         }
 
         const std::vector<VkVertexInputAttributeDescription>&
@@ -640,7 +642,7 @@ namespace tl
         struct VAO::Private
         {
             uint32_t frameIndex = 0;
-            
+
             std::vector<VkBuffer> buffers;
             std::vector<VkDeviceMemory> memories;
         };
@@ -715,7 +717,7 @@ namespace tl
             {
                 vkFreeMemory(device, memory, nullptr);
             }
-            
+
             if (vkCreateBuffer(device, &bufferInfo, nullptr, &buffer) !=
                 VK_SUCCESS)
             {
@@ -755,7 +757,8 @@ namespace tl
         {
             TLRENDER_P();
             if (value >= MAX_FRAMES_IN_FLIGHT)
-                throw std::runtime_error("VAO::bind value bigger than MAX_FRAMES_IN_FLIGHT");
+                throw std::runtime_error(
+                    "VAO::bind value bigger than MAX_FRAMES_IN_FLIGHT");
 
             p.frameIndex = value;
         }
@@ -765,12 +768,14 @@ namespace tl
             TLRENDER_P();
 
             VkDeviceSize offsets[1] = {0};
-            vkCmdBindVertexBuffers(cmd, 0, 1, &p.buffers[p.frameIndex], offsets);
+            vkCmdBindVertexBuffers(
+                cmd, 0, 1, &p.buffers[p.frameIndex], offsets);
             vkCmdDraw(cmd, size, 1, 0, 0);
         }
 
         void VAO::draw(VkCommandBuffer& cmd, const std::shared_ptr<VBO>& vbo)
         {
+            upload(vbo->getData());
             draw(cmd, vbo->getSize() * 3);
         }
     } // namespace vlk
