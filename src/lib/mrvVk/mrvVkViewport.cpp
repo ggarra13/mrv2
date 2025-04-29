@@ -16,6 +16,8 @@
 #include <tlVk/Init.h>
 #include <tlVk/Util.h>
 
+#include <FL/vk_enum_string_helper.h>
+
 // mrViewer .fl includes
 #include "mrViewer.h"
 #include "mrvHotkeyUI.h"
@@ -478,6 +480,7 @@ namespace mrv
                 offscreenBufferOptions.depth = vlk::OffscreenDepth::_24;
                 offscreenBufferOptions.stencil = vlk::OffscreenStencil::_8;
                 offscreenBufferOptions.allowCompositing = true;
+                offscreenBufferOptions.pbo = true;
 
                 if (vlk::doCreate(
                         vk.buffer, renderSize, offscreenBufferOptions))
@@ -649,6 +652,14 @@ namespace mrv
 
             end_render_pass(cmd);
 
+            vk.buffer->transitionToColorAttachment(cmd);
+
+            // Update the pixel bar from here only if we are playing a movie
+            // and one that is not 1 frames long.
+            bool update = !_shouldUpdatePixelBar();
+            if (update)
+                updatePixelBar();
+            
             // Draw FLTK children
             // Fl_Window::draw();
         }
@@ -768,57 +779,6 @@ namespace mrv
                 _calculateColorAreaRawValues(info);
         }
 
-        void Viewport::_mapBuffer() noexcept
-        {
-            MRV2_VK();
-            TLRENDER_P();
-
-            if (p.ui->uiPixelWindow->uiPixelValue->value() == PixelValue::kFull)
-            {
-
-                // For faster access, we muse use BGRA.
-                // constexpr VKenum format = GL_BGRA;
-                // constexpr VKenum type = GL_FLOAT;
-
-                // vlk::OffscreenBufferBinding binding(vk.buffer);
-                const auto& renderSize = vk.buffer->getSize();
-
-                // bool update = _shouldUpdatePixelBar();
-                bool stopped = _isPlaybackStopped();
-                bool single_frame = _isSingleFrame();
-
-                // set the target framebuffer to read
-                // "index" is used to read pixels from framebuffer to a PBO
-                // "nextIndex" is used to update pixels in the other PBO
-                vk.currentPBOIndex = (vk.currentPBOIndex + 1) % 2;
-                vk.nextPBOIndex = (vk.currentPBOIndex + 1) % 2;
-            }
-            else
-            {
-                TimelineViewport::_mapBuffer();
-            }
-        }
-
-        void Viewport::_unmapBuffer() noexcept
-        {
-            MRV2_VK();
-            TLRENDER_P();
-
-            if (p.image)
-            {
-                if (!p.rawImage)
-                {
-                    // glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
-
-                    // // Create a new fence
-                    // vk.pboFences[vk.nextPBOIndex] =
-                    //     glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
-                    p.image = nullptr;
-                    p.rawImage = true;
-                }
-            }
-        }
-
         void Viewport::_readPixel(image::Color4f& rgba)
         {
 
@@ -871,41 +831,192 @@ namespace mrv
             }
             else
             {
-                // This is needed as the FL_MOVE of fltk wouuld get called
+                // This is needed as the FL_MOVE of fltk would get called
                 // before the draw routine
-                if (!vk.buffer || !valid())
+                if (!vk.buffer)
                 {
                     return;
                 }
 
-                // glPixelStorei(GL_PACK_ALIGNMENT, 1);
-                // glPixelStorei(GL_PACK_SWAP_BYTES, GL_FALSE);
-
-                // We use ReadPixels when the movie is stopped or has only a
-                // a single frame.
-                bool update = _shouldUpdatePixelBar();
+                // const VKenum type = GL_FLOAT;
 
                 if (_isEnvironmentMap())
                 {
-                    update = true;
+                    pos = _getFocus();
+                    // glBindFramebuffer(GL_FRAMEBUFFER, 0);
+                    // glReadBuffer(GL_FRONT);
+                    // glReadPixels(pos.x, pos.y, 1, 1, GL_RGBA, type,
+                    // &rgba);
+                    return;
                 }
-
-                // const VKenum type = GL_FLOAT;
-
-                if (update)
+                else
                 {
-                    _unmapBuffer();
-                    if (_isEnvironmentMap())
+                    VkCommandBuffer cmd = beginSingleTimeCommands(device(), commandPool());
+                    
+                    vk.buffer->readPixels(cmd, pos.x, pos.y, 1, 1);
+                    
+                    vkEndCommandBuffer(cmd);
+                    
+                    vk.buffer->submitReadback(cmd);
+                    
+                    wait_queue();
+                        
+                    vkFreeCommandBuffers(device(), commandPool(), 1, &cmd);
+
+                    void* data = vk.buffer->getLatestReadPixels();
+                    if (!data)
                     {
-                        pos = _getFocus();
-                        // glBindFramebuffer(GL_FRAMEBUFFER, 0);
-                        // glReadBuffer(GL_FRONT);
-                        // glReadPixels(pos.x, pos.y, 1, 1, GL_RGBA, type,
-                        // &rgba);
+                        LOG_ERROR("Could not get pixel under mouse");
                         return;
                     }
-                    else
+                        
+                    auto options = vk.buffer->getOptions();
+                    
+                    switch(options.colorType)
                     {
+                    case image::PixelType::RGB_F32:
+                    {
+                        float* pixels = reinterpret_cast<float*>(data);
+                        rgba.r = pixels[0];
+                        rgba.g = pixels[1];
+                        rgba.b = pixels[2];
+                        rgba.a = 1.F;
+                        break;
+                    }
+                    case image::PixelType::RGBA_F32:
+                    {
+                        float* pixels = reinterpret_cast<float*>(data);
+                        rgba.r = pixels[0];
+                        rgba.g = pixels[1];
+                        rgba.b = pixels[2];
+                        rgba.a = pixels[3];
+                        break;
+                    }
+                    case image::PixelType::RGB_F16:
+                    {
+                        half* pixels = reinterpret_cast<half*>(data);
+                        rgba.r = pixels[0];
+                        rgba.g = pixels[1];
+                        rgba.b = pixels[2];
+                        rgba.a = 1.F;
+                        break;
+                    }
+                    case image::PixelType::RGBA_F16:
+                    {
+                        half* pixels = reinterpret_cast<half*>(data);
+                        rgba.r = pixels[0];
+                        rgba.g = pixels[1];
+                        rgba.b = pixels[2];
+                        rgba.a = pixels[3];
+                        break;
+                    }
+                    case image::PixelType::RGB_U8:
+                    {
+                        uint8_t* pixels = reinterpret_cast<uint8_t*>(data);
+                        rgba.r = static_cast<float>(pixels[0]) / 255.F;
+                        rgba.g = static_cast<float>(pixels[1]) / 255.F;
+                        rgba.b = static_cast<float>(pixels[2]) / 255.F;
+                        rgba.a = 1.F;
+                        break;
+                    }
+                    case image::PixelType::RGBA_U8:
+                    {
+                        uint8_t* pixels = reinterpret_cast<uint8_t*>(data);
+                        rgba.r = static_cast<float>(pixels[0]) / 255.F;
+                        rgba.g = static_cast<float>(pixels[1]) / 255.F;
+                        rgba.b = static_cast<float>(pixels[2]) / 255.F;
+                        rgba.a = static_cast<float>(pixels[3]) / 255.F;
+                        break;
+                    }
+                    case image::PixelType::RGBA_U16:
+                    {
+                        uint16_t* pixels = reinterpret_cast<uint16_t*>(data);
+                        rgba.r = static_cast<float>(pixels[0]) / 65535.F;
+                        rgba.g = static_cast<float>(pixels[1]) / 65535.F;
+                        rgba.b = static_cast<float>(pixels[2]) / 65535.F;
+                        rgba.a = static_cast<float>(pixels[3]) / 65535.F;
+                        break;
+                    }
+                    case image::PixelType::L_F32:
+                    {
+                        float* pixels = reinterpret_cast<float*>(data);
+                        rgba.r = pixels[0];
+                        rgba.g = pixels[0];
+                        rgba.b = pixels[0];
+                        rgba.a = 1.0F;
+                        break;
+                    }
+                    case image::PixelType::LA_F32:
+                    {
+                        float* pixels = reinterpret_cast<float*>(data);
+                        rgba.r = pixels[0];
+                        rgba.g = pixels[0];
+                        rgba.b = pixels[0];
+                        rgba.a = pixels[1];
+                        break;
+                    }
+                    case image::PixelType::L_F16:
+                    {
+                        half* pixels = reinterpret_cast<half*>(data);
+                        rgba.r = pixels[0];
+                        rgba.g = pixels[0];
+                        rgba.b = pixels[0];
+                        rgba.a = 1.0F;
+                        break;
+                    }
+                    case image::PixelType::LA_F16:
+                    {
+                        half* pixels = reinterpret_cast<half*>(data);
+                        rgba.r = pixels[0];
+                        rgba.g = pixels[0];
+                        rgba.b = pixels[0];
+                        rgba.a = pixels[1];
+                        break;
+                    }
+                    case image::PixelType::L_U8:
+                    {
+                        uint16_t* pixels = reinterpret_cast<uint16_t*>(data);
+                        rgba.r = static_cast<float>(pixels[0]) / 65535.F;
+                        rgba.g = static_cast<float>(pixels[0]) / 65535.F;
+                        rgba.b = static_cast<float>(pixels[0]) / 65535.F;
+                        rgba.a = 1.0F;
+                        break;
+                    }
+                    case image::PixelType::LA_U8:
+                    {
+                        uint8_t* pixels = reinterpret_cast<uint8_t*>(data);
+                        rgba.r = static_cast<float>(pixels[0]) / 255.F;
+                        rgba.g = static_cast<float>(pixels[0]) / 255.F;
+                        rgba.b = static_cast<float>(pixels[0]) / 255.F;
+                        rgba.a = static_cast<float>(pixels[1]) / 255.F;
+                        break;
+                    }
+                    case image::PixelType::L_U16:
+                    {
+                        uint16_t* pixels = reinterpret_cast<uint16_t*>(data);
+                        rgba.r = static_cast<float>(pixels[0]) / 65535.F;
+                        rgba.g = static_cast<float>(pixels[0]) / 65535.F;
+                        rgba.b = static_cast<float>(pixels[0]) / 65535.F;
+                        rgba.a = 1.0F;
+                        break;
+                    }
+                    case image::PixelType::LA_U16:
+                    {
+                        uint16_t* pixels = reinterpret_cast<uint16_t*>(data);
+                        rgba.r = static_cast<float>(pixels[0]) / 65535.F;
+                        rgba.g = static_cast<float>(pixels[0]) / 65535.F;
+                        rgba.b = static_cast<float>(pixels[0]) / 65535.F;
+                        rgba.a = static_cast<float>(pixels[1]) / 65535.F;
+                        break;
+                    }
+                    default:
+                        std::cerr << "Unhandled format " << options.colorType
+                                  << std::endl;
+                        break;
+                    }
+                        
+                        //endSingleTimeCommands(cmd, device(), commandPool(), queue());
+                        
                         // MyViewport* self = const_cast<Viewport*>(this);
                         // self->make_current();
                         // vlk::OffscreenBufferBinding binding(vk.buffer);
@@ -913,22 +1024,16 @@ namespace mrv
                         // &rgba);
                         return;
                     }
-                }
 
-                if (!p.image)
-                    _mapBuffer();
-
-                if (p.image)
-                {
-                    const auto& renderSize = vk.buffer->getSize();
-                    rgba.b = p.image[(pos.x + pos.y * renderSize.w) * 4];
-                    rgba.g = p.image[(pos.x + pos.y * renderSize.w) * 4 + 1];
-                    rgba.r = p.image[(pos.x + pos.y * renderSize.w) * 4 + 2];
-                    rgba.a = p.image[(pos.x + pos.y * renderSize.w) * 4 + 3];
-                }
+                // if (p.image)
+                // {
+                //     const auto& renderSize = vk.buffer->getSize();
+                //     rgba.b = p.image[(pos.x + pos.y * renderSize.w) * 4];
+                //     rgba.g = p.image[(pos.x + pos.y * renderSize.w) * 4 + 1];
+                //     rgba.r = p.image[(pos.x + pos.y * renderSize.w) * 4 + 2];
+                //     rgba.a = p.image[(pos.x + pos.y * renderSize.w) * 4 + 3];
+                // }
             }
-
-            _unmapBuffer();
         }
 
         void Viewport::_pushAnnotationShape(const std::string& command) const

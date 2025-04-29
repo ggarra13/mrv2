@@ -113,9 +113,6 @@ namespace mrv
                 const float pixelAspectRatio, const image::Color4f& color,
                 const math::Matrix4x4f& mvp, const char* label = "") noexcept;
 
-            void _mapBuffer() noexcept;
-            void _unmapBuffer() noexcept;
-
             void _drawShape(
                 const std::shared_ptr< draw::Shape >& shape,
                 const float alphamult = 1.F) noexcept;

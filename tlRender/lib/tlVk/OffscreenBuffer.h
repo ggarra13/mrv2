@@ -120,23 +120,44 @@ namespace tl
             const OffscreenBufferOptions& getOptions() const;
 
             //! Vulkan Accessors
+
+            //! Get image layout.
             VkImageLayout getImageLayout() const;
 
+            //! Get depth layout.
             VkImageLayout getDepthLayout() const;
-            
+
+            //! Get image view.
             VkImageView getImageView() const;
+
+            //! Get image.
             VkImage getImage() const;
-            
+
+            //! Get normal handles.
             VkFramebuffer getFramebuffer() const;
             VkRenderPass getRenderPass() const;
-            
+
+            //! Get compositing handles.
             VkFramebuffer getCompositingFramebuffer() const;
             VkRenderPass getCompositingRenderPass() const;
-            
+
+            //! Get Sampler
             VkSampler getSampler() const;
+
+            //! Get Extents (same as getSize()).
             VkExtent2D getExtent() const;
+
+            //! Get viewport.
             VkViewport getViewport() const;
+
+            //! Get scissor.
             VkRect2D getScissor() const;
+
+            //! Get Vulkan's internal format of buffer.
+            VkFormat getFormat() const;
+            
+            //! Get Vulkan's internal format of depth buffer.
+            VkFormat getDepthFormat() const;
             
             //! Start/end a normal render pass.
             void beginRenderPass(VkCommandBuffer cmd,
@@ -163,6 +184,7 @@ namespace tl
             //! Read-back PBO like functionality.
             void createStagingBuffers();
             void readPixels(VkCommandBuffer cmd,
+                            int32_t x = 0, int32_t y = 0,
                             uint32_t w = 0, uint32_t h = 0);
             void submitReadback(VkCommandBuffer cmd);
             void* getLatestReadPixels();

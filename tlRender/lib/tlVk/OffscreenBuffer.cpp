@@ -136,7 +136,7 @@ namespace tl
         static constexpr int NUM_PBO_BUFFERS = 3;
 
         struct StagingBuffer {
-            VkBuffer buffer;
+            VkBuffer buffer = VK_NULL_HANDLE;
             VkDeviceMemory memory;
             void* mappedPtr = nullptr;
             VkFence fence = VK_NULL_HANDLE;
@@ -150,7 +150,7 @@ namespace tl
             OffscreenBufferOptions options;
 
             // PBO for reading from main FBO.
-            uint32_t currentPBO = 3;
+            uint32_t currentPBO = 0;
             std::vector<StagingBuffer> pboRing;
 
             // Vulkan handles
@@ -440,6 +440,16 @@ namespace tl
             return _p->options;
         }
 
+        VkFormat OffscreenBuffer::getFormat() const
+        {
+            return _p->colorFormat;
+        }
+        
+        VkFormat OffscreenBuffer::getDepthFormat() const
+        {
+            return _p->depthFormat;
+        }
+        
         VkImageLayout OffscreenBuffer::getImageLayout() const
         {
             return _p->imageLayout;
@@ -1052,6 +1062,7 @@ namespace tl
         }
 
         void OffscreenBuffer::readPixels(VkCommandBuffer cmd,
+                                         int32_t x, int32_t y,
                                          uint32_t w, uint32_t h)
         {
             TLRENDER_P();
@@ -1059,7 +1070,7 @@ namespace tl
             VkDevice device = ctx.device;
             VkCommandPool commandPool = ctx.commandPool;
             VkQueue  queue  = ctx.queue;
-            
+
             auto& pbo = p.pboRing[p.currentPBO];
             vkWaitForFences(device, 1, &pbo.fence, VK_TRUE, UINT64_MAX);
             vkResetFences(device, 1, &pbo.fence);
@@ -1076,7 +1087,7 @@ namespace tl
             region.imageSubresource.mipLevel = 0;
             region.imageSubresource.baseArrayLayer = 0;
             region.imageSubresource.layerCount = 1;
-            region.imageOffset = {0, 0, 0};
+            region.imageOffset = {x, y, 0};
 
             if (w == 0) w = p.size.w;
             if (h == 0) h = p.size.h;
@@ -1101,7 +1112,7 @@ namespace tl
             submitInfo.commandBufferCount = 1;
             submitInfo.pCommandBuffers = &cmd;
 
-            // Should we use another queue?
+            // Should we use another queue?  For faster feedback yes.
             VkQueue transferQueue = ctx.queue;
             
             vkQueueSubmit(transferQueue, 1, &submitInfo,
