@@ -92,7 +92,6 @@ namespace tl
                 case timeline::Background::Solid:
                 {
                     const auto& mesh = geom::box(box);
-                    _createMesh("rect", mesh);
                     _createPipeline(p.fbo, "solid", "rect", "rect");
                     p.shaders["rect"]->bind(p.frameIndex);
                     _bindDescriptorSets("solid", "rect");

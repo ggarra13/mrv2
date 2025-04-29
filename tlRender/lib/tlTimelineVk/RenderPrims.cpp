@@ -53,6 +53,7 @@ namespace tl
                 p.shaders["mesh"]->setUniform("transform.mvp", transform);
                 p.shaders["mesh"]->setUniform("color", color);
 
+                // Default blend function in pipelines.
                 // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
                 if (!p.vbos["mesh"] ||
@@ -60,7 +61,6 @@ namespace tl
                 {
                     p.vbos["mesh"] =
                         vlk::VBO::create(size * 3, vlk::VBOType::Pos2_F32);
-                    p.vaos["mesh"].reset();
                 }
                 if (p.vbos["mesh"])
                 {
@@ -80,9 +80,8 @@ namespace tl
         }
 
         void Render::drawColorMesh(
-            const std::string& pipelineLayoutName,
-            const geom::TriangleMesh2& mesh, const math::Vector2i& position,
-            const image::Color4f& color)
+            const std::string& pipelineName, const geom::TriangleMesh2& mesh,
+            const math::Vector2i& position, const image::Color4f& color)
         {
             TLRENDER_P();
             ++(p.currentStats.meshes);
@@ -98,28 +97,9 @@ namespace tl
                 p.shaders["colorMesh"]->setUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
                 p.shaders["colorMesh"]->setUniform("color", color);
-                _bindDescriptorSets(pipelineLayoutName, "colorMesh");
+                _bindDescriptorSets(pipelineName, "colorMesh");
 
                 // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-                if (!p.vbos["colorMesh"] ||
-                    (p.vbos["colorMesh"] &&
-                     p.vbos["colorMesh"]->getSize() < size * 3))
-                {
-                    p.vbos["colorMesh"] = vlk::VBO::create(
-                        size * 3, vlk::VBOType::Pos2_F32_Color_F32);
-                    p.vaos["colorMesh"].reset();
-                }
-                if (p.vbos["colorMesh"])
-                {
-                    p.vbos["colorMesh"]->copy(
-                        convert(mesh, vlk::VBOType::Pos2_F32_Color_F32));
-                }
-
-                if (!p.vaos["colorMesh"] && p.vbos["colorMesh"])
-                {
-                    p.vaos["colorMesh"] = vlk::VAO::create(ctx);
-                }
                 if (p.vaos["colorMesh"] && p.vbos["colorMesh"])
                 {
                     p.vaos["colorMesh"]->bind(p.frameIndex);
@@ -136,7 +116,7 @@ namespace tl
             if (size > 0)
             {
                 if (!vbos["text"] ||
-                    (vbos["text"] && vbos["text"]->getSize() < size * 3))
+                    (vbos["text"] && vbos["text"]->getSize() != size * 3))
                 {
                     vbos["text"] = vlk::VBO::create(
                         size * 3, vlk::VBOType::Pos2_F32_UV_U16);
@@ -445,18 +425,19 @@ namespace tl
             const std::string& pipelineName, const std::string& shaderName)
         {
             TLRENDER_P();
+            const std::string pipelineLayoutName = pipelineName + shaderName;
             if (!p.shaders[shaderName])
             {
                 throw std::runtime_error("Undefined shader " + shaderName);
             }
-            if (!p.pipelineLayouts[pipelineName])
+            if (!p.pipelineLayouts[pipelineLayoutName])
             {
                 throw std::runtime_error(
                     "Undefined pipelineLayout " + pipelineName);
             }
             vkCmdBindDescriptorSets(
                 p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
-                p.pipelineLayouts[pipelineName], 0, 1,
+                p.pipelineLayouts[pipelineLayoutName], 0, 1,
                 &p.shaders[shaderName]->getDescriptorSet(), 0, nullptr);
         }
 
@@ -466,25 +447,30 @@ namespace tl
             TLRENDER_P();
 
             const size_t size = mesh.triangles.size();
-            if (!p.vbos[meshName] ||
-                (p.vbos[meshName] && p.vbos[meshName]->getSize() < size * 3))
+
+            auto type = vlk::VBOType::Pos2_F32;
+            if (mesh.t.size())
             {
-                p.vbos[meshName] = vlk::VBO::create(
-                    size * 3, vlk::VBOType::Pos2_F32_Color_F32);
-                p.vaos[meshName].reset();
+                type = vlk::VBOType::Pos2_F32_UV_U16;
+            }
+            if (mesh.c.size())
+            {
+                type = vlk::VBOType::Pos2_F32_Color_F32;
+            }
+
+            if (!p.vbos[meshName] ||
+                (p.vbos[meshName] && p.vbos[meshName]->getSize() != size * 3))
+            {
+                p.vbos[meshName] = vlk::VBO::create(size * 3, type);
             }
             if (p.vbos[meshName])
             {
-                p.vbos[meshName]->copy(
-                    convert(mesh, vlk::VBOType::Pos2_F32_Color_F32));
+                p.vbos[meshName]->copy(convert(mesh, type));
             }
 
             if (!p.vaos[meshName] && p.vbos[meshName])
             {
                 p.vaos[meshName] = vlk::VAO::create(ctx);
-            }
-            if (p.vaos[meshName] && p.vbos[meshName])
-            {
             }
         }
 
@@ -514,7 +500,9 @@ namespace tl
                 throw std::runtime_error(
                     "createPipeline failed with unknown mesh " + meshName);
 
-            if (!p.pipelineLayouts[pipelineName])
+            const std::string pipelineLayoutName = pipelineName + shaderName;
+
+            if (!p.pipelineLayouts[pipelineLayoutName])
             {
                 VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = {};
                 pPipelineLayoutCreateInfo.sType =
@@ -529,7 +517,7 @@ namespace tl
                     device, &pPipelineLayoutCreateInfo, NULL, &pipelineLayout);
                 VK_CHECK(result);
 
-                p.pipelineLayouts[pipelineName] = pipelineLayout;
+                p.pipelineLayouts[pipelineLayoutName] = pipelineLayout;
             }
 
             // Elements of new Pipeline
@@ -547,7 +535,7 @@ namespace tl
             vlk::RasterizationStateInfo rs;
 
             vlk::DepthStencilStateInfo ds;
-            
+
             bool has_depth = fbo->hasDepth();     // Check if FBO has depth
             bool has_stencil = fbo->hasStencil(); // Check if FBO has stencil
 
@@ -601,10 +589,10 @@ namespace tl
             pipelineState.renderPass =
                 enableBlending ? fbo->getCompositingRenderPass()
                                : fbo->getRenderPass(); // Use FBO's render pass
-            pipelineState.layout = p.pipelineLayouts[pipelineName];
+            pipelineState.layout = p.pipelineLayouts[pipelineLayoutName];
 
             VkPipeline pipeline = VK_NULL_HANDLE;
-            
+
             if (p.pipelines.count(pipelineName) == 0)
             {
                 pipeline = pipelineState.create(device);
