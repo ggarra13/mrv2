@@ -608,6 +608,8 @@ namespace tl
 
             VkDevice device = ctx.device;
 
+            vkDeviceWaitIdle(device);
+
             for (auto& [_, pipeline] : p.pipelines)
             {
                 vkDestroyPipeline(device, pipeline.second, nullptr);

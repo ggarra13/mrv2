@@ -445,6 +445,8 @@ namespace tl
             p.type = type;
 
             p.bindingDesc.resize(1);
+            p.bindingDesc[0].binding = 0;
+            p.bindingDesc[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 
             switch (type)
             {

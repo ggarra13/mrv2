@@ -140,15 +140,15 @@ namespace mrv
             pipeline.layout =
                 vk.pipeline_layout; // Use the main pipeline layout
 
+            const auto& bindingDescs = vk.vbo->getBindingDescription();
+            const auto& attrDescs = vk.vbo->getAttributes();
             vi.sType =
                 VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
             vi.pNext = NULL;
-            vi.vertexBindingDescriptionCount =
-                vk.vbo->getBindingDescription().size();
-            vi.pVertexBindingDescriptions =
-                vk.vbo->getBindingDescription().data();
-            vi.vertexAttributeDescriptionCount = vk.vbo->getAttributes().size();
-            vi.pVertexAttributeDescriptions = vk.vbo->getAttributes().data();
+            vi.vertexBindingDescriptionCount = bindingDescs.size();
+            vi.pVertexBindingDescriptions = bindingDescs.data();
+            vi.vertexAttributeDescriptionCount = attrDescs.size();
+            vi.pVertexAttributeDescriptions = attrDescs.data();
 
             memset(&ia, 0, sizeof(ia));
             ia.sType =

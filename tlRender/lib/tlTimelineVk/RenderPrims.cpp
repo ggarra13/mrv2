@@ -531,100 +531,107 @@ namespace tl
                 p.pipelineLayouts[pipelineName] = pipelineLayout;
             }
 
-            if (p.pipelines.count(pipelineName) == 0)
+            const auto& mesh = p.vbos[meshName];
+
+            // Elements of new Pipeline
+            vlk::VertexInputStateInfo vi;
+            vi.bindingDescriptions = mesh->getBindingDescription();
+            vi.attributeDescriptions = mesh->getAttributes();
+
+            // Defaults are fine
+            vlk::InputAssemblyStateInfo ia;
+
+            // Defaults are fine
+            vlk::ColorBlendStateInfo cb;
+
+            // Defaults are fine
+            vlk::RasterizationStateInfo rs;
+
+            vlk::DepthStencilStateInfo ds;
+            bool has_depth = fbo->hasDepth();     // Check FBO depth
+            bool has_stencil = fbo->hasStencil(); // Check FBO stencil
+
+            ds.depthTestEnable = has_depth ? VK_TRUE : VK_FALSE;
+            ds.depthWriteEnable = has_depth ? VK_TRUE : VK_FALSE;
+            ds.stencilTestEnable = has_stencil ? VK_TRUE : VK_FALSE;
+
+            vlk::ViewportStateInfo vp;
+
+            vlk::MultisampleStateInfo ms;
+
+            vlk::DynamicStateInfo dynamicState;
+            dynamicState.dynamicStates = {
+                VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR};
+
+            std::vector<vlk::PipelineCreationState::ShaderStageInfo>
+                shaderStages(2);
+
+            shaderStages[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
+            shaderStages[0].name = shader->getName();
+            shaderStages[0].module = shader->getVertex();
+            shaderStages[0].entryPoint = "main";
+
+            shaderStages[1].stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+            shaderStages[1].name = shader->getName();
+            shaderStages[1].module = shader->getFragment();
+            shaderStages[1].entryPoint = "main";
+
+            vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
+            if (enableBlending)
             {
-                const auto mesh = p.vbos[meshName];
-                const auto& pair = p.pipelines[pipelineName];
-
-                // Elements of new Pipeline
-                vlk::VertexInputStateInfo vi;
-                vi.bindingDescriptions = mesh->getBindingDescription();
-                vi.attributeDescriptions = mesh->getAttributes();
-
-                vlk::InputAssemblyStateInfo ia;
-                vlk::ColorBlendStateInfo cb;
-                vlk::DepthStencilStateInfo ds;
-
-                bool has_depth = fbo->hasDepth();     // Check FBO depth
-                bool has_stencil = fbo->hasStencil(); // Check FBO stencil
-
-                ds.depthTestEnable = has_depth ? VK_TRUE : VK_FALSE;
-                ds.depthWriteEnable = has_depth ? VK_TRUE : VK_FALSE;
-                ds.stencilTestEnable = has_stencil ? VK_TRUE : VK_FALSE;
-
-                vlk::ViewportStateInfo vp;
-
-                vlk::MultisampleStateInfo ms;
-
-                vlk::DynamicStateInfo dynamicState;
-                dynamicState.dynamicStates = {
-                    VK_DYNAMIC_STATE_VIEWPORT,
-                    VK_DYNAMIC_STATE_SCISSOR}; // Directly initialize with
-                                               // correct values
-
-                std::vector<vlk::PipelineCreationState::ShaderStageInfo>
-                    shaderStages(2);
-
-                shaderStages[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
-                shaderStages[0].name = shader->getName();
-                shaderStages[0].module = shader->getVertex();
-                shaderStages[0].entryPoint = "main";
-
-                shaderStages[1].stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-                shaderStages[1].name = shader->getName();
-                shaderStages[1].module = shader->getFragment();
-                shaderStages[1].entryPoint = "main";
-
-                vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
-                if (enableBlending)
-                {
-                    colorBlendAttachment.blendEnable = VK_TRUE;
-                }
-
-                cb.attachments.push_back(colorBlendAttachment);
-
-                //
-                // Actual pipeline creation parameters
-                //
-                vlk::PipelineCreationState pipelineState;
-                pipelineState.vertexInputState = vi;
-                pipelineState.inputAssemblyState = ia;
-                pipelineState.colorBlendState = cb;
-
-                pipelineState.depthStencilState = ds;
-                pipelineState.viewportState = vp;
-                pipelineState.multisampleState = ms;
-                pipelineState.dynamicState = dynamicState;
-                pipelineState.stages = shaderStages;
-                pipelineState.renderPass =
-                    enableBlending
-                        ? fbo->getCompositingRenderPass()
-                        : fbo->getRenderPass(); // Use FBO's render pass
-
-                // Create a temporary pipeline cache
-                VkPipelineCacheCreateInfo pipelineCacheCreateInfo{};
-                pipelineCacheCreateInfo.sType =
-                    VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
-
-                VkPipelineCache pipelineCache;
-                VkResult result;
-                result = vkCreatePipelineCache(
-                    device, &pipelineCacheCreateInfo, NULL, &pipelineCache);
-                VK_CHECK(result);
-
-                VkPipeline graphicsPipeline;
-                const VkGraphicsPipelineCreateInfo& pipelineCreateInfo =
-                    pipelineState.toVkCreateInfo();
-                result = vkCreateGraphicsPipelines(
-                    device, pipelineCache, 1, &pipelineCreateInfo, NULL,
-                    &graphicsPipeline);
-                VK_CHECK(result);
-                abort();
+                colorBlendAttachment.blendEnable = VK_TRUE;
             }
 
-            vkCmdBindPipeline(
-                p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
-                p.pipelines[pipelineName].second);
+            cb.attachments.push_back(colorBlendAttachment);
+
+            //
+            // Actual pipeline creation parameters
+            //
+            vlk::PipelineCreationState pipelineState;
+            pipelineState.vertexInputState = vi;
+            pipelineState.inputAssemblyState = ia;
+            pipelineState.colorBlendState = cb;
+            pipelineState.rasterizationState = rs;
+            pipelineState.depthStencilState = ds;
+            pipelineState.viewportState = vp;
+            pipelineState.multisampleState = ms;
+            pipelineState.dynamicState = dynamicState;
+            pipelineState.stages = shaderStages;
+            pipelineState.renderPass =
+                enableBlending ? fbo->getCompositingRenderPass()
+                               : fbo->getRenderPass(); // Use FBO's render pass
+            pipelineState.layout = p.pipelineLayouts[pipelineName];
+
+            VkPipeline pipeline = VK_NULL_HANDLE;
+            if (p.pipelines.count(pipelineName) == 0)
+            {
+                pipeline = pipelineState.create(device);
+                auto pair = std::make_pair(pipelineState, pipeline);
+                p.pipelines[pipelineName] = pair;
+                std::cerr << "create pipeline " << pipelineName << std::endl;
+            }
+            else
+            {
+                auto pair = p.pipelines[pipelineName];
+                auto oldPipelineState = pair.first;
+                if (pipelineState != oldPipelineState)
+                {
+                    std::cerr << "different pipeline " << pipelineName
+                              << std::endl;
+                    vkDeviceWaitIdle(device);
+                    vkDestroyPipeline(device, pair.second, nullptr);
+                    pipeline = pipelineState.create(device);
+                    auto pair = std::make_pair(pipelineState, pipeline);
+                    p.pipelines[pipelineName] = pair;
+                }
+                else
+                {
+                    std::cerr << "same pipeline " << pipelineName << std::endl;
+                    pipeline = pair.second;
+                }
+            }
+
+            vkCmdBindPipeline(p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 
             fbo->setupViewportAndScissor(p.cmd);
         }
