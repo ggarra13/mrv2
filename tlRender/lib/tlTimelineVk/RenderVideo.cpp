@@ -304,7 +304,6 @@ namespace tl
                 if (p.vaos["wipe"])
                 {
                     p.vaos["wipe"]->bind(p.frameIndex);
-                    p.vaos["wipe"]->upload(p.vbos["wipe"]->getData());
                     p.vaos["wipe"]->draw(p.cmd, p.vbos["wipe"]);
                 }
             }
@@ -427,7 +426,6 @@ namespace tl
                     if (p.vaos["video"])
                     {
                         p.vaos["video"]->bind(p.frameIndex);
-                        p.vaos["video"]->upload(p.vbos["video"]->getData());
                         p.vaos["video"]->draw(p.cmd, p.vbos["video"]);
                     }
                 }
@@ -587,7 +585,6 @@ namespace tl
                     if (p.vaos["video"])
                     {
                         p.vaos["video"]->bind(p.frameIndex);
-                        p.vaos["video"]->upload(p.vbos["video"]->getData());
                         p.vaos["video"]->draw(p.cmd, p.vbos["video"]);
                     }
                 }
@@ -784,8 +781,6 @@ namespace tl
                                 if (p.vaos["video"])
                                 {
                                     p.vaos["video"]->bind(p.frameIndex);
-                                    p.vaos["video"]->upload(
-                                        p.vbos["video"]->getData());
                                     p.vaos["video"]->draw(
                                         p.cmd, p.vbos["video"]);
                                 }
@@ -807,8 +802,6 @@ namespace tl
                                 if (p.vaos["video"])
                                 {
                                     p.vaos["video"]->bind(p.frameIndex);
-                                    p.vaos["video"]->upload(
-                                        p.vbos["video"]->getData());
                                     p.vaos["video"]->draw(
                                         p.cmd, p.vbos["video"]);
                                 }
@@ -972,11 +965,12 @@ namespace tl
                 if (p.vaos["video"])
                 {
                     p.vaos["video"]->bind(p.frameIndex);
-                    p.vaos["video"]->upload(p.vbos["video"]->getData());
                     p.vaos["video"]->draw(p.cmd, p.vbos["video"]);
                 }
 
                 p.fbo->endCompositingRenderPass(p.cmd);
+
+                // Transition buffer back to color attachment
                 p.buffers["video"]->transitionToColorAttachment(p.cmd);
             }
         }

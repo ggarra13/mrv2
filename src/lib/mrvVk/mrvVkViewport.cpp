@@ -527,7 +527,7 @@ namespace mrv
                 getBackgroundOptions());
             vk.render->end();
 
-            vk.buffer->transitionToShaderRead(cmd);
+            // vk.buffer->transitionToShaderRead(cmd);
 
             math::Matrix4x4f mvp;
 
@@ -593,7 +593,7 @@ namespace mrv
             end_render_pass();
 
             // Correctly transition from SHADER_READ to COLOR_ATTACHMENT
-            vk.buffer->transitionToColorAttachment(cmd);
+            // vk.buffer->transitionToColorAttachment(cmd);
 
             // Draw FLTK children
             // Fl_Window::draw();

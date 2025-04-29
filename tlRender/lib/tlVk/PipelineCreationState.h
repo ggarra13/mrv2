@@ -123,18 +123,6 @@ namespace tl
             float depthBiasSlopeFactor = 0.F;
             float lineWidth = 1.F;
 
-            RasterizationStateInfo()
-                {
-                    memset(this, 0, sizeof(RasterizationStateInfo));
-                    polygonMode = VK_POLYGON_MODE_FILL;
-                    cullMode = VK_CULL_MODE_NONE;
-                    frontFace = VK_FRONT_FACE_CLOCKWISE;
-                    depthClampEnable = VK_FALSE;
-                    rasterizerDiscardEnable = VK_FALSE;
-                    depthBiasEnable = VK_FALSE;
-                    lineWidth = 1.F;
-                }
-
             // Add comparison operators (==, !=)
             bool operator==(const RasterizationStateInfo& other) const
             {
@@ -171,16 +159,6 @@ namespace tl
             VkColorComponentFlags colorWriteMask =
                 VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
                 VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-            
-            ColorBlendAttachmentStateInfo()
-                {
-                    memset(this, 0, sizeof(ColorBlendAttachmentStateInfo));
-                    colorWriteMask = VK_COLOR_COMPONENT_R_BIT |
-                                     VK_COLOR_COMPONENT_G_BIT |
-                                     VK_COLOR_COMPONENT_B_BIT |
-                                     VK_COLOR_COMPONENT_A_BIT;
-                    blendEnable = VK_FALSE;
-                }
             
             // Add comparison operators (==, !=)
             bool operator==(const ColorBlendAttachmentStateInfo& other) const
