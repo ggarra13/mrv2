@@ -16,17 +16,14 @@
 namespace tl
 {
     namespace vlk
-    {                           
-        
+    {
 
-        std::size_t getDataByteCount(const VkImageType type,
-                                     uint32_t w,
-                                     uint32_t h,
-                                     uint32_t d,
-                                     VkFormat format)
+        std::size_t getDataByteCount(
+            const VkImageType type, uint32_t w, uint32_t h, uint32_t d,
+            VkFormat format)
         {
             std::size_t out = 0;
-            switch(type)
+            switch (type)
             {
             case VK_IMAGE_TYPE_1D:
                 h = d = 1;
@@ -37,7 +34,7 @@ namespace tl
             default:
                 break;
             }
-            
+
             switch (format)
             {
             case VK_FORMAT_R8_UNORM:
@@ -71,7 +68,7 @@ namespace tl
             case VK_FORMAT_R32G32_SFLOAT:
                 out = 2 * w * h * d * sizeof(float);
                 break;
-                
+
             case VK_FORMAT_R8G8B8_UNORM:
                 out = 3 * w * h * d * sizeof(uint8_t);
                 break;
@@ -87,11 +84,11 @@ namespace tl
             case VK_FORMAT_R32G32B32_SFLOAT:
                 out = 3 * w * h * d * sizeof(float);
                 break;
-                
+
             case VK_FORMAT_A2R10G10B10_UNORM_PACK32:
                 out = 32 * w * h * d;
                 break;
-                
+
             case VK_FORMAT_R8G8B8A8_UNORM:
                 out = 4 * w * h * d * sizeof(uint8_t);
                 break;
@@ -107,13 +104,12 @@ namespace tl
             case VK_FORMAT_R32G32B32A32_SFLOAT:
                 out = 4 * w * h * d * sizeof(float);
                 break;
-                
+
             default:
                 break;
             }
             return out;
         }
-        
 
         VkFormat getTextureFormat(image::PixelType type)
         {
@@ -224,7 +220,8 @@ namespace tl
 
         void Texture::_init(
             const uint32_t width, const uint32_t height, const uint32_t depth,
-            const VkFormat format, const std::string& name, const TextureOptions& options)
+            const VkFormat format, const std::string& name,
+            const TextureOptions& options)
         {
             TLRENDER_P();
 
@@ -263,7 +260,7 @@ namespace tl
             VkDevice device = ctx.device;
 
             vkDeviceWaitIdle(device);
-            
+
             if (p.sampler != VK_NULL_HANDLE)
                 vkDestroySampler(device, p.sampler, nullptr);
 
@@ -325,7 +322,7 @@ namespace tl
         {
             return _p->info.pixelType;
         }
-        
+
         const std::string& Texture::getName() const
         {
             return _p->name;
@@ -335,12 +332,12 @@ namespace tl
         {
             return _p->format;
         }
-        
+
         VkFormat Texture::getInternalFormat() const
         {
             return _p->internalFormat;
         }
-        
+
         VkImageView Texture::getImageView() const
         {
             return _p->imageView;
@@ -490,40 +487,53 @@ namespace tl
             if ((p.memoryFlags & memFlags) == memFlags)
             {
                 VkImageSubresource subresource = {};
-                subresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT; // Or appropriate aspect
-                subresource.mipLevel = 0; // The mip level you are mapping
+                subresource.aspectMask =
+                    VK_IMAGE_ASPECT_COLOR_BIT; // Or appropriate aspect
+                subresource.mipLevel = 0;      // The mip level you are mapping
                 subresource.arrayLayer = 0; // The array layer you are mapping
 
                 VkSubresourceLayout subresourceLayout;
-                vkGetImageSubresourceLayout(device, p.image, &subresource,
-                                            &subresourceLayout);
-                
+                vkGetImageSubresourceLayout(
+                    device, p.image, &subresource, &subresourceLayout);
+
                 void* mapped;
                 if (size == subresourceLayout.size)
                 {
                     // Host-visible upload (like glTexSubImage2D)
-                    VK_CHECK(vkMapMemory(device, p.memory, 0, size, 0, &mapped));
+                    VK_CHECK(
+                        vkMapMemory(device, p.memory, 0, size, 0, &mapped));
                     std::memcpy(mapped, data, size);
                     vkUnmapMemory(device, p.memory);
                 }
                 else
                 {
                     // Map based on layout offset and size
-                    VK_CHECK(vkMapMemory(device, p.memory, subresourceLayout.offset,
-                                         subresourceLayout.size, 0, &mapped));
+                    VK_CHECK(vkMapMemory(
+                        device, p.memory, subresourceLayout.offset,
+                        subresourceLayout.size, 0, &mapped));
 
-                    // Assuming 'data' is a pointer to your tightly packed source pixel data
-                    size_t pixel_size = image::getBitDepth(p.info.pixelType) / 8 *
-                                        image::getChannelCount(p.info.pixelType);
-                    uint32_t row_byte_size = static_cast<uint32_t>(p.info.size.w) * pixel_size;
-                    for (uint32_t y = 0; y < static_cast<uint32_t>(p.info.size.h); ++y) {
+                    // Assuming 'data' is a pointer to your tightly packed
+                    // source pixel data
+                    size_t pixel_size =
+                        image::getBitDepth(p.info.pixelType) / 8 *
+                        image::getChannelCount(p.info.pixelType);
+                    uint32_t row_byte_size =
+                        static_cast<uint32_t>(p.info.size.w) * pixel_size;
+                    for (uint32_t y = 0;
+                         y < static_cast<uint32_t>(p.info.size.h); ++y)
+                    {
                         // Source row start in your tightly packed data
-                        const void* src_row = static_cast<const uint8_t*>(data) + y * row_byte_size;
+                        const void* src_row =
+                            static_cast<const uint8_t*>(data) +
+                            y * row_byte_size;
 
-                        // Destination row start in the mapped memory, using the rowPitch
-                        void* dst_row = static_cast<uint8_t*>(mapped) + y * subresourceLayout.rowPitch;
+                        // Destination row start in the mapped memory, using the
+                        // rowPitch
+                        void* dst_row = static_cast<uint8_t*>(mapped) +
+                                        y * subresourceLayout.rowPitch;
 
-                        // Copy the actual pixel data for this row (excluding padding)
+                        // Copy the actual pixel data for this row (excluding
+                        // padding)
                         std::memcpy(dst_row, src_row, row_byte_size);
                     }
 
@@ -618,34 +628,32 @@ namespace tl
             TLRENDER_P();
             copy(data->getData(), data->getDataByteCount());
         }
-        
+
         void Texture::createImage()
         {
             TLRENDER_P();
 
             VkPhysicalDeviceImageFormatInfo2 formatInfo = {};
-            formatInfo.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2;
+            formatInfo.sType =
+                VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2;
             formatInfo.format = p.format;
             formatInfo.type = p.imageType;
             formatInfo.tiling = p.options.tiling;
-            formatInfo.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT |
-                               VK_IMAGE_USAGE_SAMPLED_BIT;
+            formatInfo.usage =
+                VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
             formatInfo.flags = 0;
 
             VkImageFormatProperties2 imageProperties = {};
             imageProperties.sType = VK_STRUCTURE_TYPE_IMAGE_FORMAT_PROPERTIES_2;
 
             VkPhysicalDevice gpu = ctx.gpu;
-            
+
             VkResult result = vkGetPhysicalDeviceImageFormatProperties2(
-                gpu,
-                &formatInfo,
-                &imageProperties
-                );
-            
+                gpu, &formatInfo, &imageProperties);
+
             if (result != VK_SUCCESS)
             {
-                switch(p.format)
+                switch (p.format)
                 {
                 case VK_FORMAT_R8G8B8_UNORM:
                     p.internalFormat = VK_FORMAT_R8G8B8A8_UNORM;
@@ -656,9 +664,11 @@ namespace tl
                 case VK_FORMAT_R16G16B16_SFLOAT:
                     p.internalFormat = VK_FORMAT_R16G16B16A16_SFLOAT;
                     break;
+                default:
+                    break;
                 }
             }
-            
+
             VkImageCreateInfo imageInfo = {};
             imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
             imageInfo.imageType = p.imageType;
