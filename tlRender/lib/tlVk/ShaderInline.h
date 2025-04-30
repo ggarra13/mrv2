@@ -29,7 +29,7 @@ namespace tl
             VkDevice device = ctx.device;
             VkPhysicalDevice gpu = ctx.gpu;
 
-            for (int i = 0; i < NUM_DESCRIPTOR_SETS; ++i)
+            for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
             {
                 VkBufferCreateInfo ubo_buf_info = {};
                 ubo_buf_info.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
