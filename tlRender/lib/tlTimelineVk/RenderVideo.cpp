@@ -872,7 +872,11 @@ namespace tl
                 p.buffers["video"]->transitionToShaderRead(p.cmd);
 
                 //                     pipeline    shader    mesh
-                createPipeline(p.fbo, "display", "display", "video", true);
+                const std::string pipelineName = "display";
+                const std::string shaderName = "display";
+                const std::string meshName = "video";
+                createPipeline(p.fbo, pipelineName, shaderName,
+                               meshName, true);
 
                 // Begin the new compositing render pass.
                 p.fbo->beginCompositingRenderPass(p.cmd);
@@ -928,6 +932,7 @@ namespace tl
 #if defined(TLRENDER_OCIO)
                 if (p.ocioData)
                 {
+                    std::cerr << "has OCIO textures" << std::endl;
                     for (auto& texture : p.ocioData->textures)
                     {
                         p.shaders["display"]->setTexture(
@@ -936,6 +941,7 @@ namespace tl
                 }
                 if (p.lutData)
                 {
+                    std::cerr << "has OCIO Lut textures" << std::endl;
                     for (auto& texture : p.lutData->textures)
                     {
                         p.shaders["display"]->setTexture(
@@ -946,6 +952,7 @@ namespace tl
 #if defined(TLRENDER_LIBPLACEBO)
                 if (p.placeboData)
                 {
+                    std::cerr << "has libplacebo textures" << std::endl;
                     for (auto& texture : p.placeboData->textures)
                     {
                         p.shaders["display"]->setTexture(
@@ -954,7 +961,7 @@ namespace tl
                 }
 #endif // TLRENDER_LIBPLACEBO
 
-                bindDescriptorSets("display", "display");
+                bindDescriptorSets(pipelineName, shaderName);
 
                 if (p.vbos["video"])
                 {
