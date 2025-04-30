@@ -197,9 +197,7 @@ namespace tl
                           << ") >= " << NUM_DESCRIPTOR_SETS << std::endl;
                 throw std::runtime_error("Invalid value for bind.");
             }
-            frameIndex++;
-            if (frameIndex >= NUM_DESCRIPTOR_SETS)
-                frameIndex = 0;
+            frameIndex = value;
         }
 
         void Shader::addTexture(
