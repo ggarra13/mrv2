@@ -29,12 +29,31 @@ extern "C"
 #include <array>
 #include <cstdint>
 #include <list>
+#include <regex>
 
 #define _USE_MATH_DEFINES
 #include <math.h>
 
 namespace
 {
+    
+    std::string replaceUniformSampler(const std::string& input,
+                                      unsigned& bindingIndex)
+    {
+        std::string output = input;
+        std::string target = "uniform sampler";
+        size_t pos = 0;
+        
+        while ((pos = output.find(target, pos)) != std::string::npos)
+        {
+            std::string replacement = "layout(binding=" + std::to_string(bindingIndex++) + ") " + target;
+            output.replace(pos, target.length(), replacement);
+            pos += replacement.length(); // move past the inserted text
+        }
+
+        return output;
+    }
+    
     VkFormat to_vk_format(pl_fmt fmt)
     {
         int size = fmt->internal_size / fmt->num_components;
@@ -1132,8 +1151,6 @@ namespace tl
             TLRENDER_P();
 
             // Create 3D textures.
-            // glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-            // glPixelStorei(GL_UNPACK_SWAP_BYTES, 0);
             for (unsigned i = 0; i < res->num_descriptors; ++i)
             {
                 const pl_shader_desc* sd = &res->descriptors[i];
@@ -1227,6 +1244,8 @@ namespace tl
 #if defined(TLRENDER_OCIO)
             if (p.ocioOptions.enabled)
             {
+                vkDeviceWaitIdle(ctx.device);
+                
                 p.ocioData.reset(new OCIOData);
 
                 if (!p.ocioOptions.fileName.empty())
@@ -1244,6 +1263,12 @@ namespace tl
                 }
                 p.ocioData->icsDesc = OCIO::GpuShaderDesc::CreateShaderDesc();
                 if (!p.ocioData->icsDesc)
+                {
+                    p.ocioData.reset();
+                    throw std::runtime_error("Cannot create OCIO transform");
+                }
+                p.ocioData->transform = OCIO::DisplayViewTransform::Create();
+                if (!p.ocioData->transform)
                 {
                     p.ocioData.reset();
                     throw std::runtime_error("Cannot create OCIO transform");
@@ -1375,6 +1400,7 @@ namespace tl
                 return;
 
 #if defined(TLRENDER_OCIO)
+            vkDeviceWaitIdle(ctx.device);
             p.lutData.reset();
 #endif // TLRENDER_OCIO
 
@@ -1465,6 +1491,26 @@ namespace tl
 
             if (!p.shaders["display"])
             {
+                if (p.pipelines.count("display") != 0)
+                {
+                    auto pair = p.pipelines["display"];
+
+                    VkDevice device = ctx.device;
+                    vkDeviceWaitIdle(device);
+                    vkDestroyPipeline(device, pair.second, nullptr);
+
+                    vlk::PipelineCreationState pipelineState;
+                    pair = std::make_pair(pipelineState, VK_NULL_HANDLE);
+                    p.pipelines["display"] = pair;
+                }
+                if (p.pipelineLayouts["display_display"] != VK_NULL_HANDLE)
+                {
+                    VkDevice device = ctx.device;
+                    vkDeviceWaitIdle(device);
+                    vkDestroyPipelineLayout(device, p.pipelineLayouts["display_display"], nullptr);
+                    p.pipelineLayouts["display_display"] = VK_NULL_HANDLE;
+                }
+                
                 std::string ocioICSDef;
                 std::string ocioICS;
                 std::string ocioDef;
@@ -1475,25 +1521,31 @@ namespace tl
                 std::string toneMap;
 
 #if defined(TLRENDER_OCIO)
+                p.bindingIndex = 7;
                 if (p.ocioData && p.ocioData->icsDesc)
                 {
                     ocioICSDef = p.ocioData->icsDesc->getShaderText();
+                    ocioICSDef = replaceUniformSampler(ocioICSDef, p.bindingIndex);
                     ocioICS = "outColor = ocioICSFunc(outColor);";
                 }
                 if (p.ocioData && p.ocioData->shaderDesc)
                 {
                     ocioDef = p.ocioData->shaderDesc->getShaderText();
+                    ocioDef = replaceUniformSampler(ocioDef, p.bindingIndex);
                     ocio = "outColor = ocioDisplayFunc(outColor);";
                 }
                 if (p.lutData && p.lutData->shaderDesc)
                 {
                     lutDef = p.lutData->shaderDesc->getShaderText();
+                    lutDef = replaceUniformSampler(lutDef, p.bindingIndex);
                     lut = "outColor = lutFunc(outColor);";
                 }
 #endif // TLRENDER_OCIO
 #if defined(TLRENDER_LIBPLACEBO)
                 if (p.placeboData)
                 {
+                    vkDeviceWaitIdle(ctx.device);
+                
                     pl_shader_params shader_params;
                     memset(&shader_params, 0, sizeof(pl_shader_params));
 
@@ -1761,8 +1813,7 @@ namespace tl
                     //           << std::endl
                     //           << "num_constants="
                     //           << res->num_constants << std::endl;
-                    int i = 0;
-                    for (i = 0; i < res->num_descriptors; i++)
+                    for (int i = 0; i < res->num_descriptors; i++)
                     {
                         const pl_shader_desc* sd = &res->descriptors[i];
                         const pl_desc* desc = &sd->desc;
@@ -1798,7 +1849,7 @@ namespace tl
                                 break;
                             }
 
-                            s << "layout(binding=" << (i + 1) << ") uniform "
+                            s << "layout(binding=" << p.bindingIndex++ << ") uniform "
                               << prefix << type << " " << desc->name << ";"
                               << std::endl;
                             break;
@@ -1823,9 +1874,9 @@ namespace tl
                       << "// Variables"
                       << "//" << std::endl
                       << std::endl;
-                    s << "layout(set = 0, binding = " << i + 1
+                    s << "layout(set = 0, binding = " << p.bindingIndex++
                       << ", std140) uniform Placebo {\n";
-                    for (i = 0; i < res->num_variables; ++i)
+                    for (int i = 0; i < res->num_variables; ++i)
                     {
                         const struct pl_shader_var shader_var =
                             res->variables[i];

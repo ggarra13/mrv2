@@ -120,6 +120,7 @@ namespace tl
             timeline::OCIOOptions ocioOptions;
             timeline::LUTOptions lutOptions;
             timeline::HDROptions hdrOptions;
+            unsigned bindingIndex = 7;
             timeline::RenderOptions renderOptions;
 
 #if defined(TLRENDER_OCIO)

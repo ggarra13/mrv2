@@ -419,7 +419,7 @@ namespace tl
             const std::string& pipelineName, const std::string& shaderName)
         {
             TLRENDER_P();
-            const std::string pipelineLayoutName = pipelineName + shaderName;
+            const std::string pipelineLayoutName = pipelineName + "_" + shaderName;
             if (!p.shaders[shaderName])
             {
                 throw std::runtime_error("Undefined shader " + shaderName);
@@ -494,7 +494,7 @@ namespace tl
                 throw std::runtime_error(
                     "createPipeline failed with unknown mesh " + meshName);
 
-            const std::string pipelineLayoutName = pipelineName + shaderName;
+            const std::string pipelineLayoutName = pipelineName + "_" + shaderName;
 
             if (!p.pipelineLayouts[pipelineLayoutName])
             {
@@ -597,10 +597,16 @@ namespace tl
             {
                 auto pair = p.pipelines[pipelineName];
                 auto oldPipelineState = pair.first;
-                if (pipelineState != oldPipelineState)
+                VkPipeline oldPipeline = pair.second;
+                if (pipelineState != oldPipelineState ||
+                    oldPipeline == VK_NULL_HANDLE)
                 {
-                    vkDeviceWaitIdle(device);
-                    vkDestroyPipeline(device, pair.second, nullptr);
+                    if (oldPipeline != VK_NULL_HANDLE)
+                    {
+                        vkDeviceWaitIdle(device);
+                        vkDestroyPipeline(device, oldPipeline, nullptr);
+                    }
+                    
                     pipeline = pipelineState.create(device);
                     auto pair = std::make_pair(pipelineState, pipeline);
                     p.pipelines[pipelineName] = pair;

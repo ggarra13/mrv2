@@ -51,6 +51,7 @@ namespace tl
                     std::cerr << i++ << ": " << line << std::endl;
                 }
                 p.vertex = VK_NULL_HANDLE;
+                throw e;
             }
 
             try
@@ -76,6 +77,7 @@ namespace tl
                     std::cerr << i++ << ": " << line << std::endl;
                 }
                 p.fragment = VK_NULL_HANDLE;
+                throw e;
             }
         }
 
@@ -232,6 +234,7 @@ namespace tl
             VkDescriptorImageInfo imageInfo{};
             if (texture)
             {
+                texture->transition();
                 imageInfo.imageView = texture->getImageView();
                 imageInfo.sampler = texture->getSampler();
                 imageInfo.imageLayout = texture->getImageLayout();

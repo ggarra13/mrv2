@@ -2136,14 +2136,15 @@ namespace mrv
 
         void TimelineViewport::refreshWindows()
         {
-            _p->ui->uiView->valid(0);
+            _p->ui->uiView->refresh();
             _p->ui->uiView->redraw();
             if (_hasSecondaryViewport())
             {
                 MyViewport* view = _p->ui->uiSecondary->viewport();
-                view->valid(0);
+                view->refresh();
                 view->redraw();
             }
+            Fl::flush();
         }
 
         void TimelineViewport::updateOCIOOptions() noexcept
@@ -2184,7 +2185,7 @@ namespace mrv
                 setOCIOOptions(screen, o);
             }
 
-            redrawWindows();
+            refreshWindows();
         }
 
         inline float calculate_fstop(float exposure) noexcept

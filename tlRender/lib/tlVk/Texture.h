@@ -101,9 +101,11 @@ namespace tl
             ///@}
             
             void transition(
-                VkImageLayout newLayout, VkAccessFlags srcAccess,
-                VkPipelineStageFlags srcStage, VkAccessFlags dstAccess,
-                VkPipelineStageFlags dstStage);
+                VkImageLayout newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                VkAccessFlags srcAccess = VK_ACCESS_TRANSFER_WRITE_BIT,
+                VkPipelineStageFlags srcStage = VK_PIPELINE_STAGE_TRANSFER_BIT,
+                VkAccessFlags dstAccess = VK_ACCESS_SHADER_READ_BIT,
+                VkPipelineStageFlags dstStage = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
 
             VkDescriptorImageInfo getDescriptorInfo() const;
 
@@ -120,13 +122,6 @@ namespace tl
             VkImage getImage() const;
 
             VkImageLayout getImageLayout() const;
-
-            //! If internal format is different from the source format, unpack it to
-            //! correct the difference.
-            void unpack();
-
-            //! Bind the texture.
-            void bind();
 
         private:
             Fl_Vk_Context& ctx;

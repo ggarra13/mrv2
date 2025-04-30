@@ -262,6 +262,8 @@ namespace tl
 
             VkDevice device = ctx.device;
 
+            vkDeviceWaitIdle(device);
+            
             if (p.sampler != VK_NULL_HANDLE)
                 vkDestroySampler(device, p.sampler, nullptr);
 
@@ -418,7 +420,7 @@ namespace tl
             p.currentLayout = newLayout;
         }
 
-        //! Used in TextureAtlas
+        //! \@todo: Used in TextureAtlas
         void
         Texture::copy(const std::shared_ptr<image::Image>& data, int x, int y)
         {
@@ -617,11 +619,6 @@ namespace tl
             copy(data->getData(), data->getDataByteCount());
         }
         
-        void Texture::bind()
-        {
-            // glBindTexture(GL_TEXTURE_2D, _p->id);
-        }
-
         void Texture::createImage()
         {
             TLRENDER_P();
@@ -667,7 +664,7 @@ namespace tl
             imageInfo.imageType = p.imageType;
             imageInfo.extent.width = p.info.size.w;
             imageInfo.extent.height = p.info.size.h;
-            imageInfo.extent.depth = p.depth;
+            imageInfo.extent.depth = p.depth == 0 ? p.depth = 1 : p.depth;
             imageInfo.mipLevels = 1;
             imageInfo.arrayLayers = p.arrayLayers;
             imageInfo.format = p.internalFormat;

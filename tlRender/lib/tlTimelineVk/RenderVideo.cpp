@@ -928,28 +928,28 @@ namespace tl
 #if defined(TLRENDER_OCIO)
                 if (p.ocioData)
                 {
-                    for (size_t i = 0; i < p.ocioData->textures.size(); ++i)
+                    for (auto& texture : p.ocioData->textures)
                     {
                         p.shaders["display"]->setTexture(
-                            "sampler", p.ocioData->textures[i]);
+                            texture->getName(), texture);
                     }
                 }
                 if (p.lutData)
                 {
-                    for (size_t i = 0; i < p.lutData->textures.size(); ++i)
+                    for (auto& texture : p.lutData->textures)
                     {
                         p.shaders["display"]->setTexture(
-                            "sampler", p.lutData->textures[i]);
+                            texture->getName(), texture);
                     }
                 }
 #endif // TLRENDER_OCIO
 #if defined(TLRENDER_LIBPLACEBO)
                 if (p.placeboData)
                 {
-                    for (size_t i = 0; i < p.placeboData->textures.size(); ++i)
+                    for (auto& texture : p.placeboData->textures)
                     {
                         p.shaders["display"]->setTexture(
-                            "sampler", p.placeboData->textures[i]);
+                            texture->getName(), texture);
                     }
                 }
 #endif // TLRENDER_LIBPLACEBO

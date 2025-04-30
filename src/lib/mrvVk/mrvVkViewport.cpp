@@ -578,13 +578,69 @@ namespace mrv
             renderOptions.textureCacheByteCount = 0.1 * memory::gigabyte;
 #    endif
 #endif
-            vk.render->begin(
-                cmd, vk.buffer, m_currentFrameIndex, renderSize, renderOptions);
-            vk.render->drawVideo(
-                p.videoData,
-                timeline::getBoxes(p.compareOptions.mode, p.videoData),
-                p.imageOptions, p.displayOptions, p.compareOptions,
-                getBackgroundOptions());
+
+            try
+            {
+                vk.render->begin(
+                    cmd, vk.buffer, m_currentFrameIndex,
+                    renderSize, renderOptions);
+
+                if (p.showVideo)
+                {
+                    int screen = this->screen_num();
+                    if (screen >= 0 && !p.monitorOCIOOptions.empty() &&
+                        screen < p.monitorOCIOOptions.size())
+                    {
+                        timeline::OCIOOptions o = p.ocioOptions;
+                        o.display = p.monitorOCIOOptions[screen].display;
+                        o.view = p.monitorOCIOOptions[screen].view;
+                        vk.render->setOCIOOptions(o);
+
+                        _updateMonitorDisplayView(screen, o);
+                    }
+                    else
+                    {
+                        vk.render->setOCIOOptions(p.ocioOptions);
+                        _updateMonitorDisplayView(screen, p.ocioOptions);
+                    }
+
+                    vk.render->setLUTOptions(p.lutOptions);
+                    vk.render->setHDROptions(p.hdrOptions);
+                    if (p.missingFrame &&
+                        p.missingFrameType != MissingFrameType::kBlackFrame)
+                    {
+                        _drawMissingFrame(renderSize);
+                    }
+                    else
+                    {
+                        if (p.stereo3DOptions.input ==
+                            Stereo3DInput::Image &&
+                            p.videoData.size() > 1)
+                        {
+                            _drawStereo3D();
+                        }
+                        else
+                        {
+                            vk.render->drawVideo(
+                                p.videoData,
+                                timeline::getBoxes(
+                                    p.compareOptions.mode, p.videoData),
+                                p.imageOptions, p.displayOptions,
+                                p.compareOptions, getBackgroundOptions());
+                        }
+                    }
+                }
+            }
+            catch(const std::exception& e)
+            {
+                LOG_ERROR(e.what());
+            }
+            
+            // vk.render->drawVideo(
+            //     p.videoData,
+            //     timeline::getBoxes(p.compareOptions.mode, p.videoData),
+            //     p.imageOptions, p.displayOptions, p.compareOptions,
+            //     getBackgroundOptions());
             vk.render->end();
 
             m_clearColor = {r, g, b, a};
