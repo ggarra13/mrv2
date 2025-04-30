@@ -189,7 +189,7 @@ namespace tl
             return descriptorPools[frameIndex];
         }
 
-        void Shader::bind(uint32_t value)
+        void Shader::bind(uint64_t value)
         {
             if (value >= MAX_FRAMES_IN_FLIGHT)
             {
