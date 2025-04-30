@@ -54,8 +54,9 @@ namespace mrv
 
     namespace
     {
-        int getIndex(const otio::SerializableObject::Retainer<otio::Composable>&
-                     composable)
+        int getIndex(
+            const otio::SerializableObject::Retainer<otio::Composable>&
+                composable)
         {
             int out = -1;
             if (composable && composable->parent())
@@ -84,10 +85,10 @@ namespace mrv
 
         public:
             void _init(const std::shared_ptr<system::Context>& context)
-                {
-                    IWindow::_init(
-                        "tl::anonymous::TimelineWindow", context, nullptr);
-                }
+            {
+                IWindow::_init(
+                    "tl::anonymous::TimelineWindow", context, nullptr);
+            }
 
             TimelineWindow() {}
 
@@ -96,16 +97,16 @@ namespace mrv
 
             static std::shared_ptr<TimelineWindow>
             create(const std::shared_ptr<system::Context>& context)
-                {
-                    auto out = std::shared_ptr<TimelineWindow>(new TimelineWindow);
-                    out->_init(context);
-                    return out;
-                }
+            {
+                auto out = std::shared_ptr<TimelineWindow>(new TimelineWindow);
+                out->_init(context);
+                return out;
+            }
 
             bool key(ui::Key key, bool press, int modifiers)
-                {
-                    return _key(key, press, modifiers);
-                }
+            {
+                return _key(key, press, modifiers);
+            }
 
             void text(const std::string& text) { _text(text); }
 
@@ -114,23 +115,23 @@ namespace mrv
             void cursorPos(const math::Vector2i& value) { _cursorPos(value); }
 
             void mouseButton(int button, bool press, int modifiers)
-                {
-                    _mouseButton(button, press, modifiers);
-                }
+            {
+                _mouseButton(button, press, modifiers);
+            }
 
             void scroll(const math::Vector2f& value, int modifiers)
-                {
-                    _scroll(value, modifiers);
-                }
+            {
+                _scroll(value, modifiers);
+            }
 
             void setGeometry(const math::Box2i& value) override
+            {
+                IWindow::setGeometry(value);
+                for (const auto& i : _children)
                 {
-                    IWindow::setGeometry(value);
-                    for (const auto& i : _children)
-                    {
-                        i->setGeometry(value);
-                    }
+                    i->setGeometry(value);
                 }
+            }
         };
 
         class Clipboard : public ui::IClipboard
@@ -139,9 +140,9 @@ namespace mrv
 
         public:
             void _init(const std::shared_ptr<system::Context>& context)
-                {
-                    IClipboard::_init(context);
-                }
+            {
+                IClipboard::_init(context);
+            }
 
             Clipboard() {}
 
@@ -150,30 +151,30 @@ namespace mrv
 
             static std::shared_ptr<Clipboard>
             create(const std::shared_ptr<system::Context>& context)
-                {
-                    auto out = std::shared_ptr<Clipboard>(new Clipboard);
-                    out->_init(context);
-                    return out;
-                }
+            {
+                auto out = std::shared_ptr<Clipboard>(new Clipboard);
+                out->_init(context);
+                return out;
+            }
 
             std::string getText() const override
-                {
-                    std::string text;
-                    if (Fl::event_text())
-                        text = Fl::event_text();
-                    return text;
-                }
+            {
+                std::string text;
+                if (Fl::event_text())
+                    text = Fl::event_text();
+                return text;
+            }
 
             void setText(const std::string& value) override
-                {
-                    Fl::copy(value.c_str(), value.size());
-                }
+            {
+                Fl::copy(value.c_str(), value.size());
+            }
         };
     } // namespace
 
     namespace vulkan
     {
-    
+
         struct TimelineWidget::Private
         {
             std::weak_ptr<system::Context> context;
@@ -205,7 +206,7 @@ namespace mrv
             std::shared_ptr<ui::IconLibrary> iconLibrary;
             std::shared_ptr<image::FontSystem> fontSystem;
             std::shared_ptr<Clipboard> clipboard;
-            std::shared_ptr<timeline::IRender> render;
+            std::shared_ptr<timeline_vlk::Render> render;
             timelineui::DisplayOptions displayOptions;
             std::shared_ptr<timelineui::TimelineWidget> timelineWidget;
             std::shared_ptr<TimelineWindow> timelineWindow;
@@ -214,6 +215,7 @@ namespace mrv
             std::shared_ptr<vlk::VBO> vbo;
             std::shared_ptr<vlk::VAO> vao;
             std::chrono::steady_clock::time_point mouseWheelTimer;
+            VkPipelineLayout pipeline_layout = VK_NULL_HANDLE;
 
             //! Flags
             bool draggingClip = false;
@@ -221,41 +223,45 @@ namespace mrv
 
             //! Observers
             std::shared_ptr<observer::ValueObserver<timeline::PlayerCacheInfo> >
-            cacheInfoObserver;
+                cacheInfoObserver;
 
             std::vector<otime::RationalTime> annotationTimes;
             otime::TimeRange timeRange = time::invalidTimeRange;
         };
 
-        TimelineWidget::TimelineWidget(int X, int Y, int W, int H, const char* L) :
+        TimelineWidget::TimelineWidget(
+            int X, int Y, int W, int H, const char* L) :
             VkWindow(X, Y, W, H, L),
             _p(new Private)
         {
-            int fl_double = FL_DOUBLE; // _WIN32 needs this (and Vulkan too it seems)
+            int fl_double =
+                FL_DOUBLE; // _WIN32 needs this (and Vulkan too it seems)
 
             // Do not use FL_DOUBLE on APPLE as it makes playback slow
-// #if defined(__APPLE__) || defined(__linux__)
-//             fl_double = 0;
-//             if (desktop::XWayland())
-//             {
-//                 fl_double = FL_DOUBLE; // needed
-//             }
-//             else if (desktop::Wayland())
-//             {
-//                 // For faster playback, we won't set this window to FL_DOUBLE.
-//                 // FLTK's EVk Wayland already uses two buffers.
-//                 fl_double = 0;
-//             }
-//             else
-//             {
-//                 if (desktop::X11())
-//                 {
-//                     // For faster playback, we won't set this window to FL_DOUBLE.
-//                     // FLTK's X11 already uses two buffers.
-//                     fl_double = 0;
-//                 }
-//             }
-// #endif
+            // #if defined(__APPLE__) || defined(__linux__)
+            //             fl_double = 0;
+            //             if (desktop::XWayland())
+            //             {
+            //                 fl_double = FL_DOUBLE; // needed
+            //             }
+            //             else if (desktop::Wayland())
+            //             {
+            //                 // For faster playback, we won't set this window
+            //                 to FL_DOUBLE.
+            //                 // FLTK's EVk Wayland already uses two buffers.
+            //                 fl_double = 0;
+            //             }
+            //             else
+            //             {
+            //                 if (desktop::X11())
+            //                 {
+            //                     // For faster playback, we won't set this
+            //                     window to FL_DOUBLE.
+            //                     // FLTK's X11 already uses two buffers.
+            //                     fl_double = 0;
+            //                 }
+            //             }
+            // #endif
             mode(FL_RGB | FL_ALPHA | FL_DOUBLE);
         }
 
@@ -288,13 +294,16 @@ namespace mrv
             p.timelineWidget->setEditable(false);
             p.timelineWidget->setFrameView(true);
             p.timelineWidget->setScrollBarsVisible(false);
-            p.timelineWidget->setMoveCallback(std::bind(
-                                                  &mrv::vulkan::TimelineWidget::moveCallback, this, std::placeholders::_1));
+            p.timelineWidget->setMoveCallback(
+                std::bind(
+                    &mrv::vulkan::TimelineWidget::moveCallback, this,
+                    std::placeholders::_1));
 
             timelineui::DisplayOptions displayOptions;
             displayOptions.trackInfo =
                 settings->getValue<bool>("Timeline/TrackInfo");
-            displayOptions.clipInfo = settings->getValue<bool>("Timeline/ClipInfo");
+            displayOptions.clipInfo =
+                settings->getValue<bool>("Timeline/ClipInfo");
             p.timelineWidget->setDisplayOptions(displayOptions);
 
             p.timelineWindow = TimelineWindow::create(context);
@@ -367,55 +376,57 @@ namespace mrv
                 observer::ValueObserver<timeline::PlayerCacheInfo>::create(
                     p.player->player()->observeCacheInfo(),
                     [this](const timeline::PlayerCacheInfo& value)
+                    {
+                        TLRENDER_P();
+
+                        const auto& time = p.player->currentTime();
+
+                        const auto& cache =
+                            p.player->player()->observeCacheOptions()->get();
+                        const auto& rate = time.rate();
+                        const auto& readAhead =
+                            cache.readAhead.rescaled_to(rate);
+                        const auto& readBehind =
+                            cache.readBehind.rescaled_to(rate);
+                        const auto& timeRange = p.player->inOutRange();
+
+                        auto startTime = time + readBehind;
+                        auto endTime = time - readAhead;
+                        if (endTime < timeRange.start_time())
                         {
-                            TLRENDER_P();
+                            auto diff = timeRange.start_time() - endTime;
+                            endTime = timeRange.end_time_exclusive();
+                            startTime = endTime - diff;
 
-                            const auto& time = p.player->currentTime();
+                            // Check in case of negative frames
+                            if (startTime > endTime)
+                                startTime = endTime;
+                        }
 
-                            const auto& cache =
-                                p.player->player()->observeCacheOptions()->get();
-                            const auto& rate = time.rate();
-                            const auto& readAhead = cache.readAhead.rescaled_to(rate);
-                            const auto& readBehind = cache.readBehind.rescaled_to(rate);
-                            const auto& timeRange = p.player->inOutRange();
+                        // Sanity check just in case
+                        if (endTime < startTime)
+                        {
+                            const auto tmp = endTime;
+                            endTime = startTime;
+                            startTime = tmp;
+                        }
 
-                            auto startTime = time + readBehind;
-                            auto endTime = time - readAhead;
-                            if (endTime < timeRange.start_time())
+                        // Avoid rounding errors
+                        endTime = endTime.floor();
+                        startTime = startTime.ceil();
+
+                        for (const auto& t : value.videoFrames)
+                        {
+                            if (t.start_time() <= startTime &&
+                                t.end_time_exclusive() >= endTime)
                             {
-                                auto diff = timeRange.start_time() - endTime;
-                                endTime = timeRange.end_time_exclusive();
-                                startTime = endTime - diff;
-
-                                // Check in case of negative frames
-                                if (startTime > endTime)
-                                    startTime = endTime;
+                                p.ui->uiView->setPlayback(
+                                    timeline::Playback::Reverse);
+                                p.cacheInfoObserver.reset();
+                                return;
                             }
-
-                            // Sanity check just in case
-                            if (endTime < startTime)
-                            {
-                                const auto tmp = endTime;
-                                endTime = startTime;
-                                startTime = tmp;
-                            }
-
-                            // Avoid rounding errors
-                            endTime = endTime.floor();
-                            startTime = startTime.ceil();
-
-                            for (const auto& t : value.videoFrames)
-                            {
-                                if (t.start_time() <= startTime &&
-                                    t.end_time_exclusive() >= endTime)
-                                {
-                                    p.ui->uiView->setPlayback(
-                                        timeline::Playback::Reverse);
-                                    p.cacheInfoObserver.reset();
-                                    return;
-                                }
-                            }
-                        });
+                        }
+                    });
         }
 
         int TimelineWidget::_seek()
@@ -432,11 +443,10 @@ namespace mrv
                 const auto& time = _posToTime(X);
                 p.player->seek(time);
                 // \@note: Jumping frames when playing can
-                //         lead to seeking issues in tlRender when the images are
-                //         not in cache.
-                //         We stop the playback and set an FLTK timeout to watch
-                //         on the cache until it is filled and we continue
-                //         playing from there.
+                //         lead to seeking issues in tlRender when the images
+                //         are not in cache. We stop the playback and set an
+                //         FLTK timeout to watch on the cache until it is filled
+                //         and we continue playing from there.
                 //
                 const auto& path = p.player->path();
                 if (file::isMovie(path) &&
@@ -470,7 +480,8 @@ namespace mrv
             const int wX = X - kWINDOW_BORDERS;
             const int wY = Y - kWINDOW_BORDERS;
             const int wW = W + kWINDOW_BORDERS * 2 + kBOX_BORDERS * 2;
-            const int wH = H + kWINDOW_BORDERS * 2 + kBOX_BORDERS * 2 + kLABEL_SIZE;
+            const int wH =
+                H + kWINDOW_BORDERS * 2 + kBOX_BORDERS * 2 + kLABEL_SIZE;
 
             const int bX = kBOX_BORDERS;
             const int bY = kBOX_BORDERS;
@@ -492,7 +503,8 @@ namespace mrv
             Fl_Group::current(nullptr);
         }
 
-        void TimelineWidget::_getThumbnailPosition(int& X, int& Y, int& W, int& H)
+        void
+        TimelineWidget::_getThumbnailPosition(int& X, int& Y, int& W, int& H)
         {
             TLRENDER_P();
 
@@ -636,7 +648,8 @@ namespace mrv
                 p.timeRange = innerPlayer->getTimeRange();
                 p.timelineWidget->setPlayer(innerPlayer);
 
-                // These calls are needed to refresh the timeline display properly.
+                // These calls are needed to refresh the timeline display
+                // properly.
                 _sizeHintEvent();
                 _setGeometry();
                 _clipEvent();
@@ -683,18 +696,19 @@ namespace mrv
             _p->timelineWidget->setMouseWheelScale(value);
         }
 
-        void TimelineWidget::setItemOptions(const timelineui::ItemOptions& value)
+        void
+        TimelineWidget::setItemOptions(const timelineui::ItemOptions& value)
         {
             _p->timelineWidget->setItemOptions(value);
         }
 
-        void
-        TimelineWidget::setDisplayOptions(const timelineui::DisplayOptions& value)
+        void TimelineWidget::setDisplayOptions(
+            const timelineui::DisplayOptions& value)
         {
             _p->timelineWidget->setDisplayOptions(value);
         }
 
-        void TimelineWidget::_initializeVKResources()
+        void TimelineWidget::prepare_shaders()
         {
             TLRENDER_P();
 
@@ -702,42 +716,51 @@ namespace mrv
             {
                 try
                 {
-                    p.render = timeline_vlk::Render::create(ctx, context);
-                
-                    const std::string vertexSource =
-                        "#version 410\n"
-                        "\n"
-                        "in vec3 vPos;\n"
-                        "in vec2 vTexture;\n"
-                        "out vec2 fTexture;\n"
-                        "\n"
-                        "uniform struct Transform\n"
-                        "{\n"
-                        "    mat4 mvp;\n"
-                        "} transform;\n"
-                        "\n"
-                        "void main()\n"
-                        "{\n"
-                        "    gl_Position = transform.mvp * vec4(vPos, 1.0);\n"
-                        "    fTexture = vTexture;\n"
-                        "}\n";
-                    const std::string fragmentSource =
-                        "#version 410\n"
-                        "\n"
-                        "in vec2 fTexture;\n"
-                        "out vec4 fColor;\n"
-                        "\n"
-                        "uniform float opacity;\n"
-                        "uniform sampler2D textureSampler;\n"
-                        "\n"
-                        "void main()\n"
-                        "{\n"
-                        "    fColor = texture(textureSampler, fTexture);\n"
-                        "    fColor.a *= opacity;\n"
-                        "}\n";
-                    p.shader = vlk::Shader::create(ctx,
-                                                  vertexSource, fragmentSource);
-                
+                    if (!p.render)
+                        p.render = timeline_vlk::Render::create(ctx, context);
+
+                    const std::string vertexSource = R"(#version 450
+                   layout(location = 0) in vec3 vPos;
+                   layout(location = 1) in vec2 vTexture;
+                   layout(location = 0) out vec2 fTexture;
+                   layout(set = 0, binding = 0, std140) uniform Transform {
+                      mat4 mvp;
+                    } transform;
+
+                   void main()
+                   {
+                       gl_Position = transform.mvp * vec4(vPos, 1.0);
+                       fTexture = vTexture;
+                   })";
+
+                    const std::string fragmentSource = R"(#version 450
+                 
+layout(location = 0) in vec2 fTexture;
+layout(location = 0) out vec4 outColor;
+
+layout(binding = 1) uniform sampler2D textureSampler;
+
+layout(set = 0, binding = 2, std140) uniform OpacityUBO {
+    float opacity;
+} ubo;
+                 
+void main()
+{
+     outColor = texture(textureSampler, fTexture);
+     outColor.a *= ubo.opacity;
+})";
+
+                    if (!p.shader)
+                    {
+                        p.shader = vlk::Shader::create(
+                            ctx, vertexSource, fragmentSource);
+                        math::Matrix4x4f pm;
+                        p.shader->createUniform(
+                            "transform.mvp", pm, vlk::kShaderVertex);
+                        p.shader->addFBO("textureSampler");
+                        p.shader->createUniform("opacity", 1.0);
+                        p.shader->createDescriptorSets();
+                    }
                 }
                 catch (const std::exception& e)
                 {
@@ -752,20 +775,43 @@ namespace mrv
 
         void TimelineWidget::prepare()
         {
+            prepare_shaders();
             prepare_render_pass();
+            prepare_descriptor_layout(); // Main shader layout
         }
-    
+
         void TimelineWidget::destroy_resources()
         {
-        }
-    
-        void TimelineWidget::_initializeVK()
-        {
-            // Clean up all resources
+            TLRENDER_P();
+
             refresh();
 
-            // Reinitialize them
-            _initializeVKResources();
+            if (p.pipeline_layout != VK_NULL_HANDLE)
+            {
+                vkDestroyPipelineLayout(device(), p.pipeline_layout, nullptr);
+                p.pipeline_layout = VK_NULL_HANDLE;
+            }
+
+            if (m_pipeline != VK_NULL_HANDLE)
+            {
+                vkDestroyPipeline(device(), m_pipeline, nullptr);
+                m_pipeline = VK_NULL_HANDLE;
+            }
+        }
+
+        void TimelineWidget::hide()
+        {
+            TLRENDER_P();
+
+            wait_device();
+
+            refresh();
+
+            p.render.reset();
+            p.buffer.reset();
+            p.shader.reset();
+
+            VkWindow::hide();
         }
 
         void TimelineWidget::resize(int X, int Y, int W, int H)
@@ -796,17 +842,10 @@ namespace mrv
         {
             TLRENDER_P();
 
-            return VkWindow::draw();
-            
             const math::Size2i renderSize(pixel_w(), pixel_h());
 
-            // make_current();
-
-            // if (!valid())
-            // {
-            //     _initializeVk();
-            //     valid(1);
-            // }
+            VkCommandBuffer cmd = getCurrentCommandBuffer();
+            end_render_pass(cmd);
 
             std::vector<int> markers;
             if (p.player && p.player->hasAnnotations())
@@ -855,15 +894,18 @@ namespace mrv
                         timeline::RenderOptions renderOptions;
                         renderOptions.clearColor =
                             p.style->getColorRole(ui::ColorRole::Window);
-                        p.render->begin(renderSize, renderOptions);
+                        p.render->begin(
+                            cmd, p.buffer, m_currentFrameIndex, renderSize,
+                            renderOptions);
                         p.render->setOCIOOptions(timeline::OCIOOptions());
                         p.render->setLUTOptions(timeline::LUTOptions());
                         ui::DrawEvent drawEvent(
                             p.style, p.iconLibrary, p.render, p.fontSystem);
-                        p.render->setClipRectEnabled(true);
-                        _drawEvent(
-                            p.timelineWindow, math::Box2i(renderSize), drawEvent);
-                        p.render->setClipRectEnabled(false);
+                        // p.render->setClipRectEnabled(true);
+                        // _drawEvent(
+                        //     p.timelineWindow, math::Box2i(renderSize),
+                        //     drawEvent);
+                        // p.render->setClipRectEnabled(false);
                         p.render->end();
                     }
                 }
@@ -873,56 +915,242 @@ namespace mrv
                 }
             }
 
-            const float alpha = p.ui->uiMain->get_alpha() / 255.0F;
-
-            if (p.ui->uiPrefs->uiPrefsBlitTimeline->value() == kNoBlit ||
-                alpha < 1.0F)
+            if (p.buffer)
             {
-                // glViewport(0, 0, renderSize.w, renderSize.h);
-                // glClearColor(0.F, 0.F, 0.F, 0.F);
-                // glClear(Vk_COLOR_BUFFER_BIT);
+                p.buffer->transitionToShaderRead(cmd);
 
-                if (p.buffer)
-                {
-                    // p.shader->bind(frameIndex);
-                    // const auto pm = math::ortho(
-                    //     0.F, static_cast<float>(renderSize.w), 0.F,
-                    //     static_cast<float>(renderSize.h), -1.F, 1.F);
-                    // p.shader->setUniform("transform.mvp", pm);
-                    // p.shader->setUniform("opacity", alpha);
+                begin_render_pass(cmd);
+
+                p.shader->bind(m_currentFrameIndex);
+                const auto pm = math::ortho(
+                    0.F, static_cast<float>(renderSize.w), 0.F,
+                    static_cast<float>(renderSize.h), -1.F, 1.F);
+                p.shader->setUniform("transform.mvp", pm, vlk::kShaderVertex);
+                p.shader->setUniform("opacity", 1.0);
+                p.shader->setFBO("textureSampler", p.buffer);
 
 #ifdef __APPLE__
-                    set_window_transparency(alpha);
+                const float alpha = p.ui->uiMain->get_alpha() / 255.F;
+                set_window_transparency(alpha);
 #endif
 
-                    // glActiveTexture(Vk_TEXTURE0);
-                    // glBindTexture(Vk_TEXTURE_2D, p.buffer->getColorID());
-
-                    // const auto mesh =
-                    //     geom::box(math::Box2i(0, 0, renderSize.w, renderSize.h));
-                    // if (!p.vbo)
-                    // {
-                    //     p.vbo = vlk::VBO::create(
-                    //         mesh.triangles.size() * 3,
-                    //         vlk::VBOType::Pos2_F32_UV_U16);
-                    // }
-                    // if (p.vbo)
-                    // {
-                    //     p.vbo->copy(convert(mesh, vlk::VBOType::Pos2_F32_UV_U16));
-                    // }
-
-                    // if (!p.vao && p.vbo)
-                    // {
-                    //     p.vao = vlk::VAO::create(
-                    //         vlk::VBOType::Pos2_F32_UV_U16, p.vbo->getID());
-                    // }
-                    // if (p.vao && p.vbo)
-                    // {
-                    //     p.vao->bind(frameIndex);
-                    //     p.vao->draw(Vk_TRIANGLES, 0, p.vbo->getSize());
-                    // }
+                const auto& mesh =
+                    geom::box(math::Box2i(0, 0, renderSize.w, renderSize.h));
+                if (!p.vbo)
+                {
+                    p.vbo = vlk::VBO::create(
+                        mesh.triangles.size() * 3,
+                        vlk::VBOType::Pos2_F32_UV_U16);
                 }
+                if (p.vbo)
+                {
+                    p.vbo->copy(convert(mesh, vlk::VBOType::Pos2_F32_UV_U16));
+                }
+
+                if (!p.vao && p.vbo)
+                {
+                    p.vao = vlk::VAO::create(ctx);
+                    prepare_pipeline();
+                }
+
+                // Bind the main composition pipeline (created/managed outside
+                // this draw loop)
+                vkCmdBindPipeline(
+                    cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline);
+
+                vkCmdBindDescriptorSets(
+                    cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, p.pipeline_layout, 0,
+                    1, &p.shader->getDescriptorSet(),
+                    // Bind the set for THIS frame
+                    0, nullptr);
+
+                VkViewport viewport = {};
+                viewport.width = static_cast<float>(w());
+                viewport.height = static_cast<float>(h());
+                viewport.minDepth = 0.0f;
+                viewport.maxDepth = 1.0f;
+                vkCmdSetViewport(cmd, 0, 1, &viewport);
+
+                VkRect2D scissor = {};
+                scissor.extent.width = w();
+                scissor.extent.height = h();
+                vkCmdSetScissor(cmd, 0, 1, &scissor);
+
+                if (p.vao && p.vbo)
+                {
+                    p.vao->bind(m_currentFrameIndex);
+                    p.vao->draw(cmd, p.vbo);
+                }
+
+                end_render_pass(cmd);
+
+                p.buffer->transitionToColorAttachment(cmd);
             }
+        }
+
+        void TimelineWidget::prepare_descriptor_layout()
+        {
+            TLRENDER_P();
+
+            VkResult result;
+
+            VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = {};
+            pPipelineLayoutCreateInfo.sType =
+                VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+            pPipelineLayoutCreateInfo.pNext = NULL;
+            pPipelineLayoutCreateInfo.setLayoutCount = 1;
+            pPipelineLayoutCreateInfo.pSetLayouts =
+                &p.shader->getDescriptorSetLayout();
+
+            result = vkCreatePipelineLayout(
+                device(), &pPipelineLayoutCreateInfo, NULL, &p.pipeline_layout);
+        }
+
+        void TimelineWidget::prepare_pipeline()
+        {
+            TLRENDER_P();
+
+            if (m_pipeline != VK_NULL_HANDLE)
+            {
+                vkDestroyPipeline(device(), m_pipeline, nullptr);
+            }
+
+            VkGraphicsPipelineCreateInfo pipeline;
+
+            VkPipelineVertexInputStateCreateInfo vi = {};
+            VkPipelineInputAssemblyStateCreateInfo ia = {};
+            VkPipelineRasterizationStateCreateInfo rs = {};
+            VkPipelineColorBlendStateCreateInfo cb = {};
+            VkPipelineDepthStencilStateCreateInfo ds = {};
+            VkPipelineViewportStateCreateInfo vp = {};
+            VkPipelineMultisampleStateCreateInfo ms = {};
+            VkDynamicState dynamicStateEnables[(
+                VK_DYNAMIC_STATE_STENCIL_REFERENCE - VK_DYNAMIC_STATE_VIEWPORT +
+                1)];
+            VkPipelineDynamicStateCreateInfo dynamicState = {};
+
+            VkResult result;
+
+            memset(dynamicStateEnables, 0, sizeof dynamicStateEnables);
+            memset(&dynamicState, 0, sizeof dynamicState);
+            dynamicState.sType =
+                VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+            dynamicState.pDynamicStates = dynamicStateEnables;
+
+            memset(&pipeline, 0, sizeof(pipeline));
+            pipeline.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+            pipeline.layout = p.pipeline_layout; // Use the main pipeline layout
+
+            const auto& bindingDescs = p.vbo->getBindingDescription();
+            const auto& attrDescs = p.vbo->getAttributes();
+            vi.sType =
+                VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+            vi.pNext = NULL;
+            vi.vertexBindingDescriptionCount = bindingDescs.size();
+            vi.pVertexBindingDescriptions = bindingDescs.data();
+            vi.vertexAttributeDescriptionCount = attrDescs.size();
+            vi.pVertexAttributeDescriptions = attrDescs.data();
+
+            memset(&ia, 0, sizeof(ia));
+            ia.sType =
+                VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
+            ia.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+
+            memset(&rs, 0, sizeof(rs));
+            rs.sType =
+                VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+            rs.polygonMode = VK_POLYGON_MODE_FILL;
+            rs.cullMode = VK_CULL_MODE_BACK_BIT;
+            rs.frontFace = VK_FRONT_FACE_CLOCKWISE;
+            rs.depthClampEnable = VK_FALSE;
+            rs.rasterizerDiscardEnable = VK_FALSE;
+            rs.depthBiasEnable = VK_FALSE;
+            rs.lineWidth = 1.0f;
+
+            memset(&cb, 0, sizeof(cb));
+            cb.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+            VkPipelineColorBlendAttachmentState att_state[1];
+            memset(att_state, 0, sizeof(att_state));
+            att_state[0].colorWriteMask = 0xf;
+            att_state[0].blendEnable = VK_FALSE;
+            cb.attachmentCount = 1;
+            cb.pAttachments = att_state;
+
+            memset(&vp, 0, sizeof(vp));
+            vp.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+            vp.viewportCount = 1;
+            dynamicStateEnables[dynamicState.dynamicStateCount++] =
+                VK_DYNAMIC_STATE_VIEWPORT;
+            vp.scissorCount = 1;
+            dynamicStateEnables[dynamicState.dynamicStateCount++] =
+                VK_DYNAMIC_STATE_SCISSOR;
+
+            bool has_depth = mode() & FL_DEPTH;     // Check window depth
+            bool has_stencil = mode() & FL_STENCIL; // Check window stencil
+
+            memset(&ds, 0, sizeof(ds));
+            ds.sType =
+                VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+            ds.depthTestEnable = has_depth ? VK_TRUE : VK_FALSE;
+            ds.depthWriteEnable = has_depth ? VK_TRUE : VK_FALSE;
+            ds.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
+            ds.depthBoundsTestEnable = VK_FALSE;
+            ds.stencilTestEnable = has_stencil ? VK_TRUE : VK_FALSE;
+            ds.back.failOp = VK_STENCIL_OP_KEEP;
+            ds.back.passOp = VK_STENCIL_OP_KEEP;
+            ds.back.compareOp = VK_COMPARE_OP_ALWAYS;
+            ds.front = ds.back;
+
+            memset(&ms, 0, sizeof(ms));
+            ms.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
+            ms.pSampleMask = NULL;
+            ms.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
+
+            // Two stages: vs and fs
+            pipeline.stageCount = 2;
+            VkPipelineShaderStageCreateInfo shaderStages[2];
+            memset(
+                &shaderStages, 0, 2 * sizeof(VkPipelineShaderStageCreateInfo));
+
+            shaderStages[0].sType =
+                VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+            shaderStages[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
+            shaderStages[0].module = p.shader->getVertex();
+            shaderStages[0].pName = "main";
+
+            shaderStages[1].sType =
+                VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+            shaderStages[1].stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+            shaderStages[1].module = p.shader->getFragment();
+            shaderStages[1].pName = "main";
+
+            pipeline.pVertexInputState = &vi;
+            pipeline.pInputAssemblyState = &ia;
+            pipeline.pRasterizationState = &rs;
+            pipeline.pColorBlendState = &cb;
+            pipeline.pMultisampleState = &ms;
+            pipeline.pViewportState = &vp;
+            pipeline.pDepthStencilState = &ds;
+            pipeline.pStages = shaderStages;
+            pipeline.renderPass =
+                m_renderPass; // Use main render pass (swapchain)
+            pipeline.pDynamicState = &dynamicState;
+
+            // Create a temporary pipeline cache
+            VkPipelineCacheCreateInfo pipelineCacheCreateInfo{};
+            pipelineCacheCreateInfo.sType =
+                VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
+            VkPipelineCache pipelineCache;
+            result = vkCreatePipelineCache(
+                device(), &pipelineCacheCreateInfo, NULL, &pipelineCache);
+            VK_CHECK(result);
+
+            result = vkCreateGraphicsPipelines(
+                device(), pipelineCache, 1, &pipeline, NULL, &m_pipeline);
+            VK_CHECK(result);
+
+            // Destroy the temporary pipeline cache
+            vkDestroyPipelineCache(device(), pipelineCache, NULL);
         }
 
         int TimelineWidget::enterEvent()
@@ -1101,7 +1329,8 @@ namespace mrv
             if (Fl::event_button1())
                 button = 1;
             mouseReleaseEvent(
-                Fl::event_x(), Fl::event_y(), button, false, fromFLTKModifiers());
+                Fl::event_x(), Fl::event_y(), button, false,
+                fromFLTKModifiers());
             return 1;
         }
 
@@ -1125,7 +1354,8 @@ namespace mrv
                 tcp->pushMessage(message);
             }
             const auto now = std::chrono::steady_clock::now();
-            const auto diff = std::chrono::duration<float>(now - p.mouseWheelTimer);
+            const auto diff =
+                std::chrono::duration<float>(now - p.mouseWheelTimer);
             const float delta = Fl::event_dy() / 8.F / 15.F;
             p.mouseWheelTimer = now;
             p.timelineWindow->cursorPos(math::Vector2i(_toUI(X), _toUI(Y)));
@@ -1152,10 +1382,12 @@ namespace mrv
         {
             TLRENDER_P();
             const auto now = std::chrono::steady_clock::now();
-            const auto diff = std::chrono::duration<float>(now - p.mouseWheelTimer);
+            const auto diff =
+                std::chrono::duration<float>(now - p.mouseWheelTimer);
             const float delta = Fl::event_dy() / 8.F / 15.F;
             p.mouseWheelTimer = now;
-            scrollEvent(Fl::event_dx() / 8.F / 15.F, -delta, fromFLTKModifiers());
+            scrollEvent(
+                Fl::event_dx() / 8.F / 15.F, -delta, fromFLTKModifiers());
             return 1;
         }
 
@@ -1523,7 +1755,7 @@ namespace mrv
 
             if (p.thumbnail.request.future.valid() &&
                 p.thumbnail.request.future.wait_for(std::chrono::seconds(0)) ==
-                std::future_status::ready)
+                    std::future_status::ready)
             {
                 if (auto image = p.thumbnail.request.future.get())
                 {
@@ -1535,14 +1767,16 @@ namespace mrv
 
                         uint8_t* pixelData = new uint8_t[w * h * depth];
 
-                        auto rgbImage = new Fl_RGB_Image(pixelData, w, h, depth);
+                        auto rgbImage =
+                            new Fl_RGB_Image(pixelData, w, h, depth);
                         rgbImage->alloc_array = true;
 
                         uint8_t* d = pixelData;
                         const uint8_t* s = image->getData();
                         for (int y = 0; y < h; ++y)
                         {
-                            memcpy(d + (h - 1 - y) * w * 4, s + y * w * 4, w * 4);
+                            memcpy(
+                                d + (h - 1 - y) * w * 4, s + y * w * 4, w * 4);
                         }
                         p.box->bind_image(rgbImage);
                         p.box->redraw();
@@ -1572,7 +1806,8 @@ namespace mrv
                 redraw();
             }
 
-            Fl::repeat_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
+            Fl::repeat_timeout(
+                kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
         }
 
         int TimelineWidget::handle(int event)
@@ -1662,11 +1897,12 @@ namespace mrv
             return devicePixelRatio > 0.F ? (value / devicePixelRatio) : 0.F;
         }
 
-        math::Vector2i TimelineWidget::_fromUI(const math::Vector2i& value) const
+        math::Vector2i
+        TimelineWidget::_fromUI(const math::Vector2i& value) const
         {
             const float devicePixelRatio = pixelRatio();
             return devicePixelRatio > 0.F ? (value / devicePixelRatio)
-                : math::Vector2i();
+                                          : math::Vector2i();
         }
 
         //! Routine to turn mrv2's hotkeys into Darby's shortcuts
@@ -1692,13 +1928,13 @@ namespace mrv
                 // dragging the window to the borders.
                 const math::Box2i& geometry =
                     p.timelineWidget->getTimelineItemGeometry();
-                const double normalized =
-                    (value - geometry.min.x) / static_cast<double>(geometry.w());
+                const double normalized = (value - geometry.min.x) /
+                                          static_cast<double>(geometry.w());
                 out = (p.timeRange.start_time() +
                        otime::RationalTime(
                            p.timeRange.duration().value() * normalized,
                            p.timeRange.duration().rate()))
-                      .round();
+                          .round();
                 out = math::clamp(
                     out, p.timeRange.start_time(),
                     p.timeRange.end_time_inclusive());
@@ -1709,9 +1945,6 @@ namespace mrv
         void TimelineWidget::refresh()
         {
             TLRENDER_P();
-            p.render.reset();
-            p.buffer.reset();
-            p.shader.reset();
             p.vbo.reset();
             p.vao.reset();
         }
@@ -1747,8 +1980,8 @@ namespace mrv
         }
 
         void TimelineWidget::_tickEvent(
-            const std::shared_ptr<ui::IWidget>& widget, bool visible, bool enabled,
-            const ui::TickEvent& event)
+            const std::shared_ptr<ui::IWidget>& widget, bool visible,
+            bool enabled, const ui::TickEvent& event)
         {
             TLRENDER_P();
             const bool parentsVisible = visible && widget->isVisible(false);
@@ -1814,8 +2047,8 @@ namespace mrv
         }
 
         void TimelineWidget::_clipEvent(
-            const std::shared_ptr<ui::IWidget>& widget, const math::Box2i& clipRect,
-            bool clipped)
+            const std::shared_ptr<ui::IWidget>& widget,
+            const math::Box2i& clipRect, bool clipped)
         {
             const math::Box2i& g = widget->getGeometry();
             clipped |= !g.intersects(clipRect);
@@ -1841,8 +2074,8 @@ namespace mrv
                 out = widget->getUpdates() & ui::Update::Draw;
                 if (out)
                 {
-                    // std::cout << "Draw update: " << widget->getObjectName() <<
-                    // std::endl;
+                    // std::cout << "Draw update: " << widget->getObjectName()
+                    // << std::endl;
                 }
                 else
                 {
@@ -1856,8 +2089,8 @@ namespace mrv
         }
 
         void TimelineWidget::_drawEvent(
-            const std::shared_ptr<ui::IWidget>& widget, const math::Box2i& drawRect,
-            const ui::DrawEvent& event)
+            const std::shared_ptr<ui::IWidget>& widget,
+            const math::Box2i& drawRect, const ui::DrawEvent& event)
         {
             const math::Box2i& g = widget->getGeometry();
             if (!widget->isClipped() && g.w() > 0 && g.h() > 0)

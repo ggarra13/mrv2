@@ -32,7 +32,7 @@ namespace mrv
     namespace vulkan
     {
         using namespace tl;
-        
+
         //! Timeline widget.
         class TimelineWidget : public VkWindow
         {
@@ -50,7 +50,7 @@ namespace mrv
 
             //! Get timelineUI's timelineWidget item options
             timelineui::ItemOptions getItemOptions() const;
-        
+
             //! Get timelineUI's timelineWidget display options
             timelineui::DisplayOptions getDisplayOptions() const;
 
@@ -83,7 +83,7 @@ namespace mrv
 
             //! Set the Display options.
             void setItemOptions(const timelineui::ItemOptions&);
-        
+
             //! Set the Display options.
             void setDisplayOptions(const timelineui::DisplayOptions&);
 
@@ -94,14 +94,15 @@ namespace mrv
             void resize(int X, int Y, int W, int H) FL_OVERRIDE;
             void draw() FL_OVERRIDE;
             int handle(int) FL_OVERRIDE;
+            void hide() FL_OVERRIDE;
 
             void prepare() FL_OVERRIDE;
             void destroy_resources() FL_OVERRIDE;
-        
+
             //! @}
 
-            //! Hide the thumbnail at least until user enters the timeline slider
-            //! again.
+            //! Hide the thumbnail at least until user enters the timeline
+            //! slider again.
             void hideThumbnail();
 
             //! Request a new thumbnail and reposition on timeline.
@@ -123,7 +124,8 @@ namespace mrv
             void setEditable(bool);
 
             int mousePressEvent(int button, bool, int modifiers);
-            int mouseReleaseEvent(int X, int Y, int button, bool, int modifiers);
+            int
+            mouseReleaseEvent(int X, int Y, int button, bool, int modifiers);
 
             void mouseMoveEvent(int X, int Y);
             void scrollEvent(const float X, const float Y, const int modifiers);
@@ -135,11 +137,9 @@ namespace mrv
 
             void continuePlaying();
 
-            
         protected:
-
             const float pixelRatio() const;
-        
+
             int enterEvent();
             int leaveEvent();
             int mousePressEvent();
@@ -153,8 +153,10 @@ namespace mrv
             void timerEvent();
 
         private:
-            void _initializeVKResources();
-            void _initializeVK();
+            void prepare_shaders();
+            void prepare_descriptor_layout();
+            void prepare_pipeline();
+
             void _thumbnailEvent();
 
             void _createThumbnailWindow();
@@ -163,7 +165,7 @@ namespace mrv
             void _setTimeUnits(tl::timeline::TimeUnits);
 
             void _cancelThumbnailRequests();
-        
+
             void _tickEvent();
             void _tickEvent(
                 const std::shared_ptr<ui::IWidget>&, bool visible, bool enabled,
@@ -206,6 +208,6 @@ namespace mrv
             TLRENDER_PRIVATE();
         };
 
-    }  // namespace vlk
-    
+    } // namespace vulkan
+
 } // namespace mrv
