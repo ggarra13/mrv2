@@ -22,6 +22,7 @@ namespace tl
 {
     namespace vlk
     {
+        
         enum ShaderFlags {
             kShaderVertex = 1,
             kShaderFragment = 2,
@@ -82,7 +83,7 @@ namespace tl
             const VkDescriptorPool& getDescriptorPool() const;
 
             //! Bind the shader.
-            void bind(uint32_t value);
+            void bind(uint64_t value);
 
             //! \name Uniform
             //! Set uniform values.
@@ -101,6 +102,18 @@ namespace tl
                 const ShaderFlags stageFlags = kShaderFragment);
             ///@}
 
+            //! Add a push block.
+            template <typename T>
+            void addPush(
+                const std::string&, const T& value,
+                const ShaderFlags stageFlags = kShaderFragment);
+
+            //! Get the push stage flags.
+            VkShaderStageFlags getPushStageFlags() { return pushStageFlags; }
+
+            //! Get the push size.
+            std::size_t getPushSize() { return pushSize; }
+            
             //! Add a textire to shader parameters.
             void addTexture(
                 const std::string& name,
@@ -122,7 +135,7 @@ namespace tl
                 const std::string& name,
                 const std::shared_ptr<OffscreenBuffer>&,
                 const ShaderFlags stageFlags = kShaderFragment);
-
+            
             //! Create desciptor set bindings for all frames
             void createDescriptorSets();
 
@@ -153,11 +166,16 @@ namespace tl
 
             //! Internal variable used to point all resources to the right
             //! frame in flight.
-            uint32_t frameIndex = 0;
+            uint64_t frameIndex = 0;
 
             std::vector<VkDescriptorPool> descriptorPools;
             std::vector<VkDescriptorSet> descriptorSets;
 
+            // Push size
+            std::size_t pushSize = 0;
+            VkShaderStageFlags pushStageFlags = VK_SHADER_STAGE_VERTEX_BIT |
+                                                VK_SHADER_STAGE_FRAGMENT_BIT;
+            
             struct UBO
             {
                 VkDescriptorSetLayoutBinding layoutBinding;

@@ -805,12 +805,19 @@ void main()
 
             wait_device();
 
-            refresh();
-
+            // Destroy main render
             p.render.reset();
+
+            // Destroy buffers
             p.buffer.reset();
+
+            // Destroy shaders
             p.shader.reset();
 
+            // Destroy meshes
+            p.vbo.reset();
+            p.vao.reset();
+            
             VkWindow::hide();
         }
 
@@ -841,7 +848,7 @@ void main()
         void TimelineWidget::draw()
         {
             TLRENDER_P();
-
+            
             const math::Size2i renderSize(pixel_w(), pixel_h());
 
             VkCommandBuffer cmd = getCurrentCommandBuffer();
@@ -876,11 +883,13 @@ void main()
                         vlk::OffscreenBufferOptions offscreenBufferOptions;
                         offscreenBufferOptions.colorType =
                             image::PixelType::RGBA_U8;
+                        //offscreenBufferOptions.allowCompositing = true;
                         if (vlk::doCreate(
                                 p.buffer, renderSize, offscreenBufferOptions))
                         {
                             p.buffer = vlk::OffscreenBuffer::create(
                                 ctx, renderSize, offscreenBufferOptions);
+                            p.vbo.reset();
                         }
                     }
                     else
@@ -890,7 +899,6 @@ void main()
 
                     if (p.render && p.buffer)
                     {
-                        // vlk::OffscreenBufferBinding binding(p.buffer);
                         timeline::RenderOptions renderOptions;
                         renderOptions.clearColor =
                             p.style->getColorRole(ui::ColorRole::Window);
@@ -901,11 +909,13 @@ void main()
                         p.render->setLUTOptions(timeline::LUTOptions());
                         ui::DrawEvent drawEvent(
                             p.style, p.iconLibrary, p.render, p.fontSystem);
-                        // p.render->setClipRectEnabled(true);
-                        // _drawEvent(
-                        //     p.timelineWindow, math::Box2i(renderSize),
-                        //     drawEvent);
-                        // p.render->setClipRectEnabled(false);
+                        p.render->setClipRectEnabled(true);
+                        p.buffer->beginRenderPass(cmd);
+                        _drawEvent(
+                            p.timelineWindow, math::Box2i(renderSize),
+                            drawEvent);
+                        p.buffer->endRenderPass(cmd);
+                        p.render->setClipRectEnabled(false);
                         p.render->end();
                     }
                 }
@@ -2104,7 +2114,7 @@ void main()
                 {
                     const math::Box2i& childGeometry = child->getGeometry();
                     if (childGeometry.intersects(childrenClipRect))
-                    {
+                    { 
                         _drawEvent(
                             child, childGeometry.intersect(childrenClipRect),
                             event);

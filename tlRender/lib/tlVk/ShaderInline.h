@@ -21,14 +21,14 @@ namespace tl
             ubo.size = sizeof(value);
             
             // Create buffer and memory for each frame (You need helper functions here)
-            ubo.buffers.resize(MAX_FRAMES_IN_FLIGHT);
-            ubo.memories.resize(MAX_FRAMES_IN_FLIGHT);
-            ubo.bufferInfos.resize(MAX_FRAMES_IN_FLIGHT);
+            ubo.buffers.resize(NUM_DESCRIPTOR_SETS);
+            ubo.memories.resize(NUM_DESCRIPTOR_SETS);
+            ubo.bufferInfos.resize(NUM_DESCRIPTOR_SETS);
 
             VkDevice device = ctx.device;
             VkPhysicalDevice gpu = ctx.gpu;
 
-            for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+            for (int i = 0; i < NUM_DESCRIPTOR_SETS; ++i)
             {
                 VkBufferCreateInfo ubo_buf_info = {};
                 ubo_buf_info.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
@@ -109,6 +109,15 @@ namespace tl
             write.pBufferInfo = &bufferInfo;
 
             vkUpdateDescriptorSets(ctx.device, 1, &write, 0, nullptr);
+        }
+
+        template <typename T>
+        void Shader::addPush(
+            const std::string& name, const T& value,
+            const ShaderFlags stageFlags)
+        {
+            pushSize = sizeof(T);
+            pushStageFlags = getVulkanShaderFlags(stageFlags);
         }
 
     } // namespace vlk

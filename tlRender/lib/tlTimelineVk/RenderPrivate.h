@@ -112,7 +112,7 @@ namespace tl
             // Vulkan variables
             VkCommandBuffer cmd;
             std::shared_ptr<vlk::OffscreenBuffer> fbo;
-            uint32_t frameIndex;
+            int32_t frameIndex; // must be an int32_t not an uint32_t.
 
             bool hdrMonitorFound = false;
 
@@ -138,6 +138,12 @@ namespace tl
             bool clipRectEnabled = false;
             math::Box2i clipRect;
 
+            struct FrameGarbage {
+                std::vector<VkPipeline> pipelines;
+                std::vector<VkPipelineLayout> pipelineLayouts;
+            };
+            std::vector<FrameGarbage> garbage;
+            
             std::map<std::string, std::shared_ptr<vlk::Shader> > shaders;
             std::map<std::string, std::shared_ptr<vlk::OffscreenBuffer> >
                 buffers;

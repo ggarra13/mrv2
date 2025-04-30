@@ -613,6 +613,8 @@ namespace tl
                 timeline::ImageFilter::Linear);
 
             p.logTimer = std::chrono::steady_clock::now();
+
+            p.garbage.resize(vlk::MAX_FRAMES_IN_FLIGHT + 1);
         }
 
         Render::Render(Fl_Vk_Context& context) :
@@ -637,6 +639,13 @@ namespace tl
             for (auto& [_, pipelineLayout] : p.pipelineLayouts)
             {
                 vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
+            }
+            for (auto& garbage : p.garbage)
+            {
+                for (auto& pipeline : garbage.pipelines)
+                {
+                    vkDestroyPipeline(device, pipeline, nullptr);
+                }
             }
         }
 
@@ -681,7 +690,17 @@ namespace tl
             p.renderOptions = renderOptions;
             p.textureCache->setMax(renderOptions.textureCacheByteCount);
 
-            // \@todo: reproduce this in first pipeline.
+            VkDevice device = ctx.device;
+
+            // Destroy old pipelines that are no longer used.
+            int garbageIndex = p.frameIndex % vlk::MAX_FRAMES_IN_FLIGHT;
+            for (auto& pipeline : p.garbage[garbageIndex].pipelines)
+            {
+                vkDestroyPipeline(device, pipeline, nullptr);
+            }
+            p.garbage[garbageIndex].pipelines.clear();
+
+            // \@todo: reproduce this in first pipeline?
             // glEnable(GL_BLEND);
             // glBlendEquation(GL_FUNC_ADD);
 
@@ -693,7 +712,7 @@ namespace tl
                     ctx, vertex2Source(), meshFragmentSource(), "rect");
                 p.shaders["rect"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["rect"]->createUniform("color", color);
+                p.shaders["rect"]->addPush("color", color, vlk::kShaderFragment);
                 p.shaders["rect"]->createDescriptorSets();
             }
             if (!p.shaders["mesh"])
@@ -702,7 +721,7 @@ namespace tl
                     ctx, vertexSource(), meshFragmentSource(), "mesh");
                 p.shaders["mesh"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["mesh"]->createUniform("color", color);
+                p.shaders["mesh"]->addPush("color", color, vlk::kShaderFragment);
                 p.shaders["mesh"]->createDescriptorSets();
             }
             if (!p.shaders["colorMesh"])
@@ -712,7 +731,7 @@ namespace tl
                     "colorMesh");
                 p.shaders["colorMesh"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["colorMesh"]->createUniform("color", color);
+                p.shaders["colorMesh"]->addPush("color", color, vlk::kShaderFragment);
                 p.shaders["colorMesh"]->createDescriptorSets();
             }
             if (!p.shaders["text"])
@@ -722,7 +741,7 @@ namespace tl
                 p.shaders["text"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
                 p.shaders["text"]->addTexture("textureSampler");
-                p.shaders["text"]->createUniform("color", color);
+                p.shaders["text"]->addPush("color", color, vlk::kShaderFragment);
                 p.shaders["text"]->createDescriptorSets();
             }
             if (!p.shaders["texture"])
@@ -732,7 +751,7 @@ namespace tl
                 p.shaders["texture"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
                 p.shaders["texture"]->addTexture("textureSampler");
-                p.shaders["texture"]->createUniform("color", color);
+                p.shaders["texture"]->addPush("color", color, vlk::kShaderFragment);
                 p.shaders["texture"]->createDescriptorSets();
             }
             if (!p.shaders["image"])

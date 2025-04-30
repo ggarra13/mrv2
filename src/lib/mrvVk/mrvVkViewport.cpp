@@ -636,11 +636,6 @@ namespace mrv
                 LOG_ERROR(e.what());
             }
             
-            // vk.render->drawVideo(
-            //     p.videoData,
-            //     timeline::getBoxes(p.compareOptions.mode, p.videoData),
-            //     p.imageOptions, p.displayOptions, p.compareOptions,
-            //     getBackgroundOptions());
             vk.render->end();
 
             m_clearColor = {r, g, b, a};
