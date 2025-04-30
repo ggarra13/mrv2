@@ -19,9 +19,6 @@ namespace tl
             ++(p.currentStats.rects);
 
             p.shaders["rect"]->bind(p.frameIndex);
-            p.shaders["rect"]->setUniform("color", color);
-
-            // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
             if (p.vbos["rect"])
             {
@@ -31,6 +28,22 @@ namespace tl
             if (p.vaos["rect"])
             {
                 p.vaos["rect"]->bind(p.frameIndex);
+
+                const std::string pipelineName = "timeline";
+                const std::string shaderName = "rect";
+                const std::string meshName = "rect";
+                const bool enableBlending = false;
+                createPipeline(
+                    p.fbo, pipelineName, shaderName, meshName, enableBlending);
+                bindDescriptorSets(pipelineName, shaderName);
+
+                VkPipelineLayout pipelineLayout =
+                    p.pipelineLayouts["timeline_rect"];
+                vkCmdPushConstants(
+                    p.cmd, pipelineLayout,
+                    p.shaders["rect"]->getPushStageFlags(), 0, sizeof(color),
+                    &color);
+
                 p.vaos["rect"]->draw(p.cmd, p.vbos["rect"]);
             }
         }
@@ -45,26 +58,21 @@ namespace tl
             p.currentStats.meshTriangles += mesh.triangles.size();
             if (size > 0)
             {
-                p.shaders["mesh"]->bind(p.frameIndex);
                 const auto transform =
                     p.transform *
                     math::translate(
                         math::Vector3f(position.x, position.y, 0.F));
-                p.shaders["mesh"]->setUniform("transform.mvp", transform);
-                p.shaders["mesh"]->setUniform("color", color);
-
-                // Default blend function in pipelines.
-                // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
                 if (!p.vbos["mesh"] ||
                     (p.vbos["mesh"] && p.vbos["mesh"]->getSize() < size * 3))
                 {
-                    p.vbos["mesh"] =
-                        vlk::VBO::create(size * 3, vlk::VBOType::Pos2_F32);
+                    p.vbos["mesh"] = vlk::VBO::create(
+                        size * 3, vlk::VBOType::Pos2_F32_UV_U16);
                 }
                 if (p.vbos["mesh"])
                 {
-                    p.vbos["mesh"]->copy(convert(mesh, vlk::VBOType::Pos2_F32));
+                    p.vbos["mesh"]->copy(
+                        convert(mesh, vlk::VBOType::Pos2_F32_UV_U16));
                 }
 
                 if (!p.vaos["mesh"] && p.vbos["mesh"])
@@ -73,6 +81,26 @@ namespace tl
                 }
                 if (p.vaos["mesh"] && p.vbos["mesh"])
                 {
+                    const std::string pipelineName = "timeline";
+                    const std::string shaderName = "mesh";
+                    const std::string meshName = "mesh";
+                    const bool enableBlending = false;
+
+                    p.shaders["mesh"]->bind(p.frameIndex);
+                    p.shaders["mesh"]->setUniform("transform.mvp", transform);
+
+                    createPipeline(
+                        p.fbo, pipelineName, shaderName, meshName,
+                        enableBlending);
+                    bindDescriptorSets(pipelineName, shaderName);
+
+                    VkPipelineLayout pipelineLayout =
+                        p.pipelineLayouts["timeline_mesh"];
+                    vkCmdPushConstants(
+                        p.cmd, pipelineLayout,
+                        p.shaders["mesh"]->getPushStageFlags(), 0,
+                        sizeof(color), &color);
+
                     p.vaos["mesh"]->bind(p.frameIndex);
                     p.vaos["mesh"]->draw(p.cmd, p.vbos["mesh"]);
                 }
@@ -96,13 +124,19 @@ namespace tl
                         math::Vector3f(position.x, position.y, 0.F));
                 p.shaders["colorMesh"]->setUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["colorMesh"]->setUniform("color", color);
-                _bindDescriptorSets(pipelineName, "colorMesh");
+                bindDescriptorSets(pipelineName, "colorMesh");
 
                 // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
                 if (p.vaos["colorMesh"] && p.vbos["colorMesh"])
                 {
-                    p.vaos["colorMesh"]->bind(p.frameIndex);
+                    const std::string pipelineLayoutName =
+                        pipelineName + "_colorMesh";
+                    VkPipelineLayout pipelineLayout =
+                        p.pipelineLayouts[pipelineLayoutName];
+                    vkCmdPushConstants(
+                        p.cmd, pipelineLayout,
+                        p.shaders["colorMesh"]->getPushStageFlags(), 0,
+                        sizeof(color), &color);
                     p.vaos["colorMesh"]->draw(p.cmd, p.vbos["colorMesh"]);
                 }
             }
@@ -133,7 +167,6 @@ namespace tl
                 if (vaos["text"] && vbos["text"])
                 {
                     vaos["text"]->bind(frameIndex);
-                    vaos["text"]->upload(vbos["text"]->getData());
                     vaos["text"]->draw(cmd, vbos["text"]);
                 }
             }
@@ -146,8 +179,10 @@ namespace tl
             TLRENDER_P();
             ++(p.currentStats.text);
 
+            return;
+
             p.shaders["text"]->bind(p.frameIndex);
-            p.shaders["text"]->setUniform("color", color);
+            // p.shaders["text"]->setUniform("color", color);
 
             // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -402,24 +437,27 @@ namespace tl
             //
             // Create pipeline
             //
-            _createPipeline(fbo, "image", "image", "image");
-            _bindDescriptorSets("image", "image");
+            const std::string pipelineName = "image";
+            const std::string shaderName = "image";
+            const std::string meshName = "image";
+            createPipeline(fbo, pipelineName, shaderName, meshName);
+            bindDescriptorSets(pipelineName, shaderName);
             fbo->setupViewportAndScissor(p.cmd);
 
             if (p.vaos["image"])
             {
                 p.vaos["image"]->bind(p.frameIndex);
-                p.vaos["image"]->upload(p.vbos["image"]->getData());
                 p.vaos["image"]->draw(p.cmd, p.vbos["image"]);
             }
             fbo->endRenderPass(p.cmd);
         }
 
-        void Render::_bindDescriptorSets(
+        void Render::bindDescriptorSets(
             const std::string& pipelineName, const std::string& shaderName)
         {
             TLRENDER_P();
-            const std::string pipelineLayoutName = pipelineName + "_" + shaderName;
+            const std::string pipelineLayoutName =
+                pipelineName + "_" + shaderName;
             if (!p.shaders[shaderName])
             {
                 throw std::runtime_error("Undefined shader " + shaderName);
@@ -468,7 +506,7 @@ namespace tl
             }
         }
 
-        void Render::_createPipeline(
+        void Render::createPipeline(
             const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
             const std::string& pipelineName, const std::string& shaderName,
             const std::string& meshName, const bool enableBlending,
@@ -488,13 +526,16 @@ namespace tl
 
             if (!shader)
                 throw std::runtime_error(
-                    "createPipeline failed with unknown shader " + shaderName);
+                    "createPipeline failed with unknown shader '" + shaderName +
+                    "'");
 
             if (!mesh)
                 throw std::runtime_error(
-                    "createPipeline failed with unknown mesh " + meshName);
+                    "createPipeline failed with unknown mesh '" + meshName +
+                    "'");
 
-            const std::string pipelineLayoutName = pipelineName + "_" + shaderName;
+            const std::string pipelineLayoutName =
+                pipelineName + "_" + shaderName;
 
             if (!p.pipelineLayouts[pipelineLayoutName])
             {
@@ -505,6 +546,19 @@ namespace tl
                 pPipelineLayoutCreateInfo.setLayoutCount = 1;
                 pPipelineLayoutCreateInfo.pSetLayouts =
                     &shader->getDescriptorSetLayout();
+
+                VkPushConstantRange pushConstantRange = {};
+                std::size_t pushSize = shader->getPushSize();
+                if (pushSize > 0)
+                {
+                    pushConstantRange.stageFlags = shader->getPushStageFlags();
+                    pushConstantRange.offset = 0;
+                    pushConstantRange.size = pushSize;
+
+                    pPipelineLayoutCreateInfo.pushConstantRangeCount = 1;
+                    pPipelineLayoutCreateInfo.pPushConstantRanges =
+                        &pushConstantRange;
+                }
 
                 VkPipelineLayout pipelineLayout;
                 VkResult result = vkCreatePipelineLayout(
@@ -595,18 +649,17 @@ namespace tl
             }
             else
             {
-                auto pair = p.pipelines[pipelineName];
-                auto oldPipelineState = pair.first;
+                const auto& pair = p.pipelines[pipelineName];
+                const auto& oldPipelineState = pair.first;
                 VkPipeline oldPipeline = pair.second;
                 if (pipelineState != oldPipelineState ||
                     oldPipeline == VK_NULL_HANDLE)
                 {
                     if (oldPipeline != VK_NULL_HANDLE)
                     {
-                        vkDeviceWaitIdle(device);
-                        vkDestroyPipeline(device, oldPipeline, nullptr);
+                        p.garbage[p.frameIndex].pipelines.push_back(
+                            oldPipeline);
                     }
-                    
                     pipeline = pipelineState.create(device);
                     auto pair = std::make_pair(pipelineState, pipeline);
                     p.pipelines[pipelineName] = pair;

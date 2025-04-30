@@ -13,7 +13,9 @@
 #include <tlCore/String.h>
 
 #include <array>
+#include <set>
 #include <stdexcept>
+#include <vector>
 
 namespace tl
 {
@@ -641,12 +643,28 @@ namespace tl
             _p->data = data;
         }
 
+        //! Structure used to hold the resource of each upload.
+        struct UploadBuffer
+        {
+            VkBuffer buffer;
+            VkDeviceMemory memory;
+        };
+
+        //! Structure used to hold per frames in flight resources.
+        //! For example, multiple meshes.
+        struct FrameResources
+        {
+            std::vector<UploadBuffer> buffersThisFrame;
+        };
+
         struct VAO::Private
         {
             uint32_t frameIndex = 0;
 
             std::vector<VkBuffer> buffers;
             std::vector<VkDeviceMemory> memories;
+
+            std::array<FrameResources, MAX_FRAMES_IN_FLIGHT> frames;
         };
 
         void VAO::_init()
@@ -669,21 +687,43 @@ namespace tl
 
             VkDevice device = ctx.device;
 
+            std::set<VkBuffer> buffers;
             for (auto& buffer : p.buffers)
             {
                 if (buffer != VK_NULL_HANDLE)
                 {
+                    buffers.insert(buffer);
+
                     vkDestroyBuffer(device, buffer, nullptr);
                     buffer = VK_NULL_HANDLE;
                 }
             }
 
+            std::set<VkDeviceMemory> memories;
             for (auto& memory : p.memories)
             {
                 if (memory != VK_NULL_HANDLE)
                 {
+                    memories.insert(memory);
+
                     vkFreeMemory(device, memory, nullptr);
                     memory = VK_NULL_HANDLE;
+                }
+            }
+
+            for (auto& frame : p.frames)
+            {
+                for (auto& upload : frame.buffersThisFrame)
+                {
+                    if (buffers.find(upload.buffer) == buffers.end())
+                    {
+                        vkDestroyBuffer(device, upload.buffer, nullptr);
+                    }
+
+                    if (memories.find(upload.memory) == memories.end())
+                    {
+                        vkFreeMemory(device, upload.memory, nullptr);
+                    }
                 }
             }
         }
@@ -699,26 +739,17 @@ namespace tl
         {
             TLRENDER_P();
 
+            VkDevice device = ctx.device;
+            VkPhysicalDevice gpu = ctx.gpu;
+            VkBuffer& buffer = p.buffers[p.frameIndex];
+            VkDeviceMemory& memory = p.memories[p.frameIndex];
+
             // 1. Create Buffer
             VkBufferCreateInfo bufferInfo = {};
             bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
             bufferInfo.size = vertexData.size();
             bufferInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
             bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-
-            VkDevice device = ctx.device;
-            VkPhysicalDevice gpu = ctx.gpu;
-            VkBuffer& buffer = p.buffers[p.frameIndex];
-            VkDeviceMemory& memory = p.memories[p.frameIndex];
-
-            if (buffer != VK_NULL_HANDLE)
-            {
-                vkDestroyBuffer(device, buffer, nullptr);
-            }
-            if (memory != VK_NULL_HANDLE)
-            {
-                vkFreeMemory(device, memory, nullptr);
-            }
 
             if (vkCreateBuffer(device, &bufferInfo, nullptr, &buffer) !=
                 VK_SUCCESS)
@@ -753,6 +784,10 @@ namespace tl
             vkMapMemory(device, memory, 0, vertexData.size(), 0, &mappedData);
             memcpy(mappedData, vertexData.data(), vertexData.size());
             vkUnmapMemory(device, memory);
+
+            // 5. Add it to the queue
+            FrameResources& frame = p.frames[p.frameIndex];
+            frame.buffersThisFrame.push_back({buffer, memory});
         }
 
         void VAO::bind(uint32_t value)
@@ -762,16 +797,32 @@ namespace tl
                 throw std::runtime_error(
                     "VAO::bind value bigger than MAX_FRAMES_IN_FLIGHT");
 
-            p.frameIndex = value;
+            if (value != p.frameIndex)
+            {
+                p.frameIndex = value;
+
+                FrameResources& frame = p.frames[p.frameIndex];
+                VkDevice device = ctx.device;
+
+                for (auto& upload : frame.buffersThisFrame)
+                {
+                    vkDestroyBuffer(device, upload.buffer, nullptr);
+                    vkFreeMemory(device, upload.memory, nullptr);
+                }
+
+                frame.buffersThisFrame.clear();
+            }
         }
 
         void VAO::draw(VkCommandBuffer& cmd, std::size_t size)
         {
             TLRENDER_P();
 
+            VkDevice device = ctx.device;
+            VkBuffer buffer = p.buffers[p.frameIndex];
+
             VkDeviceSize offsets[1] = {0};
-            vkCmdBindVertexBuffers(
-                cmd, 0, 1, &p.buffers[p.frameIndex], offsets);
+            vkCmdBindVertexBuffers(cmd, 0, 1, &buffer, offsets);
             vkCmdDraw(cmd, size, 1, 0, 0);
         }
 

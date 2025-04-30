@@ -21,8 +21,7 @@ namespace tl
             UBO ubo;
             ubo.size = sizeof(value);
 
-            // Create buffer and memory for each frame (You need helper
-            // functions here)
+            // Create buffer and memory for each frame
             ubo.buffers.resize(MAX_FRAMES_IN_FLIGHT);
             ubo.memories.resize(MAX_FRAMES_IN_FLIGHT);
             ubo.bufferInfos.resize(MAX_FRAMES_IN_FLIGHT);
@@ -30,7 +29,7 @@ namespace tl
             VkDevice device = ctx.device;
             VkPhysicalDevice gpu = ctx.gpu;
 
-            for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+            for (int i = 0; i < NUM_DESCRIPTOR_SETS; ++i)
             {
                 VkBufferCreateInfo ubo_buf_info = {};
                 ubo_buf_info.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
