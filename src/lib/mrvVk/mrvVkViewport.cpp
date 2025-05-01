@@ -571,13 +571,15 @@ namespace mrv
                 renderOptions.clearColor = image::Color4f(r, g, b, 0);
             }
 
-#ifdef __APPLE__
-#    ifdef __x86_64__ // macOS Intel
-            // MoltenVK has 2048 samplers only.  1.0 * memory::gigabyte would
-            // make it raise validation errors.
-            renderOptions.textureCacheByteCount = 0.1 * memory::gigabyte;
-#    endif
-#endif
+            // #ifdef __APPLE__
+            // #    ifdef __x86_64__ // macOS Intel
+            //             // MoltenVK has 2048 samplers only.  1.0 *
+            //             memory::gigabyte would
+            //             // make it raise validation errors.
+            //             renderOptions.textureCacheByteCount = 0.1 *
+            //             memory::gigabyte;
+            // #    endif
+            // #endif
 
             try
             {
