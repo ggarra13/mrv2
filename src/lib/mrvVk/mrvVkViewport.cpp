@@ -571,19 +571,21 @@ namespace mrv
                 renderOptions.clearColor = image::Color4f(r, g, b, 0);
             }
 
-#ifdef __APPLE__
-#    ifdef __x86_64__ // macOS Intel
-            // MoltenVK has 2048 samplers only.  1.0 * memory::gigabyte would
-            // make it raise validation errors.
-            renderOptions.textureCacheByteCount = 0.1 * memory::gigabyte;
-#    endif
-#endif
+            // #ifdef __APPLE__
+            // #    ifdef __x86_64__ // macOS Intel
+            //             // MoltenVK has 2048 samplers only.  1.0 *
+            //             memory::gigabyte would
+            //             // make it raise validation errors.
+            //             renderOptions.textureCacheByteCount = 0.1 *
+            //             memory::gigabyte;
+            // #    endif
+            // #endif
 
             try
             {
                 vk.render->begin(
-                    cmd, vk.buffer, m_currentFrameIndex,
-                    renderSize, renderOptions);
+                    cmd, vk.buffer, m_currentFrameIndex, renderSize,
+                    renderOptions);
 
                 if (p.showVideo)
                 {
@@ -613,8 +615,7 @@ namespace mrv
                     }
                     else
                     {
-                        if (p.stereo3DOptions.input ==
-                            Stereo3DInput::Image &&
+                        if (p.stereo3DOptions.input == Stereo3DInput::Image &&
                             p.videoData.size() > 1)
                         {
                             _drawStereo3D();
@@ -631,16 +632,11 @@ namespace mrv
                     }
                 }
             }
-            catch(const std::exception& e)
+            catch (const std::exception& e)
             {
                 LOG_ERROR(e.what());
             }
-            
-            // vk.render->drawVideo(
-            //     p.videoData,
-            //     timeline::getBoxes(p.compareOptions.mode, p.videoData),
-            //     p.imageOptions, p.displayOptions, p.compareOptions,
-            //     getBackgroundOptions());
+
             vk.render->end();
 
             m_clearColor = {r, g, b, a};

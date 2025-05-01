@@ -36,24 +36,26 @@ extern "C"
 
 namespace
 {
-    
-    std::string replaceUniformSampler(const std::string& input,
-                                      unsigned& bindingIndex)
+
+    std::string
+    replaceUniformSampler(const std::string& input, unsigned& bindingIndex)
     {
         std::string output = input;
         std::string target = "uniform sampler";
         size_t pos = 0;
-        
+
         while ((pos = output.find(target, pos)) != std::string::npos)
         {
-            std::string replacement = "layout(binding=" + std::to_string(bindingIndex++) + ") " + target;
+            std::string replacement =
+                "layout(binding=" + std::to_string(bindingIndex++) + ") " +
+                target;
             output.replace(pos, target.length(), replacement);
             pos += replacement.length(); // move past the inserted text
         }
 
         return output;
     }
-    
+
     VkFormat to_vk_format(pl_fmt fmt)
     {
         int size = fmt->internal_size / fmt->num_components;
@@ -613,6 +615,8 @@ namespace tl
                 timeline::ImageFilter::Linear);
 
             p.logTimer = std::chrono::steady_clock::now();
+
+            p.garbage.resize(vlk::MAX_FRAMES_IN_FLIGHT + 1);
         }
 
         Render::Render(Fl_Vk_Context& context) :
@@ -637,6 +641,13 @@ namespace tl
             for (auto& [_, pipelineLayout] : p.pipelineLayouts)
             {
                 vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
+            }
+            for (auto& garbage : p.garbage)
+            {
+                for (auto& pipeline : garbage.pipelines)
+                {
+                    vkDestroyPipeline(device, pipeline, nullptr);
+                }
             }
         }
 
@@ -681,7 +692,17 @@ namespace tl
             p.renderOptions = renderOptions;
             p.textureCache->setMax(renderOptions.textureCacheByteCount);
 
-            // \@todo: reproduce this in first pipeline.
+            VkDevice device = ctx.device;
+
+            // Destroy old pipelines that are no longer used.
+            int garbageIndex = p.frameIndex % vlk::MAX_FRAMES_IN_FLIGHT;
+            for (auto& pipeline : p.garbage[garbageIndex].pipelines)
+            {
+                vkDestroyPipeline(device, pipeline, nullptr);
+            }
+            p.garbage[garbageIndex].pipelines.clear();
+
+            // \@todo: reproduce this in first pipeline?
             // glEnable(GL_BLEND);
             // glBlendEquation(GL_FUNC_ADD);
 
@@ -693,7 +714,8 @@ namespace tl
                     ctx, vertex2Source(), meshFragmentSource(), "rect");
                 p.shaders["rect"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["rect"]->createUniform("color", color);
+                p.shaders["rect"]->addPush(
+                    "color", color, vlk::kShaderFragment);
                 p.shaders["rect"]->createDescriptorSets();
             }
             if (!p.shaders["mesh"])
@@ -702,7 +724,8 @@ namespace tl
                     ctx, vertexSource(), meshFragmentSource(), "mesh");
                 p.shaders["mesh"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["mesh"]->createUniform("color", color);
+                p.shaders["mesh"]->addPush(
+                    "color", color, vlk::kShaderFragment);
                 p.shaders["mesh"]->createDescriptorSets();
             }
             if (!p.shaders["colorMesh"])
@@ -712,7 +735,8 @@ namespace tl
                     "colorMesh");
                 p.shaders["colorMesh"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["colorMesh"]->createUniform("color", color);
+                p.shaders["colorMesh"]->addPush(
+                    "color", color, vlk::kShaderFragment);
                 p.shaders["colorMesh"]->createDescriptorSets();
             }
             if (!p.shaders["text"])
@@ -722,7 +746,8 @@ namespace tl
                 p.shaders["text"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
                 p.shaders["text"]->addTexture("textureSampler");
-                p.shaders["text"]->createUniform("color", color);
+                p.shaders["text"]->addPush(
+                    "color", color, vlk::kShaderFragment);
                 p.shaders["text"]->createDescriptorSets();
             }
             if (!p.shaders["texture"])
@@ -732,7 +757,8 @@ namespace tl
                 p.shaders["texture"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
                 p.shaders["texture"]->addTexture("textureSampler");
-                p.shaders["texture"]->createUniform("color", color);
+                p.shaders["texture"]->addPush(
+                    "color", color, vlk::kShaderFragment);
                 p.shaders["texture"]->createDescriptorSets();
             }
             if (!p.shaders["image"])
@@ -963,9 +989,10 @@ namespace tl
 
             VkRenderPassBeginInfo rpBegin{};
             rpBegin.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-            rpBegin.renderPass = p.fbo->getRenderPass(); // Use the FBO's render pass
-            rpBegin.framebuffer = p.fbo->getFramebuffer(/*currentFrameIndex*/); 
-            rpBegin.renderArea.offset = {0, 0}; 
+            rpBegin.renderPass =
+                p.fbo->getRenderPass(); // Use the FBO's render pass
+            rpBegin.framebuffer = p.fbo->getFramebuffer(/*currentFrameIndex*/);
+            rpBegin.renderArea.offset = {0, 0};
             rpBegin.renderArea.extent = p.fbo->getExtent(); // Use FBO extent
             rpBegin.clearValueCount =
                 1 +
@@ -1245,7 +1272,7 @@ namespace tl
             if (p.ocioOptions.enabled)
             {
                 vkDeviceWaitIdle(ctx.device);
-                
+
                 p.ocioData.reset(new OCIOData);
 
                 if (!p.ocioOptions.fileName.empty())
@@ -1507,10 +1534,11 @@ namespace tl
                 {
                     VkDevice device = ctx.device;
                     vkDeviceWaitIdle(device);
-                    vkDestroyPipelineLayout(device, p.pipelineLayouts["display_display"], nullptr);
+                    vkDestroyPipelineLayout(
+                        device, p.pipelineLayouts["display_display"], nullptr);
                     p.pipelineLayouts["display_display"] = VK_NULL_HANDLE;
                 }
-                
+
                 std::string ocioICSDef;
                 std::string ocioICS;
                 std::string ocioDef;
@@ -1525,7 +1553,8 @@ namespace tl
                 if (p.ocioData && p.ocioData->icsDesc)
                 {
                     ocioICSDef = p.ocioData->icsDesc->getShaderText();
-                    ocioICSDef = replaceUniformSampler(ocioICSDef, p.bindingIndex);
+                    ocioICSDef =
+                        replaceUniformSampler(ocioICSDef, p.bindingIndex);
                     ocioICS = "outColor = ocioICSFunc(outColor);";
                 }
                 if (p.ocioData && p.ocioData->shaderDesc)
@@ -1545,7 +1574,7 @@ namespace tl
                 if (p.placeboData)
                 {
                     vkDeviceWaitIdle(ctx.device);
-                
+
                     pl_shader_params shader_params;
                     memset(&shader_params, 0, sizeof(pl_shader_params));
 
@@ -1849,9 +1878,9 @@ namespace tl
                                 break;
                             }
 
-                            s << "layout(binding=" << p.bindingIndex++ << ") uniform "
-                              << prefix << type << " " << desc->name << ";"
-                              << std::endl;
+                            s << "layout(binding=" << p.bindingIndex++
+                              << ") uniform " << prefix << type << " "
+                              << desc->name << ";" << std::endl;
                             break;
                         }
                         case PL_DESC_BUF_UNIFORM:

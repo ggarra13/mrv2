@@ -26,7 +26,7 @@ namespace tl
                        fTexture = vTexture;
                    })";
         }
-        
+
         std::string vertex2Source()
         {
             return R"(#version 450
@@ -47,18 +47,19 @@ namespace tl
         {
             return R"(#version 450
                    
+layout(location = 0) in  vec2 fTexture;
 layout(location = 0) out vec4 outColor;
-                 
-layout(set = 0, binding = 1, std140) uniform ColorUBO {
-        uniform vec4 color;
-} ubo;
+                  
+layout(push_constant) uniform PushConstants {
+    vec4 color;
+} pc;       
                  
 void main()
 {
-         outColor = ubo.color;
+         outColor = pc.color;
 })";
         }
-        
+
         std::string colorMeshVertexSource()
         {
             return R"(#version 450
@@ -85,13 +86,13 @@ void main()
 layout(location = 0) in vec4 fColor;
 layout(location = 0) out vec4 outColor;
                  
-layout(set = 0, binding = 1, std140) uniform ColorUBO {
+layout(push_constant) uniform PushConstants {
     vec4 color;
-} ubo;
+} pc;
 
 void main()
 {
-    outColor = fColor * ubo.color;
+    outColor = fColor * pc.color;
 })";
         }
 
@@ -103,18 +104,18 @@ layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 outColor;
 
 layout(binding = 1) uniform sampler2D textureSampler;
-
-layout(set = 0, binding = 2, std140) uniform ColorUBO {
+                 
+layout(push_constant) uniform PushConstants {
     vec4 color;
-} ubo;
+} pc;    
                  
                  
 void main()
 {
-     outColor.r = ubo.color.r;
-     outColor.g = ubo.color.g;
-     outColor.b = ubo.color.b;
-     outColor.a = ubo.color.a * texture(textureSampler, fTexture).r;
+     outColor.r = pc.color.r;
+     outColor.g = pc.color.g;
+     outColor.b = pc.color.b;
+     outColor.a = pc.color.a * texture(textureSampler, fTexture).r;
 })";
         }
 
@@ -127,13 +128,13 @@ layout(location = 0) out vec4 outColor;
 
 layout(binding = 1) uniform sampler2D textureSampler;
 
-layout(set = 0, binding = 2, std140) uniform ColorUBO {
+layout(push_constant) uniform PushConstants {
     vec4 color;
-} ubo;
+} pc;
                  
 void main()
 {
-     outColor = texture(textureSampler, fTexture) * ubo.color;
+     outColor = texture(textureSampler, fTexture) * pc.color;
 })";
         }
 
@@ -177,7 +178,7 @@ void main()
               const uint VideoLevels_FullRange  = 0;
               const uint VideoLevels_LegalRange = 1;
 )";
-            
+
             const std::string sampleTexture = R"(
 vec4 sampleTexture(
               vec2 textureCoord,
@@ -250,7 +251,6 @@ vec4 sampleTexture(
  })";
         } // namespace
 
-
         std::string dummyFragmentSource()
         {
             return R"(#version 450
@@ -263,7 +263,7 @@ void main()
          outColor = vec4(1, 0, 1, 1);
 })";
         }
-        
+
         std::string imageFragmentSource()
         {
             return string::Format(R"(#version 450

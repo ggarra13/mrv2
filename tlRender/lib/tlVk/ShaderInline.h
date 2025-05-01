@@ -14,13 +14,14 @@ namespace tl
             auto it = ubos.find(name);
             if (it != ubos.end())
             {
-                throw std::runtime_error(name + " for shader " + shaderName + " already created.");
+                throw std::runtime_error(
+                    name + " for shader " + shaderName + " already created.");
             }
-            
+
             UBO ubo;
             ubo.size = sizeof(value);
-            
-            // Create buffer and memory for each frame (You need helper functions here)
+
+            // Create buffer and memory for each frame
             ubo.buffers.resize(MAX_FRAMES_IN_FLIGHT);
             ubo.memories.resize(MAX_FRAMES_IN_FLIGHT);
             ubo.bufferInfos.resize(MAX_FRAMES_IN_FLIGHT);
@@ -38,8 +39,9 @@ namespace tl
 
                 VkMemoryRequirements mem_reqs;
                 vkCreateBuffer(device, &ubo_buf_info, nullptr, &ubo.buffers[i]);
-            
-                vkGetBufferMemoryRequirements(device, ubo.buffers[i], &mem_reqs);
+
+                vkGetBufferMemoryRequirements(
+                    device, ubo.buffers[i], &mem_reqs);
 
                 VkMemoryAllocateInfo ubo_alloc_info = {};
                 ubo_alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
@@ -47,11 +49,11 @@ namespace tl
                 ubo_alloc_info.memoryTypeIndex = findMemoryType(
                     gpu, mem_reqs.memoryTypeBits,
                     VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                    VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+                        VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
-                vkAllocateMemory(device, &ubo_alloc_info, nullptr, &ubo.memories[i]);
+                vkAllocateMemory(
+                    device, &ubo_alloc_info, nullptr, &ubo.memories[i]);
                 vkBindBufferMemory(device, ubo.buffers[i], ubo.memories[i], 0);
-
 
                 ubo.bufferInfos[i].buffer = ubo.buffers[i];
                 ubo.bufferInfos[i].offset = 0;
@@ -76,32 +78,40 @@ namespace tl
             auto it = ubos.find(name);
             if (it == ubos.end())
             {
-                throw std::runtime_error(shaderName + ": parameter '"+ name + "' was not created");
+                throw std::runtime_error(
+                    shaderName + ": parameter '" + name + "' was not created");
             }
-            
+
             VkDevice device = ctx.device;
 
             const UBO& ubo = it->second;
             if (ubo.size != sizeof(value))
             {
-                throw std::runtime_error(shaderName + ": parameter '"+ name + "' passed is different size than created ");
+                throw std::runtime_error(
+                    shaderName + ": parameter '" + name +
+                    "' passed is different size than created ");
             }
-            
+
             void* data;
-            vkMapMemory(device, ubo.memories[frameIndex], 0, sizeof(T), 0, &data);
+            vkMapMemory(
+                device, ubo.memories[frameIndex], 0, sizeof(T), 0, &data);
             memcpy(data, &value, sizeof(T));
             vkUnmapMemory(device, ubo.memories[frameIndex]);
 
-            
-            // We need to update the bufferInfo in the descriptor set for the current frame
-            // Alternatively, you could use dynamic uniform buffers.
+            // We need to update the bufferInfo in the descriptor set for the
+            // current frame Alternatively, you could use dynamic uniform
+            // buffers.
 
-            // For this approach, we re-write the descriptor set for this binding and frame
-            VkDescriptorBufferInfo bufferInfo = ubo.bufferInfos[frameIndex]; // Use the buffer info for this frame
+            // For this approach, we re-write the descriptor set for this
+            // binding and frame
+            VkDescriptorBufferInfo bufferInfo =
+                ubo.bufferInfos[frameIndex]; // Use the buffer info for this
+                                             // frame
 
             VkWriteDescriptorSet write{};
             write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-            write.dstSet = descriptorSets[frameIndex]; // Update the set for this frame
+            write.dstSet =
+                descriptorSets[frameIndex]; // Update the set for this frame
             write.dstBinding = ubo.layoutBinding.binding;
             write.dstArrayElement = 0;
             write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
@@ -109,6 +119,15 @@ namespace tl
             write.pBufferInfo = &bufferInfo;
 
             vkUpdateDescriptorSets(ctx.device, 1, &write, 0, nullptr);
+        }
+
+        template <typename T>
+        void Shader::addPush(
+            const std::string& name, const T& value,
+            const ShaderFlags stageFlags)
+        {
+            pushSize = sizeof(T);
+            pushStageFlags = getVulkanShaderFlags(stageFlags);
         }
 
     } // namespace vlk

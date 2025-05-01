@@ -85,8 +85,8 @@ namespace tl
             _p(new Private),
             ctx(context)
         {
-            descriptorPools.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
-            descriptorSets.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
+            descriptorPools.resize(NUM_DESCRIPTOR_SETS, VK_NULL_HANDLE);
+            descriptorSets.resize(NUM_DESCRIPTOR_SETS, VK_NULL_HANDLE);
         }
 
         Shader::~Shader()
@@ -110,7 +110,7 @@ namespace tl
 
             for (auto& [_, ubo] : ubos)
             {
-                for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT;
+                for (size_t i = 0; i < NUM_DESCRIPTOR_SETS;
                      ++i) // Destroy buffers and memories for all frames
                 {
                     if (ubo.buffers[i] != VK_NULL_HANDLE)
@@ -194,7 +194,7 @@ namespace tl
             if (value >= MAX_FRAMES_IN_FLIGHT)
             {
                 std::cerr << "value (" << value
-                          << ") >= " << MAX_FRAMES_IN_FLIGHT << std::endl;
+                          << ") >= " << NUM_DESCRIPTOR_SETS << std::endl;
                 throw std::runtime_error("Invalid value for bind.");
             }
             frameIndex = value;
@@ -341,7 +341,7 @@ namespace tl
                 VkDescriptorPoolSize poolSize = {};
                 poolSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
                 poolSize.descriptorCount =
-                    MAX_FRAMES_IN_FLIGHT; // or more if you support arrays
+                    NUM_DESCRIPTOR_SETS; // or more if you support arrays
                 poolSizes.push_back(poolSize);
             }
 
@@ -363,7 +363,7 @@ namespace tl
                 poolSize.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
 
                 // One texture descriptor per frame per binding
-                poolSize.descriptorCount = MAX_FRAMES_IN_FLIGHT;
+                poolSize.descriptorCount = NUM_DESCRIPTOR_SETS;
                 poolSizes.push_back(poolSize);
             }
 
@@ -384,7 +384,7 @@ namespace tl
                 VkDescriptorPoolSize poolSize{};
                 poolSize.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
                 // One FBO descriptor per frame per binding
-                poolSize.descriptorCount = MAX_FRAMES_IN_FLIGHT;
+                poolSize.descriptorCount = NUM_DESCRIPTOR_SETS;
                 poolSizes.push_back(poolSize);
             }
 
@@ -399,12 +399,12 @@ namespace tl
             poolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
             poolInfo.pPoolSizes = poolSizes.data();
             // maxSets should be 1 if allocating 1 set per pool.
-            // was: poolInfo.maxSets = MAX_FRAMES_IN_FLIGHT; // Max sets is now
+            // was: poolInfo.maxSets = NUM_DESCRIPTOR_SETS; // Max sets is now
             // number of frames in flight
             poolInfo.maxSets = 1;
 
             // Create a descriptor pool for each frame
-            for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+            for (size_t i = 0; i < NUM_DESCRIPTOR_SETS; ++i)
             {
                 if (vkCreateDescriptorPool(
                         device, &poolInfo, nullptr, &descriptorPools[i]) !=
@@ -434,13 +434,13 @@ namespace tl
             // Allocate descriptor sets for each frame, from their respective
             // pools
             std::vector<VkDescriptorSetLayout> layouts(
-                MAX_FRAMES_IN_FLIGHT, descriptorSetLayout);
+                NUM_DESCRIPTOR_SETS, descriptorSetLayout);
             VkDescriptorSetAllocateInfo allocInfo{};
             allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
             allocInfo.descriptorSetCount = 1; // Allocating one set at a time
             allocInfo.pSetLayouts = layouts.data(); // Still use the same layout
 
-            for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+            for (size_t i = 0; i < NUM_DESCRIPTOR_SETS; ++i)
             {
                 allocInfo.descriptorPool =
                     descriptorPools[i]; // Allocate from the pool for this frame
@@ -464,7 +464,7 @@ namespace tl
             // before that set is first bound in a command buffer.
 
             // Update descriptor sets for each frame
-            for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+            for (size_t i = 0; i < NUM_DESCRIPTOR_SETS; ++i)
             {
                 std::vector<VkWriteDescriptorSet> writes;
 
@@ -628,14 +628,14 @@ namespace tl
         void Shader::debugPointers()
         {
             std::cerr << "--- Descriptor Sets ---" << std::endl;
-            for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+            for (size_t i = 0; i < NUM_DESCRIPTOR_SETS; ++i)
             {
                 std::cerr << "Frame " << i << ": " << descriptorSets[i]
                           << std::endl;
             }
 
             std::cerr << "--- Descriptor Pools ---" << std::endl;
-            for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+            for (size_t i = 0; i < NUM_DESCRIPTOR_SETS; ++i)
             {
                 std::cerr << "Frame " << i << " Pool: " << descriptorPools[i]
                           << std::endl;

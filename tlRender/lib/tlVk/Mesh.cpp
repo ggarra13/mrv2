@@ -687,7 +687,6 @@ namespace tl
 
             VkDevice device = ctx.device;
 
-
             std::set<VkBuffer> buffers;
             for (auto& buffer : p.buffers)
             {
@@ -739,19 +738,18 @@ namespace tl
         void VAO::upload(const std::vector<uint8_t>& vertexData)
         {
             TLRENDER_P();
-            
-            VkDevice       device = ctx.device;
-            VkPhysicalDevice  gpu = ctx.gpu;
-            VkBuffer&       buffer = p.buffers[p.frameIndex];
+
+            VkDevice device = ctx.device;
+            VkPhysicalDevice gpu = ctx.gpu;
+            VkBuffer& buffer = p.buffers[p.frameIndex];
             VkDeviceMemory& memory = p.memories[p.frameIndex];
-            
+
             // 1. Create Buffer
             VkBufferCreateInfo bufferInfo = {};
             bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
             bufferInfo.size = vertexData.size();
             bufferInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
             bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-
 
             if (vkCreateBuffer(device, &bufferInfo, nullptr, &buffer) !=
                 VK_SUCCESS)
@@ -789,7 +787,7 @@ namespace tl
 
             // 5. Add it to the queue
             FrameResources& frame = p.frames[p.frameIndex];
-            frame.buffersThisFrame.push_back({ buffer, memory });
+            frame.buffersThisFrame.push_back({buffer, memory});
         }
 
         void VAO::bind(uint32_t value)
@@ -805,7 +803,7 @@ namespace tl
 
                 FrameResources& frame = p.frames[p.frameIndex];
                 VkDevice device = ctx.device;
-            
+                
                 for (auto& upload : frame.buffersThisFrame)
                 {
                     vkDestroyBuffer(device, upload.buffer, nullptr);

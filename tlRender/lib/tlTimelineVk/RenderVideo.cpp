@@ -92,9 +92,9 @@ namespace tl
                 case timeline::Background::Solid:
                 {
                     const auto& mesh = geom::box(box);
-                    _createPipeline(p.fbo, "solid", "rect", "rect");
+                    createPipeline(p.fbo, "solid", "rect", "rect");
                     p.shaders["rect"]->bind(p.frameIndex);
-                    _bindDescriptorSets("solid", "rect");
+                    bindDescriptorSets("solid", "rect");
                     p.fbo->beginRenderPass(p.cmd);
                     p.fbo->setupViewportAndScissor(p.cmd);
                     drawRect(box, options.color0);
@@ -107,8 +107,7 @@ namespace tl
                         box, options.color0, options.color1,
                         options.checkersSize);
                     _createMesh("colorMesh", mesh);
-                    _createPipeline(
-                        p.fbo, "checkers", "colorMesh", "colorMesh");
+                    createPipeline(p.fbo, "checkers", "colorMesh", "colorMesh");
                     p.fbo->beginRenderPass(p.cmd);
                     p.fbo->setupViewportAndScissor(p.cmd);
                     drawColorMesh(
@@ -143,8 +142,7 @@ namespace tl
                         geom::Vertex2(1, 0, 1),
                     });
                     _createMesh("colorMesh", mesh);
-                    _createPipeline(
-                        p.fbo, "gradient", "colorMesh", "colorMesh");
+                    createPipeline(p.fbo, "gradient", "colorMesh", "colorMesh");
                     p.fbo->beginRenderPass(p.cmd);
                     p.fbo->setupViewportAndScissor(p.cmd);
                     drawColorMesh(
@@ -746,7 +744,7 @@ namespace tl
                                     p.cmd);
                                 p.buffers["dissolve2"]->transitionToShaderRead(
                                     p.cmd);
-                                _createPipeline(
+                                createPipeline(
                                     p.buffers["video"], "video", "dissolve",
                                     "video", true);
                                 p.buffers["dissolve"]->beginRenderPass(p.cmd);
@@ -872,7 +870,10 @@ namespace tl
                 p.buffers["video"]->transitionToShaderRead(p.cmd);
 
                 //                     pipeline    shader    mesh
-                _createPipeline(p.fbo, "display", "display", "video", true);
+                const std::string pipelineName = "display";
+                const std::string shaderName = "display";
+                const std::string meshName = "video";
+                createPipeline(p.fbo, pipelineName, shaderName, meshName, true);
 
                 // Begin the new compositing render pass.
                 p.fbo->beginCompositingRenderPass(p.cmd);
@@ -928,6 +929,7 @@ namespace tl
 #if defined(TLRENDER_OCIO)
                 if (p.ocioData)
                 {
+                    std::cerr << "has OCIO textures" << std::endl;
                     for (auto& texture : p.ocioData->textures)
                     {
                         p.shaders["display"]->setTexture(
@@ -936,6 +938,7 @@ namespace tl
                 }
                 if (p.lutData)
                 {
+                    std::cerr << "has OCIO Lut textures" << std::endl;
                     for (auto& texture : p.lutData->textures)
                     {
                         p.shaders["display"]->setTexture(
@@ -946,6 +949,7 @@ namespace tl
 #if defined(TLRENDER_LIBPLACEBO)
                 if (p.placeboData)
                 {
+                    std::cerr << "has libplacebo textures" << std::endl;
                     for (auto& texture : p.placeboData->textures)
                     {
                         p.shaders["display"]->setTexture(
@@ -954,7 +958,7 @@ namespace tl
                 }
 #endif // TLRENDER_LIBPLACEBO
 
-                _bindDescriptorSets("display", "display");
+                bindDescriptorSets(pipelineName, shaderName);
 
                 if (p.vbos["video"])
                 {
