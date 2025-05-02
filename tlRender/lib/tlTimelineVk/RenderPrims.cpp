@@ -600,36 +600,10 @@ namespace tl
                     "createPipeline failed with unknown mesh '" + meshName +
                     "'");
 
-            if (!p.pipelineLayouts[pipelineLayoutName])
+            VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+            if (!pipelineLayout)
             {
-                std::cerr << "\t\t\tcreate pipeline layout " << pipelineLayoutName << std::endl; 
-                VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = {};
-                pPipelineLayoutCreateInfo.sType =
-                    VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-                pPipelineLayoutCreateInfo.pNext = NULL;
-                pPipelineLayoutCreateInfo.setLayoutCount = 1;
-                VkDescriptorSetLayout setLayout = shader->getDescriptorSetLayout();
-                pPipelineLayoutCreateInfo.pSetLayouts = &setLayout;
-
-                VkPushConstantRange pushConstantRange = {};
-                std::size_t pushSize = shader->getPushSize();
-                if (pushSize > 0)
-                {
-                    pushConstantRange.stageFlags = shader->getPushStageFlags();
-                    pushConstantRange.offset = 0;
-                    pushConstantRange.size = pushSize;
-
-                    pPipelineLayoutCreateInfo.pushConstantRangeCount = 1;
-                    pPipelineLayoutCreateInfo.pPushConstantRanges =
-                        &pushConstantRange;
-                }
-
-                VkPipelineLayout pipelineLayout;
-                VkResult result = vkCreatePipelineLayout(
-                    device, &pPipelineLayoutCreateInfo, NULL, &pipelineLayout);
-                VK_CHECK(result);
-
-                p.pipelineLayouts[pipelineLayoutName] = pipelineLayout;
+                pipelineLayout = _createPipelineLayout(pipelineLayoutName, shaderName);;
             }
 
             // Elements of new Pipeline
@@ -698,12 +672,10 @@ namespace tl
             pipelineState.multisampleState = ms;
             pipelineState.dynamicState = dynamicState;
             pipelineState.stages = shaderStages;
-
             pipelineState.renderPass = fbo->getRenderPass();
-            pipelineState.layout = p.pipelineLayouts[pipelineLayoutName];
+            pipelineState.layout = pipelineLayout;
 
-            VkPipeline pipeline = VK_NULL_HANDLE;
-
+            VkPipeline pipeline;
             if (p.pipelines.count(pipelineName) == 0)
             {
                 pipeline = pipelineState.create(device);
