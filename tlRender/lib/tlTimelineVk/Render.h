@@ -139,6 +139,8 @@ namespace tl
                 const timeline::CompareOptions& = timeline::CompareOptions(),
                 const timeline::BackgroundOptions& =
                     timeline::BackgroundOptions()) override;
+            VkPipelineLayout _createPipelineLayout(const std::string& pipelineLayoutName,
+                                                   const std::string& meshName);
             void createPipeline(
                 const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
                 const std::string& pipelineName,
@@ -150,7 +152,7 @@ namespace tl
                 const VkBlendFactor dstColorBlendFactor =
                     VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
                 const VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
-                const VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO,
+                const VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
                 const VkBlendOp colorBlendOp = VK_BLEND_OP_ADD,
                 const VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD);
             void bindDescriptorSets(
