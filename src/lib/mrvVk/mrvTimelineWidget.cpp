@@ -876,7 +876,6 @@ void main()
                         vlk::OffscreenBufferOptions offscreenBufferOptions;
                         offscreenBufferOptions.colorType =
                             image::PixelType::RGBA_U8;
-                        offscreenBufferOptions.allowCompositing = true;
                         if (vlk::doCreate(
                                 p.buffer, renderSize, offscreenBufferOptions))
                         {
