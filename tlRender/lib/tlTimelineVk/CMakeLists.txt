@@ -8,6 +8,7 @@ set(SOURCE
     Render.cpp
     RenderPrims.cpp
     RenderVideo.cpp
+    RenderVulkan.cpp
     RenderShaders.cpp)
 
 set(LIBRARIES_PRIVATE )

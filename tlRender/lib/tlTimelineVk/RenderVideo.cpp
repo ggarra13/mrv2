@@ -86,7 +86,7 @@ namespace tl
                                                       options.color1,
                                                       options.checkersSize);
                     _createMesh("colorMesh", mesh);
-                    createPipeline(p.fbo, "checkers", "checkers", "colorMesh", "colorMesh");
+                    _createPipeline(p.fbo, "checkers", "checkers", "colorMesh", "colorMesh");
                     p.fbo->beginRenderPass(p.cmd, "Checkers BG");
                     drawColorMesh("checkers", mesh, math::Vector2i(), image::Color4f(1.F, 1.F, 1.F));
                     p.fbo->endRenderPass(p.cmd);
@@ -112,7 +112,7 @@ namespace tl
                         geom::Vertex2(1, 0, 1),
                     });
                     _createMesh("colorMesh", mesh);
-                    createPipeline(p.fbo, "gradient", "gradient", "colorMesh", "colorMesh");
+                    _createPipeline(p.fbo, "gradient", "gradient", "colorMesh", "colorMesh");
                     p.fbo->beginRenderPass(p.cmd, "Gradient BG");
                     drawColorMesh("gradient", mesh, math::Vector2i(), image::Color4f(1.F, 1.F, 1.F));
                     p.fbo->endRenderPass(p.cmd);
@@ -324,12 +324,13 @@ namespace tl
                     const std::string shaderName = "overlay";
                     const std::string meshName = "video";
                     const std::string pipelineLayoutName = shaderName;
-                    createPipeline(p.buffers["video"], pipelineName, pipelineLayoutName,
-                                   shaderName, meshName);
+                    _createPipeline(p.buffers["overlay"], pipelineName,
+                                    pipelineLayoutName,
+                                    shaderName, meshName);
                     
                     VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
 
-                    bindDescriptorSets(pipelineLayoutName, shaderName);
+                    _bindDescriptorSets(pipelineLayoutName, shaderName);
 
                     vkCmdPushConstants(p.cmd, pipelineLayout,
                                        p.shaders["overlay"]->getPushStageFlags(), 0, sizeof(color), &color);
@@ -511,6 +512,36 @@ namespace tl
             }
         } // namespace
 
+        VkPipelineLayout Render::_createPipelineLayout(const std::string& pipelineLayoutName,
+                                           const std::string& shaderName)
+        {
+            TLRENDER_P();
+            
+            VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = {};
+            pPipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+            pPipelineLayoutCreateInfo.pNext = NULL;
+            pPipelineLayoutCreateInfo.setLayoutCount = 1;
+            VkDescriptorSetLayout setLayout = p.shaders[shaderName]->getDescriptorSetLayout(); // Get layout from shader
+            pPipelineLayoutCreateInfo.pSetLayouts = &setLayout;
+
+            VkPushConstantRange pushConstantRange = {};
+            std::size_t pushSize = p.shaders[shaderName]->getPushSize();
+            if (pushSize > 0)
+            {
+                pushConstantRange.stageFlags = p.shaders[shaderName]->getPushStageFlags();
+                pushConstantRange.offset = 0;
+                pushConstantRange.size = pushSize;
+                pPipelineLayoutCreateInfo.pushConstantRangeCount = 1;
+                pPipelineLayoutCreateInfo.pPushConstantRanges = &pushConstantRange;
+            }
+
+            VkPipelineLayout pipelineLayout;
+            VkResult result = vkCreatePipelineLayout(ctx.device, &pPipelineLayoutCreateInfo, NULL, &pipelineLayout);
+            VK_CHECK(result);
+            p.pipelineLayouts[pipelineLayoutName] = pipelineLayout;
+            return pipelineLayout;
+        }
+        
         void Render::_drawVideo(
             const timeline::VideoData& videoData, const math::Box2i& box, const std::shared_ptr<timeline::ImageOptions>& imageOptions,
             const timeline::DisplayOptions& displayOptions)
@@ -529,8 +560,7 @@ namespace tl
             vlk::OffscreenBufferOptions offscreenBufferOptions;
             offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
             offscreenBufferOptions.colorFilters = displayOptions.imageFilters;
-            offscreenBufferOptions.allowCompositing = true;
-            offscreenBufferOptions.clearColor = true;
+            offscreenBufferOptions.clear = true;
             if (doCreate(p.buffers["video"], offscreenBufferSize, offscreenBufferOptions))
             {
                 p.buffers["video"] = vlk::OffscreenBuffer::create(ctx, offscreenBufferSize,
@@ -539,6 +569,7 @@ namespace tl
 
             float d1 = 1;
             float d2 = 1;
+            bool inDissolve = false;
             if (p.buffers["video"])
             {
                 for (const auto& layer : videoData.layers)
@@ -555,7 +586,6 @@ namespace tl
                                 p.buffers["dissolve"] = vlk::OffscreenBuffer::create(ctx, offscreenBufferSize,
                                                                                      offscreenBufferOptions);
                             }
-                            offscreenBufferOptions.allowCompositing = false;
                             if (doCreate(p.buffers["dissolve2"], offscreenBufferSize, offscreenBufferOptions))
                             {
                                 p.buffers["dissolve2"] = vlk::OffscreenBuffer::create(ctx,
@@ -594,82 +624,97 @@ namespace tl
 #define SECOND_RENDER_PASS 1 // working fine by itself
                             if (p.buffers["dissolve"] && p.buffers["dissolve2"])
                             {
-
+                                inDissolve = true;
+                                
                                 p.buffers["dissolve"]->transitionToShaderRead(p.cmd);
                                 p.buffers["dissolve2"]->transitionToShaderRead(p.cmd);
 
                                 p.buffers["video"]->transitionToColorAttachment(p.cmd);
 
-                                // Some constant values
+                                // --- Common Setup ---
+                                std::shared_ptr<vlk::ShaderBindingSet> bindingSet;
                                 const auto transform = math::ortho(0.F, static_cast<float>(box.w()), 0.F,
                                                                    static_cast<float>(box.h()), -1.F, 1.F);
                                 const image::Color4f color(1.F, 1.F, 1.F);
-                                const std::string pipelineName = "video";
+                                const std::string pipelineNameBase = "video_dissolve"; // Use distinct names
                                 const std::string shaderName = "dissolve";
                                 const std::string meshName = "video";
-                                const bool enableBlending = true;
+                                std::string pipelineLayoutName = shaderName; // Typically shader name determines layout
+                                VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+                                // Ensure pipelineLayout is valid, create if necessary
+                                if (!pipelineLayout) {
+                                    pipelineLayout = _createPipelineLayout(pipelineLayoutName, shaderName);
+                                }
 
-                                // Create or find a pipeline with blending
-                                createPipeline(p.buffers["video"], pipelineName,
+                                std::string pipelineName = pipelineNameBase + "_Pass1_NoBlend";
+
+                                // Create or find a pipeline without blending
+                                bool enableBlending = false;
+                                _createPipeline(p.buffers["video"],
+                                                pipelineName,
                                                "dissolve",
                                                shaderName, meshName,
-                                               enableBlending,
-                                               VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-                                               VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE);
-                                std::string pipelineLayoutName = shaderName;
-                                VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
-
+                                               enableBlending);
                                 p.buffers["video"]->beginRenderPass(p.cmd, "COMP VIDEO RENDER");
 
-#if FIRST_RENDER_PASS
-                                auto bindingSet = p.shaders["dissolve"]->createBindingSet();
+                                bindingSet = p.shaders["dissolve"]->createBindingSet();
                                 p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
 
                                 p.shaders["dissolve"]->bind(p.frameIndex);
                                 p.shaders["dissolve"]->setUniform("transform.mvp", transform, vlk::kShaderVertex);
                                 p.shaders["dissolve"]->setFBO("textureSampler", p.buffers["dissolve"]);
 
+                                _bindDescriptorSets(pipelineLayoutName,
+                                                    shaderName);
+
                                 vkCmdPushConstants(p.cmd, pipelineLayout,
                                                    p.shaders["dissolve"]->getPushStageFlags(), 0, sizeof(color), &color);
                                 
-                                bindDescriptorSets(pipelineLayoutName, shaderName);
 
-
+#if FIRST_RENDER_PASS
                                 if (p.vbos["video"])
                                 {
                                     p.vbos["video"]->copy(
-                                        convert(geom::box(math::Box2i(0, 0, offscreenBufferSize.w, offscreenBufferSize.h), true), p.vbos["video"]->getType()));
+                                        convert(geom::box(math::Box2i(0, 0,
+                                                                      offscreenBufferSize.w,
+                                                                      offscreenBufferSize.h),
+                                                          true), p.vbos["video"]->getType()));
                                 }
                                 if (p.vaos["video"])
                                 {
-                                    std::cerr << "\t\tDraw dissolve quad with " << d1 << std::endl;
+                                    std::cerr << "\t\tDraw dissolve quad1 with " << d1 << std::endl;
                                     p.vaos["video"]->bind(p.frameIndex);
                                     p.vaos["video"]->draw(p.cmd, p.vbos["video"]);
                                 }
 #endif
 
-#if SECOND_RENDER_PASS
                                 bindingSet = p.shaders["dissolve"]->createBindingSet();
                                 p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
 
-                                pipelineLayoutName += "2";
-                                createPipeline(p.buffers["video"],
-                                               pipelineName, pipelineLayoutName,
-                                               shaderName, meshName,
-                                               enableBlending,
-                                               VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-                                               VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE);
-                                
-                                pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
-                                
+                                pipelineName = pipelineNameBase + "_Pass2_BlendColorForceAlpha";
+                                enableBlending = true;
+                                _createPipeline(
+                                    p.buffers["video"], pipelineName,
+                                    pipelineLayoutName, shaderName, meshName,
+                                    enableBlending,
+                                    VK_BLEND_FACTOR_SRC_ALPHA,
+                                    VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                                    VK_BLEND_FACTOR_ONE,
+                                    VK_BLEND_FACTOR_ONE,
+                                    VK_BLEND_OP_ADD,
+                                    VK_BLEND_OP_ADD);
+
                                 p.shaders["dissolve"]->bind(p.frameIndex);
                                 p.shaders["dissolve"]->setUniform("transform.mvp", transform,
                                                                   vlk::kShaderVertex);
                                 p.shaders["dissolve"]->setFBO("textureSampler", p.buffers["dissolve2"]);
                                 vkCmdPushConstants(p.cmd, pipelineLayout,
-                                                   p.shaders["dissolve"]->getPushStageFlags(), 0, sizeof(color), &color);
-                                bindDescriptorSets(pipelineLayoutName, shaderName);
+                                                   p.shaders["dissolve"]->getPushStageFlags(), 0,
+                                                   sizeof(color), &color);
+                                _bindDescriptorSets(pipelineLayoutName,
+                                                    shaderName);
 
+#if SECOND_RENDER_PASS
                                 if (p.vbos["video"])
                                 {
                                     p.vbos["video"]->copy(
@@ -680,7 +725,7 @@ namespace tl
                                 }
                                 if (p.vaos["video"])
                                 {
-                                    std::cerr << "\t\tDraw dissolve2 quad2 with "<< d2 << std::endl;
+                                    std::cerr << "\t\tDraw dissolve quad2 with " << d2 << std::endl;
                                     p.vaos["video"]->bind(p.frameIndex);
                                     p.vaos["video"]->draw(p.cmd, p.vbos["video"]);
                                 }
@@ -688,11 +733,12 @@ namespace tl
 
                                 p.buffers["video"]->endRenderPass(p.cmd);
 
+                                // --- Transitions ---
                                 p.buffers["dissolve"]->transitionToColorAttachment(p.cmd);
                                 p.buffers["dissolve2"]->transitionToColorAttachment(p.cmd);
                                 
                                 p.buffers["video"]->transitionToShaderRead(p.cmd);
-                            }
+                            } // end if (p.buffers["dissolve"] && p.buffers["dissolve2"])
                         }
                         else if (layer.image)
                         {
@@ -734,10 +780,14 @@ namespace tl
                 const std::string pipelineLayoutName = "display";
                 const std::string shaderName = "display";
                 const std::string meshName = "video";
-                const bool enableBlending = true;
-                createPipeline(p.fbo, pipelineName,
-                               pipelineLayoutName, shaderName, meshName,
-                               enableBlending);
+                const bool enableBlending = !inDissolve;  
+                _createPipeline(p.fbo, pipelineName,
+                                pipelineLayoutName, shaderName, meshName,
+                                enableBlending,
+                                VK_BLEND_FACTOR_SRC_ALPHA,
+                                VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                                VK_BLEND_FACTOR_ONE,
+                                VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);
 
 
                 p.fbo->beginRenderPass(p.cmd, "DISPLAY PASS");
@@ -807,7 +857,7 @@ namespace tl
                 }
 #endif // TLRENDER_LIBPLACEBO
 
-                bindDescriptorSets(pipelineLayoutName, shaderName);
+                _bindDescriptorSets(pipelineLayoutName, shaderName);
 
                 if (p.vbos["video"])
                 {

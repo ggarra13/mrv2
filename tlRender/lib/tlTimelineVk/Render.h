@@ -139,24 +139,7 @@ namespace tl
                 const timeline::CompareOptions& = timeline::CompareOptions(),
                 const timeline::BackgroundOptions& =
                     timeline::BackgroundOptions()) override;
-            VkPipelineLayout _createPipelineLayout(const std::string& pipelineLayoutName,
-                                                   const std::string& meshName);
-            void createPipeline(
-                const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
-                const std::string& pipelineName,
-                const std::string& pipelineLayoutName,
-                const std::string& shaderName,
-                const std::string& meshName, const bool enableBlending = false,
-                const VkBlendFactor srcColorBlendFactor =
-                    VK_BLEND_FACTOR_SRC_ALPHA,
-                const VkBlendFactor dstColorBlendFactor =
-                    VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-                const VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
-                const VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-                const VkBlendOp colorBlendOp = VK_BLEND_OP_ADD,
-                const VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD);
-            void bindDescriptorSets(
-                const std::string& pipelineLayoutName, const std::string& shaderName);
+
 
         private:
             void _displayShader();
@@ -204,9 +187,26 @@ namespace tl
                 const timeline::VideoData&, const math::Box2i&,
                 const std::shared_ptr<timeline::ImageOptions>&,
                 const timeline::DisplayOptions&);
-
             void _createMesh(
                 const std::string& meshName, const geom::TriangleMesh2& mesh);
+            VkPipelineLayout _createPipelineLayout(const std::string& pipelineLayoutName,
+                                                   const std::string& meshName);
+            void _createPipeline(
+                const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
+                const std::string& pipelineName,
+                const std::string& pipelineLayoutName,
+                const std::string& shaderName,
+                const std::string& meshName, const bool enableBlending = false,
+                const VkBlendFactor srcColorBlendFactor =
+                    VK_BLEND_FACTOR_SRC_ALPHA,
+                const VkBlendFactor dstColorBlendFactor =
+                    VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                const VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
+                const VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                const VkBlendOp colorBlendOp = VK_BLEND_OP_ADD,
+                const VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD);
+            void _bindDescriptorSets(
+                const std::string& pipelineLayoutName, const std::string& shaderName);
 
 #if defined(TLRENDER_LIBPLACEBO)
             void _addTextures(
