@@ -82,7 +82,12 @@ fi
 
 cd $dir
 
-run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t ${CMAKE_TARGET}
+cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t ${CMAKE_TARGET}
+if [[ $? != 0 ]]; then
+    echo "COMPILATION of mrv2 failed!"
+    exit 1
+fi
+
 
 cd -
 
