@@ -111,7 +111,7 @@ layout(location = 0) out vec4 fColor;
 void main()
 {
     fColor = texture(textureSampler, fTexture);
-    fColor *= ubo.opacity;
+    fColor *= pc.opacity;
 })";
 }
 
