@@ -10,6 +10,8 @@ it to Vulkan.
 - Fixed hdr view utility sometimes crashing at start up on macOS.
 - Fixed vkSetHdrMetadataEXT not being active.
 - Fixed HDR monitor scoring selection to prefer HDR10 and HLG over P3_NONLINEAR.
+- Improved runmeq.sh and runmet.sh scripts to exit early and with an error
+  message if compilation fails.
 
 
 v1.3.7
