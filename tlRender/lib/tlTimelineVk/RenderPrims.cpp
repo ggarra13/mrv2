@@ -427,17 +427,17 @@ namespace tl
             case image::PixelType::YUV_422P_U16:
             case image::PixelType::YUV_444P_U16:
                 textures[0]->transition(
-                    VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                    p.cmd, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
                     VK_ACCESS_TRANSFER_WRITE_BIT,
                     VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_SHADER_READ_BIT,
                     VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
                 textures[1]->transition(
-                    VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                    p.cmd, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
                     VK_ACCESS_TRANSFER_WRITE_BIT,
                     VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_SHADER_READ_BIT,
                     VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
                 textures[2]->transition(
-                    VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                    p.cmd, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
                     VK_ACCESS_TRANSFER_WRITE_BIT,
                     VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_SHADER_READ_BIT,
                     VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
@@ -447,7 +447,7 @@ namespace tl
                 break;
             default:
                 textures[0]->transition(
-                    VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                    p.cmd, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
                     VK_ACCESS_TRANSFER_WRITE_BIT,
                     VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_SHADER_READ_BIT,
                     VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);

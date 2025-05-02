@@ -4,18 +4,14 @@
 
 #pragma once
 
-#include <tlTimeline/ImageOptions.h>
+#include <tlVk/Vk.h>
 
-#include <tlCore/Image.h>
+#include <string>
 
 namespace tl
 {
     namespace vlk
     {
-        //! Get the glReadPixels format.
-        unsigned int getReadPixelsFormat(image::PixelType);
-
-        //! Get the glReadPixels type.
-        unsigned int getReadPixelsType(image::PixelType);
+        std::string getLayoutName(const VkImageLayout& layout);
     } // namespace tk
 } // namespace tl

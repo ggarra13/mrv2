@@ -121,6 +121,7 @@ namespace tl
                 default:
                     break;
                 }
+                p.fbo->transitionToShaderRead(p.cmd);
             }
         }
 
@@ -686,10 +687,11 @@ namespace tl
 #endif
 
                                 p.buffers["video"]->endRenderPass(p.cmd);
-                                p.buffers["video"]->transitionToShaderRead(p.cmd);
 
                                 p.buffers["dissolve"]->transitionToColorAttachment(p.cmd);
                                 p.buffers["dissolve2"]->transitionToColorAttachment(p.cmd);
+                                
+                                p.buffers["video"]->transitionToShaderRead(p.cmd);
                             }
                         }
                         else if (layer.image)
@@ -728,7 +730,6 @@ namespace tl
                 
                 p.buffers["video"]->transitionToShaderRead(p.cmd);
                 
-                //                     pipeline    shader    mesh
                 const std::string pipelineName = "display";
                 const std::string pipelineLayoutName = "display";
                 const std::string shaderName = "display";
@@ -740,8 +741,6 @@ namespace tl
 
 
                 p.fbo->beginRenderPass(p.cmd, "DISPLAY PASS");
-
-                p.fbo->setupViewportAndScissor(p.cmd);
 
                 p.shaders["display"]->bind(p.frameIndex);
                 p.shaders["display"]->setFBO("textureSampler", p.buffers["video"]);

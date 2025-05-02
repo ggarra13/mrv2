@@ -6,6 +6,7 @@
 
 #include <tlVk/Vk.h>
 #include <tlVk/Texture.h>
+#include <tlVk/Util.h>
 
 #include <tlCore/Error.h>
 #include <tlCore/String.h>
@@ -31,24 +32,6 @@ namespace tl
 
         namespace
         {
-            std::string getLayoutName(const VkImageLayout& layout)
-            {
-                switch (layout)
-                {
-                case VK_IMAGE_LAYOUT_UNDEFINED:
-                    return "VK_IMAGE_LAYOUT_UNDEFINED";
-                case VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL:
-                    return "VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL";
-                case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
-                    return "VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL";
-                case VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL:
-                    return "VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL";
-                case VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL:
-                    return "VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL";
-                default:
-                    return "VK_IMAGE_LAYOUT_UNKNOWN";
-                }
-            }
 
             VkSampleCountFlagBits getVulkanSamples(OffscreenSampling sampling)
             {
@@ -584,12 +567,13 @@ namespace tl
             VkAttachmentDescription colorAttachment{};
             colorAttachment.format = p.colorFormat;
             colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-            colorAttachment.loadOp = clearColor ||
-                                     p.imageLayout == VK_IMAGE_LAYOUT_UNDEFINED ?
+            colorAttachment.loadOp = clearColor ?
                                      VK_ATTACHMENT_LOAD_OP_CLEAR :
                                      VK_ATTACHMENT_LOAD_OP_LOAD;
             colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-            VkImageLayout initialLayout = p.imageLayout == VK_IMAGE_LAYOUT_UNDEFINED ? VK_IMAGE_LAYOUT_UNDEFINED : VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            VkImageLayout initialLayout = clearColor ?
+                                          VK_IMAGE_LAYOUT_UNDEFINED :
+                                          VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
             colorAttachment.initialLayout = initialLayout;
             colorAttachment.finalLayout =
                 VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
@@ -619,7 +603,7 @@ namespace tl
                 VkAttachmentDescription depthAttachment{};
                 depthAttachment.format = p.depthFormat;
                 depthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-                depthAttachment.loadOp = clearDepth || p.depthLayout == VK_IMAGE_LAYOUT_UNDEFINED ?
+                depthAttachment.loadOp = clearDepth ?
                                          VK_ATTACHMENT_LOAD_OP_CLEAR :
                                          VK_ATTACHMENT_LOAD_OP_LOAD;
                 depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
@@ -693,10 +677,12 @@ namespace tl
         void OffscreenBuffer::transitionToShaderRead(VkCommandBuffer cmd)
         {
             TLRENDER_P();
-
+            
             if (p.imageLayout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
+            {
                 return;
-
+            }
+            
             VkImageMemoryBarrier barrier{};
             barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
             barrier.oldLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
@@ -772,28 +758,11 @@ namespace tl
             beginInfo.pClearValues = clearValues.data();
 
             vkCmdBeginRenderPass(cmd, &beginInfo, contents);
-
-            // Track layouts
-            p.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-            if (p.depthFormat != VK_FORMAT_UNDEFINED)
-            {
-                p.depthLayout =
-                    VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-            }
         }
 
         void OffscreenBuffer::endRenderPass(VkCommandBuffer cmd)
         {
-            TLRENDER_P();
-
             vkCmdEndRenderPass(cmd);
-
-            p.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-            if (p.depthFormat != VK_FORMAT_UNDEFINED)
-            {
-                p.depthLayout =
-                    VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-            }
         }
 
         void OffscreenBuffer::setupViewportAndScissor(VkCommandBuffer cmd)
@@ -810,13 +779,14 @@ namespace tl
         {
             TLRENDER_P();
 
-            if (p.imageLayout == VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ||
-                p.imageLayout == VK_IMAGE_LAYOUT_UNDEFINED)
+            if (p.imageLayout == VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL)
+            {
                 return;
+            }
             
             VkImageMemoryBarrier barrier{};
             barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-            barrier.oldLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            barrier.oldLayout = p.imageLayout; //VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
             barrier.newLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
             barrier.srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
             barrier.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
@@ -849,7 +819,10 @@ namespace tl
                 VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
             barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
             barrier.image = p.depthImage;
-            barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+            barrier.subresourceRange.aspectMask = 0;
+            if (hasDepth())
+                barrier.subresourceRange.aspectMask |=
+                    VK_IMAGE_ASPECT_DEPTH_BIT;
             if (hasStencil())
                 barrier.subresourceRange.aspectMask |=
                     VK_IMAGE_ASPECT_STENCIL_BIT;

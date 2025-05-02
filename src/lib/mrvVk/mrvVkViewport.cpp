@@ -68,13 +68,7 @@ namespace mrv
             _vk(new VKPrivate)
         {
             int stereo = 0;
-            int fl_double = FL_DOUBLE; // needed on Linux and _WIN32
-                                       // #if defined(__APPLE__)
-            //             // \bug: Do not use FL_DOUBLE on APPLE as it makes
-            //             // playback slow
-            //             fl_double = 0;
-            // #endif
-            mode(FL_RGB | fl_double | FL_ALPHA | FL_STENCIL | stereo);
+            mode(FL_RGB | FL_DOUBLE | FL_ALPHA | FL_STENCIL | stereo);
         }
 
         Viewport::~Viewport() {}
@@ -397,6 +391,7 @@ namespace mrv
         {
             TLRENDER_P();
             MRV2_VK();
+            
 
             // Get the command buffer started for the current frame.
             VkCommandBuffer cmd = getCurrentCommandBuffer();
@@ -582,8 +577,11 @@ namespace mrv
             timeline::RenderOptions renderOptions;
             renderOptions.colorBuffer = vk.colorBufferType;
             
+            
             try
             {
+                vk.buffer->transitionToColorAttachment(cmd);
+            
                 vk.render->begin(
                     cmd, vk.buffer, m_currentFrameIndex, renderSize,
                     renderOptions);
@@ -662,7 +660,6 @@ namespace mrv
                 mvp = _createTexturedRectangle();
             }
             
-                
             // --- Final Render Pass: Render to Swapchain (Composition) ---
             vk.buffer->transitionToShaderRead(cmd);
 
@@ -725,8 +722,6 @@ namespace mrv
             }
 
             end_render_pass(cmd);
-
-            vk.buffer->transitionToColorAttachment(cmd);
             
             // Update the pixel bar from here only if we are playing a movie
             // and one that is not 1 frames long.
@@ -734,6 +729,8 @@ namespace mrv
             if (update)
                 updatePixelBar();
 
+            vk.buffer->transitionToColorAttachment(cmd);
+            
             // Draw FLTK children
             // Fl_Window::draw();
         }

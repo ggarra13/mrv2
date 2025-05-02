@@ -112,7 +112,6 @@ namespace tl
                     throw std::runtime_error("Null texture for: " + name);
 
                 VkDescriptorImageInfo imageInfo{};
-                texture->transition();
                 imageInfo.imageView = texture->getImageView();
                 imageInfo.sampler = texture->getSampler();
                 imageInfo.imageLayout = texture->getImageLayout();

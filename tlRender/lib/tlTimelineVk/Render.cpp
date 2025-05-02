@@ -885,12 +885,7 @@ namespace tl
         {
             TLRENDER_P();
 
-            //! \bug Should these be reset periodically?
-            // p.glyphIDs.clear();
-            // p.vbos["mesh"].reset();
-            // p.vaos["mesh"].reset();
-            // p.vbos["text"].reset();
-            // p.vaos["text"].reset();
+            p.fbo->transitionToShaderRead(p.cmd);
 
             const auto now = std::chrono::steady_clock::now();
             const auto diff =

@@ -375,6 +375,7 @@ namespace tl
         }
 
         void Texture::transition(
+            VkCommandBuffer cmd,
             VkImageLayout newLayout, VkAccessFlags srcAccessMask,
             VkPipelineStageFlags srcStageMask, VkAccessFlags dstAccessMask,
             VkPipelineStageFlags dstStageMask)
@@ -387,8 +388,6 @@ namespace tl
             VkDevice device = ctx.device;
             VkCommandPool commandPool = ctx.commandPool;
             VkQueue queue = ctx.queue;
-
-            VkCommandBuffer cmd = beginSingleTimeCommands(device, commandPool);
 
             VkImageMemoryBarrier barrier = {};
             barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
@@ -411,8 +410,6 @@ namespace tl
             vkCmdPipelineBarrier(
                 cmd, srcStageMask, dstStageMask, 0, 0, nullptr, 0, nullptr, 1,
                 &barrier);
-
-            endSingleTimeCommands(cmd, device, commandPool, queue);
 
             p.currentLayout = newLayout;
         }
@@ -574,15 +571,17 @@ namespace tl
                 vkUnmapMemory(device, stagingMemory);
 
                 // Transition image for copy
+                VkCommandBuffer cmd =
+                    beginSingleTimeCommands(device, commandPool);
+                
                 transition(
+                    cmd,
                     VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_ACCESS_NONE,
                     VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
                     VK_ACCESS_TRANSFER_WRITE_BIT,
                     VK_PIPELINE_STAGE_TRANSFER_BIT);
 
                 // Copy from staging buffer to image
-                VkCommandBuffer cmd =
-                    beginSingleTimeCommands(device, commandPool);
 
                 VkBufferImageCopy region = {};
                 region.bufferOffset = 0;
@@ -603,14 +602,16 @@ namespace tl
                     cmd, stagingBuffer, p.image,
                     VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
 
-                endSingleTimeCommands(cmd, device, commandPool, queue);
 
                 // Transition back to shader layout
                 transition(
+                    cmd,
                     VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
                     VK_ACCESS_TRANSFER_WRITE_BIT,
                     VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_SHADER_READ_BIT,
                     VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+
+                endSingleTimeCommands(cmd, device, commandPool, queue);
 
                 vkDestroyBuffer(device, stagingBuffer, nullptr);
                 vkFreeMemory(device, stagingMemory, nullptr);

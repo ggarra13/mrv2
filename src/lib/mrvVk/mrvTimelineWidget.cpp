@@ -895,6 +895,8 @@ void main()
                         timeline::RenderOptions renderOptions;
                         renderOptions.clearColor =
                             p.style->getColorRole(ui::ColorRole::Window);
+                        
+                        p.buffer->transitionToColorAttachment(cmd);
                         p.render->begin(
                             cmd, p.buffer, m_currentFrameIndex, renderSize,
                             renderOptions);
@@ -920,8 +922,6 @@ void main()
 
             if (p.buffer)
             {
-                p.buffer->transitionToShaderRead(cmd);
-                
                 begin_render_pass(cmd);
 
                 p.shader->bind(m_currentFrameIndex);
@@ -990,9 +990,6 @@ void main()
                 }
 
                 end_render_pass(cmd);
-
-                p.buffer->transitionToColorAttachment(cmd);
-
             }
         }
 

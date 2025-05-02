@@ -166,6 +166,10 @@ namespace tl
             
             //! Get Vulkan's internal format of depth buffer.
             VkFormat getDepthFormat() const;
+
+            //! Set up a render pass.
+            void createRenderPass(bool clearColor, bool clearDepth);
+            void createFramebuffer();
             
             //! Start/end a normal render pass.
             void beginRenderPass(VkCommandBuffer cmd,
@@ -202,8 +206,6 @@ namespace tl
             void createImageView();
             void createDepthImage();
             void createDepthImageView();
-            void createRenderPass(bool clearColor, bool clearDepth);
-            void createFramebuffer();
             void createSampler();
 
             uint32_t findMemoryType(

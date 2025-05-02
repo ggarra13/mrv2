@@ -125,9 +125,9 @@ layout(location = 0) out vec4 fColor;
 
 layout(binding = 1) uniform sampler2D textureSampler;
 
-layout(set = 0, binding = 2) uniform OpacityUBO {
-     float opacity;
-} ubo;
+layout(push_constant) uniform PushConstants {
+    float opacity;
+} pc;
 
 {0}
                   
@@ -136,7 +136,7 @@ void main()
 {
     fColor = texture(textureSampler, fTexture);
     fColor = stereoFunc(fColor, fTexture);
-    fColor.a *= ubo.opacity;
+    fColor.a *= pc.opacity;
 })")
             .arg(stereoSource);
     }

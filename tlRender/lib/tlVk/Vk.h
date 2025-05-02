@@ -10,7 +10,6 @@ namespace tl
 {
     namespace vlk
     {
-        static constexpr size_t NUM_DESCRIPTOR_SETS = 32;
         static constexpr size_t MAX_FRAMES_IN_FLIGHT = 3;
     } // namespace vlk
 } // namespace tl
