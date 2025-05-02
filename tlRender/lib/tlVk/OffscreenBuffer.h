@@ -16,6 +16,7 @@ namespace tl
 {
     namespace vlk
     {
+        
         //! Default offscreen buffer color type.
         const image::PixelType offscreenColorDefault =
             image::PixelType::RGBA_U8;
@@ -75,6 +76,8 @@ namespace tl
             OffscreenDepth depth = OffscreenDepth::kNone;
             OffscreenStencil stencil = OffscreenStencil::kNone;
             OffscreenSampling sampling = OffscreenSampling::kNone;
+            bool      clearColor = false;
+            bool      clearDepth = true;
             bool      allowCompositing = false;
             bool      pbo = false;
 
@@ -116,16 +119,25 @@ namespace tl
             //! Returns true if the buffer has depth.
             bool hasStencil() const;
 
+            //! Supports compositing.
+            bool supportsCompositing() const;
+
             //! Get the options.
             const OffscreenBufferOptions& getOptions() const;
 
             //! Vulkan Accessors
-
+                
             //! Get image layout.
             VkImageLayout getImageLayout() const;
 
             //! Get depth layout.
             VkImageLayout getDepthLayout() const;
+
+            //! Get image layout name.
+            const std::string getImageLayoutName() const;
+
+            //! Get depth layout name.
+            const std::string getDepthLayoutName() const;
 
             //! Get image view.
             VkImageView getImageView() const;
@@ -136,10 +148,6 @@ namespace tl
             //! Get normal handles.
             VkFramebuffer getFramebuffer() const;
             VkRenderPass getRenderPass() const;
-
-            //! Get compositing handles.
-            VkFramebuffer getCompositingFramebuffer() const;
-            VkRenderPass getCompositingRenderPass() const;
 
             //! Get Sampler
             VkSampler getSampler() const;
@@ -161,13 +169,9 @@ namespace tl
             
             //! Start/end a normal render pass.
             void beginRenderPass(VkCommandBuffer cmd,
+                                 const std::string& name = "Unknown",
                                  VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE);
             void endRenderPass(VkCommandBuffer cmd);
-
-            //! Start/end a compositing pass.
-            void beginCompositingRenderPass(VkCommandBuffer cmd,
-                                            VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE);
-            void endCompositingRenderPass(VkCommandBuffer cmd);
             
             //! Offscreen image transitions.
             void transitionToShaderRead(VkCommandBuffer cmd);
@@ -198,12 +202,7 @@ namespace tl
             void createImageView();
             void createDepthImage();
             void createDepthImageView();
-            void createRenderPass(VkAttachmentLoadOp colorLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR,
-                                  VkAttachmentStoreOp colorStoreOp = VK_ATTACHMENT_STORE_OP_STORE,
-                                  VkAttachmentLoadOp depthLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR,
-                                  VkAttachmentStoreOp depthStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE);
-            void createCompositingRenderPass();
-            void createCompositingFramebuffer();
+            void createRenderPass(bool clearColor, bool clearDepth);
             void createFramebuffer();
             void createSampler();
 

@@ -7,6 +7,7 @@
 
 #include <tlVk/Texture.h>
 #include <tlVk/OffscreenBuffer.h>
+#include <tlVk/ShaderBindingSet.h>
 #include <tlVk/Vk.h>
 
 #include <tlCore/Color.h>
@@ -74,13 +75,13 @@ namespace tl
             const VkShaderModule& getFragment() const;
 
             //! Get the Vulkan description set for current frame.
-            const VkDescriptorSet& getDescriptorSet() const;
+            const VkDescriptorSet getDescriptorSet() const;
 
             //! Get the Vulkan description set layout for current frame.
-            const VkDescriptorSetLayout& getDescriptorSetLayout() const;
+            const VkDescriptorSetLayout getDescriptorSetLayout() const;
 
             //! Get the Vulkan description pool for current frame.
-            const VkDescriptorPool& getDescriptorPool() const;
+            const VkDescriptorPool getDescriptorPool() const;
 
             //! Bind the shader.
             void bind(uint64_t value);
@@ -139,6 +140,12 @@ namespace tl
             //! Create desciptor set bindings for all frames
             void createDescriptorSets();
 
+            //! Create a new shader binding set.
+            std::shared_ptr<ShaderBindingSet> createBindingSet();
+
+            //! Bind a ShaderBindingSet to this shader.
+            void useBindingSet(const std::shared_ptr<ShaderBindingSet>);
+            
             //! Print out a list of descriptor set bindings for vertex shader.
             void debugVertexDescriptorSets();
 
@@ -148,9 +155,6 @@ namespace tl
             //! Print out a list of descriptor set bindings for both shaders
             //! types.
             void debugDescriptorSets();
-
-            //! Print out a list of pointers for all frames.
-            void debugPointers();
 
             //! Print out all debug info.
             void debug();
@@ -168,45 +172,24 @@ namespace tl
             //! frame in flight.
             uint64_t frameIndex = 0;
 
-            std::vector<VkDescriptorPool> descriptorPools;
-            std::vector<VkDescriptorSet> descriptorSets;
-
-            // Push size
+            //! Push size (if shader has a push parameter).
             std::size_t pushSize = 0;
+
+            //! Push flags (if shader has a push parameter).
             VkShaderStageFlags pushStageFlags =
                 VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
 
-            struct UBO
-            {
-                VkDescriptorSetLayoutBinding layoutBinding;
+            typedef ShaderBindingSet::UniformParameter UBOBinding;
+            std::map<std::string, UBOBinding> ubos;
 
-                std::vector<VkBuffer> buffers;
-                std::vector<VkDeviceMemory> memories;
-                std::vector<VkDescriptorBufferInfo> bufferInfos;
-
-                size_t size;
-            };
-            std::map<std::string, UBO> ubos;
-
-            struct TextureBinding
-            {
-                uint32_t binding;
-                VkShaderStageFlags stageFlags;
-                std::shared_ptr<Texture> texture; // texture can be shared
-            };
-
+            typedef ShaderBindingSet::TextureParameter TextureBinding;
             std::map<std::string, TextureBinding> textureBindings;
 
-            struct FBOBinding
-            {
-                uint32_t binding;
-                VkShaderStageFlags stageFlags;
-                std::shared_ptr<OffscreenBuffer> fbo; // fbo can be shared
-            };
-
+            typedef ShaderBindingSet::FBOParameter FBOBinding;
             std::map<std::string, FBOBinding> fboBindings;
 
             std::string shaderName = "Shader";
+            std::shared_ptr<ShaderBindingSet> activeBindingSet;
 
             TLRENDER_PRIVATE();
         };

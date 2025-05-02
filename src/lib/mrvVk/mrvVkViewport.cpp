@@ -89,7 +89,7 @@ namespace mrv
             return 0;
         }
 
-        void Viewport::prepare_descriptor_layout()
+        void Viewport::prepare_pipeline_layout()
         {
             MRV2_VK();
 
@@ -100,8 +100,22 @@ namespace mrv
                 VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
             pPipelineLayoutCreateInfo.pNext = NULL;
             pPipelineLayoutCreateInfo.setLayoutCount = 1;
-            pPipelineLayoutCreateInfo.pSetLayouts =
-                &vk.shader->getDescriptorSetLayout();
+
+            VkDescriptorSetLayout setLayout = vk.shader->getDescriptorSetLayout();
+            pPipelineLayoutCreateInfo.pSetLayouts = &setLayout;
+
+            VkPushConstantRange pushConstantRange = {};
+            std::size_t pushSize = vk.shader->getPushSize();
+            if (pushSize > 0)
+            {
+                pushConstantRange.stageFlags = vk.shader->getPushStageFlags();
+                pushConstantRange.offset = 0;
+                pushConstantRange.size = pushSize;
+
+                pPipelineLayoutCreateInfo.pushConstantRangeCount = 1;
+                pPipelineLayoutCreateInfo.pPushConstantRanges =
+                    &pushConstantRange;
+            }
 
             result = vkCreatePipelineLayout(
                 device(), &pPipelineLayoutCreateInfo, NULL,
@@ -262,7 +276,7 @@ namespace mrv
         {
             prepare_shaders();
             prepare_render_pass();       // Main swapchain render pass
-            prepare_descriptor_layout(); // Main shader layout
+            prepare_pipeline_layout(); 
         }
 
         void Viewport::destroy_resources()
@@ -341,33 +355,35 @@ namespace mrv
                     vk.lines = std::make_shared<vulkan::Lines>();
 
                 const std::string& vertexSource = timeline_vlk::vertexSource();
-
+                const image::Color4f color(1.F, 1.F, 1.F);
                 math::Matrix4x4f mvp;
                 if (!vk.shader)
                 {
                     vk.shader = vlk::Shader::create(
                         ctx, vertexSource, textureFragmentSource(),
-                        "composite");
+                        "vk.shader");
 
                     // Create parameters for shader.
                     vk.shader->createUniform(
                         "transform.mvp", mvp, vlk::kShaderVertex);
                     vk.shader->addFBO("textureSampler"); // default is fragment
-                    float opacity = 1.0;
-                    vk.shader->createUniform("opacity", opacity);
-                    vk.shader->createDescriptorSets();
+                    float opacity = 1.F;
+                    vk.shader->addPush("opacity", opacity, vlk::kShaderFragment);
+                    auto bindingSet = vk.shader->createBindingSet();
+                    vk.shader->useBindingSet(bindingSet);
                 }
 
                 if (!vk.annotationShader)
                 {
                     vk.annotationShader = vlk::Shader::create(
                         ctx, vertexSource, annotationFragmentSource(),
-                        "annotation");
+                        "vk.annotationShader");
                     vk.annotationShader->createUniform(
                         "transform.mvp", mvp, vlk::kShaderVertex);
                     int channels = 0; // Color
                     vk.annotationShader->createUniform("channels", channels);
-                    vk.annotationShader->createDescriptorSets();
+                    auto bindingSet = vk.annotationShader->createBindingSet();
+                    vk.annotationShader->useBindingSet(bindingSet);
                 }
             }
         }
@@ -465,6 +481,7 @@ namespace mrv
                     break;
                 }
 
+                
                 vlk::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = vk.colorBufferType;
 
@@ -477,7 +494,7 @@ namespace mrv
                 offscreenBufferOptions.stencil = vlk::OffscreenStencil::_8;
                 offscreenBufferOptions.allowCompositing = true;
                 offscreenBufferOptions.pbo = true;
-
+            
                 if (vlk::doCreate(
                         vk.buffer, renderSize, offscreenBufferOptions))
                 {
@@ -564,23 +581,7 @@ namespace mrv
             locale::SetAndRestore saved;
             timeline::RenderOptions renderOptions;
             renderOptions.colorBuffer = vk.colorBufferType;
-
-            if (transparent)
-            {
-                renderOptions.clear = true;
-                renderOptions.clearColor = image::Color4f(r, g, b, 0);
-            }
-
-            // #ifdef __APPLE__
-            // #    ifdef __x86_64__ // macOS Intel
-            //             // MoltenVK has 2048 samplers only.  1.0 *
-            //             memory::gigabyte would
-            //             // make it raise validation errors.
-            //             renderOptions.textureCacheByteCount = 0.1 *
-            //             memory::gigabyte;
-            // #    endif
-            // #endif
-
+            
             try
             {
                 vk.render->begin(
@@ -606,6 +607,13 @@ namespace mrv
                         _updateMonitorDisplayView(screen, p.ocioOptions);
                     }
 
+                    timeline::BackgroundOptions backgroundOptions = getBackgroundOptions();        
+                    if (transparent)
+                    {
+                        backgroundOptions.type = timeline::Background::Solid;
+                        backgroundOptions.color0 = image::Color4f(r, g, b, a);
+                    }
+            
                     vk.render->setLUTOptions(p.lutOptions);
                     vk.render->setHDROptions(p.hdrOptions);
                     if (p.missingFrame &&
@@ -627,7 +635,7 @@ namespace mrv
                                 timeline::getBoxes(
                                     p.compareOptions.mode, p.videoData),
                                 p.imageOptions, p.displayOptions,
-                                p.compareOptions, getBackgroundOptions());
+                                p.compareOptions, backgroundOptions);
                         }
                     }
                 }
@@ -653,10 +661,15 @@ namespace mrv
             {
                 mvp = _createTexturedRectangle();
             }
-
+            
+                
             // --- Final Render Pass: Render to Swapchain (Composition) ---
+            vk.buffer->transitionToShaderRead(cmd);
+
+            
             begin_render_pass(cmd);
 
+            
             // Bind the shaders to the current frame index.
             vk.shader->bind(m_currentFrameIndex);
             vk.annotationShader->bind(m_currentFrameIndex);
@@ -670,24 +683,26 @@ namespace mrv
             // the CPU.
             vk.shader->setUniform("transform.mvp", mvp, vlk::kShaderVertex);
             vk.shader->setFBO("textureSampler", vk.buffer);
+
+            float opacity = 1.F;
 #ifdef __APPLE__
-            vk.shader->setUniform("opacity", 1.0F);
             set_window_transparency(alpha);
 #else
             if (desktop::Wayland())
-                vk.shader->setUniform("opacity", alpha);
-            else if (desktop::X11() || desktop::Windows())
-                vk.shader->setUniform("opacity", 1.0F);
+                opacity = alpha;
 #endif
 
             // --- Bind Descriptor Set for the SECOND pass ---
             // Record the command to bind the descriptor set for the CURRENT
             // frame index
+            VkDescriptorSet descriptorSet = vk.shader->getDescriptorSet();
             vkCmdBindDescriptorSets(
                 cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, vk.pipeline_layout, 0, 1,
-                &vk.shader->getDescriptorSet(),
-                // Bind the set for THIS frame
-                0, nullptr);
+                &descriptorSet, 0, nullptr);
+            
+            vkCmdPushConstants(
+                cmd, vk.pipeline_layout,
+                vk.shader->getPushStageFlags(), 0, sizeof(float), &opacity);
 
             VkViewport viewport = {};
             viewport.width = static_cast<float>(w());
@@ -712,7 +727,7 @@ namespace mrv
             end_render_pass(cmd);
 
             vk.buffer->transitionToColorAttachment(cmd);
-
+            
             // Update the pixel bar from here only if we are playing a movie
             // and one that is not 1 frames long.
             bool update = !_shouldUpdatePixelBar();
@@ -1074,15 +1089,6 @@ namespace mrv
                                   << std::endl;
                         break;
                     }
-
-                    // endSingleTimeCommands(cmd, device(), commandPool(),
-                    // queue());
-
-                    // MyViewport* self = const_cast<Viewport*>(this);
-                    // self->make_current();
-                    // vlk::OffscreenBufferBinding binding(vk.buffer);
-                    // glReadPixels(pos.x, pos.y, 1, 1, GL_RGBA, type,
-                    // &rgba);
                     return;
                 }
 

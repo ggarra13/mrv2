@@ -101,9 +101,9 @@ layout(location = 0) in vec2 fTexture;
 
 layout(binding = 1) uniform sampler2D textureSampler;
 
-layout(binding = 2) uniform OpacityUBO {
-     float opacity;
-} ubo;
+layout(push_constant) uniform PushConstants {
+    float opacity;
+} pc;
 
 layout(location = 0) out vec4 fColor;
 

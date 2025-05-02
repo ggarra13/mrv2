@@ -139,7 +139,7 @@ namespace mrv
             // Pipelines and layouts are managed outside the per-frame draw loop
 
             void prepare_pipeline();
-            void prepare_descriptor_layout();
+            void prepare_pipeline_layout();
             void prepare_shaders();
             void prepare_render();
 

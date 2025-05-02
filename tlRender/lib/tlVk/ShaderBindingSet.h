@@ -1,6 +1,9 @@
 #pragma once
 
-#include <vulkan/vulkan.h>
+#include <tlVk/Texture.h>
+#include <tlVk/OffscreenBuffer.h>
+#include <tlVk/Vk.h>
+
 #include <map>
 #include <vector>
 #include <memory>
@@ -10,13 +13,15 @@ namespace tl
 {
     namespace vlk
     {
-
+        //! All allocation of these structures happen in
+        //! Shader::createBingingSet()
         struct ShaderBindingSet
         {
+            std::string shaderName;
             std::vector<VkDescriptorSet> descriptorSets;
             std::vector<VkDescriptorPool> descriptorPools;
 
-            struct Uniform
+            struct UniformParameter
             {
                 std::vector<VkBuffer> buffers;
                 std::vector<VkDeviceMemory> memories;
@@ -24,29 +29,45 @@ namespace tl
                 VkDescriptorSetLayoutBinding layoutBinding;
                 size_t size = 0;
             };
-            std::map<std::string, Uniform> uniforms;
+            std::map<std::string, UniformParameter> uniforms;
 
-            struct Texture
+            struct TextureParameter
             {
                 uint32_t binding;
                 VkShaderStageFlags stageFlags;
             };
-            std::map<std::string, Texture> textures;
+            std::map<std::string, TextureParameter> textures;
 
-            struct FBO
+            struct FBOParameter
             {
                 uint32_t binding;
                 VkShaderStageFlags stageFlags;
             };
-            std::map<std::string, FBO> fbos;
+            std::map<std::string, FBOParameter> fbos;
+
+            VkDevice device;
+            
+            ShaderBindingSet(VkDevice device) :
+                device(device)
+                {
+                    descriptorSets.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
+                    descriptorPools.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
+                }
+
+            ~ShaderBindingSet()
+                {
+                    destroy();
+                }
 
             void updateUniform(
-                VkDevice device, const std::string& name, const void* data,
+                const std::string& name, const void* data,
                 size_t size, size_t frameIndex)
             {
                 auto it = uniforms.find(name);
                 if (it == uniforms.end())
-                    throw std::runtime_error("Uniform not found: " + name);
+                {
+                    throw std::runtime_error("Uniform Parameter not found: " + name);
+                }
                 if (it->second.size != size)
                     throw std::runtime_error("Uniform size mismatch");
 
@@ -56,10 +77,30 @@ namespace tl
                     &mapped);
                 memcpy(mapped, data, size);
                 vkUnmapMemory(device, it->second.memories[frameIndex]);
+                
+                // We need to update the bufferInfo in the descriptor set for the
+                // current frame Alternatively, you could use dynamic uniform
+                // buffers.
+
+                auto descriptorSet = descriptorSets[frameIndex]; // Update the set for this frame
+                // For this approach, we re-write the descriptor set for this
+                // binding and frame
+                VkDescriptorBufferInfo bufferInfo = it->second.infos[frameIndex];
+                
+                VkWriteDescriptorSet write{};
+                write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                write.dstSet = descriptorSet;
+                write.dstBinding = it->second.layoutBinding.binding;
+                write.dstArrayElement = 0;
+                write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+                write.descriptorCount = 1;
+                write.pBufferInfo = &bufferInfo;
+                
+                vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
             }
 
             void updateTexture(
-                VkDevice device, const std::string& name,
+                const std::string& name,
                 VkDescriptorSet descriptorSet,
                 const std::shared_ptr<Texture>& texture)
             {
@@ -89,8 +130,7 @@ namespace tl
                 vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
             }
 
-            void updateFBO(
-                VkDevice device, const std::string& name,
+            void updateFBO(const std::string& name,
                 VkDescriptorSet descriptorSet,
                 const std::shared_ptr<OffscreenBuffer>& fbo)
             {
@@ -120,8 +160,41 @@ namespace tl
 
                 vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
             }
+            
+            void destroy()
+                {
+                    for (auto& [_, ubo] : uniforms)
+                    {
+                        for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+                        {
+                            if (ubo.buffers[i]) vkDestroyBuffer(device,
+                                                                ubo.buffers[i],
+                                                                nullptr);
+                            if (ubo.memories[i]) vkFreeMemory(device,
+                                                              ubo.memories[i],
+                                                              nullptr);
+                        }
+                    }
 
-            VkDescriptorSet get(size_t frameIndex) const
+                    for (auto& pool : descriptorPools)
+                    {
+                        if (pool) vkDestroyDescriptorPool(device, pool, nullptr);
+                    }
+
+                    descriptorSets.clear();
+                    descriptorPools.clear();
+                    
+                    uniforms.clear();
+                    textures.clear();
+                    fbos.clear();
+                }
+            
+            VkDescriptorPool getDescriptorPool(size_t frameIndex) const
+            {
+                return descriptorPools.at(frameIndex);
+            }
+            
+            VkDescriptorSet getDescriptorSet(size_t frameIndex) const
             {
                 return descriptorSets.at(frameIndex);
             }

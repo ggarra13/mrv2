@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// Copyright (c) 2021-2024 Darby Johnston
+// Copyright (c) 2025 Gonzalo Garramuño
 // All rights reserved.
 
 #include <tlTimelineVk/RenderPrivate.h>
@@ -12,13 +12,23 @@ namespace tl
 {
     namespace timeline_vlk
     {
-        void
-        Render::drawRect(const math::Box2i& box, const image::Color4f& color)
+        void Render::drawRect(const std::string& pipelineName,
+                              const std::string& shaderName,
+                              const std::string& meshName,
+                              const math::Box2i& box,
+                              const image::Color4f& color,
+                              const bool enableBlending)
         {
             TLRENDER_P();
             ++(p.currentStats.rects);
 
-            p.shaders["rect"]->bind(p.frameIndex);
+            auto shader = p.shaders[shaderName];
+
+            auto bindingSet = shader->createBindingSet();
+            p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
+            
+            shader->bind(p.frameIndex);
+            shader->setUniform("transform.mvp", p.transform);
 
             if (p.vbos["rect"])
             {
@@ -29,116 +39,149 @@ namespace tl
             {
                 p.vaos["rect"]->bind(p.frameIndex);
 
-                const std::string pipelineName = "timeline";
-                const std::string shaderName = "rect";
-                const std::string meshName = "rect";
-                const bool enableBlending = false;
-                createPipeline(
-                    p.fbo, pipelineName, shaderName, meshName, enableBlending);
-                bindDescriptorSets(pipelineName, shaderName);
+                const std::string& pipelineLayoutName = shaderName;
+                createPipeline(p.fbo, pipelineName, pipelineLayoutName,
+                               shaderName, meshName, enableBlending);
+                bindDescriptorSets(pipelineLayoutName, shaderName);
 
-                VkPipelineLayout pipelineLayout =
-                    p.pipelineLayouts["timeline_rect"];
+                VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+                if (pipelineLayout == VK_NULL_HANDLE)
+                {
+                    throw std::runtime_error("drawRect '" + pipelineLayoutName
+                                             + "' undefined");
+                }
                 vkCmdPushConstants(
                     p.cmd, pipelineLayout,
-                    p.shaders["rect"]->getPushStageFlags(), 0, sizeof(color),
+                    p.shaders[shaderName]->getPushStageFlags(), 0, sizeof(color),
                     &color);
 
                 p.vaos["rect"]->draw(p.cmd, p.vbos["rect"]);
             }
         }
+        
+        void
+        Render::drawRect(const math::Box2i& box, const image::Color4f& color)
+        {
+            drawRect("timeline", "rect", "rect", box, color, false);
+        }
 
+        void Render::drawMesh(const std::string& pipelineName,
+                              const std::string& pipelineLayoutName,
+                              const std::string& shaderName,
+                              const std::string& meshName,
+                              const geom::TriangleMesh2& mesh,
+                              const math::Vector2i& position,
+                              const image::Color4f& color,
+                              const bool enableBlending)
+        {
+            TLRENDER_P();
+            const size_t size = mesh.triangles.size();
+            if (size == 0)
+                return;
+            
+            ++(p.currentStats.meshes);
+            p.currentStats.meshTriangles += mesh.triangles.size();
+
+            auto shader = p.shaders[shaderName];
+            auto bindingSet = shader->createBindingSet();
+            shader->useBindingSet(bindingSet);
+            p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
+
+            
+            const auto transform =
+                p.transform *
+                math::translate(
+                    math::Vector3f(position.x, position.y, 0.F));
+
+            if (!p.vbos[meshName] ||
+                (p.vbos[meshName] && p.vbos[meshName]->getSize() < size * 3))
+            {
+                p.vbos[meshName] = vlk::VBO::create(
+                    size * 3, vlk::VBOType::Pos2_F32_UV_U16);
+            }
+            if (p.vbos[meshName])
+            {
+                p.vbos[meshName]->copy(
+                    convert(mesh, vlk::VBOType::Pos2_F32_UV_U16));
+            }
+
+            if (!p.vaos[meshName] && p.vbos[meshName])
+            {
+                p.vaos[meshName] = vlk::VAO::create(ctx);
+            }
+            if (p.vaos[meshName] && p.vbos[meshName])
+            {
+                shader->bind(p.frameIndex);
+                shader->setUniform("transform.mvp", transform);
+
+                createPipeline(
+                    p.fbo, pipelineName, pipelineLayoutName,
+                    shaderName, meshName, enableBlending);
+                bindDescriptorSets(pipelineLayoutName, shaderName);
+
+                const std::string pipelineLayoutName = shaderName;
+                VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+                if (!pipelineLayout)
+                    throw std::runtime_error("drawMesh '" +
+                                             meshName +
+                                             "': Invalid pipeline Layout '" +
+                                             pipelineLayoutName + "'"); 
+                vkCmdPushConstants(
+                    p.cmd, pipelineLayout,
+                    shader->getPushStageFlags(), 0,
+                    sizeof(color), &color);
+
+                p.vaos[meshName]->bind(p.frameIndex);
+                p.vaos[meshName]->draw(p.cmd, p.vbos[meshName]);
+            }
+        }
+        
         void Render::drawMesh(
             const geom::TriangleMesh2& mesh, const math::Vector2i& position,
             const image::Color4f& color)
         {
-            TLRENDER_P();
-            ++(p.currentStats.meshes);
-            const size_t size = mesh.triangles.size();
-            p.currentStats.meshTriangles += mesh.triangles.size();
-            if (size > 0)
-            {
-                const auto transform =
-                    p.transform *
-                    math::translate(
-                        math::Vector3f(position.x, position.y, 0.F));
-
-                if (!p.vbos["mesh"] ||
-                    (p.vbos["mesh"] && p.vbos["mesh"]->getSize() < size * 3))
-                {
-                    p.vbos["mesh"] = vlk::VBO::create(
-                        size * 3, vlk::VBOType::Pos2_F32_UV_U16);
-                }
-                if (p.vbos["mesh"])
-                {
-                    p.vbos["mesh"]->copy(
-                        convert(mesh, vlk::VBOType::Pos2_F32_UV_U16));
-                }
-
-                if (!p.vaos["mesh"] && p.vbos["mesh"])
-                {
-                    p.vaos["mesh"] = vlk::VAO::create(ctx);
-                }
-                if (p.vaos["mesh"] && p.vbos["mesh"])
-                {
-                    const std::string pipelineName = "timeline";
-                    const std::string shaderName = "mesh";
-                    const std::string meshName = "mesh";
-                    const bool enableBlending = false;
-
-                    p.shaders["mesh"]->bind(p.frameIndex);
-                    p.shaders["mesh"]->setUniform("transform.mvp", transform);
-
-                    createPipeline(
-                        p.fbo, pipelineName, shaderName, meshName,
-                        enableBlending);
-                    bindDescriptorSets(pipelineName, shaderName);
-
-                    VkPipelineLayout pipelineLayout =
-                        p.pipelineLayouts["timeline_mesh"];
-                    vkCmdPushConstants(
-                        p.cmd, pipelineLayout,
-                        p.shaders["mesh"]->getPushStageFlags(), 0,
-                        sizeof(color), &color);
-
-                    p.vaos["mesh"]->bind(p.frameIndex);
-                    p.vaos["mesh"]->draw(p.cmd, p.vbos["mesh"]);
-                }
-            }
+            drawMesh("timeline", "mesh", "mesh", "mesh", mesh, position, color);
         }
 
         void Render::drawColorMesh(
-            const std::string& pipelineName, const geom::TriangleMesh2& mesh,
+            const std::string& pipelineLayoutName, const geom::TriangleMesh2& mesh,
             const math::Vector2i& position, const image::Color4f& color)
         {
             TLRENDER_P();
-            ++(p.currentStats.meshes);
             const size_t size = mesh.triangles.size();
+            if (size == 0)
+                return;
+            
+            ++(p.currentStats.meshes);
             p.currentStats.meshTriangles += mesh.triangles.size();
-            if (size > 0)
-            {
-                p.shaders["colorMesh"]->bind(p.frameIndex);
-                const auto transform =
-                    p.transform *
-                    math::translate(
-                        math::Vector3f(position.x, position.y, 0.F));
-                p.shaders["colorMesh"]->setUniform(
-                    "transform.mvp", transform, vlk::kShaderVertex);
-                bindDescriptorSets(pipelineName, "colorMesh");
 
-                // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-                if (p.vaos["colorMesh"] && p.vbos["colorMesh"])
-                {
-                    const std::string pipelineLayoutName =
-                        pipelineName + "_colorMesh";
-                    VkPipelineLayout pipelineLayout =
-                        p.pipelineLayouts[pipelineLayoutName];
-                    vkCmdPushConstants(
-                        p.cmd, pipelineLayout,
-                        p.shaders["colorMesh"]->getPushStageFlags(), 0,
-                        sizeof(color), &color);
-                    p.vaos["colorMesh"]->draw(p.cmd, p.vbos["colorMesh"]);
-                }
+            auto shader = p.shaders["colorMesh"];
+            auto bindingSet = shader->createBindingSet();
+            shader->useBindingSet(bindingSet);
+            p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
+            
+            shader->bind(p.frameIndex);
+            const auto transform =
+                p.transform *
+                math::translate(
+                    math::Vector3f(position.x, position.y, 0.F));
+            shader->setUniform(
+                "transform.mvp", transform, vlk::kShaderVertex);
+            bindDescriptorSets(pipelineLayoutName, "colorMesh");
+
+            // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            if (p.vaos["colorMesh"] && p.vbos["colorMesh"])
+            {
+                VkPipelineLayout pipelineLayout =
+                    p.pipelineLayouts[pipelineLayoutName];
+                if (!pipelineLayout)
+                    throw std::runtime_error("Invalid pipeline Layout '" +
+                                             pipelineLayoutName + "'"); 
+                vkCmdPushConstants(
+                    p.cmd, pipelineLayout,
+                    shader->getPushStageFlags(), 0,
+                    sizeof(color), &color);
+                p.vaos["colorMesh"]->draw(p.cmd, p.vbos["colorMesh"]);
             }
         }
 
@@ -335,7 +378,12 @@ namespace tl
                 p.textureCache->add(image, textures, image->getDataByteCount());
             }
 
-            p.shaders["image"]->bind(p.frameIndex);
+            auto shader = p.shaders["image"];
+            auto bindingSet = shader->createBindingSet();
+            p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
+            
+            shader->bind(p.frameIndex);
+            shader->setUniform("transform.mvp", p.transform);
 
             struct UBO
             {
@@ -367,8 +415,8 @@ namespace tl
                 image::getYUVCoefficients(info.yuvCoefficients);
             ubo.imageChannels = image::getChannelCount(info.pixelType);
             ubo.mirrorX = info.layout.mirror.x;
-            ubo.mirrorY = info.layout.mirror.y;
-            p.shaders["image"]->setUniform("ubo", ubo);
+            ubo.mirrorY = !info.layout.mirror.y;
+            shader->setUniform("ubo", ubo);
 
             switch (info.pixelType)
             {
@@ -393,9 +441,9 @@ namespace tl
                     VK_ACCESS_TRANSFER_WRITE_BIT,
                     VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_SHADER_READ_BIT,
                     VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
-                p.shaders["image"]->setTexture("textureSampler0", textures[0]);
-                p.shaders["image"]->setTexture("textureSampler1", textures[1]);
-                p.shaders["image"]->setTexture("textureSampler2", textures[2]);
+                shader->setTexture("textureSampler0", textures[0]);
+                shader->setTexture("textureSampler1", textures[1]);
+                shader->setTexture("textureSampler2", textures[2]);
                 break;
             default:
                 textures[0]->transition(
@@ -403,31 +451,44 @@ namespace tl
                     VK_ACCESS_TRANSFER_WRITE_BIT,
                     VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_SHADER_READ_BIT,
                     VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
-                p.shaders["image"]->setTexture("textureSampler0", textures[0]);
-                p.shaders["image"]->setTexture("textureSampler1", textures[0]);
-                p.shaders["image"]->setTexture("textureSampler2", textures[0]);
+                shader->setTexture("textureSampler0", textures[0]);
+                shader->setTexture("textureSampler1", textures[0]);
+                shader->setTexture("textureSampler2", textures[0]);
                 break;
             }
+            bool enableBlending = false;
+            VkBlendFactor srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+            VkBlendFactor dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+            VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+            VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
             switch (imageOptions.alphaBlend)
             {
             case timeline::AlphaBlend::kNone:
-                // glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ONE, GL_ZERO);
+                enableBlending = true;
+                srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
+                dstColorBlendFactor = VK_BLEND_FACTOR_ZERO;
+                srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+                dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
                 break;
             case timeline::AlphaBlend::Straight:
-                // glBlendFuncSeparate(
-                //     GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
-                //     GL_ONE_MINUS_SRC_ALPHA);
+                enableBlending = true;
+                srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+                dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+                srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+                dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
                 break;
             case timeline::AlphaBlend::Premultiplied:
-                // glBlendFuncSeparate(
-                //     GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
-                //     GL_ONE_MINUS_SRC_ALPHA);
+                enableBlending = true;
+                srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
+                dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+                srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+                dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
                 break;
             default:
                 break;
             }
 
-            fbo->beginRenderPass(p.cmd);
+            fbo->beginRenderPass(p.cmd, "image");
             if (p.vbos["image"])
             {
                 p.vbos["image"]->copy(
@@ -438,10 +499,14 @@ namespace tl
             // Create pipeline
             //
             const std::string pipelineName = "image";
+            const std::string pipelineLayoutName = "image";
             const std::string shaderName = "image";
             const std::string meshName = "image";
-            createPipeline(fbo, pipelineName, shaderName, meshName);
-            bindDescriptorSets(pipelineName, shaderName);
+            createPipeline(fbo, pipelineName, pipelineLayoutName,
+                           shaderName, meshName, enableBlending,
+                           srcColorBlendFactor, dstColorBlendFactor,
+                           srcAlphaBlendFactor, dstAlphaBlendFactor);
+            bindDescriptorSets(pipelineLayoutName, shaderName);
             fbo->setupViewportAndScissor(p.cmd);
 
             if (p.vaos["image"])
@@ -453,11 +518,9 @@ namespace tl
         }
 
         void Render::bindDescriptorSets(
-            const std::string& pipelineName, const std::string& shaderName)
+            const std::string& pipelineLayoutName, const std::string& shaderName)
         {
             TLRENDER_P();
-            const std::string pipelineLayoutName =
-                pipelineName + "_" + shaderName;
             if (!p.shaders[shaderName])
             {
                 throw std::runtime_error("Undefined shader " + shaderName);
@@ -465,12 +528,13 @@ namespace tl
             if (!p.pipelineLayouts[pipelineLayoutName])
             {
                 throw std::runtime_error(
-                    "Undefined pipelineLayout " + pipelineName);
+                    "Undefined pipelineLayout " + pipelineLayoutName);
             }
+            VkDescriptorSet descriptorSet = p.shaders[shaderName]->getDescriptorSet();
             vkCmdBindDescriptorSets(
                 p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
                 p.pipelineLayouts[pipelineLayoutName], 0, 1,
-                &p.shaders[shaderName]->getDescriptorSet(), 0, nullptr);
+                &descriptorSet, 0, nullptr);
         }
 
         void Render::_createMesh(
@@ -508,13 +572,15 @@ namespace tl
 
         void Render::createPipeline(
             const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
-            const std::string& pipelineName, const std::string& shaderName,
+            const std::string& pipelineName,
+            const std::string& pipelineLayoutName,
+            const std::string& shaderName,
             const std::string& meshName, const bool enableBlending,
             const VkBlendFactor srcColorBlendFactor,
             const VkBlendFactor dstColorBlendFactor,
-            const VkBlendOp colorBlendOp,
             const VkBlendFactor srcAlphaBlendFactor,
             const VkBlendFactor dstAlphaBlendFactor,
+            const VkBlendOp colorBlendOp,
             const VkBlendOp alphaBlendOp)
         {
             TLRENDER_P();
@@ -534,18 +600,16 @@ namespace tl
                     "createPipeline failed with unknown mesh '" + meshName +
                     "'");
 
-            const std::string pipelineLayoutName =
-                pipelineName + "_" + shaderName;
-
             if (!p.pipelineLayouts[pipelineLayoutName])
             {
+                std::cerr << "\t\t\tcreate pipeline layout " << pipelineLayoutName << std::endl; 
                 VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = {};
                 pPipelineLayoutCreateInfo.sType =
                     VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
                 pPipelineLayoutCreateInfo.pNext = NULL;
                 pPipelineLayoutCreateInfo.setLayoutCount = 1;
-                pPipelineLayoutCreateInfo.pSetLayouts =
-                    &shader->getDescriptorSetLayout();
+                VkDescriptorSetLayout setLayout = shader->getDescriptorSetLayout();
+                pPipelineLayoutCreateInfo.pSetLayouts = &setLayout;
 
                 VkPushConstantRange pushConstantRange = {};
                 std::size_t pushSize = shader->getPushSize();
@@ -634,9 +698,8 @@ namespace tl
             pipelineState.multisampleState = ms;
             pipelineState.dynamicState = dynamicState;
             pipelineState.stages = shaderStages;
-            pipelineState.renderPass =
-                enableBlending ? fbo->getCompositingRenderPass()
-                               : fbo->getRenderPass(); // Use FBO's render pass
+
+            pipelineState.renderPass = fbo->getRenderPass();
             pipelineState.layout = p.pipelineLayouts[pipelineLayoutName];
 
             VkPipeline pipeline = VK_NULL_HANDLE;

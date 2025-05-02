@@ -88,7 +88,19 @@ namespace tl
             void setLUTOptions(const timeline::LUTOptions&) override;
             void setHDROptions(const timeline::HDROptions&) override;
 
+            void drawRect(const std::string& pipelineName,
+                          const std::string& shaderName,
+                          const std::string& meshName,
+                          const math::Box2i&, const image::Color4f&,
+                          const bool enableBlending = true);
             void drawRect(const math::Box2i&, const image::Color4f&) override;
+            void drawMesh(const std::string& pipelineName,
+                          const std::string& pipelineLayoutName,
+                          const std::string& shaderName,
+                          const std::string& meshName,
+                          const geom::TriangleMesh2&, const math::Vector2i& position,
+                          const image::Color4f&,
+                          const bool enableBlending = false);
             void drawMesh(
                 const geom::TriangleMesh2&, const math::Vector2i& position,
                 const image::Color4f&) override;
@@ -129,18 +141,20 @@ namespace tl
                     timeline::BackgroundOptions()) override;
             void createPipeline(
                 const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
-                const std::string& pipelineName, const std::string& shaderName,
+                const std::string& pipelineName,
+                const std::string& pipelineLayoutName,
+                const std::string& shaderName,
                 const std::string& meshName, const bool enableBlending = false,
                 const VkBlendFactor srcColorBlendFactor =
                     VK_BLEND_FACTOR_SRC_ALPHA,
                 const VkBlendFactor dstColorBlendFactor =
                     VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-                const VkBlendOp colorBlendOp = VK_BLEND_OP_ADD,
                 const VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
                 const VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO,
+                const VkBlendOp colorBlendOp = VK_BLEND_OP_ADD,
                 const VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD);
             void bindDescriptorSets(
-                const std::string& pipelineName, const std::string& shaderName);
+                const std::string& pipelineLayoutName, const std::string& shaderName);
 
         private:
             void _displayShader();

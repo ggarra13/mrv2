@@ -190,6 +190,11 @@ namespace tl
             std::vector<ColorBlendAttachmentStateInfo>
                 attachments; // Store our custom attachment info
 
+            ColorBlendStateInfo()
+                {
+                    memset(&blendConstants, 0, sizeof(blendConstants));
+                }
+
             // Add comparison operators (==, !=)
             bool operator==(const ColorBlendStateInfo& other) const
             {

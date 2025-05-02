@@ -85,8 +85,6 @@ namespace tl
             _p(new Private),
             ctx(context)
         {
-            descriptorPools.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
-            descriptorSets.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
         }
 
         Shader::~Shader()
@@ -108,33 +106,7 @@ namespace tl
                 descriptorSetLayout = VK_NULL_HANDLE;
             }
 
-            for (auto& [_, ubo] : ubos)
-            {
-                for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT;
-                     ++i) // Destroy buffers and memories for all frames
-                {
-                    if (ubo.buffers[i] != VK_NULL_HANDLE)
-                    {
-                        vkDestroyBuffer(device, ubo.buffers[i], nullptr);
-                        ubo.buffers[i] = VK_NULL_HANDLE;
-                    }
-                    if (ubo.memories[i] != VK_NULL_HANDLE)
-                    {
-                        vkFreeMemory(device, ubo.memories[i], nullptr);
-                        ubo.memories[i] = VK_NULL_HANDLE;
-                    }
-                }
-            }
-
-            for (auto& pool : descriptorPools) // Destroy all pools
-            {
-                if (pool != VK_NULL_HANDLE)
-                {
-                    vkResetDescriptorPool(device, pool, 0);
-                    vkDestroyDescriptorPool(device, pool, nullptr);
-                    pool = VK_NULL_HANDLE;
-                }
-            }
+            activeBindingSet.reset();
         }
 
         std::shared_ptr<Shader> Shader::create(
@@ -174,19 +146,28 @@ namespace tl
             return _p->fragmentSource;
         }
 
-        const VkDescriptorSet& Shader::getDescriptorSet() const
+        void Shader::useBindingSet(const std::shared_ptr<ShaderBindingSet> value)
         {
-            return descriptorSets[frameIndex];
+            activeBindingSet = value;
         }
-
-        const VkDescriptorSetLayout& Shader::getDescriptorSetLayout() const
+        
+        const VkDescriptorSet Shader::getDescriptorSet() const
+        {
+            if (!activeBindingSet)
+                throw std::runtime_error("No activeBindingSet.  Call useBindingSet first");
+            return activeBindingSet->getDescriptorSet(frameIndex);
+        }
+        
+        const VkDescriptorSetLayout Shader::getDescriptorSetLayout() const
         {
             return descriptorSetLayout;
         }
 
-        const VkDescriptorPool& Shader::getDescriptorPool() const
-        {
-            return descriptorPools[frameIndex];
+        const VkDescriptorPool Shader::getDescriptorPool() const
+        {            
+            if (!activeBindingSet)
+                throw std::runtime_error("No activeBindingSet.  Call useBindingSet first");
+            return activeBindingSet->getDescriptorPool(frameIndex);
         }
 
         void Shader::bind(uint64_t value)
@@ -213,55 +194,11 @@ namespace tl
             const std::string& name, const std::shared_ptr<Texture>& texture,
             const ShaderFlags stageFlags)
         {
-
-            auto it = textureBindings.find(name);
-            if (it == textureBindings.end())
-            {
-                // If texture is added after descriptor sets are created,
-                // you might need to recreate descriptor sets or use dynamic
-                // descriptors. For simplicity here, we assume textures are
-                // added before createDescriptorSets.
-                addTexture(name, stageFlags);
-                it = textureBindings.find(name); // Find again after adding
-                if (it == textureBindings.end())
-                    return; // Should not happen
-            }
-
-            VkDevice device = ctx.device;
-
-            uint32_t binding = it->second.binding;
-
-            VkDescriptorImageInfo imageInfo{};
-            if (texture)
-            {
-                texture->transition();
-                imageInfo.imageView = texture->getImageView();
-                imageInfo.sampler = texture->getSampler();
-                imageInfo.imageLayout = texture->getImageLayout();
-            }
-            else
-            {
-                // Provide placeholder/dummy info if the texture is not yet
-                // available This depends on your specific use case and whether
-                // you can have unbound descriptors. For simplicity, assuming a
-                // valid texture is provided when setTexture is called.
-                throw std::runtime_error(
-                    tl::string::Format(
-                        "Cannot set texture '{0}': provided texture pointer is "
-                        "null.")
-                        .arg(name));
-            }
-
-            VkWriteDescriptorSet write{};
-            write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-            write.dstSet = descriptorSets[frameIndex];
-            write.dstBinding = binding;
-            write.dstArrayElement = 0;
-            write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-            write.descriptorCount = 1;
-            write.pImageInfo = &imageInfo;
-
-            vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
+            if (!activeBindingSet)
+                throw std::runtime_error("No activeBindingSet.  Call useBindingSet first");
+            activeBindingSet->updateTexture(name,
+                                            activeBindingSet->getDescriptorSet(frameIndex),
+                                            texture);
         }
 
         void
@@ -286,209 +223,15 @@ namespace tl
                         .arg(name));
             }
 
-            auto it = fboBindings.find(name);
-            if (it == fboBindings.end())
-            {
-                // If FBO is added after descriptor sets are created,
-                // you might need to recreate descriptor sets or use dynamic
-                // descriptors. For simplicity here, we assume FBOs are added
-                // before createDescriptorSets.
-                addFBO(name, stageFlags);
-                it = fboBindings.find(name); // Find again after adding
-                if (it == fboBindings.end())
-                    return; // Should not happen
-            }
-
-            VkDevice device = ctx.device;
-
-            uint32_t binding = it->second.binding;
-
-            VkDescriptorImageInfo imageInfo{};
-            imageInfo.sampler = fbo->getSampler();
-            imageInfo.imageView = fbo->getImageView();
-            imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-
-            VkWriteDescriptorSet write{};
-            write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-            write.dstSet = descriptorSets[frameIndex]; // previously created set
-            write.dstBinding = binding;
-            write.dstArrayElement = 0;
-            write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-            write.descriptorCount = 1;
-            write.pImageInfo = &imageInfo;
-
-            vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
+            if (!activeBindingSet)
+                throw std::runtime_error("No activeBindingSet.  Call useBindingSet first");
+            activeBindingSet->updateFBO(name,
+                                        activeBindingSet->getDescriptorSet(frameIndex),
+                                        fbo);
         }
 
         void Shader::createDescriptorSets()
         {
-            VkDevice device = ctx.device;
-
-            if (descriptorSetLayout != VK_NULL_HANDLE)
-            {
-                throw std::runtime_error(
-                    shaderName +
-                    ": createDescriptorSets called more than once!");
-            }
-
-            std::vector<VkDescriptorSetLayoutBinding> bindings;
-            std::vector<VkDescriptorPoolSize> poolSizes;
-
-            // UBOs
-            for (const auto& [_, ubo] : ubos)
-            {
-                bindings.push_back(ubo.layoutBinding);
-                VkDescriptorPoolSize poolSize = {};
-                poolSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-                poolSize.descriptorCount =
-                    MAX_FRAMES_IN_FLIGHT; // or more if you support arrays
-                poolSizes.push_back(poolSize);
-            }
-
-            // Textures
-            for (const auto& [_, texture] : textureBindings)
-            {
-                VkDescriptorSetLayoutBinding layoutBinding = {};
-
-                layoutBinding.binding = texture.binding;
-                layoutBinding.descriptorCount = 1;
-                layoutBinding.descriptorType =
-                    VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-                layoutBinding.stageFlags = texture.stageFlags;
-                layoutBinding.pImmutableSamplers = nullptr;
-
-                bindings.push_back(layoutBinding);
-
-                VkDescriptorPoolSize poolSize{};
-                poolSize.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-
-                // One texture descriptor per frame per binding
-                poolSize.descriptorCount = MAX_FRAMES_IN_FLIGHT;
-                poolSizes.push_back(poolSize);
-            }
-
-            // FBOs
-            for (const auto& [_, element] : fboBindings)
-            {
-                VkDescriptorSetLayoutBinding layoutBinding = {};
-
-                layoutBinding.binding = element.binding;
-                layoutBinding.descriptorCount = 1;
-                layoutBinding.descriptorType =
-                    VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-                layoutBinding.stageFlags = element.stageFlags;
-                layoutBinding.pImmutableSamplers = nullptr;
-
-                bindings.push_back(layoutBinding);
-
-                VkDescriptorPoolSize poolSize{};
-                poolSize.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-                // One FBO descriptor per frame per binding
-                poolSize.descriptorCount = MAX_FRAMES_IN_FLIGHT;
-                poolSizes.push_back(poolSize);
-            }
-
-            // Create descriptor pool. (One pool per frame, or a larger single
-            // pool) Using a pool per frame allows for easier management and
-            // less risk of pool fragmentation, especially if descriptor counts
-            // vary significantly between frames, although less common for
-            // shaders. A single large pool is also a valid strategy. Sticking
-            // to pool per frame as discussed.
-            VkDescriptorPoolCreateInfo poolInfo = {};
-            poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-            poolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
-            poolInfo.pPoolSizes = poolSizes.data();
-            // maxSets should be 1 if allocating 1 set per pool.
-            // was: poolInfo.maxSets = MAX_FRAMES_IN_FLIGHT; // Max sets is now
-            // number of frames in flight
-            poolInfo.maxSets = 1;
-
-            // Create a descriptor pool for each frame
-            for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
-            {
-                if (vkCreateDescriptorPool(
-                        device, &poolInfo, nullptr, &descriptorPools[i]) !=
-                    VK_SUCCESS)
-                {
-                    throw std::runtime_error(
-                        "failed to create descriptor pool!");
-                }
-            }
-
-            // Create descriptor set layout. (Layout can be shared across
-            // frames)
-            VkDescriptorSetLayoutCreateInfo layout_info = {};
-            layout_info.sType =
-                VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-            layout_info.bindingCount = static_cast<uint32_t>(bindings.size());
-            layout_info.pBindings = bindings.data();
-
-            if (vkCreateDescriptorSetLayout(
-                    device, &layout_info, nullptr, &descriptorSetLayout) !=
-                VK_SUCCESS)
-            {
-                throw std::runtime_error(
-                    "failed to create descriptor set layout!");
-            }
-
-            // Allocate descriptor sets for each frame, from their respective
-            // pools
-            std::vector<VkDescriptorSetLayout> layouts(
-                MAX_FRAMES_IN_FLIGHT, descriptorSetLayout);
-            VkDescriptorSetAllocateInfo allocInfo{};
-            allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-            allocInfo.descriptorSetCount = 1; // Allocating one set at a time
-            allocInfo.pSetLayouts = layouts.data(); // Still use the same layout
-
-            for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
-            {
-                allocInfo.descriptorPool =
-                    descriptorPools[i]; // Allocate from the pool for this frame
-                if (vkAllocateDescriptorSets(
-                        device, &allocInfo, &descriptorSets[i]) != VK_SUCCESS)
-                {
-                    throw std::runtime_error(
-                        "failed to allocate descriptor set for frame " +
-                        std::to_string(i) + "!");
-                }
-            }
-
-            // Initial Update of descriptor sets for UBOs
-            // Textures and FBOs will be updated by setTexture/setFBO when the
-            // resources are ready. An initial write is often required to
-            // transition the descriptor set to a valid state. For image
-            // descriptors, you could potentially write a dummy image
-            // view/sampler if unbound descriptors are not supported or you need
-            // to avoid validation errors. However, the simplest is to ensure
-            // setTexture/setFBO is called for each frame's descriptor set
-            // before that set is first bound in a command buffer.
-
-            // Update descriptor sets for each frame
-            for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
-            {
-                std::vector<VkWriteDescriptorSet> writes;
-
-                // Allocate descriptor set and update with buffer infos
-                for (const auto& [_, ubo] : ubos)
-                {
-                    VkWriteDescriptorSet write = {};
-                    write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-                    write.dstSet = descriptorSets[i];
-                    write.dstBinding = ubo.layoutBinding.binding;
-                    write.dstArrayElement = 0;
-                    write.descriptorCount = 1;
-                    write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-                    write.pBufferInfo = &ubo.bufferInfos[i];
-                    writes.push_back(write);
-                }
-
-                if (!writes.empty())
-                {
-                    vkUpdateDescriptorSets(
-                        device, static_cast<uint32_t>(writes.size()),
-                        writes.data(), 0, nullptr);
-                }
-            }
         }
 
         void Shader::debugVertexDescriptorSets()
@@ -625,23 +368,6 @@ namespace tl
             }
         }
 
-        void Shader::debugPointers()
-        {
-            std::cerr << "--- Descriptor Sets ---" << std::endl;
-            for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
-            {
-                std::cerr << "Frame " << i << ": " << descriptorSets[i]
-                          << std::endl;
-            }
-
-            std::cerr << "--- Descriptor Pools ---" << std::endl;
-            for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
-            {
-                std::cerr << "Frame " << i << " Pool: " << descriptorPools[i]
-                          << std::endl;
-            }
-        }
-
         void Shader::debug()
         {
             TLRENDER_P();
@@ -655,6 +381,224 @@ namespace tl
             std::cerr << "------------------------------------" << std::endl;
             debugFragmentDescriptorSets();
             // debugPointers();
+        }
+        
+        std::shared_ptr<ShaderBindingSet> Shader::createBindingSet()
+        {
+            VkDevice device = ctx.device;
+            VkPhysicalDevice gpu = ctx.gpu;
+            
+            auto bindingSet = std::make_shared<ShaderBindingSet>(device);
+            bindingSet->shaderName = shaderName;
+            
+            std::vector<VkDescriptorSetLayoutBinding> bindings;
+            std::vector<VkDescriptorPoolSize> poolSizes;
+            
+            // UBOs
+            for (const auto& [_, ubo] : ubos)
+            {
+                bindings.push_back(ubo.layoutBinding);
+                VkDescriptorPoolSize poolSize = {};
+                poolSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+                poolSize.descriptorCount =
+                    MAX_FRAMES_IN_FLIGHT; // or more if you support arrays
+                poolSizes.push_back(poolSize);
+            }
+
+            // Textures
+            for (const auto& [_, texture] : textureBindings)
+            {
+                VkDescriptorSetLayoutBinding layoutBinding = {};
+
+                layoutBinding.binding = texture.binding;
+                layoutBinding.descriptorCount = 1;
+                layoutBinding.descriptorType =
+                    VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+                layoutBinding.stageFlags = texture.stageFlags;
+                layoutBinding.pImmutableSamplers = nullptr;
+
+                bindings.push_back(layoutBinding);
+
+                VkDescriptorPoolSize poolSize{};
+                poolSize.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+
+                // One texture descriptor per frame per binding
+                poolSize.descriptorCount = MAX_FRAMES_IN_FLIGHT;
+                poolSizes.push_back(poolSize);
+            }
+
+            // FBOs
+            for (const auto& [_, element] : fboBindings)
+            {
+                VkDescriptorSetLayoutBinding layoutBinding = {};
+
+                layoutBinding.binding = element.binding;
+                layoutBinding.descriptorCount = 1;
+                layoutBinding.descriptorType =
+                    VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+                layoutBinding.stageFlags = element.stageFlags;
+                layoutBinding.pImmutableSamplers = nullptr;
+
+                bindings.push_back(layoutBinding);
+
+                VkDescriptorPoolSize poolSize{};
+                poolSize.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+                // One FBO descriptor per frame per binding
+                poolSize.descriptorCount = MAX_FRAMES_IN_FLIGHT;
+                poolSizes.push_back(poolSize);
+            }
+
+            // Create descriptor pool. (One pool per frame)
+            // maxSets should be 1 if allocating 1 set per pool.
+            VkDescriptorPoolCreateInfo poolInfo = {};
+            poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+            poolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
+            poolInfo.pPoolSizes = poolSizes.data();
+            poolInfo.maxSets = 1;
+
+            // Create a descriptor pool for each frame
+            for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+            {
+                if (vkCreateDescriptorPool(
+                        device, &poolInfo, nullptr, &bindingSet->descriptorPools[i]) !=
+                    VK_SUCCESS)
+                {
+                    throw std::runtime_error(
+                        "failed to create descriptor pool!");
+                }
+            }
+
+            // Create descriptor set layout. (Layout can be shared across
+            // frames)
+            VkDescriptorSetLayoutCreateInfo layout_info = {};
+            layout_info.sType =
+                VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+            layout_info.bindingCount = static_cast<uint32_t>(bindings.size());
+            layout_info.pBindings = bindings.data();
+
+            if (descriptorSetLayout != VK_NULL_HANDLE)
+            {
+                vkDestroyDescriptorSetLayout(device, descriptorSetLayout, nullptr);
+                descriptorSetLayout = VK_NULL_HANDLE;
+            }
+            
+            if (vkCreateDescriptorSetLayout(
+                    device, &layout_info, nullptr, &descriptorSetLayout) !=
+                VK_SUCCESS)
+            {
+                throw std::runtime_error(
+                    "failed to create descriptor set layout!");
+            }
+
+            // Allocate descriptor sets for each frame, from their respective
+            // pools
+            std::vector<VkDescriptorSetLayout> layouts(
+                MAX_FRAMES_IN_FLIGHT, descriptorSetLayout);
+            VkDescriptorSetAllocateInfo allocInfo{};
+            allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+            allocInfo.descriptorSetCount = 1; // Allocating one set at a time
+            allocInfo.pSetLayouts = layouts.data(); // Still use the same layout
+
+            for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+            {
+                allocInfo.descriptorPool = bindingSet->descriptorPools[i];
+                if (vkAllocateDescriptorSets(
+                        device, &allocInfo, &bindingSet->descriptorSets[i]) != VK_SUCCESS)
+                {
+                    throw std::runtime_error(
+                        "failed to allocate descriptor set for frame " +
+                        std::to_string(i) + "!");
+                }
+            }
+
+            // Initial Update of descriptor sets for UBOs
+            // Textures and FBOs will be updated by setTexture/setFBO when the
+            // resources are ready. An initial write is often required to
+            // transition the descriptor set to a valid state. For image
+            // descriptors, you could potentially write a dummy image
+            // view/sampler if unbound descriptors are not supported or you need
+            // to avoid validation errors. However, the simplest is to ensure
+            // setTexture/setFBO is called for each frame's descriptor set
+            // before that set is first bound in a command buffer.
+        
+            // Step 3: populate UBOs for each uniform
+            for (const auto& [name, uboTemplate] : ubos)
+            {
+                ShaderBindingSet::UniformParameter ubo;
+                ubo.size = uboTemplate.size;
+                ubo.layoutBinding = uboTemplate.layoutBinding;
+
+                ubo.buffers.resize(MAX_FRAMES_IN_FLIGHT);
+                ubo.memories.resize(MAX_FRAMES_IN_FLIGHT);
+                ubo.infos.resize(MAX_FRAMES_IN_FLIGHT);
+
+                for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+                {
+                    VkBufferCreateInfo bufferInfo = {};
+                    bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+                    bufferInfo.size = ubo.size;
+                    bufferInfo.usage = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
+                    bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+                    VK_CHECK(vkCreateBuffer(device, &bufferInfo, nullptr, &ubo.buffers[i]));
+
+                    VkMemoryRequirements memReqs;
+                    vkGetBufferMemoryRequirements(device, ubo.buffers[i], &memReqs);
+
+                    VkMemoryAllocateInfo allocInfo = {};
+                    allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+                    allocInfo.allocationSize = memReqs.size;
+                    allocInfo.memoryTypeIndex = findMemoryType(
+                        gpu,
+                        memReqs.memoryTypeBits,
+                        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+                        VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+                    VK_CHECK(vkAllocateMemory(device, &allocInfo, nullptr, &ubo.memories[i]));
+                    VK_CHECK(vkBindBufferMemory(device, ubo.buffers[i], ubo.memories[i], 0));
+
+                    ubo.infos[i].buffer = ubo.buffers[i];
+                    ubo.infos[i].offset = 0;
+                    ubo.infos[i].range = ubo.size;
+
+                    // Descriptor write to binding
+                    VkWriteDescriptorSet write{};
+                    write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                    write.dstSet = bindingSet->descriptorSets[i];
+                    write.dstBinding = ubo.layoutBinding.binding;
+                    write.dstArrayElement = 0;
+                    write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+                    write.descriptorCount = 1;
+                    write.pBufferInfo = &ubo.infos[i];
+
+                    vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
+                }
+
+                bindingSet->uniforms[name] = std::move(ubo);
+            }
+
+            // Step 4: Texture bindings
+            for (const auto& [name, texBinding] : textureBindings)
+            {
+                ShaderBindingSet::TextureParameter textureInfo;
+                textureInfo.binding = texBinding.binding;
+                textureInfo.stageFlags = texBinding.stageFlags;
+                bindingSet->textures[name] = textureInfo;
+            }
+            
+            // Step 5: FBO bindings
+            for (const auto& [name, fboBinding] : fboBindings)
+            {
+                ShaderBindingSet::FBOParameter fboInfo;
+                fboInfo.binding = fboBinding.binding;
+                fboInfo.stageFlags = fboBinding.stageFlags;
+                bindingSet->fbos[name] = fboInfo;
+            }
+
+            // Make this set active
+            activeBindingSet = bindingSet;
+            
+            return bindingSet;
         }
 
     } // namespace vlk

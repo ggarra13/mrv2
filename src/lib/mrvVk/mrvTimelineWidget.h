@@ -154,7 +154,7 @@ namespace mrv
 
         private:
             void prepare_shaders();
-            void prepare_descriptor_layout();
+            void prepare_pipeline_layout();
             void prepare_pipeline();
 
             void _thumbnailEvent();

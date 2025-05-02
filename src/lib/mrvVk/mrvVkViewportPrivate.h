@@ -9,6 +9,7 @@
 #include <tlVk/Mesh.h>
 #include <tlVk/OffscreenBuffer.h>
 #include <tlTimelineVk/Render.h>
+#include <tlVk/ShaderBindingSet.h>
 #include <tlVk/Shader.h>
 
 #include "mrvVk/mrvVkDefines.h"

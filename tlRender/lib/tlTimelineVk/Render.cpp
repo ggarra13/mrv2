@@ -648,6 +648,10 @@ namespace tl
                 {
                     vkDestroyPipeline(device, pipeline, nullptr);
                 }
+                for (auto& bindingSets : garbage.bindingSets)
+                {
+                    bindingSets.reset();
+                }
             }
         }
 
@@ -700,6 +704,10 @@ namespace tl
             {
                 vkDestroyPipeline(device, pipeline, nullptr);
             }
+            for (auto& sets : p.garbage[garbageIndex].bindingSets)
+            {
+                sets.reset();
+            }
             p.garbage[garbageIndex].pipelines.clear();
 
             // \@todo: reproduce this in first pipeline?
@@ -716,7 +724,8 @@ namespace tl
                     "transform.mvp", transform, vlk::kShaderVertex);
                 p.shaders["rect"]->addPush(
                     "color", color, vlk::kShaderFragment);
-                p.shaders["rect"]->createDescriptorSets();
+                auto bindingSet = p.shaders["rect"]->createBindingSet();
+                p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
             }
             if (!p.shaders["mesh"])
             {
@@ -726,7 +735,8 @@ namespace tl
                     "transform.mvp", transform, vlk::kShaderVertex);
                 p.shaders["mesh"]->addPush(
                     "color", color, vlk::kShaderFragment);
-                p.shaders["mesh"]->createDescriptorSets();
+                auto bindingSet = p.shaders["mesh"]->createBindingSet();
+                p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
             }
             if (!p.shaders["colorMesh"])
             {
@@ -737,7 +747,8 @@ namespace tl
                     "transform.mvp", transform, vlk::kShaderVertex);
                 p.shaders["colorMesh"]->addPush(
                     "color", color, vlk::kShaderFragment);
-                p.shaders["colorMesh"]->createDescriptorSets();
+                auto bindingSet = p.shaders["colorMesh"]->createBindingSet();
+                p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
             }
             if (!p.shaders["text"])
             {
@@ -748,7 +759,8 @@ namespace tl
                 p.shaders["text"]->addTexture("textureSampler");
                 p.shaders["text"]->addPush(
                     "color", color, vlk::kShaderFragment);
-                p.shaders["text"]->createDescriptorSets();
+                auto bindingSet = p.shaders["text"]->createBindingSet();
+                p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
             }
             if (!p.shaders["texture"])
             {
@@ -759,7 +771,8 @@ namespace tl
                 p.shaders["texture"]->addTexture("textureSampler");
                 p.shaders["texture"]->addPush(
                     "color", color, vlk::kShaderFragment);
-                p.shaders["texture"]->createDescriptorSets();
+                auto bindingSet = p.shaders["texture"]->createBindingSet();
+                p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
             }
             if (!p.shaders["image"])
             {
@@ -775,7 +788,8 @@ namespace tl
                 p.shaders["image"]->addTexture("textureSampler1");
                 p.shaders["image"]->addTexture("textureSampler2");
 
-                p.shaders["image"]->createDescriptorSets();
+                auto bindingSet = p.shaders["image"]->createBindingSet();
+                p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
             }
             if (!p.shaders["wipe"])
             {
@@ -783,8 +797,9 @@ namespace tl
                     ctx, vertexSource(), meshFragmentSource(), "wipe");
                 p.shaders["wipe"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["wipe"]->createUniform("color", color);
-                p.shaders["wipe"]->createDescriptorSets();
+                p.shaders["wipe"]->addPush("color", color, vlk::kShaderFragment);
+                auto bindingSet = p.shaders["wipe"]->createBindingSet();
+                p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
             }
             if (!p.shaders["overlay"])
             {
@@ -793,8 +808,9 @@ namespace tl
                 p.shaders["overlay"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
                 p.shaders["overlay"]->addTexture("textureSampler");
-                p.shaders["overlay"]->createUniform("color", color);
-                p.shaders["overlay"]->createDescriptorSets();
+                p.shaders["overlay"]->addPush("color", color, vlk::kShaderFragment);
+                auto bindingSet = p.shaders["overlay"]->createBindingSet();
+                p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
             }
             if (!p.shaders["difference"])
             {
@@ -805,7 +821,8 @@ namespace tl
                     "transform.mvp", transform, vlk::kShaderVertex);
                 p.shaders["difference"]->addFBO("textureSampler");
                 p.shaders["difference"]->addFBO("textureSamplerB");
-                p.shaders["difference"]->createDescriptorSets();
+                auto bindingSet = p.shaders["difference"]->createBindingSet();
+                p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
             }
             if (!p.shaders["dissolve"])
             {
@@ -814,9 +831,10 @@ namespace tl
                 p.shaders["dissolve"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
                 p.shaders["dissolve"]->addFBO("textureSampler");
-                p.shaders["dissolve"]->createUniform(
-                    "color", image::Color4f(1.F, 1.F, 1.F));
-                p.shaders["dissolve"]->createDescriptorSets();
+                p.shaders["dissolve"]->addPush(
+                    "color", color, vlk::kShaderFragment);
+                auto bindingSet = p.shaders["dissolve"]->createBindingSet();
+                p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
             }
             _displayShader();
 
@@ -991,7 +1009,7 @@ namespace tl
             rpBegin.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
             rpBegin.renderPass =
                 p.fbo->getRenderPass(); // Use the FBO's render pass
-            rpBegin.framebuffer = p.fbo->getFramebuffer(/*currentFrameIndex*/);
+            rpBegin.framebuffer = p.fbo->getFramebuffer();
             rpBegin.renderArea.offset = {0, 0};
             rpBegin.renderArea.extent = p.fbo->getExtent(); // Use FBO extent
             rpBegin.clearValueCount =
@@ -1530,13 +1548,13 @@ namespace tl
                     pair = std::make_pair(pipelineState, VK_NULL_HANDLE);
                     p.pipelines["display"] = pair;
                 }
-                if (p.pipelineLayouts["display_display"] != VK_NULL_HANDLE)
+                if (p.pipelineLayouts["display"])
                 {
                     VkDevice device = ctx.device;
                     vkDeviceWaitIdle(device);
                     vkDestroyPipelineLayout(
-                        device, p.pipelineLayouts["display_display"], nullptr);
-                    p.pipelineLayouts["display_display"] = VK_NULL_HANDLE;
+                        device, p.pipelineLayouts["display"], nullptr);
+                    p.pipelineLayouts["display"] = VK_NULL_HANDLE;
                 }
 
                 std::string ocioICSDef;
@@ -2089,7 +2107,7 @@ namespace tl
                     }
                 }
 #endif
-                p.shaders["display"]->createDescriptorSets();
+                auto bindingSet = p.shaders["display"]->createBindingSet();
                 // p.shaders["display"]->debug();
             }
         }

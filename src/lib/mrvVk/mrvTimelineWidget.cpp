@@ -18,6 +18,7 @@
 #include <tlVk/Mesh.h>
 #include <tlVk/OffscreenBuffer.h>
 #include <tlVk/Shader.h>
+#include <tlVk/ShaderBindingSet.h>
 
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvHotkey.h"
@@ -740,26 +741,27 @@ layout(location = 0) out vec4 outColor;
 
 layout(binding = 1) uniform sampler2D textureSampler;
 
-layout(set = 0, binding = 2, std140) uniform OpacityUBO {
+layout(push_constant) uniform PushConstants {
     float opacity;
-} ubo;
+} pc;  
                  
 void main()
 {
      outColor = texture(textureSampler, fTexture);
-     outColor.a *= ubo.opacity;
+     outColor.a *= pc.opacity;
 })";
 
                     if (!p.shader)
                     {
                         p.shader = vlk::Shader::create(
-                            ctx, vertexSource, fragmentSource);
+                            ctx, vertexSource, fragmentSource, "timeline p.shader");
                         math::Matrix4x4f pm;
                         p.shader->createUniform(
                             "transform.mvp", pm, vlk::kShaderVertex);
                         p.shader->addFBO("textureSampler");
-                        p.shader->createUniform("opacity", 1.0);
-                        p.shader->createDescriptorSets();
+                        p.shader->addPush("opacity", 1.0, vlk::kShaderFragment);
+                        auto bindingSet = p.shader->createBindingSet();
+                        p.shader->useBindingSet(bindingSet);
                     }
                 }
                 catch (const std::exception& e)
@@ -777,7 +779,7 @@ void main()
         {
             prepare_shaders();
             prepare_render_pass();
-            prepare_descriptor_layout(); // Main shader layout
+            prepare_pipeline_layout(); // Main shader layout
         }
 
         void TimelineWidget::destroy_resources()
@@ -804,7 +806,7 @@ void main()
             TLRENDER_P();
 
             wait_device();
-
+            
             // Destroy main render
             p.render.reset();
 
@@ -825,15 +827,6 @@ void main()
         {
             TLRENDER_P();
 
-#if 0
-            std::cerr << "\t\ttimeline widget WxH=" << W << "x" << H << std::endl;
-            std::cerr << "\t\t\tpixels_per_unit=" << this->pixels_per_unit()
-                      << std::endl;
-            std::cerr << "\t\t\tuiView pixels_per_unit="
-                      << p.ui->uiView->pixels_per_unit()
-                      << std::endl;
-#endif
-
             Fl_Vk_Window::resize(X, Y, W, H);
 
             _sizeHintEvent();
@@ -848,7 +841,7 @@ void main()
         void TimelineWidget::draw()
         {
             TLRENDER_P();
-
+            
             const math::Size2i renderSize(pixel_w(), pixel_h());
 
             VkCommandBuffer cmd = getCurrentCommandBuffer();
@@ -883,7 +876,7 @@ void main()
                         vlk::OffscreenBufferOptions offscreenBufferOptions;
                         offscreenBufferOptions.colorType =
                             image::PixelType::RGBA_U8;
-                        // offscreenBufferOptions.allowCompositing = true;
+                        offscreenBufferOptions.allowCompositing = true;
                         if (vlk::doCreate(
                                 p.buffer, renderSize, offscreenBufferOptions))
                         {
@@ -910,7 +903,7 @@ void main()
                         ui::DrawEvent drawEvent(
                             p.style, p.iconLibrary, p.render, p.fontSystem);
                         p.render->setClipRectEnabled(true);
-                        p.buffer->beginRenderPass(cmd);
+                        p.buffer->beginRenderPass(cmd, "timeline");
                         _drawEvent(
                             p.timelineWindow, math::Box2i(renderSize),
                             drawEvent);
@@ -928,7 +921,7 @@ void main()
             if (p.buffer)
             {
                 p.buffer->transitionToShaderRead(cmd);
-
+                
                 begin_render_pass(cmd);
 
                 p.shader->bind(m_currentFrameIndex);
@@ -936,7 +929,6 @@ void main()
                     0.F, static_cast<float>(renderSize.w), 0.F,
                     static_cast<float>(renderSize.h), -1.F, 1.F);
                 p.shader->setUniform("transform.mvp", pm, vlk::kShaderVertex);
-                p.shader->setUniform("opacity", 1.0);
                 p.shader->setFBO("textureSampler", p.buffer);
 
 #ifdef __APPLE__
@@ -968,11 +960,16 @@ void main()
                 vkCmdBindPipeline(
                     cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline);
 
+                VkDescriptorSet descriptorSet = p.shader->getDescriptorSet();
                 vkCmdBindDescriptorSets(
                     cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, p.pipeline_layout, 0,
-                    1, &p.shader->getDescriptorSet(),
-                    // Bind the set for THIS frame
-                    0, nullptr);
+                    1, &descriptorSet, 0, nullptr);
+                
+                float opacity = 1.0;
+                vkCmdPushConstants(
+                    cmd, p.pipeline_layout,
+                    p.shader->getPushStageFlags(), 0,
+                    sizeof(float), &opacity);
 
                 VkViewport viewport = {};
                 viewport.width = static_cast<float>(w());
@@ -995,10 +992,11 @@ void main()
                 end_render_pass(cmd);
 
                 p.buffer->transitionToColorAttachment(cmd);
+
             }
         }
 
-        void TimelineWidget::prepare_descriptor_layout()
+        void TimelineWidget::prepare_pipeline_layout()
         {
             TLRENDER_P();
 
@@ -1009,8 +1007,21 @@ void main()
                 VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
             pPipelineLayoutCreateInfo.pNext = NULL;
             pPipelineLayoutCreateInfo.setLayoutCount = 1;
-            pPipelineLayoutCreateInfo.pSetLayouts =
-                &p.shader->getDescriptorSetLayout();
+            VkDescriptorSetLayout setLayout = p.shader->getDescriptorSetLayout();
+            pPipelineLayoutCreateInfo.pSetLayouts = &setLayout;
+
+            VkPushConstantRange pushConstantRange = {};
+            std::size_t pushSize = p.shader->getPushSize();
+            if (pushSize > 0)
+            {
+                pushConstantRange.stageFlags = p.shader->getPushStageFlags();
+                pushConstantRange.offset = 0;
+                pushConstantRange.size = pushSize;
+
+                pPipelineLayoutCreateInfo.pushConstantRangeCount = 1;
+                pPipelineLayoutCreateInfo.pPushConstantRanges =
+                    &pushConstantRange;
+            }
 
             result = vkCreatePipelineLayout(
                 device(), &pPipelineLayoutCreateInfo, NULL, &p.pipeline_layout);
@@ -1024,7 +1035,7 @@ void main()
             {
                 vkDestroyPipeline(device(), m_pipeline, nullptr);
             }
-
+            
             VkGraphicsPipelineCreateInfo pipeline;
 
             VkPipelineVertexInputStateCreateInfo vi = {};
