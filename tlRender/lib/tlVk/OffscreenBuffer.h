@@ -9,6 +9,7 @@
 
 #include <tlTimeline/ImageOptions.h>
 
+#include <tlCore/Color.h>
 #include <tlCore/Image.h>
 #include <tlCore/Size.h>
 
@@ -76,9 +77,9 @@ namespace tl
             OffscreenDepth depth = OffscreenDepth::kNone;
             OffscreenStencil stencil = OffscreenStencil::kNone;
             OffscreenSampling sampling = OffscreenSampling::kNone;
-            bool      clearColor = false;
+            bool      clear = false;
+            image::Color4f clearColor = image::Color4f(0.F, 0.F, 0.F, 0.F);
             bool      clearDepth = true;
-            bool      allowCompositing = false;
             bool      pbo = false;
 
             bool operator==(const OffscreenBufferOptions&) const;
@@ -118,9 +119,6 @@ namespace tl
 
             //! Returns true if the buffer has depth.
             bool hasStencil() const;
-
-            //! Supports compositing.
-            bool supportsCompositing() const;
 
             //! Get the options.
             const OffscreenBufferOptions& getOptions() const;
@@ -166,10 +164,6 @@ namespace tl
             
             //! Get Vulkan's internal format of depth buffer.
             VkFormat getDepthFormat() const;
-
-            //! Set up a render pass.
-            void createRenderPass(bool clearColor, bool clearDepth);
-            void createFramebuffer();
             
             //! Start/end a normal render pass.
             void beginRenderPass(VkCommandBuffer cmd,
@@ -206,6 +200,9 @@ namespace tl
             void createImageView();
             void createDepthImage();
             void createDepthImageView();
+            void createRenderPass(const bool clearColor,
+                                  const bool clearDepth);
+            void createFramebuffer();
             void createSampler();
 
             uint32_t findMemoryType(

@@ -125,7 +125,6 @@ namespace tl
                     stencil == other.stencil && sampling == other.sampling &&
                     clearColor == other.clearColor &&
                     clearDepth == other.clearDepth &&
-                    allowCompositing == other.allowCompositing &&
                     pbo == other.pbo);
         }
 
@@ -270,7 +269,7 @@ namespace tl
                 createDepthImageView();
             }
 
-            createRenderPass(p.options.clearColor,
+            createRenderPass(p.options.clear,
                              p.options.clearDepth);
             createFramebuffer();
             if (p.options.pbo)
@@ -464,11 +463,6 @@ namespace tl
         VkRenderPass OffscreenBuffer::getRenderPass() const
         {
             return _p->renderPass;
-        }
-
-        bool OffscreenBuffer::supportsCompositing() const
-        {
-            return _p->options.allowCompositing;
         }
 
         VkExtent2D OffscreenBuffer::getExtent() const
@@ -735,7 +729,8 @@ namespace tl
             
             std::vector<VkClearValue> clearValues;
             VkClearValue colorClear = {};
-            colorClear.color = {{0.0f, 0.0f, 0.0f, 0.0f}}; // Black clear
+            const image::Color4f& color = p.options.clearColor;
+            colorClear.color = {{color.r, color.g, color.b, color.a}}; // Black clear
             clearValues.push_back(colorClear);
 
             if (p.depthFormat != VK_FORMAT_UNDEFINED)
