@@ -487,7 +487,6 @@ namespace mrv
                 }
                 offscreenBufferOptions.depth = vlk::OffscreenDepth::_24;
                 offscreenBufferOptions.stencil = vlk::OffscreenStencil::_8;
-                offscreenBufferOptions.allowCompositing = true;
                 offscreenBufferOptions.pbo = true;
             
                 if (vlk::doCreate(
