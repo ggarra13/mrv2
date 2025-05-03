@@ -697,20 +697,21 @@ namespace tl
             VkDevice device = ctx.device;
 
             // Destroy old pipelines that are no longer used.
-            int garbageIndex = p.frameIndex % vlk::MAX_FRAMES_IN_FLIGHT;
-            for (auto& pipeline : p.garbage[garbageIndex].pipelines)
+            for (auto& pipeline : p.garbage[p.frameIndex].pipelines)
             {
                 vkDestroyPipeline(device, pipeline, nullptr);
             }
-            for (auto& sets : p.garbage[garbageIndex].bindingSets)
+            for (auto& sets : p.garbage[p.frameIndex].bindingSets)
             {
                 sets.reset();
             }
-            p.garbage[garbageIndex].pipelines.clear();
-
-            // \@todo: reproduce this in first pipeline?
-            // glEnable(GL_BLEND);
-            // glBlendEquation(GL_FUNC_ADD);
+            for (auto& vaos : p.garbage[p.frameIndex].vaos)
+            {
+                vaos.reset();
+            }
+            p.garbage[p.frameIndex].pipelines.clear();
+            p.garbage[p.frameIndex].bindingSets.clear();
+            p.garbage[p.frameIndex].vaos.clear();
 
             const math::Matrix4x4f transform;
             const image::Color4f color(0.F, 0.F, 0.F, 0.F);
