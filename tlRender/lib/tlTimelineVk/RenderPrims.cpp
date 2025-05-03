@@ -42,6 +42,7 @@ namespace tl
             if (!p.vaos[meshName] && p.vbos[meshName])
             {
                 p.vaos[meshName] = vlk::VAO::create(ctx);
+                p.vaos[meshName]->bind(p.frameIndex);
             }
         }
 
@@ -70,8 +71,6 @@ namespace tl
             }
             if (p.vaos["rect"])
             {
-                p.vaos["rect"]->bind(p.frameIndex);
-
                 const std::string& pipelineLayoutName = shaderName;
                 _createPipeline(p.fbo, pipelineName, pipelineLayoutName,
                                shaderName, meshName, enableBlending);
@@ -89,6 +88,7 @@ namespace tl
                     &color);
 
                 p.vaos["rect"]->draw(p.cmd, p.vbos["rect"]);
+                p.garbage[p.frameIndex].vaos.push_back(p.vaos["rect"]);
             }
         }
         
@@ -141,6 +141,7 @@ namespace tl
             if (!p.vaos[meshName] && p.vbos[meshName])
             {
                 p.vaos[meshName] = vlk::VAO::create(ctx);
+                p.vaos[meshName]->bind(p.frameIndex);
             }
             if (p.vaos[meshName] && p.vbos[meshName])
             {
@@ -164,8 +165,8 @@ namespace tl
                     shader->getPushStageFlags(), 0,
                     sizeof(color), &color);
 
-                p.vaos[meshName]->bind(p.frameIndex);
                 p.vaos[meshName]->draw(p.cmd, p.vbos[meshName]);
+                p.garbage[p.frameIndex].vaos.push_back(p.vaos[meshName]);
             }
         }
         
@@ -177,8 +178,10 @@ namespace tl
         }
 
         void Render::drawColorMesh(
-            const std::string& pipelineLayoutName, const geom::TriangleMesh2& mesh,
-            const math::Vector2i& position, const image::Color4f& color)
+            const std::string& pipelineLayoutName,
+            const geom::TriangleMesh2& mesh,
+            const math::Vector2i& position,
+            const image::Color4f& color)
         {
             TLRENDER_P();
             const size_t size = mesh.triangles.size();
@@ -193,16 +196,16 @@ namespace tl
             shader->useBindingSet(bindingSet);
             p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
             
-            shader->bind(p.frameIndex);
             const auto transform =
                 p.transform *
                 math::translate(
                     math::Vector3f(position.x, position.y, 0.F));
+            
+            shader->bind(p.frameIndex);
             shader->setUniform(
                 "transform.mvp", transform, vlk::kShaderVertex);
             _bindDescriptorSets(pipelineLayoutName, "colorMesh");
 
-            // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             if (p.vaos["colorMesh"] && p.vbos["colorMesh"])
             {
                 VkPipelineLayout pipelineLayout =
@@ -215,10 +218,13 @@ namespace tl
                     shader->getPushStageFlags(), 0,
                     sizeof(color), &color);
                 p.vaos["colorMesh"]->draw(p.cmd, p.vbos["colorMesh"]);
+                p.garbage[p.frameIndex].vaos.push_back(p.vaos["colorMesh"]);
             }
         }
 
-        void Render::Private::drawTextMesh(
+
+        
+        void Render::Private::createTextMesh(
             Fl_Vk_Context& ctx, const geom::TriangleMesh2& mesh)
         {
             const size_t size = mesh.triangles.size();
@@ -240,11 +246,6 @@ namespace tl
                 {
                     vaos["text"] = vlk::VAO::create(ctx);
                 }
-                if (vaos["text"] && vbos["text"])
-                {
-                    vaos["text"]->bind(frameIndex);
-                    vaos["text"]->draw(cmd, vbos["text"]);
-                }
             }
         }
 
@@ -255,17 +256,24 @@ namespace tl
             TLRENDER_P();
             ++(p.currentStats.text);
 
-            return;
 
-            p.shaders["text"]->bind(p.frameIndex);
-            // p.shaders["text"]->setUniform("color", color);
+            const std::string pipelineName = "text";
+            const std::string shaderName = "text";
+            const std::string meshName = "text";
+            const std::string pipelineLayoutName = shaderName;
+            const bool enableBlending = true;
+            
+            auto shader = p.shaders[shaderName];
+
+            auto bindingSet = shader->createBindingSet();
+            p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
+
+            //shader->setUniform("color", color);
 
             // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
             uint8_t textureIndex = 0;
-            // const auto textures = p.glyphTextureAtlas->getTextures();
-            // p.shaders["text"]->setTexture("textureSampler",
-            //                               textures[textureIndex]);
+            const auto textures = p.glyphTextureAtlas->getTextures();
 
             int x = 0;
             int32_t rsbDeltaPrev = 0;
@@ -303,10 +311,36 @@ namespace tl
                         if (item.textureIndex != textureIndex)
                         {
                             textureIndex = item.textureIndex;
-                            // glBindTexture(
-                            //     GL_TEXTURE_2D, textures[textureIndex]);
+                            p.createTextMesh(ctx, mesh);
 
-                            p.drawTextMesh(ctx, mesh);
+                            _createPipeline(
+                                p.fbo, pipelineName, pipelineLayoutName,
+                                shaderName, meshName, enableBlending);
+
+                            shader->bind(p.frameIndex);
+                            shader->setUniform("transform.mvp", p.transform);
+                            shader->setTexture("textureSampler",
+                                               textures[textureIndex]);
+            
+                            _bindDescriptorSets(pipelineLayoutName, shaderName);
+                            
+                            VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+                            if (!pipelineLayout)
+                                throw std::runtime_error("drawText '" +
+                                                         meshName +
+                                                         "': Invalid pipeline Layout '" +
+                                                         pipelineLayoutName + "'"); 
+                            vkCmdPushConstants(
+                                p.cmd, pipelineLayout,
+                                shader->getPushStageFlags(), 0,
+                                sizeof(color), &color);
+                            
+                            if (p.vaos["text"] && p.vbos["text"])
+                            {
+                                p.vaos["text"]->draw(p.cmd, p.vbos["text"]);
+                                p.garbage[p.frameIndex].vaos.push_back(p.vaos["text"]);
+                            }
+
                             mesh = geom::TriangleMesh2();
                             meshIndex = 0;
                         }
@@ -326,19 +360,19 @@ namespace tl
                         mesh.t.push_back(
                             math::Vector2f(
                                 item.textureU.getMin(),
-                                item.textureV.getMin()));
-                        mesh.t.push_back(
-                            math::Vector2f(
-                                item.textureU.getMax(),
-                                item.textureV.getMin()));
+                                item.textureV.getMax()));
                         mesh.t.push_back(
                             math::Vector2f(
                                 item.textureU.getMax(),
                                 item.textureV.getMax()));
+                        mesh.t.push_back(
+                            math::Vector2f(
+                                item.textureU.getMax(),
+                                item.textureV.getMin()));
                         mesh.t.push_back(
                             math::Vector2f(
                                 item.textureU.getMin(),
-                                item.textureV.getMax()));
+                                item.textureV.getMin()));
 
                         geom::Triangle2 triangle;
                         triangle.v[0].v = meshIndex + 1;
@@ -362,7 +396,36 @@ namespace tl
                     x += glyph->advance;
                 }
             }
-            p.drawTextMesh(ctx, mesh);
+
+            p.createTextMesh(ctx, mesh);
+            
+            _createPipeline(
+                p.fbo, pipelineName, pipelineLayoutName,
+                shaderName, meshName, enableBlending);
+            
+            
+            shader->bind(p.frameIndex);
+            shader->setUniform("transform.mvp", p.transform);
+            shader->setTexture("textureSampler",
+                               textures[textureIndex]);
+            _bindDescriptorSets(pipelineLayoutName, shaderName);
+                            
+            VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+            if (!pipelineLayout)
+                throw std::runtime_error("drawText '" +
+                                         meshName +
+                                         "': Invalid pipeline Layout '" +
+                                         pipelineLayoutName + "'"); 
+            vkCmdPushConstants(
+                p.cmd, pipelineLayout,
+                shader->getPushStageFlags(), 0,
+                sizeof(color), &color);
+                            
+            if (p.vaos["text"] && p.vbos["text"])
+            {
+                p.vaos["text"]->draw(p.cmd, p.vbos["text"]);
+                p.garbage[p.frameIndex].vaos.push_back(p.vaos["text"]);
+            }
         }
 
         void Render::drawTexture(
@@ -372,9 +435,19 @@ namespace tl
             TLRENDER_P();
             ++(p.currentStats.textures);
 
-            p.shaders["texture"]->bind(p.frameIndex);
-            p.shaders["texture"]->setUniform("color", color);
-            p.shaders["texture"]->setUniform("textureSampler", texture);
+            const std::string pipelineName = "texture";
+            const std::string shaderName = "texture";
+            const std::string pipelineLayoutName = shaderName;
+            const std::string meshName = "texture";
+            
+            _createPipeline(
+                p.fbo, pipelineName, pipelineLayoutName,
+                shaderName, meshName);
+
+            auto shader = p.shaders[shaderName];
+            shader->bind(p.frameIndex);
+            shader->setUniform("textureSampler", texture);
+            _bindDescriptorSets(pipelineLayoutName, shaderName);
 
             if (p.vbos["texture"])
             {
@@ -383,8 +456,19 @@ namespace tl
             }
             if (p.vaos["texture"])
             {
-                p.vaos["texture"]->bind(p.frameIndex);
+                VkPipelineLayout pipelineLayout = p.pipelineLayouts["texture"];
+                if (!pipelineLayout)
+                    throw std::runtime_error(
+                        "drawTextture 'texture': Invalid pipelineLayout "
+                        "'texture'"); 
+                vkCmdPushConstants(
+                    p.cmd, pipelineLayout,
+                    shader->getPushStageFlags(), 0,
+                    sizeof(color), &color);
+
+            
                 p.vaos["texture"]->draw(p.cmd, p.vbos["texture"]);
+                p.garbage[p.frameIndex].vaos.push_back(p.vaos["texture"]);
             }
         }
 
@@ -544,8 +628,8 @@ namespace tl
 
             if (p.vaos["image"])
             {
-                p.vaos["image"]->bind(p.frameIndex);
                 p.vaos["image"]->draw(p.cmd, p.vbos["image"]);
+                p.garbage[p.frameIndex].vaos.push_back(p.vaos["image"]);
             }
             fbo->endRenderPass(p.cmd);
         }

@@ -24,8 +24,10 @@ extern "C"
 #    include <OpenColorIO/OpenColorIO.h>
 #endif // TLRENDER_OCIO
 
+#include <array>
 #include <list>
 #include <map>
+#include <string>
 
 #if defined(TLRENDER_OCIO)
 namespace OCIO = OCIO_NAMESPACE;
@@ -143,8 +145,9 @@ namespace tl
                 std::vector<VkPipeline> pipelines;
                 std::vector<VkPipelineLayout> pipelineLayouts;
                 std::vector<std::shared_ptr<vlk::ShaderBindingSet> > bindingSets;
+                std::vector<std::shared_ptr<vlk::VAO> > vaos;
             };
-            std::vector<FrameGarbage> garbage;
+            std::array<FrameGarbage, vlk::MAX_FRAMES_IN_FLIGHT> garbage;
 
             std::map<std::string, std::shared_ptr<vlk::Shader> > shaders;
             std::map<std::string, std::shared_ptr<vlk::OffscreenBuffer> >
@@ -175,7 +178,7 @@ namespace tl
             std::list<Stats> stats;
             std::chrono::steady_clock::time_point logTimer;
 
-            void drawTextMesh(Fl_Vk_Context& ctx, const geom::TriangleMesh2&);
+            void createTextMesh(Fl_Vk_Context& ctx, const geom::TriangleMesh2&);
         };
     } // namespace timeline_vlk
 } // namespace tl

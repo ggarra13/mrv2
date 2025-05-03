@@ -117,8 +117,10 @@ namespace tl
             if (p.pipelines.count(pipelineName) == 0)
             {
                 pipeline = pipelineState.create(device);
-                auto pair = std::make_pair(pipelineState, pipeline);
-                p.pipelines[pipelineName] = pair;
+                std::cerr << "created pipeline " << pipelineName << " at "
+                          << pipeline << std::endl;
+                p.pipelines[pipelineName] = std::make_pair(pipelineState,
+                                                           pipeline);
             }
             else
             {
@@ -130,6 +132,10 @@ namespace tl
                 {
                     if (oldPipeline != VK_NULL_HANDLE)
                     {
+                        std::cerr << "send to garbage pipeline "
+                                  << pipelineName
+                                  << " "
+                                  << oldPipeline << std::endl;
                         p.garbage[p.frameIndex].pipelines.push_back(
                             oldPipeline);
                     }
@@ -140,6 +146,8 @@ namespace tl
                 else
                 {
                     pipeline = pair.second;
+                    std::cerr << "reusing pipeline " << pipeline << " "
+                              << pipelineName << std::endl;
                 }
             }
 

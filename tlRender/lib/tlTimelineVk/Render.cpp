@@ -615,8 +615,6 @@ namespace tl
                 timeline::ImageFilter::Linear);
 
             p.logTimer = std::chrono::steady_clock::now();
-
-            p.garbage.resize(vlk::MAX_FRAMES_IN_FLIGHT + 1);
         }
 
         Render::Render(Fl_Vk_Context& context) :
