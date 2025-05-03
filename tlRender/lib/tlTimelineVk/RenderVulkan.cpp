@@ -7,6 +7,15 @@ namespace tl
 {
     namespace timeline_vlk
     {
+        void Render::_createBindingSet(const std::string& shaderName)
+        {
+            TLRENDER_P();
+            
+            auto shader = p.shaders[shaderName];
+            auto bindingSet = shader->createBindingSet();
+            shader->useBindingSet(bindingSet);
+            p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
+        }
         
         void Render::_createPipeline(
             const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
@@ -117,8 +126,6 @@ namespace tl
             if (p.pipelines.count(pipelineName) == 0)
             {
                 pipeline = pipelineState.create(device);
-                std::cerr << "created pipeline " << pipelineName << " at "
-                          << pipeline << std::endl;
                 p.pipelines[pipelineName] = std::make_pair(pipelineState,
                                                            pipeline);
             }
@@ -132,10 +139,6 @@ namespace tl
                 {
                     if (oldPipeline != VK_NULL_HANDLE)
                     {
-                        std::cerr << "send to garbage pipeline "
-                                  << pipelineName
-                                  << " "
-                                  << oldPipeline << std::endl;
                         p.garbage[p.frameIndex].pipelines.push_back(
                             oldPipeline);
                     }
@@ -146,8 +149,6 @@ namespace tl
                 else
                 {
                     pipeline = pair.second;
-                    std::cerr << "reusing pipeline " << pipeline << " "
-                              << pipelineName << std::endl;
                 }
             }
 
