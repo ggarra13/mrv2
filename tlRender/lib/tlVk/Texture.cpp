@@ -414,7 +414,6 @@ namespace tl
             p.currentLayout = newLayout;
         }
 
-        
         void Texture::copy(const std::shared_ptr<image::Image>& data, int x, int y)
         {
             TLRENDER_P();
@@ -426,7 +425,7 @@ namespace tl
             VkDevice device = ctx.device;
             VkCommandPool commandPool = ctx.commandPool;
             VkQueue queue = ctx.queue;
-
+    
             // Create staging buffer
             VkBuffer stagingBuffer;
             VkDeviceMemory stagingMemory;
@@ -451,10 +450,22 @@ namespace tl
             VK_CHECK(vkAllocateMemory(device, &allocInfo, nullptr, &stagingMemory));
             VK_CHECK(vkBindBufferMemory(device, stagingBuffer, stagingMemory, 0));
 
-            // Copy image data to buffer
+            // Copy image data to buffer, respecting alignment
             void* mapped;
             VK_CHECK(vkMapMemory(device, stagingMemory, 0, size, 0, &mapped));
-            std::memcpy(mapped, srcData, size);
+            if (info.layout.alignment == 1) {
+                std::memcpy(mapped, srcData, size);
+            } else {
+                size_t pixelSize = image::getBitDepth(info.pixelType) / 8 * image::getChannelCount(info.pixelType);
+                size_t srcRowBytes = info.size.w * pixelSize;
+                size_t dstRowBytes = (srcRowBytes + info.layout.alignment - 1) & ~(info.layout.alignment - 1);
+                for (uint32_t y = 0; y < info.size.h; ++y) {
+                    std::memcpy(
+                        static_cast<uint8_t*>(mapped) + y * dstRowBytes,
+                        srcData + y * srcRowBytes,
+                        srcRowBytes);
+                }
+            }
             vkUnmapMemory(device, stagingMemory);
 
             // Begin command buffer
@@ -469,7 +480,8 @@ namespace tl
             // Prepare region copy
             VkBufferImageCopy region = {};
             region.bufferOffset = 0;
-            region.bufferRowLength = 0; // tightly packed
+            region.bufferRowLength = info.layout.alignment > 1 ?
+                                     ((info.size.w + info.layout.alignment - 1) & ~(info.layout.alignment - 1)) : 0;
             region.bufferImageHeight = 0;
 
             region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -495,7 +507,7 @@ namespace tl
                        VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
 
             endSingleTimeCommands(cmd, device, commandPool, queue);
-            
+    
             vkDestroyBuffer(device, stagingBuffer, nullptr);
             vkFreeMemory(device, stagingMemory, nullptr);
 
@@ -667,7 +679,7 @@ namespace tl
         void Texture::copy(const std::shared_ptr<image::Image>& data)
         {
             TLRENDER_P();
-            copy(data->getData(), data->getDataByteCount());
+            copy(data, 0, 0);
         }
 
         void Texture::createImage()

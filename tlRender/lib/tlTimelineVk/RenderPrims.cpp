@@ -309,7 +309,8 @@ namespace tl
                                 _createBindingSet(shaderName);
                                 auto shader = p.shaders[shaderName];
                                 createPipeline(
-                                    pipelineName, pipelineLayoutName, renderPass,
+                                    pipelineName, pipelineLayoutName,
+                                    renderPass,
                                     hasDepth, hasStencil,
                                     shader, p.vbos[meshName], enableBlending);
                             
@@ -344,8 +345,13 @@ namespace tl
                         }
 
                         const math::Vector2i& offset = glyph->offset;
+                        // original was:
+                        // const math::Box2i box(
+                        //     pos.x + x + offset.x, pos.y - offset.y,
+                        //     glyph->image->getWidth(),
+                        //     glyph->image->getHeight());
                         const math::Box2i box(
-                            pos.x + x + offset.x, pos.y - offset.y,
+                            pos.x + x + offset.x, pos.y, 
                             glyph->image->getWidth(),
                             glyph->image->getHeight());
                         const auto& min = box.min;
@@ -528,7 +534,7 @@ namespace tl
 
                         const math::Vector2i& offset = glyph->offset;
                         const math::Box2i box(
-                            pos.x + x + offset.x, pos.y - offset.y,
+                            pos.x + x + offset.x, pos.y - offset.y, 
                             glyph->image->getWidth(),
                             glyph->image->getHeight());
                         const auto& min = box.min;

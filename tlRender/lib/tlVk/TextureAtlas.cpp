@@ -425,9 +425,9 @@ namespace tl
                     static_cast<float>(textureSize));
             out.textureV = math::FloatRange(
                 (node->box.min.y + static_cast<float>(border)) /
-                    static_cast<float>(textureSize),
+                static_cast<float>(textureSize),
                 (node->box.max.y - static_cast<float>(border) + 1.F) /
-                    static_cast<float>(textureSize));
+                static_cast<float>(textureSize));
         }
 
         void TextureAtlas::Private::removeFromAtlas(
