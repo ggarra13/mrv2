@@ -636,6 +636,7 @@ namespace mrv
                         }
                     }
                 }
+
             }
             catch (const std::exception& e)
             {
@@ -658,6 +659,7 @@ namespace mrv
             {
                 mvp = _createTexturedRectangle();
             }
+                
             
             // --- Final Render Pass: Render to Swapchain (Composition) ---
             vk.buffer->transitionToShaderRead(cmd);
@@ -720,6 +722,9 @@ namespace mrv
                 vk.vao->draw(cmd, vk.vbo);
             }
 
+            // if (p.hudActive && p.hud != HudDisplay::kNone)
+            //     _drawHUD(alpha);
+            
             end_render_pass(cmd);
             
             // Update the pixel bar from here only if we are playing a movie

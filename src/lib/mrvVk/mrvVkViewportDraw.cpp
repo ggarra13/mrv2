@@ -623,9 +623,6 @@ namespace mrv
             const image::Color4f& labelColor) const noexcept
         {
             MRV2_VK();
-
-            // \@todo:  just return
-            return;
             
             const image::Color4f shadowColor(0.F, 0.F, 0.F, 0.7F);
             math::Vector2i shadowPos{pos.x + 2, pos.y + 2};
