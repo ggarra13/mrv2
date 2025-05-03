@@ -220,6 +220,8 @@ namespace tl
 
             VkDevice device = ctx.device;
 
+            vkDeviceWaitIdle(device);
+            
             if (p.sampler != VK_NULL_HANDLE)
                 vkDestroySampler(device, p.sampler, nullptr);
 

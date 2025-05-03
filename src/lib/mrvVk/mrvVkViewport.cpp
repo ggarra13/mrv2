@@ -391,7 +391,6 @@ namespace mrv
         {
             TLRENDER_P();
             MRV2_VK();
-            
 
             // Get the command buffer started for the current frame.
             VkCommandBuffer cmd = getCurrentCommandBuffer();
@@ -734,7 +733,7 @@ namespace mrv
                 updatePixelBar();
 
             vk.buffer->transitionToColorAttachment(cmd);
-            
+
             // Draw FLTK children
             // Fl_Window::draw();
         }
