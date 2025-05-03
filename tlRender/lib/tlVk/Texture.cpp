@@ -414,54 +414,92 @@ namespace tl
             p.currentLayout = newLayout;
         }
 
-        //! \@todo: Used in TextureAtlas
-        void
-        Texture::copy(const std::shared_ptr<image::Image>& data, int x, int y)
+        
+        void Texture::copy(const std::shared_ptr<image::Image>& data, int x, int y)
         {
             TLRENDER_P();
-#if defined(TLRENDER_API_GL_4_1)
-            // if (p.pbo)
-            // {
-            // glBindBuffer(GL_PIXEL_UNPACK_BUFFER, p.pbo);
-            // if (void* buffer =
-            //         glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY))
-            // {
-            //     memcpy(buffer, data->getData(),
-            //     data->getDataByteCount());
-            //     glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
-            //     const auto& info = data->getInfo();
-            //     glBindTexture(GL_TEXTURE_2D, p.id);
-            //     glPixelStorei(GL_UNPACK_ALIGNMENT,
-            //     info.layout.alignment); glPixelStorei(
-            //         GL_UNPACK_SWAP_BYTES,
-            //         info.layout.endian != memory::getEndian());
-            //     glTexSubImage2D(
-            //         GL_TEXTURE_2D, 0, x, y, info.size.w, info.size.h,
-            //         getTextureFormat(info.pixelType),
-            //         getTextureType(info.pixelType), NULL);
-            // }
-            // glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
-            // }
-            // else
-#endif // TLRENDER_API_GL_4_1
-            {
-                const auto& info = data->getInfo();
-                //                 glBindTexture(GL_TEXTURE_2D, p.id);
-                //                 glPixelStorei(GL_UNPACK_ALIGNMENT,
-                //                 info.layout.alignment);
-                // #if defined(TLRENDER_API_GL_4_1)
-                //                 glPixelStorei(
-                //                     GL_UNPACK_SWAP_BYTES,
-                //                     info.layout.endian !=
-                //                     memory::getEndian());
-                // #endif // TLRENDER_API_GL_4_1
-                //                 glTexSubImage2D(
-                //                     GL_TEXTURE_2D, 0, x, y, info.size.w,
-                //                     info.size.h,
-                //                     getTextureFormat(info.pixelType),
-                //                     getTextureType(info.pixelType),
-                //                     data->getData());
-            }
+
+            const auto& info = data->getInfo();
+            const uint8_t* srcData = data->getData();
+            const std::size_t size = data->getDataByteCount();
+
+            VkDevice device = ctx.device;
+            VkCommandPool commandPool = ctx.commandPool;
+            VkQueue queue = ctx.queue;
+
+            // Create staging buffer
+            VkBuffer stagingBuffer;
+            VkDeviceMemory stagingMemory;
+
+            VkBufferCreateInfo bufInfo = {};
+            bufInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+            bufInfo.size = size;
+            bufInfo.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
+
+            VK_CHECK(vkCreateBuffer(device, &bufInfo, nullptr, &stagingBuffer));
+
+            VkMemoryRequirements memReqs;
+            vkGetBufferMemoryRequirements(device, stagingBuffer, &memReqs);
+
+            VkMemoryAllocateInfo allocInfo = {};
+            allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+            allocInfo.allocationSize = memReqs.size;
+            allocInfo.memoryTypeIndex = findMemoryType(
+                ctx.gpu, memReqs.memoryTypeBits,
+                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+            VK_CHECK(vkAllocateMemory(device, &allocInfo, nullptr, &stagingMemory));
+            VK_CHECK(vkBindBufferMemory(device, stagingBuffer, stagingMemory, 0));
+
+            // Copy image data to buffer
+            void* mapped;
+            VK_CHECK(vkMapMemory(device, stagingMemory, 0, size, 0, &mapped));
+            std::memcpy(mapped, srcData, size);
+            vkUnmapMemory(device, stagingMemory);
+
+            // Begin command buffer
+            VkCommandBuffer cmd = beginSingleTimeCommands(device, commandPool);
+
+            // Transition image to transfer dst
+            transition(cmd,
+                       VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_ACCESS_NONE,
+                       VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_ACCESS_TRANSFER_WRITE_BIT,
+                       VK_PIPELINE_STAGE_TRANSFER_BIT);
+
+            // Prepare region copy
+            VkBufferImageCopy region = {};
+            region.bufferOffset = 0;
+            region.bufferRowLength = 0; // tightly packed
+            region.bufferImageHeight = 0;
+
+            region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            region.imageSubresource.mipLevel = 0;
+            region.imageSubresource.baseArrayLayer = 0;
+            region.imageSubresource.layerCount = 1;
+
+            region.imageOffset = {x, y, 0};
+            region.imageExtent = {
+                static_cast<uint32_t>(info.size.w),
+                static_cast<uint32_t>(info.size.h),
+                1};
+
+            vkCmdCopyBufferToImage(
+                cmd, stagingBuffer, p.image,
+                VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                1, &region);
+
+            // Transition to shader-readable
+            transition(cmd,
+                       VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_ACCESS_TRANSFER_WRITE_BIT,
+                       VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_SHADER_READ_BIT,
+                       VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+
+            endSingleTimeCommands(cmd, device, commandPool, queue);
+            
+            vkDestroyBuffer(device, stagingBuffer, nullptr);
+            vkFreeMemory(device, stagingMemory, nullptr);
+
+            p.currentLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
         }
 
         void Texture::copy(const uint8_t* data, const std::size_t size)
@@ -615,6 +653,8 @@ namespace tl
 
                 vkDestroyBuffer(device, stagingBuffer, nullptr);
                 vkFreeMemory(device, stagingMemory, nullptr);
+                
+                p.currentLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
             }
         }
 

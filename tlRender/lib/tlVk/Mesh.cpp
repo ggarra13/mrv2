@@ -797,21 +797,21 @@ namespace tl
                 throw std::runtime_error(
                     "VAO::bind value bigger than MAX_FRAMES_IN_FLIGHT");
 
-            if (value != p.frameIndex)
-            {
-                p.frameIndex = value;
+            if (p.frameIndex == value)
+                return;
 
-                FrameResources& frame = p.frames[p.frameIndex];
-                VkDevice device = ctx.device;
+            p.frameIndex = value;
+
+            FrameResources& frame = p.frames[p.frameIndex];
+            VkDevice device = ctx.device;
                 
-                for (auto& upload : frame.buffersThisFrame)
-                {
-                    vkDestroyBuffer(device, upload.buffer, nullptr);
-                    vkFreeMemory(device, upload.memory, nullptr);
-                }
-
-                frame.buffersThisFrame.clear();
+            for (auto& upload : frame.buffersThisFrame)
+            {
+                vkDestroyBuffer(device, upload.buffer, nullptr);
+                vkFreeMemory(device, upload.memory, nullptr);
             }
+
+            frame.buffersThisFrame.clear();
         }
 
         void VAO::draw(VkCommandBuffer& cmd, std::size_t size)

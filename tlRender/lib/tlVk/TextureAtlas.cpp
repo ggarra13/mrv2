@@ -6,6 +6,8 @@
 
 #include <tlVk/Texture.h>
 
+#include <FL/Fl_Vk_Utils.H>
+
 namespace tl
 {
     namespace vlk
@@ -242,15 +244,9 @@ namespace tl
             return _p->textureType;
         }
 
-        std::vector<unsigned int> TextureAtlas::getTextures() const
+        std::vector<std::shared_ptr<vlk::Texture> > TextureAtlas::getTextures() const
         {
-            TLRENDER_P();
-            std::vector<unsigned int> out;
-            for (const auto& i : p.textures)
-            {
-                out.push_back(i->getID());
-            }
-            return out;
+            return _p->textures;
         }
 
         bool TextureAtlas::getItem(TextureAtlasID id, TextureAtlasItem& out)
@@ -271,6 +267,13 @@ namespace tl
         {
             TLRENDER_P();
 
+            std::cerr << "transition images add Item " << image << std::endl;
+            VkDevice device = ctx.device;
+            VkCommandPool commandPool = ctx.commandPool;
+            VkQueue queue = ctx.queue;
+            
+            VkCommandBuffer cmd = beginSingleTimeCommands(device,
+                                                          commandPool);
             for (uint8_t i = 0; i < p.textureCount; ++i)
             {
                 if (auto node = p.boxPackingNodes[i]->insert(image))
@@ -281,11 +284,17 @@ namespace tl
                     p.textures[node->textureIndex]->copy(
                         image, node->box.min.x + p.border,
                         node->box.min.y + p.border);
+                    p.textures[node->textureIndex]->transition(cmd);
                     p.cache[node->id] = node;
                     p.toTextureAtlasItem(node, out);
+                    
+                    std::cerr << "transition end packing" << std::endl;
+                    endSingleTimeCommands(cmd, device, commandPool, queue);
+
                     return node->id;
                 }
             }
+            std::cerr << "atlas full" << std::endl;
 
             // The atlas is full, over-write older data.
             std::vector<std::shared_ptr<BoxPackingNode> > nodes;
@@ -306,6 +315,8 @@ namespace tl
             const math::Size2i dataSize =
                 math::Size2i(image->getWidth(), image->getHeight()) +
                 p.border * 2;
+
+            
             for (auto node : nodes)
             {
                 const math::Size2i nodeSize = node->box.getSize();
@@ -337,13 +348,18 @@ namespace tl
                         p.textures[node2->textureIndex]->copy(
                             image, node2->box.min.x + p.border,
                             node2->box.min.y + p.border);
+                        p.textures[node2->textureIndex]->transition(cmd);
                         p.cache[node2->id] = node2;
                         p.toTextureAtlasItem(node2, out);
 
+                        std::cerr << "transition end overwrite" << std::endl;
+                        endSingleTimeCommands(cmd, device, commandPool, queue);
                         return node2->id;
                     }
                 }
             }
+            endSingleTimeCommands(cmd, device, commandPool, queue);
+            std::cerr << "transitioned images" << std::endl;
             return 0;
         }
 

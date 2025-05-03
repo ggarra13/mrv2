@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <tlVk/Texture.h>
 #include <tlVk/Vk.h>
 
 #include <tlTimeline/ImageOptions.h>
@@ -54,7 +55,7 @@ namespace tl
             size_t getTextureCount() const;
             int getTextureSize() const;
             image::PixelType getTextureType() const;
-            std::vector<unsigned int> getTextures() const;
+            std::vector<std::shared_ptr<vlk::Texture> > getTextures() const;
 
             bool getItem(TextureAtlasID, TextureAtlasItem&);
 
