@@ -166,18 +166,21 @@ namespace tl
                     {
                         for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
                         {
-                            if (ubo.buffers[i]) vkDestroyBuffer(device,
-                                                                ubo.buffers[i],
-                                                                nullptr);
-                            if (ubo.memories[i]) vkFreeMemory(device,
-                                                              ubo.memories[i],
-                                                              nullptr);
+                            if (ubo.buffers[i] != VK_NULL_HANDLE)
+                                vkDestroyBuffer(device,
+                                                ubo.buffers[i],
+                                                nullptr);
+                            if (ubo.memories[i] != VK_NULL_HANDLE)
+                                vkFreeMemory(device,
+                                             ubo.memories[i],
+                                             nullptr);
                         }
                     }
 
                     for (auto& pool : descriptorPools)
                     {
-                        if (pool) vkDestroyDescriptorPool(device, pool, nullptr);
+                        if (pool != VK_NULL_HANDLE)
+                            vkDestroyDescriptorPool(device, pool, nullptr);
                     }
 
                     descriptorSets.clear();

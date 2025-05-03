@@ -793,9 +793,6 @@ namespace tl
         void VAO::bind(uint32_t value)
         {
             TLRENDER_P();
-            if (value >= MAX_FRAMES_IN_FLIGHT)
-                throw std::runtime_error(
-                    "VAO::bind value bigger than MAX_FRAMES_IN_FLIGHT");
 
             if (p.frameIndex == value)
                 return;
@@ -817,6 +814,11 @@ namespace tl
         void VAO::draw(VkCommandBuffer& cmd, std::size_t size)
         {
             TLRENDER_P();
+
+            if (size == 0)
+            {
+                throw std::runtime_error("VAO::draw tried to draw with a size of 0");
+            }
 
             VkDevice device = ctx.device;
             VkBuffer buffer = p.buffers[p.frameIndex];

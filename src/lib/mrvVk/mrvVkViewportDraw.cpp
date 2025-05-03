@@ -477,8 +477,6 @@ namespace mrv
                     
                 }
             }
-
-            vk.render->end();
         }
 
         void Viewport::_compositeAnnotations(
@@ -624,13 +622,34 @@ namespace mrv
         {
             MRV2_VK();
             
+            const bool hasDepth = mode() & FL_DEPTH;
+            const bool hasStencil = mode() & FL_STENCIL;
+            
+
             const image::Color4f shadowColor(0.F, 0.F, 0.F, 0.7F);
-            math::Vector2i shadowPos{pos.x + 2, pos.y + 2};
-            vk.render->drawText(glyphs, shadowPos, shadowColor);
-            vk.render->drawText(glyphs, pos, labelColor);
-            pos.y += lineHeight;
+            math::Vector2i shadowPos{pos.x + 1, pos.y - 1};
+            vk.render->drawText("HUD", "text",
+                                renderPass(),
+                                hasDepth, hasStencil,
+                                glyphs,
+                                shadowPos, shadowColor);
+            vk.render->drawText("HUD", "texts",
+                                renderPass(),
+                                hasDepth, hasStencil,
+                                glyphs,
+                                pos, labelColor);
+            pos.y -= lineHeight;
         }
 
+        inline void Viewport::_drawText(
+            const std::string& text, const image::FontInfo& fontInfo,
+            math::Vector2i& pos, const int16_t lineHeight,
+            const image::Color4f& labelColor) const noexcept
+        {
+            _drawText(_p->fontSystem->getGlyphs(text, fontInfo), pos,
+                      lineHeight, labelColor);
+        }
+            
         void Viewport::_drawSafeAreas(
             const float percentX, const float percentY,
             const float pixelAspectRatio, const image::Color4f& color,
@@ -744,7 +763,7 @@ namespace mrv
             }
         }
 
-        void Viewport::_drawHUD(float alpha) const noexcept
+        void Viewport::_drawHUD(VkCommandBuffer cmd, float alpha) const noexcept
         {
             TLRENDER_P();
             MRV2_VK();
@@ -752,11 +771,13 @@ namespace mrv
             if (!p.fontSystem || p.videoData.empty() || !p.player)
                 return;
 
-            const auto& viewportSize = getViewportSize();
-
             static const std::string fontFamily = "NotoSans-Regular";
             Viewport* self = const_cast< Viewport* >(this);
-            uint16_t fontSize = 12 * self->pixels_per_unit();
+            const uint16_t fontSize = 12 * self->pixels_per_unit();
+            const image::FontInfo fontInfo(fontFamily, fontSize);
+            const auto& viewportSize = getViewportSize();
+            
+            
 
             Fl_Color c = p.ui->uiPrefs->uiPrefsViewHud->color();
             uint8_t r, g, b;
@@ -764,29 +785,30 @@ namespace mrv
 
             const image::Color4f labelColor(r / 255.F, g / 255.F, b / 255.F, alpha);
 
-            const image::FontInfo fontInfo(fontFamily, fontSize);
             const image::FontMetrics fontMetrics =
                 p.fontSystem->getMetrics(fontInfo);
+            
             auto lineHeight = fontMetrics.lineHeight;
-            math::Vector2i pos(20, lineHeight * 2);
+            math::Vector2i pos(20, viewportSize.h - lineHeight * 2);
 
             const auto player = p.player;
 
             const auto& path = player->path();
             const otime::RationalTime& time = p.videoData[0].time;
             int64_t frame = time.to_frames();
-
-            timeline::RenderOptions renderOptions;
-            renderOptions.clear = false;
-            vk.render->begin(viewportSize, renderOptions);
-
+            
+            vk.render->setViewport(math::Box2i(0, 0, viewportSize.w,
+                                               viewportSize.h));
+            vk.render->setRenderSize(viewportSize);
+            math::Matrix4x4f oldTransform = vk.render->getTransform();
+            vk.render->setTransform(math::ortho(
+                                        0.F, static_cast<float>(viewportSize.w),
+                                        static_cast<float>(viewportSize.h), 0.F, -1.F, 1.F));
             char buf[512];
             if (p.hud & HudDisplay::kDirectory)
             {
                 const auto& directory = path.getDirectory();
-                _drawText(
-                    p.fontSystem->getGlyphs(directory, fontInfo), pos, lineHeight,
-                    labelColor);
+                _drawText(directory, fontInfo, pos, lineHeight, labelColor);
             }
 
             bool otioClip = false;
@@ -810,9 +832,7 @@ namespace mrv
                         ss >> clipTime;
                     }
                 }
-                _drawText(
-                    p.fontSystem->getGlyphs(fullname, fontInfo), pos, lineHeight,
-                    labelColor);
+                _drawText(fullname, fontInfo, pos, lineHeight, labelColor);
             }
 
             if (p.hud & HudDisplay::kResolution)
@@ -834,9 +854,7 @@ namespace mrv
                     {
                         snprintf(buf, 512, "%d x %d", video.size.w, video.size.h);
                     }
-                    _drawText(
-                        p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
-                        labelColor);
+                    _drawText(buf, fontInfo, pos, lineHeight, labelColor);
                 }
             }
 
@@ -922,9 +940,7 @@ namespace mrv
             p.lastFrame = time.value();
 
             if (!tmp.empty())
-                _drawText(
-                    p.fontSystem->getGlyphs(tmp, fontInfo), pos, lineHeight,
-                    labelColor);
+                _drawText(tmp, fontInfo, pos, lineHeight, labelColor);
 
             tmp.clear();
             if (p.hud & HudDisplay::kFrameCount)
@@ -937,9 +953,7 @@ namespace mrv
             }
 
             if (!tmp.empty())
-                _drawText(
-                    p.fontSystem->getGlyphs(tmp, fontInfo), pos, lineHeight,
-                    labelColor);
+                _drawText(tmp, fontInfo, pos, lineHeight,  labelColor);
 
             tmp.clear();
             if (p.hud & HudDisplay::kMemory)
@@ -964,9 +978,7 @@ namespace mrv
             }
 
             if (!tmp.empty())
-                _drawText(
-                    p.fontSystem->getGlyphs(tmp, fontInfo), pos, lineHeight,
-                    labelColor);
+                _drawText(tmp, fontInfo, pos, lineHeight, labelColor);
 
             if (p.hud & HudDisplay::kCache)
             {
@@ -999,9 +1011,7 @@ namespace mrv
                         behindAudioFrames += frame - i.start_time().to_frames();
                     }
                 }
-                _drawText(
-                    p.fontSystem->getGlyphs(_("Cache:"), fontInfo), pos, lineHeight,
-                    labelColor);
+                _drawText(_("Cache: "), fontInfo, pos, lineHeight, labelColor);
                 const auto ioSystem =
                     App::app->getContext()->getSystem<io::System>();
                 const auto& cache = ioSystem->getCache();
@@ -1011,21 +1021,15 @@ namespace mrv
                 snprintf(
                     buf, 512, _("    Used: %.2g of %zu Gb (%.2g %%)"), usedCache,
                     maxCache, pctCache);
-                _drawText(
-                    p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
-                    labelColor);
+                _drawText(buf, fontInfo, pos, lineHeight, labelColor);
                 snprintf(
                     buf, 512, _("    Ahead    V: % 4" PRIu64 "    A: % 4" PRIu64),
                     aheadVideoFrames, aheadAudioFrames);
-                _drawText(
-                    p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
-                    labelColor);
+                _drawText(buf, fontInfo, pos, lineHeight, labelColor);
                 snprintf(
                     buf, 512, _("    Behind   V: % 4" PRIu64 "    A: % 4" PRIu64),
                     behindVideoFrames, behindAudioFrames);
-                _drawText(
-                    p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
-                    labelColor);
+                _drawText(buf, fontInfo, pos, lineHeight, labelColor);
             }
 
             if (p.hud & HudDisplay::kAttributes)
@@ -1038,11 +1042,11 @@ namespace mrv
                     snprintf(
                         buf, 512, "%s = %s", tag.first.c_str(), tag.second.c_str());
 
-                    _drawText(
-                        p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
-                        labelColor);
+                    _drawText(buf, fontInfo, pos, lineHeight, labelColor);
                 }
             }
+            
+            vk.render->setTransform(oldTransform);
         }
 
         void Viewport::_drawWindowArea(const std::string& dw) noexcept
@@ -1116,6 +1120,8 @@ namespace mrv
             if (!p.fontSystem)
                 return;
 
+            return;
+
             MRV2_VK();
 
             static const std::string fontFamily = "NotoSans-Regular";
@@ -1153,49 +1159,15 @@ namespace mrv
             vk.render->drawRect(
                 box, image::Color4f(0.F, 0.F, 0.F, 0.7F * p.helpTextFade));
 
-            _drawText(
-                p.fontSystem->getGlyphs(p.helpText, fontInfo), pos, lineHeight,
-                labelColor);
+            _drawText(p.helpText, fontInfo, pos, lineHeight, labelColor);
 
             vk.render->end();
         }
 
         void Viewport::_createPBOs(const math::Size2i& renderSize)
         {
-            // MRV2_VK();
-            // if (renderSize.w > 0 && renderSize.h > 0)
-            // {
-            //     if (vk.pboIDs[0] != 0)
-            //     {
-            //         glDeleteBuffers(2, vk.pboIDs);
-            //         
-            //         glDeleteSync(vk.pboFences[0]);
-            //         
-            //         glDeleteSync(vk.pboFences[1]);
-            //         
-            //     }
-            //     glGenBuffers(2, vk.pboIDs);
-            //     
-
-            //     const vlk::OffscreenBufferOptions& options = vk.buffer->getOptions();
-            //     const size_t dataSize = renderSize.w * renderSize.h *
-            //                             image::getChannelCount(options.colorType) *
-            //                             image::getBitDepth(options.colorType);
-            //     
-            //     for (int i = 0; i < 2; ++i)
-            //     {
-            //         glBindBuffer(GL_PIXEL_PACK_BUFFER, vk.pboIDs[i]);
-            //         
-            //         glBufferData(
-            //             GL_PIXEL_PACK_BUFFER, dataSize, nullptr, GL_STREAM_READ);
-            //         
-            //         vk.pboFences[i] = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
-            //         
-            //     }
-            //     glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
-            //     
-            // }
         }
+
         void Viewport::_createOverlayPBO(const math::Size2i& renderSize)
         {
             MRV2_VK();

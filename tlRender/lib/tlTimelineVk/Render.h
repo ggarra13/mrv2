@@ -6,7 +6,9 @@
 
 #include <tlTimeline/IRender.h>
 
+#include <tlVk/Mesh.h>
 #include <tlVk/OffscreenBuffer.h>
+#include <tlVk/Shader.h>
 #include <tlVk/Texture.h>
 
 #include <tlCore/LRUCache.h>
@@ -73,6 +75,23 @@ namespace tl
             VkCommandBuffer getCommandBuffer() const;
             uint32_t getFrameIndex() const;
 
+            void createPipeline(const std::string& pipelineName,
+                                const std::string& pipelineLayoutName,
+                                const VkRenderPass renderPass,
+                                const bool hasDepth,
+                                const bool hasStencil,
+                                const std::shared_ptr<vlk::Shader>& shader,    
+                                const std::shared_ptr<vlk::VBO>& mesh,
+                                const bool enableBlending = false,
+                                const VkBlendFactor srcColorBlendFactor =
+                                VK_BLEND_FACTOR_SRC_ALPHA,
+                                const VkBlendFactor dstColorBlendFactor =
+                                VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                                const VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
+                                const VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                                const VkBlendOp colorBlendOp = VK_BLEND_OP_ADD,
+                                const VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD);
+            
             math::Size2i getRenderSize() const override;
             void setRenderSize(const math::Size2i&) override;
             math::Box2i getViewport() const override;
@@ -111,6 +130,15 @@ namespace tl
                 const std::string& pipelineLayoutName,
                 const geom::TriangleMesh2&, const math::Vector2i& position,
                 const image::Color4f&);
+
+            void drawText(
+                const std::string& pipelineName,
+                const std::string& pipelineLayoutName,
+                const VkRenderPass& renderPass,
+                const bool hasDepth,
+                const bool hasStencil,
+                const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
+                const math::Vector2i& pos, const image::Color4f& color);
             void drawText(
                 const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
                 const math::Vector2i& position, const image::Color4f&) override;
@@ -190,8 +218,9 @@ namespace tl
             void _createMesh(
                 const std::string& meshName, const geom::TriangleMesh2& mesh);
             void _createBindingSet(const std::string& shaderName);
-            VkPipelineLayout _createPipelineLayout(const std::string& pipelineLayoutName,
-                                                   const std::string& meshName);
+            VkPipelineLayout _createPipelineLayout(
+                const std::string& pipelineLayoutName,
+                const std::shared_ptr<vlk::Shader> shader);
             void _createPipeline(
                 const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
                 const std::string& pipelineName,
@@ -206,8 +235,10 @@ namespace tl
                 const VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
                 const VkBlendOp colorBlendOp = VK_BLEND_OP_ADD,
                 const VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD);
+            void _setViewportAndScissor(const math::Size2i&);
             void _bindDescriptorSets(
-                const std::string& pipelineLayoutName, const std::string& shaderName);
+                const std::string& pipelineLayoutName,
+                const std::string& shaderName);
 
 #if defined(TLRENDER_LIBPLACEBO)
             void _addTextures(

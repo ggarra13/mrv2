@@ -735,7 +735,7 @@ namespace mrv
         {
             MRV2_GL();
             const image::Color4f shadowColor(0.F, 0.F, 0.F, 0.7F);
-            math::Vector2i shadowPos{pos.x + 2, pos.y + 2};
+            math::Vector2i shadowPos{pos.x + 1, pos.y + 1};
             gl.render->drawText(glyphs, shadowPos, shadowColor);
             gl.render->drawText(glyphs, pos, labelColor);
             pos.y += lineHeight;

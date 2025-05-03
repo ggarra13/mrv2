@@ -82,7 +82,7 @@ namespace mrv
 
             void _drawCropMask(const math::Size2i& renderSize) const noexcept;
 
-            void _drawHUD(float alpha) const noexcept;
+            void _drawHUD(VkCommandBuffer cmd, float alpha) const noexcept;
 
             void _drawCursor(const math::Matrix4x4f& mvp) noexcept;
 
@@ -107,6 +107,10 @@ namespace mrv
                 const std::vector<std::shared_ptr<image::Glyph> >&,
                 math::Vector2i&, const int16_t lineHeight,
                 const image::Color4f&) const noexcept;
+            void _drawText(
+                const std::string& text, const image::FontInfo& fontInfo,
+                math::Vector2i& pos, const int16_t lineHeight,
+                const image::Color4f& labelColor) const noexcept;
             void _drawSafeAreas() noexcept;
             void _drawSafeAreas(
                 const float percentX, const float percentY,

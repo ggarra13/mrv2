@@ -720,9 +720,9 @@ namespace mrv
                 vk.vao->bind(m_currentFrameIndex);
                 vk.vao->draw(cmd, vk.vbo);
             }
-
-            // if (p.hudActive && p.hud != HudDisplay::kNone)
-            //     _drawHUD(alpha);
+            
+            if (p.hudActive && p.hud != HudDisplay::kNone)
+                _drawHUD(cmd, alpha);
             
             end_render_pass(cmd);
             

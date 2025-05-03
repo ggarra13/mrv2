@@ -172,12 +172,6 @@ namespace tl
 
         void Shader::bind(uint64_t value)
         {
-            if (value >= MAX_FRAMES_IN_FLIGHT)
-            {
-                std::cerr << "value (" << value
-                          << ") >= " << MAX_FRAMES_IN_FLIGHT << std::endl;
-                throw std::runtime_error("Invalid value for bind.");
-            }
             frameIndex = value;
         }
 

@@ -39,34 +39,6 @@ namespace tl
             if (!activeBindingSet)
                 throw std::runtime_error("No activeBindingSet for Shader " + name);
             activeBindingSet->updateUniform(name, &value, sizeof(value), frameIndex);
-            
-            // void* data;
-            // vkMapMemory(
-            //     device, ubo.memories[frameIndex], 0, sizeof(T), 0, &data);
-            // memcpy(data, &value, sizeof(T));
-            // vkUnmapMemory(device, ubo.memories[frameIndex]);
-
-            // We need to update the bufferInfo in the descriptor set for the
-            // current frame Alternatively, you could use dynamic uniform
-            // buffers.
-
-            // // For this approach, we re-write the descriptor set for this
-            // // binding and frame
-            // VkDescriptorBufferInfo bufferInfo =
-            //     ubo.infos[frameIndex]; // Use the buffer info for this
-            //                                  // frame
-
-            // VkWriteDescriptorSet write{};
-            // write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-            // write.dstSet =
-            //     descriptorSets[frameIndex]; // Update the set for this frame
-            // write.dstBinding = ubo.layoutBinding.binding;
-            // write.dstArrayElement = 0;
-            // write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-            // write.descriptorCount = 1;
-            // write.pBufferInfo = &bufferInfo;
-
-            // vkUpdateDescriptorSets(ctx.device, 1, &write, 0, nullptr);
         }
 
         template <typename T>

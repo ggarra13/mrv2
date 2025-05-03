@@ -17,42 +17,82 @@ namespace tl
             p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
         }
         
-        void Render::_createPipeline(
-            const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
-            const std::string& pipelineName,
+        
+        VkPipelineLayout Render::_createPipelineLayout(
             const std::string& pipelineLayoutName,
-            const std::string& shaderName,
-            const std::string& meshName, const bool enableBlending,
-            const VkBlendFactor srcColorBlendFactor,
-            const VkBlendFactor dstColorBlendFactor,
-            const VkBlendFactor srcAlphaBlendFactor,
-            const VkBlendFactor dstAlphaBlendFactor,
-            const VkBlendOp colorBlendOp,
-            const VkBlendOp alphaBlendOp)
+            const std::shared_ptr<vlk::Shader> shader)
         {
             TLRENDER_P();
+            
+            VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = {};
+            pPipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+            pPipelineLayoutCreateInfo.pNext = NULL;
+            pPipelineLayoutCreateInfo.setLayoutCount = 1;
+            VkDescriptorSetLayout setLayout = shader->getDescriptorSetLayout(); // Get layout from shader
+            pPipelineLayoutCreateInfo.pSetLayouts = &setLayout;
 
-            VkDevice device = ctx.device;
-
-            const auto& shader = p.shaders[shaderName];
-            const auto& mesh = p.vbos[meshName];
-
+            VkPushConstantRange pushConstantRange = {};
+            std::size_t pushSize = shader->getPushSize();
+            if (pushSize > 0)
+            {
+                pushConstantRange.stageFlags = shader->getPushStageFlags();
+                pushConstantRange.offset = 0;
+                pushConstantRange.size = pushSize;
+                pPipelineLayoutCreateInfo.pushConstantRangeCount = 1;
+                pPipelineLayoutCreateInfo.pPushConstantRanges = &pushConstantRange;
+            }
+            
+            VkPipelineLayout pipelineLayout;
+            VkResult result = vkCreatePipelineLayout(ctx.device, &pPipelineLayoutCreateInfo, NULL, &pipelineLayout);
+            VK_CHECK(result);
+            p.pipelineLayouts[pipelineLayoutName] = pipelineLayout;
+            return pipelineLayout;
+        }
+        
+        void Render::createPipeline(const std::string& pipelineName,
+                                    const std::string& pipelineLayoutName,
+                                    const VkRenderPass renderPass,
+                                    const bool hasDepth,
+                                    const bool hasStencil,
+                                    const std::shared_ptr<vlk::Shader>& shader,
+                                    const std::shared_ptr<vlk::VBO>& mesh,
+                                    const bool enableBlending,
+                                    const VkBlendFactor srcColorBlendFactor,
+                                    const VkBlendFactor dstColorBlendFactor,
+                                    const VkBlendFactor srcAlphaBlendFactor,
+                                    const VkBlendFactor dstAlphaBlendFactor,
+                                    const VkBlendOp colorBlendOp,
+                                    const VkBlendOp alphaBlendOp)
+        {
+            TLRENDER_P();
+            
             if (!shader)
                 throw std::runtime_error(
-                    "createPipeline failed with unknown shader '" + shaderName +
-                    "'");
+                    "createPipeline failed with unknown shader");
 
             if (!mesh)
                 throw std::runtime_error(
-                    "createPipeline failed with unknown mesh '" + meshName +
-                    "'");
+                    "createPipeline failed with unknown mesh");
 
+            if (renderPass == VK_NULL_HANDLE)
+                throw std::runtime_error(
+                    "createPipeline failed with renderPass == VK_NULL_HANDLE");
+                
+
+            
             VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
             if (!pipelineLayout)
             {
-                pipelineLayout = _createPipelineLayout(pipelineLayoutName, shaderName);;
+                pipelineLayout = _createPipelineLayout(pipelineLayoutName,
+                                                       shader);
             }
+            
+            if (pipelineLayout == VK_NULL_HANDLE)
+                throw std::runtime_error(
+                    "createPipeline failed with pipelineLayout == VK_NULL_HANDLE");
 
+            VkDevice device = ctx.device;
+            
             // Elements of new Pipeline
             vlk::VertexInputStateInfo vi;
             vi.bindingDescriptions = mesh->getBindingDescription();
@@ -69,12 +109,9 @@ namespace tl
 
             vlk::DepthStencilStateInfo ds;
 
-            bool has_depth = fbo->hasDepth();     // Check if FBO has depth
-            bool has_stencil = fbo->hasStencil(); // Check if FBO has stencil
-
-            ds.depthTestEnable = has_depth ? VK_TRUE : VK_FALSE;
-            ds.depthWriteEnable = has_depth ? VK_TRUE : VK_FALSE;
-            ds.stencilTestEnable = has_stencil ? VK_TRUE : VK_FALSE;
+            ds.depthTestEnable = hasDepth ? VK_TRUE : VK_FALSE;
+            ds.depthWriteEnable = hasDepth ? VK_TRUE : VK_FALSE;
+            ds.stencilTestEnable = hasStencil ? VK_TRUE : VK_FALSE;
 
             vlk::ViewportStateInfo vp;
 
@@ -119,7 +156,7 @@ namespace tl
             pipelineState.multisampleState = ms;
             pipelineState.dynamicState = dynamicState;
             pipelineState.stages = shaderStages;
-            pipelineState.renderPass = fbo->getRenderPass();
+            pipelineState.renderPass = renderPass;
             pipelineState.layout = pipelineLayout;
 
             VkPipeline pipeline;
@@ -134,14 +171,10 @@ namespace tl
                 const auto& pair = p.pipelines[pipelineName];
                 const auto& oldPipelineState = pair.first;
                 VkPipeline oldPipeline = pair.second;
-                if (pipelineState != oldPipelineState ||
-                    oldPipeline == VK_NULL_HANDLE)
+                if (pipelineState != oldPipelineState)
                 {
-                    if (oldPipeline != VK_NULL_HANDLE)
-                    {
-                        p.garbage[p.frameIndex].pipelines.push_back(
-                            oldPipeline);
-                    }
+                    p.garbage[p.frameIndex].pipelines.push_back(
+                        oldPipeline);
                     pipeline = pipelineState.create(device);
                     auto pair = std::make_pair(pipelineState, pipeline);
                     p.pipelines[pipelineName] = pair;
@@ -152,11 +185,62 @@ namespace tl
                 }
             }
 
+            if (pipeline == VK_NULL_HANDLE)
+            {
+                throw  std::runtime_error("createPipeline failed binding pipeline, it is VK_NULL_HANDLE");
+            }
+            // Enable the pipeline.
             vkCmdBindPipeline(p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
+        }
+        
+        void Render::_createPipeline(
+            const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
+            const std::string& pipelineName,
+            const std::string& pipelineLayoutName,
+            const std::string& shaderName,
+            const std::string& meshName,
+            const bool enableBlending,
+            const VkBlendFactor srcColorBlendFactor,
+            const VkBlendFactor dstColorBlendFactor,
+            const VkBlendFactor srcAlphaBlendFactor,
+            const VkBlendFactor dstAlphaBlendFactor,
+            const VkBlendOp colorBlendOp,
+            const VkBlendOp alphaBlendOp)
+        {
+            TLRENDER_P();
 
+            const auto& shader = p.shaders[shaderName];
+            const auto& mesh = p.vbos[meshName];
+            
+            createPipeline(pipelineName,
+                           pipelineLayoutName,
+                           fbo->getRenderPass(),
+                           fbo->hasDepth(), fbo->hasStencil(),
+                           shader, mesh, enableBlending, srcColorBlendFactor,
+                           dstColorBlendFactor, srcAlphaBlendFactor,
+                           dstAlphaBlendFactor, colorBlendOp,
+                           alphaBlendOp);
             fbo->setupViewportAndScissor(p.cmd);
         }
+        
+        void Render::_setViewportAndScissor(const math::Size2i& viewportSize)
+        {
+            TLRENDER_P();
+            
+            VkViewport viewport = {};
+            viewport.x =  0.F;
+            viewport.y = static_cast<float>(viewportSize.h);
+            viewport.width = static_cast<float>(viewportSize.w);
+            viewport.height = -static_cast<float>(viewportSize.h);
+            viewport.minDepth = 0.0f;
+            viewport.maxDepth = 1.0f;
+            vkCmdSetViewport(p.cmd, 0, 1, &viewport);
 
+            VkRect2D scissor = {};
+            scissor.extent.width = viewportSize.w;
+            scissor.extent.height = viewportSize.h;
+            vkCmdSetScissor(p.cmd, 0, 1, &scissor);
+        }
 
         void Render::_bindDescriptorSets(
             const std::string& pipelineLayoutName, const std::string& shaderName)
@@ -172,6 +256,7 @@ namespace tl
                     "Undefined pipelineLayout " + pipelineLayoutName);
             }
             VkDescriptorSet descriptorSet = p.shaders[shaderName]->getDescriptorSet();
+            
             vkCmdBindDescriptorSets(
                 p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
                 p.pipelineLayouts[pipelineLayoutName], 0, 1,

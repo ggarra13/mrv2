@@ -12,6 +12,26 @@ it to Vulkan.
 - Fixed HDR monitor scoring selection to prefer HDR10 and HLG over P3_NONLINEAR.
 - Improved runmeq.sh and runmet.sh scripts to exit early and with an error
   message if compilation fails.
+- Started porting to Vulkan.
+	 * Working:
+		 * Viewport
+		 * Color toolbar
+		 * Timeline with tick bars, current frame number and labels.
+		 * Timeline without thumbnails
+		 * OTIO with dissolves
+	 * Missing to check/add:
+		 * HUD
+		 * Safe Areas
+		 * Masking
+		 * Thumbnails in Timeline (crashes) / Editing
+		 * Thumbnails in Panels (done with OpenGL for now)
+		 * Saving of Movies/Pictures with Annotations
+		 * Annotations
+		 * Area selection
+		 * Area color information
+		 * Temporary FLTK Text widget annotation (how to do it?)
+		 * Text annotations (how to do it?)
+		 * 
 
 
 v1.3.7
