@@ -267,7 +267,6 @@ namespace tl
         {
             TLRENDER_P();
 
-            std::cerr << "transition images add Item " << image << std::endl;
             VkDevice device = ctx.device;
             VkCommandPool commandPool = ctx.commandPool;
             VkQueue queue = ctx.queue;
@@ -288,13 +287,11 @@ namespace tl
                     p.cache[node->id] = node;
                     p.toTextureAtlasItem(node, out);
                     
-                    std::cerr << "transition end packing" << std::endl;
                     endSingleTimeCommands(cmd, device, commandPool, queue);
 
                     return node->id;
                 }
             }
-            std::cerr << "atlas full" << std::endl;
 
             // The atlas is full, over-write older data.
             std::vector<std::shared_ptr<BoxPackingNode> > nodes;
@@ -352,14 +349,12 @@ namespace tl
                         p.cache[node2->id] = node2;
                         p.toTextureAtlasItem(node2, out);
 
-                        std::cerr << "transition end overwrite" << std::endl;
                         endSingleTimeCommands(cmd, device, commandPool, queue);
                         return node2->id;
                     }
                 }
             }
             endSingleTimeCommands(cmd, device, commandPool, queue);
-            std::cerr << "transitioned images" << std::endl;
             return 0;
         }
 
