@@ -144,6 +144,7 @@ namespace tl
             {
                 std::vector<VkPipeline> pipelines;
                 std::vector<std::shared_ptr<vlk::ShaderBindingSet> > bindingSets;
+                std::vector<std::shared_ptr<vlk::Shader> > shaders;
                 std::vector<std::shared_ptr<vlk::VAO> > vaos;
             };
             std::array<FrameGarbage, vlk::MAX_FRAMES_IN_FLIGHT> garbage;

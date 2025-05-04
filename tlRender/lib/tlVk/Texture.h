@@ -41,6 +41,7 @@ namespace tl
             _init(const image::Info&, const TextureOptions& = TextureOptions());
 
             void _init(
+                const VkImageType type,
                 const uint32_t width, const uint32_t height,
                 const uint32_t depth, const VkFormat format,
                 const std::string& name,

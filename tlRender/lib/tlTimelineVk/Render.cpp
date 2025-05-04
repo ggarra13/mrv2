@@ -712,6 +712,10 @@ namespace tl
             {
                 vao.reset();
             }
+            for (auto& shaders : g.shaders)
+            {
+                shaders.reset();
+            }
             g.pipelines.clear();
             g.bindingSets.clear();
             g.vaos.clear();
@@ -879,9 +883,17 @@ namespace tl
                     static_cast<float>(renderSize.h), -1.F, 1.F));
             for (auto& i : p.shaders)
             {
-                i.second->bind(p.frameIndex);
-                i.second->setUniform("transform.mvp", p.transform,
-                                     vlk::kShaderVertex);
+                if (i.second)
+                {
+                    i.second->bind(p.frameIndex);
+                    i.second->setUniform("transform.mvp", p.transform,
+                                         vlk::kShaderVertex);
+                }
+                else
+                {
+                    std::string err = "Missing shader for entry ";
+                    throw std::runtime_error(err + i.first);
+                }
             }
         }
 
@@ -1200,7 +1212,7 @@ namespace tl
                 switch (sd->desc.type)
                 {
                 case PL_DESC_STORAGE_IMG:
-                    throw "Unimplemented img";
+                    throw std::runtime_error("Unimplemented storage image");
                 case PL_DESC_SAMPLED_TEX:
                 {
                     pl_tex tex = reinterpret_cast<pl_tex>(sd->binding.object);
@@ -1209,13 +1221,9 @@ namespace tl
                     int dims = pl_tex_params_dimension(tex->params);
                     assert(dims >= 1 && dims <= 3);
 
-                    const char* textureName = sd->desc.name;
                     const char* samplerName = sd->desc.name;
-                    const int channels = fmt->num_components;
-
-                    // Defaults
-                    unsigned textureId = 0;
-                    int size = fmt->internal_size / fmt->num_components;
+                    int pixel_fmt_size = fmt->internal_size / fmt->num_components;
+                    int channels = fmt->num_components;
 
                     // Map libplacebo format to Vulkan format
                     VkFormat imageFormat = to_vk_format(fmt);
@@ -1247,12 +1255,17 @@ namespace tl
                         height = depth = 1;
                     else if (imageType == VK_IMAGE_TYPE_2D)
                         depth = 1;
+                    std::cerr << "create texture " << __LINE__ << std::endl;
+                    vlk::TextureOptions options;
+                    options.tiling = VK_IMAGE_TILING_OPTIMAL;
                     auto texture = vlk::Texture::create(
                         ctx, imageType, width, height, depth, imageFormat,
                         samplerName);
+                    std::cerr << "created texture " << __LINE__ << std::endl;
                     texture->copy(
                         reinterpret_cast<const uint8_t*>(values),
                         width * height * depth * fmt->internal_size);
+                    std::cerr << "copied texture data " << __LINE__ << std::endl;
                     textures.push_back(texture);
                     break;
                 }
@@ -1432,6 +1445,7 @@ namespace tl
             }
 #endif // TLRENDER_OCIO
 
+            p.garbage[p.frameIndex].shaders.push_back(p.shaders["display"]);
             p.shaders["display"].reset();
             _displayShader();
         }
@@ -1508,6 +1522,7 @@ namespace tl
             }
 #endif // TLRENDER_OCIO
 
+            p.garbage[p.frameIndex].shaders.push_back(p.shaders["display"]);
             p.shaders["display"].reset();
             _displayShader();
         }
@@ -1524,6 +1539,7 @@ namespace tl
             p.placeboData.reset(new LibPlaceboData);
 #endif // TLRENDER_LIBPLACEBO
 
+            p.garbage[p.frameIndex].shaders.push_back(p.shaders["display"]);
             p.shaders["display"].reset();
             _displayShader();
         }
@@ -1534,6 +1550,7 @@ namespace tl
 
             if (!p.shaders["display"])
             {
+                std::cerr << "RECREATE DISPLAY " << __LINE__ << std::endl;
                 if (p.pipelines.count("display") != 0)
                 {
                     auto pair = p.pipelines["display"];
@@ -1585,12 +1602,11 @@ namespace tl
                     lutDef = replaceUniformSampler(lutDef, p.bindingIndex);
                     lut = "outColor = lutFunc(outColor);";
                 }
+                std::cerr << "RECREATE DISPLAY " << __LINE__ << std::endl;
 #endif // TLRENDER_OCIO
 #if defined(TLRENDER_LIBPLACEBO)
                 if (p.placeboData)
                 {
-                    vkDeviceWaitIdle(ctx.device);
-
                     pl_shader_params shader_params;
                     memset(&shader_params, 0, sizeof(pl_shader_params));
 
@@ -1919,6 +1935,86 @@ namespace tl
                       << "// Variables"
                       << "//" << std::endl
                       << std::endl;
+
+#define USE_CONSTANTS 1
+#if USE_CONSTANTS
+                    for (int i = 0; i < res->num_variables; ++i)
+                    {
+                        const struct pl_shader_var shader_var = res->variables[i];
+                        const struct pl_var var = shader_var.var;
+                        std::string glsl_type = pl_var_glsl_type_name(var);
+                        s << "const " << glsl_type << " " << var.name;
+                        if (!shader_var.data)
+                        {
+                            s << ";" << std::endl;
+                        }
+                        else
+                        {
+                            int dim_v = var.dim_v;
+                            int dim_m = var.dim_m;
+                            switch (var.type)
+                            {
+                            case PL_VAR_SINT:
+                            {
+                                int* m = (int*)shader_var.data;
+                                s << " = " << m[0] << ";" << std::endl;
+                                break;
+                            }
+                            case PL_VAR_UINT:
+                            {
+                                unsigned* m = (unsigned*)shader_var.data;
+                                s << " = " << m[0] << ";" << std::endl;
+                                break;
+                            }
+                            case PL_VAR_FLOAT:
+                            {
+                                float* m = (float*)shader_var.data;
+                                if (dim_m > 1 && dim_v > 1)
+                                {
+                                    s << " = " << glsl_type << "(";
+                                    for (int c = 0; c < dim_v; ++c)
+                                    {
+                                        for (int r = 0; r < dim_m; ++r)
+                                        {
+                                            int index = c * dim_m + r;
+                                            s << m[index];
+
+                                            // Check if it's the last element
+                                            if (!(r == dim_m - 1 && c == dim_v - 1))
+                                            {
+                                                s << ", ";
+                                            }
+                                        }
+                                    }
+                                    s << ");" << std::endl;
+                                }
+                                else if (dim_v > 1)
+                                {
+                                    s << " = " << glsl_type << "(";
+                                    for (int c = 0; c < dim_v; ++c)
+                                    {
+                                        s << m[c];
+
+                                        // Check if it's the last element
+                                        if (!(c == dim_v - 1))
+                                        {
+                                            s << ", ";
+                                        }
+                                    }
+                                    s << ");" << std::endl;
+                                }
+                                else
+                                {
+                                    s << " = " << m[0] << ";" << std::endl;
+                                }
+                                break;
+                            }
+                            default:
+                                break;
+                            }
+                        }
+                    }
+#else
                     s << "layout(set = 0, binding = " << p.bindingIndex++
                       << ", std140) uniform Placebo {\n";
                     for (int i = 0; i < res->num_variables; ++i)
@@ -1928,74 +2024,9 @@ namespace tl
                         const struct pl_var var = shader_var.var;
                         std::string glsl_type = pl_var_glsl_type_name(var);
                         s << glsl_type << " " << var.name << ";" << std::endl;
-                        // else
-                        // {
-                        //     int dim_v = var.dim_v;
-                        //     int dim_m = var.dim_m;
-                        //     switch (var.type)
-                        //     {
-                        //     case PL_VAR_SINT:
-                        //     {
-                        //         int* m = (int*)shader_var.data;
-                        //         s << " = " << m[0] << ";" << std::endl;
-                        //         break;
-                        //     }
-                        //     case PL_VAR_UINT:
-                        //     {
-                        //         unsigned* m = (unsigned*)shader_var.data;
-                        //         s << " = " << m[0] << ";" << std::endl;
-                        //         break;
-                        //     }
-                        //     case PL_VAR_FLOAT:
-                        //     {
-                        //         float* m = (float*)shader_var.data;
-                        //         if (dim_m > 1 && dim_v > 1)
-                        //         {
-                        //             s << " = " << glsl_type << "(";
-                        //             for (int c = 0; c < dim_v; ++c)
-                        //             {
-                        //                 for (int r = 0; r < dim_m; ++r)
-                        //                 {
-                        //                     int index = c * dim_m + r;
-                        //                     s << m[index];
-
-                        //                     // Check if it's the last element
-                        //                     if (!(r == dim_m - 1 && c ==
-                        //                     dim_v - 1))
-                        //                     {
-                        //                         s << ", ";
-                        //                     }
-                        //                 }
-                        //             }
-                        //             s << ");" << std::endl;
-                        //         }
-                        //         else if (dim_v > 1)
-                        //         {
-                        //             s << " = " << glsl_type << "(";
-                        //             for (int c = 0; c < dim_v; ++c)
-                        //             {
-                        //                 s << m[c];
-
-                        //                 // Check if it's the last element
-                        //                 if (!(c == dim_v - 1))
-                        //                 {
-                        //                     s << ", ";
-                        //                 }
-                        //             }
-                        //             s << ");" << std::endl;
-                        //         }
-                        //         else
-                        //         {
-                        //             s << " = " << m[0] << ";" << std::endl;
-                        //         }
-                        //         break;
-                        //     }
-                        //     default:
-                        //         break;
-                        //     }
-                        // }
                     }
                     s << "} uboPlacebo;\n";
+#endif
 
                     s << std::endl
                       << "//" << std::endl
@@ -2031,6 +2062,7 @@ namespace tl
 
                     s << res->glsl << std::endl;
                     toneMapDef = s.str();
+                    std::cerr << "RECREATE DISPLAY " << __LINE__ << std::endl;
 
                     try
                     {
@@ -2040,11 +2072,12 @@ namespace tl
                     {
                         std::cerr << e.what() << std::endl;
                         pl_shader_free(&shader);
-                        return;
+                        p.placeboData.reset();
+                        throw e;
                     }
                     toneMap = "outColor = ";
                     toneMap += res->name;
-                    toneMap += "(tmp);\n";
+                    toneMap += "(outColor);\n";
 
                     pl_shader_free(&shader);
                 }
@@ -2059,6 +2092,10 @@ namespace tl
                 }
                 p.shaders["display"] =
                     vlk::Shader::create(ctx, vertexSource(), source, "display");
+                if (!p.shaders["display"])
+                {
+                    abort();
+                }
                 p.shaders["display"]->createUniform(
                     "transform.mvp", p.transform, vlk::kShaderVertex);
                 p.shaders["display"]->addFBO("textureSampler");
@@ -2103,10 +2140,13 @@ namespace tl
                     {
                         p.shaders["display"]->addTexture(texture->getName());
                     }
+                    // \@ todo: add libplacebo uniforms
                 }
 #endif
+                std::cerr << "RECREATE DISPLAY " << __LINE__ << std::endl;
                 _createBindingSet(p.shaders["display"]);
-                // p.shaders["display"]->debug();
+                std::cerr << "RECREATE DISPLAY " << __LINE__ << std::endl;
+                p.shaders["display"]->debug();
             }
         }
     } // namespace timeline_vlk

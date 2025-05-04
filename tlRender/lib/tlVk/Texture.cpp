@@ -3,12 +3,12 @@
 // All rights reserved.
 
 #include <tlVk/Texture.h>
-
 #include <tlVk/Vk.h>
 
 #include <tlCore/Assert.h>
 
 #include <FL/Fl_Vk_Utils.H>
+#include <FL/vk_enum_string_helper.h>
 
 #include <array>
 #include <iostream>
@@ -219,12 +219,14 @@ namespace tl
         }
 
         void Texture::_init(
+            const VkImageType type,
             const uint32_t width, const uint32_t height, const uint32_t depth,
             const VkFormat format, const std::string& name,
             const TextureOptions& options)
         {
             TLRENDER_P();
 
+            p.imageType = type;
             p.info.size.w = width;
             p.info.size.h = height;
             p.depth = depth;
@@ -232,14 +234,18 @@ namespace tl
             p.options = options;
             p.name = name;
 
-            if (depth == 0 && height == 0 && width > 0)
-                p.imageType = VK_IMAGE_TYPE_1D;
-            else if (depth > 0 && height > 0 && width > 0)
-                p.imageType = VK_IMAGE_TYPE_3D;
-            else if (height > 0 && width > 0)
-                p.imageType = VK_IMAGE_TYPE_2D;
-            else
-                throw std::runtime_error("Invalid width, height and depth.");
+            switch(p.imageType)
+            {
+            case VK_IMAGE_TYPE_3D:
+            case VK_IMAGE_TYPE_1D:
+                p.options.tiling = VK_IMAGE_TILING_OPTIMAL;
+                break;
+            default:
+                break;
+            }
+
+            if (p.options.tiling == VK_IMAGE_TILING_OPTIMAL)
+                p.memoryFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
 
             createImage();
             allocateMemory();
@@ -289,7 +295,7 @@ namespace tl
             const std::string& name, const TextureOptions& options)
         {
             auto out = std::shared_ptr<Texture>(new Texture(ctx));
-            out->_init(width, height, depth, format, name, options);
+            out->_init(type, width, height, depth, format, name, options);
             return out;
         }
 
@@ -718,6 +724,8 @@ namespace tl
                     p.internalFormat = VK_FORMAT_R16G16B16A16_SFLOAT;
                     break;
                 default:
+                    std::string err = "tl::vlk::Texture Invalid VK_FORMAT: ";
+                    throw std::runtime_error(err + string_VkFormat(p.format));
                     break;
                 }
             }

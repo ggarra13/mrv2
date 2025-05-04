@@ -767,8 +767,8 @@ namespace tl
             allocInfo.memoryTypeIndex = findMemoryType(
                 gpu, memRequirements.memoryTypeBits,
                 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                    VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
+                VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+            
             if (vkAllocateMemory(device, &allocInfo, nullptr, &memory) !=
                 VK_SUCCESS)
             {

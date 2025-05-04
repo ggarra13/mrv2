@@ -576,7 +576,9 @@ namespace mrv
             renderOptions.colorBuffer = vk.colorBufferType;
             
             
+#ifndef NDEBUG
             try
+#endif
             {
                 vk.buffer->transitionToColorAttachment(cmd);
             
@@ -637,10 +639,12 @@ namespace mrv
                 }
 
             }
+#ifndef NDEBUG
             catch (const std::exception& e)
             {
                 LOG_ERROR(e.what());
             }
+#endif
 
             vk.render->end();
 
