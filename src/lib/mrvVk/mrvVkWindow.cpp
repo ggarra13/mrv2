@@ -38,9 +38,7 @@ namespace mrv
 
         void VkWindow::_init()
         {
-            m_validate = true;
         }
-
 
         // m_depth (optionally) -> creates m_renderPass
         void VkWindow::prepare_render_pass() 
