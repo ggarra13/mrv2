@@ -1368,8 +1368,11 @@ void main() {
         {
             return;
         }
+        end_render_pass(cmd);
 
         update_texture(cmd);
+
+        begin_render_pass(cmd);
 
         vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline);
         vkCmdBindDescriptorSets(
@@ -1390,6 +1393,8 @@ void main() {
 
         // Draw the rectangle
         p.vao->draw(cmd, p.vbo);
+
+        end_render_pass(cmd);
     }
 
     std::vector<const char*> NDIView::get_instance_extensions()
