@@ -635,7 +635,8 @@ namespace tl
                                                enableBlending);
                                 p.buffers["video"]->beginRenderPass(p.cmd, "COMP VIDEO RENDER");
 
-                                _createBindingSet("dissolve");
+                                auto shader = p.shaders["dissolve"];
+                                _createBindingSet(shader);
 
                                 p.shaders["dissolve"]->bind(p.frameIndex);
                                 p.shaders["dissolve"]->setUniform("transform.mvp", transform, vlk::kShaderVertex);
@@ -665,7 +666,7 @@ namespace tl
                                 }
 #endif
 
-                                _createBindingSet("dissolve");
+                                _createBindingSet(shader);
 
                                 pipelineName = pipelineNameBase + "_Pass2_BlendColorForceAlpha";
                                 enableBlending = true;

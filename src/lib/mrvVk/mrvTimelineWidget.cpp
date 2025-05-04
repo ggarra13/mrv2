@@ -255,7 +255,6 @@ namespace mrv
             }
 #endif
             mode(FL_RGB | FL_ALPHA | fl_double);
-            m_validate = false;
         }
 
         void TimelineWidget::setContext(
@@ -796,6 +795,8 @@ void main()
         void TimelineWidget::hide()
         {
             TLRENDER_P();
+            
+            Fl::check();
 
             wait_device();
             
@@ -1867,7 +1868,6 @@ void main()
                     hideThumbnail();
                 }
                 refresh();
-                valid(0);
                 return Fl_Vk_Window::handle(event);
             }
             }
@@ -1954,6 +1954,7 @@ void main()
         {
             TLRENDER_P();
             p.vbo.reset();
+            p.vao.reset();
         }
 
         void TimelineWidget::setUnits(TimeUnits value)

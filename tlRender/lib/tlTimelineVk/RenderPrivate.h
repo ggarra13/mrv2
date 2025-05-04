@@ -143,7 +143,6 @@ namespace tl
             struct FrameGarbage
             {
                 std::vector<VkPipeline> pipelines;
-                std::vector<VkPipelineLayout> pipelineLayouts;
                 std::vector<std::shared_ptr<vlk::ShaderBindingSet> > bindingSets;
                 std::vector<std::shared_ptr<vlk::VAO> > vaos;
             };
@@ -159,8 +158,8 @@ namespace tl
             std::shared_ptr<TextureCache> textureCache;
             std::shared_ptr<vlk::TextureAtlas> glyphTextureAtlas;
             std::map<image::GlyphInfo, vlk::TextureAtlasID> glyphIDs;
-            std::map<std::string, std::shared_ptr<vlk::VBO> > vbos;
-            std::map<std::string, std::shared_ptr<vlk::VAO> > vaos;
+            std::unordered_map<std::string, std::shared_ptr<vlk::VBO> > vbos;
+            std::unordered_map<std::string, std::shared_ptr<vlk::VAO> > vaos;
 
             std::chrono::steady_clock::time_point timer;
             struct Stats

@@ -217,7 +217,7 @@ namespace tl
                 const timeline::DisplayOptions&);
             void _createMesh(
                 const std::string& meshName, const geom::TriangleMesh2& mesh);
-            void _createBindingSet(const std::string& shaderName);
+            void _createBindingSet(const std::shared_ptr<vlk::Shader>& shaderName);
             VkPipelineLayout _createPipelineLayout(
                 const std::string& pipelineLayoutName,
                 const std::shared_ptr<vlk::Shader> shader);
@@ -239,7 +239,9 @@ namespace tl
             void _bindDescriptorSets(
                 const std::string& pipelineLayoutName,
                 const std::string& shaderName);
+            void _vkDraw(const std::string& meshName);
 
+            
 #if defined(TLRENDER_LIBPLACEBO)
             void _addTextures(
                 std::vector<std::shared_ptr<vlk::Texture> >& textures,

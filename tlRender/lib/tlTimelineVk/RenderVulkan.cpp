@@ -9,11 +9,9 @@ namespace tl
 {
     namespace timeline_vlk
     {
-        void Render::_createBindingSet(const std::string& shaderName)
+        void Render::_createBindingSet(const std::shared_ptr<vlk::Shader>& shader)
         {
             TLRENDER_P();
-            
-            auto shader = p.shaders[shaderName];
             auto bindingSet = shader->createBindingSet();
             shader->useBindingSet(bindingSet);
             p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
@@ -275,6 +273,15 @@ namespace tl
                 p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
                 p.pipelineLayouts[pipelineLayoutName], 0, 1,
                 &descriptorSet, 0, nullptr);
+        }
+        
+        void Render::_vkDraw(const std::string& meshName)
+        {
+            TLRENDER_P();
+
+            p.vaos[meshName]->bind(p.frameIndex);
+            p.vaos[meshName]->draw(p.cmd, p.vbos[meshName]);
+            p.garbage[p.frameIndex].vaos.push_back(p.vaos[meshName]);
         }
     }
 }

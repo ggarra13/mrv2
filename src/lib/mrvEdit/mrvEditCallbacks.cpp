@@ -3170,21 +3170,21 @@ namespace mrv
         {
             if (ui->uiBottomBar->visible())
             {
-                if (!ui->uiTimelineGroup->visible())
-                    TimelineGroup->show();
                 if (!ui->uiTimeline->visible())
                 {
                     ui->uiTimeline->show();
                 }
+                if (!ui->uiTimelineGroup->visible())
+                    TimelineGroup->show();
             }
             else
             {
-                if (ui->uiTimelineGroup->visible())
-                    TimelineGroup->hide();
                 if (ui->uiTimeline->visible())
                 {
                     ui->uiTimeline->hide();
                 }
+                if (ui->uiTimelineGroup->visible())
+                    TimelineGroup->hide();
             }
         }
 #endif

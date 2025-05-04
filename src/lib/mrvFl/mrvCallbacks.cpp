@@ -1681,6 +1681,7 @@ namespace mrv
             set_edit_mode_cb(editMode, ui);
         else
             set_edit_mode_cb(EditMode::kNone, ui);
+        // else
         bool send = ui->uiPrefs->SendUI->value();
         if (send)
             tcp->pushMessage("Bottom Bar", (bool)ui->uiBottomBar->visible());

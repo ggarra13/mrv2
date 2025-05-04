@@ -34,6 +34,7 @@ namespace tl
                 (p.vbos[meshName] && p.vbos[meshName]->getSize() != size * 3))
             {
                 p.vbos[meshName] = vlk::VBO::create(size * 3, type);
+                p.vaos[meshName].reset();
             }
             if (p.vbos[meshName])
             {
@@ -58,9 +59,7 @@ namespace tl
             ++(p.currentStats.rects);
 
             auto shader = p.shaders[shaderName];
-
-            auto bindingSet = shader->createBindingSet();
-            p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
+            _createBindingSet(shader);
             
             shader->bind(p.frameIndex);
             shader->setUniform("transform.mvp", p.transform);
@@ -88,15 +87,15 @@ namespace tl
                     p.shaders[shaderName]->getPushStageFlags(), 0, sizeof(color),
                     &color);
 
-                p.vaos["rect"]->draw(p.cmd, p.vbos["rect"]);
-                p.garbage[p.frameIndex].vaos.push_back(p.vaos["rect"]);
+                _vkDraw("rect");
             }
         }
         
         void
         Render::drawRect(const math::Box2i& box, const image::Color4f& color)
         {
-            drawRect("timeline", "rect", "rect", box, color, false);
+            const bool enableBlending = true;
+            drawRect("timeline", "rect", "rect", box, color, enableBlending);
         }
 
         void Render::drawMesh(const std::string& pipelineName,
@@ -116,8 +115,8 @@ namespace tl
             ++(p.currentStats.meshes);
             p.currentStats.meshTriangles += mesh.triangles.size();
 
-            _createBindingSet(shaderName);
             auto shader = p.shaders[shaderName];
+            _createBindingSet(shader);
             
             const auto transform =
                 p.transform *
@@ -129,6 +128,7 @@ namespace tl
             {
                 p.vbos[meshName] = vlk::VBO::create(
                     size * 3, vlk::VBOType::Pos2_F32_UV_U16);
+                p.vaos[meshName].reset();
             }
             if (p.vbos[meshName])
             {
@@ -164,8 +164,7 @@ namespace tl
                     shader->getPushStageFlags(), 0,
                     sizeof(color), &color);
 
-                p.vaos[meshName]->draw(p.cmd, p.vbos[meshName]);
-                p.garbage[p.frameIndex].vaos.push_back(p.vaos[meshName]);
+                _vkDraw(meshName);
             }
         }
         
@@ -216,8 +215,7 @@ namespace tl
                     p.cmd, pipelineLayout,
                     shader->getPushStageFlags(), 0,
                     sizeof(color), &color);
-                p.vaos["colorMesh"]->draw(p.cmd, p.vbos["colorMesh"]);
-                p.garbage[p.frameIndex].vaos.push_back(p.vaos["colorMesh"]);
+                _vkDraw("colorMesh");
             }
         }
 
@@ -227,24 +225,24 @@ namespace tl
             Fl_Vk_Context& ctx, const geom::TriangleMesh2& mesh)
         {
             const size_t size = mesh.triangles.size();
+            if (size == 0)
+                return;
             currentStats.textTriangles += size;
-            if (size > 0)
+            if (!vbos["text"] ||
+                (vbos["text"] && vbos["text"]->getSize() != size * 3))
             {
-                if (!vbos["text"] ||
-                    (vbos["text"] && vbos["text"]->getSize() != size * 3))
-                {
-                    vbos["text"] = vlk::VBO::create(
-                        size * 3, vlk::VBOType::Pos2_F32_UV_U16);
-                    vaos["text"].reset();
-                }
-                if (vbos["text"])
-                {
-                    vbos["text"]->copy(convert(mesh, vbos["text"]->getType()));
-                }
-                if (!vaos["text"] && vbos["text"])
-                {
-                    vaos["text"] = vlk::VAO::create(ctx);
-                }
+                vbos["text"] = vlk::VBO::create(
+                    size * 3, vlk::VBOType::Pos2_F32_UV_U16);
+                vaos["text"].reset();
+            }
+            if (vbos["text"])
+            {
+                vbos["text"]->copy(convert(mesh, vbos["text"]->getType()));
+            }
+            if (!vaos["text"] && vbos["text"])
+            {
+                vaos["text"] = vlk::VAO::create(ctx);
+                vaos["text"]->bind(frameIndex);
             }
         }
 
@@ -270,7 +268,9 @@ namespace tl
             int32_t rsbDeltaPrev = 0;
             geom::TriangleMesh2 mesh;
             size_t meshIndex = 0;
-            _createBindingSet(shaderName);
+
+            auto shader = p.shaders[shaderName];
+            _createBindingSet(shader);
             for (const auto& glyph : glyphs)
             {
                 if (glyph)
@@ -334,8 +334,7 @@ namespace tl
                                 
                                 if (p.vaos["text"] && p.vbos["text"])
                                 {
-                                    p.vaos["text"]->draw(p.cmd, p.vbos["text"]);
-                                    p.garbage[p.frameIndex].vaos.push_back(p.vaos["text"]);
+                                    _vkDraw("text");
                                 }
                             }
                             
@@ -429,8 +428,7 @@ namespace tl
                             
                 if (p.vaos["text"] && p.vbos["text"])
                 {
-                    p.vaos["text"]->draw(p.cmd, p.vbos["text"]);
-                    p.garbage[p.frameIndex].vaos.push_back(p.vaos["text"]);
+                    _vkDraw("text");
                 }
             }
         }
@@ -449,12 +447,7 @@ namespace tl
             const bool enableBlending = true;
             
             auto shader = p.shaders[shaderName];
-
-            _createBindingSet(shaderName);
-
-            //shader->setUniform("color", color);
-
-            // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            _createBindingSet(shader);
 
             uint8_t textureIndex = 0;
             const auto textures = p.glyphTextureAtlas->getTextures();
@@ -521,8 +514,7 @@ namespace tl
                             
                             if (p.vaos["text"] && p.vbos["text"])
                             {
-                                p.vaos["text"]->draw(p.cmd, p.vbos["text"]);
-                                p.garbage[p.frameIndex].vaos.push_back(p.vaos["text"]);
+                                _vkDraw("text");
                             }
 
                             mesh = geom::TriangleMesh2();
@@ -607,8 +599,7 @@ namespace tl
                             
             if (p.vaos["text"] && p.vbos["text"])
             {
-                p.vaos["text"]->draw(p.cmd, p.vbos["text"]);
-                p.garbage[p.frameIndex].vaos.push_back(p.vaos["text"]);
+                _vkDraw("text");
             }
         }
 
@@ -651,8 +642,7 @@ namespace tl
                     sizeof(color), &color);
 
             
-                p.vaos["texture"]->draw(p.cmd, p.vbos["texture"]);
-                p.garbage[p.frameIndex].vaos.push_back(p.vaos["texture"]);
+                _vkDraw("texture");
             }
         }
 
@@ -679,9 +669,9 @@ namespace tl
                 p.textureCache->add(image, textures, image->getDataByteCount());
             }
 
-            _createBindingSet("image");
-
             auto shader = p.shaders["image"];
+            _createBindingSet(shader);
+
             shader->bind(p.frameIndex);
             shader->setUniform("transform.mvp", p.transform);
 
@@ -793,16 +783,15 @@ namespace tl
             const std::string shaderName = "image";
             const std::string meshName = "image";
             _createPipeline(fbo, pipelineName, pipelineLayoutName,
-                           shaderName, meshName, enableBlending,
-                           srcColorBlendFactor, dstColorBlendFactor,
-                           srcAlphaBlendFactor, dstAlphaBlendFactor);
+                            shaderName, meshName, enableBlending,
+                            srcColorBlendFactor, dstColorBlendFactor,
+                            srcAlphaBlendFactor, dstAlphaBlendFactor);
             _bindDescriptorSets(pipelineLayoutName, shaderName);
             fbo->setupViewportAndScissor(p.cmd);
 
             if (p.vaos["image"])
             {
-                p.vaos["image"]->draw(p.cmd, p.vbos["image"]);
-                p.garbage[p.frameIndex].vaos.push_back(p.vaos["image"]);
+                _vkDraw("image");
             }
             fbo->endRenderPass(p.cmd);
         }

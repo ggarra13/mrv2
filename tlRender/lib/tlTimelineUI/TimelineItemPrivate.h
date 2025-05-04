@@ -27,7 +27,8 @@ namespace tl
             std::vector<int> frameMarkers;
             int minimumHeight = 0;
             std::shared_ptr<ui::ThumbnailGenerator> thumbnailGenerator;
-
+            std::unordered_map<std::string,
+                               std::vector<std::shared_ptr<image::Glyph>> > labelsCache;
             struct Track
             {
                 int index = 0;
