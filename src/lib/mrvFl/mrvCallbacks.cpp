@@ -1642,6 +1642,7 @@ namespace mrv
 
         ui->uiRegion->layout();
         ui->uiMain->fill_menu(ui->uiMenuBar);
+       
     }
 
     void toggle_menu_bar(Fl_Menu_*, ViewerUI* ui)
@@ -1671,10 +1672,11 @@ namespace mrv
             tcp->pushMessage("Pixel Bar", (bool)ui->uiPixelBar->visible());
     }
 
-    void toggle_bottom_bar(Fl_Menu_*, ViewerUI* ui)
+    void toggle_timeline_bar(Fl_Menu_*, ViewerUI* ui)
     {
         toggle_ui_bar(ui, ui->uiBottomBar);
         save_ui_state(ui, ui->uiBottomBar);
+        Fl::check();
         if (ui->uiBottomBar->visible())
             set_edit_mode_cb(editMode, ui);
         else

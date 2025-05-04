@@ -628,12 +628,12 @@ namespace mrv
 
             const image::Color4f shadowColor(0.F, 0.F, 0.F, 0.7F);
             math::Vector2i shadowPos{pos.x + 1, pos.y - 1};
-            vk.render->drawText("HUD", "text",
+            vk.render->drawText("HUDShadow", "text",
                                 renderPass(),
                                 hasDepth, hasStencil,
                                 glyphs,
                                 shadowPos, shadowColor);
-            vk.render->drawText("HUD", "texts",
+            vk.render->drawText("HUD", "text",
                                 renderPass(),
                                 hasDepth, hasStencil,
                                 glyphs,

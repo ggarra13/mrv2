@@ -3,6 +3,8 @@
 
 #include <string>
 
+#define DEBUG_PIPELINE_USE 0
+
 namespace tl
 {
     namespace timeline_vlk
@@ -162,6 +164,10 @@ namespace tl
             VkPipeline pipeline;
             if (p.pipelines.count(pipelineName) == 0)
             {
+#if DEBUG_PIPELINE_USE
+                std::cerr << "CREATING   pipeline " << pipelineName
+                          << std::endl;
+#endif
                 pipeline = pipelineState.create(device);
                 p.pipelines[pipelineName] = std::make_pair(pipelineState,
                                                            pipeline);
@@ -173,6 +179,10 @@ namespace tl
                 VkPipeline oldPipeline = pair.second;
                 if (pipelineState != oldPipelineState)
                 {
+#if DEBUG_PIPELINE_USE
+                    std::cerr << "RECREATING pipeline " << pipelineName
+                              << std::endl;
+#endif
                     p.garbage[p.frameIndex].pipelines.push_back(
                         oldPipeline);
                     pipeline = pipelineState.create(device);
@@ -181,6 +191,10 @@ namespace tl
                 }
                 else
                 {
+#if DEBUG_PIPELINE_USE
+                    std::cerr << "REUSING    pipeline " << pipelineName
+                              << std::endl;
+#endif
                     pipeline = pair.second;
                 }
             }

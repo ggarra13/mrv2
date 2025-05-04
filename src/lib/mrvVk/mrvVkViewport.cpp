@@ -728,9 +728,9 @@ namespace mrv
             
             // Update the pixel bar from here only if we are playing a movie
             // and one that is not 1 frames long.
-            // bool update = !_shouldUpdatePixelBar();
-            // if (update)
-            //     updatePixelBar();
+            bool update = !_shouldUpdatePixelBar();
+            if (update)
+                updatePixelBar();
 
             vk.buffer->transitionToColorAttachment(cmd);
 

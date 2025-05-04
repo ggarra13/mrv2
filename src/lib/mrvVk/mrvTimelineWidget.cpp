@@ -183,6 +183,7 @@ namespace mrv
             ViewerUI* ui = nullptr;
             Fl_Window* topWindow = nullptr;
 
+            
             TimelinePlayer* player = nullptr;
 
             ThumbnailCreator* thumbnailCreator = nullptr;
@@ -203,6 +204,7 @@ namespace mrv
 
             mrv::TimeUnits units = mrv::TimeUnits::Timecode;
 
+            // Render data
             std::shared_ptr<ui::Style> style;
             std::shared_ptr<ui::IconLibrary> iconLibrary;
             std::shared_ptr<image::FontSystem> fontSystem;
@@ -235,35 +237,25 @@ namespace mrv
             VkWindow(X, Y, W, H, L),
             _p(new Private)
         {
-            int fl_double =
-                FL_DOUBLE; // _WIN32 needs this (and Vulkan too it seems)
+            int fl_double = FL_DOUBLE; // _WIN32 needs this (and Vulkan too it seems)
 
             // Do not use FL_DOUBLE on APPLE as it makes playback slow
-            // #if defined(__APPLE__) || defined(__linux__)
-            //             fl_double = 0;
-            //             if (desktop::XWayland())
-            //             {
-            //                 fl_double = FL_DOUBLE; // needed
-            //             }
-            //             else if (desktop::Wayland())
-            //             {
-            //                 // For faster playback, we won't set this window
-            //                 to FL_DOUBLE.
-            //                 // FLTK's EVk Wayland already uses two buffers.
-            //                 fl_double = 0;
-            //             }
-            //             else
-            //             {
-            //                 if (desktop::X11())
-            //                 {
-            //                     // For faster playback, we won't set this
-            //                     window to FL_DOUBLE.
-            //                     // FLTK's X11 already uses two buffers.
-            //                     fl_double = 0;
-            //                 }
-            //             }
-            // #endif
-            mode(FL_RGB | FL_ALPHA | FL_DOUBLE);
+#if defined(__APPLE__) || defined(__linux__)
+            fl_double = 0;
+            if (desktop::XWayland())
+            {
+                fl_double = FL_DOUBLE; // needed
+            }
+            else if (desktop::Wayland() || desktop::X11())
+            {
+                // For faster playback, we won't set this
+                // window to FL_DOUBLE.
+                // FLTK's X11 already uses two buffers.
+                fl_double = 0;
+            }
+#endif
+            mode(FL_RGB | FL_ALPHA | fl_double);
+            m_validate = false;
         }
 
         void TimelineWidget::setContext(
@@ -957,8 +949,8 @@ void main()
                 // Bind the main composition pipeline (created/managed outside
                 // this draw loop)
                 vkCmdBindPipeline(
-                    cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline);
-
+                    cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline());
+                
                 VkDescriptorSet descriptorSet = p.shader->getDescriptorSet();
                 vkCmdBindDescriptorSets(
                     cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, p.pipeline_layout, 0,
@@ -1027,12 +1019,12 @@ void main()
         {
             TLRENDER_P();
 
-            if (m_pipeline != VK_NULL_HANDLE)
+            if (pipeline() != VK_NULL_HANDLE)
             {
-                vkDestroyPipeline(device(), m_pipeline, nullptr);
+                vkDestroyPipeline(device(), pipeline(), nullptr);
             }
             
-            VkGraphicsPipelineCreateInfo pipeline;
+            VkGraphicsPipelineCreateInfo pipelineInfo;
 
             VkPipelineVertexInputStateCreateInfo vi = {};
             VkPipelineInputAssemblyStateCreateInfo ia = {};
@@ -1054,9 +1046,9 @@ void main()
                 VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
             dynamicState.pDynamicStates = dynamicStateEnables;
 
-            memset(&pipeline, 0, sizeof(pipeline));
-            pipeline.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-            pipeline.layout = p.pipeline_layout; // Use the main pipeline layout
+            memset(&pipelineInfo, 0, sizeof(pipelineInfo));
+            pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+            pipelineInfo.layout = p.pipeline_layout; // Use the main pipeline layout
 
             const auto& bindingDescs = p.vbo->getBindingDescription();
             const auto& attrDescs = p.vbo->getAttributes();
@@ -1124,7 +1116,7 @@ void main()
             ms.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
 
             // Two stages: vs and fs
-            pipeline.stageCount = 2;
+            pipelineInfo.stageCount = 2;
             VkPipelineShaderStageCreateInfo shaderStages[2];
             memset(
                 &shaderStages, 0, 2 * sizeof(VkPipelineShaderStageCreateInfo));
@@ -1141,17 +1133,16 @@ void main()
             shaderStages[1].module = p.shader->getFragment();
             shaderStages[1].pName = "main";
 
-            pipeline.pVertexInputState = &vi;
-            pipeline.pInputAssemblyState = &ia;
-            pipeline.pRasterizationState = &rs;
-            pipeline.pColorBlendState = &cb;
-            pipeline.pMultisampleState = &ms;
-            pipeline.pViewportState = &vp;
-            pipeline.pDepthStencilState = &ds;
-            pipeline.pStages = shaderStages;
-            pipeline.renderPass =
-                m_renderPass; // Use main render pass (swapchain)
-            pipeline.pDynamicState = &dynamicState;
+            pipelineInfo.pVertexInputState = &vi;
+            pipelineInfo.pInputAssemblyState = &ia;
+            pipelineInfo.pRasterizationState = &rs;
+            pipelineInfo.pColorBlendState = &cb;
+            pipelineInfo.pMultisampleState = &ms;
+            pipelineInfo.pViewportState = &vp;
+            pipelineInfo.pDepthStencilState = &ds;
+            pipelineInfo.pStages = shaderStages;
+            pipelineInfo.renderPass = m_renderPass;
+            pipelineInfo.pDynamicState = &dynamicState;
 
             // Create a temporary pipeline cache
             VkPipelineCacheCreateInfo pipelineCacheCreateInfo{};
@@ -1163,7 +1154,7 @@ void main()
             VK_CHECK(result);
 
             result = vkCreateGraphicsPipelines(
-                device(), pipelineCache, 1, &pipeline, NULL, &m_pipeline);
+                device(), pipelineCache, 1, &pipelineInfo, NULL, &pipeline());
             VK_CHECK(result);
 
             // Destroy the temporary pipeline cache
@@ -1963,7 +1954,6 @@ void main()
         {
             TLRENDER_P();
             p.vbo.reset();
-            p.vao.reset();
         }
 
         void TimelineWidget::setUnits(TimeUnits value)

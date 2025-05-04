@@ -12,6 +12,7 @@ it to Vulkan.
 - Fixed HDR monitor scoring selection to prefer HDR10 and HLG over P3_NONLINEAR.
 - Improved runmeq.sh and runmet.sh scripts to exit early and with an error
   message if compilation fails.
+- Fixed a potential reset of the X11 server when hiding the timeline bar.
 - Started porting to Vulkan.
 	 * Working:
 		 * Viewport
@@ -19,8 +20,8 @@ it to Vulkan.
 		 * Timeline with tick bars, current frame number and labels.
 		 * Timeline without thumbnails
 		 * OTIO with dissolves
-	 * Missing to check/add:
 		 * HUD
+	 * Missing to check/add:
 		 * Safe Areas
 		 * Masking
 		 * Thumbnails in Timeline (crashes) / Editing

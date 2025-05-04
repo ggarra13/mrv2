@@ -273,8 +273,8 @@ namespace mrv
 
         snprintf(buf, 256, "%s", _("View/Tool Bars/Toggle Timeline Bar"));
         idx = menu->add(
-            buf, kToggleTimeline.hotkey(), (Fl_Callback*)toggle_bottom_bar, ui,
-            FL_MENU_TOGGLE);
+            buf, kToggleTimeline.hotkey(), (Fl_Callback*)toggle_timeline_bar,
+            ui, FL_MENU_TOGGLE);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (ui->uiBottomBar->visible())
             item->set();

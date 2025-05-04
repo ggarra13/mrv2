@@ -153,7 +153,6 @@ namespace tl
 
                 _bindDescriptorSets(pipelineLayoutName, shaderName);
 
-                const std::string pipelineLayoutName = shaderName;
                 VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
                 if (!pipelineLayout)
                     throw std::runtime_error("drawMesh '" +
@@ -271,6 +270,7 @@ namespace tl
             int32_t rsbDeltaPrev = 0;
             geom::TriangleMesh2 mesh;
             size_t meshIndex = 0;
+            _createBindingSet(shaderName);
             for (const auto& glyph : glyphs)
             {
                 if (glyph)
@@ -306,7 +306,6 @@ namespace tl
                             p.createTextMesh(ctx, mesh);
                             if (mesh.triangles.size() > 0)
                             {
-                                _createBindingSet(shaderName);
                                 auto shader = p.shaders[shaderName];
                                 createPipeline(
                                     pipelineName, pipelineLayoutName,
@@ -404,8 +403,6 @@ namespace tl
             p.createTextMesh(ctx, mesh);
             if (mesh.triangles.size() > 0)
             {
-            
-                _createBindingSet(shaderName);
                 auto shader = p.shaders[shaderName];
                 createPipeline(
                     pipelineName, pipelineLayoutName, renderPass,

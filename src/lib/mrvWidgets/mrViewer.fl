@@ -845,13 +845,13 @@ if (!presentation)
     if (value) mrv::editMode = mrv::EditMode::kFull;
     else       mrv::editMode = mrv::EditMode::kTimeline;
     set_edit_mode_cb(mrv::editMode, v);
-    //mrv::toggle_bottom_bar(nullptr, v);
+    //mrv::toggle_timeline_bar(nullptr, v);
 }
 else
 {   
     if (value) mrv::editMode = mrv::EditMode::kFull;
     else       mrv::editMode = mrv::EditMode::kNone;
-    mrv::toggle_bottom_bar(nullptr, v);
+    mrv::toggle_timeline_bar(nullptr, v);
 }}
               tooltip {Toggle Edit Mode.} xywh {813 0 79 30} down_box DOWN_BOX selection_color 95 labelsize 12 align 192
             }
