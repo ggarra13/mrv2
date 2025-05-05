@@ -1190,6 +1190,8 @@ namespace mrv
         void Viewport::_checkHDR()
         {
             TLRENDER_P();
+
+            return;
             
             if (!p.hdrOptions.passthru)
                 return;
@@ -1224,7 +1226,10 @@ namespace mrv
             m_hdr_metadata.maxFrameAverageLightLevel = data.maxFALL;
 
             if (!is_equal_hdr_metadata(m_hdr_metadata, m_previous_hdr_metadata))
+            {
                 m_hdr_metadata_changed = true; // Mark as changed
+                std::cerr << "======================== CHANGED HDR METADATA" << std::endl;
+            }
         }
 
     } // namespace vulkan

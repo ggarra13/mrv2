@@ -1566,12 +1566,22 @@ namespace tl
 
             p.hdrOptions = value;
 
-#if defined(TLRENDER_LIBPLACEBO)
-            p.placeboData.reset(new LibPlaceboData);
-#endif // TLRENDER_LIBPLACEBO
-
             p.garbage[p.frameIndex].shaders.push_back(p.shaders["display"]);
             p.shaders["display"].reset();
+
+#if defined(TLRENDER_LIBPLACEBO)
+            if (p.hdrOptions.tonemap || p.hdrOptions.passthru)
+            {
+                std::cerr << "passed libplacebo with data" << std::endl;
+                p.placeboData.reset(new LibPlaceboData);
+            }
+            else
+            {
+                std::cerr << "passed libplacebo empty" << std::endl;
+                p.placeboData.reset();
+            }
+#endif // TLRENDER_LIBPLACEBO
+            
             _displayShader();
         }
 
@@ -1974,103 +1984,35 @@ namespace tl
                     for (int i = 0; i < res->num_variables; ++i)
                     {
                         const struct pl_shader_var shader_var = res->variables[i];
-                        const struct pl_var var = shader_var.var;
-                        std::string glsl_type = pl_var_glsl_type_name(var);
-                        s << "const " << glsl_type << " " << var.name;
-                        if (!shader_var.data)
-                        {
-                            s << ";" << std::endl;
-                        }
-                        else
-                        {
-                            int dim_v = var.dim_v;
-                            int dim_m = var.dim_m;
-                            switch (var.type)
-                            {
-                            case PL_VAR_SINT:
-                            {
-                                int* m = (int*)shader_var.data;
-                                s << " = " << m[0] << ";" << std::endl;
-                                break;
-                            }
-                            case PL_VAR_UINT:
-                            {
-                                unsigned* m = (unsigned*)shader_var.data;
-                                s << " = " << m[0] << ";" << std::endl;
-                                break;
-                            }
-                            case PL_VAR_FLOAT:
-                            {
-                                float* m = (float*)shader_var.data;
-                                if (dim_m > 1 && dim_v > 1)
-                                {
-                                    s << " = " << glsl_type << "(";
-                                    for (int c = 0; c < dim_v; ++c)
-                                    {
-                                        for (int r = 0; r < dim_m; ++r)
-                                        {
-                                            int index = c * dim_m + r;
-                                            s << m[index];
-
-                                            // Check if it's the last element
-                                            if (!(r == dim_m - 1 && c == dim_v - 1))
-                                            {
-                                                s << ", ";
-                                            }
-                                        }
-                                    }
-                                    s << ");" << std::endl;
-                                }
-                                else if (dim_v > 1)
-                                {
-                                    s << " = " << glsl_type << "(";
-                                    for (int c = 0; c < dim_v; ++c)
-                                    {
-                                        s << m[c];
-
-                                        // Check if it's the last element
-                                        if (!(c == dim_v - 1))
-                                        {
-                                            s << ", ";
-                                        }
-                                    }
-                                    s << ");" << std::endl;
-                                }
-                                else
-                                {
-                                    s << " = " << m[0] << ";" << std::endl;
-                                }
-                                break;
-                            }
-                            default:
-                                break;
-                            }
-                        }
+                        s << _debugPLVar(shader_var);
+                        std::cerr <<  _debugPLVar(shader_var);
                     }
 #else
-                    
                     s << "layout(std430, push_constant) uniform PushC {\n";
                     for (int i = 0; i < res->num_variables; ++i)
                     {
-                        const struct pl_shader_var shader_var =
-                            res->variables[i];
+                        const struct pl_shader_var shader_var = res->variables[i];
+                        std::cerr << _debugPLVar(shader_var) << std::endl;;
                         const struct pl_var var = shader_var.var;
                         const std::string glsl_type = pl_var_glsl_type_name(var);
-                        
-                        size_t el_size = pl_var_type_size(var.type);
-                        size_t stride = el_size * var.dim_v;
-                        size_t align = stride;
-                        if (var.dim_v == 3)
-                            align += el_size;
-                        if (var.dim_m * var.dim_a > 1)
-                            stride = align;
 
-                        const std::size_t offset = MRV2_ALIGN2(pushOffset, align);
-                        const std::size_t size = stride * var.dim_m * var.dim_a;
-    
-                        s << "\tlayout(offset=" << offset << ") "
-                          << glsl_type << " " << var.name << ";" << std::endl;
+                        size_t el_size = pl_var_type_size(var.type); // Size of base type (e.g., 4 for float)
+                        size_t stride = el_size * var.dim_v; // Size of one vector
+                        size_t align = stride;
+                        if (var.dim_v >= 3) // vec3/vec4 align to 16 bytes
+                            align = 16;
+                        if (var.dim_m * var.dim_a > 1) // Arrays/matrices use aligned stride
+                            stride = align;
+                        size_t size = stride * var.dim_m * var.dim_a; // Total size
+                        std::size_t offset = MRV2_ALIGN2(pushOffset, align);
+
+                        
+                        std::cerr << "\toffset=" << offset << std::endl;
+                        std::cerr << "\tsize=" << size << std::endl;
+
+                        s << "\tlayout(offset=" << offset << ") " << glsl_type << " " << var.name << ";\n";
                         pushOffset = offset + size;
+    
                     }
                     s << "};\n";
 #endif
@@ -2182,14 +2124,88 @@ namespace tl
                 }
 #endif
                 p.shaders["display"]->createPush("libplacebo", pushOffset, vlk::kShaderFragment);
+                p.shaders["display"]->debug();
                 
                 _createBindingSet(p.shaders["display"]);
-                
-                if (p.placeboData)
+            }
+        }
+
+        std::string Render::_debugPLVar(const struct pl_shader_var& shader_var)
+        {
+            const struct pl_var var = shader_var.var;
+            std::string glsl_type = pl_var_glsl_type_name(var);
+            std::stringstream s;
+            s << "const " << glsl_type << " " << var.name;
+            if (!shader_var.data)
+            {
+                s << ";" << std::endl;
+            }
+            else
+            {
+                const int dim_v = var.dim_v;
+                const int dim_m = var.dim_m;
+                switch (var.type)
                 {
-                    p.shaders["display"]->debug();
+                case PL_VAR_SINT:
+                {
+                    int* m = (int*)shader_var.data;
+                    s << " = " << m[0] << ";" << std::endl;
+                    break;
+                }
+                case PL_VAR_UINT:
+                {
+                    unsigned* m = (unsigned*)shader_var.data;
+                    s << " = " << m[0] << ";" << std::endl;
+                    break;
+                }
+                case PL_VAR_FLOAT:
+                {
+                    float* m = (float*)shader_var.data;
+                    if (dim_m > 1 && dim_v > 1)
+                    {
+                        s << " = " << glsl_type << "(";
+                        for (int c = 0; c < dim_v; ++c)
+                        {
+                            for (int r = 0; r < dim_m; ++r)
+                            {
+                                int index = c * dim_m + r;
+                                s << m[index];
+
+                                // Check if it's the last element
+                                if (!(r == dim_m - 1 && c == dim_v - 1))
+                                {
+                                    s << ", ";
+                                }
+                            }
+                        }
+                        s << ");" << std::endl;
+                    }
+                    else if (dim_v > 1)
+                    {
+                        s << " = " << glsl_type << "(";
+                        for (int c = 0; c < dim_v; ++c)
+                        {
+                            s << m[c];
+
+                            // Check if it's the last element
+                            if (!(c == dim_v - 1))
+                            {
+                                s << ", ";
+                            }
+                        }
+                        s << ");" << std::endl;
+                    }
+                    else
+                    {
+                        s << " = " << m[0] << ";" << std::endl;
+                    }
+                    break;
+                }
+                default:
+                    break;
                 }
             }
+            return s.str();
         }
     } // namespace timeline_vlk
 } // namespace tl
