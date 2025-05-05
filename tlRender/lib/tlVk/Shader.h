@@ -109,6 +109,10 @@ namespace tl
                 const std::string&, const T& value,
                 const ShaderFlags stageFlags = kShaderFragment);
 
+            //! Createa a push block given a size.
+            void createPush(const std::string& name, const std::size_t size,
+                            const ShaderFlags stageFlags);
+            
             //! Get the push stage flags.
             VkShaderStageFlags getPushStageFlags() { return pushStageFlags; }
 

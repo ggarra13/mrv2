@@ -831,6 +831,41 @@ namespace tl
                     {
                         p.shaders["display"]->setTexture(texture->getName(), texture);
                     }
+
+#if PUSH_CONSTANTS
+                    if (p.placeboData->res != nullptr)
+                    {
+                        std::size_t pushOffset = 0;
+                        const pl_shader_res* res = p.placeboData->res;
+                        VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+                        for (int i = 0; i < res->num_variables; ++i)
+                        {
+                            const struct pl_shader_var shader_var =
+                                res->variables[i];
+                            const struct pl_var var = shader_var.var;
+
+                            size_t el_size = pl_var_type_size(var.type);
+                            size_t stride = el_size * var.dim_v;
+                            size_t align = stride;
+                            if (var.dim_v == 3)
+                                align += el_size;
+                            if (var.dim_m * var.dim_a > 1)
+                                stride = align;
+                            size_t size = stride * var.dim_m * var.dim_a;
+
+                            std::size_t offset = MRV2_ALIGN2(pushOffset, align);
+
+                            const uint8_t* data = reinterpret_cast<const uint8_t*>(shader_var.data);
+                            if (!data)
+                            {
+                                throw std::runtime_error("No libplacebo shader_var.data");
+                            }
+                            vkCmdPushConstants(p.cmd, pipelineLayout,
+                                               VK_SHADER_STAGE_FRAGMENT_BIT, offset, size, &data);
+                            pushOffset = offset + size;
+                        }
+                    }
+#endif
                 }
 #endif // TLRENDER_LIBPLACEBO
 

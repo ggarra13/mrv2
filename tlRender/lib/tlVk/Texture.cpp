@@ -395,6 +395,40 @@ namespace tl
             VkCommandPool commandPool = ctx.commandPool;
             VkQueue queue = ctx.queue;
 
+            
+            // Determine proper masks
+            if (p.currentLayout == VK_IMAGE_LAYOUT_UNDEFINED &&
+                newLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL) {
+                srcAccessMask = 0;
+                dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+                srcStageMask = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+                dstStageMask = VK_PIPELINE_STAGE_TRANSFER_BIT;
+            }
+            else if (p.currentLayout == VK_IMAGE_LAYOUT_UNDEFINED &&
+                     newLayout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
+            {
+                srcAccessMask = 0;
+                dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+                srcStageMask = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+                dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+            }
+            else if (p.currentLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL &&
+                     newLayout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
+            {
+                srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+                dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+                srcStageMask = VK_PIPELINE_STAGE_TRANSFER_BIT;
+                dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+            }
+            else if (p.currentLayout == VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL &&
+                     newLayout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
+            {
+                srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+                dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+                srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+                dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+            }
+    
             VkImageMemoryBarrier barrier = {};
             barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
             barrier.oldLayout = p.currentLayout;
@@ -420,6 +454,22 @@ namespace tl
             p.currentLayout = newLayout;
         }
 
+        void Texture::transitionToShaderRead(VkCommandBuffer cmd)
+        {
+            transition(cmd, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                       VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+                       VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+                       VK_ACCESS_SHADER_READ_BIT,
+                       VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+        }
+
+        void Texture::transitionToColorAttachment(VkCommandBuffer cmd)
+        {
+            transition(cmd, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+                       VK_ACCESS_SHADER_READ_BIT, 0,
+                       VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, 0);
+        }
+        
         void Texture::copy(const std::shared_ptr<image::Image>& data, int x, int y)
         {
             TLRENDER_P();

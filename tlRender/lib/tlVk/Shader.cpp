@@ -362,6 +362,13 @@ namespace tl
             }
         }
 
+        void Shader::createPush(const std::string& name, const std::size_t size,
+                                const ShaderFlags stageFlags)
+        {
+            pushSize = size;
+            pushStageFlags = getVulkanShaderFlags(stageFlags);
+        }
+        
         void Shader::debug()
         {
             TLRENDER_P();
@@ -374,7 +381,11 @@ namespace tl
             std::cerr << getFragmentSource() << std::endl;
             std::cerr << "------------------------------------" << std::endl;
             debugFragmentDescriptorSets();
-            // debugPointers();
+            if (pushSize > 0)
+            {
+                std::cerr << "------------------------------------" << std::endl;
+                std::cerr << "pushSize = " << pushSize << std::endl;
+            }
         }
         
         std::shared_ptr<ShaderBindingSet> Shader::createBindingSet()

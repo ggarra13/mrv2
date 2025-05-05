@@ -8,6 +8,7 @@
 extern "C"
 {
 #    include <libplacebo/dummy.h>
+#    include <libplacebo/shaders.h>
 }
 #endif
 
@@ -32,6 +33,9 @@ extern "C"
 #if defined(TLRENDER_OCIO)
 namespace OCIO = OCIO_NAMESPACE;
 #endif // TLRENDER_OCIO
+
+#define MRV2_ALIGN2(x, align) (((x) + (align) - 1) & ~((align) - 1))
+#define USE_CONSTANTS 0
 
 namespace tl
 {
@@ -105,6 +109,8 @@ namespace tl
 
             pl_log log;
             pl_gpu gpu;
+            pl_shader shader;
+            const pl_shader_res* res = nullptr;
             std::vector<std::shared_ptr<vlk::Texture> > textures;
         };
 #endif
@@ -143,6 +149,7 @@ namespace tl
             struct FrameGarbage
             {
                 std::vector<VkPipeline> pipelines;
+                std::vector<VkPipelineLayout> pipelineLayouts;
                 std::vector<std::shared_ptr<vlk::ShaderBindingSet> > bindingSets;
                 std::vector<std::shared_ptr<vlk::Shader> > shaders;
                 std::vector<std::shared_ptr<vlk::VAO> > vaos;
