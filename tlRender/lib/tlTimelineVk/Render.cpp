@@ -1988,7 +1988,12 @@ namespace tl
                         std::cerr <<  _debugPLVar(shader_var);
                     }
 #else
+
+#ifdef USE_STD430
                     s << "layout(std430, push_constant) uniform PushC {\n";
+#else
+                    s << "layout(std140, push_constant) uniform PushC {\n";
+#endif
                     for (int i = 0; i < res->num_variables; ++i)
                     {
                         const struct pl_shader_var shader_var = res->variables[i];
