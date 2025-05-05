@@ -266,6 +266,14 @@ namespace mrv
             vkDestroyPipelineCache(device(), pipelineCache, NULL);
         }
 
+        std::vector<const char*> Viewport::get_device_extensions()
+        {
+            std::vector<const char*> out;
+            out = Fl_Vk_Window::get_device_extensions();
+            out.push_back(VK_EXT_HDR_METADATA_EXTENSION_NAME);
+            return out;
+        }
+        
         void Viewport::init_colorspace()
         {
             TLRENDER_P();

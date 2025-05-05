@@ -692,10 +692,10 @@ namespace tl
                 }
 
                 image::HDRData hdrData;
-                hdrData.eotf = toEOTF(_avColorTRC);
                 bool hasHDR = toHDRData(
                     avVideoCodecParameters->coded_side_data,
                     avVideoCodecParameters->nb_coded_side_data, hdrData);
+                hdrData.eotf = toEOTF(_avColorTRC);
                 if (hasHDR)
                     _tags["hdr"] = nlohmann::json(hdrData).dump();
             }

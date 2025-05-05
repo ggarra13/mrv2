@@ -839,7 +839,7 @@ namespace tl
                     {
                         std::vector<uint8_t> pushData(pushSize, 0);
                         const pl_shader_res* res = p.placeboData->res;
-                        std::cerr << "-----------std430 packing = " << res->num_variables << std::endl;
+                        // std::cerr << "-----------std430 packing = " << res->num_variables << std::endl;
                         VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
                         std::size_t currentOffset = 0;
                         for (int i = 0; i < res->num_variables; ++i)
@@ -858,9 +858,9 @@ namespace tl
                             size_t size = stride * var.dim_m * var.dim_a;
 
                             std::size_t offset = MRV2_ALIGN2(currentOffset, align);
-                            std::cerr << var.name << std::endl;
-                            std::cerr << "\toffset=" << offset << std::endl;
-                            std::cerr << "\tsize=" << size << std::endl;
+                            // std::cerr << var.name << std::endl;
+                            // std::cerr << "\toffset=" << offset << std::endl;
+                            // std::cerr << "\tsize=" << size << std::endl;
 
                             if (!shader_var.data) {
                                 throw std::runtime_error("No libplacebo shader_var.data");
@@ -868,18 +868,18 @@ namespace tl
     
                             // Handle matrices, vectors, and scalars
                             if (var.dim_m > 1 && var.dim_v > 1) { // Matrix (e.g., mat3)
-                                std::cerr << var.name << " = ";
+                                // std::cerr << var.name << " = ";
                                 std::vector<float> paddedData(stride / sizeof(float) * var.dim_m, 0.0f); // E.g., 12 floats for mat3
                                 const float* src = reinterpret_cast<const float*>(shader_var.data);
                                 for (int row = 0; row < var.dim_v; ++row)
                                     for (int col = 0; col < var.dim_m; ++col)
                                         paddedData[col * (stride / sizeof(float)) + row] = src[row * var.dim_m + col]; // Transpose
                                 memcpy(pushData.data() + offset, paddedData.data(), size);
-                                for (int i = 0; i < var.dim_m * var.dim_v; ++i)
-                                {
-                                    std::cerr << paddedData[i] << " ";
-                                }
-                                std::cerr << std::endl;
+                                // for (int i = 0; i < var.dim_m * var.dim_v; ++i)
+                                // {
+                                //     std::cerr << paddedData[i] << " ";
+                                // }
+                                // std::cerr << std::endl;
                             } else { // Vector or scalar
                                 memcpy(pushData.data() + offset, shader_var.data, size); // Copy as-is
                             }

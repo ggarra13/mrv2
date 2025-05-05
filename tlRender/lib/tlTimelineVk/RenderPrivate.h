@@ -35,7 +35,7 @@ namespace OCIO = OCIO_NAMESPACE;
 #endif // TLRENDER_OCIO
 
 #define MRV2_ALIGN2(x, align) (((x) + (align) - 1) & ~((align) - 1))
-#define USE_CONSTANTS 0
+#define USE_CONSTANTS 1
 
 namespace tl
 {

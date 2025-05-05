@@ -1286,17 +1286,14 @@ namespace tl
                         height = depth = 1;
                     else if (imageType == VK_IMAGE_TYPE_2D)
                         depth = 1;
-                    std::cerr << "create texture " << __LINE__ << std::endl;
                     vlk::TextureOptions options;
                     options.tiling = VK_IMAGE_TILING_OPTIMAL;
                     auto texture = vlk::Texture::create(
                         ctx, imageType, width, height, depth, imageFormat,
                         samplerName);
-                    std::cerr << "created texture " << __LINE__ << std::endl;
                     texture->copy(
                         reinterpret_cast<const uint8_t*>(values),
                         width * height * depth * fmt->internal_size);
-                    std::cerr << "copied texture data " << __LINE__ << std::endl;
                     textures.push_back(texture);
                     break;
                 }
@@ -1561,27 +1558,22 @@ namespace tl
         void Render::setHDROptions(const timeline::HDROptions& value)
         {
             TLRENDER_P();
-            if (value == p.hdrOptions)
+            if (value == p.hdrOptions &&
+                value.passthru == p.hdrOptions.passthru)
                 return;
 
             p.hdrOptions = value;
 
             p.garbage[p.frameIndex].shaders.push_back(p.shaders["display"]);
-            p.shaders["display"].reset();
 
 #if defined(TLRENDER_LIBPLACEBO)
             if (p.hdrOptions.tonemap || p.hdrOptions.passthru)
             {
-                std::cerr << "passed libplacebo with data" << std::endl;
                 p.placeboData.reset(new LibPlaceboData);
-            }
-            else
-            {
-                std::cerr << "passed libplacebo empty" << std::endl;
-                p.placeboData.reset();
             }
 #endif // TLRENDER_LIBPLACEBO
             
+            p.shaders["display"].reset();
             _displayShader();
         }
 
@@ -1985,7 +1977,6 @@ namespace tl
                     {
                         const struct pl_shader_var shader_var = res->variables[i];
                         s << _debugPLVar(shader_var);
-                        std::cerr <<  _debugPLVar(shader_var);
                     }
 #else
 
@@ -1997,7 +1988,6 @@ namespace tl
                     for (int i = 0; i < res->num_variables; ++i)
                     {
                         const struct pl_shader_var shader_var = res->variables[i];
-                        std::cerr << _debugPLVar(shader_var) << std::endl;;
                         const struct pl_var var = shader_var.var;
                         const std::string glsl_type = pl_var_glsl_type_name(var);
 
@@ -2010,10 +2000,6 @@ namespace tl
                             stride = align;
                         size_t size = stride * var.dim_m * var.dim_a; // Total size
                         std::size_t offset = MRV2_ALIGN2(pushOffset, align);
-
-                        
-                        std::cerr << "\toffset=" << offset << std::endl;
-                        std::cerr << "\tsize=" << size << std::endl;
 
                         s << "\tlayout(offset=" << offset << ") " << glsl_type << " " << var.name << ";\n";
                         pushOffset = offset + size;
@@ -2129,7 +2115,6 @@ namespace tl
                 }
 #endif
                 p.shaders["display"]->createPush("libplacebo", pushOffset, vlk::kShaderFragment);
-                p.shaders["display"]->debug();
                 
                 _createBindingSet(p.shaders["display"]);
             }
