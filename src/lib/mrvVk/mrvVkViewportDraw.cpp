@@ -1186,7 +1186,47 @@ namespace mrv
             //     glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
             // }
         }
+        
+        void Viewport::_checkHDR()
+        {
+            TLRENDER_P();
+            
+            if (!p.hdrOptions.passthru)
+                return;
+            
+            // This will make the FLTK swapchain call vk->SetHDRMetadataEXT();
+            const image::HDRData& data = p.hdrOptions.hdrData;
+            auto m_previous_hdr_metadata = m_hdr_metadata;
 
-    } // namespace opengl
+            m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
+            m_hdr_metadata.displayPrimaryRed = {
+                data.primaries[image::HDRPrimaries::Red][0],
+                data.primaries[image::HDRPrimaries::Red][1],
+            };
+            m_hdr_metadata.displayPrimaryGreen = {
+                data.primaries[image::HDRPrimaries::Green][0],
+                data.primaries[image::HDRPrimaries::Green][1],
+            };
+            m_hdr_metadata.displayPrimaryBlue = {
+                data.primaries[image::HDRPrimaries::Blue][0],
+                data.primaries[image::HDRPrimaries::Blue][1],
+            };
+            m_hdr_metadata.whitePoint = {
+                data.primaries[image::HDRPrimaries::White][0],
+                data.primaries[image::HDRPrimaries::White][1],
+            };
+            // Max display capability
+            m_hdr_metadata.maxLuminance =
+                data.displayMasteringLuminance.getMax();
+            m_hdr_metadata.minLuminance =
+                data.displayMasteringLuminance.getMin();
+            m_hdr_metadata.maxContentLightLevel = data.maxCLL;
+            m_hdr_metadata.maxFrameAverageLightLevel = data.maxFALL;
+
+            if (!is_equal_hdr_metadata(m_hdr_metadata, m_previous_hdr_metadata))
+                m_hdr_metadata_changed = true; // Mark as changed
+        }
+
+    } // namespace vulkan
 
 } // namespace mrv

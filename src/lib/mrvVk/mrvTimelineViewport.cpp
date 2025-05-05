@@ -971,6 +971,7 @@ namespace mrv
             TLRENDER_P();
             if (value == p.hdrOptions)
                 return;
+            p.hdrOptions.passthru = value.passthru;
             p.hdrOptions.tonemap = value.tonemap;
             p.hdrOptions.algorithm = value.algorithm;
             redrawWindows();

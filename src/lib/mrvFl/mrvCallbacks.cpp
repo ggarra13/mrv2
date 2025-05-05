@@ -1295,6 +1295,13 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
+    void toggle_hdr_passthru_cb(Fl_Menu_* w, ViewerUI* ui)
+    {
+        timeline::HDROptions o = ui->uiView->getHDROptions();
+        o.passthru ^= 1;
+        ui->uiView->setHDROptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
     void select_hdr_tonemap_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         const Fl_Menu_Item* item = m->mvalue();

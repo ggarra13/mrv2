@@ -766,18 +766,28 @@ namespace tl
                 {
                 case VK_FORMAT_R8G8B8_UNORM:
                     p.internalFormat = VK_FORMAT_R8G8B8A8_UNORM;
+                    p.info.pixelType = image::PixelType::RGBA_U8;
                     break;
                 case VK_FORMAT_R16G16B16_UNORM:
                     p.internalFormat = VK_FORMAT_R16G16B16A16_UNORM;
+                    p.info.pixelType = image::PixelType::RGBA_U16;
                     break;
                 case VK_FORMAT_R16G16B16_SFLOAT:
                     p.internalFormat = VK_FORMAT_R16G16B16A16_SFLOAT;
+                    p.info.pixelType = image::PixelType::RGBA_F16;
                     break;
                 default:
                     std::string err = "tl::vlk::Texture Invalid VK_FORMAT: ";
                     throw std::runtime_error(err + string_VkFormat(p.format));
                     break;
                 }
+#ifndef NDEBUG
+                std::cerr << this << ": tried to create texture "
+                          << string_VkFormat(p.format)
+                          << " but created "
+                          << string_VkFormat(p.internalFormat)
+                          << std::endl;
+#endif
             }
 
             VkImageCreateInfo imageInfo = {};

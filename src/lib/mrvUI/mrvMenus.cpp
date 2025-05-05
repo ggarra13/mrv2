@@ -826,12 +826,21 @@ namespace mrv
                 item->set();
 
             const timeline::HDROptions& hdrOptions = uiView->getHDROptions();
+            
+            idx = menu->add(
+                _("Render/HDR/Toggle Passthru"), kToggleHDRPassthru.hotkey(),
+                (Fl_Callback*)toggle_hdr_passthru_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (hdrOptions.passthru)
+                item->set();
+            
             idx = menu->add(
                 _("Render/HDR/Toggle Tonemap"), kToggleHDRTonemap.hotkey(),
                 (Fl_Callback*)toggle_hdr_tonemap_cb, ui, mode);
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
             if (hdrOptions.tonemap)
                 item->set();
+            
 
             int selected = static_cast<int>(hdrOptions.algorithm);
             mode = FL_MENU_RADIO;

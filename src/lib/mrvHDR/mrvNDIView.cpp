@@ -274,19 +274,6 @@ namespace mrv
                                         : (dims == 2) ? VK_IMAGE_TYPE_2D
                                                       : VK_IMAGE_TYPE_3D;
 
-
-                // Transition image layout to TRANSFER_DST_OPTIMAL
-                // VkCommandBuffer cmd = beginSingleTimeCommands(device(), commandPool());
-
-                // // Upload texture data
-                // uploadTextureData(
-                //     device(), gpu(), commandPool(), queue(), image, width,
-                //     height, depth, imageFormat, channels, pixel_fmt_size,
-                //     values);
-
-
-                // endSingleTimeCommands(cmd, device(), commandPool(), queue());
-
                 auto texture = vlk::Texture::create(ctx, imageType, width,
                                                     height, depth, imageFormat,
                                                     samplerName);
@@ -685,7 +672,7 @@ namespace mrv
         TLRENDER_P();
 
         VkResult result;
-        m_textures.reserve(16);
+        m_textures.reserve(16);  // reserve up to 16 textures for libplacebo.
 
         uint32_t tex_width = 1, tex_height = 1;
         image::Info info;
@@ -695,11 +682,11 @@ namespace mrv
         }
         else
         {
-            info = image::Info(1, 1, image::PixelType::RGBA_U8);
+            info = image::Info(1, 1, image::PixelType::RGBA_F16);
         }
         m_textures.push_back(vlk::Texture::create(ctx, info));
         
-        // Transition image layout to TRANSFER_DST_OPTIMAL
+        // Transition image layout to TRANSFER_SHADER_READ_OPTIMAL
         VkCommandBuffer cmd = beginSingleTimeCommands(device(), commandPool());
         m_textures[0]->transitionToShaderRead(cmd);
         endSingleTimeCommands(cmd, device(), commandPool(), queue());
@@ -1247,16 +1234,20 @@ void main() {
 
         if (!p.image)
             return;
-        
-        const std::size_t dataSize = p.image->getWidth() * p.image->getHeight() * 4 * sizeof(half);
-        const size_t byteCount = p.image->getDataByteCount();
-        if (dataSize == byteCount)
+
+        // Compare the texture data size to the new image data size to see
+        // if user changed streaming mid-way.
+        const std::size_t dataSize = m_textures[0]->getWidth() *
+                                     m_textures[0]->getHeight() *
+                                     4 * sizeof(half);
+        const std::size_t imageSize = p.image->getDataByteCount();
+        if (dataSize != imageSize)
         {
-            m_textures[0]->copy(reinterpret_cast<const uint8_t*>(p.image->getData()), dataSize);
+            m_swapchain_needs_recreation = true;
         }
         else
         {
-            m_swapchain_needs_recreation = true;
+            m_textures[0]->copy(reinterpret_cast<const uint8_t*>(p.image->getData()), imageSize);
         }
     }
 
