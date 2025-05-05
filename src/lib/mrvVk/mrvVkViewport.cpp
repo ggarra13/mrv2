@@ -574,7 +574,8 @@ namespace mrv
             locale::SetAndRestore saved;
             timeline::RenderOptions renderOptions;
             renderOptions.colorBuffer = vk.colorBufferType;
-            
+
+            _checkHDR();
             
 #ifndef NDEBUG
             try

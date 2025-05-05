@@ -274,45 +274,11 @@ namespace mrv
                                         : (dims == 2) ? VK_IMAGE_TYPE_2D
                                                       : VK_IMAGE_TYPE_3D;
 
-                // Create Vulkan image
-                VkImage image = createImage(
-                    device(), imageType, width, height, depth, imageFormat);
-
-                // Allocate and bind memory for the image
-                VkDeviceMemory imageMemory =
-                    allocateAndBindImageMemory(device(), gpu(), image);
-
-                // Transition image layout to TRANSFER_DST_OPTIMAL
-                VkCommandBuffer cmd = beginSingleTimeCommands(device(), commandPool());
-                transitionImageLayout(cmd,
-                    device(), commandPool(), queue(), image,
-                    VK_IMAGE_LAYOUT_UNDEFINED,
-                    VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-
-                // Upload texture data
-                uploadTextureData(
-                    device(), gpu(), commandPool(), queue(), image, width,
-                    height, depth, imageFormat, channels, pixel_fmt_size,
-                    values);
-
-                // Transition image layout to SHADER_READ_ONLY_OPTIMAL
-                transitionImageLayout(cmd,
-                    device(), commandPool(), queue(), image,
-                    VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                    VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-
-                endSingleTimeCommands(cmd, device(), commandPool(), queue());
-
-                // Create image view
-                VkImageView imageView =
-                    createImageView(device(), image, imageFormat, imageType);
-
-                // Create sampler (equivalent to GL_LINEAR)
-                VkSampler sampler = createSampler(device());
-
-                Fl_Vk_Texture texture(
-                    imageType, imageFormat, image, imageView, sampler,
-                    imageMemory, samplerName, width, height, depth);
+                auto texture = vlk::Texture::create(ctx, imageType, width,
+                                                    height, depth, imageFormat,
+                                                    samplerName);
+                texture->copy(reinterpret_cast<const uint8_t*>(values),
+                              width * height * depth * pixel_fmt_size * channels);
                 m_textures.push_back(texture);
                 break;
             }
@@ -706,59 +672,24 @@ namespace mrv
         TLRENDER_P();
 
         VkResult result;
-        const VkFormat tex_format = VK_FORMAT_R16G16B16A16_SFLOAT;
+        m_textures.reserve(16);  // reserve up to 16 textures for libplacebo.
 
-        // Query if image supports texture format
-        VkFormatProperties props;
-        vkGetPhysicalDeviceFormatProperties(gpu(), tex_format, &props);
-
-        m_textures.resize(1);
-
-        if (props.linearTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT)
+        uint32_t tex_width = 1, tex_height = 1;
+        image::Info info;
+        if (p.image)
         {
-            uint32_t tex_width = 1, tex_height = 1;
-            if (p.image)
-            {
-                const auto& info = p.image->getInfo();
-                tex_width = p.info.size.w;
-                tex_height = p.info.size.h;
-            }
-
-            m_textures[0].width = tex_width;
-            m_textures[0].height = tex_height;
-            m_textures[0].image = createImage(
-                device(), VK_IMAGE_TYPE_2D, tex_width, tex_height, 1,
-                tex_format, VK_IMAGE_TILING_LINEAR, VK_IMAGE_USAGE_SAMPLED_BIT);
-            m_textures[0].mem = allocateAndBindImageMemory(
-                device(), gpu(), m_textures[0].image,
-                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                    VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
-            // Initial transition to shader-readable layout
-            VkCommandBuffer cmd = beginSingleTimeCommands(device(), commandPool());
-            set_image_layout(
-                cmd, device(), commandPool(), queue(), m_textures[0].image,
-                VK_IMAGE_ASPECT_COLOR_BIT,
-                VK_IMAGE_LAYOUT_UNDEFINED, // Initial layout
-                VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-                0,                          // No previous access
-                VK_PIPELINE_STAGE_HOST_BIT, // Host stage
-                VK_ACCESS_SHADER_READ_BIT,  // Shader read
-                VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
-            endSingleTimeCommands(cmd, device(), commandPool(), queue());
+            info = p.image->getInfo();
         }
         else
         {
-            /* Can't support VK_FORMAT_B8G8R8A8_UNORM !? */
-            Fl::fatal("No support for B8G8R8A8_UNORM as texture image format");
+            info = image::Info(1, 1, image::PixelType::RGBA_F16);
         }
-
-        /* create sampler */
-        m_textures[0].sampler = createSampler(device());
-
-        /* create image view */
-        m_textures[0].view = createImageView(
-            device(), m_textures[0].image, tex_format, VK_IMAGE_TYPE_2D);
+        m_textures.push_back(vlk::Texture::create(ctx, info));
+        
+        // Transition image layout to TRANSFER_SHADER_READ_OPTIMAL
+        VkCommandBuffer cmd = beginSingleTimeCommands(device(), commandPool());
+        m_textures[0]->transitionToShaderRead(cmd);
+        endSingleTimeCommands(cmd, device(), commandPool(), queue());
     }
 
     void NDIView::prepare_vertices()
@@ -1150,8 +1081,8 @@ void main() {
         std::vector<VkWriteDescriptorSet> writes(m_textures.size());
         for (uint32_t i = 0; i < m_textures.size(); ++i)
         {
-            imageInfos[i].sampler = m_textures[i].sampler;
-            imageInfos[i].imageView = m_textures[i].view;
+            imageInfos[i].sampler = m_textures[i]->getSampler();
+            imageInfos[i].imageView = m_textures[i]->getImageView();
             imageInfos[i].imageLayout =
                 VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 
@@ -1187,7 +1118,6 @@ void main() {
         TLRENDER_P();
 
         // Some Vulkan settings
-        m_validate = true;
         m_clearColor = {0.F, 0.F, 0.F, 0.F};
 
         mode(FL_RGB | FL_DOUBLE | FL_ALPHA);
@@ -1249,14 +1179,7 @@ void main() {
         {
             std::unique_lock<std::mutex> lock(p.videoMutex.mutex);
             prepare_main_texture();
-            try
-            {
-                prepare_shader();
-            }
-            catch (const std::exception& e)
-            {
-                std::cerr << "ERROR: " << e.what() << std::endl;
-            }
+            prepare_shader();
         }
         prepare_vertices();
         prepare_descriptor_layout();
@@ -1309,47 +1232,23 @@ void main() {
                 m_hdr_metadata_changed = true; // Mark as changed
         }
 
-        // Transition to GENERAL for CPU writes
-        set_image_layout(
-            cmd, device(), commandPool(), queue(), m_textures[0].image,
-            VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-            VK_IMAGE_LAYOUT_GENERAL, VK_ACCESS_SHADER_READ_BIT,
-            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, VK_ACCESS_HOST_WRITE_BIT,
-            VK_PIPELINE_STAGE_HOST_BIT);
+        if (!p.image)
+            return;
 
-        void* mappedData;
-        result = vkMapMemory(
-            device(), m_textures[0].mem, 0, VK_WHOLE_SIZE, 0, &mappedData);
-        VK_CHECK(result);
-
-        if (p.image)
+        // Compare the texture data size to the new image data size to see
+        // if user changed streaming mid-way.
+        const std::size_t dataSize = m_textures[0]->getWidth() *
+                                     m_textures[0]->getHeight() *
+                                     4 * sizeof(half);
+        const std::size_t imageSize = p.image->getDataByteCount();
+        if (dataSize != imageSize)
         {
-            const size_t dataSize =
-                m_textures[0].width * m_textures[0].height * 4 * sizeof(half);
-            const size_t byteCount = p.image->getDataByteCount();
-
-            // Make sure the texture and the image have the same data size.
-            // If not, recalculate the swapchain (call destroy_resources and
-            // prepare).
-            if (dataSize == byteCount)
-            {
-                std::memcpy(mappedData, p.image->getData(), dataSize);
-            }
-            else
-            {
-                m_swapchain_needs_recreation = true;
-            }
+            m_swapchain_needs_recreation = true;
         }
-
-        vkUnmapMemory(device(), m_textures[0].mem);
-
-        // Transition back to SHADER_READ_ONLY_OPTIMAL
-        set_image_layout(
-            cmd, device(), commandPool(), queue(), m_textures[0].image,
-            VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_GENERAL,
-            VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_ACCESS_HOST_WRITE_BIT,
-            VK_PIPELINE_STAGE_HOST_BIT, VK_ACCESS_SHADER_READ_BIT,
-            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+        else
+        {
+            m_textures[0]->copy(reinterpret_cast<const uint8_t*>(p.image->getData()), imageSize);
+        }
     }
 
     void NDIView::vk_draw_begin()
@@ -1371,7 +1270,7 @@ void main() {
         end_render_pass(cmd);
 
         update_texture(cmd);
-
+        
         begin_render_pass(cmd);
 
         vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline);
@@ -1587,7 +1486,7 @@ void main() {
                         m_swapchain_needs_recreation = true;
                     }
 
-                    if (video_frame.p_data)
+                    if (video_frame.p_data && !init)
                     {
                         _copy(video_frame.p_data);
                         redraw();
@@ -1673,12 +1572,6 @@ void main() {
 
     void NDIView::destroy_textures()
     {
-        vkQueueWaitIdle(queue()); // Wait for completion
-
-        for (auto& texture : m_textures)
-        {
-            texture.destroy(device());
-        }
         m_textures.clear();
     }
 

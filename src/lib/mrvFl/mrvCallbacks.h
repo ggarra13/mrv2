@@ -103,6 +103,8 @@ namespace mrv
     void toggle_normalize_image_cb(Fl_Menu_* w, ViewerUI* ui);
     void toggle_invalid_values_cb(Fl_Menu_* w, ViewerUI* ui);
     void toggle_hdr_tonemap_cb(Fl_Menu_* w, ViewerUI* ui);
+    void toggle_hdr_passthru_cb(Fl_Menu_* w, ViewerUI* ui);
+
     void select_hdr_tonemap_cb(Fl_Menu_* w, ViewerUI* ui);
 
     //! Channel callbacks

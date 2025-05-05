@@ -46,6 +46,8 @@ namespace mrv
             void destroy_resources() FL_OVERRIDE;
 
         protected:
+            void _checkHDR();
+            
             void _createPBOs(const math::Size2i& renderSize);
             void _createOverlayPBO(const math::Size2i& renderSize);
 

@@ -246,6 +246,7 @@ namespace tl
             void _addTextures(
                 std::vector<std::shared_ptr<vlk::Texture> >& textures,
                 const pl_shader_res* res);
+            std::string _debugPLVar(const struct pl_shader_var& var);
 #endif
 
 #if defined(TLRENDER_OCIO)

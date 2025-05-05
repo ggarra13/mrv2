@@ -33,7 +33,8 @@ it to Vulkan.
 		 * Temporary FLTK Text widget annotation (how to do it?)
 		 * Text annotations (how to do it?)
 		 * 
-
+- Added passthru to HDROptions.
+- Fixed and simplified code for NDIView.
 
 v1.3.7
 ======

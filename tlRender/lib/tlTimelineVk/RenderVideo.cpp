@@ -831,6 +831,74 @@ namespace tl
                     {
                         p.shaders["display"]->setTexture(texture->getName(), texture);
                     }
+
+#if !PUSH_CONSTANTS
+                    std::size_t pushSize = p.shaders["display"]->getPushSize();
+                    if (pushSize > 0)
+                    {
+                        std::vector<uint8_t> pushData(pushSize, 0);
+                        const pl_shader_res* res = p.placeboData->res;
+                        std::cerr << "-----------PUSH VARIABLES = " << res->num_variables << std::endl;
+                        VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+                        std::size_t currentOffset = 0;
+                        for (int i = 0; i < res->num_variables; ++i)
+                        {
+                            const struct pl_shader_var shader_var = res->variables[i];
+                            const struct pl_var var = shader_var.var;
+
+                            
+                            size_t el_size = pl_var_type_size(var.type);
+                            size_t stride = el_size * var.dim_v;
+                            size_t align = stride;
+                            if (var.dim_v >= 3) // vec3/vec4 align to 16 bytes
+                                align = 16;
+                            if (var.dim_m * var.dim_a > 1) // Arrays/matrices use aligned stride
+                                stride = align;
+                            size_t size = stride * var.dim_m * var.dim_a;
+
+                            std::size_t offset = MRV2_ALIGN2(currentOffset, align);
+                            std::cerr << var.name << std::endl;
+                            std::cerr << "\toffset=" << offset << std::endl;
+                            std::cerr << "\tsize=" << size << std::endl;
+
+                            if (!shader_var.data) {
+                                throw std::runtime_error("No libplacebo shader_var.data");
+                            }
+    
+                            // Handle matrices, vectors, and scalars
+                            if (var.dim_m > 1 && var.dim_v > 1) { // Matrix (e.g., mat3)
+                                std::cerr << var.name << " = ";
+                                std::vector<float> paddedData(stride / sizeof(float) * var.dim_m, 0.0f); // E.g., 12 floats for mat3
+                                const float* src = reinterpret_cast<const float*>(shader_var.data);
+                                for (int row = 0; row < var.dim_v; ++row)
+                                    for (int col = 0; col < var.dim_m; ++col)
+                                        paddedData[col * (stride / sizeof(float)) + row] = src[row * var.dim_m + col]; // Transpose
+                                memcpy(pushData.data() + offset, paddedData.data(), size);
+                                for (int i = 0; i < var.dim_m * var.dim_v; ++i)
+                                {
+                                    std::cerr << paddedData[i] << " ";
+                                }
+                                std::cerr << std::endl;
+                            } else { // Vector or scalar
+                                memcpy(pushData.data() + offset, shader_var.data, size); // Copy as-is
+                            }
+
+                            currentOffset = offset + size;
+                        }
+                        
+                        std::cerr << "PUSH DATA-------------------" << std::endl;
+                        float* d = (float*) pushData.data();
+                        for (size_t i = 0; i < pushSize / sizeof(float); ++i)
+                        {
+                            std::cerr << d[i] << ", ";
+                        }
+                        std::cerr << std::endl;
+                        
+                        vkCmdPushConstants(p.cmd, pipelineLayout,
+                                           VK_SHADER_STAGE_FRAGMENT_BIT, 0,
+                                           pushData.size(), pushData.data());
+                    }
+#endif
                 }
 #endif // TLRENDER_LIBPLACEBO
 

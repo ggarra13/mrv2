@@ -68,6 +68,7 @@ namespace mrv
     Hotkey kIgnoreChromaticities(false, false, false, false, 0);
     Hotkey kAutoNormalize(false, false, false, false, 0);
     Hotkey kInvalidValues(false, false, false, false, 0);
+    Hotkey kToggleHDRPassthru(false, false, false, false, 0);
     Hotkey kToggleHDRTonemap(false, false, false, false, 0);
 
     Hotkey kDisplayWindow(true, false, false, false, 'd');
@@ -416,6 +417,7 @@ namespace mrv
         HotkeyEntry(_("Ignore Chromaticities"), &kIgnoreChromaticities),
         HotkeyEntry(_("Auto Normalize"), &kAutoNormalize),
         HotkeyEntry(_("Invalid Values"), &kInvalidValues),
+        HotkeyEntry(_("Toggle HDR passthru"), &kToggleHDRPassthru),
         HotkeyEntry(_("Toggle HDR tonemap"), &kToggleHDRTonemap),
         HotkeyEntry(_("Display Window"), &kDisplayWindow),
         HotkeyEntry(_("Data Window"), &kDataWindow),

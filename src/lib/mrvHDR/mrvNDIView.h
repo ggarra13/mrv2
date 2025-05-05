@@ -20,6 +20,8 @@
 
 #include <half.h>
 
+#include <tlVk/Texture.h>
+
 #include <tlCore/Util.h>
 #include <tlCore/ListObserver.h>
 
@@ -82,7 +84,7 @@ namespace mrv
         VkShaderModule m_frag_shader_module;
 
         //! This is for holding the textures
-        std::vector<Fl_Vk_Texture> m_textures;
+        std::vector<std::shared_ptr<vlk::Texture> > m_textures;
 
         //! This is for swapchain pipeline layout.
         VkPipelineLayout      m_pipeline_layout;

@@ -250,20 +250,7 @@ vec4 sampleTexture(
          return c;
  })";
         } // namespace
-
-        std::string dummyFragmentSource()
-        {
-            return R"(#version 450
-                 
-layout(location = 0) in vec2 fTexture;  
-layout(location = 0) out vec4 outColor;
-                 
-void main()
-{
-         outColor = vec4(1, 0, 1, 1);
-})";
-        }
-
+        
         std::string imageFragmentSource()
         {
             return string::Format(R"(#version 450
@@ -573,10 +560,10 @@ void main()
         outColor = softClipFunc(outColor, ubo.softClip);
     }
 
-    // // Call libplacebo tonemapping
+    // Call libplacebo tonemapping
     {7}
 
-    // // Apply OCIO Display/View.
+    // Apply OCIO Display/View.
     {8}
 
     if (uboLevels.data.enabled)
