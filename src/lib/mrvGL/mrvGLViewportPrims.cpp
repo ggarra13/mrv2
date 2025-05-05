@@ -181,11 +181,8 @@ namespace mrv
             const size_t numTriangles = mesh.triangles.size();
             if (!gl.vbo || (gl.vbo && gl.vbo->getSize() != numTriangles * 3))
             {
-                gl.vbo =
-                    gl::VBO::create(numTriangles * 3, gl::VBOType::Pos2_F32_UV_U16);
-                CHECK_GL;
+                gl.vbo = gl::VBO::create(numTriangles * 3, gl::VBOType::Pos2_F32_UV_U16);
                 gl.vao.reset();
-                CHECK_GL;
             }
             if (gl.vbo)
             {

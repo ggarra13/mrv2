@@ -8,8 +8,10 @@ namespace tl
     {
         inline bool HDROptions::operator==(const HDROptions& other) const
         {
-            return tonemap == other.tonemap && algorithm == other.algorithm &&
-                   hdrData == other.hdrData;
+            // passthru is ignored on purpose
+            return (tonemap == other.tonemap &&
+                    algorithm == other.algorithm &&
+                    hdrData == other.hdrData);
         }
 
         inline bool HDROptions::operator!=(const HDROptions& other) const

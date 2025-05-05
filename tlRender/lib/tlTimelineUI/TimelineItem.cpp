@@ -415,7 +415,7 @@ namespace tl
             event.render->drawRect(
                 math::Box2i(g.min.x, y, g.w(), h),
                 event.style->getColorRole(ui::ColorRole::Border));
-
+            
             _drawInOutPoints(drawRect, event);
             _drawTimeTicks(drawRect, event);
             _drawFrameMarkers(drawRect, event);

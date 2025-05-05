@@ -59,6 +59,7 @@ Set the format of the image to the desired color format (e.g., VK_FORMAT_R8G8B8A
 Specify the extent (width and height) of the offscreen buffer. This can be different from the swapchain resolution.
 Choose the appropriate tiling (e.g., VK_IMAGE_TILING_OPTIMAL for GPU access).
 Allocate memory for the image using vkAllocateMemory and bind it to the image using vkBindImageMemory.
+
 VkImageView: Create a VkImageView from the VkImage. This provides a typed view of the image's memory and is what you'll attach to the framebuffer.
 Specify the image, viewType, format, and subresourceRange (typically aspectMask of VK_IMAGE_ASPECT_COLOR_BIT for color attachment).
 

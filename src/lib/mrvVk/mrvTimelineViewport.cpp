@@ -969,6 +969,9 @@ namespace mrv
         TimelineViewport::setHDROptions(const timeline::HDROptions& value) noexcept
         {
             TLRENDER_P();
+
+            p.hdrOptions.passthru = value.passthru;
+            
             if (value == p.hdrOptions)
                 return;
             p.hdrOptions.tonemap = value.tonemap;
@@ -1849,7 +1852,7 @@ namespace mrv
             math::Vector2i pos;
             const float devicePixelRatio = self->pixels_per_unit();
             pos.x = X * devicePixelRatio;
-            pos.y = (h() - 1 - Y) * devicePixelRatio;
+            pos.y = Y * devicePixelRatio;
             return pos;
         }
 
@@ -1864,7 +1867,7 @@ namespace mrv
             math::Vector2f pos;
             const float devicePixelRatio = self->pixels_per_unit();
             pos.x = X * devicePixelRatio;
-            pos.y = (h() - 1 - Y) * devicePixelRatio;
+            pos.y = Y * devicePixelRatio;
             return pos;
         }
 
@@ -2070,7 +2073,7 @@ namespace mrv
             c->uiPixelL->value(float_printf(buf, hsv.a));
         }
 
-        void TimelineViewport::updatePixelBar() const noexcept
+        void TimelineViewport::updatePixelBar() noexcept
         {
             TLRENDER_P();
             const Fl_Widget* belowmouse = Fl::belowmouse();
@@ -2136,14 +2139,15 @@ namespace mrv
 
         void TimelineViewport::refreshWindows()
         {
-            _p->ui->uiView->valid(0);
+            _p->ui->uiView->refresh();
             _p->ui->uiView->redraw();
             if (_hasSecondaryViewport())
             {
                 MyViewport* view = _p->ui->uiSecondary->viewport();
-                view->valid(0);
+                view->refresh();
                 view->redraw();
             }
+            Fl::flush();
         }
 
         void TimelineViewport::updateOCIOOptions() noexcept
@@ -2184,7 +2188,7 @@ namespace mrv
                 setOCIOOptions(screen, o);
             }
 
-            redrawWindows();
+            refreshWindows();
         }
 
         inline float calculate_fstop(float exposure) noexcept
@@ -3408,7 +3412,7 @@ namespace mrv
                 if (p.ui->uiPrefs->uiPrefsTonemap->value() != 0)
                     p.hdrOptions.tonemap = true;
 
-                if (p.hdrOptions.tonemap && p.hdr != i->second)
+                if (p.hdr != i->second)
                 {
                     p.hdr = i->second;
 
@@ -3420,6 +3424,7 @@ namespace mrv
             else
             {
                 p.hdrOptions.tonemap = false;
+                p.hdrOptions.passthru = false;
             }
 
             // \@bug: Apple (macOS Intel at least) is too slow and goes black.

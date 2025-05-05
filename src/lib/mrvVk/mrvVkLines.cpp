@@ -2,6 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <FL/Fl_Vk_Window.H>
+
 #include <tlCore/Mesh.h>
 
 #include <tlVk/Mesh.h>
@@ -14,10 +16,10 @@
 
 namespace tl
 {
-    namespace timeline_vk
+    namespace timeline_vlk
     {
         extern std::string vertexSource();
-    } // namespace timeline_vk
+    } // namespace timeline_vlk
 
 } // namespace tl
 
@@ -31,10 +33,10 @@ namespace mrv
 
         struct Lines::Private
         {
-            std::shared_ptr<vk::Shader> softShader = nullptr;
-            std::shared_ptr<vk::Shader> hardShader = nullptr;
-            std::shared_ptr<vk::VBO> vbo;
-            std::shared_ptr<vk::VAO> vao;
+            std::shared_ptr<vlk::Shader> softShader = nullptr;
+            std::shared_ptr<vlk::Shader> hardShader = nullptr;
+            std::shared_ptr<vlk::VBO> vbo;
+            std::shared_ptr<vlk::VAO> vao;
         };
 
         Lines::Lines() :
@@ -45,7 +47,8 @@ namespace mrv
         Lines::~Lines() {}
 
         void Lines::drawLines(
-            const std::shared_ptr<timeline::IRender>& render,
+            Fl_Vk_Context& ctx,
+            const std::shared_ptr<timeline_vlk::Render>& render,
             const draw::PointList& pts, const image::Color4f& color,
             const float width, const bool soft,
             const draw::Polyline2D::JointStyle jointStyle,
@@ -59,10 +62,10 @@ namespace mrv
                 try
                 {
                     const std::string& vertexSource =
-                        tl::timeline_vk::vertexSource();
-                    // p.softShader = vk::Shader::create(
+                        tl::timeline_vlk::vertexSource();
+                    // p.softShader = vlk::Shader::create(
                     //     vertexSource, mrv::softFragmentSource());
-                    // p.hardShader = vk::Shader::create(
+                    // p.hardShader = vlk::Shader::create(
                     //     vertexSource, mrv::hardFragmentSource());
                 }
                 catch (const std::exception& e)
@@ -96,11 +99,11 @@ namespace mrv
 
             mesh.triangles.reserve(numTriangles);
 
-            tl::vk::VBOType vboType = vk::VBOType::Pos2_F32;
+            tl::vlk::VBOType vboType = vlk::VBOType::Pos2_F32;
             geom::Triangle2 triangle;
             if (numUVs > 0)
             {
-                vboType = vk::VBOType::Pos2_F32_UV_U16;
+                vboType = vlk::VBOType::Pos2_F32_UV_U16;
                 for (size_t i = 0; i < numTriangles; ++i)
                 {
                     Polyline2D::IndexTriangle t = triangles[i];
@@ -135,78 +138,76 @@ namespace mrv
                 mesh.v.push_back(math::Vector2f(draw[i].x, draw[i].y));
 
             const math::Matrix4x4f& mvp = render->getTransform();
-            
+
+            VkCommandBuffer cmd = render->getCommandBuffer();
+            const uint32_t frameIndex = render->getFrameIndex();
             if (soft)
             {
-                p.softShader->bind();
-                
-                p.softShader->setUniform("transform.mvp", mvp);
-                
+                p.softShader->bind(frameIndex);
+
+                p.softShader->setUniform("transform.mvp", mvp, vlk::kShaderVertex);
+
                 p.softShader->setUniform("color", color);
-                
             }
             else
             {
-                p.hardShader->bind();
-                
-                p.hardShader->setUniform("transform.mvp", mvp);
-                
+                p.hardShader->bind(frameIndex);
+
+                p.hardShader->setUniform("transform.mvp", mvp, vlk::kShaderVertex);
+
                 p.hardShader->setUniform("color", color);
-                
             }
 
             if (!p.vbo || (p.vbo && (p.vbo->getSize() != numTriangles * 3 ||
                                      p.vbo->getType() != vboType)))
             {
-                p.vbo = vk::VBO::create(numTriangles * 3, vboType);
-                
+                p.vbo = vlk::VBO::create(numTriangles * 3, vboType);
+
                 p.vao.reset();
-                
             }
 
             if (p.vbo)
             {
                 p.vbo->copy(convert(mesh, vboType));
-                
             }
 
             if (!p.vao && p.vbo)
             {
-                p.vao = vk::VAO::create(p.vbo->getType(), p.vbo->getID());
-                
+                p.vao = vlk::VAO::create(ctx);
+                p.vao->bind(frameIndex);
+                p.vao->upload(p.vbo->getData());
             }
 
             if (p.vao && p.vbo)
             {
-                p.vao->bind();
-                
-                // p.vao->draw(GL_TRIANGLES, 0, p.vbo->getSize());
+                p.vao->draw(cmd, p.vbo);
                 
 
                 // #ifndef NDEBUG
                 //             if (!soft)
                 //             {
                 //                 p.wireShader->bind();
-                //                 
+                //
                 //                 p.wireShader->setUniform("transform.mvp",
-                //                 mvp); 
+                //                 mvp);
                 //                 p.wireShader->setUniform("color",
-                //                 image::Color4f(1, 0, 0, 1)); 
+                //                 image::Color4f(1, 0, 0, 1));
                 //                 glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-                //                 
+                //
                 //                 p.vao->bind();
-                //                 
+                //
                 //                 p.vao->draw(GL_TRIANGLES, 0,
-                //                 p.vbo->getSize()); 
+                //                 p.vbo->getSize());
                 //                 glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-                //                 
+                //
                 //             }
                 // #endif
             }
         }
 
         void Lines::drawLine(
-            const std::shared_ptr<timeline::IRender>& render,
+            Fl_Vk_Context& ctx,
+            const std::shared_ptr<timeline_vlk::Render>& render,
             const math::Vector2i& start, const math::Vector2i& end,
             const image::Color4f& color, const float width)
         {
@@ -217,22 +218,22 @@ namespace mrv
             line.push_back(Point(end.x, end.y));
 
             drawLines(
-                render, line, color, width, false,
+                ctx, render, line, color, width, false,
                 Polyline2D::JointStyle::MITER, Polyline2D::EndCapStyle::BUTT,
                 false);
         }
 
-        void Lines::drawPoints(
-            const std::vector<math::Vector2f>& pnts,
+        void Lines::drawPoints(VkCommandBuffer& cmd, uint32_t frameIndex,
+            Fl_Vk_Context& ctx, const std::vector<math::Vector2f>& pnts,
             const image::Color4f& color, const int size)
         {
             TLRENDER_P();
 
             const size_t numPoints = pnts.size();
-            const tl::vk::VBOType vboType = vk::VBOType::Pos2_F32;
+            const tl::vlk::VBOType vboType = vlk::VBOType::Pos2_F32;
             if (!p.vbo || (p.vbo && p.vbo->getSize() != numPoints))
             {
-                p.vbo = vk::VBO::create(numPoints, vboType);
+                p.vbo = vlk::VBO::create(numPoints, vboType);
                 p.vao.reset();
             }
             if (p.vbo)
@@ -246,19 +247,21 @@ namespace mrv
 
             if (!p.vao && p.vbo)
             {
-                p.vao = vk::VAO::create(p.vbo->getType(), p.vbo->getID());
+                p.vao = vlk::VAO::create(ctx);
+                p.vao->upload(p.vbo->getData());
             }
 
             if (p.vao && p.vbo)
             {
-                p.vao->bind();
+                p.vao->bind(frameIndex);
                 // glPointSize(size);
                 // p.vao->draw(GL_POINTS, 0, p.vbo->getSize());
             }
         }
 
         void Lines::drawCircle(
-            const std::shared_ptr<timeline::IRender>& render,
+            Fl_Vk_Context& ctx,
+            const std::shared_ptr<timeline_vlk::Render>& render,
             const math::Vector2f& center, const float radius, const float width,
             const image::Color4f& color, const bool soft)
         {
@@ -276,24 +279,25 @@ namespace mrv
             }
 
             drawLines(
-                render, verts, color, width, soft,
+                ctx, render, verts, color, width, soft,
                 draw::Polyline2D::JointStyle::ROUND,
                 draw::Polyline2D::EndCapStyle::JOINT);
         }
 
         void Lines::drawCursor(
-            const std::shared_ptr<timeline::IRender>& render,
+            Fl_Vk_Context& ctx,
+            const std::shared_ptr<timeline_vlk::Render>& render,
             const math::Vector2f& center, const float radius,
             const image::Color4f& color)
         {
             float lineWidth = 2.0;
             if (radius <= 2.0)
                 lineWidth = 1.0f;
-            drawCircle(render, center, radius, lineWidth, color, false);
+            drawCircle(ctx, render, center, radius, lineWidth, color, false);
             image::Color4f black(0.F, 0.F, 0.F, 1.F);
             if (radius > 2.0F)
-                drawCircle(render, center, radius - 2.0F, 2.0, black, false);
+                drawCircle(ctx, render, center, radius - 2.0F, 2.0, black, false);
         }
 
-    } // namespace opengl
+    } // namespace vulkan
 } // namespace mrv

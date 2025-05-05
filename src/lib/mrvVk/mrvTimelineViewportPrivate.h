@@ -34,6 +34,8 @@ namespace mrv
             //! Ghosting options
             static short ghostPrevious;
             static short ghostNext;
+
+            bool hdrMonitorFound = false;
         
             timeline::OCIOOptions ocioOptions;
             timeline::LUTOptions lutOptions;
@@ -186,6 +188,6 @@ namespace mrv
             std::shared_ptr<image::Image> overlayImage;
         };
 
-    }  // namespace vk
+    }  // namespace vlk
     
 } // namespace mrv

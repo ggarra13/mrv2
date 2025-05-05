@@ -314,49 +314,6 @@ namespace tl
             return _p->id;
         }
 
-        void Texture::copy(const std::shared_ptr<image::Image>& data)
-        {
-            TLRENDER_P();
-#if defined(TLRENDER_API_GL_4_1)
-            if (p.pbo)
-            {
-                glBindBuffer(GL_PIXEL_UNPACK_BUFFER, p.pbo);
-                if (void* buffer =
-                        glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY))
-                {
-                    memcpy(buffer, data->getData(), data->getDataByteCount());
-                    glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
-                    const auto& info = data->getInfo();
-                    glBindTexture(GL_TEXTURE_2D, p.id);
-                    glPixelStorei(GL_UNPACK_ALIGNMENT, info.layout.alignment);
-                    glPixelStorei(
-                        GL_UNPACK_SWAP_BYTES,
-                        info.layout.endian != memory::getEndian());
-                    glTexSubImage2D(
-                        GL_TEXTURE_2D, 0, 0, 0, info.size.w, info.size.h,
-                        getTextureFormat(info.pixelType),
-                        getTextureType(info.pixelType), NULL);
-                }
-                glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
-            }
-            else
-#endif // TLRENDER_API_GL_4_1
-            {
-                const auto& info = data->getInfo();
-                glBindTexture(GL_TEXTURE_2D, p.id);
-                glPixelStorei(GL_UNPACK_ALIGNMENT, info.layout.alignment);
-#if defined(TLRENDER_API_GL_4_1)
-                glPixelStorei(
-                    GL_UNPACK_SWAP_BYTES,
-                    info.layout.endian != memory::getEndian());
-#endif // TLRENDER_API_GL_4_1
-                glTexSubImage2D(
-                    GL_TEXTURE_2D, 0, 0, 0, info.size.w, info.size.h,
-                    getTextureFormat(info.pixelType),
-                    getTextureType(info.pixelType), data->getData());
-            }
-        }
-
         void
         Texture::copy(const std::shared_ptr<image::Image>& data, int x, int y)
         {
@@ -400,7 +357,12 @@ namespace tl
                     getTextureType(info.pixelType), data->getData());
             }
         }
-
+        void Texture::copy(const std::shared_ptr<image::Image>& data)
+        {
+            TLRENDER_P();
+            copy(data, 0, 0);
+        }
+        
         void Texture::copy(const uint8_t* data, const image::Info& info)
         {
             TLRENDER_P();

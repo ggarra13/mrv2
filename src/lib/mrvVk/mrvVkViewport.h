@@ -26,29 +26,34 @@ namespace mrv
         public:
             Viewport(int X, int Y, int W, int H, const char* L = 0);
             ~Viewport();
-        
-            //! Virual draw method
-            void draw() override;
 
-            //! Virtual handle event method
-            int handle(int event) override;
+            //! Virtual log level method
+            int log_level() const FL_OVERRIDE;
+
+            //! Virual draw method
+            void draw() FL_OVERRIDE;
+
+            //! Virtual handle event method.
+            int handle(int event) FL_OVERRIDE;
+
+            //! Virtual hide method.  Destroys ALL resources.
+            void hide() FL_OVERRIDE;
 
             //! Set the internal system context for the widget.
             void setContext(const std::weak_ptr<system::Context>& context);
 
-            //! Refresh window by clearing the associated resources.
-            void refresh() FL_OVERRIDE;
-
+            void init_colorspace() FL_OVERRIDE;
+            std::vector<const char*> get_device_extensions() FL_OVERRIDE;
+            
             void prepare() FL_OVERRIDE;
             void destroy_resources() FL_OVERRIDE;
 
         protected:
-            void _initializeVK();
-            void _initializeVKResources();
-
+            void _checkHDR();
+            
             void _createPBOs(const math::Size2i& renderSize);
             void _createOverlayPBO(const math::Size2i& renderSize);
-        
+
             void _createCubicEnvironmentMap();
 
             void _createSphericalEnvironmentMap();
@@ -61,58 +66,61 @@ namespace mrv
 
             void _drawAnaglyph(int, int) const noexcept;
 
-            void _drawCheckerboard(int, int) const noexcept;
+            void _drawCheckerboard(int, int) noexcept;
 
-            void _drawColumns(int, int) const noexcept;
+            void _drawColumns(int, int) noexcept;
 
-            void _drawScanlines(int, int) const noexcept;
+            void _drawScanlines(int, int) noexcept;
 
             void _drawStereoVulkan() noexcept;
 
-            void _drawStereo3D() const noexcept;
+            void _drawStereo3D() noexcept;
 
-            void _drawDataWindow() const noexcept;
+            void _drawDataWindow() noexcept;
 
-            void _drawDisplayWindow() const noexcept;
+            void _drawDisplayWindow() noexcept;
 
-            void _drawMissingFrame(const math::Size2i& renderSize) const noexcept;
+            void _drawMissingFrame(const math::Size2i& renderSize) noexcept;
 
             //! Crop mask, data window and display window
             void _drawOverlays(const math::Size2i& renderSize) const noexcept;
 
             void _drawCropMask(const math::Size2i& renderSize) const noexcept;
 
-            void _drawHUD(float alpha) const noexcept;
+            void _drawHUD(VkCommandBuffer cmd, float alpha) const noexcept;
 
-            void _drawCursor(const math::Matrix4x4f& mvp) const noexcept;
+            void _drawCursor(const math::Matrix4x4f& mvp) noexcept;
 
             void _drawAnnotations(
-                const std::shared_ptr<tl::vk::OffscreenBuffer>& overlay,
+                const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay,
                 const math::Matrix4x4f& renderMVP,
                 const otime::RationalTime& time,
-                const std::vector<std::shared_ptr<draw::Annotation>>& annotations,
+                const std::vector<std::shared_ptr<draw::Annotation>>&
+                    annotations,
                 const math::Size2i& renderSize);
 
             void _pushAnnotationShape(const std::string& cmd) const override;
 
-            void _readPixel(image::Color4f& rgba) const noexcept override;
+            void _readPixel(image::Color4f& rgba) override;
 
             void _drawHelpText() const noexcept;
 
             void _drawRectangleOutline(
                 const math::Box2i& box, const image::Color4f& color,
-                const math::Matrix4x4f& mvp) const noexcept;
+                const math::Matrix4x4f& mvp) noexcept;
             void _drawText(
-                const std::vector<std::shared_ptr<image::Glyph> >&, math::Vector2i&,
-                const int16_t lineHeight, const image::Color4f&) const noexcept;
-            void _drawSafeAreas() const noexcept;
+                const std::vector<std::shared_ptr<image::Glyph> >&,
+                math::Vector2i&, const int16_t lineHeight,
+                const image::Color4f&) const noexcept;
+            void _drawText(
+                const std::string& text, const image::FontInfo& fontInfo,
+                math::Vector2i& pos, const int16_t lineHeight,
+                const image::Color4f& labelColor) const noexcept;
+            void _drawSafeAreas() noexcept;
             void _drawSafeAreas(
                 const float percentX, const float percentY,
                 const float pixelAspectRatio, const image::Color4f& color,
-                const math::Matrix4x4f& mvp, const char* label = "") const noexcept;
-
-            void _mapBuffer() const noexcept;
-            void _unmapBuffer() const noexcept;
+                const math::Matrix4x4f& mvp, const char* label = "") noexcept;
 
             void _drawShape(
                 const std::shared_ptr< draw::Shape >& shape,
@@ -120,26 +128,36 @@ namespace mrv
 
             void _calculateColorAreaFullValues(area::Info& info) noexcept;
 
-            void _drawWindowArea(const std::string&) const noexcept;
+            void _drawWindowArea(const std::string&) noexcept;
 
             void _compositeAnnotations(
                 const math::Matrix4x4f& shaderMatrix,
                 const math::Size2i& viewportSize);
-        
+
             void _compositeAnnotations(
-                const std::shared_ptr<tl::vk::OffscreenBuffer>&,
+                const std::shared_ptr<tl::vlk::OffscreenBuffer>&,
                 const math::Matrix4x4f& orthoMatrix,
                 const math::Size2i& viewportSize);
-        
-            void _compositeOverlay(const std::shared_ptr<tl::vk::OffscreenBuffer>&,
-                                   const math::Matrix4x4f& identity,
-                                   const math::Size2i& viewportSize);
-        
+
+            void _compositeOverlay(
+                const std::shared_ptr<tl::vlk::OffscreenBuffer>&,
+                const math::Matrix4x4f& identity,
+                const math::Size2i& viewportSize);
+
+        protected:
+            // Pipelines and layouts are managed outside the per-frame draw loop
+
+            void prepare_pipeline();
+            void prepare_pipeline_layout();
+            void prepare_shaders();
+            void prepare_render();
+
+            
         private:
             struct VKPrivate;
             std::unique_ptr<VKPrivate> _vk;
         };
-        
-    }  // namespace vulkan
-    
+
+    } // namespace vulkan
+
 } // namespace mrv

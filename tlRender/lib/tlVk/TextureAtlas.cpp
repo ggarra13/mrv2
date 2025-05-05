@@ -6,9 +6,11 @@
 
 #include <tlVk/Texture.h>
 
+#include <FL/Fl_Vk_Utils.H>
+
 namespace tl
 {
-    namespace vk
+    namespace vlk
     {
         namespace
         {
@@ -195,7 +197,7 @@ namespace tl
                 textureOptions.filters.minify = filter;
                 textureOptions.filters.magnify = filter;
                 auto texture = Texture::create(
-                    image::Info(textureSize, textureSize, textureType),
+                    ctx, image::Info(textureSize, textureSize, textureType),
                     textureOptions);
                 p.textures.push_back(texture);
 
@@ -209,18 +211,20 @@ namespace tl
             }
         }
 
-        TextureAtlas::TextureAtlas() :
-            _p(new Private)
+        TextureAtlas::TextureAtlas(Fl_Vk_Context& context) :
+            _p(new Private),
+            ctx(context)
         {
         }
 
         TextureAtlas::~TextureAtlas() {}
 
         std::shared_ptr<TextureAtlas> TextureAtlas::create(
-            size_t textureCount, int textureSize, image::PixelType textureType,
-            timeline::ImageFilter filter, int border)
+            Fl_Vk_Context& ctx, size_t textureCount, int textureSize,
+            image::PixelType textureType, timeline::ImageFilter filter,
+            int border)
         {
-            auto out = std::shared_ptr<TextureAtlas>(new TextureAtlas);
+            auto out = std::shared_ptr<TextureAtlas>(new TextureAtlas(ctx));
             out->_init(textureCount, textureSize, textureType, filter, border);
             return out;
         }
@@ -240,15 +244,9 @@ namespace tl
             return _p->textureType;
         }
 
-        std::vector<unsigned int> TextureAtlas::getTextures() const
+        std::vector<std::shared_ptr<vlk::Texture> > TextureAtlas::getTextures() const
         {
-            TLRENDER_P();
-            std::vector<unsigned int> out;
-            for (const auto& i : p.textures)
-            {
-                out.push_back(i->getID());
-            }
-            return out;
+            return _p->textures;
         }
 
         bool TextureAtlas::getItem(TextureAtlasID id, TextureAtlasItem& out)
@@ -269,6 +267,12 @@ namespace tl
         {
             TLRENDER_P();
 
+            VkDevice device = ctx.device;
+            VkCommandPool commandPool = ctx.commandPool;
+            VkQueue queue = ctx.queue;
+            
+            VkCommandBuffer cmd = beginSingleTimeCommands(device,
+                                                          commandPool);
             for (uint8_t i = 0; i < p.textureCount; ++i)
             {
                 if (auto node = p.boxPackingNodes[i]->insert(image))
@@ -279,8 +283,12 @@ namespace tl
                     p.textures[node->textureIndex]->copy(
                         image, node->box.min.x + p.border,
                         node->box.min.y + p.border);
+                    p.textures[node->textureIndex]->transition(cmd);
                     p.cache[node->id] = node;
                     p.toTextureAtlasItem(node, out);
+                    
+                    endSingleTimeCommands(cmd, device, commandPool, queue);
+
                     return node->id;
                 }
             }
@@ -304,6 +312,8 @@ namespace tl
             const math::Size2i dataSize =
                 math::Size2i(image->getWidth(), image->getHeight()) +
                 p.border * 2;
+
+            
             for (auto node : nodes)
             {
                 const math::Size2i nodeSize = node->box.getSize();
@@ -335,13 +345,16 @@ namespace tl
                         p.textures[node2->textureIndex]->copy(
                             image, node2->box.min.x + p.border,
                             node2->box.min.y + p.border);
+                        p.textures[node2->textureIndex]->transition(cmd);
                         p.cache[node2->id] = node2;
                         p.toTextureAtlasItem(node2, out);
 
+                        endSingleTimeCommands(cmd, device, commandPool, queue);
                         return node2->id;
                     }
                 }
             }
+            endSingleTimeCommands(cmd, device, commandPool, queue);
             return 0;
         }
 
@@ -412,9 +425,9 @@ namespace tl
                     static_cast<float>(textureSize));
             out.textureV = math::FloatRange(
                 (node->box.min.y + static_cast<float>(border)) /
-                    static_cast<float>(textureSize),
+                static_cast<float>(textureSize),
                 (node->box.max.y - static_cast<float>(border) + 1.F) /
-                    static_cast<float>(textureSize));
+                static_cast<float>(textureSize));
         }
 
         void TextureAtlas::Private::removeFromAtlas(
@@ -432,5 +445,5 @@ namespace tl
                 removeFromAtlas(node->children[1]);
             }
         }
-    } // namespace vk
+    } // namespace vlk
 } // namespace tl

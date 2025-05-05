@@ -103,6 +103,8 @@ namespace mrv
     void toggle_normalize_image_cb(Fl_Menu_* w, ViewerUI* ui);
     void toggle_invalid_values_cb(Fl_Menu_* w, ViewerUI* ui);
     void toggle_hdr_tonemap_cb(Fl_Menu_* w, ViewerUI* ui);
+    void toggle_hdr_passthru_cb(Fl_Menu_* w, ViewerUI* ui);
+
     void select_hdr_tonemap_cb(Fl_Menu_* w, ViewerUI* ui);
 
     //! Channel callbacks
@@ -161,7 +163,7 @@ namespace mrv
     void toggle_menu_bar(Fl_Menu_*, ViewerUI* ui);
     void toggle_top_bar(Fl_Menu_*, ViewerUI* ui);
     void toggle_pixel_bar(Fl_Menu_*, ViewerUI* ui);
-    void toggle_bottom_bar(Fl_Menu_*, ViewerUI* ui);
+    void toggle_timeline_bar(Fl_Menu_*, ViewerUI* ui);
     void toggle_status_bar(Fl_Menu_*, ViewerUI* ui);
     void toggle_ui_bar(
         ViewerUI* ui, Fl_Group* const bar, const int sizeX, const int sizeY);

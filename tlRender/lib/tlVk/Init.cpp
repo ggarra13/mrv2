@@ -9,9 +9,8 @@
 
 namespace tl
 {
-    namespace vk
+    namespace vlk
     {
         void init(const std::shared_ptr<system::Context>& context) {}
-
-    } // namespace vk
+    } // namespace vlk
 } // namespace tl

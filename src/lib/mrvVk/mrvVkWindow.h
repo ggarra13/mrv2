@@ -27,32 +27,15 @@ namespace mrv
 
             void valid(int x) {};
             int valid() const { return 1; }
-
-            virtual void draw() FL_OVERRIDE;
-            virtual void vk_draw_begin() FL_OVERRIDE;
-            virtual void prepare() FL_OVERRIDE;
-            virtual void destroy_resources() FL_OVERRIDE;
         
 #ifdef __APPLE__
         protected:
             void set_window_transparency(double alpha);
 #endif
+            //! Main swapchain render pass (common to all Vulkan windows).
+            void prepare_render_pass(); 
 
-            Fl_Vk_Mesh m_mesh;
-            int sides = 3;
-            
-            VkShaderModule prepare_vs();
-            VkShaderModule prepare_fs();
-
-            VkShaderModule m_frag_shader;
-            VkShaderModule m_vert_shader;
-            
-            void prepare_vertices();
-            void prepare_descriptor_layout();
-            void prepare_render_pass();
-            void prepare_pipeline();
-            void prepare_descriptor_pool() {};
-            void prepare_descriptor_set()  {};
+            void _init();
         };
 
     } // namespace vulkan

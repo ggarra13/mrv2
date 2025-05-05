@@ -6,6 +6,9 @@
 
 #include <tlTimeline/IRender.h>
 
+#include <tlVk/Mesh.h>
+#include <tlVk/OffscreenBuffer.h>
+#include <tlVk/Shader.h>
 #include <tlVk/Texture.h>
 
 #include <tlCore/LRUCache.h>
@@ -25,12 +28,12 @@ struct pl_shader_res;
 namespace tl
 {
     //! Timeline Vulkan support
-    namespace timeline_vk
+    namespace timeline_vlk
     {
         //! Texture cache.
         typedef memory::LRUCache<
             std::shared_ptr<image::Image>,
-            std::vector<std::shared_ptr<vk::Texture> > >
+            std::vector<std::shared_ptr<vlk::Texture> > >
             TextureCache;
 
         //! Vulkan renderer.
@@ -40,29 +43,55 @@ namespace tl
 
         protected:
             void _init(
-                const Fl_Vk_Context* ctx,
                 const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<TextureCache>&);
 
-            Render();
+            Render(Fl_Vk_Context& ctx);
 
         public:
             virtual ~Render();
 
             //! Create a new renderer.
             static std::shared_ptr<Render> create(
-                const Fl_Vk_Context* ctx,
-                const std::shared_ptr<system::Context>&,
+                Fl_Vk_Context& ctx, const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<TextureCache>& = nullptr);
 
             //! Get the texture cache.
             const std::shared_ptr<TextureCache>& getTextureCache() const;
 
+            //! Overriden begin function
             void begin(
                 const math::Size2i&, const timeline::RenderOptions& =
                                          timeline::RenderOptions()) override;
+
+            //! Proper Vulkan begin function
+            void begin(
+                VkCommandBuffer& cmd,
+                const std::shared_ptr<vlk::OffscreenBuffer> fbo,
+                const uint32_t frameIndex, const math::Size2i&,
+                const timeline::RenderOptions& = timeline::RenderOptions());
             void end() override;
 
+            VkCommandBuffer getCommandBuffer() const;
+            uint32_t getFrameIndex() const;
+
+            void createPipeline(const std::string& pipelineName,
+                                const std::string& pipelineLayoutName,
+                                const VkRenderPass renderPass,
+                                const bool hasDepth,
+                                const bool hasStencil,
+                                const std::shared_ptr<vlk::Shader>& shader,    
+                                const std::shared_ptr<vlk::VBO>& mesh,
+                                const bool enableBlending = false,
+                                const VkBlendFactor srcColorBlendFactor =
+                                VK_BLEND_FACTOR_SRC_ALPHA,
+                                const VkBlendFactor dstColorBlendFactor =
+                                VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                                const VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
+                                const VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                                const VkBlendOp colorBlendOp = VK_BLEND_OP_ADD,
+                                const VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD);
+            
             math::Size2i getRenderSize() const override;
             void setRenderSize(const math::Size2i&) override;
             math::Box2i getViewport() const override;
@@ -78,24 +107,58 @@ namespace tl
             void setLUTOptions(const timeline::LUTOptions&) override;
             void setHDROptions(const timeline::HDROptions&) override;
 
+            void drawRect(const std::string& pipelineName,
+                          const std::string& shaderName,
+                          const std::string& meshName,
+                          const math::Box2i&, const image::Color4f&,
+                          const bool enableBlending = true);
             void drawRect(const math::Box2i&, const image::Color4f&) override;
+            void drawMesh(const std::string& pipelineName,
+                          const std::string& pipelineLayoutName,
+                          const std::string& shaderName,
+                          const std::string& meshName,
+                          const geom::TriangleMesh2&, const math::Vector2i& position,
+                          const image::Color4f&,
+                          const bool enableBlending = false);
             void drawMesh(
                 const geom::TriangleMesh2&, const math::Vector2i& position,
                 const image::Color4f&) override;
             void drawColorMesh(
                 const geom::TriangleMesh2&, const math::Vector2i& position,
-                const image::Color4f&) override;
+                const image::Color4f&) override {};
+            void drawColorMesh(
+                const std::string& pipelineLayoutName,
+                const geom::TriangleMesh2&, const math::Vector2i& position,
+                const image::Color4f&);
+
+            void drawText(
+                const std::string& pipelineName,
+                const std::string& pipelineLayoutName,
+                const VkRenderPass& renderPass,
+                const bool hasDepth,
+                const bool hasStencil,
+                const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
+                const math::Vector2i& pos, const image::Color4f& color);
             void drawText(
                 const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
                 const math::Vector2i& position, const image::Color4f&) override;
             void drawTexture(
                 unsigned int, const math::Box2i&,
-                const image::Color4f& = image::Color4f(1.F, 1.F, 1.F)) override;
+                const image::Color4f& =
+                    image::Color4f(1.F, 1.F, 1.F)) override {};
+            void drawTexture(
+                const std::shared_ptr<vlk::Texture>&, const math::Box2i&,
+                const image::Color4f& = image::Color4f(1.F, 1.F, 1.F));
             void drawImage(
                 const std::shared_ptr<image::Image>&, const math::Box2i&,
                 const image::Color4f& = image::Color4f(1.F, 1.F, 1.F),
                 const timeline::ImageOptions& =
-                    timeline::ImageOptions()) override;
+                    timeline::ImageOptions()) override {};
+            void drawImage(
+                const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
+                const std::shared_ptr<image::Image>&, const math::Box2i&,
+                const image::Color4f& = image::Color4f(1.F, 1.F, 1.F),
+                const timeline::ImageOptions& = timeline::ImageOptions());
             void drawVideo(
                 const std::vector<timeline::VideoData>&,
                 const std::vector<math::Box2i>&,
@@ -104,6 +167,7 @@ namespace tl
                 const timeline::CompareOptions& = timeline::CompareOptions(),
                 const timeline::BackgroundOptions& =
                     timeline::BackgroundOptions()) override;
+
 
         private:
             void _displayShader();
@@ -151,20 +215,48 @@ namespace tl
                 const timeline::VideoData&, const math::Box2i&,
                 const std::shared_ptr<timeline::ImageOptions>&,
                 const timeline::DisplayOptions&);
+            void _createMesh(
+                const std::string& meshName, const geom::TriangleMesh2& mesh);
+            void _createBindingSet(const std::shared_ptr<vlk::Shader>& shaderName);
+            VkPipelineLayout _createPipelineLayout(
+                const std::string& pipelineLayoutName,
+                const std::shared_ptr<vlk::Shader> shader);
+            void _createPipeline(
+                const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
+                const std::string& pipelineName,
+                const std::string& pipelineLayoutName,
+                const std::string& shaderName,
+                const std::string& meshName, const bool enableBlending = false,
+                const VkBlendFactor srcColorBlendFactor =
+                    VK_BLEND_FACTOR_SRC_ALPHA,
+                const VkBlendFactor dstColorBlendFactor =
+                    VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                const VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
+                const VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                const VkBlendOp colorBlendOp = VK_BLEND_OP_ADD,
+                const VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD);
+            void _setViewportAndScissor(const math::Size2i&);
+            void _bindDescriptorSets(
+                const std::string& pipelineLayoutName,
+                const std::string& shaderName);
+            void _vkDraw(const std::string& meshName);
 
+            
 #if defined(TLRENDER_LIBPLACEBO)
             void _addTextures(
-                std::vector<Fl_Vk_Texture>& textures,
+                std::vector<std::shared_ptr<vlk::Texture> >& textures,
                 const pl_shader_res* res);
+            std::string _debugPLVar(const struct pl_shader_var& var);
 #endif
-                
+
 #if defined(TLRENDER_OCIO)
             void _addTextures(
-                std::vector<Fl_Vk_Texture>& textures,
+                std::vector<std::shared_ptr<vlk::Texture >>& textures,
                 const OCIO::GpuShaderDescRcPtr& shaderDesc);
 #endif
-                
+            Fl_Vk_Context& ctx;
+
             TLRENDER_PRIVATE();
         };
-    } // namespace timeline_vk
+    } // namespace timeline_vlk
 } // namespace tl

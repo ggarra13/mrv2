@@ -66,7 +66,7 @@ namespace mrv
             // glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
         }
 
-        void Viewport::_drawScanlines(int left, int right) const noexcept
+        void Viewport::_drawScanlines(int left, int right) noexcept
         {
             TLRENDER_P();
             MRV2_VK();
@@ -92,9 +92,8 @@ namespace mrv
             image::Color4f color(1, 1, 1, 1);
             for (size_t y = 0; y < H; y += 2)
             {
-                vk.lines->drawLine(
-                    vk.render, math::Vector2i(0, y), math::Vector2i(W, y), color,
-                    1);
+                vk.lines->drawLine(ctx, vk.render, math::Vector2i(0, y),
+                                   math::Vector2i(W, y), color, 1);
             }
 
             if (p.stereo3DOptions.eyeSeparation != 0.F)
@@ -120,7 +119,7 @@ namespace mrv
                 ;
         }
 
-        void Viewport::_drawCheckerboard(int left, int right) const noexcept
+        void Viewport::_drawCheckerboard(int left, int right) noexcept
         {
             TLRENDER_P();
             MRV2_VK();
@@ -157,7 +156,7 @@ namespace mrv
                 }
             }
 
-            vk.lines->drawPoints(pnts, color, 5);
+            vk.lines->drawPoints(vk.cmd, m_currentFrameIndex, ctx, pnts, color, 5);
 
             if (p.stereo3DOptions.eyeSeparation != 0.F)
             {
@@ -181,7 +180,7 @@ namespace mrv
             // glDisable(GL_STENCIL_TEST);
         }
 
-        void Viewport::_drawColumns(int left, int right) const noexcept
+        void Viewport::_drawColumns(int left, int right) noexcept
         {
             TLRENDER_P();
             MRV2_VK();
@@ -207,7 +206,7 @@ namespace mrv
             image::Color4f color(1, 1, 1, 1);
             for (size_t x = 0; x < W; x += 2)
             {
-                vk.lines->drawLine(
+                vk.lines->drawLine(ctx,
                     vk.render, math::Vector2i(x, 0), math::Vector2i(x, H), color,
                     1);
             }
@@ -252,7 +251,7 @@ namespace mrv
             {
                 locale::SetAndRestore saved;
 
-                vk::OffscreenBufferBinding binding(vk.buffer);
+                // vlk::OffscreenBufferBinding binding(vk.buffer);
                 vk.render->begin(renderSize);
                 vk.render->setOCIOOptions(p.ocioOptions);
                 vk.render->setLUTOptions(p.lutOptions);
@@ -278,7 +277,7 @@ namespace mrv
 
             {
                 locale::SetAndRestore saved;
-                vk::OffscreenBufferBinding binding(vk.stereoBuffer);
+                // vlk::OffscreenBufferBinding binding(vk.stereoBuffer);
 
                 vk.render->begin(renderSize);
                 vk.render->setOCIOOptions(p.ocioOptions);
@@ -304,7 +303,7 @@ namespace mrv
             }
         }
 
-        void Viewport::_drawStereo3D() const noexcept
+        void Viewport::_drawStereo3D() noexcept
         {
             TLRENDER_P();
             const bool swap = p.stereo3DOptions.swapEyes;
@@ -335,7 +334,7 @@ namespace mrv
         }
 
         void
-        Viewport::_drawMissingFrame(const math::Size2i& renderSize) const noexcept
+        Viewport::_drawMissingFrame(const math::Size2i& renderSize) noexcept
         {
             TLRENDER_P();
             MRV2_VK();
@@ -349,16 +348,16 @@ namespace mrv
             if (p.missingFrameType == MissingFrameType::kScratchedFrame)
             {
                 image::Color4f color(1, 0, 0, 0.8);
-                vk.lines->drawLine(
+                vk.lines->drawLine(ctx,
                     vk.render, math::Vector2i(0, 0),
                     math::Vector2i(renderSize.w, renderSize.h), color, 4);
-                vk.lines->drawLine(
+                vk.lines->drawLine(ctx,
                     vk.render, math::Vector2i(0, renderSize.h),
                     math::Vector2i(renderSize.w, 0), color, 4);
             }
         }
 
-        void Viewport::_drawCursor(const math::Matrix4x4f& mvp) const noexcept
+        void Viewport::_drawCursor(const math::Matrix4x4f& mvp) noexcept
         {
             MRV2_VK();
             TLRENDER_P();
@@ -369,16 +368,16 @@ namespace mrv
             p.mousePos = _getFocus();
             const auto& pos = _getRasterf();
             vk.render->setTransform(mvp);
-            vk.lines->drawCursor(vk.render, pos, pen_size, color);
+            vk.lines->drawCursor(ctx, vk.render, pos, pen_size, color);
         }
 
         void Viewport::_drawRectangleOutline(
             const math::Box2i& box, const image::Color4f& color,
-            const math::Matrix4x4f& mvp) const noexcept
+            const math::Matrix4x4f& mvp) noexcept
         {
             MRV2_VK();
 #ifdef USE_ONE_PIXEL_LINES
-            vk.outline->drawRect(box, color, mvp);
+            vk.outline->drawRect(vk.cmd, m_currentFrameIndex, ctx, box, color, mvp);
             
 #else
             int width = 2 / _p->viewZoom; //* renderSize.w / viewportSize.w;
@@ -386,7 +385,7 @@ namespace mrv
                 width = 2;
             vk.render->setTransform(mvp);
             
-            drawRectOutline(vk.render, box, color, width);
+            drawRectOutline(ctx, vk.render, box, color, width);
             
 #endif
         }
@@ -415,7 +414,7 @@ namespace mrv
         }
 
         void Viewport::_drawAnnotations(
-            const std::shared_ptr<tl::vk::OffscreenBuffer>& overlay,
+            const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay,
             const math::Matrix4x4f& renderMVP, const otime::RationalTime& time,
             const std::vector<std::shared_ptr<draw::Annotation>>& annotations,
             const math::Size2i& renderSize)
@@ -423,7 +422,7 @@ namespace mrv
             TLRENDER_P();
             MRV2_VK();
 
-            vk::OffscreenBufferBinding binding(overlay);
+            // vlk::OffscreenBufferBinding binding(overlay);
             
 
             timeline::RenderOptions renderOptions;
@@ -478,8 +477,6 @@ namespace mrv
                     
                 }
             }
-
-            vk.render->end();
         }
 
         void Viewport::_compositeAnnotations(
@@ -488,7 +485,7 @@ namespace mrv
             TLRENDER_P();
             MRV2_VK();
 
-            // vk::SetAndRestore(GL_BLEND, GL_TRUE);
+            // vlk::SetAndRestore(GL_BLEND, GL_TRUE);
 
             // glBlendFuncSeparate(
             //     GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA,
@@ -501,7 +498,7 @@ namespace mrv
             // glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
             
 
-            vk.annotationShader->bind();
+            vk.annotationShader->bind(m_currentFrameIndex);
             vk.annotationShader->setUniform("transform.mvp", mvp);
             timeline::Channels channels = timeline::Channels::Color;
             if (!p.displayOptions.empty())
@@ -510,7 +507,7 @@ namespace mrv
         }
 
         void Viewport::_compositeOverlay(
-            const std::shared_ptr<tl::vk::OffscreenBuffer>& overlay,
+            const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay,
             const math::Matrix4x4f& mvp, const math::Size2i& viewportSize)
         {
             MRV2_VK();
@@ -560,7 +557,7 @@ namespace mrv
         }
 
         void Viewport::_compositeAnnotations(
-            const std::shared_ptr<tl::vk::OffscreenBuffer>& overlay,
+            const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay,
             const math::Matrix4x4f& orthoMatrix, const math::Size2i& viewportSize)
         {
             MRV2_VK();
@@ -573,12 +570,13 @@ namespace mrv
 
             if (vk.vao && vk.vbo)
             {
-                vk.vao->bind();
-                // vk.vao->draw(GL_TRIANGLES, 0, vk.vbo->getSize());
+                vk.vao->bind(m_currentFrameIndex);
+                vk.vao->draw(vk.cmd, vk.vbo);
             }
         }
 
-        void Viewport::_drawCropMask(const math::Size2i& renderSize) const noexcept
+        void
+        Viewport::_drawCropMask(const math::Size2i& renderSize) const noexcept
         {
             MRV2_VK();
 
@@ -623,17 +621,39 @@ namespace mrv
             const image::Color4f& labelColor) const noexcept
         {
             MRV2_VK();
+            
+            const bool hasDepth = mode() & FL_DEPTH;
+            const bool hasStencil = mode() & FL_STENCIL;
+            
+
             const image::Color4f shadowColor(0.F, 0.F, 0.F, 0.7F);
-            math::Vector2i shadowPos{pos.x + 2, pos.y + 2};
-            vk.render->drawText(glyphs, shadowPos, shadowColor);
-            vk.render->drawText(glyphs, pos, labelColor);
-            pos.y += lineHeight;
+            math::Vector2i shadowPos{pos.x + 1, pos.y - 1};
+            vk.render->drawText("HUDShadow", "text",
+                                renderPass(),
+                                hasDepth, hasStencil,
+                                glyphs,
+                                shadowPos, shadowColor);
+            vk.render->drawText("HUD", "text",
+                                renderPass(),
+                                hasDepth, hasStencil,
+                                glyphs,
+                                pos, labelColor);
+            pos.y -= lineHeight;
         }
 
+        inline void Viewport::_drawText(
+            const std::string& text, const image::FontInfo& fontInfo,
+            math::Vector2i& pos, const int16_t lineHeight,
+            const image::Color4f& labelColor) const noexcept
+        {
+            _drawText(_p->fontSystem->getGlyphs(text, fontInfo), pos,
+                      lineHeight, labelColor);
+        }
+            
         void Viewport::_drawSafeAreas(
             const float percentX, const float percentY,
             const float pixelAspectRatio, const image::Color4f& color,
-            const math::Matrix4x4f& mvp, const char* label) const noexcept
+            const math::Matrix4x4f& mvp, const char* label) noexcept
         {
             MRV2_VK();
             const auto& renderSize = getRenderSize();
@@ -670,7 +690,7 @@ namespace mrv
             int width = 2 / _p->viewZoom; //* renderSize.w / viewportSize.w;
 
 #ifdef USE_ONE_PIXEL_LINES
-            vk.outline->drawRect(box, color, mvp);
+            vk.outline->drawRect(vk.cmd, m_currentFrameIndex, ctx, box, color, mvp);
 #else
             if (width < 2)
                 width = 2;
@@ -691,7 +711,7 @@ namespace mrv
             vk.render->drawText(glyphs, pos, color);
         }
 
-        void Viewport::_drawSafeAreas() const noexcept
+        void Viewport::_drawSafeAreas() noexcept
         {
             TLRENDER_P();
             if (!p.player)
@@ -743,7 +763,7 @@ namespace mrv
             }
         }
 
-        void Viewport::_drawHUD(float alpha) const noexcept
+        void Viewport::_drawHUD(VkCommandBuffer cmd, float alpha) const noexcept
         {
             TLRENDER_P();
             MRV2_VK();
@@ -751,11 +771,13 @@ namespace mrv
             if (!p.fontSystem || p.videoData.empty() || !p.player)
                 return;
 
-            const auto& viewportSize = getViewportSize();
-
             static const std::string fontFamily = "NotoSans-Regular";
             Viewport* self = const_cast< Viewport* >(this);
-            uint16_t fontSize = 12 * self->pixels_per_unit();
+            const uint16_t fontSize = 12 * self->pixels_per_unit();
+            const image::FontInfo fontInfo(fontFamily, fontSize);
+            const auto& viewportSize = getViewportSize();
+            
+            
 
             Fl_Color c = p.ui->uiPrefs->uiPrefsViewHud->color();
             uint8_t r, g, b;
@@ -763,29 +785,30 @@ namespace mrv
 
             const image::Color4f labelColor(r / 255.F, g / 255.F, b / 255.F, alpha);
 
-            const image::FontInfo fontInfo(fontFamily, fontSize);
             const image::FontMetrics fontMetrics =
                 p.fontSystem->getMetrics(fontInfo);
+            
             auto lineHeight = fontMetrics.lineHeight;
-            math::Vector2i pos(20, lineHeight * 2);
+            math::Vector2i pos(20, viewportSize.h - lineHeight * 2);
 
             const auto player = p.player;
 
             const auto& path = player->path();
             const otime::RationalTime& time = p.videoData[0].time;
             int64_t frame = time.to_frames();
-
-            timeline::RenderOptions renderOptions;
-            renderOptions.clear = false;
-            vk.render->begin(viewportSize, renderOptions);
-
+            
+            vk.render->setViewport(math::Box2i(0, 0, viewportSize.w,
+                                               viewportSize.h));
+            vk.render->setRenderSize(viewportSize);
+            math::Matrix4x4f oldTransform = vk.render->getTransform();
+            vk.render->setTransform(math::ortho(
+                                        0.F, static_cast<float>(viewportSize.w),
+                                        static_cast<float>(viewportSize.h), 0.F, -1.F, 1.F));
             char buf[512];
             if (p.hud & HudDisplay::kDirectory)
             {
                 const auto& directory = path.getDirectory();
-                _drawText(
-                    p.fontSystem->getGlyphs(directory, fontInfo), pos, lineHeight,
-                    labelColor);
+                _drawText(directory, fontInfo, pos, lineHeight, labelColor);
             }
 
             bool otioClip = false;
@@ -809,9 +832,7 @@ namespace mrv
                         ss >> clipTime;
                     }
                 }
-                _drawText(
-                    p.fontSystem->getGlyphs(fullname, fontInfo), pos, lineHeight,
-                    labelColor);
+                _drawText(fullname, fontInfo, pos, lineHeight, labelColor);
             }
 
             if (p.hud & HudDisplay::kResolution)
@@ -833,9 +854,7 @@ namespace mrv
                     {
                         snprintf(buf, 512, "%d x %d", video.size.w, video.size.h);
                     }
-                    _drawText(
-                        p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
-                        labelColor);
+                    _drawText(buf, fontInfo, pos, lineHeight, labelColor);
                 }
             }
 
@@ -921,9 +940,7 @@ namespace mrv
             p.lastFrame = time.value();
 
             if (!tmp.empty())
-                _drawText(
-                    p.fontSystem->getGlyphs(tmp, fontInfo), pos, lineHeight,
-                    labelColor);
+                _drawText(tmp, fontInfo, pos, lineHeight, labelColor);
 
             tmp.clear();
             if (p.hud & HudDisplay::kFrameCount)
@@ -936,9 +953,7 @@ namespace mrv
             }
 
             if (!tmp.empty())
-                _drawText(
-                    p.fontSystem->getGlyphs(tmp, fontInfo), pos, lineHeight,
-                    labelColor);
+                _drawText(tmp, fontInfo, pos, lineHeight,  labelColor);
 
             tmp.clear();
             if (p.hud & HudDisplay::kMemory)
@@ -963,9 +978,7 @@ namespace mrv
             }
 
             if (!tmp.empty())
-                _drawText(
-                    p.fontSystem->getGlyphs(tmp, fontInfo), pos, lineHeight,
-                    labelColor);
+                _drawText(tmp, fontInfo, pos, lineHeight, labelColor);
 
             if (p.hud & HudDisplay::kCache)
             {
@@ -998,9 +1011,7 @@ namespace mrv
                         behindAudioFrames += frame - i.start_time().to_frames();
                     }
                 }
-                _drawText(
-                    p.fontSystem->getGlyphs(_("Cache:"), fontInfo), pos, lineHeight,
-                    labelColor);
+                _drawText(_("Cache: "), fontInfo, pos, lineHeight, labelColor);
                 const auto ioSystem =
                     App::app->getContext()->getSystem<io::System>();
                 const auto& cache = ioSystem->getCache();
@@ -1010,21 +1021,15 @@ namespace mrv
                 snprintf(
                     buf, 512, _("    Used: %.2g of %zu Gb (%.2g %%)"), usedCache,
                     maxCache, pctCache);
-                _drawText(
-                    p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
-                    labelColor);
+                _drawText(buf, fontInfo, pos, lineHeight, labelColor);
                 snprintf(
                     buf, 512, _("    Ahead    V: % 4" PRIu64 "    A: % 4" PRIu64),
                     aheadVideoFrames, aheadAudioFrames);
-                _drawText(
-                    p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
-                    labelColor);
+                _drawText(buf, fontInfo, pos, lineHeight, labelColor);
                 snprintf(
                     buf, 512, _("    Behind   V: % 4" PRIu64 "    A: % 4" PRIu64),
                     behindVideoFrames, behindAudioFrames);
-                _drawText(
-                    p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
-                    labelColor);
+                _drawText(buf, fontInfo, pos, lineHeight, labelColor);
             }
 
             if (p.hud & HudDisplay::kAttributes)
@@ -1037,14 +1042,14 @@ namespace mrv
                     snprintf(
                         buf, 512, "%s = %s", tag.first.c_str(), tag.second.c_str());
 
-                    _drawText(
-                        p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
-                        labelColor);
+                    _drawText(buf, fontInfo, pos, lineHeight, labelColor);
                 }
             }
+            
+            vk.render->setTransform(oldTransform);
         }
 
-        void Viewport::_drawWindowArea(const std::string& dw) const noexcept
+        void Viewport::_drawWindowArea(const std::string& dw) noexcept
         {
             TLRENDER_P();
             MRV2_VK();
@@ -1075,7 +1080,7 @@ namespace mrv
 #endif
         }
 
-        void Viewport::_drawDataWindow() const noexcept
+        void Viewport::_drawDataWindow() noexcept
         {
             TLRENDER_P();
             ;
@@ -1087,7 +1092,7 @@ namespace mrv
             _drawWindowArea(dw);
         }
 
-        void Viewport::_drawDisplayWindow() const noexcept
+        void Viewport::_drawDisplayWindow() noexcept
         {
             TLRENDER_P();
 
@@ -1099,7 +1104,8 @@ namespace mrv
             _drawWindowArea(dw);
         }
 
-        void Viewport::_drawOverlays(const math::Size2i& renderSize) const noexcept
+        void
+        Viewport::_drawOverlays(const math::Size2i& renderSize) const noexcept
         {
             TLRENDER_P();
             if (p.masking > 0.0001F)
@@ -1113,6 +1119,8 @@ namespace mrv
                 return;
             if (!p.fontSystem)
                 return;
+
+            return;
 
             MRV2_VK();
 
@@ -1151,49 +1159,15 @@ namespace mrv
             vk.render->drawRect(
                 box, image::Color4f(0.F, 0.F, 0.F, 0.7F * p.helpTextFade));
 
-            _drawText(
-                p.fontSystem->getGlyphs(p.helpText, fontInfo), pos, lineHeight,
-                labelColor);
+            _drawText(p.helpText, fontInfo, pos, lineHeight, labelColor);
 
             vk.render->end();
         }
 
         void Viewport::_createPBOs(const math::Size2i& renderSize)
         {
-            // MRV2_VK();
-            // if (renderSize.w > 0 && renderSize.h > 0)
-            // {
-            //     if (vk.pboIDs[0] != 0)
-            //     {
-            //         glDeleteBuffers(2, vk.pboIDs);
-            //         
-            //         glDeleteSync(vk.pboFences[0]);
-            //         
-            //         glDeleteSync(vk.pboFences[1]);
-            //         
-            //     }
-            //     glGenBuffers(2, vk.pboIDs);
-            //     
-
-            //     const vk::OffscreenBufferOptions& options = vk.buffer->getOptions();
-            //     const size_t dataSize = renderSize.w * renderSize.h *
-            //                             image::getChannelCount(options.colorType) *
-            //                             image::getBitDepth(options.colorType);
-            //     
-            //     for (int i = 0; i < 2; ++i)
-            //     {
-            //         glBindBuffer(GL_PIXEL_PACK_BUFFER, vk.pboIDs[i]);
-            //         
-            //         glBufferData(
-            //             GL_PIXEL_PACK_BUFFER, dataSize, nullptr, GL_STREAM_READ);
-            //         
-            //         vk.pboFences[i] = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
-            //         
-            //     }
-            //     glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
-            //     
-            // }
         }
+
         void Viewport::_createOverlayPBO(const math::Size2i& renderSize)
         {
             MRV2_VK();
@@ -1212,7 +1186,53 @@ namespace mrv
             //     glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
             // }
         }
+        
+        void Viewport::_checkHDR()
+        {
+            TLRENDER_P();
+            
+            if (!p.hdrOptions.passthru)
+                return;
+            
+            // This will make the FLTK swapchain call vk->SetHDRMetadataEXT();
+            const image::HDRData& data = p.hdrOptions.hdrData;
+            auto m_previous_hdr_metadata = m_hdr_metadata;
 
-    } // namespace opengl
+            m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
+            m_hdr_metadata.displayPrimaryRed = {
+                data.primaries[image::HDRPrimaries::Red][0],
+                data.primaries[image::HDRPrimaries::Red][1],
+            };
+            m_hdr_metadata.displayPrimaryGreen = {
+                data.primaries[image::HDRPrimaries::Green][0],
+                data.primaries[image::HDRPrimaries::Green][1],
+            };
+            m_hdr_metadata.displayPrimaryBlue = {
+                data.primaries[image::HDRPrimaries::Blue][0],
+                data.primaries[image::HDRPrimaries::Blue][1],
+            };
+            m_hdr_metadata.whitePoint = {
+                data.primaries[image::HDRPrimaries::White][0],
+                data.primaries[image::HDRPrimaries::White][1],
+            };
+            // Max display capability
+            m_hdr_metadata.maxLuminance =
+                data.displayMasteringLuminance.getMax();
+            m_hdr_metadata.minLuminance =
+                data.displayMasteringLuminance.getMin();
+            m_hdr_metadata.maxContentLightLevel = data.maxCLL;
+            m_hdr_metadata.maxFrameAverageLightLevel = data.maxFALL;
+
+            if (!is_equal_hdr_metadata(m_hdr_metadata, m_previous_hdr_metadata))
+            {
+                m_hdr_metadata_changed = true; // Mark as changed
+            }
+            else
+            {
+                m_hdr_metadata_changed = false; // Mark as unchanged
+            }
+        }
+
+    } // namespace vulkan
 
 } // namespace mrv

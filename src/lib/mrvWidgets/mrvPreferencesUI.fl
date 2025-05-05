@@ -1903,15 +1903,6 @@ RtAudio audio(api);
 
 RtAudio::Api realApi = audio.getCurrentApi();
 
-\#if 0
-    std::cerr << "      value=" << value << std::endl
-              << "    apiName=" << apiName << std::endl
-              << "      apiId=" << (int)api << std::endl
-              << "  realApiId=" << (int)realApi << std::endl
-              << "realApiName=" << RtAudio::getApiName(realApi)
-              << "  oldDevice=" << oldDevice << std::endl;
-\#endif
-
 const auto numDevices = audio.getDeviceCount();
 if (numDevices <= 0)
 {

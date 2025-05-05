@@ -1295,6 +1295,13 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
+    void toggle_hdr_passthru_cb(Fl_Menu_* w, ViewerUI* ui)
+    {
+        timeline::HDROptions o = ui->uiView->getHDROptions();
+        o.passthru ^= 1;
+        ui->uiView->setHDROptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
     void select_hdr_tonemap_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         const Fl_Menu_Item* item = m->mvalue();
@@ -1642,6 +1649,7 @@ namespace mrv
 
         ui->uiRegion->layout();
         ui->uiMain->fill_menu(ui->uiMenuBar);
+       
     }
 
     void toggle_menu_bar(Fl_Menu_*, ViewerUI* ui)
@@ -1671,14 +1679,16 @@ namespace mrv
             tcp->pushMessage("Pixel Bar", (bool)ui->uiPixelBar->visible());
     }
 
-    void toggle_bottom_bar(Fl_Menu_*, ViewerUI* ui)
+    void toggle_timeline_bar(Fl_Menu_*, ViewerUI* ui)
     {
         toggle_ui_bar(ui, ui->uiBottomBar);
         save_ui_state(ui, ui->uiBottomBar);
+        Fl::check();
         if (ui->uiBottomBar->visible())
             set_edit_mode_cb(editMode, ui);
         else
             set_edit_mode_cb(EditMode::kNone, ui);
+        // else
         bool send = ui->uiPrefs->SendUI->value();
         if (send)
             tcp->pushMessage("Bottom Bar", (bool)ui->uiBottomBar->visible());

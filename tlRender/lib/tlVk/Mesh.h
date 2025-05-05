@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <tlVk/Vk.h>
+
 #include <tlCore/Mesh.h>
 #include <tlCore/Range.h>
 #include <tlCore/Util.h>
@@ -19,7 +21,7 @@ namespace tl
         struct TriangleMesh3;
     } // namespace geom
 
-    namespace vk
+    namespace vlk
     {
         //! Vertex buffer object types.
         enum class VBOType {
@@ -45,20 +47,20 @@ namespace tl
 
         //! Convert a triangle mesh to vertex buffer data.
         std::vector<uint8_t>
-        convert(const geom::TriangleMesh2& mesh, vk::VBOType type);
+        convert(const geom::TriangleMesh2& mesh, vlk::VBOType type);
 
         //! Convert a triangle mesh to vertex buffer data.
         std::vector<uint8_t> convert(
-            const geom::TriangleMesh2& mesh, vk::VBOType type,
+            const geom::TriangleMesh2& mesh, vlk::VBOType type,
             const math::SizeTRange& range);
 
         //! Convert a triangle mesh to vertex buffer data.
         std::vector<uint8_t>
-        convert(const geom::TriangleMesh3& mesh, vk::VBOType type);
+        convert(const geom::TriangleMesh3& mesh, vlk::VBOType type);
 
         //! Convert a triangle mesh to vertex buffer data.
         std::vector<uint8_t> convert(
-            const geom::TriangleMesh3& mesh, vk::VBOType type,
+            const geom::TriangleMesh3& mesh, vlk::VBOType type,
             const math::SizeTRange& range);
 
         //! OpenGL vertex buffer object.
@@ -86,6 +88,13 @@ namespace tl
             //! Get the OpenGL ID.
             unsigned int getID() const;
 
+            const std::vector<uint8_t>& getData() const;
+
+            const std::vector<VkVertexInputBindingDescription>&
+            getBindingDescription() const;
+            const std::vector<VkVertexInputAttributeDescription>&
+            getAttributes() const;
+
             //! \name Copy
             //! Copy data to the vertex buffer object.
             ///@{
@@ -101,33 +110,45 @@ namespace tl
             TLRENDER_PRIVATE();
         };
 
-        //! OpenGL vertex array object.
+        //! Vulkan vertex array object.
         class VAO : public std::enable_shared_from_this<VAO>
         {
             TLRENDER_NON_COPYABLE(VAO);
 
         protected:
-            void _init(VBOType, unsigned int vbo);
+            void _init();
 
-            VAO();
+            VAO(Fl_Vk_Context& ctx);
 
         public:
             ~VAO();
 
             //! Create a new object.
-            static std::shared_ptr<VAO> create(VBOType, unsigned int vbo);
-
-            //! Get the OpenGL ID.
-            unsigned int getID() const;
+            static std::shared_ptr<VAO> create(Fl_Vk_Context& ctx);
 
             //! Bind the vertex array object.
-            void bind();
+            void bind(uint32_t frameIndex);
+
+            //! Get Mesh buffer.
+            VkBuffer getBuffer() const;
+
+            //! Get device memory.
+            VkDeviceMemory getDeviceMemory() const;
+
+            //! Upload mesh data.
+            void upload(const std::vector<uint8_t>& data);
+
+            //! Draw the vertex array object, by uploading the vertex buffer
+            //! object.
+            void draw(VkCommandBuffer& cmd, const std::shared_ptr<VBO>& vbo);
 
             //! Draw the vertex array object.
-            void draw(unsigned int mode, std::size_t offset, std::size_t size);
+            void draw(VkCommandBuffer& cmd, std::size_t size);
 
         private:
+            Fl_Vk_Context& ctx;
+
             TLRENDER_PRIVATE();
         };
-    } // namespace vk
+    } // namespace vlk
 } // namespace tl

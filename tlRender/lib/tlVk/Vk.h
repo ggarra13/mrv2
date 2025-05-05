@@ -4,4 +4,12 @@
 
 #pragma once
 
-#include <FL/Fl_Vk_Window.H>
+#include <FL/Fl_Vk_Context.H>
+
+namespace tl
+{
+    namespace vlk
+    {
+        static constexpr size_t MAX_FRAMES_IN_FLIGHT = 3;
+    } // namespace vlk
+} // namespace tl

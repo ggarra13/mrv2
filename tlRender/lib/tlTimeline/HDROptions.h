@@ -30,6 +30,7 @@ namespace tl
         //! Tonemap options.
         struct HDROptions
         {
+            bool passthru = false;
             bool tonemap = false;
             HDRTonemapAlgorithm algorithm = HDRTonemapAlgorithm::ST2094_40;
             image::HDRData hdrData;

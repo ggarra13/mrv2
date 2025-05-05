@@ -9,6 +9,7 @@
 #include <tlVk/Mesh.h>
 #include <tlVk/OffscreenBuffer.h>
 #include <tlTimelineVk/Render.h>
+#include <tlVk/ShaderBindingSet.h>
 #include <tlVk/Shader.h>
 
 #include "mrvVk/mrvVkDefines.h"
@@ -21,32 +22,33 @@ namespace mrv
 {
     namespace vulkan
     {
-        
+
         struct Viewport::VKPrivate
         {
             std::weak_ptr<system::Context> context;
 
-            // GL variables
+            //! This is for swapchain pipeline
+            VkPipelineLayout pipeline_layout = VK_NULL_HANDLE;
+            VkCommandBuffer cmd = VK_NULL_HANDLE;
+
+            // tlRender variables
             //! Vulkan Offscreen buffers
             image::PixelType colorBufferType = image::PixelType::RGBA_F32;
 
-            std::shared_ptr<timeline_vk::Render> render;
-            std::shared_ptr<tl::vk::OffscreenBuffer> buffer;
-            std::shared_ptr<tl::vk::OffscreenBuffer> stereoBuffer;
-            std::shared_ptr<tl::vk::OffscreenBuffer> annotation;
-            std::shared_ptr<tl::image::Image> annotationImage; // only used on APPLE
-            std::shared_ptr<tl::vk::OffscreenBuffer> overlay;
-            std::shared_ptr<vk::Shader> shader;
-            std::shared_ptr<vk::Shader> annotationShader;
+            std::shared_ptr<timeline_vlk::Render> render;
+            std::shared_ptr<tl::vlk::OffscreenBuffer> buffer;
+            std::shared_ptr<tl::vlk::OffscreenBuffer> stereoBuffer;
+            std::shared_ptr<tl::vlk::OffscreenBuffer> annotation;
+            std::shared_ptr<tl::image::Image>
+                annotationImage; // only used on APPLE
+            std::shared_ptr<tl::vlk::OffscreenBuffer> overlay;
+            std::shared_ptr<vlk::Shader> shader;
+            std::shared_ptr<vlk::Shader> annotationShader;
 
-            int currentPBOIndex = 0;
-            int nextPBOIndex = 1;
-            uint32_t pboIDs[2] = {0, 0};
-            VkFence pboFences[2] = {0, 0};
             uint32_t overlayPBO = 0;
             VkFence overlayFence;
-            std::shared_ptr<vk::VBO> vbo;
-            std::shared_ptr<vk::VAO> vao;
+            std::shared_ptr<vlk::VBO> vbo;
+            std::shared_ptr<vlk::VAO> vao;
 
 #ifdef USE_ONE_PIXEL_LINES
             std::shared_ptr<vulkan::Outline> outline;
@@ -55,8 +57,8 @@ namespace mrv
 
             bool init_debug = false;
         };
-        
-    }  // namespace vulkan
+
+    } // namespace vulkan
 
 //! Define a variable, "gl", that references the private implementation.
 #define MRV2_VK() auto& vk = *_vk

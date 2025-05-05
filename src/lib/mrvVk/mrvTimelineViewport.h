@@ -298,7 +298,7 @@ namespace mrv
             void dragAndDrop(const std::string& text) noexcept;
 
             //! Update the pixel bar's coordinates and color information.
-            void updatePixelBar() const noexcept;
+            void updatePixelBar() noexcept;
 
             //! Get the text widget if available.
             MultilineInput* getMultilineInput() const noexcept;
@@ -376,7 +376,7 @@ namespace mrv
 
             void _updateDevices() const noexcept;
 
-            virtual void _readPixel(image::Color4f& rgba) const noexcept = 0;
+            virtual void _readPixel(image::Color4f& rgba) = 0;
             math::Vector2i _getViewportCenter() const noexcept;
 
             math::Vector2i _getFocus(int X, int Y) const noexcept;
@@ -426,7 +426,7 @@ namespace mrv
             void _hidePixelBar() const noexcept;
             void _togglePixelBar() const noexcept;
 
-            void _updatePixelBar() const noexcept;
+            void _updatePixelBar() noexcept;
             void _updatePixelBar(image::Color4f& rgba) const noexcept;
             bool _shouldUpdatePixelBar() const noexcept;
             bool _isPlaybackStopped() const noexcept;

@@ -4,13 +4,13 @@
 
 #pragma once
 
+#include "mrvDraw/Polyline2D.h"
+
+#include <tlTimelineVk/Render.h>
+
 #include <tlCore/Util.h>
 #include <tlCore/Matrix.h>
 #include <tlCore/Color.h>
-
-#include <tlTimeline/IRender.h>
-
-#include "mrvDraw/Polyline2D.h"
 
 namespace mrv
 {
@@ -27,18 +27,22 @@ namespace mrv
 
             //! Draw a points in raster coordinates with glPointSize
             void drawPoints(
+                VkCommandBuffer& cmd, const uint32_t frameIndex,
+                Fl_Vk_Context& ctx,
                 const std::vector<math::Vector2f>& pts,
                 const image::Color4f& color, const int size = 1);
 
             //! Draw a single line in raster coordinates with a mesh.
             void drawLine(
-                const std::shared_ptr<timeline::IRender>& render,
+                Fl_Vk_Context& ctx,
+                const std::shared_ptr<timeline_vlk::Render>& render,
                 const math::Vector2i& start, const math::Vector2i& end,
                 const image::Color4f& color, const float width);
 
             //! Draw a set of connected line segments.
             void drawLines(
-                const std::shared_ptr<timeline::IRender>& render,
+                Fl_Vk_Context& ctx,
+                const std::shared_ptr<timeline_vlk::Render>& render,
                 const draw::PointList& pts, const image::Color4f& color,
                 const float width, const bool soft = false,
                 const draw::Polyline2D::JointStyle jointStyle =
@@ -50,14 +54,16 @@ namespace mrv
 
             //! Draw a circle.
             void drawCircle(
-                const std::shared_ptr<timeline::IRender>& render,
+                Fl_Vk_Context& ctx,
+                const std::shared_ptr<timeline_vlk::Render>& render,
                 const math::Vector2f& center, const float radius,
                 const float width, const image::Color4f& color,
                 const bool soft = false);
 
             //! Draw drawing cursor (two circles, one white, one black).
             void drawCursor(
-                const std::shared_ptr<timeline::IRender>& render,
+                Fl_Vk_Context& ctx,
+                const std::shared_ptr<timeline_vlk::Render>& render,
                 const math::Vector2f& center, const float radius,
                 const image::Color4f& color);
 

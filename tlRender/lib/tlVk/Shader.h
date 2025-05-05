@@ -5,6 +5,9 @@
 
 #pragma once
 
+#include <tlVk/Texture.h>
+#include <tlVk/OffscreenBuffer.h>
+#include <tlVk/ShaderBindingSet.h>
 #include <tlVk/Vk.h>
 
 #include <tlCore/Color.h>
@@ -18,8 +21,25 @@
 
 namespace tl
 {
-    namespace vk
+    namespace vlk
     {
+
+        enum ShaderFlags {
+            kShaderVertex = 1,
+            kShaderFragment = 2,
+        };
+
+        inline VkShaderStageFlags getVulkanShaderFlags(ShaderFlags stageFlags)
+        {
+            VkShaderStageFlags out = 0;
+            out =
+                (stageFlags & kShaderFragment ? VK_SHADER_STAGE_FRAGMENT_BIT
+                                              : 0);
+            out |=
+                (stageFlags & kShaderVertex ? VK_SHADER_STAGE_VERTEX_BIT : 0);
+            return out;
+        }
+
         //! Vulkan shader.
         class Shader : public std::enable_shared_from_this<Shader>
         {
@@ -28,15 +48,19 @@ namespace tl
         protected:
             void _init();
 
-            Shader();
+            Shader(Fl_Vk_Context& ctx);
 
         public:
             ~Shader();
 
             //! Create a new shader.
             static std::shared_ptr<Shader> create(
-                const Fl_Vk_Context* ctx, const std::string& vertexSource,
-                const std::string& fragmentSource);
+                Fl_Vk_Context& ctx, const std::string& vertexSource,
+                const std::string& fragmentSource,
+                const std::string& name = "");
+
+            //! Get the shader name.
+            const std::string& getName() const;
 
             //! Get the vertex shader source.
             const std::string& getVertexSource() const;
@@ -50,49 +74,130 @@ namespace tl
             //! Get the Vulkan fragment module.
             const VkShaderModule& getFragment() const;
 
-            //! Bind the shader.
-            void bind();
+            //! Get the Vulkan description set for current frame.
+            const VkDescriptorSet getDescriptorSet() const;
 
-            //! \name Uniforms
+            //! Get the Vulkan description set layout for current frame.
+            const VkDescriptorSetLayout getDescriptorSetLayout() const;
+
+            //! Get the Vulkan description pool for current frame.
+            const VkDescriptorPool getDescriptorPool() const;
+
+            //! Bind the shader.
+            void bind(uint64_t value);
+
+            //! \name Uniform
             //! Set uniform values.
             ///@{
 
-            void setUniform(int, int);
-            void setUniform(int, float);
-            void setUniform(int, const math::Vector2f&);
-            void setUniform(int, const math::Vector3f&);
-            void setUniform(int, const math::Vector4f&);
-            void setUniform(int, const math::Matrix3x3f&);
-            void setUniform(int, const math::Matrix4x4f&);
-            void setUniform(int, const image::Color4f&);
-            void setUniform(int, const float[4]);
+            //! Create a uniform UBO variable.
+            template <typename T>
+            void createUniform(
+                const std::string&, const T& value,
+                const ShaderFlags stageFlags = kShaderFragment);
 
-            void setUniform(int, const std::vector<int>&);
-            void setUniform(int, const std::vector<float>&);
-            void setUniform(int, const std::vector<math::Vector3f>&);
-            void setUniform(int, const std::vector<math::Vector4f>&);
-
-            void setUniform(const std::string&, int);
-            void setUniform(const std::string&, float);
-            void setUniform(const std::string&, const math::Vector2f&);
-            void setUniform(const std::string&, const math::Vector3f&);
-            void setUniform(const std::string&, const math::Vector4f&);
-            void setUniform(const std::string&, const math::Matrix3x3f&);
-            void setUniform(const std::string&, const math::Matrix4x4f&);
-            void setUniform(const std::string&, const image::Color4f&);
-            void setUniform(const std::string&, const float[4]);
-
-            void setUniform(const std::string&, const std::vector<int>&);
-            void setUniform(const std::string&, const std::vector<float>&);
-            void
-            setUniform(const std::string&, const std::vector<math::Vector3f>&);
-            void
-            setUniform(const std::string&, const std::vector<math::Vector4f>&);
-
+            //! Set and upload a uniform UBO variable
+            template <typename T>
+            void setUniform(
+                const std::string&, const T& value,
+                const ShaderFlags stageFlags = kShaderFragment);
             ///@}
 
+            //! Add a push block.
+            template <typename T>
+            void addPush(
+                const std::string&, const T& value,
+                const ShaderFlags stageFlags = kShaderFragment);
+
+            //! Createa a push block given a size.
+            void createPush(const std::string& name, const std::size_t size,
+                            const ShaderFlags stageFlags);
+            
+            //! Get the push stage flags.
+            VkShaderStageFlags getPushStageFlags() { return pushStageFlags; }
+
+            //! Get the push size.
+            std::size_t getPushSize() { return pushSize; }
+
+            //! Add a textire to shader parameters.
+            void addTexture(
+                const std::string& name,
+                const ShaderFlags stageFlags = kShaderFragment);
+
+            //! Attach and upload a texture to shader parameters.
+            void setTexture(
+                const std::string& name,
+                const std::shared_ptr<Texture>& texture,
+                const ShaderFlags stageFlags = kShaderFragment);
+
+            //! Add and FBO to list of shader parameters.
+            void addFBO(
+                const std::string& name,
+                const ShaderFlags stageFlags = kShaderFragment);
+
+            //! Attach an FBO and updata shader parameters.
+            void setFBO(
+                const std::string& name,
+                const std::shared_ptr<OffscreenBuffer>&,
+                const ShaderFlags stageFlags = kShaderFragment);
+
+            //! Create desciptor set bindings for all frames
+            void createDescriptorSets();
+
+            //! Create a new shader binding set.
+            std::shared_ptr<ShaderBindingSet> createBindingSet();
+
+            //! Bind a ShaderBindingSet to this shader.
+            void useBindingSet(const std::shared_ptr<ShaderBindingSet>);
+            
+            //! Print out a list of descriptor set bindings for vertex shader.
+            void debugVertexDescriptorSets();
+
+            //! Print out a list of descriptor set bindings for fragment shader.
+            void debugFragmentDescriptorSets();
+
+            //! Print out a list of descriptor set bindings for both shaders
+            //! types.
+            void debugDescriptorSets();
+
+            //! Print out all debug info.
+            void debug();
+
         private:
+            Fl_Vk_Context& ctx;
+
+            //! Counter used in binding UBOs, Textures and FBOs.
+            uint32_t current_binding_index = 0;
+
+            //! Descriptor set layout shared across sets and pools.
+            VkDescriptorSetLayout descriptorSetLayout = VK_NULL_HANDLE;
+
+            //! Internal variable used to point all resources to the right
+            //! frame in flight.
+            uint64_t frameIndex = 0;
+
+            //! Push size (if shader has a push parameter).
+            std::size_t pushSize = 0;
+
+            //! Push flags (if shader has a push parameter).
+            VkShaderStageFlags pushStageFlags =
+                VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
+
+            typedef ShaderBindingSet::UniformParameter UBOBinding;
+            std::map<std::string, UBOBinding> ubos;
+
+            typedef ShaderBindingSet::TextureParameter TextureBinding;
+            std::map<std::string, TextureBinding> textureBindings;
+
+            typedef ShaderBindingSet::FBOParameter FBOBinding;
+            std::map<std::string, FBOBinding> fboBindings;
+
+            std::string shaderName = "Shader";
+            std::shared_ptr<ShaderBindingSet> activeBindingSet;
+
             TLRENDER_PRIVATE();
         };
-    } // namespace vk
+    } // namespace vlk
 } // namespace tl
+
+#include <tlVk/ShaderInline.h>

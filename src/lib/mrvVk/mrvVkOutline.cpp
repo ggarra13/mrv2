@@ -12,11 +12,11 @@
 
 namespace tl
 {
-    namespace timeline_vk
+    namespace timeline_vlk
     {
         extern std::string vertexSource();
         extern std::string meshFragmentSource();
-    } // namespace timeline_vk
+    } // namespace timeline_vlk
 } // namespace tl
 
 namespace mrv
@@ -24,13 +24,13 @@ namespace mrv
     namespace vulkan
     {
 
-        using namespace tl::vk;
+        using namespace tl::vlk;
 
         struct Outline::Private
         {
-            std::shared_ptr<vk::Shader> shader;
-            std::shared_ptr<vk::VBO> vbo;
-            std::shared_ptr<vk::VAO> vao;
+            std::shared_ptr<vlk::Shader> shader;
+            std::shared_ptr<vlk::VBO> vbo;
+            std::shared_ptr<vlk::VAO> vao;
         };
 
         Outline::Outline() :
@@ -41,16 +41,18 @@ namespace mrv
         Outline::~Outline() {}
 
         void Outline::drawRect(
-            const math::Box2i& bbox, const image::Color4f& color,
-            const math::Matrix4x4f& mvp)
+            VkCommandBuffer& cmd,
+            const uint32_t frameIndex,
+            Fl_Vk_Context& ctx, const math::Box2i& bbox,
+            const image::Color4f& color, const math::Matrix4x4f& mvp)
         {
             TLRENDER_P();
 
             if (!p.shader)
             {
                 // p.shader = Shader::create(
-                //     timeline_vk::vertexSource(),
-                //     timeline_vk::meshFragmentSource());
+                //     timeline_vlk::vertexSource(),
+                //     timeline_vlk::meshFragmentSource());
             }
 
             if (!p.vbo)
@@ -61,10 +63,10 @@ namespace mrv
 
             if (!p.vao)
             {
-                p.vao = VAO::create(p.vbo->getType(), p.vbo->getID());
+                p.vao = VAO::create(ctx);
             }
 
-            p.shader->bind();
+            p.shader->bind(frameIndex);
             p.shader->setUniform("color", color);
             p.shader->setUniform("transform.mvp", mvp);
 
@@ -98,8 +100,9 @@ namespace mrv
             }
             if (p.vao && p.vbo)
             {
-                p.vao->bind();
-                // p.vao->draw(GL_LINES, 0, p.vbo->getSize());
+                p.vao->bind(frameIndex);
+                p.vao->upload(p.vbo->getData());
+                p.vao->draw(cmd, p.vbo);
             }
         }
 

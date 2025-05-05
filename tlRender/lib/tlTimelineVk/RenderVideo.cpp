@@ -3,25 +3,25 @@
 // All rights reserved.
 
 #include <tlTimelineVk/RenderPrivate.h>
+#include <tlTimelineVk/RenderStructs.h>
 
-#include <tlGL/GL.h>
-#include <tlGL/Mesh.h>
-#include <tlGL/Util.h>
+#include <tlVk/Vk.h>
+#include <tlVk/Mesh.h>
+#include <tlVk/Util.h>
 
 #include <tlCore/Math.h>
 
 namespace tl
 {
-    namespace timeline_vk
+    namespace timeline_vlk
     {
         void Render::drawVideo(
-            const std::vector<timeline::VideoData>& videoData,
-            const std::vector<math::Box2i>& boxes,
-            const std::vector<timeline::ImageOptions>& imageOptions,
-            const std::vector<timeline::DisplayOptions>& displayOptions,
-            const timeline::CompareOptions& compareOptions,
+            const std::vector<timeline::VideoData>& videoData, const std::vector<math::Box2i>& boxes, const std::vector<timeline::ImageOptions>& imageOptions,
+            const std::vector<timeline::DisplayOptions>& displayOptions, const timeline::CompareOptions& compareOptions,
             const timeline::BackgroundOptions& backgroundOptions)
         {
+            TLRENDER_P();
+
             //! \todo Render the background only if there is valid video data
             //! and a valid layer?
             if (!videoData.empty() && !videoData.front().layers.empty())
@@ -31,69 +31,67 @@ namespace tl
             switch (compareOptions.mode)
             {
             case timeline::CompareMode::A:
-                _drawVideoA(
-                    videoData, boxes, imageOptions, displayOptions,
-                    compareOptions);
+                _drawVideoA(videoData, boxes, imageOptions, displayOptions, compareOptions);
                 break;
             case timeline::CompareMode::B:
-                _drawVideoB(
-                    videoData, boxes, imageOptions, displayOptions,
-                    compareOptions);
+                _drawVideoB(videoData, boxes, imageOptions, displayOptions, compareOptions);
                 break;
             case timeline::CompareMode::Wipe:
-                _drawVideoWipe(
-                    videoData, boxes, imageOptions, displayOptions,
-                    compareOptions);
+                _drawVideoWipe(videoData, boxes, imageOptions, displayOptions, compareOptions);
                 break;
             case timeline::CompareMode::Overlay:
-                _drawVideoOverlay(
-                    videoData, boxes, imageOptions, displayOptions,
-                    compareOptions);
+                _drawVideoOverlay(videoData, boxes, imageOptions, displayOptions, compareOptions);
                 break;
             case timeline::CompareMode::Difference:
                 if (videoData.size() > 1)
                 {
-                    _drawVideoDifference(
-                        videoData, boxes, imageOptions, displayOptions,
-                        compareOptions);
+                    _drawVideoDifference(videoData, boxes, imageOptions, displayOptions, compareOptions);
                 }
                 else
                 {
-                    _drawVideoA(
-                        videoData, boxes, imageOptions, displayOptions,
-                        compareOptions);
+                    _drawVideoA(videoData, boxes, imageOptions, displayOptions, compareOptions);
                 }
                 break;
             case timeline::CompareMode::Horizontal:
             case timeline::CompareMode::Vertical:
             case timeline::CompareMode::Tile:
-                _drawVideoTile(
-                    videoData, boxes, imageOptions, displayOptions,
-                    compareOptions);
+                _drawVideoTile(videoData, boxes, imageOptions, displayOptions, compareOptions);
                 break;
             default:
                 break;
             }
         }
 
-        void Render::_drawBackground(
-            const std::vector<math::Box2i>& boxes,
-            const timeline::BackgroundOptions& options)
+        void Render::_drawBackground(const std::vector<math::Box2i>& boxes, const timeline::BackgroundOptions& options)
         {
+            TLRENDER_P();
+
             for (const auto& box : boxes)
             {
+                p.fbo->transitionToColorAttachment(p.cmd);
                 switch (options.type)
                 {
                 case timeline::Background::Solid:
-                    drawRect(box, options.color0);
+                {
+                    const auto& mesh = geom::box(box);
+                    p.fbo->beginRenderPass(p.cmd, "Solid BG");
+                    p.fbo->setupViewportAndScissor(p.cmd);
+                    drawRect("solid", "rect", "rect", box, options.color0);
+                    p.fbo->endRenderPass(p.cmd);
                     break;
+                }
                 case timeline::Background::Checkers:
-                    drawColorMesh(
-                        geom::checkers(
-                            box, options.color0, options.color1,
-                            options.checkersSize),
-                        math::Vector2i(), image::Color4f(1.F, 1.F, 1.F));
+                {
+                    const auto& mesh = geom::checkers(box, options.color0,
+                                                      options.color1,
+                                                      options.checkersSize);
+                    _createMesh("colorMesh", mesh);
+                    _createPipeline(p.fbo, "checkers", "checkers", "colorMesh", "colorMesh");
+                    p.fbo->beginRenderPass(p.cmd, "Checkers BG");
+                    drawColorMesh("checkers", mesh, math::Vector2i(), image::Color4f(1.F, 1.F, 1.F));
+                    p.fbo->endRenderPass(p.cmd);
                     break;
+                }
                 case timeline::Background::Gradient:
                 {
                     geom::TriangleMesh2 mesh;
@@ -101,12 +99,8 @@ namespace tl
                     mesh.v.push_back(math::Vector2f(box.max.x, box.min.y));
                     mesh.v.push_back(math::Vector2f(box.max.x, box.max.y));
                     mesh.v.push_back(math::Vector2f(box.min.x, box.max.y));
-                    mesh.c.push_back(math::Vector4f(
-                        options.color0.r, options.color0.g, options.color0.b,
-                        options.color0.a));
-                    mesh.c.push_back(math::Vector4f(
-                        options.color1.r, options.color1.g, options.color1.b,
-                        options.color1.a));
+                    mesh.c.push_back(math::Vector4f(options.color0.r, options.color0.g, options.color0.b, options.color0.a));
+                    mesh.c.push_back(math::Vector4f(options.color1.r, options.color1.g, options.color1.b, options.color1.a));
                     mesh.triangles.push_back({
                         geom::Vertex2(1, 0, 1),
                         geom::Vertex2(2, 0, 1),
@@ -117,64 +111,49 @@ namespace tl
                         geom::Vertex2(4, 0, 2),
                         geom::Vertex2(1, 0, 1),
                     });
-                    drawColorMesh(
-                        mesh, math::Vector2i(), image::Color4f(1.F, 1.F, 1.F));
+                    _createMesh("colorMesh", mesh);
+                    _createPipeline(p.fbo, "gradient", "gradient", "colorMesh", "colorMesh");
+                    p.fbo->beginRenderPass(p.cmd, "Gradient BG");
+                    drawColorMesh("gradient", mesh, math::Vector2i(), image::Color4f(1.F, 1.F, 1.F));
+                    p.fbo->endRenderPass(p.cmd);
                     break;
                 }
                 default:
                     break;
                 }
+                p.fbo->transitionToShaderRead(p.cmd);
             }
         }
 
         void Render::_drawVideoA(
-            const std::vector<timeline::VideoData>& videoData,
-            const std::vector<math::Box2i>& boxes,
-            const std::vector<timeline::ImageOptions>& imageOptions,
-            const std::vector<timeline::DisplayOptions>& displayOptions,
-            const timeline::CompareOptions& compareOptions)
+            const std::vector<timeline::VideoData>& videoData, const std::vector<math::Box2i>& boxes, const std::vector<timeline::ImageOptions>& imageOptions,
+            const std::vector<timeline::DisplayOptions>& displayOptions, const timeline::CompareOptions& compareOptions)
         {
             TLRENDER_P();
 
             if (!videoData.empty() && !boxes.empty())
             {
                 _drawVideo(
-                    videoData[0], boxes[0],
-                    !imageOptions.empty()
-                        ? std::make_shared<timeline::ImageOptions>(
-                              imageOptions[0])
-                        : nullptr,
-                    !displayOptions.empty() ? displayOptions[0]
-                                            : timeline::DisplayOptions());
+                    videoData[0], boxes[0], !imageOptions.empty() ? std::make_shared<timeline::ImageOptions>(imageOptions[0]) : nullptr,
+                    !displayOptions.empty() ? displayOptions[0] : timeline::DisplayOptions());
             }
         }
 
         void Render::_drawVideoB(
-            const std::vector<timeline::VideoData>& videoData,
-            const std::vector<math::Box2i>& boxes,
-            const std::vector<timeline::ImageOptions>& imageOptions,
-            const std::vector<timeline::DisplayOptions>& displayOptions,
-            const timeline::CompareOptions& compareOptions)
+            const std::vector<timeline::VideoData>& videoData, const std::vector<math::Box2i>& boxes, const std::vector<timeline::ImageOptions>& imageOptions,
+            const std::vector<timeline::DisplayOptions>& displayOptions, const timeline::CompareOptions& compareOptions)
         {
             if (videoData.size() > 1 && boxes.size() > 1)
             {
                 _drawVideo(
-                    videoData[1], boxes[1],
-                    imageOptions.size() > 1
-                        ? std::make_shared<timeline::ImageOptions>(
-                              imageOptions[1])
-                        : nullptr,
-                    displayOptions.size() > 1 ? displayOptions[1]
-                                              : timeline::DisplayOptions());
+                    videoData[1], boxes[1], imageOptions.size() > 1 ? std::make_shared<timeline::ImageOptions>(imageOptions[1]) : nullptr,
+                    displayOptions.size() > 1 ? displayOptions[1] : timeline::DisplayOptions());
             }
         }
 
         void Render::_drawVideoWipe(
-            const std::vector<timeline::VideoData>& videoData,
-            const std::vector<math::Box2i>& boxes,
-            const std::vector<timeline::ImageOptions>& imageOptions,
-            const std::vector<timeline::DisplayOptions>& displayOptions,
-            const timeline::CompareOptions& compareOptions)
+            const std::vector<timeline::VideoData>& videoData, const std::vector<math::Box2i>& boxes, const std::vector<timeline::ImageOptions>& imageOptions,
+            const std::vector<timeline::DisplayOptions>& displayOptions, const timeline::CompareOptions& compareOptions)
         {
             TLRENDER_P();
 
@@ -206,9 +185,9 @@ namespace tl
             // glStencilFunc(GL_ALWAYS, 1, 0xFF);
             // glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
             // glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-            p.shaders["wipe"]->bind();
-            p.shaders["wipe"]->setUniform(
-                "color", image::Color4f(1.F, 0.F, 0.F));
+            p.shaders["wipe"]->bind(p.frameIndex);
+            p.shaders["wipe"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
+            p.shaders["wipe"]->setUniform("color", image::Color4f(1.F, 0.F, 0.F));
             {
                 if (p.vbos["wipe"])
                 {
@@ -221,14 +200,11 @@ namespace tl
                     tri.v[1] = 2;
                     tri.v[2] = 3;
                     mesh.triangles.push_back(tri);
-                    p.vbos["wipe"]->copy(
-                        convert(mesh, p.vbos["wipe"]->getType()));
+                    p.vbos["wipe"]->copy(convert(mesh, p.vbos["wipe"]->getType()));
                 }
                 if (p.vaos["wipe"])
                 {
-                    p.vaos["wipe"]->bind();
-                    // p.vaos["wipe"]->draw(
-                    //     GL_TRIANGLES, 0, p.vbos["wipe"]->getSize());
+                    p.vaos["wipe"]->bind(p.frameIndex);
                 }
             }
             // glStencilFunc(GL_EQUAL, 1, 0xFF);
@@ -236,13 +212,8 @@ namespace tl
             if (!videoData.empty() && !boxes.empty())
             {
                 _drawVideo(
-                    videoData[0], boxes[0],
-                    !imageOptions.empty()
-                        ? std::make_shared<timeline::ImageOptions>(
-                              imageOptions[0])
-                        : nullptr,
-                    !displayOptions.empty() ? displayOptions[0]
-                                            : timeline::DisplayOptions());
+                    videoData[0], boxes[0], !imageOptions.empty() ? std::make_shared<timeline::ImageOptions>(imageOptions[0]) : nullptr,
+                    !displayOptions.empty() ? displayOptions[0] : timeline::DisplayOptions());
             }
 
             // glViewport(
@@ -252,9 +223,9 @@ namespace tl
             // glClear(GL_STENCIL_BUFFER_BIT);
             // glStencilFunc(GL_ALWAYS, 1, 0xFF);
             // glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-            p.shaders["wipe"]->bind();
-            p.shaders["wipe"]->setUniform(
-                "color", image::Color4f(0.F, 1.F, 0.F));
+            p.shaders["wipe"]->bind(p.frameIndex);
+            p.shaders["wipe"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
+            p.shaders["wipe"]->setUniform("color", image::Color4f(0.F, 1.F, 0.F));
             {
                 if (p.vbos["wipe"])
                 {
@@ -267,14 +238,13 @@ namespace tl
                     tri.v[1] = 2;
                     tri.v[2] = 3;
                     mesh.triangles.push_back(tri);
-                    p.vbos["wipe"]->copy(
-                        convert(mesh, p.vbos["wipe"]->getType()));
+                    p.vbos["wipe"]->copy(convert(mesh, p.vbos["wipe"]->getType()));
                 }
                 if (p.vaos["wipe"])
                 {
-                    p.vaos["wipe"]->bind();
-                    p.vaos["wipe"]->draw(
-                        GL_TRIANGLES, 0, p.vbos["wipe"]->getSize());
+                    p.vaos["wipe"]->bind(p.frameIndex);
+                    p.vaos["wipe"]->draw(p.cmd, p.vbos["wipe"]);
+                    p.garbage[p.frameIndex].vaos.push_back(p.vaos["wipe"]);
                 }
             }
             // glStencilFunc(GL_EQUAL, 1, 0xFF);
@@ -282,53 +252,35 @@ namespace tl
             if (videoData.size() > 1 && boxes.size() > 1)
             {
                 _drawVideo(
-                    videoData[1], boxes[1],
-                    imageOptions.size() > 1
-                        ? std::make_shared<timeline::ImageOptions>(
-                              imageOptions[1])
-                        : nullptr,
-                    displayOptions.size() > 1 ? displayOptions[1]
-                                              : timeline::DisplayOptions());
+                    videoData[1], boxes[1], imageOptions.size() > 1 ? std::make_shared<timeline::ImageOptions>(imageOptions[1]) : nullptr,
+                    displayOptions.size() > 1 ? displayOptions[1] : timeline::DisplayOptions());
             }
         }
 
         void Render::_drawVideoOverlay(
-            const std::vector<timeline::VideoData>& videoData,
-            const std::vector<math::Box2i>& boxes,
-            const std::vector<timeline::ImageOptions>& imageOptions,
-            const std::vector<timeline::DisplayOptions>& displayOptions,
-            const timeline::CompareOptions& compareOptions)
+            const std::vector<timeline::VideoData>& videoData, const std::vector<math::Box2i>& boxes, const std::vector<timeline::ImageOptions>& imageOptions,
+            const std::vector<timeline::DisplayOptions>& displayOptions, const timeline::CompareOptions& compareOptions)
         {
             TLRENDER_P();
 
             if (videoData.size() > 1 && boxes.size() > 1)
             {
                 _drawVideo(
-                    videoData[1], boxes[1],
-                    imageOptions.size() > 1
-                        ? std::make_shared<timeline::ImageOptions>(
-                              imageOptions[1])
-                        : nullptr,
-                    displayOptions.size() > 1 ? displayOptions[1]
-                                              : timeline::DisplayOptions());
+                    videoData[1], boxes[1], imageOptions.size() > 1 ? std::make_shared<timeline::ImageOptions>(imageOptions[1]) : nullptr,
+                    displayOptions.size() > 1 ? displayOptions[1] : timeline::DisplayOptions());
             }
             if (!videoData.empty() && !boxes.empty())
             {
-                const math::Size2i offscreenBufferSize(
-                    boxes[0].w(), boxes[0].h());
-                vk::OffscreenBufferOptions offscreenBufferOptions;
+                const math::Size2i offscreenBufferSize(boxes[0].w(), boxes[0].h());
+                vlk::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
                 if (!displayOptions.empty())
                 {
-                    offscreenBufferOptions.colorFilters =
-                        displayOptions[0].imageFilters;
+                    offscreenBufferOptions.colorFilters = displayOptions[0].imageFilters;
                 }
-                if (doCreate(
-                        p.buffers["overlay"], offscreenBufferSize,
-                        offscreenBufferOptions))
+                if (doCreate(p.buffers["overlay"], offscreenBufferSize, offscreenBufferOptions))
                 {
-                    p.buffers["overlay"] = vk::OffscreenBuffer::create(
-                        offscreenBufferSize, offscreenBufferOptions);
+                    p.buffers["overlay"] = vlk::OffscreenBuffer::create(ctx, offscreenBufferSize, offscreenBufferOptions);
                 }
 
                 if (p.buffers["overlay"])
@@ -342,45 +294,52 @@ namespace tl
                     // glClearColor(0.F, 0.F, 0.F, 0.F);
                     // glClear(GL_COLOR_BUFFER_BIT);
 
-                    p.shaders["display"]->bind();
+                    p.shaders["display"]->bind(p.frameIndex);
                     p.shaders["display"]->setUniform(
                         "transform.mvp",
-                        math::ortho(
-                            0.F, static_cast<float>(offscreenBufferSize.w),
-                            static_cast<float>(offscreenBufferSize.h), 0.F,
-                            -1.F, 1.F));
+                        math::ortho(0.F, static_cast<float>(offscreenBufferSize.w), static_cast<float>(offscreenBufferSize.h), 0.F, -1.F, 1.F));
 
                     _drawVideo(
-                        videoData[0],
-                        math::Box2i(
-                            0, 0, offscreenBufferSize.w, offscreenBufferSize.h),
-                        !imageOptions.empty()
-                            ? std::make_shared<timeline::ImageOptions>(
-                                  imageOptions[0])
-                            : nullptr,
-                        !displayOptions.empty() ? displayOptions[0]
-                                                : timeline::DisplayOptions());
+                        videoData[0], math::Box2i(0, 0, offscreenBufferSize.w, offscreenBufferSize.h),
+                        !imageOptions.empty() ? std::make_shared<timeline::ImageOptions>(imageOptions[0]) : nullptr,
+                        !displayOptions.empty() ? displayOptions[0] : timeline::DisplayOptions());
 
-                    p.shaders["display"]->bind();
-                    p.shaders["display"]->setUniform(
-                        "transform.mvp", p.transform);
+                    p.shaders["display"]->bind(p.frameIndex);
+                    p.shaders["display"]->setUniform("transform.mvp", p.transform);
                 }
 
                 if (p.buffers["overlay"])
                 {
                     // glBlendFuncSeparate(
-                    //     GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
+                    //     GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
+                    //     GL_ONE);
 
                     // glViewport(
                     //     p.viewport.x(),
                     //     p.renderSize.h - p.viewport.h() - p.viewport.y(),
                     //     p.viewport.w(), p.viewport.h());
 
-                    p.shaders["overlay"]->bind();
-                    p.shaders["overlay"]->setUniform(
-                        "color",
-                        image::Color4f(1.F, 1.F, 1.F, compareOptions.overlay));
-                    p.shaders["overlay"]->setUniform("textureSampler", 0);
+                    p.shaders["overlay"]->bind(p.frameIndex);
+                    p.shaders["overlay"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
+
+                    image::Color4f color = image::Color4f(1.F, 1.F, 1.F, compareOptions.overlay);
+
+                    const std::string pipelineName = "overlay";
+                    const std::string shaderName = "overlay";
+                    const std::string meshName = "video";
+                    const std::string pipelineLayoutName = shaderName;
+                    _createPipeline(p.buffers["overlay"], pipelineName,
+                                    pipelineLayoutName,
+                                    shaderName, meshName);
+                    
+                    VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+
+                    _bindDescriptorSets(pipelineLayoutName, shaderName);
+
+                    vkCmdPushConstants(p.cmd, pipelineLayout,
+                                       p.shaders["overlay"]->getPushStageFlags(), 0, sizeof(color), &color);
+
+                    p.shaders["overlay"]->setFBO("textureSampler", p.buffers["overlay"]);
 
                     // glActiveTexture(static_cast<GLenum>(GL_TEXTURE0));
                     // glBindTexture(
@@ -388,45 +347,35 @@ namespace tl
 
                     if (p.vbos["video"])
                     {
-                        p.vbos["video"]->copy(convert(
-                            geom::box(boxes[0], true),
-                            p.vbos["video"]->getType()));
+                        p.vbos["video"]->copy(convert(geom::box(boxes[0], true), p.vbos["video"]->getType()));
                     }
                     if (p.vaos["video"])
                     {
-                        p.vaos["video"]->bind();
-                        // p.vaos["video"]->draw(
-                        //     GL_TRIANGLES, 0, p.vbos["video"]->getSize());
+                        p.vaos["video"]->bind(p.frameIndex);
+                        p.vaos["video"]->draw(p.cmd, p.vbos["video"]);
+                        p.garbage[p.frameIndex].vaos.push_back(p.vaos["video"]);
                     }
                 }
             }
         }
 
         void Render::_drawVideoDifference(
-            const std::vector<timeline::VideoData>& videoData,
-            const std::vector<math::Box2i>& boxes,
-            const std::vector<timeline::ImageOptions>& imageOptions,
-            const std::vector<timeline::DisplayOptions>& displayOptions,
-            const timeline::CompareOptions& compareOptions)
+            const std::vector<timeline::VideoData>& videoData, const std::vector<math::Box2i>& boxes, const std::vector<timeline::ImageOptions>& imageOptions,
+            const std::vector<timeline::DisplayOptions>& displayOptions, const timeline::CompareOptions& compareOptions)
         {
             TLRENDER_P();
             if (!videoData.empty() && !boxes.empty())
             {
-                const math::Size2i offscreenBufferSize(
-                    boxes[0].w(), boxes[0].h());
-                vk::OffscreenBufferOptions offscreenBufferOptions;
+                const math::Size2i offscreenBufferSize(boxes[0].w(), boxes[0].h());
+                vlk::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
                 if (!displayOptions.empty())
                 {
-                    offscreenBufferOptions.colorFilters =
-                        displayOptions[0].imageFilters;
+                    offscreenBufferOptions.colorFilters = displayOptions[0].imageFilters;
                 }
-                if (doCreate(
-                        p.buffers["difference0"], offscreenBufferSize,
-                        offscreenBufferOptions))
+                if (doCreate(p.buffers["difference0"], offscreenBufferSize, offscreenBufferOptions))
                 {
-                    p.buffers["difference0"] = vk::OffscreenBuffer::create(
-                        offscreenBufferSize, offscreenBufferOptions);
+                    p.buffers["difference0"] = vlk::OffscreenBuffer::create(ctx, offscreenBufferSize, offscreenBufferOptions);
                 }
 
                 if (p.buffers["difference0"])
@@ -441,46 +390,31 @@ namespace tl
                     // glClearColor(0.F, 0.F, 0.F, 0.F);
                     // glClear(GL_COLOR_BUFFER_BIT);
 
-                    p.shaders["display"]->bind();
+                    p.shaders["display"]->bind(p.frameIndex);
                     p.shaders["display"]->setUniform(
                         "transform.mvp",
-                        math::ortho(
-                            0.F, static_cast<float>(offscreenBufferSize.w),
-                            static_cast<float>(offscreenBufferSize.h), 0.F,
-                            -1.F, 1.F));
+                        math::ortho(0.F, static_cast<float>(offscreenBufferSize.w), static_cast<float>(offscreenBufferSize.h), 0.F, -1.F, 1.F));
 
                     _drawVideo(
-                        videoData[0],
-                        math::Box2i(
-                            0, 0, offscreenBufferSize.w, offscreenBufferSize.h),
-                        !imageOptions.empty()
-                            ? std::make_shared<timeline::ImageOptions>(
-                                  imageOptions[0])
-                            : nullptr,
-                        !displayOptions.empty() ? displayOptions[0]
-                                                : timeline::DisplayOptions());
+                        videoData[0], math::Box2i(0, 0, offscreenBufferSize.w, offscreenBufferSize.h),
+                        !imageOptions.empty() ? std::make_shared<timeline::ImageOptions>(imageOptions[0]) : nullptr,
+                        !displayOptions.empty() ? displayOptions[0] : timeline::DisplayOptions());
 
-                    p.shaders["display"]->bind();
-                    p.shaders["display"]->setUniform(
-                        "transform.mvp", p.transform);
+                    p.shaders["display"]->bind(p.frameIndex);
+                    p.shaders["display"]->setUniform("transform.mvp", p.transform);
                 }
 
                 if (videoData.size() > 1)
                 {
-                    offscreenBufferOptions = vk::OffscreenBufferOptions();
-                    offscreenBufferOptions.colorType =
-                        p.renderOptions.colorBuffer;
+                    offscreenBufferOptions = vlk::OffscreenBufferOptions();
+                    offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
                     if (displayOptions.size() > 1)
                     {
-                        offscreenBufferOptions.colorFilters =
-                            displayOptions[1].imageFilters;
+                        offscreenBufferOptions.colorFilters = displayOptions[1].imageFilters;
                     }
-                    if (doCreate(
-                            p.buffers["difference1"], offscreenBufferSize,
-                            offscreenBufferOptions))
+                    if (doCreate(p.buffers["difference1"], offscreenBufferSize, offscreenBufferOptions))
                     {
-                        p.buffers["difference1"] = vk::OffscreenBuffer::create(
-                            offscreenBufferSize, offscreenBufferOptions);
+                        p.buffers["difference1"] = vlk::OffscreenBuffer::create(ctx, offscreenBufferSize, offscreenBufferOptions);
                     }
 
                     if (p.buffers["difference1"])
@@ -491,30 +425,20 @@ namespace tl
                         // gl::OffscreenBufferBinding binding(
                         //     p.buffers["difference1"]);
                         // glViewport(
-                        //     0, 0, offscreenBufferSize.w, offscreenBufferSize.h);
+                        //     0, 0, offscreenBufferSize.w,
+                        //     offscreenBufferSize.h);
                         // glClearColor(0.F, 0.F, 0.F, 0.F);
                         // glClear(GL_COLOR_BUFFER_BIT);
 
-                        p.shaders["display"]->bind();
+                        p.shaders["display"]->bind(p.frameIndex);
                         p.shaders["display"]->setUniform(
                             "transform.mvp",
-                            math::ortho(
-                                0.F, static_cast<float>(offscreenBufferSize.w),
-                                static_cast<float>(offscreenBufferSize.h), 0.F,
-                                -1.F, 1.F));
+                            math::ortho(0.F, static_cast<float>(offscreenBufferSize.w), static_cast<float>(offscreenBufferSize.h), 0.F, -1.F, 1.F));
 
                         _drawVideo(
-                            videoData[1],
-                            math::Box2i(
-                                0, 0, offscreenBufferSize.w,
-                                offscreenBufferSize.h),
-                            imageOptions.size() > 1
-                                ? std::make_shared<timeline::ImageOptions>(
-                                      imageOptions[1])
-                                : nullptr,
-                            displayOptions.size() > 1
-                                ? displayOptions[1]
-                                : timeline::DisplayOptions());
+                            videoData[1], math::Box2i(0, 0, offscreenBufferSize.w, offscreenBufferSize.h),
+                            imageOptions.size() > 1 ? std::make_shared<timeline::ImageOptions>(imageOptions[1]) : nullptr,
+                            displayOptions.size() > 1 ? displayOptions[1] : timeline::DisplayOptions());
                     }
                 }
                 else
@@ -532,51 +456,34 @@ namespace tl
                     //     p.renderSize.h - p.viewport.h() - p.viewport.y(),
                     //     p.viewport.w(), p.viewport.h());
 
-                    p.shaders["difference"]->bind();
-                    p.shaders["difference"]->setUniform("textureSampler", 0);
-                    p.shaders["difference"]->setUniform("textureSamplerB", 1);
-
-                    // glActiveTexture(static_cast<GLenum>(GL_TEXTURE0));
-                    // glBindTexture(
-                    //     GL_TEXTURE_2D, p.buffers["difference0"]->getColorID());
-
-                    // glActiveTexture(static_cast<GLenum>(GL_TEXTURE1));
-                    // glBindTexture(
-                    //     GL_TEXTURE_2D, p.buffers["difference1"]->getColorID());
+                    p.shaders["difference"]->bind(p.frameIndex);
+                    p.shaders["difference"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
+                    p.shaders["difference"]->setFBO("textureSampler", p.buffers["difference0"]);
+                    p.shaders["difference"]->setFBO("textureSamplerB", p.buffers["difference1"]);
 
                     if (p.vbos["video"])
                     {
-                        p.vbos["video"]->copy(convert(
-                            geom::box(boxes[0], true),
-                            p.vbos["video"]->getType()));
+                        p.vbos["video"]->copy(convert(geom::box(boxes[0], true), p.vbos["video"]->getType()));
                     }
                     if (p.vaos["video"])
                     {
-                        p.vaos["video"]->bind();
-                        p.vaos["video"]->draw(
-                            GL_TRIANGLES, 0, p.vbos["video"]->getSize());
+                        p.vaos["video"]->bind(p.frameIndex);
+                        p.vaos["video"]->draw(p.cmd, p.vbos["video"]);
+                        p.garbage[p.frameIndex].vaos.push_back(p.vaos["video"]);
                     }
                 }
             }
         }
 
         void Render::_drawVideoTile(
-            const std::vector<timeline::VideoData>& videoData,
-            const std::vector<math::Box2i>& boxes,
-            const std::vector<timeline::ImageOptions>& imageOptions,
-            const std::vector<timeline::DisplayOptions>& displayOptions,
-            const timeline::CompareOptions& compareOptions)
+            const std::vector<timeline::VideoData>& videoData, const std::vector<math::Box2i>& boxes, const std::vector<timeline::ImageOptions>& imageOptions,
+            const std::vector<timeline::DisplayOptions>& displayOptions, const timeline::CompareOptions& compareOptions)
         {
             for (size_t i = 0; i < videoData.size() && i < boxes.size(); ++i)
             {
                 _drawVideo(
-                    videoData[i], boxes[i],
-                    i < imageOptions.size()
-                        ? std::make_shared<timeline::ImageOptions>(
-                              imageOptions[i])
-                        : nullptr,
-                    i < displayOptions.size() ? displayOptions[i]
-                                              : timeline::DisplayOptions());
+                    videoData[i], boxes[i], i < imageOptions.size() ? std::make_shared<timeline::ImageOptions>(imageOptions[i]) : nullptr,
+                    i < displayOptions.size() ? displayOptions[i] : timeline::DisplayOptions());
             }
         }
 
@@ -611,44 +518,37 @@ namespace tl
                 return (f0 + f1) / 2.F;
             }
         } // namespace
-
+        
         void Render::_drawVideo(
-            const timeline::VideoData& videoData, const math::Box2i& box,
-            const std::shared_ptr<timeline::ImageOptions>& imageOptions,
+            const timeline::VideoData& videoData, const math::Box2i& box, const std::shared_ptr<timeline::ImageOptions>& imageOptions,
             const timeline::DisplayOptions& displayOptions)
         {
             TLRENDER_P();
 
+            // \@todo: \@bug: there's no such call in Vulkan.
             // GLint viewportPrev[4] = {0, 0, 0, 0};
             // glGetIntegerv(GL_VIEWPORT, viewportPrev);
 
-            const auto transform = math::ortho(
-                0.F, static_cast<float>(box.w()), static_cast<float>(box.h()),
-                0.F, -1.F, 1.F);
-            p.shaders["image"]->bind();
-            p.shaders["image"]->setUniform("transform.mvp", transform);
+            const auto transform = math::ortho(0.F, static_cast<float>(box.w()), static_cast<float>(box.h()), 0.F, -1.F, 1.F);
+            p.shaders["image"]->bind(p.frameIndex);
+            p.shaders["image"]->setUniform("transform.mvp", transform, vlk::kShaderVertex);
 
             const math::Size2i& offscreenBufferSize = box.getSize();
-            vk::OffscreenBufferOptions offscreenBufferOptions;
+            vlk::OffscreenBufferOptions offscreenBufferOptions;
             offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
             offscreenBufferOptions.colorFilters = displayOptions.imageFilters;
-            if (doCreate(
-                    p.buffers["video"], offscreenBufferSize,
-                    offscreenBufferOptions))
+            offscreenBufferOptions.clear = true;
+            if (doCreate(p.buffers["video"], offscreenBufferSize, offscreenBufferOptions))
             {
-                p.buffers["video"] = vk::OffscreenBuffer::create(
-                    offscreenBufferSize, offscreenBufferOptions);
+                p.buffers["video"] = vlk::OffscreenBuffer::create(ctx, offscreenBufferSize,
+                                                                  offscreenBufferOptions);
             }
 
+            float d1 = 1;
+            float d2 = 1;
+            bool inDissolve = false;
             if (p.buffers["video"])
             {
-                // const gl::SetAndRestore scissorTest(GL_SCISSOR_TEST, GL_FALSE);
-
-                // gl::OffscreenBufferBinding binding(p.buffers["video"]);
-                // glViewport(0, 0, offscreenBufferSize.w, offscreenBufferSize.h);
-                // glClearColor(0.F, 0.F, 0.F, 0.F);
-                // glClear(GL_COLOR_BUFFER_BIT);
-
                 for (const auto& layer : videoData.layers)
                 {
                     switch (layer.transition)
@@ -657,160 +557,179 @@ namespace tl
                     {
                         if (layer.image && layer.imageB)
                         {
-                            if (doCreate(
-                                    p.buffers["dissolve"], offscreenBufferSize,
-                                    offscreenBufferOptions))
+                            if (doCreate(p.buffers["dissolve"], offscreenBufferSize,
+                                         offscreenBufferOptions))
                             {
-                                // p.buffers["dissolve"] =
-                                //     gl::OffscreenBuffer::create(
-                                //         offscreenBufferSize,
-                                //         offscreenBufferOptions);
+                                p.buffers["dissolve"] = vlk::OffscreenBuffer::create(ctx, offscreenBufferSize,
+                                                                                     offscreenBufferOptions);
                             }
-                            if (doCreate(
-                                    p.buffers["dissolve2"], offscreenBufferSize,
-                                    offscreenBufferOptions))
+                            if (doCreate(p.buffers["dissolve2"], offscreenBufferSize, offscreenBufferOptions))
                             {
-                                // p.buffers["dissolve2"] =
-                                //     gl::OffscreenBuffer::create(
-                                //         offscreenBufferSize,
-                                //         offscreenBufferOptions);
+                                p.buffers["dissolve2"] = vlk::OffscreenBuffer::create(ctx,
+                                                                                      offscreenBufferSize,
+                                                                                      offscreenBufferOptions);
                             }
                             if (p.buffers["dissolve"])
                             {
-                                // gl::OffscreenBufferBinding binding(
-                                //     p.buffers["dissolve"]);
-                                // glViewport(
-                                //     0, 0, offscreenBufferSize.w,
-                                //     offscreenBufferSize.h);
-                                // glClearColor(0.F, 0.F, 0.F, 0.F);
-                                // glClear(GL_COLOR_BUFFER_BIT);
-                                float v = 1.F - layer.transitionValue;
-                                auto dissolveImageOptions =
-                                    imageOptions.get() ? *imageOptions
-                                                       : layer.imageOptions;
-                                dissolveImageOptions.alphaBlend =
-                                    timeline::AlphaBlend::Straight;
+                                float v = d1 = 1.F - layer.transitionValue;
+                                auto dissolveImageOptions = imageOptions.get() ?
+                                                            *imageOptions :
+                                                            layer.imageOptions;
+                                dissolveImageOptions.alphaBlend = timeline::AlphaBlend::Straight;
                                 drawImage(
-                                    layer.image,
-                                    image::getBox(
-                                        layer.image->getAspect(),
-                                        math::Box2i(
-                                            0, 0, offscreenBufferSize.w,
-                                            offscreenBufferSize.h)),
-                                    image::Color4f(1.F, 1.F, 1.F, v),
-                                    dissolveImageOptions);
+                                    p.buffers["dissolve"], layer.image,
+                                    image::getBox(layer.image->getAspect(),
+                                                  math::Box2i(0, 0, offscreenBufferSize.w,
+                                                              offscreenBufferSize.h)),
+                                    image::Color4f(1.F, 1.F, 1.F, v), dissolveImageOptions);
                             }
                             if (p.buffers["dissolve2"])
                             {
-                                // gl::OffscreenBufferBinding binding(
-                                //     p.buffers["dissolve2"]);
-                                // glViewport(
-                                //     0, 0, offscreenBufferSize.w,
-                                //     offscreenBufferSize.h);
-                                // glClearColor(0.F, 0.F, 0.F, 0.F);
-                                // glClear(GL_COLOR_BUFFER_BIT);
-                                float v = layer.transitionValue;
-                                auto dissolveImageOptions =
-                                    imageOptions.get() ? *imageOptions
-                                                       : layer.imageOptionsB;
-                                dissolveImageOptions.alphaBlend =
-                                    timeline::AlphaBlend::Straight;
+                                float v = d2 = layer.transitionValue;
+                                auto dissolveImageOptions = imageOptions.get() ? *imageOptions : layer.imageOptionsB;
+                                dissolveImageOptions.alphaBlend = timeline::AlphaBlend::Straight;
                                 drawImage(
-                                    layer.imageB,
-                                    image::getBox(
-                                        layer.imageB->getAspect(),
-                                        math::Box2i(
-                                            0, 0, offscreenBufferSize.w,
-                                            offscreenBufferSize.h)),
-                                    image::Color4f(1.F, 1.F, 1.F, v),
-                                    dissolveImageOptions);
+                                    p.buffers["dissolve2"], layer.imageB,
+                                    image::getBox(layer.imageB->getAspect(),
+                                                  math::Box2i(0, 0, offscreenBufferSize.w,
+                                                              offscreenBufferSize.h)),
+                                    image::Color4f(1.F, 1.F, 1.F, v), dissolveImageOptions);
                             }
+                            
+
+#define FIRST_RENDER_PASS 1  // working fine by itself
+#define SECOND_RENDER_PASS 1 // working fine by itself
                             if (p.buffers["dissolve"] && p.buffers["dissolve2"])
                             {
-                                // glBlendFuncSeparate(
-                                //     GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
-                                //     GL_ONE);
+                                inDissolve = true;
+                                
+                                p.buffers["dissolve"]->transitionToShaderRead(p.cmd);
+                                p.buffers["dissolve2"]->transitionToShaderRead(p.cmd);
 
-                                p.shaders["dissolve"]->bind();
-                                p.shaders["dissolve"]->setUniform(
-                                    "transform.mvp", transform);
-                                p.shaders["dissolve"]->setUniform(
-                                    "color", image::Color4f(1.F, 1.F, 1.F));
-                                p.shaders["dissolve"]->setUniform(
-                                    "textureSampler", 0);
+                                p.buffers["video"]->transitionToColorAttachment(p.cmd);
 
-                                // glActiveTexture(
-                                //     static_cast<GLenum>(GL_TEXTURE0));
-                                // glBindTexture(
-                                //     GL_TEXTURE_2D,
-                                //     p.buffers["dissolve"]->getColorID());
+                                // --- Common Setup ---
+                                std::shared_ptr<vlk::ShaderBindingSet> bindingSet;
+                                const auto transform = math::ortho(0.F, static_cast<float>(box.w()), 0.F,
+                                                                   static_cast<float>(box.h()), -1.F, 1.F);
+                                const image::Color4f color(1.F, 1.F, 1.F);
+                                const std::string pipelineNameBase = "video_dissolve"; // Use distinct names
+                                const std::string shaderName = "dissolve";
+                                const std::string meshName = "video";
+                                std::string pipelineLayoutName = shaderName; // Typically shader name determines layout
+                                VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+                                // Ensure pipelineLayout is valid, create if necessary
+                                if (!pipelineLayout) {
+                                    pipelineLayout = _createPipelineLayout(pipelineLayoutName,
+                                                                           p.shaders[shaderName]);
+                                }
+
+                                std::string pipelineName = pipelineNameBase + "_Pass1_NoBlend";
+
+                                // Create or find a pipeline without blending
+                                bool enableBlending = false;
+                                _createPipeline(p.buffers["video"],
+                                                pipelineName,
+                                               "dissolve",
+                                               shaderName, meshName,
+                                               enableBlending);
+                                p.buffers["video"]->beginRenderPass(p.cmd, "COMP VIDEO RENDER");
+
+                                auto shader = p.shaders["dissolve"];
+                                _createBindingSet(shader);
+
+                                p.shaders["dissolve"]->bind(p.frameIndex);
+                                p.shaders["dissolve"]->setUniform("transform.mvp", transform, vlk::kShaderVertex);
+                                p.shaders["dissolve"]->setFBO("textureSampler", p.buffers["dissolve"]);
+
+                                _bindDescriptorSets(pipelineLayoutName,
+                                                    shaderName);
+
+                                vkCmdPushConstants(p.cmd, pipelineLayout,
+                                                   p.shaders["dissolve"]->getPushStageFlags(), 0, sizeof(color), &color);
+                                
+
+#if FIRST_RENDER_PASS
                                 if (p.vbos["video"])
                                 {
-                                    p.vbos["video"]->copy(convert(
-                                        geom::box(
-                                            math::Box2i(
-                                                0, 0, offscreenBufferSize.w,
-                                                offscreenBufferSize.h),
-                                            true),
-                                        p.vbos["video"]->getType()));
+                                    p.vbos["video"]->copy(
+                                        convert(geom::box(math::Box2i(0, 0,
+                                                                      offscreenBufferSize.w,
+                                                                      offscreenBufferSize.h),
+                                                          true), p.vbos["video"]->getType()));
                                 }
                                 if (p.vaos["video"])
                                 {
-                                    p.vaos["video"]->bind();
-                                    p.vaos["video"]->draw(
-                                        GL_TRIANGLES, 0,
-                                        p.vbos["video"]->getSize());
+                                    p.vaos["video"]->bind(p.frameIndex);
+                                    p.vaos["video"]->draw(p.cmd, p.vbos["video"]);
+                                    p.garbage[p.frameIndex].vaos.push_back(p.vaos["video"]);
                                 }
+#endif
 
-                                // glBindTexture(
-                                //     GL_TEXTURE_2D,
-                                //     p.buffers["dissolve2"]->getColorID());
+                                _createBindingSet(shader);
+
+                                pipelineName = pipelineNameBase + "_Pass2_BlendColorForceAlpha";
+                                enableBlending = true;
+                                _createPipeline(
+                                    p.buffers["video"], pipelineName,
+                                    pipelineLayoutName, shaderName, meshName,
+                                    enableBlending,
+                                    VK_BLEND_FACTOR_SRC_ALPHA,
+                                    VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                                    VK_BLEND_FACTOR_ONE,
+                                    VK_BLEND_FACTOR_ONE,
+                                    VK_BLEND_OP_ADD,
+                                    VK_BLEND_OP_ADD);
+
+                                p.shaders["dissolve"]->bind(p.frameIndex);
+                                p.shaders["dissolve"]->setUniform("transform.mvp", transform,
+                                                                  vlk::kShaderVertex);
+                                p.shaders["dissolve"]->setFBO("textureSampler", p.buffers["dissolve2"]);
+                                vkCmdPushConstants(p.cmd, pipelineLayout,
+                                                   p.shaders["dissolve"]->getPushStageFlags(), 0,
+                                                   sizeof(color), &color);
+                                _bindDescriptorSets(pipelineLayoutName,
+                                                    shaderName);
+
+#if SECOND_RENDER_PASS
                                 if (p.vbos["video"])
                                 {
-                                    p.vbos["video"]->copy(convert(
-                                        geom::box(
-                                            math::Box2i(
-                                                0, 0, offscreenBufferSize.w,
-                                                offscreenBufferSize.h),
-                                            true),
-                                        p.vbos["video"]->getType()));
+                                    p.vbos["video"]->copy(
+                                        convert(geom::box(math::Box2i(0, 0,
+                                                                      offscreenBufferSize.w,
+                                                                      offscreenBufferSize.h), true),
+                                                p.vbos["video"]->getType()));
                                 }
                                 if (p.vaos["video"])
                                 {
-                                    p.vaos["video"]->bind();
-                                    p.vaos["video"]->draw(
-                                        GL_TRIANGLES, 0,
-                                        p.vbos["video"]->getSize());
+                                    p.vaos["video"]->bind(p.frameIndex);
+                                    p.vaos["video"]->draw(p.cmd, p.vbos["video"]);
+                                    p.garbage[p.frameIndex].vaos.push_back(p.vaos["video"]);
                                 }
-                            }
+#endif
+
+                                p.buffers["video"]->endRenderPass(p.cmd);
+
+                                // --- Transitions ---
+                                p.buffers["dissolve"]->transitionToColorAttachment(p.cmd);
+                                p.buffers["dissolve2"]->transitionToColorAttachment(p.cmd);
+                                
+                                p.buffers["video"]->transitionToShaderRead(p.cmd);
+                            } // end if (p.buffers["dissolve"] && p.buffers["dissolve2"])
                         }
                         else if (layer.image)
                         {
                             drawImage(
-                                layer.image,
-                                image::getBox(
-                                    layer.image->getAspect(),
-                                    math::Box2i(
-                                        0, 0, offscreenBufferSize.w,
-                                        offscreenBufferSize.h)),
-                                image::Color4f(
-                                    1.F, 1.F, 1.F, 1.F - layer.transitionValue),
-                                imageOptions.get() ? *imageOptions
-                                                   : layer.imageOptions);
+                                p.buffers["video"], layer.image,
+                                image::getBox(layer.image->getAspect(), math::Box2i(0, 0, offscreenBufferSize.w, offscreenBufferSize.h)),
+                                image::Color4f(1.F, 1.F, 1.F, 1.F - layer.transitionValue), imageOptions.get() ? *imageOptions : layer.imageOptions);
                         }
                         else if (layer.imageB)
                         {
                             drawImage(
-                                layer.imageB,
-                                image::getBox(
-                                    layer.imageB->getAspect(),
-                                    math::Box2i(
-                                        0, 0, offscreenBufferSize.w,
-                                        offscreenBufferSize.h)),
-                                image::Color4f(
-                                    1.F, 1.F, 1.F, layer.transitionValue),
-                                imageOptions.get() ? *imageOptions
-                                                   : layer.imageOptionsB);
+                                p.buffers["video"], layer.imageB,
+                                image::getBox(layer.imageB->getAspect(), math::Box2i(0, 0, offscreenBufferSize.w, offscreenBufferSize.h)),
+                                image::Color4f(1.F, 1.F, 1.F, layer.transitionValue), imageOptions.get() ? *imageOptions : layer.imageOptionsB);
                         }
                         break;
                     }
@@ -818,15 +737,9 @@ namespace tl
                         if (layer.image)
                         {
                             drawImage(
-                                layer.image,
-                                image::getBox(
-                                    layer.image->getAspect(),
-                                    math::Box2i(
-                                        0, 0, offscreenBufferSize.w,
-                                        offscreenBufferSize.h)),
-                                image::Color4f(1.F, 1.F, 1.F),
-                                imageOptions.get() ? *imageOptions
-                                                   : layer.imageOptions);
+                                p.buffers["video"], layer.image,
+                                image::getBox(layer.image->getAspect(), math::Box2i(0, 0, offscreenBufferSize.w, offscreenBufferSize.h)),
+                                image::Color4f(1.F, 1.F, 1.F), imageOptions.get() ? *imageOptions : layer.imageOptions);
                         }
                         break;
                     }
@@ -835,151 +748,339 @@ namespace tl
 
             if (p.buffers["video"])
             {
-                // glBlendFuncSeparate(
-                //     GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
-                //     GL_ONE_MINUS_SRC_ALPHA);
+                // Begin the new compositing render pass.
+                p.fbo->transitionToColorAttachment(p.cmd);
+                
+                p.buffers["video"]->transitionToShaderRead(p.cmd);
+                
+                const std::string pipelineName = "display";
+                const std::string pipelineLayoutName = "display";
+                const std::string shaderName = "display";
+                const std::string meshName = "video";
+                const bool enableBlending = !inDissolve;  
+                _createPipeline(p.fbo, pipelineName,
+                                pipelineLayoutName, shaderName, meshName,
+                                enableBlending,
+                                VK_BLEND_FACTOR_SRC_ALPHA,
+                                VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                                VK_BLEND_FACTOR_ONE,
+                                VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);
 
-                // glViewport(
-                //     viewportPrev[0], viewportPrev[1], viewportPrev[2],
-                //     viewportPrev[3]);
 
-                p.shaders["display"]->bind();
-                p.shaders["display"]->setUniform("textureSampler", 0);
-                p.shaders["display"]->setUniform(
-                    "channels", static_cast<int>(displayOptions.channels));
-                p.shaders["display"]->setUniform(
-                    "mirrorX", displayOptions.mirror.x);
-                p.shaders["display"]->setUniform(
-                    "mirrorY", displayOptions.mirror.y);
-                const bool colorMatrixEnabled =
-                    displayOptions.color != timeline::Color() &&
-                    displayOptions.color.enabled;
-                p.shaders["display"]->setUniform(
-                    "colorEnabled", colorMatrixEnabled);
-                p.shaders["display"]->setUniform(
-                    "colorAdd", displayOptions.color.add);
-                if (colorMatrixEnabled)
-                {
-                    p.shaders["display"]->setUniform(
-                        "colorMatrix", color(displayOptions.color));
-                }
-                p.shaders["display"]->setUniform(
-                    "colorInvert", displayOptions.color.enabled
-                                       ? displayOptions.color.invert
-                                       : false);
-                p.shaders["display"]->setUniform(
-                    "levelsEnabled", displayOptions.levels.enabled);
-                p.shaders["display"]->setUniform(
-                    "levels.inLow", displayOptions.levels.inLow);
-                p.shaders["display"]->setUniform(
-                    "levels.inHigh", displayOptions.levels.inHigh);
-                p.shaders["display"]->setUniform(
-                    "levels.gamma", displayOptions.levels.gamma > 0.F
-                                        ? (1.F / displayOptions.levels.gamma)
-                                        : 1000000.F);
-                p.shaders["display"]->setUniform(
-                    "levels.outLow", displayOptions.levels.outLow);
-                p.shaders["display"]->setUniform(
-                    "levels.outHigh", displayOptions.levels.outHigh);
-                p.shaders["display"]->setUniform(
-                    "exrDisplayEnabled", displayOptions.exrDisplay.enabled);
-                if (displayOptions.exrDisplay.enabled)
-                {
-                    const float v = powf(
-                        2.F, displayOptions.exrDisplay.exposure + 2.47393F);
-                    const float d = displayOptions.exrDisplay.defog;
-                    const float k =
-                        powf(2.F, displayOptions.exrDisplay.kneeLow);
-                    const float f = knee2(
-                        powf(2.F, displayOptions.exrDisplay.kneeHigh) - k,
-                        powf(2.F, 3.5F) - k);
-                    p.shaders["display"]->setUniform("exrDisplay.v", v);
-                    p.shaders["display"]->setUniform("exrDisplay.d", d);
-                    p.shaders["display"]->setUniform("exrDisplay.k", k);
-                    p.shaders["display"]->setUniform("exrDisplay.f", f);
-                    const float gamma =
-                        displayOptions.levels.gamma > 0.F
-                            ? (1.F / displayOptions.levels.gamma)
-                            : 1000000.F;
-                    p.shaders["display"]->setUniform("exrDisplay.g", gamma);
-                }
-                p.shaders["display"]->setUniform(
-                    "softClip", displayOptions.softClip.enabled
-                                    ? displayOptions.softClip.value
-                                    : 0.F);
-                p.shaders["display"]->setUniform(
-                    "videoLevels",
-                    static_cast<int>(displayOptions.videoLevels));
-                p.shaders["display"]->setUniform(
-                    "normalizeEnabled", displayOptions.normalize.enabled);
-                if (displayOptions.normalize.enabled)
-                {
-                    p.shaders["display"]->setUniform(
-                        "normalizeDisplay.minimum",
-                        displayOptions.normalize.minimum);
-                    p.shaders["display"]->setUniform(
-                        "normalizeDisplay.maximum",
-                        displayOptions.normalize.maximum);
-                }
-                p.shaders["display"]->setUniform(
-                    "invalidValues", displayOptions.invalidValues);
+                p.fbo->beginRenderPass(p.cmd, "DISPLAY PASS");
 
-                // glActiveTexture(static_cast<GLenum>(GL_TEXTURE0));
-                // glBindTexture(GL_TEXTURE_2D, p.buffers["video"]->getColorID());
-                size_t texturesOffset = 1;
+                p.shaders["display"]->bind(p.frameIndex);
+                p.shaders["display"]->setFBO("textureSampler", p.buffers["video"]);
+
+                UBOLevels uboLevels;
+                uboLevels.enabled = displayOptions.levels.enabled;
+                uboLevels.inLow = displayOptions.levels.inLow;
+                uboLevels.inHigh = displayOptions.levels.inHigh;
+                uboLevels.gamma = displayOptions.levels.gamma;
+                uboLevels.outLow = displayOptions.levels.outLow;
+                uboLevels.outHigh = displayOptions.levels.outHigh;
+                uboLevels.gamma = uboLevels.gamma > 0.F ? (1.F / uboLevels.gamma) : 1000000.F;
+                p.shaders["display"]->setUniform("uboLevels", uboLevels);
+
+                UBONormalize uboNormalize;
+                uboNormalize.enabled = displayOptions.normalize.enabled;
+                uboNormalize.minimum = displayOptions.normalize.minimum;
+                uboNormalize.maximum = displayOptions.normalize.maximum;
+
+                p.shaders["display"]->setUniform("uboNormalize", uboNormalize);
+
+                UBOColor uboColor;
+                const bool colorMatrixEnabled = displayOptions.color != timeline::Color() && displayOptions.color.enabled;
+                uboColor.enabled = colorMatrixEnabled;
+                uboColor.add = displayOptions.color.add;
+                uboColor.matrix = color(displayOptions.color);
+                uboColor.invert = displayOptions.color.invert;
+
+                p.shaders["display"]->setUniform("uboColor", uboColor);
+                p.shaders["display"]->setUniform("uboEXRDisplay", displayOptions.exrDisplay);
+
+                UBOOptions ubo;
+                ubo.channels = static_cast<int>(displayOptions.channels);
+                ubo.mirrorX = displayOptions.mirror.x;
+                ubo.mirrorY = displayOptions.mirror.y;
+                ubo.softClip = displayOptions.softClip.enabled ? displayOptions.softClip.value : 0.F;
+                ubo.videoLevels = static_cast<int>(displayOptions.videoLevels);
+                ubo.invalidValues = displayOptions.invalidValues;
+                p.shaders["display"]->setUniform("ubo", ubo);
+
 #if defined(TLRENDER_OCIO)
                 if (p.ocioData)
                 {
-                    for (size_t i = 0; i < p.ocioData->textures.size(); ++i)
+                    for (auto& texture : p.ocioData->textures)
                     {
-                        // glActiveTexture(GL_TEXTURE0 + texturesOffset + i);
-                        // glBindTexture(
-                        //     p.ocioData->textures[i].type,
-                        //     p.ocioData->textures[i].id);
+                        p.shaders["display"]->setTexture(texture->getName(), texture);
                     }
-                    texturesOffset += p.ocioData->textures.size();
                 }
                 if (p.lutData)
                 {
-                    for (size_t i = 0; i < p.lutData->textures.size(); ++i)
+                    for (auto& texture : p.lutData->textures)
                     {
-                        // glActiveTexture(GL_TEXTURE0 + texturesOffset + i);
-                        // glBindTexture(
-                        //     p.lutData->textures[i].type,
-                        //     p.lutData->textures[i].id);
+                        p.shaders["display"]->setTexture(texture->getName(), texture);
                     }
-                    texturesOffset += p.lutData->textures.size();
                 }
 #endif // TLRENDER_OCIO
 #if defined(TLRENDER_LIBPLACEBO)
                 if (p.placeboData)
                 {
-                    for (size_t i = 0; i < p.placeboData->textures.size(); ++i)
+                    for (auto& texture : p.placeboData->textures)
                     {
-                        // glActiveTexture(GL_TEXTURE0 + texturesOffset + i);
-                        // glBindTexture(
-                        //     p.placeboData->textures[i].type,
-                        //     p.placeboData->textures[i].id);
+                        p.shaders["display"]->setTexture(texture->getName(), texture);
                     }
-                    texturesOffset += p.ocioData->textures.size();
+
+#if !USE_CONSTANTS
+#ifdef USE_STD430
+                    std::size_t pushSize = p.shaders["display"]->getPushSize();
+                    if (pushSize > 0)
+                    {
+                        std::vector<uint8_t> pushData(pushSize, 0);
+                        const pl_shader_res* res = p.placeboData->res;
+                        // std::cerr << "-----------std430 packing = " << res->num_variables << std::endl;
+                        VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+                        std::size_t currentOffset = 0;
+                        for (int i = 0; i < res->num_variables; ++i)
+                        {
+                            const struct pl_shader_var shader_var = res->variables[i];
+                            const struct pl_var var = shader_var.var;
+
+                            
+                            size_t el_size = pl_var_type_size(var.type);
+                            size_t stride = el_size * var.dim_v;
+                            size_t align = stride;
+                            if (var.dim_v >= 3) // vec3/vec4 align to 16 bytes
+                                align = 16;
+                            if (var.dim_m * var.dim_a > 1) // Arrays/matrices use aligned stride
+                                stride = align;
+                            size_t size = stride * var.dim_m * var.dim_a;
+
+                            std::size_t offset = MRV2_ALIGN2(currentOffset, align);
+                            // std::cerr << var.name << std::endl;
+                            // std::cerr << "\toffset=" << offset << std::endl;
+                            // std::cerr << "\tsize=" << size << std::endl;
+
+                            if (!shader_var.data) {
+                                throw std::runtime_error("No libplacebo shader_var.data");
+                            }
+    
+                            // Handle matrices, vectors, and scalars
+                            if (var.dim_m > 1 && var.dim_v > 1) { // Matrix (e.g., mat3)
+                                // std::cerr << var.name << " = ";
+                                std::vector<float> paddedData(stride / sizeof(float) * var.dim_m, 0.0f); // E.g., 12 floats for mat3
+                                const float* src = reinterpret_cast<const float*>(shader_var.data);
+                                for (int row = 0; row < var.dim_v; ++row)
+                                    for (int col = 0; col < var.dim_m; ++col)
+                                        paddedData[col * (stride / sizeof(float)) + row] = src[row * var.dim_m + col]; // Transpose
+                                memcpy(pushData.data() + offset, paddedData.data(), size);
+                                // for (int i = 0; i < var.dim_m * var.dim_v; ++i)
+                                // {
+                                //     std::cerr << paddedData[i] << " ";
+                                // }
+                                // std::cerr << std::endl;
+                            } else { // Vector or scalar
+                                memcpy(pushData.data() + offset, shader_var.data, size); // Copy as-is
+                            }
+
+                            currentOffset = offset + size;
+                        }
+                        
+                        std::cerr << "PUSH DATA-------------------" << std::endl;
+                        float* d = (float*) pushData.data();
+                        for (size_t i = 0; i < pushSize / sizeof(float); ++i)
+                        {
+                            std::cerr << d[i] << ", ";
+                        }
+                        std::cerr << std::endl;
+                        
+                        vkCmdPushConstants(p.cmd, pipelineLayout,
+                                           VK_SHADER_STAGE_FRAGMENT_BIT, 0,
+                                           pushData.size(), pushData.data());
+                    }
+#else
+                    std::size_t pushSize = p.shaders["display"]->getPushSize();
+                    if (pushSize > 0)
+                    {
+                        // Ensure pushData buffer is large enough, might need resizing
+                        // if std140 requires more padding than std430 (though often not).
+                        // Re-calculating the required size based on std140 rules first
+                        // might be safer than relying on getPushSize() if that was based on std430.
+                        // For now, assume pushSize is sufficient or recalculate if needed.
+                        std::vector<uint8_t> pushData(pushSize, 0);
+
+                        const pl_shader_res* res = p.placeboData->res;
+                        std::cerr << "-----------PUSH VARIABLES (std140) = " << res->num_variables << std::endl; // Indicate std140
+                        VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+                        std::size_t currentOffset = 0;
+
+                        for (int i = 0; i < res->num_variables; ++i)
+                        {
+                            const struct pl_shader_var shader_var = res->variables[i];
+                            const struct pl_var var = shader_var.var;
+
+                            size_t el_size = pl_var_type_size(var.type); // Base size (e.g., 4 for float)
+                            size_t base_alignment = 0;
+                            size_t data_size = 0;       // Actual size of data without padding
+                            size_t stride = 0;          // Size occupied including padding (for offset advancement)
+
+                            // --- Calculate std140 alignment, data_size, and stride ---
+                            if (var.dim_m == 1 && var.dim_a == 1) { // Scalar or Vector
+                                switch (var.dim_v) {
+                                    case 1: // Scalar
+                                        base_alignment = el_size;
+                                        data_size = el_size;
+                                        stride = base_alignment; // Scalar stride matches alignment
+                                        break;
+                                    case 2: // vec2
+                                        base_alignment = el_size * 2;
+                                        data_size = el_size * 2;
+                                        stride = base_alignment; // vec2 stride matches alignment
+                                        break;
+                                    case 3: // vec3
+                                    case 4: // vec4
+                                        base_alignment = el_size * 4; // Align to 16 bytes (N=4)
+                                        data_size = el_size * var.dim_v; // Actual data size (e.g., 12 for vec3)
+                                        stride = base_alignment; // vec3/vec4 stride matches alignment (16 bytes)
+                                        break;
+                                    default:
+                                        throw std::runtime_error("Unsupported vector dimension for std140 packing");
+                                }
+                            } else if (var.dim_m > 1 && var.dim_a == 1) { // Matrix (Column-Major layout)
+                                // Determine column type (vecR where R = var.dim_v) and its std140 alignment
+                                size_t column_alignment;
+                                switch (var.dim_v) {
+                                    case 1: // Should not happen?
+                                    case 2: // vec2 column
+                                        column_alignment = el_size * 2;
+                                        break;
+                                    case 3: // vec3 column
+                                    case 4: // vec4 column
+                                        column_alignment = el_size * 4; // Align to 16 bytes
+                                        break;
+                                    default:
+                                        throw std::runtime_error("Unsupported matrix column dimension for std140 packing");
+                                }
+                                // Matrix alignment is the same as its column type's alignment
+                                base_alignment = column_alignment;
+                                // Matrix stride between columns is the column alignment
+                                stride = var.dim_m * column_alignment; // Total size occupied
+                                data_size = var.dim_m * var.dim_v * el_size; // Actual data size (tightly packed)
+                            } else {
+                                // Arrays in push constants are complex and not handled here.
+                                throw std::runtime_error("Arrays in push constants not implemented for std140 packing");
+                            }
+                            // --- End std140 calculation ---
+
+                            // Calculate the aligned offset for this member
+                            std::size_t offset = MRV2_ALIGN2(currentOffset, base_alignment);
+
+                            // --- Debug Print ---
+                            std::cerr << var.name << std::endl;
+                            std::cerr << "\tstd140 offset=" << offset << std::endl;
+                            std::cerr << "\tstd140 data_size=" << data_size << std::endl;
+                            std::cerr << "\tstd140 stride=" << stride << std::endl;
+                            std::cerr << "\tstd140 align=" << base_alignment << std::endl;
+                            // --- End Debug Print ---
+
+                            if (!shader_var.data) {
+                                throw std::runtime_error("No libplacebo shader_var.data");
+                            }
+
+                            // Ensure we don't write past the buffer
+                            if (offset + stride > pushData.size()) {
+                                throw std::runtime_error("Calculated std140 offset/stride exceeds push constant buffer size");
+                            }
+
+                            // --- Pack data according to std140 rules ---
+                            if (var.dim_m > 1 && var.dim_a == 1) { // Matrix
+                                std::cerr << var.name << " (std140 packing): ";
+                                const uint8_t* src_data = reinterpret_cast<const uint8_t*>(shader_var.data);
+                                size_t column_stride_std140 = base_alignment; // In std140, column stride IS column alignment
+                                size_t column_data_size = var.dim_v * el_size;
+
+                                // We need to copy var.dim_m columns
+                                for (int col = 0; col < var.dim_m; ++col) {
+                                    // Destination address for the start of this column in the push constant buffer
+                                    uint8_t* dest_col_ptr = pushData.data() + offset + col * column_stride_std140;
+
+                                    // Copy var.dim_v elements for this column
+                                    // Assuming source data needs the same transpose as original std430 code
+                                    for (int row = 0; row < var.dim_v; ++row) {
+                                        // Source address calculation (assuming tightly packed row-major source)
+                                        const uint8_t* src_element_ptr = src_data + (row * var.dim_m + col) * el_size;
+                                        // Destination address for this element within the column
+                                        uint8_t* dest_element_ptr = dest_col_ptr + row * el_size;
+                                        memcpy(dest_element_ptr, src_element_ptr, el_size);
+
+                                         // Debug print the float value being copied
+                                        std::cerr << *(reinterpret_cast<const float*>(src_element_ptr)) << " ";
+                                    }
+                                }
+                                std::cerr << std::endl;
+
+                            } else { // Scalar or Vector
+                                // Copy only the actual data bytes. Padding is handled by offset calculation.
+                                memcpy(pushData.data() + offset, shader_var.data, data_size);
+
+                                // Debug print for scalar/vector if needed
+                                // Example for float vec3:
+                                // if (var.type == PL_VAR_FLOAT && var.dim_v == 3) {
+                                //     const float* floats = reinterpret_cast<const float*>(shader_var.data);
+                                //     std::cerr << var.name << " (std140 packing): " << floats[0] << " " << floats[1] << " " << floats[2] << std::endl;
+                                // }
+                            }
+                            // --- End std140 packing ---
+
+                            // Advance currentOffset to the position after this element, including its padding.
+                            currentOffset = offset + stride;
+                        }
+
+                        std::cerr << "PUSH DATA (std140)-------------------" << std::endl;
+                        float* d = (float*) pushData.data();
+                        // Adjust printing loop if pushSize was recalculated or if you want to print based on currentOffset
+                        size_t elementsToPrint = std::min(currentOffset, pushData.size()) / sizeof(float);
+                        for (size_t k = 0; k < elementsToPrint; ++k)
+                        {
+                            std::cerr << d[k] << ", ";
+                        }
+                        std::cerr << std::endl;
+
+                        // // Use currentOffset for the size pushed, as it represents the total size used by std140 layout
+                        // if (currentOffset > p.shaders["display"]->getMaxPushConstantSize()) {
+                        //      throw std::runtime_error("Calculated std140 push constant size exceeds device limits");
+                        // }
+
+                        vkCmdPushConstants(p.cmd, pipelineLayout,
+                                           VK_SHADER_STAGE_FRAGMENT_BIT, 0,
+                                           currentOffset, // Push size based on calculated std140 layout
+                                           pushData.data());
+                    }
+#endif
+#endif
                 }
 #endif // TLRENDER_LIBPLACEBO
 
+                _bindDescriptorSets(pipelineLayoutName, shaderName);
+
                 if (p.vbos["video"])
                 {
-                    p.vbos["video"]->copy(convert(
-                        geom::box(box, true), p.vbos["video"]->getType()));
+                    p.vbos["video"]->copy(convert(geom::box(box, true), p.vbos["video"]->getType()));
                 }
                 if (p.vaos["video"])
                 {
-                    p.vaos["video"]->bind();
-                    // p.vaos["video"]->draw(
-                    //     GL_TRIANGLES, 0, p.vbos["video"]->getSize());
+                    p.vaos["video"]->bind(p.frameIndex);
+                    p.vaos["video"]->draw(p.cmd, p.vbos["video"]);
+                    p.garbage[p.frameIndex].vaos.push_back(p.vaos["video"]);
                 }
-            }
 
-            p.shaders["image"]->bind();
-            p.shaders["image"]->setUniform("transform.mvp", p.transform);
+                p.fbo->endRenderPass(p.cmd);
+
+                // Transition buffer back to color attachment
+                p.buffers["video"]->transitionToColorAttachment(p.cmd);
+                
+            }
         }
-    } // namespace timeline_tk
+    } // namespace timeline_vlk
 } // namespace tl

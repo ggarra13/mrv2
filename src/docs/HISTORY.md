@@ -10,7 +10,31 @@ it to Vulkan.
 - Fixed hdr view utility sometimes crashing at start up on macOS.
 - Fixed vkSetHdrMetadataEXT not being active.
 - Fixed HDR monitor scoring selection to prefer HDR10 and HLG over P3_NONLINEAR.
-
+- Improved runmeq.sh and runmet.sh scripts to exit early and with an error
+  message if compilation fails.
+- Fixed a potential reset of the X11 server when hiding the timeline bar.
+- Started porting to Vulkan.
+	 * Working:
+		 * Viewport
+		 * Color toolbar
+		 * Timeline with tick bars, current frame number and labels.
+		 * Timeline without thumbnails
+		 * OTIO with dissolves
+		 * HUD
+	 * Missing to check/add:
+		 * Safe Areas
+		 * Masking
+		 * Thumbnails in Timeline (crashes) / Editing
+		 * Thumbnails in Panels (done with OpenGL for now)
+		 * Saving of Movies/Pictures with Annotations
+		 * Annotations
+		 * Area selection
+		 * Area color information
+		 * Temporary FLTK Text widget annotation (how to do it?)
+		 * Text annotations (how to do it?)
+		 * 
+- Added passthru to HDROptions.
+- Fixed and simplified code for NDIView.
 
 v1.3.7
 ======

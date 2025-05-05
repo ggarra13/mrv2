@@ -20,6 +20,8 @@
 
 #include <half.h>
 
+#include <tlVk/Texture.h>
+
 #include <tlCore/Util.h>
 #include <tlCore/ListObserver.h>
 
@@ -43,20 +45,31 @@ namespace mrv
     class NDIView : public Fl_Vk_Window
     {
         void vk_draw_begin() FL_OVERRIDE;
-        void draw() FL_OVERRIDE;
 
     public:
         NDIView(int x, int y, int w, int h, const char* l = 0);
         NDIView(int w, int h, const char* l = 0);
         virtual ~NDIView();
 
+        //! FLTK normal functions
+        void draw() FL_OVERRIDE;
+        int handle(int event) FL_OVERRIDE;
+
+        void fill_menu(Fl_Menu_*);
+        
         //! Observe the NDI sources
         std::shared_ptr<observer::IList<std::string> >
         observeNDISources() const;
 
-        //! Set a new NDI Source
+        //! Set a new NDI Source.
         void setNDISource(const std::string&);
 
+        //! Toggle HDR metadata.
+        void toggle_hdr_metadata();
+        
+        //! Toggle Fullscreen.
+        void toggle_fullscreen();
+        
         
         void prepare() FL_OVERRIDE;
         void destroy_resources() FL_OVERRIDE;
@@ -70,11 +83,13 @@ namespace mrv
         VkShaderModule m_vert_shader_module;
         VkShaderModule m_frag_shader_module;
 
-        //! This is for holding a mesh
-        Fl_Vk_Mesh m_mesh;
-        std::vector<Fl_Vk_Texture> m_textures;
+        //! This is for holding the textures
+        std::vector<std::shared_ptr<vlk::Texture> > m_textures;
 
-        //! Memory for descriptor sets
+        //! This is for swapchain pipeline layout.
+        VkPipelineLayout      m_pipeline_layout;
+
+        //! Memory for descriptor sets.
         VkDescriptorPool      m_desc_pool;
 
         //! Describe texture bindings whithin desc. set  
@@ -95,7 +110,7 @@ namespace mrv
         void prepare_descriptor_pool();
         void prepare_descriptor_set();
 
-        void update_texture();
+        void update_texture(VkCommandBuffer);
 
     private:
         void _init();
@@ -105,8 +120,6 @@ namespace mrv
         void _findThread();
         void _videoThread();
         void _audioThread();
-
-        void fill_menu_bar(Fl_Menu_*);
 
         VkShaderModule prepare_vs();
         VkShaderModule prepare_fs();

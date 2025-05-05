@@ -1,12 +1,12 @@
 set(HEADERS
-    Vk.h
     Init.h
     Mesh.h
     OffscreenBuffer.h
     Shader.h
     Texture.h
     TextureAtlas.h
-    Util.h)
+    Util.h
+    Vk.h)
 set(PRIVATE_HEADERS)
 
 set(SOURCE

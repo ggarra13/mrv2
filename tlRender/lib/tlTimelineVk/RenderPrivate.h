@@ -8,6 +8,7 @@
 extern "C"
 {
 #    include <libplacebo/dummy.h>
+#    include <libplacebo/shaders.h>
 }
 #endif
 
@@ -15,24 +16,34 @@ extern "C"
 
 #include <tlVk/Mesh.h>
 #include <tlVk/OffscreenBuffer.h>
+#include <tlVk/PipelineCreationState.h>
 #include <tlVk/Shader.h>
+#include <tlVk/Texture.h>
 #include <tlVk/TextureAtlas.h>
 
 #if defined(TLRENDER_OCIO)
 #    include <OpenColorIO/OpenColorIO.h>
 #endif // TLRENDER_OCIO
 
+#include <array>
 #include <list>
+#include <map>
+#include <string>
 
 #if defined(TLRENDER_OCIO)
 namespace OCIO = OCIO_NAMESPACE;
 #endif // TLRENDER_OCIO
 
+#define MRV2_ALIGN2(x, align) (((x) + (align) - 1) & ~((align) - 1))
+#define USE_CONSTANTS 1
+
 namespace tl
 {
-    namespace timeline_vk
+    namespace timeline_vlk
     {
         std::string vertexSource();
+        std::string vertex2Source();
+        std::string dummyFragmentSource();
         std::string meshFragmentSource();
         std::string colorMeshVertexSource();
         std::string colorMeshFragmentSource();
@@ -47,18 +58,18 @@ namespace tl
             const std::string& toneMap);
         std::string differenceFragmentSource();
 
-        std::vector<std::shared_ptr<vk::Texture> > getTextures(
-            const image::Info&, const timeline::ImageFilters&,
+        std::vector<std::shared_ptr<vlk::Texture> > getTextures(
+            Fl_Vk_Context&, const image::Info&, const timeline::ImageFilters&,
             size_t offset = 0);
 
         void copyTextures(
             const std::shared_ptr<image::Image>&,
-            const std::vector<std::shared_ptr<vk::Texture> >&,
+            const std::vector<std::shared_ptr<vlk::Texture> >&,
             size_t offset = 0);
 
         void setActiveTextures(
             const image::Info& info,
-            const std::vector<std::shared_ptr<vk::Texture> >&,
+            const std::vector<std::shared_ptr<vlk::Texture> >&,
             size_t offset = 0);
 
 #if defined(TLRENDER_OCIO)
@@ -73,7 +84,7 @@ namespace tl
             OCIO::ConstGPUProcessorRcPtr gpuProcessor;
             OCIO::GpuShaderDescRcPtr icsDesc;
             OCIO::GpuShaderDescRcPtr shaderDesc;
-            std::vector<Fl_Vk_Texture> textures;
+            std::vector<std::shared_ptr<vlk::Texture> > textures;
         };
 
         struct OCIOLUTData
@@ -85,7 +96,7 @@ namespace tl
             OCIO::ConstProcessorRcPtr processor;
             OCIO::ConstGPUProcessorRcPtr gpuProcessor;
             OCIO::GpuShaderDescRcPtr shaderDesc;
-            std::vector<Fl_Vk_Texture> textures;
+            std::vector<std::shared_ptr<vlk::Texture> > textures;
         };
 
 #endif // TLRENDER_OCIO
@@ -98,20 +109,26 @@ namespace tl
 
             pl_log log;
             pl_gpu gpu;
-            std::vector<Fl_Vk_Texture> textures;
+            pl_shader shader;
+            const pl_shader_res* res = nullptr;
+            std::vector<std::shared_ptr<vlk::Texture> > textures;
         };
 #endif
 
         struct Render::Private
         {
-            const Fl_Vk_Context* ctx = nullptr;
+            // Vulkan variables
+            VkCommandBuffer cmd;
+            std::shared_ptr<vlk::OffscreenBuffer> fbo;
+            int32_t frameIndex; // must be an int32_t not an uint32_t.
 
             bool hdrMonitorFound = false;
-            
+
             math::Size2i renderSize;
             timeline::OCIOOptions ocioOptions;
             timeline::LUTOptions lutOptions;
             timeline::HDROptions hdrOptions;
+            unsigned bindingIndex = 7;
             timeline::RenderOptions renderOptions;
 
 #if defined(TLRENDER_OCIO)
@@ -129,14 +146,28 @@ namespace tl
             bool clipRectEnabled = false;
             math::Box2i clipRect;
 
-            std::map<std::string, std::shared_ptr<vk::Shader> > shaders;
-            std::map<std::string, std::shared_ptr<vk::OffscreenBuffer> >
+            struct FrameGarbage
+            {
+                std::vector<VkPipeline> pipelines;
+                std::vector<VkPipelineLayout> pipelineLayouts;
+                std::vector<std::shared_ptr<vlk::ShaderBindingSet> > bindingSets;
+                std::vector<std::shared_ptr<vlk::Shader> > shaders;
+                std::vector<std::shared_ptr<vlk::VAO> > vaos;
+            };
+            std::array<FrameGarbage, vlk::MAX_FRAMES_IN_FLIGHT> garbage;
+
+            std::map<std::string, std::shared_ptr<vlk::Shader> > shaders;
+            std::map<std::string, std::shared_ptr<vlk::OffscreenBuffer> >
                 buffers;
+            std::map<std::string, VkPipelineLayout> pipelineLayouts;
+            std::map<
+                std::string, std::pair<vlk::PipelineCreationState, VkPipeline>>
+                pipelines;
             std::shared_ptr<TextureCache> textureCache;
-            std::shared_ptr<vk::TextureAtlas> glyphTextureAtlas;
-            std::map<image::GlyphInfo, vk::TextureAtlasID> glyphIDs;
-            std::map<std::string, std::shared_ptr<vk::VBO> > vbos;
-            std::map<std::string, std::shared_ptr<vk::VAO> > vaos;
+            std::shared_ptr<vlk::TextureAtlas> glyphTextureAtlas;
+            std::map<image::GlyphInfo, vlk::TextureAtlasID> glyphIDs;
+            std::unordered_map<std::string, std::shared_ptr<vlk::VBO> > vbos;
+            std::unordered_map<std::string, std::shared_ptr<vlk::VAO> > vaos;
 
             std::chrono::steady_clock::time_point timer;
             struct Stats
@@ -154,7 +185,7 @@ namespace tl
             std::list<Stats> stats;
             std::chrono::steady_clock::time_point logTimer;
 
-            void drawTextMesh(const geom::TriangleMesh2&);
+            void createTextMesh(Fl_Vk_Context& ctx, const geom::TriangleMesh2&);
         };
-    } // namespace timeline_vk
+    } // namespace timeline_vlk
 } // namespace tl

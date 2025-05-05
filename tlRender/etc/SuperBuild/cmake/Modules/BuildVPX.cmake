@@ -69,12 +69,12 @@ set(VPX_CONFIGURE_ARGS
 )
 
 
-set(VPX_INSTALL $make install)
+set(VPX_INSTALL make install)
 if (WIN32)
     # Properly format VPX_CONFIGURE_ARGS
     list(JOIN VPX_CONFIGURE_ARGS " " VPX_CONFIGURE_ARGS_STR)
 
-    set(VPX_CONFIGURE ${VPX_MSYS2} -c "pacman -S make nasm diffutils --noconfirm && ./configure ${VPX_CONFIGURE_ARGS_STR}")
+    set(VPX_CONFIGURE ${VPX_MSYS2} -c "pacman -Sy make nasm diffutils --noconfirm && ./configure ${VPX_CONFIGURE_ARGS_STR}")
 
     set(VPX_BUILD ${VPX_MSYS2} -c "make -j ${NPROCS}")
 

@@ -202,7 +202,12 @@ fi
     
 if [ -z "$TLRENDER_VK" ]; then
     if [ -d "${VULKAN_SDK}/include/vulkan/" ]; then
-	export TLRENDER_VK=ON
+	if [[ "$MRV2_BACKEND" == "VK" ||
+		  "$MRV2_BACKEND" == "BOTH" ]]; then
+	    export TLRENDER_VK=ON
+	else
+	    export TLRENDER_VK=OFF
+	fi
     else
 	export TLRENDER_VK=OFF
 	export MRV2_HDR=OFF

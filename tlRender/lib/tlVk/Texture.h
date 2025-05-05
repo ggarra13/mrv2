@@ -4,37 +4,34 @@
 
 #pragma once
 
+#include <tlVk/Vk.h>
+
 #include <tlTimeline/ImageOptions.h>
 
 #include <tlCore/Image.h>
 
 namespace tl
 {
-    namespace vk
+    namespace vlk
     {
-        //! Get the OpenGL texture format.
-        unsigned int getTextureFormat(image::PixelType);
+        //! Get the Vulkan's source texture format.
+        VkFormat getTextureFormat(image::PixelType);
 
-        //! Get the OpenGL internal texture format.
-        unsigned int getTextureInternalFormat(image::PixelType);
-
-        //! Get the OpenGL texture type.
-        unsigned int getTextureType(image::PixelType);
-
-        //! OpenGL texture options.
+        //! Vulkan texture options.
         struct TextureOptions
         {
             timeline::ImageFilters filters;
             bool pbo = false;
+            VkImageTiling tiling = VK_IMAGE_TILING_LINEAR;
 
             bool operator==(const TextureOptions&) const;
             bool operator!=(const TextureOptions&) const;
         };
 
-        //! Get the OpenGL texture filter.
-        unsigned int getTextureFilter(timeline::ImageFilter);
+        //! Get the Vulkan texture filter.
+        VkFilter getTextureFilter(timeline::ImageFilter);
 
-        //! OpenGL texture.
+        //! Vulkan texture.
         class Texture : public std::enable_shared_from_this<Texture>
         {
             TLRENDER_NON_COPYABLE(Texture);
@@ -43,16 +40,31 @@ namespace tl
             void
             _init(const image::Info&, const TextureOptions& = TextureOptions());
 
-            Texture();
+            void _init(
+                const VkImageType type,
+                const uint32_t width, const uint32_t height,
+                const uint32_t depth, const VkFormat format,
+                const std::string& name,
+                const TextureOptions& = TextureOptions());
+
+            Texture(Fl_Vk_Context& ctx);
 
         public:
             ~Texture();
 
             //! Create a new texture.
             static std::shared_ptr<Texture> create(
-                const image::Info&, const TextureOptions& = TextureOptions());
+                Fl_Vk_Context& ctx, const image::Info&,
+                const TextureOptions& = TextureOptions());
 
-            //! Get the OpenGL texture ID.
+            static std::shared_ptr<Texture> create(
+                Fl_Vk_Context& ctx, const VkImageType type,
+                const uint32_t width, const uint32_t height,
+                const uint32_t depth, const VkFormat format,
+                const std::string& name = "sampler1",
+                const TextureOptions& = TextureOptions());
+
+            //! Get the Vulkan texture ID.
             unsigned int getID() const;
 
             //! Get the image information.
@@ -67,24 +79,65 @@ namespace tl
             //! Get the height.
             int getHeight() const;
 
+            //! Get the depth.
+            int getDepth() const;
+
             //! Get the pixel type.
             image::PixelType getPixelType() const;
+
+            //! Get the name.
+            const std::string& getName() const;
 
             //! \name Copy
             //! Copy image data to the texture.
             ///@{
 
             void copy(const std::shared_ptr<image::Image>&);
-            void copy(const std::shared_ptr<image::Image>&, int x, int y);
             void copy(const uint8_t*, const image::Info&);
+            void copy(const uint8_t*, const std::size_t);
+
+            //! \@todo:
+            void copy(const std::shared_ptr<image::Image>&, int x, int y);
 
             ///@}
+            
+            void transition(
+                VkCommandBuffer cmd,
+                VkImageLayout newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                VkAccessFlags srcAccess = VK_ACCESS_TRANSFER_WRITE_BIT,
+                VkPipelineStageFlags srcStage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                VkAccessFlags dstAccess = VK_ACCESS_SHADER_READ_BIT,
+                VkPipelineStageFlags dstStage = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
 
-            //! Bind the texture.
-            void bind();
+            void transitionToShaderRead(VkCommandBuffer cmd);
+
+            void transitionToColorAttachment(VkCommandBuffer cmd);
+
+            VkDescriptorImageInfo getDescriptorInfo() const;
+
+            //! Vulkan's internal format representation.
+            VkFormat getInternalFormat() const;
+
+            //! Image's original source format.
+            VkFormat getSourceFormat() const;
+            
+            VkImageView getImageView() const;
+
+            VkSampler getSampler() const;
+
+            VkImage getImage() const;
+
+            VkImageLayout getImageLayout() const;
 
         private:
+            Fl_Vk_Context& ctx;
+
+            void createImage();
+            void allocateMemory();
+            void createImageView();
+            void createSampler();
+
             TLRENDER_PRIVATE();
         };
-    } // namespace vk
+    } // namespace vlk
 } // namespace tl

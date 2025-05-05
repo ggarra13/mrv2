@@ -18,7 +18,7 @@ class HDRUI {open
       Fl_Flex {} {open
         xywh {0 0 727 532} resizable fixed_size_tuples {1  0 24 }
       } {
-        Fl_Menu_Bar uiMenuBar {open selected
+        Fl_Menu_Bar uiMenuBar {open
           xywh {0 0 727 24}
         } {}
         Fl_Group uiView {open
@@ -30,6 +30,7 @@ class HDRUI {open
   }
   Function {HDRUI()} {open
   } {
-    code {make_window();} {}
+    code {make_window();} {selected
+    }
   }
 }
