@@ -1190,8 +1190,6 @@ namespace mrv
         void Viewport::_checkHDR()
         {
             TLRENDER_P();
-
-            return;
             
             if (!p.hdrOptions.passthru)
                 return;
@@ -1228,7 +1226,10 @@ namespace mrv
             if (!is_equal_hdr_metadata(m_hdr_metadata, m_previous_hdr_metadata))
             {
                 m_hdr_metadata_changed = true; // Mark as changed
-                std::cerr << "======================== CHANGED HDR METADATA" << std::endl;
+            }
+            else
+            {
+                m_hdr_metadata_changed = false; // Mark as unchanged
             }
         }
 

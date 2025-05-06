@@ -13,8 +13,31 @@
 
 namespace tl
 {
+    namespace
+    {
+        // Helper functions for transposing a matrix in-place.
+        #define PL_TRANSPOSE_DIM(d, m)                                  \
+            pl_transpose((d), (float[(d)*(d)]){0}, (const float *)(m))
+
+#define PL_TRANSPOSE_2X2(m) PL_TRANSPOSE_DIM(2, m)
+#define PL_TRANSPOSE_3X3(m) PL_TRANSPOSE_DIM(3, m)
+#define PL_TRANSPOSE_4X4(m) PL_TRANSPOSE_DIM(4, m)
+
+        inline float *pl_transpose(int dim, float *out, const float *in)
+        {
+            for (int i = 0; i < dim; i++) {
+                for (int j = 0; j < dim; j++)
+                    out[i * dim + j] = in[j * dim + i];
+            }
+
+            return out;
+        }
+    }
+
+    
     namespace timeline_vlk
     {
+        
         void Render::drawVideo(
             const std::vector<timeline::VideoData>& videoData, const std::vector<math::Box2i>& boxes, const std::vector<timeline::ImageOptions>& imageOptions,
             const std::vector<timeline::DisplayOptions>& displayOptions, const timeline::CompareOptions& compareOptions,
@@ -832,73 +855,47 @@ namespace tl
                         p.shaders["display"]->setTexture(texture->getName(), texture);
                     }
 
-#if !PUSH_CONSTANTS
                     std::size_t pushSize = p.shaders["display"]->getPushSize();
                     if (pushSize > 0)
                     {
                         std::vector<uint8_t> pushData(pushSize, 0);
                         const pl_shader_res* res = p.placeboData->res;
-                        std::cerr << "-----------PUSH VARIABLES = " << res->num_variables << std::endl;
                         VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
                         std::size_t currentOffset = 0;
                         for (int i = 0; i < res->num_variables; ++i)
                         {
-                            const struct pl_shader_var shader_var = res->variables[i];
-                            const struct pl_var var = shader_var.var;
-
+                            const struct pl_shader_var& shader_var = res->variables[i];
+                            const struct pl_var& var = shader_var.var;
+                            const struct pl_var_layout& layout = pl_std430_layout(currentOffset, &var);
                             
-                            size_t el_size = pl_var_type_size(var.type);
-                            size_t stride = el_size * var.dim_v;
-                            size_t align = stride;
-                            if (var.dim_v >= 3) // vec3/vec4 align to 16 bytes
-                                align = 16;
-                            if (var.dim_m * var.dim_a > 1) // Arrays/matrices use aligned stride
-                                stride = align;
-                            size_t size = stride * var.dim_m * var.dim_a;
-
-                            std::size_t offset = MRV2_ALIGN2(currentOffset, align);
-                            std::cerr << var.name << std::endl;
-                            std::cerr << "\toffset=" << offset << std::endl;
-                            std::cerr << "\tsize=" << size << std::endl;
-
-                            if (!shader_var.data) {
-                                throw std::runtime_error("No libplacebo shader_var.data");
-                            }
-    
-                            // Handle matrices, vectors, and scalars
-                            if (var.dim_m > 1 && var.dim_v > 1) { // Matrix (e.g., mat3)
-                                std::cerr << var.name << " = ";
-                                std::vector<float> paddedData(stride / sizeof(float) * var.dim_m, 0.0f); // E.g., 12 floats for mat3
+                            // Handle matrix types (dim_m > 1 && dim_v > 1)
+                            if (var.dim_m > 1 && var.dim_v > 1)
+                            {
+                                // For column-major matrices, we pad each column according to layout.stride
                                 const float* src = reinterpret_cast<const float*>(shader_var.data);
-                                for (int row = 0; row < var.dim_v; ++row)
-                                    for (int col = 0; col < var.dim_m; ++col)
-                                        paddedData[col * (stride / sizeof(float)) + row] = src[row * var.dim_m + col]; // Transpose
-                                memcpy(pushData.data() + offset, paddedData.data(), size);
-                                for (int i = 0; i < var.dim_m * var.dim_v; ++i)
+                                uint8_t* dst = pushData.data() + layout.offset;
+
+                                // Fill each column (dim_m = #columns, dim_v = #rows)
+                                for (int col = 0; col < var.dim_m; ++col)
                                 {
-                                    std::cerr << paddedData[i] << " ";
+                                    const float* src_col = src + col * var.dim_v;
+                                    float* dst_col = reinterpret_cast<float*>(dst + layout.stride * col);
+                                    memcpy(dst_col, src_col, sizeof(float) * var.dim_v);
                                 }
-                                std::cerr << std::endl;
-                            } else { // Vector or scalar
-                                memcpy(pushData.data() + offset, shader_var.data, size); // Copy as-is
+                            }
+                            else
+                            {
+                                // Scalars, vectors, or arrays thereof — copy the block directly
+                                memcpy(pushData.data() + layout.offset, shader_var.data, layout.size);
                             }
 
-                            currentOffset = offset + size;
+                            currentOffset = layout.offset + layout.size;
                         }
-                        
-                        std::cerr << "PUSH DATA-------------------" << std::endl;
-                        float* d = (float*) pushData.data();
-                        for (size_t i = 0; i < pushSize / sizeof(float); ++i)
-                        {
-                            std::cerr << d[i] << ", ";
-                        }
-                        std::cerr << std::endl;
                         
                         vkCmdPushConstants(p.cmd, pipelineLayout,
                                            VK_SHADER_STAGE_FRAGMENT_BIT, 0,
                                            pushData.size(), pushData.data());
                     }
-#endif
                 }
 #endif // TLRENDER_LIBPLACEBO
 

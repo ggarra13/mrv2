@@ -312,11 +312,11 @@ void main()
             const std::string& toneMap)
         {
             std::vector<std::string> args;
-            args.push_back(videoLevels); // 0
-            args.push_back(ocioICSDef);  // 1
-            args.push_back(ocioDef);     // 2
-            args.push_back(lutDef);      // 3
-            args.push_back(toneMapDef);  // 4
+            args.push_back(toneMapDef);  // 0
+            args.push_back(videoLevels); // 1
+            args.push_back(ocioICSDef);  // 2
+            args.push_back(ocioDef);     // 3
+            args.push_back(lutDef);      // 4
             switch (lutOrder)
             {
             case timeline::LUTOrder::PreColorConfig:
@@ -341,6 +341,8 @@ layout(location = 0) out vec4 outColor;
 
 
 layout(binding = 1) uniform sampler2D textureSampler;
+
+{0}
 
 // enum tl::timeline::Channels
 const uint Channels_Color = 0;
@@ -406,7 +408,8 @@ layout(set = 0, binding = 5, std140) uniform ColorUBO
    Color data;
 } uboColor;
 
-{0}
+// Video Levels
+{1}
 
 layout(set = 0, binding = 6, std140) uniform UBO
 {
@@ -508,12 +511,13 @@ vec4 normalizeFunc(vec4 value, Normalize data)
     return value;
 }
 
-{1}
-
+// ocioICSDef
 {2}
 
+// ocioDef
 {3}
 
+// lutDef
 {4}
 
 void main()
@@ -540,9 +544,12 @@ void main()
         outColor.b = outColor.b * scale + offset;
     }
 
-    // Apply color tranform to linear space and LUT.
+    // Apply color tranform to linear space and LUT (or vicecersa).
     {5}
     {6}
+
+    // Call libplacebo tonemapping
+    {7}
 
     // Apply color transformations.
     if (uboColor.data.enabled)
@@ -559,9 +566,6 @@ void main()
     {
         outColor = softClipFunc(outColor, ubo.softClip);
     }
-
-    // Call libplacebo tonemapping
-    {7}
 
     // Apply OCIO Display/View.
     {8}

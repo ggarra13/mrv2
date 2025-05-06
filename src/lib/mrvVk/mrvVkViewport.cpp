@@ -266,6 +266,63 @@ namespace mrv
             vkDestroyPipelineCache(device(), pipelineCache, NULL);
         }
 
+        std::vector<const char*> Viewport::get_device_extensions()
+        {
+            std::vector<const char*> out;
+            out = Fl_Vk_Window::get_device_extensions();
+            out.push_back(VK_EXT_HDR_METADATA_EXTENSION_NAME);
+            return out;
+        }
+        
+        void Viewport::init_colorspace()
+        {
+            TLRENDER_P();
+
+            Fl_Vk_Window::init_colorspace();
+
+            // Look for HDR10 or HLG if present
+            p.hdrMonitorFound = false;
+
+            bool valid_colorspace = false;
+            switch (colorSpace())
+            {
+            case VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT:
+            case VK_COLOR_SPACE_HDR10_ST2084_EXT:
+            case VK_COLOR_SPACE_HDR10_HLG_EXT:
+            case VK_COLOR_SPACE_DOLBYVISION_EXT:
+                valid_colorspace = true;
+                break;
+            default:
+                break;
+            }
+
+            if (valid_colorspace)
+            {
+                // if (is_hdr_display_active())
+                // {
+                //     p.hdrMonitorFound = true;
+                //     std::cout << "HDR monitor found" << std::endl;
+                //     std::cout << string_VkColorSpaceKHR(colorSpace()) << std::endl;
+                // }
+                // else
+                {
+#ifdef __APPLE__
+                    // Intel macOS have a P3 display of 500 nits.
+                    // Not enough for HDR, but we will mark it as HDR and
+                    // tonemap with libplacebo, which gives a better picture than
+                    // just OpenGL.
+                    colorSpace() = VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT;
+                    p.hdrMonitorFound = true;
+#endif
+                }
+            }
+            else
+            {
+                std::cout << "HDR monitor not found or not configured" << std::endl;
+            }
+        }
+
+        
         void Viewport::prepare()
         {
             prepare_shaders();

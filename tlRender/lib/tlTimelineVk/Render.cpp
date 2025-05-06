@@ -21,6 +21,7 @@
 #if defined(TLRENDER_LIBPLACEBO)
 extern "C"
 {
+#    include <libplacebo/gpu.h>
 #    include <libplacebo/shaders/colorspace.h>
 #    include <libplacebo/shaders.h>
 }
@@ -1286,17 +1287,14 @@ namespace tl
                         height = depth = 1;
                     else if (imageType == VK_IMAGE_TYPE_2D)
                         depth = 1;
-                    std::cerr << "create texture " << __LINE__ << std::endl;
                     vlk::TextureOptions options;
                     options.tiling = VK_IMAGE_TILING_OPTIMAL;
                     auto texture = vlk::Texture::create(
                         ctx, imageType, width, height, depth, imageFormat,
                         samplerName);
-                    std::cerr << "created texture " << __LINE__ << std::endl;
                     texture->copy(
                         reinterpret_cast<const uint8_t*>(values),
                         width * height * depth * fmt->internal_size);
-                    std::cerr << "copied texture data " << __LINE__ << std::endl;
                     textures.push_back(texture);
                     break;
                 }
@@ -1561,27 +1559,22 @@ namespace tl
         void Render::setHDROptions(const timeline::HDROptions& value)
         {
             TLRENDER_P();
-            if (value == p.hdrOptions)
+            if (value == p.hdrOptions &&
+                value.passthru == p.hdrOptions.passthru)
                 return;
 
             p.hdrOptions = value;
 
             p.garbage[p.frameIndex].shaders.push_back(p.shaders["display"]);
-            p.shaders["display"].reset();
 
 #if defined(TLRENDER_LIBPLACEBO)
             if (p.hdrOptions.tonemap || p.hdrOptions.passthru)
             {
-                std::cerr << "passed libplacebo with data" << std::endl;
                 p.placeboData.reset(new LibPlaceboData);
-            }
-            else
-            {
-                std::cerr << "passed libplacebo empty" << std::endl;
-                p.placeboData.reset();
             }
 #endif // TLRENDER_LIBPLACEBO
             
+            p.shaders["display"].reset();
             _displayShader();
         }
 
@@ -1607,38 +1600,17 @@ namespace tl
                     p.pipelineLayouts["display"] = VK_NULL_HANDLE;
                 }
 
+                std::string toneMapDef;
                 std::string ocioICSDef;
                 std::string ocioICS;
                 std::string ocioDef;
                 std::string ocio;
                 std::string lutDef;
                 std::string lut;
-                std::string toneMapDef;
                 std::string toneMap;
 
-#if defined(TLRENDER_OCIO)
+                // Start of binding index
                 p.bindingIndex = 7;
-                if (p.ocioData && p.ocioData->icsDesc)
-                {
-                    ocioICSDef = p.ocioData->icsDesc->getShaderText();
-                    ocioICSDef =
-                        replaceUniformSampler(ocioICSDef, p.bindingIndex);
-                    ocioICS = "outColor = ocioICSFunc(outColor);";
-                }
-                if (p.ocioData && p.ocioData->shaderDesc)
-                {
-                    ocioDef = p.ocioData->shaderDesc->getShaderText();
-                    ocioDef = replaceUniformSampler(ocioDef, p.bindingIndex);
-                    ocio = "outColor = ocioDisplayFunc(outColor);";
-                }
-                if (p.lutData && p.lutData->shaderDesc)
-                {
-                    lutDef = p.lutData->shaderDesc->getShaderText();
-                    lutDef = replaceUniformSampler(lutDef, p.bindingIndex);
-                    lut = "outColor = lutFunc(outColor);";
-                }
-#endif // TLRENDER_OCIO
-                
                 std::size_t pushOffset = 0;
 #if defined(TLRENDER_LIBPLACEBO)
                 if (p.placeboData)
@@ -1980,42 +1952,19 @@ namespace tl
                       << "//" << std::endl
                       << std::endl;
 
-#if USE_CONSTANTS
-                    for (int i = 0; i < res->num_variables; ++i)
-                    {
-                        const struct pl_shader_var shader_var = res->variables[i];
-                        s << _debugPLVar(shader_var);
-                        std::cerr <<  _debugPLVar(shader_var);
-                    }
-#else
                     s << "layout(std430, push_constant) uniform PushC {\n";
                     for (int i = 0; i < res->num_variables; ++i)
                     {
                         const struct pl_shader_var shader_var = res->variables[i];
-                        std::cerr << _debugPLVar(shader_var) << std::endl;;
                         const struct pl_var var = shader_var.var;
                         const std::string glsl_type = pl_var_glsl_type_name(var);
+                        struct pl_var_layout layout = pl_std430_layout(pushOffset, &var);
 
-                        size_t el_size = pl_var_type_size(var.type); // Size of base type (e.g., 4 for float)
-                        size_t stride = el_size * var.dim_v; // Size of one vector
-                        size_t align = stride;
-                        if (var.dim_v >= 3) // vec3/vec4 align to 16 bytes
-                            align = 16;
-                        if (var.dim_m * var.dim_a > 1) // Arrays/matrices use aligned stride
-                            stride = align;
-                        size_t size = stride * var.dim_m * var.dim_a; // Total size
-                        std::size_t offset = MRV2_ALIGN2(pushOffset, align);
-
-                        
-                        std::cerr << "\toffset=" << offset << std::endl;
-                        std::cerr << "\tsize=" << size << std::endl;
-
-                        s << "\tlayout(offset=" << offset << ") " << glsl_type << " " << var.name << ";\n";
-                        pushOffset = offset + size;
+                        s << "\tlayout(offset=" << layout.offset << ") " << glsl_type << " " << var.name << ";\n";
+                        pushOffset = layout.offset + layout.size;
     
                     }
                     s << "};\n";
-#endif
                     
                     s << std::endl
                       << "//" << std::endl
@@ -2067,6 +2016,29 @@ namespace tl
                     toneMap += "(outColor);\n";
                 }
 #endif
+                
+#if defined(TLRENDER_OCIO)
+                if (p.ocioData && p.ocioData->icsDesc)
+                {
+                    ocioICSDef = p.ocioData->icsDesc->getShaderText();
+                    ocioICSDef =
+                        replaceUniformSampler(ocioICSDef, p.bindingIndex);
+                    ocioICS = "outColor = ocioICSFunc(outColor);";
+                }
+                if (p.ocioData && p.ocioData->shaderDesc)
+                {
+                    ocioDef = p.ocioData->shaderDesc->getShaderText();
+                    ocioDef = replaceUniformSampler(ocioDef, p.bindingIndex);
+                    ocio = "outColor = ocioDisplayFunc(outColor);";
+                }
+                if (p.lutData && p.lutData->shaderDesc)
+                {
+                    lutDef = p.lutData->shaderDesc->getShaderText();
+                    lutDef = replaceUniformSampler(lutDef, p.bindingIndex);
+                    lut = "outColor = lutFunc(outColor);";
+                }
+#endif // TLRENDER_OCIO
+                
                 const std::string source = displayFragmentSource(
                     ocioICSDef, ocioICS, ocioDef, ocio, lutDef, lut,
                     p.lutOptions.order, toneMapDef, toneMap);
@@ -2098,6 +2070,15 @@ namespace tl
 
                 UBOOptions ubo;
                 p.shaders["display"]->createUniform("ubo", ubo);
+#if defined(TLRENDER_LIBPLACEBO)
+                if (p.placeboData)
+                {
+                    for (const auto& texture : p.placeboData->textures)
+                    {
+                        p.shaders["display"]->addTexture(texture->getName());
+                    }
+                }
+#endif
 #if defined(TLRENDER_OCIO)
                 if (p.ocioData)
                 {
@@ -2114,17 +2095,7 @@ namespace tl
                     }
                 }
 #endif // TLRENDER_OCIO
-#if defined(TLRENDER_LIBPLACEBO)
-                if (p.placeboData)
-                {
-                    for (const auto& texture : p.placeboData->textures)
-                    {
-                        p.shaders["display"]->addTexture(texture->getName());
-                    }
-                }
-#endif
                 p.shaders["display"]->createPush("libplacebo", pushOffset, vlk::kShaderFragment);
-                p.shaders["display"]->debug();
                 
                 _createBindingSet(p.shaders["display"]);
             }

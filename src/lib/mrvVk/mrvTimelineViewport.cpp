@@ -969,9 +969,11 @@ namespace mrv
         TimelineViewport::setHDROptions(const timeline::HDROptions& value) noexcept
         {
             TLRENDER_P();
+
+            p.hdrOptions.passthru = value.passthru;
+            
             if (value == p.hdrOptions)
                 return;
-            p.hdrOptions.passthru = value.passthru;
             p.hdrOptions.tonemap = value.tonemap;
             p.hdrOptions.algorithm = value.algorithm;
             redrawWindows();
@@ -3410,7 +3412,7 @@ namespace mrv
                 if (p.ui->uiPrefs->uiPrefsTonemap->value() != 0)
                     p.hdrOptions.tonemap = true;
 
-                if (p.hdrOptions.tonemap && p.hdr != i->second)
+                if (p.hdr != i->second)
                 {
                     p.hdr = i->second;
 
@@ -3422,6 +3424,7 @@ namespace mrv
             else
             {
                 p.hdrOptions.tonemap = false;
+                p.hdrOptions.passthru = false;
             }
 
             // \@bug: Apple (macOS Intel at least) is too slow and goes black.

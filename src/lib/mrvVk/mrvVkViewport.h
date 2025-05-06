@@ -42,6 +42,9 @@ namespace mrv
             //! Set the internal system context for the widget.
             void setContext(const std::weak_ptr<system::Context>& context);
 
+            void init_colorspace() FL_OVERRIDE;
+            std::vector<const char*> get_device_extensions() FL_OVERRIDE;
+            
             void prepare() FL_OVERRIDE;
             void destroy_resources() FL_OVERRIDE;
 

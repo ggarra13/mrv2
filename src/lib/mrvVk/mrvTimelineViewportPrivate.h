@@ -34,6 +34,8 @@ namespace mrv
             //! Ghosting options
             static short ghostPrevious;
             static short ghostNext;
+
+            bool hdrMonitorFound = false;
         
             timeline::OCIOOptions ocioOptions;
             timeline::LUTOptions lutOptions;
