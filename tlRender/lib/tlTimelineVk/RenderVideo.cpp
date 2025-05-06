@@ -135,6 +135,7 @@ namespace tl
             if (!videoData.empty() && !boxes.empty())
             {
                 _drawVideo(
+                    p.fbo,
                     videoData[0], boxes[0], !imageOptions.empty() ? std::make_shared<timeline::ImageOptions>(imageOptions[0]) : nullptr,
                     !displayOptions.empty() ? displayOptions[0] : timeline::DisplayOptions());
             }
@@ -144,9 +145,12 @@ namespace tl
             const std::vector<timeline::VideoData>& videoData, const std::vector<math::Box2i>& boxes, const std::vector<timeline::ImageOptions>& imageOptions,
             const std::vector<timeline::DisplayOptions>& displayOptions, const timeline::CompareOptions& compareOptions)
         {
+            TLRENDER_P();
+            
             if (videoData.size() > 1 && boxes.size() > 1)
             {
                 _drawVideo(
+                    p.fbo,
                     videoData[1], boxes[1], imageOptions.size() > 1 ? std::make_shared<timeline::ImageOptions>(imageOptions[1]) : nullptr,
                     displayOptions.size() > 1 ? displayOptions[1] : timeline::DisplayOptions());
             }
@@ -213,6 +217,7 @@ namespace tl
             if (!videoData.empty() && !boxes.empty())
             {
                 _drawVideo(
+                    p.fbo,  // \@todo: update
                     videoData[0], boxes[0], !imageOptions.empty() ? std::make_shared<timeline::ImageOptions>(imageOptions[0]) : nullptr,
                     !displayOptions.empty() ? displayOptions[0] : timeline::DisplayOptions());
             }
@@ -253,6 +258,7 @@ namespace tl
             if (videoData.size() > 1 && boxes.size() > 1)
             {
                 _drawVideo(
+                    p.fbo, // \@todo: update
                     videoData[1], boxes[1], imageOptions.size() > 1 ? std::make_shared<timeline::ImageOptions>(imageOptions[1]) : nullptr,
                     displayOptions.size() > 1 ? displayOptions[1] : timeline::DisplayOptions());
             }
@@ -267,6 +273,7 @@ namespace tl
             if (videoData.size() > 1 && boxes.size() > 1)
             {
                 _drawVideo(
+                    p.fbo, // \@todo: update
                     videoData[1], boxes[1], imageOptions.size() > 1 ? std::make_shared<timeline::ImageOptions>(imageOptions[1]) : nullptr,
                     displayOptions.size() > 1 ? displayOptions[1] : timeline::DisplayOptions());
             }
@@ -301,6 +308,7 @@ namespace tl
                         math::ortho(0.F, static_cast<float>(offscreenBufferSize.w), static_cast<float>(offscreenBufferSize.h), 0.F, -1.F, 1.F));
 
                     _drawVideo(
+                        p.buffers["overlay"],
                         videoData[0], math::Box2i(0, 0, offscreenBufferSize.w, offscreenBufferSize.h),
                         !imageOptions.empty() ? std::make_shared<timeline::ImageOptions>(imageOptions[0]) : nullptr,
                         !displayOptions.empty() ? displayOptions[0] : timeline::DisplayOptions());
@@ -397,6 +405,7 @@ namespace tl
                         math::ortho(0.F, static_cast<float>(offscreenBufferSize.w), static_cast<float>(offscreenBufferSize.h), 0.F, -1.F, 1.F));
 
                     _drawVideo(
+                        p.buffers["difference0"],
                         videoData[0], math::Box2i(0, 0, offscreenBufferSize.w, offscreenBufferSize.h),
                         !imageOptions.empty() ? std::make_shared<timeline::ImageOptions>(imageOptions[0]) : nullptr,
                         !displayOptions.empty() ? displayOptions[0] : timeline::DisplayOptions());
@@ -437,6 +446,7 @@ namespace tl
                             math::ortho(0.F, static_cast<float>(offscreenBufferSize.w), static_cast<float>(offscreenBufferSize.h), 0.F, -1.F, 1.F));
 
                         _drawVideo(
+                            p.buffers["difference1"],
                             videoData[1], math::Box2i(0, 0, offscreenBufferSize.w, offscreenBufferSize.h),
                             imageOptions.size() > 1 ? std::make_shared<timeline::ImageOptions>(imageOptions[1]) : nullptr,
                             displayOptions.size() > 1 ? displayOptions[1] : timeline::DisplayOptions());
@@ -480,9 +490,12 @@ namespace tl
             const std::vector<timeline::VideoData>& videoData, const std::vector<math::Box2i>& boxes, const std::vector<timeline::ImageOptions>& imageOptions,
             const std::vector<timeline::DisplayOptions>& displayOptions, const timeline::CompareOptions& compareOptions)
         {
+            TLRENDER_P();
+            
             for (size_t i = 0; i < videoData.size() && i < boxes.size(); ++i)
             {
                 _drawVideo(
+                    p.fbo,
                     videoData[i], boxes[i], i < imageOptions.size() ? std::make_shared<timeline::ImageOptions>(imageOptions[i]) : nullptr,
                     i < displayOptions.size() ? displayOptions[i] : timeline::DisplayOptions());
             }
@@ -521,6 +534,7 @@ namespace tl
         } // namespace
         
         void Render::_drawVideo(
+            std::shared_ptr<vlk::OffscreenBuffer>& fbo,
             const timeline::VideoData& videoData, const math::Box2i& box, const std::shared_ptr<timeline::ImageOptions>& imageOptions,
             const timeline::DisplayOptions& displayOptions)
         {
@@ -750,7 +764,7 @@ namespace tl
             if (p.buffers["video"])
             {
                 // Begin the new compositing render pass.
-                p.fbo->transitionToColorAttachment(p.cmd);
+                fbo->transitionToColorAttachment(p.cmd);
                 
                 p.buffers["video"]->transitionToShaderRead(p.cmd);
                 
@@ -759,7 +773,7 @@ namespace tl
                 const std::string shaderName = "display";
                 const std::string meshName = "video";
                 const bool enableBlending = !inDissolve;  
-                _createPipeline(p.fbo, pipelineName,
+                _createPipeline(fbo, pipelineName,
                                 pipelineLayoutName, shaderName, meshName,
                                 enableBlending,
                                 VK_BLEND_FACTOR_SRC_ALPHA,
@@ -768,7 +782,7 @@ namespace tl
                                 VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);
 
 
-                p.fbo->beginRenderPass(p.cmd, "DISPLAY PASS");
+                fbo->beginRenderPass(p.cmd, "DISPLAY PASS");
 
                 p.shaders["display"]->bind(p.frameIndex);
                 p.shaders["display"]->setFBO("textureSampler", p.buffers["video"]);
@@ -890,7 +904,7 @@ namespace tl
                     p.garbage[p.frameIndex].vaos.push_back(p.vaos["video"]);
                 }
 
-                p.fbo->endRenderPass(p.cmd);
+                fbo->endRenderPass(p.cmd);
 
                 // Transition buffer back to color attachment
                 p.buffers["video"]->transitionToColorAttachment(p.cmd);

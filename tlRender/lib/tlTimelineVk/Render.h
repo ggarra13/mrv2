@@ -212,6 +212,7 @@ namespace tl
                 const std::vector<timeline::DisplayOptions>&,
                 const timeline::CompareOptions&);
             void _drawVideo(
+                std::shared_ptr<vlk::OffscreenBuffer>& fbo,
                 const timeline::VideoData&, const math::Box2i&,
                 const std::shared_ptr<timeline::ImageOptions>&,
                 const timeline::DisplayOptions&);
