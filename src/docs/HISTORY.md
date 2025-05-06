@@ -14,13 +14,17 @@ it to Vulkan.
   message if compilation fails.
 - Fixed a potential reset of the X11 server when hiding the timeline bar.
 - Started porting to Vulkan.
+
 	 * Working:
 		 * Viewport
 		 * Color toolbar
 		 * Timeline with tick bars, current frame number and labels.
 		 * Timeline without thumbnails
 		 * OTIO with dissolves
+		 * HDR Passthru (for HDR).
+		 * HDR Tonemapping (for SDR).
 		 * HUD
+		 
 	 * Missing to check/add:
 		 * Safe Areas
 		 * Masking
@@ -32,9 +36,12 @@ it to Vulkan.
 		 * Area color information
 		 * Temporary FLTK Text widget annotation (how to do it?)
 		 * Text annotations (how to do it?)
-		 * 
+		 * How to use any FLTK font for annotation (how to do it?)
+		 
 - Added passthru to HDROptions.
-- Fixed and simplified code for NDIView.
+- Fixed and simplified code for NDIView (hdr utility).
+- Fixed hdr utility for macOS Intel trying to pass full HDR10 or HLG data, 
+  which goes over those machines' nits.
 
 v1.3.7
 ======
