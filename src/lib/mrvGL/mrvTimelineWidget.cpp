@@ -184,7 +184,6 @@ namespace mrv
 
             TimelinePlayer* player = nullptr;
 
-            ThumbnailCreator* thumbnailCreator = nullptr;
             std::weak_ptr<ui::ThumbnailSystem> thumbnailSystem;
 
             struct ThumbnailData
