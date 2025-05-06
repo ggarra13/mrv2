@@ -1016,6 +1016,8 @@ namespace mrv
                 p.videoData.clear();
             }
 
+            p.hdr.clear();
+
             refreshWindows(); // needed We need to refresh, as the new
             // video data may have different sizes.
         }
@@ -3423,6 +3425,7 @@ namespace mrv
             }
             else
             {
+                p.hdr.clear();
                 p.hdrOptions.tonemap = false;
                 p.hdrOptions.passthru = false;
             }
