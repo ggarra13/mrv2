@@ -399,6 +399,8 @@ namespace tl
                     // glClearColor(0.F, 0.F, 0.F, 0.F);
                     // glClear(GL_COLOR_BUFFER_BIT);
 
+                    _createBindingSet(p.shaders["display"]);
+                    
                     p.shaders["display"]->bind(p.frameIndex);
                     p.shaders["display"]->setUniform(
                         "transform.mvp",
@@ -410,6 +412,7 @@ namespace tl
                         !imageOptions.empty() ? std::make_shared<timeline::ImageOptions>(imageOptions[0]) : nullptr,
                         !displayOptions.empty() ? displayOptions[0] : timeline::DisplayOptions());
 
+                    _createBindingSet(p.shaders["display"]);
                     p.shaders["display"]->bind(p.frameIndex);
                     p.shaders["display"]->setUniform("transform.mvp", p.transform);
                 }
@@ -476,11 +479,9 @@ namespace tl
                     {
                         p.vbos["video"]->copy(convert(geom::box(boxes[0], true), p.vbos["video"]->getType()));
                     }
-                    if (p.vaos["video"])
+                    if (p.vaos["video"] && p.vbos["video"])
                     {
-                        p.vaos["video"]->bind(p.frameIndex);
-                        p.vaos["video"]->draw(p.cmd, p.vbos["video"]);
-                        p.garbage[p.frameIndex].vaos.push_back(p.vaos["video"]);
+                        _vkDraw("video");
                     }
                 }
             }

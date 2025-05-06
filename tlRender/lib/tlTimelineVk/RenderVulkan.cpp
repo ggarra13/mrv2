@@ -279,6 +279,11 @@ namespace tl
         {
             TLRENDER_P();
 
+            if (!p.vaos[meshName])
+                throw std::runtime_error("p.vaos[" + meshName + "] not created");
+            if (!p.vbos[meshName])
+                throw std::runtime_error("p.vbos[" + meshName + "] not created");
+            
             p.vaos[meshName]->bind(p.frameIndex);
             p.vaos[meshName]->draw(p.cmd, p.vbos[meshName]);
             p.garbage[p.frameIndex].vaos.push_back(p.vaos[meshName]);
