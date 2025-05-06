@@ -3412,7 +3412,7 @@ namespace mrv
             if (i != p.tagData.end())
             {
                 if (p.ui->uiPrefs->uiPrefsTonemap->value() != 0)
-                    p.hdrOptions.tonemap = true;
+                    p.hdrOptions.tonemap = p.hdrOptions.passthru = true;
 
                 if (p.hdr != i->second)
                 {
