@@ -498,13 +498,15 @@ namespace mrv
             else
             {
 #ifdef __APPLE__
+#ifdef __x86_64__
                 // Intel macOS have a P3 display of 500 nits.
                 // Not enough for HDR, but we will mark it as HDR and
                 // tonemap with libplacebo, which gives a better picture than
                 // just OpenGL.
                 colorSpace() = VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT;
                 p.hdrMonitorFound = true;
-                p.isP3Display = true;
+                std::cout << "Pseudo HDR monitor found (P3)" << std::endl;
+#endif
 #endif
             }
         }
@@ -2096,7 +2098,7 @@ void main() {
         p.useHDRMetadata = !p.useHDRMetadata;
         m_swapchain_needs_recreation = true;
 
-        if (p.useHDRMetadata)
+        if (p.useHDRMetadata && !p.isP3Display)
         {
             if (p.transferName == "bt_2100_hlg")
             {
@@ -2105,13 +2107,6 @@ void main() {
             else
             {
                 colorSpace() = VK_COLOR_SPACE_HDR10_ST2084_EXT;
-            }
-        }
-        else
-        {
-            if (p.isP3Display)
-            {
-                colorSpace() = VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT;
             }
         }
 

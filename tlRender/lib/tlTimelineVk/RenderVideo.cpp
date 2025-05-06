@@ -13,8 +13,31 @@
 
 namespace tl
 {
+    namespace
+    {
+        // Helper functions for transposing a matrix in-place.
+        #define PL_TRANSPOSE_DIM(d, m)                                  \
+            pl_transpose((d), (float[(d)*(d)]){0}, (const float *)(m))
+
+#define PL_TRANSPOSE_2X2(m) PL_TRANSPOSE_DIM(2, m)
+#define PL_TRANSPOSE_3X3(m) PL_TRANSPOSE_DIM(3, m)
+#define PL_TRANSPOSE_4X4(m) PL_TRANSPOSE_DIM(4, m)
+
+        inline float *pl_transpose(int dim, float *out, const float *in)
+        {
+            for (int i = 0; i < dim; i++) {
+                for (int j = 0; j < dim; j++)
+                    out[i * dim + j] = in[j * dim + i];
+            }
+
+            return out;
+        }
+    }
+
+    
     namespace timeline_vlk
     {
+        
         void Render::drawVideo(
             const std::vector<timeline::VideoData>& videoData, const std::vector<math::Box2i>& boxes, const std::vector<timeline::ImageOptions>& imageOptions,
             const std::vector<timeline::DisplayOptions>& displayOptions, const timeline::CompareOptions& compareOptions,
@@ -832,233 +855,47 @@ namespace tl
                         p.shaders["display"]->setTexture(texture->getName(), texture);
                     }
 
-#if !USE_CONSTANTS
-#ifdef USE_STD430
                     std::size_t pushSize = p.shaders["display"]->getPushSize();
                     if (pushSize > 0)
                     {
                         std::vector<uint8_t> pushData(pushSize, 0);
                         const pl_shader_res* res = p.placeboData->res;
-                        // std::cerr << "-----------std430 packing = " << res->num_variables << std::endl;
                         VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
                         std::size_t currentOffset = 0;
                         for (int i = 0; i < res->num_variables; ++i)
                         {
-                            const struct pl_shader_var shader_var = res->variables[i];
-                            const struct pl_var var = shader_var.var;
-
+                            const struct pl_shader_var& shader_var = res->variables[i];
+                            const struct pl_var& var = shader_var.var;
+                            const struct pl_var_layout& layout = pl_std430_layout(currentOffset, &var);
                             
-                            size_t el_size = pl_var_type_size(var.type);
-                            size_t stride = el_size * var.dim_v;
-                            size_t align = stride;
-                            if (var.dim_v >= 3) // vec3/vec4 align to 16 bytes
-                                align = 16;
-                            if (var.dim_m * var.dim_a > 1) // Arrays/matrices use aligned stride
-                                stride = align;
-                            size_t size = stride * var.dim_m * var.dim_a;
-
-                            std::size_t offset = MRV2_ALIGN2(currentOffset, align);
-                            // std::cerr << var.name << std::endl;
-                            // std::cerr << "\toffset=" << offset << std::endl;
-                            // std::cerr << "\tsize=" << size << std::endl;
-
-                            if (!shader_var.data) {
-                                throw std::runtime_error("No libplacebo shader_var.data");
-                            }
-    
-                            // Handle matrices, vectors, and scalars
-                            if (var.dim_m > 1 && var.dim_v > 1) { // Matrix (e.g., mat3)
-                                // std::cerr << var.name << " = ";
-                                std::vector<float> paddedData(stride / sizeof(float) * var.dim_m, 0.0f); // E.g., 12 floats for mat3
+                            // Handle matrix types (dim_m > 1 && dim_v > 1)
+                            if (var.dim_m > 1 && var.dim_v > 1)
+                            {
+                                // For column-major matrices, we pad each column according to layout.stride
                                 const float* src = reinterpret_cast<const float*>(shader_var.data);
-                                for (int row = 0; row < var.dim_v; ++row)
-                                    for (int col = 0; col < var.dim_m; ++col)
-                                        paddedData[col * (stride / sizeof(float)) + row] = src[row * var.dim_m + col]; // Transpose
-                                memcpy(pushData.data() + offset, paddedData.data(), size);
-                                // for (int i = 0; i < var.dim_m * var.dim_v; ++i)
-                                // {
-                                //     std::cerr << paddedData[i] << " ";
-                                // }
-                                // std::cerr << std::endl;
-                            } else { // Vector or scalar
-                                memcpy(pushData.data() + offset, shader_var.data, size); // Copy as-is
+                                uint8_t* dst = pushData.data() + layout.offset;
+
+                                // Fill each column (dim_m = #columns, dim_v = #rows)
+                                for (int col = 0; col < var.dim_m; ++col)
+                                {
+                                    const float* src_col = src + col * var.dim_v;
+                                    float* dst_col = reinterpret_cast<float*>(dst + layout.stride * col);
+                                    memcpy(dst_col, src_col, sizeof(float) * var.dim_v);
+                                }
+                            }
+                            else
+                            {
+                                // Scalars, vectors, or arrays thereof — copy the block directly
+                                memcpy(pushData.data() + layout.offset, shader_var.data, layout.size);
                             }
 
-                            currentOffset = offset + size;
+                            currentOffset = layout.offset + layout.size;
                         }
-                        
-                        std::cerr << "PUSH DATA-------------------" << std::endl;
-                        float* d = (float*) pushData.data();
-                        for (size_t i = 0; i < pushSize / sizeof(float); ++i)
-                        {
-                            std::cerr << d[i] << ", ";
-                        }
-                        std::cerr << std::endl;
                         
                         vkCmdPushConstants(p.cmd, pipelineLayout,
                                            VK_SHADER_STAGE_FRAGMENT_BIT, 0,
                                            pushData.size(), pushData.data());
                     }
-#else
-                    std::size_t pushSize = p.shaders["display"]->getPushSize();
-                    if (pushSize > 0)
-                    {
-                        // Ensure pushData buffer is large enough, might need resizing
-                        // if std140 requires more padding than std430 (though often not).
-                        // Re-calculating the required size based on std140 rules first
-                        // might be safer than relying on getPushSize() if that was based on std430.
-                        // For now, assume pushSize is sufficient or recalculate if needed.
-                        std::vector<uint8_t> pushData(pushSize, 0);
-
-                        const pl_shader_res* res = p.placeboData->res;
-                        std::cerr << "-----------PUSH VARIABLES (std140) = " << res->num_variables << std::endl; // Indicate std140
-                        VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
-                        std::size_t currentOffset = 0;
-
-                        for (int i = 0; i < res->num_variables; ++i)
-                        {
-                            const struct pl_shader_var shader_var = res->variables[i];
-                            const struct pl_var var = shader_var.var;
-
-                            size_t el_size = pl_var_type_size(var.type); // Base size (e.g., 4 for float)
-                            size_t base_alignment = 0;
-                            size_t data_size = 0;       // Actual size of data without padding
-                            size_t stride = 0;          // Size occupied including padding (for offset advancement)
-
-                            // --- Calculate std140 alignment, data_size, and stride ---
-                            if (var.dim_m == 1 && var.dim_a == 1) { // Scalar or Vector
-                                switch (var.dim_v) {
-                                    case 1: // Scalar
-                                        base_alignment = el_size;
-                                        data_size = el_size;
-                                        stride = base_alignment; // Scalar stride matches alignment
-                                        break;
-                                    case 2: // vec2
-                                        base_alignment = el_size * 2;
-                                        data_size = el_size * 2;
-                                        stride = base_alignment; // vec2 stride matches alignment
-                                        break;
-                                    case 3: // vec3
-                                    case 4: // vec4
-                                        base_alignment = el_size * 4; // Align to 16 bytes (N=4)
-                                        data_size = el_size * var.dim_v; // Actual data size (e.g., 12 for vec3)
-                                        stride = base_alignment; // vec3/vec4 stride matches alignment (16 bytes)
-                                        break;
-                                    default:
-                                        throw std::runtime_error("Unsupported vector dimension for std140 packing");
-                                }
-                            } else if (var.dim_m > 1 && var.dim_a == 1) { // Matrix (Column-Major layout)
-                                // Determine column type (vecR where R = var.dim_v) and its std140 alignment
-                                size_t column_alignment;
-                                switch (var.dim_v) {
-                                    case 1: // Should not happen?
-                                    case 2: // vec2 column
-                                        column_alignment = el_size * 2;
-                                        break;
-                                    case 3: // vec3 column
-                                    case 4: // vec4 column
-                                        column_alignment = el_size * 4; // Align to 16 bytes
-                                        break;
-                                    default:
-                                        throw std::runtime_error("Unsupported matrix column dimension for std140 packing");
-                                }
-                                // Matrix alignment is the same as its column type's alignment
-                                base_alignment = column_alignment;
-                                // Matrix stride between columns is the column alignment
-                                stride = var.dim_m * column_alignment; // Total size occupied
-                                data_size = var.dim_m * var.dim_v * el_size; // Actual data size (tightly packed)
-                            } else {
-                                // Arrays in push constants are complex and not handled here.
-                                throw std::runtime_error("Arrays in push constants not implemented for std140 packing");
-                            }
-                            // --- End std140 calculation ---
-
-                            // Calculate the aligned offset for this member
-                            std::size_t offset = MRV2_ALIGN2(currentOffset, base_alignment);
-
-                            // --- Debug Print ---
-                            std::cerr << var.name << std::endl;
-                            std::cerr << "\tstd140 offset=" << offset << std::endl;
-                            std::cerr << "\tstd140 data_size=" << data_size << std::endl;
-                            std::cerr << "\tstd140 stride=" << stride << std::endl;
-                            std::cerr << "\tstd140 align=" << base_alignment << std::endl;
-                            // --- End Debug Print ---
-
-                            if (!shader_var.data) {
-                                throw std::runtime_error("No libplacebo shader_var.data");
-                            }
-
-                            // Ensure we don't write past the buffer
-                            if (offset + stride > pushData.size()) {
-                                throw std::runtime_error("Calculated std140 offset/stride exceeds push constant buffer size");
-                            }
-
-                            // --- Pack data according to std140 rules ---
-                            if (var.dim_m > 1 && var.dim_a == 1) { // Matrix
-                                std::cerr << var.name << " (std140 packing): ";
-                                const uint8_t* src_data = reinterpret_cast<const uint8_t*>(shader_var.data);
-                                size_t column_stride_std140 = base_alignment; // In std140, column stride IS column alignment
-                                size_t column_data_size = var.dim_v * el_size;
-
-                                // We need to copy var.dim_m columns
-                                for (int col = 0; col < var.dim_m; ++col) {
-                                    // Destination address for the start of this column in the push constant buffer
-                                    uint8_t* dest_col_ptr = pushData.data() + offset + col * column_stride_std140;
-
-                                    // Copy var.dim_v elements for this column
-                                    // Assuming source data needs the same transpose as original std430 code
-                                    for (int row = 0; row < var.dim_v; ++row) {
-                                        // Source address calculation (assuming tightly packed row-major source)
-                                        const uint8_t* src_element_ptr = src_data + (row * var.dim_m + col) * el_size;
-                                        // Destination address for this element within the column
-                                        uint8_t* dest_element_ptr = dest_col_ptr + row * el_size;
-                                        memcpy(dest_element_ptr, src_element_ptr, el_size);
-
-                                         // Debug print the float value being copied
-                                        std::cerr << *(reinterpret_cast<const float*>(src_element_ptr)) << " ";
-                                    }
-                                }
-                                std::cerr << std::endl;
-
-                            } else { // Scalar or Vector
-                                // Copy only the actual data bytes. Padding is handled by offset calculation.
-                                memcpy(pushData.data() + offset, shader_var.data, data_size);
-
-                                // Debug print for scalar/vector if needed
-                                // Example for float vec3:
-                                // if (var.type == PL_VAR_FLOAT && var.dim_v == 3) {
-                                //     const float* floats = reinterpret_cast<const float*>(shader_var.data);
-                                //     std::cerr << var.name << " (std140 packing): " << floats[0] << " " << floats[1] << " " << floats[2] << std::endl;
-                                // }
-                            }
-                            // --- End std140 packing ---
-
-                            // Advance currentOffset to the position after this element, including its padding.
-                            currentOffset = offset + stride;
-                        }
-
-                        std::cerr << "PUSH DATA (std140)-------------------" << std::endl;
-                        float* d = (float*) pushData.data();
-                        // Adjust printing loop if pushSize was recalculated or if you want to print based on currentOffset
-                        size_t elementsToPrint = std::min(currentOffset, pushData.size()) / sizeof(float);
-                        for (size_t k = 0; k < elementsToPrint; ++k)
-                        {
-                            std::cerr << d[k] << ", ";
-                        }
-                        std::cerr << std::endl;
-
-                        // // Use currentOffset for the size pushed, as it represents the total size used by std140 layout
-                        // if (currentOffset > p.shaders["display"]->getMaxPushConstantSize()) {
-                        //      throw std::runtime_error("Calculated std140 push constant size exceeds device limits");
-                        // }
-
-                        vkCmdPushConstants(p.cmd, pipelineLayout,
-                                           VK_SHADER_STAGE_FRAGMENT_BIT, 0,
-                                           currentOffset, // Push size based on calculated std140 layout
-                                           pushData.data());
-                    }
-#endif
-#endif
                 }
 #endif // TLRENDER_LIBPLACEBO
 
