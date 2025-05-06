@@ -457,6 +457,7 @@ namespace mrv
             TLRENDER_P();
             MRV2_VK();
 
+            
             // Get the command buffer started for the current frame.
             VkCommandBuffer cmd = getCurrentCommandBuffer();
             end_render_pass(cmd);
@@ -640,11 +641,9 @@ namespace mrv
             timeline::RenderOptions renderOptions;
             renderOptions.colorBuffer = vk.colorBufferType;
 
-            _checkHDR();
+            _updateHDRMetadata();
             
-#ifndef NDEBUG
             try
-#endif
             {
                 vk.buffer->transitionToColorAttachment(cmd);
             
@@ -705,12 +704,10 @@ namespace mrv
                 }
 
             }
-#ifndef NDEBUG
             catch (const std::exception& e)
             {
                 LOG_ERROR(e.what());
             }
-#endif
 
             vk.render->end();
 

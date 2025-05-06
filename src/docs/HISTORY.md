@@ -26,6 +26,7 @@ it to Vulkan.
 		 * HUD
 		 
 	 * Missing to check/add:
+		 * Missing Frames crosses
 		 * Safe Areas
 		 * Masking
 		 * Thumbnails in Timeline (crashes) / Editing
@@ -38,7 +39,6 @@ it to Vulkan.
 		 * Text annotations (how to do it?)
 		 * How to use any FLTK font for annotation (how to do it?)
 		 
-- Added passthru to HDROptions.
 - Fixed and simplified code for NDIView (hdr utility).
 - Fixed hdr utility for macOS Intel trying to pass full HDR10 or HLG data, 
   which goes over those machines' nits.

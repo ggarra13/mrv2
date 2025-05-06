@@ -1421,10 +1421,9 @@ namespace tl
             p.ocioOptions = value;
 
 #if defined(TLRENDER_OCIO)
+            
             if (p.ocioOptions.enabled)
             {
-                vkDeviceWaitIdle(ctx.device);
-
                 p.ocioData.reset(new OCIOData);
 
                 if (!p.ocioOptions.fileName.empty())
