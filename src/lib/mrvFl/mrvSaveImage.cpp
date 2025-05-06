@@ -2,20 +2,33 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <algorithm> // For std::clamp
-#include <string>
-#include <sstream>
-#include <filesystem>
-#include <vector>
-namespace fs = std::filesystem;
+#include "mrViewer.h"
+
+#include "mrvApp/mrvSettingsObject.h"
+
+#include "mrvUI/mrvDesktop.h"
+
+#include "mrvFl/mrvSaveOptions.h"
+#include "mrvFl/mrvSave.h"
+#include "mrvFl/mrvIO.h"
+
+#include "mrvGL/mrvGLErrors.h"
+
+#include "mrvNetwork/mrvTCP.h"
+
+#include "mrvWidgets/mrvProgressReport.h"
+
+#include "mrvCore/mrvImage.h"
+#include "mrvCore/mrvLocale.h"
+#include "mrvCore/mrvMath.h"
+#include "mrvCore/mrvUtil.h"
+#include "mrvCore/mrvWait.h"
 
 #include <tlIO/System.h>
 
 #include <tlCore/String.h>
 #include <tlCore/StringFormat.h>
 #include <tlCore/Time.h>
-
-#include "mrvCore/mrvBackend.h"
 
 #ifdef VULKAN_BACKEND
 #  include <tlVk/Init.h>
@@ -24,29 +37,13 @@ namespace fs = std::filesystem;
 #else
 #  include <tlGL/Init.h>
 #  include <tlGL/Util.h>
+#  include <tlGL/GLFWWindow.h>
 #  include <tlTimelineGL/Render.h>
-#  include "mrvGL/mrvGLErrors.h"
 #endif
 
-#include "mrvCore/mrvImage.h"
-#include "mrvCore/mrvLocale.h"
-#include "mrvCore/mrvMath.h"
-#include "mrvCore/mrvUtil.h"
-#include "mrvCore/mrvWait.h"
-
-#include "mrvWidgets/mrvProgressReport.h"
-
-#include "mrvNetwork/mrvTCP.h"
-
-#include "mrvFl/mrvSave.h"
-#include "mrvFl/mrvSaveOptions.h"
-#include "mrvFl/mrvIO.h"
-
-#include "mrvUI/mrvDesktop.h"
-
-#include "mrvApp/mrvSettingsObject.h"
-
-#include "mrViewer.h"
+#include <chrono>
+#include <string>
+#include <sstream>
 
 namespace
 {

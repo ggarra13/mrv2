@@ -2,17 +2,32 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <chrono>
-#include <string>
-#include <sstream>
+#include "mrViewer.h"
+
+#include "mrvApp/mrvSettingsObject.h"
+
+#include "mrvUI/mrvDesktop.h"
+
+#include "mrvFl/mrvSaveOptions.h"
+#include "mrvFl/mrvIO.h"
+
+#include "mrvGL/mrvGLErrors.h"
+
+#include "mrvNetwork/mrvTCP.h"
+
+#include "mrvWidgets/mrvProgressReport.h"
+
+#include "mrvCore/mrvImage.h"
+#include "mrvCore/mrvLocale.h"
+#include "mrvCore/mrvMath.h"
+#include "mrvCore/mrvUtil.h"
+#include "mrvCore/mrvWait.h"
 
 #include <tlIO/System.h>
 
 #include <tlCore/String.h>
 #include <tlCore/StringFormat.h>
 #include <tlCore/Time.h>
-
-#include "mrvCore/mrvBackend.h"
 
 #ifdef VULKAN_BACKEND
 #  include <tlVk/Init.h>
@@ -25,27 +40,13 @@
 #  include <tlTimelineGL/Render.h>
 #endif
 
+#include <chrono>
+#include <string>
+#include <sstream>
 
-#include "mrvCore/mrvImage.h"
-#include "mrvCore/mrvLocale.h"
-#include "mrvCore/mrvMath.h"
-#include "mrvCore/mrvUtil.h"
-#include "mrvCore/mrvWait.h"
 
-#include "mrvWidgets/mrvProgressReport.h"
 
-#include "mrvGL/mrvGLErrors.h"
 
-#include "mrvNetwork/mrvTCP.h"
-
-#include "mrvFl/mrvSaveOptions.h"
-#include "mrvFl/mrvIO.h"
-
-#include "mrvUI/mrvDesktop.h"
-
-#include "mrvApp/mrvSettingsObject.h"
-
-#include "mrViewer.h"
 
 namespace
 {

@@ -16,6 +16,7 @@
 #include "mrvVk/mrvVkUtil.h"
 
 #include "mrvUI/mrvDesktop.h"
+#include "mrvUI/mrvMonitor.h"
 
 #include "mrvCore/mrvLocale.h"
 #include "mrvCore/mrvMemory.h"
@@ -1196,7 +1197,7 @@ namespace mrv
 
             int screen = this->screen_num();
             
-            if (!p.hdrOptions.passthru || !desktop::is_hdr_monitor_active(screen))
+            if (!p.hdrOptions.passthru || !monitor::is_hdr_active(screen))
                 return;
             
             // This will make the FLTK swapchain call vk->SetHDRMetadataEXT();

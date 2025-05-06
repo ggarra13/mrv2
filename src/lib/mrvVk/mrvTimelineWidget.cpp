@@ -2,17 +2,31 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl.H>
-#include <FL/names.h>
+#include "mrViewer.h"
+
+#include "mrvApp/mrvSettingsObject.h"
+
+#include "mrvNetwork/mrvTCP.h"
+
+#include "mrvEdit/mrvEditCallbacks.h"
+#include "mrvEdit/mrvEditUtil.h"
+
+#include "mrvUI/mrvDesktop.h"
+
+#include "mrvFl/mrvIO.h"
+
+#include "mrvVk/mrvTimelineWidget.h"
+
+#include "mrvCore/mrvFile.h"
+#include "mrvCore/mrvHotkey.h"
+#include "mrvCore/mrvTimeObject.h"
+
+#include <tlTimelineVk/Render.h>
 
 #include <tlTimelineUI/TimelineWidget.h>
 
 #include <tlUI/IClipboard.h>
 #include <tlUI/IWindow.h>
-
-#include <tlTimelineVk/Render.h>
 
 #include <tlVk/Init.h>
 #include <tlVk/Mesh.h>
@@ -20,24 +34,11 @@
 #include <tlVk/Shader.h>
 #include <tlVk/ShaderBindingSet.h>
 
-#include "mrvCore/mrvFile.h"
-#include "mrvCore/mrvHotkey.h"
-#include "mrvCore/mrvTimeObject.h"
+#include <FL/Fl_Box.H>
+#include <FL/Fl_Double_Window.H>
+#include <FL/Fl.H>
+#include <FL/names.h>
 
-#include "mrvEdit/mrvEditCallbacks.h"
-#include "mrvEdit/mrvEditUtil.h"
-
-#include "mrvFl/mrvIO.h"
-
-#include "mrvUI/mrvDesktop.h"
-
-#include "mrvVk/mrvTimelineWidget.h"
-
-#include "mrvNetwork/mrvTCP.h"
-
-#include "mrvApp/mrvSettingsObject.h"
-
-#include "mrViewer.h"
 
 namespace mrv
 {

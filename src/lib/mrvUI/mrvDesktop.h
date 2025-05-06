@@ -20,5 +20,6 @@ namespace mrv
 
         std::string getManufacturerName(const char* edidCode);
         std::string monitorName(int monitorIndex);
+
     } // namespace desktop
 } // namespace mrv

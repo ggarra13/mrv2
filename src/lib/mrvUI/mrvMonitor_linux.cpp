@@ -45,7 +45,7 @@ namespace mrv
             return out;
         }
         
-        bool is_hdr_display_active(int screen)
+        bool is_hdr_active(int screen)
         {
             return true;
         }

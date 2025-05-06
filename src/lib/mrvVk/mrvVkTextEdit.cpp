@@ -2,11 +2,12 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include "mrvVkTextEdit.h"
+#include "mrViewer.h"
+
+#include "mrvVk/mrvVkTextEdit.h"
 
 #include "mrvVk/mrvVkShape.h"
 
-#include "mrViewer.h"
 
 namespace mrv
 {

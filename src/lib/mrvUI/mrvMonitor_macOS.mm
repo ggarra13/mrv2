@@ -138,7 +138,7 @@ bool displaySupportsHDR(CGDirectDisplayID cgDisplayID) {
 namespace mrv
 {
 
-    bool is_hdr_display_active()
+    bool is_hdr_active(int screen)
     {
         CGDirectDisplayID displayID = CGMainDisplayID();
         if (displaySupportsHDR(displayID)) {

@@ -165,7 +165,7 @@ namespace mrv
             return out;
         }
 
-        bool is_hdr_display_active(int screen)
+        bool is_hdr_active(int screen)
         {
             IDXGIFactory6* factory = nullptr;
             CreateDXGIFactory1(IID_PPV_ARGS(&factory));
@@ -209,5 +209,5 @@ namespace mrv
         }
         
         
-    } // namespace desktop
+    } // namespace monitor
 } // namespace mrv

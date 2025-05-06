@@ -4,6 +4,41 @@
 
 #include <cinttypes>
 
+// mrViewer .fl includes
+#include "mrViewer.h"
+#include "mrvHotkeyUI.h"
+
+#include "mrvApp/mrvSettingsObject.h"
+
+#include "mrvPanels/mrvPanelsCallbacks.h"
+
+#include "mrvNetwork/mrvDummyClient.h"
+
+#include "mrvUI/mrvDesktop.h"
+
+#include "mrvVk/mrvVkViewportPrivate.h"
+#include "mrvVk/mrvVkDefines.h"
+// #include "mrvVk/mrvVkErrors.h"
+#include "mrvVk/mrvVkUtil.h"
+#include "mrvVk/mrvVkShaders.h"
+#include "mrvVk/mrvVkShape.h"
+#include "mrvVk/mrvTimelineViewport.h"
+#include "mrvVk/mrvTimelineViewportPrivate.h"
+#include "mrvVk/mrvVkViewport.h"
+
+#include "mrvFl/mrvOCIO.h"
+#include "mrvFl/mrvIO.h"
+#include "mrvFl/mrvTimelinePlayer.h"
+
+#include "mrvWidgets/mrvMultilineInput.h"
+
+#include "mrvCore/mrvColorSpaces.h"
+#include "mrvCore/mrvLocale.h"
+#include "mrvCore/mrvSequence.h"
+#include "mrvCore/mrvI8N.h"
+
+
+
 #include <tlCore/FontSystem.h>
 #include <tlCore/StringFormat.h>
 
@@ -18,38 +53,11 @@
 
 #include <FL/vk_enum_string_helper.h>
 
-// mrViewer .fl includes
-#include "mrViewer.h"
-#include "mrvHotkeyUI.h"
 
-#include "mrvCore/mrvColorSpaces.h"
-#include "mrvCore/mrvLocale.h"
-#include "mrvCore/mrvSequence.h"
-#include "mrvCore/mrvI8N.h"
 
-#include "mrvWidgets/mrvMultilineInput.h"
 
-#include "mrvFl/mrvOCIO.h"
-#include "mrvFl/mrvIO.h"
-#include "mrvFl/mrvTimelinePlayer.h"
 
-#include "mrvUI/mrvDesktop.h"
 
-#include "mrvVk/mrvVkViewportPrivate.h"
-#include "mrvVk/mrvVkDefines.h"
-// #include "mrvVk/mrvVkErrors.h"
-#include "mrvVk/mrvVkUtil.h"
-#include "mrvVk/mrvVkShaders.h"
-#include "mrvVk/mrvVkShape.h"
-#include "mrvVk/mrvTimelineViewport.h"
-#include "mrvVk/mrvTimelineViewportPrivate.h"
-#include "mrvVk/mrvVkViewport.h"
-
-#include "mrvPanels/mrvPanelsCallbacks.h"
-
-#include "mrvNetwork/mrvDummyClient.h"
-
-#include "mrvApp/mrvSettingsObject.h"
 
 namespace
 {
