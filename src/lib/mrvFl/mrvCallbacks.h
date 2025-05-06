@@ -8,11 +8,11 @@
 #include <string>
 #include <memory>
 
-#include <FL/Fl_Widget.H> // For Fl_Callback
-
 #include "mrvEdit/mrvEditCallbacks.h"
 
 #include "mrvApp/mrvPlaylistsModel.h"
+
+#include <FL/Fl_Widget.H> // For Fl_Callback
 
 class Fl_Group;
 class Fl_Button;

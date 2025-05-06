@@ -2,6 +2,10 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#ifdef _WIN32
+#include <winsock2.h>
+#endif
+
 #include <iostream>
 #include <fstream>
 #include <iomanip>
@@ -28,16 +32,6 @@
 #include "mrvFl/mrvSession.h"
 #include "mrvFl/mrvStereo3DAux.h"
 #include "mrvFl/mrvCallbacks.h"
-
-#ifdef OPENGL_BACKEND
-#include "mrvGL/mrvGLShape.h"
-#include "mrvGL/mrvGLTextEdit.h"
-#endif
-
-#ifdef VULKAN_BACKEND
-#include "mrvVk/mrvVkShape.h"
-#include "mrvVk/mrvVkTextEdit.h"
-#endif
 
 #include "mrvUI/mrvAsk.h"
 #include "mrvUI/mrvDesktop.h"
@@ -74,8 +68,17 @@
 #include "mrViewer.h"
 
 #include <FL/Fl.H>
-
 #include "mrvFl/mrvIO.h"
+
+#ifdef OPENGL_BACKEND
+#include "mrvGL/mrvGLShape.h"
+#include "mrvGL/mrvGLTextEdit.h"
+#endif
+
+#ifdef VULKAN_BACKEND
+#include "mrvVk/mrvVkShape.h"
+#include "mrvVk/mrvVkTextEdit.h"
+#endif
 
 namespace
 {

@@ -2,11 +2,13 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Check_Button.H>
+#include "mrViewer.h"
 
-#include "mrvCore/mrvHome.h"
-#include "mrvCore/mrvFile.h"
+#include "mrvApp/mrvSettingsObject.h"
+
+#include "mrvPanels/mrvPanelsAux.h"
+#include "mrvPanels/mrvPanelsCallbacks.h"
+#include "mrvPanels/mrvStereo3DPanel.h"
 
 #include "mrvWidgets/mrvClipButton.h"
 #include "mrvWidgets/mrvCollapsibleGroup.h"
@@ -14,13 +16,14 @@
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvPopupMenu.h"
 
-#include "mrvPanels/mrvPanelsAux.h"
-#include "mrvPanels/mrvPanelsCallbacks.h"
-#include "mrvPanels/mrvStereo3DPanel.h"
+#include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvFile.h"
 
-#include "mrvApp/mrvSettingsObject.h"
+#include <FL/Fl_Group.H>
+#include <FL/Fl_Check_Button.H>
 
-#include "mrViewer.h"
+
+
 
 namespace mrv
 {

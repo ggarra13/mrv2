@@ -2,14 +2,14 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include "mrvWidgets/mrvFunctional.h"
-#include "mrvWidgets/mrvSecondaryWindow.h"
-#include "mrvWidgets/mrvMainWindow.h"
+#include "mrViewer.h"
 
 #include "mrvApp/mrvApp.h"
 #include "mrvApp/mrvSettingsObject.h"
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrvFunctional.h"
+#include "mrvWidgets/mrvSecondaryWindow.h"
+#include "mrvWidgets/mrvMainWindow.h"
 
 namespace mrv
 {

@@ -2,6 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include "mrViewer.h"
+
 #include <tlIO/System.h>
 
 #include <tlDevice/IOutput.h>
@@ -25,8 +27,6 @@
 #include "mrvGL/mrvGLUtil.h"
 
 #include "mrvApp/mrvSettingsObject.h"
-
-#include "mrViewer.h"
 
 namespace
 {

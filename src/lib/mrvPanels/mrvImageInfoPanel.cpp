@@ -2,15 +2,38 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include "mrViewer.h"
+#include "mrvPreferencesUI.h"
+
+#include "mrvApp/mrvSettingsObject.h"
+#include "mrvApp/mrvFilesModel.h"
+
+
+#include "mrvFl/mrvIO.h"
+#include "mrvFl/mrvHotkey.h"
+#include "mrvFl/mrvPreferences.h"
+
+#include "mrvPanels/mrvPanelsCallbacks.h"
+#include "mrvPanels/mrvImageInfoPanel.h"
+
+#include "mrvWidgets/mrvHorSlider.h"
+#include "mrvWidgets/mrvInput.h"
+#include "mrvWidgets/mrvIntInput.h"
+#include "mrvWidgets/mrvHorSlider.h"
+#include "mrvWidgets/mrvPack.h"
+#include "mrvWidgets/mrvCollapsibleGroup.h"
+#include "mrvWidgets/mrvTable.h"
+
+#include "mrvCore/mrvColorSpaces.h"
+#include "mrvCore/mrvI8N.h"
+#include "mrvCore/mrvUtil.h"
+#include "mrvCore/mrvSequence.h"
+#include "mrvCore/mrvString.h"
+#include "mrvCore/mrvMath.h"
+
+
 #include <cinttypes>
 #include <locale>
-
-#include <algorithm>
-#include <ctime>
-#include <iostream>
-#include <filesystem>
-#include <regex>
-namespace fs = std::filesystem;
 
 #include <tlCore/HDR.h>
 
@@ -23,34 +46,13 @@ namespace fs = std::filesystem;
 #include <OpenEXR/ImfTileDescription.h>
 #endif
 
-#include "mrvCore/mrvColorSpaces.h"
-#include "mrvCore/mrvI8N.h"
-#include "mrvCore/mrvUtil.h"
-#include "mrvCore/mrvSequence.h"
-#include "mrvCore/mrvString.h"
-#include "mrvCore/mrvMath.h"
+#include <algorithm>
+#include <ctime>
+#include <iostream>
+#include <filesystem>
+#include <regex>
+namespace fs = std::filesystem;
 
-#include "mrvFl/mrvHotkey.h"
-#include "mrvFl/mrvPreferences.h"
-
-#include "mrvWidgets/mrvHorSlider.h"
-#include "mrvWidgets/mrvInput.h"
-#include "mrvWidgets/mrvIntInput.h"
-#include "mrvWidgets/mrvHorSlider.h"
-#include "mrvWidgets/mrvPack.h"
-#include "mrvWidgets/mrvCollapsibleGroup.h"
-#include "mrvWidgets/mrvTable.h"
-
-#include "mrvPanels/mrvPanelsCallbacks.h"
-#include "mrvPanels/mrvImageInfoPanel.h"
-
-#include "mrvApp/mrvSettingsObject.h"
-#include "mrvApp/mrvFilesModel.h"
-
-#include "mrvPreferencesUI.h"
-#include "mrViewer.h"
-
-#include "mrvFl/mrvIO.h"
 
 namespace
 {

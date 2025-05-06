@@ -2,6 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include "mrViewer.h"
+
 #include <fstream>
 
 #include <tlCore/StringFormat.h>
@@ -31,8 +33,6 @@
 #include "mrvApp/mrvApp.h"
 
 #include "mrvFl/mrvIO.h"
-
-#include "mrViewer.h"
 
 #include "mrvSession.h"
 

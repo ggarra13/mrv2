@@ -2,6 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include "mrViewer.h"
+
 #include <FL/Fl.H>
 #include <FL/Fl_Menu_Button.H>
 
@@ -25,7 +27,6 @@
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/mrvApp.h"
 
-#include "mrViewer.h"
 
 namespace
 {

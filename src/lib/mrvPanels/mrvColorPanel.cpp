@@ -2,7 +2,19 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <vector>
+
+#include "mrViewer.h"
+
+#include "mrvApp/mrvSettingsObject.h"
+#include "mrvApp/mrvFilesModel.h"
+
+#include "mrvPanels/mrvPanelsCallbacks.h"
+#include "mrvPanels/mrvColorPanel.h"
+
+#include "mrvWidgets/mrvFunctional.h"
+#include "mrvWidgets/mrvHorSlider.h"
+#include "mrvWidgets/mrvInput.h"
+#include "mrvWidgets/mrvCollapsibleGroup.h"
 
 #include <FL/Fl_Hold_Browser.H>
 #include <FL/Fl_Check_Button.H>
@@ -11,18 +23,7 @@
 #include <FL/Fl_Input.H>
 #include <FL/Fl_Tabs.H>
 
-#include "mrvWidgets/mrvFunctional.h"
-#include "mrvWidgets/mrvHorSlider.h"
-#include "mrvWidgets/mrvInput.h"
-#include "mrvWidgets/mrvCollapsibleGroup.h"
-
-#include "mrvPanels/mrvPanelsCallbacks.h"
-#include "mrvPanels/mrvColorPanel.h"
-
-#include "mrvApp/mrvSettingsObject.h"
-#include "mrvApp/mrvFilesModel.h"
-
-#include "mrViewer.h"
+#include <vector>
 
 namespace mrv
 {

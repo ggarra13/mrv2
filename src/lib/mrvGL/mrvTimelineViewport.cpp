@@ -5,6 +5,10 @@
 // Debug scaling of the window to image size.
 // #define DEBUG_SCALING 1
 
+#ifdef _WIN32
+#include <winsock2.h>
+#endif
+
 #include "mrViewer.h"
 
 #include <tlDevice/IOutput.h>

@@ -2,26 +2,12 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <tlCore/StringFormat.h>
+#include "mrViewer.h"
 
-#include <FL/Fl_Multiline_Input.H>
-
-#include "mrvCore/mrvFile.h"
-
+#include "mrvFl/mrvOCIO.h"
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvLaserFadeData.h"
-
-#if defined(OPENGL_BACKEND) || defined(BOTH_BACKEND)
-#    include "mrvGL/mrvGLUtil.h"
-#    include "mrvGL/mrvGLJson.h"
-#endif
-
-#if defined(VULKAN_BACKEND)
-#    include "mrvVk/mrvVkUtil.h"
-#    include "mrvVk/mrvVkJson.h"
-#endif
-
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
@@ -34,8 +20,23 @@
 #include "mrvNetwork/mrvTimelineItemOptions.h"
 #include "mrvNetwork/mrvProtocolVersion.h"
 
-#include "mrViewer.h"
-#include "mrvFl/mrvOCIO.h"
+#if defined(OPENGL_BACKEND) || defined(BOTH_BACKEND)
+#    include "mrvGL/mrvGLUtil.h"
+#    include "mrvGL/mrvGLJson.h"
+#endif
+
+#if defined(VULKAN_BACKEND)
+#    include "mrvVk/mrvVkUtil.h"
+#    include "mrvVk/mrvVkJson.h"
+#endif
+
+#include "mrvCore/mrvFile.h"
+
+#include <tlCore/StringFormat.h>
+
+#include <FL/Fl_Multiline_Input.H>
+
+
 
 
 namespace

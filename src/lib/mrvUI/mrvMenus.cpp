@@ -6,6 +6,10 @@
 #include <locale>
 #include <string> // Add this include for string-related functionality
 
+#ifdef _WIN32
+#include <winsock2.h>
+#endif
+
 #include <tlCore/StringFormat.h>
 
 #include "mrvCore/mrvFile.h"
@@ -43,6 +47,7 @@
 #ifdef __APPLE__
 #    include <FL/platform.H> // Needed for Fl_Mac_App_Menu
 #endif
+
 
 namespace
 {

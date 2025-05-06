@@ -2,6 +2,26 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include "mrViewer.h"
+
+#include "mrvEdit/mrvEditCallbacks.h"
+#include "mrvEdit/mrvEditUtil.h"
+
+#include "mrvUI/mrvDesktop.h"
+
+#include "mrvFl/mrvIO.h"
+
+#include "mrvPanels/mrvPanelsCallbacks.h"
+
+#include "mrvNetwork/mrvTCP.h"
+
+#include "mrvDraw/Annotation.h"
+
+#include "mrvCore/mrvI8N.h"
+#include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvFile.h"
+
+
 #include <set>
 #include <fstream>
 #include <algorithm>
@@ -11,6 +31,15 @@ namespace fs = std::filesystem;
 
 #include <FL/fl_utf8.h>
 
+#include <tlTimeline/Util.h>
+
+#include <tlIO/System.h>
+
+#include <tlCore/Path.h>
+#include <tlCore/File.h>
+#include <tlCore/FileInfo.h>
+#include <tlCore/StringFormat.h>
+
 #include <opentimelineio/clip.h>
 #include <opentimelineio/editAlgorithm.h>
 #include <opentimelineio/externalReference.h>
@@ -19,33 +48,9 @@ namespace fs = std::filesystem;
 #include <opentimelineio/timeline.h>
 #include <opentimelineio/transition.h>
 
-#include <tlCore/Path.h>
-#include <tlCore/File.h>
-#include <tlCore/FileInfo.h>
-#include <tlCore/StringFormat.h>
 
-#include <tlIO/System.h>
 
-#include <tlTimeline/Util.h>
 
-#include "mrvCore/mrvI8N.h"
-#include "mrvCore/mrvHome.h"
-#include "mrvCore/mrvFile.h"
-
-#include "mrvDraw/Annotation.h"
-
-#include "mrvNetwork/mrvTCP.h"
-
-#include "mrvPanels/mrvPanelsCallbacks.h"
-
-#include "mrvEdit/mrvEditCallbacks.h"
-#include "mrvEdit/mrvEditUtil.h"
-
-#include "mrvFl/mrvIO.h"
-
-#include "mrvUI/mrvDesktop.h"
-
-#include "mrViewer.h"
 
 namespace
 {

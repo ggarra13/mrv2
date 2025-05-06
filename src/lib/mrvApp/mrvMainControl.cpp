@@ -4,15 +4,15 @@
 
 #include "mrViewer.h"
 
+#include "mrvApp/mrvApp.h"
+#include "mrvApp/mrvFilesModel.h"
+#include "mrvApp/mrvMainControl.h"
+
 #include "mrvFl/mrvTimelinePlayer.h"
 #include "mrvFl/mrvSession.h"
 
 #include "mrvNetwork/mrvTCP.h"
 #include "mrvNetwork/mrvCompareOptions.h"
-
-#include "mrvApp/mrvFilesModel.h"
-#include "mrvApp/mrvMainControl.h"
-#include "mrvApp/mrvApp.h"
 
 #include <tlDevice/IOutput.h>
 

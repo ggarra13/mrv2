@@ -16,6 +16,12 @@
 #    define GIT_SHORT_HASH ""
 #endif
 
+#ifdef _WIN32
+#    include <winsock2.h>
+#    include <windows.h>
+#    include <psapi.h>
+#endif
+
 #ifdef __linux__
 
 #    include <sys/types.h>
@@ -158,11 +164,6 @@ extern "C"
 
 #include "mrViewer.h"
 #undef snprintf
-
-#ifdef _WIN32
-#    include <windows.h>
-#    include <psapi.h>
-#endif
 
 #include "mrvFl/mrvIO.h"
 

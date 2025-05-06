@@ -2,25 +2,26 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+
+#include "mrViewer.h"
+
 #include "mrvFl/mrvTimelinePlayer.h"
+#include "mrvFl/mrvPreferences.h"
+#include "mrvFl/mrvIO.h"
+
+#include "mrvDraw/Annotation.h"
+
+#include "mrvPanels/mrvPanelsCallbacks.h"
+
+#include "mrvNetwork/mrvTCP.h"
+
+#include "mrvCore/mrvMath.h"
 
 #include <tlCore/Math.h>
 #include <tlCore/Time.h>
 
 #include <FL/Fl.H>
 
-#include "mrvCore/mrvMath.h"
-
-#include "mrvDraw/Annotation.h"
-
-#include "mrvFl/mrvPreferences.h"
-#include "mrvFl/mrvIO.h"
-
-#include "mrvPanels/mrvPanelsCallbacks.h"
-
-#include "mrvNetwork/mrvTCP.h"
-
-#include "mrViewer.h"
 
 namespace
 {

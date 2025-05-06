@@ -1,10 +1,11 @@
 
-#include <iostream>
-
 #ifdef _WIN32
+#    include <winsock2.h>
 #    include <windows.h>
 #    include <dxgi1_6.h>
 #endif
+
+#include <iostream>
 
 namespace mrv
 {

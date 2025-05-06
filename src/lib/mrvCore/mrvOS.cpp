@@ -45,6 +45,12 @@
 #    include <FL/gl.h>
 #endif
 
+#include <string>
+#include <vector>
+#include <stdexcept>
+#include <array>
+#include <memory>
+
 namespace
 {
     const char* kModule = "os";
@@ -62,11 +68,7 @@ namespace mrv
             else
                 return std::string();
         }
-        #include <string>
-#include <vector>
-#include <stdexcept>
-#include <array>
-#include <memory>
+
 
 #ifdef _WIN32
         int exec_command(const std::string& command,

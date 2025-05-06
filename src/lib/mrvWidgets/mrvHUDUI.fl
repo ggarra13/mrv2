@@ -7,6 +7,9 @@ i18n_gnu_function gettext
 i18n_gnu_static_function gettext_noop
 header_name {.h}
 code_name {.cxx}
+decl {\#include "mrViewer.h"} {selected public global
+}
+
 decl {\#include "mrvWidgets/mrvBackend.h"} {public global
 }
 
@@ -14,9 +17,6 @@ decl {\#include "mrvWidgets/mrvButton.h"} {public global
 }
 
 decl {\#include "mrvFl/mrvCallbacks.h"} {private local
-}
-
-decl {\#include "mrViewer.h"} {selected private local
 }
 
 class HUDUI {open
