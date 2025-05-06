@@ -428,8 +428,7 @@ namespace mrv
                     vk.shader->addFBO("textureSampler"); // default is fragment
                     float opacity = 1.F;
                     vk.shader->addPush("opacity", opacity, vlk::kShaderFragment);
-                    auto bindingSet = vk.shader->createBindingSet();
-                    vk.shader->useBindingSet(bindingSet);
+                    vk.shader->createBindingSet();
                 }
 
                 if (!vk.annotationShader)
@@ -442,7 +441,6 @@ namespace mrv
                     int channels = 0; // Color
                     vk.annotationShader->createUniform("channels", channels);
                     auto bindingSet = vk.annotationShader->createBindingSet();
-                    vk.annotationShader->useBindingSet(bindingSet);
                 }
             }
         }
@@ -729,7 +727,6 @@ namespace mrv
             
             // --- Final Render Pass: Render to Swapchain (Composition) ---
             vk.buffer->transitionToShaderRead(cmd);
-
             
             begin_render_pass(cmd);
 

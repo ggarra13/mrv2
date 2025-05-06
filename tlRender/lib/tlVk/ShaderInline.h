@@ -38,6 +38,9 @@ namespace tl
         {
             if (!activeBindingSet)
                 throw std::runtime_error("No activeBindingSet for Shader " + name);
+            std::cerr << "\t\t\tsetUniform " << name << " for shaderName="
+                      << shaderName
+                      << std::endl;
             activeBindingSet->updateUniform(name, &value, sizeof(value), frameIndex);
         }
 

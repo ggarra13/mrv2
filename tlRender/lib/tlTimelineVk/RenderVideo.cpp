@@ -470,6 +470,28 @@ namespace tl
                     //     p.renderSize.h - p.viewport.h() - p.viewport.y(),
                     //     p.viewport.w(), p.viewport.h());
 
+                    // Transition buffers to color read
+                    p.buffers["difference0"]->transitionToShaderRead(p.cmd);
+                    p.buffers["difference1"]->transitionToShaderRead(p.cmd);
+
+                    const std::string pipelineName = "difference";
+                    const std::string pipelineLayoutName = "difference";
+                    const std::string shaderName = "difference";
+                    const std::string meshName = "video";
+                    const bool enableBlending = true;  
+                    _createPipeline(p.fbo, pipelineName,
+                                    pipelineLayoutName, shaderName, meshName,
+                                    enableBlending,
+                                    VK_BLEND_FACTOR_SRC_ALPHA,
+                                    VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                                    VK_BLEND_FACTOR_ONE,
+                                    VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);
+                
+                    // Begin the new compositing render pass.
+                    p.fbo->transitionToColorAttachment(p.cmd);
+                    p.fbo->beginRenderPass(p.cmd, "DIFFERENCE PASS");
+                    
+                    // Prepare shaders
                     p.shaders["difference"]->bind(p.frameIndex);
                     p.shaders["difference"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
                     p.shaders["difference"]->setFBO("textureSampler", p.buffers["difference0"]);
@@ -483,6 +505,12 @@ namespace tl
                     {
                         _vkDraw("video");
                     }
+                    
+                    p.fbo->endRenderPass(p.cmd);
+                
+                    // Transition buffer back to color attachment
+                    p.buffers["difference0"]->transitionToColorAttachment(p.cmd);
+                    p.buffers["difference1"]->transitionToColorAttachment(p.cmd);
                 }
             }
         }
@@ -545,9 +573,10 @@ namespace tl
             // GLint viewportPrev[4] = {0, 0, 0, 0};
             // glGetIntegerv(GL_VIEWPORT, viewportPrev);
 
-            const auto transform = math::ortho(0.F, static_cast<float>(box.w()), static_cast<float>(box.h()), 0.F, -1.F, 1.F);
-            p.shaders["image"]->bind(p.frameIndex);
-            p.shaders["image"]->setUniform("transform.mvp", transform, vlk::kShaderVertex);
+            // \@todo: check if this is needed
+            // const auto transform = math::ortho(0.F, static_cast<float>(box.w()), static_cast<float>(box.h()), 0.F, -1.F, 1.F);
+            // p.shaders["image"]->bind(p.frameIndex);
+            // p.shaders["image"]->setUniform("transform.mvp", transform, vlk::kShaderVertex);
 
             const math::Size2i& offscreenBufferSize = box.getSize();
             vlk::OffscreenBufferOptions offscreenBufferOptions;
@@ -898,11 +927,9 @@ namespace tl
                 {
                     p.vbos["video"]->copy(convert(geom::box(box, true), p.vbos["video"]->getType()));
                 }
-                if (p.vaos["video"])
+                if (p.vaos["video"] && p.vbos["video"])
                 {
-                    p.vaos["video"]->bind(p.frameIndex);
-                    p.vaos["video"]->draw(p.cmd, p.vbos["video"]);
-                    p.garbage[p.frameIndex].vaos.push_back(p.vaos["video"]);
+                    _vkDraw("video");
                 }
 
                 fbo->endRenderPass(p.cmd);

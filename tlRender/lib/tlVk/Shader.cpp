@@ -123,6 +123,8 @@ namespace tl
 
             p.vertexSource = vertexSource;
             p.fragmentSource = fragmentSource;
+
+            shaderName = name;
             
             _createVertexShader();
             _createFragmentShader();
@@ -227,6 +229,8 @@ namespace tl
         {
             if (!activeBindingSet)
                 throw std::runtime_error("No activeBindingSet.  Call useBindingSet first");
+            std::cerr << "\t\t\t---------------- " << shaderName << " now "
+                      << "frozen for " << frameIndex << std::endl;
             return activeBindingSet->getDescriptorSet(frameIndex);
         }
         
@@ -238,7 +242,7 @@ namespace tl
         const VkDescriptorPool Shader::getDescriptorPool() const
         {            
             if (!activeBindingSet)
-                throw std::runtime_error("No activeBindingSet.  Call useBindingSet first");
+                throw std::runtime_error("No activeBindingSet.  Call create/useBindingSet first");
             return activeBindingSet->getDescriptorPool(frameIndex);
         }
 
@@ -261,7 +265,9 @@ namespace tl
             const ShaderFlags stageFlags)
         {
             if (!activeBindingSet)
-                throw std::runtime_error("No activeBindingSet.  Call useBindingSet first");
+                throw std::runtime_error("No activeBindingSet.  Call create/useBindingSet first");
+            std::cerr << "\t\t\tsetFBO " << name << " for " << shaderName
+                      << std::endl;
             activeBindingSet->updateTexture(name,
                                             activeBindingSet->getDescriptorSet(frameIndex),
                                             texture);
@@ -290,7 +296,9 @@ namespace tl
             }
 
             if (!activeBindingSet)
-                throw std::runtime_error("No activeBindingSet.  Call useBindingSet first");
+                throw std::runtime_error("No activeBindingSet.  Call create/useBindingSet first");
+            std::cerr << "\t\t\tsetFBO " << name << " for " << shaderName
+                      << std::endl;
             activeBindingSet->updateFBO(name,
                                         activeBindingSet->getDescriptorSet(frameIndex),
                                         fbo);
