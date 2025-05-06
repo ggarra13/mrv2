@@ -19,13 +19,13 @@ namespace tl
     {
         struct Shader::Private
         {
-            std::string vertexSource;
-            std::string fragmentSource;
+            std::string vertexSource = "Compiled SPIRV code";
+            std::string fragmentSource = "Compiled SPIRV code";
             VkShaderModule vertex = VK_NULL_HANDLE;
             VkShaderModule fragment = VK_NULL_HANDLE;
         };
 
-        void Shader::_init()
+        void Shader::_createVertexShader()
         {
             TLRENDER_P();
 
@@ -34,16 +34,17 @@ namespace tl
                 std::vector<uint32_t> spirv = compile_glsl_to_spirv(
                     p.vertexSource,
                     shaderc_vertex_shader, // Shader type
-                    "vertex_shader.glsl"   // Filename for error reporting
+                    "vertex_shader.glsl"       // Filename for error reporting
                 );
 
+                // Assuming you have a VkDevice 'device' already created
                 p.vertex = create_shader_module(ctx.device, spirv);
             }
             catch (const std::exception& e)
             {
-                std::cerr << shaderName << " failed compilation " << std::endl
+                std::cerr << shaderName << " failed vertex compilation " << std::endl
                           << e.what() << " for " << std::endl;
-                const auto& lines = tl::string::split(
+                auto lines = tl::string::split(
                     p.vertexSource, '\n', string::SplitOptions::KeepEmpty);
                 uint32_t i = 1;
                 for (const auto& line : lines)
@@ -53,6 +54,11 @@ namespace tl
                 p.vertex = VK_NULL_HANDLE;
                 throw e;
             }
+        }
+        
+        void Shader::_createFragmentShader()
+        {
+            TLRENDER_P();
 
             try
             {
@@ -67,7 +73,7 @@ namespace tl
             }
             catch (const std::exception& e)
             {
-                std::cerr << shaderName << " failed compilation " << std::endl
+                std::cerr << shaderName << " failed fragment compilation " << std::endl
                           << e.what() << " for " << std::endl;
                 auto lines = tl::string::split(
                     p.fragmentSource, '\n', string::SplitOptions::KeepEmpty);
@@ -79,6 +85,47 @@ namespace tl
                 p.fragment = VK_NULL_HANDLE;
                 throw e;
             }
+        }
+        
+        void Shader::_init(const uint8_t* vertexBytes,
+                           const uint32_t vertexLength,
+                           const std::string& fragmentSource,
+                           const std::string& name)
+        {
+            TLRENDER_P();
+            
+            p.vertex = create_shader_module(ctx.device, vertexBytes, vertexLength);
+
+            p.fragmentSource = fragmentSource;
+            shaderName = name;
+            
+            _createFragmentShader();
+        }
+        
+        void Shader::_init(const uint8_t* vertexBytes,
+                           const uint32_t vertexLength,
+                           const uint8_t* fragmentBytes,
+                           const uint32_t fragmentLength,
+                           const std::string& name)
+        {
+            TLRENDER_P();
+            
+            p.vertex = create_shader_module(ctx.device, vertexBytes, vertexLength);
+            p.fragment = create_shader_module(ctx.device, fragmentBytes, fragmentLength);
+            shaderName = name;
+        }
+        
+        void Shader::_init(const std::string& vertexSource,
+                           const std::string& fragmentSource,
+                           const std::string& name)
+        {
+            TLRENDER_P();
+
+            p.vertexSource = vertexSource;
+            p.fragmentSource = fragmentSource;
+            
+            _createVertexShader();
+            _createFragmentShader();
         }
 
         Shader::Shader(Fl_Vk_Context& context) :
@@ -113,11 +160,36 @@ namespace tl
             Fl_Vk_Context& ctx, const std::string& vertexSource,
             const std::string& fragmentSource, const std::string& name)
         {
-            auto out = std::shared_ptr<Shader>(new Shader(ctx));
-            out->_p->vertexSource = vertexSource;
-            out->_p->fragmentSource = fragmentSource;
-            out->shaderName = name;
-            out->_init();
+            auto out = std::make_shared<Shader>(ctx);
+            out->_init(vertexSource, fragmentSource, name);
+            return out;
+        }
+
+        //! Create a new shader.
+        std::shared_ptr<Shader> Shader::create(
+            Fl_Vk_Context& ctx,
+            const uint8_t* vertexBytes,
+            const uint32_t vertexLength,
+            const std::string& fragmentSource,
+            const std::string& name)
+        {
+            auto out = std::make_shared<Shader>(ctx);
+            out->_init(vertexBytes, vertexLength, fragmentSource, name);
+            return out;
+        }
+            
+        //! Create a new shader.
+        std::shared_ptr<Shader> Shader::create(
+            Fl_Vk_Context& ctx,
+            const uint8_t* vertexBytes,
+            const uint32_t vertexLength,
+            const uint8_t* fragmentBytes,
+            const uint32_t fragmentLength,
+            const std::string& name)
+        {
+            auto out = std::make_shared<Shader>(ctx);
+            out->_init(vertexBytes, vertexLength, fragmentBytes,
+                       fragmentLength, name);
             return out;
         }
 

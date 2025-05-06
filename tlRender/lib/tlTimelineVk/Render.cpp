@@ -763,8 +763,17 @@ namespace tl
             const image::Color4f color(0.F, 0.F, 0.F, 0.F);
             if (!p.shaders["rect"])
             {
+#if USE_PRECOMPILED_SHADERS
+                p.shaders["rect"] = vlk::Shader::create(
+                    ctx,
+                    Vertex2_spv,
+                    Vertex2_spv_len,
+                    meshFragment_spv,
+                    meshFragment_spv_len, "rect");
+#else
                 p.shaders["rect"] = vlk::Shader::create(
                     ctx, vertex2Source(), meshFragmentSource(), "rect");
+#endif
                 p.shaders["rect"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
                 p.shaders["rect"]->addPush(
@@ -773,8 +782,17 @@ namespace tl
             }
             if (!p.shaders["mesh"])
             {
+#if USE_PRECOMPILED_SHADERS
+                p.shaders["mesh"] = vlk::Shader::create(
+                    ctx,
+                    Vertex3_spv,
+                    Vertex3_spv_len,
+                    meshFragment_spv,
+                    meshFragment_spv_len, "mesh");
+#else
                 p.shaders["mesh"] = vlk::Shader::create(
                     ctx, vertexSource(), meshFragmentSource(), "mesh");
+#endif
                 p.shaders["mesh"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
                 p.shaders["mesh"]->addPush(
@@ -783,9 +801,18 @@ namespace tl
             }
             if (!p.shaders["colorMesh"])
             {
+#if USE_PRECOMPILED_SHADERS
+                p.shaders["colorMesh"] = vlk::Shader::create(
+                    ctx,
+                    colorMeshVertex_spv,
+                    colorMeshVertex_spv_len,
+                    colorMeshFragment_spv,
+                    colorMeshFragment_spv_len, "mesh");
+#else
                 p.shaders["colorMesh"] = vlk::Shader::create(
                     ctx, colorMeshVertexSource(), colorMeshFragmentSource(),
                     "colorMesh");
+#endif
                 p.shaders["colorMesh"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
                 p.shaders["colorMesh"]->addPush(
@@ -794,8 +821,17 @@ namespace tl
             }
             if (!p.shaders["text"])
             {
+#if USE_PRECOMPILED_SHADERS
+                p.shaders["text"] = vlk::Shader::create(
+                    ctx,
+                    Vertex3_spv,
+                    Vertex3_spv_len,
+                    textFragment_spv,
+                    textFragment_spv_len, "text");
+#else
                 p.shaders["text"] = vlk::Shader::create(
                     ctx, vertexSource(), textFragmentSource(), "text");
+#endif
                 p.shaders["text"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
                 p.shaders["text"]->addTexture("textureSampler");
@@ -805,8 +841,17 @@ namespace tl
             }
             if (!p.shaders["texture"])
             {
+#if USE_PRECOMPILED_SHADERS
+                p.shaders["texture"] = vlk::Shader::create(
+                    ctx,
+                    Vertex3_spv,
+                    Vertex3_spv_len,
+                    textureFragment_spv,
+                    textureFragment_spv_len, "texture");
+#else
                 p.shaders["texture"] = vlk::Shader::create(
                     ctx, vertexSource(), textureFragmentSource(), "texture");
+#endif
                 p.shaders["texture"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
                 p.shaders["texture"]->addTexture("textureSampler");
@@ -816,8 +861,17 @@ namespace tl
             }
             if (!p.shaders["image"])
             {
+#if USE_PRECOMPILED_SHADERS
+                p.shaders["image"] = vlk::Shader::create(
+                    ctx,
+                    Vertex3_spv,
+                    Vertex3_spv_len,
+                    imageFragment_spv,
+                    imageFragment_spv_len, "image");
+#else
                 p.shaders["image"] = vlk::Shader::create(
                     ctx, vertexSource(), imageFragmentSource(), "image");
+#endif
                 p.shaders["image"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
 
@@ -832,8 +886,17 @@ namespace tl
             }
             if (!p.shaders["wipe"])
             {
+#if USE_PRECOMPILED_SHADERS
+                p.shaders["wipe"] = vlk::Shader::create(
+                    ctx,
+                    Vertex3_spv,
+                    Vertex3_spv_len,
+                    meshFragment_spv,
+                    meshFragment_spv_len, "wipe");
+#else
                 p.shaders["wipe"] = vlk::Shader::create(
                     ctx, vertexSource(), meshFragmentSource(), "wipe");
+#endif
                 p.shaders["wipe"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
                 p.shaders["wipe"]->addPush("color", color, vlk::kShaderFragment);
@@ -842,8 +905,17 @@ namespace tl
             }
             if (!p.shaders["overlay"])
             {
+#if USE_PRECOMPILED_SHADERS
+                p.shaders["overlay"] = vlk::Shader::create(
+                    ctx,
+                    Vertex3_spv,
+                    Vertex3_spv_len,
+                    textureFragment_spv,
+                    textureFragment_spv_len, "overlay");
+#else
                 p.shaders["overlay"] = vlk::Shader::create(
                     ctx, vertexSource(), textureFragmentSource(), "overlay");
+#endif
 
                 p.shaders["overlay"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
@@ -854,9 +926,18 @@ namespace tl
             }
             if (!p.shaders["difference"])
             {
+#if USE_PRECOMPILED_SHADERS
+                p.shaders["difference"] = vlk::Shader::create(
+                    ctx,
+                    Vertex3_spv,
+                    Vertex3_spv_len,
+                    differenceFragment_spv,
+                    differenceFragment_spv_len, "difference");
+#else
                 p.shaders["difference"] = vlk::Shader::create(
                     ctx, vertexSource(), differenceFragmentSource(),
                     "difference");
+#endif
 
                 p.shaders["difference"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
@@ -867,8 +948,17 @@ namespace tl
             }
             if (!p.shaders["dissolve"])
             {
+#if USE_PRECOMPILED_SHADERS
+                p.shaders["dissolve"] = vlk::Shader::create(
+                    ctx,
+                    Vertex3_spv,
+                    Vertex3_spv_len,
+                    textureFragment_spv,
+                    textureFragment_spv_len, "dissolve");
+#else
                 p.shaders["dissolve"] = vlk::Shader::create(
                     ctx, vertexSource(), textureFragmentSource(), "dissolve");
+#endif
                 p.shaders["dissolve"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
                 p.shaders["dissolve"]->addFBO("textureSampler");
@@ -878,6 +968,10 @@ namespace tl
             }
             _displayShader();
 
+
+            //
+            // Meshes
+            //
             if (!p.vbos["rect"] || p.vbos["rect"]->getSize() != 6)
             {
                 p.vbos["rect"] =
@@ -2047,8 +2141,14 @@ namespace tl
                     context->log(
                         "tl::vlk::GLRender", "Creating display shader");
                 }
+#if USE_PRECOMPILED_SHADERS
+                p.shaders["display"] =
+                    vlk::Shader::create(ctx, Vertex3_spv, Vertex3_spv_len,
+                                        source, "display");
+#else
                 p.shaders["display"] =
                     vlk::Shader::create(ctx, vertexSource(), source, "display");
+#endif
                 p.shaders["display"]->createUniform(
                     "transform.mvp", p.transform, vlk::kShaderVertex);
                 p.shaders["display"]->addFBO("textureSampler");

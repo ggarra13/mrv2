@@ -37,19 +37,27 @@ namespace OCIO = OCIO_NAMESPACE;
 #define MRV2_ALIGN2(x, align) (((x) + (align) - 1) & ~((align) - 1))
 #define USE_CONSTANTS 0  // when 1, it uses constants instead of push_constants
 #define USE_STD430    1  // when 1, uses STD430 over STD140 in push_constants
+#define USE_PRECOMPILED_SHADERS 1 // Use 1 for faster startups.
+
+#if USE_PRECOMPILED_SHADERS
+#   include <tlTimelineVk/RenderShadersBinary.h>
+#endif
 
 namespace tl
 {
     namespace timeline_vlk
     {
         std::string vertexSource();
+        
+#if !USE_PRECOMPILED_SHADERS
         std::string vertex2Source();
-        std::string dummyFragmentSource();
         std::string meshFragmentSource();
         std::string colorMeshVertexSource();
         std::string colorMeshFragmentSource();
         std::string textFragmentSource();
         std::string textureFragmentSource();
+        std::string differenceFragmentSource();
+#endif
         std::string imageFragmentSource();
         std::string displayFragmentSource(
             const std::string& ocioICSDef, const std::string& ocioICS,
@@ -57,7 +65,6 @@ namespace tl
             const std::string& lutDef, const std::string& lut,
             timeline::LUTOrder, const std::string& toneMapDef,
             const std::string& toneMap);
-        std::string differenceFragmentSource();
 
         std::vector<std::shared_ptr<vlk::Texture> > getTextures(
             Fl_Vk_Context&, const image::Info&, const timeline::ImageFilters&,
