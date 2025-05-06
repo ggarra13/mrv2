@@ -2,17 +2,9 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <tlIO/System.h>
+#include "mrViewer.h"
 
-#include <tlDevice/IOutput.h>
-
-#include <tlCore/String.h>
-#include <tlCore/Mesh.h>
-#include <tlVk/Util.h>
-
-#include "mrvCore/mrvLocale.h"
-#include "mrvCore/mrvMemory.h"
-#include "mrvCore/mrvUtil.h"
+#include "mrvApp/mrvSettingsObject.h"
 
 #include "mrvWidgets/mrvMultilineInput.h"
 
@@ -23,9 +15,20 @@
 #include "mrvVk/mrvVkShape.h"
 #include "mrvVk/mrvVkUtil.h"
 
-#include "mrvApp/mrvSettingsObject.h"
+#include "mrvUI/mrvDesktop.h"
 
-#include "mrViewer.h"
+#include "mrvCore/mrvLocale.h"
+#include "mrvCore/mrvMemory.h"
+#include "mrvCore/mrvUtil.h"
+
+#include <tlVk/Util.h>
+
+#include <tlDevice/IOutput.h>
+
+#include <tlIO/System.h>
+
+#include <tlCore/String.h>
+#include <tlCore/Mesh.h>
 
 namespace
 {
@@ -1190,8 +1193,10 @@ namespace mrv
         void Viewport::_checkHDR()
         {
             TLRENDER_P();
+
+            int screen = this->screen_num();
             
-            if (!p.hdrOptions.passthru)
+            if (!p.hdrOptions.passthru || !desktop::is_hdr_monitor_active(screen))
                 return;
             
             // This will make the FLTK swapchain call vk->SetHDRMetadataEXT();

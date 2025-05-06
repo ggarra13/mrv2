@@ -44,5 +44,10 @@ namespace mrv
             
             return out;
         }
+        
+        bool is_hdr_display_active(int screen)
+        {
+            return true;
+        }
     } // namespace desktop
 } // namespace mrv
