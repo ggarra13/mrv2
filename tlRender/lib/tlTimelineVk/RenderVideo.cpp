@@ -135,7 +135,7 @@ namespace tl
             if (!videoData.empty() && !boxes.empty())
             {
                 _drawVideo(
-                    p.fbo,
+                    p.fbo, "display",
                     videoData[0], boxes[0], !imageOptions.empty() ? std::make_shared<timeline::ImageOptions>(imageOptions[0]) : nullptr,
                     !displayOptions.empty() ? displayOptions[0] : timeline::DisplayOptions());
             }
@@ -150,7 +150,7 @@ namespace tl
             if (videoData.size() > 1 && boxes.size() > 1)
             {
                 _drawVideo(
-                    p.fbo,
+                    p.fbo, "display",
                     videoData[1], boxes[1], imageOptions.size() > 1 ? std::make_shared<timeline::ImageOptions>(imageOptions[1]) : nullptr,
                     displayOptions.size() > 1 ? displayOptions[1] : timeline::DisplayOptions());
             }
@@ -217,7 +217,7 @@ namespace tl
             if (!videoData.empty() && !boxes.empty())
             {
                 _drawVideo(
-                    p.fbo,  // \@todo: update
+                    p.fbo, "wipe0", // \@todo: update
                     videoData[0], boxes[0], !imageOptions.empty() ? std::make_shared<timeline::ImageOptions>(imageOptions[0]) : nullptr,
                     !displayOptions.empty() ? displayOptions[0] : timeline::DisplayOptions());
             }
@@ -256,7 +256,7 @@ namespace tl
             if (videoData.size() > 1 && boxes.size() > 1)
             {
                 _drawVideo(
-                    p.fbo, // \@todo: update
+                    p.fbo, "wipe1", // \@todo: update
                     videoData[1], boxes[1], imageOptions.size() > 1 ? std::make_shared<timeline::ImageOptions>(imageOptions[1]) : nullptr,
                     displayOptions.size() > 1 ? displayOptions[1] : timeline::DisplayOptions());
             }
@@ -271,7 +271,7 @@ namespace tl
             if (videoData.size() > 1 && boxes.size() > 1)
             {
                 _drawVideo(
-                    p.fbo, // \@todo: update
+                    p.fbo, "overlay1", // \@todo: update
                     videoData[1], boxes[1], imageOptions.size() > 1 ? std::make_shared<timeline::ImageOptions>(imageOptions[1]) : nullptr,
                     displayOptions.size() > 1 ? displayOptions[1] : timeline::DisplayOptions());
             }
@@ -306,7 +306,7 @@ namespace tl
                         math::ortho(0.F, static_cast<float>(offscreenBufferSize.w), static_cast<float>(offscreenBufferSize.h), 0.F, -1.F, 1.F));
 
                     _drawVideo(
-                        p.buffers["overlay"],
+                        p.buffers["overlay"], "overlay2",
                         videoData[0], math::Box2i(0, 0, offscreenBufferSize.w, offscreenBufferSize.h),
                         !imageOptions.empty() ? std::make_shared<timeline::ImageOptions>(imageOptions[0]) : nullptr,
                         !displayOptions.empty() ? displayOptions[0] : timeline::DisplayOptions());
@@ -403,7 +403,7 @@ namespace tl
                         math::ortho(0.F, static_cast<float>(offscreenBufferSize.w), static_cast<float>(offscreenBufferSize.h), 0.F, -1.F, 1.F));
 
                     _drawVideo(
-                        p.buffers["difference0"],
+                        p.buffers["difference0"], "difference0",
                         videoData[0], math::Box2i(0, 0, offscreenBufferSize.w, offscreenBufferSize.h),
                         !imageOptions.empty() ? std::make_shared<timeline::ImageOptions>(imageOptions[0]) : nullptr,
                         !displayOptions.empty() ? displayOptions[0] : timeline::DisplayOptions());
@@ -445,7 +445,7 @@ namespace tl
                             math::ortho(0.F, static_cast<float>(offscreenBufferSize.w), static_cast<float>(offscreenBufferSize.h), 0.F, -1.F, 1.F));
 
                         _drawVideo(
-                            p.buffers["difference1"],
+                            p.buffers["difference1"], "difference1",
                             videoData[1], math::Box2i(0, 0, offscreenBufferSize.w, offscreenBufferSize.h),
                             imageOptions.size() > 1 ? std::make_shared<timeline::ImageOptions>(imageOptions[1]) : nullptr,
                             displayOptions.size() > 1 ? displayOptions[1] : timeline::DisplayOptions());
@@ -520,7 +520,7 @@ namespace tl
             for (size_t i = 0; i < videoData.size() && i < boxes.size(); ++i)
             {
                 _drawVideo(
-                    p.fbo,
+                    p.fbo, "tile",
                     videoData[i], boxes[i], i < imageOptions.size() ? std::make_shared<timeline::ImageOptions>(imageOptions[i]) : nullptr,
                     i < displayOptions.size() ? displayOptions[i] : timeline::DisplayOptions());
             }
@@ -560,6 +560,7 @@ namespace tl
         
         void Render::_drawVideo(
             std::shared_ptr<vlk::OffscreenBuffer>& fbo,
+            const std::string& pipelineName,
             const timeline::VideoData& videoData, const math::Box2i& box, const std::shared_ptr<timeline::ImageOptions>& imageOptions,
             const timeline::DisplayOptions& displayOptions)
         {
@@ -654,7 +655,7 @@ namespace tl
                                 const auto transform = math::ortho(0.F, static_cast<float>(box.w()), 0.F,
                                                                    static_cast<float>(box.h()), -1.F, 1.F);
                                 const image::Color4f color(1.F, 1.F, 1.F);
-                                const std::string pipelineNameBase = "video_dissolve"; // Use distinct names
+                                const std::string pipelineNameBase = pipelineName;
                                 const std::string shaderName = "dissolve";
                                 const std::string meshName = "video";
                                 std::string pipelineLayoutName = shaderName; // Typically shader name determines layout
@@ -665,12 +666,12 @@ namespace tl
                                                                            p.shaders[shaderName]);
                                 }
 
-                                std::string pipelineName = pipelineNameBase + "_Pass1_NoBlend";
+                                std::string pipelineDissolveName = pipelineNameBase + "_Pass1_NoBlend";
 
                                 // Create or find a pipeline without blending
                                 bool enableBlending = false;
                                 _createPipeline(p.buffers["video"],
-                                                pipelineName,
+                                                pipelineDissolveName,
                                                "dissolve",
                                                shaderName, meshName,
                                                enableBlending);
@@ -705,10 +706,11 @@ namespace tl
 
                                 _createBindingSet(shader);
 
-                                pipelineName = pipelineNameBase + "_Pass2_BlendColorForceAlpha";
+                                pipelineDissolveName = pipelineNameBase + "_Pass2_BlendColorForceAlpha";
                                 enableBlending = true;
                                 _createPipeline(
-                                    p.buffers["video"], pipelineName,
+                                    p.buffers["video"],
+                                    pipelineDissolveName,
                                     pipelineLayoutName, shaderName, meshName,
                                     enableBlending,
                                     VK_BLEND_FACTOR_SRC_ALPHA,
@@ -786,7 +788,6 @@ namespace tl
                 
                 p.buffers["video"]->transitionToShaderRead(p.cmd);
                 
-                const std::string pipelineName = "display";
                 const std::string pipelineLayoutName = "display";
                 const std::string shaderName = "display";
                 const std::string meshName = "video";
