@@ -1,3 +1,4 @@
+import struct
 import sys
 import os
 
@@ -16,15 +17,13 @@ def generate_header(spv_filepath, output_filepath, var_name, namespace=""):
         if namespace:
             f.write(f"    namespace {namespace} {{\n\n")
 
-        f.write("    // SPIR-V shader bytecode, embedded and 4-byte aligned\n")
-        f.write("    alignas(alignof(uint32_t))\n")
-        f.write(f"   const uint8_t {var_name}[] = {{\n    ")
+        f.write(f"   const uint32_t {var_name}[] = {{\n    ")
 
         # Write bytes as hex literals
-        bytes_per_line = 16
-        for i, byte in enumerate(spv_data):
-            f.write(f"0x{byte:02x}, ")
-            if (i + 1) % bytes_per_line == 0 and (i + 1) < len(spv_data):
+        words = struct.iter_unpack("<I", spv_data)
+        for i, (word,) in enumerate(words):
+            f.write(f"0x{word:08x}, ")
+            if (i + 1) % 4 == 0:
                 f.write("\n    ")
 
         # Handle the last byte and closing brace

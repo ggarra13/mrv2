@@ -678,7 +678,15 @@ namespace tl
 
                 // Actual variables that should have been filled before.
                 createInfo.renderPass = renderPass;
+                if (renderPass == VK_NULL_HANDLE)
+                {
+                    throw std::runtime_error("Render pass is null handle");
+                }
                 createInfo.layout = layout;
+                if (layout == VK_NULL_HANDLE)
+                {
+                    throw std::runtime_error("Layout is null handle");
+                }
 
                 // Create a temporary pipeline cache
                 VkResult result;

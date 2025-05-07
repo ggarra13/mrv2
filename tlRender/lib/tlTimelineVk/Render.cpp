@@ -760,7 +760,7 @@ namespace tl
 
             
             const math::Matrix4x4f transform;
-            const image::Color4f color(0.F, 0.F, 0.F, 0.F);
+            const image::Color4f color(1.F, 1.F, 1.F);
             if (!p.shaders["rect"])
             {
 #if USE_PRECOMPILED_SHADERS
@@ -796,18 +796,18 @@ namespace tl
                 p.shaders["mesh"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
                 p.shaders["mesh"]->addPush(
-                    "color", color, vlk::kShaderFragment);
-                _createBindingSet(p.shaders["mesh"]);
-            }
-            if (!p.shaders["colorMesh"])
-            {
-#if USE_PRECOMPILED_SHADERS
+                      "color", color, vlk::kShaderFragment);
+                  _createBindingSet(p.shaders["mesh"]);
+              }
+              if (!p.shaders["colorMesh"])
+              {
+  #if USE_PRECOMPILED_SHADERS
                 p.shaders["colorMesh"] = vlk::Shader::create(
                     ctx,
                     colorMeshVertex_spv,
                     colorMeshVertex_spv_len,
                     colorMeshFragment_spv,
-                    colorMeshFragment_spv_len, "mesh");
+                    colorMeshFragment_spv_len, "colorMesh");
 #else
                 p.shaders["colorMesh"] = vlk::Shader::create(
                     ctx, colorMeshVertexSource(), colorMeshFragmentSource(),
@@ -815,8 +815,7 @@ namespace tl
 #endif
                 p.shaders["colorMesh"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["colorMesh"]->addPush(
-                    "color", color, vlk::kShaderFragment);
+                p.shaders["colorMesh"]->addPush("color", color, vlk::kShaderFragment);
                 _createBindingSet(p.shaders["colorMesh"]);
             }
             if (!p.shaders["text"])
@@ -837,6 +836,7 @@ namespace tl
                 p.shaders["text"]->addTexture("textureSampler");
                 p.shaders["text"]->addPush(
                     "color", color, vlk::kShaderFragment);
+                
                 _createBindingSet(p.shaders["text"]);
             }
             if (!p.shaders["texture"])
@@ -857,6 +857,7 @@ namespace tl
                 p.shaders["texture"]->addTexture("textureSampler");
                 p.shaders["texture"]->addPush(
                     "color", color, vlk::kShaderFragment);
+                
                 _createBindingSet(p.shaders["texture"]);
             }
             if (!p.shaders["image"])
@@ -972,24 +973,23 @@ namespace tl
             //
             // Meshes
             //
+            if (!p.vbos["image"] || p.vbos["image"]->getSize() != 6)
+            {
+                p.vbos["image"] =
+                    vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32_UV_U16);
+                p.vaos["image"] = vlk::VAO::create(ctx);
+            }
             if (!p.vbos["rect"] || p.vbos["rect"]->getSize() != 6)
             {
                 p.vbos["rect"] =
                     vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32);
                 p.vaos["rect"] = vlk::VAO::create(ctx);
             }
-
             if (!p.vbos["texture"] || p.vbos["texture"]->getSize() != 6)
             {
                 p.vbos["texture"] =
                     vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32_UV_U16);
                 p.vaos["texture"] = vlk::VAO::create(ctx);
-            }
-            if (!p.vbos["image"] || p.vbos["image"]->getSize() != 6)
-            {
-                p.vbos["image"] =
-                    vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32_UV_U16);
-                p.vaos["image"] = vlk::VAO::create(ctx);
             }
             if (!p.vbos["wipe"] || p.vbos["wipe"]->getSize() != 3)
             {
@@ -1020,11 +1020,6 @@ namespace tl
                     i.second->bind(p.frameIndex);
                     i.second->setUniform("transform.mvp", p.transform,
                                          vlk::kShaderVertex);
-                }
-                else
-                {
-                    std::string err = "Missing shader for entry ";
-                    throw std::runtime_error(err + i.first);
                 }
             }
         }

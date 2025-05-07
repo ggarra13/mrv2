@@ -87,7 +87,7 @@ namespace tl
             }
         }
         
-        void Shader::_init(const uint8_t* vertexBytes,
+        void Shader::_init(const uint32_t* vertexBytes,
                            const uint32_t vertexLength,
                            const std::string& fragmentSource,
                            const std::string& name)
@@ -102,9 +102,9 @@ namespace tl
             _createFragmentShader();
         }
         
-        void Shader::_init(const uint8_t* vertexBytes,
+        void Shader::_init(const uint32_t* vertexBytes,
                            const uint32_t vertexLength,
-                           const uint8_t* fragmentBytes,
+                           const uint32_t* fragmentBytes,
                            const uint32_t fragmentLength,
                            const std::string& name)
         {
@@ -170,7 +170,7 @@ namespace tl
         //! Create a new shader.
         std::shared_ptr<Shader> Shader::create(
             Fl_Vk_Context& ctx,
-            const uint8_t* vertexBytes,
+            const uint32_t* vertexBytes,
             const uint32_t vertexLength,
             const std::string& fragmentSource,
             const std::string& name)
@@ -183,9 +183,9 @@ namespace tl
         //! Create a new shader.
         std::shared_ptr<Shader> Shader::create(
             Fl_Vk_Context& ctx,
-            const uint8_t* vertexBytes,
+            const uint32_t* vertexBytes,
             const uint32_t vertexLength,
-            const uint8_t* fragmentBytes,
+            const uint32_t* fragmentBytes,
             const uint32_t fragmentLength,
             const std::string& name)
         {

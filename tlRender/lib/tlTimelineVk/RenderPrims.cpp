@@ -13,19 +13,23 @@ namespace tl
 {
     namespace timeline_vlk
     {
-        void Render::_createMesh(
+        void Render::_create2DMesh(
             const std::string& meshName, const geom::TriangleMesh2& mesh)
         {
             TLRENDER_P();
 
             const size_t size = mesh.triangles.size();
 
-            auto type = vlk::VBOType::Pos2_F32;
-            if (mesh.t.size())
+            auto type = vlk::VBOType::Pos3_F32;
+            if (!mesh.t.empty() && !mesh.c.empty())
+            {
+                throw std::runtime_error("Colored and textured 2D meshes unsupported");
+            }
+            if (!mesh.t.empty())
             {
                 type = vlk::VBOType::Pos2_F32_UV_U16;
             }
-            if (mesh.c.size())
+            else if (!mesh.c.empty())
             {
                 type = vlk::VBOType::Pos2_F32_Color_F32;
             }
@@ -139,30 +143,23 @@ namespace tl
             if (!p.vaos[meshName] && p.vbos[meshName])
             {
                 p.vaos[meshName] = vlk::VAO::create(ctx);
-                p.vaos[meshName]->bind(p.frameIndex);
             }
             if (p.vaos[meshName] && p.vbos[meshName])
             {
-
                 _createPipeline(
                     p.fbo, pipelineName, pipelineLayoutName,
                     shaderName, meshName, enableBlending);
+
+                VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+                vkCmdPushConstants(
+                    p.cmd, pipelineLayout,
+                    shader->getPushStageFlags(), 0,
+                    sizeof(color), &color);
                 
                 shader->bind(p.frameIndex);
                 shader->setUniform("transform.mvp", transform);
 
                 _bindDescriptorSets(pipelineLayoutName, shaderName);
-
-                VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
-                if (!pipelineLayout)
-                    throw std::runtime_error("drawMesh '" +
-                                             meshName +
-                                             "': Invalid pipeline Layout '" +
-                                             pipelineLayoutName + "'"); 
-                vkCmdPushConstants(
-                    p.cmd, pipelineLayout,
-                    shader->getPushStageFlags(), 0,
-                    sizeof(color), &color);
 
                 _vkDraw(meshName);
             }
@@ -185,36 +182,24 @@ namespace tl
             const size_t size = mesh.triangles.size();
             if (size == 0)
                 return;
-            
+
             ++(p.currentStats.meshes);
             p.currentStats.meshTriangles += mesh.triangles.size();
 
-            auto shader = p.shaders["colorMesh"];
-            auto bindingSet = shader->createBindingSet();
-            shader->useBindingSet(bindingSet);
-            p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
+            _createBindingSet(p.shaders["colorMesh"]);
             
             const auto transform =
                 p.transform *
                 math::translate(
                     math::Vector3f(position.x, position.y, 0.F));
             
-            shader->bind(p.frameIndex);
-            shader->setUniform(
+            p.shaders["colorMesh"]->bind(p.frameIndex);
+            p.shaders["colorMesh"]->setUniform(
                 "transform.mvp", transform, vlk::kShaderVertex);
             _bindDescriptorSets(pipelineLayoutName, "colorMesh");
 
             if (p.vaos["colorMesh"] && p.vbos["colorMesh"])
             {
-                VkPipelineLayout pipelineLayout =
-                    p.pipelineLayouts[pipelineLayoutName];
-                if (!pipelineLayout)
-                    throw std::runtime_error("Invalid pipeline Layout '" +
-                                             pipelineLayoutName + "'"); 
-                vkCmdPushConstants(
-                    p.cmd, pipelineLayout,
-                    shader->getPushStageFlags(), 0,
-                    sizeof(color), &color);
                 _vkDraw("colorMesh");
             }
         }

@@ -12,6 +12,7 @@ extern "C"
 }
 #endif
 
+#include <tlTimelineVk/RenderOptions.h>
 #include <tlTimelineVk/Render.h>
 
 #include <tlVk/Mesh.h>
@@ -34,22 +35,11 @@ extern "C"
 namespace OCIO = OCIO_NAMESPACE;
 #endif // TLRENDER_OCIO
 
-#define MRV2_ALIGN2(x, align) (((x) + (align) - 1) & ~((align) - 1))
-#define USE_CONSTANTS 0  // when 1, it uses constants instead of push_constants
-#define USE_STD430    1  // when 1, uses STD430 over STD140 in push_constants
-#define USE_PRECOMPILED_SHADERS 1 // Use 1 for faster startups.
-
-#if USE_PRECOMPILED_SHADERS
-#   include <tlTimelineVk/RenderShadersBinary.h>
-#endif
-
 namespace tl
 {
     namespace timeline_vlk
     {
         std::string vertexSource();
-        
-#if !USE_PRECOMPILED_SHADERS
         std::string vertex2Source();
         std::string meshFragmentSource();
         std::string colorMeshVertexSource();
@@ -57,7 +47,7 @@ namespace tl
         std::string textFragmentSource();
         std::string textureFragmentSource();
         std::string differenceFragmentSource();
-#endif
+        
         std::string imageFragmentSource();
         std::string displayFragmentSource(
             const std::string& ocioICSDef, const std::string& ocioICS,

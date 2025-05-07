@@ -217,7 +217,7 @@ namespace tl
                 const timeline::VideoData&, const math::Box2i&,
                 const std::shared_ptr<timeline::ImageOptions>&,
                 const timeline::DisplayOptions&);
-            void _createMesh(
+            void _create2DMesh(
                 const std::string& meshName, const geom::TriangleMesh2& mesh);
             void _createBindingSet(const std::shared_ptr<vlk::Shader>& shaderName);
             VkPipelineLayout _createPipelineLayout(

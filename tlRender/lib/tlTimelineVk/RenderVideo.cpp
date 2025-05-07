@@ -71,6 +71,7 @@ namespace tl
         {
             TLRENDER_P();
 
+            image::Color4f color(1.F, 1.F, 1.F);
             for (const auto& box : boxes)
             {
                 p.fbo->transitionToColorAttachment(p.cmd);
@@ -78,7 +79,6 @@ namespace tl
                 {
                 case timeline::Background::Solid:
                 {
-                    const auto& mesh = geom::box(box);
                     p.fbo->beginRenderPass(p.cmd, "Solid BG");
                     p.fbo->setupViewportAndScissor(p.cmd);
                     drawRect("solid", "rect", "rect", box, options.color0);
@@ -87,11 +87,18 @@ namespace tl
                 }
                 case timeline::Background::Checkers:
                 {
-                    const auto& mesh = geom::checkers(box, options.color0,
-                                                      options.color1,
-                                                      options.checkersSize);
-                    _createMesh("colorMesh", mesh);
-                    _createPipeline(p.fbo, "checkers", "checkers", "colorMesh", "colorMesh", false);
+                    geom::TriangleMesh2 mesh = geom::checkers(box,
+                                                              options.color0,
+                                                              options.color1,
+                                                              options.checkersSize);
+                    _create2DMesh("colorMesh", mesh);
+                    _createPipeline(p.fbo, "checkers", "checkers", "colorMesh", "colorMesh");
+                    VkPipelineLayout pipelineLayout = p.pipelineLayouts["checkers"];
+                    vkCmdPushConstants(
+                        p.cmd, pipelineLayout,
+                        p.shaders["colorMesh"]->getPushStageFlags(), 0,
+                        sizeof(color), &color);
+                
                     p.fbo->beginRenderPass(p.cmd, "Checkers BG");
                     drawColorMesh("checkers", mesh, math::Vector2i(), image::Color4f(1.F, 1.F, 1.F));
                     p.fbo->endRenderPass(p.cmd);
@@ -116,8 +123,13 @@ namespace tl
                         geom::Vertex2(4, 0, 2),
                         geom::Vertex2(1, 0, 1),
                     });
-                    _createMesh("colorMesh", mesh);
-                    _createPipeline(p.fbo, "gradient", "gradient", "colorMesh", "colorMesh", false);
+                    _create2DMesh("colorMesh", mesh);
+                    _createPipeline(p.fbo, "gradient", "gradient", "colorMesh", "colorMesh");
+                    VkPipelineLayout pipelineLayout = p.pipelineLayouts["checkers"];
+                    vkCmdPushConstants(
+                        p.cmd, pipelineLayout,
+                        p.shaders["colorMesh"]->getPushStageFlags(), 0,
+                        sizeof(color), &color);
                     p.fbo->beginRenderPass(p.cmd, "Gradient BG");
                     drawColorMesh("gradient", mesh, math::Vector2i(), image::Color4f(1.F, 1.F, 1.F));
                     p.fbo->endRenderPass(p.cmd);
@@ -376,12 +388,13 @@ namespace tl
                                     VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);
                     
                     VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+                    vkCmdPushConstants(p.cmd, pipelineLayout,
+                                       p.shaders["overlay"]->getPushStageFlags(), 0, sizeof(color), &color);
+                    
                     p.fbo->transitionToColorAttachment(p.cmd);
                     p.fbo->beginRenderPass(p.cmd, "OVERLAY PASS");
 
                     p.shaders["overlay"]->setFBO("textureSampler", p.buffers["overlay"]);
-                    vkCmdPushConstants(p.cmd, pipelineLayout,
-                                       p.shaders["overlay"]->getPushStageFlags(), 0, sizeof(color), &color);
                     
                     _bindDescriptorSets(pipelineLayoutName, "overlay");
 
@@ -709,12 +722,6 @@ namespace tl
                                 const std::string shaderName = "dissolve";
                                 const std::string meshName = "video";
                                 std::string pipelineLayoutName = shaderName; // Typically shader name determines layout
-                                VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
-                                // Ensure pipelineLayout is valid, create if necessary
-                                if (!pipelineLayout) {
-                                    pipelineLayout = _createPipelineLayout(pipelineLayoutName,
-                                                                           p.shaders[shaderName]);
-                                }
 
                                 std::string pipelineDissolveName = pipelineNameBase + "_Pass1_NoBlend";
 
@@ -722,9 +729,14 @@ namespace tl
                                 bool enableBlending = false;
                                 _createPipeline(p.buffers["video"],
                                                 pipelineDissolveName,
-                                               "dissolve",
-                                               shaderName, meshName,
-                                               enableBlending);
+                                                pipelineLayoutName,
+                                                shaderName, meshName,
+                                                enableBlending);
+                                
+                                VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+                                vkCmdPushConstants(p.cmd, pipelineLayout,
+                                                   p.shaders["dissolve"]->getPushStageFlags(), 0, sizeof(color), &color);
+                                
                                 p.buffers["video"]->beginRenderPass(p.cmd, "COMP VIDEO RENDER");
 
                                 _createBindingSet(p.shaders["dissolve"]);
@@ -734,9 +746,6 @@ namespace tl
 
                                 _bindDescriptorSets(pipelineLayoutName,
                                                     "dissolve");
-
-                                vkCmdPushConstants(p.cmd, pipelineLayout,
-                                                   p.shaders["dissolve"]->getPushStageFlags(), 0, sizeof(color), &color);
                                 
 
                                 if (p.vbos["video"])
@@ -767,13 +776,13 @@ namespace tl
                                     VK_BLEND_FACTOR_ONE,
                                     VK_BLEND_OP_ADD,
                                     VK_BLEND_OP_ADD);
+                                vkCmdPushConstants(p.cmd, pipelineLayout,
+                                                   p.shaders["dissolve"]->getPushStageFlags(), 0,
+                                                   sizeof(color), &color);
 
                                 p.shaders["dissolve"]->setUniform("transform.mvp", transform,
                                                                   vlk::kShaderVertex);
                                 p.shaders["dissolve"]->setFBO("textureSampler", p.buffers["dissolve2"]);
-                                vkCmdPushConstants(p.cmd, pipelineLayout,
-                                                   p.shaders["dissolve"]->getPushStageFlags(), 0,
-                                                   sizeof(color), &color);
                                 _bindDescriptorSets(pipelineLayoutName,
                                                     "dissolve");
 
@@ -884,6 +893,47 @@ namespace tl
                                 colorBlendOp,
                                 alphaBlendOp);
 
+                std::size_t pushSize = p.shaders["display"]->getPushSize();
+                if (pushSize > 0)
+                {
+                    std::vector<uint8_t> pushData(pushSize, 0);
+                    const pl_shader_res* res = p.placeboData->res;
+                    VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+                    std::size_t currentOffset = 0;
+                    for (int i = 0; i < res->num_variables; ++i)
+                    {
+                        const struct pl_shader_var& shader_var = res->variables[i];
+                        const struct pl_var& var = shader_var.var;
+                        const struct pl_var_layout& layout = pl_std430_layout(currentOffset, &var);
+                            
+                        // Handle matrix types (dim_m > 1 && dim_v > 1)
+                        if (var.dim_m > 1 && var.dim_v > 1)
+                        {
+                            // For column-major matrices, we pad each column according to layout.stride
+                            const float* src = reinterpret_cast<const float*>(shader_var.data);
+                            uint8_t* dst = pushData.data() + layout.offset;
+
+                            // Fill each column (dim_m = #columns, dim_v = #rows)
+                            for (int col = 0; col < var.dim_m; ++col)
+                            {
+                                const float* src_col = src + col * var.dim_v;
+                                float* dst_col = reinterpret_cast<float*>(dst + layout.stride * col);
+                                memcpy(dst_col, src_col, sizeof(float) * var.dim_v);
+                            }
+                        }
+                        else
+                        {
+                            // Scalars, vectors, or arrays thereof — copy the block directly
+                            memcpy(pushData.data() + layout.offset, shader_var.data, layout.size);
+                        }
+
+                        currentOffset = layout.offset + layout.size;
+                    }
+                        
+                    vkCmdPushConstants(p.cmd, pipelineLayout,
+                                       VK_SHADER_STAGE_FRAGMENT_BIT, 0,
+                                       pushData.size(), pushData.data());
+                }
 
                 fbo->beginRenderPass(p.cmd, "DISPLAY PASS");
 
@@ -947,48 +997,6 @@ namespace tl
                     for (auto& texture : p.placeboData->textures)
                     {
                         p.shaders["display"]->setTexture(texture->getName(), texture);
-                    }
-
-                    std::size_t pushSize = p.shaders["display"]->getPushSize();
-                    if (pushSize > 0)
-                    {
-                        std::vector<uint8_t> pushData(pushSize, 0);
-                        const pl_shader_res* res = p.placeboData->res;
-                        VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
-                        std::size_t currentOffset = 0;
-                        for (int i = 0; i < res->num_variables; ++i)
-                        {
-                            const struct pl_shader_var& shader_var = res->variables[i];
-                            const struct pl_var& var = shader_var.var;
-                            const struct pl_var_layout& layout = pl_std430_layout(currentOffset, &var);
-                            
-                            // Handle matrix types (dim_m > 1 && dim_v > 1)
-                            if (var.dim_m > 1 && var.dim_v > 1)
-                            {
-                                // For column-major matrices, we pad each column according to layout.stride
-                                const float* src = reinterpret_cast<const float*>(shader_var.data);
-                                uint8_t* dst = pushData.data() + layout.offset;
-
-                                // Fill each column (dim_m = #columns, dim_v = #rows)
-                                for (int col = 0; col < var.dim_m; ++col)
-                                {
-                                    const float* src_col = src + col * var.dim_v;
-                                    float* dst_col = reinterpret_cast<float*>(dst + layout.stride * col);
-                                    memcpy(dst_col, src_col, sizeof(float) * var.dim_v);
-                                }
-                            }
-                            else
-                            {
-                                // Scalars, vectors, or arrays thereof — copy the block directly
-                                memcpy(pushData.data() + layout.offset, shader_var.data, layout.size);
-                            }
-
-                            currentOffset = layout.offset + layout.size;
-                        }
-                        
-                        vkCmdPushConstants(p.cmd, pipelineLayout,
-                                           VK_SHADER_STAGE_FRAGMENT_BIT, 0,
-                                           pushData.size(), pushData.data());
                     }
                 }
 #endif // TLRENDER_LIBPLACEBO
