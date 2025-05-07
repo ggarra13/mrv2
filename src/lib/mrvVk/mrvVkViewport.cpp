@@ -428,8 +428,7 @@ namespace mrv
                     vk.shader->addFBO("textureSampler"); // default is fragment
                     float opacity = 1.F;
                     vk.shader->addPush("opacity", opacity, vlk::kShaderFragment);
-                    auto bindingSet = vk.shader->createBindingSet();
-                    vk.shader->useBindingSet(bindingSet);
+                    vk.shader->createBindingSet();
                 }
 
                 if (!vk.annotationShader)
@@ -442,7 +441,6 @@ namespace mrv
                     int channels = 0; // Color
                     vk.annotationShader->createUniform("channels", channels);
                     auto bindingSet = vk.annotationShader->createBindingSet();
-                    vk.annotationShader->useBindingSet(bindingSet);
                 }
             }
         }
@@ -457,6 +455,7 @@ namespace mrv
             TLRENDER_P();
             MRV2_VK();
 
+            
             // Get the command buffer started for the current frame.
             VkCommandBuffer cmd = getCurrentCommandBuffer();
             end_render_pass(cmd);
@@ -640,11 +639,9 @@ namespace mrv
             timeline::RenderOptions renderOptions;
             renderOptions.colorBuffer = vk.colorBufferType;
 
-            _checkHDR();
+            _updateHDRMetadata();
             
-#ifndef NDEBUG
             try
-#endif
             {
                 vk.buffer->transitionToColorAttachment(cmd);
             
@@ -705,12 +702,10 @@ namespace mrv
                 }
 
             }
-#ifndef NDEBUG
             catch (const std::exception& e)
             {
                 LOG_ERROR(e.what());
             }
-#endif
 
             vk.render->end();
 
@@ -732,7 +727,6 @@ namespace mrv
             
             // --- Final Render Pass: Render to Swapchain (Composition) ---
             vk.buffer->transitionToShaderRead(cmd);
-
             
             begin_render_pass(cmd);
 

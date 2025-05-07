@@ -137,17 +137,18 @@ bool displaySupportsHDR(CGDirectDisplayID cgDisplayID) {
 
 namespace mrv
 {
-
-    bool is_hdr_active(int screen)
+    namespace monitor
     {
-        CGDirectDisplayID displayID = CGMainDisplayID();
-        if (displaySupportsHDR(displayID)) {
-            std::cout << "This display claims to support HDR (via EDID).\n";
-            return true;
-        } else {
-            std::cout << "This display does not advertise HDR support in EDID.\n";
-            return false;
+        bool is_hdr_active(int screen)
+        {
+            CGDirectDisplayID displayID = CGMainDisplayID();
+            if (displaySupportsHDR(displayID)) {
+                std::cout << "This display claims to support HDR (via EDID).\n";
+                return true;
+            } else {
+                std::cout << "This display does not advertise HDR support in EDID.\n";
+                return false;
+            }
         }
     }
-
 }

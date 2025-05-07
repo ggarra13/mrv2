@@ -13,19 +13,31 @@ it to Vulkan.
 - Improved runmeq.sh and runmet.sh scripts to exit early and with an error
   message if compilation fails.
 - Fixed a potential reset of the X11 server when hiding the timeline bar.
-- Started porting to Vulkan.
+- Started porting to Vulkan.  Vulkan on macOS leaves OpenGL in the dust, on 
+  Linux is underwhelming, and on Windows is middle ground.
 
 	 * Working:
 		 * Viewport
-		 * Color toolbar
+		 * Pixel toolbar
 		 * Timeline with tick bars, current frame number and labels.
 		 * Timeline without thumbnails
 		 * OTIO with dissolves
 		 * HDR Passthru (for HDR).
 		 * HDR Tonemapping (for SDR).
 		 * HUD
+		 * Comparison Modes: 
+			 - A
+			 - B
+			 - Difference (minor validation error when switching)
+			 - Dissolve (minor validation error when switching)
+			 - Horizontal
+			 - Vertical
+			 - Tile
 		 
 	 * Missing to check/add:
+		 * Comparison Modes:
+			 - Wipe
+		 * Missing Frames crosses
 		 * Safe Areas
 		 * Masking
 		 * Thumbnails in Timeline (crashes) / Editing
@@ -37,8 +49,8 @@ it to Vulkan.
 		 * Temporary FLTK Text widget annotation (how to do it?)
 		 * Text annotations (how to do it?)
 		 * How to use any FLTK font for annotation (how to do it?)
+		 * OpenUSD (how to do it?)
 		 
-- Added passthru to HDROptions.
 - Fixed and simplified code for NDIView (hdr utility).
 - Fixed hdr utility for macOS Intel trying to pass full HDR10 or HLG data, 
   which goes over those machines' nits.

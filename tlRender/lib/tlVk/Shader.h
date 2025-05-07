@@ -18,6 +18,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <cstdint>
 
 namespace tl
 {
@@ -44,19 +45,45 @@ namespace tl
         class Shader : public std::enable_shared_from_this<Shader>
         {
             TLRENDER_NON_COPYABLE(Shader);
-
-        protected:
-            void _init();
-
-            Shader(Fl_Vk_Context& ctx);
-
+            
         public:
+            Shader(Fl_Vk_Context& ctx);
             ~Shader();
+            
+            void _init(const std::string& vertexSource,
+                       const std::string& fragmentSource,
+                       const std::string& name);
+            void _init(const uint32_t* vertexBytes, const uint32_t vertexLength,
+                       const std::string& fragmentSource,
+                       const std::string& name);
+            void _init(const uint32_t* vertexBytes, const uint32_t vertexLength,
+                       const uint32_t* fragmentBytes,
+                       const uint32_t fragmentLength,
+                       const std::string& name);
+
 
             //! Create a new shader.
             static std::shared_ptr<Shader> create(
-                Fl_Vk_Context& ctx, const std::string& vertexSource,
+                Fl_Vk_Context& ctx,
+                const std::string& vertexSource,
                 const std::string& fragmentSource,
+                const std::string& name = "");
+            
+            //! Create a new shader.
+            static std::shared_ptr<Shader> create(
+                Fl_Vk_Context& ctx,
+                const uint32_t* vertexBytes,
+                const uint32_t vertexLength,
+                const std::string& fragmentSource,
+                const std::string& name = "");
+            
+            //! Create a new shader.
+            static std::shared_ptr<Shader> create(
+                Fl_Vk_Context& ctx,
+                const uint32_t* vertexBytes,
+                const uint32_t vertexLength,
+                const uint32_t* fragmentBytes,
+                const uint32_t fragmentLength,
                 const std::string& name = "");
 
             //! Get the shader name.
@@ -164,7 +191,12 @@ namespace tl
             void debug();
 
         private:
+            void _createVertexShader();
+            void _createFragmentShader();
+            
             Fl_Vk_Context& ctx;
+            
+            std::string shaderName = "Shader";
 
             //! Counter used in binding UBOs, Textures and FBOs.
             uint32_t current_binding_index = 0;
@@ -192,7 +224,6 @@ namespace tl
             typedef ShaderBindingSet::FBOParameter FBOBinding;
             std::map<std::string, FBOBinding> fboBindings;
 
-            std::string shaderName = "Shader";
             std::shared_ptr<ShaderBindingSet> activeBindingSet;
 
             TLRENDER_PRIVATE();

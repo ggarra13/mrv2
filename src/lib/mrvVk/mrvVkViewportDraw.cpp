@@ -1191,10 +1191,10 @@ namespace mrv
             // }
         }
         
-        void Viewport::_checkHDR()
+        void Viewport::_updateHDRMetadata()
         {
             TLRENDER_P();
-
+            
             int screen = this->screen_num();
             
             if (!p.hdrOptions.passthru || !monitor::is_hdr_active(screen))
