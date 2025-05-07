@@ -248,9 +248,7 @@ namespace tl
                 }
                 if (p.vaos["wipe"])
                 {
-                    p.vaos["wipe"]->bind(p.frameIndex);
-                    p.vaos["wipe"]->draw(p.cmd, p.vbos["wipe"]);
-                    p.garbage[p.frameIndex].vaos.push_back(p.vaos["wipe"]);
+                    _vkDraw("wipe");
                 }
             }
             // glStencilFunc(GL_EQUAL, 1, 0xFF);
@@ -360,9 +358,7 @@ namespace tl
                     }
                     if (p.vaos["video"])
                     {
-                        p.vaos["video"]->bind(p.frameIndex);
-                        p.vaos["video"]->draw(p.cmd, p.vbos["video"]);
-                        p.garbage[p.frameIndex].vaos.push_back(p.vaos["video"]);
+                        _vkDraw("video");
                     }
                 }
             }
@@ -694,7 +690,6 @@ namespace tl
                                                    p.shaders["dissolve"]->getPushStageFlags(), 0, sizeof(color), &color);
                                 
 
-#if FIRST_RENDER_PASS
                                 if (p.vbos["video"])
                                 {
                                     p.vbos["video"]->copy(
@@ -705,11 +700,8 @@ namespace tl
                                 }
                                 if (p.vaos["video"])
                                 {
-                                    p.vaos["video"]->bind(p.frameIndex);
-                                    p.vaos["video"]->draw(p.cmd, p.vbos["video"]);
-                                    p.garbage[p.frameIndex].vaos.push_back(p.vaos["video"]);
+                                    _vkDraw("video");
                                 }
-#endif
 
                                 _createBindingSet(shader);
 
@@ -736,7 +728,6 @@ namespace tl
                                 _bindDescriptorSets(pipelineLayoutName,
                                                     shaderName);
 
-#if SECOND_RENDER_PASS
                                 if (p.vbos["video"])
                                 {
                                     p.vbos["video"]->copy(
@@ -747,11 +738,8 @@ namespace tl
                                 }
                                 if (p.vaos["video"])
                                 {
-                                    p.vaos["video"]->bind(p.frameIndex);
-                                    p.vaos["video"]->draw(p.cmd, p.vbos["video"]);
-                                    p.garbage[p.frameIndex].vaos.push_back(p.vaos["video"]);
+                                    _vkDraw("video");
                                 }
-#endif
 
                                 p.buffers["video"]->endRenderPass(p.cmd);
 
