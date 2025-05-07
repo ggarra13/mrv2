@@ -341,7 +341,7 @@ namespace tl
                     
                     VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
 
-                    _bindDescriptorSets(pipelineLayoutName, shaderName);
+                    _bindDescriptorSets(pipelineLayoutName, "overlay");
 
                     vkCmdPushConstants(p.cmd, pipelineLayout,
                                        p.shaders["overlay"]->getPushStageFlags(), 0, sizeof(color), &color);
@@ -400,7 +400,8 @@ namespace tl
                     p.shaders["display"]->bind(p.frameIndex);
                     p.shaders["display"]->setUniform(
                         "transform.mvp",
-                        math::ortho(0.F, static_cast<float>(offscreenBufferSize.w), static_cast<float>(offscreenBufferSize.h), 0.F, -1.F, 1.F));
+                        math::ortho(0.F, static_cast<float>(offscreenBufferSize.w),
+                                    0.F, static_cast<float>(offscreenBufferSize.h), -1.F, 1.F));
 
                     _drawVideo(
                         p.buffers["difference0"], "difference0",
@@ -439,10 +440,12 @@ namespace tl
                         // glClearColor(0.F, 0.F, 0.F, 0.F);
                         // glClear(GL_COLOR_BUFFER_BIT);
 
+                        _createBindingSet(p.shaders["display"]);
                         p.shaders["display"]->bind(p.frameIndex);
                         p.shaders["display"]->setUniform(
                             "transform.mvp",
-                            math::ortho(0.F, static_cast<float>(offscreenBufferSize.w), static_cast<float>(offscreenBufferSize.h), 0.F, -1.F, 1.F));
+                            math::ortho(0.F, static_cast<float>(offscreenBufferSize.w),
+                                        0.F, static_cast<float>(offscreenBufferSize.h), -1.F, 1.F));
 
                         _drawVideo(
                             p.buffers["difference1"], "difference1",
@@ -492,6 +495,7 @@ namespace tl
                     p.shaders["difference"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
                     p.shaders["difference"]->setFBO("textureSampler", p.buffers["difference0"]);
                     p.shaders["difference"]->setFBO("textureSamplerB", p.buffers["difference1"]);
+                    _bindDescriptorSets(pipelineLayoutName, "difference");
 
                     if (p.vbos["video"])
                     {
@@ -572,6 +576,7 @@ namespace tl
 
             // \@todo: check if this is needed
             // const auto transform = math::ortho(0.F, static_cast<float>(box.w()), static_cast<float>(box.h()), 0.F, -1.F, 1.F);
+            // _createBindingSet(p.shaders["image"]);
             // p.shaders["image"]->bind(p.frameIndex);
             // p.shaders["image"]->setUniform("transform.mvp", transform, vlk::kShaderVertex);
 
@@ -685,7 +690,7 @@ namespace tl
                                 p.shaders["dissolve"]->setFBO("textureSampler", p.buffers["dissolve"]);
 
                                 _bindDescriptorSets(pipelineLayoutName,
-                                                    shaderName);
+                                                    "dissolve");
 
                                 vkCmdPushConstants(p.cmd, pipelineLayout,
                                                    p.shaders["dissolve"]->getPushStageFlags(), 0, sizeof(color), &color);
@@ -728,7 +733,7 @@ namespace tl
                                                    p.shaders["dissolve"]->getPushStageFlags(), 0,
                                                    sizeof(color), &color);
                                 _bindDescriptorSets(pipelineLayoutName,
-                                                    shaderName);
+                                                    "dissolve");
 
                                 if (p.vbos["video"])
                                 {
@@ -910,7 +915,7 @@ namespace tl
                 }
 #endif // TLRENDER_LIBPLACEBO
 
-                _bindDescriptorSets(pipelineLayoutName, shaderName);
+                _bindDescriptorSets(pipelineLayoutName, "display");
 
                 if (p.vbos["video"])
                 {
