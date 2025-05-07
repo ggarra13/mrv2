@@ -13,19 +13,30 @@ it to Vulkan.
 - Improved runmeq.sh and runmet.sh scripts to exit early and with an error
   message if compilation fails.
 - Fixed a potential reset of the X11 server when hiding the timeline bar.
-- Started porting to Vulkan.
+- Started porting to Vulkan.  Vulkan on macOS leaves OpenGL in the dust, on 
+  Linux is underwhelming, and on Windows is middle ground.
 
 	 * Working:
 		 * Viewport
-		 * Color toolbar
+		 * Pixel toolbar
 		 * Timeline with tick bars, current frame number and labels.
 		 * Timeline without thumbnails
 		 * OTIO with dissolves
 		 * HDR Passthru (for HDR).
 		 * HDR Tonemapping (for SDR).
 		 * HUD
+		 * Comparison Modes: 
+			 - A
+			 - B
+			 - Difference (minor validation error when switching)
 		 
 	 * Missing to check/add:
+		 * Comparison Modes:
+			 - Wipe
+			 - Overlay
+			 - Horizontal
+			 - Vertical
+			 - Tile
 		 * Missing Frames crosses
 		 * Safe Areas
 		 * Masking

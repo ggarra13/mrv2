@@ -17,8 +17,11 @@ namespace tl
     {
         
         void Render::drawVideo(
-            const std::vector<timeline::VideoData>& videoData, const std::vector<math::Box2i>& boxes, const std::vector<timeline::ImageOptions>& imageOptions,
-            const std::vector<timeline::DisplayOptions>& displayOptions, const timeline::CompareOptions& compareOptions,
+            const std::vector<timeline::VideoData>& videoData,
+            const std::vector<math::Box2i>& boxes,
+            const std::vector<timeline::ImageOptions>& imageOptions,
+            const std::vector<timeline::DisplayOptions>& displayOptions,
+            const timeline::CompareOptions& compareOptions,
             const timeline::BackgroundOptions& backgroundOptions)
         {
             TLRENDER_P();
@@ -63,7 +66,8 @@ namespace tl
             }
         }
 
-        void Render::_drawBackground(const std::vector<math::Box2i>& boxes, const timeline::BackgroundOptions& options)
+        void Render::_drawBackground(const std::vector<math::Box2i>& boxes,
+                                     const timeline::BackgroundOptions& options)
         {
             TLRENDER_P();
 
@@ -127,8 +131,11 @@ namespace tl
         }
 
         void Render::_drawVideoA(
-            const std::vector<timeline::VideoData>& videoData, const std::vector<math::Box2i>& boxes, const std::vector<timeline::ImageOptions>& imageOptions,
-            const std::vector<timeline::DisplayOptions>& displayOptions, const timeline::CompareOptions& compareOptions)
+            const std::vector<timeline::VideoData>& videoData,
+            const std::vector<math::Box2i>& boxes,
+            const std::vector<timeline::ImageOptions>& imageOptions,
+            const std::vector<timeline::DisplayOptions>& displayOptions,
+            const timeline::CompareOptions& compareOptions)
         {
             TLRENDER_P();
 
@@ -142,8 +149,11 @@ namespace tl
         }
 
         void Render::_drawVideoB(
-            const std::vector<timeline::VideoData>& videoData, const std::vector<math::Box2i>& boxes, const std::vector<timeline::ImageOptions>& imageOptions,
-            const std::vector<timeline::DisplayOptions>& displayOptions, const timeline::CompareOptions& compareOptions)
+            const std::vector<timeline::VideoData>& videoData,
+            const std::vector<math::Box2i>& boxes,
+            const std::vector<timeline::ImageOptions>& imageOptions,
+            const std::vector<timeline::DisplayOptions>& displayOptions,
+            const timeline::CompareOptions& compareOptions)
         {
             TLRENDER_P();
             
@@ -157,8 +167,11 @@ namespace tl
         }
 
         void Render::_drawVideoWipe(
-            const std::vector<timeline::VideoData>& videoData, const std::vector<math::Box2i>& boxes, const std::vector<timeline::ImageOptions>& imageOptions,
-            const std::vector<timeline::DisplayOptions>& displayOptions, const timeline::CompareOptions& compareOptions)
+            const std::vector<timeline::VideoData>& videoData,
+            const std::vector<math::Box2i>& boxes,
+            const std::vector<timeline::ImageOptions>& imageOptions,
+            const std::vector<timeline::DisplayOptions>& displayOptions,
+            const timeline::CompareOptions& compareOptions)
         {
             TLRENDER_P();
 
@@ -365,8 +378,11 @@ namespace tl
         }
 
         void Render::_drawVideoDifference(
-            const std::vector<timeline::VideoData>& videoData, const std::vector<math::Box2i>& boxes, const std::vector<timeline::ImageOptions>& imageOptions,
-            const std::vector<timeline::DisplayOptions>& displayOptions, const timeline::CompareOptions& compareOptions)
+            const std::vector<timeline::VideoData>& videoData,
+            const std::vector<math::Box2i>& boxes,
+            const std::vector<timeline::ImageOptions>& imageOptions,
+            const std::vector<timeline::DisplayOptions>& displayOptions,
+            const timeline::CompareOptions& compareOptions)
         {
             TLRENDER_P();
             if (!videoData.empty() && !boxes.empty())
@@ -395,6 +411,8 @@ namespace tl
                     // glClearColor(0.F, 0.F, 0.F, 0.F);
                     // glClear(GL_COLOR_BUFFER_BIT);
 
+                    // \@bug: Why does this raise a validation error when
+                    //        switching for the first time?
                     _createBindingSet(p.shaders["display"]);
                     
                     p.shaders["display"]->bind(p.frameIndex);
@@ -452,6 +470,7 @@ namespace tl
                             videoData[1], math::Box2i(0, 0, offscreenBufferSize.w, offscreenBufferSize.h),
                             imageOptions.size() > 1 ? std::make_shared<timeline::ImageOptions>(imageOptions[1]) : nullptr,
                             displayOptions.size() > 1 ? displayOptions[1] : timeline::DisplayOptions());
+                        _createBindingSet(p.shaders["display"]);
                     }
                 }
                 else
@@ -682,8 +701,7 @@ namespace tl
                                                enableBlending);
                                 p.buffers["video"]->beginRenderPass(p.cmd, "COMP VIDEO RENDER");
 
-                                auto shader = p.shaders["dissolve"];
-                                _createBindingSet(shader);
+                                _createBindingSet(p.shaders["dissolve"]);
 
                                 p.shaders["dissolve"]->bind(p.frameIndex);
                                 p.shaders["dissolve"]->setUniform("transform.mvp", transform, vlk::kShaderVertex);
@@ -709,7 +727,7 @@ namespace tl
                                     _vkDraw("video");
                                 }
 
-                                _createBindingSet(shader);
+                                _createBindingSet(p.shaders["dissolve"]);
 
                                 pipelineDissolveName = pipelineNameBase + "_Pass2_BlendColorForceAlpha";
                                 enableBlending = true;
