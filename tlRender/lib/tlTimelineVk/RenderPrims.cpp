@@ -741,10 +741,12 @@ namespace tl
             VkBlendFactor dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
             VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
             VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+            VkBlendOp colorBlendOp = VK_BLEND_OP_ADD;
+            VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD;
             switch (imageOptions.alphaBlend)
             {
             case timeline::AlphaBlend::kNone:
-                enableBlending = true;
+                enableBlending = false;
                 srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
                 dstColorBlendFactor = VK_BLEND_FACTOR_ZERO;
                 srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
@@ -785,7 +787,8 @@ namespace tl
             _createPipeline(fbo, pipelineName, pipelineLayoutName,
                             shaderName, meshName, enableBlending,
                             srcColorBlendFactor, dstColorBlendFactor,
-                            srcAlphaBlendFactor, dstAlphaBlendFactor);
+                            srcAlphaBlendFactor, dstAlphaBlendFactor,
+                            colorBlendOp, alphaBlendOp);
             _bindDescriptorSets(pipelineLayoutName, shaderName);
             fbo->setupViewportAndScissor(p.cmd);
 

@@ -919,7 +919,7 @@ namespace tl
 
                 p.shaders["overlay"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["overlay"]->addTexture("textureSampler");
+                p.shaders["overlay"]->addFBO("textureSampler");
                 p.shaders["overlay"]->addPush("color", color, vlk::kShaderFragment);
                 
                 _createBindingSet(p.shaders["overlay"]);

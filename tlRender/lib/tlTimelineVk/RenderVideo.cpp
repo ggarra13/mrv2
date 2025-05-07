@@ -91,7 +91,7 @@ namespace tl
                                                       options.color1,
                                                       options.checkersSize);
                     _createMesh("colorMesh", mesh);
-                    _createPipeline(p.fbo, "checkers", "checkers", "colorMesh", "colorMesh");
+                    _createPipeline(p.fbo, "checkers", "checkers", "colorMesh", "colorMesh", false);
                     p.fbo->beginRenderPass(p.cmd, "Checkers BG");
                     drawColorMesh("checkers", mesh, math::Vector2i(), image::Color4f(1.F, 1.F, 1.F));
                     p.fbo->endRenderPass(p.cmd);
@@ -117,7 +117,7 @@ namespace tl
                         geom::Vertex2(1, 0, 1),
                     });
                     _createMesh("colorMesh", mesh);
-                    _createPipeline(p.fbo, "gradient", "gradient", "colorMesh", "colorMesh");
+                    _createPipeline(p.fbo, "gradient", "gradient", "colorMesh", "colorMesh", false);
                     p.fbo->beginRenderPass(p.cmd, "Gradient BG");
                     drawColorMesh("gradient", mesh, math::Vector2i(), image::Color4f(1.F, 1.F, 1.F));
                     p.fbo->endRenderPass(p.cmd);
@@ -276,18 +276,30 @@ namespace tl
         }
 
         void Render::_drawVideoOverlay(
-            const std::vector<timeline::VideoData>& videoData, const std::vector<math::Box2i>& boxes, const std::vector<timeline::ImageOptions>& imageOptions,
-            const std::vector<timeline::DisplayOptions>& displayOptions, const timeline::CompareOptions& compareOptions)
+            const std::vector<timeline::VideoData>& videoData,
+            const std::vector<math::Box2i>& boxes,
+            const std::vector<timeline::ImageOptions>& imageOptions,
+            const std::vector<timeline::DisplayOptions>& displayOptions,
+            const timeline::CompareOptions& compareOptions)
         {
             TLRENDER_P();
 
             if (videoData.size() > 1 && boxes.size() > 1)
             {
+                _createBindingSet(p.shaders["display"]);
+                p.shaders["display"]->bind(p.frameIndex);
+                p.shaders["display"]->setUniform("transform.mvp", p.transform,
+                                                 vlk::kShaderVertex);
+                    
                 _drawVideo(
-                    p.fbo, "overlay1", // \@todo: update
-                    videoData[1], boxes[1], imageOptions.size() > 1 ? std::make_shared<timeline::ImageOptions>(imageOptions[1]) : nullptr,
+                    p.fbo, "display", // \@todo: update
+                    videoData[1], boxes[1],
+                    imageOptions.size() > 1 ? std::make_shared<timeline::ImageOptions>(imageOptions[1]) : nullptr,
                     displayOptions.size() > 1 ? displayOptions[1] : timeline::DisplayOptions());
+                _createBindingSet(p.shaders["display"]);
+                p.shaders["display"]->bind(p.frameIndex);
             }
+            
             if (!videoData.empty() && !boxes.empty())
             {
                 const math::Size2i offscreenBufferSize(boxes[0].w(), boxes[0].h());
@@ -304,19 +316,12 @@ namespace tl
 
                 if (p.buffers["overlay"])
                 {
-                    // const gl::SetAndRestore scissorTest(
-                    //     GL_SCISSOR_TEST, GL_FALSE);
-
-                    // gl::OffscreenBufferBinding binding(p.buffers["overlay"]);
-                    // glViewport(
-                    //     0, 0, offscreenBufferSize.w, offscreenBufferSize.h);
-                    // glClearColor(0.F, 0.F, 0.F, 0.F);
-                    // glClear(GL_COLOR_BUFFER_BIT);
-
+                    _createBindingSet(p.shaders["display"]);
                     p.shaders["display"]->bind(p.frameIndex);
                     p.shaders["display"]->setUniform(
                         "transform.mvp",
-                        math::ortho(0.F, static_cast<float>(offscreenBufferSize.w), static_cast<float>(offscreenBufferSize.h), 0.F, -1.F, 1.F));
+                        math::ortho(0.F, static_cast<float>(offscreenBufferSize.w),
+                                    0.F, static_cast<float>(offscreenBufferSize.h), -1.F, 1.F));
 
                     _drawVideo(
                         p.buffers["overlay"], "overlay2",
@@ -324,6 +329,7 @@ namespace tl
                         !imageOptions.empty() ? std::make_shared<timeline::ImageOptions>(imageOptions[0]) : nullptr,
                         !displayOptions.empty() ? displayOptions[0] : timeline::DisplayOptions());
 
+                    _createBindingSet(p.shaders["display"]);
                     p.shaders["display"]->bind(p.frameIndex);
                     p.shaders["display"]->setUniform("transform.mvp", p.transform);
                 }
@@ -339,6 +345,9 @@ namespace tl
                     //     p.renderSize.h - p.viewport.h() - p.viewport.y(),
                     //     p.viewport.w(), p.viewport.h());
 
+                    p.buffers["overlay"]->transitionToShaderRead(p.cmd);
+                    
+                    _createBindingSet(p.shaders["overlay"]);
                     p.shaders["overlay"]->bind(p.frameIndex);
                     p.shaders["overlay"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
 
@@ -348,22 +357,25 @@ namespace tl
                     const std::string shaderName = "overlay";
                     const std::string meshName = "video";
                     const std::string pipelineLayoutName = shaderName;
-                    _createPipeline(p.buffers["overlay"], pipelineName,
+                    _createPipeline(p.fbo, pipelineName,
                                     pipelineLayoutName,
-                                    shaderName, meshName);
+                                    shaderName, meshName,
+                                    true,
+                                    VK_BLEND_FACTOR_SRC_ALPHA,
+                                    VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                                    VK_BLEND_FACTOR_ONE,
+                                    VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);
                     
                     VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
-
-                    _bindDescriptorSets(pipelineLayoutName, "overlay");
-
-                    vkCmdPushConstants(p.cmd, pipelineLayout,
-                                       p.shaders["overlay"]->getPushStageFlags(), 0, sizeof(color), &color);
+                    p.fbo->transitionToColorAttachment(p.cmd);
+                    p.fbo->beginRenderPass(p.cmd, "OVERLAY PASS");
 
                     p.shaders["overlay"]->setFBO("textureSampler", p.buffers["overlay"]);
+                    vkCmdPushConstants(p.cmd, pipelineLayout,
+                                       p.shaders["overlay"]->getPushStageFlags(), 0, sizeof(color), &color);
+                    
+                    _bindDescriptorSets(pipelineLayoutName, "overlay");
 
-                    // glActiveTexture(static_cast<GLenum>(GL_TEXTURE0));
-                    // glBindTexture(
-                    //     GL_TEXTURE_2D, p.buffers["overlay"]->getColorID());
 
                     if (p.vbos["video"])
                     {
@@ -373,6 +385,12 @@ namespace tl
                     {
                         _vkDraw("video");
                     }
+                    
+                    p.fbo->endRenderPass(p.cmd);
+                    p.fbo->transitionToShaderRead(p.cmd);
+                    
+                    // Transition buffer back to color attachment
+                    p.buffers["overlay"]->transitionToColorAttachment(p.cmd);
                 }
             }
         }
@@ -535,8 +553,11 @@ namespace tl
         }
 
         void Render::_drawVideoTile(
-            const std::vector<timeline::VideoData>& videoData, const std::vector<math::Box2i>& boxes, const std::vector<timeline::ImageOptions>& imageOptions,
-            const std::vector<timeline::DisplayOptions>& displayOptions, const timeline::CompareOptions& compareOptions)
+            const std::vector<timeline::VideoData>& videoData,
+            const std::vector<math::Box2i>& boxes,
+            const std::vector<timeline::ImageOptions>& imageOptions,
+            const std::vector<timeline::DisplayOptions>& displayOptions,
+            const timeline::CompareOptions& compareOptions)
         {
             TLRENDER_P();
             
@@ -584,7 +605,9 @@ namespace tl
         void Render::_drawVideo(
             std::shared_ptr<vlk::OffscreenBuffer>& fbo,
             const std::string& pipelineName,
-            const timeline::VideoData& videoData, const math::Box2i& box, const std::shared_ptr<timeline::ImageOptions>& imageOptions,
+            const timeline::VideoData& videoData,
+            const math::Box2i& box,
+            const std::shared_ptr<timeline::ImageOptions>& imageOptions,
             const timeline::DisplayOptions& displayOptions)
         {
             TLRENDER_P();
@@ -662,9 +685,6 @@ namespace tl
                                     image::Color4f(1.F, 1.F, 1.F, v), dissolveImageOptions);
                             }
                             
-
-#define FIRST_RENDER_PASS 1  // working fine by itself
-#define SECOND_RENDER_PASS 1 // working fine by itself
                             if (p.buffers["dissolve"] && p.buffers["dissolve2"])
                             {
                                 inDissolve = true;
@@ -814,14 +834,51 @@ namespace tl
                 const std::string pipelineLayoutName = "display";
                 const std::string shaderName = "display";
                 const std::string meshName = "video";
-                const bool enableBlending = !inDissolve;  
+                bool enableBlending = !inDissolve;
+                
+                const auto blendOptions = imageOptions.get() ?
+                                          *imageOptions :
+                                          videoData.layers[0].imageOptions;
+                
+                VkBlendFactor srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+                VkBlendFactor dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+                VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+                VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+                VkBlendOp colorBlendOp = VK_BLEND_OP_ADD;
+                VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD;
+                switch (blendOptions.alphaBlend)
+                {
+                case timeline::AlphaBlend::kNone:
+                    enableBlending = false;
+                    srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
+                    dstColorBlendFactor = VK_BLEND_FACTOR_ZERO;
+                    srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+                    dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+                    break;
+                case timeline::AlphaBlend::Straight:
+                    srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+                    dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+                    srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+                    dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+                    break;
+                case timeline::AlphaBlend::Premultiplied:
+                    srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
+                    dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+                    srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+                    dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+                    break;
+                default:
+                    break;
+                }
                 _createPipeline(fbo, pipelineName,
                                 pipelineLayoutName, shaderName, meshName,
                                 enableBlending,
-                                VK_BLEND_FACTOR_SRC_ALPHA,
-                                VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-                                VK_BLEND_FACTOR_ONE,
-                                VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);
+                                srcColorBlendFactor,
+                                dstColorBlendFactor,
+                                srcAlphaBlendFactor,
+                                dstAlphaBlendFactor,
+                                colorBlendOp,
+                                alphaBlendOp);
 
 
                 fbo->beginRenderPass(p.cmd, "DISPLAY PASS");
