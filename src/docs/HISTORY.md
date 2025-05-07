@@ -29,14 +29,14 @@ it to Vulkan.
 			 - A
 			 - B
 			 - Difference (minor validation error when switching)
+			 - Dissolve (minor validation error when switching)
+			 - Horizontal
+			 - Vertical
+			 - Tile
 		 
 	 * Missing to check/add:
 		 * Comparison Modes:
 			 - Wipe
-			 - Overlay
-			 - Horizontal
-			 - Vertical
-			 - Tile
 		 * Missing Frames crosses
 		 * Safe Areas
 		 * Masking
@@ -49,6 +49,7 @@ it to Vulkan.
 		 * Temporary FLTK Text widget annotation (how to do it?)
 		 * Text annotations (how to do it?)
 		 * How to use any FLTK font for annotation (how to do it?)
+		 * OpenUSD (how to do it?)
 		 
 - Fixed and simplified code for NDIView (hdr utility).
 - Fixed hdr utility for macOS Intel trying to pass full HDR10 or HLG data, 
