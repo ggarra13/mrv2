@@ -85,9 +85,6 @@ namespace tl
             //! Get the type.
             VBOType getType() const;
 
-            //! Get the OpenGL ID.
-            unsigned int getID() const;
-
             const std::vector<uint8_t>& getData() const;
 
             const std::vector<VkVertexInputBindingDescription>&

@@ -1177,14 +1177,6 @@ namespace tl
         {
             TLRENDER_P();
             p.clipRectEnabled = value;
-            if (p.clipRectEnabled)
-            {
-                // glEnable(GL_SCISSOR_TEST);
-            }
-            else
-            {
-                // glDisable(GL_SCISSOR_TEST);
-            }
         }
 
         math::Box2i Render::getClipRect() const
@@ -1198,6 +1190,11 @@ namespace tl
             p.clipRect = value;
             if (value.w() > 0 && value.h() > 0)
             {
+                VkRect2D newScissorRect = {
+                    value.x(), value.y(),
+                    value.w(), value.h()
+                };
+                vkCmdSetScissor(p.cmd, 0, 1, &newScissorRect);
                 // glScissor(
                 //     value.x(), p.renderSize.h - value.h() - value.y(),
                 //     value.w(), value.h());

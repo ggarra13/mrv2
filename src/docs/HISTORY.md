@@ -25,6 +25,7 @@ it to Vulkan.
 		 * HDR Passthru (for HDR).
 		 * HDR Tonemapping (for SDR).
 		 * HUD
+		 * Scissor (Clipping Rectangles)
 		 * Comparison Modes: 
 			 - A
 			 - B
@@ -38,6 +39,7 @@ it to Vulkan.
 		 * Comparison Modes:
 			 - Wipe
 		 * Missing Frames crosses
+		 * Environment mapping
 		 * Safe Areas
 		 * Masking
 		 * Thumbnails in Timeline (crashes) / Editing

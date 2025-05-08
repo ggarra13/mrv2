@@ -375,11 +375,6 @@ namespace tl
             return _p->currentLayout;
         }
 
-        unsigned int Texture::getID() const
-        {
-            return 0;
-        }
-
         void Texture::transition(
             VkCommandBuffer cmd,
             VkImageLayout newLayout, VkAccessFlags srcAccessMask,

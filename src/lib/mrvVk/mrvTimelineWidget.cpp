@@ -836,6 +836,7 @@ void main()
         void TimelineWidget::draw()
         {
             TLRENDER_P();
+            return;
             
             const math::Size2i renderSize(pixel_w(), pixel_h());
 
@@ -899,7 +900,7 @@ void main()
                         ui::DrawEvent drawEvent(
                             p.style, p.iconLibrary, p.render, p.fontSystem);
                         p.render->setClipRectEnabled(true);
-                        p.buffer->beginRenderPass(cmd, "timeline");
+                        p.buffer->beginRenderPass(cmd);
                         _drawEvent(
                             p.timelineWindow, math::Box2i(renderSize),
                             drawEvent);

@@ -253,8 +253,7 @@ namespace mrv
             pipeline.pViewportState = &vp;
             pipeline.pDepthStencilState = &ds;
             pipeline.pStages = shaderStages;
-            pipeline.renderPass =
-                m_renderPass; // Use main render pass (swapchain)
+            pipeline.renderPass = m_renderPass; 
             pipeline.pDynamicState = &dynamicState;
 
             // Create a temporary pipeline cache
@@ -326,7 +325,7 @@ namespace mrv
             }
             else
             {
-                std::cout << "HDR monitor not found or not configured" << std::endl;
+                LOG_INFO("HDR monitor not found or not configured");
             }
         }
 

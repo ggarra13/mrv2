@@ -241,7 +241,7 @@ namespace tl
             const bool enableBlending = true;
 
             uint8_t textureIndex = 0;
-            const auto textures = p.glyphTextureAtlas->getTextures();
+            const auto& textures = p.glyphTextureAtlas->getTextures();
 
             int x = 0;
             int32_t rsbDeltaPrev = 0;
@@ -276,7 +276,7 @@ namespace tl
                         if (!p.glyphTextureAtlas->getItem(id, item))
                         {
                             id = p.glyphTextureAtlas->addItem(
-                                glyph->image, item);
+                                p.cmd, glyph->image, item);
                             p.glyphIDs[glyph->info] = id;
                         }
                         if (item.textureIndex != textureIndex)
@@ -301,11 +301,6 @@ namespace tl
                                 _bindDescriptorSets(pipelineLayoutName, shaderName);
                                 
                                 VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
-                                if (!pipelineLayout)
-                                    throw std::runtime_error("drawText '" +
-                                                             meshName +
-                                                             "': Invalid pipeline Layout '" +
-                                                             pipelineLayoutName + "'"); 
                                 vkCmdPushConstants(
                                     p.cmd, pipelineLayout,
                                     shader->getPushStageFlags(), 0,
@@ -424,7 +419,7 @@ namespace tl
             _createBindingSet(shader);
 
             uint8_t textureIndex = 0;
-            const auto textures = p.glyphTextureAtlas->getTextures();
+            const auto& textures = p.glyphTextureAtlas->getTextures();
 
             int x = 0;
             int32_t rsbDeltaPrev = 0;
@@ -456,7 +451,7 @@ namespace tl
                         if (!p.glyphTextureAtlas->getItem(id, item))
                         {
                             id = p.glyphTextureAtlas->addItem(
-                                glyph->image, item);
+                                p.cmd, glyph->image, item);
                             p.glyphIDs[glyph->info] = id;
                         }
                         if (item.textureIndex != textureIndex)
@@ -705,31 +700,26 @@ namespace tl
                 shader->setTexture("textureSampler2", textures[0]);
                 break;
             }
-            bool enableBlending = false;
+            bool enableBlending = true;
             VkBlendFactor srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
             VkBlendFactor dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
             VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
             VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-            VkBlendOp colorBlendOp = VK_BLEND_OP_ADD;
-            VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD;
             switch (imageOptions.alphaBlend)
             {
             case timeline::AlphaBlend::kNone:
-                enableBlending = false;
                 srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
                 dstColorBlendFactor = VK_BLEND_FACTOR_ZERO;
                 srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
                 dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
                 break;
             case timeline::AlphaBlend::Straight:
-                enableBlending = true;
                 srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
                 dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
                 srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
                 dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
                 break;
             case timeline::AlphaBlend::Premultiplied:
-                enableBlending = true;
                 srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
                 dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
                 srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
@@ -739,7 +729,7 @@ namespace tl
                 break;
             }
 
-            fbo->beginRenderPass(p.cmd, "image");
+            fbo->beginRenderPass(p.cmd);
             if (p.vbos["image"])
             {
                 p.vbos["image"]->copy(
@@ -756,8 +746,7 @@ namespace tl
             _createPipeline(fbo, pipelineName, pipelineLayoutName,
                             shaderName, meshName, enableBlending,
                             srcColorBlendFactor, dstColorBlendFactor,
-                            srcAlphaBlendFactor, dstAlphaBlendFactor,
-                            colorBlendOp, alphaBlendOp);
+                            srcAlphaBlendFactor, dstAlphaBlendFactor);
             _bindDescriptorSets(pipelineLayoutName, shaderName);
             fbo->setupViewportAndScissor(p.cmd);
 

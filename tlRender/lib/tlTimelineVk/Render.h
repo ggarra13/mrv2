@@ -8,6 +8,7 @@
 
 #include <tlVk/Mesh.h>
 #include <tlVk/OffscreenBuffer.h>
+#include <tlVk/PipelineCreationState.h>
 #include <tlVk/Shader.h>
 #include <tlVk/Texture.h>
 
@@ -75,6 +76,14 @@ namespace tl
             VkCommandBuffer getCommandBuffer() const;
             uint32_t getFrameIndex() const;
 
+            void createPipeline(const std::string& pipelineName,
+                                const std::string& pipelineLayoutName,
+                                const VkRenderPass renderPass,
+                                const std::shared_ptr<vlk::Shader>& shader,
+                                const std::shared_ptr<vlk::VBO>& mesh,
+                                const vlk::ColorBlendStateInfo& cb = vlk::ColorBlendStateInfo(),
+                                const vlk::DepthStencilStateInfo& ds = vlk::DepthStencilStateInfo(),
+                                const vlk::MultisampleStateInfo& ms = vlk::MultisampleStateInfo());
             void createPipeline(const std::string& pipelineName,
                                 const std::string& pipelineLayoutName,
                                 const VkRenderPass renderPass,

@@ -64,10 +64,7 @@ namespace tl
                 const std::string& name = "sampler1",
                 const TextureOptions& = TextureOptions());
 
-            //! Get the Vulkan texture ID.
-            unsigned int getID() const;
-
-            //! Get the image information.
+             //! Get the image information.
             const image::Info& getInfo() const;
 
             //! Get the size.

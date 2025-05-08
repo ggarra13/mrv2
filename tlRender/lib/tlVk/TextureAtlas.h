@@ -55,12 +55,12 @@ namespace tl
             size_t getTextureCount() const;
             int getTextureSize() const;
             image::PixelType getTextureType() const;
-            std::vector<std::shared_ptr<vlk::Texture> > getTextures() const;
+            const std::vector<std::shared_ptr<vlk::Texture> >& getTextures() const;
 
             bool getItem(TextureAtlasID, TextureAtlasItem&);
 
             TextureAtlasID
-            addItem(const std::shared_ptr<image::Image>&, TextureAtlasItem&);
+            addItem(VkCommandBuffer cmd, const std::shared_ptr<image::Image>&, TextureAtlasItem&);
 
             float getPercentageUsed() const;
 

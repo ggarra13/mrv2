@@ -52,20 +52,14 @@ namespace tl
         void Render::createPipeline(const std::string& pipelineName,
                                     const std::string& pipelineLayoutName,
                                     const VkRenderPass renderPass,
-                                    const bool hasDepth,
-                                    const bool hasStencil,
                                     const std::shared_ptr<vlk::Shader>& shader,
                                     const std::shared_ptr<vlk::VBO>& mesh,
-                                    const bool enableBlending,
-                                    const VkBlendFactor srcColorBlendFactor,
-                                    const VkBlendFactor dstColorBlendFactor,
-                                    const VkBlendFactor srcAlphaBlendFactor,
-                                    const VkBlendFactor dstAlphaBlendFactor,
-                                    const VkBlendOp colorBlendOp,
-                                    const VkBlendOp alphaBlendOp)
+                                    const vlk::ColorBlendStateInfo& cb,
+                                    const vlk::DepthStencilStateInfo& ds,
+                                    const vlk::MultisampleStateInfo& ms)
         {
-            TLRENDER_P();
             
+            TLRENDER_P();            
             if (!shader)
                 throw std::runtime_error(
                     "createPipeline failed with unknown shader '" +
@@ -103,7 +97,7 @@ namespace tl
 
             VkDevice device = ctx.device;
             
-            // Elements of new Pipeline
+            // Elements of new Pipeline (fill with mesh info)
             vlk::VertexInputStateInfo vi;
             vi.bindingDescriptions = mesh->getBindingDescription();
             vi.attributeDescriptions = mesh->getAttributes();
@@ -112,21 +106,12 @@ namespace tl
             vlk::InputAssemblyStateInfo ia;
 
             // Defaults are fine
-            vlk::ColorBlendStateInfo cb;
-
-            // Defaults are fine
             vlk::RasterizationStateInfo rs;
 
-            vlk::DepthStencilStateInfo ds;
-
-            ds.depthTestEnable = hasDepth ? VK_TRUE : VK_FALSE;
-            ds.depthWriteEnable = hasDepth ? VK_TRUE : VK_FALSE;
-            ds.stencilTestEnable = hasStencil ? VK_TRUE : VK_FALSE;
-
+            // Defaults are fine
             vlk::ViewportStateInfo vp;
 
-            vlk::MultisampleStateInfo ms;
-
+            // Defaults are fine
             vlk::DynamicStateInfo dynamicState;
             dynamicState.dynamicStates = {
                 VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR};
@@ -144,14 +129,6 @@ namespace tl
             shaderStages[1].name = shader->getName();
             shaderStages[1].module = shader->getFragment();
             shaderStages[1].entryPoint = "main";
-
-            vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
-            if (enableBlending)
-            {
-                colorBlendAttachment.blendEnable = VK_TRUE;
-            }
-
-            cb.attachments.push_back(colorBlendAttachment);
 
             //
             // Pass pipeline creation parameters to pipelineState.
@@ -204,12 +181,49 @@ namespace tl
                 }
             }
 
-            if (pipeline == VK_NULL_HANDLE)
-            {
-                throw  std::runtime_error("createPipeline failed binding pipeline, it is VK_NULL_HANDLE");
-            }
             // Enable the pipeline.
             vkCmdBindPipeline(p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
+        }
+        
+        void Render::createPipeline(const std::string& pipelineName,
+                                    const std::string& pipelineLayoutName,
+                                    const VkRenderPass renderPass,
+                                    const bool hasDepth,
+                                    const bool hasStencil,
+                                    const std::shared_ptr<vlk::Shader>& shader,
+                                    const std::shared_ptr<vlk::VBO>& mesh,
+                                    const bool enableBlending,
+                                    const VkBlendFactor srcColorBlendFactor,
+                                    const VkBlendFactor dstColorBlendFactor,
+                                    const VkBlendFactor srcAlphaBlendFactor,
+                                    const VkBlendFactor dstAlphaBlendFactor,
+                                    const VkBlendOp colorBlendOp,
+                                    const VkBlendOp alphaBlendOp)
+        {
+
+            vlk::ColorBlendStateInfo cb;
+            vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
+            if (enableBlending)
+            {
+                colorBlendAttachment.blendEnable = VK_TRUE;
+                colorBlendAttachment.srcColorBlendFactor = srcColorBlendFactor;
+                colorBlendAttachment.dstColorBlendFactor = dstColorBlendFactor;
+                colorBlendAttachment.srcAlphaBlendFactor = srcAlphaBlendFactor;
+                colorBlendAttachment.dstAlphaBlendFactor = dstAlphaBlendFactor;
+                colorBlendAttachment.colorBlendOp = colorBlendOp;
+                colorBlendAttachment.alphaBlendOp = alphaBlendOp;
+                
+            }
+            cb.attachments.push_back(colorBlendAttachment);
+            
+
+            vlk::DepthStencilStateInfo ds;
+            ds.depthTestEnable = hasDepth ? VK_TRUE : VK_FALSE;
+            ds.depthWriteEnable = hasDepth ? VK_TRUE : VK_FALSE;
+            ds.stencilTestEnable = hasStencil ? VK_TRUE : VK_FALSE;
+            
+            createPipeline(pipelineName, pipelineLayoutName, renderPass,
+                           shader, mesh, cb, ds);
         }
         
         void Render::_createPipeline(
@@ -231,15 +245,37 @@ namespace tl
             const auto& shader = p.shaders[shaderName];
             const auto& mesh = p.vbos[meshName];
             
-            createPipeline(pipelineName,
-                           pipelineLayoutName,
-                           fbo->getRenderPass(),
-                           fbo->hasDepth(), fbo->hasStencil(),
-                           shader, mesh, enableBlending, srcColorBlendFactor,
-                           dstColorBlendFactor, srcAlphaBlendFactor,
-                           dstAlphaBlendFactor, colorBlendOp,
-                           alphaBlendOp);
+            vlk::ColorBlendStateInfo cb;
+            vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
+            if (enableBlending)
+            {
+                colorBlendAttachment.blendEnable = VK_TRUE;
+                colorBlendAttachment.srcColorBlendFactor = srcColorBlendFactor;
+                colorBlendAttachment.dstColorBlendFactor = dstColorBlendFactor;
+                colorBlendAttachment.srcAlphaBlendFactor = srcAlphaBlendFactor;
+                colorBlendAttachment.dstAlphaBlendFactor = dstAlphaBlendFactor;
+                colorBlendAttachment.colorBlendOp = colorBlendOp;
+                colorBlendAttachment.alphaBlendOp = alphaBlendOp;
+                
+            }
+            cb.attachments.push_back(colorBlendAttachment);
+            
+            vlk::DepthStencilStateInfo ds;
+            ds.depthTestEnable = fbo->hasDepth() ? VK_TRUE : VK_FALSE;
+            ds.depthWriteEnable = fbo->hasDepth() ? VK_TRUE : VK_FALSE;
+            ds.stencilTestEnable = fbo->hasStencil() ? VK_TRUE : VK_FALSE;
+            
+            vlk::MultisampleStateInfo ms;
+            ms.rasterizationSamples = fbo->getSampleCount();
+            
+            createPipeline(pipelineName, pipelineLayoutName, fbo->getRenderPass(),
+                           shader, mesh, cb, ds, ms);
+            
             fbo->setupViewportAndScissor(p.cmd);
+            if (p.clipRectEnabled)
+            {
+                setClipRect(p.clipRect);
+            }
         }
         
         void Render::_setViewportAndScissor(const math::Size2i& viewportSize)
