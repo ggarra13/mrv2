@@ -408,13 +408,15 @@ namespace tl
                     p.size.margin + p.size.border * 4;
             event.render->drawRect(
                 math::Box2i(g.min.x, y, g.w(), h),
-                event.style->getColorRole(ui::ColorRole::Window));
+                event.style->getColorRole(ui::ColorRole::Window),
+                "timeline_background");
 
             y = y + h;
             h = p.size.border;
             event.render->drawRect(
                 math::Box2i(g.min.x, y, g.w(), h),
-                event.style->getColorRole(ui::ColorRole::Border));
+                event.style->getColorRole(ui::ColorRole::Border),
+                "timeline_border");
             
             _drawInOutPoints(drawRect, event);
             _drawTimeTicks(drawRect, event);
@@ -895,7 +897,8 @@ namespace tl
                                     box.min.x,
                                     box.min.y + p.size.fontMetrics.ascender),
                                 event.style->getColorRole(
-                                    ui::ColorRole::TextDisabled));
+                                    ui::ColorRole::TextDisabled),
+                                label);
                         }
                     }
                 }
@@ -1000,7 +1003,8 @@ namespace tl
 
                 event.render->drawRect(
                     math::Box2i(pos.x, pos.y, p.size.border * 2, g.h()),
-                    event.style->getColorRole(ui::ColorRole::Red));
+                    event.style->getColorRole(ui::ColorRole::Red),
+                    "Current Time Marker");
 
                 const std::string label =
                     _data->timeUnitsModel->getLabel(p.currentTime);
@@ -1009,7 +1013,8 @@ namespace tl
                     math::Vector2i(
                         pos.x + p.size.border * 2 + p.size.margin,
                         pos.y + p.size.margin + p.size.fontMetrics.ascender),
-                    event.style->getColorRole(ui::ColorRole::Text));
+                    event.style->getColorRole(ui::ColorRole::Text),
+                    "Current Time");
             }
         }
 

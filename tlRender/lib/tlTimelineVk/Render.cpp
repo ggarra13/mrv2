@@ -639,6 +639,13 @@ namespace tl
             {
                 p.hdrMonitorFound = true;
             }
+
+            for (int i = 0; i < vlk::MAX_FRAMES_IN_FLIGHT; ++i)
+            {
+                p.garbage[i].pipelines.reserve(20);
+                p.garbage[i].bindingSets.reserve(100);
+                p.garbage[i].vaos.reserve(30);
+            }
         }
 
         Render::~Render()
@@ -1041,7 +1048,7 @@ namespace tl
             {
                 p.stats.pop_front();
             }
-
+            
             const std::chrono::duration<float> logDiff = now - p.logTimer;
             if (logDiff.count() > 10.F)
             {

@@ -38,7 +38,6 @@ namespace tl
                 (p.vbos[meshName] && p.vbos[meshName]->getSize() != size * 3))
             {
                 p.vbos[meshName] = vlk::VBO::create(size * 3, type);
-                p.vaos[meshName].reset();
             }
             if (p.vbos[meshName])
             {
@@ -48,7 +47,6 @@ namespace tl
             if (!p.vaos[meshName] && p.vbos[meshName])
             {
                 p.vaos[meshName] = vlk::VAO::create(ctx);
-                p.vaos[meshName]->bind(p.frameIndex);
             }
         }
 
@@ -78,28 +76,24 @@ namespace tl
                 const std::string& pipelineLayoutName = shaderName;
                 _createPipeline(p.fbo, pipelineName, pipelineLayoutName,
                                shaderName, meshName, enableBlending);
-                _bindDescriptorSets(pipelineLayoutName, shaderName);
-
                 VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
-                if (pipelineLayout == VK_NULL_HANDLE)
-                {
-                    throw std::runtime_error("drawRect '" + pipelineLayoutName
-                                             + "' undefined");
-                }
                 vkCmdPushConstants(
                     p.cmd, pipelineLayout,
                     p.shaders[shaderName]->getPushStageFlags(), 0, sizeof(color),
                     &color);
+                
+                _bindDescriptorSets(pipelineLayoutName, shaderName);
 
                 _vkDraw("rect");
             }
         }
         
         void
-        Render::drawRect(const math::Box2i& box, const image::Color4f& color)
+        Render::drawRect(const math::Box2i& box, const image::Color4f& color,
+                         const std::string& pipelineName)
         {
             const bool enableBlending = true;
-            drawRect("timeline", "rect", "rect", box, color, enableBlending);
+            drawRect(pipelineName, "rect", "rect", box, color, enableBlending);
         }
 
         void Render::drawMesh(const std::string& pipelineName,
@@ -132,7 +126,6 @@ namespace tl
             {
                 p.vbos[meshName] = vlk::VBO::create(
                     size * 3, vlk::VBOType::Pos2_F32_UV_U16);
-                p.vaos[meshName].reset();
             }
             if (p.vbos[meshName])
             {
@@ -167,9 +160,10 @@ namespace tl
         
         void Render::drawMesh(
             const geom::TriangleMesh2& mesh, const math::Vector2i& position,
-            const image::Color4f& color)
+            const image::Color4f& color, const std::string& meshName)
         {
-            drawMesh("timeline", "mesh", "mesh", "mesh", mesh, position, color);
+            drawMesh("timeline", "mesh", "mesh", meshName,
+                     mesh, position, color);
         }
 
         void Render::drawColorMesh(
@@ -401,11 +395,6 @@ namespace tl
                 _bindDescriptorSets(pipelineLayoutName, shaderName);
                             
                 VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
-                if (!pipelineLayout)
-                    throw std::runtime_error("drawText '" +
-                                             meshName +
-                                             "': Invalid pipeline Layout '" +
-                                             pipelineLayoutName + "'"); 
                 vkCmdPushConstants(
                     p.cmd, pipelineLayout,
                     shader->getPushStageFlags(), 0,
@@ -420,12 +409,12 @@ namespace tl
         
         void Render::drawText(
             const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
-            const math::Vector2i& pos, const image::Color4f& color)
+            const math::Vector2i& pos, const image::Color4f& color,
+            const std::string& pipelineName)
         {
             TLRENDER_P();
             ++(p.currentStats.text);
 
-            const std::string pipelineName = "text";
             const std::string shaderName = "text";
             const std::string meshName = "text";
             const std::string pipelineLayoutName = shaderName;
@@ -617,15 +606,10 @@ namespace tl
             if (p.vaos["texture"])
             {
                 VkPipelineLayout pipelineLayout = p.pipelineLayouts["texture"];
-                if (!pipelineLayout)
-                    throw std::runtime_error(
-                        "drawTextture 'texture': Invalid pipelineLayout "
-                        "'texture'"); 
                 vkCmdPushConstants(
                     p.cmd, pipelineLayout,
                     shader->getPushStageFlags(), 0,
                     sizeof(color), &color);
-
             
                 _vkDraw("texture");
             }

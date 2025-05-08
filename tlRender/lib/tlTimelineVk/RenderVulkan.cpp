@@ -3,6 +3,7 @@
 
 #include <string>
 
+#define DEBUG_PIPELINE_USE 0 //1
 
 namespace tl
 {
@@ -11,7 +12,7 @@ namespace tl
         void Render::_createBindingSet(const std::shared_ptr<vlk::Shader>& shader)
         {
             TLRENDER_P();
-            auto bindingSet = shader->createBindingSet();
+            const auto bindingSet = shader->createBindingSet();
             shader->useBindingSet(bindingSet);
             p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
         }
@@ -67,7 +68,8 @@ namespace tl
             
             if (!shader)
                 throw std::runtime_error(
-                    "createPipeline failed with unknown shader");
+                    "createPipeline failed with unknown shader '" +
+                    shader->getName() + "'");
 
             if (!mesh)
                 throw std::runtime_error(
@@ -82,8 +84,17 @@ namespace tl
             VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
             if (!pipelineLayout)
             {
+#if DEBUG_PIPELINE_USE
+                std::cerr << "CREATING   pipelineLayout " << pipelineLayoutName << std::endl;
+#endif
                 pipelineLayout = _createPipelineLayout(pipelineLayoutName,
                                                        shader);
+            }
+            else
+            {
+#if DEBUG_PIPELINE_USE
+                std::cerr << "REUSING    pipelineLayout " << pipelineLayoutName << std::endl;
+#endif
             }
             
             if (pipelineLayout == VK_NULL_HANDLE)
@@ -161,6 +172,9 @@ namespace tl
             VkPipeline pipeline;
             if (p.pipelines.count(pipelineName) == 0)
             {
+#if DEBUG_PIPELINE_USE
+                std::cerr << "CREATING   pipeline " << pipelineName << std::endl;
+#endif
                 pipeline = pipelineState.create(device);
                 p.pipelines[pipelineName] = std::make_pair(pipelineState,
                                                            pipeline);
@@ -172,6 +186,9 @@ namespace tl
                 VkPipeline oldPipeline = pair.second;
                 if (pipelineState != oldPipelineState)
                 {
+#if DEBUG_PIPELINE_USE
+                    std::cerr << "RECREATING pipeline " << pipelineName << std::endl;
+#endif
                     p.garbage[p.frameIndex].pipelines.push_back(
                         oldPipeline);
                     pipeline = pipelineState.create(device);
@@ -180,6 +197,9 @@ namespace tl
                 }
                 else
                 {
+#if DEBUG_PIPELINE_USE
+                    std::cerr << "REUSING    pipeline " << pipelineName << std::endl;
+#endif
                     pipeline = pair.second;
                 }
             }

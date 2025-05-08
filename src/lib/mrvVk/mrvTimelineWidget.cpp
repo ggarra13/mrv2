@@ -50,7 +50,8 @@ namespace mrv
         const int kWINDOW_BORDERS = 2;
         const int kBOX_BORDERS = 2;
 
-        const double kTimeout = 0.008; // approx. 120 fps
+        // const double kTimeout = 0.008; // approx. 120 fps
+        const double kTimeout = 0.016; // approx. 120 fps
         const char* kModule = "timeline";
     } // namespace
 
@@ -835,7 +836,6 @@ void main()
         void TimelineWidget::draw()
         {
             TLRENDER_P();
-            return;
             
             const math::Size2i renderSize(pixel_w(), pixel_h());
 

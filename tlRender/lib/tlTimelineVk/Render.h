@@ -112,7 +112,8 @@ namespace tl
                           const std::string& meshName,
                           const math::Box2i&, const image::Color4f&,
                           const bool enableBlending = true);
-            void drawRect(const math::Box2i&, const image::Color4f&) override;
+            void drawRect(const math::Box2i&, const image::Color4f&,
+                          const std::string& pipelineName = "timeline") override;
             void drawMesh(const std::string& pipelineName,
                           const std::string& pipelineLayoutName,
                           const std::string& shaderName,
@@ -122,7 +123,7 @@ namespace tl
                           const bool enableBlending = false);
             void drawMesh(
                 const geom::TriangleMesh2&, const math::Vector2i& position,
-                const image::Color4f&) override;
+                const image::Color4f&, const std::string& meshName) override;
             void drawColorMesh(
                 const geom::TriangleMesh2&, const math::Vector2i& position,
                 const image::Color4f&) override {};
@@ -141,7 +142,8 @@ namespace tl
                 const math::Vector2i& pos, const image::Color4f& color);
             void drawText(
                 const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
-                const math::Vector2i& position, const image::Color4f&) override;
+                const math::Vector2i& position, const image::Color4f&,
+                const std::string& pipelineName = "timeline") override;
             void drawTexture(
                 unsigned int, const math::Box2i&,
                 const image::Color4f& =
