@@ -1020,15 +1020,7 @@ namespace tl
                 math::ortho(
                     0.F, static_cast<float>(renderSize.w), 0.F,
                     static_cast<float>(renderSize.h), -1.F, 1.F));
-            for (auto& i : p.shaders)
-            {
-                if (i.second)
-                {
-                    i.second->bind(p.frameIndex);
-                    i.second->setUniform("transform.mvp", p.transform,
-                                         vlk::kShaderVertex);
-                }
-            }
+            applyTransforms();
         }
 
         void Render::end()
@@ -1210,6 +1202,21 @@ namespace tl
         void Render::setTransform(const math::Matrix4x4f& value)
         {
             _p->transform = value;
+        }
+        
+        void Render::applyTransforms()
+        {
+            TLRENDER_P();
+            
+            for (auto& i : p.shaders)
+            {
+                if (i.second)
+                {
+                    i.second->bind(p.frameIndex);
+                    i.second->setUniform("transform.mvp", p.transform,
+                                         vlk::kShaderVertex);
+                }
+            }
         }
 
 #if defined(TLRENDER_OCIO)

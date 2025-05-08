@@ -112,6 +112,7 @@ namespace tl
             void setClipRect(const math::Box2i&) override;
             math::Matrix4x4f getTransform() const override;
             void setTransform(const math::Matrix4x4f&) override;
+            void applyTransforms();
             void setOCIOOptions(const timeline::OCIOOptions&) override;
             void setLUTOptions(const timeline::LUTOptions&) override;
             void setHDROptions(const timeline::HDROptions&) override;

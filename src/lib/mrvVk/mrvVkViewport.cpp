@@ -786,6 +786,23 @@ namespace mrv
                 vk.vao->draw(cmd, vk.vbo);
             }
             
+
+            if (p.dataWindow)
+                _drawDataWindow();
+            if (p.displayWindow)
+                _drawDisplayWindow();
+
+            if (p.safeAreas)
+                _drawSafeAreas();
+
+            if (p.actionMode != ActionMode::kScrub &&
+                p.actionMode != ActionMode::kText &&
+                p.actionMode != ActionMode::kSelection &&
+                p.actionMode != ActionMode::kRotate && Fl::belowmouse() == this)
+            {
+                _drawCursor(mvp);
+            }
+                
             if (p.hudActive && p.hud != HudDisplay::kNone)
                 _drawHUD(cmd, alpha);
             

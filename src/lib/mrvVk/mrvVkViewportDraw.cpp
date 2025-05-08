@@ -389,7 +389,7 @@ namespace mrv
                 width = 2;
             vk.render->setTransform(mvp);
             
-            drawRectOutline(ctx, vk.render, box, color, width);
+            drawRectOutline(vk.render, box, color, width);
             
 #endif
         }
