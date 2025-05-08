@@ -626,11 +626,6 @@ namespace tl
             return _p->type;
         }
 
-        unsigned int VBO::getID() const
-        {
-            return 0; // unused in Vulkan
-        }
-
         void VBO::copy(const std::vector<uint8_t>& data)
         {
             _p->data = data;

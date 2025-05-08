@@ -85,12 +85,13 @@ namespace tl
 
             //! Draw a rectangle.
             virtual void
-            drawRect(const math::Box2i&, const image::Color4f&) = 0;
+            drawRect(const math::Box2i&, const image::Color4f&,
+                     const std::string& pipelineName = "") = 0;
 
             //! Draw a triangle mesh.
             virtual void drawMesh(
                 const geom::TriangleMesh2&, const math::Vector2i& position,
-                const image::Color4f&) = 0;
+                const image::Color4f&, const std::string& meshName = "") = 0;
 
             //! Draw a triangle mesh with vertex color information.
             virtual void drawColorMesh(
@@ -100,7 +101,8 @@ namespace tl
             //! Draw text.
             virtual void drawText(
                 const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
-                const math::Vector2i& position, const image::Color4f&) = 0;
+                const math::Vector2i& position, const image::Color4f&,
+                const std::string& pipelineName = "") = 0;
 
             //! Draw a texture.
             virtual void drawTexture(

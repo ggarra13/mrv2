@@ -639,6 +639,13 @@ namespace tl
             {
                 p.hdrMonitorFound = true;
             }
+
+            for (int i = 0; i < vlk::MAX_FRAMES_IN_FLIGHT; ++i)
+            {
+                p.garbage[i].pipelines.reserve(20);
+                p.garbage[i].bindingSets.reserve(100);
+                p.garbage[i].vaos.reserve(30);
+            }
         }
 
         Render::~Render()
@@ -1041,7 +1048,7 @@ namespace tl
             {
                 p.stats.pop_front();
             }
-
+            
             const std::chrono::duration<float> logDiff = now - p.logTimer;
             if (logDiff.count() > 10.F)
             {
@@ -1170,14 +1177,6 @@ namespace tl
         {
             TLRENDER_P();
             p.clipRectEnabled = value;
-            if (p.clipRectEnabled)
-            {
-                // glEnable(GL_SCISSOR_TEST);
-            }
-            else
-            {
-                // glDisable(GL_SCISSOR_TEST);
-            }
         }
 
         math::Box2i Render::getClipRect() const
@@ -1191,6 +1190,11 @@ namespace tl
             p.clipRect = value;
             if (value.w() > 0 && value.h() > 0)
             {
+                VkRect2D newScissorRect = {
+                    value.x(), value.y(),
+                    value.w(), value.h()
+                };
+                vkCmdSetScissor(p.cmd, 0, 1, &newScissorRect);
                 // glScissor(
                 //     value.x(), p.renderSize.h - value.h() - value.y(),
                 //     value.w(), value.h());

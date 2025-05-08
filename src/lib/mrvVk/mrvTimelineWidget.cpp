@@ -50,7 +50,8 @@ namespace mrv
         const int kWINDOW_BORDERS = 2;
         const int kBOX_BORDERS = 2;
 
-        const double kTimeout = 0.008; // approx. 120 fps
+        // const double kTimeout = 0.008; // approx. 120 fps
+        const double kTimeout = 0.016; // approx. 120 fps
         const char* kModule = "timeline";
     } // namespace
 
@@ -899,7 +900,7 @@ void main()
                         ui::DrawEvent drawEvent(
                             p.style, p.iconLibrary, p.render, p.fontSystem);
                         p.render->setClipRectEnabled(true);
-                        p.buffer->beginRenderPass(cmd, "timeline");
+                        p.buffer->beginRenderPass(cmd);
                         _drawEvent(
                             p.timelineWindow, math::Box2i(renderSize),
                             drawEvent);

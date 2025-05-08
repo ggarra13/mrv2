@@ -120,6 +120,9 @@ namespace tl
             //! Returns true if the buffer has depth.
             bool hasStencil() const;
 
+            //! Get number of sampling bits.
+            VkSampleCountFlagBits getSampleCount() const;
+
             //! Get the options.
             const OffscreenBufferOptions& getOptions() const;
 
@@ -167,7 +170,6 @@ namespace tl
             
             //! Start/end a normal render pass.
             void beginRenderPass(VkCommandBuffer cmd,
-                                 const std::string& name = "Unknown",
                                  VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE);
             void endRenderPass(VkCommandBuffer cmd);
             

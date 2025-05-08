@@ -64,16 +64,18 @@ namespace tl
             void setLUTOptions(const timeline::LUTOptions&) override;
             void setHDROptions(const timeline::HDROptions&) override;
 
-            void drawRect(const math::Box2i&, const image::Color4f&) override;
+            void drawRect(const math::Box2i&, const image::Color4f&,
+                          const std::string& pipelineName = "") override;
             void drawMesh(
                 const geom::TriangleMesh2&, const math::Vector2i& position,
-                const image::Color4f&) override;
+                const image::Color4f&, const std::string&) override;
             void drawColorMesh(
                 const geom::TriangleMesh2&, const math::Vector2i& position,
                 const image::Color4f&) override;
             void drawText(
                 const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
-                const math::Vector2i& position, const image::Color4f&) override;
+                const math::Vector2i& position, const image::Color4f&,
+                const std::string& label = "") override;
             void drawTexture(
                 unsigned int, const math::Box2i&,
                 const image::Color4f& = image::Color4f(1.F, 1.F, 1.F)) override;

@@ -11,7 +11,8 @@ namespace tl
     namespace timeline_gl
     {
         void
-        Render::drawRect(const math::Box2i& box, const image::Color4f& color)
+        Render::drawRect(const math::Box2i& box, const image::Color4f& color,
+                         const std::string& pipelineName)
         {
             TLRENDER_P();
             ++(p.currentStats.rects);
@@ -36,7 +37,7 @@ namespace tl
 
         void Render::drawMesh(
             const geom::TriangleMesh2& mesh, const math::Vector2i& position,
-            const image::Color4f& color)
+            const image::Color4f& color, const std::string& meshName)
         {
             TLRENDER_P();
             ++(p.currentStats.meshes);
@@ -157,7 +158,8 @@ namespace tl
 
         void Render::drawText(
             const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
-            const math::Vector2i& pos, const image::Color4f& color)
+            const math::Vector2i& pos, const image::Color4f& color,
+            const std::string& pipelineName)
         {
             TLRENDER_P();
             ++(p.currentStats.text);

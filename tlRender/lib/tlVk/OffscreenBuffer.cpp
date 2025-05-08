@@ -412,6 +412,11 @@ namespace tl
             return (_p->options.stencil != OffscreenStencil::kNone);
         }
 
+        VkSampleCountFlagBits OffscreenBuffer::getSampleCount() const
+        {
+            return getVulkanSamples(_p->options.sampling);
+        }
+
         const OffscreenBufferOptions& OffscreenBuffer::getOptions() const
         {
             return _p->options;
@@ -722,10 +727,8 @@ namespace tl
                 static_cast<uint32_t>(p.size.h)};
         }
 
-        void OffscreenBuffer::beginRenderPass(
-            VkCommandBuffer cmd, const std::string& name,
-            VkSubpassContents contents
-            )
+        void OffscreenBuffer::beginRenderPass(VkCommandBuffer cmd,
+                                              VkSubpassContents contents)
         {
             TLRENDER_P();
             

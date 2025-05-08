@@ -622,7 +622,8 @@ namespace mrv
         inline void Viewport::_drawText(
             const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
             math::Vector2i& pos, const int16_t lineHeight,
-            const image::Color4f& labelColor) const noexcept
+            const image::Color4f& labelColor,
+            const std::string& pipelineName) const noexcept
         {
             MRV2_VK();
             
@@ -632,12 +633,12 @@ namespace mrv
 
             const image::Color4f shadowColor(0.F, 0.F, 0.F, 0.7F);
             math::Vector2i shadowPos{pos.x + 1, pos.y - 1};
-            vk.render->drawText("HUDShadow", "text",
+            vk.render->drawText(pipelineName + "Shadow", "text",
                                 renderPass(),
                                 hasDepth, hasStencil,
                                 glyphs,
                                 shadowPos, shadowColor);
-            vk.render->drawText("HUD", "text",
+            vk.render->drawText(pipelineName, "text",
                                 renderPass(),
                                 hasDepth, hasStencil,
                                 glyphs,
@@ -648,10 +649,11 @@ namespace mrv
         inline void Viewport::_drawText(
             const std::string& text, const image::FontInfo& fontInfo,
             math::Vector2i& pos, const int16_t lineHeight,
-            const image::Color4f& labelColor) const noexcept
+            const image::Color4f& labelColor,
+            const std::string& pipelineName) const noexcept
         {
             _drawText(_p->fontSystem->getGlyphs(text, fontInfo), pos,
-                      lineHeight, labelColor);
+                      lineHeight, labelColor, pipelineName);
         }
             
         void Viewport::_drawSafeAreas(
@@ -812,7 +814,8 @@ namespace mrv
             if (p.hud & HudDisplay::kDirectory)
             {
                 const auto& directory = path.getDirectory();
-                _drawText(directory, fontInfo, pos, lineHeight, labelColor);
+                _drawText(directory, fontInfo, pos, lineHeight, labelColor,
+                          "directory");
             }
 
             bool otioClip = false;
@@ -836,7 +839,8 @@ namespace mrv
                         ss >> clipTime;
                     }
                 }
-                _drawText(fullname, fontInfo, pos, lineHeight, labelColor);
+                _drawText(fullname, fontInfo, pos, lineHeight, labelColor,
+                          "fullname");
             }
 
             if (p.hud & HudDisplay::kResolution)
@@ -858,7 +862,8 @@ namespace mrv
                     {
                         snprintf(buf, 512, "%d x %d", video.size.w, video.size.h);
                     }
-                    _drawText(buf, fontInfo, pos, lineHeight, labelColor);
+                    _drawText(buf, fontInfo, pos, lineHeight, labelColor,
+                              "resolution");
                 }
             }
 
@@ -944,7 +949,7 @@ namespace mrv
             p.lastFrame = time.value();
 
             if (!tmp.empty())
-                _drawText(tmp, fontInfo, pos, lineHeight, labelColor);
+                _drawText(tmp, fontInfo, pos, lineHeight, labelColor, "FPS");
 
             tmp.clear();
             if (p.hud & HudDisplay::kFrameCount)
@@ -957,7 +962,8 @@ namespace mrv
             }
 
             if (!tmp.empty())
-                _drawText(tmp, fontInfo, pos, lineHeight,  labelColor);
+                _drawText(tmp, fontInfo, pos, lineHeight,  labelColor,
+                          "Frame Count");
 
             tmp.clear();
             if (p.hud & HudDisplay::kMemory)
@@ -982,7 +988,8 @@ namespace mrv
             }
 
             if (!tmp.empty())
-                _drawText(tmp, fontInfo, pos, lineHeight, labelColor);
+                _drawText(tmp, fontInfo, pos, lineHeight, labelColor,
+                          "Memory");
 
             if (p.hud & HudDisplay::kCache)
             {
@@ -1015,7 +1022,8 @@ namespace mrv
                         behindAudioFrames += frame - i.start_time().to_frames();
                     }
                 }
-                _drawText(_("Cache: "), fontInfo, pos, lineHeight, labelColor);
+                _drawText(_("Cache: "), fontInfo, pos, lineHeight, labelColor,
+                          "Cache Line");
                 const auto ioSystem =
                     App::app->getContext()->getSystem<io::System>();
                 const auto& cache = ioSystem->getCache();
@@ -1025,15 +1033,18 @@ namespace mrv
                 snprintf(
                     buf, 512, _("    Used: %.2g of %zu Gb (%.2g %%)"), usedCache,
                     maxCache, pctCache);
-                _drawText(buf, fontInfo, pos, lineHeight, labelColor);
+                _drawText(buf, fontInfo, pos, lineHeight, labelColor,
+                          "Cache Used");
                 snprintf(
                     buf, 512, _("    Ahead    V: % 4" PRIu64 "    A: % 4" PRIu64),
                     aheadVideoFrames, aheadAudioFrames);
-                _drawText(buf, fontInfo, pos, lineHeight, labelColor);
+                _drawText(buf, fontInfo, pos, lineHeight, labelColor,
+                          "Cache Ahead");
                 snprintf(
                     buf, 512, _("    Behind   V: % 4" PRIu64 "    A: % 4" PRIu64),
                     behindVideoFrames, behindAudioFrames);
-                _drawText(buf, fontInfo, pos, lineHeight, labelColor);
+                _drawText(buf, fontInfo, pos, lineHeight, labelColor,
+                          "Cache Behind");
             }
 
             if (p.hud & HudDisplay::kAttributes)
@@ -1046,7 +1057,8 @@ namespace mrv
                     snprintf(
                         buf, 512, "%s = %s", tag.first.c_str(), tag.second.c_str());
 
-                    _drawText(buf, fontInfo, pos, lineHeight, labelColor);
+                    _drawText(buf, fontInfo, pos, lineHeight, labelColor,
+                              "attributes");
                 }
             }
             
@@ -1163,7 +1175,8 @@ namespace mrv
             vk.render->drawRect(
                 box, image::Color4f(0.F, 0.F, 0.F, 0.7F * p.helpTextFade));
 
-            _drawText(p.helpText, fontInfo, pos, lineHeight, labelColor);
+            _drawText(p.helpText, fontInfo, pos, lineHeight, labelColor,
+                      "Help Text");
 
             vk.render->end();
         }

@@ -244,7 +244,7 @@ namespace tl
             return _p->textureType;
         }
 
-        std::vector<std::shared_ptr<vlk::Texture> > TextureAtlas::getTextures() const
+        const std::vector<std::shared_ptr<vlk::Texture> >& TextureAtlas::getTextures() const
         {
             return _p->textures;
         }
@@ -263,6 +263,7 @@ namespace tl
         }
 
         TextureAtlasID TextureAtlas::addItem(
+            VkCommandBuffer cmd,
             const std::shared_ptr<image::Image>& image, TextureAtlasItem& out)
         {
             TLRENDER_P();
@@ -271,8 +272,6 @@ namespace tl
             VkCommandPool commandPool = ctx.commandPool;
             VkQueue queue = ctx.queue;
             
-            VkCommandBuffer cmd = beginSingleTimeCommands(device,
-                                                          commandPool);
             for (uint8_t i = 0; i < p.textureCount; ++i)
             {
                 if (auto node = p.boxPackingNodes[i]->insert(image))
@@ -286,9 +285,6 @@ namespace tl
                     p.textures[node->textureIndex]->transition(cmd);
                     p.cache[node->id] = node;
                     p.toTextureAtlasItem(node, out);
-                    
-                    endSingleTimeCommands(cmd, device, commandPool, queue);
-
                     return node->id;
                 }
             }
@@ -348,13 +344,10 @@ namespace tl
                         p.textures[node2->textureIndex]->transition(cmd);
                         p.cache[node2->id] = node2;
                         p.toTextureAtlasItem(node2, out);
-
-                        endSingleTimeCommands(cmd, device, commandPool, queue);
                         return node2->id;
                     }
                 }
             }
-            endSingleTimeCommands(cmd, device, commandPool, queue);
             return 0;
         }
 
