@@ -1060,52 +1060,38 @@ namespace tl
                 const std::string pipelineLayoutName = "display";
                 const std::string shaderName = "display";
                 const std::string meshName = "video";
-                const bool enableBlending = true;
-                
-                const auto blendOptions = imageOptions.get() ?
-                                          *imageOptions :
-                                          videoData.layers[0].imageOptions;
-                
-                VkBlendFactor srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
-                VkBlendFactor dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-                VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-                VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-                _createPipeline(fbo, pipelineName,
-                                pipelineLayoutName, shaderName, meshName,
-                                enableBlending,
-                                srcColorBlendFactor,
-                                dstColorBlendFactor,
-                                srcAlphaBlendFactor,
-                                dstAlphaBlendFactor);
-                // VkBlendFactor srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
-                // VkBlendFactor dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-                // VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-                // VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
 
-                // vlk::ColorBlendStateInfo cb;
+                const auto imgOptions = imageOptions.get() ?
+                                        *imageOptions :
+                                        videoData.layers[0].imageOptions;
+                
+                bool enableBlending = true;
+                if (imgOptions.alphaBlend == timeline::AlphaBlend::kNone)
+                    enableBlending = false;
+                
+                vlk::ColorBlendStateInfo cb;
 
-                // vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
-                // colorBlendAttachment.blendEnable = VK_TRUE;
-                // colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
-                // colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-                // colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-                // colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-                // colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT |
-                //                                       VK_COLOR_COMPONENT_G_BIT |
-                //                                       VK_COLOR_COMPONENT_B_BIT |
-                //                                       VK_COLOR_COMPONENT_A_BIT;
+                vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
+                colorBlendAttachment.blendEnable = enableBlending ? VK_TRUE : VK_FALSE;
+                colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
+                colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+                colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+                colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+                colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT |
+                                                      VK_COLOR_COMPONENT_G_BIT |
+                                                      VK_COLOR_COMPONENT_B_BIT |
+                                                      VK_COLOR_COMPONENT_A_BIT;
                
-                // cb.attachments.push_back(colorBlendAttachment);
-            
+                cb.attachments.push_back(colorBlendAttachment);
+                            
+                createPipeline(pipelineName,
+                               pipelineLayoutName,
+                               fbo->getRenderPass(),
+                               p.shaders["display"],
+                               p.vbos["video"],
+                               cb);
+                fbo->setupViewportAndScissor(p.cmd);
                 
-                // createPipeline(pipelineName,
-                //                pipelineLayoutName,
-                //                fbo->getRenderPass(),
-                //                p.shaders["display"],
-                //                p.vbos["video"],
-                //                cb);
-                // fbo->setupViewportAndScissor(p.cmd);
-
                 std::size_t pushSize = p.shaders["display"]->getPushSize();
                 if (pushSize > 0)
                 {
