@@ -31,13 +31,12 @@ it to Vulkan.
 			 - B
 			 - Difference (minor validation error when switching)
 			 - Dissolve (minor validation error when switching)
-			 - Horizontal
-			 - Vertical
-			 - Tile
+			 - Wipe (minor validation error when switching)
+			 - Horizontal (minor validation error when switching)
+			 - Vertical (minor validation error when switching)
+			 - Tile (minor validation error when switching)
 		 
 	 * Missing to check/add:
-		 * Comparison Modes:
-			 - Wipe
 		 * Missing Frames crosses
 		 * Environment mapping
 		 * Safe Areas

@@ -559,6 +559,8 @@ namespace mrv
                     // As render resolution might have changed,
                     // we need to reset the quad size.
                     vk.vbo.reset();
+                    if (hasFrameView())
+                        _frameView();
                 }
             }
             else

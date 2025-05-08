@@ -1192,7 +1192,8 @@ namespace tl
             {
                 VkRect2D newScissorRect = {
                     value.x(), value.y(),
-                    value.w(), value.h()
+                    static_cast<uint32_t>(value.w()),
+                    static_cast<uint32_t>(value.h())
                 };
                 vkCmdSetScissor(p.cmd, 0, 1, &newScissorRect);
                 // glScissor(
