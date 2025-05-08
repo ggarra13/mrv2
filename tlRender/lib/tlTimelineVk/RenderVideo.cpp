@@ -1089,7 +1089,7 @@ namespace tl
                 
                 createPipeline(pipelineName,
                                pipelineLayoutName,
-                               p.fbo->getRenderPass(),
+                               fbo->getRenderPass(),
                                p.shaders["display"],
                                p.vbos["video"],
                                cb);

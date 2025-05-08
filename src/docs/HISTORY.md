@@ -37,10 +37,6 @@ it to Vulkan.
 			 - Tile
 		 
 	 * Missing to check/add:
-		 * Comparison Modes:
-			 - Horizontal
-			 - Vertical
-			 - Tile
 		 * Missing Frames crosses
 		 * Environment mapping
 		 * Safe Areas
