@@ -552,8 +552,6 @@ namespace tl
                 const math::Size2i offscreenBufferSize(boxes[0].w(), boxes[0].h());
                 vlk::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
-                offscreenBufferOptions.depth = vlk::OffscreenDepth::_24;
-                offscreenBufferOptions.stencil = vlk::OffscreenStencil::_8;
                 if (!displayOptions.empty())
                 {
                     offscreenBufferOptions.colorFilters = displayOptions[0].imageFilters;
@@ -799,7 +797,9 @@ namespace tl
             TLRENDER_P();
             
             for (size_t i = 0; i < videoData.size() && i < boxes.size(); ++i)
-            {
+            {            
+                _createBindingSet(p.shaders["display"]);
+                p.shaders["display"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
                 _drawVideo(
                     p.fbo, "tile",
                     videoData[i], boxes[i],
@@ -1070,29 +1070,41 @@ namespace tl
                 VkBlendFactor dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
                 VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
                 VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+                _createPipeline(fbo, pipelineName,
+                                pipelineLayoutName, shaderName, meshName,
+                                enableBlending,
+                                srcColorBlendFactor,
+                                dstColorBlendFactor,
+                                srcAlphaBlendFactor,
+                                dstAlphaBlendFactor);
+                // VkBlendFactor srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
+                // VkBlendFactor dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+                // VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+                // VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
 
-                vlk::ColorBlendStateInfo cb;
+                // vlk::ColorBlendStateInfo cb;
 
-                vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
-                colorBlendAttachment.blendEnable = VK_TRUE;
-                colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
-                colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-                colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-                colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-                colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT |
-                                                      VK_COLOR_COMPONENT_G_BIT |
-                                                      VK_COLOR_COMPONENT_B_BIT |
-                                                      VK_COLOR_COMPONENT_A_BIT;
+                // vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
+                // colorBlendAttachment.blendEnable = VK_TRUE;
+                // colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
+                // colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+                // colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+                // colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+                // colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT |
+                //                                       VK_COLOR_COMPONENT_G_BIT |
+                //                                       VK_COLOR_COMPONENT_B_BIT |
+                //                                       VK_COLOR_COMPONENT_A_BIT;
                
-                cb.attachments.push_back(colorBlendAttachment);
+                // cb.attachments.push_back(colorBlendAttachment);
             
                 
-                createPipeline(pipelineName,
-                               pipelineLayoutName,
-                               fbo->getRenderPass(),
-                               p.shaders["display"],
-                               p.vbos["video"],
-                               cb);
+                // createPipeline(pipelineName,
+                //                pipelineLayoutName,
+                //                fbo->getRenderPass(),
+                //                p.shaders["display"],
+                //                p.vbos["video"],
+                //                cb);
+                // fbo->setupViewportAndScissor(p.cmd);
 
                 std::size_t pushSize = p.shaders["display"]->getPushSize();
                 if (pushSize > 0)
@@ -1138,6 +1150,8 @@ namespace tl
 
                 fbo->beginRenderPass(p.cmd);
 
+                // We must NOT call this here.
+                // p.shaders["display"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
                 p.shaders["display"]->setFBO("textureSampler", p.buffers["video"]);
 
                 UBOLevels uboLevels;

@@ -32,9 +32,9 @@ it to Vulkan.
 			 - Difference (minor validation error when switching)
 			 - Dissolve (minor validation error when switching)
 			 - Wipe (minor validation error when switching)
-			 - Horizontal
-			 - Vertical
-			 - Tile
+			 - Horizontal (minor validation error when switching)
+			 - Vertical (minor validation error when switching)
+			 - Tile (minor validation error when switching)
 		 
 	 * Missing to check/add:
 		 * Missing Frames crosses
