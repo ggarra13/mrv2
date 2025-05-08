@@ -128,11 +128,17 @@ namespace tl
 
             //! Vulkan Accessors
                 
-            //! Get image layout.
+            //! Get the image layout.
             VkImageLayout getImageLayout() const;
 
-            //! Get depth layout.
+            //! Set the image layout.
+            void setImageLayout(VkImageLayout);
+
+            //! Get the depth layout.
             VkImageLayout getDepthLayout() const;
+            
+            //! Set the image layout.
+            void setDepthLayout(VkImageLayout);
 
             //! Get image layout name.
             const std::string getImageLayoutName() const;
@@ -177,6 +183,7 @@ namespace tl
             void transitionToShaderRead(VkCommandBuffer cmd);
             void transitionToColorAttachment(VkCommandBuffer cmd);
             
+            void transitionDepthToStencilAttachment(VkCommandBuffer cmd);
             void transitionDepthToShaderRead(VkCommandBuffer cmd);
             
             //! Set up the internal viewport and scissor.

@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Copyright (c) 2021-2024 Darby Johnston
+// Copyright (c) 2025 Gonzalo Garramuño
 // All rights reserved.
 
 #include <tlTimelineVk/RenderPrivate.h>
@@ -187,6 +188,27 @@ namespace tl
         {
             TLRENDER_P();
 
+#define DRAW_FIRST_PASS 1
+#define DRAW_SECOND_PASS 1
+
+            image::Color4f color(1.F, 0.F, 0.F);
+            VkPipelineLayout pipelineLayout;
+            std::string pipelineLayoutName = "wipe_left";
+            const math::Size2i& offscreenBufferSize = p.fbo->getSize();
+            vlk::OffscreenBufferOptions offscreenBufferOptions;
+            offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
+            offscreenBufferOptions.colorFilters = displayOptions[0].imageFilters;
+            offscreenBufferOptions.depth = vlk::OffscreenDepth::_24;
+            offscreenBufferOptions.stencil = vlk::OffscreenStencil::_8;
+            offscreenBufferOptions.clear = false;
+            if (doCreate(p.buffers["wipe"], offscreenBufferSize,
+                         offscreenBufferOptions))
+            {
+                p.buffers["wipe"] =
+                    vlk::OffscreenBuffer::create(ctx, offscreenBufferSize,
+                                                 offscreenBufferOptions);
+            }
+            
             float radius = 0.F;
             float x = 0.F;
             float y = 0.F;
@@ -205,110 +227,301 @@ namespace tl
                 pts[i].y = sin(rad) * radius + y;
             }
 
-            // gl::SetAndRestore stencilTest(GL_STENCIL_TEST, GL_TRUE);
-
-            // glViewport(
-            //     p.viewport.x(),
-            //     p.renderSize.h - p.viewport.h() - p.viewport.y(),
-            //     p.viewport.w(), p.viewport.h());
-            // glClear(GL_STENCIL_BUFFER_BIT);
-            // glStencilFunc(GL_ALWAYS, 1, 0xFF);
-            // glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-            // glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-            _createBindingSet(p.shaders["wipe"]);
-            p.shaders["wipe"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
-            // This is a push constant
-            //p.shaders["wipe"]->setUniform("color", image::Color4f(1.F, 0.F, 0.F));
-            {
-                if (p.vbos["wipe"])
-                {
-                    geom::TriangleMesh2 mesh;
-                    mesh.v.push_back(pts[0]);
-                    mesh.v.push_back(pts[1]);
-                    mesh.v.push_back(pts[2]);
-                    geom::Triangle2 tri;
-                    tri.v[0] = 1;
-                    tri.v[1] = 2;
-                    tri.v[2] = 3;
-                    mesh.triangles.push_back(tri);
-                    p.vbos["wipe"]->copy(convert(mesh, p.vbos["wipe"]->getType()));
-                }
-                if (p.vaos["wipe"])
-                {
-                    p.vaos["wipe"]->bind(p.frameIndex);
-                }
-            }
-            // glStencilFunc(GL_EQUAL, 1, 0xFF);
-            // glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+            // Main FBO Transition
+            p.fbo->transitionToColorAttachment(p.cmd);
+            
+#if DRAW_FIRST_PASS
+            // Draw left image to "wipe" buffer
             if (!videoData.empty() && !boxes.empty())
-            {
+            {   
+                p.buffers["wipe"]->transitionToColorAttachment(p.cmd);
+                
+                _createBindingSet(p.shaders["display"]);
+                p.shaders["display"]->setUniform(
+                    "transform.mvp",
+                    math::ortho(0.F, static_cast<float>(offscreenBufferSize.w),
+                                0.F, static_cast<float>(offscreenBufferSize.h), -1.F, 1.F));
+                _drawVideo(
+                    p.buffers["wipe"], "display", 
+                    videoData[0], boxes[0],
+                    !imageOptions.empty() ? std::make_shared<timeline::ImageOptions>(imageOptions[0]) : nullptr,
+                    !displayOptions.empty() ? displayOptions[0] : timeline::DisplayOptions());  
                 _createBindingSet(p.shaders["display"]);
                 p.shaders["display"]->setUniform("transform.mvp", p.transform,
                                                  vlk::kShaderVertex);
-                _drawVideo(
-                    p.fbo, "wipe0", 
-                    videoData[0], boxes[0], !imageOptions.empty() ? std::make_shared<timeline::ImageOptions>(imageOptions[0]) : nullptr,
-                    !displayOptions.empty() ? displayOptions[0] : timeline::DisplayOptions());
-                _createBindingSet(p.shaders["display"]);
+                
+                p.buffers["wipe"]->transitionToShaderRead(p.cmd);
             }
 
-            // glViewport(
-            //     p.viewport.x(),
-            //     p.renderSize.h - p.viewport.h() - p.viewport.y(),
-            //     p.viewport.w(), p.viewport.h());
-            // glClear(GL_STENCIL_BUFFER_BIT);
-            // glStencilFunc(GL_ALWAYS, 1, 0xFF);
-            // glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-            _createBindingSet(p.shaders["wipe"]);
-            p.shaders["wipe"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
-            image::Color4f color(0.F, 1.F, 0.F);
-
-            const std::string pipelineLayoutName = "wipe";
-            VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
-            if (!pipelineLayout)
+            // Draw stencil triangle mesh
+            if (p.vbos["wipe"])
             {
-                pipelineLayout = _createPipelineLayout(pipelineLayoutName,
-                                                       p.shaders["wipe"]);
+                geom::TriangleMesh2 mesh;
+                mesh.v.push_back(pts[0]);
+                mesh.v.push_back(pts[1]);
+                mesh.v.push_back(pts[2]);
+                geom::Triangle2 tri;
+                tri.v[0] = 1;
+                tri.v[1] = 2;
+                tri.v[2] = 3;
+                mesh.triangles.push_back(tri);
+                p.vbos["wipe"]->copy(convert(mesh, p.vbos["wipe"]->getType()));
+            }
+
+            // ----- FIRST RENDER PASS OF LEFT VIDEO
+            p.fbo->beginRenderPass(p.cmd);
+
+            
+            pipelineLayoutName = "wipe_left";
+            {
+                vlk::ColorBlendStateInfo cb;
+                vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
+                colorBlendAttachment.blendEnable = VK_FALSE;
+                colorBlendAttachment.colorWriteMask = 0;
+                cb.attachments.push_back(colorBlendAttachment);
+            
+                vlk::DepthStencilStateInfo ds;
+                ds.depthTestEnable = VK_FALSE;
+                ds.stencilTestEnable = VK_TRUE;
+            
+                VkStencilOpState stencilOp = {};
+                stencilOp.failOp = VK_STENCIL_OP_KEEP;
+                stencilOp.passOp = VK_STENCIL_OP_REPLACE;
+                stencilOp.depthFailOp = VK_STENCIL_OP_KEEP;
+                stencilOp.compareOp = VK_COMPARE_OP_ALWAYS;
+                stencilOp.compareMask = 0xFF;
+                stencilOp.writeMask = 0xFF;
+                stencilOp.reference = 1;
+
+                ds.front = stencilOp;
+                ds.back = stencilOp;
+
+            
+                // Draw left stencil mask
+                createPipeline("wipe_stencil1", pipelineLayoutName,
+                               p.fbo->getRenderPass(), p.shaders["wipe"],
+                               p.vbos["wipe"],
+                               cb, ds);
             }
             
+            pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+            
+            _createBindingSet(p.shaders["wipe"]);
             vkCmdPushConstants(p.cmd, pipelineLayout,
                                p.shaders["wipe"]->getPushStageFlags(), 0,
                                sizeof(color), &color);
+            p.shaders["wipe"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
             _bindDescriptorSets(pipelineLayoutName, "wipe");
+
+            _vkDraw("wipe");
+
+            
+            // Draw video
+            pipelineLayoutName = "wipe_image1";
+                
+            
+            if (p.vbos["video"])
             {
-                if (p.vbos["wipe"])
-                {
-                    geom::TriangleMesh2 mesh;
-                    mesh.v.push_back(pts[2]);
-                    mesh.v.push_back(pts[3]);
-                    mesh.v.push_back(pts[0]);
-                    geom::Triangle2 tri;
-                    tri.v[0] = 1;
-                    tri.v[1] = 2;
-                    tri.v[2] = 3;
-                    mesh.triangles.push_back(tri);
-                    p.vbos["wipe"]->copy(convert(mesh, p.vbos["wipe"]->getType()));
-                }
-                if (p.vaos["wipe"])
-                {
-                    _vkDraw("wipe");
-                }
+                p.vbos["video"]->copy(convert(geom::box(boxes[0], true),
+                                              p.vbos["video"]->getType()));
             }
+
+            {
+                vlk::ColorBlendStateInfo cb;
+                vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
+                cb.attachments.push_back(colorBlendAttachment);
+            
+                vlk::DepthStencilStateInfo ds;
+                ds.depthTestEnable = VK_FALSE;
+                ds.stencilTestEnable = VK_TRUE;
+            
+                VkStencilOpState stencilOp = {};
+                stencilOp.failOp = VK_STENCIL_OP_KEEP;
+                stencilOp.passOp = VK_STENCIL_OP_KEEP;
+                stencilOp.depthFailOp = VK_STENCIL_OP_KEEP;
+                stencilOp.compareOp = VK_COMPARE_OP_EQUAL;
+                stencilOp.compareMask = 0xFF;
+                stencilOp.writeMask = 0x00;
+                stencilOp.reference = 1;
+
+                ds.front = stencilOp;
+                ds.back = stencilOp;
+            
+                createPipeline("wipe_image1",
+                               pipelineLayoutName,
+                               p.fbo->getRenderPass(),
+                               p.shaders["overlay"],
+                               p.vbos["video"],
+                               cb, ds);
+            }
+            
+
+            pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+            
+            _createBindingSet(p.shaders["overlay"]);
+            color = image::Color4f(1.F, 1.F, 1.F);
+            vkCmdPushConstants(p.cmd, pipelineLayout,
+                               p.shaders["overlay"]->getPushStageFlags(), 0,
+                               sizeof(color), &color);
+            p.shaders["overlay"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
+            p.shaders["overlay"]->setFBO("textureSampler",
+                                         p.buffers["wipe"]);
+            _bindDescriptorSets(pipelineLayoutName, "overlay");
+            
+            _vkDraw("video");
+            
+            p.fbo->endRenderPass(p.cmd);
+            // END FIRST RENDER PASS
+#endif
+
+#if DRAW_SECOND_PASS
+            // ----- SECOND RENDER PASS OF RIGHT VIDEO
             // glStencilFunc(GL_EQUAL, 1, 0xFF);
             // glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+
+            // Draw right image to "wipe" buffer
             if (videoData.size() > 1 && boxes.size() > 1)
-            {
+            {   
+                p.buffers["wipe"]->transitionToColorAttachment(p.cmd);
+                
+                _createBindingSet(p.shaders["display"]);
+                p.shaders["display"]->setUniform(
+                    "transform.mvp",
+                    math::ortho(0.F, static_cast<float>(offscreenBufferSize.w),
+                                0.F, static_cast<float>(offscreenBufferSize.h), -1.F, 1.F));
+                _drawVideo(
+                    p.buffers["wipe"], "display", 
+                    videoData[1], boxes[1],
+                    !imageOptions.empty() ? std::make_shared<timeline::ImageOptions>(imageOptions[0]) : nullptr,
+                    !displayOptions.empty() ? displayOptions[0] : timeline::DisplayOptions());  
                 _createBindingSet(p.shaders["display"]);
                 p.shaders["display"]->setUniform("transform.mvp", p.transform,
                                                  vlk::kShaderVertex);
                 
-                _drawVideo(
-                    p.fbo, "wipe1", // \@todo: update
-                    videoData[1], boxes[1], imageOptions.size() > 1 ? std::make_shared<timeline::ImageOptions>(imageOptions[1]) : nullptr,
-                    displayOptions.size() > 1 ? displayOptions[1] : timeline::DisplayOptions());
-                
-                _createBindingSet(p.shaders["display"]);
+                p.buffers["wipe"]->transitionToShaderRead(p.cmd);
             }
+            
+            if (p.vbos["wipe"])
+            {
+                geom::TriangleMesh2 mesh;
+                mesh.v.push_back(pts[2]);
+                mesh.v.push_back(pts[3]);
+                mesh.v.push_back(pts[0]);
+                geom::Triangle2 tri;
+                tri.v[0] = 1;
+                tri.v[1] = 2;
+                tri.v[2] = 3;
+                mesh.triangles.push_back(tri);
+                p.vbos["wipe"]->copy(convert(mesh, p.vbos["wipe"]->getType()));
+            }
+            
+            p.fbo->beginRenderPass(p.cmd);
+
+            pipelineLayoutName = "wipe_right";
+            
+            {
+                vlk::ColorBlendStateInfo cb;
+                vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
+                colorBlendAttachment.blendEnable = VK_FALSE;
+                colorBlendAttachment.colorWriteMask = 0;
+                cb.attachments.push_back(colorBlendAttachment);
+            
+                vlk::DepthStencilStateInfo ds;
+                ds.depthTestEnable = VK_FALSE;
+                ds.stencilTestEnable = VK_TRUE;
+            
+                VkStencilOpState stencilOp = {};
+                stencilOp.failOp = VK_STENCIL_OP_KEEP;
+                stencilOp.passOp = VK_STENCIL_OP_REPLACE;
+                stencilOp.depthFailOp = VK_STENCIL_OP_KEEP;
+                stencilOp.compareOp = VK_COMPARE_OP_ALWAYS;
+                stencilOp.compareMask = 0xFF;
+                stencilOp.writeMask = 0xFF;
+                stencilOp.reference = 1;
+
+                ds.front = stencilOp;
+                ds.back = stencilOp;
+
+            
+                // Draw left stencil mask
+                createPipeline("wipe_stencil2", pipelineLayoutName,
+                               p.fbo->getRenderPass(), p.shaders["wipe"],
+                               p.vbos["wipe"],
+                               cb, ds);
+            }
+            
+            pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+            
+            _createBindingSet(p.shaders["wipe"]);
+            color = image::Color4f(0.F, 1.F, 0.F);
+            vkCmdPushConstants(p.cmd, pipelineLayout,
+                               p.shaders["wipe"]->getPushStageFlags(), 0,
+                               sizeof(color), &color);
+            p.shaders["wipe"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
+            _bindDescriptorSets(pipelineLayoutName, "wipe");
+
+            _vkDraw("wipe");
+
+            
+            // Draw video
+            pipelineLayoutName = "wipe_image2";
+                
+            
+            if (p.vbos["video"])
+            {
+                p.vbos["video"]->copy(convert(geom::box(boxes[0], true),
+                                              p.vbos["video"]->getType()));
+            }
+
+            {
+                vlk::ColorBlendStateInfo cb;
+                vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
+                cb.attachments.push_back(colorBlendAttachment);
+            
+                vlk::DepthStencilStateInfo ds;
+                ds.depthTestEnable = VK_FALSE;
+                ds.stencilTestEnable = VK_TRUE;
+            
+                VkStencilOpState stencilOp = {};
+                stencilOp.failOp = VK_STENCIL_OP_KEEP;
+                stencilOp.passOp = VK_STENCIL_OP_KEEP;
+                stencilOp.depthFailOp = VK_STENCIL_OP_KEEP;
+                stencilOp.compareOp = VK_COMPARE_OP_EQUAL;
+                stencilOp.compareMask = 0xFF;
+                stencilOp.writeMask = 0x00;
+                stencilOp.reference = 1;
+
+                ds.front = stencilOp;
+                ds.back = stencilOp;
+
+                createPipeline("wipe_image2",
+                               pipelineLayoutName,
+                               p.fbo->getRenderPass(),
+                               p.shaders["overlay"],
+                               p.vbos["video"],
+                               cb, ds);
+            }
+            
+
+            pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+            
+            _createBindingSet(p.shaders["overlay"]);
+            color = image::Color4f(1.F, 1.F, 1.F);
+            vkCmdPushConstants(p.cmd, pipelineLayout,
+                               p.shaders["overlay"]->getPushStageFlags(), 0,
+                               sizeof(color), &color);
+            p.shaders["overlay"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
+            p.shaders["overlay"]->setFBO("textureSampler",
+                                         p.buffers["wipe"]);
+            _bindDescriptorSets(pipelineLayoutName, "overlay");
+            
+            _vkDraw("video");
+            
+            p.fbo->endRenderPass(p.cmd);
+            // END SECOND RENDER PASS
+#endif
+
+            p.fbo->transitionToShaderRead(p.cmd);
         }
 
         void Render::_drawVideoOverlay(
@@ -327,7 +540,7 @@ namespace tl
                                                  vlk::kShaderVertex);
                     
                 _drawVideo(
-                    p.fbo, "display", // \@todo: update
+                    p.fbo, "display",
                     videoData[1], boxes[1],
                     imageOptions.size() > 1 ? std::make_shared<timeline::ImageOptions>(imageOptions[1]) : nullptr,
                     displayOptions.size() > 1 ? displayOptions[1] : timeline::DisplayOptions());
@@ -339,6 +552,8 @@ namespace tl
                 const math::Size2i offscreenBufferSize(boxes[0].w(), boxes[0].h());
                 vlk::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
+                offscreenBufferOptions.depth = vlk::OffscreenDepth::_24;
+                offscreenBufferOptions.stencil = vlk::OffscreenStencil::_8;
                 if (!displayOptions.empty())
                 {
                     offscreenBufferOptions.colorFilters = displayOptions[0].imageFilters;
@@ -413,10 +628,7 @@ namespace tl
                     {
                         p.vbos["video"]->copy(convert(geom::box(boxes[0], true), p.vbos["video"]->getType()));
                     }
-                    if (p.vaos["video"])
-                    {
-                        _vkDraw("video");
-                    }
+                    _vkDraw("video");
                     
                     p.fbo->endRenderPass(p.cmd);
                     p.fbo->transitionToShaderRead(p.cmd);
@@ -566,10 +778,7 @@ namespace tl
                     {
                         p.vbos["video"]->copy(convert(geom::box(boxes[0], true), p.vbos["video"]->getType()));
                     }
-                    if (p.vaos["video"] && p.vbos["video"])
-                    {
-                        _vkDraw("video");
-                    }
+                    _vkDraw("video");
                     
                     p.fbo->endRenderPass(p.cmd);
                 
@@ -645,7 +854,7 @@ namespace tl
             // GLint viewportPrev[4] = {0, 0, 0, 0};
             // glGetIntegerv(GL_VIEWPORT, viewportPrev);
 
-            // \@todo: this is needed for tiling.
+            // Saving and restoring the old matrix is needed for tiling.
             math::Matrix4x4 oldTransform = p.transform;
             p.transform = math::ortho(0.F, static_cast<float>(box.w()),
                                       0.F, static_cast<float>(box.h()),
@@ -766,10 +975,7 @@ namespace tl
                                                                       offscreenBufferSize.h),
                                                           true), p.vbos["video"]->getType()));
                                 }
-                                if (p.vaos["video"])
-                                {
-                                    _vkDraw("video");
-                                }
+                                _vkDraw("video");
 
                                 _createBindingSet(p.shaders["dissolve"]);
 
@@ -804,10 +1010,7 @@ namespace tl
                                                                       offscreenBufferSize.h), true),
                                                 p.vbos["video"]->getType()));
                                 }
-                                if (p.vaos["video"])
-                                {
-                                    _vkDraw("video");
-                                }
+                                _vkDraw("video");
 
                                 p.buffers["video"]->endRenderPass(p.cmd);
 
@@ -867,13 +1070,29 @@ namespace tl
                 VkBlendFactor dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
                 VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
                 VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-                _createPipeline(fbo, pipelineName,
-                                pipelineLayoutName, shaderName, meshName,
-                                enableBlending,
-                                srcColorBlendFactor,
-                                dstColorBlendFactor,
-                                srcAlphaBlendFactor,
-                                dstAlphaBlendFactor);
+
+                vlk::ColorBlendStateInfo cb;
+
+                vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
+                colorBlendAttachment.blendEnable = VK_TRUE;
+                colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
+                colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+                colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+                colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+                colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT |
+                                                      VK_COLOR_COMPONENT_G_BIT |
+                                                      VK_COLOR_COMPONENT_B_BIT |
+                                                      VK_COLOR_COMPONENT_A_BIT;
+               
+                cb.attachments.push_back(colorBlendAttachment);
+            
+                
+                createPipeline(pipelineName,
+                               pipelineLayoutName,
+                               p.fbo->getRenderPass(),
+                               p.shaders["display"],
+                               p.vbos["video"],
+                               cb);
 
                 std::size_t pushSize = p.shaders["display"]->getPushSize();
                 if (pushSize > 0)
@@ -989,10 +1208,7 @@ namespace tl
                 {
                     p.vbos["video"]->copy(convert(geom::box(box, true), p.vbos["video"]->getType()));
                 }
-                if (p.vaos["video"] && p.vbos["video"])
-                {
-                    _vkDraw("video");
-                }
+                _vkDraw("video");
 
                 fbo->endRenderPass(p.cmd);
 
