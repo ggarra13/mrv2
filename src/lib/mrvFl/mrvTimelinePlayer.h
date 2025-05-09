@@ -4,17 +4,15 @@
 
 #pragma once
 
-#include <tlTimeline/Player.h>
 
 #include "mrvWidgets/mrvBackend.h"
 
+#include <tlTimeline/Player.h>
+
+#include <tlDraw/Annotation.h>
+
 namespace mrv
 {
-    namespace draw
-    {
-        class Annotation;
-    }
-
     using namespace tl;
 
     //! FLTK based timeline player.

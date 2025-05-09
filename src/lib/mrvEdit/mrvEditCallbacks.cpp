@@ -15,8 +15,6 @@
 
 #include "mrvNetwork/mrvTCP.h"
 
-#include "mrvDraw/Annotation.h"
-
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvFile.h"
@@ -32,6 +30,8 @@ namespace fs = std::filesystem;
 #include <FL/fl_utf8.h>
 
 #include <tlTimeline/Util.h>
+
+#include <tlDraw/Annotation.h>
 
 #include <tlIO/System.h>
 

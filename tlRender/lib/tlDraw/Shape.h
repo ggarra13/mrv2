@@ -4,29 +4,20 @@
 
 #pragma once
 
-#include <limits>
-#include <cmath>
-#include <vector>
-#include <iostream>
+#include <tlTimeline/IRender.h>
 
+#include <tlDraw/Point.h>
+
+#include <tlCore/Color.h>
 #include <tlCore/Vector.h>
 #include <tlCore/Matrix.h>
 
-#include <tlTimeline/IRender.h>
+#include <cmath>
+#include <limits>
+#include <vector>
+#include <iostream>
 
-#include "mrvDraw/Point.h"
-
-#include "mrvCore/mrvBackend.h"
-
-#ifdef TLRENDER_VK
-#  include "mrvVk/mrvVkLines.h"
-#endif
-
-#ifdef TLRENDER_GL
-#  include "mrvGL/mrvGLLines.h"
-#endif
-
-namespace mrv
+namespace tl
 {
 
     namespace draw
@@ -46,17 +37,7 @@ namespace mrv
 
             virtual ~Shape() {};
 
-#ifdef TLRENDER_GL
-            virtual void draw(
-                const std::shared_ptr<tl::timeline::IRender>&,
-                const std::shared_ptr<opengl::Lines>&) {};
-#endif
-            
-#ifdef TLRENDER_VK
-            virtual void draw(
-                const std::shared_ptr<tl::timeline::IRender>&,
-                const std::shared_ptr<vulkan::Lines>&) {};
-#endif
+            virtual void draw(const std::shared_ptr<timeline::IRender>&) {};
 
         public:
             math::Matrix4x4f matrix;
@@ -74,17 +55,7 @@ namespace mrv
                 Shape() {};
             virtual ~PathShape() {};
 
-#ifdef TLRENDER_GL
-            virtual void draw(
-                const std::shared_ptr<tl::timeline::IRender>&,
-                const std::shared_ptr<opengl::Lines>&) {};
-#endif
-            
-#ifdef TLRENDER_VK
-            virtual void draw(
-                const std::shared_ptr<tl::timeline::IRender>&,
-                const std::shared_ptr<vulkan::Lines>&) {};
-#endif
+            virtual void draw(const std::shared_ptr<timeline::IRender>&) {};
 
             PointList pts;
         };
@@ -114,4 +85,5 @@ namespace mrv
         void from_json(const nlohmann::json&, NoteShape&);
 
     } // namespace draw
-} // namespace mrv
+
+} // namespace tl

@@ -3,6 +3,7 @@ add_subdirectory(tlCore)
 add_subdirectory(tlGL)
 add_subdirectory(tlIO)        # needs tlGL for USD
 add_subdirectory(tlTimeline)
+add_subdirectory(tlDraw)
 if(TLRENDER_GLFW)
     add_subdirectory(tlTimelineGL)
 endif()

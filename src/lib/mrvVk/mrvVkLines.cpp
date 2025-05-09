@@ -2,23 +2,31 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <FL/Fl_Vk_Window.H>
 
-#include <tlCore/Mesh.h>
 
-#include <tlVk/Mesh.h>
-#include <tlVk/Util.h>
-#include <tlVk/Shader.h>
 
 // #include "mrvGL/mrvGLErrors.h"
 #include "mrvVk/mrvVkShaders.h"
 #include "mrvVk/mrvVkLines.h"
 
+#include <tlVk/Mesh.h>
+#include <tlVk/Util.h>
+#include <tlVk/Shader.h>
+
+#include <tlDraw/Polyline2D.h>
+
+#include <tlCore/Matrix.h>
+#include <tlCore/Mesh.h>
+#include <tlCore/Vector.h>
+
+#include <FL/Fl_Vk_Window.H>
+
+
 namespace tl
 {
     namespace timeline_vlk
     {
-        extern std::string vertexSource();
+        extern std::string vertex2Source();
     } // namespace timeline_vlk
 
 } // namespace tl
@@ -33,27 +41,15 @@ namespace mrv
 
         struct Lines::Private
         {
-            std::shared_ptr<vlk::Shader> softShader = nullptr;
-            std::shared_ptr<vlk::Shader> hardShader = nullptr;
+            std::shared_ptr<vlk::Shader> softShader;
+            std::shared_ptr<vlk::Shader> hardShader;
             std::shared_ptr<vlk::VBO> vbo;
             std::shared_ptr<vlk::VAO> vao;
         };
 
-        Lines::Lines() :
-            _p(new Private)
-        {
-        }
-
-        Lines::~Lines() {}
-
-        void Lines::drawLines(
-            Fl_Vk_Context& ctx,
-            const std::shared_ptr<timeline_vlk::Render>& render,
-            const draw::PointList& pts, const image::Color4f& color,
-            const float width, const bool soft,
-            const draw::Polyline2D::JointStyle jointStyle,
-            const draw::Polyline2D::EndCapStyle endStyle,
-            const bool catmullRomSpline, const bool allowOverlap)
+        Lines::Lines(Fl_Vk_Context& vulkan_ctx) :
+            _p(new Private),
+            ctx(vulkan_ctx)
         {
             TLRENDER_P();
 
@@ -62,11 +58,23 @@ namespace mrv
                 try
                 {
                     const std::string& vertexSource =
-                        tl::timeline_vlk::vertexSource();
-                    // p.softShader = vlk::Shader::create(
-                    //     vertexSource, mrv::softFragmentSource());
-                    // p.hardShader = vlk::Shader::create(
-                    //     vertexSource, mrv::hardFragmentSource());
+                        tl::timeline_vlk::vertex2Source();
+                    p.softShader = vlk::Shader::create(ctx,
+                                                       vertexSource,
+                                                       softFragmentSource());
+                    math::Matrix4x4f mvp;
+                    image::Color4f color(1.F, 1.F, 1.F);
+                    p.softShader->createUniform("transform.mvp", mvp,
+                                                vlk::kShaderVertex);
+
+                    p.softShader->addPush("color", color, vlk::kShaderFragment);
+                    p.hardShader = vlk::Shader::create(ctx,
+                                                       vertexSource,
+                                                       hardFragmentSource());
+                    p.hardShader->createUniform("transform.mvp", mvp,
+                                                vlk::kShaderVertex);
+
+                    p.hardShader->addPush("color", color, vlk::kShaderFragment);
                 }
                 catch (const std::exception& e)
                 {
@@ -74,7 +82,21 @@ namespace mrv
                 }
             }
 
-            using namespace mrv::draw;
+        }
+
+        Lines::~Lines() {}
+
+        void Lines::drawLines(
+            const std::shared_ptr<timeline_vlk::Render>& render,
+            const VkRenderPass renderPass,
+            const draw::PointList& pts, const image::Color4f& color,
+            const float width, const bool soft,
+            const draw::Polyline2D::JointStyle jointStyle,
+            const draw::Polyline2D::EndCapStyle endStyle,
+            const bool catmullRomSpline, const bool allowOverlap)
+        {
+            TLRENDER_P();
+            using namespace tl::draw;
 
             Polyline2D path;
             path.setWidth(width);
@@ -136,95 +158,33 @@ namespace mrv
             mesh.v.reserve(numVertices);
             for (size_t i = 0; i < numVertices; ++i)
                 mesh.v.push_back(math::Vector2f(draw[i].x, draw[i].y));
-
-            const math::Matrix4x4f& mvp = render->getTransform();
-
-            VkCommandBuffer cmd = render->getCommandBuffer();
-            const uint32_t frameIndex = render->getFrameIndex();
-            if (soft)
-            {
-                p.softShader->bind(frameIndex);
-
-                p.softShader->setUniform("transform.mvp", mvp, vlk::kShaderVertex);
-
-                p.softShader->setUniform("color", color);
-            }
-            else
-            {
-                p.hardShader->bind(frameIndex);
-
-                p.hardShader->setUniform("transform.mvp", mvp, vlk::kShaderVertex);
-
-                p.hardShader->setUniform("color", color);
-            }
-
-            if (!p.vbo || (p.vbo && (p.vbo->getSize() != numTriangles * 3 ||
-                                     p.vbo->getType() != vboType)))
-            {
-                p.vbo = vlk::VBO::create(numTriangles * 3, vboType);
-
-                p.vao.reset();
-            }
-
-            if (p.vbo)
-            {
-                p.vbo->copy(convert(mesh, vboType));
-            }
-
-            if (!p.vao && p.vbo)
-            {
-                p.vao = vlk::VAO::create(ctx);
-                p.vao->bind(frameIndex);
-                p.vao->upload(p.vbo->getData());
-            }
-
-            if (p.vao && p.vbo)
-            {
-                p.vao->draw(cmd, p.vbo);
-                
-
-                // #ifndef NDEBUG
-                //             if (!soft)
-                //             {
-                //                 p.wireShader->bind();
-                //
-                //                 p.wireShader->setUniform("transform.mvp",
-                //                 mvp);
-                //                 p.wireShader->setUniform("color",
-                //                 image::Color4f(1, 0, 0, 1));
-                //                 glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-                //
-                //                 p.vao->bind();
-                //
-                //                 p.vao->draw(GL_TRIANGLES, 0,
-                //                 p.vbo->getSize());
-                //                 glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-                //
-                //             }
-                // #endif
-            }
+            
+            render->drawMesh("annotation", "overlay", "mesh", renderPass,
+                             mesh, math::Vector2i(0, 0), color, true);
         }
 
         void Lines::drawLine(
-            Fl_Vk_Context& ctx,
             const std::shared_ptr<timeline_vlk::Render>& render,
+            const VkRenderPass renderPass,
             const math::Vector2i& start, const math::Vector2i& end,
             const image::Color4f& color, const float width)
         {
-            using namespace mrv::draw;
+            using namespace tl::draw;
 
             std::vector< Point > line;
             line.push_back(Point(start.x, start.y));
             line.push_back(Point(end.x, end.y));
 
             drawLines(
-                ctx, render, line, color, width, false,
+                render, renderPass, line, color, width, false,
                 Polyline2D::JointStyle::MITER, Polyline2D::EndCapStyle::BUTT,
                 false);
         }
 
-        void Lines::drawPoints(VkCommandBuffer& cmd, uint32_t frameIndex,
-            Fl_Vk_Context& ctx, const std::vector<math::Vector2f>& pnts,
+        void Lines::drawPoints(
+            const std::shared_ptr<timeline_vlk::Render>& render,
+            const VkRenderPass renderPass,
+            const std::vector<math::Vector2f>& pnts,
             const image::Color4f& color, const int size)
         {
             TLRENDER_P();
@@ -248,20 +208,19 @@ namespace mrv
             if (!p.vao && p.vbo)
             {
                 p.vao = vlk::VAO::create(ctx);
-                p.vao->upload(p.vbo->getData());
             }
 
             if (p.vao && p.vbo)
             {
-                p.vao->bind(frameIndex);
+                // p.vao->bind(frameIndex);
                 // glPointSize(size);
                 // p.vao->draw(GL_POINTS, 0, p.vbo->getSize());
             }
         }
 
         void Lines::drawCircle(
-            Fl_Vk_Context& ctx,
             const std::shared_ptr<timeline_vlk::Render>& render,
+            const VkRenderPass renderPass,
             const math::Vector2f& center, const float radius, const float width,
             const image::Color4f& color, const bool soft)
         {
@@ -279,24 +238,24 @@ namespace mrv
             }
 
             drawLines(
-                ctx, render, verts, color, width, soft,
+                render, renderPass, verts, color, width, soft,
                 draw::Polyline2D::JointStyle::ROUND,
                 draw::Polyline2D::EndCapStyle::JOINT);
         }
 
         void Lines::drawCursor(
-            Fl_Vk_Context& ctx,
             const std::shared_ptr<timeline_vlk::Render>& render,
+            const VkRenderPass renderPass,
             const math::Vector2f& center, const float radius,
             const image::Color4f& color)
         {
             float lineWidth = 2.0;
             if (radius <= 2.0)
                 lineWidth = 1.0f;
-            drawCircle(ctx, render, center, radius, lineWidth, color, false);
+            drawCircle(render, renderPass, center, radius, lineWidth, color, false);
             image::Color4f black(0.F, 0.F, 0.F, 1.F);
             if (radius > 2.0F)
-                drawCircle(ctx, render, center, radius - 2.0F, 2.0, black, false);
+                drawCircle(render, renderPass, center, radius - 2.0F, 2.0, black, false);
         }
 
     } // namespace vulkan

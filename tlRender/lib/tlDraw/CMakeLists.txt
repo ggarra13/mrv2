@@ -19,17 +19,15 @@ set(SOURCES
 
 
 
-set(LIBRARIES mrvCore )
+set(LIBRARIES tlCore )
 
-add_library(mrvDraw ${SOURCES} ${HEADERS})
-files_to_absolute_paths()
+add_library(tlDraw ${SOURCES} ${HEADERS})
 
-target_link_libraries(mrvDraw PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE} )
-set_target_properties(mrvDraw PROPERTIES FOLDER lib)
-
+target_link_libraries(tlDraw PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE} )
+set_target_properties(tlDraw PROPERTIES FOLDER lib)
 
 
-install(TARGETS mrvDraw
+install(TARGETS tlDraw
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin

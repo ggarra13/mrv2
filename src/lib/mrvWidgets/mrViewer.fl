@@ -9,7 +9,7 @@ header_name {.h}
 code_name {.cxx}
 decl {\#ifdef _WIN32
 \#include <winsock2.h>
-\#endif} {selected public global
+\#endif} {public global
 }
 
 decl {\#include "FL/Fl_Flex.H"} {public global
@@ -108,7 +108,7 @@ decl {\#include "mrvHotkeyUI.h"} {private local
 decl {\#include "mrvPreferencesUI.h"} {public global
 }
 
-decl {class HotkeyUI;} {public global
+decl {class HotkeyUI;} {selected public global
 }
 
 decl {class AboutUI;} {public global
@@ -823,8 +823,8 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {219 258 933 608} type Double align 80 hide resizable
-      class {mrv::MainWindow} size_range {933 602 0 0}
+      xywh {219 258 933 608} type Double align 80 resizable
+      class {mrv::MainWindow} size_range {933 602 0 0} visible
     } {
       Fl_Flex uiRegion {open
         xywh {0 0 933 608} box FLAT_BOX resizable fixed_size_tuples {5  0 30  1 29  3 29  4 30  5 25 }
@@ -1163,7 +1163,7 @@ else
 }
 
 uiView->setActionMode( mode );}
-                tooltip {Polygon Tool.} image {../../icons/Polygon.svg} compress_image 1 xywh {2 190 40 32} down_box DOWN_BOX selection_color 95
+                tooltip {Polygon Tool.} image {../../icons/Polygon.svg} compress_image 1 xywh {2 198 40 32} down_box DOWN_BOX selection_color 95
                 class {mrv::Button}
               }
               Fl_Button uiText {
@@ -1182,7 +1182,7 @@ if (Fl::event_clicks() >= 1)
    mrv::panel::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
 }}
-                tooltip {Text Tool.   Right click to edit previously stamped text.} image {../../icons/Text.svg} compress_image 1 xywh {2 321 40 33} down_box DOWN_BOX selection_color 95 labelfont 8 labelsize 24 labelcolor 7
+                tooltip {Text Tool.   Right click to edit previously stamped text.} image {../../icons/Text.svg} compress_image 1 xywh {2 329 40 33} down_box DOWN_BOX selection_color 95 labelfont 8 labelsize 24 labelcolor 7
                 class {mrv::Button}
               }
               Fl_Button uiArrow {
@@ -1194,7 +1194,7 @@ if (Fl::event_clicks() >= 1)
    mrv::panel::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
 }}
-                tooltip {Arrow Tool} image {../../icons/Arrow.svg} compress_image 1 xywh {2 288 40 33} down_box DOWN_BOX selection_color 95
+                tooltip {Arrow Tool} image {../../icons/Arrow.svg} compress_image 1 xywh {2 296 40 33} down_box DOWN_BOX selection_color 95
                 class {mrv::Button}
               }
               Fl_Button uiRectangle {
@@ -1221,7 +1221,7 @@ else
 }
 
 uiView->setActionMode( mode );}
-                tooltip {Rectangle Tool} image {../../icons/Rectangle.svg} compress_image 1 xywh {2 255 40 33} down_box DOWN_BOX selection_color 95
+                tooltip {Rectangle Tool} image {../../icons/Rectangle.svg} compress_image 1 xywh {2 263 40 33} down_box DOWN_BOX selection_color 95
                 class {mrv::Button}
               }
               Fl_Button uiCircle {
@@ -1248,32 +1248,32 @@ else
 }
 
 uiView->setActionMode( mode );}
-                tooltip {Circle Tool} image {../../icons/Circle.svg} compress_image 1 xywh {2 222 40 33} down_box DOWN_BOX selection_color 95
+                tooltip {Circle Tool} image {../../icons/Circle.svg} compress_image 1 xywh {2 230 40 33} down_box DOWN_BOX selection_color 95
                 class {mrv::Button}
               }
               Fl_Group {} {open
-                xywh {2 363 40 51}
+                xywh {2 366 40 51}
               } {
                 Fl_Slider uiPenOpacity {
                   callback {auto settings = app->settings();
 int a = o->value() * 255;
 settings->setValue( mrv::kPenColorA, a);}
-                  tooltip {Opacity of pen stroke} xywh {5 397 34 17} type {Horz Knob} step 0.01 value 1
+                  tooltip {Opacity of pen stroke} xywh {5 400 34 17} type {Horz Knob} step 0.01 value 1
                 }
                 Fl_Button uiFlipPenColor {
                   user_data this user_data_type {ViewerUI*}
                   callback {mrv::flip_pen_color_cb( o, v );}
-                  tooltip {Switch Colors} image {../../icons/Flip.svg} compress_image 1 xywh {23 363 16 19} box NO_BOX labelfont 8 labelsize 24 align 16
+                  tooltip {Switch Colors} image {../../icons/Flip.svg} compress_image 1 xywh {23 366 16 19} box NO_BOX labelfont 8 labelsize 24 align 16
                   class {mrv::Button}
                 }
                 Fl_Button uiOldPenColor {
                   user_data this user_data_type {ViewerUI*}
-                  tooltip {Old Color Used.  Click on the Arrow to alternate.} xywh {23 382 15 15} box ENGRAVED_BOX color 1 selection_color 1 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
+                  tooltip {Old Color Used.  Click on the Arrow to alternate.} xywh {23 385 15 15} box ENGRAVED_BOX color 1 selection_color 1 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
                 }
                 Fl_Button uiPenColor {
                   user_data this user_data_type {ViewerUI*}
                   callback {mrv::set_pen_color_cb( o, v );}
-                  tooltip {Pick Draw Color and Alpha} xywh {3 363 20 19} box ENGRAVED_BOX color 3 selection_color 3 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
+                  tooltip {Pick Draw Color and Alpha} xywh {3 366 20 19} box ENGRAVED_BOX color 3 selection_color 3 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
                 }
               }
               Fl_Group {} {

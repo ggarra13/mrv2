@@ -10,7 +10,7 @@
 
 #include <Imath/ImathVec.h>
 
-namespace mrv
+namespace tl
 {
     namespace draw
     {
@@ -37,7 +37,7 @@ namespace mrv
             {
             }
 
-            Point(const tl::math::Vector2f& b) :
+            Point(const math::Vector2f& b) :
                 Imath::V2d(b.x, b.y)
             {
             }
@@ -79,4 +79,4 @@ namespace mrv
         typedef std::vector< Point > PointList;
     } // namespace draw
 
-} // namespace mrv
+} // namespace tl

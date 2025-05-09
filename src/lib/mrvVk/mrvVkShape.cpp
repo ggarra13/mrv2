@@ -137,8 +137,7 @@ namespace mrv
 {
 
     void VKPathShape::draw(
-        const std::shared_ptr<timeline::IRender>& render,
-        const std::shared_ptr<vulkan::Lines>& lines)
+        const std::shared_ptr<timeline_vlk::Render>& render)
     {
         using namespace tl;
         using namespace mrv::draw;
@@ -160,8 +159,7 @@ namespace mrv
     }
 
     void VKErasePathShape::draw(
-        const std::shared_ptr<timeline::IRender>& render,
-        const std::shared_ptr<vulkan::Lines>& lines)
+        const std::shared_ptr<timeline_vlk::Render>& render)
     {
         using namespace mrv::draw;
 
@@ -179,8 +177,7 @@ namespace mrv
     }
 
     void VKPolygonShape::draw(
-        const std::shared_ptr<timeline::IRender>& render,
-        const std::shared_ptr<vulkan::Lines>& lines)
+        const std::shared_ptr<timeline_vlk::Render>& render)
     {
         using namespace mrv::draw;
 
@@ -197,8 +194,7 @@ namespace mrv
     }
 
     void VKCircleShape::draw(
-        const std::shared_ptr<timeline::IRender>& render,
-        const std::shared_ptr<vulkan::Lines>& lines)
+        const std::shared_ptr<timeline_vlk::Render>& render)
     {
         // gl::SetAndRestore(VK_BLEND, VK_TRUE);
 
@@ -210,8 +206,7 @@ namespace mrv
     }
 
     void VKRectangleShape::draw(
-        const std::shared_ptr<timeline::IRender>& render,
-        const std::shared_ptr<vulkan::Lines>& lines)
+        const std::shared_ptr<timeline_vlk::Render>& render)
     {
         using namespace mrv::draw;
 
@@ -228,8 +223,7 @@ namespace mrv
     }
 
     void VKFilledPolygonShape::draw(
-        const std::shared_ptr<timeline::IRender>& render,
-        const std::shared_ptr<vulkan::Lines>& lines)
+        const std::shared_ptr<timeline_vlk::Render>& render)
     {
         using namespace mrv::draw;
 
@@ -266,8 +260,7 @@ namespace mrv
     }
 
     void VKFilledCircleShape::draw(
-        const std::shared_ptr<timeline::IRender>& render,
-        const std::shared_ptr<vulkan::Lines>& lines)
+        const std::shared_ptr<timeline_vlk::Render>& render)
     {
         using namespace mrv::draw;
 
@@ -282,8 +275,7 @@ namespace mrv
     }
 
     void VKFilledRectangleShape::draw(
-        const std::shared_ptr<timeline::IRender>& render,
-        const std::shared_ptr<vulkan::Lines>& lines)
+        const std::shared_ptr<timeline_vlk::Render>& render)
     {
         using namespace mrv::draw;
 
@@ -299,8 +291,7 @@ namespace mrv
     }
 
     void VKArrowShape::draw(
-        const std::shared_ptr<timeline::IRender>& render,
-        const std::shared_ptr<vulkan::Lines>& lines)
+        const std::shared_ptr<timeline_vlk::Render>& render)
     {
         using namespace mrv::draw;
 
@@ -336,8 +327,7 @@ namespace mrv
     }
 
     void VKTextShape::draw(
-        const std::shared_ptr<timeline::IRender>& render,
-        const std::shared_ptr<vulkan::Lines>& lines)
+        const std::shared_ptr<timeline_vlk::Render>& render)
     {
         if (text.empty())
             return;

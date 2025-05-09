@@ -35,6 +35,7 @@ namespace
 {
     const unsigned kFPSAverageFrames = 10;
     const std::string kFontFamily = "NotoSans-Regular";
+    const char* kModule = "draw";
 }
 
 namespace mrv
@@ -97,7 +98,8 @@ namespace mrv
             image::Color4f color(1, 1, 1, 1);
             for (size_t y = 0; y < H; y += 2)
             {
-                vk.lines->drawLine(ctx, vk.render, math::Vector2i(0, y),
+                vk.lines->drawLine(vk.render, renderPass(),
+                                   math::Vector2i(0, y),
                                    math::Vector2i(W, y), color, 1);
             }
 
@@ -161,7 +163,7 @@ namespace mrv
                 }
             }
 
-            vk.lines->drawPoints(vk.cmd, m_currentFrameIndex, ctx, pnts, color, 5);
+            vk.lines->drawPoints(vk.render, renderPass(), pnts, color, 5);
 
             if (p.stereo3DOptions.eyeSeparation != 0.F)
             {
@@ -211,9 +213,9 @@ namespace mrv
             image::Color4f color(1, 1, 1, 1);
             for (size_t x = 0; x < W; x += 2)
             {
-                vk.lines->drawLine(ctx,
-                    vk.render, math::Vector2i(x, 0), math::Vector2i(x, H), color,
-                    1);
+                vk.lines->drawLine(vk.render, renderPass(),
+                                   math::Vector2i(x, 0),
+                                   math::Vector2i(x, H), color, 1);
             }
 
             if (p.stereo3DOptions.eyeSeparation != 0.F)
@@ -353,12 +355,15 @@ namespace mrv
             if (p.missingFrameType == MissingFrameType::kScratchedFrame)
             {
                 image::Color4f color(1, 0, 0, 0.8);
-                vk.lines->drawLine(ctx,
-                    vk.render, math::Vector2i(0, 0),
-                    math::Vector2i(renderSize.w, renderSize.h), color, 4);
-                vk.lines->drawLine(ctx,
-                    vk.render, math::Vector2i(0, renderSize.h),
-                    math::Vector2i(renderSize.w, 0), color, 4);
+                vk.lines->drawLine(vk.render,
+                                   renderPass(),
+                                   math::Vector2i(0, 0),
+                                   math::Vector2i(renderSize.w, renderSize.h),
+                                   color, 4);
+                vk.lines->drawLine(vk.render,
+                                   renderPass(),
+                                   math::Vector2i(0, renderSize.h),
+                                   math::Vector2i(renderSize.w, 0), color, 4);
             }
         }
 
@@ -373,7 +378,7 @@ namespace mrv
             p.mousePos = _getFocus();
             const auto& pos = _getRasterf();
             vk.render->setTransform(mvp);
-            vk.lines->drawCursor(ctx, vk.render, pos, pen_size, color);
+            vk.lines->drawCursor(vk.render, renderPass(), pos, pen_size, color);
         }
 
         void Viewport::_drawShape(
@@ -394,7 +399,18 @@ namespace mrv
                 float alpha = shape->color.a;
                 shape->color.a *= alphamult;
                 shape->color.a *= shape->fade;
-                shape->draw(vk.render, vk.lines);
+                if (auto vkshape = dynamic_cast<VKPathShape*>(shape.get()))
+                {
+                    vkshape->draw(vk.render);
+                }
+                else if (auto vkshape = dynamic_cast<VKShape*>(shape.get()))
+                {
+                    vkshape->draw(vk.render);
+                }
+                else
+                {
+                    LOG_ERROR("Unknown shape - not drawing");
+                }
                 shape->color.a = alpha;
             }
         }
@@ -1076,13 +1092,9 @@ namespace mrv
         void Viewport::_drawHelpText() const noexcept
         {
             TLRENDER_P();
-            if (!p.player)
+            if (!p.player || !p.fontSystem)
                 return;
-            if (!p.fontSystem)
-                return;
-
-            return;
-
+            
             MRV2_VK();
 
             Viewport* self = const_cast< Viewport* >(this);

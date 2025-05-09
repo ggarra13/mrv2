@@ -11,7 +11,7 @@
 
 #include "mrvCore/mrvString.h"
 
-#include "mrvDraw/Annotation.h"
+#include "tlDraw/Annotation.h"
 
 class ViewerUI;
 class Fl_Menu_Button;

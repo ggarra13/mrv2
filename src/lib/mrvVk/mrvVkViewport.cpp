@@ -369,9 +369,6 @@ namespace mrv
 
             // Destroy auxiliary render classes
             vk.lines.reset();
-#ifdef USE_ONE_PIXEL_LINES
-            vk.outline.reset();
-#endif
             // Destroy Buffers
             vk.buffer.reset();
             vk.annotation.reset();
@@ -404,12 +401,8 @@ namespace mrv
                 if (!p.fontSystem)
                     p.fontSystem = image::FontSystem::create(context);
 
-#ifdef USE_ONE_PIXEL_LINES
-                if (!vk.outline)
-                    vk.outline = std::make_shared<vulkan::Outline>();
-#endif
                 if (!vk.lines)
-                    vk.lines = std::make_shared<vulkan::Lines>();
+                    vk.lines = std::make_shared<vulkan::Lines>(ctx);
 
                 const std::string& vertexSource = timeline_vlk::vertexSource();
                 const image::Color4f color(1.F, 1.F, 1.F);
@@ -806,6 +799,47 @@ namespace mrv
             if (p.hudActive && p.hud != HudDisplay::kNone)
                 _drawHUD(cmd, alpha);
             
+            math::Box2i selection = p.colorAreaInfo.box = p.selection;
+            if (selection.max.x >= 0)
+            {
+                // Check min < max
+                if (selection.min.x > selection.max.x)
+                {
+                    int tmp = selection.max.x;
+                    selection.max.x = selection.min.x;
+                    selection.min.x = tmp;
+                }
+                if (selection.min.y > selection.max.y)
+                {
+                    int tmp = selection.max.y;
+                    selection.max.y = selection.min.y;
+                    selection.min.y = tmp;
+                }
+                // Copy it again in case it changed
+                p.colorAreaInfo.box = selection;
+
+                if (panel::colorAreaPanel || panel::histogramPanel ||
+                    panel::vectorscopePanel)
+                {
+                    //_mapBuffer();
+
+                    if (panel::colorAreaPanel)
+                    {
+                        // \@todo: must be done after mapping buffer.
+                        // _calculateColorArea(p.colorAreaInfo);
+                        panel::colorAreaPanel->update(p.colorAreaInfo);
+                    }
+                    if (panel::histogramPanel)
+                    {
+                        panel::histogramPanel->update(p.colorAreaInfo);
+                    }
+                    if (panel::vectorscopePanel)
+                    {
+                        panel::vectorscopePanel->update(p.colorAreaInfo);
+                    }
+                }
+            }
+                    
             end_render_pass(cmd);
             
             // Update the pixel bar from here only if we are playing a movie

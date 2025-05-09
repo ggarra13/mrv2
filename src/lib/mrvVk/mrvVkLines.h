@@ -4,9 +4,10 @@
 
 #pragma once
 
-#include "mrvDraw/Polyline2D.h"
 
 #include <tlTimelineVk/Render.h>
+
+#include <tlDraw/Polyline2D.h>
 
 #include <tlCore/Util.h>
 #include <tlCore/Matrix.h>
@@ -22,27 +23,27 @@ namespace mrv
         class Lines
         {
         public:
-            Lines();
+            Lines(Fl_Vk_Context&);
             ~Lines();
 
             //! Draw a points in raster coordinates with glPointSize
             void drawPoints(
-                VkCommandBuffer& cmd, const uint32_t frameIndex,
-                Fl_Vk_Context& ctx,
+                const std::shared_ptr<timeline_vlk::Render>& render,
+                const VkRenderPass renderPass,
                 const std::vector<math::Vector2f>& pts,
                 const image::Color4f& color, const int size = 1);
 
             //! Draw a single line in raster coordinates with a mesh.
             void drawLine(
-                Fl_Vk_Context& ctx,
                 const std::shared_ptr<timeline_vlk::Render>& render,
+                const VkRenderPass renderPass,
                 const math::Vector2i& start, const math::Vector2i& end,
                 const image::Color4f& color, const float width);
 
             //! Draw a set of connected line segments.
             void drawLines(
-                Fl_Vk_Context& ctx,
                 const std::shared_ptr<timeline_vlk::Render>& render,
+                const VkRenderPass renderPass,
                 const draw::PointList& pts, const image::Color4f& color,
                 const float width, const bool soft = false,
                 const draw::Polyline2D::JointStyle jointStyle =
@@ -54,20 +55,22 @@ namespace mrv
 
             //! Draw a circle.
             void drawCircle(
-                Fl_Vk_Context& ctx,
                 const std::shared_ptr<timeline_vlk::Render>& render,
+                const VkRenderPass renderPass,
                 const math::Vector2f& center, const float radius,
                 const float width, const image::Color4f& color,
                 const bool soft = false);
 
             //! Draw drawing cursor (two circles, one white, one black).
             void drawCursor(
-                Fl_Vk_Context& ctx,
                 const std::shared_ptr<timeline_vlk::Render>& render,
+                const VkRenderPass renderPass,
                 const math::Vector2f& center, const float radius,
                 const image::Color4f& color);
 
         private:
+            Fl_Vk_Context& ctx;
+            
             TLRENDER_PRIVATE();
         };
     } // namespace opengl

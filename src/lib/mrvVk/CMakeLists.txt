@@ -7,7 +7,6 @@ set(HEADERS
     # mrvVkErrors.h
     mrvVkJson.h
     mrvVkLines.h
-    mrvVkOutline.h
     mrvVkShaders.h       # done
     mrvVkShape.h
     mrvVkTextEdit.h      # done
@@ -25,7 +24,6 @@ set(SOURCES
     # mrvVkErrors.cpp
     mrvVkJson.cpp
     mrvVkLines.cpp
-    mrvVkOutline.cpp
     mrvVkShaders.cpp        # done
     mrvVkShape.cpp
     mrvVkTextEdit.cpp       # done
@@ -43,9 +41,9 @@ if(APPLE)
     list(APPEND SOURCES mrvVkWindow.mm)
 endif()
 
-set(LIBRARIES mrvUI mrvWidgets mrvDraw mrvCore ${FLTK_vk_LIBRARY} )
+set(LIBRARIES mrvUI mrvWidgets mrvCore ${FLTK_vk_LIBRARY} )
 set(LIBRARIES_PRIVATE )
-list(APPEND LIBRARIES tlTimelineVk tlVk tlTimeline tlTimelineUI tlUI)
+list(APPEND LIBRARIES tlTimelineVk tlVk tlTimeline tlDraw tlTimelineUI tlUI)
 
 add_library(mrvVk ${SOURCES} ${HEADERS})
 files_to_absolute_paths()

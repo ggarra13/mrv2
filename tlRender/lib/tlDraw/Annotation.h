@@ -4,15 +4,15 @@
 
 #pragma once
 
-#include <memory>
-#include <vector>
+
+#include "tlDraw/Shape.h"
 
 #include <tlCore/Time.h>
 
-#include "mrvDraw/Shape.h"
-#include "mrvNetwork/mrvMessage.h"
+#include <memory>
+#include <vector>
 
-namespace mrv
+namespace tl
 {
     namespace draw
     {
@@ -47,8 +47,8 @@ namespace mrv
         void from_json(const nlohmann::json& json, Annotation& value);
 
         std::shared_ptr< Annotation >
-        messageToAnnotation(const mrv::Message& m);
+        messageToAnnotation(const nlohmann::json& m);
 
     } // namespace draw
 
-} // namespace mrv
+} // namespace tl
