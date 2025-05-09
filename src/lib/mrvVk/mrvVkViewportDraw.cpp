@@ -625,7 +625,7 @@ namespace mrv
                                 hasDepth, hasStencil,
                                 glyphs,
                                 pos, labelColor);
-            pos.y -= lineHeight;
+            pos.y += lineHeight;
         }
 
         inline void Viewport::_drawText(
@@ -763,8 +763,6 @@ namespace mrv
             TLRENDER_P();
             MRV2_VK();
 
-            return;
-
             if (!p.fontSystem || p.videoData.empty() || !p.player)
                 return;
 
@@ -785,7 +783,7 @@ namespace mrv
                 p.fontSystem->getMetrics(fontInfo);
             
             auto lineHeight = fontMetrics.lineHeight;
-            math::Vector2i pos(20, viewportSize.h - lineHeight * 2);
+            math::Vector2i pos(20, lineHeight * 2);
 
             const auto player = p.player;
 
@@ -800,7 +798,6 @@ namespace mrv
             vk.render->setTransform(math::ortho(
                                         0.F, static_cast<float>(viewportSize.w),
                                         0.F, static_cast<float>(viewportSize.h), -1.F, 1.F));
-            vk.render->applyTransforms();
             
             char buf[512];
             if (p.hud & HudDisplay::kDirectory)
@@ -1055,7 +1052,6 @@ namespace mrv
             }
             
             vk.render->setTransform(oldTransform);
-            vk.render->applyTransforms();
         }
 
         void Viewport::_drawWindowArea(const std::string& pipelineName,
