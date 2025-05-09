@@ -18,7 +18,6 @@
 
 #include "mrvVk/mrvVkViewportPrivate.h"
 #include "mrvVk/mrvVkDefines.h"
-// #include "mrvVk/mrvVkErrors.h"
 #include "mrvVk/mrvVkUtil.h"
 #include "mrvVk/mrvVkShaders.h"
 #include "mrvVk/mrvVkShape.h"
@@ -708,6 +707,7 @@ namespace mrv
                 LOG_ERROR(e.what());
             }
 
+            _drawOverlays(renderSize);
             vk.render->end();
 
             m_clearColor = {r, g, b, a};

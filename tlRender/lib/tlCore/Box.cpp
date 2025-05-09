@@ -53,14 +53,14 @@ namespace tl
 
         std::ostream& operator<<(std::ostream& os, const Box2i& value)
         {
-            os << value.min.x << "," << value.min.y << "-" << value.max.x << ","
+            os << value.min.x << "," << value.min.y << "*" << value.max.x << ","
                << value.max.y;
             return os;
         }
 
         std::ostream& operator<<(std::ostream& os, const Box2f& value)
         {
-            os << value.min.x << "," << value.min.y << "-" << value.max.x << ","
+            os << value.min.x << "," << value.min.y << "*" << value.max.x << ","
                << value.max.y;
             return os;
         }
@@ -69,7 +69,7 @@ namespace tl
         {
             std::string s;
             is >> s;
-            auto split = string::split(s, '-');
+            auto split = string::split(s, '*');
             if (split.size() != 2)
             {
                 throw error::ParseError();
@@ -89,7 +89,7 @@ namespace tl
         {
             std::string s;
             is >> s;
-            auto split = string::split(s, '-');
+            auto split = string::split(s, '*');
             if (split.size() != 2)
             {
                 throw error::ParseError();

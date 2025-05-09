@@ -1,6 +1,8 @@
 v1.3.8
 ======
 
+- Fixed OpenEXR's Data Window and Display Window display which was crashing when the
+  coordinates had negative values.
 - Added proper support for all possible texture types of OpenGL that libplacebo might use.
 - Same for Vulkan's hdr utility.
 - Flattened tlRender from a submodule to a directory to start working on porting
@@ -25,7 +27,9 @@ it to Vulkan.
 		 * HDR Passthru (for HDR).
 		 * HDR Tonemapping (for SDR).
 		 * HUD
-		 * Scissor (Clipping Rectangles)
+		 * Masking
+		 * Safe Areas
+		 * Data/Display Window
 		 * Comparison Modes: 
 			 - A
 			 - B
@@ -39,8 +43,6 @@ it to Vulkan.
 	 * Missing to check/add:
 		 * Missing Frames crosses
 		 * Environment mapping
-		 * Safe Areas
-		 * Masking
 		 * Thumbnails in Timeline (crashes) / Editing
 		 * Thumbnails in Panels (done with OpenGL for now)
 		 * Saving of Movies/Pictures with Annotations

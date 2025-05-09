@@ -180,7 +180,7 @@ namespace tl
                 const timeline::CompareOptions& = timeline::CompareOptions(),
                 const timeline::BackgroundOptions& =
                     timeline::BackgroundOptions()) override;
-
+            void drawMask(float pct = 0.F);
 
         private:
             void _displayShader();

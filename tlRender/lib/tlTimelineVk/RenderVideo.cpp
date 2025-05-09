@@ -142,6 +142,57 @@ namespace tl
             }
         }
 
+        void Render::drawMask(const float pct)
+        {
+            if (pct < 0.001F)
+                return;
+            
+            TLRENDER_P();
+            
+            const math::Size2i renderSize = p.fbo->getSize();
+            if (!renderSize.isValid())
+                return;
+            
+            const image::Color4f color(0.F, 0.F, 0.F);
+            p.fbo->transitionToColorAttachment(p.cmd);
+            float aspectY = (float)renderSize.w / (float)renderSize.h;
+            float aspectX = (float)renderSize.h / (float)renderSize.w;
+
+            float target_aspect = 1.F / pct;
+            float amountY = (0.5F - target_aspect * aspectY / 2);
+            float amountX = (0.5F - pct * aspectX / 2);
+
+            bool vertical = true;
+            if (amountY < amountX)
+            {
+                vertical = false;
+            }
+            
+            if (vertical)
+            {
+                int Y = renderSize.h * amountY;
+                math::Box2i box(0, 0, renderSize.w, Y);
+                p.fbo->beginRenderPass(p.cmd);
+                drawRect("Mask", "rect", "rect", box, color);
+                box.max.y = renderSize.h;
+                box.min.y = renderSize.h - Y;
+                drawRect("Mask", "rect", "rect", box, color);
+                p.fbo->endRenderPass(p.cmd);
+            }
+            else
+            {
+                int X = renderSize.w * amountX;
+                math::Box2i box(0, 0, X, renderSize.h);
+                p.fbo->beginRenderPass(p.cmd);
+                drawRect("Mask", "rect", "rect", box, color);
+                box.max.x = renderSize.w;
+                box.min.x = renderSize.w - X;
+                drawRect("Mask", "rect", "rect", box, color);
+                p.fbo->endRenderPass(p.cmd);
+            }
+            p.fbo->transitionToShaderRead(p.cmd);
+        }
+        
         void Render::_drawVideoA(
             const std::vector<timeline::VideoData>& videoData,
             const std::vector<math::Box2i>& boxes,

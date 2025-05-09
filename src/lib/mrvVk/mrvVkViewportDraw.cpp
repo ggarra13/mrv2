@@ -561,45 +561,6 @@ namespace mrv
             }
         }
 
-        void
-        Viewport::_drawCropMask(const math::Size2i& renderSize) const noexcept
-        {
-            MRV2_VK();
-
-            double aspectY = (double)renderSize.w / (double)renderSize.h;
-            double aspectX = (double)renderSize.h / (double)renderSize.w;
-
-            double target_aspect = 1.0 / _p->masking;
-            double amountY = (0.5 - target_aspect * aspectY / 2);
-            double amountX = (0.5 - _p->masking * aspectX / 2);
-
-            bool vertical = true;
-            if (amountY < amountX)
-            {
-                vertical = false;
-            }
-
-            image::Color4f maskColor(0, 0, 0, 1);
-
-            if (vertical)
-            {
-                int Y = renderSize.h * amountY;
-                math::Box2i box(0, 0, renderSize.w, Y);
-                vk.render->drawRect(box, maskColor);
-                box.max.y = renderSize.h;
-                box.min.y = renderSize.h - Y;
-                vk.render->drawRect(box, maskColor);
-            }
-            else
-            {
-                int X = renderSize.w * amountX;
-                math::Box2i box(0, 0, X, renderSize.h);
-                vk.render->drawRect(box, maskColor);
-                box.max.x = renderSize.w;
-                box.min.x = renderSize.w - X;
-                vk.render->drawRect(box, maskColor);
-            }
-        }
 
         inline void Viewport::_drawText(
             const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
@@ -642,14 +603,15 @@ namespace mrv
         void Viewport::_drawRectangleOutline(
             const std::string& pipelineName,
             const math::Matrix4x4f& mvp,
-            const math::Box2i& box, const image::Color4f& color) noexcept
+            const math::Box2i& box, const image::Color4f& color,
+            const uint16_t width) noexcept
         {
             MRV2_VK();
             
             vk.render->setTransform(mvp);
             
             drawRectOutline(vk.render, pipelineName, renderPass(),
-                            box, color, 1.0);
+                            box, color, width);
         }
 
         void Viewport::_drawSafeAreas(
@@ -1067,17 +1029,22 @@ namespace mrv
             std::stringstream ss(dw);
             ss >> box;
 
-            box.min.y = -(renderSize.h - box.min.y);
-            box.max.y = -(renderSize.h - box.max.y);
-
-            drawRectOutline(vk.render, pipelineName, renderPass(),
-                            box, color, 2);
+            math::Matrix4x4f vm =
+                math::translate(math::Vector3f(p.viewPos.x, p.viewPos.y, 0.F));
+            const auto pm = math::ortho(
+                0.F, static_cast<float>(viewportSize.w),
+                0.F, static_cast<float>(viewportSize.h), -1.F, 1.F);
+            const math::Matrix4x4f oldTransform = vk.render->getTransform();
+            const math::Matrix4x4f mvp = pm * vm;
+            vk.render->setTransform(mvp);
+            _drawRectangleOutline(pipelineName, mvp, box, color, 2);
+            vk.render->setTransform(oldTransform);
         }
 
         void Viewport::_drawDataWindow() noexcept
         {
             TLRENDER_P();
-            ;
+            
             image::Tags::const_iterator i = p.tagData.find("Data Window");
             if (i == p.tagData.end())
                 return;
@@ -1102,8 +1069,8 @@ namespace mrv
         Viewport::_drawOverlays(const math::Size2i& renderSize) const noexcept
         {
             TLRENDER_P();
-            if (p.masking > 0.0001F)
-                _drawCropMask(renderSize);
+            MRV2_VK();
+            vk.render->drawMask(p.masking);
         }
 
         void Viewport::_drawHelpText() const noexcept
