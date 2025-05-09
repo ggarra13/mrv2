@@ -34,6 +34,7 @@
 namespace
 {
     const unsigned kFPSAverageFrames = 10;
+    const std::string kFontFamily = "NotoSans-Regular";
 }
 
 namespace mrv
@@ -375,25 +376,6 @@ namespace mrv
             vk.lines->drawCursor(ctx, vk.render, pos, pen_size, color);
         }
 
-        void Viewport::_drawRectangleOutline(
-            const math::Box2i& box, const image::Color4f& color,
-            const math::Matrix4x4f& mvp) noexcept
-        {
-            MRV2_VK();
-#ifdef USE_ONE_PIXEL_LINES
-            vk.outline->drawRect(vk.cmd, m_currentFrameIndex, ctx, box, color, mvp);
-            
-#else
-            int width = 2 / _p->viewZoom; //* renderSize.w / viewportSize.w;
-            if (width < 2)
-                width = 2;
-            vk.render->setTransform(mvp);
-            
-            drawRectOutline(ctx, vk.render, box, color, width);
-            
-#endif
-        }
-
         void Viewport::_drawShape(
             const std::shared_ptr< draw::Shape >& shape,
             const float alphamult) noexcept
@@ -579,45 +561,6 @@ namespace mrv
             }
         }
 
-        void
-        Viewport::_drawCropMask(const math::Size2i& renderSize) const noexcept
-        {
-            MRV2_VK();
-
-            double aspectY = (double)renderSize.w / (double)renderSize.h;
-            double aspectX = (double)renderSize.h / (double)renderSize.w;
-
-            double target_aspect = 1.0 / _p->masking;
-            double amountY = (0.5 - target_aspect * aspectY / 2);
-            double amountX = (0.5 - _p->masking * aspectX / 2);
-
-            bool vertical = true;
-            if (amountY < amountX)
-            {
-                vertical = false;
-            }
-
-            image::Color4f maskColor(0, 0, 0, 1);
-
-            if (vertical)
-            {
-                int Y = renderSize.h * amountY;
-                math::Box2i box(0, 0, renderSize.w, Y);
-                vk.render->drawRect(box, maskColor);
-                box.max.y = renderSize.h;
-                box.min.y = renderSize.h - Y;
-                vk.render->drawRect(box, maskColor);
-            }
-            else
-            {
-                int X = renderSize.w * amountX;
-                math::Box2i box(0, 0, X, renderSize.h);
-                vk.render->drawRect(box, maskColor);
-                box.max.x = renderSize.w;
-                box.min.x = renderSize.w - X;
-                vk.render->drawRect(box, maskColor);
-            }
-        }
 
         inline void Viewport::_drawText(
             const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
@@ -643,7 +586,7 @@ namespace mrv
                                 hasDepth, hasStencil,
                                 glyphs,
                                 pos, labelColor);
-            pos.y -= lineHeight;
+            pos.y += lineHeight;
         }
 
         inline void Viewport::_drawText(
@@ -656,14 +599,31 @@ namespace mrv
                       lineHeight, labelColor, pipelineName);
         }
             
+
+        void Viewport::_drawRectangleOutline(
+            const std::string& pipelineName,
+            const math::Matrix4x4f& mvp,
+            const math::Box2i& box, const image::Color4f& color,
+            const uint16_t width) noexcept
+        {
+            MRV2_VK();
+            
+            vk.render->setTransform(mvp);
+            
+            drawRectOutline(vk.render, pipelineName, renderPass(),
+                            box, color, width);
+        }
+
         void Viewport::_drawSafeAreas(
             const float percentX, const float percentY,
             const float pixelAspectRatio, const image::Color4f& color,
             const math::Matrix4x4f& mvp, const char* label) noexcept
         {
+            TLRENDER_P();
             MRV2_VK();
-            const auto& renderSize = getRenderSize();
-            const auto& viewportSize = getViewportSize();
+
+            auto renderSize = getRenderSize();
+            
             double aspectX = (double)renderSize.h / (double)renderSize.w;
             double aspectY = (double)renderSize.w / (double)renderSize.h;
 
@@ -688,37 +648,30 @@ namespace mrv
                 X = renderSize.w * amountX / pixelAspectRatio;
                 Y = renderSize.h * percentY;
             }
-            box.min.x = renderSize.w - X;
-            box.min.y = -(renderSize.h - Y);
-            box.max.x = X;
-            box.max.y = -Y;
 
-            int width = 2 / _p->viewZoom; //* renderSize.w / viewportSize.w;
+            // Calculate box coordinates in the renderSize's coordinate space
+            box.min.x = X * p.viewZoom;
+            box.min.y = Y * p.viewZoom;
+            box.max.x = (renderSize.w - X) * p.viewZoom;
+            box.max.y = (renderSize.h - Y) * p.viewZoom;
+            
+            _drawRectangleOutline(label, mvp, box, color);
 
-#ifdef USE_ONE_PIXEL_LINES
-            vk.outline->drawRect(vk.cmd, m_currentFrameIndex, ctx, box, color, mvp);
-#else
-            if (width < 2)
-                width = 2;
-            vk.render->setTransform(mvp);
-            drawRectOutline(vk.render, box, color, width);
-#endif
-
-            //
-            // Draw the text too
-            //
-            static const std::string fontFamily = "NotoSans-Regular";
-            Viewport* self = const_cast< Viewport* >(this);
-            const image::FontInfo fontInfo(fontFamily, 12 * width);
+            const image::FontInfo fontInfo(kFontFamily, 12 * p.viewZoom);
             const auto glyphs = _p->fontSystem->getGlyphs(label, fontInfo);
-            math::Vector2i pos(box.max.x, box.max.y - 2 * width);
-            // Set the projection matrix
-            vk.render->setTransform(mvp);
-            vk.render->drawText(glyphs, pos, color);
+            const bool hasDepth = mode() & FL_DEPTH;
+            const bool hasStencil = mode() & FL_STENCIL;
+            
+            math::Vector2i pos(box.min.x, box.max.y - 2 * p.viewZoom);
+
+            vk.render->drawText(label, label, renderPass(),
+                                hasDepth, hasStencil, glyphs, pos, color);
         }
 
         void Viewport::_drawSafeAreas() noexcept
         {
+            MRV2_VK();
+            
             TLRENDER_P();
             if (!p.player)
                 return;
@@ -730,16 +683,13 @@ namespace mrv
             const auto& viewportSize = getViewportSize();
             const auto& renderSize = getRenderSize();
 
-            math::Matrix4x4f vm;
-            vm =
-                vm * math::translate(math::Vector3f(p.viewPos.x, p.viewPos.y, 0.F));
-            vm = vm * math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
+            math::Matrix4x4f vm =
+                math::translate(math::Vector3f(p.viewPos.x, p.viewPos.y, 0.F));
             const auto pm = math::ortho(
-                0.F, static_cast<float>(viewportSize.w), 0.F,
-                static_cast<float>(viewportSize.h), -1.F, 1.F);
-            auto mvp = pm * vm;
-            mvp = mvp * math::scale(math::Vector3f(1.F, -1.F, 1.F));
-
+                0.F, static_cast<float>(viewportSize.w),
+                0.F, static_cast<float>(viewportSize.h), -1.F, 1.F);
+            const math::Matrix4x4f oldTransform = vk.render->getTransform();
+            const math::Matrix4x4f mvp = pm * vm;
             double aspect = (double)renderSize.w / pr / (double)renderSize.h;
             if (aspect <= 1.78)
             {
@@ -767,6 +717,7 @@ namespace mrv
                 color = image::Color4f(1.F, 0.0f, 1.F);
                 _drawSafeAreas(1.77, 1.0, pr, color, mvp, "hdtv");
             }
+            vk.render->setTransform(oldTransform);
         }
 
         void Viewport::_drawHUD(VkCommandBuffer cmd, float alpha) const noexcept
@@ -777,10 +728,9 @@ namespace mrv
             if (!p.fontSystem || p.videoData.empty() || !p.player)
                 return;
 
-            static const std::string fontFamily = "NotoSans-Regular";
             Viewport* self = const_cast< Viewport* >(this);
             const uint16_t fontSize = 12 * self->pixels_per_unit();
-            const image::FontInfo fontInfo(fontFamily, fontSize);
+            const image::FontInfo fontInfo(kFontFamily, fontSize);
             const auto& viewportSize = getViewportSize();
             
             
@@ -795,7 +745,7 @@ namespace mrv
                 p.fontSystem->getMetrics(fontInfo);
             
             auto lineHeight = fontMetrics.lineHeight;
-            math::Vector2i pos(20, viewportSize.h - lineHeight * 2);
+            math::Vector2i pos(20, lineHeight * 2);
 
             const auto player = p.player;
 
@@ -806,10 +756,11 @@ namespace mrv
             vk.render->setViewport(math::Box2i(0, 0, viewportSize.w,
                                                viewportSize.h));
             vk.render->setRenderSize(viewportSize);
-            math::Matrix4x4f oldTransform = vk.render->getTransform();
+            const math::Matrix4x4f oldTransform = vk.render->getTransform();
             vk.render->setTransform(math::ortho(
                                         0.F, static_cast<float>(viewportSize.w),
-                                        static_cast<float>(viewportSize.h), 0.F, -1.F, 1.F));
+                                        0.F, static_cast<float>(viewportSize.h), -1.F, 1.F));
+            
             char buf[512];
             if (p.hud & HudDisplay::kDirectory)
             {
@@ -1065,7 +1016,8 @@ namespace mrv
             vk.render->setTransform(oldTransform);
         }
 
-        void Viewport::_drawWindowArea(const std::string& dw) noexcept
+        void Viewport::_drawWindowArea(const std::string& pipelineName,
+                                       const std::string& dw) noexcept
         {
             TLRENDER_P();
             MRV2_VK();
@@ -1077,35 +1029,28 @@ namespace mrv
             std::stringstream ss(dw);
             ss >> box;
 
-            box.min.y = -(renderSize.h - box.min.y);
-            box.max.y = -(renderSize.h - box.max.y);
-
             math::Matrix4x4f vm =
                 math::translate(math::Vector3f(p.viewPos.x, p.viewPos.y, 0.F));
-            vm = vm * math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
             const auto pm = math::ortho(
-                0.F, static_cast<float>(viewportSize.w), 0.F,
-                static_cast<float>(viewportSize.h), -1.F, 1.F);
-            auto mvp = pm * vm;
-            mvp = mvp * math::scale(math::Vector3f(1.F, -1.F, 1.F));
-#ifdef USE_ONE_PIXEL_LINES
-            _drawRectangleOutline(box, color, mvp);
-#else
+                0.F, static_cast<float>(viewportSize.w),
+                0.F, static_cast<float>(viewportSize.h), -1.F, 1.F);
+            const math::Matrix4x4f oldTransform = vk.render->getTransform();
+            const math::Matrix4x4f mvp = pm * vm;
             vk.render->setTransform(mvp);
-            drawRectOutline(vk.render, box, color, 2);
-#endif
+            _drawRectangleOutline(pipelineName, mvp, box, color, 2);
+            vk.render->setTransform(oldTransform);
         }
 
         void Viewport::_drawDataWindow() noexcept
         {
             TLRENDER_P();
-            ;
+            
             image::Tags::const_iterator i = p.tagData.find("Data Window");
             if (i == p.tagData.end())
                 return;
 
             const std::string& dw = i->second;
-            _drawWindowArea(dw);
+            _drawWindowArea("Data Window", dw);
         }
 
         void Viewport::_drawDisplayWindow() noexcept
@@ -1117,15 +1062,15 @@ namespace mrv
                 return;
 
             const std::string& dw = i->second;
-            _drawWindowArea(dw);
+            _drawWindowArea("Display Window", dw);
         }
 
         void
         Viewport::_drawOverlays(const math::Size2i& renderSize) const noexcept
         {
             TLRENDER_P();
-            if (p.masking > 0.0001F)
-                _drawCropMask(renderSize);
+            MRV2_VK();
+            vk.render->drawMask(p.masking);
         }
 
         void Viewport::_drawHelpText() const noexcept
@@ -1140,14 +1085,13 @@ namespace mrv
 
             MRV2_VK();
 
-            static const std::string fontFamily = "NotoSans-Regular";
             Viewport* self = const_cast< Viewport* >(this);
             uint16_t fontSize = 16 * self->pixels_per_unit();
 
             const image::Color4f labelColor(255.F, 255.F, 255.F, p.helpTextFade);
 
             char buf[512];
-            const image::FontInfo fontInfo(fontFamily, fontSize);
+            const image::FontInfo fontInfo(kFontFamily, fontSize);
             const image::FontMetrics fontMetrics =
                 p.fontSystem->getMetrics(fontInfo);
             const int labelSpacing = fontInfo.size / 2;

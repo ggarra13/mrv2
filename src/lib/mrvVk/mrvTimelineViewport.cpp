@@ -3570,8 +3570,8 @@ namespace mrv
                 math::Vector3f(transformOffset.x, transformOffset.y, 0.F));
 
             const math::Matrix4x4f& pm = math::ortho(
-                0.F, static_cast<float>(viewportSize.w), 0.F,
-                static_cast<float>(viewportSize.h), -1.F, 1.F);
+                0.F, static_cast<float>(viewportSize.w),
+                0.F, static_cast<float>(viewportSize.h), -1.F, 1.F);
             return pm * vm * transformOffsetMatrix * rotateMatrix * centerMatrix;
         }
 

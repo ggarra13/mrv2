@@ -18,7 +18,6 @@
 
 #include "mrvVk/mrvVkViewportPrivate.h"
 #include "mrvVk/mrvVkDefines.h"
-// #include "mrvVk/mrvVkErrors.h"
 #include "mrvVk/mrvVkUtil.h"
 #include "mrvVk/mrvVkShaders.h"
 #include "mrvVk/mrvVkShape.h"
@@ -708,6 +707,7 @@ namespace mrv
                 LOG_ERROR(e.what());
             }
 
+            _drawOverlays(renderSize);
             vk.render->end();
 
             m_clearColor = {r, g, b, a};
@@ -786,6 +786,23 @@ namespace mrv
                 vk.vao->draw(cmd, vk.vbo);
             }
             
+
+            if (p.dataWindow)
+                _drawDataWindow();
+            if (p.displayWindow)
+                _drawDisplayWindow();
+
+            if (p.safeAreas)
+                _drawSafeAreas();
+
+            if (p.actionMode != ActionMode::kScrub &&
+                p.actionMode != ActionMode::kText &&
+                p.actionMode != ActionMode::kSelection &&
+                p.actionMode != ActionMode::kRotate && Fl::belowmouse() == this)
+            {
+                _drawCursor(mvp);
+            }
+                
             if (p.hudActive && p.hud != HudDisplay::kNone)
                 _drawHUD(cmd, alpha);
             

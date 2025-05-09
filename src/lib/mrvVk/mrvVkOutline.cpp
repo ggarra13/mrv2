@@ -14,7 +14,7 @@ namespace tl
 {
     namespace timeline_vlk
     {
-        extern std::string vertexSource();
+        extern std::string vertex2Source();
         extern std::string meshFragmentSource();
     } // namespace timeline_vlk
 } // namespace tl
@@ -50,9 +50,9 @@ namespace mrv
 
             if (!p.shader)
             {
-                // p.shader = Shader::create(
-                //     timeline_vlk::vertexSource(),
-                //     timeline_vlk::meshFragmentSource());
+                p.shader = Shader::create(ctx,
+                    timeline_vlk::vertex2Source(),
+                    timeline_vlk::meshFragmentSource());
             }
 
             if (!p.vbo)
@@ -67,10 +67,7 @@ namespace mrv
             }
 
             p.shader->bind(frameIndex);
-            p.shader->setUniform("color", color);
-            p.shader->setUniform("transform.mvp", mvp);
-
-            // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            p.shader->setUniform("transform.mvp", mvp, vlk::kShaderVertex);
 
             if (p.vbo)
             {
@@ -101,7 +98,6 @@ namespace mrv
             if (p.vao && p.vbo)
             {
                 p.vao->bind(frameIndex);
-                p.vao->upload(p.vbo->getData());
                 p.vao->draw(cmd, p.vbo);
             }
         }

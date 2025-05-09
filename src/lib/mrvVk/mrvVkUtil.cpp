@@ -21,7 +21,7 @@
 
 namespace
 {
-    const char* kModule = "glutil";
+    const char* kModule = "vkutil";
 }
 
 namespace mrv

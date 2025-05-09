@@ -159,6 +159,7 @@ namespace tl
         void Render::drawText(
             const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
             const math::Vector2i& pos, const image::Color4f& color,
+            const bool flipped,
             const std::string& pipelineName)
         {
             TLRENDER_P();

@@ -75,6 +75,7 @@ namespace tl
             void drawText(
                 const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
                 const math::Vector2i& position, const image::Color4f&,
+                const bool flipped = false,
                 const std::string& label = "") override;
             void drawTexture(
                 unsigned int, const math::Box2i&,

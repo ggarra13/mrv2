@@ -24,7 +24,9 @@ namespace mrv
 
     //! Draw a rectangle outline with a mesh.
     inline void drawRectOutline(
-        const std::shared_ptr<timeline::IRender>& render,
+        const std::shared_ptr<timeline_vlk::Render>& render,
+        const std::string& pipelineName,
+        const VkRenderPass renderPass,
         const math::Box2i& rect, const image::Color4f& color, const int width)
     {
         geom::TriangleMesh2 mesh;
@@ -55,7 +57,8 @@ namespace mrv
 
         math::Vector2i pos;
         
-        render->drawMesh(mesh, pos, color);
+        render->drawMesh(pipelineName, "mesh", "mesh",
+                         renderPass, mesh, pos, color);
         
     }
 

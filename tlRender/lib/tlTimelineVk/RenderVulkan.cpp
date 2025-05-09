@@ -185,47 +185,6 @@ namespace tl
             vkCmdBindPipeline(p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
         }
         
-        void Render::createPipeline(const std::string& pipelineName,
-                                    const std::string& pipelineLayoutName,
-                                    const VkRenderPass renderPass,
-                                    const bool hasDepth,
-                                    const bool hasStencil,
-                                    const std::shared_ptr<vlk::Shader>& shader,
-                                    const std::shared_ptr<vlk::VBO>& mesh,
-                                    const bool enableBlending,
-                                    const VkBlendFactor srcColorBlendFactor,
-                                    const VkBlendFactor dstColorBlendFactor,
-                                    const VkBlendFactor srcAlphaBlendFactor,
-                                    const VkBlendFactor dstAlphaBlendFactor,
-                                    const VkBlendOp colorBlendOp,
-                                    const VkBlendOp alphaBlendOp)
-        {
-
-            vlk::ColorBlendStateInfo cb;
-            vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
-            if (enableBlending)
-            {
-                colorBlendAttachment.blendEnable = VK_TRUE;
-                colorBlendAttachment.srcColorBlendFactor = srcColorBlendFactor;
-                colorBlendAttachment.dstColorBlendFactor = dstColorBlendFactor;
-                colorBlendAttachment.srcAlphaBlendFactor = srcAlphaBlendFactor;
-                colorBlendAttachment.dstAlphaBlendFactor = dstAlphaBlendFactor;
-                colorBlendAttachment.colorBlendOp = colorBlendOp;
-                colorBlendAttachment.alphaBlendOp = alphaBlendOp;
-                
-            }
-            cb.attachments.push_back(colorBlendAttachment);
-            
-
-            vlk::DepthStencilStateInfo ds;
-            ds.depthTestEnable = hasDepth ? VK_TRUE : VK_FALSE;
-            ds.depthWriteEnable = hasDepth ? VK_TRUE : VK_FALSE;
-            ds.stencilTestEnable = hasStencil ? VK_TRUE : VK_FALSE;
-            
-            createPipeline(pipelineName, pipelineLayoutName, renderPass,
-                           shader, mesh, cb, ds);
-        }
-        
         void Render::_createPipeline(
             const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
             const std::string& pipelineName,

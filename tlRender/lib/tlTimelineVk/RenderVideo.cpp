@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Copyright (c) 2021-2024 Darby Johnston
-// Copyright (c) 2025 Gonzalo Garramuño
+// Copyright (c) 2025-Present Gonzalo Garramuño
 // All rights reserved.
 
 #include <tlTimelineVk/RenderPrivate.h>
@@ -81,7 +81,6 @@ namespace tl
                 case timeline::Background::Solid:
                 {
                     p.fbo->beginRenderPass(p.cmd);
-                    p.fbo->setupViewportAndScissor(p.cmd);
                     drawRect("solid", "rect", "rect", box, options.color0);
                     p.fbo->endRenderPass(p.cmd);
                     break;
@@ -126,7 +125,7 @@ namespace tl
                     });
                     _create2DMesh("colorMesh", mesh);
                     _createPipeline(p.fbo, "gradient", "gradient", "colorMesh", "colorMesh");
-                    VkPipelineLayout pipelineLayout = p.pipelineLayouts["checkers"];
+                    VkPipelineLayout pipelineLayout = p.pipelineLayouts["gradient"];
                     vkCmdPushConstants(
                         p.cmd, pipelineLayout,
                         p.shaders["colorMesh"]->getPushStageFlags(), 0,
@@ -143,6 +142,57 @@ namespace tl
             }
         }
 
+        void Render::drawMask(const float pct)
+        {
+            if (pct < 0.001F)
+                return;
+            
+            TLRENDER_P();
+            
+            const math::Size2i renderSize = p.fbo->getSize();
+            if (!renderSize.isValid())
+                return;
+            
+            const image::Color4f color(0.F, 0.F, 0.F);
+            p.fbo->transitionToColorAttachment(p.cmd);
+            float aspectY = (float)renderSize.w / (float)renderSize.h;
+            float aspectX = (float)renderSize.h / (float)renderSize.w;
+
+            float target_aspect = 1.F / pct;
+            float amountY = (0.5F - target_aspect * aspectY / 2);
+            float amountX = (0.5F - pct * aspectX / 2);
+
+            bool vertical = true;
+            if (amountY < amountX)
+            {
+                vertical = false;
+            }
+            
+            if (vertical)
+            {
+                int Y = renderSize.h * amountY;
+                math::Box2i box(0, 0, renderSize.w, Y);
+                p.fbo->beginRenderPass(p.cmd);
+                drawRect("Mask", "rect", "rect", box, color);
+                box.max.y = renderSize.h;
+                box.min.y = renderSize.h - Y;
+                drawRect("Mask", "rect", "rect", box, color);
+                p.fbo->endRenderPass(p.cmd);
+            }
+            else
+            {
+                int X = renderSize.w * amountX;
+                math::Box2i box(0, 0, X, renderSize.h);
+                p.fbo->beginRenderPass(p.cmd);
+                drawRect("Mask", "rect", "rect", box, color);
+                box.max.x = renderSize.w;
+                box.min.x = renderSize.w - X;
+                drawRect("Mask", "rect", "rect", box, color);
+                p.fbo->endRenderPass(p.cmd);
+            }
+            p.fbo->transitionToShaderRead(p.cmd);
+        }
+        
         void Render::_drawVideoA(
             const std::vector<timeline::VideoData>& videoData,
             const std::vector<math::Box2i>& boxes,
@@ -604,11 +654,7 @@ namespace tl
                     _createPipeline(p.fbo, pipelineName,
                                     pipelineLayoutName,
                                     shaderName, meshName,
-                                    true,
-                                    VK_BLEND_FACTOR_SRC_ALPHA,
-                                    VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-                                    VK_BLEND_FACTOR_ONE,
-                                    VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);
+                                    true);
                     
                     VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
                     vkCmdPushConstants(p.cmd, pipelineLayout,
@@ -1060,52 +1106,38 @@ namespace tl
                 const std::string pipelineLayoutName = "display";
                 const std::string shaderName = "display";
                 const std::string meshName = "video";
-                const bool enableBlending = true;
-                
-                const auto blendOptions = imageOptions.get() ?
-                                          *imageOptions :
-                                          videoData.layers[0].imageOptions;
-                
-                VkBlendFactor srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
-                VkBlendFactor dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-                VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-                VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-                _createPipeline(fbo, pipelineName,
-                                pipelineLayoutName, shaderName, meshName,
-                                enableBlending,
-                                srcColorBlendFactor,
-                                dstColorBlendFactor,
-                                srcAlphaBlendFactor,
-                                dstAlphaBlendFactor);
-                // VkBlendFactor srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
-                // VkBlendFactor dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-                // VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-                // VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
 
-                // vlk::ColorBlendStateInfo cb;
+                const auto imgOptions = imageOptions.get() ?
+                                        *imageOptions :
+                                        videoData.layers[0].imageOptions;
+                
+                bool enableBlending = true;
+                if (imgOptions.alphaBlend == timeline::AlphaBlend::kNone)
+                    enableBlending = false;
+                
+                vlk::ColorBlendStateInfo cb;
 
-                // vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
-                // colorBlendAttachment.blendEnable = VK_TRUE;
-                // colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
-                // colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-                // colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-                // colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-                // colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT |
-                //                                       VK_COLOR_COMPONENT_G_BIT |
-                //                                       VK_COLOR_COMPONENT_B_BIT |
-                //                                       VK_COLOR_COMPONENT_A_BIT;
+                vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
+                colorBlendAttachment.blendEnable = enableBlending ? VK_TRUE : VK_FALSE;
+                colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
+                colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+                colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+                colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+                colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT |
+                                                      VK_COLOR_COMPONENT_G_BIT |
+                                                      VK_COLOR_COMPONENT_B_BIT |
+                                                      VK_COLOR_COMPONENT_A_BIT;
                
-                // cb.attachments.push_back(colorBlendAttachment);
-            
+                cb.attachments.push_back(colorBlendAttachment);
+                            
+                createPipeline(pipelineName,
+                               pipelineLayoutName,
+                               fbo->getRenderPass(),
+                               p.shaders["display"],
+                               p.vbos["video"],
+                               cb);
+                fbo->setupViewportAndScissor(p.cmd);
                 
-                // createPipeline(pipelineName,
-                //                pipelineLayoutName,
-                //                fbo->getRenderPass(),
-                //                p.shaders["display"],
-                //                p.vbos["video"],
-                //                cb);
-                // fbo->setupViewportAndScissor(p.cmd);
-
                 std::size_t pushSize = p.shaders["display"]->getPushSize();
                 if (pushSize > 0)
                 {
