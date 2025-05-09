@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Copyright (c) 2021-2024 Darby Johnston
-// Copyright (c) 2025 Gonzalo Garramuño
+// Copyright (c) 2025-Present Gonzalo Garramuño
 // All rights reserved.
 
 #include <tlTimelineVk/RenderPrivate.h>
@@ -81,7 +81,6 @@ namespace tl
                 case timeline::Background::Solid:
                 {
                     p.fbo->beginRenderPass(p.cmd);
-                    p.fbo->setupViewportAndScissor(p.cmd);
                     drawRect("solid", "rect", "rect", box, options.color0);
                     p.fbo->endRenderPass(p.cmd);
                     break;
@@ -126,7 +125,7 @@ namespace tl
                     });
                     _create2DMesh("colorMesh", mesh);
                     _createPipeline(p.fbo, "gradient", "gradient", "colorMesh", "colorMesh");
-                    VkPipelineLayout pipelineLayout = p.pipelineLayouts["checkers"];
+                    VkPipelineLayout pipelineLayout = p.pipelineLayouts["gradient"];
                     vkCmdPushConstants(
                         p.cmd, pipelineLayout,
                         p.shaders["colorMesh"]->getPushStageFlags(), 0,
@@ -604,11 +603,7 @@ namespace tl
                     _createPipeline(p.fbo, pipelineName,
                                     pipelineLayoutName,
                                     shaderName, meshName,
-                                    true,
-                                    VK_BLEND_FACTOR_SRC_ALPHA,
-                                    VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-                                    VK_BLEND_FACTOR_ONE,
-                                    VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);
+                                    true);
                     
                     VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
                     vkCmdPushConstants(p.cmd, pipelineLayout,

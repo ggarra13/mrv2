@@ -34,6 +34,7 @@
 namespace
 {
     const unsigned kFPSAverageFrames = 10;
+    const std::string kFontFamily = "NotoSans-Regular";
 }
 
 namespace mrv
@@ -639,50 +640,20 @@ namespace mrv
             
 
         void Viewport::_drawRectangleOutline(
+            const std::string& pipelineName,
+            const math::Matrix4x4f& mvp,
             const math::Box2i& box, const image::Color4f& color) noexcept
         {
             TLRENDER_P();
             MRV2_VK();
 
-            const auto& renderSize = getRenderSize();
-            const auto renderAspect = renderSize.getAspect();
-            const auto& viewportSize = getViewportSize();
-            const auto viewportAspect = viewportSize.getAspect();
-
-            math::Vector2f transformOffset;
-            if (viewportAspect > 1.F)
-            {
-                transformOffset.x = renderSize.w / 2.F;
-                transformOffset.y = renderSize.w / renderAspect / 2.F;
-            }
-            else
-            {
-                transformOffset.x = renderSize.h * renderAspect / 2.F;
-                transformOffset.y = renderSize.h / 2.F;
-            }
-
-            const math::Matrix4x4f& vm =
-                math::translate(math::Vector3f(p.viewPos.x, -p.viewPos.y, 0.F)) *
-                math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
-            const auto& rotateMatrix = math::rotateZ(_getRotation());
-            const math::Matrix4x4f& centerMatrix = math::translate(
-                math::Vector3f(-renderSize.w / 2, -renderSize.h / 2, 0.F));
-            const math::Matrix4x4f& transformOffsetMatrix = math::translate(
-                math::Vector3f(transformOffset.x, transformOffset.y, 0.F));
-
-            const math::Matrix4x4f& pm = math::ortho(
-                0.F, static_cast<float>(viewportSize.w), 0.F,
-                static_cast<float>(viewportSize.h), -1.F, 1.F);
-            auto mvp = pm * vm * transformOffsetMatrix * rotateMatrix * centerMatrix;
-
             auto old = vk.render->getTransform();
             vk.render->setTransform(mvp);
-            vk.render->applyTransforms();
             
-            drawRectOutline(vk.render, box, color, 1.0);
+            drawRectOutline(vk.render, pipelineName, renderPass(),
+                            box, color, 1.0);
             
             vk.render->setTransform(old);
-            vk.render->applyTransforms();
         }
 
         void Viewport::_drawSafeAreas(
@@ -693,8 +664,10 @@ namespace mrv
             TLRENDER_P();
             MRV2_VK();
 
-            const auto& renderSize = getRenderSize();
-            // const auto& viewportSize = getViewportSize(); // Not needed for box calculation
+            auto renderSize = getRenderSize();
+            renderSize.w *= p.viewZoom;
+            renderSize.h *= p.viewZoom;
+            
             double aspectX = (double)renderSize.h / (double)renderSize.w;
             double aspectY = (double)renderSize.w / (double)renderSize.h;
 
@@ -725,38 +698,33 @@ namespace mrv
             box.min.y = Y;
             box.max.x = renderSize.w - X;
             box.max.y = renderSize.h - Y;
-
-            // The transformation (including pan and zoom) should ideally be handled by the
-            // matrix set before calling drawRectOutline.
-            // If _drawRectangleOutline is always called before _drawSafeAreas and
-            // sets the correct view/projection for the zoomed content,
-            // then the box calculated here should be in the space that
-            // that transformation operates on.
-
-            // If drawRectOutline uses the transformation set by _drawRectangleOutline,
-            // and _drawRectangleOutline is used to draw the video frame as well,
-            // ensure _drawRectangleOutline's matrix includes the zoom.
-            // Alternatively, pass a correct MVP matrix to _drawSafeAreas or
-            // set the correct transformation within _drawSafeAreas before drawing the box.
-
-            // Assuming _drawRectangleOutline sets the appropriate matrix including zoom
-            // for drawing content related to the video frame's coordinate space:
-            _drawRectangleOutline(box, color);
+            
+            _drawRectangleOutline(label, mvp, box, color);
 
             // The text drawing would also need to be positioned correctly
             // within the transformed space.
             //
             // Draw the text too
             //
-            // static const std::string fontFamily = "NotoSans-Regular";
-            // const image::FontInfo fontInfo(fontFamily, 12);
-            // const auto glyphs = _p->fontSystem->getGlyphs(label, fontInfo);
-            // math::Vector2i pos(box.max.x, box.min.y - 2);
-            // vk.render->drawText(glyphs, pos, color);
+
+            const image::FontInfo fontInfo(kFontFamily, 12 * p.viewZoom);
+            const auto glyphs = _p->fontSystem->getGlyphs(label, fontInfo);
+            const bool flipped = false;
+            
+            math::Vector2i pos(box.min.x, box.max.y + 12 * p.viewZoom);
+
+            // auto old = vk.render->getTransform();
+            // vk.render->setTransform(mvp);
+            // vk.render->applyTransforms();
+            // vk.render->drawText(glyphs, pos, color, flipped);
+            // vk.render->setTransform(old);
+            // vk.render->applyTransforms();
         }
 
         void Viewport::_drawSafeAreas() noexcept
         {
+            MRV2_VK();
+            
             TLRENDER_P();
             if (!p.player)
                 return;
@@ -768,16 +736,14 @@ namespace mrv
             const auto& viewportSize = getViewportSize();
             const auto& renderSize = getRenderSize();
 
-            math::Matrix4x4f vm;
-            vm =
-                vm * math::translate(math::Vector3f(p.viewPos.x, p.viewPos.y, 0.F));
-            vm = vm * math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
+            math::Matrix4x4f vm =
+                math::translate(math::Vector3f(p.viewPos.x, -p.viewPos.y, 0.F));
+            
+            //    * math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
             const auto pm = math::ortho(
-                0.F, static_cast<float>(viewportSize.w), 0.F,
-                static_cast<float>(viewportSize.h), -1.F, 1.F);
+                0.F, static_cast<float>(viewportSize.w),
+                static_cast<float>(viewportSize.h), 0.F, -1.F, 1.F);
             auto mvp = pm * vm;
-            mvp = mvp * math::scale(math::Vector3f(1.F, -1.F, 1.F));
-
             double aspect = (double)renderSize.w / pr / (double)renderSize.h;
             if (aspect <= 1.78)
             {
@@ -812,13 +778,14 @@ namespace mrv
             TLRENDER_P();
             MRV2_VK();
 
+            return;
+
             if (!p.fontSystem || p.videoData.empty() || !p.player)
                 return;
 
-            static const std::string fontFamily = "NotoSans-Regular";
             Viewport* self = const_cast< Viewport* >(this);
             const uint16_t fontSize = 12 * self->pixels_per_unit();
-            const image::FontInfo fontInfo(fontFamily, fontSize);
+            const image::FontInfo fontInfo(kFontFamily, fontSize);
             const auto& viewportSize = getViewportSize();
             
             
@@ -844,7 +811,7 @@ namespace mrv
             vk.render->setViewport(math::Box2i(0, 0, viewportSize.w,
                                                viewportSize.h));
             vk.render->setRenderSize(viewportSize);
-            math::Matrix4x4f oldTransform = vk.render->getTransform();
+            const math::Matrix4x4f oldTransform = vk.render->getTransform();
             vk.render->setTransform(math::ortho(
                                         0.F, static_cast<float>(viewportSize.w),
                                         0.F, static_cast<float>(viewportSize.h), -1.F, 1.F));
@@ -1106,7 +1073,8 @@ namespace mrv
             vk.render->applyTransforms();
         }
 
-        void Viewport::_drawWindowArea(const std::string& dw) noexcept
+        void Viewport::_drawWindowArea(const std::string& pipelineName,
+                                       const std::string& dw) noexcept
         {
             TLRENDER_P();
             MRV2_VK();
@@ -1121,7 +1089,8 @@ namespace mrv
             box.min.y = -(renderSize.h - box.min.y);
             box.max.y = -(renderSize.h - box.max.y);
 
-            drawRectOutline(vk.render, box, color, 2);
+            drawRectOutline(vk.render, pipelineName, renderPass(),
+                            box, color, 2);
         }
 
         void Viewport::_drawDataWindow() noexcept
@@ -1133,7 +1102,7 @@ namespace mrv
                 return;
 
             const std::string& dw = i->second;
-            _drawWindowArea(dw);
+            _drawWindowArea("Data Window", dw);
         }
 
         void Viewport::_drawDisplayWindow() noexcept
@@ -1145,7 +1114,7 @@ namespace mrv
                 return;
 
             const std::string& dw = i->second;
-            _drawWindowArea(dw);
+            _drawWindowArea("Display Window", dw);
         }
 
         void
@@ -1168,14 +1137,13 @@ namespace mrv
 
             MRV2_VK();
 
-            static const std::string fontFamily = "NotoSans-Regular";
             Viewport* self = const_cast< Viewport* >(this);
             uint16_t fontSize = 16 * self->pixels_per_unit();
 
             const image::Color4f labelColor(255.F, 255.F, 255.F, p.helpTextFade);
 
             char buf[512];
-            const image::FontInfo fontInfo(fontFamily, fontSize);
+            const image::FontInfo fontInfo(kFontFamily, fontSize);
             const image::FontMetrics fontMetrics =
                 p.fontSystem->getMetrics(fontInfo);
             const int labelSpacing = fontInfo.size / 2;

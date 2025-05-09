@@ -106,6 +106,8 @@ namespace mrv
             void _drawHelpText() const noexcept;
 
             void _drawRectangleOutline(
+                const std::string& pipelineName,
+                const math::Matrix4x4f& mvp,
                 const math::Box2i& box, const image::Color4f& color) noexcept;
             void _drawText(
                 const std::vector<std::shared_ptr<image::Glyph> >&,
@@ -127,7 +129,8 @@ namespace mrv
 
             void _calculateColorAreaFullValues(area::Info& info) noexcept;
 
-            void _drawWindowArea(const std::string&) noexcept;
+            void _drawWindowArea(const std::string& pipelineName,
+                                 const std::string&) noexcept;
 
             void _compositeAnnotations(
                 const math::Matrix4x4f& shaderMatrix,

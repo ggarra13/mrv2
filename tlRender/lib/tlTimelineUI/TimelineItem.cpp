@@ -898,6 +898,7 @@ namespace tl
                                     box.min.y + p.size.fontMetrics.ascender),
                                 event.style->getColorRole(
                                     ui::ColorRole::TextDisabled),
+                                false,
                                 label);
                         }
                     }
@@ -1014,6 +1015,7 @@ namespace tl
                         pos.x + p.size.border * 2 + p.size.margin,
                         pos.y + p.size.margin + p.size.fontMetrics.ascender),
                     event.style->getColorRole(ui::ColorRole::Text),
+                    false,
                     "Current Time");
             }
         }
