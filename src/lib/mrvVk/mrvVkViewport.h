@@ -105,11 +105,13 @@ namespace mrv
 
             void _drawHelpText() const noexcept;
 
+            // Given a raster projection matrix without zoom, draws the given box with
+            // the exact width provided.
             void _drawRectangleOutline(
                 const std::string& pipelineName,
                 const math::Matrix4x4f& mvp,
                 const math::Box2i& box, const image::Color4f& color,
-                const uint16_t width = 2) noexcept;
+                const uint16_t width = 1) const noexcept;
             void _drawText(
                 const std::vector<std::shared_ptr<image::Glyph> >&,
                 math::Vector2i&, const int16_t lineHeight,
@@ -118,6 +120,7 @@ namespace mrv
                 const std::string& text, const image::FontInfo& fontInfo,
                 math::Vector2i& pos, const int16_t lineHeight,
                 const image::Color4f& labelColor, const std::string&) const noexcept;
+            void _drawAreaSelection() const noexcept;
             void _drawSafeAreas() noexcept;
             void _drawSafeAreas(
                 const float percentX, const float percentY,

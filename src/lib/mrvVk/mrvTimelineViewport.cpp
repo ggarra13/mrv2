@@ -3466,6 +3466,21 @@ namespace mrv
                 _frameView();
         }
 
+        math::Matrix4x4f TimelineViewport::_rasterProjectionMatrix() const noexcept
+        {
+            TLRENDER_P();
+
+            // \@todo: handle rotations in this matrix calculation
+            const math::Size2i viewportSize = getViewportSize();
+            
+            math::Matrix4x4f vm =
+                math::translate(math::Vector3f(p.viewPos.x, p.viewPos.y, 0.F));
+            const auto pm = math::ortho(
+                0.F, static_cast<float>(viewportSize.w),
+                0.F, static_cast<float>(viewportSize.h), -1.F, 1.F);
+            return pm * vm;
+        }
+        
         math::Matrix4x4f TimelineViewport::_renderProjectionMatrix() const noexcept
         {
             TLRENDER_P();
@@ -3477,8 +3492,8 @@ namespace mrv
 
             if (p.frameView && _getRotation() == 0.F)
                 return math::ortho(
-                    0.F, static_cast<float>(renderSize.w), 0.F,
-                    static_cast<float>(renderSize.h), -1.F, 1.F);
+                    0.F, static_cast<float>(renderSize.w),
+                    0.F, static_cast<float>(renderSize.h), -1.F, 1.F);
 
             const auto renderAspect = renderSize.getAspect();
             const auto viewportAspect = viewportSize.getAspect();

@@ -34,7 +34,8 @@ namespace mrv
         virtual ~VKShape() {};
 
         virtual void draw(
-            const std::shared_ptr<timeline_vlk::Render>&) = 0;
+            const std::shared_ptr<timeline_vlk::Render>&,
+            const std::shared_ptr<vulkan::Lines> lines) = 0;
     };
 
     class VKCircleShape : public VKShape
@@ -46,7 +47,8 @@ namespace mrv
         virtual ~VKCircleShape() {};
         
         virtual void draw(
-            const std::shared_ptr<timeline_vlk::Render>&) override;
+            const std::shared_ptr<timeline_vlk::Render>&,
+            const std::shared_ptr<vulkan::Lines> lines) override;
 
         math::Vector2f center;
         double radius;
@@ -59,7 +61,8 @@ namespace mrv
     {
     public:
         virtual void draw(
-            const std::shared_ptr<timeline_vlk::Render>&) override;
+            const std::shared_ptr<timeline_vlk::Render>&,
+            const std::shared_ptr<vulkan::Lines> lines) override;
     };
 
     void to_json(nlohmann::json& json, const VKFilledCircleShape& value);
@@ -73,7 +76,8 @@ namespace mrv
         virtual ~VKPathShape() {};
 
         virtual void draw(
-            const std::shared_ptr<timeline_vlk::Render>&);
+            const std::shared_ptr<timeline_vlk::Render>&,
+            const std::shared_ptr<vulkan::Lines> lines);
     };
 
     void to_json(nlohmann::json& json, const VKPathShape& value);
@@ -87,14 +91,16 @@ namespace mrv
         virtual ~VKPolygonShape() {};
 
         virtual void draw(
-            const std::shared_ptr<timeline_vlk::Render>&) override;
+            const std::shared_ptr<timeline_vlk::Render>&,
+            const std::shared_ptr<vulkan::Lines> lines) override;
     };
 
     class VKFilledPolygonShape : public VKPolygonShape
     {
     public:
         virtual void draw(
-            const std::shared_ptr<timeline_vlk::Render>&) override;
+            const std::shared_ptr<timeline_vlk::Render>&,
+            const std::shared_ptr<vulkan::Lines> lines) override;
     };
 
     void to_json(nlohmann::json& json, const VKFilledPolygonShape& value);
@@ -108,7 +114,8 @@ namespace mrv
         virtual ~VKArrowShape() {};
 
         virtual void draw(
-            const std::shared_ptr<timeline_vlk::Render>&) override;
+            const std::shared_ptr<timeline_vlk::Render>&,
+            const std::shared_ptr<vulkan::Lines> lines) override;
     };
 
     void to_json(nlohmann::json& json, const VKArrowShape& value);
@@ -121,7 +128,8 @@ namespace mrv
             VKPathShape() {};
         virtual ~VKRectangleShape() {};
         virtual void draw(
-            const std::shared_ptr<timeline_vlk::Render>&) override;
+            const std::shared_ptr<timeline_vlk::Render>&,
+            const std::shared_ptr<vulkan::Lines> lines) override;
     };
 
     void to_json(nlohmann::json& json, const VKRectangleShape& value);
@@ -131,7 +139,8 @@ namespace mrv
     {
     public:
         virtual void draw(
-            const std::shared_ptr<timeline_vlk::Render>&) override;
+            const std::shared_ptr<timeline_vlk::Render>&,
+            const std::shared_ptr<vulkan::Lines> lines) override;
     };
 
     void to_json(nlohmann::json& json, const VKFilledRectangleShape& value);
@@ -147,7 +156,8 @@ namespace mrv
         virtual ~VKTextShape() {};
 
         virtual void draw(
-            const std::shared_ptr<timeline_vlk::Render>&) override;
+            const std::shared_ptr<timeline_vlk::Render>&,
+            const std::shared_ptr<vulkan::Lines> lines) override;
 
     public:
         std::string fontFamily = "NotoSans-Regular";
@@ -174,7 +184,8 @@ namespace mrv
         bool setRasterPos(double x, double y, size_t textLength);
 
         virtual void draw(
-            const std::shared_ptr<timeline_vlk::Render>&) override;
+            const std::shared_ptr<timeline_vlk::Render>&,
+            const std::shared_ptr<vulkan::Lines> lines) override;
 
     public:
         std::string txt; // Copy of text as we are processing it.
@@ -200,7 +211,8 @@ namespace mrv
         virtual ~VKErasePathShape() {};
 
         virtual void draw(
-            const std::shared_ptr<timeline_vlk::Render>&) override;
+            const std::shared_ptr<timeline_vlk::Render>&,
+            const std::shared_ptr<vulkan::Lines> lines) override;
     };
 
     void to_json(nlohmann::json& json, const VKErasePathShape& value);

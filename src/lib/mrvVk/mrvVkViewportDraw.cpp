@@ -98,7 +98,7 @@ namespace mrv
             image::Color4f color(1, 1, 1, 1);
             for (size_t y = 0; y < H; y += 2)
             {
-                vk.lines->drawLine(vk.render, renderPass(),
+                vk.lines->drawLine(vk.render,
                                    math::Vector2i(0, y),
                                    math::Vector2i(W, y), color, 1);
             }
@@ -163,7 +163,7 @@ namespace mrv
                 }
             }
 
-            vk.lines->drawPoints(vk.render, renderPass(), pnts, color, 5);
+            vk.lines->drawPoints(vk.render, pnts, color, 5);
 
             if (p.stereo3DOptions.eyeSeparation != 0.F)
             {
@@ -213,7 +213,7 @@ namespace mrv
             image::Color4f color(1, 1, 1, 1);
             for (size_t x = 0; x < W; x += 2)
             {
-                vk.lines->drawLine(vk.render, renderPass(),
+                vk.lines->drawLine(vk.render,
                                    math::Vector2i(x, 0),
                                    math::Vector2i(x, H), color, 1);
             }
@@ -356,12 +356,10 @@ namespace mrv
             {
                 image::Color4f color(1, 0, 0, 0.8);
                 vk.lines->drawLine(vk.render,
-                                   renderPass(),
                                    math::Vector2i(0, 0),
                                    math::Vector2i(renderSize.w, renderSize.h),
                                    color, 4);
                 vk.lines->drawLine(vk.render,
-                                   renderPass(),
                                    math::Vector2i(0, renderSize.h),
                                    math::Vector2i(renderSize.w, 0), color, 4);
             }
@@ -378,7 +376,7 @@ namespace mrv
             p.mousePos = _getFocus();
             const auto& pos = _getRasterf();
             vk.render->setTransform(mvp);
-            vk.lines->drawCursor(vk.render, renderPass(), pos, pen_size, color);
+            vk.lines->drawCursor(vk.render, pos, pen_size, color);
         }
 
         void Viewport::_drawShape(
@@ -401,11 +399,11 @@ namespace mrv
                 shape->color.a *= shape->fade;
                 if (auto vkshape = dynamic_cast<VKPathShape*>(shape.get()))
                 {
-                    vkshape->draw(vk.render);
+                    vkshape->draw(vk.render, vk.lines);
                 }
                 else if (auto vkshape = dynamic_cast<VKShape*>(shape.get()))
                 {
-                    vkshape->draw(vk.render);
+                    vkshape->draw(vk.render, vk.lines);
                 }
                 else
                 {
@@ -615,21 +613,49 @@ namespace mrv
                       lineHeight, labelColor, pipelineName);
         }
             
-
         void Viewport::_drawRectangleOutline(
             const std::string& pipelineName,
             const math::Matrix4x4f& mvp,
-            const math::Box2i& box, const image::Color4f& color,
-            const uint16_t width) noexcept
+            const math::Box2i& area, const image::Color4f& color,
+            const uint16_t width) const noexcept
         {
             MRV2_VK();
+            TLRENDER_P();
             
             vk.render->setTransform(mvp);
+            
+            // Calculate box coordinates in the renderSize's coordinate space
+            // \@todo: handle rotation (should be done in mvp)
+            math::Box2i box = area;
+            box.min.x *= p.viewZoom;
+            box.min.y *= p.viewZoom;
+            box.max.x *= p.viewZoom;
+            box.max.y *= p.viewZoom;
             
             drawRectOutline(vk.render, pipelineName, renderPass(),
                             box, color, width);
         }
 
+        void Viewport::_drawAreaSelection() const noexcept
+        {
+            TLRENDER_P();
+            
+            Fl_Color c = p.ui->uiPrefs->uiPrefsViewSelection->color();
+            uint8_t r, g, b;
+            Fl::get_color(c, r, g, b);
+
+            const image::Color4f color(r / 255.F, g / 255.F, b / 255.F);
+
+            math::Box2i selection = p.selection;
+            if (selection.min == selection.max)
+            {
+                selection.max.x++;
+                selection.max.y++;
+            }
+            const math::Matrix4x4f mvp = _rasterProjectionMatrix();
+            _drawRectangleOutline("selection", mvp, selection, color, 1);
+        }
+        
         void Viewport::_drawSafeAreas(
             const float percentX, const float percentY,
             const float pixelAspectRatio, const image::Color4f& color,
@@ -699,13 +725,8 @@ namespace mrv
             const auto& viewportSize = getViewportSize();
             const auto& renderSize = getRenderSize();
 
-            math::Matrix4x4f vm =
-                math::translate(math::Vector3f(p.viewPos.x, p.viewPos.y, 0.F));
-            const auto pm = math::ortho(
-                0.F, static_cast<float>(viewportSize.w),
-                0.F, static_cast<float>(viewportSize.h), -1.F, 1.F);
+            const math::Matrix4x4f mvp = _rasterProjectionMatrix();
             const math::Matrix4x4f oldTransform = vk.render->getTransform();
-            const math::Matrix4x4f mvp = pm * vm;
             double aspect = (double)renderSize.w / pr / (double)renderSize.h;
             if (aspect <= 1.78)
             {

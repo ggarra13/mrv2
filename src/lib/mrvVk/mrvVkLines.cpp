@@ -47,9 +47,10 @@ namespace mrv
             std::shared_ptr<vlk::VAO> vao;
         };
 
-        Lines::Lines(Fl_Vk_Context& vulkan_ctx) :
+        Lines::Lines(Fl_Vk_Context& vulkan_ctx, VkRenderPass renderPass) :
             _p(new Private),
-            ctx(vulkan_ctx)
+            ctx(vulkan_ctx),
+            m_renderPass(renderPass)
         {
             TLRENDER_P();
 
@@ -88,7 +89,6 @@ namespace mrv
 
         void Lines::drawLines(
             const std::shared_ptr<timeline_vlk::Render>& render,
-            const VkRenderPass renderPass,
             const draw::PointList& pts, const image::Color4f& color,
             const float width, const bool soft,
             const draw::Polyline2D::JointStyle jointStyle,
@@ -159,13 +159,12 @@ namespace mrv
             for (size_t i = 0; i < numVertices; ++i)
                 mesh.v.push_back(math::Vector2f(draw[i].x, draw[i].y));
             
-            render->drawMesh("annotation", "rect", "mesh", renderPass,
-                             mesh, math::Vector2i(0, 0), color, true);
+            render->drawMesh("annotation", "rect", "mesh", renderPass(),
+                             mesh, math::Vector2i(0, 0), color, false);
         }
 
         void Lines::drawLine(
             const std::shared_ptr<timeline_vlk::Render>& render,
-            const VkRenderPass renderPass,
             const math::Vector2i& start, const math::Vector2i& end,
             const image::Color4f& color, const float width)
         {
@@ -176,14 +175,13 @@ namespace mrv
             line.push_back(Point(end.x, end.y));
 
             drawLines(
-                render, renderPass, line, color, width, false,
+                render, line, color, width, false,
                 Polyline2D::JointStyle::MITER, Polyline2D::EndCapStyle::BUTT,
                 false);
         }
 
         void Lines::drawPoints(
             const std::shared_ptr<timeline_vlk::Render>& render,
-            const VkRenderPass renderPass,
             const std::vector<math::Vector2f>& pnts,
             const image::Color4f& color, const int size)
         {
@@ -220,7 +218,6 @@ namespace mrv
 
         void Lines::drawCircle(
             const std::shared_ptr<timeline_vlk::Render>& render,
-            const VkRenderPass renderPass,
             const math::Vector2f& center, const float radius, const float width,
             const image::Color4f& color, const bool soft)
         {
@@ -238,24 +235,23 @@ namespace mrv
             }
 
             drawLines(
-                render, renderPass, verts, color, width, soft,
+                render, verts, color, width, soft,
                 draw::Polyline2D::JointStyle::ROUND,
                 draw::Polyline2D::EndCapStyle::JOINT);
         }
 
         void Lines::drawCursor(
             const std::shared_ptr<timeline_vlk::Render>& render,
-            const VkRenderPass renderPass,
             const math::Vector2f& center, const float radius,
             const image::Color4f& color)
         {
             float lineWidth = 2.0;
             if (radius <= 2.0)
                 lineWidth = 1.0f;
-            drawCircle(render, renderPass, center, radius, lineWidth, color, false);
+            drawCircle(render, center, radius, lineWidth, color, false);
             image::Color4f black(0.F, 0.F, 0.F, 1.F);
             if (radius > 2.0F)
-                drawCircle(render, renderPass, center, radius - 2.0F, 2.0, black, false);
+                drawCircle(render, center, radius - 2.0F, 2.0, black, false);
         }
 
     } // namespace vulkan

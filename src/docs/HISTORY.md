@@ -16,7 +16,8 @@ it to Vulkan.
   message if compilation fails.
 - Fixed a potential reset of the X11 server when hiding the timeline bar.
 - Started porting to Vulkan.  Vulkan on macOS leaves OpenGL in the dust, on 
-  Linux is underwhelming, and on Windows is middle ground.
+  Linux is underwhelming, and on Windows is middle ground.  There appears to be a
+  synchronization issue when the two windows (timeline and viewport) are used.
 
 	 * Working:
 		 * Viewport
@@ -24,12 +25,14 @@ it to Vulkan.
 		 * Timeline with tick bars, current frame number and labels.
 		 * Timeline without thumbnails
 		 * OTIO with dissolves
+		 * OpenColorIO
 		 * HDR Passthru (for HDR).
 		 * HDR Tonemapping (for SDR).
 		 * HUD
 		 * Masking
 		 * Safe Areas
 		 * Data/Display Window
+		 * Area selection
 		 * Comparison Modes: 
 			 - A
 			 - B
@@ -48,7 +51,6 @@ it to Vulkan.
 		 * Thumbnails in Panels (done with OpenGL for now)
 		 * Saving of Movies/Pictures with Annotations
 		 * Annotations
-		 * Area selection
 		 * Area color information
 		 * Temporary FLTK Text widget annotation (how to do it?)
 		 * Text annotations (how to do it?)

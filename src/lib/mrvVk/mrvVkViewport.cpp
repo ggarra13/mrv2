@@ -331,8 +331,8 @@ namespace mrv
         
         void Viewport::prepare()
         {
-            prepare_shaders();
             prepare_render_pass();       // Main swapchain render pass
+            prepare_shaders();
             prepare_pipeline_layout(); 
         }
 
@@ -401,8 +401,7 @@ namespace mrv
                 if (!p.fontSystem)
                     p.fontSystem = image::FontSystem::create(context);
 
-                if (!vk.lines)
-                    vk.lines = std::make_shared<vulkan::Lines>(ctx);
+                vk.lines = std::make_shared<vulkan::Lines>(ctx, renderPass());
 
                 const std::string& vertexSource = timeline_vlk::vertexSource();
                 const image::Color4f color(1.F, 1.F, 1.F);
@@ -821,6 +820,7 @@ namespace mrv
                 if (panel::colorAreaPanel || panel::histogramPanel ||
                     panel::vectorscopePanel)
                 {
+                    // \@todo: map the whole buffer in cpu memory
                     //_mapBuffer();
 
                     if (panel::colorAreaPanel)
@@ -838,7 +838,9 @@ namespace mrv
                         panel::vectorscopePanel->update(p.colorAreaInfo);
                     }
                 }
+                _drawAreaSelection();
             }
+            
                     
             end_render_pass(cmd);
             
@@ -847,6 +849,7 @@ namespace mrv
             bool update = !_shouldUpdatePixelBar();
             if (update)
                 updatePixelBar();
+
 
             vk.buffer->transitionToColorAttachment(cmd);
 
