@@ -768,6 +768,8 @@ namespace tl
             
             const math::Matrix4x4f transform;
             const image::Color4f color(1.F, 1.F, 1.F);
+
+            // Shader used to draw a 2D mesh with a texture * color
             if (!p.shaders["rect"])
             {
 #if USE_PRECOMPILED_SHADERS
@@ -787,6 +789,8 @@ namespace tl
                     "color", color, vlk::kShaderFragment);
                 _createBindingSet(p.shaders["rect"]);
             }
+
+            // Shader used to draw a 3d mesh with a texture * push color
             if (!p.shaders["mesh"])
             {
 #if USE_PRECOMPILED_SHADERS
@@ -806,6 +810,8 @@ namespace tl
                       "color", color, vlk::kShaderFragment);
                   _createBindingSet(p.shaders["mesh"]);
               }
+
+              // Shader used to create a 2D mesh with colors
               if (!p.shaders["colorMesh"])
               {
   #if USE_PRECOMPILED_SHADERS
@@ -825,6 +831,8 @@ namespace tl
                 p.shaders["colorMesh"]->addPush("color", color, vlk::kShaderFragment);
                 _createBindingSet(p.shaders["colorMesh"]);
             }
+
+            // Shader to create a quad with a texture for text drawing 
             if (!p.shaders["text"])
             {
 #if USE_PRECOMPILED_SHADERS
@@ -846,6 +854,8 @@ namespace tl
                 
                 _createBindingSet(p.shaders["text"]);
             }
+            
+            // Shader to read one mesh with 3 vertex and uvs and a simple textue.
             if (!p.shaders["texture"])
             {
 #if USE_PRECOMPILED_SHADERS
@@ -867,6 +877,8 @@ namespace tl
                 
                 _createBindingSet(p.shaders["texture"]);
             }
+
+            // Shader used to read an RGB or YUV image
             if (!p.shaders["image"])
             {
 #if USE_PRECOMPILED_SHADERS

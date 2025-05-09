@@ -159,7 +159,7 @@ namespace mrv
             for (size_t i = 0; i < numVertices; ++i)
                 mesh.v.push_back(math::Vector2f(draw[i].x, draw[i].y));
             
-            render->drawMesh("annotation", "overlay", "mesh", renderPass,
+            render->drawMesh("annotation", "rect", "mesh", renderPass,
                              mesh, math::Vector2i(0, 0), color, true);
         }
 

@@ -39,6 +39,7 @@ it to Vulkan.
 			 - Horizontal (minor validation error when switching)
 			 - Vertical (minor validation error when switching)
 			 - Tile (minor validation error when switching)
+		 - Annotation cursor (circle)
 		 
 	 * Missing to check/add:
 		 * Missing Frames crosses
