@@ -644,16 +644,12 @@ namespace mrv
             const math::Matrix4x4f& mvp,
             const math::Box2i& box, const image::Color4f& color) noexcept
         {
-            TLRENDER_P();
             MRV2_VK();
-
-            auto old = vk.render->getTransform();
+            
             vk.render->setTransform(mvp);
             
             drawRectOutline(vk.render, pipelineName, renderPass(),
                             box, color, 1.0);
-            
-            vk.render->setTransform(old);
         }
 
         void Viewport::_drawSafeAreas(
@@ -665,8 +661,6 @@ namespace mrv
             MRV2_VK();
 
             auto renderSize = getRenderSize();
-            renderSize.w *= p.viewZoom;
-            renderSize.h *= p.viewZoom;
             
             double aspectX = (double)renderSize.h / (double)renderSize.w;
             double aspectY = (double)renderSize.w / (double)renderSize.h;
@@ -694,31 +688,22 @@ namespace mrv
             }
 
             // Calculate box coordinates in the renderSize's coordinate space
-            box.min.x = X;
-            box.min.y = Y;
-            box.max.x = renderSize.w - X;
-            box.max.y = renderSize.h - Y;
+            box.min.x = X * p.viewZoom;
+            box.min.y = Y * p.viewZoom;
+            box.max.x = (renderSize.w - X) * p.viewZoom;
+            box.max.y = (renderSize.h - Y) * p.viewZoom;
             
             _drawRectangleOutline(label, mvp, box, color);
 
-            // The text drawing would also need to be positioned correctly
-            // within the transformed space.
-            //
-            // Draw the text too
-            //
-
             const image::FontInfo fontInfo(kFontFamily, 12 * p.viewZoom);
             const auto glyphs = _p->fontSystem->getGlyphs(label, fontInfo);
-            const bool flipped = false;
+            const bool hasDepth = mode() & FL_DEPTH;
+            const bool hasStencil = mode() & FL_STENCIL;
             
-            math::Vector2i pos(box.min.x, box.max.y + 12 * p.viewZoom);
+            math::Vector2i pos(box.min.x, box.max.y - 2 * p.viewZoom);
 
-            // auto old = vk.render->getTransform();
-            // vk.render->setTransform(mvp);
-            // vk.render->applyTransforms();
-            // vk.render->drawText(glyphs, pos, color, flipped);
-            // vk.render->setTransform(old);
-            // vk.render->applyTransforms();
+            vk.render->drawText(label, label, renderPass(),
+                                hasDepth, hasStencil, glyphs, pos, color);
         }
 
         void Viewport::_drawSafeAreas() noexcept
@@ -737,13 +722,12 @@ namespace mrv
             const auto& renderSize = getRenderSize();
 
             math::Matrix4x4f vm =
-                math::translate(math::Vector3f(p.viewPos.x, -p.viewPos.y, 0.F));
-            
-            //    * math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
+                math::translate(math::Vector3f(p.viewPos.x, p.viewPos.y, 0.F));
             const auto pm = math::ortho(
                 0.F, static_cast<float>(viewportSize.w),
-                static_cast<float>(viewportSize.h), 0.F, -1.F, 1.F);
-            auto mvp = pm * vm;
+                0.F, static_cast<float>(viewportSize.h), -1.F, 1.F);
+            const math::Matrix4x4f oldTransform = vk.render->getTransform();
+            const math::Matrix4x4f mvp = pm * vm;
             double aspect = (double)renderSize.w / pr / (double)renderSize.h;
             if (aspect <= 1.78)
             {
@@ -771,6 +755,7 @@ namespace mrv
                 color = image::Color4f(1.F, 0.0f, 1.F);
                 _drawSafeAreas(1.77, 1.0, pr, color, mvp, "hdtv");
             }
+            vk.render->setTransform(oldTransform);
         }
 
         void Viewport::_drawHUD(VkCommandBuffer cmd, float alpha) const noexcept

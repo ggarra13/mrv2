@@ -437,15 +437,15 @@ namespace tl
                         }
 
                         const math::Vector2i& offset = glyph->offset;
-                        // original was:
-                        // const math::Box2i box(
-                        //     pos.x + x + offset.x, pos.y - offset.y,
-                        //     glyph->image->getWidth(),
-                        //     glyph->image->getHeight());
+                        // // original was:
                         const math::Box2i box(
-                            pos.x + x + offset.x, pos.y, 
+                            pos.x + x + offset.x, pos.y - offset.y,
                             glyph->image->getWidth(),
                             glyph->image->getHeight());
+                        // const math::Box2i box(
+                        //     pos.x + x + offset.x, pos.y, 
+                        //     glyph->image->getWidth(),
+                        //     glyph->image->getHeight());
                         const auto& min = box.min;
                         const auto& max = box.max;
 
@@ -456,19 +456,19 @@ namespace tl
                         mesh.t.push_back(
                             math::Vector2f(
                                 item.textureU.getMin(),
-                                item.textureV.getMax()));
-                        mesh.t.push_back(
-                            math::Vector2f(
-                                item.textureU.getMax(),
-                                item.textureV.getMax()));
+                                item.textureV.getMin()));
                         mesh.t.push_back(
                             math::Vector2f(
                                 item.textureU.getMax(),
                                 item.textureV.getMin()));
+                        mesh.t.push_back(
+                            math::Vector2f(
+                                item.textureU.getMax(),
+                                item.textureV.getMax()));
                         mesh.t.push_back(
                             math::Vector2f(
                                 item.textureU.getMin(),
-                                item.textureV.getMin()));
+                                item.textureV.getMax()));
 
                         geom::Triangle2 triangle;
                         triangle.v[0].v = meshIndex + 1;
