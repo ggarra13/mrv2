@@ -15,9 +15,7 @@ it to Vulkan.
 - Improved runmeq.sh and runmet.sh scripts to exit early and with an error
   message if compilation fails.
 - Fixed a potential reset of the X11 server when hiding the timeline bar.
-- Started porting to Vulkan.  Vulkan on macOS leaves OpenGL in the dust, on 
-  Linux is underwhelming, and on Windows is middle ground.  There appears to be a
-  synchronization issue when the two windows (timeline and viewport) are used.
+- Started porting to Vulkan.
 
 	 * Working:
 		 * Viewport
@@ -43,6 +41,7 @@ it to Vulkan.
 			 - Vertical (minor validation error when switching)
 			 - Tile (minor validation error when switching)
 		 - Annotation cursor (circle)
+		 - Annotations (but needs reworking)
 		 
 	 * Missing to check/add:
 		 * Missing Frames crosses
