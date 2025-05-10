@@ -986,6 +986,44 @@ namespace tl
                     "color", color, vlk::kShaderFragment);
                 _createBindingSet(p.shaders["dissolve"]);
             }
+            if (!p.shaders["hard"])
+            {
+#if USE_PRECOMPILED_SHADERS
+                p.shaders["hard"] = vlk::Shader::create(
+                    ctx,
+                    Vertex2_spv,
+                    Vertex2_spv_len,
+                    hardFragment_spv,
+                    hardFragment_spv_len, "hard");
+#else
+                p.shaders["hard"] = vlk::Shader::create(
+                    ctx, vertex2Source(), softFragmentSource(), "hard");
+#endif
+                p.shaders["hard"]->createUniform(
+                    "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["hard"]->addPush(
+                    "color", color, vlk::kShaderFragment);
+                _createBindingSet(p.shaders["hard"]);
+            }
+            if (!p.shaders["soft"])
+            {
+#if USE_PRECOMPILED_SHADERS
+                p.shaders["soft"] = vlk::Shader::create(
+                    ctx,
+                    Vertex2_spv,
+                    Vertex2_spv_len,
+                    softFragment_spv,
+                    softFragment_spv_len, "soft");
+#else
+                p.shaders["soft"] = vlk::Shader::create(
+                    ctx, vertex2Source(), softFragmentSource(), "soft");
+#endif
+                p.shaders["soft"]->createUniform(
+                    "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["soft"]->addPush(
+                    "color", color, vlk::kShaderFragment);
+                _createBindingSet(p.shaders["soft"]);
+            }
             _displayShader();
 
 

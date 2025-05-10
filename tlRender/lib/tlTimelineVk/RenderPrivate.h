@@ -39,6 +39,7 @@ namespace tl
 {
     namespace timeline_vlk
     {
+        // For drawing
         std::string vertexSource();
         std::string vertex2Source();
         std::string meshFragmentSource();
@@ -47,7 +48,12 @@ namespace tl
         std::string textFragmentSource();
         std::string textureFragmentSource();
         std::string differenceFragmentSource();
-        
+
+        // For annotations
+        std::string softFragmentSource();
+        std::string hardFragmentSource();
+
+        // For display
         std::string imageFragmentSource();
         std::string displayFragmentSource(
             const std::string& ocioICSDef, const std::string& ocioICS,
