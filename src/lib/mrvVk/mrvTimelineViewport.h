@@ -4,16 +4,18 @@
 
 #pragma once
 
+#include "mrvOptions/mrvStereo3DOptions.h"
+#include "mrvOptions/mrvEnvironmentMapOptions.h"
+
 #include "mrvCore/mrvActionMode.h"
 #include "mrvCore/mrvColorAreaInfo.h"
 #include "mrvCore/mrvString.h"
 
-#include "mrvOptions/mrvStereo3DOptions.h"
-#include "mrvOptions/mrvEnvironmentMapOptions.h"
-
 #include <tlTimeline/BackgroundOptions.h>
 #include <tlTimeline/IRender.h>
 #include <tlTimeline/PlayerOptions.h>
+
+#include <tlDraw/Shape.h>
 
 #include <tlCore/ValueObserver.h>
 
@@ -23,6 +25,8 @@ class ViewerUI;
 
 namespace mrv
 {
+    using namespace tl;
+    
     class MultilineInput;
 
     class TimelinePlayer;
@@ -31,7 +35,6 @@ namespace mrv
 
     namespace vulkan
     {
-        using namespace tl;
 
         class TimelineViewport : public VkWindow
         {
@@ -391,6 +394,9 @@ namespace mrv
             //! full rotation of the image (user rotation + video rotation)
             float _getRotation() const noexcept;
 
+            //! Get the raster matrix (ie. without zoom into account).
+            math::Matrix4x4f _rasterProjectionMatrix() const noexcept;
+            
             //! Get the render projection matrix.
             math::Matrix4x4f _renderProjectionMatrix() const noexcept;
 

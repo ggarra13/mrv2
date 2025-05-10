@@ -10,15 +10,14 @@ add_subdirectory(mrvFLU)         # mrvWidgets, FLTK, Intl
 add_subdirectory(mrvUI)          # mrvWidgets, Xrandr, wayland-client
 if(TLRENDER_VK AND MRV2_BACKEND STREQUAL "VK" OR MRV2_BACKEND STREQUAL "BOTH")
     # tlTimelineVk, tlVk, tlTimeline, tlTimelineUI, tlUI
-    # mrvUI, mrvEdit, mrvWidgets, mrvDraw, mrvCore, FLTK_vk
+    # mrvUI, mrvEdit, mrvWidgets, mrvCore, FLTK_vk
     add_subdirectory(mrvVk)
 endif()
 if(TLRENDER_GL AND MRV2_BACKEND STREQUAL "GL" OR MRV2_BACKEND STREQUAL "BOTH")
     # tlGL, tlTimeline, tlTimelineUI, tlUI, glfw
-    # mrvUI, mrvEdit, mrvWidgets, mrvDraw, mrvCore, FLTK_gl
+    # mrvUI, mrvEdit, mrvWidgets, mrvCore, FLTK_gl
     add_subdirectory(mrvGL)
 endif()
-add_subdirectory(mrvDraw)        # mrvCore
 if(MRV2_PDF)
     add_subdirectory(mrvPDF)     # mrvWidgets
 endif()
@@ -27,7 +26,7 @@ add_subdirectory(mrvEdit)    # mrvWidgets, mrvNetwork
 add_subdirectory(mrvFl)      # mrvEdit, mrvUI, mrvGL, mrvVk, mrvPDF
 add_subdirectory(mrvPanels)  # mrvFl, mrvEdit
 add_subdirectory(mrvBaseApp) # tlBaseApp, tlCore, RtAudio, freetype, Imath::Imath
-add_subdirectory(mrvApp)  # mrvBaseApp, mrvPanels, mrvDraw, mrvFLU, mrvOptions
+add_subdirectory(mrvApp)  # mrvBaseApp, mrvPanels, mrvFLU, mrvOptions
 if(MRV2_PYBIND11)
     add_subdirectory(mrvPy)  # mrvApp
 endif()

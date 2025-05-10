@@ -10,11 +10,11 @@
 #include <tlCore/Vector.h>
 #include <tlCore/Mesh.h>
 
-#include <tlTimeline/IRender.h>
+#include <tlTimelineVk/Render.h>
 
-#include "mrvDraw/Point.h"
-#include "mrvDraw/Polyline2D.h"
-#include "mrvDraw/Shape.h"
+#include "tlDraw/Point.h"
+#include "tlDraw/Polyline2D.h"
+#include "tlDraw/Shape.h"
 
 #include "mrvNetwork/mrvMessage.h"
 
@@ -64,13 +64,11 @@ namespace mrv
 
     //! Draw a filled circle.
     void drawFilledCircle(
-        const std::shared_ptr<timeline::IRender>& render,
+        const std::shared_ptr<timeline_vlk::Render>& render,
+        const std::string& pipelineName,
+        const VkRenderPass renderPass,
         const math::Vector2i& center, const float radius,
         const image::Color4f& color, const bool soft = false);
-
-    //! Create a mesh for drawing checkers.
-    geom::TriangleMesh2
-    checkers(const math::Box2i&, const math::Size2i& checkerSize);
 
     // Function to perform bilinear interpolation for resizing
     void resizeImage(

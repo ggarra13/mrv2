@@ -30,6 +30,7 @@
 
 namespace
 {
+    const char* kModule = "draw";
     const unsigned kFPSAverageFrames = 10;
 }
 
@@ -473,7 +474,7 @@ namespace mrv
                     textShape->viewZoom = viewZoom;
                     shape->matrix = vm;
                     CHECK_GL;
-                    shape->draw(gl.render, gl.lines);
+                    textShape->draw(gl.render, gl.lines);
                     CHECK_GL;
                     shape->color.a = a;
                 }
@@ -520,7 +521,18 @@ namespace mrv
                 float alpha = shape->color.a;
                 shape->color.a *= alphamult;
                 shape->color.a *= shape->fade;
-                shape->draw(gl.render, gl.lines);
+                if (auto glshape = dynamic_cast<GLPathShape*>(shape.get()))
+                {
+                    glshape->draw(gl.render, gl.lines);
+                }
+                else if (auto glshape = dynamic_cast<GLShape*>(shape.get()))
+                {
+                    glshape->draw(gl.render, gl.lines);
+                }
+                else
+                {
+                    LOG_ERROR("Unknown shape - not drawing");
+                }
                 shape->color.a = alpha;
             }
         }
@@ -695,7 +707,7 @@ namespace mrv
 
             double aspectY = (double)renderSize.w / (double)renderSize.h;
             double aspectX = (double)renderSize.h / (double)renderSize.w;
-
+            
             double target_aspect = 1.0 / _p->masking;
             double amountY = (0.5 - target_aspect * aspectY / 2);
             double amountX = (0.5 - _p->masking * aspectX / 2);

@@ -20,17 +20,17 @@
 #include "mrvNetwork/mrvTimelineItemOptions.h"
 #include "mrvNetwork/mrvProtocolVersion.h"
 
-#if defined(OPENGL_BACKEND) || defined(BOTH_BACKEND)
-#    include "mrvGL/mrvGLUtil.h"
+#if defined(OPENGL_BACKEND)
 #    include "mrvGL/mrvGLJson.h"
 #endif
 
 #if defined(VULKAN_BACKEND)
-#    include "mrvVk/mrvVkUtil.h"
 #    include "mrvVk/mrvVkJson.h"
 #endif
 
 #include "mrvCore/mrvFile.h"
+
+#include <tlDraw/Annotation.h>
 
 #include <tlCore/StringFormat.h>
 
@@ -684,7 +684,7 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
-                auto shape = draw::messageToShape(message["value"]);
+                auto shape = messageToShape(message["value"]);
                 annotation->shapes.push_back(shape);
 
                 // Create annotation menus if not there already
@@ -795,7 +795,7 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
-                auto shape = draw::messageToShape(message["value"]);
+                auto shape = messageToShape(message["value"]);
                 annotation->shapes.pop_back();
                 annotation->shapes.push_back(shape);
                 view->updateUndoRedoButtons();
@@ -815,7 +815,7 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
-                auto shape = draw::messageToShape(message["value"]);
+                auto shape = messageToShape(message["value"]);
                 annotation->shapes.push_back(shape);
                 // Create annotation menus if not there already
                 ui->uiMain->fill_menu(ui->uiMenuBar);

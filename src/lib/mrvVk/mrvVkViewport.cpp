@@ -331,8 +331,8 @@ namespace mrv
         
         void Viewport::prepare()
         {
-            prepare_shaders();
             prepare_render_pass();       // Main swapchain render pass
+            prepare_shaders();
             prepare_pipeline_layout(); 
         }
 
@@ -369,9 +369,6 @@ namespace mrv
 
             // Destroy auxiliary render classes
             vk.lines.reset();
-#ifdef USE_ONE_PIXEL_LINES
-            vk.outline.reset();
-#endif
             // Destroy Buffers
             vk.buffer.reset();
             vk.annotation.reset();
@@ -404,12 +401,7 @@ namespace mrv
                 if (!p.fontSystem)
                     p.fontSystem = image::FontSystem::create(context);
 
-#ifdef USE_ONE_PIXEL_LINES
-                if (!vk.outline)
-                    vk.outline = std::make_shared<vulkan::Outline>();
-#endif
-                if (!vk.lines)
-                    vk.lines = std::make_shared<vulkan::Lines>();
+                vk.lines = std::make_shared<vulkan::Lines>(ctx, renderPass());
 
                 const std::string& vertexSource = timeline_vlk::vertexSource();
                 const image::Color4f color(1.F, 1.F, 1.F);
@@ -568,10 +560,14 @@ namespace mrv
                 vk.stereoBuffer.reset();
             }
 
-            if (!vk.buffer)
+            const auto& player = getTimelinePlayer();
+            if (!vk.buffer || !player)
             {
                 return;
             }
+
+            const auto& annotations =
+                player->getAnnotations(p.ghostPrevious, p.ghostNext);
 
             if (p.pixelAspectRatio > 0.F && !p.videoData.empty() &&
                 !p.videoData[0].layers.empty())
@@ -785,7 +781,21 @@ namespace mrv
                 vk.vao->bind(m_currentFrameIndex);
                 vk.vao->draw(cmd, vk.vbo);
             }
+
+            if (panel::annotationsPanel)
+            {
+                panel::annotationsPanel->notes->value("");
+            }
             
+
+            
+            const otime::RationalTime& currentTime = player->currentTime();
+            
+            if (p.showAnnotations && !annotations.empty())
+            {
+                _drawAnnotations(vk.buffer, mvp, currentTime, annotations,
+                                 viewportSize);
+            }
 
             if (p.dataWindow)
                 _drawDataWindow();
@@ -806,6 +816,52 @@ namespace mrv
             if (p.hudActive && p.hud != HudDisplay::kNone)
                 _drawHUD(cmd, alpha);
             
+            math::Box2i selection = p.colorAreaInfo.box = p.selection;
+            if (selection.max.x >= 0)
+            {
+                // Check min < max
+                if (selection.min.x > selection.max.x)
+                {
+                    int tmp = selection.max.x;
+                    selection.max.x = selection.min.x;
+                    selection.min.x = tmp;
+                }
+                if (selection.min.y > selection.max.y)
+                {
+                    int tmp = selection.max.y;
+                    selection.max.y = selection.min.y;
+                    selection.min.y = tmp;
+                }
+                // Copy it again in case it changed
+                p.colorAreaInfo.box = selection;
+
+                if (panel::colorAreaPanel || panel::histogramPanel ||
+                    panel::vectorscopePanel)
+                {
+                    // \@todo: map the whole buffer in cpu memory
+                    //_mapBuffer();
+
+                    if (panel::colorAreaPanel)
+                    {
+                        // \@todo: must be done after mapping buffer.
+                        // _calculateColorArea(p.colorAreaInfo);
+                        panel::colorAreaPanel->update(p.colorAreaInfo);
+                    }
+                    if (panel::histogramPanel)
+                    {
+                        panel::histogramPanel->update(p.colorAreaInfo);
+                    }
+                    if (panel::vectorscopePanel)
+                    {
+                        panel::vectorscopePanel->update(p.colorAreaInfo);
+                    }
+                }
+            }
+            
+                    
+            if (selection.max.x >= 0)
+                _drawAreaSelection();
+            
             end_render_pass(cmd);
             
             // Update the pixel bar from here only if we are playing a movie
@@ -813,6 +869,7 @@ namespace mrv
             bool update = !_shouldUpdatePixelBar();
             if (update)
                 updatePixelBar();
+
 
             vk.buffer->transitionToColorAttachment(cmd);
 

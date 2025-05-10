@@ -6,8 +6,8 @@
 
 #include "mrvWidgets/mrvBackend.h"
 
-#include "mrvDraw/Annotation.h"
-#include "mrvDraw/Shape.h"
+#include <tlDraw/Annotation.h>
+#include <tlDraw/Shape.h>
 
 namespace mrv
 {

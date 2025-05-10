@@ -2,11 +2,12 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <algorithm>
 
 #include "Annotation.h"
 
-namespace mrv
+#include <algorithm>
+
+namespace tl
 {
     namespace draw
     {
@@ -69,7 +70,7 @@ namespace mrv
         }
 
         std::shared_ptr< Annotation >
-        messageToAnnotation(const mrv::Message& json)
+        messageToAnnotation(const nlohmann::json& json)
         {
             auto annotation = std::make_shared< Annotation >();
             json.get_to(*annotation.get());
@@ -77,4 +78,4 @@ namespace mrv
         }
 
     } // namespace draw
-} // namespace mrv
+} // namespace tl

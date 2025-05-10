@@ -5,6 +5,10 @@
 #pragma once
 
 
+#include <tlDraw/Point.h>
+#include <tlDraw/Polyline2D.h>
+#include <tlDraw/Shape.h>
+
 #include <tlCore/Box.h>
 #include <tlCore/Matrix.h>
 #include <tlCore/Vector.h>
@@ -12,9 +16,6 @@
 
 #include <tlTimeline/IRender.h>
 
-#include "mrvDraw/Point.h"
-#include "mrvDraw/Polyline2D.h"
-#include "mrvDraw/Shape.h"
 
 #include "mrvNetwork/mrvMessage.h"
 
