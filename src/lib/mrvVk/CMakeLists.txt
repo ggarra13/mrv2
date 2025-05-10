@@ -10,7 +10,7 @@ set(HEADERS
     mrvVkShaders.h       # done
     mrvVkShape.h
     mrvVkTextEdit.h      # done
-    # mrvVkUtil.h
+    mrvVkUtil.h
     mrvVkViewport.h
     mrvVkViewportPrivate.h
     mrvVkWindow.h
@@ -27,7 +27,7 @@ set(SOURCES
     mrvVkShaders.cpp        # done
     mrvVkShape.cpp
     mrvVkTextEdit.cpp       # done
-    # mrvVkUtil.cpp
+    mrvVkUtil.cpp
     mrvVkViewport.cpp
     mrvVkViewportDraw.cpp
     mrvVkViewportPrims.cpp  # done

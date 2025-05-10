@@ -160,7 +160,7 @@ namespace mrv
                 mesh.v.push_back(math::Vector2f(draw[i].x, draw[i].y));
             
             render->drawMesh("annotation", "rect", "mesh", renderPass(),
-                             mesh, math::Vector2i(0, 0), color, false);
+                             mesh, math::Vector2i(0, 0), color, true);
         }
 
         void Lines::drawLine(

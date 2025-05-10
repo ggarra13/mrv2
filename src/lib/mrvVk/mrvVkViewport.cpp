@@ -560,10 +560,14 @@ namespace mrv
                 vk.stereoBuffer.reset();
             }
 
-            if (!vk.buffer)
+            const auto& player = getTimelinePlayer();
+            if (!vk.buffer || !player)
             {
                 return;
             }
+
+            const auto& annotations =
+                player->getAnnotations(p.ghostPrevious, p.ghostNext);
 
             if (p.pixelAspectRatio > 0.F && !p.videoData.empty() &&
                 !p.videoData[0].layers.empty())
@@ -777,7 +781,21 @@ namespace mrv
                 vk.vao->bind(m_currentFrameIndex);
                 vk.vao->draw(cmd, vk.vbo);
             }
+
+            if (panel::annotationsPanel)
+            {
+                panel::annotationsPanel->notes->value("");
+            }
             
+
+            
+            const otime::RationalTime& currentTime = player->currentTime();
+            
+            if (p.showAnnotations && !annotations.empty())
+            {
+                _drawAnnotations(vk.buffer, mvp, currentTime, annotations,
+                                 viewportSize);
+            }
 
             if (p.dataWindow)
                 _drawDataWindow();
@@ -838,10 +856,12 @@ namespace mrv
                         panel::vectorscopePanel->update(p.colorAreaInfo);
                     }
                 }
-                _drawAreaSelection();
             }
             
                     
+            if (selection.max.x >= 0)
+                _drawAreaSelection();
+            
             end_render_pass(cmd);
             
             // Update the pixel bar from here only if we are playing a movie

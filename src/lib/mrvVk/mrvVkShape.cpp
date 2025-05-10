@@ -190,10 +190,10 @@ namespace mrv
         //     VK_SRC_ALPHA, VK_ONE_MINUS_SRC_ALPHA, VK_ONE,
         //     VK_ONE_MINUS_SRC_ALPHA);
 
-        // const bool catmullRomSpline = false;
-        // lines->drawLines(
-        //     render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
-        //     Polyline2D::EndCapStyle::JOINT, catmullRomSpline);
+        const bool catmullRomSpline = false;
+        lines->drawLines(
+            render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
+            Polyline2D::EndCapStyle::JOINT, catmullRomSpline);
     }
 
     void VKCircleShape::draw(
@@ -244,7 +244,7 @@ namespace mrv
             lines->drawLines(render, pts, color, pen_size);
             return;
         }
-
+        
         geom::TriangleMesh2 mesh;
         mesh.v.reserve(pts.size() + 64);
 
@@ -278,8 +278,9 @@ namespace mrv
         //     VK_SRC_ALPHA, VK_ONE_MINUS_SRC_ALPHA, VK_ONE,
         //     VK_ONE_MINUS_SRC_ALPHA);
 
-        // math::Vector2i v(center.x, center.y);
-        // drawFilledCircle(render, v, radius, color, false);
+        math::Vector2i v(center.x, center.y);
+        drawFilledCircle(render, "annotation", lines->renderPass(),
+                         v, radius, color, false);
     }
 
     void VKFilledRectangleShape::draw(
@@ -294,9 +295,9 @@ namespace mrv
         //     VK_SRC_ALPHA, VK_ONE_MINUS_SRC_ALPHA, VK_ONE,
         //     VK_ONE_MINUS_SRC_ALPHA);
 
-        // math::Box2i box(
-        //     pts[0].x, pts[0].y, pts[2].x - pts[0].x, pts[2].y - pts[0].y);
-        // render->drawRect(box, color);
+        math::Box2i box(
+            pts[0].x, pts[0].y, pts[2].x - pts[0].x, pts[2].y - pts[0].y);
+        render->drawRect("annotation", lines->renderPass(), box, color, true);
     }
 
     void VKArrowShape::draw(

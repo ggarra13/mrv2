@@ -413,6 +413,64 @@ namespace mrv
             }
         }
 
+#if 1
+
+        void Viewport::_drawAnnotations(
+            const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay,
+            const math::Matrix4x4f& mvp, const otime::RationalTime& time,
+            const std::vector<std::shared_ptr<draw::Annotation>>& annotations,
+            const math::Size2i& renderSize)
+        {
+            TLRENDER_P();
+            MRV2_VK();
+
+            for (const auto& annotation : annotations)
+            {
+                const auto& annotationTime = annotation->time;
+                float alphamult = 0.F;
+                if (annotation->allFrames || time.floor() == annotationTime.floor())
+                    alphamult = 1.F;
+                else
+                {
+                    if (p.ghostPrevious)
+                    {
+                        for (short i = p.ghostPrevious - 1; i > 0; --i)
+                        {
+                            otime::RationalTime offset(i, time.rate());
+                            if ((time - offset).floor() == annotationTime.floor())
+                            {
+                                alphamult = 1.F - (float)i / p.ghostPrevious;
+                                break;
+                            }
+                        }
+                    }
+                    if (p.ghostNext)
+                    {
+                        for (short i = 1; i < p.ghostNext; ++i)
+                        {
+                            otime::RationalTime offset(i, time.rate());
+                            if ((time + offset).floor() == annotationTime.floor())
+                            {
+                                alphamult = 1.F - (float)i / p.ghostNext;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                const auto& shapes = annotation->shapes;
+                for (const auto& shape : shapes)
+                {
+                    if (alphamult <= 0.001F)
+                        continue;
+                    vk.render->setTransform(mvp);
+                    
+                    _drawShape(shape, alphamult);
+                    
+                }
+            }
+        }
+#else
         void Viewport::_drawAnnotations(
             const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay,
             const math::Matrix4x4f& renderMVP, const otime::RationalTime& time,
@@ -478,7 +536,7 @@ namespace mrv
                 }
             }
         }
-
+#endif
         void Viewport::_compositeAnnotations(
             const math::Matrix4x4f& mvp, const math::Size2i& viewportSize)
         {
