@@ -119,7 +119,7 @@ namespace mrv
             void _drawText(
                 const std::string& text, const image::FontInfo& fontInfo,
                 math::Vector2i& pos, const int16_t lineHeight,
-                const image::Color4f& labelColor, const std::string&) const noexcept;
+                const image::Color4f& labelColor) const noexcept;
             void _drawAreaSelection() const noexcept;
             void _drawSafeAreas() noexcept;
             void _drawSafeAreas(
