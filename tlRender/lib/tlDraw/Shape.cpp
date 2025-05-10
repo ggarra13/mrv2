@@ -2,10 +2,9 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include "mrvDraw/Shape.h"
-#include "mrvNetwork/mrvCypher.h"
+#include <tlDraw/Shape.h>
 
-namespace mrv
+namespace tl
 {
     namespace draw
     {
@@ -26,13 +25,9 @@ namespace mrv
             j.at("matrix").get_to(value.matrix);
             j.at("color").get_to(value.color);
             j.at("pen_size").get_to(value.pen_size);
-            if (j.contains("soft"))
-                j.at("soft").get_to(value.soft);
-            if (j.contains("laser"))
-            {
-                j.at("laser").get_to(value.laser);
-                j.at("fade").get_to(value.fade);
-            }
+            j.at("soft").get_to(value.soft);
+            j.at("laser").get_to(value.laser);
+            j.at("fade").get_to(value.fade);
         }
 
         void to_json(nlohmann::json& j, const PathShape& value)
@@ -51,19 +46,15 @@ namespace mrv
         void to_json(nlohmann::json& j, const NoteShape& value)
         {
             to_json(j, static_cast<const Shape&>(value));
-            const std::string& plainText = value.text;
-            std::string encodedText = mrv::encode_string(plainText);
-            j["text"] = encodedText;
+            j["text"] = value.text;
             j["type"] = "Note";
         }
 
         void from_json(const nlohmann::json& j, NoteShape& value)
         {
             from_json(j, static_cast<Shape&>(value));
-            std::string encodedText;
-            j.at("text").get_to(encodedText);
-            value.text = mrv::decode_string(encodedText);
+            j.at("text").get_to(value.text);
         }
 
     } // namespace draw
-} // namespace mrv
+} // namespace tl

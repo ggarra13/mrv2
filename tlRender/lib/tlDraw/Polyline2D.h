@@ -9,16 +9,17 @@
 
 #pragma once
 
-#include <vector>
-#include <iterator>
-#include <cassert>
+#include <tlDraw/Point.h>
+#include <tlDraw/LineSegment.h>
 
 #include <tlCore/Math.h>
 
-#include "Point.h"
-#include "LineSegment.h"
 
-namespace mrv
+#include <cassert>
+#include <iterator>
+#include <vector>
+
+namespace tl
 {
     namespace draw
     {
@@ -184,4 +185,4 @@ namespace mrv
 
     } // namespace draw
 
-} // namespace mrv
+} // namespace tl

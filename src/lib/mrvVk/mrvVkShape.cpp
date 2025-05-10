@@ -137,11 +137,11 @@ namespace mrv
 {
 
     void VKPathShape::draw(
-        const std::shared_ptr<timeline::IRender>& render,
-        const std::shared_ptr<vulkan::Lines>& lines)
+        const std::shared_ptr<timeline_vlk::Render>& render,
+        const std::shared_ptr<vulkan::Lines> lines)
     {
         using namespace tl;
-        using namespace mrv::draw;
+        using namespace tl::draw;
 
         
         // gl::SetAndRestore(VK_BLEND, VK_TRUE);
@@ -152,37 +152,37 @@ namespace mrv
         //     VK_ONE_MINUS_SRC_ALPHA);
         
 
-        // const bool catmullRomSpline = true;
+        const bool catmullRomSpline = true;
         
-        // lines->drawLines(
-        //     render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
-        //     Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
+        lines->drawLines(
+            render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
+            Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
     }
 
     void VKErasePathShape::draw(
-        const std::shared_ptr<timeline::IRender>& render,
-        const std::shared_ptr<vulkan::Lines>& lines)
+        const std::shared_ptr<timeline_vlk::Render>& render,
+        const std::shared_ptr<vulkan::Lines> lines)
     {
-        using namespace mrv::draw;
+        using namespace tl::draw;
 
         // gl::SetAndRestore(VK_BLEND, VK_TRUE);
 
         // glBlendFunc(VK_ZERO, VK_ONE_MINUS_SRC_ALPHA);
 
-        // color.r = color.g = color.b = 0.F;
-        // color.a = 1.F;
+        color.r = color.g = color.b = 0.F;
+        color.a = 1.F;
 
-        // const bool catmullRomSpline = false;
-        // lines->drawLines(
-        //     render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
-        //     Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
+        const bool catmullRomSpline = false;
+        lines->drawLines(
+            render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
+            Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
     }
 
     void VKPolygonShape::draw(
-        const std::shared_ptr<timeline::IRender>& render,
-        const std::shared_ptr<vulkan::Lines>& lines)
+        const std::shared_ptr<timeline_vlk::Render>& render,
+        const std::shared_ptr<vulkan::Lines> lines)
     {
-        using namespace mrv::draw;
+        using namespace tl::draw;
 
         // gl::SetAndRestore(VK_BLEND, VK_TRUE);
 
@@ -190,15 +190,15 @@ namespace mrv
         //     VK_SRC_ALPHA, VK_ONE_MINUS_SRC_ALPHA, VK_ONE,
         //     VK_ONE_MINUS_SRC_ALPHA);
 
-        // const bool catmullRomSpline = false;
-        // lines->drawLines(
-        //     render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
-        //     Polyline2D::EndCapStyle::JOINT, catmullRomSpline);
+        const bool catmullRomSpline = false;
+        lines->drawLines(
+            render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
+            Polyline2D::EndCapStyle::JOINT, catmullRomSpline);
     }
 
     void VKCircleShape::draw(
-        const std::shared_ptr<timeline::IRender>& render,
-        const std::shared_ptr<vulkan::Lines>& lines)
+        const std::shared_ptr<timeline_vlk::Render>& render,
+        const std::shared_ptr<vulkan::Lines> lines)
     {
         // gl::SetAndRestore(VK_BLEND, VK_TRUE);
 
@@ -206,14 +206,14 @@ namespace mrv
         //     VK_SRC_ALPHA, VK_ONE_MINUS_SRC_ALPHA, VK_ONE,
         //     VK_ONE_MINUS_SRC_ALPHA);
 
-        // lines->drawCircle(render, center, radius, pen_size, color, soft);
+        lines->drawCircle(render, center, radius, pen_size, color, soft);
     }
 
     void VKRectangleShape::draw(
-        const std::shared_ptr<timeline::IRender>& render,
-        const std::shared_ptr<vulkan::Lines>& lines)
+        const std::shared_ptr<timeline_vlk::Render>& render,
+        const std::shared_ptr<vulkan::Lines> lines)
     {
-        using namespace mrv::draw;
+        using namespace tl::draw;
 
         // gl::SetAndRestore(VK_BLEND, VK_TRUE);
 
@@ -221,17 +221,17 @@ namespace mrv
         //     VK_SRC_ALPHA, VK_ONE_MINUS_SRC_ALPHA, VK_ONE,
         //     VK_ONE_MINUS_SRC_ALPHA);
 
-        // const bool catmullRomSpline = false;
-        // lines->drawLines(
-        //     render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
-        //     Polyline2D::EndCapStyle::JOINT, catmullRomSpline);
+        const bool catmullRomSpline = false;
+        lines->drawLines(
+            render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
+            Polyline2D::EndCapStyle::JOINT, catmullRomSpline);
     }
 
     void VKFilledPolygonShape::draw(
-        const std::shared_ptr<timeline::IRender>& render,
-        const std::shared_ptr<vulkan::Lines>& lines)
+        const std::shared_ptr<timeline_vlk::Render>& render,
+        const std::shared_ptr<vulkan::Lines> lines)
     {
-        using namespace mrv::draw;
+        using namespace tl::draw;
 
         // gl::SetAndRestore(VK_BLEND, VK_TRUE);
 
@@ -239,37 +239,38 @@ namespace mrv
         //     VK_SRC_ALPHA, VK_ONE_MINUS_SRC_ALPHA, VK_ONE,
         //     VK_ONE_MINUS_SRC_ALPHA);
 
-        // if (pts.size() < 3)
-        // {
-        //     lines->drawLines(render, pts, color, pen_size);
-        //     return;
-        // }
+        if (pts.size() < 3)
+        {
+            lines->drawLines(render, pts, color, pen_size);
+            return;
+        }
+        
+        geom::TriangleMesh2 mesh;
+        mesh.v.reserve(pts.size() + 64);
 
-        // geom::TriangleMesh2 mesh;
-        // mesh.v.reserve(pts.size() + 64);
+        size_t numVertices = pts.size();
+        mesh.v.reserve(numVertices);
+        for (size_t i = 0; i < numVertices; ++i)
+            mesh.v.push_back(math::Vector2f(pts[i].x, pts[i].y));
 
-        // size_t numVertices = pts.size();
-        // mesh.v.reserve(numVertices);
-        // for (size_t i = 0; i < numVertices; ++i)
-        //     mesh.v.push_back(math::Vector2f(pts[i].x, pts[i].y));
+        std::vector<int> poly;
+        for (int i = 0; i < pts.size(); ++i)
+        {
+            poly.push_back(i + 1);
+        }
+        auto triangles = triangulatePolygon(mesh.v, poly);
+        mesh.triangles = triangles;
 
-        // std::vector<int> poly;
-        // for (int i = 0; i < pts.size(); ++i)
-        // {
-        //     poly.push_back(i + 1);
-        // }
-        // auto triangles = triangulatePolygon(mesh.v, poly);
-        // mesh.triangles = triangles;
-
-        // math::Vector2i pos;
-        // render->drawMesh(mesh, pos, color);
+        math::Vector2i pos;
+        render->drawMesh("annotation", "rect", "mesh", lines->renderPass(),
+                         mesh, pos, color, true);
     }
 
     void VKFilledCircleShape::draw(
-        const std::shared_ptr<timeline::IRender>& render,
-        const std::shared_ptr<vulkan::Lines>& lines)
+        const std::shared_ptr<timeline_vlk::Render>& render,
+        const std::shared_ptr<vulkan::Lines> lines)
     {
-        using namespace mrv::draw;
+        using namespace tl::draw;
 
         // gl::SetAndRestore(VK_BLEND, VK_TRUE);
 
@@ -277,15 +278,16 @@ namespace mrv
         //     VK_SRC_ALPHA, VK_ONE_MINUS_SRC_ALPHA, VK_ONE,
         //     VK_ONE_MINUS_SRC_ALPHA);
 
-        // math::Vector2i v(center.x, center.y);
-        // drawFilledCircle(render, v, radius, color, false);
+        math::Vector2i v(center.x, center.y);
+        drawFilledCircle(render, "annotation", lines->renderPass(),
+                         v, radius, color, false);
     }
 
     void VKFilledRectangleShape::draw(
-        const std::shared_ptr<timeline::IRender>& render,
-        const std::shared_ptr<vulkan::Lines>& lines)
+        const std::shared_ptr<timeline_vlk::Render>& render,
+        const std::shared_ptr<vulkan::Lines> lines)
     {
-        using namespace mrv::draw;
+        using namespace tl::draw;
 
         // gl::SetAndRestore(VK_BLEND, VK_TRUE);
 
@@ -293,16 +295,16 @@ namespace mrv
         //     VK_SRC_ALPHA, VK_ONE_MINUS_SRC_ALPHA, VK_ONE,
         //     VK_ONE_MINUS_SRC_ALPHA);
 
-        // math::Box2i box(
-        //     pts[0].x, pts[0].y, pts[2].x - pts[0].x, pts[2].y - pts[0].y);
-        // render->drawRect(box, color);
+        math::Box2i box(
+            pts[0].x, pts[0].y, pts[2].x - pts[0].x, pts[2].y - pts[0].y);
+        render->drawRect("annotation", lines->renderPass(), box, color, true);
     }
 
     void VKArrowShape::draw(
-        const std::shared_ptr<timeline::IRender>& render,
-        const std::shared_ptr<vulkan::Lines>& lines)
+        const std::shared_ptr<timeline_vlk::Render>& render,
+        const std::shared_ptr<vulkan::Lines> lines)
     {
-        using namespace mrv::draw;
+        using namespace tl::draw;
 
         // gl::SetAndRestore(VK_BLEND, VK_TRUE);
 
@@ -310,34 +312,34 @@ namespace mrv
         //     VK_SRC_ALPHA, VK_ONE_MINUS_SRC_ALPHA, VK_ONE,
         //     VK_ONE_MINUS_SRC_ALPHA);
 
-        // bool catmullRomSpline = false;
-        // std::vector< Point > line;
+        bool catmullRomSpline = false;
+        std::vector< Point > line;
 
-        // line.push_back(pts[1]);
-        // line.push_back(pts[2]);
-        // lines->drawLines(
-        //     render, line, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
-        //     Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
+        line.push_back(pts[1]);
+        line.push_back(pts[2]);
+        lines->drawLines(
+            render, line, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
+            Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
 
-        // line.clear();
-        // line.push_back(pts[1]);
-        // line.push_back(pts[4]);
+        line.clear();
+        line.push_back(pts[1]);
+        line.push_back(pts[4]);
 
-        // lines->drawLines(
-        //     render, line, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
-        //     Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
+        lines->drawLines(
+            render, line, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
+            Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
 
-        // line.clear();
-        // line.push_back(pts[0]);
-        // line.push_back(pts[1]);
-        // lines->drawLines(
-        //     render, line, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
-        //     Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
+        line.clear();
+        line.push_back(pts[0]);
+        line.push_back(pts[1]);
+        lines->drawLines(
+            render, line, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
+            Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
     }
 
     void VKTextShape::draw(
-        const std::shared_ptr<timeline::IRender>& render,
-        const std::shared_ptr<vulkan::Lines>& lines)
+        const std::shared_ptr<timeline_vlk::Render>& render,
+        const std::shared_ptr<vulkan::Lines> lines)
     {
         if (text.empty())
             return;

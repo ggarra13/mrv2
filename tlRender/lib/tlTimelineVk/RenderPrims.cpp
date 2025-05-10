@@ -221,6 +221,10 @@ namespace tl
             p.currentStats.meshTriangles += mesh.triangles.size();
 
             auto shader = p.shaders[shaderName];
+            if (!shader)
+            {
+                throw std::runtime_error("Unknown shader '" + shaderName + "'.");
+            }
             _createBindingSet(shader);
             
             const auto transform =

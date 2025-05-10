@@ -16,7 +16,6 @@
 // #include "mrvVk/mrvVkErrors.h"
 #include "mrvVk/mrvVkLines.h"
 #include "mrvVk/mrvVkViewport.h"
-#include "mrvVk/mrvVkOutline.h"
 
 namespace mrv
 {
@@ -50,9 +49,6 @@ namespace mrv
             std::shared_ptr<vlk::VBO> vbo;
             std::shared_ptr<vlk::VAO> vao;
 
-#ifdef USE_ONE_PIXEL_LINES
-            std::shared_ptr<vulkan::Outline> outline;
-#endif
             std::shared_ptr<vulkan::Lines> lines;
 
             bool init_debug = false;

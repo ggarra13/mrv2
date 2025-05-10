@@ -27,7 +27,9 @@ namespace
 namespace mrv
 {
     void drawFilledCircle(
-        const std::shared_ptr<timeline::IRender>& render,
+        const std::shared_ptr<timeline_vlk::Render>& render,
+        const std::string& pipelineName,
+        const VkRenderPass renderPass,
         const math::Vector2i& center, const float radius,
         const image::Color4f& color, const bool soft)
     {
@@ -59,8 +61,9 @@ namespace mrv
         triangle.v[2] = i + 1;
         mesh.triangles.emplace_back(triangle);
 
-        math::Vector2i pos;
-        render->drawMesh(mesh, pos, color);
+        const math::Vector2i pos;
+        render->drawMesh(pipelineName, "rect", "mesh", renderPass,
+                         mesh, pos, color, true);
     }
 
     geom::TriangleMesh2
@@ -146,7 +149,7 @@ namespace mrv
         uint8_t* targetPixels, uint8_t* srcPixels, const int srcWidth,
         const int srcHeight, const int targetWidth, const int targetHeight)
     {
-
+        
         // Calculate scaling factors
         double scaleX = static_cast<double>(srcWidth) / targetWidth;
         double scaleY = static_cast<double>(srcHeight) / targetHeight;
@@ -172,23 +175,23 @@ namespace mrv
                 double wy1 = 1.0 - wy2;
 
                 // Get the pixels from the source image
-                GLubyte* p11 = &srcPixels[(y1 * srcWidth + x1) * 4];
-                GLubyte* p12 = &srcPixels[(y2 * srcWidth + x1) * 4];
-                GLubyte* p21 = &srcPixels[(y1 * srcWidth + x2) * 4];
-                GLubyte* p22 = &srcPixels[(y2 * srcWidth + x2) * 4];
+                uint8_t* p11 = &srcPixels[(y1 * srcWidth + x1) * 4];
+                uint8_t* p12 = &srcPixels[(y2 * srcWidth + x1) * 4];
+                uint8_t* p21 = &srcPixels[(y1 * srcWidth + x2) * 4];
+                uint8_t* p22 = &srcPixels[(y2 * srcWidth + x2) * 4];
 
                 // Perform bilinear interpolation for each channel
-                GLubyte* targetPixel = &targetPixels[(y * targetWidth + x) * 4];
-                targetPixel[0] = static_cast<GLubyte>(
+                uint8_t* targetPixel = &targetPixels[(y * targetWidth + x) * 4];
+                targetPixel[0] = static_cast<uint8_t>(
                     wx1 * wy1 * p11[0] + wx2 * wy1 * p21[0] +
                     wx1 * wy2 * p12[0] + wx2 * wy2 * p22[0]);
-                targetPixel[1] = static_cast<GLubyte>(
+                targetPixel[1] = static_cast<uint8_t>(
                     wx1 * wy1 * p11[1] + wx2 * wy1 * p21[1] +
                     wx1 * wy2 * p12[1] + wx2 * wy2 * p22[1]);
-                targetPixel[2] = static_cast<GLubyte>(
+                targetPixel[2] = static_cast<uint8_t>(
                     wx1 * wy1 * p11[2] + wx2 * wy1 * p21[2] +
                     wx1 * wy2 * p12[2] + wx2 * wy2 * p22[2]);
-                targetPixel[3] = static_cast<GLubyte>(
+                targetPixel[3] = static_cast<uint8_t>(
                     wx1 * wy1 * p11[3] + wx2 * wy1 * p21[3] +
                     wx1 * wy2 * p12[3] + wx2 * wy2 * p22[3]);
             }
