@@ -3,7 +3,7 @@
 
 #include <string>
 
-#define DEBUG_PIPELINE_USE 0 //1
+#define DEBUG_PIPELINE_USE 0 // 1
 
 namespace tl
 {
