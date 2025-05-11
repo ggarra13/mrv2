@@ -11,4 +11,5 @@
 #include "shaders/textFragment.spv.h"
 #include "shaders/textureFragment.spv.h"
 #include "shaders/Vertex2.spv.h"
+#include "shaders/Vertex2NoUVs.spv.h"
 #include "shaders/Vertex3.spv.h"

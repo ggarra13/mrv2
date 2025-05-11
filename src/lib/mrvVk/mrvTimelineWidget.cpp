@@ -836,6 +836,7 @@ void main()
         void TimelineWidget::draw()
         {
             TLRENDER_P();
+            return;
             
             const math::Size2i renderSize(pixel_w(), pixel_h());
 

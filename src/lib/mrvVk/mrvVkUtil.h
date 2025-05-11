@@ -26,7 +26,6 @@ namespace mrv
     inline void drawRectOutline(
         const std::shared_ptr<timeline_vlk::Render>& render,
         const std::string& pipelineName,
-        const VkRenderPass renderPass,
         const math::Box2i& rect, const image::Color4f& color, const int width)
     {
         geom::TriangleMesh2 mesh;
@@ -57,8 +56,8 @@ namespace mrv
 
         math::Vector2i pos;
         
-        render->drawMesh(pipelineName, "mesh", "mesh",
-                         renderPass, mesh, pos, color);
+        render->drawMesh(pipelineName, "mesh", "mesh", "mesh", mesh, pos, color,
+                         false);
         
     }
 
@@ -66,7 +65,6 @@ namespace mrv
     void drawFilledCircle(
         const std::shared_ptr<timeline_vlk::Render>& render,
         const std::string& pipelineName,
-        const VkRenderPass renderPass,
         const math::Vector2i& center, const float radius,
         const image::Color4f& color, const bool soft = false);
 

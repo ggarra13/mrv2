@@ -120,11 +120,39 @@ namespace mrv
             for (size_t i = 0; i < numVertices; ++i)
                 mesh.v.push_back(math::Vector2f(draw[i].x, draw[i].y));
 
-            std::string shader = "hard";
-            if (soft) shader = "soft";
+            bool enableBlending = false;
+            if (color.a < 0.99F)
+                enableBlending = true;
+        
+            VkBlendFactor srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+            VkBlendFactor dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+            VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+            VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
 
-            render->drawMesh(pipelineName, shader, shader, "mesh",
-                             mesh, math::Vector2i(0, 0), color, true);
+            std::string shaderName = "hard";
+
+            // This is not working
+            if (soft)
+            {
+                enableBlending = true;
+                shaderName = "soft";
+            }
+
+            // This works, so blending is working
+            if (pipelineName == "erase")
+            {
+                enableBlending = true;
+                srcColorBlendFactor = VK_BLEND_FACTOR_ZERO;
+                dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+                srcAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+                dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+            }
+
+            render->drawMesh(pipelineName, shaderName, shaderName, "mesh",
+                             mesh, math::Vector2i(0, 0), color,
+                             enableBlending,
+                             srcColorBlendFactor, dstColorBlendFactor,
+                             srcAlphaBlendFactor, dstAlphaBlendFactor);
         }
 
         void Lines::drawLine(

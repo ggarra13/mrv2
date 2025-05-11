@@ -86,7 +86,8 @@ namespace tl
             //! Draw a rectangle.
             virtual void
             drawRect(const math::Box2i&, const image::Color4f&,
-                     const std::string& pipelineName = "") = 0;
+                     const std::string& pipelineName = "",
+                     const bool enableBlending = true) = 0;
 
             //! Draw a triangle mesh.
             virtual void drawMesh(

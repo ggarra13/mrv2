@@ -324,7 +324,6 @@ namespace mrv
 
             switch (p.stereo3DOptions.output)
             {
-                break;
             case Stereo3DOutput::Scanlines:
                 _drawScanlines(left, right);
                 break;
@@ -399,11 +398,11 @@ namespace mrv
                 shape->color.a *= shape->fade;
                 if (auto vkshape = dynamic_cast<VKPathShape*>(shape.get()))
                 {
-                    vkshape->draw(vk.render, vk.lines);
+                    vkshape->draw(vk.annotationRender, vk.lines);
                 }
                 else if (auto vkshape = dynamic_cast<VKShape*>(shape.get()))
                 {
-                    vkshape->draw(vk.render, vk.lines);
+                    vkshape->draw(vk.annotationRender, vk.lines);
                 }
                 else
                 {
@@ -414,7 +413,7 @@ namespace mrv
         }
 
         void Viewport::_drawAnnotations(
-            const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay,
+            const std::shared_ptr<tl::vlk::OffscreenBuffer>& annotationBuffer,
             const math::Matrix4x4f& renderMVP, const otime::RationalTime& time,
             const std::vector<std::shared_ptr<draw::Annotation>>& annotations,
             const math::Size2i& viewportSize)
@@ -422,19 +421,21 @@ namespace mrv
             TLRENDER_P();
             MRV2_VK();
 
-            overlay->transitionToColorAttachment(vk.cmd);
-                
+            // Transition annotation buffer to start rendering to it.
+            annotationBuffer->transitionToColorAttachment(vk.cmd);
+
+            // Start the annotation render.
             timeline::RenderOptions renderOptions;
             renderOptions.colorBuffer = image::PixelType::RGBA_U8;
 
-            vk.render->begin(vk.cmd, overlay, m_currentFrameIndex,
-                             viewportSize, renderOptions);
-            // vk.render->setOCIOOptions(timeline::OCIOOptions());
-            // vk.render->setLUTOptions(timeline::LUTOptions());
-            vk.render->setTransform(renderMVP);
-            
-            vk.render->beginRenderPass();
+            vk.annotationRender->begin(vk.cmd, annotationBuffer, m_currentFrameIndex,
+                                       viewportSize, renderOptions);
+            vk.annotationRender->setOCIOOptions(timeline::OCIOOptions());
+            vk.annotationRender->setLUTOptions(timeline::LUTOptions());
+            vk.annotationRender->setTransform(renderMVP);
+            vk.annotationRender->beginRenderPass();
 
+            // Iterate through each annotation.
             for (const auto& annotation : annotations)
             {
                 const auto& annotationTime = annotation->time;
@@ -476,11 +477,11 @@ namespace mrv
                         continue;
                     
                     _drawShape(shape, alphamult);
-                    
                 }
             }
-            vk.render->endRenderPass();
-            vk.render->end();
+            
+            vk.annotationRender->endRenderPass();
+            vk.annotationRender->end();
         }
 
         void Viewport::_compositeOverlay(
@@ -549,16 +550,13 @@ namespace mrv
             // standardard premult composite is
             // done later in the shaders.
             
-            // Bind the shaders to the current frame index.
-            vk.annotationShader->bind(m_currentFrameIndex);
 
             // Bind the main composition pipeline (created/managed outside this
             // draw loop)
             vkCmdBindPipeline(vk.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, vk.annotation_pipeline);
 
-            // --- Update Descriptor Set for the SECOND pass (Composition) ---
-            // This updates the descriptor set for the CURRENT frame index on
-            // the CPU.
+            // --- Update Descriptor Set for the SECOND pass (Composition of Annotations) ---
+            vk.annotationShader->bind(m_currentFrameIndex);
             vk.annotationShader->setUniform("transform.mvp", orthoMatrix, vlk::kShaderVertex);
             timeline::Channels channels = timeline::Channels::Color;
             if (!p.displayOptions.empty())
@@ -639,8 +637,7 @@ namespace mrv
             box.max.x *= p.viewZoom;
             box.max.y *= p.viewZoom;
             
-            drawRectOutline(vk.render, pipelineName, renderPass(),
-                            box, color, width);
+            drawRectOutline(vk.render, pipelineName, box, color, width);
         }
 
         void Viewport::_drawAreaSelection() const noexcept

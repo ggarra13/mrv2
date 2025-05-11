@@ -81,7 +81,7 @@ namespace tl
                 case timeline::Background::Solid:
                 {
                     p.fbo->beginRenderPass(p.cmd);
-                    drawRect("solid", "rect", "rect", box, options.color0);
+                    drawRect("solid", "rect", "rect", box, options.color0, false);
                     p.fbo->endRenderPass(p.cmd);
                     break;
                 }

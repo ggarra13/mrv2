@@ -409,7 +409,7 @@ namespace tl
             event.render->drawRect(
                 math::Box2i(g.min.x, y, g.w(), h),
                 event.style->getColorRole(ui::ColorRole::Window),
-                "timeline_background");
+                "timeline_background", false);
 
             y = y + h;
             h = p.size.border;
@@ -1005,7 +1005,7 @@ namespace tl
                 event.render->drawRect(
                     math::Box2i(pos.x, pos.y, p.size.border * 2, g.h()),
                     event.style->getColorRole(ui::ColorRole::Red),
-                    "Current Time Marker");
+                    "Current Time Marker", false);
 
                 const std::string label =
                     _data->timeUnitsModel->getLabel(p.currentTime);

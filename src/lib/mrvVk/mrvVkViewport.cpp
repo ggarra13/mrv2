@@ -93,8 +93,12 @@ namespace mrv
         void Viewport::prepare_pipeline_layout()
         {
             MRV2_VK();
-
+            
             VkResult result;
+
+            //
+            // Prepare main buffer comping layout 
+            //
 
             VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = {};
             pPipelineLayoutCreateInfo.sType =
@@ -122,6 +126,10 @@ namespace mrv
                 device(), &pPipelineLayoutCreateInfo, NULL,
                 &vk.pipeline_layout);
 
+
+            //
+            // Prepare annotation pipeline layout
+            //
             
             pPipelineLayoutCreateInfo = {};
             pPipelineLayoutCreateInfo.sType =
@@ -255,7 +263,7 @@ namespace mrv
             colorBlendAttachment.blendEnable = VK_TRUE;
             colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
             colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-            colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+            colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
             colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
             cb.attachments.push_back(colorBlendAttachment);
 
@@ -412,11 +420,13 @@ namespace mrv
 
             wait_device();
 
-            // Destroy main render
+            // Destroy main renders
             vk.render.reset();
+            vk.annotationRender.reset();
 
             // Destroy auxiliary render classes
             vk.lines.reset();
+            
             // Destroy Buffers
             vk.buffer.reset();
             vk.annotation.reset();
@@ -449,6 +459,9 @@ namespace mrv
                 if (!vk.render)
                     vk.render = timeline_vlk::Render::create(ctx, context);
 
+                if (!vk.annotationRender)
+                    vk.annotationRender = timeline_vlk::Render::create(ctx, context);
+                
                 if (!p.fontSystem)
                     p.fontSystem = image::FontSystem::create(context);
 
@@ -503,7 +516,7 @@ namespace mrv
             end_render_pass(cmd);
 
             vk.cmd = cmd;
-
+            
             const auto& viewportSize = getViewportSize();
             const auto& renderSize = getRenderSize();
 
@@ -808,8 +821,7 @@ namespace mrv
                     vk.annotation, viewportSize, offscreenBufferOptions))
                 {
                     vk.annotation = vlk::OffscreenBuffer::create(
-                        ctx, viewportSize,
-                        offscreenBufferOptions);
+                        ctx, viewportSize, offscreenBufferOptions);
                     vk.avbo.reset();
                     
                     const auto& mesh = geom::box(math::Box2i(0, 0,
@@ -832,11 +844,8 @@ namespace mrv
                     }
                 }
                 
-                std::cerr << "--------------------------- DRAW ANNOTATIONS" << std::endl;
                 _drawAnnotations(
                     vk.annotation, mvp, currentTime, annotations, viewportSize);
-                std::cerr << "--------------------------- DREW ANNOTATIONS" << std::endl;
-
             }
 
             
@@ -900,9 +909,7 @@ namespace mrv
                 const math::Matrix4x4f orthoMatrix = math::ortho(
                     0.F, static_cast<float>(viewportSize.w),
                     static_cast<float>(viewportSize.h), 0.0F, -1.F, 1.F);
-                std::cerr << "--------------------------- COMP ANNOTATIONS" << std::endl;
                 _compositeAnnotations(vk.annotation, orthoMatrix, viewportSize);
-                std::cerr << "--------------------------- COMPED ANNOTATIONS" << std::endl;
             }
 
             // if (p.dataWindow)
@@ -979,11 +986,9 @@ namespace mrv
                 updatePixelBar();
 
 
-            std::cerr << "transition buffer" << std::endl;
             vk.buffer->transitionToColorAttachment(cmd);
             if (vk.annotation)
             {
-                std::cerr << "transition annotation buffer" << std::endl;
                 vk.annotation->transitionToColorAttachment(cmd);
             }
         }
@@ -1445,7 +1450,7 @@ namespace mrv
             msg["value"] = value;
             tcp->pushMessage(msg);
         }
-
+        
     } // namespace vulkan
 
 } // namespace mrv

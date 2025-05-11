@@ -103,6 +103,7 @@ namespace tl
             math::Size2i getRenderSize() const override;
             void setRenderSize(const math::Size2i&) override;
             std::shared_ptr<vlk::OffscreenBuffer> getFBO() const;
+            VkRenderPass getRenderPass() const;
             math::Box2i getViewport() const override;
             void setViewport(const math::Box2i&) override;
             void beginRenderPass();
@@ -126,7 +127,8 @@ namespace tl
                           const math::Box2i&, const image::Color4f&,
                           const bool enableBlending = true);
             void drawRect(const math::Box2i&, const image::Color4f&,
-                          const std::string& pipelineName = "timeline") override;
+                          const std::string& pipelineName = "timeline",
+                          const bool enableBlending = true) override;
             void drawMesh(const std::string& pipelineName,
                           const std::string& pipelineLayoutName,
                           const std::string& shaderName,
@@ -134,7 +136,15 @@ namespace tl
                           const geom::TriangleMesh2&,
                           const math::Vector2i& position,
                           const image::Color4f&,
-                          const bool enableBlending = false);
+                          const bool enableBlending = false,
+                          const VkBlendFactor srcColorBlendFactor =
+                          VK_BLEND_FACTOR_SRC_ALPHA,
+                          const VkBlendFactor dstColorBlendFactor =
+                          VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                          const VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
+                          const VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                          const VkBlendOp colorBlendOp = VK_BLEND_OP_ADD,
+                          const VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD);
             //! These functions draw to the viewport
             void drawRect(const std::string& pipelineName,
                           const VkRenderPass renderPass,

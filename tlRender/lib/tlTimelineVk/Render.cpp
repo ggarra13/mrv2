@@ -775,13 +775,13 @@ namespace tl
 #if USE_PRECOMPILED_SHADERS
                 p.shaders["rect"] = vlk::Shader::create(
                     ctx,
-                    Vertex2_spv,
-                    Vertex2_spv_len,
+                    Vertex2NoUVs_spv,
+                    Vertex2NoUVs_spv_len,
                     meshFragment_spv,
                     meshFragment_spv_len, "rect");
 #else
                 p.shaders["rect"] = vlk::Shader::create(
-                    ctx, vertex2Source(), meshFragmentSource(), "rect");
+                    ctx, vertex2NoUVsSource(), meshFragmentSource(), "rect");
 #endif
                 p.shaders["rect"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
@@ -1001,13 +1001,12 @@ namespace tl
 #endif
                 p.shaders["hard"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["hard"]->addPush(
-                    "color", color, vlk::kShaderFragment);
+                p.shaders["hard"]->addPush("color", color);
                 _createBindingSet(p.shaders["hard"]);
             }
             if (!p.shaders["soft"])
             {
-#if USE_PRECOMPILED_SHADERS
+#if 0 //USE_PRECOMPILED_SHADERS
                 p.shaders["soft"] = vlk::Shader::create(
                     ctx,
                     Vertex2_spv,
@@ -1020,8 +1019,7 @@ namespace tl
 #endif
                 p.shaders["soft"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["soft"]->addPush(
-                    "color", color, vlk::kShaderFragment);
+                p.shaders["soft"]->addPush("color", color);
                 _createBindingSet(p.shaders["soft"]);
             }
             _displayShader();
@@ -1189,32 +1187,14 @@ namespace tl
             TLRENDER_P();
 
             p.fbo->transitionToColorAttachment(p.cmd);
-            
-            VkClearValue clearValues[2];
-            clearValues[0].color = {0.F, 0.F, 0.F, 0.F};
-            clearValues[1].depthStencil = {1.F, 0};
-
-            VkRenderPassBeginInfo rpBegin{};
-            rpBegin.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-            rpBegin.renderPass = p.fbo->getRenderPass();
-            rpBegin.framebuffer = p.fbo->getFramebuffer();
-            rpBegin.renderArea.offset = {0, 0};
-            rpBegin.renderArea.extent = p.fbo->getExtent(); // Use FBO extent
-            rpBegin.clearValueCount =
-                1 +
-                static_cast<uint16_t>(p.fbo->hasDepth() || p.fbo->hasStencil());
-            rpBegin.pClearValues = clearValues;
-
-            // Begin the first render pass instance within the single command
-            // buffer
-            vkCmdBeginRenderPass(p.cmd, &rpBegin, VK_SUBPASS_CONTENTS_INLINE);
+            p.fbo->beginRenderPass(p.cmd);
         }
 
         void Render::endRenderPass()
         {
             TLRENDER_P();
             
-            vkCmdEndRenderPass(p.cmd);
+            p.fbo->endRenderPass(p.cmd);
         }
         
         void Render::clearViewport(const image::Color4f& value)

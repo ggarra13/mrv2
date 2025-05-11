@@ -42,6 +42,7 @@ namespace tl
         // For drawing
         std::string vertexSource();
         std::string vertex2Source();
+        std::string vertex2NoUVsSource();
         std::string meshFragmentSource();
         std::string colorMeshVertexSource();
         std::string colorMeshFragmentSource();

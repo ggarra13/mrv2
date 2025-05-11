@@ -29,7 +29,6 @@ namespace mrv
     void drawFilledCircle(
         const std::shared_ptr<timeline_vlk::Render>& render,
         const std::string& pipelineName,
-        const VkRenderPass renderPass,
         const math::Vector2i& center, const float radius,
         const image::Color4f& color, const bool soft)
     {
@@ -61,9 +60,13 @@ namespace mrv
         triangle.v[2] = i + 1;
         mesh.triangles.emplace_back(triangle);
 
+        bool enableBlending = false;
+        if (color.a < 0.99F)
+            enableBlending = true;
+        
         const math::Vector2i pos;
-        render->drawMesh(pipelineName, "rect", "mesh", renderPass,
-                         mesh, pos, color, true);
+        render->drawMesh(pipelineName, "rect", "rect", "mesh",
+                         mesh, pos, color, enableBlending);
     }
 
     geom::TriangleMesh2

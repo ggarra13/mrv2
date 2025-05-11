@@ -3,7 +3,7 @@
 
 #include <string>
 
-#define DEBUG_PIPELINE_USE 1
+#define DEBUG_PIPELINE_USE 0
 
 namespace tl
 {
@@ -289,6 +289,14 @@ namespace tl
             p.vaos[meshName]->bind(p.frameIndex);
             p.vaos[meshName]->draw(p.cmd, p.vbos[meshName]);
             p.garbage[p.frameIndex].vaos.push_back(p.vaos[meshName]);
+        }
+
+        VkRenderPass Render::getRenderPass() const
+        {
+            TLRENDER_P();
+            
+            if (p.fbo) return p.fbo->getRenderPass();
+            return VK_NULL_HANDLE;
         }
     }
 }

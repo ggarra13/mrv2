@@ -25,7 +25,7 @@ namespace mrv
         struct Viewport::VKPrivate
         {
             std::weak_ptr<system::Context> context;
-
+            
             // Main command buffer, stored for convenience.
             VkCommandBuffer  cmd = VK_NULL_HANDLE;
 
@@ -39,6 +39,7 @@ namespace mrv
             image::PixelType colorBufferType = image::PixelType::RGBA_F32;
 
             std::shared_ptr<timeline_vlk::Render> render;
+            std::shared_ptr<timeline_vlk::Render> annotationRender;
             std::shared_ptr<tl::vlk::OffscreenBuffer> buffer;
             std::shared_ptr<tl::vlk::OffscreenBuffer> stereoBuffer;
             std::shared_ptr<tl::vlk::OffscreenBuffer> annotation;

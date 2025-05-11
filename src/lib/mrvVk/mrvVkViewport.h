@@ -4,10 +4,11 @@
 
 #pragma once
 
-#include <tlVk/OffscreenBuffer.h>
 
 #include "mrvVk/mrvVkDefines.h"
 #include "mrvVk/mrvTimelineViewport.h"
+
+#include <tlVk/OffscreenBuffer.h>
 
 #include <tlDraw/Annotation.h>
 
@@ -145,7 +146,7 @@ namespace mrv
                 const std::shared_ptr<tl::vlk::OffscreenBuffer>&,
                 const math::Matrix4x4f& identity,
                 const math::Size2i& viewportSize);
-
+            
         protected:
             // Pipelines and layouts are managed outside the per-frame draw loop
 

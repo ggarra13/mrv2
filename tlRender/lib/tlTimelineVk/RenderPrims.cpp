@@ -90,9 +90,9 @@ namespace tl
         
         void
         Render::drawRect(const math::Box2i& box, const image::Color4f& color,
-                         const std::string& pipelineName)
+                         const std::string& pipelineName,
+                         const bool enableBlending)
         {
-            const bool enableBlending = true;
             drawRect(pipelineName, "rect", "rect", box, color, enableBlending);
         }
 
@@ -148,7 +148,13 @@ namespace tl
                               const geom::TriangleMesh2& mesh,
                               const math::Vector2i& position,
                               const image::Color4f& color,
-                              const bool enableBlending)
+                              const bool enableBlending,
+                              const VkBlendFactor srcColorBlendFactor,
+                              const VkBlendFactor dstColorBlendFactor,
+                              const VkBlendFactor srcAlphaBlendFactor,
+                              const VkBlendFactor dstAlphaBlendFactor,
+                              const VkBlendOp colorBlendOp,
+                              const VkBlendOp alphaBlendOp)
         {
             TLRENDER_P();
             const size_t size = mesh.triangles.size();
@@ -186,7 +192,10 @@ namespace tl
             {
                 createPipeline(
                     p.fbo, pipelineName, pipelineLayoutName,
-                    shaderName, meshName, enableBlending);
+                    shaderName, meshName, enableBlending,
+                    srcColorBlendFactor, dstColorBlendFactor,
+                    srcAlphaBlendFactor, dstAlphaBlendFactor,
+                    colorBlendOp, alphaBlendOp);
 
                 VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
                 vkCmdPushConstants(
