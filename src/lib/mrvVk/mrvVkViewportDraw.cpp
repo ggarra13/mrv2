@@ -535,7 +535,8 @@ namespace mrv
 
         void Viewport::_compositeAnnotations(
             const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay,
-            const math::Matrix4x4f& orthoMatrix, const math::Size2i& viewportSize)
+            const math::Matrix4x4f& orthoMatrix,
+            const math::Size2i& viewportSize)
         {
             TLRENDER_P();
             MRV2_VK();

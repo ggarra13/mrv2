@@ -192,6 +192,7 @@ namespace mrv
         lines->drawLines(
             render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::ROUND, catmullRomSpline, false, "erase");
+        abort();
     }
 
     void VKPolygonShape::draw(

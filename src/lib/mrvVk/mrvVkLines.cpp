@@ -123,7 +123,7 @@ namespace mrv
             std::string shader = "hard";
             if (soft) shader = "soft";
 
-            render->drawMesh(pipelineName, shader, shader,"mesh",
+            render->drawMesh(pipelineName, shader, shader, "mesh",
                              mesh, math::Vector2i(0, 0), color, true);
         }
 

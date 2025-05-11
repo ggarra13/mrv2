@@ -480,7 +480,7 @@ namespace mrv
                     vk.annotationShader->createUniform(
                         "transform.mvp", mvp, vlk::kShaderVertex);
                     vk.annotationShader->addFBO("textureSampler");
-                    int channels = 0; // Color
+                    int channels = 0; // Color Channel
                     vk.annotationShader->createUniform("channels", channels);
                     vk.annotationShader->createBindingSet();
                 }
@@ -812,7 +812,9 @@ namespace mrv
                         offscreenBufferOptions);
                     vk.avbo.reset();
                     
-                    const auto& mesh = geom::box(math::Box2i(0, 0, viewportSize.w, viewportSize.h));
+                    const auto& mesh = geom::box(math::Box2i(0, 0,
+                                                             viewportSize.w,
+                                                             viewportSize.h));
                     const size_t numTriangles = mesh.triangles.size();
                     vk.avbo = vlk::VBO::create(
                         numTriangles * 3, vlk::VBOType::Pos2_F32_UV_U16);
@@ -893,11 +895,11 @@ namespace mrv
             
             if (p.showAnnotations && !annotations.empty())
             {
-                // We already flipped the coords, so we use a normal ortho matrix
-                // here
+                // We already flipped the coords, so we use a normal ortho
+                // matrix here
                 const math::Matrix4x4f orthoMatrix = math::ortho(
-                    0.F, static_cast<float>(renderSize.w),
-                    static_cast<float>(renderSize.h), 0.0F, -1.F, 1.F);
+                    0.F, static_cast<float>(viewportSize.w),
+                    static_cast<float>(viewportSize.h), 0.0F, -1.F, 1.F);
                 std::cerr << "--------------------------- COMP ANNOTATIONS" << std::endl;
                 _compositeAnnotations(vk.annotation, orthoMatrix, viewportSize);
                 std::cerr << "--------------------------- COMPED ANNOTATIONS" << std::endl;
