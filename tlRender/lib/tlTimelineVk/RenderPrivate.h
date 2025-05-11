@@ -125,6 +125,9 @@ namespace tl
             // Vulkan variables
             VkCommandBuffer cmd;
             std::shared_ptr<vlk::OffscreenBuffer> fbo;
+            VkRenderPass renderPass;
+
+            // Current frame in the swapchain
             int32_t frameIndex; // must be an int32_t not an uint32_t.
 
             bool hdrMonitorFound = false;

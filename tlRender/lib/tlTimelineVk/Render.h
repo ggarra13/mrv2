@@ -104,6 +104,7 @@ namespace tl
             void setRenderSize(const math::Size2i&) override;
             std::shared_ptr<vlk::OffscreenBuffer> getFBO() const;
             VkRenderPass getRenderPass() const;
+            void setRenderPass(VkRenderPass);
             math::Box2i getViewport() const override;
             void setViewport(const math::Box2i&) override;
             void beginRenderPass();

@@ -41,7 +41,7 @@ it to Vulkan.
 			 - Vertical (minor validation error when switching)
 			 - Tile (minor validation error when switching)
 		 - Annotation cursor (circle)
-		 - Annotations (but needs reworking)
+		 - Annotations
 		 
 	 * Missing to check/add:
 		 * Missing Frames crosses
@@ -49,12 +49,13 @@ it to Vulkan.
 		 * Thumbnails in Timeline (crashes) / Editing
 		 * Thumbnails in Panels (done with OpenGL for now)
 		 * Saving of Movies/Pictures with Annotations
-		 * Annotations
 		 * Area color information
 		 * Temporary FLTK Text widget annotation (how to do it?)
+			 - Will have to code an equivalent in Vulkan and do my own
+			   event handling.
 		 * Text annotations (how to do it?)
 		 * How to use any FLTK font for annotation (how to do it?)
-		 * OpenUSD (how to do it?)
+		 * OpenUSD in Vulkan (how to do it?)
 		 
 - Fixed and simplified code for NDIView (hdr utility).
 - Fixed hdr utility for macOS Intel trying to pass full HDR10 or HLG data, 
