@@ -413,82 +413,27 @@ namespace mrv
             }
         }
 
-#if 1
-
-        void Viewport::_drawAnnotations(
-            const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay,
-            const math::Matrix4x4f& mvp, const otime::RationalTime& time,
-            const std::vector<std::shared_ptr<draw::Annotation>>& annotations,
-            const math::Size2i& renderSize)
-        {
-            TLRENDER_P();
-            MRV2_VK();
-
-            for (const auto& annotation : annotations)
-            {
-                const auto& annotationTime = annotation->time;
-                float alphamult = 0.F;
-                if (annotation->allFrames || time.floor() == annotationTime.floor())
-                    alphamult = 1.F;
-                else
-                {
-                    if (p.ghostPrevious)
-                    {
-                        for (short i = p.ghostPrevious - 1; i > 0; --i)
-                        {
-                            otime::RationalTime offset(i, time.rate());
-                            if ((time - offset).floor() == annotationTime.floor())
-                            {
-                                alphamult = 1.F - (float)i / p.ghostPrevious;
-                                break;
-                            }
-                        }
-                    }
-                    if (p.ghostNext)
-                    {
-                        for (short i = 1; i < p.ghostNext; ++i)
-                        {
-                            otime::RationalTime offset(i, time.rate());
-                            if ((time + offset).floor() == annotationTime.floor())
-                            {
-                                alphamult = 1.F - (float)i / p.ghostNext;
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                const auto& shapes = annotation->shapes;
-                for (const auto& shape : shapes)
-                {
-                    if (alphamult <= 0.001F)
-                        continue;
-                    vk.render->setTransform(mvp);
-                    
-                    _drawShape(shape, alphamult);
-                    
-                }
-            }
-        }
-#else
         void Viewport::_drawAnnotations(
             const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay,
             const math::Matrix4x4f& renderMVP, const otime::RationalTime& time,
             const std::vector<std::shared_ptr<draw::Annotation>>& annotations,
-            const math::Size2i& renderSize)
+            const math::Size2i& viewportSize)
         {
             TLRENDER_P();
             MRV2_VK();
 
-            // vlk::OffscreenBufferBinding binding(overlay);
-            
-
+            overlay->transitionToColorAttachment(vk.cmd);
+                
             timeline::RenderOptions renderOptions;
             renderOptions.colorBuffer = image::PixelType::RGBA_U8;
 
-            vk.render->begin(renderSize, renderOptions);
-            vk.render->setOCIOOptions(timeline::OCIOOptions());
-            vk.render->setLUTOptions(timeline::LUTOptions());
+            vk.render->begin(vk.cmd, overlay, m_currentFrameIndex,
+                             viewportSize, renderOptions);
+            // vk.render->setOCIOOptions(timeline::OCIOOptions());
+            // vk.render->setLUTOptions(timeline::LUTOptions());
+            vk.render->setTransform(renderMVP);
+            
+            vk.render->beginRenderPass();
 
             for (const auto& annotation : annotations)
             {
@@ -529,39 +474,13 @@ namespace mrv
                 {
                     if (alphamult <= 0.001F)
                         continue;
-                    vk.render->setTransform(renderMVP);
                     
                     _drawShape(shape, alphamult);
                     
                 }
             }
-        }
-#endif
-        void Viewport::_compositeAnnotations(
-            const math::Matrix4x4f& mvp, const math::Size2i& viewportSize)
-        {
-            TLRENDER_P();
-            MRV2_VK();
-
-            // vlk::SetAndRestore(GL_BLEND, GL_TRUE);
-
-            // glBlendFuncSeparate(
-            //     GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA,
-            //     GL_ONE_MINUS_SRC_ALPHA); // this is needed to composite soft
-            // brushes correctly.  Note that the
-            // standardard premult composite is
-            // done later in the shaders.
-            
-
-            // glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
-            
-
-            vk.annotationShader->bind(m_currentFrameIndex);
-            vk.annotationShader->setUniform("transform.mvp", mvp);
-            timeline::Channels channels = timeline::Channels::Color;
-            if (!p.displayOptions.empty())
-                channels = p.displayOptions[0].channels;
-            vk.annotationShader->setUniform("channels", static_cast<int>(channels));
+            vk.render->endRenderPass();
+            vk.render->end();
         }
 
         void Viewport::_compositeOverlay(
@@ -618,18 +537,48 @@ namespace mrv
             const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay,
             const math::Matrix4x4f& orthoMatrix, const math::Size2i& viewportSize)
         {
-            MRV2_VK();
             TLRENDER_P();
+            MRV2_VK();
 
-            _compositeAnnotations(orthoMatrix, viewportSize);
 
-            // glActiveTexture(GL_TEXTURE0);
-            // glBindTexture(GL_TEXTURE_2D, overlay->getColorID());
+             // glBlendFuncSeparate(
+            //     GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA,
+            //     GL_ONE_MINUS_SRC_ALPHA); // this is needed to composite soft
+            // brushes correctly.  Note that the
+            // standardard premult composite is
+            // done later in the shaders.
+            
+            // Bind the shaders to the current frame index.
+            vk.annotationShader->bind(m_currentFrameIndex);
 
-            if (vk.vao && vk.vbo)
+            // Bind the main composition pipeline (created/managed outside this
+            // draw loop)
+            vkCmdBindPipeline(vk.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, vk.annotation_pipeline);
+
+            // --- Update Descriptor Set for the SECOND pass (Composition) ---
+            // This updates the descriptor set for the CURRENT frame index on
+            // the CPU.
+            vk.annotationShader->setUniform("transform.mvp", orthoMatrix, vlk::kShaderVertex);
+            timeline::Channels channels = timeline::Channels::Color;
+            if (!p.displayOptions.empty())
+                channels = p.displayOptions[0].channels;
+            vk.annotationShader->setUniform("channels", static_cast<int>(channels));
+            vk.annotationShader->setFBO("textureSampler", overlay);
+            
+            // --- Bind Descriptor Set for the SECOND pass ---
+            // Record the command to bind the descriptor set for the CURRENT
+            // frame index
+            VkDescriptorSet descriptorSet = vk.annotationShader->getDescriptorSet();
+            vkCmdBindDescriptorSets(
+                vk.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, vk.annotation_pipeline_layout, 0, 1,
+                &descriptorSet, 0, nullptr);
+            
+            if (vk.avao && vk.avbo)
             {
-                vk.vao->bind(m_currentFrameIndex);
-                vk.vao->draw(vk.cmd, vk.vbo);
+                // Draw calls for the composition geometry (e.g., a
+                // screen-filling quad)
+                vk.avao->bind(m_currentFrameIndex);
+                vk.avao->draw(vk.cmd, vk.avbo);
             }
         }
 

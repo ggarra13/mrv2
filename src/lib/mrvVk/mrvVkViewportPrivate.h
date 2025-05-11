@@ -26,9 +26,13 @@ namespace mrv
         {
             std::weak_ptr<system::Context> context;
 
-            //! This is for swapchain pipeline
+            // Main command buffer, stored for convenience.
+            VkCommandBuffer  cmd = VK_NULL_HANDLE;
+
+            //! This is for compositing pipelines
             VkPipelineLayout pipeline_layout = VK_NULL_HANDLE;
-            VkCommandBuffer cmd = VK_NULL_HANDLE;
+            VkPipelineLayout annotation_pipeline_layout = VK_NULL_HANDLE;
+            VkPipeline       annotation_pipeline = VK_NULL_HANDLE;
 
             // tlRender variables
             //! Vulkan Offscreen buffers
@@ -38,8 +42,7 @@ namespace mrv
             std::shared_ptr<tl::vlk::OffscreenBuffer> buffer;
             std::shared_ptr<tl::vlk::OffscreenBuffer> stereoBuffer;
             std::shared_ptr<tl::vlk::OffscreenBuffer> annotation;
-            std::shared_ptr<tl::image::Image>
-                annotationImage; // only used on APPLE
+            std::shared_ptr<tl::image::Image> annotationImage; // only used on APPLE
             std::shared_ptr<tl::vlk::OffscreenBuffer> overlay;
             std::shared_ptr<vlk::Shader> shader;
             std::shared_ptr<vlk::Shader> annotationShader;
@@ -48,6 +51,9 @@ namespace mrv
             VkFence overlayFence;
             std::shared_ptr<vlk::VBO> vbo;
             std::shared_ptr<vlk::VAO> vao;
+            
+            std::shared_ptr<vlk::VBO> avbo;
+            std::shared_ptr<vlk::VAO> avao;
 
             std::shared_ptr<vulkan::Lines> lines;
 

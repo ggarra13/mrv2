@@ -137,10 +137,6 @@ namespace mrv
                                  const std::string&) noexcept;
 
             void _compositeAnnotations(
-                const math::Matrix4x4f& shaderMatrix,
-                const math::Size2i& viewportSize);
-
-            void _compositeAnnotations(
                 const std::shared_ptr<tl::vlk::OffscreenBuffer>&,
                 const math::Matrix4x4f& orthoMatrix,
                 const math::Size2i& viewportSize);
@@ -153,6 +149,7 @@ namespace mrv
         protected:
             // Pipelines and layouts are managed outside the per-frame draw loop
 
+            void prepare_annotation_pipeline();
             void prepare_pipeline();
             void prepare_pipeline_layout();
             void prepare_shaders();

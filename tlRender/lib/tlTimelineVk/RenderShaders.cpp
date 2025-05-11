@@ -649,10 +649,10 @@ void main()
               
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 fColor;
-              
-layout(set = 0, binding = 1) uniform OpacityUBO {
-     vec4 color;
-} ubo;
+            
+layout(push_constant) uniform PushConstants {
+    vec4 color;
+} pc;
 
 void main()
 {
@@ -673,9 +673,9 @@ void main()
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 fColor;
               
-layout(set = 0, binding = 1) uniform OpacityUBO {
-     vec4 color;
-} ubo;
+layout(push_constant) uniform PushConstants {
+    vec4 color;
+} pc;
               
 void main()
 {

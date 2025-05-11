@@ -92,7 +92,7 @@ namespace tl
                                                               options.color1,
                                                               options.checkersSize);
                     _create2DMesh("colorMesh", mesh);
-                    _createPipeline(p.fbo, "checkers", "checkers", "colorMesh", "colorMesh");
+                    createPipeline(p.fbo, "checkers", "checkers", "colorMesh", "colorMesh");
                     VkPipelineLayout pipelineLayout = p.pipelineLayouts["checkers"];
                     vkCmdPushConstants(
                         p.cmd, pipelineLayout,
@@ -124,7 +124,7 @@ namespace tl
                         geom::Vertex2(1, 0, 1),
                     });
                     _create2DMesh("colorMesh", mesh);
-                    _createPipeline(p.fbo, "gradient", "gradient", "colorMesh", "colorMesh");
+                    createPipeline(p.fbo, "gradient", "gradient", "colorMesh", "colorMesh");
                     VkPipelineLayout pipelineLayout = p.pipelineLayouts["gradient"];
                     vkCmdPushConstants(
                         p.cmd, pipelineLayout,
@@ -651,7 +651,7 @@ namespace tl
                     const std::string shaderName = "overlay";
                     const std::string meshName = "video";
                     const std::string pipelineLayoutName = shaderName;
-                    _createPipeline(p.fbo, pipelineName,
+                    createPipeline(p.fbo, pipelineName,
                                     pipelineLayoutName,
                                     shaderName, meshName,
                                     true);
@@ -800,7 +800,7 @@ namespace tl
                     const std::string shaderName = "difference";
                     const std::string meshName = "video";
                     const bool enableBlending = true;  
-                    _createPipeline(p.fbo, pipelineName,
+                    createPipeline(p.fbo, pipelineName,
                                     pipelineLayoutName, shaderName, meshName,
                                     enableBlending,
                                     VK_BLEND_FACTOR_SRC_ALPHA,
@@ -919,7 +919,6 @@ namespace tl
 
             float d1 = 1;
             float d2 = 1;
-            bool inDissolve = false;
             if (p.buffers["video"])
             {
                 for (const auto& layer : videoData.layers)
@@ -971,8 +970,6 @@ namespace tl
                             
                             if (p.buffers["dissolve"] && p.buffers["dissolve2"])
                             {
-                                inDissolve = true;
-                                
                                 p.buffers["dissolve"]->transitionToShaderRead(p.cmd);
                                 p.buffers["dissolve2"]->transitionToShaderRead(p.cmd);
 
@@ -992,7 +989,7 @@ namespace tl
 
                                 // Create or find a pipeline without blending
                                 bool enableBlending = false;
-                                _createPipeline(p.buffers["video"],
+                                createPipeline(p.buffers["video"],
                                                 pipelineDissolveName,
                                                 pipelineLayoutName,
                                                 shaderName, meshName,
@@ -1027,7 +1024,7 @@ namespace tl
 
                                 pipelineDissolveName = pipelineNameBase + "_Pass2_BlendColorForceAlpha";
                                 enableBlending = true;
-                                _createPipeline(
+                                createPipeline(
                                     p.buffers["video"],
                                     pipelineDissolveName,
                                     pipelineLayoutName, shaderName, meshName,

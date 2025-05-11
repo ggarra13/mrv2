@@ -3,7 +3,7 @@
 
 #include <string>
 
-#define DEBUG_PIPELINE_USE 0 // 1
+#define DEBUG_PIPELINE_USE 1
 
 namespace tl
 {
@@ -185,7 +185,7 @@ namespace tl
             vkCmdBindPipeline(p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
         }
         
-        void Render::_createPipeline(
+        void Render::createPipeline(
             const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
             const std::string& pipelineName,
             const std::string& pipelineLayoutName,

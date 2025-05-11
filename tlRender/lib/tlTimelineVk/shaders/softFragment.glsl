@@ -2,10 +2,10 @@
               
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 fColor;
-              
-layout(set = 0, binding = 1) uniform OpacityUBO {
-     vec4 color;
-} ubo;
+           
+layout(push_constant) uniform PushConstants {
+    vec4 color;
+} pc;
 
 void main()
 {
@@ -14,6 +14,6 @@ void main()
      float radius = 0.75;
      float feather = 0.25;
      float mult = smoothstep(radius - feather, radius + feather, ratio);
-     fColor = ubo.color;
+     fColor = pc.color;
      fColor.a *= mult;
 }

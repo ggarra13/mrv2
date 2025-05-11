@@ -74,8 +74,8 @@ namespace tl
             if (p.vaos["rect"])
             {
                 const std::string& pipelineLayoutName = shaderName;
-                _createPipeline(p.fbo, pipelineName, pipelineLayoutName,
-                                shaderName, meshName, enableBlending);
+                createPipeline(p.fbo, pipelineName, pipelineLayoutName,
+                               shaderName, meshName, enableBlending);
                 VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
                 vkCmdPushConstants(
                     p.cmd, pipelineLayout,
@@ -184,7 +184,7 @@ namespace tl
             }
             if (p.vaos[meshName] && p.vbos[meshName])
             {
-                _createPipeline(
+                createPipeline(
                     p.fbo, pipelineName, pipelineLayoutName,
                     shaderName, meshName, enableBlending);
 
@@ -592,7 +592,7 @@ namespace tl
                             textureIndex = item.textureIndex;
                             p.createTextMesh(ctx, mesh);
 
-                            _createPipeline(
+                            createPipeline(
                                 p.fbo, pipelineName, pipelineLayoutName,
                                 shaderName, meshName, enableBlending);
 
@@ -699,7 +699,7 @@ namespace tl
 
             p.createTextMesh(ctx, mesh);
             
-            _createPipeline(
+            createPipeline(
                 p.fbo, pipelineName, pipelineLayoutName,
                 shaderName, meshName, enableBlending);
             
@@ -739,7 +739,7 @@ namespace tl
             const std::string pipelineLayoutName = shaderName;
             const std::string meshName = "texture";
             
-            _createPipeline(
+            createPipeline(
                 p.fbo, pipelineName, pipelineLayoutName,
                 shaderName, meshName);
 
@@ -898,10 +898,10 @@ namespace tl
             const std::string pipelineLayoutName = "image";
             const std::string shaderName = "image";
             const std::string meshName = "image";
-            _createPipeline(fbo, pipelineName, pipelineLayoutName,
-                            shaderName, meshName, enableBlending,
-                            srcColorBlendFactor, dstColorBlendFactor,
-                            srcAlphaBlendFactor, dstAlphaBlendFactor);
+            createPipeline(fbo, pipelineName, pipelineLayoutName,
+                           shaderName, meshName, enableBlending,
+                           srcColorBlendFactor, dstColorBlendFactor,
+                           srcAlphaBlendFactor, dstAlphaBlendFactor);
             _bindDescriptorSets(pipelineLayoutName, shaderName);
             fbo->setupViewportAndScissor(p.cmd);
 

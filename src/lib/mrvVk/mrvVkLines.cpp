@@ -22,15 +22,6 @@
 #include <FL/Fl_Vk_Window.H>
 
 
-namespace tl
-{
-    namespace timeline_vlk
-    {
-        extern std::string vertex2Source();
-    } // namespace timeline_vlk
-
-} // namespace tl
-
 namespace mrv
 {
 
@@ -52,37 +43,6 @@ namespace mrv
             ctx(vulkan_ctx),
             m_renderPass(renderPass)
         {
-            TLRENDER_P();
-
-            if (!p.softShader)
-            {
-                try
-                {
-                    const std::string& vertexSource =
-                        tl::timeline_vlk::vertex2Source();
-                    p.softShader = vlk::Shader::create(ctx,
-                                                       vertexSource,
-                                                       softFragmentSource());
-                    math::Matrix4x4f mvp;
-                    image::Color4f color(1.F, 1.F, 1.F);
-                    p.softShader->createUniform("transform.mvp", mvp,
-                                                vlk::kShaderVertex);
-
-                    p.softShader->addPush("color", color, vlk::kShaderFragment);
-                    p.hardShader = vlk::Shader::create(ctx,
-                                                       vertexSource,
-                                                       hardFragmentSource());
-                    p.hardShader->createUniform("transform.mvp", mvp,
-                                                vlk::kShaderVertex);
-
-                    p.hardShader->addPush("color", color, vlk::kShaderFragment);
-                }
-                catch (const std::exception& e)
-                {
-                    throw e;
-                }
-            }
-
         }
 
         Lines::~Lines() {}
@@ -93,7 +53,8 @@ namespace mrv
             const float width, const bool soft,
             const draw::Polyline2D::JointStyle jointStyle,
             const draw::Polyline2D::EndCapStyle endStyle,
-            const bool catmullRomSpline, const bool allowOverlap)
+            const bool catmullRomSpline, const bool allowOverlap,
+            const std::string& pipelineName)
         {
             TLRENDER_P();
             using namespace tl::draw;
@@ -158,8 +119,11 @@ namespace mrv
             mesh.v.reserve(numVertices);
             for (size_t i = 0; i < numVertices; ++i)
                 mesh.v.push_back(math::Vector2f(draw[i].x, draw[i].y));
-            
-            render->drawMesh("annotation", "rect", "mesh", renderPass(),
+
+            std::string shader = "hard";
+            if (soft) shader = "soft";
+
+            render->drawMesh(pipelineName, shader, shader,"mesh",
                              mesh, math::Vector2i(0, 0), color, true);
         }
 

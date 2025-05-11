@@ -172,10 +172,26 @@ namespace mrv
         color.r = color.g = color.b = 0.F;
         color.a = 1.F;
 
+        std::string shaderName = "hard";
+        if (soft)
+            shaderName = "soft";
+        const bool enableBlending = true;
+        render->createPipeline(render->getFBO(),
+                               "erase",
+                               shaderName,
+                               shaderName,
+                               "mesh",
+                               enableBlending,
+                               VK_BLEND_FACTOR_ZERO,
+                               VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                               VK_BLEND_FACTOR_ZERO,
+                               VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);
+                               
+        
         const bool catmullRomSpline = false;
         lines->drawLines(
             render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
-            Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
+            Polyline2D::EndCapStyle::ROUND, catmullRomSpline, false, "erase");
     }
 
     void VKPolygonShape::draw(

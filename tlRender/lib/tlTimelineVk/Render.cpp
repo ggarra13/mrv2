@@ -1070,7 +1070,7 @@ namespace tl
                 math::ortho(
                     0.F, static_cast<float>(renderSize.w), 0.F,
                     static_cast<float>(renderSize.h), -1.F, 1.F));
-            applyTransforms();
+            // applyTransforms();
         }
 
         void Render::end()
@@ -1184,6 +1184,39 @@ namespace tl
             //     value.h());
         }
 
+        void Render::beginRenderPass()
+        {
+            TLRENDER_P();
+
+            p.fbo->transitionToColorAttachment(p.cmd);
+            
+            VkClearValue clearValues[2];
+            clearValues[0].color = {0.F, 0.F, 0.F, 0.F};
+            clearValues[1].depthStencil = {1.F, 0};
+
+            VkRenderPassBeginInfo rpBegin{};
+            rpBegin.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+            rpBegin.renderPass = p.fbo->getRenderPass();
+            rpBegin.framebuffer = p.fbo->getFramebuffer();
+            rpBegin.renderArea.offset = {0, 0};
+            rpBegin.renderArea.extent = p.fbo->getExtent(); // Use FBO extent
+            rpBegin.clearValueCount =
+                1 +
+                static_cast<uint16_t>(p.fbo->hasDepth() || p.fbo->hasStencil());
+            rpBegin.pClearValues = clearValues;
+
+            // Begin the first render pass instance within the single command
+            // buffer
+            vkCmdBeginRenderPass(p.cmd, &rpBegin, VK_SUBPASS_CONTENTS_INLINE);
+        }
+
+        void Render::endRenderPass()
+        {
+            TLRENDER_P();
+            
+            vkCmdEndRenderPass(p.cmd);
+        }
+        
         void Render::clearViewport(const image::Color4f& value)
         {
             TLRENDER_P();
@@ -1194,8 +1227,7 @@ namespace tl
 
             VkRenderPassBeginInfo rpBegin{};
             rpBegin.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-            rpBegin.renderPass =
-                p.fbo->getRenderPass(); // Use the FBO's render pass
+            rpBegin.renderPass = p.fbo->getRenderPass();
             rpBegin.framebuffer = p.fbo->getFramebuffer();
             rpBegin.renderArea.offset = {0, 0};
             rpBegin.renderArea.extent = p.fbo->getExtent(); // Use FBO extent
@@ -1217,13 +1249,17 @@ namespace tl
 
         void Render::setClipRectEnabled(bool value)
         {
-            TLRENDER_P();
-            p.clipRectEnabled = value;
+            _p->clipRectEnabled = value;
         }
 
         math::Box2i Render::getClipRect() const
         {
             return _p->clipRect;
+        }
+
+        std::shared_ptr<vlk::OffscreenBuffer> Render::getFBO() const
+        {
+            return _p->fbo;
         }
 
         void Render::setClipRect(const math::Box2i& value)
