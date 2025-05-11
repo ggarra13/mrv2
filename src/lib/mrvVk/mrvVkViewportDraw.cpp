@@ -375,7 +375,7 @@ namespace mrv
             p.mousePos = _getFocus();
             const auto& pos = _getRasterf();
             vk.render->setTransform(mvp);
-            vk.lines->drawCursor(vk.render, pos, pen_size, color);
+            vk.viewport->drawCursor(vk.render, pos, pen_size, color);
         }
 
         void Viewport::_drawShape(
@@ -490,8 +490,6 @@ namespace mrv
         {
             MRV2_VK();
             TLRENDER_P();
-            if (!vk.overlayPBO)
-                return;
 
             _compositeAnnotations(overlay, mvp, viewportSize);
             
@@ -637,7 +635,8 @@ namespace mrv
             box.max.x *= p.viewZoom;
             box.max.y *= p.viewZoom;
             
-            drawRectOutline(vk.render, pipelineName, box, color, width);
+            util::drawRectOutline(vk.render, pipelineName, box, color, width,
+                                  renderPass());
         }
 
         void Viewport::_drawAreaSelection() const noexcept

@@ -148,11 +148,20 @@ namespace mrv
                 dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
             }
 
-            render->drawMesh(pipelineName, shaderName, shaderName, "mesh",
-                             mesh, math::Vector2i(0, 0), color,
-                             enableBlending,
-                             srcColorBlendFactor, dstColorBlendFactor,
-                             srcAlphaBlendFactor, dstAlphaBlendFactor);
+            if (renderPass() == VK_NULL_HANDLE)
+            {
+                render->drawMesh("viewport", shaderName, shaderName, "mesh",
+                                 mesh, math::Vector2i(0, 0), color,
+                                 enableBlending,
+                                 srcColorBlendFactor, dstColorBlendFactor,
+                                 srcAlphaBlendFactor, dstAlphaBlendFactor);
+            }
+            else
+            {
+                render->drawMesh(pipelineName, shaderName, "mesh",
+                                 renderPass(), mesh, math::Vector2i(0, 0),
+                                 color);
+            }
         }
 
         void Lines::drawLine(

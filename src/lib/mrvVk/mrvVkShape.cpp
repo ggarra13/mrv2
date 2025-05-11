@@ -276,8 +276,8 @@ namespace mrv
             enableBlending = true;
 
         math::Vector2i v(center.x, center.y);
-        drawFilledCircle(render, "annotation", v, radius, color,
-                         enableBlending);
+        util::drawFilledCircle(render, "annotation", v, radius, color,
+                               enableBlending);
     }
 
     void VKFilledRectangleShape::draw(

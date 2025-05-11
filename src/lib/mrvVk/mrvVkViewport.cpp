@@ -426,6 +426,7 @@ namespace mrv
 
             // Destroy auxiliary render classes
             vk.lines.reset();
+            vk.viewport.reset();
             
             // Destroy Buffers
             vk.buffer.reset();
@@ -456,17 +457,16 @@ namespace mrv
             if (auto context = vk.context.lock())
             {
 
-                if (!vk.render)
-                    vk.render = timeline_vlk::Render::create(ctx, context);
+                vk.render = timeline_vlk::Render::create(ctx, context);
 
-                if (!vk.annotationRender)
-                    vk.annotationRender = timeline_vlk::Render::create(ctx, context);
+                vk.annotationRender = timeline_vlk::Render::create(ctx, context);
                 
-                if (!p.fontSystem)
-                    p.fontSystem = image::FontSystem::create(context);
+                p.fontSystem = image::FontSystem::create(context);
 
-                vk.lines = std::make_shared<vulkan::Lines>(ctx, renderPass());
+                vk.lines = std::make_shared<vulkan::Lines>(ctx, VK_NULL_HANDLE);
+                vk.viewport = std::make_shared<vulkan::Lines>(ctx, renderPass());
 
+                
                 const std::string& vertexSource = timeline_vlk::vertexSource();
                 const image::Color4f color(1.F, 1.F, 1.F);
                 math::Matrix4x4f mvp;
@@ -912,24 +912,24 @@ namespace mrv
                 _compositeAnnotations(vk.annotation, orthoMatrix, viewportSize);
             }
 
-            // if (p.dataWindow)
-            //     _drawDataWindow();
-            // if (p.displayWindow)
-            //     _drawDisplayWindow();
+            if (p.dataWindow)
+                _drawDataWindow();
+            if (p.displayWindow)
+                _drawDisplayWindow();
 
-            // if (p.safeAreas)
-            //     _drawSafeAreas();
+            if (p.safeAreas)
+                _drawSafeAreas();
 
-            // if (p.actionMode != ActionMode::kScrub &&
-            //     p.actionMode != ActionMode::kText &&
-            //     p.actionMode != ActionMode::kSelection &&
-            //     p.actionMode != ActionMode::kRotate && Fl::belowmouse() == this)
-            // {
-            //     _drawCursor(mvp);
-            // }
+            if (p.actionMode != ActionMode::kScrub &&
+                p.actionMode != ActionMode::kText &&
+                p.actionMode != ActionMode::kSelection &&
+                p.actionMode != ActionMode::kRotate && Fl::belowmouse() == this)
+            {
+                _drawCursor(mvp);
+            }
                 
-            // if (p.hudActive && p.hud != HudDisplay::kNone)
-            //     _drawHUD(cmd, alpha);
+            if (p.hudActive && p.hud != HudDisplay::kNone)
+                _drawHUD(cmd, alpha);
             
             // math::Box2i selection = p.colorAreaInfo.box = p.selection;
             // if (selection.max.x >= 0)
