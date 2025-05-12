@@ -220,8 +220,8 @@ if sys.version > '3':
 %include Fl_Fill_Slider.i
 %include Fl_Flex.i
 %include Fl_Float_Input.i
-%include Fl_FormsBitmap.i
-%include Fl_FormsPixmap.i
+ //%include Fl_FormsBitmap.i
+ //%include Fl_FormsPixmap.i
 %include Fl_Free.i
 %include Fl_Pixmap.i
 %include Fl_Grid.i
