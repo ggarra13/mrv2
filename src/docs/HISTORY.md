@@ -1,8 +1,7 @@
 v1.3.8
 ======
 
-- Fixed OpenEXR's Data Window and Display Window display which was crashing when the
-  coordinates had negative values.
+- Fixed OpenEXR's Data Window and Display Window display which was crashing when the coordinates had negative values.
 - Added proper support for all possible texture types of OpenGL that libplacebo might use.
 - Same for Vulkan's hdr utility.
 - Flattened tlRender from a submodule to a directory to start working on porting
@@ -15,6 +14,7 @@ it to Vulkan.
 - Improved runmeq.sh and runmet.sh scripts to exit early and with an error
   message if compilation fails.
 - Fixed a potential reset of the X11 server when hiding the timeline bar.
+- Fixed a crash with color area selection and switching to a clip of smaller size.
 - Started porting to Vulkan.
 
 	 * Working:

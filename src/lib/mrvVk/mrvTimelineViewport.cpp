@@ -1283,6 +1283,27 @@ namespace mrv
 
             p.videoData = values;
 
+            if (p.selection.max.x >= 0)
+            {
+                image::Size videoSize;
+                if (!values[0].layers.empty())
+                {
+                    const auto& image = values[0].layers[0].image;
+                    if (image && image->isValid())
+                    {
+                        videoSize = image->getSize();
+                    }
+                }
+                
+                if (p.videoSize != videoSize)
+                {
+                    math::Box2i area;
+                    area.max.x = -1;
+                    setSelectionArea(area);
+                    p.videoSize = videoSize;
+                }
+            }
+            
             if (p.resizeWindow)
             {
                 if (!p.presentation)

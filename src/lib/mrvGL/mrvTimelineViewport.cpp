@@ -1284,6 +1284,28 @@ namespace mrv
 
             p.videoData = values;
 
+            // Check to see if we keep area selection.
+            if (p.selection.max.x >= 0)
+            {
+                image::Size videoSize;
+                if (!values[0].layers.empty())
+                {
+                    const auto& image = values[0].layers[0].image;
+                    if (image && image->isValid())
+                    {
+                        videoSize = image->getSize();
+                    }
+                }
+
+                if (p.videoSize != videoSize)
+                {
+                    math::Box2i area;
+                    area.max.x = -1;
+                    setSelectionArea(area);
+                    p.videoSize = videoSize;
+                }
+            }
+
             if (p.resizeWindow)
             {
                 if (!p.presentation)
@@ -1414,25 +1436,6 @@ namespace mrv
                         panel::imageInfoPanel->videoRefresh();
                     if (metadataRefresh)
                         panel::imageInfoPanel->metadataRefresh();
-                }
-            }
-
-            if (p.selection.max.x >= 0)
-            {
-                if (!values[0].layers.empty())
-                {
-                    const auto& image = values[0].layers[0].image;
-                    if (image && image->isValid())
-                    {
-                        const auto& videoSize = image->getSize();
-                        if (p.videoSize != videoSize)
-                        {
-                            math::Box2i area;
-                            area.max.x = -1;
-                            setSelectionArea(area);
-                            p.videoSize = videoSize;
-                        }
-                    }
                 }
             }
 

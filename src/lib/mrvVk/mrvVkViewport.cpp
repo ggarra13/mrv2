@@ -530,6 +530,7 @@ namespace mrv
             const bool transparent =
                 hasAlpha || getBackgroundOptions().type ==
                                 timeline::Background::Transparent;
+            math::Box2i selection = p.colorAreaInfo.box = p.selection;
 
             if (renderSize.isValid())
             {
@@ -597,6 +598,27 @@ namespace mrv
                 
                 vlk::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = vk.colorBufferType;
+
+                if (selection.max.x >= 0)
+                {
+                    // Check min < max
+                    if (selection.min.x > selection.max.x)
+                    {
+                        int tmp = selection.max.x;
+                        selection.max.x = selection.min.x;
+                        selection.min.x = tmp;
+                    }
+                    if (selection.min.y > selection.max.y)
+                    {
+                        int tmp = selection.max.y;
+                        selection.max.y = selection.min.y;
+                        selection.min.y = tmp;
+                    }
+                    // Copy it again in case it changed
+                    p.colorAreaInfo.box = selection;
+
+                    vk.colorBufferType = image::PixelType::RGBA_F32;
+                }
 
                 if (!p.displayOptions.empty())
                 {
@@ -930,28 +952,6 @@ namespace mrv
                 
             if (p.hudActive && p.hud != HudDisplay::kNone)
                 _drawHUD(cmd, alpha);
-            
-            math::Box2i selection = p.colorAreaInfo.box = p.selection;
-            if (selection.max.x >= 0)
-            {
-                // Check min < max
-                if (selection.min.x > selection.max.x)
-                {
-                    int tmp = selection.max.x;
-                    selection.max.x = selection.min.x;
-                    selection.min.x = tmp;
-                }
-                if (selection.min.y > selection.max.y)
-                {
-                    int tmp = selection.max.y;
-                    selection.max.y = selection.min.y;
-                    selection.min.y = tmp;
-                }
-                // Copy it again in case it changed
-                p.colorAreaInfo.box = selection;
-
-            }
-            
                     
             if (selection.max.x >= 0)
                 _drawAreaSelection();
@@ -1350,14 +1350,6 @@ namespace mrv
                     return;
                 }
 
-                // if (p.image)
-                // {
-                //     const auto& renderSize = vk.buffer->getSize();
-                //     rgba.b = p.image[(pos.x + pos.y * renderSize.w) * 4];
-                //     rgba.g = p.image[(pos.x + pos.y * renderSize.w) * 4 + 1];
-                //     rgba.r = p.image[(pos.x + pos.y * renderSize.w) * 4 + 2];
-                //     rgba.a = p.image[(pos.x + pos.y * renderSize.w) * 4 + 3];
-                // }
             }
         }
 
@@ -1365,18 +1357,14 @@ namespace mrv
         {
             TLRENDER_P();
 
-            if (p.rawImage)
-            {
-                delete [] p.image;
-                p.image = nullptr;
-            }
+            p.image = nullptr;
         }
-        
+
         void Viewport::_mapBuffer()
         {
             TLRENDER_P();
             MRV2_VK();
-            
+
             const math::Box2i box = p.colorAreaInfo.box;
 
             const uint32_t W = box.w();
@@ -1394,189 +1382,11 @@ namespace mrv
 
             vkFreeCommandBuffers(device(), commandPool(), 1, &cmd);
 
-            void* data = vk.buffer->getLatestReadPixels();
-            if (!data)
+            p.image = reinterpret_cast<float*>(vk.buffer->getLatestReadPixels());
+            if (!p.image)
             {
-                LOG_ERROR("Could not get pixel under mouse");
+                LOG_ERROR("Could not get pixel area");
                 return;
-            }
-
-            const auto options = vk.buffer->getOptions();
-
-            const uint16_t channels = vk.buffer->getChannelCount();
-            const size_t rawSize = W * H * 4;
-            if (rawSize != p.rawImageSize)
-            {
-                delete [] p.image;
-                p.image = new float[W * H * 4];
-                p.rawImageSize = rawSize;
-            }
-
-            float* rgba = p.image;
-            uint8_t* ptr = reinterpret_cast<uint8_t*>(data);
-            for (unsigned Y = 0; Y < H; ++Y)
-            {
-                for (unsigned X = 0; X < W; ++X)
-                {
-                    switch (options.colorType)
-                    {
-                    case image::PixelType::RGB_F32:
-                    {
-                        float* pixels = reinterpret_cast<float*>(ptr);
-                        *rgba++ = pixels[0];
-                        *rgba++ = pixels[1];
-                        *rgba++ = pixels[2];
-                        *rgba++ = 1.F;
-                        ptr += sizeof(float) * 3;
-                        break;
-                    }
-                    case image::PixelType::RGBA_F32:
-                    {
-                        float* pixels = reinterpret_cast<float*>(ptr);
-                        *rgba++ = pixels[0];
-                        *rgba++ = pixels[1];
-                        *rgba++ = pixels[2];
-                        *rgba++ = pixels[3];
-                        ptr += sizeof(float) * 4;
-                        break;
-                    }
-                    case image::PixelType::RGB_F16:
-                    {
-                        half* pixels = reinterpret_cast<half*>(ptr);
-                        *rgba++ = pixels[0];
-                        *rgba++ = pixels[1];
-                        *rgba++ = pixels[2];
-                        *rgba++ = 1.F;
-                        ptr += sizeof(half) * 3;
-                        break;
-                    }
-                    case image::PixelType::RGBA_F16:
-                    {
-                        half* pixels = reinterpret_cast<half*>(ptr);
-                        *rgba++ = pixels[0];
-                        *rgba++ = pixels[1];
-                        *rgba++ = pixels[2];
-                        *rgba++ = pixels[3];
-                        ptr += sizeof(half) * 4;
-                        break;
-                    }
-                    case image::PixelType::RGB_U8:
-                    {
-                        uint8_t* pixels = reinterpret_cast<uint8_t*>(ptr);
-                        *rgba++ = static_cast<float>(pixels[0]) / 255.F;
-                        *rgba++ = static_cast<float>(pixels[1]) / 255.F;
-                        *rgba++ = static_cast<float>(pixels[2]) / 255.F;
-                        *rgba++ = 1.F;
-                        ptr += 3;
-                        break;
-                    }
-                    case image::PixelType::RGBA_U8:
-                    {
-                        uint8_t* pixels = reinterpret_cast<uint8_t*>(ptr);
-                        *rgba++ = static_cast<float>(pixels[0]) / 255.F;
-                        *rgba++ = static_cast<float>(pixels[1]) / 255.F;
-                        *rgba++ = static_cast<float>(pixels[2]) / 255.F;
-                        *rgba++ = static_cast<float>(pixels[3]) / 255.F;
-                        ptr += 4;
-                        break;
-                    }
-                    case image::PixelType::RGB_U16:
-                    {
-                        uint16_t* pixels = reinterpret_cast<uint16_t*>(ptr);
-                        *rgba++ = static_cast<float>(pixels[0]) / 65535.F;
-                        *rgba++ = static_cast<float>(pixels[1]) / 65535.F;
-                        *rgba++ = static_cast<float>(pixels[2]) / 65535.F;
-                        *rgba++ = 1.0;
-                        ptr += sizeof(uint16_t) * 3;
-                        break;
-                    }
-                    case image::PixelType::RGBA_U16:
-                    {
-                        uint16_t* pixels = reinterpret_cast<uint16_t*>(ptr);
-                        *rgba++ = static_cast<float>(pixels[0]) / 65535.F;
-                        *rgba++ = static_cast<float>(pixels[1]) / 65535.F;
-                        *rgba++ = static_cast<float>(pixels[2]) / 65535.F;
-                        *rgba++ = static_cast<float>(pixels[3]) / 65535.F;
-                        ptr += sizeof(uint16_t) * 4;
-                        break;
-                    }
-                    case image::PixelType::L_F32:
-                    {
-                        float* pixels = reinterpret_cast<float*>(ptr);
-                        *rgba++ = pixels[0];
-                        *rgba++ = pixels[0];
-                        *rgba++ = pixels[0];
-                        *rgba++ = 1.0F;
-                        break;
-                    }
-                    case image::PixelType::LA_F32:
-                    {
-                        float* pixels = reinterpret_cast<float*>(ptr);
-                        *rgba++ = pixels[0];
-                        *rgba++ = pixels[0];
-                        *rgba++ = pixels[0];
-                        *rgba++ = pixels[1];
-                        break;
-                    }
-                    case image::PixelType::L_F16:
-                    {
-                        half* pixels = reinterpret_cast<half*>(ptr);
-                        *rgba++ = pixels[0];
-                        *rgba++ = pixels[0];
-                        *rgba++ = pixels[0];
-                        *rgba++ = 1.0F;
-                        break;
-                    }
-                    case image::PixelType::LA_F16:
-                    {
-                        half* pixels = reinterpret_cast<half*>(ptr);
-                        *rgba++ = pixels[0];
-                        *rgba++ = pixels[0];
-                        *rgba++ = pixels[0];
-                        *rgba++ = pixels[1];
-                        break;
-                    }
-                    case image::PixelType::L_U8:
-                    {
-                        uint16_t* pixels = reinterpret_cast<uint16_t*>(ptr);
-                        *rgba++ = static_cast<float>(pixels[0]) / 65535.F;
-                        *rgba++ = static_cast<float>(pixels[0]) / 65535.F;
-                        *rgba++ = static_cast<float>(pixels[0]) / 65535.F;
-                        *rgba++ = 1.0F;
-                        break;
-                    }
-                    case image::PixelType::LA_U8:
-                    {
-                        uint8_t* pixels = reinterpret_cast<uint8_t*>(ptr);
-                        *rgba++ = static_cast<float>(pixels[0]) / 255.F;
-                        *rgba++ = static_cast<float>(pixels[0]) / 255.F;
-                        *rgba++ = static_cast<float>(pixels[0]) / 255.F;
-                        *rgba++ = static_cast<float>(pixels[1]) / 255.F;
-                        break;
-                    }
-                    case image::PixelType::L_U16:
-                    {
-                        uint16_t* pixels = reinterpret_cast<uint16_t*>(ptr);
-                        *rgba++ = static_cast<float>(pixels[0]) / 65535.F;
-                        *rgba++ = static_cast<float>(pixels[0]) / 65535.F;
-                        *rgba++ = static_cast<float>(pixels[0]) / 65535.F;
-                        *rgba++ = 1.0F;
-                        break;
-                    }
-                    case image::PixelType::LA_U16:
-                    {
-                        uint16_t* pixels = reinterpret_cast<uint16_t*>(ptr);
-                        *rgba++ = static_cast<float>(pixels[0]) / 65535.F;
-                        *rgba++ = static_cast<float>(pixels[0]) / 65535.F;
-                        *rgba++ = static_cast<float>(pixels[0]) / 65535.F;
-                        *rgba++ = static_cast<float>(pixels[1]) / 65535.F;
-                        break;
-                    }
-                    default:
-                        LOG_ERROR("Unhandled format " << options.colorType);
-                        break;
-                    }
-                }
             }
         }
 

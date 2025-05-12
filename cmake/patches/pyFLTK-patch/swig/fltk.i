@@ -222,7 +222,7 @@ if sys.version > '3':
 %include Fl_Float_Input.i
  //%include Fl_FormsBitmap.i
  //%include Fl_FormsPixmap.i
-%include Fl_Free.i
+ //%include Fl_Free.i
 %include Fl_Pixmap.i
 %include Fl_Grid.i
 %include Fl_GIF_Image.i

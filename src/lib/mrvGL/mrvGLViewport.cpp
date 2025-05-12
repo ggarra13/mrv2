@@ -734,6 +734,20 @@ namespace mrv
                         selection.max.y = selection.min.y;
                         selection.min.y = tmp;
                     }
+
+                    // // Sanity check
+                    // const auto& renderSize = gl.buffer->getSize();
+                    // if (selection.min.x >= renderSize.w)
+                    //     selection.min.x = renderSize.w - 1;
+                    // if (selection.min.y >= renderSize.h)
+                    //     selection.min.y = renderSize.h - 1;
+                    
+                    // if (selection.max.x >= renderSize.w)
+                    //     selection.max.x = renderSize.w - 1;
+                    // if (selection.max.y >= renderSize.h)
+                    //     selection.max.y = renderSize.h - 1;
+
+            
                     // Copy it again in case it changed
                     p.colorAreaInfo.box = selection;
 
