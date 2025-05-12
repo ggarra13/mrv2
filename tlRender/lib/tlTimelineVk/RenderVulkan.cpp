@@ -19,8 +19,7 @@ namespace tl
         void Render::_createBindingSet(const std::shared_ptr<vlk::Shader>& shader)
         {
             TLRENDER_P();
-            const auto bindingSet = shader->createBindingSet();
-            shader->useBindingSet(bindingSet);
+            auto bindingSet = shader->createBindingSet();
             p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
         }
         
@@ -219,7 +218,10 @@ namespace tl
             
             vlk::MultisampleStateInfo ms;
             ms.rasterizationSamples = fbo->getSampleCount();
-            
+
+            DEBUG_USE("Create pipeline for FBO " << fbo
+                      << " renderPass " << fbo->getRenderPass());
+            setRenderPass(fbo->getRenderPass());
             createPipeline(pipelineName, pipelineLayoutName,
                            fbo->getRenderPass(), shader, mesh, cb, ds, ms);
             

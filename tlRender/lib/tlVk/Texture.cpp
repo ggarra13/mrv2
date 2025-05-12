@@ -174,6 +174,8 @@ namespace tl
             return data[static_cast<std::size_t>(value)];
         }
 
+        std::unique_ptr<SamplersCache> Texture::samplersCache;
+        
         struct Texture::Private
         {
             image::Info info;
@@ -257,6 +259,10 @@ namespace tl
             _p(new Private),
             ctx(context)
         {
+            if (!samplersCache)
+            {
+                samplersCache = std::make_unique<SamplersCache>(ctx.device);
+            }
         }
 
         Texture::~Texture()
@@ -266,9 +272,6 @@ namespace tl
             VkDevice device = ctx.device;
 
             vkDeviceWaitIdle(device);
-
-            if (p.sampler != VK_NULL_HANDLE)
-                vkDestroySampler(device, p.sampler, nullptr);
 
             if (p.imageView != VK_NULL_HANDLE)
                 vkDestroyImageView(device, p.imageView, nullptr);
@@ -876,8 +879,10 @@ namespace tl
             samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
             samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
 
-            VK_CHECK(
-                vkCreateSampler(device, &samplerInfo, nullptr, &p.sampler));
+            p.sampler = samplersCache->getOrCreateSampler(samplerInfo);
+
+            // VK_CHECK(
+            //     vkCreateSampler(device, &samplerInfo, nullptr, &p.sampler));
         }
 
     } // namespace vlk

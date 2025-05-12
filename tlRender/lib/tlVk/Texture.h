@@ -4,11 +4,14 @@
 
 #pragma once
 
+#include <tlVk/SamplersCache.h>
 #include <tlVk/Vk.h>
 
 #include <tlTimeline/ImageOptions.h>
 
 #include <tlCore/Image.h>
+
+#include <memory>
 
 namespace tl
 {
@@ -31,6 +34,7 @@ namespace tl
         //! Get the Vulkan texture filter.
         VkFilter getTextureFilter(timeline::ImageFilter);
 
+        
         //! Vulkan texture.
         class Texture : public std::enable_shared_from_this<Texture>
         {
@@ -134,6 +138,8 @@ namespace tl
             void createImageView();
             void createSampler();
 
+            static std::unique_ptr<SamplersCache> samplersCache;
+            
             TLRENDER_PRIVATE();
         };
     } // namespace vlk

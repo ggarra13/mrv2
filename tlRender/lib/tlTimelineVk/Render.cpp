@@ -905,25 +905,6 @@ namespace tl
 
                 _createBindingSet(p.shaders["image"]);
             }
-            if (!p.shaders["wipe"])
-            {
-#if USE_PRECOMPILED_SHADERS
-                p.shaders["wipe"] = vlk::Shader::create(
-                    ctx,
-                    Vertex3_spv,
-                    Vertex3_spv_len,
-                    meshFragment_spv,
-                    meshFragment_spv_len, "wipe");
-#else
-                p.shaders["wipe"] = vlk::Shader::create(
-                    ctx, vertexSource(), meshFragmentSource(), "wipe");
-#endif
-                p.shaders["wipe"]->createUniform(
-                    "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["wipe"]->addPush("color", color, vlk::kShaderFragment);
-                
-                _createBindingSet(p.shaders["wipe"]);
-            }
             if (!p.shaders["overlay"])
             {
 #if USE_PRECOMPILED_SHADERS
@@ -1022,6 +1003,24 @@ namespace tl
                     "transform.mvp", transform, vlk::kShaderVertex);
                 p.shaders["soft"]->addPush("color", color);
                 _createBindingSet(p.shaders["soft"]);
+            }
+            if (!p.shaders["wipe"])
+            {
+#if USE_PRECOMPILED_SHADERS
+                p.shaders["wipe"] = vlk::Shader::create(
+                    ctx,
+                    Vertex2NoUVs_spv,
+                    Vertex2NoUVs_spv_len,
+                    meshFragment_spv,
+                    meshFragment_spv_len, "wipe");
+#else
+                p.shaders["wipe"] = vlk::Shader::create(
+                    ctx, vertex2NoUVsSource(), meshFragmentSource(), "wipe");
+#endif
+                p.shaders["wipe"]->createUniform(
+                    "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["wipe"]->addPush("color", color, vlk::kShaderFragment);
+                _createBindingSet(p.shaders["wipe"]);
             }
             _displayShader();
 

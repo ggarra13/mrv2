@@ -55,7 +55,6 @@ namespace tl
             write.descriptorCount = 1;
             write.pBufferInfo = &bufferInfo;
 
-            std::cerr << ">>>>>>>>>>>>> updated " << descriptorSet << std::endl;
             vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
         }
 
@@ -86,7 +85,6 @@ namespace tl
             write.descriptorCount = 1;
             write.pImageInfo = &imageInfo;
 
-            std::cerr << ">>>>>>>>>>>>> updated " << descriptorSet << std::endl;
             vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
         }
 
@@ -118,20 +116,17 @@ namespace tl
             write.descriptorCount = 1;
             write.pImageInfo = &imageInfo;
 
-            std::cerr << ">>>>>>>>>>>>> updated " << descriptorSet << std::endl;
             vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
         }
             
         void ShaderBindingSet::destroy()
         {
-            std::cerr << __PRETTY_FUNCTION__ << " uniforms" << std::endl;
             for (auto& [_, ubo] : uniforms)
             {
                 for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
                 {
                     if (ubo.buffers[i] != VK_NULL_HANDLE)
                     {
-                        std::cerr << "\tdestroy " << ubo.buffers[i] << std::endl;
                         vkDestroyBuffer(device,
                                         ubo.buffers[i],
                                         nullptr);
@@ -147,7 +142,6 @@ namespace tl
                 }
             }
 
-            std::cerr << __PRETTY_FUNCTION__ << " descriptorPools" << std::endl;
             for (auto& pool : descriptorPools)
             {
                 if (pool != VK_NULL_HANDLE)

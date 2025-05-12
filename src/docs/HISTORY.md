@@ -37,12 +37,12 @@ it to Vulkan.
 		 * Comparison Modes: 
 			 - A
 			 - B
-			 - Difference (minor validation error when switching)
-			 - Dissolve (minor validation error when switching)
-			 - Wipe (minor validation error when switching)
-			 - Horizontal (minor validation error when switching)
-			 - Vertical (minor validation error when switching)
-			 - Tile (minor validation error when switching)
+			 - Difference
+			 - Dissolve
+			 - Wipe (random validation error when switching)
+			 - Horizontal
+			 - Vertical
+			 - Tile
 		 - Annotation cursor (circle)
 		 - Annotations
 		 - Vectorscope

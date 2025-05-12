@@ -237,10 +237,7 @@ namespace tl
             const timeline::CompareOptions& compareOptions)
         {
             TLRENDER_P();
-
-#define DRAW_FIRST_PASS 1
-#define DRAW_SECOND_PASS 1
-
+            
             image::Color4f color(1.F, 0.F, 0.F);
             VkPipelineLayout pipelineLayout;
             std::string pipelineLayoutName = "wipe_left";
@@ -251,10 +248,10 @@ namespace tl
             offscreenBufferOptions.depth = vlk::OffscreenDepth::_24;
             offscreenBufferOptions.stencil = vlk::OffscreenStencil::_8;
             offscreenBufferOptions.clear = false;
-            if (doCreate(p.buffers["wipe"], offscreenBufferSize,
+            if (doCreate(p.buffers["wipe_image"], offscreenBufferSize,
                          offscreenBufferOptions))
             {
-                p.buffers["wipe"] =
+                p.buffers["wipe_image"] =
                     vlk::OffscreenBuffer::create(ctx, offscreenBufferSize,
                                                  offscreenBufferOptions);
             }
@@ -280,11 +277,10 @@ namespace tl
             // Main FBO Transition
             p.fbo->transitionToColorAttachment(p.cmd);
             
-#if DRAW_FIRST_PASS
             // Draw left image to "wipe" buffer
             if (!videoData.empty() && !boxes.empty())
-            {   
-                p.buffers["wipe"]->transitionToColorAttachment(p.cmd);
+            {
+                p.buffers["wipe_image"]->transitionToColorAttachment(p.cmd);
                 
                 _createBindingSet(p.shaders["display"]);
                 p.shaders["display"]->setUniform(
@@ -292,7 +288,7 @@ namespace tl
                     math::ortho(0.F, static_cast<float>(offscreenBufferSize.w),
                                 0.F, static_cast<float>(offscreenBufferSize.h), -1.F, 1.F));
                 _drawVideo(
-                    p.buffers["wipe"], "display", 
+                    p.buffers["wipe_image"], "display", 
                     videoData[0], boxes[0],
                     !imageOptions.empty() ? std::make_shared<timeline::ImageOptions>(imageOptions[0]) : nullptr,
                     !displayOptions.empty() ? displayOptions[0] : timeline::DisplayOptions());  
@@ -300,7 +296,7 @@ namespace tl
                 p.shaders["display"]->setUniform("transform.mvp", p.transform,
                                                  vlk::kShaderVertex);
                 
-                p.buffers["wipe"]->transitionToShaderRead(p.cmd);
+                p.buffers["wipe_image"]->transitionToShaderRead(p.cmd);
             }
 
             // Draw stencil triangle mesh
@@ -322,7 +318,7 @@ namespace tl
             p.fbo->beginRenderPass(p.cmd);
 
             
-            pipelineLayoutName = "wipe_left";
+            pipelineLayoutName = "wipe_left_stencil";
             {
                 vlk::ColorBlendStateInfo cb;
                 vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
@@ -348,8 +344,8 @@ namespace tl
 
             
                 // Draw left stencil mask
-                createPipeline("wipe_stencil1", pipelineLayoutName,
-                               getRenderPass(),
+                createPipeline("wipe_left_stencil", pipelineLayoutName,
+                               p.fbo->getRenderPass(),
                                p.shaders["wipe"], p.vbos["wipe"],
                                cb, ds);
             }
@@ -364,10 +360,9 @@ namespace tl
             _bindDescriptorSets(pipelineLayoutName, "wipe");
 
             _vkDraw("wipe");
-
             
             // Draw video
-            pipelineLayoutName = "wipe_image1";
+            pipelineLayoutName = "wipe_left_image";
                 
             
             if (p.vbos["video"])
@@ -399,7 +394,7 @@ namespace tl
             
                 createPipeline("wipe_image1",
                                pipelineLayoutName,
-                               getRenderPass(),
+                               p.fbo->getRenderPass(),
                                p.shaders["overlay"],
                                p.vbos["video"],
                                cb, ds);
@@ -415,16 +410,15 @@ namespace tl
                                sizeof(color), &color);
             p.shaders["overlay"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
             p.shaders["overlay"]->setFBO("textureSampler",
-                                         p.buffers["wipe"]);
+                                         p.buffers["wipe_image"]);
             _bindDescriptorSets(pipelineLayoutName, "overlay");
             
             _vkDraw("video");
             
+            
             p.fbo->endRenderPass(p.cmd);
             // END FIRST RENDER PASS
-#endif
 
-#if DRAW_SECOND_PASS
             // ----- SECOND RENDER PASS OF RIGHT VIDEO
             // glStencilFunc(GL_EQUAL, 1, 0xFF);
             // glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
@@ -432,7 +426,7 @@ namespace tl
             // Draw right image to "wipe" buffer
             if (videoData.size() > 1 && boxes.size() > 1)
             {   
-                p.buffers["wipe"]->transitionToColorAttachment(p.cmd);
+                p.buffers["wipe_image"]->transitionToColorAttachment(p.cmd);
                 
                 _createBindingSet(p.shaders["display"]);
                 p.shaders["display"]->setUniform(
@@ -440,7 +434,7 @@ namespace tl
                     math::ortho(0.F, static_cast<float>(offscreenBufferSize.w),
                                 0.F, static_cast<float>(offscreenBufferSize.h), -1.F, 1.F));
                 _drawVideo(
-                    p.buffers["wipe"], "display", 
+                    p.buffers["wipe_image"], "display", 
                     videoData[1], boxes[1],
                     !imageOptions.empty() ? std::make_shared<timeline::ImageOptions>(imageOptions[0]) : nullptr,
                     !displayOptions.empty() ? displayOptions[0] : timeline::DisplayOptions());  
@@ -448,7 +442,7 @@ namespace tl
                 p.shaders["display"]->setUniform("transform.mvp", p.transform,
                                                  vlk::kShaderVertex);
                 
-                p.buffers["wipe"]->transitionToShaderRead(p.cmd);
+                p.buffers["wipe_image"]->transitionToShaderRead(p.cmd);
             }
             
             if (p.vbos["wipe"])
@@ -467,7 +461,7 @@ namespace tl
             
             p.fbo->beginRenderPass(p.cmd);
 
-            pipelineLayoutName = "wipe_right";
+            pipelineLayoutName = "wipe_right_stencil";
             
             {
                 vlk::ColorBlendStateInfo cb;
@@ -494,8 +488,8 @@ namespace tl
 
             
                 // Draw left stencil mask
-                createPipeline("wipe_stencil2", pipelineLayoutName,
-                               getRenderPass(),
+                createPipeline("wipe_right_stencil", pipelineLayoutName,
+                               p.fbo->getRenderPass(),
                                p.shaders["wipe"], p.vbos["wipe"],
                                cb, ds);
             }
@@ -511,10 +505,9 @@ namespace tl
             _bindDescriptorSets(pipelineLayoutName, "wipe");
 
             _vkDraw("wipe");
-
             
             // Draw video
-            pipelineLayoutName = "wipe_image2";
+            pipelineLayoutName = "wipe_right_image";
                 
             
             if (p.vbos["video"])
@@ -544,9 +537,9 @@ namespace tl
                 ds.front = stencilOp;
                 ds.back = stencilOp;
 
-                createPipeline("wipe_image2",
+                createPipeline("wipe_right_image",
                                pipelineLayoutName,
-                               getRenderPass(),
+                               p.fbo->getRenderPass(),
                                p.shaders["overlay"],
                                p.vbos["video"],
                                cb, ds);
@@ -562,14 +555,13 @@ namespace tl
                                sizeof(color), &color);
             p.shaders["overlay"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
             p.shaders["overlay"]->setFBO("textureSampler",
-                                         p.buffers["wipe"]);
+                                         p.buffers["wipe_image"]);
             _bindDescriptorSets(pipelineLayoutName, "overlay");
             
             _vkDraw("video");
             
             p.fbo->endRenderPass(p.cmd);
             // END SECOND RENDER PASS
-#endif
 
             p.fbo->transitionToShaderRead(p.cmd);
         }
@@ -899,7 +891,7 @@ namespace tl
             // \@todo: \@bug?: there's no such call in Vulkan.
             // GLint viewportPrev[4] = {0, 0, 0, 0};
             // glGetIntegerv(GL_VIEWPORT, viewportPrev);
-
+            
             // Saving and restoring the old matrix is needed for tiling.
             math::Matrix4x4 oldTransform = p.transform;
             p.transform = math::ortho(0.F, static_cast<float>(box.w()),
@@ -1129,7 +1121,7 @@ namespace tl
                             
                 createPipeline(pipelineName,
                                pipelineLayoutName,
-                               getRenderPass(),
+                               fbo->getRenderPass(),
                                p.shaders["display"],
                                p.vbos["video"],
                                cb);
