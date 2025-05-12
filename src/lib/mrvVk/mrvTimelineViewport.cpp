@@ -3106,7 +3106,7 @@ namespace mrv
             if (dataSize != p.rawImageSize || !p.image)
             {
                 free(p.image);
-                p.image = (float*)malloc(dataSize);
+                p.image = malloc(dataSize);
                 p.rawImageSize = dataSize;
             }
         }
@@ -3126,8 +3126,8 @@ namespace mrv
             {
                 for (int X = 0; X < maxX; ++X)
                 {
-                    image::Color4f& rgba =
-                        (image::Color4f&)p.image[(X + maxX * Y) * 4];
+                    float* data = reinterpret_cast<float*>(p.image);
+                    image::Color4f& rgba = (image::Color4f&)data[(X + maxX * Y) * 4];
                     rgba.r = rgba.g = rgba.b = rgba.a = 0.f;
 
                     math::Vector2i pos(X, Y);
@@ -3179,7 +3179,7 @@ namespace mrv
             {
                 free(p.image);
                 p.image = nullptr;
-                p.rawImage = true;
+                p.rawImage = false;
             }
         }
 

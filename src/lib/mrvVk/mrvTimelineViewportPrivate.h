@@ -148,11 +148,11 @@ namespace mrv
             //! Skipped frames
             static uint64_t droppedFrames;
 
-            //! The pointer to the raw area we retrieve in the float format.
-            float* image = nullptr;
+            //! The pointer to the raw area we retrieve in from Vulkan in area selections.
+            void* image = nullptr;
 
             //! Mark the buffer as raw, so we will delete with free().
-            bool rawImage = true;
+            bool rawImage = false;
 
             //! Store the size of previous buffer so we avoid allocating it again.
             size_t rawImageSize = 0;

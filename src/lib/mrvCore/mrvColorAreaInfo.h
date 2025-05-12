@@ -31,7 +31,7 @@ namespace mrv
 
             friend std::ostream& operator<<(std::ostream&, const Info&);
         };
-
+        
         inline std::ostream& operator<<(std::ostream& o, const Channels& b)
         {
             return o << "max:  " << b.max << std::endl

@@ -1208,7 +1208,6 @@ namespace mrv
             else
             {
                 TimelineViewport::_mapBuffer();
-                CHECK_GL;
             }
         }
 
