@@ -21,7 +21,7 @@ namespace mrv
 
     struct SaveOptions
     {
-        bool annotations = false; // whether annotations shoud be saved
+        bool annotations = false; // whether annotations should be saved
         bool video = true;        // whether video should be shown
                                   // If not, annotations are saved
                                   // only.

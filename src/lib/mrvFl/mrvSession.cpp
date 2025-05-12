@@ -309,7 +309,7 @@ namespace mrv
                 catch (const std::bad_cast& e)
                 {
                     LOG_ERROR(
-                        "Could not save sesssion ror " << key << " type "
+                        "Could not save session ror " << key << " type "
                                                        << value.type().name());
                 }
             }

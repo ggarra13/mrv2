@@ -1177,7 +1177,7 @@ JoelRVC                                       (Windows 11 scaling issues,
 Jose Quinteiro                                (Windows 10 checks)
 jrsndl                                        (Versioning debugging)
 jtomori                                       (OCIO pipeline ideas)
-kirillall                                     (OpenEXR DWAA/DWAB mulithread bug)
+kirillall                                     (OpenEXR DWAA/DWAB multithread bug)
 kursad-k                                      (Windows 11, Positioning)
 lucky3d                                       (Windows 10, Background Panel)
 lukas-remis                                   (Comparison issues)

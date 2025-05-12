@@ -98,8 +98,8 @@ namespace
         {
             /* According to the Sun manpages, getexecname will
                "normally" return an */
-            /* absolute path - BUT might not... AND that IF it is not,
-               pre-pending */
+            /* absolute path - BUT it may not AND therefore,
+               prepending */
             /* getcwd() will "usually" be the correct thing... Urgh!
              */
 

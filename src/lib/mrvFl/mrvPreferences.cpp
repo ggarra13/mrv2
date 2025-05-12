@@ -878,7 +878,7 @@ namespace mrv
         }
         else
         {
-            msg = tl::string::Format(_("Reseting hotkeys to default."));
+            msg = tl::string::Format(_("Resetting hotkeys to default."));
         }
         LOG_INFO(msg);
 

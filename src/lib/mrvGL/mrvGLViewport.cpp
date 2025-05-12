@@ -916,7 +916,7 @@ namespace mrv
                     overlayImage->getData());
 #    else
                 // On Apple, we must do the composite ourselves.
-                // As this is extremaly expensive, we will only do
+                // As this is extremely expensive, we will only do
                 // it when playback is stopped.
                 if (_isPlaybackStopped())
                 {
@@ -1265,7 +1265,7 @@ namespace mrv
         }
         else
         {
-            // This is needed as the FL_MOVE of fltk wouuld get called
+            // This is needed as the FL_MOVE of fltk would get called
             // before the draw routine
             if (!gl.buffer || !valid())
             {

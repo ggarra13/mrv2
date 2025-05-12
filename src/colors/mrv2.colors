@@ -1101,7 +1101,7 @@ theme "Shake"
 
 # Black color theme
 #     This theme inverts the brightness of the grayscale ramp
-#     and brings the white leves down from 255 to approx 180.
+#     and brings the white levels down from 255 to approx 180.
 #     Colors are also muted so as not to appear overly bright.
 #
 theme "Black"
@@ -1117,7 +1117,7 @@ theme "Black"
     cmap 4 0   0   220		# blu (label color for "Reports", "Current Job", "Run/Busy" state..)
     cmap 5 120 0   120		# mag LOGFILE: jobdonecommand.log, jobdumpcommand.log
     cmap 6 0   120 120		# cyn
-    cmap 7 152 168 168	        # color of background of input fiels
+    cmap 7 152 168 168		# color of background of input fields
     cmap 8 100 100 100		# desaturated black
     cmap 9 100 0  0             # desaturated red
     cmap 10 0 100 0		# desaturated grn

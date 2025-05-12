@@ -220,7 +220,7 @@ namespace mrv
             cb = cB;
             cb->labelsize(11);
             cb->tooltip(_("Makes the following annotation "
-                          "dissapear a second after drawn."));
+                          "disappear a second after drawn."));
             cb->value(settings->getValue<bool>(kLaser));
             cB->callback(
                 [=](auto w)

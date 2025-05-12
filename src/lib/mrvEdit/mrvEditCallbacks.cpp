@@ -748,7 +748,7 @@ namespace mrv
     file::Path getRelativePath(const file::Path& path, const fs::path& fileName)
     {
         fs::path filePath = path.get();
-        // Make file absolue, then remove it, leaving directory
+        // Make file absolute, then remove it, leaving directory
         fs::path directory = fs::absolute(fileName).parent_path();
         fs::path relative = fs::relative(filePath, directory);
         std::string file = relative.generic_string();
@@ -923,7 +923,7 @@ namespace mrv
             // Cut again at current time + 1 frame
             otio::algo::slice(track, out_time);
 
-            // Adjust time by almsot half a frame to avoid rounding issues in
+            // Adjust time by almost half a frame to avoid rounding issues in
             // the audio tracks.
             auto trackTime = time + half_frame;
 
@@ -1187,7 +1187,7 @@ namespace mrv
 
         for (auto track : tracks)
         {
-            // Adjust time by almsot half a frame to avoid rounding issues in
+            // Adjust time by almost half a frame to avoid rounding issues in
             // the audio tracks.
             auto trackTime = time + half_frame;
 

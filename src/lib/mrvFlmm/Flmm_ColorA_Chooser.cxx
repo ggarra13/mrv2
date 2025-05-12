@@ -698,7 +698,7 @@ int Flmm_ColorA_Window::run(double& r, double& g, double& b, double& a)
                         (float)sr, (float)sg, (float)sb, (float)sa);
                 }
 
-                // Add lates color at the top.
+                // Add latest color at the top.
                 saved[0]->chip_color(
                     (float)r, (float)g, (float)b, (float)a);
                 return 1;
@@ -713,7 +713,7 @@ int Flmm_ColorA_Window::run(double& r, double& g, double& b, double& a)
     return 0;
 }
 /**
- * A dialog that lets the user choose a color and an alpha componenet.
+ * A dialog that lets the user choose a color and an alpha component.
  *
  * This dialog box is based on FLTK's native fl_color_chooser, adding
  * the ability to display and choose an alpha value (transparency).
@@ -737,7 +737,7 @@ int flmm_color_a_chooser(
 }
 
 /**
- * A dialog that lets the user choose a color and an alpha componenet.
+ * A dialog that lets the user choose a color and an alpha component.
  *
  * This dialog box is based on FLTK's native fl_color_chooser, adding
  * the ability to display and choose an alpha value (transparency).
@@ -758,7 +758,7 @@ int flmm_color_a_chooser(const char* name, float& r, float& g, float& b, float &
 }
 
 /**
- * A dialog that lets the user choose a color and an alpha componenet.
+ * A dialog that lets the user choose a color and an alpha component.
  *
  * This dialog box is based on FLTK's native fl_color_chooser, adding
  * the ability to display and choose an alpha value (transparency).
