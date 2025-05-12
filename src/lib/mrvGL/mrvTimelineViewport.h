@@ -287,7 +287,7 @@ namespace mrv
         //! Get the window to full screen and hide/show all bars.
         bool getPresentationMode() const noexcept;
 
-        //! Retrieve the full sceen mode.
+        //! Retrieve the full screen mode.
         bool getFullScreenMode() const noexcept;
 
         //! Set or unset the window to full screen but don't hide any bars.
@@ -318,7 +318,7 @@ namespace mrv
         //! Refresh window by clearing the associated resources.
         virtual void refresh() {};
 
-        //! FLTK Callback to handle view spinning whne in Environment Map mode.
+        //! FLTK Callback to handle view spinning when in Environment Map mode.
         static void _handleViewSpinning_cb(TimelineViewport* t) noexcept;
 
         //! Handle view spinning when in Environment Map mode.

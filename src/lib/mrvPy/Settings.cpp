@@ -181,7 +181,7 @@ namespace mrv2
         /**
          * Returns the maximum file sequence digits.
          *
-         * @return an interger of 1 or higher.
+         * @return an integer of 1 or higher.
          */
         int maxFileSequenceDigits()
         {

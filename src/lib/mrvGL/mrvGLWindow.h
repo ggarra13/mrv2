@@ -12,7 +12,7 @@ namespace mrv
 {
 
     //
-    // This class implements coomon OpenGL functionality
+    // This class implements common OpenGL functionality
     //
     class GLWindow : public Fl_Gl_Window
     {

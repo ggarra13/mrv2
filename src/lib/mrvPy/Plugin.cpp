@@ -291,7 +291,7 @@ Contains all classes related to python plugins.
         .def(py::init<>())
         .def(
             "active", &mrv::Plugin::active,
-            _("Whether a plugin is active or not.  If not overriden, the "
+            _("Whether a plugin is active or not.  If not overridden, the "
               "default is True."))
         .def("menus", &mrv::Plugin::menus, _(R"PYTHON(
 Dictionary of menu entries with callbacks, like:

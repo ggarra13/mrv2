@@ -358,7 +358,7 @@ namespace mrv
         TLRENDER_P();
 
         //
-        // Thie observer will watch the cache and start a reverse playback
+        // This observer will watch the cache and start a reverse playback
         // once it is filled.
         //
         p.cacheInfoObserver =

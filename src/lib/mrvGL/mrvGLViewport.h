@@ -25,7 +25,7 @@ namespace mrv
         Viewport(int X, int Y, int W, int H, const char* L = 0);
         ~Viewport();
 
-        //! Virual draw method
+        //! Virtual draw method
         void draw() override;
 
         //! Virtual handle event method

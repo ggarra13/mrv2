@@ -94,7 +94,7 @@ namespace mrv
             else if (strcmp(edidCode, "CMN") == 0)
                 return "Chimei Innolux Corporation";
             else if (strcmp(edidCode, "CSO") == 0)
-                return "California Insitute of Technology";
+                return "California Institute of Technology";
             else if (strcmp(edidCode, "CUK") == 0)
                 return "Calibre UK Ltd";
             else if (strcmp(edidCode, "DEL") == 0)
