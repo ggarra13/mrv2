@@ -336,14 +336,6 @@ namespace mrv
                 if (gl.buffer && gl.render)
                 {
 
-                    if (p.pixelAspectRatio > 0.F && !p.videoData.empty() &&
-                        !p.videoData[0].layers.empty())
-                    {
-                        auto image = p.videoData[0].layers[0].image;
-                        p.videoData[0].size.pixelAspectRatio = p.pixelAspectRatio;
-                        image->setPixelAspectRatio(p.pixelAspectRatio);
-                    }
-
                     if (p.stereo3DOptions.output == Stereo3DOutput::Glasses &&
                         p.stereo3DOptions.input == Stereo3DInput::Image &&
                         p.videoData.size() > 1 && p.showVideo)
