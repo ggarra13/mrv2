@@ -172,10 +172,11 @@ namespace mrv
         color.r = color.g = color.b = 0.F;
         color.a = 1.F;
 
+        
         const bool catmullRomSpline = false;
         lines->drawLines(
             render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
-            Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
+            Polyline2D::EndCapStyle::ROUND, catmullRomSpline, false, "erase");
     }
 
     void VKPolygonShape::draw(
@@ -233,11 +234,9 @@ namespace mrv
     {
         using namespace tl::draw;
 
-        // gl::SetAndRestore(VK_BLEND, VK_TRUE);
-
-        // glBlendFuncSeparate(
-        //     VK_SRC_ALPHA, VK_ONE_MINUS_SRC_ALPHA, VK_ONE,
-        //     VK_ONE_MINUS_SRC_ALPHA);
+        bool enableBlending = false;
+        if (color.a < 0.99F)
+            enableBlending = true;
 
         if (pts.size() < 3)
         {
@@ -260,10 +259,10 @@ namespace mrv
         }
         auto triangles = triangulatePolygon(mesh.v, poly);
         mesh.triangles = triangles;
-
+        
         math::Vector2i pos;
-        render->drawMesh("annotation", "rect", "mesh", lines->renderPass(),
-                         mesh, pos, color, true);
+        render->drawMesh("annotation", "rect", "rect", "mesh", mesh, pos, color,
+                         enableBlending);
     }
 
     void VKFilledCircleShape::draw(
@@ -272,15 +271,13 @@ namespace mrv
     {
         using namespace tl::draw;
 
-        // gl::SetAndRestore(VK_BLEND, VK_TRUE);
-
-        // glBlendFuncSeparate(
-        //     VK_SRC_ALPHA, VK_ONE_MINUS_SRC_ALPHA, VK_ONE,
-        //     VK_ONE_MINUS_SRC_ALPHA);
+        bool enableBlending = false;
+        if (color.a < 0.99F)
+            enableBlending = true;
 
         math::Vector2i v(center.x, center.y);
-        drawFilledCircle(render, "annotation", lines->renderPass(),
-                         v, radius, color, false);
+        util::drawFilledCircle(render, "annotation", v, radius, color,
+                               enableBlending);
     }
 
     void VKFilledRectangleShape::draw(
@@ -289,15 +286,13 @@ namespace mrv
     {
         using namespace tl::draw;
 
-        // gl::SetAndRestore(VK_BLEND, VK_TRUE);
-
-        // glBlendFuncSeparate(
-        //     VK_SRC_ALPHA, VK_ONE_MINUS_SRC_ALPHA, VK_ONE,
-        //     VK_ONE_MINUS_SRC_ALPHA);
+        bool enableBlending = false;
+        if (color.a < 0.99F)
+            enableBlending = true;
 
         math::Box2i box(
             pts[0].x, pts[0].y, pts[2].x - pts[0].x, pts[2].y - pts[0].y);
-        render->drawRect("annotation", lines->renderPass(), box, color, true);
+        render->drawRect(box, color, "annotation", enableBlending);
     }
 
     void VKArrowShape::draw(

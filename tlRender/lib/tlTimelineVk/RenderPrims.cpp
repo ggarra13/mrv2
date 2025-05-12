@@ -74,8 +74,8 @@ namespace tl
             if (p.vaos["rect"])
             {
                 const std::string& pipelineLayoutName = shaderName;
-                _createPipeline(p.fbo, pipelineName, pipelineLayoutName,
-                                shaderName, meshName, enableBlending);
+                createPipeline(p.fbo, pipelineName, pipelineLayoutName,
+                               shaderName, meshName, enableBlending);
                 VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
                 vkCmdPushConstants(
                     p.cmd, pipelineLayout,
@@ -90,15 +90,14 @@ namespace tl
         
         void
         Render::drawRect(const math::Box2i& box, const image::Color4f& color,
-                         const std::string& pipelineName)
+                         const std::string& pipelineName,
+                         const bool enableBlending)
         {
-            const bool enableBlending = true;
             drawRect(pipelineName, "rect", "rect", box, color, enableBlending);
         }
 
         //! This function draws to the viewport
         void Render::drawRect(const std::string& pipelineName,
-                              const VkRenderPass renderPass,
                               const math::Box2i& box,
                               const image::Color4f& color,
                               const bool enableBlending)
@@ -124,7 +123,8 @@ namespace tl
             
                 cb.attachments.push_back(colorBlendAttachment);
             
-                createPipeline(pipelineName, "rect", renderPass,
+                createPipeline(pipelineName, "rect",
+                               getRenderPass(),
                                p.shaders["rect"],
                                p.vbos["rect"], cb);
                 
@@ -148,7 +148,13 @@ namespace tl
                               const geom::TriangleMesh2& mesh,
                               const math::Vector2i& position,
                               const image::Color4f& color,
-                              const bool enableBlending)
+                              const bool enableBlending,
+                              const VkBlendFactor srcColorBlendFactor,
+                              const VkBlendFactor dstColorBlendFactor,
+                              const VkBlendFactor srcAlphaBlendFactor,
+                              const VkBlendFactor dstAlphaBlendFactor,
+                              const VkBlendOp colorBlendOp,
+                              const VkBlendOp alphaBlendOp)
         {
             TLRENDER_P();
             const size_t size = mesh.triangles.size();
@@ -184,9 +190,12 @@ namespace tl
             }
             if (p.vaos[meshName] && p.vbos[meshName])
             {
-                _createPipeline(
+                createPipeline(
                     p.fbo, pipelineName, pipelineLayoutName,
-                    shaderName, meshName, enableBlending);
+                    shaderName, meshName, enableBlending,
+                    srcColorBlendFactor, dstColorBlendFactor,
+                    srcAlphaBlendFactor, dstAlphaBlendFactor,
+                    colorBlendOp, alphaBlendOp);
 
                 VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
                 vkCmdPushConstants(
@@ -206,7 +215,6 @@ namespace tl
         void Render::drawMesh(const std::string& pipelineName,
                               const std::string& shaderName,
                               const std::string& meshName,
-                              VkRenderPass renderPass,
                               const geom::TriangleMesh2& mesh,
                               const math::Vector2i& position,
                               const image::Color4f& color,
@@ -258,7 +266,8 @@ namespace tl
             
                 cb.attachments.push_back(colorBlendAttachment);
                 
-                createPipeline(pipelineName, pipelineLayoutName, renderPass,
+                createPipeline(pipelineName, pipelineLayoutName,
+                               getRenderPass(),
                                p.shaders[shaderName],
                                p.vbos[meshName], cb);
                 
@@ -347,7 +356,6 @@ namespace tl
         void Render::drawText(
             const std::string& pipelineName,
             const std::string& pipelineLayoutName,
-            const VkRenderPass& renderPass,
             const bool hasDepth,
             const bool hasStencil,
             const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
@@ -414,7 +422,8 @@ namespace tl
                                 ds.depthWriteEnable = hasDepth ? VK_TRUE : VK_FALSE;
                                 ds.stencilTestEnable = hasStencil ? VK_TRUE : VK_FALSE;
             
-                                createPipeline(pipelineName, pipelineLayoutName, renderPass,
+                                createPipeline(pipelineName, pipelineLayoutName,
+                                               getRenderPass(),
                                                p.shaders["text"], p.vbos["text"], cb, ds);
 
                                 p.shaders["text"]->bind(p.frameIndex);
@@ -512,8 +521,9 @@ namespace tl
                 ds.depthWriteEnable = hasDepth ? VK_TRUE : VK_FALSE;
                 ds.stencilTestEnable = hasStencil ? VK_TRUE : VK_FALSE;
             
-                createPipeline(pipelineName, pipelineLayoutName, renderPass,
-                               p.shaders["text"], p.vbos["text"], cb, ds);
+                createPipeline(pipelineName, pipelineLayoutName,
+                               getRenderPass(), p.shaders["text"],
+                               p.vbos["text"], cb, ds);
             
                 p.shaders["text"]->bind(p.frameIndex);
                 p.shaders["text"]->setUniform("transform.mvp", p.transform);
@@ -592,7 +602,7 @@ namespace tl
                             textureIndex = item.textureIndex;
                             p.createTextMesh(ctx, mesh);
 
-                            _createPipeline(
+                            createPipeline(
                                 p.fbo, pipelineName, pipelineLayoutName,
                                 shaderName, meshName, enableBlending);
 
@@ -699,7 +709,7 @@ namespace tl
 
             p.createTextMesh(ctx, mesh);
             
-            _createPipeline(
+            createPipeline(
                 p.fbo, pipelineName, pipelineLayoutName,
                 shaderName, meshName, enableBlending);
             
@@ -739,7 +749,7 @@ namespace tl
             const std::string pipelineLayoutName = shaderName;
             const std::string meshName = "texture";
             
-            _createPipeline(
+            createPipeline(
                 p.fbo, pipelineName, pipelineLayoutName,
                 shaderName, meshName);
 
@@ -898,10 +908,10 @@ namespace tl
             const std::string pipelineLayoutName = "image";
             const std::string shaderName = "image";
             const std::string meshName = "image";
-            _createPipeline(fbo, pipelineName, pipelineLayoutName,
-                            shaderName, meshName, enableBlending,
-                            srcColorBlendFactor, dstColorBlendFactor,
-                            srcAlphaBlendFactor, dstAlphaBlendFactor);
+            createPipeline(fbo, pipelineName, pipelineLayoutName,
+                           shaderName, meshName, enableBlending,
+                           srcColorBlendFactor, dstColorBlendFactor,
+                           srcAlphaBlendFactor, dstAlphaBlendFactor);
             _bindDescriptorSets(pipelineLayoutName, shaderName);
             fbo->setupViewportAndScissor(p.cmd);
 

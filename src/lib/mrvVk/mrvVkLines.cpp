@@ -22,15 +22,6 @@
 #include <FL/Fl_Vk_Window.H>
 
 
-namespace tl
-{
-    namespace timeline_vlk
-    {
-        extern std::string vertex2Source();
-    } // namespace timeline_vlk
-
-} // namespace tl
-
 namespace mrv
 {
 
@@ -52,37 +43,6 @@ namespace mrv
             ctx(vulkan_ctx),
             m_renderPass(renderPass)
         {
-            TLRENDER_P();
-
-            if (!p.softShader)
-            {
-                try
-                {
-                    const std::string& vertexSource =
-                        tl::timeline_vlk::vertex2Source();
-                    p.softShader = vlk::Shader::create(ctx,
-                                                       vertexSource,
-                                                       softFragmentSource());
-                    math::Matrix4x4f mvp;
-                    image::Color4f color(1.F, 1.F, 1.F);
-                    p.softShader->createUniform("transform.mvp", mvp,
-                                                vlk::kShaderVertex);
-
-                    p.softShader->addPush("color", color, vlk::kShaderFragment);
-                    p.hardShader = vlk::Shader::create(ctx,
-                                                       vertexSource,
-                                                       hardFragmentSource());
-                    p.hardShader->createUniform("transform.mvp", mvp,
-                                                vlk::kShaderVertex);
-
-                    p.hardShader->addPush("color", color, vlk::kShaderFragment);
-                }
-                catch (const std::exception& e)
-                {
-                    throw e;
-                }
-            }
-
         }
 
         Lines::~Lines() {}
@@ -93,7 +53,8 @@ namespace mrv
             const float width, const bool soft,
             const draw::Polyline2D::JointStyle jointStyle,
             const draw::Polyline2D::EndCapStyle endStyle,
-            const bool catmullRomSpline, const bool allowOverlap)
+            const bool catmullRomSpline, const bool allowOverlap,
+            const std::string& pipelineName)
         {
             TLRENDER_P();
             using namespace tl::draw;
@@ -158,9 +119,52 @@ namespace mrv
             mesh.v.reserve(numVertices);
             for (size_t i = 0; i < numVertices; ++i)
                 mesh.v.push_back(math::Vector2f(draw[i].x, draw[i].y));
-            
-            render->drawMesh("annotation", "rect", "mesh", renderPass(),
-                             mesh, math::Vector2i(0, 0), color, true);
+
+            bool enableBlending = false;
+            if (color.a < 0.99F)
+                enableBlending = true;
+        
+            VkBlendFactor srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+            VkBlendFactor dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+            VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+            VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+
+            std::string shaderName = "hard";
+
+            // This is not working
+            if (soft)
+            {
+                enableBlending = true;
+                shaderName = "soft";
+            }
+
+            // This works, so blending is working
+            if (pipelineName == "erase")
+            {
+                enableBlending = true;
+                srcColorBlendFactor = VK_BLEND_FACTOR_ZERO;
+                dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+                srcAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+                dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+            }
+
+            if (getRenderPass() == VK_NULL_HANDLE)
+            {
+                render->drawMesh("viewport", shaderName, shaderName, "mesh",
+                                 mesh, math::Vector2i(0, 0), color,
+                                 enableBlending,
+                                 srcColorBlendFactor, dstColorBlendFactor,
+                                 srcAlphaBlendFactor, dstAlphaBlendFactor);
+            }
+            else
+            {
+                VkRenderPass oldRenderPass = render->getRenderPass();
+                render->setRenderPass(getRenderPass());
+                render->drawMesh(pipelineName, shaderName, "mesh",
+                                 mesh, math::Vector2i(0, 0),
+                                 color);
+                render->setRenderPass(oldRenderPass);
+            }
         }
 
         void Lines::drawLine(

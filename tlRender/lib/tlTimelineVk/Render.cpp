@@ -715,6 +715,7 @@ namespace tl
 
             p.cmd = cmd;
             p.fbo = fbo;
+            p.renderPass = fbo->getRenderPass();
             p.frameIndex = frameIndex;
 
             begin(renderSize, renderOptions);
@@ -775,13 +776,13 @@ namespace tl
 #if USE_PRECOMPILED_SHADERS
                 p.shaders["rect"] = vlk::Shader::create(
                     ctx,
-                    Vertex2_spv,
-                    Vertex2_spv_len,
+                    Vertex2NoUVs_spv,
+                    Vertex2NoUVs_spv_len,
                     meshFragment_spv,
                     meshFragment_spv_len, "rect");
 #else
                 p.shaders["rect"] = vlk::Shader::create(
-                    ctx, vertex2Source(), meshFragmentSource(), "rect");
+                    ctx, vertex2NoUVsSource(), meshFragmentSource(), "rect");
 #endif
                 p.shaders["rect"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
@@ -814,7 +815,7 @@ namespace tl
               // Shader used to create a 2D mesh with colors
               if (!p.shaders["colorMesh"])
               {
-  #if USE_PRECOMPILED_SHADERS
+#if USE_PRECOMPILED_SHADERS
                 p.shaders["colorMesh"] = vlk::Shader::create(
                     ctx,
                     colorMeshVertex_spv,
@@ -986,6 +987,42 @@ namespace tl
                     "color", color, vlk::kShaderFragment);
                 _createBindingSet(p.shaders["dissolve"]);
             }
+            if (!p.shaders["hard"])
+            {
+#if USE_PRECOMPILED_SHADERS
+                p.shaders["hard"] = vlk::Shader::create(
+                    ctx,
+                    Vertex2_spv,
+                    Vertex2_spv_len,
+                    hardFragment_spv,
+                    hardFragment_spv_len, "hard");
+#else
+                p.shaders["hard"] = vlk::Shader::create(
+                    ctx, vertex2Source(), softFragmentSource(), "hard");
+#endif
+                p.shaders["hard"]->createUniform(
+                    "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["hard"]->addPush("color", color);
+                _createBindingSet(p.shaders["hard"]);
+            }
+            if (!p.shaders["soft"])
+            {
+#if USE_PRECOMPILED_SHADERS
+                p.shaders["soft"] = vlk::Shader::create(
+                    ctx,
+                    Vertex2_spv,
+                    Vertex2_spv_len,
+                    softFragment_spv,
+                    softFragment_spv_len, "soft");
+#else
+                p.shaders["soft"] = vlk::Shader::create(
+                    ctx, vertex2Source(), softFragmentSource(), "soft");
+#endif
+                p.shaders["soft"]->createUniform(
+                    "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["soft"]->addPush("color", color);
+                _createBindingSet(p.shaders["soft"]);
+            }
             _displayShader();
 
 
@@ -1032,7 +1069,7 @@ namespace tl
                 math::ortho(
                     0.F, static_cast<float>(renderSize.w), 0.F,
                     static_cast<float>(renderSize.h), -1.F, 1.F));
-            applyTransforms();
+            // applyTransforms();
         }
 
         void Render::end()
@@ -1139,13 +1176,24 @@ namespace tl
 
         void Render::setViewport(const math::Box2i& value)
         {
-            TLRENDER_P();
-            p.viewport = value;
-            // glViewport(
-            //     value.x(), p.renderSize.h - value.h() - value.y(), value.w(),
-            //     value.h());
+            _p->viewport = value;
         }
 
+        void Render::beginRenderPass()
+        {
+            TLRENDER_P();
+
+            p.fbo->transitionToColorAttachment(p.cmd);
+            p.fbo->beginRenderPass(p.cmd);
+        }
+
+        void Render::endRenderPass()
+        {
+            TLRENDER_P();
+            
+            p.fbo->endRenderPass(p.cmd);
+        }
+        
         void Render::clearViewport(const image::Color4f& value)
         {
             TLRENDER_P();
@@ -1156,8 +1204,7 @@ namespace tl
 
             VkRenderPassBeginInfo rpBegin{};
             rpBegin.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-            rpBegin.renderPass =
-                p.fbo->getRenderPass(); // Use the FBO's render pass
+            rpBegin.renderPass = p.fbo->getRenderPass();
             rpBegin.framebuffer = p.fbo->getFramebuffer();
             rpBegin.renderArea.offset = {0, 0};
             rpBegin.renderArea.extent = p.fbo->getExtent(); // Use FBO extent
@@ -1179,13 +1226,17 @@ namespace tl
 
         void Render::setClipRectEnabled(bool value)
         {
-            TLRENDER_P();
-            p.clipRectEnabled = value;
+            _p->clipRectEnabled = value;
         }
 
         math::Box2i Render::getClipRect() const
         {
             return _p->clipRect;
+        }
+
+        std::shared_ptr<vlk::OffscreenBuffer> Render::getFBO() const
+        {
+            return _p->fbo;
         }
 
         void Render::setClipRect(const math::Box2i& value)

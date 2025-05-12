@@ -403,6 +403,11 @@ namespace tl
             return _p->size.h;
         }
 
+        int OffscreenBuffer::getChannelCount() const
+        {
+            return image::getChannelCount(_p->options.colorType);
+        }
+
         bool OffscreenBuffer::hasDepth() const
         {
             return (_p->options.depth != OffscreenDepth::kNone);

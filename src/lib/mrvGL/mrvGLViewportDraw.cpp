@@ -319,7 +319,6 @@ namespace mrv
 
             switch (p.stereo3DOptions.output)
             {
-                break;
             case Stereo3DOutput::Scanlines:
                 _drawScanlines(left, right);
                 break;

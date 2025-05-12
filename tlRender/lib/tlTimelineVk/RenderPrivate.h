@@ -39,15 +39,22 @@ namespace tl
 {
     namespace timeline_vlk
     {
+        // For drawing
         std::string vertexSource();
         std::string vertex2Source();
+        std::string vertex2NoUVsSource();
         std::string meshFragmentSource();
         std::string colorMeshVertexSource();
         std::string colorMeshFragmentSource();
         std::string textFragmentSource();
         std::string textureFragmentSource();
         std::string differenceFragmentSource();
-        
+
+        // For annotations
+        std::string softFragmentSource();
+        std::string hardFragmentSource();
+
+        // For display
         std::string imageFragmentSource();
         std::string displayFragmentSource(
             const std::string& ocioICSDef, const std::string& ocioICS,
@@ -118,6 +125,9 @@ namespace tl
             // Vulkan variables
             VkCommandBuffer cmd;
             std::shared_ptr<vlk::OffscreenBuffer> fbo;
+            VkRenderPass renderPass;
+
+            // Current frame in the swapchain
             int32_t frameIndex; // must be an int32_t not an uint32_t.
 
             bool hdrMonitorFound = false;

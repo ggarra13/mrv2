@@ -22,12 +22,15 @@ namespace mrv
 {
     using namespace tl;
 
-    //! Draw a rectangle outline with a mesh.
-    inline void drawRectOutline(
-        const std::shared_ptr<timeline_vlk::Render>& render,
-        const std::string& pipelineName,
-        const VkRenderPass renderPass,
-        const math::Box2i& rect, const image::Color4f& color, const int width)
+    namespace util
+    {
+        //! Draw a rectangle outline with a mesh.
+        inline void drawRectOutline(
+            const std::shared_ptr<timeline_vlk::Render>& render,
+            const std::string& pipelineName,
+            const math::Box2i& rect, const
+            image::Color4f& color, const int width,
+            VkRenderPass renderPass = VK_NULL_HANDLE)
     {
         geom::TriangleMesh2 mesh;
 
@@ -56,9 +59,20 @@ namespace mrv
         mesh.triangles.push_back(geom::Triangle2({4, 1, 5}));
 
         math::Vector2i pos;
-        
-        render->drawMesh(pipelineName, "mesh", "mesh",
-                         renderPass, mesh, pos, color);
+
+        if (renderPass)
+        {
+            VkRenderPass oldRenderPass = render->getRenderPass();
+            render->setRenderPass(renderPass);
+            render->drawMesh(pipelineName, "mesh", "mesh", 
+                             mesh, pos, color, false);
+            render->setRenderPass(oldRenderPass);
+        }
+        else
+        {
+            render->drawMesh(pipelineName, "mesh", "mesh", "mesh",
+                             mesh, pos, color, false);
+        }
         
     }
 
@@ -66,12 +80,9 @@ namespace mrv
     void drawFilledCircle(
         const std::shared_ptr<timeline_vlk::Render>& render,
         const std::string& pipelineName,
-        const VkRenderPass renderPass,
         const math::Vector2i& center, const float radius,
         const image::Color4f& color, const bool soft = false);
 
-    // Function to perform bilinear interpolation for resizing
-    void resizeImage(
-        uint8_t* targetPixels, uint8_t* srcPixels, const int srcWidth,
-        const int srcHeight, const int targetWidth, const int targetHeight);
+    }  // namespace util
+    
 } // namespace mrv

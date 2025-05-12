@@ -37,7 +37,7 @@ namespace mrv
                 const std::shared_ptr<timeline_vlk::Render>& render,
                 const math::Vector2i& start, const math::Vector2i& end,
                 const image::Color4f& color, const float width);
-
+            
             //! Draw a set of connected line segments.
             void drawLines(
                 const std::shared_ptr<timeline_vlk::Render>& render,
@@ -48,7 +48,8 @@ namespace mrv
                 const draw::Polyline2D::EndCapStyle endStyle =
                     draw::Polyline2D::EndCapStyle::BUTT,
                 const bool catmullRomSpline = false,
-                const bool allowOverlap = false);
+                const bool allowOverlap = false,
+                const std::string& pipelineName = "annotation");
 
             //! Draw a circle.
             void drawCircle(
@@ -63,7 +64,7 @@ namespace mrv
                 const math::Vector2f& center, const float radius,
                 const image::Color4f& color);
 
-            VkRenderPass renderPass() { return m_renderPass; }
+            inline VkRenderPass getRenderPass() { return m_renderPass; }
             
         private:
             Fl_Vk_Context& ctx;

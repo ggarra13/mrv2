@@ -40,10 +40,25 @@ layout(set = 0, binding = 0, std140) uniform Transform {
 void main()
 {
     gl_Position = transform.mvp * vec4(vPos, 0.0, 1.0);
-    fTexture = fTexture;
+    fTexture = vTexture;
 })";
         }
 
+
+        std::string vertex2NoUVsSource()
+        {
+            return R"(#version 450
+layout(location = 0) in vec2 vPos;
+layout(set = 0, binding = 0, std140) uniform Transform {
+    mat4 mvp;
+} transform;
+
+void main()
+{
+    gl_Position = transform.mvp * vec4(vPos, 0.0, 1.0);
+})";
+        }
+        
         std::string meshFragmentSource()
         {
             return R"(#version 450
@@ -641,5 +656,48 @@ void main()
     outColor.a = max(c.a, cB.a);
 })";
         }
+
+
+        std::string softFragmentSource()
+        {
+            return R"(#version 450
+              
+layout(location = 0) in vec2 fTexture;
+layout(location = 0) out vec4 fColor;
+            
+layout(push_constant) uniform PushConstants {
+    vec4 color;
+} pc;
+
+void main()
+{
+     vec2       v = fTexture - vec2(0.5, 0.5);
+     float ratio  = 1 - sqrt(v.x * v.x + v.y * v.y);
+     float radius = 0.75;
+     float feather = 0.25;
+     float mult = smoothstep(radius - feather, radius + feather, ratio);
+     fColor = pc.color;
+     fColor.a *= mult;
+})";
+    }
+
+        std::string hardFragmentSource()
+        {
+            return R"(#version 450
+
+layout(location = 0) in vec2 fTexture;
+layout(location = 0) out vec4 fColor;
+              
+layout(push_constant) uniform PushConstants {
+    vec4 color;
+} pc;
+              
+void main()
+{
+     fColor = pc.color;
+})";
+    }
+
+        
     } // namespace timeline_vlk
 } // namespace tl

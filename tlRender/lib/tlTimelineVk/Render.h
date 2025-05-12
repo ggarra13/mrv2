@@ -84,11 +84,31 @@ namespace tl
                                 const std::shared_ptr<vlk::VBO>& mesh,
                                 const vlk::ColorBlendStateInfo& cb = vlk::ColorBlendStateInfo(),
                                 const vlk::DepthStencilStateInfo& ds = vlk::DepthStencilStateInfo(),
-                                const vlk::MultisampleStateInfo& ms = vlk::MultisampleStateInfo());            
+                                const vlk::MultisampleStateInfo& ms = vlk::MultisampleStateInfo());         
+            void createPipeline(
+                const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
+                const std::string& pipelineName,
+                const std::string& pipelineLayoutName,
+                const std::string& shaderName,
+                const std::string& meshName,
+                const bool enableBlending = false,
+                const VkBlendFactor srcColorBlendFactor =
+                    VK_BLEND_FACTOR_SRC_ALPHA,
+                const VkBlendFactor dstColorBlendFactor =
+                    VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                const VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
+                const VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                const VkBlendOp colorBlendOp = VK_BLEND_OP_ADD,
+                const VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD);   
             math::Size2i getRenderSize() const override;
             void setRenderSize(const math::Size2i&) override;
+            std::shared_ptr<vlk::OffscreenBuffer> getFBO() const;
+            VkRenderPass getRenderPass() const;
+            void setRenderPass(VkRenderPass);
             math::Box2i getViewport() const override;
             void setViewport(const math::Box2i&) override;
+            void beginRenderPass();
+            void endRenderPass();
             void clearViewport(const image::Color4f&) override;
             bool getClipRectEnabled() const override;
             void setClipRectEnabled(bool) override;
@@ -108,7 +128,8 @@ namespace tl
                           const math::Box2i&, const image::Color4f&,
                           const bool enableBlending = true);
             void drawRect(const math::Box2i&, const image::Color4f&,
-                          const std::string& pipelineName = "timeline") override;
+                          const std::string& pipelineName = "timeline",
+                          const bool enableBlending = true) override;
             void drawMesh(const std::string& pipelineName,
                           const std::string& pipelineLayoutName,
                           const std::string& shaderName,
@@ -116,16 +137,22 @@ namespace tl
                           const geom::TriangleMesh2&,
                           const math::Vector2i& position,
                           const image::Color4f&,
-                          const bool enableBlending = false);
+                          const bool enableBlending = false,
+                          const VkBlendFactor srcColorBlendFactor =
+                          VK_BLEND_FACTOR_SRC_ALPHA,
+                          const VkBlendFactor dstColorBlendFactor =
+                          VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                          const VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
+                          const VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                          const VkBlendOp colorBlendOp = VK_BLEND_OP_ADD,
+                          const VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD);
             //! These functions draw to the viewport
             void drawRect(const std::string& pipelineName,
-                          const VkRenderPass renderPass,
                           const math::Box2i&, const image::Color4f&,
                           const bool enableBlending = true);
             void drawMesh(const std::string& pipelineName,
                           const std::string& shaderName,
                           const std::string& meshName,
-                          VkRenderPass renderPass,
                           const geom::TriangleMesh2&,
                           const math::Vector2i& position,
                           const image::Color4f&,
@@ -145,7 +172,6 @@ namespace tl
             void drawText(
                 const std::string& pipelineName,
                 const std::string& pipelineLayoutName,
-                const VkRenderPass& renderPass,
                 const bool hasDepth,
                 const bool hasStencil,
                 const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
@@ -236,20 +262,6 @@ namespace tl
             VkPipelineLayout _createPipelineLayout(
                 const std::string& pipelineLayoutName,
                 const std::shared_ptr<vlk::Shader> shader);
-            void _createPipeline(
-                const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
-                const std::string& pipelineName,
-                const std::string& pipelineLayoutName,
-                const std::string& shaderName,
-                const std::string& meshName, const bool enableBlending = false,
-                const VkBlendFactor srcColorBlendFactor =
-                    VK_BLEND_FACTOR_SRC_ALPHA,
-                const VkBlendFactor dstColorBlendFactor =
-                    VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-                const VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
-                const VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-                const VkBlendOp colorBlendOp = VK_BLEND_OP_ADD,
-                const VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD);
             void _setViewportAndScissor(const math::Size2i&);
             void _bindDescriptorSets(
                 const std::string& pipelineLayoutName,

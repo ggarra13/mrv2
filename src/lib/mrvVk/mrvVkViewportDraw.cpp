@@ -324,7 +324,6 @@ namespace mrv
 
             switch (p.stereo3DOptions.output)
             {
-                break;
             case Stereo3DOutput::Scanlines:
                 _drawScanlines(left, right);
                 break;
@@ -376,7 +375,7 @@ namespace mrv
             p.mousePos = _getFocus();
             const auto& pos = _getRasterf();
             vk.render->setTransform(mvp);
-            vk.lines->drawCursor(vk.render, pos, pen_size, color);
+            vk.viewport->drawCursor(vk.render, pos, pen_size, color);
         }
 
         void Viewport::_drawShape(
@@ -399,11 +398,11 @@ namespace mrv
                 shape->color.a *= shape->fade;
                 if (auto vkshape = dynamic_cast<VKPathShape*>(shape.get()))
                 {
-                    vkshape->draw(vk.render, vk.lines);
+                    vkshape->draw(vk.annotationRender, vk.lines);
                 }
                 else if (auto vkshape = dynamic_cast<VKShape*>(shape.get()))
                 {
-                    vkshape->draw(vk.render, vk.lines);
+                    vkshape->draw(vk.annotationRender, vk.lines);
                 }
                 else
                 {
@@ -413,83 +412,30 @@ namespace mrv
             }
         }
 
-#if 1
-
         void Viewport::_drawAnnotations(
-            const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay,
-            const math::Matrix4x4f& mvp, const otime::RationalTime& time,
-            const std::vector<std::shared_ptr<draw::Annotation>>& annotations,
-            const math::Size2i& renderSize)
-        {
-            TLRENDER_P();
-            MRV2_VK();
-
-            for (const auto& annotation : annotations)
-            {
-                const auto& annotationTime = annotation->time;
-                float alphamult = 0.F;
-                if (annotation->allFrames || time.floor() == annotationTime.floor())
-                    alphamult = 1.F;
-                else
-                {
-                    if (p.ghostPrevious)
-                    {
-                        for (short i = p.ghostPrevious - 1; i > 0; --i)
-                        {
-                            otime::RationalTime offset(i, time.rate());
-                            if ((time - offset).floor() == annotationTime.floor())
-                            {
-                                alphamult = 1.F - (float)i / p.ghostPrevious;
-                                break;
-                            }
-                        }
-                    }
-                    if (p.ghostNext)
-                    {
-                        for (short i = 1; i < p.ghostNext; ++i)
-                        {
-                            otime::RationalTime offset(i, time.rate());
-                            if ((time + offset).floor() == annotationTime.floor())
-                            {
-                                alphamult = 1.F - (float)i / p.ghostNext;
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                const auto& shapes = annotation->shapes;
-                for (const auto& shape : shapes)
-                {
-                    if (alphamult <= 0.001F)
-                        continue;
-                    vk.render->setTransform(mvp);
-                    
-                    _drawShape(shape, alphamult);
-                    
-                }
-            }
-        }
-#else
-        void Viewport::_drawAnnotations(
-            const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay,
+            const std::shared_ptr<tl::vlk::OffscreenBuffer>& annotationBuffer,
             const math::Matrix4x4f& renderMVP, const otime::RationalTime& time,
             const std::vector<std::shared_ptr<draw::Annotation>>& annotations,
-            const math::Size2i& renderSize)
+            const math::Size2i& viewportSize)
         {
             TLRENDER_P();
             MRV2_VK();
 
-            // vlk::OffscreenBufferBinding binding(overlay);
-            
+            // Transition annotation buffer to start rendering to it.
+            annotationBuffer->transitionToColorAttachment(vk.cmd);
 
+            // Start the annotation render.
             timeline::RenderOptions renderOptions;
             renderOptions.colorBuffer = image::PixelType::RGBA_U8;
 
-            vk.render->begin(renderSize, renderOptions);
-            vk.render->setOCIOOptions(timeline::OCIOOptions());
-            vk.render->setLUTOptions(timeline::LUTOptions());
+            vk.annotationRender->begin(vk.cmd, annotationBuffer, m_currentFrameIndex,
+                                       viewportSize, renderOptions);
+            vk.annotationRender->setOCIOOptions(timeline::OCIOOptions());
+            vk.annotationRender->setLUTOptions(timeline::LUTOptions());
+            vk.annotationRender->setTransform(renderMVP);
+            vk.annotationRender->beginRenderPass();
 
+            // Iterate through each annotation.
             for (const auto& annotation : annotations)
             {
                 const auto& annotationTime = annotation->time;
@@ -529,39 +475,13 @@ namespace mrv
                 {
                     if (alphamult <= 0.001F)
                         continue;
-                    vk.render->setTransform(renderMVP);
                     
                     _drawShape(shape, alphamult);
-                    
                 }
             }
-        }
-#endif
-        void Viewport::_compositeAnnotations(
-            const math::Matrix4x4f& mvp, const math::Size2i& viewportSize)
-        {
-            TLRENDER_P();
-            MRV2_VK();
-
-            // vlk::SetAndRestore(GL_BLEND, GL_TRUE);
-
-            // glBlendFuncSeparate(
-            //     GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA,
-            //     GL_ONE_MINUS_SRC_ALPHA); // this is needed to composite soft
-            // brushes correctly.  Note that the
-            // standardard premult composite is
-            // done later in the shaders.
             
-
-            // glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
-            
-
-            vk.annotationShader->bind(m_currentFrameIndex);
-            vk.annotationShader->setUniform("transform.mvp", mvp);
-            timeline::Channels channels = timeline::Channels::Color;
-            if (!p.displayOptions.empty())
-                channels = p.displayOptions[0].channels;
-            vk.annotationShader->setUniform("channels", static_cast<int>(channels));
+            vk.annotationRender->endRenderPass();
+            vk.annotationRender->end();
         }
 
         void Viewport::_compositeOverlay(
@@ -570,8 +490,6 @@ namespace mrv
         {
             MRV2_VK();
             TLRENDER_P();
-            if (!vk.overlayPBO)
-                return;
 
             _compositeAnnotations(overlay, mvp, viewportSize);
             
@@ -616,20 +534,48 @@ namespace mrv
 
         void Viewport::_compositeAnnotations(
             const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay,
-            const math::Matrix4x4f& orthoMatrix, const math::Size2i& viewportSize)
+            const math::Matrix4x4f& orthoMatrix,
+            const math::Size2i& viewportSize)
         {
-            MRV2_VK();
             TLRENDER_P();
+            MRV2_VK();
 
-            _compositeAnnotations(orthoMatrix, viewportSize);
 
-            // glActiveTexture(GL_TEXTURE0);
-            // glBindTexture(GL_TEXTURE_2D, overlay->getColorID());
+             // glBlendFuncSeparate(
+            //     GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA,
+            //     GL_ONE_MINUS_SRC_ALPHA); // this is needed to composite soft
+            // brushes correctly.  Note that the
+            // standardard premult composite is
+            // done later in the shaders.
+            
 
-            if (vk.vao && vk.vbo)
+            // Bind the main composition pipeline (created/managed outside this
+            // draw loop)
+            vkCmdBindPipeline(vk.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, vk.annotation_pipeline);
+
+            // --- Update Descriptor Set for the SECOND pass (Composition of Annotations) ---
+            vk.annotationShader->bind(m_currentFrameIndex);
+            vk.annotationShader->setUniform("transform.mvp", orthoMatrix, vlk::kShaderVertex);
+            timeline::Channels channels = timeline::Channels::Color;
+            if (!p.displayOptions.empty())
+                channels = p.displayOptions[0].channels;
+            vk.annotationShader->setUniform("channels", static_cast<int>(channels));
+            vk.annotationShader->setFBO("textureSampler", overlay);
+            
+            // --- Bind Descriptor Set for the SECOND pass ---
+            // Record the command to bind the descriptor set for the CURRENT
+            // frame index
+            VkDescriptorSet descriptorSet = vk.annotationShader->getDescriptorSet();
+            vkCmdBindDescriptorSets(
+                vk.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, vk.annotation_pipeline_layout, 0, 1,
+                &descriptorSet, 0, nullptr);
+            
+            if (vk.avao && vk.avbo)
             {
-                vk.vao->bind(m_currentFrameIndex);
-                vk.vao->draw(vk.cmd, vk.vbo);
+                // Draw calls for the composition geometry (e.g., a
+                // screen-filling quad)
+                vk.avao->bind(m_currentFrameIndex);
+                vk.avao->draw(vk.cmd, vk.avbo);
             }
         }
 
@@ -649,12 +595,10 @@ namespace mrv
             const image::Color4f shadowColor(0.F, 0.F, 0.F, 0.7F);
             math::Vector2i shadowPos{pos.x + 1, pos.y - 1};
             vk.render->drawText("HUDShadow", "text",
-                                renderPass(),
                                 hasDepth, hasStencil,
                                 glyphs,
                                 shadowPos, shadowColor);
             vk.render->drawText("HUD", "text",
-                                renderPass(),
                                 hasDepth, hasStencil,
                                 glyphs,
                                 pos, labelColor);
@@ -689,8 +633,8 @@ namespace mrv
             box.max.x *= p.viewZoom;
             box.max.y *= p.viewZoom;
             
-            drawRectOutline(vk.render, pipelineName, renderPass(),
-                            box, color, width);
+            util::drawRectOutline(vk.render, pipelineName, box, color, width,
+                                  renderPass());
         }
 
         void Viewport::_drawAreaSelection() const noexcept
@@ -763,8 +707,7 @@ namespace mrv
             
             math::Vector2i pos(box.min.x, box.max.y - 2 * p.viewZoom);
 
-            vk.render->drawText(label, label, renderPass(),
-                                hasDepth, hasStencil, glyphs, pos, color);
+            vk.render->drawText(label, label, hasDepth, hasStencil, glyphs, pos, color);
         }
 
         void Viewport::_drawSafeAreas() noexcept
@@ -783,7 +726,10 @@ namespace mrv
             const auto& renderSize = getRenderSize();
 
             const math::Matrix4x4f mvp = _rasterProjectionMatrix();
+            const VkRenderPass oldRenderPass = vk.render->getRenderPass();
             const math::Matrix4x4f oldTransform = vk.render->getTransform();
+
+            vk.render->setRenderPass(renderPass());
             double aspect = (double)renderSize.w / pr / (double)renderSize.h;
             if (aspect <= 1.78)
             {
@@ -812,6 +758,7 @@ namespace mrv
                 _drawSafeAreas(1.77, 1.0, pr, color, mvp, "hdtv");
             }
             vk.render->setTransform(oldTransform);
+            vk.render->setRenderPass(oldRenderPass);
         }
 
         void Viewport::_drawHUD(VkCommandBuffer cmd, float alpha) const noexcept
@@ -851,6 +798,9 @@ namespace mrv
                                                viewportSize.h));
             vk.render->setRenderSize(viewportSize);
             const math::Matrix4x4f oldTransform = vk.render->getTransform();
+            VkRenderPass oldRenderPass = vk.render->getRenderPass();
+
+            vk.render->setRenderPass(renderPass());
             vk.render->setTransform(math::ortho(
                                         0.F, static_cast<float>(viewportSize.w),
                                         0.F, static_cast<float>(viewportSize.h), -1.F, 1.F));
@@ -1099,6 +1049,7 @@ namespace mrv
             }
             
             vk.render->setTransform(oldTransform);
+            vk.render->setRenderPass(oldRenderPass);
         }
 
         void Viewport::_drawWindowArea(const std::string& pipelineName,

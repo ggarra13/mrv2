@@ -12,7 +12,8 @@ namespace tl
     {
         void
         Render::drawRect(const math::Box2i& box, const image::Color4f& color,
-                         const std::string& pipelineName)
+                         const std::string& pipelineName,
+                         const bool enableBlending)
         {
             TLRENDER_P();
             ++(p.currentStats.rects);

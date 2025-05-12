@@ -114,6 +114,9 @@ namespace tl
             //! Get the offscreen buffer height.
             int getHeight() const;
 
+            //! Get the number of channels.
+            int getChannelCount() const;
+            
             //! Returns true if the buffer has depth.
             bool hasDepth() const;
 
