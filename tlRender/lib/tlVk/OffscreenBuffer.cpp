@@ -151,8 +151,10 @@ namespace tl
             math::Size2i size;
             OffscreenBufferOptions options;
 
-            // PBO for reading from main FBO.
-            uint32_t currentPBO = 0;
+            // Ring indices
+            int writeIndex = 0;  // where we'll submit the next copy
+            int readIndex  = 0;  // where we'll next wait+read
+            
             std::vector<StagingBuffer> pboRing;
 
             // Vulkan handles
@@ -944,11 +946,18 @@ namespace tl
                 VkMemoryAllocateInfo allocInfo = {};
                 allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
                 allocInfo.allocationSize = memReq.size;
+
+
+                //
+                // Important:  we must use VK_MEMORY_PROPERTY_HOST_CACHED_BIT
+                //             for fast readbacks and invalidate the memory
+                //             before accessing the pointer.
+                //
                 allocInfo.memoryTypeIndex =
                     findMemoryType(
                     memReq.memoryTypeBits,
                     VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                        VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+                    VK_MEMORY_PROPERTY_HOST_CACHED_BIT);
 
                 vkAllocateMemory(device, &allocInfo, nullptr, &pbo.memory);
                 vkBindBufferMemory(device, pbo.buffer, pbo.memory, 0);
@@ -974,7 +983,7 @@ namespace tl
             VkCommandPool commandPool = ctx.commandPool;
             VkQueue  queue  = ctx.queue;
 
-            auto& pbo = p.pboRing[p.currentPBO];
+            auto& pbo = p.pboRing[p.writeIndex];
             vkWaitForFences(device, 1, &pbo.fence, VK_TRUE, UINT64_MAX);
             vkResetFences(device, 1, &pbo.fence);
 
@@ -1010,17 +1019,20 @@ namespace tl
         void OffscreenBuffer::submitReadback(VkCommandBuffer cmd)
         {
             TLRENDER_P();
-            
+
+            VkDevice device = ctx.device;
+        
             VkSubmitInfo submitInfo{VK_STRUCTURE_TYPE_SUBMIT_INFO};
             submitInfo.commandBufferCount = 1;
             submitInfo.pCommandBuffers = &cmd;
 
-            // Should we use another queue?  For faster feedback yes.
+            // Should we use another queue?  If the gpu supported, yes.
             VkQueue transferQueue = ctx.queue;
             
             vkQueueSubmit(transferQueue, 1, &submitInfo,
-                          p.pboRing[p.currentPBO].fence);
-            p.currentPBO = (p.currentPBO + 1) % NUM_PBO_BUFFERS;
+                          p.pboRing[p.writeIndex].fence);
+            
+            p.writeIndex = (p.writeIndex + 1) % NUM_PBO_BUFFERS;
         }
 
         void* OffscreenBuffer::getLatestReadPixels()
@@ -1028,16 +1040,42 @@ namespace tl
             TLRENDER_P();
 
             VkDevice device = ctx.device;
+            auto& pbo = p.pboRing[p.readIndex];
             
-            int readIndex = (p.currentPBO + NUM_PBO_BUFFERS - 1) %
-                            NUM_PBO_BUFFERS;
-            auto& pbo = p.pboRing[readIndex];
+            // Check fence status without waiting indefinitely
+            VkResult status = vkGetFenceStatus(device, pbo.fence); 
 
-            if (vkGetFenceStatus(device, pbo.fence) == VK_SUCCESS)
+            if (status == VK_SUCCESS) 
             {
-                return pbo.mappedPtr; // valid data
+                image::Info info(p.size.w, p.size.h, p.options.colorType);
+                VkDeviceSize bufferSize = image::getDataByteCount(info);
+            
+                VkMappedMemoryRange memoryRange = {};
+                memoryRange.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
+                memoryRange.memory = pbo.memory;
+                memoryRange.offset = 0; 
+                memoryRange.size = bufferSize; // The size of the mapped region for this PBO
+                vkInvalidateMappedMemoryRanges(device, 1, &memoryRange);
+    
+                void* ptr = pbo.mappedPtr;
+
+                p.readIndex = (p.readIndex + 1) % NUM_PBO_BUFFERS; 
+
+                // Data is ready
+                return pbo.mappedPtr;
             }
-            return nullptr; // not ready yet
+            else if (status == VK_NOT_READY)
+            {
+                // Data is not ready yet, return the previous frame data if available.
+                return pbo.mappedPtr; 
+            }
+            else 
+            {
+                // Handle potential fence error
+                // Consider logging or throwing an exception based on VkResult
+                return nullptr; 
+            }
+    
         }
 
         

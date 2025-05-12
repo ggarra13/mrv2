@@ -1012,12 +1012,18 @@ namespace mrv
             const int maxX = info.box.max.x;
             const int maxY = info.box.max.y;
             const auto& renderSize = gl.buffer->getSize();
+            
+            const uint32_t W = info.box.w();
+            const uint32_t H = info.box.h();
+            const size_t dataSize = W * H;
+            std::cerr << "ptr=" << p.image << " dataSize=" << dataSize
+                      << " " << info.box << std::endl;
+            image::Color4f rgba, hsv;
 
             for (int Y = info.box.y(); Y <= maxY; ++Y)
             {
                 for (int X = info.box.x(); X <= maxX; ++X)
                 {
-                    image::Color4f rgba, hsv;
                     rgba.b = p.image[(X + Y * renderSize.w) * 4];
                     rgba.g = p.image[(X + Y * renderSize.w) * 4 + 1];
                     rgba.r = p.image[(X + Y * renderSize.w) * 4 + 2];
@@ -1051,6 +1057,7 @@ namespace mrv
                     hsv_to_info(hsv, info);
                 }
             }
+            std::cerr << "DONE" << std::endl;
 
             int num = info.box.w() * info.box.h();
             info.rgba.mean.r /= num;

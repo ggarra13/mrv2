@@ -998,10 +998,13 @@ namespace mrv
             }
         }
 
+        
         void Viewport::_calculateColorAreaFullValues(area::Info& info) noexcept
         {
             TLRENDER_P();
             MRV2_VK();
+            if (!p.image)
+                return;
 
             PixelToolBarClass* c = p.ui->uiPixelWindow;
             BrightnessType brightness_type =
@@ -1010,66 +1013,65 @@ namespace mrv
 
             const uint32_t W = info.box.w();
             const uint32_t H = info.box.h();
-            const int maxX = info.box.max.x;
-            const int maxY = info.box.max.y;
-            const auto options = vk.buffer->getOptions();
             
-            for (int Y = 0; Y < H; ++Y)
+            const uint8_t* ptr = reinterpret_cast<const uint8_t*>(p.image);
+            
+            const auto options = vk.buffer->getOptions();
+            const int channelCount = image::getChannelCount(options.colorType);
+            const int byteCount = image::getBitDepth(options.colorType) / 8;
+
+            const size_t dataSize = W * H;
+            
+            image::Color4f rgba, hsv;
+            
+            for (size_t i = 0; i < dataSize; ++i)
             {
-                for (int X = 0; X < W; ++X)
-                {
-                    image::Color4f rgba, hsv;
-                    
-                    const size_t coord = (X + Y * W) *
-                                         image::getBitDepth(options.colorType) / 8 *
-                                         image::getChannelCount(options.colorType);
-                    const uint8_t* ptr = reinterpret_cast<const uint8_t*>(p.image);
-                    rgba = color::fromVoidPtr(ptr + coord, options.colorType);
+                rgba = color::fromVoidPtr(ptr, options.colorType);
 
-                    info.rgba.mean.r += rgba.r;
-                    info.rgba.mean.g += rgba.g;
-                    info.rgba.mean.b += rgba.b;
-                    info.rgba.mean.a += rgba.a;
+                info.rgba.mean.r += rgba.r;
+                info.rgba.mean.g += rgba.g;
+                info.rgba.mean.b += rgba.b;
+                info.rgba.mean.a += rgba.a;
 
-                    if (rgba.r < info.rgba.min.r)
-                        info.rgba.min.r = rgba.r;
-                    if (rgba.g < info.rgba.min.g)
-                        info.rgba.min.g = rgba.g;
-                    if (rgba.b < info.rgba.min.b)
-                        info.rgba.min.b = rgba.b;
-                    if (rgba.a < info.rgba.min.a)
-                        info.rgba.min.a = rgba.a;
+                if (rgba.r < info.rgba.min.r)
+                    info.rgba.min.r = rgba.r;
+                if (rgba.g < info.rgba.min.g)
+                    info.rgba.min.g = rgba.g;
+                if (rgba.b < info.rgba.min.b)
+                    info.rgba.min.b = rgba.b;
+                if (rgba.a < info.rgba.min.a)
+                    info.rgba.min.a = rgba.a;
 
-                    if (rgba.r > info.rgba.max.r)
-                        info.rgba.max.r = rgba.r;
-                    if (rgba.g > info.rgba.max.g)
-                        info.rgba.max.g = rgba.g;
-                    if (rgba.b > info.rgba.max.b)
-                        info.rgba.max.b = rgba.b;
-                    if (rgba.a > info.rgba.max.a)
-                        info.rgba.max.a = rgba.a;
+                if (rgba.r > info.rgba.max.r)
+                    info.rgba.max.r = rgba.r;
+                if (rgba.g > info.rgba.max.g)
+                    info.rgba.max.g = rgba.g;
+                if (rgba.b > info.rgba.max.b)
+                    info.rgba.max.b = rgba.b;
+                if (rgba.a > info.rgba.max.a)
+                    info.rgba.max.a = rgba.a;
 
-                    hsv = rgba_to_hsv(hsv_colorspace, rgba);
-                    hsv.a = calculate_brightness(rgba, brightness_type);
-                    hsv_to_info(hsv, info);
-                }
+                hsv = rgba_to_hsv(hsv_colorspace, rgba);
+                hsv.a = calculate_brightness(rgba, brightness_type);
+                hsv_to_info(hsv, info);
+
+                ptr += channelCount * byteCount;
             }
 
-            int num = info.box.w() * info.box.h();
-            info.rgba.mean.r /= num;
-            info.rgba.mean.g /= num;
-            info.rgba.mean.b /= num;
-            info.rgba.mean.a /= num;
+            info.rgba.mean.r /= dataSize;
+            info.rgba.mean.g /= dataSize;
+            info.rgba.mean.b /= dataSize;
+            info.rgba.mean.a /= dataSize;
 
             info.rgba.diff.r = info.rgba.max.r - info.rgba.min.r;
             info.rgba.diff.g = info.rgba.max.g - info.rgba.min.g;
             info.rgba.diff.b = info.rgba.max.b - info.rgba.min.b;
             info.rgba.diff.a = info.rgba.max.a - info.rgba.min.a;
 
-            info.hsv.mean.r /= num;
-            info.hsv.mean.g /= num;
-            info.hsv.mean.b /= num;
-            info.hsv.mean.a /= num;
+            info.hsv.mean.r /= dataSize;
+            info.hsv.mean.g /= dataSize;
+            info.hsv.mean.b /= dataSize;
+            info.hsv.mean.a /= dataSize;
 
             info.hsv.diff.r = info.hsv.max.r - info.hsv.min.r;
             info.hsv.diff.g = info.hsv.max.g - info.hsv.min.g;
@@ -1080,10 +1082,7 @@ namespace mrv
         void Viewport::_calculateColorArea(area::Info& info)
         {
             TLRENDER_P();
-            MRV2_VK();
-
-            if (!p.image || !vk.buffer)
-                return;
+            MRV2_VK();//@}//@}
 
             info.rgba.max.r = std::numeric_limits<float>::min();
             info.rgba.max.g = std::numeric_limits<float>::min();
