@@ -15,9 +15,9 @@ namespace mrv
             case image::PixelType::RGB_F32:
             {
                 const float* pixels = reinterpret_cast<const float*>(ptr);
-                out.r = pixels[0];
+                out.r = pixels[2];
                 out.g = pixels[1];
-                out.b = pixels[2];
+                out.b = pixels[0];
                 break;
             }
             case image::PixelType::RGBA_F32:

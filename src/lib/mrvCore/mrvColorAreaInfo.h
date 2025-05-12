@@ -6,6 +6,7 @@
 
 #include <tlCore/Box.h>
 #include <tlCore/Color.h>
+#include <tlCore/Image.h>
 
 namespace mrv
 {
@@ -28,6 +29,8 @@ namespace mrv
             math::Box2i box;
             Channels rgba;
             Channels hsv;
+
+            image::PixelType pixelType = image::PixelType::RGBA_U8;
 
             friend std::ostream& operator<<(std::ostream&, const Info&);
         };

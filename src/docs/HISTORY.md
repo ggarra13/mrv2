@@ -15,7 +15,8 @@ it to Vulkan.
   message if compilation fails.
 - Fixed a potential reset of the X11 server when hiding the timeline bar.
 - Fixed a crash with color area selection and switching to a clip of smaller size.
-  - Fixed a crash with color area selection switching from Full to Original Values.
+- Fixed a crash with color area selection switching from Full to Original Values.
+- Fixed a memory leak in the Vectorscope.
 - Started porting to Vulkan.
 
 	 * Working:
@@ -43,6 +44,9 @@ it to Vulkan.
 			 - Tile (minor validation error when switching)
 		 - Annotation cursor (circle)
 		 - Annotations
+		 - Vectorscope
+		 - Histogram
+		 - Color Areas (Area color information)
 		 
 	 * Missing to check/add:
 		 * Missing Frames crosses
@@ -50,7 +54,6 @@ it to Vulkan.
 		 * Thumbnails in Timeline (crashes) / Editing
 		 * Thumbnails in Panels (done with OpenGL for now)
 		 * Saving of Movies/Pictures with Annotations
-		 * Area color information
 		 * Temporary FLTK Text widget annotation (how to do it?)
 			 - Will have to code an equivalent in Vulkan and do my own
 			   event handling.

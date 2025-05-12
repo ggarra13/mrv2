@@ -951,6 +951,9 @@ namespace mrv
                 // Copy it again in case it changed
                 p.colorAreaInfo.box = selection;
 
+                // Copy the pixel type (needed for Vulkan)
+                const vlk::OffscreenBufferOptions& options = vk.buffer->getOptions();
+                p.colorAreaInfo.pixelType = options.colorType;
             }
             
                     
@@ -1014,11 +1017,9 @@ namespace mrv
             const uint32_t W = info.box.w();
             const uint32_t H = info.box.h();
             
-            const uint8_t* ptr = reinterpret_cast<const uint8_t*>(p.image);
-            
-            const auto options = vk.buffer->getOptions();
-            const int channelCount = image::getChannelCount(options.colorType);
-            const int byteCount = image::getBitDepth(options.colorType) / 8;
+            const uint8_t* ptr = reinterpret_cast<const uint8_t*>(p.image);            
+            const int channelCount = image::getChannelCount(info.pixelType);
+            const int byteCount = image::getBitDepth(info.pixelType) / 8;
 
             const size_t dataSize = W * H;
             
@@ -1026,7 +1027,7 @@ namespace mrv
             
             for (size_t i = 0; i < dataSize; ++i)
             {
-                rgba = color::fromVoidPtr(ptr, options.colorType);
+                rgba = color::fromVoidPtr(ptr, info.pixelType);
 
                 info.rgba.mean.r += rgba.r;
                 info.rgba.mean.g += rgba.g;
