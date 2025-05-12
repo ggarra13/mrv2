@@ -1207,6 +1207,7 @@ namespace mrv
             }
             else
             {
+                _unmapBuffer();
                 TimelineViewport::_mapBuffer();
             }
         }

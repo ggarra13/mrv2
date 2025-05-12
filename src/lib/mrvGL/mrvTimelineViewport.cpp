@@ -3081,15 +3081,16 @@ namespace mrv
         {
             TLRENDER_P();
 
-            p.rawImage = true;
             const math::Size2i& renderSize = getRenderSize();
             unsigned dataSize = renderSize.w * renderSize.h * 4 * sizeof(float);
 
             if (dataSize != p.rawImageSize || !p.image)
             {
-                free(p.image);
+                if (p.rawImage)
+                    free(p.image);
                 p.image = (float*)malloc(dataSize);
                 p.rawImageSize = dataSize;
+                p.rawImage = true;
             }
         }
 

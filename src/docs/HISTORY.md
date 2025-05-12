@@ -15,6 +15,7 @@ it to Vulkan.
   message if compilation fails.
 - Fixed a potential reset of the X11 server when hiding the timeline bar.
 - Fixed a crash with color area selection and switching to a clip of smaller size.
+  - Fixed a crash with color area selection switching from Full to Original Values.
 - Started porting to Vulkan.
 
 	 * Working:

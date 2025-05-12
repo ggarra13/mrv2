@@ -152,7 +152,7 @@ namespace mrv
             void* image = nullptr;
 
             //! Mark the buffer as raw, so we will delete with free().
-            bool rawImage = false;
+            bool rawImage = true;
 
             //! Store the size of previous buffer so we avoid allocating it again.
             size_t rawImageSize = 0;

@@ -1283,6 +1283,7 @@ namespace mrv
 
             p.videoData = values;
 
+            // Check to see if we keep area selection.
             if (p.selection.max.x >= 0)
             {
                 image::Size videoSize;
@@ -1294,7 +1295,7 @@ namespace mrv
                         videoSize = image->getSize();
                     }
                 }
-                
+
                 if (p.videoSize != videoSize)
                 {
                     math::Box2i area;
@@ -1303,7 +1304,7 @@ namespace mrv
                     p.videoSize = videoSize;
                 }
             }
-            
+
             if (p.resizeWindow)
             {
                 if (!p.presentation)
@@ -1434,25 +1435,6 @@ namespace mrv
                         panel::imageInfoPanel->videoRefresh();
                     if (metadataRefresh)
                         panel::imageInfoPanel->metadataRefresh();
-                }
-            }
-
-            if (p.selection.max.x >= 0)
-            {
-                if (!values[0].layers.empty())
-                {
-                    const auto& image = values[0].layers[0].image;
-                    if (image && image->isValid())
-                    {
-                        const auto& videoSize = image->getSize();
-                        if (p.videoSize != videoSize)
-                        {
-                            math::Box2i area;
-                            area.max.x = -1;
-                            setSelectionArea(area);
-                            p.videoSize = videoSize;
-                        }
-                    }
                 }
             }
 
@@ -2458,7 +2440,7 @@ namespace mrv
             {
                 if (!p.fullScreen)
                     _setFullScreen(false);
-                if (reinterpret_cast<MyViewport*>(this) == p.ui->uiView)
+                if (p.ui->uiView == reinterpret_cast<MyViewport*>(this))
                     Fl::add_timeout(
                         0.01, (Fl_Timeout_Handler)restore_ui_state, p.ui);
                 p.presentation = false;
@@ -3099,15 +3081,16 @@ namespace mrv
         {
             TLRENDER_P();
 
-            p.rawImage = true;
             const math::Size2i& renderSize = getRenderSize();
             unsigned dataSize = renderSize.w * renderSize.h * 4 * sizeof(float);
 
             if (dataSize != p.rawImageSize || !p.image)
             {
-                free(p.image);
+                if (p.rawImage)
+                    free(p.image);
                 p.image = malloc(dataSize);
                 p.rawImageSize = dataSize;
+                p.rawImage = true;
             }
         }
 
@@ -3179,7 +3162,7 @@ namespace mrv
             {
                 free(p.image);
                 p.image = nullptr;
-                p.rawImage = false;
+                p.rawImage = true;
             }
         }
 
