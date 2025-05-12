@@ -3,6 +3,8 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
+#include "mrvCore/mrvBackend.h"
+
 #include "mrvWidgets/mrvHistogram.h"
 
 #include "mrViewer.h"
@@ -90,9 +92,19 @@ namespace mrv
         for (size_t i = 0; i < dataSize; ++i)
         {
             pixel = color::fromVoidPtr(ptr, info.pixelType);
+#ifdef VULKAN_BACKEND
+            rgb[0] = (uint8_t)math::clamp(pixel.r * 255.0f, 0.f, 255.f);
+            rgb[1] = (uint8_t)math::clamp(pixel.g * 255.0f, 0.f, 255.f);
+            rgb[2] = (uint8_t)math::clamp(pixel.b * 255.0f, 0.f, 255.f);
+#elif OPENGL_BACKEND
             rgb[0] = (uint8_t)math::clamp(pixel.b * 255.0f, 0.f, 255.f);
             rgb[1] = (uint8_t)math::clamp(pixel.g * 255.0f, 0.f, 255.f);
             rgb[2] = (uint8_t)math::clamp(pixel.r * 255.0f, 0.f, 255.f);
+#else
+            rgb[0] = (uint8_t)math::clamp(pixel.r * 255.0f, 0.f, 255.f);
+            rgb[1] = (uint8_t)math::clamp(pixel.g * 255.0f, 0.f, 255.f);
+            rgb[2] = (uint8_t)math::clamp(pixel.b * 255.0f, 0.f, 255.f);
+#endif
             count_pixel(rgb);
             ptr += channelCount * byteCount;
         }
