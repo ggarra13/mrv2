@@ -16,6 +16,7 @@ it to Vulkan.
 - Fixed a potential reset of the X11 server when hiding the timeline bar.
 - Fixed a crash with color area selection and switching to a clip of smaller size.
 - Fixed a crash with color area selection switching from Full to Original Values.
+- Allowed overriding pixel ratio on OpenEXR images from the Image Information Panel.  Note that once you override it, it will remain like that for all images.  To reverse them, you need to set it back to a value of 0 or less than 0.
 - Fixed a memory leak in the Vectorscope.
 - Started porting to Vulkan.
 
