@@ -62,8 +62,11 @@ namespace mrv
 
         if (renderPass)
         {
-            render->drawMesh(pipelineName, "mesh", "mesh", renderPass,
+            VkRenderPass oldRenderPass = render->getRenderPass();
+            render->setRenderPass(renderPass);
+            render->drawMesh(pipelineName, "mesh", "mesh", 
                              mesh, pos, color, false);
+            render->setRenderPass(oldRenderPass);
         }
         else
         {

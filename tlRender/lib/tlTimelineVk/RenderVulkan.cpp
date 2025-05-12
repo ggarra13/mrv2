@@ -1,9 +1,16 @@
 
 #include <tlTimelineVk/RenderPrivate.h>
 
+#include <iostream>
 #include <string>
 
 #define DEBUG_PIPELINE_USE 0
+
+#if DEBUG_PIPELINE_USE
+#define DEBUG_USE(x) std::cerr << x << std::endl;
+#else
+#define DEBUG_USE(x)
+#endif
 
 namespace tl
 {
@@ -68,27 +75,17 @@ namespace tl
             if (!mesh)
                 throw std::runtime_error(
                     "createPipeline failed with unknown mesh");
-
-            if (renderPass == VK_NULL_HANDLE)
-                throw std::runtime_error(
-                    "createPipeline failed with renderPass == VK_NULL_HANDLE");
-                
-
             
             VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
             if (!pipelineLayout)
             {
-#if DEBUG_PIPELINE_USE
-                std::cerr << "CREATING   pipelineLayout " << pipelineLayoutName << std::endl;
-#endif
+                DEBUG_USE("CREATING   pipelineLayout " << pipelineLayoutName);
                 pipelineLayout = _createPipelineLayout(pipelineLayoutName,
                                                        shader);
             }
             else
             {
-#if DEBUG_PIPELINE_USE
-                std::cerr << "REUSING    pipelineLayout " << pipelineLayoutName << std::endl;
-#endif
+                DEBUG_USE("REUSING    pipelineLayout " << pipelineLayoutName);
             }
             
             if (pipelineLayout == VK_NULL_HANDLE)
@@ -149,9 +146,7 @@ namespace tl
             VkPipeline pipeline;
             if (p.pipelines.count(pipelineName) == 0)
             {
-#if DEBUG_PIPELINE_USE
-                std::cerr << "CREATING   pipeline " << pipelineName << std::endl;
-#endif
+                DEBUG_USE("CREATING   pipeline " << pipelineName);
                 pipeline = pipelineState.create(device);
                 p.pipelines[pipelineName] = std::make_pair(pipelineState,
                                                            pipeline);
@@ -163,9 +158,7 @@ namespace tl
                 VkPipeline oldPipeline = pair.second;
                 if (pipelineState != oldPipelineState)
                 {
-#if DEBUG_PIPELINE_USE
-                    std::cerr << "RECREATING pipeline " << pipelineName << std::endl;
-#endif
+                    DEBUG_USE("RECREATING pipeline " << pipelineName);
                     p.garbage[p.frameIndex].pipelines.push_back(
                         oldPipeline);
                     pipeline = pipelineState.create(device);
@@ -174,15 +167,15 @@ namespace tl
                 }
                 else
                 {
-#if DEBUG_PIPELINE_USE
-                    std::cerr << "REUSING    pipeline " << pipelineName << std::endl;
-#endif
+                    DEBUG_USE("REUSING    pipeline " << pipelineName);
                     pipeline = pair.second;
                 }
             }
 
             // Enable the pipeline.
             vkCmdBindPipeline(p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
+            DEBUG_USE("USING      pipeline " << pipelineName <<
+                      " with renderPass " << renderPass);
         }
         
         void Render::createPipeline(
@@ -227,8 +220,8 @@ namespace tl
             vlk::MultisampleStateInfo ms;
             ms.rasterizationSamples = fbo->getSampleCount();
             
-            createPipeline(pipelineName, pipelineLayoutName, fbo->getRenderPass(),
-                           shader, mesh, cb, ds, ms);
+            createPipeline(pipelineName, pipelineLayoutName,
+                           fbo->getRenderPass(), shader, mesh, cb, ds, ms);
             
             fbo->setupViewportAndScissor(p.cmd);
             if (p.clipRectEnabled)
@@ -293,10 +286,12 @@ namespace tl
 
         VkRenderPass Render::getRenderPass() const
         {
-            TLRENDER_P();
-            
-            if (p.fbo) return p.fbo->getRenderPass();
-            return VK_NULL_HANDLE;
+            return _p->renderPass;
+        }
+
+        void Render::setRenderPass(VkRenderPass value)
+        {
+            _p->renderPass = value;
         }
     }
 }

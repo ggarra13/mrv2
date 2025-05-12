@@ -148,13 +148,11 @@ namespace tl
                           const VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD);
             //! These functions draw to the viewport
             void drawRect(const std::string& pipelineName,
-                          const VkRenderPass renderPass,
                           const math::Box2i&, const image::Color4f&,
                           const bool enableBlending = true);
             void drawMesh(const std::string& pipelineName,
                           const std::string& shaderName,
                           const std::string& meshName,
-                          VkRenderPass renderPass,
                           const geom::TriangleMesh2&,
                           const math::Vector2i& position,
                           const image::Color4f&,
@@ -174,7 +172,6 @@ namespace tl
             void drawText(
                 const std::string& pipelineName,
                 const std::string& pipelineLayoutName,
-                const VkRenderPass& renderPass,
                 const bool hasDepth,
                 const bool hasStencil,
                 const std::vector<std::shared_ptr<image::Glyph> >& glyphs,

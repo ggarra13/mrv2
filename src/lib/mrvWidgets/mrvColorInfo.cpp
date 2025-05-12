@@ -278,7 +278,7 @@ namespace mrv
              << " ] = " << numPixels << " "
              << (numPixels == 1 ? _("pixel") : _("pixels")) << std::endl;
         area->copy_label(text.str().c_str());
-
+        
         PixelToolBarClass* c = ui->uiPixelWindow;
         mrv::BrightnessType brightness_type =
             (mrv::BrightnessType)c->uiLType->value();

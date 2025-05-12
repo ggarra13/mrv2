@@ -595,12 +595,10 @@ namespace mrv
             const image::Color4f shadowColor(0.F, 0.F, 0.F, 0.7F);
             math::Vector2i shadowPos{pos.x + 1, pos.y - 1};
             vk.render->drawText("HUDShadow", "text",
-                                renderPass(),
                                 hasDepth, hasStencil,
                                 glyphs,
                                 shadowPos, shadowColor);
             vk.render->drawText("HUD", "text",
-                                renderPass(),
                                 hasDepth, hasStencil,
                                 glyphs,
                                 pos, labelColor);
@@ -709,8 +707,7 @@ namespace mrv
             
             math::Vector2i pos(box.min.x, box.max.y - 2 * p.viewZoom);
 
-            vk.render->drawText(label, label, renderPass(),
-                                hasDepth, hasStencil, glyphs, pos, color);
+            vk.render->drawText(label, label, hasDepth, hasStencil, glyphs, pos, color);
         }
 
         void Viewport::_drawSafeAreas() noexcept
@@ -729,7 +726,10 @@ namespace mrv
             const auto& renderSize = getRenderSize();
 
             const math::Matrix4x4f mvp = _rasterProjectionMatrix();
+            const VkRenderPass oldRenderPass = vk.render->getRenderPass();
             const math::Matrix4x4f oldTransform = vk.render->getTransform();
+
+            vk.render->setRenderPass(renderPass());
             double aspect = (double)renderSize.w / pr / (double)renderSize.h;
             if (aspect <= 1.78)
             {
@@ -758,6 +758,7 @@ namespace mrv
                 _drawSafeAreas(1.77, 1.0, pr, color, mvp, "hdtv");
             }
             vk.render->setTransform(oldTransform);
+            vk.render->setRenderPass(oldRenderPass);
         }
 
         void Viewport::_drawHUD(VkCommandBuffer cmd, float alpha) const noexcept
@@ -797,6 +798,9 @@ namespace mrv
                                                viewportSize.h));
             vk.render->setRenderSize(viewportSize);
             const math::Matrix4x4f oldTransform = vk.render->getTransform();
+            VkRenderPass oldRenderPass = vk.render->getRenderPass();
+
+            vk.render->setRenderPass(renderPass());
             vk.render->setTransform(math::ortho(
                                         0.F, static_cast<float>(viewportSize.w),
                                         0.F, static_cast<float>(viewportSize.h), -1.F, 1.F));
@@ -1045,6 +1049,7 @@ namespace mrv
             }
             
             vk.render->setTransform(oldTransform);
+            vk.render->setRenderPass(oldRenderPass);
         }
 
         void Viewport::_drawWindowArea(const std::string& pipelineName,

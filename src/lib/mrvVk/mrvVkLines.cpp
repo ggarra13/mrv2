@@ -148,7 +148,7 @@ namespace mrv
                 dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
             }
 
-            if (renderPass() == VK_NULL_HANDLE)
+            if (getRenderPass() == VK_NULL_HANDLE)
             {
                 render->drawMesh("viewport", shaderName, shaderName, "mesh",
                                  mesh, math::Vector2i(0, 0), color,
@@ -158,9 +158,12 @@ namespace mrv
             }
             else
             {
+                VkRenderPass oldRenderPass = render->getRenderPass();
+                render->setRenderPass(getRenderPass());
                 render->drawMesh(pipelineName, shaderName, "mesh",
-                                 renderPass(), mesh, math::Vector2i(0, 0),
+                                 mesh, math::Vector2i(0, 0),
                                  color);
+                render->setRenderPass(oldRenderPass);
             }
         }
 

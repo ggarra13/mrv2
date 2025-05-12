@@ -98,7 +98,6 @@ namespace tl
 
         //! This function draws to the viewport
         void Render::drawRect(const std::string& pipelineName,
-                              const VkRenderPass renderPass,
                               const math::Box2i& box,
                               const image::Color4f& color,
                               const bool enableBlending)
@@ -124,7 +123,8 @@ namespace tl
             
                 cb.attachments.push_back(colorBlendAttachment);
             
-                createPipeline(pipelineName, "rect", renderPass,
+                createPipeline(pipelineName, "rect",
+                               getRenderPass(),
                                p.shaders["rect"],
                                p.vbos["rect"], cb);
                 
@@ -215,7 +215,6 @@ namespace tl
         void Render::drawMesh(const std::string& pipelineName,
                               const std::string& shaderName,
                               const std::string& meshName,
-                              VkRenderPass renderPass,
                               const geom::TriangleMesh2& mesh,
                               const math::Vector2i& position,
                               const image::Color4f& color,
@@ -267,7 +266,8 @@ namespace tl
             
                 cb.attachments.push_back(colorBlendAttachment);
                 
-                createPipeline(pipelineName, pipelineLayoutName, renderPass,
+                createPipeline(pipelineName, pipelineLayoutName,
+                               getRenderPass(),
                                p.shaders[shaderName],
                                p.vbos[meshName], cb);
                 
@@ -356,7 +356,6 @@ namespace tl
         void Render::drawText(
             const std::string& pipelineName,
             const std::string& pipelineLayoutName,
-            const VkRenderPass& renderPass,
             const bool hasDepth,
             const bool hasStencil,
             const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
@@ -423,7 +422,8 @@ namespace tl
                                 ds.depthWriteEnable = hasDepth ? VK_TRUE : VK_FALSE;
                                 ds.stencilTestEnable = hasStencil ? VK_TRUE : VK_FALSE;
             
-                                createPipeline(pipelineName, pipelineLayoutName, renderPass,
+                                createPipeline(pipelineName, pipelineLayoutName,
+                                               getRenderPass(),
                                                p.shaders["text"], p.vbos["text"], cb, ds);
 
                                 p.shaders["text"]->bind(p.frameIndex);
@@ -521,8 +521,9 @@ namespace tl
                 ds.depthWriteEnable = hasDepth ? VK_TRUE : VK_FALSE;
                 ds.stencilTestEnable = hasStencil ? VK_TRUE : VK_FALSE;
             
-                createPipeline(pipelineName, pipelineLayoutName, renderPass,
-                               p.shaders["text"], p.vbos["text"], cb, ds);
+                createPipeline(pipelineName, pipelineLayoutName,
+                               getRenderPass(), p.shaders["text"],
+                               p.vbos["text"], cb, ds);
             
                 p.shaders["text"]->bind(p.frameIndex);
                 p.shaders["text"]->setUniform("transform.mvp", p.transform);

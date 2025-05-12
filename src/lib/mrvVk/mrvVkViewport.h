@@ -146,16 +146,16 @@ namespace mrv
                 const std::shared_ptr<tl::vlk::OffscreenBuffer>&,
                 const math::Matrix4x4f& identity,
                 const math::Size2i& viewportSize);
-            
-        protected:
-            // Pipelines and layouts are managed outside the per-frame draw loop
 
+            // Vulkan preparation functions
             void prepare_annotation_pipeline();
             void prepare_pipeline();
             void prepare_pipeline_layout();
             void prepare_shaders();
             void prepare_render();
 
+            void _mapBuffer();
+            void _unmapBuffer();
             
         private:
             struct VKPrivate;

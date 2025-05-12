@@ -349,8 +349,8 @@ namespace tl
             
                 // Draw left stencil mask
                 createPipeline("wipe_stencil1", pipelineLayoutName,
-                               p.fbo->getRenderPass(), p.shaders["wipe"],
-                               p.vbos["wipe"],
+                               getRenderPass(),
+                               p.shaders["wipe"], p.vbos["wipe"],
                                cb, ds);
             }
             
@@ -399,7 +399,7 @@ namespace tl
             
                 createPipeline("wipe_image1",
                                pipelineLayoutName,
-                               p.fbo->getRenderPass(),
+                               getRenderPass(),
                                p.shaders["overlay"],
                                p.vbos["video"],
                                cb, ds);
@@ -495,8 +495,8 @@ namespace tl
             
                 // Draw left stencil mask
                 createPipeline("wipe_stencil2", pipelineLayoutName,
-                               p.fbo->getRenderPass(), p.shaders["wipe"],
-                               p.vbos["wipe"],
+                               getRenderPass(),
+                               p.shaders["wipe"], p.vbos["wipe"],
                                cb, ds);
             }
             
@@ -546,7 +546,7 @@ namespace tl
 
                 createPipeline("wipe_image2",
                                pipelineLayoutName,
-                               p.fbo->getRenderPass(),
+                               getRenderPass(),
                                p.shaders["overlay"],
                                p.vbos["video"],
                                cb, ds);
@@ -652,9 +652,9 @@ namespace tl
                     const std::string meshName = "video";
                     const std::string pipelineLayoutName = shaderName;
                     createPipeline(p.fbo, pipelineName,
-                                    pipelineLayoutName,
-                                    shaderName, meshName,
-                                    true);
+                                   pipelineLayoutName,
+                                   shaderName, meshName,
+                                   true);
                     
                     VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
                     vkCmdPushConstants(p.cmd, pipelineLayout,
@@ -801,12 +801,12 @@ namespace tl
                     const std::string meshName = "video";
                     const bool enableBlending = true;  
                     createPipeline(p.fbo, pipelineName,
-                                    pipelineLayoutName, shaderName, meshName,
-                                    enableBlending,
-                                    VK_BLEND_FACTOR_SRC_ALPHA,
-                                    VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-                                    VK_BLEND_FACTOR_ONE,
-                                    VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);
+                                   pipelineLayoutName, shaderName, meshName,
+                                   enableBlending,
+                                   VK_BLEND_FACTOR_SRC_ALPHA,
+                                   VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                                   VK_BLEND_FACTOR_ONE,
+                                   VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);
                 
                     // Begin the new compositing render pass.
                     p.fbo->transitionToColorAttachment(p.cmd);
@@ -990,10 +990,10 @@ namespace tl
                                 // Create or find a pipeline without blending
                                 bool enableBlending = false;
                                 createPipeline(p.buffers["video"],
-                                                pipelineDissolveName,
-                                                pipelineLayoutName,
-                                                shaderName, meshName,
-                                                enableBlending);
+                                               pipelineDissolveName,
+                                               pipelineLayoutName,
+                                               shaderName, meshName,
+                                               enableBlending);
                                 
                                 VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
                                 vkCmdPushConstants(p.cmd, pipelineLayout,
@@ -1129,7 +1129,7 @@ namespace tl
                             
                 createPipeline(pipelineName,
                                pipelineLayoutName,
-                               fbo->getRenderPass(),
+                               getRenderPass(),
                                p.shaders["display"],
                                p.vbos["video"],
                                cb);

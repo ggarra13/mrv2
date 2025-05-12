@@ -64,7 +64,7 @@ namespace mrv
                 const math::Vector2f& center, const float radius,
                 const image::Color4f& color);
 
-            VkRenderPass renderPass() { return m_renderPass; }
+            inline VkRenderPass getRenderPass() { return m_renderPass; }
             
         private:
             Fl_Vk_Context& ctx;

@@ -715,6 +715,7 @@ namespace tl
 
             p.cmd = cmd;
             p.fbo = fbo;
+            p.renderPass = fbo->getRenderPass();
             p.frameIndex = frameIndex;
 
             begin(renderSize, renderOptions);
@@ -814,7 +815,7 @@ namespace tl
               // Shader used to create a 2D mesh with colors
               if (!p.shaders["colorMesh"])
               {
-  #if USE_PRECOMPILED_SHADERS
+#if USE_PRECOMPILED_SHADERS
                 p.shaders["colorMesh"] = vlk::Shader::create(
                     ctx,
                     colorMeshVertex_spv,
@@ -1006,7 +1007,7 @@ namespace tl
             }
             if (!p.shaders["soft"])
             {
-#if 0 //USE_PRECOMPILED_SHADERS
+#if USE_PRECOMPILED_SHADERS
                 p.shaders["soft"] = vlk::Shader::create(
                     ctx,
                     Vertex2_spv,
@@ -1175,11 +1176,7 @@ namespace tl
 
         void Render::setViewport(const math::Box2i& value)
         {
-            TLRENDER_P();
-            p.viewport = value;
-            // glViewport(
-            //     value.x(), p.renderSize.h - value.h() - value.y(), value.w(),
-            //     value.h());
+            _p->viewport = value;
         }
 
         void Render::beginRenderPass()

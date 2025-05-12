@@ -148,9 +148,7 @@ namespace mrv
             //! Skipped frames
             static uint64_t droppedFrames;
 
-            //! We store really image::Color4f but since we need to reverse
-            //! the R and B channels (as they are read in BGR order), we process
-            //! floats.
+            //! The pointer to the raw area we retrieve in the float format.
             float* image = nullptr;
 
             //! Mark the buffer as raw, so we will delete with free().
