@@ -14,7 +14,7 @@
 #include "mrvUI/mrvDesktop.h"
 
 #include "mrvFl/mrvIO.h"
-
+//@{//@{
 #include "mrvVk/mrvTimelineWidget.h"
 
 #include "mrvCore/mrvFile.h"
@@ -50,8 +50,9 @@ namespace mrv
         const int kWINDOW_BORDERS = 2;
         const int kBOX_BORDERS = 2;
 
-        // const double kTimeout = 0.008; // approx. 120 fps
-        const double kTimeout = 0.016; // approx. 120 fps
+        const double kTimeout = 0.008; // approx. 120 fps
+        //const double kTimeout = 0.016; // approx. 60 fps
+        //const double kTimeout = 0.05;
         const char* kModule = "timeline";
     } // namespace
 
@@ -209,7 +210,7 @@ namespace mrv
             // Render data
             std::shared_ptr<ui::Style> style;
             std::shared_ptr<ui::IconLibrary> iconLibrary;
-            std::shared_ptr<image::FontSystem> fontSystem;
+            std::shared_ptr<image::FontSystem> fontSystem;//@}//@}
             std::shared_ptr<Clipboard> clipboard;
             std::shared_ptr<timeline_vlk::Render> render;
             timelineui::DisplayOptions displayOptions;
@@ -239,23 +240,23 @@ namespace mrv
             VkWindow(X, Y, W, H, L),
             _p(new Private)
         {
-            int fl_double = FL_DOUBLE; // _WIN32 needs this
+            int fl_double = FL_SINGLE; // _WIN32 needs this
 
-            // Do not use FL_DOUBLE on APPLE as it makes playback slow
-#if defined(__APPLE__) || defined(__linux__)
-            fl_double = FL_SINGLE;
-            if (desktop::XWayland())
-            {
-                fl_double = FL_DOUBLE; // needed
-            }
-            else if (desktop::Wayland() || desktop::X11())
-            {
-                // For faster playback, we won't set this
-                // window to FL_DOUBLE.
-                // FLTK's X11 already uses two buffers.
-                fl_double = FL_SINGLE;
-            }
-#endif
+//             // Do not use FL_DOUBLE on APPLE as it makes playback slow
+// #if defined(__APPLE__) || defined(__linux__)
+//             fl_double = FL_SINGLE;
+//             if (desktop::XWayland())
+//             {
+//                 fl_double = FL_DOUBLE; // needed
+//             }
+//             else if (desktop::Wayland() || desktop::X11())
+//             {
+//                 // For faster playback, we won't set this
+//                 // window to FL_DOUBLE.
+//                 // FLTK's X11 already uses two buffers.
+//                 fl_double = FL_SINGLE;
+//             }
+// #endif
             mode(FL_RGB | FL_ALPHA | fl_double);
         }
 
@@ -797,8 +798,6 @@ void main()
         void TimelineWidget::hide()
         {
             TLRENDER_P();
-            
-            Fl::check();
 
             wait_device();
             
@@ -887,6 +886,7 @@ void main()
                     if (p.render && p.buffer)
                     {
                         timeline::RenderOptions renderOptions;
+                        renderOptions.clear = false;
                         renderOptions.clearColor =
                             p.style->getColorRole(ui::ColorRole::Window);
                         

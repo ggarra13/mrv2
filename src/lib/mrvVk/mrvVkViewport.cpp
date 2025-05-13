@@ -1176,66 +1176,44 @@ namespace mrv
                     return;
                 }
                 
-                // We use ReadPixels when the movie is stopped or has only a
-                // a single frame.
-                bool update = _shouldUpdatePixelBar();
 
-                if (update)
+                _unmapBuffer();
+
+                if (_isEnvironmentMap())
                 {
-                    _unmapBuffer();
-                    if (_isEnvironmentMap())
-                    {
-                        pos = _getFocus();
-                        // glBindFramebuffer(GL_FRAMEBUFFER, 0);
-                        // glReadBuffer(GL_FRONT);
-                        // glReadPixels(pos.x, pos.y, 1, 1, GL_RGBA, type,
-                        // &rgba);
-                        return;
-                    }
-                    else
-                    {
-                        if (p.image)
-                            return;
-                        
-                        VkCommandBuffer cmd =
-                            beginSingleTimeCommands(device(), commandPool());
-
-                        vk.buffer->readPixels(cmd, pos.x, pos.y, 1, 1);
-
-                        vkEndCommandBuffer(cmd);
-
-                        vk.buffer->submitReadback(cmd);
-
-                        wait_queue();
-
-                        vkFreeCommandBuffers(device(), commandPool(), 1, &cmd);
-
-                        const void* data = vk.buffer->getLatestReadPixels();
-                        if (!data)
-                        {
-                            LOG_ERROR("Could not get pixel under mouse");
-                            return;
-                        }
-
-                        const auto options = vk.buffer->getOptions();
-                        rgba = color::fromVoidPtr(data, options.colorType);
-                        return;
-                    }
+                    pos = _getFocus();
+                    // glBindFramebuffer(GL_FRAMEBUFFER, 0);
+                    // glReadBuffer(GL_FRONT);
+                    // glReadPixels(pos.x, pos.y, 1, 1, GL_RGBA, type,
+                    // &rgba);
+                    return;
                 }
+                else
+                {                        
+                    VkCommandBuffer cmd =
+                        beginSingleTimeCommands(device(), commandPool());
 
-                // if (!p.image)
-                //     _mapBuffer();
-            
-                // if (p.image)
-                // {
-                //     const auto& renderSize = vk.buffer->getSize();
-                //     rgba.b = p.image[(pos.x + pos.y * renderSize.w) * 4];
-                //     rgba.g = p.image[(pos.x + pos.y * renderSize.w) * 4 + 1];
-                //     rgba.r = p.image[(pos.x + pos.y * renderSize.w) * 4 + 2];
-                //     rgba.a = p.image[(pos.x + pos.y * renderSize.w) * 4 + 3];
-                // }
-                
-                // _unmapBuffer();
+                    vk.buffer->readPixels(cmd, pos.x, pos.y, 1, 1);
+
+                    vkEndCommandBuffer(cmd);
+                    
+                    vk.buffer->submitReadback(cmd);
+
+                    wait_queue();
+                        
+                    vkFreeCommandBuffers(device(), commandPool(), 1, &cmd);
+
+                    const void* data = vk.buffer->getLatestReadPixels();
+                    if (!data)
+                    {
+                        LOG_ERROR("Could not get pixel under mouse");
+                        return;
+                    }
+
+                    const auto options = vk.buffer->getOptions();
+                    rgba = color::fromVoidPtr(data, options.colorType);
+                    return;
+                }
             }
         }
         

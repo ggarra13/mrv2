@@ -833,19 +833,19 @@ namespace tl
                 _createBindingSet(p.shaders["colorMesh"]);
             }
 
-            // Shader to create a quad with a texture for text drawing 
+            // Shader to creates a quad with a texture for text drawing 
             if (!p.shaders["text"])
             {
 #if USE_PRECOMPILED_SHADERS
                 p.shaders["text"] = vlk::Shader::create(
                     ctx,
-                    Vertex3_spv,
-                    Vertex3_spv_len,
+                    Vertex2_spv,
+                    Vertex2_spv_len,
                     textFragment_spv,
                     textFragment_spv_len, "text");
 #else
                 p.shaders["text"] = vlk::Shader::create(
-                    ctx, vertexSource(), textFragmentSource(), "text");
+                    ctx, vertex2Source(), textFragmentSource(), "text");
 #endif
                 p.shaders["text"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
