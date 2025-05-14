@@ -920,8 +920,8 @@ void main()
 
                 p.shader->bind(m_currentFrameIndex);
                 const auto pm = math::ortho(
-                    0.F, static_cast<float>(renderSize.w), 0.F,
-                    static_cast<float>(renderSize.h), -1.F, 1.F);
+                    0.F, static_cast<float>(renderSize.w),
+                    0.F, static_cast<float>(renderSize.h), -1.F, 1.F);
                 p.shader->setUniform("transform.mvp", pm, vlk::kShaderVertex);
                 p.shader->setFBO("textureSampler", p.buffer);
 

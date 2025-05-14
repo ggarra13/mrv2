@@ -5,11 +5,18 @@
 #include <string>
 
 #define DEBUG_PIPELINE_USE 0
+#define DEBUG_PIPELINE_LAYOUT_USE 0
 
 #if DEBUG_PIPELINE_USE
-#define DEBUG_USE(x) std::cerr << x << std::endl;
+#define DEBUG_PIPELINE(x) std::cerr << x << std::endl;
 #else
-#define DEBUG_USE(x)
+#define DEBUG_PIPELINE(x)
+#endif
+
+#if DEBUG_PIPELINE_LAYOUT_USE
+#define DEBUG_PIPELINE_LAYOUT(x) std::cerr << x << std::endl;
+#else
+#define DEBUG_PIPELINE_LAYOUT(x)
 #endif
 
 namespace tl
@@ -78,13 +85,13 @@ namespace tl
             VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
             if (!pipelineLayout)
             {
-                DEBUG_USE("CREATING   pipelineLayout " << pipelineLayoutName);
+                DEBUG_PIPELINE_LAYOUT("CREATING   pipelineLayout " << pipelineLayoutName);
                 pipelineLayout = _createPipelineLayout(pipelineLayoutName,
                                                        shader);
             }
             else
             {
-                DEBUG_USE("REUSING    pipelineLayout " << pipelineLayoutName);
+                DEBUG_PIPELINE_LAYOUT("REUSING    pipelineLayout " << pipelineLayoutName);
             }
             
             if (pipelineLayout == VK_NULL_HANDLE)
@@ -145,7 +152,7 @@ namespace tl
             VkPipeline pipeline;
             if (p.pipelines.count(pipelineName) == 0)
             {
-                DEBUG_USE("CREATING   pipeline " << pipelineName);
+                DEBUG_PIPELINE("CREATING   pipeline " << pipelineName);
                 pipeline = pipelineState.create(device);
                 p.pipelines[pipelineName] = std::make_pair(pipelineState,
                                                            pipeline);
@@ -157,7 +164,7 @@ namespace tl
                 VkPipeline oldPipeline = pair.second;
                 if (pipelineState != oldPipelineState)
                 {
-                    DEBUG_USE("RECREATING pipeline " << pipelineName);
+                    DEBUG_PIPELINE("RECREATING pipeline " << pipelineName);
                     p.garbage[p.frameIndex].pipelines.push_back(
                         oldPipeline);
                     pipeline = pipelineState.create(device);
@@ -166,15 +173,13 @@ namespace tl
                 }
                 else
                 {
-                    DEBUG_USE("REUSING    pipeline " << pipelineName);
+                    DEBUG_PIPELINE("REUSING    pipeline " << pipelineName);
                     pipeline = pair.second;
                 }
             }
 
             // Enable the pipeline.
             vkCmdBindPipeline(p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
-            DEBUG_USE("USING      pipeline " << pipelineName <<
-                      " with renderPass " << renderPass);
         }
         
         void Render::createPipeline(
@@ -219,8 +224,6 @@ namespace tl
             vlk::MultisampleStateInfo ms;
             ms.rasterizationSamples = fbo->getSampleCount();
 
-            DEBUG_USE("Create pipeline for FBO " << fbo
-                      << " renderPass " << fbo->getRenderPass());
             setRenderPass(fbo->getRenderPass());
             createPipeline(pipelineName, pipelineLayoutName,
                            fbo->getRenderPass(), shader, mesh, cb, ds, ms);
@@ -283,7 +286,6 @@ namespace tl
             
             p.vaos[meshName]->bind(p.frameIndex);
             p.vaos[meshName]->draw(p.cmd, p.vbos[meshName]);
-            p.garbage[p.frameIndex].vaos.push_back(p.vaos[meshName]);
         }
 
         VkRenderPass Render::getRenderPass() const

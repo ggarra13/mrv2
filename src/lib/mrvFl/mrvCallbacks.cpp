@@ -1686,12 +1686,23 @@ namespace mrv
     {
         toggle_ui_bar(ui, ui->uiBottomBar);
         save_ui_state(ui, ui->uiBottomBar);
-        Fl::check();
         if (ui->uiBottomBar->visible())
             set_edit_mode_cb(editMode, ui);
         else
             set_edit_mode_cb(EditMode::kNone, ui);
-        // else
+        
+        // These are needed to clean the resources and avoid
+        // OpenGL flickering.
+        ui->uiView->refresh();
+        ui->uiView->valid(0);
+        ui->uiTimeline->refresh();
+        ui->uiTimeline->valid(0);
+        if (ui->uiSecondary && ui->uiSecondary->viewport())
+        {
+            auto view = ui->uiSecondary->viewport();
+            view->refresh();
+            view->valid(0);
+        }
         bool send = ui->uiPrefs->SendUI->value();
         if (send)
             tcp->pushMessage("Bottom Bar", (bool)ui->uiBottomBar->visible());

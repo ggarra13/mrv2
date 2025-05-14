@@ -643,8 +643,7 @@ namespace tl
             for (int i = 0; i < vlk::MAX_FRAMES_IN_FLIGHT; ++i)
             {
                 p.garbage[i].pipelines.reserve(20);
-                p.garbage[i].bindingSets.reserve(100);
-                p.garbage[i].vaos.reserve(30);
+                p.garbage[i].bindingSets.reserve(30);
             }
         }
 
@@ -679,10 +678,6 @@ namespace tl
                 for (auto& bindingSet : g.bindingSets)
                 {
                     bindingSet.reset();
-                }
-                for (auto& vao : g.vaos)
-                {
-                    vao.reset();
                 }
                 for (auto& shaders : g.shaders)
                 {
@@ -751,11 +746,6 @@ namespace tl
             {
                 bindingSet.reset();
             }
-            // Destroy old vaos that are no longer used
-            for (auto& vao : g.vaos)
-            {
-                vao.reset();
-            }
             for (auto& shaders : g.shaders)
             {
                 shaders.reset();
@@ -763,7 +753,6 @@ namespace tl
             g.pipelines.clear();
             g.pipelineLayouts.clear();
             g.bindingSets.clear();
-            g.vaos.clear();
             g.shaders.clear();
 
             

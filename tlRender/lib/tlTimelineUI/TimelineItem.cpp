@@ -416,12 +416,12 @@ namespace tl
             event.render->drawRect(
                 math::Box2i(g.min.x, y, g.w(), h),
                 event.style->getColorRole(ui::ColorRole::Border),
-                "timeline_border");
+                "timeline_border", false);
             
             _drawInOutPoints(drawRect, event);
             _drawTimeTicks(drawRect, event);
             _drawFrameMarkers(drawRect, event);
-            _drawTimeLabels(drawRect, event);
+            _drawTimeLabels(drawRect, event);  // without it 40fps
             _drawCacheInfo(drawRect, event);
             _drawCurrentTime(drawRect, event);
 

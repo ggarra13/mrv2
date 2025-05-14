@@ -4,8 +4,7 @@ v1.3.8
 - Fixed OpenEXR's Data Window and Display Window display which was crashing when the coordinates had negative values.
 - Added proper support for all possible texture types of OpenGL that libplacebo might use.
 - Same for Vulkan's hdr utility.
-- Flattened tlRender from a submodule to a directory to start working on porting
-it to Vulkan.
+- Flattened tlRender from a submodule to a directory to start working on porting it to Vulkan.
 - Added mrvCore/mrvBackend.h to select which backend should mrv2 use.  By default, we still use opengl.
 - Fixed hdr view utility to handle HDR10 and HLG properly on HDR10 monitors, as it would lead to a crash.
 - Fixed hdr view utility sometimes crashing at start up on macOS.
@@ -18,6 +17,7 @@ it to Vulkan.
 - Fixed a crash with color area selection switching from Full to Original Values.
 - Allowed overriding pixel ratio on OpenEXR images from the Image Information Panel.  Note that once you override it, it will remain like that for all images.  To reverse them, you need to set it back to a value of 0 or less than 0.
 - Fixed a memory leak in the Vectorscope.
+- Fixed secondary viewport flickering when the timeline was hidden (at least on X11).
 - Started porting to Vulkan.
 
 	 * Working:
@@ -50,18 +50,22 @@ it to Vulkan.
 		 - Color Areas (Area color information)
 		 
 	 * Missing to check/add:
-		 * Missing Frames crosses
-		 * Environment mapping
-		 * Thumbnails in Timeline (crashes) / Editing
-		 * Thumbnails in Panels (done with OpenGL for now)
-		 * Saving of Movies/Pictures with Annotations
-		 * Temporary FLTK Text widget annotation (how to do it?)
+		 - Missing Frames crosses
+		 - Environment mapping
+		 - Thumbnails in Timeline (crashes) / Editing
+		 - Thumbnails in Panels (done with OpenGL for now)
+		 - Saving of Movies/Pictures with Annotations
+		 - Temporary FLTK Text widget annotation (how to do it?)
 			 - Will have to code an equivalent in Vulkan and do my own
 			   event handling.
-		 * Text annotations (how to do it?)
-		 * How to use any FLTK font for annotation (how to do it?)
-		 * OpenUSD in Vulkan (how to do it?)
+		 - Text annotations (how to do it?)
+		 - How to use any FLTK font for annotation (how to do it?)
+		 - OpenUSD in Vulkan (how to do it?)
 		 
+	 * Problems:
+		 - Performance of the timeline is an issue.  It prevents mrv2 from
+		   reaching 60 fps at 4K (it reaches only 35 fps).
+		   
 - Fixed and simplified code for NDIView (hdr utility).
 - Fixed hdr utility for macOS Intel trying to pass full HDR10 or HLG data, 
   which goes over those machines' nits.

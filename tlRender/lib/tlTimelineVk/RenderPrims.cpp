@@ -340,7 +340,6 @@ namespace tl
             {
                 vbos["text"] = vlk::VBO::create(
                     size * 3, vlk::VBOType::Pos2_F32_UV_U16);
-                vaos["text"].reset();
             }
             if (vbos["text"])
             {
@@ -440,7 +439,7 @@ namespace tl
                                     sizeof(color), &color);
                                 
                                 if (p.vaos["text"] && p.vbos["text"])
-                                {
+                                {           
                                     _vkDraw("text");
                                 }
                             }
