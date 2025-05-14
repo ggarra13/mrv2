@@ -163,9 +163,10 @@ namespace mrv
         {
             MRV2_VK();
 
-            if (m_pipeline != VK_NULL_HANDLE)
+            if (pipeline() != VK_NULL_HANDLE)
             {
                 vkDestroyPipeline(device(), m_pipeline, nullptr);
+                pipeline() = VK_NULL_HANDLE;
             }
             
             // Elements of new Pipeline (fill with mesh info)
@@ -229,8 +230,8 @@ namespace mrv
             pipelineState.renderPass = renderPass();
             pipelineState.layout = vk.pipeline_layout;
 
-            m_pipeline = pipelineState.create(device());
-            if (m_pipeline == VK_NULL_HANDLE)
+            pipeline() = pipelineState.create(device());
+            if (pipeline() == VK_NULL_HANDLE)
             {
                 throw std::runtime_error("Composition pipeline failed");
             }
@@ -787,6 +788,9 @@ namespace mrv
             {
                 mvp = _createTexturedRectangle();
             }
+
+            if (!pipeline())
+                return;
                 
 
 
@@ -840,7 +844,7 @@ namespace mrv
 
                     if (!vk.avao && vk.avbo)
                     {
-                        vk.avao = vlk::VAO::create(ctx);
+                        vk.avao = vlk::VAO::create(ctx, "vk.avao");
                         prepare_annotation_pipeline();
                     }
                 }
@@ -854,7 +858,7 @@ namespace mrv
             vk.buffer->transitionToShaderRead(cmd);
             if (vk.annotation)
                 vk.annotation->transitionToShaderRead(cmd);
-
+            
             begin_render_pass(cmd);
 
             // Bind the shaders to the current frame index.
@@ -862,8 +866,8 @@ namespace mrv
 
             // Bind the main composition pipeline (created/managed outside this
             // draw loop)
-            vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline);
-
+            vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline());
+            
             // --- Update Descriptor Set for the SECOND pass (Composition) ---
             // This updates the descriptor set for the CURRENT frame index on
             // the CPU.

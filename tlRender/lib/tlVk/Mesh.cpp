@@ -22,10 +22,17 @@ namespace tl
     namespace vlk
     {
         TLRENDER_ENUM_IMPL(
-            VBOType, "Pos2_F32", "Pos2_F32_UV_U16", "Pos2_F32_Color_F32",
-            "Pos3_F32", "Pos3_F32_UV_U16", "Pos3_F32_UV_U16_Normal_U10",
-            "Pos3_F32_UV_U16_Normal_U10_Color_U8", "Pos3_F32_UV_F32_Normal_F32",
-            "Pos3_F32_UV_F32_Normal_F32_Color_F32", "Pos3_F32_Color_U8");
+            VBOType,
+            "Pos2_F32",
+            "Pos2_F32_UV_U16",
+            "Pos2_F32_Color_F32",
+            "Pos3_F32",
+            "Pos3_F32_UV_U16",
+            "Pos3_F32_UV_U16_Normal_U10",
+            "Pos3_F32_UV_U16_Normal_U10_Color_U8",
+            "Pos3_F32_UV_F32_Normal_F32",
+            "Pos3_F32_UV_F32_Normal_F32_Color_F32",
+            "Pos3_F32_Color_U8");
         TLRENDER_ENUM_SERIALIZE_IMPL(VBOType);
 
         namespace
@@ -655,6 +662,7 @@ namespace tl
         struct VAO::Private
         {
             uint32_t frameIndex = 0;
+            std::string name;
 
             std::vector<VkBuffer> buffers;
             std::vector<VkDeviceMemory> memories;
@@ -662,9 +670,11 @@ namespace tl
             std::array<FrameResources, MAX_FRAMES_IN_FLIGHT> frames;
         };
 
-        void VAO::_init()
+        void VAO::_init(const std::string& name)
         {
             TLRENDER_P();
+
+            p.name = name;
 
             p.buffers.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
             p.memories.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
@@ -723,17 +733,17 @@ namespace tl
             }
         }
 
-        std::shared_ptr<VAO> VAO::create(Fl_Vk_Context& context)
+        std::shared_ptr<VAO> VAO::create(Fl_Vk_Context& context, const std::string& name)
         {
             auto out = std::shared_ptr<VAO>(new VAO(context));
-            out->_init();
+            out->_init(name);
             return out;
         }
 
         void VAO::upload(const std::vector<uint8_t>& vertexData)
         {
             TLRENDER_P();
-
+            
             VkDevice device = ctx.device;
             VkPhysicalDevice gpu = ctx.gpu;
             VkBuffer& buffer = p.buffers[p.frameIndex];

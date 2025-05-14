@@ -769,11 +769,38 @@ void main()
             }
         }
 
+        void TimelineWidget::prepare_mesh()
+        {
+            TLRENDER_P();
+
+            const math::Size2i renderSize(pixel_w(), pixel_h());
+            
+            const auto& mesh =
+                geom::box(math::Box2i(0, 0, renderSize.w, renderSize.h));
+            if (!p.vbo)
+            {
+                p.vbo = vlk::VBO::create(
+                    mesh.triangles.size() * 3,
+                    vlk::VBOType::Pos2_F32_UV_U16);
+            }
+            if (p.vbo)
+            {
+                p.vbo->copy(convert(mesh, vlk::VBOType::Pos2_F32_UV_U16));
+            }
+
+            if (!p.vao && p.vbo)
+            {
+                p.vao = vlk::VAO::create(ctx, "timeline vao");
+            }
+        }
+        
         void TimelineWidget::prepare()
         {
             prepare_shaders();
+            prepare_mesh();
             prepare_render_pass();
             prepare_pipeline_layout(); // Main shader layout
+            prepare_pipeline();
         }
 
         void TimelineWidget::destroy_resources()
@@ -788,10 +815,10 @@ void main()
                 p.pipeline_layout = VK_NULL_HANDLE;
             }
 
-            if (m_pipeline != VK_NULL_HANDLE)
+            if (pipeline() != VK_NULL_HANDLE)
             {
-                vkDestroyPipeline(device(), m_pipeline, nullptr);
-                m_pipeline = VK_NULL_HANDLE;
+                vkDestroyPipeline(device(), pipeline(), nullptr);
+                pipeline() = VK_NULL_HANDLE;
             }
         }
 
@@ -875,7 +902,8 @@ void main()
                         {
                             p.buffer = vlk::OffscreenBuffer::create(
                                 ctx, renderSize, offscreenBufferOptions);
-                            p.vbo.reset();
+                            prepare_mesh();
+                            prepare_pipeline();
                         }
                     }
                     else
@@ -916,6 +944,8 @@ void main()
 
             if (p.buffer)
             {
+                p.buffer->transitionToShaderRead(cmd);
+                        
                 begin_render_pass(cmd);
 
                 p.shader->bind(m_currentFrameIndex);
@@ -929,25 +959,6 @@ void main()
                 const float alpha = p.ui->uiMain->get_alpha() / 255.F;
                 set_window_transparency(alpha);
 #endif
-
-                const auto& mesh =
-                    geom::box(math::Box2i(0, 0, renderSize.w, renderSize.h));
-                if (!p.vbo)
-                {
-                    p.vbo = vlk::VBO::create(
-                        mesh.triangles.size() * 3,
-                        vlk::VBOType::Pos2_F32_UV_U16);
-                }
-                if (p.vbo)
-                {
-                    p.vbo->copy(convert(mesh, vlk::VBOType::Pos2_F32_UV_U16));
-                }
-
-                if (!p.vao && p.vbo)
-                {
-                    p.vao = vlk::VAO::create(ctx);
-                    prepare_pipeline();
-                }
 
                 // Bind the main composition pipeline (created/managed outside
                 // this draw loop)
@@ -1025,7 +1036,11 @@ void main()
             if (pipeline() != VK_NULL_HANDLE)
             {
                 vkDestroyPipeline(device(), pipeline(), nullptr);
+                pipeline() = VK_NULL_HANDLE;
             }
+
+            assert(p.vbo);
+            assert(p.shader);
             
             // Elements of new Pipeline (fill with mesh info)
             vlk::VertexInputStateInfo vi;
@@ -1088,12 +1103,11 @@ void main()
             pipelineState.renderPass = renderPass();
             pipelineState.layout = p.pipeline_layout;
 
-            m_pipeline = pipelineState.create(device());
-            if (m_pipeline == VK_NULL_HANDLE)
+            pipeline() = pipelineState.create(device());
+            if (pipeline() == VK_NULL_HANDLE)
             {
                 throw std::runtime_error("Composition pipeline failed");
             }
-            
         }
 
         int TimelineWidget::enterEvent()

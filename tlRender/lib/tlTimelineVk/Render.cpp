@@ -675,14 +675,6 @@ namespace tl
                 {
                     vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
                 }
-                for (auto& bindingSet : g.bindingSets)
-                {
-                    bindingSet.reset();
-                }
-                for (auto& shaders : g.shaders)
-                {
-                    shaders.reset();
-                }
             }
         }
 
@@ -741,20 +733,23 @@ namespace tl
             {
                 vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
             }
-            // Destroy old binding sets that are no longer used.
-            for (auto& bindingSet : g.bindingSets)
-            {
-                bindingSet.reset();
-            }
-            for (auto& shaders : g.shaders)
-            {
-                shaders.reset();
-            }
+            // These get reset as soon as their vector is cleared.
+            // for (auto& bindingSet : g.bindingSets)
+            // {
+            //     bindingSet.reset();
+            // }
+            // for (auto& shader : g.shaders)
+            // {
+            //     shader.reset();
+            // }
+            // for (auto& vao : g.vaos)
+            // {
+            //     vao.reset();
+            // }
             g.pipelines.clear();
             g.pipelineLayouts.clear();
             g.bindingSets.clear();
             g.shaders.clear();
-
             
             const math::Matrix4x4f transform;
             const image::Color4f color(1.F, 1.F, 1.F);
@@ -1021,31 +1016,31 @@ namespace tl
             {
                 p.vbos["image"] =
                     vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32_UV_U16);
-                p.vaos["image"] = vlk::VAO::create(ctx);
+                p.vaos["image"] = vlk::VAO::create(ctx, "image");
             }
             if (!p.vbos["rect"] || p.vbos["rect"]->getSize() != 6)
             {
                 p.vbos["rect"] =
                     vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32);
-                p.vaos["rect"] = vlk::VAO::create(ctx);
+                p.vaos["rect"] = vlk::VAO::create(ctx, "rect");
             }
             if (!p.vbos["texture"] || p.vbos["texture"]->getSize() != 6)
             {
                 p.vbos["texture"] =
                     vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32_UV_U16);
-                p.vaos["texture"] = vlk::VAO::create(ctx);
+                p.vaos["texture"] = vlk::VAO::create(ctx, "texture");
             }
             if (!p.vbos["wipe"] || p.vbos["wipe"]->getSize() != 3)
             {
                 p.vbos["wipe"] =
                     vlk::VBO::create(1 * 3, vlk::VBOType::Pos2_F32);
-                p.vaos["wipe"] = vlk::VAO::create(ctx);
+                p.vaos["wipe"] = vlk::VAO::create(ctx, "wipe");
             }
             if (!p.vbos["video"] || p.vbos["video"]->getSize() != 6)
             {
                 p.vbos["video"] =
                     vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32_UV_U16);
-                p.vaos["video"] = vlk::VAO::create(ctx);
+                p.vaos["video"] = vlk::VAO::create(ctx, "video");
             }
 
             if (renderOptions.clear)

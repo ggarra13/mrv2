@@ -35,7 +35,6 @@ namespace mrv
             {
                 vk.vbo = vlk::VBO::create(
                     numTriangles * 3, vlk::VBOType::Pos3_F32_UV_U16);
-                vk.vao.reset();
             }
             if (vk.vbo)
             {
@@ -43,8 +42,7 @@ namespace mrv
             }
             if (!vk.vao && vk.vbo)
             {
-                vk.vao = vlk::VAO::create(ctx);
-                vkDeviceWaitIdle(device());
+                vk.vao = vlk::VAO::create(ctx, "vk.vao");
                 prepare_pipeline();
             }
         }
@@ -61,7 +59,6 @@ namespace mrv
             {
                 vk.vbo = vlk::VBO::create(
                     numTriangles * 3, vlk::VBOType::Pos3_F32_UV_U16);
-                vk.vao.reset();
             }
             if (vk.vbo)
             {
@@ -69,9 +66,7 @@ namespace mrv
             }
             if (!vk.vao && vk.vbo)
             {
-                vk.vao = vlk::VAO::create(ctx);
-
-                vkDeviceWaitIdle(device());
+                vk.vao = vlk::VAO::create(ctx, "vk.vao");
                 prepare_pipeline();
             }
         }
@@ -186,8 +181,6 @@ namespace mrv
             {
                 vk.vbo = vlk::VBO::create(
                     numTriangles * 3, vlk::VBOType::Pos2_F32_UV_U16);
-
-                vk.vao.reset();
             }
             if (vk.vbo)
             {
@@ -196,7 +189,7 @@ namespace mrv
 
             if (!vk.vao && vk.vbo)
             {
-                vk.vao = vlk::VAO::create(ctx);
+                vk.vao = vlk::VAO::create(ctx, "vk.vao");
                 prepare_pipeline();
             }
 

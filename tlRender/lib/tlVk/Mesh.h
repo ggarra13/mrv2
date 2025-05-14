@@ -113,7 +113,7 @@ namespace tl
             TLRENDER_NON_COPYABLE(VAO);
 
         protected:
-            void _init();
+            void _init(const std::string& name);
 
             VAO(Fl_Vk_Context& ctx);
 
@@ -121,7 +121,8 @@ namespace tl
             ~VAO();
 
             //! Create a new object.
-            static std::shared_ptr<VAO> create(Fl_Vk_Context& ctx);
+            static std::shared_ptr<VAO> create(Fl_Vk_Context& ctx,
+                                               const std::string& name);
 
             //! Bind the vertex array object.
             void bind(uint32_t frameIndex);

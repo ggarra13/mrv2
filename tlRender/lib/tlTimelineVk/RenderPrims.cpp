@@ -46,7 +46,8 @@ namespace tl
 
             if (!p.vaos[meshName] && p.vbos[meshName])
             {
-                p.vaos[meshName] = vlk::VAO::create(ctx);
+                p.vaos[meshName] = vlk::VAO::create(ctx, meshName);
+                p.vaos[meshName]->bind(p.frameIndex);
             }
         }
 
@@ -186,7 +187,8 @@ namespace tl
 
             if (!p.vaos[meshName] && p.vbos[meshName])
             {
-                p.vaos[meshName] = vlk::VAO::create(ctx);
+                p.vaos[meshName] = vlk::VAO::create(ctx, meshName);
+                p.vaos[meshName]->bind(p.frameIndex);
             }
             if (p.vaos[meshName] && p.vbos[meshName])
             {
@@ -254,7 +256,8 @@ namespace tl
 
             if (!p.vaos[meshName] && p.vbos[meshName])
             {
-                p.vaos[meshName] = vlk::VAO::create(ctx);
+                p.vaos[meshName] = vlk::VAO::create(ctx, meshName);
+                p.vaos[meshName]->bind(p.frameIndex);
             }
             if (p.vaos[meshName] && p.vbos[meshName])
             {
@@ -290,7 +293,8 @@ namespace tl
             const geom::TriangleMesh2& mesh, const math::Vector2i& position,
             const image::Color4f& color, const std::string& meshName)
         {
-            drawMesh("timeline", "mesh", "mesh", meshName,
+            // \@todo this is problematic!
+            drawMesh(meshName, "mesh", "mesh", meshName,
                      mesh, position, color);
         }
 
@@ -347,7 +351,7 @@ namespace tl
             }
             if (!vaos["text"] && vbos["text"])
             {
-                vaos["text"] = vlk::VAO::create(ctx);
+                vaos["text"] = vlk::VAO::create(ctx, "text");
                 vaos["text"]->bind(frameIndex);
             }
         }

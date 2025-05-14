@@ -159,6 +159,7 @@ namespace tl
                 std::vector<VkPipeline> pipelines;
                 std::vector<VkPipelineLayout> pipelineLayouts;
                 std::vector<std::shared_ptr<vlk::ShaderBindingSet> > bindingSets;
+                // \@todo: check if shaders is needed in garbage.
                 std::vector<std::shared_ptr<vlk::Shader> > shaders;
             };
             std::array<FrameGarbage, vlk::MAX_FRAMES_IN_FLIGHT> garbage;

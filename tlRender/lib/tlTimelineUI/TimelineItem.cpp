@@ -421,7 +421,7 @@ namespace tl
             _drawInOutPoints(drawRect, event);
             _drawTimeTicks(drawRect, event);
             _drawFrameMarkers(drawRect, event);
-            _drawTimeLabels(drawRect, event);  // without it 40fps
+            _drawTimeLabels(drawRect, event);
             _drawCacheInfo(drawRect, event);
             _drawCurrentTime(drawRect, event);
 
@@ -830,7 +830,8 @@ namespace tl
                     {
                         event.render->drawMesh(
                             mesh, math::Vector2i(),
-                            event.style->getColorRole(ui::ColorRole::Button));
+                            event.style->getColorRole(ui::ColorRole::Button),
+                            "timeticks");
                     }
                 }
             }
@@ -949,7 +950,8 @@ namespace tl
                 {
                     event.render->drawMesh(
                         mesh, math::Vector2i(),
-                        event.style->getColorRole(ui::ColorRole::VideoCache));
+                        event.style->getColorRole(ui::ColorRole::VideoCache),
+                        "video cache");
                 }
             }
 
@@ -985,7 +987,8 @@ namespace tl
                 {
                     event.render->drawMesh(
                         mesh, math::Vector2i(),
-                        event.style->getColorRole(ui::ColorRole::AudioCache));
+                        event.style->getColorRole(ui::ColorRole::AudioCache),
+                        "audio cache");
                 }
             }
         }
