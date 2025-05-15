@@ -357,6 +357,60 @@ namespace tl
         }
 
         void Render::drawText(
+            const timeline::TextInfo& info,
+            const math::Vector2i& position,
+            const image::Color4f& color,
+            const std::string& pipelineName)
+        {
+            TLRENDER_P();
+
+            const std::string pipelineLayoutName = "text"; 
+            
+            const auto& textures = p.glyphTextureAtlas->getTextures();
+            
+            const geom::TriangleMesh2& mesh = info.mesh;
+            const unsigned textureIndex = info.textureId;
+
+            _create2DMesh("text", mesh);
+            
+            const bool enableBlending = true;
+            _createBindingSet(p.shaders["text"]);
+            
+            vlk::ColorBlendStateInfo cb;
+            vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
+            colorBlendAttachment.blendEnable = VK_TRUE;
+            
+            cb.attachments.push_back(colorBlendAttachment);
+            
+                
+            vlk::DepthStencilStateInfo ds;
+            ds.depthTestEnable = VK_FALSE;
+            ds.depthWriteEnable = VK_FALSE;
+            ds.stencilTestEnable = VK_FALSE;
+            
+            createPipeline(pipelineName, pipelineLayoutName,
+                           p.fbo->getRenderPass(), p.shaders["text"],
+                           p.vbos["text"], cb, ds);
+            
+            p.shaders["text"]->bind(p.frameIndex);
+            p.shaders["text"]->setUniform("transform.mvp", p.transform);
+            p.shaders["text"]->setTexture("textureSampler",
+                                          textures[textureIndex]);
+            _bindDescriptorSets(pipelineLayoutName, "text");
+                            
+            VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+            vkCmdPushConstants(
+                p.cmd, pipelineLayout,
+                p.shaders["text"]->getPushStageFlags(), 0,
+                sizeof(color), &color);
+                            
+            if (p.vaos["text"] && p.vbos["text"])
+            {
+                _vkDraw("text");
+            }
+        }
+        
+        void Render::drawText(
             const std::string& pipelineName,
             const std::string& pipelineLayoutName,
             const bool hasDepth,

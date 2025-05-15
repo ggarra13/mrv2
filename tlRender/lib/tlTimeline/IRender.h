@@ -114,7 +114,7 @@ namespace tl
             
             //! Create text meshes to speed up drawing
             virtual void appendText(
-                std::vector<TextInfo>& meshes,
+                std::vector<TextInfo>& textInfos,
                 const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
                 const math::Vector2i& position,
                 const bool flipped = false) {};

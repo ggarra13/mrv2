@@ -876,6 +876,7 @@ namespace tl
                 {
                     const math::Size2i labelMaxSize =
                         _getLabelMaxSize(event.fontSystem);
+                    std::vector<timeline::TextInfo> textInfos;
                     for (double t = 0.0; t < duration; t += seconds)
                     {
                         const otime::RationalTime time =
@@ -891,17 +892,31 @@ namespace tl
                         {
                             const std::string label =
                                 _data->timeUnitsModel->getLabel(time);
-                            event.render->drawText(
-                                event.fontSystem->getGlyphs(
-                                    label, p.size.fontInfo),
-                                math::Vector2i(
-                                    box.min.x,
-                                    box.min.y + p.size.fontMetrics.ascender),
-                                event.style->getColorRole(
-                                    ui::ColorRole::TextDisabled),
-                                false,
-                                label);
+                            event.render->appendText(textInfos,
+                                                     event.fontSystem->getGlyphs(
+                                                         label, p.size.fontInfo),
+                                                     math::Vector2i(
+                                                         box.min.x,
+                                                         box.min.y + p.size.fontMetrics.ascender));
+                                                     
+                            // event.render->drawText(
+                            //     event.fontSystem->getGlyphs(
+                            //         label, p.size.fontInfo),
+                            //     math::Vector2i(
+                            //         box.min.x,
+                            //         box.min.y + p.size.fontMetrics.ascender),
+                            //     event.style->getColorRole(
+                            //         ui::ColorRole::TextDisabled),
+                            //     false,
+                            //     label);
                         }
+                    }
+                    for (auto& textInfo : textInfos)
+                    {
+                        event.render->drawText(textInfo, math::Vector2i(),
+                                               event.style->getColorRole(
+                                                   ui::ColorRole::TextDisabled),
+                                               "timelabels");
                     }
                 }
             }
