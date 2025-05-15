@@ -579,6 +579,41 @@ namespace mrv
             }
         }
 
+        inline void Viewport::_appendText(
+            std::vector<timeline::TextInfo>& textInfos,
+            const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
+            math::Vector2i& pos, const int16_t lineHeight) const
+        {
+            MRV2_VK();
+            
+            vk.render->appendText(textInfos, glyphs, pos, true);
+            pos.y += lineHeight;
+        }
+        
+        inline void Viewport::_appendText(
+            std::vector<timeline::TextInfo>& textInfos,
+            const std::string& text,
+            const image::FontInfo& fontInfo,
+            math::Vector2i& pos, const int16_t lineHeight) const
+        {   
+            _appendText(textInfos, _p->fontSystem->getGlyphs(text, fontInfo), pos,
+                        lineHeight);
+        }
+            
+        void Viewport::_drawText(const std::vector<timeline::TextInfo>& textInfos,
+                                 const math::Vector2i& pos, const image::Color4f& color, 
+                                 const std::string& pipelineName) const
+        {
+            MRV2_VK();
+            
+            const bool hasDepth = mode() & FL_DEPTH;
+            const bool hasStencil = mode() & FL_STENCIL;
+            
+            for (auto& textInfo : textInfos)
+            {
+                vk.render->drawText(pipelineName, "text", hasDepth, hasStencil, textInfo, color);
+            }
+        }
 
         inline void Viewport::_drawText(
             const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
@@ -761,6 +796,24 @@ namespace mrv
             vk.render->setRenderPass(oldRenderPass);
         }
 
+        void Viewport::_drawHUD(const std::vector<timeline::TextInfo>& textInfos,
+                                const float alpha) const noexcept
+        {
+            TLRENDER_P();
+            
+            const image::Color4f shadowColor(0.F, 0.F, 0.F, 0.7F);
+            const math::Vector2i shadowPos{1, - 1};
+            
+            Fl_Color c = p.ui->uiPrefs->uiPrefsViewHud->color();
+            uint8_t r, g, b;
+            Fl::get_color(c, r, g, b);
+            const image::Color4f labelColor(r / 255.F, g / 255.F, b / 255.F, alpha);
+            const math::Vector2i labelPos;
+            
+            _drawText(textInfos, shadowPos, shadowColor, "HUDShadow");
+            _drawText(textInfos, labelPos, labelColor, "HUDShadow");
+        }
+        
         void Viewport::_drawHUD(VkCommandBuffer cmd, float alpha) const noexcept
         {
             TLRENDER_P();
@@ -776,11 +829,6 @@ namespace mrv
             
             
 
-            Fl_Color c = p.ui->uiPrefs->uiPrefsViewHud->color();
-            uint8_t r, g, b;
-            Fl::get_color(c, r, g, b);
-
-            const image::Color4f labelColor(r / 255.F, g / 255.F, b / 255.F, alpha);
 
             const image::FontMetrics fontMetrics =
                 p.fontSystem->getMetrics(fontInfo);
@@ -804,12 +852,14 @@ namespace mrv
             vk.render->setTransform(math::ortho(
                                         0.F, static_cast<float>(viewportSize.w),
                                         0.F, static_cast<float>(viewportSize.h), -1.F, 1.F));
+
+            std::vector<timeline::TextInfo> textInfos;
             
             char buf[512];
             if (p.hud & HudDisplay::kDirectory)
             {
                 const auto& directory = path.getDirectory();
-                _drawText(directory, fontInfo, pos, lineHeight, labelColor);
+                _appendText(textInfos, directory, fontInfo, pos, lineHeight);
             }
 
             bool otioClip = false;
@@ -833,7 +883,7 @@ namespace mrv
                         ss >> clipTime;
                     }
                 }
-                _drawText(fullname, fontInfo, pos, lineHeight, labelColor);
+                _appendText(textInfos, fullname, fontInfo, pos, lineHeight);
             }
 
             if (p.hud & HudDisplay::kResolution)
@@ -855,7 +905,7 @@ namespace mrv
                     {
                         snprintf(buf, 512, "%d x %d", video.size.w, video.size.h);
                     }
-                    _drawText(buf, fontInfo, pos, lineHeight, labelColor);
+                    _appendText(textInfos, buf, fontInfo, pos, lineHeight);
                 }
             }
 
@@ -941,7 +991,7 @@ namespace mrv
             p.lastFrame = time.value();
 
             if (!tmp.empty())
-                _drawText(tmp, fontInfo, pos, lineHeight, labelColor);
+                _appendText(textInfos, tmp, fontInfo, pos, lineHeight);
 
             tmp.clear();
             if (p.hud & HudDisplay::kFrameCount)
@@ -954,7 +1004,7 @@ namespace mrv
             }
 
             if (!tmp.empty())
-                _drawText(tmp, fontInfo, pos, lineHeight,  labelColor);
+                _appendText(textInfos, tmp, fontInfo, pos, lineHeight);
 
             tmp.clear();
             if (p.hud & HudDisplay::kMemory)
@@ -979,7 +1029,7 @@ namespace mrv
             }
 
             if (!tmp.empty())
-                _drawText(tmp, fontInfo, pos, lineHeight, labelColor);
+                _appendText(textInfos, tmp, fontInfo, pos, lineHeight);
 
             if (p.hud & HudDisplay::kCache)
             {
@@ -1012,7 +1062,7 @@ namespace mrv
                         behindAudioFrames += frame - i.start_time().to_frames();
                     }
                 }
-                _drawText(_("Cache: "), fontInfo, pos, lineHeight, labelColor);
+                _appendText(textInfos, _("Cache: "), fontInfo, pos, lineHeight);
                 const auto ioSystem =
                     App::app->getContext()->getSystem<io::System>();
                 const auto& cache = ioSystem->getCache();
@@ -1022,15 +1072,15 @@ namespace mrv
                 snprintf(
                     buf, 512, _("    Used: %.2g of %zu Gb (%.2g %%)"), usedCache,
                     maxCache, pctCache);
-                _drawText(buf, fontInfo, pos, lineHeight, labelColor);
+                _appendText(textInfos, buf, fontInfo, pos, lineHeight);
                 snprintf(
                     buf, 512, _("    Ahead    V: % 4" PRIu64 "    A: % 4" PRIu64),
                     aheadVideoFrames, aheadAudioFrames);
-                _drawText(buf, fontInfo, pos, lineHeight, labelColor);
+                _appendText(textInfos, buf, fontInfo, pos, lineHeight);
                 snprintf(
                     buf, 512, _("    Behind   V: % 4" PRIu64 "    A: % 4" PRIu64),
                     behindVideoFrames, behindAudioFrames);
-                _drawText(buf, fontInfo, pos, lineHeight, labelColor);
+                _appendText(textInfos, buf, fontInfo, pos, lineHeight);
             }
 
             if (p.hud & HudDisplay::kAttributes)
@@ -1044,9 +1094,11 @@ namespace mrv
                         buf, 512, "%s = %s", tag.first.c_str(),
                         tag.second.c_str());
 
-                    _drawText(buf, fontInfo, pos, lineHeight, labelColor);
+                    _appendText(textInfos, buf, fontInfo, pos, lineHeight);
                 }
             }
+
+            _drawHUD(textInfos, alpha);
             
             vk.render->setTransform(oldTransform);
             vk.render->setRenderPass(oldRenderPass);
@@ -1151,7 +1203,7 @@ namespace mrv
             vk.render->drawRect(
                 box, image::Color4f(0.F, 0.F, 0.F, 0.7F * p.helpTextFade));
 
-            _drawText(p.helpText, fontInfo, pos, lineHeight, labelColor);
+            //_drawText(p.helpText, fontInfo, pos, lineHeight, labelColor);
 
             vk.render->end();
         }

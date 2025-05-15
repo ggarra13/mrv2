@@ -361,6 +361,60 @@ namespace tl
             const std::string& pipelineLayoutName,
             const bool hasDepth,
             const bool hasStencil,
+            const timeline::TextInfo& info,
+            const image::Color4f& color)
+        {
+            TLRENDER_P();
+
+            const auto& textures = p.glyphTextureAtlas->getTextures();
+            
+            const geom::TriangleMesh2& mesh = info.mesh;
+            const unsigned textureIndex = info.textureId;
+
+            _create2DMesh("text", mesh);
+            
+            const bool enableBlending = true;
+            _createBindingSet(p.shaders["text"]);
+            
+            vlk::ColorBlendStateInfo cb;
+            vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
+            colorBlendAttachment.blendEnable = VK_TRUE;
+            
+            cb.attachments.push_back(colorBlendAttachment);
+            
+                
+            vlk::DepthStencilStateInfo ds;
+            ds.depthTestEnable = hasDepth ? VK_TRUE : VK_FALSE;
+            ds.depthWriteEnable = hasDepth ? VK_TRUE : VK_FALSE;
+            ds.stencilTestEnable = hasStencil ? VK_TRUE : VK_FALSE;
+            
+            createPipeline(pipelineName, pipelineLayoutName,
+                           getRenderPass(), p.shaders["text"],
+                           p.vbos["text"], cb, ds);
+            
+            p.shaders["text"]->bind(p.frameIndex);
+            p.shaders["text"]->setUniform("transform.mvp", p.transform);
+            p.shaders["text"]->setTexture("textureSampler",
+                                          textures[textureIndex]);
+            _bindDescriptorSets(pipelineLayoutName, "text");
+                            
+            VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+            vkCmdPushConstants(
+                p.cmd, pipelineLayout,
+                p.shaders["text"]->getPushStageFlags(), 0,
+                sizeof(color), &color);
+                            
+            if (p.vaos["text"] && p.vbos["text"])
+            {
+                _vkDraw("text");
+            }
+        }
+        
+        void Render::drawText(
+            const std::string& pipelineName,
+            const std::string& pipelineLayoutName,
+            const bool hasDepth,
+            const bool hasStencil,
             const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
             const math::Vector2i& pos, const image::Color4f& color)
         {
@@ -544,6 +598,142 @@ namespace tl
                 {
                     _vkDraw("text");
                 }
+            }
+        }        
+        
+        void Render::appendText(
+            std::vector<timeline::TextInfo>& textInfos,
+            const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
+            const math::Vector2i& pos,
+            const bool flipped)
+        {
+            TLRENDER_P();
+            
+            uint8_t textureIndex = 0;
+            const auto& textures = p.glyphTextureAtlas->getTextures();
+
+            int x = 0;
+            int32_t rsbDeltaPrev = 0;
+            geom::TriangleMesh2 mesh;
+            size_t meshIndex = 0;
+            for (const auto& glyph : glyphs)
+            {
+                if (glyph)
+                {
+                    if (rsbDeltaPrev - glyph->lsbDelta > 32)
+                    {
+                        x -= 1;
+                    }
+                    else if (rsbDeltaPrev - glyph->lsbDelta < -31)
+                    {
+                        x += 1;
+                    }
+                    rsbDeltaPrev = glyph->rsbDelta;
+
+                    if (glyph->image && glyph->image->isValid())
+                    {
+                        vlk::TextureAtlasID id = 0;
+                        const auto i = p.glyphIDs.find(glyph->info);
+                        if (i != p.glyphIDs.end())
+                        {
+                            id = i->second;
+                        }
+                        vlk::TextureAtlasItem item;
+                        if (!p.glyphTextureAtlas->getItem(id, item))
+                        {
+                            id = p.glyphTextureAtlas->addItem(
+                                p.cmd, glyph->image, item);
+                            p.glyphIDs[glyph->info] = id;
+                        }
+                        if (item.textureIndex != textureIndex)
+                        {
+                            textureIndex = item.textureIndex;
+
+                            timeline::TextInfo textInfo(mesh, textureIndex);
+                            textInfos.push_back(textInfo);
+                            
+                            mesh = geom::TriangleMesh2();
+                            meshIndex = 0;
+                        }
+
+                        const math::Vector2i& offset = glyph->offset;
+                        const math::Box2i box(
+                            pos.x + x + offset.x, pos.y - offset.y, 
+                            glyph->image->getWidth(),
+                            glyph->image->getHeight());
+                        const auto& min = box.min;
+                        const auto& max = box.max;
+
+                        mesh.v.push_back(math::Vector2f(min.x, min.y));
+                        mesh.v.push_back(math::Vector2f(max.x + 1, min.y));
+                        mesh.v.push_back(math::Vector2f(max.x + 1, max.y + 1));
+                        mesh.v.push_back(math::Vector2f(min.x, max.y + 1));
+                        if (flipped)
+                        {
+                            mesh.t.push_back(
+                                math::Vector2f(
+                                    item.textureU.getMin(),
+                                    item.textureV.getMin()));
+                            mesh.t.push_back(
+                                math::Vector2f(
+                                    item.textureU.getMax(),
+                                    item.textureV.getMin()));
+                            mesh.t.push_back(
+                                math::Vector2f(
+                                    item.textureU.getMax(),
+                                    item.textureV.getMax()));
+                            mesh.t.push_back(
+                                math::Vector2f(
+                                    item.textureU.getMin(),
+                                    item.textureV.getMax()));
+                        }
+                        else
+                        {
+                            mesh.t.push_back(
+                                math::Vector2f(
+                                    item.textureU.getMin(),
+                                    item.textureV.getMax()));
+                            mesh.t.push_back(
+                                math::Vector2f(
+                                    item.textureU.getMax(),
+                                    item.textureV.getMax()));
+                            mesh.t.push_back(
+                                math::Vector2f(
+                                    item.textureU.getMax(),
+                                    item.textureV.getMin()));
+                            mesh.t.push_back(
+                                math::Vector2f(
+                                    item.textureU.getMin(),
+                                    item.textureV.getMin()));
+                        }
+                        
+                        geom::Triangle2 triangle;
+                        triangle.v[0].v = meshIndex + 1;
+                        triangle.v[1].v = meshIndex + 2;
+                        triangle.v[2].v = meshIndex + 3;
+                        triangle.v[0].t = meshIndex + 1;
+                        triangle.v[1].t = meshIndex + 2;
+                        triangle.v[2].t = meshIndex + 3;
+                        mesh.triangles.push_back(triangle);
+                        triangle.v[0].v = meshIndex + 3;
+                        triangle.v[1].v = meshIndex + 4;
+                        triangle.v[2].v = meshIndex + 1;
+                        triangle.v[0].t = meshIndex + 3;
+                        triangle.v[1].t = meshIndex + 4;
+                        triangle.v[2].t = meshIndex + 1;
+                        mesh.triangles.push_back(triangle);
+
+                        meshIndex += 4;
+                    }
+
+                    x += glyph->advance;
+                }
+            }
+
+            if (!mesh.triangles.empty())
+            {
+                timeline::TextInfo textInfo(mesh, textureIndex);
+                textInfos.push_back(textInfo);
             }
         }
         

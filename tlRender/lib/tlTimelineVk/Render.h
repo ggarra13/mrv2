@@ -146,6 +146,15 @@ namespace tl
                           const VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
                           const VkBlendOp colorBlendOp = VK_BLEND_OP_ADD,
                           const VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD);
+            //! Create text meshes to speed up drawing
+            void appendText(
+                std::vector<timeline::TextInfo>& info,
+                const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
+                const math::Vector2i& position,
+                const bool flipped = false) FL_OVERRIDE;
+            void drawText(
+                const timeline::TextInfo&, const math::Vector2i& position,
+                const image::Color4f&, const std::string& meshName = "") {};
             //! These functions draw to the viewport
             void drawRect(const std::string& pipelineName,
                           const math::Box2i&, const image::Color4f&,
@@ -157,6 +166,13 @@ namespace tl
                           const math::Vector2i& position,
                           const image::Color4f&,
                           const bool enableBlending = false);
+            void drawText(
+                const std::string& pipelineName,
+                const std::string& pipelineLayoutName,
+                const bool hasDepth,
+                const bool hasStencil,
+                const timeline::TextInfo& info,
+                const image::Color4f& color);
             
             void drawMesh(
                 const geom::TriangleMesh2&, const math::Vector2i& position,

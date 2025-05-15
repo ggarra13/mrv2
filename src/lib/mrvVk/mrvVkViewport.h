@@ -88,6 +88,9 @@ namespace mrv
 
             void _drawCropMask(const math::Size2i& renderSize) const noexcept;
 
+            void _drawHUD(const std::vector<timeline::TextInfo>& textInfos,
+                const float alpha) const noexcept;
+            
             void _drawHUD(VkCommandBuffer cmd, float alpha) const noexcept;
 
             void _drawCursor(const math::Matrix4x4f& mvp) noexcept;
@@ -113,6 +116,21 @@ namespace mrv
                 const math::Matrix4x4f& mvp,
                 const math::Box2i& box, const image::Color4f& color,
                 const uint16_t width = 1) const noexcept;
+            
+            void _appendText(std::vector<timeline::TextInfo>& textInfos,
+                             const std::vector<std::shared_ptr<image::Glyph> >&,
+                             math::Vector2i&, const int16_t lineHeight) const;
+            
+            void _appendText(std::vector<timeline::TextInfo>& textInfos,
+                             const std::string& text,
+                             const image::FontInfo& fontInfo,
+                             math::Vector2i&, const int16_t lineHeight) const;
+            void _drawText(const std::vector<timeline::TextInfo>& textInfos,
+                           const math::Vector2i&, const image::Color4f&, 
+                           const std::string&) const;
+
+            ///////// OLDER FUNCTIONS BELOW
+                             
             void _drawText(
                 const std::vector<std::shared_ptr<image::Glyph> >&,
                 math::Vector2i&, const int16_t lineHeight,

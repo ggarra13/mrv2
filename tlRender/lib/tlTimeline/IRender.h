@@ -22,6 +22,19 @@ namespace tl
 {
     namespace timeline
     {
+        //! Text information.
+        struct TextInfo
+        {
+            TextInfo(const geom::TriangleMesh2& mesh, unsigned id) :
+                mesh(mesh),
+                textureId(id)
+                {
+                };
+            
+            geom::TriangleMesh2 mesh;
+            unsigned textureId;
+        };
+        
         //! Base class for renderers.
         class IRender : public std::enable_shared_from_this<IRender>
         {
@@ -98,7 +111,20 @@ namespace tl
             virtual void drawColorMesh(
                 const geom::TriangleMesh2&, const math::Vector2i& position,
                 const image::Color4f&) = 0;
-
+            
+            //! Create text meshes to speed up drawing
+            virtual void appendText(
+                std::vector<TextInfo>& meshes,
+                const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
+                const math::Vector2i& position,
+                const bool flipped = false) {};
+            
+            //! Draw a text mesh after having been created with appendText.
+            virtual void drawText(
+                const TextInfo& info,
+                const math::Vector2i& position,
+                const image::Color4f&, const std::string& meshName = "") {};
+            
             //! Draw text.
             virtual void drawText(
                 const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
