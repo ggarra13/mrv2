@@ -117,13 +117,13 @@ namespace tl
                 std::vector<TextInfo>& meshes,
                 const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
                 const math::Vector2i& position,
-                const bool flipped = false) {};
+                const bool flipped = false) = 0;
             
             //! Draw a text mesh after having been created with appendText.
             virtual void drawText(
                 const TextInfo& info,
                 const math::Vector2i& position,
-                const image::Color4f&, const std::string& meshName = "") {};
+                const image::Color4f&, const std::string& meshName = "") = 0;
             
             //! Draw text.
             virtual void drawText(

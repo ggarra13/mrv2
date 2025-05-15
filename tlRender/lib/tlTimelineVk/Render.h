@@ -154,7 +154,7 @@ namespace tl
                 const bool flipped = false) FL_OVERRIDE;
             void drawText(
                 const timeline::TextInfo&, const math::Vector2i& position,
-                const image::Color4f&, const std::string& meshName = "") {};
+                const image::Color4f&, const std::string& pipelineName = "") override {};
             //! These functions draw to the viewport
             void drawRect(const std::string& pipelineName,
                           const math::Box2i&, const image::Color4f&,
@@ -172,6 +172,7 @@ namespace tl
                 const bool hasDepth,
                 const bool hasStencil,
                 const timeline::TextInfo& info,
+                const math::Vector2i& pos,
                 const image::Color4f& color);
             
             void drawMesh(

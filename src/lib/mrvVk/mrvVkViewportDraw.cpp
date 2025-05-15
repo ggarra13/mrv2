@@ -611,7 +611,7 @@ namespace mrv
             
             for (auto& textInfo : textInfos)
             {
-                vk.render->drawText(pipelineName, "text", hasDepth, hasStencil, textInfo, color);
+                vk.render->drawText(pipelineName, "text", hasDepth, hasStencil, textInfo, pos, color);
             }
         }
 
@@ -628,7 +628,7 @@ namespace mrv
             
 
             const image::Color4f shadowColor(0.F, 0.F, 0.F, 0.7F);
-            math::Vector2i shadowPos{pos.x + 1, pos.y - 1};
+            math::Vector2i shadowPos{pos.x + 2, pos.y - 2};
             vk.render->drawText("HUDShadow", "text",
                                 hasDepth, hasStencil,
                                 glyphs,
@@ -800,9 +800,9 @@ namespace mrv
                                 const float alpha) const noexcept
         {
             TLRENDER_P();
-            
+
             const image::Color4f shadowColor(0.F, 0.F, 0.F, 0.7F);
-            const math::Vector2i shadowPos{1, - 1};
+            const math::Vector2i shadowPos{ 1, -1 };
             
             Fl_Color c = p.ui->uiPrefs->uiPrefsViewHud->color();
             uint8_t r, g, b;
@@ -811,7 +811,7 @@ namespace mrv
             const math::Vector2i labelPos;
             
             _drawText(textInfos, shadowPos, shadowColor, "HUDShadow");
-            _drawText(textInfos, labelPos, labelColor, "HUDShadow");
+            _drawText(textInfos, labelPos, labelColor, "HUD");
         }
         
         void Viewport::_drawHUD(VkCommandBuffer cmd, float alpha) const noexcept

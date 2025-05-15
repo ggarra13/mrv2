@@ -362,6 +362,7 @@ namespace tl
             const bool hasDepth,
             const bool hasStencil,
             const timeline::TextInfo& info,
+            const math::Vector2i& position,
             const image::Color4f& color)
         {
             TLRENDER_P();
@@ -370,6 +371,11 @@ namespace tl
             
             const geom::TriangleMesh2& mesh = info.mesh;
             const unsigned textureIndex = info.textureId;
+            
+            const auto transform =
+                p.transform *
+                math::translate(
+                    math::Vector3f(position.x, position.y, 0.F));
 
             _create2DMesh("text", mesh);
             
@@ -393,7 +399,7 @@ namespace tl
                            p.vbos["text"], cb, ds);
             
             p.shaders["text"]->bind(p.frameIndex);
-            p.shaders["text"]->setUniform("transform.mvp", p.transform);
+            p.shaders["text"]->setUniform("transform.mvp", transform);
             p.shaders["text"]->setTexture("textureSampler",
                                           textures[textureIndex]);
             _bindDescriptorSets(pipelineLayoutName, "text");
