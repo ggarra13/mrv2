@@ -424,7 +424,7 @@ namespace tl
             const auto& textures = p.glyphTextureAtlas->getTextures();
             
             const geom::TriangleMesh2& mesh = info.mesh;
-            const unsigned textureIndex = info.textureId;
+            const uint8_t textureIndex = info.textureId;
             
             const auto transform =
                 p.transform *

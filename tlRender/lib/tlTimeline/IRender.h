@@ -32,7 +32,7 @@ namespace tl
                 };
             
             geom::TriangleMesh2 mesh;
-            unsigned textureId;
+            uint8_t textureId;
         };
         
         //! Base class for renderers.

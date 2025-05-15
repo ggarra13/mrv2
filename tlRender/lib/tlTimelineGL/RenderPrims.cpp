@@ -188,17 +188,17 @@ namespace tl
 
                     if (glyph->image && glyph->image->isValid())
                     {
-                        vlk::TextureAtlasID id = 0;
+                        gl::TextureAtlasID id = 0;
                         const auto i = p.glyphIDs.find(glyph->info);
                         if (i != p.glyphIDs.end())
                         {
                             id = i->second;
                         }
-                        vlk::TextureAtlasItem item;
+                        gl::TextureAtlasItem item;
                         if (!p.glyphTextureAtlas->getItem(id, item))
                         {
                             id = p.glyphTextureAtlas->addItem(
-                                p.cmd, glyph->image, item);
+                                glyph->image, item);
                             p.glyphIDs[glyph->info] = id;
                         }
                         if (item.textureIndex != textureIndex)
@@ -228,19 +228,19 @@ namespace tl
                             mesh.t.push_back(
                                 math::Vector2f(
                                     item.textureU.getMin(),
-                                    item.textureV.getMax()));
-                            mesh.t.push_back(
-                                math::Vector2f(
-                                    item.textureU.getMax(),
-                                    item.textureV.getMax()));
+                                    item.textureV.getMin()));
                             mesh.t.push_back(
                                 math::Vector2f(
                                     item.textureU.getMax(),
                                     item.textureV.getMin()));
+                            mesh.t.push_back(
+                                math::Vector2f(
+                                    item.textureU.getMax(),
+                                    item.textureV.getMax()));
                             mesh.t.push_back(
                                 math::Vector2f(
                                     item.textureU.getMin(),
-                                    item.textureV.getMin()));
+                                    item.textureV.getMax()));
                         
                         geom::Triangle2 triangle;
                         triangle.v[0].v = meshIndex + 1;
@@ -270,6 +270,29 @@ namespace tl
                 timeline::TextInfo textInfo(mesh, textureIndex);
                 textInfos.push_back(textInfo);
             }
+        }
+        
+        void Render::drawText(
+            const timeline::TextInfo& info,
+            const math::Vector2i& position,
+            const image::Color4f& color,
+            const std::string& pipelineName)
+        {
+            TLRENDER_P();
+            ++(p.currentStats.text);
+
+            const geom::TriangleMesh2& mesh = info.mesh;
+            const uint8_t textureIndex = info.textureId;
+
+            p.shaders["text"]->bind();
+            p.shaders["text"]->setUniform("color", color);
+            p.shaders["text"]->setUniform("textureSampler", 0);
+            
+            glActiveTexture(static_cast<GLenum>(GL_TEXTURE0));
+            const auto textures = p.glyphTextureAtlas->getTextures();
+            glBindTexture(GL_TEXTURE_2D, textures[textureIndex]);
+            
+            p.drawTextMesh(mesh);    
         }
         
         void Render::drawText(

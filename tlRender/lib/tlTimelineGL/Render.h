@@ -73,6 +73,15 @@ namespace tl
             void drawColorMesh(
                 const geom::TriangleMesh2&, const math::Vector2i& position,
                 const image::Color4f&) override;
+            void appendText(
+                std::vector<timeline::TextInfo>& textInfos,
+                const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
+                const math::Vector2i& pos,
+                const bool flipped) override;
+            void drawText(
+                const timeline::TextInfo&, const math::Vector2i& position,
+                const image::Color4f&, const std::string& pipelineName = "")
+                override;
             void drawText(
                 const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
                 const math::Vector2i& position, const image::Color4f&,
