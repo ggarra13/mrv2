@@ -35,6 +35,7 @@ namespace mrv
             {
                 vk.vbo = vlk::VBO::create(
                     numTriangles * 3, vlk::VBOType::Pos3_F32_UV_U16);
+                vk.vao.reset();
             }
             if (vk.vbo)
             {
@@ -59,6 +60,7 @@ namespace mrv
             {
                 vk.vbo = vlk::VBO::create(
                     numTriangles * 3, vlk::VBOType::Pos3_F32_UV_U16);
+                vk.vao.reset();
             }
             if (vk.vbo)
             {
@@ -181,6 +183,7 @@ namespace mrv
             {
                 vk.vbo = vlk::VBO::create(
                     numTriangles * 3, vlk::VBOType::Pos2_F32_UV_U16);
+                vk.vao.reset();
             }
             if (vk.vbo)
             {
