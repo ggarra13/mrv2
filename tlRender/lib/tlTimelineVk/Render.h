@@ -173,6 +173,7 @@ namespace tl
                 const bool hasDepth,
                 const bool hasStencil,
                 const timeline::TextInfo& info,
+                const math::Vector2i& pos,
                 const image::Color4f& color);
             
             void drawMesh(
