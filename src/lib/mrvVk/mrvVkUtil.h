@@ -6,6 +6,7 @@
 
 
 #include <tlCore/Box.h>
+#include <tlCore/Math.h>
 #include <tlCore/Matrix.h>
 #include <tlCore/Vector.h>
 #include <tlCore/Mesh.h>
@@ -35,7 +36,6 @@ namespace mrv
         geom::TriangleMesh2 mesh;
 
         // Add the outside vertices.
-        // math::Box2i outside = rect.margin(width / 2);
         mesh.v.push_back(math::Vector2f(rect.min.x - width, rect.min.y - width));
         mesh.v.push_back(math::Vector2f(rect.max.x + width, rect.min.y - width));
         mesh.v.push_back(math::Vector2f(rect.max.x + width, rect.max.y + width));
