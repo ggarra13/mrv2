@@ -187,11 +187,14 @@ namespace mrv
             vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
             colorBlendAttachment.blendEnable = VK_FALSE;
             cb.attachments.push_back(colorBlendAttachment);
+
+            const bool hasDepth = mode() & FL_DEPTH;
+            const bool hasStencil = mode() & FL_STENCIL;
             
             vlk::DepthStencilStateInfo ds;
-            ds.depthTestEnable = VK_FALSE;
-            ds.depthWriteEnable = VK_FALSE;
-            ds.stencilTestEnable = VK_FALSE;
+            ds.depthTestEnable = hasDepth ? VK_TRUE : VK_FALSE;
+            ds.depthWriteEnable = hasDepth ? VK_TRUE : VK_FALSE;
+            ds.stencilTestEnable = hasStencil ? VK_TRUE : VK_FALSE;
             
             vlk::DynamicStateInfo dynamicState;
             dynamicState.dynamicStates = {
@@ -355,28 +358,15 @@ namespace mrv
 
             if (valid_colorspace)
             {
-                // if (is_hdr_display_active())
-                // {
-                //     p.hdrMonitorFound = true;
-                //     std::cout << "HDR monitor found" << std::endl;
-                //     std::cout << string_VkColorSpaceKHR(colorSpace()) << std::endl;
-                // }
-                // else
-                {
-#ifdef __APPLE__
-                    // Intel macOS have a P3 display of 500 nits.
-                    // Not enough for HDR, but we will mark it as HDR and
-                    // tonemap with libplacebo, which gives a better picture than
-                    // just OpenGL.
-                    colorSpace() = VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT;
-                    p.hdrMonitorFound = true;
-#endif
-                }
+                p.hdrMonitorFound = true;
+                LOG_STATUS(_("HDR monitor found."));
             }
             else
             {
-                LOG_INFO("HDR monitor not found or not configured");
+                LOG_STATUS(_("HDR monitor not found or not configured."));
             }
+            LOG_STATUS("Vulkan color space is " << string_VkColorSpaceKHR(colorSpace()));
+            LOG_STATUS("Vulkan format is " << string_VkFormat(format()));
         }
 
         
@@ -392,7 +382,9 @@ namespace mrv
             MRV2_VK();
 
             vk.vbo.reset();
+            vk.vao.reset();
             vk.avbo.reset();
+            vk.avao.reset();
 
             if (vk.pipeline_layout != VK_NULL_HANDLE)
             {
@@ -774,6 +766,7 @@ namespace mrv
             _drawOverlays(renderSize);
             vk.render->end();
 
+            
             m_clearColor = {r, g, b, a};
 
             math::Matrix4x4f mvp;
@@ -790,7 +783,10 @@ namespace mrv
             }
 
             if (!pipeline())
+            {
+                std::cerr << "pipeline not ready" << std::endl;
                 return;
+            }
                 
 
 
@@ -900,10 +896,12 @@ namespace mrv
 
             if (vk.vao && vk.vbo)
             {
-                // Draw calls for the composition geometry (e.g., a
-                // screen-filling quad)
                 vk.vao->bind(m_currentFrameIndex);
                 vk.vao->draw(cmd, vk.vbo);
+            }
+            else
+            {
+                std::cerr << "no draw of geo" << std::endl;
             }
 
             

@@ -14,7 +14,7 @@
 #include "mrvUI/mrvDesktop.h"
 
 #include "mrvFl/mrvIO.h"
-//@{//@{
+
 #include "mrvVk/mrvTimelineWidget.h"
 
 #include "mrvCore/mrvFile.h"

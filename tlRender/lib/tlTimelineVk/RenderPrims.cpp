@@ -392,7 +392,7 @@ namespace tl
             ds.stencilTestEnable = VK_FALSE;
             
             createPipeline(pipelineName, pipelineLayoutName,
-                           p.fbo->getRenderPass(), p.shaders["text"],
+                           getRenderPass(), p.shaders["text"],
                            p.vbos["text"], cb, ds);
             
             p.shaders["text"]->bind(p.frameIndex);
