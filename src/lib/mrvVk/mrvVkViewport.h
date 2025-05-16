@@ -91,7 +91,7 @@ namespace mrv
             void _drawHUD(const std::vector<timeline::TextInfo>& textInfos,
                 const float alpha) const noexcept;
             
-            void _drawHUD(VkCommandBuffer cmd, float alpha) const noexcept;
+            void _drawHUD(float alpha) const noexcept;
 
             void _drawCursor(const math::Matrix4x4f& mvp) noexcept;
 

@@ -56,7 +56,7 @@ set(SOURCES
     mrvUtil.cpp
 )
 
-set(LIBRARIES tlRender Imath::Imath ${FLTK_LIBRARIES} )
+set(LIBRARIES tlRender::tlIO tlRender::tlCore OpenEXR::OpenEXR Imath::Imath ${FLTK_LIBRARIES} )
 
 
 if( WIN32 )

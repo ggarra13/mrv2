@@ -45,7 +45,7 @@ add_definitions( -DGL_SILENCE_DEPRECATION )
 
 set(LIBRARIES mrvUI mrvWidgets mrvCore ${FLTK_gl_LIBRARY} )
 set(LIBRARIES_PRIVATE )
-list(APPEND LIBRARIES tlGL tlTimeline tlDraw tlTimelineUI tlUI glfw )
+list(APPEND LIBRARIES tlRender::tlTimelineGL tlRender::tlTimelineUI tlRender::tlTimeline tlRender::tlGL tlRender::tlDraw)
 
 add_library(mrvGL ${SOURCES} ${HEADERS})
 files_to_absolute_paths()

@@ -47,7 +47,7 @@ set(SOURCES
 add_library(mrvFl ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-set(LIBRARIES mrvEdit mrvUI tlDraw)
+set(LIBRARIES mrvEdit mrvUI tlRender::tlDraw)
 
 if(TLRENDER_GL AND MRV2_BACKEND STREQUAL "GL")
     list(APPEND LIBRARIES mrvGL )

@@ -540,22 +540,13 @@ namespace mrv
             TLRENDER_P();
             MRV2_VK();
 
-
-             // glBlendFuncSeparate(
-            //     GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA,
-            //     GL_ONE_MINUS_SRC_ALPHA); // this is needed to composite soft
-            // brushes correctly.  Note that the
-            // standardard premult composite is
-            // done later in the shaders.
             
+            vkCmdBindPipeline(vk.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
+                              vk.annotation_pipeline);
 
-            // Bind the main composition pipeline (created/managed outside this
-            // draw loop)
-            vkCmdBindPipeline(vk.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, vk.annotation_pipeline);
-
-            // --- Update Descriptor Set for the SECOND pass (Composition of Annotations) ---
             vk.annotationShader->bind(m_currentFrameIndex);
-            vk.annotationShader->setUniform("transform.mvp", orthoMatrix, vlk::kShaderVertex);
+            vk.annotationShader->setUniform("transform.mvp", orthoMatrix,
+                                            vlk::kShaderVertex);
             timeline::Channels channels = timeline::Channels::Color;
             if (!p.displayOptions.empty())
                 channels = p.displayOptions[0].channels;
@@ -567,7 +558,8 @@ namespace mrv
             // frame index
             VkDescriptorSet descriptorSet = vk.annotationShader->getDescriptorSet();
             vkCmdBindDescriptorSets(
-                vk.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, vk.annotation_pipeline_layout, 0, 1,
+                vk.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
+                vk.annotation_pipeline_layout, 0, 1,
                 &descriptorSet, 0, nullptr);
             
             if (vk.avao && vk.avbo)
@@ -763,7 +755,7 @@ namespace mrv
             TLRENDER_P();
 
             const image::Color4f shadowColor(0.F, 0.F, 0.F, 0.7F);
-            const math::Vector2i shadowPos{ 1, -1 };
+            const math::Vector2i shadowPos{ 2, 2 };
             
             Fl_Color c = p.ui->uiPrefs->uiPrefsViewHud->color();
             uint8_t r, g, b;
@@ -775,7 +767,7 @@ namespace mrv
             _drawText(textInfos, labelPos, labelColor, "HUD");
         }
         
-        void Viewport::_drawHUD(VkCommandBuffer cmd, float alpha) const noexcept
+        void Viewport::_drawHUD(float alpha) const noexcept
         {
             TLRENDER_P();
             MRV2_VK();

@@ -4,36 +4,34 @@
 
 set(HEADERS
     mrvVkDefines.h
-    # mrvVkErrors.h
-    mrvVkJson.h
-    mrvVkLines.h
+    mrvVkJson.h        # done
+    mrvVkLines.h        # done
     mrvVkShaders.h       # done
-    mrvVkShape.h
+    mrvVkShape.h         # done
     mrvVkTextEdit.h      # done
-    mrvVkUtil.h
+    mrvVkUtil.h        # done
     mrvVkViewport.h
     mrvVkViewportPrivate.h
-    mrvVkWindow.h
-    mrvTimelineViewport.h
-    mrvTimelineViewportPrivate.h
+    mrvVkWindow.h        # done
+    mrvTimelineViewport.h        # done
+    mrvTimelineViewportPrivate.h        # done
     mrvTimelineWidget.h
     )
 
 set(SOURCES
     # mrvVk2TextShape.cpp
-    # mrvVkErrors.cpp
-    mrvVkJson.cpp
-    mrvVkLines.cpp
+    mrvVkJson.cpp        # done
+    mrvVkLines.cpp        # done
     mrvVkShaders.cpp        # done
-    mrvVkShape.cpp
+    mrvVkShape.cpp        # done
     mrvVkTextEdit.cpp       # done
-    mrvVkUtil.cpp
+    mrvVkUtil.cpp        # done
     mrvVkViewport.cpp
     mrvVkViewportDraw.cpp
     mrvVkViewportPrims.cpp  # done
-    mrvVkWindow.cpp
-    mrvTimelineViewportEvents.cpp
-    mrvTimelineViewport.cpp
+    mrvVkWindow.cpp        # done
+    mrvTimelineViewportEvents.cpp        # done
+    mrvTimelineViewport.cpp        # done
     mrvTimelineWidget.cpp
 )
 
@@ -43,7 +41,7 @@ endif()
 
 set(LIBRARIES mrvUI mrvWidgets mrvCore ${FLTK_vk_LIBRARY} )
 set(LIBRARIES_PRIVATE )
-list(APPEND LIBRARIES tlTimelineVk tlVk tlTimeline tlDraw tlTimelineUI tlUI)
+list(APPEND LIBRARIES tlRender::tlDraw tlRender::tlVk tlRender::tlTimeline tlRender::tlUI tlRender::tlTimelineUI tlRender::tlTimelineVk)
 
 add_library(mrvVk ${SOURCES} ${HEADERS})
 files_to_absolute_paths()

@@ -934,7 +934,7 @@ namespace mrv
             }
                 
             if (p.hudActive && p.hud != HudDisplay::kNone)
-                _drawHUD(cmd, alpha);
+                _drawHUD(alpha);
             
             math::Box2i selection = p.colorAreaInfo.box = p.selection;
             if (selection.max.x >= 0)
