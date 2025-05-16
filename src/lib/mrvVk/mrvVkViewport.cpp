@@ -377,7 +377,7 @@ namespace mrv
             prepare_pipeline_layout(); 
         }
 
-        void Viewport::destroy_resources()
+        void Viewport::destroy()
         {
             MRV2_VK();
 
@@ -404,7 +404,7 @@ namespace mrv
                 vk.annotation_pipeline = VK_NULL_HANDLE;
             }
 
-            VkWindow::destroy_resources();
+            VkWindow::destroy();
         }
 
         void Viewport::hide()

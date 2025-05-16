@@ -97,7 +97,7 @@ namespace mrv
             void hide() FL_OVERRIDE;
 
             void prepare() FL_OVERRIDE;
-            void destroy_resources() FL_OVERRIDE;
+            void destroy() FL_OVERRIDE;
 
             //! @}
 

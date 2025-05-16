@@ -1577,7 +1577,7 @@ void main() {
         m_textures.clear();
     }
 
-    void NDIView::destroy_resources()
+    void NDIView::destroy()
     {
         TLRENDER_P();
 

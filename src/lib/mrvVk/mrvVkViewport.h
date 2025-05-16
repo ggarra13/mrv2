@@ -47,7 +47,7 @@ namespace mrv
             std::vector<const char*> get_device_extensions() FL_OVERRIDE;
             
             void prepare() FL_OVERRIDE;
-            void destroy_resources() FL_OVERRIDE;
+            void destroy() FL_OVERRIDE;
 
         protected:
             void _updateHDRMetadata();

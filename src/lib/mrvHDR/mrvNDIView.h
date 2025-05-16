@@ -72,7 +72,7 @@ namespace mrv
         
         
         void prepare() FL_OVERRIDE;
-        void destroy_resources() FL_OVERRIDE;
+        void destroy() FL_OVERRIDE;
         
         std::vector<const char*> get_instance_extensions() FL_OVERRIDE;
         std::vector<const char*> get_optional_extensions() FL_OVERRIDE;

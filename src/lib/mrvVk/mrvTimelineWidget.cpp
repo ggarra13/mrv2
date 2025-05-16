@@ -803,7 +803,7 @@ void main()
             prepare_pipeline();
         }
 
-        void TimelineWidget::destroy_resources()
+        void TimelineWidget::destroy()
         {
             TLRENDER_P();
 
