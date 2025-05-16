@@ -174,6 +174,7 @@ namespace tl
             return data[static_cast<std::size_t>(value)];
         }
 
+        uint64_t                       Texture::numTextures = 0;
         std::unique_ptr<SamplersCache> Texture::samplersCache;
         
         struct Texture::Private
@@ -263,6 +264,7 @@ namespace tl
             {
                 samplersCache = std::make_unique<SamplersCache>(ctx.device);
             }
+            ++numTextures;
         }
 
         Texture::~Texture()
@@ -281,6 +283,12 @@ namespace tl
 
             if (p.image != VK_NULL_HANDLE)
                 vkDestroyImage(device, p.image, nullptr);
+
+            --numTextures;
+            if (numTextures == 0)
+            {
+                samplersCache.reset();
+            }
         }
 
         std::shared_ptr<Texture> Texture::create(

@@ -138,6 +138,7 @@ namespace tl
             void createImageView();
             void createSampler();
 
+            static uint64_t numTextures;
             static std::unique_ptr<SamplersCache> samplersCache;
             
             TLRENDER_PRIVATE();
