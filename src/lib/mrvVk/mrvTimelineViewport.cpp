@@ -3482,11 +3482,11 @@ namespace mrv
         {
             TLRENDER_P();
 
-            // \@todo: handle rotations in this matrix calculation
-            const math::Size2i viewportSize = getViewportSize();
+            const math::Size2i& viewportSize = getViewportSize();
             
-            math::Matrix4x4f vm =
-                math::translate(math::Vector3f(p.viewPos.x, p.viewPos.y, 0.F));
+            const math::Matrix4x4f vm =
+                math::translate(math::Vector3f(p.viewPos.x, p.viewPos.y, 0.F)) *
+                math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
             const auto pm = math::ortho(
                 0.F, static_cast<float>(viewportSize.w),
                 0.F, static_cast<float>(viewportSize.h), -1.F, 1.F);

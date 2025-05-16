@@ -167,14 +167,6 @@ namespace tl
                           const math::Vector2i& position,
                           const image::Color4f&,
                           const bool enableBlending = false);
-            void drawText(
-                const std::string& pipelineName,
-                const std::string& pipelineLayoutName,
-                const bool hasDepth,
-                const bool hasStencil,
-                const timeline::TextInfo& info,
-                const math::Vector2i& pos,
-                const image::Color4f& color);
             
             void drawMesh(
                 const geom::TriangleMesh2&, const math::Vector2i& position,
@@ -186,19 +178,11 @@ namespace tl
                 const std::string& pipelineLayoutName,
                 const geom::TriangleMesh2&, const math::Vector2i& position,
                 const image::Color4f&);
-
-            void drawText(
-                const std::string& pipelineName,
-                const std::string& pipelineLayoutName,
-                const bool hasDepth,
-                const bool hasStencil,
-                const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
-                const math::Vector2i& pos, const image::Color4f& color);
             void drawText(
                 const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
                 const math::Vector2i& position, const image::Color4f&,
                 const bool flipped = false,
-                const std::string& pipelineName = "timeline") override;
+                const std::string& pipelineName = "timeline") override {};
             void drawTexture(
                 unsigned int, const math::Box2i&,
                 const image::Color4f& =

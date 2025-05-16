@@ -791,14 +791,9 @@ namespace mrv
 
             int width = 2 / _p->viewZoom; //* renderSize.w / viewportSize.w;
 
-#ifdef USE_ONE_PIXEL_LINES
-            gl.outline->drawRect(box, color, mvp);
-#else
             if (width < 2)
                 width = 2;
-            gl.render->setTransform(mvp);
             drawRectOutline(gl.render, box, color, width);
-#endif
 
             //
             // Draw the text too
@@ -808,8 +803,8 @@ namespace mrv
             const image::FontInfo fontInfo(fontFamily, 12 * width);
             const auto glyphs = _p->fontSystem->getGlyphs(label, fontInfo);
             math::Vector2i pos(box.max.x, box.max.y - 2 * width);
+            
             // Set the projection matrix
-            gl.render->setTransform(mvp);
             gl.render->drawText(glyphs, pos, color);
         }
 
@@ -819,6 +814,8 @@ namespace mrv
             if (!p.player)
                 return;
 
+            MRV2_GL();
+
             const auto& info = p.player->player()->getIOInfo();
             const auto& video = info.video[0];
             const auto pr = video.size.pixelAspectRatio;
@@ -826,15 +823,9 @@ namespace mrv
             const auto& viewportSize = getViewportSize();
             const auto& renderSize = getRenderSize();
 
-            math::Matrix4x4f vm;
-            vm =
-                vm * math::translate(math::Vector3f(p.viewPos.x, p.viewPos.y, 0.F));
-            vm = vm * math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
-            const auto pm = math::ortho(
-                0.F, static_cast<float>(viewportSize.w), 0.F,
-                static_cast<float>(viewportSize.h), -1.F, 1.F);
-            auto mvp = pm * vm;
+            math::Matrix4x4f mvp = _projectionMatrix();
             mvp = mvp * math::scale(math::Vector3f(1.F, -1.F, 1.F));
+            gl.render->setTransform(mvp);
 
             double aspect = (double)renderSize.w / pr / (double)renderSize.h;
             if (aspect <= 1.78)
@@ -1181,20 +1172,10 @@ namespace mrv
             box.min.y = -(renderSize.h - box.min.y);
             box.max.y = -(renderSize.h - box.max.y);
 
-            math::Matrix4x4f vm =
-                math::translate(math::Vector3f(p.viewPos.x, p.viewPos.y, 0.F));
-            vm = vm * math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
-            const auto pm = math::ortho(
-                0.F, static_cast<float>(viewportSize.w), 0.F,
-                static_cast<float>(viewportSize.h), -1.F, 1.F);
-            auto mvp = pm * vm;
+            math::Matrix4x4f mvp = _projectionMatrix();
             mvp = mvp * math::scale(math::Vector3f(1.F, -1.F, 1.F));
-#ifdef USE_ONE_PIXEL_LINES
-            _drawRectangleOutline(box, color, mvp);
-#else
             gl.render->setTransform(mvp);
             drawRectOutline(gl.render, box, color, 2);
-#endif
         }
 
         void Viewport::_drawDataWindow() const noexcept

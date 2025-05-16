@@ -29,17 +29,17 @@ namespace mrv
             const std::shared_ptr<timeline_vlk::Render>& render,
             const std::string& pipelineName,
             const math::Box2i& rect, const
-            image::Color4f& color, const int width,
+            image::Color4f& color, const float width,
             VkRenderPass renderPass = VK_NULL_HANDLE)
     {
         geom::TriangleMesh2 mesh;
 
         // Add the outside vertices.
         // math::Box2i outside = rect.margin(width / 2);
-        mesh.v.push_back(math::Vector2f(rect.min.x - 2.0f, rect.min.y - 2.0f));
-        mesh.v.push_back(math::Vector2f(rect.max.x + 2.0f, rect.min.y - 2.0f));
-        mesh.v.push_back(math::Vector2f(rect.max.x + 2.0f, rect.max.y + 2.0f));
-        mesh.v.push_back(math::Vector2f(rect.min.x - 2.0f, rect.max.y + 2.0f));
+        mesh.v.push_back(math::Vector2f(rect.min.x - width, rect.min.y - width));
+        mesh.v.push_back(math::Vector2f(rect.max.x + width, rect.min.y - width));
+        mesh.v.push_back(math::Vector2f(rect.max.x + width, rect.max.y + width));
+        mesh.v.push_back(math::Vector2f(rect.min.x - width, rect.max.y + width));
 
         // Add the inside vertices.
         mesh.v.push_back(math::Vector2f(rect.min.x, rect.min.y));

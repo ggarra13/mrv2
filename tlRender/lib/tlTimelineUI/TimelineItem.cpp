@@ -898,20 +898,9 @@ namespace tl
                                                      math::Vector2i(
                                                          box.min.x,
                                                          box.min.y + p.size.fontMetrics.ascender));
-                                                     
-                            // event.render->drawText(
-                            //     event.fontSystem->getGlyphs(
-                            //         label, p.size.fontInfo),
-                            //     math::Vector2i(
-                            //         box.min.x,
-                            //         box.min.y + p.size.fontMetrics.ascender),
-                            //     event.style->getColorRole(
-                            //         ui::ColorRole::TextDisabled),
-                            //     false,
-                            //     label);
                         }
                     }
-                    for (auto& textInfo : textInfos)
+                    for (const auto& textInfo : textInfos)
                     {
                         event.render->drawText(textInfo, math::Vector2i(),
                                                event.style->getColorRole(
@@ -1027,14 +1016,21 @@ namespace tl
 
                 const std::string label =
                     _data->timeUnitsModel->getLabel(p.currentTime);
-                event.render->drawText(
-                    event.fontSystem->getGlyphs(label, p.size.fontInfo),
-                    math::Vector2i(
-                        pos.x + p.size.border * 2 + p.size.margin,
-                        pos.y + p.size.margin + p.size.fontMetrics.ascender),
-                    event.style->getColorRole(ui::ColorRole::Text),
-                    false,
-                    "Current Time");
+                std::vector<timeline::TextInfo> textInfos;
+                event.render->appendText(textInfos,
+                                         event.fontSystem->getGlyphs(
+                                             label, p.size.fontInfo),
+                                         math::Vector2i(
+                                             pos.x + p.size.border * 2 + p.size.margin,
+                                             pos.y + p.size.margin + p.size.fontMetrics.ascender));
+                            
+                for (const auto& textInfo : textInfos)
+                {
+                    event.render->drawText(textInfo, math::Vector2i(),
+                                           event.style->getColorRole(
+                                               ui::ColorRole::Text),
+                                           "currenttime");
+                }
             }
         }
 

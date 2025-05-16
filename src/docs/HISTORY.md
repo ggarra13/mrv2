@@ -18,6 +18,8 @@ v1.3.8
 - Allowed overriding pixel ratio on OpenEXR images from the Image Information Panel.  Note that once you override it, it will remain like that for all images.  To reverse them, you need to set it back to a value of 0 or less than 0.
 - Fixed a memory leak in the Vectorscope.
 - Fixed secondary viewport flickering when the timeline was hidden (at least on X11).
+- Improved performance of text rendering on both OpenGL and Vulkan.
+- Removed outline class from OpenGL as it was not needed.
 - Started porting to Vulkan.
 
 	 * Working:
@@ -63,8 +65,9 @@ v1.3.8
 		 - OpenUSD in Vulkan (how to do it?)
 		 
 	 * Problems:
-		 - Performance of the timeline is an issue.  It prevents mrv2 from
-		   reaching 60 fps at 4K (it reaches only 35 fps).
+		 - Performance of drawing text is an issue on Linux and Windows.
+		   It prevents mrv2 from reaching 60 fps at 4K (it reaches only
+		   40 fps or less).  macOS seems fine, thou.
 		   
 - Fixed and simplified code for NDIView (hdr utility).
 - Fixed hdr utility for macOS Intel trying to pass full HDR10 or HLG data, 

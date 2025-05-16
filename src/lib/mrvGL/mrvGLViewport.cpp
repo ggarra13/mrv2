@@ -91,11 +91,7 @@ namespace mrv
             TLRENDER_P();
             MRV2_GL();
             gl.render.reset();
-            gl.outline.reset();
             gl.lines.reset();
-#ifdef USE_ONE_PIXEL_LINES
-            gl.outline.reset();
-#endif
             gl.buffer.reset();
             gl.annotation.reset();
             gl.overlay.reset();
@@ -126,10 +122,6 @@ namespace mrv
 
                 gl.render = timeline_gl::Render::create(context);
                 p.fontSystem = image::FontSystem::create(context);
-
-#ifdef USE_ONE_PIXEL_LINES
-                gl.outline = std::make_shared<opengl::Outline>();
-#endif
 
                 gl.lines = std::make_shared<opengl::Lines>();
 
@@ -1008,8 +1000,7 @@ namespace mrv
             const uint32_t W = info.box.w();
             const uint32_t H = info.box.h();
             const size_t dataSize = W * H;
-            std::cerr << "ptr=" << p.image << " dataSize=" << dataSize
-                      << " " << info.box << std::endl;
+            
             image::Color4f rgba, hsv;
 
             for (int Y = info.box.y(); Y <= maxY; ++Y)
@@ -1049,7 +1040,6 @@ namespace mrv
                     hsv_to_info(hsv, info);
                 }
             }
-            std::cerr << "DONE" << std::endl;
 
             int num = info.box.w() * info.box.h();
             info.rgba.mean.r /= num;

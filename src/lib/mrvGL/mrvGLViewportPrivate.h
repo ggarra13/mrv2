@@ -15,7 +15,6 @@
 #include "mrvGL/mrvGLErrors.h"
 #include "mrvGL/mrvGLLines.h"
 #include "mrvGL/mrvGLViewport.h"
-#include "mrvGL/mrvGLOutline.h"
 
 namespace mrv
 {
@@ -46,10 +45,7 @@ namespace mrv
             GLsync overlayFence;
             std::shared_ptr<gl::VBO> vbo;
             std::shared_ptr<gl::VAO> vao;
-
-#ifdef USE_ONE_PIXEL_LINES
-            std::shared_ptr<opengl::Outline> outline;
-#endif
+            
             std::shared_ptr<opengl::Lines> lines;
 
             bool init_debug = false;

@@ -7,7 +7,6 @@ set(HEADERS
     mrvGLErrors.h
     mrvGLJson.h
     mrvGLLines.h
-    mrvGLOutline.h
     mrvGLShaders.h
     mrvGLShape.h
     mrvGLTextEdit.h
@@ -25,7 +24,6 @@ set(SOURCES
     mrvGLErrors.cpp
     mrvGLJson.cpp
     mrvGLLines.cpp
-    mrvGLOutline.cpp
     mrvGLShaders.cpp
     mrvGLShape.cpp
     mrvGLTextEdit.cpp

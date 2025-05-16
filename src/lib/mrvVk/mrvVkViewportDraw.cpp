@@ -601,52 +601,16 @@ namespace mrv
         }
             
         void Viewport::_drawText(const std::vector<timeline::TextInfo>& textInfos,
-                                 const math::Vector2i& pos, const image::Color4f& color, 
+                                 const math::Vector2i& pos,
+                                 const image::Color4f& color, 
                                  const std::string& pipelineName) const
         {
             MRV2_VK();
             
-            const bool hasDepth = mode() & FL_DEPTH;
-            const bool hasStencil = mode() & FL_STENCIL;
-            
             for (auto& textInfo : textInfos)
             {
-                vk.render->drawText(pipelineName, "text", hasDepth, hasStencil, textInfo, pos, color);
+                vk.render->drawText(textInfo, pos, color, pipelineName);
             }
-        }
-
-        inline void Viewport::_drawText(
-            const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
-            math::Vector2i& pos, const int16_t lineHeight,
-            const image::Color4f& labelColor,
-            const std::string& pipelineName) const noexcept
-        {
-            MRV2_VK();
-            
-            const bool hasDepth = mode() & FL_DEPTH;
-            const bool hasStencil = mode() & FL_STENCIL;
-            
-
-            const image::Color4f shadowColor(0.F, 0.F, 0.F, 0.7F);
-            math::Vector2i shadowPos{pos.x + 2, pos.y - 2};
-            vk.render->drawText("HUDShadow", "text",
-                                hasDepth, hasStencil,
-                                glyphs,
-                                shadowPos, shadowColor);
-            vk.render->drawText("HUD", "text",
-                                hasDepth, hasStencil,
-                                glyphs,
-                                pos, labelColor);
-            pos.y += lineHeight;
-        }
-
-        inline void Viewport::_drawText(
-            const std::string& text, const image::FontInfo& fontInfo,
-            math::Vector2i& pos, const int16_t lineHeight,
-            const image::Color4f& labelColor) const noexcept
-        {
-            _drawText(_p->fontSystem->getGlyphs(text, fontInfo), pos,
-                      lineHeight, labelColor, "HUD");
         }
             
         void Viewport::_drawRectangleOutline(
@@ -659,16 +623,11 @@ namespace mrv
             TLRENDER_P();
             
             vk.render->setTransform(mvp);
+
+            const float pixelWidth = width;
+            const float t = pixelWidth / p.viewZoom;
             
-            // Calculate box coordinates in the renderSize's coordinate space
-            // \@todo: handle rotation (should be done in mvp)
-            math::Box2i box = area;
-            box.min.x *= p.viewZoom;
-            box.min.y *= p.viewZoom;
-            box.max.x *= p.viewZoom;
-            box.max.y *= p.viewZoom;
-            
-            util::drawRectOutline(vk.render, pipelineName, box, color, width,
+            util::drawRectOutline(vk.render, pipelineName, area, color, t,
                                   renderPass());
         }
 
@@ -688,7 +647,7 @@ namespace mrv
                 selection.max.x++;
                 selection.max.y++;
             }
-            const math::Matrix4x4f mvp = _rasterProjectionMatrix();
+            const math::Matrix4x4f mvp = _projectionMatrix();
             _drawRectangleOutline("selection", mvp, selection, color, 1);
         }
         
@@ -714,6 +673,8 @@ namespace mrv
                 vertical = false;
             }
 
+            int width = 2 / _p->viewZoom; //* renderSize.w / viewportSize.w;
+            
             math::Box2i box;
             int X, Y;
             if (vertical)
@@ -728,21 +689,21 @@ namespace mrv
             }
 
             // Calculate box coordinates in the renderSize's coordinate space
-            box.min.x = X * p.viewZoom;
-            box.min.y = Y * p.viewZoom;
-            box.max.x = (renderSize.w - X) * p.viewZoom;
-            box.max.y = (renderSize.h - Y) * p.viewZoom;
+            box.min.x = X;
+            box.min.y = Y;
+            box.max.x = (renderSize.w - X);
+            box.max.y = (renderSize.h - Y);
             
             _drawRectangleOutline(label, mvp, box, color);
-
-            const image::FontInfo fontInfo(kFontFamily, 12 * p.viewZoom);
-            const auto glyphs = _p->fontSystem->getGlyphs(label, fontInfo);
-            const bool hasDepth = mode() & FL_DEPTH;
-            const bool hasStencil = mode() & FL_STENCIL;
             
-            math::Vector2i pos(box.min.x, box.max.y - 2 * p.viewZoom);
-
-            vk.render->drawText(label, label, hasDepth, hasStencil, glyphs, pos, color);
+            const image::FontInfo fontInfo(kFontFamily, 12 * width);
+            const auto& glyphs = _p->fontSystem->getGlyphs(label, fontInfo);
+            
+            math::Vector2i pos(box.min.x, (box.max.y - 2));
+            std::vector<timeline::TextInfo> textInfos;
+            vk.render->appendText(textInfos, glyphs, pos, true);
+            
+            _drawText(textInfos, math::Vector2i(), color, "safe_areas");
         }
 
         void Viewport::_drawSafeAreas() noexcept
@@ -760,7 +721,7 @@ namespace mrv
             const auto& viewportSize = getViewportSize();
             const auto& renderSize = getRenderSize();
 
-            const math::Matrix4x4f mvp = _rasterProjectionMatrix();
+            const math::Matrix4x4f mvp = _projectionMatrix();
             const VkRenderPass oldRenderPass = vk.render->getRenderPass();
             const math::Matrix4x4f oldTransform = vk.render->getTransform();
 
@@ -929,7 +890,7 @@ namespace mrv
                 frame = range.start_time().to_frames();
                 const int64_t last_frame = range.end_time_inclusive().to_frames();
                 snprintf(
-                    buf, 512, " Range: %" PRId64 " -  %" PRId64, frame, last_frame);
+                    buf, 512, " Range: %" PRId64 " -  %" PRId64 " " , frame, last_frame);
                 tmp += buf;
             }
 

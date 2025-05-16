@@ -394,7 +394,7 @@ namespace mrv
             //! full rotation of the image (user rotation + video rotation)
             float _getRotation() const noexcept;
 
-            //! Get the raster matrix (ie. without zoom into account).
+            //! Get the raster matrix.
             math::Matrix4x4f _rasterProjectionMatrix() const noexcept;
             
             //! Get the render projection matrix.

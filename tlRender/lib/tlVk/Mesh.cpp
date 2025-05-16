@@ -733,7 +733,8 @@ namespace tl
             }
         }
 
-        std::shared_ptr<VAO> VAO::create(Fl_Vk_Context& context, const std::string& name)
+        std::shared_ptr<VAO> VAO::create(Fl_Vk_Context& context,
+                                         const std::string& name)
         {
             auto out = std::shared_ptr<VAO>(new VAO(context));
             out->_init(name);
