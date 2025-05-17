@@ -270,6 +270,8 @@ namespace tl
                 const std::string& shaderName);
             void _vkDraw(const std::string& meshName);
 
+            void wait_device();
+            void wait_queue();
             
 #if defined(TLRENDER_LIBPLACEBO)
             void _addTextures(
