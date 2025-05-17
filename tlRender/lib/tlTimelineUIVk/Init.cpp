@@ -17,10 +17,13 @@ namespace tl
         {
             tl::timeline::init(context);
             tl::ui::init(context);
-            if (!context->getSystem<timelineui_vk::ThumbnailSystem>())
-            {
-                context->addSystem(timelineui_vk::ThumbnailSystem::create(context));
-            }
+
+            // We cannot init thumbnail system here as we need the FLTK context
+            // if (!context->getSystem<timelineui_vk::ThumbnailSystem>())
+            // {
+            //     Fl_Vk_Context ctx;
+            //     context->addSystem(timelineui_vk::ThumbnailSystem::create(context, ctx));
+            // }
         }
     } // namespace timelineui_vk
 } // namespace tl

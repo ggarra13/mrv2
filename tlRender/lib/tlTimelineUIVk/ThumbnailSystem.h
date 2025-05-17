@@ -13,14 +13,12 @@
 #include <tlCore/Mesh.h>
 #include <tlCore/Path.h>
 
+#include <FL/Fl_Vk_Context.H>
+
 #include <future>
 
 namespace tl
 {
-    namespace gl
-    {
-        class GLFWWindow;
-    }
 
     namespace timelineui_vk
     {
@@ -137,10 +135,9 @@ namespace tl
         protected:
             void _init(
                 const std::shared_ptr<ThumbnailCache>&,
-                const std::shared_ptr<system::Context>&,
-                const std::shared_ptr<gl::GLFWWindow>&);
+                const std::shared_ptr<system::Context>&);
 
-            ThumbnailGenerator();
+            ThumbnailGenerator(Fl_Vk_Context& ctx);
 
         public:
             ~ThumbnailGenerator();
@@ -149,7 +146,7 @@ namespace tl
             static std::shared_ptr<ThumbnailGenerator> create(
                 const std::shared_ptr<ThumbnailCache>&,
                 const std::shared_ptr<system::Context>&,
-                const std::shared_ptr<gl::GLFWWindow>& = nullptr);
+                Fl_Vk_Context&);
 
             //! Get information.
             InfoRequest
@@ -196,6 +193,8 @@ namespace tl
             void _thumbnailCancel();
             void _waveformCancel();
 
+            Fl_Vk_Context& ctx;
+            
             TLRENDER_PRIVATE();
         };
 
@@ -205,14 +204,15 @@ namespace tl
         protected:
             void _init(const std::shared_ptr<system::Context>&);
 
-            ThumbnailSystem();
+            ThumbnailSystem(Fl_Vk_Context&);
 
         public:
             ~ThumbnailSystem();
 
             //! Create a new system.
             static std::shared_ptr<ThumbnailSystem>
-            create(const std::shared_ptr<system::Context>&);
+            create(const std::shared_ptr<system::Context>&,
+                   Fl_Vk_Context& ctx);
 
             //! Get information.
             InfoRequest
@@ -237,6 +237,8 @@ namespace tl
             const std::shared_ptr<ThumbnailCache>& getCache() const;
 
         private:
+            Fl_Vk_Context& ctx;
+            
             TLRENDER_PRIVATE();
         };
     } // namespace timelineui_vk

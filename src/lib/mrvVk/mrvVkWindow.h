@@ -23,6 +23,8 @@ namespace mrv
             VkWindow(int X, int Y, int W, int H, const char* L = 0);
             VkWindow(int W, int H, const char* L = 0);
 
+            const Fl_Vk_Context& getContext() { return ctx; } 
+            
             void show() FL_OVERRIDE;
 
             void valid(int x) {};

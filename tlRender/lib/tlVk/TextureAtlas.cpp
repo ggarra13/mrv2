@@ -270,7 +270,6 @@ namespace tl
 
             VkDevice device = ctx.device;
             VkCommandPool commandPool = ctx.commandPool;
-            VkQueue queue = ctx.queue;
             
             for (uint8_t i = 0; i < p.textureCount; ++i)
             {

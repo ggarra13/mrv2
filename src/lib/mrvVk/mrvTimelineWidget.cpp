@@ -285,7 +285,8 @@ namespace mrv
             p.clipboard = Clipboard::create(context);
 
             p.timelineWidget =
-                timelineui_vk::TimelineWidget::create(timeUnitsModel, context);
+                timelineui_vk::TimelineWidget::create(timeUnitsModel, ctx,
+                                                      context);
             p.timelineWidget->setEditable(false);
             p.timelineWidget->setFrameView(true);
             p.timelineWidget->setScrollBarsVisible(false);

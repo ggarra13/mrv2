@@ -26,7 +26,7 @@ namespace tl
                 const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<IWidget>& parent);
 
-            TimelineWidget();
+            TimelineWidget(Fl_Vk_Context& ctx);
 
         public:
             virtual ~TimelineWidget();
@@ -34,6 +34,7 @@ namespace tl
             //! Create a new widget.
             static std::shared_ptr<TimelineWidget> create(
                 const std::shared_ptr<timeline::ITimeUnitsModel>&,
+                Fl_Vk_Context& ctx,
                 const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<IWidget>& parent = nullptr);
 
@@ -188,6 +189,8 @@ namespace tl
         protected:
             void _releaseMouse() override;
 
+            Fl_Vk_Context& ctx;
+            
         private:
             void _setViewZoom(
                 double zoomNew, double zoomPrev, const math::Vector2i& focus,

@@ -101,7 +101,8 @@ namespace tl
             p.scrollWidget->setBorder(false);
         }
 
-        TimelineWidget::TimelineWidget() :
+        TimelineWidget::TimelineWidget(Fl_Vk_Context& ctx) :
+            ctx(ctx),
             _p(new Private)
         {
         }
@@ -110,10 +111,11 @@ namespace tl
 
         std::shared_ptr<TimelineWidget> TimelineWidget::create(
             const std::shared_ptr<timeline::ITimeUnitsModel>& timeUnitsModel,
+            Fl_Vk_Context& ctx,
             const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<IWidget>& parent)
         {
-            auto out = std::shared_ptr<TimelineWidget>(new TimelineWidget);
+            auto out = std::shared_ptr<TimelineWidget>(new TimelineWidget(ctx));
             out->_init(timeUnitsModel, context, parent);
             return out;
         }
@@ -733,7 +735,7 @@ namespace tl
                         p.player,
                         p.player->getTimeline()->getTimeline()->tracks(),
                         p.scale, p.itemOptions->get(), p.displayOptions->get(),
-                        p.itemData, p.window, context);
+                        p.itemData, ctx, context);
                     p.timelineItem->setEditable(p.editable->get());
                     p.timelineItem->setStopOnScrub(p.stopOnScrub->get());
                     p.timelineItem->setMoveCallback(p.moveCallback);

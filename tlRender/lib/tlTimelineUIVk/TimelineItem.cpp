@@ -16,6 +16,8 @@
 
 #include <tlCore/StringFormat.h>
 
+#include <FL/Fl.H>
+
 namespace tl
 {
     namespace timelineui_vk
@@ -26,7 +28,6 @@ namespace tl
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
-            const std::shared_ptr<gl::GLFWWindow>& window,
             const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<IWidget>& parent)
         {
@@ -47,10 +48,18 @@ namespace tl
             p.scrub = observer::Value<bool>::create(false);
             p.timeScrub =
                 observer::Value<otime::RationalTime>::create(time::invalidTime);
+            
 
+            if (!context->getSystem<timelineui_vk::ThumbnailSystem>())
+            {
+                std::cerr << "create timeline thumbnail system with device "
+                          << ctx.device << std::endl;
+                context->addSystem(timelineui_vk::ThumbnailSystem::create(context, ctx));
+            }
+                
             p.thumbnailGenerator = timelineui_vk::ThumbnailGenerator::create(
                 context->getSystem<timelineui_vk::ThumbnailSystem>()->getCache(), context,
-                window);
+                ctx);
 
             const auto otioTimeline = p.player->getTimeline()->getTimeline();
             for (const auto& child : otioTimeline->tracks()->children())
@@ -172,7 +181,8 @@ namespace tl
                     });
         }
 
-        TimelineItem::TimelineItem() :
+        TimelineItem::TimelineItem(Fl_Vk_Context& ctx) :
+            ctx(ctx),
             _p(new Private)
         {
         }
@@ -185,13 +195,13 @@ namespace tl
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
-            const std::shared_ptr<gl::GLFWWindow>& window,
+            Fl_Vk_Context& ctx,
             const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<IWidget>& parent)
         {
-            auto out = std::shared_ptr<TimelineItem>(new TimelineItem);
+            auto out = std::shared_ptr<TimelineItem>(new TimelineItem(ctx));
             out->_init(
-                player, stack, scale, options, displayOptions, itemData, window,
+                player, stack, scale, options, displayOptions, itemData,
                 context, parent);
             return out;
         }
@@ -417,6 +427,8 @@ namespace tl
                 math::Box2i(g.min.x, y, g.w(), h),
                 event.style->getColorRole(ui::ColorRole::Border),
                 "timeline_border", false);
+
+            std::cerr << "drawing" << std::endl;
             
             _drawInOutPoints(drawRect, event);
             _drawTimeTicks(drawRect, event);

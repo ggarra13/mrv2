@@ -451,6 +451,13 @@ namespace mrv
             if (auto context = vk.context.lock())
             {
 
+                if (!context->getSystem<timelineui_vk::ThumbnailSystem>())
+                {
+                    std::cerr << "create thumbnail system with device "
+                              << ctx.device << std::endl;
+                    context->addSystem(timelineui_vk::ThumbnailSystem::create(context, ctx));
+                }
+            
                 vk.render = timeline_vlk::Render::create(ctx, context);
 
                 vk.annotationRender = timeline_vlk::Render::create(ctx, context);

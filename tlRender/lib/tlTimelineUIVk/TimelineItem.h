@@ -9,13 +9,10 @@
 #include <tlTimeline/Edit.h>
 #include <tlTimeline/Player.h>
 
+#include <FL/Fl_Vk_Context.H>
+
 namespace tl
 {
-    namespace gl
-    {
-        class GLFWWindow;
-    }
-
     namespace timelineui_vk
     {
         //! Track types.
@@ -26,7 +23,6 @@ namespace tl
         //! \todo Add a selection model.
         //! \todo Add support for dragging clips to different tracks.
         //! \todo Add support for adjusting clip handles.
-        //! \todo Add support for undo/redo.
         //! \todo Add an option for viewing/playing individual clips ("solo"
         //! mode).
         class TimelineItem : public IItem
@@ -37,11 +33,10 @@ namespace tl
                 const otio::SerializableObject::Retainer<otio::Stack>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
-                const std::shared_ptr<gl::GLFWWindow>&,
                 const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<IWidget>& parent);
 
-            TimelineItem();
+            TimelineItem(Fl_Vk_Context&);
 
         public:
             virtual ~TimelineItem();
@@ -52,7 +47,7 @@ namespace tl
                 const otio::SerializableObject::Retainer<otio::Stack>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
-                const std::shared_ptr<gl::GLFWWindow>&,
+                Fl_Vk_Context& ctx,
                 const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<IWidget>& parent = nullptr);
 
@@ -99,6 +94,8 @@ namespace tl
 
             void _releaseMouse() override;
 
+            Fl_Vk_Context& ctx;
+            
         private:
             bool _isTrackVisible(int) const;
 
