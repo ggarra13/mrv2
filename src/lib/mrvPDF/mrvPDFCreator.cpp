@@ -14,16 +14,22 @@ namespace fs = std::filesystem;
 
 #include <tlIO/System.h>
 
-#include <tlGL/Init.h>
-
-#include <tlUI/ThumbnailSystem.h>
-
-#include <FL/fl_draw.H>
-
+#include "mrvCore/mrvBackend.h"
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvImage.h"
 #include "mrvCore/mrvString.h"
 #include "mrvCore/mrvWait.h"
+
+#ifdef OPENGL_BACKEND
+#    include <tlGL/Init.h>
+#endif
+
+#ifdef VULKAN_BACKEND
+#    include <tlTimelineUIVk/ThumbnailSystem.h>
+#endif
+
+#include <FL/fl_draw.H>
+
 
 #include "mrvWidgets/mrvProgressReport.h"
 
@@ -317,9 +323,11 @@ namespace mrv
                                   .arg(Y);
             LOG_INFO(msg);
 
+#ifdef OPENGL_BACKEND
             view->make_current();
             gl::initGLAD();
-
+#endif
+            
             // Don't send any tcp updates
             tcp->lock();
 
@@ -351,7 +359,10 @@ namespace mrv
                 // Wait a while until so viewport updates.
                 wait();
 
+#ifdef OPENGL_BACKEND
                 view->make_current();
+#endif
+                
                 view->redraw();
                 view->flush();
                 Fl::flush();
@@ -369,6 +380,8 @@ namespace mrv
                 memcpy(buffer, data[0], data_size);
                 delete rgb;
 #else
+
+#ifdef OPENGL_BACKEND
                 GLenum imageBuffer = GL_FRONT;
 
                 // @note: Wayland does not work like Windows, macOS or
@@ -385,6 +398,8 @@ namespace mrv
                     X, Y, renderSize.w, renderSize.h, format, type, buffer);
 
                 flipImageInY(buffer, renderSize.w, renderSize.h, 3);
+#endif
+                
 #endif
 
                 create_thumbnail(renderSize.w, renderSize.h, buffer);
