@@ -4,21 +4,21 @@
 
 #pragma once
 
-#include <tlTimelineUI/IBasicItem.h>
+#include <tlTimelineUIVk/IBasicItem.h>
 
 #include <opentimelineio/clip.h>
 
 namespace tl
 {
-    namespace timelineui
+    namespace timelineui_vk
     {
         class ThumbnailGenerator;
     }
 
-    namespace timelineui
+    namespace timelineui_vk
     {
-        //! Video clip item.
-        class VideoClipItem : public IBasicItem
+        //! Audio clip item.
+        class AudioClipItem : public IBasicItem
         {
         protected:
             void _init(
@@ -29,13 +29,13 @@ namespace tl
                 const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<IWidget>& parent);
 
-            VideoClipItem();
+            AudioClipItem();
 
         public:
-            virtual ~VideoClipItem();
+            virtual ~AudioClipItem();
 
             //! Create a new item.
-            static std::shared_ptr<VideoClipItem> create(
+            static std::shared_ptr<AudioClipItem> create(
                 const otio::SerializableObject::Retainer<otio::Clip>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
@@ -52,11 +52,11 @@ namespace tl
             void drawEvent(const math::Box2i&, const ui::DrawEvent&) override;
 
         private:
-            void _drawThumbnails(const math::Box2i&, const ui::DrawEvent&);
+            void _drawWaveforms(const math::Box2i&, const ui::DrawEvent&);
 
             void _cancelRequests();
 
             TLRENDER_PRIVATE();
         };
-    } // namespace timelineui
+    } // namespace timelineui_vk
 } // namespace tl

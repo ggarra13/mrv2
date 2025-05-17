@@ -4,59 +4,47 @@
 
 #pragma once
 
-#include <tlTimelineUI/IBasicItem.h>
+#include <tlTimelineUIVk/IBasicItem.h>
 
-#include <opentimelineio/clip.h>
+#include <opentimelineio/transition.h>
 
 namespace tl
 {
-    namespace timelineui
+    namespace timelineui_vk
     {
-        class ThumbnailGenerator;
-    }
-
-    namespace timelineui
-    {
-        //! Video clip item.
-        class VideoClipItem : public IBasicItem
+        //! Transition item.
+        class TransitionItem : public IItem
         {
         protected:
             void _init(
-                const otio::SerializableObject::Retainer<otio::Clip>&,
+                const otio::SerializableObject::Retainer<otio::Transition>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
-                const std::shared_ptr<ThumbnailGenerator>,
                 const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<IWidget>& parent);
 
-            VideoClipItem();
+            TransitionItem();
 
         public:
-            virtual ~VideoClipItem();
+            virtual ~TransitionItem();
 
             //! Create a new item.
-            static std::shared_ptr<VideoClipItem> create(
-                const otio::SerializableObject::Retainer<otio::Clip>&,
+            static std::shared_ptr<TransitionItem> create(
+                const otio::SerializableObject::Retainer<otio::Transition>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
-                const std::shared_ptr<ThumbnailGenerator>,
                 const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<IWidget>& parent = nullptr);
 
-            void setScale(double) override;
-            void setDisplayOptions(const DisplayOptions&) override;
-
-            void tickEvent(bool, bool, const ui::TickEvent&) override;
             void sizeHintEvent(const ui::SizeHintEvent&) override;
             void clipEvent(const math::Box2i&, bool) override;
             void drawEvent(const math::Box2i&, const ui::DrawEvent&) override;
 
         private:
-            void _drawThumbnails(const math::Box2i&, const ui::DrawEvent&);
-
-            void _cancelRequests();
+            void _timeUnitsUpdate() override;
+            void _textUpdate();
 
             TLRENDER_PRIVATE();
         };
-    } // namespace timelineui
+    } // namespace timelineui_vk
 } // namespace tl

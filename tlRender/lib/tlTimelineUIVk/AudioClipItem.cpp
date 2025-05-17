@@ -2,8 +2,8 @@
 // Copyright (c) 2021-2024 Darby Johnston
 // All rights reserved.
 
-#include <tlTimelineUI/VideoClipItem.h>
-#include <tlTimelineUI/ThumbnailSystem.h>
+#include <tlTimelineUIVk/AudioClipItem.h>
+#include <tlTimelineUIVk/ThumbnailSystem.h>
 
 #include <tlUI/DrawUtil.h>
 
@@ -17,37 +17,32 @@
 
 namespace tl
 {
-    namespace timelineui
+    namespace timelineui_vk
     {
-        struct VideoClipItem::Private
+        struct AudioClipItem::Private
         {
-            std::string clipName;
             file::Path path;
             std::vector<file::MemoryRead> memoryRead;
             std::shared_ptr<ThumbnailGenerator> thumbnailGenerator;
 
             struct SizeData
             {
-                bool sizeInit = true;
                 int dragLength = 0;
-
                 math::Box2i clipRect;
             };
             SizeData size;
 
-            io::Options ioOptions;
-            timelineui::InfoRequest infoRequest;
+            timelineui_vk::InfoRequest infoRequest;
             std::shared_ptr<io::Info> ioInfo;
-            std::map<otime::RationalTime, ThumbnailRequest>
-                thumbnailRequests;
+            std::map<otime::RationalTime, timelineui_vk::WaveformRequest> waveformRequests;
         };
 
-        void VideoClipItem::_init(
+        void AudioClipItem::_init(
             const otio::SerializableObject::Retainer<otio::Clip>& clip,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
-            const std::shared_ptr<ThumbnailGenerator> thumbnailGenerator,
+            const std::shared_ptr<timelineui_vk::ThumbnailGenerator> thumbnailGenerator,
             const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<IWidget>& parent)
         {
@@ -57,20 +52,17 @@ namespace tl
             IBasicItem::_init(
                 !clip->name().empty() ? clip->name()
                                       : path.get(-1, file::PathType::FileName),
-                ui::ColorRole::VideoClip, "tl::timelineui::VideoClipItem",
+                ui::ColorRole::AudioClip, "tl::timelineui_vk::AudioClipItem",
                 clip.value, scale, options, displayOptions, itemData, context,
                 parent);
             TLRENDER_P();
 
-            p.clipName = clip->name();
             p.path = path;
             p.memoryRead = timeline::getMemoryRead(clip->media_reference());
             p.thumbnailGenerator = thumbnailGenerator;
 
-            p.ioOptions = _data->options.ioOptions;
-            p.ioOptions["USD/cameraName"] = p.clipName;
             const std::string infoCacheKey =
-                io::getInfoCacheKey(path, p.ioOptions);
+                io::getInfoCacheKey(path, _data->options.ioOptions);
             const auto i = itemData->info.find(infoCacheKey);
             if (i != itemData->info.end())
             {
@@ -78,34 +70,34 @@ namespace tl
             }
         }
 
-        VideoClipItem::VideoClipItem() :
+        AudioClipItem::AudioClipItem() :
             _p(new Private)
         {
         }
 
-        VideoClipItem::~VideoClipItem()
+        AudioClipItem::~AudioClipItem()
         {
             TLRENDER_P();
             _cancelRequests();
         }
 
-        std::shared_ptr<VideoClipItem> VideoClipItem::create(
+        std::shared_ptr<AudioClipItem> AudioClipItem::create(
             const otio::SerializableObject::Retainer<otio::Clip>& clip,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
-            const std::shared_ptr<timelineui::ThumbnailGenerator> thumbnailGenerator,
+            const std::shared_ptr<timelineui_vk::ThumbnailGenerator> thumbnailGenerator,
             const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<IWidget>& parent)
         {
-            auto out = std::shared_ptr<VideoClipItem>(new VideoClipItem);
+            auto out = std::shared_ptr<AudioClipItem>(new AudioClipItem);
             out->_init(
                 clip, scale, options, displayOptions, itemData,
                 thumbnailGenerator, context, parent);
             return out;
         }
 
-        void VideoClipItem::setScale(double value)
+        void AudioClipItem::setScale(double value)
         {
             const bool changed = value != _scale;
             IBasicItem::setScale(value);
@@ -117,11 +109,13 @@ namespace tl
             }
         }
 
-        void VideoClipItem::setDisplayOptions(const DisplayOptions& value)
+        void AudioClipItem::setDisplayOptions(const DisplayOptions& value)
         {
             const bool thumbnailsChanged =
                 value.thumbnails != _displayOptions.thumbnails ||
-                value.thumbnailHeight != _displayOptions.thumbnailHeight;
+                value.waveformWidth != _displayOptions.waveformWidth ||
+                value.waveformHeight != _displayOptions.waveformHeight ||
+                value.waveformPrim != _displayOptions.waveformPrim;
             IBasicItem::setDisplayOptions(value);
             TLRENDER_P();
             if (thumbnailsChanged)
@@ -131,7 +125,7 @@ namespace tl
             }
         }
 
-        void VideoClipItem::tickEvent(
+        void AudioClipItem::tickEvent(
             bool parentsVisible, bool parentsEnabled,
             const ui::TickEvent& event)
         {
@@ -146,25 +140,26 @@ namespace tl
                 p.ioInfo =
                     std::make_shared<io::Info>(p.infoRequest.future.get());
                 const std::string infoCacheKey =
-                    io::getInfoCacheKey(p.path, p.ioOptions);
+                    io::getInfoCacheKey(p.path, _data->options.ioOptions);
                 _data->info[infoCacheKey] = p.ioInfo;
                 _updates |= ui::Update::Size;
                 _updates |= ui::Update::Draw;
             }
 
-            // Check if any thumbnails are finished.
-            auto i = p.thumbnailRequests.begin();
-            while (i != p.thumbnailRequests.end())
+            // Check if any audio waveforms are finished.
+            auto i = p.waveformRequests.begin();
+            while (i != p.waveformRequests.end())
             {
                 if (i->second.future.valid() &&
                     i->second.future.wait_for(std::chrono::seconds(0)) ==
                         std::future_status::ready)
                 {
-                    const auto image = i->second.future.get();
-                    const std::string cacheKey =
-                        io::getVideoCacheKey(p.path, i->first, p.ioOptions, {});
-                    _data->thumbnails[cacheKey] = image;
-                    i = p.thumbnailRequests.erase(i);
+                    const auto mesh = i->second.future.get();
+                    const std::string cacheKey = io::getAudioCacheKey(
+                        p.path, i->second.timeRange, _data->options.ioOptions,
+                        {});
+                    _data->waveforms[cacheKey] = mesh;
+                    i = p.waveformRequests.erase(i);
                     _updates |= ui::Update::Draw;
                 }
                 else
@@ -174,27 +169,19 @@ namespace tl
             }
         }
 
-        void VideoClipItem::sizeHintEvent(const ui::SizeHintEvent& event)
+        void AudioClipItem::sizeHintEvent(const ui::SizeHintEvent& event)
         {
-            const bool displayScaleChanged =
-                event.displayScale != _displayScale;
             IBasicItem::sizeHintEvent(event);
             TLRENDER_P();
-
-            if (displayScaleChanged || p.size.sizeInit)
-            {
-                p.size.dragLength = event.style->getSizeRole(
-                    ui::SizeRole::DragLength, _displayScale);
-            }
-            p.size.sizeInit = false;
-
+            p.size.dragLength = event.style->getSizeRole(
+                ui::SizeRole::DragLength, _displayScale);
             if (_displayOptions.thumbnails)
             {
-                _sizeHint.h += _displayOptions.thumbnailHeight;
+                _sizeHint.h += _displayOptions.waveformHeight;
             }
         }
 
-        void VideoClipItem::clipEvent(const math::Box2i& clipRect, bool clipped)
+        void AudioClipItem::clipEvent(const math::Box2i& clipRect, bool clipped)
         {
             IBasicItem::clipEvent(clipRect, clipped);
             TLRENDER_P();
@@ -208,17 +195,17 @@ namespace tl
             }
         }
 
-        void VideoClipItem::drawEvent(
+        void AudioClipItem::drawEvent(
             const math::Box2i& drawRect, const ui::DrawEvent& event)
         {
             IBasicItem::drawEvent(drawRect, event);
             if (_displayOptions.thumbnails)
             {
-                _drawThumbnails(drawRect, event);
+                _drawWaveforms(drawRect, event);
             }
         }
 
-        void VideoClipItem::_drawThumbnails(
+        void AudioClipItem::_drawWaveforms(
             const math::Box2i& drawRect, const ui::DrawEvent& event)
         {
             TLRENDER_P();
@@ -230,7 +217,7 @@ namespace tl
             const math::Box2i box(
                 g.min.x,
                 g.min.y + (_displayOptions.clipInfo ? (lineHeight + m * 2) : 0),
-                g.w(), _displayOptions.thumbnailHeight);
+                g.w(), _displayOptions.waveformHeight);
             event.render->drawRect(box, image::Color4f(0.F, 0.F, 0.F));
             const timeline::ClipRectEnabledState clipRectEnabledState(
                 event.render);
@@ -238,9 +225,6 @@ namespace tl
             event.render->setClipRectEnabled(true);
             event.render->setClipRect(
                 box.intersect(clipRectState.getClipRect()));
-            event.render->setOCIOOptions(_displayOptions.ocio);
-            event.render->setLUTOptions(_displayOptions.lut);
-            event.render->setHDROptions(_displayOptions.hdr);
 
             const math::Box2i clipRect =
                 _getClipRect(drawRect, _displayOptions.clipRectScale);
@@ -249,66 +233,70 @@ namespace tl
                 if (!p.ioInfo && !p.infoRequest.future.valid())
                 {
                     p.infoRequest = p.thumbnailGenerator->getInfo(
-                        p.path, p.memoryRead, p.ioOptions);
+                        p.path, p.memoryRead, _data->options.ioOptions);
                 }
             }
 
-            const int thumbnailWidth =
-                (_displayOptions.thumbnails && p.ioInfo &&
-                 !p.ioInfo->video.empty())
-                    ? static_cast<int>(
-                          _displayOptions.thumbnailHeight *
-                          p.ioInfo->video[0].size.getAspect())
-                    : 0;
-            if (thumbnailWidth > 0)
+            if (_displayOptions.waveformWidth > 0 && p.ioInfo)
             {
                 const int w = g.w();
-                for (int x = 0; x < w; x += thumbnailWidth)
+                for (int x = 0; x < w; x += _displayOptions.waveformWidth)
                 {
                     const math::Box2i box(
                         g.min.x + x,
                         g.min.y + (_displayOptions.clipInfo
                                        ? (lineHeight + m * 2)
                                        : 0),
-                        thumbnailWidth, _displayOptions.thumbnailHeight);
+                        _displayOptions.waveformWidth,
+                        _displayOptions.waveformHeight);
                     if (box.intersects(clipRect))
                     {
                         const otime::RationalTime time =
                             otime::RationalTime(
                                 _timeRange.start_time().value() +
-                                    (w > 1 ? (x / static_cast<double>(w - 1))
+                                    (w > 0 ? (x / static_cast<double>(w)) : 0) *
+                                        _timeRange.duration().value(),
+                                _timeRange.duration().rate())
+                                .round();
+                        const otime::RationalTime time2 =
+                            otime::RationalTime(
+                                _timeRange.start_time().value() +
+                                    (w > 0 ? ((x +
+                                               _displayOptions.waveformWidth) /
+                                              static_cast<double>(w))
                                            : 0) *
                                         _timeRange.duration().value(),
                                 _timeRange.duration().rate())
-                                .floor();
-                        const otime::RationalTime mediaTime =
-                            timeline::toVideoMediaTime(
-                                time, _timeRange, _trimmedRange,
-                                p.ioInfo->videoTime.duration().rate());
+                                .round();
+                        const otime::TimeRange mediaRange =
+                            timeline::toAudioMediaTime(
+                                otime::TimeRange::range_from_start_end_time(
+                                    time, time2),
+                                _timeRange, _trimmedRange,
+                                p.ioInfo->audio.sampleRate);
 
-                        const std::string cacheKey = io::getVideoCacheKey(
-                            p.path, mediaTime, p.ioOptions, {});
-                        const auto i = _data->thumbnails.find(cacheKey);
-                        if (i != _data->thumbnails.end())
+                        const std::string cacheKey = io::getAudioCacheKey(
+                            p.path, mediaRange, _data->options.ioOptions, {});
+                        const auto i = _data->waveforms.find(cacheKey);
+                        if (i != _data->waveforms.end())
                         {
                             if (i->second)
                             {
-                                timeline::VideoData videoData;
-                                videoData.size = i->second->getSize();
-                                videoData.layers.push_back({i->second});
-                                event.render->drawVideo({videoData}, {box});
+                                event.render->drawMesh(
+                                    *i->second, box.min,
+                                    image::Color4f(1.F, 1.F, 1.F));
                             }
                         }
-                        else if (p.ioInfo && !p.ioInfo->video.empty())
+                        else if (p.ioInfo && p.ioInfo->audio.isValid())
                         {
-                            const auto k = p.thumbnailRequests.find(mediaTime);
-                            if (k == p.thumbnailRequests.end())
+                            const auto j = p.waveformRequests.find(
+                                mediaRange.start_time());
+                            if (j == p.waveformRequests.end())
                             {
-                                p.thumbnailRequests[mediaTime] =
-                                    p.thumbnailGenerator->getThumbnail(
-                                        p.path, p.memoryRead,
-                                        _displayOptions.thumbnailHeight,
-                                        mediaTime, p.ioOptions);
+                                p.waveformRequests[mediaRange.start_time()] =
+                                    p.thumbnailGenerator->getWaveform(
+                                        p.path, p.memoryRead, box.getSize(),
+                                        mediaRange, _data->options.ioOptions);
                             }
                         }
                     }
@@ -316,21 +304,21 @@ namespace tl
             }
         }
 
-        void VideoClipItem::_cancelRequests()
+        void AudioClipItem::_cancelRequests()
         {
             TLRENDER_P();
             std::vector<uint64_t> ids;
             if (p.infoRequest.future.valid())
             {
                 ids.push_back(p.infoRequest.id);
-                p.infoRequest = timelineui::InfoRequest();
+                p.infoRequest = timelineui_vk::InfoRequest();
             }
-            for (const auto& i : p.thumbnailRequests)
+            for (const auto& i : p.waveformRequests)
             {
                 ids.push_back(i.second.id);
             }
-            p.thumbnailRequests.clear();
+            p.waveformRequests.clear();
             p.thumbnailGenerator->cancelRequests(ids);
         }
-    } // namespace timelineui
+    } // namespace timelineui_vk
 } // namespace tl

@@ -9,8 +9,8 @@ add_subdirectory(mrvWidgets)     # mrvFlmm mrvCore FLTK FLTK_gl MINIzip
 add_subdirectory(mrvFLU)         # mrvWidgets, FLTK, Intl
 add_subdirectory(mrvUI)          # mrvWidgets, Xrandr, wayland-client
 if(TLRENDER_VK AND MRV2_BACKEND STREQUAL "VK" OR MRV2_BACKEND STREQUAL "BOTH")
-    # tlTimelineVk, tlVk, tlTimeline, tlTimelineUI, tlUI
-    # mrvUI, mrvEdit, mrvWidgets, mrvCore, FLTK_vk
+    # tlTimelineVk, tlVk, tlTimeline, tlTimelineUIVk, tlUI
+    # mrvUI, mrvEdit, mrvWidgets, mrvCore, FLTK
     add_subdirectory(mrvVk)
 endif()
 if(TLRENDER_GL AND MRV2_BACKEND STREQUAL "GL" OR MRV2_BACKEND STREQUAL "BOTH")
@@ -21,9 +21,9 @@ endif()
 if(MRV2_PDF)
     add_subdirectory(mrvPDF)     # mrvWidgets
 endif()
-add_subdirectory(mrvNetwork) # mrvFl, Poco::Net
 add_subdirectory(mrvEdit)    # mrvWidgets, mrvNetwork
 add_subdirectory(mrvFl)      # mrvEdit, mrvUI, mrvGL, mrvVk, mrvPDF
+add_subdirectory(mrvNetwork) # mrvFl, Poco::Net
 add_subdirectory(mrvPanels)  # mrvFl, mrvEdit
 add_subdirectory(mrvBaseApp) # tlBaseApp, tlCore, RtAudio, freetype, Imath::Imath
 add_subdirectory(mrvApp)  # mrvBaseApp, mrvPanels, mrvFLU, mrvOptions

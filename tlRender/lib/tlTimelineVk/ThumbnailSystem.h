@@ -17,12 +17,7 @@
 
 namespace tl
 {
-    namespace gl
-    {
-        class GLFWWindow;
-    }
-
-    namespace ui
+    namespace timeline_vk
     {
         //! Information request.
         struct InfoRequest
@@ -137,8 +132,7 @@ namespace tl
         protected:
             void _init(
                 const std::shared_ptr<ThumbnailCache>&,
-                const std::shared_ptr<system::Context>&,
-                const std::shared_ptr<gl::GLFWWindow>&);
+                const std::shared_ptr<system::Context>&);
 
             ThumbnailGenerator();
 
@@ -148,8 +142,7 @@ namespace tl
             //! Create a new thumbnail generator.
             static std::shared_ptr<ThumbnailGenerator> create(
                 const std::shared_ptr<ThumbnailCache>&,
-                const std::shared_ptr<system::Context>&,
-                const std::shared_ptr<gl::GLFWWindow>& = nullptr);
+                const std::shared_ptr<system::Context>&);
 
             //! Get information.
             InfoRequest
@@ -239,5 +232,5 @@ namespace tl
         private:
             TLRENDER_PRIVATE();
         };
-    } // namespace ui
+    } // namespace timelineui
 } // namespace tl

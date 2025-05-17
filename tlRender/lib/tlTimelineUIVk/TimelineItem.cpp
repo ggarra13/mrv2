@@ -2,11 +2,11 @@
 // Copyright (c) 2021-2024 Darby Johnston
 // All rights reserved.
 
-#include <tlTimelineUI/TimelineItemPrivate.h>
+#include <tlTimelineUIVk/TimelineItemPrivate.h>
 
-#include <tlTimelineUI/AudioClipItem.h>
-#include <tlTimelineUI/GapItem.h>
-#include <tlTimelineUI/VideoClipItem.h>
+#include <tlTimelineUIVk/AudioClipItem.h>
+#include <tlTimelineUIVk/GapItem.h>
+#include <tlTimelineUIVk/VideoClipItem.h>
 
 #include <tlUI/DrawUtil.h>
 #include <tlUI/ScrollArea.h>
@@ -18,7 +18,7 @@
 
 namespace tl
 {
-    namespace timelineui
+    namespace timelineui_vk
     {
         void TimelineItem::_init(
             const std::shared_ptr<timeline::Player>& player,
@@ -35,7 +35,7 @@ namespace tl
                 otime::RationalTime(0.0, timeRange.duration().rate()),
                 timeRange.duration());
             IItem::_init(
-                "tl::timelineui::TimelineItem", timeRange, trimmedRange, scale,
+                "tl::timelineui_vk::TimelineItem", timeRange, trimmedRange, scale,
                 options, displayOptions, itemData, context, parent);
             TLRENDER_P();
 
@@ -48,8 +48,8 @@ namespace tl
             p.timeScrub =
                 observer::Value<otime::RationalTime>::create(time::invalidTime);
 
-            p.thumbnailGenerator = timelineui::ThumbnailGenerator::create(
-                context->getSystem<timelineui::ThumbnailSystem>()->getCache(), context,
+            p.thumbnailGenerator = timelineui_vk::ThumbnailGenerator::create(
+                context->getSystem<timelineui_vk::ThumbnailSystem>()->getCache(), context,
                 window);
 
             const auto otioTimeline = p.player->getTimeline()->getTimeline();
@@ -1217,5 +1217,5 @@ namespace tl
             }
             return out;
         }
-    } // namespace timelineui
+    } // namespace timelineui_vk
 } // namespace tl

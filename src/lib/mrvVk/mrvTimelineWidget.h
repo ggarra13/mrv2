@@ -10,7 +10,7 @@
 
 #include <tlTimeline/Edit.h>
 
-#include <tlTimelineUI/IItem.h>
+#include <tlTimelineUIVk/IItem.h>
 
 #include "mrvVk/mrvVkWindow.h"
 
@@ -49,10 +49,10 @@ namespace mrv
             void setStyle(const std::shared_ptr<ui::Style>& = nullptr);
 
             //! Get timelineUI's timelineWidget item options
-            timelineui::ItemOptions getItemOptions() const;
+            timelineui_vk::ItemOptions getItemOptions() const;
 
             //! Get timelineUI's timelineWidget display options
-            timelineui::DisplayOptions getDisplayOptions() const;
+            timelineui_vk::DisplayOptions getDisplayOptions() const;
 
             //! Set the timeline player.
             void setTimelinePlayer(TimelinePlayer*);
@@ -82,10 +82,10 @@ namespace mrv
             void setStopOnScrub(bool);
 
             //! Set the Display options.
-            void setItemOptions(const timelineui::ItemOptions&);
+            void setItemOptions(const timelineui_vk::ItemOptions&);
 
             //! Set the Display options.
-            void setDisplayOptions(const timelineui::DisplayOptions&);
+            void setDisplayOptions(const timelineui_vk::DisplayOptions&);
 
             //! Frame the view.
             void frameView();

@@ -26,13 +26,13 @@ set(SOURCE
     TransitionItem.cpp
     VideoClipItem.cpp)
 
-add_library(tlTimelineUI ${HEADERS} ${HEADERS_PRIVATE} ${SOURCE})
-target_link_libraries(tlTimelineUI PUBLIC tlUI PRIVATE ${LIBRARIES_PRIVATE})
-set_target_properties(tlTimelineUI PROPERTIES FOLDER lib)
-set_target_properties(tlTimelineUI PROPERTIES PUBLIC_HEADER "${HEADERS}")
+add_library(tlTimelineUIVk ${HEADERS} ${HEADERS_PRIVATE} ${SOURCE})
+target_link_libraries(tlTimelineUIVk PUBLIC tlUI PRIVATE ${LIBRARIES_PRIVATE})
+set_target_properties(tlTimelineUIVk PROPERTIES FOLDER lib)
+set_target_properties(tlTimelineUIVk PROPERTIES PUBLIC_HEADER "${HEADERS}")
 
-install(TARGETS tlTimelineUI
+install(TARGETS tlTimelineUIVk
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
-    PUBLIC_HEADER DESTINATION include/tlRender/tlTimelineUI)
+    PUBLIC_HEADER DESTINATION include/tlRender/tlTimelineUIVk)

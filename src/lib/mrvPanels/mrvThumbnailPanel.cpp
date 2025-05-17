@@ -116,8 +116,14 @@ namespace mrv
             try
             {
                 const auto context = App::app->getContext();
+#ifdef OPENGL_BACKEND
                 auto thumbnailSystem =
-                    context->getSystem<ui::ThumbnailSystem>();
+                    context->getSystem<timelineui::ThumbnailSystem>();
+#endif
+#ifdef VULKAN_BACKEND
+                auto thumbnailSystem =
+                    context->getSystem<timelineui_vk::ThumbnailSystem>();
+#endif
 
 #ifdef MRV2_PYBIND11
                 py::gil_scoped_release release;
@@ -179,7 +185,13 @@ namespace mrv
         void ThumbnailPanel::_cancelRequests()
         {
             const auto context = App::app->getContext();
-            auto thumbnailSystem = context->getSystem<ui::ThumbnailSystem>();
+#ifdef OPENGL_BACKEND
+            auto thumbnailSystem = context->getSystem<timelineui::ThumbnailSystem>();
+#endif
+
+#ifdef VULKAN_BACKEND
+            auto thumbnailSystem = context->getSystem<timelineui_vk::ThumbnailSystem>();
+#endif
 
             std::vector<uint64_t> ids;
             for (const auto& i : thumbnailRequests)

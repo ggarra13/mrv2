@@ -2,8 +2,8 @@
 // Copyright (c) 2021-2024 Darby Johnston
 // All rights reserved.
 
-#include <tlTimelineUI/VideoClipItem.h>
-#include <tlTimelineUI/ThumbnailSystem.h>
+#include <tlTimelineUIVk/VideoClipItem.h>
+#include <tlTimelineUIVk/ThumbnailSystem.h>
 
 #include <tlUI/DrawUtil.h>
 
@@ -17,7 +17,7 @@
 
 namespace tl
 {
-    namespace timelineui
+    namespace timelineui_vk
     {
         struct VideoClipItem::Private
         {
@@ -36,7 +36,7 @@ namespace tl
             SizeData size;
 
             io::Options ioOptions;
-            timelineui::InfoRequest infoRequest;
+            timelineui_vk::InfoRequest infoRequest;
             std::shared_ptr<io::Info> ioInfo;
             std::map<otime::RationalTime, ThumbnailRequest>
                 thumbnailRequests;
@@ -57,7 +57,7 @@ namespace tl
             IBasicItem::_init(
                 !clip->name().empty() ? clip->name()
                                       : path.get(-1, file::PathType::FileName),
-                ui::ColorRole::VideoClip, "tl::timelineui::VideoClipItem",
+                ui::ColorRole::VideoClip, "tl::timelineui_vk::VideoClipItem",
                 clip.value, scale, options, displayOptions, itemData, context,
                 parent);
             TLRENDER_P();
@@ -94,7 +94,7 @@ namespace tl
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
-            const std::shared_ptr<timelineui::ThumbnailGenerator> thumbnailGenerator,
+            const std::shared_ptr<timelineui_vk::ThumbnailGenerator> thumbnailGenerator,
             const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<IWidget>& parent)
         {
@@ -323,7 +323,7 @@ namespace tl
             if (p.infoRequest.future.valid())
             {
                 ids.push_back(p.infoRequest.id);
-                p.infoRequest = timelineui::InfoRequest();
+                p.infoRequest = timelineui_vk::InfoRequest();
             }
             for (const auto& i : p.thumbnailRequests)
             {
@@ -332,5 +332,5 @@ namespace tl
             p.thumbnailRequests.clear();
             p.thumbnailGenerator->cancelRequests(ids);
         }
-    } // namespace timelineui
+    } // namespace timelineui_vk
 } // namespace tl

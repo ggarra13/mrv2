@@ -2,15 +2,15 @@
 // Copyright (c) 2021-2024 Darby Johnston
 // All rights reserved.
 
-#include <tlTimelineUI/ThumbnailSystem.h>
-#include <tlTimelineUI/TimelineItem.h>
-#include <tlTimelineUI/TransitionItem.h>
+#include <tlTimelineUIVk/ThumbnailSystem.h>
+#include <tlTimelineUIVk/TimelineItem.h>
+#include <tlTimelineUIVk/TransitionItem.h>
 
 #include <tlUI/Label.h>
 
 namespace tl
 {
-    namespace timelineui
+    namespace timelineui_vk
     {
         struct TimelineItem::Private
         {
@@ -26,7 +26,7 @@ namespace tl
             std::shared_ptr<observer::Value<otime::RationalTime> > timeScrub;
             std::vector<int> frameMarkers;
             int minimumHeight = 0;
-            std::shared_ptr<timelineui::ThumbnailGenerator> thumbnailGenerator;
+            std::shared_ptr<timelineui_vk::ThumbnailGenerator> thumbnailGenerator;
             std::unordered_map<std::string,
                                std::vector<std::shared_ptr<image::Glyph>> > labelsCache;
             struct Track
@@ -107,5 +107,5 @@ namespace tl
             std::vector<MouseItemDropTarget>
             getDropTargets(const math::Box2i& geometry, int index, int track);
         };
-    } // namespace timelineui
+    } // namespace timelineui_vk
 } // namespace tl

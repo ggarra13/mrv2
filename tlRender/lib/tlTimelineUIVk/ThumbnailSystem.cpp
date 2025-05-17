@@ -2,7 +2,7 @@
 // Copyright (c) 2021-2024 Darby Johnston
 // All rights reserved.
 
-#include <tlUI/ThumbnailSystem.h>
+#include <tlTimelineUIVk/ThumbnailSystem.h>
 
 #include <tlTimelineGL/Render.h>
 
@@ -22,7 +22,7 @@
 
 namespace tl
 {
-    namespace ui
+    namespace timelineui_vk
     {
         namespace
         {
@@ -330,7 +330,7 @@ namespace tl
             if (!p.window)
             {
                 p.window = gl::GLFWWindow::create(
-                    "tl::ui::ThumbnailGenerator", math::Size2i(1, 1), context,
+                    "tl::timelineui_vk::ThumbnailGenerator", math::Size2i(1, 1), context,
                     static_cast<int>(gl::GLFWWindowOptions::kNone));
             }
 
@@ -1097,7 +1097,7 @@ namespace tl
         void
         ThumbnailSystem::_init(const std::shared_ptr<system::Context>& context)
         {
-            ISystem::_init("tl::ui::ThumbnailSystem", context);
+            ISystem::_init("tl::timelineui_vk::ThumbnailSystem", context);
             TLRENDER_P();
             p.cache = ThumbnailCache::create(context);
             p.generator = ThumbnailGenerator::create(p.cache, context);
@@ -1147,5 +1147,5 @@ namespace tl
         {
             return _p->cache;
         }
-    } // namespace ui
+    } // namespace timelineui_vk
 } // namespace tl
