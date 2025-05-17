@@ -450,11 +450,9 @@ namespace mrv
 
             if (auto context = vk.context.lock())
             {
-
+                // Add the thumbnail system if not present.
                 if (!context->getSystem<timelineui_vk::ThumbnailSystem>())
                 {
-                    std::cerr << "create thumbnail system with device "
-                              << ctx.device << std::endl;
                     context->addSystem(timelineui_vk::ThumbnailSystem::create(context, ctx));
                 }
             

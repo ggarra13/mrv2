@@ -347,10 +347,12 @@ namespace tl
                 [this]
                 {
                     TLRENDER_P();
+                        
                     while (p.thumbnailThread.running)
                     {
                         if (ctx.queue == VK_NULL_HANDLE)
                             continue;
+
                         if (!p.thumbnailThread.render)
                         {
                             if (auto context = p.context.lock())
@@ -359,6 +361,7 @@ namespace tl
                                     timeline_vlk::Render::create(ctx, context);
                             }
                         }
+                    
                         // _thumbnailRun();
                     }
                     {
@@ -380,16 +383,6 @@ namespace tl
                     
                     while (p.waveformThread.running)
                     {
-                        if (ctx.queue == VK_NULL_HANDLE)
-                            continue;
-                        if (!p.thumbnailThread.render)
-                        {
-                            if (auto context = p.context.lock())
-                            {
-                                p.thumbnailThread.render =
-                                    timeline_vlk::Render::create(ctx, context);
-                            }
-                        }
                         // _waveformRun();
                     }
                     {

@@ -52,8 +52,6 @@ namespace tl
 
             if (!context->getSystem<timelineui_vk::ThumbnailSystem>())
             {
-                std::cerr << "create timeline thumbnail system with device "
-                          << ctx.device << std::endl;
                 context->addSystem(timelineui_vk::ThumbnailSystem::create(context, ctx));
             }
                 
@@ -428,8 +426,6 @@ namespace tl
                 event.style->getColorRole(ui::ColorRole::Border),
                 "timeline_border", false);
 
-            std::cerr << "drawing" << std::endl;
-            
             _drawInOutPoints(drawRect, event);
             _drawTimeTicks(drawRect, event);
             _drawFrameMarkers(drawRect, event);
