@@ -939,6 +939,9 @@ namespace mrv
             if (p.hudActive && p.hud != HudDisplay::kNone)
                 _drawHUD(alpha);
             
+            if (!p.helpText.empty())
+                _drawHelpText();
+            
             math::Box2i selection = p.colorAreaInfo.box = p.selection;
             if (selection.max.x >= 0)
             {
@@ -1090,7 +1093,7 @@ namespace mrv
         void Viewport::_calculateColorArea(area::Info& info)
         {
             TLRENDER_P();
-            MRV2_VK();//@}//@}
+            MRV2_VK();
 
             info.rgba.max.r = std::numeric_limits<float>::min();
             info.rgba.max.g = std::numeric_limits<float>::min();

@@ -383,7 +383,7 @@ namespace tl
                     
                     while (p.waveformThread.running)
                     {
-                        // _waveformRun();
+                        _waveformRun();
                     }
                     {
                         std::unique_lock<std::mutex> lock(
