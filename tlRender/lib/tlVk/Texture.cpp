@@ -273,7 +273,10 @@ namespace tl
 
             VkDevice device = ctx.device;
 
-            vkDeviceWaitIdle(device);
+            {
+                std::lock_guard<std::mutex> lock(ctx.queue_mutex);
+                vkDeviceWaitIdle(device);
+            }
 
             if (p.imageView != VK_NULL_HANDLE)
                 vkDestroyImageView(device, p.imageView, nullptr);
@@ -399,7 +402,6 @@ namespace tl
 
             VkDevice device = ctx.device;
             VkCommandPool commandPool = ctx.commandPool;
-            VkQueue queue = ctx.queue;
 
             
             // Determine proper masks
@@ -568,8 +570,11 @@ namespace tl
                        VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_SHADER_READ_BIT,
                        VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
 
-            endSingleTimeCommands(cmd, device, commandPool, queue);
-    
+            {
+                std::lock_guard<std::mutex> lock(ctx.queue_mutex);
+                endSingleTimeCommands(cmd, device, commandPool, queue);
+            }
+            
             vkDestroyBuffer(device, stagingBuffer, nullptr);
             vkFreeMemory(device, stagingMemory, nullptr);
 
@@ -723,8 +728,12 @@ namespace tl
                     VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_SHADER_READ_BIT,
                     VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
 
-                endSingleTimeCommands(cmd, device, commandPool, queue);
 
+                {
+                    std::lock_guard<std::mutex> lock(ctx.queue_mutex);
+                    endSingleTimeCommands(cmd, device, commandPool, queue);
+                }
+                
                 vkDestroyBuffer(device, stagingBuffer, nullptr);
                 vkFreeMemory(device, stagingMemory, nullptr);
                 

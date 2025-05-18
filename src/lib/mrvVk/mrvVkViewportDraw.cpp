@@ -608,18 +608,15 @@ namespace mrv
         void Viewport::_drawRectangleOutline(
             const std::string& pipelineName,
             const math::Matrix4x4f& mvp,
-            const math::Box2i& area, const image::Color4f& color,
-            const uint16_t width) const noexcept
+            const math::Box2i& area, const image::Color4f& color) const noexcept
         {
             MRV2_VK();
             TLRENDER_P();
             
-            vk.render->setTransform(mvp);
 
-            const float pixelWidth = width;
-            const float t = pixelWidth / p.viewZoom;
-            
-            util::drawRectOutline(vk.render, pipelineName, area, color, t,
+            float width = 2 / _p->viewZoom; //* renderSize.w / viewportSize.w;x
+            vk.render->setTransform(mvp);
+            util::drawRectOutline(vk.render, pipelineName, area, color, width,
                                   renderPass());
         }
 
@@ -640,7 +637,7 @@ namespace mrv
                 selection.max.y++;
             }
             const math::Matrix4x4f mvp = _projectionMatrix();
-            _drawRectangleOutline("selection", mvp, selection, color, 1);
+            _drawRectangleOutline("selection", mvp, selection, color);
         }
         
         void Viewport::_drawSafeAreas(
@@ -1078,7 +1075,7 @@ namespace mrv
             const math::Matrix4x4f oldTransform = vk.render->getTransform();
             const math::Matrix4x4f mvp = pm * vm;
             vk.render->setTransform(mvp);
-            _drawRectangleOutline(pipelineName, mvp, box, color, 2);
+            _drawRectangleOutline(pipelineName, mvp, box, color);
             vk.render->setTransform(oldTransform);
         }
 

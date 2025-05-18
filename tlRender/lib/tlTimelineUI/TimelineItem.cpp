@@ -48,8 +48,8 @@ namespace tl
             p.timeScrub =
                 observer::Value<otime::RationalTime>::create(time::invalidTime);
 
-            p.thumbnailGenerator = ui::ThumbnailGenerator::create(
-                context->getSystem<ui::ThumbnailSystem>()->getCache(), context,
+            p.thumbnailGenerator = timelineui::ThumbnailGenerator::create(
+                context->getSystem<timelineui::ThumbnailSystem>()->getCache(), context,
                 window);
 
             const auto otioTimeline = p.player->getTimeline()->getTimeline();

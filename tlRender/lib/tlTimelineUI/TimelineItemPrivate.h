@@ -2,11 +2,11 @@
 // Copyright (c) 2021-2024 Darby Johnston
 // All rights reserved.
 
+#include <tlTimelineUI/ThumbnailSystem.h>
 #include <tlTimelineUI/TimelineItem.h>
 #include <tlTimelineUI/TransitionItem.h>
 
 #include <tlUI/Label.h>
-#include <tlUI/ThumbnailSystem.h>
 
 namespace tl
 {
@@ -26,7 +26,7 @@ namespace tl
             std::shared_ptr<observer::Value<otime::RationalTime> > timeScrub;
             std::vector<int> frameMarkers;
             int minimumHeight = 0;
-            std::shared_ptr<ui::ThumbnailGenerator> thumbnailGenerator;
+            std::shared_ptr<timelineui::ThumbnailGenerator> thumbnailGenerator;
             std::unordered_map<std::string,
                                std::vector<std::shared_ptr<image::Glyph>> > labelsCache;
             struct Track

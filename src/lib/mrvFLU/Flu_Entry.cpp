@@ -5,19 +5,13 @@
 
 // #define DEBUG_REQUESTS 1
 
-#include <random>
-#include <mutex>
+#include "mrvCore/mrvBackend.h"
+
+
 
 #include <tlCore/Path.h>
 #include <tlCore/String.h>
 #include <tlCore/StringFormat.h>
-
-#include <tlTimeline/Timeline.h>
-
-#include <tlUI/ThumbnailSystem.h>
-
-#include <FL/Fl_Pixmap.H>
-#include <FL/fl_utf8.h>
 
 #include "mrvFLU/flu_pixmaps.h"
 #include "mrvFLU/flu_file_chooser_pixmaps.h"
@@ -32,6 +26,23 @@
 #include "mrvUI/mrvUtil.h"
 
 #include "mrvApp/mrvApp.h"
+
+#ifdef OPENGL_BACKEND
+#include <tlTimelineUI/ThumbnailSystem.h>
+#endif
+
+#ifdef VULKAN_BACKEND
+#include <tlTimelineUIVk/ThumbnailSystem.h>
+#endif
+
+#include <tlTimeline/Timeline.h>
+
+#include <FL/fl_utf8.h>
+
+
+#include <random>
+#include <mutex>
+
 
 namespace
 {
@@ -95,13 +106,26 @@ namespace
 
 struct Flu_Entry::Private
 {
-    std::weak_ptr<ui::ThumbnailSystem> thumbnailSystem;
+#ifdef OPENGL_BACKEND
+    std::weak_ptr<timelineui::ThumbnailSystem> thumbnailSystem;
 
     struct ThumbnailData
     {
         bool init = true;
-        ui::ThumbnailRequest request;
+        timelineui::ThumbnailRequest request;
     };
+#endif
+
+#ifdef VULKAN_BACKEND
+    std::weak_ptr<timelineui_vk::ThumbnailSystem> thumbnailSystem;
+
+    struct ThumbnailData
+    {
+        bool init = true;
+        timelineui_vk::ThumbnailRequest request;
+    };
+#endif
+    
     ThumbnailData thumbnail;
 
     bool bind_image = false;
@@ -115,7 +139,13 @@ Flu_Entry::Flu_Entry(
 {
     TLRENDER_P();
 
-    p.thumbnailSystem = context->getSystem<ui::ThumbnailSystem>();
+#ifdef OPENGL_BACKEND
+    p.thumbnailSystem = context->getSystem<timelineui::ThumbnailSystem>();
+#endif
+
+#ifdef VULKAN_BACKEND
+    p.thumbnailSystem = context->getSystem<timelineui_vk::ThumbnailSystem>();
+#endif
 
     _init(name, t, d, c);
 }

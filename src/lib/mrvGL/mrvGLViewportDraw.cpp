@@ -377,18 +377,9 @@ namespace mrv
             const math::Matrix4x4f& mvp) const noexcept
         {
             MRV2_GL();
-#ifdef USE_ONE_PIXEL_LINES
-            gl.outline->drawRect(box, color, mvp);
-            CHECK_GL;
-#else
-            int width = 2 / _p->viewZoom; //* renderSize.w / viewportSize.w;
-            if (width < 2)
-                width = 2;
+            float width = 2 / _p->viewZoom; //* renderSize.w / viewportSize.w;
             gl.render->setTransform(mvp);
-            CHECK_GL;
             drawRectOutline(gl.render, box, color, width);
-            CHECK_GL;
-#endif
         }
 
 #ifdef USE_OPENGL2

@@ -4,8 +4,6 @@
 
 #include <tlUI/Init.h>
 
-#include <tlUI/ThumbnailSystem.h>
-
 #include <tlIO/Init.h>
 
 #include <tlCore/Context.h>
@@ -17,10 +15,6 @@ namespace tl
         void init(const std::shared_ptr<system::Context>& context)
         {
             tl::io::init(context);
-            if (!context->getSystem<ThumbnailSystem>())
-            {
-                context->addSystem(ThumbnailSystem::create(context));
-            }
         }
     } // namespace ui
 } // namespace tl

@@ -1,12 +1,14 @@
 set(HEADERS
-    Render.h)
+    Render.h
+)
 set(PRIVATE_HEADERS
     RenderPrivate.h)
 
 set(SOURCE
     Render.cpp
     RenderPrims.cpp
-    RenderVideo.cpp)
+    RenderVideo.cpp
+)
 if("${TLRENDER_API}" STREQUAL "GL_4_1" OR "${TLRENDER_API}" STREQUAL "GL_4_1_Debug")
     list(APPEND SOURCE RenderShaders_GL_4_1.cpp)
 elseif("${TLRENDER_API}" STREQUAL "GLES_2")

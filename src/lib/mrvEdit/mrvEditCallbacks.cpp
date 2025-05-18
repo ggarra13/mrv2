@@ -2864,8 +2864,15 @@ namespace mrv
 
     int calculate_edit_viewport_size(ViewerUI* ui)
     { //
+#ifdef OPENGL_BACKEND
         const timelineui::DisplayOptions& displayOptions =
             ui->uiTimeline->getDisplayOptions();
+#endif
+
+#ifdef VULKAN_BACKEND
+        const timelineui_vk::DisplayOptions& displayOptions =
+            ui->uiTimeline->getDisplayOptions();
+#endif
 
 #if 0
         std::cerr << " trackInfo=" << displayOptions.trackInfo << std::endl;

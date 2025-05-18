@@ -184,11 +184,11 @@ namespace mrv
 
             TimelinePlayer* player = nullptr;
 
-            std::weak_ptr<ui::ThumbnailSystem> thumbnailSystem;
+            std::weak_ptr<timelineui::ThumbnailSystem> thumbnailSystem;
 
             struct ThumbnailData
             {
-                ui::ThumbnailRequest request;
+                timelineui::ThumbnailRequest request;
                 std::shared_ptr<image::Image> image;
             };
             ThumbnailData thumbnail;
@@ -301,7 +301,7 @@ namespace mrv
             p.timelineWindow->setClipboard(p.clipboard);
             p.timelineWidget->setParent(p.timelineWindow);
 
-            p.thumbnailSystem = context->getSystem<ui::ThumbnailSystem>();
+            p.thumbnailSystem = context->getSystem<timelineui::ThumbnailSystem>();
 
             setStopOnScrub(false);
 

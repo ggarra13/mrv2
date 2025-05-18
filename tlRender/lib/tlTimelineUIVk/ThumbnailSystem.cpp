@@ -2,27 +2,28 @@
 // Copyright (c) 2021-2024 Darby Johnston
 // All rights reserved.
 
-#include <tlUI/ThumbnailSystem.h>
+#include <tlTimelineUIVk/ThumbnailSystem.h>
 
-#include <tlTimelineGL/Render.h>
+#include <tlTimelineVk/Render.h>
 
 #include <tlTimeline/Timeline.h>
 
 #include <tlIO/System.h>
 
-#include <tlGL/GL.h>
-#include <tlGL/GLFWWindow.h>
-#include <tlGL/OffscreenBuffer.h>
+#include <tlVk/Vk.h>
+#include <tlVk/OffscreenBuffer.h>
 
 #include <tlCore/AudioResample.h>
 #include <tlCore/LRUCache.h>
 #include <tlCore/StringFormat.h>
 
+#include <FL/Fl_Vk_Utils.H>
+
 #include <sstream>
 
 namespace tl
 {
-    namespace ui
+    namespace timelineui_vk
     {
         namespace
         {
@@ -226,7 +227,6 @@ namespace tl
         {
             std::weak_ptr<system::Context> context;
             std::shared_ptr<ThumbnailCache> cache;
-            std::shared_ptr<gl::GLFWWindow> window;
             uint64_t requestId = 0;
 
             struct InfoRequest
@@ -294,8 +294,8 @@ namespace tl
 
             struct ThumbnailThread
             {
-                std::shared_ptr<timeline_gl::Render> render;
-                std::shared_ptr<gl::OffscreenBuffer> buffer;
+                std::shared_ptr<timeline_vlk::Render> render;
+                std::shared_ptr<vlk::OffscreenBuffer> buffer;
                 memory::LRUCache<std::string, std::shared_ptr<io::IRead> >
                     ioCache;
                 std::condition_variable cv;
@@ -317,22 +317,13 @@ namespace tl
 
         void ThumbnailGenerator::_init(
             const std::shared_ptr<ThumbnailCache>& cache,
-            const std::shared_ptr<system::Context>& context,
-            const std::shared_ptr<gl::GLFWWindow>& window)
+            const std::shared_ptr<system::Context>& context)
         {
             TLRENDER_P();
 
             p.context = context;
 
             p.cache = cache;
-
-            p.window = window;
-            if (!p.window)
-            {
-                p.window = gl::GLFWWindow::create(
-                    "tl::ui::ThumbnailGenerator", math::Size2i(1, 1), context,
-                    static_cast<int>(gl::GLFWWindowOptions::kNone));
-            }
 
             p.infoThread.running = true;
             p.infoThread.thread = std::thread(
@@ -356,15 +347,22 @@ namespace tl
                 [this]
                 {
                     TLRENDER_P();
-                    p.window->makeCurrent();
-                    if (auto context = p.context.lock())
-                    {
-                        p.thumbnailThread.render =
-                            timeline_gl::Render::create(context);
-                    }
+                        
                     while (p.thumbnailThread.running)
                     {
-                        _thumbnailRun();
+                        if (ctx.queue == VK_NULL_HANDLE)
+                            continue;
+
+                        if (!p.thumbnailThread.render)
+                        {
+                            if (auto context = p.context.lock())
+                            {
+                                p.thumbnailThread.render =
+                                    timeline_vlk::Render::create(ctx, context);
+                            }
+                        }
+                    
+                        // _thumbnailRun();
                     }
                     {
                         std::unique_lock<std::mutex> lock(
@@ -373,7 +371,6 @@ namespace tl
                     }
                     p.thumbnailThread.buffer.reset();
                     p.thumbnailThread.render.reset();
-                    p.window->doneCurrent();
                     _thumbnailCancel();
                 });
 
@@ -383,9 +380,10 @@ namespace tl
                 [this]
                 {
                     TLRENDER_P();
+                    
                     while (p.waveformThread.running)
                     {
-                        _waveformRun();
+                        // _waveformRun();
                     }
                     {
                         std::unique_lock<std::mutex> lock(
@@ -396,7 +394,8 @@ namespace tl
                 });
         }
 
-        ThumbnailGenerator::ThumbnailGenerator() :
+        ThumbnailGenerator::ThumbnailGenerator(Fl_Vk_Context& ctx) :
+            ctx(ctx),
             _p(new Private)
         {
         }
@@ -424,11 +423,11 @@ namespace tl
         std::shared_ptr<ThumbnailGenerator> ThumbnailGenerator::create(
             const std::shared_ptr<ThumbnailCache>& cache,
             const std::shared_ptr<system::Context>& context,
-            const std::shared_ptr<gl::GLFWWindow>& window)
+            Fl_Vk_Context& ctx)
         {
             auto out =
-                std::shared_ptr<ThumbnailGenerator>(new ThumbnailGenerator);
-            out->_init(cache, context, window);
+                std::shared_ptr<ThumbnailGenerator>(new ThumbnailGenerator(ctx));
+            out->_init(cache, context);
             return out;
         }
 
@@ -718,14 +717,14 @@ namespace tl
                                              info.video[0].size.getAspect();
                                     size.h = request->height;
                                 }
-                                gl::OffscreenBufferOptions options;
+                                vlk::OffscreenBufferOptions options;
                                 options.colorType = image::PixelType::RGBA_U8;
-                                if (gl::doCreate(
+                                if (vlk::doCreate(
                                         p.thumbnailThread.buffer, size,
                                         options))
                                 {
                                     p.thumbnailThread.buffer =
-                                        gl::OffscreenBuffer::create(
+                                        vlk::OffscreenBuffer::create(ctx,
                                             size, options);
                                 }
                                 const otime::RationalTime time =
@@ -738,9 +737,9 @@ namespace tl
                                 if (p.thumbnailThread.render &&
                                     p.thumbnailThread.buffer && videoData.image)
                                 {
-                                    gl::OffscreenBufferBinding binding(
-                                        p.thumbnailThread.buffer);
-                                    p.thumbnailThread.render->begin(size);
+                                    VkCommandBuffer cmd = beginSingleTimeCommands(ctx.device, ctx.commandPool);
+                                    p.thumbnailThread.render->begin(cmd, p.thumbnailThread.buffer,
+                                                                    0, size);
                                     p.thumbnailThread.render->drawImage(
                                         videoData.image,
                                         {math::Box2i(0, 0, size.w, size.h)});
@@ -748,10 +747,14 @@ namespace tl
                                     image = image::Image::create(
                                         size.w, size.h,
                                         image::PixelType::RGBA_U8);
-                                    glPixelStorei(GL_PACK_ALIGNMENT, 1);
-                                    glReadPixels(
-                                        0, 0, size.w, size.h, GL_RGBA,
-                                        GL_UNSIGNED_BYTE, image->getData());
+                                    endSingleTimeCommands(cmd, ctx.device,
+                                                          ctx.commandPool,
+                                                          ctx.queue);
+                                    
+                                    // glPixelStorei(GL_PACK_ALIGNMENT, 1);
+                                    // glReadPixels(
+                                    //     0, 0, size.w, size.h, GL_RGBA,
+                                    //     GL_UNSIGNED_BYTE, image->getData());
                                 }
                             }
                             else if (
@@ -785,35 +788,38 @@ namespace tl
                                 }
                                 if (size.isValid())
                                 {
-                                    gl::OffscreenBufferOptions options;
+                                    vlk::OffscreenBufferOptions options;
                                     options.colorType =
                                         image::PixelType::RGBA_U8;
-                                    if (gl::doCreate(
+                                    if (vlk::doCreate(
                                             p.thumbnailThread.buffer, size,
                                             options))
                                     {
                                         p.thumbnailThread.buffer =
-                                            gl::OffscreenBuffer::create(
+                                            vlk::OffscreenBuffer::create(ctx,
                                                 size, options);
                                     }
                                     if (p.thumbnailThread.render &&
                                         p.thumbnailThread.buffer)
                                     {
-                                        gl::OffscreenBufferBinding binding(
-                                            p.thumbnailThread.buffer);
-                                        p.thumbnailThread.render->begin(size);
+                                        VkCommandBuffer cmd = beginSingleTimeCommands(ctx.device, ctx.commandPool);
+                                        p.thumbnailThread.render->begin(cmd,
+                                                                        p.thumbnailThread.buffer,
+                                                                        0, size);
                                         p.thumbnailThread.render->drawVideo(
                                             {videoData},
                                             {math::Box2i(
                                                 0, 0, size.w, size.h)});
                                         p.thumbnailThread.render->end();
+                                        endSingleTimeCommands(cmd, ctx.device, ctx.commandPool,
+                                                              ctx.queue);
                                         image = image::Image::create(
                                             size.w, size.h,
                                             image::PixelType::RGBA_U8);
-                                        glPixelStorei(GL_PACK_ALIGNMENT, 1);
-                                        glReadPixels(
-                                            0, 0, size.w, size.h, GL_RGBA,
-                                            GL_UNSIGNED_BYTE, image->getData());
+                                        // glPixelStorei(GL_PACK_ALIGNMENT, 1);
+                                        // glReadPixels(
+                                        //     0, 0, size.w, size.h, GL_RGBA,
+                                        //     GL_UNSIGNED_BYTE, image->getData());
                                     }
                                 }
                             }
@@ -1097,13 +1103,14 @@ namespace tl
         void
         ThumbnailSystem::_init(const std::shared_ptr<system::Context>& context)
         {
-            ISystem::_init("tl::ui::ThumbnailSystem", context);
+            ISystem::_init("tl::timelineui_vk::ThumbnailSystem", context);
             TLRENDER_P();
             p.cache = ThumbnailCache::create(context);
-            p.generator = ThumbnailGenerator::create(p.cache, context);
+            p.generator = ThumbnailGenerator::create(p.cache, context, ctx);
         }
 
-        ThumbnailSystem::ThumbnailSystem() :
+        ThumbnailSystem::ThumbnailSystem(Fl_Vk_Context& ctx) :
+            ctx(ctx),
             _p(new Private)
         {
         }
@@ -1111,9 +1118,10 @@ namespace tl
         ThumbnailSystem::~ThumbnailSystem() {}
 
         std::shared_ptr<ThumbnailSystem>
-        ThumbnailSystem::create(const std::shared_ptr<system::Context>& context)
+        ThumbnailSystem::create(const std::shared_ptr<system::Context>& context,
+                                Fl_Vk_Context& ctx)
         {
-            auto out = std::shared_ptr<ThumbnailSystem>(new ThumbnailSystem);
+            auto out = std::shared_ptr<ThumbnailSystem>(new ThumbnailSystem(ctx));
             out->_init(context);
             return out;
         }
@@ -1147,5 +1155,5 @@ namespace tl
         {
             return _p->cache;
         }
-    } // namespace ui
+    } // namespace timelineui_vk
 } // namespace tl

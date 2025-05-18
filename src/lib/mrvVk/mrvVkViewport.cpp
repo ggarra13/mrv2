@@ -450,7 +450,12 @@ namespace mrv
 
             if (auto context = vk.context.lock())
             {
-
+                // Add the thumbnail system if not present.
+                if (!context->getSystem<timelineui_vk::ThumbnailSystem>())
+                {
+                    context->addSystem(timelineui_vk::ThumbnailSystem::create(context, ctx));
+                }
+            
                 vk.render = timeline_vlk::Render::create(ctx, context);
 
                 vk.annotationRender = timeline_vlk::Render::create(ctx, context);

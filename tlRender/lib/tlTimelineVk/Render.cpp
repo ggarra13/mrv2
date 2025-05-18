@@ -647,14 +647,30 @@ namespace tl
             }
         }
 
+        void Render::wait_queue()
+        {
+            VkQueue queue = ctx.queue;
+            
+            std::lock_guard<std::mutex>(ctx.queue_mutex);
+            vkQueueWaitIdle(queue);
+        }
+
+        void Render::wait_device()
+        {
+            VkDevice device = ctx.device;
+            
+            std::lock_guard<std::mutex>(ctx.queue_mutex);
+            vkDeviceWaitIdle(device);
+        }
+        
         Render::~Render()
         {
             TLRENDER_P();
 
+            wait_device();
+
             VkDevice device = ctx.device;
-
-            vkDeviceWaitIdle(device);
-
+            
             for (auto& [_, pipeline] : p.pipelines)
             {
                 vkDestroyPipeline(device, pipeline.second, nullptr);
@@ -1468,6 +1484,7 @@ namespace tl
                 return;
 
 #if defined(TLRENDER_OCIO)
+            wait_device();
             p.ocioData.reset();
 #endif // TLRENDER_OCIO
 
@@ -1632,7 +1649,7 @@ namespace tl
                 return;
 
 #if defined(TLRENDER_OCIO)
-            vkDeviceWaitIdle(ctx.device);
+            wait_device();
             p.lutData.reset();
 #endif // TLRENDER_OCIO
 

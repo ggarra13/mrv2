@@ -4,6 +4,7 @@ set(HEADERS
     IBasicItem.h
     IItem.h
     Init.h
+    ThumbnailSystem.h
     TimelineItem.h
     TimelineViewport.h
     TimelineWidget.h
@@ -18,6 +19,7 @@ set(SOURCE
     IBasicItem.cpp
     IItem.cpp
     Init.cpp
+    ThumbnailSystem.cpp
     TimelineItem.cpp
     TimelineViewport.cpp
     TimelineWidget.cpp

@@ -223,7 +223,10 @@ namespace tl
 
             VkDevice device = ctx.device;
 
-            vkDeviceWaitIdle(device);
+            {
+                std::lock_guard<std::mutex> lock(ctx.queue_mutex);
+                vkDeviceWaitIdle(device);
+            }
             
             if (p.sampler != VK_NULL_HANDLE)
                 vkDestroySampler(device, p.sampler, nullptr);
@@ -981,6 +984,7 @@ namespace tl
             
             VkDevice device = ctx.device;
             VkCommandPool commandPool = ctx.commandPool;
+            
             VkQueue  queue  = ctx.queue;
 
             auto& pbo = p.pboRing[p.writeIndex];
@@ -988,11 +992,14 @@ namespace tl
             vkResetFences(device, 1, &pbo.fence);
 
             // Transition image to TRANSFER_SRC
-            transitionImageLayout(cmd, device, commandPool, queue,
-                                  p.image,
-                                  VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-                                  VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-
+            {
+                std::lock_guard<std::mutex> lock(ctx.queue_mutex);
+                transitionImageLayout(cmd, device, commandPool, queue,
+                                      p.image,
+                                      VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+                                      VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+            }
+            
             // Setup copy region
             VkBufferImageCopy region{};
             region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -1011,9 +1018,12 @@ namespace tl
                                    pbo.buffer, 1, &region);
 
             // Transition back if needed
-            transitionImageLayout(cmd, device, commandPool, queue, p.image,
-                                  VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-                                  VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+            {
+                std::lock_guard<std::mutex> lock(ctx.queue_mutex);
+                transitionImageLayout(cmd, device, commandPool, queue, p.image,
+                                      VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                                      VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+            }
         }
 
         void OffscreenBuffer::submitReadback(VkCommandBuffer cmd)
@@ -1026,8 +1036,10 @@ namespace tl
             submitInfo.commandBufferCount = 1;
             submitInfo.pCommandBuffers = &cmd;
 
-            // Should we use another queue?  If the gpu supported, yes.
+            std::lock_guard<std::mutex> lock(ctx.queue_mutex);
+
             VkQueue transferQueue = ctx.queue;
+            
             
             vkQueueSubmit(transferQueue, 1, &submitInfo,
                           p.pboRing[p.writeIndex].fence);

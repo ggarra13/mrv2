@@ -3,9 +3,9 @@
 // All rights reserved.
 
 #include <tlTimelineUI/VideoClipItem.h>
+#include <tlTimelineUI/ThumbnailSystem.h>
 
 #include <tlUI/DrawUtil.h>
-#include <tlUI/ThumbnailSystem.h>
 
 #include <tlTimeline/RenderUtil.h>
 #include <tlTimeline/Util.h>
@@ -24,7 +24,7 @@ namespace tl
             std::string clipName;
             file::Path path;
             std::vector<file::MemoryRead> memoryRead;
-            std::shared_ptr<ui::ThumbnailGenerator> thumbnailGenerator;
+            std::shared_ptr<ThumbnailGenerator> thumbnailGenerator;
 
             struct SizeData
             {
@@ -36,9 +36,9 @@ namespace tl
             SizeData size;
 
             io::Options ioOptions;
-            ui::InfoRequest infoRequest;
+            timelineui::InfoRequest infoRequest;
             std::shared_ptr<io::Info> ioInfo;
-            std::map<otime::RationalTime, ui::ThumbnailRequest>
+            std::map<otime::RationalTime, ThumbnailRequest>
                 thumbnailRequests;
         };
 
@@ -47,7 +47,7 @@ namespace tl
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
-            const std::shared_ptr<ui::ThumbnailGenerator> thumbnailGenerator,
+            const std::shared_ptr<ThumbnailGenerator> thumbnailGenerator,
             const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<IWidget>& parent)
         {
@@ -94,7 +94,7 @@ namespace tl
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
-            const std::shared_ptr<ui::ThumbnailGenerator> thumbnailGenerator,
+            const std::shared_ptr<timelineui::ThumbnailGenerator> thumbnailGenerator,
             const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<IWidget>& parent)
         {
@@ -323,7 +323,7 @@ namespace tl
             if (p.infoRequest.future.valid())
             {
                 ids.push_back(p.infoRequest.id);
-                p.infoRequest = ui::InfoRequest();
+                p.infoRequest = timelineui::InfoRequest();
             }
             for (const auto& i : p.thumbnailRequests)
             {
