@@ -1,13 +1,12 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Copyright (c) 2021-2024 Darby Johnston
+// Copyright (c) 2025-Present Gonzalo Garramuño
 // All rights reserved.
 
 #include <tlTimelineUIVk/TimelineWidget.h>
 
 #include <tlUI/ScrollWidget.h>
 
-#include <tlGL/GL.h>
-#include <tlGL/GLFWWindow.h>
 
 namespace tl
 {
@@ -39,7 +38,7 @@ namespace tl
             otime::RationalTime currentTime = time::invalidTime;
             double scale = 500.0;
             bool sizeInit = true;
-
+            
             std::shared_ptr<ui::ScrollWidget> scrollWidget;
             std::shared_ptr<TimelineItem> timelineItem;
 

@@ -668,8 +668,6 @@ namespace tl
         {
             TLRENDER_P();
 
-            // wait_device();
-
             VkDevice device = ctx.device;
             
             for (auto& [_, pipeline] : p.pipelines)

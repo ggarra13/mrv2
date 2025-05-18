@@ -886,7 +886,6 @@ namespace tl
                     const math::Size2i labelMaxSize =
                         _getLabelMaxSize(event.fontSystem);
                     std::vector<timeline::TextInfo> textInfos;
-                    const bool flippedV = true;
                     for (double t = 0.0; t < duration; t += seconds)
                     {
                         const otime::RationalTime time =
@@ -907,7 +906,7 @@ namespace tl
                                                          label, p.size.fontInfo),
                                                      math::Vector2i(
                                                          box.min.x,
-                                                         box.min.y + p.size.fontMetrics.ascender), flippedV);
+                                                         box.min.y + p.size.fontMetrics.ascender));
                         }
                     }
                     for (const auto& textInfo : textInfos)
@@ -1024,7 +1023,6 @@ namespace tl
                     event.style->getColorRole(ui::ColorRole::Red),
                     "Current Time Marker", false);
 
-                const bool flippedV = true;
                 const std::string label =
                     _data->timeUnitsModel->getLabel(p.currentTime);
                 std::vector<timeline::TextInfo> textInfos;
@@ -1033,7 +1031,7 @@ namespace tl
                                              label, p.size.fontInfo),
                                          math::Vector2i(
                                              pos.x + p.size.border * 2 + p.size.margin,
-                                             pos.y + p.size.margin + p.size.fontMetrics.ascender), flippedV);
+                                             pos.y + p.size.margin + p.size.fontMetrics.ascender));
                             
                 for (const auto& textInfo : textInfos)
                 {
