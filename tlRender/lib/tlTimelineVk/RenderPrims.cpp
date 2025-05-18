@@ -480,44 +480,23 @@ namespace tl
                         mesh.v.push_back(math::Vector2f(max.x + 1, min.y));
                         mesh.v.push_back(math::Vector2f(max.x + 1, max.y + 1));
                         mesh.v.push_back(math::Vector2f(min.x, max.y + 1));
-                        if (flipped)
-                        {
-                            mesh.t.push_back(
-                                math::Vector2f(
-                                    item.textureU.getMin(),
-                                    item.textureV.getMin()));
-                            mesh.t.push_back(
-                                math::Vector2f(
-                                    item.textureU.getMax(),
-                                    item.textureV.getMin()));
-                            mesh.t.push_back(
-                                math::Vector2f(
-                                    item.textureU.getMax(),
-                                    item.textureV.getMax()));
-                            mesh.t.push_back(
-                                math::Vector2f(
-                                    item.textureU.getMin(),
-                                    item.textureV.getMax()));
-                        }
-                        else
-                        {
-                            mesh.t.push_back(
-                                math::Vector2f(
-                                    item.textureU.getMin(),
-                                    item.textureV.getMax()));
-                            mesh.t.push_back(
-                                math::Vector2f(
-                                    item.textureU.getMax(),
-                                    item.textureV.getMax()));
-                            mesh.t.push_back(
-                                math::Vector2f(
-                                    item.textureU.getMax(),
-                                    item.textureV.getMin()));
-                            mesh.t.push_back(
-                                math::Vector2f(
-                                    item.textureU.getMin(),
-                                    item.textureV.getMin()));
-                        }
+                        
+                        mesh.t.push_back(
+                            math::Vector2f(
+                                item.textureU.getMin(),
+                                item.textureV.getMin()));
+                        mesh.t.push_back(
+                            math::Vector2f(
+                                item.textureU.getMax(),
+                                item.textureV.getMin()));
+                        mesh.t.push_back(
+                            math::Vector2f(
+                                item.textureU.getMax(),
+                                item.textureV.getMax()));
+                        mesh.t.push_back(
+                            math::Vector2f(
+                                item.textureU.getMin(),
+                                item.textureV.getMax()));
                         
                         geom::Triangle2 triangle;
                         triangle.v[0].v = meshIndex + 1;

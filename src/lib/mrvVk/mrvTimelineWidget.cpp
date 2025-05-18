@@ -901,6 +901,8 @@ void main()
                         vlk::OffscreenBufferOptions offscreenBufferOptions;
                         offscreenBufferOptions.colorType =
                             image::PixelType::RGBA_U8;
+                        offscreenBufferOptions.clear = true;
+                        offscreenBufferOptions.clearColor = p.style->getColorRole(ui::ColorRole::Window);
                         if (vlk::doCreate(
                                 p.buffer, renderSize, offscreenBufferOptions))
                         {
@@ -917,12 +919,13 @@ void main()
 
                     if (p.render && p.buffer)
                     {
+                        p.buffer->transitionToColorAttachment(cmd);
+                        
                         timeline::RenderOptions renderOptions;
                         renderOptions.clear = true;
                         renderOptions.clearColor =
                             p.style->getColorRole(ui::ColorRole::Window);
                         
-                        p.buffer->transitionToColorAttachment(cmd);
                         p.render->begin(
                             cmd, p.buffer, m_currentFrameIndex, renderSize,
                             renderOptions);

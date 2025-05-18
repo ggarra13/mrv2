@@ -165,7 +165,8 @@ namespace tl
             IWidget::drawEvent(drawRect, event);
             TLRENDER_P();
 
-            // event.render->drawRect(_geometry, image::Color4f(.5F, .3F, .3F));
+            // Commenting this line makes text not render.
+            // event.render->drawRect(_geometry, image::Color4f(.5F, .5F, .5F));
 
             const math::Box2i g = align(
                                       _geometry, _sizeHint, Stretch::Fixed,
@@ -181,13 +182,19 @@ namespace tl
                 }
             }
             math::Vector2i pos = g.min;
+            std::vector<timeline::TextInfo> textInfos;
             for (const auto& glyphs : p.draw.glyphs)
             {
-                event.render->drawText(
+                event.render->appendText(textInfos,
                     glyphs,
-                    math::Vector2i(pos.x, pos.y + p.size.fontMetrics.ascender),
-                    event.style->getColorRole(p.textRole));
+                    math::Vector2i(pos.x, pos.y + p.size.fontMetrics.ascender));
                 pos.y += p.size.fontMetrics.lineHeight;
+            }
+            for (const auto& textInfo : textInfos)
+            {
+                event.render->drawText(textInfo, math::Vector2i(),
+                                       event.style->getColorRole(p.textRole),
+                                       "Label");
             }
         }
 
