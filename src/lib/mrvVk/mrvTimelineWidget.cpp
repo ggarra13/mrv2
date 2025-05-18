@@ -828,6 +828,9 @@ void main()
             TLRENDER_P();
 
             wait_device();
+
+            // Reset timeline widget first so threads are joined.
+            p.timelineWidget.reset();
             
             // Destroy main render
             p.render.reset();
@@ -915,7 +918,7 @@ void main()
                     if (p.render && p.buffer)
                     {
                         timeline::RenderOptions renderOptions;
-                        renderOptions.clear = false;
+                        renderOptions.clear = true;
                         renderOptions.clearColor =
                             p.style->getColorRole(ui::ColorRole::Window);
                         
@@ -923,6 +926,11 @@ void main()
                         p.render->begin(
                             cmd, p.buffer, m_currentFrameIndex, renderSize,
                             renderOptions);
+                        math::Matrix4x4f ortho = math::ortho(
+                            0.F, static_cast<float>(renderSize.w),
+                            static_cast<float>(renderSize.h), 0.F,
+                            -1.F, 1.F);
+                        p.render->setTransform(ortho);
                         p.render->setOCIOOptions(timeline::OCIOOptions());
                         p.render->setLUTOptions(timeline::LUTOptions());
                         ui::DrawEvent drawEvent(

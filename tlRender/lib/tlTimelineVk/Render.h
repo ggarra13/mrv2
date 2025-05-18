@@ -151,7 +151,7 @@ namespace tl
                 std::vector<timeline::TextInfo>& info,
                 const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
                 const math::Vector2i& position,
-                const bool flipped = false) override;
+                const bool flipped = true) override;
             void drawText(
                 const timeline::TextInfo&, const math::Vector2i& position,
                 const image::Color4f&, const std::string& pipelineName = "")

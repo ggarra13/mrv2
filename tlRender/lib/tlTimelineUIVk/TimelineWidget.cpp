@@ -40,8 +40,6 @@ namespace tl
             double scale = 500.0;
             bool sizeInit = true;
 
-            std::shared_ptr<gl::GLFWWindow> window;
-
             std::shared_ptr<ui::ScrollWidget> scrollWidget;
             std::shared_ptr<TimelineItem> timelineItem;
 
@@ -90,10 +88,6 @@ namespace tl
                 observer::Value<otime::RationalTime>::create(time::invalidTime);
             p.itemOptions = observer::Value<ItemOptions>::create();
             p.displayOptions = observer::Value<DisplayOptions>::create();
-
-            p.window = gl::GLFWWindow::create(
-                "tl::timelineui_vk::TimelineWidget", math::Size2i(1, 1), context,
-                static_cast<int>(gl::GLFWWindowOptions::kNone));
 
             p.scrollWidget = ui::ScrollWidget::create(
                 context, ui::ScrollType::Both, shared_from_this());
