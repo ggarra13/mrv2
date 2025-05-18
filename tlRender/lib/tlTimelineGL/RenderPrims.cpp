@@ -160,8 +160,7 @@ namespace tl
         void Render::appendText(
             std::vector<timeline::TextInfo>& textInfos,
             const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
-            const math::Vector2i& pos,
-            const bool flipped)
+            const math::Vector2i& pos)
         {
             TLRENDER_P();
             
@@ -273,135 +272,31 @@ namespace tl
         }
         
         void Render::drawText(
-            const timeline::TextInfo& info,
-            const math::Vector2i& position,
-            const image::Color4f& color,
+            const timeline::TextInfo& textInfo,
+            const math::Vector2i& position, const image::Color4f& color,
             const std::string& pipelineName)
         {
             TLRENDER_P();
             ++(p.currentStats.text);
 
-            const geom::TriangleMesh2& mesh = info.mesh;
-            const uint8_t textureIndex = info.textureId;
-
-            p.shaders["text"]->bind();
-            p.shaders["text"]->setUniform("color", color);
-            p.shaders["text"]->setUniform("textureSampler", 0);
+            const auto& mesh = textInfo.mesh;
+            const uint8_t textureIndex = textInfo.textureId;
+            const math::Matrix4x4f transform =
+                p.transform *
+                math::translate(math::Vector3f(position.x, position.y, 0.F));
             
-            glActiveTexture(static_cast<GLenum>(GL_TEXTURE0));
             const auto textures = p.glyphTextureAtlas->getTextures();
-            glBindTexture(GL_TEXTURE_2D, textures[textureIndex]);
-            
-            p.drawTextMesh(mesh);    
-        }
-        
-        void Render::drawText(
-            const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
-            const math::Vector2i& pos, const image::Color4f& color,
-            const bool flipped,
-            const std::string& pipelineName)
-        {
-            TLRENDER_P();
-            ++(p.currentStats.text);
-
             p.shaders["text"]->bind();
+            p.shaders["text"]->setUniform("transform.mvp", transform);
             p.shaders["text"]->setUniform("color", color);
             p.shaders["text"]->setUniform("textureSampler", 0);
 
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
             glActiveTexture(static_cast<GLenum>(GL_TEXTURE0));
-            uint8_t textureIndex = 0;
-            const auto textures = p.glyphTextureAtlas->getTextures();
+
+            
             glBindTexture(GL_TEXTURE_2D, textures[textureIndex]);
-
-            int x = 0;
-            int32_t rsbDeltaPrev = 0;
-            geom::TriangleMesh2 mesh;
-            size_t meshIndex = 0;
-            for (const auto& glyph : glyphs)
-            {
-                if (glyph)
-                {
-                    if (rsbDeltaPrev - glyph->lsbDelta > 32)
-                    {
-                        x -= 1;
-                    }
-                    else if (rsbDeltaPrev - glyph->lsbDelta < -31)
-                    {
-                        x += 1;
-                    }
-                    rsbDeltaPrev = glyph->rsbDelta;
-
-                    if (glyph->image && glyph->image->isValid())
-                    {
-                        gl::TextureAtlasID id = 0;
-                        const auto i = p.glyphIDs.find(glyph->info);
-                        if (i != p.glyphIDs.end())
-                        {
-                            id = i->second;
-                        }
-                        gl::TextureAtlasItem item;
-                        if (!p.glyphTextureAtlas->getItem(id, item))
-                        {
-                            id = p.glyphTextureAtlas->addItem(
-                                glyph->image, item);
-                            p.glyphIDs[glyph->info] = id;
-                        }
-                        if (item.textureIndex != textureIndex)
-                        {
-                            textureIndex = item.textureIndex;
-                            glBindTexture(
-                                GL_TEXTURE_2D, textures[textureIndex]);
-
-                            p.drawTextMesh(mesh);
-                            mesh = geom::TriangleMesh2();
-                            meshIndex = 0;
-                        }
-
-                        const math::Vector2i& offset = glyph->offset;
-                        const math::Box2i box(
-                            pos.x + x + offset.x, pos.y - offset.y,
-                            glyph->image->getWidth(),
-                            glyph->image->getHeight());
-                        const auto& min = box.min;
-                        const auto& max = box.max;
-
-                        mesh.v.push_back(math::Vector2f(min.x, min.y));
-                        mesh.v.push_back(math::Vector2f(max.x + 1, min.y));
-                        mesh.v.push_back(math::Vector2f(max.x + 1, max.y + 1));
-                        mesh.v.push_back(math::Vector2f(min.x, max.y + 1));
-                        mesh.t.push_back(math::Vector2f(
-                            item.textureU.getMin(), item.textureV.getMin()));
-                        mesh.t.push_back(math::Vector2f(
-                            item.textureU.getMax(), item.textureV.getMin()));
-                        mesh.t.push_back(math::Vector2f(
-                            item.textureU.getMax(), item.textureV.getMax()));
-                        mesh.t.push_back(math::Vector2f(
-                            item.textureU.getMin(), item.textureV.getMax()));
-
-                        geom::Triangle2 triangle;
-                        triangle.v[0].v = meshIndex + 1;
-                        triangle.v[1].v = meshIndex + 2;
-                        triangle.v[2].v = meshIndex + 3;
-                        triangle.v[0].t = meshIndex + 1;
-                        triangle.v[1].t = meshIndex + 2;
-                        triangle.v[2].t = meshIndex + 3;
-                        mesh.triangles.push_back(triangle);
-                        triangle.v[0].v = meshIndex + 3;
-                        triangle.v[1].v = meshIndex + 4;
-                        triangle.v[2].v = meshIndex + 1;
-                        triangle.v[0].t = meshIndex + 3;
-                        triangle.v[1].t = meshIndex + 4;
-                        triangle.v[2].t = meshIndex + 1;
-                        mesh.triangles.push_back(triangle);
-
-                        meshIndex += 4;
-                    }
-
-                    x += glyph->advance;
-                }
-            }
             p.drawTextMesh(mesh);
         }
 

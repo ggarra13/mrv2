@@ -78,6 +78,10 @@ namespace mrv
 
             void _drawCropMask(const math::Size2i& renderSize) const noexcept;
 
+            void _drawHUD(
+                const std::vector<timeline::TextInfo>& textInfos,
+                const float alpha) const noexcept;
+            
             void _drawHUD(float alpha) const noexcept;
 
             void _drawCursor(const math::Matrix4x4f& mvp) const noexcept;
@@ -103,9 +107,17 @@ namespace mrv
             void _drawRectangleOutline(
                 const math::Box2i& box, const image::Color4f& color,
                 const math::Matrix4x4f& mvp) const noexcept;
-            void _drawText(
-                const std::vector<std::shared_ptr<image::Glyph> >&, math::Vector2i&,
-                const int16_t lineHeight, const image::Color4f&) const noexcept;
+            void _appendText(std::vector<timeline::TextInfo>& textInfos,
+                             const std::vector<std::shared_ptr<image::Glyph> >&,
+                             math::Vector2i&, const int16_t lineHeight) const;
+            
+            void _appendText(std::vector<timeline::TextInfo>& textInfos,
+                             const std::string& text,
+                             const image::FontInfo& fontInfo,
+                             math::Vector2i&, const int16_t lineHeight) const;
+            void _drawText(const std::vector<timeline::TextInfo>& textInfos,
+                           const math::Vector2i&, const image::Color4f&) const;
+            
             void _drawSafeAreas() const noexcept;
             void _drawSafeAreas(
                 const float percentX, const float percentY,

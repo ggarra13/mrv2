@@ -182,6 +182,8 @@ namespace tl
             const timeline::ClipRectState clipRectState(event.render);
             event.render->setClipRectEnabled(true);
             event.render->setClipRect(g2.intersect(drawRect));
+            
+            std::vector<timeline::TextInfo> textInfos;
 
             if (_displayOptions.clipInfo)
             {
@@ -195,12 +197,14 @@ namespace tl
                         p.draw.labelGlyphs = event.fontSystem->getGlyphs(
                             p.label, p.size.fontInfo);
                     }
-                    event.render->drawText(
+
+                    
+                    event.render->appendText(
+                        textInfos,
                         p.draw.labelGlyphs,
                         math::Vector2i(
                             labelGeometry.min.x,
-                            labelGeometry.min.y + p.size.fontMetrics.ascender),
-                        event.style->getColorRole(ui::ColorRole::Text));
+                            labelGeometry.min.y + p.size.fontMetrics.ascender));
                 }
 
                 const math::Box2i durationGeometry(
@@ -216,13 +220,13 @@ namespace tl
                         p.draw.durationGlyphs = event.fontSystem->getGlyphs(
                             p.durationLabel, p.size.fontInfo);
                     }
-                    event.render->drawText(
+                    event.render->appendText(
+                        textInfos,
                         p.draw.durationGlyphs,
                         math::Vector2i(
                             durationGeometry.min.x,
                             durationGeometry.min.y +
-                                p.size.fontMetrics.ascender),
-                        event.style->getColorRole(ui::ColorRole::Text));
+                                p.size.fontMetrics.ascender));
                 }
             }
 
@@ -282,17 +286,23 @@ namespace tl
                                 event.fontSystem->getGlyphs(
                                     p.markers[i].name, p.size.fontInfo);
                         }
-                        event.render->drawText(
+                        event.render->appendText(
+                            textInfos,
                             p.draw.markerGlyphs[i],
                             math::Vector2i(
                                 labelGeometry.min.x,
                                 labelGeometry.min.y +
-                                    p.size.fontMetrics.ascender),
-                            event.style->getColorRole(ui::ColorRole::Text));
+                                    p.size.fontMetrics.ascender));
                     }
 
                     y += p.size.fontMetrics.lineHeight + p.size.margin * 2;
                 }
+            }
+            
+            for (const auto& textInfo : textInfos)
+            {
+                event.render->drawText(textInfo, math::Vector2i(),
+                                       event.style->getColorRole(ui::ColorRole::Text));
             }
         }
 

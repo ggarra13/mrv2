@@ -76,17 +76,11 @@ namespace tl
             void appendText(
                 std::vector<timeline::TextInfo>& textInfos,
                 const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
-                const math::Vector2i& pos,
-                const bool flipped) override;
+                const math::Vector2i& pos) override;
             void drawText(
                 const timeline::TextInfo&, const math::Vector2i& position,
                 const image::Color4f&, const std::string& pipelineName = "")
                 override;
-            void drawText(
-                const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
-                const math::Vector2i& position, const image::Color4f&,
-                const bool flipped = false,
-                const std::string& label = "") override;
             void drawTexture(
                 unsigned int, const math::Box2i&,
                 const image::Color4f& = image::Color4f(1.F, 1.F, 1.F)) override;

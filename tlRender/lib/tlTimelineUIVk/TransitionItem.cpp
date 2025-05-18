@@ -73,7 +73,7 @@ namespace tl
             }
 
             IItem::_init(
-                "tl::timelineui_vk::TransitionItem", timeRange, trimmedRange,
+                "tl::timelineui::TransitionItem", timeRange, trimmedRange,
                 scale, options, displayOptions, itemData, context, parent);
         }
 
@@ -173,6 +173,8 @@ namespace tl
             const bool durationVisible =
                 drawRect.intersects(durationGeometry) &&
                 !durationGeometry.intersects(labelGeometry);
+            
+            std::vector<timeline::TextInfo> textInfos;
 
             if (labelVisible)
             {
@@ -181,12 +183,12 @@ namespace tl
                     p.draw.labelGlyphs = event.fontSystem->getGlyphs(
                         p.label, p.size.labelFontInfo);
                 }
-                event.render->drawText(
+                event.render->appendText(
+                    textInfos,
                     p.draw.labelGlyphs,
                     math::Vector2i(
                         labelGeometry.min.x,
-                        labelGeometry.min.y + p.size.fontMetrics.ascender),
-                    event.style->getColorRole(ui::ColorRole::Text));
+                        labelGeometry.min.y + p.size.fontMetrics.ascender));
             }
 
             if (durationVisible)
@@ -196,12 +198,18 @@ namespace tl
                     p.draw.durationGlyphs = event.fontSystem->getGlyphs(
                         p.durationLabel, p.size.durationFontInfo);
                 }
-                event.render->drawText(
+                event.render->appendText(
+                    textInfos,
                     p.draw.durationGlyphs,
                     math::Vector2i(
-                        durationGeometry.min.x,
-                        durationGeometry.min.y + p.size.fontMetrics.ascender),
-                    event.style->getColorRole(ui::ColorRole::Text));
+                        labelGeometry.min.x,
+                        labelGeometry.min.y + p.size.fontMetrics.ascender));
+            }
+            
+            for (const auto& textInfo : textInfos)
+            {
+                event.render->drawText(textInfo, math::Vector2i(),
+                                       event.style->getColorRole(ui::ColorRole::Text));
             }
         }
 

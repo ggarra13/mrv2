@@ -48,5 +48,5 @@ namespace tl
 
             TLRENDER_PRIVATE();
         };
-    } // namespace timelineui_vk
+    } // namespace timelineui
 } // namespace tl

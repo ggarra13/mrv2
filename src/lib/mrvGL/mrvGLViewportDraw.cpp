@@ -32,6 +32,7 @@ namespace
 {
     const char* kModule = "draw";
     const unsigned kFPSAverageFrames = 10;
+    const std::string kFontFamily = "NotoSans-Regular";
 }
 
 namespace mrv
@@ -730,17 +731,38 @@ namespace mrv
             }
         }
 
-        inline void Viewport::_drawText(
+        inline void Viewport::_appendText(
+            std::vector<timeline::TextInfo>& textInfos,
             const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
-            math::Vector2i& pos, const int16_t lineHeight,
-            const image::Color4f& labelColor) const noexcept
+            math::Vector2i& pos, const int16_t lineHeight) const
         {
             MRV2_GL();
-            const image::Color4f shadowColor(0.F, 0.F, 0.F, 0.7F);
-            math::Vector2i shadowPos{pos.x + 1, pos.y + 1};
-            gl.render->drawText(glyphs, shadowPos, shadowColor);
-            gl.render->drawText(glyphs, pos, labelColor);
+            
+            gl.render->appendText(textInfos, glyphs, pos);
             pos.y += lineHeight;
+        }
+        
+        inline void Viewport::_appendText(
+            std::vector<timeline::TextInfo>& textInfos,
+            const std::string& text,
+            const image::FontInfo& fontInfo,
+            math::Vector2i& pos, const int16_t lineHeight) const
+        {   
+            _appendText(textInfos, _p->fontSystem->getGlyphs(text, fontInfo), pos,
+                        lineHeight);
+        }
+        
+        void Viewport::_drawText(
+            const std::vector<timeline::TextInfo>& textInfos,
+            const math::Vector2i& pos,
+            const image::Color4f& color) const
+        {
+            MRV2_GL();
+            
+            for (auto& textInfo : textInfos)
+            {
+                gl.render->drawText(textInfo, pos, color);
+            }
         }
 
         void Viewport::_drawSafeAreas(
@@ -789,14 +811,14 @@ namespace mrv
             //
             // Draw the text too
             //
-            static const std::string fontFamily = "NotoSans-Regular";
-            Viewport* self = const_cast< Viewport* >(this);
-            const image::FontInfo fontInfo(fontFamily, 12 * width);
-            const auto glyphs = _p->fontSystem->getGlyphs(label, fontInfo);
-            math::Vector2i pos(box.max.x, box.max.y - 2 * width);
+            const image::FontInfo fontInfo(kFontFamily, 12 * width);
+            const auto& glyphs = _p->fontSystem->getGlyphs(label, fontInfo);
             
-            // Set the projection matrix
-            gl.render->drawText(glyphs, pos, color);
+            math::Vector2i pos(box.min.x, (box.max.y - 2 * width));
+            std::vector<timeline::TextInfo> textInfos;
+            gl.render->appendText(textInfos, glyphs, pos);
+            
+            _drawText(textInfos, math::Vector2i(), color);
         }
 
         void Viewport::_drawSafeAreas() const noexcept
@@ -847,6 +869,26 @@ namespace mrv
             }
         }
 
+
+        void Viewport::_drawHUD(
+            const std::vector<timeline::TextInfo>& textInfos,
+            const float alpha) const noexcept
+        {
+            TLRENDER_P();
+
+            const image::Color4f shadowColor(0.F, 0.F, 0.F, 0.7F);
+            const math::Vector2i shadowPos{ 2, 2 };
+            
+            Fl_Color c = p.ui->uiPrefs->uiPrefsViewHud->color();
+            uint8_t r, g, b;
+            Fl::get_color(c, r, g, b);
+            const image::Color4f labelColor(r / 255.F, g / 255.F, b / 255.F, alpha);
+            const math::Vector2i labelPos;
+            
+            _drawText(textInfos, shadowPos, shadowColor);
+            _drawText(textInfos, labelPos, labelColor);
+        }
+        
         void Viewport::_drawHUD(float alpha) const noexcept
         {
             TLRENDER_P();
@@ -855,21 +897,14 @@ namespace mrv
             if (!p.fontSystem || p.videoData.empty() || !p.player)
                 return;
 
+            Viewport* self = const_cast< Viewport* >(this);
+            const uint16_t fontSize = 12 * self->pixels_per_unit();
+            const image::FontInfo fontInfo(kFontFamily, fontSize);
             const auto& viewportSize = getViewportSize();
 
-            static const std::string fontFamily = "NotoSans-Regular";
-            Viewport* self = const_cast< Viewport* >(this);
-            uint16_t fontSize = 12 * self->pixels_per_unit();
-
-            Fl_Color c = p.ui->uiPrefs->uiPrefsViewHud->color();
-            uint8_t r, g, b;
-            Fl::get_color(c, r, g, b);
-
-            const image::Color4f labelColor(r / 255.F, g / 255.F, b / 255.F, alpha);
-
-            const image::FontInfo fontInfo(fontFamily, fontSize);
             const image::FontMetrics fontMetrics =
                 p.fontSystem->getMetrics(fontInfo);
+            
             auto lineHeight = fontMetrics.lineHeight;
             math::Vector2i pos(20, lineHeight * 2);
 
@@ -883,13 +918,14 @@ namespace mrv
             renderOptions.clear = false;
             gl.render->begin(viewportSize, renderOptions);
 
+            // Vector that will hold the text drawing.
+            std::vector<timeline::TextInfo> textInfos;
+            
             char buf[512];
             if (p.hud & HudDisplay::kDirectory)
             {
                 const auto& directory = path.getDirectory();
-                _drawText(
-                    p.fontSystem->getGlyphs(directory, fontInfo), pos, lineHeight,
-                    labelColor);
+                _appendText(textInfos, directory, fontInfo, pos, lineHeight);
             }
 
             bool otioClip = false;
@@ -913,9 +949,7 @@ namespace mrv
                         ss >> clipTime;
                     }
                 }
-                _drawText(
-                    p.fontSystem->getGlyphs(fullname, fontInfo), pos, lineHeight,
-                    labelColor);
+                _appendText(textInfos, fullname, fontInfo, pos, lineHeight);
             }
 
             if (p.hud & HudDisplay::kResolution)
@@ -937,9 +971,7 @@ namespace mrv
                     {
                         snprintf(buf, 512, "%d x %d", video.size.w, video.size.h);
                     }
-                    _drawText(
-                        p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
-                        labelColor);
+                    _appendText(textInfos, buf, fontInfo, pos, lineHeight);
                 }
             }
 
@@ -1025,9 +1057,7 @@ namespace mrv
             p.lastFrame = time.value();
 
             if (!tmp.empty())
-                _drawText(
-                    p.fontSystem->getGlyphs(tmp, fontInfo), pos, lineHeight,
-                    labelColor);
+                _appendText(textInfos, tmp, fontInfo, pos, lineHeight);
 
             tmp.clear();
             if (p.hud & HudDisplay::kFrameCount)
@@ -1040,9 +1070,7 @@ namespace mrv
             }
 
             if (!tmp.empty())
-                _drawText(
-                    p.fontSystem->getGlyphs(tmp, fontInfo), pos, lineHeight,
-                    labelColor);
+                _appendText(textInfos, tmp, fontInfo, pos, lineHeight);
 
             tmp.clear();
             if (p.hud & HudDisplay::kMemory)
@@ -1067,9 +1095,7 @@ namespace mrv
             }
 
             if (!tmp.empty())
-                _drawText(
-                    p.fontSystem->getGlyphs(tmp, fontInfo), pos, lineHeight,
-                    labelColor);
+                _appendText(textInfos, tmp, fontInfo, pos, lineHeight);
 
             if (p.hud & HudDisplay::kCache)
             {
@@ -1102,9 +1128,7 @@ namespace mrv
                         behindAudioFrames += frame - i.start_time().to_frames();
                     }
                 }
-                _drawText(
-                    p.fontSystem->getGlyphs(_("Cache:"), fontInfo), pos, lineHeight,
-                    labelColor);
+                _appendText(textInfos, _("Cache: "), fontInfo, pos, lineHeight);
                 const auto ioSystem =
                     App::app->getContext()->getSystem<io::System>();
                 const auto& cache = ioSystem->getCache();
@@ -1114,21 +1138,15 @@ namespace mrv
                 snprintf(
                     buf, 512, _("    Used: %.2g of %zu Gb (%.2g %%)"), usedCache,
                     maxCache, pctCache);
-                _drawText(
-                    p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
-                    labelColor);
+                _appendText(textInfos, buf, fontInfo, pos, lineHeight);
                 snprintf(
                     buf, 512, _("    Ahead    V: % 4" PRIu64 "    A: % 4" PRIu64),
                     aheadVideoFrames, aheadAudioFrames);
-                _drawText(
-                    p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
-                    labelColor);
+                _appendText(textInfos, buf, fontInfo, pos, lineHeight);
                 snprintf(
                     buf, 512, _("    Behind   V: % 4" PRIu64 "    A: % 4" PRIu64),
                     behindVideoFrames, behindAudioFrames);
-                _drawText(
-                    p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
-                    labelColor);
+                _appendText(textInfos, buf, fontInfo, pos, lineHeight);
             }
 
             if (p.hud & HudDisplay::kAttributes)
@@ -1141,11 +1159,11 @@ namespace mrv
                     snprintf(
                         buf, 512, "%s = %s", tag.first.c_str(), tag.second.c_str());
 
-                    _drawText(
-                        p.fontSystem->getGlyphs(buf, fontInfo), pos, lineHeight,
-                        labelColor);
+                    _appendText(textInfos, buf, fontInfo, pos, lineHeight);
                 }
             }
+            
+            _drawHUD(textInfos, alpha);
         }
 
         void Viewport::_drawWindowArea(const std::string& dw) const noexcept
@@ -1245,9 +1263,12 @@ namespace mrv
             gl.render->drawRect(
                 box, image::Color4f(0.F, 0.F, 0.F, 0.7F * p.helpTextFade));
 
-            _drawText(
-                p.fontSystem->getGlyphs(p.helpText, fontInfo), pos, lineHeight,
-                labelColor);
+            std::vector<timeline::TextInfo> textInfos;
+            _appendText(textInfos,
+                        p.fontSystem->getGlyphs(p.helpText, fontInfo),
+                        pos, lineHeight);
+            
+            _drawText(textInfos, pos, labelColor);
 
             gl.render->end();
         }

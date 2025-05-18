@@ -356,20 +356,25 @@ namespace mrv
         int y = pts[0].y;
         math::Vector2i pnt(x, y);
         std::size_t pos = txt.find('\n');
+        std::vector<timeline::TextInfo> textInfos;
         for (; pos != std::string::npos; y += height, pos = txt.find('\n'))
         {
             pnt.y = y;
             std::string line = txt.substr(0, pos);
-            const auto glyphs = fontSystem->getGlyphs(line, fontInfo);
-            render->drawText(glyphs, pnt, color);
+            const auto& glyphs = fontSystem->getGlyphs(line, fontInfo);
+            render->appendText(textInfos, glyphs, pnt);
             if (txt.size() > pos)
                 txt = txt.substr(pos + 1, txt.size());
         }
         if (!txt.empty())
         {
             pnt.y = y;
-            const auto glyphs = fontSystem->getGlyphs(txt, fontInfo);
-            render->drawText(glyphs, pnt, color);
+            const auto& glyphs = fontSystem->getGlyphs(txt, fontInfo);
+            render->appendText(textInfos, glyphs, pnt);
+        }
+        for (const auto& textInfo : textInfos)
+        {
+            render->drawText(textInfo, math::Vector2i(), color);
         }
         render->setTransform(oldMatrix);
     }

@@ -416,8 +416,7 @@ namespace tl
         void Render::appendText(
             std::vector<timeline::TextInfo>& textInfos,
             const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
-            const math::Vector2i& pos,
-            const bool flipped)
+            const math::Vector2i& pos)
         {
             TLRENDER_P();
             

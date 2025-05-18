@@ -111,26 +111,18 @@ namespace tl
             virtual void drawColorMesh(
                 const geom::TriangleMesh2&, const math::Vector2i& position,
                 const image::Color4f&) = 0;
-            
+           
             //! Create text meshes to speed up drawing
             virtual void appendText(
                 std::vector<TextInfo>& textInfos,
                 const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
-                const math::Vector2i& position,
-                const bool flipped = false) = 0;
+                const math::Vector2i& position) = 0;
             
             //! Draw a text mesh after having been created with appendText.
             virtual void drawText(
                 const TextInfo& info,
                 const math::Vector2i& position,
                 const image::Color4f&, const std::string& meshName = "") = 0;
-            
-            //! Draw text.
-            virtual void drawText(
-                const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
-                const math::Vector2i& position, const image::Color4f&,
-                const bool flipped = false,
-                const std::string& pipelineName = "") = 0;
 
             //! Draw a texture.
             virtual void drawTexture(

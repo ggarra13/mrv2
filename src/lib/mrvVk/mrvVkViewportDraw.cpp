@@ -33,9 +33,9 @@
 
 namespace
 {
+    const char* kModule = "draw";
     const unsigned kFPSAverageFrames = 10;
     const std::string kFontFamily = "NotoSans-Regular";
-    const char* kModule = "draw";
 }
 
 namespace mrv
@@ -578,7 +578,7 @@ namespace mrv
         {
             MRV2_VK();
             
-            vk.render->appendText(textInfos, glyphs, pos, true);
+            vk.render->appendText(textInfos, glyphs, pos);
             pos.y += lineHeight;
         }
         
@@ -591,7 +591,7 @@ namespace mrv
             _appendText(textInfos, _p->fontSystem->getGlyphs(text, fontInfo), pos,
                         lineHeight);
         }
-            
+        
         void Viewport::_drawText(const std::vector<timeline::TextInfo>& textInfos,
                                  const math::Vector2i& pos,
                                  const image::Color4f& color, 
@@ -688,9 +688,9 @@ namespace mrv
             const image::FontInfo fontInfo(kFontFamily, 12 * width);
             const auto& glyphs = _p->fontSystem->getGlyphs(label, fontInfo);
             
-            math::Vector2i pos(box.min.x, (box.max.y - 2));
+            math::Vector2i pos(box.min.x, (box.max.y - 2 * width));
             std::vector<timeline::TextInfo> textInfos;
-            vk.render->appendText(textInfos, glyphs, pos, true);
+            vk.render->appendText(textInfos, glyphs, pos);
             
             _drawText(textInfos, math::Vector2i(), color, "safe_areas");
         }
@@ -746,8 +746,9 @@ namespace mrv
             vk.render->setRenderPass(oldRenderPass);
         }
 
-        void Viewport::_drawHUD(const std::vector<timeline::TextInfo>& textInfos,
-                                const float alpha) const noexcept
+        void Viewport::_drawHUD(
+            const std::vector<timeline::TextInfo>& textInfos,
+            const float alpha) const noexcept
         {
             TLRENDER_P();
 
@@ -776,8 +777,6 @@ namespace mrv
             const uint16_t fontSize = 12 * self->pixels_per_unit();
             const image::FontInfo fontInfo(kFontFamily, fontSize);
             const auto& viewportSize = getViewportSize();
-            
-            
 
 
             const image::FontMetrics fontMetrics =

@@ -150,8 +150,7 @@ namespace tl
             void appendText(
                 std::vector<timeline::TextInfo>& info,
                 const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
-                const math::Vector2i& position,
-                const bool flipped = true) override;
+                const math::Vector2i& position) override;
             void drawText(
                 const timeline::TextInfo&, const math::Vector2i& position,
                 const image::Color4f&, const std::string& pipelineName = "")
@@ -178,11 +177,6 @@ namespace tl
                 const std::string& pipelineLayoutName,
                 const geom::TriangleMesh2&, const math::Vector2i& position,
                 const image::Color4f&);
-            void drawText(
-                const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
-                const math::Vector2i& position, const image::Color4f&,
-                const bool flipped = false,
-                const std::string& pipelineName = "timeline") override {};
             void drawTexture(
                 unsigned int, const math::Box2i&,
                 const image::Color4f& =
