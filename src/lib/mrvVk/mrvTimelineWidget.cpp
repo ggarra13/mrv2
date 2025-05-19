@@ -286,7 +286,19 @@ namespace mrv
             p.timelineWindow = TimelineWindow::create(context);
             p.timelineWindow->setClipboard(p.clipboard);
             
-            _createTimelineWidget();
+            
+            p.timelineWidget =
+                timelineui_vk::TimelineWidget::create(timeUnitsModel, ctx,
+                                                      context);
+            p.timelineWidget->setEditable(false);
+            p.timelineWidget->setFrameView(true);
+            p.timelineWidget->setScrollBarsVisible(false);
+            p.timelineWidget->setMoveCallback(
+                std::bind(
+                    &mrv::vulkan::TimelineWidget::moveCallback, this,
+                    std::placeholders::_1));
+
+            p.timelineWidget->setParent(p.timelineWindow);
             
             auto settings = ui->app->settings();
             
@@ -749,11 +761,6 @@ void main()
                         auto bindingSet = p.shader->createBindingSet();
                         p.shader->useBindingSet(bindingSet);
                     }
-
-                    if (!p.timelineWidget)
-                    {
-                        _createTimelineWidget();
-                    }
                 }
                 catch (const std::exception& e)
                 {
@@ -824,9 +831,6 @@ void main()
             TLRENDER_P();
 
             wait_device();
-
-            // Reset timeline widget first so threads are joined.
-            p.timelineWidget.reset();
             
             // Destroy main render
             p.render.reset();
@@ -2090,23 +2094,6 @@ void main()
         void TimelineWidget::_createTimelineWidget()
         {
             TLRENDER_P();
-            
-            auto timeUnitsModel = p.ui->app->timeUnitsModel();
-            if (auto context = p.context.lock())
-            {
-                p.timelineWidget =
-                    timelineui_vk::TimelineWidget::create(timeUnitsModel, ctx,
-                                                          context);
-                p.timelineWidget->setEditable(false);
-                p.timelineWidget->setFrameView(true);
-                p.timelineWidget->setScrollBarsVisible(false);
-                p.timelineWidget->setMoveCallback(
-                    std::bind(
-                        &mrv::vulkan::TimelineWidget::moveCallback, this,
-                        std::placeholders::_1));
-
-                p.timelineWidget->setParent(p.timelineWindow);
-            }
         }
         
     } // namespace vulkan

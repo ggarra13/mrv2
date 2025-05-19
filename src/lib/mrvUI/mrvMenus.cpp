@@ -1114,136 +1114,133 @@ namespace mrv
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
 
-        if (ui->uiTimeline->visible_r())
+        idx = menu->add(
+            _("Timeline/Editable"), kToggleTimelineEditable.hotkey(),
+            (Fl_Callback*)toggle_timeline_editable_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        bool editable = ui->uiTimeline->isEditable();
+        if (editable)
+            item->set();
+
+        const auto& itemOptions = ui->uiTimeline->getItemOptions();
+        const auto& displayOptions = ui->uiTimeline->getDisplayOptions();
+        idx = menu->add(
+            _("Timeline/Edit Associated Clips"),
+            kToggleEditAssociatedClips.hotkey(),
+            (Fl_Callback*)toggle_timeline_edit_associated_clips_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (itemOptions.editAssociatedClips)
+            item->set();
+
+        mode = 0;
+        if (numFiles == 0)
+            mode |= FL_MENU_INACTIVE;
+
+        idx = menu->add(
+            _("Timeline/Frame View"), kToggleTimelineFrameView.hotkey(),
+            (Fl_Callback*)timeline_frame_view_cb, ui, mode);
+
+        mode = FL_MENU_TOGGLE;
+        if (numFiles == 0)
+            mode |= FL_MENU_INACTIVE;
+
+        idx = menu->add(
+            _("Timeline/Scroll To Current Frame"),
+            kToggleTimelineScrollToCurrentFrame.hotkey(),
+            (Fl_Callback*)toggle_timeline_scroll_to_current_frame_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        bool boolValue =
+            settings->getValue<bool>("Timeline/ScrollToCurrentFrame");
+        if (boolValue)
+            item->set();
+
+        idx = menu->add(
+            _("Timeline/Track Info"), kToggleTimelineTrackInfo.hotkey(),
+            (Fl_Callback*)toggle_timeline_track_info_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (displayOptions.trackInfo)
+            item->set();
+
+        idx = menu->add(
+            _("Timeline/Clip Info"), kToggleTimelineClipInfo.hotkey(),
+            (Fl_Callback*)toggle_timeline_clip_info_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (displayOptions.clipInfo)
+            item->set();
+
+        mode = FL_MENU_RADIO;
+        if (numFiles == 0)
+            mode |= FL_MENU_INACTIVE;
+
+        int thumbnails_none = 0;
+        int thumbnails_small = 0;
+        if (displayOptions.thumbnails)
+            thumbnails_none = kToggleTimelineThumbnails.hotkey();
+        else
+            thumbnails_small = kToggleTimelineThumbnails.hotkey();
+
+        idx = menu->add(
+            _("Timeline/Thumbnails/None"), thumbnails_none,
+            (Fl_Callback*)timeline_thumbnails_none_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (!displayOptions.thumbnails)
+            item->set();
+        idx = menu->add(
+            _("Timeline/Thumbnails/Small"), thumbnails_small,
+            (Fl_Callback*)timeline_thumbnails_small_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (displayOptions.thumbnails && displayOptions.thumbnailHeight == 100)
+            item->set();
+        idx = menu->add(
+            _("Timeline/Thumbnails/Medium"), 0,
+            (Fl_Callback*)timeline_thumbnails_medium_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (displayOptions.thumbnails && displayOptions.thumbnailHeight == 200)
+            item->set();
+        idx = menu->add(
+            _("Timeline/Thumbnails/Large"), 0,
+            (Fl_Callback*)timeline_thumbnails_large_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (displayOptions.thumbnails && displayOptions.thumbnailHeight == 300)
+            item->set();
+
+        mode = FL_MENU_TOGGLE;
+        if (numFiles == 0)
+            mode |= FL_MENU_INACTIVE;
+        idx = menu->add(
+            _("Timeline/Transitions"), kToggleTimelineTransitions.hotkey(),
+            (Fl_Callback*)toggle_timeline_transitions_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (displayOptions.transitions)
+            item->set();
+        idx = menu->add(
+            _("Timeline/Markers"), kToggleTimelineMarkers.hotkey(),
+            (Fl_Callback*)toggle_timeline_markers_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (displayOptions.markers)
+            item->set();
+
+        if (isOtio)
         {
-            idx = menu->add(
-                _("Timeline/Editable"), kToggleTimelineEditable.hotkey(),
-                (Fl_Callback*)toggle_timeline_editable_cb, ui, mode);
-            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-            bool editable = ui->uiTimeline->isEditable();
-            if (editable)
-                item->set();
-
-            const auto& itemOptions = ui->uiTimeline->getItemOptions();
-            const auto& displayOptions = ui->uiTimeline->getDisplayOptions();
-            idx = menu->add(
-                _("Timeline/Edit Associated Clips"),
-                kToggleEditAssociatedClips.hotkey(),
-                (Fl_Callback*)toggle_timeline_edit_associated_clips_cb, ui, mode);
-            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-            if (itemOptions.editAssociatedClips)
-                item->set();
-
-            mode = 0;
-            if (numFiles == 0)
-                mode |= FL_MENU_INACTIVE;
-
-            idx = menu->add(
-                _("Timeline/Frame View"), kToggleTimelineFrameView.hotkey(),
-                (Fl_Callback*)timeline_frame_view_cb, ui, mode);
-
-            mode = FL_MENU_TOGGLE;
-            if (numFiles == 0)
-                mode |= FL_MENU_INACTIVE;
-
-            idx = menu->add(
-                _("Timeline/Scroll To Current Frame"),
-                kToggleTimelineScrollToCurrentFrame.hotkey(),
-                (Fl_Callback*)toggle_timeline_scroll_to_current_frame_cb, ui, mode);
-            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-            bool boolValue =
-                settings->getValue<bool>("Timeline/ScrollToCurrentFrame");
-            if (boolValue)
-                item->set();
-
-            idx = menu->add(
-                _("Timeline/Track Info"), kToggleTimelineTrackInfo.hotkey(),
-                (Fl_Callback*)toggle_timeline_track_info_cb, ui, mode);
-            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-            if (displayOptions.trackInfo)
-                item->set();
-
-            idx = menu->add(
-                _("Timeline/Clip Info"), kToggleTimelineClipInfo.hotkey(),
-                (Fl_Callback*)toggle_timeline_clip_info_cb, ui, mode);
-            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-            if (displayOptions.clipInfo)
-                item->set();
-
-            mode = FL_MENU_RADIO;
-            if (numFiles == 0)
-                mode |= FL_MENU_INACTIVE;
-
-            int thumbnails_none = 0;
-            int thumbnails_small = 0;
-            if (displayOptions.thumbnails)
-                thumbnails_none = kToggleTimelineThumbnails.hotkey();
-            else
-                thumbnails_small = kToggleTimelineThumbnails.hotkey();
-
-            idx = menu->add(
-                _("Timeline/Thumbnails/None"), thumbnails_none,
-                (Fl_Callback*)timeline_thumbnails_none_cb, ui, mode);
-            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-            if (!displayOptions.thumbnails)
-                item->set();
-            idx = menu->add(
-                _("Timeline/Thumbnails/Small"), thumbnails_small,
-                (Fl_Callback*)timeline_thumbnails_small_cb, ui, mode);
-            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-            if (displayOptions.thumbnails && displayOptions.thumbnailHeight == 100)
-                item->set();
-            idx = menu->add(
-                _("Timeline/Thumbnails/Medium"), 0,
-                (Fl_Callback*)timeline_thumbnails_medium_cb, ui, mode);
-            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-            if (displayOptions.thumbnails && displayOptions.thumbnailHeight == 200)
-                item->set();
-            idx = menu->add(
-                _("Timeline/Thumbnails/Large"), 0,
-                (Fl_Callback*)timeline_thumbnails_large_cb, ui, mode);
-            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-            if (displayOptions.thumbnails && displayOptions.thumbnailHeight == 300)
-                item->set();
-
-            mode = FL_MENU_TOGGLE;
-            if (numFiles == 0)
-                mode |= FL_MENU_INACTIVE;
-            idx = menu->add(
-                _("Timeline/Transitions"), kToggleTimelineTransitions.hotkey(),
-                (Fl_Callback*)toggle_timeline_transitions_cb, ui, mode);
-            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-            if (displayOptions.transitions)
-                item->set();
-            idx = menu->add(
-                _("Timeline/Markers"), kToggleTimelineMarkers.hotkey(),
-                (Fl_Callback*)toggle_timeline_markers_cb, ui, mode);
-            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-            if (displayOptions.markers)
-                item->set();
-
-            if (isOtio)
+            std::vector<std::string> tracks;
+            std::vector<bool> tracksActive;
+            getActiveTracks(tracks, tracksActive, ui);
+            unsigned numTracks = tracks.size();
+            if (numTracks > 1)
             {
-                std::vector<std::string> tracks;
-                std::vector<bool> tracksActive;
-                getActiveTracks(tracks, tracksActive, ui);
-                unsigned numTracks = tracks.size();
-                if (numTracks > 1)
+                for (unsigned i = 0; i < tracks.size(); ++i)
                 {
-                    for (unsigned i = 0; i < tracks.size(); ++i)
-                    {
-                        std::string msg =
-                            tl::string::Format(_("Timeline/Visible Tracks/{0}"))
+                    std::string msg =
+                        tl::string::Format(_("Timeline/Visible Tracks/{0}"))
                             .arg(tracks[i]);
 
-                        idx = menu->add(
-                            msg.c_str(), 0,
-                            (Fl_Callback*)toggle_timeline_active_track_cb, ui,
-                            FL_MENU_TOGGLE);
-                        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                        if (tracksActive[i])
-                            item->set();
-                    }
+                    idx = menu->add(
+                        msg.c_str(), 0,
+                        (Fl_Callback*)toggle_timeline_active_track_cb, ui,
+                        FL_MENU_TOGGLE);
+                    item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+                    if (tracksActive[i])
+                        item->set();
                 }
             }
         }

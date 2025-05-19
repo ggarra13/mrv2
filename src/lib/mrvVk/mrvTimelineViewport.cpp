@@ -3443,12 +3443,9 @@ namespace mrv
 
             // \@bug: Apple (macOS Intel at least) is too slow and goes black.
 #ifndef __APPLE__
-            if (p.ui->uiTimeline->visible_r())
-            {
-                auto display = p.ui->uiTimeline->getDisplayOptions();
-                display.hdr = p.hdrOptions;
-                p.ui->uiTimeline->setDisplayOptions(display);
-            }
+            auto display = p.ui->uiTimeline->getDisplayOptions();
+            display.hdr = p.hdrOptions;
+            p.ui->uiTimeline->setDisplayOptions(display);
 #endif
 
             if (!p.displayOptions.empty() && p.displayOptions[0].normalize.enabled)
