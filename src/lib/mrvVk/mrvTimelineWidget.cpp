@@ -930,7 +930,7 @@ void main()
                         p.render->begin(
                             cmd, p.buffer, m_currentFrameIndex, renderSize,
                             renderOptions);
-                        math::Matrix4x4f ortho = math::ortho(
+                        const math::Matrix4x4f ortho = math::ortho(
                             0.F, static_cast<float>(renderSize.w),
                             static_cast<float>(renderSize.h), 0.F,
                             -1.F, 1.F);

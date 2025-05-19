@@ -619,7 +619,7 @@ namespace tl
 
             VkAttachmentReference depthRef{};
 
-            if (hasDepth())
+            if (hasDepth() || hasStencil())
             {
                 depthRef.attachment = 1;
                 depthRef.layout =
@@ -653,10 +653,49 @@ namespace tl
                 attachments.push_back(depthAttachment);
             }
 
+            VkSubpassDependency dependency{};
+            dependency.srcSubpass = 0;
+            dependency.dstSubpass = 0;
+
+            // Stages involved:
+            // - Color output
+            // - Depth/stencil tests
+            // - Fragment shader sampling (e.g., input attachments or sampled images)
+            dependency.srcStageMask =
+                VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT |
+                VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT |
+                VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT |
+                VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+
+            dependency.dstStageMask = dependency.srcStageMask;
+
+            // Access types involved:
+            dependency.srcAccessMask =
+                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
+                VK_ACCESS_SHADER_READ_BIT;
+
+            dependency.dstAccessMask =
+                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
+                VK_ACCESS_SHADER_READ_BIT;
+
+            if (hasDepth() || hasStencil())
+            {
+                dependency.srcAccessMask |= VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT |
+                                            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
+                dependency.dstAccessMask |= VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT |
+                                            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
+            }
+
+            // Optional: this can improve performance on tiled GPUs
+            dependency.dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
+
+
             VkRenderPassCreateInfo rpInfo{};
             rpInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
             rpInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
             rpInfo.pAttachments = attachments.data();
+            // rpInfo.dependencyCount = 1;
+            // rpInfo.pDependencies = &dependency;
             rpInfo.subpassCount = 1;
             rpInfo.pSubpasses = &subpass;
 
@@ -676,7 +715,7 @@ namespace tl
 
             std::vector<VkImageView> attachments;
             attachments.push_back(p.imageView);
-            if (hasDepth())
+            if (hasDepth() || hasStencil())
                 attachments.push_back(p.depthImageView);
 
             VkFramebufferCreateInfo fbInfo{};

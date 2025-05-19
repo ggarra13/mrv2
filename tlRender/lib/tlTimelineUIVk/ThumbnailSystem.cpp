@@ -351,7 +351,7 @@ namespace tl
                         
                     while (p.thumbnailThread.running)
                     {
-                        if (ctx.queue == VK_NULL_HANDLE)
+                        if (ctx.commandPool == VK_NULL_HANDLE)
                             continue;
 
                         if (!p.thumbnailThread.render)
@@ -745,64 +745,76 @@ namespace tl
                                     VkQueue queue = ctx.queue;
                                     std::mutex& queue_mutex = ctx.queue_mutex;
                                     
-                                    VkCommandBuffer cmd = beginSingleTimeCommands(ctx.device, ctx.commandPool);
-                                    
-                                    p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
-                                    
-                                    timeline::RenderOptions renderOptions;
-                                    renderOptions.clear = false;
-                                    // p.thumbnailThread.render->begin(cmd, p.thumbnailThread.buffer,
-                                    //                                 p.thumbnailThread.frameIndex, size,
-                                    //                                 renderOptions);
-                                    // std::cerr << "____________DRAW IMAGE________________" << std::endl;
-                                    // p.thumbnailThread.render->drawImage(
-                                    //     p.thumbnailThread.buffer,
-                                    //     videoData.image,
-                                    //     {math::Box2i(0, 0, size.w, size.h)});
-                                    // std::cerr << "____________DREW IMAGE________________" << std::endl;
-                                    // p.thumbnailThread.render->end();
-                                    // std::cerr << "____________END  IMAGE________________" << std::endl;
                                     image = image::Image::create(
                                         size.w, size.h,
                                         image::PixelType::RGBA_U8);
 
-                                    // std::cerr << "transition to color attachment" << std::endl;
-                                    // p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
+#if 1
+                                    std::cerr << "____________BEGIN CMD________________" << std::endl;
+                                    VkCommandBuffer cmd = beginSingleTimeCommands(ctx.device, ctx.commandPool);
                                     
-                                    // std::cerr << "____________READ PIXELS________________" << std::endl;
-                                    // p.thumbnailThread.buffer->readPixels(cmd, 0, 0, size.w,
-                                    //                                      size.h);
+                                    std::cerr << "____________BEGAN CMD " << cmd << " ________________" << std::endl;
+                                    p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
                                     
-                                    // vkEndCommandBuffer(cmd);
+                                    timeline::RenderOptions renderOptions;
+                                    renderOptions.clear = false;
+                                    std::cerr << "____________CALL RENDER BEGIN________________" << std::endl;
+                                    p.thumbnailThread.render->begin(cmd, p.thumbnailThread.buffer,
+                                                                    p.thumbnailThread.frameIndex, size,
+                                                                    renderOptions);
+                                    const math::Matrix4x4f ortho = math::ortho(
+                                        0.F, static_cast<float>(size.w),
+                                        static_cast<float>(size.h), 0.F,
+                                        -1.F, 1.F);
+                                    p.thumbnailThread.render->setTransform(ortho);
+                                    std::cerr << "____________DRAW IMAGE________________" << std::endl;
+                                    p.thumbnailThread.render->drawImage(
+                                        p.thumbnailThread.buffer,
+                                        videoData.image,
+                                        {math::Box2i(0, 0, size.w, size.h)});
+                                    std::cerr << "____________DREW IMAGE________________" << std::endl;
+                                    p.thumbnailThread.render->end();
+                                    std::cerr << "____________END  IMAGE________________" << std::endl;
+
+                                    std::cerr << "transition to color attachment" << std::endl;
+                                    p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
+                                    
+                                    std::cerr << "____________READ PIXELS________________" << std::endl;
+                                    p.thumbnailThread.buffer->readPixels(cmd, 0, 0, size.w,
+                                                                         size.h);
+                                    
+                                    vkEndCommandBuffer(cmd);
                 
-                                    // std::cerr << "____________SUBMIT READBACK________________" << std::endl;
-                                    // p.thumbnailThread.buffer->submitReadback(cmd);
+                                    std::cerr << "____________SUBMIT READBACK________________" << std::endl;
+                                    p.thumbnailThread.buffer->submitReadback(cmd);
 
-                                    // {
-                                    //     std::lock_guard<std::mutex> lock(queue_mutex);
-                                    //     VkResult result = vkQueueWaitIdle(queue);
-                                    // }
-                                    // std::cerr << "____________WAITED QUEUE________________" << std::endl;
+                                    {
+                                        std::lock_guard<std::mutex> lock(queue_mutex);
+                                        VkResult result = vkQueueWaitIdle(queue);
+                                    }
+                                    std::cerr << "____________WAITED QUEUE________________" << std::endl;
                                     
-                                    // vkFreeCommandBuffers(device, commandPool, 1, &cmd);
+                                    vkFreeCommandBuffers(device, commandPool, 1, &cmd);
 
-                                    std::memset(image->getData(), 255, image->getDataByteCount());
                                     
-                                    // void* imageData = p.thumbnailThread.buffer->getLatestReadPixels();
-                                    // if (imageData)
-                                    // {
-                                    //     std::cerr << "____________GOT IMAGE________________" << std::endl;
-                                    //     // std::memcpy(image->getData(), imageData,
-                                    //     //             image->getDataByteCount());
+                                    void* imageData = p.thumbnailThread.buffer->getLatestReadPixels();
+                                    if (imageData)
+                                    {
+                                        std::cerr << "____________GOT IMAGE________________" << std::endl;
+                                        std::memcpy(image->getData(), imageData,
+                                                    image->getDataByteCount());
                                         
-                                    //     std::cerr << "____________COPIED IMAGE________________" << std::endl;
-                                    // }
-                                    // else
-                                    // {
-                                    //     std::cerr << "__IMAGE FAILED__" << std::endl;
-                                    // }
+                                        std::cerr << "____________COPIED IMAGE________________" << std::endl;
+                                    }
+                                    else
+                                    {
+                                        std::cerr << "__IMAGE FAILED__" << std::endl;
+                                    }
 
                                     p.thumbnailThread.frameIndex = (p.thumbnailThread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
+#else
+                                    std::memset(image->getData(), 255, image->getDataByteCount());
+#endif
                                 }
                             }
                             else if (

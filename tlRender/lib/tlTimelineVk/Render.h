@@ -203,7 +203,10 @@ namespace tl
                 const timeline::BackgroundOptions& =
                     timeline::BackgroundOptions()) override;
             void drawMask(float pct = 0.F);
-            
+
+
+            // Vulkan overridden functions
+            void createBindingSet(const std::string& shaderName) override;
             void createRenderPass(bool clearColor, bool clearDepth) override;
             void beginRenderPass() override;
             void endRenderPass() override;

@@ -768,6 +768,8 @@ namespace tl
             g.pipelineLayouts.clear();
             g.bindingSets.clear();
             g.shaders.clear();
+            g.framebuffers.clear();
+            g.renderPasses.clear();
             
             const math::Matrix4x4f transform;
             const image::Color4f color(1.F, 1.F, 1.F);
@@ -1178,6 +1180,11 @@ namespace tl
         void Render::setViewport(const math::Box2i& value)
         {
             _p->viewport = value;
+        }
+        
+        void Render::createBindingSet(const std::string& shaderName)
+        {
+            _createBindingSet(_p->shaders[shaderName]);
         }
         
         void Render::createRenderPass(bool clearColor, bool clearDepth)

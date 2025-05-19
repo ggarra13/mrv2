@@ -296,14 +296,27 @@ namespace tl
                             {
                                 timeline::VideoData videoData;
                                 videoData.size = i->second->getSize();
-                                std::cerr << "__RENDER VIDEO__ " << box << std::endl;
+                                std::cerr << "__RENDER VIDEO__ " << box << " " << videoData.size << std::endl;
                                 videoData.layers.push_back({i->second});
                                 // event.render->setupViewportAndScissor();
                                 event.render->endRenderPass();
-                                event.render->beginRenderPass();
+
                                 event.render->createRenderPass(false, false);
+
+#if 1
+                                static float v = 0.1F;
+                                event.render->beginRenderPass();  // will get called by drawVideo
+                                event.render->drawRect(box, image::Color4f(v, v, v));
+                                v += 0.1F;
+                                if (v > 1.F) v = 0.1F;
+#else
+                                auto image = videoData.layers[0].image;
+                                uint8_t* data = (uint8_t*)image->getData();
+                                event.render->createBindingSet("display");
                                 event.render->drawVideo({videoData}, {box});
-                                std::cerr << "__RENDERED VIDEO__" << std::endl;
+                                event.render->beginRenderPass();
+                                std::cerr << "__RENDERED VIDEO__ " << (int)(data[0]) << std::endl;
+#endif
                             }
                         }
                         else if (p.ioInfo && !p.ioInfo->video.empty())

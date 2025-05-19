@@ -888,6 +888,8 @@ namespace tl
         {
             TLRENDER_P();
 
+            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
+            
             // \@todo: \@bug?: there's no such call in Vulkan.
             // GLint viewportPrev[4] = {0, 0, 0, 0};
             // glGetIntegerv(GL_VIEWPORT, viewportPrev);
@@ -909,6 +911,7 @@ namespace tl
                                                                   offscreenBufferOptions);
             }
 
+            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             float d1 = 1;
             float d2 = 1;
             if (p.buffers["video"])
@@ -1085,6 +1088,7 @@ namespace tl
                 }
             }
 
+            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             if (p.buffers["video"])
             {
                 // Begin the new compositing render pass.
@@ -1169,6 +1173,7 @@ namespace tl
                                        pushData.size(), pushData.data());
                 }
 
+                std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                 fbo->beginRenderPass(p.cmd);
 
                 // We must NOT call this here.
@@ -1237,18 +1242,22 @@ namespace tl
                 }
 #endif // TLRENDER_LIBPLACEBO
 
+            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                 _bindDescriptorSets(pipelineLayoutName, "display");
 
+            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                 if (p.vbos["video"])
                 {
                     p.vbos["video"]->copy(convert(geom::box(box, true), p.vbos["video"]->getType()));
                 }
                 _vkDraw("video");
+            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
 
                 fbo->endRenderPass(p.cmd);
 
                 // Transition buffer back to color attachment
                 p.buffers["video"]->transitionToColorAttachment(p.cmd);
+            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                 
             }
             
