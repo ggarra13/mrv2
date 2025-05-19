@@ -1079,14 +1079,15 @@ namespace tl
             submitInfo.commandBufferCount = 1;
             submitInfo.pCommandBuffers = &cmd;
 
-            std::lock_guard<std::mutex> lock(ctx.queue_mutex);
+            {
+                std::lock_guard<std::mutex> lock(ctx.queue_mutex);
+                VkQueue& transferQueue = ctx.queue;
 
-            VkQueue transferQueue = ctx.queue;
-            
-            
-            vkQueueSubmit(transferQueue, 1, &submitInfo,
-                          p.pboRing[p.writeIndex].fence);
-            
+                vkQueueSubmit(
+                    transferQueue, 1, &submitInfo,
+                    p.pboRing[p.writeIndex].fence);
+            }
+
             p.writeIndex = (p.writeIndex + 1) % NUM_PBO_BUFFERS;
         }
 

@@ -260,6 +260,14 @@ namespace mrv
             mode(FL_RGB | FL_ALPHA | fl_double);
         }
 
+        void TimelineWidget::init_colorspace()
+        {
+            Fl_Vk_Window::init_colorspace();
+
+            format() = VK_FORMAT_B8G8R8A8_UNORM;
+            colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+        }
+        
         void TimelineWidget::setContext(
             const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<timeline::TimeUnitsModel>& timeUnitsModel,
@@ -923,8 +931,11 @@ void main()
                         p.buffer->transitionToColorAttachment(cmd);
                         
                         timeline::RenderOptions renderOptions;
-                        renderOptions.clear = false;
+                        renderOptions.clear = true;
+                        renderOptions.clearColor =
+                            p.style->getColorRole(ui::ColorRole::Window);
                         
+                        p.buffer->createRenderPass(true, false);
                         p.render->begin(
                             cmd, p.buffer, m_currentFrameIndex, renderSize,
                             renderOptions);
@@ -938,14 +949,12 @@ void main()
                         ui::DrawEvent drawEvent(
                             p.style, p.iconLibrary, p.render, p.fontSystem);
                         p.render->setClipRectEnabled(true);
-                        // p.render->endRenderPass();
-                        // p.render->createRenderPass(false, true);
-                        // p.render->setRenderPass(p.buffer->getRenderPass());
-                        p.buffer->beginRenderPass(cmd);
+                        p.render->createRenderPass(false, false);
+                        p.render->beginRenderPass();
                         _drawEvent(
                             p.timelineWindow, math::Box2i(renderSize),
                             drawEvent);
-                        p.buffer->endRenderPass(cmd);
+                        p.render->endRenderPass();
                         p.render->setClipRectEnabled(false);
                         p.render->end();
                     }

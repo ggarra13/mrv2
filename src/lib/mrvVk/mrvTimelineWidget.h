@@ -137,6 +137,8 @@ namespace mrv
 
             void continuePlaying();
 
+            void init_colorspace();
+            
         protected:
             const float pixelRatio() const;
 
