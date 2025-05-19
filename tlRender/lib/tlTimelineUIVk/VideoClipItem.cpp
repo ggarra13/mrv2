@@ -303,19 +303,17 @@ namespace tl
 
                                 event.render->createRenderPass(false, false);
 
-#if 1
+#if 0
                                 static float v = 0.1F;
                                 event.render->beginRenderPass();  // will get called by drawVideo
                                 event.render->drawRect(box, image::Color4f(v, v, v));
                                 v += 0.1F;
                                 if (v > 1.F) v = 0.1F;
 #else
-                                auto image = videoData.layers[0].image;
-                                uint8_t* data = (uint8_t*)image->getData();
                                 event.render->createBindingSet("display");
                                 event.render->drawVideo({videoData}, {box});
                                 event.render->beginRenderPass();
-                                std::cerr << "__RENDERED VIDEO__ " << (int)(data[0]) << std::endl;
+                                std::cerr << "__RENDERED VIDEO__ " << std::endl;
 #endif
                             }
                         }

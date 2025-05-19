@@ -1177,7 +1177,8 @@ namespace tl
                 fbo->beginRenderPass(p.cmd);
 
                 // We must NOT call this here.
-                // p.shaders["display"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
+                p.shaders["display"]->setUniform("transform.mvp", oldTransform, vlk::kShaderVertex);
+
                 p.shaders["display"]->setFBO("textureSampler", p.buffers["video"]);
 
                 UBOLevels uboLevels;

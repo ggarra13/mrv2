@@ -298,6 +298,7 @@ namespace tl
                 std::shared_ptr<vlk::OffscreenBuffer> buffer;
                 memory::LRUCache<std::string, std::shared_ptr<io::IRead> >
                     ioCache;
+                VkCommandPool commandPool = VK_NULL_HANDLE;
                 std::condition_variable cv;
                 std::thread thread;
                 std::atomic<bool> running;
@@ -351,7 +352,7 @@ namespace tl
                         
                     while (p.thumbnailThread.running)
                     {
-                        if (ctx.commandPool == VK_NULL_HANDLE)
+                        if (ctx.queue == VK_NULL_HANDLE)
                             continue;
 
                         if (!p.thumbnailThread.render)
@@ -360,6 +361,16 @@ namespace tl
                             {
                                 p.thumbnailThread.render =
                                     timeline_vlk::Render::create(ctx, context);
+
+                                VkDevice device = ctx.device;
+                                
+                                // Create command pool
+                                VkCommandPoolCreateInfo cmd_pool_info = {};
+                                cmd_pool_info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+                                cmd_pool_info.queueFamilyIndex = ctx.queueFamilyIndex;
+                                cmd_pool_info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+                                vkCreateCommandPool(device, &cmd_pool_info, nullptr,
+                                                    &p.thumbnailThread.commandPool);
                             }
                         }
                     
@@ -740,59 +751,53 @@ namespace tl
                                 if (p.thumbnailThread.render &&
                                     p.thumbnailThread.buffer && videoData.image)
                                 {
-                                    VkDevice device = ctx.device;
-                                    VkCommandPool commandPool = ctx.commandPool;
-                                    VkQueue queue = ctx.queue;
-                                    std::mutex& queue_mutex = ctx.queue_mutex;
+                                        
                                     
                                     image = image::Image::create(
                                         size.w, size.h,
                                         image::PixelType::RGBA_U8);
 
-#if 1
-                                    std::cerr << "____________BEGIN CMD________________" << std::endl;
-                                    VkCommandBuffer cmd = beginSingleTimeCommands(ctx.device, ctx.commandPool);
+                                    VkDevice& device = ctx.device;
+                                    VkCommandPool& commandPool = p.thumbnailThread.commandPool;
+
+                                    VkCommandBuffer cmd = beginSingleTimeCommands(device, commandPool);
                                     
-                                    std::cerr << "____________BEGAN CMD " << cmd << " ________________" << std::endl;
                                     p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
                                     
                                     timeline::RenderOptions renderOptions;
                                     renderOptions.clear = false;
-                                    std::cerr << "____________CALL RENDER BEGIN________________" << std::endl;
                                     p.thumbnailThread.render->begin(cmd, p.thumbnailThread.buffer,
                                                                     p.thumbnailThread.frameIndex, size,
                                                                     renderOptions);
+
+                                    // Use a reverse matrix like OpenGL
                                     const math::Matrix4x4f ortho = math::ortho(
                                         0.F, static_cast<float>(size.w),
                                         static_cast<float>(size.h), 0.F,
                                         -1.F, 1.F);
                                     p.thumbnailThread.render->setTransform(ortho);
-                                    std::cerr << "____________DRAW IMAGE________________" << std::endl;
+  
                                     p.thumbnailThread.render->drawImage(
                                         p.thumbnailThread.buffer,
                                         videoData.image,
                                         {math::Box2i(0, 0, size.w, size.h)});
-                                    std::cerr << "____________DREW IMAGE________________" << std::endl;
-                                    p.thumbnailThread.render->end();
-                                    std::cerr << "____________END  IMAGE________________" << std::endl;
 
-                                    std::cerr << "transition to color attachment" << std::endl;
+                                    p.thumbnailThread.render->end();
+
                                     p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
                                     
-                                    std::cerr << "____________READ PIXELS________________" << std::endl;
                                     p.thumbnailThread.buffer->readPixels(cmd, 0, 0, size.w,
                                                                          size.h);
                                     
                                     vkEndCommandBuffer(cmd);
                 
-                                    std::cerr << "____________SUBMIT READBACK________________" << std::endl;
                                     p.thumbnailThread.buffer->submitReadback(cmd);
 
                                     {
-                                        std::lock_guard<std::mutex> lock(queue_mutex);
+                                        std::lock_guard<std::mutex> lock(ctx.queue_mutex);
+                                        VkQueue& queue = ctx.queue;
                                         VkResult result = vkQueueWaitIdle(queue);
                                     }
-                                    std::cerr << "____________WAITED QUEUE________________" << std::endl;
                                     
                                     vkFreeCommandBuffers(device, commandPool, 1, &cmd);
 
@@ -800,21 +805,12 @@ namespace tl
                                     void* imageData = p.thumbnailThread.buffer->getLatestReadPixels();
                                     if (imageData)
                                     {
-                                        std::cerr << "____________GOT IMAGE________________" << std::endl;
                                         std::memcpy(image->getData(), imageData,
                                                     image->getDataByteCount());
                                         
-                                        std::cerr << "____________COPIED IMAGE________________" << std::endl;
-                                    }
-                                    else
-                                    {
-                                        std::cerr << "__IMAGE FAILED__" << std::endl;
                                     }
 
                                     p.thumbnailThread.frameIndex = (p.thumbnailThread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
-#else
-                                    std::memset(image->getData(), 255, image->getDataByteCount());
-#endif
                                 }
                             }
                             else if (
@@ -863,24 +859,75 @@ namespace tl
                                     if (p.thumbnailThread.render &&
                                         p.thumbnailThread.buffer)
                                     {
-                                        VkCommandBuffer cmd = beginSingleTimeCommands(ctx.device, ctx.commandPool);
+                                        image = image::Image::create(
+                                            size.w, size.h,
+                                            image::PixelType::RGBA_U8);
+                                        
+                                        VkDevice& device = ctx.device;
+                                        VkCommandPool& commandPool = p.thumbnailThread.commandPool;
+                                    
+                                        VkCommandBuffer cmd = beginSingleTimeCommands(device,
+                                                                                      commandPool);
+
+                                        p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
+                                    
+                                        timeline::RenderOptions renderOptions;
+                                        renderOptions.clear = false;
                                         p.thumbnailThread.render->begin(cmd,
                                                                         p.thumbnailThread.buffer,
-                                                                        0, size);
+                                                                        p.thumbnailThread.frameIndex,
+                                                                        size, renderOptions);
+
+                                        const math::Matrix4x4f ortho = math::ortho(
+                                            0.F, static_cast<float>(size.w),
+                                            static_cast<float>(size.h), 0.F,
+                                            -1.F, 1.F);
+                                        p.thumbnailThread.render->setTransform(ortho);
+                                    
+                                        // p.thumbnailThread.render->drawImage(
+                                        //     p.thumbnailThread.buffer,
+                                        //     videoData.layers[0].image,
+                                        //     {math::Box2i(
+                                        //         0, 0, size.w, size.h)});
                                         p.thumbnailThread.render->drawVideo(
                                             {videoData},
                                             {math::Box2i(
                                                 0, 0, size.w, size.h)});
                                         p.thumbnailThread.render->end();
-                                        endSingleTimeCommands(cmd, ctx.device, ctx.commandPool,
-                                                              ctx.queue);
-                                        image = image::Image::create(
-                                            size.w, size.h,
-                                            image::PixelType::RGBA_U8);
                                         // glPixelStorei(GL_PACK_ALIGNMENT, 1);
                                         // glReadPixels(
                                         //     0, 0, size.w, size.h, GL_RGBA,
                                         //     GL_UNSIGNED_BYTE, image->getData());
+                                        p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
+                                    
+                                        p.thumbnailThread.buffer->readPixels(cmd, 0, 0, size.w,
+                                                                             size.h);
+                                    
+                                        vkEndCommandBuffer(cmd);
+                
+                                        p.thumbnailThread.buffer->submitReadback(cmd);
+
+                                        {
+                                            std::lock_guard<std::mutex> lock(ctx.queue_mutex);
+                                            VkQueue& queue = ctx.queue;
+                                            VkResult result = vkQueueWaitIdle(queue);
+                                        }
+                                    
+                                        vkFreeCommandBuffers(device, commandPool, 1, &cmd);
+
+                                    
+                                        void* imageData = p.thumbnailThread.buffer->getLatestReadPixels();
+                                        if (imageData)
+                                        {
+                                            std::memcpy(image->getData(), imageData,
+                                                        image->getDataByteCount());
+                                        }
+                                        else
+                                        {
+                                            std::cerr << "no thumbnail" << std::endl;
+                                        }
+
+                                        p.thumbnailThread.frameIndex = (p.thumbnailThread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
                                     }
                                 }
                             }
