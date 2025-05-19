@@ -902,7 +902,8 @@ void main()
                         offscreenBufferOptions.colorType =
                             image::PixelType::RGBA_U8;
                         offscreenBufferOptions.clear = true;
-                        offscreenBufferOptions.clearColor = p.style->getColorRole(ui::ColorRole::Window);
+                        offscreenBufferOptions.clearColor =
+                            p.style->getColorRole(ui::ColorRole::Window);
                         if (vlk::doCreate(
                                 p.buffer, renderSize, offscreenBufferOptions))
                         {
@@ -919,12 +920,12 @@ void main()
 
                     if (p.render && p.buffer)
                     {
+                        std::cerr << "Timeline buffer=" << p.buffer << std::endl;
+                
                         p.buffer->transitionToColorAttachment(cmd);
                         
                         timeline::RenderOptions renderOptions;
-                        renderOptions.clear = true;
-                        renderOptions.clearColor =
-                            p.style->getColorRole(ui::ColorRole::Window);
+                        renderOptions.clear = false;
                         
                         p.render->begin(
                             cmd, p.buffer, m_currentFrameIndex, renderSize,
@@ -939,6 +940,9 @@ void main()
                         ui::DrawEvent drawEvent(
                             p.style, p.iconLibrary, p.render, p.fontSystem);
                         p.render->setClipRectEnabled(true);
+                        // p.render->endRenderPass();
+                        // p.render->createRenderPass(false, true);
+                        // p.render->setRenderPass(p.buffer->getRenderPass());
                         p.buffer->beginRenderPass(cmd);
                         _drawEvent(
                             p.timelineWindow, math::Box2i(renderSize),

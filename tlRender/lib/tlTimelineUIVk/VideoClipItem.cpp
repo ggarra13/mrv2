@@ -298,7 +298,10 @@ namespace tl
                                 videoData.size = i->second->getSize();
                                 std::cerr << "__RENDER VIDEO__ " << box << std::endl;
                                 videoData.layers.push_back({i->second});
-                                event.render->setupViewportAndScissor();
+                                // event.render->setupViewportAndScissor();
+                                event.render->endRenderPass();
+                                event.render->beginRenderPass();
+                                event.render->createRenderPass(false, false);
                                 event.render->drawVideo({videoData}, {box});
                                 std::cerr << "__RENDERED VIDEO__" << std::endl;
                             }

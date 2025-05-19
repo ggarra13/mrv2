@@ -601,6 +601,10 @@ namespace tl
             colorAttachment.finalLayout =
                 VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
+            std::cerr << this << " has loadOp LOAD? "
+                      << (colorAttachment.loadOp == VK_ATTACHMENT_LOAD_OP_LOAD)
+                      << std::endl;
+
             VkAttachmentReference colorRef{};
             colorRef.attachment = 0;
             colorRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
@@ -770,8 +774,6 @@ namespace tl
                 return;
             }
             
-            std::cerr << "BEGIN render pass for " << this << std::endl;
-            
             std::vector<VkClearValue> clearValues;
             VkClearValue colorClear = {};
             const image::Color4f& color = p.options.clearColor;
@@ -813,7 +815,6 @@ namespace tl
                 std::cerr << "not in render pass for " << this << std::endl;
                 return;
             }
-            std::cerr << "END render pass for " << this << std::endl;
             
             vkCmdEndRenderPass(cmd);
 

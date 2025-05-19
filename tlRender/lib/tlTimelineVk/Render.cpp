@@ -690,6 +690,14 @@ namespace tl
                 {
                     vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
                 }
+                for (auto& framebuffer : g.framebuffers)
+                {
+                    vkDestroyFramebuffer(device, framebuffer, nullptr);
+                }
+                for (auto& renderPass : g.renderPasses)
+                {
+                    vkDestroyRenderPass(device, renderPass, nullptr);
+                }
             }
         }
 
@@ -747,6 +755,14 @@ namespace tl
             for (auto& pipelineLayout : g.pipelineLayouts)
             {
                 vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
+            }
+            for (auto& framebuffer : g.framebuffers)
+            {
+                vkDestroyFramebuffer(device, framebuffer, nullptr);
+            }
+            for (auto& renderPass : g.renderPasses)
+            {
+                vkDestroyRenderPass(device, renderPass, nullptr);
             }
             g.pipelines.clear();
             g.pipelineLayouts.clear();
@@ -1163,6 +1179,20 @@ namespace tl
         {
             _p->viewport = value;
         }
+        
+        void Render::createRenderPass(bool clearColor, bool clearDepth)
+        {
+            TLRENDER_P();
+
+            std::cerr << p.fbo << " create new render pass clearColor=" << clearColor << std::endl;
+            p.garbage[p.frameIndex].framebuffers.push_back(p.fbo->getFramebuffer());
+            p.garbage[p.frameIndex].renderPasses.push_back(p.fbo->getRenderPass());
+            
+            p.fbo->createRenderPass(clearColor, clearDepth);
+            p.fbo->createFramebuffer();
+
+            setRenderPass(p.fbo->getRenderPass());
+        }
 
         void Render::beginRenderPass()
         {
@@ -1209,6 +1239,8 @@ namespace tl
             // buffer
             vkCmdBeginRenderPass(p.cmd, &rpBegin, VK_SUBPASS_CONTENTS_INLINE);
             vkCmdEndRenderPass(p.cmd);
+
+            //createRenderPass(false, false);
         }
 
         bool Render::getClipRectEnabled() const

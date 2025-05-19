@@ -751,53 +751,56 @@ namespace tl
                                     
                                     timeline::RenderOptions renderOptions;
                                     renderOptions.clear = false;
-                                    p.thumbnailThread.render->begin(cmd, p.thumbnailThread.buffer,
-                                                                    p.thumbnailThread.frameIndex, size,
-                                                                    renderOptions);
-                                    std::cerr << "____________DRAW IMAGE________________" << std::endl;
-                                    p.thumbnailThread.render->drawImage(
-                                        p.thumbnailThread.buffer,
-                                        videoData.image,
-                                        {math::Box2i(0, 0, size.w, size.h)});
-                                    std::cerr << "____________DREW IMAGE________________" << std::endl;
-                                    p.thumbnailThread.render->end();
-                                    std::cerr << "____________END  IMAGE________________" << std::endl;
+                                    // p.thumbnailThread.render->begin(cmd, p.thumbnailThread.buffer,
+                                    //                                 p.thumbnailThread.frameIndex, size,
+                                    //                                 renderOptions);
+                                    // std::cerr << "____________DRAW IMAGE________________" << std::endl;
+                                    // p.thumbnailThread.render->drawImage(
+                                    //     p.thumbnailThread.buffer,
+                                    //     videoData.image,
+                                    //     {math::Box2i(0, 0, size.w, size.h)});
+                                    // std::cerr << "____________DREW IMAGE________________" << std::endl;
+                                    // p.thumbnailThread.render->end();
+                                    // std::cerr << "____________END  IMAGE________________" << std::endl;
                                     image = image::Image::create(
                                         size.w, size.h,
                                         image::PixelType::RGBA_U8);
 
-                                    std::cerr << "transition to color attachment" << std::endl;
-                                    p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
+                                    // std::cerr << "transition to color attachment" << std::endl;
+                                    // p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
                                     
-                                    std::cerr << "____________READ PIXELS________________" << std::endl;
-                                    p.thumbnailThread.buffer->readPixels(cmd, 0, 0, size.w,
-                                                                         size.h);
+                                    // std::cerr << "____________READ PIXELS________________" << std::endl;
+                                    // p.thumbnailThread.buffer->readPixels(cmd, 0, 0, size.w,
+                                    //                                      size.h);
                                     
-                                    vkEndCommandBuffer(cmd);
+                                    // vkEndCommandBuffer(cmd);
                 
-                                    std::cerr << "____________SUBMIT READBACK________________" << std::endl;
-                                    p.thumbnailThread.buffer->submitReadback(cmd);
+                                    // std::cerr << "____________SUBMIT READBACK________________" << std::endl;
+                                    // p.thumbnailThread.buffer->submitReadback(cmd);
 
-                                    {
-                                        std::lock_guard<std::mutex> lock(queue_mutex);
-                                        VkResult result = vkQueueWaitIdle(queue);
-                                    }
-                                    std::cerr << "____________WAITED QUEUE________________" << std::endl;
+                                    // {
+                                    //     std::lock_guard<std::mutex> lock(queue_mutex);
+                                    //     VkResult result = vkQueueWaitIdle(queue);
+                                    // }
+                                    // std::cerr << "____________WAITED QUEUE________________" << std::endl;
                                     
-                                    vkFreeCommandBuffers(device, commandPool, 1, &cmd);
+                                    // vkFreeCommandBuffers(device, commandPool, 1, &cmd);
 
-                                    void* imageData = p.thumbnailThread.buffer->getLatestReadPixels();
-                                    if (imageData)
-                                    {
-                                        std::cerr << "____________GOT IMAGE________________" << std::endl;
-                                        std::memcpy(image->getData(), imageData,
-                                                    image->getDataByteCount());
-                                        std::cerr << "____________COPIED IMAGE________________" << std::endl;
-                                    }
-                                    else
-                                    {
-                                        std::cerr << "__IMAGE FAILED__" << std::endl;
-                                    }
+                                    std::memset(image->getData(), 255, image->getDataByteCount());
+                                    
+                                    // void* imageData = p.thumbnailThread.buffer->getLatestReadPixels();
+                                    // if (imageData)
+                                    // {
+                                    //     std::cerr << "____________GOT IMAGE________________" << std::endl;
+                                    //     // std::memcpy(image->getData(), imageData,
+                                    //     //             image->getDataByteCount());
+                                        
+                                    //     std::cerr << "____________COPIED IMAGE________________" << std::endl;
+                                    // }
+                                    // else
+                                    // {
+                                    //     std::cerr << "__IMAGE FAILED__" << std::endl;
+                                    // }
 
                                     p.thumbnailThread.frameIndex = (p.thumbnailThread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
                                 }

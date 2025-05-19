@@ -203,7 +203,8 @@ namespace tl
                 const timeline::BackgroundOptions& =
                     timeline::BackgroundOptions()) override;
             void drawMask(float pct = 0.F);
-
+            
+            void createRenderPass(bool clearColor, bool clearDepth) override;
             void beginRenderPass() override;
             void endRenderPass() override;
             

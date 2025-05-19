@@ -161,6 +161,8 @@ namespace tl
                 std::vector<std::shared_ptr<vlk::ShaderBindingSet> > bindingSets;
                 // \@todo: check if shaders is needed in garbage.
                 std::vector<std::shared_ptr<vlk::Shader> > shaders;
+                std::vector<VkRenderPass> renderPasses;
+                std::vector<VkFramebuffer> framebuffers;
             };
             std::array<FrameGarbage, vlk::MAX_FRAMES_IN_FLIGHT> garbage;
 

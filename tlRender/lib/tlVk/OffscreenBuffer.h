@@ -195,6 +195,13 @@ namespace tl
             //! Apply internal viewport and scissor to command buffer.
             void setupViewportAndScissor(VkCommandBuffer cmd);
 
+            //! Render Pass functionality.
+            void createRenderPass(const bool clearColor,
+                                  const bool clearDepth);
+            
+            //! Create a framebuffer for the current render pass.
+            void createFramebuffer();
+            
             //! Read-back PBO like functionality.
             void createStagingBuffers();
             void readPixels(VkCommandBuffer cmd,
@@ -212,9 +219,6 @@ namespace tl
             void createImageView();
             void createDepthImage();
             void createDepthImageView();
-            void createRenderPass(const bool clearColor,
-                                  const bool clearDepth);
-            void createFramebuffer();
             void createSampler();
 
             uint32_t findMemoryType(
