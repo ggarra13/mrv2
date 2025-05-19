@@ -705,7 +705,6 @@ namespace mrv
             {
                 vk.buffer->transitionToColorAttachment(cmd);
 
-                std::cerr << "Viewport buffer=" << vk.buffer << std::endl;
                 vk.render->begin(
                     cmd, vk.buffer, m_currentFrameIndex, renderSize,
                     renderOptions);

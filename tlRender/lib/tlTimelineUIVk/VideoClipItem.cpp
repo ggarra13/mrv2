@@ -301,6 +301,7 @@ namespace tl
 
                                 event.render->createRenderPass(false, false);
 
+
                                 event.render->createBindingSet("display");
                                 event.render->drawVideo({videoData}, {box});
                                 

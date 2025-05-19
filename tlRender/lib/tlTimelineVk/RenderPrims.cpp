@@ -688,7 +688,7 @@ namespace tl
             if (p.vbos["image"])
             {
                 p.vbos["image"]->copy(
-                    convert(geom::box(box), p.vbos["image"]->getType()));
+                    convert(geom::box(box, true), p.vbos["image"]->getType()));
             }
 
             //

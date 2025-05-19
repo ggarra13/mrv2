@@ -1191,7 +1191,6 @@ namespace tl
         {
             TLRENDER_P();
 
-            std::cerr << p.fbo << " create new render pass clearColor=" << clearColor << std::endl;
             p.garbage[p.frameIndex].framebuffers.push_back(p.fbo->getFramebuffer());
             p.garbage[p.frameIndex].renderPasses.push_back(p.fbo->getRenderPass());
             

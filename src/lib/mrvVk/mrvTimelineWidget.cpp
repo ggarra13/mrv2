@@ -920,8 +920,6 @@ void main()
 
                     if (p.render && p.buffer)
                     {
-                        std::cerr << "Timeline buffer=" << p.buffer << std::endl;
-                
                         p.buffer->transitionToColorAttachment(cmd);
                         
                         timeline::RenderOptions renderOptions;

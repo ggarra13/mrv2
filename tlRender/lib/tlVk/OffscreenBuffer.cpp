@@ -147,7 +147,6 @@ namespace tl
         struct OffscreenBuffer::Private
         {
             uint32_t frameIndex = 0;
-            bool in_render_pass = false;
 
             math::Size2i size;
             OffscreenBufferOptions options;
@@ -601,10 +600,6 @@ namespace tl
             colorAttachment.finalLayout =
                 VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
-            std::cerr << this << " has loadOp LOAD? "
-                      << (colorAttachment.loadOp == VK_ATTACHMENT_LOAD_OP_LOAD)
-                      << std::endl;
-
             VkAttachmentReference colorRef{};
             colorRef.attachment = 0;
             colorRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
@@ -807,12 +802,6 @@ namespace tl
         {
             TLRENDER_P();
             
-            if (p.in_render_pass)
-            {
-                std::cerr << "in render pass for " << this << std::endl;
-                return;
-            }
-            
             std::vector<VkClearValue> clearValues;
             VkClearValue colorClear = {};
             const image::Color4f& color = p.options.clearColor;
@@ -841,23 +830,13 @@ namespace tl
             vkCmdBeginRenderPass(cmd, &beginInfo, contents);
 
             setupViewportAndScissor(cmd);
-            
-            p.in_render_pass = true;
         }
 
         void OffscreenBuffer::endRenderPass(VkCommandBuffer cmd)
         {
             TLRENDER_P();
             
-            if (!p.in_render_pass)
-            {
-                std::cerr << "not in render pass for " << this << std::endl;
-                return;
-            }
-            
             vkCmdEndRenderPass(cmd);
-
-            p.in_render_pass = false;
         }
 
         void OffscreenBuffer::setupViewportAndScissor(VkCommandBuffer cmd)
