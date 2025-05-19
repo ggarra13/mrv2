@@ -2863,7 +2863,11 @@ namespace mrv
     }
 
     int calculate_edit_viewport_size(ViewerUI* ui)
-    { //
+    {
+        if (!ui->uiTimeline->visible_r())
+            return kMinEditModeH;
+        
+       //
 #ifdef OPENGL_BACKEND
         const timelineui::DisplayOptions& displayOptions =
             ui->uiTimeline->getDisplayOptions();

@@ -205,6 +205,7 @@ namespace mrv
 
             void _deleteThumbnails();
             void _thumbnailsUpdate();
+            void _createTimelineWidget();
 
             TLRENDER_PRIVATE();
         };

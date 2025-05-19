@@ -277,35 +277,26 @@ namespace mrv
                 _createThumbnailWindow();
             }
 
-            auto settings = ui->app->settings();
 
             p.style = ui::Style::create(context);
             p.iconLibrary = ui::IconLibrary::create(context);
             p.fontSystem = image::FontSystem::create(context);
             p.clipboard = Clipboard::create(context);
 
-            p.timelineWidget =
-                timelineui_vk::TimelineWidget::create(timeUnitsModel, ctx,
-                                                      context);
-            p.timelineWidget->setEditable(false);
-            p.timelineWidget->setFrameView(true);
-            p.timelineWidget->setScrollBarsVisible(false);
-            p.timelineWidget->setMoveCallback(
-                std::bind(
-                    &mrv::vulkan::TimelineWidget::moveCallback, this,
-                    std::placeholders::_1));
-
+            p.timelineWindow = TimelineWindow::create(context);
+            p.timelineWindow->setClipboard(p.clipboard);
+            
+            _createTimelineWidget();
+            
+            auto settings = ui->app->settings();
+            
             timelineui_vk::DisplayOptions displayOptions;
             displayOptions.trackInfo =
                 settings->getValue<bool>("Timeline/TrackInfo");
             displayOptions.clipInfo =
                 settings->getValue<bool>("Timeline/ClipInfo");
             p.timelineWidget->setDisplayOptions(displayOptions);
-
-            p.timelineWindow = TimelineWindow::create(context);
-            p.timelineWindow->setClipboard(p.clipboard);
-            p.timelineWidget->setParent(p.timelineWindow);
-
+                
             p.thumbnailSystem = context->getSystem<timelineui_vk::ThumbnailSystem>();
 
             setStopOnScrub(false);
@@ -757,6 +748,11 @@ void main()
                         p.shader->addPush("opacity", 1.0, vlk::kShaderFragment);
                         auto bindingSet = p.shader->createBindingSet();
                         p.shader->useBindingSet(bindingSet);
+                    }
+
+                    if (!p.timelineWidget)
+                    {
+                        _createTimelineWidget();
                     }
                 }
                 catch (const std::exception& e)
@@ -2091,6 +2087,28 @@ void main()
             }
         }
 
+        void TimelineWidget::_createTimelineWidget()
+        {
+            TLRENDER_P();
+            
+            auto timeUnitsModel = p.ui->app->timeUnitsModel();
+            if (auto context = p.context.lock())
+            {
+                p.timelineWidget =
+                    timelineui_vk::TimelineWidget::create(timeUnitsModel, ctx,
+                                                          context);
+                p.timelineWidget->setEditable(false);
+                p.timelineWidget->setFrameView(true);
+                p.timelineWidget->setScrollBarsVisible(false);
+                p.timelineWidget->setMoveCallback(
+                    std::bind(
+                        &mrv::vulkan::TimelineWidget::moveCallback, this,
+                        std::placeholders::_1));
+
+                p.timelineWidget->setParent(p.timelineWindow);
+            }
+        }
+        
     } // namespace vulkan
 
 } // namespace mrv
