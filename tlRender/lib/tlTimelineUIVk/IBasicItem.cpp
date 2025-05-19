@@ -164,7 +164,7 @@ namespace tl
         {
             IItem::drawEvent(drawRect, event);
             TLRENDER_P();
-
+            
             const math::Box2i& g = _geometry;
             ui::ColorRole colorRole = getSelectRole();
             if (colorRole != ui::ColorRole::kNone)
@@ -304,6 +304,7 @@ namespace tl
                 event.render->drawText(textInfo, math::Vector2i(),
                                        event.style->getColorRole(ui::ColorRole::Text));
             }
+            
         }
 
         int IBasicItem::_getMargin() const

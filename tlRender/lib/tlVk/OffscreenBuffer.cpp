@@ -147,6 +147,7 @@ namespace tl
         struct OffscreenBuffer::Private
         {
             uint32_t frameIndex = 0;
+            bool in_render_pass = false;
 
             math::Size2i size;
             OffscreenBufferOptions options;
@@ -763,6 +764,14 @@ namespace tl
         {
             TLRENDER_P();
             
+            if (p.in_render_pass)
+            {
+                std::cerr << "in render pass for " << this << std::endl;
+                return;
+            }
+            
+            std::cerr << "BEGIN render pass for " << this << std::endl;
+            
             std::vector<VkClearValue> clearValues;
             VkClearValue colorClear = {};
             const image::Color4f& color = p.options.clearColor;
@@ -789,11 +798,26 @@ namespace tl
             beginInfo.pClearValues = clearValues.data();
 
             vkCmdBeginRenderPass(cmd, &beginInfo, contents);
+
+            setupViewportAndScissor(cmd);
+            
+            p.in_render_pass = true;
         }
 
         void OffscreenBuffer::endRenderPass(VkCommandBuffer cmd)
         {
+            TLRENDER_P();
+            
+            if (!p.in_render_pass)
+            {
+                std::cerr << "not in render pass for " << this << std::endl;
+                return;
+            }
+            std::cerr << "END render pass for " << this << std::endl;
+            
             vkCmdEndRenderPass(cmd);
+
+            p.in_render_pass = false;
         }
 
         void OffscreenBuffer::setupViewportAndScissor(VkCommandBuffer cmd)

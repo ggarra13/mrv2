@@ -212,6 +212,7 @@ namespace tl
             const math::Box2i& drawRect, const ui::DrawEvent& event)
         {
             IBasicItem::drawEvent(drawRect, event);
+            
             if (_displayOptions.thumbnails)
             {
                 _drawThumbnails(drawRect, event);
@@ -295,8 +296,11 @@ namespace tl
                             {
                                 timeline::VideoData videoData;
                                 videoData.size = i->second->getSize();
+                                std::cerr << "__RENDER VIDEO__ " << box << std::endl;
                                 videoData.layers.push_back({i->second});
+                                event.render->setupViewportAndScissor();
                                 event.render->drawVideo({videoData}, {box});
+                                std::cerr << "__RENDERED VIDEO__" << std::endl;
                             }
                         }
                         else if (p.ioInfo && !p.ioInfo->video.empty())

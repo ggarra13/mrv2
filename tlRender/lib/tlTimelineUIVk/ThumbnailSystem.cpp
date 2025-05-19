@@ -301,6 +301,7 @@ namespace tl
                 std::condition_variable cv;
                 std::thread thread;
                 std::atomic<bool> running;
+                uint32_t frameIndex = 0;
             };
             ThumbnailThread thumbnailThread;
 
@@ -362,7 +363,7 @@ namespace tl
                             }
                         }
                     
-                        // _thumbnailRun();
+                        _thumbnailRun();
                     }
                     {
                         std::unique_lock<std::mutex> lock(
@@ -709,6 +710,7 @@ namespace tl
                             }
                             if (read)
                             {
+                
                                 const io::Info info = read->getInfo().get();
                                 math::Size2i size;
                                 if (!info.video.empty())
@@ -719,6 +721,7 @@ namespace tl
                                 }
                                 vlk::OffscreenBufferOptions options;
                                 options.colorType = image::PixelType::RGBA_U8;
+                                options.pbo = true;
                                 if (vlk::doCreate(
                                         p.thumbnailThread.buffer, size,
                                         options))
@@ -737,24 +740,66 @@ namespace tl
                                 if (p.thumbnailThread.render &&
                                     p.thumbnailThread.buffer && videoData.image)
                                 {
+                                    VkDevice device = ctx.device;
+                                    VkCommandPool commandPool = ctx.commandPool;
+                                    VkQueue queue = ctx.queue;
+                                    std::mutex& queue_mutex = ctx.queue_mutex;
+                                    
                                     VkCommandBuffer cmd = beginSingleTimeCommands(ctx.device, ctx.commandPool);
+                                    
+                                    p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
+                                    
+                                    timeline::RenderOptions renderOptions;
+                                    renderOptions.clear = false;
                                     p.thumbnailThread.render->begin(cmd, p.thumbnailThread.buffer,
-                                                                    0, size);
+                                                                    p.thumbnailThread.frameIndex, size,
+                                                                    renderOptions);
+                                    std::cerr << "____________DRAW IMAGE________________" << std::endl;
                                     p.thumbnailThread.render->drawImage(
+                                        p.thumbnailThread.buffer,
                                         videoData.image,
                                         {math::Box2i(0, 0, size.w, size.h)});
+                                    std::cerr << "____________DREW IMAGE________________" << std::endl;
                                     p.thumbnailThread.render->end();
+                                    std::cerr << "____________END  IMAGE________________" << std::endl;
                                     image = image::Image::create(
                                         size.w, size.h,
                                         image::PixelType::RGBA_U8);
-                                    endSingleTimeCommands(cmd, ctx.device,
-                                                          ctx.commandPool,
-                                                          ctx.queue);
+
+                                    std::cerr << "transition to color attachment" << std::endl;
+                                    p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
                                     
-                                    // glPixelStorei(GL_PACK_ALIGNMENT, 1);
-                                    // glReadPixels(
-                                    //     0, 0, size.w, size.h, GL_RGBA,
-                                    //     GL_UNSIGNED_BYTE, image->getData());
+                                    std::cerr << "____________READ PIXELS________________" << std::endl;
+                                    p.thumbnailThread.buffer->readPixels(cmd, 0, 0, size.w,
+                                                                         size.h);
+                                    
+                                    vkEndCommandBuffer(cmd);
+                
+                                    std::cerr << "____________SUBMIT READBACK________________" << std::endl;
+                                    p.thumbnailThread.buffer->submitReadback(cmd);
+
+                                    {
+                                        std::lock_guard<std::mutex> lock(queue_mutex);
+                                        VkResult result = vkQueueWaitIdle(queue);
+                                    }
+                                    std::cerr << "____________WAITED QUEUE________________" << std::endl;
+                                    
+                                    vkFreeCommandBuffers(device, commandPool, 1, &cmd);
+
+                                    void* imageData = p.thumbnailThread.buffer->getLatestReadPixels();
+                                    if (imageData)
+                                    {
+                                        std::cerr << "____________GOT IMAGE________________" << std::endl;
+                                        std::memcpy(image->getData(), imageData,
+                                                    image->getDataByteCount());
+                                        std::cerr << "____________COPIED IMAGE________________" << std::endl;
+                                    }
+                                    else
+                                    {
+                                        std::cerr << "__IMAGE FAILED__" << std::endl;
+                                    }
+
+                                    p.thumbnailThread.frameIndex = (p.thumbnailThread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
                                 }
                             }
                             else if (
@@ -791,6 +836,7 @@ namespace tl
                                     vlk::OffscreenBufferOptions options;
                                     options.colorType =
                                         image::PixelType::RGBA_U8;
+                                    options.pbo = true;
                                     if (vlk::doCreate(
                                             p.thumbnailThread.buffer, size,
                                             options))

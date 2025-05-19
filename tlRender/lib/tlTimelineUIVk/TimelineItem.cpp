@@ -409,7 +409,7 @@ namespace tl
         {
             IItem::drawOverlayEvent(drawRect, event);
             TLRENDER_P();
-
+            
             const math::Box2i& g = _geometry;
 
             int y = p.size.scrollPos.y + g.min.y;
@@ -440,7 +440,7 @@ namespace tl
                 const auto& dt = p.mouse.dropTargets[p.mouse.currentDropTarget];
                 event.render->drawRect(
                     dt.draw, event.style->getColorRole(ui::ColorRole::Green));
-            }
+            }            
         }
 
         void TimelineItem::mouseMoveEvent(ui::MouseMoveEvent& event)

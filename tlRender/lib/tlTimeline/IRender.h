@@ -144,6 +144,10 @@ namespace tl
                 const CompareOptions& = CompareOptions(),
                 const BackgroundOptions& = BackgroundOptions()) = 0;
 
+            virtual void beginRenderPass() {};
+            virtual void endRenderPass() {};
+            virtual void setupViewportAndScissor() {};
+            
         protected:
             std::weak_ptr<system::Context> _context;
         };

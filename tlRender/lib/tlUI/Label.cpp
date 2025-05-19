@@ -190,6 +190,7 @@ namespace tl
                     math::Vector2i(pos.x, pos.y + p.size.fontMetrics.ascender));
                 pos.y += p.size.fontMetrics.lineHeight;
             }
+
             for (const auto& textInfo : textInfos)
             {
                 event.render->drawText(textInfo, math::Vector2i(),

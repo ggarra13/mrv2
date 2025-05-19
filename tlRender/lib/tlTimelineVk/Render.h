@@ -107,8 +107,6 @@ namespace tl
             void setRenderPass(VkRenderPass);
             math::Box2i getViewport() const override;
             void setViewport(const math::Box2i&) override;
-            void beginRenderPass();
-            void endRenderPass();
             void clearViewport(const image::Color4f&) override;
             bool getClipRectEnabled() const override;
             void setClipRectEnabled(bool) override;
@@ -121,6 +119,8 @@ namespace tl
             void setLUTOptions(const timeline::LUTOptions&) override;
             void setHDROptions(const timeline::HDROptions&) override;
 
+            void setupViewportAndScissor() override;
+            
             //! These functions draw to the internal FBO.
             void drawRect(const std::string& pipelineName,
                           const std::string& shaderName,
@@ -204,6 +204,9 @@ namespace tl
                     timeline::BackgroundOptions()) override;
             void drawMask(float pct = 0.F);
 
+            void beginRenderPass() override;
+            void endRenderPass() override;
+            
         private:
             void _displayShader();
 

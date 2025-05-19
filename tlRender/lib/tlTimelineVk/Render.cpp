@@ -748,19 +748,6 @@ namespace tl
             {
                 vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
             }
-            // These get reset as soon as their vector is cleared.
-            // for (auto& bindingSet : g.bindingSets)
-            // {
-            //     bindingSet.reset();
-            // }
-            // for (auto& shader : g.shaders)
-            // {
-            //     shader.reset();
-            // }
-            // for (auto& vao : g.vaos)
-            // {
-            //     vao.reset();
-            // }
             g.pipelines.clear();
             g.pipelineLayouts.clear();
             g.bindingSets.clear();
@@ -1190,6 +1177,13 @@ namespace tl
             TLRENDER_P();
             
             p.fbo->endRenderPass(p.cmd);
+        }
+        
+        void Render::setupViewportAndScissor()
+        {
+            TLRENDER_P();
+            
+            p.fbo->setupViewportAndScissor();
         }
         
         void Render::clearViewport(const image::Color4f& value)

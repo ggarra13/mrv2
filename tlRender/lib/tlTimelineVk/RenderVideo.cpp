@@ -173,10 +173,10 @@ namespace tl
                 int Y = renderSize.h * amountY;
                 math::Box2i box(0, 0, renderSize.w, Y);
                 p.fbo->beginRenderPass(p.cmd);
-                drawRect("Mask", "rect", "rect", box, color);
+                drawRect("Mask", "rect", "rect", box, color, false);
                 box.max.y = renderSize.h;
                 box.min.y = renderSize.h - Y;
-                drawRect("Mask", "rect", "rect", box, color);
+                drawRect("Mask", "rect", "rect", box, color, false);
                 p.fbo->endRenderPass(p.cmd);
             }
             else
@@ -184,10 +184,10 @@ namespace tl
                 int X = renderSize.w * amountX;
                 math::Box2i box(0, 0, X, renderSize.h);
                 p.fbo->beginRenderPass(p.cmd);
-                drawRect("Mask", "rect", "rect", box, color);
+                drawRect("Mask", "rect", "rect", box, color, false);
                 box.max.x = renderSize.w;
                 box.min.x = renderSize.w - X;
-                drawRect("Mask", "rect", "rect", box, color);
+                drawRect("Mask", "rect", "rect", box, color, false);
                 p.fbo->endRenderPass(p.cmd);
             }
             p.fbo->transitionToShaderRead(p.cmd);
