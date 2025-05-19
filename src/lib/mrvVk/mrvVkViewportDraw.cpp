@@ -761,7 +761,7 @@ namespace mrv
             const image::Color4f labelColor(r / 255.F, g / 255.F, b / 255.F, alpha);
             const math::Vector2i labelPos;
             
-            _drawText(textInfos, shadowPos, shadowColor, "HUDShadow");
+            _drawText(textInfos, shadowPos, shadowColor, "HUD");
             _drawText(textInfos, labelPos, labelColor, "HUD");
         }
         
@@ -932,6 +932,7 @@ namespace mrv
                         buf, 512, "DF: %" PRIu64 " FPS: %.2f/%.3f", p.droppedFrames,
                         fps, player->speed());
 
+                    std::cerr << buf << std::endl;
                     tmp += buf;
                     p.startTime = std::chrono::high_resolution_clock::now();
                 }
@@ -1152,13 +1153,11 @@ namespace mrv
             vk.render->drawRect(
                 box, image::Color4f(0.F, 0.F, 0.F, 0.7F * p.helpTextFade));
 
-            //_drawText(p.helpText, fontInfo, pos, lineHeight, labelColor);
+            std::vector<timeline::TextInfo> textInfos;
+            _appendText(textInfos, p.helpText, fontInfo, pos, lineHeight);
+            _drawText(textInfos, math::Vector2i(), labelColor, "Help");
 
             vk.render->end();
-        }
-
-        void Viewport::_createPBOs(const math::Size2i& renderSize)
-        {
         }
 
         void Viewport::_createOverlayPBO(const math::Size2i& renderSize)

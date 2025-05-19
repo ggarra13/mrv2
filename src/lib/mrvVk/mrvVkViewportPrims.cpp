@@ -29,7 +29,7 @@ namespace mrv
         void Viewport::_createCubicEnvironmentMap()
         {
             MRV2_VK();
-            const auto& mesh = createEnvCube(1);
+            const auto& mesh = createEnvCube(1, true);
             const size_t numTriangles = mesh.triangles.size();
             if (!vk.vbo || (vk.vbo && vk.vbo->getSize() != numTriangles * 3))
             {

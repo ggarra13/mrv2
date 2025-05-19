@@ -128,10 +128,8 @@ layout(push_constant) uniform PushConstants {
                  
 void main()
 {
-     outColor.r = pc.color.r;
-     outColor.g = pc.color.g;
-     outColor.b = pc.color.b;
-     outColor.a = pc.color.a * texture(textureSampler, fTexture).r;
+     float alpha = texture(textureSampler, fTexture).r;
+     outColor = vec4(pc.color.rgb * alpha, pc.color.a * alpha);
 })";
         }
 

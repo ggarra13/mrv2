@@ -934,7 +934,8 @@ void main()
                         renderOptions.clear = true;
                         renderOptions.clearColor =
                             p.style->getColorRole(ui::ColorRole::Window);
-                        
+
+                        // Clear color in new render pass.
                         p.buffer->createRenderPass(true, false);
                         p.render->begin(
                             cmd, p.buffer, m_currentFrameIndex, renderSize,
@@ -949,6 +950,8 @@ void main()
                         ui::DrawEvent drawEvent(
                             p.style, p.iconLibrary, p.render, p.fontSystem);
                         p.render->setClipRectEnabled(true);
+
+                        // Do not clear colors in new render passes
                         p.render->createRenderPass(false, false);
                         p.render->beginRenderPass();
                         _drawEvent(

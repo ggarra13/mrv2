@@ -382,6 +382,13 @@ namespace tl
             vlk::ColorBlendStateInfo cb;
             vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
             colorBlendAttachment.blendEnable = VK_TRUE;
+
+#if 1
+            colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
+            colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+            colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+            colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+#endif
             
             cb.attachments.push_back(colorBlendAttachment);
             
@@ -460,8 +467,9 @@ namespace tl
                         {
                             textureIndex = item.textureIndex;
 
-                            timeline::TextInfo textInfo(mesh, textureIndex);
-                            textInfos.push_back(textInfo);
+                            const timeline::TextInfo textInfo(mesh,
+                                                              textureIndex);
+                            textInfos.emplace_back(textInfo);
                             
                             mesh = geom::TriangleMesh2();
                             meshIndex = 0;
@@ -522,8 +530,8 @@ namespace tl
 
             if (!mesh.triangles.empty())
             {
-                timeline::TextInfo textInfo(mesh, textureIndex);
-                textInfos.push_back(textInfo);
+                const timeline::TextInfo textInfo(mesh, textureIndex);
+                textInfos.emplace_back(textInfo);
             }
         }
 

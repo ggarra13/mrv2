@@ -26,10 +26,9 @@ v1.3.8
 		 * Viewport
 		 * Pixel toolbar
 		 * Timeline with tick bars, current frame number and labels.
-		 * Timeline without thumbnails
 		 * OTIO with dissolves
 		 * OpenColorIO
-		 * HDR Passthru (for HDR).
+		 * HDR Toggle (for HDR).
 		 * HDR Tonemapping (for SDR).
 		 * HUD
 		 * Masking
@@ -45,29 +44,32 @@ v1.3.8
 			 - Horizontal
 			 - Vertical
 			 - Tile
-		 - Annotation cursor (circle)
-		 - Annotations
-		 - Vectorscope
-		 - Histogram
-		 - Color Areas (Area color information)
+		 * Annotation cursor (circle)
+		 * Annotations
+		 * Vectorscope
+		 * Histogram
+		 * Color Areas (Area color information)
+		 * Environment mapping
+		 * Thumbnails in Timeline (extremely slow and not clipped).
+		 * Thumbnails in Panels
+		 * Missing Frames crosses
 		 
 	 * Missing to check/add:
-		 - Missing Frames crosses
-		 - Environment mapping
-		 - Thumbnails in Timeline (crashes) / Editing
-		 - Thumbnails in Panels (done with OpenGL for now)
-		 - Saving of Movies/Pictures with Annotations
-		 - Temporary FLTK Text widget annotation (how to do it?)
+		 * Editing
+		 * Saving of Movies/Pictures with Annotations
+		 * Temporary FLTK Text widget annotation (how to do it?)
 			 - Will have to code an equivalent in Vulkan and do my own
 			   event handling.
-		 - Text annotations (how to do it?)
-		 - How to use any FLTK font for annotation (how to do it?)
-		 - OpenUSD in Vulkan (how to do it?)
+		 * Text annotations (how to do it?)
+		 * How to use any FLTK font for annotation (how to do it?)
+		 * OpenUSD in Vulkan (how to do it?)
 		 
 	 * Problems:
 		 - Performance of drawing text is an issue on Linux and Windows.
 		   It prevents mrv2 from reaching 60 fps at 4K (it reaches only
-		   40 fps or less).  macOS seems fine, thou.
+		   40 fps or less on most clips with Cache Information on).
+		   macOS seems fine albeit with other drawing issues.
+	 	 - Performance of the timeline with clips is an even worse problem.
 		   
 - Fixed and simplified code for NDIView (hdr utility).
 - Fixed hdr utility for macOS Intel trying to pass full HDR10 or HLG data, 
