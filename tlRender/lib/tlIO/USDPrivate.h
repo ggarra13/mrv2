@@ -5,6 +5,7 @@
 #pragma once
 
 #include <tlIO/USD.h>
+#include <tlIO/USDPlugin.h>
 
 #ifndef NOMINMAX
 #    define NOMINMAX
