@@ -9,7 +9,7 @@
 #    include <tlDevice/BMD/BMDSystem.h>
 #endif // TLRENDER_BMD
 
-#if defined(TLRENDER_NDI) && !defined(VULKAN_BACKEND)
+#if defined(TLRENDER_NDI)
 #    include <tlDevice/NDI/NDISystem.h>
 #endif // TLRENDER_NDI
 
@@ -30,7 +30,7 @@ namespace tl
                 context->addSystem(bmd::System::create(context));
             }
 #endif // TLRENDER_BMD
-#if defined(TLRENDER_NDI) && !defined(VULKAN_BACKEND)
+#if defined(TLRENDER_NDI)
             if (!context->getSystem<ndi::System>())
             {
                 context->addSystem(ndi::System::create(context));

@@ -8,14 +8,14 @@
 
 #include <tlTimelineGL/Render.h>
 
-#if defined(OPENGL_BACKEND)
+#ifdef OPENGL_BACKEND
 #include <tlGL/GLFWWindow.h>
 #include <tlGL/OffscreenBuffer.h>
 #include <tlGL/Texture.h>
 #include <tlGL/Util.h>
 #endif
 
-#if defined(VULKAN_BACKEND)
+#ifdef VULKAN_BACKEND
 #include <tlVk/OffscreenBuffer.h>
 #include <tlVk/Texture.h>
 #include <tlVk/Util.h>
