@@ -88,7 +88,7 @@ namespace tl
 #if defined(TLRENDER_TIFF)
                 _plugins.push_back(tiff::Plugin::create(p.cache, logSystem));
 #endif // TLRENDER_TIFF
-#if defined(TLRENDER_USD) && !defined(VULKAN_BACKEND)
+#if defined(TLRENDER_USD)
                 _plugins.push_back(usd::Plugin::create(p.cache, logSystem));
 #endif // TLRENDER_USD
 #if defined(TLRENDER_RAW)
