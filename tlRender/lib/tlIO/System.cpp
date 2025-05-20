@@ -29,8 +29,8 @@
 #if defined(TLRENDER_TIFF)
 #    include <tlIO/TIFF.h>
 #endif // TLRENDER_TIFF
-#if defined(TLRENDER_USD) && !defined(VULKAN_BACKEND)
-#    include <tlIO/USD.h>
+#if defined(TLRENDER_USD)
+#    include <tlIO/USDPlugin.h>
 #endif // TLRENDER_USD
 #if defined(TLRENDER_RAW)
 #    include <tlIO/RAW.h>
