@@ -185,6 +185,12 @@ namespace tl
             //! Cancel pending requests.
             void cancelRequests(const std::vector<uint64_t>&);
 
+            //! Start the threads.
+            void startThreads();
+            
+            //! Exit the threads.
+            void exitThreads();
+            
         private:
             void _infoRun();
             void _thumbnailRun();

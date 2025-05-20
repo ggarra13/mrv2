@@ -1110,6 +1110,11 @@ namespace mrv
         if (ui->uiPrefs->uiPrefsRemoveEDLs->value())
             removeTemporaryEDLs(ui);
 
+        // Remove thumbnail system.
+        auto context = App::app->getContext();
+        auto system  = context->getSystem<timelineui_vk::ThumbnailSystem>();
+        context->removeSystem(system);
+
         tcp->unlock();
     }
 

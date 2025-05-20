@@ -33,6 +33,9 @@ namespace tl
             //! Add a system.
             void addSystem(const std::shared_ptr<ICoreSystem>&);
 
+            //! Remove  a system.
+            void removeSystem(const std::shared_ptr<ICoreSystem>&);
+            
             //! Get the log system.
             const std::shared_ptr<log::System>& getLogSystem() const;
 

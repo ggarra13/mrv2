@@ -327,6 +327,13 @@ namespace tl
 
             p.cache = cache;
 
+            startThreads();
+        }
+
+        void ThumbnailGenerator::startThreads()
+        {
+            TLRENDER_P();
+            
             p.infoThread.running = true;
             p.infoThread.thread = std::thread(
                 [this]
@@ -381,6 +388,13 @@ namespace tl
                             p.thumbnailMutex.mutex);
                         p.thumbnailMutex.stopped = true;
                     }
+                    VkDevice device = ctx.device;
+                    if (device != VK_NULL_HANDLE)
+                    {
+                        vkDestroyCommandPool(device,
+                                             p.thumbnailThread.commandPool,
+                                             nullptr);
+                    }
                     p.thumbnailThread.buffer.reset();
                     p.thumbnailThread.render.reset();
                     _thumbnailCancel();
@@ -414,7 +428,13 @@ namespace tl
 
         ThumbnailGenerator::~ThumbnailGenerator()
         {
+            exitThreads();
+        }
+
+        void ThumbnailGenerator::exitThreads()
+        {
             TLRENDER_P();
+            
             p.infoThread.running = false;
             if (p.infoThread.thread.joinable())
             {
@@ -794,6 +814,8 @@ namespace tl
                                     p.thumbnailThread.buffer->submitReadback(cmd);
 
                                     {
+                                        if (ctx.queue == VK_NULL_HANDLE)
+                                            return;
                                         std::lock_guard<std::mutex> lock(ctx.queue_mutex);
                                         VkQueue& queue = ctx.queue;
                                         VkResult result = vkQueueWaitIdle(queue);
@@ -883,21 +905,11 @@ namespace tl
                                             static_cast<float>(size.h), 0.F,
                                             -1.F, 1.F);
                                         p.thumbnailThread.render->setTransform(ortho);
-                                    
-                                        // p.thumbnailThread.render->drawImage(
-                                        //     p.thumbnailThread.buffer,
-                                        //     videoData.layers[0].image,
-                                        //     {math::Box2i(
-                                        //         0, 0, size.w, size.h)});
                                         p.thumbnailThread.render->drawVideo(
                                             {videoData},
                                             {math::Box2i(
                                                 0, 0, size.w, size.h)});
                                         p.thumbnailThread.render->end();
-                                        // glPixelStorei(GL_PACK_ALIGNMENT, 1);
-                                        // glReadPixels(
-                                        //     0, 0, size.w, size.h, GL_RGBA,
-                                        //     GL_UNSIGNED_BYTE, image->getData());
                                         p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
                                     
                                         p.thumbnailThread.buffer->readPixels(cmd, 0, 0, size.w,
@@ -908,6 +920,8 @@ namespace tl
                                         p.thumbnailThread.buffer->submitReadback(cmd);
 
                                         {
+                                            if (ctx.queue == VK_NULL_HANDLE)
+                                                return;
                                             std::lock_guard<std::mutex> lock(ctx.queue_mutex);
                                             VkQueue& queue = ctx.queue;
                                             VkResult result = vkQueueWaitIdle(queue);
@@ -919,12 +933,9 @@ namespace tl
                                         void* imageData = p.thumbnailThread.buffer->getLatestReadPixels();
                                         if (imageData)
                                         {
-                                            std::memcpy(image->getData(), imageData,
+                                            std::memcpy(image->getData(),
+                                                        imageData,
                                                         image->getDataByteCount());
-                                        }
-                                        else
-                                        {
-                                            std::cerr << "no thumbnail" << std::endl;
                                         }
 
                                         p.thumbnailThread.frameIndex = (p.thumbnailThread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;

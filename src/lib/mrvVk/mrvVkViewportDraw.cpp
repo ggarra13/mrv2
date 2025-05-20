@@ -932,7 +932,6 @@ namespace mrv
                         buf, 512, "DF: %" PRIu64 " FPS: %.2f/%.3f", p.droppedFrames,
                         fps, player->speed());
 
-                    std::cerr << buf << std::endl;
                     tmp += buf;
                     p.startTime = std::chrono::high_resolution_clock::now();
                 }

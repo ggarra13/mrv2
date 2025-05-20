@@ -65,6 +65,23 @@ namespace tl
             _systems.push_back(system);
             _systemTimes[system] = std::chrono::steady_clock::now();
         }
+        
+        void Context::removeSystem(const std::shared_ptr<ICoreSystem>& system)
+        {
+            for (auto it = _systems.begin(); it != _systems.end(); )
+            {
+                if (*it == system)
+                {
+                    it = _systems.erase(it);
+                    break;
+                }
+                else
+                {
+                    ++it;
+                }
+            }
+            _systemTimes.erase(system);
+        }
 
         void Context::log(
             const std::string& prefix, const std::string& value, log::Type type)
