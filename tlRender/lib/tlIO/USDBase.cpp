@@ -21,6 +21,5 @@ namespace tl
             "GeomFlat",
             "GeomSmooth");
         TLRENDER_ENUM_SERIALIZE_IMPL(DrawMode);
-
     } // namespace usd
 } // namespace tl

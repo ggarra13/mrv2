@@ -700,7 +700,7 @@ namespace mrv
         p.settings->setDefaultValue("BMD/HDRData", bmdDevicesModelData.hdrData);
 #endif // TLRENDER_BMD
 
-#if defined(TLRENDER_NDI) && !defined(VULKAN_BACKEND)
+#if defined(TLRENDER_NDI)
 
         device::DevicesModelData devicesModelData;
         p.settings->setDefaultValue(
@@ -1411,7 +1411,7 @@ namespace mrv
         return _p->outputDevice;
     }
     
-#if !defined(VULKAN_BACKEND) && (defined(TLRENDER_BMD) || defined(TLRENDER_NDI))
+#if defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
     void App::_timer_update_cb(App* self)
     {
         self->timerUpdate();
@@ -1456,9 +1456,9 @@ namespace mrv
         
         Fl::remove_timeout((Fl_Timeout_Handler)_timer_update_cb, this);
     }
-#endif // !defined(VULKAN_BACKEND) && TLRENDER_BMD || TLRENDER_NDI
+#endif // defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
 
-#if defined(TLRENDER_NDI) && !defined(VULKAN_BACKEND)
+#if defined(TLRENDER_NDI)
     void App::beginNDIOutputStream()
     {
         TLRENDER_P();

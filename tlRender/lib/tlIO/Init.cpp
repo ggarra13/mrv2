@@ -6,7 +6,9 @@
 
 #include <tlIO/System.h>
 
-#include <tlGL/Init.h>
+#ifndef VULKAN_BACKEND
+#    include <tlGL/Init.h>
+#endif
 
 #include <tlCore/Context.h>
 
@@ -16,7 +18,9 @@ namespace tl
     {
         void init(const std::shared_ptr<system::Context>& context)
         {
+#ifndef VULKAN_BACKEND
             gl::init(context);
+#endif
             if (!context->getSystem<System>())
             {
                 context->addSystem(System::create(context));

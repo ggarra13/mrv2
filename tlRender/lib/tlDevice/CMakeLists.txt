@@ -17,21 +17,25 @@ if(TLRENDER_BMD OR TLRENDER_NDI)
     set(HEADERS
 	DevicesModel.h
 	DeviceSystem.h
-	GLUtil.h
 	Init.h
 	IOutput.h
 	OutputData.h)
     set(SOURCE
 	DevicesModel.cpp
 	DeviceSystem.cpp
-	GLUtil.cpp
 	Init.cpp
 	IOutput.cpp
-	OutputData.cpp
-	)
+	OutputData.cpp)
 endif()
 
-if(TLRENDER_NDI AND TLRENDER_FFMPEG AND MRV2_BACKEND STREQUAL "GL")
+if (MRV2_BACKEND STREQUAL "GL")
+    set(HEADERS
+	GLUtil.h)
+    set(SOURCE
+	GLUtil.cpp)
+endif()
+
+if(TLRENDER_NDI AND TLRENDER_FFMPEG)
     list(APPEND HEADERS
 	NDI/NDIOptions.h
 	NDI/NDIOutputDevice.h

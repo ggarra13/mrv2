@@ -167,7 +167,7 @@ namespace mrv
             // Create the renderer.
 #ifdef VULKAN_BACKEND
             // \@todo: Vulkan
-            //render = timeline_vlk::Render::create(context);
+            //render = timeline_vlk::Render::create(context, ctx);
 #else
             render = timeline_gl::Render::create(context);
 #endif
@@ -403,7 +403,8 @@ namespace mrv
             }
 #endif
             {
-                std::string msg = tl::string::Format(_("OpenGL info: {0}"))
+                std::string msg =
+                    tl::string::Format(_("Offscreen Buffer info: {0}"))
                                       .arg(offscreenBufferOptions.colorType);
                 LOG_STATUS(msg);
             }
