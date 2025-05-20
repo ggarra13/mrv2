@@ -1095,6 +1095,13 @@ namespace mrv
         // Close all files
         close_all_cb(w, ui);
 
+        // Remove thumbnail system.
+#ifdef VULKAN_BACKEND
+        auto context = App::app->getContext();
+        auto system  = context->getSystem<timelineui_vk::ThumbnailSystem>();
+        context->removeSystem(system);
+#endif
+
         // Hide any GL Window (needed in Windows)
         Fl_Window* pw = Fl::first_window();
         while (pw)
@@ -1106,14 +1113,9 @@ namespace mrv
         // Delete Color Chooser
         delete colorChooser;
 
-        // Remove any temporary EDLS in tmppath
+        // Remove any temporary EDLs in tmppath
         if (ui->uiPrefs->uiPrefsRemoveEDLs->value())
             removeTemporaryEDLs(ui);
-
-        // Remove thumbnail system.
-        auto context = App::app->getContext();
-        auto system  = context->getSystem<timelineui_vk::ThumbnailSystem>();
-        context->removeSystem(system);
 
         tcp->unlock();
     }
