@@ -202,8 +202,8 @@ namespace tl
                     textInfos,
                     p.draw.durationGlyphs,
                     math::Vector2i(
-                        labelGeometry.min.x,
-                        labelGeometry.min.y + p.size.fontMetrics.ascender));
+                        durationGeometry.min.x,
+                        durationGeometry.min.y + p.size.fontMetrics.ascender));
             }
             
             for (const auto& textInfo : textInfos)
