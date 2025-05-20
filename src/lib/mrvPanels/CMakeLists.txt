@@ -53,7 +53,7 @@ if(TLRENDER_USD)
     list( APPEND SOURCES mrvUSDPanel.cpp)
 endif()
 
-if(TLRENDER_NDI)
+if(TLRENDER_NDI AND MRV2_BACKEND STREQUAL "GL")
     list( APPEND HEADERS mrvNDIPanel.h )
     list( APPEND SOURCES mrvNDIPanel.cpp)
 endif()
