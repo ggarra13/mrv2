@@ -29,9 +29,9 @@ if(TLRENDER_BMD OR TLRENDER_NDI)
 endif()
 
 if (MRV2_BACKEND STREQUAL "GL")
-    set(HEADERS
+    list(APPEND HEADERS
 	GLUtil.h)
-    set(SOURCE
+    list(APPEND SOURCE
 	GLUtil.cpp)
 endif()
 
