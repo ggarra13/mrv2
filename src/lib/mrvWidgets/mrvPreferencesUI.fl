@@ -1520,8 +1520,8 @@ v->uiOCIO_Display_View->do_callback();}
               }
             }
             Fl_Group {} {
-              label Video
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+              label Video open
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {open
                 xywh {323 60 478 314}
@@ -1568,7 +1568,7 @@ v->uiOCIO_Display_View->do_callback();}
                 }
                 Fl_Choice uiPrefsBlitViewports {
                   label {Blit Viewports}
-                  tooltip {Viewports can be drawn with blitting or with OpenGL shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {513 243 140 25} down_box BORDER_BOX align 132 textcolor 32
+                  tooltip {Viewports can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {513 243 140 25} down_box BORDER_BOX align 132 textcolor 32
                   class {mrv::Choice}
                 } {
                   MenuItem {} {
@@ -1581,8 +1581,8 @@ v->uiOCIO_Display_View->do_callback();}
                   }
                 }
                 Fl_Choice uiPrefsBlitTimeline {
-                  label {Blit Timeline}
-                  tooltip {Timeline can be drawn with blitting or with OpenGL shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {515 291 140 25} down_box BORDER_BOX align 132 textcolor 32
+                  label {Blit Timeline} selected
+                  tooltip {tter then the other.Timeline can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform be} xywh {515 291 140 25} down_box BORDER_BOX align 132 textcolor 32
                   class {mrv::Choice}
                 } {
                   MenuItem {} {
@@ -1817,8 +1817,7 @@ o->add( _("Audio") );
 o->add( _("ComfyUI") );
 o->add( _("Errors") );
 o->add( _("Behavior") );
-o->select( item );} {selected
-    }
+o->select( item );} {}
   }
   Function {fill_audio_apis(Fl_Choice* o)} {} {
     code {o->clear();

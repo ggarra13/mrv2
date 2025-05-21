@@ -8,10 +8,18 @@
 
 #include <tlTimelineGL/Render.h>
 
+#ifdef OPENGL_BACKEND
 #include <tlGL/GLFWWindow.h>
 #include <tlGL/OffscreenBuffer.h>
 #include <tlGL/Texture.h>
 #include <tlGL/Util.h>
+#endif
+
+#ifdef VULKAN_BACKEND
+#include <tlVk/OffscreenBuffer.h>
+#include <tlVk/Texture.h>
+#include <tlVk/Util.h>
+#endif
 
 #include <tlTimeline/Util.h>
 
@@ -97,8 +105,10 @@ namespace tl
                 audioObserver;
             std::shared_ptr<observer::ValueObserver<double> > speedObserver;
 
+#ifdef OPENGL_BACKEND
             std::shared_ptr<gl::GLFWWindow> window;
-
+#endif
+            
             struct Mutex
             {
                 device::DeviceConfig config;
@@ -157,7 +167,12 @@ namespace tl
                 std::shared_ptr<image::Image> overlay;
 
                 std::shared_ptr<timeline::IRender> render;
+#ifdef OPENGL_BACKEND
                 std::shared_ptr<gl::OffscreenBuffer> offscreenBuffer;
+#endif
+#ifdef VULKAN_BACKEND
+                std::shared_ptr<vlk::OffscreenBuffer> offscreenBuffer;
+#endif
                 GLuint pbo = 0;
 
                 // NDI variables
@@ -202,17 +217,23 @@ namespace tl
 
             p.mutex.reset = true;
 
+#ifdef OPENGL_BACKEND
             p.window = gl::GLFWWindow::create(
                 "tl::ndi::OutputDevice", math::Size2i(1, 1), context,
                 static_cast<int>(gl::GLFWWindowOptions::kNone));
+#endif
             p.thread.running = true;
             p.thread.thread = std::thread(
                 [this]
                 {
                     TLRENDER_P();
+#ifdef OPENGL_BACKEND
                     p.window->makeCurrent();
+#endif
                     _run();
+#ifdef OPENGL_BACKEND
                     p.window->doneCurrent();
+#endif
                 });
         }
 
@@ -845,6 +866,7 @@ namespace tl
                         p.mutex.frameRate = frameRate;
                     }
 
+#ifdef OPENGL_BACKEND
                     glGenBuffers(1, &p.thread.pbo);
                     glBindBuffer(GL_PIXEL_PACK_BUFFER, p.thread.pbo);
                     glBufferData(
@@ -852,6 +874,7 @@ namespace tl
                         getPackPixelsSize(
                             p.thread.size, p.thread.outputPixelType),
                         NULL, GL_STREAM_READ);
+#endif
                 }
 
                 if (audioDataChanged && p.thread.render && !config.noAudio)
@@ -889,8 +912,10 @@ namespace tl
 
             if (p.thread.pbo != 0)
             {
+#ifdef OPENGL_BACKEND
                 glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
                 glDeleteBuffers(1, &p.thread.pbo);
+#endif
                 p.thread.pbo = 0;
             }
             p.thread.offscreenBuffer.reset();
@@ -1638,7 +1663,12 @@ namespace tl
 
             // Create the offscreen buffer.
             const math::Size2i renderSize = p.thread.size;
+#ifdef OPENGL_BACKEND
             gl::OffscreenBufferOptions offscreenBufferOptions;
+#endif
+#ifdef VULKAN_BACKEND
+            vlk::OffscreenBufferOptions offscreenBufferOptions;
+#endif
             offscreenBufferOptions.colorType =
                 getColorBuffer(p.thread.outputPixelType);
             if (!displayOptions.empty())
@@ -1646,6 +1676,7 @@ namespace tl
                 offscreenBufferOptions.colorFilters =
                     displayOptions[0].imageFilters;
             }
+#ifdef OPENGL_BACKEND
             offscreenBufferOptions.depth = gl::OffscreenDepth::_24;
             offscreenBufferOptions.stencil = gl::OffscreenStencil::_8;
             if (gl::doCreate(
@@ -1655,12 +1686,26 @@ namespace tl
                 p.thread.offscreenBuffer = gl::OffscreenBuffer::create(
                     renderSize, offscreenBufferOptions);
             }
+#endif
+#ifdef VULKAN_BACKEND
+            offscreenBufferOptions.depth = vlk::OffscreenDepth::_24;
+            offscreenBufferOptions.stencil = vlk::OffscreenStencil::_8;
+            if (vlk::doCreate(
+                    p.thread.offscreenBuffer, renderSize,
+                    offscreenBufferOptions))
+            {
+                // \@todo: pass the context to NDIOutputDevice
+                // p.thread.offscreenBuffer = vlk::OffscreenBuffer::create(ctx,
+                //     renderSize, offscreenBufferOptions);
+            }
+#endif
 
             // Render the video.
             if (p.thread.offscreenBuffer)
             {
+#ifdef OPENGL_BACKEND
                 gl::OffscreenBufferBinding binding(p.thread.offscreenBuffer);
-
+#endif
                 timeline::RenderOptions renderOptions;
                 renderOptions.colorBuffer =
                     getColorBuffer(p.thread.outputPixelType);
@@ -1813,6 +1858,7 @@ namespace tl
 
                 p.thread.render->end();
 
+#ifdef OPENGL_BACKEND
                 glBindBuffer(GL_PIXEL_PACK_BUFFER, p.thread.pbo);
                 glPixelStorei(
                     GL_PACK_ALIGNMENT,
@@ -1826,7 +1872,7 @@ namespace tl
                     GL_TEXTURE_2D, 0,
                     getPackPixelsFormat(p.thread.outputPixelType),
                     getPackPixelsType(p.thread.outputPixelType), NULL);
-
+#endif
                 // std::cerr << "pm=" << pm << std::endl;
                 // std::cerr << "centerTranslationMatrix=" <<
                 // centerTranslationMatrix << std::endl; std::cerr <<
@@ -1846,6 +1892,7 @@ namespace tl
 
             auto& video_frame = p.thread.NDI_video_frame;
 
+#ifdef OPENGL_BACKEND
             glBindBuffer(GL_PIXEL_PACK_BUFFER, p.thread.pbo);
             if (void* pboP = glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY))
             {
@@ -1855,6 +1902,8 @@ namespace tl
                 glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
             }
             glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+#endif
+            // \@todo: Vulkan read pixels
 
             std::shared_ptr<image::HDRData> hdrData;
             switch (p.thread.hdrMode)

@@ -259,7 +259,7 @@ namespace mrv
             m->add(_("Checkerboard"));
             m->value(static_cast<int>(o.output));
             if (p.ui->uiView->can_do(FL_STEREO))
-                m->add(_("OpenGL"));
+                m->add(_("Graphics Card"));
 
             pW->callback(
                 [=](auto w)

@@ -2,6 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include "mrvCore/mrvBackend.h"
+
 #include <string>
 #include <sstream>
 #include <fstream>
@@ -42,17 +44,21 @@
 #    include <sys/param.h>
 #    include <sys/mount.h>
 #    include <mach/mach.h>
-#    include <OpenGL/OpenGL.h>
 
+#if  defined(OPENGL_BACKEND)
+#        include <OpenGL/OpenGL.h>
+#    endif
 #endif
 
 #ifdef FLTK_USE_WAYLAND
 #    include <wayland-client.h>
 #    include <wayland-server.h>
 #    include <wayland-client-protocol.h>
-#    include <wayland-egl.h> // Wayland EGL MUST be included before EGL headers
-#    include <EGL/egl.h>
-#    include <EGL/eglplatform.h>
+#if  defined(OPENGL_BACKEND)
+#        include <wayland-egl.h> // Wayland EGL MUST be included before EGL headers
+#        include <EGL/egl.h>
+#        include <EGL/eglplatform.h>
+#    endif
 #endif
 
 #ifdef TLRENDER_OCIO
@@ -84,8 +90,9 @@
 #    include <rtaudio/RtAudio.h>
 #endif
 
-#ifdef TLRENDER_GL
+#if defined(TLRENDER_GL) && defined(OPENGL_BACKEND)
 #    include <tlGL/Init.h>
+#    include "mrvGL/mrvGLErrors.h" // defines glGetString and GL_VERSION
 #endif
 
 #ifdef TLRENDER_LIBPLACEBO
@@ -160,7 +167,6 @@ extern "C"
 
 #include "mrvWidgets/mrvVersion.h"
 
-#include "mrvGL/mrvGLErrors.h" // defines glGetString and GL_VERSION
 
 #include "mrViewer.h"
 #undef snprintf
@@ -807,9 +813,11 @@ namespace mrv
              "and Werner Lemberg"
           << endl
           << endl;
+#if defined(OPENGL_BACKEND)
         o << "glad v" << GLAD_GENERATOR_VERSION << endl
           << "Copyright (c) 2013-2020 David Herberth" << endl
           << endl;
+#endif
         o << "Imath v" << IMATH_VERSION_STRING << endl
           << "Copyright Contributors to the OpenEXR Project" << endl
           << endl;
@@ -1038,6 +1046,7 @@ namespace mrv
         int num_monitors = Fl::screen_count();
         o << "Monitors:\t" << num_monitors << endl << endl;
 
+#ifdef OPENGL_BACKEND
         tl::gl::initGLAD();
 
         // Get OpenGL information
@@ -1064,11 +1073,13 @@ namespace mrv
         o << _("Max. Texture Size:\t") << glMaxTexDim << " x " << glMaxTexDim
           << endl
           << endl;
+#endif
 
 #ifdef FLTK_USE_WAYLAND
         wl_display* wld = fl_wl_display();
         if (wld)
         {
+#ifdef OPENGL_BACKEND
             EGLDisplay display = eglGetDisplay((EGLNativeDisplayType)wld);
             const char* client_apis = eglQueryString(display, EGL_CLIENT_APIS);
             const char* egl_version = eglQueryString(display, EGL_VERSION);
@@ -1083,6 +1094,7 @@ namespace mrv
               << std::endl
               << "Extensions:\t" << extensions << std::endl
               << std::endl;
+#endif
         }
 #endif
 

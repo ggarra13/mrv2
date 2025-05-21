@@ -6,25 +6,33 @@ set(SOURCE
     Init.cpp)
 
 set(INCLUDE_DIRS)
-set(LIBRARIES tlTimelineGL)
+if (MRV2_BACKEND STREQUAL "VK")
+    set(LIBRARIES tlTimelineVk)
+else()
+    set(LIBRARIES tlTimelineGL)
+endif()
 set(LIBRARIES_PRIVATE)
 
 if(TLRENDER_BMD OR TLRENDER_NDI)
     set(HEADERS
 	DevicesModel.h
 	DeviceSystem.h
-	GLUtil.h
 	Init.h
 	IOutput.h
 	OutputData.h)
     set(SOURCE
 	DevicesModel.cpp
 	DeviceSystem.cpp
-	GLUtil.cpp
 	Init.cpp
 	IOutput.cpp
-	OutputData.cpp
-	)
+	OutputData.cpp)
+endif()
+
+if (MRV2_BACKEND STREQUAL "GL")
+    list(APPEND HEADERS
+	GLUtil.h)
+    list(APPEND SOURCE
+	GLUtil.cpp)
 endif()
 
 if(TLRENDER_NDI AND TLRENDER_FFMPEG)

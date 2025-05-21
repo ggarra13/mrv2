@@ -826,7 +826,7 @@ namespace mrv
                     // std::endl;
                 });
 
-#endif // TLRENDER_BMD || TLRENDER_NDI
+#endif // TLRENDER_BMD
 
         p.logObserver = observer::ListObserver<log::Item>::create(
             ui->app->getContext()->getLogSystem()->observeLog(),
@@ -1456,9 +1456,9 @@ namespace mrv
         
         Fl::remove_timeout((Fl_Timeout_Handler)_timer_update_cb, this);
     }
-#endif // TLRENDER_BMD || TLRENDER_NDI
+#endif // defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
 
-#ifdef TLRENDER_NDI
+#if defined(TLRENDER_NDI)
     void App::beginNDIOutputStream()
     {
         TLRENDER_P();
