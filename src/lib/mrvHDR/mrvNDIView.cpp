@@ -745,7 +745,7 @@ namespace mrv
 
         if (!p.vao && p.vbo)
         {
-            p.vao = vlk::VAO::create(ctx, "p.vao");
+            p.vao = vlk::VAO::create(ctx);
             p.vao->upload(p.vbo->getData());
         }
     }

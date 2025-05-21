@@ -792,8 +792,7 @@ void main()
             if (!p.vbo)
             {
                 p.vbo = vlk::VBO::create(
-                    mesh.triangles.size() * 3,
-                    vlk::VBOType::Pos2_F32_UV_U16);
+                    mesh.triangles.size() * 3, vlk::VBOType::Pos2_F32_UV_U16);
             }
             if (p.vbo)
             {
@@ -802,7 +801,7 @@ void main()
 
             if (!p.vao && p.vbo)
             {
-                p.vao = vlk::VAO::create(ctx, "timeline vao");
+                p.vao = vlk::VAO::create(ctx);
             }
         }
         

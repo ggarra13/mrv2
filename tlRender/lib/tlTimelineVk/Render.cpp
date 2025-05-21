@@ -1036,31 +1036,31 @@ namespace tl
             {
                 p.vbos["image"] =
                     vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32_UV_U16);
-                p.vaos["image"] = vlk::VAO::create(ctx, "image");
+                p.vaos["image"] = vlk::VAO::create(ctx);
             }
             if (!p.vbos["rect"] || p.vbos["rect"]->getSize() != 6)
             {
                 p.vbos["rect"] =
                     vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32);
-                p.vaos["rect"] = vlk::VAO::create(ctx, "rect");
+                p.vaos["rect"] = vlk::VAO::create(ctx);
             }
             if (!p.vbos["texture"] || p.vbos["texture"]->getSize() != 6)
             {
                 p.vbos["texture"] =
                     vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32_UV_U16);
-                p.vaos["texture"] = vlk::VAO::create(ctx, "texture");
+                p.vaos["texture"] = vlk::VAO::create(ctx);
             }
             if (!p.vbos["wipe"] || p.vbos["wipe"]->getSize() != 3)
             {
                 p.vbos["wipe"] =
                     vlk::VBO::create(1 * 3, vlk::VBOType::Pos2_F32);
-                p.vaos["wipe"] = vlk::VAO::create(ctx, "wipe");
+                p.vaos["wipe"] = vlk::VAO::create(ctx);
             }
             if (!p.vbos["video"] || p.vbos["video"]->getSize() != 6)
             {
                 p.vbos["video"] =
                     vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32_UV_U16);
-                p.vaos["video"] = vlk::VAO::create(ctx, "video");
+                p.vaos["video"] = vlk::VAO::create(ctx);
             }
 
             if (renderOptions.clear)

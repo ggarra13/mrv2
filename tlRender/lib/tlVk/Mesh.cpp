@@ -21,6 +21,13 @@ namespace tl
 {
     namespace vlk
     {
+
+        namespace
+        {
+            // 16 MB
+            constexpr size_t DYNAMIC_VERTEX_BUFFER_SIZE = 16 * 1024 * 1024;
+        }
+        
         TLRENDER_ENUM_IMPL(
             VBOType,
             "Pos2_F32",
@@ -622,7 +629,7 @@ namespace tl
         {
             return _p->size;
         }
-
+        
         const std::vector<uint8_t>& VBO::getData() const
         {
             return _p->data;
@@ -638,46 +645,80 @@ namespace tl
             _p->data = data;
         }
 
-        void VBO::copy(
-            const std::vector<uint8_t>& data, std::size_t offset,
-            std::size_t size)
-        {
-            _p->data = data;
-        }
-
-        //! Structure used to hold the resource of each upload.
-        struct UploadBuffer
-        {
-            VkBuffer buffer;
-            VkDeviceMemory memory;
-        };
-
-        //! Structure used to hold per frames in flight resources.
-        //! For example, multiple meshes.
-        struct FrameResources
-        {
-            std::vector<UploadBuffer> buffersThisFrame;
-        };
-        
         struct VAO::Private
         {
             uint32_t frameIndex = 0;
-            std::string name;
 
-            std::vector<VkBuffer> buffers;
-            std::vector<VkDeviceMemory> memories;
+            VkBuffer vertexBuffer = VK_NULL_HANDLE;
+            VkDeviceMemory vertexMemory = VK_NULL_HANDLE;
+            void* mappedPtr = nullptr;
+
+            // relative offset within this frame's partition
+            size_t relativeOffset = 0;
+
+            // Aligned region size
+            size_t regionSize = 0;
+
+            size_t alignment = 1;
             
-            std::array<FrameResources, MAX_FRAMES_IN_FLIGHT> frames;
         };
 
-        void VAO::_init(const std::string& name)
+        void VAO::_init()
         {
             TLRENDER_P();
+            
+            VkDevice device = ctx.device;
+            VkPhysicalDevice gpu = ctx.gpu;
 
-            p.name = name;
+            VkBufferCreateInfo bufferInfo{};
+            bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+            bufferInfo.size = DYNAMIC_VERTEX_BUFFER_SIZE;
+            bufferInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT |
+                               VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+            bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-            p.buffers.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
-            p.memories.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
+            if (vkCreateBuffer(device, &bufferInfo, nullptr, &p.vertexBuffer) != VK_SUCCESS)
+                throw std::runtime_error("Failed to create persistent vertex buffer");
+
+            VkMemoryRequirements memRequirements;
+            vkGetBufferMemoryRequirements(device, p.vertexBuffer, &memRequirements);
+
+            VkPhysicalDeviceProperties props;
+            vkGetPhysicalDeviceProperties(gpu, &props);
+            VkDeviceSize memAlign   = memRequirements.alignment;
+            VkDeviceSize vertAlign  = props.limits.minUniformBufferOffsetAlignment;;
+            VkDeviceSize atomSize   = props.limits.nonCoherentAtomSize;
+            p.alignment             = std::max(std::max(memAlign, vertAlign),
+                                               atomSize);
+
+            // Now carve equal regions, rounded down to p.alignment:
+            const VkDeviceSize totalSize  = memRequirements.size;
+            const VkDeviceSize frameCount = MAX_FRAMES_IN_FLIGHT;
+            const VkDeviceSize regionSize = totalSize / frameCount;
+            p.regionSize = (totalSize / frameCount / p.alignment) * p.alignment;
+            if (!p.regionSize)
+                throw std::runtime_error("Per-frame region too small for required alignment");
+            if (p.regionSize > regionSize)
+                throw std::runtime_error("Per-frame region too big with required alignment");
+            if (p.regionSize * frameCount > totalSize)
+                throw std::runtime_error("Per-frame region * MAX_FRAMES_IN_FLIGHT too big with required alignment");
+
+            VkMemoryAllocateInfo allocInfo{};
+            allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+            allocInfo.allocationSize = memRequirements.size;
+            allocInfo.memoryTypeIndex = findMemoryType(
+                gpu, memRequirements.memoryTypeBits,
+                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+                VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+            if (vkAllocateMemory(device, &allocInfo, nullptr, &p.vertexMemory) != VK_SUCCESS)
+                throw std::runtime_error("Failed to allocate persistent vertex memory");
+
+            vkBindBufferMemory(device, p.vertexBuffer, p.vertexMemory, 0);
+
+            // Persistently map
+            if (vkMapMemory(device, p.vertexMemory, 0, memRequirements.size, 0, &p.mappedPtr) != VK_SUCCESS)
+                throw std::runtime_error("Failed to map persistent vertex buffer");
         }
 
         VAO::VAO(Fl_Vk_Context& context) :
@@ -691,153 +732,82 @@ namespace tl
             TLRENDER_P();
 
             VkDevice device = ctx.device;
-
-            std::set<VkBuffer> buffers;
-            for (auto& buffer : p.buffers)
+            
+            if (p.vertexBuffer != VK_NULL_HANDLE)
+                vkDestroyBuffer(device, p.vertexBuffer, nullptr);
+            if (p.vertexMemory != VK_NULL_HANDLE)
             {
-                if (buffer != VK_NULL_HANDLE)
-                {
-                    buffers.insert(buffer);
-                    
-                    vkDestroyBuffer(device, buffer, nullptr);
-                    buffer = VK_NULL_HANDLE;
-                }
-            }
-
-            std::set<VkDeviceMemory> memories;
-            for (auto& memory : p.memories)
-            {
-                if (memory != VK_NULL_HANDLE)
-                {
-                    memories.insert(memory);
-
-                    vkFreeMemory(device, memory, nullptr);
-                    memory = VK_NULL_HANDLE;
-                }
-            }
-
-            for (auto& frame : p.frames)
-            {
-                for (auto& upload : frame.buffersThisFrame)
-                {
-                    if (buffers.find(upload.buffer) == buffers.end())
-                    {
-                        vkDestroyBuffer(device, upload.buffer, nullptr);
-                    }
-
-                    if (memories.find(upload.memory) == memories.end())
-                    {
-                        vkFreeMemory(device, upload.memory, nullptr);
-                    }
-                }
+                vkUnmapMemory(device, p.vertexMemory);
+                vkFreeMemory(device, p.vertexMemory, nullptr);
             }
         }
 
-        std::shared_ptr<VAO> VAO::create(Fl_Vk_Context& context,
-                                         const std::string& name)
+        std::shared_ptr<VAO> VAO::create(Fl_Vk_Context& context)
         {
             auto out = std::shared_ptr<VAO>(new VAO(context));
-            out->_init(name);
+            out->_init();
             return out;
-        }
-
-        void VAO::upload(const std::vector<uint8_t>& vertexData)
-        {
-            TLRENDER_P();
-            
-            VkDevice device = ctx.device;
-            VkPhysicalDevice gpu = ctx.gpu;
-            VkBuffer& buffer = p.buffers[p.frameIndex];
-            VkDeviceMemory& memory = p.memories[p.frameIndex];
-
-            // 1. Create Buffer
-            VkBufferCreateInfo bufferInfo = {};
-            bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-            bufferInfo.size = vertexData.size();
-            bufferInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
-            bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-
-            if (vkCreateBuffer(device, &bufferInfo, nullptr, &buffer) !=
-                VK_SUCCESS)
-            {
-                throw std::runtime_error("Failed to create vertex buffer!");
-            }
-
-            // 2. Allocate memory
-            VkMemoryRequirements memRequirements;
-            vkGetBufferMemoryRequirements(device, buffer, &memRequirements);
-
-            VkMemoryAllocateInfo allocInfo = {};
-            allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-            allocInfo.allocationSize = memRequirements.size;
-            allocInfo.memoryTypeIndex = findMemoryType(
-                gpu, memRequirements.memoryTypeBits,
-                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-            
-            if (vkAllocateMemory(device, &allocInfo, nullptr, &memory) !=
-                VK_SUCCESS)
-            {
-                throw std::runtime_error(
-                    "Failed to allocate vertex buffer memory!");
-            }
-
-            // 3. Bind buffer + memory
-            vkBindBufferMemory(device, buffer, memory, 0);
-
-            // 4. Copy data to memory
-            void* mappedData;
-            vkMapMemory(device, memory, 0, vertexData.size(), 0, &mappedData);
-            memcpy(mappedData, vertexData.data(), vertexData.size());
-            vkUnmapMemory(device, memory);
-
-            // 5. Add it to the queue
-            FrameResources& frame = p.frames[p.frameIndex];
-            frame.buffersThisFrame.push_back({buffer, memory});
         }
 
         void VAO::bind(uint32_t value)
         {
             TLRENDER_P();
-
             if (p.frameIndex == value)
                 return;
-
+            
             p.frameIndex = value;
+            p.relativeOffset = 0;
+        }
+        
+        std::size_t VAO::upload(const std::vector<uint8_t>& vertexData)
+        {
+            TLRENDER_P();
+            const size_t dataSize = vertexData.size();
+            const std::size_t startRegion = p.frameIndex * p.regionSize;
 
-            FrameResources& frame = p.frames[p.frameIndex];
+            // Compute absolute offset in the big buffer:
+            // per-frame region + relative
+            size_t absOffset = startRegion + p.relativeOffset;
+            void* dst = reinterpret_cast<uint8_t*>(p.mappedPtr) + absOffset;
+            memcpy(dst, vertexData.data(), dataSize);
+
+            // Align relativeOffset for the next upload
+            p.relativeOffset += dataSize;
+            
+            size_t copied = p.relativeOffset;
+            p.relativeOffset = (p.relativeOffset + p.alignment - 1) & ~(p.alignment - 1);
+
             VkDevice device = ctx.device;
-                
-            for (auto& upload : frame.buffersThisFrame)
-            {
-                vkDestroyBuffer(device, upload.buffer, nullptr);
-                vkFreeMemory(device, upload.memory, nullptr);
-            }
+            VkMappedMemoryRange range = {};
+            range.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
+            range.memory = p.vertexMemory;
+            range.offset = absOffset;
+            range.size = dataSize;
 
-            frame.buffersThisFrame.clear();
+            VkResult result = vkFlushMappedMemoryRanges(device, 1, &range);
+            if (result != VK_SUCCESS)
+                throw std::runtime_error("vkFlushMappedMemoryRanges failed on macOS");
+
+            return absOffset;
         }
 
-        void VAO::draw(VkCommandBuffer& cmd, std::size_t size)
+        void VAO::draw(VkCommandBuffer& cmd, const std::size_t vertexCount,
+                       const VkDeviceSize offset)
         {
             TLRENDER_P();
 
-            if (size == 0)
-            {
-                throw std::runtime_error("VAO::draw tried to draw with a size of 0");
-            }
-
-            VkDevice device = ctx.device;
-            VkBuffer buffer = p.buffers[p.frameIndex];
-            
-            VkDeviceSize offsets[1] = {0};
-            vkCmdBindVertexBuffers(cmd, 0, 1, &buffer, offsets);
-            vkCmdDraw(cmd, size, 1, 0, 0);
+            vkCmdBindVertexBuffers(cmd, 0, 1, &p.vertexBuffer, &offset);
+            vkCmdDraw(cmd, static_cast<uint32_t>(vertexCount), 1, 0, 0);
         }
 
         void VAO::draw(VkCommandBuffer& cmd, const std::shared_ptr<VBO>& vbo)
         {
-            upload(vbo->getData());
-            draw(cmd, vbo->getSize() * 3);
+            const std::size_t offset = upload(vbo->getData());
+            draw(cmd, vbo->getSize(), offset);
         }
+
+        VkBuffer VAO::getBuffer() const { return _p->vertexBuffer; }
+        VkDeviceMemory VAO::getDeviceMemory() const { return _p->vertexMemory; }
+        
     } // namespace vlk
 } // namespace tl

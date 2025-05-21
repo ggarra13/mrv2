@@ -79,7 +79,7 @@ namespace tl
             //! Create a new object.
             static std::shared_ptr<VBO> create(std::size_t size, VBOType);
 
-            //! Get the size.
+            //! Get the vertex size.
             std::size_t getSize() const;
 
             //! Get the type.
@@ -97,9 +97,6 @@ namespace tl
             ///@{
 
             void copy(const std::vector<uint8_t>&);
-            void copy(
-                const std::vector<uint8_t>&, std::size_t offset,
-                std::size_t size);
 
             ///@}
 
@@ -113,7 +110,7 @@ namespace tl
             TLRENDER_NON_COPYABLE(VAO);
 
         protected:
-            void _init(const std::string& name);
+            void _init();
 
             VAO(Fl_Vk_Context& ctx);
 
@@ -121,8 +118,7 @@ namespace tl
             ~VAO();
 
             //! Create a new object.
-            static std::shared_ptr<VAO> create(Fl_Vk_Context& ctx,
-                                               const std::string& name);
+            static std::shared_ptr<VAO> create(Fl_Vk_Context& ctx);
 
             //! Bind the vertex array object.
             void bind(uint32_t frameIndex);
@@ -133,15 +129,16 @@ namespace tl
             //! Get device memory.
             VkDeviceMemory getDeviceMemory() const;
 
-            //! Upload mesh data.
-            void upload(const std::vector<uint8_t>& data);
+            //! Upload mesh data and return offset.
+            std::size_t upload(const std::vector<uint8_t>& data);
 
             //! Draw the vertex array object, by uploading the vertex buffer
             //! object.
             void draw(VkCommandBuffer& cmd, const std::shared_ptr<VBO>& vbo);
 
             //! Draw the vertex array object.
-            void draw(VkCommandBuffer& cmd, std::size_t size);
+            void draw(VkCommandBuffer& cmd, const std::size_t size,
+                      const VkDeviceSize offset);
 
         private:
             Fl_Vk_Context& ctx;

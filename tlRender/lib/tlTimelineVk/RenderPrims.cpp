@@ -46,7 +46,7 @@ namespace tl
 
             if (!p.vaos[meshName] && p.vbos[meshName])
             {
-                p.vaos[meshName] = vlk::VAO::create(ctx, meshName);
+                p.vaos[meshName] = vlk::VAO::create(ctx);
                 p.vaos[meshName]->bind(p.frameIndex);
             }
         }
@@ -174,7 +174,7 @@ namespace tl
                     math::Vector3f(position.x, position.y, 0.F));
 
             if (!p.vbos[meshName] ||
-                (p.vbos[meshName] && p.vbos[meshName]->getSize() < size * 3))
+                (p.vbos[meshName] && p.vbos[meshName]->getSize() != size * 3))
             {
                 p.vbos[meshName] = vlk::VBO::create(
                     size * 3, vlk::VBOType::Pos2_F32_UV_U16);
@@ -187,7 +187,7 @@ namespace tl
 
             if (!p.vaos[meshName] && p.vbos[meshName])
             {
-                p.vaos[meshName] = vlk::VAO::create(ctx, meshName);
+                p.vaos[meshName] = vlk::VAO::create(ctx);
                 p.vaos[meshName]->bind(p.frameIndex);
             }
             if (p.vaos[meshName] && p.vbos[meshName])
@@ -243,7 +243,7 @@ namespace tl
                     math::Vector3f(position.x, position.y, 0.F));
 
             if (!p.vbos[meshName] ||
-                (p.vbos[meshName] && p.vbos[meshName]->getSize() < size * 3))
+                (p.vbos[meshName] && p.vbos[meshName]->getSize() != size * 3))
             {
                 p.vbos[meshName] = vlk::VBO::create(
                     size * 3, vlk::VBOType::Pos2_F32_UV_U16);
@@ -256,7 +256,7 @@ namespace tl
 
             if (!p.vaos[meshName] && p.vbos[meshName])
             {
-                p.vaos[meshName] = vlk::VAO::create(ctx, meshName);
+                p.vaos[meshName] = vlk::VAO::create(ctx);
                 p.vaos[meshName]->bind(p.frameIndex);
             }
             if (p.vaos[meshName] && p.vbos[meshName])
@@ -342,8 +342,8 @@ namespace tl
             if (!vbos["text"] ||
                 (vbos["text"] && vbos["text"]->getSize() != size * 3))
             {
-                vbos["text"] = vlk::VBO::create(
-                    size * 3, vlk::VBOType::Pos2_F32_UV_U16);
+                vbos["text"] = vlk::VBO::create(size * 3,
+                                                vlk::VBOType::Pos2_F32_UV_U16);
             }
             if (vbos["text"])
             {
@@ -351,7 +351,7 @@ namespace tl
             }
             if (!vaos["text"] && vbos["text"])
             {
-                vaos["text"] = vlk::VAO::create(ctx, "text");
+                vaos["text"] = vlk::VAO::create(ctx);
                 vaos["text"]->bind(frameIndex);
             }
         }

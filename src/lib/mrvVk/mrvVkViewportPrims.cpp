@@ -43,7 +43,7 @@ namespace mrv
             }
             if (!vk.vao && vk.vbo)
             {
-                vk.vao = vlk::VAO::create(ctx, "vk.vao");
+                vk.vao = vlk::VAO::create(ctx);
                 prepare_pipeline();
             }
         }
@@ -68,7 +68,7 @@ namespace mrv
             }
             if (!vk.vao && vk.vbo)
             {
-                vk.vao = vlk::VAO::create(ctx, "vk.vao");
+                vk.vao = vlk::VAO::create(ctx);
                 prepare_pipeline();
             }
         }
@@ -192,7 +192,7 @@ namespace mrv
 
             if (!vk.vao && vk.vbo)
             {
-                vk.vao = vlk::VAO::create(ctx, "vk.vao");
+                vk.vao = vlk::VAO::create(ctx);
                 prepare_pipeline();
             }
 

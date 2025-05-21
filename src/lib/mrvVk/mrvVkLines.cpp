@@ -209,7 +209,7 @@ namespace mrv
 
             if (!p.vao && p.vbo)
             {
-                p.vao = vlk::VAO::create(ctx, "points p.vao");
+                p.vao = vlk::VAO::create(ctx);
             }
 
             if (p.vao && p.vbo)

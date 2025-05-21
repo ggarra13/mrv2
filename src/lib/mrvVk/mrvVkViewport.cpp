@@ -845,7 +845,7 @@ namespace mrv
 
                     if (!vk.avao && vk.avbo)
                     {
-                        vk.avao = vlk::VAO::create(ctx, "vk.avao");
+                        vk.avao = vlk::VAO::create(ctx);
                         prepare_annotation_pipeline();
                     }
                 }
@@ -903,10 +903,6 @@ namespace mrv
             {
                 vk.vao->bind(m_currentFrameIndex);
                 vk.vao->draw(cmd, vk.vbo);
-            }
-            else
-            {
-                std::cerr << "no draw of geo" << std::endl;
             }
 
             

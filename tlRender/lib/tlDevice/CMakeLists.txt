@@ -14,13 +14,13 @@ endif()
 set(LIBRARIES_PRIVATE)
 
 if(TLRENDER_BMD OR TLRENDER_NDI)
-    set(HEADERS
+    list(APPEND HEADERS
 	DevicesModel.h
 	DeviceSystem.h
 	Init.h
 	IOutput.h
 	OutputData.h)
-    set(SOURCE
+    list(APPEND SOURCE
 	DevicesModel.cpp
 	DeviceSystem.cpp
 	Init.cpp
