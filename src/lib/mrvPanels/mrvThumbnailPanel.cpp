@@ -71,12 +71,18 @@ namespace mrv
                             uint8_t* d = pixelData;
                             const uint8_t* s = image->getData();
 
+#ifdef OPENGL_BACKEND
                             for (int y = 0; y < h; ++y)
                             {
                                 std::memcpy(
                                     d + (h - 1 - y) * w * 4, s + y * w * 4,
                                     w * 4);
                             }
+#endif
+
+#ifdef VULKAN_BACKEND
+                            std::memcpy(d, s, w * h * depth);
+#endif
                             i->first->bind_image(rgbImage);
                             i->first->redraw();
                         }
