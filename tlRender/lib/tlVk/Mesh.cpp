@@ -771,10 +771,10 @@ namespace tl
             void* dst = reinterpret_cast<uint8_t*>(p.mappedPtr) + absOffset;
             memcpy(dst, vertexData.data(), dataSize);
 
-            // Align relativeOffset for the next upload
+            // Increase the relative offset
             p.relativeOffset += dataSize;
             
-            size_t copied = p.relativeOffset;
+            // Align relativeOffset for the next upload
             p.relativeOffset = (p.relativeOffset + p.alignment - 1) & ~(p.alignment - 1);
 
             VkDevice device = ctx.device;

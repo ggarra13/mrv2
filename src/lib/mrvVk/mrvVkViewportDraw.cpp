@@ -815,8 +815,9 @@ namespace mrv
             otime::RationalTime clipTime;
             if (p.hud & HudDisplay::kFilename)
             {
-                std::string fullname = createStringFromPathAndTime(path, time);
-                if (path.getExtension() == ".otio")
+                const std::string fullname = createStringFromPathAndTime(path, time);
+                const std::string extension = path.getExtension();
+                if (extension == ".otio" || extension == ".otioz")
                 {
                     otioClip = true;
                     auto i = p.tagData.find("otioClipName");

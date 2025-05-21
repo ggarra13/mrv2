@@ -20,6 +20,7 @@ v1.3.8
 - Fixed secondary viewport flickering when the timeline was hidden (at least on X11).
 - Improved performance of text rendering on both OpenGL and Vulkan.
 - Removed outline class from OpenGL as it was not needed.
+- Added showing of clip in the HUD for .otioz files.
 - Started porting to Vulkan.
 
 	 * Working:
@@ -55,8 +56,9 @@ v1.3.8
 		 * Missing Frames crosses
 		 
 	 * Missing to check/add:
-		 * Editing
+		 * Editing (thumbnails not clipped)
 		 * Saving of Movies/Pictures with Annotations
+		 * NDI support
 		 * Temporary FLTK Text widget annotation (how to do it?)
 			 - Will have to code an equivalent in Vulkan and do my own
 			   event handling.
