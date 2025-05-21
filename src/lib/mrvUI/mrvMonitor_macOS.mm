@@ -139,14 +139,17 @@ namespace mrv
 {
     namespace monitor
     {
-        bool is_hdr_active(int screen)
+        //! \@todo: handle multiple screens on macOS
+        bool is_hdr_active(int screen, const bool silent)
         {
             CGDirectDisplayID displayID = CGMainDisplayID();
             if (displaySupportsHDR(displayID)) {
-                std::cout << "This display claims to support HDR (via EDID).\n";
+                if (!silent)
+                    std::cout << "This display claims to support HDR (via EDID).\n";
                 return true;
             } else {
-                std::cout << "This display does not advertise HDR support in EDID.\n";
+                if (!silent)
+                    std::cout << "This display does not advertise HDR support in EDID.\n";
                 return false;
             }
         }
