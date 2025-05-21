@@ -1035,13 +1035,9 @@ namespace tl
             vkResetFences(device, 1, &pbo.fence);
 
             // Transition image to TRANSFER_SRC
-            {
-                std::lock_guard<std::mutex> lock(ctx.queue_mutex);
-                transitionImageLayout(cmd, device, commandPool, queue,
-                                      p.image,
-                                      VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-                                      VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-            }
+            transitionImageLayout(cmd, p.image,
+                                  VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+                                  VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
             
             // Setup copy region
             VkBufferImageCopy region{};
@@ -1061,12 +1057,9 @@ namespace tl
                                    pbo.buffer, 1, &region);
 
             // Transition back if needed
-            {
-                std::lock_guard<std::mutex> lock(ctx.queue_mutex);
-                transitionImageLayout(cmd, device, commandPool, queue, p.image,
-                                      VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-                                      VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
-            }
+            transitionImageLayout(cmd, p.image,
+                                  VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                                  VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
         }
 
         void OffscreenBuffer::submitReadback(VkCommandBuffer cmd)

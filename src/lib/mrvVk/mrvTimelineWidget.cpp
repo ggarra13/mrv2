@@ -967,7 +967,10 @@ void main()
                 }
             }
 
-            if (p.buffer)
+            const float alpha = p.ui->uiMain->get_alpha() / 255.F;
+                
+            if (p.ui->uiPrefs->uiPrefsBlitTimeline->value() == kNoBlit ||
+                alpha < 1.0F)
             {
                 p.buffer->transitionToShaderRead(cmd);
                         
@@ -981,7 +984,6 @@ void main()
                 p.shader->setFBO("textureSampler", p.buffer);
 
 #ifdef __APPLE__
-                const float alpha = p.ui->uiMain->get_alpha() / 255.F;
                 set_window_transparency(alpha);
 #endif
 
@@ -995,7 +997,7 @@ void main()
                     cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, p.pipeline_layout, 0,
                     1, &descriptorSet, 0, nullptr);
                 
-                float opacity = 1.0;
+                const float opacity = 1.0;
                 vkCmdPushConstants(
                     cmd, p.pipeline_layout,
                     p.shader->getPushStageFlags(), 0,
@@ -1020,6 +1022,48 @@ void main()
                 }
 
                 end_render_pass(cmd);
+            }
+            else
+            {
+                VkImage srcImage = p.buffer->getImage();
+                VkImage dstImage = get_back_buffer_image();
+                
+                // srcImage barrier
+                transitionImageLayout(cmd, srcImage,
+                                      VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+                                      VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+                
+                // dstImage barrier (swapchain image)
+                transitionImageLayout(cmd, dstImage,
+                                      VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+                                      VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+
+                begin_render_pass();
+                
+                VkImageCopy region = {};
+                region.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+                region.srcSubresource.mipLevel = 0;
+                region.srcSubresource.baseArrayLayer = 0;
+                region.srcSubresource.layerCount = 1;
+                region.srcOffset = {0, 0, 0};
+                region.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+                region.dstSubresource.mipLevel = 0;
+                region.dstSubresource.baseArrayLayer = 0;
+                region.dstSubresource.layerCount = 1;
+                region.dstOffset = {0, 0, 0};
+                region.extent = {
+                    static_cast<uint32_t>(renderSize.w),
+                    static_cast<uint32_t>(renderSize.h),
+                    1};
+
+                vkCmdCopyImage(
+                    cmd,
+                    srcImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                    dstImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                    1, &region
+                    );
+
+                end_render_pass();
             }
         }
 
