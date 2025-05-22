@@ -1091,8 +1091,8 @@ void main()
                 // srcImage barrier
                 transitionImageLayout(cmd, srcImage,
                                       VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-                                      VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
-                p.buffer->setImageLayout(VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+                                      VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+                p.buffer->setImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
                 
                 // dstImage barrier (swapchain image)
                 transitionImageLayout(cmd, dstImage,

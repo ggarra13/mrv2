@@ -1125,6 +1125,7 @@ namespace tl
                                p.shaders["display"],
                                p.vbos["video"],
                                cb);
+                
                 fbo->setupViewportAndScissor(p.cmd);
                 
                 std::size_t pushSize = p.shaders["display"]->getPushSize();
@@ -1171,7 +1172,6 @@ namespace tl
 
                 fbo->beginRenderPass(p.cmd);
 
-                // We must NOT call this here.
                 p.shaders["display"]->setUniform("transform.mvp", oldTransform, vlk::kShaderVertex);
                 p.shaders["display"]->setFBO("textureSampler", p.buffers["video"]);
 
@@ -1243,6 +1243,11 @@ namespace tl
                 {
                     p.vbos["video"]->copy(convert(geom::box(box, false), p.vbos["video"]->getType()));
                 }
+
+                // Enable clipping (scissor)
+                if (p.clipRectEnabled)
+                    setClipRect(p.clipRect);
+
                 _vkDraw("video");
 
                 fbo->endRenderPass(p.cmd);

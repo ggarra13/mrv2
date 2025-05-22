@@ -51,12 +51,12 @@ v1.3.8
 		 * Histogram
 		 * Color Areas (Area color information)
 		 * Environment mapping
-		 * Thumbnails in Timeline (extremely slow and not clipped).
+		 * Thumbnails in Timeline (extremely slow).
 		 * Thumbnails in Panels
 		 * Missing Frames crosses
 		 
 	 * Missing to check/add:
-		 * Editing (thumbnails not clipped)
+		 * Editing (dissolves are broken in new OTIO).
 		 * Saving of Movies/Pictures with Annotations
 		 * NDI support
 		 * Temporary FLTK Text widget annotation (how to do it?)

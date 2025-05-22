@@ -263,9 +263,11 @@ namespace tl
                     : 0;
             if (thumbnailWidth > 0)
             {
+                int idx = 0;
                 const int w = g.w();
                 for (int x = 0; x < w; x += thumbnailWidth)
                 {
+                    ++idx;
                     const math::Box2i box(
                         g.min.x + x,
                         g.min.y + (_displayOptions.clipInfo
@@ -300,7 +302,6 @@ namespace tl
                                 event.render->endRenderPass();
 
                                 event.render->createRenderPass(false, false);
-
 
                                 event.render->createBindingSet("display");
                                 event.render->drawVideo({videoData}, {box});

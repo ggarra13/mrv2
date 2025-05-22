@@ -263,8 +263,10 @@ namespace tl
             if (thumbnailWidth > 0)
             {
                 const int w = g.w();
+                int idx = 0;
                 for (int x = 0; x < w; x += thumbnailWidth)
                 {
+                    ++idx;
                     const math::Box2i box(
                         g.min.x + x,
                         g.min.y + (_displayOptions.clipInfo

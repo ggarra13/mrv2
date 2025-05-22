@@ -188,6 +188,9 @@ namespace tl
             
             void transitionDepthToStencilAttachment(VkCommandBuffer cmd);
             void transitionDepthToShaderRead(VkCommandBuffer cmd);
+
+            //! Set up the internal scissor.
+            void setupScissor(const math::Box2i&); 
             
             //! Set up the internal viewport and scissor.
             void setupViewportAndScissor();

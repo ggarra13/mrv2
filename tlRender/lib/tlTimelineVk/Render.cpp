@@ -1192,7 +1192,7 @@ namespace tl
             TLRENDER_P();
 
             p.garbage[p.frameIndex].framebuffers.push_back(p.fbo->getFramebuffer());
-            p.garbage[p.frameIndex].renderPasses.push_back(p.fbo->getRenderPass());
+            p.garbage[p.frameIndex].renderPasses.push_back(getRenderPass());
             
             p.fbo->createRenderPass(clearColor, clearDepth);
             p.fbo->createFramebuffer();
@@ -1272,15 +1272,17 @@ namespace tl
         void Render::setClipRect(const math::Box2i& value)
         {
             TLRENDER_P();
-            
-            // Clamp to framebuffer bounds
-            int32_t clampedX = std::max(0, value.x());
-            int32_t clampedY = std::max(0, value.y());
-            uint32_t clampedW = std::max(0, value.w() - (clampedX - value.x()));
-            uint32_t clampedH = std::max(0, value.h() - (clampedY - value.y()));
-            const math::Box2i clampedRect(clampedX, clampedY,
-                                          clampedW, clampedH);
-            p.clipRect = clampedRect;
+            p.clipRect = value;
+            if (p.clipRectEnabled && p.clipRect.w() > 0 && p.clipRect.h() > 0)
+            {
+                VkRect2D scissorRect = {
+                    p.clipRect.x(),
+                    p.clipRect.y(),
+                    static_cast<uint32_t>(p.clipRect.w()),
+                    static_cast<uint32_t>(p.clipRect.h())
+                };
+                vkCmdSetScissor(p.cmd, 0, 1, &scissorRect);
+            }
         }
 
         math::Matrix4x4f Render::getTransform() const

@@ -71,16 +71,7 @@ namespace tl
                                     const vlk::DepthStencilStateInfo& ds,
                                     const vlk::MultisampleStateInfo& ms)
         {
-            
-            TLRENDER_P();            
-            if (!shader)
-                throw std::runtime_error(
-                    "createPipeline failed with unknown shader '" +
-                    shader->getName() + "'");
-
-            if (!mesh)
-                throw std::runtime_error(
-                    "createPipeline failed with unknown mesh");
+            TLRENDER_P();
             
             VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
             if (!pipelineLayout)
@@ -93,10 +84,6 @@ namespace tl
             {
                 DEBUG_PIPELINE_LAYOUT("REUSING    pipelineLayout " << pipelineLayoutName);
             }
-            
-            if (pipelineLayout == VK_NULL_HANDLE)
-                throw std::runtime_error(
-                    "createPipeline failed with pipelineLayout == VK_NULL_HANDLE");
 
             VkDevice device = ctx.device;
             
@@ -258,15 +245,7 @@ namespace tl
             const std::string& pipelineLayoutName, const std::string& shaderName)
         {
             TLRENDER_P();
-            if (!p.shaders[shaderName])
-            {
-                throw std::runtime_error("Undefined shader " + shaderName);
-            }
-            if (!p.pipelineLayouts[pipelineLayoutName])
-            {
-                throw std::runtime_error(
-                    "Undefined pipelineLayout " + pipelineLayoutName);
-            }
+            
             VkDescriptorSet descriptorSet = p.shaders[shaderName]->getDescriptorSet();
             
             vkCmdBindDescriptorSets(
@@ -278,24 +257,6 @@ namespace tl
         void Render::_vkDraw(const std::string& meshName)
         {
             TLRENDER_P();
-
-            if (!p.vaos[meshName])
-                throw std::runtime_error("p.vaos[" + meshName + "] not created");
-            if (!p.vbos[meshName])
-                throw std::runtime_error("p.vbos[" + meshName + "] not created");
-            if (p.clipRectEnabled)
-            {
-                VkRect2D newScissorRect = {
-                    p.clipRect.x(),
-                    p.clipRect.y(),
-                    static_cast<uint32_t>(p.clipRect.w()),
-                    static_cast<uint32_t>(p.clipRect.h())
-                };
-                vkCmdSetScissor(p.cmd, 0, 1, &newScissorRect);
-                // glScissor(
-                //     value.x(), p.renderSize.h - value.h() - value.y(),
-                //     value.w(), value.h());
-            }
             
             p.vaos[meshName]->bind(p.frameIndex);
             p.vaos[meshName]->draw(p.cmd, p.vbos[meshName]);

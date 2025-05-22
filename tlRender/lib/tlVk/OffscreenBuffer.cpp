@@ -753,24 +753,10 @@ namespace tl
             {
                 return;
             }
-            
-            VkImageMemoryBarrier barrier{};
-            barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-            barrier.oldLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-            barrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-            barrier.srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-            barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
-            barrier.image = p.image;
-            barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-            barrier.subresourceRange.baseMipLevel = 0;
-            barrier.subresourceRange.levelCount = 1;
-            barrier.subresourceRange.baseArrayLayer = 0;
-            barrier.subresourceRange.layerCount = 1;
 
-            vkCmdPipelineBarrier(
-                cmd, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-                VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 0, 0, nullptr, 0,
-                nullptr, 1, &barrier);
+            transitionImageLayout(cmd, p.image,
+                                  p.imageLayout,
+                                  VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
             // Track layout
             p.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
@@ -795,6 +781,20 @@ namespace tl
             p.scissor.extent = {
                 static_cast<uint32_t>(p.size.w),
                 static_cast<uint32_t>(p.size.h)};
+        }
+
+        void OffscreenBuffer::setupScissor(const math::Box2i& value)
+        {
+            TLRENDER_P();
+            
+            if (value.w() > 0 && value.h() > 0)
+            {
+                p.scissor.offset = { value.x(), value.y() };
+                p.scissor.extent = {
+                    static_cast<uint32_t>(value.w()),
+                    static_cast<uint32_t>(value.h())
+                };
+            }
         }
 
         void OffscreenBuffer::beginRenderPass(VkCommandBuffer cmd,
@@ -857,24 +857,9 @@ namespace tl
             {
                 return;
             }
-            
-            VkImageMemoryBarrier barrier{};
-            barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-            barrier.oldLayout = p.imageLayout; //VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-            barrier.newLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-            barrier.srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
-            barrier.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-            barrier.image = p.image;
-            barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-            barrier.subresourceRange.baseMipLevel = 0;
-            barrier.subresourceRange.levelCount = 1;
-            barrier.subresourceRange.baseArrayLayer = 0;
-            barrier.subresourceRange.layerCount = 1;
 
-            vkCmdPipelineBarrier(
-                cmd, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-                VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, 0, 0, nullptr, 0,
-                nullptr, 1, &barrier);
+            transitionImageLayout(cmd, p.image, p.imageLayout,
+                                  VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
 
             // Track layout
             p.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;

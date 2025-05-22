@@ -786,6 +786,10 @@ namespace tl
                                     
                                     timeline::RenderOptions renderOptions;
                                     renderOptions.clear = false;
+                                    std::cerr << "calling render image begin "
+                                              << " with frame "
+                                              << p.thumbnailThread.frameIndex
+                                              << std::endl;
                                     p.thumbnailThread.render->begin(cmd, p.thumbnailThread.buffer,
                                                                     p.thumbnailThread.frameIndex, size,
                                                                     renderOptions);
@@ -895,6 +899,10 @@ namespace tl
                                     
                                         timeline::RenderOptions renderOptions;
                                         renderOptions.clear = false;
+                                        std::cerr << "calling render video begin "
+                                                  << " with frame "
+                                                  << p.thumbnailThread.frameIndex
+                                                  << std::endl;
                                         p.thumbnailThread.render->begin(cmd,
                                                                         p.thumbnailThread.buffer,
                                                                         p.thumbnailThread.frameIndex,
