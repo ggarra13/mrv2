@@ -30,6 +30,7 @@ namespace mrv
             VkCommandBuffer  cmd = VK_NULL_HANDLE;
 
             //! This is for compositing pipelines
+            VkRenderPass     loadRenderPass = VK_NULL_HANDLE;
             VkPipelineLayout pipeline_layout = VK_NULL_HANDLE;
             VkPipelineLayout annotation_pipeline_layout = VK_NULL_HANDLE;
             VkPipeline       annotation_pipeline = VK_NULL_HANDLE;

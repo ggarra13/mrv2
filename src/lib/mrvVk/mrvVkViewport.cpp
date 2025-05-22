@@ -373,6 +373,7 @@ namespace mrv
         void Viewport::prepare()
         {
             prepare_render_pass();       // Main swapchain render pass
+            prepare_load_render_pass();  // swapchain render pass that loads contents
             prepare_shaders();
             prepare_pipeline_layout(); 
         }
@@ -386,6 +387,12 @@ namespace mrv
             vk.avbo.reset();
             vk.avao.reset();
 
+            if (vk.loadRenderPass != VK_NULL_HANDLE)
+            {
+                vkDestroyRenderPass(device(), vk.loadRenderPass, nullptr);
+                vk.loadRenderPass = VK_NULL_HANDLE;
+            }
+            
             if (vk.pipeline_layout != VK_NULL_HANDLE)
             {
                 vkDestroyPipelineLayout(device(), vk.pipeline_layout, nullptr);
@@ -851,6 +858,18 @@ namespace mrv
             }
 
             
+            VkViewport viewport = {};
+            viewport.width = static_cast<float>(w());
+            viewport.height = static_cast<float>(h());
+            viewport.minDepth = 0.0f;
+            viewport.maxDepth = 1.0f;
+            vkCmdSetViewport(cmd, 0, 1, &viewport);
+
+            VkRect2D scissor = {};
+            scissor.extent.width = w();
+            scissor.extent.height = h();
+            vkCmdSetScissor(cmd, 0, 1, &scissor);
+                
                 
             const float rotation = _getRotation();
             if (p.presentation ||
@@ -890,18 +909,6 @@ namespace mrv
                     cmd, vk.pipeline_layout,
                     vk.shader->getPushStageFlags(), 0, sizeof(float), &opacity);
 
-                VkViewport viewport = {};
-                viewport.width = static_cast<float>(w());
-                viewport.height = static_cast<float>(h());
-                viewport.minDepth = 0.0f;
-                viewport.maxDepth = 1.0f;
-                vkCmdSetViewport(cmd, 0, 1, &viewport);
-
-                VkRect2D scissor = {};
-                scissor.extent.width = w();
-                scissor.extent.height = h();
-                vkCmdSetScissor(cmd, 0, 1, &scissor);
-
                 if (vk.vao && vk.vbo)
                 {
                     vk.vao->bind(m_currentFrameIndex);
@@ -915,8 +922,10 @@ namespace mrv
                 
                 // srcImage barrier
                 transitionImageLayout(cmd, srcImage,
-                                      VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+                                      VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
                                       VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+                // srcImage barrier
+                vk.buffer->setImageLayout(VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL); 
                 
                 // dstImage barrier (swapchain image)
                 transitionImageLayout(cmd, dstImage,
@@ -936,20 +945,6 @@ namespace mrv
                         filters.magnify == timeline::ImageFilter::Linear)
                         filter = VK_FILTER_LINEAR;
                 }
-                        
-                begin_render_pass();
-                
-                VkViewport viewport = {};
-                viewport.width = static_cast<float>(w());
-                viewport.height = static_cast<float>(h());
-                viewport.minDepth = 0.0f;
-                viewport.maxDepth = 1.0f;
-                vkCmdSetViewport(cmd, 0, 1, &viewport);
-
-                VkRect2D scissor = {};
-                scissor.extent.width = w();
-                scissor.extent.height = h();
-                vkCmdSetScissor(cmd, 0, 1, &scissor);
                 
                 const int32_t viewportX = p.viewPos.x;
                 const int32_t viewportY = p.viewPos.y;
@@ -966,7 +961,7 @@ namespace mrv
 
                 if (dstWidth <= 0 || dstHeight <= 0)
                     return; // Nothing to blit
-                
+
                 // Adjust source region.
                 const int srcWidth = renderSize.w;
                 const int srcHeight = renderSize.h;
@@ -985,7 +980,6 @@ namespace mrv
                 int srcRight  = static_cast<int>((offsetX + visibleW) * scaleX);
                 int srcBottom = static_cast<int>((offsetY + visibleH) * scaleY);
                 
-
                 VkImageBlit region = {};
                 region.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
                 region.srcSubresource.mipLevel = 0;
@@ -1006,11 +1000,40 @@ namespace mrv
                     1, &region,
                     filter
                     );
+                
+                // srcImage barrier
+                transitionImageLayout(cmd, srcImage,
+                                      VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                                      VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+                vk.buffer->setImageLayout(VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+                                
+                // dstImage barrier (swapchain image)
+                transitionImageLayout(cmd, dstImage,
+                                      VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                                      VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+
+                VkClearValue clear_values[2];
+                clear_values[0].color = m_clearColor;
+                clear_values[1].depthStencil = {m_depthStencil, 0};
+
+                VkRenderPassBeginInfo rp_begin = {};
+                rp_begin.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+                rp_begin.renderPass = vk.loadRenderPass;
+                rp_begin.framebuffer = m_buffers[m_current_buffer].framebuffer;
+                rp_begin.renderArea.offset.x = 0;
+                rp_begin.renderArea.offset.y = 0;
+                rp_begin.renderArea.extent.width = w();
+                rp_begin.renderArea.extent.height = h();
+                rp_begin.clearValueCount = 2;
+                rp_begin.pClearValues = clear_values;
+                
+                vkCmdBeginRenderPass(cmd, &rp_begin, VK_SUBPASS_CONTENTS_INLINE);
+                m_in_render_pass = true;
             }
 
             
             if (p.showAnnotations && !annotations.empty())
-            {
+            {                
                 // We already flipped the coords, so we use a normal ortho
                 // matrix here
                 const math::Matrix4x4f orthoMatrix = math::ortho(
@@ -1477,6 +1500,84 @@ namespace mrv
             tcp->pushMessage(msg);
         }
         
+        // m_depth (optionally) -> creates m_renderPass
+        void Viewport::prepare_load_render_pass() 
+        {
+            MRV2_VK();
+            
+            bool has_depth = mode() & FL_DEPTH;
+            bool has_stencil = mode() & FL_STENCIL;
+
+            VkAttachmentDescription attachments[2];
+            attachments[0] = VkAttachmentDescription();
+            attachments[0].format = format();
+            attachments[0].samples = VK_SAMPLE_COUNT_1_BIT;
+            attachments[0].loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
+            attachments[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+            attachments[0].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+            attachments[0].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+            attachments[0].initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            attachments[0].finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR; // Final layout for presentation
+
+            attachments[1] = VkAttachmentDescription();
+
+
+            VkAttachmentReference color_reference = {};
+            color_reference.attachment = 0;
+            color_reference.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+    
+            VkAttachmentReference depth_reference = {};
+            depth_reference.attachment = 1;
+            depth_reference.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+    
+            VkSubpassDescription subpass = {};
+            subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+            subpass.flags = 0;
+            subpass.inputAttachmentCount = 0;
+            subpass.pInputAttachments = NULL;
+            subpass.colorAttachmentCount = 1;
+            subpass.pColorAttachments = &color_reference;
+            subpass.pResolveAttachments = NULL;
+
+            if (has_depth || has_stencil)
+            {
+                attachments[1].format = m_depth.format;
+                attachments[1].samples = VK_SAMPLE_COUNT_1_BIT;
+                attachments[1].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+                attachments[1].storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+                if (has_stencil)
+                {
+                    attachments[1].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+                }
+                else
+                {
+                    attachments[1].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+                }
+                attachments[1].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+                attachments[1].initialLayout =
+                    VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+                attachments[1].finalLayout =
+                    VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+    
+                subpass.pDepthStencilAttachment = &depth_reference;
+                subpass.preserveAttachmentCount = 0;
+                subpass.pPreserveAttachments = NULL;
+            }
+
+            VkRenderPassCreateInfo rp_info = {};
+            rp_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+            rp_info.pNext = NULL;
+            rp_info.attachmentCount = (has_depth || has_stencil) ? 2: 1;
+            rp_info.pAttachments = attachments;
+            rp_info.subpassCount = 1;
+            rp_info.pSubpasses = &subpass;
+            rp_info.dependencyCount = 0;
+            rp_info.pDependencies = NULL;
+                    
+            VkResult result;
+            result = vkCreateRenderPass(device(), &rp_info, NULL, &vk.loadRenderPass);
+            VK_CHECK(result);
+        }
     } // namespace vulkan
 
 } // namespace mrv

@@ -283,6 +283,19 @@ namespace tl
                 throw std::runtime_error("p.vaos[" + meshName + "] not created");
             if (!p.vbos[meshName])
                 throw std::runtime_error("p.vbos[" + meshName + "] not created");
+            if (p.clipRectEnabled)
+            {
+                VkRect2D newScissorRect = {
+                    p.clipRect.x(),
+                    p.clipRect.y(),
+                    static_cast<uint32_t>(p.clipRect.w()),
+                    static_cast<uint32_t>(p.clipRect.h())
+                };
+                vkCmdSetScissor(p.cmd, 0, 1, &newScissorRect);
+                // glScissor(
+                //     value.x(), p.renderSize.h - value.h() - value.y(),
+                //     value.w(), value.h());
+            }
             
             p.vaos[meshName]->bind(p.frameIndex);
             p.vaos[meshName]->draw(p.cmd, p.vbos[meshName]);

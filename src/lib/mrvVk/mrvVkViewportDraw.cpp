@@ -1184,7 +1184,6 @@ namespace mrv
             TLRENDER_P();
             
             int screen = this->screen_num();
-            auto m_previous_hdr_metadata = m_hdr_metadata;
             
             if (!p.hdrOptions.passthru)
             {

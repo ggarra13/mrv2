@@ -1030,15 +1030,13 @@ void main()
                 
                 // srcImage barrier
                 transitionImageLayout(cmd, srcImage,
-                                      VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+                                      VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
                                       VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-                
+
                 // dstImage barrier (swapchain image)
                 transitionImageLayout(cmd, dstImage,
                                       VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
                                       VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-
-                begin_render_pass();
 
                 if (p.buffer->getFormat() == format())
                 {
@@ -1089,8 +1087,18 @@ void main()
                         VK_FILTER_NEAREST
                     );
                 }
+                
+                // srcImage barrier
+                transitionImageLayout(cmd, srcImage,
+                                      VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                                      VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+                p.buffer->setImageLayout(VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+                
+                // dstImage barrier (swapchain image)
+                transitionImageLayout(cmd, dstImage,
+                                      VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                                      VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
 
-                end_render_pass();
             }
         }
 
@@ -1826,12 +1834,17 @@ void main()
 
                         uint8_t* d = pixelData;
                         const uint8_t* s = image->getData();
+#ifdef OPENGL_BACKEND
                         for (int y = 0; y < h; ++y)
                         {
                             std::memcpy(
                                 d + (h - 1 - y) * w * 4, s + y * w * 4,
                                 w * 4);
                         }
+#endif
+#ifdef VULKAN_BACKEND
+                        std::memcpy(d, s, w * h * 4);
+#endif
                         p.box->bind_image(rgbImage);
                         p.box->redraw();
                         repositionThumbnail();

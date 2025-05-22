@@ -1272,19 +1272,15 @@ namespace tl
         void Render::setClipRect(const math::Box2i& value)
         {
             TLRENDER_P();
-            p.clipRect = value;
-            if (value.w() > 0 && value.h() > 0)
-            {
-                VkRect2D newScissorRect = {
-                    value.x(), value.y(),
-                    static_cast<uint32_t>(value.w()),
-                    static_cast<uint32_t>(value.h())
-                };
-                vkCmdSetScissor(p.cmd, 0, 1, &newScissorRect);
-                // glScissor(
-                //     value.x(), p.renderSize.h - value.h() - value.y(),
-                //     value.w(), value.h());
-            }
+            
+            // Clamp to framebuffer bounds
+            int32_t clampedX = std::max(0, value.x());
+            int32_t clampedY = std::max(0, value.y());
+            uint32_t clampedW = std::max(0, value.w() - (clampedX - value.x()));
+            uint32_t clampedH = std::max(0, value.h() - (clampedY - value.y()));
+            const math::Box2i clampedRect(clampedX, clampedY,
+                                          clampedW, clampedH);
+            p.clipRect = clampedRect;
         }
 
         math::Matrix4x4f Render::getTransform() const
@@ -1970,9 +1966,7 @@ namespace tl
                         }
                         else
                         {
-                            // We may still need a tonemap function, for example
-                            // to fit 10000 nits into P3 1000 nits.
-                            cmap.tone_mapping_function = &pl_tone_map_auto;
+                            cmap.tone_mapping_function = nullptr; //&pl_tone_map_spline;
                         }
                     }
                     else
