@@ -1758,14 +1758,15 @@ namespace tl
                 return;
 
             p.hdrOptions = value;
+            p.hdrOptions.passthru = value.passthru;
 
             p.garbage[p.frameIndex].shaders.push_back(p.shaders["display"]);
 
 #if defined(TLRENDER_LIBPLACEBO)
-            if (p.hdrOptions.tonemap || p.hdrOptions.passthru)
-            {
+            if (p.hdrOptions.passthru || p.hdrOptions.tonemap)
                 p.placeboData.reset(new LibPlaceboData);
-            }
+            else
+                p.placeboData.reset();
 #endif // TLRENDER_LIBPLACEBO
             
             p.shaders["display"].reset();
@@ -1969,6 +1970,8 @@ namespace tl
                         }
                         else
                         {
+                            // We may still need a tonemap function, for example
+                            // to fit 10000 nits into P3 1000 nits.
                             cmap.tone_mapping_function = &pl_tone_map_auto;
                         }
                     }
