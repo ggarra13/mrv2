@@ -1184,38 +1184,54 @@ namespace mrv
             TLRENDER_P();
             
             int screen = this->screen_num();
-            
-            if (!p.hdrOptions.passthru || !monitor::is_hdr_active(screen))
-                return;
-            
-            // This will make the FLTK swapchain call vk->SetHDRMetadataEXT();
-            const image::HDRData& data = p.hdrOptions.hdrData;
             auto m_previous_hdr_metadata = m_hdr_metadata;
+            
+            if (!p.hdrOptions.passthru)
+            {
+                m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
 
-            m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
-            m_hdr_metadata.displayPrimaryRed = {
-                data.primaries[image::HDRPrimaries::Red][0],
-                data.primaries[image::HDRPrimaries::Red][1],
-            };
-            m_hdr_metadata.displayPrimaryGreen = {
-                data.primaries[image::HDRPrimaries::Green][0],
-                data.primaries[image::HDRPrimaries::Green][1],
-            };
-            m_hdr_metadata.displayPrimaryBlue = {
-                data.primaries[image::HDRPrimaries::Blue][0],
-                data.primaries[image::HDRPrimaries::Blue][1],
-            };
-            m_hdr_metadata.whitePoint = {
-                data.primaries[image::HDRPrimaries::White][0],
-                data.primaries[image::HDRPrimaries::White][1],
-            };
-            // Max display capability
-            m_hdr_metadata.maxLuminance =
-                data.displayMasteringLuminance.getMax();
-            m_hdr_metadata.minLuminance =
-                data.displayMasteringLuminance.getMin();
-            m_hdr_metadata.maxContentLightLevel = data.maxCLL;
-            m_hdr_metadata.maxFrameAverageLightLevel = data.maxFALL;
+                // Primaries
+                m_hdr_metadata.displayPrimaryRed = { 0.640F, 0.330F };
+                m_hdr_metadata.displayPrimaryGreen = { 0.300F, 0.600F };
+                m_hdr_metadata.displayPrimaryBlue = { 0.15F, 0.060F };
+                m_hdr_metadata.whitePoint = { 0.3127F, 0.3290F };
+                
+                // Max display capability
+                m_hdr_metadata.maxLuminance = 100.F;
+                m_hdr_metadata.minLuminance = 0.1F;
+                m_hdr_metadata.maxContentLightLevel = 100.F;
+                m_hdr_metadata.maxFrameAverageLightLevel = 100.F;
+            }
+            else
+            {
+                // This will make the FLTK swapchain call vk->SetHDRMetadataEXT();
+                const image::HDRData& data = p.hdrOptions.hdrData;
+
+                m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
+                m_hdr_metadata.displayPrimaryRed = {
+                    data.primaries[image::HDRPrimaries::Red][0],
+                    data.primaries[image::HDRPrimaries::Red][1],
+                };
+                m_hdr_metadata.displayPrimaryGreen = {
+                    data.primaries[image::HDRPrimaries::Green][0],
+                    data.primaries[image::HDRPrimaries::Green][1],
+                };
+                m_hdr_metadata.displayPrimaryBlue = {
+                    data.primaries[image::HDRPrimaries::Blue][0],
+                    data.primaries[image::HDRPrimaries::Blue][1],
+                };
+                m_hdr_metadata.whitePoint = {
+                    data.primaries[image::HDRPrimaries::White][0],
+                    data.primaries[image::HDRPrimaries::White][1],
+                };
+                // Max display capability
+                m_hdr_metadata.maxLuminance =
+                    data.displayMasteringLuminance.getMax();
+                m_hdr_metadata.minLuminance =
+                    data.displayMasteringLuminance.getMin();
+                m_hdr_metadata.maxContentLightLevel = data.maxCLL;
+                m_hdr_metadata.maxFrameAverageLightLevel = data.maxFALL;
+            }
 
             if (!is_equal_hdr_metadata(m_hdr_metadata, m_previous_hdr_metadata))
             {
@@ -1225,6 +1241,7 @@ namespace mrv
             {
                 m_hdr_metadata_changed = false; // Mark as unchanged
             }
+            
         }
 
     } // namespace vulkan

@@ -1039,29 +1039,56 @@ void main()
                                       VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 
                 begin_render_pass();
-                
-                VkImageCopy region = {};
-                region.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-                region.srcSubresource.mipLevel = 0;
-                region.srcSubresource.baseArrayLayer = 0;
-                region.srcSubresource.layerCount = 1;
-                region.srcOffset = {0, 0, 0};
-                region.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-                region.dstSubresource.mipLevel = 0;
-                region.dstSubresource.baseArrayLayer = 0;
-                region.dstSubresource.layerCount = 1;
-                region.dstOffset = {0, 0, 0};
-                region.extent = {
-                    static_cast<uint32_t>(renderSize.w),
-                    static_cast<uint32_t>(renderSize.h),
-                    1};
 
-                vkCmdCopyImage(
-                    cmd,
-                    srcImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-                    dstImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                    1, &region
+                if (p.buffer->getFormat() == format())
+                {
+                    VkImageCopy region = {};
+                    region.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+                    region.srcSubresource.mipLevel = 0;
+                    region.srcSubresource.baseArrayLayer = 0;
+                    region.srcSubresource.layerCount = 1;
+                    region.srcOffset = {0, 0, 0};
+                    region.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+                    region.dstSubresource.mipLevel = 0;
+                    region.dstSubresource.baseArrayLayer = 0;
+                    region.dstSubresource.layerCount = 1;
+                    region.dstOffset = {0, 0, 0};
+                    region.extent = {
+                        static_cast<uint32_t>(renderSize.w),
+                        static_cast<uint32_t>(renderSize.h),
+                        1};
+
+                    vkCmdCopyImage(
+                        cmd,
+                        srcImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                        dstImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                        1, &region
+                        );
+                }
+                else
+                {
+
+                    VkImageBlit region = {};
+                    region.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+                    region.srcSubresource.mipLevel = 0;
+                    region.srcSubresource.baseArrayLayer = 0;
+                    region.srcSubresource.layerCount = 1;
+                    region.srcOffsets[0] = {0, 0, 0};
+                    region.srcOffsets[1] = {w(), h(), 1};
+                    region.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+                    region.dstSubresource.mipLevel = 0;
+                    region.dstSubresource.baseArrayLayer = 0;
+                    region.dstSubresource.layerCount = 1;
+                    region.dstOffsets[0] = {0, 0, 0};
+                    region.dstOffsets[1] = {w(), h(), 1};
+                    vkCmdBlitImage(
+                        cmd,
+                        srcImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                        dstImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                        1, &region,
+                        VK_FILTER_NEAREST
                     );
+                }
 
                 end_render_pass();
             }

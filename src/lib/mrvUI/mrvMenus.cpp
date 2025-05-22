@@ -848,7 +848,6 @@ namespace mrv
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
             if (hdrOptions.tonemap)
                 item->set();
-#endif            
 
             int selected = static_cast<int>(hdrOptions.algorithm);
             mode = FL_MENU_RADIO;
@@ -868,6 +867,7 @@ namespace mrv
                     item->set();
                 ++tonemap;
             }
+#endif
         }
 
         timeline::Playback playback = timeline::Playback::Stop;

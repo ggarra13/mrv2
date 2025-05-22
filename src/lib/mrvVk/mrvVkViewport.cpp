@@ -776,8 +776,6 @@ namespace mrv
 
             math::Matrix4x4f mvp;
 
-            const float rotation = _getRotation();
-
             if (p.environmentMapOptions.type != EnvironmentMapOptions::kNone)
             {
                 mvp = _createEnvironmentMap();
@@ -789,10 +787,8 @@ namespace mrv
 
             if (!pipeline())
             {
-                std::cerr << "pipeline not ready" << std::endl;
                 return;
-            }
-                
+            }                
 
 
             float opacity = 1.F;
@@ -855,54 +851,161 @@ namespace mrv
             }
 
             
-            // --- Final Render Pass: Render to Swapchain (Composition) ---
-            vk.buffer->transitionToShaderRead(cmd);
-            if (vk.annotation)
-                vk.annotation->transitionToShaderRead(cmd);
-            
-            begin_render_pass(cmd);
-
-            // Bind the shaders to the current frame index.
-            vk.shader->bind(m_currentFrameIndex);
-
-            // Bind the main composition pipeline (created/managed outside this
-            // draw loop)
-            vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline());
-            
-            // --- Update Descriptor Set for the SECOND pass (Composition) ---
-            // This updates the descriptor set for the CURRENT frame index on
-            // the CPU.
-            vk.shader->setUniform("transform.mvp", mvp, vlk::kShaderVertex);
-            vk.shader->setFBO("textureSampler", vk.buffer);
-            
-            // --- Bind Descriptor Set for the SECOND pass ---
-            // Record the command to bind the descriptor set for the CURRENT
-            // frame index
-            VkDescriptorSet descriptorSet = vk.shader->getDescriptorSet();
-            vkCmdBindDescriptorSets(
-                cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, vk.pipeline_layout, 0, 1,
-                &descriptorSet, 0, nullptr);
-            
-            vkCmdPushConstants(
-                cmd, vk.pipeline_layout,
-                vk.shader->getPushStageFlags(), 0, sizeof(float), &opacity);
-
-            VkViewport viewport = {};
-            viewport.width = static_cast<float>(w());
-            viewport.height = static_cast<float>(h());
-            viewport.minDepth = 0.0f;
-            viewport.maxDepth = 1.0f;
-            vkCmdSetViewport(cmd, 0, 1, &viewport);
-
-            VkRect2D scissor = {};
-            scissor.extent.width = w();
-            scissor.extent.height = h();
-            vkCmdSetScissor(cmd, 0, 1, &scissor);
-
-            if (vk.vao && vk.vbo)
+                
+            const float rotation = _getRotation();
+            if (p.presentation ||
+                p.ui->uiPrefs->uiPrefsBlitViewports->value() == kNoBlit ||
+                p.environmentMapOptions.type != EnvironmentMapOptions::kNone ||
+                rotation != 0.F || (transparent && hasAlpha))
             {
-                vk.vao->bind(m_currentFrameIndex);
-                vk.vao->draw(cmd, vk.vbo);
+                // --- Final Render Pass: Render to Swapchain (Composition) ---
+                vk.buffer->transitionToShaderRead(cmd);
+                if (vk.annotation)
+                    vk.annotation->transitionToShaderRead(cmd);
+            
+                begin_render_pass(cmd);
+
+                // Bind the shaders to the current frame index.
+                vk.shader->bind(m_currentFrameIndex);
+
+                // Bind the main composition pipeline (created/managed outside this
+                // draw loop)
+                vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline());
+            
+                // --- Update Descriptor Set for the SECOND pass (Composition) ---
+                // This updates the descriptor set for the CURRENT frame index on
+                // the CPU.
+                vk.shader->setUniform("transform.mvp", mvp, vlk::kShaderVertex);
+                vk.shader->setFBO("textureSampler", vk.buffer);
+            
+                // --- Bind Descriptor Set for the SECOND pass ---
+                // Record the command to bind the descriptor set for the CURRENT
+                // frame index
+                VkDescriptorSet descriptorSet = vk.shader->getDescriptorSet();
+                vkCmdBindDescriptorSets(
+                    cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, vk.pipeline_layout, 0, 1,
+                    &descriptorSet, 0, nullptr);
+            
+                vkCmdPushConstants(
+                    cmd, vk.pipeline_layout,
+                    vk.shader->getPushStageFlags(), 0, sizeof(float), &opacity);
+
+                VkViewport viewport = {};
+                viewport.width = static_cast<float>(w());
+                viewport.height = static_cast<float>(h());
+                viewport.minDepth = 0.0f;
+                viewport.maxDepth = 1.0f;
+                vkCmdSetViewport(cmd, 0, 1, &viewport);
+
+                VkRect2D scissor = {};
+                scissor.extent.width = w();
+                scissor.extent.height = h();
+                vkCmdSetScissor(cmd, 0, 1, &scissor);
+
+                if (vk.vao && vk.vbo)
+                {
+                    vk.vao->bind(m_currentFrameIndex);
+                    vk.vao->draw(cmd, vk.vbo);
+                }
+            }
+            else
+            {
+                VkImage srcImage = vk.buffer->getImage();
+                VkImage dstImage = get_back_buffer_image();
+                
+                // srcImage barrier
+                transitionImageLayout(cmd, srcImage,
+                                      VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+                                      VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+                
+                // dstImage barrier (swapchain image)
+                transitionImageLayout(cmd, dstImage,
+                                      VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+                                      VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+
+                // Blit the offscreen buffer contents to the viewport
+                VkFilter filter = VK_FILTER_NEAREST;
+                if (!p.displayOptions.empty())
+                {
+                    const auto& filters = p.displayOptions[0].imageFilters;
+                    if (p.viewZoom < 1.0f &&
+                        filters.minify == timeline::ImageFilter::Linear)
+                        filter = VK_FILTER_LINEAR;
+                    else if (
+                        p.viewZoom > 1.0f &&
+                        filters.magnify == timeline::ImageFilter::Linear)
+                        filter = VK_FILTER_LINEAR;
+                }
+                        
+                begin_render_pass();
+                
+                VkViewport viewport = {};
+                viewport.width = static_cast<float>(w());
+                viewport.height = static_cast<float>(h());
+                viewport.minDepth = 0.0f;
+                viewport.maxDepth = 1.0f;
+                vkCmdSetViewport(cmd, 0, 1, &viewport);
+
+                VkRect2D scissor = {};
+                scissor.extent.width = w();
+                scissor.extent.height = h();
+                vkCmdSetScissor(cmd, 0, 1, &scissor);
+                
+                const int32_t viewportX = p.viewPos.x;
+                const int32_t viewportY = p.viewPos.y;
+                const int32_t sizeW = renderSize.w * p.viewZoom;
+                const int32_t sizeH = renderSize.h * p.viewZoom;
+                
+                int dstRight  = std::min(viewportX + sizeW, viewportSize.w);
+                int dstBottom = std::min(viewportY + sizeH, viewportSize.h);
+                int dstLeft   = std::max(viewportX, 0);
+                int dstTop    = std::max(viewportY, 0);
+
+                const int dstWidth = dstRight - dstLeft;
+                const int dstHeight = dstBottom - dstTop;
+
+                if (dstWidth <= 0 || dstHeight <= 0)
+                    return; // Nothing to blit
+                
+                // Adjust source region.
+                const int srcWidth = renderSize.w;
+                const int srcHeight = renderSize.h;
+                
+                const float scaleX = static_cast<float>(srcWidth) / sizeW;
+                const float scaleY = static_cast<float>(srcHeight) / sizeH;
+                
+                const int offsetX = dstLeft - viewportX;
+                const int offsetY = dstTop - viewportY;
+
+                const int visibleW = dstWidth;
+                const int visibleH = dstHeight;
+
+                int srcLeft   = static_cast<int>(offsetX * scaleX);
+                int srcTop    = static_cast<int>(offsetY * scaleY);
+                int srcRight  = static_cast<int>((offsetX + visibleW) * scaleX);
+                int srcBottom = static_cast<int>((offsetY + visibleH) * scaleY);
+                
+
+                VkImageBlit region = {};
+                region.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+                region.srcSubresource.mipLevel = 0;
+                region.srcSubresource.baseArrayLayer = 0;
+                region.srcSubresource.layerCount = 1;
+                region.srcOffsets[0] = {srcLeft, srcTop, 0};
+                region.srcOffsets[1] = {srcRight, srcBottom, 1};
+                region.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+                region.dstSubresource.mipLevel = 0;
+                region.dstSubresource.baseArrayLayer = 0;
+                region.dstSubresource.layerCount = 1;
+                region.dstOffsets[0] = {dstLeft, dstTop, 0};
+                region.dstOffsets[1] = {dstRight, dstBottom, 1};
+                vkCmdBlitImage(
+                    cmd,
+                    srcImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                    dstImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                    1, &region,
+                    filter
+                    );
             }
 
             
