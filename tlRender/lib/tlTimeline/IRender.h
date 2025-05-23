@@ -145,8 +145,8 @@ namespace tl
                 const BackgroundOptions& = BackgroundOptions()) = 0;
 
             virtual void createBindingSet(const std::string&) {};
-            virtual void createRenderPass(bool clearColor, bool clearDepth) {};
             virtual void beginRenderPass() {};
+            virtual void beginLoadRenderPass() {};
             virtual void endRenderPass() {};
             virtual void setupViewportAndScissor() {};
             

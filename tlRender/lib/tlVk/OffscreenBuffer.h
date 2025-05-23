@@ -157,7 +157,8 @@ namespace tl
 
             //! Get normal handles.
             VkFramebuffer getFramebuffer() const;
-            VkRenderPass getRenderPass() const;
+            VkRenderPass getClearRenderPass() const;
+            VkRenderPass getLoadRenderPass() const;
 
             //! Get Sampler
             VkSampler getSampler() const;
@@ -177,9 +178,11 @@ namespace tl
             //! Get Vulkan's internal format of depth buffer.
             VkFormat getDepthFormat() const;
             
-            //! Start/end a normal render pass.
-            void beginRenderPass(VkCommandBuffer cmd,
-                                 VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE);
+            //! Start/end a render passes.
+            void beginClearRenderPass(VkCommandBuffer cmd,
+                                      VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE);
+            void beginLoadRenderPass(VkCommandBuffer cmd,
+                                     VkSubpassContents contents = VK_SUBPASS_CONTENTS_INLINE);
             void endRenderPass(VkCommandBuffer cmd);
             
             //! Offscreen image transitions.
@@ -199,8 +202,8 @@ namespace tl
             void setupViewportAndScissor(VkCommandBuffer cmd);
 
             //! Render Pass functionality.
-            void createRenderPass(const bool clearColor,
-                                  const bool clearDepth);
+            void createClearRenderPass();
+            void createLoadRenderPass();
             
             //! Create a framebuffer for the current render pass.
             void createFramebuffer();

@@ -171,7 +171,8 @@ namespace tl
             VkDeviceMemory depthMemory = VK_NULL_HANDLE;
             VkImageView depthImageView = VK_NULL_HANDLE;
 
-            VkRenderPass renderPass = VK_NULL_HANDLE;
+            VkRenderPass clearRenderPass = VK_NULL_HANDLE;
+            VkRenderPass loadRenderPass = VK_NULL_HANDLE;
             VkFramebuffer framebuffer = VK_NULL_HANDLE;
 
             VkFramebuffer framebufferCompositing = VK_NULL_HANDLE;
@@ -180,6 +181,8 @@ namespace tl
 
             VkViewport viewport = {};
             VkRect2D scissor = {};
+
+            bool inRenderPass = false;
         };
 
         void OffscreenBuffer::_init(
@@ -233,8 +236,10 @@ namespace tl
 
             if (p.framebuffer != VK_NULL_HANDLE)
                 vkDestroyFramebuffer(device, p.framebuffer, nullptr);
-            if (p.renderPass != VK_NULL_HANDLE)
-                vkDestroyRenderPass(device, p.renderPass, nullptr);
+            if (p.clearRenderPass != VK_NULL_HANDLE)
+                vkDestroyRenderPass(device, p.clearRenderPass, nullptr);
+            if (p.loadRenderPass != VK_NULL_HANDLE)
+                vkDestroyRenderPass(device, p.loadRenderPass, nullptr);
 
             if (p.imageView != VK_NULL_HANDLE)
                 vkDestroyImageView(device, p.imageView, nullptr);
@@ -277,8 +282,10 @@ namespace tl
                 createDepthImageView();
             }
 
-            createRenderPass(p.options.clear,
-                             p.options.clearDepth);
+            // Render passes
+            createClearRenderPass();
+            createLoadRenderPass();
+            
             createFramebuffer();
             if (p.options.pbo)
             {
@@ -488,9 +495,14 @@ namespace tl
             return _p->framebuffer;
         }
 
-        VkRenderPass OffscreenBuffer::getRenderPass() const
+        VkRenderPass OffscreenBuffer::getClearRenderPass() const
         {
-            return _p->renderPass;
+            return _p->clearRenderPass;
+        }
+
+        VkRenderPass OffscreenBuffer::getLoadRenderPass() const
+        {
+            return _p->loadRenderPass;
         }
 
         VkExtent2D OffscreenBuffer::getExtent() const
@@ -579,8 +591,7 @@ namespace tl
                 throw std::runtime_error("Failed to create image view");
         }
 
-        void OffscreenBuffer::createRenderPass(bool clearColor,
-                                               bool clearDepth)
+        void OffscreenBuffer::createClearRenderPass()
         {
             TLRENDER_P();
 
@@ -589,13 +600,9 @@ namespace tl
             VkAttachmentDescription colorAttachment{};
             colorAttachment.format = p.colorFormat;
             colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-            colorAttachment.loadOp = clearColor ?
-                                     VK_ATTACHMENT_LOAD_OP_CLEAR :
-                                     VK_ATTACHMENT_LOAD_OP_LOAD;
+            colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
             colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-            VkImageLayout initialLayout = clearColor ?
-                                          VK_IMAGE_LAYOUT_UNDEFINED :
-                                          VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            VkImageLayout initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
             colorAttachment.initialLayout = initialLayout;
             colorAttachment.finalLayout =
                 VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
@@ -625,24 +632,12 @@ namespace tl
                 VkAttachmentDescription depthAttachment{};
                 depthAttachment.format = p.depthFormat;
                 depthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-                depthAttachment.loadOp = clearDepth ?
-                                         VK_ATTACHMENT_LOAD_OP_CLEAR :
-                                         VK_ATTACHMENT_LOAD_OP_LOAD;
+                depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
                 depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-                depthAttachment.stencilLoadOp = p.depthLayout == VK_IMAGE_LAYOUT_UNDEFINED ?
-                                                VK_ATTACHMENT_LOAD_OP_CLEAR :
-                                                VK_ATTACHMENT_LOAD_OP_LOAD;
+                depthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
                 depthAttachment.stencilStoreOp =
                     VK_ATTACHMENT_STORE_OP_STORE;
-
-                if (depthAttachment.stencilLoadOp == VK_ATTACHMENT_LOAD_OP_LOAD)
-                {
-                    depthAttachment.initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-                }
-                else
-                {
-                    depthAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-                }
+                depthAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
                 depthAttachment.finalLayout =
                     VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
                 attachments.push_back(depthAttachment);
@@ -695,7 +690,113 @@ namespace tl
             rpInfo.pSubpasses = &subpass;
 
             if (vkCreateRenderPass(
-                    device, &rpInfo, nullptr, &p.renderPass) !=
+                    device, &rpInfo, nullptr, &p.clearRenderPass) !=
+                VK_SUCCESS)
+                throw std::runtime_error(
+                    "Failed to create compositing render pass");
+        }
+
+
+        void OffscreenBuffer::createLoadRenderPass()
+        {
+            TLRENDER_P();
+
+            VkDevice device = ctx.device;
+
+            VkAttachmentDescription colorAttachment{};
+            colorAttachment.format = p.colorFormat;
+            colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
+            colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
+            colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+            VkImageLayout initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            colorAttachment.initialLayout = initialLayout;
+            colorAttachment.finalLayout =
+                VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+            VkAttachmentReference colorRef{};
+            colorRef.attachment = 0;
+            colorRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+            VkSubpassDescription subpass{};
+            subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+            subpass.colorAttachmentCount = 1;
+            subpass.pColorAttachments = &colorRef;
+
+            std::vector<VkAttachmentDescription> attachments;
+            attachments.push_back(colorAttachment);
+
+            VkAttachmentReference depthRef{};
+
+            if (hasDepth() || hasStencil())
+            {
+                depthRef.attachment = 1;
+                depthRef.layout =
+                    VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
+                subpass.pDepthStencilAttachment = &depthRef;
+
+                VkAttachmentDescription depthAttachment{};
+                depthAttachment.format = p.depthFormat;
+                depthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
+                depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
+                depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+                depthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+                depthAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_STORE;
+                
+                depthAttachment.initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+                depthAttachment.finalLayout =
+                    VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+                attachments.push_back(depthAttachment);
+            }
+
+            VkSubpassDependency dependency{};
+            dependency.srcSubpass = 0;
+            dependency.dstSubpass = 0;
+
+            // Stages involved:
+            // - Color output
+            // - Depth/stencil tests
+            // - Fragment shader sampling (e.g., input attachments or sampled images)
+            dependency.srcStageMask =
+                VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT |
+                VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT |
+                VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT |
+                VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+
+            dependency.dstStageMask = dependency.srcStageMask;
+
+            // Access types involved:
+            dependency.srcAccessMask =
+                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
+                VK_ACCESS_SHADER_READ_BIT;
+
+            dependency.dstAccessMask =
+                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
+                VK_ACCESS_SHADER_READ_BIT;
+
+            if (hasDepth() || hasStencil())
+            {
+                dependency.srcAccessMask |= VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT |
+                                            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
+                dependency.dstAccessMask |= VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT |
+                                            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
+            }
+
+            // Optional: this can improve performance on tiled GPUs
+            dependency.dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
+
+
+            VkRenderPassCreateInfo rpInfo{};
+            rpInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+            rpInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
+            rpInfo.pAttachments = attachments.data();
+            // rpInfo.dependencyCount = 1;
+            // rpInfo.pDependencies = &dependency;
+            rpInfo.subpassCount = 1;
+            rpInfo.pSubpasses = &subpass;
+
+            if (vkCreateRenderPass(
+                    device, &rpInfo, nullptr, &p.loadRenderPass) !=
                 VK_SUCCESS)
                 throw std::runtime_error(
                     "Failed to create compositing render pass");
@@ -715,7 +816,7 @@ namespace tl
 
             VkFramebufferCreateInfo fbInfo{};
             fbInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-            fbInfo.renderPass = p.renderPass;
+            fbInfo.renderPass = p.clearRenderPass;
             fbInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
             fbInfo.pAttachments = attachments.data();
             fbInfo.width = p.size.w;
@@ -797,8 +898,44 @@ namespace tl
             }
         }
 
-        void OffscreenBuffer::beginRenderPass(VkCommandBuffer cmd,
-                                              VkSubpassContents contents)
+        void OffscreenBuffer::beginLoadRenderPass(VkCommandBuffer cmd,
+                                                  VkSubpassContents contents)
+        {
+            TLRENDER_P();
+
+            std::vector<VkClearValue> clearValues;
+            
+            VkClearValue colorClear = {};
+            const image::Color4f& color = p.options.clearColor;
+            colorClear.color = {{color.r, color.g, color.b, color.a}}; // Black clear
+            clearValues.push_back(colorClear);
+
+            if (hasDepth() || hasStencil())
+            {
+                VkClearValue depthClear = {};
+                depthClear.depthStencil = {1.0f, 0};
+                clearValues.push_back(depthClear);
+            }
+            
+            VkRenderPassBeginInfo beginInfo = {};
+            beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+            beginInfo.renderPass = p.loadRenderPass;
+            beginInfo.framebuffer = p.framebuffer;
+            beginInfo.renderArea.offset = {0, 0};
+            beginInfo.renderArea.extent = {
+                static_cast<uint32_t>(p.size.w),
+                static_cast<uint32_t>(p.size.h)};
+            beginInfo.clearValueCount =
+                static_cast<uint32_t>(clearValues.size());
+            beginInfo.pClearValues = clearValues.data();
+
+            vkCmdBeginRenderPass(cmd, &beginInfo, contents);
+            
+            setupViewportAndScissor(cmd);
+        }
+        
+        void OffscreenBuffer::beginClearRenderPass(VkCommandBuffer cmd,
+                                                   VkSubpassContents contents)
         {
             TLRENDER_P();
             
@@ -817,7 +954,7 @@ namespace tl
 
             VkRenderPassBeginInfo beginInfo = {};
             beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-            beginInfo.renderPass = p.renderPass;
+            beginInfo.renderPass = p.clearRenderPass;
             beginInfo.framebuffer = p.framebuffer;
             beginInfo.renderArea.offset = {0, 0};
             beginInfo.renderArea.extent = {
@@ -828,7 +965,7 @@ namespace tl
             beginInfo.pClearValues = clearValues.data();
 
             vkCmdBeginRenderPass(cmd, &beginInfo, contents);
-
+            
             setupViewportAndScissor(cmd);
         }
 
@@ -837,6 +974,15 @@ namespace tl
             TLRENDER_P();
             
             vkCmdEndRenderPass(cmd);
+            
+            // Update tracked layouts to reflect the finalLayouts of the render pass
+            // These are the final layouts specified in both clearRenderPass and
+            // loadRenderPass
+            p.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            if (hasDepth() || hasStencil())
+            {
+                p.depthLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+            }
         }
 
         void OffscreenBuffer::setupViewportAndScissor(VkCommandBuffer cmd)
@@ -1068,7 +1214,7 @@ namespace tl
 
             p.writeIndex = (p.writeIndex + 1) % NUM_PBO_BUFFERS;
         }
-
+        
         void* OffscreenBuffer::getLatestReadPixels()
         {
             TLRENDER_P();
@@ -1100,8 +1246,7 @@ namespace tl
             }
             else if (status == VK_NOT_READY)
             {
-                // Data is not ready yet, return the previous frame data if available.
-                return pbo.mappedPtr; 
+                return nullptr; 
             }
             else 
             {

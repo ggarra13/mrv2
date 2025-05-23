@@ -207,7 +207,7 @@ namespace tl
 
             // Vulkan overridden functions
             void createBindingSet(const std::string& shaderName) override;
-            void createRenderPass(bool clearColor, bool clearDepth) override;
+            void beginLoadRenderPass() override;
             void beginRenderPass() override;
             void endRenderPass() override;
             

@@ -725,7 +725,7 @@ namespace tl
 
             p.cmd = cmd;
             p.fbo = fbo;
-            p.renderPass = fbo->getRenderPass();
+            p.renderPass = fbo->getClearRenderPass();
             p.frameIndex = frameIndex;
 
             begin(renderSize, renderOptions);
@@ -768,8 +768,8 @@ namespace tl
             g.pipelineLayouts.clear();
             g.bindingSets.clear();
             g.shaders.clear();
-            g.framebuffers.clear();
             g.renderPasses.clear();
+            g.framebuffers.clear();
             
             const math::Matrix4x4f transform;
             const image::Color4f color(1.F, 1.F, 1.F);
@@ -1186,26 +1186,21 @@ namespace tl
         {
             _createBindingSet(_p->shaders[shaderName]);
         }
-        
-        void Render::createRenderPass(bool clearColor, bool clearDepth)
+
+        void Render::beginLoadRenderPass()
         {
             TLRENDER_P();
 
-            p.garbage[p.frameIndex].framebuffers.push_back(p.fbo->getFramebuffer());
-            p.garbage[p.frameIndex].renderPasses.push_back(getRenderPass());
-            
-            p.fbo->createRenderPass(clearColor, clearDepth);
-            p.fbo->createFramebuffer();
-
-            setRenderPass(p.fbo->getRenderPass());
+            p.fbo->transitionToColorAttachment(p.cmd);
+            p.fbo->beginLoadRenderPass(p.cmd);
         }
-
+        
         void Render::beginRenderPass()
         {
             TLRENDER_P();
 
             p.fbo->transitionToColorAttachment(p.cmd);
-            p.fbo->beginRenderPass(p.cmd);
+            p.fbo->beginClearRenderPass(p.cmd);
         }
 
         void Render::endRenderPass()
@@ -1232,7 +1227,7 @@ namespace tl
 
             VkRenderPassBeginInfo rpBegin{};
             rpBegin.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-            rpBegin.renderPass = p.fbo->getRenderPass();
+            rpBegin.renderPass = p.fbo->getClearRenderPass();
             rpBegin.framebuffer = p.fbo->getFramebuffer();
             rpBegin.renderArea.offset = {0, 0};
             rpBegin.renderArea.extent = p.fbo->getExtent(); // Use FBO extent

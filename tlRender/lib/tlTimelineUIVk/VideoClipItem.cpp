@@ -263,11 +263,11 @@ namespace tl
                     : 0;
             if (thumbnailWidth > 0)
             {
-                int idx = 0;
+                timeline::BackgroundOptions background;
+                background.type = timeline::Background::Transparent;
                 const int w = g.w();
                 for (int x = 0; x < w; x += thumbnailWidth)
                 {
-                    ++idx;
                     const math::Box2i box(
                         g.min.x + x,
                         g.min.y + (_displayOptions.clipInfo
@@ -299,14 +299,15 @@ namespace tl
                                 timeline::VideoData videoData;
                                 videoData.size = i->second->getSize();
                                 videoData.layers.push_back({i->second});
+
                                 event.render->endRenderPass();
-
-                                event.render->createRenderPass(false, false);
-
-                                event.render->createBindingSet("display");
-                                event.render->drawVideo({videoData}, {box});
                                 
-                                event.render->beginRenderPass();
+                                event.render->createBindingSet("display");
+                                event.render->drawVideo({videoData}, {box},
+                                                        {}, {}, {},
+                                                        background);
+                                
+                                event.render->beginLoadRenderPass();
                             }
                         }
                         else if (p.ioInfo && !p.ioInfo->video.empty())

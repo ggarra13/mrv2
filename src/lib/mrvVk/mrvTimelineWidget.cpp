@@ -935,7 +935,6 @@ void main()
                             p.style->getColorRole(ui::ColorRole::Window);
 
                         // Clear color in new render pass.
-                        p.buffer->createRenderPass(true, false);
                         p.render->begin(
                             cmd, p.buffer, m_currentFrameIndex, renderSize,
                             renderOptions);
@@ -946,17 +945,17 @@ void main()
                         p.render->setTransform(ortho);
                         p.render->setOCIOOptions(timeline::OCIOOptions());
                         p.render->setLUTOptions(timeline::LUTOptions());
+                        
+                        p.render->setClipRectEnabled(true);
+                        
                         ui::DrawEvent drawEvent(
                             p.style, p.iconLibrary, p.render, p.fontSystem);
-                        p.render->setClipRectEnabled(true);
-
-                        // Do not clear colors in new render passes
-                        p.render->createRenderPass(false, false);
-                        p.render->beginRenderPass();
+                        p.render->beginLoadRenderPass();
                         _drawEvent(
                             p.timelineWindow, math::Box2i(renderSize),
                             drawEvent);
                         p.render->endRenderPass();
+                        
                         p.render->setClipRectEnabled(false);
                         p.render->end();
                     }
