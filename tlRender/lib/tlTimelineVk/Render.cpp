@@ -1939,7 +1939,7 @@ namespace tl
                     }
                     else
                     {
-                        cmap.tone_mapping_function = nullptr; //&pl_tone_map_spline;
+                        cmap.tone_mapping_function = &pl_tone_map_spline;
                     }
                 }
                 else
