@@ -25,6 +25,11 @@ namespace tl
         //! Text information.
         struct TextInfo
         {
+            TextInfo(unsigned id) :
+                textureId(id)
+                {
+                };
+            
             TextInfo(const geom::TriangleMesh2& mesh, unsigned id) :
                 mesh(mesh),
                 textureId(id)
@@ -33,6 +38,7 @@ namespace tl
             
             geom::TriangleMesh2 mesh;
             uint8_t textureId;
+            size_t  meshIndex = 0;
         };
         
         //! Base class for renderers.

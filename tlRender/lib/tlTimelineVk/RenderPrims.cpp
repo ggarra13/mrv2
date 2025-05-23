@@ -383,12 +383,10 @@ namespace tl
             vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
             colorBlendAttachment.blendEnable = VK_TRUE;
 
-#if 1
             colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
             colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
             colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
             colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-#endif
             
             cb.attachments.push_back(colorBlendAttachment);
             
@@ -432,8 +430,25 @@ namespace tl
 
             int x = 0;
             int32_t rsbDeltaPrev = 0;
-            geom::TriangleMesh2 mesh;
-            size_t meshIndex = 0;
+
+            if (textInfos.empty())
+            {
+                timeline::TextInfo textInfo(textureIndex);
+                textInfos.emplace_back(textInfo);
+            }
+            else
+            {
+                timeline::TextInfo& lastTextInfo = textInfos.back();
+                if (lastTextInfo.textureId != textureIndex)
+                {
+                    timeline::TextInfo textInfo(textureIndex);
+                    textInfos.emplace_back(textInfo);
+                }
+            }
+            
+            timeline::TextInfo& lastTextInfo = textInfos.back();
+            geom::TriangleMesh2& mesh = lastTextInfo.mesh;
+            size_t& meshIndex = lastTextInfo.meshIndex;
             for (const auto& glyph : glyphs)
             {
                 if (glyph)
@@ -466,13 +481,13 @@ namespace tl
                         if (item.textureIndex != textureIndex)
                         {
                             textureIndex = item.textureIndex;
-
-                            const timeline::TextInfo textInfo(mesh,
-                                                              textureIndex);
+                            
+                            const timeline::TextInfo textInfo(textureIndex);
                             textInfos.emplace_back(textInfo);
                             
-                            mesh = geom::TriangleMesh2();
-                            meshIndex = 0;
+                            timeline::TextInfo& lastTextInfo = textInfos.back();
+                            mesh = lastTextInfo.mesh;
+                            meshIndex = lastTextInfo.meshIndex;
                         }
 
                         const math::Vector2i& offset = glyph->offset;
@@ -526,12 +541,6 @@ namespace tl
 
                     x += glyph->advance;
                 }
-            }
-
-            if (!mesh.triangles.empty())
-            {
-                const timeline::TextInfo textInfo(mesh, textureIndex);
-                textInfos.emplace_back(textInfo);
             }
         }
 
