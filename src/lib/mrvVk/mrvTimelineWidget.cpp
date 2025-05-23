@@ -943,8 +943,18 @@ void main()
                             static_cast<float>(renderSize.h), 0.F,
                             -1.F, 1.F);
                         p.render->setTransform(ortho);
-                        p.render->setOCIOOptions(timeline::OCIOOptions());
-                        p.render->setLUTOptions(timeline::LUTOptions());
+
+                        const auto& ocioOptions = p.ui->uiView->getOCIOOptions();
+                        p.render->setOCIOOptions(ocioOptions);
+                        
+                        const auto& lutOptions = p.ui->uiView->lutOptions();
+                        p.render->setLUTOptions(lutOptions);
+                        
+                        const auto& hdrOptions = p.ui->uiView->getHDROptions();
+                        p.render->setHDROptions(hdrOptions);
+                        
+                        // p.render->setOCIOOptions(timeline::OCIOOptions());
+                        // p.render->setLUTOptions(timeline::LUTOptions());
                         
                         p.render->setClipRectEnabled(true);
                         
