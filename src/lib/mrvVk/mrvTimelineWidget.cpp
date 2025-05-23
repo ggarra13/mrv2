@@ -15,6 +15,7 @@
 
 #include "mrvFl/mrvIO.h"
 
+#include "mrvVk/mrvVkShadersBinary.h"
 #include "mrvVk/mrvTimelineWidget.h"
 
 #include "mrvCore/mrvFile.h"
@@ -22,6 +23,7 @@
 #include "mrvCore/mrvTimeObject.h"
 
 #include <tlTimelineVk/Render.h>
+#include <tlTimelineVk/RenderShadersBinary.h>
 
 #include <tlTimelineUIVk/TimelineWidget.h>
 
@@ -189,7 +191,6 @@ namespace mrv
             
             TimelinePlayer* player = nullptr;
 
-            ThumbnailCreator* thumbnailCreator = nullptr;
             std::weak_ptr<timelineui_vk::ThumbnailSystem> thumbnailSystem;
 
             struct ThumbnailData
@@ -317,6 +318,11 @@ namespace mrv
                 settings->getValue<bool>("Timeline/ClipInfo");
             p.timelineWidget->setDisplayOptions(displayOptions);
                 
+            if (!context->getSystem<timelineui_vk::ThumbnailSystem>())
+            {
+                context->addSystem(timelineui_vk::ThumbnailSystem::create(context, ctx));
+            }
+            
             p.thumbnailSystem = context->getSystem<timelineui_vk::ThumbnailSystem>();
 
             setStopOnScrub(false);
@@ -760,7 +766,12 @@ void main()
                     if (!p.shader)
                     {
                         p.shader = vlk::Shader::create(
-                            ctx, vertexSource, fragmentSource, "timeline p.shader");
+                            ctx,
+                            timeline_vlk::Vertex3_spv,
+                            timeline_vlk::Vertex3_spv_len,
+                            textureFragment_spv,
+                            textureFragment_spv_len,
+                            "timeline p.shader");
                         math::Matrix4x4f pm;
                         p.shader->createUniform(
                             "transform.mvp", pm, vlk::kShaderVertex);
@@ -1843,17 +1854,7 @@ void main()
 
                         uint8_t* d = pixelData;
                         const uint8_t* s = image->getData();
-#ifdef OPENGL_BACKEND
-                        for (int y = 0; y < h; ++y)
-                        {
-                            std::memcpy(
-                                d + (h - 1 - y) * w * 4, s + y * w * 4,
-                                w * 4);
-                        }
-#endif
-#ifdef VULKAN_BACKEND
                         std::memcpy(d, s, w * h * 4);
-#endif
                         p.box->bind_image(rgbImage);
                         p.box->redraw();
                         repositionThumbnail();

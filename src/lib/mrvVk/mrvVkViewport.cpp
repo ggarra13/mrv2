@@ -20,6 +20,7 @@
 #include "mrvVk/mrvVkDefines.h"
 #include "mrvVk/mrvVkUtil.h"
 #include "mrvVk/mrvVkShaders.h"
+#include "mrvVk/mrvVkShadersBinary.h"
 #include "mrvVk/mrvVkShape.h"
 #include "mrvVk/mrvTimelineViewport.h"
 #include "mrvVk/mrvTimelineViewportPrivate.h"
@@ -37,6 +38,8 @@
 #include "mrvCore/mrvSequence.h"
 #include "mrvCore/mrvI8N.h"
 
+
+#include <tlTimelineVk/RenderShadersBinary.h>
 
 
 #include <tlCore/FontSystem.h>
@@ -473,13 +476,16 @@ namespace mrv
                 vk.viewport = std::make_shared<vulkan::Lines>(ctx, renderPass());
 
                 
-                const std::string& vertexSource = timeline_vlk::vertexSource();
                 const image::Color4f color(1.F, 1.F, 1.F);
                 math::Matrix4x4f mvp;
                 if (!vk.shader)
                 {
                     vk.shader = vlk::Shader::create(
-                        ctx, vertexSource, textureFragmentSource(),
+                        ctx,
+                        timeline_vlk::Vertex3_spv,
+                        timeline_vlk::Vertex3_spv_len,
+                        textureFragment_spv,
+                        textureFragment_spv_len,
                         "vk.shader");
 
                     // Create parameters for shader.
@@ -494,7 +500,11 @@ namespace mrv
                 if (!vk.annotationShader)
                 {
                     vk.annotationShader = vlk::Shader::create(
-                        ctx, vertexSource, annotationFragmentSource(),
+                        ctx, 
+                        timeline_vlk::Vertex3_spv,
+                        timeline_vlk::Vertex3_spv_len,
+                        annotationFragment_spv,
+                        annotationFragment_spv_len,
                         "vk.annotationShader");
                     vk.annotationShader->createUniform(
                         "transform.mvp", mvp, vlk::kShaderVertex);

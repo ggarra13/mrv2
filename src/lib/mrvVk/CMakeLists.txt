@@ -6,6 +6,7 @@ set(HEADERS
     mrvVkDefines.h
     mrvVkJson.h        # done
     mrvVkLines.h        # done
+    mrvVkShadersBinary.h       # done
     mrvVkShaders.h       # done
     mrvVkShape.h         # done
     mrvVkTextEdit.h      # done
@@ -15,7 +16,7 @@ set(HEADERS
     mrvVkWindow.h        # done
     mrvTimelineViewport.h        # done
     mrvTimelineViewportPrivate.h        # done
-    mrvTimelineWidget.h
+    mrvTimelineWidget.h               
     )
 
 set(SOURCES
