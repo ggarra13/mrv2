@@ -690,14 +690,6 @@ namespace tl
                 {
                     vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
                 }
-                for (auto& framebuffer : g.framebuffers)
-                {
-                    vkDestroyFramebuffer(device, framebuffer, nullptr);
-                }
-                for (auto& renderPass : g.renderPasses)
-                {
-                    vkDestroyRenderPass(device, renderPass, nullptr);
-                }
             }
         }
 
@@ -756,20 +748,9 @@ namespace tl
             {
                 vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
             }
-            for (auto& framebuffer : g.framebuffers)
-            {
-                vkDestroyFramebuffer(device, framebuffer, nullptr);
-            }
-            for (auto& renderPass : g.renderPasses)
-            {
-                vkDestroyRenderPass(device, renderPass, nullptr);
-            }
             g.pipelines.clear();
             g.pipelineLayouts.clear();
             g.bindingSets.clear();
-            g.shaders.clear();
-            g.renderPasses.clear();
-            g.framebuffers.clear();
             
             const math::Matrix4x4f transform;
             const image::Color4f color(1.F, 1.F, 1.F);
@@ -1508,7 +1489,6 @@ namespace tl
                 return;
 
 #if defined(TLRENDER_OCIO)
-            wait_device();
             p.ocioData.reset();
 #endif // TLRENDER_OCIO
 
@@ -1661,8 +1641,6 @@ namespace tl
             }
 #endif // TLRENDER_OCIO
 
-            p.garbage[p.frameIndex].shaders.push_back(p.shaders["display"]);
-            p.shaders["display"].reset();
             _displayShader();
         }
 
@@ -1673,7 +1651,7 @@ namespace tl
                 return;
 
 #if defined(TLRENDER_OCIO)
-            wait_device();
+            //wait_device();
             p.lutData.reset();
 #endif // TLRENDER_OCIO
 
@@ -1738,8 +1716,6 @@ namespace tl
             }
 #endif // TLRENDER_OCIO
 
-            p.garbage[p.frameIndex].shaders.push_back(p.shaders["display"]);
-            p.shaders["display"].reset();
             _displayShader();
         }
 
@@ -1753,8 +1729,6 @@ namespace tl
             p.hdrOptions = value;
             p.hdrOptions.passthru = value.passthru;
 
-            p.garbage[p.frameIndex].shaders.push_back(p.shaders["display"]);
-
 #if defined(TLRENDER_LIBPLACEBO)
             if (p.hdrOptions.passthru || p.hdrOptions.tonemap)
                 p.placeboData.reset(new LibPlaceboData);
@@ -1762,7 +1736,6 @@ namespace tl
                 p.placeboData.reset();
 #endif // TLRENDER_LIBPLACEBO
             
-            p.shaders["display"].reset();
             _displayShader();
         }
 
@@ -2235,63 +2208,69 @@ namespace tl
                     context->log(
                         "tl::vlk::GLRender", "Creating display shader");
                 }
-#if USE_PRECOMPILED_SHADERS
-                p.shaders["display"] =
-                    vlk::Shader::create(ctx, Vertex3_spv, Vertex3_spv_len,
-                                        source, "display");
-#else
-                p.shaders["display"] =
-                    vlk::Shader::create(ctx, vertexSource(), source, "display");
-#endif
-                p.shaders["display"]->createUniform(
-                    "transform.mvp", p.transform, vlk::kShaderVertex);
-                p.shaders["display"]->addFBO("textureSampler");
 
-                UBOLevels uboLevels;
-                p.shaders["display"]->createUniform("uboLevels", uboLevels);
-
-                // \@unused in mrv2 (used to keep reference of gain UI)
-                timeline::EXRDisplay exrDisplay;
-                p.shaders["display"]->createUniform(
-                    "uboEXRDisplay", exrDisplay);
-
-                UBONormalize uboNormalize;
-                p.shaders["display"]->createUniform(
-                    "uboNormalize", uboNormalize);
-
-                UBOColor uboColor;
-                p.shaders["display"]->createUniform("uboColor", uboColor);
-
-                UBOOptions ubo;
-                p.shaders["display"]->createUniform("ubo", ubo);
-#if defined(TLRENDER_LIBPLACEBO)
-                if (p.placeboData)
+                if (!p.shaders["display"] || source != p.displayShaderSource)
                 {
-                    for (const auto& texture : p.placeboData->textures)
+                    p.displayShaderSource = source;
+                    
+#if USE_PRECOMPILED_SHADERS
+                    p.shaders["display"] =
+                        vlk::Shader::create(ctx, Vertex3_spv, Vertex3_spv_len,
+                                            source, "display");
+#else
+                    p.shaders["display"] =
+                        vlk::Shader::create(ctx, vertexSource(), source, "display");
+#endif
+                    p.shaders["display"]->createUniform(
+                        "transform.mvp", p.transform, vlk::kShaderVertex);
+                    p.shaders["display"]->addFBO("textureSampler");
+
+                    UBOLevels uboLevels;
+                    p.shaders["display"]->createUniform("uboLevels", uboLevels);
+
+                    // \@unused in mrv2 (used to keep reference of gain UI)
+                    timeline::EXRDisplay exrDisplay;
+                    p.shaders["display"]->createUniform(
+                        "uboEXRDisplay", exrDisplay);
+
+                    UBONormalize uboNormalize;
+                    p.shaders["display"]->createUniform(
+                        "uboNormalize", uboNormalize);
+
+                    UBOColor uboColor;
+                    p.shaders["display"]->createUniform("uboColor", uboColor);
+
+                    UBOOptions ubo;
+                    p.shaders["display"]->createUniform("ubo", ubo);
+#if defined(TLRENDER_LIBPLACEBO)
+                    if (p.placeboData)
                     {
-                        p.shaders["display"]->addTexture(texture->getName());
+                        for (const auto& texture : p.placeboData->textures)
+                        {
+                            p.shaders["display"]->addTexture(texture->getName());
+                        }
                     }
-                }
 #endif
 #if defined(TLRENDER_OCIO)
-                if (p.ocioData)
-                {
-                    for (const auto& texture : p.ocioData->textures)
+                    if (p.ocioData)
                     {
-                        p.shaders["display"]->addTexture(texture->getName());
+                        for (const auto& texture : p.ocioData->textures)
+                        {
+                            p.shaders["display"]->addTexture(texture->getName());
+                        }
                     }
-                }
-                if (p.lutData)
-                {
-                    for (const auto& texture : p.lutData->textures)
+                    if (p.lutData)
                     {
-                        p.shaders["display"]->addTexture(texture->getName());
+                        for (const auto& texture : p.lutData->textures)
+                        {
+                            p.shaders["display"]->addTexture(texture->getName());
+                        }
                     }
-                }
 #endif // TLRENDER_OCIO
-                p.shaders["display"]->createPush("libplacebo", pushOffset, vlk::kShaderFragment);
+                    p.shaders["display"]->createPush("libplacebo", pushOffset, vlk::kShaderFragment);
                 
-                _createBindingSet(p.shaders["display"]);
+                    _createBindingSet(p.shaders["display"]);
+                }
             }
         }
 

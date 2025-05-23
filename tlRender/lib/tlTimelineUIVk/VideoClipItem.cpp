@@ -301,8 +301,9 @@ namespace tl
                                 videoData.layers.push_back({i->second});
 
                                 event.render->endRenderPass();
-                                
-                                event.render->createBindingSet("display");
+
+                                // Without this, 19.8 FPS
+                                // With it, 8.6 FPS
                                 event.render->drawVideo({videoData}, {box},
                                                         {}, {}, {},
                                                         background);
