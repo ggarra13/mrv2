@@ -1462,19 +1462,11 @@ namespace mrv
                 auto s = dynamic_cast< VKCircleShape* >(shape);
                 value = *s;
             }
-#ifdef USE_OPENVK2
-            else if (dynamic_cast< VK2TextShape* >(shape))
-            {
-                auto s = dynamic_cast< VK2TextShape* >(shape);
-                value = *s;
-            }
-#else
             else if (dynamic_cast< VKTextShape* >(shape))
             {
                 auto s = dynamic_cast< VKTextShape* >(shape);
                 value = *s;
             }
-#endif
             else if (dynamic_cast< draw::NoteShape* >(shape))
             {
                 auto s = dynamic_cast< draw::NoteShape* >(shape);

@@ -2568,8 +2568,14 @@ namespace mrv
         auto w = ui->uiView->getMultilineInput();
         if (!w)
             return;
+#ifdef OPENGL_BACKEND
         w->textcolor(c);
         w->redraw();
+#endif
+#ifdef VULKAN_BACKEND
+        w->color = from_fltk_color(c);
+        ui->uiView->redrawWindows();
+#endif
     }
 
     image::Color4f from_fltk_color(const Fl_Color& c)

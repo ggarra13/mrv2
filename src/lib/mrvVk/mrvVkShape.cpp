@@ -337,20 +337,18 @@ namespace mrv
         const std::shared_ptr<vulkan::Lines> lines)
     {
         if (text.empty())
+        {
             return;
-
+        }
+        
         const image::FontInfo fontInfo(fontFamily, fontSize);
         const image::FontMetrics fontMetrics = fontSystem->getMetrics(fontInfo);
         auto height = fontMetrics.lineHeight;
         if (height == 0)
             throw std::runtime_error(_("Invalid font for text drawing"));
 
-        // Set the projection matrix
-        math::Matrix4x4f oldMatrix = render->getTransform();
-        render->setTransform(matrix);
-
         // Copy the text to process it
-        txt = text;
+        std::string txt = text;
 
         int x = pts[0].x;
         int y = pts[0].y;
@@ -376,7 +374,6 @@ namespace mrv
         {
             render->drawText(textInfo, math::Vector2i(), color);
         }
-        render->setTransform(oldMatrix);
     }
 
     void to_json(nlohmann::json& json, const VKPathShape& value)
@@ -428,25 +425,6 @@ namespace mrv
         json.at("fontFamily").get_to(value.fontFamily);
         json.at("fontSize").get_to(value.fontSize);
     }
-
-#ifdef USE_OPENVK2
-    void to_json(nlohmann::json& json, const VK2TextShape& value)
-    {
-        to_json(json, static_cast<const draw::PathShape&>(value));
-        json["type"] = "VK2Text";
-        json["text"] = value.text;
-        json["font"] = value.font;
-        json["fontSize"] = value.fontSize;
-    }
-
-    void from_json(const nlohmann::json& json, VK2TextShape& value)
-    {
-        from_json(json, static_cast<draw::PathShape&>(value));
-        json.at("text").get_to(value.text);
-        json.at("font").get_to(value.font);
-        json.at("fontSize").get_to(value.fontSize);
-    }
-#endif
 
     void to_json(nlohmann::json& json, const VKCircleShape& value)
     {

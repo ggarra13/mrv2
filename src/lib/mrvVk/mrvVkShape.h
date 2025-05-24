@@ -149,10 +149,11 @@ namespace mrv
     class VKTextShape : public VKPathShape
     {
     public:
-        VKTextShape(const std::shared_ptr<image::FontSystem> f) :
+        VKTextShape() :
             VKPathShape(),
-            fontSize(30),
-            fontSystem(f) {};
+            fontSize(30)
+            {
+            };
         virtual ~VKTextShape() {};
 
         virtual void draw(
@@ -161,10 +162,11 @@ namespace mrv
 
     public:
         std::string fontFamily = "NotoSans-Regular";
-        std::string txt;
         std::string text;
         uint16_t fontSize;
+        bool editing = true;
         Fl_Font font;
+        math::Vector2f pos;
         float viewZoom = 1.F;
         std::shared_ptr<image::FontSystem> fontSystem;
     };
@@ -172,36 +174,6 @@ namespace mrv
     void to_json(nlohmann::json& json, const VKTextShape& value);
     void from_json(const nlohmann::json& json, VKTextShape& value);
 
-#ifdef USE_OPENVK2
-    class VK2TextShape : public VKPathShape
-    {
-    public:
-        VK2TextShape() :
-            VKPathShape() {};
-        virtual ~VK2TextShape() {};
-
-        //! Auxiliary function to set the raster coordinates with no clipping
-        bool setRasterPos(double x, double y, size_t textLength);
-
-        virtual void draw(
-            const std::shared_ptr<timeline_vlk::Render>&,
-            const std::shared_ptr<vulkan::Lines> lines) override;
-
-    public:
-        std::string txt; // Copy of text as we are processing it.
-        std::string text;
-        Fl_Font font;
-        float fontSize = 30;
-        int w;
-        int h;
-        double pixels_per_unit = 1.F;
-        double viewZoom = 1.F;
-    };
-
-    void to_json(nlohmann::json& json, const VK2TextShape& value);
-    void from_json(const nlohmann::json& json, VK2TextShape& value);
-
-#endif
 
     class VKErasePathShape : public VKPathShape
     {

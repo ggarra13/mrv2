@@ -76,20 +76,12 @@ namespace mrv
             json.get_to(*shape.get());
             return shape;
         }
-        // else if ( type == "Text" )
-        // {
-        //     auto shape = std::make_shared< VKTextShape >(fontSystem);
-        //     json.get_to( *shape.get() );
-        //     value.shapes.push_back(shape);
-        // }
-#ifdef USE_OPENVK2
-        else if (type == "VK2Text")
+        else if ( type == "Text" )
         {
-            auto shape = std::make_shared< VK2TextShape >();
-            json.get_to(*shape.get());
+            auto shape = std::make_shared< VKTextShape >();
+            json.get_to( *shape.get() );
             return shape;
         }
-#endif
         std::string err = _("Could not convert message to shape: ");
         err += type;
         throw std::runtime_error(type);
@@ -112,13 +104,6 @@ namespace mrv
                 reinterpret_cast< VKRectangleShape* >(ptr);
             msg = *p;
         }
-#ifdef USE_OPENVK2
-        else if (dynamic_cast< VK2TextShape* >(ptr))
-        {
-            VK2TextShape* p = reinterpret_cast< VK2TextShape* >(ptr);
-            msg = *p;
-        }
-#endif
         else if (dynamic_cast< VKFilledCircleShape* >(ptr))
         {
             VKFilledCircleShape* p =

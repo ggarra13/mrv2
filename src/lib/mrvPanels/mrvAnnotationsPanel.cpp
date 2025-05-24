@@ -136,22 +136,27 @@ namespace mrv
                     auto numFonts = Fl::set_fonts("-*");
                     settings->setValue(kTextFont, font);
                     auto view = p.ui->uiView;
+#ifdef USE_OPENGL2
                     MultilineInput* w = view->getMultilineInput();
                     if (!w)
                         return;
                     if (font >= numFonts)
                         font = FL_HELVETICA;
-#ifdef USE_OPENGL2
                     int attrs = 0;
                     const char* fontName =
                         Fl::get_font_name((Fl_Font)font, &attrs);
-#else
+                    w->textfont((Fl_Font)font);
+                    w->redraw();
+#endif
+
+#ifdef VULKAN_BACKEND                    
+                    auto w = view->getMultilineInput();
+                    if (!w)
+                        return;
                     const Fl_Menu_Item* item = c->mvalue();
                     std::string fontName = item->label();
                     w->fontFamily = fontName;
 #endif
-                    w->textfont((Fl_Font)font);
-                    w->redraw();
                     view->redrawWindows();
                 });
 
@@ -168,12 +173,20 @@ namespace mrv
                     settings->setValue(kFontSize, static_cast<int>(o->value()));
                     const auto& viewportSize = p.ui->uiView->getViewportSize();
                     float pct = viewportSize.h / 1024.F;
-                    MultilineInput* w = p.ui->uiView->getMultilineInput();
+                    auto w = p.ui->uiView->getMultilineInput();
                     if (!w)
                         return;
                     int fontSize = o->value() * pct * p.ui->uiView->viewZoom();
+                    
+#ifdef OPENGL_BACKEND
                     w->textsize(fontSize);
                     w->redraw();
+#endif
+
+#ifdef VULKAN_BACKEND
+                    w->fontSize = fontSize;
+#endif
+                    
                     p.ui->uiView->redrawWindows();
                 });
 

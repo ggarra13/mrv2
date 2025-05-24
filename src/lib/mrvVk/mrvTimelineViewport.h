@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include "mrvVk/mrvVkShape.h"
+
 #include "mrvOptions/mrvStereo3DOptions.h"
 #include "mrvOptions/mrvEnvironmentMapOptions.h"
 
@@ -26,8 +28,6 @@ class ViewerUI;
 namespace mrv
 {
     using namespace tl;
-    
-    class MultilineInput;
 
     class TimelinePlayer;
 
@@ -304,7 +304,7 @@ namespace mrv
             void updatePixelBar() noexcept;
 
             //! Get the text widget if available.
-            MultilineInput* getMultilineInput() const noexcept;
+            std::shared_ptr<VKTextShape> getMultilineInput() const noexcept;
 
             //! Get the viewportSize
             math::Size2i getViewportSize() const noexcept;
