@@ -213,7 +213,6 @@ namespace tl
             vlk::MultisampleStateInfo ms;
             ms.rasterizationSamples = fbo->getSampleCount();
 
-            setRenderPass(fbo->getLoadRenderPass());
             createPipeline(pipelineName, pipelineLayoutName,
                            fbo->getLoadRenderPass(), shader, mesh, cb, ds, ms);
             

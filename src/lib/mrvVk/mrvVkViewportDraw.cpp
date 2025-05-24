@@ -1234,6 +1234,7 @@ namespace mrv
 
             if (!is_equal_hdr_metadata(m_hdr_metadata, m_previous_hdr_metadata))
             {
+                m_previous_hdr_metadata = m_hdr_metadata;
                 m_hdr_metadata_changed = true; // Mark as changed
             }
             else

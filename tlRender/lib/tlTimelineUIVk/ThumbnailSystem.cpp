@@ -389,7 +389,8 @@ namespace tl
                         p.thumbnailMutex.stopped = true;
                     }
                     VkDevice device = ctx.device;
-                    if (device != VK_NULL_HANDLE)
+                    if (device != VK_NULL_HANDLE &&
+                        p.thumbnailThread.commandPool != VK_NULL_HANDLE)
                     {
                         vkDestroyCommandPool(device,
                                              p.thumbnailThread.commandPool,
@@ -790,15 +791,13 @@ namespace tl
                                                                     p.thumbnailThread.frameIndex, size,
                                                                     renderOptions);
 
-                                    // Use a reverse matrix like OpenGL
                                     const math::Matrix4x4f ortho = math::ortho(
                                         0.F, static_cast<float>(size.w),
-                                        static_cast<float>(size.h), 0.F,
+                                        0.F, static_cast<float>(size.h),
                                         -1.F, 1.F);
                                     p.thumbnailThread.render->setTransform(ortho);
   
                                     p.thumbnailThread.render->drawImage(
-                                        p.thumbnailThread.buffer,
                                         videoData.image,
                                         {math::Box2i(0, 0, size.w, size.h)});
 
@@ -869,6 +868,7 @@ namespace tl
                                             p.thumbnailThread.buffer, size,
                                             options))
                                     {
+                                        std::cerr << "recreate thumbnail buffer" << std::endl;
                                         p.thumbnailThread.buffer =
                                             vlk::OffscreenBuffer::create(ctx,
                                                 size, options);
@@ -890,6 +890,7 @@ namespace tl
                                     
                                         timeline::RenderOptions renderOptions;
                                         renderOptions.clear = false;
+                                        std::cerr << "begin render" << std::endl;
                                         p.thumbnailThread.render->begin(cmd,
                                                                         p.thumbnailThread.buffer,
                                                                         p.thumbnailThread.frameIndex,
@@ -897,13 +898,15 @@ namespace tl
 
                                         const math::Matrix4x4f ortho = math::ortho(
                                             0.F, static_cast<float>(size.w),
-                                            static_cast<float>(size.h), 0.F,
+                                            0.F, static_cast<float>(size.h), 
                                             -1.F, 1.F);
                                         p.thumbnailThread.render->setTransform(ortho);
+                                        std::cerr << "call drawVideo" << std::endl;
                                         p.thumbnailThread.render->drawVideo(
                                             {videoData},
                                             {math::Box2i(
                                                 0, 0, size.w, size.h)});
+                                        std::cerr << "called drawVideo" << std::endl;
                                         p.thumbnailThread.render->end();
                                         p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
                                     
@@ -922,6 +925,7 @@ namespace tl
                                             imageData = p.thumbnailThread.buffer->getLatestReadPixels();
                                             if (imageData)
                                             {
+                                                std::cerr << "copied image data " << (void*)imageData << std::endl;
                                                 std::memcpy(image->getData(), imageData,
                                                             image->getDataByteCount());
                                                 vkFreeCommandBuffers(device, commandPool, 1, &cmd);
@@ -930,6 +934,7 @@ namespace tl
                                         }
 
                                         p.thumbnailThread.frameIndex = (p.thumbnailThread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
+                                        std::cerr << "next thumbnail " << p.thumbnailThread.frameIndex << std::endl; 
                                     }
                                 }
                             }

@@ -298,7 +298,31 @@ namespace tl
                                 timeline::VideoData videoData;
                                 videoData.size = i->second->getSize();
                                 videoData.layers.push_back({i->second});
-                                event.render->drawVideo({videoData}, {box});
+                                
+                                const timeline::VideoLayer& layer = videoData.layers[0];
+
+                                if ((!_displayOptions.ocio.enabled ||
+                                     _displayOptions.ocio == timeline::OCIOOptions()) &&
+                                    _displayOptions.lut == timeline::LUTOptions() &&
+                                    _displayOptions.hdr == timeline::HDROptions())
+                                {
+                                    if (!layer.imageB && layer.image)
+                                    {
+                                        event.render->drawImage(layer.image, box);
+                                    }
+                                    else if (!layer.image && layer.imageB)
+                                    {
+                                        event.render->drawImage(layer.imageB, box);
+                                    }
+                                    else
+                                    {
+                                        event.render->drawVideo({videoData}, {box});
+                                    }
+                                }
+                                else
+                                {
+                                    event.render->drawVideo({videoData}, {box});
+                                }
                             }
                         }
                         else if (p.ioInfo && !p.ioInfo->video.empty())

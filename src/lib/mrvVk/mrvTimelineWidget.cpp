@@ -961,9 +961,6 @@ void main()
                         const auto& lutOptions = p.ui->uiView->lutOptions();
                         p.render->setLUTOptions(lutOptions);
                         
-                        const auto& hdrOptions = p.ui->uiView->getHDROptions();
-                        p.render->setHDROptions(hdrOptions);
-                        
                         // p.render->setOCIOOptions(timeline::OCIOOptions());
                         // p.render->setLUTOptions(timeline::LUTOptions());
                         
@@ -1946,12 +1943,7 @@ void main()
         const float TimelineWidget::pixelRatio() const
         {
             TLRENDER_P();
-#if 0
-            TimelineWidget* self = const_cast<TimelineWidget*>(this);
-            const float devicePixelRatio = self->pixels_per_unit();
-#else
             const float devicePixelRatio = p.ui->uiView->pixels_per_unit();
-#endif
             return devicePixelRatio;
         }
 

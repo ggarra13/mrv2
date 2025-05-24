@@ -188,7 +188,7 @@ namespace tl
                 const std::shared_ptr<image::Image>&, const math::Box2i&,
                 const image::Color4f& = image::Color4f(1.F, 1.F, 1.F),
                 const timeline::ImageOptions& =
-                    timeline::ImageOptions()) override {};
+                    timeline::ImageOptions()) override;
             void drawImage(
                 const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
                 const std::shared_ptr<image::Image>&, const math::Box2i&,

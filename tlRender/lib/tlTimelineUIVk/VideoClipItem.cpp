@@ -7,6 +7,8 @@
 
 #include <tlUI/DrawUtil.h>
 
+#include <tlTimelineVk/Render.h>
+
 #include <tlTimeline/RenderUtil.h>
 #include <tlTimeline/Util.h>
 
@@ -66,7 +68,7 @@ namespace tl
             p.path = path;
             p.memoryRead = timeline::getMemoryRead(clip->media_reference());
             p.thumbnailGenerator = thumbnailGenerator;
-
+            
             p.ioOptions = _data->options.ioOptions;
             p.ioOptions["USD/cameraName"] = p.clipName;
             const std::string infoCacheKey =
@@ -302,11 +304,34 @@ namespace tl
 
                                 event.render->endRenderPass();
 
-                                // Without this, 19.8 FPS
-                                // With it, 8.6 FPS
-                                event.render->drawVideo({videoData}, {box},
-                                                        {}, {}, {},
-                                                        background);
+                                const timeline::VideoLayer& layer = videoData.layers[0];
+                                
+                                if ((!_displayOptions.ocio.enabled ||
+                                     _displayOptions.ocio == timeline::OCIOOptions()) &&
+                                    _displayOptions.lut == timeline::LUTOptions() &&
+                                    _displayOptions.hdr == timeline::HDROptions())
+                                {
+                                    if (!layer.imageB && layer.image)
+                                    {
+                                        event.render->drawImage(layer.image, box);
+                                    }
+                                    else if (!layer.image && layer.imageB)
+                                    {
+                                        event.render->drawImage(layer.imageB, box);
+                                    }
+                                    else
+                                    {
+                                        event.render->drawVideo({videoData}, {box},
+                                                                {}, {}, {},
+                                                                background);
+                                    }
+                                }
+                                else
+                                {
+                                    event.render->drawVideo({videoData}, {box},
+                                                            {}, {}, {},
+                                                            background);
+                                }
                                 
                                 event.render->beginLoadRenderPass();
                             }
