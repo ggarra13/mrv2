@@ -176,7 +176,6 @@ if [ -z "$TLRENDER_USD" ]; then
     export TLRENDER_USD=ON
 fi
 
-echo A
 if [ -z "$VULKAN_SDK" ]; then
     export VULKAN_SDK=/crapola_of_dir
     if [[ $KERNEL == *Msys* ]]; then
@@ -221,7 +220,6 @@ else
     fi
 fi
 
-echo C
     
 if [ -z "$TLRENDER_VPX" ]; then
     export TLRENDER_VPX=ON
@@ -250,7 +248,6 @@ if [ -z "$FLTK_BUILD_SHARED" ]; then
     fi
 fi
 
-echo D
 #
 # Clean python path to avoid clashes, mainly, with macOS meson
 #

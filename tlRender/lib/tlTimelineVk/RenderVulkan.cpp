@@ -222,25 +222,6 @@ namespace tl
                 setClipRect(p.clipRect);
             }
         }
-        
-        void Render::_setViewportAndScissor(const math::Size2i& viewportSize)
-        {
-            TLRENDER_P();
-            
-            VkViewport viewport = {};
-            viewport.x =  0.F;
-            viewport.y = static_cast<float>(viewportSize.h);
-            viewport.width = static_cast<float>(viewportSize.w);
-            viewport.height = -static_cast<float>(viewportSize.h);
-            viewport.minDepth = 0.0f;
-            viewport.maxDepth = 1.0f;
-            vkCmdSetViewport(p.cmd, 0, 1, &viewport);
-
-            VkRect2D scissor = {};
-            scissor.extent.width = viewportSize.w;
-            scissor.extent.height = viewportSize.h;
-            vkCmdSetScissor(p.cmd, 0, 1, &scissor);
-        }
 
         void Render::_bindDescriptorSets(
             const std::string& pipelineLayoutName, const std::string& shaderName)

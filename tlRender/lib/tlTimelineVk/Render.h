@@ -265,7 +265,6 @@ namespace tl
             VkPipelineLayout _createPipelineLayout(
                 const std::string& pipelineLayoutName,
                 const std::shared_ptr<vlk::Shader> shader);
-            void _setViewportAndScissor(const math::Size2i&);
             void _bindDescriptorSets(
                 const std::string& pipelineLayoutName,
                 const std::string& shaderName);

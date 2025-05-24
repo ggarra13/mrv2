@@ -1116,14 +1116,12 @@ namespace mrv
         vkEnumeratePhysicalDevices(instance, &num, devices);
         for (int i = 0; i < num; i++)
         {
-            VkPhysicalDeviceIDPropertiesKHR id_props = {
-                .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ID_PROPERTIES_KHR,
-            };
+            VkPhysicalDeviceIDPropertiesKHR id_props;
+            id_props.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ID_PROPERTIES_KHR;
 
-            VkPhysicalDeviceProperties2 prop = {
-                .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2_KHR,
-                .pNext = &id_props,
-            };
+            VkPhysicalDeviceProperties2 prop;
+            prop.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2_KHR;
+            prop.pNext = &id_props;
             
             vkGetPhysicalDeviceProperties2(devices[i], &prop);
             VkPhysicalDeviceType t = prop.properties.deviceType;

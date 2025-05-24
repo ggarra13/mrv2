@@ -2,7 +2,18 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <map>
+
+#include "mrViewer.h"
+
+#include "mrvPanels/mrvDevicesPanel.h"
+
+#include "mrvPanels/mrvPanelsCallbacks.h"
+
+#include "mrvWidgets/mrvFunctional.h"
+#include "mrvWidgets/mrvHorSlider.h"
+#include "mrvWidgets/mrvPack.h"
+#include "mrvWidgets/mrvDoubleSpinner.h"
+#include "mrvWidgets/mrvCollapsibleGroup.h"
 
 #if defined(TLRENDER_BMD)
 #    include <tlPlay/BMDDevicesModel.h>
@@ -14,17 +25,7 @@
 
 #include <FL/Fl_Choice.H>
 
-#include "mrvWidgets/mrvFunctional.h"
-#include "mrvWidgets/mrvHorSlider.h"
-#include "mrvWidgets/mrvPack.h"
-#include "mrvWidgets/mrvDoubleSpinner.h"
-#include "mrvWidgets/mrvCollapsibleGroup.h"
-
-#include "mrvPanelsCallbacks.h"
-
-#include "mrvDevicesPanel.h"
-
-#include "mrViewer.h"
+#include <map>
 
 namespace mrv
 {

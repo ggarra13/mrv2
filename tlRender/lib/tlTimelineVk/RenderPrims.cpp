@@ -868,6 +868,11 @@ namespace tl
             _bindDescriptorSets(pipelineLayoutName, shaderName);
             p.fbo->setupViewportAndScissor(p.cmd);
 
+            if (p.clipRectEnabled)
+            {
+                setClipRect(p.clipRect);
+            }
+            
             if (p.vaos["image"])
             {
                 _vkDraw("image");
