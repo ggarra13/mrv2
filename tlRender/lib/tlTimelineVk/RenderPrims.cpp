@@ -383,12 +383,10 @@ namespace tl
             vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
             colorBlendAttachment.blendEnable = VK_TRUE;
 
-#if 1
             colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
             colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
             colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
             colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-#endif
             
             cb.attachments.push_back(colorBlendAttachment);
             
@@ -432,8 +430,25 @@ namespace tl
 
             int x = 0;
             int32_t rsbDeltaPrev = 0;
-            geom::TriangleMesh2 mesh;
-            size_t meshIndex = 0;
+
+            if (textInfos.empty())
+            {
+                timeline::TextInfo textInfo(textureIndex);
+                textInfos.emplace_back(textInfo);
+            }
+            else
+            {
+                timeline::TextInfo& lastTextInfo = textInfos.back();
+                if (lastTextInfo.textureId != textureIndex)
+                {
+                    timeline::TextInfo textInfo(textureIndex);
+                    textInfos.emplace_back(textInfo);
+                }
+            }
+            
+            timeline::TextInfo& lastTextInfo = textInfos.back();
+            geom::TriangleMesh2& mesh = lastTextInfo.mesh;
+            size_t& meshIndex = lastTextInfo.meshIndex;
             for (const auto& glyph : glyphs)
             {
                 if (glyph)
@@ -466,13 +481,13 @@ namespace tl
                         if (item.textureIndex != textureIndex)
                         {
                             textureIndex = item.textureIndex;
-
-                            const timeline::TextInfo textInfo(mesh,
-                                                              textureIndex);
+                            
+                            const timeline::TextInfo textInfo(textureIndex);
                             textInfos.emplace_back(textInfo);
                             
-                            mesh = geom::TriangleMesh2();
-                            meshIndex = 0;
+                            timeline::TextInfo& lastTextInfo = textInfos.back();
+                            mesh = lastTextInfo.mesh;
+                            meshIndex = lastTextInfo.meshIndex;
                         }
 
                         const math::Vector2i& offset = glyph->offset;
@@ -526,12 +541,6 @@ namespace tl
 
                     x += glyph->advance;
                 }
-            }
-
-            if (!mesh.triangles.empty())
-            {
-                const timeline::TextInfo textInfo(mesh, textureIndex);
-                textInfos.emplace_back(textInfo);
             }
         }
 
@@ -692,7 +701,7 @@ namespace tl
                 break;
             }
 
-            fbo->beginRenderPass(p.cmd);
+            fbo->beginClearRenderPass(p.cmd);
             if (p.vbos["image"])
             {
                 p.vbos["image"]->copy(
@@ -720,6 +729,156 @@ namespace tl
             fbo->endRenderPass(p.cmd);
         }
 
+        void Render::drawImage(
+            const std::shared_ptr<image::Image>& image, const math::Box2i& box,
+            const image::Color4f& color,
+            const timeline::ImageOptions& imageOptions)
+        {
+            TLRENDER_P();
+            ++(p.currentStats.images);
+
+            const auto& info = image->getInfo();
+            std::vector<std::shared_ptr<vlk::Texture> > textures;
+            if (!imageOptions.cache)
+            {
+                textures = getTextures(ctx, info, imageOptions.imageFilters);
+                copyTextures(image, textures);
+            }
+            else if (!p.textureCache->get(image, textures))
+            {
+                textures = getTextures(ctx, info, imageOptions.imageFilters);
+                copyTextures(image, textures);
+                p.textureCache->add(image, textures, image->getDataByteCount());
+            }
+
+            auto shader = p.shaders["image"];
+            _createBindingSet(shader);
+
+            shader->bind(p.frameIndex);
+            shader->setUniform("transform.mvp", p.transform);
+
+            UBOTexture ubo;
+            ubo.color = color;
+            ubo.pixelType = static_cast<int>(info.pixelType);
+            image::VideoLevels videoLevels = info.videoLevels;
+            switch (imageOptions.videoLevels)
+            {
+            case timeline::InputVideoLevels::FullRange:
+                videoLevels = image::VideoLevels::FullRange;
+                break;
+            case timeline::InputVideoLevels::LegalRange:
+                videoLevels = image::VideoLevels::LegalRange;
+                break;
+            default:
+                break;
+            }
+            ubo.videoLevels = static_cast<int>(videoLevels);
+            ubo.yuvCoefficients =
+                image::getYUVCoefficients(info.yuvCoefficients);
+            ubo.imageChannels = image::getChannelCount(info.pixelType);
+            ubo.mirrorX = info.layout.mirror.x;
+            ubo.mirrorY = !info.layout.mirror.y;
+            shader->setUniform("ubo", ubo);
+
+            switch (info.pixelType)
+            {
+            case image::PixelType::YUV_420P_U8:
+            case image::PixelType::YUV_422P_U8:
+            case image::PixelType::YUV_444P_U8:
+            case image::PixelType::YUV_420P_U16:
+            case image::PixelType::YUV_422P_U16:
+            case image::PixelType::YUV_444P_U16:
+                textures[0]->transition(
+                    p.cmd, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                    VK_ACCESS_TRANSFER_WRITE_BIT,
+                    VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_SHADER_READ_BIT,
+                    VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+                textures[1]->transition(
+                    p.cmd, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                    VK_ACCESS_TRANSFER_WRITE_BIT,
+                    VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_SHADER_READ_BIT,
+                    VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+                textures[2]->transition(
+                    p.cmd, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                    VK_ACCESS_TRANSFER_WRITE_BIT,
+                    VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_SHADER_READ_BIT,
+                    VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+                shader->setTexture("textureSampler0", textures[0]);
+                shader->setTexture("textureSampler1", textures[1]);
+                shader->setTexture("textureSampler2", textures[2]);
+                break;
+            default:
+                textures[0]->transition(
+                    p.cmd, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                    VK_ACCESS_TRANSFER_WRITE_BIT,
+                    VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_SHADER_READ_BIT,
+                    VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+                shader->setTexture("textureSampler0", textures[0]);
+                shader->setTexture("textureSampler1", textures[0]);
+                shader->setTexture("textureSampler2", textures[0]);
+                break;
+            }
+            bool enableBlending = true;
+            VkBlendFactor srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+            VkBlendFactor dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+            VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+            VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+            switch (imageOptions.alphaBlend)
+            {
+            case timeline::AlphaBlend::kNone:
+                srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
+                dstColorBlendFactor = VK_BLEND_FACTOR_ZERO;
+                srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+                dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+                break;
+            case timeline::AlphaBlend::Straight:
+                srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+                dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+                srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+                dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+                break;
+            case timeline::AlphaBlend::Premultiplied:
+                srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
+                dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+                srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+                dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+                break;
+            default:
+                break;
+            }
+
+            p.fbo->beginLoadRenderPass(p.cmd);
+            if (p.vbos["image"])
+            {
+                p.vbos["image"]->copy(
+                    convert(geom::box(box, false), p.vbos["image"]->getType()));
+            }
+
+            //
+            // Create pipeline
+            //
+            const std::string pipelineName = "image";
+            const std::string pipelineLayoutName = "image";
+            const std::string shaderName = "image";
+            const std::string meshName = "image";
+            createPipeline(p.fbo, pipelineName, pipelineLayoutName,
+                           shaderName, meshName, enableBlending,
+                           srcColorBlendFactor, dstColorBlendFactor,
+                           srcAlphaBlendFactor, dstAlphaBlendFactor);
+            _bindDescriptorSets(pipelineLayoutName, shaderName);
+            p.fbo->setupViewportAndScissor(p.cmd);
+
+            if (p.clipRectEnabled)
+            {
+                setClipRect(p.clipRect);
+            }
+            
+            if (p.vaos["image"])
+            {
+                _vkDraw("image");
+            }
+            p.fbo->endRenderPass(p.cmd);
+        }
 
         
     } // namespace timeline_vlk

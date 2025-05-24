@@ -15,6 +15,7 @@
 
 #include "mrvFl/mrvIO.h"
 
+#include "mrvVk/mrvVkShadersBinary.h"
 #include "mrvVk/mrvTimelineWidget.h"
 
 #include "mrvCore/mrvFile.h"
@@ -22,6 +23,7 @@
 #include "mrvCore/mrvTimeObject.h"
 
 #include <tlTimelineVk/Render.h>
+#include <tlTimelineVk/RenderShadersBinary.h>
 
 #include <tlTimelineUIVk/TimelineWidget.h>
 
@@ -189,7 +191,6 @@ namespace mrv
             
             TimelinePlayer* player = nullptr;
 
-            ThumbnailCreator* thumbnailCreator = nullptr;
             std::weak_ptr<timelineui_vk::ThumbnailSystem> thumbnailSystem;
 
             struct ThumbnailData
@@ -317,6 +318,11 @@ namespace mrv
                 settings->getValue<bool>("Timeline/ClipInfo");
             p.timelineWidget->setDisplayOptions(displayOptions);
                 
+            if (!context->getSystem<timelineui_vk::ThumbnailSystem>())
+            {
+                context->addSystem(timelineui_vk::ThumbnailSystem::create(context, ctx));
+            }
+            
             p.thumbnailSystem = context->getSystem<timelineui_vk::ThumbnailSystem>();
 
             setStopOnScrub(false);
@@ -760,7 +766,12 @@ void main()
                     if (!p.shader)
                     {
                         p.shader = vlk::Shader::create(
-                            ctx, vertexSource, fragmentSource, "timeline p.shader");
+                            ctx,
+                            timeline_vlk::Vertex3_spv,
+                            timeline_vlk::Vertex3_spv_len,
+                            textureFragment_spv,
+                            textureFragment_spv_len,
+                            "timeline p.shader");
                         math::Matrix4x4f pm;
                         p.shader->createUniform(
                             "transform.mvp", pm, vlk::kShaderVertex);
@@ -935,7 +946,6 @@ void main()
                             p.style->getColorRole(ui::ColorRole::Window);
 
                         // Clear color in new render pass.
-                        p.buffer->createRenderPass(true, false);
                         p.render->begin(
                             cmd, p.buffer, m_currentFrameIndex, renderSize,
                             renderOptions);
@@ -944,19 +954,26 @@ void main()
                             static_cast<float>(renderSize.h), 0.F,
                             -1.F, 1.F);
                         p.render->setTransform(ortho);
-                        p.render->setOCIOOptions(timeline::OCIOOptions());
-                        p.render->setLUTOptions(timeline::LUTOptions());
+
+                        const auto& ocioOptions = p.ui->uiView->getOCIOOptions();
+                        p.render->setOCIOOptions(ocioOptions);
+                        
+                        const auto& lutOptions = p.ui->uiView->lutOptions();
+                        p.render->setLUTOptions(lutOptions);
+                        
+                        // p.render->setOCIOOptions(timeline::OCIOOptions());
+                        // p.render->setLUTOptions(timeline::LUTOptions());
+                        
+                        p.render->setClipRectEnabled(true);
+                        
                         ui::DrawEvent drawEvent(
                             p.style, p.iconLibrary, p.render, p.fontSystem);
-                        p.render->setClipRectEnabled(true);
-
-                        // Do not clear colors in new render passes
-                        p.render->createRenderPass(false, false);
-                        p.render->beginRenderPass();
+                        p.render->beginLoadRenderPass();
                         _drawEvent(
                             p.timelineWindow, math::Box2i(renderSize),
                             drawEvent);
                         p.render->endRenderPass();
+                        
                         p.render->setClipRectEnabled(false);
                         p.render->end();
                     }
@@ -967,7 +984,10 @@ void main()
                 }
             }
 
-            if (p.buffer)
+            const float alpha = p.ui->uiMain->get_alpha() / 255.F;
+                
+            if (p.ui->uiPrefs->uiPrefsBlitTimeline->value() == kNoBlit ||
+                alpha < 1.0F)
             {
                 p.buffer->transitionToShaderRead(cmd);
                         
@@ -981,7 +1001,6 @@ void main()
                 p.shader->setFBO("textureSampler", p.buffer);
 
 #ifdef __APPLE__
-                const float alpha = p.ui->uiMain->get_alpha() / 255.F;
                 set_window_transparency(alpha);
 #endif
 
@@ -995,7 +1014,7 @@ void main()
                     cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, p.pipeline_layout, 0,
                     1, &descriptorSet, 0, nullptr);
                 
-                float opacity = 1.0;
+                const float opacity = 1.0;
                 vkCmdPushConstants(
                     cmd, p.pipeline_layout,
                     p.shader->getPushStageFlags(), 0,
@@ -1020,6 +1039,83 @@ void main()
                 }
 
                 end_render_pass(cmd);
+            }
+            else
+            {
+                VkImage srcImage = p.buffer->getImage();
+                VkImage dstImage = get_back_buffer_image();
+                
+                // srcImage barrier
+                transitionImageLayout(cmd, srcImage,
+                                      VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                                      VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+
+                // dstImage barrier (swapchain image)
+                transitionImageLayout(cmd, dstImage,
+                                      VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+                                      VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+
+                if (p.buffer->getFormat() == format())
+                {
+                    VkImageCopy region = {};
+                    region.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+                    region.srcSubresource.mipLevel = 0;
+                    region.srcSubresource.baseArrayLayer = 0;
+                    region.srcSubresource.layerCount = 1;
+                    region.srcOffset = {0, 0, 0};
+                    region.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+                    region.dstSubresource.mipLevel = 0;
+                    region.dstSubresource.baseArrayLayer = 0;
+                    region.dstSubresource.layerCount = 1;
+                    region.dstOffset = {0, 0, 0};
+                    region.extent = {
+                        static_cast<uint32_t>(renderSize.w),
+                        static_cast<uint32_t>(renderSize.h),
+                        1};
+
+                    vkCmdCopyImage(
+                        cmd,
+                        srcImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                        dstImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                        1, &region
+                        );
+                }
+                else
+                {
+
+                    VkImageBlit region = {};
+                    region.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+                    region.srcSubresource.mipLevel = 0;
+                    region.srcSubresource.baseArrayLayer = 0;
+                    region.srcSubresource.layerCount = 1;
+                    region.srcOffsets[0] = {0, 0, 0};
+                    region.srcOffsets[1] = {w(), h(), 1};
+                    region.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+                    region.dstSubresource.mipLevel = 0;
+                    region.dstSubresource.baseArrayLayer = 0;
+                    region.dstSubresource.layerCount = 1;
+                    region.dstOffsets[0] = {0, 0, 0};
+                    region.dstOffsets[1] = {w(), h(), 1};
+                    vkCmdBlitImage(
+                        cmd,
+                        srcImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                        dstImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                        1, &region,
+                        VK_FILTER_NEAREST
+                    );
+                }
+                
+                // srcImage barrier
+                transitionImageLayout(cmd, srcImage,
+                                      VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                                      VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+                p.buffer->setImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+                
+                // dstImage barrier (swapchain image)
+                transitionImageLayout(cmd, dstImage,
+                                      VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                                      VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
+
             }
         }
 
@@ -1755,12 +1851,7 @@ void main()
 
                         uint8_t* d = pixelData;
                         const uint8_t* s = image->getData();
-                        for (int y = 0; y < h; ++y)
-                        {
-                            std::memcpy(
-                                d + (h - 1 - y) * w * 4, s + y * w * 4,
-                                w * 4);
-                        }
+                        std::memcpy(d, s, w * h * 4);
                         p.box->bind_image(rgbImage);
                         p.box->redraw();
                         repositionThumbnail();
@@ -1852,12 +1943,7 @@ void main()
         const float TimelineWidget::pixelRatio() const
         {
             TLRENDER_P();
-#if 0
-            TimelineWidget* self = const_cast<TimelineWidget*>(this);
-            const float devicePixelRatio = self->pixels_per_unit();
-#else
             const float devicePixelRatio = p.ui->uiView->pixels_per_unit();
-#endif
             return devicePixelRatio;
         }
 

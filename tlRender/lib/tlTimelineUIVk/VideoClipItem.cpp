@@ -7,6 +7,8 @@
 
 #include <tlUI/DrawUtil.h>
 
+#include <tlTimelineVk/Render.h>
+
 #include <tlTimeline/RenderUtil.h>
 #include <tlTimeline/Util.h>
 
@@ -66,7 +68,7 @@ namespace tl
             p.path = path;
             p.memoryRead = timeline::getMemoryRead(clip->media_reference());
             p.thumbnailGenerator = thumbnailGenerator;
-
+            
             p.ioOptions = _data->options.ioOptions;
             p.ioOptions["USD/cameraName"] = p.clipName;
             const std::string infoCacheKey =
@@ -263,6 +265,8 @@ namespace tl
                     : 0;
             if (thumbnailWidth > 0)
             {
+                timeline::BackgroundOptions background;
+                background.type = timeline::Background::Transparent;
                 const int w = g.w();
                 for (int x = 0; x < w; x += thumbnailWidth)
                 {
@@ -297,15 +301,39 @@ namespace tl
                                 timeline::VideoData videoData;
                                 videoData.size = i->second->getSize();
                                 videoData.layers.push_back({i->second});
+
                                 event.render->endRenderPass();
 
-                                event.render->createRenderPass(false, false);
-
-
-                                event.render->createBindingSet("display");
-                                event.render->drawVideo({videoData}, {box});
+                                const timeline::VideoLayer& layer = videoData.layers[0];
                                 
-                                event.render->beginRenderPass();
+                                if ((!_displayOptions.ocio.enabled ||
+                                     _displayOptions.ocio == timeline::OCIOOptions()) &&
+                                    _displayOptions.lut == timeline::LUTOptions() &&
+                                    _displayOptions.hdr == timeline::HDROptions())
+                                {
+                                    if (!layer.imageB && layer.image)
+                                    {
+                                        event.render->drawImage(layer.image, box);
+                                    }
+                                    else if (!layer.image && layer.imageB)
+                                    {
+                                        event.render->drawImage(layer.imageB, box);
+                                    }
+                                    else
+                                    {
+                                        event.render->drawVideo({videoData}, {box},
+                                                                {}, {}, {},
+                                                                background);
+                                    }
+                                }
+                                else
+                                {
+                                    event.render->drawVideo({videoData}, {box},
+                                                            {}, {}, {},
+                                                            background);
+                                }
+                                
+                                event.render->beginLoadRenderPass();
                             }
                         }
                         else if (p.ioInfo && !p.ioInfo->video.empty())

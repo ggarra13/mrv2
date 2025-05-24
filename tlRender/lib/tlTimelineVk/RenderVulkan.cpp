@@ -26,6 +26,8 @@ namespace tl
         void Render::_createBindingSet(const std::shared_ptr<vlk::Shader>& shader)
         {
             TLRENDER_P();
+            if (!shader)
+                throw std::runtime_error("_createBindingSet shader nullptr");
             auto bindingSet = shader->createBindingSet();
             p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
         }
@@ -71,16 +73,7 @@ namespace tl
                                     const vlk::DepthStencilStateInfo& ds,
                                     const vlk::MultisampleStateInfo& ms)
         {
-            
-            TLRENDER_P();            
-            if (!shader)
-                throw std::runtime_error(
-                    "createPipeline failed with unknown shader '" +
-                    shader->getName() + "'");
-
-            if (!mesh)
-                throw std::runtime_error(
-                    "createPipeline failed with unknown mesh");
+            TLRENDER_P();
             
             VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
             if (!pipelineLayout)
@@ -93,10 +86,6 @@ namespace tl
             {
                 DEBUG_PIPELINE_LAYOUT("REUSING    pipelineLayout " << pipelineLayoutName);
             }
-            
-            if (pipelineLayout == VK_NULL_HANDLE)
-                throw std::runtime_error(
-                    "createPipeline failed with pipelineLayout == VK_NULL_HANDLE");
 
             VkDevice device = ctx.device;
             
@@ -224,9 +213,8 @@ namespace tl
             vlk::MultisampleStateInfo ms;
             ms.rasterizationSamples = fbo->getSampleCount();
 
-            setRenderPass(fbo->getRenderPass());
             createPipeline(pipelineName, pipelineLayoutName,
-                           fbo->getRenderPass(), shader, mesh, cb, ds, ms);
+                           fbo->getLoadRenderPass(), shader, mesh, cb, ds, ms);
             
             fbo->setupViewportAndScissor(p.cmd);
             if (p.clipRectEnabled)
@@ -234,39 +222,12 @@ namespace tl
                 setClipRect(p.clipRect);
             }
         }
-        
-        void Render::_setViewportAndScissor(const math::Size2i& viewportSize)
-        {
-            TLRENDER_P();
-            
-            VkViewport viewport = {};
-            viewport.x =  0.F;
-            viewport.y = static_cast<float>(viewportSize.h);
-            viewport.width = static_cast<float>(viewportSize.w);
-            viewport.height = -static_cast<float>(viewportSize.h);
-            viewport.minDepth = 0.0f;
-            viewport.maxDepth = 1.0f;
-            vkCmdSetViewport(p.cmd, 0, 1, &viewport);
-
-            VkRect2D scissor = {};
-            scissor.extent.width = viewportSize.w;
-            scissor.extent.height = viewportSize.h;
-            vkCmdSetScissor(p.cmd, 0, 1, &scissor);
-        }
 
         void Render::_bindDescriptorSets(
             const std::string& pipelineLayoutName, const std::string& shaderName)
         {
             TLRENDER_P();
-            if (!p.shaders[shaderName])
-            {
-                throw std::runtime_error("Undefined shader " + shaderName);
-            }
-            if (!p.pipelineLayouts[pipelineLayoutName])
-            {
-                throw std::runtime_error(
-                    "Undefined pipelineLayout " + pipelineLayoutName);
-            }
+            
             VkDescriptorSet descriptorSet = p.shaders[shaderName]->getDescriptorSet();
             
             vkCmdBindDescriptorSets(
@@ -278,11 +239,6 @@ namespace tl
         void Render::_vkDraw(const std::string& meshName)
         {
             TLRENDER_P();
-
-            if (!p.vaos[meshName])
-                throw std::runtime_error("p.vaos[" + meshName + "] not created");
-            if (!p.vbos[meshName])
-                throw std::runtime_error("p.vbos[" + meshName + "] not created");
             
             p.vaos[meshName]->bind(p.frameIndex);
             p.vaos[meshName]->draw(p.cmd, p.vbos[meshName]);

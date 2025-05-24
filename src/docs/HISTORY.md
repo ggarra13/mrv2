@@ -20,7 +20,8 @@ v1.3.8
 - Fixed secondary viewport flickering when the timeline was hidden (at least on X11).
 - Improved performance of text rendering on both OpenGL and Vulkan.
 - Removed outline class from OpenGL as it was not needed.
-- Added showing of clip in the HUD for .otioz files.
+- Added showing of clip name in the HUD for .otioz files.
+- Improved performance of the thumbnails in the timeline for both OpenGL and Vulkan.
 - Started porting to Vulkan.
 
 	 * Working:
@@ -51,12 +52,12 @@ v1.3.8
 		 * Histogram
 		 * Color Areas (Area color information)
 		 * Environment mapping
-		 * Thumbnails in Timeline (extremely slow and not clipped).
+		 * Thumbnails in Timeline (extremely slow).
 		 * Thumbnails in Panels
 		 * Missing Frames crosses
 		 
 	 * Missing to check/add:
-		 * Editing (thumbnails not clipped)
+		 * Editing (dissolves are broken in new OTIO).
 		 * Saving of Movies/Pictures with Annotations
 		 * NDI support
 		 * Temporary FLTK Text widget annotation (how to do it?)
@@ -67,11 +68,13 @@ v1.3.8
 		 * OpenUSD in Vulkan (how to do it?)
 		 
 	 * Problems:
-		 - Performance of drawing text is an issue on Linux and Windows.
-		   It prevents mrv2 from reaching 60 fps at 4K (it reaches only
-		   40 fps or less on most clips with Cache Information on).
-		   macOS seems fine albeit with other drawing issues.
 	 	 - Performance of the timeline with clips is an even worse problem.
+		   
+	 * Improvements:
+		 - Improved performance of drawing text in the HUD and timeline for
+		   both Vulkan and OpenGL.
+		 - Improved performance of drawing clips in the timeline for Vulkan.
+		   Still slow, thou.
 		   
 - Fixed and simplified code for NDIView (hdr utility).
 - Fixed hdr utility for macOS Intel trying to pass full HDR10 or HLG data, 

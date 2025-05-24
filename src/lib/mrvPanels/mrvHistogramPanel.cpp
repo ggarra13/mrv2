@@ -2,17 +2,17 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include "FL/Fl_Choice.H"
-
-#include "mrvCore/mrvColorAreaInfo.h"
-
-#include "mrvWidgets/mrvFunctional.h"
-#include "mrvWidgets/mrvHistogram.h"
+#include "mrViewer.h"
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 #include "mrvPanels/mrvHistogramPanel.h"
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrvFunctional.h"
+#include "mrvWidgets/mrvHistogram.h"
+
+#include "mrvCore/mrvColorAreaInfo.h"
+
+#include "FL/Fl_Choice.H"
 
 namespace mrv
 {

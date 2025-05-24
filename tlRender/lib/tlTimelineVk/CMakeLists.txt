@@ -1,8 +1,8 @@
 set(HEADERS
-    Render.h)
+    Render.h
+    RenderShadersBinary.h)
 set(PRIVATE_HEADERS
     RenderPrivate.h
-    RenderShadersBinary.h
     RenderStructs.h)
 
 set(SOURCE

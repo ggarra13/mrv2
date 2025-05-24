@@ -4,26 +4,15 @@
 
 #if defined(TLRENDER_NDI)
 
-#    include <chrono>
-#    include <regex>
-#    include <thread>
-#    include <mutex>
-#    include <atomic>
+#    include "mrViewer.h"
 
-#    include <tlCore/ListObserver.h>
-#    include <tlCore/StringFormat.h>
+#    include "mrvApp/mrvSettingsObject.h"
 
-#    include <tlDevice/OutputData.h>
-#    include <tlDevice/NDI/NDIOptions.h>
-#    include <tlDevice/NDI/NDIOutputDevice.h>
-#    include <tlDevice/NDI/NDISystem.h>
-#    include <tlDevice/NDI/NDIUtil.h>
 
-#    include <FL/Fl_Choice.H>
+#    include "mrvPanels/mrvPanelsCallbacks.h"
+#    include "mrvPanels/mrvNDIPanel.h"
 
-#    include "mrvCore/mrvHome.h"
-#    include "mrvCore/mrvFile.h"
-#    include "mrvCore/mrvMemory.h"
+#    include "mrvFl/mrvIO.h"
 
 #    include "mrvWidgets/mrvToggleButton.h"
 #    include "mrvWidgets/mrvFunctional.h"
@@ -31,14 +20,29 @@
 #    include "mrvWidgets/mrvInput.h"
 #    include "mrvWidgets/mrvCollapsibleGroup.h"
 
-#    include "mrvPanels/mrvPanelsCallbacks.h"
-#    include "mrvPanels/mrvNDIPanel.h"
+#    include "mrvCore/mrvHome.h"
+#    include "mrvCore/mrvFile.h"
+#    include "mrvCore/mrvMemory.h"
 
-#    include "mrvFl/mrvIO.h"
 
-#    include "mrvApp/mrvSettingsObject.h"
 
-#    include "mrViewer.h"
+
+#    include <tlDevice/OutputData.h>
+#    include <tlDevice/NDI/NDIOptions.h>
+#    include <tlDevice/NDI/NDIOutputDevice.h>
+#    include <tlDevice/NDI/NDISystem.h>
+#    include <tlDevice/NDI/NDIUtil.h>
+
+#    include <tlCore/ListObserver.h>
+#    include <tlCore/StringFormat.h>
+
+#    include <FL/Fl_Choice.H>
+
+#    include <chrono>
+#    include <regex>
+#    include <thread>
+#    include <mutex>
+#    include <atomic>
 
 namespace
 {

@@ -20,6 +20,7 @@
 #include "mrvVk/mrvVkDefines.h"
 #include "mrvVk/mrvVkUtil.h"
 #include "mrvVk/mrvVkShaders.h"
+#include "mrvVk/mrvVkShadersBinary.h"
 #include "mrvVk/mrvVkShape.h"
 #include "mrvVk/mrvTimelineViewport.h"
 #include "mrvVk/mrvTimelineViewportPrivate.h"
@@ -37,6 +38,8 @@
 #include "mrvCore/mrvSequence.h"
 #include "mrvCore/mrvI8N.h"
 
+
+#include <tlTimelineVk/RenderShadersBinary.h>
 
 
 #include <tlCore/FontSystem.h>
@@ -373,6 +376,7 @@ namespace mrv
         void Viewport::prepare()
         {
             prepare_render_pass();       // Main swapchain render pass
+            prepare_load_render_pass();  // swapchain render pass that loads contents
             prepare_shaders();
             prepare_pipeline_layout(); 
         }
@@ -386,6 +390,12 @@ namespace mrv
             vk.avbo.reset();
             vk.avao.reset();
 
+            if (vk.loadRenderPass != VK_NULL_HANDLE)
+            {
+                vkDestroyRenderPass(device(), vk.loadRenderPass, nullptr);
+                vk.loadRenderPass = VK_NULL_HANDLE;
+            }
+            
             if (vk.pipeline_layout != VK_NULL_HANDLE)
             {
                 vkDestroyPipelineLayout(device(), vk.pipeline_layout, nullptr);
@@ -466,13 +476,16 @@ namespace mrv
                 vk.viewport = std::make_shared<vulkan::Lines>(ctx, renderPass());
 
                 
-                const std::string& vertexSource = timeline_vlk::vertexSource();
                 const image::Color4f color(1.F, 1.F, 1.F);
                 math::Matrix4x4f mvp;
                 if (!vk.shader)
                 {
                     vk.shader = vlk::Shader::create(
-                        ctx, vertexSource, textureFragmentSource(),
+                        ctx,
+                        timeline_vlk::Vertex3_spv,
+                        timeline_vlk::Vertex3_spv_len,
+                        textureFragment_spv,
+                        textureFragment_spv_len,
                         "vk.shader");
 
                     // Create parameters for shader.
@@ -487,7 +500,11 @@ namespace mrv
                 if (!vk.annotationShader)
                 {
                     vk.annotationShader = vlk::Shader::create(
-                        ctx, vertexSource, annotationFragmentSource(),
+                        ctx, 
+                        timeline_vlk::Vertex3_spv,
+                        timeline_vlk::Vertex3_spv_len,
+                        annotationFragment_spv,
+                        annotationFragment_spv_len,
                         "vk.annotationShader");
                     vk.annotationShader->createUniform(
                         "transform.mvp", mvp, vlk::kShaderVertex);
@@ -776,8 +793,6 @@ namespace mrv
 
             math::Matrix4x4f mvp;
 
-            const float rotation = _getRotation();
-
             if (p.environmentMapOptions.type != EnvironmentMapOptions::kNone)
             {
                 mvp = _createEnvironmentMap();
@@ -789,10 +804,8 @@ namespace mrv
 
             if (!pipeline())
             {
-                std::cerr << "pipeline not ready" << std::endl;
                 return;
-            }
-                
+            }                
 
 
             float opacity = 1.F;
@@ -855,38 +868,6 @@ namespace mrv
             }
 
             
-            // --- Final Render Pass: Render to Swapchain (Composition) ---
-            vk.buffer->transitionToShaderRead(cmd);
-            if (vk.annotation)
-                vk.annotation->transitionToShaderRead(cmd);
-            
-            begin_render_pass(cmd);
-
-            // Bind the shaders to the current frame index.
-            vk.shader->bind(m_currentFrameIndex);
-
-            // Bind the main composition pipeline (created/managed outside this
-            // draw loop)
-            vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline());
-            
-            // --- Update Descriptor Set for the SECOND pass (Composition) ---
-            // This updates the descriptor set for the CURRENT frame index on
-            // the CPU.
-            vk.shader->setUniform("transform.mvp", mvp, vlk::kShaderVertex);
-            vk.shader->setFBO("textureSampler", vk.buffer);
-            
-            // --- Bind Descriptor Set for the SECOND pass ---
-            // Record the command to bind the descriptor set for the CURRENT
-            // frame index
-            VkDescriptorSet descriptorSet = vk.shader->getDescriptorSet();
-            vkCmdBindDescriptorSets(
-                cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, vk.pipeline_layout, 0, 1,
-                &descriptorSet, 0, nullptr);
-            
-            vkCmdPushConstants(
-                cmd, vk.pipeline_layout,
-                vk.shader->getPushStageFlags(), 0, sizeof(float), &opacity);
-
             VkViewport viewport = {};
             viewport.width = static_cast<float>(w());
             viewport.height = static_cast<float>(h());
@@ -898,16 +879,171 @@ namespace mrv
             scissor.extent.width = w();
             scissor.extent.height = h();
             vkCmdSetScissor(cmd, 0, 1, &scissor);
-
-            if (vk.vao && vk.vbo)
+                
+                
+            const float rotation = _getRotation();
+            if (p.presentation ||
+                p.ui->uiPrefs->uiPrefsBlitViewports->value() == kNoBlit ||
+                p.environmentMapOptions.type != EnvironmentMapOptions::kNone ||
+                rotation != 0.F || (transparent && hasAlpha))
             {
-                vk.vao->bind(m_currentFrameIndex);
-                vk.vao->draw(cmd, vk.vbo);
+                // --- Final Render Pass: Render to Swapchain (Composition) ---
+                vk.buffer->transitionToShaderRead(cmd);
+                if (vk.annotation)
+                    vk.annotation->transitionToShaderRead(cmd);
+            
+                begin_render_pass(cmd);
+
+                // Bind the shaders to the current frame index.
+                vk.shader->bind(m_currentFrameIndex);
+
+                // Bind the main composition pipeline (created/managed outside this
+                // draw loop)
+                vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline());
+            
+                // --- Update Descriptor Set for the SECOND pass (Composition) ---
+                // This updates the descriptor set for the CURRENT frame index on
+                // the CPU.
+                vk.shader->setUniform("transform.mvp", mvp, vlk::kShaderVertex);
+                vk.shader->setFBO("textureSampler", vk.buffer);
+            
+                // --- Bind Descriptor Set for the SECOND pass ---
+                // Record the command to bind the descriptor set for the CURRENT
+                // frame index
+                VkDescriptorSet descriptorSet = vk.shader->getDescriptorSet();
+                vkCmdBindDescriptorSets(
+                    cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, vk.pipeline_layout, 0, 1,
+                    &descriptorSet, 0, nullptr);
+            
+                vkCmdPushConstants(
+                    cmd, vk.pipeline_layout,
+                    vk.shader->getPushStageFlags(), 0, sizeof(float), &opacity);
+
+                if (vk.vao && vk.vbo)
+                {
+                    vk.vao->bind(m_currentFrameIndex);
+                    vk.vao->draw(cmd, vk.vbo);
+                }
+            }
+            else
+            {
+                VkImage srcImage = vk.buffer->getImage();
+                VkImage dstImage = get_back_buffer_image();
+                
+                // srcImage barrier
+                transitionImageLayout(cmd, srcImage,
+                                      VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                                      VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+                // srcImage barrier
+                vk.buffer->setImageLayout(VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL); 
+                
+                // dstImage barrier (swapchain image)
+                transitionImageLayout(cmd, dstImage,
+                                      VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+                                      VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+
+                // Blit the offscreen buffer contents to the viewport
+                VkFilter filter = VK_FILTER_NEAREST;
+                if (!p.displayOptions.empty())
+                {
+                    const auto& filters = p.displayOptions[0].imageFilters;
+                    if (p.viewZoom < 1.0f &&
+                        filters.minify == timeline::ImageFilter::Linear)
+                        filter = VK_FILTER_LINEAR;
+                    else if (
+                        p.viewZoom > 1.0f &&
+                        filters.magnify == timeline::ImageFilter::Linear)
+                        filter = VK_FILTER_LINEAR;
+                }
+                
+                const int32_t viewportX = p.viewPos.x;
+                const int32_t viewportY = p.viewPos.y;
+                const int32_t sizeW = renderSize.w * p.viewZoom;
+                const int32_t sizeH = renderSize.h * p.viewZoom;
+                
+                int dstRight  = std::min(viewportX + sizeW, viewportSize.w);
+                int dstBottom = std::min(viewportY + sizeH, viewportSize.h);
+                int dstLeft   = std::max(viewportX, 0);
+                int dstTop    = std::max(viewportY, 0);
+
+                const int dstWidth = dstRight - dstLeft;
+                const int dstHeight = dstBottom - dstTop;
+
+                if (dstWidth <= 0 || dstHeight <= 0)
+                    return; // Nothing to blit
+
+                // Adjust source region.
+                const int srcWidth = renderSize.w;
+                const int srcHeight = renderSize.h;
+                
+                const float scaleX = static_cast<float>(srcWidth) / sizeW;
+                const float scaleY = static_cast<float>(srcHeight) / sizeH;
+                
+                const int offsetX = dstLeft - viewportX;
+                const int offsetY = dstTop - viewportY;
+
+                const int visibleW = dstWidth;
+                const int visibleH = dstHeight;
+
+                int srcLeft   = static_cast<int>(offsetX * scaleX);
+                int srcTop    = static_cast<int>(offsetY * scaleY);
+                int srcRight  = static_cast<int>((offsetX + visibleW) * scaleX);
+                int srcBottom = static_cast<int>((offsetY + visibleH) * scaleY);
+                
+                VkImageBlit region = {};
+                region.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+                region.srcSubresource.mipLevel = 0;
+                region.srcSubresource.baseArrayLayer = 0;
+                region.srcSubresource.layerCount = 1;
+                region.srcOffsets[0] = {srcLeft, srcTop, 0};
+                region.srcOffsets[1] = {srcRight, srcBottom, 1};
+                region.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+                region.dstSubresource.mipLevel = 0;
+                region.dstSubresource.baseArrayLayer = 0;
+                region.dstSubresource.layerCount = 1;
+                region.dstOffsets[0] = {dstLeft, dstTop, 0};
+                region.dstOffsets[1] = {dstRight, dstBottom, 1};
+                vkCmdBlitImage(
+                    cmd,
+                    srcImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                    dstImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                    1, &region,
+                    filter
+                    );
+                
+                // srcImage barrier
+                transitionImageLayout(cmd, srcImage,
+                                      VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                                      VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+                vk.buffer->setImageLayout(VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+                                
+                // dstImage barrier (swapchain image)
+                transitionImageLayout(cmd, dstImage,
+                                      VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                                      VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+
+                VkClearValue clear_values[2];
+                clear_values[0].color = m_clearColor;
+                clear_values[1].depthStencil = {m_depthStencil, 0};
+
+                VkRenderPassBeginInfo rp_begin = {};
+                rp_begin.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+                rp_begin.renderPass = vk.loadRenderPass;
+                rp_begin.framebuffer = m_buffers[m_current_buffer].framebuffer;
+                rp_begin.renderArea.offset.x = 0;
+                rp_begin.renderArea.offset.y = 0;
+                rp_begin.renderArea.extent.width = w();
+                rp_begin.renderArea.extent.height = h();
+                rp_begin.clearValueCount = 2;
+                rp_begin.pClearValues = clear_values;
+                
+                vkCmdBeginRenderPass(cmd, &rp_begin, VK_SUBPASS_CONTENTS_INLINE);
+                m_in_render_pass = true;
             }
 
             
             if (p.showAnnotations && !annotations.empty())
-            {
+            {                
                 // We already flipped the coords, so we use a normal ortho
                 // matrix here
                 const math::Matrix4x4f orthoMatrix = math::ortho(
@@ -1374,6 +1510,84 @@ namespace mrv
             tcp->pushMessage(msg);
         }
         
+        // m_depth (optionally) -> creates m_renderPass
+        void Viewport::prepare_load_render_pass() 
+        {
+            MRV2_VK();
+            
+            bool has_depth = mode() & FL_DEPTH;
+            bool has_stencil = mode() & FL_STENCIL;
+
+            VkAttachmentDescription attachments[2];
+            attachments[0] = VkAttachmentDescription();
+            attachments[0].format = format();
+            attachments[0].samples = VK_SAMPLE_COUNT_1_BIT;
+            attachments[0].loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
+            attachments[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+            attachments[0].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+            attachments[0].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+            attachments[0].initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            attachments[0].finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR; // Final layout for presentation
+
+            attachments[1] = VkAttachmentDescription();
+
+
+            VkAttachmentReference color_reference = {};
+            color_reference.attachment = 0;
+            color_reference.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+    
+            VkAttachmentReference depth_reference = {};
+            depth_reference.attachment = 1;
+            depth_reference.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+    
+            VkSubpassDescription subpass = {};
+            subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+            subpass.flags = 0;
+            subpass.inputAttachmentCount = 0;
+            subpass.pInputAttachments = NULL;
+            subpass.colorAttachmentCount = 1;
+            subpass.pColorAttachments = &color_reference;
+            subpass.pResolveAttachments = NULL;
+
+            if (has_depth || has_stencil)
+            {
+                attachments[1].format = m_depth.format;
+                attachments[1].samples = VK_SAMPLE_COUNT_1_BIT;
+                attachments[1].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+                attachments[1].storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+                if (has_stencil)
+                {
+                    attachments[1].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+                }
+                else
+                {
+                    attachments[1].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+                }
+                attachments[1].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+                attachments[1].initialLayout =
+                    VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+                attachments[1].finalLayout =
+                    VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+    
+                subpass.pDepthStencilAttachment = &depth_reference;
+                subpass.preserveAttachmentCount = 0;
+                subpass.pPreserveAttachments = NULL;
+            }
+
+            VkRenderPassCreateInfo rp_info = {};
+            rp_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+            rp_info.pNext = NULL;
+            rp_info.attachmentCount = (has_depth || has_stencil) ? 2: 1;
+            rp_info.pAttachments = attachments;
+            rp_info.subpassCount = 1;
+            rp_info.pSubpasses = &subpass;
+            rp_info.dependencyCount = 0;
+            rp_info.pDependencies = NULL;
+                    
+            VkResult result;
+            result = vkCreateRenderPass(device(), &rp_info, NULL, &vk.loadRenderPass);
+            VK_CHECK(result);
+        }
     } // namespace vulkan
 
 } // namespace mrv

@@ -188,7 +188,7 @@ namespace tl
                 const std::shared_ptr<image::Image>&, const math::Box2i&,
                 const image::Color4f& = image::Color4f(1.F, 1.F, 1.F),
                 const timeline::ImageOptions& =
-                    timeline::ImageOptions()) override {};
+                    timeline::ImageOptions()) override;
             void drawImage(
                 const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
                 const std::shared_ptr<image::Image>&, const math::Box2i&,
@@ -207,7 +207,7 @@ namespace tl
 
             // Vulkan overridden functions
             void createBindingSet(const std::string& shaderName) override;
-            void createRenderPass(bool clearColor, bool clearDepth) override;
+            void beginLoadRenderPass() override;
             void beginRenderPass() override;
             void endRenderPass() override;
             
@@ -265,7 +265,6 @@ namespace tl
             VkPipelineLayout _createPipelineLayout(
                 const std::string& pipelineLayoutName,
                 const std::shared_ptr<vlk::Shader> shader);
-            void _setViewportAndScissor(const math::Size2i&);
             void _bindDescriptorSets(
                 const std::string& pipelineLayoutName,
                 const std::string& shaderName);

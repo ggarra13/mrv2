@@ -4,8 +4,6 @@
 
 
 
-
-// #include "mrvGL/mrvGLErrors.h"
 #include "mrvVk/mrvVkShaders.h"
 #include "mrvVk/mrvVkLines.h"
 

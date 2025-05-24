@@ -50,6 +50,15 @@
 #    endif
 #endif
 
+#ifdef VULKAN_BACKEND
+#    include <vulkan/vulkan.h>
+#    define FLTK_OUTPUT_VERSION(ver) \
+    (int) VK_API_VERSION_MAJOR(ver) << "." << \
+    (int) VK_API_VERSION_MINOR(ver) << "." << \
+    (int) VK_API_VERSION_PATCH(ver)
+#endif
+
+
 #ifdef FLTK_USE_WAYLAND
 #    include <wayland-client.h>
 #    include <wayland-server.h>
@@ -1096,6 +1105,33 @@ namespace mrv
               << std::endl;
 #endif
         }
+#endif
+
+#ifdef VULKAN_BACKEND
+        VkInstance instance = ui->uiView->instance();
+        VkPhysicalDevice* devices = nullptr;
+        uint32_t num = 0;
+        vkEnumeratePhysicalDevices(instance, &num, nullptr);
+        devices = new VkPhysicalDevice[num];
+        vkEnumeratePhysicalDevices(instance, &num, devices);
+        for (int i = 0; i < num; i++)
+        {
+            VkPhysicalDeviceIDPropertiesKHR id_props;
+            id_props.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ID_PROPERTIES_KHR;
+
+            VkPhysicalDeviceProperties2 prop;
+            prop.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2_KHR;
+            prop.pNext = &id_props;
+            
+            vkGetPhysicalDeviceProperties2(devices[i], &prop);
+            VkPhysicalDeviceType t = prop.properties.deviceType;
+            o << "GPU " << i << ": " << prop.properties.deviceName
+              << " v" << FLTK_OUTPUT_VERSION(prop.properties.apiVersion)
+              << std::endl
+              << std::endl;
+            
+        }
+        delete [] devices;
 #endif
 
         o << "HW Stereo:\t" << (ui->uiView->can_do(FL_STEREO) ? "Yes" : "No")

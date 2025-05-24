@@ -1,18 +1,15 @@
 
-#include <cstdlib>
-#include <cstdio>
-#include <cstring>
-#include <cmath>
 
-#include <algorithm>
-#include <filesystem>
-namespace fs = std::filesystem;
+#include "mrvWidgets/mrvProgressReport.h"
 
-#include <opentime/rationalTime.h>
+#include "mrvFl/mrvIO.h"
+#include "mrvNetwork/mrvTCP.h"
 
-#include <tlCore/StringFormat.h>
+#include "mrvUI/mrvDesktop.h"
 
-#include <tlIO/System.h>
+#include "mrvPDF/mrvPDFCreator.h"
+
+#include "mrViewer.h"
 
 #include "mrvCore/mrvBackend.h"
 #include "mrvCore/mrvHome.h"
@@ -28,19 +25,24 @@ namespace fs = std::filesystem;
 #    include <tlTimelineUIVk/ThumbnailSystem.h>
 #endif
 
+#include <tlIO/System.h>
+
+#include <tlCore/StringFormat.h>
+
+#include <opentime/rationalTime.h>
+
 #include <FL/fl_draw.H>
 
+#include <algorithm>
+#include <cstdlib>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <filesystem>
+namespace fs = std::filesystem;
 
-#include "mrvWidgets/mrvProgressReport.h"
 
-#include "mrvFl/mrvIO.h"
-#include "mrvNetwork/mrvTCP.h"
 
-#include "mrvUI/mrvDesktop.h"
-
-#include "mrvPDF/mrvPDFCreator.h"
-
-#include "mrViewer.h"
 
 jmp_buf env;
 

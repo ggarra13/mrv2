@@ -830,7 +830,7 @@ namespace mrv
 
             if (value == p.ocioOptions)
                 return;
-
+            
             p.ocioOptions = value;
             p.previous_screen = -1;
 
@@ -2191,7 +2191,7 @@ namespace mrv
             if (!o.fileName.empty() &&
                 (!o.input.empty() || (!o.display.empty() && !o.view.empty())))
                 o.enabled = true;
-
+            
             setOCIOOptions(o);
 
             int num_screens = Fl::screen_count();
@@ -3445,6 +3445,7 @@ namespace mrv
 #ifndef __APPLE__
             auto display = p.ui->uiTimeline->getDisplayOptions();
             display.hdr = p.hdrOptions;
+            if (p.hdrOptions.passthru) display.hdr.tonemap = true;
             p.ui->uiTimeline->setDisplayOptions(display);
 #endif
 

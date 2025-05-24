@@ -782,7 +782,7 @@ namespace tl
             range.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
             range.memory = p.vertexMemory;
             range.offset = absOffset;
-            range.size = dataSize;
+            range.size = VK_WHOLE_SIZE;
 
             VkResult result = vkFlushMappedMemoryRanges(device, 1, &range);
             if (result != VK_SUCCESS)

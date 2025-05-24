@@ -2,6 +2,14 @@
 // Copyright (c) 2021-2023 Darby Johnston
 // All rights reserved.
 
+#include "mrViewer.h"
+
+#include "mrvPanels/mrvThumbnailPanel.h"
+
+#include "mrvCore/mrvFile.h"
+
+#include <tlCore/StringFormat.h>
+
 #include <FL/Fl_Widget.H>
 #include <FL/Fl.H>
 
@@ -9,14 +17,6 @@
 #    include <pybind11/embed.h>
 namespace py = pybind11;
 #endif
-
-#include <tlCore/StringFormat.h>
-
-#include "mrvCore/mrvFile.h"
-
-#include "mrvPanels/mrvThumbnailPanel.h"
-
-#include "mrViewer.h"
 
 namespace
 {

@@ -4,13 +4,10 @@
 
 #if defined(TLRENDER_USD)
 
-#    include <tlCore/StringFormat.h>
 
-#    include <FL/Fl_Check_Button.H>
-#    include <FL/Fl_Choice.H>
-#    include <FL/Fl_Spinner.H>
+#    include "mrViewer.h"
 
-#    include "mrvOptions/mrvUSD.h"
+#    include "mrvApp/mrvSettingsObject.h"
 
 #    include "mrvWidgets/mrvFunctional.h"
 #    include "mrvWidgets/mrvHorSlider.h"
@@ -21,9 +18,14 @@
 
 #    include "mrvFl/mrvIO.h"
 
-#    include "mrvApp/mrvSettingsObject.h"
+#    include "mrvOptions/mrvUSD.h"
 
-#    include "mrViewer.h"
+
+#    include <tlCore/StringFormat.h>
+
+#    include <FL/Fl_Check_Button.H>
+#    include <FL/Fl_Choice.H>
+#    include <FL/Fl_Spinner.H>
 
 namespace
 {

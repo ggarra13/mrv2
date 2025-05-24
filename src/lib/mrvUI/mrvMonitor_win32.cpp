@@ -165,7 +165,7 @@ namespace mrv
             return out;
         }
 
-        bool is_hdr_active(int screen)
+        bool is_hdr_active(int screen, const bool silent)
         {
             IDXGIFactory6* factory = nullptr;
             CreateDXGIFactory1(IID_PPV_ARGS(&factory));
@@ -190,7 +190,8 @@ namespace mrv
                             desc.ColorSpace ==
                             DXGI_COLOR_SPACE_RGB_FULL_G10_NONE_P709)
                         {
-                            std::cout << "HDR is active on display.\n";
+                            if (!silent)
+                                std::cout << "HDR is active on display.\n";
                             output6->Release();
                             output->Release();
                             adapter->Release();
