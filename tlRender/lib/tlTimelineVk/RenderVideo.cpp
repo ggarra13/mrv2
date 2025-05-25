@@ -1162,14 +1162,14 @@ namespace tl
 #if defined(TLRENDER_OCIO)
                 if (p.ocioData)
                 {
-                    for (auto& texture : p.ocioData->textures)
+                    for (const auto& texture : p.ocioData->textures)
                     {
                         p.shaders["display"]->setTexture(texture->getName(), texture);
                     }
                 }
                 if (p.lutData)
                 {
-                    for (auto& texture : p.lutData->textures)
+                    for (const auto& texture : p.lutData->textures)
                     {
                         p.shaders["display"]->setTexture(texture->getName(), texture);
                     }
@@ -1178,7 +1178,7 @@ namespace tl
 #if defined(TLRENDER_LIBPLACEBO)
                 if (p.placeboData)
                 {
-                    for (auto& texture : p.placeboData->textures)
+                    for (const auto& texture : p.placeboData->textures)
                     {
                         p.shaders["display"]->setTexture(texture->getName(), texture);
                     }

@@ -583,7 +583,19 @@ namespace tl
                 throw std::runtime_error("pl_gpu_dummy_create failed!");
             }
 
-            shader = nullptr;
+            pl_shader_params shader_params;
+            memset(&shader_params, 0, sizeof(pl_shader_params));
+                
+            shader_params.id = 1;
+            shader_params.gpu = gpu;
+            shader_params.dynamic_constants = false;
+
+            shader = pl_shader_alloc(log, &shader_params);
+            if (!shader)
+            {
+                throw std::runtime_error("pl_shader_alloc failed!");
+            }
+                
             res = nullptr;
         }
 
@@ -1463,6 +1475,7 @@ namespace tl
                     texture->copy(
                         reinterpret_cast<const uint8_t*>(values),
                         width * height * depth * fmt->internal_size);
+                    pl_tex_destroy(p.placeboData->gpu, &tex);
                     textures.push_back(texture);
                     break;
                 }
@@ -1752,7 +1765,7 @@ namespace tl
             {
                 auto pair = p.pipelines["display"];
                 p.garbage[p.frameIndex].pipelines.push_back(pair.second);
-                    
+                
 
                 vlk::PipelineCreationState pipelineState;
                 pair = std::make_pair(pipelineState, VK_NULL_HANDLE);
@@ -1781,17 +1794,12 @@ namespace tl
             {
                 pl_shader_params shader_params;
                 memset(&shader_params, 0, sizeof(pl_shader_params));
-
+                
                 shader_params.id = 1;
                 shader_params.gpu = p.placeboData->gpu;
                 shader_params.dynamic_constants = false;
-
-                pl_shader shader =
-                    pl_shader_alloc(p.placeboData->log, &shader_params);
-                if (!shader)
-                {
-                    throw std::runtime_error("pl_shader_alloc failed!");
-                }
+            
+                pl_shader_reset(p.placeboData->shader, &shader_params);
 
                 pl_color_map_params cmap;
                 memset(&cmap, 0, sizeof(pl_color_map_params));
@@ -2023,19 +2031,14 @@ namespace tl
                 color_map_args.dst = dst_colorspace;
                 color_map_args.prelinearized = false;
 
-                pl_shader_obj state = NULL;
-                color_map_args.state = &state;
+                // pl_shader_obj state = NULL;
+                // color_map_args.state = &state;
 
-                pl_shader_color_map_ex(shader, &cmap, &color_map_args);
-
-                if (p.placeboData->res)
-                {
-                    p.placeboData->res = nullptr;
-                    pl_shader_free(&p.placeboData->shader);
-                }
+                pl_shader_color_map_ex(p.placeboData->shader, &cmap,
+                                       &color_map_args);
                     
-                const pl_shader_res* res = pl_shader_finalize(shader);
-                p.placeboData->shader = shader;
+                const pl_shader_res* res =
+                    pl_shader_finalize(p.placeboData->shader);
                 p.placeboData->res = res;
                 if (!res)
                 {
@@ -2164,20 +2167,11 @@ namespace tl
 
                 s << res->glsl << std::endl;
                 toneMapDef = s.str();
-
-                try
-                {
-                    _addTextures(p.placeboData->textures, res);
-                }
-                catch (const std::exception& e)
-                {
-                    std::cerr << e.what() << std::endl;
-                    p.placeboData.reset();
-                    throw e;
-                }
+                
                 toneMap = "outColor = ";
                 toneMap += res->name;
                 toneMap += "(outColor);\n";
+                
             }
 #endif
                 
@@ -2215,6 +2209,21 @@ namespace tl
             if (!p.shaders["display"] || source != p.displayShaderSource)
             {
                 p.displayShaderSource = source;
+
+                try
+                {
+                    if (p.placeboData)
+                    {
+                        p.placeboData->textures.clear();
+                        _addTextures(p.placeboData->textures, p.placeboData->res);
+                    }
+                }
+                catch (const std::exception& e)
+                {
+                    std::cerr << e.what() << std::endl;
+                    p.placeboData.reset();
+                    throw e;
+                }
                     
 #if USE_PRECOMPILED_SHADERS
                 p.shaders["display"] =
@@ -2274,7 +2283,6 @@ namespace tl
                 
             }
             _createBindingSet(p.shaders["display"]);
-            
         }
 
     std::string Render::_debugPLVar(const struct pl_shader_var& shader_var)

@@ -26,8 +26,6 @@ namespace tl
         void Render::_createBindingSet(const std::shared_ptr<vlk::Shader>& shader)
         {
             TLRENDER_P();
-            if (!shader)
-                throw std::runtime_error("_createBindingSet shader nullptr");
             auto bindingSet = shader->createBindingSet();
             p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
         }

@@ -1574,7 +1574,6 @@ namespace tl
                     pl_color_map_params cmap;
                     memset(&cmap, 0, sizeof(pl_color_map_params));
 
-                    // defaults, generates LUTs if state is set.
                     cmap.gamut_mapping = &pl_gamut_map_perceptual;
 
                     switch (p.hdrOptions.algorithm)
@@ -1723,9 +1722,6 @@ namespace tl
                     color_map_args.src = src_colorspace;
                     color_map_args.dst = dst_colorspace;
                     color_map_args.prelinearized = false;
-
-                    pl_shader_obj state = NULL;
-                    color_map_args.state = &state;
                     
                     pl_shader_color_map_ex(shader, &cmap, &color_map_args);
 
