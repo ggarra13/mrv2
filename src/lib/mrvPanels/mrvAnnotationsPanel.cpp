@@ -171,19 +171,22 @@ namespace mrv
                 [=](auto o)
                 {
                     settings->setValue(kFontSize, static_cast<int>(o->value()));
-                    const auto& viewportSize = p.ui->uiView->getViewportSize();
-                    float pct = viewportSize.h / 1024.F;
+                    const auto& renderSize = p.ui->uiView->getRenderSize();
+                    float pct = renderSize.h / 1024.F;
+                    double pixels_per_unit = p.ui->uiView->pixels_per_unit();
                     auto w = p.ui->uiView->getMultilineInput();
                     if (!w)
                         return;
-                    int fontSize = o->value() * pct * p.ui->uiView->viewZoom();
-                    
 #ifdef OPENGL_BACKEND
+                    int fontSize = o->value() * pct * p.ui->uiView->viewZoom()
+                                   * pixels_per_unit;
+                    
                     w->textsize(fontSize);
                     w->redraw();
 #endif
 
 #ifdef VULKAN_BACKEND
+                    int fontSize = o->value() * pct * pixels_per_unit;
                     w->fontSize = fontSize;
 #endif
                     

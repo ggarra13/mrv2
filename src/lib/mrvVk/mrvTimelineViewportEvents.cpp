@@ -658,9 +658,11 @@ namespace mrv
                     {
                         const auto& renderSize = getRenderSize();
                         auto shape = getMultilineInput();
-
+                        
+                        double pixels_unit = pixels_per_unit();
+                        double pct = renderSize.h / 1024.F;
                         int font_size = settings->getValue<int>(kFontSize);
-                        double fontSize = font_size / pixels_per_unit();
+                        double fontSize = font_size * pct / pixels_unit;
                         math::Vector2f pos(_getRasterf());
                         if (shape)
                         {
