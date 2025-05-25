@@ -381,18 +381,12 @@ namespace mrv
             auto shape = getMultilineInput();
             if (!shape)
                 return 0;
-                
-            draw::Point pnt(_getRasterf());
-            shape->pts.push_back(pnt);
 
-            annotation->push_back(shape);
-
-            shape->fontSystem = p.fontSystem;
             shape->editing = false;
-            shape->color = color;
 
-            const float pixels_unit = pixels_per_unit();
-                
+            p.multilineText.reset();
+            
+            const float pixels_unit = pixels_per_unit();            
             _endAnnotationShape();
             p.ui->uiUndoDraw->activate();
 
@@ -663,12 +657,10 @@ namespace mrv
                     case ActionMode::kText:
                     {
                         const auto& renderSize = getRenderSize();
-                        float pct = renderSize.h / 1024.F;
                         auto shape = getMultilineInput();
 
                         int font_size = settings->getValue<int>(kFontSize);
-                        double fontSize =
-                            font_size * pct * p.viewZoom / pixels_per_unit();
+                        double fontSize = font_size / pixels_per_unit();
                         math::Vector2f pos(_getRasterf());
                         if (shape)
                         {
@@ -683,9 +675,11 @@ namespace mrv
                         shape->fontSystem = p.fontSystem;
                         shape->pts.push_back(pos);
                         shape->editing = true;
-                        shape->text = "Hello";
+                        shape->color = color;
+                        shape->fontSize = fontSize;
 
                         annotation->push_back(shape);
+                        take_focus();
 
             
                         redrawWindows();
@@ -911,6 +905,16 @@ namespace mrv
                 return ret;
             }
 
+            if (p.multilineText)
+            {
+                ret = p.multilineText->handle(event);
+                if (ret)
+                {
+                    redrawWindows();
+                    return ret;
+                }
+            }
+
             p.event_x = Fl::event_x();
             p.event_y = Fl::event_y();
 
@@ -922,17 +926,8 @@ namespace mrv
             {
                 p.lastEvent = 0;
 
-                // We have children if we are editing a text widget, so we do not
-                // grab focus in that case.
-                // if (!children())
-                {
-                    bool grab_focus = false;
-                    if (p.ui->uiPrefs->uiPrefsRaiseOnEnter->value())
-                        grab_focus = true;
-
-                    if (grab_focus)
-                        take_focus();
-                }
+                if (p.multilineText)
+                    take_focus();
             
 #ifdef __APPLE__
                 if (p.ui->uiMenuBar && p.ui->uiPrefs->uiPrefsMacOSMenus->value())
@@ -1525,6 +1520,7 @@ namespace mrv
                 std::string text;
                 if (Fl::event_text())
                     text = Fl::event_text();
+
                 dragAndDrop(text);
                 return 1;
             }

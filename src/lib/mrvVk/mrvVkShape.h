@@ -156,6 +156,11 @@ namespace mrv
             };
         virtual ~VKTextShape() {};
 
+        int paste();
+        int accept();
+        
+        int handle(int event);
+        
         virtual void draw(
             const std::shared_ptr<timeline_vlk::Render>&,
             const std::shared_ptr<vulkan::Lines> lines) override;
@@ -166,6 +171,7 @@ namespace mrv
         uint16_t fontSize;
         bool editing = true;
         Fl_Font font;
+        unsigned cursor = 0;
         math::Vector2f pos;
         float viewZoom = 1.F;
         std::shared_ptr<image::FontSystem> fontSystem;
