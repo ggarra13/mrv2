@@ -173,6 +173,7 @@ namespace mrv
         Fl_Font font;
         unsigned cursor = 0;
         math::Vector2f pos;
+        math::Box2i    box;
         float viewZoom = 1.F;
         std::shared_ptr<image::FontSystem> fontSystem;
     };

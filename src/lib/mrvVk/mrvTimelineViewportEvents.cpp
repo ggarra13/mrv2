@@ -927,9 +927,6 @@ namespace mrv
             case FL_ENTER:
             {
                 p.lastEvent = 0;
-
-                if (p.multilineText)
-                    take_focus();
             
 #ifdef __APPLE__
                 if (p.ui->uiMenuBar && p.ui->uiPrefs->uiPrefsMacOSMenus->value())
@@ -960,7 +957,7 @@ namespace mrv
                 break;
             case FL_PUSH:
             {
-                if (!children() && Fl::focus() != this && Fl::event_button1())
+                if (Fl::focus() != this && Fl::event_button1())
                 {
                     take_focus();
                     if (Fl::event_clicks() < 2)
@@ -969,6 +966,15 @@ namespace mrv
                 p.mousePress = _getFocus();
                 if (Fl::event_button1())
                 {
+                    if (p.multilineText)
+                    {
+                        math::Vector2f pos = _getRasterf();
+                        auto widget = p.multilineText->box.min;
+                        if (pos.x >= widget.x && pos.x <= widget.x + 10 &&
+                            pos.y >= widget.y && pos.y <= widget.y + 10)
+                            return acceptMultilineInput();
+                    }
+                    
                     if (Fl::event_ctrl())
                     {
                         p.viewPosMousePress = p.viewPos;
@@ -1029,6 +1035,24 @@ namespace mrv
                 }
                 if (p.actionMode != ActionMode::kText)
                     _updateCursor();
+                else
+                {
+                    if (p.multilineText)
+                    {
+                        take_focus();
+                        const math::Vector2f pos = _getRasterf();
+                        const math::Vector2i widget = p.multilineText->box.min;
+                        if (pos.x >= widget.x && pos.x <= widget.x + 10 &&
+                            pos.y >= widget.y && pos.y <= widget.y + 10)
+                        {
+                            cursor(FL_CURSOR_ARROW);
+                        }
+                        else
+                        {
+                            cursor(FL_CURSOR_INSERT);
+                        }
+                    }
+                }
                 _updatePixelBar();
                 return 1;
             }

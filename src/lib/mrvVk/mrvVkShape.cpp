@@ -356,10 +356,6 @@ namespace mrv
         case FL_FOCUS:
         case FL_UNFOCUS:
             return 1;
-        case FL_PUSH:
-            if (Fl::event_button2())
-                return paste();
-            break;
         case FL_PASTE:
         {
             return paste();
@@ -370,6 +366,10 @@ namespace mrv
                 return paste();
             switch(rawkey)
             {
+            case FL_Escape:
+                text = "";
+                return accept();
+                break;
             case FL_Delete:
             {
                 if (text.empty())
@@ -510,7 +510,7 @@ namespace mrv
             
         if (editing)
         {
-            math::Box2i box(pts[0].x, pts[0].y - height / 2, 70, height / 2);
+            box = math::Box2i(pts[0].x, pts[0].y - height / 2, 70, height / 2);
             for (const auto& textInfo : textInfos)
             {
                 for (const auto& v : textInfo.mesh.v)
