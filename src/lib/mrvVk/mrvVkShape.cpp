@@ -441,6 +441,11 @@ namespace mrv
         const std::shared_ptr<timeline_vlk::Render>& render,
         const std::shared_ptr<vulkan::Lines> lines)
     {
+        if (!fontSystem->hasFont(fontFamily))
+        {
+            fontSystem->addFont(fontPath);
+        }
+        
         const image::FontInfo fontInfo(fontFamily, fontSize);
         const image::FontMetrics fontMetrics = fontSystem->getMetrics(fontInfo);
         int ascender = fontMetrics.ascender;

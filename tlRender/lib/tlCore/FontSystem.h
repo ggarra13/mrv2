@@ -7,6 +7,9 @@
 #include <tlCore/ISystem.h>
 #include <tlCore/Image.h>
 
+#include <filesystem>
+namespace fs = std::filesystem;
+
 namespace tl
 {
     namespace system
@@ -90,7 +93,10 @@ namespace tl
 
             //! Add a font.
             void addFont(const std::string& name, const uint8_t*, size_t);
+            void addFont(const fs::path& filePath);
 
+            bool hasFont(const std::string&);
+            
             //! \name Information
             ///@{
 
@@ -130,6 +136,8 @@ namespace tl
         private:
             TLRENDER_PRIVATE();
         };
+
+        std::vector<fs::path> discoverSystemFonts();
     } // namespace image
 } // namespace tl
 

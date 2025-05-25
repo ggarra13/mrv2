@@ -15,10 +15,12 @@
 
 #include <FL/Enumerations.H>
 
-#include <limits>
 #include <cmath>
+#include <filesystem>
+#include <limits>
 #include <vector>
 #include <iostream>
+namespace fs = std::filesystem;
 
 namespace mrv
 {
@@ -167,6 +169,7 @@ namespace mrv
 
     public:
         std::string fontFamily = "NotoSans-Regular";
+        fs::path fontPath;
         std::string text;
         uint16_t fontSize;
         bool editing = true;

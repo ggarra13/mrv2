@@ -106,24 +106,24 @@ namespace mrv
             c->labelsize(12);
             c->align(FL_ALIGN_LEFT);
 
-#ifdef USE_OPENGL2
+#ifdef OPENGL_BACKEND
             const std::vector<std::string>& fontList = fonts::list();
-            int numFonts = fontList.size();
             for (const auto& font : fontList)
             {
                 c->add(font.c_str());
             }
-#else
-            const char* kFonts[3] = {
-                "NotoSans-Regular", "NotoSans-Bold", "NotoMono-Regular"};
+#endif
 
-            int numFonts = sizeof(kFonts) / sizeof(char*);
-            for (unsigned i = 0; i < numFonts; ++i)
+#ifdef VULKAN_BACKEND
+            const std::vector<fs::path>& fontList = image::discoverSystemFonts();
+            for (const auto& path : fontList)
             {
-                c->add(kFonts[i]);
+                file::Path filePath(path.filename());
+                c->add(filePath.getBaseName().c_str());
             }
 #endif
 
+            int numFonts = fontList.size();
             int font = settings->getValue<int>(kTextFont);
             if (font > numFonts)
                 font = 0;
@@ -133,10 +133,10 @@ namespace mrv
                 [=](auto o)
                 {
                     int font = o->value();
+                    auto view = p.ui->uiView;
+#ifdef OPENGL_BACKEND
                     auto numFonts = Fl::set_fonts("-*");
                     settings->setValue(kTextFont, font);
-                    auto view = p.ui->uiView;
-#ifdef USE_OPENGL2
                     MultilineInput* w = view->getMultilineInput();
                     if (!w)
                         return;
@@ -156,6 +156,19 @@ namespace mrv
                     const Fl_Menu_Item* item = c->mvalue();
                     std::string fontName = item->label();
                     w->fontFamily = fontName;
+                    
+                    const std::vector<fs::path>& fontList = image::discoverSystemFonts();
+                    fs::path out = fontList[0];
+                    for (const auto& path : fontList)
+                    {
+                        file::Path filePath(path.filename());
+                        if (fontName == filePath.getBaseName())
+                        {
+                            out = path;
+                            break;
+                        }
+                    }
+                    w->fontPath = out;
 #endif
                     view->redrawWindows();
                 });

@@ -672,13 +672,18 @@ namespace mrv
                             return;
                         }
 
+                        const std::vector<fs::path>& fontList =
+                            image::discoverSystemFonts();
                         p.multilineText = std::make_shared<VKTextShape>();
                         shape = p.multilineText;
+
                         shape->fontSystem = p.fontSystem;
+                        shape->fontPath = fontList[(unsigned)font];
+                        shape->fontSize = fontSize;
+                        
                         shape->pts.push_back(pos);
                         shape->editing = true;
                         shape->color = color;
-                        shape->fontSize = fontSize;
 
                         annotation->push_back(shape);
                         take_focus();
