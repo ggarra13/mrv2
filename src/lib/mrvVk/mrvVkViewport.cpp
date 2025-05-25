@@ -378,7 +378,7 @@ namespace mrv
             prepare_render_pass();       // Main swapchain render pass
             prepare_load_render_pass();  // swapchain render pass that loads contents
             prepare_shaders();
-            prepare_pipeline_layout(); 
+            prepare_pipeline_layout();
         }
 
         void Viewport::destroy()

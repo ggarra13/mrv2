@@ -72,21 +72,19 @@ namespace tl
                 p.vbos["rect"]->copy(
                     convert(geom::box(box), p.vbos["rect"]->getType()));
             }
-            if (p.vaos["rect"])
-            {
-                const std::string& pipelineLayoutName = shaderName;
-                createPipeline(p.fbo, pipelineName, pipelineLayoutName,
-                               shaderName, meshName, enableBlending);
-                VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
-                vkCmdPushConstants(
-                    p.cmd, pipelineLayout,
-                    p.shaders[shaderName]->getPushStageFlags(), 0, sizeof(color),
-                    &color);
+            
+            const std::string& pipelineLayoutName = shaderName;
+            createPipeline(p.fbo, pipelineName, pipelineLayoutName,
+                           shaderName, meshName, enableBlending);
+            VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+            vkCmdPushConstants(
+                p.cmd, pipelineLayout,
+                p.shaders[shaderName]->getPushStageFlags(), 0, sizeof(color),
+                &color);
                 
-                _bindDescriptorSets(pipelineLayoutName, shaderName);
+            _bindDescriptorSets(pipelineLayoutName, shaderName);
 
-                _vkDraw("rect");
-            }
+            _vkDraw("rect");
         }
         
         void
@@ -94,7 +92,9 @@ namespace tl
                          const std::string& pipelineName,
                          const bool enableBlending)
         {
-            drawRect(pipelineName, "rect", "rect", box, color, enableBlending);
+            bool blending = enableBlending;
+            if (color.a >= 0.9F) blending = false;
+            drawRect(pipelineName, "rect", "rect", box, color, blending);
         }
 
         //! This function draws to the viewport
@@ -116,29 +116,28 @@ namespace tl
                 p.vbos["rect"]->copy(
                     convert(geom::box(box), p.vbos["rect"]->getType()));
             }
-            if (p.vaos["rect"])
-            {
-                vlk::ColorBlendStateInfo cb;
-                vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
-                colorBlendAttachment.blendEnable = VK_TRUE;
             
-                cb.attachments.push_back(colorBlendAttachment);
+            vlk::ColorBlendStateInfo cb;
+            vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
+            colorBlendAttachment.blendEnable = enableBlending ?
+                                               VK_TRUE : VK_FALSE;
             
-                createPipeline(pipelineName, "rect",
-                               getRenderPass(),
-                               p.shaders["rect"],
-                               p.vbos["rect"], cb);
+            cb.attachments.push_back(colorBlendAttachment);
+            
+            createPipeline(pipelineName, "rect",
+                           getRenderPass(),
+                           p.shaders["rect"],
+                           p.vbos["rect"], cb);
                 
-                VkPipelineLayout pipelineLayout = p.pipelineLayouts["rect"];
-                vkCmdPushConstants(
-                    p.cmd, pipelineLayout,
-                    p.shaders["rect"]->getPushStageFlags(), 0, sizeof(color),
-                    &color);
+            VkPipelineLayout pipelineLayout = p.pipelineLayouts["rect"];
+            vkCmdPushConstants(
+                p.cmd, pipelineLayout,
+                p.shaders["rect"]->getPushStageFlags(), 0, sizeof(color),
+                &color);
                 
-                _bindDescriptorSets("rect", "rect");
+            _bindDescriptorSets("rect", "rect");
 
-                _vkDraw("rect");
-            }
+            _vkDraw("rect");
         }
 
         
@@ -190,28 +189,26 @@ namespace tl
                 p.vaos[meshName] = vlk::VAO::create(ctx);
                 p.vaos[meshName]->bind(p.frameIndex);
             }
-            if (p.vaos[meshName] && p.vbos[meshName])
-            {
-                createPipeline(
-                    p.fbo, pipelineName, pipelineLayoutName,
-                    shaderName, meshName, enableBlending,
-                    srcColorBlendFactor, dstColorBlendFactor,
-                    srcAlphaBlendFactor, dstAlphaBlendFactor,
-                    colorBlendOp, alphaBlendOp);
+            
+            createPipeline(
+                p.fbo, pipelineName, pipelineLayoutName,
+                shaderName, meshName, enableBlending,
+                srcColorBlendFactor, dstColorBlendFactor,
+                srcAlphaBlendFactor, dstAlphaBlendFactor,
+                colorBlendOp, alphaBlendOp);
 
-                VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
-                vkCmdPushConstants(
-                    p.cmd, pipelineLayout,
-                    shader->getPushStageFlags(), 0,
-                    sizeof(color), &color);
+            VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+            vkCmdPushConstants(
+                p.cmd, pipelineLayout,
+                shader->getPushStageFlags(), 0,
+                sizeof(color), &color);
                 
-                shader->bind(p.frameIndex);
-                shader->setUniform("transform.mvp", transform);
+            shader->bind(p.frameIndex);
+            shader->setUniform("transform.mvp", transform);
 
-                _bindDescriptorSets(pipelineLayoutName, shaderName);
+            _bindDescriptorSets(pipelineLayoutName, shaderName);
 
-                _vkDraw(meshName);
-            }
+            _vkDraw(meshName);
         }
         
         void Render::drawMesh(const std::string& pipelineName,
@@ -259,43 +256,41 @@ namespace tl
                 p.vaos[meshName] = vlk::VAO::create(ctx);
                 p.vaos[meshName]->bind(p.frameIndex);
             }
-            if (p.vaos[meshName] && p.vbos[meshName])
-            {
-                const std::string pipelineLayoutName = shaderName;
-
-                vlk::ColorBlendStateInfo cb;
-                vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
-                colorBlendAttachment.blendEnable = VK_TRUE;
             
-                cb.attachments.push_back(colorBlendAttachment);
-                
-                createPipeline(pipelineName, pipelineLayoutName,
-                               getRenderPass(),
-                               p.shaders[shaderName],
-                               p.vbos[meshName], cb);
-                
-                VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
-                vkCmdPushConstants(
-                    p.cmd, pipelineLayout,
-                    shader->getPushStageFlags(), 0,
-                    sizeof(color), &color);
-                
-                shader->bind(p.frameIndex);
-                shader->setUniform("transform.mvp", transform);
+            const std::string pipelineLayoutName = shaderName;
 
-                _bindDescriptorSets(pipelineLayoutName, shaderName);
+            vlk::ColorBlendStateInfo cb;
+            vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
+            colorBlendAttachment.blendEnable = enableBlending ?
+                                               VK_TRUE : VK_FALSE;
+            
+            cb.attachments.push_back(colorBlendAttachment);
+                
+            createPipeline(pipelineName, pipelineLayoutName,
+                           getRenderPass(),
+                           p.shaders[shaderName],
+                           p.vbos[meshName], cb);
+                
+            VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+            vkCmdPushConstants(
+                p.cmd, pipelineLayout,
+                shader->getPushStageFlags(), 0,
+                sizeof(color), &color);
+                
+            shader->bind(p.frameIndex);
+            shader->setUniform("transform.mvp", transform);
 
-                _vkDraw(meshName);
-            }
+            _bindDescriptorSets(pipelineLayoutName, shaderName);
+
+            _vkDraw(meshName);
         }
         
         void Render::drawMesh(
             const geom::TriangleMesh2& mesh, const math::Vector2i& position,
             const image::Color4f& color, const std::string& meshName)
         {
-            // \@todo this is problematic!
             drawMesh(meshName, "mesh", "mesh", meshName,
-                     mesh, position, color);
+                     mesh, position, color, false);
         }
 
         void Render::drawColorMesh(
@@ -359,11 +354,11 @@ namespace tl
         void Render::drawText(
             const timeline::TextInfo& info,
             const math::Vector2i& position,
-            const image::Color4f& color,
-            const std::string& pipelineName)
+            const image::Color4f& color)
         {
             TLRENDER_P();
 
+            const std::string pipelineName = "text";
             const std::string pipelineLayoutName = "text"; 
             
             const auto& textures = p.glyphTextureAtlas->getTextures();
@@ -375,14 +370,12 @@ namespace tl
                 math::translate(math::Vector3f(position.x, position.y, 0.F));
 
             _create2DMesh("text", mesh);
-            
-            const bool enableBlending = true;
             _createBindingSet(p.shaders["text"]);
             
             vlk::ColorBlendStateInfo cb;
             vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
             colorBlendAttachment.blendEnable = VK_TRUE;
-
+                
             colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
             colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
             colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
@@ -412,10 +405,7 @@ namespace tl
                 p.shaders["text"]->getPushStageFlags(), 0,
                 sizeof(color), &color);
                             
-            if (p.vaos["text"] && p.vbos["text"])
-            {
-                _vkDraw("text");
-            }
+            _vkDraw("text");
         }                
         
         void Render::appendText(
@@ -570,16 +560,14 @@ namespace tl
                 p.vbos["texture"]->copy(
                     convert(geom::box(box), p.vbos["texture"]->getType()));
             }
-            if (p.vaos["texture"])
-            {
-                VkPipelineLayout pipelineLayout = p.pipelineLayouts["texture"];
-                vkCmdPushConstants(
-                    p.cmd, pipelineLayout,
-                    shader->getPushStageFlags(), 0,
-                    sizeof(color), &color);
             
-                _vkDraw("texture");
-            }
+            VkPipelineLayout pipelineLayout = p.pipelineLayouts["texture"];
+            vkCmdPushConstants(
+                p.cmd, pipelineLayout,
+                shader->getPushStageFlags(), 0,
+                sizeof(color), &color);
+            
+            _vkDraw("texture");
         }
 
         void Render::drawImage(
@@ -722,10 +710,8 @@ namespace tl
             _bindDescriptorSets(pipelineLayoutName, shaderName);
             fbo->setupViewportAndScissor(p.cmd);
 
-            if (p.vaos["image"])
-            {
-                _vkDraw("image");
-            }
+            _vkDraw("image");
+            
             fbo->endRenderPass(p.cmd);
         }
 
@@ -873,10 +859,8 @@ namespace tl
                 setClipRect(p.clipRect);
             }
             
-            if (p.vaos["image"])
-            {
-                _vkDraw("image");
-            }
+            _vkDraw("image");
+                
             p.fbo->endRenderPass(p.cmd);
         }
 

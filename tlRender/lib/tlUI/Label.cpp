@@ -194,8 +194,7 @@ namespace tl
             for (const auto& textInfo : textInfos)
             {
                 event.render->drawText(textInfo, math::Vector2i(),
-                                       event.style->getColorRole(p.textRole),
-                                       "Label");
+                                       event.style->getColorRole(p.textRole));
             }
         }
 

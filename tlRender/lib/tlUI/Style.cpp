@@ -47,14 +47,32 @@ namespace tl
         }
 
         TLRENDER_ENUM_IMPL(
-            ColorRole, "None",
+            ColorRole,
+            "None",
+            "Window",
+            "Base",
+            "Button",
+            "Text",
+            "TextDisabled",
 
-            "Window", "Base", "Button", "Text", "TextDisabled", "Border",
-            "Hover", "Pressed", "Checked", "KeyFocus", "Overlay",
-            "ToolTipWindow", "ToolTipText",
+            "Border",
+            "Hover",
+            "Pressed",
+            "Checked",
+            "KeyFocus",
+            "Overlay",
+            "ToolTipWindow",
+            "ToolTipText",
 
-            "InOut", "FrameMarker", "VideoCache", "AudioCache", "VideoClip",
-            "VideoGap", "AudioClip", "AudioGap", "Transition",
+            "InOut",
+            "FrameMarker",
+            "VideoCache",
+            "AudioCache",
+            "VideoClip",
+            "VideoGap",
+            "AudioClip",
+            "AudioGap",
+            "Transition",
 
             "Red", "Green", "Blue", "Cyan", "Magenta", "Yellow");
         TLRENDER_ENUM_SERIALIZE_IMPL(ColorRole);

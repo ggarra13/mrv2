@@ -152,9 +152,9 @@ namespace tl
                 const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
                 const math::Vector2i& position) override;
             void drawText(
-                const timeline::TextInfo&, const math::Vector2i& position,
-                const image::Color4f&, const std::string& pipelineName = "")
-                override;
+                const timeline::TextInfo&,
+                const math::Vector2i& position,
+                const image::Color4f&) override;
             //! These functions draw to the viewport
             void drawRect(const std::string& pipelineName,
                           const math::Box2i&, const image::Color4f&,

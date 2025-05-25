@@ -904,8 +904,7 @@ namespace tl
                     {
                         event.render->drawText(textInfo, math::Vector2i(),
                                                event.style->getColorRole(
-                                                   ui::ColorRole::TextDisabled),
-                                               "timelabels");
+                                                   ui::ColorRole::TextDisabled));
                     }
                 }
             }
@@ -1028,8 +1027,7 @@ namespace tl
                 {
                     event.render->drawText(textInfo, math::Vector2i(),
                                            event.style->getColorRole(
-                                               ui::ColorRole::Text),
-                                           "currenttime");
+                                               ui::ColorRole::Text));
                 }
             }
         }

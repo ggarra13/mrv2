@@ -418,14 +418,14 @@ namespace tl
             event.render->drawRect(
                 math::Box2i(g.min.x, y, g.w(), h),
                 event.style->getColorRole(ui::ColorRole::Window),
-                "timeline_background", false);
+                "rect");
 
             y = y + h;
             h = p.size.border;
             event.render->drawRect(
                 math::Box2i(g.min.x, y, g.w(), h),
                 event.style->getColorRole(ui::ColorRole::Border),
-                "timeline_border", false);
+                "rect");
 
             _drawInOutPoints(drawRect, event);
             _drawTimeTicks(drawRect, event);
@@ -863,7 +863,8 @@ namespace tl
                 {
                     event.render->drawRect(
                         g2,
-                        event.style->getColorRole(ui::ColorRole::FrameMarker));
+                        event.style->getColorRole(ui::ColorRole::FrameMarker),
+                        "rect", false);
                 }
             }
         }
@@ -913,8 +914,7 @@ namespace tl
                     {
                         event.render->drawText(textInfo, math::Vector2i(),
                                                event.style->getColorRole(
-                                                   ui::ColorRole::TextDisabled),
-                                               "timelabels");
+                                                   ui::ColorRole::TextDisabled));
                     }
                 }
             }
@@ -964,7 +964,7 @@ namespace tl
                     event.render->drawMesh(
                         mesh, math::Vector2i(),
                         event.style->getColorRole(ui::ColorRole::VideoCache),
-                        "video cache");
+                        "cache");
                 }
             }
 
@@ -1001,7 +1001,7 @@ namespace tl
                     event.render->drawMesh(
                         mesh, math::Vector2i(),
                         event.style->getColorRole(ui::ColorRole::AudioCache),
-                        "audio cache");
+                        "cache");
                 }
             }
         }
@@ -1021,7 +1021,7 @@ namespace tl
                 event.render->drawRect(
                     math::Box2i(pos.x, pos.y, p.size.border * 2, g.h()),
                     event.style->getColorRole(ui::ColorRole::Red),
-                    "Current Time Marker", false);
+                    "rect");
 
                 const std::string label =
                     _data->timeUnitsModel->getLabel(p.currentTime);
@@ -1032,14 +1032,10 @@ namespace tl
                                          math::Vector2i(
                                              pos.x + p.size.border * 2 + p.size.margin,
                                              pos.y + p.size.margin + p.size.fontMetrics.ascender));
-                            
-                for (const auto& textInfo : textInfos)
-                {
-                    event.render->drawText(textInfo, math::Vector2i(),
-                                           event.style->getColorRole(
-                                               ui::ColorRole::Text),
-                                           "currenttime");
-                }
+                
+                event.render->drawText(textInfos[0], math::Vector2i(),
+                                       event.style->getColorRole(
+                                           ui::ColorRole::Text));
             }
         }
 

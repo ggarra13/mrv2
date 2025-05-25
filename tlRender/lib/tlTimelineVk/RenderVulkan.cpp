@@ -199,7 +199,10 @@ namespace tl
                 colorBlendAttachment.dstAlphaBlendFactor = dstAlphaBlendFactor;
                 colorBlendAttachment.colorBlendOp = colorBlendOp;
                 colorBlendAttachment.alphaBlendOp = alphaBlendOp;
-                
+            }
+            else
+            {
+                colorBlendAttachment.blendEnable = VK_FALSE;
             }
             cb.attachments.push_back(colorBlendAttachment);
             

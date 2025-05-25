@@ -128,7 +128,7 @@ namespace tl
             virtual void drawText(
                 const TextInfo& info,
                 const math::Vector2i& position,
-                const image::Color4f&, const std::string& meshName = "") = 0;
+                const image::Color4f&) = 0;
 
             //! Draw a texture.
             virtual void drawTexture(

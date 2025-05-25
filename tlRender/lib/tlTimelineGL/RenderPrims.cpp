@@ -283,8 +283,7 @@ namespace tl
         
         void Render::drawText(
             const timeline::TextInfo& textInfo,
-            const math::Vector2i& position, const image::Color4f& color,
-            const std::string& pipelineName)
+            const math::Vector2i& position, const image::Color4f& color)
         {
             TLRENDER_P();
             ++(p.currentStats.text);
