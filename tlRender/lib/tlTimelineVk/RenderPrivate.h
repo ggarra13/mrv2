@@ -161,7 +161,6 @@ namespace tl
                 std::vector<std::shared_ptr<vlk::ShaderBindingSet> > bindingSets;
             };
             std::array<FrameGarbage, vlk::MAX_FRAMES_IN_FLIGHT> garbage;
-            std::string displayShaderSource;
 
             std::map<std::string, std::shared_ptr<vlk::Shader> > shaders;
             std::map<std::string, std::shared_ptr<vlk::OffscreenBuffer> >

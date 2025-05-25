@@ -961,9 +961,6 @@ void main()
                         const auto& lutOptions = p.ui->uiView->lutOptions();
                         p.render->setLUTOptions(lutOptions);
                         
-                        // p.render->setOCIOOptions(timeline::OCIOOptions());
-                        // p.render->setLUTOptions(timeline::LUTOptions());
-                        
                         p.render->setClipRectEnabled(true);
                         
                         ui::DrawEvent drawEvent(
