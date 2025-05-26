@@ -3424,16 +3424,23 @@ namespace mrv
             i = p.tagData.find("hdr");
             if (i != p.tagData.end())
             {
-                if (p.ui->uiPrefs->uiPrefsTonemap->value() != 0)
-                    p.hdrOptions.tonemap = true;
-
-                if (p.hdrOptions.tonemap && p.hdr != i->second)
+                if (p.displayOptions.empty() ||
+                    p.displayOptions[0].hdrInfo ==
+                    timeline::HDRInformation::kFalse)
                 {
-                    p.hdr = i->second;
-
-                    // Parse the JSON string back into a nlohmann::json object
-                    nlohmann::json j = nlohmann::json::parse(p.hdr);
-                    p.hdrOptions.hdrData = j.get<image::HDRData>();
+                    p.hdrOptions.hdrData = image::HDRData();
+                }
+                else
+                {
+                    p.hdrOptions.passthru = true;
+                    if (p.hdr != i->second)
+                    {
+                        p.hdr = i->second;
+                        
+                        // Parse the JSON string back 
+                        nlohmann::json j = nlohmann::json::parse(p.hdr);
+                        p.hdrOptions.hdrData = j.get<image::HDRData>();
+                    }
                 }
             }
             else
