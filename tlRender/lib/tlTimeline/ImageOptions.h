@@ -53,7 +53,7 @@ namespace tl
         };
         TLRENDER_ENUM(ImageFilter);
         TLRENDER_ENUM_SERIALIZE(ImageFilter);
-
+        
         //! Image filters.
         struct ImageFilters
         {

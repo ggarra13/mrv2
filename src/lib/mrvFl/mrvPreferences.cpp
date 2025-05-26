@@ -389,8 +389,8 @@ namespace mrv
         hdr.get("chromaticities", tmp, 0);
         uiPrefs->uiPrefsChromaticities->value(tmp);
         
-        hdr.get("tonemap", tmp, 1);
-        uiPrefs->uiPrefsTonemap->value(tmp);
+        hdr.get("hdr_data", tmp, 0);
+        uiPrefs->uiPrefsHDRInfo->value(tmp);
         
         hdr.get("tonemap_algorithm", tmp, 0);
         uiPrefs->uiPrefsTonemapAlgorithm->value(tmp);
@@ -1263,7 +1263,7 @@ namespace mrv
 
         Fl_Preferences hdr(gui, "hdr");
         hdr.set("chromaticities", uiPrefs->uiPrefsChromaticities->value());
-        hdr.set("tonemap", uiPrefs->uiPrefsTonemap->value());
+        hdr.set("hdr_data", uiPrefs->uiPrefsHDRInfo->value());
         hdr.set("tonemap_algorithm",
                 uiPrefs->uiPrefsTonemapAlgorithm->value());
         
@@ -1799,6 +1799,9 @@ namespace mrv
             static_cast<timeline::ImageFilter>(magnifyFilter);
         displayOptions.ignoreChromaticities =
             !uiPrefs->uiPrefsChromaticities->value();
+        displayOptions.hdrInfo =
+            static_cast<timeline::HDRInformation>(
+                uiPrefs->uiPrefsHDRInfo->value());
         app->setDisplayOptions(displayOptions);
         
         timeline::HDROptions hdrOptions = ui->uiView->getHDROptions();

@@ -940,6 +940,21 @@ namespace mrv
             p.ui->uiSaturation->value(saturation);
             p.ui->uiSaturationInput->value(saturation);
 
+
+            if (d.hdrInfo != timeline::HDRInformation::kFalse)
+            {
+                p.hdrOptions.passthru = true;
+                auto i = p.tagData.find("hdr");
+                if (i != p.tagData.end())
+                {
+                    p.hdr = i->second;
+
+                    // Parse the JSON string back into a nlohmann::json object
+                    nlohmann::json j = nlohmann::json::parse(p.hdr);
+                    p.hdrOptions.hdrData = j.get<image::HDRData>();
+                }
+            }
+            
             redraw();
         }
 
@@ -969,8 +984,6 @@ namespace mrv
         TimelineViewport::setHDROptions(const timeline::HDROptions& value) noexcept
         {
             TLRENDER_P();
-
-            p.hdrOptions.passthru = value.passthru;
             
             if (value == p.hdrOptions)
                 return;
@@ -3422,16 +3435,23 @@ namespace mrv
             i = p.tagData.find("hdr");
             if (i != p.tagData.end())
             {
-                if (p.ui->uiPrefs->uiPrefsTonemap->value() != 0)
-                    p.hdrOptions.tonemap = p.hdrOptions.passthru = true;
-
-                if (p.hdr != i->second)
+                if (p.displayOptions.empty() ||
+                    p.displayOptions[0].hdrInfo ==
+                    timeline::HDRInformation::kFalse)
                 {
-                    p.hdr = i->second;
-
-                    // Parse the JSON string back into a nlohmann::json object
-                    nlohmann::json j = nlohmann::json::parse(p.hdr);
-                    p.hdrOptions.hdrData = j.get<image::HDRData>();
+                    p.hdrOptions.hdrData = image::HDRData();
+                }
+                else
+                {
+                    p.hdrOptions.passthru = true;
+                    if (p.hdr != i->second)
+                    {
+                        p.hdr = i->second;
+                        
+                        // Parse the JSON string back 
+                        nlohmann::json j = nlohmann::json::parse(p.hdr);
+                        p.hdrOptions.hdrData = j.get<image::HDRData>();
+                    }
                 }
             }
             else
@@ -3439,6 +3459,7 @@ namespace mrv
                 p.hdr.clear();
                 p.hdrOptions.tonemap = false;
                 p.hdrOptions.passthru = false;
+                p.hdrOptions.hdrData = image::HDRData();
             }
 
             // \@bug: Apple (macOS Intel at least) is too slow and goes black.

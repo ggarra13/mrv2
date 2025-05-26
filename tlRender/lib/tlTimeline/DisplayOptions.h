@@ -109,6 +109,18 @@ namespace tl
             bool operator!=(const Normalize&) const;
         };
 
+        //! HDR usage.
+        enum class HDRInformation {
+            FromFile,
+            kFalse,
+            kTrue,
+
+            Count,
+            First = FromFile
+        };
+        TLRENDER_ENUM(HDRInformation);
+        TLRENDER_ENUM_SERIALIZE(HDRInformation);
+
         //! Display options.
         struct DisplayOptions
         {
@@ -121,6 +133,7 @@ namespace tl
             ImageFilters imageFilters;
             image::VideoLevels videoLevels = image::VideoLevels::FullRange;
             Normalize normalize;
+            HDRInformation   hdrInfo = HDRInformation::FromFile;
             bool ignoreChromaticities = false;
             bool invalidValues = false;
 

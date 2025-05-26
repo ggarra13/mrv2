@@ -1198,6 +1198,25 @@ namespace mrv
         ui->uiView->redraw();
     }
 
+    void select_hdr_data_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        const Fl_Menu_Item* item = m->mvalue();
+        const std::string type = item->label();
+
+        int idx = 0;
+        for (const auto& entry : timeline::getHDRInformationLabels())
+        {
+            if (entry == type)
+                break;
+            ++idx;
+        }
+
+        timeline::DisplayOptions o = ui->app->displayOptions();
+        o.hdrInfo = static_cast<timeline::HDRInformation>(idx);
+        ui->app->setDisplayOptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
     void rotate_plus_90_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         float r = ui->uiView->getRotation();
@@ -1304,14 +1323,7 @@ namespace mrv
         ui->uiView->setHDROptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
-
-    void toggle_hdr_passthru_cb(Fl_Menu_* w, ViewerUI* ui)
-    {
-        timeline::HDROptions o = ui->uiView->getHDROptions();
-        o.passthru ^= 1;
-        ui->uiView->setHDROptions(o);
-        ui->uiMain->fill_menu(ui->uiMenuBar);
-    }
+    
     void select_hdr_tonemap_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         const Fl_Menu_Item* item = m->mvalue();
