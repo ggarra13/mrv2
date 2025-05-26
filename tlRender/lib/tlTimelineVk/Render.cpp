@@ -662,9 +662,9 @@ namespace tl
 
         void Render::wait_queue()
         {
-            VkQueue queue = ctx.queue;
+            VkQueue queue = ctx.queue();
             
-            std::lock_guard<std::mutex> lock(ctx.queue_mutex);
+            std::lock_guard<std::mutex> lock(ctx.queue_mutex());
             vkQueueWaitIdle(queue);
         }
 
@@ -672,7 +672,7 @@ namespace tl
         {
             VkDevice device = ctx.device;
             
-            std::lock_guard<std::mutex> lock(ctx.queue_mutex);
+            std::lock_guard<std::mutex> lock(ctx.queue_mutex());
             vkDeviceWaitIdle(device);
         }
         

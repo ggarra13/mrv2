@@ -359,7 +359,7 @@ namespace tl
                         
                     while (p.thumbnailThread.running)
                     {
-                        if (ctx.queue == VK_NULL_HANDLE)
+                        if (ctx.queue() == VK_NULL_HANDLE)
                             continue;
 
                         if (!p.thumbnailThread.render)
@@ -368,16 +368,19 @@ namespace tl
                             {
                                 p.thumbnailThread.render =
                                     timeline_vlk::Render::create(ctx, context);
-
-                                VkDevice device = ctx.device;
                                 
                                 // Create command pool
-                                VkCommandPoolCreateInfo cmd_pool_info = {};
-                                cmd_pool_info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-                                cmd_pool_info.queueFamilyIndex = ctx.queueFamilyIndex;
-                                cmd_pool_info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-                                vkCreateCommandPool(device, &cmd_pool_info, nullptr,
-                                                    &p.thumbnailThread.commandPool);
+                                if (p.thumbnailThread.commandPool == VK_NULL_HANDLE)
+                                {
+                                    VkDevice device = ctx.device;
+                                
+                                    VkCommandPoolCreateInfo cmd_pool_info = {};
+                                    cmd_pool_info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+                                    cmd_pool_info.queueFamilyIndex = ctx.queueFamilyIndex;
+                                    cmd_pool_info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+                                    vkCreateCommandPool(device, &cmd_pool_info, nullptr,
+                                                        &p.thumbnailThread.commandPool);
+                                }
                             }
                         }
                     
@@ -810,11 +813,14 @@ namespace tl
                                     
                                     vkEndCommandBuffer(cmd);
                 
+                                    fprintf(stderr, "thumbnail submit queue\n");
                                     p.thumbnailThread.buffer->submitReadback(cmd);
 
                                     {
-                                        std::lock_guard<std::mutex> lock(ctx.queue_mutex);
-                                        vkQueueWaitIdle(ctx.queue);
+                                        fprintf(stderr, "thumbnail system wait queue\n");
+                                        std::lock_guard<std::mutex> lock(ctx.queue_mutex());
+                                        vkQueueWaitIdle(ctx.queue());
+                                        fprintf(stderr, "thumbnail system waited queue\n");
                                     }
                                     
                                     void* imageData = p.thumbnailThread.buffer->getLatestReadPixels();
@@ -913,8 +919,8 @@ namespace tl
                                         p.thumbnailThread.buffer->submitReadback(cmd);
                                     
                                         {
-                                            std::lock_guard<std::mutex> lock(ctx.queue_mutex);
-                                            vkQueueWaitIdle(ctx.queue);
+                                            std::lock_guard<std::mutex> lock(ctx.queue_mutex());
+                                            vkQueueWaitIdle(ctx.queue());
                                         }
 
                                     

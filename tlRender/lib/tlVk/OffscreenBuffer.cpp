@@ -228,7 +228,7 @@ namespace tl
             VkDevice device = ctx.device;
 
             {
-                std::lock_guard<std::mutex> lock(ctx.queue_mutex);
+                std::lock_guard<std::mutex> lock(ctx.queue_mutex());
                 vkDeviceWaitIdle(device);
             }
             
@@ -1160,7 +1160,7 @@ namespace tl
             VkDevice device = ctx.device;
             VkCommandPool commandPool = ctx.commandPool;
             
-            VkQueue  queue  = ctx.queue;
+            VkQueue  queue  = ctx.queue();
 
             auto& pbo = p.pboRing[p.writeIndex];
             VkResult result = vkWaitForFences(device, 1, &pbo.fence, VK_TRUE,
@@ -1211,19 +1211,19 @@ namespace tl
             submitInfo.pCommandBuffers = &cmd;
 
             {
-                std::lock_guard<std::mutex> lock(ctx.queue_mutex);
-                VkQueue& transferQueue = ctx.queue;
+                std::lock_guard<std::mutex> lock(ctx.queue_mutex());
+                VkQueue queue = ctx.queue();
 
-                result = vkQueueSubmit(
-                    transferQueue, 1, &submitInfo,
-                    p.pboRing[p.writeIndex].fence);
-                if (result != VK_SUCCESS)
-                {
-                    fprintf(stderr,
-                            "OffscreenBuffer::vkQueueSubmit failed: %s\n",
-                            string_VkResult(result));
-                    return;
-                }
+                result = vkQueueSubmit(queue, 1, &submitInfo,
+                                       p.pboRing[p.writeIndex].fence);
+            }
+            
+            if (result != VK_SUCCESS)
+            {
+                fprintf(stderr,
+                        "OffscreenBuffer::vkQueueSubmit failed: %s\n",
+                        string_VkResult(result));
+                return;
             }
 
             p.writeIndex = (p.writeIndex + 1) % NUM_PBO_BUFFERS;

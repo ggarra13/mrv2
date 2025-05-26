@@ -483,7 +483,7 @@ namespace tl
 
             VkDevice device = ctx.device;
             VkCommandPool commandPool = ctx.commandPool;
-            VkQueue queue = ctx.queue;
+            VkQueue queue = ctx.queue();
     
             // Create staging buffer
             VkBuffer stagingBuffer;
@@ -566,7 +566,7 @@ namespace tl
                        VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
 
             {
-                std::lock_guard<std::mutex> lock(ctx.queue_mutex);
+                std::lock_guard<std::mutex> lock(ctx.queue_mutex());
                 endSingleTimeCommands(cmd, device, commandPool, queue);
             }
             
@@ -583,7 +583,7 @@ namespace tl
             VkDevice device = ctx.device;
             VkCommandPool commandPool = ctx.commandPool;
             VkPhysicalDevice gpu = ctx.gpu;
-            VkQueue queue = ctx.queue;
+            VkQueue queue = ctx.queue();
 
             // First, check if the memory is host visible
             VkMemoryRequirements memReqs;
@@ -725,7 +725,7 @@ namespace tl
 
 
                 {
-                    std::lock_guard<std::mutex> lock(ctx.queue_mutex);
+                    std::lock_guard<std::mutex> lock(ctx.queue_mutex());
                     endSingleTimeCommands(cmd, device, commandPool, queue);
                 }
                 
