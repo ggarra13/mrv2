@@ -167,6 +167,7 @@ namespace tl
 
             // Enable the pipeline.
             vkCmdBindPipeline(p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
+            p.currentPipeline = pipelineName;
         }
         
         void Render::createPipeline(
@@ -224,6 +225,23 @@ namespace tl
             }
         }
 
+        void Render::usePipeline(const std::string& pipelineName)
+        {
+            TLRENDER_P();
+
+            if (p.currentPipeline == pipelineName)
+                return;
+            
+            const auto& pair = p.pipelines[pipelineName];
+            VkPipeline pipeline = pair.second;
+
+            // Enable the pipeline.
+            vkCmdBindPipeline(p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
+            p.currentPipeline = pipelineName;
+            
+            ++(p.currentStats.pipelineChanges);
+        }
+        
         void Render::_bindDescriptorSets(
             const std::string& pipelineLayoutName, const std::string& shaderName)
         {

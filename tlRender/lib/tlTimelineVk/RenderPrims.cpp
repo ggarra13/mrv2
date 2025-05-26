@@ -51,17 +51,13 @@ namespace tl
             }
         }
 
-        void Render::drawRect(const std::string& pipelineName,
-                              const std::string& shaderName,
-                              const std::string& meshName,
-                              const math::Box2i& box,
-                              const image::Color4f& color,
-                              const bool enableBlending)
+        void Render::drawRect(const math::Box2i& box,
+                              const image::Color4f& color)
         {
             TLRENDER_P();
             ++(p.currentStats.rects);
 
-            auto shader = p.shaders[shaderName];
+            auto shader = p.shaders["rect"];
             _createBindingSet(shader);
             
             shader->bind(p.frameIndex);
@@ -72,31 +68,31 @@ namespace tl
                 p.vbos["rect"]->copy(
                     convert(geom::box(box), p.vbos["rect"]->getType()));
             }
-            
-            const std::string& pipelineLayoutName = shaderName;
-            createPipeline(p.fbo, pipelineName, pipelineLayoutName,
-                           shaderName, meshName, enableBlending);
-            VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+
+            bool enableBlending = false;
+            if (color.a < 0.95F)
+            {
+                bool enableBlending = true;
+                createPipeline(p.fbo, "rect_blending", "rect", "rect", "rect",
+                               enableBlending);
+            }
+            else
+            {
+                createPipeline(p.fbo, "rect", "rect", "rect", "rect",
+                               enableBlending);
+            }
+
+            VkPipelineLayout pipelineLayout = p.pipelineLayouts["rect"];
             vkCmdPushConstants(
                 p.cmd, pipelineLayout,
-                p.shaders[shaderName]->getPushStageFlags(), 0, sizeof(color),
+                p.shaders["rect"]->getPushStageFlags(), 0, sizeof(color),
                 &color);
-                
-            _bindDescriptorSets(pipelineLayoutName, shaderName);
+            
+            _bindDescriptorSets("rect", "rect");
 
             _vkDraw("rect");
         }
         
-        void
-        Render::drawRect(const math::Box2i& box, const image::Color4f& color,
-                         const std::string& pipelineName,
-                         const bool enableBlending)
-        {
-            bool blending = enableBlending;
-            if (color.a >= 0.9F) blending = false;
-            drawRect(pipelineName, "rect", "rect", box, color, blending);
-        }
-
         //! This function draws to the viewport
         void Render::drawRect(const std::string& pipelineName,
                               const math::Box2i& box,
@@ -357,9 +353,6 @@ namespace tl
             const image::Color4f& color)
         {
             TLRENDER_P();
-
-            const std::string pipelineName = "text";
-            const std::string pipelineLayoutName = "text"; 
             
             const auto& textures = p.glyphTextureAtlas->getTextures();
             
@@ -389,7 +382,7 @@ namespace tl
             ds.depthWriteEnable = VK_FALSE;
             ds.stencilTestEnable = VK_FALSE;
             
-            createPipeline(pipelineName, pipelineLayoutName,
+            createPipeline("text", "text",
                            getRenderPass(), p.shaders["text"],
                            p.vbos["text"], cb, ds);
             
@@ -397,9 +390,9 @@ namespace tl
             p.shaders["text"]->setUniform("transform.mvp", transform);
             p.shaders["text"]->setTexture("textureSampler",
                                           textures[textureIndex]);
-            _bindDescriptorSets(pipelineLayoutName, "text");
+            _bindDescriptorSets("text", "text");
                             
-            VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+            VkPipelineLayout pipelineLayout = p.pipelineLayouts["text"];
             vkCmdPushConstants(
                 p.cmd, pipelineLayout,
                 p.shaders["text"]->getPushStageFlags(), 0,

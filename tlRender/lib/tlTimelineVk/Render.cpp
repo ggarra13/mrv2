@@ -1036,6 +1036,44 @@ namespace tl
                 p.vbos["rect"] =
                     vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32);
                 p.vaos["rect"] = vlk::VAO::create(ctx);
+
+                // Create two pipeline for rect, one without blending and
+                // one with.
+                // {
+                //     const std::string pipelineName = "rect";
+                //     const std::string pipelineLayoutName = "rect";
+                //     const std::string shaderName = "rect";
+                //     const std::string meshName = "rect";
+                //     const bool enableBlending = false;
+                //     createPipeline(p.fbo, pipelineName, pipelineLayoutName,
+                //                    shaderName, meshName, enableBlending);
+                // }
+                
+                // {
+                //     const std::string pipelineName = "rect_blending";
+                //     const std::string pipelineLayoutName = "rect";
+                //     const std::string shaderName = "rect";
+                //     const std::string meshName = "rect";
+                //     const bool enableBlending = true;
+                //     createPipeline(p.fbo, pipelineName, pipelineLayoutName,
+                //                    shaderName, meshName, enableBlending);
+                // }
+            }
+            if (!p.vbos["text"])
+            {
+                p.vbos["text"] = vlk::VBO::create(2 * 3,
+                                                  vlk::VBOType::Pos2_F32_UV_U16);
+                p.vaos["text"] = vlk::VAO::create(ctx);
+                
+                {
+                    const std::string pipelineName = "text";
+                    const std::string pipelineLayoutName = "text";
+                    const std::string shaderName = "text";
+                    const std::string meshName = "text";
+                    const bool enableBlending = true;
+                    createPipeline(p.fbo, pipelineName, pipelineLayoutName,
+                                   shaderName, meshName, enableBlending);
+                }
             }
             if (!p.vbos["texture"] || p.vbos["texture"]->getSize() != 6)
             {
@@ -1106,6 +1144,7 @@ namespace tl
                             average.textTriangles += i.textTriangles;
                             average.textures += i.textures;
                             average.images += i.images;
+                            average.pipelineChanges += i.pipelineChanges;
                         }
                         average.time /= p.stats.size();
                         average.rects /= p.stats.size();
@@ -1115,10 +1154,11 @@ namespace tl
                         average.textTriangles /= p.stats.size();
                         average.textures /= p.stats.size();
                         average.images /= p.stats.size();
+                        average.pipelineChanges /= p.stats.size();
                     }
 
                     context->log(
-                        string::Format("tl::timeline::GLRender {0}").arg(this),
+                        string::Format("tl::timeline_vlk::Render {0}").arg(this),
                         string::Format(
                             "\n"
                             "    Average render time: {0}ms\n"
@@ -1129,8 +1169,9 @@ namespace tl
                             "    Average text triangles: {5}\n"
                             "    Average texture count: {6}\n"
                             "    Average image count: {7}\n"
-                            "    Glyph texture atlas: {8}%\n"
-                            "    Glyph IDs: {9}")
+                            "    Average pipeline changes: {8}\n"
+                            "    Glyph texture atlas: {9}%\n"
+                            "    Glyph IDs: {10}")
                             .arg(average.time)
                             .arg(average.rects)
                             .arg(average.meshes)
@@ -1139,6 +1180,7 @@ namespace tl
                             .arg(average.textTriangles)
                             .arg(average.textures)
                             .arg(average.images)
+                            .arg(average.pipelineChanges)
                             .arg(p.glyphTextureAtlas->getPercentageUsed())
                             .arg(p.glyphIDs.size()));
                 }
@@ -1233,8 +1275,6 @@ namespace tl
             // buffer
             vkCmdBeginRenderPass(p.cmd, &rpBegin, VK_SUBPASS_CONTENTS_INLINE);
             vkCmdEndRenderPass(p.cmd);
-
-            //createRenderPass(false, false);
         }
 
         bool Render::getClipRectEnabled() const
@@ -2215,7 +2255,7 @@ namespace tl
                 if (auto context = _context.lock())
                 {
                     context->log(
-                        "tl::vlk::GLRender", "Creating display shader");
+                        "tl::vlk::VulkanRender", "Creating display shader");
                 }
 
 

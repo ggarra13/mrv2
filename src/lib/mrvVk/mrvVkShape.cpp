@@ -270,7 +270,7 @@ namespace mrv
 
         math::Box2i box(
             pts[0].x, pts[0].y, pts[2].x - pts[0].x, pts[2].y - pts[0].y);
-        render->drawRect(box, color, "annotation", enableBlending);
+        render->drawRect(box, color);
     }
 
     void VKArrowShape::draw(

@@ -103,10 +103,8 @@ namespace tl
             virtual void setHDROptions(const HDROptions&) = 0;
 
             //! Draw a rectangle.
-            virtual void
-            drawRect(const math::Box2i&, const image::Color4f&,
-                     const std::string& pipelineName = "",
-                     const bool enableBlending = true) = 0;
+            virtual void drawRect(
+                const math::Box2i&, const image::Color4f&) = 0;
 
             //! Draw a triangle mesh.
             virtual void drawMesh(

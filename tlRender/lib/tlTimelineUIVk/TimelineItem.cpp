@@ -409,6 +409,8 @@ namespace tl
         {
             IItem::drawOverlayEvent(drawRect, event);
             TLRENDER_P();
+
+            // return;   // 56-58 fps
             
             const math::Box2i& g = _geometry;
 
@@ -417,22 +419,33 @@ namespace tl
                     p.size.margin + p.size.border * 4;
             event.render->drawRect(
                 math::Box2i(g.min.x, y, g.w(), h),
-                event.style->getColorRole(ui::ColorRole::Window),
-                "rect");
+                event.style->getColorRole(ui::ColorRole::Window));
 
             y = y + h;
             h = p.size.border;
             event.render->drawRect(
                 math::Box2i(g.min.x, y, g.w(), h),
-                event.style->getColorRole(ui::ColorRole::Border),
-                "rect");
+                event.style->getColorRole(ui::ColorRole::Border));
 
-            _drawInOutPoints(drawRect, event);
-            _drawTimeTicks(drawRect, event);
-            _drawFrameMarkers(drawRect, event);
-            _drawTimeLabels(drawRect, event);
-            _drawCacheInfo(drawRect, event);
-            _drawCurrentTime(drawRect, event);
+            // return;  // 54-56 fps
+
+            _drawInOutPoints(drawRect, event); // draws in-out points
+            _drawTimeTicks(drawRect, event);   // draws time ticks
+
+            // return;  // 50 fps
+
+            _drawFrameMarkers(drawRect, event);  // draws optional markers
+            _drawTimeLabels(drawRect, event);  // draws labels next to time ticks
+
+            // return;  // 48 fps
+            
+            _drawCacheInfo(drawRect, event);     // draws audio and video cache
+            
+            // return;  // 48 fps
+
+            _drawCurrentTime(drawRect, event);   // draws red line and frame text
+
+            // return;  // 42 fps
 
             if (p.mouse.currentDropTarget >= 0 &&
                 p.mouse.currentDropTarget < p.mouse.dropTargets.size())
@@ -863,8 +876,7 @@ namespace tl
                 {
                     event.render->drawRect(
                         g2,
-                        event.style->getColorRole(ui::ColorRole::FrameMarker),
-                        "rect", false);
+                        event.style->getColorRole(ui::ColorRole::FrameMarker));
                 }
             }
         }
@@ -1020,8 +1032,7 @@ namespace tl
 
                 event.render->drawRect(
                     math::Box2i(pos.x, pos.y, p.size.border * 2, g.h()),
-                    event.style->getColorRole(ui::ColorRole::Red),
-                    "rect");
+                    event.style->getColorRole(ui::ColorRole::Red));
 
                 const std::string label =
                     _data->timeUnitsModel->getLabel(p.currentTime);
