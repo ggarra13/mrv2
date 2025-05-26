@@ -3432,7 +3432,7 @@ namespace mrv
                 }
                 else
                 {
-                    p.hdrOptions.passthru = true;
+                    p.hdrOptions.tonemap = true;
                     if (p.hdr != i->second)
                     {
                         p.hdr = i->second;
