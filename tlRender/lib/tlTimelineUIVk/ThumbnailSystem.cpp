@@ -813,14 +813,11 @@ namespace tl
                                     
                                     vkEndCommandBuffer(cmd);
                 
-                                    fprintf(stderr, "thumbnail submit queue\n");
                                     p.thumbnailThread.buffer->submitReadback(cmd);
 
                                     {
-                                        fprintf(stderr, "thumbnail system wait queue\n");
                                         std::lock_guard<std::mutex> lock(ctx.queue_mutex());
                                         vkQueueWaitIdle(ctx.queue());
-                                        fprintf(stderr, "thumbnail system waited queue\n");
                                     }
                                     
                                     void* imageData = p.thumbnailThread.buffer->getLatestReadPixels();
