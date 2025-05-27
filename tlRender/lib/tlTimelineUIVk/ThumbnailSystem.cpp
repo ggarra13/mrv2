@@ -359,7 +359,8 @@ namespace tl
                         
                     while (p.thumbnailThread.running)
                     {
-                        if (ctx.queue() == VK_NULL_HANDLE)
+                        if (ctx.queue() == VK_NULL_HANDLE ||
+                            ctx.device == VK_NULL_HANDLE)
                             continue;
 
                         if (!p.thumbnailThread.render)
@@ -398,6 +399,7 @@ namespace tl
                         vkDestroyCommandPool(device,
                                              p.thumbnailThread.commandPool,
                                              nullptr);
+                        p.thumbnailThread.commandPool = VK_NULL_HANDLE;
                     }
                     p.thumbnailThread.buffer.reset();
                     p.thumbnailThread.render.reset();
