@@ -286,7 +286,7 @@ namespace mrv
         //     VK_ONE_MINUS_SRC_ALPHA);
 
         bool catmullRomSpline = false;
-        std::vector< Point > line;
+        std::vector< draw::Point > line;
 
         line.push_back(pts[1]);
         line.push_back(pts[2]);
