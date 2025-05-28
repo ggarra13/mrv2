@@ -2,6 +2,9 @@ name: MacOS M1 Vulkan
 
 on:
   push:
+    branches-ignore:
+      - main
+      - beta
 
 jobs:
   ###################################
