@@ -12,7 +12,7 @@ jobs:
   # FULL BUILDS                     #
   #                                 #
   ###################################
-  macos-14-full-build:
+  macos-14-full-build-vulkan:
     runs-on: macos-14
 
     env:
@@ -58,7 +58,7 @@ jobs:
         brew install vulkan-profiles
         brew install spirv-tools
         
-        export VULKAN_SDK=/usr/local/
+        export VULKAN_SDK=/opt/homebrew/
         echo "VULKAN_SDK=${VULKAN_SDK}" >> $GITHUB_ENV
         echo "DYLD_LIBRARY_PATH=${VULKAN_SDK}/lib:$DYLD_LIBRARY_PATH" >> $GITHUB_ENV
         echo "VK_ICD_FILENAMES=${VULKAN_SDK}/share/vulkan/icd.d/MoltenVK_icd.json" >> $GITHUB_ENV
