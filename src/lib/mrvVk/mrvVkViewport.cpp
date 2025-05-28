@@ -702,11 +702,11 @@ namespace mrv
                         p.ui->uiHotkey->uiMain->visible() ||
                         p.ui->uiAbout->uiMain->visible())
                     {
-                        window()->cursor(FL_CURSOR_DEFAULT);
+                        set_cursor(FL_CURSOR_DEFAULT);
                     }
                     else
                     {
-                        window()->cursor(FL_CURSOR_NONE);
+                        set_cursor(FL_CURSOR_NONE);
                     }
                     p.presentationTime = time;
                 }
@@ -970,8 +970,11 @@ namespace mrv
                 const int dstHeight = dstBottom - dstTop;
 
                 if (dstWidth <= 0 || dstHeight <= 0)
+                {
+                    m_in_render_pass = false;
                     return; // Nothing to blit
-
+                }
+                
                 // Adjust source region.
                 const int srcWidth = renderSize.w;
                 const int srcHeight = renderSize.h;

@@ -445,11 +445,11 @@ namespace mrv
                         p.ui->uiHotkey->uiMain->visible() ||
                         p.ui->uiAbout->uiMain->visible())
                     {
-                        window()->cursor(FL_CURSOR_DEFAULT);
+                        set_cursor(FL_CURSOR_DEFAULT);
                     }
                     else
                     {
-                        window()->cursor(FL_CURSOR_NONE);
+                        set_cursor(FL_CURSOR_NONE);
                     }
                     p.presentationTime = time;
                 }
