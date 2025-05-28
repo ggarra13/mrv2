@@ -1148,7 +1148,7 @@ namespace mrv
         o.imageFilters.minify = timeline::ImageFilter::Nearest;
         ui->app->setDisplayOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
-        ui->uiView->redraw();
+        ui->uiView->redrawWindows();
     }
 
     void minify_linear_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -1157,7 +1157,7 @@ namespace mrv
         o.imageFilters.minify = timeline::ImageFilter::Linear;
         ui->app->setDisplayOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
-        ui->uiView->redraw();
+        ui->uiView->redrawWindows();
     }
 
     void magnify_nearest_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -1166,7 +1166,7 @@ namespace mrv
         o.imageFilters.magnify = timeline::ImageFilter::Nearest;
         ui->app->setDisplayOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
-        ui->uiView->redraw();
+        ui->uiView->redrawWindows();
     }
 
     void magnify_linear_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -1175,7 +1175,7 @@ namespace mrv
         o.imageFilters.magnify = timeline::ImageFilter::Linear;
         ui->app->setDisplayOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
-        ui->uiView->redraw();
+        ui->uiView->redrawWindows();
     }
 
     void mirror_x_cb(Fl_Menu_* w, ViewerUI* ui)
@@ -1185,7 +1185,7 @@ namespace mrv
         ui->app->setDisplayOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
         ui->uiView->updateCoords();
-        ui->uiView->redraw();
+        ui->uiView->redrawWindows();
     }
 
     void mirror_y_cb(Fl_Menu_* w, ViewerUI* ui)
@@ -1195,7 +1195,7 @@ namespace mrv
         ui->app->setDisplayOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
         ui->uiView->updateCoords();
-        ui->uiView->redraw();
+        ui->uiView->redrawWindows();
     }
 
     void select_hdr_data_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -1215,6 +1215,7 @@ namespace mrv
         o.hdrInfo = static_cast<timeline::HDRInformation>(idx);
         ui->app->setDisplayOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
+        ui->uiView->redrawWindows();
     }
 
     void rotate_plus_90_cb(Fl_Menu_* m, ViewerUI* ui)

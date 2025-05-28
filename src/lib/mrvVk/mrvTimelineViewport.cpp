@@ -954,6 +954,10 @@ namespace mrv
                     p.hdrOptions.hdrData = j.get<image::HDRData>();
                 }
             }
+            else
+            {
+                p.hdrOptions.passthru = false;
+            }
             
             redraw();
         }
@@ -3439,6 +3443,8 @@ namespace mrv
                     p.displayOptions[0].hdrInfo ==
                     timeline::HDRInformation::kFalse)
                 {
+                    p.hdr.clear();
+                    p.hdrOptions.passthru = false;
                     p.hdrOptions.hdrData = image::HDRData();
                 }
                 else
@@ -3457,7 +3463,6 @@ namespace mrv
             else
             {
                 p.hdr.clear();
-                p.hdrOptions.tonemap = false;
                 p.hdrOptions.passthru = false;
                 p.hdrOptions.hdrData = image::HDRData();
             }

@@ -122,8 +122,7 @@ namespace mrv
                 timeline::getBoxes(timeline::CompareMode::A, {p.videoData[right]}),
                 p.imageOptions, p.displayOptions);
 
-            // glDisable(GL_STENCIL_TEST)
-                ;
+            // glDisable(GL_STENCIL_TEST);
         }
 
         void Viewport::_drawCheckerboard(int left, int right) noexcept

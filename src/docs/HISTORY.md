@@ -59,7 +59,7 @@ v1.3.8
 		 * Vulkan Text widget annotation (does not support UTF-8 nor pasting)
 		 
 	 * Missing to check/add:
-		 * Editing (dissolves are broken in new OTIO).
+		 * Editing.
 		 * Saving of Movies/Pictures with Annotations
 		 * NDI support
 		 * OpenUSD in Vulkan (how to do it?)
