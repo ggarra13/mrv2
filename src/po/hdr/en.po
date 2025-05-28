@@ -17,3 +17,9 @@ msgstr ""
 
 msgid "Connection/"
 msgstr "Connection/"
+
+msgid "Window/Fullscreen"
+msgstr "Window/Fullscreen"
+
+msgid "HDR/Pass through Metadata to Display"
+msgstr "HDR/Pass through Metadata to Display"

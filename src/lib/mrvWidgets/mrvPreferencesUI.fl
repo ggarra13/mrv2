@@ -796,7 +796,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                   }
                 }
                 Fl_Choice uiPrefsHDRInfo {
-                  label {HDR Data} open selected
+                  label {HDR Data} open
                   xywh {513 312 135 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
@@ -804,16 +804,16 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                     xywh {40 40 100 20}
                   }
                   MenuItem {} {
-                    label False
+                    label Inactive selected
                     xywh {30 30 100 20}
                   }
                   MenuItem {} {
-                    label True
+                    label Active
                     xywh {40 40 100 20}
                   }
                 }
                 Fl_Choice uiPrefsTonemapAlgorithm {
-                  label {Tonemap Algorithm} open
+                  label {Tonemap Algorithm}
                   xywh {513 349 135 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
@@ -1586,7 +1586,7 @@ v->uiOCIO_Display_View->do_callback();}
                 }
                 Fl_Choice uiPrefsBlitTimeline {
                   label {Blit Timeline}
-                  tooltip {tter then the other.Timeline can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform be} xywh {515 291 140 25} down_box BORDER_BOX align 132 textcolor 32
+                  tooltip {Timeline can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform better than the other.} xywh {515 291 140 25} down_box BORDER_BOX align 132 textcolor 32
                   class {mrv::Choice}
                 } {
                   MenuItem {} {

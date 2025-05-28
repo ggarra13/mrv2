@@ -848,14 +848,14 @@ namespace mrv
                 item->set();
             
             idx = menu->add(
-                _("Render/HDR Data/False"), kHDRDataFalse.hotkey(),
+                _("Render/HDR Data/Inactive"), kHDRDataFalse.hotkey(),
                 (Fl_Callback*)select_hdr_data_cb, ui, mode);
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
             if (displayOptions.hdrInfo == timeline::HDRInformation::kFalse)
                 item->set();
             
             idx = menu->add(
-                _("Render/HDR Data/True"), kHDRDataTrue.hotkey(),
+                _("Render/HDR Data/Active"), kHDRDataTrue.hotkey(),
                 (Fl_Callback*)select_hdr_data_cb, ui, mode);
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
             if (displayOptions.hdrInfo == timeline::HDRInformation::kTrue)
