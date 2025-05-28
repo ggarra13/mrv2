@@ -118,7 +118,7 @@ namespace mrv
             const std::vector<fs::path>& fontList = image::discoverSystemFonts();
             for (const auto& path : fontList)
             {
-                file::Path filePath(path.filename());
+                file::Path filePath(path.filename().generic_string());
                 c->add(filePath.getBaseName().c_str());
             }
 #endif
@@ -161,7 +161,7 @@ namespace mrv
                     fs::path out = fontList[0];
                     for (const auto& path : fontList)
                     {
-                        file::Path filePath(path.filename());
+                        file::Path filePath(path.filename().generic_string());
                         if (fontName == filePath.getBaseName())
                         {
                             out = path;

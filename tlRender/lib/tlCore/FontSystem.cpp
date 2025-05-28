@@ -24,6 +24,7 @@
 #include <cstdint>
 
 #ifdef _WIN32
+# define NOMINMAX
 # include <windows.h>
 # include <shlobj.h>  // SHGetKnownFolderPath
 # include <knownfolders.h>
@@ -226,7 +227,7 @@ namespace tl
         {
             TLRENDER_P();
             
-            file::Path fileName(filePath.filename());
+            file::Path fileName(filePath.filename().generic_string());
             const std::string name = fileName.getBaseName();
             if (p.fontData.find(name) != p.fontData.end())
                 return;
