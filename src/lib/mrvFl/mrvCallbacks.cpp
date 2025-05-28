@@ -1198,21 +1198,28 @@ namespace mrv
         ui->uiView->redrawWindows();
     }
 
-    void select_hdr_data_cb(Fl_Menu_* m, ViewerUI* ui)
+    void hdr_data_from_file_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        const Fl_Menu_Item* item = m->mvalue();
-        const std::string type = item->label();
-
-        int idx = 0;
-        for (const auto& entry : timeline::getHDRInformationLabels())
-        {
-            if (entry == type)
-                break;
-            ++idx;
-        }
-
         timeline::DisplayOptions o = ui->app->displayOptions();
-        o.hdrInfo = static_cast<timeline::HDRInformation>(idx);
+        o.hdrInfo = timeline::HDRInformation::FromFile;
+        ui->app->setDisplayOptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+        ui->uiView->redrawWindows();
+    }
+
+    void hdr_data_inactive_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        timeline::DisplayOptions o = ui->app->displayOptions();
+        o.hdrInfo = timeline::HDRInformation::Inactive;
+        ui->app->setDisplayOptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+        ui->uiView->redrawWindows();
+    }
+
+    void hdr_data_active_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        timeline::DisplayOptions o = ui->app->displayOptions();
+        o.hdrInfo = timeline::HDRInformation::Active;
         ui->app->setDisplayOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
         ui->uiView->redrawWindows();

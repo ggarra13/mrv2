@@ -948,7 +948,7 @@ namespace mrv
             p.ui->uiSaturationInput->value(saturation);
 
 
-            if (d.hdrInfo != timeline::HDRInformation::kFalse)
+            if (d.hdrInfo != timeline::HDRInformation::Inactive)
             {
                 p.hdrOptions.passthru = true;
                 auto i = p.tagData.find("hdr");
@@ -3448,7 +3448,7 @@ namespace mrv
             {
                 if (p.displayOptions.empty() ||
                     p.displayOptions[0].hdrInfo ==
-                    timeline::HDRInformation::kFalse)
+                    timeline::HDRInformation::Inactive)
                 {
                     p.hdr.clear();
                     p.hdrOptions.passthru = false;

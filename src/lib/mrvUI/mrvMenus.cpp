@@ -842,23 +842,23 @@ namespace mrv
             
             idx = menu->add(
                 _("Render/HDR Data/From File"), kHDRDataFromFile.hotkey(),
-                (Fl_Callback*)select_hdr_data_cb, ui, mode);
+                (Fl_Callback*)hdr_data_from_file_cb, ui, mode);
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
             if (displayOptions.hdrInfo == timeline::HDRInformation::FromFile)
                 item->set();
             
             idx = menu->add(
                 _("Render/HDR Data/Inactive"), kHDRDataFalse.hotkey(),
-                (Fl_Callback*)select_hdr_data_cb, ui, mode);
+                (Fl_Callback*)hdr_data_inactive_cb, ui, mode);
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-            if (displayOptions.hdrInfo == timeline::HDRInformation::kFalse)
+            if (displayOptions.hdrInfo == timeline::HDRInformation::Inactive)
                 item->set();
             
             idx = menu->add(
                 _("Render/HDR Data/Active"), kHDRDataTrue.hotkey(),
-                (Fl_Callback*)select_hdr_data_cb, ui, mode);
+                (Fl_Callback*)hdr_data_active_cb, ui, mode);
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-            if (displayOptions.hdrInfo == timeline::HDRInformation::kTrue)
+            if (displayOptions.hdrInfo == timeline::HDRInformation::Active)
                 item->set();
             
 

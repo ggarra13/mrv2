@@ -6617,10 +6617,10 @@ msgstr ""
 msgid "HDR Data From File"
 msgstr ""
 
-msgid "HDR Data False"
+msgid "HDR Data Inactive"
 msgstr ""
 
-msgid "HDR Data True"
+msgid "HDR Data Active"
 msgstr ""
 
 msgid "Toggle HDR tonemap"

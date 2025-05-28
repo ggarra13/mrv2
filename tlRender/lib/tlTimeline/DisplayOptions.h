@@ -112,8 +112,8 @@ namespace tl
         //! HDR usage.
         enum class HDRInformation {
             FromFile,
-            kFalse,
-            kTrue,
+            Inactive,
+            Active,
 
             Count,
             First = FromFile
