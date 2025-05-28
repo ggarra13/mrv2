@@ -153,6 +153,7 @@ namespace tl
             math::Matrix4x4f transform;
             bool clipRectEnabled = false;
             math::Box2i clipRect;
+            std::string currentPipeline;
 
             struct FrameGarbage
             {
@@ -161,13 +162,12 @@ namespace tl
                 std::vector<std::shared_ptr<vlk::ShaderBindingSet> > bindingSets;
             };
             std::array<FrameGarbage, vlk::MAX_FRAMES_IN_FLIGHT> garbage;
-            std::string displayShaderSource;
 
-            std::map<std::string, std::shared_ptr<vlk::Shader> > shaders;
-            std::map<std::string, std::shared_ptr<vlk::OffscreenBuffer> >
+            std::unordered_map<std::string, std::shared_ptr<vlk::Shader> > shaders;
+            std::unordered_map<std::string, std::shared_ptr<vlk::OffscreenBuffer> >
                 buffers;
-            std::map<std::string, VkPipelineLayout> pipelineLayouts;
-            std::map<
+            std::unordered_map<std::string, VkPipelineLayout> pipelineLayouts;
+            std::unordered_map<
                 std::string, std::pair<vlk::PipelineCreationState, VkPipeline>>
                 pipelines;
             std::shared_ptr<TextureCache> textureCache;
@@ -187,6 +187,7 @@ namespace tl
                 size_t textTriangles = 0;
                 size_t textures = 0;
                 size_t images = 0;
+                size_t pipelineChanges = 0;
             };
             Stats currentStats;
             std::list<Stats> stats;

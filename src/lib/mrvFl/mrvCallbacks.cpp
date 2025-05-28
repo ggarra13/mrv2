@@ -1148,7 +1148,7 @@ namespace mrv
         o.imageFilters.minify = timeline::ImageFilter::Nearest;
         ui->app->setDisplayOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
-        ui->uiView->redraw();
+        ui->uiView->redrawWindows();
     }
 
     void minify_linear_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -1157,7 +1157,7 @@ namespace mrv
         o.imageFilters.minify = timeline::ImageFilter::Linear;
         ui->app->setDisplayOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
-        ui->uiView->redraw();
+        ui->uiView->redrawWindows();
     }
 
     void magnify_nearest_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -1166,7 +1166,7 @@ namespace mrv
         o.imageFilters.magnify = timeline::ImageFilter::Nearest;
         ui->app->setDisplayOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
-        ui->uiView->redraw();
+        ui->uiView->redrawWindows();
     }
 
     void magnify_linear_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -1175,7 +1175,7 @@ namespace mrv
         o.imageFilters.magnify = timeline::ImageFilter::Linear;
         ui->app->setDisplayOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
-        ui->uiView->redraw();
+        ui->uiView->redrawWindows();
     }
 
     void mirror_x_cb(Fl_Menu_* w, ViewerUI* ui)
@@ -1185,7 +1185,7 @@ namespace mrv
         ui->app->setDisplayOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
         ui->uiView->updateCoords();
-        ui->uiView->redraw();
+        ui->uiView->redrawWindows();
     }
 
     void mirror_y_cb(Fl_Menu_* w, ViewerUI* ui)
@@ -1195,7 +1195,27 @@ namespace mrv
         ui->app->setDisplayOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
         ui->uiView->updateCoords();
-        ui->uiView->redraw();
+        ui->uiView->redrawWindows();
+    }
+
+    void select_hdr_data_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        const Fl_Menu_Item* item = m->mvalue();
+        const std::string type = item->label();
+
+        int idx = 0;
+        for (const auto& entry : timeline::getHDRInformationLabels())
+        {
+            if (entry == type)
+                break;
+            ++idx;
+        }
+
+        timeline::DisplayOptions o = ui->app->displayOptions();
+        o.hdrInfo = static_cast<timeline::HDRInformation>(idx);
+        ui->app->setDisplayOptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+        ui->uiView->redrawWindows();
     }
 
     void rotate_plus_90_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -1304,14 +1324,7 @@ namespace mrv
         ui->uiView->setHDROptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
-
-    void toggle_hdr_passthru_cb(Fl_Menu_* w, ViewerUI* ui)
-    {
-        timeline::HDROptions o = ui->uiView->getHDROptions();
-        o.passthru ^= 1;
-        ui->uiView->setHDROptions(o);
-        ui->uiMain->fill_menu(ui->uiMenuBar);
-    }
+    
     void select_hdr_tonemap_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         const Fl_Menu_Item* item = m->mvalue();
@@ -2568,8 +2581,14 @@ namespace mrv
         auto w = ui->uiView->getMultilineInput();
         if (!w)
             return;
+#ifdef OPENGL_BACKEND
         w->textcolor(c);
         w->redraw();
+#endif
+#ifdef VULKAN_BACKEND
+        w->color = from_fltk_color(c);
+        ui->uiView->redrawWindows();
+#endif
     }
 
     image::Color4f from_fltk_color(const Fl_Color& c)

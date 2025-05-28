@@ -22,6 +22,9 @@ v1.3.8
 - Removed outline class from OpenGL as it was not needed.
 - Added showing of clip name in the HUD for .otioz files.
 - Improved performance of the thumbnails in the timeline for both OpenGL and Vulkan.
+- Fixed a memory issue on libplacebo.
+- Fixed a slowdown due to always trying to change cursor when in viewport with the media information
+  window present.
 - Started porting to Vulkan.
 
 	 * Working:
@@ -42,7 +45,7 @@ v1.3.8
 			 - B
 			 - Difference
 			 - Dissolve
-			 - Wipe (random validation error when switching)
+			 - Wipe
 			 - Horizontal
 			 - Vertical
 			 - Tile
@@ -55,16 +58,12 @@ v1.3.8
 		 * Thumbnails in Timeline (extremely slow).
 		 * Thumbnails in Panels
 		 * Missing Frames crosses
+		 * Vulkan Text widget annotation (does not support UTF-8 nor pasting)
 		 
 	 * Missing to check/add:
-		 * Editing (dissolves are broken in new OTIO).
+		 * Editing.
 		 * Saving of Movies/Pictures with Annotations
 		 * NDI support
-		 * Temporary FLTK Text widget annotation (how to do it?)
-			 - Will have to code an equivalent in Vulkan and do my own
-			   event handling.
-		 * Text annotations (how to do it?)
-		 * How to use any FLTK font for annotation (how to do it?)
 		 * OpenUSD in Vulkan (how to do it?)
 		 
 	 * Problems:

@@ -133,7 +133,11 @@ namespace mrv
     extern Hotkey kIgnoreChromaticities;
     extern Hotkey kAutoNormalize;
     extern Hotkey kInvalidValues;
-    extern Hotkey kToggleHDRPassthru;
+    
+    extern Hotkey kHDRDataFromFile;
+    extern Hotkey kHDRDataFalse;
+    extern Hotkey kHDRDataTrue;
+    
     extern Hotkey kToggleHDRTonemap;
 
     extern Hotkey kDisplayWindow;

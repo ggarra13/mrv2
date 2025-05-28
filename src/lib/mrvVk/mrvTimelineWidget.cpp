@@ -961,9 +961,6 @@ void main()
                         const auto& lutOptions = p.ui->uiView->lutOptions();
                         p.render->setLUTOptions(lutOptions);
                         
-                        // p.render->setOCIOOptions(timeline::OCIOOptions());
-                        // p.render->setLUTOptions(timeline::LUTOptions());
-                        
                         p.render->setClipRectEnabled(true);
                         
                         ui::DrawEvent drawEvent(
@@ -1037,8 +1034,6 @@ void main()
                     p.vao->bind(m_currentFrameIndex);
                     p.vao->draw(cmd, p.vbo);
                 }
-
-                end_render_pass(cmd);
             }
             else
             {
@@ -1115,7 +1110,6 @@ void main()
                 transitionImageLayout(cmd, dstImage,
                                       VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                                       VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
-
             }
         }
 

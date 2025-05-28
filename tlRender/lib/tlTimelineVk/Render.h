@@ -99,7 +99,8 @@ namespace tl
                 const VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
                 const VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
                 const VkBlendOp colorBlendOp = VK_BLEND_OP_ADD,
-                const VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD);   
+                const VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD);
+            void usePipeline(const std::string& pipelineName);
             math::Size2i getRenderSize() const override;
             void setRenderSize(const math::Size2i&) override;
             std::shared_ptr<vlk::OffscreenBuffer> getFBO() const;
@@ -122,14 +123,7 @@ namespace tl
             void setupViewportAndScissor() override;
             
             //! These functions draw to the internal FBO.
-            void drawRect(const std::string& pipelineName,
-                          const std::string& shaderName,
-                          const std::string& meshName,
-                          const math::Box2i&, const image::Color4f&,
-                          const bool enableBlending = true);
-            void drawRect(const math::Box2i&, const image::Color4f&,
-                          const std::string& pipelineName = "timeline",
-                          const bool enableBlending = true) override;
+            void drawRect(const math::Box2i&, const image::Color4f&) override;
             void drawMesh(const std::string& pipelineName,
                           const std::string& pipelineLayoutName,
                           const std::string& shaderName,
@@ -152,9 +146,9 @@ namespace tl
                 const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
                 const math::Vector2i& position) override;
             void drawText(
-                const timeline::TextInfo&, const math::Vector2i& position,
-                const image::Color4f&, const std::string& pipelineName = "")
-                override;
+                const timeline::TextInfo&,
+                const math::Vector2i& position,
+                const image::Color4f&) override;
             //! These functions draw to the viewport
             void drawRect(const std::string& pipelineName,
                           const math::Box2i&, const image::Color4f&,

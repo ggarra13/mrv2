@@ -123,8 +123,7 @@ namespace mrv
                              const image::FontInfo& fontInfo,
                              math::Vector2i&, const int16_t lineHeight) const;
             void _drawText(const std::vector<timeline::TextInfo>& textInfos,
-                           const math::Vector2i&, const image::Color4f&, 
-                           const std::string&) const;
+                           const math::Vector2i&, const image::Color4f&) const;
 
             void _drawAreaSelection() const noexcept;
             void _drawSafeAreas() noexcept;

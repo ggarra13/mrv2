@@ -124,6 +124,9 @@ namespace mrv
             //! Last video size (if changed, clear selection)
             static image::Size videoSize;
 
+            //! Last FLTK cursor set on window.
+            Fl_Cursor lastCursor = FL_CURSOR_ARROW;
+            
             //! Color area information
             area::Info colorAreaInfo;
 
@@ -180,10 +183,13 @@ namespace mrv
             std::deque<double> frameTimes;
             std::chrono::high_resolution_clock::time_point startTime;
 
-            // Observers
+            //! Observers
             std::shared_ptr<observer::ListObserver<timeline::VideoData> >
             videoDataObserver;
 
+            //! Editing
+            std::shared_ptr<VKTextShape> multilineText;
+            
             //! Overlay
             std::shared_ptr<image::Image> overlayImage;
         };

@@ -6,6 +6,7 @@
 
 #include <tlCore/Context.h>
 #include <tlCore/LRUCache.h>
+#include <tlCore/Path.h>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -13,9 +14,67 @@
 
 #include <algorithm>
 #include <codecvt>
+#include <filesystem>
 #include <limits>
 #include <locale>
 #include <map>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <cstdint>
+
+#ifdef _WIN32
+# include <windows.h>
+# include <shlobj.h>  // SHGetKnownFolderPath
+# include <knownfolders.h>
+#else
+# include <cstdlib>  // getenv
+# include <pwd.h>
+# include <unistd.h>
+#endif
+
+namespace fs = std::filesystem;
+
+namespace
+{
+    std::vector<fs::path> getSystemFontPaths()
+    {
+        std::vector<fs::path> paths;
+
+#ifdef _WIN32
+        PWSTR fontDirW = nullptr;
+        if (SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Fonts, 0, nullptr,
+                                           &fontDirW))) {
+            char fontDir[MAX_PATH];
+            wcstombs(fontDir, fontDirW, MAX_PATH);
+            CoTaskMemFree(fontDirW);
+            paths.emplace_back(fontDir);
+        } else {
+            paths.emplace_back("C:\\Windows\\Fonts\\");
+        }
+
+#elif __APPLE__
+        const char* home = getenv("HOME");
+        if (home) {
+            paths.emplace_back(std::string(home) + "/Library/Fonts/");
+        }
+        paths.emplace_back("/System/Library/Fonts/");
+        paths.emplace_back("/Library/Fonts/");
+
+#else  // Linux / Unix
+        const char* home = getenv("HOME");
+        if (home) {
+            paths.emplace_back(std::string(home) + "/.fonts/");
+            paths.emplace_back(std::string(home) + "/.local/share/fonts/");
+        }
+        paths.emplace_back("/usr/share/fonts/");
+        paths.emplace_back("/usr/local/share/fonts/");
+
+#endif
+
+        return paths;
+    }
+}
 
 namespace tl
 {
@@ -142,6 +201,12 @@ namespace tl
             return out;
         }
 
+        bool FontSystem::hasFont(const std::string& name)
+        {
+            TLRENDER_P();
+            return p.fontData.find(name) != p.fontData.end();
+        }
+        
         void FontSystem::addFont(
             const std::string& name, const uint8_t* data, size_t size)
         {
@@ -155,6 +220,34 @@ namespace tl
             {
                 _log("Cannot create font", log::Type::Error);
             }
+        }
+
+        void FontSystem::addFont(const fs::path& filePath)
+        {
+            TLRENDER_P();
+            
+            file::Path fileName(filePath.filename());
+            const std::string name = fileName.getBaseName();
+            if (p.fontData.find(name) != p.fontData.end())
+                return;
+            
+            std::ifstream file(filePath, std::ios::binary | std::ios::ate);
+            if (!file) {
+                std::cerr << "Failed to open font: " << filePath << std::endl;
+                return;
+            }
+
+            std::streamsize size = file.tellg();
+            file.seekg(0, std::ios::beg);
+
+            std::vector<uint8_t> buffer(size);
+            if (!file.read(reinterpret_cast<char*>(buffer.data()), size)) {
+                std::cerr << "Failed to read font: " << filePath << std::endl;
+                return;
+            }
+
+            
+            addFont(name, buffer.data(), buffer.size());
         }
 
         size_t FontSystem::getGlyphCacheSize() const
@@ -413,5 +506,38 @@ namespace tl
                 size.h = pos.y;
             }
         }
+
+        std::vector<fs::path> discoverSystemFonts()
+        {
+            std::vector<fs::path> out;
+            const std::vector<fs::path> fontDirs = getSystemFontPaths();
+
+            for (const auto& dir : fontDirs)
+            {
+                if (!fs::exists(dir) || !fs::is_directory(dir))
+                    continue;
+
+                for (const auto& entry : fs::recursive_directory_iterator(dir)) {
+                    if (!entry.is_regular_file())
+                        continue;
+
+                    const auto ext = entry.path().extension().string();
+                    if (ext == ".ttf" || ext == ".otf" || ext == ".ttc")
+                    {
+                        out.emplace_back(entry.path());
+                    }
+                }
+            }
+            
+            // Sort by filename
+            std::sort(out.begin(), out.end(),
+                      [](const fs::path& a, const fs::path& b)
+                          {
+                              return (a.filename().string() <
+                                      b.filename().string());
+                      });
+            return out;
+        }
+
     } // namespace image
 } // namespace tl

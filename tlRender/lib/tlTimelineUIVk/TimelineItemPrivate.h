@@ -54,6 +54,7 @@ namespace tl
                 image::FontMetrics fontMetrics;
 
                 math::Vector2i scrollPos;
+                std::vector<timeline::TextInfo> textInfos;
             };
             SizeData size;
 

@@ -3792,7 +3792,7 @@ msgid "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 
 msgid "Cache:"
-msgstr "キャッシュ:"
+msgstr "Cache:"
 
 msgid "    Used: %.2g of %zu Gb (%.2g %%)"
 msgstr "    使用済み: %.2g / %zu Gb (%.2g %%)"

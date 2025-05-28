@@ -17,7 +17,6 @@
 #include "mrvFl/mrvTimelinePlayer.h"
 
 #include "mrvWidgets/mrvHorSlider.h"
-#include "mrvWidgets/mrvMultilineInput.h"
 
 #include "mrvVk/mrvVkShape.h"
 #include "mrvVk/mrvTimelineViewport.h"
@@ -339,15 +338,11 @@ namespace mrv
                     }
                     case ActionMode::kText:
                     {
-                        MultilineInput* w = getMultilineInput();
+                        auto w = getMultilineInput();
                         if (w)
                         {
-                            auto pos = math::Vector2i(p.event_x, p.event_y);
-#ifdef USE_OPENVK2
-                            w->pos = pos;
-#else
-                            w->Fl_Widget::position(pos.x, pos.y);
-#endif
+                            auto pos = _getRasterf();
+                            w->pts[0] = pos;
                             redrawWindows();
                         }
                         return;
@@ -360,109 +355,44 @@ namespace mrv
             }
         }
 
-        MultilineInput* TimelineViewport::getMultilineInput() const noexcept
+        std::shared_ptr<VKTextShape> TimelineViewport::getMultilineInput() const noexcept
         {
-            MultilineInput* w;
-            for (int i = children(); i--;)
-            {
-                w = dynamic_cast< MultilineInput* >(child(i));
-                if (!w)
-                    continue;
-                return w;
-            }
-            return nullptr;
+            return _p->multilineText;
         }
 
         int TimelineViewport::acceptMultilineInput() noexcept
         {
             TLRENDER_P();
 
-            MultilineInput* w = getMultilineInput();
-            if (!w)
+            auto player = getTimelinePlayer();
+            if (!player)
                 return 0;
 
-            int ret = 0;
-            const char* text = w->value();
-            if (text && strlen(text) > 0)
-            {
-                auto player = getTimelinePlayer();
-                if (!player)
-                    return 0;
+            auto annotation = player->getAnnotation();
+            if (!annotation)
+                return 0;
 
-                auto annotation = player->getAnnotation();
-                if (!annotation)
-                    return 0;
+            uint8_t r, g, b;
+            int fltk_color = p.ui->uiPenColor->color();
+            float alpha = p.ui->uiPenOpacity->value();
+            Fl::get_color((Fl_Color)fltk_color, r, g, b);
+            const image::Color4f color(r / 255.F, g / 255.F, b / 255.F, alpha);
 
-                uint8_t r, g, b;
-                int fltk_color = p.ui->uiPenColor->color();
-                float alpha = p.ui->uiPenOpacity->value();
-                Fl::get_color((Fl_Color)fltk_color, r, g, b);
-                const image::Color4f color(r / 255.F, g / 255.F, b / 255.F, alpha);
-                fl_font(w->textfont(), w->textsize());
+            auto shape = getMultilineInput();
+            if (!shape)
+                return 0;
 
-#ifdef USE_OPENVK2
-                auto shape = std::make_shared< VK2TextShape >();
-#else
-                auto shape = std::make_shared< VKTextShape >(p.fontSystem);
-#endif
+            shape->editing = false;
 
-                draw::Point pnt(_getRasterf());
-                shape->pts.push_back(pnt); // we'll change it later...
+            p.multilineText.reset();
+            
+            const float pixels_unit = pixels_per_unit();            
+            _endAnnotationShape();
+            p.ui->uiUndoDraw->activate();
 
-                annotation->push_back(shape);
-
-                // Calculate offset from corner due to cross and the bottom of
-                // the font.
-                const math::Vector2i offset(
-                    kCrossSize + 2, kCrossSize + fl_height() - fl_descent());
-
-                shape->text = text;
-                shape->color = color;
-
-                const float pixels_unit = pixels_per_unit();
-
-#ifdef USE_OPENVK2
-                shape->font = w->textfont();
-                shape->fontSize = w->textsize() / p.viewZoom * pixels_unit;
-
-                auto pos = math::Vector2i(w->x() + offset.x, w->y() + offset.y);
-                pnt = _getFocusf(pos.x, pos.y);
-
-                // Store rotation
-                float rotation = p.rotation;
-                float videoRotation = p.videoRotation;
-
-                p.rotation = 0.F;
-                p.videoRotation = 0.F;
-                pnt = _getRasterf(pnt.x, pnt.y);
-
-                // Restore rotation
-                p.rotation = rotation;
-                p.videoRotation = videoRotation;
-
-                // Save new shape position
-                shape->pts[0].x = pnt.x;
-                shape->pts[0].y = pnt.y;
-#else
-                shape->fontFamily = w->fontFamily;
-                shape->fontSize = w->textsize() / p.viewZoom * pixels_unit;
-
-                // @bug: this is broken on image rotations
-                shape->pts[0].x += offset.x;
-                shape->pts[0].y -= offset.y;
-                shape->pts[0].y = -shape->pts[0].y;
-#endif
-                _endAnnotationShape();
-                p.ui->uiUndoDraw->activate();
-                ret = 1;
-            }
-
-            // Safely delete the winget.  This call removes the
-            // widget from the opengl canvas too.
-            Fl::delete_widget(w);
             redrawWindows();
             take_focus();
-            return ret;
+            return 1;
         }
 
         void TimelineViewport::_handlePushLeftMouseButton() noexcept
@@ -727,41 +657,38 @@ namespace mrv
                     case ActionMode::kText:
                     {
                         const auto& renderSize = getRenderSize();
-                        float pct = renderSize.h / 1024.F;
-                        auto w = getMultilineInput();
-
+                        auto shape = getMultilineInput();
+                        
+                        double pixels_unit = pixels_per_unit();
+                        double pct = renderSize.h / 1024.F;
                         int font_size = settings->getValue<int>(kFontSize);
-                        double fontSize =
-                            font_size * pct * p.viewZoom / pixels_per_unit();
-                        math::Vector2i pos(p.event_x, p.event_y);
-                        if (w)
+                        double fontSize = font_size * pct / pixels_unit;
+                        math::Vector2f pos(_getRasterf());
+                        if (shape)
                         {
-                            w->take_focus();
-                            w->pos = pos;
-#ifdef USE_OPENVK2
-                            w->textfont((Fl_Font)font);
-#else
-                            w->Fl_Widget::position(pos.x, pos.y);
-#endif
-                            w->textsize(fontSize);
+                            shape->pts[0] = pos;
+                            shape->fontSize = fontSize;
                             redrawWindows();
                             return;
                         }
 
-                        w = new MultilineInput(
-                            pos.x, pos.y, 20, 30 * pct * p.viewZoom);
-                        w->take_focus();
-#ifdef USE_OPENVK2
-                        w->textfont((Fl_Font)font);
-#endif
-                        w->textsize(fontSize);
-                        w->textcolor(fltk_color);
-                        w->viewPos = p.viewPos;
-                        w->viewZoom = p.viewZoom;
-                        w->redraw();
+                        const std::vector<fs::path>& fontList =
+                            image::discoverSystemFonts();
+                        p.multilineText = std::make_shared<VKTextShape>();
+                        shape = p.multilineText;
 
-                        this->add(w);
+                        shape->fontSystem = p.fontSystem;
+                        shape->fontPath = fontList[(unsigned)font];
+                        shape->fontSize = fontSize;
+                        
+                        shape->pts.push_back(pos);
+                        shape->editing = true;
+                        shape->color = color;
 
+                        annotation->push_back(shape);
+                        take_focus();
+
+            
                         redrawWindows();
                         return;
                     }
@@ -985,6 +912,16 @@ namespace mrv
                 return ret;
             }
 
+            if (p.multilineText)
+            {
+                ret = p.multilineText->handle(event);
+                if (ret)
+                {
+                    redrawWindows();
+                    return ret;
+                }
+            }
+
             p.event_x = Fl::event_x();
             p.event_y = Fl::event_y();
 
@@ -995,18 +932,6 @@ namespace mrv
             case FL_ENTER:
             {
                 p.lastEvent = 0;
-
-                // We have children if we are editing a text widget, so we do not
-                // grab focus in that case.
-                if (!children())
-                {
-                    bool grab_focus = false;
-                    if (p.ui->uiPrefs->uiPrefsRaiseOnEnter->value())
-                        grab_focus = true;
-
-                    if (grab_focus)
-                        take_focus();
-                }
             
 #ifdef __APPLE__
                 if (p.ui->uiMenuBar && p.ui->uiPrefs->uiPrefsMacOSMenus->value())
@@ -1022,6 +947,8 @@ namespace mrv
             case FL_LEAVE:
             {
                 p.lastEvent = 0;
+                p.lastCursor = FL_CURSOR_ARROW;
+                
                 const float NaN = std::numeric_limits<float>::quiet_NaN();
                 image::Color4f rgba(NaN, NaN, NaN, NaN);
                 _updatePixelBar(rgba);
@@ -1037,7 +964,7 @@ namespace mrv
                 break;
             case FL_PUSH:
             {
-                if (!children() && Fl::focus() != this && Fl::event_button1())
+                if (Fl::focus() != this && Fl::event_button1())
                 {
                     take_focus();
                     if (Fl::event_clicks() < 2)
@@ -1046,6 +973,15 @@ namespace mrv
                 p.mousePress = _getFocus();
                 if (Fl::event_button1())
                 {
+                    if (p.multilineText)
+                    {
+                        math::Vector2f pos = _getRasterf();
+                        auto widget = p.multilineText->box.min;
+                        if (pos.x >= widget.x && pos.x <= widget.x + 10 &&
+                            pos.y >= widget.y && pos.y <= widget.y + 10)
+                            return acceptMultilineInput();
+                    }
+                    
                     if (Fl::event_ctrl())
                     {
                         p.viewPosMousePress = p.viewPos;
@@ -1106,6 +1042,24 @@ namespace mrv
                 }
                 if (p.actionMode != ActionMode::kText)
                     _updateCursor();
+                else
+                {
+                    if (p.multilineText)
+                    {
+                        take_focus();
+                        const math::Vector2f pos = _getRasterf();
+                        const math::Vector2i widget = p.multilineText->box.min;
+                        if (pos.x >= widget.x && pos.x <= widget.x + 10 &&
+                            pos.y >= widget.y && pos.y <= widget.y + 10)
+                        {
+                            set_cursor(FL_CURSOR_ARROW);
+                        }
+                        else
+                        {
+                            set_cursor(FL_CURSOR_INSERT);
+                        }
+                    }
+                }
                 _updatePixelBar();
                 return 1;
             }
@@ -1599,6 +1553,7 @@ namespace mrv
                 std::string text;
                 if (Fl::event_text())
                     text = Fl::event_text();
+
                 dragAndDrop(text);
                 return 1;
             }
@@ -1680,72 +1635,16 @@ namespace mrv
 
             const float devicePixelRatio = pixels_per_unit();
 
-#ifdef USE_OPENVK2
-            auto shape = dynamic_cast<VK2TextShape*>(s.get());
-            if (!shape)
-                return;
-
-            const int fontsize =
-                shape->fontSize * shape->viewZoom / devicePixelRatio;
-            fl_font(shape->font, fontsize);
-
-            const math::Vector2i offset(
-                kCrossSize + 2, kCrossSize + fl_height() - fl_descent());
-
-            math::Vector2f pos(
-                shape->pts[0].x * shape->viewZoom + p.viewPos.x,
-                shape->pts[0].y * shape->viewZoom + p.viewPos.y);
-            pos.x = pos.x / devicePixelRatio;
-            pos.y = h() - 1 - pos.y / devicePixelRatio;
-
-            pos.x -= offset.x;
-            pos.y -= offset.y;
-
-            auto w = new MultilineInput(pos.x, pos.y, 20, 30 * pct * p.viewZoom);
-            w->take_focus();
-            w->textfont(shape->font);
-            w->textsize(shape->fontSize);
-            w->value(shape->text.c_str(), shape->text.size());
-            w->recalc();
-#else
             auto shape = dynamic_cast<VKTextShape*>(s.get());
             if (!shape)
                 return;
 
-            const int fontsize =
-                shape->fontSize * shape->viewZoom / devicePixelRatio;
-            fl_font(shape->font, fontsize);
-
-            const math::Vector2i offset(
-                kCrossSize + 2, kCrossSize + fl_height() - fl_descent());
-
-            math::Vector2i pos(
-                shape->pts[0].x + p.viewPos.x, -shape->pts[0].y - p.viewPos.y);
-
-            pos.x -= offset.x;
-            pos.y -= offset.y;
-
-            auto w = new MultilineInput(pos.x, pos.y, 20, 30 * pct * p.viewZoom);
-            w->take_focus();
-            w->fontFamily = shape->fontFamily;
-            w->textsize(shape->fontSize);
-            w->value(shape->text.c_str(), shape->text.size());
-            w->recalc();
-#endif
-            Fl_Color fltk_color = fl_rgb_color(
-                shape->color.r * 255.F, shape->color.g * 255.F,
-                shape->color.b * 255.F);
-            w->textcolor(fltk_color);
-            w->viewPos = p.viewPos;
-            w->viewZoom = p.viewZoom;
-            w->redraw();
+            shape->editing = true;
 
             tcp->pushMessage("Remove Shape", index);
 
             annotation->remove(s);
-            this->add(w);
 
-            p.ui->uiTimeline->redraw();
             redrawWindows();
         }
 

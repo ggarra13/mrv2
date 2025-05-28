@@ -26,8 +26,6 @@ namespace tl
         void Render::_createBindingSet(const std::shared_ptr<vlk::Shader>& shader)
         {
             TLRENDER_P();
-            if (!shader)
-                throw std::runtime_error("_createBindingSet shader nullptr");
             auto bindingSet = shader->createBindingSet();
             p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
         }
@@ -169,6 +167,7 @@ namespace tl
 
             // Enable the pipeline.
             vkCmdBindPipeline(p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
+            p.currentPipeline = pipelineName;
         }
         
         void Render::createPipeline(
@@ -201,7 +200,10 @@ namespace tl
                 colorBlendAttachment.dstAlphaBlendFactor = dstAlphaBlendFactor;
                 colorBlendAttachment.colorBlendOp = colorBlendOp;
                 colorBlendAttachment.alphaBlendOp = alphaBlendOp;
-                
+            }
+            else
+            {
+                colorBlendAttachment.blendEnable = VK_FALSE;
             }
             cb.attachments.push_back(colorBlendAttachment);
             
@@ -223,6 +225,23 @@ namespace tl
             }
         }
 
+        void Render::usePipeline(const std::string& pipelineName)
+        {
+            TLRENDER_P();
+
+            if (p.currentPipeline == pipelineName)
+                return;
+            
+            const auto& pair = p.pipelines[pipelineName];
+            VkPipeline pipeline = pair.second;
+
+            // Enable the pipeline.
+            vkCmdBindPipeline(p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
+            p.currentPipeline = pipelineName;
+            
+            ++(p.currentStats.pipelineChanges);
+        }
+        
         void Render::_bindDescriptorSets(
             const std::string& pipelineLayoutName, const std::string& shaderName)
         {

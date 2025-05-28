@@ -73,6 +73,7 @@ namespace tl
                    exrDisplay == other.exrDisplay &&
                    softClip == other.softClip &&
                    imageFilters == other.imageFilters &&
+                   hdrInfo == other.hdrInfo &&
                    videoLevels == other.videoLevels &&
                    normalize == other.normalize &&
                    ignoreChromaticities == other.ignoreChromaticities &&

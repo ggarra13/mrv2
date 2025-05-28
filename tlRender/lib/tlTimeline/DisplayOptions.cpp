@@ -17,6 +17,10 @@ namespace tl
         TLRENDER_ENUM_IMPL(
             Channels, "Color", "Red", "Green", "Blue", "Alpha", "Lumma");
         TLRENDER_ENUM_SERIALIZE_IMPL(Channels);
+        
+        TLRENDER_ENUM_IMPL(
+            HDRInformation, "From File", "False", "True");
+        TLRENDER_ENUM_SERIALIZE_IMPL(HDRInformation);
 
         math::Matrix4x4f brightness(const math::Vector3f& value)
         {

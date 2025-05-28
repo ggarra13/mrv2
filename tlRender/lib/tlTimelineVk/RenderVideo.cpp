@@ -83,7 +83,7 @@ namespace tl
                 {
                     p.fbo->transitionToColorAttachment(p.cmd);
                     p.fbo->beginClearRenderPass(p.cmd);
-                    drawRect("solid", "rect", "rect", box, options.color0, false);
+                    drawRect(box, options.color0);
                     p.fbo->endRenderPass(p.cmd);
                     p.fbo->transitionToShaderRead(p.cmd);
                     break;
@@ -179,10 +179,10 @@ namespace tl
                 int Y = renderSize.h * amountY;
                 math::Box2i box(0, 0, renderSize.w, Y);
                 p.fbo->beginLoadRenderPass(p.cmd);
-                drawRect("Mask", "rect", "rect", box, color, false);
+                drawRect(box, color);
                 box.max.y = renderSize.h;
                 box.min.y = renderSize.h - Y;
-                drawRect("Mask", "rect", "rect", box, color, false);
+                drawRect(box, color);
                 p.fbo->endRenderPass(p.cmd);
             }
             else
@@ -190,10 +190,10 @@ namespace tl
                 int X = renderSize.w * amountX;
                 math::Box2i box(0, 0, X, renderSize.h);
                 p.fbo->beginLoadRenderPass(p.cmd);
-                drawRect("Mask", "rect", "rect", box, color, false);
+                drawRect(box, color);
                 box.max.x = renderSize.w;
                 box.min.x = renderSize.w - X;
-                drawRect("Mask", "rect", "rect", box, color, false);
+                drawRect(box, color);
                 p.fbo->endRenderPass(p.cmd);
             }
             p.fbo->transitionToShaderRead(p.cmd);
@@ -1162,14 +1162,14 @@ namespace tl
 #if defined(TLRENDER_OCIO)
                 if (p.ocioData)
                 {
-                    for (auto& texture : p.ocioData->textures)
+                    for (const auto& texture : p.ocioData->textures)
                     {
                         p.shaders["display"]->setTexture(texture->getName(), texture);
                     }
                 }
                 if (p.lutData)
                 {
-                    for (auto& texture : p.lutData->textures)
+                    for (const auto& texture : p.lutData->textures)
                     {
                         p.shaders["display"]->setTexture(texture->getName(), texture);
                     }
@@ -1178,7 +1178,7 @@ namespace tl
 #if defined(TLRENDER_LIBPLACEBO)
                 if (p.placeboData)
                 {
-                    for (auto& texture : p.placeboData->textures)
+                    for (const auto& texture : p.placeboData->textures)
                     {
                         p.shaders["display"]->setTexture(texture->getName(), texture);
                     }

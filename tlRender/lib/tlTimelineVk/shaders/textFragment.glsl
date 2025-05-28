@@ -7,11 +7,12 @@ layout(binding = 1) uniform sampler2D textureSampler;
                  
 layout(push_constant) uniform PushConstants {
     vec4 color;
-} pc;    
-                 
+} pc;
                  
 void main()
 {
-     float alpha = texture(textureSampler, fTexture).r;
-     outColor = vec4(pc.color.rgb * alpha, pc.color.a * alpha);
+     outColor.r = pc.color.r;
+     outColor.g = pc.color.g;
+     outColor.b = pc.color.b;
+     outColor.a = pc.color.a * texture(textureSampler, fTexture).r;
 }

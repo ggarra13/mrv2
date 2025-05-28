@@ -378,7 +378,7 @@ namespace mrv
             prepare_render_pass();       // Main swapchain render pass
             prepare_load_render_pass();  // swapchain render pass that loads contents
             prepare_shaders();
-            prepare_pipeline_layout(); 
+            prepare_pipeline_layout();
         }
 
         void Viewport::destroy()
@@ -702,11 +702,11 @@ namespace mrv
                         p.ui->uiHotkey->uiMain->visible() ||
                         p.ui->uiAbout->uiMain->visible())
                     {
-                        window()->cursor(FL_CURSOR_DEFAULT);
+                        set_cursor(FL_CURSOR_DEFAULT);
                     }
                     else
                     {
-                        window()->cursor(FL_CURSOR_NONE);
+                        set_cursor(FL_CURSOR_NONE);
                     }
                     p.presentationTime = time;
                 }
@@ -970,8 +970,11 @@ namespace mrv
                 const int dstHeight = dstBottom - dstTop;
 
                 if (dstWidth <= 0 || dstHeight <= 0)
+                {
+                    m_in_render_pass = false;
                     return; // Nothing to blit
-
+                }
+                
                 // Adjust source region.
                 const int srcWidth = renderSize.w;
                 const int srcHeight = renderSize.h;
@@ -1462,19 +1465,11 @@ namespace mrv
                 auto s = dynamic_cast< VKCircleShape* >(shape);
                 value = *s;
             }
-#ifdef USE_OPENVK2
-            else if (dynamic_cast< VK2TextShape* >(shape))
-            {
-                auto s = dynamic_cast< VK2TextShape* >(shape);
-                value = *s;
-            }
-#else
             else if (dynamic_cast< VKTextShape* >(shape))
             {
                 auto s = dynamic_cast< VKTextShape* >(shape);
                 value = *s;
             }
-#endif
             else if (dynamic_cast< draw::NoteShape* >(shape))
             {
                 auto s = dynamic_cast< draw::NoteShape* >(shape);

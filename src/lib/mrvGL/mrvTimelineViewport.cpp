@@ -363,8 +363,15 @@ namespace mrv
 
         void TimelineViewport::set_cursor(Fl_Cursor n) const noexcept
         {
+            TLRENDER_P();
+
+            if (n == p.lastCursor)
+                return;
+            
             if (window())
                 window()->cursor(n);
+
+            p.lastCursor = n;
         }
 
         //
@@ -835,7 +842,7 @@ namespace mrv
 
             if (value == p.ocioOptions)
                 return;
-
+            
             p.ocioOptions = value;
             p.previous_screen = -1;
 
@@ -945,6 +952,25 @@ namespace mrv
             p.ui->uiSaturation->value(saturation);
             p.ui->uiSaturationInput->value(saturation);
 
+
+            if (d.hdrInfo != timeline::HDRInformation::kFalse)
+            {
+                p.hdrOptions.tonemap = true;
+                auto i = p.tagData.find("hdr");
+                if (i != p.tagData.end())
+                {
+                    p.hdr = i->second;
+
+                    // Parse the JSON string back into a nlohmann::json object
+                    nlohmann::json j = nlohmann::json::parse(p.hdr);
+                    p.hdrOptions.hdrData = j.get<image::HDRData>();
+                }
+            }
+            else
+            {
+                p.hdrOptions.tonemap = false;
+            }
+            
             redraw();
         }
 
@@ -976,7 +1002,6 @@ namespace mrv
             TLRENDER_P();
             if (value == p.hdrOptions)
                 return;
-            p.hdrOptions.tonemap = value.tonemap;
             p.hdrOptions.algorithm = value.algorithm;
             redrawWindows();
         }
@@ -1017,6 +1042,8 @@ namespace mrv
             {
                 p.videoData.clear();
             }
+
+            p.hdr.clear();
 
             refreshWindows(); // needed We need to refresh, as the new
             // video data may have different sizes.
@@ -1306,7 +1333,6 @@ namespace mrv
                 }
             }
 
-
             if (p.pixelAspectRatio > 0.F && !p.videoData.empty() &&
                 !p.videoData[0].layers.empty())
             {
@@ -1314,7 +1340,6 @@ namespace mrv
                 p.videoData[0].size.pixelAspectRatio = p.pixelAspectRatio;
                 image->setPixelAspectRatio(p.pixelAspectRatio);
             }
-
                     
             if (p.resizeWindow)
             {
@@ -3424,16 +3449,23 @@ namespace mrv
             i = p.tagData.find("hdr");
             if (i != p.tagData.end())
             {
-                if (p.ui->uiPrefs->uiPrefsTonemap->value() != 0)
-                    p.hdrOptions.tonemap = true;
-
-                if (p.hdrOptions.tonemap && p.hdr != i->second)
+                if (p.displayOptions.empty() ||
+                    p.displayOptions[0].hdrInfo ==
+                    timeline::HDRInformation::kFalse)
                 {
-                    p.hdr = i->second;
-
-                    // Parse the JSON string back into a nlohmann::json object
-                    nlohmann::json j = nlohmann::json::parse(p.hdr);
-                    p.hdrOptions.hdrData = j.get<image::HDRData>();
+                    p.hdrOptions.hdrData = image::HDRData();
+                }
+                else
+                {
+                    p.hdrOptions.tonemap = true;
+                    if (p.hdr != i->second)
+                    {
+                        p.hdr = i->second;
+                        
+                        // Parse the JSON string back 
+                        nlohmann::json j = nlohmann::json::parse(p.hdr);
+                        p.hdrOptions.hdrData = j.get<image::HDRData>();
+                    }
                 }
             }
             else

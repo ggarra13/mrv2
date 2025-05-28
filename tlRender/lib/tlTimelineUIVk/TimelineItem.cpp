@@ -333,6 +333,7 @@ namespace tl
             {
                 p.size.scrollPos = scrollArea->getScrollPos();
             }
+            p.size.textInfos.clear();
         }
 
         void TimelineItem::sizeHintEvent(const ui::SizeHintEvent& event)
@@ -355,6 +356,7 @@ namespace tl
                     _displayOptions.fontSize * _displayScale);
                 p.size.fontMetrics =
                     event.fontSystem->getMetrics(p.size.fontInfo);
+                p.size.textInfos.clear();
             }
             p.size.sizeInit = false;
 
@@ -409,6 +411,8 @@ namespace tl
         {
             IItem::drawOverlayEvent(drawRect, event);
             TLRENDER_P();
+
+            // return;   // 56-58 fps
             
             const math::Box2i& g = _geometry;
 
@@ -417,22 +421,33 @@ namespace tl
                     p.size.margin + p.size.border * 4;
             event.render->drawRect(
                 math::Box2i(g.min.x, y, g.w(), h),
-                event.style->getColorRole(ui::ColorRole::Window),
-                "timeline_background", false);
+                event.style->getColorRole(ui::ColorRole::Window));
 
             y = y + h;
             h = p.size.border;
             event.render->drawRect(
                 math::Box2i(g.min.x, y, g.w(), h),
-                event.style->getColorRole(ui::ColorRole::Border),
-                "timeline_border", false);
+                event.style->getColorRole(ui::ColorRole::Border));
 
-            _drawInOutPoints(drawRect, event);
-            _drawTimeTicks(drawRect, event);
-            _drawFrameMarkers(drawRect, event);
-            _drawTimeLabels(drawRect, event);
-            _drawCacheInfo(drawRect, event);
-            _drawCurrentTime(drawRect, event);
+            // return;  // 58-60 fps after caching 5000-6000 frames
+
+            _drawInOutPoints(drawRect, event); // draws in-out points
+            _drawTimeTicks(drawRect, event);   // draws time ticks
+
+            // return;  // 52-57 fps after caching 5000-6000 frames
+
+            _drawFrameMarkers(drawRect, event);  // draws optional markers
+            _drawTimeLabels(drawRect, event);  // draws labels next to time ticks
+
+            // return;  // 50-55 fps after caching 5000-6000 frames
+            
+            _drawCacheInfo(drawRect, event);     // draws audio and video cache
+            
+            //return;  // 47-51 fps after caching 5000-6000 frames
+
+            _drawCurrentTime(drawRect, event);   // draws red line and frame text
+
+            // return;  // 44-48 fps after caching 5000-6000 frames
 
             if (p.mouse.currentDropTarget >= 0 &&
                 p.mouse.currentDropTarget < p.mouse.dropTargets.size())
@@ -883,38 +898,39 @@ namespace tl
                 _getTimeTicks(event.fontSystem, seconds, tick);
                 if (seconds > 0.0 && tick > 0)
                 {
-                    const math::Size2i labelMaxSize =
-                        _getLabelMaxSize(event.fontSystem);
-                    std::vector<timeline::TextInfo> textInfos;
-                    for (double t = 0.0; t < duration; t += seconds)
+                    if (p.size.textInfos.empty())
                     {
-                        const otime::RationalTime time =
-                            _timeRange.start_time() +
-                            otime::RationalTime(t, 1.0).rescaled_to(
-                                _timeRange.duration().rate());
-                        const math::Box2i box(
-                            g.min.x + t / duration * w + p.size.border +
-                                p.size.margin,
-                            p.size.scrollPos.y + g.min.y + p.size.margin,
-                            labelMaxSize.w, p.size.fontMetrics.lineHeight);
-                        if (time != p.currentTime && box.intersects(drawRect))
+                        const math::Size2i labelMaxSize =
+                            _getLabelMaxSize(event.fontSystem);
+                        for (double t = 0.0; t < duration; t += seconds)
                         {
-                            const std::string label =
-                                _data->timeUnitsModel->getLabel(time);
-                            event.render->appendText(textInfos,
-                                                     event.fontSystem->getGlyphs(
-                                                         label, p.size.fontInfo),
-                                                     math::Vector2i(
-                                                         box.min.x,
-                                                         box.min.y + p.size.fontMetrics.ascender));
+                            const otime::RationalTime time =
+                                _timeRange.start_time() +
+                                otime::RationalTime(t, 1.0).rescaled_to(
+                                    _timeRange.duration().rate());
+                            const math::Box2i box(
+                                g.min.x + t / duration * w + p.size.border +
+                                p.size.margin,
+                                p.size.scrollPos.y + g.min.y + p.size.margin,
+                                labelMaxSize.w, p.size.fontMetrics.lineHeight);
+                            if (time != p.currentTime && box.intersects(drawRect))
+                            {
+                                const std::string label =
+                                    _data->timeUnitsModel->getLabel(time);
+                                event.render->appendText(p.size.textInfos,
+                                                         event.fontSystem->getGlyphs(
+                                                             label, p.size.fontInfo),
+                                                         math::Vector2i(
+                                                             box.min.x,
+                                                             box.min.y + p.size.fontMetrics.ascender));
+                            }
                         }
                     }
-                    for (const auto& textInfo : textInfos)
+                    for (const auto& textInfo : p.size.textInfos)
                     {
                         event.render->drawText(textInfo, math::Vector2i(),
                                                event.style->getColorRole(
-                                                   ui::ColorRole::TextDisabled),
-                                               "timelabels");
+                                                   ui::ColorRole::TextDisabled));
                     }
                 }
             }
@@ -964,7 +980,7 @@ namespace tl
                     event.render->drawMesh(
                         mesh, math::Vector2i(),
                         event.style->getColorRole(ui::ColorRole::VideoCache),
-                        "video cache");
+                        "cache");
                 }
             }
 
@@ -1001,7 +1017,7 @@ namespace tl
                     event.render->drawMesh(
                         mesh, math::Vector2i(),
                         event.style->getColorRole(ui::ColorRole::AudioCache),
-                        "audio cache");
+                        "cache");
                 }
             }
         }
@@ -1020,8 +1036,7 @@ namespace tl
 
                 event.render->drawRect(
                     math::Box2i(pos.x, pos.y, p.size.border * 2, g.h()),
-                    event.style->getColorRole(ui::ColorRole::Red),
-                    "Current Time Marker", false);
+                    event.style->getColorRole(ui::ColorRole::Red));
 
                 const std::string label =
                     _data->timeUnitsModel->getLabel(p.currentTime);
@@ -1032,14 +1047,10 @@ namespace tl
                                          math::Vector2i(
                                              pos.x + p.size.border * 2 + p.size.margin,
                                              pos.y + p.size.margin + p.size.fontMetrics.ascender));
-                            
-                for (const auto& textInfo : textInfos)
-                {
-                    event.render->drawText(textInfo, math::Vector2i(),
-                                           event.style->getColorRole(
-                                               ui::ColorRole::Text),
-                                           "currenttime");
-                }
+                
+                event.render->drawText(textInfos[0], math::Vector2i(),
+                                       event.style->getColorRole(
+                                           ui::ColorRole::Text));
             }
         }
 
@@ -1062,6 +1073,8 @@ namespace tl
         void TimelineItem::_textUpdate()
         {
             TLRENDER_P();
+            
+            p.size.textInfos.clear();
             for (const auto& track : p.tracks)
             {
                 const otime::RationalTime duration = track.timeRange.duration();

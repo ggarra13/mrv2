@@ -400,7 +400,7 @@ namespace tl
         {
             IItem::drawOverlayEvent(drawRect, event);
             TLRENDER_P();
-
+            
             const math::Box2i& g = _geometry;
 
             int y = p.size.scrollPos.y + g.min.y;
@@ -408,15 +408,14 @@ namespace tl
                     p.size.margin + p.size.border * 4;
             event.render->drawRect(
                 math::Box2i(g.min.x, y, g.w(), h),
-                event.style->getColorRole(ui::ColorRole::Window),
-                "timeline_background", false);
+                event.style->getColorRole(ui::ColorRole::Window));
 
             y = y + h;
             h = p.size.border;
             event.render->drawRect(
                 math::Box2i(g.min.x, y, g.w(), h),
-                event.style->getColorRole(ui::ColorRole::Border),
-                "timeline_border", false);
+                event.style->getColorRole(ui::ColorRole::Border));
+
             
             _drawInOutPoints(drawRect, event);
             _drawTimeTicks(drawRect, event);
@@ -904,8 +903,7 @@ namespace tl
                     {
                         event.render->drawText(textInfo, math::Vector2i(),
                                                event.style->getColorRole(
-                                                   ui::ColorRole::TextDisabled),
-                                               "timelabels");
+                                                   ui::ColorRole::TextDisabled));
                     }
                 }
             }
@@ -1011,8 +1009,7 @@ namespace tl
 
                 event.render->drawRect(
                     math::Box2i(pos.x, pos.y, p.size.border * 2, g.h()),
-                    event.style->getColorRole(ui::ColorRole::Red),
-                    "Current Time Marker", false);
+                    event.style->getColorRole(ui::ColorRole::Red));
 
                 const std::string label =
                     _data->timeUnitsModel->getLabel(p.currentTime);
@@ -1028,8 +1025,7 @@ namespace tl
                 {
                     event.render->drawText(textInfo, math::Vector2i(),
                                            event.style->getColorRole(
-                                               ui::ColorRole::Text),
-                                           "currenttime");
+                                               ui::ColorRole::Text));
                 }
             }
         }

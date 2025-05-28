@@ -122,8 +122,7 @@ namespace mrv
                 timeline::getBoxes(timeline::CompareMode::A, {p.videoData[right]}),
                 p.imageOptions, p.displayOptions);
 
-            // glDisable(GL_STENCIL_TEST)
-                ;
+            // glDisable(GL_STENCIL_TEST);
         }
 
         void Viewport::_drawCheckerboard(int left, int right) noexcept
@@ -594,14 +593,13 @@ namespace mrv
         
         void Viewport::_drawText(const std::vector<timeline::TextInfo>& textInfos,
                                  const math::Vector2i& pos,
-                                 const image::Color4f& color, 
-                                 const std::string& pipelineName) const
+                                 const image::Color4f& color) const
         {
             MRV2_VK();
             
             for (auto& textInfo : textInfos)
             {
-                vk.render->drawText(textInfo, pos, color, pipelineName);
+                vk.render->drawText(textInfo, pos, color);
             }
         }
             
@@ -692,7 +690,7 @@ namespace mrv
             std::vector<timeline::TextInfo> textInfos;
             vk.render->appendText(textInfos, glyphs, pos);
             
-            _drawText(textInfos, math::Vector2i(), color, "safe_areas");
+            _drawText(textInfos, math::Vector2i(), color);
         }
 
         void Viewport::_drawSafeAreas() noexcept
@@ -761,8 +759,8 @@ namespace mrv
             const image::Color4f labelColor(r / 255.F, g / 255.F, b / 255.F, alpha);
             const math::Vector2i labelPos;
             
-            _drawText(textInfos, shadowPos, shadowColor, "HUD");
-            _drawText(textInfos, labelPos, labelColor, "HUD");
+            _drawText(textInfos, shadowPos, shadowColor);
+            _drawText(textInfos, labelPos, labelColor);
         }
         
         void Viewport::_drawHUD(float alpha) const noexcept
@@ -1155,7 +1153,7 @@ namespace mrv
 
             std::vector<timeline::TextInfo> textInfos;
             _appendText(textInfos, p.helpText, fontInfo, pos, lineHeight);
-            _drawText(textInfos, math::Vector2i(), labelColor, "Help");
+            _drawText(textInfos, math::Vector2i(), labelColor);
 
             vk.render->end();
         }

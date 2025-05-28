@@ -808,6 +808,11 @@ namespace mrv
                 timeline::ImageFilter::Linear)
                 item->set();
 
+
+            mode = FL_MENU_TOGGLE;
+            if (numFiles == 0)
+                mode |= FL_MENU_INACTIVE;
+            
             idx = menu->add(
                 _("Render/HDR/Auto Normalize"), kAutoNormalize.hotkey(),
                 (Fl_Callback*)toggle_normalize_image_cb, ui, mode);
@@ -830,25 +835,35 @@ namespace mrv
             if (displayOptions.ignoreChromaticities)
                 item->set();
 
-            const timeline::HDROptions& hdrOptions = uiView->getHDROptions();
             
-#if MRV2_BACKEND_VK
-            idx = menu->add(
-                _("Render/HDR/Toggle"), kToggleHDRPassthru.hotkey(),
-                (Fl_Callback*)toggle_hdr_passthru_cb, ui, mode);
-            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-            if (hdrOptions.passthru)
-                item->set();
-#endif
+            mode = FL_MENU_RADIO;
+            if (numFiles == 0)
+                mode |= FL_MENU_INACTIVE;
             
-#if MRV2_BACKEND_GL
             idx = menu->add(
-                _("Render/HDR/Toggle Tonemap"), kToggleHDRTonemap.hotkey(),
-                (Fl_Callback*)toggle_hdr_tonemap_cb, ui, mode);
+                _("Render/HDR Data/From File"), kHDRDataFromFile.hotkey(),
+                (Fl_Callback*)select_hdr_data_cb, ui, mode);
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-            if (hdrOptions.tonemap)
+            if (displayOptions.hdrInfo == timeline::HDRInformation::FromFile)
                 item->set();
+            
+            idx = menu->add(
+                _("Render/HDR Data/False"), kHDRDataFalse.hotkey(),
+                (Fl_Callback*)select_hdr_data_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (displayOptions.hdrInfo == timeline::HDRInformation::kFalse)
+                item->set();
+            
+            idx = menu->add(
+                _("Render/HDR Data/True"), kHDRDataTrue.hotkey(),
+                (Fl_Callback*)select_hdr_data_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (displayOptions.hdrInfo == timeline::HDRInformation::kTrue)
+                item->set();
+            
 
+#if MRV2_BACKEND_GL
+            const timeline::HDROptions& hdrOptions = uiView->getHDROptions();
             int selected = static_cast<int>(hdrOptions.algorithm);
             mode = FL_MENU_RADIO;
             if (numFiles == 0)

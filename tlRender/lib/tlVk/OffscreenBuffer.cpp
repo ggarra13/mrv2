@@ -12,6 +12,7 @@
 #include <tlCore/Error.h>
 #include <tlCore/String.h>
 
+#include <FL/vk_enum_string_helper.h>
 #include <FL/Fl_Vk_Utils.H>
 
 #include <array>
@@ -227,7 +228,7 @@ namespace tl
             VkDevice device = ctx.device;
 
             {
-                std::lock_guard<std::mutex> lock(ctx.queue_mutex);
+                std::lock_guard<std::mutex> lock(ctx.queue_mutex());
                 vkDeviceWaitIdle(device);
             }
             
@@ -1159,10 +1160,15 @@ namespace tl
             VkDevice device = ctx.device;
             VkCommandPool commandPool = ctx.commandPool;
             
-            VkQueue  queue  = ctx.queue;
+            VkQueue  queue  = ctx.queue();
 
             auto& pbo = p.pboRing[p.writeIndex];
-            vkWaitForFences(device, 1, &pbo.fence, VK_TRUE, UINT64_MAX);
+            VkResult result = vkWaitForFences(device, 1, &pbo.fence, VK_TRUE,
+                                              UINT64_MAX); 
+            if (result != VK_SUCCESS) {
+                fprintf(stderr, "OffscreenBuffer: vkWaitForFences failed: %s\n", string_VkResult(result));
+                return;
+            }
             vkResetFences(device, 1, &pbo.fence);
 
             // Transition image to TRANSFER_SRC
@@ -1197,6 +1203,7 @@ namespace tl
         {
             TLRENDER_P();
 
+            VkResult result;
             VkDevice device = ctx.device;
         
             VkSubmitInfo submitInfo{VK_STRUCTURE_TYPE_SUBMIT_INFO};
@@ -1204,12 +1211,19 @@ namespace tl
             submitInfo.pCommandBuffers = &cmd;
 
             {
-                std::lock_guard<std::mutex> lock(ctx.queue_mutex);
-                VkQueue& transferQueue = ctx.queue;
+                std::lock_guard<std::mutex> lock(ctx.queue_mutex());
+                VkQueue queue = ctx.queue();
 
-                vkQueueSubmit(
-                    transferQueue, 1, &submitInfo,
-                    p.pboRing[p.writeIndex].fence);
+                result = vkQueueSubmit(queue, 1, &submitInfo,
+                                       p.pboRing[p.writeIndex].fence);
+            }
+            
+            if (result != VK_SUCCESS)
+            {
+                fprintf(stderr,
+                        "OffscreenBuffer::vkQueueSubmit failed: %s\n",
+                        string_VkResult(result));
+                return;
             }
 
             p.writeIndex = (p.writeIndex + 1) % NUM_PBO_BUFFERS;
@@ -1222,10 +1236,10 @@ namespace tl
             VkDevice device = ctx.device;
             auto& pbo = p.pboRing[p.readIndex];
             
-            // Check fence status without waiting indefinitely
-            VkResult status = vkGetFenceStatus(device, pbo.fence); 
+            // Check fence result without waiting indefinitely
+            VkResult result = vkGetFenceStatus(device, pbo.fence); 
 
-            if (status == VK_SUCCESS) 
+            if (result == VK_SUCCESS) 
             {
                 image::Info info(p.size.w, p.size.h, p.options.colorType);
                 VkDeviceSize bufferSize = image::getDataByteCount(info);
@@ -1244,14 +1258,14 @@ namespace tl
                 // Data is ready
                 return pbo.mappedPtr;
             }
-            else if (status == VK_NOT_READY)
+            else if (result == VK_NOT_READY)
             {
                 return nullptr; 
             }
             else 
             {
-                // Handle potential fence error
-                // Consider logging or throwing an exception based on VkResult
+                fprintf(stderr, "OffscreenBuffer::getLatestReadPixels pbo=%d fence failed: %s\n",
+                        p.readIndex, string_VkResult(result));
                 return nullptr; 
             }
     

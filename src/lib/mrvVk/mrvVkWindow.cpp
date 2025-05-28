@@ -38,6 +38,7 @@ namespace mrv
 
         void VkWindow::_init()
         {
+            // m_debugSync = true;
         }
 
         // m_depth (optionally) -> creates m_renderPass

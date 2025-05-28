@@ -359,7 +359,8 @@ namespace tl
                         
                     while (p.thumbnailThread.running)
                     {
-                        if (ctx.queue == VK_NULL_HANDLE)
+                        if (ctx.queue() == VK_NULL_HANDLE ||
+                            ctx.device == VK_NULL_HANDLE)
                             continue;
 
                         if (!p.thumbnailThread.render)
@@ -368,16 +369,19 @@ namespace tl
                             {
                                 p.thumbnailThread.render =
                                     timeline_vlk::Render::create(ctx, context);
-
-                                VkDevice device = ctx.device;
                                 
                                 // Create command pool
-                                VkCommandPoolCreateInfo cmd_pool_info = {};
-                                cmd_pool_info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-                                cmd_pool_info.queueFamilyIndex = ctx.queueFamilyIndex;
-                                cmd_pool_info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-                                vkCreateCommandPool(device, &cmd_pool_info, nullptr,
-                                                    &p.thumbnailThread.commandPool);
+                                if (p.thumbnailThread.commandPool == VK_NULL_HANDLE)
+                                {
+                                    VkDevice device = ctx.device;
+                                
+                                    VkCommandPoolCreateInfo cmd_pool_info = {};
+                                    cmd_pool_info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+                                    cmd_pool_info.queueFamilyIndex = ctx.queueFamilyIndex;
+                                    cmd_pool_info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+                                    vkCreateCommandPool(device, &cmd_pool_info, nullptr,
+                                                        &p.thumbnailThread.commandPool);
+                                }
                             }
                         }
                     
@@ -395,6 +399,7 @@ namespace tl
                         vkDestroyCommandPool(device,
                                              p.thumbnailThread.commandPool,
                                              nullptr);
+                        p.thumbnailThread.commandPool = VK_NULL_HANDLE;
                     }
                     p.thumbnailThread.buffer.reset();
                     p.thumbnailThread.render.reset();
@@ -812,19 +817,18 @@ namespace tl
                 
                                     p.thumbnailThread.buffer->submitReadback(cmd);
 
-                                    
-                                    void* imageData = nullptr;
-                                    while (!imageData)
                                     {
-                                        imageData = p.thumbnailThread.buffer->getLatestReadPixels();
-                                        if (imageData)
-                                        {
-                                            std::memcpy(image->getData(), imageData,
-                                                        image->getDataByteCount());
+                                        std::lock_guard<std::mutex> lock(ctx.queue_mutex());
+                                        vkQueueWaitIdle(ctx.queue());
+                                    }
                                     
-                                            vkFreeCommandBuffers(device, commandPool, 1, &cmd);
-                                            
-                                        }
+                                    void* imageData = p.thumbnailThread.buffer->getLatestReadPixels();
+                                    if (imageData)
+                                    {
+                                        std::memcpy(image->getData(), imageData,
+                                                    image->getDataByteCount());
+                                    
+                                        vkFreeCommandBuffers(device, commandPool, 1, &cmd);    
                                     }
                                     p.thumbnailThread.frameIndex = (p.thumbnailThread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
                                 }
@@ -868,7 +872,6 @@ namespace tl
                                             p.thumbnailThread.buffer, size,
                                             options))
                                     {
-                                        std::cerr << "recreate thumbnail buffer" << std::endl;
                                         p.thumbnailThread.buffer =
                                             vlk::OffscreenBuffer::create(ctx,
                                                 size, options);
@@ -890,7 +893,6 @@ namespace tl
                                     
                                         timeline::RenderOptions renderOptions;
                                         renderOptions.clear = false;
-                                        std::cerr << "begin render" << std::endl;
                                         p.thumbnailThread.render->begin(cmd,
                                                                         p.thumbnailThread.buffer,
                                                                         p.thumbnailThread.frameIndex,
@@ -901,12 +903,10 @@ namespace tl
                                             0.F, static_cast<float>(size.h), 
                                             -1.F, 1.F);
                                         p.thumbnailThread.render->setTransform(ortho);
-                                        std::cerr << "call drawVideo" << std::endl;
                                         p.thumbnailThread.render->drawVideo(
                                             {videoData},
                                             {math::Box2i(
                                                 0, 0, size.w, size.h)});
-                                        std::cerr << "called drawVideo" << std::endl;
                                         p.thumbnailThread.render->end();
                                         p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
                                     
@@ -917,24 +917,21 @@ namespace tl
                 
                                         p.thumbnailThread.buffer->submitReadback(cmd);
                                     
+                                        {
+                                            std::lock_guard<std::mutex> lock(ctx.queue_mutex());
+                                            vkQueueWaitIdle(ctx.queue());
+                                        }
 
                                     
-                                        void* imageData = nullptr;
-                                        while (!imageData)
+                                        void* imageData = p.thumbnailThread.buffer->getLatestReadPixels();
+                                        if (imageData)
                                         {
-                                            imageData = p.thumbnailThread.buffer->getLatestReadPixels();
-                                            if (imageData)
-                                            {
-                                                std::cerr << "copied image data " << (void*)imageData << std::endl;
                                                 std::memcpy(image->getData(), imageData,
                                                             image->getDataByteCount());
                                                 vkFreeCommandBuffers(device, commandPool, 1, &cmd);
-                                            
-                                            }
                                         }
 
                                         p.thumbnailThread.frameIndex = (p.thumbnailThread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
-                                        std::cerr << "next thumbnail " << p.thumbnailThread.frameIndex << std::endl; 
                                     }
                                 }
                             }

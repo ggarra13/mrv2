@@ -30,7 +30,8 @@ namespace
 
 namespace
 {
-    const double kTimeout = 0.008;
+    // 120 fps per seconds
+    const double kTimeout = 0.0083333;
 }
 
 namespace mrv
