@@ -50,9 +50,15 @@ jobs:
     # Download and install Vulkan SDK with MoltenVK
     - name: Install Vulkan SDK
       run: |
-        brew install vulkan-sdk
+        brew install vulkan-loader
         brew install molten-vk
-        export VULKAN_SDK=$(brew --prefix)/opt/vulkan-sdk
+        brew install vulkan-tools
+        brew install shaderc
+        brew install glslc
+        brew install vulkan-profiles
+        brew install spirv-tools
+        
+        export VULKAN_SDK=/usr/local/
         echo "VULKAN_SDK=${VULKAN_SDK}" >> $GITHUB_ENV
         echo "DYLD_LIBRARY_PATH=${VULKAN_SDK}/lib:$DYLD_LIBRARY_PATH" >> $GITHUB_ENV
         echo "VK_ICD_FILENAMES=${VULKAN_SDK}/share/vulkan/icd.d/MoltenVK_icd.json" >> $GITHUB_ENV
