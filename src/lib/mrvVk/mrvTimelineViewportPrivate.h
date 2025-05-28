@@ -124,6 +124,9 @@ namespace mrv
             //! Last video size (if changed, clear selection)
             static image::Size videoSize;
 
+            //! Last FLTK cursor set on window.
+            Fl_Cursor lastCursor = FL_CURSOR_ARROW;
+            
             //! Color area information
             area::Info colorAreaInfo;
 

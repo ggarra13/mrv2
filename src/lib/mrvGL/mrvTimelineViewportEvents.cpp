@@ -1023,6 +1023,8 @@ namespace mrv
             case FL_LEAVE:
             {
                 p.lastEvent = 0;
+                p.lastCursor = FL_CURSOR_ARROW;
+                
                 const float NaN = std::numeric_limits<float>::quiet_NaN();
                 image::Color4f rgba(NaN, NaN, NaN, NaN);
                 _updatePixelBar(rgba);

@@ -358,8 +358,15 @@ namespace mrv
 
         void TimelineViewport::set_cursor(Fl_Cursor n) const noexcept
         {
+            TLRENDER_P();
+
+            if (n == p.lastCursor)
+                return;
+            
             if (window())
                 window()->cursor(n);
+            
+            p.lastCursor = n;
         }
 
         //
@@ -1329,7 +1336,7 @@ namespace mrv
                 p.videoData[0].size.pixelAspectRatio = p.pixelAspectRatio;
                 image->setPixelAspectRatio(p.pixelAspectRatio);
             }
-
+                    
             if (p.resizeWindow)
             {
                 if (!p.presentation)

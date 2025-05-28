@@ -947,6 +947,8 @@ namespace mrv
             case FL_LEAVE:
             {
                 p.lastEvent = 0;
+                p.lastCursor = FL_CURSOR_ARROW;
+                
                 const float NaN = std::numeric_limits<float>::quiet_NaN();
                 image::Color4f rgba(NaN, NaN, NaN, NaN);
                 _updatePixelBar(rgba);
@@ -1050,11 +1052,11 @@ namespace mrv
                         if (pos.x >= widget.x && pos.x <= widget.x + 10 &&
                             pos.y >= widget.y && pos.y <= widget.y + 10)
                         {
-                            cursor(FL_CURSOR_ARROW);
+                            set_cursor(FL_CURSOR_ARROW);
                         }
                         else
                         {
-                            cursor(FL_CURSOR_INSERT);
+                            set_cursor(FL_CURSOR_INSERT);
                         }
                     }
                 }
