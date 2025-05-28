@@ -54,7 +54,7 @@ jobs:
         brew install molten-vk
         brew install vulkan-tools
         brew install shaderc
-        brew install glslc
+        brew install glslang
         brew install vulkan-profiles
         brew install spirv-tools
         
