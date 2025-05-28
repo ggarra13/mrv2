@@ -12,7 +12,7 @@ jobs:
   # FULL BUILDS                     #
   #                                 #
   ###################################
-  macos-14-full-build:
+  macos-14-full-build-vulkan:
     runs-on: macos-14
 
     env:
@@ -50,21 +50,20 @@ jobs:
     # Download and install Vulkan SDK with MoltenVK
     - name: Install Vulkan SDK
       run: |
-        brew install vulkan-sdk
+        brew install vulkan-loader
         brew install molten-vk
-        export VULKAN_SDK=$(brew --prefix)/opt/vulkan-sdk
-        echo "VULKAN_SDK=${VULKAN_SDK}" >> $GITHUB_ENV
-        echo "DYLD_LIBRARY_PATH=${VULKAN_SDK}/lib:$DYLD_LIBRARY_PATH" >> $GITHUB_ENV
-        echo "VK_ICD_FILENAMES=${VULKAN_SDK}/share/vulkan/icd.d/MoltenVK_icd.json" >> $GITHUB_ENV
-        echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
+        brew install vulkan-tools
+        brew install shaderc
+        brew install glslang
+        brew install vulkan-profiles
+        brew install spirv-tools
 
+        export VULKAN_SDK=/opt/homebrew/
+        echo "VULKAN_SDK=${VULKAN_SDK}" >> $GITHUB_ENV
 
     # Verify Vulkan installation
     - name: Verify Vulkan
       run: |
-        echo "VULKAN_SDK: $VULKAN_SDK"
-        echo "PATH: $PATH"
-        echo "DYLD_LIBRARY_PATH: $DYLD_LIBRARY_PATH"
         vulkaninfo --summary
         
     - name: Setup environment
