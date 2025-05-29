@@ -59,51 +59,8 @@ jobs:
       
     - name: Install python dependencies
       run: sudo apt-get install -y libssl-dev libffi-dev python3
-      
         
     # Install Vulkan SDK
-    No problem! Setting up a GitHub Action to compile a Vulkan application on Linux (Ubuntu 22.04) is very similar to the Windows setup, but with different package managers and paths.
-
-The core principles remain the same: use a Linux runner, install the Vulkan SDK, and use your build system.
-
-Here's a breakdown and a sample workflow for Ubuntu 22.04:
-
-Key Components for Vulkan Compilation on Linux:
-
-GitHub Actions Workflow File (.yml): Defines your CI/CD pipeline.
-Linux Runner: GitHub-hosted runners (e.g., ubuntu-latest, ubuntu-22.04) provide a Linux environment.
-Vulkan SDK: Again, essential for Vulkan development. On Linux, this typically involves downloading and extracting the SDK from LunarG, or using system packages for basic development. For the full SDK and validation layers, direct download is often preferred.
-Build System: CMake and a GCC/Clang compiler.
-Repository: Your project's code.
-Sample GitHub Actions Workflow (.github/workflows/build_vulkan_linux.yml):
-
-YAML
-
-name: Build Vulkan Application on Linux
-
-on:
-  push:
-    branches:
-      - main # Or your development branch
-  pull_request:
-    branches:
-      - main # Or your development branch
-
-jobs:
-  build:
-    runs-on: ubuntu-22.04 # Explicitly use Ubuntu 22.04
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        submodules: true # If your project uses submodules (e.g., for Vulkan-Headers)
-
-    - name: Install Build Dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y build-essential cmake libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libglu1-mesa-dev mesa-common-dev
-
     - name: Install Vulkan SDK
       # Option 1: Using a GitHub Action (recommended for ease and caching)
       uses: jakoch/install-vulkan-sdk-action@v1
