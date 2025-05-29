@@ -23,8 +23,8 @@ v1.3.8
 - Added showing of clip name in the HUD for .otioz files.
 - Improved performance of the thumbnails in the timeline for both OpenGL and Vulkan.
 - Fixed a memory issue on libplacebo.
-- Fixed a slowdown due to always trying to change cursor when in viewport with the media information
-  window present.
+- Fixed a slowdown due to always trying to change cursor when in viewport with the media information window present.
+- Fixed a Wayland bug not allowing to select the button menus (such as HSV) at the bottom of the screen.
 - Started porting to Vulkan.
 
 	 * Working:
