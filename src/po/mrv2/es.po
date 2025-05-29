@@ -2008,8 +2008,8 @@ msgstr "Columnas"
 msgid "Checkerboard"
 msgstr "Cuadriculado"
 
-msgid "OpenGL"
-msgstr "OpenGL"
+msgid "Graphics Card"
+msgstr "Tarjeta Gráfica"
 
 msgid "Adjustments"
 msgstr "Ajustes"
@@ -2911,51 +2911,6 @@ msgstr "Hace la siguiente anotación presente en todos los cuadros."
 msgid "Notes"
 msgstr "Notas"
 
-msgid "Invalid index for add clip to timeline."
-msgstr "Índice inválido para agregar clip a la linea de tiempo."
-
-msgid "Could not get current path."
-msgstr "No pude obtener el camino actual."
-
-msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
-msgstr "Item de EDL '{0}' ya no está cargado.  No puedo deshacer ni rehacer."
-
-msgid "Could not paste {0}.  Error {1}."
-msgstr "No pude pegar {0}.  Error {1}."
-
-msgid "Could not save .otio file: {0}"
-msgstr "No pude grabar el archivo .otio: {0}"
-
-msgid "Error saving {0}. {1}"
-msgstr "Error grabando {0}. {1}"
-
-msgid "Empty EDL file.  Not saving."
-msgstr "Archivo EDL vacío.  No grabando."
-
-msgid "Destination file is invalid."
-msgstr "Archivo de destino es inválido."
-
-msgid "You can only add clips to an .otio EDL playlist."
-msgstr "Sólo puede agregar clips a una lista de reproduccion (EDL) de .otio."
-
-msgid "Unknown media reference"
-msgstr "Referencia de los medios desconocidos"
-
-msgid "Track #{0} - {1}"
-msgstr "Pista #{0} - {1}"
-
-msgid "Cannot currently concatenate an .otio file."
-msgstr "No puedo concatenar un archivo .otio."
-
-msgid "Cannot currently concatenate a directory."
-msgstr "No puedo concatenar un directorio."
-
-msgid "Could not append video track {0}"
-msgstr "No pude agregar pista de video {0}"
-
-msgid "Could not append audio track {0}"
-msgstr "No pude agregar pista de audio {0}"
-
 msgid "Server started at port {0}."
 msgstr "Servidor corriendo en puerto {0}."
 
@@ -3155,6 +3110,9 @@ msgstr "Tamaño de renderizado: {0}"
 
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr "Información de la capa de imagen '{0}': {1} {2}"
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "Información del Buffer: {0}"
 
 msgid "Unsupported output format: "
 msgstr "Formato de salida no soportado: "
@@ -3762,6 +3720,51 @@ msgstr "Editar Anotación de Texto"
 msgid "No item selected"
 msgstr "Ningún item seleccionado"
 
+msgid "Invalid index for add clip to timeline."
+msgstr "Índice inválido para agregar clip a la linea de tiempo."
+
+msgid "Could not get current path."
+msgstr "No pude obtener el camino actual."
+
+msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
+msgstr "Item de EDL '{0}' ya no está cargado.  No puedo deshacer ni rehacer."
+
+msgid "Could not paste {0}.  Error {1}."
+msgstr "No pude pegar {0}.  Error {1}."
+
+msgid "Could not save .otio file: {0}"
+msgstr "No pude grabar el archivo .otio: {0}"
+
+msgid "Error saving {0}. {1}"
+msgstr "Error grabando {0}. {1}"
+
+msgid "Empty EDL file.  Not saving."
+msgstr "Archivo EDL vacío.  No grabando."
+
+msgid "Destination file is invalid."
+msgstr "Archivo de destino es inválido."
+
+msgid "You can only add clips to an .otio EDL playlist."
+msgstr "Sólo puede agregar clips a una lista de reproduccion (EDL) de .otio."
+
+msgid "Unknown media reference"
+msgstr "Referencia de los medios desconocidos"
+
+msgid "Track #{0} - {1}"
+msgstr "Pista #{0} - {1}"
+
+msgid "Cannot currently concatenate an .otio file."
+msgstr "No puedo concatenar un archivo .otio."
+
+msgid "Cannot currently concatenate a directory."
+msgstr "No puedo concatenar un directorio."
+
+msgid "Could not append video track {0}"
+msgstr "No pude agregar pista de video {0}"
+
+msgid "Could not append audio track {0}"
+msgstr "No pude agregar pista de audio {0}"
+
 msgid "%s - Page %d"
 msgstr "%s - Página %d"
 
@@ -3860,8 +3863,8 @@ msgstr "1,66"
 msgid "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 
-msgid "Cache:"
-msgstr "Cache:"
+msgid "Cache: "
+msgstr "Cache: "
 
 msgid "    Used: %.2g of %zu Gb (%.2g %%)"
 msgstr "    Usado: %.2g of %zu Gb (%.2g %%)"
@@ -3872,11 +3875,14 @@ msgstr "   Adelante V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "   Atrás       V: % 4<PRIu64>    A: % 4<PRIu64> "
 
+msgid "HDR monitor found."
+msgstr "Monitor HDR encontrado."
+
+msgid "HDR monitor not found or not configured."
+msgstr "Monitor HDR no encontrado o no configurado."
+
 msgid "Edit Text"
 msgstr "Editar Texto"
-
-msgid "Invalid font for text drawing"
-msgstr "Fuente inválida para dibujar texto"
 
 msgid "Could not convert message to shape: "
 msgstr "No pude convertir el mensaje a figura: "
@@ -4076,8 +4082,14 @@ msgstr "Render/HDR/Valores Inválidos"
 msgid "Render/HDR/Ignore Chromaticities"
 msgstr "Render/HDR/Ignorar Chromacidades"
 
-msgid "Render/HDR/Toggle Tonemap"
-msgstr "Render/HDR/Alternar Mapeo de Tonos"
+msgid "Render/HDR Data/From File"
+msgstr "Render/Datos de HDR/Del Archivo"
+
+msgid "Render/HDR Data/Inactive"
+msgstr "Render/Datos de HDR/Inactivos"
+
+msgid "Render/HDR Data/Active"
+msgstr "Render/Datos de HDR/Activos"
 
 msgid "Render/HDR/Tonemap"
 msgstr "Render/HDR/Mapeo de Tonos"
@@ -5947,8 +5959,11 @@ msgstr "Ignorar"
 msgid "Apply"
 msgstr "Usar"
 
-msgid "Never"
-msgstr "Nunca"
+msgid "Inactive"
+msgstr "Inactivo"
+
+msgid "Active"
+msgstr "Activo"
 
 msgid "ST2094_40"
 msgstr "ST2094_40"
@@ -6434,8 +6449,8 @@ msgstr "HDR"
 msgid "Chromaticities"
 msgstr "Cromáticidades"
 
-msgid "Tonemap"
-msgstr "Mapeo de Tonos"
+msgid "HDR Data"
+msgstr "Datos de HDR"
 
 msgid "Tonemap Algorithm"
 msgstr "Algoritmo de Mapeo de Tonos"
@@ -6785,23 +6800,23 @@ msgid "Blit Viewports"
 msgstr "Copia de Vistas"
 
 msgid ""
-"Viewports can be drawn with blitting or with OpenGL shaders.  Depending on "
-"graphics card and OS one can perform better then the other."
+"Viewports can be drawn with blitting or with shaders.  Depending on graphics "
+"card and OS one can perform better then the other."
 msgstr ""
-"Las vistas pueden ser dibujada con blitting (transferencia) o con shaders de "
-"OpenGL.  Dependiendo en tu tarjeta gráfica y sistema operativo una u otra "
-"puede desempeñarse mejor que la otra."
+"Las vistas pueden ser dibujada con blitting (transferencia) o con shaders.  "
+"Dependiendo en tu tarjeta gráfica y sistema operativo una u otra puede "
+"desempeñarse mejor que la otra."
 
 msgid "Blit Timeline"
 msgstr "Transferir Línea de Tiempo"
 
 msgid ""
-"Timeline can be drawn with blitting or with OpenGL shaders.  Depending on "
-"graphics card and OS one can perform better then the other."
+"Timeline can be drawn with blitting or with shaders.  Depending on graphics "
+"card and OS one can perform better than the other."
 msgstr ""
-"La línea de tiempo puede ser dibujada con blitting (transferencia) o con "
-"shaders de OpenGL.  Dependiendo en tu tarjeta gráfica y sistema operativo "
-"una u otra puede desempeñarse mejor que la otra."
+"Las vistas pueden ser dibujada con blitting (transferencia) o con shaders.  "
+"Dependiendo en tu tarjeta gráfica y sistema operativo una u otra puede "
+"desempeñarse mejor que la otra."
 
 msgid ""
 "For changes to take effect, you will need to re-open any movies already "
@@ -6968,9 +6983,6 @@ msgstr "Resumen"
 
 msgid "Preset Name"
 msgstr "Nombre de Preseteo"
-
-msgid "Active"
-msgstr "Activo"
 
 msgid "Function"
 msgstr "Función"
@@ -7277,6 +7289,15 @@ msgstr "Auto Normalizar"
 
 msgid "Invalid Values"
 msgstr "Valores Inválidos"
+
+msgid "HDR Data From File"
+msgstr "Datos de HDR Del Archivo"
+
+msgid "HDR Data Inactive"
+msgstr "Datos de HDR Inactivos"
+
+msgid "HDR Data Active"
+msgstr "Datos de HDR Activos"
 
 msgid "Toggle HDR tonemap"
 msgstr "Alternar mapeo de tonos de HDR"
@@ -7685,6 +7706,30 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
+
+#, fuzzy
+#~ msgid ""
+#~ "tter then the other.Timeline can be drawn with blitting or with shaders.  "
+#~ "Depending on graphics card and OS one can perform be"
+#~ msgstr ""
+#~ "La línea de tiempo puede ser dibujada con blitting (transferencia) o con "
+#~ "shaders de OpenGL.  Dependiendo en tu tarjeta gráfica y sistema operativo "
+#~ "una u otra puede desempeñarse mejor que la otra."
+
+#~ msgid "OpenGL"
+#~ msgstr "OpenGL"
+
+#~ msgid "Invalid font for text drawing"
+#~ msgstr "Fuente inválida para dibujar texto"
+
+#~ msgid "Render/HDR/Toggle Tonemap"
+#~ msgstr "Render/HDR/Alternar Mapeo de Tonos"
+
+#~ msgid "Never"
+#~ msgstr "Nunca"
+
+#~ msgid "Tonemap"
+#~ msgstr "Mapeo de Tonos"
 
 #~ msgid "Could not initialize NDI"
 #~ msgstr "No pude inicializar NDI"

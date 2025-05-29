@@ -3,7 +3,6 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#!/bin/bash
 
 if [[ $BASH_SOURCE != $0 ]]; then
     dir=$BASH_SOURCE

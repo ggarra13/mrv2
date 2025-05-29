@@ -1960,8 +1960,8 @@ msgstr "Colonnes"
 msgid "Checkerboard"
 msgstr "Tableau de contrôle"
 
-msgid "OpenGL"
-msgstr "OpenGL"
+msgid "Graphics Card"
+msgstr "Carte graphique"
 
 msgid "Adjustments"
 msgstr "Ajustements"
@@ -2858,52 +2858,6 @@ msgstr "Fait apparaître l'annotation suivante sur tous les cadres."
 msgid "Notes"
 msgstr "Notes"
 
-msgid "Invalid index for add clip to timeline."
-msgstr "Index non valide pour ajouter un clip à la chronologie."
-
-msgid "Could not get current path."
-msgstr "Impossible d'obtenir le chemin actuel."
-
-msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
-msgstr ""
-"L'élément EDL « {0} » n'est plus chargé. Impossible d'annuler ou de refaire."
-
-msgid "Could not paste {0}.  Error {1}."
-msgstr "Impossible de coller {0}. Erreur {1}."
-
-msgid "Could not save .otio file: {0}"
-msgstr "Impossible d'enregistrer le fichier.otio : {0}"
-
-msgid "Error saving {0}. {1}"
-msgstr "Erreur lors de l'enregistrement {0}. {1}"
-
-msgid "Empty EDL file.  Not saving."
-msgstr "Fichier EDL vide. Pas d'enregistrement."
-
-msgid "Destination file is invalid."
-msgstr "Le fichier de destination n'est pas valide."
-
-msgid "You can only add clips to an .otio EDL playlist."
-msgstr "Vous ne pouvez ajouter des clips qu'à une playlist.otio EDL."
-
-msgid "Unknown media reference"
-msgstr "Référence médiatique inconnue"
-
-msgid "Track #{0} - {1}"
-msgstr "Voie #{0} - {1}"
-
-msgid "Cannot currently concatenate an .otio file."
-msgstr "Impossible de concater un fichier.otio."
-
-msgid "Cannot currently concatenate a directory."
-msgstr "Impossible de concater un répertoire actuellement."
-
-msgid "Could not append video track {0}"
-msgstr "Impossible d'ajouter la piste vidéo {0}"
-
-msgid "Could not append audio track {0}"
-msgstr "Impossible d'ajouter la piste audio {0}"
-
 msgid "Server started at port {0}."
 msgstr "Le serveur a démarré au port {0}."
 
@@ -3099,6 +3053,9 @@ msgstr "Taille de rendu : {0}"
 
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr "Informations de la couche d'image '{0}' : {1} {2}"
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "Infos du tampon hors écran : {0}"
 
 msgid "Unsupported output format: "
 msgstr "Format de sortie non supporté: "
@@ -3706,6 +3663,52 @@ msgstr "Modifier l'annotation texte"
 msgid "No item selected"
 msgstr "Aucun élément sélectionné"
 
+msgid "Invalid index for add clip to timeline."
+msgstr "Index non valide pour ajouter un clip à la chronologie."
+
+msgid "Could not get current path."
+msgstr "Impossible d'obtenir le chemin actuel."
+
+msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
+msgstr ""
+"L'élément EDL « {0} » n'est plus chargé. Impossible d'annuler ou de refaire."
+
+msgid "Could not paste {0}.  Error {1}."
+msgstr "Impossible de coller {0}. Erreur {1}."
+
+msgid "Could not save .otio file: {0}"
+msgstr "Impossible d'enregistrer le fichier.otio : {0}"
+
+msgid "Error saving {0}. {1}"
+msgstr "Erreur lors de l'enregistrement {0}. {1}"
+
+msgid "Empty EDL file.  Not saving."
+msgstr "Fichier EDL vide. Pas d'enregistrement."
+
+msgid "Destination file is invalid."
+msgstr "Le fichier de destination n'est pas valide."
+
+msgid "You can only add clips to an .otio EDL playlist."
+msgstr "Vous ne pouvez ajouter des clips qu'à une playlist.otio EDL."
+
+msgid "Unknown media reference"
+msgstr "Référence médiatique inconnue"
+
+msgid "Track #{0} - {1}"
+msgstr "Voie #{0} - {1}"
+
+msgid "Cannot currently concatenate an .otio file."
+msgstr "Impossible de concater un fichier.otio."
+
+msgid "Cannot currently concatenate a directory."
+msgstr "Impossible de concater un répertoire actuellement."
+
+msgid "Could not append video track {0}"
+msgstr "Impossible d'ajouter la piste vidéo {0}"
+
+msgid "Could not append audio track {0}"
+msgstr "Impossible d'ajouter la piste audio {0}"
+
 msgid "%s - Page %d"
 msgstr "%s - Page %d"
 
@@ -3804,8 +3807,8 @@ msgstr "1.66"
 msgid "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgstr "PMem: %<PRIu64> / %<PRIu64> MB VMem: %<PRIu64> / %<PRIu64> MB"
 
-msgid "Cache:"
-msgstr "Cache :"
+msgid "Cache: "
+msgstr "Cache: "
 
 msgid "    Used: %.2g of %zu Gb (%.2g %%)"
 msgstr "Utilisé : %.2g de %zu Gb (%.2g %%)"
@@ -3816,11 +3819,14 @@ msgstr "Avant V: % 4<PRIu64> A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "Derrière V: % 4<PRIu64> A: % 4<PRIu64>"
 
+msgid "HDR monitor found."
+msgstr "Moniteur HDR trouvé."
+
+msgid "HDR monitor not found or not configured."
+msgstr "Moniteur HDR non trouvé ou non configuré."
+
 msgid "Edit Text"
 msgstr "Modifier le texte"
-
-msgid "Invalid font for text drawing"
-msgstr "Police non valide pour le dessin de texte"
 
 msgid "Could not convert message to shape: "
 msgstr "Impossible de convertir le message en forme :"
@@ -4020,8 +4026,14 @@ msgstr "Rendre/HDR/Valeurs non valides"
 msgid "Render/HDR/Ignore Chromaticities"
 msgstr "Rendre/HDR/Ignorer les chromatismes"
 
-msgid "Render/HDR/Toggle Tonemap"
-msgstr "Rendre/HDR/Carte des tons"
+msgid "Render/HDR Data/From File"
+msgstr "Rendu/Données HDR/Depuis le fichier"
+
+msgid "Render/HDR Data/Inactive"
+msgstr "Rendu/Données HDR/Inactif"
+
+msgid "Render/HDR Data/Active"
+msgstr "Rendu/Données HDR/Actif"
 
 msgid "Render/HDR/Tonemap"
 msgstr "Rendre/HDR/Carte des tons"
@@ -5903,8 +5915,11 @@ msgstr "Ignorer"
 msgid "Apply"
 msgstr "Appliquer"
 
-msgid "Never"
-msgstr "Jamais"
+msgid "Inactive"
+msgstr "Inactif"
+
+msgid "Active"
+msgstr "Active"
 
 msgid "ST2094_40"
 msgstr "ST2094_40"
@@ -6402,8 +6417,8 @@ msgstr "HDR"
 msgid "Chromaticities"
 msgstr "Chromaticités"
 
-msgid "Tonemap"
-msgstr "Tonemap"
+msgid "HDR Data"
+msgstr "Données HDR"
 
 msgid "Tonemap Algorithm"
 msgstr "Algorithme de tonemap"
@@ -6753,23 +6768,23 @@ msgid "Blit Viewports"
 msgstr "Affiner les affichages"
 
 msgid ""
-"Viewports can be drawn with blitting or with OpenGL shaders.  Depending on "
-"graphics card and OS one can perform better then the other."
+"Viewports can be drawn with blitting or with shaders.  Depending on graphics "
+"card and OS one can perform better then the other."
 msgstr ""
-"Les affichages peuvent être dessinés avec des brouillards ou avec des "
-"shaders OpenGL. Selon la carte graphique et le système d'exploitation, l'un "
-"peut fonctionner mieux que l'autre."
+"Les fenêtres d’affichage peuvent être dessinées avec du blitting ou avec des "
+"shaders. Selon la carte graphique et le système d’exploitation, l’une ou "
+"l’autre méthode peut être plus performante."
 
 msgid "Blit Timeline"
 msgstr "Délai de fermeture"
 
 msgid ""
-"Timeline can be drawn with blitting or with OpenGL shaders.  Depending on "
-"graphics card and OS one can perform better then the other."
+"Timeline can be drawn with blitting or with shaders.  Depending on graphics "
+"card and OS one can perform better than the other."
 msgstr ""
-"La ligne de temps peut être dessinée avec des brouillages ou avec des "
-"shaders OpenGL. Selon la carte graphique et le système d'exploitation l'un "
-"peut fonctionner mieux que l'autre."
+"La timeline peut être dessinée avec du blitting ou avec des shaders. Selon "
+"la carte graphique et le système d’exploitation, l’une ou l’autre méthode "
+"peut être plus performante."
 
 msgid ""
 "For changes to take effect, you will need to re-open any movies already "
@@ -6941,9 +6956,6 @@ msgstr "Résumé"
 
 msgid "Preset Name"
 msgstr "Nom prédéfini"
-
-msgid "Active"
-msgstr "Active"
 
 msgid "Function"
 msgstr "Fonction"
@@ -7258,6 +7270,15 @@ msgstr "Normaliser automatiquement"
 
 msgid "Invalid Values"
 msgstr "Valeurs non valides"
+
+msgid "HDR Data From File"
+msgstr "Données HDR depuis le fichier"
+
+msgid "HDR Data Inactive"
+msgstr "Données HDR Inactif"
+
+msgid "HDR Data Active"
+msgstr "Données HDR Actif"
 
 msgid "Toggle HDR tonemap"
 msgstr "Commutation de la carte de tons HDR"
@@ -7666,174 +7687,3 @@ msgstr "Activer la fenêtre des touches d'amorçage"
 
 msgid "Toggle About Window"
 msgstr "Commutation à propos de la fenêtre"
-
-#~ msgid "Could not initialize NDI"
-#~ msgstr "Impossible d'initialisation de NDI"
-
-#~ msgid "You cannot set Window click through with a totally opaque window."
-#~ msgstr ""
-#~ "Vous ne pouvez pas paramétrer Fenêtre cliquer à travers avec une fenêtre "
-#~ "totalement opaque."
-
-#~ msgid "Linux Distribution: "
-#~ msgstr "Distribution Linux :"
-
-#~ msgid "Running from "
-#~ msgstr "Fuyant de"
-
-#~ msgid "Desktop: "
-#~ msgstr "Bureau & #160;:"
-
-#~ msgid "RLE"
-#~ msgstr "RLE"
-
-#~ msgid "ZIPS"
-#~ msgstr "ZIPS"
-
-#~ msgid "ZIP"
-#~ msgstr "ZIP"
-
-#~ msgid "PIZ"
-#~ msgstr "PIZ"
-
-#~ msgid "PXR24"
-#~ msgstr "PXR24"
-
-#~ msgid "B44"
-#~ msgstr "B44"
-
-#~ msgid "B44A"
-#~ msgstr "B44A"
-
-#~ msgid "DWAA"
-#~ msgstr "DWAA"
-
-#~ msgid "DWAB"
-#~ msgstr "DWAB"
-
-#~ msgid "File {0} is a network file.  Cannot do versioning."
-#~ msgstr ""
-#~ "Le fichier {0} est un fichier réseau. Impossible de faire la version."
-
-#~ msgid "Found new versioned file {0}."
-#~ msgstr "Trouvé un nouveau fichier {0}."
-
-#~ msgid "File {0} found but is not readable."
-#~ msgstr "Le fichier {0} a été trouvé mais n'est pas lisible."
-
-#~ msgid "Did not find new versioned file {0}."
-#~ msgstr "Il n'a pas trouvé de nouveau fichier {0}."
-
-#~ msgid "Iteration {0} matched prefix={1}"
-#~ msgstr "Itération {0} correspondant au préfixe={1}"
-
-#~ msgid "Iteration {0} matched version={1}"
-#~ msgstr "Itération {0} correspondant à la version={1}"
-
-#~ msgid "Iteration {0} matched suffix={1}"
-#~ msgstr "Itération {0} correspondant au suffixe={1}"
-
-#~ msgid "TV"
-#~ msgstr "TV"
-
-#~ msgid "PC"
-#~ msgstr "PC"
-
-#~ msgid "sRGB"
-#~ msgstr "sRGB"
-
-#~ msgid "Page Size: {0} x {1}"
-#~ msgstr "Taille de la page : {0} x {1}"
-
-#~ msgid "A0"
-#~ msgstr "A0"
-
-#~ msgid "A1"
-#~ msgstr "A1"
-
-#~ msgid "A2"
-#~ msgstr "A2"
-
-#~ msgid "A3"
-#~ msgstr "A3"
-
-#~ msgid "A4"
-#~ msgstr "A4"
-
-#~ msgid "A5"
-#~ msgstr "A5"
-
-#~ msgid "A6"
-#~ msgstr "A6"
-
-#~ msgid "A7"
-#~ msgstr "A7"
-
-#~ msgid "A8"
-#~ msgstr "A8"
-
-#~ msgid "A9"
-#~ msgstr "A9"
-
-#~ msgid "B0"
-#~ msgstr "B0"
-
-#~ msgid "B1"
-#~ msgstr "B1"
-
-#~ msgid "B2"
-#~ msgstr "B2"
-
-#~ msgid "B3"
-#~ msgstr "B3"
-
-#~ msgid "B4"
-#~ msgstr "B4"
-
-#~ msgid "B5"
-#~ msgstr "B5"
-
-#~ msgid "B6"
-#~ msgstr "B6"
-
-#~ msgid "B7"
-#~ msgstr "B7"
-
-#~ msgid "B8"
-#~ msgstr "B8"
-
-#~ msgid "B9"
-#~ msgstr "B9"
-
-#~ msgid "B10"
-#~ msgstr "B10"
-
-#~ msgid "C5E"
-#~ msgstr "C5E"
-
-#~ msgid "DLE"
-#~ msgstr "DLE"
-
-#~ msgid "Executive"
-#~ msgstr "Exécutif"
-
-#~ msgid "Folio"
-#~ msgstr "Folio"
-
-#~ msgid "Ledger"
-#~ msgstr "Livre-livre"
-
-#~ msgid "Legal"
-#~ msgstr "Jurisprudence"
-
-#~ msgid "Letter"
-#~ msgstr "Lettre"
-
-#~ msgid "Tabloid"
-#~ msgstr "Tabloïd"
-
-#~ msgid "Viewport Size: {0}  Render Size: {1}"
-#~ msgstr "Taille du point de vue : {0} Taille du rendu : {1}"
-
-#~ msgid "Font not found.  Will not use UTF-8."
-#~ msgstr "Police non trouvée. N'utilisera pas UTF-8."

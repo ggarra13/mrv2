@@ -31,7 +31,7 @@ namespace mrv
         SaveResolution resolution = SaveResolution::kSameSize;
 
 #ifdef TLRENDER_FFMPEG
-        tl::ffmpeg::Profile ffmpegProfile = tl::ffmpeg::Profile::None;
+        tl::ffmpeg::Profile ffmpegProfile = tl::ffmpeg::Profile::kNone;
         std::string ffmpegPreset;
         std::string ffmpegPixelFormat = "YUV420P";
         tl::ffmpeg::AudioCodec ffmpegAudioCodec = tl::ffmpeg::AudioCodec::AAC;

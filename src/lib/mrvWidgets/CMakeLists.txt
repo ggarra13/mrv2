@@ -125,7 +125,16 @@ set(SOURCES
 )
 
 
-list(APPEND LIBRARIES mrvFlmm mrvCore ${FLTK_LIBRARIES} ${FLTK_gl_LIBRARIES} ${JASPER_LIBRARIES} MINIZIP::minizip)
+list(APPEND LIBRARIES mrvFlmm mrvCore ${FLTK_LIBRARIES})
+list(APPEND LIBRARIES_PRIVATE  ${JASPER_LIBRARIES} MINIZIP::minizip)
+
+if(TLRENDER_GL AND MRV2_BACKEND STREQUAL "GL")
+    list(APPEND LIBRARIES ${FLTK_gl_LIBRARIES})
+endif()
+
+if(TLRENDER_VK AND MRV2_BACKEND STREQUAL "VK")
+    list(APPEND LIBRARIES ${FLTK_vk_LIBRARIES})
+endif()
 
 set(DISTRO_VERSION "")
 if(UNIX AND NOT APPLE)
@@ -135,10 +144,12 @@ if(UNIX AND NOT APPLE)
     
     execute_process(COMMAND ${CMAKE_COMMAND} -E env -- echo "$ENV{XDG_SESSION_DESKTOP}" OUTPUT_VARIABLE DESKTOP_ENV OUTPUT_STRIP_TRAILING_WHITESPACE)
     execute_process(COMMAND uname -r OUTPUT_VARIABLE KERNEL_INFO OUTPUT_STRIP_TRAILING_WHITESPACE)
-    
-    list(APPEND LIBRARIES OpenGL::OpenGL)
-    if(TLRENDER_WAYLAND)
-	list(APPEND LIBRARIES OpenGL::EGL)
+
+    if (MRV2_BACKEND STREQUAL "GL")
+	list(APPEND LIBRARIES OpenGL::OpenGL)
+	if(TLRENDER_WAYLAND)
+	    list(APPEND LIBRARIES OpenGL::EGL)
+	endif()
     endif()
 elseif(WIN32)
     execute_process(
@@ -202,7 +213,9 @@ if( WIN32 )
     list(APPEND LIBRARIES Crypt32.lib)
 endif()
 
-target_link_libraries(mrvWidgets PUBLIC ${LIBRARIES} )
+target_link_libraries(mrvWidgets
+    PUBLIC ${LIBRARIES}
+    PRIVATE ${LIBRARIES_PRIVATE})
 set_target_properties(mrvWidgets PROPERTIES FOLDER lib)
 
 install(TARGETS mrvWidgets

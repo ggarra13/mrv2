@@ -14,7 +14,7 @@ namespace mrv
      *
      * @return a triangle mesh.
      */
-    geom::TriangleMesh3 createEnvCube(float size)
+    geom::TriangleMesh3 createEnvCube(const float size, const bool flipped)
     {
         geom::TriangleMesh3 out;
 
@@ -32,61 +32,126 @@ namespace mrv
         out.v.push_back(math::Vector3f(size, -size, size));
         out.v.push_back(math::Vector3f(-size, -size, size));
 
-        out.t.push_back(math::Vector2f(1.F, t5));
-        out.t.push_back(math::Vector2f(0.F, t5));
-        out.t.push_back(math::Vector2f(0.F, t4));
-        out.t.push_back(math::Vector2f(1.F, t4));
+        if (flipped)
+        {
+            out.t.push_back(math::Vector2f(1.F, t2));
+            out.t.push_back(math::Vector2f(0.F, t2));
+            out.t.push_back(math::Vector2f(0.F, t1));
+            out.t.push_back(math::Vector2f(1.F, t1));
+        }
+        else
+        {
+            out.t.push_back(math::Vector2f(1.F, t5));
+            out.t.push_back(math::Vector2f(0.F, t5));
+            out.t.push_back(math::Vector2f(0.F, t4));
+            out.t.push_back(math::Vector2f(1.F, t4));
+        }
 
         // *LEFT* Face (OK)
         out.v.push_back(math::Vector3f(-size, size, -size));
         out.v.push_back(math::Vector3f(-size, -size, -size));
         out.v.push_back(math::Vector3f(size, -size, -size));
         out.v.push_back(math::Vector3f(size, size, -size));
-        out.t.push_back(math::Vector2f(0.F, t6));
-        out.t.push_back(math::Vector2f(0.F, t5));
-        out.t.push_back(math::Vector2f(1.F, t5));
-        out.t.push_back(math::Vector2f(1.F, t6));
 
-        // *BOTTOM* Face (OK)
-        out.v.push_back(math::Vector3f(-size, -size, -size));
-        out.v.push_back(math::Vector3f(-size, -size, size));
-        out.v.push_back(math::Vector3f(size, -size, size));
-        out.v.push_back(math::Vector3f(size, -size, -size));
-        out.t.push_back(math::Vector2f(1.0, t3));
-        out.t.push_back(math::Vector2f(0.0, t3));
-        out.t.push_back(math::Vector2f(0.0, t2));
-        out.t.push_back(math::Vector2f(1.0, t2));
-
+        if (flipped)
+        {
+            out.t.push_back(math::Vector2f(0.F, t1));
+            out.t.push_back(math::Vector2f(0.F, t0));
+            out.t.push_back(math::Vector2f(1.F, t0));
+            out.t.push_back(math::Vector2f(1.F, t1));
+        }
+        else
+        {
+            out.t.push_back(math::Vector2f(0.F, t6));
+            out.t.push_back(math::Vector2f(0.F, t5));
+            out.t.push_back(math::Vector2f(1.F, t5));
+            out.t.push_back(math::Vector2f(1.F, t6));
+        }
+        
         // *TOP* Face (OK)
+        out.v.push_back(math::Vector3f(-size, -size, -size));
+        out.v.push_back(math::Vector3f(-size, -size, size));
+        out.v.push_back(math::Vector3f(size, -size, size));
+        out.v.push_back(math::Vector3f(size, -size, -size));
+
+        if (flipped)
+        {
+            out.t.push_back(math::Vector2f(1.0, t3));
+            out.t.push_back(math::Vector2f(0.0, t3));
+            out.t.push_back(math::Vector2f(0.0, t2));
+            out.t.push_back(math::Vector2f(1.0, t2));
+        }
+        else
+        {
+            out.t.push_back(math::Vector2f(1.0, t3));
+            out.t.push_back(math::Vector2f(0.0, t3));
+            out.t.push_back(math::Vector2f(0.0, t2));
+            out.t.push_back(math::Vector2f(1.0, t2));
+        }
+        
+        // *BOTTOM* Face (OK)
         out.v.push_back(math::Vector3f(-size, size, -size));
         out.v.push_back(math::Vector3f(size, size, -size));
         out.v.push_back(math::Vector3f(size, size, size));
         out.v.push_back(math::Vector3f(-size, size, size));
-        out.t.push_back(math::Vector2f(1.0, t3));
-        out.t.push_back(math::Vector2f(1.0, t4));
-        out.t.push_back(math::Vector2f(0.0, t4));
-        out.t.push_back(math::Vector2f(0.0, t3));
 
-        // *FRONT* Face (OK)
+        if (flipped)
+        {
+            out.t.push_back(math::Vector2f(1.0, t3));
+            out.t.push_back(math::Vector2f(1.0, t4));
+            out.t.push_back(math::Vector2f(0.0, t4));
+            out.t.push_back(math::Vector2f(0.0, t3));
+        }
+        else
+        {
+            out.t.push_back(math::Vector2f(1.0, t3));
+            out.t.push_back(math::Vector2f(1.0, t4));
+            out.t.push_back(math::Vector2f(0.0, t4));
+            out.t.push_back(math::Vector2f(0.0, t3));
+        }
+        
+        // *BACK* Face (OK)
         out.v.push_back(math::Vector3f(size, size, -size));
         out.v.push_back(math::Vector3f(size, -size, -size));
         out.v.push_back(math::Vector3f(size, -size, size));
         out.v.push_back(math::Vector3f(size, size, size));
-        out.t.push_back(math::Vector2f(0.0, t2));
-        out.t.push_back(math::Vector2f(0.0, t1));
-        out.t.push_back(math::Vector2f(1.0, t1));
-        out.t.push_back(math::Vector2f(1.0, t2));
 
-        // *BACK* Face (OK)
+        if (flipped)
+        {
+            out.t.push_back(math::Vector2f(0.0, t5));
+            out.t.push_back(math::Vector2f(0.0, t4));
+            out.t.push_back(math::Vector2f(1.0, t4));
+            out.t.push_back(math::Vector2f(1.0, t5));
+        }
+        else
+        {
+            out.t.push_back(math::Vector2f(0.0, t2));
+            out.t.push_back(math::Vector2f(0.0, t1));
+            out.t.push_back(math::Vector2f(1.0, t1));
+            out.t.push_back(math::Vector2f(1.0, t2));
+        }
+        
+        // *FRONT* Face (OK)
         out.v.push_back(math::Vector3f(-size, size, size));
         out.v.push_back(math::Vector3f(-size, -size, size));
         out.v.push_back(math::Vector3f(-size, -size, -size));
         out.v.push_back(math::Vector3f(-size, size, -size));
-        out.t.push_back(math::Vector2f(0.0, t1));
-        out.t.push_back(math::Vector2f(0.0, t0));
-        out.t.push_back(math::Vector2f(1.0, t0));
-        out.t.push_back(math::Vector2f(1.0, t1));
 
+        if (flipped)
+        {
+            out.t.push_back(math::Vector2f(0.0, t6));
+            out.t.push_back(math::Vector2f(0.0, t5));
+            out.t.push_back(math::Vector2f(1.0, t5));
+            out.t.push_back(math::Vector2f(1.0, t6));
+        }
+        else
+        {
+            out.t.push_back(math::Vector2f(0.0, t1));
+            out.t.push_back(math::Vector2f(0.0, t0));
+            out.t.push_back(math::Vector2f(1.0, t0));
+            out.t.push_back(math::Vector2f(1.0, t1));
+        }
+        
         geom::Triangle3 triangle;
         size_t numVertices = out.v.size();
         size_t numQuads = numVertices / 4;

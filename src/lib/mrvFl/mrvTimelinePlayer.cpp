@@ -2,29 +2,26 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+
+#include "mrViewer.h"
+
 #include "mrvFl/mrvTimelinePlayer.h"
+#include "mrvFl/mrvPreferences.h"
+#include "mrvFl/mrvIO.h"
+
+#include "mrvPanels/mrvPanelsCallbacks.h"
+
+#include "mrvNetwork/mrvTCP.h"
+
+#include "mrvCore/mrvMath.h"
+
+#include <tlDraw/Annotation.h>
 
 #include <tlCore/Math.h>
 #include <tlCore/Time.h>
 
 #include <FL/Fl.H>
 
-#include "mrvCore/mrvMath.h"
-
-#include "mrvDraw/Annotation.h"
-
-#include "mrvFl/mrvPreferences.h"
-#include "mrvFl/mrvIO.h"
-
-#ifdef TLRENDER_GL
-#    include "mrvGL/mrvTimelineViewport.h"
-#endif
-
-#include "mrvPanels/mrvPanelsCallbacks.h"
-
-#include "mrvNetwork/mrvTCP.h"
-
-#include "mrViewer.h"
 
 namespace
 {
@@ -33,7 +30,8 @@ namespace
 
 namespace
 {
-    const double kTimeout = 0.008;
+    // 120 fps per seconds
+    const double kTimeout = 0.0083333;
 }
 
 namespace mrv
@@ -554,7 +552,7 @@ namespace mrv
         _p->player->setAudioOffset(value);
     }
 
-    void TimelinePlayer::setTimelineViewport(TimelineViewport* view)
+    void TimelinePlayer::setTimelineViewport(MyViewport* view)
     {
         timelineViewport = view;
     }

@@ -1,6 +1,7 @@
-// SPDX-License-Identifier: BSD-3-Clause
+// SPDX14-License-Identifier: BSD-3-Clause
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
+
 
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Double_Window.H>
@@ -10,8 +11,6 @@
 #include "mrvUI/mrvDesktop.h"
 
 #include "mrViewer.h"
-
-#include <FL/platform.H>
 
 namespace mrv
 {

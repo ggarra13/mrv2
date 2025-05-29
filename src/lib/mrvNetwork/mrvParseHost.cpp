@@ -2,11 +2,13 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include "mrViewer.h"
+
+#include "mrvApp/mrvApp.h"
+#include "mrvApp/mrvSettingsObject.h"
+
 #include "mrvNetwork/mrvParseHost.h"
 
-#include "mrvApp/mrvSettingsObject.h"
-#include "mrvApp/mrvApp.h"
-#include "mrViewer.h"
 
 namespace mrv
 {

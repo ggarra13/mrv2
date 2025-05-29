@@ -28,10 +28,7 @@ set(SOURCES
     mrvTimelineItemOptions.cpp
 )
 
-set( LIBRARIES mrvCore)
-if(TLRENDER_GL)
-    list(PREPEND LIBRARIES mrvGL)
-endif()
+set( LIBRARIES mrvFl)
 
 if(MRV2_NETWORK)
     list(APPEND SOURCES
@@ -63,11 +60,8 @@ endif()
 add_library(mrvNetwork ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-
-
 target_link_libraries(mrvNetwork PUBLIC ${LIBRARIES} )
 set_target_properties(mrvNetwork PROPERTIES FOLDER lib)
-add_dependencies( mrvNetwork mrvFl )
 
 install(TARGETS mrvNetwork
     ARCHIVE DESTINATION lib

@@ -186,6 +186,7 @@ namespace mrv
         // p.mute = p.settings->getValue<bool>("Audio/Mute");
 
         ui->uiMain->show();
+        ui->uiView->fill_menu(ui->uiMenuBar);
         ui->uiView->take_focus();
     }
 

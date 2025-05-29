@@ -144,7 +144,7 @@ namespace mrv
         std::stringstream ss;
         ss << o.input;
         s << "<mrv2.image.Stereo3DOptions input="
-          << (ss.str() == "None" ? "kNone" : ss.str()) << " output=" << o.output
+          << (ss.str() == "None" ? "None" : ss.str()) << " output=" << o.output
           << " eyeSeparation=" << o.eyeSeparation
           << " swapEyes=" << (o.swapEyes ? "True" : "False") << ">";
         return s;

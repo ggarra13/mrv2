@@ -7,7 +7,7 @@ do
     if [[ $FILE == *.cpp || $FILE == *.h ]]; then
 	echo "Running clang-format on $FILE"
 	if [[ -e $FILE ]]; then
-            clang-format -i $FILE
+            #clang-format -i $FILE
 	    chmod 0644 $FILE
 	    dos2unix $FILE
 	    git add $FILE

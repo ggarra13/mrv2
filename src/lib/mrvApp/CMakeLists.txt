@@ -23,12 +23,10 @@ set(SOURCES
 add_library(mrvApp ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-set( GL_LIBRARY )
-if (TLRENDER_GL)
-    set( GL_LIBRARY mrvGL )
-endif()
+set(LIBRARIES mrvBaseApp mrvPanels mrvFLU mrvOptions
+    tlRender::tlDevice ${FLTK_LIBRARIES})
 
-target_link_libraries(mrvApp PUBLIC mrvBaseApp mrvPanels mrvNetwork mrvDraw mrvFLU mrvWidgets mrvOptions ${FLTK_LIBRARIES} )
+target_link_libraries(mrvApp PUBLIC ${LIBRARIES} )
 target_include_directories(mrvApp PUBLIC ${INCLUDES} )
 set_target_properties(mrvApp PROPERTIES FOLDER lib)
 

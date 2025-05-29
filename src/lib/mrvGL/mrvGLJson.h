@@ -4,23 +4,16 @@
 
 #pragma once
 
-#include "mrvDraw/Annotation.h"
+#include <tlDraw/Annotation.h>
 
-#include "mrvNetwork/mrvMessage.h"
 
 namespace mrv
 {
-    namespace draw
-    {
-        //! Translate a nlohmann::json message to a draw::Shape.
-        std::shared_ptr< Shape > messageToShape(const Message&);
+    using namespace tl::draw;
+    
+    //! Translate a nlohmann::json message to a draw::Shape.
+    std::shared_ptr< Shape > messageToShape(const nlohmann::json&);
 
-        //! Translate a tl::draw::Shape to a nlohmann::json message.
-        Message shapeToMessage(const std::shared_ptr< Shape > shape);
-
-        void to_json(nlohmann::json& json, const Annotation& value);
-
-        void from_json(const nlohmann::json& json, Annotation& value);
-    } // namespace draw
-
-} // namespace mrv
+    //! Translate a tl::draw::Shape to a nlohmann::json message.
+    nlohmann::json shapeToMessage(const std::shared_ptr< Shape > shape);
+}

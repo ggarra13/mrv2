@@ -1,0 +1,3 @@
+configure -text
+*.in text eol=lf
+* text=auto

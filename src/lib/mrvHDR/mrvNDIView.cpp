@@ -16,12 +16,16 @@
 #include <tlCore/HDR.h>
 #include <tlCore/StringFormat.h>
 
+#include <tlVk/Mesh.h>
+
 #include <rapidxml/rapidxml.hpp>
 
 #include <tlDevice/NDI/NDI.h>
 
 #include "mrvCore/mrvI8N.h"
+
 #include "mrvHDR/mrvNDICallbacks.h"
+#include "mrvHDR/mrvOS.h"
 
 #include "hdr/mrvHDRApp.h"
 #include "mrvNDIView.h"
@@ -39,13 +43,11 @@ extern "C"
 #include <FL/platform.H>
 #include <FL/vk.h>
 #include <FL/Fl.H>
+#include <FL/vk_enum_string_helper.h>
 #include <FL/Fl_Vk_Window.H>
 #include <FL/Fl_Vk_Utils.H>
 #include <FL/Fl_Menu_.H>
-#ifdef __linux__
-#    undef None // macro defined in X11 config files
-#    undef Status
-#endif
+#include <FL/Fl_Menu_Button.H>
 
 namespace
 {
@@ -54,6 +56,7 @@ namespace
 
 namespace
 {
+    // \@bug: not needed?
     float apply_inverse_pq(float x)
     {
         float m1 = 0.8359375f;
@@ -73,7 +76,8 @@ namespace
     }
 
     // Function to unescape &quot; back to normal quotes (")
-    std::string unescape_quotes_from_xml(const std::string& xml_escaped_str)
+    inline std::string
+    unescape_quotes_from_xml(const std::string& xml_escaped_str)
     {
         std::string json_str;
         size_t pos = 0;
@@ -92,318 +96,135 @@ namespace
         }
         return json_str;
     }
+
+    VkFormat to_vk_format(pl_fmt fmt)
+    {
+        int size = fmt->internal_size / fmt->num_components;
+
+        switch (fmt->num_components)
+        {
+        case 1:
+            if (fmt->type == PL_FMT_FLOAT)
+            {
+                return size == 2 ? VK_FORMAT_R16_SFLOAT : VK_FORMAT_R32_SFLOAT;
+            }
+            else if (fmt->type == PL_FMT_UINT)
+            {
+                return size == 4 ? VK_FORMAT_R32_UINT
+                                 : (size == 2 ? VK_FORMAT_R16_UINT
+                                              : VK_FORMAT_R8_UINT);
+            }
+            else if (fmt->type == PL_FMT_SINT)
+            {
+                return size == 4 ? VK_FORMAT_R32_SINT
+                                 : (size == 2 ? VK_FORMAT_R16_SINT
+                                              : VK_FORMAT_R8_SINT);
+            }
+            else if (fmt->type == PL_FMT_UNORM)
+            {
+                return size == 2 ? VK_FORMAT_R16_UNORM : VK_FORMAT_R8_UNORM;
+            }
+            else if (fmt->type == PL_FMT_SNORM)
+            {
+                return size == 2 ? VK_FORMAT_R16_SNORM : VK_FORMAT_R8_SNORM;
+            }
+            break;
+        case 2:
+            if (fmt->type == PL_FMT_FLOAT)
+            {
+                return size == 2 ? VK_FORMAT_R16G16_SFLOAT
+                                 : VK_FORMAT_R32G32_SFLOAT;
+            }
+            else if (fmt->type == PL_FMT_UINT)
+            {
+                return size == 4 ? VK_FORMAT_R32G32_UINT
+                                 : (size == 2 ? VK_FORMAT_R16G16_UINT
+                                              : VK_FORMAT_R8G8_UINT);
+            }
+            else if (fmt->type == PL_FMT_SINT)
+            {
+                return size == 4 ? VK_FORMAT_R32G32_SINT
+                                 : (size == 2 ? VK_FORMAT_R16G16_SINT
+                                              : VK_FORMAT_R8G8_SINT);
+            }
+            else if (fmt->type == PL_FMT_UNORM)
+            {
+                return size == 2 ? VK_FORMAT_R16G16_UNORM
+                                 : VK_FORMAT_R8G8_UNORM;
+            }
+            else if (fmt->type == PL_FMT_SNORM)
+            {
+                return size == 2 ? VK_FORMAT_R16G16_SNORM
+                                 : VK_FORMAT_R8G8_SNORM;
+            }
+            break;
+        case 3:
+            if (fmt->type == PL_FMT_FLOAT)
+            {
+                return size == 2 ? VK_FORMAT_R16G16B16_SFLOAT
+                                 : VK_FORMAT_R32G32B32_SFLOAT;
+            }
+            else if (fmt->type == PL_FMT_UINT)
+            {
+                return size == 4 ? VK_FORMAT_R32G32B32_UINT
+                                 : (size == 2 ? VK_FORMAT_R16G16B16_UINT
+                                              : VK_FORMAT_R8G8B8_UINT);
+            }
+            else if (fmt->type == PL_FMT_SINT)
+            {
+                return size == 4 ? VK_FORMAT_R32G32B32_SINT
+                                 : (size == 2 ? VK_FORMAT_R16G16B16_SINT
+                                              : VK_FORMAT_R8G8B8_SINT);
+            }
+            else if (fmt->type == PL_FMT_UNORM)
+            {
+                return size == 2 ? VK_FORMAT_R16G16B16_UNORM
+                                 : VK_FORMAT_R8G8B8_UNORM;
+            }
+            else if (fmt->type == PL_FMT_SNORM)
+            {
+                return size == 2 ? VK_FORMAT_R16G16B16_SNORM
+                                 : VK_FORMAT_R8G8B8_SNORM;
+            }
+            break;
+        case 4:
+            if (fmt->type == PL_FMT_FLOAT)
+            {
+                return size == 2 ? VK_FORMAT_R16G16B16A16_SFLOAT
+                                 : VK_FORMAT_R32G32B32A32_SFLOAT;
+            }
+            else if (fmt->type == PL_FMT_UINT)
+            {
+                return size == 4 ? VK_FORMAT_R32G32B32A32_UINT
+                                 : (size == 2 ? VK_FORMAT_R16G16B16A16_UINT
+                                              : VK_FORMAT_R8G8B8A8_UINT);
+            }
+            else if (fmt->type == PL_FMT_SINT)
+            {
+                return size == 4 ? VK_FORMAT_R32G32B32A32_SINT
+                                 : (size == 2 ? VK_FORMAT_R16G16B16A16_SINT
+                                              : VK_FORMAT_R8G8B8A8_SINT);
+            }
+            else if (fmt->type == PL_FMT_UNORM)
+            {
+                return size == 2 ? VK_FORMAT_R16G16B16A16_UNORM
+                                 : VK_FORMAT_R8G8B8A8_UNORM;
+            }
+            else if (fmt->type == PL_FMT_SNORM)
+            {
+                return size == 2 ? VK_FORMAT_R16G16B16A16_SNORM
+                                 : VK_FORMAT_R8G8B8A8_SNORM;
+            }
+            break;
+        }
+
+        return VK_FORMAT_UNDEFINED;
+    }
+
 } // namespace
 
 namespace mrv
 {
-    VkImage NDIView::createImage(
-        VkImageType imageType, uint32_t width, uint32_t height, uint32_t depth,
-        VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage)
-    {
-
-        VkImageCreateInfo imageInfo = {};
-        imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
-        imageInfo.imageType = imageType;
-        imageInfo.format = format;
-        imageInfo.extent.width = width;
-        imageInfo.extent.height = height;
-        imageInfo.extent.depth = depth;
-        imageInfo.mipLevels = 1;
-        imageInfo.arrayLayers = 1;
-        imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
-        imageInfo.tiling = tiling;
-        imageInfo.usage = usage;
-        imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-        imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-
-        VkImage image;
-        if (vkCreateImage(m_device, &imageInfo, nullptr, &image) != VK_SUCCESS)
-        {
-            throw std::runtime_error("Failed to create image");
-        }
-        return image;
-    }
-
-    VkDeviceMemory NDIView::allocateAndBindImageMemory(VkImage image)
-    {
-        VkMemoryRequirements memRequirements;
-        vkGetImageMemoryRequirements(m_device, image, &memRequirements);
-
-        VkPhysicalDeviceMemoryProperties memProperties;
-        vkGetPhysicalDeviceMemoryProperties(m_gpu, &memProperties);
-
-        uint32_t memoryTypeIndex = 0;
-        for (uint32_t i = 0; i < memProperties.memoryTypeCount; ++i)
-        {
-            if ((memRequirements.memoryTypeBits & (1 << i)) &&
-                (memProperties.memoryTypes[i].propertyFlags &
-                 VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT))
-            {
-                memoryTypeIndex = i;
-                break;
-            }
-        }
-
-        VkMemoryAllocateInfo allocInfo = {};
-        allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-        allocInfo.allocationSize = memRequirements.size;
-        allocInfo.memoryTypeIndex = memoryTypeIndex;
-
-        VkDeviceMemory imageMemory;
-        if (vkAllocateMemory(m_device, &allocInfo, nullptr, &imageMemory) !=
-            VK_SUCCESS)
-        {
-            throw std::runtime_error("Failed to allocate image memory");
-        }
-
-        vkBindImageMemory(m_device, image, imageMemory, 0);
-        return imageMemory;
-    }
-
-    VkCommandBuffer NDIView::beginSingleTimeCommands()
-    {
-        VkCommandBufferAllocateInfo allocInfo = {};
-        allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-        allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-        allocInfo.commandPool = m_cmd_pool;
-        allocInfo.commandBufferCount = 1;
-
-        VkCommandBuffer commandBuffer;
-        vkAllocateCommandBuffers(m_device, &allocInfo, &commandBuffer);
-
-        VkCommandBufferBeginInfo beginInfo = {};
-        beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-        beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-
-        vkBeginCommandBuffer(commandBuffer, &beginInfo);
-        return commandBuffer;
-    }
-
-    void NDIView::endSingleTimeCommands(VkCommandBuffer commandBuffer)
-    {
-        vkEndCommandBuffer(commandBuffer);
-
-        VkSubmitInfo submitInfo = {};
-        submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-        submitInfo.commandBufferCount = 1;
-        submitInfo.pCommandBuffers = &commandBuffer;
-
-        vkQueueSubmit(m_queue, 1, &submitInfo, VK_NULL_HANDLE);
-        vkQueueWaitIdle(m_queue);
-
-        vkFreeCommandBuffers(m_device, m_cmd_pool, 1, &commandBuffer);
-    }
-
-    //
-    // \@todo: change for set_image_layout
-    //
-    void NDIView::transitionImageLayout(
-        VkImage image, VkImageLayout oldLayout, VkImageLayout newLayout)
-    {
-        VkCommandBuffer commandBuffer = beginSingleTimeCommands();
-
-        VkImageMemoryBarrier barrier = {};
-        barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-        barrier.oldLayout = oldLayout;
-        barrier.newLayout = newLayout;
-        barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-        barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-        barrier.image = image;
-        barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-        barrier.subresourceRange.baseMipLevel = 0;
-        barrier.subresourceRange.levelCount = 1;
-        barrier.subresourceRange.baseArrayLayer = 0;
-        barrier.subresourceRange.layerCount = 1;
-
-        VkPipelineStageFlags sourceStage;
-        VkPipelineStageFlags destinationStage;
-
-        if (oldLayout == VK_IMAGE_LAYOUT_UNDEFINED &&
-            newLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL)
-        {
-            barrier.srcAccessMask = 0;
-            barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
-            sourceStage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
-            destinationStage = VK_PIPELINE_STAGE_TRANSFER_BIT;
-        }
-        else if (
-            oldLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL &&
-            newLayout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
-        {
-            barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
-            barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
-            sourceStage = VK_PIPELINE_STAGE_TRANSFER_BIT;
-            destinationStage = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-        }
-        else
-        {
-            throw std::runtime_error("Unsupported layout transition");
-        }
-
-        vkCmdPipelineBarrier(
-            commandBuffer, sourceStage, destinationStage, 0, 0, nullptr, 0,
-            nullptr, 1, &barrier);
-
-        endSingleTimeCommands(commandBuffer);
-    }
-
-    void NDIView::createBuffer(
-        VkDeviceSize size, VkBufferUsageFlags usage,
-        VkMemoryPropertyFlags properties, VkBuffer& buffer,
-        VkDeviceMemory& bufferMemory)
-    {
-        VkBufferCreateInfo bufferInfo = {};
-        bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-        bufferInfo.size = size;
-        bufferInfo.usage = usage;
-        bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-
-        if (vkCreateBuffer(m_device, &bufferInfo, nullptr, &buffer) !=
-            VK_SUCCESS)
-        {
-            throw std::runtime_error("Failed to create buffer");
-        }
-
-        VkMemoryRequirements memRequirements;
-        vkGetBufferMemoryRequirements(m_device, buffer, &memRequirements);
-
-        VkPhysicalDeviceMemoryProperties memProperties;
-        vkGetPhysicalDeviceMemoryProperties(m_gpu, &memProperties);
-
-        uint32_t memoryTypeIndex = 0;
-        for (uint32_t i = 0; i < memProperties.memoryTypeCount; ++i)
-        {
-            if ((memRequirements.memoryTypeBits & (1 << i)) &&
-                (memProperties.memoryTypes[i].propertyFlags & properties) ==
-                    properties)
-            {
-                memoryTypeIndex = i;
-                break;
-            }
-        }
-
-        VkMemoryAllocateInfo allocInfo = {};
-        allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-        allocInfo.allocationSize = memRequirements.size;
-        allocInfo.memoryTypeIndex = memoryTypeIndex;
-
-        if (vkAllocateMemory(m_device, &allocInfo, nullptr, &bufferMemory) !=
-            VK_SUCCESS)
-        {
-            throw std::runtime_error("Failed to allocate buffer memory");
-        }
-
-        vkBindBufferMemory(m_device, buffer, bufferMemory, 0);
-    }
-
-    void NDIView::uploadTextureData(
-        VkImage image, uint32_t width, uint32_t height, uint32_t depth,
-        VkFormat format, const int pixel_fmt_size, const void* data)
-    {
-        VkResult result;
-
-        const int channels = 4; // RGBA
-
-        VkDeviceSize imageSize =
-            width * height * depth * channels * pixel_fmt_size;
-
-        // Create staging buffer
-        VkBuffer stagingBuffer;
-        VkDeviceMemory stagingBufferMemory;
-
-        createBuffer(
-            imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
-            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-            stagingBuffer, stagingBufferMemory);
-
-        // Copy data to staging buffer
-        void* mappedData;
-        result = vkMapMemory(
-            m_device, stagingBufferMemory, 0, imageSize, 0, &mappedData);
-        VK_CHECK_RESULT(result);
-
-        std::memcpy(mappedData, data, static_cast<size_t>(imageSize));
-        vkUnmapMemory(m_device, stagingBufferMemory);
-
-        // Copy staging buffer to image
-        VkCommandBuffer commandBuffer = beginSingleTimeCommands();
-
-        VkBufferImageCopy region = {};
-        region.bufferOffset = 0;
-        region.bufferRowLength = 0;
-        region.bufferImageHeight = 0;
-        region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-        region.imageSubresource.mipLevel = 0;
-        region.imageSubresource.baseArrayLayer = 0;
-        region.imageSubresource.layerCount = 1;
-        region.imageOffset = {0, 0, 0};
-        region.imageExtent = {width, height, depth};
-
-        vkCmdCopyBufferToImage(
-            commandBuffer, stagingBuffer, image,
-            VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
-
-        endSingleTimeCommands(commandBuffer);
-
-        // Clean up staging buffer
-        vkDestroyBuffer(m_device, stagingBuffer, nullptr);
-        vkFreeMemory(m_device, stagingBufferMemory, nullptr);
-    }
-
-    VkImageView NDIView::createImageView(
-        VkImage image, VkFormat format, VkImageType imageType)
-    {
-        VkImageViewCreateInfo viewInfo = {};
-        viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-        viewInfo.image = image;
-        viewInfo.viewType =
-            (imageType == VK_IMAGE_TYPE_1D)   ? VK_IMAGE_VIEW_TYPE_1D
-            : (imageType == VK_IMAGE_TYPE_2D) ? VK_IMAGE_VIEW_TYPE_2D
-                                              : VK_IMAGE_VIEW_TYPE_3D;
-        viewInfo.format = format;
-        viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-        viewInfo.subresourceRange.baseMipLevel = 0;
-        viewInfo.subresourceRange.levelCount = 1;
-        viewInfo.subresourceRange.baseArrayLayer = 0;
-        viewInfo.subresourceRange.layerCount = 1;
-
-        VkImageView imageView;
-        if (vkCreateImageView(m_device, &viewInfo, nullptr, &imageView) !=
-            VK_SUCCESS)
-        {
-            throw std::runtime_error("Failed to create image view");
-        }
-        return imageView;
-    }
-
-    VkSampler NDIView::createSampler()
-    {
-        VkSamplerCreateInfo samplerInfo = {};
-        samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
-        samplerInfo.magFilter = VK_FILTER_LINEAR;
-        samplerInfo.minFilter = VK_FILTER_LINEAR;
-        samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
-        samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-        samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-        samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-        samplerInfo.mipLodBias = 0.0f;
-        samplerInfo.anisotropyEnable = VK_FALSE;
-        samplerInfo.maxAnisotropy = 1.0f;
-        samplerInfo.compareEnable = VK_FALSE;
-        samplerInfo.minLod = 0.0f;
-        samplerInfo.maxLod = 0.0f;
-        samplerInfo.borderColor = VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK;
-        samplerInfo.unnormalizedCoordinates = VK_FALSE;
-
-        VkSampler sampler;
-        if (vkCreateSampler(m_device, &samplerInfo, nullptr, &sampler) !=
-            VK_SUCCESS)
-        {
-            throw std::runtime_error("Failed to create sampler");
-        }
-        return sampler;
-    }
 
     void NDIView::addGPUTextures(const pl_shader_res* res)
     {
@@ -417,28 +238,17 @@ namespace mrv
             case PL_DESC_SAMPLED_TEX:
             {
                 pl_tex tex = reinterpret_cast<pl_tex>(sd->binding.object);
+                pl_fmt fmt = tex->params.format;
 
                 int dims = pl_tex_params_dimension(tex->params);
                 assert(dims >= 1 && dims <= 3);
 
                 const char* samplerName = sd->desc.name;
+                int pixel_fmt_size = fmt->internal_size / fmt->num_components;
+                int channels = fmt->num_components;
 
                 // Map libplacebo format to Vulkan format
-                VkFormat imageFormat;
-
-                int pixel_fmt_size;
-                pixel_fmt_size = sizeof(float);
-                imageFormat = VK_FORMAT_R32G32B32A32_SFLOAT; // Default for 3D
-                if (dims == 2)
-                    imageFormat = VK_FORMAT_R32G32B32_SFLOAT;
-                if (dims == 1)
-                    imageFormat = VK_FORMAT_R32_SFLOAT;
-                else if (dims == 3)
-                {
-                    pixel_fmt_size = sizeof(uint16_t);
-                    imageFormat =
-                        VK_FORMAT_R16G16B16A16_UNORM; // Default for 3D
-                }
+                VkFormat imageFormat = to_vk_format(fmt);
 
                 // Texture dimensions
                 uint32_t width = tex->params.w;
@@ -464,38 +274,11 @@ namespace mrv
                                         : (dims == 2) ? VK_IMAGE_TYPE_2D
                                                       : VK_IMAGE_TYPE_3D;
 
-                // Create Vulkan image
-                VkImage image =
-                    createImage(imageType, width, height, depth, imageFormat);
-
-                // Allocate and bind memory for the image
-                VkDeviceMemory imageMemory = allocateAndBindImageMemory(image);
-
-                // Transition image layout to TRANSFER_DST_OPTIMAL
-                transitionImageLayout(
-                    image, VK_IMAGE_LAYOUT_UNDEFINED,
-                    VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-
-                // Upload texture data
-                uploadTextureData(
-                    image, width, height, depth, imageFormat, pixel_fmt_size,
-                    values);
-
-                // Transition image layout to SHADER_READ_ONLY_OPTIMAL
-                transitionImageLayout(
-                    image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                    VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-
-                // Create image view
-                VkImageView imageView =
-                    createImageView(image, imageFormat, imageType);
-
-                // Create sampler (equivalent to GL_LINEAR)
-                VkSampler sampler = createSampler();
-
-                Fl_Vk_Texture texture(
-                    imageType, imageFormat, image, imageView, sampler,
-                    imageMemory, samplerName, width, height, depth);
+                auto texture = vlk::Texture::create(ctx, imageType, width,
+                                                    height, depth, imageFormat,
+                                                    samplerName);
+                texture->copy(reinterpret_cast<const uint8_t*>(values),
+                              width * height * depth * pixel_fmt_size * channels);
                 m_textures.push_back(texture);
                 break;
             }
@@ -572,6 +355,9 @@ namespace mrv
 
     struct NDIView::Private
     {
+        // FLTK state variables
+        bool useHDRMetadata = false;
+
         NDIlib_find_instance_t NDI_find = nullptr;
         NDIlib_recv_instance_t NDI_recv = nullptr;
 
@@ -623,17 +409,22 @@ namespace mrv
         };
         AudioThread audioThread;
 
-        // Standard NDI attributes (we don't use this)
+        // Standard NDI attributes
         std::string primariesName;
         std::string transferName;
         std::string matrixName;
 
         // Full mrv2 image data (we try to use this)
         bool hdrMonitorFound = false;
+        bool isP3Display = false;
+
         bool hasHDR = false;
         image::HDRData hdrData;
 
         NDIlib_FourCC_video_type_e fourCC = NDIlib_FourCC_type_UYVY;
+
+        // Vulkan variables
+        VkColorSpaceKHR lastColorSpace;
 
         // tlRender variables
         image::Info info;
@@ -643,6 +434,10 @@ namespace mrv
         std::shared_ptr<LibPlaceboData> placeboData;
         std::string hdrColors;
         std::string hdrColorsDef;
+
+        // Rendering variables
+        std::shared_ptr<tl::vlk::VBO> vbo;
+        std::shared_ptr<tl::vlk::VAO> vao;
     };
 
     NDIView::~NDIView()
@@ -654,9 +449,6 @@ namespace mrv
         p.findThread.running = false;
         if (p.findThread.thread.joinable())
             p.findThread.thread.join();
-
-        vkDestroyShaderModule(m_device, m_frag_shader_module, NULL);
-        vkDestroyShaderModule(m_device, m_vert_shader_module, NULL);
     }
 
     NDIView::NDIView(int x, int y, int w, int h, const char* l) :
@@ -673,34 +465,57 @@ namespace mrv
         _init();
     }
 
-    void NDIView::init_vk_swapchain()
+    void NDIView::init_colorspace()
     {
         TLRENDER_P();
 
-        Fl_Vk_Window::init_vk_swapchain();
+        Fl_Vk_Window::init_colorspace();
 
         // Look for HDR10 or HLG if present
         p.hdrMonitorFound = false;
-        switch (m_color_space)
+
+        bool valid_colorspace = false;
+        switch (colorSpace())
         {
         case VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT:
         case VK_COLOR_SPACE_HDR10_ST2084_EXT:
         case VK_COLOR_SPACE_HDR10_HLG_EXT:
         case VK_COLOR_SPACE_DOLBYVISION_EXT:
-            p.hdrMonitorFound = true;
+            valid_colorspace = true;
             break;
         default:
             break;
         }
 
-        if (p.hdrMonitorFound)
+        if (valid_colorspace)
         {
-            std::cout << "HDR monitor found" << std::endl;
+            if (is_hdr_display_active())
+            {
+                p.hdrMonitorFound = true;
+                std::cout << "HDR monitor found" << std::endl;
+                std::cout << string_VkColorSpaceKHR(colorSpace()) << std::endl;
+            }
+            else
+            {
+#ifdef __APPLE__
+#ifdef __x86_64__
+                // Intel macOS have a P3 display of 500 nits.
+                // Not enough for HDR, but we will mark it as HDR and
+                // tonemap with libplacebo, which gives a better picture than
+                // just OpenGL.
+                colorSpace() = VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT;
+                p.hdrMonitorFound = true;
+                std::cout << "Pseudo HDR monitor found (P3)" << std::endl;
+#endif
+#endif
+            }
         }
         else
         {
             std::cout << "HDR monitor not found or not configured" << std::endl;
         }
+
+        p.lastColorSpace = colorSpace();
     }
 
     void NDIView::_copy(const uint8_t* video_frame)
@@ -746,7 +561,7 @@ namespace mrv
 
                     float R, G, B;
 
-                    const float Y_linear = Yf;
+                    float Y_linear = Yf;
                     // if (p.hasHDR)
                     //     Y_linear = apply_inverse_pq(Yf);
                     // else
@@ -806,7 +621,7 @@ namespace mrv
 
                     float R, G, B;
 
-                    const float Y_linear = Yf;
+                    float Y_linear = Yf;
                     // if (p.hasHDR)
                     //     Y_linear = apply_inverse_pq(Yf);
                     // else
@@ -859,125 +674,35 @@ namespace mrv
         TLRENDER_P();
 
         VkResult result;
-        const VkFormat tex_format = VK_FORMAT_R16G16B16A16_SFLOAT;
+        m_textures.reserve(16);  // reserve up to 16 textures for libplacebo.
 
-        // Query if image supports texture format
-        VkFormatProperties props;
-        vkGetPhysicalDeviceFormatProperties(m_gpu, tex_format, &props);
-
-        m_textures.resize(1);
-
-        if ((props.linearTilingFeatures &
-             VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT) &&
-            !m_use_staging_buffer)
+        uint32_t tex_width = 1, tex_height = 1;
+        image::Info info;
+        if (p.image)
         {
-            uint32_t tex_width = 1, tex_height = 1;
-            if (p.image)
-            {
-                const auto& info = p.image->getInfo();
-                tex_width = p.info.size.w;
-                tex_height = p.info.size.h;
-            }
-
-            m_textures[0].width = tex_width;
-            m_textures[0].height = tex_height;
-            m_textures[0].image = createImage(
-                VK_IMAGE_TYPE_2D, tex_width, tex_height, 1, tex_format,
-                VK_IMAGE_TILING_LINEAR, VK_IMAGE_USAGE_SAMPLED_BIT);
-
-            VkMemoryRequirements memRequirements;
-            vkGetImageMemoryRequirements(
-                m_device, m_textures[0].image, &memRequirements);
-
-            VkMemoryAllocateInfo mem_alloc = {};
-            mem_alloc.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-            mem_alloc.pNext = NULL;
-            mem_alloc.allocationSize = 0;
-            mem_alloc.memoryTypeIndex = 0;
-            mem_alloc.allocationSize = memRequirements.size;
-
-            memory_type_from_properties(
-                memRequirements.memoryTypeBits,
-                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                    VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-                &mem_alloc.memoryTypeIndex);
-
-            /* allocate memory */
-            result = vkAllocateMemory(
-                m_device, &mem_alloc, NULL, &m_textures[0].mem);
-            VK_CHECK_RESULT(result);
-
-            /* bind memory */
-            result = vkBindImageMemory(
-                m_device, m_textures[0].image, m_textures[0].mem, 0);
-            VK_CHECK_RESULT(result);
-
-            VkCommandBuffer cmd = beginSingleTimeCommands();
-
-            // Initial transition to shader-readable layout
-            set_image_layout(
-                cmd, m_textures[0].image, VK_IMAGE_ASPECT_COLOR_BIT,
-                VK_IMAGE_LAYOUT_UNDEFINED, // Initial layout
-                VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-                0,                          // No previous access
-                VK_PIPELINE_STAGE_HOST_BIT, // Host stage
-                VK_ACCESS_SHADER_READ_BIT,  // Shader read
-                VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
-
-            endSingleTimeCommands(cmd);
-        }
-        else if (
-            props.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT)
-        {
-            Fl::fatal("m_use_staging_buffer is unimplemented");
+            info = p.image->getInfo();
         }
         else
         {
-            /* Can't support VK_FORMAT_B8G8R8A8_UNORM !? */
-            Fl::fatal("No support for B8G8R8A8_UNORM as texture image format");
+            info = image::Info(1, 1, image::PixelType::RGBA_F16);
         }
-
-        /* create sampler */
-        m_textures[0].sampler = createSampler();
-
-        /* create image view */
-
-        VkImageViewCreateInfo viewInfo = {};
-        viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-        viewInfo.pNext = NULL;
-        viewInfo.image = VK_NULL_HANDLE;
-        viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-        viewInfo.format = tex_format;
-        viewInfo.components = {
-            VK_COMPONENT_SWIZZLE_R,
-            VK_COMPONENT_SWIZZLE_G,
-            VK_COMPONENT_SWIZZLE_B,
-            VK_COMPONENT_SWIZZLE_A,
-        };
-        viewInfo.subresourceRange = {VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1};
-        viewInfo.flags = 0;
-        viewInfo.image = m_textures[0].image;
-
-        result =
-            vkCreateImageView(m_device, &viewInfo, NULL, &m_textures[0].view);
-        VK_CHECK_RESULT(result);
+        m_textures.push_back(vlk::Texture::create(ctx, info));
+        
+        // Transition image layout to TRANSFER_SHADER_READ_OPTIMAL
+        VkCommandBuffer cmd = beginSingleTimeCommands(device(), commandPool());
+        m_textures[0]->transitionToShaderRead(cmd);
+        endSingleTimeCommands(cmd, device(), commandPool(), queue());
     }
 
     void NDIView::prepare_vertices()
     {
         TLRENDER_P();
 
-        // clang-format off
-        struct Vertex
-        {
-            float x, y;
-            float u, v;      // UV coordinates
-        };
+        using namespace tl;
 
-        std::vector<Vertex> vertices;
-        const math::Size2i viewportSize = { pixel_w(), pixel_h() };
-        image::Size renderSize = { pixel_w(), pixel_h() };
-        
+        const math::Size2i viewportSize = {pixel_w(), pixel_h()};
+        image::Size renderSize = {pixel_w(), pixel_h()};
+
         if (p.image)
         {
             renderSize = p.image->getSize();
@@ -985,12 +710,14 @@ namespace mrv
         }
 
         float aspectRender = renderSize.w / static_cast<float>(renderSize.h);
-        float aspectViewport = viewportSize.w / static_cast<float>(viewportSize.h);
+        float aspectViewport =
+            viewportSize.w / static_cast<float>(viewportSize.h);
 
         float scaleX = 1.0F;
         float scaleY = 1.0F;
 
-        if (aspectRender < aspectViewport) {
+        if (aspectRender < aspectViewport)
+        {
             // Image is too wide, shrink X
             scaleX = aspectRender / aspectViewport;
         }
@@ -998,119 +725,52 @@ namespace mrv
         {
             // Image is too tall, shrink Y
             scaleY = aspectViewport / aspectRender;
-            
         }
 
-        vertices.push_back({-scaleX, -scaleY, 0.F, 0.F}); // v0
-        vertices.push_back({ scaleX, -scaleY, 1.F, 0.F}); // v1
-        vertices.push_back({ scaleX,  scaleY, 1.F, 1.F}); // v2
+        const geom::TriangleMesh2& mesh =
+            geom::box(math::Box2f(-scaleX, -scaleY, scaleX * 2, scaleY * 2));
 
-        vertices.push_back({-scaleX, -scaleY, 0.F, 0.F}); // v0
-        vertices.push_back({-scaleX,  scaleY, 0.F, 1.F}); // v3
-        vertices.push_back({ scaleX,  scaleY, 1.F, 1.F}); // v2
+        const size_t numTriangles = mesh.triangles.size();
 
-            
-        VkDeviceSize buffer_size = sizeof(vertices[0]) * vertices.size();
+        if (!p.vbo || (p.vbo && p.vbo->getSize() != numTriangles * 3))
+        {
+            p.vbo = vlk::VBO::create(
+                numTriangles * 3, vlk::VBOType::Pos2_F32_UV_U16);
+            p.vao.reset();
+        }
+        if (p.vbo)
+        {
+            p.vbo->copy(convert(mesh, vlk::VBOType::Pos2_F32_UV_U16));
+        }
 
-        // clang-format on
-        VkBufferCreateInfo buf_info = {};
-        buf_info.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-        buf_info.pNext = NULL;
-        buf_info.size = buffer_size;
-        buf_info.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
-        buf_info.flags = 0;
-
-        VkMemoryAllocateInfo mem_alloc = {};
-        mem_alloc.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-        mem_alloc.pNext = NULL;
-        mem_alloc.allocationSize = 0;
-        mem_alloc.memoryTypeIndex = 0;
-
-        VkMemoryRequirements mem_reqs;
-        VkResult result;
-        bool pass;
-        void* data;
-
-        memset(&m_vertices, 0, sizeof(m_vertices));
-
-        result = vkCreateBuffer(m_device, &buf_info, NULL, &m_vertices.buf);
-        VK_CHECK_RESULT(result);
-
-        vkGetBufferMemoryRequirements(m_device, m_vertices.buf, &mem_reqs);
-        VK_CHECK_RESULT(result);
-
-        mem_alloc.allocationSize = mem_reqs.size;
-        pass = memory_type_from_properties(
-            mem_reqs.memoryTypeBits,
-            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-            &mem_alloc.memoryTypeIndex);
-
-        result = vkAllocateMemory(m_device, &mem_alloc, NULL, &m_vertices.mem);
-        VK_CHECK_RESULT(result);
-
-        result = vkMapMemory(
-            m_device, m_vertices.mem, 0, mem_alloc.allocationSize, 0, &data);
-        VK_CHECK_RESULT(result);
-
-        std::memcpy(data, vertices.data(), static_cast<size_t>(buffer_size));
-
-        vkUnmapMemory(m_device, m_vertices.mem);
-
-        result =
-            vkBindBufferMemory(m_device, m_vertices.buf, m_vertices.mem, 0);
-        VK_CHECK_RESULT(result);
-
-        m_vertices.vi.sType =
-            VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-        m_vertices.vi.pNext = NULL;
-        m_vertices.vi.vertexBindingDescriptionCount = 1;
-        m_vertices.vi.pVertexBindingDescriptions = m_vertices.vi_bindings;
-        m_vertices.vi.vertexAttributeDescriptionCount = 2;
-        m_vertices.vi.pVertexAttributeDescriptions = m_vertices.vi_attrs;
-
-        m_vertices.vi_bindings[0].binding = 0;
-        m_vertices.vi_bindings[0].stride = sizeof(vertices[0]);
-        m_vertices.vi_bindings[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
-
-        m_vertices.vi_attrs[0].binding = 0;
-        m_vertices.vi_attrs[0].location = 0;
-        m_vertices.vi_attrs[0].format = VK_FORMAT_R32G32_SFLOAT;
-        m_vertices.vi_attrs[0].offset = 0;
-
-        m_vertices.vi_attrs[1].binding = 0;
-        m_vertices.vi_attrs[1].location = 1;
-        m_vertices.vi_attrs[1].format = VK_FORMAT_R32G32_SFLOAT;
-        m_vertices.vi_attrs[1].offset = sizeof(float) * 2;
+        if (!p.vao && p.vbo)
+        {
+            p.vao = vlk::VAO::create(ctx);
+            p.vao->upload(p.vbo->getData());
+        }
     }
 
-    // m_format, m_depth (optionally) -> creates m_renderPass
+    // creates m_renderPass
     void NDIView::prepare_render_pass()
     {
-        bool has_depth = mode() & FL_DEPTH;
-        bool has_stencil = mode() & FL_STENCIL;
-
         VkAttachmentDescription attachments[2];
         attachments[0] = VkAttachmentDescription();
-        attachments[0].format = m_format;
+        attachments[0].format = ctx.format;
         attachments[0].samples = VK_SAMPLE_COUNT_1_BIT;
         attachments[0].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
         attachments[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
         attachments[0].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
         attachments[0].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-        attachments[0].initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-        attachments[0].finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+        attachments[0].initialLayout =
+            VK_IMAGE_LAYOUT_UNDEFINED; // Start undefined
+        attachments[0].finalLayout =
+            VK_IMAGE_LAYOUT_PRESENT_SRC_KHR; // Final layout for presentation
 
         attachments[1] = VkAttachmentDescription();
 
         VkAttachmentReference color_reference = {};
         color_reference.attachment = 0;
         color_reference.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-
-        VkAttachmentReference depth_reference = {};
-        depth_reference.attachment = 1;
-        depth_reference.layout =
-            VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
         VkSubpassDescription subpass = {};
         subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
@@ -1121,35 +781,10 @@ namespace mrv
         subpass.pColorAttachments = &color_reference;
         subpass.pResolveAttachments = NULL;
 
-        if (has_depth || has_stencil)
-        {
-            attachments[1].format = m_depth.format;
-            attachments[1].samples = VK_SAMPLE_COUNT_1_BIT;
-            attachments[1].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-            attachments[1].storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-            if (has_stencil)
-            {
-                attachments[1].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-            }
-            else
-            {
-                attachments[1].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-            }
-            attachments[1].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-            attachments[1].initialLayout =
-                VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-            attachments[1].finalLayout =
-                VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-
-            subpass.pDepthStencilAttachment = &depth_reference;
-            subpass.preserveAttachmentCount = 0;
-            subpass.pPreserveAttachments = NULL;
-        }
-
         VkRenderPassCreateInfo rp_info = {};
         rp_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
         rp_info.pNext = NULL;
-        rp_info.attachmentCount = (has_depth || has_stencil) ? 2 : 1;
+        rp_info.attachmentCount = 1;
         rp_info.pAttachments = attachments;
         rp_info.subpassCount = 1;
         rp_info.pSubpasses = &subpass;
@@ -1157,8 +792,8 @@ namespace mrv
         rp_info.pDependencies = NULL;
 
         VkResult result;
-        result = vkCreateRenderPass(m_device, &rp_info, NULL, &m_renderPass);
-        VK_CHECK_RESULT(result);
+        result = vkCreateRenderPass(device(), &rp_info, NULL, &m_renderPass);
+        VK_CHECK(result);
     }
 
     VkShaderModule NDIView::prepare_vs()
@@ -1186,7 +821,7 @@ namespace mrv
                 "vertex_shader.glsl"   // Filename for error reporting
             );
 
-            m_vert_shader_module = create_shader_module(m_device, spirv);
+            m_vert_shader_module = create_shader_module(device(), spirv);
         }
         catch (const std::exception& e)
         {
@@ -1233,7 +868,7 @@ void main() {
                 shaderc_fragment_shader, // Shader type
                 "frag_shader.glsl"       // Filename for error reporting
             );
-            m_frag_shader_module = create_shader_module(m_device, spirv);
+            m_frag_shader_module = create_shader_module(device(), spirv);
         }
         catch (const std::exception& e)
         {
@@ -1245,41 +880,44 @@ void main() {
 
     void NDIView::prepare_pipeline()
     {
-        VkGraphicsPipelineCreateInfo pipeline;
-        VkPipelineCacheCreateInfo pipelineCache;
+        TLRENDER_P();
 
-        VkPipelineVertexInputStateCreateInfo vi;
-        VkPipelineInputAssemblyStateCreateInfo ia;
-        VkPipelineRasterizationStateCreateInfo rs;
-        VkPipelineColorBlendStateCreateInfo cb;
-        VkPipelineDepthStencilStateCreateInfo ds;
-        VkPipelineViewportStateCreateInfo vp;
-        VkPipelineMultisampleStateCreateInfo ms;
+        VkGraphicsPipelineCreateInfo pipeline = {};
+        VkPipelineCacheCreateInfo pipelineCacheCreateInfo = {};
+
+        VkPipelineVertexInputStateCreateInfo vi = {};
+        VkPipelineInputAssemblyStateCreateInfo ia = {};
+        VkPipelineRasterizationStateCreateInfo rs = {};
+        VkPipelineColorBlendStateCreateInfo cb = {};
+        VkPipelineDepthStencilStateCreateInfo ds = {};
+        VkPipelineViewportStateCreateInfo vp = {};
+        VkPipelineMultisampleStateCreateInfo ms = {};
         VkDynamicState dynamicStateEnables[(
             VK_DYNAMIC_STATE_STENCIL_REFERENCE - VK_DYNAMIC_STATE_VIEWPORT +
             1)];
-        VkPipelineDynamicStateCreateInfo dynamicState;
+        VkPipelineDynamicStateCreateInfo dynamicState = {};
 
         VkResult result;
 
         memset(dynamicStateEnables, 0, sizeof dynamicStateEnables);
-        memset(&dynamicState, 0, sizeof dynamicState);
         dynamicState.sType =
             VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
         dynamicState.pDynamicStates = dynamicStateEnables;
 
-        memset(&pipeline, 0, sizeof(pipeline));
         pipeline.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
         pipeline.layout = m_pipeline_layout;
 
-        vi = m_vertices.vi;
+        vi.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+        vi.vertexBindingDescriptionCount =
+            p.vbo->getBindingDescription().size();
+        vi.pVertexBindingDescriptions = p.vbo->getBindingDescription().data();
+        vi.vertexAttributeDescriptionCount = p.vbo->getAttributes().size();
+        vi.pVertexAttributeDescriptions = p.vbo->getAttributes().data();
 
-        memset(&ia, 0, sizeof(ia));
         ia.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
         ia.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
         // ia.primitiveRestartEnable = VK_FALSE;
 
-        memset(&rs, 0, sizeof(rs));
         rs.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
         rs.polygonMode = VK_POLYGON_MODE_FILL;
         rs.cullMode = VK_CULL_MODE_NONE;
@@ -1289,7 +927,6 @@ void main() {
         rs.depthBiasEnable = VK_FALSE;
         rs.lineWidth = 1.0f;
 
-        memset(&cb, 0, sizeof(cb));
         cb.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
         VkPipelineColorBlendAttachmentState att_state[1];
         memset(att_state, 0, sizeof(att_state));
@@ -1298,7 +935,6 @@ void main() {
         cb.attachmentCount = 1;
         cb.pAttachments = att_state;
 
-        memset(&vp, 0, sizeof(vp));
         vp.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
         vp.viewportCount = 1;
         dynamicStateEnables[dynamicState.dynamicStateCount++] =
@@ -1307,22 +943,17 @@ void main() {
         dynamicStateEnables[dynamicState.dynamicStateCount++] =
             VK_DYNAMIC_STATE_SCISSOR;
 
-        bool has_depth = mode() & FL_DEPTH;
-        bool has_stencil = mode() & FL_STENCIL;
-
-        memset(&ds, 0, sizeof(ds));
         ds.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
-        ds.depthTestEnable = has_depth ? VK_TRUE : VK_FALSE;
-        ds.depthWriteEnable = has_depth ? VK_TRUE : VK_FALSE;
+        ds.depthTestEnable = VK_FALSE;
+        ds.depthWriteEnable = VK_FALSE;
         ds.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
         ds.depthBoundsTestEnable = VK_FALSE;
-        ds.stencilTestEnable = has_stencil ? VK_TRUE : VK_FALSE;
+        ds.stencilTestEnable = VK_FALSE;
         ds.back.failOp = VK_STENCIL_OP_KEEP;
         ds.back.passOp = VK_STENCIL_OP_KEEP;
         ds.back.compareOp = VK_COMPARE_OP_ALWAYS;
         ds.front = ds.back;
 
-        memset(&ms, 0, sizeof(ms));
         ms.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
         ms.pSampleMask = NULL;
         ms.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
@@ -1355,17 +986,20 @@ void main() {
         pipeline.renderPass = m_renderPass;
         pipeline.pDynamicState = &dynamicState;
 
-        memset(&pipelineCache, 0, sizeof(pipelineCache));
-        pipelineCache.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
+        VkPipelineCache pipelineCache;
+
+        pipelineCacheCreateInfo.sType =
+            VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
 
         result = vkCreatePipelineCache(
-            m_device, &pipelineCache, NULL, &m_pipelineCache);
-        VK_CHECK_RESULT(result);
-        result = vkCreateGraphicsPipelines(
-            m_device, m_pipelineCache, 1, &pipeline, NULL, &m_pipeline);
-        VK_CHECK_RESULT(result);
+            device(), &pipelineCacheCreateInfo, NULL, &pipelineCache);
+        VK_CHECK(result);
 
-        vkDestroyPipelineCache(m_device, m_pipelineCache, NULL);
+        result = vkCreateGraphicsPipelines(
+            device(), pipelineCache, 1, &pipeline, NULL, &m_pipeline);
+        VK_CHECK(result);
+
+        vkDestroyPipelineCache(device(), pipelineCache, NULL);
     }
 
     void NDIView::prepare_descriptor_layout()
@@ -1384,20 +1018,15 @@ void main() {
         bindings.push_back(mainBinding);
 
         // Additional libplacebo textures starting at binding 1
-        if (p.hasHDR)
+        for (uint32_t i = 1; i < m_textures.size(); ++i)
         {
-            for (uint32_t i = 1; i < m_textures.size(); ++i)
-            {
-                VkDescriptorSetLayoutBinding binding = {};
-                binding.binding =
-                    i; // Matches libplacebo’s binding = i + 1 in GLSL
-                binding.descriptorType =
-                    VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-                binding.descriptorCount = 1;
-                binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-                binding.pImmutableSamplers = nullptr;
-                bindings.push_back(binding);
-            }
+            VkDescriptorSetLayoutBinding binding = {};
+            binding.binding = i; // Matches libplacebo’s binding = i + 1 in GLSL
+            binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+            binding.descriptorCount = 1;
+            binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+            binding.pImmutableSamplers = nullptr;
+            bindings.push_back(binding);
         }
 
         VkDescriptorSetLayoutCreateInfo layoutInfo = {};
@@ -1406,8 +1035,8 @@ void main() {
         layoutInfo.pBindings = bindings.data();
 
         VkResult result = vkCreateDescriptorSetLayout(
-            m_device, &layoutInfo, nullptr, &m_desc_layout);
-        VK_CHECK_RESULT(result);
+            device(), &layoutInfo, nullptr, &m_desc_layout);
+        VK_CHECK(result);
 
         VkPipelineLayoutCreateInfo pipelineLayoutInfo = {};
         pipelineLayoutInfo.sType =
@@ -1416,8 +1045,8 @@ void main() {
         pipelineLayoutInfo.pSetLayouts = &m_desc_layout;
 
         result = vkCreatePipelineLayout(
-            m_device, &pipelineLayoutInfo, nullptr, &m_pipeline_layout);
-        VK_CHECK_RESULT(result);
+            device(), &pipelineLayoutInfo, nullptr, &m_pipeline_layout);
+        VK_CHECK(result);
     }
 
     void NDIView::prepare_descriptor_pool()
@@ -1434,8 +1063,8 @@ void main() {
         poolInfo.pPoolSizes = &poolSize;
 
         VkResult result =
-            vkCreateDescriptorPool(m_device, &poolInfo, nullptr, &m_desc_pool);
-        VK_CHECK_RESULT(result);
+            vkCreateDescriptorPool(device(), &poolInfo, nullptr, &m_desc_pool);
+        VK_CHECK(result);
     }
 
     void NDIView::prepare_descriptor_set()
@@ -1447,15 +1076,15 @@ void main() {
         allocInfo.pSetLayouts = &m_desc_layout;
 
         VkResult result =
-            vkAllocateDescriptorSets(m_device, &allocInfo, &m_desc_set);
-        VK_CHECK_RESULT(result);
+            vkAllocateDescriptorSets(device(), &allocInfo, &m_desc_set);
+        VK_CHECK(result);
 
         std::vector<VkDescriptorImageInfo> imageInfos(m_textures.size());
         std::vector<VkWriteDescriptorSet> writes(m_textures.size());
         for (uint32_t i = 0; i < m_textures.size(); ++i)
         {
-            imageInfos[i].sampler = m_textures[i].sampler;
-            imageInfos[i].imageView = m_textures[i].view;
+            imageInfos[i].sampler = m_textures[i]->getSampler();
+            imageInfos[i].imageView = m_textures[i]->getImageView();
             imageInfos[i].imageLayout =
                 VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 
@@ -1469,7 +1098,7 @@ void main() {
         }
 
         vkUpdateDescriptorSets(
-            m_device, static_cast<uint32_t>(writes.size()), writes.data(), 0,
+            device(), static_cast<uint32_t>(writes.size()), writes.data(), 0,
             nullptr);
     }
 
@@ -1491,12 +1120,6 @@ void main() {
         TLRENDER_P();
 
         // Some Vulkan settings
-#ifdef NDEBUG
-        m_validate = false;
-#else
-        m_validate = true;
-#endif
-        m_use_staging_buffer = false;
         m_clearColor = {0.F, 0.F, 0.F, 0.F};
 
         mode(FL_RGB | FL_DOUBLE | FL_ALPHA);
@@ -1516,7 +1139,7 @@ void main() {
             {
                 TLRENDER_P();
 
-                fill_menu_bar(HDRApp::ui->uiMenuBar);
+                fill_menu(HDRApp::ui->uiMenuBar);
             },
             observer::CallbackAction::Suppress);
 
@@ -1528,7 +1151,7 @@ void main() {
                 {
                     _findThread();
                 }
-                catch (std::exception& e)
+                catch (const std::exception& e)
                 {
                     std::cerr << e.what() << std::endl;
                 }
@@ -1553,19 +1176,12 @@ void main() {
     {
         TLRENDER_P();
 
-        vkDeviceWaitIdle(m_device); // waits for all queue on the device
+        vkDeviceWaitIdle(device()); // waits for all queue on the device
 
         {
             std::unique_lock<std::mutex> lock(p.videoMutex.mutex);
             prepare_main_texture();
-            try
-            {
-                prepare_shader();
-            }
-            catch (const std::exception& e)
-            {
-                std::cerr << "ERROR: " << e.what() << std::endl;
-            }
+            prepare_shader();
         }
         prepare_vertices();
         prepare_descriptor_layout();
@@ -1577,17 +1193,17 @@ void main() {
         m_swapchain_needs_recreation = false;
     }
 
-    void NDIView::update_texture()
+    void NDIView::update_texture(VkCommandBuffer cmd)
     {
         TLRENDER_P();
 
         VkResult result;
 
-        if (p.hdrMonitorFound && p.hasHDR)
+        if (p.hdrMonitorFound && p.hasHDR && p.useHDRMetadata)
         {
-
             // This will make the FLTK swapchain call vk->SetHDRMetadataEXT();
             const image::HDRData& data = p.hdrData;
+            auto m_previous_hdr_metadata = m_hdr_metadata;
 
             m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
             m_hdr_metadata.displayPrimaryRed = {
@@ -1613,78 +1229,28 @@ void main() {
                 data.displayMasteringLuminance.getMin();
             m_hdr_metadata.maxContentLightLevel = data.maxCLL;
             m_hdr_metadata.maxFrameAverageLightLevel = data.maxFALL;
+
+            if (!is_equal_hdr_metadata(m_hdr_metadata, m_previous_hdr_metadata))
+                m_hdr_metadata_changed = true; // Mark as changed
         }
 
-        VkCommandBuffer update_cmd;
-        VkCommandBufferAllocateInfo cmdAllocInfo = {};
-        cmdAllocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-        cmdAllocInfo.commandPool = m_cmd_pool;
-        cmdAllocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-        cmdAllocInfo.commandBufferCount = 1;
-        vkAllocateCommandBuffers(m_device, &cmdAllocInfo, &update_cmd);
+        if (!p.image)
+            return;
 
-        VkCommandBufferBeginInfo cmdBeginInfo = {};
-        cmdBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-        vkBeginCommandBuffer(update_cmd, &cmdBeginInfo);
-
-        // Transition to GENERAL for CPU writes
-        set_image_layout(
-            update_cmd, m_textures[0].image, VK_IMAGE_ASPECT_COLOR_BIT,
-            VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_IMAGE_LAYOUT_GENERAL,
-            VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-            VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT);
-
-        vkEndCommandBuffer(update_cmd);
-        VkSubmitInfo submitInfo = {};
-        submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-        submitInfo.commandBufferCount = 1;
-        submitInfo.pCommandBuffers = &update_cmd;
-        vkQueueSubmit(m_queue, 1, &submitInfo, VK_NULL_HANDLE);
-        vkQueueWaitIdle(m_queue); // Synchronize before CPU write
-
-        void* mappedData;
-        result = vkMapMemory(
-            m_device, m_textures[0].mem, 0, VK_WHOLE_SIZE, 0, &mappedData);
-        VK_CHECK_RESULT(result);
-
-        if (p.image)
+        // Compare the texture data size to the new image data size to see
+        // if user changed streaming mid-way.
+        const std::size_t dataSize = m_textures[0]->getWidth() *
+                                     m_textures[0]->getHeight() *
+                                     4 * sizeof(half);
+        const std::size_t imageSize = p.image->getDataByteCount();
+        if (dataSize != imageSize)
         {
-            const size_t dataSize =
-                m_textures[0].width * m_textures[0].height * 4 * sizeof(half);
-            const size_t byteCount = p.image->getDataByteCount();
-
-            // Make sure the texture and the image have the same data size.
-            // If not, recalculate the swapchain (call destroy_resources and
-            // prepare).
-            if (dataSize == byteCount)
-            {
-                std::memcpy(mappedData, p.image->getData(), dataSize);
-            }
-            else
-            {
-                m_swapchain_needs_recreation = true;
-            }
+            m_swapchain_needs_recreation = true;
         }
-
-        vkUnmapMemory(m_device, m_textures[0].mem);
-
-        // Reallocate command buffer for second transition
-        vkAllocateCommandBuffers(m_device, &cmdAllocInfo, &update_cmd);
-        vkBeginCommandBuffer(update_cmd, &cmdBeginInfo);
-
-        // Transition back to SHADER_READ_ONLY_OPTIMAL
-        set_image_layout(
-            update_cmd, m_textures[0].image, VK_IMAGE_ASPECT_COLOR_BIT,
-            VK_IMAGE_LAYOUT_GENERAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-            VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT,
-            VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
-
-        vkEndCommandBuffer(update_cmd);
-        submitInfo.pCommandBuffers = &update_cmd;
-        vkQueueSubmit(m_queue, 1, &submitInfo, VK_NULL_HANDLE);
-        vkQueueWaitIdle(m_queue); // Synchronize before rendering
-
-        vkFreeCommandBuffers(m_device, m_cmd_pool, 1, &update_cmd);
+        else
+        {
+            m_textures[0]->copy(reinterpret_cast<const uint8_t*>(p.image->getData()), imageSize);
+        }
     }
 
     void NDIView::vk_draw_begin()
@@ -1698,21 +1264,44 @@ void main() {
     {
         TLRENDER_P();
 
-        update_texture();
+        VkCommandBuffer cmd = getCurrentCommandBuffer();
+        if (!m_swapchain || !cmd || !isFrameActive())
+        {
+            return;
+        }
+        end_render_pass(cmd);
 
-        // Draw the triangle
-        VkDeviceSize offset = 0;
-        vkCmdBindVertexBuffers(m_draw_cmd, 0, 1, &m_vertices.buf, &offset);
+        update_texture(cmd);
+        
+        begin_render_pass(cmd);
 
-        vkCmdDraw(m_draw_cmd, 6, 1, 0, 0);
+        vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline);
+        vkCmdBindDescriptorSets(
+            cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline_layout, 0, 1,
+            &m_desc_set, 0, nullptr);
 
-        Fl_Window::draw();
+        VkViewport viewport = {};
+        viewport.width = static_cast<float>(w());
+        viewport.height = static_cast<float>(h());
+        viewport.minDepth = 0.0f;
+        viewport.maxDepth = 1.0f;
+        vkCmdSetViewport(cmd, 0, 1, &viewport);
+
+        VkRect2D scissor = {};
+        scissor.extent.width = w();
+        scissor.extent.height = h();
+        vkCmdSetScissor(cmd, 0, 1, &scissor);
+
+        // Draw the rectangle
+        p.vao->draw(cmd, p.vbo);
+
+        end_render_pass(cmd);
     }
 
-    std::vector<const char*> NDIView::get_required_extensions()
+    std::vector<const char*> NDIView::get_instance_extensions()
     {
         std::vector<const char*> out;
-        out = Fl_Vk_Window::get_required_extensions();
+        out = Fl_Vk_Window::get_instance_extensions();
         return out;
     }
 
@@ -1809,7 +1398,31 @@ void main() {
                                 rapidxml::xml_attribute<>* attr_transfer =
                                     root->first_attribute("transfer");
                                 if (attr_transfer)
+                                {
                                     p.transferName = attr_transfer->value();
+
+                                    if (p.hdrMonitorFound &&
+                                        colorSpace() !=
+                                            VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
+                                    {
+                                        if (p.transferName == "bt_2100_hlg")
+                                        {
+                                            colorSpace() =
+                                                VK_COLOR_SPACE_HDR10_HLG_EXT;
+                                        }
+                                        else
+                                        {
+                                            colorSpace() =
+                                                VK_COLOR_SPACE_HDR10_ST2084_EXT;
+                                        }
+
+                                        if (p.lastColorSpace != colorSpace())
+                                        {
+                                            p.lastColorSpace = colorSpace();
+                                            m_swapchain_needs_recreation = true;
+                                        }
+                                    }
+                                }
 
                                 image::HDRData hdrData;
                                 if (attr_mrv2)
@@ -1853,11 +1466,6 @@ void main() {
                         catch (const std::exception& e)
                         {
                         }
-                        // std::cerr << "primaries--------" << std::endl;
-                        // std::cerr << hdrData.primaries[0] << " "
-                        //           << hdrData.primaries[1] << " "
-                        //           << hdrData.primaries[2] << " "
-                        //           << hdrData.primaries[3] << std::endl;
                     }
                     else
                     {
@@ -1880,7 +1488,7 @@ void main() {
                         m_swapchain_needs_recreation = true;
                     }
 
-                    if (video_frame.p_data)
+                    if (video_frame.p_data && !init)
                     {
                         _copy(video_frame.p_data);
                         redraw();
@@ -1966,35 +1574,47 @@ void main() {
 
     void NDIView::destroy_textures()
     {
-        vkQueueWaitIdle(m_queue); // Wait for completion
-
-        for (uint32_t i = 0; i < m_textures.size(); i++)
-        {
-            destroy_texture_image(m_textures[i]);
-        }
         m_textures.clear();
     }
 
-    void NDIView::destroy_resources()
+    void NDIView::destroy()
     {
-        vkDestroyShaderModule(m_device, m_frag_shader_module, NULL);
-        m_frag_shader_module = VK_NULL_HANDLE;
+        TLRENDER_P();
 
-        if (m_vertices.buf != VK_NULL_HANDLE)
+        if (m_frag_shader_module != VK_NULL_HANDLE)
         {
-            vkDestroyBuffer(m_device, m_vertices.buf, NULL);
-            m_vertices.buf = VK_NULL_HANDLE;
+            vkDestroyShaderModule(device(), m_frag_shader_module, NULL);
+            m_frag_shader_module = VK_NULL_HANDLE;
         }
 
-        if (m_vertices.mem != VK_NULL_HANDLE)
+        if (m_vert_shader_module != VK_NULL_HANDLE)
         {
-            vkFreeMemory(m_device, m_vertices.mem, NULL);
-            m_vertices.mem = VK_NULL_HANDLE;
+            vkDestroyShaderModule(device(), m_vert_shader_module, NULL);
+            m_vert_shader_module = VK_NULL_HANDLE;
         }
+
+        p.vao.reset();
+        p.vbo.reset();
 
         destroy_textures();
 
-        Fl_Vk_Window::destroy_resources();
+        if (m_pipeline_layout != VK_NULL_HANDLE)
+        {
+            vkDestroyPipelineLayout(device(), m_pipeline_layout, nullptr);
+            m_pipeline_layout = VK_NULL_HANDLE;
+        }
+
+        if (m_desc_layout != VK_NULL_HANDLE)
+        {
+            vkDestroyDescriptorSetLayout(device(), m_desc_layout, nullptr);
+            m_desc_layout = VK_NULL_HANDLE;
+        }
+
+        if (m_desc_pool != VK_NULL_HANDLE)
+        {
+            vkDestroyDescriptorPool(device(), m_desc_pool, nullptr);
+            m_desc_pool = VK_NULL_HANDLE;
+        }
     }
 
     void NDIView::prepare_shader()
@@ -2028,8 +1648,6 @@ void main() {
         cmap.gamut_constants.softclip_knee = 0.70f;
         cmap.gamut_constants.softclip_desat = 0.35f;
 
-        // Hable and ACES are best for HDR
-        //   &pl_tone_map_hable;
         cmap.tone_mapping_function = nullptr;
 
         cmap.tone_constants = {0};
@@ -2064,6 +1682,7 @@ void main() {
             {
                 src_colorspace.transfer = PL_COLOR_TRC_HLG;
             }
+
             cmap.metadata = PL_HDR_METADATA_ANY;
             pl_hdr_metadata& hdr = src_colorspace.hdr;
             hdr.min_luma = data.displayMasteringLuminance.getMin();
@@ -2106,16 +1725,16 @@ void main() {
         {
             dst_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
             dst_colorspace.transfer = PL_COLOR_TRC_PQ;
-            if (m_color_space == VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
+            if (colorSpace() == VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
             {
                 dst_colorspace.primaries = PL_COLOR_PRIM_DISPLAY_P3;
                 dst_colorspace.transfer = PL_COLOR_TRC_BT_1886;
             }
-            else if (m_color_space == VK_COLOR_SPACE_HDR10_HLG_EXT)
+            else if (colorSpace() == VK_COLOR_SPACE_HDR10_HLG_EXT)
             {
                 dst_colorspace.transfer = PL_COLOR_TRC_HLG;
             }
-            else if (m_color_space == VK_COLOR_SPACE_DOLBYVISION_EXT)
+            else if (colorSpace() == VK_COLOR_SPACE_DOLBYVISION_EXT)
             {
                 // \@todo:  How to handle this? PL_COLOR_TRC_DOLBYVISION does
                 //          not exist.
@@ -2179,9 +1798,6 @@ void main() {
 
         std::stringstream s;
 
-        // s << "#define textureLod(t, p, b) texture(t, p)" << std::endl
-        //   << std::endl;
-
         // std::cerr << "num_vertex_attribs=" << res->num_vertex_attribs
         //           << std::endl
         //           << "num_descriptors=" << res->num_descriptors << std::endl
@@ -2224,7 +1840,7 @@ void main() {
                     break;
                 }
 
-                s << "layout(binding=" << (i + 1) << ") uniform " << prefix
+                s << "layout(binding = " << (i + 1) << ") uniform " << prefix
                   << type << " " << desc->name << ";" << std::endl;
                 break;
             }
@@ -2245,9 +1861,10 @@ void main() {
         }
 
         s << "//" << std::endl
-          << "// Variables" << "//" << std::endl
+          << "// Variables" << std::endl
+          << "//" << std::endl
           << std::endl;
-        // \@todo: add uniform bindings
+        // \@todo: add uniform bindings instead of using constants
         // s << "layout(binding = 2) uniform UBO {\n";
         for (int i = 0; i < res->num_variables; ++i)
         {
@@ -2389,27 +2006,132 @@ void main() {
             std::cerr << "Changing source to " << source << std::endl;
             p.currentNDISource = source;
 
+            HDRUI* ui = HDRApp::ui;
+            fill_menu(ui->uiMenuBar);
+
             _exitThreads();
             _startThreads();
         }
     }
 
-    void NDIView::fill_menu_bar(Fl_Menu_* menu)
+    int NDIView::handle(int event)
+    {
+        switch (event)
+        {
+        case FL_PUSH:
+            if (Fl::event_button3())
+            {
+                Fl_Group::current(0);
+
+                Fl_Menu_Button* popupMenu = new Fl_Menu_Button(0, 0, 0, 0);
+
+                popupMenu->textsize(12);
+                popupMenu->type(Fl_Menu_Button::POPUP3);
+
+                fill_menu(popupMenu);
+                popupMenu->popup();
+
+                delete popupMenu;
+                popupMenu = nullptr;
+                return 1;
+            }
+        default:
+            return Fl_Vk_Window::handle(event);
+            return 0;
+        }
+    }
+
+    void NDIView::fill_menu(Fl_Menu_* menu)
+    {
+        TLRENDER_P();
+
+        int idx;
+        int mode = 0;
+        HDRUI* ui = HDRApp::ui;
+        Fl_Menu_Item* item = nullptr;
+
+        menu->clear();
+        const auto& sources = p.NDISources->get();
+
+        mode = FL_MENU_RADIO;
+
+        for (auto& source : sources)
+        {
+            std::string entry = _("Connection/");
+            entry += source;
+            idx = menu->add(
+                entry.c_str(), 0, (Fl_Callback*)select_ndi_source_cb, ui, mode);
+            if (source == p.currentNDISource)
+            {
+                item = (Fl_Menu_Item*)&menu->menu()[idx];
+                item->set();
+            }
+        }
+
+        mode = FL_MENU_TOGGLE;
+        idx = menu->add(
+            _("Window/Fullscreen"), 0, (Fl_Callback*)toggle_fullscreen_cb, ui,
+            mode);
+        if (ui->uiMain->fullscreen_active())
+        {
+            item = (Fl_Menu_Item*)&menu->menu()[idx];
+            item->set();
+        }
+
+        mode = FL_MENU_TOGGLE;
+        idx = menu->add(
+            _("HDR/Pass through Metadata to Display"), 0,
+            (Fl_Callback*)apply_metadata_cb, ui, mode);
+        if (p.useHDRMetadata)
+        {
+            item = (Fl_Menu_Item*)&menu->menu()[idx];
+            item->set();
+        }
+
+        menu->menu_end();
+        menu->redraw();
+    }
+
+    void NDIView::toggle_hdr_metadata()
+    {
+        TLRENDER_P();
+        p.useHDRMetadata = !p.useHDRMetadata;
+        m_swapchain_needs_recreation = true;
+
+        if (p.useHDRMetadata && !p.isP3Display)
+        {
+            if (p.transferName == "bt_2100_hlg")
+            {
+                colorSpace() = VK_COLOR_SPACE_HDR10_HLG_EXT;
+            }
+            else
+            {
+                colorSpace() = VK_COLOR_SPACE_HDR10_ST2084_EXT;
+            }
+        }
+
+        if (p.lastColorSpace != colorSpace())
+        {
+            p.lastColorSpace = colorSpace();
+        }
+
+        redraw();
+    }
+
+    void NDIView::toggle_fullscreen()
     {
         TLRENDER_P();
 
         HDRUI* ui = HDRApp::ui;
 
-        menu->clear();
-        const auto& sources = p.NDISources->get();
-        for (auto& source : sources)
+        if (ui->uiMain->fullscreen_active())
         {
-            std::string entry = _("Connection/");
-            entry += source;
-            menu->add(entry.c_str(), 0, (Fl_Callback*)select_ndi_source_cb, ui);
+            ui->uiMain->fullscreen_off();
         }
-        menu->menu_end();
-        menu->redraw();
+        else
+        {
+            ui->uiMain->fullscreen();
+        }
     }
 
 } // namespace mrv

@@ -11,6 +11,7 @@
 #
 #
 
+set +e
 
 . $PWD/etc/build_dir.sh
 
@@ -33,6 +34,11 @@ cd $dir
 #
 
 cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
+if [[ $? != 0 ]]; then
+    echo "COMPILATON of FLTK failed"
+    cd -
+    exit 1
+fi
 
 cd -
 
@@ -52,7 +58,11 @@ cd $dir
 #  Rebuild tlRender
 #
 cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
-
+if [[ $? != 0 ]]; then
+    echo "COMPILATON of tlRender failed"
+    cd -
+    exit 1
+fi
 cd -
 
 dir=$BUILD_DIR/mrv2/src/mrv2-build

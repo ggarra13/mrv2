@@ -5,21 +5,29 @@
 set(HEADERS
     mrvNDICallbacks.h
     mrvNDIView.h
+    mrvOS.h
 )
 
 set(SOURCES
     mrvNDICallbacks.cpp
     mrvNDIView.cpp
+    mrvOS.cpp
 )
+if(APPLE)
+    list(APPEND SOURCES mrvOS.mm)
+endif()
 
 find_package(Intl REQUIRED)
 find_package(libplacebo REQUIRED)
 find_package(NDI REQUIRED)
+find_package(tlRender REQUIRED)
 
-set(LIBRARIES ${FLTK_vk_LIBRARY} ${FLTK_LIBRARIES} 
+set(LIBRARIES 
     libplacebo
-    NDI
     mrvHDRWidgets
+    NDI
+    tlRender
+    ${FLTK_vk_LIBRARY} ${FLTK_LIBRARIES} 
     ${Intl_LIBRARIES}
 )
 

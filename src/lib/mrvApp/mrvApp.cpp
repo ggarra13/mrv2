@@ -5,6 +5,11 @@
 #include <fstream>
 #include <sstream>
 
+#ifdef _WIN32
+#include <winsock2.h>
+#endif
+
+
 #include <tlIO/System.h>
 
 #include <tlCore/StringFormat.h>
@@ -37,8 +42,6 @@ namespace py = pybind11;
 
 #include "mrvWidgets/mrvLogDisplay.h"
 #include "mrvWidgets/mrvPythonOutput.h"
-
-#include "mrvGL/mrvGLViewport.h"
 
 #if defined(TLRENDER_USD)
 #    include "mrvOptions/mrvUSD.h"
@@ -520,7 +523,11 @@ namespace mrv
         DBG;
         Fl::option(Fl::OPTION_VISIBLE_FOCUS, false);
         DBG;
+#ifdef TLRENDER_VK
+        Fl::use_high_res_VK(true);
+#else
         Fl::use_high_res_GL(true);
+#endif
         DBG;
 
         
@@ -575,6 +582,7 @@ namespace mrv
 
         ui->uiTimeline->setContext(context, p.timeUnitsModel, ui);
         ui->uiTimeline->setScrollBarsVisible(false);
+
 
         DBG;
         uiLogDisplay = new LogDisplay(0, 20, 340, 320);
@@ -769,7 +777,7 @@ namespace mrv
                         value.pixelTypeIndex >= 0 &&
                                 value.pixelTypeIndex < value.pixelTypes.size()
                             ? value.pixelTypes[value.pixelTypeIndex]
-                            : device::PixelType::None;
+                            : device::PixelType::kNone;
                     config.boolOptions = value.boolOptions;
                     p.outputDevice->setConfig(config);
                     p.outputDevice->setEnabled(value.deviceEnabled);
@@ -818,7 +826,7 @@ namespace mrv
                     // std::endl;
                 });
 
-#endif // TLRENDER_BMD || TLRENDER_NDI
+#endif // TLRENDER_BMD
 
         p.logObserver = observer::ListObserver<log::Item>::create(
             ui->app->getContext()->getLogSystem()->observeLog(),
@@ -853,7 +861,7 @@ namespace mrv
                         LOG_WARNING(msg);
                         break;
                     }
-                    case log::Type::Status:
+                    case log::Type::kStatus:
                     {
                         if (msg == lastStatusMessage)
                             continue;
@@ -1448,9 +1456,9 @@ namespace mrv
         
         Fl::remove_timeout((Fl_Timeout_Handler)_timer_update_cb, this);
     }
-#endif // TLRENDER_BMD || TLRENDER_NDI
+#endif // defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
 
-#ifdef TLRENDER_NDI
+#if defined(TLRENDER_NDI)
     void App::beginNDIOutputStream()
     {
         TLRENDER_P();

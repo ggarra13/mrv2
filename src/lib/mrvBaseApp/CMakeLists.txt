@@ -16,7 +16,7 @@ find_package(Freetype REQUIRED)
 find_package(Imath REQUIRED)
 find_package(RtAudio REQUIRED)
 
-target_link_libraries(mrvBaseApp tlBaseApp tlCore RtAudio freetype Imath::Imath)
+target_link_libraries(mrvBaseApp tlBaseApp tlCore RtAudio Freetype::Freetype Imath::Imath)
 target_include_directories(mrvBaseApp PUBLIC ${INCLUDES} )
 set_target_properties(mrvBaseApp PROPERTIES FOLDER lib)
 

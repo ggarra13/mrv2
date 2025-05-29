@@ -288,7 +288,7 @@ if not (sys.platform == 'win32'):
     if not doForms:
         # disable Forms support
         print("FLTK was configured without Forms support!")
-        UserDefinedSources.append('./src/Fl_Forms_Stubs.cxx')
+        #UserDefinedSources.append('./src/Fl_Forms_Stubs.cxx')
     else:
         print("FLTK was configured with Forms support!")
 

@@ -1,0 +1,5 @@
+lib/tlIO/CMakeLists.txt
+lib/tlIO/FFmpeg.cpp
+lib/tlIO/FFmpeg.h
+lib/tlIO/FFmpegWrite.cpp
+lib/tlIO/Plugin.h   

@@ -2,17 +2,16 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <cstring>
-
-#include <string>
-
-#include "mrvFl/mrvIO.h"
-
 #include "mrvWidgets/mrvPythonEditor.h"
+
+#include "mrViewer.h"
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
-#include "mrViewer.h"
+#include "mrvFl/mrvIO.h"
+
+#include <string>
+#include <cstring>
 
 namespace
 {

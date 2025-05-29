@@ -38,10 +38,10 @@ void mrv2_io(py::module& m)
             py::arg("resolution") = mrv::SaveResolution::kSameSize
 #ifdef TLRENDER_FFMPEG
             ,
-            py::arg("ffmpegProfile") = tl::ffmpeg::Profile::None,
+            py::arg("ffmpegProfile") = tl::ffmpeg::Profile::kNone,
             py::arg("ffmpegPreset") = "",
             py::arg("ffmpegPixelFormat") = "YUV420P",
-            py::arg("ffmpegAudioCodec") = tl::ffmpeg::AudioCodec::None,
+            py::arg("ffmpegAudioCodec") = tl::ffmpeg::AudioCodec::kNone,
             py::arg("ffmpegHardwareEncode") = false,
             py::arg("ffmpegOverride") = false,
             py::arg("ffmpegColorRange") = "PC",

@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0401
+version 1.0500
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
@@ -7,25 +7,28 @@ i18n_gnu_function gettext
 i18n_gnu_static_function gettext_noop
 header_name {.h}
 code_name {.cxx}
-decl {\#include "mrvCore/mrvHotkey.h"} {private local
-}
-
-decl {\#include "mrvFl/mrvPreferences.h"} {private local
+decl {\#include "mrViewer.h"} {public global
 }
 
 decl {\#include "mrvFl/mrvHotkey.h"} {private local
 }
 
-decl {\#include "mrvWidgets/mrvBrowser.h"} {public global
+decl {\#include "mrvFl/mrvPreferences.h"} {private local
+}
+
+decl {\#include "mrvWidgets/mrvBackend.h"} {selected public global
 }
 
 decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public global
 }
 
-decl {\#include "FL/Fl.H"} {public global
+decl {\#include "mrvWidgets/mrvBrowser.h"} {public global
 }
 
-decl {\#include "mrViewer.h"} {public global
+decl {\#include "mrvCore/mrvHotkey.h"} {private local
+}
+
+decl {\#include "FL/Fl.H"} {public global
 }
 
 class HotkeyUI {open
@@ -60,7 +63,7 @@ if ( type == 0 )
 else
 {
     mrv::searchHotkey( text, ui->uiFunction );
-}} selected
+}}
             xywh {138 24 223 30} color 20 when 10 textcolor 56
           }
           Fl_Check_Button uiMatchCase {

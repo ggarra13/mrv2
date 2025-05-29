@@ -29,6 +29,7 @@
 
 #include <FL/Fl.H>
 
+#include "mrvCore/mrvBackend.h"
 #include "mrvCore/mrvEnv.h"
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvHome.h"
@@ -40,10 +41,16 @@
 
 #include "mrvUI/mrvDesktop.h"
 
-#ifdef TLRENDER_GL
+#ifdef OPENGL_BACKEND
 #    include <tlGL/Init.h>
 #    include <FL/gl.h>
 #endif
+
+#include <string>
+#include <vector>
+#include <stdexcept>
+#include <array>
+#include <memory>
 
 namespace
 {
@@ -62,11 +69,7 @@ namespace mrv
             else
                 return std::string();
         }
-        #include <string>
-#include <vector>
-#include <stdexcept>
-#include <array>
-#include <memory>
+
 
 #ifdef _WIN32
         int exec_command(const std::string& command,
@@ -415,12 +418,14 @@ namespace mrv
         {
             std::string out = _("Unknown");
 
+#ifdef OPENGL_BACKEND
             tl::gl::initGLAD();
 
             // Get OpenGL information
             const char* vendorString = (char*)glGetString(GL_VENDOR);
             if (vendorString)
                 out = vendorString;
+#endif
 
             out = "GPU: " + out;
             return out;

@@ -6,7 +6,7 @@
 
 #include "mrvPanelWidget.h"
 
-#include "mrvFl/mrvColorAreaInfo.h"
+#include "mrvCore/mrvColorAreaInfo.h"
 
 class ViewerUI;
 

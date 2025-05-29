@@ -8,11 +8,11 @@
 #include <string>
 #include <memory>
 
-#include <FL/Fl_Widget.H> // For Fl_Callback
-
 #include "mrvEdit/mrvEditCallbacks.h"
 
 #include "mrvApp/mrvPlaylistsModel.h"
+
+#include <FL/Fl_Widget.H> // For Fl_Callback
 
 class Fl_Group;
 class Fl_Button;
@@ -99,11 +99,16 @@ namespace mrv
     void rotate_plus_90_cb(Fl_Menu_* m, ViewerUI* ui);
     void rotate_minus_90_cb(Fl_Menu_* m, ViewerUI* ui);
 
+        
     //! HDR callbacks
     void toggle_normalize_image_cb(Fl_Menu_* w, ViewerUI* ui);
     void toggle_invalid_values_cb(Fl_Menu_* w, ViewerUI* ui);
     void toggle_hdr_tonemap_cb(Fl_Menu_* w, ViewerUI* ui);
     void select_hdr_tonemap_cb(Fl_Menu_* w, ViewerUI* ui);
+    
+    void hdr_data_from_file_cb(Fl_Menu_* m, ViewerUI* ui);
+    void hdr_data_inactive_cb(Fl_Menu_* m, ViewerUI* ui);
+    void hdr_data_active_cb(Fl_Menu_* m, ViewerUI* ui);
 
     //! Channel callbacks
     void toggle_red_channel_cb(Fl_Menu_* m, ViewerUI* ui);
@@ -161,7 +166,7 @@ namespace mrv
     void toggle_menu_bar(Fl_Menu_*, ViewerUI* ui);
     void toggle_top_bar(Fl_Menu_*, ViewerUI* ui);
     void toggle_pixel_bar(Fl_Menu_*, ViewerUI* ui);
-    void toggle_bottom_bar(Fl_Menu_*, ViewerUI* ui);
+    void toggle_timeline_bar(Fl_Menu_*, ViewerUI* ui);
     void toggle_status_bar(Fl_Menu_*, ViewerUI* ui);
     void toggle_ui_bar(
         ViewerUI* ui, Fl_Group* const bar, const int sizeX, const int sizeY);

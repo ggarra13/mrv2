@@ -2,20 +2,22 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <string>
-#include <vector>
-#include <map>
 
-#include <tlCore/StringFormat.h>
-
-#include "mrvWidgets/mrvFunctional.h"
-#include "mrvWidgets/mrvLogDisplay.h"
+#include "mrViewer.h"
 
 #include "mrvPanelsCallbacks.h"
 
 #include "mrvApp/mrvSettingsObject.h"
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrvFunctional.h"
+#include "mrvWidgets/mrvLogDisplay.h"
+
+#include <tlCore/StringFormat.h>
+
+#include <string>
+#include <vector>
+#include <map>
+
 
 namespace mrv
 {

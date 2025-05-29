@@ -4,15 +4,15 @@
 
 #include "mrViewer.h"
 
+#include "mrvApp/mrvApp.h"
+#include "mrvApp/mrvFilesModel.h"
+#include "mrvApp/mrvMainControl.h"
+
 #include "mrvFl/mrvTimelinePlayer.h"
 #include "mrvFl/mrvSession.h"
 
 #include "mrvNetwork/mrvTCP.h"
 #include "mrvNetwork/mrvCompareOptions.h"
-
-#include "mrvApp/mrvFilesModel.h"
-#include "mrvApp/mrvMainControl.h"
-#include "mrvApp/mrvApp.h"
 
 #include <tlDevice/IOutput.h>
 
@@ -241,7 +241,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        Viewport* view = p.ui->uiView;
+        MyViewport* view = p.ui->uiView;
         view->setLUTOptions(p.lutOptions);
         view->setDisplayOptions({p.displayOptions});
         view->updateDisplayOptions();
@@ -275,7 +275,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        Viewport* view = p.ui->uiView;
+        MyViewport* view = p.ui->uiView;
         view->setCompareOptions(p.compareOptions);
         if (p.ui->uiSecondary)
         {
@@ -427,7 +427,7 @@ namespace mrv
             c->uiVolume->redraw();
         }
 
-        Viewport* view = p.ui->uiView;
+        MyViewport* view = p.ui->uiView;
         view->setCompareOptions(p.compareOptions);
 
         p.ocioOptions = view->getOCIOOptions();

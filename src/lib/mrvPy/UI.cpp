@@ -2,16 +2,17 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <sstream>
+#include "mrViewer.h"
+
+#include "mrvApp/mrvApp.h"
+
+#include "mrvCore/mrvI8N.h"
+
 
 #include <pybind11/pybind11.h>
 namespace py = pybind11;
 
-#include "mrvCore/mrvI8N.h"
-
-#include "mrvApp/mrvApp.h"
-
-#include "mrViewer.h"
+#include <sstream>
 
 namespace mrv
 {

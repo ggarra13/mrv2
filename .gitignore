@@ -30,8 +30,6 @@
 # Directories and backup files
 BUILD-*
 *-vulkan*
-tlRender/build*
-tlRender/debug_tests
 Qt5
 Qt6
 packages

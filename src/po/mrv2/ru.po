@@ -1998,8 +1998,8 @@ msgstr "Колонки"
 msgid "Checkerboard"
 msgstr "Проверочная доска"
 
-msgid "OpenGL"
-msgstr "OpenGL"
+msgid "Graphics Card"
+msgstr "Видеокарта"
 
 msgid "Adjustments"
 msgstr "Корректировки"
@@ -2893,52 +2893,6 @@ msgstr "Делает следующую аннотацию на всех кад�
 msgid "Notes"
 msgstr "Примечания"
 
-msgid "Invalid index for add clip to timeline."
-msgstr "Неверный индекс для добавления в график."
-
-msgid "Could not get current path."
-msgstr "Невозможно найти текущий путь."
-
-msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
-msgstr ""
-"Элемент EDL \" {0} больше не загружен. Не может отменить или переделать."
-
-msgid "Could not paste {0}.  Error {1}."
-msgstr "Невозможно вставить {0}. Ошибка {1}."
-
-msgid "Could not save .otio file: {0}"
-msgstr "Невозможно сохранить файл.otio: {0}"
-
-msgid "Error saving {0}. {1}"
-msgstr "Ошибка сохранения {0}. {1}"
-
-msgid "Empty EDL file.  Not saving."
-msgstr "Пустой файл EDL, не сохранённый."
-
-msgid "Destination file is invalid."
-msgstr "Файл назначения недействителен."
-
-msgid "You can only add clips to an .otio EDL playlist."
-msgstr "Вы можете добавить только клипы в плейлист EDL.otio."
-
-msgid "Unknown media reference"
-msgstr "Неизвестная ссылка на средства массовой информации"
-
-msgid "Track #{0} - {1}"
-msgstr "Дорожка # {0} - {1}"
-
-msgid "Cannot currently concatenate an .otio file."
-msgstr "В настоящее время невозможно создать файл.otio."
-
-msgid "Cannot currently concatenate a directory."
-msgstr "В настоящее время не удалось создать каталог."
-
-msgid "Could not append video track {0}"
-msgstr "Невозможно добавить видео дорожку {0}"
-
-msgid "Could not append audio track {0}"
-msgstr "Не удалось добавить звуковую дорожку {0}"
-
 msgid "Server started at port {0}."
 msgstr "Сервер стартовал в порту {0}."
 
@@ -3130,6 +3084,9 @@ msgstr "Размер рендеринга: {0}"
 
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr "Информация о слое изображения '{0}': {1} {2}"
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "Информация о буфере вне экрана: {0}"
 
 msgid "Unsupported output format: "
 msgstr "Неподдерживаемый формат вывода: "
@@ -3737,6 +3694,52 @@ msgstr "Изменить текст Аннотация"
 msgid "No item selected"
 msgstr "Не выбранный элемент"
 
+msgid "Invalid index for add clip to timeline."
+msgstr "Неверный индекс для добавления в график."
+
+msgid "Could not get current path."
+msgstr "Невозможно найти текущий путь."
+
+msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
+msgstr ""
+"Элемент EDL \" {0} больше не загружен. Не может отменить или переделать."
+
+msgid "Could not paste {0}.  Error {1}."
+msgstr "Невозможно вставить {0}. Ошибка {1}."
+
+msgid "Could not save .otio file: {0}"
+msgstr "Невозможно сохранить файл.otio: {0}"
+
+msgid "Error saving {0}. {1}"
+msgstr "Ошибка сохранения {0}. {1}"
+
+msgid "Empty EDL file.  Not saving."
+msgstr "Пустой файл EDL, не сохранённый."
+
+msgid "Destination file is invalid."
+msgstr "Файл назначения недействителен."
+
+msgid "You can only add clips to an .otio EDL playlist."
+msgstr "Вы можете добавить только клипы в плейлист EDL.otio."
+
+msgid "Unknown media reference"
+msgstr "Неизвестная ссылка на средства массовой информации"
+
+msgid "Track #{0} - {1}"
+msgstr "Дорожка # {0} - {1}"
+
+msgid "Cannot currently concatenate an .otio file."
+msgstr "В настоящее время невозможно создать файл.otio."
+
+msgid "Cannot currently concatenate a directory."
+msgstr "В настоящее время не удалось создать каталог."
+
+msgid "Could not append video track {0}"
+msgstr "Невозможно добавить видео дорожку {0}"
+
+msgid "Could not append audio track {0}"
+msgstr "Не удалось добавить звуковую дорожку {0}"
+
 msgid "%s - Page %d"
 msgstr "%s - page %d"
 
@@ -3835,8 +3838,8 @@ msgstr "1.66"
 msgid "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 
-msgid "Cache:"
-msgstr "Кэш:"
+msgid "Cache: "
+msgstr "Кэш: "
 
 msgid "    Used: %.2g of %zu Gb (%.2g %%)"
 msgstr "Использовано: %.2g от %zu Gb (%.2g%%)"
@@ -3847,11 +3850,14 @@ msgstr "   Впереди   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "      Позади V: % 4<PRIu64>    A: % 4<PRIu64>"
 
+msgid "HDR monitor found."
+msgstr "HDR-монитор найден."
+
+msgid "HDR monitor not found or not configured."
+msgstr "HDR-монитор не найден или не настроен."
+
 msgid "Edit Text"
 msgstr "Изменить текст"
-
-msgid "Invalid font for text drawing"
-msgstr "Неверный шрифт для текстового рисунка"
 
 msgid "Could not convert message to shape: "
 msgstr "Невозможно преобразовать сообщение в форму:"
@@ -4051,8 +4057,14 @@ msgstr "Редакция/HDR/Неверные значения"
 msgid "Render/HDR/Ignore Chromaticities"
 msgstr "Редакция/HDR/Игнорировать хроматизм"
 
-msgid "Render/HDR/Toggle Tonemap"
-msgstr "Редакция/HDR/Тональность"
+msgid "Render/HDR Data/From File"
+msgstr "Рендеринг/Данные HDR/Из файла"
+
+msgid "Render/HDR Data/Inactive"
+msgstr "Рендеринг/Данные HDR/Неактивно"
+
+msgid "Render/HDR Data/Active"
+msgstr "Рендеринг/Данные HDR/Активные"
 
 msgid "Render/HDR/Tonemap"
 msgstr "Редакция/HDR/Тональность"
@@ -5926,8 +5938,11 @@ msgstr "Игнорировать"
 msgid "Apply"
 msgstr "Применить"
 
-msgid "Never"
-msgstr "Никогда"
+msgid "Inactive"
+msgstr "Неактивно"
+
+msgid "Active"
+msgstr "Активные"
 
 msgid "ST2094_40"
 msgstr "ST2094_40"
@@ -6405,8 +6420,8 @@ msgstr "HDR"
 msgid "Chromaticities"
 msgstr "Хроматичности"
 
-msgid "Tonemap"
-msgstr "Тоновая карта"
+msgid "HDR Data"
+msgstr "Данные HDR"
 
 msgid "Tonemap Algorithm"
 msgstr "Алгоритм тоновой карты"
@@ -6753,23 +6768,21 @@ msgid "Blit Viewports"
 msgstr "Blit Viewports"
 
 msgid ""
-"Viewports can be drawn with blitting or with OpenGL shaders.  Depending on "
-"graphics card and OS one can perform better then the other."
+"Viewports can be drawn with blitting or with shaders.  Depending on graphics "
+"card and OS one can perform better then the other."
 msgstr ""
-"Просмотры можно нарисовать с помощью блеска или с помощью OpenGL Sheners. В "
-"зависимости от карты графики и ОС один может работать лучше, а другой - "
-"лучше."
+"Вьюпорты могут отображаться с помощью блиттинга или шейдеров. В зависимости "
+"от видеокарты и ОС один из методов может работать лучше другого."
 
 msgid "Blit Timeline"
 msgstr "Блитная временн*е рамки"
 
 msgid ""
-"Timeline can be drawn with blitting or with OpenGL shaders.  Depending on "
-"graphics card and OS one can perform better then the other."
+"Timeline can be drawn with blitting or with shaders.  Depending on graphics "
+"card and OS one can perform better than the other."
 msgstr ""
-"Временную линию можно нарисовать с помощью блеска или с помощью OpenGL "
-"Sheners. В зависимости от карты графики и ОС один может работать лучше, а "
-"другой - лучше."
+"Таймлайн может отображаться с помощью блиттинга или шейдеров. В зависимости "
+"от видеокарты и ОС один из методов может работать лучше другого."
 
 msgid ""
 "For changes to take effect, you will need to re-open any movies already "
@@ -6938,9 +6951,6 @@ msgstr "Резюме"
 
 msgid "Preset Name"
 msgstr "Предопределенное имя"
-
-msgid "Active"
-msgstr "Активные"
 
 msgid "Function"
 msgstr "Функция"
@@ -7247,6 +7257,15 @@ msgstr "Автонормализовать"
 
 msgid "Invalid Values"
 msgstr "Неверные значения"
+
+msgid "HDR Data From File"
+msgstr "Данные HDR из файла"
+
+msgid "HDR Data Inactive"
+msgstr "Данные HDR Неактивно"
+
+msgid "HDR Data Active"
+msgstr "Данные HDR Активно"
 
 msgid "Toggle HDR tonemap"
 msgstr "Скриншот"
@@ -7655,6 +7674,36 @@ msgstr "Переключить окно горячих клавиш"
 
 msgid "Toggle About Window"
 msgstr "Закладка о окне"
+
+#~ msgid "HDR Data False"
+#~ msgstr "Данные HDR отключены"
+
+#~ msgid "HDR Data True"
+#~ msgstr "Данные HDR включены"
+
+#, fuzzy
+#~ msgid ""
+#~ "tter then the other.Timeline can be drawn with blitting or with shaders.  "
+#~ "Depending on graphics card and OS one can perform be"
+#~ msgstr ""
+#~ "Временную линию можно нарисовать с помощью блеска или с помощью OpenGL "
+#~ "Sheners. В зависимости от карты графики и ОС один может работать лучше, а "
+#~ "другой - лучше."
+
+#~ msgid "OpenGL"
+#~ msgstr "OpenGL"
+
+#~ msgid "Invalid font for text drawing"
+#~ msgstr "Неверный шрифт для текстового рисунка"
+
+#~ msgid "Render/HDR/Toggle Tonemap"
+#~ msgstr "Редакция/HDR/Тональность"
+
+#~ msgid "Never"
+#~ msgstr "Никогда"
+
+#~ msgid "Tonemap"
+#~ msgstr "Тоновая карта"
 
 #~ msgid "Could not initialize NDI"
 #~ msgstr "Не удалось инициализировать NDI"
