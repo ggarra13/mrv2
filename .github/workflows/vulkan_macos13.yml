@@ -1,4 +1,4 @@
-name: MacOS M1 Vulkan
+name: MacOS Intel Vulkan
 
 on:
   push:
@@ -12,12 +12,9 @@ jobs:
   # FULL BUILDS                     #
   #                                 #
   ###################################
-  macos-14-vulkan-full-build:
-    runs-on: macos-14
+  macos-13-vulkan-full-build:
+    runs-on: macos-13
 
-    env:
-      CMAKE_OSX_DEPLOYMENT_TARGET: 14.0
-      
     steps:
     
     - uses: actions/checkout@v4
@@ -39,13 +36,9 @@ jobs:
       
     - name: Install Python dependencies
       run: brew install libb2 libffi readline sqlite3 xz zlib
-      
-    - name: Reinstall xz to avoid broken macOS 14
-      run: brew reinstall xz
         
     - name: Install pyFLTK dependencies
       run: brew install swig
-      
         
     # Download and install Vulkan SDK with MoltenVK
     - name: Install Vulkan SDK
@@ -58,7 +51,7 @@ jobs:
         brew install vulkan-profiles
         brew install spirv-tools
 
-        export VULKAN_SDK=/opt/homebrew/
+        export VULKAN_SDK=/usr/local
         echo "VULKAN_SDK=${VULKAN_SDK}" >> $GITHUB_ENV
 
     # Verify Vulkan installation
@@ -96,9 +89,9 @@ jobs:
 
     - name: Build mrv2
       run: |
-        ./etc/runme_nolog.sh -t package -vk
-
-    - name: Upload binaries  # Conditional step
+        ./etc/runme_nolog.sh -D TLRENDER_USD=OFF -t package -vk
+      
+    - name: Upload binaries
       if: github.ref_name == 'beta'
       run: |
         ./bin/release/upload_sourceforge.sh
