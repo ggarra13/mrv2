@@ -340,11 +340,11 @@ echo
 echo "NDI support ........................ ${TLRENDER_NDI} 	(TLRENDER_NDI)"
 if [[ $TLRENDER_NDI == ON || $TLRENDER_NDI == 1 ]]; then
     echo "NDI SDK ${TLRENDER_NDI_SDK} 	(TLRENDER_NDI_SDK}"
-    if [[ $TLRENDER_VK == ON ]]; then
-	echo "VULKAN_SDK    .................. ${VULKAN_SDK} 	(env. variable)"
-    fi
 fi
-
+if [[ $TLRENDER_VK == ON || $TLRENDER_VK == 1 ]]; then
+    echo "VULKAN_SDK    .................. ${VULKAN_SDK} 	(env. variable)"
+fi
+    
 echo
 echo "JPEG   support ..................... ${TLRENDER_JPEG} 	(TLRENDER_JPEG)"
 echo "LibRaw support ..................... ${TLRENDER_RAW} 	(TLRENDER_RAW)"
