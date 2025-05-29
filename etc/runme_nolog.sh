@@ -206,16 +206,19 @@ fi
 if [ -z "$TLRENDER_VK" ]; then
     if [ -e "${VULKAN_SDK}/include/vulkan/vulkan.h" ]; then
 	export TLRENDER_VK=ON
+	echo "Vulkan FOUND at ${VULKAN_SDK}/include/vulkan"
     else
 	export TLRENDER_VK=OFF
 	export MRV2_HDR=OFF
-	echo "VULKAN NOT FOUND at ${VULKAN_SDK}/include/vulkan"
+	echo "Vulkan NOT FOUND at ${VULKAN_SDK}/include/vulkan"
     fi
 else
     if [ ! -e "${VULKAN_SDK}/include/vulkan/vulkan.h" ]; then
-	echo "VULKAN NOT FOUND at ${VULKAN_SDK}/include/vulkan"
+	echo "Vulkan NOT FOUND at ${VULKAN_SDK}/include/vulkan"
 	export TLRENDER_VK=OFF
 	export MRV2_HDR=OFF
+    else
+	echo "Vulkan FOUND at ${VULKAN_SDK}/include/vulkan"
     fi
 fi
 
