@@ -14,6 +14,8 @@
 #include <tlVk/Shader.h>
 #include <tlVk/Util.h>
 
+#include <FL/fl_utf8.h>
+
 namespace
 {
     const int kCrossSize = 10;
@@ -279,12 +281,6 @@ namespace mrv
     {
         using namespace tl::draw;
 
-        // gl::SetAndRestore(VK_BLEND, VK_TRUE);
-
-        // glBlendFuncSeparate(
-        //     VK_SRC_ALPHA, VK_ONE_MINUS_SRC_ALPHA, VK_ONE,
-        //     VK_ONE_MINUS_SRC_ALPHA);
-
         bool catmullRomSpline = false;
         std::vector< draw::Point > line;
 
@@ -315,28 +311,45 @@ namespace mrv
         return App::ui->uiView->acceptMultilineInput();
     }
     
+    void VKTextShape::to_cursor()
+    {
+        unsigned size = fl_utf8toa(text.c_str(), utf8_pos, nullptr, 0);
+
+        std::string dst;
+        dst.reserve(size);
+        
+        fl_utf8toa(text.c_str(), utf8_pos, dst.data(), size + 1);
+        cursor = size;
+    }
+    
     int VKTextShape::paste()
     {
         if (!Fl::event_text() || !Fl::event_length()) return 1;
             
         const char* t = Fl::event_text();
         const char* e = t + Fl::event_length();
-        char* copy = new char[e - t + 1];
 
-        memcpy(copy, t, e - t + 1);
+        const char* current = text.c_str() + utf8_pos;
+        const char* start = current;
+        const char* end = start + text.size() - utf8_pos;
+        const char* pos = fl_utf8fwd(current + 1, start, end);
+        unsigned next = pos - text.c_str();
+
+        char* copy = new char[e - t + 1];
+        memcpy(copy, t, e - t);
         copy[e - t] = 0;
 
         std::string right;
         std::string left;
-        if (cursor > 0)
-            left = text.substr(0, cursor);
-        if (cursor + 1 < text.size())
-            right = text.substr(cursor + 1, text.size());
+        if (utf8_pos > 0)
+            left = text.substr(0, utf8_pos);
+        if (utf8_pos < text.size())
+            right = text.substr(utf8_pos, text.size());
 
         text = left + copy + right;
-        cursor = text.size();
-            
-        delete [] copy;
+
+        to_cursor();
+        
         return 1;
     }
     
@@ -351,19 +364,12 @@ namespace mrv
              
         switch(e)
         {
-        case FL_ENTER:
-        case FL_LEAVE:
-        case FL_FOCUS:
-        case FL_UNFOCUS:
-            return 1;
         case FL_PASTE:
         {
             return paste();
             break;
         }
         case FL_KEYBOARD:
-            if (Fl::event_ctrl() && (rawkey == 'v' || rawkey == 'V'))
-                return paste();
             switch(rawkey)
             {
             case FL_Escape:
@@ -372,61 +378,111 @@ namespace mrv
                 break;
             case FL_Delete:
             {
-                if (text.empty())
+                if (utf8_pos >= text.size())
                     break;
-                int len = 1;
-                size_t textLen = text.size();
-                if (text[cursor] == '\n')
-                    len = 2;
+                const char* current = text.c_str() + utf8_pos;
+                const char* start = current;
+                const char* end = start + text.size() - utf8_pos;
+                const char* pos = fl_utf8fwd(current + 1, start, end);
+                unsigned next = pos - text.c_str();
+                std::string left;
                 std::string right;
-                if (cursor < textLen - len)
-                    right = text.substr(cursor + len, textLen);
-                text = text.substr(0, cursor);
-                text += right;
+                if (utf8_pos > 0)
+                    left = text.substr(0, utf8_pos);
+                if (next < text.size())
+                    right = text.substr(next, text.size());
+                text = left + right;
+                to_cursor();
                 break;
             }
             case FL_BackSpace:
             {
-                if (text.empty())
+                if (utf8_pos == 0)
                     break;
-                int len = 1;
-                size_t textLen = text.size();
-                if (text[cursor] == '\n')
-                    len = 2;
+                unsigned last = utf8_pos;
+                const char* current = text.c_str() + utf8_pos;
+                const char* start = text.c_str();
+                const char* end = current;
+                const char* pos = fl_utf8back(current - 1, start, end);
+                utf8_pos = pos - text.c_str();
+                std::string left;
                 std::string right;
-                if (cursor < textLen - len + 1)
-                    right = text.substr(cursor + 1, textLen);
-                text = text.substr(0, cursor - len);
-                text += right;
-                cursor -= 1;
+                if (utf8_pos > 0)
+                    left = text.substr(0, utf8_pos);
+                if (last < text.size())
+                    right = text.substr(last, text.size());
+                text = left + right;
+                to_cursor();
                 break;
             }
             case FL_Left:
-                if (cursor == 0)
+            {
+                if (utf8_pos == 0)
                     break;
-                --cursor;
-                if (text[cursor] == '\n')
-                    --cursor;
+                const char* current = text.c_str() + utf8_pos;
+                const char* start = text.c_str();
+                const char* end = current;
+                const char* pos = fl_utf8back(current - 1, start, end);
+                utf8_pos = pos - text.c_str();
+                to_cursor();
                 break;
+            }
             case FL_Right:
-                if (cursor >= text.size())
+            {
+                if (utf8_pos >= text.size())
                     break;
-                ++cursor;
-                if (text[cursor] == '\n')
-                    ++cursor;
+                const char* current = text.c_str() + utf8_pos;
+                const char* start = current;
+                const char* end = start + text.size() - utf8_pos;
+                const char* pos = fl_utf8fwd(current + 1, start, end);
+                utf8_pos = pos - text.c_str();
+                to_cursor();
                 break;
+            }
             case FL_Enter:
             case FL_KP_Enter:
-                text += '\n';
-                ++cursor;
+            {
+                std::string left;
+                std::string right;
+                if (utf8_pos > 0)
+                    left = text.substr(0, utf8_pos); 
+
+                const char* current = text.c_str() + utf8_pos;
+                const char* start = current;
+                const char* end = start + text.size() - utf8_pos;
+                const char* pos = fl_utf8fwd(current + 1, start, end);
+                if (utf8_pos < text.size())
+                    right = text.substr(utf8_pos, text.size());
+                
+                text = left + '\n' + right;
+                utf8_pos += Fl::event_length();
+                to_cursor();
                 break;
+            }
             default:
             {
+                std::string left;
+                std::string right;
+                
                 std::string key = Fl::event_text();
                 if (key != "")
                 {
-                    text += Fl::event_text();
-                    ++cursor;
+                    std::string left;
+                    std::string right;
+                    if (utf8_pos > 0)
+                        left = text.substr(0, utf8_pos); 
+                    
+                    const char* current = text.c_str() + utf8_pos;
+                    const char* start = current;
+                    const char* end = start + text.size() - utf8_pos;
+                    const char* pos = fl_utf8fwd(current + 1, start, end);
+                    
+                    if (utf8_pos < text.size())
+                        right = text.substr(utf8_pos, text.size());
+                    
+                    text = left + key + right;
+                    utf8_pos += Fl::event_length();
+                    to_cursor();
                 }
                 break;
             }
@@ -441,6 +497,8 @@ namespace mrv
         const std::shared_ptr<timeline_vlk::Render>& render,
         const std::shared_ptr<vulkan::Lines> lines)
     {
+        file::Path path(fontPath);
+        const std::string fontFamily = path.getBaseName();
         if (!fontSystem->hasFont(fontFamily))
         {
             fontSystem->addFont(fontPath);
@@ -450,9 +508,8 @@ namespace mrv
         const image::FontMetrics fontMetrics = fontSystem->getMetrics(fontInfo);
         int ascender = fontMetrics.ascender;
         int descender = fontMetrics.descender;
-        int height = fontSize; //fontMetrics.lineHeight;
 
-        // Copy the text to process it
+        // Copy the text to process it line by line
         std::string txt = text;
 
         int x = pts[0].x;
@@ -462,11 +519,10 @@ namespace mrv
         std::size_t pos = txt.find('\n');
         std::vector<timeline::TextInfo> textInfos;
         unsigned cursor_count = 0;
-        for (; pos != std::string::npos; y += height, pos = txt.find('\n'))
+        for (; pos != std::string::npos; y += fontSize, pos = txt.find('\n'))
         {
-            cursor_pos.x = x;
-            cursor_pos.y += height;
             pnt.y = y;
+            
             const std::string line = txt.substr(0, pos);
             const auto& glyphs = fontSystem->getGlyphs(line, fontInfo);
             for (const auto& glyph : glyphs)
@@ -487,13 +543,13 @@ namespace mrv
                 if (cursor_count < cursor)
                 {
                     cursor_pos.x = x;
+                    cursor_pos.y += fontSize;
+                    ++cursor_count;
                 }
             }
         }
         if (!txt.empty())
         {
-            cursor_pos.x = x;
-            cursor_pos.y = y;
             pnt.y = y;
             const auto& glyphs = fontSystem->getGlyphs(txt, fontInfo);
             for (const auto& glyph : glyphs)
@@ -511,11 +567,11 @@ namespace mrv
         }
 
         const image::Color4f cursorColor(.8F, 0.8F, 0.8F);
-        math::Box2i cursorBox(cursor_pos.x, cursor_pos.y - ascender - descender, 2, height);
+        math::Box2i cursorBox(cursor_pos.x, cursor_pos.y - ascender - descender, 2, fontSize);
             
         if (editing)
         {
-            box = math::Box2i(pts[0].x, pts[0].y - height / 2, 70, height / 2);
+            box = math::Box2i(pts[0].x, pts[0].y - fontSize / 2, 70, fontSize / 2);
             for (const auto& textInfo : textInfos)
             {
                 for (const auto& v : textInfo.mesh.v)
@@ -602,7 +658,7 @@ namespace mrv
         to_json(json, static_cast<const draw::PathShape&>(value));
         json["type"] = "Text";
         json["text"] = value.text;
-        json["fontFamily"] = value.fontFamily;
+        json["fontPath"] = value.fontPath;
         json["fontSize"] = value.fontSize;
     }
 
@@ -610,7 +666,7 @@ namespace mrv
     {
         from_json(json, static_cast<draw::PathShape&>(value));
         json.at("text").get_to(value.text);
-        json.at("fontFamily").get_to(value.fontFamily);
+        json.at("fontPath").get_to(value.fontPath);
         json.at("fontSize").get_to(value.fontSize);
     }
 

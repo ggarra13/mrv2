@@ -684,9 +684,9 @@ namespace mrv
             if (fs::exists(filePath))
             {
                 auto path = fs::absolute(filePath);
-                if (set.find(path.generic_string()) == set.end())
+                if (set.find(path.u8string()) == set.end())
                 {
-                    set.insert(path.generic_string());
+                    set.insert(path.u8string());
                     result.push_back(str);
                 }
             }

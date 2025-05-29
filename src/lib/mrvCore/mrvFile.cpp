@@ -151,7 +151,7 @@ namespace mrv
         
         bool isReadable(const fs::path& p)
         {
-            const std::string& filePath = p.generic_string();
+            const std::string& filePath = p.u8string();
             if (filePath.empty())
                 return false;
 

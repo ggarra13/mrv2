@@ -364,6 +364,8 @@ namespace mrv
         {
             TLRENDER_P();
 
+            Fl::event_dispatch(nullptr);
+                        
             auto player = getTimelinePlayer();
             if (!player)
                 return 0;
@@ -661,6 +663,7 @@ namespace mrv
                         
                         double pixels_unit = pixels_per_unit();
                         double pct = renderSize.h / 1024.F;
+                        if (pct < 1.0) pct = 1.0;
                         int font_size = settings->getValue<int>(kFontSize);
                         double fontSize = font_size * pct / pixels_unit;
                         math::Vector2f pos(_getRasterf());
@@ -676,7 +679,7 @@ namespace mrv
                             image::discoverSystemFonts();
                         p.multilineText = std::make_shared<VKTextShape>();
                         shape = p.multilineText;
-
+  
                         shape->fontSystem = p.fontSystem;
                         shape->fontPath = fontList[(unsigned)font];
                         shape->fontSize = fontSize;
@@ -903,17 +906,62 @@ namespace mrv
                 LOG_INFO("BELOWMOUSE? " << (Fl::belowmouse() == this));
             }
 #endif
-
-            int ret = VkWindow::handle(event);
-            if ((event == FL_KEYDOWN || event == FL_KEYUP ||
-                 (event == FL_PUSH && ret == 1)) &&
-                Fl::focus() != this)
-            {
-                return ret;
-            }
-
+            p.event_x = Fl::event_x();
+            p.event_y = Fl::event_y();
+            
+            int ret = 0;
             if (p.multilineText)
             {
+                switch(event)
+                {   
+                case FL_ENTER:
+                case FL_LEAVE:
+                case FL_FOCUS:
+                case FL_UNFOCUS:
+                    return 1;
+                case FL_MOVE:
+                {
+                    p.mousePos = _getFocus();
+                    const math::Vector2f pos = _getRasterf();
+                    const math::Vector2i widget = p.multilineText->box.min;
+                    if (pos.x >= widget.x && pos.x <= widget.x + 10 &&
+                        pos.y >= widget.y && pos.y <= widget.y + 10)
+                    {
+                        set_cursor(FL_CURSOR_ARROW);
+                    }
+                    else
+                    {
+                        set_cursor(FL_CURSOR_INSERT);
+                    }
+                    return 1;
+                }
+                case FL_NO_EVENT:
+                default:
+                    break;
+                }
+
+            
+                // Handle a virtual FL_PASTE event that will get sent
+                // to the multilineText widget.
+                // If we have a text widget, don't swallow key presses
+                unsigned rawkey = Fl::event_key();
+#if defined(FLTK_USE_WAYLAND)
+                if (rawkey >= 'A' && rawkey <= 'Z')
+                {
+                    rawkey = tolower(rawkey);
+                }
+#endif
+                if (event == FL_KEYBOARD && Fl::event_ctrl() && rawkey == 'v')
+                {
+                    Fl::paste(*this, 1);
+                    return 1;
+                }
+                if (event == FL_PUSH && Fl::event_button2())
+                {
+                    Fl::paste(*this, 0);
+                    return 1;
+                }
+                    
                 ret = p.multilineText->handle(event);
                 if (ret)
                 {
@@ -922,8 +970,13 @@ namespace mrv
                 }
             }
 
-            p.event_x = Fl::event_x();
-            p.event_y = Fl::event_y();
+            ret = VkWindow::handle(event);
+            if ((event == FL_KEYDOWN || event == FL_KEYUP ||
+                 (event == FL_PUSH && ret == 1)) &&
+                Fl::focus() != this)
+            {
+                return ret;
+            }
 
             switch (event)
             {
@@ -1042,24 +1095,6 @@ namespace mrv
                 }
                 if (p.actionMode != ActionMode::kText)
                     _updateCursor();
-                else
-                {
-                    if (p.multilineText)
-                    {
-                        take_focus();
-                        const math::Vector2f pos = _getRasterf();
-                        const math::Vector2i widget = p.multilineText->box.min;
-                        if (pos.x >= widget.x && pos.x <= widget.x + 10 &&
-                            pos.y >= widget.y && pos.y <= widget.y + 10)
-                        {
-                            set_cursor(FL_CURSOR_ARROW);
-                        }
-                        else
-                        {
-                            set_cursor(FL_CURSOR_INSERT);
-                        }
-                    }
-                }
                 _updatePixelBar();
                 return 1;
             }

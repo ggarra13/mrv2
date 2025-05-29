@@ -153,22 +153,22 @@ namespace mrv
                     auto w = view->getMultilineInput();
                     if (!w)
                         return;
+                    settings->setValue(kTextFont, font);
                     const Fl_Menu_Item* item = c->mvalue();
                     std::string fontName = item->label();
-                    w->fontFamily = fontName;
                     
                     const std::vector<fs::path>& fontList = image::discoverSystemFonts();
                     fs::path out = fontList[0];
                     for (const auto& path : fontList)
                     {
-                        file::Path filePath(path.filename().generic_string());
+                        file::Path filePath(path.filename().u8string());
                         if (fontName == filePath.getBaseName())
                         {
                             out = path;
                             break;
                         }
                     }
-                    w->fontPath = out;
+                    w->fontPath = out.u8string();
 #endif
                     view->redrawWindows();
                 });
@@ -199,6 +199,7 @@ namespace mrv
 #endif
 
 #ifdef VULKAN_BACKEND
+                    if (pct < 1.F) pct = 1.F;
                     int fontSize = o->value() * pct * pixels_per_unit;
                     w->fontSize = fontSize;
 #endif

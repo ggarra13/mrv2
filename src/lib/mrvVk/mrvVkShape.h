@@ -167,13 +167,16 @@ namespace mrv
             const std::shared_ptr<timeline_vlk::Render>&,
             const std::shared_ptr<vulkan::Lines> lines) override;
 
+    protected:
+        void to_cursor();
+        
     public:
-        std::string fontFamily = "NotoSans-Regular";
-        fs::path fontPath;
+        std::string fontPath;
         std::string text;
         uint16_t fontSize;
         bool editing = true;
         Fl_Font font;
+        unsigned utf8_pos = 0;
         unsigned cursor = 0;
         math::Vector2f pos;
         math::Box2i    box;
