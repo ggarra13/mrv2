@@ -2,23 +2,24 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <iostream>
-#include <sstream>
+#include "mrViewer.h"
 
-#include <pybind11/pybind11.h>
+#include "mrvApp/mrvApp.h"
 
-namespace py = pybind11;
+#include "mrvCore/mrvI8N.h"
 
-#include <tlCore/Image.h>
+
 #include <tlTimeline/ImageOptions.h>
 #include <tlTimeline/LUTOptions.h>
 #include <tlTimeline/DisplayOptions.h>
 
-#include "mrvCore/mrvI8N.h"
+#include <tlCore/Image.h>
 
-#include "mrvApp/mrvApp.h"
+#include <pybind11/pybind11.h>
+namespace py = pybind11;
 
-#include "mrViewer.h"
+#include <iostream>
+#include <sstream>
 
 namespace mrv2
 {

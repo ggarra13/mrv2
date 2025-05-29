@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="1920"
+   height="1080"
+   viewBox="0 0 508 285.75001"
+   version="1.1"
+   id="svg2617"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   sodipodi:docname="AudioTones.svg"
+   inkscape:export-filename="AudioToneRight.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview2619"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="true"
+     units="in"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:current-layer="layer4">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2678"
+       units="in"
+       spacingx="6.3500001"
+       spacingy="6.3500001"
+       originx="0"
+       originy="0" />
+  </sodipodi:namedview>
+  <defs
+     id="defs2614" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="Background"
+     style="display:inline">
+    <rect
+       style="display:inline;fill:#f0f0f0;fill-opacity:1;stroke-width:0.264583"
+       id="rect2089"
+       width="508"
+       height="285.75"
+       x="0"
+       y="0" />
+  </g>
+  <g
+     inkscape:label="STEREO"
+     inkscape:groupmode="layer"
+     id="layer1"
+     style="display:none">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:45.1556px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="161.25243"
+       y="159.02562"
+       id="text1877"><tspan
+         sodipodi:role="line"
+         id="tspan1875"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:45.1556px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="161.25243"
+         y="159.02562">STEREO</tspan></text>
+    <circle
+       style="fill:#000000;fill-opacity:1;stroke-width:0.264583"
+       id="path3772"
+       cx="63.499996"
+       cy="146.05"
+       r="31.749994" />
+    <circle
+       style="display:inline;fill:#000000;fill-opacity:1;stroke-width:0.264584"
+       id="path3772-61"
+       cx="444.5"
+       cy="146.05"
+       r="31.749992" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="LEFT CHANNEL"
+     style="display:none">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:45.1556px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="196.29872"
+       y="159.03665"
+       id="text1877-5"><tspan
+         sodipodi:role="line"
+         id="tspan1875-2"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:45.1556px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="196.29872"
+         y="159.03665">LEFT</tspan></text>
+    <circle
+       style="display:inline;fill:#000000;fill-opacity:1;stroke-width:0.264583"
+       id="path3772-6"
+       cx="63.5"
+       cy="142.875"
+       r="31.75" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="RIGHT CHANNEL"
+     style="display:inline">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:45.1556px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="182.57346"
+       y="159.03665"
+       id="text1877-5-7"><tspan
+         sodipodi:role="line"
+         id="tspan1875-2-6"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:45.1556px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="182.57346"
+         y="159.03665">RIGHT</tspan></text>
+    <circle
+       style="display:inline;fill:#000000;fill-opacity:1;stroke-width:0.264583"
+       id="path3772-61-2"
+       cx="444.5"
+       cy="142.875"
+       r="31.749996" />
+  </g>
+</svg>

@@ -1976,8 +1976,8 @@ msgstr "Colonne"
 msgid "Checkerboard"
 msgstr "Tabella di controllo"
 
-msgid "OpenGL"
-msgstr "OpenGL"
+msgid "Graphics Card"
+msgstr "Scheda grafica"
 
 msgid "Adjustments"
 msgstr "Aggiustamenti"
@@ -2876,53 +2876,6 @@ msgstr "Rende la seguente annotazione mostrare su tutti i fotogrammi."
 msgid "Notes"
 msgstr "Note"
 
-msgid "Invalid index for add clip to timeline."
-msgstr "Indice non valido per aggiungere clip alla timeline."
-
-msgid "Could not get current path."
-msgstr "Impossibile ottenere il percorso attuale."
-
-msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
-msgstr ""
-"L'elemento EDL \"{0}\" non è più caricato. Non è possibile annullare o "
-"rifare."
-
-msgid "Could not paste {0}.  Error {1}."
-msgstr "Impossibile incollare {0}. Errore {1}."
-
-msgid "Could not save .otio file: {0}"
-msgstr "Impossibile salvare il file.otio: {0}"
-
-msgid "Error saving {0}. {1}"
-msgstr "Errore nel salvare {0}. {1}"
-
-msgid "Empty EDL file.  Not saving."
-msgstr "File EDL vuoto. Non salvato."
-
-msgid "Destination file is invalid."
-msgstr "Il file di destinazione non è valido."
-
-msgid "You can only add clips to an .otio EDL playlist."
-msgstr "È possibile aggiungere solo clip a una playlist.otio EDL."
-
-msgid "Unknown media reference"
-msgstr "Riferimento dei media sconosciuti"
-
-msgid "Track #{0} - {1}"
-msgstr "Traccia #{0} - {1}"
-
-msgid "Cannot currently concatenate an .otio file."
-msgstr "Attualmente non è possibile concatenare un file.otio."
-
-msgid "Cannot currently concatenate a directory."
-msgstr "Attualmente non è possibile concatenare una directory."
-
-msgid "Could not append video track {0}"
-msgstr "Impossibile aggiungere la traccia video {0}"
-
-msgid "Could not append audio track {0}"
-msgstr "Impossibile aggiungere la traccia audio {0}"
-
 msgid "Server started at port {0}."
 msgstr "Il server è iniziato alla porta {0}."
 
@@ -3119,6 +3072,9 @@ msgstr "रेंडर आकार: {0}"
 
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr "छवि परत '{0}' जानकारी: {1} {2}"
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "Informazioni buffer offscreen: {0}"
 
 msgid "Unsupported output format: "
 msgstr "Formato di output non supportato: "
@@ -3725,6 +3681,53 @@ msgstr "Modifica annotazione testo"
 msgid "No item selected"
 msgstr "Nessun elemento selezionato"
 
+msgid "Invalid index for add clip to timeline."
+msgstr "Indice non valido per aggiungere clip alla timeline."
+
+msgid "Could not get current path."
+msgstr "Impossibile ottenere il percorso attuale."
+
+msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
+msgstr ""
+"L'elemento EDL \"{0}\" non è più caricato. Non è possibile annullare o "
+"rifare."
+
+msgid "Could not paste {0}.  Error {1}."
+msgstr "Impossibile incollare {0}. Errore {1}."
+
+msgid "Could not save .otio file: {0}"
+msgstr "Impossibile salvare il file.otio: {0}"
+
+msgid "Error saving {0}. {1}"
+msgstr "Errore nel salvare {0}. {1}"
+
+msgid "Empty EDL file.  Not saving."
+msgstr "File EDL vuoto. Non salvato."
+
+msgid "Destination file is invalid."
+msgstr "Il file di destinazione non è valido."
+
+msgid "You can only add clips to an .otio EDL playlist."
+msgstr "È possibile aggiungere solo clip a una playlist.otio EDL."
+
+msgid "Unknown media reference"
+msgstr "Riferimento dei media sconosciuti"
+
+msgid "Track #{0} - {1}"
+msgstr "Traccia #{0} - {1}"
+
+msgid "Cannot currently concatenate an .otio file."
+msgstr "Attualmente non è possibile concatenare un file.otio."
+
+msgid "Cannot currently concatenate a directory."
+msgstr "Attualmente non è possibile concatenare una directory."
+
+msgid "Could not append video track {0}"
+msgstr "Impossibile aggiungere la traccia video {0}"
+
+msgid "Could not append audio track {0}"
+msgstr "Impossibile aggiungere la traccia audio {0}"
+
 msgid "%s - Page %d"
 msgstr "%s - Pagina %d"
 
@@ -3823,8 +3826,8 @@ msgstr "1.66"
 msgid "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgstr "PMem: %<PRIu64> / %<PRIu64> MB VMem: %<PRIu64> / %<PRIu64> MB"
 
-msgid "Cache:"
-msgstr "Cache:"
+msgid "Cache: "
+msgstr "Cache: "
 
 msgid "    Used: %.2g of %zu Gb (%.2g %%)"
 msgstr "Utilizzato: %.2g di %zu Gb (%.2g %%)"
@@ -3835,11 +3838,14 @@ msgstr "Prima V: % 4<PRIu64> A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "Dietro V: % 4<PRIu64> A: % 4<PRIu64>"
 
+msgid "HDR monitor found."
+msgstr "Monitor HDR trovato."
+
+msgid "HDR monitor not found or not configured."
+msgstr "Monitor HDR non trovato o non configurato."
+
 msgid "Edit Text"
 msgstr "Modifica testo"
-
-msgid "Invalid font for text drawing"
-msgstr "Tipo di carattere non valido per il disegno di testo"
 
 msgid "Could not convert message to shape: "
 msgstr "Impossibile convertire il messaggio in forma:"
@@ -4039,8 +4045,14 @@ msgstr "Render/HDR/Valori non validi"
 msgid "Render/HDR/Ignore Chromaticities"
 msgstr "Render/HDR/Ignora le cromaticità"
 
-msgid "Render/HDR/Toggle Tonemap"
-msgstr "Render/HDR/Mappa dei toni"
+msgid "Render/HDR Data/From File"
+msgstr "Rendering/Dati HDR/Da file"
+
+msgid "Render/HDR Data/Inactive"
+msgstr "Rendering/Dati HDR/Inattivo"
+
+msgid "Render/HDR Data/Active"
+msgstr "Rendering/Dati HDR/Attivo"
 
 msgid "Render/HDR/Tonemap"
 msgstr "Render/HDR/Mappa dei toni"
@@ -5911,8 +5923,11 @@ msgstr "Ignora"
 msgid "Apply"
 msgstr "Applica"
 
-msgid "Never"
-msgstr "Ritorno"
+msgid "Inactive"
+msgstr "Inattivo"
+
+msgid "Active"
+msgstr "Attivo"
 
 msgid "ST2094_40"
 msgstr "ST2094_40"
@@ -6406,8 +6421,8 @@ msgstr "HUD"
 msgid "Chromaticities"
 msgstr "Ignora le cromaticità"
 
-msgid "Tonemap"
-msgstr "Tonemapping"
+msgid "HDR Data"
+msgstr "Dati HDR"
 
 msgid "Tonemap Algorithm"
 msgstr "Algoritmo di Tonemapping"
@@ -6759,23 +6774,22 @@ msgid "Blit Viewports"
 msgstr "Vedute di sbiancamento"
 
 msgid ""
-"Viewports can be drawn with blitting or with OpenGL shaders.  Depending on "
-"graphics card and OS one can perform better then the other."
+"Viewports can be drawn with blitting or with shaders.  Depending on graphics "
+"card and OS one can perform better then the other."
 msgstr ""
-"Le visualizzazioni possono essere disegnate con ombreggiatori OpenGL. A "
-"seconda della scheda grafica e del sistema operativo uno può funzionare "
-"meglio rispetto all'altro."
+"I viewport possono essere disegnati con blitting o con shader. A seconda "
+"della scheda grafica e del sistema operativo, uno può funzionare meglio "
+"dell’altro."
 
 msgid "Blit Timeline"
 msgstr "Tempistica di sbiancamento"
 
 msgid ""
-"Timeline can be drawn with blitting or with OpenGL shaders.  Depending on "
-"graphics card and OS one can perform better then the other."
+"Timeline can be drawn with blitting or with shaders.  Depending on graphics "
+"card and OS one can perform better than the other."
 msgstr ""
-"La timeline può essere disegnata con ombreggiatori OpenGL. A seconda della "
-"scheda grafica e del sistema operativo uno può eseguire meglio rispetto "
-"all'altro."
+"La timeline può essere disegnata con blitting o con shader. A seconda della "
+"scheda grafica e del sistema operativo, uno può funzionare meglio dell’altro."
 
 msgid ""
 "For changes to take effect, you will need to re-open any movies already "
@@ -6944,9 +6958,6 @@ msgstr "Sintesi"
 
 msgid "Preset Name"
 msgstr "Nome preimpostato"
-
-msgid "Active"
-msgstr "Attivo"
 
 msgid "Function"
 msgstr "Funzione"
@@ -7254,6 +7265,15 @@ msgstr "Normalizza automaticamente"
 
 msgid "Invalid Values"
 msgstr "Valori non validi"
+
+msgid "HDR Data From File"
+msgstr "Dati HDR da file"
+
+msgid "HDR Data Inactive"
+msgstr "Rendering/Dati HDR/Inattivo"
+
+msgid "HDR Data Active"
+msgstr "Rendering/Dati HDR/Attivo"
 
 msgid "Toggle HDR tonemap"
 msgstr "Commuta mappa tonale HDR"
@@ -7662,6 +7682,36 @@ msgstr "Finestra di commutazione di tasti di avviamento"
 
 msgid "Toggle About Window"
 msgstr "Commuta la finestra"
+
+#~ msgid "HDR Data False"
+#~ msgstr "Dati HDR disattivati"
+
+#~ msgid "HDR Data True"
+#~ msgstr "Dati HDR attivati"
+
+#, fuzzy
+#~ msgid ""
+#~ "tter then the other.Timeline can be drawn with blitting or with shaders.  "
+#~ "Depending on graphics card and OS one can perform be"
+#~ msgstr ""
+#~ "La timeline può essere disegnata con ombreggiatori OpenGL. A seconda "
+#~ "della scheda grafica e del sistema operativo uno può eseguire meglio "
+#~ "rispetto all'altro."
+
+#~ msgid "OpenGL"
+#~ msgstr "OpenGL"
+
+#~ msgid "Invalid font for text drawing"
+#~ msgstr "Tipo di carattere non valido per il disegno di testo"
+
+#~ msgid "Render/HDR/Toggle Tonemap"
+#~ msgstr "Render/HDR/Mappa dei toni"
+
+#~ msgid "Never"
+#~ msgstr "Ritorno"
+
+#~ msgid "Tonemap"
+#~ msgstr "Tonemapping"
 
 #~ msgid "Could not initialize NDI"
 #~ msgstr "Impossibile inizializzare NDI"

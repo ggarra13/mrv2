@@ -1942,8 +1942,8 @@ msgstr "स्तंभ"
 msgid "Checkerboard"
 msgstr "चेकरबोर्ड"
 
-msgid "OpenGL"
-msgstr "OpenGL"
+msgid "Graphics Card"
+msgstr "ग्राफिक्स कार्ड"
 
 msgid "Adjustments"
 msgstr "समायोजन"
@@ -2813,51 +2813,6 @@ msgstr "निम्न एनोटेशन सभी फ्रेम पर �
 msgid "Notes"
 msgstr "टिप्पणी"
 
-msgid "Invalid index for add clip to timeline."
-msgstr "समय रेखा में क्लिप जोड़ने के लिए अवैध निर्देशिका."
-
-msgid "Could not get current path."
-msgstr "वर्तमान पथ पा नहीं सका."
-
-msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
-msgstr "EDDL वस्तु '{0}' अब लोड नहीं है. वापस नहीं कर सका या लाल."
-
-msgid "Could not paste {0}.  Error {1}."
-msgstr "{0} को {1} में जोड़ नहीं सका."
-
-msgid "Could not save .otio file: {0}"
-msgstr ". बीजियो फ़ाइल को सहेज नहीं सका: {0}"
-
-msgid "Error saving {0}. {1}"
-msgstr "{0} सहेजने में त्रुटि {1}"
-
-msgid "Empty EDL file.  Not saving."
-msgstr "खाली ईएल फ़ाइल. सहेजा नहीं जा सकता."
-
-msgid "Destination file is invalid."
-msgstr "गंतव्य फ़ाइल अवैध है."
-
-msgid "You can only add clips to an .otio EDL playlist."
-msgstr "आप सिर्फ क्लिप्स को एक सूची में जोड़ सकते हैं."
-
-msgid "Unknown media reference"
-msgstr "अज्ञात मीडिया संदर्भ"
-
-msgid "Track #{0} - {1}"
-msgstr "ट्रैक 5:{0} - {1}"
-
-msgid "Cannot currently concatenate an .otio file."
-msgstr "वर्तमान में के- स्केट नहीं की जा सकी. ooio फ़ाइल."
-
-msgid "Cannot currently concatenate a directory."
-msgstr "वर्तमान में एक डिरेक्ट्री को फिर से बनाया नहीं जा सका."
-
-msgid "Could not append video track {0}"
-msgstr "वीडियो ट्रैक {0} को जोड़ नहीं सका"
-
-msgid "Could not append audio track {0}"
-msgstr "ऑडियो ट्रैक {0} जोड़ नहीं सका"
-
 msgid "Server started at port {0}."
 msgstr "सर्वर पोर्ट {0} पर प्रारंभ किया."
 
@@ -3053,6 +3008,9 @@ msgstr "रेंडर आकार: {0}"
 
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr "छवि परत '{0}' जानकारी: {1} {2}"
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "ऑफस्क्रीन बफ़र जानकारी: {0}"
 
 msgid "Unsupported output format: "
 msgstr "असमर्थित आउटपुट प्रारूप: "
@@ -3654,6 +3612,51 @@ msgstr "पाठ व्याख्या संपादित करें"
 msgid "No item selected"
 msgstr "कोई वस्तु चुना नहीं गया"
 
+msgid "Invalid index for add clip to timeline."
+msgstr "समय रेखा में क्लिप जोड़ने के लिए अवैध निर्देशिका."
+
+msgid "Could not get current path."
+msgstr "वर्तमान पथ पा नहीं सका."
+
+msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
+msgstr "EDDL वस्तु '{0}' अब लोड नहीं है. वापस नहीं कर सका या लाल."
+
+msgid "Could not paste {0}.  Error {1}."
+msgstr "{0} को {1} में जोड़ नहीं सका."
+
+msgid "Could not save .otio file: {0}"
+msgstr ". बीजियो फ़ाइल को सहेज नहीं सका: {0}"
+
+msgid "Error saving {0}. {1}"
+msgstr "{0} सहेजने में त्रुटि {1}"
+
+msgid "Empty EDL file.  Not saving."
+msgstr "खाली ईएल फ़ाइल. सहेजा नहीं जा सकता."
+
+msgid "Destination file is invalid."
+msgstr "गंतव्य फ़ाइल अवैध है."
+
+msgid "You can only add clips to an .otio EDL playlist."
+msgstr "आप सिर्फ क्लिप्स को एक सूची में जोड़ सकते हैं."
+
+msgid "Unknown media reference"
+msgstr "अज्ञात मीडिया संदर्भ"
+
+msgid "Track #{0} - {1}"
+msgstr "ट्रैक 5:{0} - {1}"
+
+msgid "Cannot currently concatenate an .otio file."
+msgstr "वर्तमान में के- स्केट नहीं की जा सकी. ooio फ़ाइल."
+
+msgid "Cannot currently concatenate a directory."
+msgstr "वर्तमान में एक डिरेक्ट्री को फिर से बनाया नहीं जा सका."
+
+msgid "Could not append video track {0}"
+msgstr "वीडियो ट्रैक {0} को जोड़ नहीं सका"
+
+msgid "Could not append audio track {0}"
+msgstr "ऑडियो ट्रैक {0} जोड़ नहीं सका"
+
 msgid "%s - Page %d"
 msgstr "%s - पृष्ठ %d"
 
@@ -3750,8 +3753,8 @@ msgstr "1.66"
 msgid "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 
-msgid "Cache:"
-msgstr "कैश:"
+msgid "Cache: "
+msgstr "कैश: "
 
 msgid "    Used: %.2g of %zu Gb (%.2g %%)"
 msgstr "उपयोग में: %.2g of %zu Gb (%.2g %%)"
@@ -3762,11 +3765,14 @@ msgstr "     आगे     V: % 4<PRIu64>     A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "      पीछे    V: % 4<PRIu64>     A: % 4<PRIu64>"
 
+msgid "HDR monitor found."
+msgstr "HDR मॉनिटर मिला।"
+
+msgid "HDR monitor not found or not configured."
+msgstr "HDR मॉनिटर नहीं मिला या कॉन्फ़िगर नहीं किया गया।"
+
 msgid "Edit Text"
 msgstr "पाठ संपादित करें"
-
-msgid "Invalid font for text drawing"
-msgstr "पाठ ड्राइंग के लिए अवैध फ़ॉन्ट"
 
 msgid "Could not convert message to shape: "
 msgstr "संदेश को आकार में परिवर्तित नहीं कर सका:"
@@ -3966,8 +3972,14 @@ msgstr "रेंडर/HDR/अवैध मान"
 msgid "Render/HDR/Ignore Chromaticities"
 msgstr "रेंडर/HDR/टॉगलिकता अनदेखा करें"
 
-msgid "Render/HDR/Toggle Tonemap"
-msgstr "रेंडर/HDR/टोनमैप"
+msgid "Render/HDR Data/From File"
+msgstr "रेंडर/HDR डेटा/फ़ाइल से"
+
+msgid "Render/HDR Data/Inactive"
+msgstr "रेंडर/HDR डेटा/निष्क्रिय"
+
+msgid "Render/HDR Data/Active"
+msgstr "रेंडर/HDR डेटा/सक्रिय"
 
 msgid "Render/HDR/Tonemap"
 msgstr "रेंडर/HDR/टोनमैप"
@@ -5817,8 +5829,11 @@ msgstr "अनदेखा करें"
 msgid "Apply"
 msgstr "लागू करें"
 
-msgid "Never"
-msgstr "कभी नहीं"
+msgid "Inactive"
+msgstr "निष्क्रिय"
+
+msgid "Active"
+msgstr "सक्रिय"
 
 msgid "ST2094_40"
 msgstr "एसटी2094_40"
@@ -6284,8 +6299,8 @@ msgstr "HDR"
 msgid "Chromaticities"
 msgstr "रंगमिति"
 
-msgid "Tonemap"
-msgstr "टोनमैप"
+msgid "HDR Data"
+msgstr "HDR डेटा"
 
 msgid "Tonemap Algorithm"
 msgstr "टोनमैप एल्गोरिदम"
@@ -6614,21 +6629,21 @@ msgid "Blit Viewports"
 msgstr "विन्यास"
 
 msgid ""
-"Viewports can be drawn with blitting or with OpenGL shaders.  Depending on "
-"graphics card and OS one can perform better then the other."
+"Viewports can be drawn with blitting or with shaders.  Depending on graphics "
+"card and OS one can perform better then the other."
 msgstr ""
-"दृश्य शुरु करने या ओपनजीएल shader के साथ बनाया जा सकता है. ग्राफ़िक्स कार्ड और ओएस पर "
-"निर्भर किया जा सकता है तब दूसरा बेहतर कर सकता है."
+"व्यूपोर्ट ब्लिटिंग या शेडर्स के साथ बनाए जा सकते हैं। ग्राफिक्स कार्ड और ऑपरेटिंग सिस्टम के "
+"आधार पर एक तरीका दूसरे से बेहतर प्रदर्शन कर सकता है।"
 
 msgid "Blit Timeline"
 msgstr "ब्लिट टाइम-लाइन"
 
 msgid ""
-"Timeline can be drawn with blitting or with OpenGL shaders.  Depending on "
-"graphics card and OS one can perform better then the other."
+"Timeline can be drawn with blitting or with shaders.  Depending on graphics "
+"card and OS one can perform better than the other."
 msgstr ""
-"टाइमलाइन्स को ओपनजीएल shader के साथ या ओपनजीएल shader के साथ बनाया जा सकता है. "
-"ग्राफ़िक्स कार्ड और ओएस पर निर्भर किया जा सकता है तो दूसरे को बेहतर कर सकता है."
+"टाइमलाइन ब्लिटिंग या शेडर्स के साथ बनाई जा सकती है। ग्राफिक्स कार्ड और ऑपरेटिंग सिस्टम के "
+"आधार पर एक तरीका दूसरे से बेहतर प्रदर्शन कर सकता है।"
 
 msgid ""
 "For changes to take effect, you will need to re-open any movies already "
@@ -6792,9 +6807,6 @@ msgstr "सारांश"
 
 msgid "Preset Name"
 msgstr "प्रीसेट नाम"
-
-msgid "Active"
-msgstr "सक्रिय"
 
 msgid "Function"
 msgstr "फंक्शन"
@@ -7101,6 +7113,15 @@ msgstr "स्वचालित सामान्य करें"
 
 msgid "Invalid Values"
 msgstr "अवैध मान"
+
+msgid "HDR Data From File"
+msgstr "फ़ाइल से HDR डेटा"
+
+msgid "HDR Data Inactive"
+msgstr "HDR डेटा निष्क्रिय"
+
+msgid "HDR Data Active"
+msgstr "HDR डेटा सक्रिय"
 
 msgid "Toggle HDR tonemap"
 msgstr "HDR वर्तनीमैप टॉगल करें"
@@ -7509,186 +7530,3 @@ msgstr "यदि आप विंडो को बन्द करना चा
 
 msgid "Toggle About Window"
 msgstr "विंडो के बारे में टॉगल करें"
-
-#~ msgid "Could not initialize NDI"
-#~ msgstr "नेडीआई प्रारंभ नहीं कर सका"
-
-#~ msgid "59.952"
-#~ msgstr "59.952"
-
-#~ msgid "You cannot set Window click through with a totally opaque window."
-#~ msgstr "आप विंडो क्लिक को पूरी तरह अपारदर्शी विंडो के द्वारा नियत नहीं कर सकते."
-
-#~ msgid "Linux Distribution: "
-#~ msgstr "लिनक्स वितरण:"
-
-#~ msgid "Running from "
-#~ msgstr "से चल रहा है"
-
-#~ msgid "Desktop: "
-#~ msgstr "डेस्कटॉप:"
-
-#~ msgid "RLE"
-#~ msgstr "RLE"
-
-#~ msgid "ZIPS"
-#~ msgstr "जिपएस"
-
-#~ msgid "ZIP"
-#~ msgstr "ZIP"
-
-#~ msgid "PIZ"
-#~ msgstr "PIZ"
-
-#~ msgid "PXR24"
-#~ msgstr "पीएक्सआर24"
-
-#~ msgid "B44"
-#~ msgstr "B44"
-
-#~ msgid "B44A"
-#~ msgstr "बी44ए"
-
-#~ msgid "DWAA"
-#~ msgstr "डीडबल्यूएओ"
-
-#~ msgid "DWAB"
-#~ msgstr "डीडबल्यूएबी"
-
-#~ msgid "File {0} is a network file.  Cannot do versioning."
-#~ msgstr "फ़ाइल {0} एक संजाल फ़ाइल है. संस्करण {0} नहीं कर सकता है."
-
-#~ msgid "Found new versioned file {0}."
-#~ msgstr "नया संस्करण किया गया फ़ाइल पाया {0}"
-
-#~ msgid "File {0} found but is not readable."
-#~ msgstr "फ़ाइल {0} मिला लेकिन पढ़ने योग्य नहीं है."
-
-#~ msgid "Did not find new versioned file {0}."
-#~ msgstr "क्या नई संस्करणकृत फ़ाइल नहीं मिली."
-
-#~ msgid "Iteration {0} matched prefix={1}"
-#~ msgstr "यह प्रोशनरेशन {0} से मेल खाता उपसर्ग={1}"
-
-#~ msgid "Iteration {0} matched version={1}"
-#~ msgstr "यह प्रोशनरेशन {0} संस्करण={1} का मेल खाता है"
-
-#~ msgid "Iteration {0} matched suffix={1}"
-#~ msgstr "यह प्रोशन्शन {0} प्रत्यय={1} का मेल खाता है"
-
-#~ msgid "TV"
-#~ msgstr "TV"
-
-#~ msgid "PC"
-#~ msgstr "PC"
-
-#~ msgid "sRGB"
-#~ msgstr "sRGB"
-
-#~ msgid "Page Size: {0} x {1}"
-#~ msgstr "पृष्ठ आकार: {0} x {1}"
-
-#~ msgid "A0"
-#~ msgstr "A0"
-
-#~ msgid "A1"
-#~ msgstr "A1"
-
-#~ msgid "A2"
-#~ msgstr "A2"
-
-#~ msgid "A3"
-#~ msgstr "A3"
-
-#~ msgid "A4"
-#~ msgstr "A4"
-
-#~ msgid "A5"
-#~ msgstr "A5"
-
-#~ msgid "A6"
-#~ msgstr "A6"
-
-#~ msgid "A7"
-#~ msgstr "A7"
-
-#~ msgid "A8"
-#~ msgstr "A8"
-
-#~ msgid "A9"
-#~ msgstr "A9"
-
-#~ msgid "B0"
-#~ msgstr "B0"
-
-#~ msgid "B1"
-#~ msgstr "B1"
-
-#~ msgid "B2"
-#~ msgstr "B2"
-
-#~ msgid "B3"
-#~ msgstr "B3"
-
-#~ msgid "B4"
-#~ msgstr "B4"
-
-#~ msgid "B5"
-#~ msgstr "B5"
-
-#~ msgid "B6"
-#~ msgstr "B6"
-
-#~ msgid "B7"
-#~ msgstr "B7"
-
-#~ msgid "B8"
-#~ msgstr "B8"
-
-#~ msgid "B9"
-#~ msgstr "B9"
-
-#~ msgid "B10"
-#~ msgstr "B10"
-
-#~ msgid "C5E"
-#~ msgstr "C5E"
-
-#~ msgid "DLE"
-#~ msgstr "DLE"
-
-#~ msgid "Executive"
-#~ msgstr "एक्ज़ीक्यूटिव"
-
-#~ msgid "Folio"
-#~ msgstr "arbfp"
-
-#~ msgid "Ledger"
-#~ msgstr "खाताबही"
-
-#~ msgid "Legal"
-#~ msgstr "लीगल"
-
-#~ msgid "Letter"
-#~ msgstr "पत्र"
-
-#~ msgid "Tabloid"
-#~ msgstr "टेब्लाइड"
-
-#~ msgid "Viewport Size: {0}  Render Size: {1}"
-#~ msgstr "दृश्यport आकार: {0} रेंडर आकार: {1}"
-
-#~ msgid "Font not found.  Will not use UTF-8."
-#~ msgstr "फ़ॉन्ट नहीं मिला. यूटीएफ़- 8 का उपयोग नहीं करें."
-
-#~ msgid "Resizable Control Group"
-#~ msgstr "री- स्कैन नियंत्रण समूह"
-
-#~ msgid "View and Look"
-#~ msgstr "देखें व देखें"
-
-#~ msgid "Layers, Exposure and Gain"
-#~ msgstr "परतें, एक्सपोज़र तथा गेन"
-
-#~ msgid "Could not match "
-#~ msgstr "मेल नहीं खा सका"

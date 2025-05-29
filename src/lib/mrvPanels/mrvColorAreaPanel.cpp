@@ -2,7 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include "mrvGL/mrvGLViewport.h"
+#include "mrViewer.h"
 
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvColorInfo.h"
@@ -10,11 +10,8 @@
 
 #include "mrvPanelsCallbacks.h"
 
-#include "mrvFl/mrvColorAreaInfo.h"
-
 #include "mrvPanels/mrvColorAreaPanel.h"
 
-#include "mrViewer.h"
 
 #include "mrvFl/mrvIO.h"
 

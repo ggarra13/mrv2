@@ -609,6 +609,16 @@ if (APPLE)
 	install_vulkan_icd_filenames(hdr)
 	# install_vulkan_layers(hdr)
 
+
+	# If MR2V2's BACKEND is VK, also install vulkan on it
+	if (MRV2_BACKEND STREQUAL "VK" OR MRV2_BACKEND STREQUAL "BOTH")
+	    install_vulkan_lib_glob("libMoltenVK*" mrv2)
+	    install_vulkan_lib_glob("libvulkan*" mrv2)
+	
+	    install_vulkan_icd_filenames(mrv2)
+	    # install_vulkan_layers(mrv2)
+	endif()
+	
 	#
 	# Install .mo translation files
 	#

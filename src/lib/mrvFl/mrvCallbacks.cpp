@@ -2,6 +2,10 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#ifdef _WIN32
+#include <winsock2.h>
+#endif
+
 #include <iostream>
 #include <fstream>
 #include <iomanip>
@@ -28,9 +32,6 @@
 #include "mrvFl/mrvSession.h"
 #include "mrvFl/mrvStereo3DAux.h"
 #include "mrvFl/mrvCallbacks.h"
-
-#include "mrvGL/mrvGLShape.h"
-#include "mrvGL/mrvGLTextEdit.h"
 
 #include "mrvUI/mrvAsk.h"
 #include "mrvUI/mrvDesktop.h"
@@ -67,8 +68,17 @@
 #include "mrViewer.h"
 
 #include <FL/Fl.H>
-
 #include "mrvFl/mrvIO.h"
+
+#ifdef OPENGL_BACKEND
+#include "mrvGL/mrvGLShape.h"
+#include "mrvGL/mrvGLTextEdit.h"
+#endif
+
+#ifdef VULKAN_BACKEND
+#include "mrvVk/mrvVkShape.h"
+#include "mrvVk/mrvVkTextEdit.h"
+#endif
 
 namespace
 {
@@ -1085,6 +1095,13 @@ namespace mrv
         // Close all files
         close_all_cb(w, ui);
 
+        // Remove thumbnail system.
+#ifdef VULKAN_BACKEND
+        auto context = App::app->getContext();
+        auto system  = context->getSystem<timelineui_vk::ThumbnailSystem>();
+        context->removeSystem(system);
+#endif
+
         // Hide any GL Window (needed in Windows)
         Fl_Window* pw = Fl::first_window();
         while (pw)
@@ -1096,7 +1113,7 @@ namespace mrv
         // Delete Color Chooser
         delete colorChooser;
 
-        // Remove any temporary EDLS in tmppath
+        // Remove any temporary EDLs in tmppath
         if (ui->uiPrefs->uiPrefsRemoveEDLs->value())
             removeTemporaryEDLs(ui);
 
@@ -1131,7 +1148,7 @@ namespace mrv
         o.imageFilters.minify = timeline::ImageFilter::Nearest;
         ui->app->setDisplayOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
-        ui->uiView->redraw();
+        ui->uiView->redrawWindows();
     }
 
     void minify_linear_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -1140,7 +1157,7 @@ namespace mrv
         o.imageFilters.minify = timeline::ImageFilter::Linear;
         ui->app->setDisplayOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
-        ui->uiView->redraw();
+        ui->uiView->redrawWindows();
     }
 
     void magnify_nearest_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -1149,7 +1166,7 @@ namespace mrv
         o.imageFilters.magnify = timeline::ImageFilter::Nearest;
         ui->app->setDisplayOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
-        ui->uiView->redraw();
+        ui->uiView->redrawWindows();
     }
 
     void magnify_linear_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -1158,7 +1175,7 @@ namespace mrv
         o.imageFilters.magnify = timeline::ImageFilter::Linear;
         ui->app->setDisplayOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
-        ui->uiView->redraw();
+        ui->uiView->redrawWindows();
     }
 
     void mirror_x_cb(Fl_Menu_* w, ViewerUI* ui)
@@ -1168,7 +1185,7 @@ namespace mrv
         ui->app->setDisplayOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
         ui->uiView->updateCoords();
-        ui->uiView->redraw();
+        ui->uiView->redrawWindows();
     }
 
     void mirror_y_cb(Fl_Menu_* w, ViewerUI* ui)
@@ -1178,7 +1195,34 @@ namespace mrv
         ui->app->setDisplayOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
         ui->uiView->updateCoords();
-        ui->uiView->redraw();
+        ui->uiView->redrawWindows();
+    }
+
+    void hdr_data_from_file_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        timeline::DisplayOptions o = ui->app->displayOptions();
+        o.hdrInfo = timeline::HDRInformation::FromFile;
+        ui->app->setDisplayOptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+        ui->uiView->redrawWindows();
+    }
+
+    void hdr_data_inactive_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        timeline::DisplayOptions o = ui->app->displayOptions();
+        o.hdrInfo = timeline::HDRInformation::Inactive;
+        ui->app->setDisplayOptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+        ui->uiView->redrawWindows();
+    }
+
+    void hdr_data_active_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        timeline::DisplayOptions o = ui->app->displayOptions();
+        o.hdrInfo = timeline::HDRInformation::Active;
+        ui->app->setDisplayOptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+        ui->uiView->redrawWindows();
     }
 
     void rotate_plus_90_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -1287,7 +1331,7 @@ namespace mrv
         ui->uiView->setHDROptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
-
+    
     void select_hdr_tonemap_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         const Fl_Menu_Item* item = m->mvalue();
@@ -1329,7 +1373,7 @@ namespace mrv
 
     void toggle_presentation_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        Viewport* view = ui->uiView;
+        MyViewport* view = ui->uiView;
         bool presentation = view->getPresentationMode();
         view->setPresentationMode(!presentation);
 
@@ -1360,7 +1404,7 @@ namespace mrv
     void toggle_secondary_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         MainWindow* window;
-        Viewport* view;
+        MyViewport* view;
 
         if (ui->uiSecondary)
         {
@@ -1635,6 +1679,7 @@ namespace mrv
 
         ui->uiRegion->layout();
         ui->uiMain->fill_menu(ui->uiMenuBar);
+       
     }
 
     void toggle_menu_bar(Fl_Menu_*, ViewerUI* ui)
@@ -1664,7 +1709,7 @@ namespace mrv
             tcp->pushMessage("Pixel Bar", (bool)ui->uiPixelBar->visible());
     }
 
-    void toggle_bottom_bar(Fl_Menu_*, ViewerUI* ui)
+    void toggle_timeline_bar(Fl_Menu_*, ViewerUI* ui)
     {
         toggle_ui_bar(ui, ui->uiBottomBar);
         save_ui_state(ui, ui->uiBottomBar);
@@ -1672,6 +1717,19 @@ namespace mrv
             set_edit_mode_cb(editMode, ui);
         else
             set_edit_mode_cb(EditMode::kNone, ui);
+        
+        // These are needed to clean the resources and avoid
+        // OpenGL flickering.
+        ui->uiView->refresh();
+        ui->uiView->valid(0);
+        ui->uiTimeline->refresh();
+        ui->uiTimeline->valid(0);
+        if (ui->uiSecondary && ui->uiSecondary->viewport())
+        {
+            auto view = ui->uiSecondary->viewport();
+            view->refresh();
+            view->valid(0);
+        }
         bool send = ui->uiPrefs->SendUI->value();
         if (send)
             tcp->pushMessage("Bottom Bar", (bool)ui->uiBottomBar->visible());
@@ -1772,7 +1830,7 @@ namespace mrv
     {
         if (!hudClass)
         {
-            Viewport* view = ui->uiView;
+            MyViewport* view = ui->uiView;
             Fl_Group::current(view);
             hudClass = new HUDUI(view);
         }
@@ -1921,7 +1979,7 @@ namespace mrv
     {
         if (!OCIOPresetsClass)
         {
-            Viewport* view = ui->uiView;
+            MyViewport* view = ui->uiView;
             Fl_Group::current(view);
             OCIOPresetsClass = new OCIOPresetsUI();
         }
@@ -2090,7 +2148,7 @@ namespace mrv
     {
         App* app = ui->app;
         timeline::ImageOptions o = app->imageOptions();
-        o.alphaBlend = timeline::AlphaBlend::None;
+        o.alphaBlend = timeline::AlphaBlend::kNone;
         app->setImageOptions(o);
     }
 
@@ -2530,8 +2588,14 @@ namespace mrv
         auto w = ui->uiView->getMultilineInput();
         if (!w)
             return;
+#ifdef OPENGL_BACKEND
         w->textcolor(c);
         w->redraw();
+#endif
+#ifdef VULKAN_BACKEND
+        w->color = from_fltk_color(c);
+        ui->uiView->redrawWindows();
+#endif
     }
 
     image::Color4f from_fltk_color(const Fl_Color& c)
@@ -2849,7 +2913,7 @@ namespace mrv
 
     void clear_note_annotation_cb(ViewerUI* ui)
     {
-        Viewport* view = ui->uiView;
+        MyViewport* view = ui->uiView;
         if (!view)
             return;
         auto player = view->getTimelinePlayer();
@@ -2879,7 +2943,7 @@ namespace mrv
 
     void add_note_annotation_cb(ViewerUI* ui, const std::string& text)
     {
-        Viewport* view = ui->uiView;
+        MyViewport* view = ui->uiView;
         if (!view)
             return;
         auto player = view->getTimelinePlayer();
@@ -2934,6 +2998,7 @@ namespace mrv
 
         for (const auto& shape : annotation->shapes)
         {
+#ifdef OPENGL_BACKEND
 #ifdef USE_OPENGL2
             if (auto s = dynamic_cast<GL2TextShape*>(shape.get()))
             {
@@ -2944,6 +3009,14 @@ namespace mrv
             {
                 window.add(s->text);
             }
+#endif
+            
+#ifdef VULKAN_BACKEND
+            if (auto s = dynamic_cast<VKTextShape*>(shape.get()))
+            {
+                window.add(s->text);
+            }
+#endif
         }
         window.textAnnotations.menu_end();
 

@@ -2,11 +2,11 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include "mrViewer.h"
+
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvNetwork/mrvTCP.h"
-
-#include "mrViewer.h"
 
 namespace mrv
 {

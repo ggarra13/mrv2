@@ -162,6 +162,7 @@ if [[ "$NOARGS" == "" ]]; then
 	    -vk|--vk|--vulkan)
 		export BUILD_ROOT=${KERNEL}-vulkan-${ARCH}
 		export MRV2_HDR=ON
+		export MRV2_BACKEND=VK
 		shift
 		continue
 		;;

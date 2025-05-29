@@ -1,0 +1,125 @@
+name: Linux Vulkan
+
+on:
+  push:
+    branches-ignore:
+      - main
+      - beta
+
+jobs:
+  ###################################
+  #                                 #
+  # FULL BUILDS                     #
+  #                                 #
+  ###################################
+  linux-vulkan-full-build:
+    runs-on: ubuntu-22.04
+
+    steps:
+    
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Get machine name
+      run: |
+        echo "Machine name: $RUNNER_NAME"
+
+    - name: Update repos
+      run: |
+        sudo add-apt-repository universe -y
+        sudo apt-get update || { echo "apt-get update failed"; exit 1; }
+      
+    - name: Install OpenGL dev
+      run: sudo apt-get install -y xorg-dev libglu1-mesa-dev mesa-common-dev
+
+    - name: Install X11 dev
+      run: sudo apt-get install -y libx11-dev libxcursor-dev libxinerama-dev
+
+    - name: Install ALSA dev
+      run: sudo apt-get install -y libasound2-dev
+
+    - name: Install PulseAudio dev
+      run: sudo apt-get install -y libpulse-dev
+
+    - name: Install Pango dev
+      run: sudo apt-get install -y libpango1.0-dev
+
+    - name: Install Wayland
+      run: sudo apt-get install -y libwayland-dev wayland-protocols libdbus-1-dev libxkbcommon-dev libegl-dev libgtk-3-dev
+
+    - name: Install curl and openssl
+      run: sudo apt-get install -y curl openssl rsync libunistring-dev
+      
+    - name: Install ninja-build
+      run: sudo apt-get install -y ninja-build
+      
+    - name: Install gettext
+      run: sudo apt-get install -y gettext
+      
+    - name: Install python dependencies
+      run: sudo apt-get install -y libssl-dev libffi-dev python3
+      
+    - name: Install vulkan
+      if: github.ref_name == 'vulkan'
+      run: |
+        sudo apt-get install -y libvulkan1 libvulkan-dev mesa-vulkan-drivers vulkan-validationlayers
+
+    - name: Install libshaderc-dev dependencies
+      if: github.ref_name == 'vulkan'
+      run: |
+        sudo apt-get install -y glslang-dev spirv-tools spirv-headers
+        
+    # Install Vulkan SDK
+    - name: Install Vulkan SDK
+      if: github.ref_name == 'vulkan'
+      run: |
+
+        # . ./etc/linux/install_vulkan.sh
+        
+        # Persist environment variables for subsequent steps
+        echo "VULKAN_SDK=/usr/" >> $GITHUB_ENV
+        echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
+        
+    - name: Synchronize clock
+      run: |
+        sudo apt-get install -y ntp
+
+    - name: Setup environment
+      run: mkdir -p ssh
+
+    - name: Decode SSH key
+      run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
+      shell: bash
+      
+    - name: Set permissions on SSH key
+      run: chmod 600 ssh/id_rsa
+      
+    - name: Decode FLTK SSH key
+      run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.FLTK_DEPLOY_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          
+    - name: Add SourceForge to known_hosts
+      run: |
+        mkdir -p ~/.ssh
+        ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
+      
+    - name: Set executable permissions
+      run: |
+        chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
+
+    # - name: Install cmake
+    #   run: |
+    #      ./etc/install_cmake.sh
+
+    - name: Build mrv2
+      run: |
+        ./etc/runme_nolog.sh -t package -vk
+      
+    - name: Upload binaries  # Conditional step
+      if: github.ref_name == 'beta'
+      run: |
+        ./bin/release/upload_sourceforge.sh

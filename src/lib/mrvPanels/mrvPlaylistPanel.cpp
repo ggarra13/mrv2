@@ -2,15 +2,17 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <string>
-#include <vector>
-#include <map>
+#include "mrViewer.h"
 
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Pack.H>
+#include "mrvApp/mrvApp.h"
+#include "mrvApp/mrvFilesModel.h"
+#include "mrvApp/mrvPlaylistsModel.h"
 
-#include "mrvCore/mrvHome.h"
-#include "mrvCore/mrvFile.h"
+#include "mrvUI/mrvAsk.h" // for fl_input
+
+#include "mrvFl/mrvIO.h"
+
+#include "mrvEdit/mrvEditCallbacks.h"
 
 #include "mrvWidgets/mrvPack.h"
 #include "mrvWidgets/mrvFunctional.h"
@@ -21,17 +23,18 @@
 #include "mrvPanels/mrvPanelsAux.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
-#include "mrvFl/mrvIO.h"
+#include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvFile.h"
 
-#include "mrvEdit/mrvEditCallbacks.h"
 
-#include "mrvUI/mrvAsk.h" // for fl_input
 
-#include "mrvApp/mrvFilesModel.h"
-#include "mrvApp/mrvPlaylistsModel.h"
-#include "mrvApp/mrvApp.h"
 
-#include "mrViewer.h"
+#include <FL/Fl_Box.H>
+#include <FL/Fl_Pack.H>
+
+#include <string>
+#include <vector>
+#include <map>
 
 namespace mrv
 {

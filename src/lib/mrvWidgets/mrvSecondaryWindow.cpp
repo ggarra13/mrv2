@@ -2,16 +2,14 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include "mrvWidgets/mrvFunctional.h"
-#include "mrvWidgets/mrvSecondaryWindow.h"
-#include "mrvWidgets/mrvMainWindow.h"
-
-#include "mrvGL/mrvGLViewport.h"
+#include "mrViewer.h"
 
 #include "mrvApp/mrvApp.h"
 #include "mrvApp/mrvSettingsObject.h"
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrvFunctional.h"
+#include "mrvWidgets/mrvSecondaryWindow.h"
+#include "mrvWidgets/mrvMainWindow.h"
 
 namespace mrv
 {
@@ -19,7 +17,7 @@ namespace mrv
     {
         ViewerUI* ui = nullptr;
         MainWindow* mainWindow = nullptr;
-        Viewport* viewport = nullptr;
+        MyViewport* viewport = nullptr;
     };
 
     SecondaryWindow::SecondaryWindow(ViewerUI* ui) :
@@ -56,7 +54,7 @@ namespace mrv
         p.mainWindow->labeltype(FL_NO_LABEL);
         p.mainWindow->begin();
 
-        p.viewport = new Viewport(0, 0, W, H);
+        p.viewport = new MyViewport(0, 0, W, H);
         p.viewport->main(ui); // needed
         p.viewport->end();
 
@@ -133,7 +131,7 @@ namespace mrv
         return _p->mainWindow;
     }
 
-    Viewport* SecondaryWindow::viewport() const
+    MyViewport* SecondaryWindow::viewport() const
     {
         return _p->viewport;
     }

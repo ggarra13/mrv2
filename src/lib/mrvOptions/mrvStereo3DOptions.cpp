@@ -16,7 +16,7 @@ namespace mrv
 
     TLRENDER_ENUM_IMPL(
         Stereo3DOutput, "Anaglyph", "Scanlines", "Columns", "Checkerboard",
-        "OpenGL");
+        "Glasses");
     TLRENDER_ENUM_SERIALIZE_IMPL(Stereo3DOutput);
 
     void to_json(nlohmann::json& j, const Stereo3DOptions& value)

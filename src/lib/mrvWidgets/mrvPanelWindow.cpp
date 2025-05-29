@@ -2,8 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <cassert>
-#include <algorithm>
+
+#include "mrViewer.h"
 
 #include <FL/Fl_Button.H>
 #include <FL/Fl.H>
@@ -19,7 +19,8 @@
 #include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/mrvApp.h"
 
-#include "mrViewer.h"
+#include <cassert>
+#include <algorithm>
 
 namespace mrv
 {

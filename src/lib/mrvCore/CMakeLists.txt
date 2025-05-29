@@ -3,56 +3,60 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 set(HEADERS
-  mrvActionMode.h
-  mrvColorSpaces.h
-  mrvCPU.h
-  mrvEnv.h
-  mrvFile.h
-  mrvFileManager.h
-  mrvFonts.h
-  mrvHome.h
-  mrvHotkey.h
-  mrvI8N.h
-  mrvImage.h
-  mrvLocale.h
-  mrvMedia.h
-  mrvMemory.h
-  mrvMesh.h
-  mrvOrderedMap.h
-  mrvOS.h 
-  mrvPathMapping.h
-  mrvRoot.h
-  mrvSequence.h
-  mrvSignalHandler.h
-  mrvStackTrace.h
-  mrvString.h
-  mrvWait.h
-  mrvTimeObject.h
-  mrvUtil.h
-  )
+    mrvActionMode.h
+    mrvBackend.h
+    mrvColor.h
+    mrvColorAreaInfo.h
+    mrvColorSpaces.h
+    mrvCPU.h
+    mrvEnv.h
+    mrvFile.h
+    mrvFileManager.h
+    mrvFonts.h
+    mrvHome.h
+    mrvHotkey.h
+    mrvI8N.h
+    mrvImage.h
+    mrvLocale.h
+    mrvMedia.h
+    mrvMemory.h
+    mrvMesh.h
+    mrvOrderedMap.h
+    mrvOS.h 
+    mrvPathMapping.h
+    mrvRoot.h
+    mrvSequence.h
+    mrvSignalHandler.h
+    mrvStackTrace.h
+    mrvString.h
+    mrvWait.h
+    mrvTimeObject.h
+    mrvUtil.h
+)
 
 set(SOURCES
-  mrvColorSpaces.cpp
-  mrvCPU.cpp
-  mrvFile.cpp
-  mrvFonts.cpp
-  mrvHome.cpp
-  mrvHotkey.cpp
-  mrvLocale.cpp
-  mrvMedia.cpp
-  mrvMemory.cpp
-  mrvMesh.cpp
-  mrvOS.cpp
-  mrvPathMapping.cpp
-  mrvRoot.cpp
-  mrvStackTrace.cpp
-  mrvString.cpp
-  mrvWait.cpp
-  mrvTimeObject.cpp
-  mrvUtil.cpp
-  )
+    mrvColor.cpp
+    mrvColorSpaces.cpp
+    mrvCPU.cpp
+    mrvFile.cpp
+    mrvFonts.cpp
+    mrvHome.cpp
+    mrvHotkey.cpp
+    mrvLocale.cpp
+    mrvMedia.cpp
+    mrvMemory.cpp
+    mrvMesh.cpp
+    mrvOS.cpp
+    mrvPathMapping.cpp
+    mrvRoot.cpp
+    mrvStackTrace.cpp
+    mrvString.cpp
+    mrvWait.cpp
+    mrvTimeObject.cpp
+    mrvUtil.cpp
+)
 
-set(LIBRARIES tlRender Imath::Imath ${FLTK_LIBRARIES} )
+set(LIBRARIES tlRender::tlIO tlRender::tlCore OpenEXR::OpenEXR Imath::Imath ${FLTK_LIBRARIES} )
 
 
 if( WIN32 )
@@ -67,7 +71,7 @@ elseif( APPLE )
     # macOS has a great a built-in stack trace and signal handler
     list( APPEND SOURCES
         mrvFileManager.mm
-        )
+    )
 else()
     list(APPEND SOURCES
         mrvFileManager.cpp

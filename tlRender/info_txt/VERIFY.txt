@@ -1,0 +1,10 @@
+After a sync with new tlRender from Darby, these uncommited changes must be
+checked:
+
+- VPX (Try Peru 8K.webm).
+- Reverse and resample of audio (Try any movie, like elemental.mov)
+- OpenEXR v2 multipart (~/Pictures/openexr-images/Beachball/multipart.0001.exr)
+- Zip OpenEXR compression (try saving an OpenEXR with two Zip compressions).
+- RAW Reader.
+- USD Settings work.
+- Playlist editing for images and movies.

@@ -106,24 +106,24 @@ namespace mrv
             c->labelsize(12);
             c->align(FL_ALIGN_LEFT);
 
-#ifdef USE_OPENGL2
+#ifdef OPENGL_BACKEND
             const std::vector<std::string>& fontList = fonts::list();
-            int numFonts = fontList.size();
             for (const auto& font : fontList)
             {
                 c->add(font.c_str());
             }
-#else
-            const char* kFonts[3] = {
-                "NotoSans-Regular", "NotoSans-Bold", "NotoMono-Regular"};
+#endif
 
-            int numFonts = sizeof(kFonts) / sizeof(char*);
-            for (unsigned i = 0; i < numFonts; ++i)
+#ifdef VULKAN_BACKEND
+            const std::vector<fs::path>& fontList = image::discoverSystemFonts();
+            for (const auto& path : fontList)
             {
-                c->add(kFonts[i]);
+                file::Path filePath(path.filename().generic_string());
+                c->add(filePath.getBaseName().c_str());
             }
 #endif
 
+            int numFonts = fontList.size();
             int font = settings->getValue<int>(kTextFont);
             if (font > numFonts)
                 font = 0;
@@ -133,25 +133,43 @@ namespace mrv
                 [=](auto o)
                 {
                     int font = o->value();
+                    auto view = p.ui->uiView;
+#ifdef OPENGL_BACKEND
                     auto numFonts = Fl::set_fonts("-*");
                     settings->setValue(kTextFont, font);
-                    auto view = p.ui->uiView;
                     MultilineInput* w = view->getMultilineInput();
                     if (!w)
                         return;
                     if (font >= numFonts)
                         font = FL_HELVETICA;
-#ifdef USE_OPENGL2
                     int attrs = 0;
                     const char* fontName =
                         Fl::get_font_name((Fl_Font)font, &attrs);
-#else
-                    const Fl_Menu_Item* item = c->mvalue();
-                    std::string fontName = item->label();
-                    w->fontFamily = fontName;
-#endif
                     w->textfont((Fl_Font)font);
                     w->redraw();
+#endif
+
+#ifdef VULKAN_BACKEND                    
+                    auto w = view->getMultilineInput();
+                    if (!w)
+                        return;
+                    settings->setValue(kTextFont, font);
+                    const Fl_Menu_Item* item = c->mvalue();
+                    std::string fontName = item->label();
+                    
+                    const std::vector<fs::path>& fontList = image::discoverSystemFonts();
+                    fs::path out = fontList[0];
+                    for (const auto& path : fontList)
+                    {
+                        file::Path filePath(path.filename().u8string());
+                        if (fontName == filePath.getBaseName())
+                        {
+                            out = path;
+                            break;
+                        }
+                    }
+                    w->fontPath = out.u8string();
+#endif
                     view->redrawWindows();
                 });
 
@@ -166,14 +184,26 @@ namespace mrv
                 [=](auto o)
                 {
                     settings->setValue(kFontSize, static_cast<int>(o->value()));
-                    const auto& viewportSize = p.ui->uiView->getViewportSize();
-                    float pct = viewportSize.h / 1024.F;
-                    MultilineInput* w = p.ui->uiView->getMultilineInput();
+                    const auto& renderSize = p.ui->uiView->getRenderSize();
+                    float pct = renderSize.h / 1024.F;
+                    double pixels_per_unit = p.ui->uiView->pixels_per_unit();
+                    auto w = p.ui->uiView->getMultilineInput();
                     if (!w)
                         return;
-                    int fontSize = o->value() * pct * p.ui->uiView->viewZoom();
+#ifdef OPENGL_BACKEND
+                    int fontSize = o->value() * pct * p.ui->uiView->viewZoom()
+                                   * pixels_per_unit;
+                    
                     w->textsize(fontSize);
                     w->redraw();
+#endif
+
+#ifdef VULKAN_BACKEND
+                    if (pct < 1.F) pct = 1.F;
+                    int fontSize = o->value() * pct * pixels_per_unit;
+                    w->fontSize = fontSize;
+#endif
+                    
                     p.ui->uiView->redrawWindows();
                 });
 

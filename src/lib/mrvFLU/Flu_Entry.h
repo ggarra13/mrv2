@@ -8,6 +8,7 @@
 #include <tlCore/Context.h>
 
 #include <FL/Fl_Input.H>
+#include <FL/Fl_Pixmap.H>
 
 extern Fl_Pixmap preview_img, file_list_img, file_listwide_img, fileDetails,
     desktop, folder_closed, default_file, my_computer, computer, disk_drive,

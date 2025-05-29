@@ -1,0 +1,305 @@
+name: CI
+
+on: [push]
+
+jobs:
+  linux-build:
+    runs-on: ubuntu-latest
+
+    env:
+      TLRENDER_PYTHON: OFF
+      TLRENDER_API: GL_4_1
+      TLRENDER_GLFW: ON
+      TLRENDER_NET: OFF
+      TLRENDER_OCIO: ON
+      TLRENDER_AUDIO: ON
+      TLRENDER_ASAN: OFF
+      TLRENDER_JPEG: ON
+      TLRENDER_TIFF: ON
+      TLRENDER_STB: ON
+      TLRENDER_PNG: ON
+      TLRENDER_EXR: ON
+      TLRENDER_FFMPEG: ON
+      TLRENDER_X11: ON
+      TLRENDER_WAYLAND: ON
+      TLRENDER_USD: OFF
+      TLRENDER_NFD: OFF
+      TLRENDER_QT5: ON
+      TLRENDER_PROGRAMS: ON
+      TLRENDER_EXAMPLES: ON
+      TLRENDER_TESTS: ON
+      TLRENDER_GCOV: ON
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Get machine name
+      run: echo "Machine name $RUNNER_NAME"
+
+    - name: Setup environment
+      run: |
+        echo "$PWD/build/install/bin" >> $GITHUB_PATH
+        echo "LD_LIBRARY_PATH=$PWD/build/install/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+        echo "PYTHONPATH=$PWD/build/install/lib:$PYTHONPATH" >> $GITHUB_ENV
+        cmake --version
+        python --version
+
+    - name: Build tlRender
+      run: bash etc/Linux/linux-build-gha.sh Debug
+
+    - name: Run tests
+      run: |
+        cd build
+        cd tlRender/src/tlRender-build
+        xvfb-run tests/tltest/tltest
+    
+    - name: Code coverage
+      if: env.TLRENDER_GCOV == 'ON'
+      run: |
+        cd build/tlRender/src/tlRender-build
+        bash ../../../../etc/Linux/lcov.sh
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        files: ${{ github.workspace }}/build/tlRender/src/tlRender-build/coverage_filtered.info
+        fail_ci_if_error: true
+        token: ${{ secrets.CODECOV_TOKEN }}
+
+  linux-minimal-build:
+    runs-on: ubuntu-latest
+
+    env:
+      TLRENDER_API: GL_4_1
+      TLRENDER_PYTHON: OFF
+      TLRENDER_GLFW: ON
+      TLRENDER_OCIO: OFF
+      TLRENDER_AUDIO: OFF
+      TLRENDER_JPEG: OFF
+      TLRENDER_TIFF: OFF
+      TLRENDER_STB: OFF
+      TLRENDER_PNG: OFF
+      TLRENDER_EXR: OFF
+      TLRENDER_FFMPEG: OFF
+      TLRENDER_X11: ON
+      TLRENDER_WAYLAND: ON
+      TLRENDER_ASAN: OFF
+      TLRENDER_USD: OFF
+      TLRENDER_NFD: OFF
+      TLRENDER_QT5: OFF
+      TLRENDER_TESTS: ON
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Setup environment
+      run: |
+        echo "$PWD/build/install/bin" >> $GITHUB_PATH
+        echo "LD_LIBRARY_PATH=$PWD/build/install/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+        echo "PYTHONPATH=$PWD/build/install/lib:$PYTHONPATH" >> $GITHUB_ENV
+        cmake --version
+        python --version
+
+    - name: Build tlRender
+      run: bash etc/Linux/linux-build-gha.sh Debug
+
+    - name: Run tests
+      run: |
+        cd build
+        cd tlRender/src/tlRender-build
+        xvfb-run tests/tltest/tltest
+
+  macos-12-build:
+    runs-on: macos-12
+
+    env:
+      TLRENDER_PYTHON: OFF
+      TLRENDER_API: GL_4_1
+      TLRENDER_GLFW: ON
+      TLRENDER_NET: OFF
+      TLRENDER_OCIO: ON
+      TLRENDER_AUDIO: ON
+      TLRENDER_JPEG: ON
+      TLRENDER_TIFF: ON
+      TLRENDER_STB: ON
+      TLRENDER_PNG: ON
+      TLRENDER_EXR: ON
+      TLRENDER_FFMPEG: ON
+      TLRENDER_USD: OFF
+      TLRENDER_NFD: OFF
+      TLRENDER_QT5: OFF
+      TLRENDER_PROGRAMS: ON
+      TLRENDER_EXAMPLES: ON
+      TLRENDER_TESTS: ON
+      TLRENDER_GCOV: OFF
+      CMAKE_OSX_DEPLOYMENT_TARGET: 10.15
+      CMAKE_OSX_ARCHITECTURES: x86_64
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Get machine name
+      run: echo "Machine name $RUNNER_NAME"
+      
+    - name: Install ninja-build
+      run: brew install ninja
+
+    # \bug DYLD_LIBRARY_PATH is not being set here?
+    - name: Setup environment
+      run: |
+        echo "$PWD/build/install/bin" >> $GITHUB_PATH
+        echo "DYLD_LIBRARY_PATH=$PWD/build/install/lib:$DYLD_LIBRARY_PATH" >> $GITHUB_ENV
+        echo "PYTHONPATH=$PWD/build/install/lib:$PYTHONPATH" >> $GITHUB_ENV
+        cmake --version
+        python --version
+
+    - name: Build tlRender
+      run: |
+        export DYLD_LIBRARY_PATH=$PWD/build/install/lib:$DYLD_LIBRARY_PATH
+        bash etc/macOS/macos-build-gha.sh Debug
+
+    - name: Run tests
+      run: |
+        export DYLD_LIBRARY_PATH=$PWD/build/install/lib:$DYLD_LIBRARY_PATH
+        cd build
+        cd tlRender/src/tlRender-build
+        # tests/tltest/tltest
+
+  macos-14-build:
+    runs-on: macos-14
+
+    env:
+      TLRENDER_PYTHON: OFF
+      TLRENDER_API: GL_4_1
+      TLRENDER_GLFW: ON
+      TLRENDER_NET: OFF
+      TLRENDER_OCIO: ON
+      TLRENDER_AUDIO: ON
+      TLRENDER_JPEG: ON
+      TLRENDER_TIFF: ON
+      TLRENDER_STB: ON
+      TLRENDER_PNG: ON
+      TLRENDER_EXR: ON
+      TLRENDER_FFMPEG: ON
+      TLRENDER_USD: OFF
+      TLRENDER_NFD: OFF
+      TLRENDER_QT5: OFF
+      TLRENDER_PROGRAMS: ON
+      TLRENDER_EXAMPLES: ON
+      TLRENDER_TESTS: ON
+      TLRENDER_GCOV: OFF
+      CMAKE_OSX_DEPLOYMENT_TARGET: 14
+      CMAKE_OSX_ARCHITECTURES: arm64
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Get machine name
+      run: echo "Machine name $RUNNER_NAME"
+      
+    - name: Install ninja-build
+      run: brew install ninja
+
+    # \bug DYLD_LIBRARY_PATH is not being set here?
+    - name: Setup environment
+      run: |
+        echo "$PWD/build/install/bin" >> $GITHUB_PATH
+        echo "DYLD_LIBRARY_PATH=$PWD/build/install/lib:$DYLD_LIBRARY_PATH" >> $GITHUB_ENV
+        echo "PYTHONPATH=$PWD/build/install/lib:$PYTHONPATH" >> $GITHUB_ENV
+        cmake --version
+        python --version
+
+    - name: Build tlRender
+      run: |
+        export DYLD_LIBRARY_PATH=$PWD/build/install/lib:$DYLD_LIBRARY_PATH
+        bash etc/macOS/macos-build-gha.sh Debug
+
+    - name: Run tests
+      run: |
+        export DYLD_LIBRARY_PATH=$PWD/build/install/lib:$DYLD_LIBRARY_PATH
+        cd build
+        cd tlRender/src/tlRender-build
+        tests/tltest/tltest
+
+  windows-build:
+    runs-on: windows-latest
+
+    env:
+      TLRENDER_API: GL_4_1
+      TLRENDER_PYTHON: OFF
+      TLRENDER_GLFW: ON
+      TLRENDER_NET: OFF
+      TLRENDER_OCIO: ON
+      TLRENDER_AUDIO: ON
+      TLRENDER_JPEG: ON
+      TLRENDER_TIFF: ON
+      TLRENDER_STB: ON
+      TLRENDER_PNG: ON
+      TLRENDER_EXR: ON
+      TLRENDER_FFMPEG: OFF
+      TLRENDER_USD: OFF
+      TLRENDER_NFD: OFF
+      TLRENDER_QT5: OFF
+      TLRENDER_PROGRAMS: ON
+      TLRENDER_EXAMPLES: ON
+      TLRENDER_TESTS: ON
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    - uses: ilammy/setup-nasm@v1
+
+    - name: Get machine name
+      shell: cmd
+      run: |
+        echo "Machine name: %RUNNER_NAME%"
+      
+    # \bug Any spaces before the ">>" will be considered part of the path.
+    - name: Setup environment
+      shell: cmd
+      run: |
+        echo %CD%\build\install\bin>> %GITHUB_PATH%
+        echo %CD%\build\install\lib>> %GITHUB_PATH%
+        echo CTEST_OUTPUT_ON_FAILURE=1 >> %GITHUB_ENV%
+        cmake --version
+        python --version
+        
+    - name: Build tlRender
+      shell: cmd
+      run: |
+        etc\Windows\windows-build-gha.bat Debug
+
+    # \bug Temporarily disable tests on Windows. All the tests seem to pass
+    # but GitHub actions reports this error at the end:
+    # Error: Process completed with exit code -1073741819.
+    #- name: Run tests
+    #  shell: cmd
+    #  run: |
+    #    cd build
+    #    cd tlRender\src\tlRender-build
+    #    tests\tltest\Debug\tltest
+

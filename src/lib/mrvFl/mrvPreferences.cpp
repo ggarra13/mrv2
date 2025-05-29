@@ -153,7 +153,6 @@ namespace mrv
                 settings->setValue(keyS, value);
             }
         }
-        DBG3;
 
         // If reading a version 7 or earlier, make sure to set ffmpeg color
         // accuracy off to avoid issues of users complaining about playback
@@ -390,8 +389,8 @@ namespace mrv
         hdr.get("chromaticities", tmp, 0);
         uiPrefs->uiPrefsChromaticities->value(tmp);
         
-        hdr.get("tonemap", tmp, 1);
-        uiPrefs->uiPrefsTonemap->value(tmp);
+        hdr.get("hdr_data", tmp, 0);
+        uiPrefs->uiPrefsHDRInfo->value(tmp);
         
         hdr.get("tonemap_algorithm", tmp, 0);
         uiPrefs->uiPrefsTonemapAlgorithm->value(tmp);
@@ -1264,7 +1263,7 @@ namespace mrv
 
         Fl_Preferences hdr(gui, "hdr");
         hdr.set("chromaticities", uiPrefs->uiPrefsChromaticities->value());
-        hdr.set("tonemap", uiPrefs->uiPrefsTonemap->value());
+        hdr.set("hdr_data", uiPrefs->uiPrefsHDRInfo->value());
         hdr.set("tonemap_algorithm",
                 uiPrefs->uiPrefsTonemapAlgorithm->value());
         
@@ -1585,7 +1584,7 @@ namespace mrv
         // Toolbars
         //
 
-        Viewport* view = ui->uiView;
+        MyViewport* view = ui->uiView;
 
         // Only redisplay the tool bars if not on Presentation
         // Mode. (User changed Preferences while on Presentation mode).
@@ -1800,6 +1799,9 @@ namespace mrv
             static_cast<timeline::ImageFilter>(magnifyFilter);
         displayOptions.ignoreChromaticities =
             !uiPrefs->uiPrefsChromaticities->value();
+        displayOptions.hdrInfo =
+            static_cast<timeline::HDRInformation>(
+                uiPrefs->uiPrefsHDRInfo->value());
         app->setDisplayOptions(displayOptions);
         
         timeline::HDROptions hdrOptions = ui->uiView->getHDROptions();

@@ -1,14 +1,13 @@
 
-#include <algorithm>
+#include "mrViewer.h"
+#include "mrvPDFOptionsUI.h"
 
 #include "mrvFl/mrvIO.h"
-
 
 #include "mrvPDF/mrvPDFCreator.h"
 #include "mrvPDF/mrvSavePDF.h"
 
-#include "mrvPDFOptionsUI.h"
-#include "mrViewer.h"
+#include <algorithm>
 
 namespace
 {

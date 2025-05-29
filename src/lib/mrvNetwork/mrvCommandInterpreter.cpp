@@ -2,19 +2,12 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <tlCore/StringFormat.h>
+#include "mrViewer.h"
 
-#include <FL/Fl_Multiline_Input.H>
-
-#include "mrvCore/mrvFile.h"
-
+#include "mrvFl/mrvOCIO.h"
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvFl/mrvIO.h"
-
-#ifdef TLRENDER_GL
-#    include "mrvGL/mrvGLUtil.h"
-#    include "mrvGL/mrvGLJson.h"
-#endif
+#include "mrvFl/mrvLaserFadeData.h"
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
@@ -27,8 +20,24 @@
 #include "mrvNetwork/mrvTimelineItemOptions.h"
 #include "mrvNetwork/mrvProtocolVersion.h"
 
-#include "mrViewer.h"
-#include "mrvFl/mrvOCIO.h"
+#if defined(OPENGL_BACKEND)
+#    include "mrvGL/mrvGLJson.h"
+#endif
+
+#if defined(VULKAN_BACKEND)
+#    include "mrvVk/mrvVkJson.h"
+#endif
+
+#include "mrvCore/mrvFile.h"
+
+#include <tlDraw/Annotation.h>
+
+#include <tlCore/StringFormat.h>
+
+#include <FL/Fl_Multiline_Input.H>
+
+
+
 
 namespace
 {
@@ -675,7 +684,7 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
-                auto shape = draw::messageToShape(message["value"]);
+                auto shape = messageToShape(message["value"]);
                 annotation->shapes.push_back(shape);
 
                 // Create annotation menus if not there already
@@ -735,7 +744,7 @@ namespace mrv
                 laserData->shape = shape;
 
                 Fl::add_timeout(
-                    0.0, (Fl_Timeout_Handler)TimelineViewport::laserFade_cb,
+                    0.0, (Fl_Timeout_Handler)MyViewport::laserFade_cb,
                     laserData);
 
                 // Create annotation menus if not there already
@@ -786,7 +795,7 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
-                auto shape = draw::messageToShape(message["value"]);
+                auto shape = messageToShape(message["value"]);
                 annotation->shapes.pop_back();
                 annotation->shapes.push_back(shape);
                 view->updateUndoRedoButtons();
@@ -806,7 +815,7 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
-                auto shape = draw::messageToShape(message["value"]);
+                auto shape = messageToShape(message["value"]);
                 annotation->shapes.push_back(shape);
                 // Create annotation menus if not there already
                 ui->uiMain->fill_menu(ui->uiMenuBar);
@@ -1326,7 +1335,12 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
+#ifdef OPENGL_BACKEND
                 timelineui::DisplayOptions value = message["value"];
+#endif
+#ifdef VULKAN_BACKEND
+                timelineui_vk::DisplayOptions value = message["value"];
+#endif
                 ui->uiTimeline->setDisplayOptions(value);
             }
             else if (c == "Timeline/FrameView")

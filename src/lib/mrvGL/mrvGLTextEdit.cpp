@@ -2,11 +2,11 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include "mrvGLTextEdit.h"
+#include "mrViewer.h"
 
+#include "mrvGL/mrvGLTextEdit.h"
 #include "mrvGL/mrvGLShape.h"
 
-#include "mrViewer.h"
 
 namespace mrv
 {
@@ -14,7 +14,7 @@ namespace mrv
     {
         ViewerUI* ui = App::ui;
 
-        Viewport* view = ui->uiView;
+        MyViewport* view = ui->uiView;
 
         auto player = view->getTimelinePlayer();
         if (!player)
@@ -60,7 +60,7 @@ namespace mrv
     {
         ViewerUI* ui = App::ui;
 
-        Viewport* view = ui->uiView;
+        MyViewport* view = ui->uiView;
 
         auto player = view->getTimelinePlayer();
         if (!player)

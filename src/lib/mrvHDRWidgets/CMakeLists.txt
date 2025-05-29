@@ -19,17 +19,7 @@ hdr_files_to_absolute_paths()
 find_package(Intl REQUIRED)
 
 
-set(LIBRARIES ${Intl_LIBRARIES})
-
-if (WIN32)
-    list(APPEND LIBRARIES ${FLTK_LIBRARIES})
-else()
-    if(FLTK_BUILD_SHARED_LIBS)
-	list(APPEND LIBRARIES ${FLTK_LIBRARIES} fltk::vk-shared)
-    else()
-	list(APPEND LIBRARIES ${FLTK_LIBRARIES} fltk::vk)
-    endif()
-endif()
+set(LIBRARIES ${FLTK_vk_LIBRARY} ${FLTK_LIBRARIES} ${Intl_LIBRARIES})
 
 if( APPLE )
     set(OSX_FRAMEWORKS "-framework IOKit")

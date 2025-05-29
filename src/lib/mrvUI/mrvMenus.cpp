@@ -6,6 +6,10 @@
 #include <locale>
 #include <string> // Add this include for string-related functionality
 
+#ifdef _WIN32
+#include <winsock2.h>
+#endif
+
 #include <tlCore/StringFormat.h>
 
 #include "mrvCore/mrvFile.h"
@@ -43,6 +47,7 @@
 #ifdef __APPLE__
 #    include <FL/platform.H> // Needed for Fl_Mac_App_Menu
 #endif
+
 
 namespace
 {
@@ -181,8 +186,8 @@ namespace mrv
             _("Window/Presentation"), kTogglePresentation.hotkey(),
             (Fl_Callback*)toggle_presentation_cb, ui, FL_MENU_TOGGLE);
 
-        const Viewport* uiView = ui->uiView;
-        const Viewport* uiView2 = nullptr;
+        const MyViewport* uiView = ui->uiView;
+        const MyViewport* uiView2 = nullptr;
         if (ui->uiSecondary && ui->uiSecondary->window()->visible())
             uiView2 = ui->uiSecondary->viewport();
 
@@ -273,8 +278,8 @@ namespace mrv
 
         snprintf(buf, 256, "%s", _("View/Tool Bars/Toggle Timeline Bar"));
         idx = menu->add(
-            buf, kToggleTimeline.hotkey(), (Fl_Callback*)toggle_bottom_bar, ui,
-            FL_MENU_TOGGLE);
+            buf, kToggleTimeline.hotkey(), (Fl_Callback*)toggle_timeline_bar,
+            ui, FL_MENU_TOGGLE);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (ui->uiBottomBar->visible())
             item->set();
@@ -733,7 +738,7 @@ namespace mrv
                 _("Render/Alpha Blend/None"), kAlphaBlendNone.hotkey(),
                 (Fl_Callback*)alpha_blend_none_cb, ui, mode);
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-            if (imageOptions.alphaBlend == timeline::AlphaBlend::None)
+            if (imageOptions.alphaBlend == timeline::AlphaBlend::kNone)
                 item->set();
 
             idx = menu->add(
@@ -803,6 +808,11 @@ namespace mrv
                 timeline::ImageFilter::Linear)
                 item->set();
 
+
+            mode = FL_MENU_TOGGLE;
+            if (numFiles == 0)
+                mode |= FL_MENU_INACTIVE;
+            
             idx = menu->add(
                 _("Render/HDR/Auto Normalize"), kAutoNormalize.hotkey(),
                 (Fl_Callback*)toggle_normalize_image_cb, ui, mode);
@@ -825,14 +835,35 @@ namespace mrv
             if (displayOptions.ignoreChromaticities)
                 item->set();
 
-            const timeline::HDROptions& hdrOptions = uiView->getHDROptions();
+            
+            mode = FL_MENU_RADIO;
+            if (numFiles == 0)
+                mode |= FL_MENU_INACTIVE;
+            
             idx = menu->add(
-                _("Render/HDR/Toggle Tonemap"), kToggleHDRTonemap.hotkey(),
-                (Fl_Callback*)toggle_hdr_tonemap_cb, ui, mode);
+                _("Render/HDR Data/From File"), kHDRDataFromFile.hotkey(),
+                (Fl_Callback*)hdr_data_from_file_cb, ui, mode);
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-            if (hdrOptions.tonemap)
+            if (displayOptions.hdrInfo == timeline::HDRInformation::FromFile)
                 item->set();
+            
+            idx = menu->add(
+                _("Render/HDR Data/Inactive"), kHDRDataFalse.hotkey(),
+                (Fl_Callback*)hdr_data_inactive_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (displayOptions.hdrInfo == timeline::HDRInformation::Inactive)
+                item->set();
+            
+            idx = menu->add(
+                _("Render/HDR Data/Active"), kHDRDataTrue.hotkey(),
+                (Fl_Callback*)hdr_data_active_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (displayOptions.hdrInfo == timeline::HDRInformation::Active)
+                item->set();
+            
 
+#if MRV2_BACKEND_GL
+            const timeline::HDROptions& hdrOptions = uiView->getHDROptions();
             int selected = static_cast<int>(hdrOptions.algorithm);
             mode = FL_MENU_RADIO;
             if (numFiles == 0)
@@ -851,6 +882,7 @@ namespace mrv
                     item->set();
                 ++tonemap;
             }
+#endif
         }
 
         timeline::Playback playback = timeline::Playback::Stop;

@@ -8,11 +8,14 @@
 #include <Imath/ImathMatrix.h>
 #include <Imath/ImathVec.h>
 
+#include <tlCore/Image.h>
 #include <tlCore/Math.h>
 
 #include "mrvWidgets/mrvVectorscope.h"
 
 #include "mrViewer.h"
+
+#include "mrvCore/mrvColor.h"
 #include "mrvCore/mrvI8N.h"
 
 namespace mrv
@@ -20,9 +23,10 @@ namespace mrv
     struct Vectorscope::Private
     {
         int diameter;
-        math::Size2i renderSize;
         math::Box2i box;
-        image::Color4f* image = nullptr;
+        image::PixelType pixelType;
+        uint8_t* image = nullptr;
+        size_t dataSize = 0;
         ViewerUI* ui;
     };
 
@@ -34,7 +38,12 @@ namespace mrv
                   "button"));
     }
 
-    Vectorscope::~Vectorscope() {}
+    Vectorscope::~Vectorscope()
+    {
+        TLRENDER_P();
+
+        free(p.image);
+    }
 
     void Vectorscope::main(ViewerUI* m)
     {
@@ -66,24 +75,26 @@ namespace mrv
     {
         TLRENDER_P();
 
-        Viewport* view = p.ui->uiView;
-        const auto& newRenderSize = view->getRenderSize();
-        const image::Color4f* viewImage = view->image();
+        MyViewport* view = p.ui->uiView;
+        const void* viewImage = view->image();
         p.box = info.box;
+        p.pixelType = info.pixelType;
 
-        if (!viewImage || !newRenderSize.isValid())
+        if (!viewImage)
         {
             redraw();
             return;
         }
 
-        const size_t dataSize =
-            newRenderSize.w * newRenderSize.h * sizeof(image::Color4f);
-        if (newRenderSize != p.renderSize)
+        const int channelCount = image::getChannelCount(p.pixelType);
+        const int byteCount = image::getBitDepth(p.pixelType) / 8;
+        
+        const size_t dataSize = info.box.w() * info.box.h() * channelCount * byteCount;
+        if (dataSize != p.dataSize)
         {
-            p.renderSize = newRenderSize;
+            p.dataSize = dataSize;
             free(p.image);
-            p.image = (image::Color4f*)malloc(dataSize);
+            p.image = reinterpret_cast<uint8_t*>(malloc(dataSize));
         }
         memcpy(p.image, viewImage, dataSize);
 
@@ -110,10 +121,19 @@ namespace mrv
         if (color.b > 1.F)
             color.b = 1.F;
 
-        // We swap R and B channels
-        uint8_t r = color.b * 255.F;
-        uint8_t g = color.g * 255.F;
-        uint8_t b = color.r * 255.F;
+#ifdef VULKAN_BACKEND
+        const uint8_t r = color.r * 255.F;
+        const uint8_t g = color.g * 255.F;
+        const uint8_t b = color.b * 255.F;
+#elif OPENGL_BACKEND
+        const uint8_t b = color.r * 255.F;
+        const uint8_t g = color.g * 255.F;
+        const uint8_t r = color.b * 255.F;
+#else
+        const uint8_t r = color.r * 255.F;
+        const uint8_t g = color.g * 255.F;
+        const uint8_t b = color.b * 255.F;
+#endif
 
         image::Color4f hsv = color::rgb::to_hsv(color);
 
@@ -174,12 +194,23 @@ namespace mrv
         if (stepY < 1)
             stepY = 1;
 
-        for (int Y = p.box.min.y; Y < p.box.max.y; Y += stepY)
+        const int channelCount = image::getChannelCount(p.pixelType);
+        const int byteCount = image::getBitDepth(p.pixelType) / 8;
+
+        const uint32_t W = p.box.w();
+        const uint32_t H = p.box.h();
+        
+        image::Color4f rgba;
+
+        // We don't use all pixels with dataSize as it is too slow.  We
+        // use a step instead.
+        for (uint32_t Y = 0; Y < H; Y += stepY)
         {
-            for (int X = p.box.min.x; X < p.box.max.x; X += stepX)
+            for (uint32_t X = 0; X < W; X += stepX)
             {
-                image::Color4f& color = p.image[X + Y * p.renderSize.w];
-                draw_pixel(color);
+                const size_t offset = (X + Y * W) * channelCount * byteCount;
+                rgba = color::fromVoidPtr(p.image + offset, p.pixelType);
+                draw_pixel(rgba);
             }
         }
     }

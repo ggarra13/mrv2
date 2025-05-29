@@ -4,11 +4,9 @@
 
 set(HEADERS
     mrvGLDefines.h
-    mrvEnums.h
     mrvGLErrors.h
     mrvGLJson.h
     mrvGLLines.h
-    mrvGLOutline.h
     mrvGLShaders.h
     mrvGLShape.h
     mrvGLTextEdit.h
@@ -26,7 +24,6 @@ set(SOURCES
     mrvGLErrors.cpp
     mrvGLJson.cpp
     mrvGLLines.cpp
-    mrvGLOutline.cpp
     mrvGLShaders.cpp
     mrvGLShape.cpp
     mrvGLTextEdit.cpp
@@ -46,9 +43,9 @@ endif()
     
 add_definitions( -DGL_SILENCE_DEPRECATION )
 
-set(LIBRARIES tlGL tlTimeline tlTimelineUI tlUI glfw)
+set(LIBRARIES mrvUI mrvWidgets mrvCore ${FLTK_gl_LIBRARY} )
 set(LIBRARIES_PRIVATE )
-list( APPEND LIBRARIES mrvUI mrvEdit mrvWidgets mrvDraw mrvCore ${FLTK_gl_LIBRARY} )
+list(APPEND LIBRARIES tlRender::tlTimelineGL tlRender::tlTimelineUI tlRender::tlTimeline tlRender::tlGL tlRender::tlDraw)
 
 add_library(mrvGL ${SOURCES} ${HEADERS})
 files_to_absolute_paths()

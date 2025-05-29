@@ -1962,8 +1962,8 @@ msgstr "柱"
 msgid "Checkerboard"
 msgstr "チェッカーボード"
 
-msgid "OpenGL"
-msgstr "OpenGL"
+msgid "Graphics Card"
+msgstr "グラフィックスカード"
 
 msgid "Adjustments"
 msgstr "調整金"
@@ -2837,53 +2837,6 @@ msgstr "次の情報は、すべてのソースドキュメントに示す必要
 msgid "Notes"
 msgstr "注記"
 
-msgid "Invalid index for add clip to timeline."
-msgstr "タイムラインにクリップを追加するためのインデックスが無効です。"
-
-msgid "Could not get current path."
-msgstr "設問タイプを取得できません。"
-
-msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
-msgstr ""
-"EDL 項目 '{0}' はロードされなくなりました。元に戻すこともやり直すこともできま"
-"せん。"
-
-msgid "Could not paste {0}.  Error {1}."
-msgstr "{0} を貼り付けられませんでした。エラー {1}。"
-
-msgid "Could not save .otio file: {0}"
-msgstr ".otio ファイルを保存できませんでした: {0}"
-
-msgid "Error saving {0}. {1}"
-msgstr "保存エラー {0}。{1}"
-
-msgid "Empty EDL file.  Not saving."
-msgstr "設定が保存されないのを修正"
-
-msgid "Destination file is invalid."
-msgstr "ファイルが無効です。"
-
-msgid "You can only add clips to an .otio EDL playlist."
-msgstr "カートに追加できるの件数は{0}件のみです。"
-
-msgid "Unknown media reference"
-msgstr "不明なメディア参照"
-
-msgid "Track #{0} - {1}"
-msgstr "トラック #{0} - {1}"
-
-msgid "Cannot currently concatenate an .otio file."
-msgstr "現在、このリージョンから移動することはできません。"
-
-msgid "Cannot currently concatenate a directory."
-msgstr "現在、ディレクトリを連結できません。"
-
-msgid "Could not append video track {0}"
-msgstr "ビデオトラック {0} を追加できませんでした"
-
-msgid "Could not append audio track {0}"
-msgstr "オーディオトラック {0} を追加できませんでした"
-
 msgid "Server started at port {0}."
 msgstr "サーバーはポート {0} で起動しました。"
 
@@ -3087,6 +3040,9 @@ msgstr "レンダーサイズ: {0}"
 
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr "画像レイヤー '{0}' 情報: {1} {2}"
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "オフスクリーンバッファ情報: {0}"
 
 msgid "Unsupported output format: "
 msgstr "サポートされていない出力形式: %1%"
@@ -3691,6 +3647,53 @@ msgstr "テキスト注釈"
 msgid "No item selected"
 msgstr "アイテムが選択されていません"
 
+msgid "Invalid index for add clip to timeline."
+msgstr "タイムラインにクリップを追加するためのインデックスが無効です。"
+
+msgid "Could not get current path."
+msgstr "設問タイプを取得できません。"
+
+msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
+msgstr ""
+"EDL 項目 '{0}' はロードされなくなりました。元に戻すこともやり直すこともできま"
+"せん。"
+
+msgid "Could not paste {0}.  Error {1}."
+msgstr "{0} を貼り付けられませんでした。エラー {1}。"
+
+msgid "Could not save .otio file: {0}"
+msgstr ".otio ファイルを保存できませんでした: {0}"
+
+msgid "Error saving {0}. {1}"
+msgstr "保存エラー {0}。{1}"
+
+msgid "Empty EDL file.  Not saving."
+msgstr "設定が保存されないのを修正"
+
+msgid "Destination file is invalid."
+msgstr "ファイルが無効です。"
+
+msgid "You can only add clips to an .otio EDL playlist."
+msgstr "カートに追加できるの件数は{0}件のみです。"
+
+msgid "Unknown media reference"
+msgstr "不明なメディア参照"
+
+msgid "Track #{0} - {1}"
+msgstr "トラック #{0} - {1}"
+
+msgid "Cannot currently concatenate an .otio file."
+msgstr "現在、このリージョンから移動することはできません。"
+
+msgid "Cannot currently concatenate a directory."
+msgstr "現在、ディレクトリを連結できません。"
+
+msgid "Could not append video track {0}"
+msgstr "ビデオトラック {0} を追加できませんでした"
+
+msgid "Could not append audio track {0}"
+msgstr "オーディオトラック {0} を追加できませんでした"
+
 msgid "%s - Page %d"
 msgstr "%s - ページ %d"
 
@@ -3789,8 +3792,8 @@ msgstr "1.66"
 msgid "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 
-msgid "Cache:"
-msgstr "キャッシュ:"
+msgid "Cache: "
+msgstr "キャッシュ: "
 
 msgid "    Used: %.2g of %zu Gb (%.2g %%)"
 msgstr "    使用済み: %.2g / %zu Gb (%.2g %%)"
@@ -3801,11 +3804,14 @@ msgstr "    先読み    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "    後ろ    V: % 4<PRIu64>    A: % 4<PRIu64>"
 
+msgid "HDR monitor found."
+msgstr "HDRモニターが見つかりました。"
+
+msgid "HDR monitor not found or not configured."
+msgstr "HDRモニターが見つからないか、設定されていません。"
+
 msgid "Edit Text"
 msgstr "テキストを編集"
-
-msgid "Invalid font for text drawing"
-msgstr "フォントファイル情報が無効です。"
 
 msgid "Could not convert message to shape: "
 msgstr "ベクター図形に変換"
@@ -4005,8 +4011,14 @@ msgstr "レンダー/HDR/無効な値"
 msgid "Render/HDR/Ignore Chromaticities"
 msgstr "レンダー/HDR/色度を無視"
 
-msgid "Render/HDR/Toggle Tonemap"
-msgstr "レンダリング/HDR/トゥーンマップの切り替え"
+msgid "Render/HDR Data/From File"
+msgstr "レンダー/HDRデータ/ファイルから"
+
+msgid "Render/HDR Data/Inactive"
+msgstr "レンダー/HDRデータ/非アクティブ"
+
+msgid "Render/HDR Data/Active"
+msgstr "レンダー/HDRデータ/アクティブ"
 
 msgid "Render/HDR/Tonemap"
 msgstr "レンダー/HDR/トーンマップ"
@@ -5872,8 +5884,11 @@ msgstr "無視"
 msgid "Apply"
 msgstr "適用"
 
-msgid "Never"
-msgstr "決して"
+msgid "Inactive"
+msgstr "非アクティブ"
+
+msgid "Active"
+msgstr "アクティブ"
 
 msgid "ST2094_40"
 msgstr "ST2094_40"
@@ -6346,8 +6361,8 @@ msgstr "HDR"
 msgid "Chromaticities"
 msgstr "色度"
 
-msgid "Tonemap"
-msgstr "トゥーンマップ"
+msgid "HDR Data"
+msgstr "HDRデータ"
 
 msgid "Tonemap Algorithm"
 msgstr "トゥーンマップ アルゴリズム"
@@ -6685,21 +6700,21 @@ msgid "Blit Viewports"
 msgstr "ビューポートをブリット"
 
 msgid ""
-"Viewports can be drawn with blitting or with OpenGL shaders.  Depending on "
-"graphics card and OS one can perform better then the other."
+"Viewports can be drawn with blitting or with shaders.  Depending on graphics "
+"card and OS one can perform better then the other."
 msgstr ""
-"ビューポートはブリットまたはOpenGLシェーダーで描画できます。グラフィックカー"
-"ドやOSによって、どちらが優れているか異なります。"
+"ビューポートはブリッティングまたはシェーダーで描画できます。グラフィックス"
+"カードやOSによって、どちらかの方法がより良いパフォーマンスを発揮します。"
 
 msgid "Blit Timeline"
 msgstr "タイムラインをブリット"
 
 msgid ""
-"Timeline can be drawn with blitting or with OpenGL shaders.  Depending on "
-"graphics card and OS one can perform better then the other."
+"Timeline can be drawn with blitting or with shaders.  Depending on graphics "
+"card and OS one can perform better than the other."
 msgstr ""
-"タイムラインはブリットまたはOpenGLシェーダーで描画できます。グラフィックカー"
-"ドやOSによって、どちらが優れているか異なります。"
+"タイムラインはブリッティングまたはシェーダーで描画できます。グラフィックス"
+"カードやOSによって、どちらかの方法がより良いパフォーマンスを発揮します。"
 
 msgid ""
 "For changes to take effect, you will need to re-open any movies already "
@@ -6864,9 +6879,6 @@ msgstr "概要"
 
 msgid "Preset Name"
 msgstr "プリセット名"
-
-msgid "Active"
-msgstr "アクティブ"
 
 msgid "Function"
 msgstr "機能"
@@ -7173,6 +7185,15 @@ msgstr "自動正規化"
 
 msgid "Invalid Values"
 msgstr "無効な値"
+
+msgid "HDR Data From File"
+msgstr "ファイルからのHDRデータ"
+
+msgid "HDR Data Inactive"
+msgstr "HDRデータ 非アクティブ"
+
+msgid "HDR Data Active"
+msgstr "HDRデータ アクティブ"
 
 msgid "Toggle HDR tonemap"
 msgstr "HDR トーンマップの切り替え"
@@ -7581,3 +7602,32 @@ msgstr "ホットキーウィンドウを切り替え"
 
 msgid "Toggle About Window"
 msgstr "バージョン情報ウィンドウを切り替え"
+
+#~ msgid "HDR Data False"
+#~ msgstr "HDRデータオフ"
+
+#~ msgid "HDR Data True"
+#~ msgstr "HDRデータオン"
+
+#, fuzzy
+#~ msgid ""
+#~ "tter then the other.Timeline can be drawn with blitting or with shaders.  "
+#~ "Depending on graphics card and OS one can perform be"
+#~ msgstr ""
+#~ "タイムラインはブリットまたはOpenGLシェーダーで描画できます。グラフィック"
+#~ "カードやOSによって、どちらが優れているか異なります。"
+
+#~ msgid "OpenGL"
+#~ msgstr "OpenGL"
+
+#~ msgid "Invalid font for text drawing"
+#~ msgstr "フォントファイル情報が無効です。"
+
+#~ msgid "Render/HDR/Toggle Tonemap"
+#~ msgstr "レンダリング/HDR/トゥーンマップの切り替え"
+
+#~ msgid "Never"
+#~ msgstr "決して"
+
+#~ msgid "Tonemap"
+#~ msgstr "トゥーンマップ"

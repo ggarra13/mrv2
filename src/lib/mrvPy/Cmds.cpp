@@ -2,15 +2,13 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <vector>
-#include <string>
-#include <chrono>
+#include "mrViewer.h"
+
+#include "mrvPy/Cmds.h"
+#include "mrvPy/CmdsAux.h"
 
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/mrvApp.h"
-
-#include "mrvCore/mrvHome.h"
-#include "mrvCore/mrvOS.h"
 
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvFl/mrvSave.h"
@@ -18,14 +16,18 @@
 
 #include "mrvPDF/mrvSavePDF.h"
 
-#include "mrvPy/CmdsAux.h"
-#include "mrvPy/Cmds.h"
+#include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvOS.h"
+
 
 #include <pybind11/embed.h>
 #include <pybind11/stl.h>
 namespace py = pybind11;
 
-#include "mrViewer.h"
+#include <vector>
+#include <string>
+#include <chrono>
+
 
 namespace mrv2
 {

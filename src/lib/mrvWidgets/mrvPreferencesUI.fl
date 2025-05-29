@@ -710,8 +710,8 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
               }
             }
             Fl_Group {} {
-              label Render
-              xywh {288 37 555 369} box EMBOSSED_BOX align 5 hide
+              label Render open
+              xywh {288 37 555 369} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label Render
@@ -779,7 +779,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                 }
               }
               Fl_Group {} {
-                label HDR
+                label HDR open
                 xywh {303 256 530 140} box ROUNDED_BOX
               } {
                 Fl_Choice uiPrefsChromaticities {
@@ -795,21 +795,25 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                     xywh {30 30 100 20}
                   }
                 }
-                Fl_Choice uiPrefsTonemap {
-                  label Tonemap open
+                Fl_Choice uiPrefsHDRInfo {
+                  label {HDR Data} open
                   xywh {513 312 135 25} down_box BORDER_BOX
                 } {
-                  MenuItem {} {
-                    label Never
-                    xywh {30 30 100 20}
-                  }
                   MenuItem {} {
                     label {From File}
                     xywh {40 40 100 20}
                   }
+                  MenuItem {} {
+                    label Inactive selected
+                    xywh {30 30 100 20}
+                  }
+                  MenuItem {} {
+                    label Active
+                    xywh {40 40 100 20}
+                  }
                 }
                 Fl_Choice uiPrefsTonemapAlgorithm {
-                  label {Tonemap Algorithm} open
+                  label {Tonemap Algorithm}
                   xywh {513 349 135 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
@@ -1568,7 +1572,7 @@ v->uiOCIO_Display_View->do_callback();}
                 }
                 Fl_Choice uiPrefsBlitViewports {
                   label {Blit Viewports}
-                  tooltip {Viewports can be drawn with blitting or with OpenGL shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {513 243 140 25} down_box BORDER_BOX align 132 textcolor 32
+                  tooltip {Viewports can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {513 243 140 25} down_box BORDER_BOX align 132 textcolor 32
                   class {mrv::Choice}
                 } {
                   MenuItem {} {
@@ -1582,7 +1586,7 @@ v->uiOCIO_Display_View->do_callback();}
                 }
                 Fl_Choice uiPrefsBlitTimeline {
                   label {Blit Timeline}
-                  tooltip {Timeline can be drawn with blitting or with OpenGL shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {515 291 140 25} down_box BORDER_BOX align 132 textcolor 32
+                  tooltip {Timeline can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform better than the other.} xywh {515 291 140 25} down_box BORDER_BOX align 132 textcolor 32
                   class {mrv::Choice}
                 } {
                   MenuItem {} {
@@ -1817,8 +1821,7 @@ o->add( _("Audio") );
 o->add( _("ComfyUI") );
 o->add( _("Errors") );
 o->add( _("Behavior") );
-o->select( item );} {selected
-    }
+o->select( item );} {}
   }
   Function {fill_audio_apis(Fl_Choice* o)} {} {
     code {o->clear();
@@ -1902,15 +1905,6 @@ RtAudio::Api api = RtAudio::getCompiledApiByName(apiName);
 RtAudio audio(api);
 
 RtAudio::Api realApi = audio.getCurrentApi();
-
-\#if 0
-    std::cerr << "      value=" << value << std::endl
-              << "    apiName=" << apiName << std::endl
-              << "      apiId=" << (int)api << std::endl
-              << "  realApiId=" << (int)realApi << std::endl
-              << "realApiName=" << RtAudio::getApiName(realApi)
-              << "  oldDevice=" << oldDevice << std::endl;
-\#endif
 
 const auto numDevices = audio.getDeviceCount();
 if (numDevices <= 0)
