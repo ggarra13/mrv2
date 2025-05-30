@@ -596,6 +596,66 @@ namespace mrv
         return 0;
     }
     
+    int VKTextShape::handle_mouse_click(const math::Vector2i& local)
+    {
+        file::Path path(fontPath);
+        const std::string fontFamily = path.getBaseName();
+        const image::FontInfo fontInfo(fontFamily, fontSize);
+        
+        // Copy the text to process it line by line
+        std::string txt = text;
+
+        int x = pts[0].x;
+        int y = pts[0].y;
+        math::Vector2i cursor_pos(x, y);
+        std::size_t pos = txt.find('\n');
+        cursor = 0;
+        for (; pos != std::string::npos; pos = txt.find('\n'))
+        {
+            const std::string line = txt.substr(0, pos);
+            const auto& glyphs = fontSystem->getGlyphs(line, fontInfo);
+            for (const auto& glyph : glyphs)
+            {
+                if (glyph)
+                {
+                    if (local.x > (cursor_pos.x + glyph->advance / 2) ||
+                        local.y > cursor_pos.y)
+                    {
+                        cursor_pos.x += glyph->advance;
+                        ++cursor;
+                    }
+                }
+            }
+            if (txt.size() > pos)
+            {
+                txt = txt.substr(pos + 1, txt.size());
+                if (local.y > cursor_pos.y)
+                {
+                    cursor_pos.x = x;
+                    cursor_pos.y += fontSize;
+                    ++cursor;
+                }
+            }
+        }
+        if (!txt.empty())
+        {
+            const auto& glyphs = fontSystem->getGlyphs(txt, fontInfo);
+            for (const auto& glyph : glyphs)
+            {
+                if (glyph)
+                {
+                    if (local.x > (cursor_pos.x + glyph->advance / 2) ||
+                        local.y > cursor_pos.y)
+                    {
+                        cursor_pos.x += glyph->advance;
+                        ++cursor;
+                    }
+                }
+            }
+        }
+        return 1;
+    }
+    
     void VKTextShape::draw(
         const std::shared_ptr<timeline_vlk::Render>& render,
         const std::shared_ptr<vulkan::Lines> lines)
@@ -670,11 +730,13 @@ namespace mrv
         }
 
         const image::Color4f cursorColor(.8F, 0.8F, 0.8F);
-        math::Box2i cursorBox(cursor_pos.x, cursor_pos.y - ascender - descender, 2, fontSize);
+        math::Box2i cursorBox(cursor_pos.x,
+                              cursor_pos.y - ascender - descender, 2, fontSize);
             
         if (editing)
         {
-            box = math::Box2i(pts[0].x, pts[0].y - fontSize / 2, 70, fontSize / 2);
+            box = math::Box2i(pts[0].x, pts[0].y - fontSize / 2,
+                              70, fontSize / 2);
             for (const auto& textInfo : textInfos)
             {
                 for (const auto& v : textInfo.mesh.v)

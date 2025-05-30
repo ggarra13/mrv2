@@ -166,6 +166,8 @@ namespace mrv
         virtual void draw(
             const std::shared_ptr<timeline_vlk::Render>&,
             const std::shared_ptr<vulkan::Lines> lines) override;
+        
+        int handle_mouse_click(const math::Vector2i& pos);
 
     protected:
         void to_cursor();

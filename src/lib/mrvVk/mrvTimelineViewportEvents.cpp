@@ -931,7 +931,10 @@ namespace mrv
                     }
                     else
                     {
-                        set_cursor(FL_CURSOR_INSERT);
+                        if (p.multilineText->box.contains(pos))
+                            set_cursor(FL_CURSOR_INSERT);
+                        else
+                            set_cursor(FL_CURSOR_CROSS);
                     }
                     return 1;
                 }
@@ -1043,7 +1046,14 @@ namespace mrv
                         else
                         {
                             if (p.multilineText->box.contains(pos))
-                                return p.multilineText->handle(event);
+                            {
+                                int ret = p.multilineText->handle_mouse_click(pos);
+                                if (ret)
+                                {
+                                    redrawWindows();
+                                    return ret;
+                                }
+                            }
                         }
                     }
                     
@@ -1196,6 +1206,17 @@ namespace mrv
                 p.mousePos = _getFocus();
                 if (Fl::event_button1())
                 {
+                    const math::Vector2i pos = _getRaster();
+                    if (p.multilineText->box.contains(pos))
+                    {
+                        int ret = p.multilineText->handle_mouse_click(pos);
+                        if (ret)
+                        {
+                            redrawWindows();
+                            return ret;
+                        }
+                    }
+                            
                     if (Fl::event_ctrl())
                     {
                         _handleDragMiddleMouseButton();
