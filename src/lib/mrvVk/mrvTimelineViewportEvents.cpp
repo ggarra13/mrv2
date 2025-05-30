@@ -922,7 +922,7 @@ namespace mrv
                 case FL_MOVE:
                 {
                     p.mousePos = _getFocus();
-                    const math::Vector2f pos = _getRasterf();
+                    const math::Vector2i pos = _getRaster();
                     const math::Vector2i widget = p.multilineText->box.min;
                     if (pos.x >= widget.x && pos.x <= widget.x + 10 &&
                         pos.y >= widget.y && pos.y <= widget.y + 10)
@@ -958,8 +958,13 @@ namespace mrv
                 }
                 if (event == FL_PUSH && Fl::event_button2())
                 {
-                    Fl::paste(*this, 0);
-                    return 1;
+                    p.mousePos = _getFocus();
+                    const math::Vector2i pos = _getRaster();
+                    if (p.multilineText->box.contains(pos))
+                    {
+                        Fl::paste(*this, 0);
+                        return 1;
+                    }
                 }
                     
                 ret = p.multilineText->handle(event);
@@ -1028,11 +1033,18 @@ namespace mrv
                 {
                     if (p.multilineText)
                     {
-                        math::Vector2f pos = _getRasterf();
+                        const math::Vector2i pos = _getRaster();
                         auto widget = p.multilineText->box.min;
                         if (pos.x >= widget.x && pos.x <= widget.x + 10 &&
                             pos.y >= widget.y && pos.y <= widget.y + 10)
+                        {
                             return acceptMultilineInput();
+                        }
+                        else
+                        {
+                            if (p.multilineText->box.contains(pos))
+                                return p.multilineText->handle(event);
+                        }
                     }
                     
                     if (Fl::event_ctrl())

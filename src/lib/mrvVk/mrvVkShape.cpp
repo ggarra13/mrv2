@@ -311,14 +311,85 @@ namespace mrv
         return App::ui->uiView->acceptMultilineInput();
     }
     
-    void VKTextShape::to_cursor()
+    unsigned VKTextShape::line_end(unsigned c)
+    {
+        const char* start   = text.c_str();
+        const char* end   = text.c_str() + text.size();
+        const char* pos = start + c;
+        while (pos[0] != '\n' && pos < end)
+        {
+            pos = start + c;
+            int len = fl_utf8len(pos[0]);
+            if (len < 1) len = 1;
+            c += len;
+        }
+        if (pos >= end)
+            return text.size();
+        ++c;
+        return c;
+    }
+
+    unsigned VKTextShape::line_start(unsigned c)
+    {
+        const char* start   = text.c_str();
+        const char* pos = start + c;
+        while (*pos != '\n' && pos > start)
+        {
+            int len = fl_utf8len(*pos);
+            if (len < 1) len = 1;
+            pos -= len;
+            c -= len;
+        }
+        if (pos <= start)
+            return 0;
+        ++c;
+        return c;
+    }
+    
+    unsigned VKTextShape::current_column()
+    {
+        unsigned size = fl_utf8toa(text.c_str(), utf8_pos, nullptr, 0);
+        
+        char* dst = new char[size+1];
+        fl_utf8toa(text.c_str(), utf8_pos, dst, size + 1);
+
+        unsigned column = 0;
+        char* c = dst;
+        for (; *c; ++c)
+        {
+            if (*c != '\n')
+                ++column;
+            else
+                column = 0;
+        }
+
+        delete [] dst;
+        
+        return column;
+    }
+    
+    unsigned VKTextShape::current_line()
     {
         unsigned size = fl_utf8toa(text.c_str(), utf8_pos, nullptr, 0);
 
-        std::string dst;
-        dst.reserve(size);
+        char* dst = new char[size+1];
+        fl_utf8toa(text.c_str(), utf8_pos, dst, size + 1);
+
+        unsigned line = 0;
+        char* c = dst;
+        for (; *c; ++c)
+        {
+            if (*c == '\n')
+                ++line;
+        }
         
-        fl_utf8toa(text.c_str(), utf8_pos, dst.data(), size + 1);
+        delete [] dst;
+        return line;
+    }
+    
+    void VKTextShape::to_cursor()
+    {
+        unsigned size = fl_utf8toa(text.c_str(), utf8_pos, nullptr, 0);
         cursor = size;
     }
     
@@ -351,6 +422,20 @@ namespace mrv
         to_cursor();
         
         return 1;
+    }
+    
+    const char* VKTextShape::advance_to_column(unsigned start,
+                                               unsigned column)
+    {
+        const char* current = text.c_str() + start;
+        const char* pos = current;
+        for (unsigned i = 0; *pos != '\n' && i < column; ++i)
+        {
+            int len = fl_utf8len(pos[0]);
+            if (len < 1) len = 1;
+            pos += len;
+        }
+        return pos;
     }
     
     int VKTextShape::handle(int e)
@@ -392,7 +477,6 @@ namespace mrv
                 if (next < text.size())
                     right = text.substr(next, text.size());
                 text = left + right;
-                to_cursor();
                 break;
             }
             case FL_BackSpace:
@@ -412,7 +496,29 @@ namespace mrv
                 if (last < text.size())
                     right = text.substr(last, text.size());
                 text = left + right;
-                to_cursor();
+                break;
+            }
+            case FL_Up:
+            {
+                unsigned row = current_line();
+                if (row == 0)
+                    break;
+                unsigned column = current_column();
+                unsigned start = line_start(utf8_pos);
+                start = line_start(start-2);  // 2 to skip \n
+                const char* pos = advance_to_column(start, column);
+                utf8_pos = pos - text.c_str();
+                break;
+            }
+            case FL_Down:
+            {
+                unsigned column = current_column();
+                unsigned end = line_end(utf8_pos);
+                if (end == text.size())
+                    break;
+                unsigned start = line_start(end+1);
+                const char* pos = advance_to_column(start, column);
+                utf8_pos = pos - text.c_str();
                 break;
             }
             case FL_Left:
@@ -424,7 +530,6 @@ namespace mrv
                 const char* end = current;
                 const char* pos = fl_utf8back(current - 1, start, end);
                 utf8_pos = pos - text.c_str();
-                to_cursor();
                 break;
             }
             case FL_Right:
@@ -436,7 +541,6 @@ namespace mrv
                 const char* end = start + text.size() - utf8_pos;
                 const char* pos = fl_utf8fwd(current + 1, start, end);
                 utf8_pos = pos - text.c_str();
-                to_cursor();
                 break;
             }
             case FL_Enter:
@@ -456,7 +560,6 @@ namespace mrv
                 
                 text = left + '\n' + right;
                 utf8_pos += Fl::event_length();
-                to_cursor();
                 break;
             }
             default:
@@ -482,11 +585,11 @@ namespace mrv
                     
                     text = left + key + right;
                     utf8_pos += Fl::event_length();
-                    to_cursor();
                 }
                 break;
             }
             }
+            to_cursor();
             return 1;
             break;
         }

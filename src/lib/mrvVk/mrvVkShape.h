@@ -169,6 +169,11 @@ namespace mrv
 
     protected:
         void to_cursor();
+        unsigned line_start(unsigned utf8);
+        unsigned line_end(unsigned utf8);
+        unsigned current_line();
+        unsigned current_column();
+        const char* advance_to_column(unsigned start, unsigned column);
         
     public:
         std::string fontPath;
