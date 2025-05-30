@@ -681,7 +681,7 @@ namespace mrv
                         shape = p.multilineText;
   
                         shape->fontSystem = p.fontSystem;
-                        shape->fontPath = fontList[(unsigned)font];
+                        shape->fontPath = fontList[(unsigned)font].u8string();
                         shape->fontSize = fontSize;
                         
                         shape->pts.push_back(pos);

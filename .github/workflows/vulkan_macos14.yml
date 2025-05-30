@@ -58,9 +58,6 @@ jobs:
         brew install vulkan-profiles
         brew install spirv-tools
 
-        export VULKAN_SDK=/opt/homebrew/
-        echo "VULKAN_SDK=${VULKAN_SDK}" >> $GITHUB_ENV
-
     # Verify Vulkan installation
     - name: Verify Vulkan
       run: |

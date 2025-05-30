@@ -70,6 +70,7 @@ jobs:
         install_runtime: true
         cache: true
         stripdown: true # Reduce cache size
+        
         # On Linux, the action automatically sets VULKAN_SDK env variable.
         # It also adds the SDK's bin directory to PATH and lib directory to LD_LIBRARY_PATH.
 

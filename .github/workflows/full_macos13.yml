@@ -3,8 +3,7 @@ name: MacOS Intel
 on:
   push:
     branches-ignore:
-      - main
-      - beta
+      - vulkan
 
 jobs:
   ###################################

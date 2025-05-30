@@ -204,18 +204,21 @@ if [ -z "$VULKAN_SDK" ]; then
 fi
     
 if [ -z "$TLRENDER_VK" ]; then
-    if [ -d "${VULKAN_SDK}/include/vulkan/" ]; then
+    if [ -e "${VULKAN_SDK}/include/vulkan/vulkan.h" ]; then
 	export TLRENDER_VK=ON
+	echo "Vulkan FOUND at ${VULKAN_SDK}/include/vulkan"
     else
 	export TLRENDER_VK=OFF
 	export MRV2_HDR=OFF
-	echo "VULKAN NOT FOUND at ${VULKAN_SDK}/include/vulkan"
+	echo "Vulkan NOT FOUND at ${VULKAN_SDK}/include/vulkan"
     fi
 else
-    if [ ! -d "${VULKAN_SDK}/include/vulkan/" ]; then
-	echo "VULKAN NOT FOUND at ${VULKAN_SDK}/include/vulkan"
+    if [ ! -e "${VULKAN_SDK}/include/vulkan/vulkan.h" ]; then
+	echo "Vulkan NOT FOUND at ${VULKAN_SDK}/include/vulkan"
 	export TLRENDER_VK=OFF
 	export MRV2_HDR=OFF
+    else
+	echo "Vulkan FOUND at ${VULKAN_SDK}/include/vulkan"
     fi
 fi
 
@@ -337,11 +340,11 @@ echo
 echo "NDI support ........................ ${TLRENDER_NDI} 	(TLRENDER_NDI)"
 if [[ $TLRENDER_NDI == ON || $TLRENDER_NDI == 1 ]]; then
     echo "NDI SDK ${TLRENDER_NDI_SDK} 	(TLRENDER_NDI_SDK}"
-    if [[ $TLRENDER_VK == ON ]]; then
-	echo "VULKAN_SDK    .................. ${VULKAN_SDK} 	(env. variable)"
-    fi
 fi
-
+if [[ $TLRENDER_VK == ON || $TLRENDER_VK == 1 ]]; then
+    echo "VULKAN_SDK    .................. ${VULKAN_SDK} 	(env. variable)"
+fi
+    
 echo
 echo "JPEG   support ..................... ${TLRENDER_JPEG} 	(TLRENDER_JPEG)"
 echo "LibRaw support ..................... ${TLRENDER_RAW} 	(TLRENDER_RAW)"
