@@ -5,7 +5,7 @@
 include( ExternalProject )
 
 set(VMA_REPOSITORY "https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator.git")
-set(VMA_TAG 6ec8481c8a13db586d7b3ba58f4eb9bbf017edf0)
+set(VMA_TAG v3.3.0)
 
 ExternalProject_Add(
     VMA
