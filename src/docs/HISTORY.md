@@ -58,13 +58,13 @@ v1.3.8
 		 * Thumbnails in Timeline (extremely slow).
 		 * Thumbnails in Panels
 		 * Missing Frames crosses
-		 * Vulkan Text widget annotation (does not support UTF-8 nor pasting)
+		 * Vulkan Text widget annotation
+		 * Editing.
 		 
 	 * Missing to check/add:
-		 * Editing.
 		 * Saving of Movies/Pictures with Annotations
 		 * NDI support
-		 * OpenUSD in Vulkan (how to do it?)
+		 * OpenUSD in Vulkan (Impossible to do it with Pixar's current API)
 		 
 	 * Problems:
 	 	 - Performance of the timeline with clips is an even worse problem.
@@ -74,6 +74,7 @@ v1.3.8
 		   both Vulkan and OpenGL.
 		 - Improved performance of drawing clips in the timeline for Vulkan.
 		   Still slow, thou.
+		 - Improved performance of Vulkan from 40FPS to 58FPS on 4K movies.
 		   
 - Fixed and simplified code for NDIView (hdr utility).
 - Fixed hdr utility for macOS Intel trying to pass full HDR10 or HLG data, 
