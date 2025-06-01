@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Copyright (c) 2021-2024 Darby Johnston
-// Copyright (c) 2025-Present Gonzalo Garramuño
 // All rights reserved.
 
 #pragma once
@@ -135,6 +134,7 @@ namespace tl
             Fl_Vk_Context& ctx;
 
             void createImage();
+            void allocateMemory();
             void createImageView();
             void createSampler();
 

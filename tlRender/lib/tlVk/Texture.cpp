@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Copyright (c) 2021-2024 Darby Johnston
-// Copyright (c) 2025-Present Gonzalo Garramuño
 // All rights reserved.
 
 #include <tlVk/Texture.h>
@@ -194,6 +193,13 @@ namespace tl
             VkImageType imageType = VK_IMAGE_TYPE_2D;
             uint32_t depth = 1;
             VkImage image = VK_NULL_HANDLE;
+
+#ifdef __APPLE__
+            VkDeviceMemory memory = VK_NULL_HANDLE;
+#else
+            VmaAllocation allocation = VK_NULL_HANDLE;
+#endif
+            
             VkImageView imageView = VK_NULL_HANDLE;
             VkSampler sampler = VK_NULL_HANDLE;
 
@@ -201,8 +207,7 @@ namespace tl
             VkFormat internalFormat = VK_FORMAT_UNDEFINED;
 
             bool hostVisible = true;
-            
-            VmaAllocation allocation = VK_NULL_HANDLE;
+
         };
 
         void
@@ -218,6 +223,7 @@ namespace tl
             p.options = options;
 
             createImage();
+            allocateMemory();
             createImageView();
             createSampler();
         }
@@ -252,6 +258,7 @@ namespace tl
                 p.memoryFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
 
             createImage();
+            allocateMemory();
             createImageView();
             createSampler();
         }
@@ -276,8 +283,11 @@ namespace tl
             if (p.imageView != VK_NULL_HANDLE)
                 vkDestroyImageView(device, p.imageView, nullptr);
 
-            if (p.image != VK_NULL_HANDLE && p.allocation != VK_NULL_HANDLE)
-                vmaDestroyImage(ctx.allocator, p.image, p.allocation);
+            if (p.memory != VK_NULL_HANDLE)
+                vkFreeMemory(device, p.memory, nullptr);
+
+            if (p.image != VK_NULL_HANDLE)
+                vkDestroyImage(device, p.image, nullptr);
 
             --numTextures;
             if (numTextures == 0)
@@ -484,22 +494,31 @@ namespace tl
     
             // Create staging buffer
             VkBuffer stagingBuffer;
-            VmaAllocation stagingAllocation;
+            VkDeviceMemory stagingMemory;
 
             VkBufferCreateInfo bufInfo = {};
             bufInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
             bufInfo.size = size;
             bufInfo.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
-            
-            VmaAllocationCreateInfo allocInfo = {};
-            allocInfo.usage = VMA_MEMORY_USAGE_CPU_ONLY;
 
-            VK_CHECK(vmaCreateBuffer(ctx.allocator, &bufInfo, &allocInfo,
-                                     &stagingBuffer, &stagingAllocation, nullptr));
+            VK_CHECK(vkCreateBuffer(device, &bufInfo, nullptr, &stagingBuffer));
+
+            VkMemoryRequirements memReqs;
+            vkGetBufferMemoryRequirements(device, stagingBuffer, &memReqs);
+
+            VkMemoryAllocateInfo allocInfo = {};
+            allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+            allocInfo.allocationSize = memReqs.size;
+            allocInfo.memoryTypeIndex = findMemoryType(
+                ctx.gpu, memReqs.memoryTypeBits,
+                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+            VK_CHECK(vkAllocateMemory(device, &allocInfo, nullptr, &stagingMemory));
+            VK_CHECK(vkBindBufferMemory(device, stagingBuffer, stagingMemory, 0));
 
             // Copy image data to buffer, respecting alignment
             void* mapped;
-            VK_CHECK(vmaMapMemory(ctx.allocator, stagingAllocation, &mapped));
+            VK_CHECK(vkMapMemory(device, stagingMemory, 0, size, 0, &mapped));
             if (info.layout.alignment == 1) {
                 std::memcpy(mapped, srcData, size);
             } else {
@@ -513,7 +532,7 @@ namespace tl
                         srcRowBytes);
                 }
             }
-            vmaUnmapMemory(ctx.allocator, stagingAllocation);
+            vkUnmapMemory(device, stagingMemory);
 
             // Begin command buffer
             VkCommandBuffer cmd = beginSingleTimeCommands(device, commandPool);
@@ -558,7 +577,8 @@ namespace tl
                 endSingleTimeCommands(cmd, device, commandPool, queue);
             }
             
-            vmaDestroyBuffer(ctx.allocator, stagingBuffer, stagingAllocation);
+            vkDestroyBuffer(device, stagingBuffer, nullptr);
+            vkFreeMemory(device, stagingMemory, nullptr);
 
             p.currentLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
         }
@@ -595,13 +615,56 @@ namespace tl
                 void* mapped;
                 if (size == subresourceLayout.size)
                 {
+#ifdef __APPLE__
+                    // Host-visible upload (like glTexSubImage2D)
+                    VK_CHECK(
+                        vkMapMemory(device, p.memory, 0, size, 0, &mapped));
+                    std::memcpy(mapped, data, size);
+                    vkUnmapMemory(device, p.memory);
+#else
                     // Host-visible upload (like glTexSubImage2D)
                     VK_CHECK(vmaMapMemory(ctx.allocator, p.allocation, &mapped));
                     std::memcpy(mapped, data, size);
                     vmaUnmapMemory(ctx.allocator, p.allocation);
+                    vmaFlushAllocation(ctx.allocator, p.allocation, 0,
+                                       VK_WHOLE_SIZE); // Ensure flush
+#endif
                 }
                 else
                 {
+#ifdef __APPLE__
+                    // Map based on layout offset and size
+                    VK_CHECK(vkMapMemory(
+                        device, p.memory, subresourceLayout.offset,
+                        subresourceLayout.size, 0, &mapped));
+
+                    // Assuming 'data' is a pointer to your tightly packed
+                    // source pixel data
+                    size_t pixel_size =
+                        image::getBitDepth(p.info.pixelType) / 8 *
+                        image::getChannelCount(p.info.pixelType);
+                    uint32_t row_byte_size =
+                        static_cast<uint32_t>(p.info.size.w) * pixel_size;
+                    for (uint32_t y = 0;
+                         y < static_cast<uint32_t>(p.info.size.h); ++y)
+                    {
+                        // Source row start in your tightly packed data
+                        const void* src_row =
+                            static_cast<const uint8_t*>(data) +
+                            y * row_byte_size;
+
+                        // Destination row start in the mapped memory, using the
+                        // rowPitch
+                        void* dst_row = static_cast<uint8_t*>(mapped) +
+                                        y * subresourceLayout.rowPitch;
+
+                        // Copy the actual pixel data for this row (excluding
+                        // padding)
+                        std::memcpy(dst_row, src_row, row_byte_size);
+                    }
+
+                    vkUnmapMemory(device, p.memory);
+#else
                     // Map based on layout offset and size
                     VK_CHECK(vmaMapMemory(ctx.allocator, p.allocation, &mapped));
 
@@ -631,19 +694,46 @@ namespace tl
                     }
 
                     vmaUnmapMemory(ctx.allocator, p.allocation);
+                    vmaFlushAllocation(ctx.allocator, p.allocation, 0,
+                                       VK_WHOLE_SIZE); // Ensure flush
+#endif
                 }
             }
             else
             {
                 // Use a staging buffer
                 VkBuffer stagingBuffer;
-                VmaAllocation stagingAllocation;
+                VkDeviceMemory stagingMemory;
 
                 VkBufferCreateInfo bufInfo = {};
                 bufInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
                 bufInfo.size = size;
                 bufInfo.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
 
+#ifdef __APPLE__
+
+                vkCreateBuffer(device, &bufInfo, nullptr, &stagingBuffer);
+
+                VkMemoryRequirements bufMemReqs;
+                vkGetBufferMemoryRequirements(
+                    device, stagingBuffer, &bufMemReqs);
+
+                VkMemoryAllocateInfo allocInfo = {};
+                allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+                allocInfo.allocationSize = bufMemReqs.size;
+                allocInfo.memoryTypeIndex = findMemoryType(
+                    gpu, bufMemReqs.memoryTypeBits,
+                    VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+                        VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+                vkAllocateMemory(device, &allocInfo, nullptr, &stagingMemory);
+                vkBindBufferMemory(device, stagingBuffer, stagingMemory, 0);
+
+                void* mapped;
+                vkMapMemory(device, stagingMemory, 0, size, 0, &mapped);
+                std::memcpy(mapped, data, size);
+                vkUnmapMemory(device, stagingMemory);
+#else
                 VmaAllocationCreateInfo allocInfo = {};
                 allocInfo.usage = VMA_MEMORY_USAGE_CPU_ONLY;
                 
@@ -654,6 +744,7 @@ namespace tl
                 VK_CHECK(vmaMapMemory(ctx.allocator, stagingAllocation, &mapped));
                 std::memcpy(mapped, data, size);
                 vmaUnmapMemory(ctx.allocator, stagingAllocation);
+#endif
 
                 // Transition image for copy
                 VkCommandBuffer cmd =
@@ -701,8 +792,13 @@ namespace tl
                     std::lock_guard<std::mutex> lock(ctx.queue_mutex());
                     endSingleTimeCommands(cmd, device, commandPool, queue);
                 }
-                
+
+#ifdef __APPLE__
+                vkDestroyBuffer(device, stagingBuffer, nullptr);
+                vkFreeMemory(device, stagingMemory, nullptr);
+#else
                 vmaDestroyBuffer(ctx.allocator, stagingBuffer, stagingAllocation);
+#endif
                 
                 p.currentLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
             }
@@ -788,6 +884,9 @@ namespace tl
             imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
             imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
 
+#ifdef __APPLE__
+            VK_CHECK(vkCreateImage(ctx.device, &imageInfo, nullptr, &p.image));
+#else
             VmaAllocationCreateInfo allocInfo = {};
             allocInfo.usage = (p.memoryFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
                               ? VMA_MEMORY_USAGE_GPU_ONLY
@@ -795,7 +894,28 @@ namespace tl
 
             VK_CHECK(vmaCreateImage(ctx.allocator, &imageInfo, &allocInfo,
                                     &p.image, &p.allocation, nullptr));
-   
+#endif
+        }
+
+        void Texture::allocateMemory()
+        {
+            TLRENDER_P();
+
+            VkDevice device = ctx.device;
+            VkPhysicalDevice gpu = ctx.gpu;
+
+            VkMemoryRequirements memReqs;
+            vkGetImageMemoryRequirements(device, p.image, &memReqs);
+
+            VkMemoryAllocateInfo allocInfo{};
+            allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+            allocInfo.allocationSize = memReqs.size;
+
+            allocInfo.memoryTypeIndex =
+                findMemoryType(gpu, memReqs.memoryTypeBits, p.memoryFlags);
+
+            VK_CHECK(vkAllocateMemory(device, &allocInfo, nullptr, &p.memory));
+            VK_CHECK(vkBindImageMemory(device, p.image, p.memory, 0));
         }
 
         void Texture::createImageView()
@@ -850,6 +970,9 @@ namespace tl
             samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
 
             p.sampler = samplersCache->getOrCreateSampler(samplerInfo);
+
+            // VK_CHECK(
+            //     vkCreateSampler(device, &samplerInfo, nullptr, &p.sampler));
         }
 
     } // namespace vlk

@@ -651,7 +651,11 @@ namespace tl
             uint32_t frameIndex = 0;
 
             VkBuffer vertexBuffer = VK_NULL_HANDLE;
+#ifdef __APPLE__
+            VkDeviceMemory vertexMemory = VK_NULL_HANDLE;
+#else
             VmaAllocation allocation = VK_NULL_HANDLE;
+#endif
             
             void* mappedPtr = nullptr;
 
@@ -679,6 +683,11 @@ namespace tl
                                VK_BUFFER_USAGE_TRANSFER_DST_BIT;
             bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
+#ifdef __APPLE__
+            if (vkCreateBuffer(device, &bufferInfo, nullptr, &p.vertexBuffer) != VK_SUCCESS)
+                throw std::runtime_error("Failed to create persistent vertex buffer");
+
+#else
             VmaAllocationCreateInfo allocCreateInfo = {};
             allocCreateInfo.usage = VMA_MEMORY_USAGE_AUTO;
             allocCreateInfo.flags = VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT |
@@ -696,7 +705,7 @@ namespace tl
             {
                 throw std::runtime_error("Failed to get mapped pointer from VMA");
             }
-
+#endif
             
             VkMemoryRequirements memRequirements;
             vkGetBufferMemoryRequirements(device, p.vertexBuffer, &memRequirements);
@@ -720,6 +729,25 @@ namespace tl
                 throw std::runtime_error("Per-frame region too big with required alignment");
             if (p.regionSize * frameCount > totalSize)
                 throw std::runtime_error("Per-frame region * MAX_FRAMES_IN_FLIGHT too big with required alignment");
+
+#ifdef __APPLE__
+            VkMemoryAllocateInfo allocInfo{};
+            allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+            allocInfo.allocationSize = memRequirements.size;
+            allocInfo.memoryTypeIndex = findMemoryType(
+                gpu, memRequirements.memoryTypeBits,
+                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+                VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+            if (vkAllocateMemory(device, &allocInfo, nullptr, &p.vertexMemory) != VK_SUCCESS)
+                throw std::runtime_error("Failed to allocate persistent vertex memory");
+
+            vkBindBufferMemory(device, p.vertexBuffer, p.vertexMemory, 0);
+
+            // Persistently map
+            if (vkMapMemory(device, p.vertexMemory, 0, memRequirements.size, 0, &p.mappedPtr) != VK_SUCCESS)
+                throw std::runtime_error("Failed to map persistent vertex buffer");
+#endif
         }
 
         VAO::VAO(Fl_Vk_Context& context) :
@@ -733,11 +761,21 @@ namespace tl
             TLRENDER_P();
 
             VkDevice device = ctx.device;
-            
+
+#ifdef __APPLE__
+            if (p.vertexBuffer != VK_NULL_HANDLE)
+                vkDestroyBuffer(device, p.vertexBuffer, nullptr);
+            if (p.vertexMemory != VK_NULL_HANDLE)
+            {
+                vkUnmapMemory(device, p.vertexMemory);
+                vkFreeMemory(device, p.vertexMemory, nullptr);
+            }
+#else            
             if (p.vertexBuffer != VK_NULL_HANDLE && p.allocation != VK_NULL_HANDLE)
             {
                 vmaDestroyBuffer(ctx.allocator, p.vertexBuffer, p.allocation);
             }
+#endif
         }
 
         std::shared_ptr<VAO> VAO::create(Fl_Vk_Context& context)
@@ -775,12 +813,25 @@ namespace tl
             // Align relativeOffset for the next upload
             p.relativeOffset = (p.relativeOffset + p.alignment - 1) & ~(p.alignment - 1);
 
+#ifdef __APPLE__
+            VkDevice device = ctx.device;
+            VkMappedMemoryRange range = {};
+            range.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
+            range.memory = p.vertexMemory;
+            range.offset = absOffset;
+            range.size = VK_WHOLE_SIZE;
+
+            VkResult result = vkFlushMappedMemoryRanges(device, 1, &range);
+            if (result != VK_SUCCESS)
+                throw std::runtime_error("vkFlushMappedMemoryRanges failed on macOS");
+#else
             VmaAllocationInfo allocInfo;
             vmaGetAllocationInfo(ctx.allocator, p.allocation, &allocInfo);
             if (vmaFlushAllocation(ctx.allocator, p.allocation, absOffset, dataSize) != VK_SUCCESS)
             {
                 throw std::runtime_error("vmaFlushAllocation failed");
             }
+#endif
 
             return absOffset;
         }
@@ -803,9 +854,13 @@ namespace tl
         VkBuffer VAO::getBuffer() const { return _p->vertexBuffer; }
         VkDeviceMemory VAO::getDeviceMemory() const
         {
+#ifdef __APPLE__
+            return _p->vertexMemory;
+#else
             VmaAllocationInfo allocInfo;
             vmaGetAllocationInfo(ctx.allocator, _p->allocation, &allocInfo);
             return allocInfo.deviceMemory;
+#endif
         }
         
     } // namespace vlk
