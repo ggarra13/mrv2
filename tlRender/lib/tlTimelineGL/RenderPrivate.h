@@ -8,6 +8,7 @@
 extern "C"
 {
 #    include <libplacebo/dummy.h>
+#    include <libplacebo/shaders/colorspace.h>
 }
 #endif
 
@@ -112,6 +113,7 @@ namespace tl
 
             pl_log log;
             pl_gpu gpu;
+            pl_shader_obj state = nullptr;
             std::vector<OCIOTexture> textures;
         };
 #endif

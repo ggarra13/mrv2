@@ -596,6 +596,7 @@ namespace tl
                 throw std::runtime_error("pl_shader_alloc failed!");
             }
                 
+            state = nullptr;
             res = nullptr;
         }
 
@@ -603,6 +604,10 @@ namespace tl
         {
             pl_shader_free(&shader);
             res = nullptr;
+            if (state) {
+                pl_shader_obj_destroy(&state);
+                state = nullptr;
+            }
             pl_gpu_dummy_destroy(&gpu);
             pl_log_destroy(&log);
         }
@@ -2075,6 +2080,8 @@ namespace tl
                     color_map_args.src = src_colorspace;
                     color_map_args.dst = dst_colorspace;
                     color_map_args.prelinearized = false;
+                    
+                    color_map_args.state = &(p.placeboData->state);
 
                     pl_shader_color_map_ex(p.placeboData->shader, &cmap,
                                            &color_map_args);

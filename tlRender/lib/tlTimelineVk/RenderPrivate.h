@@ -116,6 +116,7 @@ namespace tl
             pl_log log;
             pl_gpu gpu;
             pl_shader shader;
+            pl_shader_obj state = nullptr;
             const pl_shader_res* res = nullptr;
             std::vector<std::shared_ptr<vlk::Texture> > textures;
         };

@@ -412,6 +412,8 @@ namespace tl
             {
                 throw std::runtime_error("pl_gpu_dummy_create failed!");
             }
+
+            state = nullptr;
         }
 
         LibPlaceboData::~LibPlaceboData()
@@ -420,7 +422,10 @@ namespace tl
             {
                 glDeleteTextures(1, &textures[i].id);
             }
-
+            if (state) {
+                pl_shader_obj_destroy(&state);
+                state = NULL;
+            }
             pl_gpu_dummy_destroy(&gpu);
             pl_log_destroy(&log);
         }
@@ -1574,6 +1579,7 @@ namespace tl
                     pl_color_map_params cmap;
                     memset(&cmap, 0, sizeof(pl_color_map_params));
 
+                    // defaults, generates LUTs if state is set.
                     cmap.gamut_mapping = &pl_gamut_map_perceptual;
 
                     switch (p.hdrOptions.algorithm)
@@ -1722,6 +1728,8 @@ namespace tl
                     color_map_args.src = src_colorspace;
                     color_map_args.dst = dst_colorspace;
                     color_map_args.prelinearized = false;
+
+                    color_map_args.state = &(p.placeboData->state);
                     
                     pl_shader_color_map_ex(shader, &cmap, &color_map_args);
 
