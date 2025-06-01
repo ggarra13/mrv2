@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Copyright (c) 2021-2024 Darby Johnston
+// Copyright (c) 2025-Present Gonzalo Garramuño
 // All rights reserved.
 
 #include <tlVk/Texture.h>
@@ -194,7 +195,7 @@ namespace tl
             uint32_t depth = 1;
             VkImage image = VK_NULL_HANDLE;
 
-#ifdef __APPLE__
+#ifdef MRV2_NO_VMA
             VkDeviceMemory memory = VK_NULL_HANDLE;
 #else
             VmaAllocation allocation = VK_NULL_HANDLE;
@@ -283,12 +284,16 @@ namespace tl
             if (p.imageView != VK_NULL_HANDLE)
                 vkDestroyImageView(device, p.imageView, nullptr);
 
+#ifdef MRV2_NO_VMA
             if (p.memory != VK_NULL_HANDLE)
                 vkFreeMemory(device, p.memory, nullptr);
 
             if (p.image != VK_NULL_HANDLE)
                 vkDestroyImage(device, p.image, nullptr);
-
+#else
+            if (p.image != VK_NULL_HANDLE && p.allocation != VK_NULL_HANDLE)
+                vmaDestroyImage(ctx.allocator, p.image, p.allocation);
+#endif
             --numTextures;
             if (numTextures == 0)
             {
@@ -491,7 +496,8 @@ namespace tl
             VkDevice device = ctx.device;
             VkCommandPool commandPool = ctx.commandPool;
             VkQueue queue = ctx.queue();
-    
+
+#ifdef MRV2_NO_VMA    
             // Create staging buffer
             VkBuffer stagingBuffer;
             VkDeviceMemory stagingMemory;
@@ -533,7 +539,40 @@ namespace tl
                 }
             }
             vkUnmapMemory(device, stagingMemory);
+#else
+            // Create staging buffer
+            VkBuffer stagingBuffer;
+            VmaAllocation stagingAllocation;
 
+            VkBufferCreateInfo bufInfo = {};
+            bufInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+            bufInfo.size = size;
+            bufInfo.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
+            
+            VmaAllocationCreateInfo allocInfo = {};
+            allocInfo.usage = VMA_MEMORY_USAGE_CPU_ONLY;
+
+            VK_CHECK(vmaCreateBuffer(ctx.allocator, &bufInfo, &allocInfo,
+                                     &stagingBuffer, &stagingAllocation, nullptr));
+
+            // Copy image data to buffer, respecting alignment
+            void* mapped;
+            VK_CHECK(vmaMapMemory(ctx.allocator, stagingAllocation, &mapped));
+            if (info.layout.alignment == 1) {
+                std::memcpy(mapped, srcData, size);
+            } else {
+                size_t pixelSize = image::getBitDepth(info.pixelType) / 8 * image::getChannelCount(info.pixelType);
+                size_t srcRowBytes = info.size.w * pixelSize;
+                size_t dstRowBytes = (srcRowBytes + info.layout.alignment - 1) & ~(info.layout.alignment - 1);
+                for (uint32_t y = 0; y < info.size.h; ++y) {
+                    std::memcpy(
+                        static_cast<uint8_t*>(mapped) + y * dstRowBytes,
+                        srcData + y * srcRowBytes,
+                        srcRowBytes);
+                }
+            }
+            vmaUnmapMemory(ctx.allocator, stagingAllocation);
+#endif
             // Begin command buffer
             VkCommandBuffer cmd = beginSingleTimeCommands(device, commandPool);
 
@@ -577,9 +616,12 @@ namespace tl
                 endSingleTimeCommands(cmd, device, commandPool, queue);
             }
             
+#ifdef MRV2_NO_VMA
             vkDestroyBuffer(device, stagingBuffer, nullptr);
             vkFreeMemory(device, stagingMemory, nullptr);
-
+#else
+            vmaDestroyBuffer(ctx.allocator, stagingBuffer, stagingAllocation);
+#endif
             p.currentLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
         }
 
@@ -615,7 +657,7 @@ namespace tl
                 void* mapped;
                 if (size == subresourceLayout.size)
                 {
-#ifdef __APPLE__
+#ifdef MRV2_NO_VMA
                     // Host-visible upload (like glTexSubImage2D)
                     VK_CHECK(
                         vkMapMemory(device, p.memory, 0, size, 0, &mapped));
@@ -632,7 +674,7 @@ namespace tl
                 }
                 else
                 {
-#ifdef __APPLE__
+#ifdef MRV2_NO_VMA
                     // Map based on layout offset and size
                     VK_CHECK(vkMapMemory(
                         device, p.memory, subresourceLayout.offset,
@@ -703,15 +745,14 @@ namespace tl
             {
                 // Use a staging buffer
                 VkBuffer stagingBuffer;
-                VkDeviceMemory stagingMemory;
 
                 VkBufferCreateInfo bufInfo = {};
                 bufInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
                 bufInfo.size = size;
                 bufInfo.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
 
-#ifdef __APPLE__
-
+#ifdef MRV2_NO_VMA
+                VkDeviceMemory stagingMemory;
                 vkCreateBuffer(device, &bufInfo, nullptr, &stagingBuffer);
 
                 VkMemoryRequirements bufMemReqs;
@@ -734,6 +775,7 @@ namespace tl
                 std::memcpy(mapped, data, size);
                 vkUnmapMemory(device, stagingMemory);
 #else
+                VmaAllocation stagingAllocation;
                 VmaAllocationCreateInfo allocInfo = {};
                 allocInfo.usage = VMA_MEMORY_USAGE_CPU_ONLY;
                 
@@ -793,7 +835,7 @@ namespace tl
                     endSingleTimeCommands(cmd, device, commandPool, queue);
                 }
 
-#ifdef __APPLE__
+#ifdef MRV2_NO_VMA
                 vkDestroyBuffer(device, stagingBuffer, nullptr);
                 vkFreeMemory(device, stagingMemory, nullptr);
 #else
@@ -884,7 +926,7 @@ namespace tl
             imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
             imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
 
-#ifdef __APPLE__
+#ifdef MRV2_NO_VMA
             VK_CHECK(vkCreateImage(ctx.device, &imageInfo, nullptr, &p.image));
 #else
             VmaAllocationCreateInfo allocInfo = {};
@@ -901,6 +943,7 @@ namespace tl
         {
             TLRENDER_P();
 
+#ifdef MRV2_NO_VMA
             VkDevice device = ctx.device;
             VkPhysicalDevice gpu = ctx.gpu;
 
@@ -916,6 +959,7 @@ namespace tl
 
             VK_CHECK(vkAllocateMemory(device, &allocInfo, nullptr, &p.memory));
             VK_CHECK(vkBindImageMemory(device, p.image, p.memory, 0));
+#endif
         }
 
         void Texture::createImageView()
@@ -970,9 +1014,6 @@ namespace tl
             samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
 
             p.sampler = samplersCache->getOrCreateSampler(samplerInfo);
-
-            // VK_CHECK(
-            //     vkCreateSampler(device, &samplerInfo, nullptr, &p.sampler));
         }
 
     } // namespace vlk

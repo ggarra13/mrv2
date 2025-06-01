@@ -651,7 +651,7 @@ namespace tl
             uint32_t frameIndex = 0;
 
             VkBuffer vertexBuffer = VK_NULL_HANDLE;
-#ifdef __APPLE__
+#ifdef MRV2_NO_VMA
             VkDeviceMemory vertexMemory = VK_NULL_HANDLE;
 #else
             VmaAllocation allocation = VK_NULL_HANDLE;
@@ -683,7 +683,7 @@ namespace tl
                                VK_BUFFER_USAGE_TRANSFER_DST_BIT;
             bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-#ifdef __APPLE__
+#ifdef MRV2_NO_VMA
             if (vkCreateBuffer(device, &bufferInfo, nullptr, &p.vertexBuffer) != VK_SUCCESS)
                 throw std::runtime_error("Failed to create persistent vertex buffer");
 
@@ -730,7 +730,7 @@ namespace tl
             if (p.regionSize * frameCount > totalSize)
                 throw std::runtime_error("Per-frame region * MAX_FRAMES_IN_FLIGHT too big with required alignment");
 
-#ifdef __APPLE__
+#ifdef MRV2_NO_VMA
             VkMemoryAllocateInfo allocInfo{};
             allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
             allocInfo.allocationSize = memRequirements.size;
@@ -762,7 +762,7 @@ namespace tl
 
             VkDevice device = ctx.device;
 
-#ifdef __APPLE__
+#ifdef MRV2_NO_VMA
             if (p.vertexBuffer != VK_NULL_HANDLE)
                 vkDestroyBuffer(device, p.vertexBuffer, nullptr);
             if (p.vertexMemory != VK_NULL_HANDLE)
@@ -813,7 +813,7 @@ namespace tl
             // Align relativeOffset for the next upload
             p.relativeOffset = (p.relativeOffset + p.alignment - 1) & ~(p.alignment - 1);
 
-#ifdef __APPLE__
+#ifdef MRV2_NO_VMA
             VkDevice device = ctx.device;
             VkMappedMemoryRange range = {};
             range.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
@@ -854,7 +854,7 @@ namespace tl
         VkBuffer VAO::getBuffer() const { return _p->vertexBuffer; }
         VkDeviceMemory VAO::getDeviceMemory() const
         {
-#ifdef __APPLE__
+#ifdef MRV2_NO_VMA
             return _p->vertexMemory;
 #else
             VmaAllocationInfo allocInfo;

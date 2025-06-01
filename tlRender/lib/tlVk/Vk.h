@@ -6,6 +6,10 @@
 
 #include <FL/Fl_Vk_Context.H>
 
+#ifdef __APPLE__
+#  define MRV2_NO_VMA
+#endif
+
 namespace tl
 {
     namespace vlk
