@@ -174,9 +174,13 @@ if(MRV2_PYBIND11)
 endif()
 
 set(VMA_DEP )
-if (TLRENDER_VK)
-    include(cmake/Modules/BuildVMA.cmake)
-endif()
+
+#
+# VMA 3.3 is bundled with FLTK
+#
+# if (TLRENDER_VK)
+#     include(cmake/Modules/BuildVMA.cmake)
+# endif()
 
 add_subdirectory( tlRender/etc/SuperBuild)
 
