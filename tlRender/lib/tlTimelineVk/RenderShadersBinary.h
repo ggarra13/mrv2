@@ -1,5 +1,8 @@
-#pragma once
+// SPDX-License-Identifier: BSD-3-Clause
+// Copyright (c) 2025-Present Gonzalo Garramuño
+// All rights reserved.
 
+#pragma once
 
 #include "shaders/colorMeshVertex.spv.h"
 #include "shaders/colorMeshFragment.spv.h"

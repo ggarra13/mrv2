@@ -173,6 +173,11 @@ if(MRV2_PYBIND11)
     include(cmake/Modules/Buildpybind11.cmake)
 endif()
 
+set(VMA_DEP )
+if (TLRENDER_VK)
+    include(cmake/Modules/BuildVMA.cmake)
+endif()
+
 add_subdirectory( tlRender/etc/SuperBuild)
 
 set(FLTK_DEP )

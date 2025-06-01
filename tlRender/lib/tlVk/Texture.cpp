@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Copyright (c) 2021-2024 Darby Johnston
+// Copyright (c) 2025-Present Gonzalo Garramuño
 // All rights reserved.
 
 #include <tlVk/Texture.h>
@@ -892,9 +893,6 @@ namespace tl
             samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
 
             p.sampler = samplersCache->getOrCreateSampler(samplerInfo);
-
-            // VK_CHECK(
-            //     vkCreateSampler(device, &samplerInfo, nullptr, &p.sampler));
         }
 
     } // namespace vlk
