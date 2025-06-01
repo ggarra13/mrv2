@@ -135,7 +135,6 @@ namespace tl
             Fl_Vk_Context& ctx;
 
             void createImage();
-            void allocateMemory();
             void createImageView();
             void createSampler();
 

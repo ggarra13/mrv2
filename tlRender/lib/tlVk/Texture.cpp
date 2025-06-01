@@ -194,7 +194,6 @@ namespace tl
             VkImageType imageType = VK_IMAGE_TYPE_2D;
             uint32_t depth = 1;
             VkImage image = VK_NULL_HANDLE;
-            VkDeviceMemory memory = VK_NULL_HANDLE;
             VkImageView imageView = VK_NULL_HANDLE;
             VkSampler sampler = VK_NULL_HANDLE;
 
@@ -202,6 +201,8 @@ namespace tl
             VkFormat internalFormat = VK_FORMAT_UNDEFINED;
 
             bool hostVisible = true;
+            
+            VmaAllocation allocation = VK_NULL_HANDLE;
         };
 
         void
@@ -217,7 +218,6 @@ namespace tl
             p.options = options;
 
             createImage();
-            allocateMemory();
             createImageView();
             createSampler();
         }
@@ -252,7 +252,6 @@ namespace tl
                 p.memoryFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
 
             createImage();
-            allocateMemory();
             createImageView();
             createSampler();
         }
@@ -277,11 +276,8 @@ namespace tl
             if (p.imageView != VK_NULL_HANDLE)
                 vkDestroyImageView(device, p.imageView, nullptr);
 
-            if (p.memory != VK_NULL_HANDLE)
-                vkFreeMemory(device, p.memory, nullptr);
-
-            if (p.image != VK_NULL_HANDLE)
-                vkDestroyImage(device, p.image, nullptr);
+            if (p.image != VK_NULL_HANDLE && p.allocation != VK_NULL_HANDLE)
+                vmaDestroyImage(ctx.allocator, p.image, p.allocation);
 
             --numTextures;
             if (numTextures == 0)
@@ -488,31 +484,22 @@ namespace tl
     
             // Create staging buffer
             VkBuffer stagingBuffer;
-            VkDeviceMemory stagingMemory;
+            VmaAllocation stagingAllocation;
 
             VkBufferCreateInfo bufInfo = {};
             bufInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
             bufInfo.size = size;
             bufInfo.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
+            
+            VmaAllocationCreateInfo allocInfo = {};
+            allocInfo.usage = VMA_MEMORY_USAGE_CPU_ONLY;
 
-            VK_CHECK(vkCreateBuffer(device, &bufInfo, nullptr, &stagingBuffer));
-
-            VkMemoryRequirements memReqs;
-            vkGetBufferMemoryRequirements(device, stagingBuffer, &memReqs);
-
-            VkMemoryAllocateInfo allocInfo = {};
-            allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-            allocInfo.allocationSize = memReqs.size;
-            allocInfo.memoryTypeIndex = findMemoryType(
-                ctx.gpu, memReqs.memoryTypeBits,
-                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
-            VK_CHECK(vkAllocateMemory(device, &allocInfo, nullptr, &stagingMemory));
-            VK_CHECK(vkBindBufferMemory(device, stagingBuffer, stagingMemory, 0));
+            VK_CHECK(vmaCreateBuffer(ctx.allocator, &bufInfo, &allocInfo,
+                                     &stagingBuffer, &stagingAllocation, nullptr));
 
             // Copy image data to buffer, respecting alignment
             void* mapped;
-            VK_CHECK(vkMapMemory(device, stagingMemory, 0, size, 0, &mapped));
+            VK_CHECK(vmaMapMemory(ctx.allocator, stagingAllocation, &mapped));
             if (info.layout.alignment == 1) {
                 std::memcpy(mapped, srcData, size);
             } else {
@@ -526,7 +513,7 @@ namespace tl
                         srcRowBytes);
                 }
             }
-            vkUnmapMemory(device, stagingMemory);
+            vmaUnmapMemory(ctx.allocator, stagingAllocation);
 
             // Begin command buffer
             VkCommandBuffer cmd = beginSingleTimeCommands(device, commandPool);
@@ -571,8 +558,7 @@ namespace tl
                 endSingleTimeCommands(cmd, device, commandPool, queue);
             }
             
-            vkDestroyBuffer(device, stagingBuffer, nullptr);
-            vkFreeMemory(device, stagingMemory, nullptr);
+            vmaDestroyBuffer(ctx.allocator, stagingBuffer, stagingAllocation);
 
             p.currentLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
         }
@@ -610,17 +596,14 @@ namespace tl
                 if (size == subresourceLayout.size)
                 {
                     // Host-visible upload (like glTexSubImage2D)
-                    VK_CHECK(
-                        vkMapMemory(device, p.memory, 0, size, 0, &mapped));
+                    VK_CHECK(vmaMapMemory(ctx.allocator, p.allocation, &mapped));
                     std::memcpy(mapped, data, size);
-                    vkUnmapMemory(device, p.memory);
+                    vmaUnmapMemory(ctx.allocator, p.allocation);
                 }
                 else
                 {
                     // Map based on layout offset and size
-                    VK_CHECK(vkMapMemory(
-                        device, p.memory, subresourceLayout.offset,
-                        subresourceLayout.size, 0, &mapped));
+                    VK_CHECK(vmaMapMemory(ctx.allocator, p.allocation, &mapped));
 
                     // Assuming 'data' is a pointer to your tightly packed
                     // source pixel data
@@ -647,41 +630,30 @@ namespace tl
                         std::memcpy(dst_row, src_row, row_byte_size);
                     }
 
-                    vkUnmapMemory(device, p.memory);
+                    vmaUnmapMemory(ctx.allocator, p.allocation);
                 }
             }
             else
             {
                 // Use a staging buffer
                 VkBuffer stagingBuffer;
-                VkDeviceMemory stagingMemory;
+                VmaAllocation stagingAllocation;
 
                 VkBufferCreateInfo bufInfo = {};
                 bufInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
                 bufInfo.size = size;
                 bufInfo.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
 
-                vkCreateBuffer(device, &bufInfo, nullptr, &stagingBuffer);
-
-                VkMemoryRequirements bufMemReqs;
-                vkGetBufferMemoryRequirements(
-                    device, stagingBuffer, &bufMemReqs);
-
-                VkMemoryAllocateInfo allocInfo = {};
-                allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-                allocInfo.allocationSize = bufMemReqs.size;
-                allocInfo.memoryTypeIndex = findMemoryType(
-                    gpu, bufMemReqs.memoryTypeBits,
-                    VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                        VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
-                vkAllocateMemory(device, &allocInfo, nullptr, &stagingMemory);
-                vkBindBufferMemory(device, stagingBuffer, stagingMemory, 0);
+                VmaAllocationCreateInfo allocInfo = {};
+                allocInfo.usage = VMA_MEMORY_USAGE_CPU_ONLY;
+                
+                VK_CHECK(vmaCreateBuffer(ctx.allocator, &bufInfo, &allocInfo,
+                                         &stagingBuffer, &stagingAllocation, nullptr));
 
                 void* mapped;
-                vkMapMemory(device, stagingMemory, 0, size, 0, &mapped);
+                VK_CHECK(vmaMapMemory(ctx.allocator, stagingAllocation, &mapped));
                 std::memcpy(mapped, data, size);
-                vkUnmapMemory(device, stagingMemory);
+                vmaUnmapMemory(ctx.allocator, stagingAllocation);
 
                 // Transition image for copy
                 VkCommandBuffer cmd =
@@ -730,8 +702,7 @@ namespace tl
                     endSingleTimeCommands(cmd, device, commandPool, queue);
                 }
                 
-                vkDestroyBuffer(device, stagingBuffer, nullptr);
-                vkFreeMemory(device, stagingMemory, nullptr);
+                vmaDestroyBuffer(ctx.allocator, stagingBuffer, stagingAllocation);
                 
                 p.currentLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
             }
@@ -817,28 +788,14 @@ namespace tl
             imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
             imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
 
-            VK_CHECK(vkCreateImage(ctx.device, &imageInfo, nullptr, &p.image));
-        }
+            VmaAllocationCreateInfo allocInfo = {};
+            allocInfo.usage = (p.memoryFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
+                              ? VMA_MEMORY_USAGE_GPU_ONLY
+                              : VMA_MEMORY_USAGE_CPU_TO_GPU;
 
-        void Texture::allocateMemory()
-        {
-            TLRENDER_P();
-
-            VkDevice device = ctx.device;
-            VkPhysicalDevice gpu = ctx.gpu;
-
-            VkMemoryRequirements memReqs;
-            vkGetImageMemoryRequirements(device, p.image, &memReqs);
-
-            VkMemoryAllocateInfo allocInfo{};
-            allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-            allocInfo.allocationSize = memReqs.size;
-
-            allocInfo.memoryTypeIndex =
-                findMemoryType(gpu, memReqs.memoryTypeBits, p.memoryFlags);
-
-            VK_CHECK(vkAllocateMemory(device, &allocInfo, nullptr, &p.memory));
-            VK_CHECK(vkBindImageMemory(device, p.image, p.memory, 0));
+            VK_CHECK(vmaCreateImage(ctx.allocator, &imageInfo, &allocInfo,
+                                    &p.image, &p.allocation, nullptr));
+   
         }
 
         void Texture::createImageView()
