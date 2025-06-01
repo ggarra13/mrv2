@@ -25,6 +25,7 @@ v1.3.8
 - Fixed a memory issue on libplacebo.
 - Fixed a slowdown due to always trying to change cursor when in viewport with the media information window present.
 - Fixed a Wayland bug not allowing to select the button menus (such as HSV) at the bottom of the screen.
+- Fixed a memory leak on HDR processing on the OpenGL backend.
 - Started porting to Vulkan.
 
 	 * Working:

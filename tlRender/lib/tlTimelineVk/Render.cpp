@@ -1520,7 +1520,6 @@ namespace tl
                     texture->copy(
                         reinterpret_cast<const uint8_t*>(values),
                         width * height * depth * fmt->internal_size);
-                    pl_tex_destroy(p.placeboData->gpu, &tex);
                     textures.push_back(texture);
                     break;
                 }
@@ -2081,6 +2080,10 @@ namespace tl
                     color_map_args.dst = dst_colorspace;
                     color_map_args.prelinearized = false;
                     
+                    if (p.placeboData->state) {
+                        pl_shader_obj_destroy(&p.placeboData->state);
+                        p.placeboData->state = NULL;
+                    }
                     color_map_args.state = &(p.placeboData->state);
 
                     pl_shader_color_map_ex(p.placeboData->shader, &cmap,
@@ -2271,7 +2274,8 @@ namespace tl
                     if (p.placeboData)
                     {
                         p.placeboData->textures.clear();
-                        _addTextures(p.placeboData->textures, p.placeboData->res);
+                        _addTextures(p.placeboData->textures,
+                                     p.placeboData->res);
                     }
                 }
                 catch (const std::exception& e)
