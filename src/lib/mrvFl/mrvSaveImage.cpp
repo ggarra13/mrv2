@@ -486,7 +486,14 @@ namespace mrv
 
                 VkDevice device = ctx.device;
                 VkPhysicalDevice gpu = ctx.gpu;
-                VkCommandPool commandPool = ctx.commandPool;
+                VkCommandPool commandPool;
+                
+                VkCommandPoolCreateInfo cmd_pool_info = {};
+                cmd_pool_info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+                cmd_pool_info.queueFamilyIndex = ctx.queueFamilyIndex;
+                cmd_pool_info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+                vkCreateCommandPool(device, &cmd_pool_info, nullptr,
+                                    &commandPool);
                 
                 // Calculate bufferSize
                 image::Info info(outputInfo.size.w, outputInfo.size.h,
@@ -522,8 +529,7 @@ namespace mrv
 
                 VkFenceCreateInfo fenceInfo{
                     VK_STRUCTURE_TYPE_FENCE_CREATE_INFO};
-                fenceInfo.flags =
-                    VK_FENCE_CREATE_SIGNALED_BIT; // allow reuse on first frame
+                fenceInfo.flags = 0;
                 vkCreateFence(device, &fenceInfo, nullptr, &pbo.fence);
 
 
@@ -532,13 +538,14 @@ namespace mrv
 
                 // Get the "GL_BACK" buffer
                 VkImage image = ui->uiView->get_back_buffer_image();
-                VkImageView imageView = ui->uiView->get_back_buffer_view();
-                VkFramebuffer framebuffer = ui->uiView->get_back_buffer_framebuffer();
+                // VkImageView imageView = ui->uiView->get_back_buffer_view();
+                // VkFramebuffer framebuffer = ui->uiView->get_back_buffer_framebuffer();
 
                 // Transition image to TRANSFER_SRC
                 transitionImageLayout(cmd, image,
-                                      VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+                                      VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
                                       VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+                
                 // Setup copy region
                 VkBufferImageCopy region{};
                 region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -558,7 +565,9 @@ namespace mrv
                 // Transition back if needed
                 transitionImageLayout(cmd, image,
                                       VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-                                      VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+                                      VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
+
+                vkEndCommandBuffer(cmd);
                 
                 VkSubmitInfo submitInfo{VK_STRUCTURE_TYPE_SUBMIT_INFO};
                 submitInfo.commandBufferCount = 1;
@@ -590,6 +599,11 @@ namespace mrv
                 std::memcpy(outputImage->getData(), pbo.mappedPtr,
                             outputImage->getDataByteCount());
                 
+                vkFreeCommandBuffers(device, commandPool, 1, &cmd);
+                    
+                vkDestroyCommandPool(device, commandPool, nullptr);
+                commandPool = VK_NULL_HANDLE;
+                        
 #    else
                 GLenum imageBuffer = GL_FRONT;
 

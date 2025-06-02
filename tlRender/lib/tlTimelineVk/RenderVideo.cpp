@@ -1120,6 +1120,7 @@ namespace tl
 
                 fbo->beginLoadRenderPass(p.cmd);
 
+                p.shaders["display"]->bind(p.frameIndex);
                 p.shaders["display"]->setUniform("transform.mvp", oldTransform, vlk::kShaderVertex);
                 p.shaders["display"]->setFBO("textureSampler", p.buffers["video"]);
 
