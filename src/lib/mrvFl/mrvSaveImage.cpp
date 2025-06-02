@@ -34,6 +34,7 @@
 #  include <tlVk/Init.h>
 #  include <tlVk/Util.h>
 #  include <tlTimelineVk/Render.h>
+#  include <FL/vk_enum_string_helper.h>
 #else
 #  include <tlGL/Init.h>
 #  include <tlGL/Util.h>
@@ -166,8 +167,8 @@ namespace mrv
                     
             // Create the renderer.
 #ifdef VULKAN_BACKEND
-            // \@todo: Vulkan
-            //render = timeline_vlk::Render::create(context, ctx);
+            auto ctx = ui->uiView->getContext();
+            render = timeline_vlk::Render::create(ctx, context);
 #else
             render = timeline_gl::Render::create(context);
 #endif
@@ -392,8 +393,7 @@ namespace mrv
             // Don't send any tcp updates
             tcp->lock();
 
-#ifdef VULKAN_BACKEND
-#else
+#ifdef OPENGL_BACKEND
             const GLenum format = gl::getReadPixelsFormat(outputInfo.pixelType);
             const GLenum type = gl::getReadPixelsType(outputInfo.pixelType);
             if (GL_NONE == format || GL_NONE == type)
@@ -415,9 +415,9 @@ namespace mrv
             math::Size2i offscreenBufferSize(renderSize.w, renderSize.h);
 
 #ifdef VULKAN_BACKEND
-            Fl_Vk_Context ctx;  // \@todo: fill-in
             auto buffer = vlk::OffscreenBuffer::create(
                 ctx, offscreenBufferSize, offscreenBufferOptions);
+            uint32_t frameIndex = 0;
 #else
             view->make_current();
             gl::initGLAD();
@@ -474,6 +474,122 @@ namespace mrv
 #else
 
 #    ifdef VULKAN_BACKEND
+                VkResult result;
+                
+                struct StagingBuffer {
+                    VkBuffer buffer = VK_NULL_HANDLE;
+                    VkDeviceMemory memory;
+                    void* mappedPtr = nullptr;
+                    VkFence fence = VK_NULL_HANDLE;
+                };
+                StagingBuffer pbo;
+
+                VkDevice device = ctx.device;
+                VkPhysicalDevice gpu = ctx.gpu;
+                VkCommandPool commandPool = ctx.commandPool;
+                
+                // Calculate bufferSize
+                image::Info info(outputInfo.size.w, outputInfo.size.h,
+                                 outputInfo.pixelType);
+                VkDeviceSize bufferSize = image::getDataByteCount(info);
+
+                // Create staging buffer
+                VkBufferCreateInfo bufferInfo = {};
+                bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+                bufferInfo.size = bufferSize;
+                bufferInfo.usage = VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+                bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+                vkCreateBuffer(device, &bufferInfo, nullptr, &pbo.buffer);
+
+                VkMemoryRequirements memReq;
+                vkGetBufferMemoryRequirements(device, pbo.buffer, &memReq);
+
+                VkMemoryAllocateInfo allocInfo = {};
+                allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+                allocInfo.allocationSize = memReq.size;
+                allocInfo.memoryTypeIndex =
+                    findMemoryType(
+                        gpu,
+                        memReq.memoryTypeBits,
+                        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+                        VK_MEMORY_PROPERTY_HOST_CACHED_BIT);
+
+                vkAllocateMemory(device, &allocInfo, nullptr, &pbo.memory);
+                vkBindBufferMemory(device, pbo.buffer, pbo.memory, 0);
+
+                vkMapMemory(
+                    device, pbo.memory, 0, bufferSize, 0, &pbo.mappedPtr);
+
+                VkFenceCreateInfo fenceInfo{
+                    VK_STRUCTURE_TYPE_FENCE_CREATE_INFO};
+                fenceInfo.flags =
+                    VK_FENCE_CREATE_SIGNALED_BIT; // allow reuse on first frame
+                vkCreateFence(device, &fenceInfo, nullptr, &pbo.fence);
+
+
+                // Start read-back 
+                VkCommandBuffer cmd = beginSingleTimeCommands(device, commandPool);
+
+                // Get the "GL_BACK" buffer
+                VkImage image = ui->uiView->get_back_buffer_image();
+                VkImageView imageView = ui->uiView->get_back_buffer_view();
+                VkFramebuffer framebuffer = ui->uiView->get_back_buffer_framebuffer();
+
+                // Transition image to TRANSFER_SRC
+                transitionImageLayout(cmd, image,
+                                      VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+                                      VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+                // Setup copy region
+                VkBufferImageCopy region{};
+                region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+                region.imageSubresource.mipLevel = 0;
+                region.imageSubresource.baseArrayLayer = 0;
+                region.imageSubresource.layerCount = 1;
+                region.imageOffset = {X, Y, 0};
+                region.imageExtent = {
+                    static_cast<uint32_t>(outputInfo.size.w),
+                    static_cast<uint32_t>(outputInfo.size.h), 1
+                };
+                
+                vkCmdCopyImageToBuffer(cmd, image,
+                                       VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                                       pbo.buffer, 1, &region);
+
+                // Transition back if needed
+                transitionImageLayout(cmd, image,
+                                      VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                                      VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+                
+                VkSubmitInfo submitInfo{VK_STRUCTURE_TYPE_SUBMIT_INFO};
+                submitInfo.commandBufferCount = 1;
+                submitInfo.pCommandBuffers = &cmd;
+
+                {
+                    std::lock_guard<std::mutex> lock(ctx.queue_mutex());
+                    VkQueue queue = ctx.queue();
+
+                    result = vkQueueSubmit(queue, 1, &submitInfo,
+                                           pbo.fence);
+                }
+                
+                result = vkWaitForFences(device, 1, &pbo.fence, VK_TRUE,
+                                         UINT64_MAX); 
+                if (result != VK_SUCCESS) {
+                    fprintf(stderr, "vkWaitForFences failed: %s\n", string_VkResult(result));
+                    return -1;
+                }
+                vkResetFences(device, 1, &pbo.fence);
+            
+                VkMappedMemoryRange memoryRange = {};
+                memoryRange.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
+                memoryRange.memory = pbo.memory;
+                memoryRange.offset = 0; 
+                memoryRange.size = bufferSize;
+                vkInvalidateMappedMemoryRanges(device, 1, &memoryRange);
+
+                std::memcpy(outputImage->getData(), pbo.mappedPtr,
+                            outputImage->getDataByteCount());
+                
 #    else
                 GLenum imageBuffer = GL_FRONT;
 
@@ -504,11 +620,35 @@ namespace mrv
                 videoData.layers[0].image->setPixelAspectRatio(1.F);
 
 #ifdef VULKAN_BACKEND
+                VkDevice device = ctx.device;
+                VkCommandPool commandPool = ctx.commandPool;
+                
+                VkCommandBuffer cmd = beginSingleTimeCommands(device, commandPool);
+                buffer->transitionToColorAttachment(cmd);
+
+                {
+                    locale::SetAndRestore saved;
+                    timeline::RenderOptions renderOptions;
+                    renderOptions.clear = false;
+                    render->begin(cmd, buffer, frameIndex, offscreenBufferSize,
+                                  renderOptions);
+                                    
+                    render->setOCIOOptions(view->getOCIOOptions());
+                    render->setLUTOptions(view->lutOptions());
+                    
+                    render->drawVideo(
+                        {videoData},
+                        {math::Box2i(0, 0, renderSize.w, renderSize.h)},
+                        {timeline::ImageOptions()},
+                        {timeline::DisplayOptions()},
+                        timeline::CompareOptions(),
+                        ui->uiView->getBackgroundOptions());
+                    
+                    render->end();
+                }
 #else
                 // Render the video.
                 gl::OffscreenBufferBinding binding(buffer);
-#endif
-                
                 {
                     locale::SetAndRestore saved;
                     render->begin(offscreenBufferSize);
@@ -525,8 +665,33 @@ namespace mrv
                     
                     render->end();
                 }
+#endif
 
 #    ifdef VULKAN_BACKEND
+                buffer->transitionToColorAttachment(cmd);
+                
+                buffer->readPixels(cmd, 0, 0, renderSize.w, renderSize.h);
+                                    
+                vkEndCommandBuffer(cmd);
+                
+                buffer->submitReadback(cmd);
+
+                {
+                    std::lock_guard<std::mutex> lock(ctx.queue_mutex());
+                    vkQueueWaitIdle(ctx.queue());
+                }
+                                    
+                void* imageData = buffer->getLatestReadPixels();
+                if (imageData)
+                {
+                    std::memcpy(outputImage->getData(), imageData,
+                                outputImage->getDataByteCount());
+                                    
+                    vkFreeCommandBuffers(device, commandPool, 1, &cmd);    
+                }
+
+                frameIndex = (frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
+                                    
 #    else
                 glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
                 

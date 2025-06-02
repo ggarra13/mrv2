@@ -1207,7 +1207,8 @@ namespace mrv
                 if (Fl::event_button1())
                 {
                     const math::Vector2i pos = _getRaster();
-                    if (p.multilineText->box.contains(pos))
+                    if (p.multilineText &&
+                        p.multilineText->box.contains(pos))
                     {
                         int ret = p.multilineText->handle_mouse_click(pos);
                         if (ret)
