@@ -3477,6 +3477,13 @@ namespace mrv
             display.hdr = p.hdrOptions;
             if (p.hdrOptions.passthru) display.hdr.tonemap = true;
             p.ui->uiTimeline->setDisplayOptions(display);
+#else
+#ifndef __x86_64__
+            auto display = p.ui->uiTimeline->getDisplayOptions();
+            if (p.hdrOptions.passthru) display.hdr.tonemap = true;
+            display.hdr = p.hdrOptions;
+            p.ui->uiTimeline->setDisplayOptions(display);
+#endif
 #endif
 
             if (!p.displayOptions.empty() && p.displayOptions[0].normalize.enabled)

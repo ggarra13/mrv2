@@ -3478,6 +3478,12 @@ namespace mrv
             auto display = p.ui->uiTimeline->getDisplayOptions();
             display.hdr = p.hdrOptions;
             p.ui->uiTimeline->setDisplayOptions(display);
+#else
+#ifndef __x86_64__
+            auto display = p.ui->uiTimeline->getDisplayOptions();
+            display.hdr = p.hdrOptions;
+            p.ui->uiTimeline->setDisplayOptions(display);
+#endif
 #endif
 
             if (!p.displayOptions.empty() && p.displayOptions[0].normalize.enabled)
