@@ -565,7 +565,9 @@ namespace mrv
                 }
 #endif
 
-#    ifdef VULKAN_BACKEND
+                // Read back the image
+                
+#ifdef VULKAN_BACKEND
                 buffer->transitionToColorAttachment(cmd);
                 
                 buffer->readPixels(cmd, 0, 0, renderSize.w, renderSize.h);
@@ -588,7 +590,7 @@ namespace mrv
                     vkFreeCommandBuffers(device, commandPool, 1, &cmd);    
                 }
                                     
-#    else
+#else
                 glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
                 
 
