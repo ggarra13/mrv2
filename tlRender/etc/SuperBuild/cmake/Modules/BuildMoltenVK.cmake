@@ -12,4 +12,5 @@ ExternalProject_Add(
     CONFIGURE_COMMAND ./fetchDependencies --macos
     BUILD_COMMAND make macos
     INSTALL_COMMAND cp Package/Latest/MoltenVK/dynamic/dylib/macOS/libMoltenVK.dylib ${CMAKE_INSTALL_PREFIX}/lib
+    BUILD_IN_SOURCE 1
     )
