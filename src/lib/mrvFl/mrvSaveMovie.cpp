@@ -431,8 +431,8 @@ namespace mrv
             bool interactive = view->visible_r();
             
 #ifdef VULKAN_BACKEND
-            // \@todo: need to get context here
-            //render = timeline_vlk::Render::create(context);
+            auto ctx = ui->uiView->getContext();
+            render = timeline_vlk::Render::create(ctx, context);
 #else
             std::shared_ptr<gl::GLFWWindow> window;
             if (!interactive)
@@ -447,6 +447,9 @@ namespace mrv
             render = timeline_gl::Render::create(context);
 #endif
             offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
+#ifdef VULKAN_BACKEND
+            offscreenBufferOptions.pbo = true;
+#endif
 
             // Create the writer.
             auto writerPlugin = ioSystem->getPlugin(path);
@@ -585,8 +588,14 @@ namespace mrv
                 outputInfo = writerPlugin->getWriteInfo(outputInfo);
                 if (image::PixelType::kNone == outputInfo.pixelType)
                 {
+#ifdef OPENGL_BACKEND
                     outputInfo.pixelType = image::PixelType::RGB_U8;
                     offscreenBufferOptions.colorType = image::PixelType::RGB_U8;
+#endif
+#ifdef VULKAN_BACKEND
+                    outputInfo.pixelType = image::PixelType::RGBA_U8;
+                    offscreenBufferOptions.colorType = image::PixelType::RGBA_U8;
+#endif
 #ifdef TLRENDER_EXR
                     if (saveEXR)
                     {
@@ -718,7 +727,13 @@ namespace mrv
             tcp->lock();
 
 #ifdef VULKAN_BACKEND
-
+            if (hasVideo)
+            {
+                offscreenBufferOptions.colorType = outputInfo.pixelType;
+                msg = tl::string::Format(_("Vulkan info: {0}"))
+                          .arg(offscreenBufferOptions.colorType);
+                LOG_STATUS(msg);
+            }
 #else
             GLenum format = gl::getReadPixelsFormat(outputInfo.pixelType);
             GLenum type = gl::getReadPixelsType(outputInfo.pixelType);
@@ -744,7 +759,6 @@ namespace mrv
 
 #ifdef VULKAN_BACKEND
             std::shared_ptr<vlk::OffscreenBuffer> buffer;
-            Fl_Vk_Context ctx;  // \@todo: fill-in
             if (hasVideo)
             {
                 buffer = vlk::OffscreenBuffer::create(
@@ -771,6 +785,8 @@ namespace mrv
 
             waitForFrame(player, startTime);
 
+            int32_t frameIndex = 0;
+            
             while (running)
             {
                 context->tick();
@@ -965,6 +981,63 @@ namespace mrv
                             }
 
 #ifdef VULKAN_BACKEND
+                            VkDevice device = ctx.device;
+                            VkCommandPool commandPool = ctx.commandPool;
+                
+                            VkCommandBuffer cmd = beginSingleTimeCommands(device, commandPool);
+                            buffer->transitionToColorAttachment(cmd);
+
+                            {
+                                locale::SetAndRestore saved;
+                                timeline::RenderOptions renderOptions;
+                                renderOptions.clear = false;
+                                render->begin(cmd, buffer, frameIndex,
+                                              offscreenBufferSize,
+                                              renderOptions);
+                                const math::Matrix4x4f ortho = math::ortho(
+                                    0.F, static_cast<float>(renderSize.w),
+                                    static_cast<float>(renderSize.h), 0.F,
+                                    -1.F, 1.F);
+                                render->setTransform(ortho);
+                                render->setOCIOOptions(view->getOCIOOptions());
+                                render->setLUTOptions(view->lutOptions());
+                    
+                                render->drawVideo(
+                                    {videoData},
+                                    {math::Box2i(0, 0,
+                                                 renderSize.w, renderSize.h)},
+                                    {timeline::ImageOptions()},
+                                    {timeline::DisplayOptions()},
+                                    timeline::CompareOptions(),
+                                    ui->uiView->getBackgroundOptions());
+                    
+                                render->end();
+                            }
+
+                            buffer->transitionToColorAttachment(cmd);
+                
+                            buffer->readPixels(cmd, 0, 0,
+                                               renderSize.w, renderSize.h);
+                                    
+                            vkEndCommandBuffer(cmd);
+                
+                            buffer->submitReadback(cmd);
+
+                            {
+                                std::lock_guard<std::mutex> lock(ctx.queue_mutex());
+                                vkQueueWaitIdle(ctx.queue());
+                            }
+                                    
+                            void* imageData = buffer->getLatestReadPixels();
+                            if (imageData)
+                            {
+                                std::memcpy(outputImage->getData(), imageData,
+                                            outputImage->getDataByteCount());
+                                    
+                                vkFreeCommandBuffers(device, commandPool, 1,
+                                                     &cmd);    
+                            }
+                                    
 #else
                             // back to conventional pixel operation
                             glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
@@ -1036,6 +1109,10 @@ namespace mrv
                     else if (!hasVideo)
                         player->seek(currentTime);
                 }
+
+#ifdef VULKAN_BACKEND
+                frameIndex = (frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
+#endif
             }
         }
         catch (const std::exception& e)
