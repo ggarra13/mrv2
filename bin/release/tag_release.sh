@@ -106,20 +106,6 @@ echo "---------------------------------------"
 
 add_remote_tag $tag
 
-cd tlRender
-
-echo "-----------------------------------"
-echo "  Will release local ${tag} in tlRender"
-echo "-----------------------------------"
-
-add_local_tag $tag
-
-echo "------------------------------------------"
-echo "  Will release remote ${tag} in tlRender"
-echo "------------------------------------------"
-
-add_remote_tag $tag
-
 cd ..
 
 
