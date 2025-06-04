@@ -245,7 +245,7 @@ namespace mrv
     void alpha_blend_straight_cb(Fl_Menu_*, ViewerUI* ui);
     void alpha_blend_premultiplied_cb(Fl_Menu_*, ViewerUI* ui);
 
-    // Auxialiary color function
+    // Auxiliary color function
     image::Color4f from_fltk_color(const Fl_Color& color);
     Fl_Color to_fltk_color(const image::Color4f& color);
     image::Color4f get_color_cb(Fl_Color c, ViewerUI* ui);

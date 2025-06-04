@@ -12,11 +12,11 @@ namespace mrv
      * Memory querying rouinte on all OSes.
      *
      * @param totalVirtualMem    Total Virtual Memory
-     * @param virtualMemUsed     Total Virual Memory Used
+     * @param virtualMemUsed     Total Virtual Memory Used
      * @param virtualMemUsedByMe Virtual Memory Used by this process
      * @param totalPhysMem       Total Physical Memory
      * @param physMemUsed        Total Physical Memory Used
-     * @param physMemUsedByMe    Physical Memory used by thie process
+     * @param physMemUsedByMe    Physical Memory used by this process
      */
     void memory_information(
         uint64_t& totalVirtualMem, uint64_t& virtualMemUsed,

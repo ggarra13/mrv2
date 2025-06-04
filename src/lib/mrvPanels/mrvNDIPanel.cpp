@@ -363,7 +363,7 @@ namespace mrv
             mW->callback([=](auto b)
                 {
                     int value = b->value();
-                    settings->setValue("NDI/Output/Metatada", value);
+                    settings->setValue("NDI/Output/Metadata", value);
                     
                     auto outputDevice = App::app->outputDevice();
                     if (!outputDevice)

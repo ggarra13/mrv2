@@ -57,7 +57,7 @@ namespace mrv
         //! Get the time range.
         const otime::TimeRange& timeRange() const;
 
-        //! Get the I/O information. This information is retreived from
+        //! Get the I/O information. This information is retrieved from
         //! the first clip in the timeline.
         const tl::io::Info& ioInfo() const;
 

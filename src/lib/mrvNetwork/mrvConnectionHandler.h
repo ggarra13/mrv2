@@ -77,7 +77,7 @@ namespace mrv
         void receiveMessages() override;
 
     public:
-        //! Return a conncetion handler or null if not connected yet.
+        //! Return a connection handler or null if not connected yet.
         static ConnectionHandler* handler();
 
         //! Deletes all connection handles

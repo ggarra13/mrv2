@@ -55,7 +55,7 @@ namespace mrv2
         }
 
         /**
-         *  \brief Open a file with optiona audio.
+         *  \brief Open a file with optional audio.
          *
          * @param file        str holding the path to the file.
          * @param audioFile   optional str holding the path to the audio file.
@@ -186,7 +186,7 @@ namespace mrv2
         /**
          * \brief Set the display options.
          *
-         * @param value a valide image.DisplayOptions.
+         * @param value a valid image.DisplayOptions.
          */
         void setDisplayOptions(const timeline::DisplayOptions& value)
         {
@@ -504,7 +504,7 @@ Used to run main commands and get arguments and set the display, image, compare,
 
     cmds.def(
         "rootPath", &mrv2::cmd::rootPath,
-        _("Return the root path to the insallation of mrv2."));
+        _("Return the root path to the installation of mrv2."));
 
     cmds.def(
         "prefsPath", &mrv2::cmd::prefsPath,

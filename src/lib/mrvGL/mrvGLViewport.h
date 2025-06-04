@@ -28,7 +28,7 @@ namespace mrv
 
             //! Virual draw method
             void draw() override;
-
+            
             //! Virtual handle event method
             int handle(int event) override;
 

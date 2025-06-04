@@ -62,7 +62,7 @@ enum {
 
 //! File entry type
 enum {
-    ENTRY_NONE = 1,     /*!< An empty (or non-existant) entry */
+    ENTRY_NONE = 1,     /*!< An empty (or non-existent) entry */
     ENTRY_DIR = 2,      /*!< A directory entry */
     ENTRY_FILE = 4,     /*!< A file entry */
     ENTRY_FAVORITE = 8, /*!< A favorite entry */

@@ -308,7 +308,7 @@ install( DIRECTORY python/plug-ins/demos
     COMPONENT python_demos )
 
 #
-# These two variables will contain the sources for .po tranalation.
+# These two variables will contain the sources for .po translation.
 # PO_SOURCES will contain relative paths while PO_ABS_SOURCES will contain
 # the absolute paths.
 # This is needed as gettext/cmake would run into path length issues on some

@@ -67,13 +67,13 @@ namespace mrv
             //! Refresh all tabs.
             void refresh();
 
-            //! Quicky refresh the image tab if open.
+            //! Quickly refresh the image tab if open.
             void imageRefresh();
 
-            //! Quicky refresh the video tab if open.
+            //! Quickly refresh the video tab if open.
             void videoRefresh();
 
-            //! Quicky refresh the metadata tab if open.
+            //! Quickly refresh the metadata tab if open.
             void metadataRefresh();
 
             TimelinePlayer* timelinePlayer() const;
