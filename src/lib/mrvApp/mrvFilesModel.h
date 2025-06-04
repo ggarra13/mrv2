@@ -14,7 +14,7 @@
 #include "mrvOptions/mrvStereo3DOptions.h"
 #include "mrvOptions/mrvFilesPanelOptions.h"
 
-#include "mrvDraw/Annotation.h"
+#include <tlDraw/Annotation.h>
 
 namespace mrv
 {

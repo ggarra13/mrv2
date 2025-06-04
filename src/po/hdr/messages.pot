@@ -5,7 +5,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: hdr v1.3.7\n"
+"Project-Id-Version: hdr v1.3.8\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -16,4 +16,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "Connection/"
+msgstr ""
+
+msgid "Window/Fullscreen"
+msgstr ""
+
+msgid "HDR/Pass through Metadata to Display"
 msgstr ""

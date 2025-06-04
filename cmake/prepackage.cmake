@@ -314,6 +314,14 @@ if (APPLE)
 		DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources/bin)
 	endforeach()
     endfunction()
+    
+    function(install_mrv2_lib_glob _libglob)
+	file(GLOB _libs "${_libglob}")
+	foreach( _lib ${_libs} )
+	    file(COPY ${_lib}
+		DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources/lib)
+	endforeach()
+    endfunction()
 	
     function(copy_mo_files TARGET)
 	file(GLOB _langs "${CPACK_PREPACKAGE}/share/locale/*")
@@ -339,6 +347,8 @@ if (APPLE)
 	install_mrv2_bin_glob("${CPACK_PREPACKAGE}/python*")
 	install_mrv2_bin_glob("${CPACK_PREPACKAGE}/pip*")
     endif()
+    
+    install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libMoltenVK*")	
 	
     file(COPY ${CPACK_PREPACKAGE}/colors
 	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
@@ -599,16 +609,25 @@ if (APPLE)
 	install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/libndi*")
 	install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/libplacebo*")
 	install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/libz*")
+	install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/libMoltenVK*")
 
 	# Vulkan libraries For Apple Silicon or Intel machines
 	set(VULKAN_SDK $ENV{VULKAN_SDK})
 	message(STATUS "VULKAN_SDK set to ${VULKAN_SDK}")
-	install_vulkan_lib_glob("libMoltenVK*" hdr)
 	install_vulkan_lib_glob("libvulkan*" hdr)
 	
 	install_vulkan_icd_filenames(hdr)
 	# install_vulkan_layers(hdr)
 
+
+	# If MR2V2's BACKEND is VK, also install vulkan on it
+	if (MRV2_BACKEND STREQUAL "VK" OR MRV2_BACKEND STREQUAL "BOTH")
+	    install_vulkan_lib_glob("libvulkan*" mrv2)
+	
+	    install_vulkan_icd_filenames(mrv2)
+	    # install_vulkan_layers(mrv2)
+	endif()
+	
 	#
 	# Install .mo translation files
 	#

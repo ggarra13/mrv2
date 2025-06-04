@@ -16,8 +16,8 @@ unset LD_LIBRARY_PATH
 unset DYLD_LIBRARY_PATH
 
 branch=$(git rev-parse --abbrev-ref HEAD)
-if [[ "$branch" != "beta" && "$branch" != "upload_test" ]]; then
-    echo "You are not on the beta branch.  Will not make a release."
+if [[ "$branch" != "beta" && "$branch" != "vulkan" ]]; then
+    echo "You are not on the beta or vulkan branch.  Will not make a release."
     exit 0
 fi
 
@@ -273,7 +273,7 @@ echo "FILES=$files"
 
 # Iterate over the array of filenames
 for src in "${file_array[@]}"; do
-    dest=`echo $src | sed -e "s/v$mrv2_VERSION/beta/"`
+    dest=`echo $src | sed -e "s/v$mrv2_VERSION/$branch/"`
     upload_file "${src}" "${dest}"
 done
 

@@ -5,10 +5,8 @@
 #pragma once
 
 #include "mrvCore/mrvActionMode.h"
+#include "mrvCore/mrvColorAreaInfo.h"
 #include "mrvCore/mrvString.h"
-
-#include "mrvFl/mrvColorAreaInfo.h"
-#include "mrvFl/mrvLaserFadeData.h"
 
 #include "mrvOptions/mrvStereo3DOptions.h"
 #include "mrvOptions/mrvEnvironmentMapOptions.h"
@@ -19,11 +17,7 @@
 
 #include <tlCore/ValueObserver.h>
 
-// FLTK includes
-#ifdef TLRENDER_GL
-#    include "mrvGL/mrvGLWindow.h"
-#    define Fl_SuperClass GLWindow
-#endif
+#include "mrvGL/mrvGLWindow.h"
 
 class ViewerUI;
 
@@ -31,451 +25,467 @@ namespace mrv
 {
     using namespace tl;
 
+    class LaserFadeData;
+
     class MultilineInput;
 
     class TimelinePlayer;
 
-    class TimelineViewport : public Fl_SuperClass
+    namespace opengl
     {
-        TLRENDER_NON_COPYABLE(TimelineViewport);
 
-    public:
-        TimelineViewport(int X, int Y, int W, int H, const char* L);
-        TimelineViewport(int W, int H, const char* L);
-        ~TimelineViewport();
+        class TimelineViewport : public GLWindow
+        {
+            TLRENDER_NON_COPYABLE(TimelineViewport);
 
-        //! Virtual FLTK methods.
-        int handle(int event) override;
-        void resize(int X, int Y, int W, int H) override;
+        public:
+            TimelineViewport(int X, int Y, int W, int H, const char* L);
+            TimelineViewport(int W, int H, const char* L);
+            ~TimelineViewport();
 
-        //! Store main ui.  We need this as the first viewport does not
-        //! yet know about App::ui.
-        void main(ViewerUI* m) noexcept;
+            //! Virtual FLTK methods.
+            int handle(int event) override;
+            void resize(int X, int Y, int W, int H) override;
 
-        //! Handle scrubbing.
-        void scrub() noexcept;
+            //! Store main ui.  We need this as the first viewport does not
+            //! yet know about App::ui.
+            void main(ViewerUI* m) noexcept;
 
-        //! Stop playback while scrubbing check for audio
-        void stopPlaybackWhileScrubbing() noexcept;
+            //! Handle scrubbing.
+            void scrub() noexcept;
 
-        //! Undo last shape and annotations if no more shapes.
-        void undo();
+            //! Stop playback while scrubbing check for audio
+            void stopPlaybackWhileScrubbing() noexcept;
 
-        //! Redo last shape.
-        void redo();
+            //! Undo last shape and annotations if no more shapes.
+            void undo();
 
-        //! Change cursor to another.
-        void set_cursor(Fl_Cursor x) const noexcept;
+            //! Redo last shape.
+            void redo();
 
-        //! Set the action mode.
-        void setActionMode(const ActionMode& mode) noexcept;
+            //! Change cursor to another.
+            void set_cursor(Fl_Cursor x) const noexcept;
 
-        //! Get the color information of the selected area
-        const area::Info& getColorAreaInfo() noexcept;
+            //! Set the action mode.
+            void setActionMode(const ActionMode& mode) noexcept;
 
-        //! Return the current video image in BGRA order after drawing it.
-        const image::Color4f* image() const;
+            //! Get the color information of the selected area
+            const area::Info& getColorAreaInfo() noexcept;
 
-        //! Get the background options.
-        const timeline::BackgroundOptions&
-        getBackgroundOptions() const noexcept;
-        
-        //! Observe the background options.
-        std::shared_ptr<observer::IValue<timeline::BackgroundOptions> > observeBackgroundOptions() const;
-        
-        //! Set the background options.
-        void setBackgroundOptions(const timeline::BackgroundOptions& value);
+            //! Return the current video image in BGRA order after drawing it.
+            const image::Color4f* image() const;
 
-        //! Set the OCIO options.
-        void setOCIOOptions(const timeline::OCIOOptions&) noexcept;
+            //! Get the background options.
+            const timeline::BackgroundOptions&
+            getBackgroundOptions() const noexcept;
 
-        //! Set the OCIO options for monitor.
-        void setOCIOOptions(
-            unsigned monitorId, const timeline::OCIOOptions&) noexcept;
+            //! Observe the background options.
+            std::shared_ptr<observer::IValue<timeline::BackgroundOptions> >
+            observeBackgroundOptions() const;
 
-        const timeline::OCIOOptions&
-        getOCIOOptions(unsigned monitorId) const noexcept;
+            //! Set the background options.
+            void setBackgroundOptions(const timeline::BackgroundOptions& value);
 
-        const timeline::OCIOOptions& getOCIOOptions() const noexcept;
+            //! Set the OCIO options.
+            void setOCIOOptions(const timeline::OCIOOptions&) noexcept;
 
-        //! Set the LUT options.
-        void setLUTOptions(const timeline::LUTOptions&) noexcept;
+            //! Set the OCIO options for monitor.
+            void setOCIOOptions(
+                unsigned monitorId, const timeline::OCIOOptions&) noexcept;
 
-        timeline::LUTOptions& lutOptions() noexcept;
+            const timeline::OCIOOptions&
+            getOCIOOptions(unsigned monitorId) const noexcept;
 
-        //! Set the image options.
-        void
-        setImageOptions(const std::vector<timeline::ImageOptions>&) noexcept;
+            const timeline::OCIOOptions& getOCIOOptions() const noexcept;
 
-        //! Set the display options.
-        void setDisplayOptions(
-            const std::vector<timeline::DisplayOptions>&) noexcept;
+            //! Set the LUT options.
+            void setLUTOptions(const timeline::LUTOptions&) noexcept;
 
-        //! Set the comparison options.
-        void setCompareOptions(const timeline::CompareOptions&) noexcept;
+            timeline::LUTOptions& lutOptions() noexcept;
 
-        //! Set the stereo 3D options.
-        void setStereo3DOptions(const Stereo3DOptions&) noexcept;
+            //! Set the image options.
+            void setImageOptions(
+                const std::vector<timeline::ImageOptions>&) noexcept;
 
-        //! Set HDR options.
-        void setHDROptions(const timeline::HDROptions&) noexcept;
+            //! Set the display options.
+            void setDisplayOptions(
+                const std::vector<timeline::DisplayOptions>&) noexcept;
 
-        const timeline::HDROptions& getHDROptions() const noexcept;
-        
-        //! Set the timeline players.
-        void setTimelinePlayer(TimelinePlayer*) noexcept;
+            //! Set the comparison options.
+            void setCompareOptions(const timeline::CompareOptions&) noexcept;
 
-        //! Get one of the timeline players.  Index is not checked.
-        mrv::TimelinePlayer* getTimelinePlayer() const noexcept;
+            //! Set the stereo 3D options.
+            void setStereo3DOptions(const Stereo3DOptions&) noexcept;
 
-        //! Return if safe areas are active.
-        bool getSafeAreas() const noexcept;
+            //! Set HDR options.
+            void setHDROptions(const timeline::HDROptions&) noexcept;
 
-        //! Return if data window is active.
-        bool getDataWindow() const noexcept;
+            const timeline::HDROptions& getHDROptions() const noexcept;
 
-        //! Return if display window is active.
-        bool getDisplayWindow() const noexcept;
+            //! Set the timeline players.
+            void setTimelinePlayer(TimelinePlayer*) noexcept;
 
-        //! Return if ignoring display window is active.
-        bool getIgnoreDisplayWindow() const noexcept;
+            //! Get one of the timeline players.  Index is not checked.
+            mrv::TimelinePlayer* getTimelinePlayer() const noexcept;
 
-        //! Get pixel aspect ratio of image.
-        float getPixelAspectRatio() const noexcept;
+            //! Return if safe areas are active.
+            bool getSafeAreas() const noexcept;
 
-        //! Set the crop mask.
-        void setSafeAreas(bool) noexcept;
+            //! Return if data window is active.
+            bool getDataWindow() const noexcept;
 
-        //! Set data window.
-        void setDataWindow(bool) noexcept;
+            //! Return if display window is active.
+            bool getDisplayWindow() const noexcept;
 
-        //! Set display window.
-        void setDisplayWindow(bool) noexcept;
+            //! Return if ignoring display window is active.
+            bool getIgnoreDisplayWindow() const noexcept;
 
-        //! Set ignore of display window.
-        void setIgnoreDisplayWindow(bool) noexcept;
+            //! Get pixel aspect ratio of image.
+            float getPixelAspectRatio() const noexcept;
 
-        //! Set pixel aspect ratio of image.
-        void setPixelAspectRatio(const float x) noexcept;
+            //! Set the crop mask.
+            void setSafeAreas(bool) noexcept;
 
-        //! Clear the help text after 1 second has elapsed.
-        void clearHelpText();
+            //! Set data window.
+            void setDataWindow(bool) noexcept;
 
-        //! Set help HUD text
-        void setHelpText(const std::string&);
+            //! Set display window.
+            void setDisplayWindow(bool) noexcept;
 
-        //! @{ HUD controls
+            //! Set ignore of display window.
+            void setIgnoreDisplayWindow(bool) noexcept;
 
-        bool getHudActive() const;
-        void setHudActive(const bool active);
-        void setHudDisplay(const HudDisplay value);
-        void toggleHudDisplay(const HudDisplay value);
+            //! Set pixel aspect ratio of image.
+            void setPixelAspectRatio(const float x) noexcept;
 
-        //! }@
+            //! Clear the help text after 1 second has elapsed.
+            void clearHelpText();
 
-        HudDisplay getHudDisplay() const noexcept;
+            //! Set help HUD text
+            void setHelpText(const std::string&);
 
-        //! Return the crop mask
-        float getMask() const noexcept;
+            //! @{ HUD controls
 
-        //! Set the crop mask
-        void setMask(float f) noexcept;
+            bool getHudActive() const;
+            void setHudActive(const bool active);
+            void setHudDisplay(const HudDisplay value);
+            void toggleHudDisplay(const HudDisplay value);
 
-        //! Get the view position.
-        const math::Vector2i& viewPos() const noexcept;
+            //! }@
 
-        //! Get the view zoom.
-        float viewZoom() const noexcept;
+            HudDisplay getHudDisplay() const noexcept;
 
-        //! Get whether the view is framed.
-        bool hasFrameView() const noexcept;
+            //! Return the crop mask
+            float getMask() const noexcept;
 
-        //! Set the view position and zoom.
-        void setViewPosAndZoom(const tl::math::Vector2i&, float) noexcept;
+            //! Set the crop mask
+            void setMask(float f) noexcept;
 
-        //! Set the view zoom.
-        void setViewZoom(
-            float, const math::Vector2i& focus = math::Vector2i()) noexcept;
+            //! Get the view position.
+            const math::Vector2i& viewPos() const noexcept;
 
-        //! Get the environment map options (should not return a reference)
-        EnvironmentMapOptions getEnvironmentMapOptions() const noexcept;
+            //! Get the view zoom.
+            float viewZoom() const noexcept;
 
-        //! Set the environment map options
-        void setEnvironmentMapOptions(const EnvironmentMapOptions& o) noexcept;
+            //! Get whether the view is framed.
+            bool hasFrameView() const noexcept;
 
-        //! Resize the window to screen
-        void resizeWindow() noexcept;
+            //! Set the view position and zoom.
+            void setViewPosAndZoom(const tl::math::Vector2i&, float) noexcept;
 
-        //! Set auto resizing of the window.
-        void setResizeWindow(bool active) noexcept;
-        
-        //! Set auto frame the view.
-        void setFrameView(bool active) noexcept;
+            //! Set the view zoom.
+            void setViewZoom(
+                float, const math::Vector2i& focus = math::Vector2i()) noexcept;
 
-        //! Frame the view.
-        void frameView() noexcept;
+            //! Get the environment map options (should not return a reference)
+            EnvironmentMapOptions getEnvironmentMapOptions() const noexcept;
 
-        //! Center the view without changing the zoom.
-        void centerView() noexcept;
+            //! Set the environment map options
+            void
+            setEnvironmentMapOptions(const EnvironmentMapOptions& o) noexcept;
 
-        //! Set the view zoom to 1:1.
-        void viewZoom1To1() noexcept;
+            //! Resize the window to screen
+            void resizeWindow() noexcept;
 
-        //! Playback controls
-        void startFrame() noexcept;
+            //! Set auto resizing of the window.
+            void setResizeWindow(bool active) noexcept;
 
-        void framePrev() noexcept;
+            //! Set auto frame the view.
+            void setFrameView(bool active) noexcept;
 
-        void playBackwards() noexcept;
+            //! Frame the view.
+            void frameView() noexcept;
 
-        void stop() noexcept;
+            //! Center the view without changing the zoom.
+            void centerView() noexcept;
 
-        void frameNext() noexcept;
+            //! Set the view zoom to 1:1.
+            void viewZoom1To1() noexcept;
 
-        void playForwards() noexcept;
+            //! Playback controls
+            void startFrame() noexcept;
 
-        void togglePlayback() noexcept;
+            void framePrev() noexcept;
 
-        void endFrame() noexcept;
+            void playBackwards() noexcept;
 
-        void setPlayback(const timeline::Playback) noexcept;
+            void stop() noexcept;
 
-        //! Set the Annotation previous ghost frames.
-        void setGhostPrevious(int);
+            void frameNext() noexcept;
 
-        //! Set the Annotation previous ghost frames.
-        void setGhostNext(int);
+            void playForwards() noexcept;
 
-        //! Set the missing frame type.
-        void setMissingFrameType(const MissingFrameType);
+            void togglePlayback() noexcept;
 
-        //
-        const std::vector<tl::timeline::VideoData>&
-        getVideoData() const noexcept;
+            void endFrame() noexcept;
 
-        // Callbacks
-        int acceptMultilineInput() noexcept;
+            void setPlayback(const timeline::Playback) noexcept;
 
-        void cacheChangedCallback() const noexcept;
+            //! Set the Annotation previous ghost frames.
+            void setGhostPrevious(int);
 
-        void currentTimeChanged(const otime::RationalTime&) const noexcept;
+            //! Set the Annotation previous ghost frames.
+            void setGhostNext(int);
 
-        void currentVideoCallback(
-            const std::vector<tl::timeline::VideoData>&) noexcept;
+            //! Set the missing frame type.
+            void setMissingFrameType(const MissingFrameType);
 
-        //! Set the OCIO configuration from the GUI.
-        void updateOCIOOptions() noexcept;
+            //
+            const std::vector<tl::timeline::VideoData>&
+            getVideoData() const noexcept;
 
-        //! Update the display options from the GUI.
-        void updateDisplayOptions() noexcept;
+            // Callbacks
+            int acceptMultilineInput() noexcept;
 
-        //! Update the video layer from the GUI.
-        void updateVideoLayers(int idx = 0) noexcept;
+            void cacheChangedCallback() const noexcept;
 
-        //! This signal is emitted when the position and zoom change.
-        void viewPosAndZoomChanged(const tl::math::Vector2i&, float) noexcept;
+            void currentTimeChanged(const otime::RationalTime&) const noexcept;
 
-        //! This signal is emitted when the view is framed.
-        void frameViewActivated() noexcept;
+            void currentVideoCallback(
+                const std::vector<tl::timeline::VideoData>&) noexcept;
 
-        //! Set or unset the window to full screen and hide/show all bars.
-        void setPresentationMode(bool active = true) noexcept;
+            //! Set the OCIO configuration from the GUI.
+            void updateOCIOOptions() noexcept;
 
-        //! Set or unset the window in maximized state.
-        void setMaximized() noexcept;
+            //! Update the display options from the GUI.
+            void updateDisplayOptions() noexcept;
 
-        //! Get the window to full screen and hide/show all bars.
-        bool getPresentationMode() const noexcept;
+            //! Update the video layer from the GUI.
+            void updateVideoLayers(int idx = 0) noexcept;
 
-        //! Retrieve the full screen mode.
-        bool getFullScreenMode() const noexcept;
+            //! This signal is emitted when the position and zoom change.
+            void
+            viewPosAndZoomChanged(const tl::math::Vector2i&, float) noexcept;
 
-        //! Set or unset the window to full screen but don't hide any bars.
-        void setFullScreenMode(bool active = true) noexcept;
+            //! This signal is emitted when the view is framed.
+            void frameViewActivated() noexcept;
 
-        //! Handle a drag and drop of files to load
-        void dragAndDrop(const std::string& text) noexcept;
+            //! Set or unset the window to full screen and hide/show all bars.
+            void setPresentationMode(bool active = true) noexcept;
 
-        //! Update the pixel bar's coordinates and color information.
-        void updatePixelBar() const noexcept;
+            //! Set or unset the window in maximized state.
+            void setMaximized() noexcept;
 
-        //! Get the text widget if available.
-        MultilineInput* getMultilineInput() const noexcept;
+            //! Get the window to full screen and hide/show all bars.
+            bool getPresentationMode() const noexcept;
 
-        //! Get the viewportSize
-        math::Size2i getViewportSize() const noexcept;
+            //! Retrieve the full sceen mode.
+            bool getFullScreenMode() const noexcept;
 
-        //! Get the render image size
-        math::Size2i getRenderSize() const noexcept;
+            //! Set or unset the window to full screen but don't hide any bars.
+            void setFullScreenMode(bool active = true) noexcept;
 
-        //! Redraw both the primary and secondary windows.
-        void redrawWindows() const;
+            //! Handle a drag and drop of files to load
+            void dragAndDrop(const std::string& text) noexcept;
 
-        //! Refresh both the primary and secondary windows by clearing the
-        //! associated resources.
-        void refreshWindows();
+            //! Update the pixel bar's coordinates and color information.
+            void updatePixelBar() const noexcept;
 
-        //! Refresh window by clearing the associated resources.
-        virtual void refresh() {};
+            //! Get the text widget if available.
+            MultilineInput* getMultilineInput() const noexcept;
 
-        //! FLTK Callback to handle view spinning when in Environment Map mode.
-        static void _handleViewSpinning_cb(TimelineViewport* t) noexcept;
+            //! Get the viewportSize
+            math::Size2i getViewportSize() const noexcept;
 
-        //! Handle view spinning when in Environment Map mode.
-        void handleViewSpinning() noexcept;
+            //! Get the render image size
+            math::Size2i getRenderSize() const noexcept;
 
-        //! Set selection area.
-        void setSelectionArea(const math::Box2i& area) noexcept;
+            //! Redraw both the primary and secondary windows.
+            void redrawWindows() const;
 
-        //! Get show annotations toggle value.
-        bool getShowAnnotations() const noexcept;
+            //! Refresh both the primary and secondary windows by clearing the
+            //! associated resources.
+            void refreshWindows();
 
-        //! Show annotations toggle
-        void setShowAnnotations(const bool value) noexcept;
+            //! Refresh window by clearing the associated resources.
+            virtual void refresh(){};
 
-        //! Set whether to render the video or not (annotations are still
-        //! rendered).
-        void setShowVideo(bool value) noexcept;
+            //! FLTK Callback to handle view spinning whne in Environment Map
+            //! mode.
+            static void _handleViewSpinning_cb(TimelineViewport* t) noexcept;
 
-        //! Laser fading annotation
-        void laserFade(LaserFadeData*);
+            //! Handle view spinning when in Environment Map mode.
+            void handleViewSpinning() noexcept;
 
-        //! Main FLTK callback for laser shapes.
-        static void laserFade_cb(LaserFadeData*);
+            //! Set selection area.
+            void setSelectionArea(const math::Box2i& area) noexcept;
 
-        //! Update the undo/redo buttons to be active or not.
-        void updateUndoRedoButtons() const noexcept;
+            //! Get show annotations toggle value.
+            bool getShowAnnotations() const noexcept;
 
-        //! Edit a text shape.
-        void editText(
-            const std::shared_ptr< draw::Shape >&, const int index) noexcept;
+            //! Show annotations toggle
+            void setShowAnnotations(const bool value) noexcept;
 
-        //! Update the playback buttons.
-        void updatePlaybackButtons() const noexcept;
+            //! Set whether to render the video or not (annotations are still
+            //! rendered).
+            void setShowVideo(bool value) noexcept;
 
-        //! Return the image rotation.
-        float getRotation() const noexcept;
+            //! Laser fading annotation
+            void laserFade(LaserFadeData*);
 
-        //! Set the image rotation.
-        void setRotation(float) noexcept;
+            //! Main FLTK callback for laser shapes.
+            static void laserFade_cb(LaserFadeData*);
 
-        //! Update the coordinates.
-        void updateCoords() const noexcept;
+            //! Update the undo/redo buttons to be active or not.
+            void updateUndoRedoButtons() const noexcept;
 
-        //! Show an image.
-        void showImage(const std::shared_ptr<image::Image>& image);
+            //! Edit a text shape.
+            void editText(
+                const std::shared_ptr< draw::Shape >&,
+                const int index) noexcept;
 
-        //! Get current frame/video tags
-        image::Tags getTags() const noexcept;
+            //! Update the playback buttons.
+            void updatePlaybackButtons() const noexcept;
 
-    protected:
-        void _init();
+            //! Return the image rotation.
+            float getRotation() const noexcept;
 
-        void _updateDevices() const noexcept;
-        
-        virtual void _readPixel(image::Color4f& rgba) const noexcept = 0;
-        math::Vector2i _getViewportCenter() const noexcept;
+            //! Set the image rotation.
+            void setRotation(float) noexcept;
 
-        math::Vector2i _getFocus(int X, int Y) const noexcept;
-        math::Vector2i _getFocus() const noexcept;
-        math::Vector2i _getRaster() const noexcept;
+            //! Update the coordinates.
+            void updateCoords() const noexcept;
 
-        math::Vector2f _getFocusf(int X, int Y) const noexcept;
-        math::Vector2f _getRasterf(int X, int Y) const noexcept;
-        math::Vector2f _getRasterf() const noexcept;
+            //! Show an image.
+            void showImage(const std::shared_ptr<image::Image>& image);
 
-        //! Get the normalized rotation between 0 and 360
-        //! full rotation of the image (user rotation + video rotation)
-        float _getRotation() const noexcept;
+            //! Get current frame/video tags
+            image::Tags getTags() const noexcept;
 
-        //! Get the render projection matrix.
-        math::Matrix4x4f _renderProjectionMatrix() const noexcept;
-        
-        //! Get the full projection matrix.
-        math::Matrix4x4f _projectionMatrix() const noexcept;
+        protected:
+            void _init();
 
-        //! Get the matrix to pixel (raster) coordinates of image.
-        math::Matrix4x4f _pixelMatrix() const noexcept;
+            void _updateDevices() const noexcept;
 
-        //! Clip the selection area position taking into account
-        //! rotation.
-        void _clipSelectionArea(math::Vector2i& pos) const noexcept;
+            virtual void _readPixel(image::Color4f& rgba) const noexcept = 0;
+            math::Vector2i _getViewportCenter() const noexcept;
 
-        //! Call redraw and a flush to force a redraw.
-        void _refresh() noexcept;
+            math::Vector2i _getFocus(int X, int Y) const noexcept;
+            math::Vector2i _getFocus() const noexcept;
+            math::Vector2i _getRaster() const noexcept;
 
-        //! Get the annotation pen size taking renderSize into account.
-        float _getPenSize() const noexcept;
+            math::Vector2f _getFocusf(int X, int Y) const noexcept;
+            math::Vector2f _getRasterf(int X, int Y) const noexcept;
+            math::Vector2f _getRasterf() const noexcept;
 
-        virtual void _pushAnnotationShape(const std::string& cmd) const = 0;
+            //! Get the normalized rotation between 0 and 360
+            //! full rotation of the image (user rotation + video rotation)
+            float _getRotation() const noexcept;
 
-        void _redrawUndoRedoButtons() const;
+            //! Get the render projection matrix.
+            math::Matrix4x4f _renderProjectionMatrix() const noexcept;
 
-        void _createAnnotationShape(const bool laser) const;
-        void _updateAnnotationShape() const;
-        void _addAnnotationShapePoint() const;
-        void _endAnnotationShape() const;
+            //! Get the full projection matrix.
+            math::Matrix4x4f _projectionMatrix() const noexcept;
 
-        bool _isEnvironmentMap() const noexcept;
-        void _updateZoom() const noexcept;
+            //! Get the matrix to pixel (raster) coordinates of image.
+            math::Matrix4x4f _pixelMatrix() const noexcept;
 
-        void _showPixelBar() const noexcept;
-        void _hidePixelBar() const noexcept;
-        void _togglePixelBar() const noexcept;
+            //! Clip the selection area position taking into account
+            //! rotation.
+            void _clipSelectionArea(math::Vector2i& pos) const noexcept;
 
-        void _updatePixelBar() const noexcept;
-        void _updatePixelBar(image::Color4f& rgba) const noexcept;
-        bool _shouldUpdatePixelBar() const noexcept;
-        bool _isPlaybackStopped() const noexcept;
-        bool _isSingleFrame() const noexcept;
+            //! Call redraw and a flush to force a redraw.
+            void _refresh() noexcept;
 
-        void _setVideoRotation(float value) noexcept;
-        void _frameView() noexcept;
-        void _handleCompareWipe() noexcept;
-        void _handleCompareOverlay() noexcept;
+            //! Get the annotation pen size taking renderSize into account.
+            float _getPenSize() const noexcept;
 
-        void _handlePushLeftMouseButton() noexcept;
+            virtual void _pushAnnotationShape(const std::string& cmd) const = 0;
 
-        void _handleDragLeftMouseButton() noexcept;
-        void _handleDragSelection() noexcept;
+            void _redrawUndoRedoButtons() const;
 
-        void _handleDragMiddleMouseButton() noexcept;
+            void _createAnnotationShape(const bool laser) const;
+            void _updateAnnotationShape() const;
+            void _addAnnotationShapePoint() const;
+            void _endAnnotationShape() const;
 
-        void _updateCursor() const noexcept;
+            bool _isEnvironmentMap() const noexcept;
+            void _updateZoom() const noexcept;
 
-        void _updateViewRotation(const math::Vector2f& spin) noexcept;
+            void _showPixelBar() const noexcept;
+            void _hidePixelBar() const noexcept;
+            void _togglePixelBar() const noexcept;
 
-        void _updateDisplayOptions(const timeline::DisplayOptions& d) noexcept;
+            void _updatePixelBar() const noexcept;
+            void _updatePixelBar(image::Color4f& rgba) const noexcept;
+            bool _shouldUpdatePixelBar() const noexcept;
+            bool _isPlaybackStopped() const noexcept;
+            bool _isSingleFrame() const noexcept;
 
-        void _updateMonitorDisplayView(
-            const int screen, const timeline::OCIOOptions& o) const noexcept;
+            void _setVideoRotation(float value) noexcept;
+            void _frameView() noexcept;
+            void _handleCompareWipe() noexcept;
+            void _handleCompareOverlay() noexcept;
 
-        void _pushColorMessage(const std::string& command, float value);
+            void _handlePushLeftMouseButton() noexcept;
 
-        void _mallocBuffer() const noexcept;
-        void _mapBuffer() const noexcept;
-        void _unmapBuffer() const noexcept;
+            void _handleDragLeftMouseButton() noexcept;
+            void _handleDragSelection() noexcept;
 
-        void _setFullScreen(bool active) noexcept;
+            void _handleDragMiddleMouseButton() noexcept;
 
-        void _getPixelValue(
-            image::Color4f& rgba, const std::shared_ptr<image::Image>& image,
-            const math::Vector2i& pos) const noexcept;
-        void _calculateColorAreaRawValues(area::Info& info) const noexcept;
+            void _updateCursor() const noexcept;
 
-        void
-        hsv_to_info(const image::Color4f& hsv, area::Info& info) const noexcept;
-        image::Color4f
-        rgba_to_hsv(int hsv_colorspace, image::Color4f& rgba) const noexcept;
+            void _updateViewRotation(const math::Vector2f& spin) noexcept;
 
-        void _scrub(float change) noexcept;
+            void
+            _updateDisplayOptions(const timeline::DisplayOptions& d) noexcept;
 
-        bool _hasSecondaryViewport() const noexcept;
+            void _updateMonitorDisplayView(
+                const int screen,
+                const timeline::OCIOOptions& o) const noexcept;
 
-        float _getZoomSpeedValue() const noexcept;
+            void _pushColorMessage(const std::string& command, float value);
 
-        void _getTags() noexcept;
+            void _mallocBuffer() const noexcept;
+            void _mapBuffer() const noexcept;
+            void _unmapBuffer() const noexcept;
 
-        TLRENDER_PRIVATE();
-    };
+            void _setFullScreen(bool active) noexcept;
+
+            void _getPixelValue(
+                image::Color4f& rgba,
+                const std::shared_ptr<image::Image>& image,
+                const math::Vector2i& pos) const noexcept;
+            void _calculateColorAreaRawValues(area::Info& info) const noexcept;
+
+            void hsv_to_info(
+                const image::Color4f& hsv, area::Info& info) const noexcept;
+            image::Color4f rgba_to_hsv(
+                int hsv_colorspace, image::Color4f& rgba) const noexcept;
+
+            void _scrub(float change) noexcept;
+
+            bool _hasSecondaryViewport() const noexcept;
+
+            float _getZoomSpeedValue() const noexcept;
+
+            void _getTags() noexcept;
+
+            TLRENDER_PRIVATE();
+        };
+
+    } // namespace opengl
+
 } // namespace mrv

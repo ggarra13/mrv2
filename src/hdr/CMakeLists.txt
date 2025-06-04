@@ -23,7 +23,7 @@ find_package(Intl REQUIRED)
 if (WIN32)
     enable_language("RC")
     set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_CURRENT_SOURCE_DIR}/app.rc")
-    list( APPEND SOURCES ${APP_ICON_RESOURCE_WINDOWS} )
+    list(APPEND SOURCES ${APP_ICON_RESOURCE_WINDOWS} )
 endif()
 
 set(LIBRARIES
@@ -32,14 +32,10 @@ set(LIBRARIES
     mrvHDR
     ${Intl_LIBRARIES})
 
-if (WIN32)
-    list(APPEND LIBRARIES ${FLTK_LIBRARIES})
-else()
-    if(FLTK_BUILD_SHARED_LIBS)
-	list(APPEND LIBRARIES ${FLTK_LIBRARIES} fltk::vk-shared)
-    else()
-	list(APPEND LIBRARIES ${FLTK_LIBRARIES} fltk::vk)
-    endif()
+list(APPEND LIBRARIES ${FLTK_vk_LIBRARY} ${FLTK_LIBRARIES})
+
+if(WIN32)
+    list(APPEND LIBRARIES dxgi)
 endif()
 
 if( APPLE )

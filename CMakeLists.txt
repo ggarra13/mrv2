@@ -29,38 +29,29 @@ include(cmake/version.cmake )
 include(cmake/options.cmake )
 include(cmake/functions.cmake )
 
-if (APPLE)
-    message(STATUS "OLD_DYLD_LIBRARY_PATH=$ENV{OLD_DYLD_LIBRARY_PATH}")
-    message(STATUS "-------------------------------------------------")
-    message(STATUS "DYLD_LIBRARY_PATH=$ENV{DYLD_LIBRARY_PATH}")
-    message(STATUS "-------------------------------------------------")
-elseif(UNIX)
-    message(STATUS "OLD_LD_LIBRARY_PATH=$ENV{OLD_LD_LIBRARY_PATH}")
-    message(STATUS "LD_LIBRARY_PATH=$ENV{LD_LIBRARY_PATH}")
-    message(STATUS "-------------------------------------------------")
-else()
-    message(STATUS "OLD_PATH=$ENV{OLD_PATH}")
-    message(STATUS "PATH=$ENV{PATH}")
-    message(STATUS "-------------------------------------------------")
-endif()
 
+# Determine a repository root based on the current source directory.
+get_filename_component(REPO_ROOT "${PROJECT_SOURCE_DIR}/tlRender" ABSOLUTE)
+get_filename_component(SUPERBUILD_ROOT "${REPO_ROOT}/etc/SuperBuild" ABSOLUTE)
+
+# Compute absolute module paths.
+get_filename_component(MODULE_PATH1 "${REPO_ROOT}/cmake/Modules" ABSOLUTE)
+get_filename_component(MODULE_PATH2 "${SUPERBUILD_ROOT}/cmake/Modules" ABSOLUTE)
+get_filename_component(MODULE_PATH3 "${SUPERBUILD_ROOT}/cmake/" ABSOLUTE)
+get_filename_component(MODULE_PATH4 "${CMAKE_INSTALL_PREFIX}/share/OpenColorIO/cmake/modules" ABSOLUTE)
+
+# Prepend to the CMAKE_MODULE_PATH.
+list(PREPEND CMAKE_MODULE_PATH
+    ${MODULE_PATH1}
+    ${MODULE_PATH2}
+    ${MODULE_PATH3}
+    ${MODULE_PATH4}
+)
 
 #
 # Fetch the tlRender library as a submodule with git.
 #
-
-if(GIT_SUBMODULE)
-    find_package(Git REQUIRED)
-    
-    message(STATUS "Update/init tlRender's submodules")
-    execute_process(
-	COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
-	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/
-	RESULT_VARIABLE GIT_SUBMOD_RESULT)
-    if(NOT GIT_SUBMOD_RESULT EQUAL "0")
-	message(FATAL_ERROR "${GIT_EXECUTABLE} submodule update --init --recursive failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
-    endif()
-endif()
+find_package(Git REQUIRED)
 
 # Omit superfluous "Up-to-date" messages.
 if(NOT DEFINED CMAKE_INSTALL_MESSAGE)
@@ -108,33 +99,34 @@ if (NOT BUILD_PYTHON AND (TLRENDER_AV1 OR TLRENDER_LIBPLACEBO))
     endif()
 endif()
 
-find_program(MESON_EXECUTABLE NAMES meson.exe meson)
-if (NOT BUILD_PYTHON AND NOT MESON_EXECUTABLE)
-    message(WARNING "No meson found in path.  Trying to install it "
-	"with ${Python_EXECUTABLE}")
-    execute_process(COMMAND ${Python_EXECUTABLE} -m pip install --user meson )
-    if(WIN32)
-	# Use execute_process to get the Python version
-	execute_process(
-	    COMMAND ${Python_EXECUTABLE} -c "import sys; print(f'Python{sys.version_info.major}{sys.version_info.minor}')"
-	    OUTPUT_VARIABLE PYTHON_VERSION
-	    OUTPUT_STRIP_TRAILING_WHITESPACE
-	)
-
-	# Construct the Roaming Scripts directory path
-	set(ROAMING_SCRIPTS_DIR "$ENV{APPDATA}/Python/${PYTHON_VERSION}/Scripts")
-
-        # Add the Roaming Scripts directory to the PATH environment variable
-        set(ENV{PATH} "${ROAMING_SCRIPTS_DIR};$ENV{PATH}")
-    endif()
-    
+if (NOT BUILD_PYTHON)
     find_program(MESON_EXECUTABLE NAMES meson.exe meson)
     if (NOT MESON_EXECUTABLE)
-	message(WARNING "Path is $ENV{PATH}")
-	message(FATAL_ERROR "No meson found in PATH.  Please install it manually or set the PATH to it.")
+	message(WARNING "No meson found in path.  Trying to install it "
+	    "with ${Python_EXECUTABLE}")
+	execute_process(COMMAND ${Python_EXECUTABLE} -m pip install --user meson )
+	if(WIN32)
+	    # Use execute_process to get the Python version
+	    execute_process(
+		COMMAND ${Python_EXECUTABLE} -c "import sys; print(f'Python{sys.version_info.major}{sys.version_info.minor}')"
+		OUTPUT_VARIABLE PYTHON_VERSION
+		OUTPUT_STRIP_TRAILING_WHITESPACE
+	    )
+	    
+	    # Construct the Roaming Scripts directory path
+	    set(ROAMING_SCRIPTS_DIR "$ENV{APPDATA}/Python/${PYTHON_VERSION}/Scripts")
+
+            # Add the Roaming Scripts directory to the PATH environment variable
+            set(ENV{PATH} "${ROAMING_SCRIPTS_DIR};$ENV{PATH}")
+	endif()
+    
+	find_program(MESON_EXECUTABLE NAMES meson.exe meson)
+	if (NOT MESON_EXECUTABLE)
+	    message(WARNING "Path is $ENV{PATH}")
+	    message(FATAL_ERROR "No meson found in PATH.  Please install it manually or set the PATH to it.")
+	endif()
     endif()
 endif()
-    
 
 if(CMAKE_BUILD_TYPE MATCHES "^Debug$")
     # Check for Clang or GCC compiler  (@todo: add Microsoft support)
@@ -180,6 +172,15 @@ set(PYBIND11_DEP )
 if(MRV2_PYBIND11)
     include(cmake/Modules/Buildpybind11.cmake)
 endif()
+
+set(VMA_DEP )
+
+#
+# VMA 3.3 is bundled with FLTK
+#
+# if (TLRENDER_VK)
+#     include(cmake/Modules/BuildVMA.cmake)
+# endif()
 
 add_subdirectory( tlRender/etc/SuperBuild)
 

@@ -2,30 +2,30 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <string>
-#include <vector>
-#include <map>
+#include "mrViewer.h"
 
-#include "mrvCore/mrvHome.h"
-#include "mrvCore/mrvFile.h"
+#include "mrvApp/mrvFilesModel.h"
+#include "mrvApp/mrvApp.h"
+
+#include "mrvFl/mrvIO.h"
+
+#include "mrvPanels/mrvPanelsAux.h"
+#include "mrvPanels/mrvPanelsCallbacks.h"
+#include "mrvPanels/mrvFilesPanel.h"
 
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvPack.h"
 #include "mrvWidgets/mrvFileButton.h"
 #include "mrvWidgets/mrvButton.h"
 
-#include "mrvPanels/mrvPanelsAux.h"
-#include "mrvPanels/mrvPanelsCallbacks.h"
-#include "mrvPanels/mrvFilesPanel.h"
-
 #include "mrvNetwork/mrvTCP.h"
 
-#include "mrvApp/mrvFilesModel.h"
-#include "mrvApp/mrvApp.h"
+#include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvFile.h"
 
-#include "mrViewer.h"
-
-#include "mrvFl/mrvIO.h"
+#include <string>
+#include <vector>
+#include <map>
 
 namespace
 {

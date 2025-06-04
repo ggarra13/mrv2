@@ -2,6 +2,14 @@
 // Copyright (c) 2021-2023 Darby Johnston
 // All rights reserved.
 
+#include "mrViewer.h"
+
+#include "mrvPanels/mrvThumbnailPanel.h"
+
+#include "mrvCore/mrvFile.h"
+
+#include <tlCore/StringFormat.h>
+
 #include <FL/Fl_Widget.H>
 #include <FL/Fl.H>
 
@@ -9,14 +17,6 @@
 #    include <pybind11/embed.h>
 namespace py = pybind11;
 #endif
-
-#include <tlCore/StringFormat.h>
-
-#include "mrvCore/mrvFile.h"
-
-#include "mrvPanels/mrvThumbnailPanel.h"
-
-#include "mrViewer.h"
 
 namespace
 {
@@ -68,15 +68,21 @@ namespace mrv
                             auto rgbImage =
                                 new Fl_RGB_Image(pixelData, w, h, depth);
                             rgbImage->alloc_array = true;
-
                             uint8_t* d = pixelData;
                             const uint8_t* s = image->getData();
+
+#ifdef OPENGL_BACKEND
                             for (int y = 0; y < h; ++y)
                             {
-                                memcpy(
+                                std::memcpy(
                                     d + (h - 1 - y) * w * 4, s + y * w * 4,
                                     w * 4);
                             }
+#endif
+
+#ifdef VULKAN_BACKEND
+                            std::memcpy(d, s, w * h * depth);
+#endif
                             i->first->bind_image(rgbImage);
                             i->first->redraw();
                         }
@@ -116,8 +122,14 @@ namespace mrv
             try
             {
                 const auto context = App::app->getContext();
+#ifdef OPENGL_BACKEND
                 auto thumbnailSystem =
-                    context->getSystem<ui::ThumbnailSystem>();
+                    context->getSystem<timelineui::ThumbnailSystem>();
+#endif
+#ifdef VULKAN_BACKEND
+                auto thumbnailSystem =
+                    context->getSystem<timelineui_vk::ThumbnailSystem>();
+#endif
 
 #ifdef MRV2_PYBIND11
                 py::gil_scoped_release release;
@@ -179,7 +191,13 @@ namespace mrv
         void ThumbnailPanel::_cancelRequests()
         {
             const auto context = App::app->getContext();
-            auto thumbnailSystem = context->getSystem<ui::ThumbnailSystem>();
+#ifdef OPENGL_BACKEND
+            auto thumbnailSystem = context->getSystem<timelineui::ThumbnailSystem>();
+#endif
+
+#ifdef VULKAN_BACKEND
+            auto thumbnailSystem = context->getSystem<timelineui_vk::ThumbnailSystem>();
+#endif
 
             std::vector<uint64_t> ids;
             for (const auto& i : thumbnailRequests)

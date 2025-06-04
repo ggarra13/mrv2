@@ -72,7 +72,7 @@ else()
 endif()
 
 message( STATUS "Found FLTK: ${FLTK_INCLUDE_DIR}" )
-message( STATUS "FLTK LIBRARIES: ${FLTK_gl_LIBRARY} ${FLTK_LIBRARIES}" )
+message( STATUS "FLTK LIBRARIES: ${FLTK_vk_LIBRARY} ${FLTK_gl_LIBRARY} ${FLTK_LIBRARIES}" )
 message( STATUS "FLTK_FLUID_EXECUTABLE: ${FLTK_FLUID_EXECUTABLE}" )
 
 
@@ -83,6 +83,14 @@ find_package(glfw3 REQUIRED)
 find_package(minizip REQUIRED)
 find_package(OpenGL REQUIRED)
 
+# Now define a preprocessor macro
+if(MRV2_BACKEND STREQUAL "GL")
+    add_definitions(-DMRV2_BACKEND_GL=1)
+elseif(MRV2_BACKEND STREQUAL "VK")
+    add_definitions(-DMRV2_BACKEND_VK=1)
+elseif(MRV2_BACKEND STREQUAL "BOTH")
+    add_definitions(-DMRV2_BACKEND_BOTH=1)
+endif()
 if( MRV2_NETWORK )
     find_package(Poco REQUIRED Net Foundation)
     add_definitions( -DMRV2_NETWORK )
@@ -180,6 +188,10 @@ if(TLRENDER_USD)
     if(pxr_FOUND)
         add_definitions(-DTLRENDER_USD)
     endif()
+endif()
+
+if(TLRENDER_VK)
+    add_definitions(-DTLRENDER_VK)
 endif()
 
 if(TLRENDER_WAYLAND)
@@ -346,13 +358,17 @@ add_subdirectory( ${CMAKE_CURRENT_SOURCE_DIR}/lib )
 #
 # Add main source
 #
-add_subdirectory( main )
+add_subdirectory(main)
 
 #
 # Add hdr source
 #
-if (TLRENDER_NDI AND TLRENDER_FFMPEG AND TLRENDER_VK AND MRV2_HDR)
-    add_subdirectory( hdr )
+if (TLRENDER_NDI AND TLRENDER_VK AND MRV2_HDR)
+    add_subdirectory(hdr)
+endif()
+
+if (MRV2_BACKEND STREQUAL "VK" OR MRV2_BACKEND STREQUAL "BOTH")
+    add_subdirectory(tests)
 endif()
 
 #

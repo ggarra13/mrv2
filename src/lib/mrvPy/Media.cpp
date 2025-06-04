@@ -2,20 +2,20 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <iostream>
-#include <sstream>
-
-#include <pybind11/pybind11.h>
-
-namespace py = pybind11;
-
-#include <tlTimeline/CompareOptions.h>
-
-#include "mrvCore/mrvI8N.h"
+#include "mrViewer.h"
 
 #include "mrvApp/mrvApp.h"
 
-#include "mrViewer.h"
+#include "mrvCore/mrvI8N.h"
+
+#include <tlTimeline/CompareOptions.h>
+
+
+#include <pybind11/pybind11.h>
+namespace py = pybind11;
+
+#include <iostream>
+#include <sstream>
 
 void mrv2_media(pybind11::module& m)
 {

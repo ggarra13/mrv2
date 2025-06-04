@@ -73,30 +73,17 @@ namespace mrv
       \note Since FLTK 1.4.0 Fl_Menu_::menu_end() is called before the menu
         pops up to make sure the menu array is located in private storage.
 
-      \see Fl_Menu_::menu_end()
+        \see Fl_Menu_::menu_end()
     */
     const Fl_Menu_Item* PopupMenu::popup()
     {
-        menu_end();
-
         // If there's only one item (and the nullptr terminator) don't allow
         // picking.
         if (children() <= 2)
             return nullptr;
-
-        const Fl_Menu_Item* m;
-        pressed_menu_button_ = this;
-        redraw();
-        Fl_Widget_Tracker mb(this);
-        if (!box() || type())
-        {
-            m = menu()->popup(
-                Fl::event_x(), Fl::event_y(), label(), mvalue(), this);
-        }
-        else
-        {
-            m = menu()->pulldown(x(), y(), w(), h(), 0, this);
-        }
+        
+        const Fl_Menu_Item* m = Fl_Menu_Button::popup();
+    
         if (_disable_submenus && m && (m->flags & FL_SUBMENU))
             return nullptr;
         if (m && _enable_label)
@@ -130,10 +117,6 @@ namespace mrv
                 copy_label(m->label());
             }
         }
-        picked(m);
-        pressed_menu_button_ = 0;
-        if (mb.exists())
-            redraw();
         return m;
     }
 

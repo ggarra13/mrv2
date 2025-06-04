@@ -5,7 +5,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.3.7\n"
+"Project-Id-Version: mrv2 v1.3.8\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -1686,7 +1686,7 @@ msgstr ""
 msgid "Checkerboard"
 msgstr ""
 
-msgid "OpenGL"
+msgid "Graphics Card"
 msgstr ""
 
 msgid "Adjustments"
@@ -2547,51 +2547,6 @@ msgstr ""
 msgid "Notes"
 msgstr ""
 
-msgid "Invalid index for add clip to timeline."
-msgstr ""
-
-msgid "Could not get current path."
-msgstr ""
-
-msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
-msgstr ""
-
-msgid "Could not paste {0}.  Error {1}."
-msgstr ""
-
-msgid "Could not save .otio file: {0}"
-msgstr ""
-
-msgid "Error saving {0}. {1}"
-msgstr ""
-
-msgid "Empty EDL file.  Not saving."
-msgstr ""
-
-msgid "Destination file is invalid."
-msgstr ""
-
-msgid "You can only add clips to an .otio EDL playlist."
-msgstr ""
-
-msgid "Unknown media reference"
-msgstr ""
-
-msgid "Track #{0} - {1}"
-msgstr ""
-
-msgid "Cannot currently concatenate an .otio file."
-msgstr ""
-
-msgid "Cannot currently concatenate a directory."
-msgstr ""
-
-msgid "Could not append video track {0}"
-msgstr ""
-
-msgid "Could not append audio track {0}"
-msgstr ""
-
 msgid "Server started at port {0}."
 msgstr ""
 
@@ -2757,6 +2712,9 @@ msgstr ""
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr ""
 
+msgid "Vulkan info: {0}"
+msgstr ""
+
 msgid "{0}: Invalid OpenGL format and type"
 msgstr ""
 
@@ -2776,6 +2734,9 @@ msgid "Render size: {0}"
 msgstr ""
 
 msgid "Image Layer '{0}' info: {1} {2}"
+msgstr ""
+
+msgid "Offscreen Buffer info: {0}"
 msgstr ""
 
 msgid "Unsupported output format: "
@@ -3356,6 +3317,51 @@ msgstr ""
 msgid "No item selected"
 msgstr ""
 
+msgid "Invalid index for add clip to timeline."
+msgstr ""
+
+msgid "Could not get current path."
+msgstr ""
+
+msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
+msgstr ""
+
+msgid "Could not paste {0}.  Error {1}."
+msgstr ""
+
+msgid "Could not save .otio file: {0}"
+msgstr ""
+
+msgid "Error saving {0}. {1}"
+msgstr ""
+
+msgid "Empty EDL file.  Not saving."
+msgstr ""
+
+msgid "Destination file is invalid."
+msgstr ""
+
+msgid "You can only add clips to an .otio EDL playlist."
+msgstr ""
+
+msgid "Unknown media reference"
+msgstr ""
+
+msgid "Track #{0} - {1}"
+msgstr ""
+
+msgid "Cannot currently concatenate an .otio file."
+msgstr ""
+
+msgid "Cannot currently concatenate a directory."
+msgstr ""
+
+msgid "Could not append video track {0}"
+msgstr ""
+
+msgid "Could not append audio track {0}"
+msgstr ""
+
 msgid "%s - Page %d"
 msgstr ""
 
@@ -3450,7 +3456,7 @@ msgstr ""
 msgid "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgstr ""
 
-msgid "Cache:"
+msgid "Cache: "
 msgstr ""
 
 msgid "    Used: %.2g of %zu Gb (%.2g %%)"
@@ -3666,7 +3672,13 @@ msgstr ""
 msgid "Render/HDR/Ignore Chromaticities"
 msgstr ""
 
-msgid "Render/HDR/Toggle Tonemap"
+msgid "Render/HDR Data/From File"
+msgstr ""
+
+msgid "Render/HDR Data/Inactive"
+msgstr ""
+
+msgid "Render/HDR Data/Active"
 msgstr ""
 
 msgid "Render/HDR/Tonemap"
@@ -5379,7 +5391,10 @@ msgstr ""
 msgid "Apply"
 msgstr ""
 
-msgid "Never"
+msgid "Inactive"
+msgstr ""
+
+msgid "Active"
 msgstr ""
 
 msgid "ST2094_40"
@@ -5821,7 +5836,7 @@ msgstr ""
 msgid "Chromaticities"
 msgstr ""
 
-msgid "Tonemap"
+msgid "HDR Data"
 msgstr ""
 
 msgid "Tonemap Algorithm"
@@ -6127,16 +6142,16 @@ msgid "Blit Viewports"
 msgstr ""
 
 msgid ""
-"Viewports can be drawn with blitting or with OpenGL shaders.  Depending on "
-"graphics card and OS one can perform better then the other."
+"Viewports can be drawn with blitting or with shaders.  Depending on graphics "
+"card and OS one can perform better then the other."
 msgstr ""
 
 msgid "Blit Timeline"
 msgstr ""
 
 msgid ""
-"Timeline can be drawn with blitting or with OpenGL shaders.  Depending on "
-"graphics card and OS one can perform better then the other."
+"Timeline can be drawn with blitting or with shaders.  Depending on graphics "
+"card and OS one can perform better than the other."
 msgstr ""
 
 msgid ""
@@ -6291,9 +6306,6 @@ msgid "Summary"
 msgstr ""
 
 msgid "Preset Name"
-msgstr ""
-
-msgid "Active"
 msgstr ""
 
 msgid "Function"
@@ -6600,6 +6612,15 @@ msgid "Auto Normalize"
 msgstr ""
 
 msgid "Invalid Values"
+msgstr ""
+
+msgid "HDR Data From File"
+msgstr ""
+
+msgid "HDR Data Inactive"
+msgstr ""
+
+msgid "HDR Data Active"
 msgstr ""
 
 msgid "Toggle HDR tonemap"

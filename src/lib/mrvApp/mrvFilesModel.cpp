@@ -650,7 +650,7 @@ namespace mrv
             break;
         }
         auto stereo3DOptions = p.stereo3DOptions->get();
-        if (stereo3DOptions.input != Stereo3DInput::None && p.stereo->get())
+        if (stereo3DOptions.input != Stereo3DInput::kNone && p.stereo->get())
             out.push_back(p.stereo->get());
         return out;
     }

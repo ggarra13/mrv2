@@ -1,0 +1,134 @@
+name: Linux Vulkan
+
+on:
+  push:
+    branches-ignore:
+      - main
+      - beta
+
+jobs:
+  ###################################
+  #                                 #
+  # FULL BUILDS                     #
+  #                                 #
+  ###################################
+  linux-vulkan-full-build:
+    runs-on: ubuntu-22.04
+
+    steps:
+    
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Get machine name
+      run: |
+        echo "Machine name: $RUNNER_NAME"
+
+    - name: Update repos
+      run: |
+        sudo add-apt-repository universe -y
+        sudo apt-get update || { echo "apt-get update failed"; exit 1; }
+      
+    - name: Install OpenGL dev
+      run: sudo apt-get install -y xorg-dev libglu1-mesa-dev mesa-common-dev
+
+    - name: Install X11 dev
+      run: sudo apt-get install -y libx11-dev libxcursor-dev libxinerama-dev
+
+    - name: Install ALSA dev
+      run: sudo apt-get install -y libasound2-dev
+
+    - name: Install PulseAudio dev
+      run: sudo apt-get install -y libpulse-dev
+
+    - name: Install Pango dev
+      run: sudo apt-get install -y libpango1.0-dev
+
+    - name: Install Wayland
+      run: sudo apt-get install -y libwayland-dev wayland-protocols libdbus-1-dev libxkbcommon-dev libegl-dev libgtk-3-dev
+
+    - name: Install curl and openssl
+      run: sudo apt-get install -y curl openssl rsync libunistring-dev
+      
+    - name: Install ninja-build
+      run: sudo apt-get install -y ninja-build
+      
+    - name: Install gettext
+      run: sudo apt-get install -y gettext
+      
+    - name: Install python dependencies
+      run: sudo apt-get install -y libssl-dev libffi-dev python3
+        
+    # Install Vulkan SDK
+    - name: Install Vulkan SDK
+      # Option 1: Using a GitHub Action (recommended for ease and caching)
+      uses: jakoch/install-vulkan-sdk-action@v1
+      with:
+        # vulkan_version: 1.3.283.0 # Specify a stable Vulkan SDK version
+        # optional_components: com.lunarg.vulkan.vma # Example: install Vulkan Memory Allocator
+        install_runtime: true
+        cache: true
+        stripdown: true # Reduce cache size
+        
+        # On Linux, the action automatically sets VULKAN_SDK env variable.
+        # It also adds the SDK's bin directory to PATH and lib directory to LD_LIBRARY_PATH.
+
+    # Option 2: Manual Vulkan SDK download and setup (if jakoch/install-vulkan-sdk-action doesn't meet needs)
+    # - name: Download and Extract Vulkan SDK
+    #   run: |
+    #     VULKAN_SDK_VERSION="1.3.283.0" # Make sure this matches a Linux SDK version
+    #     SDK_FILENAME="VulkanSDK-${VULKAN_SDK_VERSION}-linux.tar.xz"
+    #     SDK_URL="https://sdk.lunarg.com/sdk/download/${VULKAN_SDK_VERSION}/linux/${SDK_FILENAME}"
+    #     wget -q "${SDK_URL}"
+    #     tar -xf "${SDK_FILENAME}"
+    #     mv "${VULKAN_SDK_VERSION}" vulkan_sdk # Rename for consistency
+
+    # - name: Set Vulkan SDK Environment Variables
+    #   run: |
+    #     echo "VULKAN_SDK=$(pwd)/vulkan_sdk/$VULKAN_SDK_VERSION/x86_64" >> $GITHUB_ENV
+    #     echo "PATH=$(pwd)/vulkan_sdk/$VULKAN_SDK_VERSION/x86_64/bin:$PATH" >> $GITHUB_ENV
+    #     echo "LD_LIBRARY_PATH=$(pwd)/vulkan_sdk/$VULKAN_SDK_VERSION/x86_64/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+        
+    - name: Synchronize clock
+      run: |
+        sudo apt-get install -y ntp
+
+    - name: Setup environment
+      run: mkdir -p ssh
+
+    - name: Decode SSH key
+      run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
+      shell: bash
+      
+    - name: Set permissions on SSH key
+      run: chmod 600 ssh/id_rsa
+      
+    - name: Decode FLTK SSH key
+      run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.FLTK_DEPLOY_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          
+    - name: Add SourceForge to known_hosts
+      run: |
+        mkdir -p ~/.ssh
+        ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
+      
+    - name: Set executable permissions
+      run: |
+        chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
+
+    # - name: Install cmake
+    #   run: |
+    #      ./etc/install_cmake.sh
+
+    - name: Build mrv2
+      run: |
+        ./etc/runme_nolog.sh -t package -vk
+      
+    - name: Upload binaries  # Conditional step
+      if: github.ref_name == 'vulkan'
+      run: |
+        ./bin/release/upload_sourceforge.sh -vk

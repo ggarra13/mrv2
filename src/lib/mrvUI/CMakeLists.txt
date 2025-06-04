@@ -36,6 +36,10 @@ if(TLRENDER_WAYLAND)
     list(APPEND LIBRARIES_PRIVATE wayland-client)
 endif()
 
+if (WIN32)
+    list(APPEND LIBRARIES_PRIVATE dxgi)
+endif()
+
 target_link_libraries(mrvUI PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE} )
 set_target_properties(mrvUI PROPERTIES FOLDER lib)
 

@@ -2,17 +2,19 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <pybind11/pybind11.h>
-namespace py = pybind11;
-
-#include "mrvPanels/mrvPanelsCallbacks.h"
-
-#include "mrvApp/mrvSettingsObject.h"
-#include "mrvApp/mrvApp.h"
-
 #include "mrViewer.h"
 
 #include "mrvPy/CmdsAux.h"
+
+#include "mrvPanels/mrvPanelsCallbacks.h"
+
+#include "mrvApp/mrvApp.h"
+#include "mrvApp/mrvSettingsObject.h"
+
+#include <pybind11/pybind11.h>
+namespace py = pybind11;
+
+
 
 namespace mrv2
 {

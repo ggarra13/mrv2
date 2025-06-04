@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0400
+version 1.0500
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
@@ -10,13 +10,13 @@ code_name {.cxx}
 decl {\#include <string>} {public local
 }
 
+decl {\#include "mrViewer.h"} {selected public global
+}
+
 decl {\#include "mrvWidgets/mrvTextBrowser.h"} {public global
 }
 
 decl {\#include "mrvWidgets/mrvVersion.h"} {public global
-}
-
-decl {\#include "mrViewer.h"} {public global
 }
 
 class AboutUI {open
@@ -24,7 +24,7 @@ class AboutUI {open
   Function {make_window(ViewerUI* main)} {open private
   } {
     Fl_Window uiMain {
-      label {About mrv2} open selected
+      label {About mrv2} open
       xywh {838 347 696 398} type Double resizable
       code0 {//main->uiMain->add(o);} modal visible
     } {

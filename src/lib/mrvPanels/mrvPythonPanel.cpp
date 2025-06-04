@@ -2,6 +2,26 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+
+#include "mrViewer.h"
+
+#include "mrvPy/PyStdErrOutRedirect.h"
+
+#include "mrvPanels/mrvPanelsCallbacks.h"
+
+#include "mrvApp/mrvSettingsObject.h"
+
+#include "mrvFl/mrvFileRequester.h"
+#include "mrvFl/mrvIO.h"
+
+#include "mrvWidgets/mrvFunctional.h"
+#include "mrvWidgets/mrvPythonOutput.h"
+#include "mrvWidgets/mrvPythonEditor.h"
+
+#include "mrvCore/mrvHome.h"
+
+#include <tlCore/StringFormat.h>
+
 #include <FL/Fl_Tile.H>
 #include <FL/Fl_Menu_Bar.H>
 #include <FL/Fl_Sys_Menu_Bar.H>
@@ -9,6 +29,9 @@
 #include <FL/Fl_PNG_Image.H>
 #include <FL/Fl_Box.H>
 #include <FL/fl_ask.H>
+
+#include <pybind11/embed.h>
+namespace py = pybind11;
 
 #include <cstdlib>
 #include <iostream>
@@ -18,28 +41,6 @@
 #include <string>
 #include <filesystem>
 namespace fs = std::filesystem;
-
-#include <pybind11/embed.h>
-namespace py = pybind11;
-
-#include <tlCore/StringFormat.h>
-
-#include "mrvCore/mrvHome.h"
-
-#include "mrvWidgets/mrvFunctional.h"
-#include "mrvWidgets/mrvPythonOutput.h"
-#include "mrvWidgets/mrvPythonEditor.h"
-
-#include "mrvFl/mrvFileRequester.h"
-#include "mrvFl/mrvIO.h"
-
-#include "mrvPanels/mrvPanelsCallbacks.h"
-
-#include "mrvPy/PyStdErrOutRedirect.h"
-
-#include "mrvApp/mrvSettingsObject.h"
-
-#include "mrViewer.h"
 
 #define PYBIND11_LINE_BUG // Line numbers reported by pybind11 can be off by one
                           // +.

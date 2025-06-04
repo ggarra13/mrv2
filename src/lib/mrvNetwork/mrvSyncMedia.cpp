@@ -2,9 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <tlCore/StringFormat.h>
 
-#include "mrvCore/mrvFile.h"
+#include "mrViewer.h"
 
 #include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvPathMapping.h"
@@ -13,7 +12,10 @@
 #include "mrvNetwork/mrvFilesModelItem.h"
 #include "mrvNetwork/mrvCommandInterpreter.h"
 
-#include "mrViewer.h"
+#include "mrvCore/mrvFile.h"
+
+
+#include <tlCore/StringFormat.h>
 
 namespace
 {

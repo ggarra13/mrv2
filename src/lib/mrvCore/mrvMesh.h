@@ -15,5 +15,5 @@ namespace mrv
     using namespace tl;
 
     //! Create an environment cube triangle mesh.
-    geom::TriangleMesh3 createEnvCube(float size = 1.0F);
+    geom::TriangleMesh3 createEnvCube(const float size = 1.0F, const bool flipped = false);
 } // namespace mrv

@@ -4,18 +4,18 @@
 
 #pragma once
 
-#include "mrvDraw/Annotation.h"
-#include "mrvDraw/Shape.h"
+#include "mrvWidgets/mrvBackend.h"
+
+#include <tlDraw/Annotation.h>
+#include <tlDraw/Shape.h>
 
 namespace mrv
 {
     using namespace tl;
 
-    class TimelineViewport;
-
     struct LaserFadeData
     {
-        TimelineViewport* view;
+        MyViewport* view;
         std::shared_ptr<draw::Annotation> annotation;
         std::shared_ptr<draw::Shape> shape;
     };

@@ -2,15 +2,20 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <FL/Enumerations.H>
-#include <FL/fl_draw.H>
 
-#include <Imath/ImathFun.h>
+#include "mrvCore/mrvBackend.h"
 
 #include "mrvWidgets/mrvHistogram.h"
 
 #include "mrViewer.h"
+
+#include "mrvCore/mrvColor.h"
 #include "mrvCore/mrvI8N.h"
+
+#include <tlCore/Math.h>
+
+#include <FL/Enumerations.H>
+#include <FL/fl_draw.H>
 
 namespace mrv
 {
@@ -59,9 +64,11 @@ namespace mrv
 
     void Histogram::update(const area::Info& info)
     {
-        Viewport* view = ui->uiView;
+        using namespace tl;
+        
+        MyViewport* view = ui->uiView;
         const auto& renderSize = view->getRenderSize();
-        const image::Color4f* image = view->image();
+        const void* image = view->image();
 
         maxColor = maxLumma = 0;
         memset(red, 0, sizeof(float) * 256);
@@ -75,23 +82,31 @@ namespace mrv
             return;
         }
 
-        int xmin = info.box.min.x;
-        int ymin = info.box.min.y;
-        int xmax = info.box.max.x;
-        int ymax = info.box.max.y;
+        size_t dataSize = info.box.w() * info.box.h();            
+        const int channelCount = image::getChannelCount(info.pixelType);
+        const int byteCount = image::getBitDepth(info.pixelType) / 8;
 
-        image::Color4f* pixel;
+        const uint8_t* ptr = reinterpret_cast<const uint8_t*>(image); 
+        image::Color4f pixel;
         uint8_t rgb[3];
-        for (int Y = ymin; Y <= ymax; ++Y)
+        for (size_t i = 0; i < dataSize; ++i)
         {
-            for (int X = xmin; X <= xmax; ++X)
-            {
-                const auto& pixel = image[X + Y * renderSize.w];
-                rgb[0] = (uint8_t)Imath::clamp(pixel.b * 255.0f, 0.f, 255.f);
-                rgb[1] = (uint8_t)Imath::clamp(pixel.g * 255.0f, 0.f, 255.f);
-                rgb[2] = (uint8_t)Imath::clamp(pixel.r * 255.0f, 0.f, 255.f);
-                count_pixel(rgb);
-            }
+            pixel = color::fromVoidPtr(ptr, info.pixelType);
+#ifdef VULKAN_BACKEND
+            rgb[0] = (uint8_t)math::clamp(pixel.r * 255.0f, 0.f, 255.f);
+            rgb[1] = (uint8_t)math::clamp(pixel.g * 255.0f, 0.f, 255.f);
+            rgb[2] = (uint8_t)math::clamp(pixel.b * 255.0f, 0.f, 255.f);
+#elif OPENGL_BACKEND
+            rgb[0] = (uint8_t)math::clamp(pixel.b * 255.0f, 0.f, 255.f);
+            rgb[1] = (uint8_t)math::clamp(pixel.g * 255.0f, 0.f, 255.f);
+            rgb[2] = (uint8_t)math::clamp(pixel.r * 255.0f, 0.f, 255.f);
+#else
+            rgb[0] = (uint8_t)math::clamp(pixel.r * 255.0f, 0.f, 255.f);
+            rgb[1] = (uint8_t)math::clamp(pixel.g * 255.0f, 0.f, 255.f);
+            rgb[2] = (uint8_t)math::clamp(pixel.b * 255.0f, 0.f, 255.f);
+#endif
+            count_pixel(rgb);
+            ptr += channelCount * byteCount;
         }
 
         redraw();

@@ -2,6 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include "mrViewer.h"
+
 #include <fstream>
 
 #include <tlCore/StringFormat.h>
@@ -31,8 +33,6 @@
 #include "mrvApp/mrvApp.h"
 
 #include "mrvFl/mrvIO.h"
-
-#include "mrViewer.h"
 
 #include "mrvSession.h"
 
@@ -434,7 +434,7 @@ namespace mrv
                 fs::path currentDir = fileName;
                 currentDir = fs::absolute(currentDir);
                 currentDir = currentDir.parent_path();
-                fl_chdir(currentDir.generic_string().c_str());
+                fl_chdir(currentDir.u8string().c_str());
 
                 // Get session version
                 int version = session["version"];

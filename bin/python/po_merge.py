@@ -91,9 +91,9 @@ class POMergeMissing:
 
 def merge_missing(lang):
 
-    main_po = f'src/mrv2/po/{lang}.po'
-    merged_po = f'src/mrv2/po/{lang}.po'
-    missing_po = f'src/mrv2/xpo/{lang}_missing.po'
+    main_po = f'src/po/mrv2/{lang}.po'
+    merged_po = f'src/po/mrv2/{lang}.po'
+    missing_po = f'src/po/mrv2/{lang}_missing.po'
     missing = POMergeMissing()
     missing.merge(merged_po, main_po, missing_po)
     

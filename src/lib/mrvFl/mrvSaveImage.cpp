@@ -2,22 +2,21 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <algorithm> // For std::clamp
-#include <string>
-#include <sstream>
-#include <filesystem>
-#include <vector>
-namespace fs = std::filesystem;
+#include "mrViewer.h"
 
-#include <tlIO/System.h>
+#include "mrvApp/mrvSettingsObject.h"
 
-#include <tlCore/String.h>
-#include <tlCore/StringFormat.h>
-#include <tlCore/Time.h>
+#include "mrvUI/mrvDesktop.h"
 
-#include <tlGL/Init.h>
-#include <tlGL/Util.h>
-#include <tlTimelineGL/Render.h>
+#include "mrvFl/mrvSaveOptions.h"
+#include "mrvFl/mrvSave.h"
+#include "mrvFl/mrvIO.h"
+
+#include "mrvGL/mrvGLErrors.h"
+
+#include "mrvNetwork/mrvTCP.h"
+
+#include "mrvWidgets/mrvProgressReport.h"
 
 #include "mrvCore/mrvImage.h"
 #include "mrvCore/mrvLocale.h"
@@ -25,21 +24,27 @@ namespace fs = std::filesystem;
 #include "mrvCore/mrvUtil.h"
 #include "mrvCore/mrvWait.h"
 
-#include "mrvWidgets/mrvProgressReport.h"
+#include <tlIO/System.h>
 
-#include "mrvGL/mrvGLErrors.h"
+#include <tlCore/String.h>
+#include <tlCore/StringFormat.h>
+#include <tlCore/Time.h>
 
-#include "mrvNetwork/mrvTCP.h"
+#ifdef VULKAN_BACKEND
+#  include <tlVk/Init.h>
+#  include <tlVk/Util.h>
+#  include <tlTimelineVk/Render.h>
+#  include <FL/vk_enum_string_helper.h>
+#else
+#  include <tlGL/Init.h>
+#  include <tlGL/Util.h>
+#  include <tlGL/GLFWWindow.h>
+#  include <tlTimelineGL/Render.h>
+#endif
 
-#include "mrvFl/mrvSave.h"
-#include "mrvFl/mrvSaveOptions.h"
-#include "mrvFl/mrvIO.h"
-
-#include "mrvUI/mrvDesktop.h"
-
-#include "mrvApp/mrvSettingsObject.h"
-
-#include "mrViewer.h"
+#include <chrono>
+#include <string>
+#include <sstream>
 
 namespace
 {
@@ -48,13 +53,14 @@ namespace
 
 namespace mrv
 {
-
+    
     int _save_single_frame(
-        std::string file, const ViewerUI* ui, SaveOptions options)
+        std::string file, const ViewerUI* ui, SaveOptions options,
+        const int32_t frameIndex)
     {
         int ret = 0;
         std::string msg;
-        Viewport* view = ui->uiView;
+        MyViewport* view = ui->uiView;
 
         file::Path path(file);
 
@@ -107,8 +113,13 @@ namespace mrv
                 throw std::runtime_error("No video information");
             }
 
+#ifdef VULKAN_BACKEND
+            vlk::OffscreenBufferOptions offscreenBufferOptions;
+            std::shared_ptr<timeline_vlk::Render> render;
+#else
             gl::OffscreenBufferOptions offscreenBufferOptions;
             std::shared_ptr<timeline_gl::Render> render;
+#endif
             image::Size renderSize;
 
             int layerId = ui->uiColorChannel->value();
@@ -156,8 +167,16 @@ namespace mrv
 
                     
             // Create the renderer.
+#ifdef VULKAN_BACKEND
+            auto ctx = ui->uiView->getContext();
+            render = timeline_vlk::Render::create(ctx, context);
+#else
             render = timeline_gl::Render::create(context);
+#endif
             offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
+#ifdef VULKAN_BACKEND
+            offscreenBufferOptions.pbo = true;
+#endif
 
             // Create the writer.
             auto writerPlugin =
@@ -320,10 +339,16 @@ namespace mrv
             }
             
             outputInfo = writerPlugin->getWriteInfo(outputInfo);
-            if (image::PixelType::None == outputInfo.pixelType)
+            if (image::PixelType::kNone == outputInfo.pixelType)
             {
+#ifdef OPENGL_BACKEND
                 outputInfo.pixelType = image::PixelType::RGB_U8;
                 offscreenBufferOptions.colorType = image::PixelType::RGB_U8;
+#endif
+#ifdef VULKAN_BACKEND
+                outputInfo.pixelType = image::PixelType::RGBA_U8;
+                offscreenBufferOptions.colorType = image::PixelType::RGBA_U8;
+#endif
 #ifdef TLRENDER_EXR
                 if (saveEXR)
                 {
@@ -378,6 +403,7 @@ namespace mrv
             // Don't send any tcp updates
             tcp->lock();
 
+#ifdef OPENGL_BACKEND
             const GLenum format = gl::getReadPixelsFormat(outputInfo.pixelType);
             const GLenum type = gl::getReadPixelsType(outputInfo.pixelType);
             if (GL_NONE == format || GL_NONE == type)
@@ -385,9 +411,10 @@ namespace mrv
                 throw std::runtime_error(
                     string::Format("{0}: Cannot open").arg(file));
             }
-
+#endif
             {
-                std::string msg = tl::string::Format(_("OpenGL info: {0}"))
+                std::string msg =
+                    tl::string::Format(_("Offscreen Buffer info: {0}"))
                                       .arg(offscreenBufferOptions.colorType);
                 LOG_STATUS(msg);
             }
@@ -397,11 +424,15 @@ namespace mrv
 
             math::Size2i offscreenBufferSize(renderSize.w, renderSize.h);
 
+#ifdef VULKAN_BACKEND
+            auto buffer = vlk::OffscreenBuffer::create(
+                ctx, offscreenBufferSize, offscreenBufferOptions);
+#else
             view->make_current();
             gl::initGLAD();
-
             auto buffer = gl::OffscreenBuffer::create(
                 offscreenBufferSize, offscreenBufferOptions);
+#endif
 
             if (options.annotations)
             {
@@ -451,6 +482,9 @@ namespace mrv
                 delete rgb;
 #else
 
+#    ifdef VULKAN_BACKEND
+                       
+#    else
                 GLenum imageBuffer = GL_FRONT;
 
                 // @note: Wayland does not work like Windows, macOS or
@@ -465,28 +499,41 @@ namespace mrv
 
                 glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
-                CHECK_GL;
+                
                 glReadPixels(
                     X, Y, outputInfo.size.w, outputInfo.size.h, format, type,
                     outputImage->getData());
+#    endif
 #endif
-                CHECK_GL;
+                
             }
             else
             {
                 // Get the videoData
                 auto videoData = timeline->getVideo(currentTime).future.get();
                 videoData.layers[0].image->setPixelAspectRatio(1.F);
+
+#ifdef VULKAN_BACKEND
+                VkDevice device = ctx.device;
+                VkCommandPool commandPool = ctx.commandPool;
                 
-                // Render the video.
-                gl::OffscreenBufferBinding binding(buffer);
-                CHECK_GL;
+                VkCommandBuffer cmd = beginSingleTimeCommands(device, commandPool);
+                buffer->transitionToColorAttachment(cmd);
+
                 {
                     locale::SetAndRestore saved;
-                    render->begin(offscreenBufferSize);
+                    timeline::RenderOptions renderOptions;
+                    renderOptions.clear = false;
+                    render->begin(cmd, buffer, frameIndex, offscreenBufferSize,
+                                  renderOptions);
+                    const math::Matrix4x4f ortho = math::ortho(
+                        0.F, static_cast<float>(renderSize.w),
+                        static_cast<float>(renderSize.h), 0.F,
+                        -1.F, 1.F);
+                    render->setTransform(ortho);
                     render->setOCIOOptions(view->getOCIOOptions());
                     render->setLUTOptions(view->lutOptions());
-                    CHECK_GL;
+                    
                     render->drawVideo(
                         {videoData},
                         {math::Box2i(0, 0, renderSize.w, renderSize.h)},
@@ -494,19 +541,64 @@ namespace mrv
                         {timeline::DisplayOptions()},
                         timeline::CompareOptions(),
                         ui->uiView->getBackgroundOptions());
-                    CHECK_GL;
+                    
                     render->end();
                 }
+#else
+                // Render the video.
+                gl::OffscreenBufferBinding binding(buffer);
+                {
+                    locale::SetAndRestore saved;
+                    render->begin(offscreenBufferSize);
+                    render->setOCIOOptions(view->getOCIOOptions());
+                    render->setLUTOptions(view->lutOptions());
+                    
+                    render->drawVideo(
+                        {videoData},
+                        {math::Box2i(0, 0, renderSize.w, renderSize.h)},
+                        {timeline::ImageOptions()},
+                        {timeline::DisplayOptions()},
+                        timeline::CompareOptions(),
+                        ui->uiView->getBackgroundOptions());
+                    
+                    render->end();
+                }
+#endif
 
+                // Read back the image
+                
+#ifdef VULKAN_BACKEND
+                buffer->transitionToColorAttachment(cmd);
+                
+                buffer->readPixels(cmd, 0, 0, renderSize.w, renderSize.h);
+                                    
+                vkEndCommandBuffer(cmd);
+                
+                buffer->submitReadback(cmd);
+
+                {
+                    std::lock_guard<std::mutex> lock(ctx.queue_mutex());
+                    vkQueueWaitIdle(ctx.queue());
+                }
+                                    
+                void* imageData = buffer->getLatestReadPixels();
+                if (imageData)
+                {
+                    std::memcpy(outputImage->getData(), imageData,
+                                outputImage->getDataByteCount());
+                                    
+                    vkFreeCommandBuffers(device, commandPool, 1, &cmd);    
+                }
+                                    
+#else
                 glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
-                CHECK_GL;
+                
 
                 glPixelStorei(GL_PACK_ALIGNMENT, outputInfo.layout.alignment);
-                CHECK_GL;
+                
                 glPixelStorei(
                     GL_PACK_SWAP_BYTES,
                     outputInfo.layout.endian != memory::getEndian());
-                CHECK_GL;
 
                 X = dataWindow.min.x;
 
@@ -522,7 +614,9 @@ namespace mrv
                 glReadPixels(X, Y, outputImage->getWidth(),
                              outputImage->getHeight(), format, type,
                              outputImage->getData());
-                CHECK_GL;
+#endif
+
+                
             }
 
             outputImage->setTags(tags);
@@ -541,7 +635,7 @@ namespace mrv
         const ViewerUI* ui, SaveOptions options)
     {
         int ret = 0;
-        Viewport* view = ui->uiView;
+        MyViewport* view = ui->uiView;
         bool presentation = view->getPresentationMode();
         bool hud = view->getHudActive();
 
@@ -557,12 +651,17 @@ namespace mrv
             return -1;
         }
 
+        int32_t frameIndex = 0;
         for (const auto& time : times)
         {
             player->seek(time);
             waitForFrame(player, time);
 
-            _save_single_frame(file, ui, options);
+            _save_single_frame(file, ui, options, frameIndex);
+
+#ifdef VULKAN_BACKEND
+            frameIndex = (frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
+#endif
         }
 
         view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
@@ -585,7 +684,7 @@ namespace mrv
         const ViewerUI* ui, SaveOptions options)
     {
         int ret = 0;
-        Viewport* view = ui->uiView;
+        MyViewport* view = ui->uiView;
         bool presentation = view->getPresentationMode();
         bool hud = view->getHudActive();
 
@@ -601,12 +700,13 @@ namespace mrv
             return -1;
         }
 
+        int32_t frameIndex = 0;
         for (const auto& time : times)
         {
             player->seek(time);
             waitForFrame(player, time);
 
-            _save_single_frame(file, ui, options);
+            _save_single_frame(file, ui, options, frameIndex);
         }
 
         view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
@@ -630,7 +730,7 @@ namespace mrv
         std::string msg;
 
         int ret = 0;
-        Viewport* view = ui->uiView;
+        MyViewport* view = ui->uiView;
         bool presentation = view->getPresentationMode();
         bool hud = view->getHudActive();
 
@@ -653,7 +753,7 @@ namespace mrv
         const auto& currentTime = player->currentTime();
 
         // Save this frame with the frame number
-        _save_single_frame(file, ui, options);
+        _save_single_frame(file, ui, options, 0);
 
         wait::milliseconds(1000);
 
@@ -668,7 +768,14 @@ namespace mrv
 
         if (filename != file && !options.noRename)
         {
-            fs::rename(fs::path(filename), fs::path(file));
+            try
+            {
+                fs::rename(fs::path(filename), fs::path(file));
+            }
+            catch(const std::exception& e)
+            {
+                LOG_ERROR(e.what());
+            }
         }
 
         view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());

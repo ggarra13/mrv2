@@ -36,6 +36,12 @@ export DYLD_FRAMEWORK_PATH=$dynlib
 #
 export VK_ICD_FILENAMES=$rsrc/etc/vulkan/icd.d/MoltenVK_icd.json:$VK_ICD_FILENAMES
 
+#
+# Set the MoltenVK log level to nothing
+#
+export MVK_CONFIG_LOG_LEVEL=0
+
+
 # The first /opt/homebrew is for MacOS Silicon
 # The second  /usr/local is for MacOS Intel
 export VK_LAYER_PATH=/opt/homebrew/share/vulkan/explicit_layers.d:/usr/local/opt/vulkan-validationlayers/share/vulkan/explicit_layer.d:$VK_LAYER_PATHx

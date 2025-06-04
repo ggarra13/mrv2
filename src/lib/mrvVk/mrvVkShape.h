@@ -1,0 +1,214 @@
+// SPDX-License-Identifier: BSD-3-Clause
+// mrv2
+// Copyright Contributors to the mrv2 Project. All rights reserved.
+
+#pragma once
+
+#include "mrvVk/mrvVkDefines.h"
+#include "mrvVk/mrvVkLines.h"
+
+#include <tlTimelineVk/Render.h>
+
+#include <tlDraw/Shape.h>
+
+#include <tlCore/Matrix.h>
+
+#include <FL/Enumerations.H>
+
+#include <cmath>
+#include <filesystem>
+#include <limits>
+#include <vector>
+#include <iostream>
+namespace fs = std::filesystem;
+
+namespace mrv
+{
+    using namespace tl;
+
+    class VKShape : public draw::Shape
+    {
+    public:
+        VKShape() :
+            draw::Shape()
+        {
+        }
+        virtual ~VKShape() {};
+
+        virtual void draw(
+            const std::shared_ptr<timeline_vlk::Render>&,
+            const std::shared_ptr<vulkan::Lines> lines) = 0;
+    };
+
+    class VKCircleShape : public VKShape
+    {
+    public:
+        VKCircleShape() :
+            VKShape(),
+            radius(1.0) {};
+        virtual ~VKCircleShape() {};
+        
+        virtual void draw(
+            const std::shared_ptr<timeline_vlk::Render>&,
+            const std::shared_ptr<vulkan::Lines> lines) override;
+
+        math::Vector2f center;
+        double radius;
+    };
+
+    void to_json(nlohmann::json& json, const VKCircleShape& value);
+    void from_json(const nlohmann::json& json, VKCircleShape& value);
+
+    class VKFilledCircleShape : public VKCircleShape
+    {
+    public:
+        virtual void draw(
+            const std::shared_ptr<timeline_vlk::Render>&,
+            const std::shared_ptr<vulkan::Lines> lines) override;
+    };
+
+    void to_json(nlohmann::json& json, const VKFilledCircleShape& value);
+    void from_json(const nlohmann::json& json, VKFilledCircleShape& value);
+
+    class VKPathShape : public draw::PathShape
+    {
+    public:
+        VKPathShape() :
+            draw::PathShape() {};
+        virtual ~VKPathShape() {};
+
+        virtual void draw(
+            const std::shared_ptr<timeline_vlk::Render>&,
+            const std::shared_ptr<vulkan::Lines> lines);
+    };
+
+    void to_json(nlohmann::json& json, const VKPathShape& value);
+    void from_json(const nlohmann::json& json, VKPathShape& value);
+
+    class VKPolygonShape : public VKPathShape
+    {
+    public:
+        VKPolygonShape() :
+            VKPathShape() {};
+        virtual ~VKPolygonShape() {};
+
+        virtual void draw(
+            const std::shared_ptr<timeline_vlk::Render>&,
+            const std::shared_ptr<vulkan::Lines> lines) override;
+    };
+
+    class VKFilledPolygonShape : public VKPolygonShape
+    {
+    public:
+        virtual void draw(
+            const std::shared_ptr<timeline_vlk::Render>&,
+            const std::shared_ptr<vulkan::Lines> lines) override;
+    };
+
+    void to_json(nlohmann::json& json, const VKFilledPolygonShape& value);
+    void from_json(const nlohmann::json& json, VKFilledPolygonShape& value);
+
+    class VKArrowShape : public VKPathShape
+    {
+    public:
+        VKArrowShape() :
+            VKPathShape() {};
+        virtual ~VKArrowShape() {};
+
+        virtual void draw(
+            const std::shared_ptr<timeline_vlk::Render>&,
+            const std::shared_ptr<vulkan::Lines> lines) override;
+    };
+
+    void to_json(nlohmann::json& json, const VKArrowShape& value);
+    void from_json(const nlohmann::json& json, VKArrowShape& value);
+
+    class VKRectangleShape : public VKPathShape
+    {
+    public:
+        VKRectangleShape() :
+            VKPathShape() {};
+        virtual ~VKRectangleShape() {};
+        virtual void draw(
+            const std::shared_ptr<timeline_vlk::Render>&,
+            const std::shared_ptr<vulkan::Lines> lines) override;
+    };
+
+    void to_json(nlohmann::json& json, const VKRectangleShape& value);
+    void from_json(const nlohmann::json& json, VKRectangleShape& value);
+
+    class VKFilledRectangleShape : public VKRectangleShape
+    {
+    public:
+        virtual void draw(
+            const std::shared_ptr<timeline_vlk::Render>&,
+            const std::shared_ptr<vulkan::Lines> lines) override;
+    };
+
+    void to_json(nlohmann::json& json, const VKFilledRectangleShape& value);
+    void from_json(const nlohmann::json& json, VKFilledRectangleShape& value);
+
+    class VKTextShape : public VKPathShape
+    {
+    public:
+        VKTextShape() :
+            VKPathShape(),
+            fontSize(30)
+            {
+            };
+        virtual ~VKTextShape() {};
+
+        int paste();
+        int accept();
+        
+        int handle(int event);
+        
+        virtual void draw(
+            const std::shared_ptr<timeline_vlk::Render>&,
+            const std::shared_ptr<vulkan::Lines> lines) override;
+        
+        int handle_mouse_click(const math::Vector2i& pos);
+
+    protected:
+        void to_cursor();
+        unsigned line_start(unsigned utf8);
+        unsigned line_end(unsigned utf8);
+        unsigned current_line();
+        unsigned current_column();
+        const char* advance_to_column(unsigned start, unsigned column);
+        
+    public:
+        std::string fontPath;
+        std::string text;
+        uint16_t fontSize;
+        bool editing = true;
+        Fl_Font font;
+        unsigned utf8_pos = 0;
+        unsigned cursor = 0;
+        math::Vector2f pos;
+        math::Box2i    box;
+        float viewZoom = 1.F;
+        std::shared_ptr<image::FontSystem> fontSystem;
+    };
+
+    void to_json(nlohmann::json& json, const VKTextShape& value);
+    void from_json(const nlohmann::json& json, VKTextShape& value);
+
+
+    class VKErasePathShape : public VKPathShape
+    {
+    public:
+        VKErasePathShape() :
+            VKPathShape() {};
+        virtual ~VKErasePathShape() {};
+
+        virtual void draw(
+            const std::shared_ptr<timeline_vlk::Render>&,
+            const std::shared_ptr<vulkan::Lines> lines) override;
+    };
+
+    void to_json(nlohmann::json& json, const VKErasePathShape& value);
+    void from_json(const nlohmann::json& json, VKErasePathShape& value);
+
+    typedef std::vector< std::shared_ptr< draw::Shape > > ShapeList;
+} // namespace mrv

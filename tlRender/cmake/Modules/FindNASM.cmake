@@ -1,0 +1,3 @@
+find_program(CMAKE_ASM_NASM_COMPILER
+    NAME nasm
+    HINTS ${CMAKE_INSTALL_PREFIX}/bin)

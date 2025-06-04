@@ -4,21 +4,23 @@
 
 #pragma once
 
-#include <limits>
-#include <cmath>
-#include <vector>
-#include <iostream>
 
-#include <FL/Enumerations.H>
+#include "mrvGL/mrvGLDefines.h"
+#include "mrvGL/mrvGLLines.h"
+
 
 #include <tlCore/Matrix.h>
 
 #include <tlTimeline/IRender.h>
 
-#include "mrvDraw/Shape.h"
+#include <tlDraw/Shape.h>
 
-#include "mrvGL/mrvGLDefines.h"
-#include "mrvGL/mrvGLLines.h"
+#include <FL/Enumerations.H>
+
+#include <cmath>
+#include <limits>
+#include <vector>
+#include <iostream>
 
 namespace mrv
 {
@@ -46,7 +48,7 @@ namespace mrv
             radius(1.0) {};
         virtual ~GLCircleShape() {};
 
-        void draw(
+        virtual void draw(
             const std::shared_ptr<timeline::IRender>&,
             const std::shared_ptr<opengl::Lines>&) override;
 
@@ -61,7 +63,7 @@ namespace mrv
     class GLFilledCircleShape : public GLCircleShape
     {
     public:
-        void draw(
+        virtual void draw(
             const std::shared_ptr<timeline::IRender>&,
             const std::shared_ptr<opengl::Lines>&) override;
     };
@@ -76,9 +78,9 @@ namespace mrv
             draw::PathShape() {};
         virtual ~GLPathShape() {};
 
-        void draw(
+        virtual void draw(
             const std::shared_ptr<timeline::IRender>&,
-            const std::shared_ptr<opengl::Lines>&) override;
+            const std::shared_ptr<opengl::Lines>&);
         opengl::Lines lines;
     };
 
@@ -92,7 +94,7 @@ namespace mrv
             GLPathShape() {};
         virtual ~GLPolygonShape() {};
 
-        void draw(
+        virtual void draw(
             const std::shared_ptr<timeline::IRender>&,
             const std::shared_ptr<opengl::Lines>&) override;
 
@@ -102,7 +104,7 @@ namespace mrv
     class GLFilledPolygonShape : public GLPolygonShape
     {
     public:
-        void draw(
+        virtual void draw(
             const std::shared_ptr<timeline::IRender>&,
             const std::shared_ptr<opengl::Lines>&) override;
     };
@@ -117,7 +119,7 @@ namespace mrv
             GLPathShape() {};
         virtual ~GLArrowShape() {};
 
-        void draw(
+        virtual void draw(
             const std::shared_ptr<timeline::IRender>&,
             const std::shared_ptr<opengl::Lines>&) override;
     };
@@ -130,10 +132,10 @@ namespace mrv
     public:
         GLRectangleShape() :
             GLPathShape() {};
-        void draw(
+        virtual ~GLRectangleShape() {};
+        virtual void draw(
             const std::shared_ptr<timeline::IRender>&,
             const std::shared_ptr<opengl::Lines>&) override;
-        virtual ~GLRectangleShape() {};
     };
 
     void to_json(nlohmann::json& json, const GLRectangleShape& value);
@@ -142,7 +144,7 @@ namespace mrv
     class GLFilledRectangleShape : public GLRectangleShape
     {
     public:
-        void draw(
+        virtual void draw(
             const std::shared_ptr<timeline::IRender>&,
             const std::shared_ptr<opengl::Lines>&) override;
     };
@@ -159,7 +161,7 @@ namespace mrv
             fontSystem(f) {};
         virtual ~GLTextShape() {};
 
-        void draw(
+        virtual void draw(
             const std::shared_ptr<timeline::IRender>&,
             const std::shared_ptr<opengl::Lines>&) override;
 
@@ -187,7 +189,7 @@ namespace mrv
         //! Auxiliary function to set the raster coordinates with no clipping
         bool setRasterPos(double x, double y, size_t textLength);
 
-        void draw(
+        virtual void draw(
             const std::shared_ptr<timeline::IRender>&,
             const std::shared_ptr<opengl::Lines>&) override;
 
@@ -214,7 +216,7 @@ namespace mrv
             GLPathShape() {};
         virtual ~GLErasePathShape() {};
 
-        void draw(
+        virtual void draw(
             const std::shared_ptr<timeline::IRender>&,
             const std::shared_ptr<opengl::Lines>&) override;
     };

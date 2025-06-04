@@ -3379,8 +3379,6 @@ void Flu_File_Chooser::cd(const char* path)
 
         for (int i = 1; i <= favoritesList->size(); i++)
         {
-            DBGM1(i << ") is favorite: ");
-            DBGM1(favoritesList->text(i));
             entry = new Flu_Entry(
                 favoritesList->text(i), ENTRY_FAVORITE,
                 false /*fileDetailsBtn->value()*/, this);

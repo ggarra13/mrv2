@@ -2,6 +2,24 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include "mrViewer.h"
+
+#include "mrvEdit/mrvEditCallbacks.h"
+#include "mrvEdit/mrvEditUtil.h"
+
+#include "mrvUI/mrvDesktop.h"
+
+#include "mrvFl/mrvIO.h"
+
+#include "mrvPanels/mrvPanelsCallbacks.h"
+
+#include "mrvNetwork/mrvTCP.h"
+
+#include "mrvCore/mrvI8N.h"
+#include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvFile.h"
+
+
 #include <set>
 #include <fstream>
 #include <algorithm>
@@ -11,6 +29,17 @@ namespace fs = std::filesystem;
 
 #include <FL/fl_utf8.h>
 
+#include <tlTimeline/Util.h>
+
+#include <tlDraw/Annotation.h>
+
+#include <tlIO/System.h>
+
+#include <tlCore/Path.h>
+#include <tlCore/File.h>
+#include <tlCore/FileInfo.h>
+#include <tlCore/StringFormat.h>
+
 #include <opentimelineio/clip.h>
 #include <opentimelineio/editAlgorithm.h>
 #include <opentimelineio/externalReference.h>
@@ -19,31 +48,9 @@ namespace fs = std::filesystem;
 #include <opentimelineio/timeline.h>
 #include <opentimelineio/transition.h>
 
-#include <tlCore/Path.h>
-#include <tlCore/File.h>
-#include <tlCore/FileInfo.h>
-#include <tlCore/StringFormat.h>
 
-#include <tlIO/System.h>
 
-#include <tlTimeline/Util.h>
 
-#include "mrvCore/mrvI8N.h"
-#include "mrvCore/mrvHome.h"
-#include "mrvCore/mrvFile.h"
-
-#include "mrvDraw/Annotation.h"
-
-#include "mrvNetwork/mrvTCP.h"
-
-#include "mrvPanels/mrvPanelsCallbacks.h"
-
-#include "mrvEdit/mrvEditCallbacks.h"
-#include "mrvEdit/mrvEditUtil.h"
-
-#include "mrvFl/mrvIO.h"
-
-#include "mrViewer.h"
 
 namespace
 {
@@ -751,7 +758,7 @@ namespace mrv
         // Make file absolute, then remove it, leaving directory
         fs::path directory = fs::absolute(fileName).parent_path();
         fs::path relative = fs::relative(filePath, directory);
-        std::string file = relative.generic_string();
+        std::string file = relative.u8string();
         if (file.empty())
             return path;
         return file::Path(file);
@@ -2857,8 +2864,15 @@ namespace mrv
 
     int calculate_edit_viewport_size(ViewerUI* ui)
     { //
+#ifdef OPENGL_BACKEND
         const timelineui::DisplayOptions& displayOptions =
             ui->uiTimeline->getDisplayOptions();
+#endif
+
+#ifdef VULKAN_BACKEND
+        const timelineui_vk::DisplayOptions& displayOptions =
+            ui->uiTimeline->getDisplayOptions();
+#endif
 
 #if 0
         std::cerr << " trackInfo=" << displayOptions.trackInfo << std::endl;
@@ -3142,39 +3156,13 @@ namespace mrv
 #if 0
         std::cerr << "1 TimelineGroup->visible()="
                   << TimelineGroup->visible() << std::endl;
-        std::cerr << "editMode=" << editMode << std::endl;
-        std::cerr << "tileGroupY=" << tileGroupY << std::endl;
-        std::cerr << " oldY=" << oldY - tileGroupY << std::endl;
+        std::cerr << "1 editMode=" << editMode << std::endl;
+        std::cerr << "1 tileGroupY=" << tileGroupY << std::endl;
+        std::cerr << "1    oldY=" << oldY - tileGroupY << std::endl;
         std::cerr << " newY=" << newY - tileGroupY << std::endl;
         std::cerr << "tileGroupH=" << tileGroupH << std::endl;
         std::cerr << "    H=" << H << std::endl;
-        assert( viewGroupH + H == tileGroupH );
-        assert( viewGroup->y() + viewGroupH == newY );
 #endif
-
-        // \@note: We do a resize instead of a move_intersection as:
-        //         it is faster and we must avoid collapsing the timeline group
-        //         to 0 when going into presentation mode (we internally keep
-        //         it as kMinEditModeH.
-        viewGroup->resize(
-            viewGroup->x(), viewGroup->y(), viewGroup->w(), viewGroupH);
-        TimelineGroup->resize(TimelineGroup->x(), newY, TimelineGroup->w(), H);
-
-#if 0
-        std::cerr << "2 TimelineGroup->visible()="
-                  << TimelineGroup->visible() << std::endl;
-        std::cerr << "2 TimelineGroup->x()="
-                  << TimelineGroup->x() << std::endl;
-        std::cerr << "2 TimelineGroup->y()="
-                  << TimelineGroup->y() << std::endl;
-        std::cerr << "2 TimelineGroup->w()="
-                  << TimelineGroup->w() << std::endl;
-        std::cerr << "2 TimelineGroup->h()="
-                  << TimelineGroup->h() << std::endl;
-#endif
-
-        viewGroup->layout();
-        tileGroup->init_sizes();
 
         // \@bug:
         // This mess is to work around macOS issues.  Unhiding TimelineGroup
@@ -3194,28 +3182,106 @@ namespace mrv
         {
             if (ui->uiBottomBar->visible())
             {
-                if (!ui->uiTimelineGroup->visible())
-                    TimelineGroup->show();
                 if (!ui->uiTimeline->visible())
                 {
                     ui->uiTimeline->show();
                 }
+                if (!ui->uiTimelineGroup->visible())
+                    TimelineGroup->show();
             }
             else
             {
-                if (ui->uiTimelineGroup->visible())
-                    TimelineGroup->hide();
                 if (ui->uiTimeline->visible())
                 {
                     ui->uiTimeline->hide();
                 }
+                if (ui->uiTimelineGroup->visible())
+                    TimelineGroup->hide();
             }
         }
 #endif
+        
+#if 0
+        std::cerr << "2 TimelineGroup->visible()="
+                  << TimelineGroup->visible() << std::endl;
+        std::cerr << "2 TimelineGroup->x()="
+                  << TimelineGroup->x() << std::endl;
+        std::cerr << "2 TimelineGroup->y()="
+                  << TimelineGroup->y() << std::endl;
+        std::cerr << "2 TimelineGroup->w()="
+                  << TimelineGroup->w() << std::endl;
+        std::cerr << "2 TimelineGroup->h()="
+                  << TimelineGroup->h() << std::endl;
+#endif
+        // \@note: We do a resize instead of a move_intersection as:
+        //         it is faster and we must avoid collapsing the timeline group
+        //         to 0 when going into presentation mode (we internally keep
+        //         it as kMinEditModeH.
+        viewGroup->resize(
+            viewGroup->x(), viewGroup->y(), viewGroup->w(), viewGroupH);
+        TimelineGroup->resize(TimelineGroup->x(), newY, TimelineGroup->w(), H);
+
+#if 0
+        std::cerr << "3 TimelineGroup->visible()="
+                  << TimelineGroup->visible() << std::endl;
+        std::cerr << "3 TimelineGroup->x()="
+                  << TimelineGroup->x() << std::endl;
+        std::cerr << "3 TimelineGroup->y()="
+                  << TimelineGroup->y() << std::endl;
+        std::cerr << "3 TimelineGroup->w()="
+                  << TimelineGroup->w() << std::endl;
+        std::cerr << "3 TimelineGroup->h()="
+                  << TimelineGroup->h() << std::endl;
+#endif
+
+        
+#if 0
+        std::cerr << "4 TimelineGroup->visible()="
+                  << TimelineGroup->visible() << std::endl;
+        std::cerr << "4 Timeline->visible()="
+                  << ui->uiTimeline->visible() << std::endl;
+        std::cerr << "4 TimelineGroup->x()="
+                  << TimelineGroup->x() << std::endl;
+        std::cerr << "4 TimelineGroup->y()="
+                  << TimelineGroup->y() << std::endl;
+        std::cerr << "4 TimelineGroup->w()="
+                  << TimelineGroup->w() << std::endl;
+        std::cerr << "4 TimelineGroup->h()="
+                  << TimelineGroup->h() << std::endl;
+#endif
+        viewGroup->layout();
+#if 0
+        std::cerr << "5 TimelineGroup->visible()="
+                  << TimelineGroup->visible() << std::endl;
+        std::cerr << "5 TimelineGroup->x()="
+                  << TimelineGroup->x() << std::endl;
+        std::cerr << "5 TimelineGroup->y()="
+                  << TimelineGroup->y() << std::endl;
+        std::cerr << "5 TimelineGroup->w()="
+                  << TimelineGroup->w() << std::endl;
+        std::cerr << "5 TimelineGroup->h()="
+                  << TimelineGroup->h() << std::endl;
+#endif
+        tileGroup->init_sizes();
+
+#if 0
+        std::cerr << "6 TimelineGroup->visible()="
+                  << TimelineGroup->visible() << std::endl;
+        std::cerr << "6 TimelineGroup->x()="
+                  << TimelineGroup->x() << std::endl;
+        std::cerr << "6 TimelineGroup->y()="
+                  << TimelineGroup->y() << std::endl;
+        std::cerr << "6 TimelineGroup->w()="
+                  << TimelineGroup->w() << std::endl;
+        std::cerr << "6 TimelineGroup->h()="
+                  << TimelineGroup->h() << std::endl;
+#endif
+
 
         // This is needed as XWayland and Wayland would leave traces of the
         // toolbar icons.
-        TimelineGroup->redraw();
+        if (desktop::XWayland() || desktop::Wayland())
+            TimelineGroup->redraw();
 
         // Change the edit button status
         set_edit_button(editMode, ui);

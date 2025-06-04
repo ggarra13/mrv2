@@ -1978,8 +1978,8 @@ msgstr "Columns"
 msgid "Checkerboard"
 msgstr "Checkerboard"
 
-msgid "OpenGL"
-msgstr "OpenGL"
+msgid "Graphics Card"
+msgstr "Graphics Card"
 
 msgid "Adjustments"
 msgstr "Adjustments"
@@ -2860,51 +2860,6 @@ msgstr "Makes the following annotation show on all frames."
 msgid "Notes"
 msgstr "Notes"
 
-msgid "Invalid index for add clip to timeline."
-msgstr "Invalid index for add clip to timeline."
-
-msgid "Could not get current path."
-msgstr "Could not get current path."
-
-msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
-msgstr "EDL item '{0}' no longer loaded.  Cannot undo or redo."
-
-msgid "Could not paste {0}.  Error {1}."
-msgstr "Could not paste {0}.  Error {1}."
-
-msgid "Could not save .otio file: {0}"
-msgstr "Could not save .otio file: {0}"
-
-msgid "Error saving {0}. {1}"
-msgstr "Error saving {0}. {1}"
-
-msgid "Empty EDL file.  Not saving."
-msgstr "Empty EDL file.  Not saving."
-
-msgid "Destination file is invalid."
-msgstr "Destination file is invalid."
-
-msgid "You can only add clips to an .otio EDL playlist."
-msgstr "You can only add clips to an .otio EDL playlist."
-
-msgid "Unknown media reference"
-msgstr "Unknown media reference"
-
-msgid "Track #{0} - {1}"
-msgstr "Track #{0} - {1}"
-
-msgid "Cannot currently concatenate an .otio file."
-msgstr "Cannot currently concatenate an .otio file."
-
-msgid "Cannot currently concatenate a directory."
-msgstr "Cannot currently concatenate a directory."
-
-msgid "Could not append video track {0}"
-msgstr "Could not append video track {0}"
-
-msgid "Could not append audio track {0}"
-msgstr "Could not append audio track {0}"
-
 msgid "Server started at port {0}."
 msgstr "Server started at port {0}."
 
@@ -3076,6 +3031,9 @@ msgstr "Saving Pictures without Audio %<PRId64> - %<PRId64>"
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Audio only in timeline, but not trying to save audio."
 
+msgid "Vulkan info: {0}"
+msgstr "OpenGL info: {0}"
+
 msgid "{0}: Invalid OpenGL format and type"
 msgstr "{0}: Invalid OpenGL format and type"
 
@@ -3096,6 +3054,9 @@ msgstr "Render size: {0}"
 
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr "Image Layer '{0}' info: {1} {2}"
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "Offscreen Buffer info: {0}"
 
 msgid "Unsupported output format: "
 msgstr "Unsupported output format: "
@@ -3701,6 +3662,51 @@ msgstr "Edit Text Annotation"
 msgid "No item selected"
 msgstr "No item selected"
 
+msgid "Invalid index for add clip to timeline."
+msgstr "Invalid index for add clip to timeline."
+
+msgid "Could not get current path."
+msgstr "Could not get current path."
+
+msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
+msgstr "EDL item '{0}' no longer loaded.  Cannot undo or redo."
+
+msgid "Could not paste {0}.  Error {1}."
+msgstr "Could not paste {0}.  Error {1}."
+
+msgid "Could not save .otio file: {0}"
+msgstr "Could not save .otio file: {0}"
+
+msgid "Error saving {0}. {1}"
+msgstr "Error saving {0}. {1}"
+
+msgid "Empty EDL file.  Not saving."
+msgstr "Empty EDL file.  Not saving."
+
+msgid "Destination file is invalid."
+msgstr "Destination file is invalid."
+
+msgid "You can only add clips to an .otio EDL playlist."
+msgstr "You can only add clips to an .otio EDL playlist."
+
+msgid "Unknown media reference"
+msgstr "Unknown media reference"
+
+msgid "Track #{0} - {1}"
+msgstr "Track #{0} - {1}"
+
+msgid "Cannot currently concatenate an .otio file."
+msgstr "Cannot currently concatenate an .otio file."
+
+msgid "Cannot currently concatenate a directory."
+msgstr "Cannot currently concatenate a directory."
+
+msgid "Could not append video track {0}"
+msgstr "Could not append video track {0}"
+
+msgid "Could not append audio track {0}"
+msgstr "Could not append audio track {0}"
+
 msgid "%s - Page %d"
 msgstr "%s - Page %d"
 
@@ -3799,8 +3805,8 @@ msgstr "1.66"
 msgid "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 
-msgid "Cache:"
-msgstr "Cache:"
+msgid "Cache: "
+msgstr "Cache: "
 
 msgid "    Used: %.2g of %zu Gb (%.2g %%)"
 msgstr "    Used: %.2g of %zu Gb (%.2g %%)"
@@ -4015,8 +4021,14 @@ msgstr "Render/HDR/Invalid Values"
 msgid "Render/HDR/Ignore Chromaticities"
 msgstr "Render/HDR/Ignore Chromaticities"
 
-msgid "Render/HDR/Toggle Tonemap"
-msgstr "Render/HDR/Toggle Tonemap"
+msgid "Render/HDR Data/From File"
+msgstr "Render/HDR Data/From File"
+
+msgid "Render/HDR Data/Inactive"
+msgstr "Render/HDR Data/Inactive"
+
+msgid "Render/HDR Data/Active"
+msgstr "Render/HDR Data/Active"
 
 msgid "Render/HDR/Tonemap"
 msgstr "Render/HDR/Tonemap"
@@ -5887,8 +5899,11 @@ msgstr "Ignore"
 msgid "Apply"
 msgstr "Apply"
 
-msgid "Never"
-msgstr "Never"
+msgid "Inactive"
+msgstr "Inactive"
+
+msgid "Active"
+msgstr "Active"
 
 msgid "ST2094_40"
 msgstr "ST2094_40"
@@ -6364,8 +6379,8 @@ msgstr "HDR"
 msgid "Chromaticities"
 msgstr "Chromaticities"
 
-msgid "Tonemap"
-msgstr "Tonemap"
+msgid "HDR Data"
+msgstr "HDR Data"
 
 msgid "Tonemap Algorithm"
 msgstr "Tonemap Algorithm"
@@ -6709,21 +6724,21 @@ msgid "Blit Viewports"
 msgstr "Blit Viewports"
 
 msgid ""
-"Viewports can be drawn with blitting or with OpenGL shaders.  Depending on "
-"graphics card and OS one can perform better then the other."
+"Viewports can be drawn with blitting or with shaders.  Depending on graphics "
+"card and OS one can perform better then the other."
 msgstr ""
-"Viewports can be drawn with blitting or with OpenGL shaders.  Depending on "
-"graphics card and OS one can perform better then the other."
+"Viewports can be drawn with blitting or with shaders.  Depending on graphics "
+"card and OS one can perform better then the other."
 
 msgid "Blit Timeline"
 msgstr "Blit Timeline"
 
 msgid ""
-"Timeline can be drawn with blitting or with OpenGL shaders.  Depending on "
-"graphics card and OS one can perform better then the other."
+"Timeline can be drawn with blitting or with shaders.  Depending on graphics "
+"card and OS one can perform better than the other."
 msgstr ""
-"Timeline can be drawn with blitting or with OpenGL shaders.  Depending on "
-"graphics card and OS one can perform better then the other."
+"Timeline can be drawn with blitting or with shaders.  Depending on graphics "
+"card and OS one can perform better than the other."
 
 msgid ""
 "For changes to take effect, you will need to re-open any movies already "
@@ -6889,9 +6904,6 @@ msgstr "Summary"
 
 msgid "Preset Name"
 msgstr "Preset Name"
-
-msgid "Active"
-msgstr "Active"
 
 msgid "Function"
 msgstr "Function"
@@ -7198,6 +7210,15 @@ msgstr "Auto Normalize"
 
 msgid "Invalid Values"
 msgstr "Invalid Values"
+
+msgid "HDR Data From File"
+msgstr "HDR Data From File"
+
+msgid "HDR Data Inactive"
+msgstr "HDR Data Inactive"
+
+msgid "HDR Data Active"
+msgstr "HDR Data Active"
 
 msgid "Toggle HDR tonemap"
 msgstr "Toggle HDR tonemap"
@@ -7606,6 +7627,31 @@ msgstr "Toggle Hotkeys Window"
 
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
+
+#~ msgid "HDR monitor found."
+#~ msgstr "HDR monitor found."
+
+#~ msgid "HDR monitor not found or not configured."
+#~ msgstr "HDR monitor not found or not configured."
+
+#~ msgid ""
+#~ "tter then the other.Timeline can be drawn with blitting or with shaders.  "
+#~ "Depending on graphics card and OS one can perform be"
+#~ msgstr ""
+#~ "tter then the other.Timeline can be drawn with blitting or with shaders.  "
+#~ "Depending on graphics card and OS one can perform be"
+
+#~ msgid "OpenGL"
+#~ msgstr "OpenGL"
+
+#~ msgid "Render/HDR/Toggle Tonemap"
+#~ msgstr "Render/HDR/Toggle Tonemap"
+
+#~ msgid "Never"
+#~ msgstr "Never"
+
+#~ msgid "Tonemap"
+#~ msgstr "Tonemap"
 
 #~ msgid "Could not initialize NDI"
 #~ msgstr "Could not initialize NDI"

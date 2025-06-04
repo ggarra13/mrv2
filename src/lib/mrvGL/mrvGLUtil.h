@@ -4,7 +4,10 @@
 
 #pragma once
 
-#
+
+#include <tlDraw/Point.h>
+#include <tlDraw/Polyline2D.h>
+#include <tlDraw/Shape.h>
 
 #include <tlCore/Box.h>
 #include <tlCore/Matrix.h>
@@ -13,9 +16,6 @@
 
 #include <tlTimeline/IRender.h>
 
-#include "mrvDraw/Point.h"
-#include "mrvDraw/Polyline2D.h"
-#include "mrvDraw/Shape.h"
 
 #include "mrvNetwork/mrvMessage.h"
 
@@ -28,16 +28,16 @@ namespace mrv
     //! Draw a rectangle outline with a mesh.
     inline void drawRectOutline(
         const std::shared_ptr<timeline::IRender>& render,
-        const math::Box2i& rect, const image::Color4f& color, const int width)
+        const math::Box2i& rect, const image::Color4f& color, const float width)
     {
         geom::TriangleMesh2 mesh;
 
         // Add the outside vertices.
         // math::Box2i outside = rect.margin(width / 2);
-        mesh.v.push_back(math::Vector2f(rect.min.x - 2.0f, rect.min.y - 2.0f));
-        mesh.v.push_back(math::Vector2f(rect.max.x + 2.0f, rect.min.y - 2.0f));
-        mesh.v.push_back(math::Vector2f(rect.max.x + 2.0f, rect.max.y + 2.0f));
-        mesh.v.push_back(math::Vector2f(rect.min.x - 2.0f, rect.max.y + 2.0f));
+        mesh.v.push_back(math::Vector2f(rect.min.x - width, rect.min.y - width));
+        mesh.v.push_back(math::Vector2f(rect.max.x + width, rect.min.y - width));
+        mesh.v.push_back(math::Vector2f(rect.max.x + width, rect.max.y + width));
+        mesh.v.push_back(math::Vector2f(rect.min.x - width, rect.max.y + width));
 
         // Add the inside vertices.
         mesh.v.push_back(math::Vector2f(rect.min.x, rect.min.y));

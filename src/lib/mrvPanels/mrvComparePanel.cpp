@@ -2,16 +2,16 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <string>
-#include <vector>
-#include <map>
 
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Group.H>
-#include <FL/Fl_RGB_Image.H>
+#include "mrViewer.h"
 
-#include "mrvCore/mrvHome.h"
-#include "mrvCore/mrvFile.h"
+#include "mrvApp/mrvSettingsObject.h"
+#include "mrvApp/mrvFilesModel.h"
+#include "mrvApp/mrvApp.h"
+
+#include "mrvPanels/mrvPanelsAux.h"
+#include "mrvPanels/mrvComparePanel.h"
+#include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvWidgets/mrvButton.h"
 #include "mrvWidgets/mrvClipButton.h"
@@ -20,15 +20,17 @@
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvPopupMenu.h"
 
-#include "mrvPanels/mrvPanelsAux.h"
-#include "mrvPanels/mrvComparePanel.h"
-#include "mrvPanels/mrvPanelsCallbacks.h"
+#include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvFile.h"
 
-#include "mrvApp/mrvSettingsObject.h"
-#include "mrvApp/mrvFilesModel.h"
-#include "mrvApp/mrvApp.h"
+#include <FL/Fl_Button.H>
+#include <FL/Fl_Group.H>
+#include <FL/Fl_RGB_Image.H>
 
-#include "mrViewer.h"
+
+#include <string>
+#include <vector>
+#include <map>
 
 namespace mrv
 {

@@ -16,7 +16,7 @@ set(SOURCES
 add_library(mrvPDF ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-set( LIBRARIES ${LibHaru} mrvWidgets )
+set( LIBRARIES mrvWidgets )
 
 target_link_libraries(mrvPDF PUBLIC ${LIBRARIES} )
 set_target_properties(mrvPDF PROPERTIES FOLDER lib)

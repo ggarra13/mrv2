@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="1024"
+   height="1024"
+   viewBox="0 0 270.93334 270.93334"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3 (0e150ed, 2023-07-21)"
+   sodipodi:docname="tlRender.svg"
+   inkscape:export-filename="../macOS/tlRender.iconset/icon_512x512@2x.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px"
+     inkscape:zoom="0.53417969"
+     inkscape:cx="511.06399"
+     inkscape:cy="511.06399"
+     inkscape:window-width="1392"
+     inkscape:window-height="1027"
+     inkscape:window-x="322"
+     inkscape:window-y="32"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer4" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer12"
+     inkscape:label="icon_16x16"
+     style="display:none">
+    <circle
+       style="display:inline;fill:#f0f0f0;fill-opacity:1;stroke-width:0.054079"
+       id="path1-9-9-9-3-3-4-8-5-0"
+       cx="2.1166668"
+       cy="2.1166668"
+       r="1.9099603" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.20486px;font-family:Roboto;-inkscape-font-specification:'Roboto, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;display:inline;fill:#000000;fill-opacity:1;stroke-width:0.0330727"
+       x="0.83875161"
+       y="2.9004254"
+       id="text1-2-7-9-0-9-1-9-2-8-7"><tspan
+         sodipodi:role="line"
+         id="tspan1-3-5-8-6-03-5-9-1-2-9"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.20486px;font-family:Roboto;-inkscape-font-specification:'Roboto, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke-width:0.0330727"
+         x="0.83875161"
+         y="2.9004254">TL</tspan></text>
+    <rect
+       style="display:inline;fill:#000000;fill-opacity:0;stroke-width:0.059189"
+       id="rect1-3-3-1-8-6-4-6-3-9"
+       width="4.2333336"
+       height="4.2333336"
+       x="0"
+       y="0"
+       inkscape:export-filename="../macOS/tlRender.iconset/icon_16x16.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer11"
+     inkscape:label="icon_16x16@2"
+     style="display:none">
+    <circle
+       style="display:inline;fill:#f0f0f0;fill-opacity:1;stroke-width:0.108158"
+       id="path1-9-9-9-3-3-4-8-5"
+       cx="4.2333336"
+       cy="4.2333336"
+       r="3.8199208" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.40973px;font-family:Roboto;-inkscape-font-specification:'Roboto, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;display:inline;fill:#000000;fill-opacity:1;stroke-width:0.0661455"
+       x="1.6775032"
+       y="5.8008509"
+       id="text1-2-7-9-0-9-1-9-2-8"><tspan
+         sodipodi:role="line"
+         id="tspan1-3-5-8-6-03-5-9-1-2"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.40973px;font-family:Roboto;-inkscape-font-specification:'Roboto, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke-width:0.0661455"
+         x="1.6775032"
+         y="5.8008509">TL</tspan></text>
+    <rect
+       style="display:inline;fill:#000000;fill-opacity:0;stroke-width:0.118378"
+       id="rect1-3-3-1-8-6-4-6-3"
+       width="8.4666672"
+       height="8.4666672"
+       x="0"
+       y="0"
+       inkscape:export-filename="../macOS/tlRender.iconset/icon_16x16@2.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer10"
+     inkscape:label="icon_32x32"
+     style="display:none">
+    <circle
+       style="display:inline;fill:#f0f0f0;fill-opacity:1;stroke-width:0.108158"
+       id="path1-9-9-9-3-3-4-8"
+       cx="4.2333336"
+       cy="4.2333336"
+       r="3.8199208" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.40973px;font-family:Roboto;-inkscape-font-specification:'Roboto, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;display:inline;fill:#000000;fill-opacity:1;stroke-width:0.0661455"
+       x="1.6775032"
+       y="5.8008509"
+       id="text1-2-7-9-0-9-1-9-2"><tspan
+         sodipodi:role="line"
+         id="tspan1-3-5-8-6-03-5-9-1"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.40973px;font-family:Roboto;-inkscape-font-specification:'Roboto, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke-width:0.0661455"
+         x="1.6775032"
+         y="5.8008509">TL</tspan></text>
+    <rect
+       style="display:inline;fill:#000000;fill-opacity:0;stroke-width:0.118378"
+       id="rect1-3-3-1-8-6-4-6"
+       width="8.4666672"
+       height="8.4666672"
+       x="0"
+       y="0"
+       inkscape:export-filename="../macOS/tlRender.iconset/icon_32x32.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer9"
+     inkscape:label="icon_32x32@2"
+     style="display:none">
+    <circle
+       style="display:inline;fill:#f0f0f0;fill-opacity:1;stroke-width:0.216315"
+       id="path1-9-9-9-3-3-4"
+       cx="8.4666672"
+       cy="8.4666672"
+       r="7.639842" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:8.81946px;font-family:Roboto;-inkscape-font-specification:'Roboto, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;display:inline;fill:#000000;fill-opacity:1;stroke-width:0.132291"
+       x="3.3550065"
+       y="11.601702"
+       id="text1-2-7-9-0-9-1-9"><tspan
+         sodipodi:role="line"
+         id="tspan1-3-5-8-6-03-5-9"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:8.81946px;font-family:Roboto;-inkscape-font-specification:'Roboto, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke-width:0.132291"
+         x="3.3550065"
+         y="11.601702">TL</tspan></text>
+    <rect
+       style="display:inline;fill:#000000;fill-opacity:0;stroke-width:0.236756"
+       id="rect1-3-3-1-8-6-4"
+       width="16.933334"
+       height="16.933334"
+       x="0"
+       y="0"
+       inkscape:export-filename="../macOS/tlRender.iconset/icon_32x32@2.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer8"
+     inkscape:label="icon_64x64"
+     style="display:none">
+    <circle
+       style="display:inline;fill:#f0f0f0;fill-opacity:1;stroke-width:0.216315"
+       id="path1-9-9-9-3-3"
+       cx="8.4666672"
+       cy="8.4666672"
+       r="7.639842" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:8.81946px;font-family:Roboto;-inkscape-font-specification:'Roboto, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;display:inline;fill:#000000;fill-opacity:1;stroke-width:0.132291"
+       x="3.3550065"
+       y="11.601702"
+       id="text1-2-7-9-0-9-1"><tspan
+         sodipodi:role="line"
+         id="tspan1-3-5-8-6-03-5"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:8.81946px;font-family:Roboto;-inkscape-font-specification:'Roboto, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke-width:0.132291"
+         x="3.3550065"
+         y="11.601702">TL</tspan></text>
+    <rect
+       style="display:inline;fill:#000000;fill-opacity:0;stroke-width:0.236756"
+       id="rect1-3-3-1-8-6"
+       width="16.933334"
+       height="16.933334"
+       x="0"
+       y="0"
+       inkscape:export-filename="../macOS/tlRender.iconset/icon_64x64.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer7"
+     inkscape:label="icon_64x64@2"
+     style="display:none">
+    <circle
+       style="display:inline;fill:#f0f0f0;fill-opacity:1;stroke-width:0.432629"
+       id="path1-9-9-9-3"
+       cx="16.933334"
+       cy="16.933334"
+       r="15.279685" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.6389px;font-family:Roboto;-inkscape-font-specification:'Roboto, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;display:inline;fill:#000000;fill-opacity:1;stroke-width:0.264582"
+       x="6.7100129"
+       y="23.203403"
+       id="text1-2-7-9-0-9"><tspan
+         sodipodi:role="line"
+         id="tspan1-3-5-8-6-03"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.6389px;font-family:Roboto;-inkscape-font-specification:'Roboto, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke-width:0.264582"
+         x="6.7100129"
+         y="23.203403">TL</tspan></text>
+    <rect
+       style="display:inline;fill:#000000;fill-opacity:0;stroke-width:0.473511"
+       id="rect1-3-3-1-8"
+       width="33.866669"
+       height="33.866669"
+       x="0"
+       y="0"
+       inkscape:export-filename="../macOS/tlRender.iconset/icon_64x64@2.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer6"
+     inkscape:label="icon_128x128"
+     style="display:none">
+    <circle
+       style="display:inline;fill:#f0f0f0;fill-opacity:1;stroke-width:0.432629"
+       id="path1-9-9-9-8"
+       cx="16.933334"
+       cy="16.933334"
+       r="15.279685" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.6389px;font-family:Roboto;-inkscape-font-specification:'Roboto, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;display:inline;fill:#000000;fill-opacity:1;stroke-width:0.264582"
+       x="6.7100129"
+       y="23.203403"
+       id="text1-2-7-9-0-5"><tspan
+         sodipodi:role="line"
+         id="tspan1-3-5-8-6-3"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.6389px;font-family:Roboto;-inkscape-font-specification:'Roboto, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke-width:0.264582"
+         x="6.7100129"
+         y="23.203403">TL</tspan></text>
+    <rect
+       style="display:inline;fill:#000000;fill-opacity:0;stroke-width:0.473511"
+       id="rect1-3-3-1-1"
+       width="33.866669"
+       height="33.866669"
+       x="0"
+       y="0"
+       inkscape:export-filename="../macOS/tlRender.iconset/icon_128x128.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer5"
+     inkscape:label="icon_128x128@2"
+     style="display:none">
+    <circle
+       style="display:inline;fill:#f0f0f0;fill-opacity:1;stroke-width:0.865258"
+       id="path1-9-9-9-1"
+       cx="33.866669"
+       cy="33.866669"
+       r="30.559372" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:35.2778px;font-family:Roboto;-inkscape-font-specification:'Roboto, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;display:inline;fill:#000000;fill-opacity:1;stroke-width:0.529165"
+       x="13.420026"
+       y="46.406807"
+       id="text1-2-7-9-0-6"><tspan
+         sodipodi:role="line"
+         id="tspan1-3-5-8-6-0"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:35.2778px;font-family:Roboto;-inkscape-font-specification:'Roboto, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke-width:0.529165"
+         x="13.420026"
+         y="46.406807">TL</tspan></text>
+    <rect
+       style="display:inline;fill:#000000;fill-opacity:0;stroke-width:0.947021"
+       id="rect1-3-3-1-9"
+       width="67.733337"
+       height="67.733337"
+       x="0"
+       y="0"
+       inkscape:export-filename="../macOS/tlRender.iconset/icon_128x128@2.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="icon_256x256"
+     style="display:inline">
+    <circle
+       style="display:inline;fill:#f0f0f0;fill-opacity:1;stroke-width:0.865258"
+       id="path1-9-9-9"
+       cx="33.866669"
+       cy="33.866669"
+       r="30.559372" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:35.2778px;font-family:Roboto;-inkscape-font-specification:'Roboto, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;display:inline;fill:#000000;fill-opacity:1;stroke-width:0.529165"
+       x="13.420026"
+       y="46.406807"
+       id="text1-2-7-9-0"><tspan
+         sodipodi:role="line"
+         id="tspan1-3-5-8-6"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:35.2778px;font-family:Roboto;-inkscape-font-specification:'Roboto, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke-width:0.529165"
+         x="13.420026"
+         y="46.406807">TL</tspan></text>
+    <rect
+       style="display:inline;fill:#000000;fill-opacity:0;stroke-width:0.947021"
+       id="rect1-3-3-1"
+       width="67.733337"
+       height="67.733337"
+       x="0"
+       y="0"
+       inkscape:export-filename="../macOS/tlRender.iconset/icon_256x256.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="icon_256x256@2"
+     style="display:none">
+    <circle
+       style="display:inline;fill:#f0f0f0;fill-opacity:1;stroke-width:1.73051"
+       id="path1-9-9"
+       cx="67.733337"
+       cy="67.733337"
+       r="61.118748" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:70.5555px;font-family:Roboto;-inkscape-font-specification:'Roboto, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;display:inline;fill:#000000;fill-opacity:1;stroke-width:1.05833"
+       x="26.840052"
+       y="92.813614"
+       id="text1-2-7-9"><tspan
+         sodipodi:role="line"
+         id="tspan1-3-5-8"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:70.5555px;font-family:Roboto;-inkscape-font-specification:'Roboto, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke-width:1.05833"
+         x="26.840052"
+         y="92.813614">TL</tspan></text>
+    <rect
+       style="display:inline;fill:#000000;fill-opacity:0;stroke-width:1.89404"
+       id="rect1-3-3"
+       width="135.46667"
+       height="135.46667"
+       x="0"
+       y="0"
+       inkscape:export-filename="../macOS/tlRender.iconset/icon_256x256@2.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+  </g>
+  <g
+     inkscape:label="icon_512x512"
+     inkscape:groupmode="layer"
+     id="layer1"
+     style="display:none">
+    <circle
+       style="display:inline;fill:#f0f0f0;fill-opacity:1;stroke-width:1.73051"
+       id="path1-9"
+       cx="67.733337"
+       cy="67.733337"
+       r="61.118748" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:70.5555px;font-family:Roboto;-inkscape-font-specification:'Roboto, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;display:inline;fill:#000000;fill-opacity:1;stroke-width:1.05833"
+       x="26.840052"
+       y="92.813614"
+       id="text1-2-7"><tspan
+         sodipodi:role="line"
+         id="tspan1-3-5"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:70.5555px;font-family:Roboto;-inkscape-font-specification:'Roboto, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke-width:1.05833"
+         x="0"
+         y="0">TL</tspan></text>
+    <rect
+       style="display:inline;fill:#000000;fill-opacity:0;stroke-width:1.89404"
+       id="rect1-3"
+       width="135.46667"
+       height="135.46667"
+       x="0"
+       y="0"
+       inkscape:export-filename="../macOS/tlRender.iconset/icon_512x512.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="icon_512x512@2"
+     style="display:none">
+    <circle
+       style="fill:#f0f0f0;fill-opacity:1;stroke-width:3.46102"
+       id="path1"
+       cx="135.46667"
+       cy="135.46667"
+       r="122.2375" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:141.111px;font-family:Roboto;-inkscape-font-specification:'Roboto, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke-width:2.11666"
+       x="53.680107"
+       y="185.62723"
+       id="text1-2"><tspan
+         sodipodi:role="line"
+         id="tspan1-3"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:141.111px;font-family:Roboto;-inkscape-font-specification:'Roboto, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke-width:2.11666"
+         x="53.680107"
+         y="185.62723">TL</tspan></text>
+    <rect
+       style="fill:#000000;fill-opacity:0;stroke-width:3.78808"
+       id="rect1"
+       width="270.93335"
+       height="270.93335"
+       x="0"
+       y="0"
+       inkscape:export-filename="../macOS/tlRender.iconset/icon_512x512@2x.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+  </g>
+</svg>

@@ -360,7 +360,7 @@ namespace mrv
                 dir = d;
         }
         fs::path path = dir;
-        return path.generic_string();
+        return path.u8string();
     }
 
     /**

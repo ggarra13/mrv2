@@ -4,16 +4,23 @@
 
 #pragma once
 
-#include <map>
+#include "mrvCore/mrvBackend.h"
+
+#include "mrvPanelWidget.h"
+
+#ifdef OPENGL_BACKEND
+#include <tlTimelineUI/ThumbnailSystem.h>
+// #include <tlTimelineUI/TimelineWidget.h>
+#endif
+
+#ifdef VULKAN_BACKEND
+#include <tlTimelineUIVk/ThumbnailSystem.h>
+#endif
 
 #include <tlCore/Time.h>
 #include <tlCore/Path.h>
 
-#include <tlUI/ThumbnailSystem.h>
-
-#include <tlTimelineUI/TimelineWidget.h>
-
-#include "mrvPanelWidget.h"
+#include <map>
 
 class ViewerUI;
 class Fl_Widget;
@@ -52,7 +59,12 @@ namespace mrv
             //! Whether to clear the cache for the thumbnails.
             bool _clearCache = false;
 
-            std::map<Fl_Widget*, ui::ThumbnailRequest> thumbnailRequests;
+#ifdef OPENGL_BACKEND
+            std::map<Fl_Widget*, timelineui::ThumbnailRequest> thumbnailRequests;
+#endif
+#ifdef VULKAN_BACKEND
+            std::map<Fl_Widget*, timelineui_vk::ThumbnailRequest> thumbnailRequests;
+#endif
         };
 
     } // namespace panel

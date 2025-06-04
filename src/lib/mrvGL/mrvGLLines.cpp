@@ -2,15 +2,17 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <tlCore/Mesh.h>
+#include "mrvGL/mrvGLErrors.h"
+#include "mrvGL/mrvGLShaders.h"
+#include "mrvGL/mrvGLLines.h"
 
 #include <tlGL/Mesh.h>
 #include <tlGL/Util.h>
 #include <tlGL/Shader.h>
 
-#include "mrvGL/mrvGLErrors.h"
-#include "mrvGL/mrvGLShaders.h"
-#include "mrvGL/mrvGLLines.h"
+#include <tlDraw/Polyline2D.h>
+
+#include <tlCore/Mesh.h>
 
 namespace tl
 {
@@ -71,7 +73,7 @@ namespace mrv
                 }
             }
 
-            using namespace mrv::draw;
+            using namespace tl::draw;
 
             Polyline2D path;
             path.setWidth(width);
@@ -210,7 +212,7 @@ namespace mrv
             const math::Vector2i& start, const math::Vector2i& end,
             const image::Color4f& color, const float width)
         {
-            using namespace mrv::draw;
+            using namespace tl::draw;
 
             std::vector< Point > line;
             line.push_back(Point(start.x, start.y));

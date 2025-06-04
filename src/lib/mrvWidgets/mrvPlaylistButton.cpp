@@ -2,8 +2,22 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <FL/Fl.H>
-#include <FL/Fl_Menu_Button.H>
+#include "mrViewer.h"
+
+#include "mrvApp/mrvFilesModel.h"
+#include "mrvApp/mrvApp.h"
+
+#include "mrvFl/mrvCallbacks.h"
+
+#include "mrvPanels/mrvPanelsCallbacks.h"
+
+#include "mrvEdit/mrvEditCallbacks.h"
+
+#include "mrvWidgets/mrvPlaylistButton.h"
+#include "mrvWidgets/mrvFileDragger.h"
+
+#include "mrvCore/mrvString.h"
+#include "mrvCore/mrvI8N.h"
 
 #include <opentimelineio/item.h>
 #include <opentimelineio/stack.h>
@@ -12,22 +26,8 @@
 
 #include <tlCore/Vector.h>
 
-#include "mrvCore/mrvString.h"
-#include "mrvCore/mrvI8N.h"
-
-#include "mrvFl/mrvCallbacks.h"
-
-#include "mrvWidgets/mrvPlaylistButton.h"
-#include "mrvWidgets/mrvFileDragger.h"
-
-#include "mrvEdit/mrvEditCallbacks.h"
-
-#include "mrvPanels/mrvPanelsCallbacks.h"
-
-#include "mrvApp/mrvFilesModel.h"
-#include "mrvApp/mrvApp.h"
-
-#include "mrViewer.h"
+#include <FL/Fl.H>
+#include <FL/Fl_Menu_Button.H>
 
 namespace
 {

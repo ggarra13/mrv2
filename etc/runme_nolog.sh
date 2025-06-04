@@ -15,7 +15,6 @@
 # Use runme.sh for that.
 #
 #
-
 if [[ !$RUNME ]]; then
     . $PWD/etc/build_dir.sh
 fi
@@ -35,8 +34,12 @@ if [ -z "$BUILD_X11" ]; then
     export BUILD_X11=ON
 fi
 
+if [ -z "$MRV2_BACKEND" ]; then
+    export MRV2_BACKEND=GL
+fi
+
 if [ -z "$MRV2_HDR" ]; then
-    export MRV2_HDR=OFF
+    export MRV2_HDR=ON
 fi
 
 if [ -z "$MRV2_PYFLTK" ]; then
@@ -54,6 +57,7 @@ fi
 if [ -z "$MRV2_PDF" ]; then
     export MRV2_PDF=ON
 fi
+
 
 if [ -z "$MRV2_PYTHON" ]; then
     if [[ $BUILD_PYTHON == ON || $BUILD_PYTHON == 1 ]]; then
@@ -144,6 +148,7 @@ if [ -z "$TLRENDER_NDI" ]; then
     else
 	echo "TLRENDER_NDI_SDK not found at ${TLRENDER_NDI_SDK}!"
 	export TLRENDER_NDI=OFF
+	export MRV2_HDR=OFF
     fi
 fi
 
@@ -189,22 +194,31 @@ if [ -z "$VULKAN_SDK" ]; then
 	    SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sort -r | grep -o "$VULKAN_ROOT/[0-9]*\..*"| sed -e "s#$VULKAN_ROOT/##" | head -1)
 	    export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/macOS
 	else
-	    export VULKAN_SDK=/usr/local
+	    if [[ -d /usr/local/include/vulkan ]]; then
+		export VULKAN_SDK=/usr/local/
+	    else
+		export VULKAN_SDK=/opt/homebrew/
+	    fi
 	fi
     fi
 fi
     
 if [ -z "$TLRENDER_VK" ]; then
-    if [ -d "${VULKAN_SDK}/include/vulkan/" ]; then
+    if [ -e "${VULKAN_SDK}/include/vulkan/vulkan.h" ]; then
 	export TLRENDER_VK=ON
+	echo "Vulkan FOUND at ${VULKAN_SDK}/include/vulkan"
     else
 	export TLRENDER_VK=OFF
-	echo "VULKAN NOT FOUND at ${VULKAN_SDK}/include/vulkan"
+	export MRV2_HDR=OFF
+	echo "Vulkan NOT FOUND at ${VULKAN_SDK}/include/vulkan"
     fi
 else
-    if [ ! -d "${VULKAN_SDK}/include/vulkan/" ]; then
-	echo "VULKAN NOT FOUND at ${VULKAN_SDK}/include/vulkan"
-	exit 1
+    if [ ! -e "${VULKAN_SDK}/include/vulkan/vulkan.h" ]; then
+	echo "Vulkan NOT FOUND at ${VULKAN_SDK}/include/vulkan"
+	export TLRENDER_VK=OFF
+	export MRV2_HDR=OFF
+    else
+	echo "Vulkan FOUND at ${VULKAN_SDK}/include/vulkan"
     fi
 fi
 
@@ -302,9 +316,8 @@ echo "Build FLTK shared................... ${FLTK_BUILD_SHARED} 	(FLTK_BUILD_SHA
 echo "Build embedded Python............... ${MRV2_PYBIND11} 	(MRV2_PYBIND11)"
 echo "Build mrv2 Network connections...... ${MRV2_NETWORK} 	(MRV2_NETWORK)"
 echo "Build PDF........................... ${MRV2_PDF} 	(MRV2_PDF)"
-if [[ $MRV2_HDR == ON || $MRV2_HDR == 1 ]]; then
-    echo "MRV2_HDR............................ ${MRV2_HDR} 	(MRV2_HDR)"
-fi
+echo "Build hdr application............... ${MRV2_HDR} 	(MRV2_HDR)"
+echo "mrv2 BACKEND........................ ${MRV2_BACKEND} 	(MRV2_BACKEND)"
 echo
 echo "tlRender Options"
 echo
@@ -327,11 +340,11 @@ echo
 echo "NDI support ........................ ${TLRENDER_NDI} 	(TLRENDER_NDI)"
 if [[ $TLRENDER_NDI == ON || $TLRENDER_NDI == 1 ]]; then
     echo "NDI SDK ${TLRENDER_NDI_SDK} 	(TLRENDER_NDI_SDK}"
-    if [[ $TLRENDER_VK == ON ]]; then
-	echo "VULKAN_SDK    .................. ${VULKAN_SDK} 	(env. variable)"
-    fi
 fi
-
+if [[ $TLRENDER_VK == ON || $TLRENDER_VK == 1 ]]; then
+    echo "VULKAN_SDK    .................. ${VULKAN_SDK} 	(env. variable)"
+fi
+    
 echo
 echo "JPEG   support ..................... ${TLRENDER_JPEG} 	(TLRENDER_JPEG)"
 echo "LibRaw support ..................... ${TLRENDER_RAW} 	(TLRENDER_RAW)"
@@ -383,6 +396,7 @@ cmd="cmake -G '${CMAKE_GENERATOR}'
 	   -D BUILD_X11=${BUILD_X11}
 	   -D BUILD_WAYLAND=${BUILD_WAYLAND}
 
+	   -D MRV2_BACKEND=${MRV2_BACKEND}
 	   -D MRV2_HDR=${MRV2_HDR}
 	   -D MRV2_NETWORK=${MRV2_NETWORK}
 	   -D MRV2_PYFLTK=${MRV2_PYFLTK}

@@ -1,3 +1,85 @@
+v1.3.8
+======
+
+- Fixed OpenEXR's Data Window and Display Window display which was crashing when the coordinates had negative values.
+- Added proper support for all possible texture types of OpenGL that libplacebo might use.
+- Same for Vulkan's hdr utility.
+- Flattened tlRender from a submodule to a directory to start working on porting it to Vulkan.
+- Added mrvCore/mrvBackend.h to select which backend should mrv2 use.  By default, we still use opengl.
+- Fixed hdr view utility to handle HDR10 and HLG properly on HDR10 monitors, as it would lead to a crash.
+- Fixed hdr view utility sometimes crashing at start up on macOS.
+- Fixed vkSetHdrMetadataEXT not being active.
+- Fixed HDR monitor scoring selection to prefer HDR10 and HLG over P3_NONLINEAR.
+- Improved runmeq.sh and runmet.sh scripts to exit early and with an error message if compilation fails.
+- Fixed a potential reset of the X11 server when hiding the timeline bar.
+- Fixed a crash with color area selection and switching to a clip of smaller size.
+- Fixed a crash with color area selection switching from Full to Original Values.
+- Allowed overriding pixel ratio on OpenEXR images from the Image Information Panel.  Note that once you override it, it will remain like that for all images.  To reverse them, you need to set it back to a value of 0 or less than 0.
+- Fixed a memory leak in the Vectorscope.
+- Fixed secondary viewport flickering when the timeline was hidden (at least on X11).
+- Improved performance of text rendering on both OpenGL and Vulkan.
+- Removed outline class from OpenGL as it was not needed.
+- Added showing of clip name in the HUD for .otioz files.
+- Improved performance of the thumbnails in the timeline for both OpenGL and Vulkan.
+- Fixed a memory issue on libplacebo.
+- Fixed a slowdown due to always trying to change cursor when in viewport with the media information window present.
+- Fixed a Wayland bug not allowing to select the button menus (such as HSV) at the bottom of the screen.
+- Fixed a memory leak on HDR processing on the OpenGL backend.
+- Started porting to Vulkan.
+
+	 + Working:
+		 * Viewport
+		 * Pixel toolbar
+		 * Timeline with tick bars, current frame number and labels.
+		 * OTIO with dissolves
+		 * OpenColorIO
+		 * HDR Toggle (for HDR).
+		 * HDR Tonemapping (for SDR).
+		 * HUD
+		 * Masking
+		 * Safe Areas
+		 * Data/Display Window
+		 * Area selection
+		 * Comparison Modes: 
+			 - A
+			 - B
+			 - Difference
+			 - Dissolve
+			 - Wipe
+			 - Horizontal
+			 - Vertical
+			 - Tile
+		 * Annotation cursor (circle)
+		 * Annotations
+		 * Vectorscope
+		 * Histogram
+		 * Color Areas (Area color information)
+		 * Environment mapping
+		 * Thumbnails in Timeline (extremely slow).
+		 * Thumbnails in Panels
+		 * Missing Frames crosses
+		 * Vulkan Text widget annotation
+		 * Editing.
+		 
+	 + Missing to check/add:
+		 * Saving of Movies/Pictures with Annotations
+		 * NDI support
+		 * OpenUSD in Vulkan (Impossible to do it with Pixar's current API)
+		 
+	 + Problems:
+	 	 - Performance of the timeline with clips is an even worse problem.
+		   
+	 + Improvements:
+		 - Improved performance of drawing text in the HUD and timeline for
+		   both Vulkan and OpenGL.
+		 - Improved performance of drawing clips in the timeline for Vulkan.
+		   Still slow, thou.
+		 - Improved performance of Vulkan from 40FPS to 58FPS on 4K movies.
+		   
+- Fixed and simplified code for NDIView (hdr utility).
+- Fixed hdr utility for macOS Intel trying to pass full HDR10 or HLG data, 
+  which goes over those machines' nits.
+
 v1.3.7
 ======
 
