@@ -1,7 +1,7 @@
 # English translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.6\n"
@@ -3031,6 +3031,9 @@ msgstr "Saving Pictures without Audio %<PRId64> - %<PRId64>"
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Audio only in timeline, but not trying to save audio."
 
+msgid "Vulkan info: {0}"
+msgstr "OpenGL info: {0}"
+
 msgid "{0}: Invalid OpenGL format and type"
 msgstr "{0}: Invalid OpenGL format and type"
 
@@ -3814,14 +3817,11 @@ msgstr "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 
-msgid "HDR monitor found."
-msgstr "HDR monitor found."
-
-msgid "HDR monitor not found or not configured."
-msgstr "HDR monitor not found or not configured."
-
 msgid "Edit Text"
 msgstr "Edit Text"
+
+msgid "Invalid font for text drawing"
+msgstr "Invalid font for text drawing"
 
 msgid "Could not convert message to shape: "
 msgstr "Could not convert message to shape: "
@@ -7628,6 +7628,12 @@ msgstr "Toggle Hotkeys Window"
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
 
+#~ msgid "HDR monitor found."
+#~ msgstr "HDR monitor found."
+
+#~ msgid "HDR monitor not found or not configured."
+#~ msgstr "HDR monitor not found or not configured."
+
 #~ msgid ""
 #~ "tter then the other.Timeline can be drawn with blitting or with shaders.  "
 #~ "Depending on graphics card and OS one can perform be"
@@ -7637,9 +7643,6 @@ msgstr "Toggle About Window"
 
 #~ msgid "OpenGL"
 #~ msgstr "OpenGL"
-
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "Invalid font for text drawing"
 
 #~ msgid "Render/HDR/Toggle Tonemap"
 #~ msgstr "Render/HDR/Toggle Tonemap"
