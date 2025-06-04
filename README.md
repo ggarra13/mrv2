@@ -30,6 +30,7 @@ Contents:
     - [Building mrv2](#building-mrv2)
     - [Debug builds](#debug-builds)
     - [Building on Windows](#building-on-windows)
+    - [Building for Vulkan](#building-for-vulkan)
     - [CMake build options](#cmake-build-options) 
     - [Building FFmpeg as GPL or LGPL](#building-ffmpeg-as-gpl-or-lgpl)
 - [Running mrv2](#running-mrv2)
@@ -368,6 +369,29 @@ The main runme.sh script supports passing CMake flags to it and allows turning o
 
 The flags are listed when you start the runme.sh script.  If you want to make some change to the flags permanent, you should change them
 in runme_nolog.sh or create a wrapper script that calls runme.sh.
+
+## Building for Vulkan
+
+Starting with v1.3.8, mrv2 can also be built for Vulkan.  This has the following benefits:
+
+- It no longer will use OpenGL which is an outdated API and threatened to disappear on both Windows and macOS.
+- It supports HDR (High Dynamic Range - do not confuse with High Definition) nativaly on monitors that support it.  This gives richer colors on those monitors and better support for OpenColorIO.
+
+It also has, currently, some drawbacks:
+
+- A little bit slower, particularly when showing the timeline with pictures.
+- No OpenUSD support.
+- No NDI support yet (coming soon).
+- No Saving of Movies or Pictures with Annotations.
+
+Anyway, to build it, you need to run:
+
+```
+./runme.sh -vk
+```
+
+It will create a KERNEL-vulkan-ARCH/BUILDTYPE/ directory.
+
 
 ## Building FFmpeg as GPL or LGPL
 
