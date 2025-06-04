@@ -53,9 +53,10 @@ namespace
 
 namespace mrv
 {
-
+    
     int _save_single_frame(
-        std::string file, const ViewerUI* ui, SaveOptions options)
+        std::string file, const ViewerUI* ui, SaveOptions options,
+        const int32_t frameIndex)
     {
         int ret = 0;
         std::string msg;
@@ -173,6 +174,9 @@ namespace mrv
             render = timeline_gl::Render::create(context);
 #endif
             offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
+#ifdef VULKAN_BACKEND
+            offscreenBufferOptions.pbo = true;
+#endif
 
             // Create the writer.
             auto writerPlugin =
@@ -337,8 +341,14 @@ namespace mrv
             outputInfo = writerPlugin->getWriteInfo(outputInfo);
             if (image::PixelType::kNone == outputInfo.pixelType)
             {
+#ifdef OPENGL_BACKEND
                 outputInfo.pixelType = image::PixelType::RGB_U8;
                 offscreenBufferOptions.colorType = image::PixelType::RGB_U8;
+#endif
+#ifdef VULKAN_BACKEND
+                outputInfo.pixelType = image::PixelType::RGBA_U8;
+                offscreenBufferOptions.colorType = image::PixelType::RGBA_U8;
+#endif
 #ifdef TLRENDER_EXR
                 if (saveEXR)
                 {
@@ -417,7 +427,6 @@ namespace mrv
 #ifdef VULKAN_BACKEND
             auto buffer = vlk::OffscreenBuffer::create(
                 ctx, offscreenBufferSize, offscreenBufferOptions);
-            uint32_t frameIndex = 0;
 #else
             view->make_current();
             gl::initGLAD();
@@ -474,136 +483,7 @@ namespace mrv
 #else
 
 #    ifdef VULKAN_BACKEND
-                VkResult result;
-                
-                struct StagingBuffer {
-                    VkBuffer buffer = VK_NULL_HANDLE;
-                    VkDeviceMemory memory;
-                    void* mappedPtr = nullptr;
-                    VkFence fence = VK_NULL_HANDLE;
-                };
-                StagingBuffer pbo;
-
-                VkDevice device = ctx.device;
-                VkPhysicalDevice gpu = ctx.gpu;
-                VkCommandPool commandPool;
-                
-                VkCommandPoolCreateInfo cmd_pool_info = {};
-                cmd_pool_info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-                cmd_pool_info.queueFamilyIndex = ctx.queueFamilyIndex;
-                cmd_pool_info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-                vkCreateCommandPool(device, &cmd_pool_info, nullptr,
-                                    &commandPool);
-                
-                // Calculate bufferSize
-                image::Info info(outputInfo.size.w, outputInfo.size.h,
-                                 outputInfo.pixelType);
-                VkDeviceSize bufferSize = image::getDataByteCount(info);
-
-                // Create staging buffer
-                VkBufferCreateInfo bufferInfo = {};
-                bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-                bufferInfo.size = bufferSize;
-                bufferInfo.usage = VK_BUFFER_USAGE_TRANSFER_DST_BIT;
-                bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-                vkCreateBuffer(device, &bufferInfo, nullptr, &pbo.buffer);
-
-                VkMemoryRequirements memReq;
-                vkGetBufferMemoryRequirements(device, pbo.buffer, &memReq);
-
-                VkMemoryAllocateInfo allocInfo = {};
-                allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-                allocInfo.allocationSize = memReq.size;
-                allocInfo.memoryTypeIndex =
-                    findMemoryType(
-                        gpu,
-                        memReq.memoryTypeBits,
-                        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                        VK_MEMORY_PROPERTY_HOST_CACHED_BIT);
-
-                vkAllocateMemory(device, &allocInfo, nullptr, &pbo.memory);
-                vkBindBufferMemory(device, pbo.buffer, pbo.memory, 0);
-
-                vkMapMemory(
-                    device, pbo.memory, 0, bufferSize, 0, &pbo.mappedPtr);
-
-                VkFenceCreateInfo fenceInfo{
-                    VK_STRUCTURE_TYPE_FENCE_CREATE_INFO};
-                fenceInfo.flags = 0;
-                vkCreateFence(device, &fenceInfo, nullptr, &pbo.fence);
-
-
-                // Start read-back 
-                VkCommandBuffer cmd = beginSingleTimeCommands(device, commandPool);
-
-                // Get the "GL_BACK" buffer
-                VkImage image = ui->uiView->get_back_buffer_image();
-                // VkImageView imageView = ui->uiView->get_back_buffer_view();
-                // VkFramebuffer framebuffer = ui->uiView->get_back_buffer_framebuffer();
-
-                // Transition image to TRANSFER_SRC
-                transitionImageLayout(cmd, image,
-                                      VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
-                                      VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-                
-                // Setup copy region
-                VkBufferImageCopy region{};
-                region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-                region.imageSubresource.mipLevel = 0;
-                region.imageSubresource.baseArrayLayer = 0;
-                region.imageSubresource.layerCount = 1;
-                region.imageOffset = {X, Y, 0};
-                region.imageExtent = {
-                    static_cast<uint32_t>(outputInfo.size.w),
-                    static_cast<uint32_t>(outputInfo.size.h), 1
-                };
-                
-                vkCmdCopyImageToBuffer(cmd, image,
-                                       VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-                                       pbo.buffer, 1, &region);
-
-                // Transition back if needed
-                transitionImageLayout(cmd, image,
-                                      VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-                                      VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
-
-                vkEndCommandBuffer(cmd);
-                
-                VkSubmitInfo submitInfo{VK_STRUCTURE_TYPE_SUBMIT_INFO};
-                submitInfo.commandBufferCount = 1;
-                submitInfo.pCommandBuffers = &cmd;
-
-                {
-                    std::lock_guard<std::mutex> lock(ctx.queue_mutex());
-                    VkQueue queue = ctx.queue();
-
-                    result = vkQueueSubmit(queue, 1, &submitInfo,
-                                           pbo.fence);
-                }
-                
-                result = vkWaitForFences(device, 1, &pbo.fence, VK_TRUE,
-                                         UINT64_MAX); 
-                if (result != VK_SUCCESS) {
-                    fprintf(stderr, "vkWaitForFences failed: %s\n", string_VkResult(result));
-                    return -1;
-                }
-                vkResetFences(device, 1, &pbo.fence);
-            
-                VkMappedMemoryRange memoryRange = {};
-                memoryRange.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
-                memoryRange.memory = pbo.memory;
-                memoryRange.offset = 0; 
-                memoryRange.size = bufferSize;
-                vkInvalidateMappedMemoryRanges(device, 1, &memoryRange);
-
-                std::memcpy(outputImage->getData(), pbo.mappedPtr,
-                            outputImage->getDataByteCount());
-                
-                vkFreeCommandBuffers(device, commandPool, 1, &cmd);
-                    
-                vkDestroyCommandPool(device, commandPool, nullptr);
-                commandPool = VK_NULL_HANDLE;
-                        
+                       
 #    else
                 GLenum imageBuffer = GL_FRONT;
 
@@ -646,7 +526,11 @@ namespace mrv
                     renderOptions.clear = false;
                     render->begin(cmd, buffer, frameIndex, offscreenBufferSize,
                                   renderOptions);
-                                    
+                    const math::Matrix4x4f ortho = math::ortho(
+                        0.F, static_cast<float>(renderSize.w),
+                        static_cast<float>(renderSize.h), 0.F,
+                        -1.F, 1.F);
+                    render->setTransform(ortho);
                     render->setOCIOOptions(view->getOCIOOptions());
                     render->setLUTOptions(view->lutOptions());
                     
@@ -681,7 +565,9 @@ namespace mrv
                 }
 #endif
 
-#    ifdef VULKAN_BACKEND
+                // Read back the image
+                
+#ifdef VULKAN_BACKEND
                 buffer->transitionToColorAttachment(cmd);
                 
                 buffer->readPixels(cmd, 0, 0, renderSize.w, renderSize.h);
@@ -703,10 +589,8 @@ namespace mrv
                                     
                     vkFreeCommandBuffers(device, commandPool, 1, &cmd);    
                 }
-
-                frameIndex = (frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
                                     
-#    else
+#else
                 glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
                 
 
@@ -767,12 +651,17 @@ namespace mrv
             return -1;
         }
 
+        int32_t frameIndex = 0;
         for (const auto& time : times)
         {
             player->seek(time);
             waitForFrame(player, time);
 
-            _save_single_frame(file, ui, options);
+            _save_single_frame(file, ui, options, frameIndex);
+
+#ifdef VULKAN_BACKEND
+            frameIndex = (frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
+#endif
         }
 
         view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
@@ -811,12 +700,13 @@ namespace mrv
             return -1;
         }
 
+        int32_t frameIndex = 0;
         for (const auto& time : times)
         {
             player->seek(time);
             waitForFrame(player, time);
 
-            _save_single_frame(file, ui, options);
+            _save_single_frame(file, ui, options, frameIndex);
         }
 
         view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
@@ -863,7 +753,7 @@ namespace mrv
         const auto& currentTime = player->currentTime();
 
         // Save this frame with the frame number
-        _save_single_frame(file, ui, options);
+        _save_single_frame(file, ui, options, 0);
 
         wait::milliseconds(1000);
 
@@ -878,7 +768,14 @@ namespace mrv
 
         if (filename != file && !options.noRename)
         {
-            fs::rename(fs::path(filename), fs::path(file));
+            try
+            {
+                fs::rename(fs::path(filename), fs::path(file));
+            }
+            catch(const std::exception& e)
+            {
+                LOG_ERROR(e.what());
+            }
         }
 
         view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
