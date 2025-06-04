@@ -3090,6 +3090,9 @@ msgstr "Grabando Película sin Audio %<PRId64> - %<PRId64>"
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Solo audio en la línea de tiempo, pero no intenta grabar audio."
 
+msgid "Vulkan info: {0}"
+msgstr "Información de Vulkan: {0}"
+
 msgid "{0}: Invalid OpenGL format and type"
 msgstr "{0}: Formato y tipo de OpenGL inválidos"
 
@@ -3875,14 +3878,11 @@ msgstr "   Adelante V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "   Atrás       V: % 4<PRIu64>    A: % 4<PRIu64> "
 
-msgid "HDR monitor found."
-msgstr "Monitor HDR encontrado."
-
-msgid "HDR monitor not found or not configured."
-msgstr "Monitor HDR no encontrado o no configurado."
-
 msgid "Edit Text"
 msgstr "Editar Texto"
+
+msgid "Invalid font for text drawing"
+msgstr "Fuente inválida para dibujar texto"
 
 msgid "Could not convert message to shape: "
 msgstr "No pude convertir el mensaje a figura: "
@@ -7707,6 +7707,12 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
 
+#~ msgid "HDR monitor found."
+#~ msgstr "Monitor HDR encontrado."
+
+#~ msgid "HDR monitor not found or not configured."
+#~ msgstr "Monitor HDR no encontrado o no configurado."
+
 #, fuzzy
 #~ msgid ""
 #~ "tter then the other.Timeline can be drawn with blitting or with shaders.  "
@@ -7718,9 +7724,6 @@ msgstr "Alternar Ventana de Acerca de mrv2"
 
 #~ msgid "OpenGL"
 #~ msgstr "OpenGL"
-
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "Fuente inválida para dibujar texto"
 
 #~ msgid "Render/HDR/Toggle Tonemap"
 #~ msgstr "Render/HDR/Alternar Mapeo de Tonos"
