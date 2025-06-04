@@ -10,8 +10,7 @@ v1.3.8
 - Fixed hdr view utility sometimes crashing at start up on macOS.
 - Fixed vkSetHdrMetadataEXT not being active.
 - Fixed HDR monitor scoring selection to prefer HDR10 and HLG over P3_NONLINEAR.
-- Improved runmeq.sh and runmet.sh scripts to exit early and with an error
-  message if compilation fails.
+- Improved runmeq.sh and runmet.sh scripts to exit early and with an error message if compilation fails.
 - Fixed a potential reset of the X11 server when hiding the timeline bar.
 - Fixed a crash with color area selection and switching to a clip of smaller size.
 - Fixed a crash with color area selection switching from Full to Original Values.
@@ -28,7 +27,7 @@ v1.3.8
 - Fixed a memory leak on HDR processing on the OpenGL backend.
 - Started porting to Vulkan.
 
-	 * Working:
+	 + Working:
 		 * Viewport
 		 * Pixel toolbar
 		 * Timeline with tick bars, current frame number and labels.
@@ -62,15 +61,15 @@ v1.3.8
 		 * Vulkan Text widget annotation
 		 * Editing.
 		 
-	 * Missing to check/add:
+	 + Missing to check/add:
 		 * Saving of Movies/Pictures with Annotations
 		 * NDI support
 		 * OpenUSD in Vulkan (Impossible to do it with Pixar's current API)
 		 
-	 * Problems:
+	 + Problems:
 	 	 - Performance of the timeline with clips is an even worse problem.
 		   
-	 * Improvements:
+	 + Improvements:
 		 - Improved performance of drawing text in the HUD and timeline for
 		   both Vulkan and OpenGL.
 		 - Improved performance of drawing clips in the timeline for Vulkan.
