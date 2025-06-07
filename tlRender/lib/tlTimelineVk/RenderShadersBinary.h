@@ -7,6 +7,7 @@
 #include "shaders/colorMeshVertex.spv.h"
 #include "shaders/colorMeshFragment.spv.h"
 #include "shaders/differenceFragment.spv.h"
+#include "shaders/dummyFragment.spv.h"
 #include "shaders/hardFragment.spv.h"
 #include "shaders/imageFragment.spv.h"
 #include "shaders/meshFragment.spv.h"

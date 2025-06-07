@@ -148,7 +148,8 @@ namespace mrv
             pushSize = vk.annotationShader->getPushSize();
             if (pushSize > 0)
             {
-                pushConstantRange.stageFlags = vk.shader->getPushStageFlags();
+                pushConstantRange.stageFlags =
+                    vk.annotationShader->getPushStageFlags();
                 pushConstantRange.offset = 0;
                 pushConstantRange.size = pushSize;
 
@@ -387,9 +388,12 @@ namespace mrv
 
             vk.vbo.reset();
             vk.vao.reset();
+            
             vk.avbo.reset();
             vk.avao.reset();
 
+            vk.ovbo.reset();
+            
             if (vk.loadRenderPass != VK_NULL_HANDLE)
             {
                 vkDestroyRenderPass(device(), vk.loadRenderPass, nullptr);
@@ -440,6 +444,7 @@ namespace mrv
             // Destroy shaders
             vk.shader.reset();
             vk.annotationShader.reset();
+            vk.overlayShader.reset();
 
             // Destroy meshes
             vk.vbo.reset();
@@ -447,6 +452,8 @@ namespace mrv
 
             vk.avbo.reset();
             vk.avao.reset();
+            
+            vk.ovbo.reset();
 
             p.fontSystem.reset();
 
@@ -512,6 +519,23 @@ namespace mrv
                     int channels = 0; // Color Channel
                     vk.annotationShader->createUniform("channels", channels);
                     vk.annotationShader->createBindingSet();
+                }
+                
+                if (!vk.overlayShader)
+                {
+                    vk.overlayShader = vlk::Shader::create(
+                        ctx, 
+                        timeline_vlk::Vertex3_spv,
+                        timeline_vlk::Vertex3_spv_len,
+                        annotationFragment_spv,
+                        annotationFragment_spv_len,
+                        "vk.overlayShader");
+                    vk.overlayShader->createUniform(
+                        "transform.mvp", mvp, vlk::kShaderVertex);
+                    vk.overlayShader->addFBO("textureSampler");
+                    int channels = 0; // Color Channel
+                    vk.overlayShader->createUniform("channels", channels);
+                    vk.overlayShader->createBindingSet();
                 }
             }
         }
@@ -646,6 +670,8 @@ namespace mrv
             {
                 return;
             }
+
+            _updateDevices();
 
             const auto& annotations =
                 player->getAnnotations(p.ghostPrevious, p.ghostNext);
@@ -849,7 +875,6 @@ namespace mrv
                     const size_t numTriangles = mesh.triangles.size();
                     vk.avbo = vlk::VBO::create(
                         numTriangles * 3, vlk::VBOType::Pos2_F32_UV_U16);
-                    vk.avao.reset();
                 
                     if (vk.avbo)
                     {
@@ -864,7 +889,67 @@ namespace mrv
                 }
                 
                 _drawAnnotations(
-                    vk.annotation, mvp, currentTime, annotations, viewportSize);
+                    vk.annotation, vk.annotationRender,
+                    mvp, currentTime, annotations, viewportSize);
+                
+                //
+                // Draw annotations for output device in an overlay buffer.
+                //
+                auto outputDevice = App::app->outputDevice();
+                if (outputDevice)
+                {
+                    vlk::OffscreenBufferOptions offscreenBufferOptions;
+                    offscreenBufferOptions.colorType = image::PixelType::RGBA_U8;
+                    if (!p.displayOptions.empty())
+                    {
+                        offscreenBufferOptions.colorFilters =
+                            p.displayOptions[0].imageFilters;
+                    }
+                    offscreenBufferOptions.depth = vlk::OffscreenDepth::kNone;
+                    offscreenBufferOptions.stencil = vlk::OffscreenStencil::kNone;
+                    offscreenBufferOptions.pbo = true;
+                    if (vlk::doCreate(
+                            vk.overlay, renderSize, offscreenBufferOptions))
+                    {
+                        vk.overlay = vlk::OffscreenBuffer::create(ctx,
+                                                                  renderSize,
+                                                                  offscreenBufferOptions);
+                        vk.ovbo.reset();
+                        
+                        if (!vk.overlayRender)
+                        {
+                            if (auto context = vk.context.lock())
+                            {
+                                vk.overlayRender = timeline_vlk::Render::create(ctx, context);
+                            }
+                        }
+                    }
+
+                    if (!vk.ovbo)
+                    {
+                        const auto& mesh = geom::box(math::Box2i(0, 0,
+                                                                 renderSize.w,
+                                                                 renderSize.h));
+                        const size_t numTriangles = mesh.triangles.size();
+                        vk.ovbo = vlk::VBO::create(
+                            numTriangles * 3, vlk::VBOType::Pos2_F32_UV_U16);
+                    
+                        vk.ovbo->copy(convert(mesh, vlk::VBOType::Pos2_F32_UV_U16));
+                    }
+
+                    const math::Matrix4x4f& renderMVP = _renderProjectionMatrix();
+                    
+                    _drawAnnotations(
+                        vk.overlay, vk.overlayRender,
+                        renderMVP, currentTime, annotations,
+                        renderSize);
+
+                    _readOverlay(vk.overlay);
+
+                    vk.overlay->transitionToColorAttachment(cmd);
+                    
+                    outputDevice->setOverlay(vk.annotationImage);
+                }
             }
 
             
@@ -1024,7 +1109,12 @@ namespace mrv
                 transitionImageLayout(cmd, dstImage,
                                       VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                                       VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+            }
+            
 
+
+            if (!m_in_render_pass)
+            {
                 VkClearValue clear_values[2];
                 clear_values[0].color = m_clearColor;
                 clear_values[1].depthStencil = {m_depthStencil, 0};
@@ -1047,12 +1137,17 @@ namespace mrv
             
             if (p.showAnnotations && !annotations.empty())
             {                
+                vkCmdBindPipeline(vk.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                  vk.annotation_pipeline);
+            
                 // We already flipped the coords, so we use a normal ortho
                 // matrix here
                 const math::Matrix4x4f orthoMatrix = math::ortho(
                     0.F, static_cast<float>(viewportSize.w),
                     static_cast<float>(viewportSize.h), 0.0F, -1.F, 1.F);
-                _compositeAnnotations(vk.annotation, orthoMatrix, viewportSize);
+                _compositeAnnotations(vk.cmd, vk.annotation, orthoMatrix,
+                                      vk.annotationShader, vk.avbo,
+                                      viewportSize);
             }
 
             if (p.dataWindow)

@@ -31,6 +31,8 @@
 #include <tlCore/String.h>
 #include <tlCore/Mesh.h>
 
+#include <FL/Fl_PNG_Image.H>
+
 namespace
 {
     const char* kModule = "draw";
@@ -378,6 +380,7 @@ namespace mrv
         }
 
         void Viewport::_drawShape(
+            const std::shared_ptr<timeline_vlk::Render>& render,
             const std::shared_ptr< draw::Shape >& shape,
             const float alphamult) noexcept
         {
@@ -397,11 +400,11 @@ namespace mrv
                 shape->color.a *= shape->fade;
                 if (auto vkshape = dynamic_cast<VKPathShape*>(shape.get()))
                 {
-                    vkshape->draw(vk.annotationRender, vk.lines);
+                    vkshape->draw(render, vk.lines);
                 }
                 else if (auto vkshape = dynamic_cast<VKShape*>(shape.get()))
                 {
-                    vkshape->draw(vk.annotationRender, vk.lines);
+                    vkshape->draw(render, vk.lines);
                 }
                 else
                 {
@@ -413,9 +416,10 @@ namespace mrv
 
         void Viewport::_drawAnnotations(
             const std::shared_ptr<tl::vlk::OffscreenBuffer>& annotationBuffer,
+            const std::shared_ptr<tl::timeline_vlk::Render>& render,
             const math::Matrix4x4f& renderMVP, const otime::RationalTime& time,
             const std::vector<std::shared_ptr<draw::Annotation>>& annotations,
-            const math::Size2i& viewportSize)
+            const math::Size2i& renderSize)
         {
             TLRENDER_P();
             MRV2_VK();
@@ -427,13 +431,14 @@ namespace mrv
             timeline::RenderOptions renderOptions;
             renderOptions.colorBuffer = image::PixelType::RGBA_U8;
 
-            vk.annotationRender->begin(vk.cmd, annotationBuffer, m_currentFrameIndex,
-                                       viewportSize, renderOptions);
-            vk.annotationRender->setOCIOOptions(timeline::OCIOOptions());
-            vk.annotationRender->setLUTOptions(timeline::LUTOptions());
-            vk.annotationRender->setTransform(renderMVP);
-            vk.annotationRender->beginRenderPass();
-
+            render->begin(vk.cmd, annotationBuffer, m_currentFrameIndex,
+                          renderSize, renderOptions);
+            render->setOCIOOptions(timeline::OCIOOptions());
+            render->setLUTOptions(timeline::LUTOptions());
+            render->setTransform(renderMVP);
+            
+            render->beginRenderPass();
+            
             // Iterate through each annotation.
             for (const auto& annotation : annotations)
             {
@@ -475,101 +480,85 @@ namespace mrv
                     if (alphamult <= 0.001F)
                         continue;
                     
-                    _drawShape(shape, alphamult);
+                    _drawShape(render, shape, alphamult);
                 }
             }
             
-            vk.annotationRender->endRenderPass();
-            vk.annotationRender->end();
-        }
-
-        void Viewport::_compositeOverlay(
-            const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay,
-            const math::Matrix4x4f& mvp, const math::Size2i& viewportSize)
-        {
-            MRV2_VK();
-            TLRENDER_P();
-
-            _compositeAnnotations(overlay, mvp, viewportSize);
-            
-
-            const size_t width = overlay->getSize().w;
-            const size_t height = overlay->getSize().h;
-
-            // Bind the overlay texture
-            // glBindTexture(GL_TEXTURE_2D, overlay->getColorID());
-            
-
-            // Wait for the annotation PBO fence
-            // GLenum waitReturn = glClientWaitSync(
-            //     vk.overlayFence, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
-            
-            // if (waitReturn == GL_TIMEOUT_EXPIRED)
-            //     return;
-
-            // glDeleteSync(vk.overlayFence);
-            
-
-            auto outputDevice = App::app->outputDevice();
-            if (outputDevice)
-            {
-                // Retrieve pixel data
-                // glBindTexture(GL_TEXTURE_2D, overlay->getColorID());
-
-                const image::PixelType pixelType = image::PixelType::RGBA_U8;
-                vk.annotationImage = image::Image::create(width, height, pixelType);
-
-                // glGetTexImage(
-                //     GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-                //     vk.annotationImage->getData());
-            }
-
-            // Restore drawing to main viewport (needed for HUD and other annotation
-            // code)
-            // glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
-            // glBindFramebuffer(GL_FRAMEBUFFER, 0);
-            
+            render->endRenderPass();
+            render->end();
         }
 
         void Viewport::_compositeAnnotations(
+            VkCommandBuffer cmd,
             const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay,
             const math::Matrix4x4f& orthoMatrix,
+            const std::shared_ptr<vlk::Shader>& shader,
+            const std::shared_ptr<vlk::VBO>& vbo,
             const math::Size2i& viewportSize)
         {
             TLRENDER_P();
             MRV2_VK();
-
             
-            vkCmdBindPipeline(vk.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
-                              vk.annotation_pipeline);
-
-            vk.annotationShader->bind(m_currentFrameIndex);
-            vk.annotationShader->setUniform("transform.mvp", orthoMatrix,
-                                            vlk::kShaderVertex);
+            shader->bind(m_currentFrameIndex);
+            shader->setUniform("transform.mvp", orthoMatrix,
+                               vlk::kShaderVertex);
             timeline::Channels channels = timeline::Channels::Color;
             if (!p.displayOptions.empty())
                 channels = p.displayOptions[0].channels;
-            vk.annotationShader->setUniform("channels", static_cast<int>(channels));
-            vk.annotationShader->setFBO("textureSampler", overlay);
+            shader->setUniform("channels", static_cast<int>(channels));
+            shader->setFBO("textureSampler", overlay);
             
-            // --- Bind Descriptor Set for the SECOND pass ---
+            // --- Bind Descriptor Set for this shader ---
             // Record the command to bind the descriptor set for the CURRENT
             // frame index
-            VkDescriptorSet descriptorSet = vk.annotationShader->getDescriptorSet();
+            VkDescriptorSet descriptorSet = shader->getDescriptorSet();
             vkCmdBindDescriptorSets(
-                vk.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
+                cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
                 vk.annotation_pipeline_layout, 0, 1,
                 &descriptorSet, 0, nullptr);
             
-            if (vk.avao && vk.avbo)
+            if (vk.avao && vbo)
             {
                 // Draw calls for the composition geometry (e.g., a
                 // screen-filling quad)
                 vk.avao->bind(m_currentFrameIndex);
-                vk.avao->draw(vk.cmd, vk.avbo);
+                vk.avao->draw(cmd, vbo);
             }
         }
 
+        void Viewport::_readOverlay(
+            const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay)
+        {
+            MRV2_VK();
+            TLRENDER_P();
+
+            VkCommandBuffer cmd =
+                beginSingleTimeCommands(device(), commandPool());
+            
+            const size_t width = overlay->getWidth();
+            const size_t height = overlay->getHeight();
+            
+            const image::PixelType pixelType = image::PixelType::RGBA_U8;
+            vk.annotationImage = image::Image::create(width, height, pixelType);
+            
+            overlay->readPixels(cmd, 0, 0, width, height);
+            
+            vkEndCommandBuffer(cmd);
+                    
+            overlay->submitReadback(cmd);
+
+            wait_queue();
+            
+            const void* data = overlay->getLatestReadPixels();
+            if (!data)
+                return;
+            
+            std::memcpy(vk.annotationImage->getData(),
+                        data, vk.annotationImage->getDataByteCount());
+            
+            vkFreeCommandBuffers(device(), commandPool(), 1, &cmd);
+        }
+        
         inline void Viewport::_appendText(
             std::vector<timeline::TextInfo>& textInfos,
             const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
@@ -612,7 +601,7 @@ namespace mrv
             TLRENDER_P();
             
 
-            float width = 2 / _p->viewZoom; //* renderSize.w / viewportSize.w;x
+            float width = 2 / _p->viewZoom; //* renderSize.w / viewportSize.w;
             vk.render->setTransform(mvp);
             util::drawRectOutline(vk.render, pipelineName, area, color, width,
                                   renderPass());

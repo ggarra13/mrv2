@@ -663,7 +663,7 @@ namespace mrv
                         CHECK_GL;
                     }
                     CHECK_GL;
-
+                    
                     const math::Matrix4x4f& renderMVP = _renderProjectionMatrix();
                     _drawAnnotations(
                         gl.overlay, renderMVP, currentTime, annotations,

@@ -1,8 +1,13 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Copyright (c) 2021-2024 Darby Johnston
+// Copyright (C) 2025-Present Gonzalo Garramuño
 // All rights reserved.
 
 #pragma once
+
+#ifdef VULKAN_BACKEND
+#    include <tlVk/Vk.h>
+#endif
 
 #include <tlDevice/IOutput.h>
 
@@ -21,15 +26,28 @@ namespace tl
         protected:
             void _init(const std::shared_ptr<system::Context>&);
 
+#ifdef OPENGL_BACKEND
             OutputDevice();
+#endif
 
+#ifdef VULKAN_BACKEND
+            OutputDevice(Fl_Vk_Context&);
+#endif
+            
         public:
             ~OutputDevice();
 
+#ifdef OPENGL_BACKEND
             //! Create a new output device.
             static std::shared_ptr<OutputDevice>
             create(const std::shared_ptr<system::Context>&);
+#endif
 
+#ifdef VULKAN_BACKEND
+            //! Create a new output device.
+            static std::shared_ptr<OutputDevice>
+            create(Fl_Vk_Context&, const std::shared_ptr<system::Context>&);
+#endif
             //! Get the output device configuration.
             device::DeviceConfig getConfig() const override;
 
@@ -137,6 +155,10 @@ namespace tl
             void _read(const device::DeviceConfig&);
             void _cacheUpdate(const std::vector<timeline::AudioData>&);
 
+#ifdef VULKAN_BACKEND
+            Fl_Vk_Context& ctx;
+#endif
+            
             TLRENDER_PRIVATE();
         };
     } // namespace ndi

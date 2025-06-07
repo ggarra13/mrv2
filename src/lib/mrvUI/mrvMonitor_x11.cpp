@@ -140,7 +140,8 @@ namespace mrv
                 XRROutputInfo* output_info =
                     XRRGetOutputInfo(display, res, res->outputs[j]);
 
-                if (output_info->connection == RR_Connected)
+                if (output_info->connection == RR_Connected &&
+                    output_info->crtc != 0)
                 {
 
                     // Retrieve the CRTC information for this output

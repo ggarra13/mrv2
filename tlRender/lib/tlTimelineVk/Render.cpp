@@ -634,8 +634,8 @@ namespace tl
         }
 
         Render::Render(Fl_Vk_Context& context) :
-            _p(new Private),
-            ctx(context)
+            ctx(context),
+            _p(new Private)
         {
             TLRENDER_P();
             

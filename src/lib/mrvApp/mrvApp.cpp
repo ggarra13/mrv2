@@ -1463,7 +1463,13 @@ namespace mrv
     {
         TLRENDER_P();
         device::DeviceConfig config;
+#ifdef OPENGL_BACKEND
         p.outputDevice = ndi::OutputDevice::create(_context);
+#endif
+#ifdef VULKAN_BACKEND
+        p.outputDevice = ndi::OutputDevice::create(
+            ui->uiView->getContext(), _context);
+#endif
         p.outputDevice->setConfig(config);
         p.devicesModel = device::DevicesModel::create(_context);
         p.devicesModel->setDeviceIndex(
