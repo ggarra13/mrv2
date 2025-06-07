@@ -135,6 +135,7 @@ namespace tl
 
             void createImage();
             void allocateMemory();
+            void createCommandPool();
             void createImageView();
             void createSampler();
 

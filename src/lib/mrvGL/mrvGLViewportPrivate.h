@@ -32,8 +32,11 @@ namespace mrv
             std::shared_ptr<tl::gl::OffscreenBuffer> buffer;
             std::shared_ptr<tl::gl::OffscreenBuffer> stereoBuffer;
             std::shared_ptr<tl::gl::OffscreenBuffer> annotation;
-            std::shared_ptr<tl::image::Image> annotationImage; // only used on APPLE
+            std::shared_ptr<tl::image::Image> annotationImage;
+            
+            // only used on APPLE
             std::shared_ptr<tl::gl::OffscreenBuffer> overlay;
+            
             std::shared_ptr<gl::Shader> shader;
             std::shared_ptr<gl::Shader> annotationShader;
 

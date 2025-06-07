@@ -200,6 +200,8 @@ namespace tl
 #else
             VmaAllocation allocation = VK_NULL_HANDLE;
 #endif
+
+            VkCommandPool commandPool = VK_NULL_HANDLE;
             
             VkImageView imageView = VK_NULL_HANDLE;
             VkSampler sampler = VK_NULL_HANDLE;
@@ -223,6 +225,7 @@ namespace tl
             p.format = p.internalFormat = getTextureFormat(info.pixelType);
             p.options = options;
 
+            createCommandPool();
             createImage();
             allocateMemory();
             createImageView();
@@ -258,6 +261,7 @@ namespace tl
             if (p.options.tiling == VK_IMAGE_TILING_OPTIMAL)
                 p.memoryFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
 
+            createCommandPool();
             createImage();
             allocateMemory();
             createImageView();
@@ -294,6 +298,9 @@ namespace tl
             if (p.image != VK_NULL_HANDLE && p.allocation != VK_NULL_HANDLE)
                 vmaDestroyImage(ctx.allocator, p.image, p.allocation);
 #endif
+            if (p.commandPool != VK_NULL_HANDLE)
+                vkDestroyCommandPool(device, p.commandPool, nullptr);
+            
             --numTextures;
             if (numTextures == 0)
             {
@@ -408,7 +415,6 @@ namespace tl
                 return;
 
             VkDevice device = ctx.device;
-            VkCommandPool commandPool = ctx.commandPool;
 
             
             // Determine proper masks
@@ -494,7 +500,6 @@ namespace tl
             const std::size_t size = data->getDataByteCount();
 
             VkDevice device = ctx.device;
-            VkCommandPool commandPool = ctx.commandPool;
             VkQueue queue = ctx.queue();
 
 #ifdef MRV2_NO_VMA    
@@ -574,7 +579,8 @@ namespace tl
             vmaUnmapMemory(ctx.allocator, stagingAllocation);
 #endif
             // Begin command buffer
-            VkCommandBuffer cmd = beginSingleTimeCommands(device, commandPool);
+            VkCommandBuffer cmd = beginSingleTimeCommands(device,
+                                                          p.commandPool);
 
             // Transition image to transfer dst
             transition(cmd,
@@ -613,7 +619,7 @@ namespace tl
 
             {
                 std::lock_guard<std::mutex> lock(ctx.queue_mutex());
-                endSingleTimeCommands(cmd, device, commandPool, queue);
+                endSingleTimeCommands(cmd, device, p.commandPool, queue);
             }
             
 #ifdef MRV2_NO_VMA
@@ -630,7 +636,6 @@ namespace tl
             TLRENDER_P();
 
             VkDevice device = ctx.device;
-            VkCommandPool commandPool = ctx.commandPool;
             VkPhysicalDevice gpu = ctx.gpu;
             VkQueue queue = ctx.queue();
 
@@ -790,7 +795,7 @@ namespace tl
 
                 // Transition image for copy
                 VkCommandBuffer cmd =
-                    beginSingleTimeCommands(device, commandPool);
+                    beginSingleTimeCommands(device, p.commandPool);
                 
                 transition(
                     cmd,
@@ -832,7 +837,7 @@ namespace tl
 
                 {
                     std::lock_guard<std::mutex> lock(ctx.queue_mutex());
-                    endSingleTimeCommands(cmd, device, commandPool, queue);
+                    endSingleTimeCommands(cmd, device, p.commandPool, queue);
                 }
 
 #ifdef MRV2_NO_VMA
@@ -997,6 +1002,21 @@ namespace tl
 
             VK_CHECK(
                 vkCreateImageView(device, &viewInfo, nullptr, &p.imageView));
+        }
+
+        void Texture::createCommandPool()
+        {
+            TLRENDER_P();
+
+            VkDevice device = ctx.device;
+
+            // Per-thread command pool
+            VkCommandPoolCreateInfo poolInfo{};
+            poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+            poolInfo.queueFamilyIndex = ctx.queueFamilyIndex;
+            poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+            
+            vkCreateCommandPool(device, &poolInfo, nullptr, &p.commandPool);
         }
 
         void Texture::createSampler()

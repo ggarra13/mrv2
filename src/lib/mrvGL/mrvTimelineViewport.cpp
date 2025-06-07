@@ -1214,7 +1214,7 @@ namespace mrv
                 }
 
                 Fl_Widget* widget = Fl::belowmouse();
-                if (widget != primary || !(secondary && widget == secondary))
+                if (widget != primary && !(secondary && widget == secondary))
                     return;
 
                 if (p.player)
@@ -3527,8 +3527,8 @@ namespace mrv
 
             if (p.frameView && _getRotation() == 0.F)
                 return math::ortho(
-                    0.F, static_cast<float>(renderSize.w), 0.F,
-                    static_cast<float>(renderSize.h), -1.F, 1.F);
+                    0.F, static_cast<float>(renderSize.w),
+                    0.F, static_cast<float>(renderSize.h), -1.F, 1.F);
 
             const auto renderAspect = renderSize.getAspect();
             const auto viewportAspect = viewportSize.getAspect();
@@ -3620,8 +3620,8 @@ namespace mrv
                 math::Vector3f(transformOffset.x, transformOffset.y, 0.F));
 
             const math::Matrix4x4f& pm = math::ortho(
-                0.F, static_cast<float>(viewportSize.w), 0.F,
-                static_cast<float>(viewportSize.h), -1.F, 1.F);
+                0.F, static_cast<float>(viewportSize.w),
+                0.F, static_cast<float>(viewportSize.h), -1.F, 1.F);
             return pm * vm * transformOffsetMatrix * rotateMatrix * centerMatrix;
         }
 

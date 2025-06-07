@@ -34,30 +34,40 @@ namespace mrv
             VkPipelineLayout pipeline_layout = VK_NULL_HANDLE;
             VkPipelineLayout annotation_pipeline_layout = VK_NULL_HANDLE;
             VkPipeline       annotation_pipeline = VK_NULL_HANDLE;
+            VkPipeline       overlay_pipeline = VK_NULL_HANDLE;
 
             image::PixelType colorBufferType = image::PixelType::RGBA_F32;
 
             //! Offscreen renderers
             std::shared_ptr<timeline_vlk::Render> render;
             std::shared_ptr<timeline_vlk::Render> annotationRender;
+            std::shared_ptr<timeline_vlk::Render> overlayRender;
 
             //! Offscreen buffers
             std::shared_ptr<tl::vlk::OffscreenBuffer> buffer;
             std::shared_ptr<tl::vlk::OffscreenBuffer> stereoBuffer;
             std::shared_ptr<tl::vlk::OffscreenBuffer> annotation;
             std::shared_ptr<tl::vlk::OffscreenBuffer> overlay;
+            std::shared_ptr<tl::vlk::OffscreenBuffer> overlayPBO;
 
             std::shared_ptr<tl::image::Image> annotationImage; // only used on APPLE
             // Compositing shaders
             std::shared_ptr<vlk::Shader> shader;
             std::shared_ptr<vlk::Shader> annotationShader;
+            std::shared_ptr<vlk::Shader> overlayShader;
 
+            // Main mesh
             std::shared_ptr<vlk::VBO> vbo;
             std::shared_ptr<vlk::VAO> vao;
-            
+
+            // Annotation mesh
             std::shared_ptr<vlk::VBO> avbo;
             std::shared_ptr<vlk::VAO> avao;
 
+            // Overlay mesh
+            std::shared_ptr<vlk::VBO> ovbo;
+            std::shared_ptr<vlk::VBO> ovao;
+            
             // Lines drawn into the rendered annotations
             std::shared_ptr<vulkan::Lines> lines;
 

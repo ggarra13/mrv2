@@ -1158,9 +1158,6 @@ namespace tl
             TLRENDER_P();
             
             VkDevice device = ctx.device;
-            VkCommandPool commandPool = ctx.commandPool;
-            
-            VkQueue  queue  = ctx.queue();
 
             auto& pbo = p.pboRing[p.writeIndex];
             VkResult result = vkWaitForFences(device, 1, &pbo.fence, VK_TRUE,

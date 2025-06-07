@@ -546,7 +546,7 @@ namespace mrv
             gl.render->begin(renderSize, renderOptions);
             gl.render->setOCIOOptions(timeline::OCIOOptions());
             gl.render->setLUTOptions(timeline::LUTOptions());
-
+                    
             for (const auto& annotation : annotations)
             {
                 const auto& annotationTime = annotation->time;

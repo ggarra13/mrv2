@@ -96,6 +96,7 @@ namespace mrv
 
             void _drawAnnotations(
                 const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay,
+                const std::shared_ptr<tl::timeline_vlk::Render>& render,
                 const math::Matrix4x4f& renderMVP,
                 const otime::RationalTime& time,
                 const std::vector<std::shared_ptr<draw::Annotation>>&
@@ -133,6 +134,7 @@ namespace mrv
                 const math::Matrix4x4f& mvp, const char* label = "") noexcept;
 
             void _drawShape(
+                const std::shared_ptr<timeline_vlk::Render>& render,
                 const std::shared_ptr< draw::Shape >& shape,
                 const float alphamult = 1.F) noexcept;
 
@@ -142,14 +144,15 @@ namespace mrv
                                  const std::string&) noexcept;
 
             void _compositeAnnotations(
+                VkCommandBuffer cmd,
                 const std::shared_ptr<tl::vlk::OffscreenBuffer>&,
                 const math::Matrix4x4f& orthoMatrix,
+                const std::shared_ptr<vlk::Shader>& shader,
+                const std::shared_ptr<vlk::VBO>& vbo,
                 const math::Size2i& viewportSize);
 
-            void _compositeOverlay(
-                const std::shared_ptr<tl::vlk::OffscreenBuffer>&,
-                const math::Matrix4x4f& identity,
-                const math::Size2i& viewportSize);
+            void _readOverlay(
+                const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay);
 
             // Vulkan preparation functions
             void prepare_annotation_pipeline();

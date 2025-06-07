@@ -268,9 +268,6 @@ namespace tl
             const std::shared_ptr<image::Image>& image, TextureAtlasItem& out)
         {
             TLRENDER_P();
-
-            VkDevice device = ctx.device;
-            VkCommandPool commandPool = ctx.commandPool;
             
             for (uint8_t i = 0; i < p.textureCount; ++i)
             {

@@ -4,11 +4,12 @@
 
 #include <tlDevice/NDI/NDIOutputDevice.h>
 #include <tlDevice/NDI/NDIUtil.h>
-#include <tlDevice/GLUtil.h>
 
 #include <tlTimelineGL/Render.h>
 
 #ifdef OPENGL_BACKEND
+#include <tlDevice/GLUtil.h>
+
 #include <tlGL/GLFWWindow.h>
 #include <tlGL/OffscreenBuffer.h>
 #include <tlGL/Texture.h>
@@ -16,6 +17,8 @@
 #endif
 
 #ifdef VULKAN_BACKEND
+#include <tlTimelineVk/Render.h>
+
 #include <tlVk/OffscreenBuffer.h>
 #include <tlVk/Texture.h>
 #include <tlVk/Util.h>
@@ -166,14 +169,18 @@ namespace tl
                 std::vector<timeline::VideoData> videoData;
                 std::shared_ptr<image::Image> overlay;
 
-                std::shared_ptr<timeline::IRender> render;
 #ifdef OPENGL_BACKEND
+                std::shared_ptr<timeline::IRender> render;
                 std::shared_ptr<gl::OffscreenBuffer> offscreenBuffer;
+                GLuint pbo = 0;
 #endif
 #ifdef VULKAN_BACKEND
+                std::shared_ptr<timeline_vlk::Render> render;
                 std::shared_ptr<vlk::OffscreenBuffer> offscreenBuffer;
+                uint32_t frameIndex = 0;
+                VkCommandBuffer cmd;
+                VkCommandPool commandPool;
 #endif
-                GLuint pbo = 0;
 
                 // NDI variables
                 NDIlib_send_instance_t NDI_send = nullptr;
@@ -237,10 +244,20 @@ namespace tl
                 });
         }
 
+#ifdef OPENGL_BACKEND
         OutputDevice::OutputDevice() :
             _p(new Private)
         {
         }
+#endif
+        
+#ifdef VULKAN_BACKEND
+        OutputDevice::OutputDevice(Fl_Vk_Context& c) :
+            ctx(c),
+            _p(new Private)
+        {
+        }
+#endif
 
         OutputDevice::~OutputDevice()
         {
@@ -252,6 +269,7 @@ namespace tl
             }
         }
 
+#ifdef OPENGL_BACKEND
         std::shared_ptr<OutputDevice>
         OutputDevice::create(const std::shared_ptr<system::Context>& context)
         {
@@ -259,6 +277,18 @@ namespace tl
             out->_init(context);
             return out;
         }
+#endif
+
+#ifdef VULKAN_BACKEND
+        std::shared_ptr<OutputDevice>
+        OutputDevice::create(Fl_Vk_Context& c,
+                             const std::shared_ptr<system::Context>& context)
+        {
+            auto out = std::shared_ptr<OutputDevice>(new OutputDevice(c));
+            out->_init(context);
+            return out;
+        }
+#endif
 
         device::DeviceConfig OutputDevice::getConfig() const
         {
@@ -688,7 +718,21 @@ namespace tl
 
             if (auto context = p.context.lock())
             {
+#ifdef OPENGL_BACKEND
                 p.thread.render = timeline_gl::Render::create(context);
+#endif
+#ifdef VULKAN_BACKEND
+                p.thread.render = timeline_vlk::Render::create(ctx, context);
+
+                VkDevice device = ctx.device;
+                                
+                VkCommandPoolCreateInfo cmd_pool_info = {};
+                cmd_pool_info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+                cmd_pool_info.queueFamilyIndex = ctx.queueFamilyIndex;
+                cmd_pool_info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+                vkCreateCommandPool(device, &cmd_pool_info, nullptr,
+                                    &p.thread.commandPool);
+#endif
             }
 
             auto t = std::chrono::steady_clock::now();
@@ -818,12 +862,14 @@ namespace tl
 
                 if (createDevice)
                 {
+#ifdef OPENGL_BACKEND
                     if (p.thread.pbo != 0)
                     {
                         glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
                         glDeleteBuffers(1, &p.thread.pbo);
                         p.thread.pbo = 0;
                     }
+#endif
                     p.thread.offscreenBuffer.reset();
 
                     bool active = false;
@@ -910,14 +956,18 @@ namespace tl
                 t = t1;
             }
 
+#ifdef OPENGL_BACKEND
             if (p.thread.pbo != 0)
             {
-#ifdef OPENGL_BACKEND
                 glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
                 glDeleteBuffers(1, &p.thread.pbo);
-#endif
                 p.thread.pbo = 0;
             }
+#endif
+
+#ifdef VULKAN_BACKEND
+            vkDeviceWaitIdle(ctx.device);
+#endif
             p.thread.offscreenBuffer.reset();
             p.thread.render.reset();
 
@@ -1688,28 +1738,38 @@ namespace tl
             }
 #endif
 #ifdef VULKAN_BACKEND
-            offscreenBufferOptions.depth = vlk::OffscreenDepth::_24;
-            offscreenBufferOptions.stencil = vlk::OffscreenStencil::_8;
+            offscreenBufferOptions.depth = vlk::OffscreenDepth::kNone;
+            offscreenBufferOptions.stencil = vlk::OffscreenStencil::kNone;
+            offscreenBufferOptions.pbo = true;
             if (vlk::doCreate(
                     p.thread.offscreenBuffer, renderSize,
                     offscreenBufferOptions))
             {
-                // \@todo: pass the context to NDIOutputDevice
-                // p.thread.offscreenBuffer = vlk::OffscreenBuffer::create(ctx,
-                //     renderSize, offscreenBufferOptions);
+                p.thread.offscreenBuffer = vlk::OffscreenBuffer::create(ctx,
+                    renderSize, offscreenBufferOptions);
             }
 #endif
 
             // Render the video.
             if (p.thread.offscreenBuffer)
             {
-#ifdef OPENGL_BACKEND
-                gl::OffscreenBufferBinding binding(p.thread.offscreenBuffer);
-#endif
                 timeline::RenderOptions renderOptions;
                 renderOptions.colorBuffer =
                     getColorBuffer(p.thread.outputPixelType);
+                
+#ifdef OPENGL_BACKEND
+                gl::OffscreenBufferBinding binding(p.thread.offscreenBuffer);
                 p.thread.render->begin(renderSize, renderOptions);
+#endif
+#ifdef VULKAN_BACKEND                                    
+                p.thread.cmd = beginSingleTimeCommands(ctx.device,
+                                                       p.thread.commandPool);
+                
+                p.thread.offscreenBuffer->transitionToColorAttachment(p.thread.cmd);
+                p.thread.render->begin(p.thread.cmd, p.thread.offscreenBuffer,
+                                       p.thread.frameIndex,
+                                       renderSize, renderOptions);
+#endif
                 p.thread.render->setOCIOOptions(ocioOptions);
                 p.thread.render->setLUTOptions(lutOptions);
 
@@ -1857,7 +1917,7 @@ namespace tl
                 }
 
                 p.thread.render->end();
-
+                
 #ifdef OPENGL_BACKEND
                 glBindBuffer(GL_PIXEL_PACK_BUFFER, p.thread.pbo);
                 glPixelStorei(
@@ -1903,7 +1963,38 @@ namespace tl
             }
             glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
 #endif
-            // \@todo: Vulkan read pixels
+            
+#ifdef VULKAN_BACKEND
+            if (!p.thread.offscreenBuffer || !p.thread.cmd)
+                return;
+                
+            p.thread.offscreenBuffer->transitionToColorAttachment(p.thread.cmd);
+
+            const uint32_t width = p.thread.size.w;
+            const uint32_t height = p.thread.size.h;
+            p.thread.offscreenBuffer->readPixels(p.thread.cmd, 0, 0, width, height);
+
+            vkEndCommandBuffer(p.thread.cmd);
+            
+            p.thread.offscreenBuffer->submitReadback(p.thread.cmd);
+            
+            {
+                std::lock_guard<std::mutex> lock(ctx.queue_mutex());
+                vkQueueWaitIdle(ctx.queue());
+            }
+
+            const void* data = p.thread.offscreenBuffer->getLatestReadPixels();
+            if (!data)
+                return;
+           
+            vkFreeCommandBuffers(ctx.device, p.thread.commandPool, 1, &p.thread.cmd);
+            p.thread.cmd = VK_NULL_HANDLE;
+            
+            p.thread.frameIndex = (p.thread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
+                                    
+            copyPackPixels(video_frame.p_data, data, p.thread.size,
+                           p.thread.outputPixelType);
+#endif    
 
             std::shared_ptr<image::HDRData> hdrData;
             switch (p.thread.hdrMode)
@@ -2108,6 +2199,7 @@ namespace tl
             {
                 NDIlib_send_send_video(p.thread.NDI_send, &video_frame);
             }
+
         }
     } // namespace ndi
 } // namespace tl

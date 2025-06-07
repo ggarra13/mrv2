@@ -450,8 +450,7 @@ namespace mrv
 
                     bool laser = settings->getValue<bool>(kLaser);
                     bool softBrush = settings->getValue<bool>(kSoftBrush);
-                    Fl_Font font =
-                        static_cast<Fl_Font>(settings->getValue<int>(kTextFont));
+                    int font = settings->getValue<int>(kTextFont);
 
                     p.mousePos = _getFocus();
                     draw::Point pnt(_getRasterf());
@@ -1008,7 +1007,6 @@ namespace mrv
             case FL_LEAVE:
             {
                 p.lastEvent = 0;
-                p.lastCursor = FL_CURSOR_ARROW;
                 
                 const float NaN = std::numeric_limits<float>::quiet_NaN();
                 image::Color4f rgba(NaN, NaN, NaN, NaN);
@@ -1709,10 +1707,9 @@ namespace mrv
                 return;
 
             shape->editing = true;
+            p.multilineText = std::dynamic_pointer_cast<VKTextShape>(s);
 
             tcp->pushMessage("Remove Shape", index);
-
-            annotation->remove(s);
 
             redrawWindows();
         }

@@ -1210,7 +1210,7 @@ namespace mrv
                 }
 
                 Fl_Widget* widget = Fl::belowmouse();
-                if (widget != primary || !(secondary && widget == secondary))
+                if (widget != primary && !(secondary && widget == secondary))
                     return;
 
                 if (p.player)
@@ -3538,7 +3538,6 @@ namespace mrv
             const math::Size2i& viewportSize = getViewportSize();
             const math::Size2i& renderSize = getRenderSize();
 
-            math::Matrix4x4f renderMVP;
 
             if (p.frameView && _getRotation() == 0.F)
                 return math::ortho(
@@ -3548,6 +3547,7 @@ namespace mrv
             const auto renderAspect = renderSize.getAspect();
             const auto viewportAspect = viewportSize.getAspect();
 
+            math::Matrix4x4f renderMVP;
             math::Vector2f transformOffset;
             if (viewportAspect > 1.F)
             {
@@ -3559,6 +3559,7 @@ namespace mrv
                 transformOffset.x = renderSize.h * renderAspect / 2.F;
                 transformOffset.y = renderSize.h / 2.F;
             }
+            
             const auto outputDevice = App::app->outputDevice();
             if (!outputDevice)
                 return math::ortho(
@@ -3595,6 +3596,7 @@ namespace mrv
                                static_cast<float>(renderSize.w);
                 float scaleY = static_cast<float>(viewportSize.h) /
                                static_cast<float>(renderSize.h);
+
                 resizeScaleMatrix =
                     math::scale(math::Vector3f(scaleX, scaleY, 1.0f));
             }
@@ -3604,6 +3606,7 @@ namespace mrv
             return renderMVP; // correct
         }
 
+        
         math::Matrix4x4f TimelineViewport::_projectionMatrix() const noexcept
         {
             TLRENDER_P();

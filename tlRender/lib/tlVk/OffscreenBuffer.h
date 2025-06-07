@@ -200,10 +200,6 @@ namespace tl
 
             //! Apply internal viewport and scissor to command buffer.
             void setupViewportAndScissor(VkCommandBuffer cmd);
-
-            //! Render Pass functionality.
-            void createClearRenderPass();
-            void createLoadRenderPass();
             
             //! Create a framebuffer for the current render pass.
             void createFramebuffer();
@@ -225,6 +221,8 @@ namespace tl
             void createImageView();
             void createDepthImage();
             void createDepthImageView();
+            void createClearRenderPass();
+            void createLoadRenderPass();
             void createSampler();
 
             uint32_t findMemoryType(
