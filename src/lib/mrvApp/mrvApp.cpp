@@ -1389,7 +1389,7 @@ namespace mrv
                 if (p.options.playback == timeline::Playback::Count)
                     p.options.playback = timeline::Playback::Forward;
                 Fl::add_timeout(
-                    0.005, (Fl_Timeout_Handler)start_playback_cb, this);
+                    1.5, (Fl_Timeout_Handler)start_playback_cb, this);
             }
         }
         p.running = true;

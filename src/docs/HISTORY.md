@@ -26,6 +26,9 @@ v1.3.8
 - Fixed a Wayland bug not allowing to select the button menus (such as HSV) at the bottom of the screen.
 - Fixed a memory leak on HDR processing on the OpenGL backend.
 - Fixed crash on X11 when a monitor was connected but disabled.
+- Made starting of playback not begin immediately but wait one second since
+  showing the UI.  This allows the application to not skip frames at the 
+  beginning.
 - Started porting to Vulkan.
 
 	 + Working:
