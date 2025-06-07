@@ -15,7 +15,7 @@ echo "RUNNING upload_sourceforge.sh......"
 unset LD_LIBRARY_PATH
 unset DYLD_LIBRARY_PATH
 
-branch=$(git rev-parse --abbrev-ref HEAD)
+export branch=$(git rev-parse --abbrev-ref HEAD)
 if [[ "$branch" != "beta" && "$branch" != "vulkan" ]]; then
     echo "You are not on the beta or vulkan branch.  Will not make a release."
     exit 0
@@ -98,7 +98,7 @@ upload_file()
     echo "Uploading $1 as $2..."
     echo
     
-    rsync -avz -e "ssh -i $SSH_KEY -o StrictHostKeyChecking=no" $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$2 2>&1 | tee rsync_error.log
+    rsync -avz -e "ssh -i $SSH_KEY -o StrictHostKeyChecking=no" $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/$branch/$2 2>&1 | tee rsync_error.log
     if [[ $? -ne 0 ]]; then
         echo "rsync command failed. Error log:"
 	cat rsync_error.log
