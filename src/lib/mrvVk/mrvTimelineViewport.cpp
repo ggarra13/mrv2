@@ -3596,6 +3596,7 @@ namespace mrv
                                static_cast<float>(renderSize.w);
                 float scaleY = static_cast<float>(viewportSize.h) /
                                static_cast<float>(renderSize.h);
+
                 resizeScaleMatrix =
                     math::scale(math::Vector3f(scaleX, scaleY, 1.0f));
             }
@@ -3605,108 +3606,6 @@ namespace mrv
             return renderMVP; // correct
         }
 
-#if 0
-        
-        math::Matrix4x4f TimelineViewport::_renderProjectionMatrix() const noexcept
-        {
-            TLRENDER_P();
-
-            const math::Size2i& viewportSize = getViewportSize(); // This is the coordinate system of your annotations
-            const math::Size2i& renderSize = getRenderSize();     // This is the size of the target FBO (annotationBuffer)
-
-            // Calculate transformations (model/view part). These transform the annotation coordinates
-            // within their native 'viewportSize' space.
-            math::Vector2f transformOffset;
-            const auto renderAspect = renderSize.getAspect(); // These offsets might be tied to rendering within the renderSize area.
-            const auto viewportAspect = viewportSize.getAspect();
-
-            // The logic for transformOffset seems to assume it's calculated relative to renderSize for centering.
-            // If annotations are drawn in viewportSize space, this translation might need to be adjusted
-            // or scaled relative to viewportSize before applying.
-            // For now, let's keep it as is, assuming it applies to the visual framing.
-            if (viewportAspect > 1.F)
-            {
-                transformOffset.x = renderSize.w / 2.F;
-                transformOffset.y = renderSize.w / renderAspect / 2.F;
-            }
-            else
-            {
-                transformOffset.x = renderSize.h * renderAspect / 2.F;
-                transformOffset.y = renderSize.h / 2.F;
-            }
-
-            float scale = 1.0;
-            const auto outputDevice = App::app->outputDevice();
-            const math::Size2i& deviceSize = outputDevice ? outputDevice->getSize() : math::Size2i();
-            if (viewportSize.isValid() && deviceSize.isValid())
-            {
-                scale *= deviceSize.w / static_cast<float>(viewportSize.w);
-            }
-
-            // Model-View Matrix (combines translation, scaling, rotation for the annotations themselves)
-            // The order of multiplication: Object -> Center -> Rotate -> Offset -> View
-            // This sequence seems to be standard P * (V * M) with M = M_offset * M_rotate * M_center
-            // and V = vm (viewPos/viewZoom).
-            // Ensure the order is correct for your math library:
-            // M = centerMatrix * rotateMatrix * transformOffsetMatrix * vm (if pre-multiplying like GLM)
-            // If it's post-multiplying (vector * matrix), then it's vm * transformOffsetMatrix * rotateMatrix * centerMatrix
-            // Your current order is `vm * transformOffsetMatrix * rotateMatrix * centerMatrix`, which implies post-multiplication (or reversed pre-multiplication)
-            // and is likely correct for your setup.
-            math::Matrix4x4f modelViewMatrix =
-                math::translate(
-                    math::Vector3f(p.viewPos.x * scale, p.viewPos.y * scale, 0.F)) * // Pan/Zoom application
-                math::scale(
-                    math::Vector3f(p.viewZoom * scale, p.viewZoom * scale, 1.F)) * // Zoom application
-                math::translate(
-                    math::Vector3f(transformOffset.x, transformOffset.y, 0.F)) * // Offset based on renderSize framing
-                math::rotateZ(_getRotation()) * // Rotation
-                math::translate(
-                    math::Vector3f(-renderSize.w / 2, -renderSize.h / 2, 0.F));     // Move annotation origin to center of renderSize frame
-
-            // *** CRITICAL CHANGE: The projection matrix (`pm`) MUST be based on viewportSize. ***
-            // It maps the source coordinate system of your annotations to NDC.
-            // Given your Vulkan viewport `(0, H, W, -H)` which flips Y, your `math::ortho`
-            // should produce a standard Y-up NDC output (0 for Y maps to -1, H for Y maps to 1).
-            // Based on your "good" run, `math::ortho(0, W, 0, H)` seems to produce this Y-up NDC.
-            const math::Matrix4x4f& pm = math::ortho(
-                0.F,                                   // Left (min X of annotation coordinate system)
-                static_cast<float>(viewportSize.w),    // Right (max X of annotation coordinate system)
-                0.F,                                   // Bottom (min Y of annotation coordinate system, maps to -1 NDC)
-                static_cast<float>(viewportSize.h),    // Top (max Y of annotation coordinate system, maps to 1 NDC)
-                -1.F, 1.F);                            // Near, Far Z
-
-            // Final MVP = Projection * ModelView
-            math::Matrix4x4f renderMVP = pm * modelViewMatrix;
-
-            // --- REMOVE THE EARLY RETURNS FOR p.frameView AND !outputDevice ---
-            // These blocks are the root cause because they override the correct projection
-            // with a renderSize-based one when p.frameView is true.
-            // By removing them, the above `pm` (based on viewportSize) will always be used.
-            /*
-              if (p.frameView && _getRotation() == 0.F)
-              return math::ortho(0.F, static_cast<float>(renderSize.w), 0.F, static_cast<float>(renderSize.h), -1.F, 1.F);
-              // ...
-              if (!outputDevice)
-              return math::ortho(0.F, static_cast<float>(renderSize.w), 0.F, static_cast<float>(renderSize.h), -1.F, 1.F);
-            */
-
-            // --- REMOVE THE RESIZE SCALE MATRIX ---
-            // The `resizeScaleMatrix` is no longer needed. The scaling from the `viewportSize`-based
-            // NDC to the `renderSize` pixel grid is handled automatically by the Vulkan viewport.
-            /*
-              math::Matrix4x4f resizeScaleMatrix;
-              if (!p.frameView) // This block is likely skipped anyway if p.frameView is true
-              {
-              float scaleX = static_cast<float>(viewportSize.w) / static_cast<float>(renderSize.w);
-              float scaleY = static_cast<float>(viewportSize.h) / static_cast<float>(renderSize.h);
-              resizeScaleMatrix = math::scale(math::Vector3f(scaleX, scaleY, 1.0f));
-              }
-              renderMVP = pm * resizeScaleMatrix * vm * transformOffsetMatrix * rotateMatrix * centerMatrix;
-            */
-
-            return renderMVP;
-        }
-#endif
         
         math::Matrix4x4f TimelineViewport::_projectionMatrix() const noexcept
         {

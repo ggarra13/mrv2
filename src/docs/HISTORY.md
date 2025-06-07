@@ -61,21 +61,25 @@ v1.3.8
 		 * Missing Frames crosses
 		 * Vulkan Text widget annotation
 		 * Editing.
+		 * NDI with annotations.
+		 * Re-editing text annotations once stamped.
+		 * Added VMA support to FLTK.
+		 * Added MoltenVK compilation on macOS to work around HDR bugs.
 		 
 	 + Missing to check/add:
-		 * Saving of Movies/Pictures with Annotations
-		 * NDI support
+		 * Saving of Movies/Pictures with Annotations 
+		   (not easy and may not be possible)
 		 * OpenUSD in Vulkan (Impossible to do it with Pixar's current API)
 		 
 	 + Problems:
-	 	 - Performance of the timeline with clips is an even worse problem.
+	 	 * Performance of the timeline with clips is an even worse problem.
 		   
 	 + Improvements:
-		 - Improved performance of drawing text in the HUD and timeline for
+		 * Improved performance of drawing text in the HUD and timeline for
 		   both Vulkan and OpenGL.
-		 - Improved performance of drawing clips in the timeline for Vulkan.
+		 * Improved performance of drawing clips in the timeline for Vulkan.
 		   Still slow, thou.
-		 - Improved performance of Vulkan from 40FPS to 58FPS on 4K movies.
+		 * Improved performance of Vulkan from 40FPS to 58/60FPS on 4K movies.
 		   
 - Fixed and simplified code for NDIView (hdr utility).
 - Fixed hdr utility for macOS Intel trying to pass full HDR10 or HLG data, 
