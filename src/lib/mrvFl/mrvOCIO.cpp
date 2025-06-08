@@ -416,14 +416,16 @@ namespace mrv
             if (!item || !item->label() || item->flags & FL_SUBMENU)
                 return "";
 
-            char pathname[1024];
-            int ret = uiICS->item_pathname(pathname, 1024, item);
-            if (ret != 0)
-                return kInactive;
+            std::string ics = item->label();
+            
+            // char pathname[1024];
+            // int ret = uiICS->item_pathname(pathname, 1024, item);
+            // if (ret != 0)
+            //     return kInactive;
 
-            std::string ics = pathname;
-            if (ics[0] == '/')
-                ics = ics.substr(1, ics.size());
+            // std::string ics = pathname;
+            // if (ics[0] == '/')
+            //     ics = ics.substr(1, ics.size());
 
             return ics;
         }

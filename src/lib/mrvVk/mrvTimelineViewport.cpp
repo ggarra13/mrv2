@@ -2191,7 +2191,7 @@ namespace mrv
             timeline::OCIOOptions o = getOCIOOptions(screen);
             o.fileName = p.ui->uiPrefs->uiPrefsOCIOConfig->value();
 
-            std::string input = p.ui->uiICS->label();
+            std::string input = ocio::ics(); //p.ui->uiICS->label();
             if (p.ui->uiICS->value() <= 0)
                 input = "";
             o.input = input;
@@ -2204,7 +2204,7 @@ namespace mrv
                 ocio::splitView(combined, o.display, o.view);
             }
 
-            std::string look = p.ui->uiOCIOLook->label();
+            std::string look = ocio::look(); //p.ui->uiOCIOLook->label();
             if (p.ui->uiOCIOLook->value() <= 0)
                 look = "";
             o.look = look;
