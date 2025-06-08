@@ -2,6 +2,7 @@
 
 # Remove old symlinks just in case
 rm -f /usr/bin/mrv2
+rm -f /usr/bin/hdr
 
 #
 # Add mrv2 to path
