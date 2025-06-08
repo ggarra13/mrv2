@@ -381,7 +381,6 @@ It also has, currently, some drawbacks:
 
 - A little bit slower, particularly when showing the timeline with pictures.
 - No OpenUSD support.
-- No NDI support yet (coming soon).
 - No Saving of Movies or Pictures with Annotations.
 
 Anyway, to build it, you need to run:
