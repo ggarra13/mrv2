@@ -392,8 +392,6 @@ namespace mrv
             vk.avbo.reset();
             vk.avao.reset();
 
-            vk.ovbo.reset();
-            
             if (vk.loadRenderPass != VK_NULL_HANDLE)
             {
                 vkDestroyRenderPass(device(), vk.loadRenderPass, nullptr);
@@ -444,7 +442,6 @@ namespace mrv
             // Destroy shaders
             vk.shader.reset();
             vk.annotationShader.reset();
-            vk.overlayShader.reset();
 
             // Destroy meshes
             vk.vbo.reset();
@@ -452,8 +449,6 @@ namespace mrv
 
             vk.avbo.reset();
             vk.avao.reset();
-            
-            vk.ovbo.reset();
 
             p.fontSystem.reset();
 
@@ -519,23 +514,6 @@ namespace mrv
                     int channels = 0; // Color Channel
                     vk.annotationShader->createUniform("channels", channels);
                     vk.annotationShader->createBindingSet();
-                }
-                
-                if (!vk.overlayShader)
-                {
-                    vk.overlayShader = vlk::Shader::create(
-                        ctx, 
-                        timeline_vlk::Vertex3_spv,
-                        timeline_vlk::Vertex3_spv_len,
-                        annotationFragment_spv,
-                        annotationFragment_spv_len,
-                        "vk.overlayShader");
-                    vk.overlayShader->createUniform(
-                        "transform.mvp", mvp, vlk::kShaderVertex);
-                    vk.overlayShader->addFBO("textureSampler");
-                    int channels = 0; // Color Channel
-                    vk.overlayShader->createUniform("channels", channels);
-                    vk.overlayShader->createBindingSet();
                 }
             }
         }
@@ -892,11 +870,15 @@ namespace mrv
                     vk.annotation, vk.annotationRender,
                     mvp, currentTime, annotations, viewportSize);
                 
-                //
-                // Draw annotations for output device in an overlay buffer.
-                //
-                auto outputDevice = App::app->outputDevice();
-                if (outputDevice)
+            }
+            
+            //
+            // Draw annotations for output device in an overlay buffer.
+            //
+            auto outputDevice = App::app->outputDevice();
+            if (outputDevice && p.showAnnotations)
+            {
+                if (!annotations.empty())
                 {
                     vlk::OffscreenBufferOptions offscreenBufferOptions;
                     offscreenBufferOptions.colorType = image::PixelType::RGBA_U8;
@@ -914,7 +896,6 @@ namespace mrv
                         vk.overlay = vlk::OffscreenBuffer::create(ctx,
                                                                   renderSize,
                                                                   offscreenBufferOptions);
-                        vk.ovbo.reset();
                         
                         if (!vk.overlayRender)
                         {
@@ -923,18 +904,6 @@ namespace mrv
                                 vk.overlayRender = timeline_vlk::Render::create(ctx, context);
                             }
                         }
-                    }
-
-                    if (!vk.ovbo)
-                    {
-                        const auto& mesh = geom::box(math::Box2i(0, 0,
-                                                                 renderSize.w,
-                                                                 renderSize.h));
-                        const size_t numTriangles = mesh.triangles.size();
-                        vk.ovbo = vlk::VBO::create(
-                            numTriangles * 3, vlk::VBOType::Pos2_F32_UV_U16);
-                    
-                        vk.ovbo->copy(convert(mesh, vlk::VBOType::Pos2_F32_UV_U16));
                     }
 
                     const math::Matrix4x4f& renderMVP = _renderProjectionMatrix();
@@ -947,9 +916,15 @@ namespace mrv
                     _readOverlay(vk.overlay);
 
                     vk.overlay->transitionToColorAttachment(cmd);
-                    
-                    outputDevice->setOverlay(vk.annotationImage);
                 }
+                else
+                {
+                    const image::PixelType pixelType = image::PixelType::RGBA_U8;
+                    vk.annotationImage = image::Image::create(1, 1, pixelType);
+                    
+                }
+
+                outputDevice->setOverlay(vk.annotationImage);
             }
 
             

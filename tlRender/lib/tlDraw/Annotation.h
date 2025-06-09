@@ -24,6 +24,7 @@ namespace tl
             Annotation(const otime::RationalTime& frame, const bool allFrames);
             ~Annotation();
 
+            //! Returns true if the current canvas will be empty.
             bool empty() const;
 
             void push_back(const std::shared_ptr< Shape >&);

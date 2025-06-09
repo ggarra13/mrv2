@@ -1010,7 +1010,7 @@ namespace tl
                 }
 
                 auto& video_frame = p.thread.NDI_video_frame;
-
+                
                 p.thread.outputPixelType = getOutputType(config.pixelType);
 
                 video_frame.xres = size.w;
@@ -1140,7 +1140,6 @@ namespace tl
                 }
                 free(video_frame.p_data);
                 video_frame.p_data = (uint8_t*)malloc(dataSize);
-                memset(video_frame.p_data, 128, dataSize);
                 if (!video_frame.p_data)
                 {
                     throw std::runtime_error("Out of memory allocating p_data");
@@ -1162,6 +1161,7 @@ namespace tl
                             .arg(frameRate));
                 }
 
+                std::cerr << "NDIOutputDevice active" << std::endl;
                 active = true;
             }
         }
@@ -1738,8 +1738,8 @@ namespace tl
             }
 #endif
 #ifdef VULKAN_BACKEND
-            offscreenBufferOptions.depth = vlk::OffscreenDepth::kNone;
-            offscreenBufferOptions.stencil = vlk::OffscreenStencil::kNone;
+            offscreenBufferOptions.depth = vlk::OffscreenDepth::_24;
+            offscreenBufferOptions.stencil = vlk::OffscreenStencil::_8;
             offscreenBufferOptions.pbo = true;
             if (vlk::doCreate(
                     p.thread.offscreenBuffer, renderSize,
@@ -1977,7 +1977,7 @@ namespace tl
             vkEndCommandBuffer(p.thread.cmd);
             
             p.thread.offscreenBuffer->submitReadback(p.thread.cmd);
-            
+
             {
                 std::lock_guard<std::mutex> lock(ctx.queue_mutex());
                 vkQueueWaitIdle(ctx.queue());

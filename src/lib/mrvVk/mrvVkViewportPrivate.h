@@ -54,7 +54,6 @@ namespace mrv
             // Compositing shaders
             std::shared_ptr<vlk::Shader> shader;
             std::shared_ptr<vlk::Shader> annotationShader;
-            std::shared_ptr<vlk::Shader> overlayShader;
 
             // Main mesh
             std::shared_ptr<vlk::VBO> vbo;
@@ -63,10 +62,6 @@ namespace mrv
             // Annotation mesh
             std::shared_ptr<vlk::VBO> avbo;
             std::shared_ptr<vlk::VAO> avao;
-
-            // Overlay mesh
-            std::shared_ptr<vlk::VBO> ovbo;
-            std::shared_ptr<vlk::VBO> ovao;
             
             // Lines drawn into the rendered annotations
             std::shared_ptr<vulkan::Lines> lines;

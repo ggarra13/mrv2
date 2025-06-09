@@ -51,8 +51,6 @@ namespace mrv
 
         protected:
             void _updateHDRMetadata();
-            
-            void _createOverlayPBO(const math::Size2i& renderSize);
 
             void _createCubicEnvironmentMap();
 

@@ -1146,25 +1146,6 @@ namespace mrv
 
             vk.render->end();
         }
-
-        void Viewport::_createOverlayPBO(const math::Size2i& renderSize)
-        {
-            MRV2_VK();
-            // if (renderSize.w > 0 && renderSize.h > 0)
-            // {
-            //     if (vk.overlayPBO != 0)
-            //     {
-            //         // Delete existing PBO if any
-            //         glDeleteBuffers(1, &vk.overlayPBO);
-            //     }
-            //     glGenBuffers(1, &vk.overlayPBO);
-            //     glBindBuffer(GL_PIXEL_PACK_BUFFER, vk.overlayPBO);
-            //     glBufferData(
-            //         GL_PIXEL_PACK_BUFFER, renderSize.w * renderSize.h * 4, nullptr,
-            //         GL_STREAM_READ); // Allocate memory
-            //     glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
-            // }
-        }
         
         void Viewport::_updateHDRMetadata()
         {

@@ -1124,7 +1124,7 @@ void main() {
         TLRENDER_P();
 
         // Some Vulkan settings
-        m_clearColor = {0.F, 0.F, 0.F, 0.F};
+        m_clearColor = {2.F, 2.F, 2.F, 0.F};
 
         mode(FL_RGB | FL_DOUBLE | FL_ALPHA);
         m_vert_shader_module = VK_NULL_HANDLE;
