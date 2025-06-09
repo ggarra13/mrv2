@@ -860,6 +860,11 @@ namespace tl
                     }
                 }
 
+#ifdef VULKAN_BACKEND
+                p.thread.cmd = beginSingleTimeCommands(ctx.device,
+                                                       p.thread.commandPool);
+#endif
+                
                 if (createDevice)
                 {
 #ifdef OPENGL_BACKEND
@@ -1161,7 +1166,6 @@ namespace tl
                             .arg(frameRate));
                 }
 
-                std::cerr << "NDIOutputDevice active" << std::endl;
                 active = true;
             }
         }
@@ -1762,9 +1766,6 @@ namespace tl
                 p.thread.render->begin(renderSize, renderOptions);
 #endif
 #ifdef VULKAN_BACKEND                                    
-                p.thread.cmd = beginSingleTimeCommands(ctx.device,
-                                                       p.thread.commandPool);
-                
                 p.thread.offscreenBuffer->transitionToColorAttachment(p.thread.cmd);
                 p.thread.render->begin(p.thread.cmd, p.thread.offscreenBuffer,
                                        p.thread.frameIndex,
@@ -1965,9 +1966,9 @@ namespace tl
 #endif
             
 #ifdef VULKAN_BACKEND
-            if (!p.thread.offscreenBuffer || !p.thread.cmd)
+            if (!p.thread.offscreenBuffer)
                 return;
-                
+            
             p.thread.offscreenBuffer->transitionToColorAttachment(p.thread.cmd);
 
             const uint32_t width = p.thread.size.w;
@@ -1986,7 +1987,7 @@ namespace tl
             const void* data = p.thread.offscreenBuffer->getLatestReadPixels();
             if (!data)
                 return;
-           
+            
             vkFreeCommandBuffers(ctx.device, p.thread.commandPool, 1, &p.thread.cmd);
             p.thread.cmd = VK_NULL_HANDLE;
             

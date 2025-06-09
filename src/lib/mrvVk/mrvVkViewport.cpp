@@ -527,7 +527,6 @@ namespace mrv
         {
             TLRENDER_P();
             MRV2_VK();
-
             
             // Get the command buffer started for the current frame.
             VkCommandBuffer cmd = getCurrentCommandBuffer();

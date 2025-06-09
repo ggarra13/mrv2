@@ -65,6 +65,7 @@ v1.3.8
 		 * Vulkan Text widget annotation
 		 * Editing.
 		 * NDI with annotations.
+		 * NDI with undo/redo annotations properly.
 		 * Re-editing text annotations once stamped.
 		 * Added VMA support to FLTK.
 		 * Added MoltenVK compilation on macOS to work around HDR bugs.

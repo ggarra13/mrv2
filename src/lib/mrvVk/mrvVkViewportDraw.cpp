@@ -544,7 +544,7 @@ namespace mrv
             overlay->readPixels(cmd, 0, 0, width, height);
             
             vkEndCommandBuffer(cmd);
-                    
+            
             overlay->submitReadback(cmd);
 
             wait_queue();

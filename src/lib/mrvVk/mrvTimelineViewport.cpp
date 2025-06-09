@@ -218,6 +218,10 @@ namespace mrv
             p.player->undoAnnotation();
 
             tcp->pushMessage("undo", 0);
+            
+            // We do two redraws and a flush so that NDI's PBO updates
+            redrawWindows();
+            Fl::flush();
             redrawWindows();
 
             updateUndoRedoButtons();
@@ -232,6 +236,10 @@ namespace mrv
 
             p.player->redoAnnotation();
             tcp->pushMessage("redo", 0);
+
+            // We do two redraws and a flush so that NDI's PBO updates
+            redrawWindows();
+            Fl::flush();
             redrawWindows();
 
             updateUndoRedoButtons();
