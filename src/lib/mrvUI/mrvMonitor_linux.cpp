@@ -26,7 +26,8 @@ namespace mrv
         {
             std::string out;
 
-            if (names.find(monitorIndex) != names.end())
+            if (names.find(monitorIndex) != names.end() &&
+                !names[monitorIndex].empty())
             {
                 return names[monitorIndex];
             }

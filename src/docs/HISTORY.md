@@ -2,6 +2,7 @@ v1.3.9
 ======
 - v1.3.8 had broken the short name of the buttons (F/O in the pixel bar) and
   T/S/F in the timecode selection button.
+- Fixed Wayland's monitor names.
   
 
 v1.3.8
