@@ -2841,20 +2841,6 @@ namespace mrv
                 rgba.r = f.r / 1023.F;
                 rgba.g = f.g / 1023.F;
                 rgba.b = f.b / 1023.F;
-                if (offset == 0)
-                {
-                    // read pixel 0,0 as ec83d03f
-                    //  raw pixel 0,0 as ec83d03f
-                    //       rgba=0.924731,0.0596285,0.0146628,1
-
-                    uint32_t d = *((uint32_t*)&data[0]);
-                    std::cerr << "raw pixel 0,0 as "
-                              << std::hex << d
-                              << std::dec << std::endl;
-                    std::cerr << "10bits=" << std::hex << f.r << " " << f.g
-                              << " " << f.b << std::dec << std::endl;
-                    std::cerr << "rgba=" << rgba << std::endl;
-                }
                 break;
             }
             case image::PixelType::RGBA_U8:
