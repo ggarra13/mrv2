@@ -2733,7 +2733,7 @@ namespace mrv
             auto size = image->getSize();
             const uint8_t* data = image->getData();
             int X = pos.x / pixelAspectRatio;
-            int Y = size.h - pos.y - 1;
+            int Y = pos.y;
             if (p.displayOptions[0].mirror.x)
                 X = size.w - X - 1;
             if (p.displayOptions[0].mirror.y)
@@ -2754,6 +2754,9 @@ namespace mrv
             case image::PixelType::YUV_420P_U16:
             case image::PixelType::YUV_422P_U16:
             case image::PixelType::YUV_444P_U16:
+                break;
+            case image::PixelType::RGB_U10:
+                offset *= sizeof(uint32_t);
                 break;
             default:
                 offset *= channels * depth;
@@ -2836,12 +2839,11 @@ namespace mrv
                 break;
             case image::PixelType::RGB_U10:
             {
-                image::U10* f = (image::U10*)(&data[offset]);
-                constexpr float max =
-                    static_cast<float>(std::numeric_limits<uint32_t>::max());
-                rgba.r = f->r / max;
-                rgba.g = f->g / max;
-                rgba.b = f->b / max;
+                image::U10 f = *((image::U10*)(&data[offset]));
+                constexpr float max = 1023.F;
+                rgba.r = f.r / max;
+                rgba.g = f.g / max;
+                rgba.b = f.b / max;
                 break;
             }
             case image::PixelType::RGBA_U8:

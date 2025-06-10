@@ -29,6 +29,8 @@
 
 #include <FL/Fl.H>
 
+#include "mrvApp/mrvApp.h"
+
 #include "mrvCore/mrvBackend.h"
 #include "mrvCore/mrvEnv.h"
 #include "mrvCore/mrvFile.h"
@@ -44,6 +46,10 @@
 #ifdef OPENGL_BACKEND
 #    include <tlGL/Init.h>
 #    include <FL/gl.h>
+#endif
+
+#ifdef VULKAN_BACKEND
+#     include <FL/vk.h>
 #endif
 
 #include <string>
@@ -426,7 +432,6 @@ namespace mrv
             if (vendorString)
                 out = vendorString;
 #endif
-
             out = "GPU: " + out;
             return out;
         }

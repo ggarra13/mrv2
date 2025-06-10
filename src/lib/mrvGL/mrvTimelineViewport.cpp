@@ -2753,6 +2753,9 @@ namespace mrv
             case image::PixelType::YUV_422P_U16:
             case image::PixelType::YUV_444P_U16:
                 break;
+            case image::PixelType::RGB_U10:
+                offset *= sizeof(uint32_t);
+                break;
             default:
                 offset *= channels * depth;
                 break;
@@ -2834,12 +2837,24 @@ namespace mrv
                 break;
             case image::PixelType::RGB_U10:
             {
-                image::U10* f = (image::U10*)(&data[offset]);
-                constexpr float max =
-                    static_cast<float>(std::numeric_limits<uint32_t>::max());
-                rgba.r = f->r / max;
-                rgba.g = f->g / max;
-                rgba.b = f->b / max;
+                image::U10 f = *((image::U10*)(&data[offset]));
+                rgba.r = f.r / 1023.F;
+                rgba.g = f.g / 1023.F;
+                rgba.b = f.b / 1023.F;
+                if (offset == 0)
+                {
+                    // read pixel 0,0 as ec83d03f
+                    //  raw pixel 0,0 as ec83d03f
+                    //       rgba=0.924731,0.0596285,0.0146628,1
+
+                    uint32_t d = *((uint32_t*)&data[0]);
+                    std::cerr << "raw pixel 0,0 as "
+                              << std::hex << d
+                              << std::dec << std::endl;
+                    std::cerr << "10bits=" << std::hex << f.r << " " << f.g
+                              << " " << f.b << std::dec << std::endl;
+                    std::cerr << "rgba=" << rgba << std::endl;
+                }
                 break;
             }
             case image::PixelType::RGBA_U8:

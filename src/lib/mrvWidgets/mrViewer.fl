@@ -108,7 +108,7 @@ decl {\#include "mrvHotkeyUI.h"} {private local
 decl {\#include "mrvPreferencesUI.h"} {public global
 }
 
-decl {class HotkeyUI;} {selected public global
+decl {class HotkeyUI;} {public global
 }
 
 decl {class AboutUI;} {public global
@@ -118,7 +118,7 @@ widget_class PixelToolBarClass {
   xywh {86 109 933 56} hide resizable
   class Fl_Double_Window
 } {
-  Fl_Group {} {open
+  Fl_Group {} {
     xywh {0 0 933 30} box FLAT_BOX color 56
   } {
     Fl_Menu_Button uiZoom {
@@ -217,14 +217,14 @@ ui->uiView->centerView();}
         xywh {5 5 100 20}
       }
     }
-    Fl_Group {} {
+    Fl_Group {} {open
       xywh {36 1 897 28} box FLAT_BOX color 56
     } {
       Fl_Output uiCoord {
         label XY
         tooltip {Image coordinate of pixel under mouse.} xywh {61 3 90 25} box FLAT_BOX color 56 labelfont 4 labelsize 10 labelcolor 17 textsize 10 textcolor 7
       }
-      Fl_Group {} {open
+      Fl_Group {} {
         xywh {151 1 782 28}
       } {
         Fl_Group {} {open
@@ -344,14 +344,13 @@ ui->uiView->redraw();} open
           }
           Fl_Menu_Button uiPixelValue {
             label F user_data_type {void*}
-            callback {select_character( uiPixelValue );
+            callback {select_character(uiPixelValue);
 ui->uiView->updatePixelBar();
-ui->uiView->redraw();}
+ui->uiView->redraw();} open
             tooltip {Displays:
 * Full Pixel Values (Gamma, Gain and LUT)
 * Original (No Gamma, No Gain, No Lut)} xywh {474 3 27 25} align 48
-            code0 {o->value(0);
-o->disable_glyph();}
+            code0 {o->enable_character(); o->disable_glyph(); o->value(0);}
             class {mrv::PopupMenu}
           } {
             MenuItem {} {
@@ -426,11 +425,11 @@ decl {class HotkeyUI;} {public global
 decl {class AboutUI;} {public global
 }
 
-widget_class TimelineClass {
+widget_class TimelineClass {open
   xywh {112 135 933 56} box NO_BOX hide resizable
   class Fl_Double_Window
 } {
-  Fl_Group {} {
+  Fl_Group {} {open
     xywh {0 0 933 29} box FLAT_BOX
   } {
     Fl_Group {} {open
@@ -442,11 +441,11 @@ widget_class TimelineClass {
         Fl_Menu_Button uiTimecodeSwitch {
           label {F:}
           user_data this user_data_type {ViewerUI*}
-          callback {mrv::TimeUnits units = (mrv::TimeUnits) o->value();
-ui->uiTimeline->setUnits( units );
-select_character( uiTimecodeSwitch );}
+          callback {select_character(uiTimecodeSwitch);
+mrv::TimeUnits units = (mrv::TimeUnits) o->value();
+ui->uiTimeline->setUnits( units );} selected
           tooltip {Switch between Frame, Seconds and Timecode display} xywh {9 3 27 24}
-          code0 {o->disable_label();}
+          code0 {o->disable_label(); o->enable_character();}
           class {mrv::PopupMenu}
         } {
           MenuItem {} {

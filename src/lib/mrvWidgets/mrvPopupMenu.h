@@ -31,6 +31,7 @@ namespace mrv
         void enable_glyph() { _enable_glyph = true; }
         void disable_label() { _enable_label = false; }
         void enable_label() { _enable_label = true; }
+        void enable_character() { _enable_character = true; }
         void disable_submenus() { _disable_submenus = true; }
 
         virtual int handle(int e) override;
@@ -38,7 +39,8 @@ namespace mrv
         virtual void draw() override;
 
     protected:
-        bool _enable_glyph, _enable_label, _disable_submenus;
+        bool _enable_glyph, _enable_label, _enable_character,
+            _disable_submenus;
     };
 
 } // namespace mrv

@@ -11,6 +11,7 @@
 #include "mrvPopupMenu.h"
 
 #include "mrvFl/mrvPreferences.h"
+#include "mrvFl/mrvLanguages.h"
 
 extern Fl_Widget* fl_did_clipping;
 
@@ -114,7 +115,14 @@ namespace mrv
             }
             else
             {
-                copy_label(m->label());
+                if (_enable_character)
+                {
+                    select_character(this);
+                }
+                else
+                {
+                    copy_label(m->label());
+                }
             }
         }
         return m;
@@ -189,6 +197,7 @@ namespace mrv
         Fl_Menu_Button(X, Y, W, H, l),
         _enable_glyph(false),
         _enable_label(true),
+        _enable_character(false),
         _disable_submenus(false)
     {
         align(FL_ALIGN_CENTER);
