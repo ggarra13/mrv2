@@ -48,10 +48,6 @@
 #    include <FL/gl.h>
 #endif
 
-#ifdef VULKAN_BACKEND
-#     include <FL/vk.h>
-#endif
-
 #include <string>
 #include <vector>
 #include <stdexcept>
