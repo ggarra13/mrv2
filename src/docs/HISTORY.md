@@ -1,6 +1,8 @@
 v1.3.8
 ======
 
+- Fixed a problem in first release of v1.3.8 regarding Input Color Space failing when first switched on.
+- Fixed a bug with menus crashing on Wayland when Fullscreen was activated with F11 and a menu from the menubar was selected.
 - Fixed OpenEXR's Data Window and Display Window display which was crashing when the coordinates had negative values.
 - Added proper support for all possible texture types of OpenGL that libplacebo might use.
 - Same for Vulkan's hdr utility.
@@ -88,8 +90,6 @@ v1.3.8
 - Fixed and simplified code for NDIView (hdr utility).
 - Fixed hdr utility for macOS Intel trying to pass full HDR10 or HLG data, 
   which goes over those machines' nits.
-- Fixed a problem in first release of v1.3.8 regarding Input Color Space
-  failing when first switched on.
 
 v1.3.7
 ======

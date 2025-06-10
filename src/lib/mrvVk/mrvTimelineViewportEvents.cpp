@@ -392,7 +392,11 @@ namespace mrv
             _endAnnotationShape();
             p.ui->uiUndoDraw->activate();
 
+            // Update the windows properly for NDI
             redrawWindows();
+            Fl::flush();
+            redrawWindows();
+            
             take_focus();
             return 1;
         }
@@ -972,6 +976,8 @@ namespace mrv
                 ret = p.multilineText->handle(event);
                 if (ret)
                 {
+                    redrawWindows();
+                    Fl::flush();
                     redrawWindows();
                     return ret;
                 }
