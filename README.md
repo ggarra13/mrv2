@@ -104,13 +104,13 @@ mrv2 binaries run on Windows 8.1+, RedHat 8.10+ or Ubuntu 22.04+, and macOS 11.0
   On Debian (Ubuntu, etc) systems, you would install with:
 
 ```
-  sudo dpkg -i mrv2-v1.0.0-Linux-amd64.tar.gz
+  sudo dpkg -i mrv2-v1.0.0-Linux-amd64.deb
 ```
 
   On Red Hat (Rocky Linux, etc), you would install it with:
   
 ```
-  sudo rpm -i mrv2-v1.0.0-Linux-amd64.tar.gz
+  sudo rpm -i mrv2-v1.0.0-Linux-amd64.rpm
 ```
 
   Once you install it, you can run mrv2 by just typing mrv2 in the shell, as
