@@ -225,13 +225,13 @@ cat <<"EOF" >> README.md
   On Debian (Ubuntu, etc) systems, you would install with:
 
 ```
-  sudo dpkg -i mrv2-beta-Linux-amd64.tar.gz
+  sudo dpkg -i mrv2-$branch-Linux-amd64.deb
 ```
 
   On Red Hat (Rocky Linux, etc), you would install it with:
   
 ```
-  sudo rpm -i mrv2-beta-Linux-amd64.tar.gz
+  sudo rpm -i mrv2-$branch-Linux-amd64.rpm
 ```
 
   Once you install it, you can run mrv2 by just typing mrv2 in the shell, as
@@ -245,7 +245,7 @@ cat <<"EOF" >> README.md
   .tar.gz file and you can uncompress it with:
   
 ```
-  tar -xf mrv2-beta-Linux-amd64.tar.gz
+  tar -xf mrv2-$branch-Linux-amd64.tar.gz
 ```
 
   That will create a folder in the directory you uncompress it from.  You can
