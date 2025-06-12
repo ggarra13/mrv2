@@ -1388,6 +1388,7 @@ namespace mrv
                 // make sure to show all frames
                 if (p.options.playback == timeline::Playback::Count)
                     p.options.playback = timeline::Playback::Forward;
+                
                 Fl::add_timeout(
                     1.5, (Fl_Timeout_Handler)start_playback_cb, this);
             }

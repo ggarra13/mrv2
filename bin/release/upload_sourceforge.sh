@@ -112,6 +112,11 @@ upload_file()
 #
 # Create the README.md file
 #
+compile_args=""
+if [[ "$branch" == "vulkan" ]]; then
+    compile_args=" -vk"
+fi
+
 cat <<EOF > README.md
 
 [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=679N8GWCNDFSJ)
@@ -124,7 +129,7 @@ ${date}.
 
 It does not support NDI® on any platform.
 
-It works on Windows 8.1+ (without USD support), Ubuntu 20.04 LTS+,
+It works on Windows 8.1+ (without USD support), Ubuntu 22.04 LTS+,
 macOS 13 (amd64 also without USD support) and macOS M1/M2/M3 (arm64). 
 
 It may contain bugs, new untested features and more.
@@ -135,7 +140,7 @@ You can extract it to compile yourself with:
    git clone https://github.com/ggarra13/mrv2.git
    cd mrv2
    git checkout ${git_hash}
-   ./runme.sh clean
+   ./runme.sh ${compile_args} clean
 \`\`\`
 
 
@@ -228,7 +233,7 @@ cat <<"EOF" >> README.md
   sudo dpkg -i mrv2-$branch-Linux-amd64.deb
 ```
 
-  On Red Hat (Rocky Linux, etc), you would install it with:
+  On Fedora, you would install it with:
   
 ```
   sudo rpm -i mrv2-$branch-Linux-amd64.rpm
