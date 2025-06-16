@@ -190,6 +190,16 @@ fi
 
 echo "$release_notes" >> README.md
 
+export vulkan_notes=cat <<EOF
+Notes about Vulkan on NVidia Linux:
+
+The preferred NVidia driver for best performance is nvidia-driver-550 (default on Ubuntu 24.04.2 LTS).
+
+nvidia-driver-570 suffers from a dramatic hit in performance (about 50%).
+
+nvidia-driver-575 suffers from an even bigger hit in performance (about 80%).
+
+EOF
 
 cat <<"EOF" >> README.md
 
@@ -258,6 +268,8 @@ cat <<"EOF" >> README.md
 
   That will create a folder in the directory you uncompress it from.  You can
   then run mrv2 by using the mrv2.sh shell script in the bin/ subdirectory.
+
+  $vulkan_notes
 EOF
 
 echo "Upload README.md"
