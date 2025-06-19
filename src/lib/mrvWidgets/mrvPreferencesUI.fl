@@ -82,7 +82,7 @@ decl {\#include "mrvCore/mrvPathMapping.h"} {public global
 decl {\#include "mrvCore/mrvMedia.h"} {public global
 }
 
-class PreferencesUI {open
+class PreferencesUI {open selected
 } {
   decl {ViewerUI* main;} {private local
   }
@@ -92,8 +92,8 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {216 239 853 467} type Double hide resizable
-      code0 {main = m;}
+      xywh {0 0 853 466} type Double resizable
+      code0 {main = m;} visible
     } {
       Fl_Group {} {open
         xywh {0 0 853 466} box FLAT_BOX
@@ -710,8 +710,8 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
               }
             }
             Fl_Group {} {
-              label Render open
-              xywh {288 37 555 369} box EMBOSSED_BOX align 5
+              label Render
+              xywh {288 37 555 369} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label Render
@@ -779,11 +779,11 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                 }
               }
               Fl_Group {} {
-                label HDR open
+                label HDR
                 xywh {303 256 530 140} box ROUNDED_BOX
               } {
                 Fl_Choice uiPrefsChromaticities {
-                  label Chromaticities open
+                  label Chromaticities
                   xywh {513 275 135 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
@@ -796,7 +796,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                   }
                 }
                 Fl_Choice uiPrefsHDRInfo {
-                  label {HDR Data} open
+                  label {HDR Data}
                   xywh {513 312 135 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
@@ -804,7 +804,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                     xywh {40 40 100 20}
                   }
                   MenuItem {} {
-                    label Inactive selected
+                    label Inactive
                     xywh {30 30 100 20}
                   }
                   MenuItem {} {
@@ -1191,7 +1191,7 @@ uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );}
               xywh {288 37 555 367} align 5 hide
             } {
               Fl_Group {} {
-                label {OCIO Defaults} open
+                label {OCIO Defaults}
                 xywh {305 54 520 340} box ROUNDED_BOX
               } {
                 Fl_Group uiOCIO_ICS {
@@ -1524,78 +1524,149 @@ v->uiOCIO_Display_View->do_callback();}
               }
             }
             Fl_Group {} {
-              label Video
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+              label Video open
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {open
-                xywh {323 60 478 314}
+                xywh {310 52 508 332}
               } {
                 Fl_Choice uiPrefsOpenGLVsync {
                   label {Monitor VSync}
-                  tooltip {Turns on and off Monitor's Vsync.  VSync off can display movies faster, at the cost of potential tearing in the image.} xywh {509 103 140 22} down_box BORDER_BOX align 132 textcolor 32
+                  tooltip {Turns on and off Monitor's Vsync.  VSync off can display movies faster, at the cost of potential tearing in the image.} xywh {509 80 140 22} down_box BORDER_BOX align 132 textcolor 32
                   class {mrv::Choice}
                 } {
                   MenuItem {} {
                     label No
-                    xywh {30 30 100 20}
+                    xywh {30 30 140 20}
                   }
                   MenuItem {} {
                     label Always
-                    xywh {30 30 100 20}
+                    xywh {30 30 140 20}
                   }
                   MenuItem {} {
                     label {Presentation Mode}
-                    xywh {40 40 100 20}
+                    xywh {40 40 140 20}
                   }
                 }
                 Fl_Choice uiPrefsColorAccuracy {
                   label {Color Buffers' Accuracy}
-                  tooltip {Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves all float information, Half Float preserves most float information and Fast works in 8-bits.  Automatic selects the accuracy based on image depth.} xywh {511 167 140 25} down_box BORDER_BOX align 132 textcolor 32
+                  tooltip {Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves all float information, Half Float preserves most float information and Fast works in 8-bits.  Automatic selects the accuracy based on image depth.} xywh {509 120 140 25} down_box BORDER_BOX align 132 textcolor 32
                   class {mrv::Choice}
                 } {
                   MenuItem {} {
                     label Automatic
-                    xywh {50 50 100 20}
+                    xywh {50 50 140 20}
                   }
                   MenuItem {} {
                     label {Half Float}
-                    xywh {60 60 100 20}
+                    xywh {60 60 140 20}
                   }
                   MenuItem {} {
                     label {Full Float (Accurate)}
-                    xywh {70 70 100 20}
+                    xywh {70 70 140 20}
                   }
                   MenuItem {} {
                     label Fast
-                    xywh {50 50 100 20}
+                    xywh {50 50 140 20}
                   }
                 }
-                Fl_Choice uiPrefsBlitViewports {
-                  label {Blit Viewports}
-                  tooltip {Viewports can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {513 243 140 25} down_box BORDER_BOX align 132 textcolor 32
-                  class {mrv::Choice}
+                Fl_Group {} {
+                  label {Main Viewport} open
+                  xywh {316 183 238 72} box BORDER_BOX
                 } {
-                  MenuItem {} {
-                    label No
-                    xywh {40 40 100 20}
+                  Fl_Choice uiPrefsBlitViewports {
+                    label Blit
+                    tooltip {Viewports can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {383 193 140 25} down_box BORDER_BOX align 132 textcolor 32
+                    class {mrv::Choice}
+                  } {
+                    MenuItem {} {
+                      label No
+                      xywh {50 50 140 20}
+                    }
+                    MenuItem {} {
+                      label Yes
+                      xywh {50 50 140 20}
+                    }
                   }
-                  MenuItem {} {
-                    label Yes
-                    xywh {40 40 100 20}
+                  Fl_Choice uiPrefsViewportGPU {
+                    label GPU
+                    tooltip {Viewports can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {383 224 140 25} down_box BORDER_BOX align 132 textcolor 32
+                    class {mrv::Choice}
+                  } {
+                    MenuItem {} {
+                      label No
+                      xywh {60 60 140 20}
+                    }
+                    MenuItem {} {
+                      label Yes
+                      xywh {60 60 140 20}
+                    }
                   }
                 }
-                Fl_Choice uiPrefsBlitTimeline {
-                  label {Blit Timeline}
-                  tooltip {Timeline can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform better than the other.} xywh {515 291 140 25} down_box BORDER_BOX align 132 textcolor 32
-                  class {mrv::Choice}
+                Fl_Group {} {
+                  label {Secondary Viewport} open
+                  xywh {576 183 238 72} box BORDER_BOX
                 } {
-                  MenuItem {} {
-                    label No
-                    xywh {50 50 100 20}
+                  Fl_Choice uiPrefsBlitViewports {
+                    label Blit
+                    tooltip {Viewports can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {643 193 140 25} down_box BORDER_BOX align 132 textcolor 32
+                    class {mrv::Choice}
+                  } {
+                    MenuItem {} {
+                      label No
+                      xywh {60 60 140 20}
+                    }
+                    MenuItem {} {
+                      label Yes
+                      xywh {60 60 140 20}
+                    }
                   }
-                  MenuItem {} {
-                    label Yes
-                    xywh {50 50 100 20}
+                  Fl_Choice uiPrefsViewportGPU {
+                    label GPU
+                    tooltip {Viewports can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {643 224 140 25} down_box BORDER_BOX align 132 textcolor 32
+                    class {mrv::Choice}
+                  } {
+                    MenuItem {} {
+                      label No
+                      xywh {70 70 140 20}
+                    }
+                    MenuItem {} {
+                      label Yes
+                      xywh {70 70 140 20}
+                    }
+                  }
+                }
+                Fl_Group {} {
+                  label Timeline open
+                  xywh {437 283 239 76} box BORDER_BOX
+                } {
+                  Fl_Choice uiPrefsBlitTimeline {
+                    label Blit
+                    tooltip {Timeline can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform better than the other.} xywh {507 293 140 25} down_box BORDER_BOX align 132 textcolor 32
+                    class {mrv::Choice}
+                  } {
+                    MenuItem {} {
+                      label No
+                      xywh {50 50 100 20}
+                    }
+                    MenuItem {} {
+                      label Yes
+                      xywh {50 50 100 20}
+                    }
+                  }
+                  Fl_Choice uiPrefsTimelineGPU {
+                    label GPU
+                    tooltip {Viewports can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {508 323 140 25} down_box BORDER_BOX align 132 textcolor 32
+                    class {mrv::Choice}
+                  } {
+                    MenuItem {} {
+                      label No
+                      xywh {70 70 140 20}
+                    }
+                    MenuItem {} {
+                      label Yes
+                      xywh {70 70 140 20}
+                    }
                   }
                 }
               }
