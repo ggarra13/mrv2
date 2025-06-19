@@ -837,11 +837,28 @@ namespace mrv
         opengl.get("color_buffers_accuracy", tmp, 0);
         uiPrefs->uiPrefsColorAccuracy->value(tmp);
 
-        opengl.get("blit_viewports", tmp, 1);
-        uiPrefs->uiPrefsBlitViewports->value(tmp);
+        opengl.get("blit_viewports", tmp, 0);
+        uiPrefs->uiPrefsBlitMainViewport->value(tmp);
+        uiPrefs->uiPrefsBlitSecondaryViewport->value(tmp);
+        
+        opengl.get("blit_main_viewport", tmp, 0);
+        uiPrefs->uiPrefsBlitMainViewport->value(tmp);
+        
+        opengl.get("blit_secondary_viewport", tmp, 0);
+        uiPrefs->uiPrefsBlitSecondaryViewport->value(tmp);
 
-        opengl.get("blit_timeline", tmp, 1);
+        opengl.get("blit_timeline", tmp, 0);
         uiPrefs->uiPrefsBlitTimeline->value(tmp);
+        
+        Fl_Preferences vulkan(base, "vulkan");
+        vulkan.get("gpu_main_viewport", tmp, 0);
+        uiPrefs->uiPrefsMainViewportGPU->value(tmp);
+        
+        vulkan.get("gpu_secondary_viewport", tmp, 0);
+        uiPrefs->uiPrefsSecondaryViewportGPU->value(tmp);
+    
+        vulkan.get("gpu_timeline", tmp, 0);
+        uiPrefs->uiPrefsTimelineGPU->value(tmp);
 
         //
         // Audio
@@ -1482,8 +1499,20 @@ namespace mrv
             "color_buffers_accuracy",
             (int)uiPrefs->uiPrefsColorAccuracy->value());
         opengl.set(
-            "blit_viewports", (int)uiPrefs->uiPrefsBlitViewports->value());
+            "blit_main_viewport", (int)uiPrefs->uiPrefsBlitMainViewport->value());
+        opengl.set(
+            "blit_secondary_viewport", (int)uiPrefs->uiPrefsBlitSecondaryViewport->value());
         opengl.set("blit_timeline", (int)uiPrefs->uiPrefsBlitTimeline->value());
+        
+        Fl_Preferences vulkan(base, "vulkan");
+        vulkan.set(
+            "gpu_main_viewport",
+            (int)uiPrefs->uiPrefsMainViewportGPU->value());
+        vulkan.set(
+            "gpu_secondary_viewport",
+            (int)uiPrefs->uiPrefsSecondaryViewportGPU->value());
+        vulkan.set("gpu_timeline",
+                   (int)uiPrefs->uiPrefsTimelineGPU->value());
 
         Fl_Preferences ComfyUI(base, "comfyUI");
         ComfyUI.set("input_pipe", (int)uiPrefs->uiPrefsUseComfyUIPipe->value());

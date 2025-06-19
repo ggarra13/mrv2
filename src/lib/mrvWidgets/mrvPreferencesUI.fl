@@ -82,7 +82,7 @@ decl {\#include "mrvCore/mrvPathMapping.h"} {public global
 decl {\#include "mrvCore/mrvMedia.h"} {public global
 }
 
-class PreferencesUI {open selected
+class PreferencesUI {open
 } {
   decl {ViewerUI* main;} {private local
   }
@@ -92,8 +92,8 @@ class PreferencesUI {open selected
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {0 0 853 466} type Double resizable
-      code0 {main = m;} visible
+      xywh {142 155 853 466} type Double hide resizable
+      code0 {main = m;}
     } {
       Fl_Group {} {open
         xywh {0 0 853 466} box FLAT_BOX
@@ -1574,7 +1574,7 @@ v->uiOCIO_Display_View->do_callback();}
                   label {Main Viewport} open
                   xywh {316 183 238 72} box BORDER_BOX
                 } {
-                  Fl_Choice uiPrefsBlitViewports {
+                  Fl_Choice uiPrefsBlitMainViewport {
                     label Blit
                     tooltip {Viewports can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {383 193 140 25} down_box BORDER_BOX align 132 textcolor 32
                     class {mrv::Choice}
@@ -1588,7 +1588,7 @@ v->uiOCIO_Display_View->do_callback();}
                       xywh {50 50 140 20}
                     }
                   }
-                  Fl_Choice uiPrefsViewportGPU {
+                  Fl_Choice uiPrefsMainViewportGPU {
                     label GPU
                     tooltip {Viewports can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {383 224 140 25} down_box BORDER_BOX align 132 textcolor 32
                     class {mrv::Choice}
@@ -1607,7 +1607,7 @@ v->uiOCIO_Display_View->do_callback();}
                   label {Secondary Viewport} open
                   xywh {576 183 238 72} box BORDER_BOX
                 } {
-                  Fl_Choice uiPrefsBlitViewports {
+                  Fl_Choice uiPrefsBlitSecondaryViewport {
                     label Blit
                     tooltip {Viewports can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {643 193 140 25} down_box BORDER_BOX align 132 textcolor 32
                     class {mrv::Choice}
@@ -1621,7 +1621,7 @@ v->uiOCIO_Display_View->do_callback();}
                       xywh {60 60 140 20}
                     }
                   }
-                  Fl_Choice uiPrefsViewportGPU {
+                  Fl_Choice uiPrefsSecondaryViewportGPU {
                     label GPU
                     tooltip {Viewports can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {643 224 140 25} down_box BORDER_BOX align 132 textcolor 32
                     class {mrv::Choice}
@@ -1826,7 +1826,7 @@ mrv::Preferences::load(false, false);}
               label OK
               user_data m user_data_type {ViewerUI*}
               callback {v->uiPrefs->uiMain->hide();
-mrv::Preferences::run();}
+mrv::Preferences::run();} selected
               tooltip {Accept settings but don't save.  They will get saved when exiting the program.} xywh {648 418 132 31}
             }
           }

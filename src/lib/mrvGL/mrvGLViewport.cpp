@@ -519,8 +519,14 @@ namespace mrv
                 math::Matrix4x4f mvp;
 
                 const float rotation = _getRotation();
-                if (p.presentation ||
-                    p.ui->uiPrefs->uiPrefsBlitViewports->value() == kNoBlit ||
+
+                bool blitViewport = false;
+                if (this == p.ui->uiView)
+                    blitViewport = p.ui->uiPrefs->uiPrefsBlitMainViewport->value();
+                else
+                    blitViewport = p.ui->uiPrefs->uiPrefsBlitSecondaryViewport->value();
+            
+                if (p.presentation || blitViewport == kNoBlit ||
                     p.environmentMapOptions.type != EnvironmentMapOptions::kNone ||
                     rotation != 0.F || (transparent && hasAlpha))
                 {

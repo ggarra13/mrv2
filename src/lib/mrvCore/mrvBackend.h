@@ -6,8 +6,10 @@
 
 #if defined(MRV2_BACKEND_VK)
 #  define VULKAN_BACKEND 1
+#  define VULKAN_NAME "Vulkan"
 #elif defined(MRV2_BACKEND_GL)
 #  define OPENGL_BACKEND 1
+#  define OPENGL_NAME "OpenGL"
 #elif defined(MRV2_BACKEND_BOTH)
 #  define VULKAN_BACKEND 1
 #  define OPENGL_BACKEND 1
