@@ -38,9 +38,9 @@ jobs:
     # Install Vulkan SDK
     - name: Install Vulkan
       run: |
-        ./etc/linux/install_vulkan.sh
+        ./etc/windows/install_vulkan.sh
       shell: bash
-        
+      
     - name: Synchronize clock
       shell: cmd
       run: |
@@ -60,21 +60,20 @@ jobs:
         echo "Machine name: $RUNNER_NAME"
     
     # Install Vulkan SDK
-    # - name: Install Vulkan SDK
-    #   if: github.ref_name == 'vulkan'
-    #   run: |
+    - name: Install Vulkan SDK
+      if: github.ref_name == 'vulkan'
+      run: |
 
-    #     . ./etc/windows/install_vulkan.sh
+        . ./etc/windows/install_vulkan.sh
         
-    #     # Persist environment variables for subsequent steps
-    #     echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
-    #     echo "VK_LAYER_PATH=$VK_LAYER_PATH" >> $GITHUB_ENV
-    #     echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
-
-    # Verify Vulkan installation (does not work on Github Actions)
-    # - name: Verify Vulkan
-    #   run: |
-    #     vulkaninfo --summary
+        # Persist environment variables for subsequent steps
+        echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
+        echo "VK_LAYER_PATH=$VK_LAYER_PATH" >> $GITHUB_ENV
+        echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
+        
+    - name: Verify Vulkan
+      run: |
+        vulkaninfo --summary
 
     - name: Setup environment
       run: mkdir -p ssh
