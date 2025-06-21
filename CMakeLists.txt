@@ -129,7 +129,7 @@ if (NOT BUILD_PYTHON)
 endif()
 
 if(CMAKE_BUILD_TYPE MATCHES "^Debug$")
-    # Check for Clang or GCC compiler  (@todo: add Microsoft support)
+    # Check for Clang or GCC compiler  (\@todo: add Microsoft support)
     if (TLRENDER_ASAN AND
 	    ((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR
 		(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")))

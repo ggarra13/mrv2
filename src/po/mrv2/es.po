@@ -358,8 +358,9 @@ msgstr ""
 "Contiene todas las clases relacionados con las los plugins de python.\n"
 "\n"
 
+#, fuzzy
 msgid ""
-"Whether a plugin is active or not.  If not overriden, the default is True."
+"Whether a plugin is active or not.  If not overridden, the default is True."
 msgstr "Si un plugin está activo o no.  Si no se reemplaza, el valor es True."
 
 msgid ""
@@ -1460,7 +1461,8 @@ msgstr "Cerrar archivo actual"
 msgid "Close all file items."
 msgstr "Cerrar todos los archivos."
 
-msgid "Return the root path to the insallation of mrv2."
+#, fuzzy
+msgid "Return the root path to the installation of mrv2."
 msgstr "Retorna la carpeta raíz de la instalación de mrv2."
 
 msgid "Return the path to preferences of mrv2."
@@ -2852,7 +2854,8 @@ msgstr "Lápiz"
 msgid "Laser"
 msgstr "Laser"
 
-msgid "Makes the following annotation dissapear a second after drawn."
+#, fuzzy
+msgid "Makes the following annotation disappear a second after drawn."
 msgstr "Hace la siguiente anotación desaparecer un segundo tras dibujarla."
 
 msgid "Color:"
@@ -3151,7 +3154,8 @@ msgstr "Mapeo de carpetas ha sido cargado de \"{0}{1}\"."
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Cargué teclas de manejo desde \"{0}{1}.prefs\"."
 
-msgid "Reseting hotkeys to default."
+#, fuzzy
+msgid "Resetting hotkeys to default."
 msgstr "Reseteando teclas a los valores estándares."
 
 msgid "Path mappings have been saved to \"{0}{1}\"."
@@ -3878,11 +3882,14 @@ msgstr "   Adelante V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "   Atrás       V: % 4<PRIu64>    A: % 4<PRIu64> "
 
+msgid "HDR monitor found."
+msgstr "Monitor HDR encontrado."
+
+msgid "HDR monitor not found or not configured."
+msgstr "Monitor HDR no encontrado o no configurado."
+
 msgid "Edit Text"
 msgstr "Editar Texto"
-
-msgid "Invalid font for text drawing"
-msgstr "Fuente inválida para dibujar texto"
 
 msgid "Could not convert message to shape: "
 msgstr "No pude convertir el mensaje a figura: "
@@ -4516,7 +4523,8 @@ msgid ""
 msgstr ""
 "No pude crear carpeta '%s'. Puedes no tener permisos para esta operación."
 
-msgid "An error ocurred while trying to delete '%s'. %s"
+#, fuzzy, c-format
+msgid "An error occurred while trying to delete '%s'. %s"
 msgstr "Un error ocurrió al tratar de borrar '%s'. %s"
 
 msgid "File '%s' already exists!"
@@ -6796,8 +6804,12 @@ msgstr ""
 "Flotante preserve la mayoría de ella, y Rápido trabaja en 8-bits.  "
 "Automático selecciona la precisión basada en profundidad de la imagen."
 
-msgid "Blit Viewports"
-msgstr "Copia de Vistas"
+#, fuzzy
+msgid "Main Viewport"
+msgstr "Ventana de Edición"
+
+msgid "Blit"
+msgstr ""
 
 msgid ""
 "Viewports can be drawn with blitting or with shaders.  Depending on graphics "
@@ -6807,8 +6819,12 @@ msgstr ""
 "Dependiendo en tu tarjeta gráfica y sistema operativo una u otra puede "
 "desempeñarse mejor que la otra."
 
-msgid "Blit Timeline"
-msgstr "Transferir Línea de Tiempo"
+msgid "GPU"
+msgstr ""
+
+#, fuzzy
+msgid "Secondary Viewport"
+msgstr "Display Secundario"
 
 msgid ""
 "Timeline can be drawn with blitting or with shaders.  Depending on graphics "
@@ -7707,11 +7723,14 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
 
-#~ msgid "HDR monitor found."
-#~ msgstr "Monitor HDR encontrado."
+#~ msgid "Invalid font for text drawing"
+#~ msgstr "Fuente inválida para dibujar texto"
 
-#~ msgid "HDR monitor not found or not configured."
-#~ msgstr "Monitor HDR no encontrado o no configurado."
+#~ msgid "Blit Viewports"
+#~ msgstr "Copia de Vistas"
+
+#~ msgid "Blit Timeline"
+#~ msgstr "Transferir Línea de Tiempo"
 
 #, fuzzy
 #~ msgid ""
