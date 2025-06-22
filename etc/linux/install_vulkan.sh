@@ -13,6 +13,7 @@ curl -L -o /tmp/vulkan-sdk.tar.gz "https://sdk.lunarg.com/sdk/download/latest/li
 echo "After downloading it..."
 ls /tmp
 
+
 mkdir -p VulkanSDK
 cd VulkanSDK
 tar -xvf /tmp/vulkan-sdk.tar.gz
