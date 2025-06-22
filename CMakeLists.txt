@@ -8,8 +8,6 @@ if( POLICY CMP0135 )
     cmake_policy(SET CMP0135 NEW)
 endif()
 
-
-
 if(APPLE)
     message( STATUS "-------------------------------------------------" )
     message( STATUS "Building for macOS ${CMAKE_OSX_DEPLOYMENT_TARGET}" )
