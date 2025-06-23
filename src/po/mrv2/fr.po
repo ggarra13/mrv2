@@ -3826,14 +3826,11 @@ msgstr "Avant V: % 4<PRIu64> A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "Derrière V: % 4<PRIu64> A: % 4<PRIu64>"
 
-msgid "HDR monitor found."
-msgstr ""
-
-msgid "HDR monitor not found or not configured."
-msgstr ""
-
 msgid "Edit Text"
 msgstr "Modifier le texte"
+
+msgid "Invalid font for text drawing"
+msgstr "Police invalide pour le dessin de texte"
 
 msgid "Could not convert message to shape: "
 msgstr "Impossible de convertir le message en forme :"
@@ -7703,9 +7700,6 @@ msgstr "Activer la fenêtre des touches d'amorçage"
 
 msgid "Toggle About Window"
 msgstr "Commutation à propos de la fenêtre"
-
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "Police invalide pour le dessin de texte"
 
 #~ msgid "Blit Viewports"
 #~ msgstr "Affiner les affichages"

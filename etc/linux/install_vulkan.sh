@@ -13,7 +13,6 @@ curl -L -o /tmp/vulkan-sdk.tar.gz "https://sdk.lunarg.com/sdk/download/latest/li
 echo "After downloading it..."
 ls /tmp
 
-
 mkdir -p VulkanSDK
 cd VulkanSDK
 tar -xvf /tmp/vulkan-sdk.tar.gz
@@ -28,6 +27,7 @@ export VK_LAYER_PATH=$VULKAN_SDK/lib
 export VK_ICD_FILENAMES=$VULKAN_SDK/etc/vulkan/icd.d/MoltenVK_icd.json
 export PATH=${VULKAN_SDK}/bin:$PATH
 
+echo "VULKAN_SDK is=$VULKAN_SDK"
 echo "Contents of SDK:"
 ls $VULKAN_SDK
 

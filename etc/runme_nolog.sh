@@ -184,7 +184,7 @@ if [ -z "$VULKAN_SDK" ]; then
 	if [[ -d VulkanSDK ]]; then
 	    export VULKAN_ROOT=$PWD/VulkanSDK
 	    SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sort -r | grep -o "$VULKAN_ROOT/[0-9]*\..*"| sed -e "s#$VULKAN_ROOT/##" | head -1)
-	    export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/
+	    export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/$UNAME_ARCH
 	else
 	    export VULKAN_SDK=/usr/
 	fi
@@ -201,6 +201,8 @@ if [ -z "$VULKAN_SDK" ]; then
 	    fi
 	fi
     fi
+else
+    echo "Using VULKAN_SDK from environment: ${VULKAN_SDK}"
 fi
     
 if [ -z "$TLRENDER_VK" ]; then
@@ -448,6 +450,8 @@ cd -
 if [[ "$CMAKE_TARGET" == "" ]]; then
     CMAKE_TARGET=install
 fi
+
+exit 1
 
 cmd="./runmeq.sh ${CMAKE_BUILD_TYPE} -t ${CMAKE_TARGET}"
 run_cmd $cmd

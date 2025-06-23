@@ -3750,14 +3750,11 @@ msgstr "    前    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "    后    V: % 4<PRIu64>    A: % 4<PRIu64>"
 
-msgid "HDR monitor found."
-msgstr ""
-
-msgid "HDR monitor not found or not configured."
-msgstr ""
-
 msgid "Edit Text"
 msgstr "编辑文本"
+
+msgid "Invalid font for text drawing"
+msgstr "用于文本绘图的无效字体"
 
 msgid "Could not convert message to shape: "
 msgstr "无法将信息转换为形状 :"
@@ -7495,9 +7492,6 @@ msgstr "开关热键窗口"
 
 msgid "Toggle About Window"
 msgstr "开关关于窗口"
-
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "用于文本绘图的无效字体"
 
 #~ msgid "Blit Viewports"
 #~ msgstr "Blit 视图"

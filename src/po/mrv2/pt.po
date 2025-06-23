@@ -3803,14 +3803,11 @@ msgstr "Antes V: % 4<PRIu64> A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "Atrs de V: % 4<PRIu64> A: % 4<PRIu64>"
 
-msgid "HDR monitor found."
-msgstr ""
-
-msgid "HDR monitor not found or not configured."
-msgstr ""
-
 msgid "Edit Text"
 msgstr "Editar o Texto"
+
+msgid "Invalid font for text drawing"
+msgstr "Fonte invlida para desenho de texto"
 
 msgid "Could not convert message to shape: "
 msgstr "No foi possvel converter a mensagem para forma:"
@@ -7643,9 +7640,6 @@ msgstr "Alternar a janela de teclas instantneas"
 
 msgid "Toggle About Window"
 msgstr "Alternar Sobre a Janela"
-
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "Fonte invlida para desenho de texto"
 
 #~ msgid "Blit Viewports"
 #~ msgstr "Visualizaes de BlitName"

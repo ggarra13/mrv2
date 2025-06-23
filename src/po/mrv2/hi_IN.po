@@ -3772,14 +3772,11 @@ msgstr "     आगे     V: % 4<PRIu64>     A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "      पीछे    V: % 4<PRIu64>     A: % 4<PRIu64>"
 
-msgid "HDR monitor found."
-msgstr ""
-
-msgid "HDR monitor not found or not configured."
-msgstr ""
-
 msgid "Edit Text"
 msgstr "पाठ संपादित करें"
+
+msgid "Invalid font for text drawing"
+msgstr "पाठ चित्रण के लिए अमान्य फ़ॉन्ट"
 
 msgid "Could not convert message to shape: "
 msgstr "संदेश को आकार में परिवर्तित नहीं कर सका:"
@@ -7546,9 +7543,6 @@ msgstr "यदि आप विंडो को बन्द करना चा
 
 msgid "Toggle About Window"
 msgstr "विंडो के बारे में टॉगल करें"
-
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "पाठ चित्रण के लिए अमान्य फ़ॉन्ट"
 
 #~ msgid "Blit Viewports"
 #~ msgstr "विन्यास"

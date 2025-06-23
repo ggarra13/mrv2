@@ -3828,14 +3828,11 @@ msgstr "    Vorne    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "    Hinter   V: % 4<PRIu64>    A: % 4<PRIu64>"
 
-msgid "HDR monitor found."
-msgstr ""
-
-msgid "HDR monitor not found or not configured."
-msgstr ""
-
 msgid "Edit Text"
 msgstr "Text bearbeiten"
+
+msgid "Invalid font for text drawing"
+msgstr "Ungültige Schriftart für das Zeichnen von Text"
 
 msgid "Could not convert message to shape: "
 msgstr "Nachricht kann nicht in Form konvertiert werden:"
@@ -7678,9 +7675,6 @@ msgstr "Hotkeys-Fenster umschalten"
 
 msgid "Toggle About Window"
 msgstr "Fenster umschalten"
-
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "Ungültige Schriftart für das Zeichnen von Text"
 
 #~ msgid "Blit Viewports"
 #~ msgstr "Blit Viewports"

@@ -3821,14 +3821,11 @@ msgstr "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 
-msgid "HDR monitor found."
-msgstr "HDR monitor found."
-
-msgid "HDR monitor not found or not configured."
-msgstr "HDR monitor not found or not configured."
-
 msgid "Edit Text"
 msgstr "Edit Text"
+
+msgid "Invalid font for text drawing"
+msgstr "Invalid font for text drawing"
 
 msgid "Could not convert message to shape: "
 msgstr "Could not convert message to shape: "
@@ -7644,8 +7641,11 @@ msgstr "Toggle Hotkeys Window"
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
 
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "Invalid font for text drawing"
+#~ msgid "HDR monitor found."
+#~ msgstr "HDR monitor found."
+
+#~ msgid "HDR monitor not found or not configured."
+#~ msgstr "HDR monitor not found or not configured."
 
 #~ msgid "Blit Viewports"
 #~ msgstr "Blit Viewports"

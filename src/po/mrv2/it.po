@@ -3845,14 +3845,11 @@ msgstr "Prima V: % 4<PRIu64> A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "Dietro V: % 4<PRIu64> A: % 4<PRIu64>"
 
-msgid "HDR monitor found."
-msgstr ""
-
-msgid "HDR monitor not found or not configured."
-msgstr ""
-
 msgid "Edit Text"
 msgstr "Modifica testo"
+
+msgid "Invalid font for text drawing"
+msgstr "Tipo di carattere non valido per il disegno di testo"
 
 msgid "Could not convert message to shape: "
 msgstr "Impossibile convertire il messaggio in forma:"
@@ -7698,9 +7695,6 @@ msgstr "Finestra di commutazione di tasti di avviamento"
 
 msgid "Toggle About Window"
 msgstr "Commuta la finestra"
-
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "Tipo di carattere non valido per il disegno di testo"
 
 #~ msgid "Blit Viewports"
 #~ msgstr "Vedute di sbiancamento"

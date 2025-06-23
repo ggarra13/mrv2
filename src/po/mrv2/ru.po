@@ -3857,14 +3857,11 @@ msgstr "   Впереди   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "      Позади V: % 4<PRIu64>    A: % 4<PRIu64>"
 
-msgid "HDR monitor found."
-msgstr ""
-
-msgid "HDR monitor not found or not configured."
-msgstr ""
-
 msgid "Edit Text"
 msgstr "Изменить текст"
+
+msgid "Invalid font for text drawing"
+msgstr "Неверный шрифт для текстового рисунка"
 
 msgid "Could not convert message to shape: "
 msgstr "Невозможно преобразовать сообщение в форму:"
@@ -7690,9 +7687,6 @@ msgstr "Переключить окно горячих клавиш"
 
 msgid "Toggle About Window"
 msgstr "Закладка о окне"
-
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "Неверный шрифт для текстового рисунка"
 
 #~ msgid "Blit Viewports"
 #~ msgstr "Blit Viewports"

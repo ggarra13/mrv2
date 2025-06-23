@@ -54,6 +54,7 @@ jobs:
     # Verify Vulkan installation
     - name: Verify Vulkan
       run: |
+        export VK_LAYER_DEBUG=all
         vulkaninfo --summary
         
     - name: Setup environment

@@ -3811,14 +3811,11 @@ msgstr "    先読み    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "    後ろ    V: % 4<PRIu64>    A: % 4<PRIu64>"
 
-msgid "HDR monitor found."
-msgstr ""
-
-msgid "HDR monitor not found or not configured."
-msgstr ""
-
 msgid "Edit Text"
 msgstr "テキストを編集"
+
+msgid "Invalid font for text drawing"
+msgstr "フォントファイル情報が無効です。"
 
 msgid "Could not convert message to shape: "
 msgstr "ベクター図形に変換"
@@ -7618,9 +7615,6 @@ msgstr "ホットキーウィンドウを切り替え"
 
 msgid "Toggle About Window"
 msgstr "バージョン情報ウィンドウを切り替え"
-
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "フォントファイル情報が無効です。"
 
 #~ msgid "Blit Viewports"
 #~ msgstr "ビューポートをブリット"

@@ -3882,14 +3882,11 @@ msgstr "   Adelante V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "   Atrás       V: % 4<PRIu64>    A: % 4<PRIu64> "
 
-msgid "HDR monitor found."
-msgstr "Monitor HDR encontrado."
-
-msgid "HDR monitor not found or not configured."
-msgstr "Monitor HDR no encontrado o no configurado."
-
 msgid "Edit Text"
 msgstr "Editar Texto"
+
+msgid "Invalid font for text drawing"
+msgstr "Fuente inválida para dibujar texto"
 
 msgid "Could not convert message to shape: "
 msgstr "No pude convertir el mensaje a figura: "
@@ -7723,8 +7720,11 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
 
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "Fuente inválida para dibujar texto"
+#~ msgid "HDR monitor found."
+#~ msgstr "Monitor HDR encontrado."
+
+#~ msgid "HDR monitor not found or not configured."
+#~ msgstr "Monitor HDR no encontrado o no configurado."
 
 #~ msgid "Blit Viewports"
 #~ msgstr "Copia de Vistas"
