@@ -25,9 +25,6 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Setup environment
-      uses: ilammy/msvc-dev-cmd@v1
-
     - name: Install Visual C++ Redistributable 2022
       run: |
         $vc_redist_url_2022 = "https://aka.ms/vs/17/release/vc_redist.x64.exe"
