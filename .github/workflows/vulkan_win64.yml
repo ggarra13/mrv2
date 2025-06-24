@@ -25,9 +25,6 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Setup environment
-      uses: ilammy/msvc-dev-cmd@v1
-
     - name: Install Visual C++ Redistributable 2022
       run: |
         $vc_redist_url_2022 = "https://aka.ms/vs/17/release/vc_redist.x64.exe"
@@ -35,18 +32,12 @@ jobs:
         Start-Process vc_redist_2022.x64.exe -ArgumentList "/install", "/quiet", "/norestart" -Wait
       shell: powershell
       
-    - name: Install Vulkan SDK
-      # This action automatically downloads and installs the Vulkan SDK
-      # There are several community actions available, 'jakoch/install-vulkan-sdk-action' is a good option.
-      # You can specify a version or let it default to the latest.
-      uses: jakoch/install-vulkan-sdk-action@v1
-      with:
-        # vulkan_version: 1.3.283.0 # Specify a stable Vulkan SDK version
-        # optional_components: com.lunarg.vulkan.vma # Example: install Vulkan Memory Allocator
-        install_runtime: true
-        cache: true
-        stripdown: true # Reduce cache size
-        
+    # Install Vulkan SDK
+    - name: Install Vulkan
+      run: |
+        ./etc/windows/install_vulkan.sh
+      shell: bash
+      
     - name: Synchronize clock
       shell: cmd
       run: |
@@ -66,20 +57,19 @@ jobs:
         echo "Machine name: $RUNNER_NAME"
     
     # Install Vulkan SDK
-    # - name: Install Vulkan SDK
-    #   if: github.ref_name == 'vulkan'
-    #   run: |
+    - name: Install Vulkan SDK
+      if: github.ref_name == 'vulkan'
+      run: |
 
-    #     . ./etc/windows/install_vulkan.sh
+        . ./etc/windows/install_vulkan.sh
         
-    #     # Persist environment variables for subsequent steps
-    #     echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
-    #     echo "VK_LAYER_PATH=$VK_LAYER_PATH" >> $GITHUB_ENV
-    #     echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
-
-    # Verify Vulkan installation (does not work on Github Actions)
+        # Persist environment variables for subsequent steps
+        echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
+        echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
+        
     # - name: Verify Vulkan
     #   run: |
+    #     export VK_LAYER_DEBUG=all
     #     vulkaninfo --summary
 
     - name: Setup environment
@@ -111,9 +101,9 @@ jobs:
       run: |
         chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
         
-    # - name: Install cmake
-    #   run: |
-    #     ./etc/install_cmake.sh
+    - name: Install cmake
+      run: |
+        ./etc/install_cmake.sh
         
     - name: Install MSYS2 Dependencies
       run: |

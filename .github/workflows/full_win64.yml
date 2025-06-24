@@ -66,9 +66,10 @@ jobs:
         echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
 
     # Verify Vulkan installation (does not work on Github Actions)
-    # - name: Verify Vulkan
-    #   run: |
-    #     vulkaninfo --summary
+    - name: Verify Vulkan
+      run: |
+        export VK_LAYER_DEBUG=all
+        vulkaninfo --summary
 
     - name: Setup environment
       run: mkdir -p ssh
@@ -99,9 +100,9 @@ jobs:
       run: |
         chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
         
-    # - name: Install cmake
-    #   run: |
-    #     ./etc/install_cmake.sh
+    - name: Install cmake
+      run: |
+        ./etc/install_cmake.sh
         
     - name: Install MSYS2 Dependencies
       run: |

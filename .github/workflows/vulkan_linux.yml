@@ -61,34 +61,10 @@ jobs:
       run: sudo apt-get install -y libssl-dev libffi-dev python3
         
     # Install Vulkan SDK
-    - name: Install Vulkan SDK
-      # Option 1: Using a GitHub Action (recommended for ease and caching)
-      uses: jakoch/install-vulkan-sdk-action@v1
-      with:
-        # vulkan_version: 1.3.283.0 # Specify a stable Vulkan SDK version
-        # optional_components: com.lunarg.vulkan.vma # Example: install Vulkan Memory Allocator
-        install_runtime: true
-        cache: true
-        stripdown: true # Reduce cache size
-        
-        # On Linux, the action automatically sets VULKAN_SDK env variable.
-        # It also adds the SDK's bin directory to PATH and lib directory to LD_LIBRARY_PATH.
-
-    # Option 2: Manual Vulkan SDK download and setup (if jakoch/install-vulkan-sdk-action doesn't meet needs)
-    # - name: Download and Extract Vulkan SDK
-    #   run: |
-    #     VULKAN_SDK_VERSION="1.3.283.0" # Make sure this matches a Linux SDK version
-    #     SDK_FILENAME="VulkanSDK-${VULKAN_SDK_VERSION}-linux.tar.xz"
-    #     SDK_URL="https://sdk.lunarg.com/sdk/download/${VULKAN_SDK_VERSION}/linux/${SDK_FILENAME}"
-    #     wget -q "${SDK_URL}"
-    #     tar -xf "${SDK_FILENAME}"
-    #     mv "${VULKAN_SDK_VERSION}" vulkan_sdk # Rename for consistency
-
-    # - name: Set Vulkan SDK Environment Variables
-    #   run: |
-    #     echo "VULKAN_SDK=$(pwd)/vulkan_sdk/$VULKAN_SDK_VERSION/x86_64" >> $GITHUB_ENV
-    #     echo "PATH=$(pwd)/vulkan_sdk/$VULKAN_SDK_VERSION/x86_64/bin:$PATH" >> $GITHUB_ENV
-    #     echo "LD_LIBRARY_PATH=$(pwd)/vulkan_sdk/$VULKAN_SDK_VERSION/x86_64/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+    - name: Install Vulkan
+      run: |
+        ./etc/linux/install_vulkan.sh
+      shell: bash
         
     - name: Synchronize clock
       run: |
@@ -120,9 +96,9 @@ jobs:
       run: |
         chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
 
-    # - name: Install cmake
-    #   run: |
-    #      ./etc/install_cmake.sh
+    - name: Install cmake
+      run: |
+         ./etc/install_cmake.sh
 
     - name: Build mrv2
       run: |
