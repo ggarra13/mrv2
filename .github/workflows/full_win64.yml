@@ -65,12 +65,6 @@ jobs:
         echo "VK_LAYER_PATH=$VK_LAYER_PATH" >> $GITHUB_ENV
         echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
 
-    # Verify Vulkan installation (does not work on Github Actions)
-    - name: Verify Vulkan
-      run: |
-        export VK_LAYER_DEBUG=all
-        vulkaninfo --summary
-
     - name: Setup environment
       run: mkdir -p ssh
       
