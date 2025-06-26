@@ -1,4 +1,4 @@
-name: Win64 Vulkan
+name: Vulkan Win64
 
 on:
   push:
