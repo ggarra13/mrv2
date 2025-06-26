@@ -70,10 +70,6 @@ jobs:
         echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
         echo "VK_LAYER_PATH=$VK_LAYER_PATH" >> $GITHUB_ENV
         echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
-        
-    - name: Verify Vulkan
-      run: |
-        vulkaninfo --summary
 
     - name: Setup environment
       run: mkdir -p ssh
