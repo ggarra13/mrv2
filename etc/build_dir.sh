@@ -73,7 +73,7 @@ export CMAKE_OSX_DEPLOYMENT_TARGET=11.0
 
 if [[ $KERNEL == *Darwin* ]]; then
     export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:${PATH}"
-    if [[ $ARCH == arm64 ]]; then
+    if [[ $ARCH == arm64 || $ARCH == aarch64 ]]; then
 	export CMAKE_OSX_ARCHITECTURES=$ARCH
 	export CMAKE_OSX_DEPLOYMENT_TARGET=11.3
     else

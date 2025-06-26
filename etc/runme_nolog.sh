@@ -184,7 +184,7 @@ if [ -z "$VULKAN_SDK" ]; then
 	if [[ -d VulkanSDK ]]; then
 	    export VULKAN_ROOT=$PWD/VulkanSDK
 	    SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sort -r | grep -o "$VULKAN_ROOT/[0-9]*\..*"| sed -e "s#$VULKAN_ROOT/##" | head -1)
-	    export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/
+	    export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/$UNAME_ARCH
 	else
 	    export VULKAN_SDK=/usr/
 	fi
