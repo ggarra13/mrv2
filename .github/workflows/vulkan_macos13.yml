@@ -1,4 +1,4 @@
-name: MacOS Intel Vulkan
+name: Vulkan MacOS Intel
 
 on:
   push:

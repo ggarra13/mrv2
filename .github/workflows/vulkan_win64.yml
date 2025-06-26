@@ -1,4 +1,4 @@
-name: Win64 Vulkan
+name: Vulkan Win64
 
 on:
   push:
@@ -66,7 +66,8 @@ jobs:
         # Persist environment variables for subsequent steps
         echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
         echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
-        
+
+    # This cannot be run on GitHub Actions to verify install.
     # - name: Verify Vulkan
     #   run: |
     #     export VK_LAYER_DEBUG=all
