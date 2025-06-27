@@ -5,7 +5,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.3.8\n"
+"Project-Id-Version: mrv2 v1.3.9\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -312,7 +312,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Whether a plugin is active or not.  If not overriden, the default is True."
+"Whether a plugin is active or not.  If not overridden, the default is True."
 msgstr ""
 
 msgid ""
@@ -1157,7 +1157,7 @@ msgstr ""
 msgid "Close all file items."
 msgstr ""
 
-msgid "Return the root path to the insallation of mrv2."
+msgid "Return the root path to the installation of mrv2."
 msgstr ""
 
 msgid "Return the path to preferences of mrv2."
@@ -2491,7 +2491,7 @@ msgstr ""
 msgid "Laser"
 msgstr ""
 
-msgid "Makes the following annotation dissapear a second after drawn."
+msgid "Makes the following annotation disappear a second after drawn."
 msgstr ""
 
 msgid "Color:"
@@ -2771,7 +2771,7 @@ msgstr ""
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr ""
 
-msgid "Reseting hotkeys to default."
+msgid "Resetting hotkeys to default."
 msgstr ""
 
 msgid "Path mappings have been saved to \"{0}{1}\"."
@@ -4101,7 +4101,7 @@ msgid ""
 "operation."
 msgstr ""
 
-msgid "An error ocurred while trying to delete '%s'. %s"
+msgid "An error occurred while trying to delete '%s'. %s"
 msgstr ""
 
 msgid "File '%s' already exists!"
@@ -6138,7 +6138,10 @@ msgid ""
 "works in 8-bits.  Automatic selects the accuracy based on image depth."
 msgstr ""
 
-msgid "Blit Viewports"
+msgid "Main Viewport"
+msgstr ""
+
+msgid "Blit"
 msgstr ""
 
 msgid ""
@@ -6146,7 +6149,10 @@ msgid ""
 "card and OS one can perform better then the other."
 msgstr ""
 
-msgid "Blit Timeline"
+msgid "GPU"
+msgstr ""
+
+msgid "Secondary Viewport"
 msgstr ""
 
 msgid ""

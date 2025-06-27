@@ -941,8 +941,13 @@ namespace mrv
                 
                 
             const float rotation = _getRotation();
+            bool blitViewport = false;
+            if (this == p.ui->uiView)
+                blitViewport = p.ui->uiPrefs->uiPrefsBlitMainViewport->value();
+            else
+                blitViewport = p.ui->uiPrefs->uiPrefsBlitSecondaryViewport->value();
             if (p.presentation ||
-                p.ui->uiPrefs->uiPrefsBlitViewports->value() == kNoBlit ||
+                blitViewport == kNoBlit ||
                 p.environmentMapOptions.type != EnvironmentMapOptions::kNone ||
                 rotation != 0.F || (transparent && hasAlpha))
             {

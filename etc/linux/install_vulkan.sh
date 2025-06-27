@@ -27,6 +27,7 @@ export VK_LAYER_PATH=$VULKAN_SDK/lib
 export VK_ICD_FILENAMES=$VULKAN_SDK/etc/vulkan/icd.d/MoltenVK_icd.json
 export PATH=${VULKAN_SDK}/bin:$PATH
 
+echo "VULKAN_SDK is=$VULKAN_SDK"
 echo "Contents of SDK:"
 ls $VULKAN_SDK
 

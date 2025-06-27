@@ -8,6 +8,7 @@ curl -L -o /tmp/vulkan-sdk.exe "https://sdk.lunarg.com/sdk/download/latest/windo
 ls /tmp
 
 export VULKAN_SDK="/C/VulkanSDK"
+rm -rf $VULKAN_SDK
 
 /tmp/vulkan-sdk.exe \
     --root "$VULKAN_SDK" \

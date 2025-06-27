@@ -1,4 +1,4 @@
-name: MacOS M1 Vulkan
+name: Vulkan MacOS M1
 
 on:
   push:

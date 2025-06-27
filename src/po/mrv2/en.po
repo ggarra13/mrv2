@@ -343,8 +343,9 @@ msgstr ""
 "Contains all classes related to python plugins.\n"
 "\n"
 
+#, fuzzy
 msgid ""
-"Whether a plugin is active or not.  If not overriden, the default is True."
+"Whether a plugin is active or not.  If not overridden, the default is True."
 msgstr ""
 "Whether a plugin is active or not.  If not overriden, the default is True."
 
@@ -1436,7 +1437,8 @@ msgstr "Close the file item."
 msgid "Close all file items."
 msgstr "Close all file items."
 
-msgid "Return the root path to the insallation of mrv2."
+#, fuzzy
+msgid "Return the root path to the installation of mrv2."
 msgstr "Return the root path to the insallation of mrv2."
 
 msgid "Return the path to preferences of mrv2."
@@ -2802,7 +2804,8 @@ msgstr "Pen"
 msgid "Laser"
 msgstr "Laser"
 
-msgid "Makes the following annotation dissapear a second after drawn."
+#, fuzzy
+msgid "Makes the following annotation disappear a second after drawn."
 msgstr "Makes the following annotation dissapear a second after drawn."
 
 msgid "Color:"
@@ -3092,7 +3095,8 @@ msgstr "Path mappings have been loaded from \"{0}{1}\"."
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Loading hotkeys from \"{0}{1}.prefs\"."
 
-msgid "Reseting hotkeys to default."
+#, fuzzy
+msgid "Resetting hotkeys to default."
 msgstr "Reseting hotkeys to default."
 
 msgid "Path mappings have been saved to \"{0}{1}\"."
@@ -4456,7 +4460,8 @@ msgstr ""
 "Could not create directory '%s'. You may not have permission to perform this "
 "operation."
 
-msgid "An error ocurred while trying to delete '%s'. %s"
+#, fuzzy, c-format
+msgid "An error occurred while trying to delete '%s'. %s"
 msgstr "An error ocurred while trying to delete '%s'. %s"
 
 msgid "File '%s' already exists!"
@@ -6720,8 +6725,12 @@ msgstr ""
 "all float information, Half Float preserves most float information and Fast "
 "works in 8-bits.  Automatic selects the accuracy based on image depth."
 
-msgid "Blit Viewports"
-msgstr "Blit Viewports"
+#, fuzzy
+msgid "Main Viewport"
+msgstr "Edit Viewport"
+
+msgid "Blit"
+msgstr ""
 
 msgid ""
 "Viewports can be drawn with blitting or with shaders.  Depending on graphics "
@@ -6730,8 +6739,12 @@ msgstr ""
 "Viewports can be drawn with blitting or with shaders.  Depending on graphics "
 "card and OS one can perform better then the other."
 
-msgid "Blit Timeline"
-msgstr "Blit Timeline"
+msgid "GPU"
+msgstr ""
+
+#, fuzzy
+msgid "Secondary Viewport"
+msgstr "Secondary Display"
 
 msgid ""
 "Timeline can be drawn with blitting or with shaders.  Depending on graphics "
@@ -7633,6 +7646,12 @@ msgstr "Toggle About Window"
 
 #~ msgid "HDR monitor not found or not configured."
 #~ msgstr "HDR monitor not found or not configured."
+
+#~ msgid "Blit Viewports"
+#~ msgstr "Blit Viewports"
+
+#~ msgid "Blit Timeline"
+#~ msgstr "Blit Timeline"
 
 #~ msgid ""
 #~ "tter then the other.Timeline can be drawn with blitting or with shaders.  "

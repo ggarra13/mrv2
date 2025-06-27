@@ -8,8 +8,6 @@ if( POLICY CMP0135 )
     cmake_policy(SET CMP0135 NEW)
 endif()
 
-
-
 if(APPLE)
     message( STATUS "-------------------------------------------------" )
     message( STATUS "Building for macOS ${CMAKE_OSX_DEPLOYMENT_TARGET}" )
@@ -129,7 +127,7 @@ if (NOT BUILD_PYTHON)
 endif()
 
 if(CMAKE_BUILD_TYPE MATCHES "^Debug$")
-    # Check for Clang or GCC compiler  (@todo: add Microsoft support)
+    # Check for Clang or GCC compiler  (\@todo: add Microsoft support)
     if (TLRENDER_ASAN AND
 	    ((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR
 		(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")))
