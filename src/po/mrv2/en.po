@@ -1,7 +1,7 @@
 # English translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.6\n"
