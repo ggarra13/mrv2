@@ -451,8 +451,6 @@ if [[ "$CMAKE_TARGET" == "" ]]; then
     CMAKE_TARGET=install
 fi
 
-exit 1
-
 cmd="./runmeq.sh ${CMAKE_BUILD_TYPE} -t ${CMAKE_TARGET}"
 run_cmd $cmd
 
