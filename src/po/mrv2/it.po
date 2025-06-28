@@ -1,7 +1,7 @@
 # Italian translations for mrv2 package
 # This file is distributed under the same license as the mrv2 package.
 # Gonzalo Garramuño <ggarra13@gmail.com>, 2023.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.7nReport-Msgid-Bugs-To: ggarra13@gmail.com\n"
@@ -338,11 +338,11 @@ msgstr ""
 "\n"
 "Modulo Plugin. Contiene tutte le classi relative ai plugin python.\n"
 
-#, fuzzy
 msgid ""
 "Whether a plugin is active or not.  If not overridden, the default is True."
 msgstr ""
-"Se un plugin è attivo o no. Se non è sovraccaricato, il predefinito è True."
+"Indica se un plugin è attivo o meno. Se non è sovrascritto, il valore "
+"predefinito è True."
 
 msgid ""
 "\n"
@@ -1430,9 +1430,8 @@ msgstr "Chiudi l'elemento del file."
 msgid "Close all file items."
 msgstr "Chiudi tutti gli elementi del file."
 
-#, fuzzy
 msgid "Return the root path to the installation of mrv2."
-msgstr "Ritorna il percorso della radice all'insallazione di mrv2."
+msgstr "Restituisce il percorso radice dell'installazione di mrv2."
 
 msgid "Return the path to preferences of mrv2."
 msgstr "Ritorna il percorso alle preferenze di mrv2."
@@ -1705,6 +1704,9 @@ msgstr "Installa la posizione:"
 
 msgid "Preferences Location: "
 msgstr "Posizione delle preferenze:"
+
+msgid "Temp Location: "
+msgstr "Percorso temporaneo: "
 
 msgid "Could not read python script '{0}'"
 msgstr "Impossibile leggere lo script python '{0}'"
@@ -2818,9 +2820,9 @@ msgstr "Pen"
 msgid "Laser"
 msgstr "Laser"
 
-#, fuzzy
 msgid "Makes the following annotation disappear a second after drawn."
-msgstr "Rende l'annotazione seguente dissapere un secondo dopo il disegno."
+msgstr ""
+"Fa scomparire l'annotazione seguente un secondo dopo essere stata disegnata."
 
 msgid "Color:"
 msgstr "Colore:"
@@ -3117,9 +3119,8 @@ msgstr "Le mappature dei percorsi sono state caricate da \"{0}{1}\"."
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Caricamento di tasti di avviamento da \"{0}{1}.prefs\"."
 
-#, fuzzy
 msgid "Resetting hotkeys to default."
-msgstr "Reimpostazione delle tasti di accensione per impostazione predefinita."
+msgstr "Ripristino dei tasti rapidi ai valori predefiniti."
 
 msgid "Path mappings have been saved to \"{0}{1}\"."
 msgstr "Le mappature dei percorsi sono state salvate in \"{0}{1}\"."
@@ -4484,9 +4485,8 @@ msgstr ""
 "Impossibile creare la directory «%s». È possibile che non abbia il permesso "
 "di eseguire questa operazione."
 
-#, fuzzy, c-format
 msgid "An error occurred while trying to delete '%s'. %s"
-msgstr "Un errore avvenuto durante la tentazione di eliminare «%s». %s"
+msgstr "Si è verificato un errore durante il tentativo di eliminare '%s'. %s"
 
 msgid "File '%s' already exists!"
 msgstr "Il file «%s» esiste già!"
@@ -6775,12 +6775,11 @@ msgstr ""
 "la maggior parte delle informazioni di galleggiante e Fast lavora in 8 bit. "
 "Automatico seleziona l'accuratezza in base alla profondità dell'immagine."
 
-#, fuzzy
 msgid "Main Viewport"
-msgstr "Modifica visualizzazione"
+msgstr "Viewport principale"
 
 msgid "Blit"
-msgstr ""
+msgstr "Blit"
 
 msgid ""
 "Viewports can be drawn with blitting or with shaders.  Depending on graphics "
@@ -6791,11 +6790,10 @@ msgstr ""
 "dell’altro."
 
 msgid "GPU"
-msgstr ""
+msgstr "GPU"
 
-#, fuzzy
 msgid "Secondary Viewport"
-msgstr "Visualizzazione secondaria"
+msgstr "Viewport secondario"
 
 msgid ""
 "Timeline can be drawn with blitting or with shaders.  Depending on graphics "

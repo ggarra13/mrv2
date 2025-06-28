@@ -1,6 +1,6 @@
 # AI Simplified Chinese translations for mrv2 package
 # This file is distributed under the same license as the mrv2 package.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.5\n"
@@ -334,10 +334,9 @@ msgstr ""
 "Contains all classes related to python plugins.\n"
 "\n"
 
-#, fuzzy
 msgid ""
 "Whether a plugin is active or not.  If not overridden, the default is True."
-msgstr "插件是否开启,默认为True"
+msgstr "插件是否激活。如果未被覆盖，默认值为 True。"
 
 msgid ""
 "\n"
@@ -1410,9 +1409,8 @@ msgstr "关闭文件项"
 msgid "Close all file items."
 msgstr "关闭所有文件项"
 
-#, fuzzy
 msgid "Return the root path to the installation of mrv2."
-msgstr "Return the root path to the insallation of mrv2."
+msgstr "返回 mrv2 安装的根路径。"
 
 msgid "Return the path to preferences of mrv2."
 msgstr "Return the path to preferences of mrv2."
@@ -1679,6 +1677,9 @@ msgstr "安装位置 :"
 
 msgid "Preferences Location: "
 msgstr "首选项位置 :"
+
+msgid "Temp Location: "
+msgstr "临时位置："
 
 msgid "Could not read python script '{0}'"
 msgstr "无法读取 python 脚本 '{0}'"
@@ -2757,9 +2758,8 @@ msgstr "笔"
 msgid "Laser"
 msgstr "Laser"
 
-#, fuzzy
 msgid "Makes the following annotation disappear a second after drawn."
-msgstr "画完之后,以下的注解一秒后消失"
+msgstr "使以下注释在绘制后一秒钟消失。"
 
 msgid "Color:"
 msgstr "颜色:"
@@ -3038,9 +3038,8 @@ msgstr "从 \"{0}{1}\" 导入路径映射图"
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "正在从 \"{0}{1}.prefs\" 导入快捷键"
 
-#, fuzzy
 msgid "Resetting hotkeys to default."
-msgstr "将快捷键重置为默认"
+msgstr "正在将快捷键重置为默认值。"
 
 msgid "Path mappings have been saved to \"{0}{1}\"."
 msgstr "路径映射已保存到 \"{0}{1}\"。"
@@ -4387,9 +4386,8 @@ msgid ""
 "operation."
 msgstr "无法创建目录 “%s ” 。 您可能没有执行此操作的权限 。"
 
-#, fuzzy, c-format
 msgid "An error occurred while trying to delete '%s'. %s"
-msgstr "尝试删除 “%s” 时发生错误。%s"
+msgstr "尝试删除 '%s' 时发生错误。%s"
 
 msgid "File '%s' already exists!"
 msgstr "文件 '%s' 已经存在!"
@@ -6586,12 +6584,11 @@ msgstr ""
 "颜色缓冲器可以是浮点、 半浮点、 快速或自动。 浮点保存所有浮点信息, 半浮点保存"
 "大多数浮点信息, 快速工作为 8 位。 根据图像深度自动选择精度 。"
 
-#, fuzzy
 msgid "Main Viewport"
-msgstr "编辑视图"
+msgstr "主视口"
 
 msgid "Blit"
-msgstr ""
+msgstr "Blit"
 
 msgid ""
 "Viewports can be drawn with blitting or with shaders.  Depending on graphics "
@@ -6601,11 +6598,10 @@ msgstr ""
 "更佳。"
 
 msgid "GPU"
-msgstr ""
+msgstr "GPU"
 
-#, fuzzy
 msgid "Secondary Viewport"
-msgstr "次要显示"
+msgstr "辅助视口"
 
 msgid ""
 "Timeline can be drawn with blitting or with shaders.  Depending on graphics "

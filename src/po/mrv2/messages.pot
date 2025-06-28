@@ -1418,6 +1418,9 @@ msgstr ""
 msgid "Preferences Location: "
 msgstr ""
 
+msgid "Temp Location: "
+msgstr ""
+
 msgid "Could not read python script '{0}'"
 msgstr ""
 

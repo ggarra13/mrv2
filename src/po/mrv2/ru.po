@@ -1,7 +1,7 @@
 # Russian translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.8\n"
@@ -341,12 +341,10 @@ msgstr ""
 "В этой колонке содержатся все классы, относящиеся к питоновым бамперам.\n"
 "\n"
 
-#, fuzzy
 msgid ""
 "Whether a plugin is active or not.  If not overridden, the default is True."
 msgstr ""
-"Вне зависимости от того, активен ли пультин или нет. Если он не отменяется, "
-"то по умолчанию это правда."
+"Активен ли плагин или нет. Если не переопределено, по умолчанию — True."
 
 msgid ""
 "\n"
@@ -1451,9 +1449,8 @@ msgstr "Закрыть файл."
 msgid "Close all file items."
 msgstr "Закрыть все файлы."
 
-#, fuzzy
 msgid "Return the root path to the installation of mrv2."
-msgstr "Вернуть корневую дорожку к изолированию mrv2."
+msgstr "Возвращает корневой путь к установке mrv2."
 
 msgid "Return the path to preferences of mrv2."
 msgstr "Вернуть путь к предпочтениям mrv2."
@@ -1727,6 +1724,9 @@ msgstr "Расположение:"
 
 msgid "Preferences Location: "
 msgstr "Предпочтение Местоположение:"
+
+msgid "Temp Location: "
+msgstr "Временное расположение: "
 
 msgid "Could not read python script '{0}'"
 msgstr "Не удаётся прочитать Python скрипт \" {0}"
@@ -2837,11 +2837,9 @@ msgstr "Перо"
 msgid "Laser"
 msgstr "Laser"
 
-#, fuzzy
 msgid "Makes the following annotation disappear a second after drawn."
 msgstr ""
-"Спустя секунду после нарисованного аннотация делает следующую аннотацию "
-"рассеянной."
+"Заставляет следующую аннотацию исчезнуть через секунду после её отображения."
 
 msgid "Color:"
 msgstr "Цвет:"
@@ -3127,9 +3125,8 @@ msgstr "Картирование путей было загружено с \" {0
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Загрузка хот-дога из \"{0}{1}.prefs\"."
 
-#, fuzzy
 msgid "Resetting hotkeys to default."
-msgstr "Перезагрузить хот-доги по умолчанию."
+msgstr "Сброс горячих клавиш к значениям по умолчанию."
 
 msgid "Path mappings have been saved to \"{0}{1}\"."
 msgstr "Картирование путей было сохранено до \" {0} {1}\"."
@@ -4496,9 +4493,8 @@ msgstr ""
 "Невозможно создать каталог '%s'. Вы можете не иметь разрешения на выполнение "
 "этой операции."
 
-#, fuzzy, c-format
 msgid "An error occurred while trying to delete '%s'. %s"
-msgstr "Ошибка в процессе удаления '%s'. %s"
+msgstr "Произошла ошибка при попытке удалить '%s'. %s"
 
 msgid "File '%s' already exists!"
 msgstr "Файл '%s' уже существует!"
@@ -6769,12 +6765,11 @@ msgstr ""
 "поплавковой информации и Fast работает в 8 битах. Автоматически выбирает "
 "точность на основе глубины изображения."
 
-#, fuzzy
 msgid "Main Viewport"
-msgstr "Правка Просмотра"
+msgstr "Основное окно просмотра"
 
 msgid "Blit"
-msgstr ""
+msgstr "Blit"
 
 msgid ""
 "Viewports can be drawn with blitting or with shaders.  Depending on graphics "
@@ -6784,11 +6779,10 @@ msgstr ""
 "от видеокарты и ОС один из методов может работать лучше другого."
 
 msgid "GPU"
-msgstr ""
+msgstr "Графический процессор"
 
-#, fuzzy
 msgid "Secondary Viewport"
-msgstr "Вторичное отображение"
+msgstr "Вторичное окно просмотра"
 
 msgid ""
 "Timeline can be drawn with blitting or with shaders.  Depending on graphics "

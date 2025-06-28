@@ -2,7 +2,7 @@
 # Traducciones al español para el paquete mrv2.
 # This file is distributed under the same license as the mrv2 package.
 # Gonzalo Garramuño <ggarra13@gmail.com>, 2023.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.8\n"
@@ -358,7 +358,6 @@ msgstr ""
 "Contiene todas las clases relacionados con las los plugins de python.\n"
 "\n"
 
-#, fuzzy
 msgid ""
 "Whether a plugin is active or not.  If not overridden, the default is True."
 msgstr "Si un plugin está activo o no.  Si no se reemplaza, el valor es True."
@@ -1461,7 +1460,6 @@ msgstr "Cerrar archivo actual"
 msgid "Close all file items."
 msgstr "Cerrar todos los archivos."
 
-#, fuzzy
 msgid "Return the root path to the installation of mrv2."
 msgstr "Retorna la carpeta raíz de la instalación de mrv2."
 
@@ -1737,6 +1735,9 @@ msgstr "Ubicación de la instalación:"
 
 msgid "Preferences Location: "
 msgstr "Ubicación de Preferencias:"
+
+msgid "Temp Location: "
+msgstr "Lugar Temporario: "
 
 msgid "Could not read python script '{0}'"
 msgstr "No pude leer script de python '{0}'"
@@ -2854,7 +2855,6 @@ msgstr "Lápiz"
 msgid "Laser"
 msgstr "Laser"
 
-#, fuzzy
 msgid "Makes the following annotation disappear a second after drawn."
 msgstr "Hace la siguiente anotación desaparecer un segundo tras dibujarla."
 
@@ -3154,7 +3154,6 @@ msgstr "Mapeo de carpetas ha sido cargado de \"{0}{1}\"."
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Cargué teclas de manejo desde \"{0}{1}.prefs\"."
 
-#, fuzzy
 msgid "Resetting hotkeys to default."
 msgstr "Reseteando teclas a los valores estándares."
 
@@ -4520,7 +4519,6 @@ msgid ""
 msgstr ""
 "No pude crear carpeta '%s'. Puedes no tener permisos para esta operación."
 
-#, fuzzy, c-format
 msgid "An error occurred while trying to delete '%s'. %s"
 msgstr "Un error ocurrió al tratar de borrar '%s'. %s"
 
@@ -6801,12 +6799,11 @@ msgstr ""
 "Flotante preserve la mayoría de ella, y Rápido trabaja en 8-bits.  "
 "Automático selecciona la precisión basada en profundidad de la imagen."
 
-#, fuzzy
 msgid "Main Viewport"
 msgstr "Ventana de Edición"
 
 msgid "Blit"
-msgstr ""
+msgstr "Blit"
 
 msgid ""
 "Viewports can be drawn with blitting or with shaders.  Depending on graphics "
@@ -6817,9 +6814,8 @@ msgstr ""
 "desempeñarse mejor que la otra."
 
 msgid "GPU"
-msgstr ""
+msgstr "GPU"
 
-#, fuzzy
 msgid "Secondary Viewport"
 msgstr "Display Secundario"
 
@@ -7732,7 +7728,6 @@ msgstr "Alternar Ventana de Acerca de mrv2"
 #~ msgid "Blit Timeline"
 #~ msgstr "Transferir Línea de Tiempo"
 
-#, fuzzy
 #~ msgid ""
 #~ "tter then the other.Timeline can be drawn with blitting or with shaders.  "
 #~ "Depending on graphics card and OS one can perform be"

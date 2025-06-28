@@ -1,7 +1,7 @@
 # English translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.6\n"
@@ -1708,6 +1708,10 @@ msgstr "Install Location: "
 msgid "Preferences Location: "
 msgstr "Preferences Location: "
 
+#, fuzzy
+msgid "Temp Location: "
+msgstr "Location"
+
 msgid "Could not read python script '{0}'"
 msgstr "Could not read python script '{0}'"
 
@@ -3035,7 +3039,7 @@ msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Audio only in timeline, but not trying to save audio."
 
 msgid "Vulkan info: {0}"
-msgstr "OpenGL info: {0}"
+msgstr "Vulkan info: {0}"
 
 msgid "{0}: Invalid OpenGL format and type"
 msgstr "{0}: Invalid OpenGL format and type"
@@ -7641,17 +7645,17 @@ msgstr "Toggle Hotkeys Window"
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
 
-#~ msgid "HDR monitor found."
-#~ msgstr "HDR monitor found."
-
-#~ msgid "HDR monitor not found or not configured."
-#~ msgstr "HDR monitor not found or not configured."
-
 #~ msgid "Blit Viewports"
 #~ msgstr "Blit Viewports"
 
 #~ msgid "Blit Timeline"
 #~ msgstr "Blit Timeline"
+
+#~ msgid "HDR monitor found."
+#~ msgstr "HDR monitor found."
+
+#~ msgid "HDR monitor not found or not configured."
+#~ msgstr "HDR monitor not found or not configured."
 
 #~ msgid ""
 #~ "tter then the other.Timeline can be drawn with blitting or with shaders.  "

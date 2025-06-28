@@ -1,7 +1,7 @@
 # Hindi translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.7\n"
@@ -326,10 +326,11 @@ msgstr ""
 "\n"
 "प्लगइन. सभी वर्ग को पायथन से संबंधित.\n"
 
-#, fuzzy
 msgid ""
 "Whether a plugin is active or not.  If not overridden, the default is True."
-msgstr "क्या प्लगिन सक्रिय है या नहीं. यदि ओवरराइड नहीं है, तयशुदा रूप से सही है."
+msgstr ""
+"यह दर्शाता है कि प्लगइन सक्रिय है या नहीं। यदि अधिरोहित नहीं किया गया है, तो डिफ़ॉल्ट "
+"मान True होता है।"
 
 msgid ""
 "\n"
@@ -1405,9 +1406,8 @@ msgstr "फ़ाइल वस्तु बन्द करें."
 msgid "Close all file items."
 msgstr "सभी फ़ाइलों को बंद करें"
 
-#, fuzzy
 msgid "Return the root path to the installation of mrv2."
-msgstr "mrv2 की अंतिम प्रक्रिया के लिए रूट पथ वापस करें."
+msgstr "mrv2 की स्थापना का मूल पथ लौटाएँ।"
 
 msgid "Return the path to preferences of mrv2."
 msgstr "mrv2 की वरीयता के लिए पथ वापस करें."
@@ -1671,6 +1671,9 @@ msgstr "स्थान संस्थापित करें:"
 
 msgid "Preferences Location: "
 msgstr "पसंद स्थान:"
+
+msgid "Temp Location: "
+msgstr "अस्थायी स्थान: "
 
 msgid "Could not read python script '{0}'"
 msgstr "पायथन स्क्रिप्ट '{0}' पढ़ नहीं सका."
@@ -2759,9 +2762,8 @@ msgstr "पेन"
 msgid "Laser"
 msgstr "Laser"
 
-#, fuzzy
 msgid "Makes the following annotation disappear a second after drawn."
-msgstr "निम्नलिखित एनोटेशन आरेखित करता है निकाले जाने के बाद एक दूसरे को समेट लेता है."
+msgstr "चित्रित होने के एक सेकंड बाद अगला एनोटेशन गायब कर देता है।"
 
 msgid "Color:"
 msgstr "रंगः"
@@ -3050,9 +3052,8 @@ msgstr "पथ \"{0}{1}\" से लोड किया गया."
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "\"{0}{1}.prefs\" से गर्म हवा लोड किया जा रहा है।"
 
-#, fuzzy
 msgid "Resetting hotkeys to default."
-msgstr "गर्म हवा को डिफ़ॉल्ट में रीसेट किया जा रहा है."
+msgstr "हॉटकीज़ को डिफ़ॉल्ट पर रीसेट किया जा रहा है।"
 
 msgid "Path mappings have been saved to \"{0}{1}\"."
 msgstr "पथ \"{0}{1}\" को सहेजा गया."
@@ -4408,9 +4409,8 @@ msgid ""
 msgstr ""
 "'%s' निर्देशिका निर्मित नहीं कर सका. आपके पास इस संक्रिया को चलाने की अनुमति नहीं है."
 
-#, fuzzy, c-format
 msgid "An error occurred while trying to delete '%s'. %s"
-msgstr "'%s' को मिटाने की कोशिश में एक त्रुटि हुई. %s"
+msgstr "'%s' को हटाने की कोशिश के दौरान एक त्रुटि हुई। %s"
 
 msgid "File '%s' already exists!"
 msgstr "फ़ाइल '%s' पहले से उपस्थित है!"
@@ -6630,12 +6630,11 @@ msgstr ""
 "रखता है, आधा फ्लोट जानकारी बनाए रखता है तथा 8- बिट पर तीव्र कार्य करता है. स्वचालित "
 "छवि गहराई पर आधारित सटीकता का चयन करता है."
 
-#, fuzzy
 msgid "Main Viewport"
-msgstr "संपादन"
+msgstr "मुख्य व्यूपोर्ट"
 
 msgid "Blit"
-msgstr ""
+msgstr "ब्लिट"
 
 msgid ""
 "Viewports can be drawn with blitting or with shaders.  Depending on graphics "
@@ -6645,11 +6644,10 @@ msgstr ""
 "आधार पर एक तरीका दूसरे से बेहतर प्रदर्शन कर सकता है।"
 
 msgid "GPU"
-msgstr ""
+msgstr "GPU"
 
-#, fuzzy
 msgid "Secondary Viewport"
-msgstr "द्वितीयक प्रदर्शक"
+msgstr "द्वितीयक व्यूपोर्ट"
 
 msgid ""
 "Timeline can be drawn with blitting or with shaders.  Depending on graphics "

@@ -1,7 +1,7 @@
 # French translations for mrv2 package
 # This file is distributed under the same license as the mrv2 package.
 # Gonzalo Garramuño <ggarra13@gmail.com>, 2023.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.6\n"
@@ -333,12 +333,11 @@ msgstr ""
 "\n"
 "Module Plugin. Contient toutes les classes liées aux plugins python.\n"
 
-#, fuzzy
 msgid ""
 "Whether a plugin is active or not.  If not overridden, the default is True."
 msgstr ""
-"Que le plugin soit actif ou non. Si ce n'est pas annulé, la valeur par "
-"défaut est True."
+"Indique si un plugin est actif ou non. Si non remplacé, la valeur par défaut "
+"est True."
 
 msgid ""
 "\n"
@@ -1415,9 +1414,8 @@ msgstr "Fermez l'élément du fichier."
 msgid "Close all file items."
 msgstr "Fermez tous les éléments du fichier."
 
-#, fuzzy
 msgid "Return the root path to the installation of mrv2."
-msgstr "Retourner le chemin racine vers l'insallation de mrv2."
+msgstr "Renvoie le chemin racine de l’installation de mrv2."
 
 msgid "Return the path to preferences of mrv2."
 msgstr "Retourner le chemin vers les préférences de mrv2."
@@ -1688,6 +1686,9 @@ msgstr "Emplacement de l'installation :"
 
 msgid "Preferences Location: "
 msgstr "Localisation des préférences :"
+
+msgid "Temp Location: "
+msgstr "Emplacement temporaire : "
 
 msgid "Could not read python script '{0}'"
 msgstr "Impossible de lire le script python « {0} »"
@@ -2802,9 +2803,8 @@ msgstr "Stylo"
 msgid "Laser"
 msgstr "Laser"
 
-#, fuzzy
 msgid "Makes the following annotation disappear a second after drawn."
-msgstr "Fait que l'annotation suivante disparaît une seconde après le tirage."
+msgstr "Fait disparaître l’annotation suivante une seconde après son dessin."
 
 msgid "Color:"
 msgstr "Couleur & #160;:"
@@ -3099,9 +3099,8 @@ msgstr "Les cartes des chemins ont été chargées à partir de « {0}{1} »."
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Chargement des touches raccourcies depuis \"{0}{1}.prefs\"."
 
-#, fuzzy
 msgid "Resetting hotkeys to default."
-msgstr "Réinitialiser les hot-keys par défaut."
+msgstr "Réinitialisation des raccourcis clavier par défaut."
 
 msgid "Path mappings have been saved to \"{0}{1}\"."
 msgstr "Les cartes des chemins ont été sauvegardées dans « {0}{1} »."
@@ -4465,9 +4464,9 @@ msgstr ""
 "Impossible de créer le répertoire « %s ». Vous n'avez peut-être pas la "
 "permission d'effectuer cette opération."
 
-#, fuzzy, c-format
 msgid "An error occurred while trying to delete '%s'. %s"
-msgstr "Une erreur survenue lors de l'essai de supprimer « %s ». %s"
+msgstr ""
+"Une erreur est survenue lors de la tentative de suppression de '%s'. %s"
 
 msgid "File '%s' already exists!"
 msgstr "Le fichier « %s » existe déjà!"
@@ -6769,12 +6768,11 @@ msgstr ""
 "all float information, Half Float preserves most float information and Fast "
 "works in 8-bits. Automatic selects the accuracy based on image depth."
 
-#, fuzzy
 msgid "Main Viewport"
-msgstr "Modifier le point de vue"
+msgstr "Vue principale"
 
 msgid "Blit"
-msgstr ""
+msgstr "Blit"
 
 msgid ""
 "Viewports can be drawn with blitting or with shaders.  Depending on graphics "
@@ -6785,11 +6783,10 @@ msgstr ""
 "l’autre méthode peut être plus performante."
 
 msgid "GPU"
-msgstr ""
+msgstr "GPU"
 
-#, fuzzy
 msgid "Secondary Viewport"
-msgstr "Affichage secondaire"
+msgstr "Vue secondaire"
 
 msgid ""
 "Timeline can be drawn with blitting or with shaders.  Depending on graphics "

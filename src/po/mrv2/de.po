@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
@@ -334,12 +334,9 @@ msgstr ""
 "\n"
 "Plugin-Modul. Enthlt alle Klassen im Zusammenhang mit Python-Plugins.\n"
 
-#, fuzzy
 msgid ""
 "Whether a plugin is active or not.  If not overridden, the default is True."
-msgstr ""
-"Ob ein Plugin aktiv ist oder nicht. Wenn nicht berschrieben, ist der "
-"Standardwert True."
+msgstr "Si un plugin está activo o no.  Si no se usa, el activo es verdad."
 
 msgid ""
 "\n"
@@ -1405,9 +1402,8 @@ msgstr "Schlieen Sie den Dateieintrag."
 msgid "Close all file items."
 msgstr "Alle Dateieintrge schlieen."
 
-#, fuzzy
 msgid "Return the root path to the installation of mrv2."
-msgstr "Gibt den Wurzelpfad zur Insallation von mrv2 zurck."
+msgstr "Retorna el camino raíz a la instalación de mrv2."
 
 msgid "Return the path to preferences of mrv2."
 msgstr "Gibt den Pfad zu den Prferenzen von mrv2 zurck."
@@ -1681,6 +1677,9 @@ msgstr "Ort installieren:"
 
 msgid "Preferences Location: "
 msgstr "Einstellungen Standort:"
+
+msgid "Temp Location: "
+msgstr "Lugar Temporario: "
 
 msgid "Could not read python script '{0}'"
 msgstr "Python-Skript '{0}' kann nicht gelesen werden"
@@ -2807,10 +2806,8 @@ msgstr "Stift"
 msgid "Laser"
 msgstr "Laser"
 
-#, fuzzy
 msgid "Makes the following annotation disappear a second after drawn."
-msgstr ""
-"Macht die folgende Annotation nach dem Zeichnen eine Sekunde auseinander."
+msgstr "Hace que la siguiente anotación desaparezca tras el segundo dibujo."
 
 msgid "Color:"
 msgstr "Farbe:"
@@ -3103,9 +3100,8 @@ msgstr "Pfad-Mappings wurden aus \"{0}{1}\" geladen."
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Hotkeys von \"{0}{1}.prefs\" werden geladen."
 
-#, fuzzy
 msgid "Resetting hotkeys to default."
-msgstr "Hotkeys auf Standard zurcksetzen."
+msgstr "Reseteando teclas a su origen."
 
 msgid "Path mappings have been saved to \"{0}{1}\"."
 msgstr "Pfad-Mappings wurden in \"{0}{1}\" gespeichert."
@@ -4467,9 +4463,8 @@ msgstr ""
 "Das Verzeichnis %s kann nicht erstellt werden. Sie haben mglicherweise keine "
 "Berechtigung, diese Operation durchzufhren."
 
-#, fuzzy, c-format
 msgid "An error occurred while trying to delete '%s'. %s"
-msgstr "Beim Versuch, %s zu lschen, ist ein Fehler aufgetreten. %s"
+msgstr "Un error ocurrió mientras intentaba borrar '%s'. %s"
 
 msgid "File '%s' already exists!"
 msgstr "Die Datei %s existiert bereits!"
@@ -6754,12 +6749,11 @@ msgstr ""
 "und Fast arbeitet in 8-Bits. Automatisch wählt die Genauigkeit basierend auf "
 "der Bildtiefe."
 
-#, fuzzy
 msgid "Main Viewport"
-msgstr "Ansicht bearbeiten"
+msgstr "Ventana Principal"
 
 msgid "Blit"
-msgstr ""
+msgstr "Blit"
 
 msgid ""
 "Viewports can be drawn with blitting or with shaders.  Depending on graphics "
@@ -6770,11 +6764,10 @@ msgstr ""
 "andere funktionieren."
 
 msgid "GPU"
-msgstr ""
+msgstr "GPU"
 
-#, fuzzy
 msgid "Secondary Viewport"
-msgstr "Sekundre Anzeige"
+msgstr "Secondary Viewport"
 
 msgid ""
 "Timeline can be drawn with blitting or with shaders.  Depending on graphics "

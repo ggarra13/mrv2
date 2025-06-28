@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.3.6\n"
@@ -339,10 +339,11 @@ msgstr ""
 "Pythonプラグインに関連するすべてのクラスを含みます。\n"
 "\n"
 
-#, fuzzy
 msgid ""
 "Whether a plugin is active or not.  If not overridden, the default is True."
-msgstr "コンフィギュレーションがアクティブかどうかを示します"
+msgstr ""
+"プラグインが有効かどうかを示します。上書きされていない場合、デフォルトはTrue"
+"です。"
 
 msgid ""
 "\n"
@@ -1422,9 +1423,8 @@ msgstr "インプットファイルを閉じる"
 msgid "Close all file items."
 msgstr "展開を閉じる"
 
-#, fuzzy
 msgid "Return the root path to the installation of mrv2."
-msgstr "残りの６枚は箱へと戻します。"
+msgstr "mrv2のインストールのルートパスを返します。"
 
 msgid "Return the path to preferences of mrv2."
 msgstr "平和への道"
@@ -1691,6 +1691,9 @@ msgstr "インストール場所 : "
 
 msgid "Preferences Location: "
 msgstr "好み："
+
+msgid "Temp Location: "
+msgstr "一時的な場所: "
 
 msgid "Could not read python script '{0}'"
 msgstr "Python スクリプト '{0}' を読み込めませんでした"
@@ -2783,9 +2786,8 @@ msgstr "Pen"
 msgid "Laser"
 msgstr "Laser"
 
-#, fuzzy
 msgid "Makes the following annotation disappear a second after drawn."
-msgstr "次の図では、1秒間に14個のサンプルがあります。"
+msgstr "描画後1秒で次の注釈を消去します。"
 
 msgid "Color:"
 msgstr "カラー:"
@@ -3084,9 +3086,8 @@ msgstr "パス マッピングが「{0}{1}」から読み込まれました。"
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "\"{0}{1}.prefs\" からホットキーをロードしています。"
 
-#, fuzzy
 msgid "Resetting hotkeys to default."
-msgstr "デフォルトに戻す"
+msgstr "ホットキーをデフォルトにリセットしています。"
 
 msgid "Path mappings have been saved to \"{0}{1}\"."
 msgstr "パスマッピングは \"{0}{1}\" に保存されました。"
@@ -4450,9 +4451,8 @@ msgstr ""
 "ディレクトリ '%s' を作成できませんでした。この操作を実行する権限がない可能性"
 "があります。"
 
-#, fuzzy, c-format
 msgid "An error occurred while trying to delete '%s'. %s"
-msgstr "'%s' を削除しようとしたときにエラーが発生しました。%s"
+msgstr "'%s' の削除中にエラーが発生しました。%s"
 
 msgid "File '%s' already exists!"
 msgstr "'%s' は既に存在します"
@@ -6701,12 +6701,11 @@ msgstr ""
 "べての浮動小数点情報を保存し、Half Floatはほとんどの浮動小数点情報を保存し、"
 "Fastは8ビットで動作します。自動は画像の深度に基づいて精度を選択します。"
 
-#, fuzzy
 msgid "Main Viewport"
-msgstr "編集ビューポート"
+msgstr "メインビューポート"
 
 msgid "Blit"
-msgstr ""
+msgstr "ブリット"
 
 msgid ""
 "Viewports can be drawn with blitting or with shaders.  Depending on graphics "
@@ -6716,11 +6715,10 @@ msgstr ""
 "カードやOSによって、どちらかの方法がより良いパフォーマンスを発揮します。"
 
 msgid "GPU"
-msgstr ""
+msgstr "GPU"
 
-#, fuzzy
 msgid "Secondary Viewport"
-msgstr "副次表示"
+msgstr "セカンダリビューポート"
 
 msgid ""
 "Timeline can be drawn with blitting or with shaders.  Depending on graphics "

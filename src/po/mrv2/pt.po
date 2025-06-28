@@ -1,7 +1,7 @@
 # Portuguese translations for mrv2 package
 # This file is distributed under the same license as the mrv2 package.
 # Gonzalo Garramuño <ggarra13@gmail.com>, 2023.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.7\n"
@@ -335,10 +335,11 @@ msgstr ""
 "\n"
 "Mdulo de plugin. Contm todas as classes relacionadas com plugins de python.\n"
 
-#, fuzzy
 msgid ""
 "Whether a plugin is active or not.  If not overridden, the default is True."
-msgstr "Se um plugin est ativo ou no. Se no for anulado, o padro  True."
+msgstr ""
+"Indica se un plugin è attivo o meno. Se non è sovrascritto, il valore "
+"predefinito è True."
 
 msgid ""
 "\n"
@@ -1415,9 +1416,8 @@ msgstr "Fecha o item do ficheiro."
 msgid "Close all file items."
 msgstr "Fechar todos os itens do ficheiro."
 
-#, fuzzy
 msgid "Return the root path to the installation of mrv2."
-msgstr "Retorne o caminho da raiz para a insalao de mrv2."
+msgstr "Restituisce il percorso radice dell'installazione di mrv2."
 
 msgid "Return the path to preferences of mrv2."
 msgstr "Retornar o caminho para as preferncias do mrv2."
@@ -1687,6 +1687,9 @@ msgstr "Instalar a Localização:"
 
 msgid "Preferences Location: "
 msgstr "Localização das Preferências:"
+
+msgid "Temp Location: "
+msgstr "Percorso temporaneo: "
 
 msgid "Could not read python script '{0}'"
 msgstr "No foi possvel ler o script python '{0}'"
@@ -2784,9 +2787,9 @@ msgstr "Caneta"
 msgid "Laser"
 msgstr "Laser"
 
-#, fuzzy
 msgid "Makes the following annotation disappear a second after drawn."
-msgstr "Faz com que a anotao seguinte se dissipe um segundo aps o desenho."
+msgstr ""
+"Fa scomparire l'annotazione seguente un secondo dopo essere stata disegnata."
 
 msgid "Color:"
 msgstr "Cor:"
@@ -3079,9 +3082,8 @@ msgstr "Os mapeamentos de caminhos foram carregados a partir de \"{0}{1}\"."
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Carregando as teclas acessrias de \"{0}{1}.prefs\"."
 
-#, fuzzy
 msgid "Resetting hotkeys to default."
-msgstr "Restaurao de teclas de atalho para padro."
+msgstr "Ripristino dei tasti rapidi ai valori predefiniti."
 
 msgid "Path mappings have been saved to \"{0}{1}\"."
 msgstr "Os mapas dos caminhos foram salvos para \"{0}{1}\"."
@@ -4442,9 +4444,8 @@ msgstr ""
 "No foi possvel criar o diretrio %s. Poder no ter permisso para executar esta "
 "operao."
 
-#, fuzzy, c-format
 msgid "An error occurred while trying to delete '%s'. %s"
-msgstr "Um erro ocorreu ao tentar excluir \"%s\". %s"
+msgstr "Si è verificato un errore durante il tentativo di eliminare '%s'. %s"
 
 msgid "File '%s' already exists!"
 msgstr "O ficheiro %s j existe!"
@@ -6720,12 +6721,11 @@ msgstr ""
 "preserva a maioria das informações flutuantes e Fast trabalha em 8 bits. "
 "Automático seleciona a precisão com base na profundidade da imagem."
 
-#, fuzzy
 msgid "Main Viewport"
-msgstr "Editar a Viso"
+msgstr "Viewport principale"
 
 msgid "Blit"
-msgstr ""
+msgstr "Blit"
 
 msgid ""
 "Viewports can be drawn with blitting or with shaders.  Depending on graphics "
@@ -6736,11 +6736,10 @@ msgstr ""
 "desempenho que a outra."
 
 msgid "GPU"
-msgstr ""
+msgstr "GPU"
 
-#, fuzzy
 msgid "Secondary Viewport"
-msgstr "Apresentao secundria"
+msgstr "Viewport secondario"
 
 msgid ""
 "Timeline can be drawn with blitting or with shaders.  Depending on graphics "
