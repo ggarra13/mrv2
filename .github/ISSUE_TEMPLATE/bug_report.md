@@ -26,6 +26,7 @@ If applicable, add screenshots to help explain your problem.
 **Desktop (please complete the following information):**
  - OS: [e.g. iOS]
  - Version [e.g. mrv2 v1.1.6]
+ - Backend [eg. OpenGL or Vulkan ]
 
 **Additional context**
 Add any other context about the problem here.
