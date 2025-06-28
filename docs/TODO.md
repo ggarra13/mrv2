@@ -8,4 +8,9 @@ TODO
 - Verify Vulkan on macOS and Windows.
 - Verify OCIO bug report (#385)
 
- /home/runner/work/mrv2/mrv2/VulkanSDK/1.4.313.0//include/vulkan
+
+## Medium
+
+- Add comments to all source code (and clean up the code more).
+
+## Difficult

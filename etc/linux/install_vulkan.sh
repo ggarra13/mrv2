@@ -24,11 +24,8 @@ SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sort -r | grep -o "$VULKAN_ROOT/[0-9]*\..
 
 export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/$UNAME_ARCH
 export VK_LAYER_PATH=$VULKAN_SDK/lib
-export VK_ICD_FILENAMES=$VULKAN_SDK/etc/vulkan/icd.d/MoltenVK_icd.json
 export PATH=${VULKAN_SDK}/bin:$PATH
 
-echo "VULKAN_SDK is=$VULKAN_SDK"
-echo "Contents of SDK:"
 ls $VULKAN_SDK
 
 rm -f /tmp/vulkan-sdk.tar.gz
