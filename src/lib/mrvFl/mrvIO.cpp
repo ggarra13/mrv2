@@ -72,7 +72,11 @@ namespace mrv
             if (out.is_open())
                 return;
 
-            out.open(tmppath() + "debug.log");
+            out.open(tmppath() + "/debug.log");
+            if (!out.is_open())
+            {
+                std::cerr << "TEMP PATH=" << tmppath() << std::endl;
+            }
         }
 
         void logbuffer::open_ffmpeg_log_panel()

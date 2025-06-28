@@ -621,6 +621,9 @@ namespace mrv
         
         LOG_STATUS(_("Preferences Location: "));
         LOG_STATUS("\t" << mrv::prefspath());
+        
+        LOG_STATUS(_("Temp Location: "));
+        LOG_STATUS("\t" << mrv::tmppath());
 
         // Create the main control.
         p.mainControl = new MainControl(ui);
