@@ -386,8 +386,20 @@ if(BUILD_PYTHON)
 endif()
 
 
+include(CPack)
+
 #
 # Create the 'package' target
 #
-include(CPack)
+if(APPLE)
+    # Add a target to unmount the volume if it is already mounted
+    add_custom_target(unmount_dmg
+        COMMAND hdiutil detach "/Volumes/${CPACK_DMG_VOLUME_NAME}" || true
+        COMMENT "Unmounting previous DMG volume if mounted"
+        VERBATIM
+    )
 
+    # Now that the 'package' target exists (after include(CPack)),
+    # we can add our unmount step as a dependency
+    add_dependencies(package unmount_dmg)
+endif()

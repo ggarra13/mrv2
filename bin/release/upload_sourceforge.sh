@@ -193,11 +193,27 @@ echo "$release_notes" >> README.md
 cat <<EOF > VULKAN_NOTES.md
 Notes about Vulkan on NVidia Linux:
 
+It will likely work with any RTX 3080+ board, but it will require to choose and
+test your hardware carefully.
+
+
+Notes about Vulkan on NVidia Linux:
+
 The preferred NVidia driver tested for best performance is nvidia-driver-550 (default on Ubuntu 24.04.2 LTS).
 
 nvidia-driver-570 suffers from a dramatic hit in performance (about 50%).
 
 nvidia-driver-575 suffers from an even bigger hit in performance (about 80%).
+
+Linux currently does not yet support HDR.
+
+
+Notes about Vulkan on macOS Intel:
+
+- Only up to Vulkan 1.3 is currently supported.
+- HDR on macOS needs a MacBook Pro.
+  MacBook Pro Intel will give you up to 1000 Nits of HDR.
+  MacBook Pro Silicon should work with any M1 device up to HDR+.
 
 EOF
 
