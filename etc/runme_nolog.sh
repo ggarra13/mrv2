@@ -295,8 +295,6 @@ if [[ $KERNEL == *Msys* ]]; then
 fi
 
 
-mkdir -p $BUILD_DIR/install
-
 if [[ $KERNEL == *Linux* ]]; then
     echo "Common options"
     echo
@@ -362,6 +360,7 @@ fi
 
 
 mkdir -p $BUILD_DIR/install
+export PATH=$BUILD_DIR/install/bin:$PATH
     
 #
 # Handle Windows pre-flight compiles
