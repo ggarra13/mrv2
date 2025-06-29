@@ -38,6 +38,7 @@ export CMAKE_FLAGS=""
 export TLRENDER_EXR=ON
 export TLRENDER_WAYLAND=ON
 export TLRENDER_X11=ON
+export BUILD_PYTHON=ON
 
 echo
 echo "Saving compile log to $BUILD_DIR/compile.log ..."
