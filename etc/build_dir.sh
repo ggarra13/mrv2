@@ -95,11 +95,6 @@ if [ -z "$OLD_PATH" ]; then
     export OLD_PATH="$PATH"
 fi
 
-#
-# Extract cmake version
-#
-get_cmake_version
-
 
 #
 # We set both lib64 and lib to handle differences in Linux RH and Ubuntu

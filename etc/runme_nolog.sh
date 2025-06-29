@@ -34,6 +34,11 @@ mkdir -p $PWD/${BUILD_DIR}/install/bin/
 ls $PWD/${BUILD_DIR}/install/bin/
 
 #
+# Extract cmake version
+#
+get_cmake_version
+
+#
 # These are some of the expensive mrv2 options
 #
 if [ -z "$BUILD_PYTHON" ]; then
