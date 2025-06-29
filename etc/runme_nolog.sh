@@ -25,6 +25,7 @@ fi
 export PATH="$PWD/${BUILD_DIR}/install/bin:$PWD/$BUILD_DIR/install/bin/Scripts:${PATH}"
 echo "PATH is now set now to ${PATH}"
 echo "It has:"
+mkdir -p $PWD/${BUILD_DIR}/install/bin/
 ls $PWD/${BUILD_DIR}/install/bin/
 
 #
@@ -365,9 +366,6 @@ echo "USD support ........................ ${TLRENDER_USD} 	(TLRENDER_USD)"
 if [[ $ASK_TO_CONTINUE == 1 ]]; then
     ask_to_continue
 fi
-
-
-mkdir -p $BUILD_DIR/install
     
 #
 # Handle Windows pre-flight compiles
