@@ -331,7 +331,7 @@ if [[ $TLRENDER_FFMPEG == ON || $TLRENDER_FFMPEG == 1 ]]; then
     echo "    FFmpeg network support ......... ${TLRENDER_NET} 	(TLRENDER_NET)"
     echo "    dav1d decodec support .......... ${TLRENDER_AV1} 	(TLRENDER_AV1)"
     echo "    SvtAv1 codec support. .......... ${TLRENDER_SVTAV1} 	(TLRENDER_SVTAV1)"
-    echo "    HAP codec support .............. ${TLRENDER_HAP} 	(TLRENDER_HAP)"
+    echo "    HAP/Snappy codec support ....... ${TLRENDER_HAP} 	(TLRENDER_HAP)"
     echo "    VPX codec support .............. ${TLRENDER_VPX} 	(TLRENDER_VPX)"
     echo "    X264 codec support ............. ${TLRENDER_X264} 	(Use -gpl flag)"
     echo "    libplacebo support ............. ${TLRENDER_LIBPLACEBO}         (TLRENDER_LIBPLACEBO)"
