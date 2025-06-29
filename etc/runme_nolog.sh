@@ -20,6 +20,25 @@ if [[ !$RUNME ]]; then
 fi
 
 #
+# Install cmake
+#
+. etc/install_cmake.sh
+
+#
+# Set environment variables to point to install directory
+#
+export PATH="$PWD/${BUILD_DIR}/install/bin:$PWD/$BUILD_DIR/install/bin/Scripts:${PATH}"
+echo "PATH is now set now to ${PATH}"
+echo "It has:"
+mkdir -p $PWD/${BUILD_DIR}/install/bin/
+ls $PWD/${BUILD_DIR}/install/bin/
+
+#
+# Extract cmake version
+#
+get_cmake_version
+
+#
 # These are some of the expensive mrv2 options
 #
 if [ -z "$BUILD_PYTHON" ]; then
@@ -295,8 +314,6 @@ if [[ $KERNEL == *Msys* ]]; then
 fi
 
 
-mkdir -p $BUILD_DIR/install
-
 if [[ $KERNEL == *Linux* ]]; then
     echo "Common options"
     echo
@@ -359,9 +376,6 @@ echo "USD support ........................ ${TLRENDER_USD} 	(TLRENDER_USD)"
 if [[ $ASK_TO_CONTINUE == 1 ]]; then
     ask_to_continue
 fi
-
-
-mkdir -p $BUILD_DIR/install
     
 #
 # Handle Windows pre-flight compiles

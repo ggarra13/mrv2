@@ -25,6 +25,7 @@ extract_version
 #
 extract_python_version
 
+
 #
 # Determine OS Kernel, OS CPU architecture
 #
@@ -55,6 +56,7 @@ fi
 if [[ ! -d $BUILD_DIR ]]; then
     run_cmd mkdir -p $BUILD_DIR
 fi
+
 
 #
 # Get the number of CPU cores for maximum efficiency
@@ -92,17 +94,6 @@ export FLAGS="${FLAGS} $*"
 if [ -z "$OLD_PATH" ]; then
     export OLD_PATH="$PATH"
 fi
-
-#
-# Set environment variables to point to install directory
-#
-export PATH="$PWD/${BUILD_DIR}/install/bin:$PWD/$BUILD_DIR/install/bin/Scripts:${PATH}"
-echo "build_dir=PATH is now set now to ${PATH}"
-
-#
-# Extract cmake version
-#
-get_cmake_version
 
 
 #
