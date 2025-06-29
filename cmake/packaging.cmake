@@ -387,28 +387,3 @@ endif()
 
 
 include(CPack)
-
-#
-# Create the 'package' target
-#
-if(APPLE)
-    add_custom_target(package_dragndrop
-        COMMAND hdiutil detach "/Volumes/${CPACK_DMG_VOLUME_NAME}" || true
-        COMMAND ${CMAKE_COMMAND} -E echo "Unmounted DMG volume (if mounted)"
-        COMMAND ${CMAKE_COMMAND} -E echo "Running CPack DragNDrop..."
-        COMMAND ${CMAKE_CPACK_COMMAND} -G DragNDrop --config "${CMAKE_BINARY_DIR}/CPackConfig.cmake"
-        WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
-        COMMENT "Creating DragNDrop DMG with CPack, after unmounting old volume"
-        VERBATIM
-    )
-    # Add a target to unmount the volume if it is already mounted
-    add_custom_target(unmount_dmg
-        COMMAND hdiutil detach "/Volumes/${CPACK_DMG_VOLUME_NAME}" || true
-        COMMENT "Unmounting previous DMG volume if mounted"
-        VERBATIM
-    )
-
-    # Now that the 'package' target exists (after include(CPack)),
-    # we can add our unmount step as a dependency
-    add_dependencies(package unmount_dmg)
-endif()
