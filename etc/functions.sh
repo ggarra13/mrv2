@@ -60,7 +60,6 @@ get_msvc_version()
 
 get_cmake_version()
 {
-    export PATH=$BUILD_DIR/install/bin:$PATH
     export CMAKE_LOCATION=`which cmake`
     export CMAKE_VERSION=`cmake --version | grep -o 'cmake version [0-9.]*' | cut -d' ' -f3`
 }

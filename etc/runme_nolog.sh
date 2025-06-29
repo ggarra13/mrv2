@@ -24,7 +24,8 @@ fi
 #
 export PATH="$PWD/${BUILD_DIR}/install/bin:$PWD/$BUILD_DIR/install/bin/Scripts:${PATH}"
 echo "PATH is now set now to ${PATH}"
-ls $PWD/${BUILD_DIR}/install/bin/*
+echo "It has:"
+ls $PWD/${BUILD_DIR}/install/bin/
 
 #
 # These are some of the expensive mrv2 options
