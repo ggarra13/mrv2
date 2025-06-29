@@ -94,12 +94,6 @@ if [ -z "$OLD_PATH" ]; then
 fi
 
 #
-# Set environment variables to point to install directory
-#
-export PATH="$PWD/${BUILD_DIR}/install/bin:$PWD/$BUILD_DIR/install/bin/Scripts:${PATH}"
-echo "build_dir=PATH is now set now to ${PATH}"
-
-#
 # Extract cmake version
 #
 get_cmake_version
