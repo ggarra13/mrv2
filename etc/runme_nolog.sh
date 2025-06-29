@@ -360,7 +360,6 @@ fi
 
 
 mkdir -p $BUILD_DIR/install
-export PATH=$BUILD_DIR/install/bin:$PATH
     
 #
 # Handle Windows pre-flight compiles
