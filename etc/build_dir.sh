@@ -25,6 +25,7 @@ extract_version
 #
 extract_python_version
 
+
 #
 # Determine OS Kernel, OS CPU architecture
 #
@@ -54,6 +55,13 @@ fi
 #
 if [[ ! -d $BUILD_DIR ]]; then
     run_cmd mkdir -p $BUILD_DIR
+fi
+
+#
+# Install cmake
+#
+if [[ $KERNEL == *Msys* ]]; then
+    . etc/install_cmake.sh
 fi
 
 #
