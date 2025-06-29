@@ -57,12 +57,6 @@ if [[ ! -d $BUILD_DIR ]]; then
     run_cmd mkdir -p $BUILD_DIR
 fi
 
-#
-# Install cmake
-#
-if [[ $KERNEL == *Msys* ]]; then
-    . etc/install_cmake.sh
-fi
 
 #
 # Get the number of CPU cores for maximum efficiency

@@ -20,6 +20,11 @@ if [[ !$RUNME ]]; then
 fi
 
 #
+# Install cmake
+#
+. etc/install_cmake.sh
+
+#
 # Set environment variables to point to install directory
 #
 export PATH="$PWD/${BUILD_DIR}/install/bin:$PWD/$BUILD_DIR/install/bin/Scripts:${PATH}"
