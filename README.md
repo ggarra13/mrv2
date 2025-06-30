@@ -3,6 +3,10 @@
 [![Build Status](https://github.com/ggarra13/mrv2/actions/workflows/full_macos13.yml/badge.svg)](https://github.com/ggarra13/mrv2/actions/workflows/full_macos13.yml)
 [![Build Status](https://github.com/ggarra13/mrv2/actions/workflows/full_win64.yml/badge.svg)](https://github.com/ggarra13/mrv2/actions/workflows/full_win64.yml)
 [![Build Status](https://github.com/ggarra13/mrv2/actions/workflows/full_macos14.yml/badge.svg)](https://github.com/ggarra13/mrv2/actions/workflows/full_macos14.yml)
+[![Build Status](https://github.com/ggarra13/mrv2/actions/workflows/vulkan_linux.yml/badge.svg)](https://github.com/ggarra13/mrv2/actions/workflows/vulkan_linux.yml)
+[![Build Status](https://github.com/ggarra13/mrv2/actions/workflows/vulkan_macos13.yml/badge.svg)](https://github.com/ggarra13/mrv2/actions/workflows/vulkan_macos13.yml)
+[![Build Status](https://github.com/ggarra13/mrv2/actions/workflows/vulkan_win64.yml/badge.svg)](https://github.com/ggarra13/mrv2/actions/workflows/vulkan_win64.yml)
+[![Build Status](https://github.com/ggarra13/mrv2/actions/workflows/vulkan_macos14.yml/badge.svg)](https://github.com/ggarra13/mrv2/actions/workflows/vulkan_macos14.yml)
 [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=679N8GWCNDFSJ)
 [![Sponsor](https://img.shields.io/badge/Sponsor-ggarra13-blue.svg)](https://github.com/sponsors/ggarra13)
 
@@ -66,7 +70,7 @@ installation.
 
 ## Compatibility
 
-mrv2 binaries run on Windows 8.1+, RedHat 8.10+ or Ubuntu 22.04+, and macOS 11.0+.
+mrv2 binaries run on Windows 10+, RedHat 8.10+ or Ubuntu 22.04+, and macOS 11.0+.
 
 ## Notes on installation
 
@@ -96,6 +100,9 @@ mrv2 binaries run on Windows 8.1+, RedHat 8.10+ or Ubuntu 22.04+, and macOS 11.0
   Click on the More Information text and a Button that says Run anyway or
   similar should appear.  Click on it and follow the standard instructions
   to any Windows installer.
+  One note about the Windows install.  When asked if you want to add mrv2 to
+  your PATH, it is recommended to answer No to it, as it avoids DLLs conflicts
+  with other applications that use common libraries like FFmpeg or OpenUSD.
 
 
 - On Linux, in order to install the .rpm or .deb packages requires your user to
