@@ -16,8 +16,8 @@ if (UNIX)
 else()
     set(libsnappy_CXX_COMPILER $ENV{GENERIC_COMPILER})
     set(libsnappy_C_COMPILER $ENV{GENERIC_COMPILER})
-    set(libsnappy_CXX_FLAGS ${CMAKE_CXX_FLAGS})
-    set(libsnappy_C_FLAGS ${CMAKE_C_FLAGS})
+    set(libsnappy_CXX_FLAGS "")
+    set(libsnappy_C_FLAGS "")
 endif()
 
 list(APPEND libsnappy_ARGS

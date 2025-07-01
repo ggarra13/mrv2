@@ -10,8 +10,8 @@ CMAKE_EXT=tar.gz
 echo "Getting latest release of cmake"
 . ./etc/build_dir.sh
 
-if [[ -d $PWD/$BUILD_DIR/install/bin/cmake ]]; then
-    exit 0
+if [[ -e $PWD/$BUILD_DIR/install/bin/cmake ]]; then
+    return
 fi
 
 echo "Will install it in $PWD/$BUILD_DIR/install.."
@@ -39,16 +39,10 @@ fi
 
 if [[ $KERNEL != *Darwin* ]]; then
     dir=cmake-${CMAKE_RELEASE}-${CMAKE_PLATFORM}
-    mv -f ${dir}/bin/* $PWD/$BUILD_DIR/install/bin/
-    mv -f ${dir}}/doc/* $PWD/$BUILD_DIR/install/doc/
-    mv -f ${dir}/man/* $PWD/$BUILD_DIR/install/man/
-    mv -f ${dir}/share/* $PWD/$BUILD_DIR/install/share/
+    mv -f ${dir}/* $PWD/$BUILD_DIR/install/
 elif [[ $KERNEL == *Darwin* ]]; then
     dir=cmake-${CMAKE_RELEASE}-${CMAKE_PLATFORM}/CMake.app/Contents/*
-    mv -f ${dir}/bin/* $PWD/$BUILD_DIR/install/bin/
-    mv -f ${dir}}/doc/* $PWD/$BUILD_DIR/install/doc/
-    mv -f ${dir}/man/* $PWD/$BUILD_DIR/install/man/
-    mv -f ${dir}/share/* $PWD/$BUILD_DIR/install/share/
+    mv -f ${dir}/* $PWD/$BUILD_DIR/install/
 fi
 
 
