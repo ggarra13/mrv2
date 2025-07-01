@@ -285,7 +285,8 @@ echo "mrv2 version to build is v${mrv2_VERSION}"
 echo
 echo "Build directory is ${BUILD_DIR}"
 echo "Build type      is ${CMAKE_BUILD_TYPE}"
-echo "Building with ${COMPILER_VERSION}, ${CPU_CORES} cores"
+echo "Native compiler ${NATIVE_COMPILER} ${COMPILER_VERSION}, ${CPU_CORES} cores"
+echo "Generic with ${GENERIC_COMPILER} ${COMPILER_VERSION}, ${CPU_CORES} cores"
 echo "CMake at: ${CMAKE_LOCATION} ${CMAKE_VERSION}"
 if [[ $KERNEL == *Darwin* ]]; then
     echo "Building on MacOS Brand ${MACOS_BRAND}"
@@ -408,10 +409,13 @@ cmd="cmake -G '${CMAKE_GENERATOR}'
            -D CMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES}
            -D CMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}
 
+	   -D NATIVE_COMPILER=${NATIVE_COMPILER}
+	   -D GENERIC_COMPILER=${GENERIC_COMPILER}
 	   -D BUILD_PYTHON=${BUILD_PYTHON}
 	   -D BUILD_X11=${BUILD_X11}
 	   -D BUILD_WAYLAND=${BUILD_WAYLAND}
 
+	   -D MRV2_COMPILER=${COMPILER}
 	   -D MRV2_BACKEND=${MRV2_BACKEND}
 	   -D MRV2_HDR=${MRV2_HDR}
 	   -D MRV2_NETWORK=${MRV2_NETWORK}
