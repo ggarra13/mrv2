@@ -53,7 +53,7 @@ if(WIN32)
     # Properly format VPX_CONFIGURE_ARGS
     list(JOIN LCMS2_CONFIGURE_ARGS " " LCMS2_CONFIGURE_ARGS_STR)
 
-    set(LCMS2_CONFIGURE_COMMAND ${LCMS2_MSYS2} -c "CC=cl CXX=cl LD=link ./configure --build=mingw64 ${LCMS2_CONFIGURE_ARGS_STR}")
+    set(LCMS2_CONFIGURE_COMMAND ${LCMS2_MSYS2} -c "CC=clang CXX=clang LD=link ./configure ${LCMS2_CONFIGURE_ARGS_STR}")
     set(LCMS2_PATCH_COMMAND 
 	${CMAKE_COMMAND} -E copy_if_different
         ${CMAKE_CURRENT_SOURCE_DIR}/patches/LCMS2-patch/configure
