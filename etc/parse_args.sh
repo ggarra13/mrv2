@@ -160,7 +160,6 @@ if [[ "$NOARGS" == "" ]]; then
 		continue
 		;;
 	    -vk|--vk|--vulkan)
-		export BUILD_ROOT=${KERNEL}-vulkan-${ARCH}
 		export MRV2_HDR=ON
 		export MRV2_BACKEND=VK
 		shift
@@ -209,4 +208,8 @@ if [[ "$NOARGS" == "" ]]; then
 	esac
     done
 
+fi
+
+if [[ "$MRV2_BACKEND" == "VK" && "$BUILD_ROOT" == "" ]]; then
+    export BUILD_ROOT=${KERNEL}-vulkan-${ARCH}
 fi

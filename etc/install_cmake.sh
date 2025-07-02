@@ -10,6 +10,10 @@ CMAKE_EXT=tar.gz
 echo "Getting latest release of cmake"
 . ./etc/build_dir.sh
 
+if [[ ! -d $PWD/$BUILD_DIR/install ]]; then
+    mkdir -p $PWD/$BUILD_DIR/install
+fi
+
 if [[ -e $PWD/$BUILD_DIR/install/bin/cmake ]]; then
     return
 fi

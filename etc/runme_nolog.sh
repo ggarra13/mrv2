@@ -15,14 +15,14 @@
 # Use runme.sh for that.
 #
 #
-if [[ !$RUNME ]]; then
-    . $PWD/etc/build_dir.sh
-fi
-
 #
 # Install cmake
 #
 . etc/install_cmake.sh
+
+if [[ !$RUNME ]]; then
+    . $PWD/etc/build_dir.sh
+fi
 
 #
 # Set environment variables to point to install directory
