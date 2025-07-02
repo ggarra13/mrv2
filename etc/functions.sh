@@ -32,9 +32,19 @@ get_kernel()
     export MACOS_BRAND=''
     if [[ $KERNEL == *MSYS* || $KERNEL == *MINGW* ]]; then
 	export KERNEL=Msys
-	export ARCH=`which cl.exe`
+	export NATIVE_COMPILER=`which cl.exe`
+	if [[ "$GENERIC_COMPILER" == "" ]]; then
+	    export GENERIC_COMPILER=`which clang.exe`
+	fi
     elif [[ $KERNEL == *Darwin* ]]; then
-	    export MACOS_BRAND=$(sysctl -n machdep.cpu.brand_string)
+	export MACOS_BRAND=$(sysctl -n machdep.cpu.brand_string)
+	export NATIVE_COMPILER=`which clang`
+	export GENERIC_COMPILER=`which clang`
+    else
+	export NATIVE_COMPILER=`which gcc`
+	if [[ "$GENERIC_COMPILER" == "" ]]; then
+	    export GENERIC_COMPILER=`which clang`
+	fi
     fi
 
     if [[ $ARCH == "" ]]; then

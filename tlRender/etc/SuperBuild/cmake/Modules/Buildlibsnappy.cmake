@@ -11,9 +11,13 @@ set(libsnappy_ARGS ${TLRENDER_EXTERNAL_ARGS})
 if (UNIX)
     set(libsnappy_CXX_FLAGS -fPIC ${CMAKE_CXX_FLAGS})
     set(libsnappy_C_FLAGS -fPIC ${CMAKE_C_FLAGS})
+    set(libsnappy_CXX_FLAGS g++)
+    set(libsnappy_C_FLAGS gcc)
 else()
-    set(libsnappy_CXX_FLAGS ${CMAKE_CXX_FLAGS})
-    set(libsnappy_C_FLAGS ${CMAKE_C_FLAGS})
+    set(libsnappy_CXX_COMPILER $ENV{GENERIC_COMPILER})
+    set(libsnappy_C_COMPILER $ENV{GENERIC_COMPILER})
+    set(libsnappy_CXX_FLAGS "")
+    set(libsnappy_C_FLAGS "")
 endif()
 
 list(APPEND libsnappy_ARGS
@@ -22,6 +26,8 @@ list(APPEND libsnappy_ARGS
     -DBENCHMARK_USE_BUNDLED_GTEST=OFF
     -DSNAPPY_BUILD_TESTS=OFF
     -DSNAPPY_BUILD_BENCHMARKS=OFF
+    -DCMAKE_CXX_COMPILER=${libsnappy_CXX_COMPILER}
+    -DCMAKE_C_COMPILER=${libsnappy_C_COMPILER}
     -DCMAKE_CXX_FLAGS="${libsnappy_CXX_FLAGS}"
     -DCMAKE_C_FLAGS="${libsnappy_C_FLAGS}"
 )

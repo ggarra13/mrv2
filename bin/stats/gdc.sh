@@ -21,6 +21,7 @@ NOARGS=1
 . etc/build_dir.sh
 
 locate_python
+echo "PYTHON found=$PYTHON"
 
 export LD_LIBRARY_PATH=$BUILD_DIR/install/lib64:$BUILD_DIR/install/lib:$OLD_LIBRRARY_PATH
 
