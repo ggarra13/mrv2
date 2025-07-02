@@ -57,8 +57,8 @@ if(WIN32)
     set(LCMS2_PATCH_COMMAND 
 	PATCH_COMMAND ${CMAKE_COMMAND} -E copy_if_different
         ${CMAKE_CURRENT_SOURCE_DIR}/patches/LCMS2-patch/configure
-        ${CMAKE_CURRENT_BINARY_DIR}/NASM/src/LCMS2/configure
-	set(LCMS2_BUILD_COMMAND ${LCMS2_MSYS2} -c "make -j ${NPROCS}")
+        ${CMAKE_CURRENT_BINARY_DIR}/NASM/src/LCMS2/configure)
+    set(LCMS2_BUILD_COMMAND ${LCMS2_MSYS2} -c "make -j ${NPROCS}")
     set(LCMS2_INSTALL_COMMAND ${LCMS2_MSYS2} -c "make install && mv ${INSTALL_PREFIX}/lib/lcms2.dll.lib ${INSTALL_PREFIX}/lib/liblcms2.lib")
 endif()
 
