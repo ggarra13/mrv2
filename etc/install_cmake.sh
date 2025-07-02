@@ -45,7 +45,7 @@ if [[ $KERNEL != *Darwin* ]]; then
     dir=cmake-${CMAKE_RELEASE}-${CMAKE_PLATFORM}
     mv -f ${dir}/* $PWD/$BUILD_DIR/install/
 elif [[ $KERNEL == *Darwin* ]]; then
-    dir=cmake-${CMAKE_RELEASE}-${CMAKE_PLATFORM}/CMake.app/Contents/*
+    dir=cmake-${CMAKE_RELEASE}-${CMAKE_PLATFORM}/CMake.app/Contents/
     mv -f ${dir}/* $PWD/$BUILD_DIR/install/
 fi
 
