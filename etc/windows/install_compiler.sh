@@ -2,6 +2,6 @@
 
 USE_MSVC=1
 if [[ $USE_MSVC == 1 ]]; then
-    pacman -Ry --noconfirm *-g++
-    pacman -Ry --noconfirm *-gcc
+    pacman -R --noconfirm *-g++
+    pacman -R --noconfirm *-gcc
 fi
