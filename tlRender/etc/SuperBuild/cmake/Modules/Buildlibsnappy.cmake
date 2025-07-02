@@ -26,6 +26,8 @@ endif()
 
 message(STATUS "libsnappy_CXX_COMPILER=${libsnappy_CXX_COMPILER}")
 message(STATUS "libsnappy_C_COMPILER=${libsnappy_C_COMPILER}")
+message(STATUS "libsnappy CMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}")
+message(STATUS "libsnappy CMAKE_C_COMPILER=${CMAKE_C_COMPILER}")
 
 
 list(APPEND libsnappy_ARGS
