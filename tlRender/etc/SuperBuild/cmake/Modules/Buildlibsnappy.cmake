@@ -2,7 +2,7 @@ include(ExternalProject)
 
 
 set(libsnappy_REPO "https://github.com/google/snappy.git")
-set(libsnappy_TAG 1.2.2)
+set(libsnappy_TAG 6af9287fbdb913f0794d0148c6aa43b58e63c8e3)
 
 
 set(libsnappy_ARGS ${TLRENDER_EXTERNAL_ARGS})
@@ -59,17 +59,19 @@ ExternalProject_Add(
     UPDATE_COMMAND ${libsnappy_UPDATE_CMD}
     
     # After the repository is cloned, run a command to print SHA and tag
-    LOG_DOWNLOAD ON
-    LOG_UPDATE ON
+    # Revise this
+    #
+    # LOG_DOWNLOAD ON
+    # LOG_UPDATE ON
 
-    STEP_TARGETS download
-    DOWNLOAD_COMMAND
-        ${CMAKE_COMMAND} -E echo "Cloning repository..." &&
-        git clone ${libsnappy_REPO} <SOURCE_DIR> &&
-        ${CMAKE_COMMAND} -E echo "Git SHA256: " &&
-        git -C <SOURCE_DIR> rev-parse HEAD &&
-        ${CMAKE_COMMAND} -E echo "Git tags: " &&
-        git -C <SOURCE_DIR> tag
+    # STEP_TARGETS download
+    # DOWNLOAD_COMMAND
+    #     ${CMAKE_COMMAND} -E echo "Cloning repository..." &&
+    #     git clone ${libsnappy_REPO} <SOURCE_DIR> &&
+    #     ${CMAKE_COMMAND} -E echo "Git SHA256: " &&
+    #     git -C <SOURCE_DIR> rev-parse HEAD &&
+    #     ${CMAKE_COMMAND} -E echo "Git tags: " &&
+    #     git -C <SOURCE_DIR> tag
 	
     LIST_SEPARATOR |
     CMAKE_ARGS ${libsnappy_ARGS}
