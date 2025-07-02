@@ -8,9 +8,14 @@ set(libsnappy_TAG 1.2.2)
 set(libsnappy_ARGS ${TLRENDER_EXTERNAL_ARGS})
 
 
-if (UNIX)
-    set(libsnappy_CXX_COMPILER g++)
-    set(libsnappy_C_COMPILER gcc)
+if(APPLE)
+    set(libsnappy_CXX_COMPILER $ENV{NATIVE_COMPILER})
+    set(libsnappy_C_COMPILER $ENV{NATIVE_COMPILER})
+    set(libsnappy_CXX_FLAGS -fPIC ${CMAKE_CXX_FLAGS})
+    set(libsnappy_C_FLAGS -fPIC ${CMAKE_C_FLAGS})
+elif (UNIX)
+    set(libsnappy_CXX_COMPILER $ENV{NATIVE_COMPILER})
+    set(libsnappy_C_COMPILER $ENV{NATIVE_COMPILER})
     set(libsnappy_CXX_FLAGS -fPIC ${CMAKE_CXX_FLAGS})
     set(libsnappy_C_FLAGS -fPIC ${CMAKE_C_FLAGS})
 else()
@@ -26,8 +31,8 @@ list(APPEND libsnappy_ARGS
     -DBENCHMARK_USE_BUNDLED_GTEST=OFF
     -DSNAPPY_BUILD_TESTS=OFF
     -DSNAPPY_BUILD_BENCHMARKS=OFF
-    -DCMAKE_CXX_COMPILER=${libsnappy_CXX_COMPILER}
-    -DCMAKE_C_COMPILER=${libsnappy_C_COMPILER}
+    -DCMAKE_CXX_COMPILER="${libsnappy_CXX_COMPILER}"
+    -DCMAKE_C_COMPILER="${libsnappy_C_COMPILER}"
     -DCMAKE_CXX_FLAGS="${libsnappy_CXX_FLAGS}"
     -DCMAKE_C_FLAGS="${libsnappy_C_FLAGS}"
 )
