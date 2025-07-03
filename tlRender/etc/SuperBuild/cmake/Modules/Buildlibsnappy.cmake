@@ -69,7 +69,7 @@ ExternalProject_Add(
 
     UPDATE_COMMAND ${libsnappy_UPDATE_CMD}
 
-    STEP_TARGETS download
+    # STEP_TARGETS download
     # DOWNLOAD_COMMAND
     #     ${CMAKE_COMMAND} -E echo "Cloning repository..." &&
     #     git clone ${libsnappy_REPO} <SOURCE_DIR> &&
