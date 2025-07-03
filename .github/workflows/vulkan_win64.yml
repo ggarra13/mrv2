@@ -108,7 +108,6 @@ jobs:
         ./etc/runme_nolog.sh -v -t package -D TLRENDER_USD=OFF \
         -D TLRENDER_HAP=OFF -vk
         
-    - name: Upload binaries  # Conditional step (beta branch only)
-      if: github.ref_name == 'vulkan'
+    - name: Upload binaries  # Conditional step
       run: |
         ./bin/release/upload_sourceforge.sh -vk
