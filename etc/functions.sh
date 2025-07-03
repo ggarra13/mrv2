@@ -53,6 +53,9 @@ get_kernel()
 	fi
     fi
 
+    export CC=${NATIVE_COMPILER}
+    export CXX=${NATIVE_COMPILER}
+    
     if [[ $ARCH == "" ]]; then
 	export ARCH=`uname -m` # was uname -a
 	export UNAME_ARCH=$ARCH
