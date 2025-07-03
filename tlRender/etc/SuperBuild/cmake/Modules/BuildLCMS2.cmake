@@ -36,7 +36,6 @@ set(LCMS2_CONFIGURE_ARGS
 )
     
 set(LCMS2_CONFIGURE_COMMAND ./configure ${LCMS2_CONFIGURE_ARGS})
-set(LCMS2_PATCH_COMMAND)
 set(LCMS2_BUILD_COMMAND make -j ${NPROCS})
 set(LCMS2_INSTALL_COMMAND make install)
 
@@ -53,11 +52,7 @@ if(WIN32)
     # Properly format VPX_CONFIGURE_ARGS
     list(JOIN LCMS2_CONFIGURE_ARGS " " LCMS2_CONFIGURE_ARGS_STR)
 
-    set(LCMS2_CONFIGURE_COMMAND ${LCMS2_MSYS2} -c "CC=clang CXX=clang LD=link ./configure ${LCMS2_CONFIGURE_ARGS_STR}")
-    set(LCMS2_PATCH_COMMAND 
-	${CMAKE_COMMAND} -E copy_if_different
-        ${CMAKE_CURRENT_SOURCE_DIR}/patches/LCMS2-patch/configure
-        ${CMAKE_CURRENT_BINARY_DIR}/LCMS2/src/LCMS2/configure)
+    set(LCMS2_CONFIGURE_COMMAND ${LCMS2_MSYS2} -c "CC=cl CXX=cl LD=link ./configure --build=mingw64 ${LCMS2_CONFIGURE_ARGS_STR}")
     set(LCMS2_BUILD_COMMAND ${LCMS2_MSYS2} -c "make -j ${NPROCS}")
     set(LCMS2_INSTALL_COMMAND ${LCMS2_MSYS2} -c "make install && mv ${INSTALL_PREFIX}/lib/lcms2.dll.lib ${INSTALL_PREFIX}/lib/liblcms2.lib")
 endif()
@@ -69,7 +64,6 @@ ExternalProject_Add(
     GIT_TAG ${LCMS2_GIT_TAG}
     
     CONFIGURE_COMMAND ${LCMS2_CONFIGURE_COMMAND}
-    PATCH_COMMAND ${LCMS2_PATCH_COMMAND}
     BUILD_COMMAND ${LCMS2_BUILD_COMMAND}
     INSTALL_COMMAND ${LCMS2_INSTALL_COMMAND}
     BUILD_IN_SOURCE 1)
