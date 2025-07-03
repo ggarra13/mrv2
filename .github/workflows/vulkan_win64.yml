@@ -24,6 +24,9 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: recursive
+        
+    - name: Setup environment
+      uses: ilammy/msvc-dev-cmd@v1
 
     - name: Install Visual C++ Redistributable 2022
       run: |
@@ -45,7 +48,7 @@ jobs:
         net stop w32time
         net start w32time
         w32tm /resync /rediscover
-          
+            
     - name: Setup MSYS
       uses: msys2/setup-msys2@v2
       with:
@@ -102,7 +105,8 @@ jobs:
       
     - name: Build mrv2
       run: |
-        ./etc/runme_nolog.sh -v -t package -D TLRENDER_USD=OFF -vk
+        ./etc/runme_nolog.sh -v -t package -D TLRENDER_USD=OFF \
+        -D TLRENDER_HAP=OFF -vk
         
     - name: Upload binaries  # Conditional step (beta branch only)
       if: github.ref_name == 'vulkan'

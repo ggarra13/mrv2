@@ -35,6 +35,9 @@ get_kernel()
 	export NATIVE_COMPILER=`which cl.exe`
 	if [[ "$GENERIC_COMPILER" == "" ]]; then
 	    export GENERIC_COMPILER=`which clang.exe`
+	    if [[ "GENERIC_COMPILER" == "" ]]; then
+		echo "GENERIC COMPILER for this platform was not found"
+	    fi
 	fi
     elif [[ $KERNEL == *Darwin* ]]; then
 	export MACOS_BRAND=$(sysctl -n machdep.cpu.brand_string)
@@ -42,6 +45,9 @@ get_kernel()
 	export GENERIC_COMPILER=`which clang`
     else
 	export NATIVE_COMPILER=`which gcc`
+	if [[ "$NATIVE_COMPILER" == "" ]]; then
+	    export NATIVE_COMPILER=`which clang`
+	fi
 	if [[ "$GENERIC_COMPILER" == "" ]]; then
 	    export GENERIC_COMPILER=`which clang`
 	fi
@@ -78,11 +84,12 @@ get_compiler_version()
 {
     if [[ $KERNEL == *Msys* ]]; then
 	get_msvc_version
-	export COMPILER_VERSION="MSVC ${MSVC_VERSION}"
+	export NATIVE_COMPILER_VERSION="MSVC ${MSVC_VERSION}"
+	export CLANG_VERSION=`clang --version | grep version`
     elif [[ $KERNEL == *Linux* ]]; then
-	export COMPILER_VERSION=`gcc --version | grep gcc`
+	export NATIVE_COMPILER_VERSION=`gcc --version | grep gcc`
     else
-	export COMPILER_VERSION=`clang --version | grep version`
+	export NATIVE_COMPILER_VERSION=`clang --version | grep version`
     fi
 }
 

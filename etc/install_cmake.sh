@@ -18,6 +18,7 @@ if [[ -e $PWD/$BUILD_DIR/install/bin/cmake ]]; then
     return
 fi
 
+
 echo "Will install it in $PWD/$BUILD_DIR/install.."
 if [[ $KERNEL == *Linux* ]]; then
     CMAKE_PLATFORM=linux-x86_64
@@ -45,7 +46,7 @@ if [[ $KERNEL != *Darwin* ]]; then
     dir=cmake-${CMAKE_RELEASE}-${CMAKE_PLATFORM}
     mv -f ${dir}/* $PWD/$BUILD_DIR/install/
 elif [[ $KERNEL == *Darwin* ]]; then
-    dir=cmake-${CMAKE_RELEASE}-${CMAKE_PLATFORM}/CMake.app/Contents/*
+    dir=cmake-${CMAKE_RELEASE}-${CMAKE_PLATFORM}/CMake.app/Contents/
     mv -f ${dir}/* $PWD/$BUILD_DIR/install/
 fi
 

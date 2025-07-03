@@ -18,7 +18,6 @@
 #
 # Install cmake
 #
-. etc/install_cmake.sh
 
 if [[ !$RUNME ]]; then
     . $PWD/etc/build_dir.sh
@@ -286,8 +285,8 @@ echo "mrv2 version to build is v${mrv2_VERSION}"
 echo
 echo "Build directory is ${BUILD_DIR}"
 echo "Build type      is ${CMAKE_BUILD_TYPE}"
-echo "Native compiler ${NATIVE_COMPILER} ${COMPILER_VERSION}, ${CPU_CORES} cores"
-echo "Generic with ${GENERIC_COMPILER} ${COMPILER_VERSION}, ${CPU_CORES} cores"
+echo "Native compiler ${NATIVE_COMPILER} ${NATIVE_COMPILER_VERSION}, ${CPU_CORES} cores"
+echo "Generic with ${GENERIC_COMPILER} ${GENERIC_COMPILER_VERSION}, ${CPU_CORES} cores"
 echo "CMake at: ${CMAKE_LOCATION} ${CMAKE_VERSION}"
 if [[ $KERNEL == *Darwin* ]]; then
     echo "Building on MacOS Brand ${MACOS_BRAND}"
@@ -350,7 +349,7 @@ if [[ $TLRENDER_FFMPEG == ON || $TLRENDER_FFMPEG == 1 ]]; then
     echo "    FFmpeg network support ......... ${TLRENDER_NET} 	(TLRENDER_NET)"
     echo "    dav1d decodec support .......... ${TLRENDER_AV1} 	(TLRENDER_AV1)"
     echo "    SvtAv1 codec support. .......... ${TLRENDER_SVTAV1} 	(TLRENDER_SVTAV1)"
-    echo "    HAP codec support .............. ${TLRENDER_HAP} 	(TLRENDER_HAP)"
+    echo "    HAP/Snappy codec support ....... ${TLRENDER_HAP} 	(TLRENDER_HAP)"
     echo "    VPX codec support .............. ${TLRENDER_VPX} 	(TLRENDER_VPX)"
     echo "    X264 codec support ............. ${TLRENDER_X264} 	(Use -gpl flag)"
     echo "    libplacebo support ............. ${TLRENDER_LIBPLACEBO}         (TLRENDER_LIBPLACEBO)"
@@ -379,6 +378,8 @@ if [[ $ASK_TO_CONTINUE == 1 ]]; then
     ask_to_continue
 fi
     
+. etc/install_cmake.sh
+
 #
 # Handle Windows pre-flight compiles
 #

@@ -210,6 +210,7 @@ if [[ "$NOARGS" == "" ]]; then
 
 fi
 
+echo "parse args ASK_TO_CONTINUE=$ASK_TO_CONTINUE"
 if [[ "$MRV2_BACKEND" == "VK" && "$BUILD_ROOT" == "" ]]; then
     export BUILD_ROOT=${KERNEL}-vulkan-${ARCH}
 fi
