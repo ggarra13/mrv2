@@ -18,7 +18,6 @@
 #
 # Install cmake
 #
-. etc/install_cmake.sh
 
 if [[ !$RUNME ]]; then
     . $PWD/etc/build_dir.sh
@@ -378,6 +377,8 @@ if [[ $ASK_TO_CONTINUE == 1 ]]; then
     ask_to_continue
 fi
     
+. etc/install_cmake.sh
+
 #
 # Handle Windows pre-flight compiles
 #

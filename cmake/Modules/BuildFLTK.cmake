@@ -24,10 +24,7 @@ endif()
 
 set( FLTK_BUILD_TYPE ${CMAKE_BUILD_TYPE} )
 
-set( FLTK_CXX_COMPILER ${CMAKE_CXX_COMPILER})
-set( FLTK_CXX_FLAGS ${CMAKE_CXX_FLAGS})
-
-set( FLTK_C_COMPILER ${CMAKE_C_COMPILER})
+set( FLTK_C_COMPILER $ENV{NATIVE_COMPILER})
 set( FLTK_C_FLAGS ${CMAKE_C_FLAGS})
 
 if(WIN32)
@@ -37,6 +34,12 @@ elseif(UNIX AND NOT APPLE)
     list(APPEND FLTK_C_FLAGS -fPIC)
     list(APPEND FLTK_CXX_FLAGS -fPIC)
 endif()
+
+message(STATUS "FLTK C compiler ${FLTK_C_COMPILER}")
+message(STATUS "FLTK CXX compiler ${FLTK_CXX_COMPILER}")
+
+message(STATUS "FLTK C flags ${FLTK_C_FLAGS}")
+message(STATUS "FLTK CXX flags ${FLTK_CXX_FLAGS}")
 
 # These two are always built by tlRender
 set(FLTK_USE_SYSTEM_ZLIB TRUE)

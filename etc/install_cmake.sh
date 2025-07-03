@@ -18,6 +18,7 @@ if [[ -e $PWD/$BUILD_DIR/install/bin/cmake ]]; then
     return
 fi
 
+
 echo "Will install it in $PWD/$BUILD_DIR/install.."
 if [[ $KERNEL == *Linux* ]]; then
     CMAKE_PLATFORM=linux-x86_64
