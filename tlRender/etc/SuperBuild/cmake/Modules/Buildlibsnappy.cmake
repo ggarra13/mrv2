@@ -4,13 +4,13 @@ include(ExternalProject)
 # Original with Microsoft and Google conflicts.
 #
 # set(libsnappy_REPO "https://github.com/google/snappy.git")
-# set(libsnappy_TAG 6af9287fbdb913f0794d0148c6aa43b58e63c8e3)
+# set(libsnappy_TAG 6af9287fbdb913f0794d0148c6aa43b58e63c8e3)  # or 1.2.2
 
 #
 # My copy of it.
 #
 set(libsnappy_REPO "https://github.com/ggarra13/libsnappy.git")
-set(libsnappy_TAG 6af9287fbdb913f0794d0148c6aa43b58e63c8e36)
+set(libsnappy_TAG 1.2.2)
 
 
 set(libsnappy_ARGS ${TLRENDER_EXTERNAL_ARGS})
