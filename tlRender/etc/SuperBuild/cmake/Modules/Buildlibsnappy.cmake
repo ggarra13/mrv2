@@ -68,18 +68,8 @@ ExternalProject_Add(
     GIT_REPOSITORY ${libsnappy_REPO}
     GIT_TAG ${libsnappy_TAG}
     
-
     UPDATE_COMMAND ${libsnappy_UPDATE_CMD}
-
-    STEP_TARGETS download
-    # DOWNLOAD_COMMAND
-    #     ${CMAKE_COMMAND} -E echo "Cloning repository..." &&
-    #     git clone ${libsnappy_REPO} <SOURCE_DIR> &&
-    #     ${CMAKE_COMMAND} -E echo "Git SHA256: " &&
-    #     git -C <SOURCE_DIR> rev-parse HEAD &&
-    #     ${CMAKE_COMMAND} -E echo "Git tags: " &&
-    #     git -C <SOURCE_DIR> tag
-	
+    
     LIST_SEPARATOR |
     CMAKE_ARGS ${libsnappy_ARGS}
 )
