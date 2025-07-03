@@ -48,11 +48,6 @@ jobs:
         net stop w32time
         net start w32time
         w32tm /resync /rediscover
-
-    - name: Setup MSVC (cl.exe)
-      shell: cmd
-      run: |
-        "/c/Program Files/Microsoft Visual Studio/2022/Enterprise/Common7/Tools/VsDevCmd.bat" -arch=x64 -host_arch=x64
             
     - name: Setup MSYS
       uses: msys2/setup-msys2@v2

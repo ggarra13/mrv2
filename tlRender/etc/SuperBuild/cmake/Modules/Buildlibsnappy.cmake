@@ -7,12 +7,12 @@ include(ExternalProject)
 if (UNIX)
     set(libsnappy_REPO "https://github.com/google/snappy.git")
     set(libsnappy_TAG 6af9287fbdb913f0794d0148c6aa43b58e63c8e3)  # or 1.2.2
-elseif(WIN32)
-    #
-    # My copy of it.
-    #
-    set(libsnappy_REPO "https://github.com/ggarra13/snappy.git")
-    set(libsnappy_TAG 1.2.2)
+# elseif(WIN32)
+#     #
+#     # My copy of it.
+#     #
+#     set(libsnappy_REPO "https://github.com/ggarra13/snappy.git")
+#     set(libsnappy_TAG 1.2.2)
 endif()
 
 
@@ -29,8 +29,10 @@ elseif (UNIX)
     set(libsnappy_CXX_FLAGS -fPIC ${CMAKE_CXX_FLAGS})
     set(libsnappy_C_FLAGS -fPIC ${CMAKE_C_FLAGS})
 else()
-    set(libsnappy_CXX_COMPILER $ENV{GENERIC_COMPILER})
-    set(libsnappy_C_COMPILER $ENV{GENERIC_COMPILER})
+    set(libsnappy_CXX_COMPILER $ENV{NATIVE_COMPILER_NAME}) #
+    set(libsnappy_C_COMPILER $ENV{NATIVE_COMPILER_NAME}) #
+    # set(libsnappy_CXX_COMPILER $ENV{GENERIC_COMPILER})
+    # set(libsnappy_C_COMPILER $ENV{GENERIC_COMPILER})
     set(libsnappy_CXX_FLAGS "")
     set(libsnappy_C_FLAGS "")
 endif()
@@ -50,12 +52,12 @@ list(APPEND libsnappy_ARGS
     -DCMAKE_CXX_FLAGS="${libsnappy_CXX_FLAGS}"
     -DCMAKE_C_FLAGS="${libsnappy_C_FLAGS}"
 )
-if(WIN32)
-    list(APPEND libsnappy_ARGS
-	-DCMAKE_CXX_COMPILER=${libsnappy_CXX_COMPILER}
-	-DCMAKE_C_COMPILER=${libsnappy_C_COMPILER}
-    )
-endif()
+# if(WIN32)
+#     list(APPEND libsnappy_ARGS
+# 	-DCMAKE_CXX_COMPILER=${libsnappy_CXX_COMPILER}
+# 	-DCMAKE_C_COMPILER=${libsnappy_C_COMPILER}
+#     )
+# endif()
 
 set(libsnappy_UPDATE_CMD git submodule update --init)
 
