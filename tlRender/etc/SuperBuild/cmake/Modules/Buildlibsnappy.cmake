@@ -1,8 +1,16 @@
 include(ExternalProject)
 
+#
+# Original with Microsoft and Google conflicts.
+#
+# set(libsnappy_REPO "https://github.com/google/snappy.git")
+# set(libsnappy_TAG 6af9287fbdb913f0794d0148c6aa43b58e63c8e3)
 
-set(libsnappy_REPO "https://github.com/google/snappy.git")
-set(libsnappy_TAG 6af9287fbdb913f0794d0148c6aa43b58e63c8e3)
+#
+# My copy of it.
+#
+set(libsnappy_REPO "https://github.com/ggarra13/snappy.git")
+set(libsnappy_TAG 6af9287fbdb913f0794d0148c6aa43b58e63c8e36)
 
 
 set(libsnappy_ARGS ${TLRENDER_EXTERNAL_ARGS})
@@ -57,14 +65,8 @@ ExternalProject_Add(
     
 
     UPDATE_COMMAND ${libsnappy_UPDATE_CMD}
-    
-    # After the repository is cloned, run a command to print SHA and tag
-    # Revise this
-    #
-    # LOG_DOWNLOAD ON
-    # LOG_UPDATE ON
 
-    # STEP_TARGETS download
+    STEP_TARGETS download
     # DOWNLOAD_COMMAND
     #     ${CMAKE_COMMAND} -E echo "Cloning repository..." &&
     #     git clone ${libsnappy_REPO} <SOURCE_DIR> &&
