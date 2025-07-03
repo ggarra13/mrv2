@@ -9,7 +9,7 @@ include(ExternalProject)
 #
 # My copy of it.
 #
-set(libsnappy_REPO "https://github.com/ggarra13/snappy.git")
+set(libsnappy_REPO "https://github.com/ggarra13/libsnappy.git")
 set(libsnappy_TAG 6af9287fbdb913f0794d0148c6aa43b58e63c8e36)
 
 
