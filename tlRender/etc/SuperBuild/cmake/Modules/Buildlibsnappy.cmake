@@ -6,13 +6,11 @@ include(ExternalProject)
 
 if (UNIX)
     set(libsnappy_REPO "https://github.com/google/snappy.git")
-    set(libsnappy_TAG 6af9287fbdb913f0794d0148c6aa43b58e63c8e3)  # or 1.2.2
-# elseif(WIN32)
-#     #
-#     # My copy of it.
-#     #
-#     set(libsnappy_REPO "https://github.com/ggarra13/snappy.git")
-#     set(libsnappy_TAG 1.2.2)
+    # set(libsnappy_TAG 6af9287fbdb913f0794d0148c6aa43b58e63c8e3)  # or 1.2.2
+    set(libsnappy_TAG 1.2.2)  # or 1.2.2
+elseif(WIN32)
+    set(libsnappy_REPO "https://github.com/google/snappy.git")
+    set(libsnappy_TAG 1.2.2)  # or 1.2.2
 endif()
 
 
@@ -31,8 +29,6 @@ elseif (UNIX)
 else()
     set(libsnappy_CXX_COMPILER $ENV{NATIVE_COMPILER_NAME}) #
     set(libsnappy_C_COMPILER $ENV{NATIVE_COMPILER_NAME}) #
-    # set(libsnappy_CXX_COMPILER $ENV{GENERIC_COMPILER})
-    # set(libsnappy_C_COMPILER $ENV{GENERIC_COMPILER})
     set(libsnappy_CXX_FLAGS "")
     set(libsnappy_C_FLAGS "")
 endif()
