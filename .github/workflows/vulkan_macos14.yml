@@ -93,6 +93,5 @@ jobs:
         ./etc/runme_nolog.sh -t package -vk
 
     - name: Upload binaries  # Conditional step
-      if: github.ref_name == 'vulkan'
       run: |
         ./bin/release/upload_sourceforge.sh -vk
