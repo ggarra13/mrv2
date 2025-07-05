@@ -42,7 +42,7 @@ get_kernel()
     elif [[ $KERNEL == *Darwin* ]]; then
 	export MACOS_BRAND=$(sysctl -n machdep.cpu.brand_string)
 	export NATIVE_COMPILER=`which clang`
-	export GENERIC_COMPILER=`which clang`
+	export GENERIC_COMPILER=`which cc`
     else
 	export NATIVE_COMPILER=`which gcc`
 	if [[ "$NATIVE_COMPILER" == "" ]]; then

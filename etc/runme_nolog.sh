@@ -377,7 +377,7 @@ echo "USD support ........................ ${TLRENDER_USD} 	(TLRENDER_USD)"
 if [[ $ASK_TO_CONTINUE == 1 ]]; then
     ask_to_continue
 fi
-    
+
 . etc/install_cmake.sh
 
 #

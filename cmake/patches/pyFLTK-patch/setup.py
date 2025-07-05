@@ -87,7 +87,7 @@ link_arg_list = []
 if sys.platform == 'win32':
     print("Building for MS Windows, using Visual C++")
     opengl_lib_dir = os.path.join(opengl_dir, 'lib')
-    def_list = [('WIN32', '1'),('FL_INTERNALS','1')]
+    def_list = [('WIN32', '1'),('FL_INTERNALS','1'),('FLTK_INCLUDE_FL_ASK', '1')]
     compile_arg_list=['/GR', '/wd4101']
     lib_dir_list = [fltk_lib_dir, opengl_lib_dir]
     win32_lib_list = ["kernel32", "user32", "gdi32", "winspool", "comdlg32", "Comctl32", "advapi32", "shell32", "ole32", "oleaut32", "uuid", "odbc32", "odbccp32", "wsock32", "gdiplus", "glu32", "opengl32"]
@@ -107,7 +107,7 @@ if sys.platform == 'win32':
 elif sys.platform.startswith('linux')  or sys.platform.startswith('gnukfreebsd') or sys.platform.startswith('gnu0'):
     print("Building for Linux")
 
-    def_list = [('UNIX', '1'),('FL_INTERNALS','1')]
+    def_list = [('UNIX', '1'),('FL_INTERNALS','1'),('FLTK_INCLUDE_FL_ASK', '1')]
     compile_arg_list.append('-Wno-unused-label')
     compile_arg_list.append('-Wno-unused-but-set-variable')
     compile_arg_list.append('-Wformat=1')
@@ -121,7 +121,7 @@ elif sys.platform in ['freebsd4','freebsd5','freebsd6','freebsd7', 'sunos5']:
     lib_list = ["fltk"]
 elif sys.platform == 'darwin':
     print("Building for  Mac OS X")
-    def_list = [('UNIX', '1'),('FL_INTERNALS','1')]
+    def_list = [('UNIX', '1'),('FL_INTERNALS','1'),('FLTK_INCLUDE_FL_ASK', '1')]
     lib_dir_list = [fltk_lib_dir]
     lib_list = ["fltk"]
     cpu_type = platform.processor()
