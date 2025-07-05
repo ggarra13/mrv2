@@ -11,18 +11,18 @@ set(libsnappy_TAG 1.2.2)  # or 1.2.2
 set(libsnappy_ARGS ${TLRENDER_EXTERNAL_ARGS})
 
 if(APPLE)
-    set(libsnappy_CXX_COMPILER $ENV{NATIVE_COMPILER_NAME}) #not yet used
-    set(libsnappy_C_COMPILER $ENV{NATIVE_COMPILER_NAME}) # not yet used
+    set(libsnappy_CXX_COMPILER $ENV{NATIVE_CXX_COMPILER_NAME}) #not yet used
+    set(libsnappy_C_COMPILER $ENV{NATIVE_C_COMPILER_NAME}) # not yet used
     set(libsnappy_CXX_FLAGS -fPIC ${CMAKE_CXX_FLAGS})
     set(libsnappy_C_FLAGS -fPIC ${CMAKE_C_FLAGS})
 elseif (UNIX)
-    set(libsnappy_CXX_COMPILER $ENV{NATIVE_COMPILER_NAME}) # not yet used
-    set(libsnappy_C_COMPILER $ENV{NATIVE_COMPILER_NAME}) # not yet used
+    set(libsnappy_CXX_COMPILER $ENV{NATIVE_CXX_COMPILER_NAME}) # not yet used
+    set(libsnappy_C_COMPILER $ENV{NATIVE_C_COMPILER_NAME}) # not yet used
     set(libsnappy_CXX_FLAGS -fPIC ${CMAKE_CXX_FLAGS})
     set(libsnappy_C_FLAGS -fPIC ${CMAKE_C_FLAGS})
 else()
-    set(libsnappy_CXX_COMPILER $ENV{GENERIC_COMPILER_NAME}) #
-    set(libsnappy_C_COMPILER $ENV{GENERIC_COMPILER_NAME}) #
+    set(libsnappy_CXX_COMPILER $ENV{GENERIC_CXX_COMPILER_NAME}) #
+    set(libsnappy_C_COMPILER $ENV{GENERIC_C_COMPILER_NAME}) #
     set(libsnappy_CXX_FLAGS "")
     set(libsnappy_C_FLAGS "")
 endif()
