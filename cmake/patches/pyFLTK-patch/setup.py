@@ -339,7 +339,7 @@ class PySwigCommand(setuptools.Command):
 
   def run(self):
     """Run command."""
-    command = ['swig', '-D{0}'.format(sys.platform.upper()), '-DFL_INTERNALS', '-w302', '-w312', '-w325', '-w362', '-w389', '-w401', '-w473', '-w509', '-I./swig', '-DPYTHON', '-DPYTHON3', '-c++', '-python', '-shadow', '-fastdispatch', '-outdir', 'fltk', '-o', 'fltk/fltk_wrap.cpp', './swig/fltk.i']
+    command = ['swig', '-D{0}'.format(sys.platform.upper()), '-DFL_INTERNALS', '-DFLTK_INCLUDE_FL_ASK=1', '-w302', '-w312', '-w325', '-w362', '-w389', '-w401', '-w473', '-w509', '-I./swig', '-DPYTHON', '-DPYTHON3', '-c++', '-python', '-shadow', '-fastdispatch', '-outdir', 'fltk', '-o', 'fltk/fltk_wrap.cpp', './swig/fltk.i']
     pos = command.index('-I./swig')
     if sys.platform.upper() == 'DARWIN':
         command[pos:pos] = ["-D__APPLE__"]
