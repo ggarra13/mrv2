@@ -1355,7 +1355,7 @@ namespace mrv
     {
         bool active = true;
         const Fl_Menu_Item* item = m->mvalue();
-        if (!item->checked())
+        if (!item->value())
             active = false;
         ui->uiView->setFullScreenMode(active);
 
@@ -1395,7 +1395,7 @@ namespace mrv
     {
         bool active = true;
         const Fl_Menu_Item* item = m->mvalue();
-        if (!item->checked())
+        if (!item->value())
             active = false;
         ui->uiMain->always_on_top(active);
         ui->uiMain->fill_menu(ui->uiMenuBar);
@@ -1463,7 +1463,7 @@ namespace mrv
         }
 
         bool active = true;
-        if (!item->checked())
+        if (!item->value())
             active = false;
         ui->uiSecondary->window()->always_on_top(active);
         ui->uiMain->fill_menu(ui->uiMenuBar);
@@ -1841,11 +1841,11 @@ namespace mrv
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         auto view = ui->uiView;
-        view->setFrameView(item->checked());
+        view->setFrameView(item->value());
         if (ui->uiSecondary && ui->uiSecondary->viewport())
         {
             view = ui->uiSecondary->viewport();
-            view->setFrameView(item->checked());
+            view->setFrameView(item->value());
         }
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
@@ -2389,7 +2389,7 @@ namespace mrv
     void toggle_timeline_editable_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
-        bool editable = (bool)item->checked();
+        bool editable = (bool)item->value();
         ui->uiTimeline->setEditable(editable);
         Message msg;
         msg["command"] = "setTimelineEditable";
@@ -2403,7 +2403,7 @@ namespace mrv
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         auto options = ui->uiTimeline->getItemOptions();
-        options.editAssociatedClips = item->checked();
+        options.editAssociatedClips = item->value();
         Message msg;
         msg["command"] = "setTimelineItemOptions";
         msg["value"] = options;
@@ -2426,7 +2426,7 @@ namespace mrv
     void toggle_timeline_scroll_to_current_frame_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
-        bool value = item->checked();
+        bool value = item->value();
         auto settings = ui->app->settings();
         Message msg;
         msg["command"] = "Timeline/ScrollToCurrentFrame";
@@ -2442,7 +2442,7 @@ namespace mrv
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         auto options = ui->uiTimeline->getDisplayOptions();
-        options.trackInfo = item->checked();
+        options.trackInfo = item->value();
         auto settings = ui->app->settings();
         settings->setValue("Timeline/TrackInfo", options.trackInfo);
         Message msg;
@@ -2460,7 +2460,7 @@ namespace mrv
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         auto options = ui->uiTimeline->getDisplayOptions();
-        options.clipInfo = item->checked();
+        options.clipInfo = item->value();
         auto settings = ui->app->settings();
         settings->setValue("Timeline/ClipInfo", options.clipInfo);
         Message msg;
@@ -2478,7 +2478,7 @@ namespace mrv
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         auto options = ui->uiTimeline->getDisplayOptions();
-        options.markers = item->checked();
+        options.markers = item->value();
         Message msg;
         msg["command"] = "setTimelineDisplayOptions";
         msg["value"] = options;
@@ -2510,7 +2510,7 @@ namespace mrv
     {
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         auto options = ui->uiTimeline->getDisplayOptions();
-        options.transitions = item->checked();
+        options.transitions = item->value();
         Message msg;
         msg["command"] = "setTimelineDisplayOptions";
         msg["value"] = options;
@@ -2770,31 +2770,31 @@ namespace mrv
         std::string label = item->label();
         if (label == _("Media"))
         {
-            ui->uiPrefs->SendMedia->value(item->checked());
+            ui->uiPrefs->SendMedia->value(item->value());
         }
         else if (label == _("UI"))
         {
-            ui->uiPrefs->SendUI->value(item->checked());
+            ui->uiPrefs->SendUI->value(item->value());
         }
         else if (label == _("Pan And Zoom"))
         {
-            ui->uiPrefs->SendPanAndZoom->value(item->checked());
+            ui->uiPrefs->SendPanAndZoom->value(item->value());
         }
         else if (label == _("Color"))
         {
-            ui->uiPrefs->SendColor->value(item->checked());
+            ui->uiPrefs->SendColor->value(item->value());
         }
         else if (label == _("Timeline"))
         {
-            ui->uiPrefs->SendTimeline->value(item->checked());
+            ui->uiPrefs->SendTimeline->value(item->value());
         }
         else if (label == _("Annotations"))
         {
-            ui->uiPrefs->SendAnnotations->value(item->checked());
+            ui->uiPrefs->SendAnnotations->value(item->value());
         }
         else if (label == _("Audio"))
         {
-            ui->uiPrefs->SendAudio->value(item->checked());
+            ui->uiPrefs->SendAudio->value(item->value());
         }
         else
         {
@@ -2808,31 +2808,31 @@ namespace mrv
         std::string label = item->label();
         if (label == _("Media"))
         {
-            ui->uiPrefs->ReceiveMedia->value(item->checked());
+            ui->uiPrefs->ReceiveMedia->value(item->value());
         }
         else if (label == _("UI"))
         {
-            ui->uiPrefs->ReceiveUI->value(item->checked());
+            ui->uiPrefs->ReceiveUI->value(item->value());
         }
         else if (label == _("Pan And Zoom"))
         {
-            ui->uiPrefs->ReceivePanAndZoom->value(item->checked());
+            ui->uiPrefs->ReceivePanAndZoom->value(item->value());
         }
         else if (label == _("Color"))
         {
-            ui->uiPrefs->ReceiveColor->value(item->checked());
+            ui->uiPrefs->ReceiveColor->value(item->value());
         }
         else if (label == _("Timeline"))
         {
-            ui->uiPrefs->ReceiveTimeline->value(item->checked());
+            ui->uiPrefs->ReceiveTimeline->value(item->value());
         }
         else if (label == _("Annotations"))
         {
-            ui->uiPrefs->ReceiveAnnotations->value(item->checked());
+            ui->uiPrefs->ReceiveAnnotations->value(item->value());
         }
         else if (label == _("Audio"))
         {
-            ui->uiPrefs->ReceiveAudio->value(item->checked());
+            ui->uiPrefs->ReceiveAudio->value(item->value());
         }
         else
         {

@@ -330,7 +330,7 @@ void Flmm_HueBox::draw() {
   int yy1 = y()+Fl::box_dy(box());
   int w1 = w()-Fl::box_dw(box());
   int h1 = h()-Fl::box_dh(box());
-  if (damage() == FL_DAMAGE_EXPOSE) fl_clip(x1+px,yy1+py,6,6);
+  if (damage() == FL_DAMAGE_EXPOSE) fl_clip_box(x1,yy1, 6, 6, x1, yy1, w1, h1);
   fl_draw_image(generate_image, this, x1, yy1, w1, h1);
   if (damage() == FL_DAMAGE_EXPOSE) fl_pop_clip();
   Flmm_ColorA_Chooser* c = (Flmm_ColorA_Chooser*)parent();
@@ -400,7 +400,7 @@ void Flmm_ValueBox::draw() {
   int yy1 = y()+Fl::box_dy(box());
   int w1 = w()-Fl::box_dw(box());
   int h1 = h()-Fl::box_dh(box());
-  if (damage() == FL_DAMAGE_EXPOSE) fl_clip(x1,yy1+py,w1,6);
+  if (damage() == FL_DAMAGE_EXPOSE) fl_clip_box(x1,yy1,6,6, x1, yy1, w1, h1);
   fl_draw_image(generate_vimage, this, x1, yy1, w1, h1);
   if (damage() == FL_DAMAGE_EXPOSE) fl_pop_clip();
   int Y = int((1-c->value()) * (h1-6));
@@ -498,7 +498,7 @@ void Flmm_AlphaBox::draw() {
   int yy1 = y()+Fl::box_dy(box());
   int w1 = w()-Fl::box_dw(box());
   int h1 = h()-Fl::box_dh(box());
-  if (damage() == FL_DAMAGE_EXPOSE) fl_clip(x1,yy1+py,w1,6);
+  if (damage() == FL_DAMAGE_EXPOSE) fl_clip_box(x1,yy1,6,6, x1, yy1, w1, h1);
   fl_draw_image(generate_aimage, this, x1, yy1, w1, h1);
   if (damage() == FL_DAMAGE_EXPOSE) fl_pop_clip();
   int Y = int((1-c->a()) * (h1-6));

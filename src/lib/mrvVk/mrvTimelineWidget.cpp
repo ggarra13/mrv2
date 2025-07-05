@@ -1246,7 +1246,7 @@ void main()
         {
             TLRENDER_P();
             p.timelineWindow->cursorEnter(false);
-            focus(p.ui->uiView);
+            Fl::focus(p.ui->uiView);
             return 1;
         }
 
