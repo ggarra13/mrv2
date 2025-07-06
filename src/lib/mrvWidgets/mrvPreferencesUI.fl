@@ -1589,16 +1589,12 @@ v->uiOCIO_Display_View->do_callback();}
                     }
                   }
                   Fl_Choice uiPrefsMainViewportGPU {
-                    label GPU
+                    label GPU open
                     tooltip {Viewports can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {383 224 140 25} down_box BORDER_BOX align 132 textcolor 32
                     class {mrv::Choice}
                   } {
                     MenuItem {} {
-                      label No
-                      xywh {60 60 140 20}
-                    }
-                    MenuItem {} {
-                      label Yes
+                      label {GPU 0}
                       xywh {60 60 140 20}
                     }
                   }
@@ -1622,16 +1618,12 @@ v->uiOCIO_Display_View->do_callback();}
                     }
                   }
                   Fl_Choice uiPrefsSecondaryViewportGPU {
-                    label GPU
+                    label GPU open
                     tooltip {Viewports can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {643 224 140 25} down_box BORDER_BOX align 132 textcolor 32
                     class {mrv::Choice}
                   } {
                     MenuItem {} {
-                      label No
-                      xywh {70 70 140 20}
-                    }
-                    MenuItem {} {
-                      label Yes
+                      label {GPU 0}
                       xywh {70 70 140 20}
                     }
                   }
@@ -1655,17 +1647,13 @@ v->uiOCIO_Display_View->do_callback();}
                     }
                   }
                   Fl_Choice uiPrefsTimelineGPU {
-                    label GPU
+                    label GPU open
                     tooltip {Viewports can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {508 323 140 25} down_box BORDER_BOX align 132 textcolor 32
                     class {mrv::Choice}
                   } {
                     MenuItem {} {
-                      label No
-                      xywh {70 70 140 20}
-                    }
-                    MenuItem {} {
-                      label Yes
-                      xywh {70 70 140 20}
+                      label {GPU 0} selected
+                      xywh {80 80 140 20}
                     }
                   }
                 }
@@ -1826,7 +1814,7 @@ mrv::Preferences::load(false, false);}
               label OK
               user_data m user_data_type {ViewerUI*}
               callback {v->uiPrefs->uiMain->hide();
-mrv::Preferences::run();} selected
+mrv::Preferences::run();}
               tooltip {Accept settings but don't save.  They will get saved when exiting the program.} xywh {648 418 132 31}
             }
           }

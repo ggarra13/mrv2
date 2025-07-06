@@ -22,6 +22,7 @@
 if [[ !$RUNME ]]; then
     . $PWD/etc/build_dir.sh
 fi
+echo "install_cmake.sh RUNME=$RUNME $BUILD_DIR"
 
 #
 
@@ -36,6 +37,9 @@ ls $PWD/${BUILD_DIR}/install/bin/
 #
 # Extract cmake version
 #
+. etc/install_cmake.sh
+echo "install_cmake.sh=$RUNME $BUILD_DIR"
+
 get_cmake_version
 
 #
@@ -377,8 +381,6 @@ echo "USD support ........................ ${TLRENDER_USD} 	(TLRENDER_USD)"
 if [[ $ASK_TO_CONTINUE == 1 ]]; then
     ask_to_continue
 fi
-
-. etc/install_cmake.sh
 
 #
 # Handle Windows pre-flight compiles

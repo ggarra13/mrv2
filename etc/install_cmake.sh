@@ -7,8 +7,9 @@ CMAKE_RELEASE=3.31.8
 CMAKE_PLATFORM=macos-universal
 CMAKE_EXT=tar.gz
 
-echo "Getting latest release of cmake"
-. ./etc/build_dir.sh
+if [[ !$RUNME ]]; then
+    . ./etc/build_dir.sh
+fi
 
 if [[ ! -d $PWD/$BUILD_DIR/install ]]; then
     mkdir -p $PWD/$BUILD_DIR/install
@@ -44,10 +45,10 @@ fi
 
 if [[ $KERNEL != *Darwin* ]]; then
     dir=cmake-${CMAKE_RELEASE}-${CMAKE_PLATFORM}
-    mv -f ${dir}/* $PWD/$BUILD_DIR/install/
+    cp -rf ${dir}/* $PWD/$BUILD_DIR/install/
 elif [[ $KERNEL == *Darwin* ]]; then
     dir=cmake-${CMAKE_RELEASE}-${CMAKE_PLATFORM}/CMake.app/Contents/
-    mv -f ${dir}/* $PWD/$BUILD_DIR/install/
+    cp -rf ${dir}/* $PWD/$BUILD_DIR/install/
 fi
 
 

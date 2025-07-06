@@ -24,6 +24,14 @@ run_cmd()
 }
 
 #
+# Get the linux id if available
+#
+get_linux_id()
+{
+    export LINUX_ID=`cat /etc/os-release | grep 'ID_LIKE='`
+}
+
+#
 # Get kernel and architecture and on MacOS, MACOS_BRAND (Intel, M1, M2, etc).
 #
 get_kernel()
@@ -37,9 +45,11 @@ get_kernel()
 	export NATIVE_CXX_COMPILER=`which cl.exe`
 	export NATIVE_CXX_COMPILER_NAME="cl.exe"
 
-	if [[ "$GENERIC_COMPILER" == "" ]]; then
+	if [[ "$GENERIC_C_COMPILER" == "" ]]; then
 	    export GENERIC_C_COMPILER=`which clang.exe`
 	    export GENERIC_C_COMPILER_NAME="clang.exe"
+	fi
+	if [[ "$GENERIC_CXX_COMPILER" == "" ]]; then
 	    export GENERIC_CXX_COMPILER=`which clang.exe`
 	    export GENERIC_CXX_COMPILER_NAME="clang.exe"
 	    if [[ "$GENERIC_CXX_COMPILER" == "" ]]; then
@@ -55,25 +65,33 @@ get_kernel()
 	export GENERIC_CXX_COMPILER=`which cc`
 	export GENERIC_CXX_COMPILER_NAME="cc"
     else
-	export NATIVE_C_COMPILER=`which cc`
-	export NATIVE_C_COMPILER_NAME="cc"
-	if [[ "$NATIVE_COMPILER" == "" ]]; then
+	get_linux_id()
+
+	if [[ $LINUX_ID == *debian* ]]; then
+	    export NATIVE_C_COMPILER=`which gcc`
+	    export NATIVE_C_COMPILER_NAME="gcc"
+	    export NATIVE_CXX_COMPILER=`which g++`
+	    export NATIVE_CXX_COMPILER_NAME="g++"
+	elif [[ $LINUX_ID == *rhel* ]]; then
+	    export NATIVE_C_COMPILER=`which cc`
+	    export NATIVE_C_COMPILER_NAME="cc"
+	    export NATIVE_CXX_COMPILER=`which c++`
+	    export NATIVE_CXX_COMPILER_NAME="c++"
+	fi
+
+	if [[ "$NATIVE_C_COMPILER" == "" ]]; then
 	    export NATIVE_C_COMPILER=`which gcc`
 	    export NATIVE_C_COMPILER_NAME="gcc"
 	fi
-	if [[ "$GENERIC_COMPILER" == "" ]]; then
-	    export GENERIC_C_COMPILER=`which cc`
-	    export GENERIC_C_COMPILER_NAME="cc"
-	fi
-
-	
-	export NATIVE_CXX_COMPILER=`which c++`
-	export NATIVE_CXX_COMPILER_NAME="c++"
-	if [[ "$NATIVE_COMPILER" == "" ]]; then
+	if [[ "$NATIVE_CXX_COMPILER" == "" ]]; then
 	    export NATIVE_CXX_COMPILER=`which g++`
 	    export NATIVE_CXX_COMPILER_NAME="g++"
 	fi
-	if [[ "$GENERIC_COMPILER" == "" ]]; then
+	if [[ "$GENERIC_C_COMPILER" == "" ]]; then
+	    export GENERIC_C_COMPILER=`which gcc`
+	    export GENERIC_C_COMPILER_NAME="gcc"
+	fi
+	if [[ "$GENERIC_CXX_COMPILER" == "" ]]; then
 	    export GENERIC_CXX_COMPILER=`which g++`
 	    export GENERIC_CXX_COMPILER_NAME="g++"
 	fi

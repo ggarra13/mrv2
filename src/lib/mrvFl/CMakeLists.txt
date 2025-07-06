@@ -35,7 +35,6 @@ set(SOURCES
     mrvOCIO.cpp
     mrvPathMapping.cpp
     mrvPreferences.cpp
-    mrvSaveImage.cpp
     mrvSaveMovie.cpp
     mrvSession.cpp
     mrvStereo3DAux.cpp
@@ -43,6 +42,14 @@ set(SOURCES
     mrvUSD.cpp
     mrvVersioning.cpp
 )
+
+if(TLRENDER_GL AND MRV2_BACKEND STREQUAL "GL")
+    list(APPEND SOURCES	mrvSaveImage.cpp)
+endif()
+
+if(TLRENDER_VK AND MRV2_BACKEND STREQUAL "VK")
+    list(APPEND SOURCES	mrvSaveImageVk.cpp)
+endif()
 
 add_library(mrvFl ${SOURCES} ${HEADERS})
 files_to_absolute_paths()

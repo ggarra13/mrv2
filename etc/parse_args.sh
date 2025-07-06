@@ -8,13 +8,14 @@
 show_help()
 {
     if [[ $RUNME == 1 ]]; then
-	echo "$0 [debug|release|reldeb] [clean] [-v] [-j <num>] [-lgpl] [-gpl] [-D VAR=VALUE] [-t <target>] [-help]"
+	echo "$0 [debug|release|reldeb] [clean] [-v] [-j <num>] [-lgpl] [-gpl] [-D VAR=VALUE] [-t <target>] [-vk] [-help]"
 	echo ""
 	echo "* debug builds a debug build."
 	echo "* release builds a release build. (default)"
 	echo "* reldeb  builds a release build with debugging symbols."
 	echo "* clean clears the directory before building -- use only with runme.sh"
 	echo "* -j <num>  controls the threads to use when compiling. [default=$CPU_CORES]"
+	echo "* -vk build Vulkan backend."
 	echo "* -v builds verbosely. [default=off]"
 	echo "* -D sets cmake variables, like -D TLRENDER_USD=OFF."
 	echo "* -gpl builds FFmpeg with x264 encoder support in a GPL version of it."
@@ -71,16 +72,37 @@ default_build_root=BUILD-$KERNEL-$ARCH
 #
 # Set up parse variables' default values
 #
-export FFMPEG_GPL=LGPL
-export TLRENDER_X264=OFF
 CLEAN_DIR=0
-export CMAKE_OSX_ARCHITECTURES=""
-export CMAKE_VERBOSE_MAKEFILE=OFF
-export BUILD_TYPE_DIR="Release"
-export CMAKE_BUILD_TYPE="Release"
-export CMAKE_GENERATOR="Ninja"
-export CMAKE_TARGET=""
-ASK_TO_CONTINUE=0
+
+if [[ -z $FFMPEG_GPL ]]; then
+    export FFMPEG_GPL=LGPL
+fi
+
+if [[ -z $TLRENDER_X264 ]]; then
+    export TLRENDER_X264=OFF
+fi
+
+if [[ -z $CMAKE_OSX_ARCHITECTURES ]]; then
+    export CMAKE_OSX_ARCHITECTURES=""
+fi
+if [[ -z $CMAKE_VERBOSE_MAKEFILE ]]; then
+    export CMAKE_VERBOSE_MAKEFILE=OFF
+fi
+if [[ -z $BUILD_TYPE_DIR ]]; then
+   export BUILD_TYPE_DIR="Release"
+fi
+if [[ -z $CMAKE_BUILD_TYPE ]]; then
+   export CMAKE_BUILD_TYPE="Release"
+fi
+if [[ -z $CMAKE_GENERATOR ]]; then
+    export CMAKE_GENERATOR="Ninja"
+fi
+if [[ -z $CMAKE_TARGET ]]; then
+    export CMAKE_TARGET=""
+fi
+if [[ -z $ASK_TO_CONTINUE ]]; then
+    export ASK_TO_CONTINUE=0
+fi
 
 if [[ "$NOARGS" == "" ]]; then
     

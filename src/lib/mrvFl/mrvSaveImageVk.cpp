@@ -30,10 +30,11 @@
 #include <tlCore/StringFormat.h>
 #include <tlCore/Time.h>
 
-#include <tlGL/Init.h>
-#include <tlGL/Util.h>
-#include <tlGL/GLFWWindow.h>
-#include <tlTimelineGL/Render.h>
+#include <tlVk/Init.h>
+#include <tlVk/Util.h>
+#include <tlTimelineVk/Render.h>
+#include <FL/Fl_Vk_Utils.H>
+#include <FL/vk_enum_string_helper.h>
 
 #include <chrono>
 #include <string>
@@ -106,8 +107,8 @@ namespace mrv
                 throw std::runtime_error("No video information");
             }
 
-            gl::OffscreenBufferOptions offscreenBufferOptions;
-            std::shared_ptr<timeline_gl::Render> render;
+            vlk::OffscreenBufferOptions offscreenBufferOptions;
+            std::shared_ptr<timeline_vlk::Render> render;
 
             image::Size renderSize;
 
@@ -160,6 +161,7 @@ namespace mrv
             render = timeline_vlk::Render::create(ctx, context);
             
             offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
+            offscreenBufferOptions.pbo = true;
 
             // Create the writer.
             auto writerPlugin =
@@ -324,10 +326,8 @@ namespace mrv
             outputInfo = writerPlugin->getWriteInfo(outputInfo);
             if (image::PixelType::kNone == outputInfo.pixelType)
             {
-#ifdef OPENGL_BACKEND
-                outputInfo.pixelType = image::PixelType::RGB_U8;
-                offscreenBufferOptions.colorType = image::PixelType::RGB_U8;
-#endif
+                outputInfo.pixelType = image::PixelType::RGBA_U8;
+                offscreenBufferOptions.colorType = image::PixelType::RGBA_U8;
 #ifdef TLRENDER_EXR
                 if (saveEXR)
                 {
@@ -382,15 +382,6 @@ namespace mrv
             // Don't send any tcp updates
             tcp->lock();
 
-#ifdef OPENGL_BACKEND
-            const GLenum format = gl::getReadPixelsFormat(outputInfo.pixelType);
-            const GLenum type = gl::getReadPixelsType(outputInfo.pixelType);
-            if (GL_NONE == format || GL_NONE == type)
-            {
-                throw std::runtime_error(
-                    string::Format("{0}: Cannot open").arg(file));
-            }
-#endif
             {
                 std::string msg =
                     tl::string::Format(_("Offscreen Buffer info: {0}"))
@@ -403,79 +394,21 @@ namespace mrv
 
             math::Size2i offscreenBufferSize(renderSize.w, renderSize.h);
 
-            view->make_current();
-            gl::initGLAD();
-            auto buffer = gl::OffscreenBuffer::create(
-                offscreenBufferSize, offscreenBufferOptions);
+            auto buffer = vlk::OffscreenBuffer::create(
+                ctx, offscreenBufferSize, offscreenBufferOptions);
 
             if (options.annotations)
             {
                 // Refresh the view (so we turn off the HUD, for example).
                 view->redraw();
                 view->flush();
+
+                view->valid(0);
+                view->store_swapchain(outputImage->getData(),
+                                      outputImage->getDataByteCount());
+                
+                
                 Fl::flush();
-
-#ifdef __APPLE__
-                Fl_RGB_Image* tmp = fl_capture_window(
-                    view, X, Y, outputInfo.size.w, outputInfo.size.h);
-
-                Fl_Image* rgb = tmp->copy(outputInfo.size.w, outputInfo.size.h);
-                tmp->alloc_array = 1;
-                delete tmp;
-
-                // Access the first pointer in the data array
-                const char* const* data = rgb->data();
-
-                // Flip image in Y
-                switch (outputImage->getPixelType())
-                {
-                case image::PixelType::RGBA_U8:
-                    flipImageInY(
-                        (uint8_t*)outputImage->getData(),
-                        (const uint8_t*)data[0], rgb->w(), rgb->h(), rgb->d(),
-                        4);
-                    break;
-                case image::PixelType::RGBA_F16:
-                    flipImageInY(
-                        (Imath::half*)outputImage->getData(),
-                        (const uint8_t*)data[0], rgb->w(), rgb->h(), rgb->d(),
-                        4);
-                    break;
-                case image::PixelType::RGBA_F32:
-                    flipImageInY(
-                        (float*)outputImage->getData(), (const uint8_t*)data[0],
-                        rgb->w(), rgb->h(), rgb->d(), 4);
-                    break;
-                default:
-                    LOG_ERROR(
-                        _("Unsupported output format: ")
-                        << outputImage->getPixelType());
-                    break;
-                }
-
-                delete rgb;
-#else
-
-                GLenum imageBuffer = GL_FRONT;
-
-                // @note: Wayland does not work like Windows, macOS or
-                //        X11.  The compositor does not immediately
-                //        swap buffers when calling view->flush().
-                if (desktop::Wayland())
-                {
-                    imageBuffer = GL_BACK;
-                }
-
-                glReadBuffer(imageBuffer);
-
-                glPixelStorei(GL_PACK_ALIGNMENT, 1);
-
-                
-                glReadPixels(
-                    X, Y, outputInfo.size.w, outputInfo.size.h, format, type,
-                    outputImage->getData());
-#endif
-                
             }
             else
             {
@@ -483,11 +416,23 @@ namespace mrv
                 auto videoData = timeline->getVideo(currentTime).future.get();
                 videoData.layers[0].image->setPixelAspectRatio(1.F);
 
-                // Render the video.
-                gl::OffscreenBufferBinding binding(buffer);
+                VkDevice device = ctx.device;
+                VkCommandPool commandPool = ctx.commandPool;
+                
+                VkCommandBuffer cmd = beginSingleTimeCommands(device, commandPool);
+                buffer->transitionToColorAttachment(cmd);
+
                 {
                     locale::SetAndRestore saved;
-                    render->begin(offscreenBufferSize);
+                    timeline::RenderOptions renderOptions;
+                    renderOptions.clear = false;
+                    render->begin(cmd, buffer, frameIndex, offscreenBufferSize,
+                                  renderOptions);
+                    const math::Matrix4x4f ortho = math::ortho(
+                        0.F, static_cast<float>(renderSize.w),
+                        static_cast<float>(renderSize.h), 0.F,
+                        -1.F, 1.F);
+                    render->setTransform(ortho);
                     render->setOCIOOptions(view->getOCIOOptions());
                     render->setLUTOptions(view->lutOptions());
                     
@@ -503,31 +448,28 @@ namespace mrv
                 }
 
                 // Read back the image
-                glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
                 
-
-                glPixelStorei(GL_PACK_ALIGNMENT, outputInfo.layout.alignment);
+                buffer->transitionToColorAttachment(cmd);
                 
-                glPixelStorei(
-                    GL_PACK_SWAP_BYTES,
-                    outputInfo.layout.endian != memory::getEndian());
-
-                X = dataWindow.min.x;
-
-                //
-                // OpenGL Framebuffer:
-                // Origin (0,0) is at the bottom-left, and Y increases upwards.
-                // However, when reading pixels with glReadPixels, the image
-                // data is stored top-down.
-                //
-                Y = displayWindow.max.y - (dataWindow.min.y +
-                                           outputImage->getHeight()) + 1;
-
-                glReadPixels(X, Y, outputImage->getWidth(),
-                             outputImage->getHeight(), format, type,
-                             outputImage->getData());
-
+                buffer->readPixels(cmd, 0, 0, renderSize.w, renderSize.h);
+                                    
+                vkEndCommandBuffer(cmd);
                 
+                buffer->submitReadback(cmd);
+
+                {
+                    std::lock_guard<std::mutex> lock(ctx.queue_mutex());
+                    vkQueueWaitIdle(ctx.queue());
+                }
+                                    
+                void* imageData = buffer->getLatestReadPixels();
+                if (imageData)
+                {
+                    std::memcpy(outputImage->getData(), imageData,
+                                outputImage->getDataByteCount());
+                                    
+                    vkFreeCommandBuffers(device, commandPool, 1, &cmd);    
+                }
             }
 
             outputImage->setTags(tags);
@@ -569,6 +511,8 @@ namespace mrv
             waitForFrame(player, time);
 
             _save_single_frame(file, ui, options, frameIndex);
+
+            frameIndex = (frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
         }
 
         view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
