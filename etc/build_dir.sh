@@ -31,9 +31,6 @@ extract_python_version
 #
 . etc/parse_args.sh
 
-echo "PAST parse_args.sh - BUILD_ROOT=$BUILD_ROOT"
-echo "PAST parse_args.sh - BUILD_TYPE_DIR=$BUILD_TYPE_DIR"
-
 #
 # Build a build directory with that information
 #
