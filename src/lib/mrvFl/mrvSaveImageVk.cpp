@@ -286,7 +286,7 @@ namespace mrv
                     LOG_STATUS(msg);
                 }
             }
-
+                
 // #ifdef __APPLE__
 //             if (options.annotations)
 //             {
@@ -403,8 +403,15 @@ namespace mrv
 
                 // Flush the image
                 Fl::flush();
-
+            
                 auto buffer = view->getVideoFBO();
+                auto bufferOptions = buffer->getOptions();
+                {
+                    std::string msg =
+                        tl::string::Format(_("Offscreen Buffer info: {0}"))
+                        .arg(bufferOptions.colorType);
+                    LOG_STATUS(msg);
+                }
                 auto annotationBuffer = view->getAnnotationFBO();
 
                 VkDevice device = view->device();
@@ -416,15 +423,6 @@ namespace mrv
                 const size_t width = buffer->getWidth();
                 const size_t height = buffer->getHeight();
 
-                auto bufferOptions = buffer->getOptions();
-
-                {
-                    std::string msg =
-                        tl::string::Format(_("Offscreen Buffer info: {0}"))
-                        .arg(bufferOptions.colorType);
-                    LOG_STATUS(msg);
-                }
-            
                 buffer->readPixels(cmd, 0, 0, width, height);
             
                 vkEndCommandBuffer(cmd);
@@ -439,10 +437,39 @@ namespace mrv
                     LOG_ERROR(_("Could not read image data from view"));
                 }
 
-                if (bufferOptions.colorType == outputInfo.pixelType)
+                memcpy(outputImage->getData(), data,
+                       outputImage->getDataByteCount());
+
+                switch(outputInfo.pixelType)
                 {
-                    std::memcpy(outputImage->getData(), data,
-                                outputImage->getDataByteCount());
+                case image::PixelType::RGBA_U8:
+                    flipImageInY(
+                        (uint8_t*)outputImage->getData(), width, height, 4);
+                    break;
+                case image::PixelType::RGB_U16:
+                    flipImageInY(
+                        (uint16_t*)outputImage->getData(), width, height, 3);
+                    break;
+                case image::PixelType::RGBA_U16:
+                    flipImageInY(
+                        (uint16_t*)outputImage->getData(), width, height, 4);
+                    break;
+                case image::PixelType::RGB_F16:
+                    flipImageInY(
+                        (half*)outputImage->getData(), width, height, 3);
+                    break;
+                case image::PixelType::RGBA_F16:
+                    flipImageInY(
+                        (half*)outputImage->getData(), width, height, 4);
+                    break;
+                case image::PixelType::RGB_F32:
+                    flipImageInY(
+                        (half*)outputImage->getData(), width, height, 3);
+                    break;
+                case image::PixelType::RGBA_F32:
+                    flipImageInY(
+                        (float*)outputImage->getData(), width, height, 4);
+                    break;
                 }
                 
                 vkFreeCommandBuffers(device, commandPool, 1, &cmd);

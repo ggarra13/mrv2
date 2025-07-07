@@ -12,18 +12,18 @@
 
 namespace mrv
 {
+    template<typename T>
     inline void flipImageInY(
-        uint8_t* pixels, const size_t width, const size_t height,
+        T* pixels, const size_t width, const size_t height,
         const int depth)
     {
-        const size_t rowSize = width * depth;
-        uint8_t* tempRow =
-            new uint8_t[rowSize]; // Temporary buffer for row swapping
+        const size_t rowSize = width * depth * sizeof(T);
+        T* tempRow = new T[rowSize]; // Temporary buffer for row swapping
 
         for (size_t y = 0; y < height / 2; ++y)
         {
-            uint8_t* topRow = pixels + y * rowSize;
-            uint8_t* bottomRow = pixels + (height - y - 1) * rowSize;
+            T* topRow = pixels + y * rowSize;
+            T* bottomRow = pixels + (height - y - 1) * rowSize;
 
             // Swap entire rows using memcpy
             std::memcpy(tempRow, topRow, rowSize);
