@@ -318,6 +318,16 @@ namespace mrv
 
     typedef std::vector< FormatInfo* > FormatList;
 
+    const char* backend()
+    {
+#ifdef VULKAN_BACKEND
+        return "Vulkan";
+#endif
+#ifdef OPENGL_BACKEND
+        return "OpenGL";
+#endif
+    }
+    
     const char* version()
     {
         return kVersion;

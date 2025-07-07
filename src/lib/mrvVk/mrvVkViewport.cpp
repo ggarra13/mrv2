@@ -455,6 +455,20 @@ namespace mrv
             TimelineViewport::hide();
         }
 
+
+        std::shared_ptr<vlk::OffscreenBuffer> Viewport::getVideoFBO()
+        {
+            MRV2_VK();
+            return vk.buffer;
+        }
+
+        std::shared_ptr<vlk::OffscreenBuffer> Viewport::getAnnotationFBO()
+        {
+            MRV2_VK();
+            return vk.overlay;
+        }
+
+        
         void Viewport::prepare_shaders()
         {
             TLRENDER_P();

@@ -18,6 +18,7 @@ namespace mrv
     void ffmpeg_protocols(mrv::TextBrowser* b);
     void ffmpeg_codec_information(mrv::TextBrowser* b);
 
+    const char* backend();
     const char* version();
     const std::string build_date();
     const std::string build_info();

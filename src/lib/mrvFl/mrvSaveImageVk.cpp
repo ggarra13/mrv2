@@ -287,30 +287,30 @@ namespace mrv
                 }
             }
 
-#ifdef __APPLE__
-            if (options.annotations)
-            {
-                switch (outputInfo.pixelType)
-                {
-                case image::PixelType::RGB_F16:
-                case image::PixelType::RGBA_F16:
-                    outputInfo.pixelType = image::PixelType::RGBA_F16;
-                    break;
-                case image::PixelType::RGB_F32:
-                case image::PixelType::RGBA_F32:
-                    outputInfo.pixelType = image::PixelType::RGBA_F32;
-                    break;
-                default:
-                    if (saveHDR)
-                        outputInfo.pixelType = image::PixelType::RGBA_F32;
-                    else if (saveEXR)
-                        outputInfo.pixelType = image::PixelType::RGBA_F16;
-                    else
-                        outputInfo.pixelType = image::PixelType::RGBA_U8;
-                    break;
-                }
-            }
-#endif
+// #ifdef __APPLE__
+//             if (options.annotations)
+//             {
+//                 switch (outputInfo.pixelType)
+//                 {
+//                 case image::PixelType::RGB_F16:
+//                 case image::PixelType::RGBA_F16:
+//                     outputInfo.pixelType = image::PixelType::RGBA_F16;
+//                     break;
+//                 case image::PixelType::RGB_F32:
+//                 case image::PixelType::RGBA_F32:
+//                     outputInfo.pixelType = image::PixelType::RGBA_F32;
+//                     break;
+//                 default:
+//                     if (saveHDR)
+//                         outputInfo.pixelType = image::PixelType::RGBA_F32;
+//                     else if (saveEXR)
+//                         outputInfo.pixelType = image::PixelType::RGBA_F16;
+//                     else
+//                         outputInfo.pixelType = image::PixelType::RGBA_U8;
+//                     break;
+//                 }
+//             }
+// #endif
 
             if (!options.annotations)
             {
@@ -321,6 +321,11 @@ namespace mrv
                       .arg(outputInfo.size)
                       .arg(outputInfo.pixelType);
                 LOG_STATUS(msg);
+            }
+            else
+            {
+                auto buffer = view->getVideoFBO();
+                outputInfo.pixelType = buffer->getOptions().colorType;
             }
             
             outputInfo = writerPlugin->getWriteInfo(outputInfo);
@@ -382,13 +387,6 @@ namespace mrv
             // Don't send any tcp updates
             tcp->lock();
 
-            {
-                std::string msg =
-                    tl::string::Format(_("Offscreen Buffer info: {0}"))
-                                      .arg(offscreenBufferOptions.colorType);
-                LOG_STATUS(msg);
-            }
-
             // Turn off hud so it does not get captured by glReadPixels.
             view->setHudActive(false);
 
@@ -403,15 +401,57 @@ namespace mrv
                 view->redraw();
                 view->flush();
 
-                view->valid(0);
-                view->store_swapchain(outputImage->getData(),
-                                      outputImage->getDataByteCount());
-                
-                
+                // Flush the image
                 Fl::flush();
+
+                auto buffer = view->getVideoFBO();
+                auto annotationBuffer = view->getAnnotationFBO();
+
+                VkDevice device = view->device();
+                VkCommandPool commandPool = view->commandPool();
+                
+                VkCommandBuffer cmd = beginSingleTimeCommands(device,
+                                                              commandPool);
+            
+                const size_t width = buffer->getWidth();
+                const size_t height = buffer->getHeight();
+
+                auto bufferOptions = buffer->getOptions();
+
+                {
+                    std::string msg =
+                        tl::string::Format(_("Offscreen Buffer info: {0}"))
+                        .arg(bufferOptions.colorType);
+                    LOG_STATUS(msg);
+                }
+            
+                buffer->readPixels(cmd, 0, 0, width, height);
+            
+                vkEndCommandBuffer(cmd);
+            
+                buffer->submitReadback(cmd);
+
+                view->wait_queue();
+            
+                const void* data = buffer->getLatestReadPixels();
+                if (!data)
+                {
+                    LOG_ERROR(_("Could not read image data from view"));
+                }
+
+                if (bufferOptions.colorType == outputInfo.pixelType)
+                {
+                    std::memcpy(outputImage->getData(), data,
+                                outputImage->getDataByteCount());
+                }
+                
+                vkFreeCommandBuffers(device, commandPool, 1, &cmd);
+                
+                
             }
             else
             {
+            
                 // Get the videoData
                 auto videoData = timeline->getVideo(currentTime).future.get();
                 videoData.layers[0].image->setPixelAspectRatio(1.F);
@@ -474,6 +514,8 @@ namespace mrv
 
             outputImage->setTags(tags);
             writer->writeVideo(currentTime, outputImage);
+            
+            view->store_swapchain(nullptr, 0);
         }
         catch (const std::exception& e)
         {
