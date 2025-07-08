@@ -1,3 +1,0 @@
-export VK_LOADER_DEBUG=all
-
-vkconfig layers -l
