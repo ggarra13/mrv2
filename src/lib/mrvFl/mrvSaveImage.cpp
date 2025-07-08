@@ -153,11 +153,6 @@ namespace mrv
                       .arg(renderSize);
                 LOG_STATUS(msg);
             }
-
-                    
-            // Create the renderer.
-            auto ctx = ui->uiView->getContext();
-            render = timeline_vlk::Render::create(ctx, context);
             
             offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
 
