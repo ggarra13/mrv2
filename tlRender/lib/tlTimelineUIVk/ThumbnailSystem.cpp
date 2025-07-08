@@ -791,7 +791,7 @@ namespace tl
                                     p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
                                     
                                     timeline::RenderOptions renderOptions;
-                                    renderOptions.clear = false;
+                                    renderOptions.clear = true;
                                     p.thumbnailThread.render->begin(cmd, p.thumbnailThread.buffer,
                                                                     p.thumbnailThread.frameIndex, size,
                                                                     renderOptions);
@@ -892,7 +892,7 @@ namespace tl
                                         p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
                                     
                                         timeline::RenderOptions renderOptions;
-                                        renderOptions.clear = false;
+                                        renderOptions.clear = true;
                                         p.thumbnailThread.render->begin(cmd,
                                                                         p.thumbnailThread.buffer,
                                                                         p.thumbnailThread.frameIndex,
