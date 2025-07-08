@@ -94,6 +94,11 @@ namespace mrv
             return 0;
         }
 
+        void Viewport::setSaveOverlay(bool value)
+        {
+            _vk->saveOverlay = true;
+        }
+
         void Viewport::prepare_pipeline_layout()
         {
             MRV2_VK();
@@ -455,6 +460,20 @@ namespace mrv
             TimelineViewport::hide();
         }
 
+
+        std::shared_ptr<vlk::OffscreenBuffer> Viewport::getVideoFBO()
+        {
+            MRV2_VK();
+            return vk.buffer;
+        }
+
+        std::shared_ptr<vlk::OffscreenBuffer> Viewport::getAnnotationFBO()
+        {
+            MRV2_VK();
+            return vk.overlay;
+        }
+
+        
         void Viewport::prepare_shaders()
         {
             TLRENDER_P();
@@ -875,7 +894,7 @@ namespace mrv
             // Draw annotations for output device in an overlay buffer.
             //
             auto outputDevice = App::app->outputDevice();
-            if (outputDevice && p.showAnnotations)
+            if ((outputDevice || vk.saveOverlay) && p.showAnnotations)
             {
                 if (!annotations.empty())
                 {
@@ -923,7 +942,8 @@ namespace mrv
                     
                 }
 
-                outputDevice->setOverlay(vk.annotationImage);
+                if (outputDevice)
+                    outputDevice->setOverlay(vk.annotationImage);
             }
 
             

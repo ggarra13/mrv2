@@ -49,6 +49,12 @@ namespace mrv
             void prepare() FL_OVERRIDE;
             void destroy() FL_OVERRIDE;
 
+            std::shared_ptr<vlk::OffscreenBuffer> getVideoFBO();
+
+            std::shared_ptr<vlk::OffscreenBuffer> getAnnotationFBO();
+
+            void setSaveOverlay(const bool save);
+            
         protected:
             void _updateHDRMetadata();
 

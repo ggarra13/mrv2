@@ -847,13 +847,16 @@ namespace mrv
                    << ioInfo.audio.sampleRate;
             }
             snprintf(
-                buf, 256, "%s %s%s", fileName.c_str(), ss.str().c_str(),
+                buf, 256, "%s - %s %s%s", fileName.c_str(), 
+                mrv::backend(), ss.str().c_str(),
                 session.c_str());
         }
         else
         {
             snprintf(
-                buf, 256, "mrv2 v%s %s%s", mrv::version(),
+                buf, 256, "mrv2 %s v%s %s%s",
+                mrv::backend(),
+                mrv::version(),
                 mrv::build_date().c_str(), session.c_str());
         }
         copy_label(buf);
