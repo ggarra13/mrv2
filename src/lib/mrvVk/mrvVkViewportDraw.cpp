@@ -886,7 +886,8 @@ namespace mrv
             if (p.hud & HudDisplay::kFPS)
             {
                 if (player->playback() != timeline::Playback::Stop &&
-                    (p.actionMode != ActionMode::kScrub || p.lastEvent != FL_DRAG))
+                    (p.actionMode != ActionMode::kScrub ||
+                     p.lastEvent != FL_DRAG))
                 {
                     // Calculate skipped frames
                     int64_t absdiff = std::abs(time.value() - p.lastFrame);

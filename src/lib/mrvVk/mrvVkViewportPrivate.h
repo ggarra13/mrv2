@@ -29,6 +29,10 @@ namespace mrv
             // Main command buffer, stored for convenience.
             VkCommandBuffer  cmd = VK_NULL_HANDLE;
 
+            //! Boolean to for creating an overlay offscreenBuffer for
+            //! annotation saving.
+            bool saveOverlay = false;
+            
             //! This is for compositing pipelines
             VkRenderPass     loadRenderPass = VK_NULL_HANDLE;
             VkPipelineLayout pipeline_layout = VK_NULL_HANDLE;
@@ -48,7 +52,6 @@ namespace mrv
             std::shared_ptr<tl::vlk::OffscreenBuffer> stereoBuffer;
             std::shared_ptr<tl::vlk::OffscreenBuffer> annotation;
             std::shared_ptr<tl::vlk::OffscreenBuffer> overlay;
-            std::shared_ptr<tl::vlk::OffscreenBuffer> overlayPBO;
 
             std::shared_ptr<tl::image::Image> annotationImage; // only used on APPLE
             // Compositing shaders

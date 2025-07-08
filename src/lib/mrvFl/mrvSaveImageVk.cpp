@@ -184,6 +184,7 @@ namespace mrv
 
 
             std::shared_ptr<image::Image> outputImage;
+            std::shared_ptr<image::Image> annotationImage;
 
             outputInfo.pixelType = info.video[layerId].pixelType;
             outputInfo.size.pixelAspectRatio = 1.0;
@@ -373,6 +374,7 @@ namespace mrv
             ioOptions["OpenEXR/PixelType"] = getLabel(outputInfo.pixelType);
 #endif
             outputImage = image::Image::create(outputInfo);
+            annotationImage = image::Image::create(outputInfo);
             
             ioInfo.video.push_back(outputInfo);
             ioInfo.videoTime = oneFrameTimeRange;
@@ -390,13 +392,10 @@ namespace mrv
             // Turn off hud so it does not get captured by glReadPixels.
             view->setHudActive(false);
 
-            math::Size2i offscreenBufferSize(renderSize.w, renderSize.h);
-
-            auto buffer = vlk::OffscreenBuffer::create(
-                ctx, offscreenBufferSize, offscreenBufferOptions);
-
             if (options.annotations)
             {
+                view->setSaveOverlay(true);
+                
                 // Refresh the view (so we turn off the HUD, for example).
                 view->redraw();
                 view->flush();
@@ -412,16 +411,18 @@ namespace mrv
                         .arg(bufferOptions.colorType);
                     LOG_STATUS(msg);
                 }
-                auto annotationBuffer = view->getAnnotationFBO();
+                
+                auto overlayBuffer = view->getAnnotationFBO();
 
                 VkDevice device = view->device();
                 VkCommandPool commandPool = view->commandPool();
-                
+
+                // Read Main Image Viewport
                 VkCommandBuffer cmd = beginSingleTimeCommands(device,
                                                               commandPool);
             
-                const size_t width = buffer->getWidth();
-                const size_t height = buffer->getHeight();
+                size_t width = buffer->getWidth();
+                size_t height = buffer->getHeight();
 
                 buffer->readPixels(cmd, 0, 0, width, height);
             
@@ -436,10 +437,12 @@ namespace mrv
                 {
                     LOG_ERROR(_("Could not read image data from view"));
                 }
-
                 memcpy(outputImage->getData(), data,
                        outputImage->getDataByteCount());
 
+                //
+                // Read Annotation Image
+                //                
                 switch(outputInfo.pixelType)
                 {
                 case image::PixelType::RGBA_U8:
@@ -472,12 +475,95 @@ namespace mrv
                     break;
                 }
                 
+                if (overlayBuffer)
+                {
+                    VkCommandBuffer cmd = beginSingleTimeCommands(device,
+                                                                  commandPool);
+                
+                    width = overlayBuffer->getWidth();
+                    height = overlayBuffer->getHeight();
+
+                    overlayBuffer->readPixels(cmd, 0, 0, width, height);
+            
+                    vkEndCommandBuffer(cmd);
+            
+                    overlayBuffer->submitReadback(cmd);
+
+                    view->wait_queue();
+            
+                    data = overlayBuffer->getLatestReadPixels();
+                    if (!data)
+                    {
+                        LOG_ERROR(_("Could not read annotation image from view"));
+                    }
+                    memcpy(annotationImage->getData(), data,
+                           annotationImage->getDataByteCount());
+                }
+                else
+                {
+                    annotationImage->zero();
+                }
+
+                //
+                // Composite output
+                //
+                switch(outputInfo.pixelType)
+                {
+                case image::PixelType::RGB_U8:
+                    compositeImageOverNoAlpha((uint8_t*)outputImage->getData(),
+                                              annotationImage->getData(),
+                                              width, height);
+                    break;
+                case image::PixelType::RGB_U16:
+                    compositeImageOverNoAlpha((uint16_t*)outputImage->getData(),
+                                              annotationImage->getData(),
+                                              width, height);
+                    break;
+                case image::PixelType::RGBA_U16:
+                    compositeImageOver((uint16_t*)outputImage->getData(),
+                                       annotationImage->getData(),
+                                       width, height);
+                    break;
+                case image::PixelType::RGB_F16:
+                    compositeImageOverNoAlpha((half*)outputImage->getData(),
+                                              annotationImage->getData(),
+                                              width, height);
+                    break;
+                case image::PixelType::RGBA_F16:
+                    compositeImageOver((half*)outputImage->getData(),
+                                       annotationImage->getData(),
+                                       width, height);
+                    break;
+                case image::PixelType::RGB_F32:
+                    compositeImageOverNoAlpha((float*)outputImage->getData(),
+                                              annotationImage->getData(),
+                                              width, height);
+                    break;
+                case image::PixelType::RGBA_F32:
+                    compositeImageOver((float*)outputImage->getData(),
+                                       annotationImage->getData(),
+                                       width, height);
+                    break;
+                default:
+                case image::PixelType::RGBA_U8:
+                    compositeImageOver((uint8_t*)outputImage->getData(),
+                                       annotationImage->getData(),
+                                       width, height);
+                    break;
+                }
+                
                 vkFreeCommandBuffers(device, commandPool, 1, &cmd);
                 
+                view->setSaveOverlay(false);
                 
             }
             else
             {
+
+                math::Size2i offscreenBufferSize(renderSize.w, renderSize.h);
+                
+                auto buffer = vlk::OffscreenBuffer::create(
+                    ctx, offscreenBufferSize, offscreenBufferOptions);
             
                 // Get the videoData
                 auto videoData = timeline->getVideo(currentTime).future.get();
@@ -540,9 +626,7 @@ namespace mrv
             }
 
             outputImage->setTags(tags);
-            writer->writeVideo(currentTime, outputImage);
-            
-            view->store_swapchain(nullptr, 0);
+            writer->writeVideo(currentTime, outputImage);            
         }
         catch (const std::exception& e)
         {

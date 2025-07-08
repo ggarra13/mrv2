@@ -52,6 +52,8 @@ namespace mrv
             std::shared_ptr<vlk::OffscreenBuffer> getVideoFBO();
 
             std::shared_ptr<vlk::OffscreenBuffer> getAnnotationFBO();
+
+            void setSaveOverlay(const bool save);
             
         protected:
             void _updateHDRMetadata();
