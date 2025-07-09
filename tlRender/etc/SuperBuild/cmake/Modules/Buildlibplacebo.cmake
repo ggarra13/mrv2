@@ -2,7 +2,7 @@ include(ExternalProject)
 
 
 set(libplacebo_GIT_REPO "https://code.videolan.org/videolan/libplacebo.git")
-set(libplacebo_GIT_TAG v7.349.0)
+set(libplacebo_GIT_TAG v7.351.0) # was v7.349.0
 
 set(libplacebo_DEPS ${PYTHON_DEP})
 
