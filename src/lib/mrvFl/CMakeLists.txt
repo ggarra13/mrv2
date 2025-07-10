@@ -35,7 +35,6 @@ set(SOURCES
     mrvOCIO.cpp
     mrvPathMapping.cpp
     mrvPreferences.cpp
-    mrvSaveMovie.cpp
     mrvSession.cpp
     mrvStereo3DAux.cpp
     mrvTimelinePlayer.cpp
@@ -44,11 +43,11 @@ set(SOURCES
 )
 
 if(TLRENDER_GL AND MRV2_BACKEND STREQUAL "GL")
-    list(APPEND SOURCES	mrvSaveImage.cpp)
+    list(APPEND SOURCES	mrvSaveImage.cpp mrvSaveMovie.cpp)
 endif()
 
 if(TLRENDER_VK AND MRV2_BACKEND STREQUAL "VK")
-    list(APPEND SOURCES	mrvSaveImageVk.cpp)
+    list(APPEND SOURCES	mrvSaveImageVk.cpp mrvSaveMovieVk.cpp)
 endif()
 
 add_library(mrvFl ${SOURCES} ${HEADERS})

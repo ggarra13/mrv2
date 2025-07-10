@@ -287,31 +287,6 @@ namespace mrv
                     LOG_STATUS(msg);
                 }
             }
-                
-// #ifdef __APPLE__
-//             if (options.annotations)
-//             {
-//                 switch (outputInfo.pixelType)
-//                 {
-//                 case image::PixelType::RGB_F16:
-//                 case image::PixelType::RGBA_F16:
-//                     outputInfo.pixelType = image::PixelType::RGBA_F16;
-//                     break;
-//                 case image::PixelType::RGB_F32:
-//                 case image::PixelType::RGBA_F32:
-//                     outputInfo.pixelType = image::PixelType::RGBA_F32;
-//                     break;
-//                 default:
-//                     if (saveHDR)
-//                         outputInfo.pixelType = image::PixelType::RGBA_F32;
-//                     else if (saveEXR)
-//                         outputInfo.pixelType = image::PixelType::RGBA_F16;
-//                     else
-//                         outputInfo.pixelType = image::PixelType::RGBA_U8;
-//                     break;
-//                 }
-//             }
-// #endif
 
             if (!options.annotations)
             {
@@ -374,6 +349,8 @@ namespace mrv
             ioOptions["OpenEXR/PixelType"] = getLabel(outputInfo.pixelType);
 #endif
             outputImage = image::Image::create(outputInfo);
+            
+            outputInfo.pixelType = image::PixelType::RGBA_U8;
             annotationImage = image::Image::create(outputInfo);
             
             ioInfo.video.push_back(outputInfo);
