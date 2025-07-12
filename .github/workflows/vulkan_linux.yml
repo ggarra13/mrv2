@@ -100,6 +100,6 @@ jobs:
       run: |
         ./etc/runme_nolog.sh -t package -vk
       
-    - name: Upload binaries  # Conditional step
-      run: |
-        ./bin/release/upload_sourceforge.sh -vk
+    # - name: Upload binaries  # Conditional step
+    #   run: |
+    #     ./bin/release/upload_sourceforge.sh -vk
