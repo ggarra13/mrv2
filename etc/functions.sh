@@ -210,6 +210,8 @@ locate_python()
 		export PYTHON=$PYTHONDIR/$PYTHONEXE
 		if [ ! -e $PYTHON ]; then
 		    continue
+		else
+		    break
 		fi
 	    fi
 	fi
