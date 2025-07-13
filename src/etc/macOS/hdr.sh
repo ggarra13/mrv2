@@ -44,5 +44,5 @@ export MVK_CONFIG_LOG_LEVEL=0
 
 # The first /opt/homebrew is for MacOS Silicon
 # The second  /usr/local is for MacOS Intel
-export VK_LAYER_PATH=/opt/homebrew/share/vulkan/explicit_layers.d:/usr/local/opt/vulkan-validationlayers/share/vulkan/explicit_layer.d:$VK_LAYER_PATHx
+export VK_LAYER_PATH=/opt/homebrew/share/vulkan/explicit_layers.d:/usr/local/opt/vulkan-validationlayers/share/vulkan/explicit_layer.d:$VK_LAYER_PATH
 exec "$rsrc/bin/hdr" $*
