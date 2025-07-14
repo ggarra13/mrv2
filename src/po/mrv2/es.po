@@ -2962,10 +2962,10 @@ msgid "Exception caught: "
 msgstr "Atrapé excepción: "
 
 msgid "ERROR:\t"
-msgstr "¿Qué es eso?"
+msgstr "ERROR:\t"
 
 msgid "WARN:\t"
-msgstr "¿Qué es lo que dices?"
+msgstr "AVISO:\t"
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"

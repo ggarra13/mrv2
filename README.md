@@ -222,7 +222,7 @@ sudo apt update
 # Install dependencies
 #
 sudo apt -y install curl build-essential perl git cmake ninja-build \
-                    libpango1.0-dev \
+                    libpango1.0-dev libglu1-mesa-dev \
 		    xorg-dev libx11-dev libxcursor-dev libxinerama-dev \
 		    libxss-dev gettext libasound2-dev \
 		    libpulse-dev libssl-dev libffi-dev \
