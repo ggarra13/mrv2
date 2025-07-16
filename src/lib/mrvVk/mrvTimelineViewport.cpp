@@ -246,7 +246,7 @@ namespace mrv
         }
 
         void TimelineViewport::setActionMode(const ActionMode& mode) noexcept
-        {
+        {            
             TLRENDER_P();
 
             if (mode == p.actionMode)
@@ -265,6 +265,10 @@ namespace mrv
             p.ui->uiRectangle->value(0);
             p.ui->uiArrow->value(0);
             p.ui->uiText->value(0);
+            
+#ifdef MRV2_DEMO
+            return;
+#endif
 
             if (mode != kSelection)
             {

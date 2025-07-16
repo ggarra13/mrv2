@@ -96,6 +96,10 @@ if( MRV2_NETWORK )
     add_definitions( -DMRV2_NETWORK )
 endif()
 
+if(MRV2_DEMO)
+    add_definitions( -DMRV2_DEMO )
+endif()
+
 if(MRV2_PDF)
     add_definitions( -DMRV2_PDF )
 endif()

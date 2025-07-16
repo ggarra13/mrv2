@@ -230,6 +230,9 @@ namespace mrv
 
     void FilesModel::setB(int index, bool value)
     {
+#ifdef MRV2_DEMO
+        return;
+#endif
         TLRENDER_P();
         if (index >= 0 && index < p.files->getSize())
         {
@@ -469,6 +472,9 @@ namespace mrv
     void
     FilesModel::setLayer(const std::shared_ptr<FilesModelItem>& item, int layer)
     {
+#ifdef MRV2_DEMO
+        return;
+#endif
         TLRENDER_P();
         const int index = _index(item);
         if (index != -1 &&
@@ -527,7 +533,11 @@ namespace mrv
 
     void FilesModel::setCompareOptions(const timeline::CompareOptions& value)
     {
+#ifdef MRV2_DEMO
+        return;
+#endif
         TLRENDER_P();
+        
         if (p.compareOptions->setIfChanged(value))
         {
             switch (p.compareOptions->get().mode)

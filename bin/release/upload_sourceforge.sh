@@ -121,8 +121,8 @@ cat <<EOF > README.md
 
 [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=679N8GWCNDFSJ)
 
-mrv2 v${mrv2_VERSION} Beta
-================
+mrv2 v${mrv2_VERSION} ${branch}
+====================
 
 This beta release of v${mrv2_VERSION} corresponds to:
 ${date}.
@@ -191,25 +191,36 @@ fi
 echo "$release_notes" >> README.md
 
 cat <<EOF > VULKAN_NOTES.md
-Notes about Vulkan on NVidia Linux:
 
-It will likely work with any RTX 3080+ board, but it will require to choose and
-test your hardware carefully.
+The Vulkan releases in the vulkan/ directory are demo versions for you to
+evaluate mrv2 before a purchase and report bugs or performance issues.
+Currently, the demo versions don't have:
 
+	   - Annotations
+	   - A/B Comparisons
+	   - OpenEXR Layer switching
+	   - NDI support
 
-Notes about Vulkan on NVidia Linux:
+Notes about Vulkan on Windows
+-----------------------------
 
-The preferred NVidia driver tested for best performance is nvidia-driver-570 (default on Ubuntu 24.04.2 LTS).
+None yet.
 
-nvidia-driver-575 suffers from an even bigger hit in performance (about 80%).
+Notes about Vulkan on NVidia Linux
+----------------------------------
 
+In order to get HDR, you currently need to have the KWin6 or GNOME48 compositors and an HDR monitor.
 
-Notes about Vulkan on macOS Intel:
+It will likely work with any NVidia RTX 3090+ or similar AMD board, but it will require you to choose and test your hardware carefully.
+
+The preferred NVidia driver tested for best performance is nvidia-driver-570 (default on Ubuntu 25.04).
+
+Notes about Vulkan on macOS Intel
+---------------------------------
 
 - Only up to Vulkan 1.3 is currently supported.
 - HDR on macOS needs a MacBook Pro.
   MacBook Pro Intel will give you up to 1000 Nits of HDR depending on model.
-
 - MacBook Pro Silicon should work with any M1 device up to HDR+.
 
 EOF

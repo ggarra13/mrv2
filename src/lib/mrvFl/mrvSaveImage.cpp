@@ -153,7 +153,10 @@ namespace mrv
                       .arg(renderSize);
                 LOG_STATUS(msg);
             }
-            
+
+                    
+            // Create the renderer.
+            render = timeline_gl::Render::create(context);
             offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
 
             // Create the writer.
@@ -319,10 +322,9 @@ namespace mrv
             outputInfo = writerPlugin->getWriteInfo(outputInfo);
             if (image::PixelType::kNone == outputInfo.pixelType)
             {
-#ifdef OPENGL_BACKEND
                 outputInfo.pixelType = image::PixelType::RGB_U8;
                 offscreenBufferOptions.colorType = image::PixelType::RGB_U8;
-#endif
+
 #ifdef TLRENDER_EXR
                 if (saveEXR)
                 {
@@ -498,6 +500,7 @@ namespace mrv
                 }
 
                 // Read back the image
+                
                 glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
                 
 
@@ -564,6 +567,7 @@ namespace mrv
             waitForFrame(player, time);
 
             _save_single_frame(file, ui, options, frameIndex);
+
         }
 
         view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-# SPDX-License-Identifier: BSD-3-Clause
-# mrv2
-# Copyright Contributors to the mrv2 Project. All rights reserved.
+# SPDX-License-Identifier: CC BY-NC-ND
+# Filmmaker
+# Copyright 2024 - Gonzalo Garramuño. All rights reserved.
+
 
 #
 # Some auxiliary functions

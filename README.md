@@ -233,6 +233,9 @@ sudo apt -y install curl build-essential perl git cmake ninja-build \
 # Install cpanminus and IPC::Cmd non-interactively
 sudo cpan App::cpanminus && cpanm --notest IPC::Cmd
 
+# For Vulkan builds
+sudo apt -y install libvulkan-dev glslang-dev libshaderc-dev
+
 
 ```
 
