@@ -472,11 +472,12 @@ namespace mrv
     void
     FilesModel::setLayer(const std::shared_ptr<FilesModelItem>& item, int layer)
     {
-#ifdef MRV2_DEMO
-        return;
-#endif
         TLRENDER_P();
         const int index = _index(item);
+#ifdef MRV2_DEMO
+        if (index > 0)
+            return;
+#endif
         if (index != -1 &&
             layer < p.files->getItem(index)->videoLayers.size() &&
             layer != p.files->getItem(index)->videoLayer)
