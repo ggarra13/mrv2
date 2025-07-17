@@ -1134,9 +1134,10 @@ namespace mrv
             }
 
             
-            if (p.showAnnotations && !annotations.empty())
-            {                
-                vkCmdBindPipeline(vk.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
+            if (p.showAnnotations && vk.annotation_pipeline != VK_NULL_HANDLE &&
+                !annotations.empty())
+            {             
+                vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
                                   vk.annotation_pipeline);
             
                 // We already flipped the coords, so we use a normal ortho
@@ -1144,7 +1145,7 @@ namespace mrv
                 const math::Matrix4x4f orthoMatrix = math::ortho(
                     0.F, static_cast<float>(viewportSize.w),
                     static_cast<float>(viewportSize.h), 0.0F, -1.F, 1.F);
-                _compositeAnnotations(vk.cmd, vk.annotation, orthoMatrix,
+                _compositeAnnotations(cmd, vk.annotation, orthoMatrix,
                                       vk.annotationShader, vk.avbo,
                                       viewportSize);
             }

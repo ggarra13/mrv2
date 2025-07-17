@@ -35,7 +35,10 @@ export CMAKE_FLAGS=""
 
 . etc/options_off.sh
 
+
 export TLRENDER_EXR=ON
+export TLRENDER_FFMPEG=ON
+export TLRENDER_FFMPEG_MINIMAL=ONr
 export TLRENDER_LIBPLACEBO=ON
 export TLRENDER_WAYLAND=ON
 export TLRENDER_X11=ON

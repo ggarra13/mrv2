@@ -241,23 +241,7 @@ namespace mrv
             VkWindow(X, Y, W, H, L),
             _p(new Private)
         {
-            int fl_double = FL_SINGLE; // _WIN32 needs this
-
-//             // Do not use FL_DOUBLE on APPLE as it makes playback slow
-// #if defined(__APPLE__) || defined(__linux__)
-//             fl_double = FL_SINGLE;
-//             if (desktop::XWayland())
-//             {
-//                 fl_double = FL_DOUBLE; // needed
-//             }
-//             else if (desktop::Wayland() || desktop::X11())
-//             {
-//                 // For faster playback, we won't set this
-//                 // window to FL_DOUBLE.
-//                 // FLTK's X11 already uses two buffers.
-//                 fl_double = FL_SINGLE;
-//             }
-// #endif
+            int fl_double = FL_DOUBLE;
             mode(FL_RGB | FL_ALPHA | fl_double);
         }
 
@@ -928,7 +912,7 @@ void main()
                             p.buffer = vlk::OffscreenBuffer::create(
                                 ctx, renderSize, offscreenBufferOptions);
                             prepare_mesh();
-                            prepare_pipeline();
+                            // prepare_pipeline();
                         }
                     }
                     else
@@ -1147,12 +1131,6 @@ void main()
         void TimelineWidget::prepare_pipeline()
         {
             TLRENDER_P();
-
-            if (pipeline() != VK_NULL_HANDLE)
-            {
-                vkDestroyPipeline(device(), pipeline(), nullptr);
-                pipeline() = VK_NULL_HANDLE;
-            }
 
             assert(p.vbo);
             assert(p.shader);
