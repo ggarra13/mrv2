@@ -60,13 +60,13 @@ namespace
                        << std::endl;;
             return -1;
         }
-
-        // Replace backslashes with forward slashes
-        wchar_t* p = pname;
-        while (*p) {
-            if (*p == L'\\') *p = L'/';
-            p++;
-        }
+    
+        // // Replace backslashes with forward slashes
+        // wchar_t* p = pname;
+        // while (*p) {
+        //     if (*p == L'\\') *p = L'/';
+        //     p++;
+        // }
         
         return 0; // Success
     }
@@ -172,7 +172,9 @@ namespace
 
 namespace mrv
 {
-
+    // Store root path of mrv2's (Installation Directory)
+    std::string g_root_path;
+    
     void set_root_path(const int argc, char** argv)
     {
 #ifdef _WIN32
@@ -194,6 +196,8 @@ namespace mrv
         fs::path parent = rootdir.parent_path(); // Skip executable
         rootdir = parent.parent_path();          // Skip bin/ directory
 
+        g_root_path = rootdir.string();
+        
         std::wstring root_str = rootdir.wstring();
         if (setenv(L"MRV2_ROOT", root_str.c_str(), 1) != 0)
         {
@@ -219,6 +223,7 @@ namespace mrv
             rootdir = parent.parent_path();          // skip bin/ directory
 
             setenv("MRV2_ROOT", rootdir.string().c_str(), 1);
+            g_root_path = rootdir.string();
         }
 #endif
     }

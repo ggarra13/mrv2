@@ -12,6 +12,7 @@ namespace fs = std::filesystem;
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvOS.h"
+#include "mrvCore/mrvRoot.h"
 #include "mrvCore/mrvString.h"
 
 #if defined(_WIN32) && !defined(_WIN64_)
@@ -48,10 +49,15 @@ namespace mrv
 
     std::string rootpath()
     {
-        const char* root = fl_getenv("MRV2_ROOT");
-        if (!root)
-            root = "..";
-        return root;
+       // If not initialized (as a fallback), you might still use a default.
+        // But with this approach, it should always be initialized correctly.
+        if (g_root_path.empty()) {
+            // This block should ideally never be hit.
+            // Add logging here if it is.
+            LOG_ERROR("Root path not set");
+            return "..";
+        }
+        return g_root_path;
     }
 
     std::string tmppath()
