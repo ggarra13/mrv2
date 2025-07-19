@@ -356,8 +356,6 @@ if (APPLE)
 	file(COPY ${CPACK_PREPACKAGE}/docs
 	    DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
     endif()
-    file(COPY ${CPACK_PREPACKAGE}/icons
-	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
     file(COPY ${CPACK_PREPACKAGE}/lib
 	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
     if (EXISTS ${CPACK_PREPACKAGE}/libraries)
@@ -640,7 +638,6 @@ if (APPLE)
     file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/bin)
     file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/colors)
     file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/docs)
-    file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/icons)
     file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/lib)
     if (EXISTS ${CPACK_PREPACKAGE}/libraries)
 	file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/libraries)
