@@ -81,7 +81,7 @@ namespace tl
         toHDRData(AVPacketSideData* sideData, int size, image::HDRData& hdr);
 
         //! Convert to HDR data.
-        bool toHDRData(AVFrameSideData**, int size, image::HDRData&);
+        bool toHDRData(AVFrame*, image::HDRData&);
 
         //! Convert from FFmpeg.
         audio::DataType toAudioType(AVSampleFormat);

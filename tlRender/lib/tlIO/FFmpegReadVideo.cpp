@@ -1127,9 +1127,7 @@ namespace tl
                     {
                         image::HDRData hdrData;
                         hdrData.eotf = toEOTF(_avColorTRC);
-                        bool hasHDR = toHDRData(
-                            _avFrame->side_data, _avFrame->nb_side_data,
-                            hdrData);
+                        bool hasHDR = toHDRData(_avFrame, hdrData);
                         if (hasHDR)
                             tags["hdr"] = nlohmann::json(hdrData).dump();
                     }
