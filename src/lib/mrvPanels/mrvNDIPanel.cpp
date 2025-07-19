@@ -20,6 +20,8 @@
 #    include "mrvWidgets/mrvInput.h"
 #    include "mrvWidgets/mrvCollapsibleGroup.h"
 
+#    include "mrvIcons/NDI.h"
+
 #    include "mrvCore/mrvHome.h"
 #    include "mrvCore/mrvFile.h"
 #    include "mrvCore/mrvMemory.h"
@@ -90,7 +92,7 @@ namespace mrv
 
             add_group("NDI");
 
-            Fl_SVG_Image* svg = load_svg("NDI.svg");
+            Fl_SVG_Image* svg = MRV2_LOAD_SVG(NDI);
             g->bind_image(svg);
                         
             g->callback(

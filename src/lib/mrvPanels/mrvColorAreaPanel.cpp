@@ -4,6 +4,8 @@
 
 #include "mrViewer.h"
 
+#include "mrvIcons/ColorArea.h"
+
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvColorInfo.h"
 #include "mrvWidgets/mrvHorSlider.h"
@@ -35,7 +37,7 @@ namespace mrv
         {
             add_group("Color Area");
 
-            Fl_SVG_Image* svg = load_svg("ColorArea.svg");
+            Fl_SVG_Image* svg = MRV2_LOAD_SVG(ColorArea);
             g->bind_image(svg);
 
             g->callback(

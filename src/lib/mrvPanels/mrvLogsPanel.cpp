@@ -12,6 +12,9 @@
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvLogDisplay.h"
 
+#include "mrvIcons/Clear.h"
+#include "mrvIcons/Logs.h"
+
 #include <tlCore/StringFormat.h>
 
 #include <string>
@@ -37,7 +40,7 @@ namespace mrv
         {
             add_group("Logs");
 
-            Fl_SVG_Image* svg = load_svg("Logs.svg");
+            Fl_SVG_Image* svg = MRV2_LOAD_SVG(Logs);
             g->bind_image(svg);
 
             g->callback(
@@ -127,7 +130,7 @@ namespace mrv
 
             int Y = controls->y();
             _r->clearButton = new Fl_Button(g->x(), Y, g->w(), 30);
-            _r->clearButton->image(load_svg("Clear.svg"));
+            _r->clearButton->image(MRV2_LOAD_SVG(Clear));
             _r->clearButton->tooltip(_("Clear the messages"));
             _r->clearButton->callback(
                 [](Fl_Widget* w, void* d)

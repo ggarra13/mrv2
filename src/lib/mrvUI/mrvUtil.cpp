@@ -42,6 +42,28 @@ namespace mrv
         return svg;
     }
     
+    Fl_SVG_Image* load_svg(const unsigned char* svg_data,
+                           const size_t length,
+                           const char* svg_name)
+    {
+        Fl_SVG_Image* svg = new Fl_SVG_Image(svg_name, svg_data, length);
+        if (!svg)
+            return nullptr;
+
+        switch (svg->fail())
+        {
+        case Fl_Image::ERR_FILE_ACCESS:
+            // File couldn't load? show path + os error to user
+            LOG_ERROR("Inline SVG: " << strerror(errno));
+            return nullptr;
+        case Fl_Image::ERR_FORMAT:
+            // Parsing error
+            LOG_ERROR("Inline SVG: couldn't decode image");
+            return nullptr;
+        }
+        return svg;
+    }
+    
     Fl_PNG_Image* load_png(const std::string& png_name)
     {
         const std::string png_root = iconpath();

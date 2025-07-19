@@ -65,6 +65,19 @@
 #include "mrvCore/mrvSequence.h"
 #include "mrvCore/mrvString.h"
 
+#include "mrvIcons/Documents.h"
+#include "mrvIcons/FavoritesButton.h"
+#include "mrvIcons/FavoritesFolders.h"
+#include "mrvIcons/Home.h"
+#include "mrvIcons/NewFolder.h"
+#include "mrvIcons/Music.h"
+#include "mrvIcons/RefreshDir.h"
+#include "mrvIcons/TemporaryButton.h"
+#include "mrvIcons/Trashcan.h"
+#include "mrvIcons/UpFolder.h"
+#include "mrvIcons/USD.h"
+
+
 #include "mrvFl/mrvPreferences.h"
 
 #include "mrvUI/mrvAsk.h"
@@ -471,14 +484,14 @@ Flu_File_Chooser::Flu_File_Chooser(
     add_type("x3f", _("RAW Picture"), &picture);
 
     if (!music)
-        music = mrv::load_svg("Music.svg");
+        music = MRV2_LOAD_SVG(Music);
 
     add_type("mp3", _("MP3 music"), music);
     add_type("ogg", _("OGG Vorbis music"), music);
     add_type("wav", _("Wave music"), music);
 
     if (!usd)
-        usd = mrv::load_svg("USD.svg");
+        usd = MRV2_LOAD_SVG(USD);
     add_type("usd", _("OpenUSD Asset"), usd);
     add_type("usdz", _("OpenUSD Zipped Asset"), usd);
     add_type("usdc", _("OpenUSD Compressed Asset"), usd);
@@ -594,7 +607,7 @@ Flu_File_Chooser::Flu_File_Chooser(
         homeBtn->image(my_computer);
 #else
         Flu_Label* l = new Flu_Label(5, 142, 100, 20, _(myComputerTxt.c_str()));
-        homeBtn->image(mrv::load_svg("Home.svg"));
+        homeBtn->image(MRV2_LOAD_SVG(Home));
 #endif
         l->labelcolor(fl_contrast(FL_WHITE, l->color()));
         l->align(FL_ALIGN_CENTER);
@@ -610,11 +623,11 @@ Flu_File_Chooser::Flu_File_Chooser(
 #ifdef _WIN32
         Flu_Label* l =
             new Flu_Label(5, 222, 100, 20, _(myDocumentsTxt.c_str()));
-        documentsBtn->image(mrv::load_svg("Documents.svg"));
+        documentsBtn->image(MRV2_LOAD_SVG(Documents));
 #else
         Flu_Label* l =
             new Flu_Label(5, 222, 100, 20, _(myDocumentsTxt.c_str()));
-        documentsBtn->image(mrv::load_svg("TemporaryButton.svg"));
+        documentsBtn->image(MRV2_LOAD_SVG(TemporaryButton));
 #endif
         l->labelcolor(fl_contrast(FL_WHITE, l->color()));
         l->align(FL_ALIGN_CENTER);
@@ -622,7 +635,7 @@ Flu_File_Chooser::Flu_File_Chooser(
 
     Flu_Button* favoritesBtn = new Flu_Button(30, 258, 50, 48);
     favoritesBtn->box(FL_FLAT_BOX);
-    favoritesBtn->image(mrv::load_svg("FavoritesButton.svg"));
+    favoritesBtn->image(MRV2_LOAD_SVG(FavoritesButton));
     favoritesBtn->enter_box(FL_THIN_UP_BOX);
     favoritesBtn->color(FL_DARK3);
     favoritesBtn->callback(_favoritesCB, this);
@@ -688,14 +701,14 @@ Flu_File_Chooser::Flu_File_Chooser(
     forwardBtn->tooltip(forwardTTxt.c_str());
 
     upDirBtn = new Flu_Button(335, 43, 25, 25);
-    upDirBtn->image(mrv::load_svg("UpFolder.svg"));
+    upDirBtn->image(MRV2_LOAD_SVG(UpFolder));
     upDirBtn->box(FL_FLAT_BOX);
     upDirBtn->enter_box(FL_THIN_UP_BOX);
     upDirBtn->callback(upDirCB, this);
     upDirBtn->tooltip(upTTxt.c_str());
 
     reloadBtn = new Flu_Button(360, 43, 25, 25);
-    reloadBtn->image(mrv::load_svg("RefreshDir.svg"));
+    reloadBtn->image(MRV2_LOAD_SVG(RefreshDir));
     reloadBtn->box(FL_FLAT_BOX);
     reloadBtn->enter_box(FL_THIN_UP_BOX);
     reloadBtn->callback(reloadCB, this);
@@ -709,21 +722,21 @@ Flu_File_Chooser::Flu_File_Chooser(
     }
 
     trashBtn = new Flu_Button(395, 43, 25, 25);
-    trashBtn->image(mrv::load_svg("Trashcan.svg"));
+    trashBtn->image(MRV2_LOAD_SVG(Trashcan));
     trashBtn->box(FL_FLAT_BOX);
     trashBtn->enter_box(FL_THIN_UP_BOX);
     trashBtn->callback(_trashCB, this);
     trashBtn->tooltip(trashTTxt.c_str());
 
     newDirBtn = new Flu_Button(420, 43, 25, 25);
-    newDirBtn->image(mrv::load_svg("NewFolder.svg"));
+    newDirBtn->image(MRV2_LOAD_SVG(NewFolder));
     newDirBtn->box(FL_FLAT_BOX);
     newDirBtn->enter_box(FL_THIN_UP_BOX);
     newDirBtn->callback(_newFolderCB, this);
     newDirBtn->tooltip(newDirTTxt.c_str());
 
     addFavoriteBtn = new Flu_Button(445, 43, 25, 25);
-    addFavoriteBtn->image(mrv::load_svg("FavoritesFolders.svg"));
+    addFavoriteBtn->image(MRV2_LOAD_SVG(FavoritesFolders));
     addFavoriteBtn->box(FL_FLAT_BOX);
     addFavoriteBtn->enter_box(FL_THIN_UP_BOX);
     addFavoriteBtn->callback(_addToFavoritesCB, this);

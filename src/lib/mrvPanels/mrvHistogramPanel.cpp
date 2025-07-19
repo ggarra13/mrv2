@@ -10,6 +10,8 @@
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvHistogram.h"
 
+#include "mrvIcons/Histogram.h"
+
 #include "mrvCore/mrvColorAreaInfo.h"
 
 #include "FL/Fl_Choice.H"
@@ -30,7 +32,7 @@ namespace mrv
         {
             add_group("Histogram");
 
-            Fl_SVG_Image* svg = load_svg("Histogram.svg");
+            Fl_SVG_Image* svg = MRV2_LOAD_SVG(Histogram);
             g->bind_image(svg);
 
             g->callback(

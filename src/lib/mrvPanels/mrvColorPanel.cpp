@@ -16,6 +16,8 @@
 #include "mrvWidgets/mrvInput.h"
 #include "mrvWidgets/mrvCollapsibleGroup.h"
 
+#include "mrvIcons/Color.h"
+
 #include <FL/Fl_Hold_Browser.H>
 #include <FL/Fl_Check_Button.H>
 #include <FL/Fl_Choice.H>
@@ -67,7 +69,7 @@ namespace mrv
 
             add_group("Color");
 
-            Fl_SVG_Image* svg = load_svg("Color.svg");
+            Fl_SVG_Image* svg = MRV2_LOAD_SVG(Color);
             g->bind_image(svg);
 
             g->callback(

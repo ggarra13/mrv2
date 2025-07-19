@@ -14,6 +14,9 @@
 #include "mrvNetwork/mrvTCP.h"
 #include "mrvNetwork/mrvCompareOptions.h"
 
+#include "mrvIcons/Mute.h"
+#include "mrvIcons/Audio.h"
+
 #include <tlDevice/IOutput.h>
 
 #include <tlCore/File.h>
@@ -390,11 +393,11 @@ namespace mrv
                 c->uiAudioTracks->value(p.mute);
                 if (p.mute)
                 {
-                    c->uiAudioTracks->image(mrv::load_svg("Mute.svg"));
+                    c->uiAudioTracks->image(MRV2_LOAD_SVG(Mute));
                 }
                 else
                 {
-                    c->uiAudioTracks->image(mrv::load_svg("Audio.svg"));
+                    c->uiAudioTracks->image(MRV2_LOAD_SVG(Audio));
                 }
                 c->uiAudioTracks->redraw();
 
@@ -405,7 +408,7 @@ namespace mrv
             else
             {
                 delete c->uiAudioTracks->image();
-                c->uiAudioTracks->image(mrv::load_svg("Mute.svg"));
+                c->uiAudioTracks->image(MRV2_LOAD_SVG(Mute));
             }
 
             // Set color channel (layer)

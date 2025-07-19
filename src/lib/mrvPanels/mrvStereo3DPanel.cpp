@@ -16,6 +16,8 @@
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvPopupMenu.h"
 
+#include "mrvIcons/Stereo3D.h"
+
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvFile.h"
 
@@ -55,7 +57,7 @@ namespace mrv
             _r(new Private)
         {
             add_group("Stereo 3D");
-            g->bind_image(load_svg("Stereo3D.svg"));
+            g->bind_image(MRV2_LOAD_SVG(Stereo3D));
 
             _r->filesObserver = observer::
                 ListObserver<std::shared_ptr<FilesModelItem> >::create(

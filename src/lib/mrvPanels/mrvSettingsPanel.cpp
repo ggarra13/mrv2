@@ -15,6 +15,8 @@
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvMemory.h"
 
+#include "mrvIcons/Settings.h"
+
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvSpinner.h"
@@ -44,7 +46,7 @@ namespace mrv
         {
             add_group("Settings");
 
-            Fl_SVG_Image* svg = load_svg("Settings.svg");
+            Fl_SVG_Image* svg = MRV2_LOAD_SVG(Settings);
             g->bind_image(svg);
 
             g->callback(

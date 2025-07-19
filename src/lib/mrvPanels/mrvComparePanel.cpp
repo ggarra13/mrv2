@@ -20,6 +20,18 @@
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvPopupMenu.h"
 
+#include "mrvIcons/Compare.h"
+#include "mrvIcons/CompareA.h"
+#include "mrvIcons/CompareB.h"
+#include "mrvIcons/CompareDifference.h"
+#include "mrvIcons/CompareHorizontal.h"
+#include "mrvIcons/CompareTile.h"
+#include "mrvIcons/CompareVertical.h"
+#include "mrvIcons/CompareWipe.h"
+#include "mrvIcons/CompareOverlay.h"
+#include "mrvIcons/Next.h"
+#include "mrvIcons/Prev.h"
+
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvFile.h"
 
@@ -63,7 +75,7 @@ namespace mrv
         {
             add_group("Compare");
 
-            Fl_SVG_Image* svg = load_svg("Compare.svg");
+            Fl_SVG_Image* svg = MRV2_LOAD_SVG(Compare);
             g->bind_image(svg);
 
             g->callback(
@@ -230,7 +242,7 @@ namespace mrv
             Fl_Button* b;
             auto bW = new Widget< Button >(X, Y, 30, 30);
             b = bW;
-            b->bind_image(load_svg("CompareA.svg"));
+            b->bind_image(MRV2_LOAD_SVG(CompareA));
             b->tooltip(_("Compare A"));
             bW->callback(
                 [=](auto w)
@@ -240,7 +252,7 @@ namespace mrv
 
             bW = new Widget< Button >(X + 30, Y, 30, 30);
             b = bW;
-            b->bind_image(load_svg("CompareB.svg"));
+            b->bind_image(MRV2_LOAD_SVG(CompareB));
             b->tooltip(_("Compare B"));
 
             bW->callback(
@@ -251,7 +263,7 @@ namespace mrv
 
             bW = new Widget< Button >(X + 60, Y, 30, 30);
             b = bW;
-            b->bind_image(load_svg("CompareWipe.svg"));
+            b->bind_image(MRV2_LOAD_SVG(CompareWipe));
             b->tooltip(
 #ifdef __APPLE__
                 _("Wipe between the A and B files\n\n"
@@ -274,7 +286,7 @@ namespace mrv
 
             bW = new Widget< Button >(X + 90, Y, 30, 30);
             b = bW;
-            b->bind_image(load_svg("CompareOverlay.svg"));
+            b->bind_image(MRV2_LOAD_SVG(CompareOverlay));
             b->tooltip(
                 _("Overlay the A and B files with optional transparencyy"));
 
@@ -286,7 +298,7 @@ namespace mrv
 
             bW = new Widget< Button >(X + 120, Y, 30, 30);
             b = bW;
-            b->bind_image(load_svg("CompareDifference.svg"));
+            b->bind_image(MRV2_LOAD_SVG(CompareDifference));
             b->tooltip(_("Difference the A and B files"));
 
             bW->callback(
@@ -297,7 +309,7 @@ namespace mrv
 
             bW = new Widget< Button >(X + 150, Y, 30, 30);
             b = bW;
-            b->bind_image(load_svg("CompareHorizontal.svg"));
+            b->bind_image(MRV2_LOAD_SVG(CompareHorizontal));
             b->tooltip(_("Compare the A and B files side by side"));
 
             bW->callback(
@@ -308,7 +320,7 @@ namespace mrv
 
             bW = new Widget< Button >(X + 180, Y, 30, 30);
             b = bW;
-            b->bind_image(load_svg("CompareVertical.svg"));
+            b->bind_image(MRV2_LOAD_SVG(CompareVertical));
             b->tooltip(_("Show the A file above the B file"));
 
             bW->callback(
@@ -319,7 +331,7 @@ namespace mrv
 
             bW = new Widget< Button >(X + 210, Y, 30, 30);
             b = bW;
-            b->bind_image(load_svg("CompareTile.svg"));
+            b->bind_image(MRV2_LOAD_SVG(CompareTile));
             b->tooltip(_("Tile the A and B files"));
 
             bW->callback(
@@ -330,7 +342,7 @@ namespace mrv
 
             bW = new Widget< Button >(X + 240, Y, 30, 30);
             b = bW;
-            b->bind_image(load_svg("Prev.svg"));
+            b->bind_image(MRV2_LOAD_SVG(Prev));
             b->tooltip(_("Previous filename"));
             bW->callback(
                 [=](auto w)
@@ -341,7 +353,7 @@ namespace mrv
 
             bW = new Widget< Button >(X + 270, Y, 30, 30);
             b = bW;
-            b->bind_image(load_svg("Next.svg"));
+            b->bind_image(MRV2_LOAD_SVG(Next));
             b->tooltip(_("Next filename"));
             bW->callback(
                 [=](auto w)

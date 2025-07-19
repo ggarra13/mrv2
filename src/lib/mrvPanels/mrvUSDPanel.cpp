@@ -20,6 +20,7 @@
 
 #    include "mrvOptions/mrvUSD.h"
 
+#    include "mrvIcons/USD.h"
 
 #    include <tlCore/StringFormat.h>
 
@@ -42,7 +43,7 @@ namespace mrv
         {
             add_group("USD");
 
-            Fl_SVG_Image* svg = load_svg("USD.svg");
+            Fl_SVG_Image* svg = MRV2_LOAD_SVG(USD);
             g->bind_image(svg);
 
             g->callback(

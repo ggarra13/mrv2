@@ -24,6 +24,8 @@
 #include "mrvWidgets/mrvCollapsibleGroup.h"
 #include "mrvWidgets/mrvTable.h"
 
+#include "mrvIcons/Info.h"
+
 #include "mrvCore/mrvColorSpaces.h"
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvUtil.h"
@@ -341,7 +343,7 @@ namespace mrv
         {
             add_group("Media Information");
 
-            Fl_SVG_Image* svg = load_svg("Info.svg");
+            Fl_SVG_Image* svg = MRV2_LOAD_SVG(Info);
             g->bind_image(svg);
 
             g->callback(

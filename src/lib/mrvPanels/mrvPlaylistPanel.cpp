@@ -23,6 +23,12 @@
 #include "mrvPanels/mrvPanelsAux.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
+#include "mrvIcons/FileClose.h"
+#include "mrvIcons/Playlist.h"
+#include "mrvIcons/Save.h"
+#include "mrvIcons/Tracks.h"
+#include "mrvIcons/TracksFromA.h"
+
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvFile.h"
 
@@ -66,7 +72,7 @@ namespace mrv
             MRV2_R();
             
             add_group("Playlist");
-            g->bind_image(load_svg("Playlist.svg"));
+            g->bind_image(MRV2_LOAD_SVG(Playlist));
 
             g->callback(
                 [](Fl_Widget* w, void* d)
@@ -201,7 +207,7 @@ namespace mrv
             Button* b;
             auto bW = new Widget< Button >(g->x() + 10, Y, 30, 30);
             b = bW;
-            Fl_Image* svg = load_svg("Tracks.svg");
+            Fl_Image* svg = MRV2_LOAD_SVG(Tracks);
             b->image(svg);
             b->tooltip(
                 _("Create an empty timeline with a video and audio track."));
@@ -209,7 +215,7 @@ namespace mrv
 
             bW = new Widget< Button >(g->x() + 40, Y, 30, 30);
             b = bW;
-            svg = load_svg("TracksFromA.svg");
+            svg = MRV2_LOAD_SVG(TracksFromA);
             b->image(svg);
             b->tooltip(_("Create a timeline from the selected clip."));
             bW->callback(
@@ -221,7 +227,7 @@ namespace mrv
 
             bW = new Widget< Button >(g->x() + 70, Y, 30, 30);
             b = bW;
-            svg = load_svg("Save.svg");
+            svg = MRV2_LOAD_SVG(Save);
             b->image(svg);
             b->tooltip(
                 _("Save current EDL to a permanent location, making paths "
@@ -231,7 +237,7 @@ namespace mrv
 
             bW = new Widget< Button >(g->x() + 100, Y, 30, 30);
             b = bW;
-            svg = load_svg("FileClose.svg");
+            svg = MRV2_LOAD_SVG(FileClose);
             b->image(svg);
             b->tooltip(_("Close current EDL."));
             bW->callback(

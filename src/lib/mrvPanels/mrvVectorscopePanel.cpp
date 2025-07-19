@@ -6,6 +6,8 @@
 
 #include "mrvCore/mrvColorAreaInfo.h"
 
+#include "mrvIcons/Vectorscope.h"
+
 #include "mrvWidgets/mrvVectorscope.h"
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
@@ -28,7 +30,7 @@ namespace mrv
         {
             add_group("Vectorscope");
 
-            Fl_SVG_Image* svg = load_svg("Vectorscope.svg");
+            Fl_SVG_Image* svg = MRV2_LOAD_SVG(Vectorscope);
             g->bind_image(svg);
 
             g->callback(

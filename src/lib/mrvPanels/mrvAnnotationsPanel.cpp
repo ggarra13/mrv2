@@ -8,7 +8,12 @@
 
 #include "mrViewer.h"
 
+
 #include "mrvCore/mrvFonts.h"
+
+#include "mrvIcons/Annotations.h"
+#include "mrvIcons/HardBrush.h"
+#include "mrvIcons/SoftBrush.h"
 
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvHorSlider.h"
@@ -31,7 +36,7 @@ namespace mrv
         {
             add_group("Annotations");
 
-            Fl_SVG_Image* svg = load_svg("Annotations.svg");
+            Fl_SVG_Image* svg = MRV2_LOAD_SVG(Annotations);
             g->bind_image(svg);
 
             g->callback(
@@ -272,7 +277,7 @@ namespace mrv
             bt->down_box(FL_EMBOSSED_BOX);
             bt->box(FL_FLAT_BOX);
             bt->tooltip(_("Selects a hard brush."));
-            Fl_SVG_Image* svg = load_svg("HardBrush.svg");
+            Fl_SVG_Image* svg = MRV2_LOAD_SVG(HardBrush);
             bt->image(svg);
             if (!soft)
             {
@@ -291,7 +296,7 @@ namespace mrv
             bt->selection_color(FL_YELLOW);
             bt->down_box(FL_EMBOSSED_BOX);
             bt->box(FL_FLAT_BOX);
-            svg = load_svg("SoftBrush.svg");
+            svg = MRV2_LOAD_SVG(SoftBrush);
             bt->image(svg);
             if (soft)
             {

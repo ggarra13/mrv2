@@ -24,6 +24,21 @@ decl {\#include "mrvCore/mrvMath.h"} {public global
 decl {\#include "mrvCore/mrvI8N.h"} {public global
 }
 
+decl {\#include "mrvIcons/LoopMode.h"} {public global
+}
+
+decl {\#include "mrvIcons/StopMode.h"} {public global
+}
+
+decl {\#include "mrvIcons/SwingMode.h"} {public global
+}
+
+decl {\#include "mrvIcons/Mute.h"} {public global
+}
+
+decl {\#include "mrvIcons/Audio.h"} {selected public global
+}
+
 decl {\#include "mrvWidgets/mrvAudioButton.h"} {public global
 }
 
@@ -443,7 +458,7 @@ widget_class TimelineClass {open
           user_data this user_data_type {ViewerUI*}
           callback {select_character(uiTimecodeSwitch);
 mrv::TimeUnits units = (mrv::TimeUnits) o->value();
-ui->uiTimeline->setUnits( units );} selected
+ui->uiTimeline->setUnits( units );}
           tooltip {Switch between Frame, Seconds and Timecode display} xywh {9 3 27 24}
           code0 {o->disable_label(); o->enable_character();}
           class {mrv::PopupMenu}
@@ -541,15 +556,15 @@ delete o->image();
 
 if ( x == 0 )
 {
-   o->image( mrv::load_svg( "LoopMode.svg" ) );
+   o->image( MRV2_LOAD_SVG(LoopMode) );
 }
 else if ( x == 1 )
 {
-   o->image( mrv::load_svg( "StopMode.svg" ) );
+   o->image( MRV2_LOAD_SVG(StopMode) );
 }
 else if ( x == 2 )
 {
-   o->image( mrv::load_svg( "SwingMode.svg" ) );
+   o->image( MRV2_LOAD_SVG(SwingMode) );
 }
 o->redraw();
 
@@ -562,7 +577,7 @@ if( !player ) return;
 
 player->setLoop( loop );}
             tooltip {Looping mode (Loop, Once, Ping-Pong)} xywh {416 3 32 24} labelcolor 19
-            code0 {o->image( mrv::load_svg( "LoopMode.svg" ) );}
+            code0 {o->image( MRV2_LOAD_SVG(LoopMode) );}
             class {mrv::StateButton}
           }
         }
@@ -680,15 +695,15 @@ ui->app->setMute(value);
 delete o->image();
 if (value)
 {  
-   o->image( mrv::load_svg( "Mute.svg" ) );
+   o->image( MRV2_LOAD_SVG(Mute) );
 }
 else
 {   
-   o->image( mrv::load_svg( "Audio.svg" ) );
+   o->image( MRV2_LOAD_SVG(Audio) );
 }
 o->redraw();}
             tooltip {Mute audio or switch audio tracks with the right mouse button.} xywh {576 3 27 24} type Toggle labelsize 10 align 80
-            code1 {o->image( mrv::load_svg( "Audio.svg" ) );}
+            code1 {o->image( MRV2_LOAD_SVG(Audio) );}
             class {mrv::AudioButton}
           }
           Fl_Slider uiVolume {
@@ -822,8 +837,8 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {219 258 933 608} type Double align 80 resizable
-      class {mrv::MainWindow} size_range {933 602 0 0} visible
+      xywh {0 0 933 608} type Double align 80 hide resizable
+      class {mrv::MainWindow} size_range {933 602 0 0}
     } {
       Fl_Flex uiRegion {open
         xywh {0 0 933 608} box FLAT_BOX resizable fixed_size_tuples {5  0 30  1 29  3 29  4 30  5 25 }

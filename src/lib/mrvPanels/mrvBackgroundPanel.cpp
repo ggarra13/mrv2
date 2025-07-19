@@ -31,7 +31,7 @@ namespace mrv
         {
             add_group("Background");
 
-            // Fl_SVG_Image* svg = load_svg("Background.svg");
+            // Fl_SVG_Image* svg = MRV2_LOAD_SVG(Background);
             // g->bind_image(svg);
 
             g->callback(

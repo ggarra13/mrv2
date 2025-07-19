@@ -8,6 +8,8 @@
 #include <FL/Fl_Int_Input.H>
 #include <FL/Fl_Flex.H>
 
+#include "mrvIcons/Network.h"
+
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvInput.h"
 #include "mrvWidgets/mrvIntInput.h"
@@ -56,7 +58,7 @@ namespace mrv
         {
             add_group("Network");
 
-            Fl_SVG_Image* svg = load_svg("Network.svg");
+            Fl_SVG_Image* svg = MRV2_LOAD_SVG(Network);
             g->bind_image(svg);
 
             g->callback(

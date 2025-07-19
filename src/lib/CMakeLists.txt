@@ -3,6 +3,7 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 add_subdirectory(mrvCore)        # tlRender Imath::Imath FLTK cpptrace
+add_subdirectory(mrvIcons)
 add_subdirectory(mrvOptions)     # mrvCore + USD libraries
 add_subdirectory(mrvFlmm)        # FLTK
 add_subdirectory(mrvWidgets)     # mrvFlmm mrvCore FLTK FLTK_gl MINIzip

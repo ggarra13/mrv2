@@ -20,6 +20,15 @@
 
 #include "mrvNetwork/mrvTCP.h"
 
+#include "mrvIcons/Files.h"
+#include "mrvIcons/FileClose.h"
+#include "mrvIcons/FileCloseAll.h"
+#include "mrvIcons/FileOpen.h"
+#include "mrvIcons/FileOpenSeparateAudio.h"
+#include "mrvIcons/Filter.h"
+#include "mrvIcons/Next.h"
+#include "mrvIcons/Prev.h"
+
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvFile.h"
 
@@ -63,7 +72,7 @@ namespace mrv
         {
             add_group("Files");
             
-            g->bind_image(load_svg("Files.svg"));
+            g->bind_image(MRV2_LOAD_SVG(Files));
 
             g->callback(
                 [](Fl_Widget* w, void* d)
@@ -205,44 +214,43 @@ namespace mrv
             Fl_Button* b;
             auto bW = new Widget< Button >(g->x(), Y, 30, 30);
             b = bW;
-            b->bind_image(load_svg("FileOpen.svg"));
+            b->bind_image(MRV2_LOAD_SVG(FileOpen));
             b->tooltip(_("Open a filename"));
             bW->callback([=](auto w) { open_cb(w, p.ui); });
 
             bW = new Widget< Button >(g->x() + 30, Y, 30, 30);
             b = bW;
-            b->bind_image(load_svg("FileOpenSeparateAudio.svg"));
+            b->bind_image(MRV2_LOAD_SVG(FileOpenSeparateAudio));
             b->tooltip(_("Open a filename with audio"));
             bW->callback([=](auto w) { open_separate_audio_cb(w, p.ui); });
 
             bW = new Widget< Button >(g->x() + 60, Y, 30, 30);
             b = bW;
-            b->bind_image(load_svg("FileClose.svg"));
+            b->bind_image(MRV2_LOAD_SVG(FileClose));
             b->tooltip(_("Close current filename"));
             bW->callback([=](auto w) { close_current_cb(w, p.ui); });
 
             bW = new Widget< Button >(g->x() + 90, Y, 30, 30);
             b = bW;
-            b->bind_image(load_svg("FileCloseAll.svg"));
+            b->bind_image(MRV2_LOAD_SVG(FileCloseAll));
             b->tooltip(_("Close all filenames"));
             bW->callback([=](auto w) { close_all_cb(w, p.ui); });
 
             bW = new Widget< Button >(g->x() + 120, Y, 30, 30);
             b = bW;
-            ;
-            b->bind_image(load_svg("Prev.svg"));
+            b->bind_image(MRV2_LOAD_SVG(Prev));
             b->tooltip(_("Previous filename"));
             bW->callback([=](auto w) { App::app->filesModel()->prev(); });
 
             bW = new Widget< Button >(g->x() + 150, Y, 30, 30);
             b = bW;
-            b->bind_image(load_svg("Next.svg"));
+            b->bind_image(MRV2_LOAD_SVG(Next));
             b->tooltip(_("Next filename"));
             bW->callback([=](auto w) { App::app->filesModel()->next(); });
 
             auto btW = new Widget< Fl_Button >(g->x() + 150, Y, 30, 30);
             b = btW;
-            b->image(load_svg("Filter.svg"));
+            b->image(MRV2_LOAD_SVG(Filter));
             b->selection_color(FL_YELLOW);
             b->value(o.filterEDL);
             b->tooltip(_("Filter EDLs"));

@@ -12,6 +12,8 @@
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvCollapsibleGroup.h"
 
+#include "mrvIcons/EnvironmentMap.h"
+
 #include <FL/Fl_Flex.H>
 #include <FL/Fl_Check_Button.H>
 
@@ -43,7 +45,7 @@ namespace mrv
 
             add_group("Environment Map");
 
-            Fl_SVG_Image* svg = load_svg("EnvironmentMap.svg");
+            Fl_SVG_Image* svg = MRV2_LOAD_SVG(EnvironmentMap);
             g->bind_image(svg);
 
             g->callback(

@@ -6,6 +6,8 @@
 
 #include "mrvPanels/mrvThumbnailPanel.h"
 
+#include "mrvIcons/NDI.h"
+
 #include "mrvCore/mrvFile.h"
 
 #include <tlCore/StringFormat.h>
@@ -105,7 +107,7 @@ namespace mrv
         {
             TLRENDER_P();
 
-            static Fl_SVG_Image* NDIimage = load_svg("NDI.svg");
+            static Fl_SVG_Image* NDIimage = MRV2_LOAD_SVG(NDI);
 
             if (!p.ui->uiPrefs->uiPrefsPanelThumbnails->value())
             {

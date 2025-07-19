@@ -36,6 +36,16 @@
 #include "mrvFl/mrvOCIO.h"
 #include "mrvFl/mrvTimelinePlayer.h"
 
+#include "mrvIcons/Circle.h"
+#include "mrvIcons/FilledCircle.h"
+#include "mrvIcons/FilledPolygon.h"
+#include "mrvIcons/FilledRectangle.h"
+#include "mrvIcons/OutlineCircle.h"
+#include "mrvIcons/OutlinePolygon.h"
+#include "mrvIcons/OutlineRectangle.h"
+#include "mrvIcons/Polygon.h"
+#include "mrvIcons/Rectangle.h"
+
 #include "mrvCore/mrvColorSpaces.h"
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvMath.h"
@@ -254,11 +264,11 @@ namespace mrv
             p.ui->uiSelection->value(0);
             p.ui->uiDraw->value(0);
             p.ui->uiErase->value(0);
-            p.ui->uiPolygon->bind_image(mrv::load_svg("Polygon.svg"));
+            p.ui->uiPolygon->bind_image(MRV2_LOAD_SVG(Polygon));
             p.ui->uiPolygon->value(0);
-            p.ui->uiCircle->bind_image(mrv::load_svg("Circle.svg"));
+            p.ui->uiCircle->bind_image(MRV2_LOAD_SVG(Circle));
             p.ui->uiCircle->value(0);
-            p.ui->uiRectangle->bind_image(mrv::load_svg("Rectangle.svg"));
+            p.ui->uiRectangle->bind_image(MRV2_LOAD_SVG(Rectangle));
             p.ui->uiRectangle->value(0);
             p.ui->uiArrow->value(0);
             p.ui->uiText->value(0);
@@ -298,23 +308,22 @@ namespace mrv
                 break;
             case kCircle:
                 p.ui->uiCircle->value(1);
-                p.ui->uiCircle->bind_image(mrv::load_svg("OutlineCircle.svg"));
+                p.ui->uiCircle->bind_image(MRV2_LOAD_SVG(OutlineCircle));
                 p.ui->uiStatus->copy_label(_("Circle"));
                 break;
             case kFilledCircle:
                 p.ui->uiCircle->value(1);
-                p.ui->uiCircle->bind_image(mrv::load_svg("FilledCircle.svg"));
+                p.ui->uiCircle->bind_image(MRV2_LOAD_SVG(FilledCircle));
                 p.ui->uiStatus->copy_label(_("Filled Circle"));
                 break;
             case kRectangle:
                 p.ui->uiRectangle->value(1);
-                p.ui->uiRectangle->bind_image(
-                    mrv::load_svg("OutlineRectangle.svg"));
+                p.ui->uiRectangle->bind_image(MRV2_LOAD_SVG(OutlineRectangle));
                 p.ui->uiStatus->copy_label(_("Rectangle"));
                 break;
             case kFilledRectangle:
                 p.ui->uiRectangle->value(1);
-                p.ui->uiRectangle->bind_image(mrv::load_svg("FilledRectangle.svg"));
+                p.ui->uiRectangle->bind_image(MRV2_LOAD_SVG(FilledRectangle));
                 p.ui->uiStatus->copy_label(_("Filled Rectangle"));
                 break;
             case kArrow:
@@ -330,12 +339,12 @@ namespace mrv
                 break;
             case kPolygon:
                 p.ui->uiPolygon->value(1);
-                p.ui->uiPolygon->bind_image(mrv::load_svg("OutlinePolygon.svg"));
+                p.ui->uiPolygon->bind_image(MRV2_LOAD_SVG(OutlinePolygon));
                 p.ui->uiStatus->copy_label(_("Polygon"));
                 break;
             case kFilledPolygon:
                 p.ui->uiPolygon->value(1);
-                p.ui->uiPolygon->bind_image(mrv::load_svg("FilledPolygon.svg"));
+                p.ui->uiPolygon->bind_image(MRV2_LOAD_SVG(FilledPolygon));
                 p.ui->uiStatus->copy_label(_("Filled Polygon"));
                 break;
             case kEditTrim:

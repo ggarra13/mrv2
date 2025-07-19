@@ -5,6 +5,8 @@
 
 #include "mrViewer.h"
 
+#include "mrvIcons/Devices.h"
+
 #include "mrvPanels/mrvDevicesPanel.h"
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
@@ -54,7 +56,7 @@ namespace mrv
         {
             add_group("Devices");
 
-            Fl_SVG_Image* svg = load_svg("Devices.svg");
+            Fl_SVG_Image* svg = MRV2_LOAD_SVG(Devices);
             g->bind_image(svg);
 
             g->callback(
