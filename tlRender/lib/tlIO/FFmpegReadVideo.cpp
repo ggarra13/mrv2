@@ -28,6 +28,106 @@ namespace tl
 {
     namespace ffmpeg
     {
+        void setPrimariesFromAVColorPrimaries(int ffmpegPrimaries, image::HDRData& hdrData)
+        {
+            using V2 = math::Vector2f;
+            switch (ffmpegPrimaries)
+            {
+            case AVCOL_PRI_BT709:         // Also covers sRGB
+                hdrData.primaries = {
+                    V2(0.640F, 0.330F),   // Red
+                    V2(0.300F, 0.600F),   // Green
+                    V2(0.150F, 0.060F),   // Blue
+                    V2(0.3127F, 0.3290F)  // White D65
+                };
+                break;
+            case AVCOL_PRI_BT470M:
+                hdrData.primaries = {
+                    V2(0.670F, 0.330F),
+                    V2(0.210F, 0.710F),
+                    V2(0.140F, 0.080F),
+                    V2(0.310F, 0.316F) // C (approx)
+                };
+                break;
+            case AVCOL_PRI_BT470BG:
+            case AVCOL_PRI_SMPTE170M:     // NTSC / PAL / SECAM
+                hdrData.primaries = {
+                    V2(0.640F, 0.330F),
+                    V2(0.290F, 0.600F),
+                    V2(0.150F, 0.060F),
+                    V2(0.3127F, 0.3290F)
+                };
+                break;
+            case AVCOL_PRI_SMPTE240M:
+                hdrData.primaries = {
+                    V2(0.630F, 0.340F),
+                    V2(0.310F, 0.595F),
+                    V2(0.155F, 0.070F),
+                    V2(0.3127F, 0.3290F)
+                };
+                break;
+            case AVCOL_PRI_FILM:
+                hdrData.primaries = {
+                    V2(0.681F, 0.319F),
+                    V2(0.243F, 0.692F),
+                    V2(0.145F, 0.049F),
+                    V2(0.310F, 0.316F) // Illuminant C
+                };
+                break;
+            case AVCOL_PRI_BT2020:
+                hdrData.primaries = {
+                    V2(0.708F, 0.292F),
+                    V2(0.170F, 0.797F),
+                    V2(0.131F, 0.046F),
+                    V2(0.3127F, 0.3290F)
+                };
+                break;
+            case AVCOL_PRI_SMPTE428: // CIE 1931 XYZ — chromaticities are undefined here
+                hdrData.primaries = {
+                    V2(1.F, 1.F), // dummy, XYZ assumed linear in CIE space
+                    V2(1.F, 1.F),
+                    V2(1.F, 1.F),
+                    V2(0.333F, 0.333F) // white (ish)
+                };
+                break;
+            case AVCOL_PRI_SMPTE431: // DCI-P3 (DCI white)
+                hdrData.primaries = {
+                    V2(0.680F, 0.320F),
+                    V2(0.265F, 0.690F),
+                    V2(0.150F, 0.060F),
+                    V2(0.314F, 0.351F) // DCI white
+                };
+                break;
+            case AVCOL_PRI_SMPTE432: // Display-P3 (D65 white)
+                hdrData.primaries = {
+                    V2(0.680F, 0.320F),
+                    V2(0.265F, 0.690F),
+                    V2(0.150F, 0.060F),
+                    V2(0.3127F, 0.3290F) // D65
+                };
+                break;
+            case AVCOL_PRI_EBU3213:
+                hdrData.primaries = {
+                    V2(0.630F, 0.340F),
+                    V2(0.295F, 0.605F),
+                    V2(0.155F, 0.077F),
+                    V2(0.3127F, 0.3290F)
+                };
+                break;
+            case AVCOL_PRI_UNSPECIFIED:
+            case AVCOL_PRI_RESERVED:
+            default:
+                // Safe fallback: Rec.709 primaries with D65
+                hdrData.primaries = {
+                    V2(0.640F, 0.330F),
+                    V2(0.300F, 0.600F),
+                    V2(0.150F, 0.060F),
+                    V2(0.3127F, 0.3290F)
+                };
+                break;
+            }
+        }
+
         image::EOTFType toEOTF(AVColorTransferCharacteristic trc)
         {
             image::EOTFType out = image::EOTFType::EOTF_BT709;
@@ -696,6 +796,13 @@ namespace tl
                     avVideoCodecParameters->coded_side_data,
                     avVideoCodecParameters->nb_coded_side_data, hdrData);
                 hdrData.eotf = toEOTF(_avColorTRC);
+                if (hdrData.eotf != image::EOTF_BT709 &&
+                    hdrData.eotf != image::EOTF_BT601)
+                {
+                    hasHDR = true;
+                    setPrimariesFromAVColorPrimaries(params->color_primaries,
+                                                     hdrData);
+                }
                 if (hasHDR)
                     _tags["hdr"] = nlohmann::json(hdrData).dump();
             }

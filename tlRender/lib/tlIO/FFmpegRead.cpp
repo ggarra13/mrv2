@@ -152,47 +152,68 @@ namespace tl
                             p.info.tags = p.readVideo->getTags();
                         }
 
-                        p.readAudio = std::make_shared<ReadAudio>(
-                            path.get(
-                                -1, path.isFileProtocol()
-                                        ? file::PathType::Path
-                                        : file::PathType::Full),
-                            _memory, p.info.videoTime.duration().rate(),
-                            p.options);
-                        p.info.audio = p.readAudio->getInfo();
-                        p.info.audioTime = p.readAudio->getTimeRange();
-                        for (const auto& tag : p.readAudio->getTags())
+                        try
                         {
-                            p.info.tags[tag.first] = tag.second;
-                        }
-
-                        p.audioThread.thread = std::thread(
-                            [this, path]
+                            p.readAudio = std::make_shared<ReadAudio>(
+                                path.get(
+                                    -1, path.isFileProtocol()
+                                    ? file::PathType::Path
+                                    : file::PathType::Full),
+                                _memory, p.info.videoTime.duration().rate(),
+                                p.options);
+                            p.info.audio = p.readAudio->getInfo();
+                            p.info.audioTime = p.readAudio->getTimeRange();
+                            for (const auto& tag : p.readAudio->getTags())
                             {
-                                TLRENDER_P();
-                                try
-                                {
-                                    _audioThread();
-                                }
-                                catch (const std::exception& e)
-                                {
-                                    if (auto logSystem = _logSystem.lock())
+                                p.info.tags[tag.first] = tag.second;
+                            }
+
+                            p.audioThread.thread = std::thread(
+                                [this, path]
                                     {
-                                        //! \todo How should this be handled?
-                                        const std::string id =
-                                            string::Format("tl::io::ffmpeg::"
-                                                           "Read ({0}: {1})")
-                                                .arg(__FILE__)
-                                                .arg(__LINE__);
-                                        logSystem->print(
-                                            id,
-                                            string::Format("{0}: {1}")
-                                                .arg(_path.get())
-                                                .arg(e.what()),
-                                            log::Type::Error);
-                                    }
-                                }
-                            });
+                                        TLRENDER_P();
+                                        try
+                                        {
+                                            _audioThread();
+                                        }
+                                        catch (const std::exception& e)
+                                        {
+                                            if (auto logSystem = _logSystem.lock())
+                                            {
+                                                //! \todo How should this be handled?
+                                                const std::string id =
+                                                    string::Format("tl::io::ffmpeg::"
+                                                                   "Read ({0}: {1})")
+                                                    .arg(__FILE__)
+                                                    .arg(__LINE__);
+                                                logSystem->print(
+                                                    id,
+                                                    string::Format("{0}: {1}")
+                                                    .arg(_path.get())
+                                                    .arg(e.what()),
+                                                    log::Type::Error);
+                                            }
+                                        }
+                                    });
+                        }
+                        catch (const std::exception& e)
+                        {
+                            if (auto logSystem = _logSystem.lock())
+                            {
+                                //! \todo How should this be handled?
+                                const std::string id =
+                                    string::Format("tl::io::ffmpeg::"
+                                                   "ReadAudio ({0}: {1})")
+                                    .arg(__FILE__)
+                                    .arg(__LINE__);
+                                logSystem->print(
+                                    id,
+                                    string::Format("{0}: {1}")
+                                    .arg(_path.get())
+                                    .arg(e.what()),
+                                    log::Type::Error);
+                            }
+                        }
 
                         _videoThread();
                     }

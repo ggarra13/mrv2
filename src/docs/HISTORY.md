@@ -1,11 +1,15 @@
 v1.3.9
 ======
+
 - v1.3.8 had broken the short name of the buttons (F/O in the pixel bar) and
   T/S/F in the timecode selection button.
 - Fixed Wayland's monitor names.
 - Fixed opening of Secondary Window on Vulkan mrv2.
 - Made all icons inlined in the C++ code.  This improves loading performance
   and avoids issues with Remote Desktop Connection.
+- Made movies without a valid audio codec still play the video.
+- Fixed HDR movies that specify a transfer/color primaries function but no valid
+  HDR metadata.
   
 
 v1.3.8
