@@ -10,6 +10,7 @@ v1.3.9
 - Made movies without a valid audio codec still play the video.
 - Fixed HDR movies that specify a transfer/color primaries function but no valid
   HDR metadata.
+- Achieved consistently 60 FPS with HDR movies on Vulkan build.
   
 
 v1.3.8
