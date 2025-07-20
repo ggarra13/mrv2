@@ -24,10 +24,14 @@ namespace tl
             struct UniformParameter
             {
                 std::vector<VkBuffer> buffers;
-                std::vector<VkDeviceMemory> memories;
                 std::vector<VkDescriptorBufferInfo> infos;
                 VkDescriptorSetLayoutBinding layoutBinding;
                 size_t size = 0;
+#ifndef MRV2_NO_VMA
+                std::vector<VmaAllocation> allocation;
+#else
+                std::vector<VkDeviceMemory> memories;
+#endif
             };
             std::map<std::string, UniformParameter> uniforms;
 
@@ -45,6 +49,7 @@ namespace tl
             };
             std::map<std::string, FBOParameter> fbos;
 
+#ifdef MRV2_NO_VMA
             VkDevice device;
             
             ShaderBindingSet(VkDevice device) :
@@ -53,6 +58,18 @@ namespace tl
                     descriptorSets.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
                     descriptorPools.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
                 }
+#else
+            VkDevice device;
+            VmaAllocator allocator;
+            
+            ShaderBindingSet(VkDevice device, VmaAllocator vmaAllocator) :
+                device(device),
+                allocator(vmaAllocator)
+                {
+                    descriptorSets.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
+                    descriptorPools.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
+                }
+#endif
 
             ~ShaderBindingSet()
                 {
@@ -71,12 +88,20 @@ namespace tl
                 if (it->second.size != size)
                     throw std::runtime_error("Uniform size mismatch");
 
+#ifdef MRV2_NO_VMA
                 void* mapped;
                 vkMapMemory(
                     device, it->second.memories[frameIndex], 0, size, 0,
                     &mapped);
                 memcpy(mapped, data, size);
                 vkUnmapMemory(device, it->second.memories[frameIndex]);
+#else
+                void* mapped;
+                vmaMapMemory(
+                    allocator, it->second.allocation[frameIndex], &mapped);
+                memcpy(mapped, data, size);
+                vmaUnmapMemory(allocator, it->second.allocation[frameIndex]);
+#endif
                 
                 // We need to update the bufferInfo in the descriptor set for the
                 // current frame Alternatively, you could use dynamic uniform
@@ -166,6 +191,7 @@ namespace tl
                     {
                         for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
                         {
+#ifdef MRV2_NO_VMA
                             if (ubo.buffers[i] != VK_NULL_HANDLE)
                                 vkDestroyBuffer(device,
                                                 ubo.buffers[i],
@@ -174,6 +200,12 @@ namespace tl
                                 vkFreeMemory(device,
                                              ubo.memories[i],
                                              nullptr);
+#else
+                            if (ubo.buffers[i] != VK_NULL_HANDLE &&
+                                ubo.allocation[i] != VK_NULL_HANDLE)
+                                vmaDestroyBuffer(allocator, ubo.buffers[i],
+                                                 ubo.allocation[i]);
+#endif
                         }
                     }
 
