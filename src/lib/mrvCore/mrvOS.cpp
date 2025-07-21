@@ -435,7 +435,9 @@ namespace mrv
         const std::string
         getWaylandCompositorVersion(const std::string& compositor)
         {
-            static std::string compositor_version = "";
+            static std::string compositor_version;
+            if (!compositor_version.empty())
+                return compositor_version;
             
             std::string version_command;
             
@@ -468,6 +470,7 @@ namespace mrv
                 std::string err;
                 std::string out;
                 ret = os::exec_command(version_command, out, err);
+                compositor_version = out;
                 return out;
             }
             catch (const std::exception& e)
