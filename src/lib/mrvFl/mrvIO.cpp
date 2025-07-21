@@ -75,7 +75,7 @@ namespace mrv
             out.open(tmppath() + "/mrv2.debug.log");
             if (!out.is_open())
             {
-                std::cerr << "TEMP PATH FAILED=" << tmppath() << std::endl;
+                std::cerr << tmppath() + "/mrv2.debug.log failed!" << std::endl;
             }
         }
 

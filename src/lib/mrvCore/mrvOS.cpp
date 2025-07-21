@@ -435,6 +435,8 @@ namespace mrv
         const std::string
         getWaylandCompositorVersion(const std::string& compositor)
         {
+            static std::string compositor_version = "";
+            
             std::string version_command;
             
             // Choose the command based on the compositor name
@@ -510,7 +512,12 @@ namespace mrv
 
         const std::string getDesktop()
         {
-            std::string out = _("\tDesktop Environment: ");
+            static std::string out;
+
+            if (!out.empty())
+                return out;
+            
+            out = _("\tDesktop Environment: ");
 
 #ifdef __linux__
             if (desktop::XWayland())
