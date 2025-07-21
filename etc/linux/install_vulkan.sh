@@ -13,13 +13,13 @@ curl -L -o /tmp/vulkan-sdk.tar.gz "https://sdk.lunarg.com/sdk/download/latest/li
 echo "After downloading it..."
 ls /tmp
 
-mkdir -p VulkanSDK
-cd VulkanSDK
+mkdir -p VulkanSDK-Linux
+cd VulkanSDK-Linux
 tar -xvf /tmp/vulkan-sdk.tar.gz
 
 cd ..
 
-VULKAN_ROOT=$PWD/VulkanSDK
+VULKAN_ROOT=$PWD/VulkanSDK-Linux
 SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sort -r | grep -o "$VULKAN_ROOT/[0-9]*\..*"| sed -e "s#$VULKAN_ROOT/##" | head -1)
 
 export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/$UNAME_ARCH
