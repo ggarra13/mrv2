@@ -11,6 +11,8 @@ v1.3.9
 - Fixed HDR movies that specify a transfer/color primaries function but no valid
   HDR metadata.
 - Achieved consistently 60 FPS with HDR movies on Vulkan build.
+- Fixed printing version information of GNOME in Ubuntu 25.04 LTS.
+- Fixed installing of icons on Linux's Vulkan .deb/.rpm installers.
   
 
 v1.3.8

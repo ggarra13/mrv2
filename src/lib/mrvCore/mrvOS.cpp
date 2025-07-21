@@ -436,9 +436,9 @@ namespace mrv
         getWaylandCompositorVersion(const std::string& compositor)
         {
             std::string version_command;
-
+            
             // Choose the command based on the compositor name
-            if (compositor == "mutter")
+            if (compositor == "gnome-shell")
             {
                 version_command = "gnome-shell --version";
             }
@@ -479,7 +479,7 @@ namespace mrv
             const std::string& desktop = tl::string::toLower(desktop_env);
 
             // Check against common Wayland compositor names
-            if (desktop == "ubuntu-wayland" ||
+            if (desktop == "ubuntu-wayland" || desktop == "ubuntu" ||
                 desktop.substr(0, 5) == "gnome" || desktop == "mutter")
             {
                 return "gnome-shell";
@@ -493,6 +493,10 @@ namespace mrv
             else if (desktop == "weston")
             {
                 return "weston";
+            }
+            else if (desktop == "wayfire")
+            {
+                return "wayfire";
             }
             else if (desktop == "sway")
             {

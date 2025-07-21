@@ -5,6 +5,11 @@ rm -f /usr/bin/mrv2
 rm -f /usr/bin/hdr
 
 #
+# Some variables
+#
+has_hdr=0
+
+#
 # Add mrv2 to path
 #
 startup="@CPACK_INSTALL_PREFIX@/bin/mrv2.sh"
@@ -24,6 +29,8 @@ if [[ -e $startup ]]; then
     #
     # Make sure script is executable
     #
+    has_hdr=1
+    
     chmod a+x "$startup"
     
     echo "Creating symlink from $startup to /usr/bin/hdr"
@@ -90,8 +97,10 @@ for i in $ICON_SIZES; do
     echo "   Installing icon size ${i}x${i}"
     cp ${sharedir}/icons/hicolor/${i}x${i}/apps/mrv2.png /usr/share/icons/hicolor/${i}x${i}/apps/mrv2-v@mrv2_VERSION@.png
     cp ${sharedir}/icons/hicolor/${i}x${i}/apps/mrv2.png /usr/share/icons/hicolor/${i}x${i}/apps/mrv2.png
-    cp ${sharedir}/icons/hicolor/${i}x${i}/apps/hdr.png /usr/share/icons/hicolor/${i}x${i}/apps/hdr-v@mrv2_VERSION@.png
-    cp ${sharedir}/icons/hicolor/${i}x${i}/apps/hdr.png /usr/share/icons/hicolor/${i}x${i}/apps/hdr.png
+    if [[ $has_hdr == 1 ]]; then
+	cp ${sharedir}/icons/hicolor/${i}x${i}/apps/hdr.png /usr/share/icons/hicolor/${i}x${i}/apps/hdr-v@mrv2_VERSION@.png
+	cp ${sharedir}/icons/hicolor/${i}x${i}/apps/hdr.png /usr/share/icons/hicolor/${i}x${i}/apps/hdr.png
+    fi
 done
 
 copy_desktop_shortcut()

@@ -3,8 +3,7 @@ include(ExternalProject)
 
 # set(LIBVPX_TAG main) # live on the cutting-edge!
 
-set(VPX_TAG v1.15.0)
-
+set(VPX_TAG v1.15.2)  # was v1.15.0
 
 include(ProcessorCount)
 ProcessorCount(NPROCS)

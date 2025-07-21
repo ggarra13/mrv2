@@ -78,7 +78,9 @@ mkdir -p $package_dir
 cd $package_dir
 
 # Read all the files of this version
+shopt -s nullglob
 files=$(ls -1 *v${mrv2_VERSION}*)
+shopt -u nullglob  # Optional: turn it off again
 
 
 if [[ $KERNEL == *Msys* ]]; then
@@ -204,16 +206,39 @@ Currently, the demo versions don't have:
 Notes about Vulkan on Windows
 -----------------------------
 
-None yet.
+In order to get HDR, you currently need to have Windows 10+ (11 is ideal) and
+an HDR monitor.
 
 Notes about Vulkan on NVidia Linux
 ----------------------------------
 
 In order to get HDR, you currently need to have the KWin6 or GNOME48 compositors and an HDR monitor.
 
-It will likely work with any NVidia RTX 3090+ or similar AMD board, but it will require you to choose and test your hardware carefully.
+It will likely work with any NVidia RTX 3080+ or similar AMD board, but it will require you to choose and test your hardware carefully.
 
-The preferred NVidia driver tested for best performance is nvidia-driver-570 (default on Ubuntu 25.04).
+The preferred NVidia driver tested for best performance is nvidia-driver-570 (default on Ubuntu 25.04 with GNOME48).
+
+For best performance with the NVidia driver, you can modify:
+
+$ sudo nano /etc/default/grub
+
+Modify line 11 to from:
+
+```
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash nvidia_drm.modeset=1 nvidia_drm.fbdev=1"
+```
+
+To this content:
+
+```
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash nvidia_drm.modeset=1 nvidia_drm.fbdev=1 nvidia.NVreg_EnableGpuFirmware=0"
+```
+
+```
+$ sudo update-grub
+$ sudo reboot
+```
+
 
 Notes about Vulkan on macOS Intel
 ---------------------------------
@@ -317,7 +342,6 @@ IFS=$'\n'
 # Convert the variable into an array
 file_array=($files)
 
-echo "FILES=$files"
 
 # Iterate over the array of filenames
 for src in "${file_array[@]}"; do
