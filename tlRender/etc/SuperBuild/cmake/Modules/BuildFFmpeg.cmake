@@ -127,6 +127,7 @@ if(TLRENDER_FFMPEG_MINIMAL)
         --enable-decoder=ac3
         --enable-decoder=av1
         --enable-decoder=cfhd
+        --enable-decoder=dca
         --enable-decoder=dnxhd
         --enable-decoder=eac3
         --enable-decoder=flac
