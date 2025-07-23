@@ -16,9 +16,9 @@ else
 fi
 
 
-if [[ ! -e /mingw64/bin/gettext.exe ||
-	  ! -e /mingw64/lib/libiconv.dll.a ||
-	  ! -e /mingw64/lib/libintl.dll.a ]]; then
+if [[ ! -e /ucrt64/bin/gettext.exe ||
+	  ! -e /ucrt64/lib/libiconv.dll.a ||
+	  ! -e /ucrt64/lib/libintl.dll.a ]]; then
     echo "Installing libssl, libiconv, libintl, subversion, swig, diffutils, nasm and gettext thru Msys..."
     pacman -Syu --noconfirm
 fi
@@ -26,7 +26,7 @@ fi
 #
 # Install 
 #
-pacman -Sy libsqlite swig diffutils mingw-w64-x86_64-gettext --noconfirm
+pacman -Sy libsqlite swig diffutils mingw-w64-ucrt-x86_64-gettext --noconfirm
 
 mkdir -p $BUILD_DIR/install/bin
 mkdir -p $BUILD_DIR/install/lib
@@ -37,7 +37,7 @@ mkdir -p $BUILD_DIR/install/include
 #
 if [[ ! -e $BUILD_DIR/install/lib/libiconv.lib ]]; then
     if [[ ! -e /ucrt64/lib/libiconv.dll.a ]]; then
-	pacman -Sy mingw-64-ucrt-x86_64-libiconv --noconfirm
+	pacman -Sy mingw-w64-ucrt-x86_64-libiconv --noconfirm
     fi
 
     run_cmd cp /ucrt64/bin/libiconv*.dll $BUILD_DIR/install/bin/
@@ -51,7 +51,7 @@ fi
 #
 if [[ ! -e $BUILD_DIR/install/lib/libintl.lib ]]; then
     if [[ ! -e /ucrt64/lib/libintl.dll.a ]]; then
-	pacman -Sy mingw-64-ucrt-x86_64-libintl --noconfirm
+	pacman -Sy mingw-w64-ucrt-x86_64-libintl --noconfirm
     fi
 
     run_cmd cp /ucrt64/bin/libintl*.dll $BUILD_DIR/install/bin/

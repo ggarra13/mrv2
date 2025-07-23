@@ -60,7 +60,7 @@ if [[ $TLRENDER_NET == ON || $TLRENDER_NET == 1 ]]; then
 	
 
 	run_cmd cp /ucrt64/bin/libssl*.dll $INSTALL_DIR/bin/
-	run_cmd cp /ucr664/lib/libssl.dll.a $INSTALL_DIR/lib/ssl.lib
+	run_cmd cp /ucrt64/lib/libssl.dll.a $INSTALL_DIR/lib/ssl.lib
 	run_cmd cp /ucrt64/bin/libcrypto*.dll $INSTALL_DIR/bin/
 	run_cmd cp /ucrt64/lib/libcrypto.dll.a $INSTALL_DIR/lib/crypto.lib
 	run_cmd mkdir -p $INSTALL_DIR/lib/pkgconfig
@@ -69,10 +69,10 @@ if [[ $TLRENDER_NET == ON || $TLRENDER_NET == 1 ]]; then
 	
 	run_cmd cp -r /ucrt64/include/openssl $INSTALL_DIR/include/
 	run_cmd sed -i -e 's/SSL_library_init../SSL_library_init/' $INSTALL_DIR/include/openssl/ssl.h
-	run_cmd sed -i -e "s#=/ucr664#=$INSTALL_DIR#" $INSTALL_DIR/lib/pkgconfig/openssl.pc
+	run_cmd sed -i -e "s#=/ucrt64#=$INSTALL_DIR#" $INSTALL_DIR/lib/pkgconfig/openssl.pc
 	run_cmd sed -i -e 's%Requires.private:.libcrypto%%' $INSTALL_DIR/lib/pkgconfig/openssl.pc
 	
-	run_cmd cp /ucr64/lib/pkgconfig/libcrypto.pc $INSTALL_DIR/lib/pkgconfig/
+	run_cmd cp /ucrt64/lib/pkgconfig/libcrypto.pc $INSTALL_DIR/lib/pkgconfig/
 	run_cmd sed -i -e "s#=/ucrt64#=$INSTALL_DIR#" $INSTALL_DIR/lib/pkgconfig/libcrypto.pc
     fi
 fi
