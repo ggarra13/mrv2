@@ -14,7 +14,8 @@ v1.3.9
 - Fixed printing version information of GNOME in Ubuntu 25.04 LTS.
 - Fixed installing of icons on Linux's Vulkan .deb/.rpm installers.
 - Improved decoding of YUV_U8P movies.  We can now **almost** play back 8K fluidly with a good SSD drive.
-- Moved all SVG icons directly into the source code to speed up viewer and avoid potentially loading issues. 
+- Made Float on Top's default hotkey be <Meta>+w instead of <Ctrl>+w to avoid issues with standard Emacs hotkey.
+- Added support for DTS (DCA) audio decoder.
   
 
 v1.3.8
