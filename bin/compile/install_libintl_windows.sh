@@ -37,7 +37,7 @@ mkdir -p $BUILD_DIR/install/include
 #
 if [[ ! -e $BUILD_DIR/install/lib/libiconv.lib ]]; then
     if [[ ! -e /ucrt64/lib/libiconv.dll.a ]]; then
-	pacman -Sy mingw-ucrt-x86_64-libiconv --noconfirm
+	pacman -Sy mingw-64-ucrt-x86_64-libiconv --noconfirm
     fi
 
     run_cmd cp /ucrt64/bin/libiconv*.dll $BUILD_DIR/install/bin/
@@ -51,7 +51,7 @@ fi
 #
 if [[ ! -e $BUILD_DIR/install/lib/libintl.lib ]]; then
     if [[ ! -e /ucrt64/lib/libintl.dll.a ]]; then
-	pacman -Sy mingw-ucrt-x86_64-libintl --noconfirm
+	pacman -Sy mingw-64-ucrt-x86_64-libintl --noconfirm
     fi
 
     run_cmd cp /ucrt64/bin/libintl*.dll $BUILD_DIR/install/bin/
