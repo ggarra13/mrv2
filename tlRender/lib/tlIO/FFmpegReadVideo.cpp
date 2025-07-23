@@ -2,6 +2,19 @@
 // Copyright (c) 2021-2024 Darby Johnston
 // All rights reserved.
 
+#include <immintrin.h>
+#if defined(_MSC_VER)
+#include <intrin.h>
+#elif defined(__GNUC__) || defined(__clang__)
+#include <cpuid.h>
+#else
+#error "Unsupported compiler"
+#endif
+
+#ifdef __ARM_NEON
+#include <arm_neon.h>
+#endif
+
 #include <sstream>
 
 #include <tlIO/FFmpegReadPrivate.h>
@@ -28,132 +41,295 @@ namespace tl
 {
     namespace ffmpeg
     {
-        void setPrimariesFromAVColorPrimaries(int ffmpegPrimaries, image::HDRData& hdrData)
-        {
-            using V2 = math::Vector2f;
-            switch (ffmpegPrimaries)
-            {
-            case AVCOL_PRI_BT709:         // Also covers sRGB
-                hdrData.primaries = {
-                    V2(0.640F, 0.330F),   // Red
-                    V2(0.300F, 0.600F),   // Green
-                    V2(0.150F, 0.060F),   // Blue
-                    V2(0.3127F, 0.3290F)  // White D65
-                };
-                break;
-            case AVCOL_PRI_BT470M:
-                hdrData.primaries = {
-                    V2(0.670F, 0.330F),
-                    V2(0.210F, 0.710F),
-                    V2(0.140F, 0.080F),
-                    V2(0.310F, 0.316F) // C (approx)
-                };
-                break;
-            case AVCOL_PRI_BT470BG:
-            case AVCOL_PRI_SMPTE170M:     // NTSC / PAL / SECAM
-                hdrData.primaries = {
-                    V2(0.640F, 0.330F),
-                    V2(0.290F, 0.600F),
-                    V2(0.150F, 0.060F),
-                    V2(0.3127F, 0.3290F)
-                };
-                break;
-            case AVCOL_PRI_SMPTE240M:
-                hdrData.primaries = {
-                    V2(0.630F, 0.340F),
-                    V2(0.310F, 0.595F),
-                    V2(0.155F, 0.070F),
-                    V2(0.3127F, 0.3290F)
-                };
-                break;
-            case AVCOL_PRI_FILM:
-                hdrData.primaries = {
-                    V2(0.681F, 0.319F),
-                    V2(0.243F, 0.692F),
-                    V2(0.145F, 0.049F),
-                    V2(0.310F, 0.316F) // Illuminant C
-                };
-                break;
-            case AVCOL_PRI_BT2020:
-                hdrData.primaries = {
-                    V2(0.708F, 0.292F),
-                    V2(0.170F, 0.797F),
-                    V2(0.131F, 0.046F),
-                    V2(0.3127F, 0.3290F)
-                };
-                break;
-            case AVCOL_PRI_SMPTE428: // CIE 1931 XYZ — chromaticities are undefined here
-                hdrData.primaries = {
-                    V2(1.F, 1.F), // dummy, XYZ assumed linear in CIE space
-                    V2(1.F, 1.F),
-                    V2(1.F, 1.F),
-                    V2(0.333F, 0.333F) // white (ish)
-                };
-                break;
-            case AVCOL_PRI_SMPTE431: // DCI-P3 (DCI white)
-                hdrData.primaries = {
-                    V2(0.680F, 0.320F),
-                    V2(0.265F, 0.690F),
-                    V2(0.150F, 0.060F),
-                    V2(0.314F, 0.351F) // DCI white
-                };
-                break;
-            case AVCOL_PRI_SMPTE432: // Display-P3 (D65 white)
-                hdrData.primaries = {
-                    V2(0.680F, 0.320F),
-                    V2(0.265F, 0.690F),
-                    V2(0.150F, 0.060F),
-                    V2(0.3127F, 0.3290F) // D65
-                };
-                break;
-            case AVCOL_PRI_EBU3213:
-                hdrData.primaries = {
-                    V2(0.630F, 0.340F),
-                    V2(0.295F, 0.605F),
-                    V2(0.155F, 0.077F),
-                    V2(0.3127F, 0.3290F)
-                };
-                break;
-            case AVCOL_PRI_UNSPECIFIED:
-            case AVCOL_PRI_RESERVED:
-            default:
-                // Safe fallback: Rec.709 primaries with D65
-                hdrData.primaries = {
-                    V2(0.640F, 0.330F),
-                    V2(0.300F, 0.600F),
-                    V2(0.150F, 0.060F),
-                    V2(0.3127F, 0.3290F)
-                };
-                break;
-            }
-        }
 
-        image::EOTFType toEOTF(AVColorTransferCharacteristic trc)
+        namespace
         {
-            image::EOTFType out = image::EOTFType::EOTF_BT709;
-            switch (trc)
+            bool has_avx2()
             {
-            case AVCOL_TRC_SMPTE2084: // PQ (HDR10)
-                out = image::EOTFType::EOTF_BT2100_PQ;
-                break;
-            case AVCOL_TRC_ARIB_STD_B67: // HLG
-                out = image::EOTFType::EOTF_BT2100_HLG;
-                break;
-            case AVCOL_TRC_BT2020_10:
-            case AVCOL_TRC_BT2020_12:
-                out = image::EOTFType::EOTF_BT2020;
-                break;
-            case AVCOL_TRC_BT709:
-            case AVCOL_TRC_SMPTE170M:
-            case AVCOL_TRC_SMPTE240M:
-            case AVCOL_TRC_IEC61966_2_4:
-            case AVCOL_TRC_BT1361_ECG:
-                out = image::EOTFType::EOTF_BT709;
-                break;
-            default:
-                out = image::EOTFType::EOTF_BT601;
+                int info[4];
+#if defined(_MSC_VER)
+                __cpuidex(info, 0, 0);
+                if (info[0] < 7) return false;
+
+                __cpuidex(info, 1, 0);
+                if (!(info[2] & (1 << 28))) return false; // AVX bit
+
+                __cpuidex(info, 7, 0);
+                return (info[1] & (1 << 5)) != 0; // AVX2 bit
+
+#elif defined(__GNUC__) || defined(__clang__)
+                unsigned int eax, ebx, ecx, edx;
+
+                if (!__get_cpuid_max(0, nullptr)) return false;
+
+                __cpuid_count(0, 0, eax, ebx, ecx, edx);
+                if (eax < 7) return false;
+
+                __cpuid_count(1, 0, eax, ebx, ecx, edx);
+                if (!(ecx & (1 << 28))) return false; // AVX bit
+
+                __cpuid_count(7, 0, eax, ebx, ecx, edx);
+                return (ebx & (1 << 5)) != 0; // AVX2 bit
+
+#else
+                return false;
+#endif
             }
-            return out;
+
+#ifdef __ARM_NEON
+            void memcpy_neon(void* dst, const void* src, size_t size)
+            {
+                size_t i = 0;
+                uint8_t* d = reinterpret_cast<uint8_t*>(dst);
+                const uint8_t* s = reinterpret_cast<const uint8_t*>(src);
+
+                for (; i + 16 <= size; i += 16) {
+                    uint8x16_t vec = vld1q_u8(s + i);
+                    vst1q_u8(d + i, vec);
+                }
+
+                if (i < size) {
+                    std::memcpy(d + i, s + i, size - i);
+                }
+            }
+#endif
+
+#ifdef __x86_64__
+            // Example using AVX2 (x86_64)
+            void memcpy_avx2(void* dst, const void* src, size_t size)
+            {
+                size_t i = 0;
+                uint8_t* d = reinterpret_cast<uint8_t*>(dst);
+                const uint8_t* s = reinterpret_cast<const uint8_t*>(src);
+
+                // Check alignment for source and destination
+                bool is_aligned = ((reinterpret_cast<uintptr_t>(dst) & 31) == 0) &&
+                                  ((reinterpret_cast<uintptr_t>(src) & 31) == 0);
+
+                if (is_aligned) {
+                    __m256i* d256 = reinterpret_cast<__m256i*>(d);
+                    const __m256i* s256 = reinterpret_cast<const __m256i*>(s);
+                    for (; i + 32 <= size; i += 32, ++d256, ++s256) {
+                        _mm256_store_si256(d256, _mm256_load_si256(s256));
+                    }
+                } else {
+                    __m256i* d256 = reinterpret_cast<__m256i*>(d);
+                    const __m256i* s256 = reinterpret_cast<const __m256i*>(s);
+                    for (; i + 32 <= size; i += 32, ++d256, ++s256)
+                    {
+                        _mm256_storeu_si256(d256, _mm256_loadu_si256(s256)); // Use unaligned store
+                    }
+                }
+
+                // Copy remaining bytes
+                if (i < size)
+                {
+                    std::memcpy(d + i, s + i, size - i);
+                }
+            }
+#endif
+            void memcpy_optimized(void* dst, const void* src, size_t size)
+            {
+                if (!dst || !src || size == 0) return;
+                
+                if (size < 128) {
+                    std::memcpy(dst, src, size);
+                    return;
+                }
+
+#ifdef __x86_64__
+                if (has_avx2()) {
+                    memcpy_avx2(dst, src, size);
+                    return;
+                }
+#endif
+#ifdef __ARM_NEON
+                memcpy_neon(dst, src, size);
+                return;
+#endif
+                std::memcpy(dst, src, size);
+            }
+        
+            inline void copy_plane_optimized(
+                uint8_t* dst,
+                const uint8_t* src,
+                std::size_t width,
+                std::size_t height,
+                std::size_t srcStride)
+            {
+                const std::size_t dstStride = width;
+                if (srcStride == dstStride)
+                {
+                    memcpy_optimized(dst, src, width * height);
+                }
+                else
+                {
+                    for (std::size_t y = 0; y < height; ++y)
+                    {
+                    memcpy_optimized(
+                        dst + y * dstStride,
+                        src + y * srcStride,
+                        width);
+                    }
+                }
+            }
+        
+            inline void copy_plane(
+                uint8_t* dst,
+                const uint8_t* src,
+                std::size_t width,
+                std::size_t height,
+                std::size_t srcStride)
+            {
+                const std::size_t dstStride = width; // assuming packed plane with no padding
+                if (srcStride == dstStride)
+                {
+                    // Fast bulk copy when strides match — single memcpy
+                    std::memcpy(dst, src, width * height);
+                }
+                else
+                {
+                    // Line-by-line copy when source has stride (FFmpeg usually does)
+                    for (std::size_t y = 0; y < height; ++y)
+                    {
+                        std::memcpy(
+                            dst + y * dstStride,
+                            src + y * srcStride,
+                            width);
+                    }
+                }
+            }
+        
+            void setPrimariesFromAVColorPrimaries(int ffmpegPrimaries,
+                                                  image::HDRData& hdrData)
+            {
+                using V2 = math::Vector2f;
+                switch (ffmpegPrimaries)
+                {
+                case AVCOL_PRI_BT709:         // Also covers sRGB
+                    hdrData.primaries = {
+                        V2(0.640F, 0.330F),   // Red
+                        V2(0.300F, 0.600F),   // Green
+                        V2(0.150F, 0.060F),   // Blue
+                        V2(0.3127F, 0.3290F)  // White D65
+                    };
+                    break;
+                case AVCOL_PRI_BT470M:
+                    hdrData.primaries = {
+                        V2(0.670F, 0.330F),
+                        V2(0.210F, 0.710F),
+                        V2(0.140F, 0.080F),
+                        V2(0.310F, 0.316F) // C (approx)
+                    };
+                    break;
+                case AVCOL_PRI_BT470BG:
+                case AVCOL_PRI_SMPTE170M:     // NTSC / PAL / SECAM
+                    hdrData.primaries = {
+                        V2(0.640F, 0.330F),
+                        V2(0.290F, 0.600F),
+                        V2(0.150F, 0.060F),
+                        V2(0.3127F, 0.3290F)
+                    };
+                    break;
+                case AVCOL_PRI_SMPTE240M:
+                    hdrData.primaries = {
+                        V2(0.630F, 0.340F),
+                        V2(0.310F, 0.595F),
+                        V2(0.155F, 0.070F),
+                        V2(0.3127F, 0.3290F)
+                    };
+                    break;
+                case AVCOL_PRI_FILM:
+                    hdrData.primaries = {
+                        V2(0.681F, 0.319F),
+                        V2(0.243F, 0.692F),
+                        V2(0.145F, 0.049F),
+                        V2(0.310F, 0.316F) // Illuminant C
+                    };
+                    break;
+                case AVCOL_PRI_BT2020:
+                    hdrData.primaries = {
+                        V2(0.708F, 0.292F),
+                        V2(0.170F, 0.797F),
+                        V2(0.131F, 0.046F),
+                        V2(0.3127F, 0.3290F)
+                    };
+                    break;
+                case AVCOL_PRI_SMPTE428: // CIE 1931 XYZ — chromaticities are undefined here
+                    hdrData.primaries = {
+                        V2(1.F, 1.F), // dummy, XYZ assumed linear in CIE space
+                        V2(1.F, 1.F),
+                        V2(1.F, 1.F),
+                        V2(0.333F, 0.333F) // white (ish)
+                    };
+                    break;
+                case AVCOL_PRI_SMPTE431: // DCI-P3 (DCI white)
+                    hdrData.primaries = {
+                        V2(0.680F, 0.320F),
+                        V2(0.265F, 0.690F),
+                        V2(0.150F, 0.060F),
+                        V2(0.314F, 0.351F) // DCI white
+                    };
+                    break;
+                case AVCOL_PRI_SMPTE432: // Display-P3 (D65 white)
+                    hdrData.primaries = {
+                        V2(0.680F, 0.320F),
+                        V2(0.265F, 0.690F),
+                        V2(0.150F, 0.060F),
+                        V2(0.3127F, 0.3290F) // D65
+                    };
+                    break;
+                case AVCOL_PRI_EBU3213:
+                    hdrData.primaries = {
+                        V2(0.630F, 0.340F),
+                        V2(0.295F, 0.605F),
+                        V2(0.155F, 0.077F),
+                        V2(0.3127F, 0.3290F)
+                    };
+                    break;
+                case AVCOL_PRI_UNSPECIFIED:
+                case AVCOL_PRI_RESERVED:
+                default:
+                    // Safe fallback: Rec.709 primaries with D65
+                    hdrData.primaries = {
+                        V2(0.640F, 0.330F),
+                        V2(0.300F, 0.600F),
+                        V2(0.150F, 0.060F),
+                        V2(0.3127F, 0.3290F)
+                    };
+                    break;
+                }
+            }
+        
+        
+
+            image::EOTFType toEOTF(AVColorTransferCharacteristic trc)
+            {
+                image::EOTFType out = image::EOTFType::EOTF_BT709;
+                switch (trc)
+                {
+                case AVCOL_TRC_SMPTE2084: // PQ (HDR10)
+                    out = image::EOTFType::EOTF_BT2100_PQ;
+                    break;
+                case AVCOL_TRC_ARIB_STD_B67: // HLG
+                    out = image::EOTFType::EOTF_BT2100_HLG;
+                    break;
+                case AVCOL_TRC_BT2020_10:
+                case AVCOL_TRC_BT2020_12:
+                    out = image::EOTFType::EOTF_BT2020;
+                    break;
+                case AVCOL_TRC_BT709:
+                case AVCOL_TRC_SMPTE170M:
+                case AVCOL_TRC_SMPTE240M:
+                case AVCOL_TRC_IEC61966_2_4:
+                case AVCOL_TRC_BT1361_ECG:
+                    out = image::EOTFType::EOTF_BT709;
+                    break;
+                default:
+                    out = image::EOTFType::EOTF_BT601;
+                }
+                return out;
+            }
         }
 
         ReadVideo::ReadVideo(
@@ -1299,17 +1475,19 @@ namespace tl
                     const uint8_t* const data2 = _avFrame->data[2];
                     const int linesize1 = _avFrame->linesize[1];
                     const int linesize2 = _avFrame->linesize[2];
-                    for (std::size_t i = 0; i < h; ++i)
+                    const std::size_t wh = w * h;
+                    const std::size_t w2h2 = w2 * h2;
+                    if (has_avx2())
                     {
-                        std::memcpy(data + w * i, data0 + linesize0 * i, w);
+                        copy_plane_optimized(data, data0, w, h, linesize0);
+                        copy_plane_optimized(data + wh, data1, w2, h2, linesize1);
+                        copy_plane_optimized(data + wh + w2h2, data2, w2, h2, linesize2);
                     }
-                    for (std::size_t i = 0; i < h2; ++i)
+                    else
                     {
-                        std::memcpy(
-                            data + (w * h) + w2 * i, data1 + linesize1 * i, w2);
-                        std::memcpy(
-                            data + (w * h) + (w2 * h2) + w2 * i,
-                            data2 + linesize2 * i, w2);
+                        copy_plane(data, data0, w, h, linesize0);
+                        copy_plane(data + wh, data1, w2, h2, linesize1);
+                        copy_plane(data + wh + w2h2, data2, w2, h2, linesize2);
                     }
                     break;
                 }

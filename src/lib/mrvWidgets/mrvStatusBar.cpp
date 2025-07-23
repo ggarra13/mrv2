@@ -40,7 +40,7 @@ namespace mrv
 #endif
         if (gpu == _("GPU: Unknown"))
             Fl::repeat_timeout(1.0, (Fl_Timeout_Handler)all_ok_cb, this);
-            
+        
         copy_label(label.c_str());
     }
 

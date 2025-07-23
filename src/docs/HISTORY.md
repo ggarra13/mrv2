@@ -13,6 +13,7 @@ v1.3.9
 - Achieved consistently 60 FPS with HDR movies on Vulkan build.
 - Fixed printing version information of GNOME in Ubuntu 25.04 LTS.
 - Fixed installing of icons on Linux's Vulkan .deb/.rpm installers.
+- Improved decoding of YUV_U8P movies.  We can now **almost** play back 8K fluidly with a good SSD drive.
   
 
 v1.3.8

@@ -100,6 +100,10 @@ add_library(tlIO ${HEADERS} ${HEADERS_PRIVATE} ${SOURCE})
 target_link_libraries(tlIO PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
 set_target_properties(tlIO PROPERTIES FOLDER lib)
 set_target_properties(tlIO PROPERTIES PUBLIC_HEADER "${HEADERS}")
+target_compile_options(tlIO PRIVATE
+    $<$<CXX_COMPILER_ID:GNU,Clang>:-mavx2>
+    $<$<CXX_COMPILER_ID:GNU,Clang>:-O3>
+)
 
 install(TARGETS tlIO
     ARCHIVE DESTINATION lib
