@@ -212,6 +212,9 @@ elseif(UNIX)
 	DESTINATION share/applications COMPONENT applications)
     install(FILES "${PROJECT_BINARY_DIR}/etc/mrv2.desktop"
 	DESTINATION share/applications COMPONENT applications)
+    install(DIRECTORY ${MRV2_DIR}/share/icons
+	DESTINATION share/ COMPONENT applications)
+
 
     if (EXISTS "${CMAKE_INSTALL_PREFIX}/bin/hdr")
 	configure_file( ${MRV2_DIR}/etc/Linux/hdr.main.desktop.in
