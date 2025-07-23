@@ -81,7 +81,10 @@ if [[ "$CMAKE_TARGET" == "package" ]]; then
 fi
 
 cd $dir
-max_retries=3
+max_retries=1
+if [[ "${CMAKE_TARGET}" == "package" ]]; then
+    max_retries=3
+fi
 retry_delay=5
 success=0
 
