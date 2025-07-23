@@ -55,7 +55,7 @@ if [[ $TLRENDER_NET == ON || $TLRENDER_NET == 1 ]]; then
     if [[ ! -e $BUILD_DIR/install/lib/ssl.lib ]]; then
 	
 	if [[ ! -e /ucrt64/lib/libssl.dll.a ]]; then
-	    pacman -Sy mingw64-w64-ucrt-x86_64-openssl --noconfirm
+	    pacman -Sy mingw-w64-ucrt-x86_64-openssl --noconfirm
 	fi
 	
 
