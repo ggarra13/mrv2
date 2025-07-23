@@ -47,7 +47,7 @@ namespace mrv
     Hotkey kZoomIn(false, false, false, false, 0);
     Hotkey kZoomOut(false, false, false, false, 0);
     Hotkey kFullScreen(false, false, false, false, FL_F + 11);
-    Hotkey kToggleFloatOnTop(true, false, false, false, 'w');
+    Hotkey kToggleFloatOnTop(false, true, false, false, 'w');
     Hotkey kToggleSecondary(false, false, false, false, 0);
     Hotkey kToggleSecondaryFloatOnTop(false, false, false, false, 0);
 
