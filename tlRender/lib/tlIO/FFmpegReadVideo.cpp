@@ -66,6 +66,9 @@ namespace tl
                 __cpuidex(info, 7, 0);
                 return (info[1] & (1 << 5)) != 0; // AVX2 bit
 
+#elif defined(__aarch64__) || defined(_M_ARM64)
+                // ARM 64-bit / NEON is mandatory
+                return true;               
 #elif defined(__GNUC__) || defined(__clang__)
                 unsigned int eax, ebx, ecx, edx;
 
@@ -79,10 +82,6 @@ namespace tl
 
                 __cpuid_count(7, 0, eax, ebx, ecx, edx);
                 return (ebx & (1 << 5)) != 0; // AVX2 bit
-
-#elif defined(__aarch64__) || defined(_M_ARM64)
-                // ARM 64-bit / NEON is mandatory
-                return true;
 #else
                 return false;
 #endif
