@@ -192,7 +192,7 @@ fi
 
 echo "$release_notes" >> README.md
 
-cat <<EOF > VULKAN_NOTES.md
+cat <<"EOF" > VULKAN_NOTES.md
 
 The Vulkan releases in the vulkan/ directory are demo versions for you to
 evaluate mrv2 before a purchase and report bugs or performance issues.
@@ -221,7 +221,7 @@ The preferred NVidia driver tested for best performance is nvidia-driver-570 (de
 For best performance with the NVidia driver, you can modify:
 
 ```
-sudo nano /etc/default/grub
+    sudo nano /etc/default/grub
 ```
 
 Modify line 11 to from:
@@ -237,8 +237,8 @@ GRUB_CMDLINE_LINUX_DEFAULT="quiet splash nvidia_drm.modeset=1 nvidia_drm.fbdev=1
 ```
 
 ```
-sudo update-grub
-sudo reboot
+   sudo update-grub
+   sudo reboot
 ```
 
 
@@ -266,9 +266,9 @@ cat <<"EOF" > INSTALLATION_NOTES.md
   and go to Security and allow "Opening Anyway".
   Alternatively, you can do it from the Terminal, by:
   
-```
+\`\`\`
   sudo xattr -rd com.apple.quarantine /Applications/mrv2.app/
-```
+\`\`\`
 
 - Windows and Chrome, like macOS, also protect you from installing files
   from the Internet.  When you first download it with Chrome it may warn
