@@ -220,7 +220,9 @@ The preferred NVidia driver tested for best performance is nvidia-driver-570 (de
 
 For best performance with the NVidia driver, you can modify:
 
-$ sudo nano /etc/default/grub
+```
+sudo nano /etc/default/grub
+```
 
 Modify line 11 to from:
 
@@ -235,8 +237,8 @@ GRUB_CMDLINE_LINUX_DEFAULT="quiet splash nvidia_drm.modeset=1 nvidia_drm.fbdev=1
 ```
 
 ```
-$ sudo update-grub
-$ sudo reboot
+sudo update-grub
+sudo reboot
 ```
 
 
