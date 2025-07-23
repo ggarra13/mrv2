@@ -2,17 +2,26 @@
 // Copyright (c) 2021-2024 Darby Johnston
 // All rights reserved.
 
-#include <immintrin.h>
-#if defined(_MSC_VER)
-#include <intrin.h>
-#elif defined(__GNUC__) || defined(__clang__)
-#include <cpuid.h>
+#if defined(__aarch64__) || defined(_M_ARM64)
+#  include <arm_neon.h>
 #else
-#error "Unsupported compiler"
+#  include <immintrin.h>
+#  if defined(_MSC_VER)
+#    include <intrin.h>
+#  elif defined(__GNUC__) || defined(__clang__)
+#    include <cpuid.h>
+#  else
+#    error "Unsupported compiler"
+#  endif
 #endif
 
-#ifdef __ARM_NEON
-#include <arm_neon.h>
+#if defined(_MSC_VER)
+// No per-function SIMD dispatch on MSVC, fallback to runtime selection only
+#  define TL_TARGET_AVX2
+#elif defined(__GNUC__) || defined(__clang__)
+#  define TL_TARGET_AVX2 __attribute__((target("avx2")))
+#else
+#  define TL_TARGET_AVX2
 #endif
 
 #include <sstream>
@@ -44,7 +53,7 @@ namespace tl
 
         namespace
         {
-            bool has_avx2()
+            bool has_avx2_or_neon()
             {
                 int info[4];
 #if defined(_MSC_VER)
@@ -71,6 +80,9 @@ namespace tl
                 __cpuid_count(7, 0, eax, ebx, ecx, edx);
                 return (ebx & (1 << 5)) != 0; // AVX2 bit
 
+#elif defined(__aarch64__) || defined(_M_ARM64)
+                // ARM 64-bit / NEON is mandatory
+                return true;
 #else
                 return false;
 #endif
@@ -96,6 +108,7 @@ namespace tl
 
 #ifdef __x86_64__
             // Example using AVX2 (x86_64)
+            TL_TARGET_AVX2
             void memcpy_avx2(void* dst, const void* src, size_t size)
             {
                 size_t i = 0;
@@ -138,7 +151,7 @@ namespace tl
                 }
 
 #ifdef __x86_64__
-                if (has_avx2()) {
+                if (has_avx2_or_neon()) {
                     memcpy_avx2(dst, src, size);
                     return;
                 }
@@ -1477,7 +1490,7 @@ namespace tl
                     const int linesize2 = _avFrame->linesize[2];
                     const std::size_t wh = w * h;
                     const std::size_t w2h2 = w2 * h2;
-                    if (has_avx2())
+                    if (has_avx2_or_neon())
                     {
                         copy_plane_optimized(data, data0, w, h, linesize0);
                         copy_plane_optimized(data + wh, data1, w2, h2, linesize1);

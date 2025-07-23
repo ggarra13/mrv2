@@ -100,10 +100,20 @@ add_library(tlIO ${HEADERS} ${HEADERS_PRIVATE} ${SOURCE})
 target_link_libraries(tlIO PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
 set_target_properties(tlIO PROPERTIES FOLDER lib)
 set_target_properties(tlIO PROPERTIES PUBLIC_HEADER "${HEADERS}")
-target_compile_options(tlIO PRIVATE
-    $<$<CXX_COMPILER_ID:GNU,Clang>:-mavx2>
-    $<$<CXX_COMPILER_ID:GNU,Clang>:-O3>
-)
+
+if (CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64")
+    target_compile_options(tlIO PRIVATE
+        -O3
+        -mcpu=apple-m1  # Optional, or use -march=armv8-a+simd
+    )
+elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
+    # MSVC uses AVX2 by default
+    target_compile_options(tlIO PRIVATE
+	$<$<CXX_COMPILER_ID:GNU,Clang>:-mavx2>
+	$<$<CXX_COMPILER_ID:GNU,Clang>:-O3>
+    )
+    target_compile_definitions(tlIO PRIVATE _CRT_SECURE_NO_WARNINGS)
+endif()
 
 install(TARGETS tlIO
     ARCHIVE DESTINATION lib
