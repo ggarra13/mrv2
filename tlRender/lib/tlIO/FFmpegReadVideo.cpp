@@ -624,8 +624,8 @@ namespace tl
                     {
                         //! \todo Use the _info.layout.endian field instead of
                         //! converting endianness.
-                        _avOutputPixelFormat = AV_PIX_FMT_YUV444P16LE;
-                        _info.pixelType = image::PixelType::YUV_444P_U16;
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV444P10LE;
+                        _info.pixelType = image::PixelType::YUV_444P_U10;
                     }
                     break;
                 case AV_PIX_FMT_YUV444P12BE:
@@ -639,8 +639,8 @@ namespace tl
                     {
                         //! \todo Use the _info.layout.endian field instead of
                         //! converting endianness.
-                        _avOutputPixelFormat = AV_PIX_FMT_YUV444P16LE;
-                        _info.pixelType = image::PixelType::YUV_444P_U16;
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV444P12LE;
+                        _info.pixelType = image::PixelType::YUV_444P_U12;
                     }
                     break;
                 case AV_PIX_FMT_YUV444P16BE:
