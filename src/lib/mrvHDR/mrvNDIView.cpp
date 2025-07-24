@@ -29,7 +29,7 @@
 #include "mrvCore/mrvI8N.h"
 
 #include "mrvHDR/mrvNDICallbacks.h"
-#include "mrvHDR/mrvOS.h"
+#include "mrvHDR/mrvHDRMonitor.h"
 
 #include "hdr/mrvHDRApp.h"
 #include "mrvNDIView.h"

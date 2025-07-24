@@ -15,6 +15,7 @@
 #include "mrvNetwork/mrvDummyClient.h"
 
 #include "mrvUI/mrvDesktop.h"
+#include "mrvUI/mrvHDRMonitor.h"
 
 #include "mrvVk/mrvVkViewportPrivate.h"
 #include "mrvVk/mrvVkDefines.h"
@@ -365,7 +366,8 @@ namespace mrv
                 break;
             }
 
-            if (valid_colorspace)
+            if (valid_colorspace &&
+                is_hdr_display_active())
             {
                 p.hdrMonitorFound = true;
                 LOG_STATUS(_("HDR monitor found."));

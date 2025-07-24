@@ -5,16 +5,16 @@
 set(HEADERS
     mrvNDICallbacks.h
     mrvNDIView.h
-    mrvOS.h
+    mrvHDRMonitor.h
 )
 
 set(SOURCES
     mrvNDICallbacks.cpp
     mrvNDIView.cpp
-    mrvOS.cpp
+    mrvHDRMonitor.cpp
 )
 if(APPLE)
-    list(APPEND SOURCES mrvOS.mm)
+    list(APPEND SOURCES mrvHDRMonitor.mm)
 endif()
 
 find_package(Intl REQUIRED)
