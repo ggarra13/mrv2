@@ -193,10 +193,16 @@ const uint PixelType_RGBA_F32          = 21;
 const uint PixelType_YUV_420P_U8       = 22;
 const uint PixelType_YUV_422P_U8       = 23;
 const uint PixelType_YUV_444P_U8       = 24;
-const uint PixelType_YUV_420P_U16      = 25;
-const uint PixelType_YUV_422P_U16      = 26;
-const uint PixelType_YUV_444P_U16      = 27;
-const uint PixelType_ARGB_4444_Premult = 28;
+const uint PixelType_YUV_420P_U10      = 25;
+const uint PixelType_YUV_422P_U10      = 26;
+const uint PixelType_YUV_444P_U10      = 27;
+const uint PixelType_YUV_420P_U12      = 28;
+const uint PixelType_YUV_422P_U12      = 29;
+const uint PixelType_YUV_444P_U12      = 30;
+const uint PixelType_YUV_420P_U16      = 31;
+const uint PixelType_YUV_422P_U16      = 32;
+const uint PixelType_YUV_444P_U16      = 33;
+const uint PixelType_ARGB_4444_Premult = 34;
                                 
 // enum tl::image::VideoLevels
 const uint VideoLevels_FullRange  = 0;

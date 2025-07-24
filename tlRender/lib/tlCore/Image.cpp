@@ -52,6 +52,10 @@ namespace tl
 
             "YUV_420P_U8", "YUV_422P_U8", "YUV_444P_U8",
 
+            "YUV_420P_U10", "YUV_422P_U10", "YUV_444P_U10",
+            
+            "YUV_420P_U12", "YUV_422P_U12", "YUV_444P_U12",
+            
             "YUV_420P_U16", "YUV_422P_U16", "YUV_444P_U16",
 
             "ARGB_4444_Premult");
@@ -98,7 +102,7 @@ namespace tl
         {
             const std::array<int, static_cast<size_t>(PixelType::Count)>
                 values = {0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3,
-                          3, 3, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 4};
+                3, 3, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4};
             return values[static_cast<size_t>(value)];
         }
 
@@ -107,7 +111,8 @@ namespace tl
             const std::array<int, static_cast<size_t>(PixelType::Count)>
                 values = {0,  8,  16, 32, 16, 32, 8,  16, 32, 16,
                           32, 8,  10, 16, 32, 16, 32, 8,  16, 32,
-                          16, 32, 8,  8,  8,  16, 16, 16, 4};
+                          16, 32, 8,  8,  8,  16, 16, 16, 16, 16, 16,
+                          16, 16, 16, 4};
             return values[static_cast<size_t>(value)];
         }
 
@@ -335,6 +340,24 @@ namespace tl
                 break;
             case PixelType::YUV_444P_U8:
                 out = w * h * 3;
+                break;
+            case PixelType::YUV_420P_U10:
+                out = (w * h + (w / 2 * h / 2) + (w / 2 * h / 2)) * 2;
+                break;
+            case PixelType::YUV_422P_U10:
+                out = (w * h + (w / 2 * h) + (w / 2 * h)) * 2;
+                break;
+            case PixelType::YUV_444P_U10:
+                out = (w * h * 3) * 2;
+                break;
+            case PixelType::YUV_420P_U12:
+                out = (w * h + (w / 2 * h / 2) + (w / 2 * h / 2)) * 2;
+                break;
+            case PixelType::YUV_422P_U12:
+                out = (w * h + (w / 2 * h) + (w / 2 * h)) * 2;
+                break;
+            case PixelType::YUV_444P_U12:
+                out = (w * h * 3) * 2;
                 break;
             case PixelType::YUV_420P_U16:
                 out = (w * h + (w / 2 * h / 2) + (w / 2 * h / 2)) * 2;

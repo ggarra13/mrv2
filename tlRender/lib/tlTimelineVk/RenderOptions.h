@@ -6,6 +6,6 @@
 
 #define USE_CONSTANTS 0  // when 1, it uses hard-coded constants instead of
                          // dynamic push_constants in libplacebo.
-#define USE_PRECOMPILED_SHADERS 1 // Use 1 for faster startups.
+#define USE_PRECOMPILED_SHADERS 0 // Use 1 for faster startups.
 
 #include <tlTimelineVk/RenderShadersBinary.h>

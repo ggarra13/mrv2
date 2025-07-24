@@ -94,6 +94,14 @@ namespace tl
             YUV_422P_U8,
             YUV_444P_U8,
 
+            YUV_420P_U10,
+            YUV_422P_U10,
+            YUV_444P_U10,
+            
+            YUV_420P_U12,
+            YUV_422P_U12,
+            YUV_444P_U12,
+            
             YUV_420P_U16,
             YUV_422P_U16,
             YUV_444P_U16,
