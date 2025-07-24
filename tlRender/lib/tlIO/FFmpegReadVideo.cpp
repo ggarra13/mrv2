@@ -3,6 +3,10 @@
 // All rights reserved.
 
 
+// Use 16 bit conversion
+#define USE_SWSCALE 1
+
+
 #include <sstream>
 
 #include <tlIO/FFmpegReadPrivate.h>
@@ -534,8 +538,13 @@ namespace tl
                     {
                         //! \todo Use the _info.layout.endian field instead of
                         //! converting endianness.
+#ifdef USE_SWSCALE
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV420P16LE;
+                        _info.pixelType = image::PixelType::YUV_420P_U16;
+#else
                         _avOutputPixelFormat = AV_PIX_FMT_YUV420P10LE;
                         _info.pixelType = image::PixelType::YUV_420P_U10;
+#endif
                     }
                     break;
                 case AV_PIX_FMT_YUV420P12BE:
@@ -549,8 +558,13 @@ namespace tl
                     {
                         //! \todo Use the _info.layout.endian field instead of
                         //! converting endianness.
+#ifdef USE_SWSCALE
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV420P16LE;
+                        _info.pixelType = image::PixelType::YUV_420P_U16;
+#else
                         _avOutputPixelFormat = AV_PIX_FMT_YUV420P12LE;
                         _info.pixelType = image::PixelType::YUV_420P_U12;
+#endif
                     }
                     break;
                 case AV_PIX_FMT_YUV420P16BE:
@@ -579,8 +593,13 @@ namespace tl
                     {
                         //! \todo Use the _info.layout.endian field instead of
                         //! converting endianness.
+#ifdef USE_SWSCALE
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV422P16LE;
+                        _info.pixelType = image::PixelType::YUV_422P_U16;
+#else
                         _avOutputPixelFormat = AV_PIX_FMT_YUV422P10LE;
-                        _info.pixelType = image::PixelType::YUV_420P_U10;
+                        _info.pixelType = image::PixelType::YUV_422P_U10;
+#endif
                     }
                     break;
                 case AV_PIX_FMT_YUV422P12BE:
@@ -594,8 +613,13 @@ namespace tl
                     {
                         //! \todo Use the _info.layout.endian field instead of
                         //! converting endianness.
+#ifdef USE_SWSCALE
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV422P16LE;
+                        _info.pixelType = image::PixelType::YUV_422P_U16;
+#else
                         _avOutputPixelFormat = AV_PIX_FMT_YUV422P12LE;
                         _info.pixelType = image::PixelType::YUV_422P_U12;
+#endif
                     }
                     break;
                 case AV_PIX_FMT_YUV422P16BE:
@@ -624,8 +648,13 @@ namespace tl
                     {
                         //! \todo Use the _info.layout.endian field instead of
                         //! converting endianness.
-                        _avOutputPixelFormat = AV_PIX_FMT_YUV444P16LE;
+#ifdef USE_SWSCALE
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV444P10LE;
                         _info.pixelType = image::PixelType::YUV_444P_U10;
+#else
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV444P16LE;
+                        _info.pixelType = image::PixelType::YUV_444P_U16;
+#endif
                     }
                     break;
                 case AV_PIX_FMT_YUV444P12BE:
@@ -639,8 +668,13 @@ namespace tl
                     {
                         //! \todo Use the _info.layout.endian field instead of
                         //! converting endianness.
+#ifdef USE_SWSCALE
                         _avOutputPixelFormat = AV_PIX_FMT_YUV444P12LE;
                         _info.pixelType = image::PixelType::YUV_444P_U12;
+#else
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV444P16LE;
+                        _info.pixelType = image::PixelType::YUV_444P_U16;
+#endif
                     }
                     break;
                 case AV_PIX_FMT_YUV444P16BE:
@@ -1011,15 +1045,17 @@ namespace tl
                           fastYUV420PConversion) ||
                         AV_PIX_FMT_YUV422P == in ||
                         AV_PIX_FMT_YUV444P == in ||
-                        AV_PIX_FMT_YUV420P16LE == in ||
-                        AV_PIX_FMT_YUV422P16LE == in ||
-                        AV_PIX_FMT_YUV444P16LE == in ||
+#ifndef USE_SWSCALE
                         AV_PIX_FMT_YUV420P10LE == in ||
                         AV_PIX_FMT_YUV422P10LE == in ||
                         AV_PIX_FMT_YUV444P10LE == in ||
                         AV_PIX_FMT_YUV420P12LE == in ||
                         AV_PIX_FMT_YUV422P12LE == in ||
-                        AV_PIX_FMT_YUV444P12LE == in);
+                        AV_PIX_FMT_YUV444P12LE == in ||
+#endif
+                        AV_PIX_FMT_YUV420P16LE == in ||
+                        AV_PIX_FMT_YUV422P16LE == in ||
+                        AV_PIX_FMT_YUV444P16LE == in);
             }
         } // namespace
 
@@ -1404,7 +1440,6 @@ namespace tl
         void ReadVideo::_copy(std::shared_ptr<image::Image>& image,
                               std::shared_ptr<AVFrame> avFrame)
         {
-            const auto& info = image->getInfo();
             const std::size_t w = _info.size.w;
             const std::size_t h = _info.size.h;
 

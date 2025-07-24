@@ -310,6 +310,8 @@ namespace tl
                     textures[2]->bind();
                 }
                 break;
+            case image::PixelType::YUV_420P_U10:
+            case image::PixelType::YUV_420P_U12:
             case image::PixelType::YUV_420P_U16:
                 if (3 == textures.size())
                 {
@@ -323,6 +325,8 @@ namespace tl
                     textures[2]->bind();
                 }
                 break;
+            case image::PixelType::YUV_422P_U10:
+            case image::PixelType::YUV_422P_U12:
             case image::PixelType::YUV_422P_U16:
                 if (3 == textures.size())
                 {
@@ -336,6 +340,8 @@ namespace tl
                     textures[2]->bind();
                 }
                 break;
+            case image::PixelType::YUV_444P_U10:
+            case image::PixelType::YUV_444P_U12:
             case image::PixelType::YUV_444P_U16:
                 if (3 == textures.size())
                 {

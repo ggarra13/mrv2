@@ -255,20 +255,20 @@ vec4 sampleTexture(
               
              // This was needed in OpenGL, but not for Vulkan
              // Swizzle for the image channels.
-             // if (1 == imageChannels)
-             // {
-             //     c.g = c.b = c.r;
-             //     c.a = 1.0;
-             // }
-             // else if (2 == imageChannels)
-             // {
-             //     c.a = c.g;
-             //     c.g = c.b = c.r;
-             // }
-             // else if (3 == imageChannels)
-             // {
-             //     c.a = 1.0;
-             // }
+          if (1 == imageChannels)
+          {
+              c.g = c.b = c.r;
+              c.a = 1.0;
+          }
+          else if (2 == imageChannels)
+          {
+              c.a = c.g;
+              c.g = c.b = c.r;
+          }
+          else if (3 == imageChannels)
+          {
+              c.a = 1.0;
+          }
        }
       return c;
 }
