@@ -235,6 +235,8 @@ namespace tl
                 out.push_back(vlk::Texture::create(ctx, infoTmp, options));
                 break;
             }
+            case image::PixelType::YUV_420P_U10:
+            case image::PixelType::YUV_420P_U12:
             case image::PixelType::YUV_420P_U16:
             {
                 auto infoTmp = image::Info(info.size, image::PixelType::L_U16);
@@ -246,6 +248,8 @@ namespace tl
                 out.push_back(vlk::Texture::create(ctx, infoTmp, options));
                 break;
             }
+            case image::PixelType::YUV_422P_U10:
+            case image::PixelType::YUV_422P_U12:
             case image::PixelType::YUV_422P_U16:
             {
                 auto infoTmp = image::Info(info.size, image::PixelType::L_U16);
@@ -257,6 +261,8 @@ namespace tl
                 out.push_back(vlk::Texture::create(ctx, infoTmp, options));
                 break;
             }
+            case image::PixelType::YUV_444P_U10:
+            case image::PixelType::YUV_444P_U12:
             case image::PixelType::YUV_444P_U16:
             {
                 auto infoTmp = image::Info(info.size, image::PixelType::L_U16);
@@ -287,6 +293,12 @@ namespace tl
             case image::PixelType::YUV_420P_U8:
             case image::PixelType::YUV_422P_U8:
             case image::PixelType::YUV_444P_U8:
+            case image::PixelType::YUV_422P_U10:
+            case image::PixelType::YUV_444P_U10:
+            case image::PixelType::YUV_420P_U10:
+            case image::PixelType::YUV_420P_U12:
+            case image::PixelType::YUV_422P_U12:
+            case image::PixelType::YUV_444P_U12:
             {
                 if (3 == textures.size())
                 {
