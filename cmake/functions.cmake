@@ -171,7 +171,7 @@ function( is_system_lib TARGET ISSYSLIB )
 	libXrender
 	libXrandr
 	libXRes
-	libXss
+	# libXss   # not present in some distros like Rocky 10
 	libxshmfence
 	libXt
 	libXtst
