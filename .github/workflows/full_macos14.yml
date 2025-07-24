@@ -1,4 +1,4 @@
-name: MacOS M1
+name: OpenGL MacOS M1
 
 on:
   push:

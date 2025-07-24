@@ -1,5 +1,5 @@
 
-name: Win64
+name: OpenGL Win64
 
 on:
   push:
