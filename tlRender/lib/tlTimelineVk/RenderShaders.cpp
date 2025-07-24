@@ -249,6 +249,7 @@ vec4 sampleTexture(
               sampler2D s2)
 {
        vec4 c;
+
        if ((pixelType >= PixelType_YUV_420P_U8 && pixelType <= PixelType_YUV_444P_U16))
        {
 
@@ -256,27 +257,50 @@ vec4 sampleTexture(
           float cb = texture(s1, textureCoord).r;
           float cr = texture(s2, textureCoord).r;
 
+          // For 10-bit and 12-bit, ensure correct normalization
+          if (pixelType == PixelType_YUV_420P_U10 ||
+              pixelType == PixelType_YUV_422P_U10 ||
+              pixelType == PixelType_YUV_444P_U10)
+          {
+            // 
+            // 10-bit data may be packed in 16-bit textures, normalize to [0,1]
+            float rangeScale = 1023.0 / 65535.0; // 1023 = 2^10 - 1
+            y  = y / rangeScale; 
+            cb = cb / rangeScale;
+            cr = cr / rangeScale;
+          }
+          else if (pixelType == PixelType_YUV_420P_U12 ||
+                   pixelType == PixelType_YUV_422P_U12 ||
+                   pixelType == PixelType_YUV_444P_U12)
+          {
+            // 12-bit data may be packed in 16-bit textures, normalize to [0,1]
+            float rangeScale = 4095.0 / 65535.0; // 1023 = 2^10 - 1
+            y  = y / rangeScale; 
+            cb = cb / rangeScale;
+            cr = cr / rangeScale;
+          }
+
           if (videoLevels == VideoLevels_FullRange)
           {
-              cb -= 0.5;
-              cr -= 0.5;
+            cb -= 0.5;
+            cr -= 0.5;
           }
           else if (videoLevels == VideoLevels_LegalRange)
           {
-              float bitDepth = getBitDepth(pixelType);
-              float maxValue = pow(2.0, bitDepth) - 1.0;
-              float range = pow(2.0, bitDepth - 8);
+            float bitDepth = getBitDepth(pixelType); 
+            float maxValue = pow(2.0, bitDepth) - 1.0;
+            float range = pow(2.0, bitDepth - 8);
 
-              // Legal range scaling for YUV (ITU-R BT.601/BT.709)
-              float yMin = 16.0 * range;   // 16 << (bitDepth - 8)
-              float yMax = 235.0 * range;  // 235 << (bitDepth - 8)
-              float cMin = 16.0 * range;   // 16 << (bitDepth - 8)
-              float cMax = 240.0 * range;  // 240 << (bitDepth - 8)
+            // Legal range scaling for YUV (ITU-R BT.601/BT.709)
+            float yMin = 16.0 * range;   // 16 << (bitDepth - 8)
+            float yMax = 235.0 * range;  // 235 << (bitDepth - 8)
+            float cMin = 16.0 * range;   // 16 << (bitDepth - 8)
+            float cMax = 240.0 * range;  // 240 << (bitDepth - 8)
             
-              // Scale to 0-1 range and normalize
-              y = clamp((y * maxValue - yMin) / (yMax - yMin), 0.0, 1.0);
-              cb = clamp((cb * maxValue - cMin) / (cMax - cMin), 0.0, 1.0) - 0.5;
-              cr = clamp((cr * maxValue - cMin) / (cMax - cMin), 0.0, 1.0) - 0.5;
+            // Scale to 0-1 range and normalize
+            y = clamp((y * maxValue - yMin) / (yMax - yMin), 0.0, 1.0);
+            cb = clamp((cb * maxValue - cMin) / (cMax - cMin), 0.0, 1.0) - 0.5;
+            cr = clamp((cr * maxValue - cMin) / (cMax - cMin), 0.0, 1.0) - 0.5;
           }
 
           c.r = y + (yuvCoefficients.x * cr);
@@ -286,33 +310,16 @@ vec4 sampleTexture(
       }
       else
       {
-          c = texture(s0, textureCoord);
+        c = texture(s0, textureCoord);
 
-          // Video levels.
-          if (VideoLevels_LegalRange == videoLevels)
-          {
-              c.r = (c.r - (16.0 / 255.0)) * (255.0 / (235.0 - 16.0));
-              c.g = (c.g - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0));
-              c.b = (c.b - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0));
-          }
-              
-             // This was needed in OpenGL, but not for Vulkan
-             // Swizzle for the image channels.
-             // if (1 == imageChannels)
-             // {
-             //     c.g = c.b = c.r;
-             //     c.a = 1.0;
-             // }
-             // else if (2 == imageChannels)
-             // {
-             //     c.a = c.g;
-             //     c.g = c.b = c.r;
-             // }
-             // else if (3 == imageChannels)
-             // {
-             //     c.a = 1.0;
-             // }
-       }
+        // Video levels.
+        if (VideoLevels_LegalRange == videoLevels)
+        {
+           c.r = (c.r - (16.0 / 255.0)) * (255.0 / (235.0 - 16.0));
+           c.g = (c.g - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0));
+           c.b = (c.b - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0));
+        }
+      }
       return c;
 }
 
@@ -341,6 +348,7 @@ void main()
     {
         t.y = 1.0 - t.y;
     }
+
     outColor = sampleTexture(t,
                              ubo.pixelType,
                              ubo.videoLevels,

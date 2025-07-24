@@ -92,6 +92,29 @@ vec4 sampleTexture(
           float cb = texture(s1, textureCoord).r;
           float cr = texture(s2, textureCoord).r;
 
+          // For 10-bit and 12-bit, ensure correct normalization
+          if (pixelType == PixelType_YUV_420P_U10 ||
+              pixelType == PixelType_YUV_422P_U10 ||
+              pixelType == PixelType_YUV_444P_U10)
+          {
+            // 
+            // 10-bit data may be packed in 16-bit textures, normalize to [0,1]
+            float rangeScale = 1023.0 / 65535.0; // 1023 = 2^10 - 1
+            y  = y / rangeScale; 
+            cb = cb / rangeScale;
+            cr = cr / rangeScale;
+          }
+          else if (pixelType == PixelType_YUV_420P_U12 ||
+                   pixelType == PixelType_YUV_422P_U12 ||
+                   pixelType == PixelType_YUV_444P_U12)
+          {
+            // 12-bit data may be packed in 16-bit textures, normalize to [0,1]
+            float rangeScale = 4095.0 / 65535.0; // 4095 = 2^12 - 1
+            y  = y / rangeScale; 
+            cb = cb / rangeScale;
+            cr = cr / rangeScale;
+          }
+          
           if (videoLevels == VideoLevels_FullRange)
           {
               cb -= 0.5;
