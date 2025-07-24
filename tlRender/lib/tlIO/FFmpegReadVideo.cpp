@@ -931,8 +931,11 @@ namespace tl
                         ((AV_PIX_FMT_YUV420P == in ||
                           AV_PIX_FMT_YUVJ420P == in) &&
                           fastYUV420PConversion) ||
-                         AV_PIX_FMT_YUV422P == in ||
-                        AV_PIX_FMT_YUV444P == in);
+                        AV_PIX_FMT_YUV422P == in ||
+                        AV_PIX_FMT_YUV444P == in ||
+                        AV_PIX_FMT_YUV420P16LE == in ||
+                        AV_PIX_FMT_YUV422P16LE == in ||
+                        AV_PIX_FMT_YUV444P16LE == in);
             }
         } // namespace
 
@@ -1253,8 +1256,7 @@ namespace tl
                         currentTime = targetTime;
                     else
                         currentTime = time;
-
-                    // auto image = image::Image::create(_info);
+                    
                     std::shared_ptr<image::Image> image;
 
                     auto tags = _tags;
