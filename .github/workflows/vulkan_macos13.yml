@@ -85,6 +85,6 @@ jobs:
       run: |
         ./etc/runme_nolog.sh -D TLRENDER_USD=OFF -D MRV2_DEMO=ON -t package -vk
       
-    # - name: Upload binaries
-    #   run: |
-    #     ./bin/release/upload_sourceforge.sh -vk
+    - name: Upload binaries
+      run: |
+        ./bin/release/upload_sourceforge.sh -vk
