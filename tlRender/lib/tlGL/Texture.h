@@ -76,7 +76,7 @@ namespace tl
 
             void copy(const std::shared_ptr<image::Image>&);
             void copy(const std::shared_ptr<image::Image>&, int x, int y);
-            void copy(const uint8_t*, const image::Info&);
+            void copy(const uint8_t*, const image::Info&, int rowPitch);
 
             ///@}
 

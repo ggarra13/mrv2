@@ -18,6 +18,11 @@
 #include <string>
 #include <vector>
 
+extern "C"
+{
+    struct AVFrame;
+}
+
 namespace tl
 {
     namespace image
@@ -283,6 +288,13 @@ namespace tl
             //! Create a new image.
             static std::shared_ptr<Image> create(int w, int h, PixelType);
 
+            //! Create a new image that references external data without
+            //! copying it.
+            static std::shared_ptr<Image> create(const Info& info,
+                                                 const std::shared_ptr<AVFrame> avFrame,
+                                                 const uint8_t* planes[3],
+                                                 const int linesize[3]);
+
             //! Get the image information.
             const Info& getInfo() const;
 
@@ -324,12 +336,38 @@ namespace tl
 
             //! Zero the image data.
             void zero();
+            
+            //! Get number of planes.
+            int getPlaneCount() const
+                {
+                    return _planar ? 3 : 1;
+                }
 
+            //! Get pointer to a specific plane.
+            const uint8_t* getPlaneData(int index) const
+                {
+                    return _planar ? _planes[index] :
+                        (index == 0 ? _data : nullptr);
+                }
+
+            //! Get linesize for a specific plane.
+            int getLineSize(int index) const
+                {
+                    return _planar ? _linesize[index] : (_data ? _info.size.w : 0);
+                }
+            
         private:
             Info _info;
             Tags _tags;
+            
+            std::shared_ptr<AVFrame> _avFrame;
+            const uint8_t* _planes[3] = { nullptr, nullptr, nullptr };
+            int _linesize[3] = { 0, 0, 0 };
+            bool _planar = false;
+            
+            uint8_t* _data = nullptr;
             size_t _dataByteCount = 0;
-            std::vector<uint8_t> _data;
+            bool _owns = false;
         };
 
         //! \name Serialize

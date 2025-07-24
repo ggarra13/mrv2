@@ -363,9 +363,15 @@ namespace tl
             copy(data, 0, 0);
         }
         
-        void Texture::copy(const uint8_t* data, const image::Info& info)
+        void Texture::copy(const uint8_t* data, const image::Info& info,
+                           const int rowPitch)
         {
             TLRENDER_P();
+
+            // Compute the unpack row length in pixels from rowPitch in bytes
+            const int bytesPerPixel = image::getBitDepth(info.pixelType) / 8;
+            const int rowLengthPixels = rowPitch / bytesPerPixel;
+            
 #if defined(TLRENDER_API_GL_4_1)
             if (p.pbo)
             {
@@ -377,6 +383,7 @@ namespace tl
                     glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
                     glBindTexture(GL_TEXTURE_2D, p.id);
                     glPixelStorei(GL_UNPACK_ALIGNMENT, info.layout.alignment);
+                    glPixelStorei(GL_UNPACK_ROW_LENGTH, rowLengthPixels);
                     glPixelStorei(
                         GL_UNPACK_SWAP_BYTES,
                         info.layout.endian != memory::getEndian());
@@ -392,6 +399,7 @@ namespace tl
             {
                 glBindTexture(GL_TEXTURE_2D, p.id);
                 glPixelStorei(GL_UNPACK_ALIGNMENT, info.layout.alignment);
+                glPixelStorei(GL_UNPACK_ROW_LENGTH, rowLengthPixels);
 #if defined(TLRENDER_API_GL_4_1)
                 glPixelStorei(
                     GL_UNPACK_SWAP_BYTES,
@@ -402,6 +410,9 @@ namespace tl
                     getTextureFormat(info.pixelType),
                     getTextureType(info.pixelType), data);
             }
+
+            // Always reset UNPACK_ROW_LENGTH to default (0 = tightly packed)
+            glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
         }
 
         void Texture::bind()

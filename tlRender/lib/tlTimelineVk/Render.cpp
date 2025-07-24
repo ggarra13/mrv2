@@ -285,98 +285,23 @@ namespace tl
             switch (info.pixelType)
             {
             case image::PixelType::YUV_420P_U8:
-            {
-                if (3 == textures.size())
-                {
-                    textures[0]->copy(image->getData(), textures[0]->getInfo());
-                    const std::size_t w = info.size.w;
-                    const std::size_t h = info.size.h;
-                    const std::size_t w2 = w / 2;
-                    const std::size_t h2 = h / 2;
-                    textures[1]->copy(
-                        image->getData() + (w * h), textures[1]->getInfo());
-                    textures[2]->copy(
-                        image->getData() + (w * h) + (w2 * h2),
-                        textures[2]->getInfo());
-                }
-                break;
-            }
             case image::PixelType::YUV_422P_U8:
-            {
-                if (3 == textures.size())
-                {
-                    textures[0]->copy(image->getData(), textures[0]->getInfo());
-                    const std::size_t w = info.size.w;
-                    const std::size_t h = info.size.h;
-                    const std::size_t w2 = w / 2;
-                    textures[1]->copy(
-                        image->getData() + (w * h), textures[1]->getInfo());
-                    textures[2]->copy(
-                        image->getData() + (w * h) + (w2 * h),
-                        textures[2]->getInfo());
-                }
-                break;
-            }
             case image::PixelType::YUV_444P_U8:
-            {
-                if (3 == textures.size())
-                {
-                    textures[0]->copy(image->getData(), textures[0]->getInfo());
-                    const std::size_t w = info.size.w;
-                    const std::size_t h = info.size.h;
-                    textures[1]->copy(
-                        image->getData() + (w * h), textures[1]->getInfo());
-                    textures[2]->copy(
-                        image->getData() + (w * h) + (w * h),
-                        textures[2]->getInfo());
-                }
-                break;
-            }
             case image::PixelType::YUV_420P_U16:
-            {
-                if (3 == textures.size())
-                {
-                    textures[0]->copy(image->getData(), textures[0]->getInfo());
-                    const std::size_t w = info.size.w;
-                    const std::size_t h = info.size.h;
-                    const std::size_t w2 = w / 2;
-                    const std::size_t h2 = h / 2;
-                    textures[1]->copy(
-                        image->getData() + (w * h) * 2, textures[1]->getInfo());
-                    textures[2]->copy(
-                        image->getData() + (w * h) * 2 + (w2 * h2) * 2,
-                        textures[2]->getInfo());
-                }
-                break;
-            }
             case image::PixelType::YUV_422P_U16:
-            {
-                if (3 == textures.size())
-                {
-                    textures[0]->copy(image->getData(), textures[0]->getInfo());
-                    const std::size_t w = info.size.w;
-                    const std::size_t h = info.size.h;
-                    const std::size_t w2 = w / 2;
-                    textures[1]->copy(
-                        image->getData() + (w * h) * 2, textures[1]->getInfo());
-                    textures[2]->copy(
-                        image->getData() + (w * h) * 2 + (w2 * h) * 2,
-                        textures[2]->getInfo());
-                }
-                break;
-            }
             case image::PixelType::YUV_444P_U16:
             {
                 if (3 == textures.size())
                 {
-                    textures[0]->copy(image->getData(), textures[0]->getInfo());
-                    const std::size_t w = info.size.w;
-                    const std::size_t h = info.size.h;
-                    textures[1]->copy(
-                        image->getData() + (w * h) * 2, textures[1]->getInfo());
-                    textures[2]->copy(
-                        image->getData() + (w * h) * 2 + (w * h) * 2,
-                        textures[2]->getInfo());
+                    textures[0]->copy(image->getPlaneData(0),
+                                      textures[0]->getInfo(),
+                                      image->getLineSize(0));
+                    textures[1]->copy(image->getPlaneData(1),
+                                      textures[1]->getInfo(),
+                                      image->getLineSize(1));
+                    textures[2]->copy(image->getPlaneData(2),
+                                      textures[2]->getInfo(),
+                                      image->getLineSize(2));
                 }
                 break;
             }

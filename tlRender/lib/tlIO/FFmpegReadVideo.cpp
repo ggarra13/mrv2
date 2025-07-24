@@ -37,8 +37,7 @@ extern "C"
 {
 #include <libavutil/display.h>
 #include <libavutil/imgutils.h>
-#include <libavutil/opt.h>
-
+#include <libavutil/opt.h>   
 } // extern "C"
 
 namespace
@@ -53,6 +52,57 @@ namespace tl
 
         namespace
         {
+            
+            class AVFramePool {
+            public:
+                AVFramePool(size_t size = 16) {
+                    for (size_t i = 0; i < size; ++i) {
+                        AVFrame* frame = av_frame_alloc();
+                        if (frame) {
+                            pool.push_back(frame);
+                        }
+                    }
+                }
+                
+                ~AVFramePool() {
+                    for (auto* frame : pool) {
+                        av_frame_free(&frame);
+                    }
+                }
+
+                AVFrame* acquire() {
+                    std::lock_guard<std::mutex> lock(mutex);
+                    if (!pool.empty()) {
+                        AVFrame* frame = pool.back();
+                        pool.pop_back();
+                        av_frame_unref(frame);
+                        return frame;
+                    }
+                    return av_frame_alloc(); // fallback if exhausted
+                }
+
+                void release(AVFrame* frame) {
+                    if (!frame) return;
+                    std::lock_guard<std::mutex> lock(mutex);
+                    pool.push_back(frame);
+                }
+
+            private:
+                std::vector<AVFrame*> pool;
+                std::mutex mutex;
+            };
+
+            // --- Static pool instance ---
+            static AVFramePool framePool;
+
+            std::shared_ptr<AVFrame> make_pooled_frame() {
+                AVFrame* frame = framePool.acquire();
+                return std::shared_ptr<AVFrame>(
+                    frame,
+                    [](AVFrame* f) { framePool.release(f); }
+                    );
+            }
+            
             bool has_avx2_or_neon()
             {
                 int info[4];
@@ -548,7 +598,7 @@ namespace tl
                                                  .arg(fileName)
                                                  .arg(getErrorLabel(r)));
                 }
-
+                
                 _info.size.w = _avCodecParameters[_avStream]->width;
                 _info.size.h = _avCodecParameters[_avStream]->height;
 
@@ -1006,10 +1056,6 @@ namespace tl
             {
                 av_frame_free(&_avFrame2);
             }
-            if (_avFrame)
-            {
-                av_frame_free(&_avFrame);
-            }
             for (auto i : _avCodecContext)
             {
                 avcodec_free_context(&i.second);
@@ -1062,8 +1108,10 @@ namespace tl
                        (AV_PIX_FMT_RGB24 == in || AV_PIX_FMT_GRAY8 == in ||
                         AV_PIX_FMT_RGBA == in ||
                         ((AV_PIX_FMT_YUV420P == in ||
-                          AV_PIX_FMT_YUVJ420P == in) &&
-                         fastYUV420PConversion));
+                          AV_PIX_FMT_YUVJ420P == in&&
+                          fastYUV420PConversion) ||
+                         AV_PIX_FMT_YUV422P == in ||
+                         AV_PIX_FMT_YUV444P == in) );
             }
         } // namespace
 
@@ -1071,14 +1119,6 @@ namespace tl
         {
             if (_avStream != -1)
             {
-                _avFrame = av_frame_alloc();
-                if (!_avFrame)
-                {
-                    throw std::runtime_error(
-                        string::Format("{0}: Cannot allocate frame")
-                            .arg(_fileName));
-                }
-
                 if (!canCopy(
                         _avInputPixelFormat, _avOutputPixelFormat,
                         _fastYUV420PConversion))
@@ -1354,6 +1394,15 @@ namespace tl
                 return out;
             }
 
+            auto decodeFrame = make_pooled_frame();
+            auto _avFrame = decodeFrame.get();
+            if (!_avFrame)
+            {
+                throw std::runtime_error(
+                    string::Format("{0}: Cannot allocate frame")
+                    .arg(_fileName));
+            }
+
             while (0 == out)
             {
                 out =
@@ -1384,7 +1433,8 @@ namespace tl
                     else
                         currentTime = time;
 
-                    auto image = image::Image::create(_info);
+                    // auto image = image::Image::create(_info);
+                    std::shared_ptr<image::Image> image;
 
                     auto tags = _tags;
 
@@ -1394,6 +1444,8 @@ namespace tl
                         ss << time;
                         tags["otioClipTime"] = ss.str();
                     }
+
+                    _copy(image, decodeFrame);
 
                     AVDictionaryEntry* tag = nullptr;
                     while (
@@ -1427,8 +1479,7 @@ namespace tl
                             tags["hdr"] = nlohmann::json(hdrData).dump();
                     }
                     image->setTags(tags);
-
-                    _copy(image);
+                    
                     _buffer.push_back(image);
                     out = 1;
 
@@ -1443,22 +1494,25 @@ namespace tl
             return out;
         }
 
-        void ReadVideo::_copy(std::shared_ptr<image::Image>& image)
+        void ReadVideo::_copy(std::shared_ptr<image::Image>& image,
+                              std::shared_ptr<AVFrame> avFrame)
         {
             const auto& info = image->getInfo();
-            const std::size_t w = info.size.w;
-            const std::size_t h = info.size.h;
+            const std::size_t w = _info.size.w;
+            const std::size_t h = _info.size.h;
 
-            uint8_t* const data = image->getData();
+            uint8_t* data;
             if (canCopy(
                     _avInputPixelFormat, _avOutputPixelFormat,
                     _fastYUV420PConversion))
             {
-                const uint8_t* const data0 = _avFrame->data[0];
-                const int linesize0 = _avFrame->linesize[0];
+                const uint8_t* const data0 = avFrame->data[0];
+                const int linesize0 = avFrame->linesize[0];
                 switch (_avInputPixelFormat)
                 {
                 case AV_PIX_FMT_RGB24:
+                    image = image::Image::create(_info);
+                    data = image->getData();
                     for (std::size_t i = 0; i < h; ++i)
                     {
                         std::memcpy(
@@ -1466,12 +1520,16 @@ namespace tl
                     }
                     break;
                 case AV_PIX_FMT_GRAY8:
+                    image = image::Image::create(_info);
+                    data = image->getData();
                     for (std::size_t i = 0; i < h; ++i)
                     {
                         std::memcpy(data + w * i, data0 + linesize0 * i, w);
                     }
                     break;
                 case AV_PIX_FMT_RGBA:
+                    image = image::Image::create(_info);
+                    data = image->getData();
                     for (std::size_t i = 0; i < h; ++i)
                     {
                         std::memcpy(
@@ -1480,27 +1538,27 @@ namespace tl
                     break;
                 case AV_PIX_FMT_YUVJ420P:
                 case AV_PIX_FMT_YUV420P:
+                case AV_PIX_FMT_YUV422P:
+                case AV_PIX_FMT_YUV444P:
+                case AV_PIX_FMT_YUV420P16LE:
+                case AV_PIX_FMT_YUV422P16LE:
+                case AV_PIX_FMT_YUV444P16LE:
+                case AV_PIX_FMT_YUV420P16BE:
+                case AV_PIX_FMT_YUV422P16BE:
+                case AV_PIX_FMT_YUV444P16BE:
                 {
-                    const std::size_t w2 = w / 2;
-                    const std::size_t h2 = h / 2;
-                    const uint8_t* const data1 = _avFrame->data[1];
-                    const uint8_t* const data2 = _avFrame->data[2];
-                    const int linesize1 = _avFrame->linesize[1];
-                    const int linesize2 = _avFrame->linesize[2];
-                    const std::size_t wh = w * h;
-                    const std::size_t w2h2 = w2 * h2;
-                    if (has_avx2_or_neon())
-                    {
-                        copy_plane_optimized(data, data0, w, h, linesize0);
-                        copy_plane_optimized(data + wh, data1, w2, h2, linesize1);
-                        copy_plane_optimized(data + wh + w2h2, data2, w2, h2, linesize2);
-                    }
-                    else
-                    {
-                        copy_plane(data, data0, w, h, linesize0);
-                        copy_plane(data + wh, data1, w2, h2, linesize1);
-                        copy_plane(data + wh + w2h2, data2, w2, h2, linesize2);
-                    }
+                    const uint8_t* planes[3] = {
+                        avFrame->data[0],
+                        avFrame->data[1],
+                        avFrame->data[2]
+                    };
+                    int linesize[3] = {
+                        avFrame->linesize[0],
+                        avFrame->linesize[1],
+                        avFrame->linesize[2]
+                    };
+                    image = image::Image::create(_info, avFrame,
+                                                 planes, linesize);
                     break;
                 }
                 default:
@@ -1509,13 +1567,16 @@ namespace tl
             }
             else
             {
+                image = image::Image::create(_info);
+                data = image->getData();
+                
                 av_image_fill_arrays(
                     _avFrame2->data, _avFrame2->linesize, data,
                     _avOutputPixelFormat, w, h, 1);
 
                 sws_scale(
-                    _swsContext, (uint8_t const* const*)_avFrame->data,
-                    _avFrame->linesize, 0,
+                    _swsContext, (uint8_t const* const*)avFrame->data,
+                    avFrame->linesize, 0,
                     _avCodecParameters[_avStream]->height, _avFrame2->data,
                     _avFrame2->linesize);
             }

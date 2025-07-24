@@ -360,17 +360,21 @@ namespace tl
         {
             _info = info;
             _dataByteCount = image::getDataByteCount(info);
-            // Use reserve() instead of resize() which can be faster since it
-            // does not initialize the data.
-            //
             //! \bug Allocate a bit of extra space since FFmpeg sws_scale()
             //! seems to be reading past the end?
-            _data.reserve(_dataByteCount + 16);
+            _data = new uint8_t[_dataByteCount + 16];
+            _owns = true;
         }
 
-        Image::Image() {}
+        Image::Image() : _data(nullptr), _owns(false)
+        {
+        }
 
-        Image::~Image() {}
+        Image::~Image()
+        {
+            if (_owns)
+                delete [] _data;
+        }
 
         std::shared_ptr<Image> Image::create(const Info& info)
         {
@@ -390,6 +394,25 @@ namespace tl
             return create(Info(w, h, pixelType));
         }
 
+        std::shared_ptr<Image> Image::create(
+            const Info& info,
+            const std::shared_ptr<AVFrame> _avFrame,
+            const uint8_t* planes[3],
+            const int linesize[3])
+        {
+            auto out = std::shared_ptr<Image>(new Image);
+            out->_init(info);
+            out->_planar = true;
+            for (int i = 0; i < 3; ++i)
+            {
+                out->_planes[i] = planes[i];
+                out->_linesize[i] = linesize[i];
+            }
+            out->_avFrame = _avFrame;
+            out->_owns = false; // We don't own external data
+            return out;
+        }
+        
         void Image::setTags(const Tags& value)
         {
             _tags = value;
@@ -397,7 +420,7 @@ namespace tl
 
         void Image::zero()
         {
-            std::memset(_data.data(), 0, _dataByteCount);
+            std::memset(_data, 0, _dataByteCount);
         }
 
         void to_json(nlohmann::json& json, const Size& value)

@@ -631,7 +631,8 @@ namespace tl
             p.currentLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
         }
 
-        void Texture::copy(const uint8_t* data, const std::size_t size)
+        void Texture::copy(const uint8_t* data, const std::size_t size,
+                           const int rowPitch)
         {
             TLRENDER_P();
 
@@ -660,7 +661,7 @@ namespace tl
                     device, p.image, &subresource, &subresourceLayout);
 
                 void* mapped;
-                if (size == subresourceLayout.size)
+                if (rowPitch == 0 && size == subresourceLayout.size)
                 {
 #ifdef MRV2_NO_VMA
                     // Host-visible upload (like glTexSubImage2D)
@@ -684,21 +685,16 @@ namespace tl
                     VK_CHECK(vkMapMemory(
                         device, p.memory, subresourceLayout.offset,
                         subresourceLayout.size, 0, &mapped));
-
-                    // Assuming 'data' is a pointer to your tightly packed
-                    // source pixel data
                     size_t pixel_size =
                         image::getBitDepth(p.info.pixelType) / 8 *
                         image::getChannelCount(p.info.pixelType);
-                    uint32_t row_byte_size =
-                        static_cast<uint32_t>(p.info.size.w) * pixel_size;
+                    const uint32_t src_row_pitch = rowPitch > 0 ? rowPitch : (p.info.size.w * pixel_size);
+                    const uint32_t dst_row_size = p.info.size.w * pixel_size;
                     for (uint32_t y = 0;
                          y < static_cast<uint32_t>(p.info.size.h); ++y)
                     {
                         // Source row start in your tightly packed data
-                        const void* src_row =
-                            static_cast<const uint8_t*>(data) +
-                            y * row_byte_size;
+                        const void* src_row = static_cast<const uint8_t*>(data) + y * src_row_pitch;
 
                         // Destination row start in the mapped memory, using the
                         // rowPitch
@@ -707,9 +703,9 @@ namespace tl
 
                         // Copy the actual pixel data for this row (excluding
                         // padding)
-                        std::memcpy(dst_row, src_row, row_byte_size);
+                        std::memcpy(dst_row, src_row, dst_row_size);
                     }
-
+                    
                     vkUnmapMemory(device, p.memory);
 #else
                     // Map based on layout offset and size
@@ -720,15 +716,13 @@ namespace tl
                     size_t pixel_size =
                         image::getBitDepth(p.info.pixelType) / 8 *
                         image::getChannelCount(p.info.pixelType);
-                    uint32_t row_byte_size =
-                        static_cast<uint32_t>(p.info.size.w) * pixel_size;
+                    const uint32_t src_row_pitch = rowPitch > 0 ? rowPitch : (p.info.size.w * pixel_size);
+                    const uint32_t dst_row_size = p.info.size.w * pixel_size;
                     for (uint32_t y = 0;
                          y < static_cast<uint32_t>(p.info.size.h); ++y)
                     {
                         // Source row start in your tightly packed data
-                        const void* src_row =
-                            static_cast<const uint8_t*>(data) +
-                            y * row_byte_size;
+                        const void* src_row = static_cast<const uint8_t*>(data) + y * src_row_pitch;
 
                         // Destination row start in the mapped memory, using the
                         // rowPitch
@@ -737,7 +731,7 @@ namespace tl
 
                         // Copy the actual pixel data for this row (excluding
                         // padding)
-                        std::memcpy(dst_row, src_row, row_byte_size);
+                        std::memcpy(dst_row, src_row, dst_row_size);
                     }
 
                     vmaUnmapMemory(ctx.allocator, p.allocation);
@@ -851,10 +845,11 @@ namespace tl
             }
         }
 
-        void Texture::copy(const uint8_t* data, const image::Info& info)
+        void Texture::copy(const uint8_t* data, const image::Info& info,
+                           const int rowPitch)
         {
             const size_t size = image::getDataByteCount(info);
-            copy(data, size);
+            copy(data, size, rowPitch);
         }
 
         void Texture::copy(const std::shared_ptr<image::Image>& data)
