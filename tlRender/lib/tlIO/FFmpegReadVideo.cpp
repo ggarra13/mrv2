@@ -1450,15 +1450,12 @@ namespace tl
                 case AV_PIX_FMT_YUV420P10LE:
                 case AV_PIX_FMT_YUV422P10LE:
                 case AV_PIX_FMT_YUV444P10LE:
-                case AV_PIX_FMT_YUV420P12BE:
-                case AV_PIX_FMT_YUV422P12BE:
-                case AV_PIX_FMT_YUV444P12BE:
+                case AV_PIX_FMT_YUV420P12LE:
+                case AV_PIX_FMT_YUV422P12LE:
+                case AV_PIX_FMT_YUV444P12LE:
                 case AV_PIX_FMT_YUV420P16LE:
                 case AV_PIX_FMT_YUV422P16LE:
                 case AV_PIX_FMT_YUV444P16LE:
-                case AV_PIX_FMT_YUV420P16BE:
-                case AV_PIX_FMT_YUV422P16BE:
-                case AV_PIX_FMT_YUV444P16BE:
                 {
                     const uint8_t* planes[3] = {
                         avFrame->data[0],
