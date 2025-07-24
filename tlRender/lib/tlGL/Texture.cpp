@@ -424,12 +424,19 @@ namespace tl
                 if (void* buffer =
                         glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY))
                 {
-                    for (int y = 0; y < info.size.h; ++y)
+                    if (rowStride == 0)
                     {
-                        memcpy(
-                            static_cast<uint8_t*>(buffer) + y * info.size.w * bytesPerPixel,
-                            data + y * rowStride,
-                            info.size.w * bytesPerPixel);
+                        memcpy(buffer, data, image::getDataByteCount(info));
+                    }
+                    else
+                    {
+                        for (int y = 0; y < info.size.h; ++y)
+                        {
+                            memcpy(
+                                static_cast<uint8_t*>(buffer) + y * info.size.w * bytesPerPixel,
+                                data + y * rowStride,
+                                info.size.w * bytesPerPixel);
+                        }
                     }
                     glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
                     glBindTexture(GL_TEXTURE_2D, p.id);
