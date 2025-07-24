@@ -933,6 +933,12 @@ namespace tl
                           fastYUV420PConversion) ||
                         AV_PIX_FMT_YUV422P == in ||
                         AV_PIX_FMT_YUV444P == in ||
+                        AV_PIX_FMT_YUV420P10LE == in ||
+                        AV_PIX_FMT_YUV422P10LE == in ||
+                        AV_PIX_FMT_YUV444P10LE == in ||
+                        AV_PIX_FMT_YUV420P12LE == in ||
+                        AV_PIX_FMT_YUV422P12LE == in ||
+                        AV_PIX_FMT_YUV444P12LE == in ||
                         AV_PIX_FMT_YUV420P16LE == in ||
                         AV_PIX_FMT_YUV422P16LE == in ||
                         AV_PIX_FMT_YUV444P16LE == in);

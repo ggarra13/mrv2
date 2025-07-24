@@ -29,15 +29,51 @@ const uint PixelType_RGBA_F32          = 21;
 const uint PixelType_YUV_420P_U8       = 22;
 const uint PixelType_YUV_422P_U8       = 23;
 const uint PixelType_YUV_444P_U8       = 24;
-const uint PixelType_YUV_420P_U16      = 25;
-const uint PixelType_YUV_422P_U16      = 26;
-const uint PixelType_YUV_444P_U16      = 27;
-const uint PixelType_ARGB_4444_Premult = 28;
+
+const uint PixelType_YUV_420P_U10      = 25;
+const uint PixelType_YUV_422P_U10      = 26;
+const uint PixelType_YUV_444P_U10      = 27;
+
+const uint PixelType_YUV_420P_U12      = 28;
+const uint PixelType_YUV_422P_U12      = 29;
+const uint PixelType_YUV_444P_U12      = 30;
+
+const uint PixelType_YUV_420P_U16      = 31;
+const uint PixelType_YUV_422P_U16      = 32;
+const uint PixelType_YUV_444P_U16      = 33;
+
+const uint PixelType_ARGB_4444_Premult = 34;
                                 
 // enum tl::image::VideoLevels
 const uint VideoLevels_FullRange  = 0;
 const uint VideoLevels_LegalRange = 1;
-                                
+
+float getBitDepth(int pixelType)
+{
+    if (pixelType == PixelType_YUV_420P_U10 ||
+        pixelType == PixelType_YUV_422P_U10 ||
+        pixelType == PixelType_YUV_444P_U10)
+    {
+        return 10.0;
+    }
+    else if (pixelType == PixelType_YUV_420P_U12 ||
+             pixelType == PixelType_YUV_422P_U12 ||
+             pixelType == PixelType_YUV_444P_U12)
+    {
+        return 12.0;
+    }
+    else if (pixelType == PixelType_YUV_420P_U16 ||
+             pixelType == PixelType_YUV_422P_U16 ||
+             pixelType == PixelType_YUV_444P_U16)
+    {
+        return 16.0;
+    }
+    else // U8 fallback
+    {
+        return 8.0;
+    }
+}
+
 vec4 sampleTexture(
               vec2 textureCoord,
               int pixelType,
@@ -49,44 +85,52 @@ vec4 sampleTexture(
               sampler2D s2)
 {
        vec4 c;
-       if (PixelType_YUV_420P_U8 == pixelType ||
-           PixelType_YUV_422P_U8 == pixelType ||
-           PixelType_YUV_444P_U8 == pixelType ||
-           PixelType_YUV_420P_U16 == pixelType ||
-           PixelType_YUV_422P_U16 == pixelType ||
-           PixelType_YUV_444P_U16 == pixelType)
+       if ((pixelType >= PixelType_YUV_420P_U8 && pixelType <= PixelType_YUV_444P_U16))
        {
-           if (VideoLevels_FullRange == videoLevels)
-           {
-                float y  = texture(s0, textureCoord).r;
-                float cb = texture(s1, textureCoord).r - 0.5;
-                float cr = texture(s2, textureCoord).r - 0.5;
-                c.r = y + (yuvCoefficients.x * cr);
-                c.g = y - (yuvCoefficients.y * cr) - (yuvCoefficients.z * cb);
-                c.b = y + (yuvCoefficients.w * cb);
-            }
-            else if (VideoLevels_LegalRange == videoLevels)
-            {
-                 float y  = (texture(s0, textureCoord).r - (16.0 / 255.0)) * (255.0 / (235.0 - 16.0));
-                 float cb = (texture(s1, textureCoord).r - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0)) - 0.5;
-                 float cr = (texture(s2, textureCoord).r - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0)) - 0.5;
-                 c.r = y + (yuvCoefficients.x * cr);
-                 c.g = y - (yuvCoefficients.y * cr) - (yuvCoefficients.z * cb);
-                 c.b = y + (yuvCoefficients.w * cb);
-             }
-             c.a = 1.0;
-        }
-        else
-        {
-             c = texture(s0, textureCoord);
 
-             // Video levels.
-             if (VideoLevels_LegalRange == videoLevels)
-             {
-                  c.r = (c.r - (16.0 / 255.0)) * (255.0 / (235.0 - 16.0));
-                          c.g = (c.g - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0));
-                          c.b = (c.b - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0));
-             }
+          float y  = texture(s0, textureCoord).r;
+          float cb = texture(s1, textureCoord).r;
+          float cr = texture(s2, textureCoord).r;
+
+          if (videoLevels == VideoLevels_FullRange)
+          {
+              cb -= 0.5;
+              cr -= 0.5;
+          }
+          else if (videoLevels == VideoLevels_LegalRange)
+          {
+              float bitDepth = getBitDepth(pixelType);
+              float maxValue = pow(2.0, bitDepth) - 1.0;
+              float range = pow(2.0, bitDepth - 8);
+
+              // Legal range scaling for YUV (ITU-R BT.601/BT.709)
+              float yMin = 16.0 * range;   // 16 << (bitDepth - 8)
+              float yMax = 235.0 * range;  // 235 << (bitDepth - 8)
+              float cMin = 16.0 * range;   // 16 << (bitDepth - 8)
+              float cMax = 240.0 * range;  // 240 << (bitDepth - 8)
+            
+              // Scale to 0-1 range and normalize
+              y = clamp((y * maxValue - yMin) / (yMax - yMin), 0.0, 1.0);
+              cb = clamp((cb * maxValue - cMin) / (cMax - cMin), 0.0, 1.0) - 0.5;
+              cr = clamp((cr * maxValue - cMin) / (cMax - cMin), 0.0, 1.0) - 0.5;
+          }
+
+          c.r = y + (yuvCoefficients.x * cr);
+          c.g = y - (yuvCoefficients.y * cr) - (yuvCoefficients.z * cb);
+          c.b = y + (yuvCoefficients.w * cb);
+          c.a = 1.0;
+      }
+      else
+      {
+          c = texture(s0, textureCoord);
+
+          // Video levels.
+          if (VideoLevels_LegalRange == videoLevels)
+          {
+              c.r = (c.r - (16.0 / 255.0)) * (255.0 / (235.0 - 16.0));
+              c.g = (c.g - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0));
+              c.b = (c.b - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0));
+          }
               
              // This was needed in OpenGL, but not for Vulkan
              // Swizzle for the image channels.
@@ -104,8 +148,8 @@ vec4 sampleTexture(
              // {
              //     c.a = 1.0;
              // }
-         }
-         return c;
+       }
+      return c;
 }
 
 layout(set = 0, binding = 1, std140) uniform UBO {

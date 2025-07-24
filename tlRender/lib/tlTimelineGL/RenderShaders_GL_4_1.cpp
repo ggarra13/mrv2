@@ -152,93 +152,127 @@ namespace tl
                 "const uint PixelType_YUV_420P_U8       = 22;\n"
                 "const uint PixelType_YUV_422P_U8       = 23;\n"
                 "const uint PixelType_YUV_444P_U8       = 24;\n"
-                "const uint PixelType_YUV_420P_U16      = 25;\n"
-                "const uint PixelType_YUV_422P_U16      = 26;\n"
-                "const uint PixelType_YUV_444P_U16      = 27;\n"
-                "const uint PixelType_ARGB_4444_Premult = 28;\n";
+                "const uint PixelType_YUV_420P_U10      = 25;\n"
+                "const uint PixelType_YUV_422P_U10      = 26;\n"
+                "const uint PixelType_YUV_444P_U10      = 27;\n"
+                "const uint PixelType_YUV_420P_U12      = 28;\n"
+                "const uint PixelType_YUV_422P_U12      = 29;\n"
+                "const uint PixelType_YUV_444P_U12      = 30;\n"
+                "const uint PixelType_YUV_420P_U16      = 31;\n"
+                "const uint PixelType_YUV_422P_U16      = 32;\n"
+                "const uint PixelType_YUV_444P_U16      = 33;\n"
+                "const uint PixelType_ARGB_4444_Premult = 34;\n";
 
             const std::string videoLevels =
                 "// enum tl::image::VideoLevels\n"
                 "const uint VideoLevels_FullRange  = 0;\n"
                 "const uint VideoLevels_LegalRange = 1;\n";
 
-            const std::string sampleTexture =
-                "vec4 sampleTexture("
-                "    vec2 textureCoord,\n"
-                "    int pixelType,\n"
-                "    int videoLevels,\n"
-                "    vec4 yuvCoefficients,\n"
-                "    int imageChannels,\n"
-                "    sampler2D s0,\n"
-                "    sampler2D s1,\n"
-                "    sampler2D s2)\n"
-                "{\n"
-                "    vec4 c;\n"
-                "    if (PixelType_YUV_420P_U8 == pixelType ||\n"
-                "        PixelType_YUV_422P_U8 == pixelType ||\n"
-                "        PixelType_YUV_444P_U8 == pixelType ||\n"
-                "        PixelType_YUV_420P_U16 == pixelType ||\n"
-                "        PixelType_YUV_422P_U16 == pixelType ||\n"
-                "        PixelType_YUV_444P_U16 == pixelType)\n"
-                "    {\n"
-                "        if (VideoLevels_FullRange == videoLevels)\n"
-                "        {\n"
-                "            float y  = texture(s0, textureCoord).r;\n"
-                "            float cb = texture(s1, textureCoord).r - 0.5;\n"
-                "            float cr = texture(s2, textureCoord).r - 0.5;\n"
-                "            c.r = y + (yuvCoefficients.x * cr);\n"
-                "            c.g = y - (yuvCoefficients.y * cr) - "
-                "(yuvCoefficients.z * cb);\n"
-                "            c.b = y + (yuvCoefficients.w * cb);\n"
-                "        }\n"
-                "        else if (VideoLevels_LegalRange == videoLevels)\n"
-                "        {\n"
-                "            float y  = (texture(s0, textureCoord).r - (16.0 / "
-                "255.0)) * (255.0 / (235.0 - 16.0));\n"
-                "            float cb = (texture(s1, textureCoord).r - (16.0 / "
-                "255.0)) * (255.0 / (240.0 - 16.0)) - 0.5;\n"
-                "            float cr = (texture(s2, textureCoord).r - (16.0 / "
-                "255.0)) * (255.0 / (240.0 - 16.0)) - 0.5;\n"
-                "            c.r = y + (yuvCoefficients.x * cr);\n"
-                "            c.g = y - (yuvCoefficients.y * cr) - "
-                "(yuvCoefficients.z * cb);\n"
-                "            c.b = y + (yuvCoefficients.w * cb);\n"
-                "        }\n"
-                "        c.a = 1.0;\n"
-                "    }\n"
-                "    else\n"
-                "    {\n"
-                "        c = texture(s0, textureCoord);\n"
-                "\n"
-                "        // Video levels.\n"
-                "        if (VideoLevels_LegalRange == videoLevels)\n"
-                "        {\n"
-                "            c.r = (c.r - (16.0 / 255.0)) * (255.0 / (235.0 - "
-                "16.0));\n"
-                "            c.g = (c.g - (16.0 / 255.0)) * (255.0 / (240.0 - "
-                "16.0));\n"
-                "            c.b = (c.b - (16.0 / 255.0)) * (255.0 / (240.0 - "
-                "16.0));\n"
-                "        }\n"
-                "\n"
-                "        // Swizzle for the image channels.\n"
-                "        if (1 == imageChannels)\n"
-                "        {\n"
-                "            c.g = c.b = c.r;\n"
-                "            c.a = 1.0;\n"
-                "        }\n"
-                "        else if (2 == imageChannels)\n"
-                "        {\n"
-                "            c.a = c.g;\n"
-                "            c.g = c.b = c.r;\n"
-                "        }\n"
-                "        else if (3 == imageChannels)\n"
-                "        {\n"
-                "            c.a = 1.0;\n"
-                "        }\n"
-                "    }\n"
-                "    return c;\n"
-                "}\n";
+            const std::string sampleTexture = R"(
+float getBitDepth(int pixelType)
+{
+    if (pixelType == PixelType_YUV_420P_U10 ||
+        pixelType == PixelType_YUV_422P_U10 ||
+        pixelType == PixelType_YUV_444P_U10)
+    {
+        return 10.0;
+    }
+    else if (pixelType == PixelType_YUV_420P_U12 ||
+             pixelType == PixelType_YUV_422P_U12 ||
+             pixelType == PixelType_YUV_444P_U12)
+    {
+        return 12.0;
+    }
+    else if (pixelType == PixelType_YUV_420P_U16 ||
+             pixelType == PixelType_YUV_422P_U16 ||
+             pixelType == PixelType_YUV_444P_U16)
+    {
+        return 16.0;
+    }
+    else // U8 fallback
+    {
+        return 8.0;
+    }
+}
+
+vec4 sampleTexture(
+              vec2 textureCoord,
+              int pixelType,
+              int videoLevels,
+              vec4 yuvCoefficients,
+              int imageChannels,
+              sampler2D s0,
+              sampler2D s1,
+              sampler2D s2)
+{
+       vec4 c;
+       if ((pixelType >= PixelType_YUV_420P_U8 && pixelType <= PixelType_YUV_444P_U16))
+       {
+
+          float y  = texture(s0, textureCoord).r;
+          float cb = texture(s1, textureCoord).r;
+          float cr = texture(s2, textureCoord).r;
+
+          if (videoLevels == VideoLevels_FullRange)
+          {
+              cb -= 0.5;
+              cr -= 0.5;
+          }
+          else if (videoLevels == VideoLevels_LegalRange)
+          {
+              float bitDepth = getBitDepth(pixelType);
+              float maxValue = pow(2.0, bitDepth) - 1.0;
+              float range = pow(2.0, bitDepth - 8);
+
+              // Legal range scaling for YUV (ITU-R BT.601/BT.709)
+              float yMin = 16.0 * range;   // 16 << (bitDepth - 8)
+              float yMax = 235.0 * range;  // 235 << (bitDepth - 8)
+              float cMin = 16.0 * range;   // 16 << (bitDepth - 8)
+              float cMax = 240.0 * range;  // 240 << (bitDepth - 8)
+            
+              // Scale to 0-1 range and normalize
+              y = clamp((y * maxValue - yMin) / (yMax - yMin), 0.0, 1.0);
+              cb = clamp((cb * maxValue - cMin) / (cMax - cMin), 0.0, 1.0) - 0.5;
+              cr = clamp((cr * maxValue - cMin) / (cMax - cMin), 0.0, 1.0) - 0.5;
+          }
+
+          c.r = y + (yuvCoefficients.x * cr);
+          c.g = y - (yuvCoefficients.y * cr) - (yuvCoefficients.z * cb);
+          c.b = y + (yuvCoefficients.w * cb);
+          c.a = 1.0;
+      }
+      else
+      {
+          c = texture(s0, textureCoord);
+
+          // Video levels.
+          if (VideoLevels_LegalRange == videoLevels)
+          {
+              c.r = (c.r - (16.0 / 255.0)) * (255.0 / (235.0 - 16.0));
+              c.g = (c.g - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0));
+              c.b = (c.b - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0));
+          }
+              
+             // This was needed in OpenGL, but not for Vulkan
+             // Swizzle for the image channels.
+             // if (1 == imageChannels)
+             // {
+             //     c.g = c.b = c.r;
+             //     c.a = 1.0;
+             // }
+             // else if (2 == imageChannels)
+             // {
+             //     c.a = c.g;
+             //     c.g = c.b = c.r;
+             // }
+             // else if (3 == imageChannels)
+             // {
+             //     c.a = 1.0;
+             // }
+       }
+      return c;
+}
+            )";
         } // namespace
 
         std::string imageFragmentSource()
