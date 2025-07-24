@@ -1108,10 +1108,10 @@ namespace tl
                        (AV_PIX_FMT_RGB24 == in || AV_PIX_FMT_GRAY8 == in ||
                         AV_PIX_FMT_RGBA == in ||
                         ((AV_PIX_FMT_YUV420P == in ||
-                          AV_PIX_FMT_YUVJ420P == in&&
+                          AV_PIX_FMT_YUVJ420P == in) &&
                           fastYUV420PConversion) ||
                          AV_PIX_FMT_YUV422P == in ||
-                         AV_PIX_FMT_YUV444P == in) );
+                        AV_PIX_FMT_YUV444P == in);
             }
         } // namespace
 
