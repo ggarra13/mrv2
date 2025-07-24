@@ -701,6 +701,9 @@ namespace mrv
         uiPrefs->uiPrefsSingleClickPlayback->value(tmp);
 
         playback.get("auto_hide_pixel_bar", tmp, 1);
+#ifdef VULKAN_BACKEND
+        uiPrefs->uiPrefsAutoHidePixelBar->hide();
+#endif
         uiPrefs->uiPrefsAutoHidePixelBar->value(tmp);
 
         playback.get("fps", tmpF, 24.0);

@@ -16,6 +16,7 @@ v1.3.9
 - Made Float on Top's default hotkey be <Meta>+w instead of <Ctrl>+w to avoid issues with standard Emacs hotkey.
 - Added support for DTS (DCA) audio decoder.
 - Dramatically improved the performance of movies decoding.
+- Made the Vulkan backend not hide the pixel toolbar as, unlike OpenGL, does not make playback slower.  Hiding it also made the playback drop some frames.
   
 
 v1.3.8

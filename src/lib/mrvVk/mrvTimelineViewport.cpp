@@ -615,7 +615,6 @@ namespace mrv
             {
             case timeline::Playback::Stop:
             {
-                _showPixelBar();
                 break;
             }
             default:
@@ -634,7 +633,6 @@ namespace mrv
 
             p.player->framePrev();
 
-            _showPixelBar();
             updatePlaybackButtons();
         }
 
@@ -648,7 +646,6 @@ namespace mrv
 
             p.player->frameNext();
 
-            _showPixelBar();
             updatePlaybackButtons();
         }
 
@@ -668,7 +665,6 @@ namespace mrv
             {
             case timeline::Playback::Stop:
             {
-                _showPixelBar();
                 break;
             }
             default:
@@ -684,10 +680,6 @@ namespace mrv
             if (!p.player)
                 return;
 
-            if (value == timeline::Playback::Stop)
-                _showPixelBar();
-            else
-                _hidePixelBar();
             p.droppedFrames = 0;
 
             p.player->setPlayback(value);
@@ -711,63 +703,6 @@ namespace mrv
             setPlayback(timeline::Playback::Forward);
         }
 
-        void TimelineViewport::_showPixelBar() const noexcept
-        {
-            TLRENDER_P();
-
-            const bool autoHide = p.ui->uiPrefs->uiPrefsAutoHidePixelBar->value();
-            const bool hasPixelBar = p.ui->uiPrefs->uiPrefsPixelToolbar->value();
-            const bool visiblePixelBar = p.ui->uiPixelBar->visible_r();
-
-            if (!hasPixelBar || visiblePixelBar || !autoHide || p.presentation)
-                return;
-
-            toggle_pixel_bar(nullptr, p.ui);
-        }
-
-        void TimelineViewport::_hidePixelBar() const noexcept
-        {
-            TLRENDER_P();
-
-            const bool autoHide = p.ui->uiPrefs->uiPrefsAutoHidePixelBar->value();
-            const bool visiblePixelBar = p.ui->uiPixelBar->visible_r();
-
-            if (!visiblePixelBar || !autoHide)
-                return;
-
-            toggle_pixel_bar(nullptr, p.ui);
-        }
-
-        void TimelineViewport::_togglePixelBar() const noexcept
-        {
-            TLRENDER_P();
-
-            const bool autoHide = p.ui->uiPrefs->uiPrefsAutoHidePixelBar->value();
-            const bool hasPixelBar = p.ui->uiPrefs->uiPrefsPixelToolbar->value();
-            const bool visiblePixelBar = p.ui->uiPixelBar->visible_r();
-
-            if (hasPixelBar && (!autoHide || p.presentation))
-                return;
-
-            // This is called *before* the togglePlayback begins, so we need
-            // to check for Stop instead of playing.
-            const auto playback = p.player->playback();
-            if (playback == timeline::Playback::Stop)
-            {
-                if (visiblePixelBar)
-                {
-                    toggle_pixel_bar(nullptr, p.ui);
-                }
-            }
-            else
-            {
-                if (!visiblePixelBar && hasPixelBar)
-                {
-                    toggle_pixel_bar(nullptr, p.ui);
-                }
-            }
-        }
-
         void TimelineViewport::togglePlayback() noexcept
         {
             TLRENDER_P();
@@ -775,7 +710,6 @@ namespace mrv
             if (!p.player)
                 return;
 
-            _togglePixelBar();
             p.droppedFrames = 0;
 
             p.player->togglePlayback();
