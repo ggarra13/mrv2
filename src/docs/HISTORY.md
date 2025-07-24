@@ -13,10 +13,9 @@ v1.3.9
 - Achieved consistently 60 FPS with HDR movies on Vulkan build.
 - Fixed printing version information of GNOME in Ubuntu 25.04 LTS.
 - Fixed installing of icons on Linux's Vulkan .deb/.rpm installers.
-- Improved decoding of YUV_420P_U8 movies.  We can now **almost** play back 8K fluidly with a good SSD drive.
 - Made Float on Top's default hotkey be <Meta>+w instead of <Ctrl>+w to avoid issues with standard Emacs hotkey.
 - Added support for DTS (DCA) audio decoder.
-- Dramatically improved the performance of movies decoding.  Now 
+- Dramatically improved the performance of movies decoding.
   
 
 v1.3.8
