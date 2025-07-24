@@ -525,8 +525,34 @@ namespace tl
                     break;
                 case AV_PIX_FMT_YUV420P10BE:
                 case AV_PIX_FMT_YUV420P10LE:
+                    if (options.yuvToRGBConversion)
+                    {
+                        _avOutputPixelFormat = AV_PIX_FMT_RGB48;
+                        _info.pixelType = image::PixelType::RGB_U16;
+                    }
+                    else
+                    {
+                        //! \todo Use the _info.layout.endian field instead of
+                        //! converting endianness.
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV420P10LE;
+                        _info.pixelType = image::PixelType::YUV_420P_U10;
+                    }
+                    break;
                 case AV_PIX_FMT_YUV420P12BE:
                 case AV_PIX_FMT_YUV420P12LE:
+                    if (options.yuvToRGBConversion)
+                    {
+                        _avOutputPixelFormat = AV_PIX_FMT_RGB48;
+                        _info.pixelType = image::PixelType::RGB_U16;
+                    }
+                    else
+                    {
+                        //! \todo Use the _info.layout.endian field instead of
+                        //! converting endianness.
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV420P12LE;
+                        _info.pixelType = image::PixelType::YUV_420P_U12;
+                    }
+                    break;
                 case AV_PIX_FMT_YUV420P16BE:
                 case AV_PIX_FMT_YUV420P16LE:
                     if (options.yuvToRGBConversion)
@@ -544,8 +570,34 @@ namespace tl
                     break;
                 case AV_PIX_FMT_YUV422P10BE:
                 case AV_PIX_FMT_YUV422P10LE:
+                    if (options.yuvToRGBConversion)
+                    {
+                        _avOutputPixelFormat = AV_PIX_FMT_RGB48;
+                        _info.pixelType = image::PixelType::RGB_U16;
+                    }
+                    else
+                    {
+                        //! \todo Use the _info.layout.endian field instead of
+                        //! converting endianness.
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV422P10LE;
+                        _info.pixelType = image::PixelType::YUV_420P_U10;
+                    }
+                    break;
                 case AV_PIX_FMT_YUV422P12BE:
                 case AV_PIX_FMT_YUV422P12LE:
+                    if (options.yuvToRGBConversion)
+                    {
+                        _avOutputPixelFormat = AV_PIX_FMT_RGB48;
+                        _info.pixelType = image::PixelType::RGB_U16;
+                    }
+                    else
+                    {
+                        //! \todo Use the _info.layout.endian field instead of
+                        //! converting endianness.
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV422P12LE;
+                        _info.pixelType = image::PixelType::YUV_422P_U12;
+                    }
+                    break;
                 case AV_PIX_FMT_YUV422P16BE:
                 case AV_PIX_FMT_YUV422P16LE:
                     if (options.yuvToRGBConversion)
@@ -563,8 +615,34 @@ namespace tl
                     break;
                 case AV_PIX_FMT_YUV444P10BE:
                 case AV_PIX_FMT_YUV444P10LE:
+                    if (options.yuvToRGBConversion)
+                    {
+                        _avOutputPixelFormat = AV_PIX_FMT_RGB48;
+                        _info.pixelType = image::PixelType::RGB_U16;
+                    }
+                    else
+                    {
+                        //! \todo Use the _info.layout.endian field instead of
+                        //! converting endianness.
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV444P16LE;
+                        _info.pixelType = image::PixelType::YUV_444P_U10;
+                    }
+                    break;
                 case AV_PIX_FMT_YUV444P12BE:
                 case AV_PIX_FMT_YUV444P12LE:
+                    if (options.yuvToRGBConversion)
+                    {
+                        _avOutputPixelFormat = AV_PIX_FMT_RGB48;
+                        _info.pixelType = image::PixelType::RGB_U16;
+                    }
+                    else
+                    {
+                        //! \todo Use the _info.layout.endian field instead of
+                        //! converting endianness.
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV444P12LE;
+                        _info.pixelType = image::PixelType::YUV_444P_U12;
+                    }
+                    break;
                 case AV_PIX_FMT_YUV444P16BE:
                 case AV_PIX_FMT_YUV444P16LE:
                     if (options.yuvToRGBConversion)
@@ -933,15 +1011,15 @@ namespace tl
                           fastYUV420PConversion) ||
                         AV_PIX_FMT_YUV422P == in ||
                         AV_PIX_FMT_YUV444P == in ||
+                        AV_PIX_FMT_YUV420P16LE == in ||
+                        AV_PIX_FMT_YUV422P16LE == in ||
+                        AV_PIX_FMT_YUV444P16LE == in ||
                         AV_PIX_FMT_YUV420P10LE == in ||
                         AV_PIX_FMT_YUV422P10LE == in ||
                         AV_PIX_FMT_YUV444P10LE == in ||
                         AV_PIX_FMT_YUV420P12LE == in ||
                         AV_PIX_FMT_YUV422P12LE == in ||
-                        AV_PIX_FMT_YUV444P12LE == in ||
-                        AV_PIX_FMT_YUV420P16LE == in ||
-                        AV_PIX_FMT_YUV422P16LE == in ||
-                        AV_PIX_FMT_YUV444P16LE == in);
+                        AV_PIX_FMT_YUV444P12LE == in);
             }
         } // namespace
 
@@ -1369,18 +1447,18 @@ namespace tl
                 case AV_PIX_FMT_YUV420P:
                 case AV_PIX_FMT_YUV422P:
                 case AV_PIX_FMT_YUV444P:
-<<<<<<< Updated upstream
-=======
                 case AV_PIX_FMT_YUV420P10LE:
                 case AV_PIX_FMT_YUV422P10LE:
                 case AV_PIX_FMT_YUV444P10LE:
-                case AV_PIX_FMT_YUV420P12LE:
-                case AV_PIX_FMT_YUV422P12LE:
-                case AV_PIX_FMT_YUV444P12LE:
->>>>>>> Stashed changes
+                case AV_PIX_FMT_YUV420P12BE:
+                case AV_PIX_FMT_YUV422P12BE:
+                case AV_PIX_FMT_YUV444P12BE:
                 case AV_PIX_FMT_YUV420P16LE:
                 case AV_PIX_FMT_YUV422P16LE:
                 case AV_PIX_FMT_YUV444P16LE:
+                case AV_PIX_FMT_YUV420P16BE:
+                case AV_PIX_FMT_YUV422P16BE:
+                case AV_PIX_FMT_YUV444P16BE:
                 {
                     const uint8_t* planes[3] = {
                         avFrame->data[0],
