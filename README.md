@@ -84,8 +84,9 @@ mrv2 binaries run on Windows 10+, RedHat 8.10+ or Ubuntu 22.04+, and macOS 11.0+
   and go to Security and allow "Opening Anyway".
   Alternatively, you can do it from the Terminal, by:
   
+```
   sudo xattr -rd com.apple.quarantine /Applications/mrv2.app/
-
+```
 
 - Windows and Chrome, like macOS, also protect you from installing files
   from the Internet.  When you first download it with Chrome it may warn
