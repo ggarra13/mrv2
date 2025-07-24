@@ -389,6 +389,12 @@ namespace tl
             case image::PixelType::YUV_420P_U8:
             case image::PixelType::YUV_422P_U8:
             case image::PixelType::YUV_444P_U8:
+            case image::PixelType::YUV_420P_U10:
+            case image::PixelType::YUV_422P_U10:
+            case image::PixelType::YUV_444P_U10:
+            case image::PixelType::YUV_420P_U12:
+            case image::PixelType::YUV_422P_U12:
+            case image::PixelType::YUV_444P_U12:
             case image::PixelType::YUV_420P_U16:
             case image::PixelType::YUV_422P_U16:
             case image::PixelType::YUV_444P_U16:
