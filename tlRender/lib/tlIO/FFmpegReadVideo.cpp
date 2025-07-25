@@ -473,6 +473,10 @@ namespace tl
                     _avOutputPixelFormat = _avInputPixelFormat;
                     _info.pixelType = image::PixelType::RGBA_U8;
                     break;
+                case AV_PIX_FMT_BGRA:
+                    _avOutputPixelFormat = AV_PIX_FMT_RGBA;
+                    _info.pixelType = image::PixelType::RGBA_U8;
+                    break;
                 case AV_PIX_FMT_YUVJ420P: // Deprecated format.
                     if (options.yuvToRGBConversion)
                     {
@@ -1041,7 +1045,7 @@ namespace tl
                         in_pix_fmt = "Unknown";
                     if (!out_pix_fmt)
                         out_pix_fmt = "Unknown";
-                    s << "Using sws_scaler conversion from " << in_pix_fmt
+                    s << "Using sws_scale conversion from " << in_pix_fmt
                       << " to " << out_pix_fmt;
                     LOG_STATUS(s.str());
                     if (!_fastYUV420PConversion &&

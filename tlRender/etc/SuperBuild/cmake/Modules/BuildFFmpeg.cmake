@@ -261,6 +261,7 @@ if(TLRENDER_FFMPEG_MINIMAL)
         --enable-demuxer=asf
         --enable-demuxer=av1
 	--enable-demuxer=avi
+        --enable-demuxer=dca
         --enable-demuxer=dnxhd
         --enable-demuxer=dts
         --enable-demuxer=dtshd
@@ -356,6 +357,7 @@ if(TLRENDER_FFMPEG_MINIMAL)
         --enable-parser=aac
         --enable-parser=ac3
         --enable-parser=av1
+	--enable-parser=dca
         --enable-parser=dnxhd
         --enable-parser=dolby_e
         --enable-parser=flac

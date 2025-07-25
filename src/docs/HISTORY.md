@@ -10,7 +10,8 @@ v1.3.9
 - Made movies without a valid audio codec still play the video.
 - Fixed HDR movies that specify a transfer/color primaries function but no valid
   HDR metadata.
-- Achieved consistently 60 FPS with HDR movies on Vulkan build.
+- Achieved consistently 60 FPS with 4K HDR movies on Vulkan build.
+- Achieved consistently 40 FPS with 8K YUV420P_U8 movies.
 - Fixed printing version information of GNOME in Ubuntu 25.04 LTS.
 - Fixed installing of icons on Linux's Vulkan .deb/.rpm installers.
 - Made Float on Top's default hotkey be <Meta>+w instead of <Ctrl>+w to avoid issues with standard Emacs hotkey.
@@ -19,7 +20,7 @@ v1.3.9
 - Made the Vulkan backend not hide the pixel toolbar as, unlike OpenGL, does not make playback slower.  Hiding it also made the playback drop some frames.
 - Fixed markers in timeline.
 - Added Undo for Annotations->Clear All and Annotations->Clear current frame.
-  
+
 
 v1.3.8
 ======
