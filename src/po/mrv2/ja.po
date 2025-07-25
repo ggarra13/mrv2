@@ -1934,21 +1934,6 @@ msgstr "{0} {1}をストリーミング中..."
 msgid "Stop streaming"
 msgstr "ストリーミング"
 
-msgid "Renderer"
-msgstr "レンダラー"
-
-msgid "Complexity"
-msgstr "難易度"
-
-msgid "Draw Mode"
-msgstr "描画モード"
-
-msgid "Stage Cache"
-msgstr "キャッシュ"
-
-msgid "Disk Cache in GB"
-msgstr "ディスクキャッシュ"
-
 msgid "Toggle other eye stereo image."
 msgstr "右 - 左ステレオ画像"
 
@@ -2984,20 +2969,17 @@ msgstr "オーディオなしで画像を保存しています %<PRId64> - %<PRI
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "しかし、どこかへ行こうとしているわけじゃない。"
 
-msgid "Vulkan info: {0}"
-msgstr "Vulkan 情報: {0}"
-
-msgid "{0}: Invalid OpenGL format and type"
-msgstr "{0}: 無効な OpenGL 形式とタイプ"
-
-msgid "OpenGL info: {0}"
-msgstr "OpenGL 情報: {0}"
+msgid "Offscreen Buffer info: {0}"
+msgstr "オフスクリーンバッファ情報: {0}"
 
 msgid "Saving... {0}"
 msgstr "保存中... {0}"
 
-msgid "Unsupported output format"
-msgstr "サポートされていない出力形式: %1%"
+msgid "Could not read image data from view"
+msgstr ""
+
+msgid "Could not read annotation image from view"
+msgstr ""
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "時刻 {0} にビデオデータがありません。フレームを繰り返します。"
@@ -3007,12 +2989,6 @@ msgstr "レンダーサイズ: {0}"
 
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr "画像レイヤー '{0}' 情報: {1} {2}"
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "オフスクリーンバッファ情報: {0}"
-
-msgid "Unsupported output format: "
-msgstr "サポートされていない出力形式: %1%"
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -3812,11 +3788,14 @@ msgstr "    先読み    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "    後ろ    V: % 4<PRIu64>    A: % 4<PRIu64>"
 
+msgid "HDR monitor found."
+msgstr ""
+
+msgid "HDR monitor not found or not configured."
+msgstr ""
+
 msgid "Edit Text"
 msgstr "テキストを編集"
-
-msgid "Invalid font for text drawing"
-msgstr "フォントファイル情報が無効です。"
 
 msgid "Could not convert message to shape: "
 msgstr "ベクター図形に変換"
@@ -7527,6 +7506,9 @@ msgstr "スクラブ モード"
 msgid "Area Selection Mode"
 msgstr "エリア選択モード"
 
+msgid "Draw Mode"
+msgstr "描画モード"
+
 msgid "Erase Mode"
 msgstr "消去モード"
 
@@ -7616,6 +7598,36 @@ msgstr "ホットキーウィンドウを切り替え"
 
 msgid "Toggle About Window"
 msgstr "バージョン情報ウィンドウを切り替え"
+
+#~ msgid "Renderer"
+#~ msgstr "レンダラー"
+
+#~ msgid "Complexity"
+#~ msgstr "難易度"
+
+#~ msgid "Stage Cache"
+#~ msgstr "キャッシュ"
+
+#~ msgid "Disk Cache in GB"
+#~ msgstr "ディスクキャッシュ"
+
+#~ msgid "Vulkan info: {0}"
+#~ msgstr "Vulkan 情報: {0}"
+
+#~ msgid "{0}: Invalid OpenGL format and type"
+#~ msgstr "{0}: 無効な OpenGL 形式とタイプ"
+
+#~ msgid "OpenGL info: {0}"
+#~ msgstr "OpenGL 情報: {0}"
+
+#~ msgid "Unsupported output format"
+#~ msgstr "サポートされていない出力形式: %1%"
+
+#~ msgid "Unsupported output format: "
+#~ msgstr "サポートされていない出力形式: %1%"
+
+#~ msgid "Invalid font for text drawing"
+#~ msgstr "フォントファイル情報が無効です。"
 
 #~ msgid "Blit Viewports"
 #~ msgstr "ビューポートをブリット"

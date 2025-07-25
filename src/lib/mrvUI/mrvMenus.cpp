@@ -1033,7 +1033,7 @@ namespace mrv
                 bool visible = ui->uiView->getShowAnnotations();
                 idx = menu->add(
                     _("Playback/Annotation/Toggle Visible"),
-                    kShapeFrameClear.hotkey(),
+                    kToggleShowAnnotations.hotkey(),
                     (Fl_Callback*)toggle_visible_annotation_cb, ui, mode);
                 item = (Fl_Menu_Item*)&(menu->menu()[idx]);
                 if (visible)
