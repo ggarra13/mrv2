@@ -83,7 +83,7 @@ namespace mrv
         std::vector<std::shared_ptr<draw::Annotation> > annotations;
 
         //! Last annotation undone
-        std::shared_ptr<draw::Annotation > undoAnnotation = nullptr;
+        std::vector<std::shared_ptr<draw::Annotation> > undoAnnotations;
     };
 
     void TimelinePlayer::_init(
@@ -618,7 +618,7 @@ namespace mrv
     }
 
     bool TimelinePlayer::hasAnnotations() const
-    {
+    {            
         return !_p->annotations.empty();
     }
 
@@ -692,6 +692,30 @@ namespace mrv
             return *found;
         }
     }
+    
+    std::shared_ptr< draw::Annotation > TimelinePlayer::getUndoAnnotation() const
+    {
+        TLRENDER_P();
+
+        //! Don't allow getting annotations while playing
+        if (playback() != timeline::Playback::Stop)
+            return nullptr;
+
+        const auto& time = currentTime();
+
+        const auto found = std::find_if(
+            p.undoAnnotations.begin(), p.undoAnnotations.end(),
+            [time](const auto& a) { return a->time == time; });
+
+        if (found == p.undoAnnotations.end())
+        {
+            return nullptr;
+        }
+        else
+        {
+            return *found;
+        }
+    }
 
     std::shared_ptr< draw::Annotation >
     TimelinePlayer::createAnnotation(const bool all_frames)
@@ -743,6 +767,7 @@ namespace mrv
         const std::vector< std::shared_ptr< draw::Annotation >>& value)
     {
         _p->annotations = value;
+        _p->undoAnnotations.clear();
     }
 
     void TimelinePlayer::clearFrameAnnotation()
@@ -757,12 +782,14 @@ namespace mrv
 
         if (found != p.annotations.end())
         {
+            p.undoAnnotations = p.annotations;
             p.annotations.erase(found);
         }
     }
 
     void TimelinePlayer::clearAllAnnotations()
     {
+        _p->undoAnnotations = _p->annotations;
         _p->annotations.clear();
     }
 
@@ -771,6 +798,7 @@ namespace mrv
     {
         TLRENDER_P();
 
+        p.undoAnnotations = p.annotations;
         p.annotations.erase(
             std::remove(p.annotations.begin(), p.annotations.end(), annotation),
             p.annotations.end());
@@ -782,12 +810,20 @@ namespace mrv
 
         auto annotation = getAnnotation();
         if (!annotation)
-            return;
+        {
+            if (!p.undoAnnotations.empty())
+            {
+                p.annotations = p.undoAnnotations;
+                p.undoAnnotations.clear();
+                return;
+            }
+            if (!annotation)
+                return;
+        }
 
         annotation->undo();
         if (annotation->empty())
         {
-            p.undoAnnotation = annotation;
             // If no shapes we remove the annotation too
             removeAnnotation(annotation);
         }
@@ -800,11 +836,14 @@ namespace mrv
         auto annotation = getAnnotation();
         if (!annotation)
         {
-            if (p.undoAnnotation)
+            if (!p.undoAnnotations.empty())
             {
-                annotation = p.undoAnnotation;
-                p.annotations.push_back(annotation);
-                p.undoAnnotation.reset();
+                annotation = getUndoAnnotation();
+                if (annotation)
+                {
+                    p.annotations.push_back(annotation);
+                    p.undoAnnotations.clear();
+                }
             }
         }
         if (!annotation)
@@ -823,7 +862,10 @@ namespace mrv
         TLRENDER_P();
         auto annotation = getAnnotation();
         if (!annotation)
-            return false;
+        {
+            if (p.undoAnnotations.empty())
+                return false;
+        }
         return true;
     }
 
@@ -834,9 +876,9 @@ namespace mrv
         auto annotation = getAnnotation();
         if (!annotation)
         {
-            if (p.undoAnnotation)
+            if (!p.undoAnnotations.empty())
             {
-                annotation = p.undoAnnotation;
+                annotation = getUndoAnnotation();
             }
         }
         if (!annotation)

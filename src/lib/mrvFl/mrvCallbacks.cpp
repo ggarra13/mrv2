@@ -2354,6 +2354,7 @@ namespace mrv
         if (ui->uiPrefs->SendAnnotations->value())
             tcp->pushMessage("Clear Frame Annotations", 0);
         player->clearFrameAnnotation();
+        ui->uiView->updateUndoRedoButtons();
         ui->uiTimeline->redraw();
         ui->uiView->redrawWindows();
     }
@@ -2366,6 +2367,7 @@ namespace mrv
         if (ui->uiPrefs->SendAnnotations->value())
             tcp->pushMessage("Clear All Annotations", 0);
         player->clearAllAnnotations();
+        ui->uiView->updateUndoRedoButtons();
         ui->uiTimeline->redraw();
         ui->uiView->redrawWindows();
         ui->uiMain->fill_menu(ui->uiMenuBar);

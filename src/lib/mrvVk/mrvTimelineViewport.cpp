@@ -233,6 +233,8 @@ namespace mrv
             redrawWindows();
             Fl::flush();
             redrawWindows();
+            
+            p.ui->uiTimeline->redraw();
 
             updateUndoRedoButtons();
         }
@@ -251,6 +253,8 @@ namespace mrv
             redrawWindows();
             Fl::flush();
             redrawWindows();
+
+            p.ui->uiTimeline->redraw();
 
             updateUndoRedoButtons();
         }

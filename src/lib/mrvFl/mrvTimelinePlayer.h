@@ -337,6 +337,9 @@ namespace mrv
 
         //! Get annotation for current time
         std::shared_ptr< draw::Annotation > getAnnotation() const;
+        
+        //! Get undo annotation for current time
+        std::shared_ptr< draw::Annotation > getUndoAnnotation() const;
 
         //! Create annotation for current time
         std::shared_ptr< draw::Annotation >

@@ -17,6 +17,8 @@ v1.3.9
 - Added support for DTS (DCA) audio decoder.
 - Dramatically improved the performance of movies decoding.
 - Made the Vulkan backend not hide the pixel toolbar as, unlike OpenGL, does not make playback slower.  Hiding it also made the playback drop some frames.
+- Fixed markers in timeline.
+- Added Undo for Annotations->Clear All and Annotations->Clear current frame.
   
 
 v1.3.8

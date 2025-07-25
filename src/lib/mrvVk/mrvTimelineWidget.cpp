@@ -892,6 +892,7 @@ void main()
             else
             {
                 p.timelineWidget->setFrameMarkers(markers);
+                p.annotationTimes.clear();
             }
 
             if (_getDrawUpdate(p.timelineWindow) || !p.buffer)

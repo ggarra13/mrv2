@@ -233,6 +233,8 @@ namespace mrv
             p.player->undoAnnotation();
 
             tcp->pushMessage("undo", 0);
+
+            p.ui->uiTimeline->redraw();
             redrawWindows();
 
             updateUndoRedoButtons();
@@ -247,6 +249,8 @@ namespace mrv
 
             p.player->redoAnnotation();
             tcp->pushMessage("redo", 0);
+
+            p.ui->uiTimeline->redraw();
             redrawWindows();
 
             updateUndoRedoButtons();
