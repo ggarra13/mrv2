@@ -68,6 +68,25 @@ namespace mrv
                 sign = -1;
             return sign;
         }
+        
+        bool isDrawAction(ActionMode mode)
+        {
+            switch(mode)
+            {
+            case ActionMode::kArrow:
+            case ActionMode::kCircle:
+            case ActionMode::kDraw:
+            case ActionMode::kErase:
+            case ActionMode::kFilledCircle:
+            case ActionMode::kFilledRectangle:
+            case ActionMode::kFilledPolygon:
+            case ActionMode::kPolygon:
+            case ActionMode::kRectangle:
+                return true;
+            default:
+                return false;
+            }
+        }
     } // namespace
 
     namespace vulkan
@@ -228,6 +247,10 @@ namespace mrv
                     if (p.actionMode != kScrub && !annotation)
                         return;
 
+                    if (isDrawAction(p.actionMode) &&
+                        !p.showAnnotations)
+                        p.showAnnotations = true;
+                    
                     std::shared_ptr< draw::Shape > s;
                     if (annotation)
                         s = annotation->lastShape();
