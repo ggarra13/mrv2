@@ -5,7 +5,6 @@
 set(HEADERS
     mrvAsk.h
     mrvDesktop.h
-    mrvHDRMonitor.h
     mrvMenus.h
     mrvMonitor.h
     mrvUtil.h
@@ -14,7 +13,6 @@ set(HEADERS
 set(SOURCES
     mrvAsk.cpp
     mrvDesktop.cpp
-    mrvHDRMonitor.cpp
     mrvMenus.cpp
     mrvMonitor.cpp
     mrvUtil.cpp
@@ -22,7 +20,6 @@ set(SOURCES
 
 if(APPLE)
     list(APPEND SOURCES
-	mrvHDRMonitor.mm
 	mrvMonitor_macOS.mm)
 endif()
 
