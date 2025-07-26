@@ -508,13 +508,13 @@ msgstr "unsupported operand type(s) for {0}: RationalTime and {1}"
 
 msgid ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/rt."
-"rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/"
+"rt.rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/rt."
-"rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/"
+"rt.rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 
 msgid ""
@@ -1948,21 +1948,6 @@ msgstr "Streaming {0} {1}..."
 msgid "Stop streaming"
 msgstr "Stop streaming"
 
-msgid "Renderer"
-msgstr "Renderer"
-
-msgid "Complexity"
-msgstr "Complexity"
-
-msgid "Draw Mode"
-msgstr "Draw Mode"
-
-msgid "Stage Cache"
-msgstr "Stage Cache"
-
-msgid "Disk Cache in GB"
-msgstr "Disk Cache in GB"
-
 msgid "Toggle other eye stereo image."
 msgstr "Toggle other eye stereo image."
 
@@ -2993,20 +2978,17 @@ msgstr "Saving Pictures without Audio %<PRId64> - %<PRId64>"
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Audio only in timeline, but not trying to save audio."
 
-msgid "Vulkan info: {0}"
-msgstr "Vulkan info: {0}"
-
-msgid "{0}: Invalid OpenGL format and type"
-msgstr "{0}: Invalid OpenGL format and type"
-
-msgid "OpenGL info: {0}"
-msgstr "OpenGL info: {0}"
+msgid "Offscreen Buffer info: {0}"
+msgstr "Offscreen Buffer info: {0}"
 
 msgid "Saving... {0}"
 msgstr "Saving... {0}"
 
-msgid "Unsupported output format"
-msgstr "Unsupported output format"
+msgid "Could not read image data from view"
+msgstr ""
+
+msgid "Could not read annotation image from view"
+msgstr ""
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "Empty video data at time {0}.  Repeating frame."
@@ -3016,12 +2998,6 @@ msgstr "Render size: {0}"
 
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr "Image Layer '{0}' info: {1} {2}"
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "Offscreen Buffer info: {0}"
-
-msgid "Unsupported output format: "
-msgstr "Unsupported output format: "
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -3820,11 +3796,14 @@ msgstr "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 
+msgid "HDR monitor found."
+msgstr "HDR monitor found."
+
+msgid "HDR monitor not found or not configured."
+msgstr "HDR monitor not found or not configured."
+
 msgid "Edit Text"
 msgstr "Edit Text"
-
-msgid "Invalid font for text drawing"
-msgstr "Invalid font for text drawing"
 
 msgid "Could not convert message to shape: "
 msgstr "Could not convert message to shape: "
@@ -6642,14 +6621,14 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
-"exr"
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
 msgstr ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
-"exr"
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
 
 msgid "Maximum Images Apart"
 msgstr "Maximum Images Apart"
@@ -7550,6 +7529,9 @@ msgstr "Scrub Mode"
 msgid "Area Selection Mode"
 msgstr "Area Selection Mode"
 
+msgid "Draw Mode"
+msgstr "Draw Mode"
+
 msgid "Erase Mode"
 msgstr "Erase Mode"
 
@@ -7640,11 +7622,35 @@ msgstr "Toggle Hotkeys Window"
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
 
-#~ msgid "HDR monitor found."
-#~ msgstr "HDR monitor found."
+#~ msgid "Renderer"
+#~ msgstr "Renderer"
 
-#~ msgid "HDR monitor not found or not configured."
-#~ msgstr "HDR monitor not found or not configured."
+#~ msgid "Complexity"
+#~ msgstr "Complexity"
+
+#~ msgid "Stage Cache"
+#~ msgstr "Stage Cache"
+
+#~ msgid "Disk Cache in GB"
+#~ msgstr "Disk Cache in GB"
+
+#~ msgid "Vulkan info: {0}"
+#~ msgstr "Vulkan info: {0}"
+
+#~ msgid "{0}: Invalid OpenGL format and type"
+#~ msgstr "{0}: Invalid OpenGL format and type"
+
+#~ msgid "OpenGL info: {0}"
+#~ msgstr "OpenGL info: {0}"
+
+#~ msgid "Unsupported output format"
+#~ msgstr "Unsupported output format"
+
+#~ msgid "Unsupported output format: "
+#~ msgstr "Unsupported output format: "
+
+#~ msgid "Invalid font for text drawing"
+#~ msgstr "Invalid font for text drawing"
 
 #~ msgid "Blit Viewports"
 #~ msgstr "Blit Viewports"

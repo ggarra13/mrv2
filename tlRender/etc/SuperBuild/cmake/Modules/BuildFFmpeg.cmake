@@ -261,7 +261,6 @@ if(TLRENDER_FFMPEG_MINIMAL)
         --enable-demuxer=asf
         --enable-demuxer=av1
 	--enable-demuxer=avi
-        --enable-demuxer=dca
         --enable-demuxer=dnxhd
         --enable-demuxer=dts
         --enable-demuxer=dtshd
@@ -299,6 +298,7 @@ if(TLRENDER_FFMPEG_MINIMAL)
         --enable-demuxer=pcm_u8
         --enable-demuxer=pcm_vidc
         --enable-demuxer=rawvideo
+	--enable-demuxer=spdif
         --enable-demuxer=truehd
         --enable-demuxer=v210
         --enable-demuxer=v210x
