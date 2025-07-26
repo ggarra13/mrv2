@@ -703,6 +703,7 @@ namespace mrv
         playback.get("auto_hide_pixel_bar", tmp, 1);
 #ifdef VULKAN_BACKEND
         uiPrefs->uiPrefsAutoHidePixelBar->hide();
+        tmp = 0;
 #endif
         uiPrefs->uiPrefsAutoHidePixelBar->value(tmp);
 
@@ -1414,9 +1415,11 @@ namespace mrv
         playback.set(
             "single_click_playback",
             (int)uiPrefs->uiPrefsSingleClickPlayback->value());
+#ifndef VULKAN_BACKEND
         playback.set(
             "auto_hide_pixel_bar",
             (int)uiPrefs->uiPrefsAutoHidePixelBar->value());
+#endif
         playback.set("fps", uiPrefs->uiPrefsFPS->value());
         playback.delete_entry("loop_mode"); // legacy preference
         playback.set("loop", uiPrefs->uiPrefsLoopMode->value());
