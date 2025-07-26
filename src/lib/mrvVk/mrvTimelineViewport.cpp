@@ -875,15 +875,20 @@ namespace mrv
             
             if (d.hdrInfo != timeline::HDRInformation::Inactive)
             {
-                p.hdrOptions.passthru = true;
                 auto i = p.tagData.find("hdr");
                 if (i != p.tagData.end())
                 {
+                    p.hdrOptions.passthru = true;
                     p.hdr = i->second;
 
                     // Parse the JSON string back into a nlohmann::json object
                     nlohmann::json j = nlohmann::json::parse(p.hdr);
                     p.hdrOptions.hdrData = j.get<image::HDRData>();
+                }
+                else
+                {
+                    if (d.hdrInfo == timeline::HDRInformation::Active)
+                        p.hdrOptions.passthru = true;
                 }
             }
             else

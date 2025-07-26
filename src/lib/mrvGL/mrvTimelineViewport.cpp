@@ -934,15 +934,20 @@ namespace mrv
 
             if (d.hdrInfo != timeline::HDRInformation::Inactive)
             {
-                p.hdrOptions.tonemap = true;
                 auto i = p.tagData.find("hdr");
                 if (i != p.tagData.end())
                 {
+                    p.hdrOptions.tonemap = true;
                     p.hdr = i->second;
 
                     // Parse the JSON string back into a nlohmann::json object
                     nlohmann::json j = nlohmann::json::parse(p.hdr);
                     p.hdrOptions.hdrData = j.get<image::HDRData>();
+                }
+                else
+                {
+                    if (d.hdrInfo == timeline::HDRInformation::Active)
+                        p.hdrOptions.tonemap = true;
                 }
             }
             else

@@ -21,7 +21,11 @@ v1.3.9
 - Fixed markers in timeline.
 - Added Undo for Annotations->Clear All and Annotations->Clear current frame.
 - Fixed BGRA animated gifs crashing.
-
+- Fixed color corrections resetting when there was a change like flipping the
+  image.
+- Fixed incorrect use of hdrData even when the clip did not have any HDR info.
+  This would make clips brighter when the playback was stopped.
+  
 
 v1.3.8
 ======

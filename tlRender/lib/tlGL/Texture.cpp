@@ -365,6 +365,9 @@ namespace tl
         Texture::copy(const std::shared_ptr<image::Image>& data, int x, int y)
         {
             TLRENDER_P();
+
+            const auto& info = data->getInfo();
+                
 #if defined(TLRENDER_API_GL_4_1)
             if (p.pbo)
             {
@@ -374,7 +377,6 @@ namespace tl
                 {
                     memcpy(buffer, data->getData(), data->getDataByteCount());
                     glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
-                    const auto& info = data->getInfo();
                     glBindTexture(GL_TEXTURE_2D, p.id);
                     glPixelStorei(GL_UNPACK_ALIGNMENT, info.layout.alignment);
                     glPixelStorei(
@@ -390,7 +392,6 @@ namespace tl
             else
 #endif // TLRENDER_API_GL_4_1
             {
-                const auto& info = data->getInfo();
                 glBindTexture(GL_TEXTURE_2D, p.id);
                 glPixelStorei(GL_UNPACK_ALIGNMENT, info.layout.alignment);
 #if defined(TLRENDER_API_GL_4_1)
