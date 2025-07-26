@@ -1208,6 +1208,7 @@ Beta testers
 ------------
 360highdynamicrangehdr                        (LibRaw Idea,
                                                OpenEXR improvements)
+AndroidFreud                                  (Windows Smart Screen issues)
 arfx                                          (PDF debugging, Wipe debugging,
                                                Color Palette improvements)
 Aziz9946                                      (Audio improvements)
