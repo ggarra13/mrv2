@@ -34,8 +34,10 @@ if [[ -e $startup ]]; then
     chmod a+x "$startup"
     
     echo "Creating symlink from $startup to /usr/bin/hdr"
+    rm -f /usr/bin/hdr
     ln -s "$startup" /usr/bin/hdr
     echo "Creating symlink from $startup to /usr/bin/hdr-v@mrv2_VERSION@"
+    rm -f /usr/bin/hdr-v@mrv2_VERSION@
     ln -s "$startup" /usr/bin/hdr-v@mrv2_VERSION@
 fi
 

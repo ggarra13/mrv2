@@ -184,6 +184,7 @@ if [[ "$NOARGS" == "" ]]; then
 	    -vk|--vk|--vulkan)
 		export MRV2_HDR=ON
 		export MRV2_BACKEND=VK
+		export TLRENDER_VK=ON
 		export TLRENDER_USD=OFF  # Turn off USD building as it does
 		                         # not currently work with Vulkan
 		shift
