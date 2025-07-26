@@ -217,7 +217,6 @@ elseif(UNIX)
 
 
     if (EXISTS "${CMAKE_INSTALL_PREFIX}/bin/hdr")
-	message(STATUS "********* Installing hdr utility **********")
 	configure_file( ${MRV2_DIR}/etc/Linux/hdr.main.desktop.in
 	    "${PROJECT_BINARY_DIR}/etc/hdr.desktop")
 	configure_file( ${MRV2_DIR}/etc/Linux/hdr.desktop.in

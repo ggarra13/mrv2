@@ -25,6 +25,7 @@ v1.3.9
   image.
 - Fixed incorrect use of hdrData even when the clip did not have any HDR info.
   This would make clips brighter when the playback was stopped.
+- Added support for RGB_U10 in Vulkan builds.
   
 
 v1.3.8

@@ -22,41 +22,6 @@ namespace tl
 {
     namespace vlk
     {
-        namespace
-        {
-            inline uint32_t byteSwap32(uint32_t x) {
-                return ((x >> 24) & 0x000000FF) |
-                    ((x >> 8)  & 0x0000FF00) |
-                    ((x << 8)  & 0x00FF0000) |
-                    ((x << 24) & 0xFF000000);
-            }
-        
-            // Convert from R10G10B10A2 to Vulkan A2R10G10B10 (ChatGPT)
-            void convert_R10G10B10A2_to_A2R10G10B10(
-                // DPX buffer (R10G10B10A2) - big endian
-                const uint32_t* src,
-                // Vulkan-compatible buffer (A2R10G10B10)
-                uint32_t* dst,
-                // number of pixels
-                size_t num_pixels 
-                )
-            {
-                for (size_t i = 0; i < num_pixels; ++i)
-                {
-                    uint32_t pixel = byteSwap32(src[i]);
-                    
-                    // Correct extraction for R10G10B10A2 layout
-                    uint32_t R = (pixel >> 22) & 0x3FF;
-                    uint32_t G = (pixel >> 12) & 0x3FF;
-                    uint32_t B = (pixel >>  2) & 0x3FF;
-                    uint32_t A = (pixel >>  0) & 0x3;
-
-                    // Repack into Vulkan layout
-                    dst[i] = (A << 30) | (R << 20) | (G << 10) | B;
-                }
-            }
-        
-        }
         
         std::size_t getDataByteCount(
             const VkImageType type, uint32_t w, uint32_t h, uint32_t d,
@@ -172,6 +137,7 @@ namespace tl
                     VK_FORMAT_R32G32_SFLOAT,
 
                     VK_FORMAT_R8G8B8_UNORM,
+                    //VK_FORMAT_R32G32B32A32_SFLOAT,
                     VK_FORMAT_A2R10G10B10_UNORM_PACK32,
                     VK_FORMAT_R16G16B16_UNORM,
                     VK_FORMAT_R32G32B32_UINT,
@@ -698,11 +664,6 @@ namespace tl
             if (p.info.pixelType == image::PixelType::RGB_U10)
             {
                 pixel_size = sizeof(uint32_t);
-                data = new uint8_t[size];
-                unsigned numPixels = p.info.size.w * p.info.size.h;
-                const uint32_t* src = reinterpret_cast<const uint32_t*>(upload);
-                uint32_t* dst = reinterpret_cast<uint32_t*>(data);
-                convert_R10G10B10A2_to_A2R10G10B10(src, dst, numPixels);
             }
             
             VkDevice device = ctx.device;
@@ -906,12 +867,6 @@ namespace tl
                 
                 p.currentLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
             }
-            
-            if (p.info.pixelType == image::PixelType::RGB_U10)
-            {
-                delete [] data;
-            }
-            
         }
 
         void Texture::copy(const uint8_t* data, const image::Info& info,

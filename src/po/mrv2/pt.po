@@ -1930,6 +1930,21 @@ msgstr "Fluxo {0} {1}..."
 msgid "Stop streaming"
 msgstr "Pára de transmitir"
 
+msgid "Renderer"
+msgstr "Renderer"
+
+msgid "Complexity"
+msgstr "Complexidade"
+
+msgid "Draw Mode"
+msgstr "Modo de desenho"
+
+msgid "Stage Cache"
+msgstr "Cache em estgio"
+
+msgid "Disk Cache in GB"
+msgstr "Cache de disco em GB"
+
 msgid "Toggle other eye stereo image."
 msgstr "Comutar outra imagem estreo dos olhos."
 
@@ -2967,17 +2982,20 @@ msgstr "Gravar imagens sem udio %<PRId64> - %<PRId64>"
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "udio apenas na linha do tempo, mas no tentando salvar udio."
 
-msgid "Offscreen Buffer info: {0}"
-msgstr "Informações do buffer offscreen: {0}"
+msgid "Vulkan info: {0}"
+msgstr "Informaes do Vulkan: {0}"
+
+msgid "{0}: Invalid OpenGL format and type"
+msgstr "{0}: Formato e tipo OpenGL invlidos"
+
+msgid "OpenGL info: {0}"
+msgstr "Informaes do OpenGL: {0}"
 
 msgid "Saving... {0}"
 msgstr "Salvar... {0}"
 
-msgid "Could not read image data from view"
-msgstr ""
-
-msgid "Could not read annotation image from view"
-msgstr ""
+msgid "Unsupported output format"
+msgstr "Formato de saída não suportado"
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "Dados de vídeo vazios no tempo {0}. Repetir o quadro."
@@ -2987,6 +3005,12 @@ msgstr "Tamanho de renderização: {0}"
 
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr "Informações da Camada de Imagem '{0}': {1} {2}"
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "Informações do buffer offscreen: {0}"
+
+msgid "Unsupported output format: "
+msgstr "Formato de saída não suportado: "
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -3781,14 +3805,11 @@ msgstr "Antes V: % 4<PRIu64> A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "Atrs de V: % 4<PRIu64> A: % 4<PRIu64>"
 
-msgid "HDR monitor found."
-msgstr ""
-
-msgid "HDR monitor not found or not configured."
-msgstr ""
-
 msgid "Edit Text"
 msgstr "Editar o Texto"
+
+msgid "Invalid font for text drawing"
+msgstr "Fonte invlida para desenho de texto"
 
 msgid "Could not convert message to shape: "
 msgstr "No foi possvel converter a mensagem para forma:"
@@ -7532,9 +7553,6 @@ msgstr "Modo de arranque"
 msgid "Area Selection Mode"
 msgstr "Modo de Seleco de reas"
 
-msgid "Draw Mode"
-msgstr "Modo de desenho"
-
 msgid "Erase Mode"
 msgstr "Modo de eliminao"
 
@@ -7624,36 +7642,6 @@ msgstr "Alternar a janela de teclas instantneas"
 
 msgid "Toggle About Window"
 msgstr "Alternar Sobre a Janela"
-
-#~ msgid "Renderer"
-#~ msgstr "Renderer"
-
-#~ msgid "Complexity"
-#~ msgstr "Complexidade"
-
-#~ msgid "Stage Cache"
-#~ msgstr "Cache em estgio"
-
-#~ msgid "Disk Cache in GB"
-#~ msgstr "Cache de disco em GB"
-
-#~ msgid "Vulkan info: {0}"
-#~ msgstr "Informaes do Vulkan: {0}"
-
-#~ msgid "{0}: Invalid OpenGL format and type"
-#~ msgstr "{0}: Formato e tipo OpenGL invlidos"
-
-#~ msgid "OpenGL info: {0}"
-#~ msgstr "Informaes do OpenGL: {0}"
-
-#~ msgid "Unsupported output format"
-#~ msgstr "Formato de saída não suportado"
-
-#~ msgid "Unsupported output format: "
-#~ msgstr "Formato de saída não suportado: "
-
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "Fonte invlida para desenho de texto"
 
 #~ msgid "Blit Viewports"
 #~ msgstr "Visualizaes de BlitName"

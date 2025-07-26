@@ -405,6 +405,7 @@ namespace tl
                     getTextureType(info.pixelType), data->getData());
             }
         }
+        
         void Texture::copy(const std::shared_ptr<image::Image>& data)
         {
             TLRENDER_P();

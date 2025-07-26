@@ -39,6 +39,47 @@ extern "C"
 namespace
 {
 
+    inline uint32_t byteSwap32(uint32_t x)
+    {
+        return ((x >> 24) & 0x000000FF) |
+            ((x >> 8)  & 0x0000FF00) |
+            ((x << 8)  & 0x00FF0000) |
+            ((x << 24) & 0xFF000000);
+    }
+        
+    // Convert from R10G10B10A2 to Vulkan A2R10G10B10 (ChatGPT)
+    void convert_R10G10B10A2_to_A2R10G10B10(
+        // DPX buffer (R10G10B10A2) - big endian
+        const uint32_t* src,
+        // Vulkan-compatible buffer (A2R10G10B10)
+        uint32_t* dst,
+        // number of pixels
+        const size_t num_pixels,
+        // endian of image
+        const tl::memory::Endian endian
+        )
+    {
+        for (std::size_t i = 0; i < num_pixels; ++i)
+        {
+            uint32_t pixel = src[i];
+
+            if (tl::memory::getEndian() != endian)
+                pixel = byteSwap32(pixel);
+                    
+            // Correct extraction for A2R10G10B10 layout
+            const uint32_t R = (pixel >> 22) & 0x3FF;
+            const uint32_t G = (pixel >> 12) & 0x3FF;
+            const uint32_t B = (pixel >>  2) & 0x3FF;
+            const uint32_t A = 0x3FF;
+                    
+            // Vulkan expects: A (bits 30-31), B (20-29), G
+            // (10-19), R (0-9)
+            pixel = (A << 30) | (R << 20) | (G << 10) | (B << 0);
+                        
+            dst[i] = pixel;
+        }
+    }
+
     std::string
     replaceUniformSampler(const std::string& input, unsigned& bindingIndex)
     {
@@ -506,43 +547,17 @@ namespace tl
             }
             case image::PixelType::RGB_U10:
             {
-                // \@bug:
-                // \@todo: Fix -- Convert from GL_UNSIGNED_INT_10_10_10_2
-                if (textures[0]->getInternalFormat() ==
-                    VK_FORMAT_A2R10G10B10_UNORM_PACK32)
-                {
-                    const std::size_t w = info.size.w;
-                    const std::size_t h = info.size.h;
-                    const uint32_t* src =
-                        reinterpret_cast<uint32_t*>(image->getData());
-                    std::vector<uint32_t> dst(w * h);
-                    uint32_t* out = dst.data();
-                    for (std::size_t y = 0; y < h; ++y)
-                    {
-                        for (std::size_t x = 0; x < w; ++x)
-                        {
-                            const uint32_t pixel = src[y * w + x];
-
-                            // OpenGL packing: R (bits 0-9), G (10-19), B
-                            // (20-29), A (30-31)
-                            const uint32_t r = (pixel >> 0) & 0x3FF;
-                            const uint32_t g = (pixel >> 10) & 0x3FF;
-                            const uint32_t b = (pixel >> 20) & 0x3FF;
-                            const uint32_t a = (pixel >> 30) & 0x3;
-
-                            // Vulkan expects: A (bits 30-31), B (20-29), G
-                            // (10-19), R (0-9)
-                            const uint32_t vk_pixel =
-                                (a << 30) | (r << 20) | (g << 10) | (b << 0);
-
-                            reinterpret_cast<uint32_t*>(out)[y * w + x] =
-                                vk_pixel;
-                        }
-                    }
-                    textures[0]->copy(
-                        reinterpret_cast<uint8_t*>(dst.data()),
-                        dst.size() * sizeof(uint32_t));
-                }
+                const std::size_t w = info.size.w;
+                const std::size_t h = info.size.h;
+                const uint32_t* src =
+                    reinterpret_cast<uint32_t*>(image->getData());
+                std::vector<uint32_t> dst(w * h);
+                uint32_t* out = dst.data();
+                convert_R10G10B10A2_to_A2R10G10B10(src, out, w*h,
+                                                   info.layout.endian);
+                textures[0]->copy(
+                    reinterpret_cast<uint8_t*>(dst.data()),
+                    dst.size() * sizeof(uint32_t));
             }
             break;
             default:
@@ -1072,28 +1087,6 @@ namespace tl
                 p.vbos["rect"] =
                     vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32);
                 p.vaos["rect"] = vlk::VAO::create(ctx);
-
-                // Create two pipeline for rect, one without blending and
-                // one with.
-                // {
-                //     const std::string pipelineName = "rect";
-                //     const std::string pipelineLayoutName = "rect";
-                //     const std::string shaderName = "rect";
-                //     const std::string meshName = "rect";
-                //     const bool enableBlending = false;
-                //     createPipeline(p.fbo, pipelineName, pipelineLayoutName,
-                //                    shaderName, meshName, enableBlending);
-                // }
-                
-                // {
-                //     const std::string pipelineName = "rect_blending";
-                //     const std::string pipelineLayoutName = "rect";
-                //     const std::string shaderName = "rect";
-                //     const std::string meshName = "rect";
-                //     const bool enableBlending = true;
-                //     createPipeline(p.fbo, pipelineName, pipelineLayoutName,
-                //                    shaderName, meshName, enableBlending);
-                // }
             }
             if (!p.vbos["text"])
             {
