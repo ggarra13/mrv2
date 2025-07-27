@@ -3,6 +3,10 @@
 // All rights reserved.
 
 
+// Use 16 bit conversion for now (Window crashes)
+#define USE_SWSCALE 1
+
+
 #include <sstream>
 
 #include <tlIO/FFmpegReadPrivate.h>
@@ -30,59 +34,7 @@ namespace tl
     {
 
         namespace
-        {
-            
-            class AVFramePool {
-            public:
-                AVFramePool(size_t size = 16) {
-                    for (size_t i = 0; i < size; ++i) {
-                        AVFrame* frame = av_frame_alloc();
-                        if (frame) {
-                            pool.push_back(frame);
-                        }
-                    }
-                }
-                
-                ~AVFramePool() {
-                    for (auto* frame : pool) {
-                        av_frame_free(&frame);
-                    }
-                }
-
-                AVFrame* acquire() {
-                    std::lock_guard<std::mutex> lock(mutex);
-                    if (!pool.empty()) {
-                        AVFrame* frame = pool.back();
-                        pool.pop_back();
-                        av_frame_unref(frame);
-                        return frame;
-                    }
-                    return av_frame_alloc(); // fallback if exhausted
-                }
-
-                void release(AVFrame* frame) {
-                    if (!frame) return;
-                    std::lock_guard<std::mutex> lock(mutex);
-                    pool.push_back(frame);
-                }
-
-            private:
-                std::vector<AVFrame*> pool;
-                std::mutex mutex;
-            };
-
-            // --- Static pool instance ---
-            static AVFramePool framePool;
-
-            std::shared_ptr<AVFrame> make_pooled_frame() {
-                AVFrame* frame = framePool.acquire();
-                return std::shared_ptr<AVFrame>(
-                    frame,
-                    [](AVFrame* f) { framePool.release(f); }
-                    );
-            }
-            
-        
+        {        
             void setPrimariesFromAVColorPrimaries(int ffmpegPrimaries,
                                                   image::HDRData& hdrData)
             {
@@ -473,10 +425,6 @@ namespace tl
                     _avOutputPixelFormat = _avInputPixelFormat;
                     _info.pixelType = image::PixelType::RGBA_U8;
                     break;
-                case AV_PIX_FMT_BGRA:
-                    _avOutputPixelFormat = AV_PIX_FMT_RGBA;
-                    _info.pixelType = image::PixelType::RGBA_U8;
-                    break;
                 case AV_PIX_FMT_YUVJ420P: // Deprecated format.
                     if (options.yuvToRGBConversion)
                     {
@@ -538,8 +486,14 @@ namespace tl
                     {
                         //! \todo Use the _info.layout.endian field instead of
                         //! converting endianness.
+#ifdef USE_SWSCALE
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV420P16LE;
+                        _info.pixelType = image::PixelType::YUV_420P_U16;
+#else
                         _avOutputPixelFormat = AV_PIX_FMT_YUV420P10LE;
                         _info.pixelType = image::PixelType::YUV_420P_U10;
+                        _info.layout.alignment = 32;
+#endif
                     }
                     break;
                 case AV_PIX_FMT_YUV420P12BE:
@@ -553,8 +507,14 @@ namespace tl
                     {
                         //! \todo Use the _info.layout.endian field instead of
                         //! converting endianness.
+#ifdef USE_SWSCALE
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV420P16LE;
+                        _info.pixelType = image::PixelType::YUV_420P_U16;
+#else
                         _avOutputPixelFormat = AV_PIX_FMT_YUV420P12LE;
                         _info.pixelType = image::PixelType::YUV_420P_U12;
+                        _info.layout.alignment = 32;
+#endif
                     }
                     break;
                 case AV_PIX_FMT_YUV420P16BE:
@@ -583,8 +543,14 @@ namespace tl
                     {
                         //! \todo Use the _info.layout.endian field instead of
                         //! converting endianness.
+#ifdef USE_SWSCALE
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV422P16LE;
+                        _info.pixelType = image::PixelType::YUV_422P_U16;
+#else
                         _avOutputPixelFormat = AV_PIX_FMT_YUV422P10LE;
                         _info.pixelType = image::PixelType::YUV_422P_U10;
+                        _info.layout.alignment = 32;
+#endif
                     }
                     break;
                 case AV_PIX_FMT_YUV422P12BE:
@@ -598,8 +564,14 @@ namespace tl
                     {
                         //! \todo Use the _info.layout.endian field instead of
                         //! converting endianness.
+#ifdef USE_SWSCALE
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV422P16LE;
+                        _info.pixelType = image::PixelType::YUV_422P_U16;
+#else
                         _avOutputPixelFormat = AV_PIX_FMT_YUV422P12LE;
                         _info.pixelType = image::PixelType::YUV_422P_U12;
+                        _info.layout.alignment = 32;
+#endif
                     }
                     break;
                 case AV_PIX_FMT_YUV422P16BE:
@@ -628,8 +600,14 @@ namespace tl
                     {
                         //! \todo Use the _info.layout.endian field instead of
                         //! converting endianness.
+#ifdef USE_SWSCALE
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV444P16LE;
+                        _info.pixelType = image::PixelType::YUV_444P_U16;
+#else
                         _avOutputPixelFormat = AV_PIX_FMT_YUV444P10LE;
                         _info.pixelType = image::PixelType::YUV_444P_U10;
+                        _info.layout.alignment = 32;
+#endif
                     }
                     break;
                 case AV_PIX_FMT_YUV444P12BE:
@@ -643,8 +621,14 @@ namespace tl
                     {
                         //! \todo Use the _info.layout.endian field instead of
                         //! converting endianness.
+#ifdef USE_SWSCALE
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV444P16LE;
+                        _info.pixelType = image::PixelType::YUV_444P_U16;
+#else
                         _avOutputPixelFormat = AV_PIX_FMT_YUV444P12LE;
                         _info.pixelType = image::PixelType::YUV_444P_U12;
+                        _info.layout.alignment = 32;
+#endif
                     }
                     break;
                 case AV_PIX_FMT_YUV444P16BE:
@@ -1015,12 +999,14 @@ namespace tl
                           fastYUV420PConversion) ||
                         AV_PIX_FMT_YUV422P == in ||
                         AV_PIX_FMT_YUV444P == in ||
+#ifndef USE_SWSCALE
                         AV_PIX_FMT_YUV420P10LE == in ||
                         AV_PIX_FMT_YUV422P10LE == in ||
                         AV_PIX_FMT_YUV444P10LE == in ||
                         AV_PIX_FMT_YUV420P12LE == in ||
                         AV_PIX_FMT_YUV422P12LE == in ||
                         AV_PIX_FMT_YUV444P12LE == in ||
+#endif
                         AV_PIX_FMT_YUV420P16LE == in ||
                         AV_PIX_FMT_YUV422P16LE == in ||
                         AV_PIX_FMT_YUV444P16LE == in);
@@ -1045,7 +1031,7 @@ namespace tl
                         in_pix_fmt = "Unknown";
                     if (!out_pix_fmt)
                         out_pix_fmt = "Unknown";
-                    s << "Using sws_scale conversion from " << in_pix_fmt
+                    s << "Using sws_scaler conversion from " << in_pix_fmt
                       << " to " << out_pix_fmt;
                     LOG_STATUS(s.str());
                     if (!_fastYUV420PConversion &&
@@ -1306,17 +1292,25 @@ namespace tl
                 return out;
             }
 
-            auto decodeFrame = make_pooled_frame();
-            auto _avFrame = decodeFrame.get();
-            if (!_avFrame)
+            // Create a shared_ptr to manage the AVFrame.
+            // av_frame_free is the custom deleter that will be called automatically.
+            auto decodeFrame = std::shared_ptr<AVFrame>(av_frame_alloc(),
+                                                        [](AVFrame* f) {
+                                                            av_frame_free(&f);
+                                                        });
+            if (!decodeFrame)
             {
                 throw std::runtime_error(
                     string::Format("{0}: Cannot allocate frame")
                     .arg(_fileName));
             }
-
+            
+            auto _avFrame = decodeFrame.get();
             while (0 == out)
             {
+                // We must unref the frame before trying to receive a new one.
+                av_frame_unref(_avFrame);
+                
                 out =
                     avcodec_receive_frame(_avCodecContext[_avStream], _avFrame);
                 if (out < 0)
@@ -1470,7 +1464,6 @@ namespace tl
                         avFrame->linesize[1],
                         avFrame->linesize[2]
                     };
-
                     image = image::Image::create(_info, avFrame,
                                                  planes, linesize);
                     break;
@@ -1488,6 +1481,7 @@ namespace tl
                     _avFrame2->data, _avFrame2->linesize, data,
                     _avOutputPixelFormat, w, h, 1);
 
+                LOG_ERROR("Using sws_scale");
                 sws_scale(
                     _swsContext, (uint8_t const* const*)avFrame->data,
                     avFrame->linesize, 0,
