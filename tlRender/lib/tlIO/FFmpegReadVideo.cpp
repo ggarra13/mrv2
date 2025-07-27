@@ -3,7 +3,7 @@
 // All rights reserved.
 
 
-#ifndef __linux__
+#ifdef _WIN32
 #  define USE_SWSCALE 1
 #endif
 
