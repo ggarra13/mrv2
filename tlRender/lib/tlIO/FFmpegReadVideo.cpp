@@ -649,11 +649,11 @@ namespace tl
                         //! \todo Use the _info.layout.endian field instead of
                         //! converting endianness.
 #ifdef USE_SWSCALE
-                        _avOutputPixelFormat = AV_PIX_FMT_YUV444P10LE;
-                        _info.pixelType = image::PixelType::YUV_444P_U10;
-#else
                         _avOutputPixelFormat = AV_PIX_FMT_YUV444P16LE;
                         _info.pixelType = image::PixelType::YUV_444P_U16;
+#else
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV444P10LE;
+                        _info.pixelType = image::PixelType::YUV_444P_U10;
 #endif
                     }
                     break;
@@ -669,11 +669,11 @@ namespace tl
                         //! \todo Use the _info.layout.endian field instead of
                         //! converting endianness.
 #ifdef USE_SWSCALE
-                        _avOutputPixelFormat = AV_PIX_FMT_YUV444P12LE;
-                        _info.pixelType = image::PixelType::YUV_444P_U12;
-#else
                         _avOutputPixelFormat = AV_PIX_FMT_YUV444P16LE;
                         _info.pixelType = image::PixelType::YUV_444P_U16;
+#else
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV444P12LE;
+                        _info.pixelType = image::PixelType::YUV_444P_U12;
 #endif
                     }
                     break;
