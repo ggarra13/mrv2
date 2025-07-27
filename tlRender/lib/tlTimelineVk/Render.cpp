@@ -450,7 +450,6 @@ namespace tl
                 {
                     if (image->getPlaneCount() == 1)
                     {
-                        std::cerr << "copy one plane" << std::endl;
                         textures[0]->copy(image->getData(),
                                           textures[0]->getInfo());
                         const std::size_t w = info.size.w;
@@ -466,7 +465,6 @@ namespace tl
                     }
                     else
                     {
-                        std::cerr << "copy three planes" << std::endl;
                         textures[0]->copy(image->getPlaneData(0),
                                           textures[0]->getInfo(),
                                           image->getLineSize(0));
