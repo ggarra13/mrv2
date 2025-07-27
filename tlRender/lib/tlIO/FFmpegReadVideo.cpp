@@ -3,6 +3,10 @@
 // All rights reserved.
 
 
+#ifndef __linux__
+#  define USE_SWSCALE 1
+#endif
+
 #include <sstream>
 
 #include <tlIO/FFmpegReadPrivate.h>
@@ -473,10 +477,6 @@ namespace tl
                     _avOutputPixelFormat = _avInputPixelFormat;
                     _info.pixelType = image::PixelType::RGBA_U8;
                     break;
-                case AV_PIX_FMT_BGRA:
-                    _avOutputPixelFormat = AV_PIX_FMT_RGBA;
-                    _info.pixelType = image::PixelType::RGBA_U8;
-                    break;
                 case AV_PIX_FMT_YUVJ420P: // Deprecated format.
                     if (options.yuvToRGBConversion)
                     {
@@ -538,8 +538,13 @@ namespace tl
                     {
                         //! \todo Use the _info.layout.endian field instead of
                         //! converting endianness.
+#ifdef USE_SWSCALE
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV420P16LE;
+                        _info.pixelType = image::PixelType::YUV_420P_U16;
+#else
                         _avOutputPixelFormat = AV_PIX_FMT_YUV420P10LE;
                         _info.pixelType = image::PixelType::YUV_420P_U10;
+#endif
                     }
                     break;
                 case AV_PIX_FMT_YUV420P12BE:
@@ -553,8 +558,13 @@ namespace tl
                     {
                         //! \todo Use the _info.layout.endian field instead of
                         //! converting endianness.
+#ifdef USE_SWSCALE
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV420P16LE;
+                        _info.pixelType = image::PixelType::YUV_420P_U16;
+#else
                         _avOutputPixelFormat = AV_PIX_FMT_YUV420P12LE;
                         _info.pixelType = image::PixelType::YUV_420P_U12;
+#endif
                     }
                     break;
                 case AV_PIX_FMT_YUV420P16BE:
@@ -583,8 +593,13 @@ namespace tl
                     {
                         //! \todo Use the _info.layout.endian field instead of
                         //! converting endianness.
+#ifdef USE_SWSCALE
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV422P16LE;
+                        _info.pixelType = image::PixelType::YUV_422P_U16;
+#else
                         _avOutputPixelFormat = AV_PIX_FMT_YUV422P10LE;
                         _info.pixelType = image::PixelType::YUV_422P_U10;
+#endif
                     }
                     break;
                 case AV_PIX_FMT_YUV422P12BE:
@@ -598,8 +613,13 @@ namespace tl
                     {
                         //! \todo Use the _info.layout.endian field instead of
                         //! converting endianness.
+#ifdef USE_SWSCALE
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV422P16LE;
+                        _info.pixelType = image::PixelType::YUV_422P_U16;
+#else
                         _avOutputPixelFormat = AV_PIX_FMT_YUV422P12LE;
                         _info.pixelType = image::PixelType::YUV_422P_U12;
+#endif
                     }
                     break;
                 case AV_PIX_FMT_YUV422P16BE:
@@ -628,8 +648,13 @@ namespace tl
                     {
                         //! \todo Use the _info.layout.endian field instead of
                         //! converting endianness.
+#ifdef USE_SWSCALE
                         _avOutputPixelFormat = AV_PIX_FMT_YUV444P10LE;
                         _info.pixelType = image::PixelType::YUV_444P_U10;
+#else
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV444P16LE;
+                        _info.pixelType = image::PixelType::YUV_444P_U16;
+#endif
                     }
                     break;
                 case AV_PIX_FMT_YUV444P12BE:
@@ -643,8 +668,13 @@ namespace tl
                     {
                         //! \todo Use the _info.layout.endian field instead of
                         //! converting endianness.
+#ifdef USE_SWSCALE
                         _avOutputPixelFormat = AV_PIX_FMT_YUV444P12LE;
                         _info.pixelType = image::PixelType::YUV_444P_U12;
+#else
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV444P16LE;
+                        _info.pixelType = image::PixelType::YUV_444P_U16;
+#endif
                     }
                     break;
                 case AV_PIX_FMT_YUV444P16BE:
@@ -1012,7 +1042,9 @@ namespace tl
                         AV_PIX_FMT_RGBA == in ||
                         ((AV_PIX_FMT_YUV420P == in ||
                           AV_PIX_FMT_YUVJ420P == in) &&
-                          fastYUV420PConversion) ||
+                          fastYUV420PConversion) 
+#ifndef USE_SWSCALE
+                        ||
                         AV_PIX_FMT_YUV422P == in ||
                         AV_PIX_FMT_YUV444P == in ||
                         AV_PIX_FMT_YUV420P10LE == in ||
@@ -1023,7 +1055,9 @@ namespace tl
                         AV_PIX_FMT_YUV444P12LE == in ||
                         AV_PIX_FMT_YUV420P16LE == in ||
                         AV_PIX_FMT_YUV422P16LE == in ||
-                        AV_PIX_FMT_YUV444P16LE == in);
+                        AV_PIX_FMT_YUV444P16LE == in
+#endif
+                           );
             }
         } // namespace
 
@@ -1045,7 +1079,7 @@ namespace tl
                         in_pix_fmt = "Unknown";
                     if (!out_pix_fmt)
                         out_pix_fmt = "Unknown";
-                    s << "Using sws_scale conversion from " << in_pix_fmt
+                    s << "Using sws_scaler conversion from " << in_pix_fmt
                       << " to " << out_pix_fmt;
                     LOG_STATUS(s.str());
                     if (!_fastYUV420PConversion &&
@@ -1307,8 +1341,8 @@ namespace tl
             }
 
             auto decodeFrame = make_pooled_frame();
-            auto _avFrame = decodeFrame.get();
-            if (!_avFrame)
+            const auto avFrame = decodeFrame.get();
+            if (!avFrame)
             {
                 throw std::runtime_error(
                     string::Format("{0}: Cannot allocate frame")
@@ -1318,14 +1352,14 @@ namespace tl
             while (0 == out)
             {
                 out =
-                    avcodec_receive_frame(_avCodecContext[_avStream], _avFrame);
+                    avcodec_receive_frame(_avCodecContext[_avStream], avFrame);
                 if (out < 0)
                 {
                     return out;
                 }
-                const int64_t timestamp = _avFrame->pts != AV_NOPTS_VALUE
-                                              ? _avFrame->pts
-                                              : _avFrame->pkt_dts;
+                const int64_t timestamp = avFrame->pts != AV_NOPTS_VALUE
+                                              ? avFrame->pts
+                                              : avFrame->pkt_dts;
                 // std::cout << "video timestamp: " << timestamp << std::endl;
                 const auto& avVideoStream =
                     _avFormatContext->streams[_avStream];
@@ -1338,7 +1372,7 @@ namespace tl
                     _timeRange.duration().rate());
 
                 if (time >= targetTime || backwards ||
-                    (_avFrame->duration == 0 && _useAudioOnly))
+                    (avFrame->duration == 0 && _useAudioOnly))
                 {
                     if (time >= targetTime)
                         currentTime = targetTime;
@@ -1371,7 +1405,7 @@ namespace tl
                     }
                     while (
                         (tag = av_dict_get(
-                             _avFrame->metadata, "", tag,
+                             avFrame->metadata, "", tag,
                              AV_DICT_IGNORE_SUFFIX)))
                     {
                         tags[tag->key] = tag->value;
@@ -1385,7 +1419,7 @@ namespace tl
                     {
                         image::HDRData hdrData;
                         hdrData.eotf = toEOTF(_avColorTRC);
-                        bool hasHDR = toHDRData(_avFrame, hdrData);
+                        bool hasHDR = toHDRData(avFrame, hdrData);
                         if (hasHDR)
                             tags["hdr"] = nlohmann::json(hdrData).dump();
                     }
@@ -1394,7 +1428,7 @@ namespace tl
                     _buffer.push_back(image);
                     out = 1;
 
-                    if (_useAudioOnly && _avFrame->duration == 0)
+                    if (_useAudioOnly && avFrame->duration == 0)
                     {
                         _singleImage = image;
                         currentTime = targetTime;
@@ -1446,6 +1480,33 @@ namespace tl
                             data + w * 4 * i, data0 + linesize0 * i, w * 4);
                     }
                     break;
+#ifdef USE_SWSCALE
+                case AV_PIX_FMT_YUVJ420P:
+                case AV_PIX_FMT_YUV420P:
+                {
+                    image = image::Image::create(_info);
+                    data = image->getData();
+                    const std::size_t w2 = w / 2;
+                    const std::size_t h2 = h / 2;
+                    const uint8_t* const data1 = avFrame->data[1];
+                    const uint8_t* const data2 = avFrame->data[2];
+                    const int linesize1 = avFrame->linesize[1];
+                    const int linesize2 = avFrame->linesize[2];
+                    for (std::size_t i = 0; i < h; ++i)
+                    {
+                        std::memcpy(data + w * i, data0 + linesize0 * i, w);
+                    }
+                    for (std::size_t i = 0; i < h2; ++i)
+                    {
+                        std::memcpy(
+                            data + (w * h) + w2 * i, data1 + linesize1 * i, w2);
+                        std::memcpy(
+                            data + (w * h) + (w2 * h2) + w2 * i,
+                            data2 + linesize2 * i, w2);
+                    }
+                    break;
+                }
+#else
                 case AV_PIX_FMT_YUVJ420P:
                 case AV_PIX_FMT_YUV420P:
                 case AV_PIX_FMT_YUV422P:
@@ -1470,11 +1531,11 @@ namespace tl
                         avFrame->linesize[1],
                         avFrame->linesize[2]
                     };
-
                     image = image::Image::create(_info, avFrame,
                                                  planes, linesize);
                     break;
                 }
+#endif
                 default:
                     break;
                 }

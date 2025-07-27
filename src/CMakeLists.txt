@@ -279,11 +279,9 @@ install( DIRECTORY colors ocio presets
     DESTINATION .
     COMPONENT applications )
 
-if(UNIX)
-    install( FILES icons/mrv2.png
-	DESTINATION icons
-	COMPONENT applications )
-endif()
+install( FILES icons/mrv2.png
+    DESTINATION icons
+    COMPONENT applications )
 
 #
 # Install locales
