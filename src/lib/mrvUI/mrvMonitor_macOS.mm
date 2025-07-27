@@ -46,9 +46,6 @@ bool getDisplayNameForDispID(CGDirectDisplayID dispID,
 }
 
 
-
-
-
 // Parse EDID to detect HDR static metadata support
 bool parseEDIDForHDR(const uint8_t* edid, size_t length) {
     if (length < 128) return false;
@@ -74,6 +71,22 @@ bool parseEDIDForHDR(const uint8_t* edid, size_t length) {
         ext += 128;
     }
 
+    return false;
+}
+
+
+bool builtInDisplaySupportsHDR(CGDirectDisplayID cgDisplayID) {
+    NSArray<NSScreen*>* screens = [NSScreen screens];
+    for (NSScreen* screen in screens) {
+        NSDictionary* deviceDescription = [screen deviceDescription];
+        NSNumber* screenNumber = [deviceDescription objectForKey:@"NSScreenNumber"];
+        if (screenNumber && [screenNumber unsignedIntValue] == cgDisplayID) {
+            CGFloat maxEDR = screen.maximumPotentialExtendedDynamicRangeColorComponentValue;
+            if (maxEDR > 1.0) {
+                return true;
+            }
+        }
+    }
     return false;
 }
 
@@ -143,7 +156,9 @@ namespace mrv
         bool is_hdr_active(int screen, const bool silent)
         {
             CGDirectDisplayID displayID = CGMainDisplayID();
-            if (displaySupportsHDR(displayID)) {
+            
+            if (builtInDisplaySupportsHDR(displayID) ||
+                displaySupportsHDR(displayID)) {
                 if (!silent)
                     std::cout << "This display claims to support HDR (via EDID).\n";
                 return true;
