@@ -1341,8 +1341,8 @@ namespace tl
             }
 
             auto decodeFrame = make_pooled_frame();
-            auto _avFrame = decodeFrame.get();
-            if (!_avFrame)
+            const auto avFrame = decodeFrame.get();
+            if (!avFrame)
             {
                 throw std::runtime_error(
                     string::Format("{0}: Cannot allocate frame")
@@ -1352,14 +1352,14 @@ namespace tl
             while (0 == out)
             {
                 out =
-                    avcodec_receive_frame(_avCodecContext[_avStream], _avFrame);
+                    avcodec_receive_frame(_avCodecContext[_avStream], avFrame);
                 if (out < 0)
                 {
                     return out;
                 }
-                const int64_t timestamp = _avFrame->pts != AV_NOPTS_VALUE
-                                              ? _avFrame->pts
-                                              : _avFrame->pkt_dts;
+                const int64_t timestamp = avFrame->pts != AV_NOPTS_VALUE
+                                              ? avFrame->pts
+                                              : avFrame->pkt_dts;
                 // std::cout << "video timestamp: " << timestamp << std::endl;
                 const auto& avVideoStream =
                     _avFormatContext->streams[_avStream];
@@ -1372,7 +1372,7 @@ namespace tl
                     _timeRange.duration().rate());
 
                 if (time >= targetTime || backwards ||
-                    (_avFrame->duration == 0 && _useAudioOnly))
+                    (avFrame->duration == 0 && _useAudioOnly))
                 {
                     if (time >= targetTime)
                         currentTime = targetTime;
@@ -1405,7 +1405,7 @@ namespace tl
                     }
                     while (
                         (tag = av_dict_get(
-                             _avFrame->metadata, "", tag,
+                             avFrame->metadata, "", tag,
                              AV_DICT_IGNORE_SUFFIX)))
                     {
                         tags[tag->key] = tag->value;
@@ -1419,7 +1419,7 @@ namespace tl
                     {
                         image::HDRData hdrData;
                         hdrData.eotf = toEOTF(_avColorTRC);
-                        bool hasHDR = toHDRData(_avFrame, hdrData);
+                        bool hasHDR = toHDRData(avFrame, hdrData);
                         if (hasHDR)
                             tags["hdr"] = nlohmann::json(hdrData).dump();
                     }
@@ -1428,7 +1428,7 @@ namespace tl
                     _buffer.push_back(image);
                     out = 1;
 
-                    if (_useAudioOnly && _avFrame->duration == 0)
+                    if (_useAudioOnly && avFrame->duration == 0)
                     {
                         _singleImage = image;
                         currentTime = targetTime;
