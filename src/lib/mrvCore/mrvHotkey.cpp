@@ -53,7 +53,7 @@ namespace mrv
 
     Hotkey kToggleOnePanelOnly(false, false, false, false, 'p');
 
-    Hotkey kToggleShowAnnotations(false, false, false, false, 0);
+    Hotkey kToggleShowAnnotations(true, false, false, true, 't');
 
     Hotkey kToggleBackground(true, false, false, false, 'b');
 
@@ -112,8 +112,8 @@ namespace mrv
     Hotkey kPlayFwdTwiceSpeed(false, false, false, false, 'k');
     Hotkey kStop(false, false, false, false, FL_Enter);
 
-    Hotkey kShapeFrameClear(false, false, false, false, 0, "");
-    Hotkey kShapeFrameClearAll(false, false, false, false, 0, "");
+    Hotkey kShapeFrameClear(true, false, false, true, 'c');
+    Hotkey kShapeFrameClearAll(true, false, false, true, 'a');
 
     Hotkey kPlaybackLoop(false, false, false, false, 0);
     Hotkey kPlaybackOnce(false, false, false, false, 0);

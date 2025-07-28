@@ -29,6 +29,10 @@ v1.3.9
 - Fixed hiding of pixel bar when starting the playback from the command-line.
 - Fixed compareDemo.py to work reliably.
 - Fixed Python's cmd.setDisplayOptions() not updating the UI's top bar.
+- Added default hotkeys for (you need to Reset the hotkeys for them):
+  	* Playback/Annotation/Toggle Visible
+	* Playback/Annotation/Clear
+	* Playback/Annotation/Clear All
 
   
 
