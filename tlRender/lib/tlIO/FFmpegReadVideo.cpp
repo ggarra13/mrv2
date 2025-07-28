@@ -4,7 +4,7 @@
 
 
 #ifdef _WIN32
-#  define USE_SWSCALE 1
+//#  define USE_SWSCALE 1
 #endif
 
 #include <sstream>
@@ -34,58 +34,7 @@ namespace tl
     {
 
         namespace
-        {
-            
-            class AVFramePool {
-            public:
-                AVFramePool(size_t size = 16) {
-                    for (size_t i = 0; i < size; ++i) {
-                        AVFrame* frame = av_frame_alloc();
-                        if (frame) {
-                            pool.push_back(frame);
-                        }
-                    }
-                }
-                
-                ~AVFramePool() {
-                    for (auto* frame : pool) {
-                        av_frame_free(&frame);
-                    }
-                }
-
-                AVFrame* acquire() {
-                    std::lock_guard<std::mutex> lock(mutex);
-                    if (!pool.empty()) {
-                        AVFrame* frame = pool.back();
-                        pool.pop_back();
-                        av_frame_unref(frame);
-                        return frame;
-                    }
-                    return av_frame_alloc(); // fallback if exhausted
-                }
-
-                void release(AVFrame* frame) {
-                    if (!frame) return;
-                    std::lock_guard<std::mutex> lock(mutex);
-                    pool.push_back(frame);
-                }
-
-            private:
-                std::vector<AVFrame*> pool;
-                std::mutex mutex;
-            };
-
-            // --- Static pool instance ---
-            static AVFramePool framePool;
-
-            std::shared_ptr<AVFrame> make_pooled_frame() {
-                AVFrame* frame = framePool.acquire();
-                return std::shared_ptr<AVFrame>(
-                    frame,
-                    [](AVFrame* f) { framePool.release(f); }
-                    );
-            }
-            
+        {   
         
             void setPrimariesFromAVColorPrimaries(int ffmpegPrimaries,
                                                   image::HDRData& hdrData)
@@ -985,6 +934,10 @@ namespace tl
             {
                 sws_freeContext(_swsContext);
             }
+            if (_avFrame)
+            {
+                av_frame_free(&_avFrame);
+            }
             if (_avFrame2)
             {
                 av_frame_free(&_avFrame2);
@@ -1065,6 +1018,14 @@ namespace tl
         {
             if (_avStream != -1)
             {
+                _avFrame = av_frame_alloc();
+                if (!_avFrame)
+                {
+                    throw std::runtime_error(
+                        string::Format("{0}: Cannot allocate frame")
+                        .arg(_fileName));
+                }
+                    
                 if (!canCopy(
                         _avInputPixelFormat, _avOutputPixelFormat,
                         _fastYUV420PConversion))
@@ -1340,26 +1301,17 @@ namespace tl
                 return out;
             }
 
-            auto decodeFrame = make_pooled_frame();
-            const auto avFrame = decodeFrame.get();
-            if (!avFrame)
-            {
-                throw std::runtime_error(
-                    string::Format("{0}: Cannot allocate frame")
-                    .arg(_fileName));
-            }
-
             while (0 == out)
             {
                 out =
-                    avcodec_receive_frame(_avCodecContext[_avStream], avFrame);
+                    avcodec_receive_frame(_avCodecContext[_avStream], _avFrame);
                 if (out < 0)
                 {
                     return out;
                 }
-                const int64_t timestamp = avFrame->pts != AV_NOPTS_VALUE
-                                              ? avFrame->pts
-                                              : avFrame->pkt_dts;
+                const int64_t timestamp = _avFrame->pts != AV_NOPTS_VALUE
+                                              ? _avFrame->pts
+                                              : _avFrame->pkt_dts;
                 // std::cout << "video timestamp: " << timestamp << std::endl;
                 const auto& avVideoStream =
                     _avFormatContext->streams[_avStream];
@@ -1372,7 +1324,7 @@ namespace tl
                     _timeRange.duration().rate());
 
                 if (time >= targetTime || backwards ||
-                    (avFrame->duration == 0 && _useAudioOnly))
+                    (_avFrame->duration == 0 && _useAudioOnly))
                 {
                     if (time >= targetTime)
                         currentTime = targetTime;
@@ -1389,8 +1341,15 @@ namespace tl
                         ss << time;
                         tags["otioClipTime"] = ss.str();
                     }
+                    
+                    // Clone to safely hold this frame's buffer data
+                    AVFrame* cloned = av_frame_clone(_avFrame);
+                    std::shared_ptr<AVFrame> safeFrame(cloned, [](AVFrame* f)
+                        {
+                            av_frame_free(&f);
+                        });
 
-                    _copy(image, decodeFrame);
+                    _copy(image, safeFrame);
 
                     AVDictionaryEntry* tag = nullptr;
                     while (
@@ -1405,8 +1364,8 @@ namespace tl
                     }
                     while (
                         (tag = av_dict_get(
-                             avFrame->metadata, "", tag,
-                             AV_DICT_IGNORE_SUFFIX)))
+                            _avFrame->metadata, "", tag,
+                            AV_DICT_IGNORE_SUFFIX)))
                     {
                         tags[tag->key] = tag->value;
                     }
@@ -1419,7 +1378,7 @@ namespace tl
                     {
                         image::HDRData hdrData;
                         hdrData.eotf = toEOTF(_avColorTRC);
-                        bool hasHDR = toHDRData(avFrame, hdrData);
+                        bool hasHDR = toHDRData(_avFrame, hdrData);
                         if (hasHDR)
                             tags["hdr"] = nlohmann::json(hdrData).dump();
                     }
@@ -1428,13 +1387,16 @@ namespace tl
                     _buffer.push_back(image);
                     out = 1;
 
-                    if (_useAudioOnly && avFrame->duration == 0)
+                    if (_useAudioOnly && _avFrame->duration == 0)
                     {
                         _singleImage = image;
                         currentTime = targetTime;
                     }
                     break;
                 }
+                
+                // Prepare for next decode
+                av_frame_unref(_avFrame);
             }
             return out;
         }

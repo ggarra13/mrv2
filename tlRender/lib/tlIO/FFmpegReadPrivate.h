@@ -105,6 +105,7 @@ namespace tl
             int _avAudioStream = -1;
             std::map<int, AVCodecParameters*> _avCodecParameters;
             std::map<int, AVCodecContext*> _avCodecContext;
+            AVFrame* _avFrame = nullptr;
             AVFrame* _avFrame2 = nullptr;
             AVColorTransferCharacteristic _avColorTRC;
             AVPixelFormat _avInputPixelFormat = AV_PIX_FMT_NONE;
