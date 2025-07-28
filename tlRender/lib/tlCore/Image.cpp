@@ -379,17 +379,20 @@ namespace tl
             return out;
         }
 
-        void Image::_init(const Info& info)
+        void Image::_init(const Info& info, const bool ownsData)
         {
             _info = info;
+            _owns = ownsData;
             _dataByteCount = image::getDataByteCount(info);
-            //! \bug Allocate a bit of extra space since FFmpeg sws_scale()
-            //! seems to be reading past the end?
-            _data = new uint8_t[_dataByteCount + 16];
-            _owns = true;
+            if (ownsData)
+            {
+                //! \bug Allocate a bit of extra space since FFmpeg sws_scale()
+                //! seems to be reading past the end?
+                _data = new uint8_t[_dataByteCount + 16];
+            }
         }
 
-        Image::Image() : _data(nullptr), _owns(false)
+        Image::Image()
         {
         }
 
@@ -402,7 +405,7 @@ namespace tl
         std::shared_ptr<Image> Image::create(const Info& info)
         {
             auto out = std::shared_ptr<Image>(new Image);
-            out->_init(info);
+            out->_init(info, true);
             return out;
         }
 
@@ -424,7 +427,7 @@ namespace tl
             const int linesize[3])
         {
             auto out = std::shared_ptr<Image>(new Image);
-            out->_init(info);
+            out->_init(info, false);
             out->_planar = true;
             for (int i = 0; i < 3; ++i)
             {
@@ -432,7 +435,6 @@ namespace tl
                 out->_linesize[i] = linesize[i];
             }
             out->_avFrame = _avFrame;
-            out->_owns = false; // We don't own external data
             return out;
         }
         

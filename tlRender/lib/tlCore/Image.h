@@ -280,7 +280,7 @@ namespace tl
             TLRENDER_NON_COPYABLE(Image);
 
         protected:
-            void _init(const Info&);
+            void _init(const Info&, const bool ownsData);
 
             Image();
 

@@ -34,6 +34,7 @@ v1.3.9
 	* Playback/Annotation/Clear
 	* Playback/Annotation/Clear All
 - Added an Alert message when using "Playback/Annotation/Clear All".
+- Improved even more memory and decoding performance.
 
   
 
