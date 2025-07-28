@@ -422,6 +422,7 @@ namespace mrv
                 //                
                 switch(outputInfo.pixelType)
                 {
+                default:
                 case image::PixelType::RGBA_U8:
                     flipImageInY(
                         (uint8_t*)outputImage->getData(), width, height, 4);
