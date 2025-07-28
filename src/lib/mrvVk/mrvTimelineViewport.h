@@ -428,6 +428,10 @@ namespace mrv
             bool _isEnvironmentMap() const noexcept;
             void _updateZoom() const noexcept;
 
+            void _showPixelBar() const noexcept;
+            void _hidePixelBar() const noexcept;
+            void _togglePixelBar() const noexcept;
+
             void _updatePixelBar() noexcept;
             void _updatePixelBar(image::Color4f& rgba) const noexcept;
             bool _shouldUpdatePixelBar() const noexcept;

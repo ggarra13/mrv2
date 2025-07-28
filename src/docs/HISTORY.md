@@ -34,7 +34,7 @@ v1.3.9
 	* Playback/Annotation/Clear
 	* Playback/Annotation/Clear All
 - Added an Alert message when using "Playback/Annotation/Clear All".
-- Improved even more memory and decoding performance.
+- Improved even more memory and decoding performance.  Now we can decode 8K YUV_420P videos with no popups at 60FPS, albeit audio may stutter or not play, specially on Vulkan when using HDR data.
 
   
 
