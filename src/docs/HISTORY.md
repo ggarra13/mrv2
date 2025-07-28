@@ -26,6 +26,10 @@ v1.3.9
 - Fixed incorrect use of hdrData even when the clip did not have any HDR info.
   This would make clips brighter when the playback was stopped.
 - Added support for RGB_U10 in Vulkan builds.
+- Fixed hiding of pixel bar when starting the playback from the command-line.
+- Fixed compareDemo.py to work reliably.
+- Fixed Python's cmd.setDisplayOptions() not updating the UI's top bar.
+
   
 
 v1.3.8

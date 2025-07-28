@@ -190,6 +190,15 @@ namespace mrv2
          */
         void setDisplayOptions(const timeline::DisplayOptions& value)
         {
+            if (value.color.enabled)
+            {
+                App::ui->uiGain->value(1.0);
+                App::ui->uiSaturation->value(value.color.saturation.x);
+            }
+            if (value.levels.enabled)
+            {
+                App::ui->uiGamma->value(value.levels.gamma);
+            }
             App::app->setDisplayOptions(value);
         }
 

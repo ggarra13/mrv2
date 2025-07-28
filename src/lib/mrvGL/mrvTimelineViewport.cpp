@@ -2544,6 +2544,7 @@ namespace mrv
         {
             TLRENDER_P();
 
+            p.displayOptions.resize(p.videoData.size());
             for (auto& display : p.displayOptions)
             {
                 display = d;

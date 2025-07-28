@@ -19,11 +19,18 @@ def change_wipe():
     o.wipeCenter.x = 0.25
     o.wipeRotation = 15.0
     cmd.setCompareOptions(o)
+    #
+    # Wait in a loop updating the UI for 0.1 seconds
+    # We need to do this so the comparison takes effect.
+    #
+    time = 0.0
+    while time < 0.1:
+        time += cmd.update()
 
 def change_saturation():
     o = cmd.displayOptions()
     o.color.enabled = True
-    o.color.saturation = math.Vector3f( 4, 4, 4)
+    o.color.saturation = math.Vector3f(4, 4, 4)
     cmd.setDisplayOptions(o)
 
 if len(media.list()) < 2:

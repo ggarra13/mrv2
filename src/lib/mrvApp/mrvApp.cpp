@@ -2015,15 +2015,18 @@ namespace mrv
                         }
                         else
                         {
-                            player->setSpeed(item->speed);
-                            player->setLoop(item->loop);
-                            player->setInOutRange(item->inOutRange);
-                            player->setVolume(p.volume);
-                            player->setMute(p.mute);
-                            player->setAudioOffset(item->audioOffset);
-                            player->setAllAnnotations(item->annotations);
-                            player->seek(item->currentTime);
-                            player->setPlayback(item->playback);
+                            if (isRunning())
+                            {
+                                player->setSpeed(item->speed);
+                                player->setLoop(item->loop);
+                                player->setInOutRange(item->inOutRange);
+                                player->setVolume(p.volume);
+                                player->setMute(p.mute);
+                                player->setAudioOffset(item->audioOffset);
+                                player->setAllAnnotations(item->annotations);
+                                player->seek(item->currentTime);
+                                player->setPlayback(item->playback);
+                            }
                         }
                     }
                     catch (const std::exception& e)
