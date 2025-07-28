@@ -33,6 +33,7 @@ v1.3.9
   	* Playback/Annotation/Toggle Visible
 	* Playback/Annotation/Clear
 	* Playback/Annotation/Clear All
+- Added an Alert message when using "Playback/Annotation/Clear All".
 
   
 

@@ -2364,6 +2364,15 @@ namespace mrv
         const auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
+
+        int ok = fl_choice(
+            _("You are about to clear all annotations.  You can still undo "
+              "the operation right after. "
+              "Do you want to continue?"),
+            _("No"), _("Yes"), NULL, NULL);
+        if (!ok)
+            return;
+        
         if (ui->uiPrefs->SendAnnotations->value())
             tcp->pushMessage("Clear All Annotations", 0);
         player->clearAllAnnotations();
