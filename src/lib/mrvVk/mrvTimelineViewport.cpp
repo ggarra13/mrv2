@@ -864,22 +864,15 @@ namespace mrv
         {
             TLRENDER_P();
 
-            if (value == p.displayOptions || value.empty())
+            if (value == p.displayOptions)
                 return;
 
-            std::vector<timeline::DisplayOptions> fullValues = value;
-            if (value.size() == 1 && p.videoData.size() > 1)
-            {
-                fullValues.resize(p.videoData.size());
-                for (auto& full : fullValues)
-                {
-                    full = value[0];
-                }
-            }
-
-            p.displayOptions = fullValues;
+            p.displayOptions = value;
 
             updateDisplayOptions();
+
+            if (p.displayOptions.empty())
+                return;
 
             const auto& d = p.displayOptions[0];
             

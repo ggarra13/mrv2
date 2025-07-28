@@ -930,6 +930,9 @@ namespace mrv
 
             updateDisplayOptions();
             
+            if (p.displayOptions.empty())
+                return;
+            
             const auto& d = p.displayOptions[0];
 
             if (d.hdrInfo != timeline::HDRInformation::Inactive)
