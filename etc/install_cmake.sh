@@ -29,7 +29,10 @@ elif [[ $KERNEL == *Msys* ]]; then
     CMAKE_EXT=zip
 fi
 
-echo "Downloading cmake..."
+echo "Downloading cmake from:"
+echo
+echo "https://github.com/Kitware/CMake/releases/download/v${CMAKE_RELEASE}/cmake-${CMAKE_RELEASE}-${CMAKE_PLATFORM}.${CMAKE_EXT}"
+echo
 wget -c -q https://github.com/Kitware/CMake/releases/download/v${CMAKE_RELEASE}/cmake-${CMAKE_RELEASE}-${CMAKE_PLATFORM}.${CMAKE_EXT}
 
 
