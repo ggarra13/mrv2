@@ -81,32 +81,11 @@ if [[ "$CMAKE_TARGET" == "package" ]]; then
 fi
 
 cd $dir
-max_retries=1
-if [[ "${CMAKE_TARGET}" == "package" ]]; then
-    max_retries=3
-fi
-retry_delay=5
-success=0
 
-for ((i=1; i<=max_retries; i++)); do
-    echo "Attempt $i of $max_retries to build mrv2..."
-    cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t ${CMAKE_TARGET}
+cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t ${CMAKE_TARGET}
     
-    if [[ $? == 0 ]]; then
-        echo "Build succeeded on attempt $i."
-        success=1
-        break
-    else
-        echo "Build failed on attempt $i."
-        if [[ $i -lt $max_retries ]]; then
-            echo "Retrying after $retry_delay seconds..."
-            sleep $retry_delay
-        fi
-    fi
-done
-
-if [[ $success -ne 1 ]]; then
-    echo "COMPILATION of mrv2 failed after $max_retries attempts!"
+if [[ $? != 0 ]]; then
+    echo "COMPILATION of mrv2 failed!"
     exit 1
 fi
 
