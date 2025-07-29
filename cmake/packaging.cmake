@@ -214,18 +214,20 @@ elseif(UNIX)
 	DESTINATION share/applications COMPONENT applications)
     install(DIRECTORY ${MRV2_DIR}/share/icons
 	DESTINATION share/ COMPONENT applications)
-
+    
+    configure_file( ${MRV2_DIR}/etc/Linux/hdr.main.desktop.in
+	"${PROJECT_BINARY_DIR}/etc/hdr.desktop")
+    configure_file( ${MRV2_DIR}/etc/Linux/hdr.desktop.in
+	"${PROJECT_BINARY_DIR}/etc/hdr-v${mrv2_VERSION}.desktop")
 
     if (EXISTS "${CMAKE_INSTALL_PREFIX}/bin/hdr")
-	configure_file( ${MRV2_DIR}/etc/Linux/hdr.main.desktop.in
-	    "${PROJECT_BINARY_DIR}/etc/hdr.desktop")
-	configure_file( ${MRV2_DIR}/etc/Linux/hdr.desktop.in
-	    "${PROJECT_BINARY_DIR}/etc/hdr-v${mrv2_VERSION}.desktop")
-    
+	message(STATUS "-----------hdr utility------------------")
 	install(FILES "${PROJECT_BINARY_DIR}/etc/hdr.desktop"
 	    DESTINATION share/applications COMPONENT applications)
 	install(FILES "${PROJECT_BINARY_DIR}/etc/hdr-v${mrv2_VERSION}.desktop"
 	    DESTINATION share/applications COMPONENT applications)
+    else()
+	message(STATUS "-----------No hdr utility------------------")
     endif()
 
 
