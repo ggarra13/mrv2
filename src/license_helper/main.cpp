@@ -1,0 +1,173 @@
+
+#include <FL/fl_utf8.h>
+#include <FL/Fl_Double_Window.H>
+#include <FL/Fl_Box.H>
+#include <FL/Fl_Button.H>
+#include <FL/Fl_Input.H>
+#include <FL/Fl_Output.H>
+#include <FL/Fl_Preferences.H>
+
+#if defined(_WIN32)
+#  include <windows.h>
+#else // Linux/Unix
+#  include <unistd.h>
+#  include <sys/types.h>
+#  include <pwd.h>
+#endif
+
+#include <array>
+#include <cstdlib>
+#include <memory>
+#include <filesystem>
+namespace fs = std::filesystem;
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <iostream>
+
+std::string get_machine_id() {
+#if defined(_WIN32)
+    char buffer[128];
+    FILE* pipe = _popen("wmic csproduct get uuid", "r");
+    if (!pipe) return "";
+    fgets(buffer, sizeof(buffer), pipe); // skip header
+    fgets(buffer, sizeof(buffer), pipe); // actual UUID
+    _pclose(pipe);
+    return std::string(buffer);
+#elif defined(__APPLE__)
+    std::array<char, 128> buffer;
+    std::string result;
+    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(
+                                                      "ioreg -rd1 -c IOPlatformExpertDevice | grep IOPlatformUUID | cut -d '\"' -f4", "r"), pclose);
+    if (pipe) {
+        while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
+            result += buffer.data();
+        }
+    }
+    return result;
+#else
+    std::ifstream f("/etc/machine-id");
+    std::string id;
+    std::getline(f, id);
+    return id;
+#endif
+}
+
+static void exit_cb(Fl_Widget* b, void* data)
+{
+    exit(1);
+}
+
+std::string homepath()
+{
+    std::string path;
+
+#ifdef _WIN32
+    char* e = nullptr;
+    if ((e = fl_getenv("HOME")))
+    {
+        path = e;
+        size_t pos = path.rfind("Documents");
+        if (pos != std::string::npos)
+        {
+            path = path.replace(pos, path.size(), "");
+        }
+        if (fs::is_directory(path))
+            return path;
+    }
+    if ((e = fl_getenv("USERPROFILE")))
+    {
+        path = e;
+        if (fs::is_directory(path))
+            return path;
+    }
+    if ((e = fl_getenv("HOMEDRIVE")))
+    {
+        path = e;
+        path += os::sgetenv("HOMEPATH");
+        path += "/" + os::sgetenv("USERNAME");
+        if (fs::is_directory(path))
+            return path;
+    }
+#else
+    char* e = nullptr;
+    if ((e = fl_getenv("HOME")))
+    {
+        path = e;
+        size_t pos = path.rfind("Documents");
+        if (pos != std::string::npos)
+        {
+            path = path.replace(pos, path.size(), "");
+        }
+        if (fs::is_directory(path))
+            return path;
+    }
+    else
+    {
+        e = getpwuid(getuid())->pw_dir;
+        if (e)
+        {
+            path = e;
+            return path;
+        }
+    }
+#endif
+    return ".";
+}
+
+std::string prefspath()
+{
+    std::string prefs = homepath();
+    prefs += "/.filmaura/";
+    return prefs;
+}
+
+
+static void create_license_cb(Fl_Widget* b, void* data)
+{
+    Fl_Input* license_widget = (Fl_Input*)data;
+    std::string license = license_widget->value();
+    if (license.empty())
+    {
+        return;
+    }
+
+    Fl_Preferences base(
+            prefspath().c_str(), "filmaura", "mrv2.license",
+            (Fl_Preferences::Root)0);
+    base.set("license", license.c_str());
+    base.flush();
+    
+    exit(0);
+}
+
+int main()
+{
+    Fl_Double_Window win(640, 480, "License helper");
+    const std::string& machine_id = get_machine_id();
+
+    win.begin();
+
+    Fl_Box    box(20, 30, 600, 80);
+    box.label("Please submit this machine id "
+              "with your Paypal email to ggarra13@@gmail.com");
+
+    Fl_Output machine(20, 130, 600, 40, "Machine ID");
+    machine.align(FL_ALIGN_CENTER | FL_ALIGN_TOP);
+    machine.value(machine_id.c_str());
+
+    Fl_Input license(20, 230, 600, 40, "License");
+    license.align(FL_ALIGN_CENTER | FL_ALIGN_TOP);
+    license.tooltip("Once you obtain a license, copy it here");
+
+    Fl_Button exit(80, 280, 150, 40, "Exit");
+    exit.callback((Fl_Callback*)exit_cb, nullptr);
+
+    Fl_Button create(360, 280, 150, 40, "Create");
+    create.callback((Fl_Callback*)create_license_cb, &license);
+
+    
+    win.end();               
+    win.show();
+    return Fl::run();
+}

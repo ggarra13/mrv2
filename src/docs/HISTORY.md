@@ -5,8 +5,7 @@ v1.3.9
   T/S/F in the timecode selection button.
 - Fixed Wayland's monitor names.
 - Fixed opening of Secondary Window on Vulkan mrv2.
-- Made all icons inlined in the C++ code.  This improves loading performance
-  and avoids issues with Remote Desktop Connection.
+- Made all icons inlined in the C++ code.  This improves loading performance.
 - Made movies without a valid audio codec still play the video.
 - Fixed HDR movies that specify a transfer/color primaries function but no valid
   HDR metadata.

@@ -26,12 +26,13 @@ set(HEADERS
     mrvPathMapping.h
     mrvRoot.h
     mrvSequence.h
+    mrvSHA256.h
     mrvSignalHandler.h
     mrvStackTrace.h
     mrvString.h
-    mrvWait.h
     mrvTimeObject.h
     mrvUtil.h
+    mrvWait.h
 )
 
 set(SOURCES
@@ -49,6 +50,7 @@ set(SOURCES
     mrvOS.cpp
     mrvPathMapping.cpp
     mrvRoot.cpp
+    mrvSHA256.cpp
     mrvStackTrace.cpp
     mrvString.cpp
     mrvWait.cpp

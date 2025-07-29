@@ -369,6 +369,11 @@ add_subdirectory( ${CMAKE_CURRENT_SOURCE_DIR}/lib )
 add_subdirectory(main)
 
 #
+# Add license_helper for licensing
+#
+add_subdirectory(license_helper)
+
+#
 # Add hdr source
 #
 if (TLRENDER_NDI AND TLRENDER_VK AND MRV2_HDR)
