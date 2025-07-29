@@ -2,9 +2,11 @@
 HDR
 ###
 
-mrv2 soporta HDR (High Dynamic Range) internamente pero actualmente no puede mostralo en un monitor HDR ya que es una limitación de OpenGL.
+mrv2 en OpenGL soporta HDR (High Dynamic Range) internamente pero actualmente no puede mostralo en un monitor HDR ya que es una limitación de OpenGL.
 
-Lo que se puede hacer es usar un SDK de salida y un dispositivo conectado a un monitor externo.
+mrv2 en Vulkan suporta HDR (High Dynamic Range) nativamente, si su monitor y su compositor Wayland en Linux es moderno como GNOME 48.
+
+Lo que se puede hacer además es usar un SDK de salida y un dispositivo conectado a un monitor externo.
 Si usa  NDI® puede mostrar el contenido en NDI® Tools en un monitor del computador capaz de HDR.
 
 

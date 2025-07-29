@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HDR &mdash; documentación de mrv2 - v1.3.5</title>
+  <title>HDR &mdash; documentación de mrv2 - v1.3.9</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
@@ -14,7 +14,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=0706040e"></script>
+      <script src="../_static/documentation_options.js?v=d8e42da6"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../_static/translations.js?v=f85f4cfb"></script>
@@ -97,8 +97,9 @@
              
   <section id="hdr">
 <h1>HDR<a class="headerlink" href="#hdr" title="Link to this heading"></a></h1>
-<p>mrv2 soporta HDR (High Dynamic Range) internamente pero actualmente no puede mostralo en un monitor HDR ya que es una limitación de OpenGL.</p>
-<p>Lo que se puede hacer es usar un SDK de salida y un dispositivo conectado a un monitor externo.
+<p>mrv2 en OpenGL soporta HDR (High Dynamic Range) internamente pero actualmente no puede mostralo en un monitor HDR ya que es una limitación de OpenGL.</p>
+<p>mrv2 en Vulkan suporta HDR (High Dynamic Range) nativamente, si su monitor y su compositor Wayland en Linux es moderno como GNOME 48.</p>
+<p>Lo que se puede hacer además es usar un SDK de salida y un dispositivo conectado a un monitor externo.
 Si usa  NDI® puede mostrar el contenido en NDI® Tools en un monitor del computador capaz de HDR.</p>
 <section id="ndi">
 <h2>NDI®<a class="headerlink" href="#ndi" title="Link to this heading"></a></h2>

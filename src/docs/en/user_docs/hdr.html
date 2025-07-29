@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HDR &mdash; mrv2 v1.3.5 documentation</title>
+  <title>HDR &mdash; mrv2 v1.3.9 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
@@ -14,7 +14,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=bc949842"></script>
+      <script src="../_static/documentation_options.js?v=6376b1ea"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -96,12 +96,13 @@
              
   <section id="hdr">
 <h1>HDR<a class="headerlink" href="#hdr" title="Link to this heading"></a></h1>
-<p>mrv2 supports HDR internally but currently cannot display it on an HDR monitor or TV set, as it is a limitation of OpenGL.</p>
-<p>What can be done is to use an output SDK + output device connected to an external monitor or use NDI® Tools if using NDI®.</p>
+<p>mrv2’s OpenGL supports HDR internally but currently cannot display it on an HDR monitor or TV set, as it is a limitation of OpenGL.</p>
+<p>mrv2’s in its Vulkan backend supports HDR properly if an HDR monitor is provided and, on Linux, if you use a modern Wayland compositor like GNOME 48 or later.</p>
+<p>What can also be done is to use an output SDK + output device connected to an external monitor or use NDI® Tools if using NDI®.</p>
 <section id="ndi">
 <h2>NDI®<a class="headerlink" href="#ndi" title="Link to this heading"></a></h2>
 <p>NDI® uses your local LAN to transmit the video through and can be used for reviewing content among artists.</p>
-<p>If you want to view NDI® with full HDR on a computer monitor, you can use the NDI Tools (macOS or Windows only), which can be downloaded from:</p>
+<p>If you want to view NDI® with full HDR on a computer monitor, you can use the bundled ‘hdr’ utility (all platforms) or NDI Tools (macOS or Windows only), which can be downloaded from:</p>
 <p><a class="reference external" href="https://ndi.video/tools/">https://ndi.video/tools/</a></p>
 <p>NDI® is a registered trademark of Vizrt NDI AB</p>
 </section>
