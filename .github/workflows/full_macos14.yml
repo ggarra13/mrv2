@@ -30,8 +30,8 @@ jobs:
     - name: Install ninja-build
       run: brew install ninja
       
-    - name: Install automake
-      run: brew install automake curl rsync
+    - name: Install automake and other network utils
+      run: brew install automake curl rsync wget
 
     - name: Install GNU sed
       run: brew install gnu-sed
