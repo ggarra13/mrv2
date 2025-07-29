@@ -21,3 +21,5 @@ Guía del Usuario de mrv2
    hdr
    command-line
    faq
+
+   licensing
