@@ -649,4 +649,11 @@ if (APPLE)
     file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/presets)
     file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/python)
     file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/share)
+
+    #
+    # Wait five seconds before continuing to package.
+    # This should avoid issues with hdiutil resource being busy on GitHub
+    # Actions.
+    #
+    execute_process(COMMAND ${CMAKE_COMMAND} -E sleep 5) # Waits for 5 second
 endif()
