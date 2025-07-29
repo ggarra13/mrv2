@@ -36,6 +36,7 @@ void sha256_final(SHA256_CTX *ctx, BYTE hash[]);
 namespace mrv
 {
     std::string sha256(const std::string& input);
+    bool validate_license(const std::string& secret_salt = "goblydock");
 }
 
 #endif   // SHA256_H

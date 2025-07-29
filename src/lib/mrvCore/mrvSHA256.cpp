@@ -13,13 +13,27 @@
 *********************************************************************/
 
 /*************************** HEADER FILES ***************************/
+#include <algorithm>
+#include <array>
+#include <cstdlib>
+#include <memory>
+#include <filesystem>
+namespace fs = std::filesystem;
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <iostream>
 #include <sstream>
 #include <iomanip>
 
 #include <cstdint>
 #include <stdlib.h>
 #include <memory.h>
-#include "mrvSHA256.h"
+
+#include <FL/Fl_Preferences.H>
+
+#include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvSHA256.h"
 
 /****************************** MACROS ******************************/
 #define ROTLEFT(a,b) (((a) << (b)) | ((a) >> (32-(b))))
@@ -163,6 +177,34 @@ void sha256_final(SHA256_CTX *ctx, BYTE hash[])
 
 namespace mrv
 {
+    std::string get_machine_id() {
+#if defined(_WIN32)
+        char buffer[128];
+        FILE* pipe = _popen("wmic csproduct get uuid", "r");
+        if (!pipe) return "";
+        fgets(buffer, sizeof(buffer), pipe); // skip header
+        fgets(buffer, sizeof(buffer), pipe); // actual UUID
+        _pclose(pipe);
+        return std::string(buffer);
+#elif defined(__APPLE__)
+        std::array<char, 128> buffer;
+        std::string result;
+        std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(
+                                                          "ioreg -rd1 -c IOPlatformExpertDevice | grep IOPlatformUUID | cut -d '\"' -f4", "r"), pclose);
+        if (pipe) {
+            while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
+                result += buffer.data();
+            }
+        }
+        return result;
+#else
+        std::ifstream f("/etc/machine-id");
+        std::string id;
+        std::getline(f, id);
+        return id;
+#endif
+    }
+
     std::string sha256(const std::string& input)
     {
         uint8_t hash[32];
@@ -177,5 +219,22 @@ namespace mrv
             oss << std::hex << std::setw(2) << std::setfill('0')
                 << (int)hash[i];
         return oss.str();
+    }
+
+    bool validate_license(const std::string& secret_salt)
+    {
+        char license_key[256];
+        
+        Fl_Preferences base(
+            prefspath().c_str(), "filmaura", "mrv2.license",
+            (Fl_Preferences::Root)0);
+        base.get("license", license_key, "", 256);
+        
+        std::string fingerprint = get_machine_id();
+        fingerprint.erase(remove(fingerprint.begin(), fingerprint.end(), '\n'),
+                          fingerprint.end());
+
+        std::string expected_key = sha256(fingerprint + secret_salt);
+        return license_key == expected_key;
     }
 }

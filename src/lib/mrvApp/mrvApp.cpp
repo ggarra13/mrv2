@@ -31,6 +31,7 @@ namespace py = pybind11;
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvUtil.h"
 #include "mrvCore/mrvRoot.h"
+#include "mrvCore/mrvSHA256.h"
 #include "mrvCore/mrvSignalHandler.h"
 
 #include "mrvFl/mrvContextObject.h"
@@ -302,13 +303,27 @@ namespace mrv
         App::app = this;
         ViewerUI::app = this;
 
-        DBG;
         open_console();
 
-        DBG;
+#ifndef MRV2_DEMO
+#  ifdef VULKAN_BACKEND
+        bool ok = validate_license();
+        if (!ok)
+        {
+            fl_alert("Invalid license");
+            std::string helper = rootpath() + "/bin/license_helper";
+            int ret = ::system(helper.c_str());
+            if (ret != 0)
+                exit(100);
+            bool ok = validate_license();
+            if (!ok)
+                exit(100);
+        }
+#  endif
+#endif
+        
         const std::string& msg = setLanguageLocale();
 
-        DBG;
         BaseApp::_init(
             app::convert(argc, argv), context, "mrv2",
             _("Play timelines, movies, and image sequences."),
