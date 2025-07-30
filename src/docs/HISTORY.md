@@ -1,3 +1,9 @@
+v1.4.0
+======
+
+- Added license_helper for easy licensing of mrv2.
+
+
 v1.3.9
 ======
 
