@@ -47,7 +47,7 @@ namespace fs = std::filesystem;
 #define SIG1(x) (ROTRIGHT(x,17) ^ ROTRIGHT(x,19) ^ ((x) >> 10))
 
 /**************************** VARIABLES *****************************/
-static const WORD k[64] = {
+static const unsigned int k[64] = {
 	0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,
 	0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
 	0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,
@@ -59,9 +59,9 @@ static const WORD k[64] = {
 };
 
 /*********************** FUNCTION DEFINITIONS ***********************/
-void sha256_transform(SHA256_CTX *ctx, const BYTE data[])
+void sha256_transform(SHA256_CTX *ctx, const unsigned char data[])
 {
-	WORD a, b, c, d, e, f, g, h, i, j, t1, t2, m[64];
+	unsigned int a, b, c, d, e, f, g, h, i, j, t1, t2, m[64];
 
 	for (i = 0, j = 0; i < 16; ++i, j += 4)
 		m[i] = (data[j] << 24) | (data[j + 1] << 16) | (data[j + 2] << 8) | (data[j + 3]);
@@ -114,9 +114,9 @@ void sha256_init(SHA256_CTX *ctx)
 	ctx->state[7] = 0x5be0cd19;
 }
 
-void sha256_update(SHA256_CTX *ctx, const BYTE data[], size_t len)
+void sha256_update(SHA256_CTX *ctx, const unsigned char data[], size_t len)
 {
-	WORD i;
+	unsigned int i;
 
 	for (i = 0; i < len; ++i) {
 		ctx->data[ctx->datalen] = data[i];
@@ -129,9 +129,9 @@ void sha256_update(SHA256_CTX *ctx, const BYTE data[], size_t len)
 	}
 }
 
-void sha256_final(SHA256_CTX *ctx, BYTE hash[])
+void sha256_final(SHA256_CTX *ctx, unsigned char hash[])
 {
-	WORD i;
+	unsigned int i;
 
 	i = ctx->datalen;
 
