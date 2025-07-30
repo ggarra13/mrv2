@@ -10,12 +10,12 @@ fi
 
 # Remove /usr/bin/mrv2 if it is a symlink to our version
 removed=0
-if [[ -L /usr/bin/mrv2 ]]; then
+if [[ -L /usr/bin/@mrv2_NAME@ ]]; then
     fullpath=`readlink /usr/bin/@mrv2_NAME@`
     installpath="@CPACK_INSTALL_PREFIX@/bin/mrv2.sh"
     if [ "$fullpath" == "$installpath" ]; then
 	echo "Removing symlink from /usr/bin/@mrv2_NAME@"
-	rm -f /usr/bin/mrv2
+	rm -f /usr/bin/@mrv2_NAME@
 	if [[ $has_hdr == 1 ]]; then
 	    rm -f /usr/bin/hdr
 	fi
