@@ -3,6 +3,7 @@ v1.4.0
 
 - Added backend used to -version flag.
 - Added tab to -version flag.
+- Made Vulkan's mrv2 be installed as vmrv2 to distinguish it from the OpenGL version and allow having both installed easily.
 
 
 v1.3.9
