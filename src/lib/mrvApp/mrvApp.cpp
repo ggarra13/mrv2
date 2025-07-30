@@ -310,14 +310,14 @@ namespace mrv
         bool ok = validate_license();
         if (!ok)
         {
-            fl_alert("Invalid license");
             std::string helper = rootpath() + "/bin/license_helper";
-            int ret = ::system(helper.c_str());
-            if (ret != 0)
-                exit(100);
+            ::system(helper.c_str());
             bool ok = validate_license();
             if (!ok)
+            {
+                fl_alert("Invalid license");
                 exit(100);
+            }
         }
 #  endif
 #endif

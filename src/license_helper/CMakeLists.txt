@@ -4,8 +4,10 @@
 
 
 set(HEADERS
+    mrvOS.h
 )
 set(SOURCES
+    mrvOS.cpp
     main.cpp)
 
 list(APPEND LIBRARIES ${FLTK_LIBRARIES})

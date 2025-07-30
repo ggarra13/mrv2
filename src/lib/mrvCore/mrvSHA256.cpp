@@ -33,6 +33,7 @@ namespace fs = std::filesystem;
 #include <FL/Fl_Preferences.H>
 
 #include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvOS.h"
 #include "mrvCore/mrvSHA256.h"
 
 /****************************** MACROS ******************************/
@@ -179,13 +180,14 @@ namespace mrv
 {
     std::string get_machine_id() {
 #if defined(_WIN32)
-        char buffer[128];
-        FILE* pipe = _popen("wmic csproduct get uuid", "r");
-        if (!pipe) return "";
-        fgets(buffer, sizeof(buffer), pipe); // skip header
-        fgets(buffer, sizeof(buffer), pipe); // actual UUID
-        _pclose(pipe);
-        return std::string(buffer);
+        std::string output, errors;
+        os::exec_command("wmic csproduct get uuid", output, errors);
+        size_t pos = output.find("\r\n");
+        if (pos != std::string::npos)
+        {
+            output = output.substr(pos + 2);
+        }
+        return output;
 #elif defined(__APPLE__)
         std::array<char, 128> buffer;
         std::string result;
@@ -230,11 +232,15 @@ namespace mrv
             (Fl_Preferences::Root)0);
         base.get("license", license_key, "", 256);
         
-        std::string fingerprint = get_machine_id();
-        fingerprint.erase(remove(fingerprint.begin(), fingerprint.end(), '\n'),
-                          fingerprint.end());
-
-        std::string expected_key = sha256(fingerprint + secret_salt);
+        std::string machine_id = get_machine_id();
+        machine_id.erase(remove(machine_id.begin(), machine_id.end(), '\n'),
+                          machine_id.end());
+        machine_id.erase(remove(machine_id.begin(), machine_id.end(), '\r'),
+                         machine_id.end());
+        machine_id.erase(remove(machine_id.begin(), machine_id.end(), ' '),
+                         machine_id.end());
+        
+        std::string expected_key = sha256(machine_id + secret_salt);
         return license_key == expected_key;
     }
 }

@@ -1,4 +1,6 @@
 
+#include "mrvOS.h"
+
 
 #include <FL/fl_utf8.h>
 #include <FL/Fl_Double_Window.H>
@@ -16,6 +18,7 @@
 #  include <pwd.h>
 #endif
 
+#include <algorithm>
 #include <array>
 #include <cstdlib>
 #include <memory>
@@ -28,13 +31,14 @@ namespace fs = std::filesystem;
 
 std::string get_machine_id() {
 #if defined(_WIN32)
-    char buffer[128];
-    FILE* pipe = _popen("wmic csproduct get uuid", "r");
-    if (!pipe) return "";
-    fgets(buffer, sizeof(buffer), pipe); // skip header
-    fgets(buffer, sizeof(buffer), pipe); // actual UUID
-    _pclose(pipe);
-    return std::string(buffer);
+    std::string output, errors;
+    mrv::os::exec_command("wmic csproduct get uuid", output, errors);
+    size_t pos = output.find("\r\n");
+    if (pos != std::string::npos)
+    {
+        output = output.substr(pos + 2);
+    }
+    return output;
 #elif defined(__APPLE__)
     std::array<char, 128> buffer;
     std::string result;
@@ -154,7 +158,14 @@ static void create_license_cb(Fl_Widget* b, void* data)
 int main(int argc, char** argv)
 {
     Fl_Double_Window win(640, 480, "License helper");
-    const std::string& machine_id = get_machine_id();
+    std::string machine_id = get_machine_id();
+    machine_id.erase(remove(machine_id.begin(), machine_id.end(), '\n'),
+                     machine_id.end());
+    machine_id.erase(remove(machine_id.begin(), machine_id.end(), '\r'),
+                     machine_id.end());
+    machine_id.erase(remove(machine_id.begin(), machine_id.end(), ' '),
+                     machine_id.end());
+
 
     win.begin();
 
