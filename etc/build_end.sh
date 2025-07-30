@@ -11,17 +11,22 @@ if [[ "$CMAKE_TARGET" == "package" ]]; then
     #
     # Here we move the installers to the packages location.
     #
+    mrv2_NAME=mrv2
+    if [[ $MRV2_BACKEND == "VK" ]]; then
+	mrv2_NAME=vmrv2
+    fi
+    
     if [[ $KERNEL == *Msys* ]]; then
-	send_to_packages "mrv2-v${mrv2_VERSION}-Windows-${ARCH}.exe"
-	send_to_packages "mrv2-v${mrv2_VERSION}-Windows-${ARCH}.zip"
+	send_to_packages "${mrv2_NAME}-v${mrv2_VERSION}-Windows-${ARCH}.exe"
+	send_to_packages "${mrv2_NAME}-v${mrv2_VERSION}-Windows-${ARCH}.zip"
 	. etc/windows/windows_signing_installer.sh
     elif [[ $KERNEL == *Darwin* ]]; then
-	send_to_packages "mrv2-v${mrv2_VERSION}-Darwin-${ARCH}.dmg"
+	send_to_packages "${mrv2_NAME}-v${mrv2_VERSION}-Darwin-${ARCH}.dmg"
 	# . etc/macos_signing_installer.sh
     elif [[ $KERNEL == *Linux* ]]; then
-	send_to_packages "mrv2-v${mrv2_VERSION}-Linux-${ARCH}.deb"
-	send_to_packages "mrv2-v${mrv2_VERSION}-Linux-${ARCH}.rpm"
-	send_to_packages "mrv2-v${mrv2_VERSION}-Linux-${ARCH}.tar.gz"
+	send_to_packages "${mrv2_NAME}-v${mrv2_VERSION}-Linux-${ARCH}.deb"
+	send_to_packages "${mrv2_NAME}-v${mrv2_VERSION}-Linux-${ARCH}.rpm"
+	send_to_packages "${mrv2_NAME}-v${mrv2_VERSION}-Linux-${ARCH}.tar.gz"
     else
 	echo "Kernel not recognized.  Will not move the files to packages/ directory."
     fi
