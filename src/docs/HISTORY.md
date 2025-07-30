@@ -1,3 +1,10 @@
+v1.4.0
+======
+
+- Added backend used to -version flag.
+- Added tab to -version flag.
+
+
 v1.3.9
 ======
 

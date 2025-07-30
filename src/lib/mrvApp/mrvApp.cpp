@@ -523,7 +523,14 @@ namespace mrv
         if (p.options.displayVersion)
         {
             std::cout << std::endl
-                      << "mrv2 v" << mrv::version() << " " << mrv::build_date()
+                      << "\tmrv2 v" << mrv::version() << " "
+#ifdef VULKAN_BACKEND
+                      << "Vulkan "
+#endif
+#ifdef OPENGL_BACKEND
+                      << "OpenGL "
+#endif                
+                      << mrv::build_date()
                       << std::endl
                       << mrv::os::getVersion() << std::endl;
 #ifdef __linux__

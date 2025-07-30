@@ -19,10 +19,10 @@ startup="@CPACK_INSTALL_PREFIX@/bin/mrv2.sh"
 #
 chmod a+x "$startup"
 
-echo "Creating symlink from $startup to /usr/bin/mrv2"
-ln -s "$startup" /usr/bin/mrv2
-echo "Creating symlink from $startup to /usr/bin/mrv2-v@mrv2_VERSION@"
-ln -s "$startup" /usr/bin/mrv2-v@mrv2_VERSION@
+echo "Creating symlink from $startup to /usr/bin/@mrv2_NAME@"
+ln -s "$startup" /usr/bin/@mrv2_NAME@
+echo "Creating symlink from $startup to /usr/bin/@mrv2_NAME@-v@mrv2_VERSION@"
+ln -s "$startup" /usr/bin/@mrv2_NAME@-v@mrv2_VERSION@
 
 startup="@CPACK_INSTALL_PREFIX@/bin/hdr.sh"
 if [[ -e $startup ]]; then
@@ -97,8 +97,8 @@ cp -rf ${sharedir}/* /usr/share/
 ICON_SIZES='16 32 48 64 128 256'
 for i in $ICON_SIZES; do
     echo "   Installing icon size ${i}x${i}"
-    cp ${sharedir}/icons/hicolor/${i}x${i}/apps/mrv2.png /usr/share/icons/hicolor/${i}x${i}/apps/mrv2-v@mrv2_VERSION@.png
-    cp ${sharedir}/icons/hicolor/${i}x${i}/apps/mrv2.png /usr/share/icons/hicolor/${i}x${i}/apps/mrv2.png
+    cp ${sharedir}/icons/hicolor/${i}x${i}/apps/mrv2.png /usr/share/icons/hicolor/${i}x${i}/apps/@mrv2_NAME@-v@mrv2_VERSION@.png
+    cp ${sharedir}/icons/hicolor/${i}x${i}/apps/mrv2.png /usr/share/icons/hicolor/${i}x${i}/apps/@mrv2_NAME@.png
     if [[ $has_hdr == 1 ]]; then
 	cp ${sharedir}/icons/hicolor/${i}x${i}/apps/hdr.png /usr/share/icons/hicolor/${i}x${i}/apps/hdr-v@mrv2_VERSION@.png
 	cp ${sharedir}/icons/hicolor/${i}x${i}/apps/hdr.png /usr/share/icons/hicolor/${i}x${i}/apps/hdr.png
@@ -131,7 +131,7 @@ copy_desktop_shortcut()
 #
 # Copy versioned shortcut to applications and desktop
 #
-shortcut="mrv2-v@mrv2_VERSION@.desktop"
+shortcut="@mrv2_NAME@-v@mrv2_VERSION@.desktop"
 copy_desktop_shortcut $shortcut
 
 if [[ -e /usr/bin/hdr-v@mrv2_VERSION@ ]]; then
