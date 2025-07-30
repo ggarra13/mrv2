@@ -148,7 +148,7 @@ if [[ -e /usr/bin/hdr-v@mrv2_VERSION@ ]]; then
     cp -f "${appshortcut}" /usr/share/applications
 fi
 
-shortcut="mrv2.desktop"
+shortcut="@mrv2_NAME@.desktop"
 appshortcut="${appdir}/${shortcut}"
 cp -f "${appshortcut}" /usr/share/applications
 
