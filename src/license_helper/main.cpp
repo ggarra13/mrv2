@@ -1,4 +1,6 @@
 
+#include "mrvCore/mrvHome.h"
+
 #include <FL/fl_utf8.h>
 #include <FL/Fl_Double_Window.H>
 #include <FL/Fl_Box.H>
