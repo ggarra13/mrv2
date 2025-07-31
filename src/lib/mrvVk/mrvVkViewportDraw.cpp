@@ -891,7 +891,7 @@ namespace mrv
                 {
                     // Calculate skipped frames
                     int64_t absdiff = std::abs(time.value() - p.lastFrame);
-                    if (absdiff > 1 && absdiff < 60)
+                    if (absdiff > 1 && absdiff < 30)
                         p.droppedFrames += absdiff - 1;
 
                     // Calculate elapsed time
