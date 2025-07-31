@@ -16,8 +16,6 @@
 #include <cstdint>
 #include <stddef.h>
 
-#define CHATGPT 1
-
 namespace tl
 {
     namespace vlk
@@ -879,7 +877,7 @@ namespace tl
         void Texture::copy(const std::shared_ptr<image::Image>& data)
         {
             TLRENDER_P();
-            copy(data, 0, 0);
+            copy(data->getData(), data->getDataByteCount(), 0);
         }
 
         void Texture::createImage()
