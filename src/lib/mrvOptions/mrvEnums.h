@@ -39,4 +39,9 @@ namespace mrv
 
     enum MissingFrameType { kBlackFrame, kRepeatFrame, kScratchedFrame };
 
+    enum ScrubLoopMode {
+        kScrubLoopButton,
+        kScrubLoopInactive,
+        kScrubLoopActive
+    };
 }

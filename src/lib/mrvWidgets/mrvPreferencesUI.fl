@@ -7,6 +7,7 @@ i18n_gnu_function _
 i18n_gnu_static_function _
 header_name {.h}
 code_name {.cxx}
+include_guard {}
 decl {\#include <FL/fl_ask.H>} {public global
 }
 
@@ -92,8 +93,8 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {142 155 853 466} type Double hide resizable
-      code0 {main = m;}
+      xywh {142 155 853 466} type Double resizable
+      code0 {main = m;} visible
     } {
       Fl_Group {} {open
         xywh {0 0 853 466} box FLAT_BOX
@@ -948,8 +949,8 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
               }
             }
             Fl_Group {} {
-              label Playback
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+              label Playback open
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label Defaults open
@@ -958,10 +959,6 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                 Fl_Check_Button uiPrefsAutoPlayback {
                   label {Auto Playback}
                   tooltip {Start Playback when opening files.} xywh {497 113 25 25} box UP_BOX down_box DOWN_BOX align 4
-                }
-                Fl_Check_Button uiPrefsScrubAutoPlay {
-                  label {Scrub with Audio}
-                  tooltip {Start playback when scrubbing so that audio can be heard.  Scrubbing can be less smooth.} xywh {572 349 25 25} box UP_BOX down_box DOWN_BOX value 1 align 4
                 }
                 Fl_Check_Button uiPrefsSingleClickPlayback {
                   label {Single Click Playback}
@@ -972,18 +969,18 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                   tooltip {The Pixel Bar can slow down playback at high resolutions.  When this option is on, the pixel toolbar will be hidden automatically.} xywh {701 79 25 25} box UP_BOX down_box DOWN_BOX align 4
                 }
                 Fl_Group {} {open
-                  xywh {332 159 450 152} box ROUNDED_BOX
+                  xywh {334 146 450 132} box ROUNDED_BOX
                 } {
                   Fl_Group {} {
                     label Sequences open
-                    xywh {347 182 415 92} box ROUNDED_FRAME color 35
+                    xywh {344 169 420 64} box ROUNDED_FRAME color 35
                   } {
                     Fl_Group {} {open
-                      xywh {372 217 390 57}
+                      xywh {429 179 270 42}
                     } {
                       Fl_Value_Input uiPrefsFPS {
                         label Speed
-                        tooltip {Frames Per Second value for sequences that don't have embedded speed.} xywh {462 224 80 25} color 20 selection_color 0 minimum 1 maximum 240 step 1 value 24 textcolor 56
+                        tooltip {Frames Per Second value for sequences that don't have embedded speed.} xywh {519 186 80 25} color 20 selection_color 0 minimum 1 maximum 240 step 1 value 24 textcolor 56
                       }
                       Fl_Menu_Button {} {
                         label FPS
@@ -992,7 +989,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
 const char* t = o->text(idx);
 float g = (float) atof( t );
 v->uiPrefsFPS->value( g );}
-                        xywh {544 224 75 25}
+                        xywh {601 186 75 25}
                         code0 {o->disable_label();}
                         class {mrv::PopupMenu}
                       } {
@@ -1041,7 +1038,7 @@ v->uiPrefsFPS->value( g );}
                   }
                   Fl_Choice uiPrefsLoopMode {
                     label {Looping Mode}
-                    tooltip {Select default looping mode in timeline.} xywh {542 277 90 28} box THIN_DOWN_BOX down_box BORDER_BOX
+                    tooltip {Select default looping mode in timeline.} xywh {539 241 90 28} box THIN_DOWN_BOX down_box BORDER_BOX
                     class {mrv::Choice}
                   } {
                     MenuItem {} {
@@ -1058,9 +1055,40 @@ v->uiPrefsFPS->value( g );}
                     }
                   }
                 }
-                Fl_Value_Input uiPrefsScrubbingSensitivity {
-                  label {Scrub Sensitivity}
-                  tooltip {This setting controls the sensitivity of scrubbing (SHIFT and then the mouse right and left).  Smaller values make the mouse move jump more frames while higher values does the opposite.} xywh {572 319 60 22} minimum 2 maximum 50 step 1 value 5 textcolor 56
+                Fl_Group {} {
+                  label Scrub open
+                  xywh {334 301 452 72} box ROUNDED_BOX
+                } {
+                  Fl_Value_Input uiPrefsScrubbingSensitivity {
+                    label Sensitivity
+                    tooltip {This setting controls the sensitivity of scrubbing (SHIFT and then the mouse right and left).  Smaller values make the mouse move jump more frames while higher values does the opposite.} xywh {483 306 56 28} color 20 minimum 2 maximum 50 step 1 value 5 textcolor 56
+                  }
+                  Fl_Check_Button uiPrefsScrubAutoPlay {
+                    label {With Audio}
+                    tooltip {Start playback when scrubbing so that audio can be heard.  Scrubbing can be less smooth.} xywh {719 340 25 25} box UP_BOX down_box DOWN_BOX value 1 align 4
+                  }
+                  Fl_Value_Input uiPrefsAltScrubbingSensitivity {
+                    label {Alt Sensitivity}
+                    tooltip {When using ALT + Left Mouse Button, this setting controls the multiplier used for slowing the scrubbing.} xywh {483 338 56 28} color 20 minimum 2 maximum 50 step 1 value 3 textcolor 56
+                  }
+                  Fl_Choice uiPrefsScrubbingLoopMode {
+                    label {Looping Mode} open selected
+                    tooltip {Select default looping mode in timeline.} xywh {654 306 90 28} box THIN_DOWN_BOX down_box BORDER_BOX
+                    class {mrv::Choice}
+                  } {
+                    MenuItem {} {
+                      label Button
+                      tooltip {Controls how to looping works when scrubbing.  Button makes looping work based on the Loop button in the timeline, Inactive turns off looping and Active turns on looping always.} xywh {20 20 100 20}
+                    }
+                    MenuItem {} {
+                      label Inactive
+                      xywh {30 30 100 20}
+                    }
+                    MenuItem {} {
+                      label Active
+                      xywh {20 20 100 20}
+                    }
+                  }
                 }
               }
             }
@@ -1525,7 +1553,7 @@ v->uiOCIO_Display_View->do_callback();}
             }
             Fl_Group {} {
               label Video open
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {open
                 xywh {310 52 508 332}
@@ -1652,7 +1680,7 @@ v->uiOCIO_Display_View->do_callback();}
                     class {mrv::Choice}
                   } {
                     MenuItem {} {
-                      label {GPU 0} selected
+                      label {GPU 0}
                       xywh {80 80 140 20}
                     }
                   }

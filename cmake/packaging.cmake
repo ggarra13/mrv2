@@ -14,6 +14,11 @@ set( CPACK_PACKAGE_VERSION_PATCH "${mrv2_VERSION_PATCH}" )
 set( CPACK_PACKAGE_VERSION "${mrv2_VERSION}")
 set( CPACK_PACKAGE_CONTACT "ggarra13@gmail.com")
 
+set( mrv2_NAME mrv2 )
+if (MRV2_BACKEND STREQUAL "VK")
+    set( mrv2_NAME vmrv2 )
+endif()
+
 
 #
 # Experimental support in CPack for multithreading. 0 uses all cores.
@@ -55,8 +60,8 @@ else()
     endif()
 endif()
 
-set( mrv2ShortName "mrv2-v${mrv2_VERSION}-${CMAKE_SYSTEM_NAME}-${MRV2_OS_BITS}" )
-set( CPACK_PACKAGE_NAME mrv2 )
+set( mrv2ShortName "${mrv2_NAME}-v${mrv2_VERSION}-${CMAKE_SYSTEM_NAME}-${MRV2_OS_BITS}" )
+set( CPACK_PACKAGE_NAME ${mrv2_NAME} )
 set( CPACK_PACKAGE_VENDOR "Hernán." )
 set( CPACK_PACKAGE_DESCRIPTION_SUMMARY "Professional media player.")
 set( CPACK_PACKAGE_INSTALL_DIRECTORY ${mrv2ShortName} )
@@ -88,43 +93,34 @@ set( CPACK_INSTALL_SCRIPT ${MRV2_ROOT}/cmake/dummy.cmake )
 #
 set( CPACK_PRE_BUILD_SCRIPTS ${MRV2_ROOT}/cmake/prepackage.cmake )
 
-if( APPLE )
-    # set(CPACK_GENERATOR Bundle )
-
-    # set(CPACK_DMG_FORMAT "UDBZ")
-    # set(CPACK_DMG_FILESYSTEM "APFS")
-
-    set( INSTALL_NAME ${PROJECT_NAME} )
-    set( HDR_INSTALL_NAME hdr )
-
-    # configure_file(
-    # 	${MRV2_DIR}/etc/macOS/Info.plist.in
-    # 	${PROJECT_BINARY_DIR}/Info.plist )
-
-    # set(CPACK_PACKAGE_ICON ${MRV2_DIR}/etc/macOS/mrv2.icns )
-    # set(CPACK_BUNDLE_NAME ${INSTALL_NAME} )
-    # set(CPACK_BUNDLE_ICON ${MRV2_DIR}/etc/macOS/mrv2.icns )
-    # set(CPACK_BUNDLE_PLIST ${PROJECT_BINARY_DIR}/Info.plist )
-    # set(CPACK_BUNDLE_STARTUP_COMMAND ${MRV2_DIR}/etc/macOS/startup.sh)
-
-
+if(APPLE)
     ##############################
     # New Method using Dragndrop #
     ##############################
 
+    set(mrv2_NAME mrv2)
+    if (MRV2_BACKEND STREQUAL "VK")
+	set(mrv2_NAME vmrv2)
+    endif()
+    
+    set( INSTALL_NAME ${mrv2_NAME} )
+    set( HDR_INSTALL_NAME hdr )
+
     # Define variables for bundle directories in the build dir
-    set(MRV2_BUNDLE_DIR ${CMAKE_BINARY_DIR}/mrv2.app)
+    set(MRV2_BUNDLE_DIR ${CMAKE_BINARY_DIR}/${mrv2_NAME}.app)
 
     # Create the mrv2.app bundle structure
+    message(STATUS "CREATE ${mrv2_NAME}.app dir")
     file(MAKE_DIRECTORY ${MRV2_BUNDLE_DIR}/Contents/MacOS)
     file(MAKE_DIRECTORY ${MRV2_BUNDLE_DIR}/Contents/Resources)
     
     # Copy the icon
-    file(COPY ${MRV2_DIR}/etc/macOS/mrv2.icns
-	DESTINATION ${MRV2_BUNDLE_DIR}/Contents/Resources)
-	
+    configure_file(${MRV2_DIR}/etc/macOS/mrv2.icns
+	${MRV2_BUNDLE_DIR}/Contents/Resources/${mrv2_NAME}.icns COPYONLY)
+    
     # Copy the shell scripts into the bundles and make them executable
-    configure_file(${MRV2_DIR}/etc/macOS/mrv2.sh ${MRV2_BUNDLE_DIR}/Contents/MacOS/mrv2 COPYONLY)
+    configure_file(${MRV2_DIR}/etc/macOS/mrv2.sh
+	${MRV2_BUNDLE_DIR}/Contents/MacOS/${mrv2_NAME} COPYONLY)
     
     configure_file(
      	${MRV2_DIR}/etc/macOS/mrv2.plist.in
@@ -148,6 +144,7 @@ if( APPLE )
 	file(MAKE_DIRECTORY ${HDR_BUNDLE_DIR}/Contents/Resources)
 
 	# Copy the icon
+	message(STATUS "CREATE hdr.app dir")
 	file(COPY ${MRV2_DIR}/etc/macOS/hdr.icns
 	    DESTINATION ${HDR_BUNDLE_DIR}/Contents/Resources)
     
@@ -180,7 +177,7 @@ if( APPLE )
     
     
     set(CPACK_COMPONENTS_ALL "macos_bundles")
-    set(CPACK_INSTALL_CMAKE_PROJECTS "${CMAKE_BINARY_DIR};${CMAKE_PROJECT_NAME};applications;/")
+    set(CPACK_INSTALL_CMAKE_PROJECTS "${CMAKE_BINARY_DIR};${mrv2_NAME};applications;/")
     set(CPACK_INSTALLED_DIRECTORIES "${CMAKE_BINARY_DIR}/install;.")
 
 elseif(UNIX)
@@ -199,7 +196,7 @@ elseif(UNIX)
     # shortcuts.
     #
     configure_file( ${MRV2_DIR}/etc/Linux/mrv2.desktop.in
-	"${PROJECT_BINARY_DIR}/etc/mrv2-v${mrv2_VERSION}.desktop" )
+	"${PROJECT_BINARY_DIR}/etc/${mrv2_NAME}-v${mrv2_VERSION}.desktop" )
     configure_file( ${MRV2_DIR}/etc/Linux/hdr.desktop.in
 	"${PROJECT_BINARY_DIR}/etc/hdr-v${mrv2_VERSION}.desktop" )
 
@@ -207,10 +204,10 @@ elseif(UNIX)
     # This desktop file is for Wayland to set its icon correctly.
     #
     configure_file( ${MRV2_DIR}/etc/Linux/mrv2.main.desktop.in
-	"${PROJECT_BINARY_DIR}/etc/mrv2.desktop" )
-    install(FILES "${PROJECT_BINARY_DIR}/etc/mrv2-v${mrv2_VERSION}.desktop"
+	"${PROJECT_BINARY_DIR}/etc/${mrv2_NAME}.desktop" )
+    install(FILES "${PROJECT_BINARY_DIR}/etc/${mrv2_NAME}-v${mrv2_VERSION}.desktop"
 	DESTINATION share/applications COMPONENT applications)
-    install(FILES "${PROJECT_BINARY_DIR}/etc/mrv2.desktop"
+    install(FILES "${PROJECT_BINARY_DIR}/etc/${mrv2_NAME}.desktop"
 	DESTINATION share/applications COMPONENT applications)
     install(DIRECTORY ${MRV2_DIR}/share/icons
 	DESTINATION share/ COMPONENT applications)
@@ -252,7 +249,7 @@ elseif(UNIX)
 	OUTPUT_VARIABLE DEB_ARCHITECTURE
 	OUTPUT_STRIP_TRAILING_WHITESPACE
     )
-    set(CPACK_DEBIAN_PACKAGE_NAME ${PROJECT_NAME}-v${mrv2_VERSION})
+    set(CPACK_DEBIAN_PACKAGE_NAME ${mrv2_NAME}-v${mrv2_VERSION})
     set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE ${DEB_ARCHITECTURE})
     set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA
 	"${PROJECT_BINARY_DIR}/etc/Linux/postinst"
@@ -263,7 +260,7 @@ elseif(UNIX)
     #
     # Set RPM options.
     #
-    set(CPACK_RPM_PACKAGE_NAME ${PROJECT_NAME}-${mrv2_VERSION})
+    set(CPACK_RPM_PACKAGE_NAME ${mrv2_NAME}-${mrv2_VERSION})
 
     set(CPACK_RPM_PACKAGE_RELOCATABLE true)
     set(CPACK_RPM_PACKAGE_AUTOREQ false)
@@ -345,7 +342,7 @@ else()
     #
     # This sets the name in Windows Apps and Control Panel.
     #
-    set(mrv2_DISPLAY_NAME "mrv2-${MRV2_OS_BITS} v${mrv2_VERSION}")
+    set(mrv2_DISPLAY_NAME "${mrv2_NAME}-${MRV2_OS_BITS} v${mrv2_VERSION}")
     
     set(CPACK_NSIS_DISPLAY_NAME "${mrv2_DISPLAY_NAME}" )
 
@@ -378,10 +375,10 @@ if(BUILD_PYTHON)
 endif()
 
 set(CPACK_COMPONENTS_ALL ${mrv2_COMPONENTS})
-set(CPACK_COMPONENT_APPLICATIONS_DISPLAY_NAME "mrv2 Application")
-set(CPACK_COMPONENT_DOCUMENTATION_DISPLAY_NAME "mrv2 Documentation")
+set(CPACK_COMPONENT_APPLICATIONS_DISPLAY_NAME "${mrv2_NAME} Application")
+set(CPACK_COMPONENT_DOCUMENTATION_DISPLAY_NAME "${mrv2_NAME} Documentation")
 if(BUILD_PYTHON)
-    set(CPACK_COMPONENT_PYTHON_DEMOS_DISPLAY_NAME "mrv2 Python Demos")
+    set(CPACK_COMPONENT_PYTHON_DEMOS_DISPLAY_NAME "${mrv2_NAME} Python Demos")
     set(CPACK_COMPONENT_PYTHON_TK_DISPLAY_NAME "Python TK Libraries")
     set(CPACK_COMPONENT_PYTHON_TK_DISABLED TRUE)
 endif()

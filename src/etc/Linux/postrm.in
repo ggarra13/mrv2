@@ -10,36 +10,36 @@ fi
 
 # Remove /usr/bin/mrv2 if it is a symlink to our version
 removed=0
-if [[ -L /usr/bin/mrv2 ]]; then
-    fullpath=`readlink /usr/bin/mrv2`
+if [[ -L /usr/bin/@mrv2_NAME@ ]]; then
+    fullpath=`readlink /usr/bin/@mrv2_NAME@`
     installpath="@CPACK_INSTALL_PREFIX@/bin/mrv2.sh"
     if [ "$fullpath" == "$installpath" ]; then
-	echo "Removing symlink from /usr/bin/mrv2"
-	rm -f /usr/bin/mrv2
+	echo "Removing symlink from /usr/bin/@mrv2_NAME@"
+	rm -f /usr/bin/@mrv2_NAME@
 	if [[ $has_hdr == 1 ]]; then
 	    rm -f /usr/bin/hdr
 	fi
 	removed=1
     else
-	echo "/usr/bin/mrv2 does not point to $installpath."
+	echo "/usr/bin/@mrv2_NAME@ does not point to $installpath."
 	echo "Won't remove symlink."
     fi
 fi
 
-echo "Removing symlink from /usr/bin/mrv2-v@mrv2_VERSION@"
-rm -f /usr/bin/mrv2-v@mrv2_VERSION@
+echo "Removing symlink from /usr/bin/@mrv2_NAME@-v@mrv2_VERSION@"
+rm -f /usr/bin/@mrv2_NAME@-v@mrv2_VERSION@
 if [[ -e /usr/bin/hdr-v@mrv2_VERSION@ ]]; then
     rm -f /usr/bin/hdr-v@mrv2_VERSION@
 fi
 
 # Find the closest version folder in /usr/bin
-closest_version=$(ls -1 "/usr/local/" | grep "mrv2-v" | sort -V | tail -n 1)
+closest_version=$(ls -1 "/usr/local/" | grep "@mrv2_NAME@-v" | sort -V | tail -n 1)
 
 # Check if a closest version was found
 if [[ -n "$closest_version" && $removed == 1 ]]; then
     # Create a new symbolic link pointing to the closest version
-    ln -s "/usr/local/$closest_version/bin/mrv2.sh" "/usr/bin/mrv2"
-    echo "Created a new symbolic link: $closest_version -> /usr/bin/mrv2"
+    ln -s "/usr/local/$closest_version/bin/mrv2.sh" "/usr/bin/@mrv2_NAME@"
+    echo "Created a new symbolic link: $closest_version -> /usr/bin/@mrv2_NAME@"
     if [[ $has_hdr == 1 ]]; then
 	ln -s "/usr/local/$closest_version/bin/hdr.sh" "/usr/bin/hdr"
 	echo "Created a new symbolic link: $closest_version -> /usr/bin/hdr"
@@ -47,8 +47,8 @@ if [[ -n "$closest_version" && $removed == 1 ]]; then
 else
     if [[ $removed == 1 ]]; then
 	echo "No suitable version found to create a symbolic link."
-	echo "Removing /usr/share/applications/mrv2.desktop and mrv2.png"
-	rm -f /usr/share/applications/mrv2.desktop
+	echo "Removing /usr/share/applications/@mrv2_NAME@.desktop and @mrv2_NAME@.png"
+	rm -f /usr/share/applications/@mrv2_NAME@.desktop
 	if [[ $has_hdr == 1 ]]; then
 	    rm -f /usr/share/applications/hdr.desktop
 	fi
@@ -58,7 +58,7 @@ else
 	#
 	for i in $ICON_SIZES; do
 	    icons_dir=${sharedir}/icons/hicolor/${i}x${i}/apps/
-	    rm -f $icons_dir/mrv2.png
+	    rm -f $icons_dir/@mrv2_NAME@.png
 	    if [[ $has_hdr == 1 ]]; then
 		rm -f $icons_dir/hdr.png
 	    fi
@@ -79,7 +79,7 @@ fi
 #
 # Remove Desktop shortcut
 #
-rm -f "${desktop_dir}/mrv2-v@mrv2_VERSION@.desktop"
+rm -f "${desktop_dir}/@mrv2_NAME@-v@mrv2_VERSION@.desktop"
 
 if [ -e "${desktop_dir}/hdr-v@mrv2_VERSION@.desktop" ]; then
     rm -f "${desktop_dir}/hdr-v@mrv2_VERSION@.desktop"
@@ -93,16 +93,16 @@ appdir=${sharedir}/applications
 #
 for i in $ICON_SIZES; do
     icons_dir=${sharedir}/icons/hicolor/${i}x${i}/apps/
-    rm $icons_dir/mrv2-v@mrv2_VERSION@.png
+    rm $icons_dir/@mrv2_NAME@-v@mrv2_VERSION@.png
     if [[ $has_hdr == 1 ]]; then
 	rm -f $icons_dir/hdr-v@mrv2_VERSION@.png
     fi
 done
 
 #
-# Remove /usr/share/applications/mrv2-v<VERSION>.desktop
+# Remove /usr/share/applications/@mrv2_NAME@-v<VERSION>.desktop
 #
-rm -f ${appdir}/mrv2-v@mrv2_VERSION@.desktop
+rm -f ${appdir}/@mrv2_NAME@-v@mrv2_VERSION@.desktop
 
 if [[ $has_hdr == 1 ]]; then
     rm -f ${appdir}/hdr-v@mrv2_VERSION@.desktop

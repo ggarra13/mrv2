@@ -13,7 +13,13 @@ extract_version
 # Specify the paths and filenames
 SIGNTOOL_PATH="signtool.exe"
 PFX_FILE="${PWD}/certificates/mrv2.pfx"
-NSIS_INSTALLER="${PWD}/packages/mrv2-v${mrv2_VERSION}-Windows-amd64.exe"
+
+mrv2_NAME=mrv2
+if [[ $MRV2_BACKEND == "VK" ]]; then
+    mrv2_NAME=vmrv2
+fi
+
+NSIS_INSTALLER="${PWD}/packages/${mrv2_NAME}-v${mrv2_VERSION}-Windows-amd64.exe"
 
 AZURE_HTTP="http://timestamp.comodoca.com/authenticode"
 

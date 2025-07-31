@@ -226,9 +226,21 @@ namespace mrv
                     else
                     {
                         if (Fl::event_shift())
+                        {
                             return _handleDragSelection();
+                        }
                         else
-                            scrub();
+                        {
+                            if (Fl::event_alt())
+                            {
+                                float multiplier = p.ui->uiPrefs->uiPrefsAltScrubbingSensitivity->value();
+                                scrub(3.0);
+                            }
+                            else
+                            {
+                                scrub();
+                            }
+                        }
                     }
                     return;
                 }
@@ -261,7 +273,26 @@ namespace mrv
                     switch (p.actionMode)
                     {
                     case ActionMode::kScrub:
-                        scrub();
+                        if (Fl::event_alt())
+                        {
+                            if (!p.player)
+                                return;
+
+                            const int X = Fl::event_x() * pixels_per_unit();
+                            const float scale = p.ui->uiPrefs->uiPrefsScrubbingSensitivity->value() * 20;
+                            float dx = (X - p.mousePress.x) / scale;
+                            std::cerr << dx << std::endl;
+                            
+                            if (std::abs(dx) >= 1.0F)
+                            {
+                                _scrub(dx);
+                                p.mousePress.x = X;
+                            }
+                        }
+                        else
+                        {
+                            scrub();
+                        }
                         return;
                     case ActionMode::kRectangle:
                     case ActionMode::kFilledRectangle:

@@ -42,6 +42,11 @@ echo "SSH KEY IS: ${SSH_KEY}"
 get_kernel
 
 
+export mrv2_NAME=mrv2
+if [[ $MRV2_BACKEND == "VK" ]]; then
+    export mrv2_NAME=vmrv2
+fi
+
 #
 # Get the date in English
 #
@@ -123,7 +128,7 @@ cat <<EOF > README.md
 
 [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=679N8GWCNDFSJ)
 
-mrv2 v${mrv2_VERSION} ${branch}
+${mrv2_NAME} v${mrv2_VERSION} ${branch}
 ====================
 
 This beta release of v${mrv2_VERSION} corresponds to:
@@ -195,7 +200,7 @@ echo "$release_notes" >> README.md
 cat <<"EOF" > VULKAN_NOTES.md
 
 The Vulkan releases in the vulkan/ directory are demo versions for you to
-evaluate mrv2 before a purchase and report bugs or performance issues.
+evaluate vmrv2 before a purchase and report bugs or performance issues.
 Currently, the demo versions don't have:
 
 	   - Annotations
@@ -256,8 +261,8 @@ cat <<"EOF" > INSTALLATION_NOTES.md
 
 ## Notes on installation
 
-- On macOS you install it by opening the .dmg file, and dragging the mrv2
-  icon to the Applications directory.  If there's already an mrv2 version,
+- On macOS you install it by opening the .dmg file, and dragging the ${mrv2_NAME}
+  icon to the Applications directory.  If there's already an ${mrv2_NAME} version,
   we recommend you overwrite it.
   The macOS application is currently not notarized, so when you launch it you
   will not be able to run it as macOS will warn you that the file is not secure
@@ -267,7 +272,7 @@ cat <<"EOF" > INSTALLATION_NOTES.md
   Alternatively, you can do it from the Terminal, by:
   
 ```
-  sudo xattr -rd com.apple.quarantine /Applications/mrv2.app/
+  sudo xattr -rd com.apple.quarantine /Applications/${mrv2_NAME}.app/
 ```
 
 - Windows and Chrome, like macOS, also protect you from installing files
@@ -283,7 +288,7 @@ cat <<"EOF" > INSTALLATION_NOTES.md
   Click on the More Information text and a Button that says Run anyway or
   similar should appear.  Click on it and follow the standard instructions
   to any Windows installer.
-  One note about the Windows install.  When asked if you want to add mrv2 to
+  One note about the Windows install.  When asked if you want to add ${mrv2_NAME} to
   your PATH, it is recommended to answer No to it, as it avoids DLLs conflicts
   with other applications that use common libraries like FFmpeg or OpenUSD.
 
@@ -294,19 +299,19 @@ cat <<"EOF" > INSTALLATION_NOTES.md
   On Debian (Ubuntu, etc) systems, you would install with:
 
 ```
-  sudo dpkg -i mrv2-${branch}-Linux-amd64.deb
+  sudo dpkg -i ${mrv2_NAME}-${branch}-Linux-amd64.deb
 ```
 
   On Fedora, you would install it with:
   
 ```
-  sudo rpm -i mrv2-${branch}-Linux-amd64.rpm
+  sudo rpm -i ${mrv2_NAME}-${branch}-Linux-amd64.rpm
 ```
 
-  Once you install it, you can run mrv2 by just typing mrv2 in the shell, as
+  Once you install it, you can run mrv2 by just typing ${mrv2_NAME} in the shell, as
   a symlink to the executable is placed in /usr/bin.  The installers will also
   associate file extensions and install an icon for easy starting up in the
-  Desktop icon of the user that installed it.  For running mrv2 with the icon,
+  Desktop icon of the user that installed it.  For running ${mrv2_NAME} with the icon,
   you need to select it and use the right mouse button to open the menu and
   choose Allow Launch.
   
@@ -314,11 +319,11 @@ cat <<"EOF" > INSTALLATION_NOTES.md
   .tar.gz file and you can uncompress it with:
   
 ```
-  tar -xf mrv2-${branch}-Linux-amd64.tar.gz
+  tar -xf ${mrv2_NAME}-${branch}-Linux-amd64.tar.gz
 ```
 
   That will create a folder in the directory you uncompress it from.  You can
-  then run mrv2 by using the mrv2.sh shell script in the bin/ subdirectory.
+  then run ${mrv2_NAME} by using the mrv2.sh shell script in the bin/ subdirectory.
 
 EOF
 

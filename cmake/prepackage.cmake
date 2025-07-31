@@ -70,6 +70,11 @@ endif()
 
 message( STATUS "CPACK_PREPACKAGE=${CPACK_PREPACKAGE}" )
 
+set(mrv2_NAME mrv2)
+if(CPACK_PREPACKAGE MATCHES ".*vmrv2.*")
+    set(mrv2_NAME vmrv2)
+endif()
+
 #
 # Remove usd directory from lib/ directory on Windows
 #
@@ -311,7 +316,7 @@ if (APPLE)
 	file(GLOB _bins "${_binglob}")
 	foreach( _bin ${_bins} )
 	    file(COPY ${_bin}
-		DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources/bin)
+		DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/bin)
 	endforeach()
     endfunction()
     
@@ -319,29 +324,31 @@ if (APPLE)
 	file(GLOB _libs "${_libglob}")
 	foreach( _lib ${_libs} )
 	    file(COPY ${_lib}
-		DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources/lib)
+		DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/lib)
 	endforeach()
     endfunction()
 	
-    function(copy_mo_files TARGET)
+    function(copy_mo_files SRC TARGET)
 	file(GLOB _langs "${CPACK_PREPACKAGE}/share/locale/*")
 	foreach( _fulldir ${_langs} )
 	    string(REGEX REPLACE ".*/locale/" "" _lang ${_fulldir})
 	    set(_langdir share/locale/${_lang}/LC_MESSAGES)
 	    file(MAKE_DIRECTORY ${CPACK_PREPACKAGE}/${TARGET}.app/Contents/Resources/${_langdir}/)
-	    file(COPY ${CPACK_PREPACKAGE}/${_langdir}/${TARGET}-v${mrv2_VERSION}.mo
+	    file(COPY ${CPACK_PREPACKAGE}/${_langdir}/${SRC}-v${mrv2_VERSION}.mo
 		DESTINATION ${CPACK_PREPACKAGE}/${TARGET}.app/Contents/Resources/${_langdir})
 	endforeach()
     endfunction()
     
     file(COPY ${CPACK_PREPACKAGE}/bin/mrv2.sh
-	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources/bin)
+	DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/bin)
     file(COPY ${CPACK_PREPACKAGE}/bin/mrv2
-	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources/bin)
+	DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/bin)
+    file(COPY ${CPACK_PREPACKAGE}/bin/license_helper
+	DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/bin)
     file(COPY ${CPACK_PREPACKAGE}/bin/environment.sh
-	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources/bin)
+	DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/bin)
     file(COPY ${CPACK_PREPACKAGE}/bin/install_dmg.sh
-	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources/bin)
+	DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/bin)
     
     if (EXISTS ${CPACK_PREPACKAGE}/python.sh)
 	install_mrv2_bin_glob("${CPACK_PREPACKAGE}/python*")
@@ -351,32 +358,32 @@ if (APPLE)
     install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libMoltenVK*")	
 	
     file(COPY ${CPACK_PREPACKAGE}/colors
-	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
+	DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources)
     if (EXISTS ${CPACK_PREPACKAGE}/docs)
 	file(COPY ${CPACK_PREPACKAGE}/docs
-	    DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
+	    DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources)
     endif()
     file(COPY ${CPACK_PREPACKAGE}/lib
-	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
+	DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources)
     if (EXISTS ${CPACK_PREPACKAGE}/libraries)
 	file(COPY ${CPACK_PREPACKAGE}/libraries
-	    DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
+	    DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources)
     endif()
     file(COPY ${CPACK_PREPACKAGE}/ocio
-	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
+	DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources)
     if (EXISTS ${CPACK_PREPACKAGE}/plugin)
 	file(COPY ${CPACK_PREPACKAGE}/plugin
-	    DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
+	    DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources)
     endif()
     file(COPY ${CPACK_PREPACKAGE}/presets
-	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
+	DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources)
     file(COPY ${CPACK_PREPACKAGE}/python
-	DESTINATION ${CPACK_PREPACKAGE}/mrv2.app/Contents/Resources)
+	DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources)
 
     #
     # Install .mo translation files
     #
-    copy_mo_files(mrv2)
+    copy_mo_files(mrv2 ${mrv2_NAME})
     
     #
     # Pre-pare hdr.app if present
@@ -629,7 +636,7 @@ if (APPLE)
 	#
 	# Install .mo translation files
 	#
-	copy_mo_files(hdr)
+	copy_mo_files(hdr hdr)
     endif()
     
     #

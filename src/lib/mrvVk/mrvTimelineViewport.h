@@ -54,7 +54,7 @@ namespace mrv
             void main(ViewerUI* m) noexcept;
 
             //! Handle scrubbing.
-            void scrub() noexcept;
+            void scrub(float multiplier = 1.F) noexcept;
 
             //! Stop playback while scrubbing check for audio
             void stopPlaybackWhileScrubbing() noexcept;

@@ -42,7 +42,6 @@
 #    include <unistd.h>
 #    include <sys/time.h>
 #    include <X11/Xlib.h>
-#    include <X11/extensions/scrnsaver.h>
 #    include <X11/extensions/shape.h>
 #endif
 
@@ -595,19 +594,19 @@ namespace mrv
 
     MainWindow::~MainWindow()
     {
-#ifdef FLTK_USE_WAYLAND
-        // Restore screensaver/black screen
-#elif defined(FLTK_USE_X11)
-        if (fl_x11_display())
-            XScreenSaverSuspend(fl_x11_display(), False);
-#elif defined(_WIN32)
-        SetThreadExecutionState(ES_CONTINUOUS);
-#elif defined(__APPLE__)
-        if (success)
-        {
-            success = IOPMAssertionRelease(assertionID);
-        }
-#endif
+// #ifdef FLTK_USE_WAYLAND
+//         // Restore screensaver/black screen
+// #elif defined(FLTK_USE_X11)
+//         if (fl_x11_display())
+//             XScreenSaverSuspend(fl_x11_display(), False);
+// #elif defined(_WIN32)
+//         SetThreadExecutionState(ES_CONTINUOUS);
+// #elif defined(__APPLE__)
+//         if (success)
+//         {
+//             success = IOPMAssertionRelease(assertionID);
+//         }
+// #endif
     }
 
     void MainWindow::init()
@@ -633,24 +632,24 @@ namespace mrv
         fl_open_display(); // Needed for icons
 
         // Turn off screensaver and black screen
-#if defined(FLTK_USE_X11)
-        if (fl_x11_display())
-        {
-            int event_base, error_base;
-            Bool ok = XScreenSaverQueryExtension(
-                fl_x11_display(), &event_base, &error_base);
-            if (ok == True)
-                XScreenSaverSuspend(fl_x11_display(), True);
-        }
-#elif defined(_WIN32)
-        SetThreadExecutionState(
-            ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_AWAYMODE_REQUIRED);
-#elif defined(__APPLE__)
-        CFStringRef reason = CFSTR("mrv2 playback");
-        success = IOPMAssertionCreateWithName(
-            kIOPMAssertionTypeNoDisplaySleep, kIOPMAssertionLevelOn, reason,
-            &assertionID);
-#endif
+// #if defined(FLTK_USE_X11)
+//         if (fl_x11_display())
+//         {
+//             int event_base, error_base;
+//             Bool ok = XScreenSaverQueryExtension(
+//                 fl_x11_display(), &event_base, &error_base);
+//             if (ok == True)
+//                 XScreenSaverSuspend(fl_x11_display(), True);
+//         }
+// #elif defined(_WIN32)
+//         SetThreadExecutionState(
+//             ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_AWAYMODE_REQUIRED);
+// #elif defined(__APPLE__)
+//         CFStringRef reason = CFSTR("mrv2 playback");
+//         success = IOPMAssertionCreateWithName(
+//             kIOPMAssertionTypeNoDisplaySleep, kIOPMAssertionLevelOn, reason,
+//             &assertionID);
+// #endif
         if (desktop::Windows() || desktop::X11())
         {
             Fl_PNG_Image* rgb = load_png("mrv2.png");

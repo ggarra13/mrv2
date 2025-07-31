@@ -146,7 +146,7 @@ for full_name in full_names:
     print(f'{formatted_total}\tTotal Downloads for repo {full_name}')
     
 
-def count_sourceforge(repo, folder_name, end_date, start_date = '2014-10-29'):
+def count_sourceforge(repo, folder_name, end_date, start_date = '2021-10-29'):
 
     print()
     print(f"\tCount {folder_name} from {start_date} to {end_date}")
