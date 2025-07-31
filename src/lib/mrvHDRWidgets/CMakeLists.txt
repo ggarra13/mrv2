@@ -28,17 +28,6 @@ if( APPLE )
     set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib;/usr/local/lib")
 endif()
 
-# if (UNIX AND NOT APPLE)
-#     if (TLRENDER_X11)
-# 	list(APPEND LIBRARIES Xss )
-#     endif()
-# endif()
-
-
-# if (APPLE)
-#     list(PREPEND SOURCES mrvMainWindow.mm)
-# endif()
-
 add_library(mrvHDRWidgets ${SOURCES} ${HEADERS})
 
 
