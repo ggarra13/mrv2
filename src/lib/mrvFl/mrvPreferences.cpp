@@ -715,6 +715,10 @@ namespace mrv
         playback.get("scrub_auto_playback", tmp, 1);
         uiPrefs->uiPrefsScrubAutoPlay->value(tmp);
 
+        playback.get("scrubbing_loop_mode", tmp, 0);
+        uiPrefs->uiPrefsScrubbingLoopMode->value(tmp);
+
+            
         Fl_Preferences pixel_toolbar(base, "pixel_toolbar");
 
         pixel_toolbar.get("RGBA_pixel", tmp, 0);
@@ -1422,6 +1426,9 @@ namespace mrv
             uiPrefs->uiPrefsScrubbingSensitivity->value());
         playback.set(
             "scrub_auto_playback", uiPrefs->uiPrefsScrubAutoPlay->value());
+
+        playback.set("scrubbing_loop_mode", 
+                     uiPrefs->uiPrefsScrubbingLoopMode->value());
 
         Fl_Preferences pixel_toolbar(base, "pixel_toolbar");
         pixel_toolbar.set("RGBA_pixel", uiPrefs->uiPrefsPixelRGBA->value());

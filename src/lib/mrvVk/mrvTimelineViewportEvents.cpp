@@ -223,9 +223,21 @@ namespace mrv
                     else
                     {
                         if (Fl::event_shift())
+                        {
                             return _handleDragSelection();
+                        }
                         else
-                            scrub();
+                        {
+                            if (Fl::event_alt())
+                            {
+                                float multiplier = p.ui->uiPrefs->uiPrefsAltScrubbingSensitivity->value();
+                                scrub(3.0);
+                            }
+                            else
+                            {
+                                scrub();
+                            }
+                        }
                     }
                     return;
                 }

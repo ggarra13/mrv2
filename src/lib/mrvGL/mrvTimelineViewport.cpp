@@ -438,9 +438,12 @@ namespace mrv
             auto time = t + otime::RationalTime(dx, t.rate());
 
             // Stop at end/beginning if not looping.
+            int behavior = p.ui->uiPrefs->uiPrefsScrubbingLoopMode->value();
             const auto& range = player->inOutRange();
             const auto loop = player->loop();
-            if (loop == timeline::Loop::Once)
+            if ((behavior == kScrubLoopButton &&
+                 loop == timeline::Loop::Once) ||
+                behavior == kScrubLoopInactive)
             {
                 if (time <= range.start_time())
                     time = range.start_time();
@@ -478,7 +481,7 @@ namespace mrv
             player->seek(time);
         }
 
-        void TimelineViewport::scrub() noexcept
+        void TimelineViewport::scrub(float multiplier) noexcept
         {
             TLRENDER_P();
 
@@ -486,7 +489,7 @@ namespace mrv
                 return;
 
             const int X = Fl::event_x() * pixels_per_unit();
-            const float scale = p.ui->uiPrefs->uiPrefsScrubbingSensitivity->value();
+            const float scale = p.ui->uiPrefs->uiPrefsScrubbingSensitivity->value() * multiplier;
             float dx = (X - p.mousePress.x) / scale;
 
             if (std::abs(dx) >= 1.0F)

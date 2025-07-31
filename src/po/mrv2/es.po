@@ -1978,21 +1978,6 @@ msgstr "Flujo {0} {1}..."
 msgid "Stop streaming"
 msgstr "Deja de transmitir"
 
-msgid "Renderer"
-msgstr "Renderizador"
-
-msgid "Complexity"
-msgstr "Complejidad"
-
-msgid "Draw Mode"
-msgstr "Modo de Dibujar"
-
-msgid "Stage Cache"
-msgstr "Cache del Escenario"
-
-msgid "Disk Cache in GB"
-msgstr "Cache en Disco en GB"
-
 msgid "Toggle other eye stereo image."
 msgstr "Alternar el otro ojo de la imagen estéreo."
 
@@ -3052,20 +3037,17 @@ msgstr "Grabando Película sin Audio %<PRId64> - %<PRId64>"
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Solo audio en la línea de tiempo, pero no intenta grabar audio."
 
-msgid "Vulkan info: {0}"
-msgstr "Información de Vulkan: {0}"
-
-msgid "{0}: Invalid OpenGL format and type"
-msgstr "{0}: Formato y tipo de OpenGL inválidos"
-
-msgid "OpenGL info: {0}"
-msgstr "Información de OpenGL: {0}"
+msgid "Offscreen Buffer info: {0}"
+msgstr "Información del Buffer: {0}"
 
 msgid "Saving... {0}"
 msgstr "Grando... {0}."
 
-msgid "Unsupported output format"
-msgstr "Formato de salida no soportado"
+msgid "Could not read image data from view"
+msgstr "No pude leer los datos de la imagen de la vista"
+
+msgid "Could not read annotation image from view"
+msgstr "No pude leer la imagen de anotación de la vista"
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "Datos de vídeo vacíos en el momento {0}. Repetición del cuadro."
@@ -3075,12 +3057,6 @@ msgstr "Tamaño de renderizado: {0}"
 
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr "Información de la capa de imagen '{0}': {1} {2}"
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "Información del Buffer: {0}"
-
-msgid "Unsupported output format: "
-msgstr "Formato de salida no soportado: "
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -3888,11 +3864,14 @@ msgstr "   Adelante V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "   Atrás       V: % 4<PRIu64>    A: % 4<PRIu64> "
 
+msgid "HDR monitor found."
+msgstr "Monitor HDR encontrado."
+
+msgid "HDR monitor not found or not configured."
+msgstr "Monitor HDR no encontrado o no configurado."
+
 msgid "Edit Text"
 msgstr "Editar Texto"
-
-msgid "Invalid font for text drawing"
-msgstr "Fuente inválida para dibujar texto"
 
 msgid "Could not convert message to shape: "
 msgstr "No pude convertir el mensaje a figura: "
@@ -6020,6 +5999,9 @@ msgstr "Bucle"
 msgid "Ping Pong"
 msgstr "Ping Pong"
 
+msgid "Button"
+msgstr "Botón"
+
 msgid "Video Only"
 msgstr "Sólo Vídeo"
 
@@ -6526,16 +6508,6 @@ msgstr "Auto Reproducir"
 msgid "Start Playback when opening files."
 msgstr "Comenzar la Reproducción al abrir archivos."
 
-msgid "Scrub with Audio"
-msgstr "Fregar con Audio"
-
-msgid ""
-"Start playback when scrubbing so that audio can be heard.  Scrubbing can be "
-"less smooth."
-msgstr ""
-"Empezar la reproducción cuando se friega así el audio puede ser oído.  "
-"Fregar con audio puede ser menos fluído."
-
 msgid "Single Click Playback"
 msgstr "Reproducción con un click."
 
@@ -6572,8 +6544,8 @@ msgstr "Modo de Bucle"
 msgid "Select default looping mode in timeline."
 msgstr "Selecionar modo de bucle estándar en la línea de tiempo."
 
-msgid "Scrub Sensitivity"
-msgstr "Sensitividad de Fregado"
+msgid "Sensitivity"
+msgstr "Sensitividad"
 
 msgid ""
 "This setting controls the sensitivity of scrubbing (SHIFT and then the mouse "
@@ -6583,6 +6555,23 @@ msgstr ""
 "Este seteo controla la sensibilidad de fregado (left mouse dragright and "
 "left).  Valores menores hacen que el ratón salte más cuadros mientras que "
 "valores más altos hacen lo opuesto."
+
+msgid ""
+"Start playback when scrubbing so that audio can be heard.  Scrubbing can be "
+"less smooth."
+msgstr ""
+"Empezar la reproducción cuando se friega así el audio puede ser oído.  "
+"Fregar con audio puede ser menos fluído."
+
+msgid "Alt Sensitivity"
+msgstr "Sensitividad con Alt"
+
+msgid ""
+"When using ALT + Left Mouse Button, this setting controls the multiplier "
+"used for slowing the scrubbing."
+msgstr ""
+"Cuando usa ALT + Botón Izquierdo del Mouse, este seteo controla la escala "
+"usada para demorar el fregado."
 
 msgid "Default View"
 msgstr "Vista estándar"
@@ -7636,6 +7625,9 @@ msgstr "Modo de Fregado"
 msgid "Area Selection Mode"
 msgstr "Modo de Selección de Área"
 
+msgid "Draw Mode"
+msgstr "Modo de Dibujar"
+
 msgid "Erase Mode"
 msgstr "Modo de Borrar"
 
@@ -7726,17 +7718,38 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
 
-#~ msgid "Could not read image data from view"
-#~ msgstr "No pude leer los datos de la imagen de la vista"
+#~ msgid "Renderer"
+#~ msgstr "Renderizador"
 
-#~ msgid "Could not read annotation image from view"
-#~ msgstr "No pude leer la imagen de anotación de la vista"
+#~ msgid "Complexity"
+#~ msgstr "Complejidad"
 
-#~ msgid "HDR monitor found."
-#~ msgstr "Monitor HDR encontrado."
+#~ msgid "Stage Cache"
+#~ msgstr "Cache del Escenario"
 
-#~ msgid "HDR monitor not found or not configured."
-#~ msgstr "Monitor HDR no encontrado o no configurado."
+#~ msgid "Disk Cache in GB"
+#~ msgstr "Cache en Disco en GB"
+
+#~ msgid "Vulkan info: {0}"
+#~ msgstr "Información de Vulkan: {0}"
+
+#~ msgid "{0}: Invalid OpenGL format and type"
+#~ msgstr "{0}: Formato y tipo de OpenGL inválidos"
+
+#~ msgid "OpenGL info: {0}"
+#~ msgstr "Información de OpenGL: {0}"
+
+#~ msgid "Unsupported output format"
+#~ msgstr "Formato de salida no soportado"
+
+#~ msgid "Unsupported output format: "
+#~ msgstr "Formato de salida no soportado: "
+
+#~ msgid "Invalid font for text drawing"
+#~ msgstr "Fuente inválida para dibujar texto"
+
+#~ msgid "Scrub with Audio"
+#~ msgstr "Fregar con Audio"
 
 #~ msgid "Blit Viewports"
 #~ msgstr "Copia de Vistas"

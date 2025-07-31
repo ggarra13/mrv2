@@ -5,6 +5,10 @@ v1.4.0
 - Added tab to -version flag.
 - Made Vulkan's mrv2 be installed as vmrv2 to distinguish it from the OpenGL version and allow having both installed easily.
 - Fixed a useless icons directory on macOS and a missing one on Windows.
+- Turned off screen saver/suspending as it was not friendly to some users.
+- Added Alt + LMB when in scrubbing mode to scrub slower.
+- Added a Preference to set a multiplier on how slow with Alt + LMB.
+- Added a Preference to control how scrubbing looping behavior works.  It can be set to Button (the UI timeline setting), Inactive or Active.
 
 
 v1.3.9
