@@ -93,28 +93,34 @@ set( CPACK_INSTALL_SCRIPT ${MRV2_ROOT}/cmake/dummy.cmake )
 #
 set( CPACK_PRE_BUILD_SCRIPTS ${MRV2_ROOT}/cmake/prepackage.cmake )
 
-if( APPLE )
+if(APPLE)
     ##############################
     # New Method using Dragndrop #
     ##############################
-    set( INSTALL_NAME mrv2 )
+
+    set(mrv2_NAME mrv2)
+    if (MRV2_BACKEND STREQUAL "VK")
+	set(mrv2_NAME vmrv2)
+    endif()
+    
+    set( INSTALL_NAME ${mrv2_NAME} )
     set( HDR_INSTALL_NAME hdr )
 
     # Define variables for bundle directories in the build dir
-    set(MRV2_BUNDLE_DIR ${CMAKE_BINARY_DIR}/mrv2.app)
+    set(MRV2_BUNDLE_DIR ${CMAKE_BINARY_DIR}/${mrv2_NAME}.app)
 
     # Create the mrv2.app bundle structure
+    message(STATUS "CREATE ${mrv2_NAME}.app dir")
     file(MAKE_DIRECTORY ${MRV2_BUNDLE_DIR}/Contents/MacOS)
     file(MAKE_DIRECTORY ${MRV2_BUNDLE_DIR}/Contents/Resources)
     
     # Copy the icon
-    if (NOT EXISTS ${MRV2_BUNDLE_DIR}/Contents/Resources/mrv2.icns)
-	file(COPY ${MRV2_DIR}/etc/macOS/mrv2.icns
-	    DESTINATION ${MRV2_BUNDLE_DIR}/Contents/Resources/mrv2.icns)
-    endif()
+    configure_file(${MRV2_DIR}/etc/macOS/mrv2.icns
+	${MRV2_BUNDLE_DIR}/Contents/Resources/${mrv2_NAME}.icns COPYONLY)
     
     # Copy the shell scripts into the bundles and make them executable
-    configure_file(${MRV2_DIR}/etc/macOS/mrv2.sh ${MRV2_BUNDLE_DIR}/Contents/MacOS/mrv2 COPYONLY)
+    configure_file(${MRV2_DIR}/etc/macOS/mrv2.sh
+	${MRV2_BUNDLE_DIR}/Contents/MacOS/${mrv2_NAME} COPYONLY)
     
     configure_file(
      	${MRV2_DIR}/etc/macOS/mrv2.plist.in
@@ -138,6 +144,7 @@ if( APPLE )
 	file(MAKE_DIRECTORY ${HDR_BUNDLE_DIR}/Contents/Resources)
 
 	# Copy the icon
+	message(STATUS "CREATE hdr.app dir")
 	file(COPY ${MRV2_DIR}/etc/macOS/hdr.icns
 	    DESTINATION ${HDR_BUNDLE_DIR}/Contents/Resources)
     
@@ -170,7 +177,7 @@ if( APPLE )
     
     
     set(CPACK_COMPONENTS_ALL "macos_bundles")
-    set(CPACK_INSTALL_CMAKE_PROJECTS "${CMAKE_BINARY_DIR};${CMAKE_PROJECT_NAME};applications;/")
+    set(CPACK_INSTALL_CMAKE_PROJECTS "${CMAKE_BINARY_DIR};${mrv2_NAME};applications;/")
     set(CPACK_INSTALLED_DIRECTORIES "${CMAKE_BINARY_DIR}/install;.")
 
 elseif(UNIX)
