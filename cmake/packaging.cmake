@@ -97,20 +97,24 @@ if( APPLE )
     ##############################
     # New Method using Dragndrop #
     ##############################
+    set( INSTALL_NAME mrv2 )
+    set( HDR_INSTALL_NAME hdr )
 
     # Define variables for bundle directories in the build dir
-    set(MRV2_BUNDLE_DIR ${CMAKE_BINARY_DIR}/${mrv2_NAME}.app)
+    set(MRV2_BUNDLE_DIR ${CMAKE_BINARY_DIR}/mrv2.app)
 
     # Create the mrv2.app bundle structure
     file(MAKE_DIRECTORY ${MRV2_BUNDLE_DIR}/Contents/MacOS)
     file(MAKE_DIRECTORY ${MRV2_BUNDLE_DIR}/Contents/Resources)
     
     # Copy the icon
-    file(COPY ${MRV2_DIR}/etc/macOS/mrv2.icns
-	DESTINATION ${MRV2_BUNDLE_DIR}/Contents/Resources/${mrv2_NAME}.icns)
-	
+    if (NOT EXISTS ${MRV2_BUNDLE_DIR}/Contents/Resources/mrv2.icns)
+	file(COPY ${MRV2_DIR}/etc/macOS/mrv2.icns
+	    DESTINATION ${MRV2_BUNDLE_DIR}/Contents/Resources/mrv2.icns)
+    endif()
+    
     # Copy the shell scripts into the bundles and make them executable
-    configure_file(${MRV2_DIR}/etc/macOS/mrv2.sh ${MRV2_BUNDLE_DIR}/Contents/MacOS/${mrv2_NAME} COPYONLY)
+    configure_file(${MRV2_DIR}/etc/macOS/mrv2.sh ${MRV2_BUNDLE_DIR}/Contents/MacOS/mrv2 COPYONLY)
     
     configure_file(
      	${MRV2_DIR}/etc/macOS/mrv2.plist.in

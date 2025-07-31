@@ -279,9 +279,15 @@ install( DIRECTORY colors ocio presets
     DESTINATION .
     COMPONENT applications )
 
-install( FILES icons/mrv2.png
-    DESTINATION icons
-    COMPONENT applications )
+if (UNIX AND NOT APPLE)
+    install( FILES icons/mrv2.png
+	DESTINATION icons
+	COMPONENT applications )
+elseif(WIN32)
+    install( FILES icons/mrv2.png
+	DESTINATION icons
+	COMPONENT applications )
+endif()
 
 #
 # Install locales

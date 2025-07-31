@@ -4,6 +4,7 @@ v1.4.0
 - Added backend used to -version flag.
 - Added tab to -version flag.
 - Made Vulkan's mrv2 be installed as vmrv2 to distinguish it from the OpenGL version and allow having both installed easily.
+- Fixed a useless icons directory on macOS and a missing one on Windows.
 
 
 v1.3.9
