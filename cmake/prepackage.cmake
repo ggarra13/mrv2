@@ -115,6 +115,7 @@ set( _pythonBuiltinModules
     lib2to3/test*
     sqlite3/test*
     tkinter/test*
+    setuptools*
     unittest*
 )
 
@@ -151,6 +152,7 @@ set( _pythonSiteModules
     sacremoses*
     safetensors*
     sentencepiece*
+    setuptools*
     snowballstemmer*
     sphinx*
     sympy*

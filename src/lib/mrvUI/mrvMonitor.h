@@ -35,6 +35,6 @@ namespace mrv
 
         std::string getName(int monitorIndex);
 
-        bool is_hdr_active(int screen = 0, const bool silent = true);
+        bool is_hdr_active(int screen = -1, const bool silent = true);
     } // namespace monitor
 } // namespace mrv

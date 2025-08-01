@@ -19,6 +19,19 @@
 
 #include "mrvUI/mrvDesktop.h"
 
+namespace
+{
+    // Helper to release COM objects
+    template <typename T>
+    void SafeRelease(T*& p)
+    {
+        if (p)
+        {
+            p->Release();
+            p = nullptr;
+        }
+    }
+}
 
 namespace
 {
@@ -165,50 +178,75 @@ namespace mrv
             return out;
         }
 
-        bool is_hdr_active(int screen, const bool silent)
+        bool is_hdr_active(int screen_index, const bool silent)
         {
             IDXGIFactory6* factory = nullptr;
-            CreateDXGIFactory1(IID_PPV_ARGS(&factory));
+            HRESULT hr = CreateDXGIFactory1(IID_PPV_ARGS(&factory));
+            if (FAILED(hr))
+            {
+                if (!silent)
+                    std::cerr << "Error: Could not create DXGI Factory: "
+                              << hr << std::endl;
+                return false;
+            }
 
+            bool hdr_found = false;
             IDXGIAdapter1* adapter = nullptr;
             for (UINT i = 0;
                  factory->EnumAdapters1(i, &adapter) != DXGI_ERROR_NOT_FOUND;
                  ++i)
             {
+                // Enumerate outputs for the current adapter
                 IDXGIOutput* output = nullptr;
-                if (SUCCEEDED(adapter->EnumOutputs(0, &output)))
+                for (UINT j = 0; adapter->EnumOutputs(j, &output) !=
+                              DXGI_ERROR_NOT_FOUND; ++j)
                 {
+                    // If you need to target a specific screen by index, you'd add logic here.
+                    // For example, if 'screen_index' means the j-th output of the i-th adapter:
+                    // if (i == target_adapter_index && j == screen_index) { ... }
+                    // Or if screen_index is a global index:
+                    // if (global_output_counter == screen_index) { ... }
+                    // For now, let's assume 'screen_index' is not strictly tied to the j-th output and
+                    // we're checking if *any* display has HDR. If 'screen_index' is meant to be a direct
+                    // target, more complex matching via GetDesc().Monitor or similar is needed.
+
                     IDXGIOutput6* output6 = nullptr;
                     if (SUCCEEDED(output->QueryInterface(IID_PPV_ARGS(&output6))))
                     {
                         DXGI_OUTPUT_DESC1 desc;
-                        output6->GetDesc1(&desc);
-
-                        // Check for HDR support
-                        if (desc.ColorSpace ==
-                            DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020 ||
-                            desc.ColorSpace ==
-                            DXGI_COLOR_SPACE_RGB_FULL_G10_NONE_P709)
+                        if (SUCCEEDED(output6->GetDesc1(&desc)))
                         {
-                            if (!silent)
-                                std::cout << "HDR is active on display.\n";
-                            output6->Release();
-                            output->Release();
-                            adapter->Release();
-                            factory->Release();
-                            return true;
+                            // Check for HDR support
+                            switch(desc.ColorSpace)
+                            {
+                            case DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020:
+                            case DXGI_COLOR_SPACE_YCBCR_STUDIO_G2084_LEFT_P2020:
+                            case DXGI_COLOR_SPACE_YCBCR_STUDIO_GHLG_TOPLEFT_P2020:
+                            case DXGI_COLOR_SPACE_YCBCR_FULL_GHLG_TOPLEFT_P2020:
+                                hdr_found = true;
+                                break;
+                            default:
+                                break;
+                            }
                         }
-
-                        output6->Release();
+                        SafeRelease(output6); // Release output6 after use
                     }
-                    output->Release();
+                    SafeRelease(output); // Release output after use
+                    if (hdr_found && screen_index <= 0)
+                    {
+                        SafeRelease(output);
+                        SafeRelease(adapter);
+                        goto cleanup;
+                    }
                 }
-                adapter->Release();
+                SafeRelease(adapter); // Release adapter after its outputs are processed
             }
-            factory->Release();
-            return false;
+
+        cleanup:
+            SafeRelease(factory); // Release factory at the very end
+
+            return hdr_found;
         }
-        
         
     } // namespace monitor
 } // namespace mrv
