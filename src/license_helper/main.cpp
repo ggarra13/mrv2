@@ -181,7 +181,7 @@ int main(int argc, char** argv)
     license.align(FL_ALIGN_CENTER | FL_ALIGN_TOP);
     license.tooltip("Once you obtain a license, copy it here");
 
-    Fl_Button exit(80, 280, 150, 40, "Exit");
+    Fl_Button exit(80, 280, 150, 40, "Demo");
     exit.callback((Fl_Callback*)exit_cb, nullptr);
 
     Fl_Button create(360, 280, 150, 40, "Create");

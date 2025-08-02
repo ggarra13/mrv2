@@ -182,6 +182,7 @@ namespace mrv
     public:
         static ViewerUI* ui;
         static App* app;
+        static bool demo_mode;
 
     private:
         void _settingsCallback();

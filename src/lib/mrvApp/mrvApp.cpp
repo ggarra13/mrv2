@@ -244,6 +244,7 @@ namespace mrv
 
     ViewerUI* App::ui = nullptr;
     App* App::app = nullptr;
+    bool App::demo_mode = false;
 
     std::vector< std::string > OSXfiles;
     void osx_open_cb(const char* fname)
@@ -304,23 +305,6 @@ namespace mrv
         ViewerUI::app = this;
 
         open_console();
-
-#ifndef MRV2_DEMO
-#  ifdef VULKAN_BACKEND
-        bool ok = validate_license();
-        if (!ok)
-        {
-            std::string helper = rootpath() + "/bin/license_helper";
-            int ret = os::exec_command(helper.c_str());
-            bool ok = validate_license();
-            if (!ok)
-            {
-                fl_alert("Invalid license");
-                exit(100);
-            }
-        }
-#  endif
-#endif
         
         const std::string& msg = setLanguageLocale();
 
@@ -538,6 +522,29 @@ namespace mrv
 #endif
             return;
         }
+
+
+#ifdef VULKAN_BACKEND
+        bool ok = validate_license();
+        if (!ok)
+        {
+            std::string helper = rootpath() + "/bin/license_helper";
+            int ret = os::exec_command(helper.c_str());
+            if (ret == 0)
+            {
+                bool ok = validate_license();
+                if (!ok)
+                {
+                    fl_alert("Invalid license. Entering demo mode");
+                    demo_mode = true;
+                }
+            }
+            else
+            {
+                demo_mode = true;
+            }
+        }
+#endif
 
         DBG;
         // Initialize FLTK.
@@ -919,6 +926,7 @@ namespace mrv
         Fl_Group::current(0);
         outputDisplay = new PythonOutput(0, 0, 400, 400);
 #endif
+        
 
         //
         // Show the UI if no python script was fed in.

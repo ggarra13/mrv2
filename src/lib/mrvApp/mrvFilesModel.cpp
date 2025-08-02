@@ -3,6 +3,7 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include "mrvApp/mrvFilesModel.h"
+#include "mrvApp/mrvApp.h"
 
 #include <tlCore/StringFormat.h>
 
@@ -230,9 +231,9 @@ namespace mrv
 
     void FilesModel::setB(int index, bool value)
     {
-#ifdef MRV2_DEMO
-        return;
-#endif
+        if (App::demo_mode)
+            return;
+        
         TLRENDER_P();
         if (index >= 0 && index < p.files->getSize())
         {
@@ -474,10 +475,9 @@ namespace mrv
     {
         TLRENDER_P();
         const int index = _index(item);
-#ifdef MRV2_DEMO
-        if (index > 0)
+        if (App::demo_mode && index > 0)
             return;
-#endif
+
         if (index != -1 &&
             layer < p.files->getItem(index)->videoLayers.size() &&
             layer != p.files->getItem(index)->videoLayer)
@@ -534,9 +534,9 @@ namespace mrv
 
     void FilesModel::setCompareOptions(const timeline::CompareOptions& value)
     {
-#ifdef MRV2_DEMO
-        return;
-#endif
+        if (App::demo_mode)
+            return;
+
         TLRENDER_P();
         
         if (p.compareOptions->setIfChanged(value))

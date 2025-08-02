@@ -280,9 +280,11 @@ namespace mrv
             p.ui->uiArrow->value(0);
             p.ui->uiText->value(0);
             
-#ifdef MRV2_DEMO
-            return;
-#endif
+            if (App::demo_mode)
+            {
+                p.ui->uiScrub->value(1);
+                return;
+            }
 
             if (mode != kSelection)
             {
