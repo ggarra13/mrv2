@@ -298,7 +298,6 @@ namespace
         {
             CHECK_EVENT_TYPE(ButtonPress);
             CHECK_EVENT_TYPE(ButtonRelease);
-            ;
             CHECK_EVENT_TYPE(CirculateNotify);
             CHECK_EVENT_TYPE(CirculateRequest);
             CHECK_EVENT_TYPE(ClientMessage);
@@ -574,6 +573,8 @@ namespace mrv
     struct MainWindow::Private
     {
         Fl_Offscreen offscreen;
+        bool hidden = false;
+        int mute = 0;
     };
 
     MainWindow::MainWindow(int X, int Y, int W, int H, const char* title) :
@@ -732,6 +733,8 @@ namespace mrv
 
     int MainWindow::handle(int event)
     {
+        TLRENDER_P();
+        
 #ifdef FLTK_USE_WAYLAND
         if (click_through && ignoreFocus && desktop::Wayland() &&
             event == FL_UNFOCUS)
@@ -780,6 +783,24 @@ namespace mrv
             {
                 set_click_through(!click_through);
                 return 1;
+            }
+        }
+        else if (event == FL_HIDE)
+        {
+            TimelineClass* t = App::ui->uiTimeWindow;
+            p.hidden = true;
+            p.mute = t->uiAudioTracks->value();
+            t->uiAudioTracks->value(1);
+            t->uiAudioTracks->do_callback();
+        }
+        else if (event == FL_SHOW)
+        {
+            if (p.hidden)
+            {
+                TimelineClass* t = App::ui->uiTimeWindow;
+                t->uiAudioTracks->value(p.mute);
+                t->uiAudioTracks->do_callback();
+                p.hidden = false;
             }
         }
 
