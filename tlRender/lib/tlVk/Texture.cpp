@@ -221,6 +221,7 @@ namespace tl
             
             VkImageView imageView = VK_NULL_HANDLE;
             VkSampler sampler = VK_NULL_HANDLE;
+            VkFence uploadFence = VK_NULL_HANDLE;
 
             VkFormat format = VK_FORMAT_UNDEFINED;
             VkFormat internalFormat = VK_FORMAT_UNDEFINED;

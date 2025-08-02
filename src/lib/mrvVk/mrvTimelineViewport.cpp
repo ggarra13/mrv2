@@ -1835,9 +1835,9 @@ namespace mrv
             {
                 // Wait a little so that resizing/maximizing takes place.
                 if (use_maximize)
-                    wait::milliseconds(1000);
-                else
                     wait::milliseconds(100);
+                else
+                    wait::milliseconds(100);                
                 _frameView();
             }
 

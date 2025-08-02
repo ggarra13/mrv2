@@ -351,13 +351,6 @@ namespace tl
                                     "FFmpeg I/O threads.  Setting it to 4.");
                         _avCodecContext[_avStream]->thread_count = 4;
                     }
-                    // \@note: libvp9 codec does not decode properly when
-                    //         thread count is 0 on Linux.
-                    if (avVideoCodecParameters->codec_id == AV_CODEC_ID_VP9)
-                    {
-                        LOG_WARNING("Decoder VP9 may decode black with 0 "
-                                    "FFmpeg I/O threads.");
-                    }
                 }
 
                 r = avcodec_open2(_avCodecContext[_avStream], avVideoCodec, 0);

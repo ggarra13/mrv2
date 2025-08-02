@@ -949,15 +949,15 @@ namespace mrv
 
             
             VkViewport viewport = {};
-            viewport.width = static_cast<float>(w());
-            viewport.height = static_cast<float>(h());
+            viewport.width = static_cast<float>(pixel_w());
+            viewport.height = static_cast<float>(pixel_h());
             viewport.minDepth = 0.0f;
             viewport.maxDepth = 1.0f;
             vkCmdSetViewport(cmd, 0, 1, &viewport);
 
             VkRect2D scissor = {};
-            scissor.extent.width = w();
-            scissor.extent.height = h();
+            scissor.extent.width = pixel_w();
+            scissor.extent.height = pixel_h();
             vkCmdSetScissor(cmd, 0, 1, &scissor);
                 
                 
@@ -1469,7 +1469,7 @@ namespace mrv
 
                 const uint32_t W = box.w();
                 const uint32_t H = box.h();
-            
+
                 VkCommandBuffer cmd = beginSingleTimeCommands(device(), commandPool());
 
                 vk.buffer->readPixels(cmd, box.min.x, box.min.y, W, H);

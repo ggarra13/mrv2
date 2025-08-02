@@ -1003,15 +1003,18 @@ void main()
                     sizeof(float), &opacity);
 
                 VkViewport viewport = {};
-                viewport.width = static_cast<float>(w());
-                viewport.height = static_cast<float>(h());
+                viewport.x = 0.0f;
+                viewport.y = 0.0f;
+                viewport.width = static_cast<float>(pixel_w());
+                viewport.height = static_cast<float>(pixel_h());
                 viewport.minDepth = 0.0f;
                 viewport.maxDepth = 1.0f;
                 vkCmdSetViewport(cmd, 0, 1, &viewport);
 
                 VkRect2D scissor = {};
-                scissor.extent.width = w();
-                scissor.extent.height = h();
+                scissor.offset = {0, 0};
+                scissor.extent.width = pixel_w();
+                scissor.extent.height = pixel_h();
                 vkCmdSetScissor(cmd, 0, 1, &scissor);
 
                 if (p.vao && p.vbo)
