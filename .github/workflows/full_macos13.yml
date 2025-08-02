@@ -71,7 +71,7 @@ jobs:
       run: |
         ./etc/runme_nolog.sh -D TLRENDER_USD=OFF -t package
       
-    - name: Upload binaries
-      if: github.ref_name == 'beta'
-      run: |
-        ./bin/release/upload_sourceforge.sh
+    # - name: Upload binaries
+    #   if: github.ref_name == 'beta'
+    #   run: |
+    #     ./bin/release/upload_sourceforge.sh

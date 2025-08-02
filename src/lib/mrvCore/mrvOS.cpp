@@ -74,6 +74,51 @@ namespace mrv
 
 
 #ifdef _WIN32
+        int exec_command(const std::string& command)
+        {
+            STARTUPINFOA si;
+            PROCESS_INFORMATION pi;
+
+            // Initialize the structures
+            ZeroMemory(&si, sizeof(si));
+            si.cb = sizeof(si);
+            ZeroMemory(&pi, sizeof(pi));
+
+            // Convert command to a mutable char buffer for CreateProcessA
+            std::vector<char> cmd(command.begin(), command.end());
+            cmd.push_back('\0');
+
+            // Create the process
+            // The CREATE_NO_WINDOW flag is key to preventing a console from popping up
+            if (!CreateProcessA(
+                    NULL,           // No module name (use command line)
+                    cmd.data(),     // Command line
+                    NULL,           // Process handle not inheritable
+                    NULL,           // Thread handle not inheritable
+                    FALSE,          // Set handle inheritance to FALSE
+                    CREATE_NO_WINDOW, // Don't create a console window
+                    NULL,           // Use parent's environment block
+                    NULL,           // Use parent's starting directory
+                    &si,            // Pointer to STARTUPINFOA structure
+                    &pi             // Pointer to PROCESS_INFORMATION structure
+                    )) {
+                throw std::runtime_error("CreateProcess failed!");
+            }
+
+            // Wait until the child process exits.
+            WaitForSingleObject(pi.hProcess, INFINITE);
+
+            // Get the exit code.
+            DWORD exitCode;
+            GetExitCodeProcess(pi.hProcess, &exitCode);
+
+            // Clean up handles.
+            CloseHandle(pi.hProcess);
+            CloseHandle(pi.hThread);
+
+            return static_cast<int>(exitCode);
+        }
+        
         int exec_command(const std::string& command,
                          std::string& std_out,
                          std::string& std_err)
@@ -164,7 +209,11 @@ namespace mrv
         }
 
 #else
-
+        int exec_command(const std::string& command)
+        {
+            return ::system(command.c_str());
+        }
+        
         int exec_command(const std::string& command,
                          std::string& std_out, std::string& std_err)
         {

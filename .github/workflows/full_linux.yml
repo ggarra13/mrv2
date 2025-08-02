@@ -115,7 +115,7 @@ jobs:
       run: |
         ./etc/runme_nolog.sh -t package
       
-    - name: Upload binaries  # Conditional step
-      if: github.ref_name == 'beta'
-      run: |
-        ./bin/release/upload_sourceforge.sh
+    # - name: Upload binaries  # Conditional step
+    #   if: github.ref_name == 'beta'
+    #   run: |
+    #     ./bin/release/upload_sourceforge.sh

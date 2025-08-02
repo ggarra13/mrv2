@@ -311,7 +311,7 @@ namespace mrv
         if (!ok)
         {
             std::string helper = rootpath() + "/bin/license_helper";
-            int ret = ::system(helper.c_str());
+            int ret = os::exec_command(helper.c_str());
             bool ok = validate_license();
             if (!ok)
             {
