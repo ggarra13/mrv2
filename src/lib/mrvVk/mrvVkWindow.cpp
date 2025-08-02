@@ -38,6 +38,7 @@ namespace mrv
 
         void VkWindow::_init()
         {
+            //m_validate = true;
             m_debugSync = false;
         }
 
