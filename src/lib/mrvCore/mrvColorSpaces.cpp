@@ -439,21 +439,23 @@ namespace mrv
                 const math::Vector4f& yuvCoefficients) noexcept
             {
                 Color4f c;
-                c.r = Imath::clamp(YPbPr.r, 0.0f, 1.0f);
-                c.g = Imath::clamp(YPbPr.g, -0.5f, 0.5f);
-                c.b = Imath::clamp(YPbPr.b, -0.5f, 0.5f);
+
+                c.r = Imath::clamp(YPbPr.r, 0.F, 1.F);
+                c.g = Imath::clamp(YPbPr.g, -0.5F, 0.5F);
+                c.b = Imath::clamp(YPbPr.b, -0.5F, 0.5F);
                 c.a = YPbPr.a;
 
                 const float y = c.r;
                 const float cb = c.g;
                 const float cr = c.b;
-                c.r = y + (yuvCoefficients.x * cr);
-                c.g = y - (yuvCoefficients.z * cb) - (yuvCoefficients.w * cr);
-                c.b = y + (yuvCoefficients.y * cb);
 
-                Imath::clamp(c.r, 0.0f, 1.0f);
-                Imath::clamp(c.g, 0.0f, 1.0f);
-                Imath::clamp(c.b, 0.0f, 1.0f);
+                c.r = y + (yuvCoefficients.x * cr);
+                c.g = y - (yuvCoefficients.y * cb) - (yuvCoefficients.z * cr);
+                c.b = y + (yuvCoefficients.w * cb);
+                
+                c.r = Imath::clamp(c.r, 0.0f, 1.0f);
+                c.g = Imath::clamp(c.g, 0.0f, 1.0f);
+                c.b = Imath::clamp(c.b, 0.0f, 1.0f);
                 return c;
             }
         } // namespace YPbPr
@@ -461,24 +463,23 @@ namespace mrv
         /**
          * Limits an RGB color to full range or legal range video levels.
          *
-         * @param rgba Original RGB color (modified in place)
+         * @param yuv Original YUV color (modified in place)
          * @param videoLevels VideoLevels enum.
          */
         void
-        checkLevels(image::Color4f& rgba, const image::VideoLevels videoLevels)
+        checkLevels(image::Color4f& yuv, const image::VideoLevels videoLevels)
         {
             if (videoLevels == image::VideoLevels::FullRange)
             {
-                rgba.g = rgba.g - 0.5f;
-                rgba.b = rgba.b - 0.5f;
+                yuv.g = yuv.g - 0.5f;
+                yuv.b = yuv.b - 0.5f;
             }
             else if (videoLevels == image::VideoLevels::LegalRange)
             {
-                rgba.r = (rgba.r - (16.0 / 255.0)) * (255.0 / (235.0 - 16.0));
-                rgba.g =
-                    (rgba.g - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0)) - 0.5;
-                rgba.b =
-                    (rgba.b - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0)) - 0.5;
+                yuv.r = (yuv.r - (16.0f / 255.0f)) * (255.0f / (235.0f - 16.0f));
+                // Cb/Cr: scale and center
+                yuv.g = ((yuv.g - (16.0f / 255.0f)) * (255.0f / (240.0f - 16.0f))) - 0.5f;
+                yuv.b = ((yuv.b - (16.0f / 255.0f)) * (255.0f / (240.0f - 16.0f))) - 0.5f;
             }
         }
 

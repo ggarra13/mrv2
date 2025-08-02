@@ -13,6 +13,8 @@ v1.4.0
 - Fixed Vulkan's DPI and scaling of images/videos within the viewport.
 - Made audio stop playback when the window is minimized (due to a bug in FLTK
   only on Windows).
+- Fixed YUV Original look up crashing the viewer.
+- Fixed YUV Original pixel values as they were not matching the Full ones.
 
 
 v1.3.9

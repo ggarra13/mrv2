@@ -1430,7 +1430,7 @@ namespace mrv
                     return;
                 }
                 else
-                {                        
+                {
                     VkCommandBuffer cmd =
                         beginSingleTimeCommands(device(), commandPool());
 
@@ -1465,6 +1465,7 @@ namespace mrv
             
             if (p.ui->uiPixelWindow->uiPixelValue->value() == PixelValue::kFull)
             {
+                    
                 const math::Box2i box = p.colorAreaInfo.box;
 
                 const uint32_t W = box.w();
