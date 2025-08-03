@@ -11,8 +11,7 @@ v1.4.0
 - Added a Preference to set a multiplier on how slow with Alt + LMB.
 - Added a Preference to control how scrubbing looping behavior works.  It can be set to Button (the UI timeline setting), Inactive or Active.
 - Fixed Vulkan's DPI and scaling of images/videos within the viewport.
-- Made audio stop playback when the window is minimized (due to a bug in FLTK
-  only on Windows).
+- Made audio stop playback when the window is minimized, except on Wayland.
 - Fixed YUV Original look up crashing the viewer.
 - Fixed YUV Original pixel values as they were not matching the Full ones.
 
