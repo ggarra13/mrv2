@@ -1949,7 +1949,7 @@ namespace tl
                 std::string toneMap;
 
                 // Start of binding index
-                p.bindingIndex = 7;
+                p.bindingIndex = 6;
                 std::size_t pushOffset = 0;
 #if defined(TLRENDER_LIBPLACEBO)
                 if (p.placeboData)
@@ -2414,9 +2414,9 @@ namespace tl
                 p.shaders["display"]->createUniform("uboLevels", uboLevels);
 
                 // \@unused in mrv2 (used to keep reference of gain UI)
-                timeline::EXRDisplay exrDisplay;
-                p.shaders["display"]->createUniform(
-                    "uboEXRDisplay", exrDisplay);
+                // timeline::EXRDisplay exrDisplay;
+                // p.shaders["display"]->createUniform(
+                //     "uboEXRDisplay", exrDisplay);
 
                 UBONormalize uboNormalize;
                 p.shaders["display"]->createUniform(

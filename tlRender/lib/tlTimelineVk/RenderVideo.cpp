@@ -1149,7 +1149,6 @@ namespace tl
                 uboColor.invert = displayOptions.color.invert;
 
                 p.shaders["display"]->setUniform("uboColor", uboColor);
-                p.shaders["display"]->setUniform("uboEXRDisplay", displayOptions.exrDisplay);
 
                 UBOOptions ubo;
                 ubo.channels = static_cast<int>(displayOptions.channels);

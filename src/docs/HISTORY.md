@@ -17,6 +17,7 @@ v1.4.0
 - Added Preferences->Behavior->Allow Screen Saver to control whether mrv2
   blocks the screen saver when running.
 - Fixed blocking Suspend mode on Windows.
+- Improved performance of Vulkan shaders' compilation for faster start ups.
 
 
 v1.3.9
