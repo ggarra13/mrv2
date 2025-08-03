@@ -1812,7 +1812,7 @@ v->uiOCIO_Display_View->do_callback();}
                 }
                 Fl_Choice uiPrefsAllowScreenSaver {
                   label {Allow Screen Saver} open selected
-                  tooltip {This setting controls whether mrv2 will block the screen saver and suspend mode when running.} xywh {487 192 255 25} down_box BORDER_BOX align 132 textcolor 32
+                  tooltip {This setting controls whether mrv2 will block the screen saver when running.} xywh {487 192 255 25} down_box BORDER_BOX align 132 textcolor 32
                   class {mrv::Choice}
                 } {
                   MenuItem {} {
