@@ -528,33 +528,6 @@ float knee(float value, float f)
     return log(value * f + 1.0) / f;
 }
 
-vec4 exrDisplayFunc(vec4 value, EXRDisplay data)
-{
-    value[0] = max(0.0, value[0] - data.d) * data.v;
-    value[1] = max(0.0, value[1] - data.d) * data.v;
-    value[2] = max(0.0, value[2] - data.d) * data.v;
-    if (value[0] > data.k)
-        value[0] = data.k + knee(value[0] - data.k, 
-data.f);
-    if (value[1] > data.k)
-        value[1] = data.k + knee(value[1] - data.k, 
-data.f);
-    if (value[2] > data.k)
-        value[2] = data.k + knee(value[2] - data.k, 
-data.f);
-    if (value[0] > 0.0) value[0] = pow(value[0], 
-data.g);
-    if (value[1] > 0.0) value[1] = pow(value[1], 
-data.g);
-    if (value[2] > 0.0) value[2] = pow(value[2], 
-data.g);
-    float s = pow(2, -3.5 * data.g);
-    value[0] *= s;
-    value[1] *= s;
-    value[2] *= s;
-    return value;
-}
-
 vec4 normalizeFunc(vec4 value, Normalize data)
 {
     value[0] = (value[0] - data.minimum[0]) / 
