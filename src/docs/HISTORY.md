@@ -14,6 +14,7 @@ v1.4.0
 - Made audio stop playback when the window is minimized, except on Wayland.
 - Fixed YUV Original look up crashing the viewer.
 - Fixed YUV Original pixel values as they were not matching the Full ones.
+- Improved performance of Vulkan shaders' compilation for faster start ups.
 
 
 v1.3.9
