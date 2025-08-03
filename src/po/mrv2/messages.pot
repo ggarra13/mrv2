@@ -1656,21 +1656,6 @@ msgstr ""
 msgid "Stop streaming"
 msgstr ""
 
-msgid "Renderer"
-msgstr ""
-
-msgid "Complexity"
-msgstr ""
-
-msgid "Draw Mode"
-msgstr ""
-
-msgid "Stage Cache"
-msgstr ""
-
-msgid "Disk Cache in GB"
-msgstr ""
-
 msgid "Toggle other eye stereo image."
 msgstr ""
 
@@ -2678,19 +2663,16 @@ msgstr ""
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr ""
 
-msgid "Vulkan info: {0}"
-msgstr ""
-
-msgid "{0}: Invalid OpenGL format and type"
-msgstr ""
-
-msgid "OpenGL info: {0}"
+msgid "Offscreen Buffer info: {0}"
 msgstr ""
 
 msgid "Saving... {0}"
 msgstr ""
 
-msgid "Unsupported output format"
+msgid "Could not read image data from view"
+msgstr ""
+
+msgid "Could not read annotation image from view"
 msgstr ""
 
 msgid "Empty video data at time {0}.  Repeating frame."
@@ -2700,12 +2682,6 @@ msgid "Render size: {0}"
 msgstr ""
 
 msgid "Image Layer '{0}' info: {1} {2}"
-msgstr ""
-
-msgid "Offscreen Buffer info: {0}"
-msgstr ""
-
-msgid "Unsupported output format: "
 msgstr ""
 
 msgid ""
@@ -3476,10 +3452,13 @@ msgstr ""
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr ""
 
-msgid "Edit Text"
+msgid "HDR monitor found."
 msgstr ""
 
-msgid "Invalid font for text drawing"
+msgid "HDR monitor not found or not configured."
+msgstr ""
+
+msgid "Edit Text"
 msgstr ""
 
 msgid "Could not convert message to shape: "
@@ -6236,7 +6215,8 @@ msgid "Allow Screen Saver"
 msgstr ""
 
 msgid ""
-"This setting controls whether mrv2 will block the screen saver when running."
+"This setting controls whether mrv2 will block the screen saver and suspend "
+"mode when running."
 msgstr ""
 
 msgid "Reset settings to the default."
@@ -6971,6 +6951,9 @@ msgid "Scrub Mode"
 msgstr ""
 
 msgid "Area Selection Mode"
+msgstr ""
+
+msgid "Draw Mode"
 msgstr ""
 
 msgid "Erase Mode"
