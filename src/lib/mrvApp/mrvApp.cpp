@@ -42,6 +42,7 @@ namespace py = pybind11;
 #include "mrvFl/mrvTimelinePlayer.h"
 
 #include "mrvWidgets/mrvLogDisplay.h"
+#include "mrvWidgets/mrvProgressReport.h"
 #include "mrvWidgets/mrvPythonOutput.h"
 
 #if defined(TLRENDER_USD)
@@ -508,12 +509,7 @@ namespace mrv
         {
             std::cout << std::endl
                       << "\tmrv2 v" << mrv::version() << " "
-#ifdef VULKAN_BACKEND
-                      << "Vulkan "
-#endif
-#ifdef OPENGL_BACKEND
-                      << "OpenGL "
-#endif                
+                      << mrv::backend() << " "
                       << mrv::build_date()
                       << std::endl
                       << mrv::os::getVersion() << std::endl;
@@ -1617,9 +1613,10 @@ namespace mrv
             LOG_ERROR(err);
             return;
         }
+    
 
         for (const auto& path :
-             timeline::getPaths(filePath, pathOptions, _context))
+                 timeline::getPaths(filePath, pathOptions, _context) )
         {
             auto item = std::make_shared<FilesModelItem>();
             item->path = path;
@@ -1938,6 +1935,8 @@ namespace mrv
     {
         TLRENDER_P();
 
+        DBG;
+        
         std::shared_ptr<TimelinePlayer> player;
         if (!p.activeFiles.empty() && isRunning() && p.player)
         {
@@ -2106,6 +2105,8 @@ namespace mrv
             p.outputDevice->setPlayer(p.player ? p.player->player() : nullptr);
 #endif // TLRENDER_BMD
 
+        DBG;
+        
         _layersUpdate(p.filesModel->observeLayers()->get());
 
         if (ui)
@@ -2172,8 +2173,13 @@ namespace mrv
             }
         }
 
+        DBG;
         cacheUpdate();
+        
+        DBG;
         _audioUpdate();
+        
+        DBG;
     }
 
     otime::RationalTime App::_cacheReadAhead() const

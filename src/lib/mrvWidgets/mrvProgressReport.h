@@ -22,7 +22,7 @@ namespace mrv
 
         bool tick();
 
-        void show();
+        void show(); // hides automatically when it goes out of scope.
 
     protected:
         //! Convert a double in seconds to hour, minutes, seconds and

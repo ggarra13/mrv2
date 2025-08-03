@@ -302,7 +302,7 @@ else()
 	    COMPONENT applications)
     endif()
     
-    set(CPACK_PACKAGE_INSTALL_DIRECTORY "mrv2-v${mrv2_VERSION}" )
+    set(CPACK_PACKAGE_INSTALL_DIRECTORY "${mrv2_NAME}-v${mrv2_VERSION}" )
     
     # There is a bug in NSIS that does not handle full unix paths properly. Make
     # sure there is at least one set of four (4) backlasshes.

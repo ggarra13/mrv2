@@ -880,10 +880,16 @@ namespace mrv
         ComfyUI.get("input_pipe", tmp, 0);
         uiPrefs->uiPrefsUseComfyUIPipe->value((bool)tmp);
 
+        
         Fl_Preferences behavior(base, "behavior");
+
         behavior.get("check_for_updates", tmp, 0);
         uiPrefs->uiPrefsCheckForUpdates->value(tmp);
 
+        behavior.get("allow_screen_saver", tmp, 0);
+        uiPrefs->uiPrefsAllowScreenSaver->value(tmp);
+        
+        
         //
         // Hotkeys
         //
@@ -1534,6 +1540,9 @@ namespace mrv
         behavior.set(
             "check_for_updates", (int)uiPrefs->uiPrefsCheckForUpdates->value());
 
+        behavior.set("allow_screen_saver",
+                     (int)uiPrefs->uiPrefsAllowScreenSaver->value());
+        
         {
 
             Fl_Preferences keys(
@@ -1990,6 +1999,8 @@ namespace mrv
             app->createComfyUIListener();
         }
 #endif
+
+        ui->uiMain->allow_screen_saver((bool)uiPrefs->uiPrefsAllowScreenSaver->value());
 
         Fl_Preferences base(
             prefspath().c_str(), "filmaura", "mrv2", (Fl_Preferences::Root)0);

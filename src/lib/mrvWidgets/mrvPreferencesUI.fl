@@ -93,8 +93,8 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {142 155 853 466} type Double resizable
-      code0 {main = m;} visible
+      xywh {142 155 853 466} type Double hide resizable
+      code0 {main = m;}
     } {
       Fl_Group {} {open
         xywh {0 0 853 466} box FLAT_BOX
@@ -950,7 +950,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
             }
             Fl_Group {} {
               label Playback open
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label Defaults open
@@ -1072,7 +1072,7 @@ v->uiPrefsFPS->value( g );}
                     tooltip {When using ALT + Left Mouse Button, this setting controls the multiplier used for slowing the scrubbing.} xywh {483 338 56 28} color 20 minimum 2 maximum 50 step 1 value 3 textcolor 56
                   }
                   Fl_Choice uiPrefsScrubbingLoopMode {
-                    label {Looping Mode} open selected
+                    label {Looping Mode} open
                     tooltip {Select default looping mode in timeline.} xywh {654 306 90 28} box THIN_DOWN_BOX down_box BORDER_BOX
                     class {mrv::Choice}
                   } {
@@ -1789,15 +1789,16 @@ v->uiOCIO_Display_View->do_callback();}
               }
             }
             Fl_Group {} {
-              label Behavior
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+              label Behavior open
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5
             } {
-              Fl_Group {} {open
-                xywh {335 38 446 313}
+              Fl_Group {} {
+                label Behavior open
+                xywh {321 115 460 141} box ROUNDED_BOX
               } {
                 Fl_Choice uiPrefsCheckForUpdates {
-                  label {Check for Updates} open
-                  tooltip {Allows you to automatically download updates of mrv2 when it starts up.} xywh {487 172 255 25} down_box BORDER_BOX align 132 textcolor 32
+                  label {Check for Updates}
+                  tooltip {Allows you to automatically download updates of mrv2 when it starts up.} xywh {487 143 255 25} down_box BORDER_BOX align 132 textcolor 32
                   class {mrv::Choice}
                 } {
                   MenuItem {} {
@@ -1807,6 +1808,20 @@ v->uiOCIO_Display_View->do_callback();}
                   MenuItem {} {
                     label {At Start Up}
                     xywh {30 30 100 20}
+                  }
+                }
+                Fl_Choice uiPrefsAllowScreenSaver {
+                  label {Allow Screen Saver} open selected
+                  tooltip {This setting controls whether mrv2 will block the screen saver and suspend mode when running.} xywh {487 192 255 25} down_box BORDER_BOX align 132 textcolor 32
+                  class {mrv::Choice}
+                } {
+                  MenuItem {} {
+                    label Inactive
+                    xywh {40 40 100 20}
+                  }
+                  MenuItem {} {
+                    label Active
+                    xywh {40 40 100 20}
                   }
                 }
               }

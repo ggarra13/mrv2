@@ -14,6 +14,9 @@ v1.4.0
 - Made audio stop playback when the window is minimized, except on Wayland.
 - Fixed YUV Original look up crashing the viewer.
 - Fixed YUV Original pixel values as they were not matching the Full ones.
+- Added Preferences->Behavior->Allow Screen Saver to control whether mrv2
+  blocks the screen saver when running.
+- Fixed blocking Suspend mode on Windows.
 
 
 v1.3.9
