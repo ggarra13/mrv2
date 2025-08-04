@@ -20,6 +20,7 @@ v1.4.0
 - Improved performance of Vulkan shaders' compilation for faster start ups.
 - Added to title bar an (E) when non-saved Edit changes are present and
   (A) when annotations have been done.
+- Fixed Vulkan macOS builds.  Still not using Retina.
 
 
 v1.3.9

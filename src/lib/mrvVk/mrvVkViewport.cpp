@@ -946,15 +946,9 @@ namespace mrv
                 if (outputDevice)
                     outputDevice->setOverlay(vk.annotationImage);
             }
-
-
-#ifdef __APPLE__
-            uint32_t W = w();
-            uint32_t H = h();
-#else
+            
             uint32_t W = pixel_w();
             uint32_t H = pixel_h();
-#endif
             
             VkViewport viewport = {};
             viewport.width = static_cast<float>(W);

@@ -780,15 +780,7 @@ void main()
         {
             TLRENDER_P();
 
-#ifdef __APPLE__
-            uint32_t W = w();
-            uint32_t H = h();
-#else
-            uint32_t W = pixel_w();
-            uint32_t H = pixel_h();
-#endif
-
-            const math::Size2i renderSize(W, H);
+            const math::Size2i renderSize(pixel_w(), pixel_h());
             
             const auto& mesh =
                 geom::box(math::Box2i(0, 0, renderSize.w, renderSize.h));
@@ -876,16 +868,8 @@ void main()
         void TimelineWidget::draw()
         {
             TLRENDER_P();
-
-#ifdef __APPLE__
-            uint32_t W = w();
-            uint32_t H = h();
-#else
-            uint32_t W = pixel_w();
-            uint32_t H = pixel_h();
-#endif
             
-            const math::Size2i renderSize(W, H);
+            const math::Size2i renderSize(pixel_w(), pixel_h());
 
             VkCommandBuffer cmd = getCurrentCommandBuffer();
             end_render_pass(cmd);
@@ -1021,16 +1005,16 @@ void main()
                 VkViewport viewport = {};
                 viewport.x = 0.0f;
                 viewport.y = 0.0f;
-                viewport.width = static_cast<float>(W);
-                viewport.height = static_cast<float>(H);
+                viewport.width = static_cast<float>(pixel_w());
+                viewport.height = static_cast<float>(pixel_h());
                 viewport.minDepth = 0.0f;
                 viewport.maxDepth = 1.0f;
                 vkCmdSetViewport(cmd, 0, 1, &viewport);
 
                 VkRect2D scissor = {};
                 scissor.offset = {0, 0};
-                scissor.extent.width = W;
-                scissor.extent.height = H;
+                scissor.extent.width = pixel_w();
+                scissor.extent.height = pixel_h();
                 vkCmdSetScissor(cmd, 0, 1, &scissor);
 
                 if (p.vao && p.vbo)
@@ -1088,13 +1072,13 @@ void main()
                     region.srcSubresource.baseArrayLayer = 0;
                     region.srcSubresource.layerCount = 1;
                     region.srcOffsets[0] = {0, 0, 0};
-                    region.srcOffsets[1] = {(int32_t)W, (int32_t)H, 1};
+                    region.srcOffsets[1] = {pixel_w(), pixel_h(), 1};
                     region.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
                     region.dstSubresource.mipLevel = 0;
                     region.dstSubresource.baseArrayLayer = 0;
                     region.dstSubresource.layerCount = 1;
                     region.dstOffsets[0] = {0, 0, 0};
-                    region.dstOffsets[1] = {(int32_t)W, (int32_t)H, 1};
+                    region.dstOffsets[1] = {pixel_w(), pixel_h(), 1};
                     vkCmdBlitImage(
                         cmd,
                         srcImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
