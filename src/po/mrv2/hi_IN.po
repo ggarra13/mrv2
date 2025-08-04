@@ -6718,8 +6718,7 @@ msgid "Allow Screen Saver"
 msgstr "स्क्रीन सेवर की अनुमति दें"
 
 msgid ""
-"This setting controls whether mrv2 will block the screen saver and suspend "
-"mode when running."
+"This setting controls whether mrv2 will block the screen saver when running."
 msgstr "यह सेटिंग नियंत्रित करती है कि mrv2 के चलने पर क्या वह स्क्रीन सेवर को रोक देगा।"
 
 msgid "Reset settings to the default."

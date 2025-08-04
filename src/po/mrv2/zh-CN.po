@@ -6662,8 +6662,7 @@ msgid "Allow Screen Saver"
 msgstr "允许屏幕保护程序"
 
 msgid ""
-"This setting controls whether mrv2 will block the screen saver and suspend "
-"mode when running."
+"This setting controls whether mrv2 will block the screen saver when running."
 msgstr "此设置控制 mrv2 在运行时是否会阻止屏幕保护程序。"
 
 msgid "Reset settings to the default."

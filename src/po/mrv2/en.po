@@ -6810,10 +6810,8 @@ msgstr ""
 msgid "Allow Screen Saver"
 msgstr "Allow Screen Saver"
 
-#, fuzzy
 msgid ""
-"This setting controls whether mrv2 will block the screen saver and suspend "
-"mode when running."
+"This setting controls whether mrv2 will block the screen saver when running."
 msgstr ""
 "This setting controls whether mrv2 will block the screen saver when running."
 
