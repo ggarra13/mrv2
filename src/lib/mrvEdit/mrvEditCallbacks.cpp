@@ -958,7 +958,7 @@ namespace mrv
         toOtioFile(timeline, ui);
 
 
-        App::unsaved_changes = true;
+        App::unsaved_edits = true;
         ui->uiMain->update_title_bar();
         
         tcp->pushMessage("Edit/Frame/Cut", time);
@@ -1056,7 +1056,7 @@ namespace mrv
 
         panel::redrawThumbnails();
         
-        App::unsaved_changes = true;
+        App::unsaved_edits = true;
         ui->uiMain->update_title_bar();
 
         tcp->pushMessage("Edit/Frame/Paste", time);
@@ -1128,7 +1128,7 @@ namespace mrv
 
         panel::redrawThumbnails();
         
-        App::unsaved_changes = true;
+        App::unsaved_edits = true;
         ui->uiMain->update_title_bar();
 
         tcp->pushMessage("Edit/Frame/Insert", time);
@@ -1181,7 +1181,7 @@ namespace mrv
         player->setTimeline(timeline);
         toOtioFile(timeline, ui);
         
-        App::unsaved_changes = true;
+        App::unsaved_edits = true;
         ui->uiMain->update_title_bar();
 
         tcp->pushMessage("Edit/Slice", time);
@@ -1231,7 +1231,7 @@ namespace mrv
 
         panel::redrawThumbnails();
         
-        App::unsaved_changes = true;
+        App::unsaved_edits = true;
         ui->uiMain->update_title_bar();
 
         tcp->pushMessage("Edit/Remove", time);
@@ -1407,7 +1407,7 @@ namespace mrv
                 refresh_media_cb(nullptr, ui);
         }
         
-        App::unsaved_changes = true;
+        App::unsaved_edits = true;
         ui->uiMain->update_title_bar();
 
         tcp->pushMessage("Edit/Audio Clip/Insert", audioFile);
@@ -1567,7 +1567,7 @@ namespace mrv
 
         panel::redrawThumbnails();
 
-        App::unsaved_changes = true;
+        App::unsaved_edits = true;
         ui->uiMain->update_title_bar();
         
         tcp->pushMessage("Edit/Audio Gap/Insert", time);
@@ -1622,7 +1622,7 @@ namespace mrv
 
         panel::redrawThumbnails();
 
-        App::unsaved_changes = true;
+        App::unsaved_edits = true;
         ui->uiMain->update_title_bar();
 
         tcp->pushMessage("Edit/Audio Clip/Remove", time);
@@ -1677,7 +1677,7 @@ namespace mrv
 
         panel::redrawThumbnails();
 
-        App::unsaved_changes = true;
+        App::unsaved_edits = true;
         ui->uiMain->update_title_bar();
 
         tcp->pushMessage("Edit/Audio Gap/Remove", time);
@@ -1862,7 +1862,7 @@ namespace mrv
 
         player->setAllAnnotations(annotations);
 
-        App::unsaved_changes = true;
+        App::unsaved_edits = true;
         ui->uiMain->update_title_bar();
         
         view->redraw();
@@ -1932,6 +1932,10 @@ namespace mrv
                                   .arg(otioFile)
                                   .arg(errorStatus.full_description);
             LOG_ERROR(err);
+        }
+        else
+        {
+            App::unsaved_edits = false;
         }
     }
 

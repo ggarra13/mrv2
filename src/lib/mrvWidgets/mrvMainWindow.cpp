@@ -879,8 +879,10 @@ namespace mrv
                    << ioInfo.audio.sampleRate;
             }
             std::string unsaved;
-            if (App::unsaved_changes)
-                unsaved = "(*) ";
+            if (App::unsaved_annotations)
+                unsaved = "(A) ";
+            if (App::unsaved_edits)
+                unsaved += "(E) ";
             snprintf(
                 buf, 256, "%s %s- %s %s%s", fileName.c_str(),
                 unsaved.c_str(),
@@ -889,7 +891,8 @@ namespace mrv
         }
         else
         {
-            App::unsaved_changes = false;
+            App::unsaved_annotations = false;
+            App::unsaved_edits = false;
             snprintf(
                 buf, 256, "mrv2 %s v%s %s%s",
                 mrv::backend(),

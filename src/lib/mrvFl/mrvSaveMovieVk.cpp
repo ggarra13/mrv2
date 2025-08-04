@@ -1103,6 +1103,8 @@ namespace mrv
             ui->uiMain->fill_menu(ui->uiMenuBar);
         }
 
+        App::unsaved_annotations = false;
+        
         cache->setMax(oldCacheSize);
     }
 

@@ -246,7 +246,8 @@ namespace mrv
     ViewerUI* App::ui = nullptr;
     App* App::app = nullptr;
     bool App::demo_mode = false;
-    bool App::unsaved_changes = false;
+    bool App::unsaved_annotations = false;
+    bool App::unsaved_edits = false;
 
     std::vector< std::string > OSXfiles;
     void osx_open_cb(const char* fname)

@@ -737,7 +737,7 @@ namespace mrv
                         return;
                     }
                     // Create annotation menus if not there already
-                    App::unsaved_changes = true;
+                    App::unsaved_annotations = true;
                     p.ui->uiMain->update_window_title();
                     p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
                     p.ui->uiUndoDraw->activate();
