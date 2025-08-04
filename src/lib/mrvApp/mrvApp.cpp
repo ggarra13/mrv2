@@ -525,17 +525,30 @@ namespace mrv
 
 
 #ifdef VULKAN_BACKEND
-        bool ok = validate_license();
-        if (!ok)
+        License ok = validate_license();
+        if (ok != kLicenseValid)
         {
+            if (ok == kLicenseExpired)
+            {
+                fl_alert("License expired. Please enter new license.");
+                Fl::check();
+            }
+            
             std::string helper = rootpath() + "/bin/license_helper";
             int ret = os::exec_command(helper.c_str());
             if (ret == 0)
             {
-                bool ok = validate_license();
-                if (!ok)
+                License ok = validate_license();
+                if (ok == kLicenseInvalid)
                 {
                     fl_alert("Invalid license. Entering demo mode");
+                    Fl::check();
+                    demo_mode = true;
+                }
+                else if (ok == kLicenseExpired)
+                {
+                    fl_alert("License expired. Entering demo mode");
+                    Fl::check();
                     demo_mode = true;
                 }
             }

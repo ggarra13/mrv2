@@ -33,8 +33,15 @@ void sha256_final(SHA256_CTX *ctx, unsigned char hash[]);
 
 namespace mrv
 {
+    enum License
+    {
+        kLicenseValid = 0,
+        kLicenseInvalid = 1,
+        kLicenseExpired = 2,
+    };
+    
     std::string sha256(const std::string& input);
-    bool validate_license(const std::string& secret_salt = "goblydock");
+    License validate_license(const std::string& secret_salt = "goblydock");
 }
 
 #endif   // SHA256_H

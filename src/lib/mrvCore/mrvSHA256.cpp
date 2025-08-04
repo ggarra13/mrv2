@@ -16,15 +16,16 @@
 #include <algorithm>
 #include <array>
 #include <cstdlib>
+#include <ctime>
 #include <memory>
 #include <filesystem>
 namespace fs = std::filesystem;
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <iomanip> // for std::get_time
 #include <iostream>
 #include <sstream>
-#include <iomanip>
 
 #include <cstdint>
 #include <stdlib.h>
@@ -35,6 +36,8 @@ namespace fs = std::filesystem;
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvOS.h"
 #include "mrvCore/mrvSHA256.h"
+
+#include "mrvNetwork/mrvCypher.h"
 
 /****************************** MACROS ******************************/
 #define ROTLEFT(a,b) (((a) << (b)) | ((a) >> (32-(b))))
@@ -223,14 +226,16 @@ namespace mrv
         return oss.str();
     }
 
-    bool validate_license(const std::string& secret_salt)
+    License validate_license(const std::string& secret_salt)
     {
         char license_key[256];
+        char expiration_date[256];
         
         Fl_Preferences base(
             prefspath().c_str(), "filmaura", "mrv2.license",
             (Fl_Preferences::Root)0);
         base.get("license", license_key, "", 256);
+        base.get("expiration", expiration_date, "", 256);
         
         std::string machine_id = get_machine_id();
         machine_id.erase(remove(machine_id.begin(), machine_id.end(), '\n'),
@@ -241,6 +246,29 @@ namespace mrv
                          machine_id.end());
         
         std::string expected_key = sha256(machine_id + secret_salt);
-        return license_key == expected_key;
+        if (license_key != expected_key)
+            return kLicenseInvalid;
+
+        std::string unencoded_expiration = decode_string(expiration_date);
+        if (unencoded_expiration == "never")
+            return kLicenseValid;
+        
+        // Validate expiration date
+        std::tm tm = {};
+        std::istringstream ss(unencoded_expiration);
+        ss >> std::get_time(&tm, "%Y-%m-%d");
+        if (ss.fail())
+            return kLicenseExpired;  // Could not parse date
+
+        std::time_t now = std::time(nullptr);
+        std::tm* now_tm = std::localtime(&now);
+
+        std::time_t exp_time = std::mktime(&tm);
+        std::time_t now_time = std::mktime(now_tm);
+
+        
+        if (now_time <= exp_time)
+            return kLicenseValid;
+        return kLicenseExpired;
     }
 }

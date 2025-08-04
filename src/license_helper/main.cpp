@@ -136,12 +136,20 @@ std::string prefspath()
     return prefs;
 }
 
+Fl_Input* license;
+Fl_Input* expiration;
+
 
 static void create_license_cb(Fl_Widget* b, void* data)
 {
-    Fl_Input* license_widget = (Fl_Input*)data;
-    std::string license = license_widget->value();
-    if (license.empty())
+    std::string license_string = license->value();
+    if (license_string.empty())
+    {
+        return;
+    }
+    
+    std::string expiration_string = expiration->value();
+    if (expiration_string.empty())
     {
         return;
     }
@@ -149,7 +157,8 @@ static void create_license_cb(Fl_Widget* b, void* data)
     Fl_Preferences base(
             prefspath().c_str(), "filmaura", "mrv2.license",
             (Fl_Preferences::Root)0);
-    base.set("license", license.c_str());
+    base.set("license", license_string.c_str());
+    base.set("expiration", expiration_string.c_str());
     base.flush();
     
     exit(0);
@@ -177,15 +186,19 @@ int main(int argc, char** argv)
     machine.align(FL_ALIGN_CENTER | FL_ALIGN_TOP);
     machine.value(machine_id.c_str());
 
-    Fl_Input license(20, 230, 600, 40, "License");
-    license.align(FL_ALIGN_CENTER | FL_ALIGN_TOP);
-    license.tooltip("Once you obtain a license, copy it here");
+    license = new Fl_Input(20, 230, 600, 40, "License");
+    license->align(FL_ALIGN_CENTER | FL_ALIGN_TOP);
+    license->tooltip("Once you obtain a license, copy it here");
+    
+    expiration = new Fl_Input(20, 300, 600, 40, "Expiration");
+    expiration->align(FL_ALIGN_CENTER | FL_ALIGN_TOP);
+    expiration->tooltip("Copy the expiration date here");
 
-    Fl_Button exit(80, 280, 150, 40, "Demo");
+    Fl_Button exit(80, 400, 150, 40, "Demo");
     exit.callback((Fl_Callback*)exit_cb, nullptr);
 
-    Fl_Button create(360, 280, 150, 40, "Create");
-    create.callback((Fl_Callback*)create_license_cb, &license);
+    Fl_Button create(360, 400, 150, 40, "Create");
+    create.callback((Fl_Callback*)create_license_cb, nullptr);
 
     
     win.end();               
