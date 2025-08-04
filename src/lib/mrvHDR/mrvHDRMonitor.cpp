@@ -34,7 +34,7 @@ namespace mrv
         }
     }
     
-    bool is_hdr_display_active(int screen_index, const bool silent = false)
+    bool is_hdr_display_active(int screen_index, const bool silent)
     {
         IDXGIFactory6* factory = nullptr;
         HRESULT hr = CreateDXGIFactory1(IID_PPV_ARGS(&factory));
@@ -104,6 +104,11 @@ namespace mrv
         return hdr_found;
     }
 
+    bool is_hdr_display_active()
+    {
+        return is_hdr_display_active(-1, false);
+    }
+    
 #endif
 
 #ifdef __linux__
@@ -158,7 +163,7 @@ namespace mrv
     
     bool is_hdr_display_active()
     {
-        return is_hdr_display_active(-1);
+        return is_hdr_display_active(0);
     }
 #endif
 

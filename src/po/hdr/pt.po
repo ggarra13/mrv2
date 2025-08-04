@@ -15,6 +15,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid "HDR monitor found."
+msgstr ""
+
+msgid "HDR monitor not found or not configured."
+msgstr ""
+
 msgid "Connection/"
 msgstr "Conexão/"
 

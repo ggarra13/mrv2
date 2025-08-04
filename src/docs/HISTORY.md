@@ -21,6 +21,7 @@ v1.4.0
 - Added to title bar an (E) when non-saved Edit changes are present and
   (A) when annotations have been done.
 - Fixed Vulkan macOS builds.  Still not using Retina.
+- Fixed Vulkan HDR support when Windows' HDR monitor was set to SDR.
 
 
 v1.3.9

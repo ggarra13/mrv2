@@ -6,7 +6,7 @@
 namespace mrv
 {
 
-    bool is_hdr_display_active(int screen);
+    bool is_hdr_display_active(int screen, bool silent = false);
     bool is_hdr_display_active();
 
 }
