@@ -477,10 +477,6 @@ namespace mrv
                     player->setPlayback(timeline::Playback::Reverse);
                 }
             }
-            else
-            {
-                player->setPlayback(timeline::Playback::Stop);
-            }
 
             player->seek(time);
         }

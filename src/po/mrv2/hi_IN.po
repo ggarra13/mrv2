@@ -1,7 +1,7 @@
 # Hindi translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.7\n"
@@ -3486,6 +3486,9 @@ msgstr "ओसीआईओ कॉन्फ़िग लोड करें"
 
 msgid "Default"
 msgstr "डिफ़ॉल्ट"
+
+msgid "You have not saved your editing changes. Do you want to continue?"
+msgstr ""
 
 msgid "Annotations"
 msgstr "व्याख्याएँ"

@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
@@ -919,8 +919,8 @@ msgid ""
 "duration of 10.\n"
 msgstr ""
 "\n"
-"Erstellt einen :class:`~TimeRange` aus Start- und End-:class:`~RationalTime`"
-"\\s (inklusive).\n"
+"Erstellt einen :class:`~TimeRange` aus Start- und End-:class:"
+"`~RationalTime`\\s (inklusive).\n"
 "\n"
 "Beispiel: Wenn start_time 1 ist und end_time 10, hat der Rückgabewert eine "
 "Dauer von 10.\n"
@@ -3528,6 +3528,9 @@ msgstr "OCIO-Konfig laden"
 
 msgid "Default"
 msgstr "Vorgabe"
+
+msgid "You have not saved your editing changes. Do you want to continue?"
+msgstr "Sie haben Ihre Änderungen nicht gespeichert. Möchten Sie fortfahren?"
 
 msgid "Annotations"
 msgstr "Anmerkungen"

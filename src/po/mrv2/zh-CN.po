@@ -1,6 +1,6 @@
 # AI Simplified Chinese translations for mrv2 package
 # This file is distributed under the same license as the mrv2 package.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.5\n"
@@ -3466,6 +3466,9 @@ msgstr "加载 OCIO 配置"
 
 msgid "Default"
 msgstr "默认"
+
+msgid "You have not saved your editing changes. Do you want to continue?"
+msgstr "您尚未保存所做的编辑更改。是否继续？"
 
 msgid "Annotations"
 msgstr "批注"

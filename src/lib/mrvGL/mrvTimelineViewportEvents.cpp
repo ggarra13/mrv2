@@ -561,6 +561,9 @@ namespace mrv
                     if (p.actionMode == ActionMode::kScrub ||
                         p.actionMode == ActionMode::kRotate)
                     {
+                        if (p.player && p.actionMode == ActionMode::kScrub)
+                            p.player->setPlayback(timeline::Playback::Stop);
+                        
                         p.lastEvent = FL_PUSH;
                         return;
                     }
@@ -1197,22 +1200,29 @@ namespace mrv
                     {
                         if (p.lastEvent == FL_PUSH &&
                             Fl::event_button() == FL_LEFT_MOUSE &&
-                            p.actionMode == ActionMode::kScrub &&
-                            p.ui->uiPrefs->uiPrefsSingleClickPlayback->value())
+                            p.actionMode == ActionMode::kScrub)
                         {
-                            p.lastEvent = 0;
-                            if (!p.player)
-                                return 1;
-
-                            if (_isPlaybackStopped())
+                            if (p.ui->uiPrefs->uiPrefsSingleClickPlayback->value())
                             {
-                                setHelpText(_("Play"));
+                                p.lastEvent = 0;
+                                if (!p.player)
+                                    return 1;
+
+                                if (_isPlaybackStopped())
+                                {
+                                    setHelpText(_("Play"));
+                                }
+                                else
+                                {
+                                    setHelpText(_("Stop"));
+                                }
+                                togglePlayback();
                             }
                             else
                             {
-                                setHelpText(_("Stop"));
+                                p.player->setPlayback(p.playbackMode);
+                                panel::redrawThumbnails();
                             }
-                            togglePlayback();
                         }
                     }
                 }

@@ -1,7 +1,7 @@
 # English translations for mrv2 package.
 # This file is distributed under the same license as the mrv2 package.
 # Automatically generated, 2024.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.6\n"
@@ -3531,6 +3531,9 @@ msgstr "Load OCIO Config"
 
 msgid "Default"
 msgstr "Default"
+
+msgid "You have not saved your editing changes. Do you want to continue?"
+msgstr "You have not saved your editing changes. Do you want to continue?"
 
 msgid "Annotations"
 msgstr "Annotations"

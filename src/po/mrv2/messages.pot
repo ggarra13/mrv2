@@ -3189,6 +3189,9 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
+msgid "You have not saved your editing changes. Do you want to continue?"
+msgstr ""
+
 msgid "Annotations"
 msgstr ""
 

@@ -85,6 +85,22 @@ namespace
     const char* kModule = "cback";
 }
 
+namespace
+{
+    int check_for_changes()
+    {
+        if (mrv::App::unsaved_edits || mrv::App::unsaved_annotations)
+        {
+            return fl_choice(
+                _("You have not saved your editing changes. "
+                  "Do you want to continue?"),
+                _("No"), _("Yes"), NULL, NULL);
+        }
+        return 1;
+    }
+
+}
+
 namespace mrv
 {
     using namespace panel;
@@ -975,6 +991,13 @@ namespace mrv
 
     void close_current_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        int ok = check_for_changes();
+        if (!ok)
+            return;
+
+        App::unsaved_edits = false;
+        App::unsaved_annotations = false;
+        
         // Must come before model->close().
         if (ui->uiPrefs->SendMedia->value())
             tcp->pushMessage("closeCurrent", 0);
@@ -982,6 +1005,7 @@ namespace mrv
         auto model = ui->app->filesModel();
         model->close();
 
+        ui->uiMain->update_title_bar();
         ui->uiMain->fill_menu(ui->uiMenuBar);
 
         auto images = model->observeFiles()->get();
@@ -991,12 +1015,21 @@ namespace mrv
 
     void close_all_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        int ok = check_for_changes();
+        if (!ok)
+            return;
+
+        App::unsaved_edits = false;
+        App::unsaved_annotations = false;
+
+        
         if (ui->uiPrefs->SendMedia->value())
             tcp->pushMessage("closeAll", 0);
 
         auto model = ui->app->filesModel();
         model->closeAll();
 
+        ui->uiMain->update_title_bar();
         ui->uiMain->fill_menu(ui->uiMenuBar);
 
         reset_timeline(ui);
@@ -1004,6 +1037,13 @@ namespace mrv
 
     void exit_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        int ok = check_for_changes();
+        if (!ok)
+            return;
+
+        App::unsaved_edits = false;
+        App::unsaved_annotations = false;
+        
         tcp->lock();
 
         ui->uiView->stop();
