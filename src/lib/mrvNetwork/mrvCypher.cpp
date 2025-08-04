@@ -2,7 +2,11 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+
 #include "mrvCypher.h"
+
+#include <sstream>
+#include <iomanip>
 
 namespace
 {
@@ -13,7 +17,7 @@ namespace
 namespace mrv
 {
 
-    void xor_cipher(
+    void xor_cipher_hex(
         const std::string& plaintext, const std::string& key,
         std::string& ciphertext)
     {
@@ -23,15 +27,42 @@ namespace mrv
         {
             // XOR the current character with the corresponding character in
             // the key
-            ciphertext += plaintext[i] ^ key[i % key_len];
+            char xored = plaintext[i] ^ key[i % key_len];
+        
+            std::stringstream hex;
+            hex << std::hex << std::setw(2) << std::setfill('0') << (static_cast<unsigned int>(static_cast<unsigned char>(xored)));
+            ciphertext += hex.str();
         }
     }
+    
+    char hex_char_to_byte(char c)
+    {
+        if (c >= '0' && c <= '9') return c - '0';
+        if (c >= 'a' && c <= 'f') return 10 + (c - 'a');
+        if (c >= 'A' && c <= 'F') return 10 + (c - 'A');
+        return 0;
+    }
 
+    void xor_decipher_hex(
+        const std::string& ciphertext, const std::string& key,
+        std::string& plaintext)
+    {
+        plaintext.clear();
+        int key_len = key.length();
+        for (size_t i = 0; i < ciphertext.length(); i += 2)
+        {
+            unsigned char byte = (hex_char_to_byte(ciphertext[i]) << 4) |
+                                 hex_char_to_byte(ciphertext[i + 1]);
+            char decoded = byte ^ key[(i / 2) % key_len];
+            plaintext += decoded;
+        }
+    }
+    
     std::string encode_string(const std::string& plainText)
     {
         std::string out;
         if (cypher_enabled)
-            xor_cipher(plainText, kKey, out);
+            xor_cipher_hex(plainText, kKey, out);
         else
             out = plainText;
         return out;
@@ -41,7 +72,7 @@ namespace mrv
     {
         std::string out;
         if (cypher_enabled)
-            xor_cipher(encodedText, kKey, out);
+            xor_decipher_hex(encodedText, kKey, out);
         else
             out = encodedText;
         return out;
