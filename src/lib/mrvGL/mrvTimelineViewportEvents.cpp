@@ -264,7 +264,9 @@ namespace mrv
 
                     if (isDrawAction(p.actionMode) &&
                         !p.showAnnotations)
+                    {
                         p.showAnnotations = true;
+                    }
                     
                     std::shared_ptr< draw::Shape > s;
                     if (annotation)
@@ -825,6 +827,8 @@ namespace mrv
                         return;
                     }
                     // Create annotation menus if not there already
+                    App::unsaved_changes = true;
+                    p.ui->uiMain->update_title_bar();
                     p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
                     p.ui->uiUndoDraw->activate();
                 }

@@ -878,13 +878,18 @@ namespace mrv
                    << " " << ioInfo.audio.dataType << " "
                    << ioInfo.audio.sampleRate;
             }
+            std::string unsaved;
+            if (App::unsaved_changes)
+                unsaved = "(*) ";
             snprintf(
-                buf, 256, "%s - %s %s%s", fileName.c_str(), 
+                buf, 256, "%s %s- %s %s%s", fileName.c_str(),
+                unsaved.c_str(),
                 mrv::backend(), ss.str().c_str(),
                 session.c_str());
         }
         else
         {
+            App::unsaved_changes = false;
             snprintf(
                 buf, 256, "mrv2 %s v%s %s%s",
                 mrv::backend(),

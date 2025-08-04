@@ -824,7 +824,7 @@ namespace mrv
     }
 
     void edit_store_redo(TimelinePlayer* player, ViewerUI* ui)
-    {
+    {   
         auto timeline = player->getTimeline();
         if (!timeline)
             return;
@@ -957,6 +957,10 @@ namespace mrv
         updateTimeline(timeline, time, ui);
         toOtioFile(timeline, ui);
 
+
+        App::unsaved_changes = true;
+        ui->uiMain->update_title_bar();
+        
         tcp->pushMessage("Edit/Frame/Cut", time);
     }
 
@@ -1051,6 +1055,9 @@ namespace mrv
         toOtioFile(timeline, ui);
 
         panel::redrawThumbnails();
+        
+        App::unsaved_changes = true;
+        ui->uiMain->update_title_bar();
 
         tcp->pushMessage("Edit/Frame/Paste", time);
     }
@@ -1120,6 +1127,9 @@ namespace mrv
         toOtioFile(timeline, ui);
 
         panel::redrawThumbnails();
+        
+        App::unsaved_changes = true;
+        ui->uiMain->update_title_bar();
 
         tcp->pushMessage("Edit/Frame/Insert", time);
     }
@@ -1170,6 +1180,9 @@ namespace mrv
 
         player->setTimeline(timeline);
         toOtioFile(timeline, ui);
+        
+        App::unsaved_changes = true;
+        ui->uiMain->update_title_bar();
 
         tcp->pushMessage("Edit/Slice", time);
     }
@@ -1217,6 +1230,9 @@ namespace mrv
         edit_clear_redo(ui);
 
         panel::redrawThumbnails();
+        
+        App::unsaved_changes = true;
+        ui->uiMain->update_title_bar();
 
         tcp->pushMessage("Edit/Remove", time);
     }
@@ -1390,6 +1406,9 @@ namespace mrv
             if (refreshMedia)
                 refresh_media_cb(nullptr, ui);
         }
+        
+        App::unsaved_changes = true;
+        ui->uiMain->update_title_bar();
 
         tcp->pushMessage("Edit/Audio Clip/Insert", audioFile);
     }
@@ -1548,6 +1567,9 @@ namespace mrv
 
         panel::redrawThumbnails();
 
+        App::unsaved_changes = true;
+        ui->uiMain->update_title_bar();
+        
         tcp->pushMessage("Edit/Audio Gap/Insert", time);
     }
 
@@ -1600,6 +1622,9 @@ namespace mrv
 
         panel::redrawThumbnails();
 
+        App::unsaved_changes = true;
+        ui->uiMain->update_title_bar();
+
         tcp->pushMessage("Edit/Audio Clip/Remove", time);
     }
 
@@ -1651,6 +1676,9 @@ namespace mrv
             edit_clear_redo(ui);
 
         panel::redrawThumbnails();
+
+        App::unsaved_changes = true;
+        ui->uiMain->update_title_bar();
 
         tcp->pushMessage("Edit/Audio Gap/Remove", time);
     }
@@ -1833,6 +1861,10 @@ namespace mrv
         }
 
         player->setAllAnnotations(annotations);
+
+        App::unsaved_changes = true;
+        ui->uiMain->update_title_bar();
+        
         view->redraw();
     }
 
