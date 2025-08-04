@@ -563,9 +563,10 @@ namespace mrv
         DBG;
         Fl::option(Fl::OPTION_VISIBLE_FOCUS, false);
         DBG;
-        
-        Fl::use_high_res_GL(true);
 
+#ifdef OPENGL_BACKEND
+        Fl::use_high_res_GL(true);
+#endif
         
         
         Fl::set_fonts("-*");
