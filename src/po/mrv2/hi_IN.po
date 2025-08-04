@@ -6714,6 +6714,13 @@ msgid "Allows you to automatically download updates of mrv2 when it starts up."
 msgstr ""
 "जब यह चालू होता है तो आपको एमरवी2 की अद्यतनों को स्वचालित डाउनलोड करने देता है."
 
+msgid "Allow Screen Saver"
+msgstr "स्क्रीन सेवर की अनुमति दें"
+
+msgid ""
+"This setting controls whether mrv2 will block the screen saver when running."
+msgstr "यह सेटिंग नियंत्रित करती है कि mrv2 के चलने पर क्या वह स्क्रीन सेवर को रोक देगा।"
+
 msgid "Reset settings to the default."
 msgstr "डिफ़ॉल्ट में सेटिंग फिर सेट करें."
 

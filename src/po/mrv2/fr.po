@@ -6858,6 +6858,15 @@ msgstr ""
 "Vous permet de télécharger automatiquement les mises à jour de mrv2 "
 "lorsqu'il démarre."
 
+msgid "Allow Screen Saver"
+msgstr "Autoriser l’économiseur d’écran"
+
+msgid ""
+"This setting controls whether mrv2 will block the screen saver when running."
+msgstr ""
+"Ce paramètre contrôle si mrv2 bloquera l’économiseur d’écran lorsqu’il est "
+"en cours d’exécution."
+
 msgid "Reset settings to the default."
 msgstr "Réinitialiser les paramètres à la valeur par défaut."
 

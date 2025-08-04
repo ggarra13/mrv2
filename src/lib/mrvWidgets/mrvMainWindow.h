@@ -45,9 +45,12 @@ namespace mrv
         //! Returns whether the window is on top of all others.
         bool is_on_top() const { return on_top; }
 
-        //! Change window's icon to mrViewer's icon
+        //! Change window's icon to mrViewer's icon.
         void set_icon();
 
+        //! Turn off/on screen saver/suspend mode.
+        void allow_screen_saver(bool value);
+        
         //! Iconize all windows
         void iconize_all();
 

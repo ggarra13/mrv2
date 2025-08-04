@@ -14,7 +14,12 @@ v1.4.0
 - Made audio stop playback when the window is minimized, except on Wayland.
 - Fixed YUV Original look up crashing the viewer.
 - Fixed YUV Original pixel values as they were not matching the Full ones.
+- Added Preferences->Behavior->Allow Screen Saver to control whether mrv2
+  blocks the screen saver when running.
+- Fixed blocking Suspend mode on Windows.
 - Improved performance of Vulkan shaders' compilation for faster start ups.
+- Added to title bar an (E) when non-saved Edit changes are present and
+  (A) when annotations have been done.
 
 
 v1.3.9

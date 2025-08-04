@@ -193,6 +193,13 @@ endif()
 
 add_library(mrvWidgets ${SOURCES} ${HEADERS})
 
+
+if (UNIX AND NOT APPLE)
+    if (TLRENDER_X11)
+	list(APPEND LIBRARIES Xss )
+    endif()
+endif()
+
 if(TLRENDER_LIBPLACEBO)
     list(APPEND LIBRARIES libplacebo::libplacebo)
 endif()

@@ -6811,6 +6811,15 @@ msgstr ""
 "Permite que voc baixe automaticamente as atualizaes do mrv2 quando ele "
 "comear."
 
+msgid "Allow Screen Saver"
+msgstr "Permitir protetor de tela"
+
+msgid ""
+"This setting controls whether mrv2 will block the screen saver when running."
+msgstr ""
+"Esta configuração controla se o mrv2 irá bloquear o protetor de tela quando "
+"estiver em execução."
+
 msgid "Reset settings to the default."
 msgstr "Reiniciar as configuraes para o padro."
 

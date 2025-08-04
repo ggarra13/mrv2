@@ -197,7 +197,7 @@ fi
 
 echo "$release_notes" >> README.md
 
-cat <<"EOF" > VULKAN_NOTES.md
+cat <<EOF > VULKAN_NOTES.md
 
 The Vulkan releases in the vulkan/ directory are demo versions for you to
 evaluate vmrv2 before a purchase and report bugs or performance issues.
@@ -225,26 +225,26 @@ The preferred NVidia driver tested for best performance is nvidia-driver-570 (de
 
 For best performance with the NVidia driver, you can modify:
 
-```
+\`\`\`
     sudo nano /etc/default/grub
-```
+\`\`\`
 
 Modify line 11 to from:
 
-```
+\`\`\`
 GRUB_CMDLINE_LINUX_DEFAULT="quiet splash nvidia_drm.modeset=1 nvidia_drm.fbdev=1"
-```
+\`\`\`
 
 To this content:
 
-```
+\`\`\`
 GRUB_CMDLINE_LINUX_DEFAULT="quiet splash nvidia_drm.modeset=1 nvidia_drm.fbdev=1 nvidia.NVreg_EnableGpuFirmware=0"
-```
+\`\`\`
 
-```
+\`\`\`
    sudo update-grub
    sudo reboot
-```
+\`\`\`
 
 
 Notes about Vulkan on macOS Intel
@@ -257,12 +257,12 @@ Notes about Vulkan on macOS Intel
 
 EOF
 
-cat <<"EOF" > INSTALLATION_NOTES.md
+cat <<EOF > INSTALLATION_NOTES.md
 
 ## Notes on installation
 
 - On macOS you install it by opening the .dmg file, and dragging the ${mrv2_NAME}
-  icon to the Applications directory.  If there's already an ${mrv2_NAME} version,
+  icon to the Applications directory.  If there's already a ${mrv2_NAME} version,
   we recommend you overwrite it.
   The macOS application is currently not notarized, so when you launch it you
   will not be able to run it as macOS will warn you that the file is not secure
@@ -271,9 +271,9 @@ cat <<"EOF" > INSTALLATION_NOTES.md
   and go to Security and allow "Opening Anyway".
   Alternatively, you can do it from the Terminal, by:
   
-```
+\`\`\`
   sudo xattr -rd com.apple.quarantine /Applications/${mrv2_NAME}.app/
-```
+\`\`\`
 
 - Windows and Chrome, like macOS, also protect you from installing files
   from the Internet.  When you first download it with Chrome it may warn
@@ -298,15 +298,15 @@ cat <<"EOF" > INSTALLATION_NOTES.md
 
   On Debian (Ubuntu, etc) systems, you would install with:
 
-```
+\`\`\`
   sudo dpkg -i ${mrv2_NAME}-${branch}-Linux-amd64.deb
-```
+\`\`\`
 
   On Fedora, you would install it with:
   
-```
+\`\`\`
   sudo rpm -i ${mrv2_NAME}-${branch}-Linux-amd64.rpm
-```
+\`\`\`
 
   Once you install it, you can run mrv2 by just typing ${mrv2_NAME} in the shell, as
   a symlink to the executable is placed in /usr/bin.  The installers will also
@@ -318,9 +318,9 @@ cat <<"EOF" > INSTALLATION_NOTES.md
   If you lack sudo permissions in your organization, you should download the
   .tar.gz file and you can uncompress it with:
   
-```
+\`\`\`
   tar -xf ${mrv2_NAME}-${branch}-Linux-amd64.tar.gz
-```
+\`\`\`
 
   That will create a folder in the directory you uncompress it from.  You can
   then run ${mrv2_NAME} by using the mrv2.sh shell script in the bin/ subdirectory.

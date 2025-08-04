@@ -6785,6 +6785,15 @@ msgstr "更新を確認"
 msgid "Allows you to automatically download updates of mrv2 when it starts up."
 msgstr "mrv2が起動時に自動的に更新をダウンロードすることを許可します。"
 
+msgid "Allow Screen Saver"
+msgstr "スクリーンセーバーを許可する"
+
+msgid ""
+"This setting controls whether mrv2 will block the screen saver when running."
+msgstr ""
+"この設定は、mrv2の実行中にスクリーンセーバーをブロックするかどうかを制御しま"
+"す。"
+
 msgid "Reset settings to the default."
 msgstr "設定をデフォルトにリセットします。"
 

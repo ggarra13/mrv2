@@ -6211,6 +6211,13 @@ msgstr ""
 msgid "Allows you to automatically download updates of mrv2 when it starts up."
 msgstr ""
 
+msgid "Allow Screen Saver"
+msgstr ""
+
+msgid ""
+"This setting controls whether mrv2 will block the screen saver when running."
+msgstr ""
+
 msgid "Reset settings to the default."
 msgstr ""
 

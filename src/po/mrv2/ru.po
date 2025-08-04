@@ -6850,6 +6850,15 @@ msgstr "Проверка обновления"
 msgid "Allows you to automatically download updates of mrv2 when it starts up."
 msgstr "Позволяет вам автоматически загружать обновления mrv2 при запуске."
 
+msgid "Allow Screen Saver"
+msgstr "Разрешить экранную заставку"
+
+msgid ""
+"This setting controls whether mrv2 will block the screen saver when running."
+msgstr ""
+"Этот параметр определяет, будет ли mrv2 блокировать экранную заставку во "
+"время работы."
+
 msgid "Reset settings to the default."
 msgstr "Перезагрузить настройки по умолчанию."
 

@@ -6658,6 +6658,13 @@ msgstr "检查更新"
 msgid "Allows you to automatically download updates of mrv2 when it starts up."
 msgstr "允许您在 mrv2 启动时自动下载更新 。"
 
+msgid "Allow Screen Saver"
+msgstr "允许屏幕保护程序"
+
+msgid ""
+"This setting controls whether mrv2 will block the screen saver when running."
+msgstr "此设置控制 mrv2 在运行时是否会阻止屏幕保护程序。"
+
 msgid "Reset settings to the default."
 msgstr "将设置重置为默认值。"
 

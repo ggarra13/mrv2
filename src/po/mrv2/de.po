@@ -6830,6 +6830,15 @@ msgstr ""
 "Ermglicht es Ihnen, Updates von mrv2 automatisch herunterzuladen, wenn es "
 "startet."
 
+msgid "Allow Screen Saver"
+msgstr "Bildschirmschoner erlauben"
+
+msgid ""
+"This setting controls whether mrv2 will block the screen saver when running."
+msgstr ""
+"Diese Einstellung legt fest, ob mrv2 den Bildschirmschoner beim Ausführen "
+"blockiert."
+
 msgid "Reset settings to the default."
 msgstr "Einstellungen auf die Standardeinstellung zurcksetzen."
 
