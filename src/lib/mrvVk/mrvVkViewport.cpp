@@ -947,17 +947,25 @@ namespace mrv
                     outputDevice->setOverlay(vk.annotationImage);
             }
 
+
+#ifdef __APPLE__
+            uint32_t W = w();
+            uint32_t H = h();
+#else
+            uint32_t W = pixel_w();
+            uint32_t H = pixel_h();
+#endif
             
             VkViewport viewport = {};
-            viewport.width = static_cast<float>(pixel_w());
-            viewport.height = static_cast<float>(pixel_h());
+            viewport.width = static_cast<float>(W);
+            viewport.height = static_cast<float>(H);
             viewport.minDepth = 0.0f;
             viewport.maxDepth = 1.0f;
             vkCmdSetViewport(cmd, 0, 1, &viewport);
 
             VkRect2D scissor = {};
-            scissor.extent.width = pixel_w();
-            scissor.extent.height = pixel_h();
+            scissor.extent.width = W;
+            scissor.extent.height = H;
             vkCmdSetScissor(cmd, 0, 1, &scissor);
                 
                 
@@ -1125,8 +1133,8 @@ namespace mrv
                 rp_begin.framebuffer = m_buffers[m_current_buffer].framebuffer;
                 rp_begin.renderArea.offset.x = 0;
                 rp_begin.renderArea.offset.y = 0;
-                rp_begin.renderArea.extent.width = w();
-                rp_begin.renderArea.extent.height = h();
+                rp_begin.renderArea.extent.width = W;
+                rp_begin.renderArea.extent.height = H;
                 rp_begin.clearValueCount = 2;
                 rp_begin.pClearValues = clear_values;
                 

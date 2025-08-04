@@ -563,9 +563,7 @@ namespace mrv
         DBG;
         Fl::option(Fl::OPTION_VISIBLE_FOCUS, false);
         DBG;
-#ifdef TLRENDER_VK
-        Fl::use_high_res_VK(true);
-#else
+#ifdef OPENGL_BACKEND
         Fl::use_high_res_GL(true);
 #endif
         DBG;
