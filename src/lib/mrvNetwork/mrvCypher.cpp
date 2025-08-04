@@ -2,9 +2,11 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <iomanip>
 
 #include "mrvCypher.h"
+
+#include <sstream>
+#include <iomanip>
 
 namespace
 {

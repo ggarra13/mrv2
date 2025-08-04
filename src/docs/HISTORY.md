@@ -1,7 +1,7 @@
 v1.4.0
 ======
 
-- Added license_helper for easy licensing of mrv2.
+- Added license_helper for easy licensing of vmrv2.
 - Added backend used to -version flag.
 - Added tabulation to -version flag's output.
 - Made Vulkan's mrv2 be installed as vmrv2 to distinguish it from the OpenGL version and allow having both installed easily.
