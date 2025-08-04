@@ -53,6 +53,9 @@ extern "C"
 #include <FL/Fl_Menu_.H>
 #include <FL/Fl_Menu_Button.H>
 
+#define LOG_STATUS(x) std::cout << x << std::endl;
+
+
 namespace
 {
     const char* kModule = "ndi_viewer";
@@ -472,7 +475,7 @@ namespace mrv
     void NDIView::init_colorspace()
     {
         TLRENDER_P();
-
+        
         Fl_Vk_Window::init_colorspace();
 
         // Look for HDR10 or HLG if present
@@ -491,33 +494,19 @@ namespace mrv
             break;
         }
 
-        if (valid_colorspace)
+        if (valid_colorspace && is_hdr_display_active())
         {
-            if (is_hdr_display_active())
-            {
-                p.hdrMonitorFound = true;
-                std::cout << "HDR monitor found" << std::endl;
-                std::cout << string_VkColorSpaceKHR(colorSpace()) << std::endl;
-            }
-            else
-            {
-#ifdef __APPLE__
-#ifdef __x86_64__
-                // Intel macOS have a P3 display of 500 nits.
-                // Not enough for HDR, but we will mark it as HDR and
-                // tonemap with libplacebo, which gives a better picture than
-                // just OpenGL.
-                colorSpace() = VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT;
-                p.hdrMonitorFound = true;
-                std::cout << "Pseudo HDR monitor found (P3)" << std::endl;
-#endif
-#endif
-            }
+            p.hdrMonitorFound = true;
+            LOG_STATUS(_("HDR monitor found."));
         }
         else
         {
-            std::cout << "HDR monitor not found or not configured" << std::endl;
+            colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+            format() = VK_FORMAT_B8G8R8A8_UNORM;
+            LOG_STATUS(_("HDR monitor not found or not configured."));
         }
+        LOG_STATUS("Vulkan color space is " << string_VkColorSpaceKHR(colorSpace()));
+        LOG_STATUS("Vulkan format is " << string_VkFormat(format()));
 
         p.lastColorSpace = colorSpace();
     }
