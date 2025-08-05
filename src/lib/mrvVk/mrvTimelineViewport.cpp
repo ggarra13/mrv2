@@ -2462,6 +2462,7 @@ namespace mrv
                 }
             }
 
+            w->wait_for_expose();
             w->fill_menu(p.ui->uiMenuBar);
         }
 

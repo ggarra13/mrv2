@@ -870,7 +870,7 @@ void main()
             TLRENDER_P();
             
             const math::Size2i renderSize(pixel_w(), pixel_h());
-
+            
             VkCommandBuffer cmd = getCurrentCommandBuffer();
             end_render_pass(cmd);
 
@@ -913,7 +913,7 @@ void main()
                             p.buffer = vlk::OffscreenBuffer::create(
                                 ctx, renderSize, offscreenBufferOptions);
                             prepare_mesh();
-                            // prepare_pipeline();
+                            prepare_pipeline();
                         }
                     }
                     else
