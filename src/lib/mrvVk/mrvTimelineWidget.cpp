@@ -1219,7 +1219,7 @@ void main()
                 takeFocus = false;
             // if (Fl::focus() == nullptr)
             if (takeFocus)
-                take_focus();
+                Fl::focus(this);
             p.timelineWindow->cursorEnter(true);
             return 1;
         }
@@ -1277,7 +1277,7 @@ void main()
         int TimelineWidget::mousePressEvent()
         {
             TLRENDER_P();
-            take_focus();
+            Fl::focus(this);
 
             bool isNDI = file::isTemporaryNDI(p.player->path());
             if (isNDI)
