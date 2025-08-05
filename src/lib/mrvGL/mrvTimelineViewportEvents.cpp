@@ -562,7 +562,8 @@ namespace mrv
                     if (p.actionMode == ActionMode::kScrub ||
                         p.actionMode == ActionMode::kRotate)
                     {
-                        if (p.player && p.actionMode == ActionMode::kScrub)
+                        if (!p.isScrubbing && p.player &&
+                            p.actionMode == ActionMode::kScrub)
                         {
                             p.player->setPlayback(timeline::Playback::Stop);
                             p.isScrubbing = true;
