@@ -103,6 +103,7 @@ namespace mrv
         TimelineViewport::Private::monitorOCIOOptions;
         timeline::Playback TimelineViewport::Private::playbackMode =
             timeline::Playback::Stop;
+        bool TimelineViewport::Private::isScrubbing = false;
         float TimelineViewport::Private::masking = 0.F;
         int64_t TimelineViewport::Private::lastFrame;
         uint64_t TimelineViewport::Private::droppedFrames = 0;
@@ -410,16 +411,19 @@ namespace mrv
                     time - p.lastScrubTime)
                 .count();
 
-            // We do not check the rate exactly as the timeout may trigger a tad
-            // early.
+            // We do not check the rate exactly as the timeout may trigger a
+            // tad early.
             const double fuzzFactor = t.rate() * 0.5;
             const double rate = t.rate() + fuzzFactor;
 
-            if (elapsedTime >= rate)
+            if (elapsedTime >= rate && p.isScrubbing)
             {
                 player->setPlayback(timeline::Playback::Stop);
                 return;
             }
+
+            if (!p.isScrubbing)
+                return;
 
             Fl::repeat_timeout(
                 1.0 / t.rate(),

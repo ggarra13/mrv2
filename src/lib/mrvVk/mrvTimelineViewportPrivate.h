@@ -118,6 +118,9 @@ namespace mrv
             //! Playback mode before scrubbing
             static tl::timeline::Playback playbackMode;
 
+            //! Boolean flag used to mark that scrubbing is being used.
+            static bool isScrubbing;
+            
             //! Rectangle selection ( Color area )
             static math::Box2i selection;
 

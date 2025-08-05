@@ -228,10 +228,11 @@ namespace mrv
                         }
                         else
                         {
+                            p.isScrubbing = true;
                             if (Fl::event_alt())
                             {
                                 float multiplier = p.ui->uiPrefs->uiPrefsAltScrubbingSensitivity->value();
-                                scrub(3.0);
+                                scrub(multiplier);
                             }
                             else
                             {
@@ -270,7 +271,26 @@ namespace mrv
                     switch (p.actionMode)
                     {
                     case ActionMode::kScrub:
-                        scrub();
+                        if (Fl::event_alt())
+                        {
+                            if (!p.player)
+                                return;
+
+                            const int X = Fl::event_x() * pixels_per_unit();
+                            const float scale = p.ui->uiPrefs->uiPrefsScrubbingSensitivity->value() * 20;
+                            float dx = (X - p.mousePress.x) / scale;
+                            
+                            if (std::abs(dx) >= 1.0F)
+                            {
+                                p.isScrubbing = true;
+                                _scrub(dx);
+                                p.mousePress.x = X;
+                            }
+                        }
+                        else
+                        {
+                            scrub();
+                        }
                         return;
                     case ActionMode::kRectangle:
                     case ActionMode::kFilledRectangle:
@@ -475,7 +495,10 @@ namespace mrv
                         p.actionMode == ActionMode::kRotate)
                     {
                         if (p.player && p.actionMode == ActionMode::kScrub)
+                        {
                             p.player->setPlayback(timeline::Playback::Stop);
+                            p.isScrubbing = true;
+                        }
                         
                         p.lastEvent = FL_PUSH;
                         return;
@@ -1179,6 +1202,7 @@ namespace mrv
                         Fl::event_button() == FL_LEFT_MOUSE && !Fl::event_shift())
                     {
                         p.lastEvent = 0;
+                        p.isScrubbing = false;
                         if (!p.player)
                             return 1;
                         p.player->setPlayback(p.playbackMode);
@@ -1208,6 +1232,7 @@ namespace mrv
                             }
                             else
                             {
+                                p.isScrubbing = false;
                                 p.player->setPlayback(p.playbackMode);
                                 panel::redrawThumbnails();
                             }

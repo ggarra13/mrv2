@@ -85,24 +85,27 @@ namespace
     const char* kModule = "cback";
 }
 
-namespace
+namespace mrv
 {
-    int check_for_changes()
+    int check_for_changes(ViewerUI* ui)
     {
         if (mrv::App::unsaved_edits || mrv::App::unsaved_annotations)
         {
-            return fl_choice(
-                _("You have not saved your editing changes. "
-                  "Do you want to continue?"),
-                _("No"), _("Yes"), NULL, NULL);
+            
+            int choice = fl_choice(
+                _("You have unsaved changes. "
+                  "Do you want to save the session before closing?"),
+                _("Cancel"), _("Save"), _("Don't Save"), NULL, NULL);
+            if (choice == 1)
+            {
+                save_session_cb(nullptr, ui);
+                return 1;
+            }
+            return choice;
         }
         return 1;
     }
-
-}
-
-namespace mrv
-{
+    
     using namespace panel;
 
     WindowCallback kWindowCallbacks[] = {
@@ -991,8 +994,8 @@ namespace mrv
 
     void close_current_cb(Fl_Widget* w, ViewerUI* ui)
     {
-        int ok = check_for_changes();
-        if (!ok)
+        int ok = check_for_changes(ui);
+        if (ok == 0)
             return;
 
         App::unsaved_edits = false;
@@ -1015,8 +1018,8 @@ namespace mrv
 
     void close_all_cb(Fl_Widget* w, ViewerUI* ui)
     {
-        int ok = check_for_changes();
-        if (!ok)
+        int ok = check_for_changes(ui);
+        if (ok == 0)
             return;
 
         App::unsaved_edits = false;
@@ -1037,8 +1040,8 @@ namespace mrv
 
     void exit_cb(Fl_Widget* w, ViewerUI* ui)
     {
-        int ok = check_for_changes();
-        if (!ok)
+        int ok = check_for_changes(ui);
+        if (ok == 0)
             return;
 
         App::unsaved_edits = false;

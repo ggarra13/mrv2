@@ -376,6 +376,11 @@ namespace mrv
 
             enable_cypher(true);
 
+            App::unsaved_edits = false;
+            App::unsaved_annotations = false;
+
+            ui->uiMain->update_title_bar();
+            
             std::string msg =
                 string::Format(_("Session saved to \"{0}\".")).arg(fileName);
             LOG_STATUS(msg);

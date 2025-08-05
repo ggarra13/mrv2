@@ -22,6 +22,7 @@ v1.4.0
   (A) when annotations have been done.
 - Fixed Vulkan macOS builds.  Still not using Retina.
 - Fixed Vulkan HDR support when Windows' HDR monitor was set to SDR.
+- Improved scrubbing behavior.
 
 
 v1.3.9

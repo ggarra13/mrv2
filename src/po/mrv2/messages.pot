@@ -420,8 +420,8 @@ msgstr ""
 
 msgid ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/rt."
-"rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/"
+"rt.rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
 
@@ -1656,6 +1656,21 @@ msgstr ""
 msgid "Stop streaming"
 msgstr ""
 
+msgid "Renderer"
+msgstr ""
+
+msgid "Complexity"
+msgstr ""
+
+msgid "Draw Mode"
+msgstr ""
+
+msgid "Stage Cache"
+msgstr ""
+
+msgid "Disk Cache in GB"
+msgstr ""
+
 msgid "Toggle other eye stereo image."
 msgstr ""
 
@@ -2663,16 +2678,19 @@ msgstr ""
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr ""
 
-msgid "Offscreen Buffer info: {0}"
+msgid "Vulkan info: {0}"
+msgstr ""
+
+msgid "{0}: Invalid OpenGL format and type"
+msgstr ""
+
+msgid "OpenGL info: {0}"
 msgstr ""
 
 msgid "Saving... {0}"
 msgstr ""
 
-msgid "Could not read image data from view"
-msgstr ""
-
-msgid "Could not read annotation image from view"
+msgid "Unsupported output format"
 msgstr ""
 
 msgid "Empty video data at time {0}.  Repeating frame."
@@ -2682,6 +2700,12 @@ msgid "Render size: {0}"
 msgstr ""
 
 msgid "Image Layer '{0}' info: {1} {2}"
+msgstr ""
+
+msgid "Offscreen Buffer info: {0}"
+msgstr ""
+
+msgid "Unsupported output format: "
 msgstr ""
 
 msgid ""
@@ -3189,7 +3213,14 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
-msgid "You have not saved your editing changes. Do you want to continue?"
+msgid ""
+"You have unsaved changes. Do you want to save the session before closing?"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Don't Save"
 msgstr ""
 
 msgid "Annotations"
@@ -3455,13 +3486,10 @@ msgstr ""
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr ""
 
-msgid "HDR monitor found."
-msgstr ""
-
-msgid "HDR monitor not found or not configured."
-msgstr ""
-
 msgid "Edit Text"
+msgstr ""
+
+msgid "Invalid font for text drawing"
 msgstr ""
 
 msgid "Could not convert message to shape: "
@@ -6069,8 +6097,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
-"exr"
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
 msgstr ""
 
 msgid "Maximum Images Apart"
@@ -6953,9 +6981,6 @@ msgid "Scrub Mode"
 msgstr ""
 
 msgid "Area Selection Mode"
-msgstr ""
-
-msgid "Draw Mode"
 msgstr ""
 
 msgid "Erase Mode"
