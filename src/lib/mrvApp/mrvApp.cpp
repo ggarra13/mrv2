@@ -567,6 +567,10 @@ namespace mrv
 #ifdef OPENGL_BACKEND
         Fl::use_high_res_GL(true);
 #endif
+
+#ifdef VULKAN_BACKEND
+        Fl::use_high_res_VK(true);
+#endif
         
         
         Fl::set_fonts("-*");
