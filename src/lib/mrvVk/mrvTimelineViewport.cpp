@@ -2436,10 +2436,12 @@ namespace mrv
                 if (!w->fullscreen_active())
                 {
                     w->fullscreen();
-                    view->take_focus();
+                    w->wait_for_expose();
 
-                    int PW = pixel_w();
-                    int PH = pixel_h();
+                    Fl::focus(view);
+                    
+                    // This forces a windows refresh!
+                    // view->take_focus();
 
                     if (!secondary)
                     {
@@ -2466,7 +2468,6 @@ namespace mrv
                 }
             }
 
-            w->wait_for_expose();
             w->fill_menu(p.ui->uiMenuBar);
         }
 
