@@ -36,10 +36,10 @@ namespace mrv
             if (fl_x11_display())
                 out = getX11Name(monitorIndex);
 #endif
-#ifdef FLTK_USE_WAYLAND
-            if (fl_wl_display())
-                out = getWaylandName(monitorIndex);
-#endif
+// #ifdef FLTK_USE_WAYLAND
+//             if (fl_wl_display())
+//                 out = getWaylandName(monitorIndex);
+// #endif
 
             names[monitorIndex] = out;
             
