@@ -370,6 +370,10 @@ add_subdirectory( ${CMAKE_CURRENT_SOURCE_DIR}/lib )
 #
 add_subdirectory(main)
 
+if (APPLE AND MRV2_BACKEND STREQUAL "VK")
+    add_subdirectory(launcher)
+endif()
+
 #
 # Add license_helper for licensing
 #

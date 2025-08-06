@@ -45,7 +45,7 @@ endif()
 add_executable(mrv2 WIN32  ${SOURCES} ${HEADERS})
 
 target_link_libraries(mrv2 PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
-target_link_directories( mrv2 BEFORE PUBLIC ${CMAKE_INSTALL_PREFIX}/lib /usr/local/lib )
+target_link_directories(mrv2 BEFORE PUBLIC ${CMAKE_INSTALL_PREFIX}/lib /usr/local/lib )
 
 set(PRUNE_SYMBOLS )
 set(EXCLUDE_LIBRARIES )
@@ -383,11 +383,3 @@ if(TLRENDER_USD)
         COMPONENT applications)
 endif()
 
-if (APPLE)
-    # Define variables for bundle directories in the build dir
-    set(MRV2_BUNDLE_DIR ${CMAKE_BINARY_DIR}/mrv2.app)
-
-    # Create the mrv2.app bundle structure
-    file(MAKE_DIRECTORY ${MRV2_BUNDLE_DIR}/Contents/MacOS)
-    file(MAKE_DIRECTORY ${MRV2_BUNDLE_DIR}/Contents/Resources)
-endif()

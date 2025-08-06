@@ -119,8 +119,13 @@ if(APPLE)
 	${MRV2_BUNDLE_DIR}/Contents/Resources/${mrv2_NAME}.icns COPYONLY)
     
     # Copy the shell scripts into the bundles and make them executable
-    configure_file(${MRV2_DIR}/etc/macOS/mrv2.sh
-	${MRV2_BUNDLE_DIR}/Contents/MacOS/${mrv2_NAME} COPYONLY)
+    if (MRV2_BACKEND STREQUAL "VK")
+	configure_file(${MRV2_DIR}/etc/macOS/mrv2.sh
+	    ${MRV2_BUNDLE_DIR}/Contents/MacOS/${mrv2_NAME}.sh COPYONLY)
+    else()
+	configure_file(${MRV2_DIR}/etc/macOS/mrv2.sh
+	    ${MRV2_BUNDLE_DIR}/Contents/MacOS/${mrv2_NAME} COPYONLY)
+    endif()
     
     configure_file(
      	${MRV2_DIR}/etc/macOS/mrv2.plist.in
