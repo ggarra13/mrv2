@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Remove old symlinks just in case
-rm -f /usr/bin/mrv2
+rm -f /usr/bin/@mrv2_NAME@
 rm -f /usr/bin/hdr
 
 #
