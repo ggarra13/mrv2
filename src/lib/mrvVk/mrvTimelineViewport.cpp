@@ -2437,7 +2437,7 @@ namespace mrv
                 {
                     w->fullscreen();
                     w->wait_for_expose();
-
+                    
                     if (!secondary)
                     {
                         // Fullscreen does not update immediately on Linux, so we
