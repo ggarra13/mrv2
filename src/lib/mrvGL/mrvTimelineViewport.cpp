@@ -2417,6 +2417,7 @@ namespace mrv
                 if (w->fullscreen_active())
                 {
                     w->fullscreen_off();
+                    w->wait_for_expose();
                 }
             }
             else
@@ -2424,10 +2425,7 @@ namespace mrv
                 if (!w->fullscreen_active())
                 {
                     w->fullscreen();
-                    view->take_focus();
-
-                    int PW = pixel_w();
-                    int PH = pixel_h();
+                    w->wait_for_expose();
 
                     if (!secondary)
                     {
@@ -2454,7 +2452,7 @@ namespace mrv
                 }
             }
 
-            w->wait_for_expose();
+            view->take_focus();
             w->fill_menu(p.ui->uiMenuBar);
         }
 
