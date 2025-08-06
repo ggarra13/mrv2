@@ -408,6 +408,9 @@ namespace mrv
             TLRENDER_P();
 
             const auto player = p.player;
+            if (!player)
+                return;
+            
             const auto& t = player->currentTime();
 
             if (player->playback() == timeline::Playback::Stop)

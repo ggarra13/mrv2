@@ -1234,7 +1234,8 @@ namespace mrv
                             else
                             {
                                 p.isScrubbing = false;
-                                p.player->setPlayback(p.playbackMode);
+                                if (p.player)
+                                    p.player->setPlayback(p.playbackMode);
                                 panel::redrawThumbnails();
                             }
                         }
