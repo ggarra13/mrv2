@@ -884,9 +884,12 @@ namespace mrv
             if (App::unsaved_edits)
                 unsaved += "(E) ";
             snprintf(
-                buf, 256, "%s %s- %s %s%s", fileName.c_str(),
+                buf, 256, "mrv2 %s v%s %s%s %s %s",
+                mrv::backend(),
+                mrv::version(),
                 unsaved.c_str(),
-                mrv::backend(), ss.str().c_str(),
+                fileName.c_str(),
+                ss.str().c_str(),
                 session.c_str());
         }
         else
