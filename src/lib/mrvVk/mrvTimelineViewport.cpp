@@ -2438,11 +2438,6 @@ namespace mrv
                     w->fullscreen();
                     w->wait_for_expose();
 
-                    Fl::focus(view);
-                    
-                    // This forces a windows refresh!
-                    // view->take_focus();
-
                     if (!secondary)
                     {
                         // Fullscreen does not update immediately on Linux, so we
@@ -2468,6 +2463,7 @@ namespace mrv
                 }
             }
 
+            view->take_focus();
             w->fill_menu(p.ui->uiMenuBar);
         }
 
