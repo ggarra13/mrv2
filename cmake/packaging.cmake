@@ -169,7 +169,7 @@ if(APPLE)
     set(CPACK_PACKAGE_ICON ${MRV2_DIR}/etc/macOS/mrv2.icns )
 
     # DragNDrop settings
-    set(CPACK_DMG_VOLUME_NAME "mrv2 Installer")
+    set(CPACK_DMG_VOLUME_NAME "${mrv2_NAME} Installer")
     set(CPACK_DMG_FORMAT "UDZO")
     Set(CPACK_DMG_VOLUME_NAME ${CPACK_PACKAGE_FILE_NAME})
     set(CPACK_DMG_VOLUME_ICON ${MRV2_DIR}/etc/macOS/mrv2.icns)

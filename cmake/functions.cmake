@@ -147,6 +147,8 @@ function( is_system_lib TARGET ISSYSLIB )
 	libgobject
 	libpango
 	libwayland-client
+	libwayland-cursor
+	libwayland-egl
 	libwayland-server
 	libxkbcommon
     )
