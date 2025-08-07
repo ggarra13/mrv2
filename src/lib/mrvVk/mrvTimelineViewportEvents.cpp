@@ -452,7 +452,7 @@ namespace mrv
             Fl::flush();
             redrawWindows();
             
-            Fl::focus(this);
+            take_focus();
             return 1;
         }
 
@@ -754,7 +754,7 @@ namespace mrv
                         shape->color = color;
 
                         annotation->push_back(shape);
-                        Fl::focus(this);
+                        take_focus();
 
             
                         redrawWindows();
@@ -1095,7 +1095,7 @@ namespace mrv
             {
                 if (Fl::focus() != this && Fl::event_button1())
                 {
-                    Fl::focus(this);
+                    take_focus();
                     if (Fl::event_clicks() < 2)
                         return 1;
                 }
