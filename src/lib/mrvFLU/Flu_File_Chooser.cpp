@@ -360,8 +360,7 @@ Flu_File_Chooser::Flu_File_Chooser(
     filename(70, h() - 60, w() - 70 - 85 - 10, 25, "", this),
     ok(w() - 90, h() - 60, 85, 25),
     cancel(w() - 90, h() - 30, 85, 25),
-    wingrp(new Fl_Group(0, 0, 900, 600)),
-    entryPopup(0, 0, 0, 0)
+    wingrp(new Fl_Group(0, 0, 900, 600))
 {
     TLRENDER_P();
 
@@ -2425,6 +2424,9 @@ int Flu_File_Chooser::popupContextMenu(Flu_Entry* entry)
 
     enum { ACTION_NEW_FOLDER = -1, ACTION_RENAME = -2, ACTION_DELETE = -3 };
 
+    Fl_Group::current(0);
+    Fl_Menu_Button entryPopup(0, 0, 0, 0);
+    entryPopup.type(Fl_Menu_Button::POPUP3);
     entryPopup.clear();
     switch (type)
     {
@@ -2478,7 +2480,6 @@ int Flu_File_Chooser::popupContextMenu(Flu_Entry* entry)
     if (ext)
         free(ext);
 
-    entryPopup.position(Fl::event_x(), Fl::event_y());
     const Fl_Menu_Item* selection = entryPopup.popup();
     if (selection)
     {

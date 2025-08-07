@@ -632,7 +632,6 @@ public:
 
     Fl_Group* wingrp;
     Fl_Group *fileGroup, *locationQuickJump;
-    Fl_Menu_Button entryPopup;
     Fl_Image* defaultFileIcon;
     Flu_Entry* lastSelected;
     FileList* filelist;
