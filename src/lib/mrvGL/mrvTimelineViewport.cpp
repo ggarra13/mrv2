@@ -1312,9 +1312,9 @@ namespace mrv
             if (p.selection.max.x >= 0)
             {
                 image::Size videoSize;
-                if (!values[0].layers.empty())
+                if (!values.empty() && !values[0].layers.empty())
                 {
-                    const auto& image = values[0].layers[0].image;
+                    const auto image = values[0].layers[0].image;
                     if (image && image->isValid())
                     {
                         videoSize = image->getSize();
@@ -1352,7 +1352,7 @@ namespace mrv
 
             if (p.switchClip && !values.empty() && !values[0].layers.empty())
             {
-                const auto& image = values[0].layers[0].image;
+                const auto image = values[0].layers[0].image;
                 if (image && image->isValid())
                 {
                     const auto& videoSize = image->getSize();
@@ -1402,7 +1402,7 @@ namespace mrv
                                 .future.get();
                             if (videoData.layers.empty())
                                 continue;
-                            const auto& image = videoData.layers[0].image;
+                            const auto image = videoData.layers[0].image;
                             if (image && image->isValid())
                             {
                                 p.lastVideoData = videoData;
@@ -3089,16 +3089,15 @@ namespace mrv
                     {
                         for (const auto& layer : video.layers)
                         {
-                            const auto& image = layer.image;
-                            if (!image->isValid())
-                                continue;
+                            const auto image = layer.image;
 
                             image::Color4f pixel, pixelB;
 
-                            _getPixelValue(pixel, image, pos);
+                            if (image && image->isValid())
+                                _getPixelValue(pixel, image, pos);
 
-                            const auto& imageB = layer.image;
-                            if (imageB->isValid())
+                            const auto imageB = layer.image;
+                            if (imageB && imageB->isValid())
                             {
                                 _getPixelValue(pixelB, imageB, pos);
 
@@ -3212,16 +3211,15 @@ namespace mrv
                     {
                         for (const auto& layer : video.layers)
                         {
-                            const auto& image = layer.image;
-                            if (!image->isValid())
-                                continue;
+                            const auto image = layer.image;
 
                             image::Color4f pixel, pixelB;
 
-                            _getPixelValue(pixel, image, pos);
+                            if (image && image->isValid())
+                                _getPixelValue(pixel, image, pos);
 
-                            const auto& imageB = layer.image;
-                            if (imageB->isValid())
+                            const auto imageB = layer.image;
+                            if (imageB && imageB->isValid())
                             {
                                 _getPixelValue(pixelB, imageB, pos);
 

@@ -33,7 +33,7 @@ namespace mrv
 
         std::string getManufacturerName(const char* vendorId);
 
-        std::string getName(int monitorIndex);
+        std::string getName(int monitorIndex, int numMonitors);
 
         bool is_hdr_active(int screen = -1, const bool silent = true);
     } // namespace monitor

@@ -29,12 +29,12 @@ namespace
 
         struct MonitorData
         {
+            struct wl_output* output;
             uint32_t global_id;
             std::string name;
             std::string description;
             int32_t x = 0;
             int32_t y = 0;
-            struct wl_output* output;
         };
 
         // Get the sorted list of monitors. It initializes on first call.
@@ -54,18 +54,6 @@ namespace
         // Clean up Wayland resources.
         ~WaylandMonitorManager()
         {
-            for (const auto& monitor : monitors)
-            {
-                if (monitor.output)
-                {
-#if defined(WL_OUTPUT_DESTROY_SINCE_VERSION)
-                    wl_output_destroy(monitor.output);
-#else
-                    // For older versions, wl_output might be released differently or not at all.
-                    // If FLTK manages the display, it may also manage output resources.
-#endif
-                }
-            }
         }
 
         // Delete copy constructor and assignment operator.
@@ -88,6 +76,9 @@ namespace
                 return;
             }
 
+            // Up to 64 monitors should be enough.
+            monitors.reserve(64);
+
             // Add the registry listener, passing 'this' as user data.
             wl_registry_add_listener(registry, &registry_listener, this);
 
@@ -96,16 +87,13 @@ namespace
             
             // Second roundtrip to ensure we receive all the output-specific events (like name, geometry).
             wl_display_roundtrip(display);
-
+            
             // Sort the monitors so the primary one (usually at 0,0) is first.
             std::sort(
                 monitors.begin(), monitors.end(),
                 [](const MonitorData& a, const MonitorData& b)
                 { return std::tie(a.x, a.y) < std::tie(b.x, b.y); });
-
-            // The registry can be destroyed after we've bound to the interfaces we need.
-            wl_registry_destroy(registry);
-
+                        
             initialized = true;
         }
 
@@ -116,16 +104,25 @@ namespace
         // They are static because C libraries don't know about 'this' pointers.
         // We get our instance back via the 'data' pointer.
 
-        static void handle_global(void* data, struct wl_registry* registry, uint32_t name, const char* interface, uint32_t version)
+        static void handle_global(void* data, struct wl_registry* registry,
+                                  uint32_t global_id, const char* interface,
+                                  uint32_t version)
         {
             if (strcmp(interface, wl_output_interface.name) == 0)
             {
                 WaylandMonitorManager* self = static_cast<WaylandMonitorManager*>(data);
+                // Bind to the wl_output interface
+                struct wl_output* output = static_cast<wl_output*>(
+                    wl_registry_bind(registry, global_id, &wl_output_interface,
+                                     std::min(version, 4u)));
+
                 self->monitors.emplace_back();
                 MonitorData& monitor_info = self->monitors.back();
-                monitor_info.global_id = name;
-                monitor_info.output = static_cast<wl_output*>(wl_registry_bind(registry, name, &wl_output_interface, std::min(version, 4u)));
-                wl_output_add_listener(monitor_info.output, &output_listener, &monitor_info);
+                monitor_info.output = output;
+                monitor_info.global_id = global_id;
+                
+                wl_output_add_listener(output, &output_listener,
+                                       &self->monitors.back());
             }
         }
 
@@ -190,7 +187,7 @@ namespace mrv
     {
         // This is the only function you need to call from your application logic.
         // It's now fast, non-blocking, and stable.
-        std::string getWaylandName(int monitorIndex)
+        std::string getWaylandName(int monitorIndex, int numMonitors)
         {
             const auto& monitors = WaylandMonitorManager::instance().getMonitors();
 
@@ -198,7 +195,7 @@ namespace mrv
             {
                 throw std::runtime_error("Invalid Monitor index");
             }
-
+            
             const auto& monitorInfo = monitors[monitorIndex];
             std::string out;
 #if defined(WL_OUTPUT_NAME_SINCE_VERSION) && WL_OUTPUT_NAME_SINCE_VERSION >= 4

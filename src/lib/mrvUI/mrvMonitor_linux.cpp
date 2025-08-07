@@ -22,7 +22,7 @@ namespace mrv
         std::map<int, std::string> names;
         
         // Get the monitor name given its FLTK screen index
-        std::string getName(int monitorIndex)
+        std::string getName(int monitorIndex, int numMonitors)
         {
             std::string out;
 
@@ -38,7 +38,7 @@ namespace mrv
 #endif
 #ifdef FLTK_USE_WAYLAND
             if (fl_wl_display())
-                out = getWaylandName(monitorIndex);
+                out = getWaylandName(monitorIndex, numMonitors);
 #endif
 
             names[monitorIndex] = out;

@@ -133,7 +133,7 @@ namespace mrv
             std::string out;
             try
             {
-                out = monitor::getName(monitorIndex);
+                out = monitor::getName(monitorIndex, Fl::screen_count());
             }
             catch (const std::exception& e)
             {

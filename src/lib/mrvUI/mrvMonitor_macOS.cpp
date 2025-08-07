@@ -10,7 +10,7 @@ namespace mrv
     namespace monitor
     {
         // Get the monitor name given its FLTK screen index
-        std::string getName(int monitorIndex)
+        std::string getName(int monitorIndex, int numMonitors)
         {
             std::string out;
 
