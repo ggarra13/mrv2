@@ -1149,6 +1149,9 @@ namespace mrv
                         return 1;
                     }
 
+                    if (Fl::focus() != this)
+                        return 0;
+
                     auto time = std::chrono::high_resolution_clock::now();
                     p.presentationTime = time;
 

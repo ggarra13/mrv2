@@ -189,6 +189,11 @@ namespace mrv
         // It's now fast, non-blocking, and stable.
         std::string getWaylandName(int monitorIndex, int numMonitors)
         {
+            std::string out;
+#if !defined(WL_OUTPUT_NAME_SINCE_VERSION) || WL_OUTPUT_NAME_SINCE_VERSION <= 3
+#    warning "Wayland version is less than 4. No monitor name will be provided."
+            return out;
+#endif
             const auto& monitors = WaylandMonitorManager::instance().getMonitors();
 
             if (monitorIndex < 0 || monitorIndex >= monitors.size())
@@ -197,15 +202,10 @@ namespace mrv
             }
             
             const auto& monitorInfo = monitors[monitorIndex];
-            std::string out;
-#if defined(WL_OUTPUT_NAME_SINCE_VERSION) && WL_OUTPUT_NAME_SINCE_VERSION >= 4
             if (!monitorInfo.name.empty())
             {
                 out = monitorInfo.name + ": " + monitorInfo.description;
             }
-#else
-#    warning "Wayland version is less than 4. No monitor name will be provided."
-#endif
             return out;
         }
 
