@@ -569,7 +569,7 @@ namespace mrv
 #endif
 
 #ifdef VULKAN_BACKEND
-        // Fl::use_high_res_VK(true);
+        Fl::use_high_res_VK(true);
 #endif
         
         
