@@ -896,17 +896,28 @@ namespace mrv
         reset_hotkeys();
         if (!resetHotkeys)
         {
-            msg =
-                tl::string::Format(_("Loading hotkeys from \"{0}{1}.prefs\"."))
-                    .arg(prefspath())
+            std::string hotkeyPath = studiopath() + "/" + hotkeys_file;
+            if (file::isReadable(hotkeyPath))
+            {
+                msg =
+                    tl::string::Format(_("Loading hotkeys from \"{0}{1}.prefs\"."))
+                    .arg(studiopath())
                     .arg(hotkeys_file);
+            }
+            else
+            {
+                msg =
+                    tl::string::Format(_("Loading hotkeys from \"{0}{1}.prefs\"."))
+                    .arg(prefspath())
+                    .arg(hotkeys_file);;
+            }
             load_hotkeys();
         }
         else
         {
             msg = tl::string::Format(_("Resetting hotkeys to default."));
         }
-        LOG_INFO(msg);
+        LOG_STATUS(msg);
 
         // Fill the hotkeys window
         HotkeyUI* h = ui->uiHotkey;

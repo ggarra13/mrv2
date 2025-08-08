@@ -20,12 +20,13 @@ v1.4.0
 - Improved performance of Vulkan shaders' compilation for faster start ups.
 - Added to title bar an (E) when non-saved Edit changes are present and
   (A) when annotations have been done.
-- Fixed Vulkan macOS builds.  Works on Retina, but no FLTK scaling.
+- Fixed Vulkan macOS builds.
 - Fixed Vulkan HDR support when Windows' HDR monitor was set to SDR.
 - Improved scrubbing behavior.
 - Fixed Wayland port on Linux distributing some incorrect Wayland libraries.
 - Fixed Vulkan macOS installs, without having to set environment variables.  Now you can actually click on the icon (after you authorize the permissions to the application).
-
+- Fixed macOS distro not installing a local python into the .app directory.
+- Fixed Linux distro shipping two wayland DSOs by mistake.
 
 v1.3.9
 ======
