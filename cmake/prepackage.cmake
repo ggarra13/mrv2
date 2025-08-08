@@ -384,7 +384,7 @@ if (APPLE)
 	if (DEFINED VULKAN_SDK AND EXISTS ${VULKAN_SDK})
 	    file(GLOB _libs
 		"${VULKAN_SDK}/etc/vulkan*"
-		"${VULKAN_SDK}/share/vulkan*")
+		"${VULKAN_SDK}/share/vulkan*"
 		"${VULKAN_SDK}/../etc/vulkan*"
 		"${VULKAN_SDK}/../share/vulkan*")
 	    foreach( _lib ${_libs} )
