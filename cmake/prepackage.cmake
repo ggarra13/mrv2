@@ -564,9 +564,9 @@ if (APPLE)
     file(COPY ${CPACK_PREPACKAGE}/bin/install_dmg.sh
 	DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/bin)
     
-    if (EXISTS ${CPACK_PREPACKAGE}/python.sh)
-	install_mrv2_bin_glob("${CPACK_PREPACKAGE}/python*")
-	install_mrv2_bin_glob("${CPACK_PREPACKAGE}/pip*")
+    if (EXISTS ${CPACK_PREPACKAGE}/bin/python.sh)
+	install_mrv2_bin_glob("${CPACK_PREPACKAGE}/bin/python*")
+	install_mrv2_bin_glob("${CPACK_PREPACKAGE}/bin/pip*")
     endif()
     
     install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libMoltenVK*")	
