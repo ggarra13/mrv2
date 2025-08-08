@@ -611,6 +611,9 @@ if (APPLE)
     # Install .mo translation files
     #
     copy_mo_files(mrv2 ${mrv2_NAME})
+    
+    set(VULKAN_SDK $ENV{VULKAN_SDK})
+    message(STATUS "VULKAN_SDK set to ${VULKAN_SDK}")
 
     #
     # Copy Apple vmrv2 launcher
@@ -618,10 +621,11 @@ if (APPLE)
     if (MRV2_BACKEND STREQUAL "VK")
 	file(COPY ${CPACK_PREPACKAGE}/bin/vmrv2
 	    DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/MacOS)
+	
+	install_vulkan_lib_glob("libvulkan*" vmrv2)
+	
+	install_vulkan_icd_filenames(vmrv2)
     endif()
-    
-    set(VULKAN_SDK $ENV{VULKAN_SDK})
-    message(STATUS "VULKAN_SDK set to ${VULKAN_SDK}")
 	
     #
     # Pre-pare hdr.app if present
@@ -662,15 +666,6 @@ if (APPLE)
 	
 	install_vulkan_icd_filenames(hdr)
 	# install_vulkan_layers(hdr)
-
-
-	# If MR2V2's BACKEND is VK, also install vulkan on it
-	if (MRV2_BACKEND STREQUAL "VK")
-	    install_vulkan_lib_glob("libvulkan*" vmrv2)
-	
-	    install_vulkan_icd_filenames(vmrv2)
-	    # install_vulkan_layers(vmrv2)
-	endif()
 	
 	#
 	# Install .mo translation files
