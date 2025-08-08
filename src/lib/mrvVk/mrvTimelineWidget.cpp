@@ -830,6 +830,8 @@ namespace mrv
             _setGeometry();
             _clipEvent();
 
+            wait_device();
+            
             p.buffer.reset();
 
             repositionThumbnail();
@@ -888,6 +890,8 @@ namespace mrv
                     }
                     else
                     {
+                        wait_device();
+                        
                         p.buffer.reset();
                     }
 
