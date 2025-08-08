@@ -21,6 +21,7 @@ namespace mrv
     void select_hotkey(HotkeyUI* m);
 
     void load_hotkeys();
+    void load_hotkeys(const std::string& path);
     void save_hotkeys(Fl_Preferences& keys);
 
     void update_hotkey_tooltips();

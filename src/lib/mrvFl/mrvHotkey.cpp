@@ -14,6 +14,7 @@ namespace fs = std::filesystem;
 #include <tlCore/StringFormat.h>
 
 #include "mrvCore/mrvI8N.h"
+#include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvString.h"
@@ -387,14 +388,24 @@ namespace mrv
         }
     }
 
-    void load_hotkeys()
+    void load_hotkeys(const std::string& path)
     {
         Fl_Preferences* keys = new Fl_Preferences(
-            prefspath().c_str(), "filmaura", Preferences::hotkeys_file.c_str(),
+            path.c_str(), "filmaura", Preferences::hotkeys_file.c_str(),
             (Fl_Preferences::Root)0);
         load_hotkeys(keys);
         delete keys;
     }
+
+    void load_hotkeys()
+    {
+        std::string hotkeyPath = studiopath() + "/" + Preferences::hotkeys_file;
+        if (file::isReadable(hotkeyPath))
+            load_hotkeys(studiopath());
+        else
+            load_hotkeys(prefspath());
+    }
+
 
     void update_hotkey_tooltips()
     {
