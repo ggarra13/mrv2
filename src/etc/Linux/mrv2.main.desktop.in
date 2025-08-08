@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=@mrv2_NAME@ v@mrv2_VERSION@
+Name=@mrv2_NAME@
 Comment=Professional Video and Flipbook player
 Exec=/usr/local/@mrv2_NAME@-v@mrv2_VERSION@-Linux-64/bin/mrv2.sh %F
 Icon=/usr/share/icons/hicolor/256x256/apps/@mrv2_NAME@.png
