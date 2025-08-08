@@ -679,9 +679,10 @@ if (APPLE)
     file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/share)
 
     #
-    # Wait five seconds before continuing to package.
-    # This should avoid issues with hdiutil resource being busy on GitHub
-    # Actions.
+    # Sync the file system
     #
-    execute_process(COMMAND ${CMAKE_COMMAND} -E sleep 5) # Waits for 5 second
+    if (APPLE)
+	execute_process(COMMAND sync)
+	execute_process(COMMAND sync)
+    endif()
 endif()
