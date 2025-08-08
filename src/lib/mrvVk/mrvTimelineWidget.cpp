@@ -716,37 +716,6 @@ namespace mrv
                     if (!p.render)
                         p.render = timeline_vlk::Render::create(ctx, context);
 
-                    const std::string vertexSource = R"(#version 450
-                   layout(location = 0) in vec3 vPos;
-                   layout(location = 1) in vec2 vTexture;
-                   layout(location = 0) out vec2 fTexture;
-                   layout(set = 0, binding = 0, std140) uniform Transform {
-                      mat4 mvp;
-                    } transform;
-
-                   void main()
-                   {
-                       gl_Position = transform.mvp * vec4(vPos, 1.0);
-                       fTexture = vTexture;
-                   })";
-
-                    const std::string fragmentSource = R"(#version 450
-                 
-layout(location = 0) in vec2 fTexture;
-layout(location = 0) out vec4 outColor;
-
-layout(binding = 1) uniform sampler2D textureSampler;
-
-layout(push_constant) uniform PushConstants {
-    float opacity;
-} pc;  
-                 
-void main()
-{
-     outColor = texture(textureSampler, fTexture);
-     outColor.a *= pc.opacity;
-})";
-
                     if (!p.shader)
                     {
                         p.shader = vlk::Shader::create(
@@ -813,8 +782,6 @@ void main()
         {
             TLRENDER_P();
 
-            refresh();
-
             if (p.pipeline_layout != VK_NULL_HANDLE)
             {
                 vkDestroyPipelineLayout(device(), p.pipeline_layout, nullptr);
@@ -826,6 +793,9 @@ void main()
                 vkDestroyPipeline(device(), pipeline(), nullptr);
                 pipeline() = VK_NULL_HANDLE;
             }
+
+            p.vbo.reset();
+            p.vao.reset();
         }
 
         void TimelineWidget::hide()
@@ -1908,7 +1878,6 @@ void main()
                     _cancelThumbnailRequests();
                     hideThumbnail();
                 }
-                refresh();
                 return Fl_Vk_Window::handle(event);
             }
             }
@@ -1986,12 +1955,6 @@ void main()
             return out;
         }
 
-        void TimelineWidget::refresh()
-        {
-            TLRENDER_P();
-            p.vbo.reset();
-            p.vao.reset();
-        }
 
         void TimelineWidget::setUnits(TimeUnits value)
         {

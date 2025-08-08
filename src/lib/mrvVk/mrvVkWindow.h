@@ -27,6 +27,8 @@ namespace mrv
             
             void show() FL_OVERRIDE;
 
+            void refresh() {};
+
             void valid(int x) {};
             int valid() const { return 1; }
         

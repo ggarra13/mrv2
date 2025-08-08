@@ -114,9 +114,6 @@ namespace mrv
             //! Set the time units.
             void setUnits(TimeUnits);
 
-            //! Refresh the VK objects
-            void refresh();
-
             //! Get whether the timeline is editable.
             bool isEditable() const;
 
