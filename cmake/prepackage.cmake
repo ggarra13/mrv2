@@ -384,9 +384,7 @@ if (APPLE)
 	if (DEFINED VULKAN_SDK AND EXISTS ${VULKAN_SDK})
 	    file(GLOB _libs
 		"${VULKAN_SDK}/etc/vulkan*"
-		"${VULKAN_SDK}/share/vulkan*"
-		"${VULKAN_SDK}/../etc/vulkan*"
-		"${VULKAN_SDK}/../share/vulkan*")
+		"${VULKAN_SDK}/../etc/vulkan*")
 	    foreach( _lib ${_libs} )
 		message(STATUS "Copying ${_lib} to ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/etc")
 		file(COPY ${_lib}
@@ -405,8 +403,7 @@ if (APPLE)
 	#
 	
 	file(GLOB _libs
-	    "/opt/homebrew/etc/vulkan*"
-	    "/opt/homebrew/share/vulkan*")
+	    "/opt/homebrew/etc/vulkan*")
 	foreach( _lib ${_libs} )
 	    message(STATUS "Copying ${_lib} to ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/etc/")
 	    file(COPY ${_lib}
@@ -419,8 +416,7 @@ if (APPLE)
 	endif()
 	
 	file(GLOB _libs
-	    "/usr/local/etc/vulkan*"
-	    "/usr/local/share/vulkan*")
+	    "/usr/local/etc/vulkan*")
 	foreach( _lib ${_libs} )
 	    message(STATUS "Copying ${_lib} to ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/etc")
 	    file(COPY ${_lib}
@@ -455,8 +451,7 @@ if (APPLE)
 	# Try System's location last
 	#
 	file(GLOB _libs
-	    "/etc/vulkan*"
-	    "/share/vulkan*")
+	    "/etc/vulkan*")
 	foreach( _lib ${_libs} )
 	    message(STATUS "Copying ${_lib} to ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/etc")
 	    file(COPY ${_lib}
@@ -476,27 +471,19 @@ if (APPLE)
 	#
 	set(_vulkan_found FALSE)
 	if (DEFINED VULKAN_SDK AND EXISTS ${VULKAN_SDK})
-	    file(GLOB _dirs "${VULKAN_SDK}/share/vulkan/*_layer.d")
+	    file(GLOB _dirs "${VULKAN_SDK}/share/vulkan*")
 	    foreach( _dir ${_dirs} )
-		message(STATUS "Copying ${_dir} to ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/share/vulkan")
+		message(STATUS "Copying ${_dir} to ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/share/")
 		file(COPY ${_dir}
-		    DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/share/vulkan
+		    DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/share/
 		    FOLLOW_SYMLINK_CHAIN)
 		set(_vulkan_found TRUE)
 	    endforeach()
 	    if(_vulkan_found)
 		return()
 	    endif()
-	    file(GLOB _dirs "${VULKAN_SDK}/etc/vulkan/*_layer.d")
-	    foreach( _dir ${_dirs} )
-		message(STATUS "Copying ${_dir} to ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/share/vulkan")
-		file(COPY ${_dir}
-		    DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/share/vulkan
-		    FOLLOW_SYMLINK_CHAIN)
-		set(_vulkan_found TRUE)
-	    endforeach()
 	    if(NOT _vulkan_found)
-		message(FATAL_ERROR "VULKAN_SDK set to ${VULKAN_SDK} but ${VULKAN_SDK}/share/vulkan/*layer.d not found")
+		message(FATAL_ERROR "VULKAN_SDK set to ${VULKAN_SDK} but ${VULKAN_SDK}/share/vulkan* not found")
 	    endif()
 	    return()
 	endif()
@@ -505,23 +492,23 @@ if (APPLE)
 	# Try /usr/local next
 	#
 	
-	file(GLOB _dirs "/opt/homebrew/vulkan-validationlayers/share/vulkan/*_layer.d")
+	file(GLOB _dirs "/opt/homebrew/vulkan-validationlayers/share/vulkan*")
 	foreach( _dir ${_dirs} )
-	    message(STATUS "Copying ${_dir} to ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/share/vulkan")
+	    message(STATUS "Copying ${_dir} to ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/share/")
 	    file(COPY ${_dir}
-		DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/share/vulkan
+		DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/share/
 		FOLLOW_SYMLINK_CHAIN)
 	    set(_vulkan_found TRUE)
 	endforeach()
 	if(NOT _vulkan_found)
-	    message(STATUS "VULKAN_SDK set to ${VULKAN_SDK} but ${VULKAN_SDKw}/share/vulkan/*layer.d not found")
+	    message(STATUS "VULKAN_SDK set to ${VULKAN_SDK} but ${VULKAN_SDKw}/share/vulkan* not found")
 	endif()
 
-	file(GLOB _dirs "/usr/local/opt/vulkan-validationlayers/share/vulkan/*")
+	file(GLOB _dirs "/usr/local/opt/vulkan-validationlayers/share/vulkan*")
 	foreach( _dir ${_dirs} )
-	    message(STATUS "Copying ${_dir} to ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/share/vulkan")
+	    message(STATUS "Copying ${_dir} to ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/share/")
 	    file(COPY ${_dir}
-		DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/share/vulkan/
+		DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/share/
 		FOLLOW_SYMLINK_CHAIN)
 	    set(_vulkan_found TRUE)
 	endforeach()
@@ -533,9 +520,9 @@ if (APPLE)
 	# Try user's home dir next
 	#
 	set(HOME $ENV{HOME})
-	file(GLOB _dirs "${HOME}/share/vulkan/*_layer.d")
+	file(GLOB _dirs "${HOME}/share/vulkan*")
 	foreach( _dir ${_dirs} )
-	    message(STATUS "Copying ${_dir} to ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/share/vulkan")
+	    message(STATUS "Copying ${_dir} to ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/share*")
 	    file(COPY ${_dir}
 		DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/share/vulkan
 		FOLLOW_SYMLINK_CHAIN)
@@ -548,17 +535,17 @@ if (APPLE)
 	#
 	# Try System's location last
 	#
-	file(GLOB _dirs "/etc/vulkan/*_layer.d")
+	file(GLOB _dirs "/share/vulkan*")
 	foreach( _dir ${_dirs} )
-	    message(STATUS "Copying ${_dir} to ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/share/vulkan")
+	    message(STATUS "Copying ${_dir} to ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/share/")
 	    file(COPY ${_dir}
-		DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/share/vulkan
+		DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/share/
 		FOLLOW_SYMLINK_CHAIN)
 	    set(_vulkan_found TRUE)
 	endforeach()
 	
 	if(NOT _vulkan_found)
-	    message(FATAL_ERROR "Could not locate vulkan/*_layer.d")
+	    message(FATAL_ERROR "Could not locate share/vulkan/*")
 	endif()
     endfunction()
     
