@@ -871,6 +871,8 @@ namespace mrv
                 if (vlk::doCreate(
                     vk.annotation, viewportSize, offscreenBufferOptions))
                 {
+                    wait_device();
+                    
                     vk.annotation = vlk::OffscreenBuffer::create(
                         ctx, viewportSize, offscreenBufferOptions);
                     vk.avbo.reset();
