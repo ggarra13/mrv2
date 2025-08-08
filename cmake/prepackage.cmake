@@ -620,6 +620,9 @@ if (APPLE)
 	    DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/MacOS)
     endif()
     
+    set(VULKAN_SDK $ENV{VULKAN_SDK})
+    message(STATUS "VULKAN_SDK set to ${VULKAN_SDK}")
+	
     #
     # Pre-pare hdr.app if present
     #
@@ -655,8 +658,6 @@ if (APPLE)
 	install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/libMoltenVK*")
 
 	# Vulkan libraries For Apple Silicon or Intel machines
-	set(VULKAN_SDK $ENV{VULKAN_SDK})
-	message(STATUS "VULKAN_SDK set to ${VULKAN_SDK}")
 	install_vulkan_lib_glob("libvulkan*" hdr)
 	
 	install_vulkan_icd_filenames(hdr)
