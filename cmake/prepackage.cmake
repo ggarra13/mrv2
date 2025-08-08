@@ -682,7 +682,7 @@ if (APPLE)
     # Sync the file system
     #
     if (APPLE)
-	execute_process(COMMAND ${CMAKE_COMMAND} -E sync)
-	execute_process(COMMAND ${CMAKE_COMMAND} -E sync)
+	execute_process(COMMAND sync)
+	execute_process(COMMAND sync)
     endif()
 endif()
