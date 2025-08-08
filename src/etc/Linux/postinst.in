@@ -151,6 +151,7 @@ fi
 shortcut="@mrv2_NAME@.desktop"
 appshortcut="${appdir}/${shortcut}"
 cp -f "${appshortcut}" /usr/share/applications
+cp -f "${appshortcut}" /usr/share/applications/mrv2.desktop  # vmrv2 uses mrv2
 
 
 #
