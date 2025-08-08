@@ -26,7 +26,7 @@ v1.4.0
 - Fixed Wayland port on Linux distributing some incorrect Wayland libraries.
 - Fixed Vulkan macOS installs, without having to set environment variables.  Now you can actually click on the icon (after you authorize the permissions to the application).
 - Fixed macOS distro not installing a local python into the .app directory.
-
+- Fixed Linux distro shipping two wayland DSOs by mistake.
 
 v1.3.9
 ======
