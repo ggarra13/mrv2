@@ -837,11 +837,6 @@ namespace mrv
                 mvp = _createTexturedRectangle();
             }
 
-            if (!pipeline())
-            {
-                return;
-            }                
-
 
             float opacity = 1.F;
 #ifdef __APPLE__

@@ -924,13 +924,6 @@ namespace tl
                     throw std::runtime_error(err + string_VkFormat(p.format));
                     break;
                 }
-#ifndef NDEBUG
-                std::cerr << this << ": tried to create texture "
-                          << string_VkFormat(p.format)
-                          << " but created "
-                          << string_VkFormat(p.internalFormat)
-                          << std::endl;
-#endif
             }
 
             VkImageCreateInfo imageInfo = {};
