@@ -752,8 +752,11 @@ namespace mrv
             
             try
             {
-                vk.buffer->transitionToColorAttachment(cmd);
-
+                if (vk.buffer)
+                {
+                    vk.buffer->transitionToColorAttachment(cmd);
+                }
+                
                 vk.render->begin(
                     cmd, vk.buffer, m_currentFrameIndex, renderSize,
                     renderOptions);
@@ -895,7 +898,7 @@ namespace mrv
                         prepare_annotation_pipeline();
                     }
                 }
-                
+
                 _drawAnnotations(
                     vk.annotation, vk.annotationRender,
                     mvp, currentTime, annotations, viewportSize);
@@ -988,8 +991,10 @@ namespace mrv
                 // --- Final Render Pass: Render to Swapchain (Composition) ---
                 vk.buffer->transitionToShaderRead(cmd);
                 if (vk.annotation)
+                {
                     vk.annotation->transitionToShaderRead(cmd);
-            
+                }
+                
                 begin_render_pass(cmd);
 
                 // Bind the shaders to the current frame index.

@@ -44,7 +44,7 @@ namespace mrv
 
     class NDIView : public Fl_Vk_Window
     {
-        void vk_draw_begin() FL_OVERRIDE;
+        bool vk_draw_begin() FL_OVERRIDE;
 
     public:
         NDIView(int x, int y, int w, int h, const char* l = 0);

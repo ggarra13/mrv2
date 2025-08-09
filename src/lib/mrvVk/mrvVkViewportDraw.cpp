@@ -425,8 +425,11 @@ namespace mrv
             MRV2_VK();
 
             // Transition annotation buffer to start rendering to it.
-            annotationBuffer->transitionToColorAttachment(vk.cmd);
-
+            if (annotationBuffer)
+            {
+                annotationBuffer->transitionToColorAttachment(vk.cmd);
+            }
+            
             // Start the annotation render.
             timeline::RenderOptions renderOptions;
             renderOptions.colorBuffer = image::PixelType::RGBA_U8;

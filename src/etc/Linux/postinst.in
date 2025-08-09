@@ -74,9 +74,7 @@ if [[ $fulldir != $desktop_dir ]]; then
 fi
 
 # Just in case.  If /home/user/DESKTOP directory is missing, create it.
-if [[ ! -d $desktop_dir ]]; then
-    mkdir $desktop_dir
-fi
+mkdir -p $desktop_dir
 
 #
 # Copy icon to applications directory

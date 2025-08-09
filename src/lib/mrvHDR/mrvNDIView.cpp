@@ -1245,12 +1245,12 @@ void main() {
             m_textures[0]->copy(reinterpret_cast<const uint8_t*>(p.image->getData()), imageSize);
         }
     }
-
-    void NDIView::vk_draw_begin()
+    
+    bool NDIView::vk_draw_begin()
     {
         // Change background color here
         m_clearColor = {0.0, 0.0, 0.0, 0.0};
-        Fl_Vk_Window::vk_draw_begin();
+        return Fl_Vk_Window::vk_draw_begin();
     }
 
     void NDIView::draw()
