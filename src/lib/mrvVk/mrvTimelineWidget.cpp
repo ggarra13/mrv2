@@ -782,6 +782,8 @@ namespace mrv
         {
             TLRENDER_P();
 
+            p.buffer.reset();
+
             if (p.pipeline_layout != VK_NULL_HANDLE)
             {
                 vkDestroyPipelineLayout(device(), p.pipeline_layout, nullptr);
@@ -829,10 +831,6 @@ namespace mrv
             _sizeHintEvent();
             _setGeometry();
             _clipEvent();
-
-            wait_device();
-            
-            p.buffer.reset();
 
             repositionThumbnail();
         }

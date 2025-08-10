@@ -397,6 +397,11 @@ namespace mrv
         {
             MRV2_VK();
 
+            vk.buffer.reset();
+            vk.stereoBuffer.reset();
+            vk.annotation.reset();
+            vk.overlay.reset();
+
             vk.vbo.reset();
             vk.vao.reset();
             
@@ -651,9 +656,7 @@ namespace mrv
             
                 if (vlk::doCreate(
                         vk.buffer, renderSize, offscreenBufferOptions))
-                {
-                    wait_device();
-                    
+                {   
                     vk.buffer = vlk::OffscreenBuffer::create(
                         ctx, renderSize, offscreenBufferOptions);
                     // As render resolution might have changed,
@@ -869,8 +872,6 @@ namespace mrv
                 if (vlk::doCreate(
                     vk.annotation, viewportSize, offscreenBufferOptions))
                 {
-                    wait_device();
-                    
                     vk.annotation = vlk::OffscreenBuffer::create(
                         ctx, viewportSize, offscreenBufferOptions);
                     vk.avbo.reset();
