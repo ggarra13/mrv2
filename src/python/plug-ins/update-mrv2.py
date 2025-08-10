@@ -14,25 +14,12 @@ GITHUB_RELEASE_NOTES = 'body'
 
 GITHUB_ASSET_RELEASE_DAYS = 3
 
-    
 #
-# Standard libs
-#
-import os, platform, re, inspect, subprocess, sys, tempfile, threading, time
-
-#
-# mrv2 imports
+# mrv2 imports.  We call cmd.update() several times globally to prevent
+# Linux Window managers from saying "program is not responding"
 #
 import mrv2
 from mrv2 import cmd, plugin, session, settings
-
-#
-# pyFLTK import (don't fail if it is not installed).
-# 
-try:
-    from fltk import *
-except Exception as e:
-    pass
 
 try:
     import gettext
@@ -53,6 +40,7 @@ except Exception as e:
         return text
     _ = _gettext
 
+cmd.update()
 
 def is_dir_empty(dir_path):
   """Checks if a directory is empty.
@@ -63,11 +51,14 @@ def is_dir_empty(dir_path):
   Returns:
       True if the directory is empty, False otherwise.
   """
+  import os
   return not os.listdir(dir_path)
 
 # Global variable to store the result of the subprocess
 subprocess_result = None
 install_progress  = 0
+
+cmd.update()
 
 def run_subprocess(command):
     """
@@ -77,6 +68,7 @@ def run_subprocess(command):
         int: Exit code of the process.
     """
     global subprocess_result
+    import subprocess
     try:
         result = subprocess.run(command, shell=True,
                                 check=True, capture_output=True, text=True)
@@ -97,6 +89,10 @@ def fltk_check_callback(data):
     """
 
     global subprocess_result, install_progress
+
+    import os, platform, time
+    from fltk import Fl
+    
     this = data[0]
     download_file = data[1]
 
@@ -149,6 +145,8 @@ def fltk_check_callback(data):
 
         subprocess_result = None  # Reset for next run
         
+cmd.update()
+
 def _get_password_cb(widget, args):
     """FLTK callback to get the secret password, hide the parent window and
     run the command to install the downloaded file with the sudo password.
@@ -157,6 +155,7 @@ def _get_password_cb(widget, args):
         widget (Fl_Widget): FLTK's secret input widget.
         args (list): [self, command, download_file]
     """
+    from fltk import Fl
     this    = args[0]
     command = args[1]
     download_file = args[2]
@@ -177,9 +176,12 @@ def _ignore_cb(widget, args):
     Returns:
         None
     """
+    from fltk import Fl
     widget.parent().hide()
     Fl.check()
     
+
+cmd.update()
 
 def _more_than_5_days_elapsed(release_date_iso):   
     """Compares the release date with the current date and returns True if
@@ -210,6 +212,8 @@ def _more_than_5_days_elapsed(release_date_iso):
         print(_("Invalid ISO 8601 format provided: "),release_date_iso)
         return False
 
+cmd.update()
+
 def _get_latest_release_cb(widget, args):
     """FLTK callback to start the download of the latest release for
     the current platform.  Hides the widget's parent window when done.
@@ -221,6 +225,7 @@ def _get_latest_release_cb(widget, args):
     Returns:
         None
     """
+    from fltk import Fl
     this = args[0]
     release_info = args[1]
     extension = this.get_download_extension()
@@ -243,6 +248,8 @@ class UpdatePlugin(plugin.Plugin):
     startup = True
     
     def __init__(self):
+        import tempfile
+        
         super().__init__()
         self.tempdir = tempfile.gettempdir()
         if settings.checkForUpdates():
@@ -259,9 +266,10 @@ class UpdatePlugin(plugin.Plugin):
         Returns:
             str: The numbers like 0.8.3 without the 'v'.
         """
-        match = re.search(r'v(\d+\.\d+\.\d+)', s)
-        if match:
-            return match.group(1)
+        import re
+        m = re.search(r'v(\d+\.\d+\.\d+)', s)
+        if m:
+            return m.group(1)
         else:
             return _("No match found")
         
@@ -276,6 +284,8 @@ class UpdatePlugin(plugin.Plugin):
         Returns:
             str: Installed executable.
         """
+        import platform
+        
         version = self.match_version(download_file)
         kernel = platform.system()
         exe = None
@@ -318,6 +328,7 @@ class UpdatePlugin(plugin.Plugin):
         """Given a download_file and a platform, create the path to the new
         executable.
         """
+        import os
         version = self.match_version(download_file)
         exe = self.get_installed_executable(download_file)
         
@@ -333,6 +344,8 @@ class UpdatePlugin(plugin.Plugin):
     # Function to start the subprocess in a thread
     def start_subprocess_in_thread(self, command, download_file):
         # Start the timeout callback
+        import threading
+        from fltk import Fl
         data = [ self, download_file ]
         Fl.add_timeout(4.0, fltk_check_callback, data)
         threading.Thread(target=run_subprocess, args=(command,)).start()
@@ -355,6 +368,8 @@ class UpdatePlugin(plugin.Plugin):
             None
         """
         global subprocess_result
+        import platform
+        from fltk import Fl
         cmd = None
         print(_('Trying to install'),download_file + '.')
         kernel = platform.system()
@@ -387,6 +402,8 @@ class UpdatePlugin(plugin.Plugin):
         Returns:
            None
         """
+        from fltk import Fl, Fl_Window, Fl_Secret_Input, fl_rgb_color, \
+            FL_ALIGN_TOP, FL_WHEN_ENTER_KEY, FL_WHEN_NOT_CHANGED
         win = Fl_Window(320, 100, _('Enter Sudo Password'))
         pwd = Fl_Secret_Input(20, 40, win.w() - 40, 40, _('Password'))
         pwd.textcolor(fl_rgb_color(0, 0, 0 ))
@@ -439,6 +456,7 @@ class UpdatePlugin(plugin.Plugin):
         Returns:
            str: The extension for the Linux flavour, or None if undetermined.
         """
+        import os, subprocess
 
         #
         # First, check for common lib databases
@@ -486,18 +504,20 @@ class UpdatePlugin(plugin.Plugin):
         Returns:
             str: The extension of the platform or 'Unknown operating system'
         """
-        os = platform.system()
-        if os == 'Windows':
+        import platform
+        kernel = platform.system()
+        if kernel == 'Windows':
             return '.exe'
-        elif os == 'Linux':
+        elif kernel == 'Linux':
             return self.check_linux_flavor()
-        elif os == 'Darwin':
+        elif kernel == 'Darwin':
             return 'amd64.dmg'
         else:
             return _('Unknown operating system')
 
     def download_file(self, name, download_url):
-        import requests
+        import os, requests
+        from fltk import Fl, Fl_Window, Fl_Progress, FL_ALIGN_TOP
         response = requests.get(download_url, stream=True)
         response.raise_for_status()  # Raise exception for non-200 status codes
         total_size = int(response.headers.get('content-length', 0))
@@ -550,6 +570,8 @@ class UpdatePlugin(plugin.Plugin):
         Returns:
             None
         """
+        from fltk import Fl, Fl_Window, Fl_Text_Buffer, Fl_Text_Display, \
+            fl_rgb_color, Fl_Box, Fl_Button
         date = release_info['published_at']
         win = Fl_Window(640, 600)
         textbuf = Fl_Text_Buffer()
@@ -715,3 +737,4 @@ class UpdatePlugin(plugin.Plugin):
         }
         return menus
         
+cmd.update()
