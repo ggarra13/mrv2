@@ -632,6 +632,8 @@ namespace mrv
         std::string version = "mrv2 v";
         version += mrv::version();
         version += " ";
+        version += mrv::backend();
+        version += " ";
         version += mrv::build_date();
         LOG_STATUS(version);
         LOG_STATUS(msg);

@@ -285,7 +285,6 @@ namespace mrv
 
             {
                 locale::SetAndRestore saved;
-                // vlk::OffscreenBufferBinding binding(vk.stereoBuffer);
 
                 vk.render->begin(renderSize);
                 vk.render->setOCIOOptions(p.ocioOptions);
