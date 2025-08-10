@@ -33,7 +33,7 @@ if [[ -e /usr/bin/hdr-v@mrv2_VERSION@ ]]; then
 fi
 
 # Find the closest version folder in /usr/bin
-closest_version=$(ls -1 "/usr/local/" | grep "@mrv2_NAME@-v" | sort -V | tail -n 1)
+closest_version=$(ls -1 "/usr/local/" | grep "^@mrv2_NAME@-v" | sort -V | tail -n 1)
 
 # Check if a closest version was found
 if [[ -n "$closest_version" && $removed == 1 ]]; then
