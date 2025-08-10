@@ -490,8 +490,8 @@ msgstr "{0} के लिए असमर्थित TLS प्रकार: �
 
 msgid ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/"
-"rt.rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/rt."
+"rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
 "\n"
@@ -648,9 +648,8 @@ msgid ""
 ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
 msgstr ""
 "\n"
-"'other' (:class:`~RationalTime`) "
-"को :attr:`start_time`/:attr:`end_time_exclusive` और बाउंड आर्ग्यूमेंट्स के अनुसार क्लैंप "
-"करें।\n"
+"'other' (:class:`~RationalTime`) को :attr:`start_time`/:attr:"
+"`end_time_exclusive` और बाउंड आर्ग्यूमेंट्स के अनुसार क्लैंप करें।\n"
 
 msgid ""
 "\n"
@@ -658,9 +657,8 @@ msgid ""
 ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
 msgstr ""
 "\n"
-"'other' (:class:`~TimeRange`) "
-"को :attr:`start_time`/:attr:`end_time_exclusive` और बाउंड आर्ग्यूमेंट्स के अनुसार क्लैंप "
-"करें।\n"
+"'other' (:class:`~TimeRange`) को :attr:`start_time`/:attr:"
+"`end_time_exclusive` और बाउंड आर्ग्यूमेंट्स के अनुसार क्लैंप करें।\n"
 
 msgid ""
 "\n"
@@ -1916,21 +1914,6 @@ msgstr "{0} स्ट्रीम कर रहा है {1}"
 msgid "Stop streaming"
 msgstr "स्ट्रीम जारी करना बन्द करें"
 
-msgid "Renderer"
-msgstr "रेंडरर"
-
-msgid "Complexity"
-msgstr "जटिलता"
-
-msgid "Draw Mode"
-msgstr "मोड आरेखित करें"
-
-msgid "Stage Cache"
-msgstr "चरण कैश"
-
-msgid "Disk Cache in GB"
-msgstr "GB में डिस्क कैश"
-
 msgid "Toggle other eye stereo image."
 msgstr "अन्य आँख स्टीरियो छवि टॉगल करें."
 
@@ -2957,20 +2940,17 @@ msgstr "ऑडियो के बिना छवि सहेज रहा ह
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "केवल समय में ऑडियो, लेकिन ऑडियो सहेजने की कोशिश नहीं कर रहा है."
 
-msgid "Vulkan info: {0}"
-msgstr "वल्कन जानकारी: {0}"
-
-msgid "{0}: Invalid OpenGL format and type"
-msgstr "{0}: अवैध OpenGL प्रारूप और प्रकार"
-
-msgid "OpenGL info: {0}"
-msgstr "ओपन- जीएल जानकारी: {0}"
+msgid "Offscreen Buffer info: {0}"
+msgstr "ऑफस्क्रीन बफ़र जानकारी: {0}"
 
 msgid "Saving... {0}"
 msgstr "सहेजा जा रहा है... {0}"
 
-msgid "Unsupported output format"
-msgstr "असमर्थित आउटपुट प्रारूप"
+msgid "Could not read image data from view"
+msgstr "दृश्य से छवि डेटा पढ़ा नहीं जा सका"
+
+msgid "Could not read annotation image from view"
+msgstr "दृश्य से एनोटेशन छवि पढ़ी नहीं जा सकी"
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "{0} समय पर वीडियो आँकड़ा खाली करें"
@@ -2980,12 +2960,6 @@ msgstr "रेंडर आकार: {0}"
 
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr "छवि परत '{0}' जानकारी: {1} {2}"
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "ऑफस्क्रीन बफ़र जानकारी: {0}"
-
-msgid "Unsupported output format: "
-msgstr "असमर्थित आउटपुट प्रारूप: "
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -3792,11 +3766,14 @@ msgstr "     आगे     V: % 4<PRIu64>     A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "      पीछे    V: % 4<PRIu64>     A: % 4<PRIu64>"
 
+msgid "HDR monitor found."
+msgstr "HDR मॉनिटर पाया गया।"
+
+msgid "HDR monitor not found or not configured."
+msgstr "HDR मॉनिटर नहीं मिला या कॉन्फ़िगर नहीं किया गया।"
+
 msgid "Edit Text"
 msgstr "पाठ संपादित करें"
-
-msgid "Invalid font for text drawing"
-msgstr "पाठ चित्रण के लिए अमान्य फ़ॉन्ट"
 
 msgid "Could not convert message to shape: "
 msgstr "संदेश को आकार में परिवर्तित नहीं कर सका:"
@@ -6579,8 +6556,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
+"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
+"exr"
 msgstr ""
 "क्लिप संस्करणों से मेल खाने के लिए उपयोग किया जाने वाला नियमित अभिव्यक्ति (रेगुलर "
 "एक्सप्रेशन)। इसमें तीन चीजें (प्रिफिक्स, संख्या, और सफिक्स) का समूह होना चाहिए। यदि इसे "
@@ -7491,6 +7468,9 @@ msgstr "स्क्रैप मोड"
 msgid "Area Selection Mode"
 msgstr "क्षेत्र चयन विधि"
 
+msgid "Draw Mode"
+msgstr "मोड आरेखित करें"
+
 msgid "Erase Mode"
 msgstr "मिटाने का मोड"
 
@@ -7581,17 +7561,35 @@ msgstr "यदि आप विंडो को बन्द करना चा
 msgid "Toggle About Window"
 msgstr "विंडो के बारे में टॉगल करें"
 
-#~ msgid "Could not read image data from view"
-#~ msgstr "दृश्य से छवि डेटा पढ़ा नहीं जा सका"
+#~ msgid "Renderer"
+#~ msgstr "रेंडरर"
 
-#~ msgid "Could not read annotation image from view"
-#~ msgstr "दृश्य से एनोटेशन छवि पढ़ी नहीं जा सकी"
+#~ msgid "Complexity"
+#~ msgstr "जटिलता"
 
-#~ msgid "HDR monitor found."
-#~ msgstr "HDR मॉनिटर पाया गया।"
+#~ msgid "Stage Cache"
+#~ msgstr "चरण कैश"
 
-#~ msgid "HDR monitor not found or not configured."
-#~ msgstr "HDR मॉनिटर नहीं मिला या कॉन्फ़िगर नहीं किया गया।"
+#~ msgid "Disk Cache in GB"
+#~ msgstr "GB में डिस्क कैश"
+
+#~ msgid "Vulkan info: {0}"
+#~ msgstr "वल्कन जानकारी: {0}"
+
+#~ msgid "{0}: Invalid OpenGL format and type"
+#~ msgstr "{0}: अवैध OpenGL प्रारूप और प्रकार"
+
+#~ msgid "OpenGL info: {0}"
+#~ msgstr "ओपन- जीएल जानकारी: {0}"
+
+#~ msgid "Unsupported output format"
+#~ msgstr "असमर्थित आउटपुट प्रारूप"
+
+#~ msgid "Unsupported output format: "
+#~ msgstr "असमर्थित आउटपुट प्रारूप: "
+
+#~ msgid "Invalid font for text drawing"
+#~ msgstr "पाठ चित्रण के लिए अमान्य फ़ॉन्ट"
 
 #~ msgid "Scrub with Audio"
 #~ msgstr "ऑडियो के साथ ग्रब करें"

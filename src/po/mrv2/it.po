@@ -504,14 +504,14 @@ msgstr "tipo/i operandi non supportati per {0}: RationalTime e {1}"
 
 msgid ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/"
-"rt.rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/rt."
+"rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
 "\n"
 "La classe RationalTime rappresenta una misura del tempo di :math:`rt.value/"
-"rt.rate` secondi. Può essere ridimensionata in un "
-"altro :class:`~RationalTime`.\n"
+"rt.rate` secondi. Può essere ridimensionata in un altro :class:"
+"`~RationalTime`.\n"
 
 msgid ""
 "\n"
@@ -573,8 +573,8 @@ msgstr ""
 
 msgid "Turn a frame number and rate into a :class:`~RationalTime` object."
 msgstr ""
-"Trasformare un numero di fotogrammi e la velocità in un "
-"oggetto :class:`~RationalTime`."
+"Trasformare un numero di fotogrammi e la velocità in un oggetto :class:"
+"`~RationalTime`."
 
 msgid "Returns the frame number based on the current rate."
 msgstr "Restituisce il numero di fotogramma in base al tasso corrente."
@@ -930,8 +930,8 @@ msgid ""
 "duration of 9.\n"
 msgstr ""
 "\n"
-"Crea un :class:`~TimeRange` dall'inizio e dalla "
-"fine :class:`~RationalTime`\\s (esclusivo).\n"
+"Crea un :class:`~TimeRange` dall'inizio e dalla fine :class:"
+"`~RationalTime`\\s (esclusivo).\n"
 "\n"
 "Per esempio, se start_time è 1 e end_time è 10, il ritorno avrà una durata "
 "di 9.\n"
@@ -945,8 +945,8 @@ msgid ""
 "duration of 10.\n"
 msgstr ""
 "\n"
-"Crea un :class:`~TimeRange` dall'inizio e dalla "
-"fine :class:`~RationalTime`\\s (incluso).\n"
+"Crea un :class:`~TimeRange` dall'inizio e dalla fine :class:"
+"`~RationalTime`\\s (incluso).\n"
 "\n"
 "Per esempio, se start_time è 1 e end_time è 10, il ritorno avrà una durata "
 "di 10.\n"
@@ -1947,21 +1947,6 @@ msgstr "Streaming {0} {1}..."
 msgid "Stop streaming"
 msgstr "Smettila di trasmettere in streaming"
 
-msgid "Renderer"
-msgstr "Renderer"
-
-msgid "Complexity"
-msgstr "Complexità"
-
-msgid "Draw Mode"
-msgstr "Modalità di disegno"
-
-msgid "Stage Cache"
-msgstr "Cache per stadio"
-
-msgid "Disk Cache in GB"
-msgstr "Cache disco in GB"
-
 msgid "Toggle other eye stereo image."
 msgstr "Commutare l'altra immagine stereo degli occhi."
 
@@ -2954,8 +2939,8 @@ msgstr "Il profilo VP9 ha bisogno di un'estensione.mp4,.mkv o.webm."
 
 msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
 msgstr ""
-"Il profilo AV1 ha bisogno di un'estensione di film.mp4 o.mkv. Cambiandolo "
-"in.mp4"
+"Il profilo AV1 ha bisogno di un'estensione di film.mp4 o.mkv. Cambiandolo in."
+"mp4"
 
 msgid ""
 "GoPro Cineform profile needs a .mkv movie extension.  Changing it to .mkv"
@@ -3018,20 +3003,17 @@ msgstr "Salvataggio delle immagini senza audio %<PRId64> - %<PRId64>"
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Audio solo nella timeline, ma non cercando di salvare l'audio."
 
-msgid "Vulkan info: {0}"
-msgstr "Informazioni Vulkan: {0}"
-
-msgid "{0}: Invalid OpenGL format and type"
-msgstr "{0}: Formato e tipo OpenGL non valido"
-
-msgid "OpenGL info: {0}"
-msgstr "Informazioni OpenGL: {0}"
+msgid "Offscreen Buffer info: {0}"
+msgstr "Informazioni buffer offscreen: {0}"
 
 msgid "Saving... {0}"
 msgstr "Salvataggio... {0}"
 
-msgid "Unsupported output format"
-msgstr "Formato di output non supportato"
+msgid "Could not read image data from view"
+msgstr "Impossibile leggere i dati dell’immagine dalla vista"
+
+msgid "Could not read annotation image from view"
+msgstr "Impossibile leggere l’immagine delle annotazioni dalla vista"
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "Dati video vuoti al momento {0}. Ripetizione della cornice."
@@ -3041,12 +3023,6 @@ msgstr "रेंडर आकार: {0}"
 
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr "छवि परत '{0}' जानकारी: {1} {2}"
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "Informazioni buffer offscreen: {0}"
-
-msgid "Unsupported output format: "
-msgstr "Formato di output non supportato: "
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -3864,11 +3840,14 @@ msgstr "Prima V: % 4<PRIu64> A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "Dietro V: % 4<PRIu64> A: % 4<PRIu64>"
 
+msgid "HDR monitor found."
+msgstr "Monitor HDR trovato."
+
+msgid "HDR monitor not found or not configured."
+msgstr "Monitor HDR non trovato o non configurato."
+
 msgid "Edit Text"
 msgstr "Modifica testo"
-
-msgid "Invalid font for text drawing"
-msgstr "Tipo di carattere non valido per il disegno di testo"
 
 msgid "Could not convert message to shape: "
 msgstr "Impossibile convertire il messaggio in forma:"
@@ -6720,8 +6699,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
+"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
+"exr"
 msgstr ""
 "Espressione regolare utilizzata per corrispondere alle versioni delle clip. "
 "Deve raggruppare tre elementi (prefisso, numero e suffisso). Se lasciato al "
@@ -7644,6 +7623,9 @@ msgstr "Modalità spruzzo"
 msgid "Area Selection Mode"
 msgstr "Modalità di selezione dell'area"
 
+msgid "Draw Mode"
+msgstr "Modalità di disegno"
+
 msgid "Erase Mode"
 msgstr "Modalità di cancellazione"
 
@@ -7734,17 +7716,35 @@ msgstr "Finestra di commutazione di tasti di avviamento"
 msgid "Toggle About Window"
 msgstr "Commuta la finestra"
 
-#~ msgid "Could not read image data from view"
-#~ msgstr "Impossibile leggere i dati dell’immagine dalla vista"
+#~ msgid "Renderer"
+#~ msgstr "Renderer"
 
-#~ msgid "Could not read annotation image from view"
-#~ msgstr "Impossibile leggere l’immagine delle annotazioni dalla vista"
+#~ msgid "Complexity"
+#~ msgstr "Complexità"
 
-#~ msgid "HDR monitor found."
-#~ msgstr "Monitor HDR trovato."
+#~ msgid "Stage Cache"
+#~ msgstr "Cache per stadio"
 
-#~ msgid "HDR monitor not found or not configured."
-#~ msgstr "Monitor HDR non trovato o non configurato."
+#~ msgid "Disk Cache in GB"
+#~ msgstr "Cache disco in GB"
+
+#~ msgid "Vulkan info: {0}"
+#~ msgstr "Informazioni Vulkan: {0}"
+
+#~ msgid "{0}: Invalid OpenGL format and type"
+#~ msgstr "{0}: Formato e tipo OpenGL non valido"
+
+#~ msgid "OpenGL info: {0}"
+#~ msgstr "Informazioni OpenGL: {0}"
+
+#~ msgid "Unsupported output format"
+#~ msgstr "Formato di output non supportato"
+
+#~ msgid "Unsupported output format: "
+#~ msgstr "Formato di output non supportato: "
+
+#~ msgid "Invalid font for text drawing"
+#~ msgstr "Tipo di carattere non valido per il disegno di testo"
 
 #~ msgid "Scrub with Audio"
 #~ msgstr "Spruzzare con l'audio"
