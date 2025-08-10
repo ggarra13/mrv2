@@ -28,6 +28,8 @@ v1.4.0
 - Fixed macOS distro not installing a local python into the .app directory.
 - Fixed Linux distro shipping two wayland DSOs by mistake.
 - Made macOS Vulkan work with Retina.
+- Fixed Vulkan crashing bug when going to presentation mode with NVidia 575
+  drivers.
 
 
 v1.3.9
