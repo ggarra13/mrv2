@@ -560,7 +560,7 @@ namespace mrv
             
             // Get the command buffer started for the current frame.
             VkCommandBuffer cmd = getCurrentCommandBuffer();
-            end_render_pass(cmd);
+            end_render_pass();
 
             vk.cmd = cmd;
             
@@ -944,7 +944,8 @@ namespace mrv
 
                     _readOverlay(vk.overlay);
 
-                    vk.overlay->transitionToColorAttachment(cmd);
+                    if (vk.overlay)
+                        vk.overlay->transitionToColorAttachment(cmd);
                 }
                 else
                 {
@@ -1215,7 +1216,7 @@ namespace mrv
             if (selection.max.x >= 0)
                 _drawAreaSelection();
             
-            end_render_pass(cmd);
+            end_render_pass();
 
             if (selection.max.x >= 0)
             {
@@ -1249,7 +1250,10 @@ namespace mrv
             if (update)
                 updatePixelBar();
 
-            vk.buffer->transitionToColorAttachment(cmd);
+            if (vk.buffer)
+            {
+                vk.buffer->transitionToColorAttachment(cmd);
+            }
             if (vk.annotation)
             {
                 vk.annotation->transitionToColorAttachment(cmd);

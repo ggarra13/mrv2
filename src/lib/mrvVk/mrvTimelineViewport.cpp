@@ -2499,7 +2499,6 @@ namespace mrv
                 if (!_hasSecondaryViewport())
                 {
                     hide_ui_state(p.ui);
-                    p.ui->uiTimeline->hide();
                 }
                 _setFullScreen(active);
                 p.presentation = true;
