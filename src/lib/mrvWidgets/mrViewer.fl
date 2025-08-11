@@ -7,6 +7,7 @@ i18n_gnu_function gettext
 i18n_gnu_static_function gettext_noop
 header_name {.h}
 code_name {.cxx}
+include_guard {}
 decl {\#ifdef _WIN32
 \#include <winsock2.h>
 \#endif} {public global
@@ -36,7 +37,7 @@ decl {\#include "mrvIcons/SwingMode.h"} {public global
 decl {\#include "mrvIcons/Mute.h"} {public global
 }
 
-decl {\#include "mrvIcons/Audio.h"} {selected public global
+decl {\#include "mrvIcons/Audio.h"} {public global
 }
 
 decl {\#include "mrvWidgets/mrvAudioButton.h"} {public global
@@ -844,7 +845,7 @@ if (reason == FL_REASON_CLOSED)
         xywh {0 0 933 608} box FLAT_BOX resizable fixed_size_tuples {5  0 30  1 29  3 29  4 30  5 25 }
       } {
         Fl_Group uiMenuGroup {
-          label MenuBar
+          label MenuBar open
           xywh {0 0 933 30} box FLAT_BOX labeltype NO_LABEL
         } {
           Fl_Group {} {open
@@ -862,7 +863,17 @@ bool presentation = uiView->getPresentationMode();
 if (!presentation)
 {
     if (value) mrv::editMode = mrv::EditMode::kFull;
-    else       mrv::editMode = mrv::EditMode::kTimeline;
+    else
+    {
+	if (v->uiPrefs->uiPrefsTimeline->value())
+       {
+           mrv::editMode = mrv::EditMode::kTimeline;
+       }
+       else
+       {
+	mrv::editMode = mrv::EditMode::kNone;
+       }
+    }
     set_edit_mode_cb(mrv::editMode, v);
     //mrv::toggle_timeline_bar(nullptr, v);
 }
@@ -871,7 +882,7 @@ else
     if (value) mrv::editMode = mrv::EditMode::kFull;
     else       mrv::editMode = mrv::EditMode::kNone;
     mrv::toggle_timeline_bar(nullptr, v);
-}}
+}} selected
               tooltip {Toggle Edit Mode.} xywh {813 0 79 30} down_box DOWN_BOX selection_color 95 labelsize 12 align 192
             }
           }
@@ -887,7 +898,7 @@ else
           xywh {0 30 933 29} box ENGRAVED_BOX labeltype NO_LABEL
         } {
           Fl_Group {} {
-            label Layers open
+            label Layers
             xywh {0 30 247 29} color 1397969664 labeltype NO_LABEL
           } {
             Fl_Menu_Button uiColorChannel {
@@ -905,7 +916,7 @@ model->setLayer(item, o->value());} open
             } {}
           }
           Fl_Group uiCOLORS {
-            label {Exposure, Saturation, and Gamma} open
+            label {Exposure, Saturation, and Gamma}
             xywh {247 30 686 29} labeltype NO_LABEL
           } {
             Fl_Group {} {
@@ -1094,7 +1105,7 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
           }
         }
         Fl_Tile uiTileGroup {
-          label TileGroup open
+          label TileGroup
           xywh {0 59 933 465} labeltype NO_LABEL
           code0 {;}
           class {mrv::Tile}
@@ -1351,7 +1362,7 @@ settings->setValue( mrv::kPenColorA, a);}
           } {}
         }
         Fl_Group uiPixelBar {
-          label PixelBar open
+          label PixelBar
           xywh {0 553 933 30} box FLAT_BOX color 56 labeltype NO_LABEL labelcolor 17
         } {
           Fl_Group uiPixelWindow {open

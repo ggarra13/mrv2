@@ -30,6 +30,7 @@ v1.4.0
 - Made macOS Vulkan work with Retina.
 - Fixed Vulkan crashing bug when going to presentation mode with NVidia 575
   drivers.
+- Fixed hiding of Timeline in normal mode leaving a gap of 30 pixels.
 
 
 v1.3.9

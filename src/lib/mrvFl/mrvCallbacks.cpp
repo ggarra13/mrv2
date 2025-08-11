@@ -1422,12 +1422,10 @@ namespace mrv
 
         // These are needed to clean the resources and avoid
         // OpenGL flickering.
-#ifdef OPENGL_BACKEND
         ui->uiView->refresh();
         ui->uiView->valid(0);
         ui->uiTimeline->refresh();
         ui->uiTimeline->valid(0);
-#endif
 
         bool send = ui->uiPrefs->SendUI->value();
         if (send)

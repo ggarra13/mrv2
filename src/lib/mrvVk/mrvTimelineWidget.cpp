@@ -880,8 +880,9 @@ namespace mrv
                         if (vlk::doCreate(
                                 p.buffer, renderSize, offscreenBufferOptions))
                         {
-                            wait_device();
-                            
+                            std::cerr << "create timeline buffer "
+                                      << renderSize
+                                      << std::endl;
                             p.buffer = vlk::OffscreenBuffer::create(
                                 ctx, renderSize, offscreenBufferOptions);
                             prepare_mesh();

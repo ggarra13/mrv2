@@ -2873,7 +2873,7 @@ namespace mrv
         return true;
     }
 
-    /// @todo: REFACTOR THIS PLEASE
+    /// \@todo: REFACTOR THIS PLEASE
     EditMode editMode = EditMode::kTimeline;
     int editModeH = 30;
     const int kMinEditModeH = 30;
@@ -2882,7 +2882,7 @@ namespace mrv
     {
         int H = ui->uiTimelineGroup->h();
 
-        if (H == 0)
+        if (!ui->uiBottomBar->visible())
         {
             editMode = EditMode::kNone;
         }
@@ -2947,6 +2947,8 @@ namespace mrv
             return H;
         else if (editMode == EditMode::kSaved)
             return editModeH;
+        else if (editMode == EditMode::kNone)
+            return 0;
 
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
@@ -3177,6 +3179,7 @@ namespace mrv
             //          mode to None.  We calculate the viewGroupH (height),
             //          but we must not calculate H as 0, as that would collapse
             //          the timeline and can crash the X11 server.
+            editMode = mode;
             viewGroupH = 0;
         }
         else
@@ -3313,6 +3316,8 @@ namespace mrv
                   << TimelineGroup->h() << std::endl;
 #endif
 
+        ui->uiView->valid(0);
+        ui->uiView->refresh();
 
         // This is needed as XWayland and Wayland would leave traces of the
         // toolbar icons.

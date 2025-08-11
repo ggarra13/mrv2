@@ -397,10 +397,15 @@ namespace mrv
         {
             MRV2_VK();
 
-            vk.buffer.reset();
-            vk.stereoBuffer.reset();
+            //
+            // Do not destroy buffers based on resolution here.
+            //
+            // vk.buffer.reset();
+            // vk.stereoBuffer.reset();
+            // vk.overlay.reset();
+
+            // Destroy viewport size buffer here
             vk.annotation.reset();
-            vk.overlay.reset();
 
             vk.vbo.reset();
             vk.vao.reset();
@@ -452,6 +457,7 @@ namespace mrv
             
             // Destroy Buffers
             vk.buffer.reset();
+            vk.stereoBuffer.reset();
             vk.annotation.reset();
             vk.overlay.reset();
 
@@ -656,7 +662,7 @@ namespace mrv
             
                 if (vlk::doCreate(
                         vk.buffer, renderSize, offscreenBufferOptions))
-                {   
+                {
                     vk.buffer = vlk::OffscreenBuffer::create(
                         ctx, renderSize, offscreenBufferOptions);
                     // As render resolution might have changed,
