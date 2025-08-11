@@ -72,6 +72,8 @@ namespace mrv
         std::shared_ptr<observer::ValueObserver<timeline::PlayerCacheInfo> >
             cacheInfoObserver;
 
+        //! Variable used to mark stepping behavior so the playback happens in
+        //! 1/rate of time to play audio while stepping back/fwd.
         bool isStepping = false;
 
         //! Measuring timer
@@ -305,7 +307,8 @@ namespace mrv
             panel::imageInfoPanel->refresh();
     }
 
-    void TimelinePlayer::setPlayback(timeline::Playback value)
+    void TimelinePlayer::setPlayback(const timeline::Playback value,
+                                     const bool scrubbing)
     {
         pushMessage("seek", currentTime());
         pushMessage("setPlayback", value);
@@ -316,7 +319,8 @@ namespace mrv
             _p->isStepping = false;
             // Send a seek request to make sure we are at the right time
             pushMessage("seek", currentTime());
-            panel::redrawThumbnails();
+            if (!scrubbing)
+                panel::redrawThumbnails();
         }
     }
 

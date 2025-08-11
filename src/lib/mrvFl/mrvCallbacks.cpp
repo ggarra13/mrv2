@@ -1757,9 +1757,16 @@ namespace mrv
         toggle_ui_bar(ui, ui->uiBottomBar);
         save_ui_state(ui, ui->uiBottomBar);
         if (ui->uiBottomBar->visible())
+        {
+            if (editMode == EditMode::kNone)
+                editMode = EditMode::kSaved;
+            
             set_edit_mode_cb(editMode, ui);
+        }
         else
+        {
             set_edit_mode_cb(EditMode::kNone, ui);
+        }
         
         // These are needed to clean the resources and avoid
         // OpenGL flickering.

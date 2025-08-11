@@ -155,7 +155,7 @@ namespace mrv
         void setSpeed(double);
 
         //! Set the playback mode.
-        void setPlayback(tl::timeline::Playback);
+        void setPlayback(tl::timeline::Playback, const bool scrubbing = false);
 
         //! Stop playback.
         void stop();

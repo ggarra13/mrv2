@@ -720,8 +720,8 @@ namespace mrv
                     {
                         p.shader = vlk::Shader::create(
                             ctx,
-                            timeline_vlk::Vertex3_spv,
-                            timeline_vlk::Vertex3_spv_len,
+                            timeline_vlk::Vertex2_spv,
+                            timeline_vlk::Vertex2_spv_len,
                             textureFragment_spv,
                             textureFragment_spv_len,
                             "timeline p.shader");
@@ -757,6 +757,7 @@ namespace mrv
             {
                 p.vbo = vlk::VBO::create(
                     mesh.triangles.size() * 3, vlk::VBOType::Pos2_F32_UV_U16);
+                p.vao.reset();
             }
             if (p.vbo)
             {
@@ -880,13 +881,8 @@ namespace mrv
                         if (vlk::doCreate(
                                 p.buffer, renderSize, offscreenBufferOptions))
                         {
-                            std::cerr << "create timeline buffer "
-                                      << renderSize
-                                      << std::endl;
                             p.buffer = vlk::OffscreenBuffer::create(
                                 ctx, renderSize, offscreenBufferOptions);
-                            prepare_mesh();
-                            prepare_pipeline();
                         }
                     }
                     else
@@ -1110,9 +1106,6 @@ namespace mrv
         void TimelineWidget::prepare_pipeline()
         {
             TLRENDER_P();
-
-            assert(p.vbo);
-            assert(p.shader);
             
             // Elements of new Pipeline (fill with mesh info)
             vlk::VertexInputStateInfo vi;
@@ -2127,11 +2120,6 @@ namespace mrv
             }
         }
 
-        void TimelineWidget::_createTimelineWidget()
-        {
-            TLRENDER_P();
-        }
-        
     } // namespace vulkan
 
 } // namespace mrv

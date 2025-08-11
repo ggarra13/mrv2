@@ -497,8 +497,9 @@ namespace mrv
                         if (!p.isScrubbing && p.player &&
                             p.actionMode == ActionMode::kScrub)
                         {
-                            p.player->setPlayback(timeline::Playback::Stop);
                             p.isScrubbing = true;
+                            p.player->setPlayback(timeline::Playback::Stop,
+                                                  p.isScrubbing);
                         }
                         
                         p.lastEvent = FL_PUSH;
