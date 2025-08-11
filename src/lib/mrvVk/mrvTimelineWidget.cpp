@@ -880,7 +880,7 @@ namespace mrv
                             p.style->getColorRole(ui::ColorRole::Window);
                         if (vlk::doCreate(
                                 p.buffer, renderSize, offscreenBufferOptions))
-                        {
+                        { 
                             p.buffer = vlk::OffscreenBuffer::create(
                                 ctx, renderSize, offscreenBufferOptions);
                         }

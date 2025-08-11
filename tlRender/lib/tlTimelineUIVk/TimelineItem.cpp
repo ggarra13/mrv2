@@ -411,8 +411,6 @@ namespace tl
         {
             IItem::drawOverlayEvent(drawRect, event);
             TLRENDER_P();
-
-            // return;   // 56-58 fps
             
             const math::Box2i& g = _geometry;
 
@@ -429,25 +427,15 @@ namespace tl
                 math::Box2i(g.min.x, y, g.w(), h),
                 event.style->getColorRole(ui::ColorRole::Border));
 
-            // return;  // 58-60 fps after caching 5000-6000 frames
-
             _drawInOutPoints(drawRect, event); // draws in-out points
             _drawTimeTicks(drawRect, event);   // draws time ticks
 
-            // return;  // 52-57 fps after caching 5000-6000 frames
-
             _drawFrameMarkers(drawRect, event);  // draws optional markers
             _drawTimeLabels(drawRect, event);  // draws labels next to time ticks
-
-            // return;  // 50-55 fps after caching 5000-6000 frames
             
             _drawCacheInfo(drawRect, event);     // draws audio and video cache
-            
-            //return;  // 47-51 fps after caching 5000-6000 frames
 
             _drawCurrentTime(drawRect, event);   // draws red line and frame text
-
-            // return;  // 44-48 fps after caching 5000-6000 frames
 
             if (p.mouse.currentDropTarget >= 0 &&
                 p.mouse.currentDropTarget < p.mouse.dropTargets.size())

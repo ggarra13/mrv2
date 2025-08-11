@@ -865,7 +865,7 @@ if (!presentation)
     if (value) mrv::editMode = mrv::EditMode::kFull;
     else
     {
-	if (v->uiPrefs->uiPrefsTimeline->value())
+      if (v->uiPrefs->uiPrefsTimeline->value())
        {
            mrv::editMode = mrv::EditMode::kTimeline;
        }

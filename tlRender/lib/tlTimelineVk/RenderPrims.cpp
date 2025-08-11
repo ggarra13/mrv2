@@ -20,6 +20,7 @@ namespace tl
             TLRENDER_P();
 
             const size_t size = mesh.triangles.size();
+            if (size == 0) return;
 
             auto type = vlk::VBOType::Pos3_F32;
             if (!mesh.t.empty() && !mesh.c.empty())
@@ -355,9 +356,11 @@ namespace tl
         {
             TLRENDER_P();
             
-            const auto& textures = p.glyphTextureAtlas->getTextures();
-            
             const geom::TriangleMesh2& mesh = info.mesh;
+            const size_t size = mesh.triangles.size();
+            if (size == 0) return;
+            
+            const auto& textures = p.glyphTextureAtlas->getTextures();
             const unsigned textureIndex = info.textureId;
             const math::Matrix4x4f transform =
                 p.transform *
@@ -382,7 +385,7 @@ namespace tl
             ds.depthTestEnable = VK_FALSE;
             ds.depthWriteEnable = VK_FALSE;
             ds.stencilTestEnable = VK_FALSE;
-            
+
             createPipeline("text", "text",
                            getRenderPass(), p.shaders["text"],
                            p.vbos["text"], cb, ds);

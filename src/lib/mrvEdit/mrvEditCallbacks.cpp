@@ -2875,7 +2875,7 @@ namespace mrv
 
     /// \@todo: REFACTOR THIS PLEASE
     EditMode editMode = EditMode::kTimeline;
-    int editModeH = 30;
+    int      editModeH = 30;
     const int kMinEditModeH = 30;
 
     void save_edit_mode_state(ViewerUI* ui)
@@ -3144,34 +3144,39 @@ namespace mrv
     void set_edit_mode_cb(EditMode mode, ViewerUI* ui)
     {
         const int kDragBarHeight = 8;
+        
 
+        // This is the main tile position.
         Fl_Tile* tileGroup = ui->uiTileGroup;
-        Fl_Group* TimelineGroup = ui->uiTimelineGroup;
-        Fl_Flex* viewGroup = ui->uiViewGroup;
-        if (ui->uiBottomBar->visible())
-        {
-            if (!tileGroup->visible())
-                tileGroup->show();
-            if (!viewGroup->visible())
-                viewGroup->show();
-        }
-
         int tileGroupY = tileGroup->y();
-        int oldY = TimelineGroup->y();
-        int timelineH = TimelineGroup->h();
         int tileGroupH = tileGroup->h();
-        int H = kMinEditModeH; // timeline height
-        int viewGroupH = H;
+
+        // This is the timeline group within the tile.
+        Fl_Group* TimelineGroup = ui->uiTimelineGroup;
+        int oldY = TimelineGroup->y();
+        int newY = oldY;
+
+        // This is the main viewport with the action items.
+        Fl_Flex* viewGroup = ui->uiViewGroup;
+        
+        // Set some defaults
+        int H = kMinEditModeH;            // min. timeline height
+        int viewGroupH = tileGroupH - H;  // max. viewport with timeline
+        
         auto player = ui->uiView->getTimelinePlayer();
         if (mode == EditMode::kFull && player)
         {
-            editMode = mode;
+            // If full editing, save the edit mode
             H = calculate_edit_viewport_size(ui);
-            editModeH = viewGroupH = H;
+            viewGroupH = tileGroupH - H;
+            editModeH = H;
+            editMode = mode;
         }
         else if (mode == EditMode::kSaved)
         {
-            H = viewGroupH = editModeH;
+            H = editModeH;
+            viewGroupH = tileGroupH - H;
+            editMode = mode;
         }
         else if (mode == EditMode::kNone)
         {
@@ -3179,28 +3184,32 @@ namespace mrv
             //          mode to None.  We calculate the viewGroupH (height),
             //          but we must not calculate H as 0, as that would collapse
             //          the timeline and can crash the X11 server.
+            viewGroupH = tileGroupH;
+            H = kMinEditModeH; // timeline height
+            newY = oldY;
             editMode = mode;
-            viewGroupH = 0;
+            TimelineGroup->hide();
         }
         else
         {
+            // Timeline mode
             H = kMinEditModeH; // timeline height
-            viewGroupH = editModeH = H;
+            viewGroupH = tileGroupH - H;
+            newY = tileGroupY + viewGroupH;
+            editMode = mode;
         }
 
-        int oldy = TimelineGroup->y();
-        int newY = tileGroupY + tileGroupH - H;
-        viewGroupH = tileGroupH - viewGroupH;
 
-#if 0
+#if 1
         std::cerr << "1 TimelineGroup->visible()="
                   << TimelineGroup->visible() << std::endl;
-        std::cerr << "1 editMode=" << editMode << std::endl;
-        std::cerr << "1 tileGroupY=" << tileGroupY << std::endl;
-        std::cerr << "1    oldY=" << oldY - tileGroupY << std::endl;
-        std::cerr << " newY=" << newY - tileGroupY << std::endl;
-        std::cerr << "tileGroupH=" << tileGroupH << std::endl;
-        std::cerr << "    H=" << H << std::endl;
+        std::cerr << "1    editMode=" << editMode << std::endl;
+        std::cerr << "1  tileGroupY=" << tileGroupY << std::endl;
+        std::cerr << "1        oldY=" << oldY - tileGroupY << std::endl;
+        std::cerr << "1        newY=" << newY - tileGroupY << std::endl;
+        std::cerr << "1  tileGroupH=" << tileGroupH << std::endl;
+        std::cerr << "1  viewGroupH=" << viewGroupH << std::endl;
+        std::cerr << "1   timelineH=" << H << std::endl;
 #endif
 
         // \@bug:
@@ -3221,12 +3230,14 @@ namespace mrv
         {
             if (ui->uiBottomBar->visible())
             {
+                if (!ui->uiTimelineGroup->visible())
+                {
+                    TimelineGroup->show();
+                }
                 if (!ui->uiTimeline->visible())
                 {
                     ui->uiTimeline->show();
                 }
-                if (!ui->uiTimelineGroup->visible())
-                    TimelineGroup->show();
             }
             else
             {
