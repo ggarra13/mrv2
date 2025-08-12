@@ -192,6 +192,9 @@ namespace mrv
                     _("&Copy/&Filename"), 0, (Fl_Callback*)copy_filename_cb, 0,
                     0);
                 menu.add(
+                    _("&Update/&Thumbnails"), 0,
+                    (Fl_Callback*)redraw_thumbnails_cb, 0, 0);
+                menu.add(
                     _("&Show/In &File Manager"), 0,
                     (Fl_Callback*)file_manager_cb, 0, 0);
 

@@ -280,6 +280,9 @@ namespace mrv
         gui.get("panel_thumbnails", tmp, 1);
         uiPrefs->uiPrefsPanelThumbnails->value(tmp);
 
+        gui.get("panel_thumbnails_manually", tmp, 0);
+        uiPrefs->uiPrefsManualPanelThumbnails->value(tmp);
+
         gui.get("remove_edls", tmp, 1);
         uiPrefs->uiPrefsRemoveEDLs->value(tmp);
 
@@ -1267,6 +1270,8 @@ namespace mrv
         gui.set(
             "timeline_thumbnails", uiPrefs->uiPrefsTimelineThumbnails->value());
         gui.set("panel_thumbnails", uiPrefs->uiPrefsPanelThumbnails->value());
+        gui.set("panel_thumbnails_manually",
+                uiPrefs->uiPrefsManualPanelThumbnails->value());
         gui.set("remove_edls", uiPrefs->uiPrefsRemoveEDLs->value());
         gui.set("timeline_edit_mode", uiPrefs->uiPrefsEditMode->value());
         gui.set("timeline_edit_view", uiPrefs->uiPrefsEditView->value());

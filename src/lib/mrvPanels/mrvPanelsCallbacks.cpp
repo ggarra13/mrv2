@@ -55,9 +55,12 @@ namespace mrv
             return one_panel_only;
         }
 
-        void redrawThumbnails(bool clearCache)
+        void redrawThumbnails(bool clearCache, bool force)
         {
             using namespace panel;
+            if (!force &&
+                App::ui->uiPrefs->uiPrefsManualPanelThumbnails->value())
+                return;
             if (filesPanel)
             {
                 if (clearCache) filesPanel->clearCache();
@@ -97,6 +100,11 @@ namespace mrv
                 playlistPanel->refresh();
         }
 
+        void redraw_thumbnails_cb(Fl_Widget* w, void* data)
+        {
+            redrawThumbnails(true, true);
+        }
+        
         void removePanels(ViewerUI* ui)
         {
             using namespace panel;

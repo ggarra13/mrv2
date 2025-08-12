@@ -91,7 +91,8 @@ namespace mrv
 
         //! \name Thumbnail functions.
         ///@{
-        void redrawThumbnails(bool clearCache = false);
+        void redrawThumbnails(bool clearCache = false, bool force = false);
+        void redraw_thumbnails_cb(Fl_Widget* w, void* data);
         void refreshThumbnails();
         ///@}
 

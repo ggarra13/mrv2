@@ -11,7 +11,8 @@ v1.4.0
 - Added a Preference to set a multiplier on how slow with Alt + LMB.
 - Added a Preference to control how scrubbing looping behavior works.  It can be set to Button (the UI timeline setting), Inactive or Active.
 - Fixed Vulkan's DPI and scaling of images/videos within the viewport.
-- Made audio stop playback when the window is minimized, except on Wayland.
+- Made audio stop playback when the window is minimized, except on older
+  Wayland versions.
 - Fixed YUV Original look up crashing the viewer.
 - Fixed YUV Original pixel values as they were not matching the Full ones.
 - Added Preferences->Behavior->Allow Screen Saver to control whether mrv2
@@ -34,6 +35,9 @@ v1.4.0
 - Fixed a lag when scrubbing with one or more of the thumbnail panels active.
 - Fixed fullscreen mode in Vulkan backend.
 - Fixed loading of some animated .gif files.
+- Added a Preferences->Thumbnails->Refresh Thumbnails in Panels Manually to
+  avoid auto refreshing of thumbnails.  You have to go to any thumbnail and
+  RMB->Update->Thumbnails.
 
 
 v1.3.9

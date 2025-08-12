@@ -93,7 +93,7 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {142 155 853 466} type Double hide resizable
+      xywh {0 0 853 466} type Double hide resizable
       code0 {main = m;}
     } {
       Fl_Group {} {open
@@ -865,21 +865,13 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
               }
             }
             Fl_Group {} {
-              label Thumbnails
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+              label Thumbnails open
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
-                label Thumbnails
+                label Thumbnails open
                 xywh {325 63 480 316} box ROUNDED_BOX
               } {
-                Fl_Check_Button uiPrefsTimelineThumbnails {
-                  label {Preview Thumbnails above Timeline}
-                  tooltip {Preview Thumbnails in a rectangle above Timeline} xywh {398 185 370 20} down_box DOWN_BOX value 1
-                }
-                Fl_Check_Button uiPrefsPanelThumbnails {
-                  label {Preview Thumbnails on Panels}
-                  tooltip {Preview Thumbnails in Panels} xywh {398 222 370 20} down_box DOWN_BOX value 1
-                }
                 Fl_Choice uiPrefsEditThumbnails {
                   label {Edit Viewport} open
                   tooltip {How to display timeline thumbnails by default.} xywh {398 140 175 28} box THIN_DOWN_BOX down_box BORDER_BOX align 8
@@ -901,6 +893,18 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                     label Large
                     xywh {45 45 100 20}
                   }
+                }
+                Fl_Check_Button uiPrefsTimelineThumbnails {
+                  label {Preview Thumbnails above Timeline}
+                  tooltip {Preview Thumbnails in a rectangle above Timeline} xywh {398 185 370 20} down_box DOWN_BOX value 1
+                }
+                Fl_Check_Button uiPrefsManualPanelThumbnails {
+                  label {Refresh Thumbnails on Panels Manuallly} selected
+                  tooltip {When this option is on, thumbnails in panels won't be refreshed automatically.  You will have to use RMB->Update Thumbnail on the Thumbnail.} xywh {398 228 370 20} down_box DOWN_BOX
+                }
+                Fl_Check_Button uiPrefsPanelThumbnails {
+                  label {Preview Thumbnails on Panels}
+                  tooltip {Preview Thumbnails in Panels} xywh {398 267 370 20} down_box DOWN_BOX value 1
                 }
               }
             }
@@ -949,11 +953,11 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
               }
             }
             Fl_Group {} {
-              label Playback open
+              label Playback
               xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
-                label Defaults open
+                label Defaults
                 xywh {310 71 500 312} box ROUNDED_BOX align 5
               } {
                 Fl_Check_Button uiPrefsAutoPlayback {
@@ -1552,7 +1556,7 @@ v->uiOCIO_Display_View->do_callback();}
               }
             }
             Fl_Group {} {
-              label Video open
+              label Video
               xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {open
@@ -1789,8 +1793,8 @@ v->uiOCIO_Display_View->do_callback();}
               }
             }
             Fl_Group {} {
-              label Behavior open
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5
+              label Behavior
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label Behavior open
@@ -1811,7 +1815,7 @@ v->uiOCIO_Display_View->do_callback();}
                   }
                 }
                 Fl_Choice uiPrefsAllowScreenSaver {
-                  label {Allow Screen Saver} open selected
+                  label {Allow Screen Saver} open
                   tooltip {This setting controls whether mrv2 will block the screen saver when running.} xywh {487 192 255 25} down_box BORDER_BOX align 132 textcolor 32
                   class {mrv::Choice}
                 } {
