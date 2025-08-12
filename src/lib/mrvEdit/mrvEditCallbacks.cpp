@@ -3200,7 +3200,7 @@ namespace mrv
         }
 
 
-#if 1
+#if 0
         std::cerr << "1 TimelineGroup->visible()="
                   << TimelineGroup->visible() << std::endl;
         std::cerr << "1    editMode=" << editMode << std::endl;
