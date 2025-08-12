@@ -1356,8 +1356,6 @@ namespace mrv
             {
                 if (!p.presentation)
                     resizeWindow();
-                else
-                    frameView();
             }
             else if (p.frameView && p.switchClip)
             {
@@ -1716,7 +1714,7 @@ namespace mrv
 
             bool alwaysFrameView = (bool)uiPrefs->uiPrefsAutoFitImage->value();
             p.frameView = alwaysFrameView;
-            bool frameView = p.frameView;
+            bool frameView = alwaysFrameView;
 
             if (uiPrefs->uiWindowFixedSize->value())
             {
@@ -1847,39 +1845,11 @@ namespace mrv
             if (frameView)
             {
                 // Wait a little so that resizing/maximizing takes place.
-                if (use_maximize)
-                    wait::milliseconds(100);
-                else
-                    wait::milliseconds(100);                
+                Fl::wait(0.01);
                 _frameView();
             }
 
             set_edit_mode_cb(editMode, p.ui);
-
-#ifdef DEBUG_SCALING
-            HBars = 0;
-            TVH = 0;
-
-            // Take into account the different UI bars
-            if (p.ui->uiMenuGroup->visible())
-                HBars += p.ui->uiMenuGroup->h();
-
-            if (p.ui->uiTopBar->visible())
-                HBars += p.ui->uiTopBar->h();
-
-            if (p.ui->uiPixelBar->visible())
-                HBars += p.ui->uiPixelBar->h();
-
-            if (p.ui->uiBottomBar->visible())
-            {
-                HBars += p.ui->uiBottomBar->h();
-            }
-
-            if (p.ui->uiStatusGroup->visible())
-                HBars += p.ui->uiStatusGroup->h();
-
-            TVH = calculate_edit_viewport_size(p.ui);
-#endif
 
             // We need to adjust dock group too.  These lines are needed.
             auto viewGroup = p.ui->uiViewGroup;

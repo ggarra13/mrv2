@@ -1342,8 +1342,6 @@ namespace mrv
             {
                 if (!p.presentation)
                     resizeWindow();
-                else
-                    frameView();
             }
             else if (p.frameView && p.switchClip)
             {
