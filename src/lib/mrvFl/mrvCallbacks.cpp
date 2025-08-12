@@ -1396,10 +1396,8 @@ namespace mrv
 
     void toggle_fullscreen_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        bool active = true;
-        const Fl_Menu_Item* item = m->mvalue();
-        if (!item->value())
-            active = false;
+        MyViewport* view = ui->uiView;
+        bool active = !view->getFullScreenMode();
         ui->uiView->setFullScreenMode(active);
 
         // These are needed to clean the resources and avoid
@@ -1412,13 +1410,15 @@ namespace mrv
         bool send = ui->uiPrefs->SendUI->value();
         if (send)
             tcp->pushMessage("Fullscreen", active);
+        
+        ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
     void toggle_presentation_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         MyViewport* view = ui->uiView;
-        bool presentation = view->getPresentationMode();
-        view->setPresentationMode(!presentation);
+        bool presentation = !view->getPresentationMode();
+        view->setPresentationMode(presentation);
 
         // These are needed to clean the resources and avoid
         // OpenGL flickering.

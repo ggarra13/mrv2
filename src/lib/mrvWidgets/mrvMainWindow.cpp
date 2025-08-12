@@ -815,7 +815,7 @@ namespace mrv
                 p.hidden = false;
             }
         }
-
+        
         int ret = DropWindow::handle(event);
         return ret;
     }

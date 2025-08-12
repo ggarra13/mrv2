@@ -2402,6 +2402,7 @@ namespace mrv
                 if (w->fullscreen_active())
                 {
                     w->fullscreen_off();
+                    w->wait_for_expose();
                 }
             }
             else
@@ -2491,7 +2492,11 @@ namespace mrv
         {
             TLRENDER_P();
 
-            MainWindow* w = p.ui->uiMain;
+            if (p.fullScreen == active)
+                return;
+            
+            p.fullScreen = active;
+     
             if (!active)
             {
                 if (!p.presentation)
@@ -2505,7 +2510,6 @@ namespace mrv
                         0.01, (Fl_Timeout_Handler)restore_ui_state, p.ui);
 #endif
                 }
-                p.fullScreen = false;
                 p.presentation = false;
             }
             else
@@ -2514,14 +2518,8 @@ namespace mrv
                     restore_ui_state(p.ui);
                 save_ui_state(p.ui);
                 _setFullScreen(true);
-                if (!p.presentation)
-                    Fl::add_timeout(
-                        0.0, (Fl_Timeout_Handler)restore_ui_state, p.ui);
                 p.presentation = false;
-                p.fullScreen = true;
             }
-
-            w->fill_menu(p.ui->uiMenuBar);
         }
 
         void TimelineViewport::setMaximized() noexcept
