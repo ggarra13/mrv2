@@ -33,6 +33,7 @@ v1.4.0
 - Fixed hiding of Timeline in normal mode leaving a gap of 30 pixels.
 - Fixed a lag when scrubbing with one or more of the thumbnail panels active.
 - Fixed fullscreen mode in Vulkan backend.
+- Fixed loading of some animated .gif files.
 
 
 v1.3.9

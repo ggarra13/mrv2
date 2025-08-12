@@ -402,16 +402,18 @@ namespace tl
 
                 switch (_avInputPixelFormat)
                 {
+                case AV_PIX_FMT_BGR24:
                 case AV_PIX_FMT_RGB24:
-                    _avOutputPixelFormat = _avInputPixelFormat;
+                    _avOutputPixelFormat = AV_PIX_FMT_RGB24;
                     _info.pixelType = image::PixelType::RGB_U8;
                     break;
                 case AV_PIX_FMT_GRAY8:
                     _avOutputPixelFormat = _avInputPixelFormat;
                     _info.pixelType = image::PixelType::L_U8;
                     break;
+                case AV_PIX_FMT_BGRA:
                 case AV_PIX_FMT_RGBA:
-                    _avOutputPixelFormat = _avInputPixelFormat;
+                    _avOutputPixelFormat = AV_PIX_FMT_RGBA;
                     _info.pixelType = image::PixelType::RGBA_U8;
                     break;
                 case AV_PIX_FMT_YUVJ420P: // Deprecated format.
@@ -639,17 +641,8 @@ namespace tl
                     _info.pixelType = image::PixelType::RGBA_U16;
                     break;
                 default:
-                    if (options.yuvToRGBConversion)
-                    {
-                        _avOutputPixelFormat = AV_PIX_FMT_RGB24;
-                        _info.pixelType = image::PixelType::RGB_U8;
-                    }
-                    else
-                    {
-                        _fastYUV420PConversion = options.fastYUV420PConversion;
-                        _avOutputPixelFormat = AV_PIX_FMT_YUV420P;
-                        _info.pixelType = image::PixelType::YUV_420P_U8;
-                    }
+                    _avOutputPixelFormat = AV_PIX_FMT_RGB24;
+                    _info.pixelType = image::PixelType::RGB_U8;
                     break;
                 }
                 const auto params = _avCodecParameters[_avStream];
