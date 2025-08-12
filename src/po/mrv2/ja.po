@@ -1936,21 +1936,6 @@ msgstr "{0} {1}をストリーミング中..."
 msgid "Stop streaming"
 msgstr "ストリーミング"
 
-msgid "Renderer"
-msgstr "レンダラー"
-
-msgid "Complexity"
-msgstr "難易度"
-
-msgid "Draw Mode"
-msgstr "描画モード"
-
-msgid "Stage Cache"
-msgstr "キャッシュ"
-
-msgid "Disk Cache in GB"
-msgstr "ディスクキャッシュ"
-
 msgid "Toggle other eye stereo image."
 msgstr "右 - 左ステレオ画像"
 
@@ -2986,20 +2971,17 @@ msgstr "オーディオなしで画像を保存しています %<PRId64> - %<PRI
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "しかし、どこかへ行こうとしているわけじゃない。"
 
-msgid "Vulkan info: {0}"
-msgstr "Vulkan 情報: {0}"
-
-msgid "{0}: Invalid OpenGL format and type"
-msgstr "{0}: 無効な OpenGL 形式とタイプ"
-
-msgid "OpenGL info: {0}"
-msgstr "OpenGL 情報: {0}"
+msgid "Offscreen Buffer info: {0}"
+msgstr "オフスクリーンバッファ情報: {0}"
 
 msgid "Saving... {0}"
 msgstr "保存中... {0}"
 
-msgid "Unsupported output format"
-msgstr "サポートされていない出力形式: %1%"
+msgid "Could not read image data from view"
+msgstr "ビューから画像データを読み取れませんでした"
+
+msgid "Could not read annotation image from view"
+msgstr "ビューから注釈画像を読み取れませんでした"
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "時刻 {0} にビデオデータがありません。フレームを繰り返します。"
@@ -3009,12 +2991,6 @@ msgstr "レンダーサイズ: {0}"
 
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr "画像レイヤー '{0}' 情報: {1} {2}"
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "オフスクリーンバッファ情報: {0}"
-
-msgid "Unsupported output format: "
-msgstr "サポートされていない出力形式: %1%"
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -3831,11 +3807,14 @@ msgstr "    先読み    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "    後ろ    V: % 4<PRIu64>    A: % 4<PRIu64>"
 
+msgid "HDR monitor found."
+msgstr "HDRモニターが見つかりました。"
+
+msgid "HDR monitor not found or not configured."
+msgstr "HDRモニターが見つからないか、設定されていません。"
+
 msgid "Edit Text"
 msgstr "テキストを編集"
-
-msgid "Invalid font for text drawing"
-msgstr "フォントファイル情報が無効です。"
 
 msgid "Could not convert message to shape: "
 msgstr "ベクター図形に変換"
@@ -6403,23 +6382,33 @@ msgstr "トゥーンマップ アルゴリズム"
 msgid "Thumbnails"
 msgstr "サムネイル"
 
+msgid "Edit Viewport"
+msgstr "編集ビューポート"
+
+msgid "How to display timeline thumbnails by default."
+msgstr "タイムラインのサムネイルをデフォルトで表示する方法。"
+
 msgid "Preview Thumbnails above Timeline"
 msgstr "タイムライン上にサムネイルをプレビュー"
 
 msgid "Preview Thumbnails in a rectangle above Timeline"
 msgstr "タイムライン上の長方形内でサムネイルをプレビュー"
 
+msgid "Refresh Thumbnails on Panels Manuallly"
+msgstr "パネルのサムネイルを手動で更新"
+
+msgid ""
+"When this option is on, thumbnails in panels won't be refreshed "
+"automatically.  You will have to use RMB->Update Thumbnail on the Thumbnail."
+msgstr ""
+"このオプションを有効にすると、パネル内のサムネイルは自動的に更新されません。"
+"サムネイル上で右クリック -> サムネイルを更新 を使用する必要があります。"
+
 msgid "Preview Thumbnails on Panels"
 msgstr "パネル上でサムネイルをプレビュー"
 
 msgid "Preview Thumbnails in Panels"
 msgstr "パネル内でサムネイルをプレビュー"
-
-msgid "Edit Viewport"
-msgstr "編集ビューポート"
-
-msgid "How to display timeline thumbnails by default."
-msgstr "タイムラインのサムネイルをデフォルトで表示する方法。"
 
 msgid "Display"
 msgstr "表示"
@@ -7568,6 +7557,9 @@ msgstr "スクラブ モード"
 msgid "Area Selection Mode"
 msgstr "エリア選択モード"
 
+msgid "Draw Mode"
+msgstr "描画モード"
+
 msgid "Erase Mode"
 msgstr "消去モード"
 
@@ -7658,29 +7650,35 @@ msgstr "ホットキーウィンドウを切り替え"
 msgid "Toggle About Window"
 msgstr "バージョン情報ウィンドウを切り替え"
 
-#~ msgid "Could not read image data from view"
-#~ msgstr "ビューから画像データを読み取れませんでした"
+#~ msgid "Renderer"
+#~ msgstr "レンダラー"
 
-#~ msgid "Could not read annotation image from view"
-#~ msgstr "ビューから注釈画像を読み取れませんでした"
+#~ msgid "Complexity"
+#~ msgstr "難易度"
 
-#~ msgid "HDR monitor found."
-#~ msgstr "HDRモニターが見つかりました。"
+#~ msgid "Stage Cache"
+#~ msgstr "キャッシュ"
 
-#~ msgid "HDR monitor not found or not configured."
-#~ msgstr "HDRモニターが見つからないか、設定されていません。"
+#~ msgid "Disk Cache in GB"
+#~ msgstr "ディスクキャッシュ"
 
-#~ msgid "Refresh Thumbnails on Panels Manuallly"
-#~ msgstr "パネルのサムネイルを手動で更新"
+#~ msgid "Vulkan info: {0}"
+#~ msgstr "Vulkan 情報: {0}"
 
-#~ msgid ""
-#~ "When this option is on, thumbnails in panels won't be refreshed "
-#~ "automatically.  You will have to use RMB->Update Thumbnail on the "
-#~ "Thumbnail."
-#~ msgstr ""
-#~ "このオプションを有効にすると、パネル内のサムネイルは自動的に更新されませ"
-#~ "ん。サムネイル上で右クリック -> サムネイルを更新 を使用する必要がありま"
-#~ "す。"
+#~ msgid "{0}: Invalid OpenGL format and type"
+#~ msgstr "{0}: 無効な OpenGL 形式とタイプ"
+
+#~ msgid "OpenGL info: {0}"
+#~ msgstr "OpenGL 情報: {0}"
+
+#~ msgid "Unsupported output format"
+#~ msgstr "サポートされていない出力形式: %1%"
+
+#~ msgid "Unsupported output format: "
+#~ msgstr "サポートされていない出力形式: %1%"
+
+#~ msgid "Invalid font for text drawing"
+#~ msgstr "フォントファイル情報が無効です。"
 
 #~ msgid "Scrub with Audio"
 #~ msgstr "オーディオとともにスクラブ"

@@ -1978,21 +1978,6 @@ msgstr "Flujo {0} {1}..."
 msgid "Stop streaming"
 msgstr "Deja de transmitir"
 
-msgid "Renderer"
-msgstr "Renderizador"
-
-msgid "Complexity"
-msgstr "Complejidad"
-
-msgid "Draw Mode"
-msgstr "Modo de Dibujar"
-
-msgid "Stage Cache"
-msgstr "Cache del Escenario"
-
-msgid "Disk Cache in GB"
-msgstr "Cache en Disco en GB"
-
 msgid "Toggle other eye stereo image."
 msgstr "Alternar el otro ojo de la imagen estéreo."
 
@@ -3052,20 +3037,17 @@ msgstr "Grabando Película sin Audio %<PRId64> - %<PRId64>"
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Solo audio en la línea de tiempo, pero no intenta grabar audio."
 
-msgid "Vulkan info: {0}"
-msgstr "Información de Vulkan: {0}"
-
-msgid "{0}: Invalid OpenGL format and type"
-msgstr "{0}: Formato y tipo de OpenGL inválidos"
-
-msgid "OpenGL info: {0}"
-msgstr "Información de OpenGL: {0}"
+msgid "Offscreen Buffer info: {0}"
+msgstr "Información del Buffer: {0}"
 
 msgid "Saving... {0}"
 msgstr "Grando... {0}."
 
-msgid "Unsupported output format"
-msgstr "Formato de salida no soportado"
+msgid "Could not read image data from view"
+msgstr "No pude leer los datos de la imagen de la vista"
+
+msgid "Could not read annotation image from view"
+msgstr "No pude leer la imagen de anotación de la vista"
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "Datos de vídeo vacíos en el momento {0}. Repetición del cuadro."
@@ -3075,12 +3057,6 @@ msgstr "Tamaño de renderizado: {0}"
 
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr "Información de la capa de imagen '{0}': {1} {2}"
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "Información del Buffer: {0}"
-
-msgid "Unsupported output format: "
-msgstr "Formato de salida no soportado: "
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -3898,11 +3874,14 @@ msgstr "   Adelante V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "   Atrás       V: % 4<PRIu64>    A: % 4<PRIu64> "
 
+msgid "HDR monitor found."
+msgstr "Monitor HDR encontrado."
+
+msgid "HDR monitor not found or not configured."
+msgstr "Monitor HDR no encontrado o no configurado."
+
 msgid "Edit Text"
 msgstr "Editar Texto"
-
-msgid "Invalid font for text drawing"
-msgstr "Fuente inválida para dibujar texto"
 
 msgid "Could not convert message to shape: "
 msgstr "No pude convertir el mensaje a figura: "
@@ -6487,23 +6466,34 @@ msgstr "Algoritmo de Mapeo de Tonos"
 msgid "Thumbnails"
 msgstr "Miniaturas"
 
+msgid "Edit Viewport"
+msgstr "Ventana de Edición"
+
+msgid "How to display timeline thumbnails by default."
+msgstr "Como mostrar la miniatura de la línea de tiempo estándar."
+
 msgid "Preview Thumbnails above Timeline"
 msgstr "Miniaturas sobre la Línea de Tiempo"
 
 msgid "Preview Thumbnails in a rectangle above Timeline"
 msgstr "Miniaturas en un recuadro sobre la Línea de Tiempo"
 
+msgid "Refresh Thumbnails on Panels Manuallly"
+msgstr "Refrescar Miniaturas en Paneles Manualmente"
+
+msgid ""
+"When this option is on, thumbnails in panels won't be refreshed "
+"automatically.  You will have to use RMB->Update Thumbnail on the Thumbnail."
+msgstr ""
+"Cuando esta opción esta activa, las miniaturas en los paneles no serán "
+"refrescadas automáticamente.  Tendrás que usar BDR->Actualizar/Miniaturas "
+"sobre la Miniatura."
+
 msgid "Preview Thumbnails on Panels"
 msgstr "Miniaturas en Paneles"
 
 msgid "Preview Thumbnails in Panels"
 msgstr "Miniaturas en Paneles"
-
-msgid "Edit Viewport"
-msgstr "Ventana de Edición"
-
-msgid "How to display timeline thumbnails by default."
-msgstr "Como mostrar la miniatura de la línea de tiempo estándar."
 
 msgid "Display"
 msgstr "Display"
@@ -7668,6 +7658,9 @@ msgstr "Modo de Fregado"
 msgid "Area Selection Mode"
 msgstr "Modo de Selección de Área"
 
+msgid "Draw Mode"
+msgstr "Modo de Dibujar"
+
 msgid "Erase Mode"
 msgstr "Modo de Borrar"
 
@@ -7758,29 +7751,35 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
 
-#~ msgid "Could not read image data from view"
-#~ msgstr "No pude leer los datos de la imagen de la vista"
+#~ msgid "Renderer"
+#~ msgstr "Renderizador"
 
-#~ msgid "Could not read annotation image from view"
-#~ msgstr "No pude leer la imagen de anotación de la vista"
+#~ msgid "Complexity"
+#~ msgstr "Complejidad"
 
-#~ msgid "HDR monitor found."
-#~ msgstr "Monitor HDR encontrado."
+#~ msgid "Stage Cache"
+#~ msgstr "Cache del Escenario"
 
-#~ msgid "HDR monitor not found or not configured."
-#~ msgstr "Monitor HDR no encontrado o no configurado."
+#~ msgid "Disk Cache in GB"
+#~ msgstr "Cache en Disco en GB"
 
-#~ msgid "Refresh Thumbnails on Panels Manuallly"
-#~ msgstr "Refrescar Miniaturas en Paneles Manualmente"
+#~ msgid "Vulkan info: {0}"
+#~ msgstr "Información de Vulkan: {0}"
 
-#~ msgid ""
-#~ "When this option is on, thumbnails in panels won't be refreshed "
-#~ "automatically.  You will have to use RMB->Update Thumbnail on the "
-#~ "Thumbnail."
-#~ msgstr ""
-#~ "Cuando esta opción esta activa, las miniaturas en los paneles no serán "
-#~ "refrescadas automáticamente.  Tendrás que usar BDR->Actualizar/Miniaturas "
-#~ "sobre la Miniatura."
+#~ msgid "{0}: Invalid OpenGL format and type"
+#~ msgstr "{0}: Formato y tipo de OpenGL inválidos"
+
+#~ msgid "OpenGL info: {0}"
+#~ msgstr "Información de OpenGL: {0}"
+
+#~ msgid "Unsupported output format"
+#~ msgstr "Formato de salida no soportado"
+
+#~ msgid "Unsupported output format: "
+#~ msgstr "Formato de salida no soportado: "
+
+#~ msgid "Invalid font for text drawing"
+#~ msgstr "Fuente inválida para dibujar texto"
 
 #~ msgid "Scrub with Audio"
 #~ msgstr "Fregar con Audio"

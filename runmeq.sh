@@ -83,7 +83,9 @@ fi
 cd $dir
 
 if [[ $CMAKE_TARGET == "package" && $KERNEL == *Darwin* ]]; then
-    cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t ${CMAKE_TARGET} -- -j1
+    echo "Packaging with a single thread..."
+    sync
+    cmake --build . -j1 --config $CMAKE_BUILD_TYPE -t ${CMAKE_TARGET}
 else
     cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t ${CMAKE_TARGET} 
 fi

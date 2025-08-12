@@ -1948,21 +1948,6 @@ msgstr "Streaming {0} {1}..."
 msgid "Stop streaming"
 msgstr "Stop streaming"
 
-msgid "Renderer"
-msgstr "Renderer"
-
-msgid "Complexity"
-msgstr "Complexity"
-
-msgid "Draw Mode"
-msgstr "Draw Mode"
-
-msgid "Stage Cache"
-msgstr "Stage Cache"
-
-msgid "Disk Cache in GB"
-msgstr "Disk Cache in GB"
-
 msgid "Toggle other eye stereo image."
 msgstr "Toggle other eye stereo image."
 
@@ -2993,20 +2978,17 @@ msgstr "Saving Pictures without Audio %<PRId64> - %<PRId64>"
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Audio only in timeline, but not trying to save audio."
 
-msgid "Vulkan info: {0}"
-msgstr "Vulkan info: {0}"
-
-msgid "{0}: Invalid OpenGL format and type"
-msgstr "{0}: Invalid OpenGL format and type"
-
-msgid "OpenGL info: {0}"
-msgstr "OpenGL info: {0}"
+msgid "Offscreen Buffer info: {0}"
+msgstr "Offscreen Buffer info: {0}"
 
 msgid "Saving... {0}"
 msgstr "Saving... {0}"
 
-msgid "Unsupported output format"
-msgstr "Unsupported output format"
+msgid "Could not read image data from view"
+msgstr "Could not read image data from view"
+
+msgid "Could not read annotation image from view"
+msgstr "Could not read annotation image from view"
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "Empty video data at time {0}.  Repeating frame."
@@ -3016,12 +2998,6 @@ msgstr "Render size: {0}"
 
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr "Image Layer '{0}' info: {1} {2}"
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "Offscreen Buffer info: {0}"
-
-msgid "Unsupported output format: "
-msgstr "Unsupported output format: "
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -3838,11 +3814,14 @@ msgstr "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 
+msgid "HDR monitor found."
+msgstr "HDR monitor found."
+
+msgid "HDR monitor not found or not configured."
+msgstr "HDR monitor not found or not configured."
+
 msgid "Edit Text"
 msgstr "Edit Text"
-
-msgid "Invalid font for text drawing"
-msgstr "Invalid font for text drawing"
 
 msgid "Could not convert message to shape: "
 msgstr "Could not convert message to shape: "
@@ -6418,23 +6397,33 @@ msgstr "Tonemap Algorithm"
 msgid "Thumbnails"
 msgstr "Thumbnails"
 
+msgid "Edit Viewport"
+msgstr "Edit Viewport"
+
+msgid "How to display timeline thumbnails by default."
+msgstr "How to display timeline thumbnails by default."
+
 msgid "Preview Thumbnails above Timeline"
 msgstr "Preview Thumbnails above Timeline"
 
 msgid "Preview Thumbnails in a rectangle above Timeline"
 msgstr "Preview Thumbnails in a rectangle above Timeline"
 
+msgid "Refresh Thumbnails on Panels Manuallly"
+msgstr "Refresh Thumbnails on Panels Manually"
+
+msgid ""
+"When this option is on, thumbnails in panels won't be refreshed "
+"automatically.  You will have to use RMB->Update Thumbnail on the Thumbnail."
+msgstr ""
+"When this option is on, thumbnails in panels won't be refreshed "
+"automatically.  You will have to use RMB->Update Thumbnail on the Thumbnail."
+
 msgid "Preview Thumbnails on Panels"
 msgstr "Preview Thumbnails on Panels"
 
 msgid "Preview Thumbnails in Panels"
 msgstr "Preview Thumbnails in Panels"
-
-msgid "Edit Viewport"
-msgstr "Edit Viewport"
-
-msgid "How to display timeline thumbnails by default."
-msgstr "How to display timeline thumbnails by default."
 
 msgid "Display"
 msgstr "Display"
@@ -7589,6 +7578,9 @@ msgstr "Scrub Mode"
 msgid "Area Selection Mode"
 msgstr "Area Selection Mode"
 
+msgid "Draw Mode"
+msgstr "Draw Mode"
+
 msgid "Erase Mode"
 msgstr "Erase Mode"
 
@@ -7679,29 +7671,35 @@ msgstr "Toggle Hotkeys Window"
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
 
-#~ msgid "Could not read image data from view"
-#~ msgstr "Could not read image data from view"
+#~ msgid "Renderer"
+#~ msgstr "Renderer"
 
-#~ msgid "Could not read annotation image from view"
-#~ msgstr "Could not read annotation image from view"
+#~ msgid "Complexity"
+#~ msgstr "Complexity"
 
-#~ msgid "HDR monitor found."
-#~ msgstr "HDR monitor found."
+#~ msgid "Stage Cache"
+#~ msgstr "Stage Cache"
 
-#~ msgid "HDR monitor not found or not configured."
-#~ msgstr "HDR monitor not found or not configured."
+#~ msgid "Disk Cache in GB"
+#~ msgstr "Disk Cache in GB"
 
-#~ msgid "Refresh Thumbnails on Panels Manuallly"
-#~ msgstr "Refresh Thumbnails on Panels Manually"
+#~ msgid "Vulkan info: {0}"
+#~ msgstr "Vulkan info: {0}"
 
-#~ msgid ""
-#~ "When this option is on, thumbnails in panels won't be refreshed "
-#~ "automatically.  You will have to use RMB->Update Thumbnail on the "
-#~ "Thumbnail."
-#~ msgstr ""
-#~ "When this option is on, thumbnails in panels won't be refreshed "
-#~ "automatically.  You will have to use RMB->Update Thumbnail on the "
-#~ "Thumbnail."
+#~ msgid "{0}: Invalid OpenGL format and type"
+#~ msgstr "{0}: Invalid OpenGL format and type"
+
+#~ msgid "OpenGL info: {0}"
+#~ msgstr "OpenGL info: {0}"
+
+#~ msgid "Unsupported output format"
+#~ msgstr "Unsupported output format"
+
+#~ msgid "Unsupported output format: "
+#~ msgstr "Unsupported output format: "
+
+#~ msgid "Invalid font for text drawing"
+#~ msgstr "Invalid font for text drawing"
 
 #~ msgid "Scrub with Audio"
 #~ msgstr "Scrub with Audio"

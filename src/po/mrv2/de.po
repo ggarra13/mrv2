@@ -1922,28 +1922,6 @@ msgstr "Streaming von {0} {1}..."
 msgid "Stop streaming"
 msgstr "Streaming beenden"
 
-msgid "Renderer"
-msgstr ""
-"Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/"
-"Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/"
-"Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/"
-"Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/"
-"Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/"
-"Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/"
-"Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/Renderer"
-
-msgid "Complexity"
-msgstr "Komplexitt"
-
-msgid "Draw Mode"
-msgstr "Zeichenmodus"
-
-msgid "Stage Cache"
-msgstr "Zwischenspeicher"
-
-msgid "Disk Cache in GB"
-msgstr "Disk-Cache in GB"
-
 msgid "Toggle other eye stereo image."
 msgstr "Schalten Sie andere Augen Stereo-Bild."
 
@@ -3002,20 +2980,17 @@ msgstr "Speichern von Bildern ohne Audio % <PRId64> - % <PRId64>"
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Audio nur in der Zeitleiste, aber nicht versuchen, Audio zu speichern."
 
-msgid "Vulkan info: {0}"
-msgstr "Vulkan Info: {0}"
-
-msgid "{0}: Invalid OpenGL format and type"
-msgstr "{0}: Ungltiges OpenGL-Format und Typ"
-
-msgid "OpenGL info: {0}"
-msgstr "OpenGL Info: {0}"
+msgid "Offscreen Buffer info: {0}"
+msgstr "Offscreen-Puffer-Info: {0}"
 
 msgid "Saving... {0}"
 msgstr "Speichern... {0}"
 
-msgid "Unsupported output format"
-msgstr "Nicht unterstütztes Ausgabeformat"
+msgid "Could not read image data from view"
+msgstr "Konnte Bilddaten aus der Ansicht nicht lesen"
+
+msgid "Could not read annotation image from view"
+msgstr "Konnte Anmerkungsbild aus der Ansicht nicht lesen"
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "Leere Videodaten zur Zeit {0}. Wiederholungsbild."
@@ -3025,12 +3000,6 @@ msgstr "Rendergröße: {0}"
 
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr "Bildschicht '{0}' Info: {1} {2}"
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "Offscreen-Puffer-Info: {0}"
-
-msgid "Unsupported output format: "
-msgstr "Nicht unterstütztes Ausgabeformat: "
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -3845,11 +3814,14 @@ msgstr "    Vorne    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "    Hinter   V: % 4<PRIu64>    A: % 4<PRIu64>"
 
+msgid "HDR monitor found."
+msgstr "HDR-Monitor gefunden."
+
+msgid "HDR monitor not found or not configured."
+msgstr "HDR-Monitor nicht gefunden oder nicht konfiguriert."
+
 msgid "Edit Text"
 msgstr "Text bearbeiten"
-
-msgid "Invalid font for text drawing"
-msgstr "Ungültige Schriftart für das Zeichnen von Text"
 
 msgid "Could not convert message to shape: "
 msgstr "Nachricht kann nicht in Form konvertiert werden:"
@@ -6445,23 +6417,34 @@ msgstr "Tonkartenalgorithmus"
 msgid "Thumbnails"
 msgstr "Thumbnails"
 
+msgid "Edit Viewport"
+msgstr "Ansicht bearbeiten"
+
+msgid "How to display timeline thumbnails by default."
+msgstr "Wie werden standardmig Timeline-Vorschaubilder angezeigt?"
+
 msgid "Preview Thumbnails above Timeline"
 msgstr "Vorschau Thumbnails ber Timeline"
 
 msgid "Preview Thumbnails in a rectangle above Timeline"
 msgstr "Vorschau Thumbnails in einem Rechteck oberhalb der Timeline"
 
+msgid "Refresh Thumbnails on Panels Manuallly"
+msgstr "Miniaturansichten in Panels manuell aktualisieren"
+
+msgid ""
+"When this option is on, thumbnails in panels won't be refreshed "
+"automatically.  You will have to use RMB->Update Thumbnail on the Thumbnail."
+msgstr ""
+"Wenn diese Option aktiviert ist, werden Miniaturansichten in Panels nicht "
+"automatisch aktualisiert. Sie müssen Rechtsklick->Miniaturansicht "
+"aktualisieren auf der Miniaturansicht verwenden."
+
 msgid "Preview Thumbnails on Panels"
 msgstr "Vorschau-Tumbnails auf Panels"
 
 msgid "Preview Thumbnails in Panels"
 msgstr "Vorschau Thumbnails in Panels"
-
-msgid "Edit Viewport"
-msgstr "Ansicht bearbeiten"
-
-msgid "How to display timeline thumbnails by default."
-msgstr "Wie werden standardmig Timeline-Vorschaubilder angezeigt?"
 
 msgid "Display"
 msgstr "Anzeige"
@@ -7625,6 +7608,9 @@ msgstr "Scrub-Modus"
 msgid "Area Selection Mode"
 msgstr "Modus fr die Flchenauswahl"
 
+msgid "Draw Mode"
+msgstr "Zeichenmodus"
+
 msgid "Erase Mode"
 msgstr "Lschmodus"
 
@@ -7715,29 +7701,42 @@ msgstr "Hotkeys-Fenster umschalten"
 msgid "Toggle About Window"
 msgstr "Fenster umschalten"
 
-#~ msgid "Could not read image data from view"
-#~ msgstr "Konnte Bilddaten aus der Ansicht nicht lesen"
-
-#~ msgid "Could not read annotation image from view"
-#~ msgstr "Konnte Anmerkungsbild aus der Ansicht nicht lesen"
-
-#~ msgid "HDR monitor found."
-#~ msgstr "HDR-Monitor gefunden."
-
-#~ msgid "HDR monitor not found or not configured."
-#~ msgstr "HDR-Monitor nicht gefunden oder nicht konfiguriert."
-
-#~ msgid "Refresh Thumbnails on Panels Manuallly"
-#~ msgstr "Miniaturansichten in Panels manuell aktualisieren"
-
-#~ msgid ""
-#~ "When this option is on, thumbnails in panels won't be refreshed "
-#~ "automatically.  You will have to use RMB->Update Thumbnail on the "
-#~ "Thumbnail."
+#~ msgid "Renderer"
 #~ msgstr ""
-#~ "Wenn diese Option aktiviert ist, werden Miniaturansichten in Panels nicht "
-#~ "automatisch aktualisiert. Sie müssen Rechtsklick->Miniaturansicht "
-#~ "aktualisieren auf der Miniaturansicht verwenden."
+#~ "Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/"
+#~ "Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/"
+#~ "Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/"
+#~ "Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/"
+#~ "Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/"
+#~ "Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/"
+#~ "Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/Renderer/Renderer"
+
+#~ msgid "Complexity"
+#~ msgstr "Komplexitt"
+
+#~ msgid "Stage Cache"
+#~ msgstr "Zwischenspeicher"
+
+#~ msgid "Disk Cache in GB"
+#~ msgstr "Disk-Cache in GB"
+
+#~ msgid "Vulkan info: {0}"
+#~ msgstr "Vulkan Info: {0}"
+
+#~ msgid "{0}: Invalid OpenGL format and type"
+#~ msgstr "{0}: Ungltiges OpenGL-Format und Typ"
+
+#~ msgid "OpenGL info: {0}"
+#~ msgstr "OpenGL Info: {0}"
+
+#~ msgid "Unsupported output format"
+#~ msgstr "Nicht unterstütztes Ausgabeformat"
+
+#~ msgid "Unsupported output format: "
+#~ msgstr "Nicht unterstütztes Ausgabeformat: "
+
+#~ msgid "Invalid font for text drawing"
+#~ msgstr "Ungültige Schriftart für das Zeichnen von Text"
 
 #~ msgid "Scrub with Audio"
 #~ msgstr "Scrub mit Audio"

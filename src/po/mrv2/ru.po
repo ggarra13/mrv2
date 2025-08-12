@@ -1967,21 +1967,6 @@ msgstr "Сверкает {0} {1}..."
 msgid "Stop streaming"
 msgstr "Прекратить поток"
 
-msgid "Renderer"
-msgstr "Редактор"
-
-msgid "Complexity"
-msgstr "Сложность"
-
-msgid "Draw Mode"
-msgstr "Режим рисования"
-
-msgid "Stage Cache"
-msgstr "Сценический кэш"
-
-msgid "Disk Cache in GB"
-msgstr "Дисковый кэш в GB"
-
 msgid "Toggle other eye stereo image."
 msgstr "Настроить другой стереоизображение."
 
@@ -3024,20 +3009,17 @@ msgstr "Securing Pictures without Audio %<PRId64> - %<PRId64>"
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Звук только в хронологии, но не в попытке сохранить звук."
 
-msgid "Vulkan info: {0}"
-msgstr "Информация Vulkan: {0}"
-
-msgid "{0}: Invalid OpenGL format and type"
-msgstr "{0}: Неверный формат и тип OpenGL"
-
-msgid "OpenGL info: {0}"
-msgstr "Информация OpenGL: {0}"
+msgid "Offscreen Buffer info: {0}"
+msgstr "Информация о буфере вне экрана: {0}"
 
 msgid "Saving... {0}"
 msgstr "Спасаю... {0}"
 
-msgid "Unsupported output format"
-msgstr "Неподдерживаемый формат вывода"
+msgid "Could not read image data from view"
+msgstr "Не удалось прочитать данные изображения с вида"
+
+msgid "Could not read annotation image from view"
+msgstr "Не удалось прочитать изображение аннотации с вида"
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "Пустые видеоданные в момент {0} Повторяю рамку."
@@ -3047,12 +3029,6 @@ msgstr "Размер рендеринга: {0}"
 
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr "Информация о слое изображения '{0}': {1} {2}"
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "Информация о буфере вне экрана: {0}"
-
-msgid "Unsupported output format: "
-msgstr "Неподдерживаемый формат вывода: "
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -3871,11 +3847,14 @@ msgstr "   Впереди   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "      Позади V: % 4<PRIu64>    A: % 4<PRIu64>"
 
+msgid "HDR monitor found."
+msgstr "HDR-монитор обнаружен."
+
+msgid "HDR monitor not found or not configured."
+msgstr "HDR-монитор не найден или не настроен."
+
 msgid "Edit Text"
 msgstr "Изменить текст"
-
-msgid "Invalid font for text drawing"
-msgstr "Неверный шрифт для текстового рисунка"
 
 msgid "Could not convert message to shape: "
 msgstr "Невозможно преобразовать сообщение в форму:"
@@ -6456,23 +6435,34 @@ msgstr "Алгоритм тоновой карты"
 msgid "Thumbnails"
 msgstr "Пальцы"
 
+msgid "Edit Viewport"
+msgstr "Правка Просмотра"
+
+msgid "How to display timeline thumbnails by default."
+msgstr "Как отображать хронологию ногтей по умолчанию."
+
 msgid "Preview Thumbnails above Timeline"
 msgstr "Просмотр миниатюрных пальцев над временной линией"
 
 msgid "Preview Thumbnails in a rectangle above Timeline"
 msgstr "Просмотреть пальцы в прямоугольнике над временной линией"
 
+msgid "Refresh Thumbnails on Panels Manuallly"
+msgstr "Обновлять миниатюры на панелях вручную"
+
+msgid ""
+"When this option is on, thumbnails in panels won't be refreshed "
+"automatically.  You will have to use RMB->Update Thumbnail on the Thumbnail."
+msgstr ""
+"Когда этот параметр включён, миниатюры на панелях не будут обновляться "
+"автоматически. Нужно использовать щелчок правой кнопкой -> Обновить "
+"миниатюру на миниатюре."
+
 msgid "Preview Thumbnails on Panels"
 msgstr "Просмотр табличек с пальцами на табличках"
 
 msgid "Preview Thumbnails in Panels"
 msgstr "Просмотр миниатюрных снимков в табличках"
-
-msgid "Edit Viewport"
-msgstr "Правка Просмотра"
-
-msgid "How to display timeline thumbnails by default."
-msgstr "Как отображать хронологию ногтей по умолчанию."
 
 msgid "Display"
 msgstr "Показать"
@@ -7634,6 +7624,9 @@ msgstr "Режим скруба"
 msgid "Area Selection Mode"
 msgstr "Режим выделения области"
 
+msgid "Draw Mode"
+msgstr "Режим рисования"
+
 msgid "Erase Mode"
 msgstr "Стереть режим"
 
@@ -7724,29 +7717,35 @@ msgstr "Переключить окно горячих клавиш"
 msgid "Toggle About Window"
 msgstr "Закладка о окне"
 
-#~ msgid "Could not read image data from view"
-#~ msgstr "Не удалось прочитать данные изображения с вида"
+#~ msgid "Renderer"
+#~ msgstr "Редактор"
 
-#~ msgid "Could not read annotation image from view"
-#~ msgstr "Не удалось прочитать изображение аннотации с вида"
+#~ msgid "Complexity"
+#~ msgstr "Сложность"
 
-#~ msgid "HDR monitor found."
-#~ msgstr "HDR-монитор обнаружен."
+#~ msgid "Stage Cache"
+#~ msgstr "Сценический кэш"
 
-#~ msgid "HDR monitor not found or not configured."
-#~ msgstr "HDR-монитор не найден или не настроен."
+#~ msgid "Disk Cache in GB"
+#~ msgstr "Дисковый кэш в GB"
 
-#~ msgid "Refresh Thumbnails on Panels Manuallly"
-#~ msgstr "Обновлять миниатюры на панелях вручную"
+#~ msgid "Vulkan info: {0}"
+#~ msgstr "Информация Vulkan: {0}"
 
-#~ msgid ""
-#~ "When this option is on, thumbnails in panels won't be refreshed "
-#~ "automatically.  You will have to use RMB->Update Thumbnail on the "
-#~ "Thumbnail."
-#~ msgstr ""
-#~ "Когда этот параметр включён, миниатюры на панелях не будут обновляться "
-#~ "автоматически. Нужно использовать щелчок правой кнопкой -> Обновить "
-#~ "миниатюру на миниатюре."
+#~ msgid "{0}: Invalid OpenGL format and type"
+#~ msgstr "{0}: Неверный формат и тип OpenGL"
+
+#~ msgid "OpenGL info: {0}"
+#~ msgstr "Информация OpenGL: {0}"
+
+#~ msgid "Unsupported output format"
+#~ msgstr "Неподдерживаемый формат вывода"
+
+#~ msgid "Unsupported output format: "
+#~ msgstr "Неподдерживаемый формат вывода: "
+
+#~ msgid "Invalid font for text drawing"
+#~ msgstr "Неверный шрифт для текстового рисунка"
 
 #~ msgid "Scrub with Audio"
 #~ msgstr "Скрутка звука"
