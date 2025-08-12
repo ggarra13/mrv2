@@ -32,6 +32,7 @@ v1.4.0
   drivers.
 - Fixed hiding of Timeline in normal mode leaving a gap of 30 pixels.
 - Fixed a lag when scrubbing with one or more of the thumbnail panels active.
+- Fixed fullscreen mode in Vulkan backend.
 
 
 v1.3.9
