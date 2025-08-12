@@ -33,8 +33,7 @@ fi
 
 if [[ "$CMAKE_TARGET" == "package" ]]; then  
     # Needed to to force a relink and update build info.
-    # touch src/lib/mrvWidgets/mrvVersion.cpp
-    true
+    touch src/lib/mrvWidgets/mrvVersion.cpp
 fi
 
 if [[ "$CMAKE_TARGET" == "" ]]; then
@@ -83,8 +82,12 @@ fi
 
 cd $dir
 
-cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t ${CMAKE_TARGET}
-    
+if [[ $CMAKE_TARGET == "package" && $KERNEL == *Darwin* ]]; then
+    cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t ${CMAKE_TARGET} -- -j1
+else
+    cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t ${CMAKE_TARGET} 
+fi
+
 if [[ $? != 0 ]]; then
     echo "COMPILATION of mrv2 failed!"
     exit 1
