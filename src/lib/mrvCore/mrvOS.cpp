@@ -483,6 +483,105 @@ namespace mrv
         }
 
         const std::string
+        getX11WMVersion(const std::string& wm)
+        {
+            static std::string wm_version;
+            if (!wm_version.empty())
+                return wm_version;
+            
+            std::string version_command;
+            
+            if (wm == "cinnamon")
+            {
+                version_command = "cinnamon --version";
+            }
+            else if (wm == "enlightenment")
+            {
+                version_command = "enlightenment --version";
+            }
+            else if (wm == "fluxbox")
+            {
+                version_command = "fluxbox --version";
+            }
+            else if (wm == "gnome-shell")
+            {
+                version_command = "gnome-shell --version";
+            }
+            else if (wm == "kwin")
+            {
+                version_command = "kwin_x11 --version";
+            }
+            else if (wm == "lxde")
+            {
+                version_command = "lxsession --version";
+            }
+            else if (wm == "lxqt")
+            {
+                version_command = "lxqt-session --version";
+            }
+            else if (wm == "mate")
+            {
+                version_command = "mate-session --version";
+            }
+            else if (wm == "openbox")
+            {
+                version_command = "openbox --version";
+            }
+            else if (wm == "xfce")
+            {
+                version_command = "xfce4-panel --version";
+            }
+            else
+            {
+                return "(unknown version)";
+            }
+
+            try
+            {
+                // Execute the command and capture the output
+                int ret;
+                std::string err;
+                std::string out;
+                ret = os::exec_command(version_command, out, err);
+                wm_version = out;
+                return out;
+            }
+            catch (const std::exception& e)
+            {
+                return std::string("Error executing command: ") + e.what();
+            }
+        }
+
+        const std::string getX11WM(const std::string& desktop_env)
+        {
+            const std::string& desktop = tl::string::toLower(desktop_env);
+
+            // Check against common Wayland compositor names
+            if (desktop == "ubuntu-wayland" ||
+                desktop.substr(0, 6) == "ubuntu" ||
+                desktop.substr(0, 5) == "gnome" ||
+                desktop == "mutter")
+            {
+                return "gnome-shell";
+            }
+            else if (
+                desktop.substr(0, 4) == "kwin" || desktop == "kde" ||
+                desktop == "plasma")
+            {
+                return "kwin";
+            }
+            else if (desktop == "enlightenment" || desktop == "e17" ||
+                     desktop == "e22")
+            {
+                return "enlightenment";
+            }
+            else
+            {
+                return desktop; // If no match is found
+            }
+        }
+        
+        const std::string
         getWaylandCompositorVersion(const std::string& compositor)
         {
             static std::string compositor_version;
@@ -629,9 +728,18 @@ namespace mrv
 
                 if (env && strlen(env) > 0)
                 {
-                    std::string compositor = getWaylandCompositor(env);
-                    out += " ";
-                    out += getWaylandCompositorVersion(compositor);
+                    if (desktop::Wayland())
+                    {
+                        std::string compositor = getWaylandCompositor(env);
+                        out += " ";
+                        out += getWaylandCompositorVersion(compositor);
+                    }
+                    else
+                    {
+                        std::string wm = getX11WM(env);
+                        out += " ";
+                        out += getX11WMVersion(wm);
+                    }
                 }
 
                 // Remove any newlines or spaces at end (needed on Rocky Linux)
