@@ -1932,13 +1932,19 @@ namespace mrv
         r = (Fl_Round_Button*)uiPrefs->uiPrefsOpenMode->child(1);
         int fullscreen = r->value();
         if (fullscreen)
+        {
+            ui->uiMain->show();
             view->setFullScreenMode(true);
-
+        }
+        
         r = (Fl_Round_Button*)uiPrefs->uiPrefsOpenMode->child(2);
         int presentation = r->value();
         if (presentation)
+        {
+            ui->uiMain->show();
             view->setPresentationMode(true);
-
+        }
+        
         if (normal)
             view->setFullScreenMode(false);
 
