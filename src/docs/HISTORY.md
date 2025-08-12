@@ -31,6 +31,7 @@ v1.4.0
 - Fixed Vulkan crashing bug when going to presentation mode with NVidia 575
   drivers.
 - Fixed hiding of Timeline in normal mode leaving a gap of 30 pixels.
+- Fixed a lag when scrubbing with one or more of the thumbnail panels active.
 
 
 v1.3.9
