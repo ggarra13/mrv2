@@ -38,6 +38,8 @@ v1.4.0
 - Added a Preferences->Thumbnails->Refresh Thumbnails in Panels Manually to
   avoid auto refreshing of thumbnails.  You have to go to any thumbnail and
   RMB->Update->Thumbnails.
+- Added thorough list of Wayland compositors with their version commands.
+- Added Desktop Envionment report if using X11 or Wayland.
 
 
 v1.3.9

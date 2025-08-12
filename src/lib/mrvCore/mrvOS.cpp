@@ -54,6 +54,7 @@
 #include <array>
 #include <memory>
 
+
 namespace
 {
     const char* kModule = "os";
@@ -491,25 +492,49 @@ namespace mrv
             std::string version_command;
             
             // Choose the command based on the compositor name
-            if (compositor == "gnome-shell")
+            if (compositor == "cage")
+            {
+                version_command = "cage --version";
+            }
+            else if (compositor == "cinnamon")
+            {
+                version_command = "cinnamon --version";
+            }
+            else if (compositor == "gnome-shell")
             {
                 version_command = "gnome-shell --version";
+            }
+            else if (compositor == "hyprland")
+            {
+                version_command = "hyprland --version";
             }
             else if (compositor == "kwin")
             {
                 version_command = "kwin_wayland --version";
             }
-            else if (compositor == "weston")
+            else if (compositor == "labwc")
             {
-                version_command = "weston --version";
+                version_command = "labwc --version";
+            }
+            else if (compositor == "river")
+            {
+                version_command = "river --version";
             }
             else if (compositor == "sway")
             {
                 version_command = "sway --version";
             }
+            else if (compositor == "wayfire")
+            {
+                version_command = "wayfire --version";
+            }
+            else if (compositor == "weston")
+            {
+                version_command = "weston --version";
+            }
             else
             {
-                return "";
+                return "(unknown version)";
             }
 
             try
@@ -533,8 +558,10 @@ namespace mrv
             const std::string& desktop = tl::string::toLower(desktop_env);
 
             // Check against common Wayland compositor names
-            if (desktop == "ubuntu-wayland" || desktop == "ubuntu" ||
-                desktop.substr(0, 5) == "gnome" || desktop == "mutter")
+            if (desktop == "ubuntu-wayland" ||
+                desktop.substr(0, 6) == "ubuntu" ||
+                desktop.substr(0, 5) == "gnome" ||
+                desktop == "mutter")
             {
                 return "gnome-shell";
             }
@@ -578,6 +605,10 @@ namespace mrv
             }
             else
             {
+                if (desktop::Wayland())
+                    out += "Wayland ";
+                else
+                    out += "X11 ";
                 const char* env = fl_getenv("XDG_SESSION_DESKTOP");
                 if (env && strlen(env) > 0)
                 {

@@ -93,7 +93,7 @@ appdir=${sharedir}/applications
 #
 for i in $ICON_SIZES; do
     icons_dir=${sharedir}/icons/hicolor/${i}x${i}/apps/
-    rm $icons_dir/@mrv2_NAME@-v@mrv2_VERSION@.png
+    rm -f $icons_dir/@mrv2_NAME@-v@mrv2_VERSION@.png
     if [[ $has_hdr == 1 ]]; then
 	rm -f $icons_dir/hdr-v@mrv2_VERSION@.png
     fi
