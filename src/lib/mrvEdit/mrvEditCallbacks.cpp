@@ -2947,8 +2947,6 @@ namespace mrv
             return H;
         else if (editMode == EditMode::kSaved)
             return editModeH;
-        else if (editMode == EditMode::kNone)
-            return 0;
 
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
@@ -3329,6 +3327,14 @@ namespace mrv
 
         ui->uiView->valid(0);
         ui->uiView->refresh();
+        ui->uiTimeline->valid(0);
+        ui->uiTimeline->refresh();
+        if (ui->uiSecondary && ui->uiSecondary->viewport())
+        {
+            auto view = ui->uiSecondary->viewport();
+            view->valid(0);
+            view->refresh();
+        }
 
         // This is needed as XWayland and Wayland would leave traces of the
         // toolbar icons.
