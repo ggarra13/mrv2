@@ -3168,7 +3168,6 @@ namespace mrv
             H = calculate_edit_viewport_size(ui);
             viewGroupH = tileGroupH - H;
             newY = tileGroupY + viewGroupH;
-            editModeH = H;
             editMode = mode;
             ui->uiBottomBar->show();
         }
