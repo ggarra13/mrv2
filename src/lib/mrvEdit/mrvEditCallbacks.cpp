@@ -3117,7 +3117,8 @@ namespace mrv
         Fl_Flex* viewGroup = ui->uiViewGroup;
         
         int H = kMinEditModeH; // timeline height
-        int viewGroupH = H;
+        int viewGroupH = H;    // temporarily will hold timeline height, but then is substracted form
+                               // tileGroup's height.
         auto player = ui->uiView->getTimelinePlayer();
         if (mode == EditMode::kFull && player)
         {
