@@ -499,7 +499,7 @@ ui->uiView->take_focus();}
       Fl_Group {} {open
         xywh {133 1 544 28}
       } {
-        Fl_Group {} {
+        Fl_Group {} {open
           xywh {133 3 324 26}
         } {
           Fl_Button uiPlayStart {
@@ -512,7 +512,14 @@ ui->uiView->take_focus();}
           Fl_Button uiPlayBackwards {
             label {@<}
             user_data this user_data_type {ViewerUI*}
-            callback {ui->uiView->playBackwards();}
+            callback {auto player = ui->uiView->getTimelinePlayer();
+if (!player) return;
+
+auto playback = player->playback();
+if (playback == tl::timeline::Playback::Stop)
+   ui->uiView->playBackwards();
+else
+   ui->uiView->stop();} selected
             tooltip {Play sequence backwards.} xywh {174 3 38 24} labelcolor 19
             class {mrv::Button}
           }
@@ -526,7 +533,7 @@ ui->uiView->take_focus();}
           Fl_Button uiStop {
             label {@||}
             user_data this user_data_type {ViewerUI*}
-            callback {ui->uiView->stop();}
+            callback {ui->uiView->togglePlayback();}
             tooltip {Stop playback.} xywh {250 3 38 24} labelcolor 19
             class {mrv::Button}
           }
@@ -540,7 +547,7 @@ ui->uiView->take_focus();}
           Fl_Button uiPlayForwards {
             label {@>}
             user_data this user_data_type {ViewerUI*}
-            callback {ui->uiView->playForwards();}
+            callback {ui->uiView->togglePlayback();}
             tooltip {Play sequence forward.} xywh {326 3 37 24} down_box DOWN_BOX labelcolor 19
             class {mrv::Button}
           }
@@ -582,7 +589,7 @@ player->setLoop( loop );}
             class {mrv::StateButton}
           }
         }
-        Fl_Group {} {open
+        Fl_Group {} {
           xywh {460 1 116 28}
         } {
           Fl_Menu_Button fpsDefaults {
@@ -882,7 +889,7 @@ else
     if (value) mrv::editMode = mrv::EditMode::kFull;
     else       mrv::editMode = mrv::EditMode::kNone;
     mrv::toggle_timeline_bar(nullptr, v);
-}} selected
+}}
               tooltip {Toggle Edit Mode.} xywh {813 0 79 30} down_box DOWN_BOX selection_color 95 labelsize 12 align 192
             }
           }

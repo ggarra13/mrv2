@@ -1914,6 +1914,21 @@ msgstr "{0} स्ट्रीम कर रहा है {1}"
 msgid "Stop streaming"
 msgstr "स्ट्रीम जारी करना बन्द करें"
 
+msgid "Renderer"
+msgstr "रेंडरर"
+
+msgid "Complexity"
+msgstr "जटिलता"
+
+msgid "Draw Mode"
+msgstr "मोड आरेखित करें"
+
+msgid "Stage Cache"
+msgstr "चरण कैश"
+
+msgid "Disk Cache in GB"
+msgstr "GB में डिस्क कैश"
+
 msgid "Toggle other eye stereo image."
 msgstr "अन्य आँख स्टीरियो छवि टॉगल करें."
 
@@ -2940,17 +2955,20 @@ msgstr "ऑडियो के बिना छवि सहेज रहा ह
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "केवल समय में ऑडियो, लेकिन ऑडियो सहेजने की कोशिश नहीं कर रहा है."
 
-msgid "Offscreen Buffer info: {0}"
-msgstr "ऑफस्क्रीन बफ़र जानकारी: {0}"
+msgid "Vulkan info: {0}"
+msgstr "वल्कन जानकारी: {0}"
+
+msgid "{0}: Invalid OpenGL format and type"
+msgstr "{0}: अवैध OpenGL प्रारूप और प्रकार"
+
+msgid "OpenGL info: {0}"
+msgstr "ओपन- जीएल जानकारी: {0}"
 
 msgid "Saving... {0}"
 msgstr "सहेजा जा रहा है... {0}"
 
-msgid "Could not read image data from view"
-msgstr "दृश्य से छवि डेटा पढ़ा नहीं जा सका"
-
-msgid "Could not read annotation image from view"
-msgstr "दृश्य से एनोटेशन छवि पढ़ी नहीं जा सकी"
+msgid "Unsupported output format"
+msgstr "असमर्थित आउटपुट प्रारूप"
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "{0} समय पर वीडियो आँकड़ा खाली करें"
@@ -2960,6 +2978,12 @@ msgstr "रेंडर आकार: {0}"
 
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr "छवि परत '{0}' जानकारी: {1} {2}"
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "ऑफस्क्रीन बफ़र जानकारी: {0}"
+
+msgid "Unsupported output format: "
+msgstr "असमर्थित आउटपुट प्रारूप: "
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -3766,14 +3790,11 @@ msgstr "     आगे     V: % 4<PRIu64>     A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "      पीछे    V: % 4<PRIu64>     A: % 4<PRIu64>"
 
-msgid "HDR monitor found."
-msgstr "HDR मॉनिटर पाया गया।"
-
-msgid "HDR monitor not found or not configured."
-msgstr "HDR मॉनिटर नहीं मिला या कॉन्फ़िगर नहीं किया गया।"
-
 msgid "Edit Text"
 msgstr "पाठ संपादित करें"
+
+msgid "Invalid font for text drawing"
+msgstr "पाठ चित्रण के लिए अमान्य फ़ॉन्ट"
 
 msgid "Could not convert message to shape: "
 msgstr "संदेश को आकार में परिवर्तित नहीं कर सका:"
@@ -7481,9 +7502,6 @@ msgstr "स्क्रैप मोड"
 msgid "Area Selection Mode"
 msgstr "क्षेत्र चयन विधि"
 
-msgid "Draw Mode"
-msgstr "मोड आरेखित करें"
-
 msgid "Erase Mode"
 msgstr "मिटाने का मोड"
 
@@ -7574,35 +7592,17 @@ msgstr "यदि आप विंडो को बन्द करना चा
 msgid "Toggle About Window"
 msgstr "विंडो के बारे में टॉगल करें"
 
-#~ msgid "Renderer"
-#~ msgstr "रेंडरर"
+#~ msgid "Could not read image data from view"
+#~ msgstr "दृश्य से छवि डेटा पढ़ा नहीं जा सका"
 
-#~ msgid "Complexity"
-#~ msgstr "जटिलता"
+#~ msgid "Could not read annotation image from view"
+#~ msgstr "दृश्य से एनोटेशन छवि पढ़ी नहीं जा सकी"
 
-#~ msgid "Stage Cache"
-#~ msgstr "चरण कैश"
+#~ msgid "HDR monitor found."
+#~ msgstr "HDR मॉनिटर पाया गया।"
 
-#~ msgid "Disk Cache in GB"
-#~ msgstr "GB में डिस्क कैश"
-
-#~ msgid "Vulkan info: {0}"
-#~ msgstr "वल्कन जानकारी: {0}"
-
-#~ msgid "{0}: Invalid OpenGL format and type"
-#~ msgstr "{0}: अवैध OpenGL प्रारूप और प्रकार"
-
-#~ msgid "OpenGL info: {0}"
-#~ msgstr "ओपन- जीएल जानकारी: {0}"
-
-#~ msgid "Unsupported output format"
-#~ msgstr "असमर्थित आउटपुट प्रारूप"
-
-#~ msgid "Unsupported output format: "
-#~ msgstr "असमर्थित आउटपुट प्रारूप: "
-
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "पाठ चित्रण के लिए अमान्य फ़ॉन्ट"
+#~ msgid "HDR monitor not found or not configured."
+#~ msgstr "HDR मॉनिटर नहीं मिला या कॉन्फ़िगर नहीं किया गया।"
 
 #~ msgid "Scrub with Audio"
 #~ msgstr "ऑडियो के साथ ग्रब करें"

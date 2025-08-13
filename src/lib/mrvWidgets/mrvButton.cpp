@@ -36,7 +36,8 @@ namespace mrv
             }
             return 1;
         case FL_LEAVE:
-            color(default_color);
+            if (color() != FL_YELLOW)
+                color(default_color);
             redraw();
             return 1;
         }
@@ -45,7 +46,8 @@ namespace mrv
 
     void Button::color(Fl_Color c)
     {
-        if (c != FL_BACKGROUND_COLOR && c != fl_lighter(default_color))
+        if (c != FL_BACKGROUND_COLOR && c != fl_lighter(default_color) &&
+            c != FL_YELLOW)
             default_color = c;
         Fl_Button::color(c);
     }
