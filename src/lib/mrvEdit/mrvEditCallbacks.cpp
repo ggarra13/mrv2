@@ -3251,18 +3251,6 @@ namespace mrv
         }
 #endif
         
-#if 0
-        std::cerr << "2 TimelineGroup->visible()="
-                  << TimelineGroup->visible() << std::endl;
-        std::cerr << "2 TimelineGroup->x()="
-                  << TimelineGroup->x() << std::endl;
-        std::cerr << "2 TimelineGroup->y()="
-                  << TimelineGroup->y() << std::endl;
-        std::cerr << "2 TimelineGroup->w()="
-                  << TimelineGroup->w() << std::endl;
-        std::cerr << "2 TimelineGroup->h()="
-                  << TimelineGroup->h() << std::endl;
-#endif
         // \@note: We do a resize instead of a move_intersection as:
         //         it is faster and we must avoid collapsing the timeline group
         //         to 0 when going into presentation mode (we internally keep
@@ -3283,35 +3271,9 @@ namespace mrv
         std::cerr << "3 TimelineGroup->h()="
                   << TimelineGroup->h() << std::endl;
 #endif
-
         
-#if 0
-        std::cerr << "4 TimelineGroup->visible()="
-                  << TimelineGroup->visible() << std::endl;
-        std::cerr << "4 Timeline->visible()="
-                  << ui->uiTimeline->visible() << std::endl;
-        std::cerr << "4 TimelineGroup->x()="
-                  << TimelineGroup->x() << std::endl;
-        std::cerr << "4 TimelineGroup->y()="
-                  << TimelineGroup->y() << std::endl;
-        std::cerr << "4 TimelineGroup->w()="
-                  << TimelineGroup->w() << std::endl;
-        std::cerr << "4 TimelineGroup->h()="
-                  << TimelineGroup->h() << std::endl;
-#endif
         viewGroup->layout();
-#if 0
-        std::cerr << "5 TimelineGroup->visible()="
-                  << TimelineGroup->visible() << std::endl;
-        std::cerr << "5 TimelineGroup->x()="
-                  << TimelineGroup->x() << std::endl;
-        std::cerr << "5 TimelineGroup->y()="
-                  << TimelineGroup->y() << std::endl;
-        std::cerr << "5 TimelineGroup->w()="
-                  << TimelineGroup->w() << std::endl;
-        std::cerr << "5 TimelineGroup->h()="
-                  << TimelineGroup->h() << std::endl;
-#endif
+
         tileGroup->init_sizes();
 
 #if 0
@@ -3329,8 +3291,11 @@ namespace mrv
 
         ui->uiView->valid(0);
         ui->uiView->refresh();
-        ui->uiTimeline->valid(0);
-        ui->uiTimeline->refresh();
+        if (ui->uiTimeline->visible_r())
+        {
+            ui->uiTimeline->valid(0);
+            ui->uiTimeline->refresh();
+        }
         if (ui->uiSecondary && ui->uiSecondary->viewport())
         {
             auto view = ui->uiSecondary->viewport();
