@@ -1,6 +1,15 @@
 v1.4.0
 ======
 
+Prices after v1.4.0
+-------------------
+* Buy mrv2 (or Vulkan vmrv2) for personal use at a cost of u$50, paid by a Paypal donation (I will use the email to verify purchase and issue a yearly license).
+
+* Buy mrv2 (or Vulkan vmrv2) for personal use to own at a cost of u$150, paid by a Paypal donation (I will use the email to verify purchase and issue a non-expiring license).
+
+History
+-------
+
 - Added license_helper for easy licensing of vmrv2.
 - Added backend used to -version flag.
 - Added tabulation to -version flag's output.
