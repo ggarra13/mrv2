@@ -3169,6 +3169,7 @@ namespace mrv
             viewGroupH = tileGroupH - H;
             newY = tileGroupY + viewGroupH;
             editMode = mode;
+            editModeH = H;
             ui->uiBottomBar->show();
         }
         else if (mode == EditMode::kSaved)
@@ -3187,7 +3188,6 @@ namespace mrv
             viewGroupH = tileGroupH;
             H = kMinEditModeH; // timeline height
             newY = oldY;
-            editMode = mode;
             ui->uiBottomBar->hide();
         }
         else
