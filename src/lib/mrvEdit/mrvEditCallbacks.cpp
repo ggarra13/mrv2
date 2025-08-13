@@ -3167,6 +3167,7 @@ namespace mrv
             // If full editing, save the edit mode
             H = calculate_edit_viewport_size(ui);
             viewGroupH = tileGroupH - H;
+            newY = tileGroupY + viewGroupH;
             editModeH = H;
             editMode = mode;
         }
@@ -3174,6 +3175,7 @@ namespace mrv
         {
             H = editModeH;
             viewGroupH = tileGroupH - H;
+            newY = tileGroupY + viewGroupH;
             editMode = mode;
         }
         else if (mode == EditMode::kNone)
