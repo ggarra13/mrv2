@@ -824,7 +824,7 @@ namespace mrv
     }
 
     void edit_store_redo(TimelinePlayer* player, ViewerUI* ui)
-    {
+    {   
         auto timeline = player->getTimeline();
         if (!timeline)
             return;
@@ -957,6 +957,10 @@ namespace mrv
         updateTimeline(timeline, time, ui);
         toOtioFile(timeline, ui);
 
+
+        App::unsaved_edits = true;
+        ui->uiMain->update_title_bar();
+        
         tcp->pushMessage("Edit/Frame/Cut", time);
     }
 
@@ -1051,6 +1055,9 @@ namespace mrv
         toOtioFile(timeline, ui);
 
         panel::redrawThumbnails();
+        
+        App::unsaved_edits = true;
+        ui->uiMain->update_title_bar();
 
         tcp->pushMessage("Edit/Frame/Paste", time);
     }
@@ -1120,6 +1127,9 @@ namespace mrv
         toOtioFile(timeline, ui);
 
         panel::redrawThumbnails();
+        
+        App::unsaved_edits = true;
+        ui->uiMain->update_title_bar();
 
         tcp->pushMessage("Edit/Frame/Insert", time);
     }
@@ -1170,6 +1180,9 @@ namespace mrv
 
         player->setTimeline(timeline);
         toOtioFile(timeline, ui);
+        
+        App::unsaved_edits = true;
+        ui->uiMain->update_title_bar();
 
         tcp->pushMessage("Edit/Slice", time);
     }
@@ -1217,6 +1230,9 @@ namespace mrv
         edit_clear_redo(ui);
 
         panel::redrawThumbnails();
+        
+        App::unsaved_edits = true;
+        ui->uiMain->update_title_bar();
 
         tcp->pushMessage("Edit/Remove", time);
     }
@@ -1390,6 +1406,9 @@ namespace mrv
             if (refreshMedia)
                 refresh_media_cb(nullptr, ui);
         }
+        
+        App::unsaved_edits = true;
+        ui->uiMain->update_title_bar();
 
         tcp->pushMessage("Edit/Audio Clip/Insert", audioFile);
     }
@@ -1548,6 +1567,9 @@ namespace mrv
 
         panel::redrawThumbnails();
 
+        App::unsaved_edits = true;
+        ui->uiMain->update_title_bar();
+        
         tcp->pushMessage("Edit/Audio Gap/Insert", time);
     }
 
@@ -1600,6 +1622,9 @@ namespace mrv
 
         panel::redrawThumbnails();
 
+        App::unsaved_edits = true;
+        ui->uiMain->update_title_bar();
+
         tcp->pushMessage("Edit/Audio Clip/Remove", time);
     }
 
@@ -1651,6 +1676,9 @@ namespace mrv
             edit_clear_redo(ui);
 
         panel::redrawThumbnails();
+
+        App::unsaved_edits = true;
+        ui->uiMain->update_title_bar();
 
         tcp->pushMessage("Edit/Audio Gap/Remove", time);
     }
@@ -1833,6 +1861,10 @@ namespace mrv
         }
 
         player->setAllAnnotations(annotations);
+
+        App::unsaved_edits = true;
+        ui->uiMain->update_title_bar();
+        
         view->redraw();
     }
 
@@ -1900,6 +1932,10 @@ namespace mrv
                                   .arg(otioFile)
                                   .arg(errorStatus.full_description);
             LOG_ERROR(err);
+        }
+        else
+        {
+            App::unsaved_edits = false;
         }
     }
 
@@ -2837,16 +2873,16 @@ namespace mrv
         return true;
     }
 
-    /// @todo: REFACTOR THIS PLEASE
+    /// \@todo: REFACTOR THIS PLEASE
     EditMode editMode = EditMode::kTimeline;
-    int editModeH = 30;
+    int      editModeH = 30;
     const int kMinEditModeH = 30;
 
     void save_edit_mode_state(ViewerUI* ui)
     {
         int H = ui->uiTimelineGroup->h();
 
-        if (H == 0)
+        if (!ui->uiBottomBar->visible())
         {
             editMode = EditMode::kNone;
         }
@@ -3106,29 +3142,42 @@ namespace mrv
     void set_edit_mode_cb(EditMode mode, ViewerUI* ui)
     {
         const int kDragBarHeight = 8;
+        
 
+        // This is the main tile position.
         Fl_Tile* tileGroup = ui->uiTileGroup;
         int tileGroupY = tileGroup->y();
         int tileGroupH = tileGroup->h();
-        
+
+        // This is the timeline group within the tile.
         Fl_Group* TimelineGroup = ui->uiTimelineGroup;
         int oldY = TimelineGroup->y();
+        int newY = oldY;
 
+        // This is the main viewport with the action items.
         Fl_Flex* viewGroup = ui->uiViewGroup;
         
-        int H = kMinEditModeH; // timeline height
-        int viewGroupH = H;    // temporarily will hold timeline height, but then is substracted form
-                               // tileGroup's height.
+        // Set some defaults
+        int H = kMinEditModeH;            // min. timeline height
+        int viewGroupH = tileGroupH - H;  // max. viewport with timeline
+        
         auto player = ui->uiView->getTimelinePlayer();
         if (mode == EditMode::kFull && player)
         {
-            editMode = mode;
+            // If full editing, save the edit mode
             H = calculate_edit_viewport_size(ui);
-            editModeH = viewGroupH = H;
+            viewGroupH = tileGroupH - H;
+            newY = tileGroupY + viewGroupH;
+            editModeH = H;
+            editMode = mode;
+            ui->uiBottomBar->show();
         }
         else if (mode == EditMode::kSaved)
         {
-            H = viewGroupH = editModeH;
+            H = editModeH;
+            viewGroupH = tileGroupH - H;
+            newY = tileGroupY + viewGroupH;
+            editMode = mode;
         }
         else if (mode == EditMode::kNone)
         {
@@ -3136,26 +3185,32 @@ namespace mrv
             //          mode to None.  We calculate the viewGroupH (height),
             //          but we must not calculate H as 0, as that would collapse
             //          the timeline and can crash the X11 server.
-            viewGroupH = 0;
+            viewGroupH = tileGroupH;
+            H = kMinEditModeH; // timeline height
+            newY = oldY;
+            editMode = mode;
+            ui->uiBottomBar->hide();
         }
         else
         {
+            // Timeline mode
             H = kMinEditModeH; // timeline height
-            viewGroupH = editModeH = H;
+            viewGroupH = tileGroupH - H;
+            newY = tileGroupY + viewGroupH;
+            editMode = mode;
         }
 
-        int newY = tileGroupY + tileGroupH - H;
-        viewGroupH = tileGroupH - viewGroupH;
 
 #if 0
         std::cerr << "1 TimelineGroup->visible()="
                   << TimelineGroup->visible() << std::endl;
-        std::cerr << "1 editMode=" << editMode << std::endl;
-        std::cerr << "1 tileGroupY=" << tileGroupY << std::endl;
-        std::cerr << "1    oldY=" << oldY - tileGroupY << std::endl;
-        std::cerr << " newY=" << newY - tileGroupY << std::endl;
-        std::cerr << "tileGroupH=" << tileGroupH << std::endl;
-        std::cerr << "    H=" << H << std::endl;
+        std::cerr << "1    editMode=" << editMode << std::endl;
+        std::cerr << "1  tileGroupY=" << tileGroupY << std::endl;
+        std::cerr << "1        oldY=" << oldY - tileGroupY << std::endl;
+        std::cerr << "1        newY=" << newY - tileGroupY << std::endl;
+        std::cerr << "1  tileGroupH=" << tileGroupH << std::endl;
+        std::cerr << "1  viewGroupH=" << viewGroupH << std::endl;
+        std::cerr << "1   timelineH=" << H << std::endl;
 #endif
 
         // \@bug:
@@ -3176,12 +3231,14 @@ namespace mrv
         {
             if (ui->uiBottomBar->visible())
             {
+                if (!ui->uiTimelineGroup->visible())
+                {
+                    TimelineGroup->show();
+                }
                 if (!ui->uiTimeline->visible())
                 {
                     ui->uiTimeline->show();
                 }
-                if (!ui->uiTimelineGroup->visible())
-                    TimelineGroup->show();
             }
             else
             {
@@ -3271,6 +3328,16 @@ namespace mrv
                   << TimelineGroup->h() << std::endl;
 #endif
 
+        ui->uiView->valid(0);
+        ui->uiView->refresh();
+        ui->uiTimeline->valid(0);
+        ui->uiTimeline->refresh();
+        if (ui->uiSecondary && ui->uiSecondary->viewport())
+        {
+            auto view = ui->uiSecondary->viewport();
+            view->valid(0);
+            view->refresh();
+        }
 
         // This is needed as XWayland and Wayland would leave traces of the
         // toolbar icons.
