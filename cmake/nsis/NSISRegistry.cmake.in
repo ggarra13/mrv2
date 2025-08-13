@@ -5,7 +5,7 @@
 #
 # Human readable version of mrv2.
 #
-set(mrv2_NAME "mrv2 Media Player")
+set(mrv2_NAME "@mrv2_NAME@ Media Player")
 set(mrv2_VERSION_NAME "${mrv2_NAME} (v${mrv2_VERSION})")
 set(mrv2_LATEST_NAME "${mrv2_NAME} Latest (currently: v${mrv2_VERSION})")
 

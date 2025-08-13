@@ -318,7 +318,7 @@ else()
     #
     # This sets the title at the top of the installer.
     #
-    set(CPACK_NSIS_PACKAGE_NAME "mrv2 v${mrv2_VERSION} ${CMAKE_SYSTEM_NAME}-${MRV2_OS_BITS}" )
+    set(CPACK_NSIS_PACKAGE_NAME "${mrv2_NAME} v${mrv2_VERSION} ${CMAKE_SYSTEM_NAME}-${MRV2_OS_BITS}" )
     
     #
     # Set the executable
@@ -360,7 +360,16 @@ else()
 
     set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON )
 
-    include("${MRV2_ROOT}/cmake/nsis/NSISRegistry.cmake")
+
+    #
+    # Create NSIS registry
+    #
+    configure_file(
+	"${MRV2_ROOT}/cmake/nsis/NSISRegistry.cmake.in"
+	"${PROJECT_BINARY_DIR}/cmake/nsis/NSISRegistry.cmake"
+	@ONLY)
+    
+    include("${PROJECT_BINARY_DIR}/cmake/nsis/NSISRegistry.cmake")
 
 endif()
 
