@@ -286,7 +286,7 @@ System::Free $9
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".wmv" "Windows Media Video" 1
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".y4m" "YUV4MPEG2 Format" 1
 
-!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".mrv2s" "YUV4MPEG2 Format" 1
+!insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".mrv2s" "mrv2 Session" 1
 
 
 !insertmacro AddCheckedListViewItemWith1SubItem $hListCtl ".mp3" "MPEG1/2 Audio Layer III" 0
