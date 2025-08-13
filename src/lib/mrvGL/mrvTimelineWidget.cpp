@@ -788,6 +788,8 @@ namespace mrv
         {
             TLRENDER_P();
             const math::Size2i renderSize(pixel_w(), pixel_h());
+            if (renderSize.w <= 0 || renderSize.h <= 0)
+                return;
 
             make_current();
 
