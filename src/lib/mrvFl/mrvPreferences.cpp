@@ -97,7 +97,7 @@ namespace mrv
         locale::SetAndRestore saved;
 
         std::string userprefspath = studiopath();
-        if (!file::isReadable(userprefspath + "/.filmaura/mrv2.prefs"))
+        if (!file::isReadable(userprefspath + "/mrv2.prefs"))
             userprefspath = prefspath();
         
         std::string msg =
@@ -550,7 +550,7 @@ namespace mrv
         //////////////////////////////////////////////////////
         // OCIO
         /////////////////////////////////////////////////////
-        std::string ocioPath = studiopath() + ".filmaura/mrv2.ocio.json";
+        std::string ocioPath = studiopath() + "mrv2.ocio.json";
         if (file::isReadable(ocioPath))
         {
             ocio::loadPresets(ocioPath);
@@ -766,7 +766,7 @@ namespace mrv
         char key[2048];
 
         std::string mappingpath = studiopath();
-        if (!file::isReadable(mappingpath + "/.filmaura/mrv2.paths.pref"))
+        if (!file::isReadable(mappingpath + "/mrv2.paths.pref"))
             mappingpath = prefspath();
 
         Fl_Preferences path_mapping(
@@ -904,8 +904,7 @@ namespace mrv
         reset_hotkeys();
         if (!resetHotkeys)
         {
-            std::string hotkeyPath = studiopath() + "/.filmaura/" +
-                                     hotkeys_file + ".prefs";
+            std::string hotkeyPath = studiopath() + hotkeys_file + ".prefs";
             if (file::isReadable(hotkeyPath))
             {
                 msg =
@@ -1019,7 +1018,7 @@ namespace mrv
         SettingsObject* settings = ViewerUI::app->settings();
 
         std::string userprefspath = studiopath();
-        if (!file::isReadable(userprefspath + "/.filmaura/mrv2.prefs"))
+        if (!file::isReadable(userprefspath + "/mrv2.prefs"))
             userprefspath = prefspath();
         
         if (!ui->uiView->getPresentationMode())
@@ -1104,7 +1103,7 @@ namespace mrv
         ocio::savePresets(ocioPath);
 
         std::string userprefspath = studiopath();
-        if (!file::isReadable(userprefspath + "/.filmaura/mrv2.prefs"))
+        if (!file::isReadable(userprefspath + "/mrv2.prefs"))
             userprefspath = prefspath();
         
         Fl_Preferences base(
@@ -1582,7 +1581,7 @@ namespace mrv
 
             msg = tl::string::Format(
                       _("Hotkeys have been saved to \"{0}{1}.prefs\"."))
-                      .arg(prefspath())
+                      .arg(userprefspath)
                       .arg(hotkeys_file);
             LOG_INFO(msg);
         }
@@ -1591,7 +1590,7 @@ namespace mrv
 
         msg = tl::string::Format(_("Preferences have been saved to: "
                                    "\"{0}{1}\"."))
-                  .arg(prefspath())
+                  .arg(userprefspath)
                   .arg("mrv2.prefs");
         LOG_INFO(msg);
 
@@ -2039,7 +2038,7 @@ namespace mrv
         ui->uiMain->allow_screen_saver((bool)uiPrefs->uiPrefsAllowScreenSaver->value());
 
         std::string userprefspath = studiopath();
-        if (!file::isReadable(userprefspath + "/.filmaura/mrv2.prefs"))
+        if (!file::isReadable(userprefspath + "/mrv2.prefs"))
             userprefspath = prefspath();
         
         Fl_Preferences base(

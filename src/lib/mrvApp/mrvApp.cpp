@@ -663,7 +663,7 @@ namespace mrv
         DBG;
         
         LOG_STATUS(_("Preferences Location: "));
-        if (file::isReadable(mrv::studiopath() + "/.filmaura/mrv2.prefs"))
+        if (file::isReadable(mrv::studiopath() + "/mrv2.prefs"))
             LOG_STATUS("\t" << mrv::studiopath());
         else
             LOG_STATUS("\t" << mrv::prefspath());

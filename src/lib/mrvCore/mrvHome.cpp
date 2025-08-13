@@ -154,10 +154,9 @@ namespace mrv
     {
         const char* c = fl_getenv("STUDIOPATH");
         if (!c)
-            return "";
+            return "/";
         std::string r = c;
-        if (r.substr(r.size() - 1, r.size()) != "/")
-            r += "/";
+        r += "/.filmaura/";
         return r;
     }
 
