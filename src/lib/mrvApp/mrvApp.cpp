@@ -663,7 +663,10 @@ namespace mrv
         DBG;
         
         LOG_STATUS(_("Preferences Location: "));
-        LOG_STATUS("\t" << mrv::prefspath());
+        if (file::isReadable(mrv::studiopath()))
+            LOG_STATUS("\t" << mrv::studiopath());
+        else
+            LOG_STATUS("\t" << mrv::prefspath());
         
         LOG_STATUS(_("Temp Location: "));
         LOG_STATUS("\t" << mrv::tmppath());

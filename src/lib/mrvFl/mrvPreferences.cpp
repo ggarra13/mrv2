@@ -96,14 +96,19 @@ namespace mrv
 
         locale::SetAndRestore saved;
 
+        std::string userprefspath = studiopath();
+        if (!file::isReadable(userprefspath + "/.filmaura/mrv2.prefs"))
+            userprefspath = prefspath();
+        
         std::string msg =
             tl::string::Format(_("Reading preferences from \"{0}{1}\"."))
-                .arg(prefspath())
+                .arg(userprefspath)
                 .arg("mrv2.prefs");
         LOG_INFO(msg);
 
         Fl_Preferences base(
-            prefspath().c_str(), "filmaura", "mrv2", (Fl_Preferences::Root)0);
+            userprefspath.c_str(), "filmaura", "mrv2",
+            (Fl_Preferences::Root)0);
 
         base.get("version", version, kPreferencesVersion);
 
@@ -545,7 +550,7 @@ namespace mrv
         //////////////////////////////////////////////////////
         // OCIO
         /////////////////////////////////////////////////////
-        std::string ocioPath = studiopath() + "mrv2.ocio.json";
+        std::string ocioPath = studiopath() + ".filmaura/mrv2.ocio.json";
         if (file::isReadable(ocioPath))
         {
             ocio::loadPresets(ocioPath);
@@ -761,7 +766,7 @@ namespace mrv
         char key[2048];
 
         std::string mappingpath = studiopath();
-        if (!file::isReadable(mappingpath + "/mrv2.paths"))
+        if (!file::isReadable(mappingpath + "/.filmaura/mrv2.paths.pref"))
             mappingpath = prefspath();
 
         Fl_Preferences path_mapping(
@@ -899,7 +904,8 @@ namespace mrv
         reset_hotkeys();
         if (!resetHotkeys)
         {
-            std::string hotkeyPath = studiopath() + "/" + hotkeys_file;
+            std::string hotkeyPath = studiopath() + "/.filmaura/" +
+                                     hotkeys_file + ".prefs";
             if (file::isReadable(hotkeyPath))
             {
                 msg =
@@ -1012,11 +1018,15 @@ namespace mrv
         ViewerUI* ui = App::ui;
         SettingsObject* settings = ViewerUI::app->settings();
 
+        std::string userprefspath = studiopath();
+        if (!file::isReadable(userprefspath + "/.filmaura/mrv2.prefs"))
+            userprefspath = prefspath();
+        
         if (!ui->uiView->getPresentationMode())
         {
             // Handle panels
             Fl_Preferences base(
-                prefspath().c_str(), "filmaura", "mrv2",
+                userprefspath.c_str(), "filmaura", "mrv2",
                 (Fl_Preferences::Root)0);
 
             Fl_Preferences panel_list(base, "panels");
@@ -1093,8 +1103,12 @@ namespace mrv
         std::string ocioPath = prefspath() + "mrv2.ocio.json";
         ocio::savePresets(ocioPath);
 
+        std::string userprefspath = studiopath();
+        if (!file::isReadable(userprefspath + "/.filmaura/mrv2.prefs"))
+            userprefspath = prefspath();
+        
         Fl_Preferences base(
-            prefspath().c_str(), "filmaura", "mrv2",
+            userprefspath.c_str(), "filmaura", "mrv2",
             (Fl_Preferences::Root)(int)Fl_Preferences::CLEAR);
         base.set("version", kPreferencesVersion);
 
@@ -1472,7 +1486,7 @@ namespace mrv
 
         char key[256];
         Fl_Preferences path_mapping(
-            prefspath().c_str(), "filmaura", "mrv2.paths",
+            userprefspath.c_str(), "filmaura", "mrv2.paths",
             (Fl_Preferences::Root)((int)Fl_Preferences::CLEAR));
         path_mapping.clear();
         for (int i = 2; i <= uiPrefs->PathMappings->size(); ++i)
@@ -1562,7 +1576,7 @@ namespace mrv
         {
 
             Fl_Preferences keys(
-                prefspath().c_str(), "filmaura", hotkeys_file.c_str(),
+                userprefspath.c_str(), "filmaura", hotkeys_file.c_str(),
                 (Fl_Preferences::Root)((int)Fl_Preferences::CLEAR));
             save_hotkeys(keys);
 
@@ -2024,8 +2038,12 @@ namespace mrv
 
         ui->uiMain->allow_screen_saver((bool)uiPrefs->uiPrefsAllowScreenSaver->value());
 
+        std::string userprefspath = studiopath();
+        if (!file::isReadable(userprefspath + "/.filmaura/mrv2.prefs"))
+            userprefspath = prefspath();
+        
         Fl_Preferences base(
-            prefspath().c_str(), "filmaura", "mrv2", (Fl_Preferences::Root)0);
+            userprefspath.c_str(), "filmaura", "mrv2", (Fl_Preferences::Root)0);
         Fl_Preferences gui(base, "ui");
         gui.set("single_instance", uiPrefs->uiPrefsSingleInstance->value());
         gui.set(

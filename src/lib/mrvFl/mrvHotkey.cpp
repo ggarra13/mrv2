@@ -399,7 +399,8 @@ namespace mrv
 
     void load_hotkeys()
     {
-        std::string hotkeyPath = studiopath() + "/" + Preferences::hotkeys_file;
+        std::string hotkeyPath = studiopath() + "/.filmaura/" +
+                                 Preferences::hotkeys_file + ".pref";
         if (file::isReadable(hotkeyPath))
             load_hotkeys(studiopath());
         else
