@@ -15,7 +15,6 @@
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvImage.h"
 #include "mrvCore/mrvString.h"
-#include "mrvCore/mrvWait.h"
 
 #ifdef OPENGL_BACKEND
 #    include <tlGL/Init.h>
@@ -225,7 +224,7 @@ namespace mrv
                 Fl::check();
             }
 
-            wait::milliseconds(1000);
+            Fl::wait(1.0);
         }
 
         bool Creator::create()

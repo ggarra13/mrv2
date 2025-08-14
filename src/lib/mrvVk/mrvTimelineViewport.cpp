@@ -45,7 +45,6 @@
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvMath.h"
 #include "mrvCore/mrvUtil.h"
-#include "mrvCore/mrvWait.h"
 
 #include "mrvFl/mrvIO.h"
 
@@ -1845,7 +1844,7 @@ namespace mrv
             if (frameView)
             {
                 // Wait a little so that resizing/maximizing takes place.
-                Fl::wait(0.01);
+                Fl::wait(0.1);
                 _frameView();
             }
 

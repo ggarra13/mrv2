@@ -21,7 +21,6 @@
 #include "mrvCore/mrvLocale.h"
 #include "mrvCore/mrvMath.h"
 #include "mrvCore/mrvUtil.h"
-#include "mrvCore/mrvWait.h"
 
 #include <tlIO/System.h>
 
@@ -34,6 +33,8 @@
 #include <tlTimelineVk/Render.h>
 #include <FL/Fl_Vk_Utils.H>
 #include <FL/vk_enum_string_helper.h>
+
+#include <FL/Fl.H>
 
 #include <chrono>
 #include <string>
@@ -470,8 +471,8 @@ namespace mrv
 
                     // Wait 2 seconds (needed on Apple for presentation mode
                     //                 visible resizing)
-                    mrv::wait::milliseconds(2000);
-
+                    Fl::wait(2.0);
+                    
                     // returns pixel_w(), pixel_h()
                     auto viewportSize = view->getViewportSize();
                     float pixels_unit = view->pixels_per_unit();
