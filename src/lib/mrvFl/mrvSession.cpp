@@ -808,9 +808,6 @@ namespace mrv
                         // Set up the viewport attributes
                         if (version >= 15)
                         {
-                            // If we are running command-line, wait a tad for the callbacks
-                            // and the main resize of window function to update.
-                            wait::milliseconds(100);
 
                             // Get the view attributes
                             auto viewPos = session["viewPos"];
@@ -820,6 +817,11 @@ namespace mrv
                             bool frameView = session["frameView"];
                             view->setFrameView(frameView);
                             view->redraw();
+                            
+                            // If we are running command-line, wait a tad for
+                            // the callbacks and the main resize of window
+                            // function to update.
+                            wait::milliseconds(1000);
                         }
                         
                     }
