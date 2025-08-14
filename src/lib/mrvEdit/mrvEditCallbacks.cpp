@@ -2875,6 +2875,7 @@ namespace mrv
 
     /// \@todo: REFACTOR THIS PLEASE
     EditMode editMode = EditMode::kTimeline;
+    EditMode previousEditMode = EditMode::kTimeline;
     int      editModeH = 30;
     const int kMinEditModeH = 30;
 
@@ -3114,7 +3115,7 @@ namespace mrv
     void set_edit_button(EditMode mode, ViewerUI* ui)
     {
         const int kDragBarHeight = 8;
-
+        
         Fl_Button* b = ui->uiEdit;
 
         bool active = (mode == EditMode::kFull || mode == EditMode::kSaved);
@@ -3141,8 +3142,10 @@ namespace mrv
 
     void set_edit_mode_cb(EditMode mode, ViewerUI* ui)
     {
-        const int kDragBarHeight = 8;
-        
+        // Store previous editmode
+        previousEditMode = editMode;
+        if (editMode == previousEditMode && editMode == EditMode::kNone)
+            previousEditMode = EditMode::kTimeline;
 
         // This is the main tile position.
         Fl_Tile* tileGroup = ui->uiTileGroup;
@@ -3178,6 +3181,7 @@ namespace mrv
             viewGroupH = tileGroupH - H;
             newY = tileGroupY + viewGroupH;
             editMode = mode;
+            ui->uiBottomBar->show();
         }
         else if (mode == EditMode::kNone)
         {
@@ -3188,6 +3192,7 @@ namespace mrv
             viewGroupH = tileGroupH;
             H = kMinEditModeH; // timeline height
             newY = oldY;
+            editMode = mode;
             ui->uiBottomBar->hide();
         }
         else
@@ -3197,6 +3202,7 @@ namespace mrv
             viewGroupH = tileGroupH - H;
             newY = tileGroupY + viewGroupH;
             editMode = mode;
+            ui->uiBottomBar->show();
         }
 
 
@@ -3275,6 +3281,8 @@ namespace mrv
         viewGroup->layout();
 
         tileGroup->init_sizes();
+
+        ui->uiRegion->layout();
 
 #if 0
         std::cerr << "6 TimelineGroup->visible()="

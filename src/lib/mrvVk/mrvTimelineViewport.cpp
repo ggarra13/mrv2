@@ -1843,8 +1843,7 @@ namespace mrv
 
             if (frameView)
             {
-                // Wait a little so that resizing/maximizing takes place.
-                Fl::wait(0.1);
+                mw->wait_for_expose();
                 _frameView();
             }
 

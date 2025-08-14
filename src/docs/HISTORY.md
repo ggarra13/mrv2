@@ -42,6 +42,7 @@ v1.4.0
 - Added Desktop Envionment report when using X11 or Wayland.
 - Fixed finding all preferences with STUDIOPATH.
 - Fixed framing when loading a session file.
+- Improved startup times from the command-line and when loading the first clip.
 
 
 v1.3.9
