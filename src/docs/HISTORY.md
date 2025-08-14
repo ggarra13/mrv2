@@ -1,14 +1,5 @@
-v1.4.0
+v1.4.0 
 ======
-
-Prices after v1.4.0
--------------------
-* Buy mrv2 (or Vulkan vmrv2) for personal use at a cost of u$50, paid by a Paypal donation (I will use the email to verify purchase and issue a yearly license).
-
-* Buy mrv2 (or Vulkan vmrv2) for personal use to own at a cost of u$150, paid by a Paypal donation (I will use the email to verify purchase and issue a non-expiring license).
-
-History
--------
 
 - Added license_helper for easy licensing of vmrv2.
 - Added backend used to -version flag.
@@ -50,6 +41,7 @@ History
 - Added thorough list of Wayland compositors with their version commands.
 - Added Desktop Envionment report when using X11 or Wayland.
 - Fixed finding all preferences with STUDIOPATH.
+- Fixed framing when loading a session file.
 
 
 v1.3.9

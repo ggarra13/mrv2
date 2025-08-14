@@ -157,6 +157,36 @@ Enjoy!
 
 ## v${mrv2_VERSION} Notes
 
+Prices after v1.4.0
+-------------------
+* Buy mrv2 (or Vulkan vmrv2) for personal use at a cost of u$50, paid by a Paypal donation (I will use the email to verify purchase and issue a yearly license).
+
+* Buy mrv2 (or Vulkan vmrv2) for personal use to own at a cost of u$150, paid by a Paypal donation (I will use the email to verify purchase and issue a non-expiring license).
+
+Differences between Vulkan and OpenGL
+-------------------------------------
+
+- Vulkan is a new open source API, compared to OpenGL that it might get deprecated on some platforms like macOS.  It supports true HDR (High Dynamic Range), it is about two times faster than the OpenGL version but it does not support OpenUSD.  It is also less buggy on Linux Wayland, at least with NVidia drivers.
+- OpenGL's only benefit at this point is that it supports OpenUSD.
+
+Vulkan Demo Version
+-------------------
+
+The Vulkan releases at:
+
+https://sourceforge.net/projects/mrv2/files/vulkan
+
+directory are versions for you to evaluate vmrv2 before a purchase and report bugs or performance issues.
+Currently, when run as demo these versions don't have:
+
+	   - Annotations
+	   - A/B Comparisons
+	   - OpenEXR Layer switching
+	   - NDI support
+
+History
+-------
+
 EOF
 
 HISTORY=../../../src/docs/HISTORY.md
@@ -198,15 +228,6 @@ fi
 echo "$release_notes" >> README.md
 
 cat <<EOF > VULKAN_NOTES.md
-
-The Vulkan releases in the vulkan/ directory are demo versions for you to
-evaluate vmrv2 before a purchase and report bugs or performance issues.
-Currently, the demo versions don't have:
-
-	   - Annotations
-	   - A/B Comparisons
-	   - OpenEXR Layer switching
-	   - NDI support
 
 Notes about Vulkan on Windows
 -----------------------------
