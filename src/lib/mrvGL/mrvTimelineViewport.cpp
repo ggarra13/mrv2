@@ -1832,7 +1832,7 @@ namespace mrv
 
             if (frameView)
             {
-                Fl::wait(0.1);
+                mw->wait_for_expose();
                 _frameView();
             }
             

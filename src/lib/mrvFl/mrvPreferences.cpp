@@ -1769,7 +1769,7 @@ namespace mrv
             ui->uiViewGroup->init_sizes();
 
             ui->uiRegion->layout();
-        }
+         }
 
         panel::onlyOne((bool)uiPrefs->uiPrefsOnePanelOnly->value());
 

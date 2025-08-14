@@ -1758,7 +1758,7 @@ namespace mrv
         save_ui_state(ui, ui->uiBottomBar);
         if (ui->uiBottomBar->visible())
         {
-            set_edit_mode_cb(editMode, ui);
+            set_edit_mode_cb(previousEditMode, ui);
         }
         else
         {

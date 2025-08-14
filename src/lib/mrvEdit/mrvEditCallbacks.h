@@ -142,7 +142,8 @@ namespace mrv
     //
     // Set the edit mode height.
     //
-    extern EditMode editMode;
+    extern EditMode editMode;  // current edit mode
+    extern EditMode previousEditMode;
     extern int editModeH;
 
     void save_edit_mode_state(ViewerUI* ui);
