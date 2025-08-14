@@ -3291,7 +3291,7 @@ namespace mrv
 
         ui->uiView->valid(0);
         ui->uiView->refresh();
-        if (ui->uiTimeline->visible_r())
+        if (ui->uiTimeline->shown())
         {
             ui->uiTimeline->valid(0);
             ui->uiTimeline->refresh();
