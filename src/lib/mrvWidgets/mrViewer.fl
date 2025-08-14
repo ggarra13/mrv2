@@ -516,10 +516,10 @@ ui->uiView->take_focus();}
 if (!player) return;
 
 auto playback = player->playback();
-if (playback == tl::timeline::Playback::Stop)
-   ui->uiView->playBackwards();
+if (playback == tl::timeline::Playback::Reverse)
+   ui->uiView->stop();
 else
-   ui->uiView->stop();} selected
+   ui->uiView->playBackwards();} selected
             tooltip {Play sequence backwards.} xywh {174 3 38 24} labelcolor 19
             class {mrv::Button}
           }
@@ -547,7 +547,14 @@ else
           Fl_Button uiPlayForwards {
             label {@>}
             user_data this user_data_type {ViewerUI*}
-            callback {ui->uiView->togglePlayback();}
+            callback {auto player = ui->uiView->getTimelinePlayer();
+if (!player) return;
+
+auto playback = player->playback();
+if (playback == tl::timeline::Playback::Forward)
+   ui->uiView->stop();
+else
+   ui->uiView->playForwards();}
             tooltip {Play sequence forward.} xywh {326 3 37 24} down_box DOWN_BOX labelcolor 19
             class {mrv::Button}
           }

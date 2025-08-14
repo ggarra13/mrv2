@@ -27,12 +27,15 @@ namespace mrv
         switch (e)
         {
         case FL_ENTER:
-            default_color = color();
-            if (active_r() && !value())
+            if (color() != FL_YELLOW)
             {
-                set_cursor(FL_CURSOR_ARROW);
-                color(fl_lighter(default_color));
-                redraw();
+                default_color = color();
+                if (active_r() && !value())
+                {
+                    set_cursor(FL_CURSOR_ARROW);
+                    color(fl_lighter(default_color));
+                    redraw();
+                }
             }
             return 1;
         case FL_LEAVE:
