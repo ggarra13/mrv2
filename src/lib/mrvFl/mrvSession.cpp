@@ -9,7 +9,6 @@
 #include <tlCore/StringFormat.h>
 
 #include "mrvCore/mrvFile.h"
-#include "mrvCore/mrvWait.h"
 
 #include "mrvOptions/mrvEnvironmentMapOptions.h"
 #include "mrvOptions/mrvStereo3DOptions.h"
@@ -821,7 +820,7 @@ namespace mrv
                             // If we are running command-line, wait a tad for
                             // the callbacks and the main resize of window
                             // function to update.
-                            wait::milliseconds(1000);
+                            Fl::wait(1);
                         }
                         
                     }
@@ -839,7 +838,7 @@ namespace mrv
             // Change current session filename.
             setCurrent(fileName);
                 
-
+            
             return true;
         }
 

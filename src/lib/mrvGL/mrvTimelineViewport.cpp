@@ -50,7 +50,6 @@
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvMath.h"
 #include "mrvCore/mrvUtil.h"
-#include "mrvCore/mrvWait.h"
 
 #include "mrvFl/mrvIO.h"
 
@@ -1833,14 +1832,10 @@ namespace mrv
 
             if (frameView)
             {
-                // Wait a little so that resizing/maximizing takes place.
-                if (use_maximize)
-                    wait::milliseconds(1000);
-                else
-                    wait::milliseconds(100);
+                Fl::wait(0.1);
                 _frameView();
             }
-
+            
             set_edit_mode_cb(editMode, p.ui);
 
 #ifdef DEBUG_SCALING

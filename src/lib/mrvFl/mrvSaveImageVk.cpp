@@ -22,7 +22,6 @@
 #include "mrvCore/mrvLocale.h"
 #include "mrvCore/mrvMath.h"
 #include "mrvCore/mrvUtil.h"
-#include "mrvCore/mrvWait.h"
 
 #include <tlIO/System.h>
 
@@ -737,8 +736,8 @@ namespace mrv
         // Save this frame with the frame number
         _save_single_frame(file, ui, options, 0);
 
-        wait::milliseconds(1000);
-
+        Fl::wait(1);
+        
         // Rename file name that got saved with a frame number to the actual
         // frame that the user set.
         int64_t currentFrame = currentTime.to_frames();

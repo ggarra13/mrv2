@@ -32,7 +32,6 @@ set(HEADERS
     mrvString.h
     mrvTimeObject.h
     mrvUtil.h
-    mrvWait.h
 )
 
 set(SOURCES
@@ -53,7 +52,6 @@ set(SOURCES
     mrvSHA256.cpp
     mrvStackTrace.cpp
     mrvString.cpp
-    mrvWait.cpp
     mrvTimeObject.cpp
     mrvUtil.cpp
 )
