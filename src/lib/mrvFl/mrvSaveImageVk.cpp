@@ -64,6 +64,8 @@ namespace mrv
 
         // Stop the playback
         player->stop();
+        
+        std::shared_ptr<image::Image> tmpImage;
 
         auto currentTime = player->currentTime();
 
@@ -128,11 +130,34 @@ namespace mrv
                     renderSize.w = compareSize.w;
                     renderSize.h = compareSize.h;
                 }
-                if (resolution == SaveResolution::kHalfSize ||
-                    resolution == SaveResolution::kQuarterSize)
+                // \@todo: rotated images not yet supported.
+                
+                // auto rotation = view->getRotation();
+                // if (options.annotations && rotationSign(rotation) != 0)
+                // {
+                //     size_t tmp = renderSize.w;
+                //     renderSize.w = renderSize.h;
+                //     renderSize.h = tmp;
+
+                //     msg = tl::string::Format(_("Rotated image info: {0}"))
+                //               .arg(renderSize);
+                //     LOG_STATUS(msg);
+                // }
+                if (resolution == SaveResolution::kHalfSize)
                 {
-                    msg = tl::string::Format(_("Half/Quarter Size not supported in Vulkan"));
-                    LOG_WARNING(msg);
+                    renderSize.w /= 2;
+                    renderSize.h /= 2;
+                    msg = tl::string::Format(_("Scaled image info: {0}"))
+                              .arg(renderSize);
+                    LOG_STATUS(msg);
+                }
+                else if (resolution == SaveResolution::kQuarterSize)
+                {
+                    renderSize.w /= 4;
+                    renderSize.h /= 4;
+                    msg = tl::string::Format(_("Scaled image info: {0}"))
+                              .arg(renderSize);
+                    LOG_STATUS(msg);
                 }
                 msg = tl::string::Format(_("Render size: {0}"))
                       .arg(renderSize);
@@ -157,16 +182,13 @@ namespace mrv
                     string::Format("{0}: Cannot open writer plugin.")
                         .arg(file));
             }
-
-            int X = 0, Y = 0;
-
-            io::Info ioInfo;
-            image::Info outputInfo;
-            outputInfo.size = renderSize;
             
             auto tags = ui->uiView->getTags();
 
+            io::Info ioInfo;
+            image::Info outputInfo;
 
+            outputInfo.size = renderSize;
             std::shared_ptr<image::Image> outputImage;
             std::shared_ptr<image::Image> annotationImage;
 
@@ -202,73 +224,16 @@ namespace mrv
                 {
                     view->setShowVideo(options.video);
                     view->setActionMode(ActionMode::kScrub);
-                    view->setPresentationMode(true);
                     view->redraw();
                     // flush is needed
                     Fl::flush();
                     view->flush();
-                    Fl::check();
 
-                    // returns pixel_w(), pixel_h()
-                    auto viewportSize = view->getViewportSize();
-                    const float pixels_unit = view->pixels_per_unit();
-                    viewportSize.w /= pixels_unit;
-                    viewportSize.h /= pixels_unit;
-
-                    if (viewportSize.w >= renderSize.w &&
-                        viewportSize.h >= renderSize.h)
-                    {
-                        view->setFrameView(false);
-#ifdef __APPLE__
-                        view->setViewZoom(pixels_unit);
-#else
-                        view->setViewZoom(1.0);
-#endif
-                        view->centerView();
-                        view->redraw();
-                        // flush is needed
-                        Fl::flush();
-
-                        outputInfo.size = renderSize;
-                    }
-                    else
-                    {
-                        LOG_WARNING(_("Image too big for Save Annotations.  "
-                                      "Will scale to the viewport size."));
-
-                        view->frameView();
-
-                        float aspectImage =
-                            static_cast<float>(renderSize.w) / renderSize.h;
-                        float aspectViewport =
-                            static_cast<float>(viewportSize.w) / viewportSize.h;
-
-                        if (aspectImage > aspectViewport)
-                        {
-                            // Fit to width
-                            outputInfo.size.w = viewportSize.w;
-                            outputInfo.size.h = viewportSize.w / aspectImage;
-                        }
-                        else
-                        {
-                            // Fit to height
-                            outputInfo.size.h = viewportSize.h;
-                            outputInfo.size.w = viewportSize.h * aspectImage;
-                        }
-                    }
-
-                    X = std::max(0, (viewportSize.w - outputInfo.size.w) / 2);
-                    Y = std::max(0, (viewportSize.h - outputInfo.size.h) / 2);
-
-                    outputInfo.size.w = std::round(outputInfo.size.w);
-                    outputInfo.size.h = std::round(outputInfo.size.h);
-
-                    msg = tl::string::Format(_("Viewport Size: {0} - "
-                                               "X={1}, Y={2}"))
-                              .arg(viewportSize)
-                              .arg(X)
-                              .arg(Y);
-                    LOG_STATUS(msg);
+                    view->setFrameView(true);
+                    view->centerView();
+                    view->redraw();
+                    // flush is needed
+                    Fl::flush();
                 }
             }
 
@@ -335,7 +300,6 @@ namespace mrv
             outputImage = image::Image::create(outputInfo);
             
             outputInfo.pixelType = image::PixelType::RGBA_U8;
-            annotationImage = image::Image::create(outputInfo);
             
             ioInfo.video.push_back(outputInfo);
             ioInfo.videoTime = oneFrameTimeRange;
@@ -384,6 +348,21 @@ namespace mrv
             
                 size_t width = buffer->getWidth();
                 size_t height = buffer->getHeight();
+                
+                auto tempImageInfo = outputInfo;
+                tempImageInfo.size.w = width;
+                tempImageInfo.size.h = height;
+
+                if (width != outputInfo.size.w ||
+                    height != outputInfo.size.h)
+                {
+                    tmpImage = image::Image::create(tempImageInfo);
+                }
+                else
+                {
+                    tmpImage = outputImage;
+                }
+                
 
                 buffer->readPixels(cmd, 0, 0, width, height);
             
@@ -398,8 +377,9 @@ namespace mrv
                 {
                     LOG_ERROR(_("Could not read image data from view"));
                 }
-                memcpy(outputImage->getData(), data,
-                       outputImage->getDataByteCount());
+                
+                std::memcpy(tmpImage->getData(), data,
+                            tmpImage->getDataByteCount());
 
                 //
                 // Read Annotation Image
@@ -410,40 +390,42 @@ namespace mrv
                 case image::PixelType::RGBA_U8:
                     flipImageInY<uint8_t>(
                         reinterpret_cast<uint8_t*>(
-                            outputImage->getData()), width, height, 4);
+                            tmpImage->getData()), width, height, 4);
                     break;
                 case image::PixelType::RGB_U16:
                     flipImageInY<uint16_t>(
                         reinterpret_cast<uint16_t*>(
-                            outputImage->getData()), width, height, 3);
+                            tmpImage->getData()), width, height, 3);
                     break;
                 case image::PixelType::RGBA_U16:
                     flipImageInY<uint16_t>(
                         reinterpret_cast<uint16_t*>(
-                            outputImage->getData()), width, height, 4);
+                            tmpImage->getData()), width, height, 4);
                     break;
                 case image::PixelType::RGB_F16:
                     flipImageInY<half>(
                         reinterpret_cast<half*>(
-                            outputImage->getData()), width, height, 3);
+                            tmpImage->getData()), width, height, 3);
                     break;
                 case image::PixelType::RGBA_F16:
                     flipImageInY<half>(
                         reinterpret_cast<half*>(
-                            outputImage->getData()), width, height, 4);
+                            tmpImage->getData()), width, height, 4);
                     break;
                 case image::PixelType::RGB_F32:
                     flipImageInY<float>(
                         reinterpret_cast<float*>(
-                            outputImage->getData()), width, height, 3);
+                            tmpImage->getData()), width, height, 3);
                     break;
                 case image::PixelType::RGBA_F32:
                     flipImageInY<float>(
                         reinterpret_cast<float*>(
-                            outputImage->getData()), width, height, 4);
+                            tmpImage->getData()), width, height, 4);
                     break;
                 }
                 
+                annotationImage = image::Image::create(tempImageInfo);
+                        
                 if (overlayBuffer)
                 {
                     VkCommandBuffer cmd = beginSingleTimeCommands(device,
@@ -465,64 +447,81 @@ namespace mrv
                     {
                         LOG_ERROR(_("Could not read annotation image from view"));
                     }
-                    memcpy(annotationImage->getData(), data,
-                           annotationImage->getDataByteCount());
+                            
+                    std::memcpy(annotationImage->getData(), data,
+                                annotationImage->getDataByteCount());
                 }
                 else
                 {
                     annotationImage->zero();
                 }
-
+                
                 //
                 // Composite output
                 //
                 switch(outputInfo.pixelType)
                 {
                 case image::PixelType::RGB_U8:
-                    compositeImageOverNoAlpha((uint8_t*)outputImage->getData(),
-                                              annotationImage->getData(),
-                                              width, height);
+                    compositeImageOverNoAlpha<uint8_t>(
+                        reinterpret_cast<uint8_t*>(
+                            tmpImage->getData()),
+                        annotationImage->getData(),
+                        width, height);
                     break;
                 case image::PixelType::RGB_U16:
-                    compositeImageOverNoAlpha((uint16_t*)outputImage->getData(),
-                                              annotationImage->getData(),
-                                              width, height);
+                    compositeImageOverNoAlpha<uint16_t>(
+                        reinterpret_cast<uint16_t*>(
+                            tmpImage->getData()),
+                        annotationImage->getData(),
+                        width, height);
                     break;
                 case image::PixelType::RGBA_U16:
-                    compositeImageOver((uint16_t*)outputImage->getData(),
-                                       annotationImage->getData(),
-                                       width, height);
+                    compositeImageOver<uint16_t>(
+                        reinterpret_cast<uint16_t*>(
+                            tmpImage->getData()),
+                        annotationImage->getData(),
+                        width, height);
                     break;
                 case image::PixelType::RGB_F16:
-                    compositeImageOverNoAlpha((half*)outputImage->getData(),
-                                              annotationImage->getData(),
-                                              width, height);
+                    compositeImageOverNoAlpha<half>(
+                        reinterpret_cast<half*>(
+                            tmpImage->getData()),
+                        annotationImage->getData(),
+                        width, height);
                     break;
                 case image::PixelType::RGBA_F16:
-                    compositeImageOver((half*)outputImage->getData(),
-                                       annotationImage->getData(),
-                                       width, height);
+                    compositeImageOver<half>(
+                        reinterpret_cast<half*>(
+                            tmpImage->getData()),
+                        annotationImage->getData(),
+                        width, height);
                     break;
                 case image::PixelType::RGB_F32:
-                    compositeImageOverNoAlpha((float*)outputImage->getData(),
-                                              annotationImage->getData(),
-                                              width, height);
+                    compositeImageOverNoAlpha<float>(
+                        reinterpret_cast<float*>(
+                            tmpImage->getData()),
+                        annotationImage->getData(),
+                        width, height);
                     break;
                 case image::PixelType::RGBA_F32:
-                    compositeImageOver((float*)outputImage->getData(),
-                                       annotationImage->getData(),
-                                       width, height);
+                    compositeImageOver<float>(
+                        reinterpret_cast<float*>(
+                            tmpImage->getData()),
+                        annotationImage->getData(),
+                        width, height);
                     break;
                 default:
                 case image::PixelType::RGBA_U8:
-                    compositeImageOver((uint8_t*)outputImage->getData(),
-                                       annotationImage->getData(),
-                                       width, height);
+                    compositeImageOver<uint8_t>(
+                        reinterpret_cast<uint8_t*>(
+                            tmpImage->getData()),
+                        annotationImage->getData(),
+                        width, height);
                     break;
                 }
                 
                 vkFreeCommandBuffers(device, commandPool, 1, &cmd);
-                
+                        
                 view->setSaveOverlay(false);
                 
             }
@@ -583,7 +582,7 @@ namespace mrv
                     std::lock_guard<std::mutex> lock(ctx.queue_mutex());
                     vkQueueWaitIdle(ctx.queue());
                 }
-                                    
+                                                    
                 void* imageData = buffer->getLatestReadPixels();
                 if (imageData)
                 {
@@ -591,6 +590,17 @@ namespace mrv
                                 outputImage->getDataByteCount());
                                     
                     vkFreeCommandBuffers(device, commandPool, 1, &cmd);    
+                }
+
+                // Scale down result.
+                if (tmpImage && outputImage != tmpImage)
+                {
+                    scaleImageLinear(tmpImage->getData(), tmpImage->getWidth(),
+                                     tmpImage->getHeight(),
+                                     outputImage->getData(),
+                                     outputImage->getWidth(),
+                                     outputImage->getHeight(),
+                                     image::getChannelCount(outputImage->getPixelType()));
                 }
             }
 
@@ -640,7 +650,6 @@ namespace mrv
         view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
         view->setHudActive(hud);
         view->setShowVideo(true);
-        view->setPresentationMode(presentation);
         tcp->unlock();
 
         auto settings = ui->app->settings();
@@ -723,9 +732,12 @@ namespace mrv
         // Stop the playback
         player->stop();
 
-        const auto& currentTime = player->currentTime();
+        const auto& currentTime = player->currentTime(); 
 
         // Save this frame with the frame number
+        player->seek(currentTime);
+        waitForFrame(player, currentTime);
+            
         _save_single_frame(file, ui, options, 0);
 
         Fl::wait(1);

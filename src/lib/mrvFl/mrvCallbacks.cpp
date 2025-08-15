@@ -447,6 +447,8 @@ namespace mrv
         mrv::SaveOptions options;
         options.annotations =
             static_cast<bool>(saveOptions.Annotations->value());
+        options.resolution =
+            static_cast<SaveResolution>(saveOptions.Resolution->value());
 
         int value;
 
@@ -703,6 +705,8 @@ namespace mrv
 
             options.annotations =
                 static_cast<bool>(saveOptions.Annotations->value());
+            options.resolution =
+                static_cast<SaveResolution>(saveOptions.Resolution->value());
             annotations_frames_only =
                 static_cast<bool>(saveOptions.AnnotationFramesOnly->value());
 

@@ -390,17 +390,19 @@ namespace mrv
                     renderSize.w = compareSize.w;
                     renderSize.h = compareSize.h;
                 }
-                auto rotation = view->getRotation();
-                if (options.annotations && rotationSign(rotation) != 0)
-                {
-                    size_t tmp = renderSize.w;
-                    renderSize.w = renderSize.h;
-                    renderSize.h = tmp;
+                // \@todo: rotated images not yet supported.
+                
+                // auto rotation = view->getRotation();
+                // if (options.annotations && rotationSign(rotation) != 0)
+                // {
+                //     size_t tmp = renderSize.w;
+                //     renderSize.w = renderSize.h;
+                //     renderSize.h = tmp;
 
-                    msg = tl::string::Format(_("Rotated image info: {0}"))
-                              .arg(renderSize);
-                    LOG_STATUS(msg);
-                }
+                //     msg = tl::string::Format(_("Rotated image info: {0}"))
+                //               .arg(renderSize);
+                //     LOG_STATUS(msg);
+                // }
                 if (resolution == SaveResolution::kHalfSize)
                 {
                     renderSize.w /= 2;
@@ -417,6 +419,9 @@ namespace mrv
                               .arg(renderSize);
                     LOG_STATUS(msg);
                 }
+                msg = tl::string::Format(_("Render size: {0}"))
+                      .arg(renderSize);
+                LOG_STATUS(msg);
             }
 
             bool interactive = view->visible_r();
@@ -803,7 +808,7 @@ namespace mrv
                         {
                         default:
                         case image::PixelType::RGBA_U8:
-                            flipImageInY(
+                            flipImageInY<uint8_t>(
                                 reinterpret_cast<uint8_t*>(
                                     tmpImage->getData()), width, height, 4);
                             break;
@@ -864,8 +869,8 @@ namespace mrv
                                 LOG_ERROR(_("Could not read annotation image from view"));
                             }
                             
-                            memcpy(annotationImage->getData(), data,
-                                   annotationImage->getDataByteCount());
+                            std::memcpy(annotationImage->getData(), data,
+                                        annotationImage->getDataByteCount());
                         }
                         else
                         {

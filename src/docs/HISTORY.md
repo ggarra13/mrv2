@@ -46,6 +46,8 @@ v1.4.0
 - Added reporting of Studio location if MRV2_STUDIOPATH or STUDIOPATH are set.
 - Fixed saving of movies in Vulkan.
 - Fixed saving of movies at half and quarter resolution in Vulkan.
+- Fixed saving of single frames in Vulkan.
+- Fixed saving of single frames at half and quarter resolution in Vulkan.
 
 
 v1.3.9
