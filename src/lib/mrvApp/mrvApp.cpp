@@ -666,6 +666,12 @@ namespace mrv
         LOG_STATUS(_("Install Location: "));
         LOG_STATUS("\t" << mrv::rootpath());
         DBG;
+
+        if (!mrv::studiopath().empty())
+        {
+            LOG_STATUS(_("Studio Location: "));
+            LOG_STATUS("\t" << mrv::studiopath());
+        }
         
         LOG_STATUS(_("Preferences Location: "));
         if (file::isReadable(mrv::studiopath() + "/mrv2.prefs"))
