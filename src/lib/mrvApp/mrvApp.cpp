@@ -531,8 +531,12 @@ namespace mrv
                 fl_alert("License expired. Please enter new license.");
                 Fl::check();
             }
-            
+
+#ifdef _WIN32
+            std::string helper = rootpath() + "/bin/license_helper.exe";
+#else
             std::string helper = rootpath() + "/bin/license_helper";
+#endif
             // This is needed for macOS installed bundle.
             if (!file::isReadable(helper))
             {
