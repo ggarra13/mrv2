@@ -533,6 +533,11 @@ namespace mrv
             }
             
             std::string helper = rootpath() + "/bin/license_helper";
+            // This is needed for macOS installed bundle.
+            if (!file::isReadable(helper))
+            {
+                helper = rootpath() + "/../Resources/bin/license_helper";
+            }
             int ret = os::exec_command(helper.c_str());
             if (ret == 0)
             {
@@ -661,6 +666,12 @@ namespace mrv
         LOG_STATUS(_("Install Location: "));
         LOG_STATUS("\t" << mrv::rootpath());
         DBG;
+
+        if (!mrv::studiopath().empty())
+        {
+            LOG_STATUS(_("Studio Location: "));
+            LOG_STATUS("\t" << mrv::studiopath());
+        }
         
         LOG_STATUS(_("Preferences Location: "));
         if (file::isReadable(mrv::studiopath() + "/mrv2.prefs"))

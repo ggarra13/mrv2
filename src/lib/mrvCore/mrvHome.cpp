@@ -55,7 +55,7 @@ namespace mrv
             // This block should ideally never be hit.
             // Add logging here if it is.
             LOG_ERROR("Root path not set");
-            return "..";
+            return "../Resources/";
         }
         return g_root_path;
     }
@@ -152,9 +152,11 @@ namespace mrv
 
     std::string studiopath()
     {
-        const char* c = fl_getenv("STUDIOPATH");
-        if (!c)
-            return "/";
+        const char* c = fl_getenv("MRV2_STUDIOPATH");
+        if (!c || strlen(c) == 0)
+            c = fl_getenv("STUDIOPATH");
+        if (!c || strlen(c) == 0)
+            return "";
         std::string r = c;
         r += "/.filmaura/";
         return r;
