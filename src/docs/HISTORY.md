@@ -40,9 +40,10 @@ v1.4.0
   RMB->Update->Thumbnails.
 - Added thorough list of Wayland compositors with their version commands.
 - Added Desktop Envionment report when using X11 or Wayland.
-- Fixed finding all preferences with STUDIOPATH.
+- Fixed finding all preferences with MRV2_STUDIOPATH and STUDIOPATH.
 - Fixed framing when loading a session file.
 - Improved startup times from the command-line and when loading the first clip.
+- Added reporting of Studio location if MRV2_STUDIOPATH or STUDIOPATH are set.
 
 
 v1.3.9
