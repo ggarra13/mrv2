@@ -533,6 +533,11 @@ namespace mrv
             }
             
             std::string helper = rootpath() + "/bin/license_helper";
+            // This is needed for macOS installed bundle.
+            if (!file::isReadable(helper))
+            {
+                helper = rootpath() + "/../Resources/bin/license_helper";
+            }
             int ret = os::exec_command(helper.c_str());
             if (ret == 0)
             {
