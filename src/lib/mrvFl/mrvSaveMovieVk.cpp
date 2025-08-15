@@ -189,7 +189,6 @@ namespace mrv
                 std::stringstream s;
                 s << speed;
                 ioOptions["OpenEXR/Speed"] = s.str();
-                LOG_STATUS("OpenEXR Speed=" << speed);
             }
 #endif
 
@@ -438,8 +437,6 @@ namespace mrv
                         .arg(file));
             }
 
-            int X = 0, Y = 0;
-
             io::Info ioInfo;
             image::Info outputInfo;
 
@@ -451,6 +448,7 @@ namespace mrv
 
             player->start();
 
+            std::shared_ptr<image::Image> tmpImage;
             if (hasVideo)
             {
 
@@ -469,75 +467,11 @@ namespace mrv
                     Fl::flush();
                     view->flush();
 
-                    // Wait 2 seconds (needed on Apple for presentation mode
-                    //                 visible resizing)
-                    Fl::wait(2.0);
-                    
-                    // returns pixel_w(), pixel_h()
-                    auto viewportSize = view->getViewportSize();
-                    float pixels_unit = view->pixels_per_unit();
-                    viewportSize.w /= pixels_unit;
-                    viewportSize.h /= pixels_unit;
-
-                    math::Size2i outputSize;
-                    if (viewportSize.w >= renderSize.w &&
-                        viewportSize.h >= renderSize.h)
-                    {
-                        view->setFrameView(false);
-#ifndef __APPLE__
-                        pixels_unit = 1.0F;
-#endif
-                        if (resolution == SaveResolution::kHalfSize)
-                            view->setViewZoom(0.5 * pixels_unit);
-                        else if (resolution == SaveResolution::kQuarterSize)
-                            view->setViewZoom(0.25 * pixels_unit);
-                        else
-                            view->setViewZoom(pixels_unit);
-                        view->centerView();
-                        view->redraw();
-                        // flush is needed
-                        Fl::flush();
-
-                        outputInfo.size = renderSize;
-                    }
-                    else
-                    {
-                        LOG_WARNING(_("Image too big for Save Annotations.  "
-                                      "Will scale to the viewport size."));
-
-                        view->frameView();
-
-                        float aspectImage =
-                            static_cast<float>(renderSize.w) / renderSize.h;
-                        float aspectViewport =
-                            static_cast<float>(viewportSize.w) / viewportSize.h;
-
-                        if (aspectImage > aspectViewport)
-                        {
-                            // Fit to width
-                            outputInfo.size.w = viewportSize.w;
-                            outputInfo.size.h = viewportSize.w / aspectImage;
-                        }
-                        else
-                        {
-                            // Fit to height
-                            outputInfo.size.h = viewportSize.h;
-                            outputInfo.size.w = viewportSize.h * aspectImage;
-                        }
-                    }
-
-                    X = std::max(0, (viewportSize.w - outputInfo.size.w) / 2);
-                    Y = std::max(0, (viewportSize.h - outputInfo.size.h) / 2);
-
-                    outputInfo.size.w = std::round(outputInfo.size.w);
-                    outputInfo.size.h = std::round(outputInfo.size.h);
-
-                    msg = tl::string::Format(_("Viewport Size: {0} - "
-                                               "X={1}, Y={2}"))
-                              .arg(viewportSize)
-                              .arg(X)
-                              .arg(Y);
-                    LOG_STATUS(msg);
+                    view->setFrameView(true);
+                    view->centerView();
+                    view->redraw();
+                    // flush is needed
+                    Fl::flush();
                 }
 
 
@@ -585,9 +519,8 @@ namespace mrv
                 ioOptions["OpenEXR/PixelType"] = getLabel(outputInfo.pixelType);
 #endif
                 outputImage = image::Image::create(outputInfo);
-
+                
                 outputInfo.pixelType = image::PixelType::RGBA_U8;
-                annotationImage = image::Image::create(outputInfo);
             
                 ioInfo.videoTime = videoTime;
                 ioInfo.video.push_back(outputInfo);
@@ -808,7 +741,7 @@ namespace mrv
                 }
 
                 if (hasVideo)
-                {
+                { 
                     if (options.annotations)
                     {
                         view->redraw();
@@ -829,7 +762,22 @@ namespace mrv
             
                         size_t width = buffer->getWidth();
                         size_t height = buffer->getHeight();
+                        auto tempImageInfo = outputInfo;
+                        tempImageInfo.size.w = width;
+                        tempImageInfo.size.h = height;
 
+                        if (width != outputInfo.size.w ||
+                            height != outputInfo.size.h)
+                        {
+                            if (!tmpImage)
+                                tmpImage = image::Image::create(tempImageInfo);
+                        }
+                        else
+                        {
+                            tmpImage = outputImage;
+                        }
+                
+                        
                         buffer->readPixels(cmd, 0, 0, width, height);
             
                         vkEndCommandBuffer(cmd);
@@ -843,8 +791,10 @@ namespace mrv
                         {
                             LOG_ERROR(_("Could not read image data from view"));
                         }
-                        memcpy(outputImage->getData(), data,
-                               outputImage->getDataByteCount());
+
+                        
+                        std::memcpy(tmpImage->getData(), data,
+                                    tmpImage->getDataByteCount());
 
                         //
                         // Read Annotation Image
@@ -854,34 +804,44 @@ namespace mrv
                         default:
                         case image::PixelType::RGBA_U8:
                             flipImageInY(
-                                (uint8_t*)outputImage->getData(), width, height, 4);
+                                reinterpret_cast<uint8_t*>(
+                                    tmpImage->getData()), width, height, 4);
                             break;
                         case image::PixelType::RGB_U16:
-                            flipImageInY(
-                                (uint16_t*)outputImage->getData(), width, height, 3);
+                            flipImageInY<uint16_t>(
+                                reinterpret_cast<uint16_t*>(
+                                    tmpImage->getData()), width, height, 3);
                             break;
                         case image::PixelType::RGBA_U16:
-                            flipImageInY(
-                                (uint16_t*)outputImage->getData(), width, height, 4);
+                            flipImageInY<uint16_t>(
+                                reinterpret_cast<uint16_t*>(
+                                    tmpImage->getData()), width, height, 4);
                             break;
                         case image::PixelType::RGB_F16:
-                            flipImageInY(
-                                (half*)outputImage->getData(), width, height, 3);
+                            flipImageInY<half>(
+                                reinterpret_cast<half*>(
+                                    tmpImage->getData()), width, height, 3);
                             break;
                         case image::PixelType::RGBA_F16:
-                            flipImageInY(
-                                (half*)outputImage->getData(), width, height, 4);
+                            flipImageInY<half>(
+                                reinterpret_cast<half*>(
+                                    tmpImage->getData()), width, height, 4);
                             break;
                         case image::PixelType::RGB_F32:
-                            flipImageInY(
-                                (half*)outputImage->getData(), width, height, 3);
+                            flipImageInY<float>(
+                                reinterpret_cast<float*>(
+                                    tmpImage->getData()), width, height, 3);
                             break;
                         case image::PixelType::RGBA_F32:
-                            flipImageInY(
-                                (float*)outputImage->getData(), width, height, 4);
+                            flipImageInY<float>(
+                                reinterpret_cast<float*>(
+                                    tmpImage->getData()), width, height, 4);
                             break;
                         }
-                
+
+                        if (!annotationImage)
+                            annotationImage = image::Image::create(tempImageInfo);
+                        
                         if (overlayBuffer)
                         {
                             VkCommandBuffer cmd = beginSingleTimeCommands(device,
@@ -903,6 +863,7 @@ namespace mrv
                             {
                                 LOG_ERROR(_("Could not read annotation image from view"));
                             }
+                            
                             memcpy(annotationImage->getData(), data,
                                    annotationImage->getDataByteCount());
                         }
@@ -917,45 +878,61 @@ namespace mrv
                         switch(outputInfo.pixelType)
                         {
                         case image::PixelType::RGB_U8:
-                            compositeImageOverNoAlpha((uint8_t*)outputImage->getData(),
-                                                      annotationImage->getData(),
-                                                      width, height);
+                            compositeImageOverNoAlpha<uint8_t>(
+                                reinterpret_cast<uint8_t*>(
+                                    tmpImage->getData()),
+                                annotationImage->getData(),
+                                width, height);
                             break;
                         case image::PixelType::RGB_U16:
-                            compositeImageOverNoAlpha((uint16_t*)outputImage->getData(),
-                                                      annotationImage->getData(),
-                                                      width, height);
+                            compositeImageOverNoAlpha<uint16_t>(
+                                reinterpret_cast<uint16_t*>(
+                                    tmpImage->getData()),
+                                annotationImage->getData(),
+                                width, height);
                             break;
                         case image::PixelType::RGBA_U16:
-                            compositeImageOver((uint16_t*)outputImage->getData(),
-                                               annotationImage->getData(),
-                                               width, height);
+                            compositeImageOver<uint16_t>(
+                                reinterpret_cast<uint16_t*>(
+                                    tmpImage->getData()),
+                                annotationImage->getData(),
+                                width, height);
                             break;
                         case image::PixelType::RGB_F16:
-                            compositeImageOverNoAlpha((half*)outputImage->getData(),
-                                                      annotationImage->getData(),
-                                                      width, height);
+                            compositeImageOverNoAlpha<half>(
+                                reinterpret_cast<half*>(
+                                    tmpImage->getData()),
+                                annotationImage->getData(),
+                                width, height);
                             break;
                         case image::PixelType::RGBA_F16:
-                            compositeImageOver((half*)outputImage->getData(),
-                                               annotationImage->getData(),
-                                               width, height);
+                            compositeImageOver<half>(
+                                reinterpret_cast<half*>(
+                                    tmpImage->getData()),
+                                annotationImage->getData(),
+                                width, height);
                             break;
                         case image::PixelType::RGB_F32:
-                            compositeImageOverNoAlpha((float*)outputImage->getData(),
-                                                      annotationImage->getData(),
-                                                      width, height);
+                            compositeImageOverNoAlpha<float>(
+                                reinterpret_cast<float*>(
+                                    tmpImage->getData()),
+                                annotationImage->getData(),
+                                width, height);
                             break;
                         case image::PixelType::RGBA_F32:
-                            compositeImageOver((float*)outputImage->getData(),
-                                               annotationImage->getData(),
-                                               width, height);
+                            compositeImageOver<float>(
+                                reinterpret_cast<float*>(
+                                    tmpImage->getData()),
+                                annotationImage->getData(),
+                                width, height);
                             break;
                         default:
                         case image::PixelType::RGBA_U8:
-                            compositeImageOver((uint8_t*)outputImage->getData(),
-                                               annotationImage->getData(),
-                                               width, height);
+                            compositeImageOver<uint8_t>(
+                                reinterpret_cast<uint8_t*>(
+                                    tmpImage->getData()),
+                                annotationImage->getData(),
+                                width, height);
                             break;
                         }
                 
@@ -1049,6 +1026,17 @@ namespace mrv
                         }
                     }
 
+                    // Scale down result.
+                    if (outputImage != tmpImage)
+                    {
+                        scaleImageLinear(tmpImage->getData(), tmpImage->getWidth(),
+                                         tmpImage->getHeight(),
+                                         outputImage->getData(),
+                                         outputImage->getWidth(),
+                                         outputImage->getHeight(),
+                                         image::getChannelCount(outputImage->getPixelType()));
+                    }
+                    
                     if (videoTime.contains(currentTime))
                     {
                         const auto& tags = ui->uiView->getTags();

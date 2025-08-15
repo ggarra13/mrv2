@@ -128,26 +128,11 @@ namespace mrv
                     renderSize.w = compareSize.w;
                     renderSize.h = compareSize.h;
                 }
-                auto rotation = ui->uiView->getRotation();
-                if (options.annotations && rotationSign(rotation) != 0)
+                if (resolution == SaveResolution::kHalfSize ||
+                    resolution == SaveResolution::kQuarterSize)
                 {
-                    size_t tmp = renderSize.w;
-                    renderSize.w = renderSize.h;
-                    renderSize.h = tmp;
-
-                    msg = tl::string::Format(_("Rotated image info: {0}"))
-                              .arg(renderSize);
-                    LOG_STATUS(msg);
-                }
-                if (resolution == SaveResolution::kHalfSize)
-                {
-                    renderSize.w /= 2;
-                    renderSize.h /= 2;
-                }
-                else if (resolution == SaveResolution::kQuarterSize)
-                {
-                    renderSize.w /= 4;
-                    renderSize.h /= 4;
+                    msg = tl::string::Format(_("Half/Quarter Size not supported in Vulkan"));
+                    LOG_WARNING(msg);
                 }
                 msg = tl::string::Format(_("Render size: {0}"))
                       .arg(renderSize);
@@ -423,32 +408,39 @@ namespace mrv
                 {
                 default:
                 case image::PixelType::RGBA_U8:
-                    flipImageInY(
-                        (uint8_t*)outputImage->getData(), width, height, 4);
+                    flipImageInY<uint8_t>(
+                        reinterpret_cast<uint8_t*>(
+                            outputImage->getData()), width, height, 4);
                     break;
                 case image::PixelType::RGB_U16:
-                    flipImageInY(
-                        (uint16_t*)outputImage->getData(), width, height, 3);
+                    flipImageInY<uint16_t>(
+                        reinterpret_cast<uint16_t*>(
+                            outputImage->getData()), width, height, 3);
                     break;
                 case image::PixelType::RGBA_U16:
-                    flipImageInY(
-                        (uint16_t*)outputImage->getData(), width, height, 4);
+                    flipImageInY<uint16_t>(
+                        reinterpret_cast<uint16_t*>(
+                            outputImage->getData()), width, height, 4);
                     break;
                 case image::PixelType::RGB_F16:
-                    flipImageInY(
-                        (half*)outputImage->getData(), width, height, 3);
+                    flipImageInY<half>(
+                        reinterpret_cast<half*>(
+                            outputImage->getData()), width, height, 3);
                     break;
                 case image::PixelType::RGBA_F16:
-                    flipImageInY(
-                        (half*)outputImage->getData(), width, height, 4);
+                    flipImageInY<half>(
+                        reinterpret_cast<half*>(
+                            outputImage->getData()), width, height, 4);
                     break;
                 case image::PixelType::RGB_F32:
-                    flipImageInY(
-                        (half*)outputImage->getData(), width, height, 3);
+                    flipImageInY<float>(
+                        reinterpret_cast<float*>(
+                            outputImage->getData()), width, height, 3);
                     break;
                 case image::PixelType::RGBA_F32:
-                    flipImageInY(
-                        (float*)outputImage->getData(), width, height, 4);
+                    flipImageInY<float>(
+                        reinterpret_cast<float*>(
+                            outputImage->getData()), width, height, 4);
                     break;
                 }
                 

@@ -28,16 +28,10 @@
 #include <tlCore/StringFormat.h>
 #include <tlCore/Time.h>
 
-#ifdef VULKAN_BACKEND
-#  include <tlVk/Init.h>
-#  include <tlVk/Util.h>
-#  include <tlTimelineVk/Render.h>
-#else
-#  include <tlGL/Init.h>
-#  include <tlGL/Util.h>
-#  include <tlGL/GLFWWindow.h>
-#  include <tlTimelineGL/Render.h>
-#endif
+#include <tlGL/Init.h>
+#include <tlGL/Util.h>
+#include <tlGL/GLFWWindow.h>
+#include <tlTimelineGL/Render.h>
 
 #include <FL/Fl.H>
 
@@ -194,7 +188,6 @@ namespace mrv
                 std::stringstream s;
                 s << speed;
                 ioOptions["OpenEXR/Speed"] = s.str();
-                LOG_STATUS("OpenEXR Speed=" << speed);
             }
 #endif
 
@@ -374,13 +367,10 @@ namespace mrv
                         .arg(file));
             }
             
-#ifdef VULKAN_BACKEND
-            vlk::OffscreenBufferOptions offscreenBufferOptions;
-            std::shared_ptr<timeline_vlk::Render> render;
-#else
+
             gl::OffscreenBufferOptions offscreenBufferOptions;
             std::shared_ptr<timeline_gl::Render> render;
-#endif
+
             image::Size renderSize;
             int layerId = ui->uiColorChannel->value();
             if (layerId < 0)
@@ -431,10 +421,6 @@ namespace mrv
 
             bool interactive = view->visible_r();
             
-#ifdef VULKAN_BACKEND
-            auto ctx = ui->uiView->getContext();
-            render = timeline_vlk::Render::create(ctx, context);
-#else
             std::shared_ptr<gl::GLFWWindow> window;
             if (!interactive)
             {
@@ -446,11 +432,7 @@ namespace mrv
 
             // Create the renderer.
             render = timeline_gl::Render::create(context);
-#endif
             offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
-#ifdef VULKAN_BACKEND
-            offscreenBufferOptions.pbo = true;
-#endif
 
             // Create the writer.
             auto writerPlugin = ioSystem->getPlugin(path);
@@ -593,10 +575,6 @@ namespace mrv
                     outputInfo.pixelType = image::PixelType::RGB_U8;
                     offscreenBufferOptions.colorType = image::PixelType::RGB_U8;
 #endif
-#ifdef VULKAN_BACKEND
-                    outputInfo.pixelType = image::PixelType::RGBA_U8;
-                    offscreenBufferOptions.colorType = image::PixelType::RGBA_U8;
-#endif
 #ifdef TLRENDER_EXR
                     if (saveEXR)
                     {
@@ -727,15 +705,6 @@ namespace mrv
             // Don't send any tcp updates
             tcp->lock();
 
-#ifdef VULKAN_BACKEND
-            if (hasVideo)
-            {
-                offscreenBufferOptions.colorType = outputInfo.pixelType;
-                msg = tl::string::Format(_("Vulkan info: {0}"))
-                          .arg(offscreenBufferOptions.colorType);
-                LOG_STATUS(msg);
-            }
-#else
             GLenum format = gl::getReadPixelsFormat(outputInfo.pixelType);
             GLenum type = gl::getReadPixelsType(outputInfo.pixelType);
             if (hasVideo)
@@ -751,23 +720,13 @@ namespace mrv
                           .arg(offscreenBufferOptions.colorType);
                 LOG_STATUS(msg);
             }
-#endif
 
             // Turn off hud so it does not get captured by glReadPixels.
             view->setHudActive(false);
 
             math::Size2i offscreenBufferSize(renderSize.w, renderSize.h);
 
-#ifdef VULKAN_BACKEND
-            std::shared_ptr<vlk::OffscreenBuffer> buffer;
-            if (hasVideo)
-            {
-                buffer = vlk::OffscreenBuffer::create(
-                    ctx, offscreenBufferSize, offscreenBufferOptions);
-            }
-#else
             std::shared_ptr<gl::OffscreenBuffer> buffer;
-
             if (hasVideo)
             {
                 if (interactive)
@@ -779,7 +738,7 @@ namespace mrv
                 buffer = gl::OffscreenBuffer::create(
                     offscreenBufferSize, offscreenBufferOptions);
             }
-#endif
+
             size_t totalSamples = 0;
             size_t currentSampleCount =
                 startTime.rescaled_to(sampleRate).value();
