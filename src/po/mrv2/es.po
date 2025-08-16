@@ -524,13 +524,13 @@ msgstr "tipo(s) de operaciones no soportadas para {0}: RationalTime y {1}"
 
 msgid ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/rt."
-"rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/"
+"rt.rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
 "\n"
-"La clase RationalTime representa una medida de tiempo de :math:`rt.value/rt."
-"rate` segundos.\n"
+"La clase RationalTime representa una medida de tiempo de :math:`rt.value/"
+"rt.rate` segundos.\n"
 "Puede ser re-escalada a otra razón de :class:`~RationalTime`.\n"
 
 msgid ""
@@ -612,8 +612,8 @@ msgstr "Convierta a timecode (``HH:MM:SS;FRAME``)"
 msgid ""
 "Convert a timecode string (``HH:MM:SS;FRAME``) into a :class:`~RationalTime`."
 msgstr ""
-"Convierta un texto con timecode (``HH:MM:SS;FRAME``) a :class:"
-"`~RationalTime`."
+"Convierta un texto con timecode (``HH:MM:SS;FRAME``) "
+"a :class:`~RationalTime`."
 
 msgid ""
 "Convert a time with microseconds string (``HH:MM:ss`` where ``ss`` is an "
@@ -1981,6 +1981,21 @@ msgstr "Flujo {0} {1}..."
 msgid "Stop streaming"
 msgstr "Deja de transmitir"
 
+msgid "Renderer"
+msgstr "Renderizador"
+
+msgid "Complexity"
+msgstr "Complejidad"
+
+msgid "Draw Mode"
+msgstr "Modo de Dibujar"
+
+msgid "Stage Cache"
+msgstr "Cache del Escenario"
+
+msgid "Disk Cache in GB"
+msgstr "Cache en Disco en GB"
+
 msgid "Toggle other eye stereo image."
 msgstr "Alternar el otro ojo de la imagen estéreo."
 
@@ -3040,17 +3055,17 @@ msgstr "Grabando Película sin Audio %<PRId64> - %<PRId64>"
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Solo audio en la línea de tiempo, pero no intenta grabar audio."
 
-msgid "Offscreen Buffer info: {0}"
-msgstr "Información del Buffer: {0}"
+msgid "{0}: Invalid OpenGL format and type"
+msgstr "{0}: Formato y tipo de OpenGL inválidos"
+
+msgid "OpenGL info: {0}"
+msgstr "Información de OpenGL: {0}"
 
 msgid "Saving... {0}"
 msgstr "Grando... {0}."
 
-msgid "Could not read image data from view"
-msgstr "No pude leer los datos de la imagen de la vista"
-
-msgid "Could not read annotation image from view"
-msgstr "No pude leer la imagen de anotación de la vista"
+msgid "Unsupported output format"
+msgstr "Formato de salida no soportado"
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "Datos de vídeo vacíos en el momento {0}. Repetición del cuadro."
@@ -3060,6 +3075,12 @@ msgstr "Tamaño de renderizado: {0}"
 
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr "Información de la capa de imagen '{0}': {1} {2}"
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "Información del Buffer: {0}"
+
+msgid "Unsupported output format: "
+msgstr "Formato de salida no soportado: "
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -3877,14 +3898,11 @@ msgstr "   Adelante V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "   Atrás       V: % 4<PRIu64>    A: % 4<PRIu64> "
 
-msgid "HDR monitor found."
-msgstr "Monitor HDR encontrado."
-
-msgid "HDR monitor not found or not configured."
-msgstr "Monitor HDR no encontrado o no configurado."
-
 msgid "Edit Text"
 msgstr "Editar Texto"
+
+msgid "Invalid font for text drawing"
+msgstr "Fuente inválida para dibujar texto"
 
 msgid "Could not convert message to shape: "
 msgstr "No pude convertir el mensaje a figura: "
@@ -6575,13 +6593,11 @@ msgid "Sensitivity"
 msgstr "Sensitividad"
 
 msgid ""
-"This setting controls the sensitivity of scrubbing (SHIFT and then the mouse "
-"right and left).  Smaller values make the mouse move jump more frames while "
-"higher values does the opposite."
+"This setting controls the sensitivity of scrubbing.  Smaller values make the "
+"mouse move jump more frames while higher values does the opposite."
 msgstr ""
-"Este seteo controla la sensibilidad de fregado (left mouse dragright and "
-"left).  Valores menores hacen que el ratón salte más cuadros mientras que "
-"valores más altos hacen lo opuesto."
+"Este seteo controla la sensibilidad de fregado.  Valores menores hacen que "
+"el ratón salte más cuadros mientras que valores más altos hacen lo opuesto."
 
 msgid ""
 "Start playback when scrubbing so that audio can be heard.  Scrubbing can be "
@@ -6739,14 +6755,14 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
-"exr"
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
 msgstr ""
 "Expresión regular usada para distinguir versiones del clip.  Debe tener tres "
 "groupos (prefijo, número y sufijo).  Si se deja en su valor estándar (_v), "
 "automáticamente se creará una para encontrar versiones que definidas con _v "
-"en el nombre del archivo, la carpeta o ambos. Por ejemplo: gizmo_v001.0001."
-"exr"
+"en el nombre del archivo, la carpeta o ambos. Por ejemplo: "
+"gizmo_v001.0001.exr"
 
 msgid "Maximum Images Apart"
 msgstr "Máximas Imágenes Aparte"
@@ -7661,9 +7677,6 @@ msgstr "Modo de Fregado"
 msgid "Area Selection Mode"
 msgstr "Modo de Selección de Área"
 
-msgid "Draw Mode"
-msgstr "Modo de Dibujar"
-
 msgid "Erase Mode"
 msgstr "Modo de Borrar"
 
@@ -7754,35 +7767,20 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
 
-#~ msgid "Renderer"
-#~ msgstr "Renderizador"
+#~ msgid "Could not read image data from view"
+#~ msgstr "No pude leer los datos de la imagen de la vista"
 
-#~ msgid "Complexity"
-#~ msgstr "Complejidad"
+#~ msgid "Could not read annotation image from view"
+#~ msgstr "No pude leer la imagen de anotación de la vista"
 
-#~ msgid "Stage Cache"
-#~ msgstr "Cache del Escenario"
+#~ msgid "HDR monitor found."
+#~ msgstr "Monitor HDR encontrado."
 
-#~ msgid "Disk Cache in GB"
-#~ msgstr "Cache en Disco en GB"
+#~ msgid "HDR monitor not found or not configured."
+#~ msgstr "Monitor HDR no encontrado o no configurado."
 
 #~ msgid "Vulkan info: {0}"
 #~ msgstr "Información de Vulkan: {0}"
-
-#~ msgid "{0}: Invalid OpenGL format and type"
-#~ msgstr "{0}: Formato y tipo de OpenGL inválidos"
-
-#~ msgid "OpenGL info: {0}"
-#~ msgstr "Información de OpenGL: {0}"
-
-#~ msgid "Unsupported output format"
-#~ msgstr "Formato de salida no soportado"
-
-#~ msgid "Unsupported output format: "
-#~ msgstr "Formato de salida no soportado: "
-
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "Fuente inválida para dibujar texto"
 
 #~ msgid "Scrub with Audio"
 #~ msgstr "Fregar con Audio"

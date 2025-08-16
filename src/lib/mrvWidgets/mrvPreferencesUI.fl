@@ -1065,7 +1065,7 @@ v->uiPrefsFPS->value( g );}
                 } {
                   Fl_Value_Input uiPrefsScrubbingSensitivity {
                     label Sensitivity
-                    tooltip {This setting controls the sensitivity of scrubbing (SHIFT and then the mouse right and left).  Smaller values make the mouse move jump more frames while higher values does the opposite.} xywh {483 306 56 28} color 20 minimum 2 maximum 50 step 1 value 5 textcolor 56
+                    tooltip {This setting controls the sensitivity of scrubbing.  Smaller values make the mouse move jump more frames while higher values does the opposite.} xywh {483 306 56 28} color 20 minimum 2 maximum 50 step 1 value 5 textcolor 56
                   }
                   Fl_Check_Button uiPrefsScrubAutoPlay {
                     label {With Audio}
