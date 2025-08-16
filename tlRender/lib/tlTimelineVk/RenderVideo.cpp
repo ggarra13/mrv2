@@ -1118,6 +1118,7 @@ namespace tl
                                        pushData.size(), pushData.data());
                 }
 
+            
                 fbo->beginLoadRenderPass(p.cmd);
 
                 p.shaders["display"]->bind(p.frameIndex);

@@ -811,8 +811,6 @@ namespace tl
         void Render::wait_device()
         {
             VkDevice device = ctx.device;
-            
-            std::lock_guard<std::mutex> lock(ctx.queue_mutex());
             vkDeviceWaitIdle(device);
         }
         
@@ -871,6 +869,11 @@ namespace tl
             p.fbo = fbo;
             p.renderPass = fbo->getClearRenderPass();
             p.frameIndex = frameIndex;
+            
+            const VkColorComponentFlags allMask[] =
+                { VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
+                  VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
+            ctx.vkCmdSetColorWriteMaskEXT(cmd, 0, 1, allMask);
 
             begin(renderSize, renderOptions);
         }

@@ -48,6 +48,7 @@ v1.4.0
 - Fixed saving of movies at half and quarter resolution in Vulkan.
 - Fixed saving of single frames in Vulkan.
 - Fixed saving of single frames at half and quarter resolution in Vulkan.
+- Added Stereo3D Anaglyph support to Vulkan.
 
 
 v1.3.9

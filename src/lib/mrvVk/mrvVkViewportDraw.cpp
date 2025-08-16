@@ -49,12 +49,15 @@ namespace mrv
         {
             TLRENDER_P();
             MRV2_VK();
-
-            // glColorMask(GL_TRUE, GL_FALSE, GL_FALSE, GL_TRUE);
+            
+            const VkColorComponentFlags redMask[] =
+                { VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_A_BIT };
+            ctx.vkCmdSetColorWriteMaskEXT(vk.cmd, 0, 1, redMask);
 
             vk.render->drawVideo(
                 {p.videoData[left]},
-                timeline::getBoxes(timeline::CompareMode::A, {p.videoData[left]}),
+                timeline::getBoxes(timeline::CompareMode::A,
+                                   {p.videoData[left]}),
                 p.imageOptions, p.displayOptions);
 
             if (p.stereo3DOptions.eyeSeparation != 0.F)
@@ -65,13 +68,20 @@ namespace mrv
                 vk.render->setTransform(mvp);
             }
 
-            // glColorMask(GL_FALSE, GL_TRUE, GL_TRUE, GL_TRUE);
+            const VkColorComponentFlags cyanMask[] =
+                { VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT |
+                  VK_COLOR_COMPONENT_A_BIT };
+            ctx.vkCmdSetColorWriteMaskEXT(vk.cmd, 0, 1, cyanMask);
+            
             vk.render->drawVideo(
                 {p.videoData[right]},
                 timeline::getBoxes(timeline::CompareMode::A, {p.videoData[right]}),
                 p.imageOptions, p.displayOptions);
 
-            // glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+            const VkColorComponentFlags allMask[] =
+                { VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
+                  VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
+            ctx.vkCmdSetColorWriteMaskEXT(vk.cmd, 0, 1, allMask);
         }
 
         void Viewport::_drawScanlines(int left, int right) noexcept
@@ -336,6 +346,7 @@ namespace mrv
             default:
             case Stereo3DOutput::Anaglyph:
                 _drawAnaglyph(left, right);
+                break;
             }
         }
 

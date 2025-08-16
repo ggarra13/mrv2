@@ -107,7 +107,14 @@ namespace tl
             // Defaults are fine
             vlk::DynamicStateInfo dynamicState;
             dynamicState.dynamicStates = {
-                VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR};
+                VK_DYNAMIC_STATE_VIEWPORT,
+                VK_DYNAMIC_STATE_SCISSOR,
+                VK_DYNAMIC_STATE_COLOR_WRITE_MASK_EXT,
+                // VK_DYNAMIC_STATE_STENCIL_COMPARE_MASK,
+                // VK_DYNAMIC_STATE_STENCIL_WRITE_MASK,
+                // VK_DYNAMIC_STATE_STENCIL_REFERENCE,
+                // VK_DYNAMIC_STATE_STENCIL_OP_EXT
+            };
 
             // Get the vertex and fragment shaders
             std::vector<vlk::PipelineCreationState::ShaderStageInfo>
