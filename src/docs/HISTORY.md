@@ -49,6 +49,8 @@ v1.4.0
 - Fixed saving of single frames in Vulkan.
 - Fixed saving of single frames at half and quarter resolution in Vulkan.
 - Added Stereo3D Anaglyph support to Vulkan.
+- Fixed hanging on Wayland with Vulkan's windows when they were going
+  off-screen.
 
 
 v1.3.9
