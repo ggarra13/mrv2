@@ -209,7 +209,10 @@ namespace mrv
             
             vlk::DynamicStateInfo dynamicState;
             dynamicState.dynamicStates = {
-                VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR};
+                VK_DYNAMIC_STATE_VIEWPORT,
+                VK_DYNAMIC_STATE_SCISSOR,
+                VK_DYNAMIC_STATE_COLOR_WRITE_MASK_EXT,
+            };
             
             // Defaults are fine
             vlk::MultisampleStateInfo ms;
@@ -250,7 +253,7 @@ namespace mrv
                 throw std::runtime_error("Composition pipeline failed");
             }
         }
-
+        
         void Viewport::prepare_annotation_pipeline()
         {
             MRV2_VK();
@@ -1028,6 +1031,12 @@ namespace mrv
 
                 if (vk.vao && vk.vbo)
                 {
+            
+                    const VkColorComponentFlags allMask[] =
+                        { VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
+                          VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
+                    ctx.vkCmdSetColorWriteMaskEXT(cmd, 0, 1, allMask);
+            
                     vk.vao->bind(m_currentFrameIndex);
                     vk.vao->draw(cmd, vk.vbo);
                 }

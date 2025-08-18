@@ -1149,14 +1149,6 @@ namespace mrv
         context->removeSystem(system);
 #endif
 
-        // Hide any GL Window (needed in Windows)
-        Fl_Window* pw = Fl::first_window();
-        while (pw)
-        {
-            pw->hide();
-            pw = Fl::first_window();
-        }
-
         // Delete Color Chooser
         delete colorChooser;
 
@@ -1164,6 +1156,8 @@ namespace mrv
         if (ui->uiPrefs->uiPrefsRemoveEDLs->value())
             removeTemporaryEDLs(ui);
 
+        Fl::hide_all_windows();
+        
         tcp->unlock();
     }
 
