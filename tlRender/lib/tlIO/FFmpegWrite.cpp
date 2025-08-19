@@ -1156,6 +1156,8 @@ namespace tl
                         LOG_STATUS("Trying Hardware encoding.");
                     }
                 }
+                std::string avBitrate;
+                std::string profileString;
                 switch (profile)
                 {
                 case Profile::H264:
@@ -1165,50 +1167,62 @@ namespace tl
                 case Profile::ProRes:
                     avCodecID = AV_CODEC_ID_PRORES;
                     avProfile = FF_PROFILE_PRORES_STANDARD;
+                    profileString = "standard";
                     break;
                 case Profile::ProRes_Proxy:
                     avCodecID = AV_CODEC_ID_PRORES;
                     avProfile = FF_PROFILE_PRORES_PROXY;
+                    profileString = "proxy";
                     break;
                 case Profile::ProRes_LT:
                     avCodecID = AV_CODEC_ID_PRORES;
                     avProfile = FF_PROFILE_PRORES_LT;
+                    profileString = "lt";
                     break;
                 case Profile::ProRes_HQ:
                     avCodecID = AV_CODEC_ID_PRORES;
                     avProfile = FF_PROFILE_PRORES_HQ;
+                    profileString = "hq";
                     break;
                 case Profile::ProRes_4444:
                     avCodecID = AV_CODEC_ID_PRORES;
                     avProfile = FF_PROFILE_PRORES_4444;
+                    profileString = "4444";
                     break;
                 case Profile::ProRes_XQ:
                     avCodecID = AV_CODEC_ID_PRORES;
                     avProfile = FF_PROFILE_PRORES_XQ;
+                    profileString = "4444xq";
                     break;
                 case Profile::DNxHD:
                     avCodecID = AV_CODEC_ID_DNXHD;
                     avProfile = FF_PROFILE_DNXHD;
+                    avBitrate = "44000";
                     break;
                 case Profile::DNxHR_LB:
                     avCodecID = AV_CODEC_ID_DNXHD;
                     avProfile = FF_PROFILE_DNXHR_LB;
+                    profileString = "dnxhr_lb";
                     break;
                 case Profile::DNxHR_SQ:
                     avCodecID = AV_CODEC_ID_DNXHD;
                     avProfile = FF_PROFILE_DNXHR_SQ;
+                    profileString = "dnxhr_sq";
                     break;
                 case Profile::DNxHR_HQ:
                     avCodecID = AV_CODEC_ID_DNXHD;
                     avProfile = FF_PROFILE_DNXHR_HQ;
+                    profileString = "dnxhr_hq";
                     break;
                 case Profile::DNxHR_HQX:
                     avCodecID = AV_CODEC_ID_DNXHD;
                     avProfile = FF_PROFILE_DNXHR_HQX;
+                    profileString = "dnxhr_hqx";
                     break;
                 case Profile::DNxHR_444:
                     avCodecID = AV_CODEC_ID_DNXHD;
                     avProfile = FF_PROFILE_DNXHR_444;
+                    profileString = "dnxhr_444";
                     break;
                 case Profile::VP9:
                     avCodecID = AV_CODEC_ID_VP9;
@@ -1454,6 +1468,16 @@ namespace tl
 
                 // Get codec options from preset file
                 AVDictionary* codecOptions = NULL;
+                if (!profileString.empty())
+                {
+                    av_dict_set(&codecOptions, "profile", profileString.c_str(),
+                                0);
+                }
+                if (!avBitrate.empty())
+                {
+                    av_dict_set(&codecOptions, "bitrate", avBitrate.c_str(),
+                                0);
+                }
 
                 std::string presetFile;
                 option = options.find("FFmpeg/PresetFile");

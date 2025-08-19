@@ -51,6 +51,7 @@ v1.4.0
 - Added Stereo3D Anaglyph support to Vulkan.
 - Fixed hanging on Wayland with Vulkan's windows when they were going
   off-screen.
+- Fixed saving of Prores and DNXHD with the correct profiles.
 
 
 v1.3.9
