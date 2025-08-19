@@ -145,9 +145,9 @@ Enjoy!
 
 Prices after v1.4.0
 -------------------
-* Buy mrv2 (or Vulkan vmrv2) for personal use at a cost of u$50, paid by a Paypal donation (I will use the email to verify purchase and issue a yearly license).
+* Buy mrv2 (or Vulkan vmrv2) for personal use at a cost of u\$50, paid by a Paypal donation (I will use the email to verify purchase and issue a yearly license).
 
-* Buy mrv2 (or Vulkan vmrv2) for personal use to own at a cost of u$150, paid by a Paypal donation (I will use the email to verify purchase and issue a non-expiring license).
+* Buy mrv2 (or Vulkan vmrv2) for personal use to own at a cost of u\$150, paid by a Paypal donation (I will use the email to verify purchase and issue a non-expiring license).
 
 Differences between Vulkan and OpenGL
 -------------------------------------
