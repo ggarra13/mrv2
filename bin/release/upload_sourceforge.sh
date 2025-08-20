@@ -43,8 +43,10 @@ get_kernel
 
 
 export mrv2_NAME=mrv2
+export branch=beta
 if [[ $MRV2_BACKEND == "VK" ]]; then
     export mrv2_NAME=vmrv2
+    export branch=vulkan
 fi
 
 #
