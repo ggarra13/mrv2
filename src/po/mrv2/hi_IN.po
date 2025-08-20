@@ -1917,6 +1917,21 @@ msgstr "{0} स्ट्रीम कर रहा है {1}"
 msgid "Stop streaming"
 msgstr "स्ट्रीम जारी करना बन्द करें"
 
+msgid "Renderer"
+msgstr "रेंडरर"
+
+msgid "Complexity"
+msgstr "जटिलता"
+
+msgid "Draw Mode"
+msgstr "मोड आरेखित करें"
+
+msgid "Stage Cache"
+msgstr "चरण कैश"
+
+msgid "Disk Cache in GB"
+msgstr "GB में डिस्क कैश"
+
 msgid "Toggle other eye stereo image."
 msgstr "अन्य आँख स्टीरियो छवि टॉगल करें."
 
@@ -2898,17 +2913,23 @@ msgstr ""
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "नया फ़ाइल {0} पहले से मौजूद है! इसपर लिख नहीं सकता"
 
+msgid "Rotated image info: {0}"
+msgstr "छवि जानकारी घुमाएँ: {0}"
+
 msgid "Scaled image info: {0}"
 msgstr "स्केल्ड छवि सूचना: {0}"
-
-msgid "Render size: {0}"
-msgstr "रेंडर आकार: {0}"
 
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: लेखक प्लगइन खोल नहीं सका."
 
 msgid "Image info: {0} {1}"
 msgstr "छवि जानकारी: {0} {1}"
+
+msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+msgstr "सहेजने के लिए छवि बहुत बड़ा. व्यूपोर्ट आकार में स्केल किया जाएगा."
+
+msgid "Viewport Size: {0} - X={1}, Y={2}"
+msgstr "दृश्य आकार: {0} - X={1}, Y={2}"
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr "राइटर प्लगइन आउटपुट जानकारी नहीं पा सका. {0} को डिफ़ॉल्ट रूप में"
@@ -2937,23 +2958,32 @@ msgstr "ऑडियो के बिना छवि सहेज रहा ह
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "केवल समय में ऑडियो, लेकिन ऑडियो सहेजने की कोशिश नहीं कर रहा है."
 
-msgid "Offscreen Buffer info: {0}"
-msgstr "ऑफस्क्रीन बफ़र जानकारी: {0}"
+msgid "{0}: Invalid OpenGL format and type"
+msgstr "{0}: अवैध OpenGL प्रारूप और प्रकार"
+
+msgid "OpenGL info: {0}"
+msgstr "ओपन- जीएल जानकारी: {0}"
 
 msgid "Saving... {0}"
 msgstr "सहेजा जा रहा है... {0}"
 
-msgid "Could not read image data from view"
-msgstr "दृश्य से छवि डेटा पढ़ा नहीं जा सका"
-
-msgid "Could not read annotation image from view"
-msgstr "दृश्य से एनोटेशन छवि पढ़ी नहीं जा सकी"
+msgid "Unsupported output format"
+msgstr "असमर्थित आउटपुट प्रारूप"
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "{0} समय पर वीडियो आँकड़ा खाली करें"
 
+msgid "Render size: {0}"
+msgstr "रेंडर आकार: {0}"
+
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr "छवि परत '{0}' जानकारी: {1} {2}"
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "ऑफस्क्रीन बफ़र जानकारी: {0}"
+
+msgid "Unsupported output format: "
+msgstr "असमर्थित आउटपुट प्रारूप: "
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -3661,9 +3691,6 @@ msgstr "फ्रेम {0} - समयकोड: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "छवि बहुत बड़ा है. व्यूपोर्ट आकार सहेजेगा."
 
-msgid "Viewport Size: {0} - X={1}, Y={2}"
-msgstr "दृश्य आकार: {0} - X={1}, Y={2}"
-
 msgid "Scrub"
 msgstr "स्क्रैप"
 
@@ -3763,14 +3790,11 @@ msgstr "     आगे     V: % 4<PRIu64>     A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "      पीछे    V: % 4<PRIu64>     A: % 4<PRIu64>"
 
-msgid "HDR monitor found."
-msgstr "HDR मॉनिटर पाया गया।"
-
-msgid "HDR monitor not found or not configured."
-msgstr "HDR मॉनिटर नहीं मिला या कॉन्फ़िगर नहीं किया गया।"
-
 msgid "Edit Text"
 msgstr "पाठ संपादित करें"
+
+msgid "Invalid font for text drawing"
+msgstr "पाठ चित्रण के लिए अमान्य फ़ॉन्ट"
 
 msgid "Could not convert message to shape: "
 msgstr "संदेश को आकार में परिवर्तित नहीं कर सका:"
@@ -6413,7 +6437,6 @@ msgstr "समय रेखा में डिफ़ॉल्ट लूपि�
 msgid "Sensitivity"
 msgstr "संवेदनशीलता"
 
-#, fuzzy
 msgid ""
 "This setting controls the sensitivity of scrubbing.  Smaller values make the "
 "mouse move jump more frames while higher values does the opposite."
@@ -7478,9 +7501,6 @@ msgstr "स्क्रैप मोड"
 msgid "Area Selection Mode"
 msgstr "क्षेत्र चयन विधि"
 
-msgid "Draw Mode"
-msgstr "मोड आरेखित करें"
-
 msgid "Erase Mode"
 msgstr "मिटाने का मोड"
 
@@ -7571,39 +7591,17 @@ msgstr "यदि आप विंडो को बन्द करना चा
 msgid "Toggle About Window"
 msgstr "विंडो के बारे में टॉगल करें"
 
-#~ msgid "Renderer"
-#~ msgstr "रेंडरर"
+#~ msgid "Could not read image data from view"
+#~ msgstr "दृश्य से छवि डेटा पढ़ा नहीं जा सका"
 
-#~ msgid "Complexity"
-#~ msgstr "जटिलता"
+#~ msgid "Could not read annotation image from view"
+#~ msgstr "दृश्य से एनोटेशन छवि पढ़ी नहीं जा सकी"
 
-#~ msgid "Stage Cache"
-#~ msgstr "चरण कैश"
+#~ msgid "HDR monitor found."
+#~ msgstr "HDR मॉनिटर पाया गया।"
 
-#~ msgid "Disk Cache in GB"
-#~ msgstr "GB में डिस्क कैश"
-
-#~ msgid "Rotated image info: {0}"
-#~ msgstr "छवि जानकारी घुमाएँ: {0}"
-
-#~ msgid ""
-#~ "Image too big for Save Annotations.  Will scale to the viewport size."
-#~ msgstr "सहेजने के लिए छवि बहुत बड़ा. व्यूपोर्ट आकार में स्केल किया जाएगा."
-
-#~ msgid "{0}: Invalid OpenGL format and type"
-#~ msgstr "{0}: अवैध OpenGL प्रारूप और प्रकार"
-
-#~ msgid "OpenGL info: {0}"
-#~ msgstr "ओपन- जीएल जानकारी: {0}"
-
-#~ msgid "Unsupported output format"
-#~ msgstr "असमर्थित आउटपुट प्रारूप"
-
-#~ msgid "Unsupported output format: "
-#~ msgstr "असमर्थित आउटपुट प्रारूप: "
-
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "पाठ चित्रण के लिए अमान्य फ़ॉन्ट"
+#~ msgid "HDR monitor not found or not configured."
+#~ msgstr "HDR मॉनिटर नहीं मिला या कॉन्फ़िगर नहीं किया गया।"
 
 #~ msgid "Vulkan info: {0}"
 #~ msgstr "वल्कन जानकारी: {0}"
