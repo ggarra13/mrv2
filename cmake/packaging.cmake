@@ -311,7 +311,9 @@ else()
     
     # There is a bug in NSIS that does not handle full unix paths properly. Make
     # sure there is at least one set of four (4) backlasshes.
-    set(CPACK_NSIS_MODIFY_PATH ON)
+    # Turn off the page to allow modifying paths with NSIS as that breaks
+    # compatibility with other DCCs that use OpenUSD like Maya.
+    set(CPACK_NSIS_MODIFY_PATH OFF)
 
     set(CPACK_GENERATOR NSIS ZIP)
 
