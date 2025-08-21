@@ -43,7 +43,7 @@ get_kernel
 
 
 export mrv2_NAME=mrv2
-export branch=beta
+export branch=opengl
 if [[ $MRV2_BACKEND == "VK" ]]; then
     export mrv2_NAME=vmrv2
     export branch=vulkan
@@ -107,7 +107,7 @@ upload_file()
     echo "Uploading $1 as $2..."
     echo
     
-    rsync -avz -e "ssh -i $SSH_KEY -o StrictHostKeyChecking=no" $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/$branch/$2 2>&1 | tee rsync_error.log
+    rsync -avz -e "ssh -i $SSH_KEY -o StrictHostKeyChecking=no" $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$branch/$2
     if [[ $? -ne 0 ]]; then
         echo "rsync command failed. Error log:"
 	cat rsync_error.log
@@ -162,7 +162,7 @@ Vulkan Demo Version
 
 The Vulkan releases at:
 
-https://sourceforge.net/projects/mrv2/files/vulkan
+https://sourceforge.net/projects/mrv2/files/beta/vulkan
 
 directory are versions for you to evaluate vmrv2 before a purchase and report bugs or performance issues.
 Currently, when run as demo these versions don't have:
@@ -365,7 +365,7 @@ file_array=($files)
 
 # Iterate over the array of filenames
 for src in "${file_array[@]}"; do
-    dest=`echo $src | sed -e "s/v$mrv2_VERSION/$branch/"`
+    dest=`echo $src | sed -e "s/v$mrv2_VERSION/beta/"`
     upload_file "${src}" "${dest}"
 done
 

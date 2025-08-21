@@ -149,7 +149,10 @@ for full_name in full_names:
 def count_sourceforge(repo, folder_name, end_date, start_date = '2021-10-29'):
 
     print()
-    print(f"\tCount {folder_name} from {start_date} to {end_date}")
+    commercial = ''
+    if folder_name == 'vulkan':
+        commercial = '(commercial limited demo)'
+    print(f"\tCount {folder_name} from {start_date} to {end_date} {commercial}")
     
     # Base URL for the project downloads page
     base_url = f"https://sourceforge.net/projects/{repo}/files/{folder_name}/stats/json?start_date={start_date}&end_date={end_date}"
@@ -181,9 +184,9 @@ def count_sourceforge(repo, folder_name, end_date, start_date = '2021-10-29'):
 sourceforge_released_total = count_sourceforge(repo, folder_name,
                                                end_date)
 
-sourceforge_beta_total = count_sourceforge(repo, 'beta', end_date, start_date)
+sourceforge_beta_total = count_sourceforge(repo, 'beta/opengl', end_date, start_date)
 
-sourceforge_beta_total = count_sourceforge(repo, 'vulkan', end_date, start_date)
+sourceforge_beta_total = count_sourceforge(repo, 'beta/vulkan', end_date, start_date)
 
 formatted_total = format_number(sourceforge_released_total +
                                 sourceforge_beta_total +
