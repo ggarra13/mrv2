@@ -460,7 +460,7 @@ namespace mrv
             case FL_Escape:
                 text = "";
                 return accept();
-                break;
+                break; 
             case FL_Delete:
             {
                 if (utf8_pos >= text.size())
@@ -564,12 +564,11 @@ namespace mrv
             }
             default:
             {
-                std::string left;
-                std::string right;
-                
-                std::string key = Fl::event_text();
-                if (key != "")
+                int len = Fl::event_length();
+                if (Fl::event_text() && len > 0)
                 {
+                    std::string key(Fl::event_text(), len);
+                    
                     std::string left;
                     std::string right;
                     if (utf8_pos > 0)
@@ -584,7 +583,7 @@ namespace mrv
                         right = text.substr(utf8_pos, text.size());
                     
                     text = left + key + right;
-                    utf8_pos += Fl::event_length();
+                    utf8_pos += len;
                 }
                 break;
             }
@@ -731,7 +730,7 @@ namespace mrv
 
         const image::Color4f cursorColor(.8F, 0.8F, 0.8F);
         math::Box2i cursorBox(cursor_pos.x,
-                              cursor_pos.y - ascender - descender, 2, fontSize);
+                              cursor_pos.y - ascender + descender, 2, fontSize);
             
         if (editing)
         {
@@ -751,17 +750,29 @@ namespace mrv
                         box.max.y = v.y;
                 }
             }
-            
+
+            //
+            // Make room in box for cursor
+            //
             box.expand(cursorBox);
-            
+
+            //
+            // Draw background which will be darker
+            //
             const image::Color4f bgcolor(0.F, 0.F, 0.F, 0.5F);
             box = box.margin(4);
             render->drawRect(box, bgcolor);
-            
+
+            //
+            // Draw second background (lighter)
+            //
             box = box.margin(4);
             box.expand(cursorBox);
             render->drawRect(box, bgcolor);
 
+            //
+            // Draw cross
+            //
             image::Color4f crossColor(0.F, 1.F, 0.F);
             if (text.empty())
                 crossColor = image::Color4f(1.F, 0.F, 0.F);
@@ -775,12 +786,19 @@ namespace mrv
             lines->drawLine(render, start, end, crossColor, 2);
 
         }
+        
+        //
+        // Draw all text with color 
+        //
         for (const auto& textInfo : textInfos)
         {
             render->drawText(textInfo, math::Vector2i(), color);
         }
         if (editing)
         {
+            //
+            // Finally, draw cursor.
+            // 
             render->drawRect(cursorBox, cursorColor);
         }
     }
