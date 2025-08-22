@@ -52,6 +52,7 @@ v1.4.0
 - Fixed hanging on Wayland with Vulkan's windows when they were going
   off-screen.
 - Fixed saving of Prores and DNXHD with the correct profiles.
+- Fixed saving of Half images on Vulkan backend.
 
 
 v1.3.9

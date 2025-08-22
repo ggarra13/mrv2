@@ -479,8 +479,8 @@ namespace mrv
                     Fl::flush();
                 }
 
-
                 outputInfo = writerPlugin->getWriteInfo(outputInfo);
+                
                 if (image::PixelType::kNone == outputInfo.pixelType)
                 {
                     outputInfo.pixelType = image::PixelType::RGBA_U8;
@@ -489,7 +489,7 @@ namespace mrv
                     if (saveEXR)
                     {
                         offscreenBufferOptions.colorType =
-                            image::PixelType::RGB_F32;
+                            options.exrPixelType;
                     }
 #endif
                     msg = tl::string::Format(
@@ -502,10 +502,9 @@ namespace mrv
 #ifdef TLRENDER_EXR
                 if (saveEXR)
                 {
-                    if (!options.annotations)
-                    {
-                        outputInfo.pixelType = options.exrPixelType;
-                    }
+                    outputInfo.pixelType = options.exrPixelType;
+                    offscreenBufferOptions.colorType =
+                        outputInfo.pixelType;
                 }
 #endif
                 if (saveHDR)
@@ -524,8 +523,6 @@ namespace mrv
                 ioOptions["OpenEXR/PixelType"] = getLabel(outputInfo.pixelType);
 #endif
                 outputImage = image::Image::create(outputInfo);
-                
-                outputInfo.pixelType = image::PixelType::RGBA_U8;
             
                 ioInfo.videoTime = videoTime;
                 ioInfo.video.push_back(outputInfo);
@@ -1032,9 +1029,10 @@ namespace mrv
                     }
 
                     // Scale down result.
-                    if (outputImage != tmpImage)
+                    if (tmpImage && outputImage != tmpImage)
                     {
-                        scaleImageLinear(tmpImage->getData(), tmpImage->getWidth(),
+                        scaleImageLinear(tmpImage->getData(),
+                                         tmpImage->getWidth(),
                                          tmpImage->getHeight(),
                                          outputImage->getData(),
                                          outputImage->getWidth(),
