@@ -154,7 +154,7 @@ Prices after v1.4.0
 Differences between Vulkan and OpenGL
 -------------------------------------
 
-- Vulkan is a new open source API, compared to OpenGL that it might get deprecated on some platforms like macOS.  It supports true HDR (High Dynamic Range), it is about two times faster than the OpenGL version but it does not support OpenUSD.  It is also less buggy on Linux Wayland, at least with NVidia drivers.
+- Vulkan is a new open source API, compared to OpenGL that it might get deprecated on some platforms like macOS.  It supports true HDR (High Dynamic Range), it is between 20% and 50% faster than the OpenGL version but it does not support OpenUSD.
 - OpenGL's only benefit at this point is that it supports OpenUSD.
 
 Vulkan Demo Version
