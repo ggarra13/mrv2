@@ -262,7 +262,7 @@ namespace mrv
                 if (saveEXR)
                 {
                     offscreenBufferOptions.colorType =
-                        image::PixelType::RGB_F32;
+                        options.exrPixelType;
                 }
 #endif
                 msg = tl::string::Format(
@@ -281,11 +281,9 @@ namespace mrv
 #ifdef TLRENDER_EXR
             if (saveEXR)
             {
-                if (options.annotations)
-                {
-                    outputInfo.pixelType = options.exrPixelType;
-                }
-                offscreenBufferOptions.colorType = outputInfo.pixelType;
+                outputInfo.pixelType = options.exrPixelType;
+                offscreenBufferOptions.colorType =
+                    outputInfo.pixelType;
             }
 #endif
 
