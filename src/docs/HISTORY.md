@@ -56,6 +56,8 @@ v1.4.0
 - Fixed saving of images without annotations on Vulkan.
 - Fixed Presentation mode autofit on OpenGL backend.
 - Fixed toggling of Presentation and Fullscreen modes quickly in Vulkan backend.
+- Made Vulkan text input widget for annotations support composed keys as those
+  in international keyboards and CJK.
 
 
 v1.3.9
