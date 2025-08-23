@@ -481,7 +481,6 @@ namespace mrv
                     if (next < text.size())
                         right = text.substr(next, text.size());
                     text = left + right;
-                    Fl::compose_reset();
                     break;
                 }
                 case FL_BackSpace:
@@ -579,16 +578,14 @@ namespace mrv
             }
             else
             {
-                int fl_pos = Fl::compose_state; 
                 int len = Fl::event_length();
-                if (Fl::event_text() && len > 0)
+                std::string key(Fl::event_text(), len);
+                if (del > 0 || Fl::event_text() && len > 0)
                 {
-                    std::string key(Fl::event_text(), len);
-                    
                     std::string left;
                     std::string right;
                     if (utf8_pos > 0)
-                        left = text.substr(0, utf8_pos - fl_pos); 
+                        left = text.substr(0, utf8_pos - del); 
                     
                     const char* current = text.c_str() + utf8_pos;
                     const char* start = current;
@@ -599,7 +596,7 @@ namespace mrv
                         right = text.substr(utf8_pos, text.size());
                     
                     text = left + key + right;
-                    utf8_pos += len;
+                    utf8_pos += len - del;
                 }
             }
             to_cursor();
