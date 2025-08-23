@@ -58,6 +58,7 @@ v1.4.0
 - Fixed toggling of Presentation and Fullscreen modes quickly in Vulkan backend.
 - Made Vulkan text input widget for annotations support composed keys as those
   in international keyboards and CJK.
+- Made starting playback from the command-line faster.
 
 
 v1.3.9
