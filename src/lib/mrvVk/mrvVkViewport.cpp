@@ -743,9 +743,9 @@ namespace mrv
                 {
                     // If user is changing preferences or hotkeys, keep
                     // the default cursor.
-                    if (p.ui->uiPrefs->uiMain->visible() ||
-                        p.ui->uiHotkey->uiMain->visible() ||
-                        p.ui->uiAbout->uiMain->visible())
+                    if ((p.ui->uiPrefs && p.ui->uiPrefs->uiMain->visible()) ||
+                        (p.ui->uiHotkey && p.ui->uiHotkey->uiMain->visible()) ||
+                        (p.ui->uiAbout && p.ui->uiAbout->uiMain->visible()))
                     {
                         set_cursor(FL_CURSOR_DEFAULT);
                     }

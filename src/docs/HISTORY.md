@@ -60,6 +60,7 @@ v1.4.0
   in international keyboards and CJK.
 - Made starting playback from the command-line faster.
 - Fixed crashes when switching from/to presentation mode when starting out as presentation mode.
+- Fixed a potential crash when exiting the program in Presentation mode.
 
 
 v1.3.9
