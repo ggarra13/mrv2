@@ -59,6 +59,7 @@ v1.4.0
 - Made Vulkan text input widget for annotations support composed keys as those
   in international keyboards and CJK.
 - Made starting playback from the command-line faster.
+- Fixed a potential crash when exiting the program in Presentation mode.
 
 
 v1.3.9
