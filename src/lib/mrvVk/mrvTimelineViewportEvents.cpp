@@ -1059,11 +1059,11 @@ namespace mrv
             switch (event)
             {
             case FL_FOCUS:
+            case FL_UNFOCUS:
                 return 1;
             case FL_ENTER:
             {
                 p.lastEvent = 0;
-            
 #ifdef __APPLE__
                 if (p.ui->uiMenuBar && p.ui->uiPrefs->uiPrefsMacOSMenus->value())
                     p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
@@ -1089,9 +1089,6 @@ namespace mrv
                 return 1;
                 break;
             }
-            case FL_UNFOCUS:
-                return 1;
-                break;
             case FL_PUSH:
             {
                 if (Fl::focus() != this && Fl::event_button1())
@@ -1670,13 +1667,14 @@ namespace mrv
                     }
                     return 1;
                 }
-
+                
                 bool primary = true;
                 if (p.ui->uiSecondary &&
                     p.ui->uiSecondary->viewport() ==
                     reinterpret_cast<MyViewport*>(this))
                     primary = false;
 
+                int ret = 0;
                 if (!p.ui->uiMenuGroup->visible() || !primary)
                 {
                     ret = p.ui->uiMenuBar->handle(FL_SHORTCUT);

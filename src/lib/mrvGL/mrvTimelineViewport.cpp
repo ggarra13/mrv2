@@ -413,8 +413,8 @@ namespace mrv
                     time - p.lastScrubTime)
                 .count();
 
-            // We do not check the rate exactly as the timeout may trigger a
-            // tad early.
+            // We do not check the rate exactly as the timeout may trigger a tad
+            // early.
             const double fuzzFactor = t.rate() * 0.5;
             const double rate = t.rate() + fuzzFactor;
 
@@ -996,6 +996,7 @@ namespace mrv
         TimelineViewport::setHDROptions(const timeline::HDROptions& value) noexcept
         {
             TLRENDER_P();
+            
             if (value == p.hdrOptions)
                 return;
             p.hdrOptions.algorithm = value.algorithm;
@@ -1341,6 +1342,8 @@ namespace mrv
             {
                 if (!p.presentation)
                     resizeWindow();
+                else if (p.frameView)
+                    frameView();
             }
             else if (p.frameView && p.switchClip)
             {
@@ -1702,7 +1705,7 @@ namespace mrv
 
             bool alwaysFrameView = (bool)uiPrefs->uiPrefsAutoFitImage->value();
             p.frameView = alwaysFrameView;
-            bool frameView = p.frameView;
+            bool frameView = alwaysFrameView;
 
             if (uiPrefs->uiWindowFixedSize->value())
             {
@@ -1835,33 +1838,8 @@ namespace mrv
                 mw->wait_for_expose();
                 _frameView();
             }
-            
+
             set_edit_mode_cb(editMode, p.ui);
-
-#ifdef DEBUG_SCALING
-            HBars = 0;
-            TVH = 0;
-
-            // Take into account the different UI bars
-            if (p.ui->uiMenuGroup->visible())
-                HBars += p.ui->uiMenuGroup->h();
-
-            if (p.ui->uiTopBar->visible())
-                HBars += p.ui->uiTopBar->h();
-
-            if (p.ui->uiPixelBar->visible())
-                HBars += p.ui->uiPixelBar->h();
-
-            if (p.ui->uiBottomBar->visible())
-            {
-                HBars += p.ui->uiBottomBar->h();
-            }
-
-            if (p.ui->uiStatusGroup->visible())
-                HBars += p.ui->uiStatusGroup->h();
-
-            TVH = calculate_edit_viewport_size(p.ui);
-#endif
 
             // We need to adjust dock group too.  These lines are needed.
             auto viewGroup = p.ui->uiViewGroup;
@@ -2481,7 +2459,6 @@ namespace mrv
                 if (!_hasSecondaryViewport())
                 {
                     hide_ui_state(p.ui);
-                    p.ui->uiTimeline->hide();
                 }
                 _setFullScreen(active);
                 p.presentation = true;
@@ -2504,7 +2481,11 @@ namespace mrv
         {
             TLRENDER_P();
 
-            MainWindow* w = p.ui->uiMain;
+            if (p.fullScreen == active)
+                return;
+            
+            p.fullScreen = active;
+     
             if (!active)
             {
                 if (!p.presentation)
@@ -2518,7 +2499,6 @@ namespace mrv
                         0.01, (Fl_Timeout_Handler)restore_ui_state, p.ui);
 #endif
                 }
-                p.fullScreen = false;
                 p.presentation = false;
             }
             else
@@ -2527,14 +2507,8 @@ namespace mrv
                     restore_ui_state(p.ui);
                 save_ui_state(p.ui);
                 _setFullScreen(true);
-                if (!p.presentation)
-                    Fl::add_timeout(
-                        0.0, (Fl_Timeout_Handler)restore_ui_state, p.ui);
                 p.presentation = false;
-                p.fullScreen = true;
             }
-
-            w->fill_menu(p.ui->uiMenuBar);
         }
 
         void TimelineViewport::setMaximized() noexcept
@@ -3195,8 +3169,8 @@ namespace mrv
             {
                 for (int X = 0; X < maxX; ++X)
                 {
-                    image::Color4f& rgba =
-                        (image::Color4f&)p.image[(X + maxX * Y) * 4];
+                    float* data = reinterpret_cast<float*>(p.image);
+                    image::Color4f& rgba = (image::Color4f&)data[(X + maxX * Y) * 4];
                     rgba.r = rgba.g = rgba.b = rgba.a = 0.f;
 
                     math::Vector2i pos(X, Y);
@@ -3204,14 +3178,13 @@ namespace mrv
                     {
                         for (const auto& layer : video.layers)
                         {
-                            const auto image = layer.image;
-
                             image::Color4f pixel, pixelB;
 
+                            const auto image = layer.image;
                             if (image && image->isValid())
                                 _getPixelValue(pixel, image, pos);
 
-                            const auto imageB = layer.image;
+                            const auto imageB = layer.imageB;
                             if (imageB && imageB->isValid())
                             {
                                 _getPixelValue(pixelB, imageB, pos);

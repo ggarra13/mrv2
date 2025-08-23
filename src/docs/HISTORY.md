@@ -54,6 +54,8 @@ v1.4.0
 - Fixed saving of Prores and DNXHD with the correct profiles.
 - Fixed saving of Half images on Vulkan backend.
 - Fixed saving of images without annotations on Vulkan.
+- Fixed Presentation mode autofit on OpenGL backend.
+- Fixed toggling of Presentation and Fullscreen modes quickly in Vulkan backend.
 
 
 v1.3.9

@@ -392,7 +392,7 @@ namespace mrv
             
             if (window())
                 window()->cursor(n);
-            
+
             p.lastCursor = n;
         }
 
@@ -435,7 +435,7 @@ namespace mrv
 
             if (!p.isScrubbing)
                 return;
-            
+
             Fl::repeat_timeout(
                 1.0 / t.rate(),
                 (Fl_Timeout_Handler)stop_playback_while_scrubbing_cb, this);
@@ -491,10 +491,6 @@ namespace mrv
                 {
                     player->setPlayback(timeline::Playback::Reverse);
                 }
-            }
-            else
-            {
-                player->setPlayback(timeline::Playback::Stop);
             }
             
             player->seek(time);
@@ -1325,7 +1321,7 @@ namespace mrv
             if (p.selection.max.x >= 0)
             {
                 image::Size videoSize;
-                if (!values.empty() && values[0].layers.empty())
+                if (!values.empty() && !values[0].layers.empty())
                 {
                     const auto image = values[0].layers[0].image;
                     if (image && image->isValid())
@@ -1350,11 +1346,13 @@ namespace mrv
                 p.videoData[0].size.pixelAspectRatio = p.pixelAspectRatio;
                 image->setPixelAspectRatio(p.pixelAspectRatio);
             }
-                    
+            
             if (p.resizeWindow)
             {
                 if (!p.presentation)
                     resizeWindow();
+                else if (p.frameView)
+                    frameView();
             }
             else if (p.frameView && p.switchClip)
             {
@@ -2409,7 +2407,7 @@ namespace mrv
                 {
                     w->fullscreen();
                     w->wait_for_expose();
-                    
+
                     if (!secondary)
                     {
                         // Fullscreen does not update immediately on Linux, so we

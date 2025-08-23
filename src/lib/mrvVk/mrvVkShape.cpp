@@ -455,115 +455,131 @@ namespace mrv
             break;
         }
         case FL_KEYBOARD:
-            switch(rawkey)
+        {
+            int del = 0;
+            if (!Fl::compose(del))
             {
-            case FL_Escape:
-                text = "";
-                return accept();
-                break; 
-            case FL_Delete:
-            {
-                if (utf8_pos >= text.size())
+                switch(rawkey)
+                {
+                case FL_Escape:
+                    text = "";
+                    return accept();
+                    break; 
+                case FL_Delete:
+                {
+                    if (utf8_pos >= text.size())
+                        break;
+                    const char* current = text.c_str() + utf8_pos;
+                    const char* start = current;
+                    const char* end = start + text.size() - utf8_pos;
+                    const char* pos = fl_utf8fwd(current + 1, start, end);
+                    unsigned next = pos - text.c_str();
+                    std::string left;
+                    std::string right;
+                    if (utf8_pos > 0)
+                        left = text.substr(0, utf8_pos);
+                    if (next < text.size())
+                        right = text.substr(next, text.size());
+                    text = left + right;
+                    Fl::compose_reset();
                     break;
-                const char* current = text.c_str() + utf8_pos;
-                const char* start = current;
-                const char* end = start + text.size() - utf8_pos;
-                const char* pos = fl_utf8fwd(current + 1, start, end);
-                unsigned next = pos - text.c_str();
-                std::string left;
-                std::string right;
-                if (utf8_pos > 0)
-                    left = text.substr(0, utf8_pos);
-                if (next < text.size())
-                    right = text.substr(next, text.size());
-                text = left + right;
-                break;
-            }
-            case FL_BackSpace:
-            {
-                if (utf8_pos == 0)
+                }
+                case FL_BackSpace:
+                {
+                    if (utf8_pos == 0)
+                        break;
+                    unsigned last = utf8_pos;
+                    const char* current = text.c_str() + utf8_pos;
+                    const char* start = text.c_str();
+                    const char* end = current;
+                    const char* pos = fl_utf8back(current - 1, start, end);
+                    utf8_pos = pos - text.c_str();
+                    std::string left;
+                    std::string right;
+                    if (utf8_pos > 0)
+                        left = text.substr(0, utf8_pos);
+                    if (last < text.size())
+                        right = text.substr(last, text.size());
+                    text = left + right;
+                    Fl::compose_reset();
                     break;
-                unsigned last = utf8_pos;
-                const char* current = text.c_str() + utf8_pos;
-                const char* start = text.c_str();
-                const char* end = current;
-                const char* pos = fl_utf8back(current - 1, start, end);
-                utf8_pos = pos - text.c_str();
-                std::string left;
-                std::string right;
-                if (utf8_pos > 0)
-                    left = text.substr(0, utf8_pos);
-                if (last < text.size())
-                    right = text.substr(last, text.size());
-                text = left + right;
-                break;
-            }
-            case FL_Up:
-            {
-                unsigned row = current_line();
-                if (row == 0)
+                }
+                case FL_Up:
+                {
+                    unsigned row = current_line();
+                    if (row == 0)
+                        break;
+                    unsigned column = current_column();
+                    unsigned start = line_start(utf8_pos);
+                    start = line_start(start-2);  // 2 to skip \n
+                    const char* pos = advance_to_column(start, column);
+                    utf8_pos = pos - text.c_str();
+                    Fl::compose_reset();
                     break;
-                unsigned column = current_column();
-                unsigned start = line_start(utf8_pos);
-                start = line_start(start-2);  // 2 to skip \n
-                const char* pos = advance_to_column(start, column);
-                utf8_pos = pos - text.c_str();
-                break;
-            }
-            case FL_Down:
-            {
-                unsigned column = current_column();
-                unsigned end = line_end(utf8_pos);
-                if (end == text.size())
+                }
+                case FL_Down:
+                {
+                    unsigned column = current_column();
+                    unsigned end = line_end(utf8_pos);
+                    if (end == text.size())
+                        break;
+                    unsigned start = line_start(end+1);
+                    const char* pos = advance_to_column(start, column);
+                    utf8_pos = pos - text.c_str();
+                    Fl::compose_reset();
                     break;
-                unsigned start = line_start(end+1);
-                const char* pos = advance_to_column(start, column);
-                utf8_pos = pos - text.c_str();
-                break;
-            }
-            case FL_Left:
-            {
-                if (utf8_pos == 0)
+                }
+                case FL_Left:
+                {
+                    if (utf8_pos == 0)
+                        break;
+                    const char* current = text.c_str() + utf8_pos;
+                    const char* start = text.c_str();
+                    const char* end = current;
+                    const char* pos = fl_utf8back(current - 1, start, end);
+                    utf8_pos = pos - text.c_str();
+                    Fl::compose_reset();
                     break;
-                const char* current = text.c_str() + utf8_pos;
-                const char* start = text.c_str();
-                const char* end = current;
-                const char* pos = fl_utf8back(current - 1, start, end);
-                utf8_pos = pos - text.c_str();
-                break;
-            }
-            case FL_Right:
-            {
-                if (utf8_pos >= text.size())
+                }
+                case FL_Right:
+                {
+                    if (utf8_pos >= text.size())
+                        break;
+                    const char* current = text.c_str() + utf8_pos;
+                    const char* start = current;
+                    const char* end = start + text.size() - utf8_pos;
+                    const char* pos = fl_utf8fwd(current + 1, start, end);
+                    utf8_pos = pos - text.c_str();
+                    Fl::compose_reset();
                     break;
-                const char* current = text.c_str() + utf8_pos;
-                const char* start = current;
-                const char* end = start + text.size() - utf8_pos;
-                const char* pos = fl_utf8fwd(current + 1, start, end);
-                utf8_pos = pos - text.c_str();
-                break;
-            }
-            case FL_Enter:
-            case FL_KP_Enter:
-            {
-                std::string left;
-                std::string right;
-                if (utf8_pos > 0)
-                    left = text.substr(0, utf8_pos); 
+                }
+                case FL_Enter:
+                case FL_KP_Enter:
+                {
+                    std::string left;
+                    std::string right;
+                    if (utf8_pos > 0)
+                        left = text.substr(0, utf8_pos); 
 
-                const char* current = text.c_str() + utf8_pos;
-                const char* start = current;
-                const char* end = start + text.size() - utf8_pos;
-                const char* pos = fl_utf8fwd(current + 1, start, end);
-                if (utf8_pos < text.size())
-                    right = text.substr(utf8_pos, text.size());
+                    const char* current = text.c_str() + utf8_pos;
+                    const char* start = current;
+                    const char* end = start + text.size() - utf8_pos;
+                    const char* pos = fl_utf8fwd(current + 1, start, end);
+                    if (utf8_pos < text.size())
+                        right = text.substr(utf8_pos, text.size());
                 
-                text = left + '\n' + right;
-                utf8_pos += Fl::event_length();
-                break;
+                    text = left + '\n' + right;
+                    utf8_pos += Fl::event_length();
+                    Fl::compose_reset();
+                    break;
+                }
+                default:
+                    break;
+                }
             }
-            default:
+            else
             {
+                int fl_pos = Fl::compose_state; 
                 int len = Fl::event_length();
                 if (Fl::event_text() && len > 0)
                 {
@@ -572,7 +588,7 @@ namespace mrv
                     std::string left;
                     std::string right;
                     if (utf8_pos > 0)
-                        left = text.substr(0, utf8_pos); 
+                        left = text.substr(0, utf8_pos - fl_pos); 
                     
                     const char* current = text.c_str() + utf8_pos;
                     const char* start = current;
@@ -585,12 +601,11 @@ namespace mrv
                     text = left + key + right;
                     utf8_pos += len;
                 }
-                break;
-            }
             }
             to_cursor();
             return 1;
             break;
+        }
         }
         return 0;
     }

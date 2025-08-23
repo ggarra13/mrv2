@@ -1391,34 +1391,10 @@ namespace mrv
         ui->uiView->setHDROptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
-
-    // \@bug: Under Wayland and Vulkan, FLTK sends a key repeat after
-    //        a change in fullscreen.  We use this constant to avoid
-    //        the repetition of the key.
-    constexpr int kVulkanWaylandKeyRepeat = 1500;
-    
-    auto last_fullscreen_active = std::chrono::high_resolution_clock::now();
-    auto last_presentation_active = std::chrono::high_resolution_clock::now();
     
     void toggle_fullscreen_cb(Fl_Menu_* m, ViewerUI* ui)
     {        
         MyViewport* view = ui->uiView;
-        
-#ifdef VULKAN_BACKEND
-        if (desktop::Wayland())
-        {
-            auto now = std::chrono::high_resolution_clock::now();
-            const auto elapsed =
-                std::chrono::duration_cast<std::chrono::milliseconds>(
-                    now - last_fullscreen_active).count();
-            last_fullscreen_active = now;
-            if (elapsed < kVulkanWaylandKeyRepeat)
-            {
-                return;
-            }
-        }
-#endif
-            
         bool active = !view->getFullScreenMode();
         ui->uiView->setFullScreenMode(active);
 
@@ -1440,23 +1416,8 @@ namespace mrv
     void toggle_presentation_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         MyViewport* view = ui->uiView;
-        
-#ifdef VULKAN_BACKEND
-        if (desktop::Wayland())
-        {
-            auto now = std::chrono::high_resolution_clock::now();
-            const auto elapsed =
-                std::chrono::duration_cast<std::chrono::milliseconds>(
-                    now - last_presentation_active).count();
-            last_presentation_active = now;
-            if (elapsed < kVulkanWaylandKeyRepeat)
-            {
-                return;
-            }
-        }
-#endif
 
-        bool presentation = !view->getPresentationMode();
+        const bool presentation = !view->getPresentationMode();
         view->setPresentationMode(presentation);
 
         
@@ -1469,7 +1430,7 @@ namespace mrv
 
         bool send = ui->uiPrefs->SendUI->value();
         if (send)
-            tcp->pushMessage("Presentation", !presentation);
+            tcp->pushMessage("Presentation", presentation);
 
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
