@@ -82,20 +82,30 @@ fi
 
 cd $dir
 
-if [[ $CMAKE_TARGET == "package" && $KERNEL == *Darwin* ]]; then
-    echo "Packaging with a single thread..."
+MAX_RETRIES=10
+COUNT=1
+
+while (( COUNT <= MAX_RETRIES )); do
+    echo "Build attempt $COUNT of $MAX_RETRIES..."
+
     sync
-    cmake --build . -j1 --config $CMAKE_BUILD_TYPE -t ${CMAKE_TARGET}
-else
-    cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t ${CMAKE_TARGET} 
-fi
+    
+    cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t "${CMAKE_TARGET}"
+    STATUS=$?
+    
+    if [[ $STATUS -eq 0 ]]; then
+        echo "Build succeeded on attempt $COUNT"
 
-if [[ $? != 0 ]]; then
-    echo "COMPILATION of mrv2 failed!"
-    exit 1
-fi
+	cd -
+
+	. etc/build_end.sh
+
+        exit 0
+    fi
+
+    echo "Build failed (attempt $COUNT)."
+    (( COUNT++ ))
+done
 
 
-cd -
 
-. etc/build_end.sh
