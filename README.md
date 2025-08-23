@@ -161,7 +161,8 @@ Currently supported:
 - Stereo 3D (Anaglyph, Scanlines, Columns, Checkered, Side by Side)
 - PDF Exporting of Annotations and Notes
 - Linux Wayland support
-- Internationalization (Translations) support.
+- Internationalization (Translations) support
+- OpenGL and Vulkan backends
 
 # Building
 
