@@ -1241,12 +1241,15 @@ lucky3d                                       (Windows 10, Background Panel)
 lukas-remis                                   (Comparison issues)
 luzpaz                                        (Spelling corrections)  
 mantissa-                                     (Sequences misdetection)
+Mark Rasmussen                                (Windows/Linux Vulkan debugging)
 mhgandvisions                                 (Session debugging)
 MMmaoamao                                     (AV1 Suggestion)
 mzigaib                                       (Sequences misdetection)
 ndeebook                                      (Save Single Frame with
                                                Annotations)
 Olympusmonsgames                              (Windows Build Debugging)
+ONOVAR                                        (Multiple bugs and ideas for
+                                               improvements)
 p2or                                          (MacOS debugging,
                                                NTFS permissions bug,
                                                Save Single Frame Idea)
@@ -1261,6 +1264,7 @@ Runenash                                      (Bug in ghosting Secondary
                                                through annotations)
 shockerNY                                     (Text Annotation bug report)
 SteffenDuenner                                (Linux Build Debugging)
+taosecurity                                   (Windows/Linux Vulkan betas)
 The Maize                                     (Wayland issues, See-through
                                                and Click-Through Functionality)
 throb                                         (Caching improvements)
