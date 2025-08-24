@@ -48,7 +48,15 @@ namespace mrv
         
         bool is_hdr_active(int screen, const bool silent)
         {
+#ifdef FLTK_USE_X11
+            if (fl_x11_display())
+                return true;
+#endif
+#ifdef FLTK_USE_WAYLAND
+            // if (fl_wl_display())
+            //     return WaylandIsHdrActive(screen, true);
             return true;
+#endif
         }
     } // namespace desktop
 } // namespace mrv

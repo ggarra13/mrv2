@@ -1504,6 +1504,7 @@ namespace tl
                 texture->copy(
                     reinterpret_cast<const uint8_t*>(values),
                     width * height * depth * channels * sizeof(float));
+                texture->transitionToShaderRead(p.cmd);
                 textures.push_back(texture);
             }
 
@@ -1566,6 +1567,7 @@ namespace tl
                 texture->copy(
                     reinterpret_cast<const uint8_t*>(values),
                     width * height * channels * sizeof(float));
+                texture->transitionToShaderRead(p.cmd);
                 textures.push_back(texture);
             }
         }
@@ -1636,6 +1638,7 @@ namespace tl
                     texture->copy(
                         reinterpret_cast<const uint8_t*>(values),
                         width * height * depth * fmt->internal_size);
+                    texture->transitionToShaderRead(p.cmd);
                     textures.push_back(texture);
                     break;
                 }

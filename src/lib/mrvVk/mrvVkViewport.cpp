@@ -81,7 +81,6 @@ namespace mrv
         {
             int stereo = 0;
             mode(FL_RGB | FL_DOUBLE | FL_ALPHA | FL_STENCIL | stereo);
-            // m_validate = true;
         }
 
         Viewport::~Viewport() {}
