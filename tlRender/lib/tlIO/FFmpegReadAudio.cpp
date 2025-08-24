@@ -175,9 +175,12 @@ namespace tl
                     avcodec_find_decoder(avAudioCodecParameters->codec_id);
                 if (!avAudioCodec)
                 {
+                    const AVCodecDescriptor *desc = avcodec_descriptor_get(avAudioCodecParameters->codec_id);
                     throw std::runtime_error(
-                        string::Format("{0}: No audio codec found")
-                            .arg(fileName));
+                        string::Format("{0}: No audio codec found - {1} {2}")
+                        .arg(fileName)
+                        .arg(desc->name)
+                        .arg(desc->long_name ? desc->long_name : "N/A"));
                 }
                 _avCodecParameters[_avStream] = avcodec_parameters_alloc();
                 if (!_avCodecParameters[_avStream])

@@ -61,7 +61,8 @@ v1.4.0
 - Made starting playback from the command-line faster.
 - Fixed crashes when switching from/to presentation mode when starting out as presentation mode.
 - Fixed a potential crash when exiting the program in Presentation mode.
-- Fixed OCIO and libplacebo Vulkan image validation errors. 
+- Fixed OCIO and libplacebo Vulkan image validation errors.
+- When a codec is not found, now mrv2 will report the actual name and long name for it. 
 
 
 v1.3.9
