@@ -54,6 +54,11 @@ namespace mrv2
             return mrv::version();
         }
 
+        std::string getBackend()
+        {
+            return mrv::backend();
+        }
+
         /**
          *  \brief Open a file with optional audio.
          *
@@ -565,6 +570,9 @@ Used to run main commands and get arguments and set the display, image, compare,
     cmds.def(
         "setStereo3DOptions", &mrv2::cmd::setStereo3DOptions,
         _("Set the stereo 3D options."), py::arg("options"));
+
+    cmds.def(
+        "getBackend", &mrv2::cmd::getBackend, _("Get the backend of mrv2."));
 
     cmds.def(
         "getLanguage", &mrv2::cmd::getLanguage, _("Get the language of mrv2."));

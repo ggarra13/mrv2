@@ -62,7 +62,12 @@ v1.4.0
 - Fixed crashes when switching from/to presentation mode when starting out as presentation mode.
 - Fixed a potential crash when exiting the program in Presentation mode.
 - Fixed OCIO and libplacebo Vulkan image validation errors.
-- When a codec is not found, now mrv2 will report the actual name and long name for it. 
+- When a codec is not found, now mrv2 will report the actual name and long name for it.
+- Added Python command cmd.getBackend() to return the backend of mrv2.
+- Updated update-cmd.py plug-in to start faster, keep UI responsive and
+  support both the OpenGL (mrv2) and Vulkan (vmrv2) backends.
+- No longer we distribute libpng.so on Linux to avoid conflicts with GTK3
+  plugin.
 
 
 v1.3.9

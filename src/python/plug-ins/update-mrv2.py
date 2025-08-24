@@ -651,11 +651,14 @@ class UpdatePlugin(plugin.Plugin):
         except requests.exceptions.RequestException as e:
             print(_("Error fetching latest release information:\n"),e)
             return None
-        
+
+        prefix = 'mrv2'
+        if cmd.getBackend() == 'Vulkan':
+            prefix = 'vmrv2'
         extension = self.get_download_extension()
         for asset in data['assets']:
             name = asset['name']
-            if name.endswith(extension):
+            if name.startswith(prefix) and name.endswith(extension):
                 return {
                     "name": asset.get(GITHUB_ASSET_NAME, None),
                     "body": data.get(GITHUB_RELEASE_NOTES, ""),
