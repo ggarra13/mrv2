@@ -21,6 +21,7 @@ extern "C"
 
 #include <libavutil/audio_fifo.h>
 #include <libavutil/imgutils.h>
+#include <libavutil/mastering_display_metadata.h>
 #include <libavutil/opt.h>
 #include <libavutil/timestamp.h>
 
@@ -358,9 +359,9 @@ namespace tl
                     out = AVCOL_TRC_BT2020_10;
                 else if (s == "bt2020-12")
                     out = AVCOL_TRC_BT2020_12;
-                else if (s == "smpte2084")
+                else if (s == "smpte2084" || s == "pq" || s == "bt2100") 
                     out = AVCOL_TRC_SMPTE2084;
-                else if (s == "arib-std-b67")
+                else if (s == "arib-std-b67" || s == "hlg")
                     out = AVCOL_TRC_ARIB_STD_B67;
 
                 return out;
@@ -678,6 +679,10 @@ namespace tl
             SwsContext* swsContext = nullptr;
             otime::RationalTime videoStartTime = time::invalidTime;
             double avSpeed = 24.0;
+
+            bool hasHDR = false;
+            image::HDRData hdr;
+            
 
             // Audio
             AVCodecContext* avAudioCodecContext = nullptr;
@@ -1388,7 +1393,7 @@ namespace tl
                     p.avCodecContext->colorspace = parseColorSpace(value);
                 }
                 value = av_color_space_name(p.avCodecContext->colorspace);
-                LOG_STATUS(string::Format("Color Space is {0}").arg(value));
+                LOG_STATUS(string::Format("FFmpeg Color Space is {0}").arg(value));
 
                 // Equivalent to -color_primaries bt709
                 p.avCodecContext->color_primaries = AVCOL_PRI_BT709;
@@ -1405,7 +1410,7 @@ namespace tl
 
                 value =
                     av_color_primaries_name(p.avCodecContext->color_primaries);
-                LOG_STATUS(string::Format("Color Primaries is {0}").arg(value));
+                LOG_STATUS(string::Format("FFmpeg Color Primaries is {0}").arg(value));
 
                 // Equivalent to -color_trc iec61966-2-1 (ie. sRGB)
                 if (!hardwareEncode)
@@ -1422,7 +1427,7 @@ namespace tl
                     p.avCodecContext->color_trc = parseColorTRC(value);
                 }
                 value = av_color_transfer_name(p.avCodecContext->color_trc);
-                LOG_STATUS(string::Format("Color TRC is {0}").arg(value));
+                LOG_STATUS(string::Format("FFmpeg Color TRC is {0}").arg(value));
 
                 if (p.avFormatContext->oformat->flags & AVFMT_GLOBALHEADER)
                 {
@@ -1574,9 +1579,16 @@ namespace tl
 
                 for (const auto& i : info.tags)
                 {
-                    av_dict_set(
-                        &p.avFormatContext->metadata, i.first.c_str(),
-                        i.second.c_str(), 0);
+                    if (i.first == "hdr")
+                    {
+                        p.hasHDR = true;
+                    }
+                    else
+                    {
+                        av_dict_set(
+                            &p.avFormatContext->metadata, i.first.c_str(),
+                            i.second.c_str(), 0);
+                    }
                 }
 
                 p.videoStartTime = info.videoTime.start_time();
@@ -1928,6 +1940,17 @@ namespace tl
                 {timeRational.second, timeRational.first},
                 p.avVideoStream->time_base);
 
+            for (const auto& i : image->getTags())
+            {
+                if (i.first == "hdr")
+                {
+                    p.hasHDR = true;
+
+                    nlohmann::json j = nlohmann::json::parse(i.second);
+                    p.hdr = j.get<image::HDRData>();
+                }
+            }
+                
             _encode(p.avCodecContext, p.avVideoStream, p.avFrame, p.avPacket);
         }
 
@@ -2083,12 +2106,84 @@ namespace tl
                     p.avAudioPacket);
             }
         }
-
-        void Write::_encode(
-            AVCodecContext* context, const AVStream* stream,
-            const AVFrame* frame, AVPacket* packet)
+        
+        void Write::_attach_hdr_metadata(AVFrame *frame)
         {
             TLRENDER_P();
+            
+            AVFrameSideData* sd = nullptr;
+
+            // --- Mastering display metadata ---
+            sd = av_frame_new_side_data(
+                frame, AV_FRAME_DATA_MASTERING_DISPLAY_METADATA,
+                sizeof(AVMasteringDisplayMetadata));
+            if (sd && sd->data)
+            {
+                AVMasteringDisplayMetadata *mdm =
+                    (AVMasteringDisplayMetadata*) sd->data;
+                memset(mdm, 0, sizeof(*mdm));
+
+                const float rx = p.hdr.primaries[0].x;
+                const float ry = p.hdr.primaries[0].y;
+                
+                const float gx = p.hdr.primaries[1].x;
+                const float gy = p.hdr.primaries[1].y;
+                
+                const float bx = p.hdr.primaries[2].x;
+                const float by = p.hdr.primaries[2].y;
+                
+                const float wx = p.hdr.primaries[3].x;
+                const float wy = p.hdr.primaries[3].y;
+
+                // Convert to rationals
+                mdm->display_primaries[0][0] = av_d2q(rx, 100000); // Rx
+                mdm->display_primaries[0][1] = av_d2q(ry, 100000); // Ry
+                
+                mdm->display_primaries[1][0] = av_d2q(gx, 100000); // Gx
+                mdm->display_primaries[1][1] = av_d2q(gy, 100000); // Gy
+
+                mdm->display_primaries[2][0] = av_d2q(bx, 100000); // Bx
+                mdm->display_primaries[2][1] = av_d2q(by, 100000); // By
+
+                mdm->white_point[0] = av_d2q(wx, 100000);
+                mdm->white_point[1] = av_d2q(wy, 100000);
+    
+                mdm->has_primaries = 1;
+
+                float min_lum = p.hdr.displayMasteringLuminance.getMin();
+                if (min_lum <= 0.F)
+                    min_lum = 1.F;
+                float max_lum = p.hdr.displayMasteringLuminance.getMax();
+                
+                mdm->max_luminance = av_d2q(max_lum, 10000);
+                mdm->min_luminance = av_d2q(min_lum, 10000);
+
+                mdm->has_luminance = 1;
+            }
+
+            // --- Content light level metadata ---
+            sd = av_frame_new_side_data(
+                frame, AV_FRAME_DATA_CONTENT_LIGHT_LEVEL,
+                sizeof(AVContentLightMetadata));
+            if (sd && sd->data)
+            {
+                AVContentLightMetadata *clm = (AVContentLightMetadata*)
+                                              sd->data;
+                clm->MaxCLL  = p.hdr.maxCLL; // peak per-pixel light level
+                clm->MaxFALL = p.hdr.maxFALL;  // frame average light level
+            }
+        }
+    
+        void Write::_encode(
+            AVCodecContext* context, const AVStream* stream,
+            AVFrame* frame, AVPacket* packet)
+        {
+            TLRENDER_P();
+    
+            if (p.hasHDR && frame)
+            {
+                _attach_hdr_metadata(frame);
+            }
 
             int r = avcodec_send_frame(context, frame);
             if (r < 0)

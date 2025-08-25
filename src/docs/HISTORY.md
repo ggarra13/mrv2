@@ -1,4 +1,4 @@
-v1.4.0 
+v1.4.0
 ======
 
 - Added license_helper for easy licensing of vmrv2.
@@ -50,7 +50,7 @@ v1.4.0
 - Fixed saving of single frames at half and quarter resolution in Vulkan.
 - Added Stereo3D Anaglyph support to Vulkan on Windows and Linux.
 - Fixed hanging on Wayland with Vulkan's windows when they were going
-  off-screen.
+    off-screen.
 - Fixed saving of Prores and DNXHD with the correct profiles.
 - Fixed saving of Half images on Vulkan backend.
 - Fixed saving of images without annotations on Vulkan.
@@ -68,6 +68,7 @@ v1.4.0
   support both the OpenGL (mrv2) and Vulkan (vmrv2) backends.
 - No longer we distribute libpng.so on Linux to avoid conflicts with GTK3 plugin.
 - Fixed saving of movie files with and without annotations from OpenEXRs on Vulkan backend.
+- Added saving HDR data into movie codecs that support it (VP9, AV1, etc).  Note that for saving the HDR data, Color TRC has to be set to a value different than BT709 in the Advanced Settings.
 
 
 v1.3.9

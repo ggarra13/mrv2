@@ -7,6 +7,7 @@ i18n_gnu_function gettext
 i18n_gnu_static_function gettext_noop
 header_name {.h}
 code_name {.cxx}
+include_guard {}
 decl {\#include <string>} {public global
 }
 
@@ -25,10 +26,10 @@ decl {\#include "tlCore/String.h"} {public global
 decl {\#include "mrvCore/mrvI8N.h"} {public global
 }
 
-decl {\#include "mrvCore/mrvHome.h"} {selected public global
+decl {\#include "mrvCore/mrvHome.h"} {public global
 }
 
-decl {\#include "mrvApp/mrvSettingsObject.h"} {selected public global
+decl {\#include "mrvApp/mrvSettingsObject.h"} {public global
 }
 
 decl {\#include "mrViewer.h"} {public global
@@ -207,7 +208,7 @@ v->hide();}
       }
     }
     Fl_Window uiAdvancedSettings {
-      label {Advanced Settings}
+      label {Advanced Settings} open
       xywh {1185 376 411 310} type Double hide hotspot modal
     } {
       Fl_Check_Button Override {
@@ -339,7 +340,7 @@ settings->setValue("SaveMovie/Color Primaries", value);}
         callback {int value = o->value();
 
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Color TRC", value);}
+settings->setValue("SaveMovie/Color TRC", value);} open
         tooltip {FFMpeg's Color Transfer Function settings for the codec selected.} xywh {129 190 170 29} down_box BORDER_BOX
       } {
         MenuItem {} {
@@ -403,11 +404,11 @@ settings->setValue("SaveMovie/Color TRC", value);}
           xywh {140 140 100 20}
         }
         MenuItem {} {
-          label smpte2084
+          label bt2100
           xywh {150 150 100 20}
         }
         MenuItem {} {
-          label {arib-std-b67}
+          label hlg selected
           xywh {160 160 100 20}
         }
       }
@@ -457,8 +458,7 @@ uiMain->show();
 while (uiMain->visible())
   Fl::check();} {}
   }
-  Function {help_profile_cb()} {open
-  } {
+  Function {help_profile_cb()} {} {
     code {uiHelpWindow->label(_("Profile Help"));
 auto buffer = uiHelp->buffer();
 buffer->text(_(R"(
@@ -799,8 +799,7 @@ if (v->size() > 0)
     v->value(0);
 }} {}
   }
-  Function {add_presets(Fl_Choice* o, Fl_Choice* v)} {open
-  } {
+  Function {add_presets(Fl_Choice* o, Fl_Choice* v)} {} {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
 if (!item || !item->label()) return;
 
@@ -898,8 +897,7 @@ o->value(value);} {}
 const bool value = settings->getValue<int>("SaveMovie/Override");
 v->value(value);} {}
   }
-  Function {add_advanced_color_range(Fl_Choice* o)} {open
-  } {
+  Function {add_advanced_color_range(Fl_Choice* o)} {} {
     code {const auto& settings = mrv::App::app->settings();
 int value;
 if (!settings->hasValue("SaveMovie/Color Range"))
@@ -908,8 +906,7 @@ else
    value = settings->getValue<int>("SaveMovie/Color Range");
 o->value(value);} {}
   }
-  Function {add_advanced_color_space(Fl_Choice* o)} {open
-  } {
+  Function {add_advanced_color_space(Fl_Choice* o)} {} {
     code {const auto& settings = mrv::App::app->settings();
 int value;
 if (!settings->hasValue("SaveMovie/Color Space"))
@@ -918,14 +915,12 @@ else
    value = settings->getValue<int>("SaveMovie/Color Space");
 o->value(value);} {}
   }
-  Function {add_advanced_color_primaries(Fl_Choice* o)} {open
-  } {
+  Function {add_advanced_color_primaries(Fl_Choice* o)} {} {
     code {const auto& settings = mrv::App::app->settings();
 const int value = settings->getValue<int>("SaveMovie/Color Primaries");
 o->value(value);} {}
   }
-  Function {add_advanced_color_trc(Fl_Choice* o)} {open
-  } {
+  Function {add_advanced_color_trc(Fl_Choice* o)} {} {
     code {const auto& settings = mrv::App::app->settings();
 int value;
 if (!settings->hasValue("SaveMovie/Color TRC"))

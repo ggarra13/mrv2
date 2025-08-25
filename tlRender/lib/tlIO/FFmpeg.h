@@ -179,8 +179,9 @@ namespace tl
                 const io::Options& = io::Options()) override;
 
         private:
+            void _attach_hdr_metadata(AVFrame*);
             void _encode(
-                AVCodecContext*, const AVStream*, const AVFrame*, AVPacket*);
+                AVCodecContext*, const AVStream*, AVFrame*, AVPacket*);
             void _flushAudio();
 
             TLRENDER_PRIVATE();
