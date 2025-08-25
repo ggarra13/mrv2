@@ -1366,17 +1366,60 @@ namespace mrv
     {
         TLRENDER_P();
 
+        p.player->setPlayback(timeline::Playback::Stop);
+        
         const timeline::Playback& playback = p.options.playback;
-        ui->uiView->setPlayback(playback);
 
-        if (playback == timeline::Playback::Reverse)
+        if (playback == timeline::Playback::Forward)
         {
-            p.player->setPlayback(timeline::Playback::Stop);
+            p.cacheInfoObserver =
+                observer::ValueObserver<timeline::PlayerCacheInfo>::create(
+                    p.player->player()->observeCacheInfo(),
+                    [this, playback](const timeline::PlayerCacheInfo& value)
+                        {
+                            TLRENDER_P();
+
+                            const auto& time = p.player->currentTime();
+
+                            const auto& cache =
+                                p.player->player()->observeCacheOptions()->get();
+                            const auto& rate = time.rate();
+                            const auto& readAhead =
+                                cache.readAhead.rescaled_to(rate);
+                            const auto& readBehind =
+                                cache.readBehind.rescaled_to(rate);
+                            const auto& timeRange = p.player->inOutRange();
+
+                            auto startTime = time;
+                            auto endTime = time + readAhead;
+                            if (endTime >= timeRange.end_time_exclusive())
+                            {
+                                endTime = timeRange.end_time_exclusive();
+                            }
+
+                            // Avoid rounding errors
+                            endTime = endTime.floor();
+                            startTime = startTime.ceil();
+
+                            for (const auto& t : value.videoFrames)
+                            {
+                                if (t.start_time() >= startTime &&
+                                    t.end_time_exclusive() >= endTime)
+                                {
+                                    ui->uiView->setPlayback(playback);
+                                    p.cacheInfoObserver.reset();
+                                    break;
+                                }
+                            }
+                        });
+        }
+        else if (playback == timeline::Playback::Reverse)
+        {
 
             p.cacheInfoObserver =
                 observer::ValueObserver<timeline::PlayerCacheInfo>::create(
                     p.player->player()->observeCacheInfo(),
-                    [this](const timeline::PlayerCacheInfo& value)
+                    [this, playback](const timeline::PlayerCacheInfo& value)
                     {
                         TLRENDER_P();
 
@@ -1421,8 +1464,7 @@ namespace mrv
                             if (t.start_time() <= startTime &&
                                 t.end_time_exclusive() >= endTime)
                             {
-                                p.player->setPlayback(
-                                    timeline::Playback::Reverse);
+                                ui->uiView->setPlayback(playback);
                                 p.cacheInfoObserver.reset();
                                 break;
                             }

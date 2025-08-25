@@ -43,6 +43,7 @@ v1.4.0
 - Fixed finding all preferences with MRV2_STUDIOPATH and STUDIOPATH.
 - Fixed framing when loading a session file.
 - Improved startup times from the command-line and when loading the first clip.
+- Made starting playback from command-line once the audio has been cached.
 - Added reporting of Studio location if MRV2_STUDIOPATH or STUDIOPATH are set.
 - Fixed saving of movies in Vulkan.
 - Fixed saving of movies at half and quarter resolution in Vulkan.
