@@ -126,8 +126,8 @@ msgstr "升级"
 msgid "No download url was found for"
 msgstr "未找到下载 url"
 
-msgid "No releases found for the specified repository."
-msgstr "未找到指定仓库的释放 。"
-
 msgid "Help/Update mrv2"
 msgstr "帮助/更新 mrv2"
+
+#~ msgid "No releases found for the specified repository."
+#~ msgstr "未找到指定仓库的释放 。"
