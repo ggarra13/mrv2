@@ -168,6 +168,7 @@ def count_sourceforge(repo, folder_name, end_date, start_date = '2021-10-29'):
             r = response.json()
         except Exception as e:
             print(f'Could not get info for version {folder_name}')
+            print(e)
             exit(1)
     
     total = 0
