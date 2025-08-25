@@ -723,10 +723,11 @@ class UpdatePlugin(plugin.Plugin):
             if download_url:
                 self.ask_to_update(release_info)
             else:
-                print(_('No download url was found for'),release)
+                print(_('No download url was found for'),release_info['name'])
             
         else:
-            print(_('No releases found for the specified repository.'))
+            backend = cmd.getBackend()
+            print(_(f'No {backend} releases found for the specified repository.'))
 
 
     def run(self):
