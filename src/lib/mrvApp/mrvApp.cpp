@@ -1403,7 +1403,7 @@ namespace mrv
 
                             for (const auto& t : value.videoFrames)
                             {
-                                if (t.start_time() >= startTime &&
+                                if (t.start_time() <= startTime &&
                                     t.end_time_exclusive() >= endTime)
                                 {
                                     ui->uiView->setPlayback(playback);
