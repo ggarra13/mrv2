@@ -1057,6 +1057,48 @@ namespace mrv
         }
     }
 
+    std::string gpu_list(ViewerUI* ui)
+    {
+#ifdef VULKAN_BACKEND
+        std::string out = "GPUs: ";
+        VkInstance instance = App::ui->uiView->instance();
+        if (instance == VK_NULL_HANDLE)
+            return "GPUs: Unknown";
+        VkPhysicalDevice* devices = nullptr;
+        uint32_t num = 0;
+        vkEnumeratePhysicalDevices(instance, &num, nullptr);
+        devices = new VkPhysicalDevice[num];
+        vkEnumeratePhysicalDevices(instance, &num, devices);
+        std::stringstream o;
+        int idx = 0;
+        for (int i = 0; i < num; i++)
+        {
+            VkPhysicalDeviceIDPropertiesKHR id_props = {};
+            id_props.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ID_PROPERTIES_KHR;
+            
+            VkPhysicalDeviceProperties2 prop = {};
+            prop.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2_KHR;
+            prop.pNext = &id_props;
+            
+            vkGetPhysicalDeviceProperties2(devices[i], &prop);
+
+            if (prop.properties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU ||
+                prop.properties.deviceType == VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU) {
+                VkPhysicalDeviceType t = prop.properties.deviceType;
+                ++idx;
+                o << idx << ") " << prop.properties.deviceName
+                  << " v"
+                  << FLTK_OUTPUT_VERSION(prop.properties.apiVersion);
+                if (i < num-1)
+                    o << ", ";
+            }
+        }
+        delete [] devices;
+#endif
+        out += o.str();
+        return out;
+    }
+
     std::string gpu_information(ViewerUI* ui)
     {
         using std::endl;

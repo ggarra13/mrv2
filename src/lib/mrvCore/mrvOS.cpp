@@ -48,12 +48,15 @@
 #    include <FL/gl.h>
 #endif
 
+#ifdef VULKAN_BACKEND
+#    include "mrvWidgets/mrvVersion.h"
+#endif
+
 #include <string>
 #include <vector>
 #include <stdexcept>
 #include <array>
 #include <memory>
-
 
 namespace
 {
@@ -477,8 +480,13 @@ namespace mrv
             const char* vendorString = (char*)glGetString(GL_VENDOR);
             if (vendorString)
                 out = vendorString;
-#endif
             out = "GPU: " + out;
+#endif
+            
+#ifdef VULKAN_BACKEND
+            out = gpu_list(App::ui);
+#endif
+
             return out;
         }
 
