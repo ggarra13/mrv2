@@ -1240,6 +1240,10 @@ namespace mrv
                                              outputImage->getHeight(),
                                              numChannels);
                         }
+                        else
+                        {
+                            outputImage = scaleImage;
+                        }
                     }
                     else
                     {
