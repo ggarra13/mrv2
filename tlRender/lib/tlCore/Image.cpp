@@ -447,6 +447,11 @@ namespace tl
         {
             std::memset(_data, 0, _dataByteCount);
         }
+        
+        void Image::fill()
+        {
+            std::memset(_data, 0xFF, _dataByteCount);
+        }
 
         void to_json(nlohmann::json& json, const Size& value)
         {

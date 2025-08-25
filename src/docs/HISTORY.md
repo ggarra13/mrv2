@@ -66,8 +66,8 @@ v1.4.0
 - Added Python command cmd.getBackend() to return the backend of mrv2.
 - Updated update-cmd.py plug-in to start faster, keep UI responsive and
   support both the OpenGL (mrv2) and Vulkan (vmrv2) backends.
-- No longer we distribute libpng.so on Linux to avoid conflicts with GTK3
-  plugin.
+- No longer we distribute libpng.so on Linux to avoid conflicts with GTK3 plugin.
+- Fixed saving of movie files with and without annotations from OpenEXRs on Vulkan backend.
 
 
 v1.3.9

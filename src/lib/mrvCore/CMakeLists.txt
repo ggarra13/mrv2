@@ -24,6 +24,7 @@ set(HEADERS
     mrvOrderedMap.h
     mrvOS.h 
     mrvPathMapping.h
+    mrvPixelConverter.h
     mrvRoot.h
     mrvSequence.h
     mrvSHA256.h

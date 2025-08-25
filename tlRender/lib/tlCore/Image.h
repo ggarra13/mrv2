@@ -344,6 +344,9 @@ namespace tl
 
             //! Zero the image data.
             void zero();
+
+            //! Fill in the image data with NANs or 255.
+            void fill();
             
             //! Get number of planes.
             int getPlaneCount() const

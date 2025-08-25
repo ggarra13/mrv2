@@ -109,18 +109,18 @@ namespace mrv
         T* pixels, const size_t width, const size_t height,
         const int depth)
     {
-        const size_t rowSize = width * depth * sizeof(T);
-        T* tempRow = new T[rowSize]; // Temporary buffer for row swapping
-
+        const size_t rowSize = width * depth;
+        const size_t rowByteCount = rowSize * sizeof(T);
+        T* tempRow = new T[width * depth];
+        
         for (size_t y = 0; y < height / 2; ++y)
         {
             T* topRow = pixels + y * rowSize;
             T* bottomRow = pixels + (height - y - 1) * rowSize;
-
             // Swap entire rows using memcpy
-            std::memcpy(tempRow, topRow, rowSize);
-            std::memcpy(topRow, bottomRow, rowSize);
-            std::memcpy(bottomRow, tempRow, rowSize);
+            std::memcpy(tempRow, topRow, rowByteCount);
+            std::memcpy(topRow, bottomRow, rowByteCount);
+            std::memcpy(bottomRow, tempRow, rowByteCount);
         }
 
         delete[] tempRow; // Free the temporary buffer

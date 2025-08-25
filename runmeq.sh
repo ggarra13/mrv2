@@ -83,6 +83,9 @@ fi
 cd $dir
 
 MAX_RETRIES=10
+if [[ $CMAKE_TARGET != "package" ]]; then
+   MAX_RETRIES=1
+fi
 COUNT=1
 
 while (( COUNT <= MAX_RETRIES )); do
