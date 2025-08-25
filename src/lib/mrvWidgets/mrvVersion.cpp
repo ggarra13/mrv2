@@ -1059,8 +1059,9 @@ namespace mrv
 
     std::string gpu_list(ViewerUI* ui)
     {
+        std::string out;
 #ifdef VULKAN_BACKEND
-        std::string out = "GPUs: ";
+        out = "GPUs: ";
         VkInstance instance = App::ui->uiView->instance();
         if (instance == VK_NULL_HANDLE)
             return "GPUs: Unknown";
