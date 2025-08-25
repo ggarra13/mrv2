@@ -1095,8 +1095,8 @@ namespace mrv
             }
         }
         delete [] devices;
-#endif
         out += o.str();
+#endif
         return out;
     }
 
