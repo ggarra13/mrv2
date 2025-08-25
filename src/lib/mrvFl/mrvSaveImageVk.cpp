@@ -544,7 +544,7 @@ namespace mrv
                 {
                     locale::SetAndRestore saved;
                     timeline::RenderOptions renderOptions;
-                    renderOptions.clear = false;
+                    renderOptions.clear = true;
                     render->begin(cmd, buffer, frameIndex, offscreenBufferSize,
                                   renderOptions);
                     const math::Matrix4x4f ortho = math::ortho(
@@ -554,7 +554,7 @@ namespace mrv
                     render->setTransform(ortho);
                     render->setOCIOOptions(view->getOCIOOptions());
                     render->setLUTOptions(view->lutOptions());
-                    
+
                     render->drawVideo(
                         {videoData},
                         {math::Box2i(0, 0, renderSize.w, renderSize.h)},
@@ -585,11 +585,11 @@ namespace mrv
                 if (imageData)
                 {
                     std::memcpy(outputImage->getData(), imageData,
-                                outputImage->getDataByteCount());
-                                    
-                    vkFreeCommandBuffers(device, commandPool, 1, &cmd);    
+                                outputImage->getDataByteCount());   
                 }
-
+                
+                vkFreeCommandBuffers(device, commandPool, 1, &cmd);
+                    
                 // Scale down result.
                 if (tmpImage && outputImage != tmpImage)
                 {

@@ -1579,16 +1579,9 @@ namespace tl
 
                 for (const auto& i : info.tags)
                 {
-                    if (i.first == "hdr")
-                    {
-                        p.hasHDR = true;
-                    }
-                    else
-                    {
-                        av_dict_set(
-                            &p.avFormatContext->metadata, i.first.c_str(),
-                            i.second.c_str(), 0);
-                    }
+                    av_dict_set(
+                        &p.avFormatContext->metadata, i.first.c_str(),
+                        i.second.c_str(), 0);
                 }
 
                 p.videoStartTime = info.videoTime.start_time();

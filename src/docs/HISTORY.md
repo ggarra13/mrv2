@@ -69,6 +69,7 @@ v1.4.0
 - No longer we distribute libpng.so on Linux to avoid conflicts with GTK3 plugin.
 - Fixed saving of movie files with and without annotations from OpenEXRs on Vulkan backend.
 - Added saving HDR data into movie codecs that support it (VP9, AV1, etc).  Note that for saving the HDR data, Color TRC has to be set to a value different than BT709 in the Advanced Settings.
+- Fixed saving movies from OpenEXRs with an alpha channel on Vulkan backend.
 
 
 v1.3.9

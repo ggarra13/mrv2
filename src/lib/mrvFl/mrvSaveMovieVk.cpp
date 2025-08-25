@@ -1010,7 +1010,7 @@ namespace mrv
                             {
                                 locale::SetAndRestore saved;
                                 timeline::RenderOptions renderOptions;
-                                renderOptions.clear = false;
+                                renderOptions.clear = true;
                                 render->begin(cmd, buffer, frameIndex,
                                               offscreenBufferSize,
                                               renderOptions);
