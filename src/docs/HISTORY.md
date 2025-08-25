@@ -71,6 +71,7 @@ v1.4.0
 - Added saving HDR data into movie codecs that support it (VP9, AV1, etc).  Note that for saving the HDR data, Color TRC has to be set to a value different than BT709 in the Advanced Settings.
 - Fixed saving movies from OpenEXRs with an alpha channel on Vulkan backend.
 - Fixed Desktop Environment report when using -v (-version) flag.
+- Added list of GPUs to Status bar on Vulkan backend.
 
 
 v1.3.9
