@@ -29,6 +29,8 @@ namespace mrv
         bool X11()
         {
             bool out = false;
+
+            fl_open_display();
 #ifdef __linux__
 #    ifdef FLTK_USE_X11
             if (fl_x11_display())
@@ -43,6 +45,8 @@ namespace mrv
         bool Wayland()
         {
             bool out = false;
+
+            fl_open_display();
 #ifdef __linux__
 #    ifdef FLTK_USE_WAYLAND
             if (fl_wl_display())
@@ -57,6 +61,8 @@ namespace mrv
         bool XWayland()
         {
             bool out = false;
+
+            fl_open_display();
 #ifdef __linux__
 #    ifdef FLTK_USE_WAYLAND
 #        ifdef FLTK_USE_X11
