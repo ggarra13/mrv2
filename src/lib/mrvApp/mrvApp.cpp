@@ -2098,7 +2098,13 @@ namespace mrv
                                             ->value();
                                     const bool pixelToolbar =
                                         ui->uiPixelBar->visible();
+#ifdef OPENGL_BACKEND
                                     if (autoHide && pixelToolbar)
+#endif
+#ifdef VULKAN_BACKEND
+                                    if (autoHide == kAutoHideOpenGLAndVulkan &&
+                                        pixelToolbar)
+#endif
                                     {
                                         toggle_pixel_bar(nullptr, ui);
                                         Fl::flush();

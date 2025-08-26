@@ -7,6 +7,13 @@
 namespace mrv
 {
 
+    enum AutoHidePixelBar
+    {
+        kAutoHideInactive = 0,
+        kAutoHideOpenGLOnly = 1,
+        kAutoHideOpenGLAndVulkan = 2
+    };
+
     enum ColorAccuracy {
         kAccuracyAuto,
         kAccuracyFloat16,

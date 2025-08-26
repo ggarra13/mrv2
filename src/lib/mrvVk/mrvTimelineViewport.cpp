@@ -734,7 +734,8 @@ namespace mrv
             const bool hasPixelBar = p.ui->uiPrefs->uiPrefsPixelToolbar->value();
             const bool visiblePixelBar = p.ui->uiPixelBar->visible_r();
 
-            if (!hasPixelBar || visiblePixelBar || (autoHide != 2) || p.presentation)
+            if (!hasPixelBar || visiblePixelBar ||
+                (autoHide != kAutoHideOpenGLAndVulkan) || p.presentation)
                 return;
 
             toggle_pixel_bar(nullptr, p.ui);
@@ -747,7 +748,7 @@ namespace mrv
             const bool autoHide = p.ui->uiPrefs->uiPrefsAutoHidePixelBar->value();
             const bool visiblePixelBar = p.ui->uiPixelBar->visible_r();
 
-            if (!visiblePixelBar || (autoHide != 2))
+            if (!visiblePixelBar || (autoHide != kAutoHideOpenGLAndVulkan))
                 return;
 
             toggle_pixel_bar(nullptr, p.ui);
@@ -761,7 +762,8 @@ namespace mrv
             const bool hasPixelBar = p.ui->uiPrefs->uiPrefsPixelToolbar->value();
             const bool visiblePixelBar = p.ui->uiPixelBar->visible_r();
 
-            if ((hasPixelBar && (autoHide != 2)) || p.presentation)
+            if ((hasPixelBar && (autoHide != kAutoHideOpenGLAndVulkan)) ||
+                p.presentation)
                 return;
 
             // This is called *before* the togglePlayback begins, so we need

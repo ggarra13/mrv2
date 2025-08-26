@@ -73,6 +73,7 @@ v1.4.0
 - Fixed saving movies from OpenEXRs with an alpha channel on Vulkan backend.
 - Fixed Desktop Environment report when using -v (-version) flag.
 - Added list of GPUs to Status bar on Vulkan backend.
+- Made Playback->Auto Hide Pixel Bar a choice menu between "Inactive", "OpenGL only" and "OpenGL And Vulkan" instead of just a toggle.  The default is OpenGL only as Vulkan is so fast it does not slow down when reading back a single pixel information.
 
 
 v1.3.9
