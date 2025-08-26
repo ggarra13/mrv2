@@ -85,6 +85,9 @@ time_difference = end_date - start_date
 days  = time_difference.days
 hours, remainder = divmod(time_difference.seconds, 3600)
 minutes, seconds = divmod(remainder, 60)
+
+print(" START DATE:", start_date)
+print("   END DATE:", end_date)
 print(f'DIFFERENCE: {days} days, {hours} hours, {minutes} minutes')
 
 start_date = start_date.strftime("%Y-%m-%d")
