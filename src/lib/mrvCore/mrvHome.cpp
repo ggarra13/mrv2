@@ -205,7 +205,7 @@ namespace mrv
     {
         std::string docs;
 
-        const char* language = getenv("LANGUAGE");
+        const char* language = fl_getenv("LANGUAGE");
         if (!language || strlen(language) == 0)
             language = "en";
 

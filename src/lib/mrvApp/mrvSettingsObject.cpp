@@ -255,7 +255,8 @@ namespace mrv
         }
 
         if (command.substr(0, 5) == "emacs" || command.substr(0, 3) == "vim" ||
-            command.substr(0, 4) == "nano" || command.substr(0, 4) == "gvim")
+            command.substr(0, 4) == "nano" || command.substr(0, 4) == "gvim" ||
+            command.substr(0, 3) == "zed")
         {
             command += " +{0} '{1}'";
         }
@@ -263,7 +264,8 @@ namespace mrv
         {
             command += " -n{0} '{1}'";
         }
-        else if (command.substr(0, 4) == "code")
+        else if (command.substr(0, 4) == "code" ||
+                 command.substr(0, 6) == "cursor")
         {
             command += " '{1}:{0}'";
         }

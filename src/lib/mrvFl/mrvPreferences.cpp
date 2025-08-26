@@ -465,13 +465,13 @@ namespace mrv
             uiPrefs->uiColorTheme->picked(item);
         }
 
-        const char* language = getenv("LANGUAGE");
+        const char* language = fl_getenv("LANGUAGE");
         if (!language || language[0] == '\0')
-            language = getenv("LC_ALL");
+            language = fl_getenv("LC_ALL");
         if (!language || language[0] == '\0')
-            language = getenv("LC_MESSAGES");
+            language = fl_getenv("LC_MESSAGES");
         if (!language || language[0] == '\0')
-            language = getenv("LANG");
+            language = fl_getenv("LANG");
 
         int uiIndex = 0;
         if (language && strlen(language) > 1)

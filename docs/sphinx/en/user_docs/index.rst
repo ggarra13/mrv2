@@ -20,6 +20,7 @@ mrv2 User Guide
    videos
    command-line
    hdr
+   variables
    faq
 
    licensing
