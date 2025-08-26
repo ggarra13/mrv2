@@ -5972,6 +5972,12 @@ msgstr "Pequeño"
 msgid "Large"
 msgstr "Grande"
 
+msgid "OpenGL only"
+msgstr "Sólo OpenGL"
+
+msgid "Vulkan and OpenGL"
+msgstr "Vulkan y OpenGL"
+
 msgid "29.97"
 msgstr "29,97"
 
@@ -6517,14 +6523,6 @@ msgstr ""
 
 msgid "Auto Hide Pixel Bar"
 msgstr "Auto Ocultar Barra de Píxel"
-
-msgid ""
-"The Pixel Bar can slow down playback at high resolutions.  When this option "
-"is on, the pixel toolbar will be hidden automatically."
-msgstr ""
-"La Barra de Pixel puede desacelearar la reproducción a altas resoluciones.  "
-"Cuando esta opción está activada la barra de pixel será ocultada "
-"automáticamente."
 
 msgid "Sequences"
 msgstr "Secuencias"
@@ -7723,6 +7721,14 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
 
+#~ msgid ""
+#~ "The Pixel Bar can slow down playback at high resolutions.  When this option "
+#~ "is on, the pixel toolbar will be hidden automatically."
+#~ msgstr ""
+#~ "La Barra de Pixel puede desacelearar la reproducción a altas resoluciones.  "
+#~ "Cuando esta opción está activada la barra de pixel será ocultada "
+#~ "automáticamente."
+
 #~ msgid "smpte2084"
 #~ msgstr "smpte2084"
 
@@ -7760,9 +7766,6 @@ msgstr "Alternar Ventana de Acerca de mrv2"
 #~ "La línea de tiempo puede ser dibujada con blitting (transferencia) o con "
 #~ "shaders de OpenGL.  Dependiendo en tu tarjeta gráfica y sistema operativo "
 #~ "una u otra puede desempeñarse mejor que la otra."
-
-#~ msgid "OpenGL"
-#~ msgstr "OpenGL"
 
 #~ msgid "Render/HDR/Toggle Tonemap"
 #~ msgstr "Render/HDR/Alternar Mapeo de Tonos"

@@ -5909,6 +5909,12 @@ msgstr "Petite"
 msgid "Large"
 msgstr "Grandes"
 
+msgid "OpenGL only"
+msgstr "OpenGL seulement"
+
+msgid "Vulkan and OpenGL"
+msgstr "Vulkan et OpenGL"
+
 msgid "29.97"
 msgstr "29.97"
 
@@ -6467,13 +6473,6 @@ msgstr ""
 
 msgid "Auto Hide Pixel Bar"
 msgstr "Masquer automatiquement la barre des pixels"
-
-msgid ""
-"The Pixel Bar can slow down playback at high resolutions.  When this option "
-"is on, the pixel toolbar will be hidden automatically."
-msgstr ""
-"La barre Pixel peut ralentir la lecture à haute résolution. Lorsque cette "
-"option est activée, la barre d'outils pixel sera cachée automatiquement."
 
 msgid "Sequences"
 msgstr "Séquences"
@@ -7687,6 +7686,13 @@ msgstr "Activer la fenêtre des touches d'amorçage"
 
 msgid "Toggle About Window"
 msgstr "Commutation à propos de la fenêtre"
+
+#~ msgid ""
+#~ "The Pixel Bar can slow down playback at high resolutions.  When this option "
+#~ "is on, the pixel toolbar will be hidden automatically."
+#~ msgstr ""
+#~ "La barre Pixel peut ralentir la lecture à haute résolution. Lorsque cette "
+#~ "option est activée, la barre d'outils pixel sera cachée automatiquement."
 
 #~ msgid "smpte2084"
 #~ msgstr "smpte2084"

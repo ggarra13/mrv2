@@ -5454,6 +5454,12 @@ msgstr ""
 msgid "Large"
 msgstr ""
 
+msgid "OpenGL only"
+msgstr ""
+
+msgid "Vulkan and OpenGL"
+msgstr ""
+
 msgid "29.97"
 msgstr ""
 
@@ -5944,11 +5950,6 @@ msgid ""
 msgstr ""
 
 msgid "Auto Hide Pixel Bar"
-msgstr ""
-
-msgid ""
-"The Pixel Bar can slow down playback at high resolutions.  When this option "
-"is on, the pixel toolbar will be hidden automatically."
 msgstr ""
 
 msgid "Sequences"

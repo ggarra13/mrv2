@@ -5807,6 +5807,12 @@ msgstr "小さい"
 msgid "Large"
 msgstr "大きい"
 
+msgid "OpenGL only"
+msgstr "OpenGL のみ"
+
+msgid "Vulkan and OpenGL"
+msgstr "Vulkan と OpenGL"
+
 msgid "29.97"
 msgstr "29.97"
 
@@ -6307,11 +6313,6 @@ msgstr "ビューウィンドウで左クリックしたときに再生を開始
 
 msgid "Auto Hide Pixel Bar"
 msgstr "ピクセルバーを自動的に隠す"
-
-msgid ""
-"The Pixel Bar can slow down playback at high resolutions.  When this option "
-"is on, the pixel toolbar will be hidden automatically."
-msgstr "ピクセルバーは高解像度で再生を遅くすることがあります。このオプションがオンになると、ピクセルツールバーが自動的に隠されます。"
 
 msgid "Sequences"
 msgstr "シーケンス"
@@ -7457,6 +7458,11 @@ msgstr "ホットキーウィンドウを切り替え"
 
 msgid "Toggle About Window"
 msgstr "バージョン情報ウィンドウを切り替え"
+
+#~ msgid ""
+#~ "The Pixel Bar can slow down playback at high resolutions.  When this option "
+#~ "is on, the pixel toolbar will be hidden automatically."
+#~ msgstr "ピクセルバーは高解像度で再生を遅くすることがあります。このオプションがオンになると、ピクセルツールバーが自動的に隠されます。"
 
 #~ msgid "smpte2084"
 #~ msgstr "smpte2084"

@@ -5830,6 +5830,12 @@ msgstr "Small"
 msgid "Large"
 msgstr "Large"
 
+msgid "OpenGL only"
+msgstr "仅 OpenGL"
+
+msgid "Vulkan and OpenGL"
+msgstr "Vulkan 和 OpenGL"
+
 msgid "29.97"
 msgstr "29.977"
 
@@ -6322,11 +6328,6 @@ msgstr "在视图窗口上单击鼠标左键时, 开始播放"
 
 msgid "Auto Hide Pixel Bar"
 msgstr "自动隐藏像素栏"
-
-msgid ""
-"The Pixel Bar can slow down playback at high resolutions.  When this option "
-"is on, the pixel toolbar will be hidden automatically."
-msgstr "像素栏会减慢高分辨率的重播。 当此选项打开时, 像素工具栏将被自动隐藏 。"
 
 msgid "Sequences"
 msgstr "序列"
@@ -7471,6 +7472,11 @@ msgstr "开关热键窗口"
 
 msgid "Toggle About Window"
 msgstr "开关关于窗口"
+
+#~ msgid ""
+#~ "The Pixel Bar can slow down playback at high resolutions.  When this option "
+#~ "is on, the pixel toolbar will be hidden automatically."
+#~ msgstr "像素栏会减慢高分辨率的重播。 当此选项打开时, 像素工具栏将被自动隐藏 。"
 
 #~ msgid "smpte2084"
 #~ msgstr "smpte2084"

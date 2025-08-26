@@ -5898,6 +5898,12 @@ msgstr "Klein"
 msgid "Large"
 msgstr "Gro"
 
+msgid "OpenGL only"
+msgstr "Nur OpenGL"
+
+msgid "Vulkan and OpenGL"
+msgstr "Vulkan und OpenGL"
+
 msgid "29.97"
 msgstr "29,97"
 
@@ -6446,13 +6452,6 @@ msgstr ""
 
 msgid "Auto Hide Pixel Bar"
 msgstr "Pixelleiste automatisch ausblenden"
-
-msgid ""
-"The Pixel Bar can slow down playback at high resolutions.  When this option "
-"is on, the pixel toolbar will be hidden automatically."
-msgstr ""
-"Die Pixelleiste kann die Wiedergabe bei hohen Auflsungen verlangsamen. Wenn "
-"diese Option aktiviert ist, wird die Pixelleiste automatisch ausgeblendet."
 
 msgid "Sequences"
 msgstr "Sequenzen"
@@ -7652,6 +7651,13 @@ msgstr "Hotkeys-Fenster umschalten"
 
 msgid "Toggle About Window"
 msgstr "Fenster umschalten"
+
+#~ msgid ""
+#~ "The Pixel Bar can slow down playback at high resolutions.  When this option "
+#~ "is on, the pixel toolbar will be hidden automatically."
+#~ msgstr ""
+#~ "Die Pixelleiste kann die Wiedergabe bei hohen Auflsungen verlangsamen. Wenn "
+#~ "diese Option aktiviert ist, wird die Pixelleiste automatisch ausgeblendet."
 
 #~ msgid "smpte2084"
 #~ msgstr "smpte2084"

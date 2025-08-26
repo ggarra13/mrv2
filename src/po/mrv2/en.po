@@ -5917,6 +5917,12 @@ msgstr "Small"
 msgid "Large"
 msgstr "Large"
 
+msgid "OpenGL only"
+msgstr "OpenGL only"
+
+msgid "Vulkan and OpenGL"
+msgstr "Vulkan and OpenGL"
+
 msgid "29.97"
 msgstr "29.97"
 
@@ -6450,13 +6456,6 @@ msgstr ""
 
 msgid "Auto Hide Pixel Bar"
 msgstr "Auto Hide Pixel Bar"
-
-msgid ""
-"The Pixel Bar can slow down playback at high resolutions.  When this option "
-"is on, the pixel toolbar will be hidden automatically."
-msgstr ""
-"The Pixel Bar can slow down playback at high resolutions.  When this option "
-"is on, the pixel toolbar will be hidden automatically."
 
 msgid "Sequences"
 msgstr "Sequences"
@@ -7649,6 +7648,13 @@ msgstr "Toggle Hotkeys Window"
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
 
+#~ msgid ""
+#~ "The Pixel Bar can slow down playback at high resolutions.  When this option "
+#~ "is on, the pixel toolbar will be hidden automatically."
+#~ msgstr ""
+#~ "The Pixel Bar can slow down playback at high resolutions.  When this option "
+#~ "is on, the pixel toolbar will be hidden automatically."
+
 #~ msgid "smpte2084"
 #~ msgstr "smpte2084"
 
@@ -7685,9 +7691,6 @@ msgstr "Toggle About Window"
 #~ msgstr ""
 #~ "tter then the other.Timeline can be drawn with blitting or with shaders.  "
 #~ "Depending on graphics card and OS one can perform be"
-
-#~ msgid "OpenGL"
-#~ msgstr "OpenGL"
 
 #~ msgid "Render/HDR/Toggle Tonemap"
 #~ msgstr "Render/HDR/Toggle Tonemap"

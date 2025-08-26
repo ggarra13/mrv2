@@ -5875,6 +5875,12 @@ msgstr "छोटा"
 msgid "Large"
 msgstr "बड़ा"
 
+msgid "OpenGL only"
+msgstr "केवल OpenGL"
+
+msgid "Vulkan and OpenGL"
+msgstr "वल्कन और OpenGL"
+
 msgid "29.97"
 msgstr "29.97"
 
@@ -6409,13 +6415,6 @@ msgstr ""
 
 msgid "Auto Hide Pixel Bar"
 msgstr "पिक्सेल पट्टी स्वतः छुपाएँ"
-
-msgid ""
-"The Pixel Bar can slow down playback at high resolutions.  When this option "
-"is on, the pixel toolbar will be hidden automatically."
-msgstr ""
-"पिक्सेल पट्टी उच्च रेज़ोल्यूशन्स में प्लेबैक को धीमा कर सकता है. जब यह "
-"विकल्प चालू होगा, पिक्सेल औज़ार- पट्टी स्वचलित छुपाई जाएगी."
 
 msgid "Sequences"
 msgstr "अनुक्रम"
@@ -7606,6 +7605,13 @@ msgstr "यदि आप विंडो को बन्द करना चा
 
 msgid "Toggle About Window"
 msgstr "विंडो के बारे में टॉगल करें"
+
+#~ msgid ""
+#~ "The Pixel Bar can slow down playback at high resolutions.  When this option "
+#~ "is on, the pixel toolbar will be hidden automatically."
+#~ msgstr ""
+#~ "पिक्सेल पट्टी उच्च रेज़ोल्यूशन्स में प्लेबैक को धीमा कर सकता है. जब यह "
+#~ "विकल्प चालू होगा, पिक्सेल औज़ार- पट्टी स्वचलित छुपाई जाएगी."
 
 #~ msgid "smpte2084"
 #~ msgstr "smpte2084"

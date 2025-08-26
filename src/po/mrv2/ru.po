@@ -5942,6 +5942,12 @@ msgstr "Маленький"
 msgid "Large"
 msgstr "Большой"
 
+msgid "OpenGL only"
+msgstr "Только OpenGL"
+
+msgid "Vulkan and OpenGL"
+msgstr "Vulkan и OpenGL"
+
 msgid "29.97"
 msgstr "29,97"
 
@@ -6478,13 +6484,6 @@ msgstr ""
 
 msgid "Auto Hide Pixel Bar"
 msgstr "Автоматическое скрытие пикселя"
-
-msgid ""
-"The Pixel Bar can slow down playback at high resolutions.  When this option "
-"is on, the pixel toolbar will be hidden automatically."
-msgstr ""
-"Pixel Bar может замедлить воспроизведение при высоких разрешениях. Когда эта"
-" опция включена, панель пикселя будет скрыта автоматически."
 
 msgid "Sequences"
 msgstr "Последовательность"
@@ -7683,6 +7682,13 @@ msgstr "Переключить окно горячих клавиш"
 
 msgid "Toggle About Window"
 msgstr "Закладка о окне"
+
+#~ msgid ""
+#~ "The Pixel Bar can slow down playback at high resolutions.  When this option "
+#~ "is on, the pixel toolbar will be hidden automatically."
+#~ msgstr ""
+#~ "Pixel Bar может замедлить воспроизведение при высоких разрешениях. Когда эта"
+#~ " опция включена, панель пикселя будет скрыта автоматически."
 
 #~ msgid "smpte2084"
 #~ msgstr "smpte2084"
