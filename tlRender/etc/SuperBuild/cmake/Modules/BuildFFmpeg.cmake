@@ -24,6 +24,13 @@ if(WIN32)
     convert_path_for_msys2("${CMAKE_INSTALL_PREFIX}" INSTALL_PREFIX)
 endif()
 
+set(FFmpeg_PATCH )
+if(WIN32)
+    set(FFmpeg_PATCH ${CMAKE_COMMAND} -E copy_if_different
+        ${CMAKE_CURRENT_SOURCE_DIR}/patches/FFmpeg-patch/configure
+        ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg/src/FFmpeg/configure)
+endif()
+
 set(FFmpeg_SHARED_LIBS ON)
 set(FFmpeg_DEBUG OFF)
 set(FFmpeg_LDFLAGS)
@@ -558,6 +565,7 @@ ExternalProject_Add(
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg
     DEPENDS ${FFmpeg_DEPS}
     URL https://ffmpeg.org/releases/ffmpeg-8.0.tar.bz2
+    PATCH_COMMAND ${FFmpeg_PATCH}
     CONFIGURE_COMMAND ${FFmpeg_CONFIGURE}
     BUILD_COMMAND ${FFmpeg_BUILD}
     INSTALL_COMMAND ${FFmpeg_INSTALL}
