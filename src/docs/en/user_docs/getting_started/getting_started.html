@@ -52,6 +52,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#building-mrv2">Building mrv2</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#installing-mrv2">Installing mrv2</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#wayland-support">Wayland support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vulkan-support">Vulkan support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#launching-mrv2">Launching mrv2</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#loading-media-drag-and-drop">Loading Media (Drag and Drop)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#loading-media-mrv2-browser">Loading Media (mrv2 Browser)</a></li>
@@ -113,23 +114,39 @@
 </section>
 <section id="installing-mrv2">
 <h2>Installing mrv2<a class="headerlink" href="#installing-mrv2" title="Link to this heading"></a></h2>
-<ul class="simple">
-<li><p>On macOS you install it by opening the .dmg file, and dragging the mrv2 icon to the Applications directory. If there’s already an mrv2 version, we recommend you overwrite it. The macOS application is currently not notarized, so when you launch it you will not be able to run it as macOS will warn you that the file is not secure as it was downloaded from internet. To avoid that, you need to open the Finder, go to the Applications directory and CTRL + Left mouse click on the mrv2 application. That will bring up the same warning, but this time it will have a button that will allow you to open it. You only need to do this once.</p></li>
+<ul>
+<li><p>On macOS you install it by opening the .dmg file, and dragging the mrv2 or
+vmrv2 icon to the Applications directory.  If there’s already a mrv2 or vmrv2
+version, we recommend you overwrite it.
+The macOS application is currently not notarized, so when you launch it you
+will not be able to run it as macOS will warn you that the file is not secure
+as it was downloaded from internet.
+To avoid that, you need to open the Apple Logo-&gt;Settings-&gt;Privacy and Security
+and go to Security and allow “Opening Anyway”.
+Alternatively, you can do it from the Terminal, by:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">xattr</span> <span class="o">-</span><span class="n">rd</span> <span class="n">com</span><span class="o">.</span><span class="n">apple</span><span class="o">.</span><span class="n">quarantine</span> <span class="o">/</span><span class="n">Applications</span><span class="o">/</span><span class="n">mrv2</span><span class="o">.</span><span class="n">app</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>or for the Vulkan mrv2 version:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">xattr</span> <span class="o">-</span><span class="n">rd</span> <span class="n">com</span><span class="o">.</span><span class="n">apple</span><span class="o">.</span><span class="n">quarantine</span> <span class="o">/</span><span class="n">Applications</span><span class="o">/</span><span class="n">vmrv2</span><span class="o">.</span><span class="n">app</span><span class="o">/</span>
+</pre></div>
+</div>
+</li>
 <li><p>Windows and Chrome, like macOS, also protect you from installing files from the Internet. When you first download it with Chrome it may warn you that it is not an usual archive to be downloaded. Make sure to click on the right up arrow menu to Save it anyway. You cannot open the .exe from Chrome directly. You will need to open Windows Explorer and go to the Downloads directory. You should then run it from there. Then Windows will popup a Blue box telling you Windows SmartScreen prevented the start of an unknown application and that you can place your PC at risk. Click on the More Information text and a Button that says Run anyway or similar should appear. Click on it and follow the standard instructions to any Windows installer.
 For file associations, you have to manually select the file and use RMB-&gt;Open With.  If you installed the application with the .exe installer, you can associate the files with a specific version you have installed or with the latest version (so you won’t have to keep updating the file association).</p></li>
 <li><p>On Linux, in order to install the .rpm or .deb packages requires your user to have sudo permissions.</p></li>
 </ul>
 <p>On Debian (Ubuntu, etc) systems, you would install with:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">dpkg</span> <span class="o">-</span><span class="n">i</span> <span class="n">mrv2</span><span class="o">-</span><span class="n">v1</span><span class="mf">.3.9</span><span class="o">-</span><span class="n">amd64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">dpkg</span> <span class="o">-</span><span class="n">i</span> <span class="n">mrv2</span><span class="o">-</span><span class="n">v1</span><span class="mf">.4.0</span><span class="o">-</span><span class="n">amd64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
 </pre></div>
 </div>
 <p>On Red Hat (Rocky Linux, etc), you would install it with:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">rpm</span> <span class="o">-</span><span class="n">i</span> <span class="n">mrv2</span><span class="o">-</span><span class="n">v1</span><span class="mf">.3.9</span><span class="o">-</span><span class="n">amd64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">rpm</span> <span class="o">-</span><span class="n">i</span> <span class="n">mrv2</span><span class="o">-</span><span class="n">v1</span><span class="mf">.4.0</span><span class="o">-</span><span class="n">amd64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
 </pre></div>
 </div>
 <p>Once you install it, you can run mrv2 by just typing mrv2 in the shell, as a symlink to the executable is placed in /usr/bin. The installers will also associate file extensions and install an icon for easy starting up in the Desktop icon of the user that installed it. For running mrv2 with the icon, you need to select it and use the right mouse button to open the menu and choose Allow Launch.</p>
 <p>If you lack sudo permissions in your organization, you should download the .tar.gz file and you can uncompress it with:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tar</span> <span class="o">-</span><span class="n">xf</span> <span class="n">mrv2</span><span class="o">-</span><span class="n">v1</span><span class="mf">.3.9</span><span class="o">-</span><span class="n">amd64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tar</span> <span class="o">-</span><span class="n">xf</span> <span class="n">mrv2</span><span class="o">-</span><span class="n">v1</span><span class="mf">.4.0</span><span class="o">-</span><span class="n">amd64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
 </pre></div>
 </div>
 <p>That will create a folder in the directory you uncompress it from. You can then run mrv2 by using the bash script:</p>
@@ -140,7 +157,12 @@ For file associations, you have to manually select the file and use RMB-&gt;Open
 </section>
 <section id="wayland-support">
 <h2>Wayland support<a class="headerlink" href="#wayland-support" title="Link to this heading"></a></h2>
-<p>The binary distribution of mrv2, which was compiled for Rocky Linux 8.9, has Wayland support but it may have problems starting up on newer distros.  It is recommended you build it from source.</p>
+<p>The binary distribution of mrv2, has native Wayland support under Linux.</p>
+</section>
+<section id="vulkan-support">
+<h2>Vulkan support<a class="headerlink" href="#vulkan-support" title="Link to this heading"></a></h2>
+<p>The commercial version of mrv2 (also known as vmrv2), supports Vulkan natively on all platforms.  This allows faster playback and full HDR (High Dynamic Range) support on all platforms.
+The free version of mrv2 works with OpenGL only and does not support HDR.</p>
 </section>
 <section id="launching-mrv2">
 <h2>Launching mrv2<a class="headerlink" href="#launching-mrv2" title="Link to this heading"></a></h2>
