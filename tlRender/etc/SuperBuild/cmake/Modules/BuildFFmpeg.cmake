@@ -64,7 +64,6 @@ set(FFmpeg_CONFIGURE_ARGS
     --enable-pic
     --disable-programs
     --disable-doc
-    --disable-postproc
     --disable-avfilter
     --disable-hwaccels
     --disable-devices
@@ -380,7 +379,8 @@ if(TLRENDER_FFMPEG_MINIMAL)
         --enable-protocol=http
         --enable-protocol=httpproxy
         --enable-protocol=https
-        --enable-protocol=md5)
+        --enable-protocol=md5
+        --enable-protocol=udp)
     if(APPLE)
 	list(APPEND FFmpeg_CONFIGURE_ARGS
 	    --enable-encoder=pcm_alaw_at
@@ -514,7 +514,7 @@ if(WIN32)
     if(WIN32)
 	convert_path_for_msys2("${CMAKE_CURRENT_BINARY_DIR}" BINARY_DIR)
         set(FFmpeg_OPENSSL_COPY
-            "cp ${BINARY_DIR}/ffmpeg_configure.sh.in ${BINARY_DIR}/FFmpeg/src/FFmpeg/ffmpeg_configure.sh &&")
+            "cp ${BINARY_DIR}/ffmpeg_configure.sh ${BINARY_DIR}/FFmpeg/src/FFmpeg/ffmpeg_configure.sh &&")
     endif()
 
     set(PKG_CONFIG_PATH_MSys2 "${INSTALL_PREFIX}/lib/pkgconfig")
@@ -540,24 +540,24 @@ else()
     set(FFmpeg_CONFIGURE ./configure ${FFmpeg_CONFIGURE_ARGS})
     set(FFmpeg_BUILD make -j ${NPROCS})
     set(FFmpeg_INSTALL make install)
+    list(JOIN FFmpeg_CONFIGURE_ARGS " \\\n" FFmpeg_CONFIGURE_ARGS_TMP)
 endif()
 
-if (WIN32)
-    set(FFmpeg_CONFIGURE_CONTENTS "#!/usr/bin/env bash\n./configure ${FFmpeg_CONFIGURE_ARGS_TMP}\n")
-    # Ensure the directory exists
-    message(STATUS "Creating directory ${CMAKE_CURRENT_BINARY_DIR}/")
-    file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/")
-    message(STATUS "Creating ffmpeg_configure.sh.in ${CMAKE_CURRENT_BINARY_DIR}/")
-    file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/ffmpeg_configure.sh.in
-	${FFmpeg_CONFIGURE_CONTENTS}
-    )
-endif()
+set(FFmpeg_CONFIGURE_CONTENTS "#!/usr/bin/env bash\n./configure ${FFmpeg_CONFIGURE_ARGS_TMP}\n")
+
+# Ensure the directory exists
+message(STATUS "Creating directory ${CMAKE_CURRENT_BINARY_DIR}/")
+file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/")
+message(STATUS "Creating ffmpeg_configure.sh ${CMAKE_CURRENT_BINARY_DIR}/")
+file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/ffmpeg_configure.sh
+    ${FFmpeg_CONFIGURE_CONTENTS}
+)
 
 ExternalProject_Add(
     FFmpeg
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg
     DEPENDS ${FFmpeg_DEPS}
-    URL https://ffmpeg.org/releases/ffmpeg-7.0.1.tar.bz2
+    URL https://ffmpeg.org/releases/ffmpeg-8.0.tar.bz2
     CONFIGURE_COMMAND ${FFmpeg_CONFIGURE}
     BUILD_COMMAND ${FFmpeg_BUILD}
     INSTALL_COMMAND ${FFmpeg_INSTALL}

@@ -2,7 +2,7 @@ include(ExternalProject)
 
 include(GNUInstallDirs)
 
-#set(SvtAV1_TAG v3.0.0)  # 3.0+ branch not ocmpatible with FFmpeg 7.1.1
+#set(SvtAV1_TAG v3.0.0)  # 3.0+ branch not ocmpatible with FFmpeg 7.0.1
 set(SvtAV1_TAG v2.3.0)
 
 set(SvtAV1_ARGS ${TLRENDER_EXTERNAL_ARGS})

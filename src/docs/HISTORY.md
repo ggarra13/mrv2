@@ -76,6 +76,7 @@ v1.4.0
 - Made Playback->Auto Hide Pixel Bar a choice menu between "Inactive", "OpenGL only" and "OpenGL And Vulkan" instead of just a toggle.  The default is OpenGL only as Vulkan is so fast it does not slow down when reading back a single pixel information.
 - Added "cursor" as one of the valid external editors for the Python console.
 - Added a description of all valid environment variables for mrv2.
+- Upgraded to FFmpeg 8.0.
 
 v1.3.9
 ======

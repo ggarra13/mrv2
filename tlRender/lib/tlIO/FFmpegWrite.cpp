@@ -1143,7 +1143,7 @@ namespace tl
             {
                 AVCodecID avCodecID = AV_CODEC_ID_MPEG4;
                 Profile profile = Profile::kNone;
-                int avProfile = FF_PROFILE_UNKNOWN;
+                int avProfile = AV_PROFILE_UNKNOWN;
                 auto option = options.find("FFmpeg/WriteProfile");
                 if (option != options.end())
                 {
@@ -1167,83 +1167,83 @@ namespace tl
                 {
                 case Profile::H264:
                     avCodecID = AV_CODEC_ID_H264;
-                    avProfile = FF_PROFILE_H264_HIGH;
+                    avProfile = AV_PROFILE_H264_HIGH;
                     break;
                 case Profile::ProRes:
                     avCodecID = AV_CODEC_ID_PRORES;
-                    avProfile = FF_PROFILE_PRORES_STANDARD;
+                    avProfile = AV_PROFILE_PRORES_STANDARD;
                     profileString = "standard";
                     break;
                 case Profile::ProRes_Proxy:
                     avCodecID = AV_CODEC_ID_PRORES;
-                    avProfile = FF_PROFILE_PRORES_PROXY;
+                    avProfile = AV_PROFILE_PRORES_PROXY;
                     profileString = "proxy";
                     break;
                 case Profile::ProRes_LT:
                     avCodecID = AV_CODEC_ID_PRORES;
-                    avProfile = FF_PROFILE_PRORES_LT;
+                    avProfile = AV_PROFILE_PRORES_LT;
                     profileString = "lt";
                     break;
                 case Profile::ProRes_HQ:
                     avCodecID = AV_CODEC_ID_PRORES;
-                    avProfile = FF_PROFILE_PRORES_HQ;
+                    avProfile = AV_PROFILE_PRORES_HQ;
                     profileString = "hq";
                     break;
                 case Profile::ProRes_4444:
                     avCodecID = AV_CODEC_ID_PRORES;
-                    avProfile = FF_PROFILE_PRORES_4444;
+                    avProfile = AV_PROFILE_PRORES_4444;
                     profileString = "4444";
                     break;
                 case Profile::ProRes_XQ:
                     avCodecID = AV_CODEC_ID_PRORES;
-                    avProfile = FF_PROFILE_PRORES_XQ;
+                    avProfile = AV_PROFILE_PRORES_XQ;
                     profileString = "4444xq";
                     break;
                 case Profile::DNxHD:
                     avCodecID = AV_CODEC_ID_DNXHD;
-                    avProfile = FF_PROFILE_DNXHD;
+                    avProfile = AV_PROFILE_DNXHD;
                     avBitrate = "44000";
                     break;
                 case Profile::DNxHR_LB:
                     avCodecID = AV_CODEC_ID_DNXHD;
-                    avProfile = FF_PROFILE_DNXHR_LB;
+                    avProfile = AV_PROFILE_DNXHR_LB;
                     profileString = "dnxhr_lb";
                     break;
                 case Profile::DNxHR_SQ:
                     avCodecID = AV_CODEC_ID_DNXHD;
-                    avProfile = FF_PROFILE_DNXHR_SQ;
+                    avProfile = AV_PROFILE_DNXHR_SQ;
                     profileString = "dnxhr_sq";
                     break;
                 case Profile::DNxHR_HQ:
                     avCodecID = AV_CODEC_ID_DNXHD;
-                    avProfile = FF_PROFILE_DNXHR_HQ;
+                    avProfile = AV_PROFILE_DNXHR_HQ;
                     profileString = "dnxhr_hq";
                     break;
                 case Profile::DNxHR_HQX:
                     avCodecID = AV_CODEC_ID_DNXHD;
-                    avProfile = FF_PROFILE_DNXHR_HQX;
+                    avProfile = AV_PROFILE_DNXHR_HQX;
                     profileString = "dnxhr_hqx";
                     break;
                 case Profile::DNxHR_444:
                     avCodecID = AV_CODEC_ID_DNXHD;
-                    avProfile = FF_PROFILE_DNXHR_444;
+                    avProfile = AV_PROFILE_DNXHR_444;
                     profileString = "dnxhr_444";
                     break;
                 case Profile::VP9:
                     avCodecID = AV_CODEC_ID_VP9;
-                    avProfile = FF_PROFILE_UNKNOWN;
+                    avProfile = AV_PROFILE_UNKNOWN;
                     break;
                 case Profile::Cineform:
                     avCodecID = AV_CODEC_ID_CFHD;
-                    avProfile = FF_PROFILE_UNKNOWN;
+                    avProfile = AV_PROFILE_UNKNOWN;
                     break;
                 case Profile::AV1:
                     avCodecID = AV_CODEC_ID_AV1;
-                    avProfile = FF_PROFILE_UNKNOWN;
+                    avProfile = AV_PROFILE_UNKNOWN;
                     break;
                 case Profile::HAP:
                     avCodecID = AV_CODEC_ID_HAP;
-                    avProfile = FF_PROFILE_UNKNOWN;
+                    avProfile = AV_PROFILE_UNKNOWN;
                     break;
                 default:
                     break;
@@ -1456,16 +1456,16 @@ namespace tl
                     switch (pix_fmt)
                     {
                     case AV_PIX_FMT_YUV420P10LE:
-                        avProfile = FF_PROFILE_H264_HIGH_10;
+                        avProfile = AV_PROFILE_H264_HIGH_10;
                         break;
                     case AV_PIX_FMT_YUV422P10LE:
-                        avProfile = FF_PROFILE_H264_HIGH_422;
+                        avProfile = AV_PROFILE_H264_HIGH_422;
                         break;
                     case AV_PIX_FMT_YUV444P10LE:
-                        avProfile = FF_PROFILE_H264_HIGH_444;
+                        avProfile = AV_PROFILE_H264_HIGH_444;
                         break;
                     default:
-                        avProfile = FF_PROFILE_H264_HIGH;
+                        avProfile = AV_PROFILE_H264_HIGH;
                     }
                 }
 
