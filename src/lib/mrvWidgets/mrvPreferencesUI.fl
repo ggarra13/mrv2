@@ -93,8 +93,8 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {0 0 853 466} type Double hide resizable
-      code0 {main = m;}
+      xywh {1067 406 853 466} type Double resizable
+      code0 {main = m;} visible
     } {
       Fl_Group {} {open
         xywh {0 0 853 466} box FLAT_BOX
@@ -865,8 +865,8 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
               }
             }
             Fl_Group {} {
-              label Thumbnails open
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5
+              label Thumbnails
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label Thumbnails open
@@ -899,7 +899,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                   tooltip {Preview Thumbnails in a rectangle above Timeline} xywh {398 185 370 20} down_box DOWN_BOX value 1
                 }
                 Fl_Check_Button uiPrefsManualPanelThumbnails {
-                  label {Refresh Thumbnails on Panels Manuallly} selected
+                  label {Refresh Thumbnails on Panels Manuallly}
                   tooltip {When this option is on, thumbnails in panels won't be refreshed automatically.  You will have to use RMB->Update Thumbnail on the Thumbnail.} xywh {398 228 370 20} down_box DOWN_BOX
                 }
                 Fl_Check_Button uiPrefsPanelThumbnails {
@@ -953,11 +953,11 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
               }
             }
             Fl_Group {} {
-              label Playback
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+              label Playback open
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
-                label Defaults
+                label Defaults open
                 xywh {310 71 500 312} box ROUNDED_BOX align 5
               } {
                 Fl_Check_Button uiPrefsAutoPlayback {
@@ -968,9 +968,22 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                   label {Single Click Playback}
                   tooltip {Start Playback when single clicking the left mouse button on the view window} xywh {701 113 25 25} box UP_BOX down_box DOWN_BOX align 4
                 }
-                Fl_Check_Button uiPrefsAutoHidePixelBar {
-                  label {Auto Hide Pixel Bar}
-                  tooltip {The Pixel Bar can slow down playback at high resolutions.  When this option is on, the pixel toolbar will be hidden automatically.} xywh {701 79 25 25} box UP_BOX down_box DOWN_BOX align 4
+                Fl_Choice uiPrefsAutoHidePixelBar {
+                  label {Auto Hide Pixel Bar} open
+                  xywh {640 77 144 28} down_box BORDER_BOX
+                } {
+                  MenuItem {} {
+                    label Inactive
+                    xywh {0 0 100 20}
+                  }
+                  MenuItem {} {
+                    label {OpenGL only} selected
+                    xywh {10 10 100 20}
+                  }
+                  MenuItem {} {
+                    label {Vulkan and OpenGL}
+                    xywh {20 20 100 20}
+                  }
                 }
                 Fl_Group {} {open
                   xywh {334 146 450 132} box ROUNDED_BOX
