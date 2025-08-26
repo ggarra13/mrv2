@@ -32,4 +32,8 @@ source "$dir/environment.sh"
 #
 # Start up mrv2
 #
-"${dir}/bin/mrv2" "$@"
+if [[ -e "${dir}/bin/vmrv2" ]]; then
+    "${dir}/bin/vmrv2" "$@"
+else
+    "${dir}/bin/mrv2" "$@"
+fi

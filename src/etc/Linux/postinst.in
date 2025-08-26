@@ -19,6 +19,17 @@ startup="@CPACK_INSTALL_PREFIX@/bin/mrv2.sh"
 #
 chmod a+x "$startup"
 
+#
+# If we are installing vmrv2, rename the main executable to
+# vmrv2 so the desktop icon will be found correctly.
+#
+if [[ @mrv2_NAME@ == "vmrv2" ]]; then
+    mrv2="@CPACK_INSTALL_PREFIX@/bin/mrv2"
+    vmrv2="@CPACK_INSTALL_PREFIX@/bin/@mrv2_NAME@"
+    mv $mrv2 $vmrv2
+fi
+
+
 echo "Creating symlink from $startup to /usr/bin/@mrv2_NAME@"
 ln -s "$startup" /usr/bin/@mrv2_NAME@
 echo "Creating symlink from $startup to /usr/bin/@mrv2_NAME@-v@mrv2_VERSION@"
@@ -149,7 +160,7 @@ fi
 shortcut="@mrv2_NAME@.desktop"
 appshortcut="${appdir}/${shortcut}"
 cp -f "${appshortcut}" /usr/share/applications
-cp -f "${appshortcut}" /usr/share/applications/mrv2.desktop  # vmrv2 uses mrv2
+cp -f "${appshortcut}" /usr/share/applications/@mrv2_NAME@.desktop
 
 
 #
