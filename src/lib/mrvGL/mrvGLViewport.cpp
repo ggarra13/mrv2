@@ -1249,16 +1249,16 @@ namespace mrv
                 {
                     for (const auto& layer : video.layers)
                     {
-                        const auto& image = layer.image;
-                        if (!image->isValid())
-                            continue;
-
                         image::Color4f pixel, pixelB;
 
-                        _getPixelValue(pixel, image, pos);
+                        const auto& image = layer.image;
+                        if (image && image->isValid())
+                        {
+                            _getPixelValue(pixel, image, pos);
+                        }
 
                         const auto& imageB = layer.image;
-                        if (imageB->isValid())
+                        if (imageB && imageB->isValid())
                         {
                             _getPixelValue(pixelB, imageB, pos);
 

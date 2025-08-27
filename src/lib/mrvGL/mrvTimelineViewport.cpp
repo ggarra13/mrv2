@@ -2706,6 +2706,7 @@ namespace mrv
             if (X < 0 || Y < 0 || X >= size.w || Y >= size.h)
                 return;
 
+            size_t stride;
             size_t offset = (Y * size.w + X);
 
             switch (type)
@@ -2726,15 +2727,18 @@ namespace mrv
                 break;
             }
             
+            
             rgba.a = 1.0f;
             switch (type)
             {
             case image::PixelType::L_U8:
+                if (!data) return;
                 rgba.r = data[offset] / 255.0f;
                 rgba.g = data[offset] / 255.0f;
                 rgba.b = data[offset] / 255.0f;
                 break;
             case image::PixelType::LA_U8:
+                if (!data) return;
                 rgba.r = data[offset] / 255.0f;
                 rgba.g = data[offset] / 255.0f;
                 rgba.b = data[offset] / 255.0f;
@@ -2742,6 +2746,7 @@ namespace mrv
                 break;
             case image::PixelType::L_U16:
             {
+                if (!data) return;
                 uint16_t* f = (uint16_t*)(&data[offset]);
                 rgba.r = f[0] / 65535.0f;
                 rgba.g = f[0] / 65535.0f;
@@ -2750,6 +2755,7 @@ namespace mrv
             }
             case image::PixelType::LA_U16:
             {
+                if (!data) return;
                 uint16_t* f = (uint16_t*)(&data[offset]);
                 rgba.r = f[0] / 65535.0f;
                 rgba.g = f[0] / 65535.0f;
@@ -2759,6 +2765,7 @@ namespace mrv
             }
             case image::PixelType::L_U32:
             {
+                if (!data) return;
                 uint32_t* f = (uint32_t*)(&data[offset]);
                 constexpr float max =
                     static_cast<float>(std::numeric_limits<uint32_t>::max());
@@ -2769,6 +2776,7 @@ namespace mrv
             }
             case image::PixelType::LA_U32:
             {
+                if (!data) return;
                 uint32_t* f = (uint32_t*)(&data[offset]);
                 constexpr float max =
                     static_cast<float>(std::numeric_limits<uint32_t>::max());
@@ -2780,6 +2788,7 @@ namespace mrv
             }
             case image::PixelType::L_F16:
             {
+                if (!data) return;
                 half* f = (half*)(&data[offset]);
                 rgba.r = f[0];
                 rgba.g = f[0];
@@ -2788,6 +2797,7 @@ namespace mrv
             }
             case image::PixelType::LA_F16:
             {
+                if (!data) return;
                 half* f = (half*)(&data[offset]);
                 rgba.r = f[0];
                 rgba.g = f[0];
@@ -2796,12 +2806,14 @@ namespace mrv
                 break;
             }
             case image::PixelType::RGB_U8:
+                if (!data) return;
                 rgba.r = data[offset] / 255.0f;
                 rgba.g = data[offset + 1] / 255.0f;
                 rgba.b = data[offset + 2] / 255.0f;
                 break;
             case image::PixelType::RGB_U10:
             {
+                if (!data) return;
                 image::U10 f = *((image::U10*)(&data[offset]));
                 constexpr float max = 1023.F;
                 rgba.r = f.r / max;
@@ -2810,6 +2822,7 @@ namespace mrv
                 break;
             }
             case image::PixelType::RGBA_U8:
+                if (!data) return;
                 rgba.r = data[offset] / 255.0f;
                 rgba.g = data[offset + 1] / 255.0f;
                 rgba.b = data[offset + 2] / 255.0f;
@@ -2817,6 +2830,7 @@ namespace mrv
                 break;
             case image::PixelType::RGB_U16:
             {
+                if (!data) return;
                 uint16_t* f = (uint16_t*)(&data[offset]);
                 rgba.r = f[0] / 65535.0f;
                 rgba.g = f[1] / 65535.0f;
@@ -2825,6 +2839,7 @@ namespace mrv
             }
             case image::PixelType::RGBA_U16:
             {
+                if (!data) return;
                 uint16_t* f = (uint16_t*)(&data[offset]);
                 rgba.r = f[0] / 65535.0f;
                 rgba.g = f[1] / 65535.0f;
@@ -2834,6 +2849,7 @@ namespace mrv
             }
             case image::PixelType::RGB_U32:
             {
+                if (!data) return;
                 uint32_t* f = (uint32_t*)(&data[offset]);
                 constexpr float max =
                     static_cast<float>(std::numeric_limits<uint32_t>::max());
@@ -2844,6 +2860,7 @@ namespace mrv
             }
             case image::PixelType::RGBA_U32:
             {
+                if (!data) return;
                 uint32_t* f = (uint32_t*)(&data[offset]);
                 constexpr float max =
                     static_cast<float>(std::numeric_limits<uint32_t>::max());
@@ -2855,6 +2872,7 @@ namespace mrv
             }
             case image::PixelType::RGB_F16:
             {
+                if (!data) return;
                 half* f = (half*)(&data[offset]);
                 rgba.r = f[0];
                 rgba.g = f[1];
@@ -2872,6 +2890,7 @@ namespace mrv
             }
             case image::PixelType::RGB_F32:
             {
+                if (!data) return;
                 float* f = (float*)(&data[offset]);
                 rgba.r = f[0];
                 rgba.g = f[1];
@@ -2880,6 +2899,7 @@ namespace mrv
             }
             case image::PixelType::RGBA_F32:
             {
+                if (!data) return;
                 float* f = (float*)(&data[offset]);
                 rgba.r = f[0];
                 rgba.g = f[1];
@@ -2889,11 +2909,10 @@ namespace mrv
             }
             case image::PixelType::YUV_420P_U8:
             {
-                size_t stride;
-
                 data = image->getPlaneData(0);
+                if (!data) return;
                 stride = image->getLineSize(0);
-                offset = Y * stride + X / 2;
+                offset = Y * stride + X;
                 rgba.r = data[offset] / 255.0f;
                 
                 data = image->getPlaneData(1);
@@ -2905,19 +2924,18 @@ namespace mrv
                 stride = image->getLineSize(2);
                 offset = (Y / 2) * stride + X / 2;
                 rgba.b = data[offset] / 255.0f;
+
                 
                 color::checkLevels(rgba, videoLevels);
-                rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
-                
+                rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);                
                 break;
             }
             case image::PixelType::YUV_422P_U8:
             {
-                size_t stride;
-                
                 data = image->getPlaneData(0);
+                if (!data) return;
                 stride = image->getLineSize(0);
-                offset = Y * stride + X / 2;
+                offset = Y * stride + X;
                 rgba.r = data[offset] / 255.0f;
                 
                 data = image->getPlaneData(1);
@@ -2928,17 +2946,16 @@ namespace mrv
                 data = image->getPlaneData(2);
                 stride = image->getLineSize(2);
                 offset = Y * stride + X / 2;
-                
                 rgba.b = data[offset] / 255.0f;
+                
                 color::checkLevels(rgba, videoLevels);
                 rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
                 break;
             }
             case image::PixelType::YUV_444P_U8:
             {
-                size_t stride;
-                
                 data = image->getPlaneData(0);
+                if (!data) return;
                 stride = image->getLineSize(0);
                 offset = Y * stride + X;
                 rgba.r = data[offset] / 255.0f;
@@ -2953,6 +2970,58 @@ namespace mrv
                 offset = Y * stride + X;
                 rgba.b = data[offset] / 255.0f;
 
+                color::checkLevels(rgba, videoLevels);
+                rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
+                break;
+            }
+            case image::PixelType::YUV_420P_U10:
+            {
+                const uint16_t* f;
+
+                data = image->getPlaneData(0);
+                stride = image->getLineSize(0) / sizeof(uint16_t);
+                offset = Y * stride + X;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.r = f[offset] / 1023.0f;
+                
+                data = image->getPlaneData(1);
+                stride = image->getLineSize(1) / sizeof(uint16_t);
+                offset = (Y / 2) * stride + X / 2;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.g = f[offset] / 1023.0f;
+                
+                data = image->getPlaneData(2);
+                stride = image->getLineSize(2) / sizeof(uint16_t);
+                offset = (Y / 2) * stride + X / 2;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.b = f[offset] / 1023.0f;
+                
+                color::checkLevels(rgba, videoLevels);
+                rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
+                break;
+            }
+            case image::PixelType::YUV_420P_U12:
+            {
+                const uint16_t* f;
+
+                data = image->getPlaneData(0);
+                stride = image->getLineSize(0) / sizeof(uint16_t);
+                offset = Y * stride + X;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.r = f[offset] / 4095.0f;
+                
+                data = image->getPlaneData(1);
+                stride = image->getLineSize(1) / sizeof(uint16_t);
+                offset = (Y / 2) * stride + X / 2;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.g = f[offset] / 4095.0f;
+                
+                data = image->getPlaneData(2);
+                stride = image->getLineSize(2) / sizeof(uint16_t);
+                offset = (Y / 2) * stride + X / 2;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.b = f[offset] / 4095.0f;
+                
                 color::checkLevels(rgba, videoLevels);
                 rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
                 break;
@@ -2961,24 +3030,76 @@ namespace mrv
             {
                 const uint16_t* f;
 
-                size_t Ysize = size.w * size.h;
-                size_t w2 = (size.w + 1) / 2;
-                size_t h2 = (size.h + 1) / 2;
-                size_t Usize = w2 * h2;
-                size_t offset2 = (Y / 2) * w2 + X / 2;
-
                 data = image->getPlaneData(0);
+                stride = image->getLineSize(0) / sizeof(uint16_t);
+                offset = Y * stride + X;
                 f = reinterpret_cast<const uint16_t*>(data);
                 rgba.r = f[offset] / 65535.0f;
                 
                 data = image->getPlaneData(1);
+                stride = image->getLineSize(1) / sizeof(uint16_t);
+                offset = (Y / 2) * stride + X / 2;
                 f = reinterpret_cast<const uint16_t*>(data);
-                rgba.g = f[offset2] / 65535.0f;
+                rgba.g = f[offset] / 65535.0f;
                 
                 data = image->getPlaneData(2);
+                stride = image->getLineSize(2) / sizeof(uint16_t);
+                offset = (Y / 2) * stride + X / 2;
                 f = reinterpret_cast<const uint16_t*>(data);
+                rgba.b = f[offset] / 65535.0f;
                 
-                rgba.b = f[offset2] / 65535.0f;
+                color::checkLevels(rgba, videoLevels);
+                rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
+                break;
+            }
+            case image::PixelType::YUV_422P_U10:
+            {
+                const uint16_t* f;
+
+                data = image->getPlaneData(0);
+                stride = image->getLineSize(0) / sizeof(uint16_t);
+                offset = Y * stride + X;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.r = f[offset] / 1023.F;
+                
+                data = image->getPlaneData(1);
+                stride = image->getLineSize(1) / sizeof(uint16_t);
+                offset = Y * stride + X / 2;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.g = f[offset] / 1023.F;
+                
+                data = image->getPlaneData(2);
+                stride = image->getLineSize(2) / sizeof(uint16_t);
+                offset = Y * stride + X / 2;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.b = f[offset] / 1023.F;
+                
+                color::checkLevels(rgba, videoLevels);
+                rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
+                break;
+            }
+            case image::PixelType::YUV_422P_U12:
+            {
+                const uint16_t* f;
+
+                data = image->getPlaneData(0);
+                stride = image->getLineSize(0) / sizeof(uint16_t);
+                offset = Y * stride + X;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.r = f[offset] / 4095.F;
+                
+                data = image->getPlaneData(1);
+                stride = image->getLineSize(1) / sizeof(uint16_t);
+                offset = Y * stride + X / 2;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.g = f[offset] / 4095.F;
+                
+                data = image->getPlaneData(2);
+                stride = image->getLineSize(2) / sizeof(uint16_t);
+                offset = Y * stride + X / 2;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.b = f[offset] / 4095.F;
+                
                 color::checkLevels(rgba, videoLevels);
                 rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
                 break;
@@ -2987,39 +3108,99 @@ namespace mrv
             {
                 const uint16_t* f;
 
-                size_t Ysize = size.w * size.h;
-                size_t w2 = (size.w + 1) / 2;
-                size_t Usize = w2 * size.h;
-                size_t offset2 = Y * w2 + X / 2;
-
                 data = image->getPlaneData(0);
+                stride = image->getLineSize(0) / sizeof(uint16_t);
+                offset = Y * stride + X;
                 f = reinterpret_cast<const uint16_t*>(data);
                 rgba.r = f[offset] / 65535.0f;
                 
                 data = image->getPlaneData(1);
-                f = reinterpret_cast<const uint16_t*>(data);
-                rgba.g = f[offset2] / 65535.0f;
-                
-                data = image->getPlaneData(2);
-                f = reinterpret_cast<const uint16_t*>(data);
-                rgba.b = f[offset2] / 65535.0f;
-                color::checkLevels(rgba, videoLevels);
-                rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
-                break;
-            }
-            case image::PixelType::YUV_444P_U16: // Works
-            {
-                const uint16_t* f;
-
-                data = image->getPlaneData(0);
-                f = reinterpret_cast<const uint16_t*>(data);
-                rgba.r = f[offset] / 65535.0f;
-                
-                data = image->getPlaneData(1);
+                stride = image->getLineSize(1) / sizeof(uint16_t);
+                offset = Y * stride + X / 2;
                 f = reinterpret_cast<const uint16_t*>(data);
                 rgba.g = f[offset] / 65535.0f;
                 
                 data = image->getPlaneData(2);
+                stride = image->getLineSize(2) / sizeof(uint16_t);
+                offset = Y * stride + X / 2;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.b = f[offset] / 65535.0f;
+                
+                color::checkLevels(rgba, videoLevels);
+                rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
+                break;
+            }
+            case image::PixelType::YUV_444P_U10:
+            {
+                const uint16_t* f;
+
+                data = image->getPlaneData(0);
+                stride = image->getLineSize(0) / sizeof(uint16_t);
+                offset = Y * stride + X;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.r = f[offset] / 1023.0f;
+                
+                data = image->getPlaneData(1);
+                stride = image->getLineSize(1) / sizeof(uint16_t);
+                offset = Y * stride + X;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.g = f[offset] / 1023.0f;
+                
+                data = image->getPlaneData(2);
+                stride = image->getLineSize(2) / sizeof(uint16_t);
+                offset = Y * stride + X;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.b = f[offset] / 1023.0f;
+                
+                color::checkLevels(rgba, videoLevels);
+                rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
+                break;
+            }
+            case image::PixelType::YUV_444P_U12:
+            {
+                const uint16_t* f;
+
+                data = image->getPlaneData(0);
+                stride = image->getLineSize(0) / sizeof(uint16_t);
+                offset = Y * stride + X;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.r = f[offset] / 4095.0f;
+                
+                data = image->getPlaneData(1);
+                stride = image->getLineSize(1) / sizeof(uint16_t);
+                offset = Y * stride + X;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.g = f[offset] / 4095.0f;
+                
+                data = image->getPlaneData(2);
+                stride = image->getLineSize(2) / sizeof(uint16_t);
+                offset = Y * stride + X;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.b = f[offset] / 4095.0f;
+                
+                color::checkLevels(rgba, videoLevels);
+                rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
+                break;
+            }
+            case image::PixelType::YUV_444P_U16:
+            {
+                const uint16_t* f;
+
+                data = image->getPlaneData(0);
+                stride = image->getLineSize(0) / sizeof(uint16_t);
+                offset = Y * stride + X;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.r = f[offset] / 65535.0f;
+                
+                data = image->getPlaneData(1);
+                stride = image->getLineSize(1) / sizeof(uint16_t);
+                offset = Y * stride + X;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.g = f[offset] / 65535.0f;
+                
+                data = image->getPlaneData(2);
+                stride = image->getLineSize(2) / sizeof(uint16_t);
+                offset = Y * stride + X;
                 f = reinterpret_cast<const uint16_t*>(data);
                 rgba.b = f[offset] / 65535.0f;
                 
