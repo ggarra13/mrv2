@@ -63,7 +63,15 @@ namespace
 
 namespace
 {
-    int normalizeAngle0to360(float angle)
+    inline uint32_t byteSwap32(uint32_t x)
+    {
+        return ((x >> 24) & 0x000000FF) |
+            ((x >> 8)  & 0x0000FF00) |
+            ((x << 8)  & 0x00FF0000) |
+            ((x << 24) & 0xFF000000);
+    }
+    
+    inline int normalizeAngle0to360(float angle)
     {
         int out = static_cast<int>(std::fmod(angle, 360.0f));
         if (out < 0)
@@ -2826,8 +2834,13 @@ namespace mrv
             case image::PixelType::RGB_U10:
             {
                 if (!data) return;
-                image::U10 f = *((image::U10*)(&data[offset]));
                 constexpr float max = 1023.F;
+
+                uint32_t packed = *((uint32_t*)&data[offset]);
+                if (tl::memory::getEndian() != info.layout.endian)
+                    packed = byteSwap32(packed);
+
+                image::U10 f = *((image::U10*)&packed);
                 rgba.r = f.r / max;
                 rgba.g = f.g / max;
                 rgba.b = f.b / max;
