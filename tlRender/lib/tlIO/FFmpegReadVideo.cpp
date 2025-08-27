@@ -1187,8 +1187,9 @@ namespace tl
                         }
                         else if (decoding < 0)
                         {
-                            std::string msg = string::Format("send packet failed with {0}")
-                                              .arg(decoding);
+                            std::string msg = string::Format("send packet failed with {0} for {1}")
+                                              .arg(decoding)
+                                              .arg(targetTime);
                             LOG_WARNING(msg);
                             seek(targetTime);
                             break;
