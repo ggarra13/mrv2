@@ -1169,7 +1169,9 @@ namespace tl
                         }
                         else if (decoding < 0)
                         {
-                            //! \todo How should this be handled?
+                            std::string msg = string::Format("av_read_frame failed with {0}")
+                                              .arg(decoding);
+                            LOG_ERROR(msg);
                             break;
                         }
                     }
@@ -1185,7 +1187,10 @@ namespace tl
                         }
                         else if (decoding < 0)
                         {
-                            //! \todo How should this be handled?
+                            std::string msg = string::Format("send packet failed with {0}")
+                                              .arg(decoding);
+                            LOG_WARNING(msg);
+                            seek(targetTime);
                             break;
                         }
                         decoding = _decode(backwards, targetTime, currentTime);
