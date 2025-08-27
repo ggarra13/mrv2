@@ -2093,7 +2093,7 @@ namespace mrv
 
                                     // If we have autoplayback on and auto hide
                                     // pixel bar, do so here.
-                                    const bool autoHide =
+                                    const int autoHide =
                                         ui->uiPrefs->uiPrefsAutoHidePixelBar
                                             ->value();
                                     const bool pixelToolbar =

@@ -1686,7 +1686,8 @@ namespace mrv
             if (showPixelBar)
             {
                 const auto player = ui->uiView->getTimelinePlayer();
-                const bool autoHide = uiPrefs->uiPrefsAutoHidePixelBar->value();
+                const int autoHide = uiPrefs->uiPrefsAutoHidePixelBar->value();
+#ifdef OPENGL_BACKEND
                 if (!autoHide || !player ||
                     player->playback() == timeline::Playback::Stop)
                 {
@@ -1696,6 +1697,19 @@ namespace mrv
                 {
                     ui->uiPixelBar->hide();
                 }
+#endif
+
+#ifdef VULKAN_BACKEND
+                if (autoHide == kAutoHideOpenGLAndVulkan || !player ||
+                    player->playback() == timeline::Playback::Stop)
+                {
+                    ui->uiPixelBar->show();
+                }
+                else
+                {
+                    ui->uiPixelBar->hide();
+                }
+#endif
             }
             else
             {

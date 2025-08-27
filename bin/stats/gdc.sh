@@ -60,4 +60,4 @@ if [[ "$date_created" == "" ]]; then
 fi
 
 
-$PYTHON bin/python/github-download-count.py ggarra13 mrv2 $TAG "$date_created" "$next_tag_date" 2>&1 | tee last_stats.log
+$PYTHON bin/python/github-download-count.py ggarra13 mrv2 $TAG "$date_created" "$next_tag_date"
