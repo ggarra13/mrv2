@@ -708,7 +708,7 @@ namespace mrv
         playback.get("single_click_playback", tmp, 0);
         uiPrefs->uiPrefsSingleClickPlayback->value(tmp);
 
-        playback.get("auto_hide_pixel_bar", tmp, 1);
+        playback.get("auto_hide_pixel_bar", tmp, kAutoHideOpenGLOnly);
         uiPrefs->uiPrefsAutoHidePixelBar->value(tmp);
 
         playback.get("fps", tmpF, 24.0);
