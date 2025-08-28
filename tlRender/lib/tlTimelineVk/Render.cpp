@@ -2137,6 +2137,9 @@ namespace tl
                         {
                             switch (p.hdrOptions.algorithm)
                             {
+                            case timeline::HDRTonemapAlgorithm::kNone:
+                                cmap.tone_mapping_function = nullptr;
+                                break;
                             case timeline::HDRTonemapAlgorithm::Clip:
                                 break;
                             case timeline::HDRTonemapAlgorithm::ST2094_10:
@@ -2183,10 +2186,14 @@ namespace tl
                                     &pl_tone_map_st2094_40;
                                 break;
                             }
+                            dst_colorspace.hdr.min_luma = 0.F;
+                            dst_colorspace.hdr.max_luma = 100.0F; // SDR peak in nits
                         }
                         else
                         {
-                            cmap.tone_mapping_function = nullptr;
+                            cmap.tone_mapping_function = &pl_tone_map_hable;
+                            dst_colorspace.hdr.min_luma = 0.F;
+                            dst_colorspace.hdr.max_luma = 100.0F; // SDR peak in nits
                         }
                     }
 

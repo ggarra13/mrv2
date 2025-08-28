@@ -1710,6 +1710,9 @@ namespace tl
 
                     switch (p.hdrOptions.algorithm)
                     {
+                    case timeline::HDRTonemapAlgorithm::kNone:
+                        cmap.tone_mapping_function = nullptr;
+                        break;
                     case timeline::HDRTonemapAlgorithm::Clip:
                         break;
                     case timeline::HDRTonemapAlgorithm::ST2094_10:

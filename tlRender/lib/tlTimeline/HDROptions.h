@@ -21,6 +21,7 @@ namespace tl
             Gamma,
             Linear,
             LinearLight,
+            kNone,
             Count,
             First = ST2094_40
         };
@@ -32,7 +33,7 @@ namespace tl
         {
             bool passthru = false;
             bool tonemap = false;
-            HDRTonemapAlgorithm algorithm = HDRTonemapAlgorithm::ST2094_40;
+            HDRTonemapAlgorithm algorithm = HDRTonemapAlgorithm::Hable;
             image::HDRData hdrData;
 
             bool operator==(const HDROptions&) const;

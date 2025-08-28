@@ -400,7 +400,7 @@ namespace mrv
         hdr.get("hdr_data", tmp, 0);
         uiPrefs->uiPrefsHDRInfo->value(tmp);
         
-        hdr.get("tonemap_algorithm", tmp, 0);
+        hdr.get("tonemap_algorithm", tmp, 8);  // Hable is default, as VLC
         uiPrefs->uiPrefsTonemapAlgorithm->value(tmp);
         
         DBG3;

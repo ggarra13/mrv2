@@ -862,7 +862,6 @@ namespace mrv
                 item->set();
             
 
-#if MRV2_BACKEND_GL
             const timeline::HDROptions& hdrOptions = uiView->getHDROptions();
             int selected = static_cast<int>(hdrOptions.algorithm);
             mode = FL_MENU_RADIO;
@@ -882,7 +881,6 @@ namespace mrv
                     item->set();
                 ++tonemap;
             }
-#endif
         }
 
         timeline::Playback playback = timeline::Playback::Stop;

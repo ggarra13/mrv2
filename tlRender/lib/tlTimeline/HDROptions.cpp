@@ -20,7 +20,7 @@ namespace tl
         TLRENDER_ENUM_IMPL(
             HDRTonemapAlgorithm, "ST2094_40", "ST2094_10", "Clip", "BT2390",
             "BT2446A", "Spline", "Reinhard", "Mobius", "Hable", "Gamma",
-            "Linear", "Linear Light");
+            "Linear", "Linear Light", "None");
         TLRENDER_ENUM_SERIALIZE_IMPL(HDRTonemapAlgorithm);
     } // namespace timeline
 } // namespace tl
