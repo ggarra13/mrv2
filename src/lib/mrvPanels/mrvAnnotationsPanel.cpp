@@ -123,7 +123,7 @@ namespace mrv
             const std::vector<fs::path>& fontList = image::discoverSystemFonts();
             for (const auto& path : fontList)
             {
-                file::Path filePath(path.filename().generic_string());
+                file::Path filePath(path.filename().u8string());
                 c->add(filePath.getBaseName().c_str());
             }
 #endif
