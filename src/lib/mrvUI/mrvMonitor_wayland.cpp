@@ -339,7 +339,7 @@ namespace mrv
                 // Iterate through all entries in the /sys/class/drm/ directory
                 for (const auto& entry : fs::directory_iterator(drm_path)) {
                     const auto& path = entry.path();
-                    std::string filename = path.filename().string();
+                    std::string filename = path.filename().u8string();
 
                     // We are looking for connector directories, which typically start with "card" and contain a hyphen.
                     // e.g., "card0-DP-1", "card0-HDMI-A-1"

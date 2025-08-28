@@ -45,7 +45,7 @@ namespace mrv
             if (!fs::exists(*i) || fs::is_directory(*i))
                 continue;
 
-            std::string file = (*i).path().string();
+            std::string file = (*i).path().u8string();
             files.push_back(file);
         }
         std::sort(files.begin(), files.end());

@@ -420,7 +420,8 @@ namespace mrv
                 fs::path filename = fullPath.filename();
 
                 char buf[256];
-                snprintf(buf, 256, _("Scripts/%s"), filename.string().c_str());
+                snprintf(buf, 256, _("Scripts/%s"),
+                         filename.u8string().c_str());
 
                 menu->add(buf, 0, (Fl_Callback*)script_shortcut_cb, this);
             }

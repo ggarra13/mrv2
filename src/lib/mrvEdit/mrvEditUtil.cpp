@@ -33,7 +33,7 @@ namespace mrv
             for (const auto& entry : fs::directory_iterator(directory))
             {
                 if (entry.is_regular_file() &&
-                    entry.path().filename().string().find(prefix) == 0)
+                    entry.path().filename().u8string().find(prefix) == 0)
                 {
                     // Remove the matching file
                     fs::remove(entry.path());
@@ -54,7 +54,7 @@ namespace mrv
             for (const auto& entry : fs::directory_iterator(directory))
             {
                 if (entry.is_regular_file() &&
-                    entry.path().filename().string().find(prefix) == 0)
+                    entry.path().filename().u8string().find(prefix) == 0)
                 {
                     // Remove the matching file
                     fs::remove(entry.path());

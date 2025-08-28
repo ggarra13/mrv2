@@ -222,7 +222,7 @@ namespace mrv
             fs::path parent = rootdir.parent_path(); // skip executable
             rootdir = parent.parent_path();          // skip bin/ directory
 
-            setenv("MRV2_ROOT", rootdir.string().c_str(), 1);
+            setenv("MRV2_ROOT", rootdir.u8string().c_str(), 1);
             g_root_path = rootdir.u8string();
         }
 #endif

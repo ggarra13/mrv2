@@ -75,7 +75,7 @@ namespace mrv
     {
         fs::path path(file);
         const fs::path back = path.make_preferred();
-        const auto native_path = back.string();
+        const auto native_path = back.u8string();
         std::string buf = "explorer /select,\"" + native_path + "\"";
 
         // CreateProcess parameters

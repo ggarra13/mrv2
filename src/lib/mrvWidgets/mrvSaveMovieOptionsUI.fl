@@ -814,7 +814,7 @@ fs::directory_iterator dirIter(directoryPath);
 for (const auto& entry : dirIter)
 {
    // Check if the entry is a regular file, starts with "codec-", and ends with ".pst"
-   std::string filename = entry.path().filename().string();
+   std::string filename = entry.path().filename().u8string();
         
    // Check if the entry is a regular file and starts with say "vp9-"
    if (fs::is_regular_file(entry) && 
