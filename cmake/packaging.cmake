@@ -312,10 +312,10 @@ else()
     # There is a bug in NSIS that does not handle full unix paths properly. Make
     # sure there is at least one set of four (4) backlasshes.
     #
-    # Do not remove this setting as it does not allow the user to create
+    # This removes the page for the user to create
     # Desktop shortcuts, BESIDES modifying the PATH environment variable.
     #
-    set(CPACK_NSIS_MODIFY_PATH ON)
+    set(CPACK_NSIS_MODIFY_PATH OFF)
     
     set(CPACK_GENERATOR NSIS ZIP)
 
@@ -352,18 +352,33 @@ else()
     # This sets the name in Windows Apps and Control Panel.
     #
     set(mrv2_DISPLAY_NAME "${mrv2_NAME}-${MRV2_OS_BITS} v${mrv2_VERSION}")
+    set(hdr_DISPLAY_NAME "hdr-${MRV2_OS_BITS} v${mrv2_VERSION}")
     
     set(CPACK_NSIS_DISPLAY_NAME "${mrv2_DISPLAY_NAME}" )
 
     set(CPACK_PACKAGE_EXECUTABLES "mrv2" "${mrv2_DISPLAY_NAME}")
     set(CPACK_CREATE_DESKTOP_LINKS "mrv2" "${mrv2_DISPLAY_NAME}")
 
+
+    #
+    # Always create a desktop shortcuts to mrv2.exe and hdr.exe
+    #
+    set(CPACK_NSIS_CREATE_ICONS_EXTRA
+	"CreateShortCut \\\"$DESKTOP\\\\${mrv2_DISPLAY_NAME}.lnk\\\" \\\"$INSTDIR\\\\bin\\\\mrv2.exe\\\"
+         CreateShortCut \\\"$DESKTOP\\\\${hdr_DISPLAY_NAME}.lnk\\\" \\\"$INSTDIR\\\\bin\\\\hdr.exe\\\"")
+
+    #
+    # Remove the shortcuts on uninstall
+    #
+    set(CPACK_NSIS_DELETE_ICONS_EXTRA
+	"Delete \\\"$DESKTOP\\\\${mrv2_DISPLAY_NAME}.lnk\\\"
+	 Delete \\\"$DESKTOP\\\\${hdr_DISPLAY_NAME}.lnk\\\"")
+    
     #
     # To call uninstall first if the same version has been installed.
     #
 
     set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON )
-
 
     #
     # Create NSIS registry
