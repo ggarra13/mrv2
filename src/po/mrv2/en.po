@@ -1954,21 +1954,6 @@ msgstr "Streaming {0} {1}..."
 msgid "Stop streaming"
 msgstr "Stop streaming"
 
-msgid "Renderer"
-msgstr "Renderer"
-
-msgid "Complexity"
-msgstr "Complexity"
-
-msgid "Draw Mode"
-msgstr "Draw Mode"
-
-msgid "Stage Cache"
-msgstr "Stage Cache"
-
-msgid "Disk Cache in GB"
-msgstr "Disk Cache in GB"
-
 msgid "Toggle other eye stereo image."
 msgstr "Toggle other eye stereo image."
 
@@ -2954,23 +2939,14 @@ msgstr "HAP profile needs a .mov extension.  Changing it to .mov"
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "New file {0} already exist!  Cannot overwrite it."
 
-msgid "Rotated image info: {0}"
-msgstr "Rotated image info: {0}"
-
-msgid "Scaled image info: {0}"
-msgstr "Scaled image info: {0}"
-
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: Cannot open writer plugin."
 
 msgid "Image info: {0} {1}"
 msgstr "Image info: {0} {1}"
 
-msgid "Image too big for Save Annotations.  Will scale to the viewport size."
-msgstr "Image too big for Save Annotations.  Will scale to the viewport size."
-
-msgid "Viewport Size: {0} - X={1}, Y={2}"
-msgstr "Viewport Size: {0} - X={1}, Y={2}"
+msgid "Scaled image info: {0}"
+msgstr "Scaled image info: {0}"
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr "Writer plugin did not get output info.  Defaulting to {0}"
@@ -2983,6 +2959,9 @@ msgstr "Using profile {0}, pixel format {1}."
 
 msgid "Using preset {0}."
 msgstr "Using preset {0}."
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "Offscreen Buffer info: {0}"
 
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr "Saving Movie without Audio %<PRId64> - %<PRId64>"
@@ -2999,17 +2978,11 @@ msgstr "Saving Pictures without Audio %<PRId64> - %<PRId64>"
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Audio only in timeline, but not trying to save audio."
 
-msgid "{0}: Invalid OpenGL format and type"
-msgstr "{0}: Invalid OpenGL format and type"
-
-msgid "OpenGL info: {0}"
-msgstr "OpenGL info: {0}"
-
 msgid "Saving... {0}"
 msgstr "Saving... {0}"
 
-msgid "Unsupported output format"
-msgstr "Unsupported output format"
+msgid "Could not read image data from view"
+msgstr "Could not read image data from view"
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "Empty video data at time {0}.  Repeating frame."
@@ -3020,11 +2993,8 @@ msgstr "Render size: {0}"
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr "Image Layer '{0}' info: {1} {2}"
 
-msgid "Offscreen Buffer info: {0}"
-msgstr "Offscreen Buffer info: {0}"
-
-msgid "Unsupported output format: "
-msgstr "Unsupported output format: "
+msgid "Could not read annotation image from view"
+msgstr "Could not read annotation image from view"
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -3740,6 +3710,9 @@ msgstr "Frame {0} - TC: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "Image too big.  Will save the viewport size."
 
+msgid "Viewport Size: {0} - X={1}, Y={2}"
+msgstr "Viewport Size: {0} - X={1}, Y={2}"
+
 msgid "Scrub"
 msgstr "Scrub"
 
@@ -3841,11 +3814,14 @@ msgstr "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 
+msgid "HDR monitor found."
+msgstr "HDR monitor found."
+
+msgid "HDR monitor not found or not configured."
+msgstr "HDR monitor not found or not configured."
+
 msgid "Edit Text"
 msgstr "Edit Text"
-
-msgid "Invalid font for text drawing"
-msgstr "Invalid font for text drawing"
 
 msgid "Could not convert message to shape: "
 msgstr "Could not convert message to shape: "
@@ -5956,6 +5932,10 @@ msgstr "Reinhard"
 msgid "Mobius"
 msgstr "Mobius"
 
+#, fuzzy
+msgid "Hable"
+msgstr "Enabled"
+
 msgid "Linear Light"
 msgstr "Linear Light"
 
@@ -7599,6 +7579,9 @@ msgstr "Scrub Mode"
 msgid "Area Selection Mode"
 msgstr "Area Selection Mode"
 
+msgid "Draw Mode"
+msgstr "Draw Mode"
+
 msgid "Erase Mode"
 msgstr "Erase Mode"
 
@@ -7689,17 +7672,40 @@ msgstr "Toggle Hotkeys Window"
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
 
-#~ msgid "Could not read image data from view"
-#~ msgstr "Could not read image data from view"
+#~ msgid "Renderer"
+#~ msgstr "Renderer"
 
-#~ msgid "Could not read annotation image from view"
-#~ msgstr "Could not read annotation image from view"
+#~ msgid "Complexity"
+#~ msgstr "Complexity"
 
-#~ msgid "HDR monitor found."
-#~ msgstr "HDR monitor found."
+#~ msgid "Stage Cache"
+#~ msgstr "Stage Cache"
 
-#~ msgid "HDR monitor not found or not configured."
-#~ msgstr "HDR monitor not found or not configured."
+#~ msgid "Disk Cache in GB"
+#~ msgstr "Disk Cache in GB"
+
+#~ msgid "Rotated image info: {0}"
+#~ msgstr "Rotated image info: {0}"
+
+#~ msgid ""
+#~ "Image too big for Save Annotations.  Will scale to the viewport size."
+#~ msgstr ""
+#~ "Image too big for Save Annotations.  Will scale to the viewport size."
+
+#~ msgid "{0}: Invalid OpenGL format and type"
+#~ msgstr "{0}: Invalid OpenGL format and type"
+
+#~ msgid "OpenGL info: {0}"
+#~ msgstr "OpenGL info: {0}"
+
+#~ msgid "Unsupported output format"
+#~ msgstr "Unsupported output format"
+
+#~ msgid "Unsupported output format: "
+#~ msgstr "Unsupported output format: "
+
+#~ msgid "Invalid font for text drawing"
+#~ msgstr "Invalid font for text drawing"
 
 #~ msgid ""
 #~ "The Pixel Bar can slow down playback at high resolutions.  When this "
