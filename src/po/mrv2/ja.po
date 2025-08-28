@@ -9,8 +9,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 msgid ""
 "\n"
@@ -1940,6 +1940,21 @@ msgstr "{0} {1}をストリーミング中..."
 msgid "Stop streaming"
 msgstr "ストリーミング"
 
+msgid "Renderer"
+msgstr "レンダラー"
+
+msgid "Complexity"
+msgstr "難易度"
+
+msgid "Draw Mode"
+msgstr "描画モード"
+
+msgid "Stage Cache"
+msgstr "キャッシュ"
+
+msgid "Disk Cache in GB"
+msgstr "ディスクキャッシュ"
+
 msgid "Toggle other eye stereo image."
 msgstr "右 - 左ステレオ画像"
 
@@ -2926,14 +2941,25 @@ msgstr "HAP プロファイルには .mov 拡張子が必要です。.mov に変
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "新しいファイル {0} はすでに存在します！上書きできません。"
 
+msgid "Rotated image info: {0}"
+msgstr "回転された画像情報: {0}"
+
+msgid "Scaled image info: {0}"
+msgstr "スケーリングされた画像情報: {0}"
+
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: ライタープラグインを開けません。"
 
 msgid "Image info: {0} {1}"
 msgstr "画像情報: {0} {1}"
 
-msgid "Scaled image info: {0}"
-msgstr "スケーリングされた画像情報: {0}"
+msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+msgstr ""
+"画像が大きすぎてアノテーションを保存できません。ビューポートサイズに拡大縮小"
+"します。"
+
+msgid "Viewport Size: {0} - X={1}, Y={2}"
+msgstr "ビューポートサイズ: {0} - X={1}, Y={2}"
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr ""
@@ -2948,9 +2974,6 @@ msgstr "プロファイル {0}、ピクセル形式 {1} を使用しています
 
 msgid "Using preset {0}."
 msgstr "プリセット{0}"
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "オフスクリーンバッファ情報: {0}"
 
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr "オーディオなしでムービーを保存しています %<PRId64> - %<PRId64>"
@@ -2967,11 +2990,17 @@ msgstr "オーディオなしで画像を保存しています %<PRId64> - %<PRI
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "しかし、どこかへ行こうとしているわけじゃない。"
 
+msgid "{0}: Invalid OpenGL format and type"
+msgstr "{0}: 無効な OpenGL 形式とタイプ"
+
+msgid "OpenGL info: {0}"
+msgstr "OpenGL 情報: {0}"
+
 msgid "Saving... {0}"
 msgstr "保存中... {0}"
 
-msgid "Could not read image data from view"
-msgstr "ビューから画像データを読み取れませんでした"
+msgid "Unsupported output format"
+msgstr "サポートされていない出力形式: %1%"
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "時刻 {0} にビデオデータがありません。フレームを繰り返します。"
@@ -2982,8 +3011,11 @@ msgstr "レンダーサイズ: {0}"
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr "画像レイヤー '{0}' 情報: {1} {2}"
 
-msgid "Could not read annotation image from view"
-msgstr "ビューから注釈画像を読み取れませんでした"
+msgid "Offscreen Buffer info: {0}"
+msgstr "オフスクリーンバッファ情報: {0}"
+
+msgid "Unsupported output format: "
+msgstr "サポートされていない出力形式: %1%"
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -3699,9 +3731,6 @@ msgstr "フレーム {0} - TC: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "彼らが都を守ってくれます"
 
-msgid "Viewport Size: {0} - X={1}, Y={2}"
-msgstr "ビューポートサイズ: {0} - X={1}, Y={2}"
-
 msgid "Scrub"
 msgstr "スクラブ"
 
@@ -3803,14 +3832,11 @@ msgstr "    先読み    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "    後ろ    V: % 4<PRIu64>    A: % 4<PRIu64>"
 
-msgid "HDR monitor found."
-msgstr "HDRモニターが見つかりました。"
-
-msgid "HDR monitor not found or not configured."
-msgstr "HDRモニターが見つからないか、設定されていません。"
-
 msgid "Edit Text"
 msgstr "テキストを編集"
+
+msgid "Invalid font for text drawing"
+msgstr "フォントファイル情報が無効です。"
 
 msgid "Could not convert message to shape: "
 msgstr "ベクター図形に変換"
@@ -7550,9 +7576,6 @@ msgstr "スクラブ モード"
 msgid "Area Selection Mode"
 msgstr "エリア選択モード"
 
-msgid "Draw Mode"
-msgstr "描画モード"
-
 msgid "Erase Mode"
 msgstr "消去モード"
 
@@ -7643,41 +7666,17 @@ msgstr "ホットキーウィンドウを切り替え"
 msgid "Toggle About Window"
 msgstr "バージョン情報ウィンドウを切り替え"
 
-#~ msgid "Renderer"
-#~ msgstr "レンダラー"
+#~ msgid "Could not read image data from view"
+#~ msgstr "ビューから画像データを読み取れませんでした"
 
-#~ msgid "Complexity"
-#~ msgstr "難易度"
+#~ msgid "Could not read annotation image from view"
+#~ msgstr "ビューから注釈画像を読み取れませんでした"
 
-#~ msgid "Stage Cache"
-#~ msgstr "キャッシュ"
+#~ msgid "HDR monitor found."
+#~ msgstr "HDRモニターが見つかりました。"
 
-#~ msgid "Disk Cache in GB"
-#~ msgstr "ディスクキャッシュ"
-
-#~ msgid "Rotated image info: {0}"
-#~ msgstr "回転された画像情報: {0}"
-
-#~ msgid ""
-#~ "Image too big for Save Annotations.  Will scale to the viewport size."
-#~ msgstr ""
-#~ "画像が大きすぎてアノテーションを保存できません。ビューポートサイズに拡大縮"
-#~ "小します。"
-
-#~ msgid "{0}: Invalid OpenGL format and type"
-#~ msgstr "{0}: 無効な OpenGL 形式とタイプ"
-
-#~ msgid "OpenGL info: {0}"
-#~ msgstr "OpenGL 情報: {0}"
-
-#~ msgid "Unsupported output format"
-#~ msgstr "サポートされていない出力形式: %1%"
-
-#~ msgid "Unsupported output format: "
-#~ msgstr "サポートされていない出力形式: %1%"
-
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "フォントファイル情報が無効です。"
+#~ msgid "HDR monitor not found or not configured."
+#~ msgstr "HDRモニターが見つからないか、設定されていません。"
 
 #~ msgid ""
 #~ "The Pixel Bar can slow down playback at high resolutions.  When this "

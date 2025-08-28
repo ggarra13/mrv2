@@ -1044,10 +1044,11 @@ namespace mrv
                     }
                     averageFrameTime /= p.frameTimes.size();
 
-                    const double fps = 1.0 / averageFrameTime;
+                    double fps = 1.0 / averageFrameTime;
+                    if (fps >= player->speed()) fps = player->speed();
 
                     snprintf(
-                        buf, 512, "DF: %" PRIu64 " FPS: %.2f/%.3f", p.droppedFrames,
+                        buf, 512, "DF: %" PRIu64 " FPS: %.2f/%.2f", p.droppedFrames,
                         fps, player->speed());
 
                     tmp += buf;

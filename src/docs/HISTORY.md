@@ -1,3 +1,8 @@
+v1.4.1
+======
+- Improved FPS reporting to not flicker so much or, on Vulkan, be double its value on Presentation mode.
+
+
 v1.4.0
 ======
 
@@ -50,8 +55,7 @@ v1.4.0
 - Fixed saving of single frames in Vulkan.
 - Fixed saving of single frames at half and quarter resolution in Vulkan.
 - Added Stereo3D Anaglyph support to Vulkan on Windows and Linux.
-- Fixed hanging on Wayland with Vulkan's windows when they were going
-    off-screen.
+- Fixed hanging on Wayland with Vulkan's windows when they were going off-screen.
 - Fixed saving of Prores and DNXHD with the correct profiles.
 - Fixed saving of Half images on Vulkan backend.
 - Fixed saving of images without annotations on Vulkan.
