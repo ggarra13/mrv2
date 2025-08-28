@@ -1,6 +1,8 @@
 v1.4.1
 ======
 - Improved FPS reporting to not flicker so much or, on Vulkan, be double its value on Presentation mode.
+- Fixed starting of mrv2/vmrv2 on Windows when the installation directory has international characters like üí etc.
+- Reverted to use FIFO instead of MAILBOX presentation mode in Vulkan.
 
 
 v1.4.0
