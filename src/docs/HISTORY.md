@@ -4,6 +4,9 @@ v1.4.1
 - Fixed starting of mrv2/vmrv2 on Windows when the installation directory has international characters like üí etc.
 - Reverted to use FIFO instead of MAILBOX presentation mode in Vulkan.
 - Some Unicode (UTF-8) fixes.
+- Added back the page to modify the PATH variable and create Desktop shortcuts
+  on the Windows installer.  It is unfortunate that it is an all or nothing
+  cmake setting.
 
 
 v1.4.0
