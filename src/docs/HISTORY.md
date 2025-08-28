@@ -7,6 +7,7 @@ v1.4.1
 - Added back the page to modify the PATH variable and create Desktop shortcuts
   on the Windows installer.  It is unfortunate that it is an all or nothing
   cmake setting.
+- Fixed OpenGL backend with HDR to tonemap properly to 100nits like VLC does.
 
 
 v1.4.0

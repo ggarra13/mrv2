@@ -1846,6 +1846,8 @@ namespace tl
                     memset(&dst_colorspace, 0, sizeof(pl_color_space));
                     dst_colorspace.primaries = PL_COLOR_PRIM_BT_709;
                     dst_colorspace.transfer = PL_COLOR_TRC_BT_1886;
+                    dst_colorspace.hdr.max_luma = 100.0F;  // SDR peak in nits
+                    dst_colorspace.hdr.min_luma = 0.0F;
                     pl_color_space_infer(&dst_colorspace);
 
                     pl_color_map_args color_map_args;
