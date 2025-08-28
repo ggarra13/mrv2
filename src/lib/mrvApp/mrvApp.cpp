@@ -522,7 +522,6 @@ namespace mrv
         }
 
 
-#ifdef VULKAN_BACKEND
         License ok = validate_license();
         if (ok != kLicenseValid)
         {
@@ -564,7 +563,6 @@ namespace mrv
                 demo_mode = true;
             }
         }
-#endif
 
         DBG;
         // Initialize FLTK.
