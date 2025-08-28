@@ -160,11 +160,15 @@ Differences between Vulkan and OpenGL
 Vulkan Demo Version
 -------------------
 
+The OpenGL releases at:
+
+https://sourceforge.net/projects/mrv2/files/beta/opengl
+
 The Vulkan releases at:
 
 https://sourceforge.net/projects/mrv2/files/beta/vulkan
 
-directory are versions for you to evaluate vmrv2 before a purchase and report bugs or performance issues.
+directory are versions for you to evaluate mrv2 or vmrv2 before a purchase and report bugs or performance issues.
 Currently, when run as demo these versions don't have:
 
 	   - Annotations
