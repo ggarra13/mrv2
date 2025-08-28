@@ -311,10 +311,12 @@ else()
     
     # There is a bug in NSIS that does not handle full unix paths properly. Make
     # sure there is at least one set of four (4) backlasshes.
-    # Turn off the page to allow modifying paths with NSIS as that breaks
-    # compatibility with other DCCs that use OpenUSD like Maya.
-    set(CPACK_NSIS_MODIFY_PATH OFF)
-
+    #
+    # Do not remove this setting as it does not allow the user to create
+    # Desktop shortcuts, BESIDES modifying the PATH environment variable.
+    #
+    set(CPACK_NSIS_MODIFY_PATH ON)
+    
     set(CPACK_GENERATOR NSIS ZIP)
 
     #

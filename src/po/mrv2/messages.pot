@@ -5,7 +5,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.4.0\n"
+"Project-Id-Version: mrv2 v1.4.1\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
