@@ -113,7 +113,7 @@ jobs:
 
     - name: Build mrv2
       run: |
-        ./etc/runme_nolog.sh -t package -D MRV2_DEMO=ON
+        ./etc/runme_nolog.sh -t package
       
     - name: Upload binaries  # Conditional step
       if: github.ref_name == 'beta'
