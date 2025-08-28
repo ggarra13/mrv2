@@ -69,7 +69,7 @@ jobs:
 
     - name: Build mrv2
       run: |
-        ./etc/runme_nolog.sh -D TLRENDER_USD=OFF -t package
+        ./etc/runme_nolog.sh -D TLRENDER_USD=OFF -t package -D MRV2_DEMO=ON
       
     - name: Upload binaries
       if: github.ref_name == 'beta'
