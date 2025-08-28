@@ -8,6 +8,7 @@ v1.4.1
   on the Windows installer.  It is unfortunate that it is an all or nothing
   cmake setting.
 - Fixed OpenGL backend with HDR to tonemap properly to 100nits like VLC does.
+- Added missing Hable tonemap to Preferences->Render->Tonemap->Algorithm.
 
 
 v1.4.0

@@ -93,7 +93,7 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {1067 406 853 466} type Double resizable
+      xywh {1059 406 853 466} type Double resizable
       code0 {main = m;} visible
     } {
       Fl_Group {} {open
@@ -711,8 +711,8 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
               }
             }
             Fl_Group {} {
-              label Render
-              xywh {288 37 555 369} box EMBOSSED_BOX align 5 hide
+              label Render open
+              xywh {288 37 555 369} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label Render
@@ -780,7 +780,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                 }
               }
               Fl_Group {} {
-                label HDR
+                label HDR open
                 xywh {303 256 530 140} box ROUNDED_BOX
               } {
                 Fl_Choice uiPrefsChromaticities {
@@ -814,7 +814,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                   }
                 }
                 Fl_Choice uiPrefsTonemapAlgorithm {
-                  label {Tonemap Algorithm}
+                  label {Tonemap Algorithm} open
                   xywh {513 349 135 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
@@ -850,6 +850,10 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                     xywh {110 110 100 20}
                   }
                   MenuItem {} {
+                    label Hable
+                    xywh {120 120 100 20}
+                  }
+                  MenuItem {} {
                     label Gamma
                     xywh {120 120 100 20}
                   }
@@ -860,6 +864,10 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                   MenuItem {} {
                     label {Linear Light}
                     xywh {140 140 100 20}
+                  }
+                  MenuItem {} {
+                    label None selected
+                    xywh {150 150 100 20}
                   }
                 }
               }
@@ -953,11 +961,11 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
               }
             }
             Fl_Group {} {
-              label Playback open
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5
+              label Playback
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
-                label Defaults open
+                label Defaults
                 xywh {310 71 500 312} box ROUNDED_BOX align 5
               } {
                 Fl_Check_Button uiPrefsAutoPlayback {
@@ -977,7 +985,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                     xywh {0 0 100 20}
                   }
                   MenuItem {} {
-                    label {OpenGL only} selected
+                    label {OpenGL only}
                     xywh {10 10 100 20}
                   }
                   MenuItem {} {
@@ -985,7 +993,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                     xywh {20 20 100 20}
                   }
                 }
-                Fl_Group {} {open
+                Fl_Group {} {
                   xywh {334 146 450 132} box ROUNDED_BOX
                 } {
                   Fl_Group {} {

@@ -5,7 +5,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.4.1\n"
+"Project-Id-Version: mrv2 v1.4.0\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -1662,6 +1662,21 @@ msgstr ""
 msgid "Stop streaming"
 msgstr ""
 
+msgid "Renderer"
+msgstr ""
+
+msgid "Complexity"
+msgstr ""
+
+msgid "Draw Mode"
+msgstr ""
+
+msgid "Stage Cache"
+msgstr ""
+
+msgid "Disk Cache in GB"
+msgstr ""
+
 msgid "Toggle other eye stereo image."
 msgstr ""
 
@@ -2624,13 +2639,22 @@ msgstr ""
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr ""
 
+msgid "Rotated image info: {0}"
+msgstr ""
+
+msgid "Scaled image info: {0}"
+msgstr ""
+
 msgid "{0}: Cannot open writer plugin."
 msgstr ""
 
 msgid "Image info: {0} {1}"
 msgstr ""
 
-msgid "Scaled image info: {0}"
+msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+msgstr ""
+
+msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr ""
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
@@ -2643,9 +2667,6 @@ msgid "Using profile {0}, pixel format {1}."
 msgstr ""
 
 msgid "Using preset {0}."
-msgstr ""
-
-msgid "Offscreen Buffer info: {0}"
 msgstr ""
 
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
@@ -2663,10 +2684,16 @@ msgstr ""
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr ""
 
+msgid "{0}: Invalid OpenGL format and type"
+msgstr ""
+
+msgid "OpenGL info: {0}"
+msgstr ""
+
 msgid "Saving... {0}"
 msgstr ""
 
-msgid "Could not read image data from view"
+msgid "Unsupported output format"
 msgstr ""
 
 msgid "Empty video data at time {0}.  Repeating frame."
@@ -2678,7 +2705,10 @@ msgstr ""
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr ""
 
-msgid "Could not read annotation image from view"
+msgid "Offscreen Buffer info: {0}"
+msgstr ""
+
+msgid "Unsupported output format: "
 msgstr ""
 
 msgid ""
@@ -3362,9 +3392,6 @@ msgstr ""
 msgid "Image too big.  Will save the viewport size."
 msgstr ""
 
-msgid "Viewport Size: {0} - X={1}, Y={2}"
-msgstr ""
-
 msgid "Scrub"
 msgstr ""
 
@@ -3462,13 +3489,10 @@ msgstr ""
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr ""
 
-msgid "HDR monitor found."
-msgstr ""
-
-msgid "HDR monitor not found or not configured."
-msgstr ""
-
 msgid "Edit Text"
+msgstr ""
+
+msgid "Invalid font for text drawing"
 msgstr ""
 
 msgid "Could not convert message to shape: "
@@ -6971,9 +6995,6 @@ msgid "Scrub Mode"
 msgstr ""
 
 msgid "Area Selection Mode"
-msgstr ""
-
-msgid "Draw Mode"
 msgstr ""
 
 msgid "Erase Mode"
