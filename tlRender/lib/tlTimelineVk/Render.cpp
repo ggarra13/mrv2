@@ -875,6 +875,18 @@ namespace tl
                   VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
             ctx.vkCmdSetColorWriteMaskEXT(cmd, 0, 1, allMask);
 
+            ctx.vkCmdSetStencilTestEnableEXT(cmd, VK_FALSE);
+            ctx.vkCmdSetStencilOpEXT(cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                     VK_STENCIL_OP_KEEP,
+                                     VK_STENCIL_OP_KEEP,
+                                     VK_STENCIL_OP_KEEP,
+                                     VK_COMPARE_OP_ALWAYS);
+            
+            vkCmdSetStencilCompareMask(cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                       0xFFFFFFFF);
+            vkCmdSetStencilWriteMask(cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                     0xFFFFFFFF);
+
             begin(renderSize, renderOptions);
         }
 

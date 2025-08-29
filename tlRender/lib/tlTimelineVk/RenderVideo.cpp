@@ -329,6 +329,8 @@ namespace tl
             
                 vlk::DepthStencilStateInfo ds;
                 ds.depthTestEnable = VK_FALSE;
+                
+                ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
                 ds.stencilTestEnable = VK_TRUE;
             
                 VkStencilOpState stencilOp = {};
@@ -336,8 +338,22 @@ namespace tl
                 stencilOp.passOp = VK_STENCIL_OP_REPLACE;
                 stencilOp.depthFailOp = VK_STENCIL_OP_KEEP;
                 stencilOp.compareOp = VK_COMPARE_OP_ALWAYS;
+                ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_REPLACE,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_COMPARE_OP_ALWAYS);
+                
+                vkCmdSetStencilWriteMask(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         0xFF);
+                vkCmdSetStencilCompareMask(p.cmd,
+                                           VK_STENCIL_FACE_FRONT_AND_BACK,
+                                           0xFF);
+
                 stencilOp.compareMask = 0xFF;
                 stencilOp.writeMask = 0xFF;
+                
+                vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK, 1);            
                 stencilOp.reference = 1;
 
                 ds.front = stencilOp;
@@ -380,6 +396,8 @@ namespace tl
             
                 vlk::DepthStencilStateInfo ds;
                 ds.depthTestEnable = VK_FALSE;
+
+                ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
                 ds.stencilTestEnable = VK_TRUE;
             
                 VkStencilOpState stencilOp = {};
@@ -387,8 +405,22 @@ namespace tl
                 stencilOp.passOp = VK_STENCIL_OP_KEEP;
                 stencilOp.depthFailOp = VK_STENCIL_OP_KEEP;
                 stencilOp.compareOp = VK_COMPARE_OP_EQUAL;
+
+                ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_COMPARE_OP_EQUAL);
+                
+                vkCmdSetStencilCompareMask(p.cmd,
+                                           VK_STENCIL_FACE_FRONT_AND_BACK,
+                                           0xFF);
+                vkCmdSetStencilWriteMask(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         0x00);
                 stencilOp.compareMask = 0xFF;
                 stencilOp.writeMask = 0x00;
+                
+                vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK, 1);            
                 stencilOp.reference = 1;
 
                 ds.front = stencilOp;
@@ -469,15 +501,33 @@ namespace tl
             
                 vlk::DepthStencilStateInfo ds;
                 ds.depthTestEnable = VK_FALSE;
+                
+                ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
                 ds.stencilTestEnable = VK_TRUE;
             
                 VkStencilOpState stencilOp = {};
+
                 stencilOp.failOp = VK_STENCIL_OP_KEEP;
                 stencilOp.passOp = VK_STENCIL_OP_REPLACE;
                 stencilOp.depthFailOp = VK_STENCIL_OP_KEEP;
                 stencilOp.compareOp = VK_COMPARE_OP_ALWAYS;
+                ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_REPLACE,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_COMPARE_OP_ALWAYS);
+                
+                
+                vkCmdSetStencilCompareMask(p.cmd,
+                                           VK_STENCIL_FACE_FRONT_AND_BACK,
+                                           0xFF);
+                vkCmdSetStencilWriteMask(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         0xFF);
+
                 stencilOp.compareMask = 0xFF;
                 stencilOp.writeMask = 0xFF;
+                
+                vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK, 1);            
                 stencilOp.reference = 1;
 
                 ds.front = stencilOp;
@@ -527,8 +577,22 @@ namespace tl
                 stencilOp.passOp = VK_STENCIL_OP_KEEP;
                 stencilOp.depthFailOp = VK_STENCIL_OP_KEEP;
                 stencilOp.compareOp = VK_COMPARE_OP_EQUAL;
+
+                ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_COMPARE_OP_EQUAL);
+                
+                vkCmdSetStencilCompareMask(p.cmd,
+                                           VK_STENCIL_FACE_FRONT_AND_BACK,
+                                           0xFF);
+                vkCmdSetStencilWriteMask(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         0x00);
                 stencilOp.compareMask = 0xFF;
                 stencilOp.writeMask = 0x00;
+                
+                vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK, 1);
                 stencilOp.reference = 1;
 
                 ds.front = stencilOp;
