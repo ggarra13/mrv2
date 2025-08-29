@@ -2457,21 +2457,36 @@ namespace mrv
 
             if (!active)
             {
+                int vsync = p.ui->uiPrefs->uiPrefsOpenGLVsync->value();
+                if (vsync == MonitorVSync::kVSyncPresentationOnly ||
+                    vsync == MonitorVSync::kVSyncNone)
+                {
+                    swap_interval(0);
+                }
+                else
+                {
+                    swap_interval(1);
+                }
                 if (!p.fullScreen)
                     _setFullScreen(false);
                 if (p.ui->uiView == reinterpret_cast<MyViewport*>(this))
                     Fl::add_timeout(
                         0.01, (Fl_Timeout_Handler)restore_ui_state, p.ui);
                 p.presentation = false;
-                if (p.ui->uiPrefs->uiPrefsOpenGLVsync->value() ==
-                    MonitorVSync::kVSyncPresentationOnly)
-                {
-                    swap_interval(0);
-                }
                 _updateCursor();
             }
             else
             {
+                int vsync = p.ui->uiPrefs->uiPrefsOpenGLVsync->value();
+                if (vsync == MonitorVSync::kVSyncPresentationOnly ||
+                    vsync == MonitorVSync::kVSyncAlways)
+                {
+                    swap_interval(1);
+                }
+                else
+                {
+                    swap_interval(0);
+                }
                 save_ui_state(p.ui);
                 if (!_hasSecondaryViewport())
                 {
@@ -2480,11 +2495,6 @@ namespace mrv
                 _setFullScreen(active);
                 p.presentation = true;
                 p.presentationTime = std::chrono::high_resolution_clock::now();
-                if (p.ui->uiPrefs->uiPrefsOpenGLVsync->value() ==
-                    MonitorVSync::kVSyncPresentationOnly)
-                {
-                    swap_interval(1);
-                }
             }
         }
 
