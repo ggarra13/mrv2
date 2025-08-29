@@ -9,6 +9,7 @@ v1.4.1
   cmake setting.
 - Fixed OpenGL backend with HDR to tonemap properly to 100nits like VLC does.
 - Added missing Hable tonemap to Preferences->Render->Tonemap->Algorithm.
+- Added VSync support to Vulkan backend.
 
 
 v1.4.0
