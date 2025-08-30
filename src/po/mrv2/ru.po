@@ -5992,6 +5992,10 @@ msgstr "Рейнхард"
 msgid "Mobius"
 msgstr "Мёбиус"
 
+#, fuzzy
+msgid "Hable"
+msgstr "Включено"
+
 msgid "Linear Light"
 msgstr "Линейный свет"
 

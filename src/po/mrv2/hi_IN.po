@@ -5887,6 +5887,10 @@ msgstr "रीनहार्ड"
 msgid "Mobius"
 msgstr "मोबियस"
 
+#, fuzzy
+msgid "Hable"
+msgstr "सक्षम"
+
 msgid "Linear Light"
 msgstr "रैखिक प्रकाश"
 

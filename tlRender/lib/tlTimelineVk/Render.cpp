@@ -961,7 +961,7 @@ namespace tl
                     "transform.mvp", transform, vlk::kShaderVertex);
                 p.shaders["mesh"]->addPush(
                       "color", color, vlk::kShaderFragment);
-                  _createBindingSet(p.shaders["mesh"]);
+                _createBindingSet(p.shaders["mesh"]);
               }
 
               // Shader used to create a 2D mesh with colors
@@ -1989,14 +1989,15 @@ namespace tl
 
                     // PL_GAMUT_MAP_CONSTANTS is defined in wrong order for C++
                     cmap.gamut_constants = {0};
-                    cmap.gamut_constants.perceptual_deadzone = 0.3F;
-                    cmap.gamut_constants.perceptual_strength = 0.8F;
                     cmap.gamut_constants.colorimetric_gamma = 1.80f;
                     cmap.gamut_constants.softclip_knee = 0.70f;
                     cmap.gamut_constants.softclip_desat = 0.35f;
+                    cmap.gamut_constants.perceptual_deadzone = 0.30F;
+                    cmap.gamut_constants.perceptual_strength = 0.80F;
 
                     cmap.tone_mapping_function = nullptr;
 
+                    // PL_TONE_MAP_CONSTANTS
                     cmap.tone_constants = {0};
                     cmap.tone_constants.knee_adaptation = 0.4f;
                     cmap.tone_constants.knee_minimum = 0.1f;
@@ -2114,6 +2115,8 @@ namespace tl
                         {
                             // \@todo:  How to handle this?
                             // PL_COLOR_TRC_DOLBYVISION does not exist.
+                            // According to libplacebo:
+                            // "Unlikely to ever be implemented"
                             // dst_colorspace.transfer = ???
                             dst_colorspace.transfer = PL_COLOR_TRC_PQ;
                         }

@@ -5974,6 +5974,10 @@ msgstr "Reinhard"
 msgid "Mobius"
 msgstr "Mobius"
 
+#, fuzzy
+msgid "Hable"
+msgstr "Activé"
+
 msgid "Linear Light"
 msgstr "Lumière linéaire"
 

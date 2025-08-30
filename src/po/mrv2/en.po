@@ -5956,6 +5956,10 @@ msgstr "Reinhard"
 msgid "Mobius"
 msgstr "Mobius"
 
+#, fuzzy
+msgid "Hable"
+msgstr "Enabled"
+
 msgid "Linear Light"
 msgstr "Linear Light"
 

@@ -10,7 +10,8 @@ set(SOURCE
     RenderPrims.cpp
     RenderVideo.cpp
     RenderVulkan.cpp
-    RenderShaders.cpp)
+    RenderShaders.cpp
+    RenderStereo.cpp)
 
 set(LIBRARIES_PRIVATE )
 if(TLRENDER_LIBPLACEBO)

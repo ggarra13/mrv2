@@ -5942,6 +5942,10 @@ msgstr "ラインハート"
 msgid "Mobius"
 msgstr "メビウス"
 
+#, fuzzy
+msgid "Hable"
+msgstr "有効"
+
 msgid "Linear Light"
 msgstr "リニア ライト"
 

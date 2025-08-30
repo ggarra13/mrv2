@@ -5860,6 +5860,10 @@ msgstr "Reinhard"
 msgid "Mobius"
 msgstr "莫比乌斯"
 
+#, fuzzy
+msgid "Hable"
+msgstr "启用"
+
 msgid "Linear Light"
 msgstr "线性光"
 
