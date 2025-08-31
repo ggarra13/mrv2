@@ -79,6 +79,73 @@ namespace tl
         }
 
         geom::TriangleMesh2 checkers(
+            const math::Box2i& box, const math::Size2i& checkerSize)
+        {
+            geom::TriangleMesh2 out;
+
+            // X points.
+            std::vector<int> xs;
+            int x = box.min.x;
+            for (; x < box.max.x; x += checkerSize.w)
+            {
+                xs.push_back(x);
+            }
+            if (x >= box.max.x)
+            {
+                xs.push_back(box.max.x);
+            }
+
+            // Y points.
+            std::vector<int> ys;
+            int y = box.min.y;
+            for (; y < box.max.y; y += checkerSize.h)
+            {
+                ys.push_back(y);
+            }
+            if (y >= box.max.y)
+            {
+                ys.push_back(box.max.y);
+            }
+
+            if (!xs.empty() && !ys.empty())
+            {
+                // 2D points.
+                for (int j = 0; j < ys.size(); ++j)
+                {
+                    for (int i = 0; i < xs.size(); ++i)
+                    {
+                        out.v.push_back(math::Vector2f(xs[i], ys[j]));
+                    }
+                }
+
+                // Triangles.
+                for (int j = 0; j < ys.size() - 1; ++j)
+                {
+                    for (int i = 0; i < xs.size() - 1; ++i)
+                    {
+                        if ( (i + j) % 2 == 0 )
+                        {
+                            const int v0 = j * xs.size() + i + 1;
+                            const int v1 = j * xs.size() + (i + 1) + 1;
+                            const int v2 = (j + 1) * xs.size() + (i + 1) + 1;
+                            const int v3 = (j + 1) * xs.size() + i + 1;
+                            out.triangles.push_back(
+                                {geom::Vertex2(v0, 0, 0),
+                                 geom::Vertex2(v1, 0, 0),
+                                 geom::Vertex2(v2, 0, 0)});
+                            out.triangles.push_back(
+                                {geom::Vertex2(v2, 0, 0),
+                                 geom::Vertex2(v3, 0, 0),
+                                 geom::Vertex2(v0, 0, 0)});
+                        }
+                    }
+                }
+            }
+
+            return out;
+        }
+            
+        geom::TriangleMesh2 checkers(
             const math::Box2i& box, const image::Color4f& color0,
             const image::Color4f& color1, const math::Size2i& checkerSize)
         {
@@ -197,11 +264,11 @@ namespace tl
         geom::TriangleMesh2 scanlines(const int start,
                                       const math::Size2i& size)
         {
-            geom::TriangleMesh2 mesh;
+            geom::TriangleMesh2 out;
             
             const size_t lines = size.h / 2;
-            mesh.v.reserve(lines * 3 * 2);
-            mesh.triangles.reserve(lines * 2);
+            out.v.reserve(lines * 3 * 2);
+            out.triangles.reserve(lines * 2);
             
             math::Vector2f pts[4];
 
@@ -217,36 +284,36 @@ namespace tl
                 pts[3].x = 0;
                 pts[3].y = y + 1;
 
-                mesh.v.push_back(pts[0]);
-                mesh.v.push_back(pts[1]);
-                mesh.v.push_back(pts[2]);
+                out.v.push_back(pts[0]);
+                out.v.push_back(pts[1]);
+                out.v.push_back(pts[2]);
 
                 geom::Triangle2 tri;
                 tri.v[0] = idx;
                 tri.v[1] = idx + 1;
                 tri.v[2] = idx + 2;
-                mesh.triangles.push_back(tri);
+                out.triangles.push_back(tri);
                 
-                mesh.v.push_back(pts[0]);
-                mesh.v.push_back(pts[2]);
-                mesh.v.push_back(pts[3]);
+                out.v.push_back(pts[0]);
+                out.v.push_back(pts[2]);
+                out.v.push_back(pts[3]);
                 
                 tri.v[0] = idx + 3;
                 tri.v[1] = idx + 4;
                 tri.v[2] = idx + 5;
-                mesh.triangles.push_back(tri);
+                out.triangles.push_back(tri);
             }
-            return mesh;
+            return out;
         }
         
         geom::TriangleMesh2 columns(const int start,
                                     const math::Size2i& size)
         {
-            geom::TriangleMesh2 mesh;
+            geom::TriangleMesh2 out;
             
             const size_t lines = size.w / 2;
-            mesh.v.reserve(lines * 3 * 2);
-            mesh.triangles.reserve(lines * 2);
+            out.v.reserve(lines * 3 * 2);
+            out.triangles.reserve(lines * 2);
             
             math::Vector2f pts[4];
 
@@ -265,26 +332,26 @@ namespace tl
                 pts[3].x = x + 1;
                 pts[3].y = 0;
 
-                mesh.v.push_back(pts[0]);
-                mesh.v.push_back(pts[1]);
-                mesh.v.push_back(pts[2]);
+                out.v.push_back(pts[0]);
+                out.v.push_back(pts[1]);
+                out.v.push_back(pts[2]);
 
                 geom::Triangle2 tri;
                 tri.v[0] = idx;
                 tri.v[1] = idx + 1;
                 tri.v[2] = idx + 2;
-                mesh.triangles.push_back(tri);
+                out.triangles.push_back(tri);
                     
-                mesh.v.push_back(pts[0]);
-                mesh.v.push_back(pts[2]);
-                mesh.v.push_back(pts[3]);
+                out.v.push_back(pts[0]);
+                out.v.push_back(pts[2]);
+                out.v.push_back(pts[3]);
                 
                 tri.v[0] = idx + 3;
                 tri.v[1] = idx + 4;
                 tri.v[2] = idx + 5;
-                mesh.triangles.push_back(tri);
+                out.triangles.push_back(tri);
             }
-            return mesh;
+            return out;
         }
             
     } // namespace geom

@@ -43,6 +43,7 @@ namespace tl
         {
             kScanlines,
             kColumns,
+            kCheckers,
         };
         
         //! Vulkan renderer.

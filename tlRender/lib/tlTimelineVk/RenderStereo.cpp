@@ -67,22 +67,29 @@ namespace tl
                 p.buffers["stereo_image"]->transitionToShaderRead(p.cmd);
             }
 
+            math::Box2i  box;
             math::Size2i size;
             if (!boxes.empty())
             {
+                box = boxes[0];
                 size.w = boxes[0].w();
                 size.h = boxes[0].h();
             }
 
-            // Create stencil triangle mesh (scanlines, columns or dots)
+            // Create stencil triangle mesh (scanlines, columns or checkers)
             geom::TriangleMesh2 mesh;
             if (stereoType == StereoType::kScanlines)
             {
                 mesh = geom::scanlines(0, size);
             }
-            else
+            else if (stereoType == StereoType::kColumns)
             {
                 mesh = geom::columns(0, size);
+            }
+            else if (stereoType == StereoType::kCheckers)
+            {
+                size.w = size.h = 1;
+                mesh = geom::checkers(box, size);
             }
             
             p.vbos["stereo"] =
@@ -96,7 +103,7 @@ namespace tl
             p.fbo->transitionToColorAttachment(p.cmd);
             p.fbo->transitionDepthToStencilAttachment(p.cmd);
 
-            // ----- FIRST RENDER PASS OF LEFT VIDEO
+            // ----- FIRST RENDER PASS OF LEFT EYE VIDEO
             p.fbo->beginClearRenderPass(p.cmd);
 
             pipelineLayoutName = "stereo1_stencil";
@@ -146,7 +153,8 @@ namespace tl
             pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
             
             _createBindingSet(p.shaders["wipe"]);
-            color = image::Color4f(0.F, 1.F, 0.F);
+
+            // Prepare shaders
             vkCmdPushConstants(p.cmd, pipelineLayout,
                                p.shaders["wipe"]->getPushStageFlags(), 0,
                                sizeof(color), &color);
@@ -154,8 +162,8 @@ namespace tl
                                           vlk::kShaderVertex);
             _bindDescriptorSets(pipelineLayoutName, "wipe");
 
-            // If I draw with colors, the pattern is being drawn.
-            ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, noneMask);
+            
+            ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, rgbaMask);
             
             _vkDraw("stereo");
 
@@ -211,7 +219,10 @@ namespace tl
             }
 
             pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
-            
+
+            //
+            // Prepare shaders
+            //
             _createBindingSet(p.shaders["overlay"]);
             color = image::Color4f(1.F, 1.F, 1.F);
             vkCmdPushConstants(p.cmd, pipelineLayout,
@@ -221,8 +232,10 @@ namespace tl
             p.shaders["overlay"]->setFBO("textureSampler",
                                          p.buffers["stereo_image"]);
             _bindDescriptorSets(pipelineLayoutName, "overlay");
-            
-            // If I draw with colors, the pattern is being drawn.
+
+            //
+            // Draw with RGBA the video
+            //
             ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, rgbaMask);
             _vkDraw("video");
 
@@ -230,12 +243,8 @@ namespace tl
             p.fbo->endRenderPass(p.cmd);
 
             // Draw second image to "stereo_image" buffer
-
-#define SECOND_PASS
-#ifdef SECOND_PASS
             if (videoData.size() > 1 && boxes.size() > 1)
             {   
-            
                 math::Matrix4x4f saved = getTransform();
                 const math::Matrix4x4f mvp = saved * math::translate(math::Vector3f(
                                                                    eyeSeparation, 0.F, 0.F));
@@ -261,16 +270,22 @@ namespace tl
             p.fbo->beginLoadRenderPass(p.cmd);
 
 
-            // Create stencil triangle mesh (scanlines, columns or dots)
+            // Create stencil triangle mesh (scanlines, columns or checkers)
             mesh.v.clear();
             mesh.triangles.clear();
             if (stereoType == StereoType::kScanlines)
             {
                 mesh = geom::scanlines(1, size);
             }
-            else
+            else if (stereoType == StereoType::kColumns)
             {
                 mesh = geom::columns(1, size);
+            }
+            else if (stereoType == StereoType::kCheckers)
+            {
+                size.w = size.h = 1;
+                box.min.x = 1.0;
+                mesh = geom::checkers(box, size);
             }
             
             p.vbos["stereo"] =
@@ -411,7 +426,6 @@ namespace tl
             
             p.fbo->endRenderPass(p.cmd);
             // END SECOND RENDER PASS
-#endif
             
             p.fbo->transitionToShaderRead(p.cmd);
             

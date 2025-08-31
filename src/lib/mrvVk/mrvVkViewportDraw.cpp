@@ -105,60 +105,15 @@ namespace mrv
             TLRENDER_P();
             MRV2_VK();
 
-            // glClear(GL_STENCIL_BUFFER_BIT);
-            // glDisable(GL_STENCIL_TEST);
-
-            vk.render->drawVideo(
-                {p.videoData[left]},
-                timeline::getBoxes(timeline::CompareMode::A, {p.videoData[left]}),
+            vk.render->drawStereo(
+                {p.videoData[left],
+                 p.videoData[right]},
+                timeline::getBoxes(timeline::CompareMode::Wipe, {
+                        p.videoData[left],
+                        p.videoData[right]}),
+                timeline_vlk::StereoType::kCheckers,
+                p.stereo3DOptions.eyeSeparation,
                 p.imageOptions, p.displayOptions);
-
-            // glEnable(GL_STENCIL_TEST);
-
-            // // Set 1 into the stencil buffer
-            // glStencilFunc(GL_ALWAYS, 1, 0xFFFFFFFF);
-            // glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
-            // glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-
-            const auto& renderSize = getRenderSize();
-            const size_t W = renderSize.w;
-            const size_t H = renderSize.h;
-            image::Color4f color(1, 1, 1, 1);
-            std::vector< math::Vector2f > pnts;
-            for (size_t y = 0; y < H; ++y)
-            {
-                for (size_t x = 0; x < W; ++x)
-                {
-                    bool t = ((x + y) % 2) < 1;
-                    if (t)
-                    {
-                        pnts.push_back(math::Vector2f(x, y));
-                    }
-                }
-            }
-
-            vk.lines->drawPoints(vk.render, pnts, color, 5);
-
-            if (p.stereo3DOptions.eyeSeparation != 0.F)
-            {
-                math::Matrix4x4f mvp = vk.render->getTransform();
-                mvp = mvp * math::translate(math::Vector3f(
-                                                p.stereo3DOptions.eyeSeparation, 0.F, 0.F));
-                vk.render->setTransform(mvp);
-            }
-
-            // // Only write to the Stencil Buffer where 1 is not set
-            // glStencilFunc(GL_NOTEQUAL, 1, 0xFFFFFFFF);
-            // // Keep the content of the Stencil Buffer
-            // glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-            // glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-
-            vk.render->drawVideo(
-                {p.videoData[right]},
-                timeline::getBoxes(timeline::CompareMode::A, {p.videoData[right]}),
-                p.imageOptions, p.displayOptions);
-
-            // glDisable(GL_STENCIL_TEST);
         }
 
         void Viewport::_drawColumns(int left, int right) noexcept
