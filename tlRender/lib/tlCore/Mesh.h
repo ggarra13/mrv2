@@ -85,6 +85,13 @@ namespace tl
             const math::Vector2f& p, const math::Vector2f& v0,
             const math::Vector2f& v1);
 
+        //! Scanlines function
+        geom::TriangleMesh2 scanlines(const int start,
+                                      const math::Size2i& size);
+        
+        //! Columns function
+        geom::TriangleMesh2 columns(const int start, const math::Size2i& size);
+        
         //! Create a sphere triangle mesh.
         TriangleMesh3
         sphere(float radius, size_t xResolution, size_t yResolution);

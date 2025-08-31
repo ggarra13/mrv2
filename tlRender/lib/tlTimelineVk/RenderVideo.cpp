@@ -234,7 +234,7 @@ namespace tl
                     displayOptions.size() > 1 ? displayOptions[1] : timeline::DisplayOptions());
             }
         }
-        
+
         void Render::_drawVideoWipe(
             const std::vector<timeline::VideoData>& videoData,
             const std::vector<math::Box2i>& boxes,
@@ -337,13 +337,26 @@ namespace tl
                 stencilOp.depthFailOp = VK_STENCIL_OP_KEEP;
                 stencilOp.compareOp = VK_COMPARE_OP_ALWAYS;
                 stencilOp.compareMask = 0xFF;
-                stencilOp.writeMask = 0xFF;           
+                stencilOp.writeMask = 0xFF;
                 stencilOp.reference = 1;
-
                 ds.front = stencilOp;
                 ds.back = stencilOp;
+                
+                
+                ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
+                ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_REPLACE,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_COMPARE_OP_ALWAYS);
+                
+                vkCmdSetStencilWriteMask(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         0xFF);
+                vkCmdSetStencilCompareMask(p.cmd,
+                                           VK_STENCIL_FACE_FRONT_AND_BACK,
+                                           0xFF);
+                vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK, 1);
 
-            
                 // Draw left stencil mask
                 createPipeline("wipe_left_stencil", pipelineLayoutName,
                                p.fbo->getClearRenderPass(),
@@ -387,12 +400,25 @@ namespace tl
                 stencilOp.passOp = VK_STENCIL_OP_KEEP;
                 stencilOp.depthFailOp = VK_STENCIL_OP_KEEP;
                 stencilOp.compareOp = VK_COMPARE_OP_EQUAL;
-                stencilOp.compareMask = 0xFF;
-                stencilOp.writeMask = 0x00;            
                 stencilOp.reference = 1;
-
+                stencilOp.compareMask = 0xFF;
+                stencilOp.writeMask = 0x00;
                 ds.front = stencilOp;
                 ds.back = stencilOp;
+
+                // This is the same as the above flags, but dynamically
+                ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
+                ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_COMPARE_OP_EQUAL);
+                vkCmdSetStencilCompareMask(p.cmd,
+                                           VK_STENCIL_FACE_FRONT_AND_BACK,
+                                           0xFF);
+                vkCmdSetStencilWriteMask(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         0x00);
+                vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK, 1);            
             
                 createPipeline("wipe_image1",
                                pipelineLayoutName,
@@ -472,16 +498,29 @@ namespace tl
                 ds.stencilTestEnable = VK_TRUE;
             
                 VkStencilOpState stencilOp = {};
+
                 stencilOp.failOp = VK_STENCIL_OP_KEEP;
                 stencilOp.passOp = VK_STENCIL_OP_REPLACE;
                 stencilOp.depthFailOp = VK_STENCIL_OP_KEEP;
                 stencilOp.compareOp = VK_COMPARE_OP_ALWAYS;
                 stencilOp.compareMask = 0xFF;
-                stencilOp.writeMask = 0xFF;           
+                stencilOp.writeMask = 0xFF;
                 stencilOp.reference = 1;
-
                 ds.front = stencilOp;
                 ds.back = stencilOp;
+                
+                ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
+                ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_REPLACE,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_COMPARE_OP_ALWAYS);
+                vkCmdSetStencilCompareMask(p.cmd,
+                                           VK_STENCIL_FACE_FRONT_AND_BACK,
+                                           0xFF);
+                vkCmdSetStencilWriteMask(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         0xFF);
+                vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK, 1);            
 
             
                 // Draw left stencil mask
@@ -533,6 +572,20 @@ namespace tl
 
                 ds.front = stencilOp;
                 ds.back = stencilOp;
+
+                ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
+                ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_COMPARE_OP_EQUAL);
+                vkCmdSetStencilCompareMask(p.cmd,
+                                           VK_STENCIL_FACE_FRONT_AND_BACK,
+                                           0xFF);
+                vkCmdSetStencilWriteMask(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         0x00);
+                vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         1);
 
                 createPipeline("wipe_right_image",
                                pipelineLayoutName,

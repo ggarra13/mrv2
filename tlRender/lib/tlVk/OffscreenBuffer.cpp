@@ -592,6 +592,9 @@ namespace tl
                 throw std::runtime_error("Failed to create image view");
         }
 
+        //
+        // This function clears all buffers
+        //
         void OffscreenBuffer::createClearRenderPass()
         {
             TLRENDER_P();
@@ -698,6 +701,10 @@ namespace tl
         }
 
 
+        //
+        // This function creates render pass does not clear the color and
+        // depth buffers but DOES clear the stencil buffer.
+        //
         void OffscreenBuffer::createLoadRenderPass()
         {
             TLRENDER_P();
@@ -904,6 +911,8 @@ namespace tl
         {
             TLRENDER_P();
 
+            // Note: even this is a load render pass, the clear values are
+            //       needed by the Vulkan spec (they are just ignored).
             std::vector<VkClearValue> clearValues;
             
             VkClearValue colorClear = {};

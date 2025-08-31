@@ -22,6 +22,12 @@ namespace tl
             const timeline::CompareOptions& compareOptions)
         {
             TLRENDER_P();
+
+            const VkColorComponentFlags rgbaMask[] =
+                { VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
+                  VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
+            const VkColorComponentFlags noneMask[] = { 0 };
+            
             
             image::Color4f color(1.F, 0.F, 0.F);
             VkPipelineLayout pipelineLayout;
@@ -47,7 +53,7 @@ namespace tl
             p.fbo->transitionDepthToStencilAttachment(p.cmd);
             
 
-            // Draw left image to "wipe" buffer
+            // Draw left image to "stereo_image" buffer
             if (!videoData.empty() && !boxes.empty())
             {
                 p.buffers["stereo_image"]->transitionToColorAttachment(p.cmd);
@@ -61,100 +67,22 @@ namespace tl
                 p.buffers["stereo_image"]->transitionToShaderRead(p.cmd);
             }
 
-            float W = 0.F;
-            float H = 0.F;
+            math::Size2i size;
             if (!boxes.empty())
             {
-                W = boxes[0].w();
-                H = boxes[0].h();
+                size.w = boxes[0].w();
+                size.h = boxes[0].h();
             }
 
-            // Draw stencil triangle mesh
+            // Create stencil triangle mesh (scanlines, columns or dots)
             geom::TriangleMesh2 mesh;
             if (stereoType == StereoType::kScanlines)
             {
-                size_t lines = H / 2;
-                mesh.v.reserve(lines * 3 * 2);
-                mesh.triangles.reserve(lines * 2);
-                
-                math::Vector2f pts[4];
-
-                size_t idx = 1;
-                float y = 0;
-                for (float y = 0; y < H; y += 2, idx += 6)
-                {
-                    pts[0].x = 0;
-                    pts[0].y = y;
-                    pts[1].x = W;
-                    pts[1].y = y;
-                    pts[2].x = W;
-                    pts[2].y = y + 1;
-                    pts[3].x = 0;
-                    pts[3].y = y + 1;
-
-                    mesh.v.push_back(pts[0]);
-                    mesh.v.push_back(pts[1]);
-                    mesh.v.push_back(pts[2]);
-
-                    geom::Triangle2 tri;
-                    tri.v[0] = idx;
-                    tri.v[1] = idx + 1;
-                    tri.v[2] = idx + 2;
-                    mesh.triangles.push_back(tri);
-                    
-                    mesh.v.push_back(pts[0]);
-                    mesh.v.push_back(pts[2]);
-                    mesh.v.push_back(pts[3]);
-                
-                    tri.v[0] = idx + 3;
-                    tri.v[1] = idx + 4;
-                    tri.v[2] = idx + 5;
-                    mesh.triangles.push_back(tri);
-                }
+                mesh = geom::scanlines(0, size);
             }
             else
             {
-                size_t lines = W / 2;
-                mesh.v.reserve(lines * 3 * 2);
-                mesh.triangles.reserve(lines * 2);
-            
-                math::Vector2f pts[4];
-
-                size_t idx = 1;
-                float x = 0;
-                for (float x = 0; x < W; x += 2, idx += 6)
-                {
-                    pts[0].x = x + 1;
-                    pts[0].y = H;
-
-                    pts[1].x = x;
-                    pts[1].y = H;
-
-                    pts[2].x = x;
-                    pts[2].y = 0;
-                    
-                    pts[3].x = x + 1;
-                    pts[3].y = 0;
-
-                    mesh.v.push_back(pts[0]);
-                    mesh.v.push_back(pts[1]);
-                    mesh.v.push_back(pts[2]);
-
-                    geom::Triangle2 tri;
-                    tri.v[0] = idx;
-                    tri.v[1] = idx + 1;
-                    tri.v[2] = idx + 2;
-                    mesh.triangles.push_back(tri);
-                    
-                    mesh.v.push_back(pts[0]);
-                    mesh.v.push_back(pts[2]);
-                    mesh.v.push_back(pts[3]);
-                
-                    tri.v[0] = idx + 3;
-                    tri.v[1] = idx + 4;
-                    tri.v[2] = idx + 5;
-                    mesh.triangles.push_back(tri);
-                }
+                mesh = geom::columns(0, size);
             }
             
             p.vbos["stereo"] =
@@ -165,12 +93,74 @@ namespace tl
             p.vbos["stereo"]->copy(convert(mesh,
                                            p.vbos["stereo"]->getType()));
 
+            p.fbo->transitionToColorAttachment(p.cmd);
+            p.fbo->transitionDepthToStencilAttachment(p.cmd);
+
             // ----- FIRST RENDER PASS OF LEFT VIDEO
             p.fbo->beginClearRenderPass(p.cmd);
+
+            pipelineLayoutName = "stereo1_stencil";
+            {
+                vlk::ColorBlendStateInfo cb;
+                vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
+                colorBlendAttachment.blendEnable = VK_FALSE;
+                cb.attachments.push_back(colorBlendAttachment);
             
+                vlk::DepthStencilStateInfo ds;
+                ds.depthTestEnable = VK_FALSE;
+                ds.stencilTestEnable = VK_TRUE;
+            
+                VkStencilOpState stencilOp = {};
+                stencilOp.failOp = VK_STENCIL_OP_KEEP;
+                stencilOp.passOp = VK_STENCIL_OP_REPLACE;
+                stencilOp.depthFailOp = VK_STENCIL_OP_KEEP;
+                stencilOp.compareOp = VK_COMPARE_OP_ALWAYS;
+                stencilOp.compareMask = 0xFF;
+                stencilOp.writeMask = 0xFF;
+                stencilOp.reference = 1;
+                ds.front = ds.back = stencilOp;
+
+                //
+                // These are for dynamic stencils
+                //
+                ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
+                ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_REPLACE,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_COMPARE_OP_ALWAYS);
+                vkCmdSetStencilCompareMask(p.cmd,
+                                           VK_STENCIL_FACE_FRONT_AND_BACK,
+                                           0xFF);
+                vkCmdSetStencilWriteMask(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         0xFF);
+                vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK, 1);
+
+                // Draw stencil mask
+                createPipeline("stereo1_stencil", pipelineLayoutName,
+                               p.fbo->getClearRenderPass(),
+                               p.shaders["wipe"], p.vbos["stereo"],
+                               cb, ds);
+            }
+            
+            pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+            
+            _createBindingSet(p.shaders["wipe"]);
+            color = image::Color4f(0.F, 1.F, 0.F);
+            vkCmdPushConstants(p.cmd, pipelineLayout,
+                               p.shaders["wipe"]->getPushStageFlags(), 0,
+                               sizeof(color), &color);
+            p.shaders["wipe"]->setUniform("transform.mvp", p.transform,
+                                          vlk::kShaderVertex);
+            _bindDescriptorSets(pipelineLayoutName, "wipe");
+
+            // If I draw with colors, the pattern is being drawn.
+            ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, noneMask);
+            
+            _vkDraw("stereo");
+
             // Draw video
             pipelineLayoutName = "stereo1_image";
-                
             
             if (p.vbos["video"])
             {
@@ -184,6 +174,33 @@ namespace tl
                 cb.attachments.push_back(colorBlendAttachment);
             
                 vlk::DepthStencilStateInfo ds;
+                ds.depthTestEnable = VK_FALSE;
+                ds.stencilTestEnable = VK_TRUE;
+            
+                VkStencilOpState stencilOp = {};
+                stencilOp.failOp = VK_STENCIL_OP_KEEP;
+                stencilOp.passOp = VK_STENCIL_OP_KEEP;
+                stencilOp.depthFailOp = VK_STENCIL_OP_KEEP;
+                stencilOp.compareOp = VK_COMPARE_OP_EQUAL;
+                stencilOp.compareMask = 0xFF;
+                stencilOp.writeMask = 0x00;
+                stencilOp.reference = 1;
+                ds.front = stencilOp;
+                ds.back = stencilOp;
+
+                // This is the same as the above flags, but dynamically
+                ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
+                ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_COMPARE_OP_EQUAL);
+                vkCmdSetStencilCompareMask(p.cmd,
+                                           VK_STENCIL_FACE_FRONT_AND_BACK,
+                                           0xFF);
+                vkCmdSetStencilWriteMask(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         0x00);
+                vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK, 1);            
             
                 createPipeline("stereo_image1",
                                pipelineLayoutName,
@@ -192,7 +209,6 @@ namespace tl
                                p.vbos["video"],
                                cb, ds);
             }
-            
 
             pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
             
@@ -206,15 +222,17 @@ namespace tl
                                          p.buffers["stereo_image"]);
             _bindDescriptorSets(pipelineLayoutName, "overlay");
             
+            // If I draw with colors, the pattern is being drawn.
+            ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, rgbaMask);
             _vkDraw("video");
-            
-            p.fbo->endRenderPass(p.cmd);
-            // END FIRST RENDER PASS
 
-            // ----- SECOND RENDER PASS OF RIGHT VIDEO
+
+            p.fbo->endRenderPass(p.cmd);
 
             // Draw second image to "stereo_image" buffer
-            
+
+#define SECOND_PASS
+#ifdef SECOND_PASS
             if (videoData.size() > 1 && boxes.size() > 1)
             {   
             
@@ -236,23 +254,39 @@ namespace tl
                 setTransform(saved);
             }
 
-            //
-            //  DRAW STEREO STENCIL MASK
-            //
+            // END FIRST RENDER PASS
             
-            p.fbo->transitionToColorAttachment(p.cmd);
-            p.fbo->transitionDepthToStencilAttachment(p.cmd);
+            // ----- SECOND RENDER PASS OF RIGHT VIDEO
             
             p.fbo->beginLoadRenderPass(p.cmd);
-                        
 
+
+            // Create stencil triangle mesh (scanlines, columns or dots)
+            mesh.v.clear();
+            mesh.triangles.clear();
+            if (stereoType == StereoType::kScanlines)
+            {
+                mesh = geom::scanlines(1, size);
+            }
+            else
+            {
+                mesh = geom::columns(1, size);
+            }
             
-            pipelineLayoutName = "stereo1_stencil";
+            p.vbos["stereo"] =
+                vlk::VBO::create(mesh.triangles.size() * 3,
+                                 vlk::VBOType::Pos2_F32);
+            p.vaos["stereo"] = vlk::VAO::create(ctx);
+            
+            p.vbos["stereo"]->copy(convert(mesh,
+                                           p.vbos["stereo"]->getType()));
+            
+
+            pipelineLayoutName = "stereo2_stencil";
             {
                 vlk::ColorBlendStateInfo cb;
                 vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
                 colorBlendAttachment.blendEnable = VK_FALSE;
-                // colorBlendAttachment.colorWriteMask = 0;
                 cb.attachments.push_back(colorBlendAttachment);
             
                 vlk::DepthStencilStateInfo ds;
@@ -267,15 +301,25 @@ namespace tl
                 stencilOp.compareMask = 0xFF;
                 stencilOp.writeMask = 0xFF;
                 stencilOp.reference = 1;
+                ds.front = ds.back = stencilOp;
+                
+                ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
+                ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_REPLACE,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_COMPARE_OP_ALWAYS);
+                vkCmdSetStencilCompareMask(p.cmd,
+                                           VK_STENCIL_FACE_FRONT_AND_BACK,
+                                           0xFF);
+                vkCmdSetStencilWriteMask(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         0xFF);
+                vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK, 1);
 
-                ds.front = stencilOp;
-                ds.back = stencilOp;
-
-            
                 // Draw stencil mask
-                createPipeline("stereo1_stencil", pipelineLayoutName,
+                createPipeline("stereo2_stencil", pipelineLayoutName,
                                p.fbo->getLoadRenderPass(),
-                               p.shaders["wipe"], p.vbos["wipe"],
+                               p.shaders["wipe"], p.vbos["stereo"],
                                cb, ds);
             }
             
@@ -290,19 +334,17 @@ namespace tl
                                           vlk::kShaderVertex);
             _bindDescriptorSets(pipelineLayoutName, "wipe");
 
+
+            ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, rgbaMask);
             _vkDraw("stereo");
 
-            p.fbo->endRenderPass(p.cmd);
-            
-#if 0
-            p.fbo->transitionToColorAttachment(p.cmd);
-            p.fbo->transitionDepthToStencilAttachment(p.cmd);
-            
-            p.fbo->beginLoadRenderPass(p.cmd);
+
+            // Draw full RGBA
+            ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, rgbaMask);
             
             // Draw video
             pipelineLayoutName = "stereo_image2";
-                            
+            
             if (p.vbos["video"])
             {
                 p.vbos["video"]->copy(convert(geom::box(boxes[1], true),
@@ -322,14 +364,26 @@ namespace tl
                 stencilOp.failOp = VK_STENCIL_OP_KEEP;
                 stencilOp.passOp = VK_STENCIL_OP_KEEP;
                 stencilOp.depthFailOp = VK_STENCIL_OP_KEEP;
-                stencilOp.compareOp = VK_COMPARE_OP_NOT_EQUAL;
+                stencilOp.compareOp = VK_COMPARE_OP_EQUAL;
                 stencilOp.compareMask = 0xFF;
                 stencilOp.writeMask = 0x00;
                 stencilOp.reference = 1;
-
-                ds.front = stencilOp;
-                ds.back = stencilOp;
-
+                ds.front = ds.back = stencilOp;
+                
+                ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
+                ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_COMPARE_OP_EQUAL);
+                vkCmdSetStencilCompareMask(p.cmd,
+                                           VK_STENCIL_FACE_FRONT_AND_BACK,
+                                           0xFF);
+                vkCmdSetStencilWriteMask(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         0x00);
+                vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         1);
+                
                 createPipeline("stereo_image2",
                                pipelineLayoutName,
                                p.fbo->getLoadRenderPass(),
@@ -351,11 +405,12 @@ namespace tl
                                          p.buffers["stereo_image"]);
             _bindDescriptorSets(pipelineLayoutName, "overlay");
 
+            // If I draw with colors, the pattern is being drawn.
+            ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, rgbaMask);
             _vkDraw("video");
             
             p.fbo->endRenderPass(p.cmd);
             // END SECOND RENDER PASS
-
 #endif
             
             p.fbo->transitionToShaderRead(p.cmd);

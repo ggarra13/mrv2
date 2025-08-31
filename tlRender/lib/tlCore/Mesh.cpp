@@ -193,5 +193,99 @@ namespace tl
 
             return out;
         }
+        
+        geom::TriangleMesh2 scanlines(const int start,
+                                      const math::Size2i& size)
+        {
+            geom::TriangleMesh2 mesh;
+            
+            const size_t lines = size.h / 2;
+            mesh.v.reserve(lines * 3 * 2);
+            mesh.triangles.reserve(lines * 2);
+            
+            math::Vector2f pts[4];
+
+            size_t idx = 1;
+            for (int y = start; y < size.h; y += 2, idx += 6)
+            {
+                pts[0].x = 0;
+                pts[0].y = y;
+                pts[1].x = size.w;
+                pts[1].y = y;
+                pts[2].x = size.w;
+                pts[2].y = y + 1;
+                pts[3].x = 0;
+                pts[3].y = y + 1;
+
+                mesh.v.push_back(pts[0]);
+                mesh.v.push_back(pts[1]);
+                mesh.v.push_back(pts[2]);
+
+                geom::Triangle2 tri;
+                tri.v[0] = idx;
+                tri.v[1] = idx + 1;
+                tri.v[2] = idx + 2;
+                mesh.triangles.push_back(tri);
+                
+                mesh.v.push_back(pts[0]);
+                mesh.v.push_back(pts[2]);
+                mesh.v.push_back(pts[3]);
+                
+                tri.v[0] = idx + 3;
+                tri.v[1] = idx + 4;
+                tri.v[2] = idx + 5;
+                mesh.triangles.push_back(tri);
+            }
+            return mesh;
+        }
+        
+        geom::TriangleMesh2 columns(const int start,
+                                    const math::Size2i& size)
+        {
+            geom::TriangleMesh2 mesh;
+            
+            const size_t lines = size.w / 2;
+            mesh.v.reserve(lines * 3 * 2);
+            mesh.triangles.reserve(lines * 2);
+            
+            math::Vector2f pts[4];
+
+            size_t idx = 1;
+            for (int x = start; x < size.w; x += 2, idx += 6)
+            {
+                pts[0].x = x + 1;
+                pts[0].y = size.h;
+
+                pts[1].x = x;
+                pts[1].y = size.h;
+
+                pts[2].x = x;
+                pts[2].y = 0;
+                    
+                pts[3].x = x + 1;
+                pts[3].y = 0;
+
+                mesh.v.push_back(pts[0]);
+                mesh.v.push_back(pts[1]);
+                mesh.v.push_back(pts[2]);
+
+                geom::Triangle2 tri;
+                tri.v[0] = idx;
+                tri.v[1] = idx + 1;
+                tri.v[2] = idx + 2;
+                mesh.triangles.push_back(tri);
+                    
+                mesh.v.push_back(pts[0]);
+                mesh.v.push_back(pts[2]);
+                mesh.v.push_back(pts[3]);
+                
+                tri.v[0] = idx + 3;
+                tri.v[1] = idx + 4;
+                tri.v[2] = idx + 5;
+                mesh.triangles.push_back(tri);
+            }
+            return mesh;
+        }
+            
     } // namespace geom
 } // namespace tl
