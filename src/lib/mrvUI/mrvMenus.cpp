@@ -877,11 +877,31 @@ namespace mrv
                     entry.c_str(), 0, (Fl_Callback*)select_hdr_tonemap_cb, ui,
                     mode);
                 item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                if (tonemap == (int)selected)
+                if (tonemap == selected)
                     item->set();
                 ++tonemap;
             }
+            
+            selected = static_cast<int>(hdrOptions.gamutMapping);
+            mode = FL_MENU_RADIO;
+            if (numFiles == 0)
+                mode |= FL_MENU_INACTIVE;
+            std::string gamut_root = _("Render/HDR/Gamut Mapping");
+            int gammut = 0;
+            for (const auto& algorithm : timeline::getHDRGamutMappingLabels())
+            {
+                const std::string entry = gamut_root + "/" + algorithm;
+                idx = menu->add(
+                    entry.c_str(), 0,
+                    (Fl_Callback*)select_hdr_gamut_mapping_cb, ui,
+                    mode);
+                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+                if (gammut == selected)
+                    item->set();
+                ++gammut;
+            }
         }
+            
 
         timeline::Playback playback = timeline::Playback::Stop;
 

@@ -1707,6 +1707,39 @@ namespace tl
 
                     // defaults, generates LUTs if state is set.
                     cmap.gamut_mapping = &pl_gamut_map_perceptual;
+                    switch (p.hdrOptions.gamutMapping)
+                    {
+                    case timeline::HDRGamutMapping::Clip:
+                        cmap.gamut_mapping = &pl_gamut_map_clip;
+                        break;
+                    case timeline::HDRGamutMapping::Perceptual:
+                        cmap.gamut_mapping = &pl_gamut_map_perceptual;
+                        break;
+                    case timeline::HDRGamutMapping::Relative:
+                        cmap.gamut_mapping = &pl_gamut_map_relative;
+                        break;
+                    case timeline::HDRGamutMapping::Saturation:
+                        cmap.gamut_mapping = &pl_gamut_map_saturation;
+                        break;
+                    case timeline::HDRGamutMapping::Absolute:
+                        cmap.gamut_mapping = &pl_gamut_map_absolute;
+                        break;
+                    case timeline::HDRGamutMapping::Desaturate:
+                        cmap.gamut_mapping = &pl_gamut_map_desaturate;
+                        break;
+                    case timeline::HDRGamutMapping::Darken:
+                        cmap.gamut_mapping = &pl_gamut_map_darken;
+                        break;
+                    case timeline::HDRGamutMapping::Highlight:
+                        cmap.gamut_mapping = &pl_gamut_map_highlight;
+                        break;
+                    case timeline::HDRGamutMapping::Linear:
+                        cmap.gamut_mapping = &pl_gamut_map_linear;
+                        break;
+                    default:
+                        cmap.gamut_mapping = &pl_gamut_map_perceptual;
+                        break;
+                    }
 
                     switch (p.hdrOptions.algorithm)
                     {

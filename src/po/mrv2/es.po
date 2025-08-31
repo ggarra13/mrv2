@@ -4075,6 +4075,9 @@ msgstr "Render/Datos de HDR/Activos"
 msgid "Render/HDR/Tonemap"
 msgstr "Render/HDR/Mapeo de Tonos"
 
+msgid "Render/HDR/Gamut Mapping"
+msgstr "Render/HDR/Mapeo de Gama"
+
 msgid "Playback/Stop"
 msgstr "Reproducir/Parar"
 

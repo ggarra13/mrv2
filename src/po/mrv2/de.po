@@ -4001,6 +4001,9 @@ msgstr "Rendern/HDR-Daten/Aktiv"
 msgid "Render/HDR/Tonemap"
 msgstr "Render/HDR/Tonkarte"
 
+msgid "Render/HDR/Gamut Mapping"
+msgstr "Render/HDR/Gamut-Mapping"
+
 msgid "Playback/Stop"
 msgstr "Wiedergabe/Anhalten"
 

@@ -105,6 +105,7 @@ namespace mrv
     void toggle_invalid_values_cb(Fl_Menu_* w, ViewerUI* ui);
     void toggle_hdr_tonemap_cb(Fl_Menu_* w, ViewerUI* ui);
     void select_hdr_tonemap_cb(Fl_Menu_* w, ViewerUI* ui);
+    void select_hdr_gamut_mapping_cb(Fl_Menu_* m, ViewerUI* ui);
     
     void hdr_data_from_file_cb(Fl_Menu_* m, ViewerUI* ui);
     void hdr_data_inactive_cb(Fl_Menu_* m, ViewerUI* ui);

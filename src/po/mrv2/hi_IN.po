@@ -4000,6 +4000,9 @@ msgstr "रेंडर/HDR डेटा/सक्रिय"
 msgid "Render/HDR/Tonemap"
 msgstr "रेंडर/HDR/टोनमैप"
 
+msgid "Render/HDR/Gamut Mapping"
+msgstr "रेंडर/HDR/सरगम मानचित्रण"
+
 msgid "Playback/Stop"
 msgstr "प्लेबैक/रूकें"
 

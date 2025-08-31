@@ -18,6 +18,20 @@ namespace tl
     namespace timeline
     {
         TLRENDER_ENUM_IMPL(
+            HDRGamutMapping,
+            "Auto",
+            "Clip",
+            "Perceptual",
+            "Relative",
+            "Saturation",
+            "Absolute",
+            "Desaturate",
+            "Darken",
+            "Highlight",
+            "Linear");
+        TLRENDER_ENUM_SERIALIZE_IMPL(HDRGamutMapping);
+        
+        TLRENDER_ENUM_IMPL(
             HDRTonemapAlgorithm, "ST2094_40", "ST2094_10", "Clip", "BT2390",
             "BT2446A", "Spline", "Reinhard", "Mobius", "Hable", "Gamma",
             "Linear", "Linear Light", "None");

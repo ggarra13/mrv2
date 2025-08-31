@@ -3959,6 +3959,9 @@ msgstr "レンダー/HDRデータ/アクティブ"
 msgid "Render/HDR/Tonemap"
 msgstr "レンダー/HDR/トーンマップ"
 
+msgid "Render/HDR/Gamut Mapping"
+msgstr "レンダー/HDR/色域マッピング"
+
 msgid "Playback/Stop"
 msgstr "再生/停止"
 

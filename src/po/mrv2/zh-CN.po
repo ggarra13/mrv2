@@ -3949,6 +3949,9 @@ msgstr "渲染/HDR 数据/活动"
 msgid "Render/HDR/Tonemap"
 msgstr "招标/HDR/时针映射"
 
+msgid "Render/HDR/Gamut Mapping"
+msgstr "招标/HDR/色域映射"
+
 msgid "Playback/Stop"
 msgstr "播放/停止"
 

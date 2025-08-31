@@ -8,7 +8,24 @@ namespace tl
 {
     namespace timeline
     {
-        enum HDRTonemapAlgorithm {
+        enum class HDRGamutMapping {
+            Auto,
+            Clip,
+            Perceptual,
+            Relative,
+            Saturation,
+            Absolute,
+            Desaturate,
+            Darken,
+            Highlight,
+            Linear,
+            Count,
+            First = Auto
+        };
+        TLRENDER_ENUM(HDRGamutMapping);
+        TLRENDER_ENUM_SERIALIZE(HDRGamutMapping);
+        
+        enum class HDRTonemapAlgorithm {
             ST2094_40,
             ST2094_10,
             Clip,
@@ -33,6 +50,7 @@ namespace tl
         {
             bool passthru = false;
             bool tonemap = false;
+            HDRGamutMapping     gamutMapping = HDRGamutMapping::Auto;
             HDRTonemapAlgorithm algorithm = HDRTonemapAlgorithm::Hable;
             image::HDRData hdrData;
 

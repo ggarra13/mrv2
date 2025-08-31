@@ -3997,6 +3997,9 @@ msgstr "Renderização/Dados HDR/Ativo"
 msgid "Render/HDR/Tonemap"
 msgstr "Renúncia/HDR/Mapa de tons"
 
+msgid "Render/HDR/Gamut Mapping"
+msgstr "Renúncia/HDR/Mapeamento de gama"
+
 msgid "Playback/Stop"
 msgstr "Reproduo/Pra."
 

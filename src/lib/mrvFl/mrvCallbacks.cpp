@@ -1392,6 +1392,25 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
     
+    void select_hdr_gamut_mapping_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        const Fl_Menu_Item* item = m->mvalue();
+        const std::string algorithm = item->label();
+
+        int idx = 0;
+        for (const auto& entry : timeline::getHDRGamutMappingLabels())
+        {
+            if (entry == algorithm)
+                break;
+            ++idx;
+        }
+
+        timeline::HDROptions o = ui->uiView->getHDROptions();
+        o.gamutMapping = static_cast<timeline::HDRGamutMapping>(idx);
+        ui->uiView->setHDROptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+    
     void toggle_fullscreen_cb(Fl_Menu_* m, ViewerUI* ui)
     {        
         MyViewport* view = ui->uiView;

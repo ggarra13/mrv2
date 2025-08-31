@@ -4042,6 +4042,9 @@ msgstr "Рендеринг/Данные HDR/Активные"
 msgid "Render/HDR/Tonemap"
 msgstr "Редакция/HDR/Тональность"
 
+msgid "Render/HDR/Gamut Mapping"
+msgstr "Редакция/HDR/Сопоставление гаммы"
+
 msgid "Playback/Stop"
 msgstr "Воспроизведение/Стой."
 

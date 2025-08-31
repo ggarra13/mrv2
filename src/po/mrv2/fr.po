@@ -4007,6 +4007,9 @@ msgstr "Rendu/Données HDR/Actif"
 msgid "Render/HDR/Tonemap"
 msgstr "Rendre/HDR/Carte des tons"
 
+msgid "Render/HDR/Gamut Mapping"
+msgstr "Rendre/HDR/Carte des la gamme"
+
 msgid "Playback/Stop"
 msgstr "Remise en ligne/Arrêtez-vous."
 

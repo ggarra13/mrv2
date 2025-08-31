@@ -10,6 +10,7 @@ v1.4.1
 - Added missing Hable tonemap to Preferences->Render->Tonemap->Algorithm.
 - Added VSync support to Vulkan backend.
 - Added Stereo 3D Scanlines, Columns and Checkerboard.
+- Added Render->HDR->Gamut Mapping controls.
 
 
 v1.4.0

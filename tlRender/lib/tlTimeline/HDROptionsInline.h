@@ -10,6 +10,7 @@ namespace tl
         {
             // passthru is ignored on purpose
             return (tonemap == other.tonemap &&
+                    gamutMapping == other.gamutMapping &&
                     algorithm == other.algorithm &&
                     hdrData == other.hdrData);
         }
