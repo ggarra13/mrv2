@@ -4,13 +4,12 @@ v1.4.1
 - Fixed starting of mrv2/vmrv2 on Windows when the installation directory has international characters like üí etc.
 - Reverted to use FIFO instead of MAILBOX presentation mode in Vulkan.
 - Some Unicode (UTF-8) fixes.
-- Added back the page to modify the PATH variable and create Desktop shortcuts
-  on the Windows installer.  It is unfortunate that it is an all or nothing
-  cmake setting.
+- Fixed shortcuts on Windows installer without having to modify the PATH variable.
 - Fixed OpenGL backend with HDR to tonemap properly to 100nits.
 - Fixed Vulkan SDR backend with HDR to tonemap properly to 100nits.
 - Added missing Hable tonemap to Preferences->Render->Tonemap->Algorithm.
 - Added VSync support to Vulkan backend.
+- Added Stereo 3D Scanlines, Columns and Checkerboard.
 
 
 v1.4.0
