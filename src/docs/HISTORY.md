@@ -13,6 +13,8 @@ v1.4.1
 - Added Stereo 3D Scanlines, Columns and Checkerboard.
 - Added Render->HDR->Gamut Mapping controls.
 - Fixed Stereo 3D Checkerboard on OpenGL due to deprecation of GL_POINTS.
+- Fixed hiding of pixel bar on Vulkan backend after opening/closing Preference
+  Window.
 
 
 v1.4.0

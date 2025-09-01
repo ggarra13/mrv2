@@ -1700,7 +1700,7 @@ namespace mrv
 #endif
 
 #ifdef VULKAN_BACKEND
-                if (autoHide == kAutoHideOpenGLAndVulkan || !player ||
+                if (autoHide != kAutoHideOpenGLAndVulkan || !player ||
                     player->playback() == timeline::Playback::Stop)
                 {
                     ui->uiPixelBar->show();
