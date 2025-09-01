@@ -36,8 +36,8 @@ namespace mrv
         int handle(int e) FL_OVERRIDE;
         
     private:
-        int eval(uchar *&s, int prio) const;
-        int eval(const char *s) const;
+        double eval(uchar *&s, int prio) const;
+        double eval(const char *s) const;
 
         void _textUpdate() noexcept;
         void _updateGeometry() noexcept;

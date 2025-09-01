@@ -94,8 +94,15 @@ int main(int argc, char* argv[])
         full_path = g_bin_path + "/" + binary;
     }
 
-
-    std::cout << "Launching " << full_path << std::endl;
+    if (!fs::exists(full_path))
+    {
+        std::cerr << "Could not locate " << full_path
+                  << std::endl;
+        std::cerr << "Could not locate " << g_bin_path
+                  << "/vmrv2.sh"
+                  << std::endl;
+        return 1;
+    }
 
     // Execute the real app binary, replacing the stub process
     execv(full_path.c_str(), argv);

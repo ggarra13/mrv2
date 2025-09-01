@@ -81,13 +81,23 @@ namespace mrv
                 rawkey == FL_KP_Enter ||
                 rawkey == FL_Tab)
             {
-                if (p.units == TimeUnits::Frames)
+                double v;
+                switch(p.units)
                 {
-                    int t = eval(value());
-                    p.value = otime::RationalTime(double(t), p.value.rate());
-                    _textUpdate();
-                    return 1;
+                case TimeUnits::Frames:
+                    v = eval(value());
+                    p.value = otime::RationalTime(v, p.value.rate());
+                    break;
+                case TimeUnits::Seconds:
+                    v = eval(value());
+                    p.value = otime::RationalTime(v, 1.0);
+                    break;
+                default:
+                    break;
                 }
+                _textUpdate();
+                do_callback();
+                return 1;
             }
             break;
         }
@@ -99,31 +109,54 @@ namespace mrv
     }
     
     /**
-       Evaluate a formula into an integer, recursive part.
+       Evaluate a formula into a double, recursive part.
        \param s remaining text in this formula, must return a pointer to the next
        character that will be interpreted.
        \param prio priority of current operation
        \return the value so far
     */
-    int Timecode::eval(uchar *&s, int prio) const {
-        int v = 0, sgn = 1;
+    double Timecode::eval(uchar *&s, int prio) const {
+        double v = 0;
+        int sgn = 1, dec = 0; 
         uchar c = *s++;
 
         // check for end of text
-        if (c==0) { s--; return sgn*v; }
+        if (c==0) { 
+            s--; return sgn*v;
+        }
 
         // check for unary operator
         if (c=='-') { sgn = -1; c = *s++; }
         else if (c=='+') { sgn = 1; c = *s++; }
 
-        // read value, variable, or bracketed term
+        if (_p->units == TimeUnits::Seconds && (c == '.' || c == ','))
+        {
+            c = *s++;
+            dec = 1;
+        }
+        
+        // read value or bracketed term
         if (c==0) {
             s--; return sgn*v;
         } else if (c>='0' && c<='9') {
-            // numeric value
-            while (c>='0' && c<='9') {
-                v = v*10 + (c-'0');
-                c = *s++;
+            if (dec) {
+                int d = 10;
+                while (c>='0' && c<='9') {
+                    v = v + double(c-'0') / d;
+                    c = *s++;
+                    d *= 10;
+                }
+            }
+            else {
+                // numeric value 
+                while (c>='0' && c<='9') {
+                    v = v*10 + (c-'0');
+                    c = *s++;
+                }
+            }
+            if (c == '.' || c == ',') {
+                --s;
+                v += eval(s, 5);
             }
         } else if (c=='(') {
             // opening bracket
@@ -153,7 +186,7 @@ namespace mrv
             } else if (c==')') {
                 return v;
             } else {
-                return v; // syntax error
+                return v; // syntax error or final parsing
             }
             c = *s++;
         }
@@ -174,7 +207,7 @@ namespace mrv
    \param s formula as a C string
    \return the calculated value
 */
-    int Timecode::eval(const char *s) const
+    double Timecode::eval(const char *s) const
     {
         // duplicate the text, so we can modify it
         uchar *buf = (uchar*)fl_strdup(s);
@@ -188,7 +221,7 @@ namespace mrv
         }
         src = buf;
         // now jump into the recursion
-        int ret = eval(src, 5);
+        double ret = eval(src, 5);
         ::free(buf);
         return ret;
     }
