@@ -261,25 +261,24 @@ namespace tl
             return out;
         }
         
-        geom::TriangleMesh2 scanlines(const int start,
-                                      const math::Size2i& size)
+        geom::TriangleMesh2 scanlines(const math::Box2i& box)
         {
             geom::TriangleMesh2 out;
             
-            const size_t lines = size.h / 2;
+            const size_t lines = box.h() / 2;
             out.v.reserve(lines * 3 * 2);
             out.triangles.reserve(lines * 2);
             
             math::Vector2f pts[4];
 
             size_t idx = 1;
-            for (int y = start; y < size.h; y += 2, idx += 6)
+            for (int y = box.min.y; y < box.max.y; y += 2, idx += 6)
             {
                 pts[0].x = 0;
                 pts[0].y = y;
-                pts[1].x = size.w;
+                pts[1].x = box.w();
                 pts[1].y = y;
-                pts[2].x = size.w;
+                pts[2].x = box.w();
                 pts[2].y = y + 1;
                 pts[3].x = 0;
                 pts[3].y = y + 1;
@@ -306,25 +305,24 @@ namespace tl
             return out;
         }
         
-        geom::TriangleMesh2 columns(const int start,
-                                    const math::Size2i& size)
+        geom::TriangleMesh2 columns(const math::Box2i& box)
         {
             geom::TriangleMesh2 out;
             
-            const size_t lines = size.w / 2;
+            const size_t lines = box.w() / 2;
             out.v.reserve(lines * 3 * 2);
             out.triangles.reserve(lines * 2);
             
             math::Vector2f pts[4];
 
             size_t idx = 1;
-            for (int x = start; x < size.w; x += 2, idx += 6)
+            for (int x = box.min.x; x < box.max.x; x += 2, idx += 6)
             {
                 pts[0].x = x + 1;
-                pts[0].y = size.h;
+                pts[0].y = box.h();
 
                 pts[1].x = x;
-                pts[1].y = size.h;
+                pts[1].y = box.h();
 
                 pts[2].x = x;
                 pts[2].y = 0;

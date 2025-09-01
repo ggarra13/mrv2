@@ -130,10 +130,11 @@ namespace mrv
             glClear(GL_STENCIL_BUFFER_BIT);
             glDisable(GL_STENCIL_TEST);
 
-            gl.render->drawVideo(
-                {p.videoData[left]},
-                timeline::getBoxes(timeline::CompareMode::A, {p.videoData[left]}),
-                p.imageOptions, p.displayOptions);
+            auto boxes = timeline::getBoxes(timeline::CompareMode::A,
+                                            {p.videoData[left]});
+
+            gl.render->drawVideo({p.videoData[left]}, boxes, p.imageOptions,
+                                 p.displayOptions);
 
             glEnable(GL_STENCIL_TEST);
 
@@ -142,24 +143,10 @@ namespace mrv
             glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
             glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 
-            const auto& renderSize = getRenderSize();
-            const size_t W = renderSize.w;
-            const size_t H = renderSize.h;
-            image::Color4f color(1, 1, 1, 1);
-            std::vector< math::Vector2f > pnts;
-            for (size_t y = 0; y < H; ++y)
-            {
-                for (size_t x = 0; x < W; ++x)
-                {
-                    bool t = ((x + y) % 2) < 1;
-                    if (t)
-                    {
-                        pnts.push_back(math::Vector2f(x, y));
-                    }
-                }
-            }
-
-            gl.lines->drawPoints(pnts, color, 5);
+            const math::Size2i size(1, 1);
+            
+            geom::TriangleMesh2 mesh = geom::checkers(boxes[0], size);
+            gl.render->drawMesh(mesh, math::Vector2i(), image::Color4f());
 
             if (p.stereo3DOptions.eyeSeparation != 0.F)
             {

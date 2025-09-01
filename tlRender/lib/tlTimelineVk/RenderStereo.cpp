@@ -80,11 +80,11 @@ namespace tl
             geom::TriangleMesh2 mesh;
             if (stereoType == StereoType::kScanlines)
             {
-                mesh = geom::scanlines(0, size);
+                mesh = geom::scanlines(box);
             }
             else if (stereoType == StereoType::kColumns)
             {
-                mesh = geom::columns(0, size);
+                mesh = geom::columns(box);
             }
             else if (stereoType == StereoType::kCheckers)
             {
@@ -115,8 +115,11 @@ namespace tl
             
                 vlk::DepthStencilStateInfo ds;
                 ds.depthTestEnable = VK_FALSE;
-                ds.stencilTestEnable = VK_TRUE;
-            
+
+                //
+                // These are for static stencils
+                //
+                ds.stencilTestEnable = VK_TRUE;            
                 VkStencilOpState stencilOp = {};
                 stencilOp.failOp = VK_STENCIL_OP_KEEP;
                 stencilOp.passOp = VK_STENCIL_OP_REPLACE;
@@ -183,20 +186,11 @@ namespace tl
             
                 vlk::DepthStencilStateInfo ds;
                 ds.depthTestEnable = VK_FALSE;
-                ds.stencilTestEnable = VK_TRUE;
-            
-                VkStencilOpState stencilOp = {};
-                stencilOp.failOp = VK_STENCIL_OP_KEEP;
-                stencilOp.passOp = VK_STENCIL_OP_KEEP;
-                stencilOp.depthFailOp = VK_STENCIL_OP_KEEP;
-                stencilOp.compareOp = VK_COMPARE_OP_EQUAL;
-                stencilOp.compareMask = 0xFF;
-                stencilOp.writeMask = 0x00;
-                stencilOp.reference = 1;
-                ds.front = stencilOp;
-                ds.back = stencilOp;
 
-                // This is the same as the above flags, but dynamically
+#if USE_DYNAMIC_STENCILS
+                //
+                // These are for dynamic stencils
+                //
                 ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
                 ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
                                          VK_STENCIL_OP_KEEP,
@@ -208,7 +202,24 @@ namespace tl
                                            0xFF);
                 vkCmdSetStencilWriteMask(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
                                          0x00);
-                vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK, 1);            
+                vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK, 1);
+#else
+                ds.stencilTestEnable = VK_TRUE;
+            
+                //
+                // These are for static stencils
+                //
+                VkStencilOpState stencilOp = {};
+                stencilOp.failOp = VK_STENCIL_OP_KEEP;
+                stencilOp.passOp = VK_STENCIL_OP_KEEP;
+                stencilOp.depthFailOp = VK_STENCIL_OP_KEEP;
+                stencilOp.compareOp = VK_COMPARE_OP_EQUAL;
+                stencilOp.compareMask = 0xFF;
+                stencilOp.writeMask = 0x00;
+                stencilOp.reference = 1;
+                ds.front = stencilOp;
+                ds.back = stencilOp;
+#endif
             
                 createPipeline("stereo_image1",
                                pipelineLayoutName,
@@ -275,11 +286,13 @@ namespace tl
             mesh.triangles.clear();
             if (stereoType == StereoType::kScanlines)
             {
-                mesh = geom::scanlines(1, size);
+                box.min.y = 1;
+                mesh = geom::scanlines(box);
             }
             else if (stereoType == StereoType::kColumns)
             {
-                mesh = geom::columns(1, size);
+                box.min.x = 1;
+                mesh = geom::columns(box);
             }
             else if (stereoType == StereoType::kCheckers)
             {
@@ -306,18 +319,8 @@ namespace tl
             
                 vlk::DepthStencilStateInfo ds;
                 ds.depthTestEnable = VK_FALSE;
-                ds.stencilTestEnable = VK_TRUE;
-            
-                VkStencilOpState stencilOp = {};
-                stencilOp.failOp = VK_STENCIL_OP_KEEP;
-                stencilOp.passOp = VK_STENCIL_OP_REPLACE;
-                stencilOp.depthFailOp = VK_STENCIL_OP_KEEP;
-                stencilOp.compareOp = VK_COMPARE_OP_ALWAYS;
-                stencilOp.compareMask = 0xFF;
-                stencilOp.writeMask = 0xFF;
-                stencilOp.reference = 1;
-                ds.front = ds.back = stencilOp;
                 
+#if USE_DYNAMIC_STENCILS
                 ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
                 ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
                                          VK_STENCIL_OP_KEEP,
@@ -330,6 +333,19 @@ namespace tl
                 vkCmdSetStencilWriteMask(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
                                          0xFF);
                 vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK, 1);
+#else
+                ds.stencilTestEnable = VK_TRUE;
+            
+                VkStencilOpState stencilOp = {};
+                stencilOp.failOp = VK_STENCIL_OP_KEEP;
+                stencilOp.passOp = VK_STENCIL_OP_REPLACE;
+                stencilOp.depthFailOp = VK_STENCIL_OP_KEEP;
+                stencilOp.compareOp = VK_COMPARE_OP_ALWAYS;
+                stencilOp.compareMask = 0xFF;
+                stencilOp.writeMask = 0xFF;
+                stencilOp.reference = 1;
+                ds.front = ds.back = stencilOp;
+#endif
 
                 // Draw stencil mask
                 createPipeline("stereo2_stencil", pipelineLayoutName,
@@ -373,18 +389,8 @@ namespace tl
             
                 vlk::DepthStencilStateInfo ds;
                 ds.depthTestEnable = VK_FALSE;
-                ds.stencilTestEnable = VK_TRUE;
-            
-                VkStencilOpState stencilOp = {};
-                stencilOp.failOp = VK_STENCIL_OP_KEEP;
-                stencilOp.passOp = VK_STENCIL_OP_KEEP;
-                stencilOp.depthFailOp = VK_STENCIL_OP_KEEP;
-                stencilOp.compareOp = VK_COMPARE_OP_EQUAL;
-                stencilOp.compareMask = 0xFF;
-                stencilOp.writeMask = 0x00;
-                stencilOp.reference = 1;
-                ds.front = ds.back = stencilOp;
-                
+
+#if USE_DYNAMIC_STENCILS
                 ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
                 ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
                                          VK_STENCIL_OP_KEEP,
@@ -398,6 +404,19 @@ namespace tl
                                          0x00);
                 vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
                                          1);
+#else
+                ds.stencilTestEnable = VK_TRUE;
+            
+                VkStencilOpState stencilOp = {};
+                stencilOp.failOp = VK_STENCIL_OP_KEEP;
+                stencilOp.passOp = VK_STENCIL_OP_KEEP;
+                stencilOp.depthFailOp = VK_STENCIL_OP_KEEP;
+                stencilOp.compareOp = VK_COMPARE_OP_EQUAL;
+                stencilOp.compareMask = 0xFF;
+                stencilOp.writeMask = 0x00;
+                stencilOp.reference = 1;
+                ds.front = ds.back = stencilOp;
+#endif
                 
                 createPipeline("stereo_image2",
                                pipelineLayoutName,

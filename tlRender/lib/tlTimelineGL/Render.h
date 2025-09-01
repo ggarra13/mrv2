@@ -67,7 +67,7 @@ namespace tl
             void drawRect(const math::Box2i&, const image::Color4f&) override;
             void drawMesh(
                 const geom::TriangleMesh2&, const math::Vector2i& position,
-                const image::Color4f&, const std::string&) override;
+                const image::Color4f&, const std::string& meshName = "") override;
             void drawColorMesh(
                 const geom::TriangleMesh2&, const math::Vector2i& position,
                 const image::Color4f&) override;

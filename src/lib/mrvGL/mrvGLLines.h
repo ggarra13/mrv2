@@ -25,11 +25,6 @@ namespace mrv
             Lines();
             ~Lines();
 
-            //! Draw a points in raster coordinates with glPointSize
-            void drawPoints(
-                const std::vector<math::Vector2f>& pts,
-                const image::Color4f& color, const int size = 1);
-
             //! Draw a single line in raster coordinates with a mesh.
             void drawLine(
                 const std::shared_ptr<timeline::IRender>& render,

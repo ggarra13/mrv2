@@ -90,11 +90,10 @@ namespace tl
             const math::Box2i&, const math::Size2i& checkerSize);
         
         //! Create a mesh for drawing scanlines.
-        geom::TriangleMesh2 scanlines(const int start,
-                                      const math::Size2i& size);
+        geom::TriangleMesh2 scanlines(const math::Box2i&);
         
         //! Create a mesh for drawing columns.
-        geom::TriangleMesh2 columns(const int start, const math::Size2i& size);
+        geom::TriangleMesh2 columns(const math::Box2i&);
         
         //! Create a sphere triangle mesh.
         TriangleMesh3

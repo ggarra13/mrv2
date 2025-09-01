@@ -1,5 +1,6 @@
 v1.4.1
 ======
+
 - Improved FPS reporting to not flicker so much or, on Vulkan, be double its value on Presentation mode.
 - Fixed starting of mrv2/vmrv2 on Windows when the installation directory has international characters like üí etc.
 - Reverted to use FIFO instead of MAILBOX presentation mode in Vulkan.
@@ -11,6 +12,7 @@ v1.4.1
 - Added VSync support to Vulkan backend.
 - Added Stereo 3D Scanlines, Columns and Checkerboard.
 - Added Render->HDR->Gamut Mapping controls.
+- Fixed Stereo 3D Checkerboard on OpenGL due to deprecation of GL_POINTS.
 
 
 v1.4.0
