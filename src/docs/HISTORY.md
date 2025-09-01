@@ -10,7 +10,7 @@ v1.4.1
 - Fixed Vulkan SDR backend with HDR to tonemap properly to 100nits.
 - Added missing Hable tonemap to Preferences->Render->Tonemap->Algorithm.
 - Added VSync support to Vulkan backend.
-- Added Stereo 3D Scanlines, Columns and Checkerboard.
+- Added Stereo 3D Scanlines, Columns and Checkerboard for Vulkan.
 - Added Render->HDR->Gamut Mapping controls.
 - Fixed Stereo 3D Checkerboard on OpenGL due to deprecation of GL_POINTS.
 - Fixed hiding of pixel bar on Vulkan backend after opening/closing Preference Window.

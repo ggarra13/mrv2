@@ -166,7 +166,7 @@ namespace tl
             _bindDescriptorSets(pipelineLayoutName, "wipe");
 
             
-            ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, rgbaMask);
+            ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, noneMask);
             
             _vkDraw("stereo");
 
@@ -366,7 +366,7 @@ namespace tl
             _bindDescriptorSets(pipelineLayoutName, "wipe");
 
 
-            ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, rgbaMask);
+            ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, noneMask);
             _vkDraw("stereo");
 
 
