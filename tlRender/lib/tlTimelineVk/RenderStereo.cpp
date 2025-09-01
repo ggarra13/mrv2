@@ -23,15 +23,25 @@ namespace tl
         {
             TLRENDER_P();
 
+            //
+            // Some constants
+            // 
             const VkColorComponentFlags rgbaMask[] =
                 { VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
                   VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
             const VkColorComponentFlags noneMask[] = { 0 };
             
-            
+
+            //
+            // Some auxiliary variables
+            //
             image::Color4f color(1.F, 0.F, 0.F);
             VkPipelineLayout pipelineLayout;
             std::string pipelineLayoutName = "stereo1";
+
+            //
+            // Create offscreen buffer to draw into
+            // 
             const math::Size2i& offscreenBufferSize = p.fbo->getSize();
             vlk::OffscreenBufferOptions offscreenBufferOptions;
             offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
@@ -167,11 +177,10 @@ namespace tl
 
             
             ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, noneMask);
-            
             _vkDraw("stereo");
 
             // Draw video
-            pipelineLayoutName = "stereo1_image";
+            pipelineLayoutName = "stereo_image1";
             
             if (p.vbos["video"])
             {
@@ -368,10 +377,6 @@ namespace tl
 
             ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, noneMask);
             _vkDraw("stereo");
-
-
-            // Draw full RGBA
-            ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, rgbaMask);
             
             // Draw video
             pipelineLayoutName = "stereo_image2";
@@ -452,6 +457,6 @@ namespace tl
             p.buffers["stereo_image"]->transitionToColorAttachment(p.cmd);
            
         }
-        
+
     } // namespace timeline_vlk
 } // namespace tl

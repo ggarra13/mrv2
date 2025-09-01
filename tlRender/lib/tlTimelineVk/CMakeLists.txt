@@ -7,6 +7,7 @@ set(PRIVATE_HEADERS
 
 set(SOURCE
     Render.cpp
+    RenderAnaglyph.cpp
     RenderPrims.cpp
     RenderVideo.cpp
     RenderVulkan.cpp

@@ -22,7 +22,8 @@
 
 //
 // Use 1 for using dynamic RGBA write masks.
+// MoltenVK does not currently support dynamic write masks.
 //
-#define USE_DYNAMIC_RGBA_WRITE_MASKS 1  
+#define USE_DYNAMIC_RGBA_WRITE_MASKS 0
 
 #include <tlTimelineVk/RenderShadersBinary.h>

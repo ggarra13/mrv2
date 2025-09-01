@@ -15,6 +15,7 @@ v1.4.1
 - Fixed Stereo 3D Checkerboard on OpenGL due to deprecation of GL_POINTS.
 - Fixed hiding of pixel bar on Vulkan backend after opening/closing Preference Window.
 - Fixed some movies's play rate not being valid for timecode due to minor rounding errors.
+- Made Stereo 3D Anaglyph work on MacOS.
 
 
 v1.4.0

@@ -213,6 +213,13 @@ namespace tl
                 const std::vector<timeline::ImageOptions>& = {},
                 const std::vector<timeline::DisplayOptions>& = {},
                 const timeline::CompareOptions& = timeline::CompareOptions());
+            void drawAnaglyph(
+                const std::vector<timeline::VideoData>&,
+                const std::vector<math::Box2i>&,
+                const float offset = 0.F,
+                const std::vector<timeline::ImageOptions>& = {},
+                const std::vector<timeline::DisplayOptions>& = {},
+                const timeline::CompareOptions& = timeline::CompareOptions());
             void drawMask(float pct = 0.F);
 
 

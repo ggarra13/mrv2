@@ -49,39 +49,16 @@ namespace mrv
         {
             TLRENDER_P();
             MRV2_VK();
-            
-            const VkColorComponentFlags redMask[] =
-                { VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_A_BIT };
-            ctx.vkCmdSetColorWriteMaskEXT(vk.cmd, 0, 1, redMask);
 
-            vk.render->drawVideo(
-                {p.videoData[left]},
-                timeline::getBoxes(timeline::CompareMode::A,
-                                   {p.videoData[left]}),
+
+            vk.render->drawAnaglyph(
+                {p.videoData[left],
+                 p.videoData[right]},
+                timeline::getBoxes(timeline::CompareMode::Wipe, {
+                        p.videoData[left],
+                        p.videoData[right]}),
+                p.stereo3DOptions.eyeSeparation,
                 p.imageOptions, p.displayOptions);
-
-            if (p.stereo3DOptions.eyeSeparation != 0.F)
-            {
-                math::Matrix4x4f mvp = vk.render->getTransform();
-                mvp = mvp * math::translate(math::Vector3f(
-                                                p.stereo3DOptions.eyeSeparation, 0.F, 0.F));
-                vk.render->setTransform(mvp);
-            }
-
-            const VkColorComponentFlags cyanMask[] =
-                { VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT |
-                  VK_COLOR_COMPONENT_A_BIT };
-            ctx.vkCmdSetColorWriteMaskEXT(vk.cmd, 0, 1, cyanMask);
-            
-            vk.render->drawVideo(
-                {p.videoData[right]},
-                timeline::getBoxes(timeline::CompareMode::A, {p.videoData[right]}),
-                p.imageOptions, p.displayOptions);
-
-            const VkColorComponentFlags allMask[] =
-                { VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
-                  VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
-            ctx.vkCmdSetColorWriteMaskEXT(vk.cmd, 0, 1, allMask);
         }
 
         void Viewport::_drawScanlines(int left, int right) noexcept
