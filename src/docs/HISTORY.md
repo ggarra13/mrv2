@@ -16,6 +16,8 @@ v1.4.1
 - Fixed hiding of pixel bar on Vulkan backend after opening/closing Preference Window.
 - Fixed some movies's play rate not being valid for timecode due to minor rounding errors.
 - Made Stereo 3D Anaglyph work on MacOS.
+- Updated Frame Entry Widgets to allow calculations, so that you can type:
+  	  10 + 5 and get 15.
 
 
 v1.4.0
