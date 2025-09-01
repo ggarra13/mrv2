@@ -21,6 +21,32 @@ extern "C"
 namespace
 {
     const char* kModule = "ffmpeg";
+    
+    static constexpr std::array<double, 16> valid_timecode_rates{
+        { 1.0,
+          12.0,
+          23.97,
+          23.976,
+          23.98,
+          24000.0 / 1001.0,
+          24.0,
+          25.0,
+          29.97,
+          30000.0 / 1001.0,
+          30.0,
+          48.0,
+          50.0,
+          59.94,
+          60000.0 / 1001.0,
+          60.0 }
+    };
+    
+    bool is_valid_timecode_rate(double fps)
+    {
+        auto b = valid_timecode_rates.begin(), e = valid_timecode_rates.end();
+        return std::find(b, e, fps) != e;
+    }
+    
 }
 
 namespace tl
@@ -748,6 +774,13 @@ namespace tl
                     }
 
                     speed = av_q2d(_avSpeed);
+
+                    // Some movies can return a rounding error in speed
+                    // calculation
+                    if (!is_valid_timecode_rate(speed))
+                    {
+                        speed = round(speed * 1000.F) / 1000.F;
+                    }
 
                     if (avVideoStream->nb_frames > 0)
                     {

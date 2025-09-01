@@ -13,8 +13,8 @@ v1.4.1
 - Added Stereo 3D Scanlines, Columns and Checkerboard.
 - Added Render->HDR->Gamut Mapping controls.
 - Fixed Stereo 3D Checkerboard on OpenGL due to deprecation of GL_POINTS.
-- Fixed hiding of pixel bar on Vulkan backend after opening/closing Preference
-  Window.
+- Fixed hiding of pixel bar on Vulkan backend after opening/closing Preference Window.
+- Fixed some movies's play rate not being valid for timecode due to minor rounding errors.
 
 
 v1.4.0
