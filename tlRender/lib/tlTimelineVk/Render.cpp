@@ -99,6 +99,7 @@ namespace
         return output;
     }
 
+#if defined(TLRENDER_LIBPLACEBO)
     VkFormat to_vk_format(pl_fmt fmt)
     {
         int size = fmt->internal_size / fmt->num_components;
@@ -222,7 +223,8 @@ namespace
 
         return VK_FORMAT_UNDEFINED;
     }
-
+#endif
+    
 } // namespace
 
 namespace tl
@@ -2402,6 +2404,7 @@ namespace tl
                 }
 
 
+#if defined(TLRENDER_LIBPLACEBO)
                 try
                 {
                     if (p.placeboData)
@@ -2417,6 +2420,7 @@ namespace tl
                     p.placeboData.reset();
                     throw e;
                 }
+#endif
                     
 #if USE_PRECOMPILED_SHADERS
                 p.shaders["display"] =
@@ -2479,11 +2483,14 @@ namespace tl
         }
     
 
+            
+#if defined(TLRENDER_LIBPLACEBO)
         std::string Render::_debugPLVar(const struct pl_shader_var& shader_var)
         {
+            
+            std::stringstream s;
             const struct pl_var var = shader_var.var;
             std::string glsl_type = pl_var_glsl_type_name(var);
-            std::stringstream s;
             s << "const " << glsl_type << " " << var.name;
             if (!shader_var.data)
             {
@@ -2554,7 +2561,10 @@ namespace tl
                     break;
                 }
             }
+            
             return s.str();
         }
+#endif
+        
     } // namespace timeline_vlk
 } // namespace tl

@@ -1136,9 +1136,11 @@ namespace tl
                 if (pushSize > 0)
                 {
                     std::vector<uint8_t> pushData(pushSize, 0);
-                    const pl_shader_res* res = p.placeboData->res;
+
                     VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+#if defined(TLRENDER_LIBPLACEBO)
                     std::size_t currentOffset = 0;
+                    const pl_shader_res* res = p.placeboData->res;
                     for (int i = 0; i < res->num_variables; ++i)
                     {
                         const struct pl_shader_var& shader_var = res->variables[i];
@@ -1172,6 +1174,7 @@ namespace tl
                     vkCmdPushConstants(p.cmd, pipelineLayout,
                                        VK_SHADER_STAGE_FRAGMENT_BIT, 0,
                                        pushData.size(), pushData.data());
+#endif
                 }
 
             
