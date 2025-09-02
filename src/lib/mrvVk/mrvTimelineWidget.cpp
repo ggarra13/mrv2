@@ -843,7 +843,6 @@ namespace mrv
             const math::Size2i renderSize(pixel_w(), pixel_h());
             
             VkCommandBuffer cmd = getCurrentCommandBuffer();
-            end_render_pass();
 
             std::vector<int> markers;
             if (p.player && p.player->hasAnnotations())

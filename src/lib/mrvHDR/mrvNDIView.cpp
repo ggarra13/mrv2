@@ -1262,7 +1262,6 @@ void main() {
         {
             return;
         }
-        end_render_pass();
 
         update_texture(cmd);
         

@@ -569,8 +569,8 @@ namespace mrv
             
             // Get the command buffer started for the current frame.
             VkCommandBuffer cmd = getCurrentCommandBuffer();
-            end_render_pass();
 
+            // Store command for easy access.
             vk.cmd = cmd;
             
             const auto& viewportSize = getViewportSize();
