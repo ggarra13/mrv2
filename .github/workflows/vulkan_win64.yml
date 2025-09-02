@@ -102,11 +102,15 @@ jobs:
     - name: Install MSYS2 Dependencies
       run: |
         pacman -S --noconfirm nasm rsync
+        
+    - name: List disk space
+      shell: cmd
+      run: |
+        wmic logicaldisk get freespace, size, caption
       
     - name: Build mrv2
       run: |
-        ./etc/runme_nolog.sh -v -t package -D TLRENDER_USD=OFF \
-        -D MRV2_DEMO=ON -vk
+        ./etc/runme_nolog.sh -v -t package -D TLRENDER_USD=OFF -vk
         
     - name: Upload binaries  # Conditional step
       run: |

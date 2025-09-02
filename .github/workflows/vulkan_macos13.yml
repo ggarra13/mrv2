@@ -81,9 +81,13 @@ jobs:
       run: |
         chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
 
+    - name: List disk space
+      run: |
+        df -k
+        
     - name: Build mrv2
       run: |
-        ./etc/runme_nolog.sh -D TLRENDER_USD=OFF -D MRV2_DEMO=ON -t package -vk
+        ./etc/runme_nolog.sh -D TLRENDER_USD=OFF -t package -vk
       
     - name: Upload binaries
       run: |

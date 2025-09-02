@@ -110,6 +110,10 @@ jobs:
     - name: Set executable permissions
       run: |
         chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
+        
+    - name: List disk space
+      run: |
+        df -k
 
     - name: Build mrv2
       run: |

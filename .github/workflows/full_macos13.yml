@@ -63,9 +63,9 @@ jobs:
       run: |
         chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
 
-    # - name: Install cmake
-    #   run: |
-    #     ./etc/install_cmake.sh
+    - name: List disk space
+      run: |
+        df -k
 
     - name: Build mrv2
       run: |

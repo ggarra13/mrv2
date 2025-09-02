@@ -95,10 +95,14 @@ jobs:
     - name: Set executable permissions
       run: |
         chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
+        
+    - name: List disk space
+      run: |
+        df -k
 
     - name: Build mrv2
       run: |
-        ./etc/runme_nolog.sh -t package -vk -D MRV2_DEMO=ON
+        ./etc/runme_nolog.sh -t package -vk
       
     - name: Upload binaries  # Conditional step
       run: |
