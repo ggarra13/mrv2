@@ -570,6 +570,10 @@ namespace mrv
             // Get the command buffer started for the current frame.
             VkCommandBuffer cmd = getCurrentCommandBuffer();
 
+            // Clear the frame
+            begin_render_pass(cmd);
+            end_render_pass(cmd);
+
             // Store command for easy access.
             vk.cmd = cmd;
             

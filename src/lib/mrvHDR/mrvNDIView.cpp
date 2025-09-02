@@ -1262,6 +1262,10 @@ void main() {
         {
             return;
         }
+        
+        // Clear the frame
+        begin_render_pass(cmd);
+        end_render_pass(cmd);
 
         update_texture(cmd);
         
