@@ -342,7 +342,7 @@ if(tlRender_FOUND AND NOT TARGET tlRender::tlDevice)
 endif()
 if (tlRender_GL_FOUND)
     if(tlRender_FOUND AND TLRENDER_GL AND NOT TARGET tlRender::tlGL)
-	set(tlRender_tlGL_LIBRARIES "tlRender::tlCore;tlRender::glad")
+	set(tlRender_tlGL_LIBRARIES "tlRender::tlCore;tlRender::glad;glfw3")
 	add_library(tlRender::tlGL UNKNOWN IMPORTED)
 	set_target_properties(tlRender::tlGL PROPERTIES
             IMPORTED_LOCATION "${tlRender_tlGL_LIBRARY}"

@@ -20,10 +20,7 @@ set(SOURCES
 add_library(mrvEdit ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-set(LIBRARIES mrvWidgets)
-if(MRV2_NETWORK)
-    list(APPEND LIBRARIES mrvNetwork)
-endif()
+set(LIBRARIES mrvWidgets mrvNetwork)
 list(APPEND LIBRARIES OTIO)
 
 target_link_libraries(mrvEdit PUBLIC ${LIBRARIES} )

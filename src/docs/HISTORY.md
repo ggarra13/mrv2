@@ -9,7 +9,7 @@ v1.4.1
 - Fixed OpenGL backend with HDR to tonemap properly to 100nits.
 - Fixed Vulkan SDR backend with HDR to tonemap properly to 100nits.
 - Added missing Hable tonemap to Preferences->Render->Tonemap->Algorithm.
-- Added VSync support to Vulkan backend.
+- Added VSync support to Vulkan backend (so that FIFO/MAILBOX can be chosen).
 - Added Stereo 3D Scanlines, Columns and Checkerboard for Vulkan.
 - Added Render->HDR->Gamut Mapping controls.
 - Fixed Stereo 3D Checkerboard on OpenGL due to deprecation of GL_POINTS.
@@ -22,6 +22,8 @@ v1.4.1
 - Updated compile to work with cmake 4.1.1.
 - Updated to OpenEXR v3.3.5.
 - Updated to use Imath v3.2.1 (from 3.1.9)
+- Updated to use cpptrace v1.0.4
+
 
 v1.4.0
 ======
