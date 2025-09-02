@@ -93,6 +93,8 @@ namespace mrv
                     p.value = otime::RationalTime(v, 1.0);
                     break;
                 default:
+                    p.value = otime::RationalTime::from_timecode(value(),
+                                                                 p.value.rate());
                     break;
                 }
                 _textUpdate();

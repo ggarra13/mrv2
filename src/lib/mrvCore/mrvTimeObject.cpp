@@ -75,7 +75,7 @@ namespace mrv
             snprintf(
                 out, 13, "%s",
                 time::isValid(time) ? time.to_timecode(&errorStatus).c_str()
-                                    : "00:00:00:00");
+                                    : "--:--:--:--");
             break;
         }
         default:
