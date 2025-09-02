@@ -134,8 +134,7 @@ ${date}.
 
 It does not support NDI® on any platform.
 
-It works on Windows 8.1+ (without USD support), Ubuntu 22.04 LTS+,
-macOS 13 (amd64 also without USD support) and macOS M1/M2/M3 (arm64). 
+It works on Windows 8.1+, Ubuntu 22.04 LTS+, macOS 13 (amd64) and macOS M1/M2/M3 (arm64). 
 
 It may contain bugs, new untested features and more.
 
@@ -149,13 +148,13 @@ Prices after v1.4.0
 -------------------
 * Buy mrv2 (or Vulkan vmrv2) for personal use at a cost of u\$50, paid by a Paypal donation (I will use the email to verify purchase and issue a yearly license).
 
-* Buy mrv2 (or Vulkan vmrv2) for personal use to own at a cost of u\$150, paid by a Paypal donation (I will use the email to verify purchase and issue a non-expiring license).
+* Buy mrv2 (or Vulkan vmrv2) for personal use to own at a cost of u\$150, paid by a Paypal donation (I will use the email to verify purchase and issue a non-expiring, node-locked license).
 
 Differences between Vulkan and OpenGL
 -------------------------------------
 
 - Vulkan is a new open source API, compared to OpenGL that it might get deprecated on some platforms like macOS.  It supports true HDR (High Dynamic Range), it is between 20% and 50% faster than the OpenGL version but it does not support OpenUSD.
-- OpenGL's only benefit at this point is that it supports OpenUSD.
+- OpenGL's only benefit at this point is that it supports OpenUSD and runs better on older OSes like MacOS Intel or Linux's X11 desktops.
 
 Vulkan Demo Version
 -------------------

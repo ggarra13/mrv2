@@ -110,7 +110,7 @@ jobs:
       
     - name: Build mrv2
       run: |
-        ./etc/runme_nolog.sh -v -t package -D TLRENDER_USD=OFF -vk
+        ./etc/runme_nolog.sh -v -t package -vk
         
     - name: Upload binaries  # Conditional step
       run: |

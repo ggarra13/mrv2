@@ -39,7 +39,6 @@ if(WIN32)
     set(USD_INSTALL_COMMAND
         ${CMAKE_COMMAND} -E copy_directory ${CMAKE_INSTALL_PREFIX}/lib/usd  ${CMAKE_INSTALL_PREFIX}/bin/usd
         COMMAND copy "${cmake_install}\\lib\\*.dll" "${cmake_install}\\bin")
-
 endif()
 
 ExternalProject_Add(

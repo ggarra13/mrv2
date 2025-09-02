@@ -105,7 +105,7 @@ jobs:
       
     - name: Build mrv2
       run: |
-        ./etc/runme_nolog.sh -v -D TLRENDER_USD=OFF -t package
+        ./etc/runme_nolog.sh -v -t package
         
     - name: Upload binaries  # Conditional step (beta branch only)
       if: github.ref_name == 'beta'
