@@ -1,7 +1,7 @@
 v1.4.1
 ======
 
-- Improved FPS reporting to not flicker so much or, on Vulkan, be double its value on Presentation mode.
+- Improved FPS reporting to not flicker so much or, on Wayland + Vulkan, be double its value on Presentation mode.
 - Fixed starting of mrv2/vmrv2 on Windows when the installation directory has international characters like üí etc.
 - Reverted to use FIFO instead of MAILBOX presentation mode in Vulkan.
 - Some Unicode (UTF-8) fixes.
@@ -23,6 +23,7 @@ v1.4.1
 - Updated to OpenEXR v3.3.5.
 - Updated to use Imath v3.2.1 (from 3.1.9)
 - Updated to use cpptrace v1.0.4
+- Updated beta builds to build OpenUSD on Windows and macOS 13.
 
 
 v1.4.0
