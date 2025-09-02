@@ -3,7 +3,7 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-CMAKE_RELEASE=3.31.8 
+CMAKE_RELEASE=4.1.1
 CMAKE_PLATFORM=macos-universal
 CMAKE_EXT=tar.gz
 

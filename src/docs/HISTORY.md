@@ -16,9 +16,12 @@ v1.4.1
 - Fixed hiding of pixel bar on Vulkan backend after opening/closing Preference Window.
 - Fixed some movies's play rate not being valid for timecode due to minor rounding errors.
 - Made Stereo 3D Anaglyph work on MacOS.
-- Updated Frame Entry Widgets to allow calculations, so that you can type:
+- Updated Frame/Seconds Entry Widgets to allow calculations, so that you can
+  type, for example:
   	  10 + 5 and get 15.
-
+- Updated compile to work with cmake 4.1.1.
+- Updated to OpenEXR v3.3.5.
+- Updated to use Imath v3.2.1 (from 3.1.9)
 
 v1.4.0
 ======
