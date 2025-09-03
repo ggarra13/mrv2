@@ -25,7 +25,7 @@
 
 #include "mrvFl/mrvIO.h"
 
-#include "mrvWidgets/mrvMultilineInput.h"  // for annationsPanel->notes
+#include "mrvWidgets/mrvMultilineInput.h"  // for annotationsPanel->notes
 
 #include "mrvCore/mrvColor.h"
 #include "mrvCore/mrvColorSpaces.h"
@@ -33,9 +33,7 @@
 #include "mrvCore/mrvSequence.h"
 #include "mrvCore/mrvI8N.h"
 
-
 #include <tlTimelineVk/RenderShadersBinary.h>
-
 
 #include <tlCore/FontSystem.h>
 #include <tlCore/StringFormat.h>

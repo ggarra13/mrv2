@@ -128,7 +128,8 @@ namespace mrv
             Fl_Vk_Window::show();
 
 #ifdef FLTK_USE_WAYLAND
-            // Not sure if this is needed
+            // \@todo: Not sure if this is needed.  It was added to provide
+            //         transparency on Wayland surfaces.
             if (fl_wl_display())
             {
                 wl_surface_set_opaque_region(fl_wl_surface(fl_wl_xid(this)), NULL);
