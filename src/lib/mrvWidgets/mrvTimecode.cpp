@@ -92,9 +92,15 @@ namespace mrv
                     v = eval(value());
                     p.value = otime::RationalTime(v, 1.0);
                     break;
-                default:
+                case TimeUnits::Timecode:
+                {
+                    otime::ErrorStatus status;
                     p.value = otime::RationalTime::from_timecode(value(),
-                                                                 p.value.rate());
+                                                                 p.value.rate(),
+                                                                 &status);
+                    break;
+                }
+                default:
                     break;
                 }
                 _textUpdate();

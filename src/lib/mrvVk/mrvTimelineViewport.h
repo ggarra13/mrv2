@@ -491,3 +491,5 @@ namespace mrv
     } // namespace vulkan
 
 } // namespace mrv
+
+#include "mrvVk/mrvTimelineViewportPrivate.h"

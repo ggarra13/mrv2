@@ -20,10 +20,13 @@ v1.4.1
   type, for example:
   	  10 + 5 and get 15.
 - Updated compile to work with cmake 4.1.1.
-- Updated to OpenEXR v3.3.5.
+- Updated to OpenEXR v3.4 (from 3.2).
 - Updated to use Imath v3.2.1 (from 3.1.9)
 - Updated to use cpptrace v1.0.4
 - Updated beta builds to build OpenUSD on Windows and macOS 13.
+- Refactored mrvGL/mrvTimelineViewport.cpp and mrvVk/mrvTimelineViewport.cpp to
+  common classes in mrvCommonBackend/mrvTimelineViewport.cpp
+- Flipped Y coordinate of pixel toolbar on the Vulkan backend to make it consistent with the OpenGL backend and OpenEXR which also has 0, 0 at the bottom left corner.
 
 
 v1.4.0

@@ -299,7 +299,7 @@ namespace mrv
             void dragAndDrop(const std::string& text) noexcept;
 
             //! Update the pixel bar's coordinates and color information.
-            void updatePixelBar() const noexcept;
+            void updatePixelBar() noexcept;
 
             //! Get the text widget if available.
             MultilineInput* getMultilineInput() const noexcept;
@@ -427,7 +427,7 @@ namespace mrv
             void _hidePixelBar() const noexcept;
             void _togglePixelBar() const noexcept;
 
-            void _updatePixelBar() const noexcept;
+            void _updatePixelBar() noexcept;
             void _updatePixelBar(image::Color4f& rgba) const noexcept;
             bool _shouldUpdatePixelBar() const noexcept;
             bool _isPlaybackStopped() const noexcept;
@@ -489,3 +489,5 @@ namespace mrv
     } // namespace opengl
 
 } // namespace mrv
+
+#include "mrvGL/mrvTimelineViewportPrivate.h"

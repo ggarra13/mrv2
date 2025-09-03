@@ -1907,6 +1907,12 @@ namespace mrv
                 item->clear();
         }
 
+        idx = menu->add(_("Voice Annotation/Record"), 0,
+                        (Fl_Callback*) record_voice_annotation_cb, ui, 0);
+        idx = menu->add(_("Voice Annotation/Play"), 0,
+                        (Fl_Callback*) play_voice_annotation_cb, ui, 0);
+                        
+
 #ifdef MRV2_PYBIND11
         for (const auto& entry : pythonMenus)
         {
@@ -1954,7 +1960,7 @@ namespace mrv
                 (void*)&pythonMenus.at(entry), mode);
         }
 #endif
-
+        
         menu->add(
             _("Help/Documentation"), 0, (Fl_Callback*)help_documentation_cb,
             ui);

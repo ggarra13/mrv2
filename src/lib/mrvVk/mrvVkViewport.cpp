@@ -8,10 +8,6 @@
 #include "mrViewer.h"
 #include "mrvHotkeyUI.h"
 
-#include "mrvApp/mrvSettingsObject.h"
-
-#include "mrvPanels/mrvPanelsCallbacks.h"
-
 #include "mrvNetwork/mrvDummyClient.h"
 
 #include "mrvUI/mrvDesktop.h"
@@ -27,9 +23,7 @@
 #include "mrvVk/mrvTimelineViewportPrivate.h"
 #include "mrvVk/mrvVkViewport.h"
 
-#include "mrvFl/mrvOCIO.h"
 #include "mrvFl/mrvIO.h"
-#include "mrvFl/mrvTimelinePlayer.h"
 
 #include "mrvWidgets/mrvMultilineInput.h"
 
