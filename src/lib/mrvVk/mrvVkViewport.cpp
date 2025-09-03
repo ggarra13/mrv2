@@ -52,11 +52,6 @@
 #include <FL/vk_enum_string_helper.h>
 
 
-
-
-
-
-
 namespace
 {
     const char* kModule = "view";
