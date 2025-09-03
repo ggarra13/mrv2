@@ -833,48 +833,9 @@ namespace mrv
 
                         //
                         // Read Annotation Image
-                        //                
-                        switch(bufferInfo.pixelType)
-                        {
-                        case image::PixelType::RGBA_U8:
-                            flipImageInY<uint8_t>(
-                                reinterpret_cast<uint8_t*>(bufferImage->getData()),
-                                width, height, 4);
-                            break;
-                        case image::PixelType::RGB_U16:
-                            flipImageInY<uint16_t>(
-                                reinterpret_cast<uint16_t*>(bufferImage->getData()),
-                                width, height, 3);
-                            break;
-                        case image::PixelType::RGBA_U16:
-                            flipImageInY<uint16_t>(
-                                reinterpret_cast<uint16_t*>(bufferImage->getData()),
-                                width, height, 4);
-                            break;
-                        case image::PixelType::RGB_F16:
-                            flipImageInY<half>(
-                                reinterpret_cast<half*>(bufferImage->getData()),
-                                width, height, 3);
-                            break;
-                        case image::PixelType::RGBA_F16:
-                            flipImageInY<half>(
-                                reinterpret_cast<half*>(bufferImage->getData()),
-                                width, height, 4);
-                            break;
-                        case image::PixelType::RGB_F32:
-                            flipImageInY<float>(
-                                reinterpret_cast<float*>(bufferImage->getData()),
-                                width, height, 3);
-                            break;
-                        case image::PixelType::RGBA_F32:
-                            flipImageInY<float>(
-                                reinterpret_cast<float*>(bufferImage->getData()),
-                                width, height, 4);
-                            break;
-                        default:
-                            LOG_ERROR("Unknown buffer for flipImageInY info pixel type " << bufferInfo.pixelType);
-                            break;
-                        }
+                        //
+                        flipImageInY(bufferImage);
+                        
                         
                         if (overlayBuffer)
                         {
@@ -897,7 +858,6 @@ namespace mrv
                             }
                             else
                             {
-                                LOG_ERROR("annotation image data not retrieved");
                                 annotationImage->zero();
                             }
                             
@@ -911,69 +871,7 @@ namespace mrv
                         //
                         // Composite output
                         //
-                        switch(bufferInfo.pixelType)
-                        {
-                        case image::PixelType::RGB_U16:
-                            compositeImageOverNoAlpha<uint16_t>(
-                                reinterpret_cast<uint16_t*>(
-                                    bufferImage->getData()),
-                                annotationImage->getData(),
-                                width, height);
-                            break;
-                        case image::PixelType::RGB_F16:
-                            compositeImageOverNoAlpha<half>(
-                                reinterpret_cast<half*>(
-                                    bufferImage->getData()),
-                                annotationImage->getData(),
-                                width, height);
-                            break;
-                        case image::PixelType::RGB_F32:
-                            compositeImageOverNoAlpha<float>(
-                                reinterpret_cast<float*>(
-                                    bufferImage->getData()),
-                                annotationImage->getData(),
-                                width, height);
-                            break;
-                        case image::PixelType::RGB_U8:
-                            compositeImageOverNoAlpha<uint8_t>(
-                                reinterpret_cast<uint8_t*>(
-                                    bufferImage->getData()),
-                                annotationImage->getData(),
-                                width, height);
-                            break;
-                        case image::PixelType::RGBA_U16:
-                            compositeImageOver<uint16_t>(
-                                reinterpret_cast<uint16_t*>(
-                                    bufferImage->getData()),
-                                annotationImage->getData(),
-                                width, height);
-                            break;
-                        case image::PixelType::RGBA_F16:
-                            compositeImageOver<half>(
-                                reinterpret_cast<half*>(
-                                    bufferImage->getData()),
-                                annotationImage->getData(),
-                                width, height);
-                            break;
-                        case image::PixelType::RGBA_F32:
-                            compositeImageOver<float>(
-                                reinterpret_cast<float*>(
-                                    bufferImage->getData()),
-                                annotationImage->getData(),
-                                width, height);
-                            break;
-                        case image::PixelType::RGBA_U8:
-                            compositeImageOver<uint8_t>(
-                                reinterpret_cast<uint8_t*>(
-                                    bufferImage->getData()),
-                                annotationImage->getData(),
-                                width, height);
-                            break;
-                        default:
-                            LOG_ERROR("Unknown composite type " << bufferInfo.pixelType);
-                            break;
-                        }
-                        
+                        composite_RGBA_U8(bufferImage, annotationImage);
                     }
                     else
                     {

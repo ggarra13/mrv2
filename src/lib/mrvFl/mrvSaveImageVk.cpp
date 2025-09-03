@@ -381,46 +381,8 @@ namespace mrv
 
                 //
                 // Read Annotation Image
-                //                
-                switch(outputInfo.pixelType)
-                {
-                default:
-                case image::PixelType::RGBA_U8:
-                    flipImageInY<uint8_t>(
-                        reinterpret_cast<uint8_t*>(
-                            tmpImage->getData()), width, height, 4);
-                    break;
-                case image::PixelType::RGB_U16:
-                    flipImageInY<uint16_t>(
-                        reinterpret_cast<uint16_t*>(
-                            tmpImage->getData()), width, height, 3);
-                    break;
-                case image::PixelType::RGBA_U16:
-                    flipImageInY<uint16_t>(
-                        reinterpret_cast<uint16_t*>(
-                            tmpImage->getData()), width, height, 4);
-                    break;
-                case image::PixelType::RGB_F16:
-                    flipImageInY<half>(
-                        reinterpret_cast<half*>(
-                            tmpImage->getData()), width, height, 3);
-                    break;
-                case image::PixelType::RGBA_F16:
-                    flipImageInY<half>(
-                        reinterpret_cast<half*>(
-                            tmpImage->getData()), width, height, 4);
-                    break;
-                case image::PixelType::RGB_F32:
-                    flipImageInY<float>(
-                        reinterpret_cast<float*>(
-                            tmpImage->getData()), width, height, 3);
-                    break;
-                case image::PixelType::RGBA_F32:
-                    flipImageInY<float>(
-                        reinterpret_cast<float*>(
-                            tmpImage->getData()), width, height, 4);
-                    break;
-                }
+                //
+                flipImageInY(tmpImage);
                 
                 annotationImage = image::Image::create(tempImageInfo);
                         
@@ -457,66 +419,7 @@ namespace mrv
                 //
                 // Composite output
                 //
-                switch(outputInfo.pixelType)
-                {
-                case image::PixelType::RGB_U8:
-                    compositeImageOverNoAlpha<uint8_t>(
-                        reinterpret_cast<uint8_t*>(
-                            tmpImage->getData()),
-                        annotationImage->getData(),
-                        width, height);
-                    break;
-                case image::PixelType::RGB_U16:
-                    compositeImageOverNoAlpha<uint16_t>(
-                        reinterpret_cast<uint16_t*>(
-                            tmpImage->getData()),
-                        annotationImage->getData(),
-                        width, height);
-                    break;
-                case image::PixelType::RGBA_U16:
-                    compositeImageOver<uint16_t>(
-                        reinterpret_cast<uint16_t*>(
-                            tmpImage->getData()),
-                        annotationImage->getData(),
-                        width, height);
-                    break;
-                case image::PixelType::RGB_F16:
-                    compositeImageOverNoAlpha<half>(
-                        reinterpret_cast<half*>(
-                            tmpImage->getData()),
-                        annotationImage->getData(),
-                        width, height);
-                    break;
-                case image::PixelType::RGBA_F16:
-                    compositeImageOver<half>(
-                        reinterpret_cast<half*>(
-                            tmpImage->getData()),
-                        annotationImage->getData(),
-                        width, height);
-                    break;
-                case image::PixelType::RGB_F32:
-                    compositeImageOverNoAlpha<float>(
-                        reinterpret_cast<float*>(
-                            tmpImage->getData()),
-                        annotationImage->getData(),
-                        width, height);
-                    break;
-                case image::PixelType::RGBA_F32:
-                    compositeImageOver<float>(
-                        reinterpret_cast<float*>(
-                            tmpImage->getData()),
-                        annotationImage->getData(),
-                        width, height);
-                    break;
-                default:
-                case image::PixelType::RGBA_U8:
-                    compositeImageOver<uint8_t>(
-                        reinterpret_cast<uint8_t*>(
-                            tmpImage->getData()),
-                        annotationImage->getData(),
-                        width, height);
-                    break;
-                }
+                composite_RGBA_U8(tmpImage, annotationImage);
                 
                 vkFreeCommandBuffers(device, commandPool, 1, &cmd);
                         

@@ -27,6 +27,7 @@ v1.4.1
 - Refactored mrvGL/mrvTimelineViewport.cpp and mrvVk/mrvTimelineViewport.cpp to
   common classes in mrvCommonBackend/mrvTimelineViewport.cpp
 - Flipped Y coordinate of pixel toolbar on the Vulkan backend to make it consistent with the OpenGL backend and OpenEXR which also has 0, 0 at the bottom left corner.
+- Fixed PDF thumbnail creation under Vulkan backend.
 
 
 v1.4.0

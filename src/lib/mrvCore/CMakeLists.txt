@@ -33,6 +33,7 @@ set(HEADERS
     mrvString.h
     mrvTimeObject.h
     mrvUtil.h
+    mrvWait.h
 )
 
 set(SOURCES
@@ -43,6 +44,7 @@ set(SOURCES
     mrvFonts.cpp
     mrvHome.cpp
     mrvHotkey.cpp
+    mrvImage.cpp
     mrvLocale.cpp
     mrvMedia.cpp
     mrvMemory.cpp
@@ -55,6 +57,7 @@ set(SOURCES
     mrvString.cpp
     mrvTimeObject.cpp
     mrvUtil.cpp
+    mrvWait.cpp
 )
 
 set(LIBRARIES tlRender::tlIO tlRender::tlCore OpenEXR::OpenEXR Imath::Imath ${FLTK_LIBRARIES} )
