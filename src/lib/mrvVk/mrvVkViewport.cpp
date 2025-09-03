@@ -13,19 +13,19 @@
 #include "mrvUI/mrvDesktop.h"
 #include "mrvUI/mrvMonitor.h"
 
+#include "mrvViewport/mrvTimelineViewport.h"
+
 #include "mrvVk/mrvVkViewportPrivate.h"
 #include "mrvVk/mrvVkDefines.h"
 #include "mrvVk/mrvVkUtil.h"
 #include "mrvVk/mrvVkShaders.h"
 #include "mrvVk/mrvVkShadersBinary.h"
 #include "mrvVk/mrvVkShape.h"
-#include "mrvVk/mrvTimelineViewport.h"
-#include "mrvVk/mrvTimelineViewportPrivate.h"
 #include "mrvVk/mrvVkViewport.h"
 
 #include "mrvFl/mrvIO.h"
 
-#include "mrvWidgets/mrvMultilineInput.h"
+#include "mrvWidgets/mrvMultilineInput.h"  // for annationsPanel->notes
 
 #include "mrvCore/mrvColor.h"
 #include "mrvCore/mrvColorSpaces.h"

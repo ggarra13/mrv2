@@ -12,13 +12,7 @@
 #include "mrvFl/mrvTimelinePlayer.h"
 #include "mrvFl/mrvLaserFadeData.h"
 
-#ifdef OPENGL_BACKEND
-#include "mrvGL/mrvTimelineViewport.h"
-#endif
-
-#ifdef VULKAN_BACKEND
-#include "mrvVk/mrvTimelineViewport.h"
-#endif
+#include "mrvViewport/mrvTimelineViewport.h"
 
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvMultilineInput.h"
@@ -396,7 +390,7 @@ namespace mrv
             }
 #endif
             
-            int ret = SUPER_CLASS::handle(event);
+            int ret = BACKEND_SUPER_CLASS::handle(event);
             if ((event == FL_KEYDOWN || event == FL_KEYUP ||
                  (event == FL_PUSH && ret == 1)) &&
                 Fl::focus() != this)

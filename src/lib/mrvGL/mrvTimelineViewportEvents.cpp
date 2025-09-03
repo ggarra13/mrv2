@@ -18,9 +18,9 @@
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvMultilineInput.h"
 
+#include "mrvViewport/mrvTimelineViewport.h"
+
 #include "mrvGL/mrvGLShape.h"
-#include "mrvGL/mrvTimelineViewport.h"
-#include "mrvGL/mrvTimelineViewportPrivate.h"
 
 #include "mrvPanels/mrvComparePanel.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"

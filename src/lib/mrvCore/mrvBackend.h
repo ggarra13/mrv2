@@ -9,13 +9,13 @@
 #  define VULKAN_NAME "Vulkan"
 #  define BACKEND mrv::vulkan
 #  define BACKEND_NAMESPACE vulkan
-#  define SUPER_CLASS VkWindow
+#  define BACKEND_SUPER_CLASS VkWindow
 #elif defined(MRV2_BACKEND_GL)
 #  define OPENGL_BACKEND 1
 #  define OPENGL_NAME "OpenGL"
 #  define BACKEND mrv::opengl
 #  define BACKEND_NAMESPACE opengl
-#  define SUPER_CLASS GLWindow
+#  define BACKEND_SUPER_CLASS GLWindow
 #endif
 
 

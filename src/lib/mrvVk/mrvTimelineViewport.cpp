@@ -11,8 +11,7 @@
 
 #include "mrvUI/mrvDesktop.h"
 
-#include "mrvVk/mrvTimelineViewport.h"
-#include "mrvVk/mrvTimelineViewportPrivate.h"
+#include "mrvViewport/mrvTimelineViewport.h"
 
 namespace
 {

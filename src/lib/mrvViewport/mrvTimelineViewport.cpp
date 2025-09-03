@@ -9,8 +9,6 @@
 #include <winsock2.h>
 #endif
 
-#include "mrvCore/mrvBackend.h"
-
 #include "mrViewer.h"
 
 #include <tlDevice/IOutput.h>
@@ -27,15 +25,7 @@
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvMultilineInput.h"
 
-#ifdef OPENGL_BACKEND
-#include "mrvGL/mrvTimelineViewport.h"
-#include "mrvGL/mrvTimelineViewportPrivate.h"
-#endif
-
-#ifdef VULKAN_BACKEND
-#include "mrvVk/mrvTimelineViewport.h"
-#include "mrvVk/mrvTimelineViewportPrivate.h"
-#endif
+#include "mrvViewport/mrvTimelineViewport.h"
 
 #include "mrvNetwork/mrvTCP.h"
 #include "mrvNetwork/mrvDummyClient.h"

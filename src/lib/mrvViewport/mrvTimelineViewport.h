@@ -4,7 +4,16 @@
 
 #pragma once
 
-#include "mrvVk/mrvVkShape.h"
+#include "mrvCore/mrvBackend.h"
+
+#ifdef VULKAN_BACKEND
+#  include "mrvVk/mrvVkShape.h"
+#  include "mrvVk/mrvVkWindow.h"
+#endif
+
+#ifdef OPENGL_BACKEND
+#  include "mrvGL/mrvGLWindow.h"
+#endif
 
 #include "mrvOptions/mrvStereo3DOptions.h"
 #include "mrvOptions/mrvEnvironmentMapOptions.h"
@@ -21,7 +30,6 @@
 
 #include <tlCore/ValueObserver.h>
 
-#include "mrvVk/mrvVkWindow.h"
 
 class ViewerUI;
 
@@ -33,10 +41,14 @@ namespace mrv
 
     class LaserFadeData;
 
-    namespace vulkan
+    class MultilineInput;
+
+    class TimelinePlayer;
+
+    namespace BACKEND_NAMESPACE
     {
 
-        class TimelineViewport : public VkWindow
+        class TimelineViewport : public BACKEND_SUPER_CLASS
         {
             TLRENDER_NON_COPYABLE(TimelineViewport);
 
@@ -303,8 +315,15 @@ namespace mrv
             //! Update the pixel bar's coordinates and color information.
             void updatePixelBar() noexcept;
 
+#ifdef OPENGL_BACKEND
+            //! Get the text widget if available.
+            MultilineInput* getMultilineInput() const noexcept;
+#endif
+
+#ifdef VULKAN_BACKEND
             //! Get the text widget if available.
             std::shared_ptr<VKTextShape> getMultilineInput() const noexcept;
+#endif
 
             //! Get the viewportSize
             math::Size2i getViewportSize() const noexcept;
@@ -318,6 +337,9 @@ namespace mrv
             //! Refresh both the primary and secondary windows by clearing the
             //! associated resources.
             void refreshWindows();
+
+            //! Refresh window by clearing the associated resources.
+            virtual void refresh(){};
 
             //! FLTK Callback to handle view spinning whne in Environment Map
             //! mode.
@@ -492,4 +514,10 @@ namespace mrv
 
 } // namespace mrv
 
-#include "mrvVk/mrvTimelineViewportPrivate.h"
+#ifdef OPENGL_BACKEND
+#  include "mrvGL/mrvTimelineViewportPrivate.h"
+#endif
+
+#ifdef VULKAN_BACKEND
+#  include "mrvVk/mrvTimelineViewportPrivate.h"
+#endif

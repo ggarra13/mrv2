@@ -35,14 +35,14 @@
 
 #include "mrvUI/mrvDesktop.h"
 
+#include "mrvViewport/mrvTimelineViewport.h"
+
 #include "mrvGL/mrvGLViewportPrivate.h"
 #include "mrvGL/mrvGLDefines.h"
 #include "mrvGL/mrvGLErrors.h"
 #include "mrvGL/mrvGLUtil.h"
 #include "mrvGL/mrvGLShaders.h"
 #include "mrvGL/mrvGLShape.h"
-#include "mrvGL/mrvTimelineViewport.h"
-#include "mrvGL/mrvTimelineViewportPrivate.h"
 #include "mrvGL/mrvGLViewport.h"
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
@@ -1230,9 +1230,8 @@ namespace mrv
             glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
         }
 
-        void Viewport::_readPixel(image::Color4f& rgba) const noexcept
+        void Viewport::_readPixel(image::Color4f& rgba)
         {
-
             TLRENDER_P();
             MRV2_GL();
 
