@@ -104,10 +104,10 @@ namespace mrv
             fl_font(FL_HELVETICA, 18);
             int tw, th;
             fl_measure(page_title, tw, th);
-            fl_draw(page_title, (width - tw) / 2, th);
+            fl_draw(page_title, (pageWidth - tw) / 2, th);
 
             fl_line_style(FL_SOLID, 1);
-            fl_rect(20, th + 10, width - 40, height - 40);
+            fl_rect(20, th + 10, pageWidth - 40, pageHeight - 40);
 
             P.x = 25;
             P.y = th + 15;
@@ -240,7 +240,7 @@ namespace mrv
                 return false;
             }
 
-            pdf.printable_rect(&width, &height);
+            pdf.printable_rect(&pageWidth, &pageHeight);
 
             addPage();
 
@@ -392,7 +392,7 @@ namespace mrv
             bool exit = false;
             for (const auto& annotation : annotations)
             {
-                if (P.y > height - 20 - thumbnailHeight)
+                if (P.y > pageHeight - 20 - thumbnailHeight)
                 {
                     pdf.end_page();
 
