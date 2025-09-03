@@ -95,7 +95,7 @@ namespace
         return out;
     }
 
-    void stop_playback_while_scrubbing_cb(BACKEND::TimelineViewport* view)
+    void stop_playback_while_scrubbing_cb(mrv::BACKEND_NAMESPACE::TimelineViewport* view)
     {
         view->stopPlaybackWhileScrubbing();
     }
@@ -3641,7 +3641,156 @@ namespace mrv
             if (hasFrameView())
                 _frameView();
         }
+        
+        math::Matrix4x4f TimelineViewport::_renderProjectionMatrix() const noexcept
+        {
+            TLRENDER_P();
 
-    } // namespace opengl
+            const math::Size2i& viewportSize = getViewportSize();
+            const math::Size2i& renderSize = getRenderSize();
+
+
+            if (p.frameView && _getRotation() == 0.F)
+                return math::ortho(
+                    0.F, static_cast<float>(renderSize.w),
+                    0.F, static_cast<float>(renderSize.h), -1.F, 1.F);
+
+            const auto renderAspect = renderSize.getAspect();
+            const auto viewportAspect = viewportSize.getAspect();
+
+            math::Matrix4x4f renderMVP;
+            math::Vector2f transformOffset;
+            if (viewportAspect > 1.F)
+            {
+                transformOffset.x = renderSize.w / 2.F;
+                transformOffset.y = renderSize.w / renderAspect / 2.F;
+            }
+            else
+            {
+                transformOffset.x = renderSize.h * renderAspect / 2.F;
+                transformOffset.y = renderSize.h / 2.F;
+            }
+            
+            const auto outputDevice = App::app->outputDevice();
+            if (!outputDevice)
+                return math::ortho(
+                    0.F, static_cast<float>(renderSize.w), 0.F,
+                    static_cast<float>(renderSize.h), -1.F, 1.F);
+
+            float scale = 1.0;
+            const math::Size2i& deviceSize = outputDevice->getSize();
+            if (viewportSize.isValid() && deviceSize.isValid())
+            {
+                scale *= deviceSize.w / static_cast<float>(viewportSize.w);
+            }
+            const math::Matrix4x4f& vm =
+                math::translate(
+                    math::Vector3f(p.viewPos.x * scale, p.viewPos.y * scale, 0.F)) *
+                math::scale(
+                    math::Vector3f(p.viewZoom * scale, p.viewZoom * scale, 1.F));
+            const auto& rotateMatrix = math::rotateZ(_getRotation());
+            const math::Matrix4x4f& centerMatrix = math::translate(
+                math::Vector3f(-renderSize.w / 2, -renderSize.h / 2, 0.F));
+            const math::Matrix4x4f& transformOffsetMatrix = math::translate(
+                math::Vector3f(transformOffset.x, transformOffset.y, 0.F));
+
+            const math::Matrix4x4f& pm = math::ortho(
+                0.F, static_cast<float>(viewportSize.w), 0.F,
+                static_cast<float>(viewportSize.h), -1.F, 1.F);
+
+            // Calculate aspect-correct scale
+            math::Matrix4x4f resizeScaleMatrix;
+
+            if (!p.frameView)
+            {
+                float scaleX = static_cast<float>(viewportSize.w) /
+                               static_cast<float>(renderSize.w);
+                float scaleY = static_cast<float>(viewportSize.h) /
+                               static_cast<float>(renderSize.h);
+
+                resizeScaleMatrix =
+                    math::scale(math::Vector3f(scaleX, scaleY, 1.0f));
+            }
+            renderMVP = pm * resizeScaleMatrix * vm * transformOffsetMatrix *
+                        rotateMatrix * centerMatrix;
+
+            return renderMVP; // correct
+        }
+
+        
+        math::Matrix4x4f TimelineViewport::_projectionMatrix() const noexcept
+        {
+            TLRENDER_P();
+
+            const auto& renderSize = getRenderSize();
+            const auto renderAspect = renderSize.getAspect();
+            const auto& viewportSize = getViewportSize();
+            const auto viewportAspect = viewportSize.getAspect();
+
+            math::Vector2f transformOffset;
+            if (viewportAspect > 1.F)
+            {
+                transformOffset.x = renderSize.w / 2.F;
+                transformOffset.y = renderSize.w / renderAspect / 2.F;
+            }
+            else
+            {
+                transformOffset.x = renderSize.h * renderAspect / 2.F;
+                transformOffset.y = renderSize.h / 2.F;
+            }
+
+            const math::Matrix4x4f& vm =
+                math::translate(math::Vector3f(p.viewPos.x, p.viewPos.y, 0.F)) *
+                math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
+            const auto& rotateMatrix = math::rotateZ(_getRotation());
+            const math::Matrix4x4f& centerMatrix = math::translate(
+                math::Vector3f(-renderSize.w / 2, -renderSize.h / 2, 0.F));
+            const math::Matrix4x4f& transformOffsetMatrix = math::translate(
+                math::Vector3f(transformOffset.x, transformOffset.y, 0.F));
+
+            const math::Matrix4x4f& pm = math::ortho(
+                0.F, static_cast<float>(viewportSize.w),
+                0.F, static_cast<float>(viewportSize.h), -1.F, 1.F);
+            return pm * vm * transformOffsetMatrix * rotateMatrix * centerMatrix;
+        }
+        
+        math::Matrix4x4f TimelineViewport::_pixelMatrix() const noexcept
+        {
+            TLRENDER_P();
+
+            const auto& renderSize = getRenderSize();
+            const auto renderAspect = renderSize.getAspect();
+            const auto& viewportSize = getViewportSize();
+            const auto viewportAspect = viewportSize.getAspect();
+
+            math::Vector2f transformOffset;
+            if (viewportAspect > 1.F)
+            {
+                transformOffset.x = renderSize.w / 2.F;
+                transformOffset.y = renderSize.w / renderAspect / 2.F;
+            }
+            else
+            {
+                transformOffset.x = renderSize.h * renderAspect / 2.F;
+                transformOffset.y = renderSize.h / 2.F;
+            }
+
+            // Create transformation matrices
+            math::Matrix4x4f translation =
+                math::translate(math::Vector3f(-p.viewPos.x, -p.viewPos.y, 0.F));
+            math::Matrix4x4f zoom = math::scale(
+                math::Vector3f(1.F / p.viewZoom, 1.F / p.viewZoom, 1.F));
+            const auto& rotation = math::rotateZ(-_getRotation());
+
+            const math::Matrix4x4f tm = math::translate(
+                math::Vector3f(renderSize.w / 2, renderSize.h / 2, 0.F));
+            const math::Matrix4x4f to = math::translate(
+                math::Vector3f(-transformOffset.x, -transformOffset.y, 0.F));
+            // Combined transformation matrix
+            const math::Matrix4x4f& vm = tm * rotation * to * zoom * translation;
+            return vm;
+        }
+        
+    } // namespace BACKEND_NAMESPACE
     
 } // namespace mrv
