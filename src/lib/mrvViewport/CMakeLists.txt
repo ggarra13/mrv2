@@ -13,7 +13,7 @@ set(SOURCES
 add_library(mrvViewport ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-add_dependencies(mrvViewport mrvWidgets)
+set(LIBRARIES mrvWidgets ${FLTK_vk_LIBRARY})
 target_link_libraries(mrvViewport PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
 set_target_properties(mrvViewport PROPERTIES FOLDER lib)
 
