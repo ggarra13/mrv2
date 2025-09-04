@@ -1,6 +1,7 @@
 name: Minimal Builds
 
-on: [push]
+on:
+  push:
     branches-ignore:
       - main
 
