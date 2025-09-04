@@ -1,6 +1,10 @@
 name: GPL Builds
 
-on: [push]
+on:
+  push:
+    branches-ignore:
+      - beta
+      - vulkan
 
 jobs:
   ###################################
