@@ -11,6 +11,7 @@
 
 #include "hdr/mrvContextObject.h"
 #include "hdr/mrvHDRApp.h"
+#include "hdr/mrvLanguages.h"
 
 #include <FL/platform.H>
 #include <FL/filename.H>
@@ -115,7 +116,7 @@ namespace mrv
         // DBG;
         // open_console();
 
-        // const std::string& msg = setLanguageLocale();
+        const std::string& msg = setLanguageLocale();
 
         BaseApp::_init(
             app::convert(argc, argv), context, "hdr",

@@ -5,15 +5,28 @@
 
 set(HEADERS
     mrvContextObject.h
+    mrvDesktop.h
     mrvEnv.h
+    mrvFile.h
     mrvHDRApp.h
+    mrvHome.h
+    mrvI8N.h
+    mrvLanguages.h
+    mrvOS.h
     mrvRoot.h
+    mrvString.h
 )
 set(SOURCES
     mrvContextObject.cpp
+    mrvDesktop.cpp
     mrvEnv.cpp
+    mrvFile.cpp
     mrvHDRApp.cpp
+    mrvHome.cpp
+    mrvLanguages.cpp
+    mrvOS.cpp
     mrvRoot.cpp
+    mrvString.cpp
     main.cpp)
 
 hdr_files_to_absolute_paths()
