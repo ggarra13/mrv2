@@ -35,6 +35,7 @@ v1.4.1
   and leaving a timecode widget, will not throw focus.  This makes the whole
   UI much more friendly.
 - Added .po translations to hdr utility.
+- Fixed switching languages on Linux and macOS.
 
 
 v1.4.0

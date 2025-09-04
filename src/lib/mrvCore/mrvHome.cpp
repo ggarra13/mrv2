@@ -49,12 +49,14 @@ namespace mrv
 
     std::string rootpath()
     {
-       // If not initialized (as a fallback), you might still use a default.
+        // If not initialized (as a fallback), you might still use a default.
         // But with this approach, it should always be initialized correctly.
         if (g_root_path.empty()) {
             // This block should ideally never be hit.
             // Add logging here if it is.
-            LOG_ERROR("Root path not set");
+            g_root_path = fl_getenv("MRV2_ROOT");
+            if (g_root_path.empty())
+                LOG_ERROR("Root path not set");
             return "../Resources/";
         }
         return g_root_path;
