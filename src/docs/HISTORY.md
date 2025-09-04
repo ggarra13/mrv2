@@ -12,6 +12,8 @@ v1.4.1
 - Added VSync support to Vulkan backend (so that FIFO/MAILBOX can be chosen).
 - Added Stereo 3D Scanlines, Columns and Checkerboard for Vulkan.
 - Added Render->HDR->Gamut Mapping controls.
+- Split Preferences->Render into Render and HDR.
+- Added Preferences->HDR->Gamut Mapping controls.
 - Fixed Stereo 3D Checkerboard on OpenGL due to deprecation of GL_POINTS.
 - Fixed hiding of pixel bar on Vulkan backend after opening/closing Preference Window.
 - Fixed some movies's play rate not being valid for timecode due to minor rounding errors.
@@ -23,7 +25,7 @@ v1.4.1
 - Updated to OpenEXR v3.4 (from 3.2).
 - Updated to use Imath v3.2.1 (from 3.1.9)
 - Updated to use cpptrace v1.0.4
-- Updated beta builds to build OpenUSD on Windows and macOS 13.
+- Updated beta builds to build OpenUSD on Windows and macOS 13, as disk space is no longer an issue (Thank you Microsoft!).
 - Refactored mrvGL/mrvTimelineViewport.cpp and mrvVk/mrvTimelineViewport.cpp to
   common classes in mrvCommonBackend/mrvTimelineViewport.cpp
 - Refactored also mrvTimelineViewportEvents.cpp.
@@ -32,6 +34,7 @@ v1.4.1
 - Improved focus on Timecode widgets.  Now entering them will draw the cursor
   and leaving a timecode widget, will not throw focus.  This makes the whole
   UI much more friendly.
+- Added .po translations to hdr utility.
 
 
 v1.4.0

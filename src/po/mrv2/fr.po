@@ -3689,6 +3689,15 @@ msgstr "Cadre {0} - CT: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "Image trop grande. Enregistrera la taille du viseur."
 
+msgid "Could not read image data from view"
+msgstr "Impossible de lire les données d’image depuis la vue"
+
+msgid "Play"
+msgstr "Jouer"
+
+msgid "Stop"
+msgstr "Arrêtez-vous."
+
 msgid "Scrub"
 msgstr "Arrosage"
 
@@ -3759,12 +3768,6 @@ msgid ""
 msgstr ""
 "Impossible de créer une annotation ici pour le cadre actuel. Une annotation "
 "de tous les cadres existe déjà."
-
-msgid "Play"
-msgstr "Jouer"
-
-msgid "Stop"
-msgstr "Arrêtez-vous."
 
 msgid "2.35"
 msgstr "2.35"
@@ -4315,6 +4318,12 @@ msgstr "Synchroniser/Accepter/Annotations"
 
 msgid "Sync/Accept/Audio"
 msgstr "Synchroniser/Accepter/Audio"
+
+msgid "Voice Annotation/Record"
+msgstr "Annotation vocale/Enregistrer"
+
+msgid "Voice Annotation/Play"
+msgstr "Annotation vocale/Lecture"
 
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
@@ -5813,65 +5822,14 @@ msgstr "Moyenne"
 msgid "Fast"
 msgstr "Rapide"
 
-msgid "base"
-msgstr "base"
-
-msgid "plastic"
-msgstr "plastic"
-
-msgid "gtk+"
-msgstr "gtk+"
-
-msgid "gleam"
-msgstr "l'éclat"
-
-msgid "oxy"
-msgstr "oxy"
-
-msgid "Float Values"
-msgstr "Valeurs flottantes"
-
-msgid "Hex Values"
-msgstr "Valeurs hexagonales"
-
-msgid "8-bit Values"
-msgstr "Valeurs 8 bits"
-
-msgid "Full Lut, Gamma and Gain"
-msgstr "Pleine luth, gamma et gain"
-
-msgid "Original without Gamma, Gain or Lut"
-msgstr "Original sans Gamma, Gain ou Lut"
-
-msgid "CIE XYZ"
-msgstr "CIE XYZ"
-
-msgid "CIE xyY"
-msgstr "CIE xyY"
-
-msgid "From File"
-msgstr "À partir du fichier"
-
-msgid "Full Range"
-msgstr "Plage complète"
-
-msgid "Legal Range"
-msgstr "Plage Légale"
-
-msgid "Straight"
-msgstr "Droite"
-
-msgid "Premultiplied"
-msgstr "Prémultiplication"
-
-msgid "Nearest"
-msgstr "Le plus proche"
-
 msgid "Ignore"
 msgstr "Ignorer"
 
 msgid "Apply"
 msgstr "Appliquer"
+
+msgid "From File"
+msgstr "À partir du fichier"
 
 msgid "Inactive"
 msgstr "Inactif"
@@ -5908,6 +5866,78 @@ msgstr "Hable"
 
 msgid "Linear Light"
 msgstr "Lumière linéaire"
+
+msgid "Auto"
+msgstr "Automatique"
+
+msgid "Perceptual"
+msgstr "Perceptuel"
+
+msgid "Relative"
+msgstr "Relatif"
+
+msgid "Absolute"
+msgstr "Absolu"
+
+msgid "Desaturate"
+msgstr "Désaturer"
+
+msgid "Darken"
+msgstr "Assombrir"
+
+msgid "Highlight"
+msgstr "Mettre en surbrillance"
+
+msgid "base"
+msgstr "base"
+
+msgid "plastic"
+msgstr "plastic"
+
+msgid "gtk+"
+msgstr "gtk+"
+
+msgid "gleam"
+msgstr "l'éclat"
+
+msgid "oxy"
+msgstr "oxy"
+
+msgid "Float Values"
+msgstr "Valeurs flottantes"
+
+msgid "Hex Values"
+msgstr "Valeurs hexagonales"
+
+msgid "8-bit Values"
+msgstr "Valeurs 8 bits"
+
+msgid "Full Lut, Gamma and Gain"
+msgstr "Pleine luth, gamma et gain"
+
+msgid "Original without Gamma, Gain or Lut"
+msgstr "Original sans Gamma, Gain ou Lut"
+
+msgid "CIE XYZ"
+msgstr "CIE XYZ"
+
+msgid "CIE xyY"
+msgstr "CIE xyY"
+
+msgid "Full Range"
+msgstr "Plage complète"
+
+msgid "Legal Range"
+msgstr "Plage Légale"
+
+msgid "Straight"
+msgstr "Droite"
+
+msgid "Premultiplied"
+msgstr "Prémultiplication"
+
+msgid "Nearest"
+msgstr "Le plus proche"
 
 msgid "Small"
 msgstr "Petite"
@@ -6262,6 +6292,21 @@ msgid "Sets the font to use in panels. (Not yet working)"
 msgstr ""
 "Définit la police à utiliser dans les panneaux. (Pas encore de travail)"
 
+msgid "HDR"
+msgstr "HDR"
+
+msgid "Chromaticities"
+msgstr "Chromaticités"
+
+msgid "HDR Data"
+msgstr "Données HDR"
+
+msgid "Tonemap Algorithm"
+msgstr "Algorithme de tonemap"
+
+msgid "Gamut Mapping"
+msgstr "Mappage de gamut"
+
 msgid "Language and Colors"
 msgstr "Langue et couleurs"
 
@@ -6385,18 +6430,6 @@ msgstr "Minimiser le filtre"
 
 msgid "Magnify Filter"
 msgstr "Amplifier le filtre"
-
-msgid "HDR"
-msgstr "HDR"
-
-msgid "Chromaticities"
-msgstr "Chromaticités"
-
-msgid "HDR Data"
-msgstr "Données HDR"
-
-msgid "Tonemap Algorithm"
-msgstr "Algorithme de tonemap"
 
 msgid "Thumbnails"
 msgstr "Thumbnails"
@@ -6881,6 +6914,9 @@ msgstr "Interface utilisateur/Demandeur de fichier"
 
 msgid "User Interface/Fonts"
 msgstr "Interface utilisateur/Polices"
+
+msgid "User Interface/HDR"
+msgstr "Interface utilisateur/HDR"
 
 msgid "User Interface/Language and Colors"
 msgstr "Interface utilisateur/Langue et couleurs"
@@ -7692,9 +7728,6 @@ msgstr "Activer la fenêtre des touches d'amorçage"
 
 msgid "Toggle About Window"
 msgstr "Commutation à propos de la fenêtre"
-
-#~ msgid "Could not read image data from view"
-#~ msgstr "Impossible de lire les données d’image depuis la vue"
 
 #~ msgid "Could not read annotation image from view"
 #~ msgstr "Impossible de lire l’image d’annotation depuis la vue"

@@ -3392,6 +3392,15 @@ msgstr ""
 msgid "Image too big.  Will save the viewport size."
 msgstr ""
 
+msgid "Could not read image data from view"
+msgstr ""
+
+msgid "Play"
+msgstr ""
+
+msgid "Stop"
+msgstr ""
+
 msgid "Scrub"
 msgstr ""
 
@@ -3457,12 +3466,6 @@ msgstr ""
 msgid ""
 "Cannot create an annotation here for current frame.  An all frames "
 "annotation already exists."
-msgstr ""
-
-msgid "Play"
-msgstr ""
-
-msgid "Stop"
 msgstr ""
 
 msgid "2.35"
@@ -4012,6 +4015,12 @@ msgid "Sync/Accept/Annotations"
 msgstr ""
 
 msgid "Sync/Accept/Audio"
+msgstr ""
+
+msgid "Voice Annotation/Record"
+msgstr ""
+
+msgid "Voice Annotation/Play"
 msgstr ""
 
 msgid ""
@@ -5358,64 +5367,13 @@ msgstr ""
 msgid "Fast"
 msgstr ""
 
-msgid "base"
-msgstr ""
-
-msgid "plastic"
-msgstr ""
-
-msgid "gtk+"
-msgstr ""
-
-msgid "gleam"
-msgstr ""
-
-msgid "oxy"
-msgstr ""
-
-msgid "Float Values"
-msgstr ""
-
-msgid "Hex Values"
-msgstr ""
-
-msgid "8-bit Values"
-msgstr ""
-
-msgid "Full Lut, Gamma and Gain"
-msgstr ""
-
-msgid "Original without Gamma, Gain or Lut"
-msgstr ""
-
-msgid "CIE XYZ"
-msgstr ""
-
-msgid "CIE xyY"
-msgstr ""
-
-msgid "From File"
-msgstr ""
-
-msgid "Full Range"
-msgstr ""
-
-msgid "Legal Range"
-msgstr ""
-
-msgid "Straight"
-msgstr ""
-
-msgid "Premultiplied"
-msgstr ""
-
-msgid "Nearest"
-msgstr ""
-
 msgid "Ignore"
 msgstr ""
 
 msgid "Apply"
+msgstr ""
+
+msgid "From File"
 msgstr ""
 
 msgid "Inactive"
@@ -5452,6 +5410,78 @@ msgid "Hable"
 msgstr ""
 
 msgid "Linear Light"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
+
+msgid "Perceptual"
+msgstr ""
+
+msgid "Relative"
+msgstr ""
+
+msgid "Absolute"
+msgstr ""
+
+msgid "Desaturate"
+msgstr ""
+
+msgid "Darken"
+msgstr ""
+
+msgid "Highlight"
+msgstr ""
+
+msgid "base"
+msgstr ""
+
+msgid "plastic"
+msgstr ""
+
+msgid "gtk+"
+msgstr ""
+
+msgid "gleam"
+msgstr ""
+
+msgid "oxy"
+msgstr ""
+
+msgid "Float Values"
+msgstr ""
+
+msgid "Hex Values"
+msgstr ""
+
+msgid "8-bit Values"
+msgstr ""
+
+msgid "Full Lut, Gamma and Gain"
+msgstr ""
+
+msgid "Original without Gamma, Gain or Lut"
+msgstr ""
+
+msgid "CIE XYZ"
+msgstr ""
+
+msgid "CIE xyY"
+msgstr ""
+
+msgid "Full Range"
+msgstr ""
+
+msgid "Legal Range"
+msgstr ""
+
+msgid "Straight"
+msgstr ""
+
+msgid "Premultiplied"
+msgstr ""
+
+msgid "Nearest"
 msgstr ""
 
 msgid "Small"
@@ -5767,6 +5797,21 @@ msgstr ""
 msgid "Sets the font to use in panels. (Not yet working)"
 msgstr ""
 
+msgid "HDR"
+msgstr ""
+
+msgid "Chromaticities"
+msgstr ""
+
+msgid "HDR Data"
+msgstr ""
+
+msgid "Tonemap Algorithm"
+msgstr ""
+
+msgid "Gamut Mapping"
+msgstr ""
+
 msgid "Language and Colors"
 msgstr ""
 
@@ -5870,18 +5915,6 @@ msgid "Minify Filter"
 msgstr ""
 
 msgid "Magnify Filter"
-msgstr ""
-
-msgid "HDR"
-msgstr ""
-
-msgid "Chromaticities"
-msgstr ""
-
-msgid "HDR Data"
-msgstr ""
-
-msgid "Tonemap Algorithm"
 msgstr ""
 
 msgid "Thumbnails"
@@ -6293,6 +6326,9 @@ msgid "User Interface/File Requester"
 msgstr ""
 
 msgid "User Interface/Fonts"
+msgstr ""
+
+msgid "User Interface/HDR"
 msgstr ""
 
 msgid "User Interface/Language and Colors"

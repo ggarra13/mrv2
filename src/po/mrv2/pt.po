@@ -3680,6 +3680,15 @@ msgstr "Quadro {0} - CT: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "Imagem muito grande. Vai salvar o tamanho da vista."
 
+msgid "Could not read image data from view"
+msgstr "Não foi possível ler os dados da imagem da visualização"
+
+msgid "Play"
+msgstr "Reproduzir"
+
+msgid "Stop"
+msgstr "Pra."
+
 msgid "Scrub"
 msgstr "Esfregar"
 
@@ -3750,12 +3759,6 @@ msgid ""
 msgstr ""
 "No  possvel criar uma anotao aqui para o quadro atual. Uma anotao de todos "
 "os quadros j existe."
-
-msgid "Play"
-msgstr "Reproduzir"
-
-msgid "Stop"
-msgstr "Pra."
 
 msgid "2.35"
 msgstr "2.35"
@@ -4305,6 +4308,12 @@ msgstr "Sincronizao/Aceitar/Anotaes"
 
 msgid "Sync/Accept/Audio"
 msgstr "Sincronizao/Aceitar/udio"
+
+msgid "Voice Annotation/Record"
+msgstr "Anotação de Voz/Gravar"
+
+msgid "Voice Annotation/Play"
+msgstr "Anotação de Voz/Reproduzir"
 
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
@@ -5800,65 +5809,14 @@ msgstr "Mdia"
 msgid "Fast"
 msgstr "Rpido"
 
-msgid "base"
-msgstr "base"
-
-msgid "plastic"
-msgstr "plastic"
-
-msgid "gtk+"
-msgstr "gtk+"
-
-msgid "gleam"
-msgstr "Brilho"
-
-msgid "oxy"
-msgstr "oxy"
-
-msgid "Float Values"
-msgstr "Valores de flutuao"
-
-msgid "Hex Values"
-msgstr "Valores de Hexadecime"
-
-msgid "8-bit Values"
-msgstr "Valores de 8 bits"
-
-msgid "Full Lut, Gamma and Gain"
-msgstr "Lot completo, Gamma e Gain"
-
-msgid "Original without Gamma, Gain or Lut"
-msgstr "Original sem Gamma, Gain ou Lut"
-
-msgid "CIE XYZ"
-msgstr "CIE XYZ"
-
-msgid "CIE xyY"
-msgstr "CIE xyY"
-
-msgid "From File"
-msgstr "A partir do Ficheiro"
-
-msgid "Full Range"
-msgstr "Intervalo completo"
-
-msgid "Legal Range"
-msgstr "Alcance legal"
-
-msgid "Straight"
-msgstr "Direto"
-
-msgid "Premultiplied"
-msgstr "Pr-multiplicado"
-
-msgid "Nearest"
-msgstr "Mais perto"
-
 msgid "Ignore"
 msgstr "Ignorar"
 
 msgid "Apply"
 msgstr "Aplicar"
+
+msgid "From File"
+msgstr "A partir do Ficheiro"
 
 msgid "Inactive"
 msgstr "Inativo"
@@ -5895,6 +5853,78 @@ msgstr "Hable"
 
 msgid "Linear Light"
 msgstr "Luz Linear"
+
+msgid "Auto"
+msgstr "Automático"
+
+msgid "Perceptual"
+msgstr "Perceptivo"
+
+msgid "Relative"
+msgstr "Relativo"
+
+msgid "Absolute"
+msgstr "Absoluto"
+
+msgid "Desaturate"
+msgstr "Desaturar"
+
+msgid "Darken"
+msgstr "Escurecer"
+
+msgid "Highlight"
+msgstr "Realçar"
+
+msgid "base"
+msgstr "base"
+
+msgid "plastic"
+msgstr "plastic"
+
+msgid "gtk+"
+msgstr "gtk+"
+
+msgid "gleam"
+msgstr "Brilho"
+
+msgid "oxy"
+msgstr "oxy"
+
+msgid "Float Values"
+msgstr "Valores de flutuao"
+
+msgid "Hex Values"
+msgstr "Valores de Hexadecime"
+
+msgid "8-bit Values"
+msgstr "Valores de 8 bits"
+
+msgid "Full Lut, Gamma and Gain"
+msgstr "Lot completo, Gamma e Gain"
+
+msgid "Original without Gamma, Gain or Lut"
+msgstr "Original sem Gamma, Gain ou Lut"
+
+msgid "CIE XYZ"
+msgstr "CIE XYZ"
+
+msgid "CIE xyY"
+msgstr "CIE xyY"
+
+msgid "Full Range"
+msgstr "Intervalo completo"
+
+msgid "Legal Range"
+msgstr "Alcance legal"
+
+msgid "Straight"
+msgstr "Direto"
+
+msgid "Premultiplied"
+msgstr "Pr-multiplicado"
+
+msgid "Nearest"
+msgstr "Mais perto"
 
 msgid "Small"
 msgstr "Pequeno"
@@ -6242,6 +6272,21 @@ msgstr "Painis"
 msgid "Sets the font to use in panels. (Not yet working)"
 msgstr "Defina a fonte a usar em painis. (Ainda no est funcionando)"
 
+msgid "HDR"
+msgstr "HDR"
+
+msgid "Chromaticities"
+msgstr "Cromaticidades"
+
+msgid "HDR Data"
+msgstr "Dados HDR"
+
+msgid "Tonemap Algorithm"
+msgstr "Algoritmo de Mapeamento de Tons"
+
+msgid "Gamut Mapping"
+msgstr "Mapeamento de Gamut"
+
 msgid "Language and Colors"
 msgstr "Lngua e cores"
 
@@ -6360,18 +6405,6 @@ msgstr "Minimizar o Filtro"
 
 msgid "Magnify Filter"
 msgstr "Aumentar o Filtro"
-
-msgid "HDR"
-msgstr "HDR"
-
-msgid "Chromaticities"
-msgstr "Cromaticidades"
-
-msgid "HDR Data"
-msgstr "Dados HDR"
-
-msgid "Tonemap Algorithm"
-msgstr "Algoritmo de Mapeamento de Tons"
 
 msgid "Thumbnails"
 msgstr "Thumbnails"
@@ -6851,6 +6884,9 @@ msgstr "Interface do Usurio/Solicitante de Ficheiro"
 
 msgid "User Interface/Fonts"
 msgstr "Interface do Usurio/Fontes"
+
+msgid "User Interface/HDR"
+msgstr "Interface do Usuário/HDR"
 
 msgid "User Interface/Language and Colors"
 msgstr "Interface do Usurio/Lngua e cores"
@@ -7652,9 +7688,6 @@ msgstr "Alternar a janela de teclas instantneas"
 
 msgid "Toggle About Window"
 msgstr "Alternar Sobre a Janela"
-
-#~ msgid "Could not read image data from view"
-#~ msgstr "Não foi possível ler os dados da imagem da visualização"
 
 #~ msgid "Could not read annotation image from view"
 #~ msgstr "Não foi possível ler a imagem de anotação da visualização"

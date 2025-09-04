@@ -1,4 +1,4 @@
-# Russian translations for hdr package.
+	# Russian translations for hdr package.
 # This file is distributed under the same license as the hdr package.
 # Automatically generated, 2025.
 #
@@ -17,16 +17,16 @@ msgstr ""
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 msgid "HDR monitor found."
-msgstr ""
+msgstr "HDR-монитор найден."
 
 msgid "HDR monitor not found or not configured."
-msgstr ""
+msgstr "HDR-монитор не найден или не настроен."
 
 msgid "Connection/"
-msgstr "соединение/"
+msgstr "Подключение/"
 
 msgid "Window/Fullscreen"
-msgstr ""
+msgstr "Окно/Полный экран"
 
 msgid "HDR/Pass through Metadata to Display"
-msgstr ""
+msgstr "HDR/Передача метаданных на дисплей"

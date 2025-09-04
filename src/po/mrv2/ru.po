@@ -3725,6 +3725,15 @@ msgstr "Рамка {0} - ТС: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "Слишком большое изображение, сохранит размер смотрового портала."
 
+msgid "Could not read image data from view"
+msgstr "Не удалось прочитать данные изображения с вида"
+
+msgid "Play"
+msgstr "Воспроизвести"
+
+msgid "Stop"
+msgstr "Стой."
+
 msgid "Scrub"
 msgstr "Скреб"
 
@@ -3795,12 +3804,6 @@ msgid ""
 msgstr ""
 "Невозможно создать аннотацию для текущей структуры. Аннотация всех рамок уже"
 " существует."
-
-msgid "Play"
-msgstr "Воспроизвести"
-
-msgid "Stop"
-msgstr "Стой."
 
 msgid "2.35"
 msgstr "2.35"
@@ -4350,6 +4353,12 @@ msgstr "Синхронизация/Принять/Аннотации"
 
 msgid "Sync/Accept/Audio"
 msgstr "Синхронизация/Принять/Звук"
+
+msgid "Voice Annotation/Record"
+msgstr "Голосовая заметка/Запись"
+
+msgid "Voice Annotation/Play"
+msgstr "Голосовая заметка/Воспроизведение"
 
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
@@ -5846,65 +5855,14 @@ msgstr "Средняя"
 msgid "Fast"
 msgstr "Быстрая"
 
-msgid "base"
-msgstr "base"
-
-msgid "plastic"
-msgstr "plastic"
-
-msgid "gtk+"
-msgstr "gtk+"
-
-msgid "gleam"
-msgstr "Сияние"
-
-msgid "oxy"
-msgstr "oxy"
-
-msgid "Float Values"
-msgstr "Значения поплавка"
-
-msgid "Hex Values"
-msgstr "Значения гекса"
-
-msgid "8-bit Values"
-msgstr "8-битные значения"
-
-msgid "Full Lut, Gamma and Gain"
-msgstr "Полная лута, гамма и прибыль"
-
-msgid "Original without Gamma, Gain or Lut"
-msgstr "Оригинал без гаммы, гонорара или люта"
-
-msgid "CIE XYZ"
-msgstr "CIE XYZ"
-
-msgid "CIE xyY"
-msgstr "CIE xyY"
-
-msgid "From File"
-msgstr "Из файла"
-
-msgid "Full Range"
-msgstr "Полная дальность"
-
-msgid "Legal Range"
-msgstr "Законный Диапазон"
-
-msgid "Straight"
-msgstr "Прямо"
-
-msgid "Premultiplied"
-msgstr "Предмногочисленные"
-
-msgid "Nearest"
-msgstr "Ближайший"
-
 msgid "Ignore"
 msgstr "Игнорировать"
 
 msgid "Apply"
 msgstr "Применить"
+
+msgid "From File"
+msgstr "Из файла"
 
 msgid "Inactive"
 msgstr "Неактивно"
@@ -5941,6 +5899,78 @@ msgstr "Hable"
 
 msgid "Linear Light"
 msgstr "Линейный свет"
+
+msgid "Auto"
+msgstr "Автоматически"
+
+msgid "Perceptual"
+msgstr "Перцепционный"
+
+msgid "Relative"
+msgstr "Относительный"
+
+msgid "Absolute"
+msgstr "Абсолютный"
+
+msgid "Desaturate"
+msgstr "Уменьшить насыщенность"
+
+msgid "Darken"
+msgstr "Затемнить"
+
+msgid "Highlight"
+msgstr "Выделить"
+
+msgid "base"
+msgstr "base"
+
+msgid "plastic"
+msgstr "plastic"
+
+msgid "gtk+"
+msgstr "gtk+"
+
+msgid "gleam"
+msgstr "Сияние"
+
+msgid "oxy"
+msgstr "oxy"
+
+msgid "Float Values"
+msgstr "Значения поплавка"
+
+msgid "Hex Values"
+msgstr "Значения гекса"
+
+msgid "8-bit Values"
+msgstr "8-битные значения"
+
+msgid "Full Lut, Gamma and Gain"
+msgstr "Полная лута, гамма и прибыль"
+
+msgid "Original without Gamma, Gain or Lut"
+msgstr "Оригинал без гаммы, гонорара или люта"
+
+msgid "CIE XYZ"
+msgstr "CIE XYZ"
+
+msgid "CIE xyY"
+msgstr "CIE xyY"
+
+msgid "Full Range"
+msgstr "Полная дальность"
+
+msgid "Legal Range"
+msgstr "Законный Диапазон"
+
+msgid "Straight"
+msgstr "Прямо"
+
+msgid "Premultiplied"
+msgstr "Предмногочисленные"
+
+msgid "Nearest"
+msgstr "Ближайший"
 
 msgid "Small"
 msgstr "Маленький"
@@ -6279,6 +6309,21 @@ msgstr "Таблицы"
 msgid "Sets the font to use in panels. (Not yet working)"
 msgstr "Устанавливает шрифт для использования в панелях. (Еще не работает)"
 
+msgid "HDR"
+msgstr "HDR"
+
+msgid "Chromaticities"
+msgstr "Хроматичности"
+
+msgid "HDR Data"
+msgstr "Данные HDR"
+
+msgid "Tonemap Algorithm"
+msgstr "Алгоритм тоновой карты"
+
+msgid "Gamut Mapping"
+msgstr "Маппинг цветового охвата"
+
 msgid "Language and Colors"
 msgstr "Язык и цвета"
 
@@ -6398,18 +6443,6 @@ msgstr "Минимизация фильтра"
 
 msgid "Magnify Filter"
 msgstr "Увеличить фильтр"
-
-msgid "HDR"
-msgstr "HDR"
-
-msgid "Chromaticities"
-msgstr "Хроматичности"
-
-msgid "HDR Data"
-msgstr "Данные HDR"
-
-msgid "Tonemap Algorithm"
-msgstr "Алгоритм тоновой карты"
 
 msgid "Thumbnails"
 msgstr "Пальцы"
@@ -6885,6 +6918,9 @@ msgstr "Интерфэйс пользователя/Запрашиватель �
 
 msgid "User Interface/Fonts"
 msgstr "Интерфэйс пользователя/Шрифты"
+
+msgid "User Interface/HDR"
+msgstr "Интерфейс пользователя/HDR"
 
 msgid "User Interface/Language and Colors"
 msgstr "Интерфэйс пользователя/Язык и цвета"
@@ -7688,9 +7724,6 @@ msgstr "Переключить окно горячих клавиш"
 
 msgid "Toggle About Window"
 msgstr "Закладка о окне"
-
-#~ msgid "Could not read image data from view"
-#~ msgstr "Не удалось прочитать данные изображения с вида"
 
 #~ msgid "Could not read annotation image from view"
 #~ msgstr "Не удалось прочитать изображение аннотации с вида"

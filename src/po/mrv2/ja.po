@@ -3646,6 +3646,15 @@ msgstr "フレーム {0} - TC: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "彼らが都を守ってくれます"
 
+msgid "Could not read image data from view"
+msgstr "ビューから画像データを読み取れませんでした"
+
+msgid "Play"
+msgstr "再生"
+
+msgid "Stop"
+msgstr "停止"
+
 msgid "Scrub"
 msgstr "スクラブ"
 
@@ -3712,12 +3721,6 @@ msgid ""
 "Cannot create an annotation here for current frame.  An all frames "
 "annotation already exists."
 msgstr "現在のフレームに注釈を作成できません。すべてのフレームの注釈がすでに存在します。"
-
-msgid "Play"
-msgstr "再生"
-
-msgid "Stop"
-msgstr "停止"
 
 msgid "2.35"
 msgstr "2.35"
@@ -4267,6 +4270,12 @@ msgstr "同期/受信/注釈"
 
 msgid "Sync/Accept/Audio"
 msgstr "同期/受信/オーディオ"
+
+msgid "Voice Annotation/Record"
+msgstr "音声アノテーション/録音"
+
+msgid "Voice Annotation/Play"
+msgstr "音声アノテーション/再生"
 
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
@@ -5711,65 +5720,14 @@ msgstr "中間"
 msgid "Fast"
 msgstr "速い"
 
-msgid "base"
-msgstr "base"
-
-msgid "plastic"
-msgstr "plastic"
-
-msgid "gtk+"
-msgstr "gtk+"
-
-msgid "gleam"
-msgstr "gleam"
-
-msgid "oxy"
-msgstr "oxy"
-
-msgid "Float Values"
-msgstr "浮動小数値"
-
-msgid "Hex Values"
-msgstr "16進数値"
-
-msgid "8-bit Values"
-msgstr "8ビット値"
-
-msgid "Full Lut, Gamma and Gain"
-msgstr "フルLUT、ガンマ、ゲイン"
-
-msgid "Original without Gamma, Gain or Lut"
-msgstr "ガンマ、ゲイン、LUTなしの元の状態"
-
-msgid "CIE XYZ"
-msgstr "CIE XYZ"
-
-msgid "CIE xyY"
-msgstr "CIE xyY"
-
-msgid "From File"
-msgstr "ファイルから"
-
-msgid "Full Range"
-msgstr "フルレンジ"
-
-msgid "Legal Range"
-msgstr "法的レンジ"
-
-msgid "Straight"
-msgstr "ストレート"
-
-msgid "Premultiplied"
-msgstr "事前乗算済み"
-
-msgid "Nearest"
-msgstr "最も近い"
-
 msgid "Ignore"
 msgstr "無視"
 
 msgid "Apply"
 msgstr "適用"
+
+msgid "From File"
+msgstr "ファイルから"
 
 msgid "Inactive"
 msgstr "非アクティブ"
@@ -5806,6 +5764,78 @@ msgstr "Hable"
 
 msgid "Linear Light"
 msgstr "リニア ライト"
+
+msgid "Auto"
+msgstr "自動"
+
+msgid "Perceptual"
+msgstr "知覚的"
+
+msgid "Relative"
+msgstr "相対"
+
+msgid "Absolute"
+msgstr "絶対"
+
+msgid "Desaturate"
+msgstr "彩度を下げる"
+
+msgid "Darken"
+msgstr "暗くする"
+
+msgid "Highlight"
+msgstr "ハイライト"
+
+msgid "base"
+msgstr "base"
+
+msgid "plastic"
+msgstr "plastic"
+
+msgid "gtk+"
+msgstr "gtk+"
+
+msgid "gleam"
+msgstr "gleam"
+
+msgid "oxy"
+msgstr "oxy"
+
+msgid "Float Values"
+msgstr "浮動小数値"
+
+msgid "Hex Values"
+msgstr "16進数値"
+
+msgid "8-bit Values"
+msgstr "8ビット値"
+
+msgid "Full Lut, Gamma and Gain"
+msgstr "フルLUT、ガンマ、ゲイン"
+
+msgid "Original without Gamma, Gain or Lut"
+msgstr "ガンマ、ゲイン、LUTなしの元の状態"
+
+msgid "CIE XYZ"
+msgstr "CIE XYZ"
+
+msgid "CIE xyY"
+msgstr "CIE xyY"
+
+msgid "Full Range"
+msgstr "フルレンジ"
+
+msgid "Legal Range"
+msgstr "法的レンジ"
+
+msgid "Straight"
+msgstr "ストレート"
+
+msgid "Premultiplied"
+msgstr "事前乗算済み"
+
+msgid "Nearest"
+msgstr "最も近い"
 
 msgid "Small"
 msgstr "小さい"
@@ -6124,6 +6154,21 @@ msgstr "パネル"
 msgid "Sets the font to use in panels. (Not yet working)"
 msgstr "パネルで使用するフォントを設定します。（まだ動作していません）"
 
+msgid "HDR"
+msgstr "HDR"
+
+msgid "Chromaticities"
+msgstr "色度"
+
+msgid "HDR Data"
+msgstr "HDRデータ"
+
+msgid "Tonemap Algorithm"
+msgstr "トゥーンマップ アルゴリズム"
+
+msgid "Gamut Mapping"
+msgstr "色域マッピング"
+
 msgid "Language and Colors"
 msgstr "言語とカラー"
 
@@ -6232,18 +6277,6 @@ msgstr "縮小フィルタ"
 
 msgid "Magnify Filter"
 msgstr "拡大フィルタ"
-
-msgid "HDR"
-msgstr "HDR"
-
-msgid "Chromaticities"
-msgstr "色度"
-
-msgid "HDR Data"
-msgstr "HDRデータ"
-
-msgid "Tonemap Algorithm"
-msgstr "トゥーンマップ アルゴリズム"
 
 msgid "Thumbnails"
 msgstr "サムネイル"
@@ -6665,6 +6698,9 @@ msgstr "ユーザーインターフェース/ファイルリクエスター"
 
 msgid "User Interface/Fonts"
 msgstr "ユーザーインターフェース/フォント"
+
+msgid "User Interface/HDR"
+msgstr "ユーザーインターフェース/HDR"
 
 msgid "User Interface/Language and Colors"
 msgstr "ユーザーインターフェース/言語とカラー"
@@ -7464,9 +7500,6 @@ msgstr "ホットキーウィンドウを切り替え"
 
 msgid "Toggle About Window"
 msgstr "バージョン情報ウィンドウを切り替え"
-
-#~ msgid "Could not read image data from view"
-#~ msgstr "ビューから画像データを読み取れませんでした"
 
 #~ msgid "Could not read annotation image from view"
 #~ msgstr "ビューから注釈画像を読み取れませんでした"

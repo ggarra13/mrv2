@@ -3636,6 +3636,15 @@ msgstr "帧 {0} - 时间码 : {1} - 秒数: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "图像太大。 将保存视图的大小 。"
 
+msgid "Could not read image data from view"
+msgstr "无法从视图读取图像数据"
+
+msgid "Play"
+msgstr "播放"
+
+msgid "Stop"
+msgstr "停止"
+
 msgid "Scrub"
 msgstr "Scrub"
 
@@ -3702,12 +3711,6 @@ msgid ""
 "Cannot create an annotation here for current frame.  An all frames "
 "annotation already exists."
 msgstr "无法在此为当前帧创建注释。 已经存在全部帧注释 。"
-
-msgid "Play"
-msgstr "播放"
-
-msgid "Stop"
-msgstr "停止"
 
 msgid "2.35"
 msgstr "2.35"
@@ -4257,6 +4260,12 @@ msgstr "同步/接受/注释"
 
 msgid "Sync/Accept/Audio"
 msgstr "同步/接受/音频"
+
+msgid "Voice Annotation/Record"
+msgstr "语音注释/录制"
+
+msgid "Voice Annotation/Play"
+msgstr "语音注释/播放"
 
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
@@ -5734,65 +5743,14 @@ msgstr "中"
 msgid "Fast"
 msgstr "快"
 
-msgid "base"
-msgstr "base"
-
-msgid "plastic"
-msgstr "plastic"
-
-msgid "gtk+"
-msgstr "gtk+"
-
-msgid "gleam"
-msgstr "gleam"
-
-msgid "oxy"
-msgstr "oxy"
-
-msgid "Float Values"
-msgstr "Float Values"
-
-msgid "Hex Values"
-msgstr "Hex Values"
-
-msgid "8-bit Values"
-msgstr "8 位值"
-
-msgid "Full Lut, Gamma and Gain"
-msgstr "Full Lut, Gamma and Gain"
-
-msgid "Original without Gamma, Gain or Lut"
-msgstr "Original without Gamma, Gain or Lut"
-
-msgid "CIE XYZ"
-msgstr "CIE XYZ"
-
-msgid "CIE xyY"
-msgstr "CIE xyY"
-
-msgid "From File"
-msgstr "从文件"
-
-msgid "Full Range"
-msgstr "全范围"
-
-msgid "Legal Range"
-msgstr "合法范围"
-
-msgid "Straight"
-msgstr "Straight"
-
-msgid "Premultiplied"
-msgstr "Premultiplied"
-
-msgid "Nearest"
-msgstr "Nearest"
-
 msgid "Ignore"
 msgstr "忽略"
 
 msgid "Apply"
 msgstr "应用"
+
+msgid "From File"
+msgstr "从文件"
 
 msgid "Inactive"
 msgstr "未激活"
@@ -5829,6 +5787,78 @@ msgstr "Hable"
 
 msgid "Linear Light"
 msgstr "线性光"
+
+msgid "Auto"
+msgstr "自动"
+
+msgid "Perceptual"
+msgstr "感知"
+
+msgid "Relative"
+msgstr "相对"
+
+msgid "Absolute"
+msgstr "绝对"
+
+msgid "Desaturate"
+msgstr "去饱和"
+
+msgid "Darken"
+msgstr "变暗"
+
+msgid "Highlight"
+msgstr "高亮"
+
+msgid "base"
+msgstr "base"
+
+msgid "plastic"
+msgstr "plastic"
+
+msgid "gtk+"
+msgstr "gtk+"
+
+msgid "gleam"
+msgstr "gleam"
+
+msgid "oxy"
+msgstr "oxy"
+
+msgid "Float Values"
+msgstr "Float Values"
+
+msgid "Hex Values"
+msgstr "Hex Values"
+
+msgid "8-bit Values"
+msgstr "8 位值"
+
+msgid "Full Lut, Gamma and Gain"
+msgstr "Full Lut, Gamma and Gain"
+
+msgid "Original without Gamma, Gain or Lut"
+msgstr "Original without Gamma, Gain or Lut"
+
+msgid "CIE XYZ"
+msgstr "CIE XYZ"
+
+msgid "CIE xyY"
+msgstr "CIE xyY"
+
+msgid "Full Range"
+msgstr "全范围"
+
+msgid "Legal Range"
+msgstr "合法范围"
+
+msgid "Straight"
+msgstr "Straight"
+
+msgid "Premultiplied"
+msgstr "Premultiplied"
+
+msgid "Nearest"
+msgstr "Nearest"
 
 msgid "Small"
 msgstr "Small"
@@ -6144,6 +6174,21 @@ msgstr "面板"
 msgid "Sets the font to use in panels. (Not yet working)"
 msgstr "设置要在面板中使用的字体。 (尚未工作)"
 
+msgid "HDR"
+msgstr "HDR"
+
+msgid "Chromaticities"
+msgstr "色度"
+
+msgid "HDR Data"
+msgstr "HDR 数据"
+
+msgid "Tonemap Algorithm"
+msgstr "色调映射算法"
+
+msgid "Gamut Mapping"
+msgstr "色域映射"
+
 msgid "Language and Colors"
 msgstr "语言和颜色"
 
@@ -6248,18 +6293,6 @@ msgstr "Minify Filter"
 
 msgid "Magnify Filter"
 msgstr "Magnify Filter"
-
-msgid "HDR"
-msgstr "HDR"
-
-msgid "Chromaticities"
-msgstr "色度"
-
-msgid "HDR Data"
-msgstr "HDR 数据"
-
-msgid "Tonemap Algorithm"
-msgstr "色调映射算法"
 
 msgid "Thumbnails"
 msgstr "缩略图"
@@ -6678,6 +6711,9 @@ msgstr "用户界面/文件请求器"
 
 msgid "User Interface/Fonts"
 msgstr "用户界面/字体"
+
+msgid "User Interface/HDR"
+msgstr "用户界面/HDR"
 
 msgid "User Interface/Language and Colors"
 msgstr "用户界面/语言和颜色"
@@ -7478,9 +7514,6 @@ msgstr "开关热键窗口"
 
 msgid "Toggle About Window"
 msgstr "开关关于窗口"
-
-#~ msgid "Could not read image data from view"
-#~ msgstr "无法从视图读取图像数据"
 
 #~ msgid "Could not read annotation image from view"
 #~ msgstr "无法从视图读取注释图像"

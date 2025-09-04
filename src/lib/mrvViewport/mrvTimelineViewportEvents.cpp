@@ -405,9 +405,7 @@ namespace mrv
             switch (event)
             {
             case FL_FOCUS:
-            {
                 return 1;
-            }
             case FL_ENTER:
             {
                 p.lastEvent = 0;

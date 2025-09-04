@@ -3683,6 +3683,15 @@ msgstr "फ्रेम {0} - समयकोड: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "छवि बहुत बड़ा है. व्यूपोर्ट आकार सहेजेगा."
 
+msgid "Could not read image data from view"
+msgstr "दृश्य से छवि डेटा पढ़ा नहीं जा सका"
+
+msgid "Play"
+msgstr "बजाएँ"
+
+msgid "Stop"
+msgstr "रूकें"
+
 msgid "Scrub"
 msgstr "स्क्रैप"
 
@@ -3753,12 +3762,6 @@ msgid ""
 msgstr ""
 "वर्तमान फ्रेम के लिए यहाँ एक एनोटेशन बना नहीं सकता. सभी फ्रेम पहले से ही "
 "मौजूद है."
-
-msgid "Play"
-msgstr "बजाएँ"
-
-msgid "Stop"
-msgstr "रूकें"
 
 msgid "2.35"
 msgstr "2.35"
@@ -4308,6 +4311,12 @@ msgstr "सिंक/स्वीकारें/व्याख्याएँ"
 
 msgid "Sync/Accept/Audio"
 msgstr "सिंक/स्वीकारें/ऑडियो"
+
+msgid "Voice Annotation/Record"
+msgstr "वॉइस एनोटेशन/रिकॉर्ड"
+
+msgid "Voice Annotation/Play"
+msgstr "वॉइस एनोटेशन/चलाएँ"
 
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
@@ -5779,65 +5788,14 @@ msgstr "मध्यम"
 msgid "Fast"
 msgstr "तेज"
 
-msgid "base"
-msgstr "base"
-
-msgid "plastic"
-msgstr "plastic"
-
-msgid "gtk+"
-msgstr "gtk+"
-
-msgid "gleam"
-msgstr "गहरा लाल रंग"
-
-msgid "oxy"
-msgstr "oxy"
-
-msgid "Float Values"
-msgstr "फ्लोट मूल्य"
-
-msgid "Hex Values"
-msgstr "हेक्साक मान"
-
-msgid "8-bit Values"
-msgstr "8- बिट मूल्य"
-
-msgid "Full Lut, Gamma and Gain"
-msgstr "पूरा लूत, गामा और गेन"
-
-msgid "Original without Gamma, Gain or Lut"
-msgstr "मूल बिना गामा, प्राप्ति या लूत के बगैर"
-
-msgid "CIE XYZ"
-msgstr "सीआई एक्सवाय"
-
-msgid "CIE xyY"
-msgstr "सीआईआई एक्सy"
-
-msgid "From File"
-msgstr "फ़ाइल से"
-
-msgid "Full Range"
-msgstr "पूरा सीमा"
-
-msgid "Legal Range"
-msgstr "लीगल सीमा"
-
-msgid "Straight"
-msgstr "सीधा"
-
-msgid "Premultiplied"
-msgstr "प्री- एम्प्टीज़"
-
-msgid "Nearest"
-msgstr "निकटस्थ"
-
 msgid "Ignore"
 msgstr "अनदेखा करें"
 
 msgid "Apply"
 msgstr "लागू करें"
+
+msgid "From File"
+msgstr "फ़ाइल से"
 
 msgid "Inactive"
 msgstr "निष्क्रिय"
@@ -5874,6 +5832,78 @@ msgstr "Hable"
 
 msgid "Linear Light"
 msgstr "रैखिक प्रकाश"
+
+msgid "Auto"
+msgstr "स्वचालित"
+
+msgid "Perceptual"
+msgstr "परसेप्चुअल"
+
+msgid "Relative"
+msgstr "सापेक्ष"
+
+msgid "Absolute"
+msgstr "निरपेक्ष"
+
+msgid "Desaturate"
+msgstr "सैट्युरेशन घटाएँ"
+
+msgid "Darken"
+msgstr "गहरा करें"
+
+msgid "Highlight"
+msgstr "हाइलाइट करें"
+
+msgid "base"
+msgstr "base"
+
+msgid "plastic"
+msgstr "plastic"
+
+msgid "gtk+"
+msgstr "gtk+"
+
+msgid "gleam"
+msgstr "गहरा लाल रंग"
+
+msgid "oxy"
+msgstr "oxy"
+
+msgid "Float Values"
+msgstr "फ्लोट मूल्य"
+
+msgid "Hex Values"
+msgstr "हेक्साक मान"
+
+msgid "8-bit Values"
+msgstr "8- बिट मूल्य"
+
+msgid "Full Lut, Gamma and Gain"
+msgstr "पूरा लूत, गामा और गेन"
+
+msgid "Original without Gamma, Gain or Lut"
+msgstr "मूल बिना गामा, प्राप्ति या लूत के बगैर"
+
+msgid "CIE XYZ"
+msgstr "सीआई एक्सवाय"
+
+msgid "CIE xyY"
+msgstr "सीआईआई एक्सy"
+
+msgid "Full Range"
+msgstr "पूरा सीमा"
+
+msgid "Legal Range"
+msgstr "लीगल सीमा"
+
+msgid "Straight"
+msgstr "सीधा"
+
+msgid "Premultiplied"
+msgstr "प्री- एम्प्टीज़"
+
+msgid "Nearest"
+msgstr "निकटस्थ"
 
 msgid "Small"
 msgstr "छोटा"
@@ -6216,6 +6246,21 @@ msgstr "फलक"
 msgid "Sets the font to use in panels. (Not yet working)"
 msgstr "फलक में उपयोग हेतु फ़ॉन्ट सेट करता है. (अभी कार्य नहीं)"
 
+msgid "HDR"
+msgstr "HDR"
+
+msgid "Chromaticities"
+msgstr "रंगमिति"
+
+msgid "HDR Data"
+msgstr "HDR डेटा"
+
+msgid "Tonemap Algorithm"
+msgstr "टोनमैप एल्गोरिदम"
+
+msgid "Gamut Mapping"
+msgstr "गेमट मैपिंग"
+
 msgid "Language and Colors"
 msgstr "भाषा और रंग"
 
@@ -6331,18 +6376,6 @@ msgstr "न्यूनतमीकरण फ़िल्टर"
 
 msgid "Magnify Filter"
 msgstr "आवाही फ़िल्टर"
-
-msgid "HDR"
-msgstr "HDR"
-
-msgid "Chromaticities"
-msgstr "रंगमिति"
-
-msgid "HDR Data"
-msgstr "HDR डेटा"
-
-msgid "Tonemap Algorithm"
-msgstr "टोनमैप एल्गोरिदम"
 
 msgid "Thumbnails"
 msgstr "लघु छवि"
@@ -6810,6 +6843,9 @@ msgstr "प्रयोक्ता अंतरफलक/फ़ाइल नि
 
 msgid "User Interface/Fonts"
 msgstr "प्रयोक्ता अंतरफलक/फ़ॉन्ट्स"
+
+msgid "User Interface/HDR"
+msgstr "उपयोगकर्ता इंटरफ़ेस/HDR"
 
 msgid "User Interface/Language and Colors"
 msgstr "उपयोक्ता इंटरफेस/ भाषा तथा रंग"
@@ -7611,9 +7647,6 @@ msgstr "यदि आप विंडो को बन्द करना चा
 
 msgid "Toggle About Window"
 msgstr "विंडो के बारे में टॉगल करें"
-
-#~ msgid "Could not read image data from view"
-#~ msgstr "दृश्य से छवि डेटा पढ़ा नहीं जा सका"
 
 #~ msgid "Could not read annotation image from view"
 #~ msgstr "दृश्य से एनोटेशन छवि पढ़ी नहीं जा सकी"

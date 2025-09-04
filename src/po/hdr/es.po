@@ -16,16 +16,16 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "HDR monitor found."
-msgstr ""
+msgstr "Monitor HDR encontrado."
 
 msgid "HDR monitor not found or not configured."
-msgstr ""
+msgstr "Monitor HDR no encontrado o no configurado."
 
 msgid "Connection/"
 msgstr "Conección/"
 
 msgid "Window/Fullscreen"
-msgstr ""
+msgstr "Ventana/Pantalla Completa"
 
 msgid "HDR/Pass through Metadata to Display"
-msgstr ""
+msgstr "HDR/Pasar los Metadatos a la Pantalla"

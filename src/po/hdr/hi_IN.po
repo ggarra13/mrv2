@@ -15,16 +15,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "HDR monitor found."
-msgstr ""
+msgstr "HDR मॉनिटर मिला।"
 
 msgid "HDR monitor not found or not configured."
-msgstr ""
+msgstr "HDR मॉनिटर नहीं मिला या कॉन्फ़िगर नहीं किया गया है।"
 
 msgid "Connection/"
 msgstr "कनेक्शन/"
 
 msgid "Window/Fullscreen"
-msgstr ""
+msgstr "विंडो/पूर्ण स्क्रीन"
 
 msgid "HDR/Pass through Metadata to Display"
-msgstr ""
+msgstr "HDR/मेटाडेटा को डिस्प्ले पर पास करें"

@@ -3702,6 +3702,15 @@ msgstr "Frame {0} - TC: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "Image too big.  Will save the viewport size."
 
+msgid "Could not read image data from view"
+msgstr "Could not read image data from view"
+
+msgid "Play"
+msgstr "Play"
+
+msgid "Stop"
+msgstr "Stop"
+
 msgid "Scrub"
 msgstr "Scrub"
 
@@ -3772,12 +3781,6 @@ msgid ""
 msgstr ""
 "Cannot create an annotation here for current frame.  An all frames "
 "annotation already exists."
-
-msgid "Play"
-msgstr "Play"
-
-msgid "Stop"
-msgstr "Stop"
 
 msgid "2.35"
 msgstr "2.35"
@@ -4327,6 +4330,12 @@ msgstr "Sync/Accept/Annotations"
 
 msgid "Sync/Accept/Audio"
 msgstr "Sync/Accept/Audio"
+
+msgid "Voice Annotation/Record"
+msgstr "Voice Annotation/Record"
+
+msgid "Voice Annotation/Play"
+msgstr "Voice Annotation/Play"
 
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
@@ -5821,65 +5830,14 @@ msgstr "Medium"
 msgid "Fast"
 msgstr "Fast"
 
-msgid "base"
-msgstr "base"
-
-msgid "plastic"
-msgstr "plastic"
-
-msgid "gtk+"
-msgstr "gtk+"
-
-msgid "gleam"
-msgstr "gleam"
-
-msgid "oxy"
-msgstr "oxy"
-
-msgid "Float Values"
-msgstr "Float Values"
-
-msgid "Hex Values"
-msgstr "Hex Values"
-
-msgid "8-bit Values"
-msgstr "8-bit Values"
-
-msgid "Full Lut, Gamma and Gain"
-msgstr "Full Lut, Gamma and Gain"
-
-msgid "Original without Gamma, Gain or Lut"
-msgstr "Original without Gamma, Gain or Lut"
-
-msgid "CIE XYZ"
-msgstr "CIE XYZ"
-
-msgid "CIE xyY"
-msgstr "CIE xyY"
-
-msgid "From File"
-msgstr "From File"
-
-msgid "Full Range"
-msgstr "Full Range"
-
-msgid "Legal Range"
-msgstr "Legal Range"
-
-msgid "Straight"
-msgstr "Straight"
-
-msgid "Premultiplied"
-msgstr "Premultiplied"
-
-msgid "Nearest"
-msgstr "Nearest"
-
 msgid "Ignore"
 msgstr "Ignore"
 
 msgid "Apply"
 msgstr "Apply"
+
+msgid "From File"
+msgstr "From File"
 
 msgid "Inactive"
 msgstr "Inactive"
@@ -5916,6 +5874,78 @@ msgstr "Hable"
 
 msgid "Linear Light"
 msgstr "Linear Light"
+
+msgid "Auto"
+msgstr "Auto"
+
+msgid "Perceptual"
+msgstr "Perceptual"
+
+msgid "Relative"
+msgstr "Relative"
+
+msgid "Absolute"
+msgstr "Absolute"
+
+msgid "Desaturate"
+msgstr "Desaturate"
+
+msgid "Darken"
+msgstr "Darken"
+
+msgid "Highlight"
+msgstr "Highlight"
+
+msgid "base"
+msgstr "base"
+
+msgid "plastic"
+msgstr "plastic"
+
+msgid "gtk+"
+msgstr "gtk+"
+
+msgid "gleam"
+msgstr "gleam"
+
+msgid "oxy"
+msgstr "oxy"
+
+msgid "Float Values"
+msgstr "Float Values"
+
+msgid "Hex Values"
+msgstr "Hex Values"
+
+msgid "8-bit Values"
+msgstr "8-bit Values"
+
+msgid "Full Lut, Gamma and Gain"
+msgstr "Full Lut, Gamma and Gain"
+
+msgid "Original without Gamma, Gain or Lut"
+msgstr "Original without Gamma, Gain or Lut"
+
+msgid "CIE XYZ"
+msgstr "CIE XYZ"
+
+msgid "CIE xyY"
+msgstr "CIE xyY"
+
+msgid "Full Range"
+msgstr "Full Range"
+
+msgid "Legal Range"
+msgstr "Legal Range"
+
+msgid "Straight"
+msgstr "Straight"
+
+msgid "Premultiplied"
+msgstr "Premultiplied"
+
+msgid "Nearest"
+msgstr "Nearest"
 
 msgid "Small"
 msgstr "Small"
@@ -6255,6 +6285,21 @@ msgstr "Panels"
 msgid "Sets the font to use in panels. (Not yet working)"
 msgstr "Sets the font to use in panels. (Not yet working)"
 
+msgid "HDR"
+msgstr "HDR"
+
+msgid "Chromaticities"
+msgstr "Chromaticities"
+
+msgid "HDR Data"
+msgstr "HDR Data"
+
+msgid "Tonemap Algorithm"
+msgstr "Tonemap Algorithm"
+
+msgid "Gamut Mapping"
+msgstr "Gamut Mapping"
+
 msgid "Language and Colors"
 msgstr "Language and Colors"
 
@@ -6371,18 +6416,6 @@ msgstr "Minify Filter"
 
 msgid "Magnify Filter"
 msgstr "Magnify Filter"
-
-msgid "HDR"
-msgstr "HDR"
-
-msgid "Chromaticities"
-msgstr "Chromaticities"
-
-msgid "HDR Data"
-msgstr "HDR Data"
-
-msgid "Tonemap Algorithm"
-msgstr "Tonemap Algorithm"
 
 msgid "Thumbnails"
 msgstr "Thumbnails"
@@ -6852,6 +6885,9 @@ msgstr "User Interface/File Requester"
 
 msgid "User Interface/Fonts"
 msgstr "User Interface/Fonts"
+
+msgid "User Interface/HDR"
+msgstr "User Interface/HDR"
 
 msgid "User Interface/Language and Colors"
 msgstr "User Interface/Language and Colors"
@@ -7653,9 +7689,6 @@ msgstr "Toggle Hotkeys Window"
 
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
-
-#~ msgid "Could not read image data from view"
-#~ msgstr "Could not read image data from view"
 
 #~ msgid "Could not read annotation image from view"
 #~ msgstr "Could not read annotation image from view"
