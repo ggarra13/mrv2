@@ -174,6 +174,7 @@ Currently, when run as demo these versions don't have:
 	   - A/B Comparisons
 	   - OpenEXR Layer switching
 	   - NDI support
+	   - Allow more than 5 minutes of use.
 
 History
 -------
