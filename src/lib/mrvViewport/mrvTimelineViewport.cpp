@@ -262,7 +262,7 @@ namespace mrv
             p.ui->uiRectangle->value(0);
             p.ui->uiArrow->value(0);
             p.ui->uiText->value(0);
-
+            
             if (mode != kSelection)
             {
                 math::Box2i area;
@@ -270,6 +270,12 @@ namespace mrv
                 setSelectionArea(area);
             }
 
+            if (App::demo_mode)
+            {
+                p.ui->uiScrub->value(1);
+                return;
+            }
+            
             if (p.actionMode == kText && mode != kText)
             {
                 acceptMultilineInput();
