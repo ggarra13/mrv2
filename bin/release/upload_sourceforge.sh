@@ -344,10 +344,11 @@ echo "Concatenating Installation notes"
 cat INSTALLATION_NOTES.md >> README.md
 rm INSTALLATION_NOTES.md
 
-echo "Concatenating Vulkan notes"
-cat VULKAN_NOTES.md >> README.md
-rm VULKAN_NOTES.md
-
+if [[ $branch == "vulkan" ]]; then
+    echo "Concatenating Vulkan notes"
+    cat VULKAN_NOTES.md >> README.md
+    rm VULKAN_NOTES.md
+fi
 
 echo "Upload README.md"
 upload_file README.md README.md
