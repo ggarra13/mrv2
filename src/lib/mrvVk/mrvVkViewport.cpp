@@ -493,7 +493,7 @@ namespace mrv
                 {
                     context->addSystem(timelineui_vk::ThumbnailSystem::create(context, ctx));
                 }
-            
+                
                 vk.render = timeline_vlk::Render::create(ctx, context);
 
                 vk.annotationRender = timeline_vlk::Render::create(ctx, context);

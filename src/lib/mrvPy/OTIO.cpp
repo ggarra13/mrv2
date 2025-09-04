@@ -143,10 +143,6 @@ Compute the duration of samples from first to last (including last). This is not
 For example, the duration of a clip from frame 10 to frame 15 is 6 frames. Result will be in the rate of start_time.
 )docstring"))
         .def_static(
-            "is_valid_timecode_rate", &RationalTime::is_valid_timecode_rate,
-            "rate"_a,
-            _("Returns true if the rate is valid for use with timecode."))
-        .def_static(
             "nearest_valid_timecode_rate",
             &RationalTime::nearest_valid_timecode_rate, "rate"_a,
             _("Returns the first valid timecode rate that has the least "

@@ -7,6 +7,8 @@
 
 #include "mrvWidgets/mrvBackend.h"
 
+#include "mrvVoice/mrvAnnotation.h"
+
 #include <tlTimeline/Player.h>
 
 #include <tlDraw/Annotation.h>
@@ -329,12 +331,17 @@ namespace mrv
 
         ///@}
 
-        //! Returns whether there's annotations in the player
+        //! Returns whether there's annotations in the player.
         bool hasAnnotations() const;
+
+        //! Returns whether there's voice annotations in the player.
+        bool hasVoiceAnnotations() const;
 
         //! Return a list of annotation times
         const std::vector< otime::RationalTime > getAnnotationTimes() const;
 
+        //! @{
+        
         //! Get annotation for current time
         std::shared_ptr< draw::Annotation > getAnnotation() const;
         
@@ -361,15 +368,50 @@ namespace mrv
         void setAllAnnotations(
             const std::vector< std::shared_ptr< draw::Annotation >>&);
 
+        //! Remove an annotation from list.
+        void removeAnnotation(const std::shared_ptr< draw::Annotation >&);
+
+        //! @}
+
+        //! @{
+        
+        //! Get annotation for current time
+        std::shared_ptr< voice::Annotation > getVoiceAnnotation() const;
+        
+        //! Get undo annotation for current time
+        std::shared_ptr< voice::Annotation > getUndoVoiceAnnotation() const;
+
+        //! Create annotation for current time
+        std::shared_ptr< voice::Annotation >
+        createVoiceAnnotation(const bool all_frames = false);
+
+        //! Get list of annotations for between previous ghosting and
+        //! next ghosting from current time.
+        std::vector< std::shared_ptr< voice::Annotation >>
+        getVoiceAnnotations(const int, const int) const;
+
+        //! Get all annotations in timeline player.
+        std::vector< std::shared_ptr< voice::Annotation >>
+        getAllVoiceAnnotations() const;
+
+        //! Set frame annotations in timeline player for current frame (time).
+        void setFrameAnnotation(const std::shared_ptr< voice::Annotation >&);
+
+        //! Set all annotations in timeline player.
+        void setAllAnnotations(
+            const std::vector< std::shared_ptr< voice::Annotation >>&);
+
+        //! Remove an annotation from list.
+        void removeAnnotation(const std::shared_ptr< voice::Annotation >&);
+
+        //! @}
+        
         //! Clear all annotations in timeline player for current frame (time).
         void clearFrameAnnotation();
 
         //! Clear all annotations in timeline player.
         void clearAllAnnotations();
-
-        //! Remove an annotation from list.
-        void removeAnnotation(const std::shared_ptr< draw::Annotation >&);
-
+        
         //! Undo the last annotation.
         void undoAnnotation();
 
@@ -382,6 +424,9 @@ namespace mrv
         //! Returns whtehr annotation at current time can be redone.
         bool hasRedo() const;
 
+        //! @}
+
+        
     protected:
         template < typename T >
         void pushMessage(const std::string& command, const T& value);

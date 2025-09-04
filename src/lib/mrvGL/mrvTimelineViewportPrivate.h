@@ -4,14 +4,14 @@
 
 #pragma once
 
-#include <deque>
+#include "mrvCore/mrvString.h"
 
 #include <tlTimeline/BackgroundOptions.h>
 #include <tlTimeline/Player.h>
 
-#include "mrvCore/mrvString.h"
-
 #include "tlDraw/Annotation.h"
+
+#include <deque>
 
 class ViewerUI;
 class Fl_Menu_Button;
@@ -191,7 +191,5 @@ namespace mrv
             //! Overlay
             std::shared_ptr<image::Image> overlayImage;
         };
-
-    }
-    
+    }  // namespace opengl
 } // namespace mrv

@@ -94,8 +94,6 @@ namespace tl
 
         ///@}
 
-        class Info;
-
         //! Audio data information.
         class Info
         {

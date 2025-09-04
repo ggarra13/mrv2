@@ -14,7 +14,7 @@ set(SOURCES
 add_library(mrvViewport ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-set(LIBRARIES mrvWidgets)
+set(LIBRARIES mrvWidgets mrvVoice)
 if(TLRENDER_VK AND MRV2_BACKEND STREQUAL "VK")
     list(APPEND LIBRARIES ${FLTK_vk_LIBRARY})
 endif()

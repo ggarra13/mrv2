@@ -20,9 +20,23 @@ namespace mrv
         const char* title, const char* pattern, const char* startfile,
         const bool compact_images = true);
 
-    std::string open_directory(const char* startfile);
+    /** 
+     * Opens a directory
+     * 
+     * @param startdir Directory to start from.
+     * 
+     * @return new directory or same original directory if cancelled.
+     */
+    std::string open_directory(const char* startdir);
 
-    std::string open_session(const char* startfilex);
+    /** 
+     * Opens a session file (.mrv2s)
+     * 
+     * @param startfile Starting session file.
+     * 
+     * @return new session file or empty.
+     */
+    std::string open_session(const char* startfile);
 
     /**
      * Opens a file requester to save an otio file

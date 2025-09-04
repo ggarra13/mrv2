@@ -9,6 +9,8 @@
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvIO.h"
 
+#include "mrvVoice/mrvAnnotation.h"
+
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvNetwork/mrvTCP.h"
@@ -81,11 +83,14 @@ namespace mrv
         std::chrono::time_point<std::chrono::high_resolution_clock> start_time;
 #endif
 
-        //! List of annotations ( drawings/text per time )
+        //! List of annotations ( drawings/text per time ).
         std::vector<std::shared_ptr<draw::Annotation> > annotations;
 
-        //! Last annotation undone
+        //! Last annotation undone.
         std::vector<std::shared_ptr<draw::Annotation> > undoAnnotations;
+
+        //! List of voice annotations.
+        std::vector<std::shared_ptr<voice::Annotation> > voiceAnnotations;
     };
 
     void TimelinePlayer::_init(

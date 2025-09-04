@@ -93,8 +93,8 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {0 0 853 466} type Double resizable
-      code0 {main = m;} visible
+      xywh {0 0 853 466} type Double hide resizable
+      code0 {main = m;}
     } {
       Fl_Group {} {open
         xywh {0 0 853 466} box FLAT_BOX
@@ -427,11 +427,11 @@ If you try to open several mrv2s with different images, all these images will be
               }
             }
             Fl_Group {} {
-              label HDR open
-              xywh {298 28 555 369} box EMBOSSED_BOX align 5
+              label HDR
+              xywh {298 28 555 369} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
-                label HDR open selected
+                label HDR open
                 xywh {310 71 530 304} box ROUNDED_BOX
               } {
                 Fl_Choice uiPrefsChromaticities {
@@ -1446,31 +1446,31 @@ v->uiOCIO_Display_View->do_callback();}
             }
             Fl_Group {} {
               label Loading
-              xywh {288 37 555 360} align 5 hide
+              xywh {288 38 555 360} align 5 hide
             } {
               Fl_Group {} {open
-                xywh {324 140 488 180}
+                xywh {324 141 488 180}
               } {
                 Fl_Input uiPrefsVersionRegex {
                   label {Version Regex}
-                  tooltip {Regular Expression used to match clip versions.  Must group three things (prefix, number and suffix). If left on its default value (_v), it will automatically be created a regular expression to match versions defined with _v in the name of the file, directory or both. For example: gizmo_v001.0001.exr} xywh {443 164 345 30} color 20 textcolor 56
+                  tooltip {Regular Expression used to match clip versions.  Must group three things (prefix, number and suffix). If left on its default value (_v), it will automatically be created a regular expression to match versions defined with _v in the name of the file, directory or both. For example: gizmo_v001.0001.exr} xywh {443 165 345 30} color 20 textcolor 56
                   code0 {o->value( "_v" );}
                 }
                 Fl_Spinner uiPrefsMaxImagesApart {
                   label {Maximum Images Apart}
-                  tooltip {When searching for a version, this value is the maximum version apart from each other when searching the first or last version.} xywh {593 244 60 25} box DOWN_BOX color 20 selection_color 15 minimum 10 maximum 50 value 10 textcolor 56
+                  tooltip {When searching for a version, this value is the maximum version apart from each other when searching the first or last version.} xywh {593 245 60 25} box DOWN_BOX color 20 selection_color 15 minimum 10 maximum 50 value 10 textcolor 56
                 }
               }
               Fl_Group {} {open
-                xywh {380 72 412 34}
+                xywh {380 73 412 34}
               } {
                 Fl_Box {} {
                   label {Missing Frame}
-                  xywh {380 72 158 34}
+                  xywh {380 73 158 34}
                 }
                 Fl_Menu_Button uiMissingFrameType {
                   label {Black Frame}
-                  xywh {545 72 247 34}
+                  xywh {545 73 247 34}
                   code0 {o->enable_glyph();}
                   class {mrv::PopupMenu}
                 } {
@@ -1796,6 +1796,61 @@ v->uiOCIO_Display_View->do_callback();}
               }
             }
             Fl_Group {} {
+              label {Voice Annotations} open
+              tooltip {Voice Annotation Preferences.} xywh {298 47 555 361} box EMBOSSED_BOX align 5
+            } {
+              Fl_Group {} {
+                label {Voice Annotations} open
+                xywh {314 72 520 300} box ROUNDED_BOX
+              } {
+                Fl_Input uiPrefsVoiceOverPath {
+                  label {Save Path}
+                  user_data main user_data_type {ViewerUI*}
+                  tooltip {This is the path to your config.ocio file.  It can be set with the environment variable OCIO, which takes precedence over any saved setting.} xywh {332 114 424 31} color 20 align 1 when 11 textcolor 56
+                }
+                Fl_Button {} {
+                  label Pick
+                  user_data m user_data_type {ViewerUI*}
+                  callback {PreferencesUI* uiPrefs = v->uiPrefs;
+std::string r = mrv::open_directory(uiPrefs->uiPrefsVoiceOverPath->value());
+if ( r.empty() ) return;
+
+uiPrefs->uiPrefsVoiceOverPath->value( r.c_str() );} selected
+                  tooltip {Pick a directory from disk to save voice overs..} xywh {760 114 55 31}
+                }
+                Fl_Choice uiPrefsVoiceOverSpeed {
+                  label {Playback Speed}
+                  xywh {476 182 100 32} down_box BORDER_BOX
+                } {
+                  MenuItem {} {
+                    label Normal
+                    xywh {0 0 100 20}
+                  }
+                  MenuItem {} {
+                    label {X 2}
+                    xywh {0 0 100 20}
+                  }
+                  MenuItem {} {
+                    label {X 3}
+                    xywh {10 10 100 20}
+                  }
+                  MenuItem {} {
+                    label {X 4}
+                    xywh {20 20 100 20}
+                  }
+                }
+                Fl_Choice uiPrefsVoiceOverMicrophone {
+                  label Microphone open
+                  xywh {478 222 310 32} down_box BORDER_BOX
+                  code0 {fill_audio_input_devices(this);}
+                } {}
+                Fl_Value_Slider uiPrefsVoiceOverVolume {
+                  label Volume
+                  xywh {476 262 174 28} type {Horz Knob} align 4 minimum 30 maximum 120 step 1 value 100 textsize 14
+                }
+              }
+            }
+            Fl_Group {} {
               label ComfyUI
               tooltip {Here are the current settings to interact with ComfyUI.  It requires installation of mrv2's comfyUI nodes.} xywh {298 47 555 360} box EMBOSSED_BOX align 5 hide
             } {
@@ -1996,6 +2051,7 @@ o->add( _("Path Mappings") );
 o->add( _("Network") );
 o->add( _("Video") );
 o->add( _("Audio") );
+o->add( _("Voice Annotations") );
 o->add( _("ComfyUI") );
 o->add( _("Errors") );
 o->add( _("Behavior") );
@@ -2049,7 +2105,8 @@ o->select( item );} {}
     o->add(_("No Audio was Compiled"));
 \#endif} {}
   }
-  Function {fill_audio_output_devices(PreferencesUI* self)} {} {
+  Function {fill_audio_output_devices(PreferencesUI* self)} {open
+  } {
     code {auto v = self->uiPrefsAudioAPI;
 auto o = self->uiPrefsAudioOutputDevice;
 int oldDevice = o->value();
@@ -2112,6 +2169,91 @@ for (size_t i = 0; i < numDevices - 1; ++i)
    unsigned numOutput = deviceInfo.outputChannels;
    unsigned numDuplex = deviceInfo.duplexChannels;
    if (numOutput == 0 && numDuplex == 0)
+      continue;  // a microphone or similar
+      
+   name = mrv::string::commentSlash(deviceInfo.name);
+   o->add(name.c_str());
+   if (name == oldDeviceName)
+   {
+      oldDevice = i + 1;
+   }
+}
+
+o->value(oldDevice);
+
+\#else
+
+o->add(_("No Valid Devices found" ));
+o->value(0);
+
+\#endif} {}
+  }
+  Function {fill_audio_input_devices(PreferencesUI* self)} {open
+  } {
+    code {auto v = self->uiPrefsAudioAPI;
+auto o = self->uiPrefsVoiceOverMicrophone;
+
+int oldDevice = o->value();
+std::string oldDeviceName;
+
+if (oldDevice >= 0)
+{
+    const Fl_Menu_Item* item = v->child(oldDevice);
+    if (item && item->label())
+    {
+        oldDeviceName = item->label();
+    }
+}
+
+
+o->clear();
+
+\#ifdef TLRENDER_AUDIO
+
+int value = v->value();
+const Fl_Menu_Item* item = v->child(value);
+
+std::string apiName;
+if (item && item->label())
+{
+    apiName = item->label();
+}
+
+   
+RtAudio::Api api = RtAudio::getCompiledApiByName(apiName);
+
+RtAudio audio(api);
+
+RtAudio::Api realApi = audio.getCurrentApi();
+
+const auto numDevices = audio.getDeviceCount();
+if (numDevices <= 0)
+{
+    o->add(_("No Valid Devices found" ));
+    o->value(0);
+    return;
+}
+
+
+const auto deviceDefault = audio.getDefaultInputDevice();
+const auto& info = audio.getDeviceInfo(deviceDefault);
+const auto& deviceName = mrv::string::commentSlash(info.name);
+
+oldDevice = 0;
+
+std::string name = _("Default Device");
+name += " (";
+name += deviceName;
+name += ")";
+o->add(name.c_str());
+for (size_t i = 0; i < numDevices - 1; ++i)
+{
+   const auto& deviceInfo = audio.getDeviceInfo(i);
+   if (!deviceInfo.probed) continue;
+   
+   unsigned numInput = deviceInfo.inputChannels;
+   unsigned numDuplex = deviceInfo.duplexChannels;
+   if (numInput == 0 && numDuplex == 0)
       continue;  // a microphone or similar
       
    name = mrv::string::commentSlash(deviceInfo.name);

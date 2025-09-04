@@ -844,27 +844,30 @@ namespace mrv
         uiPrefs->uiPrefsRaiseLogWindowOnFFmpegError->value(tmp);
         LogDisplay::ffmpegPrefs = (LogDisplay::ShowPreferences)tmp;
 
-        Fl_Preferences opengl(base, "opengl");
+        Fl_Preferences video(base, "opengl");
 
-        opengl.get("vsync", tmp, 1);
+        video.get("vsync", tmp, 1);
         uiPrefs->uiPrefsOpenGLVsync->value(tmp);
 
-        opengl.get("color_buffers_accuracy", tmp, 0);
+        video.get("color_buffers_accuracy", tmp, 0);
         uiPrefs->uiPrefsColorAccuracy->value(tmp);
 
-        opengl.get("blit_viewports", tmp, 0);
+        video.get("blit_viewports", tmp, 0);
         uiPrefs->uiPrefsBlitMainViewport->value(tmp);
         uiPrefs->uiPrefsBlitSecondaryViewport->value(tmp);
         
-        opengl.get("blit_main_viewport", tmp, 0);
+        video.get("blit_main_viewport", tmp, 0);
         uiPrefs->uiPrefsBlitMainViewport->value(tmp);
         
-        opengl.get("blit_secondary_viewport", tmp, 0);
+        video.get("blit_secondary_viewport", tmp, 0);
         uiPrefs->uiPrefsBlitSecondaryViewport->value(tmp);
 
-        opengl.get("blit_timeline", tmp, 0);
+        video.get("blit_timeline", tmp, 0);
         uiPrefs->uiPrefsBlitTimeline->value(tmp);
-        
+
+        // 
+        // Vulkan
+        // 
         Fl_Preferences vulkan(base, "vulkan");
         vulkan.get("gpu_main_viewport", tmp, 0);
         uiPrefs->uiPrefsMainViewportGPU->value(tmp);
@@ -886,12 +889,35 @@ namespace mrv
         audio.get("output_device", tmp, 0);
         uiPrefs->uiPrefsAudioOutputDevice->value(tmp);
 
+        //
+        // Voice Overs
+        //
+        Fl_Preferences voice(base, "voice");
+        
+        voice.get("path", tmpS, tmppath().c_str(), 4096);
+        uiPrefs->uiPrefsVoiceOverPath->value(tmpS);
+        
+        voice.get("speed", tmp, 0);
+        uiPrefs->uiPrefsVoiceOverSpeed->value(tmp);
+        
+        voice.get("microphone", tmp, 0);
+        uiPrefs->uiPrefsVoiceOverMicrophone->value(tmp);
+        
+        voice.get("volume", tmpF, 100.F);
+        uiPrefs->uiPrefsVoiceOverSpeed->value(tmpF);
+        
+        //
+        // ComfyUI
+        //
         Fl_Preferences ComfyUI(base, "comfyUI");
 
         ComfyUI.get("input_pipe", tmp, 0);
         uiPrefs->uiPrefsUseComfyUIPipe->value((bool)tmp);
 
-        
+
+        //
+        // Behavior
+        //
         Fl_Preferences behavior(base, "behavior");
 
         behavior.get("check_for_updates", tmp, 0);

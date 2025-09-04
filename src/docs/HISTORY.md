@@ -23,8 +23,9 @@ v1.4.1
   	  10 + 5 and get 15.
 - Updated compile to work with cmake 4.1.1.
 - Updated to OpenEXR v3.5 (from 3.2).
-- Updated to use Imath v3.2.1 (from 3.1.9)
+- Updated to use Imath v3.2.1 (from 3.1.9)	
 - Updated to use cpptrace v1.0.4
+- Updated to use FFmpeg v8.0 (from v7.0.1)
 - Updated beta builds to build OpenUSD on Windows and macOS 13, as disk space is no longer an issue (Thank you Microsoft!).
 - Refactored mrvGL/mrvTimelineViewport.cpp and mrvVk/mrvTimelineViewport.cpp to
   common classes in mrvCommonBackend/mrvTimelineViewport.cpp
@@ -39,7 +40,10 @@ v1.4.1
 - Made demo mode pop up a license request every 5 minutes of use.
 - Made demo mode not allow clicking twice on draw actions.
 - Fixed dpkg and rpm uninstallers failing due to a syntax error on bash script.
-
+- Removed deprecated is_valid_timecode_rate from OTIO pybind11's rationalTime.
+- Fixed audio saving to also store the duration of each frame.
+- Fixed HDR data also potentially being added to audio streams when saving a
+  movie.
 
 v1.4.0
 ======

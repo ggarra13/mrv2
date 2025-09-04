@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Copyright (c) 2021-2024 Darby Johnston
+// Copyright (c) 2024-2025 Gonzalo Garramuño
 // All rights reserved.
 
 #include <fstream>
@@ -1108,12 +1109,13 @@ namespace tl
                             .arg(getErrorLabel(r)));
                 }
 
-                if (p.avAudioCodecContext->codec->capabilities &
-                    AV_CODEC_CAP_VARIABLE_FRAME_SIZE)
+                int workSize = p.avAudioCodecContext->frame_size;
+                if (workSize <= 0 && avAudioCodecID != AV_CODEC_ID_PCM_S16LE)
                 {
-                    p.avAudioCodecContext->frame_size = p.sampleRate;
+                    workSize = 1024;
                 }
-                p.avAudioFrame->nb_samples = p.avAudioCodecContext->frame_size;
+                
+                p.avAudioFrame->nb_samples = workSize;
                 p.avAudioFrame->format = p.avAudioCodecContext->sample_fmt;
                 p.avAudioFrame->sample_rate = p.sampleRate;
                 r = av_channel_layout_copy(
@@ -1786,6 +1788,7 @@ namespace tl
 
                     if (p.avCodecContext)
                     {
+                        std::cerr << __LINE__ << std::endl;
                         _encode(
                             p.avCodecContext, p.avVideoStream, nullptr,
                             p.avPacket);
@@ -1959,6 +1962,7 @@ namespace tl
             const auto& info = audioIn->getInfo();
             if (!info.isValid())
                 return;
+            
 
             int r = 0;
             const auto timeRange = otime::TimeRange(
@@ -1974,6 +1978,13 @@ namespace tl
                 if (p.totalSamples == 0)
                 {
                     p.audioStartSamples = timeRange.start_time().value();
+                }
+                else
+                {
+                    // // Warn if there's a gap in the audio timeline
+                    // LOG_WARNING(
+                    //     string::Format("Audio gap detected at {0} samples")
+                    //     .arg(timeRange.start_time().value()));
                 }
 
                 auto audioResampled = audioIn;
@@ -2007,10 +2018,13 @@ namespace tl
                 }
 
                 const size_t sampleCount = audio->getSampleCount();
+                
                 r = av_audio_fifo_write(
                     p.avAudioFifo,
                     reinterpret_cast<void**>(p.flatPointers.data()),
                     sampleCount);
+
+                fifoSize = av_audio_fifo_size(p.avAudioFifo);
                 if (r < 0)
                 {
                     throw std::runtime_error(
@@ -2029,7 +2043,7 @@ namespace tl
             const AVRational ratio = {1, p.avAudioCodecContext->sample_rate};
 
             const int frameSize = p.avAudioCodecContext->frame_size;
-            while (av_audio_fifo_size(p.avAudioFifo) >= frameSize)
+            while (fifoSize >= frameSize)
             {
                 r = av_frame_make_writable(p.avAudioFrame);
                 if (r < 0)
@@ -2044,6 +2058,9 @@ namespace tl
                     p.avAudioFifo,
                     reinterpret_cast<void**>(p.avAudioFrame->extended_data),
                     frameSize);
+
+                fifoSize = av_audio_fifo_size(p.avAudioFifo);
+                
                 if (r < 0)
                 {
                     throw std::runtime_error(
@@ -2054,6 +2071,8 @@ namespace tl
 
                 p.avAudioFrame->pts = av_rescale_q(
                     p.totalSamples, ratio, p.avAudioCodecContext->time_base);
+                p.avAudioFrame->duration = av_rescale_q(
+                    frameSize, ratio, p.avAudioCodecContext->time_base);
 
                 _encode(
                     p.avAudioCodecContext, p.avAudioStream, p.avAudioFrame,
@@ -2079,9 +2098,14 @@ namespace tl
                     return;
                 }
 
-                p.avAudioFrame->nb_samples = fifoSize;
-
-                r = av_audio_fifo_read(
+                int frameSize = fifoSize;
+                if (p.avAudioCodecContext->codec_id != AV_CODEC_ID_PCM_S16LE &&
+                    p.avAudioCodecContext->frame_size > 0)
+                {
+                    frameSize = std::min(fifoSize, p.avAudioCodecContext->frame_size);
+                }
+                p.avAudioFrame->nb_samples = frameSize;
+                        r = av_audio_fifo_read(
                     p.avAudioFifo,
                     reinterpret_cast<void**>(p.avAudioFrame->extended_data),
                     fifoSize);
@@ -2097,6 +2121,7 @@ namespace tl
                 _encode(
                     p.avAudioCodecContext, p.avAudioStream, p.avAudioFrame,
                     p.avAudioPacket);
+
             }
         }
         
@@ -2172,8 +2197,8 @@ namespace tl
             AVFrame* frame, AVPacket* packet)
         {
             TLRENDER_P();
-    
-            if (p.hasHDR && frame)
+
+            if (p.hasHDR && frame && p.avVideoStream == stream)
             {
                 _attach_hdr_metadata(frame);
             }
@@ -2190,7 +2215,8 @@ namespace tl
             while (r >= 0)
             {
                 r = avcodec_receive_packet(context, packet);
-                if (r == AVERROR(EAGAIN) || r == AVERROR_EOF)
+                
+                if (r == AVERROR_EOF || r == AVERROR(EAGAIN))
                 {
                     return;
                 }

@@ -119,7 +119,6 @@ namespace mrv
 
             if (auto context = gl.context.lock())
             {
-
                 gl.render = timeline_gl::Render::create(context);
                 p.fontSystem = image::FontSystem::create(context);
 

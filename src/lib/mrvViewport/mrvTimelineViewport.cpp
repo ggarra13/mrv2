@@ -35,6 +35,7 @@
 #include "mrvFl/mrvOCIO.h"
 #include "mrvFl/mrvTimelinePlayer.h"
 
+
 #include "mrvIcons/Circle.h"
 #include "mrvIcons/FilledCircle.h"
 #include "mrvIcons/FilledPolygon.h"
@@ -3785,6 +3786,28 @@ namespace mrv
             // Combined transformation matrix
             const math::Matrix4x4f& vm = tm * rotation * to * zoom * translation;
             return vm;
+        }
+        
+        void TimelineViewport::recordVoiceAnnotation()
+        {
+            TLRENDER_P();
+
+            if (!p.player)
+                return;
+
+            p.player->stop();
+
+        }
+        
+        void TimelineViewport::playVoiceAnnotation()
+        {
+            TLRENDER_P();
+
+            if (!p.player)
+                return;
+
+            p.player->stop();
+
         }
         
     } // namespace BACKEND_NAMESPACE

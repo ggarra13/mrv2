@@ -97,4 +97,8 @@ if [[ "$CMAKE_TARGET" == "" ]]; then
 fi
 
 run_cmd ./runmeq.sh $CMAKE_BUILD_TYPE -t $CMAKE_TARGET
+if [[ $? != 0 ]]; then
+    echo "COMPILATON of mrv2 failed"
+    exit 1
+fi
 

@@ -3290,12 +3290,12 @@ namespace mrv
     
     void record_voice_annotation_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        // ui->uiView->recordVoiceAnnotation();
+        ui->uiView->recordVoiceAnnotation();
     }
     
     void play_voice_annotation_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        // ui->uiView->playVoiceAnnotation();
+        ui->uiView->playVoiceAnnotation();
     }
 
 } // namespace mrv

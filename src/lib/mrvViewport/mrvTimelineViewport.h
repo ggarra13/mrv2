@@ -393,6 +393,12 @@ namespace mrv
             //! Get current frame/video tags
             image::Tags getTags() const noexcept;
 
+            //! \@test:
+            void recordVoiceAnnotation();
+
+            //! \@test:
+            void playVoiceAnnotation();
+            
         protected:
             void _init();
 

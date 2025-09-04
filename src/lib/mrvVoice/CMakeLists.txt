@@ -3,14 +3,16 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 set(HEADERS
+    mrvAnnotation.h
     mrvVoiceData.h
     # mrvVoicePlayer.h
-    mrvVoiceRecorder.h
+    mrvVoiceOver.h
 )
 
 set(SOURCES
+    mrvAnnotation.cpp
     # mrvVoicePlayer.cpp
-    mrvVoiceRecorder.cpp
+    mrvVoiceOver.cpp
 )
 
 set(LIBRARIES tlRender::tlCore ${FLTK_LIBRARIES} )

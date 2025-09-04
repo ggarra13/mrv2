@@ -6,7 +6,6 @@
 
 #include <deque>
 
-
 #include "mrvCore/mrvString.h"
 
 #include <tlTimeline/BackgroundOptions.h>
