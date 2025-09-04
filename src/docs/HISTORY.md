@@ -37,6 +37,8 @@ v1.4.1
 - Added .po translations to hdr utility.
 - Fixed switching languages on Linux and macOS.
 - Made demo mode pop up a license request every 5 minutes of use.
+- Made demo mode not allow clicking twice on draw actions.
+- Fixed dpkg and rpm uninstallers failing due to a syntax error on bash script.
 
 
 v1.4.0
