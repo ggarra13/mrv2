@@ -22,7 +22,7 @@ v1.4.1
   type, for example:
   	  10 + 5 and get 15.
 - Updated compile to work with cmake 4.1.1.
-- Updated to OpenEXR v3.4 (from 3.2).
+- Updated to OpenEXR v3.5 (from 3.2).
 - Updated to use Imath v3.2.1 (from 3.1.9)
 - Updated to use cpptrace v1.0.4
 - Updated beta builds to build OpenUSD on Windows and macOS 13, as disk space is no longer an issue (Thank you Microsoft!).
@@ -36,6 +36,7 @@ v1.4.1
   UI much more friendly.
 - Added .po translations to hdr utility.
 - Fixed switching languages on Linux and macOS.
+- Made demo mode pop up a license request every 5 minutes of use.
 
 
 v1.4.0
