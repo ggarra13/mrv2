@@ -134,7 +134,7 @@ ${date}.
 
 It does not support NDI® on any platform.
 
-It works on Windows 8.1+, Ubuntu 22.04 LTS+, macOS 13 (amd64) and macOS M1/M2/M3 (arm64). 
+It works on Windows 10+, Ubuntu 22.04 LTS+, macOS 13 (amd64) and macOS M1+ (arm64). 
 
 It may contain bugs, new untested features and more.
 
