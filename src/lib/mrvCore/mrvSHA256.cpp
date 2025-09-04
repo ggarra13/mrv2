@@ -13,6 +13,20 @@
 *********************************************************************/
 
 /*************************** HEADER FILES ***************************/
+
+#include "mrvApp/mrvApp.h"
+
+#include "mrvNetwork/mrvCypher.h"
+
+#include "mrvCore/mrvFile.h"
+#include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvOS.h"
+#include "mrvCore/mrvSHA256.h"
+
+#include <FL/Fl.H>
+#include <FL/fl_ask.H>
+#include <FL/Fl_Preferences.H>
+
 #include <algorithm>
 #include <array>
 #include <cstdlib>
@@ -30,14 +44,6 @@ namespace fs = std::filesystem;
 #include <cstdint>
 #include <stdlib.h>
 #include <memory.h>
-
-#include <FL/Fl_Preferences.H>
-
-#include "mrvCore/mrvHome.h"
-#include "mrvCore/mrvOS.h"
-#include "mrvCore/mrvSHA256.h"
-
-#include "mrvNetwork/mrvCypher.h"
 
 /****************************** MACROS ******************************/
 #define ROTLEFT(a,b) (((a) << (b)) | ((a) >> (32-(b))))
@@ -270,5 +276,50 @@ namespace mrv
         if (now_time <= exp_time)
             return License::kValid;
         return License::kExpired;
+    }
+
+    void license_beat()
+    {
+        License ok = validate_license();
+        if (ok != License::kValid)
+        {
+            if (ok == License::kExpired)
+            {
+                fl_alert("License expired. Please enter new license.");
+                Fl::check();
+            }
+
+#ifdef _WIN32
+            std::string helper = rootpath() + "/bin/license_helper.exe";
+#else
+            std::string helper = rootpath() + "/bin/license_helper";
+#endif
+            // This is needed for macOS installed bundle.
+            if (!file::isReadable(helper))
+            {
+                helper = rootpath() + "/../Resources/bin/license_helper";
+            }
+            int ret = os::exec_command(helper.c_str());
+            if (ret == 0)
+            {
+                License ok = validate_license();
+                if (ok == License::kInvalid)
+                {
+                    fl_alert("Invalid license. Entering demo mode");
+                    Fl::check();
+                    App::demo_mode = true;
+                }
+                else if (ok == License::kExpired)
+                {
+                    fl_alert("License expired. Entering demo mode");
+                    Fl::check();
+                    App::demo_mode = true;
+                }
+            }
+            else
+            {
+                App::demo_mode = true;
+            }
+        }
     }
 }
