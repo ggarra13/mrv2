@@ -1,4 +1,4 @@
-	# Russian translations for hdr package.
+# Russian translations for hdr package.
 # This file is distributed under the same license as the hdr package.
 # Automatically generated, 2025.
 #
