@@ -247,18 +247,18 @@ namespace mrv
         
         std::string expected_key = sha256(machine_id + secret_salt);
         if (license_key != expected_key)
-            return kLicenseInvalid;
+            return License::kInvalid;
 
         std::string unencoded_expiration = decode_string(expiration_date);
         if (unencoded_expiration == "never")
-            return kLicenseValid;
+            return License::kValid;
         
         // Validate expiration date
         std::tm tm = {};
         std::istringstream ss(unencoded_expiration);
         ss >> std::get_time(&tm, "%Y-%m-%d");
         if (ss.fail())
-            return kLicenseExpired;  // Could not parse date
+            return License::kExpired;  // Could not parse date
 
         std::time_t now = std::time(nullptr);
         std::tm* now_tm = std::localtime(&now);
@@ -268,7 +268,7 @@ namespace mrv
 
         
         if (now_time <= exp_time)
-            return kLicenseValid;
-        return kLicenseExpired;
+            return License::kValid;
+        return License::kExpired;
     }
 }

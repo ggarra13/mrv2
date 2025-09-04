@@ -344,7 +344,6 @@ namespace mrv
 
             TimelineClass* c = ui->uiTimeWindow;
                 
-            view->setSaveOverlay(true);
             view->setShowVideo(true);
             view->setActionMode(ActionMode::kScrub);
             view->redraw();
@@ -354,6 +353,8 @@ namespace mrv
             uint8_t* bufferData;
 
 #ifdef VULKAN_BACKEND
+            view->setSaveOverlay(true);
+            
             auto buffer = view->getVideoFBO();
             auto bufferOptions = buffer->getOptions();
                         

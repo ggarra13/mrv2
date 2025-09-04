@@ -523,9 +523,9 @@ namespace mrv
 
 
         License ok = validate_license();
-        if (ok != kLicenseValid)
+        if (ok != License::kValid)
         {
-            if (ok == kLicenseExpired)
+            if (ok == License::kExpired)
             {
                 fl_alert("License expired. Please enter new license.");
                 Fl::check();
@@ -545,13 +545,13 @@ namespace mrv
             if (ret == 0)
             {
                 License ok = validate_license();
-                if (ok == kLicenseInvalid)
+                if (ok == License::kInvalid)
                 {
                     fl_alert("Invalid license. Entering demo mode");
                     Fl::check();
                     demo_mode = true;
                 }
-                else if (ok == kLicenseExpired)
+                else if (ok == License::kExpired)
                 {
                     fl_alert("License expired. Entering demo mode");
                     Fl::check();

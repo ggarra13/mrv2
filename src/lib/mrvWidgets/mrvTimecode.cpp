@@ -74,6 +74,17 @@ namespace mrv
         
         switch(e)
         {
+        case FL_FOCUS:
+            return 1;
+        case FL_UNFOCUS:
+            redraw();
+            return 1;
+        case FL_ENTER:
+            take_focus();
+            redraw();
+            return 1;
+        case FL_LEAVE:
+            return 1;
         case FL_KEYBOARD:
         {
             unsigned rawkey = Fl::event_key();

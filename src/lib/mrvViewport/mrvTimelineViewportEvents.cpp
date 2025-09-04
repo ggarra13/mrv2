@@ -2,7 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-
+#define DEBUG_EVENTS 1
 
 #include "mrViewer.h"
 
@@ -33,7 +33,6 @@
 #include <cmath>
 #include <algorithm>
 
-// #define DEBUG_EVENTS
 
 namespace
 {
@@ -48,6 +47,8 @@ namespace
     const float kLaserFadeTimeout = 0.01;
     const float kLaserFade = 0.025;
 
+    const char* kModule = "view";
+    
 } // namespace
 
 namespace mrv
@@ -404,21 +405,22 @@ namespace mrv
             switch (event)
             {
             case FL_FOCUS:
+            {
                 return 1;
+            }
             case FL_ENTER:
             {
                 p.lastEvent = 0;
 
-                // We have children if we are editing a text widget, so we do not
-                // grab focus in that case.
+                // We have children if we are editing a text widget, so we do
+                // not grab focus in that case.
                 if (!children())
                 {
-                    bool grab_focus = false;
+                    Fl_Widget* oldFocus = Fl::focus();
                     if (p.ui->uiPrefs->uiPrefsRaiseOnEnter->value())
-                        grab_focus = true;
-
-                    if (grab_focus)
-                        take_focus();
+                        Fl::focus(this);
+                    if (oldFocus)
+                        oldFocus->redraw();
                 }
             
 #ifdef __APPLE__

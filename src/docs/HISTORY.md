@@ -26,8 +26,12 @@ v1.4.1
 - Updated beta builds to build OpenUSD on Windows and macOS 13.
 - Refactored mrvGL/mrvTimelineViewport.cpp and mrvVk/mrvTimelineViewport.cpp to
   common classes in mrvCommonBackend/mrvTimelineViewport.cpp
+- Refactored also mrvTimelineViewportEvents.cpp.
 - Flipped Y coordinate of pixel toolbar on the Vulkan backend to make it consistent with the OpenGL backend and OpenEXR which also has 0, 0 at the bottom left corner.
 - Fixed PDF thumbnail creation under Vulkan backend.
+- Improved focus on Timecode widgets.  Now entering them will draw the cursor
+  and leaving a timecode widget, will not throw focus.  This makes the whole
+  UI much more friendly.
 
 
 v1.4.0
