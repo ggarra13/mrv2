@@ -103,7 +103,6 @@ void check_language(PreferencesUI* uiPrefs, int& language_index, mrv::App* app)
 
             base.flush();
 
-#ifdef _WIN32
             // Save a temporary session file
             std::string session = mrv::tmppath();
             session += "/lang.mrv2s";
@@ -113,7 +112,6 @@ void check_language(PreferencesUI* uiPrefs, int& language_index, mrv::App* app)
             app->cleanResources();
             
             mrv::os::execv("", session);
-#endif
         }
         else
         {

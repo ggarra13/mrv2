@@ -226,6 +226,10 @@ namespace mrv
             setenv("MRV2_ROOT", rootdir.u8string().c_str(), 1);
             g_root_path = rootdir.u8string();
         }
+        else
+        {
+            g_root_path = root;
+        }
 #endif
     }
 } // namespace mrv
