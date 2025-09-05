@@ -591,7 +591,7 @@ namespace mrv
                         return 1;
 
                     auto annotation = player->getAnnotation();
-                    if (p.actionMode != kScrub && !annotation)
+                    if (p.actionMode != ActionMode::kScrub && !annotation)
                         return 1;
 
                     std::shared_ptr< draw::Shape > s;

@@ -44,6 +44,8 @@ v1.4.1
 - Fixed audio saving to also store the duration of each frame.
 - Fixed HDR data also potentially being added to audio streams when saving a
   movie.
+- Improved locate_python in etc/functions.sh
+
 
 v1.4.0
 ======

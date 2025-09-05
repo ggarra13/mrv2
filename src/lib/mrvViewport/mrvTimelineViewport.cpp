@@ -264,7 +264,7 @@ namespace mrv
             p.ui->uiArrow->value(0);
             p.ui->uiText->value(0);
             
-            if (mode != kSelection)
+            if (mode != ActionMode::kSelection)
             {
                 math::Box2i area;
                 area.max.x = -1; // disable area selection.
@@ -277,7 +277,7 @@ namespace mrv
                 return;
             }
             
-            if (p.actionMode == kText && mode != kText)
+            if (p.actionMode == ActionMode::kText && mode != ActionMode::kText)
             {
                 acceptMultilineInput();
             }
@@ -287,76 +287,80 @@ namespace mrv
             switch (mode)
             {
             default:
-            case kScrub:
+            case ActionMode::kScrub:
                 p.ui->uiScrub->value(1);
                 p.ui->uiStatus->copy_label(_("Scrub"));
                 break;
-            case kSelection:
+            case ActionMode::kSelection:
                 p.ui->uiSelection->value(1);
                 p.ui->uiStatus->copy_label(_("Selection"));
                 break;
-            case kDraw:
+            case ActionMode::kDraw:
                 p.ui->uiDraw->value(1);
                 p.ui->uiStatus->copy_label(_("Draw"));
                 break;
-            case kErase:
+            case ActionMode::kErase:
                 p.ui->uiErase->value(1);
                 p.ui->uiStatus->copy_label(_("Erase"));
                 break;
-            case kCircle:
+            case ActionMode::kCircle:
                 p.ui->uiCircle->value(1);
                 p.ui->uiCircle->bind_image(MRV2_LOAD_SVG(OutlineCircle));
                 p.ui->uiStatus->copy_label(_("Circle"));
                 break;
-            case kFilledCircle:
+            case ActionMode::kFilledCircle:
                 p.ui->uiCircle->value(1);
                 p.ui->uiCircle->bind_image(MRV2_LOAD_SVG(FilledCircle));
                 p.ui->uiStatus->copy_label(_("Filled Circle"));
                 break;
-            case kRectangle:
+            case ActionMode::kRectangle:
                 p.ui->uiRectangle->value(1);
                 p.ui->uiRectangle->bind_image(MRV2_LOAD_SVG(OutlineRectangle));
                 p.ui->uiStatus->copy_label(_("Rectangle"));
                 break;
-            case kFilledRectangle:
+            case ActionMode::kFilledRectangle:
                 p.ui->uiRectangle->value(1);
                 p.ui->uiRectangle->bind_image(MRV2_LOAD_SVG(FilledRectangle));
                 p.ui->uiStatus->copy_label(_("Filled Rectangle"));
                 break;
-            case kArrow:
+            case ActionMode::kArrow:
                 p.ui->uiArrow->value(1);
                 p.ui->uiStatus->copy_label(_("Arrow"));
                 break;
-            case kText:
+            case ActionMode::kText:
                 p.ui->uiText->value(1);
                 p.ui->uiStatus->copy_label(_("Text"));
                 break;
-            case kRotate:
+            case ActionMode::kVoice:
+                //p.ui->uiVoice->value(1);
+                p.ui->uiStatus->copy_label(_("Voice"));
+                break;
+            case ActionMode::kRotate:
                 p.ui->uiStatus->copy_label(_("Rotate"));
                 break;
-            case kPolygon:
+            case ActionMode::kPolygon:
                 p.ui->uiPolygon->value(1);
                 p.ui->uiPolygon->bind_image(MRV2_LOAD_SVG(OutlinePolygon));
                 p.ui->uiStatus->copy_label(_("Polygon"));
                 break;
-            case kFilledPolygon:
+            case ActionMode::kFilledPolygon:
                 p.ui->uiPolygon->value(1);
                 p.ui->uiPolygon->bind_image(MRV2_LOAD_SVG(FilledPolygon));
                 p.ui->uiStatus->copy_label(_("Filled Polygon"));
                 break;
-            case kEditTrim:
+            case ActionMode::kEditTrim:
                 p.ui->uiStatus->copy_label(_("Trim"));
                 break;
-            case kEditSlip:
+            case ActionMode::kEditSlip:
                 p.ui->uiStatus->copy_label(_("Slip"));
                 break;
-            case kEditSlide:
+            case ActionMode::kEditSlide:
                 p.ui->uiStatus->copy_label(_("Slide"));
                 break;
-            case kEditRipple:
+            case ActionMode::kEditRipple:
                 p.ui->uiStatus->copy_label(_("Ripple"));
                 break;
-            case kEditRoll:
+            case ActionMode::kEditRoll:
                 p.ui->uiStatus->copy_label(_("Roll"));
                 break;
             }

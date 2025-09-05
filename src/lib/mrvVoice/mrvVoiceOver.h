@@ -3,6 +3,7 @@
 
 #include <tlCore/Context.h>
 #include <tlCore/ISystem.h>
+#include <tlCore/Vector.h>
 #include <tlCore/Util.h>
 
 #include <memory>
@@ -21,12 +22,19 @@ namespace mrv
             Playing
         };
         
+        class MouseData
+        {
+            math::Vector2i pos;
+            bool pressed = false;
+        };
+        
         class VoiceOver
         {
             TLRENDER_NON_COPYABLE(VoiceOver);
 
         protected:
-            void _init(const std::shared_ptr<system::Context>&);
+            void _init(const std::shared_ptr<system::Context>&,
+                       const math::Vector2i&);
 
             VoiceOver();
             
@@ -35,13 +43,14 @@ namespace mrv
 
             //! Create a new system.
             static std::shared_ptr<VoiceOver>
-            create(const std::shared_ptr<system::Context>&);
+            create(const std::shared_ptr<system::Context>&,
+                   const math::Vector2i& center);
 
             //! Get the context.
             const std::weak_ptr<system::Context>& getContext() const;
             
             //! Get recorded data.
-            std::vector<float> getData() const;
+            std::vector<float> getAudio() const;
 
             //! Return status
             RecordStatus getStatus() const;
@@ -61,6 +70,15 @@ namespace mrv
             //! Stop playing.
             void stopPlaying();
 
+            //! Get center of current voice over.
+            const math::Vector2i& getCenter() const;
+            
+            //! Get current mouse data for current audio frame.
+            MouseData getMouseData() const;
+
+            //! Append mouse data.
+            void appendMouseData(const MouseData&);
+            
         private:
             TLRENDER_PRIVATE();
         };

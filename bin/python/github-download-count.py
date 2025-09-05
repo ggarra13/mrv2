@@ -195,5 +195,5 @@ sourceforge_beta_total = count_sourceforge(repo, 'beta/vulkan', end_date, start_
 formatted_total = format_number(sourceforge_released_total +
                                 sourceforge_beta_total +
                                 total_count, 5)
-print('-----------------------------------------------------')
+print('----------------------------------------------------------')
 print(f'{formatted_total}\tGrand Total')

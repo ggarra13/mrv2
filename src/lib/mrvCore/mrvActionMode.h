@@ -6,7 +6,7 @@
 
 namespace mrv
 {
-    enum ActionMode {
+    enum class ActionMode {
         kScrub,
         kSelection,
         kDraw,
@@ -16,6 +16,7 @@ namespace mrv
         kRectangle,
         kArrow,
         kText,
+        kVoice,
         kRotate,
         kFilledCircle,
         kFilledRectangle,

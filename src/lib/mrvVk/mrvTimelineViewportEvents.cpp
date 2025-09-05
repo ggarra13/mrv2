@@ -158,7 +158,7 @@ namespace mrv
                         return;
 
                     auto annotation = player->getAnnotation();
-                    if (p.actionMode != kScrub && !annotation)
+                    if (p.actionMode != ActionMode::kScrub && !annotation)
                         return;
 
                     if (isDrawAction(p.actionMode) &&

@@ -20,7 +20,6 @@ extern "C"
 #include <libavformat/avformat.h>
 #include <libavcodec/avcodec.h>
 #include <libavutil/channel_layout.h>
-#include <libavutil/mem.h>
 }
 
 #if defined(TLRENDER_AUDIO)
@@ -33,6 +32,7 @@ namespace
 {
     const int kNumChannels = 1;
     const unsigned kSampleRate = 44100;
+    unsigned int rtBufferFrames = 256;
     const char* kModule = "voice";
 }
 
@@ -59,11 +59,13 @@ namespace
     }
 }
 
-struct CallbackData
+        
+struct AudioData
 {
-    size_t rtAudioCurrentFrame = 0;
+    size_t rtCurrentFrame = 0;
     std::vector<float> buffer;
 };
+
 
 #if defined(TLRENDER_AUDIO)
 static int rtAudioPlaybackCallback(
@@ -74,24 +76,24 @@ static int rtAudioPlaybackCallback(
     (void)inputBuffer;
         
     // Cast the user data back to our struct
-    CallbackData *data = static_cast<CallbackData*>(userData);
+    AudioData* audio = static_cast<AudioData*>(userData);
     
     // Cast the input buffer to our sample type (float)
     float *out = static_cast<float*>(outputBuffer);
 
-    size_t pos = data->rtAudioCurrentFrame * kNumChannels;
-    if (pos > data->buffer.size())
-        return 1;
+    size_t pos = audio->rtCurrentFrame * kNumChannels;
+    if (pos > audio->buffer.size())
+        return 1; // Stop streaming
 
     // Copy the audio data
     size_t dataByteCount = nFrames * kNumChannels * sizeof(float);
-    float* stored = &data->buffer[pos];
+    float* stored = &audio->buffer[pos];
     memcpy(out, stored, dataByteCount);
 
     // Increment the counter based on playback speed set in preferences.
     PreferencesUI* uiPrefs = mrv::App::ui->uiPrefs;
-    data->rtAudioCurrentFrame += nFrames *
-                                 (uiPrefs->uiPrefsVoiceOverSpeed->value() + 1);
+    audio->rtCurrentFrame += nFrames *
+                             (uiPrefs->uiPrefsVoiceOverSpeed->value() + 1);
     
     return 0; // Return 0 to continue streaming
 }
@@ -104,13 +106,13 @@ static int rtAudioRecordCallback(
     (void)outputBuffer;
     
     // Cast the user data back to our struct
-    CallbackData *data = static_cast<CallbackData*>(userData);
+    AudioData* audio = static_cast<AudioData*>(userData);
     
     // Cast the input buffer to our sample type (float)
-    float *input = static_cast<float*>(inputBuffer);
+    float* input = static_cast<float*>(inputBuffer);
     
     unsigned int numSamples = nFrames * kNumChannels;
-    data->buffer.insert(data->buffer.end(), input, input + numSamples);
+    audio->buffer.insert(audio->buffer.end(), input, input + numSamples);
     
     return 0; // Return 0 to continue streaming
 }
@@ -127,6 +129,12 @@ namespace mrv
     namespace voice
     {
         using namespace tl;
+
+        struct MouseRecording
+        {
+            size_t idx = 0;
+            std::vector<MouseData> data;
+        };
         
         struct VoiceOver::Private
         {
@@ -138,17 +146,22 @@ namespace mrv
             
             bool running = false;
             std::thread thread;
+
+            math::Vector2i center;
             
-            CallbackData data;
+            AudioData audio;
+            MouseRecording mouse;
 
             std::string  fileName;
             RecordStatus status;
         };
 
-        void VoiceOver::_init(const std::shared_ptr<system::Context>& context)
+        void VoiceOver::_init(const std::shared_ptr<system::Context>& context,
+                              const math::Vector2i& center)
         {
             TLRENDER_P();
             p.context = context;
+            p.center  = center;
         }
 
         VoiceOver::VoiceOver() :
@@ -167,13 +180,14 @@ namespace mrv
         }
 
         std::shared_ptr<VoiceOver>
-        VoiceOver::create(const std::shared_ptr<system::Context>& context)
+        VoiceOver::create(const std::shared_ptr<system::Context>& context,
+                          const math::Vector2i& center)
         {
             auto out = context->getSystem<VoiceOver>();
             if (!out)
             {
                 out = std::shared_ptr<VoiceOver>(new VoiceOver);
-                out->_init(context);
+                out->_init(context, center);
             }
             return out;
         }
@@ -184,12 +198,23 @@ namespace mrv
             return _p->context;
         }
 
-        std::vector<float> VoiceOver::getData() const
+        std::vector<float> VoiceOver::getAudio() const
         {
-            return _p->data.buffer;
+            return _p->audio.buffer;
         }
         
         void VoiceOver::startRecording()
+        {
+            TLRENDER_P();
+
+            // Clear the recording
+            p.audio.buffer.clear();
+            p.audio.rtCurrentFrame = 0;
+
+            appendRecording();            
+        }
+        
+        void VoiceOver::appendRecording()
         {
             TLRENDER_P();
             
@@ -204,12 +229,10 @@ namespace mrv
                 }
                 catch (const std::exception& e)
                 {
-                    {
-                        std::stringstream ss;
-                        ss << "Cannot create RtAudio instance: " << e.what();
-                        context->log(
-                            "mrv::voice::VoiceOver", ss.str(), log::Type::Error);
-                    }
+                    std::stringstream ss;
+                    ss << "Cannot create RtAudio instance: " << e.what();
+                    context->log(
+                        "mrv::voice::VoiceOver", ss.str(), log::Type::Error);
                 }
             }
 #endif
@@ -229,13 +252,12 @@ namespace mrv
                         rtParameters.deviceId =
                             audioSystem->getInputDevice();
                         rtParameters.nChannels = kNumChannels;
-                        unsigned int rtBufferFrames = 256;
                         p.rtAudio->openStream(
                             nullptr, &rtParameters,
                             RTAUDIO_FLOAT32,
                             kSampleRate,
                             &rtBufferFrames, rtAudioRecordCallback,
-                            &p.data, nullptr,
+                            &p.audio, nullptr,
                             rtAudioErrorCallback);
                         p.rtAudio->startStream();
                         p.status = RecordStatus::Recording;
@@ -251,9 +273,8 @@ namespace mrv
                     }
                 }
             }
-#endif // TLRENDER_AUDIO
+#endif // TLRENDER_AUDIO   
         }
-
 
         void VoiceOver::stopRecording()
         {
@@ -276,7 +297,7 @@ namespace mrv
 
                 const std::string fileName("/tmp/saved.wav");
             
-                size_t totalSamples = p.data.buffer.size() / sizeof(float);
+                size_t totalSamples = p.audio.buffer.size() / sizeof(float);
                 if (totalSamples == 0)
                 {
                     return;
@@ -337,8 +358,8 @@ namespace mrv
                     return;
                 }
 
-                pkt->data = (uint8_t*)&p.data.buffer[0];
-                pkt->size = p.data.buffer.size();
+                pkt->data = (uint8_t*)&p.audio.buffer[0];
+                pkt->size = p.audio.buffer.size();
                 pkt->stream_index = stream->index;
                 pkt->duration = totalSamples;
                 pkt->pts = pkt->dts = 0;
@@ -376,12 +397,10 @@ namespace mrv
                 }
                 catch (const std::exception& e)
                 {
-                    {
-                        std::stringstream ss;
-                        ss << "Cannot create RtAudio instance: " << e.what();
-                        context->log(
-                            "mrv::voice::VoiceOver", ss.str(), log::Type::Error);
-                    }
+                    std::stringstream ss;
+                    ss << "Cannot create RtAudio instance: " << e.what();
+                    context->log(
+                        "mrv::voice::VoiceOver", ss.str(), log::Type::Error);
                 }
             }
 #endif
@@ -398,13 +417,12 @@ namespace mrv
                         auto audioSystem = context->getSystem<audio::System>();
                         rtParameters.deviceId = audioSystem->getOutputDevice();
                         rtParameters.nChannels = kNumChannels;
-                        unsigned int rtBufferFrames = 256;
                         p.rtAudio->openStream(
                             &rtParameters, nullptr,
                             RTAUDIO_FLOAT32,
                             kSampleRate,
                             &rtBufferFrames, rtAudioPlaybackCallback,
-                            &p.data, nullptr,
+                            &p.audio, nullptr,
                             rtAudioErrorCallback);
                         p.rtAudio->startStream();
                         p.status = RecordStatus::Playing;
@@ -437,6 +455,32 @@ namespace mrv
             }
             
             p.status = RecordStatus::Stopped;
+        }
+
+        MouseData VoiceOver::getMouseData() const
+        {
+            TLRENDER_P();
+
+            if (p.mouse.data.empty())
+            {
+                throw std::runtime_error("voice::VoiceOver No mouse data saved");
+            }
+            
+            size_t idx = p.mouse.idx;
+            if (idx >= p.mouse.data.size())
+                idx = p.mouse.data.size() - 1;
+
+            return p.mouse.data[idx];
+        }
+
+        void VoiceOver::appendMouseData(const MouseData& mouse)
+        {
+            _p->mouse.data.push_back(mouse);
+        }
+
+        const math::Vector2i& VoiceOver::getCenter() const
+        {
+            return _p->center;
         }
     }
 }
