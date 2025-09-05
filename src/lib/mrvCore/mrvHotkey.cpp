@@ -159,6 +159,7 @@ namespace mrv
     Hotkey kRectangleMode(false, false, false, true, 'r');
     Hotkey kCircleMode(false, false, false, true, 'c');
     Hotkey kTextMode(false, false, false, true, 't');
+    Hotkey kVoiceMode(false, false, false, true, 'v');
 
     Hotkey kPenSizeMore(false, false, false, false, 0, "+");
     Hotkey kPenSizeLess(false, false, false, false, 0, "-");
@@ -569,6 +570,7 @@ namespace mrv
         HotkeyEntry(_("Rectangle Mode"), &kRectangleMode),
         HotkeyEntry(_("Circle Mode"), &kCircleMode),
         HotkeyEntry(_("Text Mode"), &kTextMode),
+        HotkeyEntry(_("Voice Mode"), &kVoiceMode),
         HotkeyEntry(_("Pen Size More"), &kPenSizeMore),
         HotkeyEntry(_("Pen Size Less"), &kPenSizeLess),
         HotkeyEntry(_("Undo Draw"), &kUndoDraw),

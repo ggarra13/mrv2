@@ -147,7 +147,7 @@ namespace mrv
             bool running = false;
             std::thread thread;
 
-            math::Vector2i center;
+            math::Vector2f center;
             
             AudioData audio;
             MouseRecording mouse;
@@ -157,7 +157,7 @@ namespace mrv
         };
 
         void VoiceOver::_init(const std::shared_ptr<system::Context>& context,
-                              const math::Vector2i& center)
+                              const math::Vector2f& center)
         {
             TLRENDER_P();
             p.context = context;
@@ -181,7 +181,7 @@ namespace mrv
 
         std::shared_ptr<VoiceOver>
         VoiceOver::create(const std::shared_ptr<system::Context>& context,
-                          const math::Vector2i& center)
+                          const math::Vector2f& center)
         {
             auto out = context->getSystem<VoiceOver>();
             if (!out)
@@ -478,7 +478,7 @@ namespace mrv
             _p->mouse.data.push_back(mouse);
         }
 
-        const math::Vector2i& VoiceOver::getCenter() const
+        const math::Vector2f& VoiceOver::getCenter() const
         {
             return _p->center;
         }

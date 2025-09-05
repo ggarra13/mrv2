@@ -27,13 +27,11 @@ v1.4.1
 - Updated to use cpptrace v1.0.4
 - Updated to use FFmpeg v8.0 (from v7.0.1)
 - Updated beta builds to build OpenUSD on Windows and macOS 13, as disk space is no longer an issue (Thank you Microsoft!).
-- Refactored mrvGL/mrvTimelineViewport.cpp and mrvVk/mrvTimelineViewport.cpp to
-  common classes in mrvCommonBackend/mrvTimelineViewport.cpp
+- Refactored mrvGL/mrvTimelineViewport.cpp and mrvVk/mrvTimelineViewport.cpp to common classes in mrvCommonBackend/mrvTimelineViewport.cpp
 - Refactored also mrvTimelineViewportEvents.cpp.
 - Flipped Y coordinate of pixel toolbar on the Vulkan backend to make it consistent with the OpenGL backend and OpenEXR which also has 0, 0 at the bottom left corner.
 - Fixed PDF thumbnail creation under Vulkan backend.
-- Improved focus on Timecode widgets.  Now entering them will draw the cursor
-  and leaving a timecode widget, will not throw focus.  This makes the whole
+- Improved focus on Timecode widgets.  Now entering them will draw the cursor and leaving a timecode widget, will not throw focus.  This makes the whole
   UI much more friendly.
 - Added .po translations to hdr utility.
 - Fixed switching languages on Linux and macOS.
@@ -42,8 +40,7 @@ v1.4.1
 - Fixed dpkg and rpm uninstallers failing due to a syntax error on bash script.
 - Removed deprecated is_valid_timecode_rate from OTIO pybind11's rationalTime.
 - Fixed audio saving to also store the duration of each frame.
-- Fixed HDR data also potentially being added to audio streams when saving a
-  movie.
+- Fixed HDR data also potentially being added to audio streams when saving a movie.
 - Improved locate_python in etc/functions.sh
 
 

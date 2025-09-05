@@ -33,7 +33,7 @@ namespace mrv
         virtual ~TimelinePlayer();
 
         //! Get the context.
-        const std::weak_ptr<system::Context>& context() const;
+        const std::weak_ptr<system::Context>& getContext() const;
 
         //! Get the timeline player.
         const std::shared_ptr<timeline::Player>& player() const;
@@ -383,7 +383,8 @@ namespace mrv
 
         //! Create annotation for current time
         std::shared_ptr< voice::Annotation >
-        createVoiceAnnotation(const bool all_frames = false);
+        createVoiceAnnotation(const math::Vector2f& center,
+                              const bool all_frames = false);
 
         //! Get list of annotations for between previous ghosting and
         //! next ghosting from current time.

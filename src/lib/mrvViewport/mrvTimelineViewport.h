@@ -469,8 +469,10 @@ namespace mrv
             void _handleCompareOverlay() noexcept;
 
             void _handlePushLeftMouseButton() noexcept;
-
+            void _handlePushLeftMouseButtonShapes() noexcept;
+            
             void _handleDragLeftMouseButton() noexcept;
+            void _handleDragLeftMouseButtonShapes() noexcept;
             void _handleDragSelection() noexcept;
 
             void _handleDragMiddleMouseButton() noexcept;

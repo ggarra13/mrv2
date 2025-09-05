@@ -249,6 +249,7 @@ namespace mrv
     extern Hotkey kRectangleMode;
     extern Hotkey kScrubMode;
     extern Hotkey kTextMode;
+    extern Hotkey kVoiceMode;
     extern Hotkey kAreaMode;
 
     extern Hotkey kPenSizeMore;

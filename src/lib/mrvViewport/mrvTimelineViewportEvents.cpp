@@ -172,7 +172,193 @@ namespace mrv
                 redrawWindows();
             }
         }
+        
+        void TimelineViewport::_handleDragLeftMouseButton() noexcept
+        {
+            TLRENDER_P();
 
+            if (p.compareOptions.mode == timeline::CompareMode::Wipe)
+            {
+                _handleCompareWipe();
+            }
+            else if (p.compareOptions.mode == timeline::CompareMode::Overlay)
+            {
+                _handleCompareOverlay();
+            }
+            else
+            {
+                if (p.actionMode == ActionMode::kScrub ||
+                    (p.actionMode == ActionMode::kRotate && _isEnvironmentMap()))
+                {
+                    p.lastEvent = FL_DRAG;
+
+                    const auto& pos = _getFocus();
+                    int dx = pos.x - p.mousePress.x;
+
+                    if (Fl::event_shift() && _isEnvironmentMap())
+                    {
+                        const float speed = _getZoomSpeedValue();
+                        auto o = p.environmentMapOptions;
+                        o.focalLength += dx * speed;
+                        p.mousePress = pos;
+                        setEnvironmentMapOptions(o);
+                    }
+                    else
+                    {
+                        if (Fl::event_shift())
+                        {
+                            return _handleDragSelection();
+                        }
+                        else
+                        {
+                            p.isScrubbing = true;
+                            if (Fl::event_alt())
+                            {
+                                float multiplier = p.ui->uiPrefs->uiPrefsAltScrubbingSensitivity->value();
+                                scrub(multiplier);
+                            }
+                            else
+                            {
+                                scrub();
+                            }
+                        }
+                    }
+                    return;
+                }
+                else if (
+                    Fl::event_shift() || p.actionMode == ActionMode::kSelection)
+                {
+                    _handleDragSelection();
+                    return;
+                }
+                else
+                {
+                    draw::Point pnt(_getRasterf());
+
+                    auto player = getTimelinePlayer();
+                    if (!player)
+                        return;
+
+                    auto annotation = player->getAnnotation();
+                    if (p.actionMode != ActionMode::kScrub && !annotation)
+                        return;
+
+                    if (isDrawAction(p.actionMode) &&
+                        !p.showAnnotations)
+                    {
+                        p.showAnnotations = true;
+                    }
+                    
+                    std::shared_ptr< draw::Shape > s;
+                    if (annotation)
+                        s = annotation->lastShape();
+
+                    switch (p.actionMode)
+                    {
+                    case ActionMode::kScrub:
+                        if (Fl::event_alt())
+                        {
+                            if (!p.player)
+                                return;
+
+                            const int X = Fl::event_x() * pixels_per_unit();
+                            const float scale = p.ui->uiPrefs->uiPrefsScrubbingSensitivity->value() * 20;
+                            float dx = (X - p.mousePress.x) / scale;
+                            
+                            if (std::abs(dx) >= 1.0F)
+                            {
+                                p.isScrubbing = true;
+                                _scrub(dx);
+                                p.mousePress.x = X;
+                            }
+                        }
+                        else
+                        {
+                            scrub();
+                        }
+                        return;
+                    default:
+                        _handleDragLeftMouseButtonShapes();
+                        return;
+                    }
+                }
+            }
+        }
+        
+        void TimelineViewport::_handlePushLeftMouseButton() noexcept
+        {
+            TLRENDER_P();
+
+            p.playbackMode = timeline::Playback::Stop;
+
+            if (p.player)
+                p.playbackMode = p.player->playback();
+
+            if (p.compareOptions.mode == timeline::CompareMode::Wipe)
+            {
+                _handleCompareWipe();
+            }
+            else if (p.compareOptions.mode == timeline::CompareMode::Overlay)
+            {
+                _handleCompareOverlay();
+            }
+            else
+            {
+                if (Fl::event_shift() || p.actionMode == ActionMode::kSelection)
+                {
+                    p.lastEvent = FL_DRAG;
+                    p.mousePos = _getFocus();
+                    math::Vector2i pos = _getRaster();
+
+                    _clipSelectionArea(pos);
+                    math::Box2i area;
+                    area.min = pos;
+                    area.max = pos;
+                    setSelectionArea(area);
+                    redrawWindows();
+                }
+                else
+                {
+                    if (p.actionMode == ActionMode::kScrub ||
+                        p.actionMode == ActionMode::kRotate)
+                    {
+                        if (!p.isScrubbing && p.player &&
+                            p.actionMode == ActionMode::kScrub)
+                        {
+                            p.isScrubbing = true;
+                            p.player->setPlayback(timeline::Playback::Stop,
+                                                  p.isScrubbing);
+                        }
+                        
+                        p.lastEvent = FL_PUSH;
+                        return;
+                    }
+                    else if (p.actionMode == ActionMode::kVoice)
+                    {
+                        p.mousePos = _getFocus();
+                        auto pnt = _getRasterf();
+            
+                        auto annotation = p.player->getVoiceAnnotation();
+                        if (!annotation)
+                        {
+                            const bool all_frames =
+                                p.ui->app->settings()->getValue<bool>(kAllFrames);
+                            annotation =
+                                p.player->createVoiceAnnotation(pnt,
+                                                                all_frames);
+                            if (!annotation)
+                                return;
+                        }
+                        
+                        p.lastEvent = FL_PUSH;
+                        return;
+                    }
+
+                    _handlePushLeftMouseButtonShapes();
+                }
+            }
+        }
+            
         void TimelineViewport::_handleDragSelection() noexcept
         {
             TLRENDER_P();
@@ -858,6 +1044,11 @@ namespace mrv
                 else if (kRectangleMode.match(rawkey))
                 {
                     setActionMode(ActionMode::kRectangle);
+                    return 1;
+                }
+                else if (kVoiceMode.match(rawkey))
+                {
+                    setActionMode(ActionMode::kVoice);
                     return 1;
                 }
                 else if (

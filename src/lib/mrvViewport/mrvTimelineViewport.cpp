@@ -263,6 +263,7 @@ namespace mrv
             p.ui->uiRectangle->value(0);
             p.ui->uiArrow->value(0);
             p.ui->uiText->value(0);
+            p.ui->uiVoice->value(0);
             
             if (mode != ActionMode::kSelection)
             {
@@ -332,7 +333,7 @@ namespace mrv
                 p.ui->uiStatus->copy_label(_("Text"));
                 break;
             case ActionMode::kVoice:
-                //p.ui->uiVoice->value(1);
+                p.ui->uiVoice->value(1);
                 p.ui->uiStatus->copy_label(_("Voice"));
                 break;
             case ActionMode::kRotate:
@@ -1124,7 +1125,8 @@ namespace mrv
 
             if (p.actionMode == ActionMode::kScrub ||
                 p.actionMode == ActionMode::kSelection ||
-                p.actionMode == ActionMode::kRotate)
+                p.actionMode == ActionMode::kRotate ||
+                p.actionMode == ActionMode::kVoice)
             {
                 set_cursor(FL_CURSOR_CROSS);
             }

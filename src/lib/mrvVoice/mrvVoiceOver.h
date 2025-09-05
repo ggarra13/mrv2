@@ -34,7 +34,7 @@ namespace mrv
 
         protected:
             void _init(const std::shared_ptr<system::Context>&,
-                       const math::Vector2i&);
+                       const math::Vector2f&);
 
             VoiceOver();
             
@@ -44,7 +44,7 @@ namespace mrv
             //! Create a new system.
             static std::shared_ptr<VoiceOver>
             create(const std::shared_ptr<system::Context>&,
-                   const math::Vector2i& center);
+                   const math::Vector2f& center);
 
             //! Get the context.
             const std::weak_ptr<system::Context>& getContext() const;
@@ -71,7 +71,7 @@ namespace mrv
             void stopPlaying();
 
             //! Get center of current voice over.
-            const math::Vector2i& getCenter() const;
+            const math::Vector2f& getCenter() const;
             
             //! Get current mouse data for current audio frame.
             MouseData getMouseData() const;

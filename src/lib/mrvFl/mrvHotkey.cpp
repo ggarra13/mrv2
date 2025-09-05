@@ -490,6 +490,10 @@ namespace mrv
         tooltip += addHotkey(kTextMode);
         ui->uiText->copy_tooltip(tooltip.c_str());
         
+        tooltip = _("Voice Annotation Tool");
+        tooltip += addHotkey(kVoiceMode);
+        ui->uiVoice->copy_tooltip(tooltip.c_str());
+        
         tooltip = _("Undo Draw");
         tooltip += addHotkey(kUndoDraw);
         ui->uiUndoDraw->copy_tooltip(tooltip.c_str());

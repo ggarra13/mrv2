@@ -1182,6 +1182,7 @@ namespace mrv
 
             if (p.actionMode != ActionMode::kScrub &&
                 p.actionMode != ActionMode::kText &&
+                p.actionMode != ActionMode::kVoice &&
                 p.actionMode != ActionMode::kSelection &&
                 p.actionMode != ActionMode::kRotate && Fl::belowmouse() == this)
             {

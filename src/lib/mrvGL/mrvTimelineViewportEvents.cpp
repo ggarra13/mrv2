@@ -84,232 +84,149 @@ namespace mrv
     namespace opengl
     {
 
-        void TimelineViewport::_handleDragLeftMouseButton() noexcept
+        void TimelineViewport::_handleDragLeftMouseButtonShapes() noexcept
         {
             TLRENDER_P();
 
-            if (p.compareOptions.mode == timeline::CompareMode::Wipe)
+            draw::Point pnt(_getRasterf());
+
+            auto annotation = player->getAnnotation();
+            if (p.actionMode != ActionMode::kScrub && !annotation)
+                return;
+
+            if (isDrawAction(p.actionMode) && !p.showAnnotations)
             {
-                _handleCompareWipe();
+                p.showAnnotations = true;
             }
-            else if (p.compareOptions.mode == timeline::CompareMode::Overlay)
-            {
-                _handleCompareOverlay();
-            }
-            else
-            {
-                if (p.actionMode == ActionMode::kScrub ||
-                    (p.actionMode == ActionMode::kRotate && _isEnvironmentMap()))
-                {
-                    p.lastEvent = FL_DRAG;
-
-                    const auto& pos = _getFocus();
-                    int dx = pos.x - p.mousePress.x;
-
-                    if (Fl::event_shift() && _isEnvironmentMap())
-                    {
-                        const float speed = _getZoomSpeedValue();
-                        auto o = p.environmentMapOptions;
-                        o.focalLength += dx * speed;
-                        p.mousePress = pos;
-                        setEnvironmentMapOptions(o);
-                    }
-                    else
-                    {
-                        if (Fl::event_shift())
-                        {
-                            return _handleDragSelection();
-                        }
-                        else
-                        {
-                            p.isScrubbing = true;
-                            if (Fl::event_alt())
-                            {
-                                float multiplier = p.ui->uiPrefs->uiPrefsAltScrubbingSensitivity->value();
-                                scrub(multiplier);
-                            }
-                            else
-                            {
-                                scrub();
-                            }
-                        }
-                    }
-                    return;
-                }
-                else if (
-                    Fl::event_shift() || p.actionMode == ActionMode::kSelection)
-                {
-                    _handleDragSelection();
-                    return;
-                }
-                else
-                {
-                    draw::Point pnt(_getRasterf());
-
-                    auto player = getTimelinePlayer();
-                    if (!player)
-                        return;
-
-                    auto annotation = player->getAnnotation();
-                    if (p.actionMode != ActionMode::kScrub && !annotation)
-                        return;
-
-                    if (isDrawAction(p.actionMode) &&
-                        !p.showAnnotations)
-                    {
-                        p.showAnnotations = true;
-                    }
                     
-                    std::shared_ptr< draw::Shape > s;
-                    if (annotation)
-                        s = annotation->lastShape();
+            std::shared_ptr< draw::Shape > s;
+            if (annotation) s = annotation->lastShape();
 
-                    switch (p.actionMode)
-                    {
-                    case ActionMode::kScrub:
-                        if (Fl::event_alt())
-                        {
-                            if (!p.player)
-                                return;
+            switch (p.actionMode)
+            {
+            case ActionMode::kRectangle:
+            case ActionMode::kFilledRectangle:
+            {
+                auto shape = dynamic_cast< GLRectangleShape* >(s.get());
+                if (!shape)
+                    return;
 
-                            const int X = Fl::event_x() * pixels_per_unit();
-                            const float scale = p.ui->uiPrefs->uiPrefsScrubbingSensitivity->value() * 20;
-                            float dx = (X - p.mousePress.x) / scale;
-                            
-                            if (std::abs(dx) >= 1.0F)
-                            {
-                                p.isScrubbing = true;
-                                _scrub(dx);
-                                p.mousePress.x = X;
-                            }
-                        }
-                        else
-                        {
-                            scrub();
-                        }
-                        return;
-                    case ActionMode::kRectangle:
-                    case ActionMode::kFilledRectangle:
-                    {
-                        auto shape = dynamic_cast< GLRectangleShape* >(s.get());
-                        if (!shape)
-                            return;
+                shape->pts[1].x = pnt.x;
+                shape->pts[2].x = pnt.x;
+                shape->pts[2].y = pnt.y;
+                shape->pts[3].y = pnt.y;
+                _updateAnnotationShape();
+                redrawWindows();
+                return;
+            }
+            case ActionMode::kPolygon:
+            case ActionMode::kFilledPolygon:
+            {
+                auto shape = dynamic_cast< GLPathShape* >(s.get());
+                if (!shape)
+                    return;
+                
+                auto& lastPoint = shape->pts.back();
+                lastPoint = pnt;
+                
+                _updateAnnotationShape();
+                redrawWindows();
+                return;
+            }
+            case ActionMode::kDraw:
+            {
+                auto shape = dynamic_cast< GLPathShape* >(s.get());
+                if (!shape)
+                    return;
+                
+                shape->pts.push_back(pnt);
+                _addAnnotationShapePoint();
+                redrawWindows();
+                return;
+            }
+            case ActionMode::kErase:
+            {
+                auto shape = dynamic_cast< GLErasePathShape* >(s.get());
+                if (!shape)
+                    return;
 
-                        shape->pts[1].x = pnt.x;
-                        shape->pts[2].x = pnt.x;
-                        shape->pts[2].y = pnt.y;
-                        shape->pts[3].y = pnt.y;
-                        _updateAnnotationShape();
-                        redrawWindows();
-                        return;
-                    }
-                    case ActionMode::kPolygon:
-                    case ActionMode::kFilledPolygon:
-                    {
-                        auto shape = dynamic_cast< GLPathShape* >(s.get());
-                        if (!shape)
-                            return;
+                shape->pts.push_back(pnt);
+                _addAnnotationShapePoint();
+                redrawWindows();
+                return;
+            }
+            case ActionMode::kArrow:
+            {
+                auto shape = dynamic_cast< GLArrowShape* >(s.get());
+                if (!shape)
+                    return;
 
-                        auto& lastPoint = shape->pts.back();
-                        lastPoint = pnt;
+                Imath::V2d p1 = shape->pts[0];
+                Imath::V2d lineVector = pnt - p1;
+                double lineLength = lineVector.length();
 
-                        _updateAnnotationShape();
-                        redrawWindows();
-                        return;
-                    }
-                    case ActionMode::kDraw:
-                    {
-                        auto shape = dynamic_cast< GLPathShape* >(s.get());
-                        if (!shape)
-                            return;
+                const float theta = 45 * M_PI / 180;
+                const double nWidth = lineLength * 0.2;
 
-                        shape->pts.push_back(pnt);
-                        _addAnnotationShapePoint();
-                        redrawWindows();
-                        return;
-                    }
-                    case ActionMode::kErase:
-                    {
-                        auto shape = dynamic_cast< GLErasePathShape* >(s.get());
-                        if (!shape)
-                            return;
+                const double tPointOnLine =
+                    nWidth / (2 * (tan(theta) / 2) * lineLength);
+                const Imath::V2d& pointOnLine =
+                    pnt + -tPointOnLine * lineVector;
 
-                        shape->pts.push_back(pnt);
-                        _addAnnotationShapePoint();
-                        redrawWindows();
-                        return;
-                    }
-                    case ActionMode::kArrow:
-                    {
-                        auto shape = dynamic_cast< GLArrowShape* >(s.get());
-                        if (!shape)
-                            return;
+                const Imath::V2d normalVector(-lineVector.y, lineVector.x);
 
-                        Imath::V2d p1 = shape->pts[0];
-                        Imath::V2d lineVector = pnt - p1;
-                        double lineLength = lineVector.length();
+                const double tNormal = nWidth / (2 * lineLength);
+                Imath::V2d tmp = pointOnLine + tNormal * normalVector;
 
-                        const float theta = 45 * M_PI / 180;
-                        const double nWidth = lineLength * 0.2;
+                shape->pts[1] = pnt;
+                shape->pts[2] = tmp;
+                shape->pts[3] = pnt;
+                tmp = pointOnLine + -tNormal * normalVector;
+                shape->pts[4] = tmp;
+                _updateAnnotationShape();
 
-                        const double tPointOnLine =
-                            nWidth / (2 * (tan(theta) / 2) * lineLength);
-                        const Imath::V2d& pointOnLine =
-                            pnt + -tPointOnLine * lineVector;
+                redrawWindows();
+                return;
+            }
+            case ActionMode::kFilledCircle:
+            case ActionMode::kCircle:
+            {
+                auto shape = dynamic_cast< GLCircleShape* >(s.get());
+                if (!shape)
+                    return;
 
-                        const Imath::V2d normalVector(-lineVector.y, lineVector.x);
-
-                        const double tNormal = nWidth / (2 * lineLength);
-                        Imath::V2d tmp = pointOnLine + tNormal * normalVector;
-
-                        shape->pts[1] = pnt;
-                        shape->pts[2] = tmp;
-                        shape->pts[3] = pnt;
-                        tmp = pointOnLine + -tNormal * normalVector;
-                        shape->pts[4] = tmp;
-                        _updateAnnotationShape();
-
-                        redrawWindows();
-                        return;
-                    }
-                    case ActionMode::kFilledCircle:
-                    case ActionMode::kCircle:
-                    {
-                        auto shape = dynamic_cast< GLCircleShape* >(s.get());
-                        if (!shape)
-                            return;
-
-                        shape->radius =
-                            2.0F * abs(shape->center.x - pnt.x) * pixels_per_unit();
-                        if (shape->radius < shape->pen_size / 2)
-                            shape->radius = shape->pen_size / 2;
-                        _updateAnnotationShape();
-                        redrawWindows();
-                        return;
-                    }
-                    case ActionMode::kText:
-                    {
-                        MultilineInput* w = getMultilineInput();
-                        if (w)
-                        {
-                            auto pos = math::Vector2i(p.event_x, p.event_y);
+                shape->radius =
+                    2.0F * abs(shape->center.x - pnt.x) * pixels_per_unit();
+                if (shape->radius < shape->pen_size / 2)
+                    shape->radius = shape->pen_size / 2;
+                _updateAnnotationShape();
+                redrawWindows();
+                return;
+            }
+            case ActionMode::kText:
+            {
+                MultilineInput* w = getMultilineInput();
+                if (w)
+                {
+                    auto pos = math::Vector2i(p.event_x, p.event_y);
 #ifdef USE_OPENGL2
-                            w->pos = pos;
+                    w->pos = pos;
 #else
-                            w->Fl_Widget::position(pos.x, pos.y);
+                    w->Fl_Widget::position(pos.x, pos.y);
 #endif
-                            redrawWindows();
-                        }
-                        return;
-                    }
-                    default:
-                        LOG_ERROR(_("Unknown action mode in ") << __FUNCTION__);
-                        return;
-                    }
+                    redrawWindows();
                 }
+                return;
+            }
+            case ActionMode::kScrub:
+            case ActionMode::kVoice:
+                return;
+            default:
+                LOG_ERROR(_("Unknown action mode in ") << __FUNCTION__);
+                return;
             }
         }
-
+        
         MultilineInput* TimelineViewport::getMultilineInput() const noexcept
         {
             MultilineInput* w;
@@ -415,324 +332,276 @@ namespace mrv
             return ret;
         }
 
-        void TimelineViewport::_handlePushLeftMouseButton() noexcept
+        void TimelineViewport::_handlePushLeftMouseButtonShapes() noexcept
         {
             TLRENDER_P();
 
-            p.playbackMode = timeline::Playback::Stop;
+            uint8_t r, g, b;
+            SettingsObject* settings = p.ui->app->settings();
+            int fltk_color = p.ui->uiPenColor->color();
+            Fl::get_color((Fl_Color)fltk_color, r, g, b);
+            float alpha = p.ui->uiPenOpacity->value();
+            const image::Color4f color(
+                r / 255.F, g / 255.F, b / 255.F, alpha);
+            const float pen_size = _getPenSize();
 
-            if (p.player)
-                p.playbackMode = p.player->playback();
+            bool laser = settings->getValue<bool>(kLaser);
+            bool softBrush = settings->getValue<bool>(kSoftBrush);
+            Fl_Font font =
+                static_cast<Fl_Font>(settings->getValue<int>(kTextFont));
 
-            if (p.compareOptions.mode == timeline::CompareMode::Wipe)
+            p.mousePos = _getFocus();
+            draw::Point pnt(_getRasterf());
+
+            auto player = getTimelinePlayer();
+            if (!player)
+                return;
+
+            auto annotation = player->getAnnotation();
+            bool all_frames =
+                p.ui->app->settings()->getValue<bool>(kAllFrames);
+            if (!annotation)
             {
-                _handleCompareWipe();
-            }
-            else if (p.compareOptions.mode == timeline::CompareMode::Overlay)
-            {
-                _handleCompareOverlay();
+                annotation = player->createAnnotation(all_frames);
+                if (!annotation)
+                    return;
             }
             else
             {
-                if (Fl::event_shift() || p.actionMode == ActionMode::kSelection)
+                if (annotation->allFrames != all_frames)
                 {
-                    p.lastEvent = FL_DRAG;
-                    p.mousePos = _getFocus();
-                    math::Vector2i pos = _getRaster();
-
-                    _clipSelectionArea(pos);
-                    math::Box2i area;
-                    area.min = pos;
-                    area.max = pos;
-                    setSelectionArea(area);
-                    redrawWindows();
-                }
-                else
-                {
-
-                    if (p.actionMode == ActionMode::kScrub ||
-                        p.actionMode == ActionMode::kRotate)
+                    std::string error;
+                    if (all_frames)
                     {
-                        if (!p.isScrubbing && p.player &&
-                            p.actionMode == ActionMode::kScrub)
-                        {
-                            p.isScrubbing = true;
-                            p.player->setPlayback(timeline::Playback::Stop,
-                                                  p.isScrubbing);
-                        }
-                        
-                        p.lastEvent = FL_PUSH;
-                        return;
-                    }
-
-                    uint8_t r, g, b;
-                    SettingsObject* settings = p.ui->app->settings();
-                    int fltk_color = p.ui->uiPenColor->color();
-                    Fl::get_color((Fl_Color)fltk_color, r, g, b);
-                    float alpha = p.ui->uiPenOpacity->value();
-                    const image::Color4f color(
-                        r / 255.F, g / 255.F, b / 255.F, alpha);
-                    const float pen_size = _getPenSize();
-
-                    bool laser = settings->getValue<bool>(kLaser);
-                    bool softBrush = settings->getValue<bool>(kSoftBrush);
-                    Fl_Font font =
-                        static_cast<Fl_Font>(settings->getValue<int>(kTextFont));
-
-                    p.mousePos = _getFocus();
-                    draw::Point pnt(_getRasterf());
-
-                    auto player = getTimelinePlayer();
-                    if (!player)
-                        return;
-
-                    auto annotation = player->getAnnotation();
-                    bool all_frames =
-                        p.ui->app->settings()->getValue<bool>(kAllFrames);
-                    if (!annotation)
-                    {
-                        annotation = player->createAnnotation(all_frames);
-                        if (!annotation)
-                            return;
+                        error +=
+                            _("Cannot create an annotation here for all "
+                              "frames.  "
+                              "A current frame annotation already "
+                              "exists.");
                     }
                     else
                     {
-                        if (annotation->allFrames != all_frames)
-                        {
-                            std::string error;
-                            if (all_frames)
-                            {
-                                error +=
-                                    _("Cannot create an annotation here for all "
-                                      "frames.  "
-                                      "A current frame annotation already "
-                                      "exists.");
-                            }
-                            else
-                            {
-                                error +=
-                                    _("Cannot create an annotation here for "
-                                      "current frame.  "
-                                      "An all frames annotation already exists.");
-                            }
-                            LOG_ERROR(error);
-                            return;
-                        }
+                        error +=
+                            _("Cannot create an annotation here for "
+                              "current frame.  "
+                              "An all frames annotation already exists.");
                     }
-
-                    switch (p.actionMode)
-                    {
-                    case ActionMode::kDraw:
-                    {
-                        auto shape = std::make_shared< GLPathShape >();
-                        shape->pen_size = pen_size;
-                        shape->color = color;
-                        shape->soft = softBrush;
-                        shape->laser = laser;
-                        shape->pts.push_back(pnt);
-                        annotation->push_back(shape);
-                        _createAnnotationShape(laser);
-                        break;
-                    }
-                    case ActionMode::kErase:
-                    {
-                        auto shape = std::make_shared< GLErasePathShape >();
-                        shape->pen_size = pen_size * 3.5F;
-                        shape->color = color;
-                        shape->soft = softBrush;
-                        shape->pts.push_back(pnt);
-                        annotation->push_back(shape);
-                        _createAnnotationShape(false);
-                        break;
-                    }
-                    case ActionMode::kArrow:
-                    {
-                        auto shape = std::make_shared< GLArrowShape >();
-                        shape->pen_size = pen_size;
-                        shape->soft = softBrush;
-                        shape->color = color;
-                        shape->laser = laser;
-                        shape->pts.push_back(pnt);
-                        shape->pts.push_back(pnt);
-                        shape->pts.push_back(pnt);
-                        shape->pts.push_back(pnt);
-                        shape->pts.push_back(pnt);
-                        annotation->push_back(shape);
-                        _createAnnotationShape(laser);
-                        break;
-                    }
-                    case ActionMode::kFilledPolygon:
-                    {
-                        std::shared_ptr<GLFilledPolygonShape> shape;
-                        if (p.lastEvent != FL_DRAG)
-                        {
-                            shape = std::make_shared< GLFilledPolygonShape >();
-                            shape->pen_size = pen_size;
-                            shape->soft = false;
-                            shape->color = color;
-                            shape->laser = laser;
-                            shape->pts.push_back(pnt);
-                            p.lastEvent = FL_PUSH;
-                        }
-                        else
-                        {
-                            auto s = annotation->lastShape();
-                            shape =
-                                std::dynamic_pointer_cast<GLFilledPolygonShape>(s);
-                            if (!shape)
-                                return;
-                            shape->pts.push_back(pnt);
-                        }
-                    
-                        if (p.lastEvent == FL_PUSH)
-                        {
-                            annotation->push_back(shape);
-                            _createAnnotationShape(false);
-                            p.lastEvent = FL_DRAG;
-                        }
-                        break;
-                    }
-                    case ActionMode::kPolygon:
-                    {
-                        std::shared_ptr<GLPolygonShape> shape;
-                        if (p.lastEvent != FL_DRAG)
-                        {
-                            shape = std::make_shared< GLPolygonShape >();
-                            shape->pen_size = pen_size;
-                            shape->soft = false;
-                            shape->color = color;
-                            shape->laser = laser;
-                            p.lastEvent = FL_PUSH;
-                        }
-                        else
-                        {
-                            auto s = annotation->lastShape();
-                            shape = std::dynamic_pointer_cast<GLPolygonShape>(s);
-                            if (!shape)
-                                return;
-                        }
-                    
-                        shape->pts.push_back(pnt);
-                        
-                        if (p.lastEvent == FL_PUSH)
-                        {
-                            annotation->push_back(shape);
-                            _createAnnotationShape(false);
-                            p.lastEvent = FL_DRAG;
-                        }
-                        break;
-                    }
-                    case ActionMode::kFilledCircle:
-                    {
-                        auto shape = std::make_shared< GLFilledCircleShape >();
-                        shape->pen_size = pen_size;
-                        shape->soft = softBrush;
-                        shape->color = color;
-                        shape->laser = laser;
-                        shape->center = _getRasterf();
-                        shape->radius = 0;
-
-                        annotation->push_back(shape);
-                        _createAnnotationShape(laser);
-                        break;
-                    }
-                    case ActionMode::kCircle:
-                    {
-                        auto shape = std::make_shared< GLCircleShape >();
-                        shape->pen_size = pen_size;
-                        shape->soft = softBrush;
-                        shape->color = color;
-                        shape->laser = laser;
-                        shape->center = _getRasterf();
-                        shape->radius = 0;
-
-                        annotation->push_back(shape);
-                        _createAnnotationShape(laser);
-                        break;
-                    }
-                    case ActionMode::kFilledRectangle:
-                    {
-                        auto shape = std::make_shared< GLFilledRectangleShape >();
-                        shape->pen_size = pen_size;
-                        shape->soft = softBrush;
-                        shape->color = color;
-                        shape->laser = laser;
-                        shape->pts.push_back(pnt);
-                        shape->pts.push_back(pnt);
-                        shape->pts.push_back(pnt);
-                        shape->pts.push_back(pnt);
-                        shape->pts.push_back(pnt);
-                        annotation->push_back(shape);
-                        _createAnnotationShape(laser);
-                        break;
-                    }
-                    case ActionMode::kRectangle:
-                    {
-                        auto shape = std::make_shared< GLRectangleShape >();
-                        shape->pen_size = pen_size;
-                        shape->soft = softBrush;
-                        shape->color = color;
-                        shape->laser = laser;
-                        shape->pts.push_back(pnt);
-                        shape->pts.push_back(pnt);
-                        shape->pts.push_back(pnt);
-                        shape->pts.push_back(pnt);
-                        shape->pts.push_back(pnt);
-                        annotation->push_back(shape);
-                        _createAnnotationShape(laser);
-                        break;
-                    }
-                    case ActionMode::kText:
-                    {
-                        const auto& renderSize = getRenderSize();
-                        float pct = renderSize.h / 1024.F;
-                        auto w = getMultilineInput();
-
-                        int font_size = settings->getValue<int>(kFontSize);
-                        double fontSize =
-                            font_size * pct * p.viewZoom / pixels_per_unit();
-                        math::Vector2i pos(p.event_x, p.event_y);
-                        if (w)
-                        {
-                            w->take_focus();
-                            w->pos = pos;
-#ifdef USE_OPENGL2
-                            w->textfont((Fl_Font)font);
-#else
-                            w->Fl_Widget::position(pos.x, pos.y);
-#endif
-                            w->textsize(fontSize);
-                            redrawWindows();
-                            return;
-                        }
-
-                        w = new MultilineInput(
-                            pos.x, pos.y, 20, 30 * pct * p.viewZoom);
-                        w->take_focus();
-#ifdef USE_OPENGL2
-                        w->textfont((Fl_Font)font);
-#endif
-                        w->textsize(fontSize);
-                        w->textcolor(fltk_color);
-                        w->viewPos = p.viewPos;
-                        w->viewZoom = p.viewZoom;
-                        w->redraw();
-
-                        this->add(w);
-
-                        redrawWindows();
-                        return;
-                    }
-                    default:
-                        return;
-                    }
-                    // Create annotation menus if not there already
-                    App::unsaved_annotations = true;
-                    p.ui->uiMain->update_title_bar();
-                    p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
-                    p.ui->uiUndoDraw->activate();
+                    LOG_ERROR(error);
+                    return;
                 }
             }
+
+            switch (p.actionMode)
+            {
+            case ActionMode::kDraw:
+            {
+                auto shape = std::make_shared< GLPathShape >();
+                shape->pen_size = pen_size;
+                shape->color = color;
+                shape->soft = softBrush;
+                shape->laser = laser;
+                shape->pts.push_back(pnt);
+                annotation->push_back(shape);
+                _createAnnotationShape(laser);
+                break;
+            }
+            case ActionMode::kErase:
+            {
+                auto shape = std::make_shared< GLErasePathShape >();
+                shape->pen_size = pen_size * 3.5F;
+                shape->color = color;
+                shape->soft = softBrush;
+                shape->pts.push_back(pnt);
+                annotation->push_back(shape);
+                _createAnnotationShape(false);
+                break;
+            }
+            case ActionMode::kArrow:
+            {
+                auto shape = std::make_shared< GLArrowShape >();
+                shape->pen_size = pen_size;
+                shape->soft = softBrush;
+                shape->color = color;
+                shape->laser = laser;
+                shape->pts.push_back(pnt);
+                shape->pts.push_back(pnt);
+                shape->pts.push_back(pnt);
+                shape->pts.push_back(pnt);
+                shape->pts.push_back(pnt);
+                annotation->push_back(shape);
+                _createAnnotationShape(laser);
+                break;
+            }
+            case ActionMode::kFilledPolygon:
+            {
+                std::shared_ptr<GLFilledPolygonShape> shape;
+                if (p.lastEvent != FL_DRAG)
+                {
+                    shape = std::make_shared< GLFilledPolygonShape >();
+                    shape->pen_size = pen_size;
+                    shape->soft = false;
+                    shape->color = color;
+                    shape->laser = laser;
+                    shape->pts.push_back(pnt);
+                    p.lastEvent = FL_PUSH;
+                }
+                else
+                {
+                    auto s = annotation->lastShape();
+                    shape =
+                        std::dynamic_pointer_cast<GLFilledPolygonShape>(s);
+                    if (!shape)
+                        return;
+                    shape->pts.push_back(pnt);
+                }
+                    
+                if (p.lastEvent == FL_PUSH)
+                {
+                    annotation->push_back(shape);
+                    _createAnnotationShape(false);
+                    p.lastEvent = FL_DRAG;
+                }
+                break;
+            }
+            case ActionMode::kPolygon:
+            {
+                std::shared_ptr<GLPolygonShape> shape;
+                if (p.lastEvent != FL_DRAG)
+                {
+                    shape = std::make_shared< GLPolygonShape >();
+                    shape->pen_size = pen_size;
+                    shape->soft = false;
+                    shape->color = color;
+                    shape->laser = laser;
+                    p.lastEvent = FL_PUSH;
+                }
+                else
+                {
+                    auto s = annotation->lastShape();
+                    shape = std::dynamic_pointer_cast<GLPolygonShape>(s);
+                    if (!shape)
+                        return;
+                }
+                    
+                shape->pts.push_back(pnt);
+                        
+                if (p.lastEvent == FL_PUSH)
+                {
+                    annotation->push_back(shape);
+                    _createAnnotationShape(false);
+                    p.lastEvent = FL_DRAG;
+                }
+                break;
+            }
+            case ActionMode::kFilledCircle:
+            {
+                auto shape = std::make_shared< GLFilledCircleShape >();
+                shape->pen_size = pen_size;
+                shape->soft = softBrush;
+                shape->color = color;
+                shape->laser = laser;
+                shape->center = _getRasterf();
+                shape->radius = 0;
+
+                annotation->push_back(shape);
+                _createAnnotationShape(laser);
+                break;
+            }
+            case ActionMode::kCircle:
+            {
+                auto shape = std::make_shared< GLCircleShape >();
+                shape->pen_size = pen_size;
+                shape->soft = softBrush;
+                shape->color = color;
+                shape->laser = laser;
+                shape->center = _getRasterf();
+                shape->radius = 0;
+
+                annotation->push_back(shape);
+                _createAnnotationShape(laser);
+                break;
+            }
+            case ActionMode::kFilledRectangle:
+            {
+                auto shape = std::make_shared< GLFilledRectangleShape >();
+                shape->pen_size = pen_size;
+                shape->soft = softBrush;
+                shape->color = color;
+                shape->laser = laser;
+                shape->pts.push_back(pnt);
+                shape->pts.push_back(pnt);
+                shape->pts.push_back(pnt);
+                shape->pts.push_back(pnt);
+                shape->pts.push_back(pnt);
+                annotation->push_back(shape);
+                _createAnnotationShape(laser);
+                break;
+            }
+            case ActionMode::kRectangle:
+            {
+                auto shape = std::make_shared< GLRectangleShape >();
+                shape->pen_size = pen_size;
+                shape->soft = softBrush;
+                shape->color = color;
+                shape->laser = laser;
+                shape->pts.push_back(pnt);
+                shape->pts.push_back(pnt);
+                shape->pts.push_back(pnt);
+                shape->pts.push_back(pnt);
+                shape->pts.push_back(pnt);
+                annotation->push_back(shape);
+                _createAnnotationShape(laser);
+                break;
+            }
+            case ActionMode::kText:
+            {
+                const auto& renderSize = getRenderSize();
+                float pct = renderSize.h / 1024.F;
+                auto w = getMultilineInput();
+
+                int font_size = settings->getValue<int>(kFontSize);
+                double fontSize =
+                    font_size * pct * p.viewZoom / pixels_per_unit();
+                math::Vector2i pos(p.event_x, p.event_y);
+                if (w)
+                {
+                    w->take_focus();
+                    w->pos = pos;
+#ifdef USE_OPENGL2
+                    w->textfont((Fl_Font)font);
+#else
+                    w->Fl_Widget::position(pos.x, pos.y);
+#endif
+                    w->textsize(fontSize);
+                    redrawWindows();
+                    return;
+                }
+
+                w = new MultilineInput(
+                    pos.x, pos.y, 20, 30 * pct * p.viewZoom);
+                w->take_focus();
+#ifdef USE_OPENGL2
+                w->textfont((Fl_Font)font);
+#endif
+                w->textsize(fontSize);
+                w->textcolor(fltk_color);
+                w->viewPos = p.viewPos;
+                w->viewZoom = p.viewZoom;
+                w->redraw();
+
+                this->add(w);
+
+                redrawWindows();
+                return;
+            }
+            default:
+                return;
+            }
+            // Create annotation menus if not there already
+            App::unsaved_annotations = true;
+            p.ui->uiMain->update_title_bar();
+            p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
+            p.ui->uiUndoDraw->activate();
         }
 
 

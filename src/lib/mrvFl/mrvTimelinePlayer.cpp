@@ -91,6 +91,9 @@ namespace mrv
 
         //! List of voice annotations.
         std::vector<std::shared_ptr<voice::Annotation> > voiceAnnotations;
+
+        //! Last voice annotation undone.
+        std::vector<std::shared_ptr<voice::Annotation> > undoVoiceAnnotations;
     };
 
     void TimelinePlayer::_init(
@@ -122,19 +125,19 @@ namespace mrv
             observer::ValueObserver<otime::RationalTime>::create(
                 p.player->observeCurrentTime(),
                 [this](const otime::RationalTime& value)
-                { currentTimeChanged(value); });
+                    { currentTimeChanged(value); });
 
         p.cacheOptionsObserver =
             observer::ValueObserver<timeline::PlayerCacheOptions>::create(
                 p.player->observeCacheOptions(),
                 [this](const timeline::PlayerCacheOptions& value)
-                { cacheOptionsChanged(value); });
+                    { cacheOptionsChanged(value); });
 
         p.cacheInfoObserver =
             observer::ValueObserver<timeline::PlayerCacheInfo>::create(
                 p.player->observeCacheInfo(),
                 [this](const timeline::PlayerCacheInfo& value)
-                { cacheInfoChanged(value); });
+                    { cacheInfoChanged(value); });
 
 #ifdef DEBUG_SPEED
         p.start_time = std::chrono::high_resolution_clock::now();
@@ -156,7 +159,7 @@ namespace mrv
         Fl::remove_timeout((Fl_Timeout_Handler)timerEvent_cb, this);
     }
 
-    const std::weak_ptr<system::Context>& TimelinePlayer::context() const
+    const std::weak_ptr<system::Context>& TimelinePlayer::getContext() const
     {
         return _p->player->getContext();
     }
@@ -350,8 +353,8 @@ namespace mrv
     {
         setPlayback(
             timeline::Playback::Stop == _p->player->observePlayback()->get()
-                ? timeline::Playback::Forward
-                : timeline::Playback::Stop);
+            ? timeline::Playback::Forward
+            : timeline::Playback::Stop);
     }
 
     void TimelinePlayer::setLoop(timeline::Loop value)
@@ -640,6 +643,10 @@ namespace mrv
         {
             times.push_back(annotation->time);
         }
+        for (auto annotation : p.voiceAnnotations)
+        {
+            times.push_back(annotation->time);
+        }
         return times;
     }
 
@@ -660,13 +667,13 @@ namespace mrv
             found = std::find_if(
                 found, p.annotations.end(),
                 [frame, previous, next](const auto& a)
-                {
-                    if (a->allFrames)
-                        return true;
-                    const int64_t start = frame - previous;
-                    const int64_t end = frame + next;
-                    return (frame > start && frame < end);
-                });
+                    {
+                        if (a->allFrames)
+                            return true;
+                        const int64_t start = frame - previous;
+                        const int64_t end = frame + next;
+                        return (frame > start && frame < end);
+                    });
 
             if (found != p.annotations.end())
             {
@@ -895,14 +902,168 @@ namespace mrv
         return !annotation->undo_shapes.empty();
     }
 
+    //! Get annotation for current time
+    std::shared_ptr< voice::Annotation > TimelinePlayer::getVoiceAnnotation() const
+    {
+        TLRENDER_P();
+
+        //! Don't allow getting annotations while playing
+        if (playback() != timeline::Playback::Stop)
+            return nullptr;
+
+        const auto& time = currentTime();
+
+        const auto found = std::find_if(
+            p.voiceAnnotations.begin(), p.voiceAnnotations.end(),
+            [time](const auto& a) { return a->time == time; });
+
+        if (found == p.voiceAnnotations.end())
+        {
+            return nullptr;
+        }
+        else
+        {
+            return *found;
+        }
+    }
+        
+    //! Get undo annotation for current time
+    std::shared_ptr< voice::Annotation > TimelinePlayer::getUndoVoiceAnnotation() const
+    {
+        TLRENDER_P();
+
+        //! Don't allow getting annotations while playing
+        if (playback() != timeline::Playback::Stop)
+            return nullptr;
+
+        const auto& time = currentTime();
+
+        const auto found = std::find_if(
+            p.undoVoiceAnnotations.begin(), p.undoVoiceAnnotations.end(),
+            [time](const auto& a) { return a->time == time; });
+
+        if (found == p.undoVoiceAnnotations.end())
+        {
+            return nullptr;
+        }
+        else
+        {
+            return *found;
+        }
+    }
+
+    //! Create annotation for current time
+    std::shared_ptr< voice::Annotation >
+    TimelinePlayer::createVoiceAnnotation(const math::Vector2f& center,
+                                          const bool all_frames)
+    {
+        TLRENDER_P();
+
+        // Don't allow creating annotations while playing.  Stop playback first.
+        if (playback() != timeline::Playback::Stop)
+        {
+            stop();
+        }
+
+        auto time = currentTime();
+
+        auto found = std::find_if(
+            p.voiceAnnotations.begin(), p.voiceAnnotations.end(),
+            [time](const auto& a) { return a->time == time; });
+
+        std::shared_ptr< voice::Annotation > annotation;
+        if (found == p.voiceAnnotations.end())
+        {
+            annotation = std::make_shared< voice::Annotation >(time, all_frames);
+            p.voiceAnnotations.push_back(annotation);
+        }
+        else
+        {
+            annotation = *found;
+            if (!annotation->allFrames && !all_frames)
+            {
+                throw std::runtime_error(
+                    _("Annotation already existed at this time"));
+            }
+        }
+
+        if (auto context = getContext().lock())
+        {
+            std::shared_ptr< voice::VoiceOver > voice =
+                voice::VoiceOver::create(context, center);
+            annotation->push_back(voice);
+        }
+        return annotation;
+    }
+
+    //! Get list of annotations for between previous ghosting and
+    //! next ghosting from current time.
+    std::vector< std::shared_ptr< voice::Annotation > >
+    TimelinePlayer::getVoiceAnnotations(const int previous, const int next) const
+    {
+        TLRENDER_P();
+
+        std::vector< std::shared_ptr< voice::Annotation > > out;
+        
+        const auto& time = currentTime();
+        const int64_t frame = time.value();
+
+
+        auto found = p.voiceAnnotations.begin();
+
+        while (found != p.voiceAnnotations.end())
+        {
+            found = std::find_if(
+                found, p.voiceAnnotations.end(),
+                [frame, previous, next](const auto& a)
+                    {
+                        if (a->allFrames)
+                            return true;
+                        const int64_t start = frame - previous;
+                        const int64_t end = frame + next;
+                        return (frame > start && frame < end);
+                    });
+
+            if (found != p.voiceAnnotations.end())
+            {
+                out.push_back(*found);
+                ++found;
+            }
+        }
+        return out;
+    }
+
+    //! Get all annotations in timeline player.
+    std::vector< std::shared_ptr< voice::Annotation > >
+    TimelinePlayer::getAllVoiceAnnotations() const
+    {
+        return _p->voiceAnnotations;
+    }
+
+
+    //! Set all annotations in timeline player.
+    void TimelinePlayer::setAllAnnotations(
+        const std::vector<std::shared_ptr<voice::Annotation > >& value)
+    {
+        _p->voiceAnnotations = value;
+        _p->undoVoiceAnnotations.clear();
+    }
+
+    //! Remove an annotation from list.
+    void TimelinePlayer::removeAnnotation(const std::shared_ptr< voice::Annotation >& voiceAnnotation)
+    {
+        TLRENDER_P();
+        
+        p.undoVoiceAnnotations = p.voiceAnnotations;
+        p.voiceAnnotations.erase(
+            std::remove(p.voiceAnnotations.begin(),
+                        p.voiceAnnotations.end(), voiceAnnotation),
+            p.voiceAnnotations.end());
+    }
+
+    
     void TimelinePlayer::timerEvent()
     {
-#ifdef DEBUG_SPEED
-        auto end_time = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double> diff = end_time - _p->start_time;
-        std::cout << "timeout duration: " << diff.count() << std::endl;
-        _p->start_time = std::chrono::high_resolution_clock::now();
-#endif
         _p->player->tick();
         Fl::repeat_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
     }
