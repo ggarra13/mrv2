@@ -1332,6 +1332,11 @@ namespace tl
             return _p->frameIndex;
         }
 
+        Fl_Vk_Context& Render::getContext() const
+        {
+            return ctx;
+        }
+        
         math::Size2i Render::getRenderSize() const
         {
             return _p->renderSize;

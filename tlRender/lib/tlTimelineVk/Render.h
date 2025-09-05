@@ -82,6 +82,7 @@ namespace tl
                 const timeline::RenderOptions& = timeline::RenderOptions());
             void end() override;
 
+            Fl_Vk_Context& getContext() const;
             VkCommandBuffer getCommandBuffer() const;
             uint32_t getFrameIndex() const;
 

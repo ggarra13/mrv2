@@ -75,6 +75,10 @@ namespace tl
         //! Create a two-dimensional box mesh.
         TriangleMesh2 box(const math::Box2f&, bool flipV = false);
         
+        //! Create a two-dimensional box mesh.
+        TriangleMesh2 circleFilled(const math::Vector2f& center, float radius,
+                                   const unsigned sides);
+        
         //! Create a mesh for drawing checkers.
         geom::TriangleMesh2 checkers(
             const math::Box2i&, const image::Color4f& color0,

@@ -48,6 +48,8 @@ files_to_absolute_paths()
 target_link_libraries(mrvVk PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
 set_target_properties(mrvVk PROPERTIES FOLDER lib)
 
+add_dependencies(mrvVk mrvVoice)
+
 install(TARGETS mrvVk
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib

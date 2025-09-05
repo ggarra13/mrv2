@@ -8,6 +8,7 @@
 #include "mrvGL/mrvGLDefines.h"
 #include "mrvGL/mrvGLLines.h"
 
+#include "mrvVoice/mrvVoiceOver.h"
 
 #include <tlCore/Matrix.h>
 
@@ -225,4 +226,26 @@ namespace mrv
     void from_json(const nlohmann::json& json, GLErasePathShape& value);
 
     typedef std::vector< std::shared_ptr< draw::Shape > > ShapeList;
+
+    
+    /** 
+     * Auxiliary class used to draw a voice over icon.
+     * 
+     */
+    class GLVoiceOverShape
+    {
+    public:
+        GLVoiceOverShape()
+            {
+            };
+        ~GLVoiceOverShape() {};
+        
+        void draw(const std::shared_ptr<timeline::IRender>&,
+                  const voice::MouseData& mouse);
+        
+        voice::RecordStatus status;
+        math::Vector2i center;
+    };
+
+
 } // namespace mrv

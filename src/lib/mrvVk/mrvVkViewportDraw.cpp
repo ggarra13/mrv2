@@ -286,7 +286,8 @@ namespace mrv
             const std::shared_ptr<tl::vlk::OffscreenBuffer>& annotationBuffer,
             const std::shared_ptr<tl::timeline_vlk::Render>& render,
             const math::Matrix4x4f& renderMVP, const otime::RationalTime& time,
-            const std::vector<std::shared_ptr<draw::Annotation>>& annotations,
+            const std::vector<std::shared_ptr<draw::Annotation> >& annotations,
+            const std::vector<std::shared_ptr<voice::Annotation> >& voannotations,
             const math::Size2i& renderSize)
         {
             TLRENDER_P();
@@ -352,6 +353,24 @@ namespace mrv
                         continue;
                     
                     _drawShape(render, shape, alphamult);
+                }
+            }
+
+            VKVoiceOverShape shape;
+            for (const auto annotation : voannotations)
+            {
+                if (!annotation->allFrames && time.floor() != annotation->time.floor())
+                    continue;
+                
+                const auto& voices = annotation->voices;
+                for (const auto voice : voices)
+                {
+                    shape.center = voice->getCenter();
+                    shape.status = voice->getStatus();
+
+                    const auto& mouseData = voice->getMouseData();
+                    
+                    shape.draw(render, mouseData);
                 }
             }
             
@@ -1083,6 +1102,31 @@ namespace mrv
                 m_hdr_metadata_changed = false; // Mark as unchanged
             }
             
+        }
+
+        
+        void Viewport::_drawVoiceOverShapes(const math::Matrix4x4f& mvp)
+        {
+            MRV2_VK();
+            
+            // auto player = getTimelinePlayer();
+            // if (!player) return;
+            
+            // auto annotations = player->getVoiceAnnotations();
+            // if (annotations.empty())
+            //     return;
+
+            // for (const auto annotation : annotations)
+            // {
+            //     const auto& voices = annotation->voices;
+            //     VKVoiceOverShape shape;
+            //     for (const auto voice : voices)
+            //     {
+            //         shape.center = voice->getCenter();
+            //         shape.status = voice->getStatus();
+            //         shape.draw(render, vk.lines);
+            //     }
+            // }
         }
 
     } // namespace vulkan

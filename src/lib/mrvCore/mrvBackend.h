@@ -10,12 +10,15 @@
 #  define BACKEND mrv::vulkan
 #  define BACKEND_NAMESPACE vulkan
 #  define BACKEND_SUPER_CLASS VkWindow
+#  include "mrvVk/mrvVkWindow.h"
+#  include "mrvVk/mrvVkShape.h"
 #elif defined(MRV2_BACKEND_GL)
 #  define OPENGL_BACKEND 1
 #  define OPENGL_NAME "OpenGL"
 #  define BACKEND mrv::opengl
 #  define BACKEND_NAMESPACE opengl
 #  define BACKEND_SUPER_CLASS GLWindow
+#  include "mrvGL/mrvGLWindow.h"
 #endif
 
 

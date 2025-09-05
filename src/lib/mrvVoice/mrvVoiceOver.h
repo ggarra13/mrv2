@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include <tlCore/Box.h>
 #include <tlCore/Context.h>
 #include <tlCore/ISystem.h>
 #include <tlCore/Vector.h>
@@ -19,10 +20,17 @@ namespace mrv
         {
             Stopped,
             Recording,
-            Playing
+            Saved,
+            Playing,
+
+            Count,
+            First = Stopped
         };
         
-        class MouseData
+        TLRENDER_ENUM(RecordStatus);
+        TLRENDER_ENUM_SERIALIZE(RecordStatus);
+        
+        struct MouseData
         {
             math::Vector2i pos;
             bool pressed = false;
@@ -34,7 +42,7 @@ namespace mrv
 
         protected:
             void _init(const std::shared_ptr<system::Context>&,
-                       const math::Vector2f&);
+                       const math::Vector2i&);
 
             VoiceOver();
             
@@ -44,7 +52,7 @@ namespace mrv
             //! Create a new system.
             static std::shared_ptr<VoiceOver>
             create(const std::shared_ptr<system::Context>&,
-                   const math::Vector2f& center);
+                   const math::Vector2i& center);
 
             //! Get the context.
             const std::weak_ptr<system::Context>& getContext() const;
@@ -70,14 +78,20 @@ namespace mrv
             //! Stop playing.
             void stopPlaying();
 
+            //! Get the bounding box.
+            const math::Box2i getBBox() const;
+            
             //! Get center of current voice over.
-            const math::Vector2f& getCenter() const;
+            const math::Vector2i& getCenter() const;
             
             //! Get current mouse data for current audio frame.
             MouseData getMouseData() const;
 
             //! Append mouse data.
             void appendMouseData(const MouseData&);
+            
+            //! Tick the mouse position playback.
+            void tick();
             
         private:
             TLRENDER_PRIVATE();

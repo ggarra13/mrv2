@@ -52,6 +52,8 @@ files_to_absolute_paths()
 target_link_libraries(mrvGL PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
 set_target_properties(mrvGL PROPERTIES FOLDER lib)
 
+add_dependencies(mrvGL mrvVoice)
+
 install(TARGETS mrvGL
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib

@@ -2,7 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#define DEBUG_EVENTS 1
+// #define DEBUG_EVENTS 1
 
 #include "mrViewer.h"
 
@@ -47,6 +47,8 @@ namespace
     const float kLaserFadeTimeout = 0.01;
     const float kLaserFade = 0.025;
 
+    const float kVoiceTimeout = 1.0 / 30.0;
+
     const char* kModule = "view";
     
 } // namespace
@@ -90,7 +92,55 @@ namespace mrv
 
     namespace BACKEND_NAMESPACE
     {
+        namespace
+        {
+            void record_mouse_position_cb(TimelineViewport* view)
+            {
+                view->recordMousePosition();
+            }
     
+            void play_mouse_position_cb(TimelineViewport* view)
+            {
+                view->playMousePosition();
+            }
+
+            void handleViewSpinning_cb(TimelineViewport* t) noexcept
+            {
+                t->handleViewSpinning();
+            }
+        }
+
+        void TimelineViewport::recordMousePosition()
+        {
+            if (!currentVoiceOver)
+                return;
+
+            currentVoiceOver->appendMouseData(currentMouseData);
+            redrawWindows();
+
+            if (currentVoiceOver->getStatus() == voice::RecordStatus::Recording)
+            {
+                Fl::repeat_timeout(kVoiceTimeout,
+                                   (Fl_Timeout_Handler)record_mouse_position_cb, this);
+            }
+        }
+
+        void TimelineViewport::playMousePosition()
+        {
+            if (!currentVoiceOver)
+                return;
+
+            currentVoiceOver->tick();
+            redrawWindows();
+
+            if (currentVoiceOver->getStatus() == voice::RecordStatus::Playing)
+            {
+                Fl::repeat_timeout(kVoiceTimeout,
+                                   (Fl_Timeout_Handler)play_mouse_position_cb, this);
+            }
+        }
+        
+        //! This callback must be part of TimelineViewport as CommandInterpreter will call it.
         void TimelineViewport::laserFade_cb(LaserFadeData* data)
         {
             MyViewport* view = data->view;
@@ -336,21 +386,80 @@ namespace mrv
                     else if (p.actionMode == ActionMode::kVoice)
                     {
                         p.mousePos = _getFocus();
-                        auto pnt = _getRasterf();
-            
-                        auto annotation = p.player->getVoiceAnnotation();
-                        if (!annotation)
+                        const math::Vector2i& pnt = _getRaster();
+
+                        auto annotations = p.player->getVoiceAnnotations();
+                        if (!annotations.empty())
                         {
-                            const bool all_frames =
-                                p.ui->app->settings()->getValue<bool>(kAllFrames);
-                            annotation =
-                                p.player->createVoiceAnnotation(pnt,
-                                                                all_frames);
-                            if (!annotation)
-                                return;
+                            for (auto& annotation : annotations)
+                            {
+                                for (auto& voice : annotation->voices)
+                                {
+                                    auto buttonBox = voice->getBBox();
+                                    if (buttonBox.contains(pnt))
+                                    {
+                                        auto status = voice->getStatus();
+                                        
+                                        switch(status)
+                                        {
+                                        case voice::RecordStatus::Stopped:
+                                        {
+                                            voice->startRecording();
+                                            currentVoiceOver = voice;
+                                            
+                                            p.mousePos = _getFocus();
+                                            const math::Vector2i& pnt = _getRaster();
+                                            currentMouseData.pos = pnt;
+                                            Fl::add_timeout(kVoiceTimeout,
+                                                            (Fl_Timeout_Handler)record_mouse_position_cb, this);
+                                            break;
+                                        }
+                                        case voice::RecordStatus::Recording:
+                                        {
+                                            voice->stopRecording();
+                                            Fl::remove_timeout((Fl_Timeout_Handler)record_mouse_position_cb, this);
+                                            break;
+                                        }
+                                        case voice::RecordStatus::Saved:
+                                        {
+                                            voice->startPlaying();
+                                            currentVoiceOver = voice;
+                                            Fl::add_timeout(kVoiceTimeout,
+                                                            (Fl_Timeout_Handler)play_mouse_position_cb, this);
+                                            break;
+                                        }
+                                        case voice::RecordStatus::Playing:
+                                        {
+                                            voice->stopPlaying();
+                                            currentVoiceOver.reset();
+                                            Fl::remove_timeout((Fl_Timeout_Handler)play_mouse_position_cb, this);
+                                            break;
+                                        }
+                                        default:
+                                            return;
+                                        }
+                                        redrawWindows();
+                                        return;
+                                    }
+                                }
+                            }
                         }
                         
-                        p.lastEvent = FL_PUSH;
+                
+                        if (currentVoiceOver)
+                        {
+                            switch(currentVoiceOver->getStatus())
+                            {
+                            case voice::RecordStatus::Recording:
+                                currentMouseData.pressed = true;
+                                redrawWindows();
+                                return;
+                                break;
+                            default:
+                                break;
+                            }
+                        }
+                        p.player->createVoiceAnnotation(pnt, false);
                         return;
                     }
 
@@ -373,11 +482,6 @@ namespace mrv
             setSelectionArea(area);
 
             redrawWindows();
-        }
-
-        void TimelineViewport::_handleViewSpinning_cb(TimelineViewport* t) noexcept
-        {
-            t->handleViewSpinning();
         }
 
         void TimelineViewport::handleViewSpinning() noexcept
@@ -414,7 +518,7 @@ namespace mrv
             {
                 _updateViewRotation(p.viewSpin);
                 Fl::repeat_timeout(
-                    kSpinTimeout, (Fl_Timeout_Handler)_handleViewSpinning_cb, this);
+                    kSpinTimeout, (Fl_Timeout_Handler)handleViewSpinning_cb, this);
             }
         }
 
@@ -486,11 +590,11 @@ namespace mrv
                             p.viewSpin.x = -kSpinMaxX;
 
                         if (!Fl::has_timeout(
-                                (Fl_Timeout_Handler)_handleViewSpinning_cb, this))
+                                (Fl_Timeout_Handler)handleViewSpinning_cb, this))
                         {
                             Fl::add_timeout(
                                 kSpinTimeout,
-                                (Fl_Timeout_Handler)_handleViewSpinning_cb, this);
+                                (Fl_Timeout_Handler)handleViewSpinning_cb, this);
                         }
                     }
                     else
@@ -652,6 +756,7 @@ namespace mrv
                         p.viewPosMousePress = p.viewPos;
                         return 1;
                     }
+                
                     _handlePushLeftMouseButton();
                 }
                 else if (Fl::event_button2())
@@ -701,6 +806,14 @@ namespace mrv
                     p.actionMode != ActionMode::kText &&
                     p.actionMode != ActionMode::kRotate)
                 {
+                    if (currentVoiceOver)
+                    {
+                        p.mousePos = _getFocus();
+                        
+                        const math::Vector2i& pnt = _getRaster();
+                        currentMouseData.pos = pnt;
+                    }
+                    
                     redrawWindows();
                 }
                 if (p.presentation)
@@ -799,6 +912,10 @@ namespace mrv
                     Fl::add_timeout(
                         kLaserFadeTimeout, (Fl_Timeout_Handler)laserFade_cb,
                         laserData);
+                }
+                else if (p.actionMode == ActionMode::kVoice)
+                {
+                    currentMouseData.pressed = false;
                 }
                 p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
                 _updateCursor();
@@ -1299,6 +1416,6 @@ namespace mrv
                 pos.y = renderSize.h - 1;
         }
 
-    } // namespace opengl
+    } // namespace BACKEND_NAMESPACE
 
 } // namespace mrv

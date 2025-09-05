@@ -519,6 +519,7 @@ namespace mrv
             const std::shared_ptr<tl::gl::OffscreenBuffer>& overlay,
             const math::Matrix4x4f& renderMVP, const otime::RationalTime& time,
             const std::vector<std::shared_ptr<draw::Annotation>>& annotations,
+            const std::vector<std::shared_ptr<voice::Annotation>>& voannotations,
             const math::Size2i& renderSize)
         {
             TLRENDER_P();
@@ -577,6 +578,25 @@ namespace mrv
                     CHECK_GL;
                     _drawShape(shape, alphamult);
                     CHECK_GL;
+                }
+            }
+            
+            GLVoiceOverShape shape;
+            for (const auto annotation : voannotations)
+            {
+                if (!annotation->allFrames && time.floor() != annotation->time.floor())
+                    continue;
+                
+                const auto& voices = annotation->voices;
+                for (const auto voice : voices)
+                {
+                    shape.center = voice->getCenter();
+                    shape.status = voice->getStatus();
+
+                    const auto& mouseData = voice->getMouseData();
+                    
+                    gl.render->setTransform(renderMVP);
+                    shape.draw(gl.render, mouseData);
                 }
             }
 
@@ -652,7 +672,7 @@ namespace mrv
                     GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE,
                     gl.annotationImage->getData());
             }
-
+            
             // Restore drawing to main viewport (needed for HUD and other annotation
             // code)
             glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));

@@ -7,6 +7,8 @@
 #include "mrvVk/mrvVkDefines.h"
 #include "mrvVk/mrvVkLines.h"
 
+#include "mrvVoice/mrvVoiceOver.h"
+
 #include <tlTimelineVk/Render.h>
 
 #include <tlDraw/Shape.h>
@@ -211,4 +213,26 @@ namespace mrv
     void from_json(const nlohmann::json& json, VKErasePathShape& value);
 
     typedef std::vector< std::shared_ptr< draw::Shape > > ShapeList;
+
+
+    /** 
+     * Auxiliary class used to draw a voice over icon.
+     * 
+     */
+    class VKVoiceOverShape
+    {
+    public:
+        VKVoiceOverShape()
+            {
+            };
+        ~VKVoiceOverShape() {};
+        
+        void draw(const std::shared_ptr<timeline_vlk::Render>&,
+                  const voice::MouseData& mouse);
+        
+        voice::RecordStatus status;
+        math::Vector2i center;
+    };
+
+
 } // namespace mrv

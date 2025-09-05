@@ -856,7 +856,10 @@ namespace mrv
             
             const otime::RationalTime& currentTime = player->currentTime();
             
-            if (p.showAnnotations && !annotations.empty())
+            const auto& voannotations = p.player->getVoiceAnnotations();
+            
+            if (p.showAnnotations &&
+                (!annotations.empty() || !voannotations.empty()))
             {
                 vlk::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = image::PixelType::RGBA_U8;
@@ -897,7 +900,7 @@ namespace mrv
 
                 _drawAnnotations(
                     vk.annotation, vk.annotationRender,
-                    mvp, currentTime, annotations, viewportSize);
+                    mvp, currentTime, annotations, voannotations, viewportSize);
                 
             }
             
@@ -939,7 +942,7 @@ namespace mrv
                     
                     _drawAnnotations(
                         vk.overlay, vk.overlayRender,
-                        renderMVP, currentTime, annotations,
+                        renderMVP, currentTime, annotations, voannotations,
                         renderSize);
 
                     _readOverlay(vk.overlay);
@@ -1156,8 +1159,9 @@ namespace mrv
             }
 
             
-            if (p.showAnnotations && vk.annotation_pipeline != VK_NULL_HANDLE &&
-                !annotations.empty())
+            if (p.showAnnotations &&
+                vk.annotation_pipeline != VK_NULL_HANDLE &&
+                (!annotations.empty() || !voannotations.empty()))
             {             
                 vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
                                   vk.annotation_pipeline);
@@ -1171,7 +1175,7 @@ namespace mrv
                                       vk.annotationShader, vk.avbo,
                                       viewportSize);
             }
-
+    
             if (p.dataWindow)
                 _drawDataWindow();
             if (p.displayWindow)
@@ -1179,12 +1183,13 @@ namespace mrv
 
             if (p.safeAreas)
                 _drawSafeAreas();
-
+            
             if (p.actionMode != ActionMode::kScrub &&
                 p.actionMode != ActionMode::kText &&
                 p.actionMode != ActionMode::kVoice &&
                 p.actionMode != ActionMode::kSelection &&
-                p.actionMode != ActionMode::kRotate && Fl::belowmouse() == this)
+                p.actionMode != ActionMode::kRotate &&
+                Fl::belowmouse() == this)
             {
                 _drawCursor(mvp);
             }

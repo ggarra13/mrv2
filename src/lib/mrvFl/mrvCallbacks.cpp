@@ -3288,14 +3288,4 @@ namespace mrv
         file_manager::show_uri(path);
     }
     
-    void record_voice_annotation_cb(Fl_Menu_* m, ViewerUI* ui)
-    {
-        ui->uiView->recordVoiceAnnotation();
-    }
-    
-    void play_voice_annotation_cb(Fl_Menu_* m, ViewerUI* ui)
-    {
-        ui->uiView->playVoiceAnnotation();
-    }
-
 } // namespace mrv

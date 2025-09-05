@@ -15,6 +15,8 @@
 #include <tlCore/AudioSystem.h>
 #include <tlCore/StringFormat.h>
 
+#include <FL/Fl.H>
+
 extern "C"
 {
 #include <libavformat/avformat.h>
@@ -113,7 +115,7 @@ static int rtAudioRecordCallback(
     
     unsigned int numSamples = nFrames * kNumChannels;
     audio->buffer.insert(audio->buffer.end(), input, input + numSamples);
-    
+
     return 0; // Return 0 to continue streaming
 }
 
@@ -147,21 +149,34 @@ namespace mrv
             bool running = false;
             std::thread thread;
 
-            math::Vector2f center;
+            math::Vector2i center;
             
             AudioData audio;
             MouseRecording mouse;
 
             std::string  fileName;
-            RecordStatus status;
+            RecordStatus status = RecordStatus::Stopped;
         };
 
+
+
+        TLRENDER_ENUM_IMPL(RecordStatus, "Stopped", "Recording", "Saved", "Playing");
+        TLRENDER_ENUM_SERIALIZE_IMPL(RecordStatus);
+        
+        
         void VoiceOver::_init(const std::shared_ptr<system::Context>& context,
-                              const math::Vector2f& center)
+                              const math::Vector2i& center)
         {
             TLRENDER_P();
             p.context = context;
             p.center  = center;
+            
+            MouseData data;
+            data.pos = center;
+            data.pressed = false;
+
+            p.mouse.data.push_back(data);
+            p.mouse.idx = 0;
         }
 
         VoiceOver::VoiceOver() :
@@ -173,6 +188,9 @@ namespace mrv
         {
             TLRENDER_P();
             
+            if (p.rtAudio && p.rtAudio->isStreamRunning())
+                p.rtAudio->abortStream();
+                
             if (p.rtAudio && p.rtAudio->isStreamOpen())
             {
                 p.rtAudio->closeStream();
@@ -181,7 +199,7 @@ namespace mrv
 
         std::shared_ptr<VoiceOver>
         VoiceOver::create(const std::shared_ptr<system::Context>& context,
-                          const math::Vector2f& center)
+                          const math::Vector2i& center)
         {
             auto out = context->getSystem<VoiceOver>();
             if (!out)
@@ -206,6 +224,12 @@ namespace mrv
         void VoiceOver::startRecording()
         {
             TLRENDER_P();
+            
+            if (p.status != RecordStatus::Stopped && p.audio.buffer.empty())
+            {
+                LOG_ERROR("Not stopped or audio buffer not empty.");
+                return;
+            }
 
             // Clear the recording
             p.audio.buffer.clear();
@@ -229,10 +253,7 @@ namespace mrv
                 }
                 catch (const std::exception& e)
                 {
-                    std::stringstream ss;
-                    ss << "Cannot create RtAudio instance: " << e.what();
-                    context->log(
-                        "mrv::voice::VoiceOver", ss.str(), log::Type::Error);
+                    LOG_ERROR("Cannot create RtAudio instance: " << e.what());
                 }
             }
 #endif
@@ -264,12 +285,7 @@ namespace mrv
                     }
                     catch (const std::exception& e)
                     {
-                        std::stringstream ss;
-                        ss << "Cannot open audio stream for recording: "
-                           << e.what();
-                        context->log(
-                            "mrv::voice::VoiceOver", ss.str(),
-                            log::Type::Error);
+                        LOG_ERROR("Cannot open audio stream for recording: " << e.what());
                     }
                 }
             }
@@ -279,9 +295,16 @@ namespace mrv
         void VoiceOver::stopRecording()
         {
             TLRENDER_P();
+            
+            if (p.status != RecordStatus::Recording || p.audio.buffer.empty())
+            {
+                LOG_ERROR("No audio recorded.");
+                return;
+            }
+            
             try
             {
-                if (p.rtAudio)
+                if (p.rtAudio && p.rtAudio->isStreamRunning())
                     p.rtAudio->stopStream();
             }
             catch (const RtAudioError& e)
@@ -289,7 +312,8 @@ namespace mrv
                 e.printMessage();
             }
 
-            p.status = RecordStatus::Stopped;
+            p.status = RecordStatus::Saved;
+            p.mouse.idx = 0;
                         
             if (auto context = p.context.lock())
             {
@@ -384,7 +408,11 @@ namespace mrv
         {
             TLRENDER_P();
 
-            stopRecording();
+            if (p.status != RecordStatus::Saved || p.audio.buffer.empty())
+            {
+                LOG_ERROR("No audio for playing.");
+                return;
+            }
             
 #if defined(TLRENDER_AUDIO)
             if (auto context = getContext().lock())
@@ -429,12 +457,7 @@ namespace mrv
                     }
                     catch (const std::exception& e)
                     {
-                        std::stringstream ss;
-                        ss << "Cannot open audio stream for playback: "
-                           << e.what();
-                        context->log(
-                            "mrv::voice::VoiceOver", ss.str(),
-                            log::Type::Error);
+                        LOG_ERROR("Cannot open audio stream for playback: " << e.what());
                     }
                 }
             }
@@ -444,9 +467,15 @@ namespace mrv
         {
             TLRENDER_P();
             
+            if (p.status != RecordStatus::Playing || p.audio.buffer.empty())
+            {
+                LOG_ERROR("No audio playing.");
+                return;
+            }
+            
             try
             {
-                if (p.rtAudio)
+                if (p.rtAudio && p.rtAudio->isStreamRunning())
                     p.rtAudio->stopStream();
             }
             catch (const RtAudioError& e)
@@ -454,18 +483,20 @@ namespace mrv
                 e.printMessage();
             }
             
-            p.status = RecordStatus::Stopped;
+            p.status = RecordStatus::Saved;
+            p.audio.rtCurrentFrame = 0;
+            p.mouse.idx = 0;
         }
 
+        RecordStatus VoiceOver::getStatus() const
+        {
+            return _p->status;
+        }
+        
         MouseData VoiceOver::getMouseData() const
         {
             TLRENDER_P();
 
-            if (p.mouse.data.empty())
-            {
-                throw std::runtime_error("voice::VoiceOver No mouse data saved");
-            }
-            
             size_t idx = p.mouse.idx;
             if (idx >= p.mouse.data.size())
                 idx = p.mouse.data.size() - 1;
@@ -476,11 +507,32 @@ namespace mrv
         void VoiceOver::appendMouseData(const MouseData& mouse)
         {
             _p->mouse.data.push_back(mouse);
+            _p->mouse.idx = _p->mouse.data.size() - 1;
         }
 
-        const math::Vector2f& VoiceOver::getCenter() const
+        const math::Vector2i& VoiceOver::getCenter() const
         {
             return _p->center;
         }
+        
+        const math::Box2i VoiceOver::getBBox() const
+        {
+            return math::Box2i(_p->center.x - 10, _p->center.y - 10, 20, 20);
+        }
+
+        void VoiceOver::tick()
+        {
+            TLRENDER_P();
+            
+            p.mouse.idx++;
+
+            if (p.mouse.idx >= p.mouse.data.size())
+            {
+                p.status = RecordStatus::Saved;
+                p.audio.rtCurrentFrame = 0;
+                p.mouse.idx = 0;
+            }
+        }
+        
     }
 }

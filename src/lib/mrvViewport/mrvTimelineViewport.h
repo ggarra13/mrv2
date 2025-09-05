@@ -6,14 +6,7 @@
 
 #include "mrvCore/mrvBackend.h"
 
-#ifdef VULKAN_BACKEND
-#  include "mrvVk/mrvVkShape.h"
-#  include "mrvVk/mrvVkWindow.h"
-#endif
-
-#ifdef OPENGL_BACKEND
-#  include "mrvGL/mrvGLWindow.h"
-#endif
+#include "mrvVoice/mrvVoiceOver.h"
 
 #include "mrvOptions/mrvStereo3DOptions.h"
 #include "mrvOptions/mrvEnvironmentMapOptions.h"
@@ -45,6 +38,11 @@ namespace mrv
 
     class TimelinePlayer;
 
+    namespace voice
+    {
+        class VoiceOver;
+    }
+    
     namespace BACKEND_NAMESPACE
     {
 
@@ -340,11 +338,7 @@ namespace mrv
 
             //! Refresh window by clearing the associated resources.
             virtual void refresh(){};
-
-            //! FLTK Callback to handle view spinning whne in Environment Map
-            //! mode.
-            static void _handleViewSpinning_cb(TimelineViewport* t) noexcept;
-
+            
             //! Handle view spinning when in Environment Map mode.
             void handleViewSpinning() noexcept;
 
@@ -362,10 +356,10 @@ namespace mrv
             void setShowVideo(bool value) noexcept;
 
             //! Laser fading annotation
-            void laserFade(LaserFadeData*);
-
-            //! Main FLTK callback for laser shapes.
             static void laserFade_cb(LaserFadeData*);
+            
+            //! Laser fading annotation
+            void laserFade(LaserFadeData*);
 
             //! Update the undo/redo buttons to be active or not.
             void updateUndoRedoButtons() const noexcept;
@@ -393,11 +387,9 @@ namespace mrv
             //! Get current frame/video tags
             image::Tags getTags() const noexcept;
 
-            //! \@test:
-            void recordVoiceAnnotation();
+            void recordMousePosition();
 
-            //! \@test:
-            void playVoiceAnnotation();
+            void playMousePosition();
             
         protected:
             void _init();
@@ -514,7 +506,10 @@ namespace mrv
             float _getZoomSpeedValue() const noexcept;
 
             void _getTags() noexcept;
-
+            
+            voice::MouseData currentMouseData;
+            std::shared_ptr<voice::VoiceOver> currentVoiceOver;
+            
             TLRENDER_PRIVATE();
         };
 

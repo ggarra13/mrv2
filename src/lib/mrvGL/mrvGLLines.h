@@ -50,6 +50,12 @@ namespace mrv
                 const float width, const image::Color4f& color,
                 const bool soft = false);
 
+            //! Draw a circle.
+            void drawFilledCircle(
+                const std::shared_ptr<timeline::IRender>& render,
+                const math::Vector2f& center, const float radius,
+                const image::Color4f& color, const unsigned sides = 20);
+            
             //! Draw drawing cursor (two circles, one white, one black).
             void drawCursor(
                 const std::shared_ptr<timeline::IRender>& render,

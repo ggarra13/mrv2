@@ -182,42 +182,17 @@ namespace mrv
                 false);
         }
 
-        void Lines::drawPoints(
+        void Lines::drawFilledCircle(
             const std::shared_ptr<timeline_vlk::Render>& render,
-            const std::vector<math::Vector2f>& pnts,
-            const image::Color4f& color, const int size)
+            const math::Vector2f& center, const float radius,
+            const image::Color4f& color, const unsigned sides)
         {
-            TLRENDER_P();
-
-            const size_t numPoints = pnts.size();
-            const tl::vlk::VBOType vboType = vlk::VBOType::Pos2_F32;
-            if (!p.vbo || (p.vbo && p.vbo->getSize() != numPoints))
-            {
-                p.vbo = vlk::VBO::create(numPoints, vboType);
-                p.vao.reset();
-            }
-            if (p.vbo)
-            {
-                std::vector<uint8_t> pts;
-                pts.resize(numPoints * 2 * sizeof(float));
-                memcpy(
-                    pts.data(), pnts.data(), pnts.size() * 2 * sizeof(float));
-                p.vbo->copy(pts);
-            }
-
-            if (!p.vao && p.vbo)
-            {
-                p.vao = vlk::VAO::create(ctx);
-            }
-
-            if (p.vao && p.vbo)
-            {
-                // p.vao->bind(frameIndex);
-                // glPointSize(size);
-                // p.vao->draw(GL_POINTS, 0, p.vbo->getSize());
-            }
+            auto mesh = geom::circleFilled(center, radius, sides);
+            render->drawMesh("viewport", "mesh", "mesh",
+                             mesh, math::Vector2i(0, 0),
+                             color);
         }
-
+        
         void Lines::drawCircle(
             const std::shared_ptr<timeline_vlk::Render>& render,
             const math::Vector2f& center, const float radius, const float width,

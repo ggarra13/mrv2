@@ -3794,28 +3794,6 @@ namespace mrv
             return vm;
         }
         
-        void TimelineViewport::recordVoiceAnnotation()
-        {
-            TLRENDER_P();
-
-            if (!p.player)
-                return;
-
-            p.player->stop();
-
-        }
-        
-        void TimelineViewport::playVoiceAnnotation()
-        {
-            TLRENDER_P();
-
-            if (!p.player)
-                return;
-
-            p.player->stop();
-
-        }
-        
     } // namespace BACKEND_NAMESPACE
     
 } // namespace mrv

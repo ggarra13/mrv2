@@ -6,7 +6,10 @@
 
 
 #include "mrvVk/mrvVkDefines.h"
+
 #include "mrvViewport/mrvTimelineViewport.h"
+
+#include "mrvVoice/mrvAnnotation.h"
 
 #include <tlVk/OffscreenBuffer.h>
 
@@ -56,6 +59,8 @@ namespace mrv
             void setSaveOverlay(const bool save);
             
         protected:
+            void _drawVoiceOverShapes(const math::Matrix4x4f& mvp);
+            
             void _updateHDRMetadata();
 
             void _createCubicEnvironmentMap();
@@ -105,6 +110,8 @@ namespace mrv
                 const otime::RationalTime& time,
                 const std::vector<std::shared_ptr<draw::Annotation>>&
                     annotations,
+                const std::vector<std::shared_ptr<voice::Annotation> >&
+                voannotations,
                 const math::Size2i& renderSize);
 
             void _pushAnnotationShape(const std::string& cmd) const override;

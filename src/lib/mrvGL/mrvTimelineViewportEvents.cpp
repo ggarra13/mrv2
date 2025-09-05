@@ -90,7 +90,7 @@ namespace mrv
 
             draw::Point pnt(_getRasterf());
 
-            auto annotation = player->getAnnotation();
+            auto annotation = p.player->getAnnotation();
             if (p.actionMode != ActionMode::kScrub && !annotation)
                 return;
 

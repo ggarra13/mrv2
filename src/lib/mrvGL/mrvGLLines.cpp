@@ -248,6 +248,15 @@ namespace mrv
                 draw::Polyline2D::EndCapStyle::JOINT);
         }
 
+        void Lines::drawFilledCircle(
+            const std::shared_ptr<timeline::IRender>& render,
+            const math::Vector2f& center, const float radius,
+            const image::Color4f& color, const unsigned sides)
+        {
+            auto mesh = geom::circleFilled(center, radius, sides);
+            render->drawMesh(mesh, math::Vector2i(0, 0), color);
+        }
+        
         void Lines::drawCursor(
             const std::shared_ptr<timeline::IRender>& render,
             const math::Vector2f& center, const float radius,

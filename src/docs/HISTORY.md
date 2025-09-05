@@ -41,7 +41,15 @@ v1.4.1
 - Removed deprecated is_valid_timecode_rate from OTIO pybind11's rationalTime.
 - Fixed audio saving to also store the duration of each frame.
 - Fixed HDR data also potentially being added to audio streams when saving a movie.
-- Improved locate_python in etc/functions.sh
+- Improved locate_python in etc/functions.sh.
+- Added Voice Over Annotations (new icon at the bottom of the toolbar).  How to use it:
+  	* Select the microphone icon.
+	* Click somewhere on the canvas.  A stop button will show up.
+	* Click on the button.  It will change to a recording icon.
+	  You are now recording your mouse positions, LMB presses, and your voice on the
+	  default microphone (you can change it in the Preferences->Voice Over section)
+	* Click on the button again to stop recording.  It will change to a stop button in yellow.
+	* Click again on the button to replay the mouse moves and the audio.
 
 
 v1.4.0

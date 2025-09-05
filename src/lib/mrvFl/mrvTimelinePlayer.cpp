@@ -954,7 +954,7 @@ namespace mrv
 
     //! Create annotation for current time
     std::shared_ptr< voice::Annotation >
-    TimelinePlayer::createVoiceAnnotation(const math::Vector2f& center,
+    TimelinePlayer::createVoiceAnnotation(const math::Vector2i& center,
                                           const bool all_frames)
     {
         TLRENDER_P();
@@ -980,11 +980,6 @@ namespace mrv
         else
         {
             annotation = *found;
-            if (!annotation->allFrames && !all_frames)
-            {
-                throw std::runtime_error(
-                    _("Annotation already existed at this time"));
-            }
         }
 
         if (auto context = getContext().lock())
@@ -996,8 +991,6 @@ namespace mrv
         return annotation;
     }
 
-    //! Get list of annotations for between previous ghosting and
-    //! next ghosting from current time.
     std::vector< std::shared_ptr< voice::Annotation > >
     TimelinePlayer::getVoiceAnnotations(const int previous, const int next) const
     {
@@ -1033,7 +1026,6 @@ namespace mrv
         return out;
     }
 
-    //! Get all annotations in timeline player.
     std::vector< std::shared_ptr< voice::Annotation > >
     TimelinePlayer::getAllVoiceAnnotations() const
     {
@@ -1041,7 +1033,6 @@ namespace mrv
     }
 
 
-    //! Set all annotations in timeline player.
     void TimelinePlayer::setAllAnnotations(
         const std::vector<std::shared_ptr<voice::Annotation > >& value)
     {
@@ -1049,7 +1040,6 @@ namespace mrv
         _p->undoVoiceAnnotations.clear();
     }
 
-    //! Remove an annotation from list.
     void TimelinePlayer::removeAnnotation(const std::shared_ptr< voice::Annotation >& voiceAnnotation)
     {
         TLRENDER_P();

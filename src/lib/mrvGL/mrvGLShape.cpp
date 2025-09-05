@@ -527,4 +527,90 @@ namespace mrv
         from_json(json, static_cast<draw::PathShape&>(value));
     }
 
+    void GLVoiceOverShape::draw(
+        const std::shared_ptr<timeline::IRender>& render,
+        const voice::MouseData& mouse)
+    {
+        const image::Color4f color(1.F, 0.5F, 0.7F);
+        const image::Color4f stoppedColor(0.7F, 0.4F, 6.F);
+        const image::Color4f recordingColor(1.F, 0.F, 0.F);
+        const image::Color4f yellowColor(1.F, 1.F, 0.F);
+        const image::Color4f blackColor(0.F, 0.F, 0.F);
+        const image::Color4f lineColor(0.F, 0.F, 1.F);
+
+        image::Color4f cursorColor(1.F, 1.F, 1.F);
+        if (mouse.pressed)
+            cursorColor = image::Color4f(0.F, 1.F, 0.F);
+
+        switch(status)
+        {
+        case voice::RecordStatus::Stopped:
+        {
+            math::Box2i box(center.x - 5, center.y - 5, 10, 10);
+            render->drawRect(box, stoppedColor);
+            
+            box = math::Box2i(center.x - 3, center.y - 3, 6, 6);
+            render->drawRect(box, blackColor);
+            break;
+        }
+        case voice::RecordStatus::Saved:
+        {
+            opengl::Lines lines;
+            math::Box2i box(center.x - 5, center.y - 5, 10, 10);
+            render->drawRect(box, stoppedColor);
+            
+            math::Vector2f c(center.x, center.y);
+            lines.drawFilledCircle(render, c, 4, yellowColor);
+            break;
+        }
+        case voice::RecordStatus::Playing:
+        {
+            //
+            // Draw the connecting line and the cursor
+            //
+            opengl::Lines lines;
+            lines.drawLine(render, center, mouse.pos, lineColor, 2);
+            
+            math::Box2i box(mouse.pos.x - 3, mouse.pos.y - 3, 6, 6);
+            render->drawRect(box, cursorColor);
+
+
+            //
+            // Draw box and icon
+            //
+            box = math::Box2i(center.x - 5, center.y - 5, 10, 10);
+            render->drawRect(box, stoppedColor);
+            
+            math::Vector2f c(center.x, center.y);
+            lines.drawFilledCircle(render, c, 4, blackColor, 3);
+            break;
+        }
+        case voice::RecordStatus::Recording:
+        {
+            //
+            // Draw the connecting line and the cursor
+            //
+            opengl::Lines lines;
+            lines.drawLine(render, center, mouse.pos, lineColor, 2);
+            
+            math::Box2i box(mouse.pos.x - 3, mouse.pos.y - 3, 6, 6);
+            render->drawRect(box, cursorColor);
+            
+            //
+            // Draw box and icon
+            //
+            box = math::Box2i(center.x - 5, center.y - 5, 10, 10);
+            render->drawRect(box, stoppedColor);
+            
+            math::Vector2f c(center.x, center.y);
+            lines.drawFilledCircle(render, c, 4, recordingColor);
+
+            break;
+        }
+        default:
+            throw std::runtime_error("Unknown voice::RecordStatus");
+            break;
+        }
+    }
+    
 } // namespace mrv

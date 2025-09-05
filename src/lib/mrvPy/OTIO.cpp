@@ -144,7 +144,12 @@ For example, the duration of a clip from frame 10 to frame 15 is 6 frames. Resul
 )docstring"))
         .def_static(
             "nearest_valid_timecode_rate",
-            &RationalTime::nearest_valid_timecode_rate, "rate"_a,
+            &RationalTime::nearest_smpte_timecode_rate, "rate"_a,
+            _("Returns the first valid timecode rate that has the least "
+              "difference from the given value."))
+        .def_static(
+            "nearest_smpte_timecode_rate",
+            &RationalTime::nearest_smpte_timecode_rate, "rate"_a,
             _("Returns the first valid timecode rate that has the least "
               "difference from the given value."))
         .def_static(

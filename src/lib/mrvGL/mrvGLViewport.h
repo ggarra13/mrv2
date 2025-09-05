@@ -4,13 +4,16 @@
 
 #pragma once
 
-#include <tlGL/OffscreenBuffer.h>
-
-#include <tlDraw/Annotation.h>
 
 #include "mrvViewport/mrvTimelineViewport.h"
 
 #include "mrvGL/mrvGLDefines.h"
+
+#include "mrvVoice/mrvAnnotation.h"
+
+#include <tlGL/OffscreenBuffer.h>
+
+#include <tlDraw/Annotation.h>
 
 namespace mrv
 {
@@ -92,6 +95,7 @@ namespace mrv
                 const math::Matrix4x4f& renderMVP,
                 const otime::RationalTime& time,
                 const std::vector<std::shared_ptr<draw::Annotation>>& annotations,
+                const std::vector<std::shared_ptr<voice::Annotation>>& voannotations,
                 const math::Size2i& renderSize);
 
 #ifdef USE_OPENGL2

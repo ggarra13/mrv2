@@ -351,6 +351,56 @@ namespace tl
             }
             return out;
         }
+          
+        TriangleMesh2 circleFilled(const math::Vector2f& center, float radius, const unsigned sides)
+        {
+
+            constexpr double twoPi = math::pi * 2.0;
+            geom::TriangleMesh2 out;
+
+
+            for (int i = 0; i < sides; ++i)
+            {
+                const double ang = i * twoPi / sides;
+                auto pt = math::Vector2f(
+                    center.x + (radius * cos(ang)),
+                    center.y + (radius * sin(ang)));
+                out.v.push_back(pt);
+            }
+
+            geom::Triangle2 triangle;
+            triangle.v[0].v = 1;
             
+            if (sides == 3)
+            {
+                triangle.v[1].v = 2;
+                triangle.v[2].v = 3;
+        
+                out.triangles.push_back(triangle);
+            }
+            else
+            {
+                out.v.reserve(sides + 1);
+                out.v.push_back(center);
+                
+                for (size_t i = 1; i < sides; ++i)
+                {
+                    triangle.v[1].v = i + 1;
+
+                    if (i == sides - 1)
+                    {
+                        triangle.v[2].v = 2;
+                    }
+                    else
+                    {
+                        triangle.v[2].v = i + 2;
+                    }
+        
+                    out.triangles.push_back(triangle);
+                }
+            }
+
+            return out;
+        }
     } // namespace geom
 } // namespace tl

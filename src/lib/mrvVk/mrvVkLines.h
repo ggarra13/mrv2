@@ -19,18 +19,12 @@ namespace mrv
     {
         using namespace tl;
 
-        //! Vulkan Lines renderer.
+        //! Vulkan Lines renderer 
         class Lines
         {
         public:
             Lines(Fl_Vk_Context&, VkRenderPass);
             ~Lines();
-
-            //! Draw a points in raster coordinates with glPointSize
-            void drawPoints(
-                const std::shared_ptr<timeline_vlk::Render>& render,
-                const std::vector<math::Vector2f>& pts,
-                const image::Color4f& color, const int size = 1);
 
             //! Draw a single line in raster coordinates with a mesh.
             void drawLine(
@@ -57,6 +51,12 @@ namespace mrv
                 const math::Vector2f& center, const float radius,
                 const float width, const image::Color4f& color,
                 const bool soft = false);
+            
+            //! Draw a circle.
+            void drawFilledCircle(
+                const std::shared_ptr<timeline_vlk::Render>& render,
+                const math::Vector2f& center, const float radius,
+                const image::Color4f& color, const unsigned sides = 20);
 
             //! Draw drawing cursor (two circles, one white, one black).
             void drawCursor(

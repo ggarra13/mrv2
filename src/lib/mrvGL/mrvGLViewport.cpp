@@ -478,6 +478,7 @@ namespace mrv
 
             const auto& annotations =
                 player->getAnnotations(p.ghostPrevious, p.ghostNext);
+            const auto& voannotations = player->getVoiceAnnotations();
 
             MultilineInput* w = getMultilineInput();
             if (w)
@@ -590,7 +591,7 @@ namespace mrv
                 }
                 else
                 {
-                    if (annotations.empty())
+                    if (annotations.empty() && voannotations.empty())
                         mvp = _projectionMatrix();
                     else
                         mvp = _createTexturedRectangle();
@@ -672,7 +673,7 @@ namespace mrv
                     const math::Matrix4x4f& renderMVP = _renderProjectionMatrix();
                     _drawAnnotations(
                         gl.overlay, renderMVP, currentTime, annotations,
-                        renderSize);
+                        voannotations, renderSize);
                     CHECK_GL;
 
                     // Copy data to PBO:
@@ -803,7 +804,8 @@ namespace mrv
                     panel::annotationsPanel->notes->value("");
                 }
 
-                if (p.showAnnotations && !annotations.empty())
+                if (p.showAnnotations &&
+                    (!annotations.empty() || !voannotations.empty()))
                 {
                     gl::OffscreenBufferOptions offscreenBufferOptions;
                     offscreenBufferOptions.colorType = image::PixelType::RGBA_U8;
@@ -822,7 +824,8 @@ namespace mrv
                     }
 
                     _drawAnnotations(
-                        gl.annotation, mvp, currentTime, annotations, viewportSize);
+                        gl.annotation, mvp, currentTime, annotations,
+                        voannotations, viewportSize);
 
                     const math::Matrix4x4f orthoMatrix = math::ortho(
                         0.F, static_cast<float>(renderSize.w), 0.F,

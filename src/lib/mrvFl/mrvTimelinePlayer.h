@@ -355,7 +355,7 @@ namespace mrv
         //! Get list of annotations for between previous ghosting and
         //! next ghosting from current time.
         std::vector< std::shared_ptr< draw::Annotation >>
-        getAnnotations(const int, const int) const;
+        getAnnotations(const int from = 1, const int to = 1) const;
 
         //! Get all annotations in timeline player.
         std::vector< std::shared_ptr< draw::Annotation >>
@@ -383,13 +383,13 @@ namespace mrv
 
         //! Create annotation for current time
         std::shared_ptr< voice::Annotation >
-        createVoiceAnnotation(const math::Vector2f& center,
+        createVoiceAnnotation(const math::Vector2i& center,
                               const bool all_frames = false);
 
         //! Get list of annotations for between previous ghosting and
         //! next ghosting from current time.
         std::vector< std::shared_ptr< voice::Annotation >>
-        getVoiceAnnotations(const int, const int) const;
+        getVoiceAnnotations(const int from = 1, const int to = 1) const;
 
         //! Get all annotations in timeline player.
         std::vector< std::shared_ptr< voice::Annotation >>
