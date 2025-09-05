@@ -501,13 +501,13 @@ msgstr "Tipo(s) de pera no suportados para {0}: RationalTime e {1}"
 
 msgid ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/"
-"rt.rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/rt."
+"rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
 "\n"
-"A classe RationalTime representa uma medida do tempo de :math:`rt.value/"
-"rt.rate` segundos. Pode ser redimensionada para outra :class:`~RationalTime` "
+"A classe RationalTime representa uma medida do tempo de :math:`rt.value/rt."
+"rate` segundos. Pode ser redimensionada para outra :class:`~RationalTime` "
 "taxa.\n"
 
 msgid ""
@@ -580,8 +580,8 @@ msgstr "Converter para cdigo de tempo (``HH:MM:SS;FRAME``)"
 msgid ""
 "Convert a timecode string (``HH:MM:SS;FRAME``) into a :class:`~RationalTime`."
 msgstr ""
-"Converta uma cadeia de cdigo de tempo (``HH:MM:SS;FRAME``) em "
-"uma :class:`~RationalTime`."
+"Converta uma cadeia de cdigo de tempo (``HH:MM:SS;FRAME``) em uma :class:"
+"`~RationalTime`."
 
 msgid ""
 "Convert a time with microseconds string (``HH:MM:ss`` where ``ss`` is an "
@@ -667,8 +667,8 @@ msgid ""
 ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
 msgstr ""
 "\n"
-"Limite 'outros' (:classe:`~TimeRange`) de acordo "
-"com:attr:`start_time`/:attr:`end_time_exclusive` e argumentos vinculados.\n"
+"Limite 'outros' (:classe:`~TimeRange`) de acordo com:attr:`start_time`/:attr:"
+"`end_time_exclusive` e argumentos vinculados.\n"
 
 msgid ""
 "\n"
@@ -1936,6 +1936,21 @@ msgstr "Fluxo {0} {1}..."
 msgid "Stop streaming"
 msgstr "Pára de transmitir"
 
+msgid "Renderer"
+msgstr "Renderer"
+
+msgid "Complexity"
+msgstr "Complexidade"
+
+msgid "Draw Mode"
+msgstr "Modo de desenho"
+
+msgid "Stage Cache"
+msgstr "Cache em estgio"
+
+msgid "Disk Cache in GB"
+msgstr "Cache de disco em GB"
+
 msgid "Toggle other eye stereo image."
 msgstr "Comutar outra imagem estreo dos olhos."
 
@@ -2907,8 +2922,8 @@ msgstr "Perfis ProRes precisam de uma extensão de filme.mov. Mudá-lo para.mov.
 msgid ""
 "VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to .mp4"
 msgstr ""
-"O perfil VP9 precisa de uma extenso de filme.mp4,.mkv ou.webm. Mud-lo "
-"para.mp4"
+"O perfil VP9 precisa de uma extenso de filme.mp4,.mkv ou.webm. Mud-lo para."
+"mp4"
 
 msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
 msgstr ""
@@ -2917,8 +2932,8 @@ msgstr ""
 msgid ""
 "GoPro Cineform profile needs a .mkv movie extension.  Changing it to .mkv"
 msgstr ""
-"O perfil do Cineform GoPro precisa de uma extenso do filme.mkv. Mud-lo "
-"para.mkv"
+"O perfil do Cineform GoPro precisa de uma extenso do filme.mkv. Mud-lo para."
+"mkv"
 
 msgid "HAP profile needs a .mov extension.  Changing it to .mov"
 msgstr "O perfil HAP precisa de uma extenso.mov. Mud-lo para.mov"
@@ -2926,14 +2941,25 @@ msgstr "O perfil HAP precisa de uma extenso.mov. Mud-lo para.mov"
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "O novo ficheiro {0} j existe! No  possvel sobrescrev- lo."
 
+msgid "Rotated image info: {0}"
+msgstr "Informaes sobre a imagem rotativa: {0}"
+
+msgid "Scaled image info: {0}"
+msgstr "Informao da imagem escalada: {0}"
+
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: No foi possvel abrir o plugin do gravador."
 
 msgid "Image info: {0} {1}"
 msgstr "Informao da imagem: {0} {1}"
 
-msgid "Scaled image info: {0}"
-msgstr "Informao da imagem escalada: {0}"
+msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+msgstr ""
+"Imagem muito grande para salvar anotações. Irá escalar para o tamanho do "
+"viewport."
+
+msgid "Viewport Size: {0} - X={1}, Y={2}"
+msgstr "Tamanho do visor: {0} - X={1}, Y={2}"
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr "O plugin do Writer no obteve informaes de sada. Por omisso para {0}"
@@ -2946,9 +2972,6 @@ msgstr "Usando o perfil {0}, o formato de pixel {1}."
 
 msgid "Using preset {0}."
 msgstr "Usando o predefinido {0}."
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "Informações do buffer offscreen: {0}"
 
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr "Salvar filme sem udio %<PRId64> - %<PRId64>"
@@ -2965,11 +2988,17 @@ msgstr "Gravar imagens sem udio %<PRId64> - %<PRId64>"
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "udio apenas na linha do tempo, mas no tentando salvar udio."
 
+msgid "{0}: Invalid OpenGL format and type"
+msgstr "{0}: Formato e tipo OpenGL invlidos"
+
+msgid "OpenGL info: {0}"
+msgstr "Informaes do OpenGL: {0}"
+
 msgid "Saving... {0}"
 msgstr "Salvar... {0}"
 
-msgid "Could not read image data from view"
-msgstr "Não foi possível ler os dados da imagem da visualização"
+msgid "Unsupported output format"
+msgstr "Formato de saída não suportado"
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "Dados de vídeo vazios no tempo {0}. Repetir o quadro."
@@ -2980,8 +3009,11 @@ msgstr "Tamanho de renderização: {0}"
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr "Informações da Camada de Imagem '{0}': {1} {2}"
 
-msgid "Could not read annotation image from view"
-msgstr "Não foi possível ler a imagem de anotação da visualização"
+msgid "Offscreen Buffer info: {0}"
+msgstr "Informações do buffer offscreen: {0}"
+
+msgid "Unsupported output format: "
+msgstr "Formato de saída não suportado: "
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -3693,9 +3725,6 @@ msgstr "Quadro {0} - CT: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "Imagem muito grande. Vai salvar o tamanho da vista."
 
-msgid "Viewport Size: {0} - X={1}, Y={2}"
-msgstr "Tamanho do visor: {0} - X={1}, Y={2}"
-
 msgid "Could not read image data from view"
 msgstr "Não foi possível ler os dados da imagem da visualização"
 
@@ -3800,14 +3829,11 @@ msgstr "Antes V: % 4<PRIu64> A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "Atrs de V: % 4<PRIu64> A: % 4<PRIu64>"
 
-msgid "HDR monitor found."
-msgstr "Monitor HDR encontrado."
-
-msgid "HDR monitor not found or not configured."
-msgstr "Monitor HDR não encontrado ou não configurado."
-
 msgid "Edit Text"
 msgstr "Editar o Texto"
+
+msgid "Invalid font for text drawing"
+msgstr "Fonte invlida para desenho de texto"
 
 msgid "Could not convert message to shape: "
 msgstr "No foi possvel converter a mensagem para forma:"
@@ -5955,48 +5981,6 @@ msgstr "Pr-multiplicado"
 msgid "Nearest"
 msgstr "Mais perto"
 
-msgid "Ignore"
-msgstr "Ignorar"
-
-msgid "Apply"
-msgstr "Aplicar"
-
-msgid "Inactive"
-msgstr "Inativo"
-
-msgid "Active"
-msgstr "Ativo"
-
-msgid "ST2094_40"
-msgstr "ST2094_40"
-
-msgid "ST2094_10"
-msgstr "ST2094_10"
-
-msgid "Clip"
-msgstr "Recortar"
-
-msgid "BT2390"
-msgstr "BT2390"
-
-msgid "BT2446A"
-msgstr "BT2446A"
-
-msgid "Spline"
-msgstr "Spline"
-
-msgid "Reinhard"
-msgstr "Reinhard"
-
-msgid "Mobius"
-msgstr "Móbius"
-
-msgid "Hable"
-msgstr "Hable"
-
-msgid "Linear Light"
-msgstr "Luz Linear"
-
 msgid "Small"
 msgstr "Pequeno"
 
@@ -6498,8 +6482,8 @@ msgid ""
 "automatically.  You will have to use RMB->Update Thumbnail on the Thumbnail."
 msgstr ""
 "Quando esta opção está ativada, as miniaturas nos painéis não serão "
-"atualizadas automaticamente. Você precisará usar clique com o botão direito "
-"-> Atualizar miniatura na miniatura."
+"atualizadas automaticamente. Você precisará usar clique com o botão direito -"
+"> Atualizar miniatura na miniatura."
 
 msgid "Preview Thumbnails on Panels"
 msgstr "Previsualizar miniaturas em painis"
@@ -6737,8 +6721,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
+"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
+"exr"
 msgstr ""
 "Expressão regular usada para combinar as versões do clipe. Deve agrupar três "
 "coisas (prefixo, número e sufixo). Se for deixada no seu valor padrão (_v), "
@@ -7663,9 +7647,6 @@ msgstr "Modo de arranque"
 msgid "Area Selection Mode"
 msgstr "Modo de Seleco de reas"
 
-msgid "Draw Mode"
-msgstr "Modo de desenho"
-
 msgid "Erase Mode"
 msgstr "Modo de eliminao"
 
@@ -7756,44 +7737,14 @@ msgstr "Alternar a janela de teclas instantneas"
 msgid "Toggle About Window"
 msgstr "Alternar Sobre a Janela"
 
-#~ msgid "Renderer"
-#~ msgstr "Renderer"
-
-#~ msgid "Complexity"
-#~ msgstr "Complexidade"
-
 #~ msgid "Could not read annotation image from view"
 #~ msgstr "Não foi possível ler a imagem de anotação da visualização"
 
-#~ msgid "Stage Cache"
-#~ msgstr "Cache em estgio"
+#~ msgid "HDR monitor found."
+#~ msgstr "Monitor HDR encontrado."
 
-#~ msgid "Disk Cache in GB"
-#~ msgstr "Cache de disco em GB"
-
-#~ msgid "Rotated image info: {0}"
-#~ msgstr "Informaes sobre a imagem rotativa: {0}"
-
-#~ msgid ""
-#~ "Image too big for Save Annotations.  Will scale to the viewport size."
-#~ msgstr ""
-#~ "Imagem muito grande para salvar anotações. Irá escalar para o tamanho do "
-#~ "viewport."
-
-#~ msgid "{0}: Invalid OpenGL format and type"
-#~ msgstr "{0}: Formato e tipo OpenGL invlidos"
-
-#~ msgid "OpenGL info: {0}"
-#~ msgstr "Informaes do OpenGL: {0}"
-
-#~ msgid "Unsupported output format"
-#~ msgstr "Formato de saída não suportado"
-
-#~ msgid "Unsupported output format: "
-#~ msgstr "Formato de saída não suportado: "
-
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "Fonte invlida para desenho de texto"
+#~ msgid "HDR monitor not found or not configured."
+#~ msgstr "Monitor HDR não encontrado ou não configurado."
 
 #~ msgid ""
 #~ "The Pixel Bar can slow down playback at high resolutions.  When this "
