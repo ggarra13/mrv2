@@ -4,18 +4,15 @@
 
 set(HEADERS
     mrvAnnotation.h
-    mrvVoiceData.h
-    # mrvVoicePlayer.h
     mrvVoiceOver.h
 )
 
 set(SOURCES
     mrvAnnotation.cpp
-    # mrvVoicePlayer.cpp
     mrvVoiceOver.cpp
 )
 
-set(LIBRARIES tlRender::tlCore ${FLTK_LIBRARIES} )
+set(LIBRARIES mrvWidgets tlRender::tlCore ${FLTK_LIBRARIES} )
 add_library(mrvVoice ${SOURCES} ${HEADERS})
 
 files_to_absolute_paths()

@@ -630,7 +630,7 @@ namespace mrv
 
     bool TimelinePlayer::hasAnnotations() const
     {            
-        return !_p->annotations.empty();
+        return !_p->annotations.empty() || !_p->voiceAnnotations.empty();
     }
 
     const std::vector< otime::RationalTime >
