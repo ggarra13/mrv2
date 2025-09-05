@@ -507,13 +507,13 @@ msgstr "неподдерживаемый тип(ы) операнда {0}: Рац
 
 msgid ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/rt."
-"rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/"
+"rt.rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
 "\n"
-"Класс RationalTime представляет собой измерение времени в :math:`rt.value/rt."
-"rate` секундах.\n"
+"Класс RationalTime представляет собой измерение времени в :math:`rt.value/"
+"rt.rate` секундах.\n"
 "Он может быть пересчитан в другой :class:`~RationalTime` с другим частотным "
 "значением.\n"
 
@@ -944,8 +944,8 @@ msgid ""
 "duration of 9.\n"
 msgstr ""
 "\n"
-"Создает :class:`~TimeRange` из начального и конечного :class:`~RationalTime`"
-"\\s (исключительно).\n"
+"Создает :class:`~TimeRange` из начального и "
+"конечного :class:`~RationalTime`\\s (исключительно).\n"
 "\n"
 "Например, если start_time равно 1, а end_time равно 10, возвращаемый "
 "диапазон будет иметь продолжительность 9.\n"
@@ -959,8 +959,8 @@ msgid ""
 "duration of 10.\n"
 msgstr ""
 "\n"
-"Создает :class:`~TimeRange` из начального и конечного :class:`~RationalTime`"
-"\\s (включительно).\n"
+"Создает :class:`~TimeRange` из начального и "
+"конечного :class:`~RationalTime`\\s (включительно).\n"
 "\n"
 "Например, если start_time равно 1, а end_time равно 10, возвращаемый "
 "диапазон будет иметь продолжительность 10.\n"
@@ -3744,6 +3744,15 @@ msgstr "Слишком большое изображение, сохранит �
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Размер просмотра: {0} - X= {1}, Y= {2}"
 
+msgid "Could not read image data from view"
+msgstr "Не удалось прочитать данные изображения с вида"
+
+msgid "Play"
+msgstr "Воспроизвести"
+
+msgid "Stop"
+msgstr "Стой."
+
 msgid "Scrub"
 msgstr "Скреб"
 
@@ -3814,12 +3823,6 @@ msgid ""
 msgstr ""
 "Невозможно создать аннотацию для текущей структуры. Аннотация всех рамок уже "
 "существует."
-
-msgid "Play"
-msgstr "Воспроизвести"
-
-msgid "Stop"
-msgstr "Стой."
 
 msgid "2.35"
 msgstr "2.35"
@@ -4063,6 +4066,9 @@ msgstr "Рендеринг/Данные HDR/Активные"
 
 msgid "Render/HDR/Tonemap"
 msgstr "Редакция/HDR/Тональность"
+
+msgid "Render/HDR/Gamut Mapping"
+msgstr "Редакция/HDR/Сопоставление гаммы"
 
 msgid "Playback/Stop"
 msgstr "Воспроизведение/Стой."
@@ -4369,6 +4375,12 @@ msgstr "Синхронизация/Принять/Аннотации"
 
 msgid "Sync/Accept/Audio"
 msgstr "Синхронизация/Принять/Звук"
+
+msgid "Voice Annotation/Record"
+msgstr "Голосовая заметка/Запись"
+
+msgid "Voice Annotation/Play"
+msgstr "Голосовая заметка/Воспроизведение"
 
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
@@ -5876,6 +5888,72 @@ msgstr "Средняя"
 msgid "Fast"
 msgstr "Быстрая"
 
+msgid "Ignore"
+msgstr "Игнорировать"
+
+msgid "Apply"
+msgstr "Применить"
+
+msgid "From File"
+msgstr "Из файла"
+
+msgid "Inactive"
+msgstr "Неактивно"
+
+msgid "Active"
+msgstr "Активные"
+
+msgid "ST2094_40"
+msgstr "ST2094_40"
+
+msgid "ST2094_10"
+msgstr "ST2094_10"
+
+msgid "Clip"
+msgstr "Обрезка"
+
+msgid "BT2390"
+msgstr "BT2390"
+
+msgid "BT2446A"
+msgstr "BT2446A"
+
+msgid "Spline"
+msgstr "Сплайн"
+
+msgid "Reinhard"
+msgstr "Рейнхард"
+
+msgid "Mobius"
+msgstr "Мёбиус"
+
+msgid "Hable"
+msgstr "Hable"
+
+msgid "Linear Light"
+msgstr "Линейный свет"
+
+msgid "Auto"
+msgstr "Автоматически"
+
+msgid "Perceptual"
+msgstr "Перцепционный"
+
+msgid "Relative"
+msgstr "Относительный"
+
+msgid "Absolute"
+msgstr "Абсолютный"
+
+msgid "Desaturate"
+msgstr "Уменьшить насыщенность"
+
+msgid "Darken"
+msgstr "Затемнить"
+
+msgid "Highlight"
+msgstr "Выделить"
+
 msgid "base"
 msgstr "base"
 
@@ -5911,9 +5989,6 @@ msgstr "CIE XYZ"
 
 msgid "CIE xyY"
 msgstr "CIE xyY"
-
-msgid "From File"
-msgstr "Из файла"
 
 msgid "Full Range"
 msgstr "Полная дальность"
@@ -5966,9 +6041,8 @@ msgstr "Рейнхард"
 msgid "Mobius"
 msgstr "Мёбиус"
 
-#, fuzzy
 msgid "Hable"
-msgstr "Включено"
+msgstr "Hable"
 
 msgid "Linear Light"
 msgstr "Линейный свет"
@@ -6308,6 +6382,21 @@ msgstr "Таблицы"
 msgid "Sets the font to use in panels. (Not yet working)"
 msgstr "Устанавливает шрифт для использования в панелях. (Еще не работает)"
 
+msgid "HDR"
+msgstr "HDR"
+
+msgid "Chromaticities"
+msgstr "Хроматичности"
+
+msgid "HDR Data"
+msgstr "Данные HDR"
+
+msgid "Tonemap Algorithm"
+msgstr "Алгоритм тоновой карты"
+
+msgid "Gamut Mapping"
+msgstr "Маппинг цветового охвата"
+
 msgid "Language and Colors"
 msgstr "Язык и цвета"
 
@@ -6427,18 +6516,6 @@ msgstr "Минимизация фильтра"
 
 msgid "Magnify Filter"
 msgstr "Увеличить фильтр"
-
-msgid "HDR"
-msgstr "HDR"
-
-msgid "Chromaticities"
-msgstr "Хроматичности"
-
-msgid "HDR Data"
-msgstr "Данные HDR"
-
-msgid "Tonemap Algorithm"
-msgstr "Алгоритм тоновой карты"
 
 msgid "Thumbnails"
 msgstr "Пальцы"
@@ -6644,8 +6721,8 @@ msgid ""
 "The name of the OCIO default image color space for 8 bit images (jpg, bmp, "
 "etc)."
 msgstr ""
-"Название цветового пространства OCIO для 8 битных изображений (jpg, bmp и т."
-"д.)."
+"Название цветового пространства OCIO для 8 битных изображений (jpg, bmp и "
+"т.д.)."
 
 msgid "16-bits"
 msgstr "16 бит"
@@ -6702,8 +6779,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
-"exr"
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
 msgstr ""
 "Регулярное выражение, используемое для совпадения с версиями клипов. Нужно "
 "группировать три вещи (prefix, число и suffix). Если оставить на своем "
@@ -6910,6 +6987,9 @@ msgstr "Интерфэйс пользователя/Запрашиватель �
 
 msgid "User Interface/Fonts"
 msgstr "Интерфэйс пользователя/Шрифты"
+
+msgid "User Interface/HDR"
+msgstr "Интерфейс пользователя/HDR"
 
 msgid "User Interface/Language and Colors"
 msgstr "Интерфэйс пользователя/Язык и цвета"
@@ -7722,6 +7802,9 @@ msgstr "Закладка о окне"
 
 #~ msgid "Complexity"
 #~ msgstr "Сложность"
+
+#~ msgid "Could not read annotation image from view"
+#~ msgstr "Не удалось прочитать изображение аннотации с вида"
 
 #~ msgid "Stage Cache"
 #~ msgstr "Сценический кэш"

@@ -15,16 +15,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "HDR monitor found."
-msgstr ""
+msgstr "已找到 HDR 显示器。"
 
 msgid "HDR monitor not found or not configured."
-msgstr ""
+msgstr "未找到 HDR 显示器或未配置。"
 
 msgid "Connection/"
 msgstr "连接/"
 
 msgid "Window/Fullscreen"
-msgstr ""
+msgstr "窗口/全屏"
 
 msgid "HDR/Pass through Metadata to Display"
-msgstr ""
+msgstr "HDR/将元数据传递到显示器"

@@ -224,41 +224,6 @@ namespace mrv
                 false);
         }
 
-        void Lines::drawPoints(
-            const std::vector<math::Vector2f>& pnts,
-            const image::Color4f& color, const int size)
-        {
-            TLRENDER_P();
-
-            const size_t numPoints = pnts.size();
-            const tl::gl::VBOType vboType = gl::VBOType::Pos2_F32;
-            if (!p.vbo || (p.vbo && p.vbo->getSize() != numPoints))
-            {
-                p.vbo = gl::VBO::create(numPoints, vboType);
-                p.vao.reset();
-            }
-            if (p.vbo)
-            {
-                std::vector<uint8_t> pts;
-                pts.resize(numPoints * 2 * sizeof(float));
-                memcpy(
-                    pts.data(), pnts.data(), pnts.size() * 2 * sizeof(float));
-                p.vbo->copy(pts);
-            }
-
-            if (!p.vao && p.vbo)
-            {
-                p.vao = gl::VAO::create(p.vbo->getType(), p.vbo->getID());
-            }
-
-            if (p.vao && p.vbo)
-            {
-                p.vao->bind();
-                glPointSize(size);
-                p.vao->draw(GL_POINTS, 0, p.vbo->getSize());
-            }
-        }
-
         void Lines::drawCircle(
             const std::shared_ptr<timeline::IRender>& render,
             const math::Vector2f& center, const float radius, const float width,

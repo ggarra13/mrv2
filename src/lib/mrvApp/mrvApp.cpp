@@ -255,6 +255,12 @@ namespace mrv
         OSXfiles.push_back(fname);
     }
 
+    static void beat_cb(void* data)
+    {
+        license_beat();
+        Fl::repeat_timeout(300, (Fl_Timeout_Handler)beat_cb, data);
+    }
+
     namespace
     {
         void open_console()
@@ -521,48 +527,8 @@ namespace mrv
             return;
         }
 
-
-        License ok = validate_license();
-        if (ok != kLicenseValid)
-        {
-            if (ok == kLicenseExpired)
-            {
-                fl_alert("License expired. Please enter new license.");
-                Fl::check();
-            }
-
-#ifdef _WIN32
-            std::string helper = rootpath() + "/bin/license_helper.exe";
-#else
-            std::string helper = rootpath() + "/bin/license_helper";
-#endif
-            // This is needed for macOS installed bundle.
-            if (!file::isReadable(helper))
-            {
-                helper = rootpath() + "/../Resources/bin/license_helper";
-            }
-            int ret = os::exec_command(helper.c_str());
-            if (ret == 0)
-            {
-                License ok = validate_license();
-                if (ok == kLicenseInvalid)
-                {
-                    fl_alert("Invalid license. Entering demo mode");
-                    Fl::check();
-                    demo_mode = true;
-                }
-                else if (ok == kLicenseExpired)
-                {
-                    fl_alert("License expired. Entering demo mode");
-                    Fl::check();
-                    demo_mode = true;
-                }
-            }
-            else
-            {
-                demo_mode = true;
-            }
-        }
+        license_beat();
+        Fl::add_timeout(300, (Fl_Timeout_Handler)beat_cb, this);
 
         DBG;
         // Initialize FLTK.

@@ -105,6 +105,7 @@ namespace mrv
     void toggle_invalid_values_cb(Fl_Menu_* w, ViewerUI* ui);
     void toggle_hdr_tonemap_cb(Fl_Menu_* w, ViewerUI* ui);
     void select_hdr_tonemap_cb(Fl_Menu_* w, ViewerUI* ui);
+    void select_hdr_gamut_mapping_cb(Fl_Menu_* m, ViewerUI* ui);
     
     void hdr_data_from_file_cb(Fl_Menu_* m, ViewerUI* ui);
     void hdr_data_inactive_cb(Fl_Menu_* m, ViewerUI* ui);
@@ -298,6 +299,10 @@ namespace mrv
     void copy_filename_cb(Fl_Menu_* m, void* d);
     void file_manager_cb(Fl_Menu_* m, void* d);
 
+    //! Voice over annotations
+    void record_voice_annotation_cb(Fl_Menu_* m, ViewerUI* ui);
+    void play_voice_annotation_cb(Fl_Menu_* m, ViewerUI* ui);
+    
     // Python
     void run_python_method_cb(Fl_Menu_* m, void* d);
 

@@ -57,7 +57,7 @@ namespace
         // Check if the file exists
         if (GetFileAttributesW(pname) == INVALID_FILE_ATTRIBUTES) {
             std::wcerr << L"File does not exist or is inaccessible"
-                       << std::endl;;
+                       << std::endl;
             return -1;
         }
     
@@ -78,7 +78,7 @@ namespace
     {
         long result;
 
-#  ifdef __linux__
+#    ifdef __linux__
         /* Oddly, the readlink(2) man page says no NULL is appended. */
         /* So you have to do it yourself, based on the return value: */
         pathsize--; /* Preserve a space to add the trailing NULL */
@@ -92,14 +92,14 @@ namespace
                           /*else name doesn't seem to exist, return FAIL (falls
                             through) */
         }
-#  elif defined(SOLARIS)
+#    elif defined(SOLARIS)
         char* p = getexecname();
         if (p)
         {
             /* According to the Sun manpages, getexecname will
                "normally" return an */
-            /* absolute path - BUT it may not AND therefore,
-               prepending */
+            /* absolute path - BUT might not... AND that IF it is not,
+               pre-pending */
             /* getcwd() will "usually" be the correct thing... Urgh!
              */
 
@@ -126,7 +126,7 @@ namespace
                                 (falls through) */
             }
         }
-#  elif defined(__APPLE__) /* assume this is OSX */
+#    elif defined(__APPLE__) /* assume this is OSX */
         /*
           from http://www.hmug.org/man/3/NSModule.html
 
@@ -161,13 +161,13 @@ namespace
         }
         free(given_path);
         return status;
-#  else                    /* APPLE */
-#    error Unknown OS
-#  endif /* APPLE */
+#    else                    /* APPLE */
+#        error Unknown OS
+#    endif /* APPLE */
 
         return -1; /* Path Lookup Failed */
     } /* where_do_I_live */
-#endif // ! _WIN32
+#endif     // ! _WIN32
 } // namespace
 
 namespace mrv
@@ -185,13 +185,14 @@ namespace mrv
         int ok = get_app_path(binpath, 32767);
         if (ok != 0)
         {
-            if (argc >= 1) {
+            if (argc >= 1)
+            {
                 // Convert argv[0] from char* to wchar_t*
                 size_t converted;
                 mbstowcs_s(&converted, binpath, argv[0], 32767);
             }
         }
-                
+
         fs::path rootdir(binpath);
         fs::path parent = rootdir.parent_path(); // Skip executable
         rootdir = parent.parent_path();          // Skip bin/ directory
@@ -203,7 +204,7 @@ namespace mrv
         {
             std::wcerr << L"failed to set MRV2_ROOT" << std::endl;
         }
-#else  // ! _WIN32
+#else // ! _WIN32
         char* root = fl_getenv("MRV2_ROOT");
 
         if (!root)
@@ -224,6 +225,10 @@ namespace mrv
 
             setenv("MRV2_ROOT", rootdir.u8string().c_str(), 1);
             g_root_path = rootdir.u8string();
+        }
+        else
+        {
+            g_root_path = root;
         }
 #endif
     }

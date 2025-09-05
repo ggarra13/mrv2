@@ -16,7 +16,7 @@ unset LD_LIBRARY_PATH
 unset DYLD_LIBRARY_PATH
 
 export branch=$(git rev-parse --abbrev-ref HEAD)
-if [[ "$branch" != "beta" && "$branch" != vulkan ]]; then
+if [[ "$branch" != "beta" && "$branch" != "vulkan" && "$branch" != "opengl" ]]; then
     echo "You are not on the beta or vulkan branch.  Will not make a release."
     exit 0
 fi
@@ -124,7 +124,7 @@ upload_file()
 
 cat <<EOF > README.md
 
-[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=679N8GWCNDFSJ)
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UJMHRRKYCPXYW)
 
 ${mrv2_NAME} v${mrv2_VERSION} ${branch}
 ====================
@@ -134,8 +134,7 @@ ${date}.
 
 It does not support NDI® on any platform.
 
-It works on Windows 8.1+ (without USD support), Ubuntu 22.04 LTS+,
-macOS 13 (amd64 also without USD support) and macOS M1/M2/M3 (arm64). 
+It works on Windows 10+, Ubuntu 22.04 LTS+, macOS 13 (amd64) and macOS M1+ (arm64). 
 
 It may contain bugs, new untested features and more.
 
@@ -149,13 +148,13 @@ Prices after v1.4.0
 -------------------
 * Buy mrv2 (or Vulkan vmrv2) for personal use at a cost of u\$50, paid by a Paypal donation (I will use the email to verify purchase and issue a yearly license).
 
-* Buy mrv2 (or Vulkan vmrv2) for personal use to own at a cost of u\$150, paid by a Paypal donation (I will use the email to verify purchase and issue a non-expiring license).
+* Buy mrv2 (or Vulkan vmrv2) for personal use to own at a cost of u\$150, paid by a Paypal donation (I will use the email to verify purchase and issue a non-expiring, node-locked license).
 
 Differences between Vulkan and OpenGL
 -------------------------------------
 
 - Vulkan is a new open source API, compared to OpenGL that it might get deprecated on some platforms like macOS.  It supports true HDR (High Dynamic Range), it is between 20% and 50% faster than the OpenGL version but it does not support OpenUSD.
-- OpenGL's only benefit at this point is that it supports OpenUSD.
+- OpenGL's only benefit at this point is that it supports OpenUSD and runs better on older OSes like MacOS Intel or Linux's X11 desktops.
 
 Vulkan Demo Version
 -------------------
@@ -175,6 +174,7 @@ Currently, when run as demo these versions don't have:
 	   - A/B Comparisons
 	   - OpenEXR Layer switching
 	   - NDI support
+	   - Allow more than 5 minutes of use.
 
 History
 -------
@@ -344,10 +344,11 @@ echo "Concatenating Installation notes"
 cat INSTALLATION_NOTES.md >> README.md
 rm INSTALLATION_NOTES.md
 
-echo "Concatenating Vulkan notes"
-cat VULKAN_NOTES.md >> README.md
-rm VULKAN_NOTES.md
-
+if [[ $branch == "vulkan" ]]; then
+    echo "Concatenating Vulkan notes"
+    cat VULKAN_NOTES.md >> README.md
+    rm VULKAN_NOTES.md
+fi
 
 echo "Upload README.md"
 upload_file README.md README.md

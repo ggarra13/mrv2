@@ -25,15 +25,15 @@ namespace tl
             {
             case timeline::TimeUnits::Frames:
                 out = string::Format("{0}").arg(
-                    time::isValid(time) ? time.to_frames() : 0);
+                    !time.is_invalid_time() ? time.to_frames() : 0);
                 break;
             case timeline::TimeUnits::Seconds:
                 out = string::Format("{0}").arg(
-                    time::isValid(time) ? time.to_seconds() : 0.0, 2);
+                    !time.is_invalid_time() ? time.to_seconds() : 0.0, 2);
                 break;
             case timeline::TimeUnits::Timecode:
             {
-                if (time::isValid(time))
+                if (!time.is_invalid_time())
                 {
                     out = time.to_timecode();
                 }

@@ -15,6 +15,7 @@
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvImage.h"
 #include "mrvCore/mrvString.h"
+#include "mrvCore/mrvWait.h"
 
 #ifdef OPENGL_BACKEND
 #    include <tlGL/Init.h>
@@ -103,10 +104,10 @@ namespace mrv
             fl_font(FL_HELVETICA, 18);
             int tw, th;
             fl_measure(page_title, tw, th);
-            fl_draw(page_title, (width - tw) / 2, th);
+            fl_draw(page_title, (pageWidth - tw) / 2, th);
 
             fl_line_style(FL_SOLID, 1);
-            fl_rect(20, th + 10, width - 40, height - 40);
+            fl_rect(20, th + 10, pageWidth - 40, pageHeight - 40);
 
             P.x = 25;
             P.y = th + 15;
@@ -224,7 +225,7 @@ namespace mrv
                 Fl::check();
             }
 
-            Fl::wait(1.0);
+            wait::milliseconds(500);
         }
 
         bool Creator::create()
@@ -239,7 +240,7 @@ namespace mrv
                 return false;
             }
 
-            pdf.printable_rect(&width, &height);
+            pdf.printable_rect(&pageWidth, &pageHeight);
 
             addPage();
 
@@ -256,19 +257,24 @@ namespace mrv
             auto mute = player->isMuted();
             player->setMute(true);
             player->start();
+            
+            auto renderSize = view->getRenderSize();
 
-            // Set presentation mode
+#ifdef OPENGL_BACKEND
+            // Set presentation mode on OpenGL
             view->setPresentationMode(true);
             view->redraw();
-
+            view->setFrameView(true);
+            view->centerView();
+            view->redraw();
+                
             // flush is needed
             Fl::flush();
             view->flush();
             Fl::check();
-
+            
             auto viewportSize = view->getViewportSize();
             float pixels_unit = view->pixels_per_unit();
-            auto renderSize = view->getRenderSize();
 
             int X = 0, Y = 0;
 #ifdef __APPLE__
@@ -323,8 +329,7 @@ namespace mrv
                                   .arg(X)
                                   .arg(Y);
             LOG_INFO(msg);
-
-#ifdef OPENGL_BACKEND
+            
             view->make_current();
             gl::initGLAD();
 #endif
@@ -338,16 +343,57 @@ namespace mrv
             player->stop();
 
             TimelineClass* c = ui->uiTimeWindow;
+                
+            view->setShowVideo(true);
+            view->setActionMode(ActionMode::kScrub);
+            view->redraw();
+            view->flush();
+            Fl::flush();
 
+            uint8_t* bufferData;
+
+#ifdef VULKAN_BACKEND
+            view->setSaveOverlay(true);
+            
+            auto buffer = view->getVideoFBO();
+            auto bufferOptions = buffer->getOptions();
+                        
+            std::shared_ptr<image::Image> annotationImage;
+            std::shared_ptr<image::Image> bufferImage;
+            std::shared_ptr<image::Image> rgbImage;
+
+            
+            const size_t width = buffer->getWidth();
+            const size_t height = buffer->getHeight();
+                
+            image::Info bufferInfo;
+            bufferInfo.pixelType = bufferOptions.colorType;
+            bufferInfo.size.w = width;
+            bufferInfo.size.h = height;
+            bufferImage = image::Image::create(bufferInfo);
+                
+            image::Info rgbInfo;
+            rgbInfo.pixelType = image::PixelType::RGB_U8;
+            rgbInfo.size.w = width;
+            rgbInfo.size.h = height;
+            rgbImage = image::Image::create(rgbInfo);
+            
+            image::Info annotationInfo = bufferInfo;
+            annotationInfo.pixelType = image::PixelType::RGBA_U8;
+            annotationImage = image::Image::create(annotationInfo);
+#endif
+
+#ifdef OPENGL_BACKEND
             const GLenum format = GL_RGB;
             const GLenum type = GL_UNSIGNED_BYTE;
-
-            GLubyte* buffer = new GLubyte[renderSize.w * renderSize.h * 3];
-
+            
+            bufferData = new uint8_t[renderSize.w * renderSize.h * 3];
+#endif
+            
             bool exit = false;
             for (const auto& annotation : annotations)
             {
-                if (P.y > height - 20 - thumbnailHeight)
+                if (P.y > pageHeight - 20 - thumbnailHeight)
                 {
                     pdf.end_page();
 
@@ -356,17 +402,13 @@ namespace mrv
 
                 time = annotation->time;
                 player->seek(time);
-
                 // Wait a while until so viewport updates.
                 wait();
+                
 
 #ifdef OPENGL_BACKEND
-                view->make_current();
-#endif
                 
-                view->redraw();
-                view->flush();
-                Fl::flush();
+                view->make_current();
 
 #ifdef __APPLE__
                 Fl_RGB_Image* tmp =
@@ -378,11 +420,12 @@ namespace mrv
                 // Access the first pointer in the data array
                 const char* const* data = rgb->data();
                 const size_t data_size = rgb->w() * rgb->h() * rgb->d();
-                memcpy(buffer, data[0], data_size);
+                memcpy(bufferData, data[0], data_size);
                 delete rgb;
 #else
 
-#ifdef OPENGL_BACKEND
+                const GLenum format = GL_RGB;
+                const GLenum type = GL_UNSIGNED_BYTE;
                 GLenum imageBuffer = GL_FRONT;
 
                 // @note: Wayland does not work like Windows, macOS or
@@ -396,15 +439,117 @@ namespace mrv
                 glReadBuffer(imageBuffer);
 
                 glReadPixels(
-                    X, Y, renderSize.w, renderSize.h, format, type, buffer);
+                    X, Y, renderSize.w, renderSize.h, format, type, bufferData);
 
-                flipImageInY(buffer, renderSize.w, renderSize.h, 3);
+                flipImageInY(bufferData, renderSize.w, renderSize.h, 3);
 #endif
                 
 #endif
 
-                create_thumbnail(renderSize.w, renderSize.h, buffer);
+#ifdef VULKAN_BACKEND
+                // flush is needed
+                view->redraw();
+                Fl::flush();
+                view->flush();
+                // flush is needed
+                view->redraw();
+                Fl::flush();
+                
+                // Refresh the view three times so that video buffer is updated.
+                view->redraw();
+                Fl::flush();
+                view->redraw();
+                Fl::flush();
+                view->redraw();
+                Fl::flush();
 
+                // Flush the image
+                view->redraw();
+                Fl::flush();
+                
+                auto buffer = view->getVideoFBO();
+                auto overlayBuffer = view->getAnnotationFBO();
+                
+                auto bufferOptions = buffer->getOptions();        
+
+                VkDevice device = view->device();
+                VkCommandPool commandPool = view->commandPool();
+
+                // Read Main Image Viewport
+                VkCommandBuffer cmd = beginSingleTimeCommands(device,
+                                                              commandPool);
+
+                buffer->readPixels(cmd, 0, 0, width, height);
+                
+                vkEndCommandBuffer(cmd);
+                
+                buffer->submitReadback(cmd);
+
+                view->wait_queue();
+            
+                const void* imageData = buffer->getLatestReadPixels();
+                if (imageData)
+                {
+                    std::memcpy(bufferImage->getData(), imageData,
+                                bufferImage->getDataByteCount());
+                }
+                else
+                {
+                    LOG_ERROR(_("Could not read image data from view"));
+                    bufferImage->zero();
+                }
+
+                vkFreeCommandBuffers(device, commandPool, 1, &cmd);
+
+                if (overlayBuffer)
+                {
+                    VkCommandBuffer cmd = beginSingleTimeCommands(device,
+                                                                  commandPool);
+
+                    overlayBuffer->readPixels(cmd, 0, 0, width, height);
+                    
+                    vkEndCommandBuffer(cmd);
+                    
+                    overlayBuffer->submitReadback(cmd);
+
+                    view->wait_queue();
+            
+                    imageData = overlayBuffer->getLatestReadPixels();
+                    if (imageData)
+                    {
+                        std::memcpy(annotationImage->getData(), imageData,
+                                    annotationImage->getDataByteCount());
+                        flipImageInY(annotationImage);
+                    }
+                    else
+                    {
+                        annotationImage->zero();
+                    }
+                            
+                    vkFreeCommandBuffers(device, commandPool, 1, &cmd);
+                }
+                else
+                {
+                    annotationImage->zero();
+                }
+                
+                //
+                // Composite output
+                //
+                composite_RGBA_U8(bufferImage, annotationImage);
+
+                //
+                // Convert output to RGB_U8
+                //
+                convert_RGBA_to_RGB_U8(rgbImage, bufferImage);
+
+                bufferData = rgbImage->getData();
+                renderSize.w = width;
+                renderSize.h = height;
+#endif
+                
+                create_thumbnail(renderSize.w, renderSize.h, bufferData);
+                
                 // print time
                 print_time(FL_HELVETICA);
 
@@ -420,15 +565,14 @@ namespace mrv
                 P.y += thumbnailHeight + image_margin;
             }
 
-            delete[] buffer;
-
+#ifdef OPENGL_BACKEND
+            delete[] bufferData;
+#endif
             pdf.end_page();
 
             pdf.end_job();
 
             view->setPresentationMode(presentation);
-            wait();
-
             view->setHudActive(hud);
 
             view->frameView();

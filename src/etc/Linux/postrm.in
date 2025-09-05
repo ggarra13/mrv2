@@ -28,7 +28,7 @@ fi
 
 # When installing vmrv2, as we renamed the file, we need to clear
 # the directory manually.
-if [[ -e "@CPACK_INSTALL_PREFIX@" ]];
+if [[ -e "@CPACK_INSTALL_PREFIX@" ]]; then
    rm -rf "@CPACK_INSTALL_PREFIX@"
 fi
 

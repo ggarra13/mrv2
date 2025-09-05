@@ -1,4 +1,4 @@
-# German translations for hdr package.
+# German translations for hdr package.	
 # This file is distributed under the same license as the hdr package.
 # Automatically generated, 2025.
 #
@@ -16,16 +16,16 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "HDR monitor found."
-msgstr ""
+msgstr "HDR-Monitor gefunden."
 
 msgid "HDR monitor not found or not configured."
-msgstr ""
+msgstr "HDR-Monitor nicht gefunden oder nicht konfiguriert."
 
 msgid "Connection/"
 msgstr "Verbindung/"
 
 msgid "Window/Fullscreen"
-msgstr ""
+msgstr "Fenster/Vollbild"
 
 msgid "HDR/Pass through Metadata to Display"
-msgstr ""
+msgstr "HDR/Metadaten an das Display weiterleiten"

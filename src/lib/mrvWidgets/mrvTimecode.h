@@ -4,16 +4,17 @@
 
 #pragma once
 
-#include <memory>
-
-#include <FL/Fl_Float_Input.H>
 
 #include "mrvCore/mrvTimeObject.h"
+
+#include <FL/Fl_Input.H>
+
+#include <memory>
 
 namespace mrv
 {
     //! Time label.
-    class Timecode : public Fl_Float_Input
+    class Timecode : public Fl_Input
     {
     public:
         Timecode(int X, int Y, int W, int H, const char* L = 0);
@@ -32,7 +33,12 @@ namespace mrv
         //! Set the time units.
         void setUnits(TimeUnits);
 
+        int handle(int e) FL_OVERRIDE;
+        
     private:
+        double eval(uchar *&s, int prio) const;
+        double eval(const char *s) const;
+
         void _textUpdate() noexcept;
         void _updateGeometry() noexcept;
 

@@ -7,10 +7,12 @@ set(PRIVATE_HEADERS
 
 set(SOURCE
     Render.cpp
+    RenderAnaglyph.cpp
     RenderPrims.cpp
     RenderVideo.cpp
     RenderVulkan.cpp
-    RenderShaders.cpp)
+    RenderShaders.cpp
+    RenderStereo.cpp)
 
 set(LIBRARIES_PRIVATE )
 if(TLRENDER_LIBPLACEBO)

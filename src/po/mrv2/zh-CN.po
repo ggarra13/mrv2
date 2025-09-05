@@ -497,13 +497,13 @@ msgstr "不支持的操作类型 {0}: RationalTime 和{1}"
 
 msgid ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/rt."
-"rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/"
+"rt.rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/rt."
-"rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/"
+"rt.rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 
 msgid ""
@@ -653,8 +653,8 @@ msgid ""
 msgstr ""
 "\n"
 "根据\n"
-":attr:`start_time`/:attr:`end_time_exclusive` 和绑定参数限制‘其他’(:class:"
-"`~RationalTime`)。\n"
+":attr:`start_time`/:attr:`end_time_exclusive` 和绑定参数限制‘其"
+"他’(:class:`~RationalTime`)。\n"
 
 msgid ""
 "\n"
@@ -663,8 +663,8 @@ msgid ""
 msgstr ""
 "\n"
 "根据\n"
-":attr:`start_time`/:attr:`end_time_exclusive` 和绑定参数限制‘其他’(:class:"
-"`~TimeRange`)。\n"
+":attr:`start_time`/:attr:`end_time_exclusive` 和绑定参数限制‘其"
+"他’(:class:`~TimeRange`)。\n"
 
 msgid ""
 "\n"
@@ -909,8 +909,8 @@ msgid ""
 "duration of 9.\n"
 msgstr ""
 "\n"
-"从开始和结束 :class:`~RationalTime`\\s（不包括）创建一个 :class:"
-"`~TimeRange`。\n"
+"从开始和结束 :class:`~RationalTime`\\s（不包括）创建一"
+"个 :class:`~TimeRange`。\n"
 "\n"
 "例如，如果 start_time 为 1 且 end_time 为 10，则返回的持续时间为 9。\n"
 
@@ -3643,6 +3643,15 @@ msgstr "图像太大。 将保存视图的大小 。"
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "视图端口大小 : {0} - X={1}, Y={2}"
 
+msgid "Could not read image data from view"
+msgstr "无法从视图读取图像数据"
+
+msgid "Play"
+msgstr "播放"
+
+msgid "Stop"
+msgstr "停止"
+
 msgid "Scrub"
 msgstr "Scrub"
 
@@ -3709,12 +3718,6 @@ msgid ""
 "Cannot create an annotation here for current frame.  An all frames "
 "annotation already exists."
 msgstr "无法在此为当前帧创建注释。 已经存在全部帧注释 。"
-
-msgid "Play"
-msgstr "播放"
-
-msgid "Stop"
-msgstr "停止"
 
 msgid "2.35"
 msgstr "2.35"
@@ -3958,6 +3961,9 @@ msgstr "渲染/HDR 数据/活动"
 
 msgid "Render/HDR/Tonemap"
 msgstr "招标/HDR/时针映射"
+
+msgid "Render/HDR/Gamut Mapping"
+msgstr "招标/HDR/色域映射"
 
 msgid "Playback/Stop"
 msgstr "播放/停止"
@@ -4264,6 +4270,12 @@ msgstr "同步/接受/注释"
 
 msgid "Sync/Accept/Audio"
 msgstr "同步/接受/音频"
+
+msgid "Voice Annotation/Record"
+msgstr "语音注释/录制"
+
+msgid "Voice Annotation/Play"
+msgstr "语音注释/播放"
 
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
@@ -5746,6 +5758,72 @@ msgstr "中"
 msgid "Fast"
 msgstr "快"
 
+msgid "Ignore"
+msgstr "忽略"
+
+msgid "Apply"
+msgstr "应用"
+
+msgid "From File"
+msgstr "从文件"
+
+msgid "Inactive"
+msgstr "未激活"
+
+msgid "Active"
+msgstr "活动"
+
+msgid "ST2094_40"
+msgstr "ST2094_40"
+
+msgid "ST2094_10"
+msgstr "ST2094_10"
+
+msgid "Clip"
+msgstr "剪切"
+
+msgid "BT2390"
+msgstr "BT2390"
+
+msgid "BT2446A"
+msgstr "BT2446A"
+
+msgid "Spline"
+msgstr "样条曲线"
+
+msgid "Reinhard"
+msgstr "Reinhard"
+
+msgid "Mobius"
+msgstr "莫比乌斯"
+
+msgid "Hable"
+msgstr "Hable"
+
+msgid "Linear Light"
+msgstr "线性光"
+
+msgid "Auto"
+msgstr "自动"
+
+msgid "Perceptual"
+msgstr "感知"
+
+msgid "Relative"
+msgstr "相对"
+
+msgid "Absolute"
+msgstr "绝对"
+
+msgid "Desaturate"
+msgstr "去饱和"
+
+msgid "Darken"
+msgstr "变暗"
+
+msgid "Highlight"
+msgstr "高亮"
+
 msgid "base"
 msgstr "base"
 
@@ -5781,9 +5859,6 @@ msgstr "CIE XYZ"
 
 msgid "CIE xyY"
 msgstr "CIE xyY"
-
-msgid "From File"
-msgstr "从文件"
 
 msgid "Full Range"
 msgstr "全范围"
@@ -6164,6 +6239,21 @@ msgstr "面板"
 msgid "Sets the font to use in panels. (Not yet working)"
 msgstr "设置要在面板中使用的字体。 (尚未工作)"
 
+msgid "HDR"
+msgstr "HDR"
+
+msgid "Chromaticities"
+msgstr "色度"
+
+msgid "HDR Data"
+msgstr "HDR 数据"
+
+msgid "Tonemap Algorithm"
+msgstr "色调映射算法"
+
+msgid "Gamut Mapping"
+msgstr "色域映射"
+
 msgid "Language and Colors"
 msgstr "语言和颜色"
 
@@ -6274,18 +6364,6 @@ msgstr "Minify Filter"
 
 msgid "Magnify Filter"
 msgstr "Magnify Filter"
-
-msgid "HDR"
-msgstr "HDR"
-
-msgid "Chromaticities"
-msgstr "色度"
-
-msgid "HDR Data"
-msgstr "HDR 数据"
-
-msgid "Tonemap Algorithm"
-msgstr "色调映射算法"
 
 msgid "Thumbnails"
 msgstr "缩略图"
@@ -6528,8 +6606,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
-"exr"
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
 msgstr ""
 "用于匹配剪辑版本的正则表达式。必须分组三部分（前缀、数字和后缀）。如果保持默"
 "认值(_v)，它会自动创建一个正则表达式来匹配文件、目录或两者名称中带有_v定义的"
@@ -6716,6 +6794,9 @@ msgstr "用户界面/文件请求器"
 
 msgid "User Interface/Fonts"
 msgstr "用户界面/字体"
+
+msgid "User Interface/HDR"
+msgstr "用户界面/HDR"
 
 msgid "User Interface/Language and Colors"
 msgstr "用户界面/语言和颜色"
@@ -7525,6 +7606,9 @@ msgstr "开关关于窗口"
 
 #~ msgid "Complexity"
 #~ msgstr "复杂程度"
+
+#~ msgid "Could not read annotation image from view"
+#~ msgstr "无法从视图读取注释图像"
 
 #~ msgid "Stage Cache"
 #~ msgstr "缓存"

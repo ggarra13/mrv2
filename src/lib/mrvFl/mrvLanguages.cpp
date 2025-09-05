@@ -110,7 +110,7 @@ void check_language(PreferencesUI* uiPrefs, int& language_index, mrv::App* app)
             mrv::session::save(session);
 
             app->cleanResources();
-
+            
             mrv::os::execv("", session);
         }
         else

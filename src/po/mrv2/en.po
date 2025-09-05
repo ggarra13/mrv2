@@ -508,13 +508,13 @@ msgstr "unsupported operand type(s) for {0}: RationalTime and {1}"
 
 msgid ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/rt."
-"rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/"
+"rt.rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/rt."
-"rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/"
+"rt.rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 
 msgid ""
@@ -3713,6 +3713,15 @@ msgstr "Image too big.  Will save the viewport size."
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Viewport Size: {0} - X={1}, Y={2}"
 
+msgid "Could not read image data from view"
+msgstr "Could not read image data from view"
+
+msgid "Play"
+msgstr "Play"
+
+msgid "Stop"
+msgstr "Stop"
+
 msgid "Scrub"
 msgstr "Scrub"
 
@@ -3783,12 +3792,6 @@ msgid ""
 msgstr ""
 "Cannot create an annotation here for current frame.  An all frames "
 "annotation already exists."
-
-msgid "Play"
-msgstr "Play"
-
-msgid "Stop"
-msgstr "Stop"
 
 msgid "2.35"
 msgstr "2.35"
@@ -4032,6 +4035,9 @@ msgstr "Render/HDR Data/Active"
 
 msgid "Render/HDR/Tonemap"
 msgstr "Render/HDR/Tonemap"
+
+msgid "Render/HDR/Gamut Mapping"
+msgstr "Render/HDR/Gamut Mapping"
 
 msgid "Playback/Stop"
 msgstr "Playback/Stop"
@@ -4338,6 +4344,12 @@ msgstr "Sync/Accept/Annotations"
 
 msgid "Sync/Accept/Audio"
 msgstr "Sync/Accept/Audio"
+
+msgid "Voice Annotation/Record"
+msgstr "Voice Annotation/Record"
+
+msgid "Voice Annotation/Play"
+msgstr "Voice Annotation/Play"
 
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
@@ -5842,6 +5854,72 @@ msgstr "Medium"
 msgid "Fast"
 msgstr "Fast"
 
+msgid "Ignore"
+msgstr "Ignore"
+
+msgid "Apply"
+msgstr "Apply"
+
+msgid "From File"
+msgstr "From File"
+
+msgid "Inactive"
+msgstr "Inactive"
+
+msgid "Active"
+msgstr "Active"
+
+msgid "ST2094_40"
+msgstr "ST2094_40"
+
+msgid "ST2094_10"
+msgstr "ST2094_10"
+
+msgid "Clip"
+msgstr "Clip"
+
+msgid "BT2390"
+msgstr "BT2390"
+
+msgid "BT2446A"
+msgstr "BT2446A"
+
+msgid "Spline"
+msgstr "Spline"
+
+msgid "Reinhard"
+msgstr "Reinhard"
+
+msgid "Mobius"
+msgstr "Mobius"
+
+msgid "Hable"
+msgstr "Hable"
+
+msgid "Linear Light"
+msgstr "Linear Light"
+
+msgid "Auto"
+msgstr "Auto"
+
+msgid "Perceptual"
+msgstr "Perceptual"
+
+msgid "Relative"
+msgstr "Relative"
+
+msgid "Absolute"
+msgstr "Absolute"
+
+msgid "Desaturate"
+msgstr "Desaturate"
+
+msgid "Darken"
+msgstr "Darken"
+
+msgid "Highlight"
+msgstr "Highlight"
+
 msgid "base"
 msgstr "base"
 
@@ -5877,9 +5955,6 @@ msgstr "CIE XYZ"
 
 msgid "CIE xyY"
 msgstr "CIE xyY"
-
-msgid "From File"
-msgstr "From File"
 
 msgid "Full Range"
 msgstr "Full Range"
@@ -6275,6 +6350,21 @@ msgstr "Panels"
 msgid "Sets the font to use in panels. (Not yet working)"
 msgstr "Sets the font to use in panels. (Not yet working)"
 
+msgid "HDR"
+msgstr "HDR"
+
+msgid "Chromaticities"
+msgstr "Chromaticities"
+
+msgid "HDR Data"
+msgstr "HDR Data"
+
+msgid "Tonemap Algorithm"
+msgstr "Tonemap Algorithm"
+
+msgid "Gamut Mapping"
+msgstr "Gamut Mapping"
+
 msgid "Language and Colors"
 msgstr "Language and Colors"
 
@@ -6391,18 +6481,6 @@ msgstr "Minify Filter"
 
 msgid "Magnify Filter"
 msgstr "Magnify Filter"
-
-msgid "HDR"
-msgstr "HDR"
-
-msgid "Chromaticities"
-msgstr "Chromaticities"
-
-msgid "HDR Data"
-msgstr "HDR Data"
-
-msgid "Tonemap Algorithm"
-msgstr "Tonemap Algorithm"
 
 msgid "Thumbnails"
 msgstr "Thumbnails"
@@ -6663,14 +6741,14 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
-"exr"
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
 msgstr ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
-"exr"
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
 
 msgid "Maximum Images Apart"
 msgstr "Maximum Images Apart"
@@ -6867,6 +6945,9 @@ msgstr "User Interface/File Requester"
 
 msgid "User Interface/Fonts"
 msgstr "User Interface/Fonts"
+
+msgid "User Interface/HDR"
+msgstr "User Interface/HDR"
 
 msgid "User Interface/Language and Colors"
 msgstr "User Interface/Language and Colors"
@@ -7677,6 +7758,9 @@ msgstr "Toggle About Window"
 
 #~ msgid "Complexity"
 #~ msgstr "Complexity"
+
+#~ msgid "Could not read annotation image from view"
+#~ msgstr "Could not read annotation image from view"
 
 #~ msgid "Stage Cache"
 #~ msgstr "Stage Cache"

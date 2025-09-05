@@ -14,7 +14,6 @@ set(HEADERS
     mrvGLViewport.h
     mrvGLViewportPrivate.h
     mrvGLWindow.h
-    mrvTimelineViewport.h
     mrvTimelineViewportPrivate.h
     mrvTimelineWidget.h
     )

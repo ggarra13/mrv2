@@ -501,13 +501,13 @@ msgstr "Tipo(s) de pera no suportados para {0}: RationalTime e {1}"
 
 msgid ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/rt."
-"rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/"
+"rt.rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
 "\n"
-"A classe RationalTime representa uma medida do tempo de :math:`rt.value/rt."
-"rate` segundos. Pode ser redimensionada para outra :class:`~RationalTime` "
+"A classe RationalTime representa uma medida do tempo de :math:`rt.value/"
+"rt.rate` segundos. Pode ser redimensionada para outra :class:`~RationalTime` "
 "taxa.\n"
 
 msgid ""
@@ -580,8 +580,8 @@ msgstr "Converter para cdigo de tempo (``HH:MM:SS;FRAME``)"
 msgid ""
 "Convert a timecode string (``HH:MM:SS;FRAME``) into a :class:`~RationalTime`."
 msgstr ""
-"Converta uma cadeia de cdigo de tempo (``HH:MM:SS;FRAME``) em uma :class:"
-"`~RationalTime`."
+"Converta uma cadeia de cdigo de tempo (``HH:MM:SS;FRAME``) em "
+"uma :class:`~RationalTime`."
 
 msgid ""
 "Convert a time with microseconds string (``HH:MM:ss`` where ``ss`` is an "
@@ -667,8 +667,8 @@ msgid ""
 ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
 msgstr ""
 "\n"
-"Limite 'outros' (:classe:`~TimeRange`) de acordo com:attr:`start_time`/:attr:"
-"`end_time_exclusive` e argumentos vinculados.\n"
+"Limite 'outros' (:classe:`~TimeRange`) de acordo "
+"com:attr:`start_time`/:attr:`end_time_exclusive` e argumentos vinculados.\n"
 
 msgid ""
 "\n"
@@ -2907,8 +2907,8 @@ msgstr "Perfis ProRes precisam de uma extensão de filme.mov. Mudá-lo para.mov.
 msgid ""
 "VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to .mp4"
 msgstr ""
-"O perfil VP9 precisa de uma extenso de filme.mp4,.mkv ou.webm. Mud-lo para."
-"mp4"
+"O perfil VP9 precisa de uma extenso de filme.mp4,.mkv ou.webm. Mud-lo "
+"para.mp4"
 
 msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
 msgstr ""
@@ -2917,8 +2917,8 @@ msgstr ""
 msgid ""
 "GoPro Cineform profile needs a .mkv movie extension.  Changing it to .mkv"
 msgstr ""
-"O perfil do Cineform GoPro precisa de uma extenso do filme.mkv. Mud-lo para."
-"mkv"
+"O perfil do Cineform GoPro precisa de uma extenso do filme.mkv. Mud-lo "
+"para.mkv"
 
 msgid "HAP profile needs a .mov extension.  Changing it to .mov"
 msgstr "O perfil HAP precisa de uma extenso.mov. Mud-lo para.mov"
@@ -3696,6 +3696,15 @@ msgstr "Imagem muito grande. Vai salvar o tamanho da vista."
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Tamanho do visor: {0} - X={1}, Y={2}"
 
+msgid "Could not read image data from view"
+msgstr "Não foi possível ler os dados da imagem da visualização"
+
+msgid "Play"
+msgstr "Reproduzir"
+
+msgid "Stop"
+msgstr "Pra."
+
 msgid "Scrub"
 msgstr "Esfregar"
 
@@ -3766,12 +3775,6 @@ msgid ""
 msgstr ""
 "No  possvel criar uma anotao aqui para o quadro atual. Uma anotao de todos "
 "os quadros j existe."
-
-msgid "Play"
-msgstr "Reproduzir"
-
-msgid "Stop"
-msgstr "Pra."
 
 msgid "2.35"
 msgstr "2.35"
@@ -4015,6 +4018,9 @@ msgstr "Renderização/Dados HDR/Ativo"
 
 msgid "Render/HDR/Tonemap"
 msgstr "Renúncia/HDR/Mapa de tons"
+
+msgid "Render/HDR/Gamut Mapping"
+msgstr "Renúncia/HDR/Mapeamento de gama"
 
 msgid "Playback/Stop"
 msgstr "Reproduo/Pra."
@@ -4321,6 +4327,12 @@ msgstr "Sincronizao/Aceitar/Anotaes"
 
 msgid "Sync/Accept/Audio"
 msgstr "Sincronizao/Aceitar/udio"
+
+msgid "Voice Annotation/Record"
+msgstr "Anotação de Voz/Gravar"
+
+msgid "Voice Annotation/Play"
+msgstr "Anotação de Voz/Reproduzir"
 
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
@@ -5826,6 +5838,72 @@ msgstr "Mdia"
 msgid "Fast"
 msgstr "Rpido"
 
+msgid "Ignore"
+msgstr "Ignorar"
+
+msgid "Apply"
+msgstr "Aplicar"
+
+msgid "From File"
+msgstr "A partir do Ficheiro"
+
+msgid "Inactive"
+msgstr "Inativo"
+
+msgid "Active"
+msgstr "Ativo"
+
+msgid "ST2094_40"
+msgstr "ST2094_40"
+
+msgid "ST2094_10"
+msgstr "ST2094_10"
+
+msgid "Clip"
+msgstr "Recortar"
+
+msgid "BT2390"
+msgstr "BT2390"
+
+msgid "BT2446A"
+msgstr "BT2446A"
+
+msgid "Spline"
+msgstr "Spline"
+
+msgid "Reinhard"
+msgstr "Reinhard"
+
+msgid "Mobius"
+msgstr "Móbius"
+
+msgid "Hable"
+msgstr "Hable"
+
+msgid "Linear Light"
+msgstr "Luz Linear"
+
+msgid "Auto"
+msgstr "Automático"
+
+msgid "Perceptual"
+msgstr "Perceptivo"
+
+msgid "Relative"
+msgstr "Relativo"
+
+msgid "Absolute"
+msgstr "Absoluto"
+
+msgid "Desaturate"
+msgstr "Desaturar"
+
+msgid "Darken"
+msgstr "Escurecer"
+
+msgid "Highlight"
+msgstr "Realçar"
+
 msgid "base"
 msgstr "base"
 
@@ -5861,9 +5939,6 @@ msgstr "CIE XYZ"
 
 msgid "CIE xyY"
 msgstr "CIE xyY"
-
-msgid "From File"
-msgstr "A partir do Ficheiro"
 
 msgid "Full Range"
 msgstr "Intervalo completo"
@@ -5916,9 +5991,8 @@ msgstr "Reinhard"
 msgid "Mobius"
 msgstr "Móbius"
 
-#, fuzzy
 msgid "Hable"
-msgstr "Activado"
+msgstr "Hable"
 
 msgid "Linear Light"
 msgstr "Luz Linear"
@@ -6267,6 +6341,21 @@ msgstr "Painis"
 msgid "Sets the font to use in panels. (Not yet working)"
 msgstr "Defina a fonte a usar em painis. (Ainda no est funcionando)"
 
+msgid "HDR"
+msgstr "HDR"
+
+msgid "Chromaticities"
+msgstr "Cromaticidades"
+
+msgid "HDR Data"
+msgstr "Dados HDR"
+
+msgid "Tonemap Algorithm"
+msgstr "Algoritmo de Mapeamento de Tons"
+
+msgid "Gamut Mapping"
+msgstr "Mapeamento de Gamut"
+
 msgid "Language and Colors"
 msgstr "Lngua e cores"
 
@@ -6386,18 +6475,6 @@ msgstr "Minimizar o Filtro"
 msgid "Magnify Filter"
 msgstr "Aumentar o Filtro"
 
-msgid "HDR"
-msgstr "HDR"
-
-msgid "Chromaticities"
-msgstr "Cromaticidades"
-
-msgid "HDR Data"
-msgstr "Dados HDR"
-
-msgid "Tonemap Algorithm"
-msgstr "Algoritmo de Mapeamento de Tons"
-
 msgid "Thumbnails"
 msgstr "Thumbnails"
 
@@ -6421,8 +6498,8 @@ msgid ""
 "automatically.  You will have to use RMB->Update Thumbnail on the Thumbnail."
 msgstr ""
 "Quando esta opção está ativada, as miniaturas nos painéis não serão "
-"atualizadas automaticamente. Você precisará usar clique com o botão direito -"
-"> Atualizar miniatura na miniatura."
+"atualizadas automaticamente. Você precisará usar clique com o botão direito "
+"-> Atualizar miniatura na miniatura."
 
 msgid "Preview Thumbnails on Panels"
 msgstr "Previsualizar miniaturas em painis"
@@ -6660,8 +6737,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
-"exr"
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
 msgstr ""
 "Expressão regular usada para combinar as versões do clipe. Deve agrupar três "
 "coisas (prefixo, número e sufixo). Se for deixada no seu valor padrão (_v), "
@@ -6871,6 +6948,9 @@ msgstr "Interface do Usurio/Solicitante de Ficheiro"
 
 msgid "User Interface/Fonts"
 msgstr "Interface do Usurio/Fontes"
+
+msgid "User Interface/HDR"
+msgstr "Interface do Usuário/HDR"
 
 msgid "User Interface/Language and Colors"
 msgstr "Interface do Usurio/Lngua e cores"
@@ -7681,6 +7761,9 @@ msgstr "Alternar Sobre a Janela"
 
 #~ msgid "Complexity"
 #~ msgstr "Complexidade"
+
+#~ msgid "Could not read annotation image from view"
+#~ msgstr "Não foi possível ler a imagem de anotação da visualização"
 
 #~ msgid "Stage Cache"
 #~ msgstr "Cache em estgio"

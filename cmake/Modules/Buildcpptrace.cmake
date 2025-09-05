@@ -5,7 +5,8 @@
 include( ExternalProject )
 
 set(cpptrace_REPOSITORY "https://github.com/jeremy-rifkin/cpptrace.git")
-set(cpptrace_TAG c37b5ed7364f4fc1c58e92d13399cd04656e6572)
+set(cpptrace_TAG v1.0.4)
+#set(cpptrace_TAG c37b5ed7364f4fc1c58e92d13399cd04656e6572)
 
 ExternalProject_Add(
     cpptrace

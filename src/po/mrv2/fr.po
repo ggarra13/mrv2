@@ -499,14 +499,14 @@ msgstr "type(s) d'opérande non supporté(s) pour {0}: RationalTime et {1}"
 
 msgid ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/rt."
-"rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/"
+"rt.rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
 "\n"
-"La classe RationalTime représente une mesure du temps de :math:`rt.value/rt."
-"rate` secondes. Elle peut être redimensionnée en un autre :class:"
-"`~RationalTime`.\n"
+"La classe RationalTime représente une mesure du temps de :math:`rt.value/"
+"rt.rate` secondes. Elle peut être redimensionnée en un "
+"autre :class:`~RationalTime`.\n"
 
 msgid ""
 "\n"
@@ -581,8 +581,8 @@ msgstr "Convertir en code-temps (``HH:MM:SS;FRAME``)"
 msgid ""
 "Convert a timecode string (``HH:MM:SS;FRAME``) into a :class:`~RationalTime`."
 msgstr ""
-"Convertir une chaîne de code-temps (``HH:MM:SS;FRAME``) en :class:"
-"`~RationalTime`."
+"Convertir une chaîne de code-temps (``HH:MM:SS;FRAME``) "
+"en :class:`~RationalTime`."
 
 msgid ""
 "Convert a time with microseconds string (``HH:MM:ss`` where ``ss`` is an "
@@ -602,8 +602,8 @@ msgstr ""
 "\n"
 "La classe TimeRange représente une plage de temps. Elle code l'heure de "
 "début et la durée, ce qui signifie que :meth:`end_time_inclusive` (dernière "
-"partie d'un échantillon dans la plage de temps) et :meth:"
-"`end_time_exclusive` peuvent être calculés.\n"
+"partie d'un échantillon dans la plage de temps) "
+"et :meth:`end_time_exclusive` peuvent être calculés.\n"
 
 msgid ""
 "\n"
@@ -652,8 +652,8 @@ msgid ""
 ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
 msgstr ""
 "\n"
-"Clamp «autre» (:classe:`~RationalTime`) selon :attr:`start_time`/:attr:"
-"`end_time_exclusive` et arguments liés.\n"
+"Clamp «autre» (:classe:`~RationalTime`) "
+"selon :attr:`start_time`/:attr:`end_time_exclusive` et arguments liés.\n"
 
 msgid ""
 "\n"
@@ -661,8 +661,8 @@ msgid ""
 ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
 msgstr ""
 "\n"
-"Clamp «autre» (:classe:`~TimeRange`) selon :attr:`start_time`/:attr:"
-"`end_time_exclusive` et arguments liés.\n"
+"Clamp «autre» (:classe:`~TimeRange`) "
+"selon :attr:`start_time`/:attr:`end_time_exclusive` et arguments liés.\n"
 
 msgid ""
 "\n"
@@ -3717,6 +3717,15 @@ msgstr "Image trop grande. Enregistrera la taille du viseur."
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Taille du point de vue : {0} - X={1}, Y={2}"
 
+msgid "Could not read image data from view"
+msgstr "Impossible de lire les données d’image depuis la vue"
+
+msgid "Play"
+msgstr "Jouer"
+
+msgid "Stop"
+msgstr "Arrêtez-vous."
+
 msgid "Scrub"
 msgstr "Arrosage"
 
@@ -3787,12 +3796,6 @@ msgid ""
 msgstr ""
 "Impossible de créer une annotation ici pour le cadre actuel. Une annotation "
 "de tous les cadres existe déjà."
-
-msgid "Play"
-msgstr "Jouer"
-
-msgid "Stop"
-msgstr "Arrêtez-vous."
 
 msgid "2.35"
 msgstr "2.35"
@@ -4036,6 +4039,9 @@ msgstr "Rendu/Données HDR/Actif"
 
 msgid "Render/HDR/Tonemap"
 msgstr "Rendre/HDR/Carte des tons"
+
+msgid "Render/HDR/Gamut Mapping"
+msgstr "Rendre/HDR/Carte des la gamme"
 
 msgid "Playback/Stop"
 msgstr "Remise en ligne/Arrêtez-vous."
@@ -4342,6 +4348,12 @@ msgstr "Synchroniser/Accepter/Annotations"
 
 msgid "Sync/Accept/Audio"
 msgstr "Synchroniser/Accepter/Audio"
+
+msgid "Voice Annotation/Record"
+msgstr "Annotation vocale/Enregistrer"
+
+msgid "Voice Annotation/Play"
+msgstr "Annotation vocale/Lecture"
 
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
@@ -5858,6 +5870,72 @@ msgstr "Moyenne"
 msgid "Fast"
 msgstr "Rapide"
 
+msgid "Ignore"
+msgstr "Ignorer"
+
+msgid "Apply"
+msgstr "Appliquer"
+
+msgid "From File"
+msgstr "À partir du fichier"
+
+msgid "Inactive"
+msgstr "Inactif"
+
+msgid "Active"
+msgstr "Active"
+
+msgid "ST2094_40"
+msgstr "ST2094_40"
+
+msgid "ST2094_10"
+msgstr "ST2094_10"
+
+msgid "Clip"
+msgstr "Découper"
+
+msgid "BT2390"
+msgstr "BT2390"
+
+msgid "BT2446A"
+msgstr "BT2446A"
+
+msgid "Spline"
+msgstr "Spline"
+
+msgid "Reinhard"
+msgstr "Reinhard"
+
+msgid "Mobius"
+msgstr "Mobius"
+
+msgid "Hable"
+msgstr "Hable"
+
+msgid "Linear Light"
+msgstr "Lumière linéaire"
+
+msgid "Auto"
+msgstr "Automatique"
+
+msgid "Perceptual"
+msgstr "Perceptuel"
+
+msgid "Relative"
+msgstr "Relatif"
+
+msgid "Absolute"
+msgstr "Absolu"
+
+msgid "Desaturate"
+msgstr "Désaturer"
+
+msgid "Darken"
+msgstr "Assombrir"
+
+msgid "Highlight"
+msgstr "Mettre en surbrillance"
+
 msgid "base"
 msgstr "base"
 
@@ -5893,9 +5971,6 @@ msgstr "CIE XYZ"
 
 msgid "CIE xyY"
 msgstr "CIE xyY"
-
-msgid "From File"
-msgstr "À partir du fichier"
 
 msgid "Full Range"
 msgstr "Plage complète"
@@ -5948,9 +6023,8 @@ msgstr "Reinhard"
 msgid "Mobius"
 msgstr "Mobius"
 
-#, fuzzy
 msgid "Hable"
-msgstr "Activé"
+msgstr "Hable"
 
 msgid "Linear Light"
 msgstr "Lumière linéaire"
@@ -6307,6 +6381,21 @@ msgid "Sets the font to use in panels. (Not yet working)"
 msgstr ""
 "Définit la police à utiliser dans les panneaux. (Pas encore de travail)"
 
+msgid "HDR"
+msgstr "HDR"
+
+msgid "Chromaticities"
+msgstr "Chromaticités"
+
+msgid "HDR Data"
+msgstr "Données HDR"
+
+msgid "Tonemap Algorithm"
+msgstr "Algorithme de tonemap"
+
+msgid "Gamut Mapping"
+msgstr "Mappage de gamut"
+
 msgid "Language and Colors"
 msgstr "Langue et couleurs"
 
@@ -6429,18 +6518,6 @@ msgstr "Minimiser le filtre"
 
 msgid "Magnify Filter"
 msgstr "Amplifier le filtre"
-
-msgid "HDR"
-msgstr "HDR"
-
-msgid "Chromaticities"
-msgstr "Chromaticités"
-
-msgid "HDR Data"
-msgstr "Données HDR"
-
-msgid "Tonemap Algorithm"
-msgstr "Algorithme de tonemap"
 
 msgid "Thumbnails"
 msgstr "Thumbnails"
@@ -6708,8 +6785,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
-"exr"
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
 msgstr ""
 "Expression régulière utilisée pour correspondre aux versions de clip. Il "
 "faut grouper trois choses (préfixe, numéro et suffixe). Si elle est laissée "
@@ -6920,6 +6997,9 @@ msgstr "Interface utilisateur/Demandeur de fichier"
 
 msgid "User Interface/Fonts"
 msgstr "Interface utilisateur/Polices"
+
+msgid "User Interface/HDR"
+msgstr "Interface utilisateur/HDR"
 
 msgid "User Interface/Language and Colors"
 msgstr "Interface utilisateur/Langue et couleurs"
@@ -7740,6 +7820,9 @@ msgstr "Commutation à propos de la fenêtre"
 
 #~ msgid "Complexity"
 #~ msgstr "Complexité"
+
+#~ msgid "Could not read annotation image from view"
+#~ msgstr "Impossible de lire l’image d’annotation depuis la vue"
 
 #~ msgid "Stage Cache"
 #~ msgstr "Cache d'étape"

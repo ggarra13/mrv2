@@ -519,7 +519,7 @@ auto playback = player->playback();
 if (playback == tl::timeline::Playback::Reverse)
    ui->uiView->stop();
 else
-   ui->uiView->playBackwards();} selected
+   ui->uiView->playBackwards();}
             tooltip {Play sequence backwards.} xywh {174 3 38 24} labelcolor 19
             class {mrv::Button}
           }
@@ -859,7 +859,7 @@ if (reason == FL_REASON_CLOSED)
         xywh {0 0 933 608} box FLAT_BOX resizable fixed_size_tuples {5  0 30  1 29  3 29  4 30  5 25 }
       } {
         Fl_Group uiMenuGroup {
-          label MenuBar open
+          label MenuBar
           xywh {0 0 933 30} box FLAT_BOX labeltype NO_LABEL
         } {
           Fl_Group {} {open
@@ -1119,7 +1119,7 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
           }
         }
         Fl_Tile uiTileGroup {
-          label TileGroup
+          label TileGroup open
           xywh {0 59 933 465} labeltype NO_LABEL
           code0 {;}
           class {mrv::Tile}
@@ -1133,7 +1133,7 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
             code1 {uiMain->workspace = uiViewGroup;}
             class Fl_Flex
           } {
-            Fl_Group uiToolsGroup {
+            Fl_Group uiToolsGroup {open
               xywh {0 59 42 435} box FLAT_BOX
             } {
               Fl_Button uiScrub {
@@ -1146,7 +1146,7 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
                 user_data this user_data_type {ViewerUI*}
                 callback {uiView->setActionMode( mrv::ActionMode::kSelection );
 
-if (Fl::event_clicks() >= 1)
+if (!mrv::App::demo_mode && Fl::event_clicks() >= 1)
 {
    mrv::panel::color_area_panel_cb( nullptr, v);
    Fl::event_clicks(0);
@@ -1156,7 +1156,10 @@ if (Fl::event_clicks() >= 1)
               }
               Fl_Button uiDraw {
                 user_data this user_data_type {ViewerUI*}
-                callback {uiView->setActionMode( mrv::ActionMode::kDraw );
+                callback {if (mrv::App::demo_mode)
+   return;
+
+uiView->setActionMode( mrv::ActionMode::kDraw );
 
 if (Fl::event_clicks() >= 1)
 {
@@ -1168,19 +1171,27 @@ if (Fl::event_clicks() >= 1)
               }
               Fl_Button uiErase {
                 user_data this user_data_type {ViewerUI*}
-                callback {uiView->setActionMode( mrv::ActionMode::kErase );
+                callback {if (mrv::App::demo_mode)
+    return;
+    
+    
+uiView->setActionMode( mrv::ActionMode::kErase );
 
 if (Fl::event_clicks() >= 1)
 {
    mrv::panel::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
-}}
+}} selected
                 tooltip {Eraser Tool} image {../../icons/Erase.svg} compress_image 1 xywh {2 164 40 35} down_box DOWN_BOX selection_color 95
                 class {mrv::Button}
               }
               Fl_Button uiPolygon {
                 user_data this user_data_type {ViewerUI*}
-                callback {auto mode = mrv::ActionMode::kPolygon;
+                callback {if (mrv::App::demo_mode)
+    return;
+    
+auto mode = mrv::ActionMode::kPolygon;
+
 if (Fl::event_clicks() >= 1)
 {
    mrv::panel::annotations_panel_cb( nullptr, v);
@@ -1207,7 +1218,11 @@ uiView->setActionMode( mode );}
               }
               Fl_Button uiText {
                 user_data this user_data_type {ViewerUI*}
-                callback {uiView->setActionMode( mrv::ActionMode::kText );
+                callback {if (mrv::App::demo_mode)
+    return;  
+   
+
+uiView->setActionMode( mrv::ActionMode::kText );
 
 if (Fl::event_button() == FL_RIGHT_MOUSE)
 {
@@ -1226,7 +1241,10 @@ if (Fl::event_clicks() >= 1)
               }
               Fl_Button uiArrow {
                 user_data this user_data_type {ViewerUI*}
-                callback {uiView->setActionMode( mrv::ActionMode::kArrow );
+                callback {if (mrv::App::demo_mode)
+    return;  
+   
+uiView->setActionMode( mrv::ActionMode::kArrow );
 
 if (Fl::event_clicks() >= 1)
 {
@@ -1238,7 +1256,10 @@ if (Fl::event_clicks() >= 1)
               }
               Fl_Button uiRectangle {
                 user_data this user_data_type {ViewerUI*}
-                callback {auto mode = mrv::ActionMode::kRectangle;
+                callback {if (mrv::App::demo_mode)
+    return;  
+   
+auto mode = mrv::ActionMode::kRectangle;
 if (Fl::event_clicks() >= 1)
 {
    mrv::panel::annotations_panel_cb( nullptr, v);
@@ -1265,7 +1286,10 @@ uiView->setActionMode( mode );}
               }
               Fl_Button uiCircle {
                 user_data this user_data_type {ViewerUI*}
-                callback {auto mode = mrv::ActionMode::kCircle;
+                callback {if (mrv::App::demo_mode)
+    return;  
+   
+auto mode = mrv::ActionMode::kCircle;
 if (Fl::event_clicks() >= 1)
 {
    mrv::panel::annotations_panel_cb( nullptr, v);

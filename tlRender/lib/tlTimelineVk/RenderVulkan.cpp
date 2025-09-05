@@ -109,11 +109,20 @@ namespace tl
             dynamicState.dynamicStates = {
                 VK_DYNAMIC_STATE_VIEWPORT,
                 VK_DYNAMIC_STATE_SCISSOR,
+                
+#if USE_DYNAMIC_RGBA_WRITE_MASKS
+                // For dynamic R/G/B/A masks
                 VK_DYNAMIC_STATE_COLOR_WRITE_MASK_EXT,
-                // VK_DYNAMIC_STATE_STENCIL_COMPARE_MASK,
-                // VK_DYNAMIC_STATE_STENCIL_WRITE_MASK,
-                // VK_DYNAMIC_STATE_STENCIL_REFERENCE,
-                // VK_DYNAMIC_STATE_STENCIL_OP_EXT
+#endif
+
+                // For dynamic stencils
+#if USE_DYNAMIC_STENCILS
+                VK_DYNAMIC_STATE_STENCIL_TEST_ENABLE_EXT,
+                VK_DYNAMIC_STATE_STENCIL_COMPARE_MASK,
+                VK_DYNAMIC_STATE_STENCIL_WRITE_MASK,
+                VK_DYNAMIC_STATE_STENCIL_REFERENCE,
+                VK_DYNAMIC_STATE_STENCIL_OP_EXT
+#endif
             };
 
             // Get the vertex and fragment shaders

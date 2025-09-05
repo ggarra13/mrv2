@@ -877,11 +877,31 @@ namespace mrv
                     entry.c_str(), 0, (Fl_Callback*)select_hdr_tonemap_cb, ui,
                     mode);
                 item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                if (tonemap == (int)selected)
+                if (tonemap == selected)
                     item->set();
                 ++tonemap;
             }
+            
+            selected = static_cast<int>(hdrOptions.gamutMapping);
+            mode = FL_MENU_RADIO;
+            if (numFiles == 0)
+                mode |= FL_MENU_INACTIVE;
+            std::string gamut_root = _("Render/HDR/Gamut Mapping");
+            int gammut = 0;
+            for (const auto& algorithm : timeline::getHDRGamutMappingLabels())
+            {
+                const std::string entry = gamut_root + "/" + algorithm;
+                idx = menu->add(
+                    entry.c_str(), 0,
+                    (Fl_Callback*)select_hdr_gamut_mapping_cb, ui,
+                    mode);
+                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+                if (gammut == selected)
+                    item->set();
+                ++gammut;
+            }
         }
+            
 
         timeline::Playback playback = timeline::Playback::Stop;
 
@@ -1887,6 +1907,12 @@ namespace mrv
                 item->clear();
         }
 
+        idx = menu->add(_("Voice Annotation/Record"), 0,
+                        (Fl_Callback*) record_voice_annotation_cb, ui, 0);
+        idx = menu->add(_("Voice Annotation/Play"), 0,
+                        (Fl_Callback*) play_voice_annotation_cb, ui, 0);
+                        
+
 #ifdef MRV2_PYBIND11
         for (const auto& entry : pythonMenus)
         {
@@ -1934,7 +1960,7 @@ namespace mrv
                 (void*)&pythonMenus.at(entry), mode);
         }
 #endif
-
+        
         menu->add(
             _("Help/Documentation"), 0, (Fl_Callback*)help_documentation_cb,
             ui);

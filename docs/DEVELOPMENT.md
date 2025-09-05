@@ -105,12 +105,16 @@ etc/:
 Development Instructions
 ========================
 
+src/icons
+	Original SVG icons in .svg format.
+
 src/lib:
 
 	mrvApp     - Main application, command-line parsing and settings.
 	mrvCore    - Core functionality.
 	mrvDraw    - Annotation Drawing classes.
 	mrvEdit    - Editing callbacks and functions.
+	mrvIcons   - Binary SVG icons for faster loading.
 	mrvFl      - mrv2's classes for different functions 
 	             (needs refactoring).
 	mrvFlmm    - Mathias Melcher's Flmm_ColorA_Chooser.
@@ -123,7 +127,8 @@ src/lib:
 	mrvPDF     - PDF exporting classes.  Needs updating to FLTK's new
 		         PDF classes (don't work under Windows 8.1 thou)?
 	mrvPy      - Python (pybind11) code.  Must remove mrv2 namespace.
-	mrvUI      - Menus, Desktop and SVG loading functions. 
+	mrvUI      - Menus, Desktop and SVG loading functions.
+	mrvViewport- Viewport functions common to all backends.
 	mrvWidgets - FLTK custom widgets and main fluid UI (.fl) files.
 	             .fl files should be refactored to mrvUI?
 

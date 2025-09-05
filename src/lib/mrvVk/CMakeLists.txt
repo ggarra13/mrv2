@@ -4,35 +4,33 @@
 
 set(HEADERS
     mrvVkDefines.h
-    mrvVkJson.h        # done
-    mrvVkLines.h        # done
-    mrvVkShadersBinary.h       # done
-    mrvVkShaders.h       # done
-    mrvVkShape.h         # done
-    mrvVkTextEdit.h      # done
-    mrvVkUtil.h        # done
+    mrvVkJson.h        
+    mrvVkLines.h        
+    mrvVkShadersBinary.h       
+    mrvVkShaders.h       
+    mrvVkShape.h         
+    mrvVkTextEdit.h      
+    mrvVkUtil.h        
     mrvVkViewport.h
     mrvVkViewportPrivate.h
-    mrvVkWindow.h        # done
-    mrvTimelineViewport.h        # done
-    mrvTimelineViewportPrivate.h        # done
+    mrvVkWindow.h        
+    mrvTimelineViewportPrivate.h        
     mrvTimelineWidget.h               
-    )
+)
 
 set(SOURCES
-    # mrvVk2TextShape.cpp
-    mrvVkJson.cpp        # done
-    mrvVkLines.cpp        # done
-    mrvVkShaders.cpp        # done
-    mrvVkShape.cpp        # done
-    mrvVkTextEdit.cpp       # done
-    mrvVkUtil.cpp        # done
+    mrvVkJson.cpp        
+    mrvVkLines.cpp        
+    mrvVkShaders.cpp        
+    mrvVkShape.cpp        
+    mrvVkTextEdit.cpp       
+    mrvVkUtil.cpp        
     mrvVkViewport.cpp
     mrvVkViewportDraw.cpp
-    mrvVkViewportPrims.cpp  # done
-    mrvVkWindow.cpp        # done
-    mrvTimelineViewportEvents.cpp        # done
-    mrvTimelineViewport.cpp        # done
+    mrvVkViewportPrims.cpp  
+    mrvVkWindow.cpp        
+    mrvTimelineViewportEvents.cpp        
+    mrvTimelineViewport.cpp        
     mrvTimelineWidget.cpp
 )
 

@@ -1,14 +1,44 @@
 v1.4.1
 ======
-- Improved FPS reporting to not flicker so much or, on Vulkan, be double its value on Presentation mode.
+
+- Improved FPS reporting to not flicker so much or, on Wayland + Vulkan, be double its value on Presentation mode.
 - Fixed starting of mrv2/vmrv2 on Windows when the installation directory has international characters like üí etc.
 - Reverted to use FIFO instead of MAILBOX presentation mode in Vulkan.
 - Some Unicode (UTF-8) fixes.
-- Added back the page to modify the PATH variable and create Desktop shortcuts
-  on the Windows installer.  It is unfortunate that it is an all or nothing
-  cmake setting.
-- Fixed OpenGL backend with HDR to tonemap properly to 100nits like VLC does.
+- Fixed shortcuts on Windows installer without having to modify the PATH variable.
+- Fixed OpenGL backend with HDR to tonemap properly to 100nits.
+- Fixed Vulkan SDR backend with HDR to tonemap properly to 100nits.
 - Added missing Hable tonemap to Preferences->Render->Tonemap->Algorithm.
+- Added VSync support to Vulkan backend (so that FIFO/MAILBOX can be chosen).
+- Added Stereo 3D Scanlines, Columns and Checkerboard for Vulkan.
+- Added Render->HDR->Gamut Mapping controls.
+- Split Preferences->Render into Render and HDR.
+- Added Preferences->HDR->Gamut Mapping controls.
+- Fixed Stereo 3D Checkerboard on OpenGL due to deprecation of GL_POINTS.
+- Fixed hiding of pixel bar on Vulkan backend after opening/closing Preference Window.
+- Fixed some movies's play rate not being valid for timecode due to minor rounding errors.
+- Made Stereo 3D Anaglyph work on MacOS.
+- Updated Frame/Seconds Entry Widgets to allow calculations, so that you can
+  type, for example:
+  	  10 + 5 and get 15.
+- Updated compile to work with cmake 4.1.1.
+- Updated to OpenEXR v3.5 (from 3.2).
+- Updated to use Imath v3.2.1 (from 3.1.9)
+- Updated to use cpptrace v1.0.4
+- Updated beta builds to build OpenUSD on Windows and macOS 13, as disk space is no longer an issue (Thank you Microsoft!).
+- Refactored mrvGL/mrvTimelineViewport.cpp and mrvVk/mrvTimelineViewport.cpp to
+  common classes in mrvCommonBackend/mrvTimelineViewport.cpp
+- Refactored also mrvTimelineViewportEvents.cpp.
+- Flipped Y coordinate of pixel toolbar on the Vulkan backend to make it consistent with the OpenGL backend and OpenEXR which also has 0, 0 at the bottom left corner.
+- Fixed PDF thumbnail creation under Vulkan backend.
+- Improved focus on Timecode widgets.  Now entering them will draw the cursor
+  and leaving a timecode widget, will not throw focus.  This makes the whole
+  UI much more friendly.
+- Added .po translations to hdr utility.
+- Fixed switching languages on Linux and macOS.
+- Made demo mode pop up a license request every 5 minutes of use.
+- Made demo mode not allow clicking twice on draw actions.
+- Fixed dpkg and rpm uninstallers failing due to a syntax error on bash script.
 
 
 v1.4.0

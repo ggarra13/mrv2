@@ -403,6 +403,9 @@ namespace mrv
         hdr.get("tonemap_algorithm", tmp, 8);  // Hable is default, as VLC
         uiPrefs->uiPrefsTonemapAlgorithm->value(tmp);
         
+        hdr.get("gamut_mapping", tmp, 0);  // Auto is default
+        uiPrefs->uiPrefsGamutMapping->value(tmp);
+        
         DBG3;
         //
         // ui/colors
@@ -1322,6 +1325,7 @@ namespace mrv
         hdr.set("hdr_data", uiPrefs->uiPrefsHDRInfo->value());
         hdr.set("tonemap_algorithm",
                 uiPrefs->uiPrefsTonemapAlgorithm->value());
+        hdr.set("gamut_mapping", uiPrefs->uiPrefsGamutMapping->value());
         
         //
         // view/colors prefs
@@ -1700,7 +1704,7 @@ namespace mrv
 #endif
 
 #ifdef VULKAN_BACKEND
-                if (autoHide == kAutoHideOpenGLAndVulkan || !player ||
+                if (autoHide != kAutoHideOpenGLAndVulkan || !player ||
                     player->playback() == timeline::Playback::Stop)
                 {
                     ui->uiPixelBar->show();
@@ -1895,6 +1899,8 @@ namespace mrv
         timeline::HDROptions hdrOptions = ui->uiView->getHDROptions();
         hdrOptions.algorithm =
             static_cast<timeline::HDRTonemapAlgorithm>(uiPrefs->uiPrefsTonemapAlgorithm->value());
+        hdrOptions.gamutMapping =
+            static_cast<timeline::HDRGamutMapping>(uiPrefs->uiPrefsGamutMapping->value());
         ui->uiView->setHDROptions(hdrOptions);
 
         //

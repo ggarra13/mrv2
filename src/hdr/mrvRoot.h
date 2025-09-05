@@ -5,6 +5,8 @@
 namespace mrv
 {
 
+    extern std::string g_root_path;
+    
     /*
      * @brief  sets the MRV2_ROOT variable if not defined by trying to find
      *         the executable's root directory.

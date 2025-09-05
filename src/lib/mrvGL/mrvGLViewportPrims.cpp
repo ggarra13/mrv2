@@ -15,8 +15,8 @@
 
 #include "mrvFl/mrvTimelinePlayer.h"
 
-#include "mrvGL/mrvTimelineViewport.h"
-#include "mrvGL/mrvTimelineViewportPrivate.h"
+#include "mrvViewport/mrvTimelineViewport.h"
+
 #include "mrvGL/mrvGLViewportPrivate.h"
 #include "mrvGL/mrvGLErrors.h"
 #include "mrvGL/mrvGLUtil.h"

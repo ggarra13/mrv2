@@ -490,8 +490,8 @@ msgstr "{0} के लिए असमर्थित TLS प्रकार: �
 
 msgid ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/rt."
-"rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/"
+"rt.rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
 "\n"
@@ -648,8 +648,9 @@ msgid ""
 ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
 msgstr ""
 "\n"
-"'other' (:class:`~RationalTime`) को :attr:`start_time`/:attr:"
-"`end_time_exclusive` और बाउंड आर्ग्यूमेंट्स के अनुसार क्लैंप करें।\n"
+"'other' (:class:`~RationalTime`) "
+"को :attr:`start_time`/:attr:`end_time_exclusive` और बाउंड आर्ग्यूमेंट्स के अनुसार क्लैंप "
+"करें।\n"
 
 msgid ""
 "\n"
@@ -657,8 +658,9 @@ msgid ""
 ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
 msgstr ""
 "\n"
-"'other' (:class:`~TimeRange`) को :attr:`start_time`/:attr:"
-"`end_time_exclusive` और बाउंड आर्ग्यूमेंट्स के अनुसार क्लैंप करें।\n"
+"'other' (:class:`~TimeRange`) "
+"को :attr:`start_time`/:attr:`end_time_exclusive` और बाउंड आर्ग्यूमेंट्स के अनुसार क्लैंप "
+"करें।\n"
 
 msgid ""
 "\n"
@@ -3667,6 +3669,15 @@ msgstr "छवि बहुत बड़ा है. व्यूपोर्ट 
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "दृश्य आकार: {0} - X={1}, Y={2}"
 
+msgid "Could not read image data from view"
+msgstr "दृश्य से छवि डेटा पढ़ा नहीं जा सका"
+
+msgid "Play"
+msgstr "बजाएँ"
+
+msgid "Stop"
+msgstr "रूकें"
+
 msgid "Scrub"
 msgstr "स्क्रैप"
 
@@ -3735,12 +3746,6 @@ msgid ""
 "Cannot create an annotation here for current frame.  An all frames "
 "annotation already exists."
 msgstr "वर्तमान फ्रेम के लिए यहाँ एक एनोटेशन बना नहीं सकता. सभी फ्रेम पहले से ही मौजूद है."
-
-msgid "Play"
-msgstr "बजाएँ"
-
-msgid "Stop"
-msgstr "रूकें"
 
 msgid "2.35"
 msgstr "2.35"
@@ -3984,6 +3989,9 @@ msgstr "रेंडर/HDR डेटा/सक्रिय"
 
 msgid "Render/HDR/Tonemap"
 msgstr "रेंडर/HDR/टोनमैप"
+
+msgid "Render/HDR/Gamut Mapping"
+msgstr "रेंडर/HDR/सरगम मानचित्रण"
 
 msgid "Playback/Stop"
 msgstr "प्लेबैक/रूकें"
@@ -4290,6 +4298,12 @@ msgstr "सिंक/स्वीकारें/व्याख्याएँ"
 
 msgid "Sync/Accept/Audio"
 msgstr "सिंक/स्वीकारें/ऑडियो"
+
+msgid "Voice Annotation/Record"
+msgstr "वॉइस एनोटेशन/रिकॉर्ड"
+
+msgid "Voice Annotation/Play"
+msgstr "वॉइस एनोटेशन/चलाएँ"
 
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
@@ -5773,6 +5787,72 @@ msgstr "मध्यम"
 msgid "Fast"
 msgstr "तेज"
 
+msgid "Ignore"
+msgstr "अनदेखा करें"
+
+msgid "Apply"
+msgstr "लागू करें"
+
+msgid "From File"
+msgstr "फ़ाइल से"
+
+msgid "Inactive"
+msgstr "निष्क्रिय"
+
+msgid "Active"
+msgstr "सक्रिय"
+
+msgid "ST2094_40"
+msgstr "एसटी2094_40"
+
+msgid "ST2094_10"
+msgstr "एसटी2094_10"
+
+msgid "Clip"
+msgstr "क्लिप"
+
+msgid "BT2390"
+msgstr "बीटी2390"
+
+msgid "BT2446A"
+msgstr "बीटी2446ए"
+
+msgid "Spline"
+msgstr "स्प्लाइन"
+
+msgid "Reinhard"
+msgstr "रीनहार्ड"
+
+msgid "Mobius"
+msgstr "मोबियस"
+
+msgid "Hable"
+msgstr "Hable"
+
+msgid "Linear Light"
+msgstr "रैखिक प्रकाश"
+
+msgid "Auto"
+msgstr "स्वचालित"
+
+msgid "Perceptual"
+msgstr "परसेप्चुअल"
+
+msgid "Relative"
+msgstr "सापेक्ष"
+
+msgid "Absolute"
+msgstr "निरपेक्ष"
+
+msgid "Desaturate"
+msgstr "सैट्युरेशन घटाएँ"
+
+msgid "Darken"
+msgstr "गहरा करें"
+
+msgid "Highlight"
+msgstr "हाइलाइट करें"
+
 msgid "base"
 msgstr "base"
 
@@ -5808,9 +5888,6 @@ msgstr "सीआई एक्सवाय"
 
 msgid "CIE xyY"
 msgstr "सीआईआई एक्सy"
-
-msgid "From File"
-msgstr "फ़ाइल से"
 
 msgid "Full Range"
 msgstr "पूरा सीमा"
@@ -6198,6 +6275,21 @@ msgstr "फलक"
 msgid "Sets the font to use in panels. (Not yet working)"
 msgstr "फलक में उपयोग हेतु फ़ॉन्ट सेट करता है. (अभी कार्य नहीं)"
 
+msgid "HDR"
+msgstr "HDR"
+
+msgid "Chromaticities"
+msgstr "रंगमिति"
+
+msgid "HDR Data"
+msgstr "HDR डेटा"
+
+msgid "Tonemap Algorithm"
+msgstr "टोनमैप एल्गोरिदम"
+
+msgid "Gamut Mapping"
+msgstr "गेमट मैपिंग"
+
 msgid "Language and Colors"
 msgstr "भाषा और रंग"
 
@@ -6312,18 +6404,6 @@ msgstr "न्यूनतमीकरण फ़िल्टर"
 
 msgid "Magnify Filter"
 msgstr "आवाही फ़िल्टर"
-
-msgid "HDR"
-msgstr "HDR"
-
-msgid "Chromaticities"
-msgstr "रंगमिति"
-
-msgid "HDR Data"
-msgstr "HDR डेटा"
-
-msgid "Tonemap Algorithm"
-msgstr "टोनमैप एल्गोरिदम"
 
 msgid "Thumbnails"
 msgstr "लघु छवि"
@@ -6571,8 +6651,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
-"exr"
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
 msgstr ""
 "क्लिप संस्करणों से मेल खाने के लिए उपयोग किया जाने वाला नियमित अभिव्यक्ति (रेगुलर "
 "एक्सप्रेशन)। इसमें तीन चीजें (प्रिफिक्स, संख्या, और सफिक्स) का समूह होना चाहिए। यदि इसे "
@@ -6771,6 +6851,9 @@ msgstr "प्रयोक्ता अंतरफलक/फ़ाइल नि
 
 msgid "User Interface/Fonts"
 msgstr "प्रयोक्ता अंतरफलक/फ़ॉन्ट्स"
+
+msgid "User Interface/HDR"
+msgstr "उपयोगकर्ता इंटरफ़ेस/HDR"
 
 msgid "User Interface/Language and Colors"
 msgstr "उपयोक्ता इंटरफेस/ भाषा तथा रंग"
@@ -7581,6 +7664,9 @@ msgstr "विंडो के बारे में टॉगल करें"
 
 #~ msgid "Complexity"
 #~ msgstr "जटिलता"
+
+#~ msgid "Could not read annotation image from view"
+#~ msgstr "दृश्य से एनोटेशन छवि पढ़ी नहीं जा सकी"
 
 #~ msgid "Stage Cache"
 #~ msgstr "चरण कैश"

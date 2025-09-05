@@ -950,7 +950,6 @@ namespace mrv
         {
             TLRENDER_P();
             p.timelineWindow->cursorEnter(false);
-            Fl::focus(p.ui->uiView);
             return 1;
         }
 

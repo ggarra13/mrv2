@@ -7,12 +7,15 @@
 #if defined(MRV2_BACKEND_VK)
 #  define VULKAN_BACKEND 1
 #  define VULKAN_NAME "Vulkan"
+#  define BACKEND mrv::vulkan
+#  define BACKEND_NAMESPACE vulkan
+#  define BACKEND_SUPER_CLASS VkWindow
 #elif defined(MRV2_BACKEND_GL)
 #  define OPENGL_BACKEND 1
 #  define OPENGL_NAME "OpenGL"
-#elif defined(MRV2_BACKEND_BOTH)
-#  define VULKAN_BACKEND 1
-#  define OPENGL_BACKEND 1
+#  define BACKEND mrv::opengl
+#  define BACKEND_NAMESPACE opengl
+#  define BACKEND_SUPER_CLASS GLWindow
 #endif
 
 

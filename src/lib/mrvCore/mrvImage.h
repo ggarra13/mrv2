@@ -4,16 +4,21 @@
 
 #pragma once
 
+#include <tlCore/Image.h>
+
+#include <Imath/half.h>
+
 #include <cstddef>
 #include <cstdint>
 #include <cstring> // For memcpy
 #include <cstddef>
 #include <limits>
-
-#include <Imath/half.h>
+#include <memory>
 
 namespace mrv
 {
+    using namespace tl;
+    
     namespace
     {
         // Saturating cast: integers clamp to their min/max, floats just cast.
@@ -352,5 +357,13 @@ void compositeImageOver(
             }
         }
     }
+    
+    void flipImageInY(const std::shared_ptr<image::Image> image);
+    
+    void composite_RGBA_U8(std::shared_ptr<image::Image>& dest,
+                           std::shared_ptr<image::Image>& source);
 
+    void convert_RGBA_to_RGB_U8(std::shared_ptr<image::Image>& dest,
+                                std::shared_ptr<image::Image>& source);
+    
 } // namespace mrv

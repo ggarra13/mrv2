@@ -8,14 +8,12 @@
 #include "mrViewer.h"
 #include "mrvHotkeyUI.h"
 
-#include "mrvApp/mrvSettingsObject.h"
-
-#include "mrvPanels/mrvPanelsCallbacks.h"
-
 #include "mrvNetwork/mrvDummyClient.h"
 
 #include "mrvUI/mrvDesktop.h"
 #include "mrvUI/mrvMonitor.h"
+
+#include "mrvViewport/mrvTimelineViewport.h"
 
 #include "mrvVk/mrvVkViewportPrivate.h"
 #include "mrvVk/mrvVkDefines.h"
@@ -23,15 +21,11 @@
 #include "mrvVk/mrvVkShaders.h"
 #include "mrvVk/mrvVkShadersBinary.h"
 #include "mrvVk/mrvVkShape.h"
-#include "mrvVk/mrvTimelineViewport.h"
-#include "mrvVk/mrvTimelineViewportPrivate.h"
 #include "mrvVk/mrvVkViewport.h"
 
-#include "mrvFl/mrvOCIO.h"
 #include "mrvFl/mrvIO.h"
-#include "mrvFl/mrvTimelinePlayer.h"
 
-#include "mrvWidgets/mrvMultilineInput.h"
+#include "mrvWidgets/mrvMultilineInput.h"  // for annotationsPanel->notes
 
 #include "mrvCore/mrvColor.h"
 #include "mrvCore/mrvColorSpaces.h"
@@ -39,9 +33,7 @@
 #include "mrvCore/mrvSequence.h"
 #include "mrvCore/mrvI8N.h"
 
-
 #include <tlTimelineVk/RenderShadersBinary.h>
-
 
 #include <tlCore/FontSystem.h>
 #include <tlCore/StringFormat.h>
@@ -56,11 +48,6 @@
 #include <tlVk/Util.h>
 
 #include <FL/vk_enum_string_helper.h>
-
-
-
-
-
 
 
 namespace
@@ -569,8 +556,12 @@ namespace mrv
             
             // Get the command buffer started for the current frame.
             VkCommandBuffer cmd = getCurrentCommandBuffer();
-            end_render_pass();
 
+            // Clear the frame
+            begin_render_pass(cmd);
+            end_render_pass(cmd);
+
+            // Store command for easy access.
             vk.cmd = cmd;
             
             const auto& viewportSize = getViewportSize();

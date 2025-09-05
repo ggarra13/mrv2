@@ -53,7 +53,7 @@ namespace mrv
             Fl_PDF_File_Surface pdf;
             Fl_PDF_File_Surface::Page_Format page_format;
                     
-            int width = 0, height = 0;
+            int pageWidth = 0, pageHeight = 0;
 
             int time_margin, image_margin;
             

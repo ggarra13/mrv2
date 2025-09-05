@@ -329,6 +329,22 @@ namespace tl
             
                 vlk::DepthStencilStateInfo ds;
                 ds.depthTestEnable = VK_FALSE;
+                
+#if USE_DYNAMIC_STENCILS
+                ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
+                ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_REPLACE,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_COMPARE_OP_ALWAYS);
+                
+                vkCmdSetStencilWriteMask(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         0xFF);
+                vkCmdSetStencilCompareMask(p.cmd,
+                                           VK_STENCIL_FACE_FRONT_AND_BACK,
+                                           0xFF);
+                vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK, 1);
+#else
                 ds.stencilTestEnable = VK_TRUE;
             
                 VkStencilOpState stencilOp = {};
@@ -339,11 +355,9 @@ namespace tl
                 stencilOp.compareMask = 0xFF;
                 stencilOp.writeMask = 0xFF;
                 stencilOp.reference = 1;
+                ds.front = ds.back = stencilOp;
+#endif
 
-                ds.front = stencilOp;
-                ds.back = stencilOp;
-
-            
                 // Draw left stencil mask
                 createPipeline("wipe_left_stencil", pipelineLayoutName,
                                p.fbo->getClearRenderPass(),
@@ -380,6 +394,21 @@ namespace tl
             
                 vlk::DepthStencilStateInfo ds;
                 ds.depthTestEnable = VK_FALSE;
+
+#if USE_DYNAMIC_STENCILS
+                ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
+                ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_COMPARE_OP_EQUAL);
+                vkCmdSetStencilCompareMask(p.cmd,
+                                           VK_STENCIL_FACE_FRONT_AND_BACK,
+                                           0xFF);
+                vkCmdSetStencilWriteMask(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         0x00);
+                vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK, 1);
+#else
                 ds.stencilTestEnable = VK_TRUE;
             
                 VkStencilOpState stencilOp = {};
@@ -387,12 +416,11 @@ namespace tl
                 stencilOp.passOp = VK_STENCIL_OP_KEEP;
                 stencilOp.depthFailOp = VK_STENCIL_OP_KEEP;
                 stencilOp.compareOp = VK_COMPARE_OP_EQUAL;
+                stencilOp.reference = 1;
                 stencilOp.compareMask = 0xFF;
                 stencilOp.writeMask = 0x00;
-                stencilOp.reference = 1;
-
-                ds.front = stencilOp;
-                ds.back = stencilOp;
+                ds.front = ds.back = stencilOp;
+#endif
             
                 createPipeline("wipe_image1",
                                pipelineLayoutName,
@@ -469,9 +497,25 @@ namespace tl
             
                 vlk::DepthStencilStateInfo ds;
                 ds.depthTestEnable = VK_FALSE;
+                
+#if USE_DYNAMIC_STENCILS
+                ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
+                ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_REPLACE,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_COMPARE_OP_ALWAYS);
+                vkCmdSetStencilCompareMask(p.cmd,
+                                           VK_STENCIL_FACE_FRONT_AND_BACK,
+                                           0xFF);
+                vkCmdSetStencilWriteMask(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         0xFF);
+                vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK, 1);            
+#else
                 ds.stencilTestEnable = VK_TRUE;
             
                 VkStencilOpState stencilOp = {};
+
                 stencilOp.failOp = VK_STENCIL_OP_KEEP;
                 stencilOp.passOp = VK_STENCIL_OP_REPLACE;
                 stencilOp.depthFailOp = VK_STENCIL_OP_KEEP;
@@ -479,10 +523,8 @@ namespace tl
                 stencilOp.compareMask = 0xFF;
                 stencilOp.writeMask = 0xFF;
                 stencilOp.reference = 1;
-
-                ds.front = stencilOp;
-                ds.back = stencilOp;
-
+                ds.front = ds.back = stencilOp;
+#endif
             
                 // Draw left stencil mask
                 createPipeline("wipe_right_stencil", pipelineLayoutName,
@@ -533,6 +575,20 @@ namespace tl
 
                 ds.front = stencilOp;
                 ds.back = stencilOp;
+
+                ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
+                ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_COMPARE_OP_EQUAL);
+                vkCmdSetStencilCompareMask(p.cmd,
+                                           VK_STENCIL_FACE_FRONT_AND_BACK,
+                                           0xFF);
+                vkCmdSetStencilWriteMask(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         0x00);
+                vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         1);
 
                 createPipeline("wipe_right_image",
                                pipelineLayoutName,
@@ -1080,9 +1136,11 @@ namespace tl
                 if (pushSize > 0)
                 {
                     std::vector<uint8_t> pushData(pushSize, 0);
-                    const pl_shader_res* res = p.placeboData->res;
+
                     VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+#if defined(TLRENDER_LIBPLACEBO)
                     std::size_t currentOffset = 0;
+                    const pl_shader_res* res = p.placeboData->res;
                     for (int i = 0; i < res->num_variables; ++i)
                     {
                         const struct pl_shader_var& shader_var = res->variables[i];
@@ -1116,6 +1174,7 @@ namespace tl
                     vkCmdPushConstants(p.cmd, pipelineLayout,
                                        VK_SHADER_STAGE_FRAGMENT_BIT, 0,
                                        pushData.size(), pushData.data());
+#endif
                 }
 
             

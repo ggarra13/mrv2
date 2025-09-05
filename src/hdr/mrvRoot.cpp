@@ -48,34 +48,29 @@ namespace
         // Use a larger buffer for long paths (Windows supports up to
         // 32767 chars)
         DWORD result = GetModuleFileNameW(NULL, pname, DWORD(pathsize));
-        if (result == 0 || result >= pathsize)
-        {
+        if (result == 0 || result >= pathsize) {
             std::wcerr << L"GetModuleFileNameW failed or buffer too small"
                        << std::endl;
             return -1;
         }
 
         // Check if the file exists
-        if (GetFileAttributesW(pname) == INVALID_FILE_ATTRIBUTES)
-        {
+        if (GetFileAttributesW(pname) == INVALID_FILE_ATTRIBUTES) {
             std::wcerr << L"File does not exist or is inaccessible"
                        << std::endl;
-            ;
             return -1;
         }
-
-        // Replace backslashes with forward slashes
-        wchar_t* p = pname;
-        while (*p)
-        {
-            if (*p == L'\\')
-                *p = L'/';
-            p++;
-        }
-
+    
+        // // Replace backslashes with forward slashes
+        // wchar_t* p = pname;
+        // while (*p) {
+        //     if (*p == L'\\') *p = L'/';
+        //     p++;
+        // }
+        
         return 0; // Success
     }
-#else // !_WIN32
+#else  // !_WIN32
     /*
      * Mechanism to handle determining *where* the exe actually lives
      */
@@ -177,7 +172,9 @@ namespace
 
 namespace mrv
 {
-
+    // Store root path of mrv2's (Installation Directory)
+    std::string g_root_path;
+    
     void set_root_path(const int argc, char** argv)
     {
 #ifdef _WIN32
@@ -200,6 +197,8 @@ namespace mrv
         fs::path parent = rootdir.parent_path(); // Skip executable
         rootdir = parent.parent_path();          // Skip bin/ directory
 
+        g_root_path = rootdir.u8string();
+        
         std::wstring root_str = rootdir.wstring();
         if (setenv(L"MRV2_ROOT", root_str.c_str(), 1) != 0)
         {
@@ -224,7 +223,12 @@ namespace mrv
             fs::path parent = rootdir.parent_path(); // skip executable
             rootdir = parent.parent_path();          // skip bin/ directory
 
-            setenv("MRV2_ROOT", rootdir.string().c_str(), 1);
+            setenv("MRV2_ROOT", rootdir.u8string().c_str(), 1);
+            g_root_path = rootdir.u8string();
+        }
+        else
+        {
+            g_root_path = root;
         }
 #endif
     }

@@ -59,9 +59,11 @@ if(OTIO_FOUND AND NOT TARGET OTIO::opentimelineio)
     set_target_properties(OTIO::opentimelineio PROPERTIES
         IMPORTED_LOCATION "${opentimelineio_LIBRARY}"
         INTERFACE_COMPILE_DEFINITIONS opentimelineio_FOUND
-        INTERFACE_INCLUDE_DIRECTORIES "${OTIO_INCLUDE_DIR};${OTIO_DEPS_INCLUDE_DIRS}")
+        INTERFACE_INCLUDE_DIRECTORIES "${OTIO_INCLUDE_DIR};${OTIO_DEPS_INCLUDE_DIRS}"
+	INTERFACE_LINK_LIBRARIES "OTIO::opentime")
 endif()
 if(OTIO_FOUND AND NOT TARGET OTIO)
     add_library(OTIO INTERFACE)
-    target_link_libraries(OTIO INTERFACE OTIO::opentimelineio OTIO::opentime)
+    target_link_libraries(OTIO INTERFACE OTIO::opentimelineio)
+    target_link_libraries(OTIO INTERFACE OTIO::opentime)
 endif()

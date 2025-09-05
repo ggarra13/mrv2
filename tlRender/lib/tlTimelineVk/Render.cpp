@@ -99,6 +99,7 @@ namespace
         return output;
     }
 
+#if defined(TLRENDER_LIBPLACEBO)
     VkFormat to_vk_format(pl_fmt fmt)
     {
         int size = fmt->internal_size / fmt->num_components;
@@ -222,7 +223,8 @@ namespace
 
         return VK_FORMAT_UNDEFINED;
     }
-
+#endif
+    
 } // namespace
 
 namespace tl
@@ -875,6 +877,18 @@ namespace tl
                   VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
             ctx.vkCmdSetColorWriteMaskEXT(cmd, 0, 1, allMask);
 
+            ctx.vkCmdSetStencilTestEnableEXT(cmd, VK_FALSE);
+            ctx.vkCmdSetStencilOpEXT(cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                     VK_STENCIL_OP_KEEP,
+                                     VK_STENCIL_OP_KEEP,
+                                     VK_STENCIL_OP_KEEP,
+                                     VK_COMPARE_OP_ALWAYS);
+            
+            vkCmdSetStencilCompareMask(cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                       0xFFFFFFFF);
+            vkCmdSetStencilWriteMask(cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                     0xFFFFFFFF);
+
             begin(renderSize, renderOptions);
         }
 
@@ -949,7 +963,7 @@ namespace tl
                     "transform.mvp", transform, vlk::kShaderVertex);
                 p.shaders["mesh"]->addPush(
                       "color", color, vlk::kShaderFragment);
-                  _createBindingSet(p.shaders["mesh"]);
+                _createBindingSet(p.shaders["mesh"]);
               }
 
               // Shader used to create a 2D mesh with colors
@@ -1969,40 +1983,44 @@ namespace tl
             
                     pl_shader_reset(p.placeboData->shader, &shader_params);
 
-                    pl_color_map_params cmap;
-                    memset(&cmap, 0, sizeof(pl_color_map_params));
+                    pl_color_map_params cmap = pl_color_map_high_quality_params;
 
                     // defaults, generates LUTs if state is set.
                     cmap.gamut_mapping = &pl_gamut_map_perceptual;
-
-                    // PL_GAMUT_MAP_CONSTANTS is defined in wrong order for C++
-                    cmap.gamut_constants = {0};
-                    cmap.gamut_constants.perceptual_deadzone = 0.3F;
-                    cmap.gamut_constants.perceptual_strength = 0.8F;
-                    cmap.gamut_constants.colorimetric_gamma = 1.80f;
-                    cmap.gamut_constants.softclip_knee = 0.70f;
-                    cmap.gamut_constants.softclip_desat = 0.35f;
+                    switch (p.hdrOptions.gamutMapping)
+                    {
+                    case timeline::HDRGamutMapping::Clip:
+                        cmap.gamut_mapping = &pl_gamut_map_clip;
+                        break;
+                    case timeline::HDRGamutMapping::Perceptual:
+                        cmap.gamut_mapping = &pl_gamut_map_perceptual;
+                        break;
+                    case timeline::HDRGamutMapping::Relative:
+                        cmap.gamut_mapping = &pl_gamut_map_relative;
+                        break;
+                    case timeline::HDRGamutMapping::Saturation:
+                        cmap.gamut_mapping = &pl_gamut_map_saturation;
+                        break;
+                    case timeline::HDRGamutMapping::Absolute:
+                        cmap.gamut_mapping = &pl_gamut_map_absolute;
+                        break;
+                    case timeline::HDRGamutMapping::Desaturate:
+                        cmap.gamut_mapping = &pl_gamut_map_desaturate;
+                        break;
+                    case timeline::HDRGamutMapping::Darken:
+                        cmap.gamut_mapping = &pl_gamut_map_darken;
+                        break;
+                    case timeline::HDRGamutMapping::Highlight:
+                        cmap.gamut_mapping = &pl_gamut_map_highlight;
+                        break;
+                    case timeline::HDRGamutMapping::Linear:
+                        cmap.gamut_mapping = &pl_gamut_map_linear;
+                        break;
+                    default:
+                        break;
+                    }
 
                     cmap.tone_mapping_function = nullptr;
-
-                    cmap.tone_constants = {0};
-                    cmap.tone_constants.knee_adaptation = 0.4f;
-                    cmap.tone_constants.knee_minimum = 0.1f;
-                    cmap.tone_constants.knee_maximum = 0.8f;
-                    cmap.tone_constants.knee_default = 0.4f;
-                    cmap.tone_constants.knee_offset = 1.0f;
-
-                    cmap.tone_constants.slope_tuning = 1.5f;
-                    cmap.tone_constants.slope_offset = 0.2f;
-
-                    cmap.tone_constants.spline_contrast = 0.5f;
-
-                    cmap.tone_constants.reinhard_contrast = 0.5f;
-                    cmap.tone_constants.linear_knee = 0.3f;
-
-                    cmap.tone_constants.exposure = 1.0f;
-
-                    cmap.contrast_smoothness = 3.5f;
 
                     const image::HDRData& data = p.hdrOptions.hdrData;
 
@@ -2102,6 +2120,8 @@ namespace tl
                         {
                             // \@todo:  How to handle this?
                             // PL_COLOR_TRC_DOLBYVISION does not exist.
+                            // According to libplacebo:
+                            // "Unlikely to ever be implemented"
                             // dst_colorspace.transfer = ???
                             dst_colorspace.transfer = PL_COLOR_TRC_PQ;
                         }
@@ -2120,18 +2140,10 @@ namespace tl
                     }
                     else
                     {
-                        cmap.lut3d_size[0] = 48;
-                        cmap.lut3d_size[1] = 32;
-                        cmap.lut3d_size[2] = 256;
-                        cmap.lut_size = 256;
-                        cmap.visualize_rect.x0 = 0;
-                        cmap.visualize_rect.y0 = 0;
-                        cmap.visualize_rect.x1 = 1;
-                        cmap.visualize_rect.y1 = 1;
-                        cmap.contrast_smoothness = 3.5f;
-
                         dst_colorspace.primaries = PL_COLOR_PRIM_BT_709;
                         dst_colorspace.transfer = PL_COLOR_TRC_BT_1886;
+                        dst_colorspace.hdr.min_luma = 0.F;
+                        dst_colorspace.hdr.max_luma = 100.0F; // SDR peak in nits
 
                         if (hasHDR)
                         {
@@ -2181,19 +2193,16 @@ namespace tl
                                     &pl_tone_map_linear_light;
                                 break;
                             case timeline::HDRTonemapAlgorithm::ST2094_40:
-                            default:
                                 cmap.tone_mapping_function =
                                     &pl_tone_map_st2094_40;
                                 break;
+                            default:
+                                break;
                             }
-                            dst_colorspace.hdr.min_luma = 0.F;
-                            dst_colorspace.hdr.max_luma = 100.0F; // SDR peak in nits
                         }
                         else
                         {
                             cmap.tone_mapping_function = &pl_tone_map_hable;
-                            dst_colorspace.hdr.min_luma = 0.F;
-                            dst_colorspace.hdr.max_luma = 100.0F; // SDR peak in nits
                         }
                     }
 
@@ -2395,6 +2404,7 @@ namespace tl
                 }
 
 
+#if defined(TLRENDER_LIBPLACEBO)
                 try
                 {
                     if (p.placeboData)
@@ -2410,6 +2420,7 @@ namespace tl
                     p.placeboData.reset();
                     throw e;
                 }
+#endif
                     
 #if USE_PRECOMPILED_SHADERS
                 p.shaders["display"] =
@@ -2472,11 +2483,14 @@ namespace tl
         }
     
 
+            
+#if defined(TLRENDER_LIBPLACEBO)
         std::string Render::_debugPLVar(const struct pl_shader_var& shader_var)
         {
+            
+            std::stringstream s;
             const struct pl_var var = shader_var.var;
             std::string glsl_type = pl_var_glsl_type_name(var);
-            std::stringstream s;
             s << "const " << glsl_type << " " << var.name;
             if (!shader_var.data)
             {
@@ -2547,7 +2561,10 @@ namespace tl
                     break;
                 }
             }
+            
             return s.str();
         }
+#endif
+        
     } // namespace timeline_vlk
 } // namespace tl

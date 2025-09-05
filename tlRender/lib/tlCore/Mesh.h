@@ -74,7 +74,7 @@ namespace tl
 
         //! Create a two-dimensional box mesh.
         TriangleMesh2 box(const math::Box2f&, bool flipV = false);
-
+        
         //! Create a mesh for drawing checkers.
         geom::TriangleMesh2 checkers(
             const math::Box2i&, const image::Color4f& color0,
@@ -85,6 +85,16 @@ namespace tl
             const math::Vector2f& p, const math::Vector2f& v0,
             const math::Vector2f& v1);
 
+        //! Create a mesh for drawing checkers.
+        geom::TriangleMesh2 checkers(
+            const math::Box2i&, const math::Size2i& checkerSize);
+        
+        //! Create a mesh for drawing scanlines.
+        geom::TriangleMesh2 scanlines(const math::Box2i&);
+        
+        //! Create a mesh for drawing columns.
+        geom::TriangleMesh2 columns(const math::Box2i&);
+        
         //! Create a sphere triangle mesh.
         TriangleMesh3
         sphere(float radius, size_t xResolution, size_t yResolution);

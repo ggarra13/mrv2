@@ -11,14 +11,14 @@ This version consolidates and fixes a number of issues on the Vulkan backend.
 It adds saving of HDR frame metadata in movies.  Fixes Prores and DNxHR profiles.  Fixes crashes with some .gifs.  Fixes some Wayland crashes and hangs on the Vulkan backend.  Adds international characters support to Vulkan's Text annotations.  Many other Vulkan fixes and improvements.
 
 
-Main Web page (with links to videos and online documentation):
+Main Web page (with links to videos, donations and online documentation):
 https://mrv2.sourceforge.io
 
 Release History and Binaries:
 https://github.com/ggarra13/mrv2/releases/
 https://sourceforge.net/projects/mrv2/files/
 
-Source code and build instructions:
+Source code, donations and build instructions:
 https://www.github.com/ggarra13/mrv2
 
 

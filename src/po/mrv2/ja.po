@@ -504,8 +504,8 @@ msgstr "{0} に対するオペランド型がサポートされていません: 
 
 msgid ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/rt."
-"rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/"
+"rt.rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
 "\n"
@@ -594,8 +594,8 @@ msgid ""
 "Convert a time with microseconds string (``HH:MM:ss`` where ``ss`` is an "
 "integer or a decimal number) into a :class:`~RationalTime`."
 msgstr ""
-"マイクロ秒付きの時間文字列（``HH:MM:ss``、ここで``ss``は整数または小数）を :"
-"class:`~RationalTime` に変換します。"
+"マイクロ秒付きの時間文字列（``HH:MM:ss``、ここで``ss``は整数または小数）"
+"を :class:`~RationalTime` に変換します。"
 
 msgid ""
 "\n"
@@ -663,8 +663,9 @@ msgid ""
 ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
 msgstr ""
 "\n"
-"引数 'other' (:class:`~RationalTime`) を :attr:`start_time`/:attr:"
-"`end_time_exclusive` および境界引数に従ってクランプします。\n"
+"引数 'other' (:class:`~RationalTime`) "
+"を :attr:`start_time`/:attr:`end_time_exclusive` および境界引数に従ってクラン"
+"プします。\n"
 
 msgid ""
 "\n"
@@ -672,8 +673,9 @@ msgid ""
 ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
 msgstr ""
 "\n"
-"引数 'other' (:class:`~TimeRange`) を :attr:`start_time`/:attr:"
-"`end_time_exclusive` および境界引数に従ってクランプします。\n"
+"引数 'other' (:class:`~TimeRange`) "
+"を :attr:`start_time`/:attr:`end_time_exclusive` および境界引数に従ってクラン"
+"プします。\n"
 
 msgid ""
 "\n"
@@ -3702,6 +3704,15 @@ msgstr "彼らが都を守ってくれます"
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "ビューポートサイズ: {0} - X={1}, Y={2}"
 
+msgid "Could not read image data from view"
+msgstr "ビューから画像データを読み取れませんでした"
+
+msgid "Play"
+msgstr "再生"
+
+msgid "Stop"
+msgstr "停止"
+
 msgid "Scrub"
 msgstr "スクラブ"
 
@@ -3772,12 +3783,6 @@ msgid ""
 msgstr ""
 "現在のフレームに注釈を作成できません。すべてのフレームの注釈がすでに存在しま"
 "す。"
-
-msgid "Play"
-msgstr "再生"
-
-msgid "Stop"
-msgstr "停止"
 
 msgid "2.35"
 msgstr "2.35"
@@ -4021,6 +4026,9 @@ msgstr "レンダー/HDRデータ/アクティブ"
 
 msgid "Render/HDR/Tonemap"
 msgstr "レンダー/HDR/トーンマップ"
+
+msgid "Render/HDR/Gamut Mapping"
+msgstr "レンダー/HDR/色域マッピング"
 
 msgid "Playback/Stop"
 msgstr "再生/停止"
@@ -4327,6 +4335,12 @@ msgstr "同期/受信/注釈"
 
 msgid "Sync/Accept/Audio"
 msgstr "同期/受信/オーディオ"
+
+msgid "Voice Annotation/Record"
+msgstr "音声アノテーション/録音"
+
+msgid "Voice Annotation/Play"
+msgstr "音声アノテーション/再生"
 
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
@@ -5826,6 +5840,72 @@ msgstr "中間"
 msgid "Fast"
 msgstr "速い"
 
+msgid "Ignore"
+msgstr "無視"
+
+msgid "Apply"
+msgstr "適用"
+
+msgid "From File"
+msgstr "ファイルから"
+
+msgid "Inactive"
+msgstr "非アクティブ"
+
+msgid "Active"
+msgstr "アクティブ"
+
+msgid "ST2094_40"
+msgstr "ST2094_40"
+
+msgid "ST2094_10"
+msgstr "ST2094_10"
+
+msgid "Clip"
+msgstr "クリップ"
+
+msgid "BT2390"
+msgstr "BT2390"
+
+msgid "BT2446A"
+msgstr "BT2446A"
+
+msgid "Spline"
+msgstr "スプライン"
+
+msgid "Reinhard"
+msgstr "ラインハート"
+
+msgid "Mobius"
+msgstr "メビウス"
+
+msgid "Hable"
+msgstr "Hable"
+
+msgid "Linear Light"
+msgstr "リニア ライト"
+
+msgid "Auto"
+msgstr "自動"
+
+msgid "Perceptual"
+msgstr "知覚的"
+
+msgid "Relative"
+msgstr "相対"
+
+msgid "Absolute"
+msgstr "絶対"
+
+msgid "Desaturate"
+msgstr "彩度を下げる"
+
+msgid "Darken"
+msgstr "暗くする"
+
+msgid "Highlight"
+msgstr "ハイライト"
+
 msgid "base"
 msgstr "base"
 
@@ -5861,9 +5941,6 @@ msgstr "CIE XYZ"
 
 msgid "CIE xyY"
 msgstr "CIE xyY"
-
-msgid "From File"
-msgstr "ファイルから"
 
 msgid "Full Range"
 msgstr "フルレンジ"
@@ -6258,6 +6335,21 @@ msgstr "パネル"
 msgid "Sets the font to use in panels. (Not yet working)"
 msgstr "パネルで使用するフォントを設定します。（まだ動作していません）"
 
+msgid "HDR"
+msgstr "HDR"
+
+msgid "Chromaticities"
+msgstr "色度"
+
+msgid "HDR Data"
+msgstr "HDRデータ"
+
+msgid "Tonemap Algorithm"
+msgstr "トゥーンマップ アルゴリズム"
+
+msgid "Gamut Mapping"
+msgstr "色域マッピング"
+
 msgid "Language and Colors"
 msgstr "言語とカラー"
 
@@ -6372,18 +6464,6 @@ msgstr "縮小フィルタ"
 
 msgid "Magnify Filter"
 msgstr "拡大フィルタ"
-
-msgid "HDR"
-msgstr "HDR"
-
-msgid "Chromaticities"
-msgstr "色度"
-
-msgid "HDR Data"
-msgstr "HDRデータ"
-
-msgid "Tonemap Algorithm"
-msgstr "トゥーンマップ アルゴリズム"
 
 msgid "Thumbnails"
 msgstr "サムネイル"
@@ -6639,8 +6719,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
-"exr"
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
 msgstr ""
 "クリップバージョンに一致するための正規表現です。プレフィックス、番号、サ"
 "フィックスの3つをグループ化する必要があります。デフォルト値(_v)のままにする"
@@ -6842,6 +6922,9 @@ msgstr "ユーザーインターフェース/ファイルリクエスター"
 
 msgid "User Interface/Fonts"
 msgstr "ユーザーインターフェース/フォント"
+
+msgid "User Interface/HDR"
+msgstr "ユーザーインターフェース/HDR"
 
 msgid "User Interface/Language and Colors"
 msgstr "ユーザーインターフェース/言語とカラー"
@@ -7652,6 +7735,9 @@ msgstr "バージョン情報ウィンドウを切り替え"
 
 #~ msgid "Complexity"
 #~ msgstr "難易度"
+
+#~ msgid "Could not read annotation image from view"
+#~ msgstr "ビューから注釈画像を読み取れませんでした"
 
 #~ msgid "Stage Cache"
 #~ msgstr "キャッシュ"

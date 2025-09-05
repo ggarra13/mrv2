@@ -8,8 +8,9 @@
 
 #include <tlDraw/Annotation.h>
 
+#include "mrvViewport/mrvTimelineViewport.h"
+
 #include "mrvGL/mrvGLDefines.h"
-#include "mrvGL/mrvTimelineViewport.h"
 
 namespace mrv
 {
@@ -100,7 +101,7 @@ namespace mrv
 
             void _pushAnnotationShape(const std::string& cmd) const override;
 
-            void _readPixel(image::Color4f& rgba) const noexcept override;
+            void _readPixel(image::Color4f& rgba) override;
 
             void _drawHelpText() const noexcept;
 

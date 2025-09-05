@@ -16,10 +16,10 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "HDR monitor found."
-msgstr ""
+msgstr "HDR monitor found."
 
 msgid "HDR monitor not found or not configured."
-msgstr ""
+msgstr "HDR monitor not found or not configured."
 
 msgid "Connection/"
 msgstr "Connection/"

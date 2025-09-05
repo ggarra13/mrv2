@@ -38,6 +38,14 @@ namespace tl
             std::vector<std::shared_ptr<vlk::Texture> > >
             TextureCache;
 
+        //! Stereo mode.
+        enum class StereoType
+        {
+            kScanlines,
+            kColumns,
+            kCheckers,
+        };
+        
         //! Vulkan renderer.
         class Render : public timeline::IRender
         {
@@ -197,6 +205,21 @@ namespace tl
                 const timeline::CompareOptions& = timeline::CompareOptions(),
                 const timeline::BackgroundOptions& =
                     timeline::BackgroundOptions()) override;
+            void drawStereo(
+                const std::vector<timeline::VideoData>&,
+                const std::vector<math::Box2i>&,
+                const StereoType = StereoType::kScanlines,
+                const float offset = 0.F,
+                const std::vector<timeline::ImageOptions>& = {},
+                const std::vector<timeline::DisplayOptions>& = {},
+                const timeline::CompareOptions& = timeline::CompareOptions());
+            void drawAnaglyph(
+                const std::vector<timeline::VideoData>&,
+                const std::vector<math::Box2i>&,
+                const float offset = 0.F,
+                const std::vector<timeline::ImageOptions>& = {},
+                const std::vector<timeline::DisplayOptions>& = {},
+                const timeline::CompareOptions& = timeline::CompareOptions());
             void drawMask(float pct = 0.F);
 
 

@@ -1262,7 +1262,10 @@ void main() {
         {
             return;
         }
-        end_render_pass();
+        
+        // Clear the frame
+        begin_render_pass(cmd);
+        end_render_pass(cmd);
 
         update_texture(cmd);
         
@@ -1627,40 +1630,9 @@ void main() {
             throw std::runtime_error("pl_shader_alloc failed!");
         }
 
-        pl_color_map_params cmap;
-        memset(&cmap, 0, sizeof(pl_color_map_params));
-
-        // defaults, generates LUTs if state is set.
-        cmap.gamut_mapping = &pl_gamut_map_perceptual;
-
-        // PL_GAMUT_MAP_CONSTANTS is defined in wrong order for C++
-        cmap.gamut_constants = {0};
-        cmap.gamut_constants.perceptual_deadzone = 0.3F;
-        cmap.gamut_constants.perceptual_strength = 0.8F;
-        cmap.gamut_constants.colorimetric_gamma = 1.80f;
-        cmap.gamut_constants.softclip_knee = 0.70f;
-        cmap.gamut_constants.softclip_desat = 0.35f;
+        pl_color_map_params cmap = pl_color_map_high_quality_params;
 
         cmap.tone_mapping_function = nullptr;
-
-        cmap.tone_constants = {0};
-        cmap.tone_constants.knee_adaptation = 0.4f;
-        cmap.tone_constants.knee_minimum = 0.1f;
-        cmap.tone_constants.knee_maximum = 0.8f;
-        cmap.tone_constants.knee_default = 0.4f;
-        cmap.tone_constants.knee_offset = 1.0f;
-
-        cmap.tone_constants.slope_tuning = 1.5f;
-        cmap.tone_constants.slope_offset = 0.2f;
-
-        cmap.tone_constants.spline_contrast = 0.5f;
-
-        cmap.tone_constants.reinhard_contrast = 0.5f;
-        cmap.tone_constants.linear_knee = 0.3f;
-
-        cmap.tone_constants.exposure = 1.0f;
-
-        cmap.contrast_smoothness = 3.5f;
 
         const image::HDRData& data = p.hdrData;
 
@@ -1744,7 +1716,7 @@ void main() {
             }
             else
             {
-                cmap.tone_mapping_function = &pl_tone_map_auto;
+                cmap.tone_mapping_function = &pl_tone_map_hable;
             }
         }
         else
@@ -1762,8 +1734,11 @@ void main() {
             dst_colorspace.primaries = PL_COLOR_PRIM_BT_709;
             dst_colorspace.transfer = PL_COLOR_TRC_BT_1886;
 
+            dst_colorspace.hdr.min_luma = 0.F;
+            dst_colorspace.hdr.max_luma = 100.0F; // SDR peak
+                            
             if (p.hasHDR)
-                cmap.tone_mapping_function = &pl_tone_map_st2094_40;
+                cmap.tone_mapping_function = &pl_tone_map_hable;
             else
                 cmap.tone_mapping_function = nullptr;
         }
