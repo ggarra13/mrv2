@@ -39,7 +39,7 @@
 #include "mrvCore/mrvString.h"
 #include "mrvCore/mrvOS.h"
 
-#include "mrvFl/mrvIO.h"
+#define LOG_ERROR(x) std::cerr << x << std::endl;
 
 #include "mrvUI/mrvDesktop.h"
 
