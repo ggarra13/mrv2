@@ -6,6 +6,15 @@
 
 #include "mrvCore/mrvBackend.h"
 
+#ifdef OPENGL_BACKEND
+#include "mrvGL/mrvGLWindow.h"
+#endif
+
+#ifdef VULKAN_BACKEND
+#include "mrvVk/mrvVkWindow.h"
+#include "mrvVk/mrvVkShape.h"
+#endif
+
 #include "mrvVoice/mrvVoiceOver.h"
 
 #include "mrvOptions/mrvStereo3DOptions.h"
