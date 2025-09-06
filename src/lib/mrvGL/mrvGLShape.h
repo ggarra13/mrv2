@@ -244,7 +244,8 @@ namespace mrv
                   const voice::MouseData& mouse);
         
         voice::RecordStatus status;
-        math::Vector2i center;
+        math::Vector2f center;
+        float mult = 1.F;
     };
 
 

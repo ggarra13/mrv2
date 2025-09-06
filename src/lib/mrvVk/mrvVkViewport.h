@@ -58,9 +58,7 @@ namespace mrv
 
             void setSaveOverlay(const bool save);
             
-        protected:
-            void _drawVoiceOverShapes(const math::Matrix4x4f& mvp);
-            
+        protected:            
             void _updateHDRMetadata();
 
             void _createCubicEnvironmentMap();

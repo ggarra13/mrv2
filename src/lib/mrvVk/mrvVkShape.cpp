@@ -951,28 +951,45 @@ namespace mrv
         const image::Color4f lineColor(0.F, 0.F, 1.F);
 
         image::Color4f cursorColor(1.F, 1.F, 1.F);
+
+        const int radius = 3 * mult;
+        const int boxRadius = 6 * mult;
+        const int lineSize = 3 * mult;
+
         if (mouse.pressed)
             cursorColor = image::Color4f(0.F, 1.F, 0.F);
 
+        const math::Vector2i c(int(center.x), int(center.y));
+        const math::Vector2i e(int(mouse.pos.x), int(mouse.pos.y));
+        
         switch(status)
         {
         case voice::RecordStatus::Stopped:
         {
-            math::Box2i box(center.x - 5, center.y - 5, 10, 10);
+            //
+            // Draw box and rectangle icon
+            //
+            math::Box2i box(c.x - boxRadius, c.y - boxRadius,
+                            boxRadius * 2, boxRadius * 2);
             render->drawRect(box, stoppedColor);
             
-            box = math::Box2i(center.x - 3, center.y - 3, 6, 6);
+            box = math::Box2i(c.x - radius, c.y - radius,
+                              radius * 2, radius * 2);
             render->drawRect(box, blackColor);
             break;
         }
         case voice::RecordStatus::Saved:
         {
+            //
+            // Draw box and icon
+            //
             vulkan::Lines lines(render->getContext(), VK_NULL_HANDLE);
-            math::Box2i box(center.x - 5, center.y - 5, 10, 10);
+            math::Box2i box(c.x - boxRadius, c.y - boxRadius,
+                            boxRadius * 2, boxRadius * 2);
             render->drawRect(box, stoppedColor);
-            
-            math::Vector2f c(center.x, center.y);
-            lines.drawFilledCircle(render, c, 4, yellowColor);
+
+            unsigned numSides = 4; // A rotated square
+            lines.drawFilledCircle(render, center, radius, yellowColor, numSides);
             break;
         }
         case voice::RecordStatus::Playing:
@@ -981,20 +998,23 @@ namespace mrv
             // Draw the connecting line and the cursor
             //
             vulkan::Lines lines(render->getContext(), VK_NULL_HANDLE);
-            lines.drawLine(render, center, mouse.pos, lineColor, 2);
+            lines.drawLine(render, c, e, lineColor, 2);
             
-            math::Box2i box(mouse.pos.x - 3, mouse.pos.y - 3, 6, 6);
+            math::Box2i box(int(e.x - radius), int(e.y - radius),
+                            radius * 2, radius * 2);
             render->drawRect(box, cursorColor);
 
 
             //
-            // Draw box and icon
+            // Draw box and a triangle icon
             //
-            box = math::Box2i(center.x - 5, center.y - 5, 10, 10);
+            box = math::Box2i(c.x - boxRadius, c.y - boxRadius,
+                              boxRadius * 2, boxRadius * 2);
             render->drawRect(box, stoppedColor);
-            
-            math::Vector2f c(center.x, center.y);
-            lines.drawFilledCircle(render, c, 4, blackColor, 3);
+
+            unsigned numSides = 3;
+            lines.drawFilledCircle(render, center, radius, blackColor,
+                                   numSides);
             break;
         }
         case voice::RecordStatus::Recording:
@@ -1003,19 +1023,20 @@ namespace mrv
             // Draw the connecting line and the cursor
             //
             vulkan::Lines lines(render->getContext(), VK_NULL_HANDLE);
-            lines.drawLine(render, center, mouse.pos, lineColor, 2);
+            lines.drawLine(render, c, e, lineColor, 2);
             
-            math::Box2i box(mouse.pos.x - 3, mouse.pos.y - 3, 6, 6);
+            math::Box2i box(int(e.x - radius), int(e.y - radius),
+                            radius * 2, radius * 2);
             render->drawRect(box, cursorColor);
             
             //
             // Draw box and icon
             //
-            box = math::Box2i(center.x - 5, center.y - 5, 10, 10);
+            box = math::Box2i(c.x - boxRadius, c.y - boxRadius,
+                              boxRadius * 2, boxRadius * 2);
             render->drawRect(box, stoppedColor);
             
-            math::Vector2f c(center.x, center.y);
-            lines.drawFilledCircle(render, c, 4, recordingColor);
+            lines.drawFilledCircle(render, center, radius, recordingColor);
 
             break;
         }

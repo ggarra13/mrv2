@@ -356,7 +356,12 @@ namespace mrv
                 }
             }
 
+            
             VKVoiceOverShape shape;
+
+            float mult = renderSize.w * 6 / 4096.0 / p.viewZoom;
+            mult = std::clamp(mult, 1.F, 10.F);
+            
             for (const auto annotation : voannotations)
             {
                 if (!annotation->allFrames && time.floor() != annotation->time.floor())
@@ -365,8 +370,10 @@ namespace mrv
                 const auto& voices = annotation->voices;
                 for (const auto voice : voices)
                 {
+                    
                     shape.center = voice->getCenter();
                     shape.status = voice->getStatus();
+                    shape.mult   = mult;
 
                     const auto& mouseData = voice->getMouseData();
                     
@@ -1104,30 +1111,6 @@ namespace mrv
             
         }
 
-        
-        void Viewport::_drawVoiceOverShapes(const math::Matrix4x4f& mvp)
-        {
-            MRV2_VK();
-            
-            // auto player = getTimelinePlayer();
-            // if (!player) return;
-            
-            // auto annotations = player->getVoiceAnnotations();
-            // if (annotations.empty())
-            //     return;
-
-            // for (const auto annotation : annotations)
-            // {
-            //     const auto& voices = annotation->voices;
-            //     VKVoiceOverShape shape;
-            //     for (const auto voice : voices)
-            //     {
-            //         shape.center = voice->getCenter();
-            //         shape.status = voice->getStatus();
-            //         shape.draw(render, vk.lines);
-            //     }
-            // }
-        }
 
     } // namespace vulkan
 

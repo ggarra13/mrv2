@@ -32,10 +32,10 @@ extern "C"
 
 namespace
 {
-    const int kNumChannels = 1;
+    const int      kNumChannels = 2;
     const unsigned kSampleRate = 44100;
-    unsigned int rtBufferFrames = 256;
-    const char* kModule = "voice";
+    unsigned int   rtBufferFrames = 256;
+    const char*    kModule = "voice";
 }
 
 namespace
@@ -149,7 +149,7 @@ namespace mrv
             bool running = false;
             std::thread thread;
 
-            math::Vector2i center;
+            math::Vector2f center;
             
             AudioData audio;
             MouseRecording mouse;
@@ -165,7 +165,7 @@ namespace mrv
         
         
         void VoiceOver::_init(const std::shared_ptr<system::Context>& context,
-                              const math::Vector2i& center)
+                              const math::Vector2f& center)
         {
             TLRENDER_P();
             p.context = context;
@@ -199,7 +199,7 @@ namespace mrv
 
         std::shared_ptr<VoiceOver>
         VoiceOver::create(const std::shared_ptr<system::Context>& context,
-                          const math::Vector2i& center)
+                          const math::Vector2f& center)
         {
             auto out = context->getSystem<VoiceOver>();
             if (!out)
@@ -298,7 +298,6 @@ namespace mrv
             
             if (p.status != RecordStatus::Recording || p.audio.buffer.empty())
             {
-                LOG_ERROR("No audio recorded.");
                 return;
             }
             
@@ -410,7 +409,6 @@ namespace mrv
 
             if (p.status != RecordStatus::Saved || p.audio.buffer.empty())
             {
-                LOG_ERROR("No audio for playing.");
                 return;
             }
             
@@ -469,7 +467,6 @@ namespace mrv
             
             if (p.status != RecordStatus::Playing || p.audio.buffer.empty())
             {
-                LOG_ERROR("No audio playing.");
                 return;
             }
             
@@ -510,14 +507,18 @@ namespace mrv
             _p->mouse.idx = _p->mouse.data.size() - 1;
         }
 
-        const math::Vector2i& VoiceOver::getCenter() const
+        const math::Vector2f& VoiceOver::getCenter() const
         {
             return _p->center;
         }
         
-        const math::Box2i VoiceOver::getBBox() const
+        const math::Box2f VoiceOver::getBBox(const float mult) const
         {
-            return math::Box2i(_p->center.x - 10, _p->center.y - 10, 20, 20);
+            TLRENDER_P();
+
+            return math::Box2f(p.center.x - 10 * mult,
+                               p.center.y - 10 * mult,
+                               20 * mult, 20 * mult);
         }
 
         void VoiceOver::tick()

@@ -383,7 +383,7 @@ namespace mrv
 
         //! Create annotation for current time
         std::shared_ptr< voice::Annotation >
-        createVoiceAnnotation(const math::Vector2i& center,
+        createVoiceAnnotation(const math::Vector2f& center,
                               const bool all_frames = false);
 
         //! Get list of annotations for between previous ghosting and

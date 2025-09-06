@@ -379,7 +379,7 @@ namespace mrv
                 const int index) noexcept;
 
             //! Update the playback buttons.
-            void updatePlaybackButtons() const noexcept;
+            void updatePlaybackButtons() noexcept;
 
             //! Return the image rotation.
             float getRotation() const noexcept;
@@ -413,6 +413,7 @@ namespace mrv
             math::Vector2i _getRaster() const noexcept;
 
             math::Vector2f _getFocusf(int X, int Y) const noexcept;
+            math::Vector2f _getFocusf() const noexcept;
             math::Vector2f _getRasterf(int X, int Y) const noexcept;
             math::Vector2f _getRasterf() const noexcept;
 
@@ -431,6 +432,10 @@ namespace mrv
 
             //! Get the matrix to pixel (raster) coordinates of image.
             math::Matrix4x4f _pixelMatrix() const noexcept;
+            
+            //! Get the matrix to pixel (raster) coordinates of image with
+            //! panning and zooming.
+            math::Matrix4x4f _pixelMatrixWithTransforms() const noexcept;
 
             //! Clip the selection area position taking into account
             //! rotation.
@@ -515,6 +520,12 @@ namespace mrv
             float _getZoomSpeedValue() const noexcept;
 
             void _getTags() noexcept;
+
+            void _stopVoiceRecording(const std::shared_ptr<voice::VoiceOver> voice);
+            void _stopVoicePlaying(const std::shared_ptr<voice::VoiceOver> voice);
+
+            void _stopVoiceRecording();
+            void _stopVoicePlaying();
             
             voice::MouseData currentMouseData;
             std::shared_ptr<voice::VoiceOver> currentVoiceOver;

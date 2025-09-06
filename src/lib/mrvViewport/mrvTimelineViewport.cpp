@@ -503,10 +503,15 @@ namespace mrv
             }
         }
 
-        void TimelineViewport::updatePlaybackButtons() const noexcept
+        void TimelineViewport::updatePlaybackButtons() noexcept
         {
             TLRENDER_P();
 
+            // stop recording or playing of any voice over.
+            _stopVoiceRecording();
+            _stopVoicePlaying();
+            
+            // Clear frame times for drop frame stats.
             p.frameTimes.clear();
 
             TimelineClass* c = p.ui->uiTimeWindow;
@@ -1783,6 +1788,11 @@ namespace mrv
         math::Vector2i TimelineViewport::_getFocus() const noexcept
         {
             return _getFocus(_p->event_x, _p->event_y);
+        }
+        
+        math::Vector2f TimelineViewport::_getFocusf() const noexcept
+        {
+            return _getFocusf(_p->event_x, _p->event_y);
         }
 
         math::Vector2f TimelineViewport::_getRasterf(int X, int Y) const noexcept

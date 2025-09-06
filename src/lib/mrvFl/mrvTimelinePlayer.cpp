@@ -954,7 +954,7 @@ namespace mrv
 
     //! Create annotation for current time
     std::shared_ptr< voice::Annotation >
-    TimelinePlayer::createVoiceAnnotation(const math::Vector2i& center,
+    TimelinePlayer::createVoiceAnnotation(const math::Vector2f& center,
                                           const bool all_frames)
     {
         TLRENDER_P();

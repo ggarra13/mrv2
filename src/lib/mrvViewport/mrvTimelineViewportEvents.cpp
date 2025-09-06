@@ -334,6 +334,60 @@ namespace mrv
                 }
             }
         }
+
+        void TimelineViewport::_stopVoiceRecording(const std::shared_ptr<voice::VoiceOver> voice)
+        {
+            voice->stopRecording();
+            currentVoiceOver.reset();
+            Fl::remove_timeout((Fl_Timeout_Handler)record_mouse_position_cb, this);
+        }
+                                            
+        void TimelineViewport::_stopVoicePlaying(const std::shared_ptr<voice::VoiceOver> voice)
+        {
+            voice->stopPlaying();
+            currentVoiceOver.reset();
+            Fl::remove_timeout((Fl_Timeout_Handler)play_mouse_position_cb, this);
+        }
+        
+        void TimelineViewport::_stopVoiceRecording()
+        {
+            TLRENDER_P();
+            
+            if (!p.player)
+                return;
+            
+            auto annotations = p.player->getVoiceAnnotations();
+            if (!annotations.empty())
+            {
+                for (auto& annotation : annotations)
+                {
+                    for (auto& voice : annotation->voices)
+                    {
+                        _stopVoiceRecording(voice);
+                    }
+                }
+            }
+        }
+                                            
+        void TimelineViewport::_stopVoicePlaying()
+        {
+            TLRENDER_P();
+
+            if (!p.player)
+                return;
+            
+            auto annotations = p.player->getVoiceAnnotations();
+            if (!annotations.empty())
+            {
+                for (auto& annotation : annotations)
+                {
+                    for (auto& voice : annotation->voices)
+                    {
+                        _stopVoicePlaying(voice);
+                    }
+                }
+            }
+        }
         
         void TimelineViewport::_handlePushLeftMouseButton() noexcept
         {
@@ -386,7 +440,12 @@ namespace mrv
                     else if (p.actionMode == ActionMode::kVoice)
                     {
                         p.mousePos = _getFocus();
-                        const math::Vector2i& pnt = _getRaster();
+                        auto pos = _getRasterf();
+
+                        auto renderSize = getRenderSize();
+                        
+                        float mult = renderSize.w * 6 / 4096.0 / p.viewZoom / 2;
+                        mult = std::clamp(mult, 1.F, 10.F);
 
                         auto annotations = p.player->getVoiceAnnotations();
                         if (!annotations.empty())
@@ -395,8 +454,9 @@ namespace mrv
                             {
                                 for (auto& voice : annotation->voices)
                                 {
-                                    auto buttonBox = voice->getBBox();
-                                    if (buttonBox.contains(pnt))
+                                    auto center = voice->getCenter();
+                                    auto buttonBox = voice->getBBox(mult);
+                                    if (buttonBox.contains(pos))
                                     {
                                         auto status = voice->getStatus();
                                         
@@ -407,17 +467,14 @@ namespace mrv
                                             voice->startRecording();
                                             currentVoiceOver = voice;
                                             
-                                            p.mousePos = _getFocus();
-                                            const math::Vector2i& pnt = _getRaster();
-                                            currentMouseData.pos = pnt;
+                                            currentMouseData.pos = pos;
                                             Fl::add_timeout(kVoiceTimeout,
                                                             (Fl_Timeout_Handler)record_mouse_position_cb, this);
                                             break;
                                         }
                                         case voice::RecordStatus::Recording:
                                         {
-                                            voice->stopRecording();
-                                            Fl::remove_timeout((Fl_Timeout_Handler)record_mouse_position_cb, this);
+                                            _stopVoiceRecording(voice);
                                             break;
                                         }
                                         case voice::RecordStatus::Saved:
@@ -430,9 +487,7 @@ namespace mrv
                                         }
                                         case voice::RecordStatus::Playing:
                                         {
-                                            voice->stopPlaying();
-                                            currentVoiceOver.reset();
-                                            Fl::remove_timeout((Fl_Timeout_Handler)play_mouse_position_cb, this);
+                                            _stopVoicePlaying(voice);
                                             break;
                                         }
                                         default:
@@ -459,7 +514,8 @@ namespace mrv
                                 break;
                             }
                         }
-                        p.player->createVoiceAnnotation(pnt, false);
+                        
+                        p.player->createVoiceAnnotation(pos, false);
                         return;
                     }
 
@@ -810,7 +866,7 @@ namespace mrv
                     {
                         p.mousePos = _getFocus();
                         
-                        const math::Vector2i& pnt = _getRaster();
+                        const math::Vector2f& pnt = _getRasterf();
                         currentMouseData.pos = pnt;
                     }
                     

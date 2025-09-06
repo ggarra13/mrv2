@@ -582,6 +582,10 @@ namespace mrv
             }
             
             GLVoiceOverShape shape;
+
+            float mult = renderSize.w * 6 / 4096.0 / p.viewZoom;
+            mult = std::clamp(mult, 1.F, 10.F);
+            
             for (const auto annotation : voannotations)
             {
                 if (!annotation->allFrames && time.floor() != annotation->time.floor())
@@ -592,6 +596,7 @@ namespace mrv
                 {
                     shape.center = voice->getCenter();
                     shape.status = voice->getStatus();
+                    shape.mult   = mult;
 
                     const auto& mouseData = voice->getMouseData();
                     
