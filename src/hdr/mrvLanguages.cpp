@@ -14,6 +14,7 @@ namespace fs = std::filesystem;
 #endif
 
 #include "mrvOS.h"
+#include "mrvEnv.h"
 #include "mrvHome.h"
 #include "mrvI8N.h"
 
