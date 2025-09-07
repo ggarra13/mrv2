@@ -175,14 +175,14 @@ locate_python() {
     # Clear previous exports to ensure a clean slate
     unset PYTHONDIR PYTHONEXE PYTHON PYTHON_VERSION PYTHON_SITEDIR PYTHON_USER_SITEDIR PYTHON_LIBDIR
 
-    local executables=("python" "python3" "python3.11" "python3.10" "python3.9" "python2")
+    local executables=("python" "python3" "python3.11" "python3.10" "python3.9")
     local locations
     
     # Check if BUILD_DIR exists and is a directory
     if [[ -d "${BUILD_DIR}/install/bin" ]]; then
-        locations="${BUILD_DIR}/install/bin ${PATH}"
+        locations="${BUILD_DIR}/install/bin /usr/local/bin ${PATH} /usr/bin"
     else
-        locations="${PATH}"
+        locations="/usr/local/bin ${PATH} /usr/bin"
     fi
 
     # Loop through locations and executables to find a working Python
