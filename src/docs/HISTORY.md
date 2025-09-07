@@ -22,7 +22,7 @@ v1.4.1
   type, for example:
   	  10 + 5 and get 15.
 - Updated compile to work with cmake 4.1.1.
-- Updated to OpenEXR v3.5 (from 3.2).
+- Updated to OpenEXR v3.4 (from 3.2).
 - Updated to use Imath v3.2.1 (from 3.1.9)	
 - Updated to use cpptrace v1.0.4
 - Updated to use FFmpeg v8.0 (from v7.0.1)
@@ -51,6 +51,8 @@ v1.4.1
 	  default microphone (you can change it in the Preferences->Voice Over section)
 	* Click on the button again to stop recording.  It will change to a stop button in yellow.
 	* Click again on the button to replay the mouse moves and the audio.
+	* Note that on macOS, there's a bug in the OS that requires reloading or
+	  switching the clip after playing the voice over annotation.
 
 
 v1.4.0
