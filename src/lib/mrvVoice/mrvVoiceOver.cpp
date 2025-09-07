@@ -417,6 +417,7 @@ namespace mrv
                 
                 pkt->data = reinterpret_cast<uint8_t*>(p.audio.buffer.data());
                 pkt->size = static_cast<int>(bytes);
+                pkt->pts  = 0; // needed to avoid FFmpeg warning
                 pkt->duration = frames; // number of audio frames (per channel samples)
 
                 // Write raw samples
