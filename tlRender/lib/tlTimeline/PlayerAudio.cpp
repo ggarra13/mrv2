@@ -2,6 +2,8 @@
 // Copyright (c) 2021-2025 Darby Johnston and Gonzalo Garramuño
 // All rights reserved.
 
+//#define CHECK_AUDIO 1
+
 #include <tlTimeline/PlayerPrivate.h>
 
 #include <tlTimeline/Util.h>
@@ -68,7 +70,7 @@ namespace tl
             double streamTime, RtAudioStreamStatus status, void* userData)
         {
             auto p = reinterpret_cast<Player::Private*>(userData);
-
+    
             // Get mutex protected values.
             Playback playback = Playback::Stop;
             otime::RationalTime playbackStartTime = time::invalidTime;
@@ -99,9 +101,11 @@ namespace tl
                 reset = p->audioMutex.reset;
                 p->audioMutex.reset = false;
             }
-            // std::cout << "playback: " << playback << std::endl;
-            // std::cout << "playbackStartTime: " << playbackStartTime <<
-            // std::endl;
+#if CHECK_AUDIO
+            std::cout << "playback: " << playback << std::endl;
+            std::cout << "playbackStartTime: " << playbackStartTime <<
+            std::endl;
+#endif
 
             auto& thread = p->audioThread;
 
@@ -192,26 +196,31 @@ namespace tl
                 int64_t seconds = inSampleRate > 0 ? (frame / inSampleRate) : 0;
                 int64_t inOffsetSamples = frame - seconds * inSampleRate;
 
-                // std::cerr << "TIM seconds:     " << seconds << std::endl;
-                // std::cerr << "TIM rtAudioCurrentFrame: " <<
-                // thread.rtAudioCurrentFrame << std::endl; std::cerr << "TIM
-                // playbackStartTime: " << playbackStartTime << std::endl;
-                // std::cerr << "TIM playbackStartFrame: " << playbackStartFrame
-                // << std::endl; std::cerr << "TIM bufferSampleCount: " <<
-                // bufferSampleCount << std::endl; std::cerr << "TIM
-                // inSampleRate: " << inSampleRate << std::endl; std::cerr <<
-                // "TIM outSampleRate: " << outSampleRate << std::endl;
-                // std::cerr << "TIM timeOffset: " <<
-                // timeOffset.rescaled_to(1.0) << std::endl; std::cerr << "TIM
-                // frameOffset: " << frameOffset << std::endl; std::cerr << "TIM
-                // frame:       " << frame   << std::endl;
+#if CHECK_AUDIO
+                std::cerr << "TIM seconds:     " << seconds << std::endl;
+                std::cerr << "TIM rtAudioCurrentFrame: "
+                          << thread.rtAudioCurrentFrame << std::endl;
+                std::cerr << "TIM playbackStartTime: " << playbackStartTime
+                          << std::endl;
+                std::cerr << "TIM playbackStartFrame: " << playbackStartFrame
+                          << std::endl;
+                std::cerr << "TIM bufferSampleCount: " <<  bufferSampleCount
+                          << std::endl;
+                std::cerr << "TIM inSampleRate: " << inSampleRate
+                          << std::endl;
+                std::cerr << "TIM outSampleRate: " << outSampleRate
+                          << std::endl;
+                std::cerr << "TIM timeOffset: " <<  timeOffset.rescaled_to(1.0) << std::endl;
+                std::cerr << "TIM frameOffset: " << frameOffset << std::endl;
+                std::cerr << "TIM frame:       " << frame   << std::endl;
+#endif
+                
                 while (audio::getSampleCount(thread.buffer) < outSamples)
                 {
-                    ;
-                    // std::cerr << "\toffset  = " << offset  << std::endl;
-                    // std::cout << "\tseconds: " << seconds << std::endl;
-                    // std::cerr << "\tinOffsetSamples:      " <<
-                    // inOffsetSamples  << std::endl;
+#if CHECK_AUDIO
+                    std::cout << "\tseconds: " << seconds << std::endl;
+                    std::cerr << "\tinOffsetSamples: " << inOffsetSamples  << std::endl;
+#endif
                     AudioData audioData;
                     {
                         std::unique_lock<std::mutex> lock(p->audioMutex.mutex);
@@ -412,6 +421,9 @@ namespace tl
                     !mute && now >= muteTimeout &&
                     outSamples <= getSampleCount(thread.buffer))
                 {
+#    if CHECK_AUDIO
+                    std::cerr << "\t\t\tMOVE audio" << std::endl;
+#    endif
                     audio::move(
                         thread.buffer, reinterpret_cast<uint8_t*>(outputBuffer),
                         outSamples);
@@ -420,9 +432,9 @@ namespace tl
                 // Update the audio frame.
                 thread.rtAudioCurrentFrame += outSamples;
 
-#    ifdef CHECK_AUDIO
+#    if CHECK_AUDIO
                 std::cerr << "\t\t\tSEND seconds=" << seconds << std::endl
-                          << "\t\t\tSEND inOccsetSamples " << inOffsetSamples
+                          << "\t\t\tSEND inOffsetSamples " << inOffsetSamples
                           << " outSamples=" << outSamples << std::endl;
 #    endif
 
@@ -438,7 +450,7 @@ namespace tl
         void Player::Private::rtAudioErrorCallback(
             RtAudioError::Type type, const std::string& errorText)
         {
-            // std::cout << "RtAudio ERROR: " << errorText << std::endl;
+            std::cout << "RtAudio ERROR: " << errorText << std::endl;
         }
 #endif // TLRENDER_AUDIO
 

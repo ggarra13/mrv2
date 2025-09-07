@@ -83,9 +83,28 @@ static int rtAudioPlaybackCallback(
     // Cast the input buffer to our sample type (float)
     float *out = static_cast<float*>(outputBuffer);
 
-    size_t pos = audio->rtCurrentFrame * kNumChannels;
-    if (pos > audio->buffer.size())
+    const size_t samplesRequested = static_cast<size_t>(nFrames) * kNumChannels;
+    const size_t pos = audio->rtCurrentFrame * kNumChannels;
+    const size_t available = (pos < audio->buffer.size()) ? (audio->buffer.size() - pos) : 0;
+
+    if (available == 0)
+    {
+        // No data left: fill output with silence and return non-zero to stop streaming.
+        std::memset(out, 0, samplesRequested * sizeof(float));
+        return 1;
+    }
+
+    
+    const size_t toCopySamples = std::min(available, samplesRequested);
+    std::memcpy(out, &audio->buffer[pos], toCopySamples * sizeof(float));
+    
+    if (toCopySamples < samplesRequested)
+    {
+        // Partial copy: zero the rest
+        std::memset(out + toCopySamples, 0, (samplesRequested - toCopySamples) * sizeof(float));
+        audio->rtCurrentFrame += toCopySamples / kNumChannels;
         return 1; // Stop streaming
+    }
 
     // Copy the audio data
     size_t dataByteCount = nFrames * kNumChannels * sizeof(float);
@@ -111,6 +130,13 @@ static int rtAudioRecordCallback(
     AudioData* audio = static_cast<AudioData*>(userData);
     
     // Cast the input buffer to our sample type (float)
+    if (!inputBuffer)
+    {
+        // Input unavailable — append silence (or skip)
+        audio->buffer.insert(audio->buffer.end(), nFrames * kNumChannels, 0.0f);
+        return 0;
+    }
+
     float* input = static_cast<float*>(inputBuffer);
     
     unsigned int numSamples = nFrames * kNumChannels;
@@ -332,7 +358,7 @@ namespace mrv
 
                 const std::string fileName("/tmp/saved.wav");
             
-                size_t totalSamples = p.audio.buffer.size() / sizeof(float);
+                size_t totalSamples = p.audio.buffer.size();
                 if (totalSamples == 0)
                 {
                     return;
@@ -392,12 +418,15 @@ namespace mrv
                     avformat_free_context(fmt_ctx);
                     return;
                 }
-
-                pkt->data = (uint8_t*)&p.audio.buffer[0];
-                pkt->size = p.audio.buffer.size();
-                pkt->stream_index = stream->index;
-                pkt->duration = totalSamples;
-                pkt->pts = pkt->dts = 0;
+                
+                const int channels = kNumChannels;
+                const size_t totalSamples = p.audio.buffer.size(); // number of floats = frames * channels
+                const size_t frames = totalSamples / channels;
+                const size_t bytes = totalSamples * sizeof(float);
+                
+                pkt->data = reinterpret_cast<uint8_t*>(p.audio.buffer.data());
+                pkt->size = static_cast<int>(bytes);
+                pkt->duration = frames; // number of audio frames (per channel samples)
 
                 // Write raw samples
                 if (av_interleaved_write_frame(fmt_ctx, pkt) < 0) {
