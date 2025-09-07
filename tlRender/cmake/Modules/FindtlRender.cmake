@@ -238,6 +238,17 @@ if (TIFF_FOUND)
     list(APPEND tlRender_tlIO_LIBRARIES TIFF)
 endif()
 if (OpenEXR_FOUND)
+    # Print the version and the location of the config file that was found
+    message(STATUS "Found OpenEXR version: ${OpenEXR_VERSION}")
+    message(STATUS "OpenEXR config file location: ${OpenEXR_CONFIG}")
+
+    # For modern CMake with imported targets (like OpenEXR::OpenEXR)
+    # this is the most reliable way to check the linked library.
+    get_target_property(OPENEXR_LIBRARY OpenEXR::OpenEXR IMPORTED_LOCATION_RELEASE)
+    get_target_property(OPENEXR_INCLUDES OpenEXR::OpenEXR INTERFACE_INCLUDE_DIRECTORIES)
+
+    message(STATUS "OpenEXR include directories: ${OPENEXR_INCLUDES}")
+    message(STATUS "OpenEXR library file: ${OPENEXR_LIBRARY}")
     list(APPEND tlRender_tlIO_LIBRARIES OpenEXR::OpenEXR)
 endif()
 if (FFmpeg_FOUND)
