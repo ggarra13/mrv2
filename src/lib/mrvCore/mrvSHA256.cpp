@@ -290,7 +290,7 @@ namespace mrv
         return License::kExpired;
     }
 
-    void license_beat()
+    License license_beat()
     {
         std::string expiration;
         License ok = validate_license(expiration);
@@ -335,5 +335,6 @@ namespace mrv
                 App::demo_mode = true;
             }
         }
+        return ok;
     }
 }

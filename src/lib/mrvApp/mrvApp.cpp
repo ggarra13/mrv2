@@ -527,8 +527,9 @@ namespace mrv
             return;
         }
 
-        license_beat();
-        Fl::add_timeout(300, (Fl_Timeout_Handler)beat_cb, this);
+        License ok = license_beat();
+        if (ok != License::kValid)
+            Fl::add_timeout(300, (Fl_Timeout_Handler)beat_cb, this);
 
         DBG;
         // Initialize FLTK.

@@ -397,8 +397,10 @@ namespace mrv
             image::Tags getTags() const noexcept;
 
             void recordMousePosition();
-
             void playMousePosition();
+            void voiceOverDelete();
+            void voiceOverClear();
+            void voiceOverAppendAudio();
             
         protected:
             void _init();

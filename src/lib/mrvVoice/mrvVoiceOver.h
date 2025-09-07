@@ -57,6 +57,9 @@ namespace mrv
 
             //! Get the context.
             const std::weak_ptr<system::Context>& getContext() const;
+
+            //! Clear the audio and mouse data.
+            void clear();
             
             //! Get recorded data.
             std::vector<float> getAudio() const;

@@ -216,6 +216,17 @@ namespace mrv
             return _p->context;
         }
 
+        void VoiceOver::clear()
+        {
+            TLRENDER_P();
+            
+            p.audio.buffer.clear();
+            p.mouse.data.clear();
+            p.status = RecordStatus::Stopped;
+            p.audio.rtCurrentFrame = 0;
+            p.mouse.idx = 0;
+        }
+
         std::vector<float> VoiceOver::getAudio() const
         {
             return _p->audio.buffer;

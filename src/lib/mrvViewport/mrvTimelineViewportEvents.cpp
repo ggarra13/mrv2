@@ -94,6 +94,21 @@ namespace mrv
     {
         namespace
         {
+            void voice_over_delete_cb(TimelineViewport* view)
+            {
+                view->voiceOverDelete();
+            }
+            
+            void voice_over_clear_cb(TimelineViewport* view)
+            {
+                view->voiceOverClear();
+            }
+            
+            void voice_over_append_audio_cb(TimelineViewport* view)
+            {
+                view->voiceOverAppendAudio();
+            }
+            
             void record_mouse_position_cb(TimelineViewport* view)
             {
                 view->recordMousePosition();
@@ -110,6 +125,62 @@ namespace mrv
             }
         }
 
+        void TimelineViewport::voiceOverDelete()
+        {
+            TLRENDER_P();
+            
+            if (!currentVoiceOver)
+                return;
+            std::cerr << __LINE__ << std::endl;
+
+            if (!p.player)
+                return;
+            
+            std::cerr << __LINE__ << std::endl;
+
+            auto annotation = p.player->getVoiceAnnotation();
+            if (!annotation)
+                return;
+            std::cerr << __LINE__ << std::endl;
+
+            annotation->voices.erase(
+                std::remove_if(annotation->voices.begin(),
+                               annotation->voices.end(),
+                               [this](const std::shared_ptr<voice::VoiceOver>& a){
+                                   return a == currentVoiceOver;
+                               }),
+                annotation->voices.end()
+                );
+            std::cerr << __LINE__ << std::endl;
+            
+            currentVoiceOver.reset();
+            std::cerr << __LINE__ << std::endl;
+            
+            if (annotation->voices.empty())
+                p.player->removeAnnotation(annotation);
+            std::cerr << __LINE__ << std::endl;
+            
+            redraw();
+        }
+        
+        void TimelineViewport::voiceOverClear()
+        {
+            if (!currentVoiceOver)
+                return;
+
+            currentVoiceOver->clear();
+            redraw();
+        }
+
+        void TimelineViewport::voiceOverAppendAudio()
+        {
+            if (!currentVoiceOver)
+                return;
+
+            currentVoiceOver->appendRecording();
+            redraw();
+        }
+        
         void TimelineViewport::recordMousePosition()
         {
             if (!currentVoiceOver)
@@ -842,6 +913,46 @@ namespace mrv
                     p.popupMenu->textsize(12);
                     p.popupMenu->type(Fl_Menu_Button::POPUP3);
 
+                    if (p.actionMode == ActionMode::kVoice)
+                    {
+                        p.mousePos = _getFocus();
+                        auto pos = _getRasterf();
+
+                        auto renderSize = getRenderSize();
+                        
+                        float mult = renderSize.w * 6 / 4096.0 / p.viewZoom / 2;
+                        mult = std::clamp(mult, 1.F, 10.F);
+
+                        auto annotations = p.player->getVoiceAnnotations();
+                        if (!annotations.empty())
+                        {
+                            for (auto& annotation : annotations)
+                            {
+                                for (auto& voice : annotation->voices)
+                                {
+                                    auto center = voice->getCenter();
+                                    auto buttonBox = voice->getBBox(mult);
+                                    if (buttonBox.contains(pos))
+                                    {
+                                        currentVoiceOver = voice;
+                                        p.popupMenu->add(_("Voice Over/Delete"), 0,
+                                                         (Fl_Callback*)voice_over_delete_cb,
+                                                         this);
+                                        p.popupMenu->add(_("VoiceOver/Clear"), 0,
+                                                         (Fl_Callback*)voice_over_clear_cb,
+                                                         this);
+                                        p.popupMenu->add(_("Audio/Append"), 0,
+                                                         (Fl_Callback*)voice_over_append_audio_cb,
+                                                         this);
+                                        p.popupMenu->popup();
+                                        return 1;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    
                     p.ui->uiMain->fill_menu(p.popupMenu);
                     p.popupMenu->popup();
 
