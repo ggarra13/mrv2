@@ -39,6 +39,10 @@ jobs:
     - name: Install pyFLTK dependencies
       run: brew install swig
 
+    - name: Remove system OpenEXR and Imath
+      run: |
+        brew uninstall --ignore-dependencies openexr imath || true
+
     - name: Setup environment
       run: mkdir -p ssh
 
