@@ -186,15 +186,7 @@ namespace mrv
 
         VoiceOver::~VoiceOver()
         {
-            TLRENDER_P();
-            
-            if (p.rtAudio && p.rtAudio->isStreamRunning())
-                p.rtAudio->abortStream();
-                
-            if (p.rtAudio && p.rtAudio->isStreamOpen())
-            {
-                p.rtAudio->closeStream();
-            }
+            _cleanupAudio();
         }
 
         std::shared_ptr<VoiceOver>
@@ -316,8 +308,15 @@ namespace mrv
             
             try
             {
+#if defined(TLRENDER_AUDIO)
                 if (p.rtAudio && p.rtAudio->isStreamRunning())
                     p.rtAudio->stopStream();
+                
+                if (p.rtAudio && p.rtAudio->isStreamOpen())
+                {
+                    p.rtAudio->closeStream();
+                }
+#endif
             }
             catch (const RtAudioError& e)
             {
@@ -487,8 +486,15 @@ namespace mrv
             
             try
             {
+#if defined(TLRENDER_AUDIO)
                 if (p.rtAudio && p.rtAudio->isStreamRunning())
                     p.rtAudio->stopStream();
+                
+                if (p.rtAudio && p.rtAudio->isStreamOpen())
+                {
+                    p.rtAudio->closeStream();
+                }
+#endif
             }
             catch (const RtAudioError& e)
             {
@@ -498,6 +504,8 @@ namespace mrv
             p.status = RecordStatus::Saved;
             p.audio.rtCurrentFrame = 0;
             p.mouse.idx = 0;
+
+            _cleanupAudio();
         }
 
         RecordStatus VoiceOver::getStatus() const
@@ -549,8 +557,33 @@ namespace mrv
                 p.status = RecordStatus::Saved;
                 p.audio.rtCurrentFrame = 0;
                 p.mouse.idx = 0;
+
+                _cleanupAudio();
             }
         }
-        
+
+        void VoiceOver::_cleanupAudio()
+        {
+            TLRENDER_P();
+                
+#if defined(TLRENDER_AUDIO)
+            if (!p.rtAudio) return; // Nothing to do
+
+            try
+            {
+                if (p.rtAudio->isStreamRunning())
+                    p.rtAudio->abortStream();
+
+                if (p.rtAudio->isStreamOpen())
+                    p.rtAudio->closeStream();
+            }
+            catch (const RtAudioError& e)
+            {
+                e.printMessage();
+            }
+
+            p.rtAudio.reset(); // Destroy the object and release resources
+#endif
+        }
     }
 }

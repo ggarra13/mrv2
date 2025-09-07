@@ -96,6 +96,7 @@ namespace mrv
             
         private:
             void _startRecording();
+            void _cleanupAudio();
             
             TLRENDER_PRIVATE();
         };
