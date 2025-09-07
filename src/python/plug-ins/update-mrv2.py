@@ -727,7 +727,7 @@ class UpdatePlugin(plugin.Plugin):
             
         else:
             backend = cmd.getBackend()
-            print(_(f'No {backend} releases found for the specified repository.'))
+            print(_('No'),backend,_('releases found for the specified repository.'))
 
 
     def run(self):
