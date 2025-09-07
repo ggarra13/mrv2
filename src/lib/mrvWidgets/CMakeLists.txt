@@ -214,10 +214,10 @@ if( WIN32 )
 endif()
 
 # Get the property and store it in a variable
-get_target_property(MRV_WIDGETS_INCLUDES mrvWidgets INCLUDE_DIRECTORIES)
+# get_target_property(MRV_WIDGETS_INCLUDES mrvWidgets INCLUDE_DIRECTORIES)
 
-# Print the variable to the console during configuration
-message(STATUS "Final include directories for mrvWidgets: ${MRV_WIDGETS_INCLUDES}")
+# # Print the variable to the console during configuration
+# message(STATUS "Final include directories for mrvWidgets: ${MRV_WIDGETS_INCLUDES}")
 
 
 target_link_libraries(mrvWidgets
