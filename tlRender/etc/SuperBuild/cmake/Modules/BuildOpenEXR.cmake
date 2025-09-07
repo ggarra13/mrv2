@@ -1,7 +1,7 @@
 include(ExternalProject)
 
 set(OpenEXR_GIT_REPOSITORY "https://github.com/AcademySoftwareFoundation/openexr.git")
-set(OpenEXR_GIT_TAG "v3.4")
+set(OpenEXR_GIT_TAG "v3.4.0")
 
 # \bug Disable OpenEXR threading to work around a crash at shutdown in the
 # OpenEXR thread pool. Note that we already set the OpenEXR global thread

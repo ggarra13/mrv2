@@ -367,21 +367,13 @@ namespace mrv
             {
                 auto ioSystem = context->getSystem<io::System>();
 
-                const std::string fileName("/tmp/saved.wav");
-            
-                size_t totalSamples = p.audio.buffer.size();
-                if (totalSamples == 0)
-                {
-                    return;
-                }
-
                 p.fileName = voiceOverFileName();
                 AVFormatContext *fmt_ctx = NULL;
                 AVStream *stream = NULL;
 
                 // Allocate the format context for WAV output
                 if (avformat_alloc_output_context2(&fmt_ctx, NULL, "wav",
-                                                   fileName.c_str()) < 0 ||
+                                                   p.fileName.c_str()) < 0 ||
                     !fmt_ctx)
                 {
                     throw std::runtime_error("Could not create output context");
