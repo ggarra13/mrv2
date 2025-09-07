@@ -95,6 +95,8 @@ namespace mrv
             void tick();
             
         private:
+            void _startRecording();
+            
             TLRENDER_PRIVATE();
         };
     }

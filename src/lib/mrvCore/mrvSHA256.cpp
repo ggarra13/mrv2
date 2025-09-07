@@ -18,6 +18,8 @@
 
 #include "mrvNetwork/mrvCypher.h"
 
+#include "mrvFl/mrvIO.h"
+
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvOS.h"
@@ -44,6 +46,12 @@ namespace fs = std::filesystem;
 #include <cstdint>
 #include <stdlib.h>
 #include <memory.h>
+
+namespace
+{
+    const char* kModule = "lic.";
+}
+
 
 /****************************** MACROS ******************************/
 #define ROTLEFT(a,b) (((a) << (b)) | ((a) >> (32-(b))))
@@ -232,7 +240,8 @@ namespace mrv
         return oss.str();
     }
 
-    License validate_license(const std::string& secret_salt)
+    License validate_license(std::string& unencoded_expiration,
+                             const std::string& secret_salt)
     {
         char license_key[256];
         char expiration_date[256];
@@ -255,7 +264,7 @@ namespace mrv
         if (license_key != expected_key)
             return License::kInvalid;
 
-        std::string unencoded_expiration = decode_string(expiration_date);
+        unencoded_expiration = decode_string(expiration_date);
         if (unencoded_expiration == "never")
             return License::kValid;
         
@@ -274,18 +283,23 @@ namespace mrv
 
         
         if (now_time <= exp_time)
+        {
+            LOG_STATUS("Your license will expire on " << unencoded_expiration);
             return License::kValid;
+        }
         return License::kExpired;
     }
 
     void license_beat()
     {
-        License ok = validate_license();
+        std::string expiration;
+        License ok = validate_license(expiration);
         if (ok != License::kValid)
         {
             if (ok == License::kExpired)
             {
-                fl_alert("License expired. Please enter new license.");
+                fl_alert("License expired on %s. Please enter new license.",
+                         expiration.c_str());
                 Fl::check();
             }
 
@@ -302,7 +316,7 @@ namespace mrv
             int ret = os::exec_command(helper.c_str());
             if (ret == 0)
             {
-                License ok = validate_license();
+                License ok = validate_license(expiration);
                 if (ok == License::kInvalid)
                 {
                     fl_alert("Invalid license. Entering demo mode");

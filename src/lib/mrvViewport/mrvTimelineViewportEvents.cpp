@@ -136,7 +136,8 @@ namespace mrv
             if (currentVoiceOver->getStatus() == voice::RecordStatus::Playing)
             {
                 Fl::repeat_timeout(kVoiceTimeout,
-                                   (Fl_Timeout_Handler)play_mouse_position_cb, this);
+                                   (Fl_Timeout_Handler)play_mouse_position_cb,
+                                   this);
             }
         }
         
@@ -339,14 +340,12 @@ namespace mrv
         {
             voice->stopRecording();
             currentVoiceOver.reset();
-            Fl::remove_timeout((Fl_Timeout_Handler)record_mouse_position_cb, this);
         }
                                             
         void TimelineViewport::_stopVoicePlaying(const std::shared_ptr<voice::VoiceOver> voice)
         {
             voice->stopPlaying();
             currentVoiceOver.reset();
-            Fl::remove_timeout((Fl_Timeout_Handler)play_mouse_position_cb, this);
         }
         
         void TimelineViewport::_stopVoiceRecording()

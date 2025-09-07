@@ -32,7 +32,7 @@ extern "C"
 
 namespace
 {
-    const int      kNumChannels = 2;
+    const int      kNumChannels = 1;
     const unsigned kSampleRate = 44100;
     unsigned int   rtBufferFrames = 256;
     const char*    kModule = "voice";
@@ -235,10 +235,23 @@ namespace mrv
             p.audio.buffer.clear();
             p.audio.rtCurrentFrame = 0;
 
-            appendRecording();            
+            _startRecording();            
         }
         
         void VoiceOver::appendRecording()
+        {
+            TLRENDER_P();
+            
+            if (p.status != RecordStatus::Saved && p.audio.buffer.empty())
+            {
+                LOG_ERROR("Not stopped or audio buffer is empty.");
+                return;
+            }
+            
+            _startRecording();   
+        }
+            
+        void VoiceOver::_startRecording()
         {
             TLRENDER_P();
             
@@ -467,6 +480,8 @@ namespace mrv
             
             if (p.status != RecordStatus::Playing || p.audio.buffer.empty())
             {
+                p.audio.rtCurrentFrame = 0;
+                p.mouse.idx = 0;
                 return;
             }
             
@@ -496,7 +511,9 @@ namespace mrv
 
             size_t idx = p.mouse.idx;
             if (idx >= p.mouse.data.size())
+            {
                 idx = p.mouse.data.size() - 1;
+            }
 
             return p.mouse.data[idx];
         }
