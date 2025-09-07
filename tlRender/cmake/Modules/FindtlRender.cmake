@@ -30,7 +30,9 @@
 
 set(tlRender_VERSION 0.0.1)
 
-find_package(Imath REQUIRED)
+set(CMAKE_FIND_DEBUG_MODE TRUE)
+
+find_package(Imath REQUIRED CONFIG)
 find_package(nlohmann_json REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(OTIO REQUIRED)
@@ -68,6 +70,9 @@ endif()
 if(TLRENDER_USD)
     find_package(pxr)
 endif()
+
+set(CMAKE_FIND_DEBUG_MODE FALSE)
+
 
 find_path(tlRender_INCLUDE_DIR NAMES tlCore/Util.h PATH_SUFFIXES tlRender)
 set(tlRender_INCLUDE_DIRS
@@ -407,3 +412,4 @@ if(tlRender_FOUND AND NOT TARGET tlRender)
     endif()
     target_link_libraries(tlRender INTERFACE tlRender::glad)
 endif()
+
