@@ -253,12 +253,6 @@ namespace mrv
         void VoiceOver::startRecording()
         {
             TLRENDER_P();
-            
-            if (p.status != RecordStatus::Stopped && p.audio.buffer.empty())
-            {
-                LOG_ERROR("Not stopped or audio buffer not empty.");
-                return;
-            }
 
             // Clear the recording
             p.audio.buffer.clear();
@@ -270,12 +264,6 @@ namespace mrv
         void VoiceOver::appendRecording()
         {
             TLRENDER_P();
-            
-            if (p.status != RecordStatus::Saved && p.audio.buffer.empty())
-            {
-                LOG_ERROR("Not stopped or audio buffer is empty.");
-                return;
-            }
             
             _startRecording();   
         }

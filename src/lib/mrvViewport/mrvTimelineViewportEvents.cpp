@@ -94,17 +94,17 @@ namespace mrv
     {
         namespace
         {
-            void voice_over_delete_cb(TimelineViewport* view)
+            void voice_over_delete_cb(Fl_Menu_*, TimelineViewport* view)
             {
                 view->voiceOverDelete();
             }
             
-            void voice_over_clear_cb(TimelineViewport* view)
+            void voice_over_clear_cb(Fl_Menu_*, TimelineViewport* view)
             {
                 view->voiceOverClear();
             }
             
-            void voice_over_append_audio_cb(TimelineViewport* view)
+            void voice_over_append_audio_cb(Fl_Menu_*, TimelineViewport* view)
             {
                 view->voiceOverAppendAudio();
             }
@@ -131,17 +131,13 @@ namespace mrv
             
             if (!currentVoiceOver)
                 return;
-            std::cerr << __LINE__ << std::endl;
 
             if (!p.player)
                 return;
-            
-            std::cerr << __LINE__ << std::endl;
 
             auto annotation = p.player->getVoiceAnnotation();
             if (!annotation)
                 return;
-            std::cerr << __LINE__ << std::endl;
 
             annotation->voices.erase(
                 std::remove_if(annotation->voices.begin(),
@@ -151,16 +147,13 @@ namespace mrv
                                }),
                 annotation->voices.end()
                 );
-            std::cerr << __LINE__ << std::endl;
             
             currentVoiceOver.reset();
-            std::cerr << __LINE__ << std::endl;
             
             if (annotation->voices.empty())
                 p.player->removeAnnotation(annotation);
-            std::cerr << __LINE__ << std::endl;
             
-            redraw();
+            redrawWindows();
         }
         
         void TimelineViewport::voiceOverClear()
