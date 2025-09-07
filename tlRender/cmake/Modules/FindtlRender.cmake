@@ -30,7 +30,7 @@
 
 set(tlRender_VERSION 0.0.1)
 
-set(CMAKE_FIND_DEBUG_MODE TRUE)
+# set(CMAKE_FIND_DEBUG_MODE TRUE)
 
 find_package(Imath REQUIRED CONFIG)
 find_package(nlohmann_json REQUIRED)
@@ -62,7 +62,7 @@ if(TLRENDER_NDI)
     find_package(NDI)
 endif()
 if(TLRENDER_RAW)
-    find_package(libraw CONFIG)
+    find_package(LibRaw)
 endif()
 if(TLRENDER_TIFF)
     find_package(TIFF)
@@ -71,7 +71,7 @@ if(TLRENDER_USD)
     find_package(pxr)
 endif()
 
-set(CMAKE_FIND_DEBUG_MODE FALSE)
+# set(CMAKE_FIND_DEBUG_MODE FALSE)
 
 
 find_path(tlRender_INCLUDE_DIR NAMES tlCore/Util.h PATH_SUFFIXES tlRender)
@@ -89,8 +89,8 @@ endif()
 if(libjpeg-turbo_FOUND)
     list(APPEND tlRender_INCLUDE_DIRS ${libjpeg-turbo_INCLUDE_DIRS})
 endif()
-if(libraw_FOUND)
-    list(APPEND tlRender_INCLUDE_DIRS ${libraw_INCLUDE_DIRS})
+if(LibRaw_FOUND)
+    list(APPEND tlRender_INCLUDE_DIRS ${LibRaw_INCLUDE_DIRS})
 endif()
 if(libplacebo_FOUND)
     list(APPEND tlRender_INCLUDE_DIRS ${libplacebo_INCLUDE_DIRS})
@@ -181,7 +181,7 @@ set(tlRender_LIBRARIES
     ${PNG_LIBRARIES}
     ${OpenEXR_LIBRARIES}
     ${FFmpeg_LIBRARIES}
-    ${libraw_LIBRARIES}
+    ${LibRaw_LIBRARIES}
     ${NDI_LIBRARIES}
     ${glfw3_LIBRARIES})
 
@@ -254,8 +254,8 @@ endif()
 if (FFmpeg_FOUND)
     list(APPEND tlRender_tlIO_LIBRARIES FFmpeg)
 endif()
-if (libraw_FOUND)
-    list(APPEND tlRender_tlIO_LIBRARIES libraw::raw_r)
+if (LibRaw_FOUND)
+    list(APPEND tlRender_tlIO_LIBRARIES LibRaw)
 endif()
 if (NDI_FOUND)
     list(APPEND tlRender_tlIO_LIBRARIES NDI)
