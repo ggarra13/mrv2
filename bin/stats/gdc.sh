@@ -26,6 +26,13 @@ export LD_LIBRARY_PATH=$BUILD_DIR/install/lib64:$BUILD_DIR/install/lib:$OLD_LIBR
 
 if [[ ! -d $PYTHON_SITEDIR/requests || ! -d $PYTHON_SITEDIR/pytz ]];
 then
+    if [[ $PYTHON != *$BUILD_DIR* ]]; then
+	if [ ! -d .venv ]; then
+	    $PYTHON -m venv venv
+	fi
+	. venv/bin/activate
+	export PYTHON=python
+    fi
     $PYTHON -m pip install requests pytz
 fi
 
@@ -62,5 +69,6 @@ fi
 
 echo "START DATE: $date_created"
 echo "  END DATE: $next_tag_date"
+
 
 $PYTHON bin/python/github-download-count.py ggarra13 mrv2 $TAG "$date_created" "$next_tag_date"

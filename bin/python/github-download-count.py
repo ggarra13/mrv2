@@ -85,6 +85,9 @@ time_difference = end_date - start_date
 days  = time_difference.days
 hours, remainder = divmod(time_difference.seconds, 3600)
 minutes, seconds = divmod(remainder, 60)
+
+print(" START DATE:", start_date)
+print("   END DATE:", end_date)
 print(f'DIFFERENCE: {days} days, {hours} hours, {minutes} minutes')
 
 start_date = start_date.strftime("%Y-%m-%d")
@@ -146,10 +149,13 @@ for full_name in full_names:
     print(f'{formatted_total}\tTotal Downloads for repo {full_name}')
     
 
-def count_sourceforge(repo, folder_name, end_date, start_date = '2014-10-29'):
+def count_sourceforge(repo, folder_name, end_date, start_date = '2021-10-29'):
 
     print()
-    print(f"\tCount {folder_name} from {start_date} to {end_date}")
+    commercial = ''
+    if folder_name == 'vulkan':
+        commercial = '(commercial limited demo)'
+    print(f"\tCount {folder_name} from {start_date} to {end_date} {commercial}")
     
     # Base URL for the project downloads page
     base_url = f"https://sourceforge.net/projects/{repo}/files/{folder_name}/stats/json?start_date={start_date}&end_date={end_date}"
@@ -165,6 +171,7 @@ def count_sourceforge(repo, folder_name, end_date, start_date = '2014-10-29'):
             r = response.json()
         except Exception as e:
             print(f'Could not get info for version {folder_name}')
+            print(e)
             exit(1)
     
     total = 0
@@ -181,12 +188,12 @@ def count_sourceforge(repo, folder_name, end_date, start_date = '2014-10-29'):
 sourceforge_released_total = count_sourceforge(repo, folder_name,
                                                end_date)
 
-sourceforge_beta_total = count_sourceforge(repo, 'beta', end_date, start_date)
+sourceforge_beta_total = count_sourceforge(repo, 'beta/opengl', end_date, start_date)
 
-sourceforge_beta_total = count_sourceforge(repo, 'vulkan', end_date, start_date)
+sourceforge_beta_total = count_sourceforge(repo, 'beta/vulkan', end_date, start_date)
 
 formatted_total = format_number(sourceforge_released_total +
                                 sourceforge_beta_total +
                                 total_count, 5)
-print('-----------------------------------------------------')
+print('----------------------------------------------------------')
 print(f'{formatted_total}\tGrand Total')
