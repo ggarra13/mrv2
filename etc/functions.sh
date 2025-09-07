@@ -170,122 +170,73 @@ extract_python_version()
 # PYTHON_USER_SITEDIR - directory of user's pythons site libraries 
 # PYTHON_LIBDIR       - directory of python dynamic libraries
 #
-locate_python()
-{
-    export PYTHONEXE=""
-    local locations="${BUILD_DIR}/install/bin ${PATH} /usr/local/bin /usr/bin"
-    if [[ $KERNEL == *Msys* ]]; then
-	locations=`echo "${locations}" | sed -e 's/;/ /g'`
-    else
-	locations=`echo "${locations}" | sed -e 's/:/ /g'`
-    fi
 
-    for location in $locations; do
-	local pythons=$(ls ${location}/python* 2> /dev/null) || PYTHON=""
-	if [[ "$pythons" != "" ]]; then
-	    pythons=`echo "$pythons" | sed -e 's#/python.sh##'`
-	    export PYTHONDIR=$location
-	    export PYTHONEXE=`echo "$pythons" | grep -o '/python.exe' | head -1`
-	    if [[ $KERNEL != *Msys* ]]; then
-		export PYTHONEXE=`echo "$pythons" | grep -o '/python[0-9]*' | head -1`
-		export PYTHON=$PYTHONDIR/$PYTHONEXE
-		if [ ! -e $PYTHON ]; then
-		    export PYTHONEXE=`echo "$pythons" | grep -o '/python' | head -1`
-		    export PYTHON=$PYTHONDIR/$PYTHONEXE
-		    if [ ! -e $PYTHON ]; then
-			continue
-		    else
-			break
-		    fi
-		fi
-		while true; do
-		    if [[ -L $PYTHON ]]; then
-			export PYTHONEXE=`readlink ${PYTHON}`
-			export PYTHON=$PYTHONDIR/$PYTHONEXE
-		    else
-			break
-		    fi
-		done
-		break
-	    else
-		export PYTHON=$PYTHONDIR/$PYTHONEXE
-		if [ ! -e $PYTHON ]; then
-		    continue
-		else
-		    break
-		fi
-	    fi
-	fi
-    done
+locate_python() {
+    # Clear previous exports to ensure a clean slate
+    unset PYTHONDIR PYTHONEXE PYTHON PYTHON_VERSION PYTHON_SITEDIR PYTHON_USER_SITEDIR PYTHON_LIBDIR
 
-    if [[ "$PYTHON" == "" ]]; then
-	if [[ -z $BUILD_PYTHON ]]; then
-	    echo "No python found!!! Please install it in your PATH"
-	    exit 1
-	fi
-	export PYTHONDIR="${PWD}/${BUILD_DIR}/install/bin/"
-	if [[ $KERNEL != *Msys* ]]; then
-	    export PYTHONEXE=python3	
-	    export PYTHON=$PYTHONDIR/$PYTHONEXE
-	else
-	    export PYTHONEXE=python
-	    export PYTHON=$PYTHONDIR/$PYTHONEXE
-	fi
-    fi
-
-    export PYTHON_LIBDIR="-unknown-"
-    local lib_dirs="~/.local/lib/${PYTHONEXE} ${PYTHONDIR}/../lib/${PYTHONEXE} ${PYTHONDIR}/Lib"
-    for python_libdir in $lib_dirs; do
-	if [[ $KERNEL != *Msys* ]]; then
-	    if [[ -d "${python_libdir}" ]]; then
-		python_libdir=`readlink -f "${python_libdir}"`
-	    fi
-	fi
-	if [[ -d "${python_libdir}" ]]; then
-	    export PYTHON_LIBDIR="${python_libdir}"
-	    break
-	fi
-    done
+    local executables=("python" "python3" "python3.11" "python3.10" "python3.9" "python2")
+    local locations
     
-    local site_dirs="${PYTHON_LIBDIR}"
-    export PYTHON_SITEDIR="-unknown-"
-    export PYTHON_USER_SITEDIR="${HOME}/.local/lib/${PYTHONEXE}"
-    for python_sitedir in $site_dirs; do
-	if [[ -d "${python_sitedir}/site-packages" ]]; then
-	    export PYTHON_SITEDIR="${python_sitedir}/site-packages"
-	    break
-	fi
+    # Check if BUILD_DIR exists and is a directory
+    if [[ -d "${BUILD_DIR}/install/bin" ]]; then
+        locations="${BUILD_DIR}/install/bin ${PATH}"
+    else
+        locations="${PATH}"
+    fi
+
+    # Loop through locations and executables to find a working Python
+    for loc in $(echo "${locations}" | tr ':' ' '); do
+        for exe in "${executables[@]}"; do
+            local full_path="$(command -v "${loc}/${exe}" 2>/dev/null)"
+            if [[ -x "${full_path}" ]]; then
+                export PYTHON="${full_path}"
+                export PYTHONEXE="${exe}"
+                export PYTHONDIR="$(dirname "${full_path}")"
+                break 2 # Found it, exit both loops
+            fi
+        done
     done
 
+    # If Python is still not found, handle the error
+    if [[ -z "${PYTHON}" ]]; then
+        if [[ -z $BUILD_PYTHON ]]; then
+            echo "No python found! Please install it in your PATH." >&2
+            exit 1
+        fi
+        # Fallback for when BUILD_PYTHON is set
+        export PYTHONDIR="${PWD}/${BUILD_DIR}/install/bin/"
+        if [[ $KERNEL != *Msys* ]]; then
+            export PYTHONEXE=python3
+        else
+            export PYTHONEXE=python
+        fi
+        export PYTHON="${PYTHONDIR}/${PYTHONEXE}"
+    fi
+
+    # Use Python to determine version and directories
+    if [[ -x "${PYTHON}" ]]; then
+        local python_info
+        python_info=$("${PYTHON}" -c "import sys; import site; print(f'VER={sys.version_info.major}.{sys.version_info.minor}\nLIBDIR={sys.exec_prefix}/lib/python{sys.version_info.major}.{sys.version_info.minor}\nSYSTEM_SITEDIR={site.getsitepackages()[0]}\nUSER_SITEDIR={site.getusersitepackages()}')" 2>/dev/null)
+
+        if [[ -n "${python_info}" ]]; then
+            export PYTHON_VERSION=$(echo "${python_info}" | grep 'VER=' | cut -d'=' -f2)
+            export PYTHON_LIBDIR=$(echo "${python_info}" | grep 'LIBDIR=' | cut -d'=' -f2)
+            export PYTHON_SITEDIR=$(echo "${python_info}" | grep 'SYSTEM_SITEDIR=' | cut -d'=' -f2)
+            export PYTHON_USER_SITEDIR=$(echo "${python_info}" | grep 'USER_SITEDIR=' | cut -d'=' -f2)
+        else
+            echo "Could not get Python details from ${PYTHON}. Falling back to old method." >&2
+            extract_python_version # Your fallback function
+        fi
+    fi
+
+    # Report if crucial variables are missing
     if [[ ! -d "${PYTHON_LIBDIR}" ]]; then
-	echo "Python libdir could not be determined!"
-	echo "PYTHON_LIBDIR=${PYTHON_LIBDIR}"
+        echo "Python libdir could not be determined! PYTHON_LIBDIR=${PYTHON_LIBDIR}" >&2
     fi
-
     if [[ ! -d "${PYTHON_SITEDIR}" ]]; then
-	echo "Python site-packages could not be determined!"
-	echo "PYTHON_SITEDIR=${PYTHON_SITEDIR}"
+        echo "Python site-packages could not be determined! PYTHON_SITEDIR=${PYTHON_SITEDIR}" >&2
     fi
-
-    if [[ $KERNEL == *Msys* ]]; then
-	local python_dlls=`ls ${PYTHONDIR}/python*.dll`
-	local python_dll=`echo "$python_dlls" | grep -o '/python.*' | head -1`
-
-	local full=`echo "${python_dll}" | sed -e 's#.*/python##' | sed -e 's#.dll##'`
-	local major=`echo $full | sed -e 's#[0-9][0-9]$##'`
-	local minor=`echo $full | sed -e 's#^[0-9]##'`
-	export PYTHON_VERSION="${major}.${minor}"
-    else
-	export PYTHON_VERSION=`echo "${PYTHON_LIBDIR}" | sed -e 's#.*/python##'`
-    fi
-
-    #
-    # If python version failed, get it from the cmake script.
-    #
-    if [[ "$PYTHON_VERSION" == "" || "$PYTHON_VERSION" == "." ]]; then
-	extract_python_version
-    fi
-    
 }
 
 
