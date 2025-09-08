@@ -106,6 +106,17 @@ Wayland
 	XWayland, set::
 
 	  export FLTK_BACKEND=x11
+
+- I get redraw issues after a Panel Window disappeared or went off-screen.
+  This is a known issue with big panel windows like the Media Information
+  Panel.  To reset your settings back to normal::
+
+    vmrv2 -resetSettings
+
+  or, if you can access it, go to the Settings panel (F9), at the bottom and
+  click on::
+
+    Reset Settings.
 	  
 - I get warnings when I run the pre-compiled mrv2 on the console under Wayland
   on a modern distro like Ubuntu 22.04.4 LTS, like::
