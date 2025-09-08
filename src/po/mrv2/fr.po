@@ -3692,13 +3692,13 @@ msgid "Could not read image data from view"
 msgstr "Impossible de lire les données d’image depuis la vue"
 
 msgid "Voice Over/Delete"
-msgstr ""
+msgstr "Voice Over/Supprimer"
 
 msgid "Audio/Clear"
-msgstr ""
+msgstr "Audio/Effacer"
 
 msgid "Audio/Append"
-msgstr ""
+msgstr "Audio/Ajouter"
 
 msgid "Play"
 msgstr "Jouer"
@@ -3734,7 +3734,7 @@ msgid "Arrow"
 msgstr "Flèche"
 
 msgid "Voice"
-msgstr ""
+msgstr "Voix"
 
 msgid "Rotate"
 msgstr "Rotation"
@@ -6014,13 +6014,13 @@ msgid "Normal"
 msgstr "Normal"
 
 msgid "X 2"
-msgstr ""
+msgstr "X 2"
 
 msgid "X 3"
-msgstr ""
+msgstr "X 3"
 
 msgid "X 4"
-msgstr ""
+msgstr "X 4"
 
 msgid "Do Nothing"
 msgstr "Ne rien faire"
@@ -6848,22 +6848,22 @@ msgid "Output Device to use for audio playback."
 msgstr "Dispositif de sortie à utiliser pour la lecture audio."
 
 msgid "Voice Annotations"
-msgstr ""
+msgstr "Annotations vocales"
 
 msgid "Voice Annotation Preferences."
-msgstr ""
+msgstr "Préférences des annotations vocales."
 
 msgid "Save Path"
-msgstr ""
+msgstr "Chemin d’enregistrement"
 
 msgid "Pick a directory from disk to save voice overs.."
-msgstr ""
+msgstr "Choisissez un répertoire sur le disque pour enregistrer les voix off."
 
 msgid "Playback Speed"
-msgstr ""
+msgstr "Vitesse de lecture"
 
 msgid "Microphone"
-msgstr ""
+msgstr "Microphone"
 
 msgid "Volume"
 msgstr "Volume"
@@ -7769,8 +7769,7 @@ msgstr "Commutation à propos de la fenêtre"
 
 #~ msgid "Returns true if the rate is valid for use with timecode."
 #~ msgstr ""
-#~ "Renvoie true si le taux est valide pour l'utilisation avec le code de "
-#~ "temps."
+#~ "Renvoie true si le taux est valide pour l'utilisation avec le code de temps."
 
 #~ msgid "Could not read annotation image from view"
 #~ msgstr "Impossible de lire l’image d’annotation depuis la vue"

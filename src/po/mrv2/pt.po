@@ -7655,7 +7655,6 @@ msgstr "Modo de texto"
 
 msgid "Voice Mode"
 msgstr "Modo de voz"
->>>>>>> a22f76c8400fef90cb539e53fb656639e99388b3
 
 msgid "Pen Size More"
 msgstr "Tamanho da caneta Mais"

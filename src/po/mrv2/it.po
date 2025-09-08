@@ -3386,9 +3386,8 @@ msgstr ""
 msgid "Voice Annotation Tool"
 msgstr "Strumento di annotazione vocale"
 
-#, fuzzy
 msgid "Voice Annotation Tool"
-msgstr "Annotazione vocale/Riproduci"
+msgstr "Strumento di annotazione vocale"
 
 msgid "Undo Draw"
 msgstr "Annulla disegno"

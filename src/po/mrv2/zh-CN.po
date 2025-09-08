@@ -540,8 +540,7 @@ msgstr ""
 "\n"
 "Compute the duration of samples from first to last (including last). This is not the same as distance.\n"
 "\n"
-"For example, the duration of a clip from frame 10 to frame 15 is 6 frames. "
-"Result will be in the rate of start_time.\n"
+"For example, the duration of a clip from frame 10 to frame 15 is 6 frames. Result will be in the rate of start_time.\n"
 
 msgid ""
 "Returns the first valid timecode rate that has the least difference from the"
@@ -6657,20 +6656,17 @@ msgstr "输出设备"
 msgid "Output Device to use for audio playback."
 msgstr "用于音频播放的输出设备 。"
 
-#, fuzzy
 msgid "Voice Annotations"
-msgstr "语音注释/播放"
+msgstr "语音注释"
 
-#, fuzzy
 msgid "Voice Annotation Preferences."
-msgstr "语音注释/录制"
+msgstr "语音注释首选项。"
 
-#, fuzzy
 msgid "Save Path"
-msgstr "删除路径"
+msgstr "保存路径"
 
 msgid "Pick a directory from disk to save voice overs.."
-msgstr ""
+msgstr "从磁盘中选择一个目录来保存配音。"
 
 msgid "Voice Annotations"
 msgstr "语音注释"
@@ -6682,7 +6678,7 @@ msgid "Save Path"
 msgstr "保存路径"
 
 msgid "Pick a directory from disk to save voice overs.."
-msgstr "从磁盘选择一个目录以保存配音。"
+msgstr "从磁盘中选择一个目录来保存配音。"
 
 msgid "Playback Speed"
 msgstr "播放速度"
