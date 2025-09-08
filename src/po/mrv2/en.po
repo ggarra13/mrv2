@@ -567,9 +567,6 @@ msgstr ""
 "For example, the duration of a clip from frame 10 to frame 15 is 6 frames. "
 "Result will be in the rate of start_time.\n"
 
-msgid "Returns true if the rate is valid for use with timecode."
-msgstr "Returns true if the rate is valid for use with timecode."
-
 msgid ""
 "Returns the first valid timecode rate that has the least difference from the "
 "given value."
@@ -3411,6 +3408,10 @@ msgstr "Arrow Tool"
 msgid "Text Tool.   Right click to edit previously stamped text."
 msgstr "Text Tool.   Right click to edit previously stamped text."
 
+#, fuzzy
+msgid "Voice Annotation Tool"
+msgstr "Voice Annotation/Play"
+
 msgid "Undo Draw"
 msgstr "Undo Draw"
 
@@ -3743,6 +3744,15 @@ msgstr "Image too big.  Will save the viewport size."
 msgid "Could not read image data from view"
 msgstr "Could not read image data from view"
 
+msgid "Voice Over/Delete"
+msgstr ""
+
+msgid "VoiceOver/Clear"
+msgstr ""
+
+msgid "Audio/Append"
+msgstr ""
+
 msgid "Play"
 msgstr "Play"
 
@@ -3775,6 +3785,9 @@ msgstr "Filled Rectangle"
 
 msgid "Arrow"
 msgstr "Arrow"
+
+msgid "Voice"
+msgstr ""
 
 msgid "Rotate"
 msgstr "Rotate"
@@ -4368,12 +4381,6 @@ msgstr "Sync/Accept/Annotations"
 
 msgid "Sync/Accept/Audio"
 msgstr "Sync/Accept/Audio"
-
-msgid "Voice Annotation/Record"
-msgstr "Voice Annotation/Record"
-
-msgid "Voice Annotation/Play"
-msgstr "Voice Annotation/Play"
 
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
@@ -6061,6 +6068,18 @@ msgstr "Full Float (Accurate)"
 msgid "GPU 0"
 msgstr "GPU 0"
 
+msgid "Normal"
+msgstr "Normal"
+
+msgid "X 2"
+msgstr ""
+
+msgid "X 3"
+msgstr ""
+
+msgid "X 4"
+msgstr ""
+
 msgid "Do Nothing"
 msgstr "Do Nothing"
 
@@ -6135,9 +6154,6 @@ msgid ""
 msgstr ""
 "When selected, mrv2 will raise the window to the front once you enter the "
 "view window."
-
-msgid "Normal"
-msgstr "Normal"
 
 msgid "When selected, mrv2 will resize its window to the first image."
 msgstr "When selected, mrv2 will resize its window to the first image."
@@ -6850,6 +6866,32 @@ msgstr "Output Device"
 
 msgid "Output Device to use for audio playback."
 msgstr "Output Device to use for audio playback."
+
+#, fuzzy
+msgid "Voice Annotations"
+msgstr "Voice Annotation/Play"
+
+#, fuzzy
+msgid "Voice Annotation Preferences."
+msgstr "Voice Annotation/Record"
+
+#, fuzzy
+msgid "Save Path"
+msgstr "Remove Paths"
+
+msgid "Pick a directory from disk to save voice overs.."
+msgstr ""
+
+#, fuzzy
+msgid "Playback Speed"
+msgstr "Playback speed."
+
+msgid "Microphone"
+msgstr ""
+
+#, fuzzy
+msgid "Volume"
+msgstr "Audio Volume"
 
 msgid "ComfyUI"
 msgstr "ComfyUI"
@@ -7659,6 +7701,10 @@ msgstr "Circle Mode"
 msgid "Text Mode"
 msgstr "Text Mode"
 
+#, fuzzy
+msgid "Voice Mode"
+msgstr "Circle Mode"
+
 msgid "Pen Size More"
 msgstr "Pen Size More"
 
@@ -7730,6 +7776,9 @@ msgstr "Toggle Hotkeys Window"
 
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
+
+#~ msgid "Returns true if the rate is valid for use with timecode."
+#~ msgstr "Returns true if the rate is valid for use with timecode."
 
 #~ msgid "Could not read annotation image from view"
 #~ msgstr "Could not read annotation image from view"

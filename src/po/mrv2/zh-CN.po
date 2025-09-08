@@ -556,9 +556,6 @@ msgstr ""
 "For example, the duration of a clip from frame 10 to frame 15 is 6 frames. "
 "Result will be in the rate of start_time.\n"
 
-msgid "Returns true if the rate is valid for use with timecode."
-msgstr "返回true, 如果rate是有效的时间编码率"
-
 msgid ""
 "Returns the first valid timecode rate that has the least difference from the "
 "given value."
@@ -3346,6 +3343,10 @@ msgstr "箭头工具"
 msgid "Text Tool.   Right click to edit previously stamped text."
 msgstr "文本工具。 右键单击以编辑先前标记的文本"
 
+#, fuzzy
+msgid "Voice Annotation Tool"
+msgstr "语音注释/播放"
+
 msgid "Undo Draw"
 msgstr "撤消绘制"
 
@@ -3673,6 +3674,15 @@ msgstr "图像太大。 将保存视图的大小 。"
 msgid "Could not read image data from view"
 msgstr "无法从视图读取图像数据"
 
+msgid "Voice Over/Delete"
+msgstr ""
+
+msgid "VoiceOver/Clear"
+msgstr ""
+
+msgid "Audio/Append"
+msgstr ""
+
 msgid "Play"
 msgstr "播放"
 
@@ -3705,6 +3715,9 @@ msgstr "填充矩形"
 
 msgid "Arrow"
 msgstr "箭头"
+
+msgid "Voice"
+msgstr ""
 
 msgid "Rotate"
 msgstr "旋转"
@@ -4294,12 +4307,6 @@ msgstr "同步/接受/注释"
 
 msgid "Sync/Accept/Audio"
 msgstr "同步/接受/音频"
-
-msgid "Voice Annotation/Record"
-msgstr "语音注释/录制"
-
-msgid "Voice Annotation/Play"
-msgstr "语音注释/播放"
 
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
@@ -5965,6 +5972,18 @@ msgstr "Full Float (Accurate)"
 msgid "GPU 0"
 msgstr "GPU 0"
 
+msgid "Normal"
+msgstr "普通"
+
+msgid "X 2"
+msgstr ""
+
+msgid "X 3"
+msgstr ""
+
+msgid "X 4"
+msgstr ""
+
 msgid "Do Nothing"
 msgstr "Do Nothing"
 
@@ -6031,9 +6050,6 @@ msgid ""
 "When selected, mrv2 will raise the window to the front once you enter the "
 "view window."
 msgstr "当选中时, mrv2 将会在你进入视窗后唤起窗口"
-
-msgid "Normal"
-msgstr "普通"
 
 msgid "When selected, mrv2 will resize its window to the first image."
 msgstr "选中时, mrv2 将调整窗口大小到适配第一个图像 。"
@@ -6706,6 +6722,32 @@ msgstr "输出设备"
 
 msgid "Output Device to use for audio playback."
 msgstr "用于音频播放的输出设备 。"
+
+#, fuzzy
+msgid "Voice Annotations"
+msgstr "语音注释/播放"
+
+#, fuzzy
+msgid "Voice Annotation Preferences."
+msgstr "语音注释/录制"
+
+#, fuzzy
+msgid "Save Path"
+msgstr "删除路径"
+
+msgid "Pick a directory from disk to save voice overs.."
+msgstr ""
+
+#, fuzzy
+msgid "Playback Speed"
+msgstr "播放速度"
+
+msgid "Microphone"
+msgstr ""
+
+#, fuzzy
+msgid "Volume"
+msgstr "音频音量"
 
 msgid "ComfyUI"
 msgstr "ComfyUI"
@@ -7507,6 +7549,10 @@ msgstr "圆圈模式"
 msgid "Text Mode"
 msgstr "文本模式"
 
+#, fuzzy
+msgid "Voice Mode"
+msgstr "圆圈模式"
+
 msgid "Pen Size More"
 msgstr "笔变大"
 
@@ -7578,6 +7624,9 @@ msgstr "开关热键窗口"
 
 msgid "Toggle About Window"
 msgstr "开关关于窗口"
+
+#~ msgid "Returns true if the rate is valid for use with timecode."
+#~ msgstr "返回true, 如果rate是有效的时间编码率"
 
 #~ msgid "Could not read annotation image from view"
 #~ msgstr "无法从视图读取注释图像"

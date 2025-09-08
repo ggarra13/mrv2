@@ -551,10 +551,6 @@ msgstr ""
 "Zum Beispiel beträgt die Dauer eines Clips von Frame 10 bis Frame 15 6 "
 "Frames. Das Ergebnis wird in der Rate der start_time angegeben.\n"
 
-msgid "Returns true if the rate is valid for use with timecode."
-msgstr ""
-"Gibt true zurck, wenn die Rate fr die Verwendung mit Timecode gltig ist."
-
 msgid ""
 "Returns the first valid timecode rate that has the least difference from the "
 "given value."
@@ -919,8 +915,8 @@ msgid ""
 "duration of 10.\n"
 msgstr ""
 "\n"
-"Erstellt einen :class:`~TimeRange` aus Start- und End-:class:`~RationalTime`"
-"\\s (inklusive).\n"
+"Erstellt einen :class:`~TimeRange` aus Start- und End-:class:"
+"`~RationalTime`\\s (inklusive).\n"
 "\n"
 "Beispiel: Wenn start_time 1 ist und end_time 10, hat der Rückgabewert eine "
 "Dauer von 10.\n"
@@ -3415,6 +3411,10 @@ msgstr "Pfeilwerkzeug"
 msgid "Text Tool.   Right click to edit previously stamped text."
 msgstr "Text-Tool. Rechtsklick, um zuvor gestempelten Text zu bearbeiten."
 
+#, fuzzy
+msgid "Voice Annotation Tool"
+msgstr "Sprachanmerkung/Wiedergabe"
+
 msgid "Undo Draw"
 msgstr "Ziehen rckgngig machen"
 
@@ -3748,6 +3748,15 @@ msgstr "Bild zu gro. Speichert die Ansichtsfenstergre."
 msgid "Could not read image data from view"
 msgstr "Konnte Bilddaten aus der Ansicht nicht lesen"
 
+msgid "Voice Over/Delete"
+msgstr ""
+
+msgid "VoiceOver/Clear"
+msgstr ""
+
+msgid "Audio/Append"
+msgstr ""
+
 msgid "Play"
 msgstr "Wiedergabe"
 
@@ -3780,6 +3789,9 @@ msgstr "Gefülltes Rechteck"
 
 msgid "Arrow"
 msgstr "Pfeil"
+
+msgid "Voice"
+msgstr ""
 
 msgid "Rotate"
 msgstr "Drehen"
@@ -4373,12 +4385,6 @@ msgstr "Synchronisieren/Akzeptieren/Anmerkungen"
 
 msgid "Sync/Accept/Audio"
 msgstr "Synchronisieren/Akzeptieren/Audio"
-
-msgid "Voice Annotation/Record"
-msgstr "Sprachanmerkung/Aufnahme"
-
-msgid "Voice Annotation/Play"
-msgstr "Sprachanmerkung/Wiedergabe"
 
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
@@ -6073,6 +6079,18 @@ msgstr "Vollschwimmen (Accurate)"
 msgid "GPU 0"
 msgstr "GPU 0"
 
+msgid "Normal"
+msgstr "Normal"
+
+msgid "X 2"
+msgstr ""
+
+msgid "X 3"
+msgstr ""
+
+msgid "X 4"
+msgstr ""
+
 msgid "Do Nothing"
 msgstr "Nichts tun"
 
@@ -6147,9 +6165,6 @@ msgid ""
 msgstr ""
 "Wenn mrv2 ausgewhlt ist, wird das Fenster nach vorne angehoben, sobald Sie "
 "das Ansichtsfenster eingeben."
-
-msgid "Normal"
-msgstr "Normal"
 
 msgid "When selected, mrv2 will resize its window to the first image."
 msgstr ""
@@ -6881,6 +6896,32 @@ msgstr "Ausgabegert"
 
 msgid "Output Device to use for audio playback."
 msgstr "Ausgabegert zur Audiowiedergabe."
+
+#, fuzzy
+msgid "Voice Annotations"
+msgstr "Sprachanmerkung/Wiedergabe"
+
+#, fuzzy
+msgid "Voice Annotation Preferences."
+msgstr "Sprachanmerkung/Aufnahme"
+
+#, fuzzy
+msgid "Save Path"
+msgstr "Pfade entfernen"
+
+msgid "Pick a directory from disk to save voice overs.."
+msgstr ""
+
+#, fuzzy
+msgid "Playback Speed"
+msgstr "Rckspielgeschwindigkeit."
+
+msgid "Microphone"
+msgstr ""
+
+#, fuzzy
+msgid "Volume"
+msgstr "Audio-Volume"
 
 msgid "ComfyUI"
 msgstr "ComfyUI"
@@ -7695,6 +7736,10 @@ msgstr "Kreismodus"
 msgid "Text Mode"
 msgstr "Textmodus"
 
+#, fuzzy
+msgid "Voice Mode"
+msgstr "Kreismodus"
+
 msgid "Pen Size More"
 msgstr "Stiftgre mehr"
 
@@ -7766,6 +7811,10 @@ msgstr "Hotkeys-Fenster umschalten"
 
 msgid "Toggle About Window"
 msgstr "Fenster umschalten"
+
+#~ msgid "Returns true if the rate is valid for use with timecode."
+#~ msgstr ""
+#~ "Gibt true zurck, wenn die Rate fr die Verwendung mit Timecode gltig ist."
 
 #~ msgid "Could not read annotation image from view"
 #~ msgstr "Konnte Anmerkungsbild aus der Ansicht nicht lesen"

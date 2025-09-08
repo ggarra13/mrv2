@@ -561,9 +561,6 @@ msgstr ""
 "fotogramma 10 al fotogramma 15 è di 6 fotogrammi. Il risultato sarà nella "
 "velocità di start_time.\n"
 
-msgid "Returns true if the rate is valid for use with timecode."
-msgstr "Restituisce true se la tariffa è valida per l'uso con timecode."
-
 msgid ""
 "Returns the first valid timecode rate that has the least difference from the "
 "given value."
@@ -930,8 +927,8 @@ msgid ""
 "duration of 9.\n"
 msgstr ""
 "\n"
-"Crea un :class:`~TimeRange` dall'inizio e dalla fine :class:`~RationalTime`"
-"\\s (esclusivo).\n"
+"Crea un :class:`~TimeRange` dall'inizio e dalla fine :class:"
+"`~RationalTime`\\s (esclusivo).\n"
 "\n"
 "Per esempio, se start_time è 1 e end_time è 10, il ritorno avrà una durata "
 "di 9.\n"
@@ -945,8 +942,8 @@ msgid ""
 "duration of 10.\n"
 msgstr ""
 "\n"
-"Crea un :class:`~TimeRange` dall'inizio e dalla fine :class:`~RationalTime`"
-"\\s (incluso).\n"
+"Crea un :class:`~TimeRange` dall'inizio e dalla fine :class:"
+"`~RationalTime`\\s (incluso).\n"
 "\n"
 "Per esempio, se start_time è 1 e end_time è 10, il ritorno avrà una durata "
 "di 10.\n"
@@ -3435,6 +3432,10 @@ msgstr ""
 "Strumento di testo. Fare clic destro per modificare il testo precedentemente "
 "stampato."
 
+#, fuzzy
+msgid "Voice Annotation Tool"
+msgstr "Annotazione vocale/Riproduci"
+
 msgid "Undo Draw"
 msgstr "Annulla disegno"
 
@@ -3769,6 +3770,15 @@ msgstr "Immagine troppo grande. Salva la dimensione della vista."
 msgid "Could not read image data from view"
 msgstr "Impossibile leggere i dati dell’immagine dalla vista"
 
+msgid "Voice Over/Delete"
+msgstr ""
+
+msgid "VoiceOver/Clear"
+msgstr ""
+
+msgid "Audio/Append"
+msgstr ""
+
 msgid "Play"
 msgstr "Gioca"
 
@@ -3801,6 +3811,9 @@ msgstr "Rettangolo riempito"
 
 msgid "Arrow"
 msgstr "Freccia"
+
+msgid "Voice"
+msgstr ""
 
 msgid "Rotate"
 msgstr "Ruotare"
@@ -4394,12 +4407,6 @@ msgstr "Sincronizzazione/Accettare/Annotazioni"
 
 msgid "Sync/Accept/Audio"
 msgstr "Sincronizzazione/Accettare/Audio"
-
-msgid "Voice Annotation/Record"
-msgstr "Annotazione vocale/Registra"
-
-msgid "Voice Annotation/Play"
-msgstr "Annotazione vocale/Riproduci"
 
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
@@ -6087,6 +6094,18 @@ msgstr "Fluttuazione completa (accurata)"
 msgid "GPU 0"
 msgstr "GPU 0"
 
+msgid "Normal"
+msgstr "Normale"
+
+msgid "X 2"
+msgstr ""
+
+msgid "X 3"
+msgstr ""
+
+msgid "X 4"
+msgstr ""
+
 msgid "Do Nothing"
 msgstr "Non fare niente"
 
@@ -6161,9 +6180,6 @@ msgid ""
 msgstr ""
 "Quando selezionato, mrv2 alzerà la finestra sulla parte anteriore una volta "
 "che si inserisce la finestra di vista."
-
-msgid "Normal"
-msgstr "Normale"
 
 msgid "When selected, mrv2 will resize its window to the first image."
 msgstr ""
@@ -6904,6 +6920,32 @@ msgstr "Dispositivo di uscita"
 
 msgid "Output Device to use for audio playback."
 msgstr "Dispositivo di uscita da usare per la riproduzione audio."
+
+#, fuzzy
+msgid "Voice Annotations"
+msgstr "Annotazione vocale/Riproduci"
+
+#, fuzzy
+msgid "Voice Annotation Preferences."
+msgstr "Annotazione vocale/Registra"
+
+#, fuzzy
+msgid "Save Path"
+msgstr "Rimuovi percorsi"
+
+msgid "Pick a directory from disk to save voice overs.."
+msgstr ""
+
+#, fuzzy
+msgid "Playback Speed"
+msgstr "Velocità di riproduzione."
+
+msgid "Microphone"
+msgstr ""
+
+#, fuzzy
+msgid "Volume"
+msgstr "Volume audio"
 
 msgid "ComfyUI"
 msgstr "ComfyUI"
@@ -7718,6 +7760,10 @@ msgstr "Modalità cerchio"
 msgid "Text Mode"
 msgstr "Modalità testo"
 
+#, fuzzy
+msgid "Voice Mode"
+msgstr "Modalità cerchio"
+
 msgid "Pen Size More"
 msgstr "Misura della penna di più"
 
@@ -7789,6 +7835,9 @@ msgstr "Finestra di commutazione di tasti di avviamento"
 
 msgid "Toggle About Window"
 msgstr "Commuta la finestra"
+
+#~ msgid "Returns true if the rate is valid for use with timecode."
+#~ msgstr "Restituisce true se la tariffa è valida per l'uso con timecode."
 
 #~ msgid "Could not read annotation image from view"
 #~ msgstr "Impossibile leggere l’immagine delle annotazioni dalla vista"

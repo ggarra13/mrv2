@@ -547,9 +547,6 @@ msgstr ""
 "उदाहरण के लिए, फ्रेम 10 से फ्रेम 15 तक के क्लिप की अवधि 6 फ्रेम है। परिणाम start_time "
 "की दर में होगा।\n"
 
-msgid "Returns true if the rate is valid for use with timecode."
-msgstr "समयकोड के साथ उपयोग के लिए सही पलटता है यदि दर वैध है."
-
 msgid ""
 "Returns the first valid timecode rate that has the least difference from the "
 "given value."
@@ -3366,6 +3363,10 @@ msgstr "तीर औज़ारName"
 msgid "Text Tool.   Right click to edit previously stamped text."
 msgstr "पाठ औज़ार. पिछला दबाने पर पाठ संपादित करने के लिए दायाँ क्लिक करें."
 
+#, fuzzy
+msgid "Voice Annotation Tool"
+msgstr "वॉइस एनोटेशन/चलाएँ"
+
 msgid "Undo Draw"
 msgstr "आरेखित करें"
 
@@ -3697,6 +3698,15 @@ msgstr "छवि बहुत बड़ा है. व्यूपोर्ट 
 msgid "Could not read image data from view"
 msgstr "दृश्य से छवि डेटा पढ़ा नहीं जा सका"
 
+msgid "Voice Over/Delete"
+msgstr ""
+
+msgid "VoiceOver/Clear"
+msgstr ""
+
+msgid "Audio/Append"
+msgstr ""
+
 msgid "Play"
 msgstr "बजाएँ"
 
@@ -3729,6 +3739,9 @@ msgstr "भरा हुआ चतुर्भुज"
 
 msgid "Arrow"
 msgstr "तीर"
+
+msgid "Voice"
+msgstr ""
 
 msgid "Rotate"
 msgstr "घुमाएँ"
@@ -4320,12 +4333,6 @@ msgstr "सिंक/स्वीकारें/व्याख्याएँ"
 
 msgid "Sync/Accept/Audio"
 msgstr "सिंक/स्वीकारें/ऑडियो"
-
-msgid "Voice Annotation/Record"
-msgstr "वॉइस एनोटेशन/रिकॉर्ड"
-
-msgid "Voice Annotation/Play"
-msgstr "वॉइस एनोटेशन/चलाएँ"
 
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
@@ -5992,6 +5999,18 @@ msgstr "पूरा फ्लोट (कम्परेट)"
 msgid "GPU 0"
 msgstr "GPU 0"
 
+msgid "Normal"
+msgstr "सामान्य"
+
+msgid "X 2"
+msgstr ""
+
+msgid "X 3"
+msgstr ""
+
+msgid "X 4"
+msgstr ""
+
 msgid "Do Nothing"
 msgstr "कुछ नहीं करें"
 
@@ -6061,9 +6080,6 @@ msgid ""
 "When selected, mrv2 will raise the window to the front once you enter the "
 "view window."
 msgstr "जब चुना जाता है, mrv2 विंडो को सामने ले जाता है जब आप दृश्य विंडो में प्रवेश करते हैं."
-
-msgid "Normal"
-msgstr "सामान्य"
 
 msgid "When selected, mrv2 will resize its window to the first image."
 msgstr "जब चयनित होता है, mrv2 इसके विंडो को प्रथम छवि में नया आकार देगा."
@@ -6758,6 +6774,32 @@ msgstr "आउटपुट उपकरण"
 
 msgid "Output Device to use for audio playback."
 msgstr "ऑडियो प्लेबैक के लिए प्रयोग करने के लिए आउटपुट उपकरण."
+
+#, fuzzy
+msgid "Voice Annotations"
+msgstr "वॉइस एनोटेशन/चलाएँ"
+
+#, fuzzy
+msgid "Voice Annotation Preferences."
+msgstr "वॉइस एनोटेशन/रिकॉर्ड"
+
+#, fuzzy
+msgid "Save Path"
+msgstr "पथ मिटाएँ"
+
+msgid "Pick a directory from disk to save voice overs.."
+msgstr ""
+
+#, fuzzy
+msgid "Playback Speed"
+msgstr "प्लेबैक गति."
+
+msgid "Microphone"
+msgstr ""
+
+#, fuzzy
+msgid "Volume"
+msgstr "ध्वनि आवाज़"
 
 msgid "ComfyUI"
 msgstr "ComfyUI"
@@ -7563,6 +7605,10 @@ msgstr "वृत्त मोड"
 msgid "Text Mode"
 msgstr "पाठ मोड"
 
+#, fuzzy
+msgid "Voice Mode"
+msgstr "वृत्त मोड"
+
 msgid "Pen Size More"
 msgstr "पेन आकार अधिक"
 
@@ -7634,6 +7680,9 @@ msgstr "यदि आप विंडो को बन्द करना चा
 
 msgid "Toggle About Window"
 msgstr "विंडो के बारे में टॉगल करें"
+
+#~ msgid "Returns true if the rate is valid for use with timecode."
+#~ msgstr "समयकोड के साथ उपयोग के लिए सही पलटता है यदि दर वैध है."
 
 #~ msgid "Could not read annotation image from view"
 #~ msgstr "दृश्य से एनोटेशन छवि पढ़ी नहीं जा सकी"

@@ -66,7 +66,9 @@ if [[ "$date_created" == "" ]]; then
     exit 1
 fi
 
-
+echo
+echo "> bin/stats/gdc.sh"
+echo
 echo "START DATE: $date_created"
 echo "  END DATE: $next_tag_date"
 

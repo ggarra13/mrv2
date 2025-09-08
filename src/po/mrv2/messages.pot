@@ -459,9 +459,6 @@ msgid ""
 "Result will be in the rate of start_time.\n"
 msgstr ""
 
-msgid "Returns true if the rate is valid for use with timecode."
-msgstr ""
-
 msgid ""
 "Returns the first valid timecode rate that has the least difference from the "
 "given value."
@@ -3076,6 +3073,9 @@ msgstr ""
 msgid "Text Tool.   Right click to edit previously stamped text."
 msgstr ""
 
+msgid "Voice Annotation Tool"
+msgstr ""
+
 msgid "Undo Draw"
 msgstr ""
 
@@ -3395,6 +3395,15 @@ msgstr ""
 msgid "Could not read image data from view"
 msgstr ""
 
+msgid "Voice Over/Delete"
+msgstr ""
+
+msgid "VoiceOver/Clear"
+msgstr ""
+
+msgid "Audio/Append"
+msgstr ""
+
 msgid "Play"
 msgstr ""
 
@@ -3426,6 +3435,9 @@ msgid "Filled Rectangle"
 msgstr ""
 
 msgid "Arrow"
+msgstr ""
+
+msgid "Voice"
 msgstr ""
 
 msgid "Rotate"
@@ -4015,12 +4027,6 @@ msgid "Sync/Accept/Annotations"
 msgstr ""
 
 msgid "Sync/Accept/Audio"
-msgstr ""
-
-msgid "Voice Annotation/Record"
-msgstr ""
-
-msgid "Voice Annotation/Play"
 msgstr ""
 
 msgid ""
@@ -5550,6 +5556,18 @@ msgstr ""
 msgid "GPU 0"
 msgstr ""
 
+msgid "Normal"
+msgstr ""
+
+msgid "X 2"
+msgstr ""
+
+msgid "X 3"
+msgstr ""
+
+msgid "X 4"
+msgstr ""
+
 msgid "Do Nothing"
 msgstr ""
 
@@ -5611,9 +5629,6 @@ msgstr ""
 msgid ""
 "When selected, mrv2 will raise the window to the front once you enter the "
 "view window."
-msgstr ""
-
-msgid "Normal"
 msgstr ""
 
 msgid "When selected, mrv2 will resize its window to the first image."
@@ -6257,6 +6272,27 @@ msgid "Output Device"
 msgstr ""
 
 msgid "Output Device to use for audio playback."
+msgstr ""
+
+msgid "Voice Annotations"
+msgstr ""
+
+msgid "Voice Annotation Preferences."
+msgstr ""
+
+msgid "Save Path"
+msgstr ""
+
+msgid "Pick a directory from disk to save voice overs.."
+msgstr ""
+
+msgid "Playback Speed"
+msgstr ""
+
+msgid "Microphone"
+msgstr ""
+
+msgid "Volume"
 msgstr ""
 
 msgid "ComfyUI"
@@ -7055,6 +7091,9 @@ msgid "Circle Mode"
 msgstr ""
 
 msgid "Text Mode"
+msgstr ""
+
+msgid "Voice Mode"
 msgstr ""
 
 msgid "Pen Size More"

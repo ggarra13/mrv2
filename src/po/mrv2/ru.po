@@ -12,8 +12,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 msgid ""
 "\n"
@@ -570,11 +570,6 @@ msgstr ""
 "Например, продолжительность клипа от 10 до 15 кадра равна 6 кадрам. "
 "Результат будет в скорости начала_время.\n"
 
-msgid "Returns true if the rate is valid for use with timecode."
-msgstr ""
-"Возвращение верно, если ставка действительна для использования с помощью "
-"временного кода."
-
 msgid ""
 "Returns the first valid timecode rate that has the least difference from the "
 "given value."
@@ -944,8 +939,8 @@ msgid ""
 "duration of 9.\n"
 msgstr ""
 "\n"
-"Создает :class:`~TimeRange` из начального и конечного :class:`~RationalTime`"
-"\\s (исключительно).\n"
+"Создает :class:`~TimeRange` из начального и конечного :class:"
+"`~RationalTime`\\s (исключительно).\n"
 "\n"
 "Например, если start_time равно 1, а end_time равно 10, возвращаемый "
 "диапазон будет иметь продолжительность 9.\n"
@@ -959,8 +954,8 @@ msgid ""
 "duration of 10.\n"
 msgstr ""
 "\n"
-"Создает :class:`~TimeRange` из начального и конечного :class:`~RationalTime`"
-"\\s (включительно).\n"
+"Создает :class:`~TimeRange` из начального и конечного :class:"
+"`~RationalTime`\\s (включительно).\n"
 "\n"
 "Например, если start_time равно 1, а end_time равно 10, возвращаемый "
 "диапазон будет иметь продолжительность 10.\n"
@@ -3444,6 +3439,10 @@ msgstr "Стрелка"
 msgid "Text Tool.   Right click to edit previously stamped text."
 msgstr "Нажмите правый нажатие на ранее отпечатанный текст."
 
+#, fuzzy
+msgid "Voice Annotation Tool"
+msgstr "Голосовая заметка/Воспроизведение"
+
 msgid "Undo Draw"
 msgstr "Отменить рисование"
 
@@ -3776,6 +3775,15 @@ msgstr "Слишком большое изображение, сохранит �
 msgid "Could not read image data from view"
 msgstr "Не удалось прочитать данные изображения с вида"
 
+msgid "Voice Over/Delete"
+msgstr ""
+
+msgid "VoiceOver/Clear"
+msgstr ""
+
+msgid "Audio/Append"
+msgstr ""
+
 msgid "Play"
 msgstr "Воспроизвести"
 
@@ -3808,6 +3816,9 @@ msgstr "Заполненный фильтр"
 
 msgid "Arrow"
 msgstr "Стрела"
+
+msgid "Voice"
+msgstr ""
 
 msgid "Rotate"
 msgstr "Вращение"
@@ -4401,12 +4412,6 @@ msgstr "Синхронизация/Принять/Аннотации"
 
 msgid "Sync/Accept/Audio"
 msgstr "Синхронизация/Принять/Звук"
-
-msgid "Voice Annotation/Record"
-msgstr "Голосовая заметка/Запись"
-
-msgid "Voice Annotation/Play"
-msgstr "Голосовая заметка/Воспроизведение"
 
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
@@ -6097,6 +6102,18 @@ msgstr "Полный поплавок (аккурат)"
 msgid "GPU 0"
 msgstr "GPU 0"
 
+msgid "Normal"
+msgstr "Обычный"
+
+msgid "X 2"
+msgstr ""
+
+msgid "X 3"
+msgstr ""
+
+msgid "X 4"
+msgstr ""
+
 msgid "Do Nothing"
 msgstr "Ничего не делай"
 
@@ -6170,9 +6187,6 @@ msgid ""
 "view window."
 msgstr ""
 "При выборе mrv2 поднимет окно вперед, как только вы войдете в окно просмотра."
-
-msgid "Normal"
-msgstr "Обычный"
 
 msgid "When selected, mrv2 will resize its window to the first image."
 msgstr "При выборе mrv2 перестроит окно на первое изображение."
@@ -6895,6 +6909,32 @@ msgstr "Выходное устройство"
 
 msgid "Output Device to use for audio playback."
 msgstr "Выходное устройство для использования для воспроизведения звука."
+
+#, fuzzy
+msgid "Voice Annotations"
+msgstr "Голосовая заметка/Воспроизведение"
+
+#, fuzzy
+msgid "Voice Annotation Preferences."
+msgstr "Голосовая заметка/Запись"
+
+#, fuzzy
+msgid "Save Path"
+msgstr "Удалить пути"
+
+msgid "Pick a directory from disk to save voice overs.."
+msgstr ""
+
+#, fuzzy
+msgid "Playback Speed"
+msgstr "Скорость воспроизведения."
+
+msgid "Microphone"
+msgstr ""
+
+#, fuzzy
+msgid "Volume"
+msgstr "Звуковой объем"
 
 msgid "ComfyUI"
 msgstr "ComfyUI"
@@ -7706,6 +7746,10 @@ msgstr "Режим окружности"
 msgid "Text Mode"
 msgstr "Текстовый режим"
 
+#, fuzzy
+msgid "Voice Mode"
+msgstr "Режим окружности"
+
 msgid "Pen Size More"
 msgstr "Размер пены больше"
 
@@ -7777,6 +7821,11 @@ msgstr "Переключить окно горячих клавиш"
 
 msgid "Toggle About Window"
 msgstr "Закладка о окне"
+
+#~ msgid "Returns true if the rate is valid for use with timecode."
+#~ msgstr ""
+#~ "Возвращение верно, если ставка действительна для использования с помощью "
+#~ "временного кода."
 
 #~ msgid "Could not read annotation image from view"
 #~ msgstr "Не удалось прочитать изображение аннотации с вида"

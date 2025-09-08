@@ -9,8 +9,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 msgid ""
 "\n"
@@ -561,9 +561,6 @@ msgstr ""
 "\n"
 "例えば、フレーム 10 からフレーム 15 までのクリップの長さは 6 フレームです。結"
 "果は start_time のレートで返されます。\n"
-
-msgid "Returns true if the rate is valid for use with timecode."
-msgstr "テーブルのセルのテキストを返す。"
 
 msgid ""
 "Returns the first valid timecode rate that has the least difference from the "
@@ -3401,6 +3398,10 @@ msgstr "矢印ツール"
 msgid "Text Tool.   Right click to edit previously stamped text."
 msgstr "クリックしてテキストを編集"
 
+#, fuzzy
+msgid "Voice Annotation Tool"
+msgstr "音声アノテーション/再生"
+
 msgid "Undo Draw"
 msgstr "取り消し"
 
@@ -3734,6 +3735,15 @@ msgstr "彼らが都を守ってくれます"
 msgid "Could not read image data from view"
 msgstr "ビューから画像データを読み取れませんでした"
 
+msgid "Voice Over/Delete"
+msgstr ""
+
+msgid "VoiceOver/Clear"
+msgstr ""
+
+msgid "Audio/Append"
+msgstr ""
+
 msgid "Play"
 msgstr "再生"
 
@@ -3766,6 +3776,9 @@ msgstr "塗りつぶした長方形"
 
 msgid "Arrow"
 msgstr "矢印"
+
+msgid "Voice"
+msgstr ""
 
 msgid "Rotate"
 msgstr "回転"
@@ -4359,12 +4372,6 @@ msgstr "同期/受信/注釈"
 
 msgid "Sync/Accept/Audio"
 msgstr "同期/受信/オーディオ"
-
-msgid "Voice Annotation/Record"
-msgstr "音声アノテーション/録音"
-
-msgid "Voice Annotation/Play"
-msgstr "音声アノテーション/再生"
 
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
@@ -6047,6 +6054,18 @@ msgstr "フルフロート（正確）"
 msgid "GPU 0"
 msgstr "GPU 0"
 
+msgid "Normal"
+msgstr "通常"
+
+msgid "X 2"
+msgstr ""
+
+msgid "X 3"
+msgstr ""
+
+msgid "X 4"
+msgstr ""
+
 msgid "Do Nothing"
 msgstr "何もしない"
 
@@ -6118,9 +6137,6 @@ msgid ""
 "view window."
 msgstr ""
 "選択すると、mrv2 は表示ウィンドウに入ったときにウィンドウを前面に表示します。"
-
-msgid "Normal"
-msgstr "通常"
 
 msgid "When selected, mrv2 will resize its window to the first image."
 msgstr "選択すると、mrv2はウィンドウを最初の画像に合わせてリサイズします。"
@@ -6828,6 +6844,32 @@ msgstr "出力デバイス"
 
 msgid "Output Device to use for audio playback."
 msgstr "オーディオ再生に使用する出力デバイス"
+
+#, fuzzy
+msgid "Voice Annotations"
+msgstr "音声アノテーション/再生"
+
+#, fuzzy
+msgid "Voice Annotation Preferences."
+msgstr "音声アノテーション/録音"
+
+#, fuzzy
+msgid "Save Path"
+msgstr "パスを削除"
+
+msgid "Pick a directory from disk to save voice overs.."
+msgstr ""
+
+#, fuzzy
+msgid "Playback Speed"
+msgstr "再生スピード"
+
+msgid "Microphone"
+msgstr ""
+
+#, fuzzy
+msgid "Volume"
+msgstr "オーディオボリューム"
 
 msgid "ComfyUI"
 msgstr "ComfyUI"
@@ -7636,6 +7678,10 @@ msgstr "円モード"
 msgid "Text Mode"
 msgstr "テキストモード"
 
+#, fuzzy
+msgid "Voice Mode"
+msgstr "円モード"
+
 msgid "Pen Size More"
 msgstr "ペンサイズ増加"
 
@@ -7707,6 +7753,9 @@ msgstr "ホットキーウィンドウを切り替え"
 
 msgid "Toggle About Window"
 msgstr "バージョン情報ウィンドウを切り替え"
+
+#~ msgid "Returns true if the rate is valid for use with timecode."
+#~ msgstr "テーブルのセルのテキストを返す。"
 
 #~ msgid "Could not read annotation image from view"
 #~ msgstr "ビューから注釈画像を読み取れませんでした"

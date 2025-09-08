@@ -555,9 +555,6 @@ msgstr ""
 "no  o mesmo que a distncia. Por exemplo, a durao de um clipe do quadro 10 "
 "para o quadro 15  de 6 quadros. O resultado ser na taxa de start_time.\n"
 
-msgid "Returns true if the rate is valid for use with timecode."
-msgstr "Devolve true se a taxa for vlida para uso com o tempocode."
-
 msgid ""
 "Returns the first valid timecode rate that has the least difference from the "
 "given value."
@@ -3396,6 +3393,10 @@ msgstr ""
 "Ferramenta de texto. Clique com o boto direito para editar o texto "
 "previamente carimbado."
 
+#, fuzzy
+msgid "Voice Annotation Tool"
+msgstr "Anotação de Voz/Reproduzir"
+
 msgid "Undo Draw"
 msgstr "Desfazer Desenhar"
 
@@ -3728,6 +3729,15 @@ msgstr "Imagem muito grande. Vai salvar o tamanho da vista."
 msgid "Could not read image data from view"
 msgstr "Não foi possível ler os dados da imagem da visualização"
 
+msgid "Voice Over/Delete"
+msgstr ""
+
+msgid "VoiceOver/Clear"
+msgstr ""
+
+msgid "Audio/Append"
+msgstr ""
+
 msgid "Play"
 msgstr "Reproduzir"
 
@@ -3760,6 +3770,9 @@ msgstr "Retângulo preenchido"
 
 msgid "Arrow"
 msgstr "Seta"
+
+msgid "Voice"
+msgstr ""
 
 msgid "Rotate"
 msgstr "Rotao"
@@ -4353,12 +4366,6 @@ msgstr "Sincronizao/Aceitar/Anotaes"
 
 msgid "Sync/Accept/Audio"
 msgstr "Sincronizao/Aceitar/udio"
-
-msgid "Voice Annotation/Record"
-msgstr "Anotação de Voz/Gravar"
-
-msgid "Voice Annotation/Play"
-msgstr "Anotação de Voz/Reproduzir"
 
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
@@ -6047,6 +6054,18 @@ msgstr "Flutuao total (apurado)"
 msgid "GPU 0"
 msgstr "GPU 0"
 
+msgid "Normal"
+msgstr "Normal"
+
+msgid "X 2"
+msgstr ""
+
+msgid "X 3"
+msgstr ""
+
+msgid "X 4"
+msgstr ""
+
 msgid "Do Nothing"
 msgstr "No faas nada"
 
@@ -6121,9 +6140,6 @@ msgid ""
 msgstr ""
 "Quando selecionado, o mrv2 ir elevar a janela para a frente uma vez que voc "
 "introduzir a janela de viso."
-
-msgid "Normal"
-msgstr "Normal"
 
 msgid "When selected, mrv2 will resize its window to the first image."
 msgstr ""
@@ -6853,6 +6869,32 @@ msgstr "Dispositivo de sada"
 
 msgid "Output Device to use for audio playback."
 msgstr "Dispositivo de sada a usar para reproduo de udio."
+
+#, fuzzy
+msgid "Voice Annotations"
+msgstr "Anotação de Voz/Reproduzir"
+
+#, fuzzy
+msgid "Voice Annotation Preferences."
+msgstr "Anotação de Voz/Gravar"
+
+#, fuzzy
+msgid "Save Path"
+msgstr "Remover Caminhos"
+
+msgid "Pick a directory from disk to save voice overs.."
+msgstr ""
+
+#, fuzzy
+msgid "Playback Speed"
+msgstr "Velocidade de reproduo."
+
+msgid "Microphone"
+msgstr ""
+
+#, fuzzy
+msgid "Volume"
+msgstr "Volume de udio"
 
 msgid "ComfyUI"
 msgstr "ComfyUI"
@@ -7665,6 +7707,10 @@ msgstr "Modo Crculo"
 msgid "Text Mode"
 msgstr "Modo de texto"
 
+#, fuzzy
+msgid "Voice Mode"
+msgstr "Modo Crculo"
+
 msgid "Pen Size More"
 msgstr "Tamanho da caneta Mais"
 
@@ -7736,6 +7782,9 @@ msgstr "Alternar a janela de teclas instantneas"
 
 msgid "Toggle About Window"
 msgstr "Alternar Sobre a Janela"
+
+#~ msgid "Returns true if the rate is valid for use with timecode."
+#~ msgstr "Devolve true se a taxa for vlida para uso com o tempocode."
 
 #~ msgid "Could not read annotation image from view"
 #~ msgstr "Não foi possível ler a imagem de anotação da visualização"

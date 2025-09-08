@@ -586,9 +586,6 @@ msgstr ""
 "Por ejemplo, la duración de un clip de cuadro 10 a cuadro 15 es 6 cuadros. "
 "El resultado estará en la razón de start_time.\n"
 
-msgid "Returns true if the rate is valid for use with timecode."
-msgstr "Retorna verdadero si la razón es válida para usar con timecode."
-
 msgid ""
 "Returns the first valid timecode rate that has the least difference from the "
 "given value."
@@ -3472,6 +3469,10 @@ msgstr ""
 "Herramienta de Texto.  Cliquee con el botón derecho para editar texto "
 "previamente estampado."
 
+#, fuzzy
+msgid "Voice Annotation Tool"
+msgstr "Voz/Reproducir"
+
 msgid "Undo Draw"
 msgstr "Deshacer Dibujo"
 
@@ -3803,6 +3804,15 @@ msgstr "Imagen demasiado grande.  Guardaré el tamaño de la vista."
 msgid "Could not read image data from view"
 msgstr "No pude leer los datos de la imagen de la vista"
 
+msgid "Voice Over/Delete"
+msgstr ""
+
+msgid "VoiceOver/Clear"
+msgstr ""
+
+msgid "Audio/Append"
+msgstr ""
+
 msgid "Play"
 msgstr "Reproducir"
 
@@ -3835,6 +3845,9 @@ msgstr "Rectángulo lleno"
 
 msgid "Arrow"
 msgstr "Flecha"
+
+msgid "Voice"
+msgstr ""
 
 msgid "Rotate"
 msgstr "Rotar"
@@ -4428,12 +4441,6 @@ msgstr "Sincronizar/Aceptar/Anotaciones"
 
 msgid "Sync/Accept/Audio"
 msgstr "Sincronizar/Aceptar/Audio"
-
-msgid "Voice Annotation/Record"
-msgstr "Voz/Grabar"
-
-msgid "Voice Annotation/Play"
-msgstr "Voz/Reproducir"
 
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
@@ -6120,6 +6127,18 @@ msgstr "Coma Flotante (Preciso)"
 msgid "GPU 0"
 msgstr "GPU 0"
 
+msgid "Normal"
+msgstr "Normal"
+
+msgid "X 2"
+msgstr ""
+
+msgid "X 3"
+msgstr ""
+
+msgid "X 4"
+msgstr ""
+
 msgid "Do Nothing"
 msgstr "Hacer Nada"
 
@@ -6193,9 +6212,6 @@ msgid ""
 "view window."
 msgstr ""
 "Al seleccionarlo, mrv2 elevará la ventana al frente cuando entre la vista."
-
-msgid "Normal"
-msgstr "Normal"
 
 msgid "When selected, mrv2 will resize its window to the first image."
 msgstr ""
@@ -6928,6 +6944,32 @@ msgstr "Equipo de Salida"
 
 msgid "Output Device to use for audio playback."
 msgstr "Equipo o tarjeta a usar para la reproducción de audio."
+
+#, fuzzy
+msgid "Voice Annotations"
+msgstr "Voz/Reproducir"
+
+#, fuzzy
+msgid "Voice Annotation Preferences."
+msgstr "Voz/Grabar"
+
+#, fuzzy
+msgid "Save Path"
+msgstr "Eliminar Carpetas"
+
+msgid "Pick a directory from disk to save voice overs.."
+msgstr ""
+
+#, fuzzy
+msgid "Playback Speed"
+msgstr "Velocidad de reproducción."
+
+msgid "Microphone"
+msgstr ""
+
+#, fuzzy
+msgid "Volume"
+msgstr "Volúmen del Audio"
 
 msgid "ComfyUI"
 msgstr "ComfyUI"
@@ -7738,6 +7780,10 @@ msgstr "Modo de Círculo"
 msgid "Text Mode"
 msgstr "Modo de Texto"
 
+#, fuzzy
+msgid "Voice Mode"
+msgstr "Modo de Círculo"
+
 msgid "Pen Size More"
 msgstr "Mayor Tamaño del Lápiz"
 
@@ -7809,6 +7855,9 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
+
+#~ msgid "Returns true if the rate is valid for use with timecode."
+#~ msgstr "Retorna verdadero si la razón es válida para usar con timecode."
 
 #~ msgid "Could not read annotation image from view"
 #~ msgstr "No pude leer la imagen de anotación de la vista"

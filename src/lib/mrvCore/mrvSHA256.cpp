@@ -265,8 +265,6 @@ namespace mrv
             return License::kInvalid;
 
         unencoded_expiration = decode_string(expiration_date);
-        if (unencoded_expiration == "never")
-            return License::kValid;
         
         // Validate expiration date
         std::tm tm = {};
