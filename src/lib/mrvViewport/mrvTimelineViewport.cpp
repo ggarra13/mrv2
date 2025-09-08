@@ -1280,9 +1280,19 @@ namespace mrv
             if (p.resizeWindow)
             {
                 if (!p.presentation)
+                {
                     resizeWindow();
+                }
                 else if (p.frameView)
+                {
                     frameView();
+                }
+
+                const auto& renderSize = getRenderSize();
+                if (renderSize.isValid())
+                {
+                    p.resizeWindow = false;
+                }
             }
             else if (p.frameView && p.switchClip)
             {
@@ -1778,11 +1788,6 @@ namespace mrv
             viewGroup->fixed(dockGroup, dockGroup->w());
             const int X = viewGroup->x() + viewGroup->w() - dockGroup->w();
             dockGroup->position(X, dockGroup->y());
-
-            if (renderSize.isValid())
-            {
-                p.resizeWindow = false;
-            }
         }
 
         math::Vector2i TimelineViewport::_getFocus() const noexcept
