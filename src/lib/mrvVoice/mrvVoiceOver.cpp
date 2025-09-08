@@ -365,7 +365,6 @@ namespace mrv
                     !fmt_ctx)
                 {
                     throw std::runtime_error("Could not create output context");
-                    return;
                 }
 
                 // Create new audio stream
@@ -373,52 +372,63 @@ namespace mrv
                 if (!stream)
                 {
                     avformat_free_context(fmt_ctx);
-                    throw std::runtime_error("Could not free context");
-                    return;
+                    throw std::runtime_error("Could not create new stream");
                 }
 
                 // Configure codec parameters for PCM 32-bit float LE
-                AVCodecParameters *codecpar = stream->codecpar;
+                AVCodecParameters* codecpar = stream->codecpar;
                 codecpar->codec_type     = AVMEDIA_TYPE_AUDIO;
                 codecpar->codec_id       = AV_CODEC_ID_PCM_F32LE;
                 codecpar->sample_rate    = kSampleRate;
                 av_channel_layout_default(&codecpar->ch_layout, kNumChannels);
                 codecpar->bit_rate       = codecpar->sample_rate * kNumChannels * sizeof(float) * 8;
+                stream->time_base = AVRational{1, codecpar->sample_rate};
 
                 // Open the output file
                 if (!(fmt_ctx->oformat->flags & AVFMT_NOFILE)) {
                     if (avio_open(&fmt_ctx->pb, p.fileName.c_str(), AVIO_FLAG_WRITE) < 0) {
                         avformat_free_context(fmt_ctx);
                         throw std::runtime_error("Could not open output file");
-                        return;
                     }
                 }
 
                 // Write the WAV header
                 if (avformat_write_header(fmt_ctx, NULL) < 0) {
-                    avio_closep(&fmt_ctx->pb);
+                    if (!(fmt_ctx->oformat->flags & AVFMT_NOFILE)) {
+                        avio_closep(&fmt_ctx->pb);
+                    }
                     avformat_free_context(fmt_ctx);
                     throw std::runtime_error("Error occurred when writing header");
-                    return;
                 }
 
                 // Allocate packet
                 AVPacket *pkt = av_packet_alloc();
                 if (!pkt) {
-                    avio_closep(&fmt_ctx->pb);
+                    if (!(fmt_ctx->oformat->flags & AVFMT_NOFILE)) {
+                        avio_closep(&fmt_ctx->pb);
+                    }
                     avformat_free_context(fmt_ctx);
-                    return;
+                    throw std::runtime_error("Could not allocate packet");
                 }
-                
+
                 const int channels = kNumChannels;
                 const size_t totalSamples = p.audio.buffer.size(); // number of floats = frames * channels
                 const size_t frames = totalSamples / channels;
                 const size_t bytes = totalSamples * sizeof(float);
                 
-                pkt->data = reinterpret_cast<uint8_t*>(p.audio.buffer.data());
-                pkt->size = static_cast<int>(bytes);
-                pkt->pts  = 0; // needed to avoid FFmpeg warning
-                pkt->duration = frames; // number of audio frames (per channel samples)
+                pkt->data = (uint8_t*)p.audio.buffer.data();
+                pkt->size = bytes;
+                pkt->flags |= AV_PKT_FLAG_KEY;
+                pkt->stream_index = stream->index;
+                pkt->pts = av_rescale_q(0,
+                                        AVRational{1, codecpar->sample_rate},
+                                        stream->time_base);
+                pkt->dts = pkt->pts;
+                pkt->duration = av_rescale_q(frames,
+                                             AVRational{1,
+                                                 codecpar->sample_rate},
+                                             stream->time_base);
+
 
                 // Write raw samples
                 if (av_interleaved_write_frame(fmt_ctx, pkt) < 0) {
