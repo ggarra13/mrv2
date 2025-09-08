@@ -43,6 +43,9 @@ v1.4.1
 - Fixed HDR data also potentially being added to audio streams when saving a movie.
 - Improved locate_python in etc/functions.sh.
 - Added expiration date reporting on licenses.
+- Put a work around on Wayland Panel Windows to avoid having them go off-screen.
+  Note that they may still flicker and due to limitations of Wayland, they
+  currently will get saved upon exit as docked panels, not windows.
 - Added Voice Over Annotations (new icon at the bottom of the toolbar).  How to use it:
   	* Select the microphone icon.
 	* Click somewhere on the canvas.  A stop button will show up.
