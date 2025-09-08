@@ -91,7 +91,12 @@ elseif(MRV2_BACKEND STREQUAL "VK")
 elseif(MRV2_BACKEND STREQUAL "BOTH")
     add_definitions(-DMRV2_BACKEND_BOTH=1)
 endif()
-if( MRV2_NETWORK )
+
+if(MRV2_DEMO)
+    add_definitions( -D MRV2_DEMO )
+endif()
+
+if(MRV2_NETWORK)
     find_package(Poco REQUIRED
 	COMPONENTS Net Foundation
 	CONFIG)

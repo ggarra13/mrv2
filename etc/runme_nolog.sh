@@ -61,6 +61,10 @@ if [ -z "$MRV2_BACKEND" ]; then
     export MRV2_BACKEND=GL
 fi
 
+if [ -z "$MRV2_DEMO" ]; then
+    export MRV2_DEMO=OFF
+fi
+
 if [ -z "$MRV2_HDR" ]; then
     export MRV2_HDR=ON
 fi
@@ -421,6 +425,7 @@ cmd="cmake -G '${CMAKE_GENERATOR}'
 
 	   -D MRV2_COMPILER=${COMPILER}
 	   -D MRV2_BACKEND=${MRV2_BACKEND}
+	   -D MRV2_DEMO=${MRV2_DEMO}
 	   -D MRV2_HDR=${MRV2_HDR}
 	   -D MRV2_NETWORK=${MRV2_NETWORK}
 	   -D MRV2_PYFLTK=${MRV2_PYFLTK}
