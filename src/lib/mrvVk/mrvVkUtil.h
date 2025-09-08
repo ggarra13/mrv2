@@ -32,56 +32,56 @@ namespace mrv
             const math::Box2i& rect, const
             image::Color4f& color, const float width,
             VkRenderPass renderPass = VK_NULL_HANDLE)
-    {
-        geom::TriangleMesh2 mesh;
-
-        // Add the outside vertices.
-        mesh.v.push_back(math::Vector2f(rect.min.x - width, rect.min.y - width));
-        mesh.v.push_back(math::Vector2f(rect.max.x + width, rect.min.y - width));
-        mesh.v.push_back(math::Vector2f(rect.max.x + width, rect.max.y + width));
-        mesh.v.push_back(math::Vector2f(rect.min.x - width, rect.max.y + width));
-
-        // Add the inside vertices.
-        mesh.v.push_back(math::Vector2f(rect.min.x, rect.min.y));
-        mesh.v.push_back(math::Vector2f(rect.max.x, rect.min.y));
-        mesh.v.push_back(math::Vector2f(rect.max.x, rect.max.y));
-        mesh.v.push_back(math::Vector2f(rect.min.x, rect.max.y));
-
-        // Add the triangles. Note that vertex indexes start at one,
-        // zero is invalid.
-        mesh.triangles.push_back(geom::Triangle2({1, 2, 5}));
-        mesh.triangles.push_back(geom::Triangle2({2, 6, 5}));
-        mesh.triangles.push_back(geom::Triangle2({2, 3, 6}));
-        mesh.triangles.push_back(geom::Triangle2({3, 7, 6}));
-        mesh.triangles.push_back(geom::Triangle2({3, 4, 8}));
-        mesh.triangles.push_back(geom::Triangle2({8, 7, 3}));
-        mesh.triangles.push_back(geom::Triangle2({4, 5, 8}));
-        mesh.triangles.push_back(geom::Triangle2({4, 1, 5}));
-
-        math::Vector2i pos;
-
-        if (renderPass)
         {
-            VkRenderPass oldRenderPass = render->getRenderPass();
-            render->setRenderPass(renderPass);
-            render->drawMesh(pipelineName, "mesh", "mesh", 
-                             mesh, pos, color, false);
-            render->setRenderPass(oldRenderPass);
-        }
-        else
-        {
-            render->drawMesh(pipelineName, "mesh", "mesh", "mesh",
-                             mesh, pos, color, false);
+            geom::TriangleMesh2 mesh;
+
+            // Add the outside vertices.
+            mesh.v.push_back(math::Vector2f(rect.min.x - width, rect.min.y - width));
+            mesh.v.push_back(math::Vector2f(rect.max.x + width, rect.min.y - width));
+            mesh.v.push_back(math::Vector2f(rect.max.x + width, rect.max.y + width));
+            mesh.v.push_back(math::Vector2f(rect.min.x - width, rect.max.y + width));
+
+            // Add the inside vertices.
+            mesh.v.push_back(math::Vector2f(rect.min.x, rect.min.y));
+            mesh.v.push_back(math::Vector2f(rect.max.x, rect.min.y));
+            mesh.v.push_back(math::Vector2f(rect.max.x, rect.max.y));
+            mesh.v.push_back(math::Vector2f(rect.min.x, rect.max.y));
+
+            // Add the triangles. Note that vertex indexes start at one,
+            // zero is invalid.
+            mesh.triangles.push_back(geom::Triangle2({1, 2, 5}));
+            mesh.triangles.push_back(geom::Triangle2({2, 6, 5}));
+            mesh.triangles.push_back(geom::Triangle2({2, 3, 6}));
+            mesh.triangles.push_back(geom::Triangle2({3, 7, 6}));
+            mesh.triangles.push_back(geom::Triangle2({3, 4, 8}));
+            mesh.triangles.push_back(geom::Triangle2({8, 7, 3}));
+            mesh.triangles.push_back(geom::Triangle2({4, 5, 8}));
+            mesh.triangles.push_back(geom::Triangle2({4, 1, 5}));
+
+            math::Vector2i pos;
+
+            if (renderPass)
+            {
+                VkRenderPass oldRenderPass = render->getRenderPass();
+                render->setRenderPass(renderPass);
+                render->drawMesh(pipelineName, "mesh", "mesh", 
+                                 mesh, pos, color, false);
+                render->setRenderPass(oldRenderPass);
+            }
+            else
+            {
+                render->drawMesh(pipelineName, "mesh", "mesh", "mesh",
+                                 mesh, pos, color, false);
+            }
+        
         }
         
-    }
-
-    //! Draw a filled circle.
-    void drawFilledCircle(
-        const std::shared_ptr<timeline_vlk::Render>& render,
-        const std::string& pipelineName,
-        const math::Vector2i& center, const float radius,
-        const image::Color4f& color, const bool soft = false);
+        //! Draw a filled circle.
+        void drawFilledCircle(
+            const std::shared_ptr<timeline_vlk::Render>& render,
+            const std::string& pipelineName,
+            const math::Vector2i& center, const float radius,
+            const image::Color4f& color, const bool soft = false);
 
     }  // namespace util
     
