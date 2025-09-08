@@ -50,9 +50,11 @@ v1.4.1
   	* Select the microphone icon.
 	* Click somewhere on the canvas.  A stop button will show up.
 	* Click on the button.  It will change to a recording icon.
-	  You are now recording your mouse positions, LMB presses, and your voice on the
-	  default microphone (you can change it in the Preferences->Voice Over section)
-	* Click on the button again to stop recording.  It will change to a stop button in yellow.
+	  You are now recording your mouse positions, LMB presses, and your
+	  voice on the default microphone (you can change it in the
+	  Preferences->Voice Over section)
+	* Click on the button again to stop recording.  It will change to a
+	  stop button in yellow.
 	* Click again on the button to replay the mouse moves and the audio.
 	* Note that on macOS, there's a bug in the OS that requires reloading or
 	  switching the clip after playing the voice over annotation.
