@@ -92,7 +92,9 @@ elseif(MRV2_BACKEND STREQUAL "BOTH")
     add_definitions(-DMRV2_BACKEND_BOTH=1)
 endif()
 if( MRV2_NETWORK )
-    find_package(Poco REQUIRED Net Foundation)
+    find_package(Poco REQUIRED
+	COMPONENTS Net Foundation
+	CONFIG)
     add_definitions( -DMRV2_NETWORK )
 endif()
 

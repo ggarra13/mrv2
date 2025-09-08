@@ -57,6 +57,10 @@ jobs:
         export VK_LAYER_DEBUG=all
         vulkaninfo --summary
         
+    - name: Remove system OpenEXR and Imath
+      run: |
+        brew uninstall --ignore-dependencies openexr imath || true
+
     - name: Setup environment
       run: mkdir -p ssh
 

@@ -127,8 +127,12 @@ msgstr "Actualice"
 msgid "No download url was found for"
 msgstr "Ninguna dirección para bajar fue encontrada para"
 
+msgid "No"
+msgstr ""
+
+#, fuzzy
+msgid "releases found for the specified repository."
+msgstr "Ninguna publicación encontrada para el repositorio especificado."
+
 msgid "Help/Update mrv2"
 msgstr "Ayuda/Actualizar mrv2"
-
-#~ msgid "No releases found for the specified repository."
-#~ msgstr "Ninguna publicación encontrada para el repositorio especificado."

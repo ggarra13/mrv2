@@ -126,8 +126,12 @@ msgstr "उन्नयन"
 msgid "No download url was found for"
 msgstr "कोई डाउनलोड यूआरएल नहीं मिला"
 
+msgid "No"
+msgstr ""
+
+#, fuzzy
+msgid "releases found for the specified repository."
+msgstr "उल्लेखित भंडार के लिए कोई रिलीज नहीं मिला."
+
 msgid "Help/Update mrv2"
 msgstr "मदद/mrv2 अद्यतन करें"
-
-#~ msgid "No releases found for the specified repository."
-#~ msgstr "उल्लेखित भंडार के लिए कोई रिलीज नहीं मिला."

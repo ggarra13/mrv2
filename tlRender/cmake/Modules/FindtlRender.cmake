@@ -30,7 +30,9 @@
 
 set(tlRender_VERSION 0.0.1)
 
-find_package(Imath REQUIRED)
+# set(CMAKE_FIND_DEBUG_MODE TRUE)
+
+find_package(Imath REQUIRED CONFIG)
 find_package(nlohmann_json REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(OTIO REQUIRED)
@@ -42,10 +44,10 @@ find_package(RtAudio)
 # These may be installed in cmake or not installed if the setting is off
 #
 if(TLRENDER_OCIO)
-    find_package(OpenColorIO REQUIRED)
+    find_package(OpenColorIO REQUIRED CONFIG)
 endif()
 if(TLRENDER_EXR)
-    find_package(OpenEXR)
+    find_package(OpenEXR CONFIG)
 endif()
 if(TLRENDER_FFMPEG)
     find_package(FFmpeg)
@@ -54,7 +56,7 @@ if(TLRENDER_LIBPLACEBO)
     find_package(libplacebo)
 endif()
 if(TLRENDER_JPEG)
-    find_package(libjpeg-turbo)
+    find_package(libjpeg-turbo CONFIG)
 endif()
 if(TLRENDER_NDI)
     find_package(NDI)
@@ -68,6 +70,9 @@ endif()
 if(TLRENDER_USD)
     find_package(pxr)
 endif()
+
+# set(CMAKE_FIND_DEBUG_MODE FALSE)
+
 
 find_path(tlRender_INCLUDE_DIR NAMES tlCore/Util.h PATH_SUFFIXES tlRender)
 set(tlRender_INCLUDE_DIRS
@@ -233,6 +238,17 @@ if (TIFF_FOUND)
     list(APPEND tlRender_tlIO_LIBRARIES TIFF)
 endif()
 if (OpenEXR_FOUND)
+    # Print the version and the location of the config file that was found
+    message(STATUS "Found OpenEXR version: ${OpenEXR_VERSION}")
+    message(STATUS "OpenEXR config file location: ${OpenEXR_CONFIG}")
+
+    # For modern CMake with imported targets (like OpenEXR::OpenEXR)
+    # this is the most reliable way to check the linked library.
+    get_target_property(OPENEXR_LIBRARY OpenEXR::OpenEXR IMPORTED_LOCATION_RELEASE)
+    get_target_property(OPENEXR_INCLUDES OpenEXR::OpenEXR INTERFACE_INCLUDE_DIRECTORIES)
+
+    message(STATUS "OpenEXR include directories: ${OPENEXR_INCLUDES}")
+    message(STATUS "OpenEXR library file: ${OPENEXR_LIBRARY}")
     list(APPEND tlRender_tlIO_LIBRARIES OpenEXR::OpenEXR)
 endif()
 if (FFmpeg_FOUND)
@@ -407,3 +423,4 @@ if(tlRender_FOUND AND NOT TARGET tlRender)
     endif()
     target_link_libraries(tlRender INTERFACE tlRender::glad)
 endif()
+

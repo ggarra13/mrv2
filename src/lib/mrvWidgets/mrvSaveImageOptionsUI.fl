@@ -7,6 +7,7 @@ i18n_gnu_function gettext
 i18n_gnu_static_function gettext_noop
 header_name {.h}
 code_name {.cxx}
+include_guard {}
 decl {\#include <string>} {public global
 }
 
@@ -87,11 +88,12 @@ o->clear();
 \#ifdef TLRENDER_EXR
 for (int i = 0; i < Imf::NUM_COMPRESSION_METHODS; ++i)
 {
-   getCompressionNameFromId((Imf::Compression)i, name);
+   Imf::getCompressionNameFromId((Imf::Compression)i, name);
    o->add(name.c_str());
 }
 o->menu_end();
-\#endif} {}
+\#endif} {selected
+    }
   }
   Function {SaveImageOptionsUI(const std::string ext, const bool exr_valid)} {open
   } {
@@ -280,7 +282,6 @@ if (ext == ".exr" && exr_valid)
 }
 uiMain->show();
 while (uiMain->visible())
-  Fl::check();} {selected
-    }
+  Fl::check();} {}
   }
 }

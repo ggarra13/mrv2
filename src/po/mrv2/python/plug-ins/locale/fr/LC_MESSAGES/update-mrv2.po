@@ -128,8 +128,12 @@ msgstr "Mise à niveau"
 msgid "No download url was found for"
 msgstr "Aucun téléchargement url n'a été trouvé pour"
 
+msgid "No"
+msgstr ""
+
+#, fuzzy
+msgid "releases found for the specified repository."
+msgstr "Aucune version n'a été trouvée pour le dépôt spécifié."
+
 msgid "Help/Update mrv2"
 msgstr "Aide/Mise à jour mrv2"
-
-#~ msgid "No releases found for the specified repository."
-#~ msgstr "Aucune version n'a été trouvée pour le dépôt spécifié."
