@@ -42,7 +42,7 @@ namespace mrv
     
     std::string sha256(const std::string& input);
     License validate_license(std::string& expiration_date,
-                             const std::string& secret_salt = "goblydock");
+                             const std::string& secret_salt = "superGoblydock1973!x>");
     License license_beat();
 }
 
