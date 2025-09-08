@@ -128,8 +128,12 @@ msgstr "アップグレード"
 msgid "No download url was found for"
 msgstr "ダウンロードURLが見つかりませんでした: "
 
+msgid "No"
+msgstr ""
+
+#, fuzzy
+msgid "releases found for the specified repository."
+msgstr "指定されたリポジトリにはリリースが見つかりませんでした。"
+
 msgid "Help/Update mrv2"
 msgstr "ヘルプ/mrv2 を更新"
-
-#~ msgid "No releases found for the specified repository."
-#~ msgstr "指定されたリポジトリにはリリースが見つかりませんでした。"

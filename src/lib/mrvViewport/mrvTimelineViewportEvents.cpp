@@ -931,7 +931,7 @@ namespace mrv
                                         p.popupMenu->add(_("Voice Over/Delete"), 0,
                                                          (Fl_Callback*)voice_over_delete_cb,
                                                          this);
-                                        p.popupMenu->add(_("VoiceOver/Clear"), 0,
+                                        p.popupMenu->add(_("Audio/Clear"), 0,
                                                          (Fl_Callback*)voice_over_clear_cb,
                                                          this);
                                         p.popupMenu->add(_("Audio/Append"), 0,
