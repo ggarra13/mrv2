@@ -180,7 +180,7 @@ int main(int argc, char** argv)
 
     Fl_Box    box(20, 30, 600, 80);
     box.label("Please submit this machine id "
-              "with your Paypal donation of USD $50 or USD $150 to ggarra13@@gmail.com");
+              "with your Paypal donation of\nUSD $50 or USD $150 to ggarra13@@gmail.com");
 
     Fl_Output machine(20, 130, 600, 40, "Machine ID");
     machine.align(FL_ALIGN_CENTER | FL_ALIGN_TOP);
