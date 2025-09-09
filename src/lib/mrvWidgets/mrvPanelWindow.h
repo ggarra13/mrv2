@@ -14,7 +14,10 @@
 
 namespace mrv
 {
-
+   /** 
+    * Class used to hold a panel when the panel is in window mode.
+    * 
+    */
     class PanelWindow : public Fl_Double_Window
     {
     protected:
