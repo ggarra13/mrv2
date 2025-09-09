@@ -855,7 +855,7 @@ if (reason == FL_REASON_CLOSED)
       xywh {0 0 933 641} type Double align 80 resizable
       class {mrv::MainWindow} size_range {933 641 0 0} visible
     } {
-      Fl_Flex uiRegion {open selected
+      Fl_Flex uiRegion {open
         xywh {0 0 933 641} box FLAT_BOX resizable fixed_size_tuples {5  0 30  1 29  3 29  4 30  5 25 }
       } {
         Fl_Group uiMenuGroup {
@@ -1370,17 +1370,17 @@ settings->setValue( mrv::kPenColorA, a);}
               code0 {o->main( this );}
               class MyViewport
             } {}
-            Fl_Group uiDockGroup {
+            Fl_Group uiDockGroup {open
               xywh {663 59 270 468} box FLAT_BOX hide
               code0 {uiViewGroup->fixed( o, 270 );}
             } {
               Fl_Box uiResizableBar {
-                xywh {663 59 10 435} box ENGRAVED_BOX
+                xywh {663 59 10 468} box ENGRAVED_BOX
                 class {mrv::ResizableBar}
               }
               Fl_Group uiDock {
-                label DockGroup open
-                xywh {673 59 260 435} box FLAT_BOX labeltype NO_LABEL resizable
+                label DockGroup open selected
+                xywh {673 59 260 468} box FLAT_BOX labeltype NO_LABEL resizable
                 code0 {o->set_window( uiMain );}
                 code1 {uiMain->set_dock(o);}
                 class {mrv::DockGroup}
