@@ -203,6 +203,10 @@ namespace mrv
                                    (Fl_Timeout_Handler)play_mouse_position_cb,
                                    this);
             }
+            else
+            {
+                _stopVoicePlaying(currentVoiceOver);
+            }
         }
         
         //! This callback must be part of TimelineViewport as CommandInterpreter will call it.
@@ -410,6 +414,7 @@ namespace mrv
         {
             voice->stopPlaying();
             currentVoiceOver.reset();
+
         }
         
         void TimelineViewport::_stopVoiceRecording()
@@ -450,6 +455,7 @@ namespace mrv
                     }
                 }
             }
+            
         }
         
         void TimelineViewport::_handlePushLeftMouseButton() noexcept

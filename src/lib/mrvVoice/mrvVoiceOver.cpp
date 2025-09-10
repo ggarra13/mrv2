@@ -517,15 +517,7 @@ namespace mrv
             
             try
             {
-#if defined(TLRENDER_AUDIO)
-                if (p.rtAudio && p.rtAudio->isStreamRunning())
-                    p.rtAudio->stopStream();
-                
-                if (p.rtAudio && p.rtAudio->isStreamOpen())
-                {
-                    p.rtAudio->closeStream();
-                }
-#endif
+                _cleanupAudio();
             }
             catch (const RtAudioError& e)
             {
@@ -535,8 +527,6 @@ namespace mrv
             p.status = RecordStatus::Saved;
             p.audio.rtCurrentFrame = 0;
             p.mouse.idx = 0;
-
-            _cleanupAudio();
         }
 
         RecordStatus VoiceOver::getStatus() const

@@ -1990,6 +1990,7 @@ namespace mrv
             p.activeFiles[0]->inOutRange = p.player->inOutRange();
             p.activeFiles[0]->audioOffset = p.player->audioOffset();
             p.activeFiles[0]->annotations = p.player->getAllAnnotations();
+            p.activeFiles[0]->voiceAnnotations = p.player->getAllVoiceAnnotations();
             p.activeFiles[0]->ocioIcs = ocio::ics();
             p.activeFiles[0]->ocioLook = ocio::look();
             p.activeFiles[0]->lutOptions = p.lutOptions;
@@ -2102,6 +2103,7 @@ namespace mrv
                                 player->setMute(p.mute);
                                 player->setAudioOffset(item->audioOffset);
                                 player->setAllAnnotations(item->annotations);
+                                player->setAllAnnotations(item->voiceAnnotations);
                                 player->seek(item->currentTime);
                                 player->setPlayback(item->playback);
                             }

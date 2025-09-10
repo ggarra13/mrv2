@@ -8,13 +8,16 @@
 
 #pragma once
 
-#include <tlTimeline/IRender.h>
-#include <tlTimeline/Player.h>
+#include <mrvVoice/mrvAnnotation.h>
 
 #include "mrvOptions/mrvStereo3DOptions.h"
 #include "mrvOptions/mrvFilesPanelOptions.h"
 
+#include <tlTimeline/IRender.h>
+#include <tlTimeline/Player.h>
+
 #include <tlDraw/Annotation.h>
+
 
 namespace mrv
 {
@@ -27,7 +30,6 @@ namespace mrv
      */
     struct FilesModelItem
     {
-        // These are Darby's elements
         tl::file::Path path;
         tl::file::Path audioPath;
 
@@ -57,6 +59,7 @@ namespace mrv
         timeline::LUTOptions lutOptions;
 
         std::vector<std::shared_ptr<draw::Annotation > > annotations;
+        std::vector<std::shared_ptr<voice::Annotation > > voiceAnnotations;
     };
 
     //! Files model.
@@ -115,7 +118,7 @@ namespace mrv
 
         //! Close all the files.
         void closeAll();
-
+        
         //! Set the A file.
         void setA(int index);
 
