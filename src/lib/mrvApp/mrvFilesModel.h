@@ -121,6 +121,9 @@ namespace mrv
         
         //! Set the A file.
         void setA(int index);
+        
+        //! Set the A file even if already set.
+        void forceA(int index);
 
         //! Set the B files.
         void setB(int index, bool);

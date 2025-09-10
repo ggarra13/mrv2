@@ -229,6 +229,21 @@ namespace mrv
         }
     }
 
+    void FilesModel::forceA(int index)
+    {
+        TLRENDER_P();
+        
+        if (index >= 0 && index < p.files->getSize())
+        {
+            auto oldA = p.files->getItem(index);
+            p.a->setIfChanged(nullptr);
+            p.a->setIfChanged(oldA);
+            p.aIndex->setAlways(_index(p.a->get()));
+            p.active->setAlways(_getActive());
+            p.layers->setAlways(_getLayers());
+        }
+    }
+
     void FilesModel::setB(int index, bool value)
     {
         if (App::demo_mode)

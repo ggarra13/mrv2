@@ -205,7 +205,10 @@ namespace mrv
             }
             else
             {
-                _stopVoicePlaying(currentVoiceOver);
+                // This is mainly needed on macOS to refresh the RtAudio pointer
+                // in CoreAudio.
+                auto files = _p->ui->app->filesModel();
+                files->forceA(files->observeAIndex()->get());
             }
         }
         
@@ -414,7 +417,6 @@ namespace mrv
         {
             voice->stopPlaying();
             currentVoiceOver.reset();
-
         }
         
         void TimelineViewport::_stopVoiceRecording()
@@ -919,7 +921,7 @@ namespace mrv
 
                         auto renderSize = getRenderSize();
                         
-                        float mult = renderSize.w * 6 / 4096.0 / p.viewZoom / 2;
+                        float mult = renderSize.w * 6 / 4096.0 / p.viewZoom / 2 * pixels_per_unit();
                         mult = std::clamp(mult, 1.F, 10.F);
 
                         auto annotations = p.player->getVoiceAnnotations();
