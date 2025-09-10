@@ -23,6 +23,8 @@ v1.4.1
   	  10 + 5 and get 15.
 - Updated compile to work with cmake 4.1.1.
 - Updated to OpenEXR v3.4 (from 3.3.5).
+- Added reading and writing of colorInteropId attribute, but no interpretation
+  of the parameter yet.
 - Updated to use Imath v3.2.1 (from 3.1.9)	
 - Updated to use cpptrace v1.0.4
 - Updated to use FFmpeg v8.0 (from v7.0.1)
@@ -45,7 +47,7 @@ v1.4.1
 - Added expiration date reporting on licenses.
 - Put a work around on Wayland Panel Windows to avoid having them go off-screen.
   Note that they may still flicker and due to limitations of Wayland at 4k with
-  60 FPS, the.
+  60 FPS.
 - Added Voice Over Annotations (new icon at the bottom of the toolbar).  How to use it:
   	* Select the microphone icon.
 	* Click somewhere on the canvas.  A stop button will show up.
