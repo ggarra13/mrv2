@@ -58,8 +58,6 @@ v1.4.1
 	* Click on the button again to stop recording.  It will change to a
 	  stop button in yellow.
 	* Click again on the button to replay the mouse moves and the audio.
-	* Note that on macOS, there's a bug in the OS that requires reloading or
-	  switching the clip after playing the voice over annotation.
 
 
 v1.4.0
