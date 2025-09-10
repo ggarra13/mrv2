@@ -694,6 +694,7 @@ namespace tl
             TLRENDER_SERIALIZE_STD_ATTR(CapDate, capDate);
             TLRENDER_SERIALIZE_STD_ATTR(CaptureRate, captureRate);
             TLRENDER_SERIALIZE_STD_ATTR(Chromaticities, chromaticities);
+            TLRENDER_SERIALIZE_STD_ATTR(ColorInteropID, colorInteropID);
             TLRENDER_SERIALIZE_STD_ATTR(Comments, comments);
             TLRENDER_SERIALIZE_STD_ATTR(DeepImageState, deepImageState);
             TLRENDER_SERIALIZE_STD_ATTR(
@@ -757,6 +758,7 @@ namespace tl
             TLRENDER_DESERIALIZE_STD_ATTR(CapDate, std::string);
             TLRENDER_DESERIALIZE_STD_ATTR(CaptureRate, Imf::Rational);
             TLRENDER_DESERIALIZE_STD_ATTR(Chromaticities, Imf::Chromaticities);
+            TLRENDER_DESERIALIZE_STD_ATTR(ColorInteropID, std::string);
             TLRENDER_DESERIALIZE_STD_ATTR(Comments, std::string);
             TLRENDER_DESERIALIZE_STD_ATTR(DeepImageState, Imf::DeepImageState);
             TLRENDER_DESERIALIZE_STD_ATTR(EffectiveFocalLength, float);
