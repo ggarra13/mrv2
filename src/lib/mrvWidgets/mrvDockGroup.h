@@ -4,13 +4,14 @@
 
 #pragma once
 
-#include <string>
-#include <vector>
 
 #include <FL/Fl_Group.H>
 
 #include "mrvWidgets/mrvPack.h"
 #include "mrvWidgets/mrvScroll.h"
+
+#include <string>
+#include <vector>
 
 namespace mrv
 {

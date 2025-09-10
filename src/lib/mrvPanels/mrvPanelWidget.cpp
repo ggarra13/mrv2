@@ -156,8 +156,8 @@ namespace mrv
 
             // \@bug: Wayland currently cannot store properly the positions of
             //        panel windows.
-            if (desktop::Wayland())
-                window = 0;
+            // if (desktop::Wayland())
+            //     window = 0;
             
             settings->setValue(key, window);
 

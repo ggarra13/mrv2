@@ -273,7 +273,6 @@ namespace mrv
                     newY = y();
                     newH = kMinHeight;
                 }
-                    
                 resize(newX, newY, newW, newH);
                 if (parent())
                     parent()->init_sizes();

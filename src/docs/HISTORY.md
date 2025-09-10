@@ -44,12 +44,8 @@ v1.4.1
 - Improved locate_python in etc/functions.sh.
 - Added expiration date reporting on licenses.
 - Put a work around on Wayland Panel Windows to avoid having them go off-screen.
-  Note that they may still flicker and due to limitations of Wayland, they
-  currently will get saved upon exit as docked panels, not windows.
-- The Wayland Panel Windows work-around is not enough.  We currently don't save
-  panels as Windows to prevent corrupting the interface upon loading.  This
-  also means that if a Panel goes flying into space, it is possible to retrieve
-  it by just toggling it (say, press F4 twice to get the Files Panel back).
+  Note that they may still flicker and due to limitations of Wayland at 4k with
+  60 FPS, the.
 - Added Voice Over Annotations (new icon at the bottom of the toolbar).  How to use it:
   	* Select the microphone icon.
 	* Click somewhere on the canvas.  A stop button will show up.

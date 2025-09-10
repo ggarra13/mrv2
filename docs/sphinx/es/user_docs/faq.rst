@@ -111,17 +111,11 @@ Wayland
 
 	  export FLTK_BACKEND=x11
 	  
-- Tengo problemas de dibujo luego que una ventana de panel desapareció o salió
-  de la pantalla.
-  Esto es un problema con los paneles grandes como el panel de Información del Medio. Para resetear tus seteos a lo normal::
+- Los paneles bajo Wayland temblequean.
 
-    vmrv2 -resetSettings
-
-  o, si puede accederlo, vaya al panel de Seteos (F9), en la parte inforior y
-  cliquée en::
-
-    Resetear Seteos.
-    
+        Esto parecece ser un error en GNOME 48 (Mutter) reproduciendo a 4K
+	y 60 FPS.
+  
 - Tengo avisos (warnings) cuando ejecuto el mrv2 pre-compilado en la consola
   bajo Wayland en una distro moderna como Ubuntu 22.04.4 LTS::
 

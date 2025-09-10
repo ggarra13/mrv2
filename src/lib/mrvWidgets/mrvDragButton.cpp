@@ -22,7 +22,9 @@
 
 namespace
 {
+    // Minimum distance to move for undocking
     const int kDragMinDistance = 10;
+    const int kMinMove = 120;
 }
 
 namespace mrv
@@ -31,13 +33,13 @@ namespace mrv
     DragButton::DragButton(int x, int y, int w, int h, const char* l) :
         Fl_Box(x, y, w, h, l)
     {
-        was_docked = 0; // Assume we have NOT just undocked...
+        was_docked = false; // Assume we have NOT just undocked...
     }
     
     DragButton::~DragButton()
     {
     }
-    
+
     int DragButton::handle(int event)
     {
         int ret = Fl_Box::handle(event);
@@ -64,15 +66,10 @@ namespace mrv
             switch (event)
             {
             case FL_PUSH: // downclick in button creates cursor offsets
-                get_global_coords(x1, y1);
-                get_window_coords(xoff, yoff);
-                
-                xoff -= x1;
-                yoff -= y1;
+                get_global_coords(fromx, fromy);
+                get_window_coords(winx, winy);
                 ret = 1;
-        
                 break;
-
             case FL_DRAG: // drag the button (and its parent window) around the
             {          // screen
                 if (was_docked)
@@ -80,26 +77,17 @@ namespace mrv
                     // Need to init offsets, we probably got here following a
                     // drag from the dock, so the PUSH (above) will not have
                     // happened.
-                    was_docked = 0;
-                    get_global_coords(x1, y1);
-                    get_window_coords(xoff, yoff);
-                
-                    xoff -= x1;
-                    yoff -= y1;
+                    was_docked = false;
+                    get_global_coords(fromx, fromy);
+                    get_window_coords(winx, winy);
                 }
-
-                int posX, posY;
-                get_global_coords(posX, posY);
-
-                posX += xoff;
-                posY += yoff;
-
-                PanelWindow* tw = tg->get_window();
-                assert(tw);
-                tw->position(posX, posY);
-                if (tw->parent())
-                    tw->parent()->init_sizes();
-
+                
+                int deltax = Fl::event_x() + window()->x() - fromx;
+                int deltay = Fl::event_y() + window()->y() - fromy;
+                window()->position(winx + deltax, winy + deltay);
+                if (window()->parent())
+                    window()->parent()->init_sizes();
+                
                 int dock_attempt = would_dock();
                 if (dock_attempt)
                 {
@@ -139,7 +127,7 @@ namespace mrv
         switch (event)
         {
         case FL_PUSH: // downclick in button creates cursor offsets
-            get_global_coords(x1, y1);
+            get_global_coords(fromx, fromy);
             ret = 1;
             break;
 
@@ -147,20 +135,19 @@ namespace mrv
             // If the drag has moved further than the drag_min distance
             // then invoke an un-docking
             get_global_coords(x2, y2);
-            x2 -= x1;
-            y2 -= y1;
+            x2 -= fromx;
+            y2 -= fromy;
             x2 = (x2 > 0) ? x2 : (-x2);
             y2 = (y2 > 0) ? y2 : (-y2);
             if ((x2 > kDragMinDistance) || (y2 > kDragMinDistance))
             {
                 tg->undock_grp(false); // undock the window
-                was_docked = -1;       // note that we *just now* undocked
+                was_docked = true;     // note that we *just now* undocked
                 
                 int posX, posY;
                 get_global_coords(posX, posY);
                 
                 PanelWindow* tw = tg->get_window();
-                assert(tw);
                 tw->position(posX, posY);
                 if (tw->parent())
                     tw->parent()->init_sizes();
