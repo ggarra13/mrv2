@@ -106,6 +106,10 @@ Wayland
 	XWayland, set::
 
 	  export FLTK_BACKEND=x11
+
+- I get flickering positioning of Panels under Wayland.
+
+        This seems to be a bug in GNOME 48 (Mutter) when playing 4K at 60FPS.
 	  
 - I get warnings when I run the pre-compiled mrv2 on the console under Wayland
   on a modern distro like Ubuntu 22.04.4 LTS, like::
