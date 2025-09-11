@@ -37,6 +37,33 @@ namespace mrv
             bool pressed = false;
         };
         
+        //! \name Serialize
+        ///@{
+
+        void to_json(nlohmann::json&, const MouseData&);
+
+        void from_json(const nlohmann::json&, MouseData&);
+
+        ///@}
+
+        
+        struct MouseRecording
+        {
+            size_t idx = 0;
+            std::vector<MouseData> data;
+        };
+        
+        //! \name Serialize
+        ///@{
+
+        void to_json(nlohmann::json&, const MouseRecording&);
+
+        void from_json(const nlohmann::json&, MouseRecording&);
+
+        ///@}
+
+
+        
         class VoiceOver
         {
             TLRENDER_NON_COPYABLE(VoiceOver);
@@ -44,10 +71,9 @@ namespace mrv
         protected:
             void _init(const std::shared_ptr<system::Context>&,
                        const math::Vector2f&);
-
-            VoiceOver();
             
         public:
+            VoiceOver();
             virtual ~VoiceOver();
 
             //! Create a new system.
@@ -96,12 +122,26 @@ namespace mrv
             
             //! Tick the mouse position playback.
             void tick();
-            
+
+        public:
+            // These are serializable elements.
+            MouseRecording mouse;
+            std::string    fileName;
+
         private:
             void _startRecording();
             void _cleanupAudio();
             
             TLRENDER_PRIVATE();
         };
+        
+        //! \name Serialize
+        ///@{
+
+        void to_json(nlohmann::json&, const VoiceOver&);
+
+        void from_json(const nlohmann::json&, VoiceOver&);
+
+        ///@}
     }
 }

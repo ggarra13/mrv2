@@ -30,12 +30,20 @@ namespace mrv
         j["ocioIcs"] = value.ocioIcs;
         j["ocioLook"] = value.ocioLook;
         j["lutOptions"] = value.lutOptions;
+
         std::vector< draw::Annotation > annotations;
         for (const auto& annotation : value.annotations)
         {
             annotations.push_back(*annotation.get());
         }
         j["annotations"] = annotations;
+        
+        std::vector< voice::Annotation > voiceAnnotations;
+        for (const auto& voannotation : value.voiceAnnotations)
+        {
+            voiceAnnotations.push_back(*voannotation.get());
+        }
+        j["voiceAnnotations"] = voiceAnnotations;
     }
 
     void from_json(const nlohmann::json& j, FilesModelItem& value)
@@ -86,8 +94,17 @@ namespace mrv
         const nlohmann::json& annotations = j["annotations"];
         for (const auto& annotation : annotations)
         {
-            std::shared_ptr< Annotation > tmp = messageToAnnotation(annotation);
+            std::shared_ptr< Annotation > tmp =
+                draw::messageToAnnotation(annotation);
             value.annotations.push_back(tmp);
+        }
+        
+        const nlohmann::json& voannotations = j["voiceAnnotations"];
+        for (const auto& voannotation : voannotations)
+        {
+            std::shared_ptr< voice::Annotation > tmp =
+                voice::messageToAnnotation(voannotation);
+            value.voiceAnnotations.push_back(tmp);
         }
     }
 } // namespace mrv

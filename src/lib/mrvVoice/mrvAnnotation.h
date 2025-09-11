@@ -48,6 +48,9 @@ namespace mrv
         void to_json(nlohmann::json& json, const Annotation& value);
         void from_json(const nlohmann::json& json, Annotation& value);
 
-    } // namespace void
+        std::shared_ptr< Annotation >
+        messageToAnnotation(const nlohmann::json& json);
+        
+    } // namespace voice
 
 } // namespace tl

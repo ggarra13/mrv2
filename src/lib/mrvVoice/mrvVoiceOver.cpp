@@ -157,12 +157,6 @@ namespace mrv
     namespace voice
     {
         using namespace tl;
-
-        struct MouseRecording
-        {
-            size_t idx = 0;
-            std::vector<MouseData> data;
-        };
         
         struct VoiceOver::Private
         {
@@ -201,8 +195,8 @@ namespace mrv
             data.pos = center;
             data.pressed = false;
 
-            p.mouse.data.push_back(data);
-            p.mouse.idx = 0;
+            mouse.data.push_back(data);
+            mouse.idx = 0;
         }
 
         VoiceOver::VoiceOver() :
@@ -239,10 +233,10 @@ namespace mrv
             TLRENDER_P();
             
             p.audio.buffer.clear();
-            p.mouse.data.clear();
+            mouse.data.clear();
             p.status = RecordStatus::Stopped;
             p.audio.rtCurrentFrame = 0;
-            p.mouse.idx = 0;
+            mouse.idx = 0;
         }
 
         std::vector<float> VoiceOver::getAudio() const
@@ -349,7 +343,7 @@ namespace mrv
             }
 
             p.status = RecordStatus::Saved;
-            p.mouse.idx = 0;
+            mouse.idx = 0;
                         
             if (auto context = p.context.lock())
             {
@@ -511,7 +505,7 @@ namespace mrv
             if (p.status != RecordStatus::Playing || p.audio.buffer.empty())
             {
                 p.audio.rtCurrentFrame = 0;
-                p.mouse.idx = 0;
+                mouse.idx = 0;
                 return;
             }
             
@@ -526,7 +520,7 @@ namespace mrv
             
             p.status = RecordStatus::Saved;
             p.audio.rtCurrentFrame = 0;
-            p.mouse.idx = 0;
+            mouse.idx = 0;
         }
 
         RecordStatus VoiceOver::getStatus() const
@@ -538,19 +532,19 @@ namespace mrv
         {
             TLRENDER_P();
 
-            size_t idx = p.mouse.idx;
-            if (idx >= p.mouse.data.size())
+            size_t idx = mouse.idx;
+            if (idx >= mouse.data.size())
             {
-                idx = p.mouse.data.size() - 1;
+                idx = mouse.data.size() - 1;
             }
 
-            return p.mouse.data[idx];
+            return mouse.data[idx];
         }
 
-        void VoiceOver::appendMouseData(const MouseData& mouse)
+        void VoiceOver::appendMouseData(const MouseData& value)
         {
-            _p->mouse.data.push_back(mouse);
-            _p->mouse.idx = _p->mouse.data.size() - 1;
+            mouse.data.push_back(value);
+            mouse.idx = mouse.data.size() - 1;
         }
 
         const math::Vector2f& VoiceOver::getCenter() const
@@ -571,13 +565,13 @@ namespace mrv
         {
             TLRENDER_P();
             
-            p.mouse.idx++;
+            mouse.idx++;
 
-            if (p.mouse.idx >= p.mouse.data.size())
+            if (mouse.idx >= mouse.data.size())
             {
                 p.status = RecordStatus::Saved;
                 p.audio.rtCurrentFrame = 0;
-                p.mouse.idx = 0;
+                mouse.idx = 0;
 
                 _cleanupAudio();
             }
@@ -605,6 +599,41 @@ namespace mrv
 
             p.rtAudio.reset(); // Destroy the object and release resources
 #endif
+        }
+        
+        void to_json(nlohmann::json& j, const MouseData& value)
+        {
+            j["pos"] = value.pos;
+            j["pressed"] = value.pressed;
+        }
+
+        void from_json(const nlohmann::json& j, MouseData& value)
+        {
+            j.at("pos").get_to(value.pos);
+            j.at("pressed").get_to(value.pressed);
+        }
+        
+        void to_json(nlohmann::json& j, const MouseRecording& value)
+        {
+            j["data"] = value.data;
+        }
+
+        void from_json(const nlohmann::json& j, MouseRecording& value)
+        {
+            j.at("data").get_to(value.data);
+            value.idx = 0;
+        }
+        
+        void to_json(nlohmann::json& j, const VoiceOver& value)
+        {
+            j["fileName"] = value.fileName;
+            j["mouse"] = value.mouse;
+        }
+
+        void from_json(const nlohmann::json& j, VoiceOver& value)
+        {
+            j.at("fileName").get_to(value.fileName);
+            j.at("mouse").get_to(value.mouse);
         }
     }
 }

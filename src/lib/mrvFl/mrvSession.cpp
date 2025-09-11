@@ -114,6 +114,7 @@ namespace mrv
 
             Message timeline;
             Message annotation;
+            Message voiceAnnotation;
             Message time;
             Message playback;
             Message inOutRange;
@@ -121,18 +122,26 @@ namespace mrv
             if (player)
             {
                 auto annotations = player->getAllAnnotations();
+                auto voannotations = player->getAllVoiceAnnotations();
                 std::vector< draw::Annotation > jAnnotations;
+                std::vector< voice::Annotation > voAnnotations;
                 for (const auto& ann : annotations)
                 {
                     jAnnotations.push_back(*(ann.get()));
                 }
+                for (const auto& ann : voannotations)
+                {
+                    voAnnotations.push_back(*(ann.get()));
+                }
                 annotation = jAnnotations;
+                voiceAnnotation = voAnnotations;
                 time = player->currentTime();
                 playback = player->playback();
                 inOutRange = player->inOutRange();
             }
 
             timeline["annotations"] = annotation;
+            timeline["voice_annotations"] = voiceAnnotation;
             timeline["time"] = time;
             timeline["playback"] = playback;
             timeline["inOutRange"] = inOutRange;
@@ -475,6 +484,7 @@ namespace mrv
                     if (!Aitem->ocioIcs.empty())
                         ocio::setIcs(Aitem->ocioIcs);
                     Aitem->annotations = item.annotations;
+                    Aitem->voiceAnnotations = item.voiceAnnotations;
                     Aitem->videoLayer = item.videoLayer;
                     Aitem->currentTime = item.currentTime;
                     Aitem->inOutRange = item.inOutRange;
