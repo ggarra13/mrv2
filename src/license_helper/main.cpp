@@ -137,7 +137,6 @@ std::string prefspath()
 }
 
 Fl_Input* license;
-Fl_Input* expiration;
 
 
 static void create_license_cb(Fl_Widget* b, void* data)
@@ -148,17 +147,10 @@ static void create_license_cb(Fl_Widget* b, void* data)
         return;
     }
     
-    std::string expiration_string = expiration->value();
-    if (expiration_string.empty())
-    {
-        return;
-    }
-
     Fl_Preferences base(
             prefspath().c_str(), "filmaura", "mrv2.license",
             (Fl_Preferences::Root)0);
-    base.set("license", license_string.c_str());
-    base.set("expiration", expiration_string.c_str());
+    base.set("full_license", license_string.c_str());
     base.flush();
     
     exit(0);
@@ -166,7 +158,7 @@ static void create_license_cb(Fl_Widget* b, void* data)
 
 int main(int argc, char** argv)
 {
-    Fl_Double_Window win(640, 480, "License helper");
+    Fl_Double_Window win(640, 380, "License helper");
     std::string machine_id = get_machine_id();
     machine_id.erase(remove(machine_id.begin(), machine_id.end(), '\n'),
                      machine_id.end());
@@ -180,24 +172,21 @@ int main(int argc, char** argv)
 
     Fl_Box    box(20, 30, 600, 80);
     box.label("Please submit this machine id "
-              "with your Paypal donation of\nUSD $50 or USD $150 to ggarra13@@gmail.com");
+              "with your Paypal donation of\nUSD $50 (yearly license) or\n"
+              "USD $150 (license to own) to ggarra13@@gmail.com");
 
-    Fl_Output machine(20, 130, 600, 40, "Machine ID");
+    Fl_Output machine(20, 160, 600, 40, "Machine ID");
     machine.align(FL_ALIGN_CENTER | FL_ALIGN_TOP);
     machine.value(machine_id.c_str());
 
-    license = new Fl_Input(20, 230, 600, 40, "License");
+    license = new Fl_Input(20, 240, 600, 40, "License");
     license->align(FL_ALIGN_CENTER | FL_ALIGN_TOP);
     license->tooltip("Once you obtain a license, copy it here");
     
-    expiration = new Fl_Input(20, 300, 600, 40, "Expiration Code");
-    expiration->align(FL_ALIGN_CENTER | FL_ALIGN_TOP);
-    expiration->tooltip("Copy the expiration code here");
-
-    Fl_Button exit(80, 400, 150, 40, "Demo");
+    Fl_Button exit(80, 300, 150, 40, "Demo");
     exit.callback((Fl_Callback*)exit_cb, nullptr);
 
-    Fl_Button create(360, 400, 150, 40, "Create");
+    Fl_Button create(370, 300, 150, 40, "Create");
     create.callback((Fl_Callback*)create_license_cb, nullptr);
 
     
