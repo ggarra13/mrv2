@@ -95,7 +95,7 @@ namespace mrv
             int choice = fl_choice(
                 _("You have unsaved changes. "
                   "Do you want to save the session before closing?"),
-                _("Cancel"), _("Save"), _("Don't Save"), NULL, NULL);
+                _("Cancel"), _("Save"), _("Don't Save"), nullptr);
             if (choice == 1)
             {
                 save_session_cb(nullptr, ui);

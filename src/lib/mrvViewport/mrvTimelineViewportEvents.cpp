@@ -410,6 +410,23 @@ namespace mrv
             }
         }
 
+        void TimelineViewport::_startVoiceRecording(const std::shared_ptr<voice::VoiceOver> voice)
+        {
+            TLRENDER_P();
+            
+            p.mousePos = _getFocus();
+            auto pos = _getRasterf();
+
+            currentMouseData.pos = pos;
+            currentVoiceOver = voice;
+
+            voice->clear();
+            voice->startRecording();
+            Fl::add_timeout(kVoiceTimeout,
+                            (Fl_Timeout_Handler)record_mouse_position_cb, this);
+            redrawWindows();
+        }
+        
         void TimelineViewport::_stopVoiceRecording(const std::shared_ptr<voice::VoiceOver> voice)
         {
             voice->stopRecording();
@@ -556,12 +573,7 @@ namespace mrv
                                         {
                                         case voice::RecordStatus::Stopped:
                                         {
-                                            voice->startRecording();
-                                            currentVoiceOver = voice;
-                                            
-                                            currentMouseData.pos = pos;
-                                            Fl::add_timeout(kVoiceTimeout,
-                                                            (Fl_Timeout_Handler)record_mouse_position_cb, this);
+                                            _startVoiceRecording(voice);
                                             break;
                                         }
                                         case voice::RecordStatus::Recording:
@@ -614,13 +626,7 @@ namespace mrv
                             bool allFrames = false;
                             auto annotation = p.player->createVoiceAnnotation(pos, allFrames);
                             auto voice = annotation->voices.back();
-                            voice->startRecording();
-                            currentVoiceOver = voice;
-                            currentMouseData.pos = pos;
-                            Fl::add_timeout(kVoiceTimeout,
-                                            (Fl_Timeout_Handler)
-                                            record_mouse_position_cb, this);
-                            redrawWindows();
+                            _startVoiceRecording(voice);
                         }
                         return;
                     }
@@ -1237,10 +1243,26 @@ namespace mrv
                         switch(currentVoiceOver->getStatus())
                         {
                         case voice::RecordStatus::Recording:
-                            _stopVoiceRecording(currentVoiceOver);
-                            voice_over_delete_cb(nullptr, this);
+                        {
+                            int ok = fl_choice(_("Really cancel voice over recording?"),
+                                               _("Cancel"), _("Record Again"),
+                                               _("Delete"), nullptr);
+                            switch(ok)
+                            {
+                            case 0: // Cancel
+                                _stopVoiceRecording(currentVoiceOver);
+                                break;
+                            case 1: // Record again
+                                _startVoiceRecording(currentVoiceOver);
+                                break;
+                            case 2: // Delete
+                            default:
+                                voice_over_delete_cb(nullptr, this);
+                                break;
+                            }
                             return 1;
                             break;
+                        }
                         case voice::RecordStatus::Playing:
                             _stopVoicePlaying(currentVoiceOver);
                             return 1;

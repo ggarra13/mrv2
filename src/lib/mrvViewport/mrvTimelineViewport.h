@@ -535,6 +535,8 @@ namespace mrv
 
             void _getTags() noexcept;
 
+            void _startVoiceRecording(const std::shared_ptr<voice::VoiceOver> voice);
+            void _startVoicePlaying(const std::shared_ptr<voice::VoiceOver> voice);
             void _stopVoiceRecording(const std::shared_ptr<voice::VoiceOver> voice);
             void _stopVoicePlaying(const std::shared_ptr<voice::VoiceOver> voice);
 
