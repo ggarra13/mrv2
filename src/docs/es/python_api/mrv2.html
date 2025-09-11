@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Módulo mrv2 &mdash; documentación de mrv2 - v1.4.0</title>
+  <title>Módulo mrv2 &mdash; documentación de mrv2 - v1.4.1</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
@@ -14,7 +14,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=d1546b7e"></script>
+      <script src="../_static/documentation_options.js?v=752cef67"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../_static/translations.js?v=f85f4cfb"></script>
@@ -77,7 +77,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.RationalTime.from_time_string"><code class="docutils literal notranslate"><span class="pre">RationalTime.from_time_string()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.RationalTime.from_timecode"><code class="docutils literal notranslate"><span class="pre">RationalTime.from_timecode()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.RationalTime.is_invalid_time"><code class="docutils literal notranslate"><span class="pre">RationalTime.is_invalid_time()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#mrv2.RationalTime.is_valid_timecode_rate"><code class="docutils literal notranslate"><span class="pre">RationalTime.is_valid_timecode_rate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.RationalTime.nearest_smpte_timecode_rate"><code class="docutils literal notranslate"><span class="pre">RationalTime.nearest_smpte_timecode_rate()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.RationalTime.nearest_valid_timecode_rate"><code class="docutils literal notranslate"><span class="pre">RationalTime.nearest_valid_timecode_rate()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.RationalTime.rescaled_to"><code class="docutils literal notranslate"><span class="pre">RationalTime.rescaled_to()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.RationalTime.to_frames"><code class="docutils literal notranslate"><span class="pre">RationalTime.to_frames()</span></code></a></li>
@@ -267,9 +267,9 @@ o si la razón es menor o igual a cero.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mrv2.RationalTime.is_valid_timecode_rate">
-<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_valid_timecode_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#mrv2.RationalTime.is_valid_timecode_rate" title="Link to this definition"></a></dt>
-<dd><p>Retorna verdadero si la razón es válida para usar con timecode.</p>
+<dt class="sig sig-object py" id="mrv2.RationalTime.nearest_smpte_timecode_rate">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nearest_smpte_timecode_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#mrv2.RationalTime.nearest_smpte_timecode_rate" title="Link to this definition"></a></dt>
+<dd><p>Returna la razón del primer timecode válido que tiene la menor diferencia del valor dado.</p>
 </dd></dl>
 
 <dl class="py method">

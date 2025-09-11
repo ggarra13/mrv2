@@ -111,6 +111,11 @@ Wayland
 
 	  export FLTK_BACKEND=x11
 	  
+- Los paneles bajo Wayland temblequean.
+
+        Esto parecece ser un error en GNOME 48 (Mutter) reproduciendo a 4K
+	y 60 FPS.
+  
 - Tengo avisos (warnings) cuando ejecuto el mrv2 pre-compilado en la consola
   bajo Wayland en una distro moderna como Ubuntu 22.04.4 LTS::
 
