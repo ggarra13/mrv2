@@ -52,8 +52,7 @@ v1.4.1
   OpenGL backend.
 - Added Voice Over Annotations (new icon at the bottom of the toolbar).  How to use it:
   	* Select the microphone icon.
-	* Click somewhere on the canvas.  A stop button will show up.
-	* Click on the button.  It will change to a recording icon.
+	* Click somewhere on the canvas. 
 	  You are now recording your mouse positions, LMB presses, and your
 	  voice on the default microphone (you can change it in the
 	  Preferences->Voice Over section)
@@ -64,6 +63,7 @@ v1.4.1
   audios are saved to the specified temp directory and should not be removed
   for playback.
 - Voice Annotations are now saved and played in stereo.
+- Added blinking recording button for Voice Annotation.
 
 v1.4.0
 ======

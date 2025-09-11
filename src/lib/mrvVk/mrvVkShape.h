@@ -233,6 +233,7 @@ namespace mrv
         voice::RecordStatus status;
         math::Vector2f center;
         float mult = 1;
+        unsigned blinkingIndex = 0;
     };
 
 

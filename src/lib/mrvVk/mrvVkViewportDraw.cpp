@@ -374,8 +374,9 @@ namespace mrv
                     shape.center = voice->getCenter();
                     shape.status = voice->getStatus();
                     shape.mult   = mult;
-
+                    
                     const auto& mouseData = voice->getMouseData();
+                    shape.blinkingIndex = ( voice->getCounter() * 12 ) % 256;
                     
                     shape.draw(render, mouseData);
                 }

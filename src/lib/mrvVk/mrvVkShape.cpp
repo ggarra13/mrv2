@@ -945,7 +945,7 @@ namespace mrv
     {
         const image::Color4f color(1.F, 0.5F, 0.7F);
         const image::Color4f stoppedColor(0.7F, 0.4F, 6.F);
-        const image::Color4f recordingColor(1.F, 0.F, 0.F);
+        const image::Color4f recordingColor(blinkingIndex / 255.F, 0.F, 0.F);
         const image::Color4f yellowColor(1.F, 1.F, 0.F);
         const image::Color4f blackColor(0.F, 0.F, 0.F);
         const image::Color4f lineColor(0.F, 0.F, 1.F);

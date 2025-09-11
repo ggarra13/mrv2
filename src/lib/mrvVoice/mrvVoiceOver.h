@@ -114,6 +114,9 @@ namespace mrv
             //! Get center of current voice over.
             const math::Vector2f& getCenter() const;
             
+            //! Get current mouse data counter.
+            inline size_t getCounter() const { return mouse.idx; };
+            
             //! Get current mouse data for current audio frame.
             MouseData getMouseData() const;
 

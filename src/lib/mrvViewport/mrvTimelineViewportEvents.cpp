@@ -162,7 +162,7 @@ namespace mrv
                 return;
 
             currentVoiceOver->clear();
-            redraw();
+            redrawWindows();
         }
 
         void TimelineViewport::voiceOverAppend()
@@ -414,12 +414,14 @@ namespace mrv
         {
             voice->stopRecording();
             currentVoiceOver.reset();
+            redrawWindows();
         }
                                             
         void TimelineViewport::_stopVoicePlaying(const std::shared_ptr<voice::VoiceOver> voice)
         {
             voice->stopPlaying();
             currentVoiceOver.reset();
+            redrawWindows();
         }
         
         void TimelineViewport::_stopVoiceRecording()
@@ -545,6 +547,11 @@ namespace mrv
                                     {
                                         dont_create_annotation = true;
 
+                                        // Mark annotations as unsaved so
+                                        // if the user hits Esc it will not
+                                        // pop it out of the program.
+                                        App::unsaved_annotations = true;
+                                        
                                         switch(status)
                                         {
                                         case voice::RecordStatus::Stopped:
@@ -942,40 +949,37 @@ namespace mrv
                     p.popupMenu->textsize(12);
                     p.popupMenu->type(Fl_Menu_Button::POPUP3);
 
-                    if (p.actionMode == ActionMode::kVoice)
-                    {
-                        p.mousePos = _getFocus();
-                        auto pos = _getRasterf();
+                    p.mousePos = _getFocus();
+                    auto pos = _getRasterf();
 
-                        auto renderSize = getRenderSize();
+                    auto renderSize = getRenderSize();
                         
-                        float mult = renderSize.w * 6 / 4096.0 / p.viewZoom / 2 * pixels_per_unit();
-                        mult = std::clamp(mult, 1.F, 10.F);
+                    float mult = renderSize.w * 6 / 4096.0 / p.viewZoom / 2 * pixels_per_unit();
+                    mult = std::clamp(mult, 1.F, 10.F);
 
-                        auto annotations = p.player->getVoiceAnnotations();
-                        if (!annotations.empty())
+                    auto annotations = p.player->getVoiceAnnotations();
+                    if (!annotations.empty())
+                    {
+                        for (auto& annotation : annotations)
                         {
-                            for (auto& annotation : annotations)
+                            for (auto& voice : annotation->voices)
                             {
-                                for (auto& voice : annotation->voices)
+                                auto center = voice->getCenter();
+                                auto buttonBox = voice->getBBox(mult);
+                                if (buttonBox.contains(pos))
                                 {
-                                    auto center = voice->getCenter();
-                                    auto buttonBox = voice->getBBox(mult);
-                                    if (buttonBox.contains(pos))
-                                    {
-                                        currentVoiceOver = voice;
-                                        p.popupMenu->add(_("Voice Over/Delete"), 0,
-                                                         (Fl_Callback*)voice_over_delete_cb,
-                                                         this);
-                                        p.popupMenu->add(_("Audio/Clear"), 0,
-                                                         (Fl_Callback*)voice_over_clear_cb,
-                                                         this);
-                                        p.popupMenu->add(_("Audio/Append"), 0,
-                                                         (Fl_Callback*)voice_over_append_cb,
-                                                         this);
-                                        p.popupMenu->popup();
-                                        return 1;
-                                    }
+                                    currentVoiceOver = voice;
+                                    p.popupMenu->add(_("Voice Over/Delete"), 0,
+                                                     (Fl_Callback*)voice_over_delete_cb,
+                                                     this);
+                                    p.popupMenu->add(_("Audio/Clear"), 0,
+                                                     (Fl_Callback*)voice_over_clear_cb,
+                                                     this);
+                                    p.popupMenu->add(_("Audio/Append"), 0,
+                                                     (Fl_Callback*)voice_over_append_cb,
+                                                     this);
+                                    p.popupMenu->popup();
+                                    return 1;
                                 }
                             }
                         }
@@ -1225,6 +1229,45 @@ namespace mrv
                     rawkey = tolower(rawkey);
                 }
 #endif
+                if (currentVoiceOver)
+                {
+                    switch(rawkey)
+                    {
+                    case FL_Escape:
+                        switch(currentVoiceOver->getStatus())
+                        {
+                        case voice::RecordStatus::Recording:
+                            _stopVoiceRecording(currentVoiceOver);
+                            voice_over_delete_cb(nullptr, this);
+                            return 1;
+                            break;
+                        case voice::RecordStatus::Playing:
+                            _stopVoicePlaying(currentVoiceOver);
+                            return 1;
+                            break;
+                        default:
+                            break;
+                        }
+                        break;
+                    case FL_Enter:
+                        switch(currentVoiceOver->getStatus())
+                        {
+                        case voice::RecordStatus::Recording:
+                            _stopVoiceRecording(currentVoiceOver);
+                            return 1;
+                            break;
+                        case voice::RecordStatus::Playing:
+                            _stopVoicePlaying(currentVoiceOver);
+                            return 1;
+                            break;
+                        default:
+                            break;
+                        }
+                        break;
+                    default:
+                        break;
+                    }
+                }
 
                 if (kResetChanges.match(rawkey))
                 {

@@ -190,9 +190,9 @@ int main(int argc, char** argv)
     license->align(FL_ALIGN_CENTER | FL_ALIGN_TOP);
     license->tooltip("Once you obtain a license, copy it here");
     
-    expiration = new Fl_Input(20, 300, 600, 40, "Expiration");
+    expiration = new Fl_Input(20, 300, 600, 40, "Expiration Code");
     expiration->align(FL_ALIGN_CENTER | FL_ALIGN_TOP);
-    expiration->tooltip("Copy the expiration date here");
+    expiration->tooltip("Copy the expiration code here");
 
     Fl_Button exit(80, 400, 150, 40, "Demo");
     exit.callback((Fl_Callback*)exit_cb, nullptr);

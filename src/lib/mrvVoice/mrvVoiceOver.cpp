@@ -254,6 +254,11 @@ namespace mrv
             p.audio.buffer.clear();
             mouse.data.clear();
 
+            MouseData data;
+            data.pos = center;
+            data.pressed = false;
+            mouse.data.push_back(data);
+
             status = RecordStatus::Stopped;
             p.audio.rtCurrentFrame = 0;
             mouse.idx = 0;
