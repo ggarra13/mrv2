@@ -71,9 +71,9 @@ namespace mrv
         protected:
             void _init(const std::shared_ptr<system::Context>&,
                        const math::Vector2f&);
+            VoiceOver();
             
         public:
-            VoiceOver();
             virtual ~VoiceOver();
 
             //! Create a new system.
@@ -119,14 +119,19 @@ namespace mrv
 
             //! Append mouse data.
             void appendMouseData(const MouseData&);
+
+            //! Load the audio.
+            void loadAudio();
             
             //! Tick the mouse position playback.
             void tick();
 
         public:
             // These are serializable elements.
+            math::Vector2f center;
             MouseRecording mouse;
             std::string    fileName;
+            RecordStatus status = RecordStatus::Stopped;
 
         private:
             void _startRecording();

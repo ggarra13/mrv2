@@ -40,7 +40,7 @@
 namespace
 {
     const char* kModule = "mrv2s";
-    const int kSessionVersion = 15;
+    const int kSessionVersion = 17;
 } // namespace
 
 namespace
@@ -141,7 +141,7 @@ namespace mrv
             }
 
             timeline["annotations"] = annotation;
-            timeline["voice_annotations"] = voiceAnnotation;
+            timeline["voiceAnnotations"] = voiceAnnotation;
             timeline["time"] = time;
             timeline["playback"] = playback;
             timeline["inOutRange"] = inOutRange;
@@ -353,7 +353,8 @@ namespace mrv
             session["frameView"] = view->hasFrameView();
             session["viewZoom"] = view->viewZoom();
             session["viewPos"] = view->viewPos();
-
+            session["actionMode"] = view->getActionMode();
+                        
             std::ofstream ofs(fileName);
             if (!ofs.is_open())
             {
@@ -758,10 +759,25 @@ namespace mrv
                         annotations.push_back(annotation);
                     }
 
+
                     auto player = view->getTimelinePlayer();
                     if (player)
                     {
                         player->setAllAnnotations(annotations);
+
+                        if (version >= 16)
+                        {
+                            std::vector< std::shared_ptr<voice::Annotation> >
+                                voiceAnnotations;
+                            auto tmp = j["voiceAnnotations"];
+                            for (const auto& value : tmp)
+                            {
+                                auto annotation = voice::messageToAnnotation(value);
+                                voiceAnnotations.push_back(annotation);
+                            }
+                    
+                            player->setAllAnnotations(voiceAnnotations);
+                        }
 
                         if (version >= 11)
                         {
@@ -831,6 +847,12 @@ namespace mrv
                             // the callbacks and the main resize of window
                             // function to update.
                             Fl::wait(1);
+                        }
+
+                        if (version >= 17)
+                        {
+                            auto actionMode = session["actionMode"];
+                            view->setActionMode(actionMode);
                         }
                         
                     }

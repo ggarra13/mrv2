@@ -7,6 +7,7 @@
 
 #include "mrvFl/mrvIO.h"
 
+#include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvI8N.h"
 
 #include <tlIO/System.h>
@@ -32,7 +33,7 @@ extern "C"
 
 namespace
 {
-    const int      kNumChannels = 1;
+    const int      kNumChannels = 2; // we store and play stereo
     const unsigned kSampleRate = 44100;
     unsigned int   rtBufferFrames = 256;
     const char*    kModule = "voice";
@@ -58,6 +59,14 @@ namespace
         ++voiceOverIndex;
         
         return out;
+    }
+    
+    // A helper function to print error messages from FFmpeg functions
+    void print_ffmpeg_error(int error_code, const std::string& message)
+    {
+        char errbuf[AV_ERROR_MAX_STRING_SIZE];
+        av_strerror(error_code, errbuf, sizeof(errbuf));
+        LOG_ERROR(message << ": " << errbuf);
     }
 }
 
@@ -125,6 +134,9 @@ static int rtAudioRecordCallback(
 {
     // Unused output buffer
     (void)outputBuffer;
+
+    // Calculate the number of samples to record
+    size_t numSamples = nFrames * kNumChannels;
     
     // Cast the user data back to our struct
     AudioData* audio = static_cast<AudioData*>(userData);
@@ -133,14 +145,27 @@ static int rtAudioRecordCallback(
     if (!inputBuffer)
     {
         // Input unavailable — append silence (or skip)
-        audio->buffer.insert(audio->buffer.end(), nFrames * kNumChannels, 0.0f);
+        audio->buffer.insert(audio->buffer.end(), numSamples, 0.0f);
         return 0;
     }
 
     float* input = static_cast<float*>(inputBuffer);
     
-    unsigned int numSamples = nFrames * kNumChannels;
-    audio->buffer.insert(audio->buffer.end(), input, input + numSamples);
+    // Resize the buffer to accommodate the new interleaved stereo data
+    audio->buffer.reserve(audio->buffer.size() + numSamples);
+
+    //
+    // Store out interleaved audio data.
+    //
+    for (unsigned int i = 0; i < nFrames; ++i)
+    {
+        // Get the single mono sample
+        float monoSample = input[i];
+
+        // Append the mono sample to the buffer twice for interleaved stereo
+        audio->buffer.push_back(monoSample); // Left channel
+        audio->buffer.push_back(monoSample); // Right channel
+    }
 
     return 0; // Return 0 to continue streaming
 }
@@ -168,14 +193,8 @@ namespace mrv
             
             bool running = false;
             std::thread thread;
-
-            math::Vector2f center;
             
             AudioData audio;
-            MouseRecording mouse;
-
-            std::string  fileName;
-            RecordStatus status = RecordStatus::Stopped;
         };
 
 
@@ -185,14 +204,14 @@ namespace mrv
         
         
         void VoiceOver::_init(const std::shared_ptr<system::Context>& context,
-                              const math::Vector2f& center)
+                              const math::Vector2f& inCenter)
         {
             TLRENDER_P();
             p.context = context;
-            p.center  = center;
+            center  = inCenter;
             
             MouseData data;
-            data.pos = center;
+            data.pos = inCenter;
             data.pressed = false;
 
             mouse.data.push_back(data);
@@ -234,7 +253,8 @@ namespace mrv
             
             p.audio.buffer.clear();
             mouse.data.clear();
-            p.status = RecordStatus::Stopped;
+
+            status = RecordStatus::Stopped;
             p.audio.rtCurrentFrame = 0;
             mouse.idx = 0;
         }
@@ -280,8 +300,6 @@ namespace mrv
                     LOG_ERROR("Cannot create RtAudio instance: " << e.what());
                 }
             }
-#endif
-#if defined(TLRENDER_AUDIO)
             if (auto context = getContext().lock())
             {
                 // Initialize audio.
@@ -296,7 +314,11 @@ namespace mrv
                             context->getSystem<audio::System>();
                         rtParameters.deviceId =
                             audioSystem->getInputDevice();
-                        rtParameters.nChannels = kNumChannels;
+
+                        // We record one channel as macOS has a single mic,
+                        // but we store stereo audio.
+                        rtParameters.nChannels = 1;
+                        
                         p.rtAudio->openStream(
                             nullptr, &rtParameters,
                             RTAUDIO_FLOAT32,
@@ -305,7 +327,7 @@ namespace mrv
                             &p.audio, nullptr,
                             rtAudioErrorCallback);
                         p.rtAudio->startStream();
-                        p.status = RecordStatus::Recording;
+                        status = RecordStatus::Recording;
                     }
                     catch (const std::exception& e)
                     {
@@ -316,11 +338,165 @@ namespace mrv
 #endif // TLRENDER_AUDIO   
         }
 
+        
+        void VoiceOver::loadAudio()
+        {
+            TLRENDER_P();
+            
+            AVFormatContext* fmt_ctx = NULL;
+            AVCodecContext* dec_ctx = NULL;
+            int audio_stream_index = -1;
+            AVPacket* pkt = NULL;
+            AVFrame* frame = NULL;
+
+            try {
+                // Step 1: Open the input file and allocate the format context
+                if (avformat_open_input(&fmt_ctx, fileName.c_str(), NULL, NULL) < 0)
+                {
+                    throw std::runtime_error("Could not open input file");
+                }
+
+                // Step 2: Find stream information
+                if (avformat_find_stream_info(fmt_ctx, NULL) < 0)
+                {
+                    avformat_close_input(&fmt_ctx);
+                    throw std::runtime_error("Could not find stream information");
+                }
+
+                // Step 3: Find the audio stream
+                audio_stream_index = av_find_best_stream(fmt_ctx, AVMEDIA_TYPE_AUDIO, -1, -1, NULL, 0);
+                if (audio_stream_index < 0)
+                {
+                    avformat_close_input(&fmt_ctx);
+                    throw std::runtime_error("Could not find any audio stream in the input file");
+                }
+
+                AVStream* audio_stream = fmt_ctx->streams[audio_stream_index];
+                const AVCodec* decoder = avcodec_find_decoder(audio_stream->codecpar->codec_id);
+                if (!decoder)
+                {
+                    avformat_close_input(&fmt_ctx);
+                    throw std::runtime_error("Failed to find decoder for the audio stream");
+                }
+
+                // Step 4: Allocate a new decoding context
+                dec_ctx = avcodec_alloc_context3(decoder);
+                if (!dec_ctx)
+                {
+                    avformat_close_input(&fmt_ctx);
+                    throw std::runtime_error("Failed to allocate a codec context");
+                }
+
+                // Copy codec parameters from input stream to decoder context
+                if (avcodec_parameters_to_context(dec_ctx,
+                                                  audio_stream->codecpar) < 0)
+                {
+                    avcodec_free_context(&dec_ctx);
+                    avformat_close_input(&fmt_ctx);
+                    throw std::runtime_error("Failed to copy codec parameters to decoder context");
+                }
+
+                // Step 5: Open the decoder
+                if (avcodec_open2(dec_ctx, decoder, NULL) < 0)
+                {
+                    avcodec_free_context(&dec_ctx);
+                    avformat_close_input(&fmt_ctx);
+                    throw std::runtime_error("Failed to open decoder");
+                }
+
+                // Allocate a packet and frame for reading and decoding
+                pkt = av_packet_alloc();
+                frame = av_frame_alloc();
+                if (!pkt || !frame)
+                {
+                    throw std::runtime_error("Could not allocate packet or frame");
+                }
+
+                // Step 6: Read frames from the file
+                p.audio.buffer.clear(); // Clear any existing buffer data
+                
+                int ret = 0;
+                while (av_read_frame(fmt_ctx, pkt) >= 0) {
+                    // Check if the packet belongs to our audio stream
+                    if (pkt->stream_index == audio_stream_index)
+                    {
+                        // Send the packet to the decoder
+                        ret = avcodec_send_packet(dec_ctx, pkt);
+                        if (ret < 0)
+                        {
+                            print_ffmpeg_error(ret, "Error sending packet to the decoder");
+                            av_packet_unref(pkt);
+                            break;
+                        }
+
+                        // Receive decoded frames from the decoder
+                        while (ret >= 0)
+                        {
+                            ret = avcodec_receive_frame(dec_ctx, frame);
+                            if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF)
+                            {
+                                break;
+                            }
+                            else if (ret < 0)
+                            {
+                                print_ffmpeg_error(ret, "Error receiving frame from the decoder");
+                                break;
+                            }
+                            
+                            // Append decoded data to the buffer
+                            const size_t num_samples = frame->nb_samples * kNumChannels;
+                            size_t current_size = p.audio.buffer.size();
+                            p.audio.buffer.resize(current_size + num_samples);
+                            memcpy(p.audio.buffer.data() + current_size, frame->data[0], num_samples * sizeof(float));
+                            
+                            av_frame_unref(frame);
+                        }
+                    }
+                    av_packet_unref(pkt);
+                }
+                
+                // Flush the decoder
+                ret = avcodec_send_packet(dec_ctx, NULL); // Flush decoder
+                while (ret >= 0) {
+                    ret = avcodec_receive_frame(dec_ctx, frame);
+                    if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) {
+                        break;
+                    } else if (ret < 0) {
+                        print_ffmpeg_error(ret, "Error receiving frame from the decoder on flush");
+                        break;
+                    }
+
+                    // Append remaining decoded data to the buffer
+                    const size_t num_samples = frame->nb_samples * kNumChannels;
+                    size_t current_size = p.audio.buffer.size();
+                    p.audio.buffer.resize(current_size + num_samples);
+                    memcpy(p.audio.buffer.data() + current_size, frame->data[0], num_samples * sizeof(float));
+
+                    av_frame_unref(frame);
+                }
+            }
+            catch (const std::exception& e)
+            {
+                LOG_ERROR(e.what());
+            }
+            
+            // Step 7: Cleanup
+            av_packet_free(&pkt);
+            av_frame_free(&frame);
+            avcodec_free_context(&dec_ctx);
+            avformat_close_input(&fmt_ctx);
+            
+            if (!p.audio.buffer.empty())
+            {
+                status = RecordStatus::Saved;
+            }
+        }        
+        
         void VoiceOver::stopRecording()
         {
             TLRENDER_P();
             
-            if (p.status != RecordStatus::Recording || p.audio.buffer.empty())
+            if (status != RecordStatus::Recording || p.audio.buffer.empty())
             {
                 return;
             }
@@ -342,112 +518,124 @@ namespace mrv
                 e.printMessage();
             }
 
-            p.status = RecordStatus::Saved;
+            status = RecordStatus::Saved;
             mouse.idx = 0;
                         
-            if (auto context = p.context.lock())
+            fileName = voiceOverFileName();
+
+            AVFormatContext *fmt_ctx = NULL;
+            AVStream *stream = NULL;
+
+            // Allocate the format context for WAV output
+            if (avformat_alloc_output_context2(&fmt_ctx, NULL, "wav",
+                                               fileName.c_str()) < 0 ||
+                !fmt_ctx)
             {
-                auto ioSystem = context->getSystem<io::System>();
-
-                p.fileName = voiceOverFileName();
-                AVFormatContext *fmt_ctx = NULL;
-                AVStream *stream = NULL;
-
-                // Allocate the format context for WAV output
-                if (avformat_alloc_output_context2(&fmt_ctx, NULL, "wav",
-                                                   p.fileName.c_str()) < 0 ||
-                    !fmt_ctx)
-                {
-                    throw std::runtime_error("Could not create output context");
-                }
-
-                // Create new audio stream
-                stream = avformat_new_stream(fmt_ctx, NULL);
-                if (!stream)
-                {
-                    avformat_free_context(fmt_ctx);
-                    throw std::runtime_error("Could not create new stream");
-                }
-
-                // Configure codec parameters for PCM 32-bit float LE
-                AVCodecParameters* codecpar = stream->codecpar;
-                codecpar->codec_type     = AVMEDIA_TYPE_AUDIO;
-                codecpar->codec_id       = AV_CODEC_ID_PCM_F32LE;
-                codecpar->sample_rate    = kSampleRate;
-                av_channel_layout_default(&codecpar->ch_layout, kNumChannels);
-                codecpar->bit_rate       = codecpar->sample_rate * kNumChannels * sizeof(float) * 8;
-                stream->time_base = AVRational{1, codecpar->sample_rate};
-
-                // Open the output file
-                if (!(fmt_ctx->oformat->flags & AVFMT_NOFILE)) {
-                    if (avio_open(&fmt_ctx->pb, p.fileName.c_str(), AVIO_FLAG_WRITE) < 0) {
-                        avformat_free_context(fmt_ctx);
-                        throw std::runtime_error("Could not open output file");
-                    }
-                }
-
-                // Write the WAV header
-                if (avformat_write_header(fmt_ctx, NULL) < 0) {
-                    if (!(fmt_ctx->oformat->flags & AVFMT_NOFILE)) {
-                        avio_closep(&fmt_ctx->pb);
-                    }
-                    avformat_free_context(fmt_ctx);
-                    throw std::runtime_error("Error occurred when writing header");
-                }
-
-                // Allocate packet
-                AVPacket *pkt = av_packet_alloc();
-                if (!pkt) {
-                    if (!(fmt_ctx->oformat->flags & AVFMT_NOFILE)) {
-                        avio_closep(&fmt_ctx->pb);
-                    }
-                    avformat_free_context(fmt_ctx);
-                    throw std::runtime_error("Could not allocate packet");
-                }
-
-                const int channels = kNumChannels;
-                const size_t totalSamples = p.audio.buffer.size(); // number of floats = frames * channels
-                const size_t frames = totalSamples / channels;
-                const size_t bytes = totalSamples * sizeof(float);
-                
-                pkt->data = (uint8_t*)p.audio.buffer.data();
-                pkt->size = bytes;
-                pkt->flags |= AV_PKT_FLAG_KEY;
-                pkt->stream_index = stream->index;
-                pkt->pts = av_rescale_q(0,
-                                        AVRational{1, codecpar->sample_rate},
-                                        stream->time_base);
-                pkt->dts = pkt->pts;
-                pkt->duration = av_rescale_q(frames,
-                                             AVRational{1,
-                                                 codecpar->sample_rate},
-                                             stream->time_base);
-
-
-                // Write raw samples
-                if (av_interleaved_write_frame(fmt_ctx, pkt) < 0) {
-                    throw std::runtime_error("Error writing frame");
-                }
-
-                // Write trailer (finalize WAV header)
-                av_write_trailer(fmt_ctx);
-
-                // Cleanup
-                av_packet_free(&pkt);
-                if (!(fmt_ctx->oformat->flags & AVFMT_NOFILE))
-                    avio_closep(&fmt_ctx->pb);
-                avformat_free_context(fmt_ctx);
+                throw std::runtime_error("Could not create output context");
             }
+
+            // Create new audio stream
+            stream = avformat_new_stream(fmt_ctx, NULL);
+            if (!stream)
+            {
+                avformat_free_context(fmt_ctx);
+                throw std::runtime_error("Could not create new stream");
+            }
+
+            // Configure codec parameters for PCM 32-bit float LE
+            AVCodecParameters* codecpar = stream->codecpar;
+            codecpar->codec_type     = AVMEDIA_TYPE_AUDIO;
+            codecpar->codec_id       = AV_CODEC_ID_PCM_F32LE;
+            codecpar->sample_rate    = kSampleRate;
+            av_channel_layout_default(&codecpar->ch_layout, kNumChannels);
+            codecpar->bit_rate       = codecpar->sample_rate * kNumChannels * sizeof(float) * 8;
+            stream->time_base = AVRational{1, codecpar->sample_rate};
+
+            // Open the output file
+            if (!(fmt_ctx->oformat->flags & AVFMT_NOFILE)) {
+                if (avio_open(&fmt_ctx->pb, fileName.c_str(), AVIO_FLAG_WRITE) < 0) {
+                    avformat_free_context(fmt_ctx);
+                    throw std::runtime_error("Could not open output file");
+                }
+            }
+
+            // Write the WAV header
+            if (avformat_write_header(fmt_ctx, NULL) < 0) {
+                if (!(fmt_ctx->oformat->flags & AVFMT_NOFILE)) {
+                    avio_closep(&fmt_ctx->pb);
+                }
+                avformat_free_context(fmt_ctx);
+                throw std::runtime_error("Error occurred when writing header");
+            }
+
+            // Allocate packet
+            AVPacket *pkt = av_packet_alloc();
+            if (!pkt) {
+                if (!(fmt_ctx->oformat->flags & AVFMT_NOFILE)) {
+                    avio_closep(&fmt_ctx->pb);
+                }
+                avformat_free_context(fmt_ctx);
+                throw std::runtime_error("Could not allocate packet");
+            }
+
+            const int channels = kNumChannels;
+            const size_t totalSamples = p.audio.buffer.size(); // number of floats = frames * channels
+            const size_t frames = totalSamples / channels;
+            const size_t bytes = totalSamples * sizeof(float);
+                
+            pkt->data = (uint8_t*)p.audio.buffer.data();
+            pkt->size = bytes;
+            pkt->flags |= AV_PKT_FLAG_KEY;
+            pkt->stream_index = stream->index;
+            pkt->pts = av_rescale_q(0,
+                                    AVRational{1, codecpar->sample_rate},
+                                    stream->time_base);
+            pkt->dts = pkt->pts;
+            pkt->duration = av_rescale_q(frames,
+                                         AVRational{1,
+                                             codecpar->sample_rate},
+                                         stream->time_base);
+
+
+            // Write raw samples
+            if (av_interleaved_write_frame(fmt_ctx, pkt) < 0) {
+                throw std::runtime_error("Error writing frame");
+            }
+
+            // Write trailer (finalize WAV header)
+            av_write_trailer(fmt_ctx);
+
+            // Cleanup
+            av_packet_free(&pkt);
+            if (!(fmt_ctx->oformat->flags & AVFMT_NOFILE))
+                avio_closep(&fmt_ctx->pb);
+            avformat_free_context(fmt_ctx);
         }
 
         void VoiceOver::startPlaying()
         {
             TLRENDER_P();
-
-            if (p.status != RecordStatus::Saved || p.audio.buffer.empty())
+            
+            if (mouse.data.empty())
             {
+                LOG_ERROR(_("Cannot play - no mouse recording"));
                 return;
             }
+            
+            if (p.audio.buffer.empty())
+            {
+                LOG_ERROR(_("Cannot play - audio annotation is empty"));
+                return;
+            }
+
+            if (status != RecordStatus::Saved)
+            {
+                LOG_ERROR(_("Status is not saved"));
+                return;
+            }
+
+            mouse.idx = 0;
+            p.audio.rtCurrentFrame = 0;
             
 #if defined(TLRENDER_AUDIO)
             if (auto context = getContext().lock())
@@ -466,7 +654,6 @@ namespace mrv
                         "mrv::voice::VoiceOver", ss.str(), log::Type::Error);
                 }
             }
-#endif
             if (auto context = getContext().lock())
             {
                 // Initialize audio.
@@ -488,21 +675,26 @@ namespace mrv
                             &p.audio, nullptr,
                             rtAudioErrorCallback);
                         p.rtAudio->startStream();
-                        p.status = RecordStatus::Playing;
+                        status = RecordStatus::Playing;
                     }
                     catch (const std::exception& e)
                     {
                         LOG_ERROR("Cannot open audio stream for playback: " << e.what());
                     }
                 }
+                else
+                {
+                    LOG_ERROR("No rtAudio or devices");
+                }
             }
+#endif
         }
         
         void VoiceOver::stopPlaying()
         {
             TLRENDER_P();
             
-            if (p.status != RecordStatus::Playing || p.audio.buffer.empty())
+            if (status != RecordStatus::Playing || p.audio.buffer.empty())
             {
                 p.audio.rtCurrentFrame = 0;
                 mouse.idx = 0;
@@ -518,14 +710,14 @@ namespace mrv
                 e.printMessage();
             }
             
-            p.status = RecordStatus::Saved;
+            status = RecordStatus::Saved;
             p.audio.rtCurrentFrame = 0;
             mouse.idx = 0;
         }
 
         RecordStatus VoiceOver::getStatus() const
         {
-            return _p->status;
+            return status;
         }
         
         MouseData VoiceOver::getMouseData() const
@@ -549,15 +741,15 @@ namespace mrv
 
         const math::Vector2f& VoiceOver::getCenter() const
         {
-            return _p->center;
+            return center;
         }
         
         const math::Box2f VoiceOver::getBBox(const float mult) const
         {
             TLRENDER_P();
 
-            return math::Box2f(p.center.x - 10 * mult,
-                               p.center.y - 10 * mult,
+            return math::Box2f(center.x - 10 * mult,
+                               center.y - 10 * mult,
                                20 * mult, 20 * mult);
         }
 
@@ -569,7 +761,7 @@ namespace mrv
 
             if (mouse.idx >= mouse.data.size())
             {
-                p.status = RecordStatus::Saved;
+                status = RecordStatus::Saved;
                 p.audio.rtCurrentFrame = 0;
                 mouse.idx = 0;
 
@@ -626,14 +818,26 @@ namespace mrv
         
         void to_json(nlohmann::json& j, const VoiceOver& value)
         {
+            j["center"] = value.center;
             j["fileName"] = value.fileName;
             j["mouse"] = value.mouse;
         }
 
         void from_json(const nlohmann::json& j, VoiceOver& value)
         {
+            j.at("center").get_to(value.center);
             j.at("fileName").get_to(value.fileName);
             j.at("mouse").get_to(value.mouse);
+
+            if (file::isReadable(value.fileName))
+            {
+                value.loadAudio();
+            }
+            else
+            {
+                std::string err = tl::string::Format(_("Audio annotation file {0} is missing or not !")).arg(value.fileName);
+                LOG_ERROR(err);
+            }
         }
     }
 }

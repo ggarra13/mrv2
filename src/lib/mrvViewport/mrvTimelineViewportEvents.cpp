@@ -104,9 +104,9 @@ namespace mrv
                 view->voiceOverClear();
             }
             
-            void voice_over_append_audio_cb(Fl_Menu_*, TimelineViewport* view)
+            void voice_over_append_cb(Fl_Menu_*, TimelineViewport* view)
             {
-                view->voiceOverAppendAudio();
+                view->voiceOverAppend();
             }
             
             void record_mouse_position_cb(TimelineViewport* view)
@@ -165,13 +165,16 @@ namespace mrv
             redraw();
         }
 
-        void TimelineViewport::voiceOverAppendAudio()
+        void TimelineViewport::voiceOverAppend()
         {
             if (!currentVoiceOver)
                 return;
 
             currentVoiceOver->appendRecording();
-            redraw();
+            redrawWindows();
+
+            Fl::add_timeout(kVoiceTimeout,
+                            (Fl_Timeout_Handler)record_mouse_position_cb, this);
         }
         
         void TimelineViewport::recordMousePosition()
@@ -196,7 +199,7 @@ namespace mrv
 
             currentVoiceOver->tick();
             redrawWindows();
-
+            
             if (currentVoiceOver->getStatus() == voice::RecordStatus::Playing)
             {
                 Fl::repeat_timeout(kVoiceTimeout,
@@ -518,6 +521,11 @@ namespace mrv
                         float mult = renderSize.w * 6 / 4096.0 / p.viewZoom / 2;
                         mult = std::clamp(mult, 1.F, 10.F);
 
+                        //
+                        // Flag to avoid creation a new annotation if one
+                        // is recording or playing.
+                        //
+                        bool dont_create_annotation = false;
                         auto annotations = p.player->getVoiceAnnotations();
                         if (!annotations.empty())
                         {
@@ -525,12 +533,18 @@ namespace mrv
                             {
                                 for (auto& voice : annotation->voices)
                                 {
+                                    auto status = voice->getStatus();
                                     auto center = voice->getCenter();
                                     auto buttonBox = voice->getBBox(mult);
+
+                                    if (status != voice::RecordStatus::Saved &&
+                                        status != voice::RecordStatus::Stopped)
+                                        dont_create_annotation = true;
+                                    
                                     if (buttonBox.contains(pos))
                                     {
-                                        auto status = voice->getStatus();
-                                        
+                                        dont_create_annotation = true;
+
                                         switch(status)
                                         {
                                         case voice::RecordStatus::Stopped:
@@ -585,8 +599,22 @@ namespace mrv
                                 break;
                             }
                         }
-                        
-                        p.player->createVoiceAnnotation(pos, false);
+                        else
+                        {
+                            if (dont_create_annotation)
+                                return;
+
+                            bool allFrames = false;
+                            auto annotation = p.player->createVoiceAnnotation(pos, allFrames);
+                            auto voice = annotation->voices.back();
+                            voice->startRecording();
+                            currentVoiceOver = voice;
+                            currentMouseData.pos = pos;
+                            Fl::add_timeout(kVoiceTimeout,
+                                            (Fl_Timeout_Handler)
+                                            record_mouse_position_cb, this);
+                            redrawWindows();
+                        }
                         return;
                     }
 
@@ -943,7 +971,7 @@ namespace mrv
                                                          (Fl_Callback*)voice_over_clear_cb,
                                                          this);
                                         p.popupMenu->add(_("Audio/Append"), 0,
-                                                         (Fl_Callback*)voice_over_append_audio_cb,
+                                                         (Fl_Callback*)voice_over_append_cb,
                                                          this);
                                         p.popupMenu->popup();
                                         return 1;

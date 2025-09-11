@@ -90,6 +90,9 @@ namespace mrv
             //! Set the action mode.
             void setActionMode(const ActionMode& mode) noexcept;
 
+            //! Get the action mode.
+            ActionMode getActionMode() noexcept;
+
             //! Get the color information of the selected area
             const area::Info& getColorAreaInfo() noexcept;
 
@@ -396,11 +399,20 @@ namespace mrv
             //! Get current frame/video tags
             image::Tags getTags() const noexcept;
 
+            //! Record the mouse position callback.
             void recordMousePosition();
+
+            //! Play the mouse position callback.
             void playMousePosition();
+
+            //! Delete the voice over.
             void voiceOverDelete();
+
+            //! Clear the recording (audio and mouse positions) of a voice over.
             void voiceOverClear();
-            void voiceOverAppendAudio();
+
+            //! Append audio and mouse movements to current voice over.
+            void voiceOverAppend();
             
         protected:
             void _init();

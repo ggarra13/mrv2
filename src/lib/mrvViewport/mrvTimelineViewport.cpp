@@ -243,6 +243,11 @@ namespace mrv
             updateUndoRedoButtons();
         }
 
+        ActionMode TimelineViewport::getActionMode() noexcept
+        {
+            return _p->actionMode;
+        }
+        
         void TimelineViewport::setActionMode(const ActionMode& mode) noexcept
         {
             TLRENDER_P();

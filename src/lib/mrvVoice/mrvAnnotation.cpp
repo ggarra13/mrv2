@@ -2,6 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include "mrvApp/mrvApp.h"
 
 #include "mrvVoice/mrvAnnotation.h"
 
@@ -66,21 +67,6 @@ namespace mrv
             voices.push_back(shape);
             undo_voices.pop_back();
         }
-
-        void to_json(nlohmann::json& j, const Annotation& value)
-        {
-            nlohmann::json voices;
-            for (auto& voice_shared : value.voices)
-            {
-                const auto voice = voice_shared.get();
-                voices.push_back(*voice);
-            }
-            
-            j = nlohmann::json{
-                {"voices", voices},
-                {"allFrames", value.allFrames}
-            };
-        }
         
         nlohmann::json voiceOverToMessage(
             const std::shared_ptr< voice::VoiceOver > voice)
@@ -93,9 +79,35 @@ namespace mrv
         std::shared_ptr< voice::VoiceOver >
         messageToVoiceOver(const nlohmann::json& json)
         {
-            auto voice = std::make_shared< voice::VoiceOver >();
+            math::Vector2f center;
+            auto voice = voice::VoiceOver::create(App::app->getContext(),
+                                                  center);
             json.get_to(*voice.get());
             return voice;
+        }
+                
+        std::shared_ptr< Annotation >
+        messageToAnnotation(const nlohmann::json& json)
+        {
+            auto annotation = std::make_shared< Annotation >();
+            json.get_to(*annotation.get());
+            return annotation;
+        }
+
+        void to_json(nlohmann::json& j, const Annotation& value)
+        {
+            nlohmann::json voices;
+            for (auto& voice_shared : value.voices)
+            {
+                const auto voice = voice_shared.get();
+                voices.push_back(*voice);
+            }
+            
+            j = nlohmann::json{
+                {"voices", voices},
+                {"time", value.time},
+                {"allFrames", value.allFrames}
+            };
         }
         
         void from_json(const nlohmann::json& j, Annotation& value)
@@ -107,15 +119,8 @@ namespace mrv
             {
                 value.voices.push_back(messageToVoiceOver(voice));
             }
+            j.at("time").get_to(value.time);
             j.at("allFrames").get_to(value.allFrames);
-        }
-        
-        std::shared_ptr< Annotation >
-        messageToAnnotation(const nlohmann::json& json)
-        {
-            auto annotation = std::make_shared< Annotation >();
-            json.get_to(*annotation.get());
-            return annotation;
         }
         
     } // namespace voice

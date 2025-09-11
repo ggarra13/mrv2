@@ -60,7 +60,10 @@ v1.4.1
 	* Click on the button again to stop recording.  It will change to a
 	  stop button in yellow.
 	* Click again on the button to replay the mouse moves and the audio.
-
+- Voice Annotations can now be saved in the session.  Note that voice over
+  audios are saved to the specified temp directory and should not be removed
+  for playback.
+- Voice Annotations are now saved and played in stereo.
 
 v1.4.0
 ======
