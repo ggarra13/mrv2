@@ -48,6 +48,8 @@ v1.4.1
 - Put a work around on Wayland Panel Windows to avoid having them go off-screen.
   Note that they may still flicker and due to limitations of Wayland at 4k with
   60 FPS.
+- Fixed current frame in timeline not updating on 4K videos sometimes on the
+  OpenGL backend.
 - Added Voice Over Annotations (new icon at the bottom of the toolbar).  How to use it:
   	* Select the microphone icon.
 	* Click somewhere on the canvas.  A stop button will show up.

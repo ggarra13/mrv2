@@ -2052,34 +2052,26 @@ namespace mrv
                             if (!file::isTemporaryEDL(item->path) &&
                                 autoPlayback)
                             {
-                                if (isRunning())
-                                {
-                                    player->setPlayback(
-                                        timeline::Playback::Forward);
+                                player->setPlayback(
+                                    timeline::Playback::Forward);
 
-                                    // If we have autoplayback on and auto hide
-                                    // pixel bar, do so here.
-                                    const int autoHide =
-                                        ui->uiPrefs->uiPrefsAutoHidePixelBar
-                                            ->value();
-                                    const bool pixelToolbar =
-                                        ui->uiPixelBar->visible();
+                                // If we have autoplayback on and auto hide
+                                // pixel bar, do so here.
+                                const int autoHide =
+                                    ui->uiPrefs->uiPrefsAutoHidePixelBar
+                                    ->value();
+                                const bool pixelToolbar =
+                                    ui->uiPixelBar->visible();
 #ifdef OPENGL_BACKEND
-                                    if (autoHide && pixelToolbar)
+                                if (autoHide && pixelToolbar)
 #endif
 #ifdef VULKAN_BACKEND
-                                    if (autoHide == kAutoHideOpenGLAndVulkan &&
-                                        pixelToolbar)
+                                if (autoHide == kAutoHideOpenGLAndVulkan &&
+                                    pixelToolbar)
 #endif
-                                    {
-                                        toggle_pixel_bar(nullptr, ui);
-                                        Fl::flush();
-                                    }
-                                }
-                                else
                                 {
-                                    item->playback =
-                                        timeline::Playback::Forward;
+                                    toggle_pixel_bar(nullptr, ui);
+                                    Fl::flush();
                                 }
                             }
 
