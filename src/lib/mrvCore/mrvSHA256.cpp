@@ -243,14 +243,33 @@ namespace mrv
     License validate_license(std::string& unencoded_expiration,
                              const std::string& secret_salt)
     {
-        char license_key[256];
-        char expiration_date[256];
+        std::string license_key;
+        std::string expiration_date;
+        
+        char license_key_c[256];
+        char expiration_date_c[256];
         
         Fl_Preferences base(
             prefspath().c_str(), "filmaura", "mrv2.license",
             (Fl_Preferences::Root)0);
-        base.get("license", license_key, "", 256);
-        base.get("expiration", expiration_date, "", 256);
+        base.get("full_license", license_key_c, "", 256);
+
+        if (strlen(license_key_c) > 0)
+        {
+            expiration_date = license_key_c;
+            expiration_date = expiration_date.substr(64,
+                                                     expiration_date.size());
+            license_key = license_key_c;
+            license_key = license_key.substr(0, 64);
+        }
+        else
+        {
+            base.get("license", license_key_c, "", 256);
+            base.get("expiration", expiration_date_c, "", 256);
+
+            license_key = license_key_c;
+            expiration_date = expiration_date_c;
+        }
         
         std::string machine_id = get_machine_id();
         machine_id.erase(remove(machine_id.begin(), machine_id.end(), '\n'),
