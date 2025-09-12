@@ -69,6 +69,7 @@ v1.4.1
 - Added a -np (-noPython) flag for faster start ups.
 - Fixed saving of single OpenEXR images failing on some cases on Vulkan backend.
 - Fixed scaling of single OpenEXR images.
+- Made UI more responsive when loading images (specially from the command-line).
 
 v1.4.0
 ======
