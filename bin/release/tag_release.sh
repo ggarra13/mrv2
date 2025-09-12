@@ -85,13 +85,6 @@ add_remote_tag()
 #
 # Pull last changes
 #
-echo "Switch to main and pull changes"
-${GIT_EXECUTABLE} switch main && ${GIT_EXECUTABLE} pull
-
-echo "Now push any committed changes"
-${GIT_EXECUTABLE} push
-
-
 export tag="v${mrv2_VERSION}"
 
 echo "--------------------------------"
