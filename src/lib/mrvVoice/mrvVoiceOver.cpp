@@ -840,7 +840,7 @@ namespace mrv
             }
             else
             {
-                std::string err = tl::string::Format(_("Audio annotation file {0} is missing or not !")).arg(value.fileName);
+                std::string err = tl::string::Format(_("Audio annotation file {0} is missing or not exists!")).arg(value.fileName);
                 LOG_ERROR(err);
             }
         }
