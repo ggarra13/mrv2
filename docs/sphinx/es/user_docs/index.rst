@@ -8,6 +8,7 @@ Guía del Usuario de mrv2
    :maxdepth: 2
 
    overview
+   installation
    ./getting_started/getting_started
    ./interface/interface
    ./panels/panels
