@@ -67,6 +67,8 @@ v1.4.1
 - Fixed incorrect resizing of window when being in fullscreen and loading a
   smaller clip than the window one.
 - Added a -np (-noPython) flag for faster start ups.
+- Fixed saving of single OpenEXR images failing on some cases on Vulkan backend.
+- Fixed scaling of single OpenEXR images.
 
 v1.4.0
 ======

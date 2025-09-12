@@ -418,11 +418,13 @@ namespace mrv
                         .arg(file));
             }
 
+            auto tags = ui->uiView->getTags();
+            
             io::Info ioInfo;
             image::Info outputInfo, scaleInfo, bufferInfo;
 
-            
             outputInfo.pixelType = info.video[layerId].pixelType;
+            outputInfo.size.pixelAspectRatio = 1.0;
 
             // Images that may be created
             std::shared_ptr<image::Image> outputImage;
@@ -583,13 +585,6 @@ namespace mrv
                 bufferInfo.size.w = width;
                 bufferInfo.size.h = height;
                 bufferImage = image::Image::create(bufferInfo);
-                
-                if (options.annotations)
-                {            
-                    image::Info annotationInfo = outputInfo;
-                    annotationInfo.pixelType = image::PixelType::RGBA_U8;
-                    annotationImage = image::Image::create(annotationInfo);
-                }
                         
                 std::string msg =
                     tl::string::Format(_("Offscreen Buffer info: {0}"))
@@ -790,6 +785,7 @@ namespace mrv
                 { 
                     if (options.annotations)
                     {
+                        view->setSaveOverlay(true);
                         
                         view->redraw();
                         view->flush(); // needed
@@ -860,18 +856,20 @@ namespace mrv
                             {
                                 annotationImage->zero();
                             }
-                            
-                            vkFreeCommandBuffers(device, commandPool, 1, &cmd);
                         }
                         else
                         {
                             annotationImage->zero();
                         }
-
+                        
                         //
                         // Composite output
                         //
                         composite_RGBA_U8(bufferImage, annotationImage);
+                        
+                        vkFreeCommandBuffers(device, commandPool, 1, &cmd);
+                        
+                        view->setSaveOverlay(false);
                     }
                     else
                     {
@@ -973,14 +971,6 @@ namespace mrv
                         }
 
 
-                        
-                        
-#if 0
-                        bufferImage->fill();
-                        std::cerr << "bufferImage->getData="
-                                  << (int)bufferImage->getData()[0]
-                                  << std::endl;
-#else
                         switch(outputInfo.pixelType)
                         {
                         case image::PixelType::RGB_U8:
@@ -1108,17 +1098,23 @@ namespace mrv
                                 scaleImage = bufferImage;
                                 break;
                             default:
-                                LOG_ERROR("Unhandled buffer format " << bufferInfo.pixelType);
+                                LOG_ERROR("Unhandled buffer format: " << bufferInfo.pixelType);
                                 break;
                             }
                             break;
                         }
                         default:
-                            LOG_ERROR("Unhandled output format " << outputInfo.pixelType);
+                            if (bufferInfo.pixelType != outputInfo.pixelType)
+                            {
+                                LOG_ERROR("Unhandled output format: " << outputInfo.pixelType);
+                            }
+                            else
+                            {
+                                scaleImage = bufferImage;
+                            }
                             break;
                         }
                     }
-#endif
                     
                     //
                     // Scale down result.

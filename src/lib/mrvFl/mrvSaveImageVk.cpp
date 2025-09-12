@@ -21,6 +21,7 @@
 #include "mrvCore/mrvImage.h"
 #include "mrvCore/mrvLocale.h"
 #include "mrvCore/mrvMath.h"
+#include "mrvCore/mrvPixelConverter.h"
 #include "mrvCore/mrvUtil.h"
 
 #include <tlIO/System.h>
@@ -180,21 +181,82 @@ namespace mrv
             {
                 throw std::runtime_error(
                     string::Format("{0}: Cannot open writer plugin.")
-                        .arg(file));
+                    .arg(file));
             }
             
             auto tags = ui->uiView->getTags();
 
             io::Info ioInfo;
-            image::Info outputInfo;
-
-            outputInfo.size = renderSize;
-            std::shared_ptr<image::Image> outputImage;
-            std::shared_ptr<image::Image> annotationImage;
-
+            image::Info outputInfo, scaleInfo, bufferInfo;
+            
             outputInfo.pixelType = info.video[layerId].pixelType;
             outputInfo.size.pixelAspectRatio = 1.0;
 
+            std::shared_ptr<image::Image> outputImage;
+            std::shared_ptr<image::Image> annotationImage;
+            std::shared_ptr<image::Image> bufferImage;
+            std::shared_ptr<image::Image> scaleImage;
+            
+            // Create scaleImage if resolution is not the same.
+            if (resolution != SaveResolution::kSameSize)
+            {
+                scaleInfo.size = renderSize;
+                scaleInfo.pixelType = outputInfo.pixelType;
+                scaleImage = image::Image::create(scaleInfo);
+
+                msg = tl::string::Format(_("Image info: {0} {1}"))
+                      .arg(scaleInfo.size)
+                      .arg(scaleInfo.pixelType);
+                LOG_STATUS(msg);
+            }
+            
+            else if (resolution == SaveResolution::kHalfSize)
+            {
+                renderSize.w /= 2;
+                renderSize.h /= 2;
+                msg = tl::string::Format(_("Scaled image info: {0}"))
+                      .arg(renderSize);
+                LOG_STATUS(msg);
+            }
+            else if (resolution == SaveResolution::kQuarterSize)
+            {
+                renderSize.w /= 4;
+                renderSize.h /= 4;
+                msg = tl::string::Format(_("Scaled image info: {0}"))
+                      .arg(renderSize);
+                LOG_STATUS(msg);
+            }
+
+            outputInfo.size = renderSize;
+            outputInfo = writerPlugin->getWriteInfo(outputInfo);
+                
+            if (image::PixelType::kNone == outputInfo.pixelType)
+            {
+                outputInfo.pixelType = image::PixelType::RGBA_U8;
+                offscreenBufferOptions.colorType = image::PixelType::RGBA_U8;
+#ifdef TLRENDER_EXR
+                if (saveEXR)
+                {
+                    offscreenBufferOptions.colorType =
+                        options.exrPixelType;
+                }
+#endif
+                msg = tl::string::Format(
+                    _("Writer plugin did not get output info.  "
+                      "Defaulting to {0}"))
+                      .arg(offscreenBufferOptions.colorType);
+                LOG_STATUS(msg);
+            }
+            
+#ifdef TLRENDER_EXR
+            if (saveEXR)
+            {
+                outputInfo.pixelType = options.exrPixelType;
+                offscreenBufferOptions.colorType =
+                    outputInfo.pixelType;
+            }
+#endif
+            
             math::Box2i displayWindow(0, 0, renderSize.w, renderSize.h);
             math::Box2i dataWindow(0, 0, renderSize.w, renderSize.h);
             if (!options.annotations && saveEXR)
@@ -218,60 +280,76 @@ namespace mrv
                 outputInfo.size.h = dataWindow.max.y - dataWindow.min.y + 1;
             }
 
+            //
+            // Create image buffer (main FBO).
+            // 
+            math::Size2i offscreenBufferSize(renderSize.w, renderSize.h);
+            std::shared_ptr<vlk::OffscreenBuffer> buffer;
+
+            if (options.annotations)
             {
+                view->setShowVideo(options.video);
+                view->setActionMode(ActionMode::kScrub);
+                view->redraw();
+                // flush is needed
+                Fl::flush();
+                view->flush();
 
-                if (options.annotations)
-                {
-                    view->setShowVideo(options.video);
-                    view->setActionMode(ActionMode::kScrub);
-                    view->redraw();
-                    // flush is needed
-                    Fl::flush();
-                    view->flush();
+                view->setFrameView(true);
+                view->centerView();
+                view->redraw();
+                // flush is needed
+                Fl::flush();
 
-                    view->setFrameView(true);
-                    view->centerView();
-                    view->redraw();
-                    // flush is needed
-                    Fl::flush();
-                }
-            }
-
-            if (!options.annotations)
-            {
-                std::string layerName = ui->uiColorChannel->label();
-                outputInfo.pixelType = info.video[layerId].pixelType;
-                msg = tl::string::Format(_("Image Layer '{0}' info: {1} {2}"))
-                      .arg(layerName)
-                      .arg(outputInfo.size)
-                      .arg(outputInfo.pixelType);
-                LOG_STATUS(msg);
+                buffer = view->getVideoFBO();
+                offscreenBufferOptions = buffer->getOptions();
+                
+                image::Info annotationInfo = outputInfo;
+                annotationInfo.pixelType = image::PixelType::RGBA_U8;
+                annotationImage = image::Image::create(annotationInfo);
             }
             else
             {
-                auto buffer = view->getVideoFBO();
-                outputInfo.pixelType = buffer->getOptions().colorType;
+                buffer = vlk::OffscreenBuffer::create(
+                    ctx, offscreenBufferSize, offscreenBufferOptions);
             }
             
-            outputInfo = writerPlugin->getWriteInfo(outputInfo);
-            if (image::PixelType::kNone == outputInfo.pixelType)
-            {
-                outputInfo.pixelType = image::PixelType::RGBA_U8;
-                offscreenBufferOptions.colorType = image::PixelType::RGBA_U8;
-#ifdef TLRENDER_EXR
-                if (saveEXR)
-                {
-                    offscreenBufferOptions.colorType =
-                        options.exrPixelType;
-                }
-#endif
-                msg = tl::string::Format(
-                          _("Writer plugin did not get output info.  "
-                            "Defaulting to {0}"))
-                          .arg(offscreenBufferOptions.colorType);
-                LOG_STATUS(msg);
-            }
+            const size_t width = buffer->getWidth();
+            const size_t height = buffer->getHeight();
+                
+            bufferInfo = outputInfo;
+            bufferInfo.pixelType = offscreenBufferOptions.colorType;
+            bufferInfo.size.w = width;
+            bufferInfo.size.h = height;
+            bufferImage = image::Image::create(bufferInfo);
 
+            std::string msg =
+                tl::string::Format(_("Offscreen Buffer info: {0}"))
+                .arg(offscreenBufferOptions.colorType);
+            LOG_STATUS(msg);
+            
+            // Turn off hud so it does not get captured by readPixels.
+            view->setHudActive(false);
+                
+            // Prepare annotations without HUD, cursors, and overlay with
+            // a centered and frame image for easier checking.
+            if (options.annotations)
+            {
+                view->setSaveOverlay(true);
+                view->setShowVideo(options.video);
+                view->setActionMode(ActionMode::kScrub);
+                view->redraw();
+                // flush is needed
+                Fl::flush();
+                view->flush();
+
+                view->setFrameView(true);
+                view->centerView();
+                view->redraw();
+                // flush is needed
+                Fl::flush();
+            }
+            
             if (saveHDR)
             {
                 outputInfo.pixelType = image::PixelType::RGB_F32;
@@ -287,9 +365,9 @@ namespace mrv
             }
 #endif
 
-            std::string msg = tl::string::Format(_("Output info: {0} {1}"))
-                                  .arg(outputInfo.size)
-                                  .arg(outputInfo.pixelType);
+            msg = tl::string::Format(_("Output info: {0} {1}"))
+                  .arg(outputInfo.size)
+                  .arg(outputInfo.pixelType);
             LOG_STATUS(msg);
 
 #ifdef TLRENDER_EXR
@@ -297,10 +375,8 @@ namespace mrv
 #endif
             outputImage = image::Image::create(outputInfo);
             
-            outputInfo.pixelType = image::PixelType::RGBA_U8;
-            
-            ioInfo.video.push_back(outputInfo);
             ioInfo.videoTime = oneFrameTimeRange;
+            ioInfo.video.push_back(outputInfo);
 
             auto writer = writerPlugin->write(path, ioInfo, ioOptions);
             if (!writer)
@@ -315,26 +391,20 @@ namespace mrv
             // Turn off hud so it does not get captured by glReadPixels.
             view->setHudActive(false);
 
+            if (bufferInfo.pixelType != outputInfo.pixelType)
+                options.annotations = true;
+                
             if (options.annotations)
             {
                 view->setSaveOverlay(true);
                 
-                // Refresh the view (so we turn off the HUD, for example).
                 view->redraw();
-                view->flush();
-
-                // Flush the image
+                view->flush(); // needed
                 Fl::flush();
-            
+                        
                 auto buffer = view->getVideoFBO();
                 auto bufferOptions = buffer->getOptions();
-                {
-                    std::string msg =
-                        tl::string::Format(_("Offscreen Buffer info: {0}"))
-                        .arg(bufferOptions.colorType);
-                    LOG_STATUS(msg);
-                }
-                
+                        
                 auto overlayBuffer = view->getAnnotationFBO();
 
                 VkDevice device = view->device();
@@ -344,23 +414,8 @@ namespace mrv
                 VkCommandBuffer cmd = beginSingleTimeCommands(device,
                                                               commandPool);
             
-                size_t width = buffer->getWidth();
-                size_t height = buffer->getHeight();
-                
-                auto tempImageInfo = outputInfo;
-                tempImageInfo.size.w = width;
-                tempImageInfo.size.h = height;
-
-                if (width != outputInfo.size.w ||
-                    height != outputInfo.size.h)
-                {
-                    tmpImage = image::Image::create(tempImageInfo);
-                }
-                else
-                {
-                    tmpImage = outputImage;
-                }
-                
+                const size_t width = buffer->getWidth();
+                const size_t height = buffer->getHeight();
 
                 buffer->readPixels(cmd, 0, 0, width, height);
             
@@ -370,29 +425,29 @@ namespace mrv
 
                 view->wait_queue();
             
-                const void* data = buffer->getLatestReadPixels();
-                if (!data)
+                const void* imageData = buffer->getLatestReadPixels();
+                if (imageData)
+                {                            
+                    std::memcpy(bufferImage->getData(), imageData,
+                                bufferImage->getDataByteCount());
+                }
+                else
                 {
                     LOG_ERROR(_("Could not read image data from view"));
                 }
-                
-                std::memcpy(tmpImage->getData(), data,
-                            tmpImage->getDataByteCount());
+
+                vkFreeCommandBuffers(device, commandPool, 1, &cmd);
 
                 //
                 // Read Annotation Image
                 //
-                flipImageInY(tmpImage);
-                
-                annotationImage = image::Image::create(tempImageInfo);
+                flipImageInY(bufferImage);
+                        
                         
                 if (overlayBuffer)
                 {
                     VkCommandBuffer cmd = beginSingleTimeCommands(device,
                                                                   commandPool);
-                
-                    width = overlayBuffer->getWidth();
-                    height = overlayBuffer->getHeight();
 
                     overlayBuffer->readPixels(cmd, 0, 0, width, height);
             
@@ -402,24 +457,28 @@ namespace mrv
 
                     view->wait_queue();
             
-                    data = overlayBuffer->getLatestReadPixels();
-                    if (!data)
+                    imageData = overlayBuffer->getLatestReadPixels();
+                    if (imageData)
                     {
-                        LOG_ERROR(_("Could not read annotation image from view"));
+                        std::memcpy(annotationImage->getData(), imageData,
+                                    annotationImage->getDataByteCount());
+                    }
+                    else
+                    {
+                        annotationImage->zero();
                     }
                             
-                    std::memcpy(annotationImage->getData(), data,
-                                annotationImage->getDataByteCount());
+                    vkFreeCommandBuffers(device, commandPool, 1, &cmd);
                 }
                 else
                 {
                     annotationImage->zero();
                 }
-                
+
                 //
                 // Composite output
                 //
-                composite_RGBA_U8(tmpImage, annotationImage);
+                composite_RGBA_U8(bufferImage, annotationImage);
                 
                 vkFreeCommandBuffers(device, commandPool, 1, &cmd);
                         
@@ -487,26 +546,199 @@ namespace mrv
                 void* imageData = buffer->getLatestReadPixels();
                 if (imageData)
                 {
-                    std::memcpy(outputImage->getData(), imageData,
-                                outputImage->getDataByteCount());   
+                    std::memcpy(bufferImage->getData(), imageData,
+                                bufferImage->getDataByteCount());   
                 }
                 
                 vkFreeCommandBuffers(device, commandPool, 1, &cmd);
-                    
-                // Scale down result.
-                if (tmpImage && outputImage != tmpImage)
+            }
+            
+            if (bufferImage != scaleImage)
+            {
+                const size_t width = bufferImage->getWidth();
+                const size_t height = bufferImage->getHeight();
+                        
+                if (!scaleImage)
                 {
-                    scaleImageLinear(tmpImage->getData(), tmpImage->getWidth(),
-                                     tmpImage->getHeight(),
+                    scaleImage = outputImage;
+                }
+
+
+                switch(outputInfo.pixelType)
+                {
+                case image::PixelType::RGB_U8:
+                {
+                    switch(bufferInfo.pixelType)
+                    {
+                    case image::PixelType::RGB_F16:
+                        convert_rgb_array<uint8_t, half>
+                            (reinterpret_cast<uint8_t*>(scaleImage->getData()),
+                             reinterpret_cast<half*>(bufferImage->getData()),
+                             width * height);
+                        break;
+                    case image::PixelType::RGB_F32:
+                        convert_rgb_array<uint8_t, float>
+                            (reinterpret_cast<uint8_t*>(scaleImage->getData()),
+                             reinterpret_cast<float*>(bufferImage->getData()),
+                             width * height);
+                        break;
+                    case image::PixelType::RGBA_F16:
+                        convert_rgba_to_rgb_array<uint8_t, half>
+                            (reinterpret_cast<uint8_t*>(scaleImage->getData()),
+                             reinterpret_cast<half*>(bufferImage->getData()),
+                             width * height);
+                        break;
+                    case image::PixelType::RGBA_F32:
+                        convert_rgba_to_rgb_array<uint8_t, float>
+                            (reinterpret_cast<uint8_t*>(scaleImage->getData()),
+                             reinterpret_cast<float*>(bufferImage->getData()),
+                             width * height);
+                        break;
+                    default:
+                        LOG_ERROR("Unhandled buffer format " << bufferInfo.pixelType);
+                        break;
+                    }
+                    break;
+                }
+                case image::PixelType::RGB_U16:
+                {
+                    switch(bufferInfo.pixelType)
+                    {
+                    case image::PixelType::RGB_F16:
+                        convert_rgb_array<uint16_t, half>
+                            (reinterpret_cast<uint16_t*>(scaleImage->getData()),
+                             reinterpret_cast<half*>(bufferImage->getData()),
+                             width * height);
+                        break;
+                    case image::PixelType::RGB_F32:
+                        convert_rgb_array<uint16_t, float>
+                            (reinterpret_cast<uint16_t*>(scaleImage->getData()),
+                             reinterpret_cast<float*>(bufferImage->getData()),
+                             width * height);
+                        break;
+                    case image::PixelType::RGBA_F16:
+                        convert_rgba_to_rgb_array<uint16_t, half>
+                            (reinterpret_cast<uint16_t*>(scaleImage->getData()),
+                             reinterpret_cast<half*>(bufferImage->getData()),
+                             width * height);
+                        break;
+                    case image::PixelType::RGBA_F32:
+                        convert_rgba_to_rgb_array<uint16_t, float>
+                            (reinterpret_cast<uint16_t*>(scaleImage->getData()),
+                             reinterpret_cast<float*>(bufferImage->getData()),
+                             width * height);
+                        break;
+                    default:
+                        LOG_ERROR("Unhandled buffer format " << bufferInfo.pixelType);
+                        break;
+                    }
+                    break;
+                }
+                case image::PixelType::RGBA_U8:
+                {
+                    switch(bufferInfo.pixelType)
+                    {
+                    case image::PixelType::RGBA_F16:
+                        convert_rgba_array<uint8_t, half>
+                            (reinterpret_cast<uint8_t*>(scaleImage->getData()),
+                             reinterpret_cast<half*>(bufferImage->getData()),
+                             width * height);
+                        break;
+                    case image::PixelType::RGBA_F32:
+                        convert_rgba_array<uint8_t, float>
+                            (reinterpret_cast<uint8_t*>(scaleImage->getData()),
+                             reinterpret_cast<float*>(bufferImage->getData()),
+                             width * height);
+                        break;
+                    case image::PixelType::RGBA_U8:
+                        scaleImage = bufferImage;
+                        break;
+                    default:
+                        LOG_ERROR("Unhandled buffer format " << bufferInfo.pixelType);
+                        break;
+                    }
+                    break;
+                }
+                case image::PixelType::RGBA_U16:
+                {
+                    switch(bufferInfo.pixelType)
+                    {
+                    case image::PixelType::RGB_F16:
+                        convert_rgb_to_rgba_array<uint16_t, half>
+                            (reinterpret_cast<uint16_t*>(scaleImage->getData()),
+                             reinterpret_cast<half*>(bufferImage->getData()),
+                             width * height);
+                        break;
+                    case image::PixelType::RGB_F32:
+                        convert_rgb_to_rgba_array<uint16_t, float>
+                            (reinterpret_cast<uint16_t*>(scaleImage->getData()),
+                             reinterpret_cast<float*>(bufferImage->getData()),
+                             width * height);
+                        break;
+                    case image::PixelType::RGBA_F16:
+                        convert_rgba_array<uint16_t, half>
+                            (reinterpret_cast<uint16_t*>(scaleImage->getData()),
+                             reinterpret_cast<half*>(bufferImage->getData()),
+                             width * height);
+                        break;
+                    case image::PixelType::RGBA_F32:
+                        convert_rgba_array<uint16_t, float>
+                            (reinterpret_cast<uint16_t*>(scaleImage->getData()),
+                             reinterpret_cast<float*>(bufferImage->getData()),
+                             width * height);
+                        break;
+                    case image::PixelType::RGBA_U16:
+                        scaleImage = bufferImage;
+                        break;
+                    default:
+                        LOG_ERROR("Unhandled buffer format: " << bufferInfo.pixelType);
+                        break;
+                    }
+                    break;
+                }
+                default:
+                    if (bufferInfo.pixelType != outputInfo.pixelType)
+                    {
+                        LOG_ERROR("Unhandled output format: " << outputInfo.pixelType);
+                    }
+                    else
+                    {
+                        scaleImage = bufferImage;
+                    }
+                    break;
+                }
+            }
+                    
+            //
+            // Scale down result.
+            //
+            if (scaleImage)
+            {
+                if (outputImage != scaleImage &&
+                    (scaleImage->getWidth() != outputImage->getWidth() ||
+                     scaleImage->getHeight() != outputImage->getHeight()))
+                {
+                    int numChannels = image::getChannelCount(outputImage->getPixelType());
+                    scaleImageLinear(scaleImage->getData(),
+                                     scaleImage->getWidth(),
+                                     scaleImage->getHeight(),
                                      outputImage->getData(),
                                      outputImage->getWidth(),
                                      outputImage->getHeight(),
-                                     image::getChannelCount(outputImage->getPixelType()));
+                                     numChannels);
                 }
+                else
+                {
+                    outputImage = scaleImage;
+                }
+            }
+            else
+            {
+                outputImage = bufferImage;
             }
 
             outputImage->setTags(tags);
-            writer->writeVideo(currentTime, outputImage);            
+            writer->writeVideo(currentTime, outputImage);
         }
         catch (const std::exception& e)
         {
