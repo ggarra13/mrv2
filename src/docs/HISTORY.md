@@ -1,6 +1,40 @@
 v1.4.1
 ======
 
+mrv2 and vmrv2 are an open source professional players and review tools for vfx, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
+
+This is the first donationware version of mrv2 and vmrv2.
+
+It ships now in two compiled versions:
+   - mrv2 with OpenGL backend  (free up to version 1.4.0 -
+     	       	      	        donationware afterwards)
+   - vmrv2 with Vulkan backend (donationware)
+
+Difference between OpenGL and Vulkan
+------------------------------------
+
+Vulkan is a new open source API, compared to OpenGL that it might get deprecated on some platforms like macOS. It supports true HDR (High Dynamic Range), it is about 20% to 50% faster than the OpenGL version (on Windows, macOS M1+ and it is the same speed for Linux's GNOME 48 and later) but it does not support OpenUSD.
+
+OpenGL's main benefit at this point is that it supports OpenUSD and works better on old CPUs (macOS Intel and older Wayland compositors).
+
+Prices for binaries
+-------------------
+
+Donationware prices of binary licenses through PayPal:
+
+https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UJMHRRKYCPXYW
+
+I use the email information to contact you privately.  I don't sell your information, as I don't have access to it, except for your email, which I use to contact you.
+
+- u$  50 for a node-lock license for one year.
+- u$ 150 for a node-lock license to own.
+- The prices are cumulative.  If you donate, say u$10 in 5 months, you can access the node-lock license for one year.
+
+License works for both mrv2 and vmrv2 (you can have both installed).
+
+ChangeLog
+---------
+
 - Improved FPS reporting to not flicker so much or, on Wayland + Vulkan, be double its value on Presentation mode.
 - Fixed starting of mrv2/vmrv2 on Windows when the installation directory has international characters like üí etc.
 - Reverted to use FIFO instead of MAILBOX presentation mode in Vulkan.
