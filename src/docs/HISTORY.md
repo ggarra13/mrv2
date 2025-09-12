@@ -65,7 +65,8 @@ v1.4.1
 - Voice Annotations are now saved and played in stereo.
 - Added blinking recording button for Voice Annotation.
 - Fixed incorrect resizing of window when being in fullscreen and loading a
-  smaller clip than the window one. 
+  smaller clip than the window one.
+- Added a -np (-noPython) flag for faster start ups.
 
 v1.4.0
 ======

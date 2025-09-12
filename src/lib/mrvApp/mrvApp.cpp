@@ -148,6 +148,7 @@ namespace mrv
         std::string audioFileName;
         std::string compareFileName;
 #ifdef MRV2_PYBIND11
+        bool        noPython = false;
         std::string pythonScript;
         std::string pythonArgs;
 #endif
@@ -407,6 +408,9 @@ namespace mrv
                     string::Format("{0}").arg(p.options.lutOptions.order),
                     string::join(timeline::getLUTOrderLabels(), ", ")),
 #ifdef MRV2_PYBIND11
+                app::CmdLineFlagOption::create(
+                    p.options.noPython, {"-noPython", "-np"},
+                    _("Don't load python for faster startup.")),
                 app::CmdLineValueOption<std::string>::create(
                     p.options.pythonScript, {"-pythonScript", "-ps"},
                     _("Python Script to run and exit.")),
@@ -1092,85 +1096,85 @@ namespace mrv
         }
 
 #ifdef MRV2_PYBIND11
-        DBG;
-        // Import the mrv2 python module so we read all python
-        // plug-ins.
-        py::module::import("mrv2");
-        DBG;
-
-        // Discover Python plugins
-        mrv2_discover_python_plugins();
-        DBG;
-
-        //
-        // Run command-line python script.
-        //
-        if (!p.options.pythonScript.empty())
+        if (!p.options.noPython)
         {
-            std::string script = p.options.pythonScript;
-            if (!file::isReadable(script))
+            // Import the mrv2 python module so we read all python
+            // plug-ins.
+            py::module::import("mrv2");
+
+            // Discover Python plugins
+            mrv2_discover_python_plugins();
+
+            //
+            // Run command-line python script.
+            //
+            if (!p.options.pythonScript.empty())
             {
-                // Search for script in $STUDIOPATH/python/ directory
-                std::string studio_script = studiopath() + "/python/" + script;
-                if (file::isReadable(studio_script))
+                std::string script = p.options.pythonScript;
+                if (!file::isReadable(script))
                 {
-                    script = studio_script;
-                }
-                else
-                {
-                    // Search for script in mrv2's python demos directory.
-                    script = pythonpath() + script;
-                    if (!file::isReadable(script))
+                    // Search for script in $STUDIOPATH/python/ directory
+                    std::string studio_script = studiopath() + "/python/" + script;
+                    if (file::isReadable(studio_script))
                     {
-                        std::cerr
-                            << std::string(
-                                   string::Format(
-                                       _("Could not read python script '{0}'"))
-                                       .arg(p.options.pythonScript))
-                            << std::endl;
-                        _exit = 1;
-                        return;
+                        script = studio_script;
+                    }
+                    else
+                    {
+                        // Search for script in mrv2's python demos directory.
+                        script = pythonpath() + script;
+                        if (!file::isReadable(script))
+                        {
+                            std::cerr
+                                << std::string(
+                                    string::Format(
+                                        _("Could not read python script '{0}'"))
+                                    .arg(p.options.pythonScript))
+                                << std::endl;
+                            _exit = 1;
+                            return;
+                        }
                     }
                 }
-            }
 
-            p.pythonArgs = std::make_unique<PythonArgs>(p.options.pythonArgs);
+                p.pythonArgs = std::make_unique<PythonArgs>(p.options.pythonArgs);
 
-            LOG_STATUS(std::string(
-                string::Format(_("Running python script '{0}'")).arg(script)));
-            const auto& args = p.pythonArgs->getArguments();
+                LOG_STATUS(std::string(
+                               string::Format(_("Running python script '{0}'")).arg(script)));
+                const auto& args = p.pythonArgs->getArguments();
 
-            if (!args.empty())
-            {
-                LOG_STATUS(_("with Arguments:"));
-                std::string out = "[";
-                out += tl::string::join(args, ',');
-                out += "]";
-                LOG_STATUS(out);
-            }
+                if (!args.empty())
+                {
+                    LOG_STATUS(_("with Arguments:"));
+                    std::string out = "[";
+                    out += tl::string::join(args, ',');
+                    out += "]";
+                    LOG_STATUS(out);
+                }
 
-            std::ifstream is(script);
-            std::stringstream s;
-            s << is.rdbuf();
-            try
-            {
-                py::exec(s.str());
-            }
-            catch (const std::exception& e)
-            {
-                std::cerr << _("Python Error: ") << std::endl
-                          << e.what() << std::endl;
-                _exit = 1;
+                std::ifstream is(script);
+                std::stringstream s;
+                s << is.rdbuf();
+                try
+                {
+                    py::exec(s.str());
+                }
+                catch (const std::exception& e)
+                {
+                    std::cerr << _("Python Error: ") << std::endl
+                              << e.what() << std::endl;
+                    _exit = 1;
+                    return;
+                }
+                delete ui;
+                ui = nullptr;
                 return;
             }
-            delete ui;
-            ui = nullptr;
-            return;
-        }
 
-        DBG;
-        // Redirect Python's stdout/stderr to my own class
-        p.pythonStdErrOutRedirect.reset(new PyStdErrOutStreamRedirect);
+            DBG;
+            // Redirect Python's stdout/stderr to my own class
+            p.pythonStdErrOutRedirect.reset(new PyStdErrOutStreamRedirect);
+        }
 #endif
 
         // Open Panel Windows if not loading a session file.
@@ -1330,6 +1334,7 @@ namespace mrv
     void App::startPlayback()
     {
         TLRENDER_P();
+        
 
         p.player->setPlayback(timeline::Playback::Stop);
         
@@ -1366,6 +1371,9 @@ namespace mrv
                             endTime = endTime.floor();
                             startTime = startTime.ceil();
 
+                            // Keep UI responsive
+                            Fl::check();
+                            
                             for (const auto& t : value.videoFrames)
                             {
                                 if (t.start_time() <= startTime &&
@@ -1424,6 +1432,9 @@ namespace mrv
                         endTime = endTime.floor();
                         startTime = startTime.ceil();
 
+                        // Keep UI responsive
+                        Fl::check();
+                            
                         for (const auto& t : value.videoFrames)
                         {
                             if (t.start_time() <= startTime &&
@@ -1460,12 +1471,13 @@ namespace mrv
                 // make sure to show all frames
                 if (p.options.playback == timeline::Playback::Count)
                     p.options.playback = timeline::Playback::Forward;
-                
+            
                 Fl::add_timeout(
                     0.0, (Fl_Timeout_Handler)start_playback_cb, this);
             }
         }
         p.running = true;
+            
         return Fl::run();
     }
 
@@ -1941,7 +1953,8 @@ namespace mrv
         if (file::isUSD(item->path))
         {
 #ifdef MRV2_PYBIND11
-            py::gil_scoped_release release;
+            if (!p.options.noPython)
+                py::gil_scoped_release release;
 #endif
             otioTimeline = item->audioPath.isEmpty()
                                ? timeline::create(
@@ -2054,7 +2067,7 @@ namespace mrv
                             {
                                 player->setPlayback(
                                     timeline::Playback::Forward);
-
+                                
                                 // If we have autoplayback on and auto hide
                                 // pixel bar, do so here.
                                 const int autoHide =
@@ -2216,13 +2229,10 @@ namespace mrv
             }
         }
 
-        DBG;
         cacheUpdate();
-        
-        DBG;
+
         _audioUpdate();
-        
-        DBG;
+
     }
 
     otime::RationalTime App::_cacheReadAhead() const
