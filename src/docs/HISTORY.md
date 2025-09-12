@@ -70,6 +70,8 @@ v1.4.1
 - Fixed saving of single OpenEXR images failing on some cases on Vulkan backend.
 - Fixed scaling of single OpenEXR images.
 - Made UI more responsive when loading images (specially from the command-line).
+- Added Vulkan install instructions to vmrv2 documentation for Ubuntu and
+  Red Hat / Fedora 42 / Rocky Linux.
 
 v1.4.0
 ======
