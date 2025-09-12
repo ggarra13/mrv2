@@ -1284,7 +1284,7 @@ namespace mrv
                     
             if (p.resizeWindow)
             {
-                if (!p.presentation)
+                if (!p.presentation && !p.fullScreen)
                 {
                     resizeWindow();
                 }
