@@ -227,9 +227,6 @@ locate_python() {
             export PYTHON_LIBDIR=$(echo "${python_info}" | grep 'LIBDIR=' | cut -d'=' -f2)
             export PYTHON_SITEDIR=$(echo "${python_info}" | grep 'SYSTEM_SITEDIR=' | cut -d'=' -f2)
             export PYTHON_USER_SITEDIR=$(echo "${python_info}" | grep 'USER_SITEDIR=' | cut -d'=' -f2)
-	    echo "PYTHON_LIBDIR=${PYTHON_LIBDIR}"
-	    echo "PYTHON_SITEDIR=${PYTHON_SITEDIR}"
-	    echo "PYTHON_USER_SITEDIR=${PYTHON_USER_SITEDIR}"
         else
             echo "Could not get Python details from ${PYTHON}. Falling back to old method." >&2
             extract_python_version # Your fallback function
