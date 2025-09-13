@@ -202,53 +202,10 @@ fi
 if [ -z "$TLRENDER_USD" ]; then
     export TLRENDER_USD=ON
 fi
-
-if [ -z "$VULKAN_SDK" ]; then
-    export VULKAN_SDK=/crapola_of_dir
-    if [[ $KERNEL == *Msys* ]]; then
-	export VULKAN_SDK=/C/VulkanSDK
-    elif [[ $KERNEL == *Linux* ]]; then
-	if [[ -d VulkanSDK-Linux ]]; then
-	    export VULKAN_ROOT=$PWD/VulkanSDK-Linux
-	    SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sort -r | grep -o "$VULKAN_ROOT/[0-9]*\..*"| sed -e "s#$VULKAN_ROOT/##" | head -1)
-	    export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/$UNAME_ARCH
-	else
-	    export VULKAN_SDK=/usr/
-	fi
-    elif [[ $KERNEL == *Darwin* ]]; then
-	VULKAN_ROOT=$HOME/VulkanSDK
-	if [ -d "$VULKAN_ROOT" ]; then
-	    SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sort -r | grep -o "$VULKAN_ROOT/[0-9]*\..*"| sed -e "s#$VULKAN_ROOT/##" | head -1)
-	    export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/macOS
-	else
-	    if [[ -d /usr/local/include/vulkan ]]; then
-		export VULKAN_SDK=/usr/local/
-	    else
-		export VULKAN_SDK=/opt/homebrew/
-	    fi
-	fi
-    fi
-else
-    echo "Using VULKAN_SDK from environment: ${VULKAN_SDK}"
-fi
     
 if [ -z "$TLRENDER_VK" ]; then
-    if [ -e "${VULKAN_SDK}/include/vulkan/vulkan.h" ]; then
-	export TLRENDER_VK=ON
-	echo "Vulkan FOUND at ${VULKAN_SDK}/include/vulkan"
-    else
-	export TLRENDER_VK=OFF
-	export MRV2_HDR=OFF
-	echo "Vulkan NOT FOUND at ${VULKAN_SDK}/include/vulkan"
-    fi
-else
-    if [ ! -e "${VULKAN_SDK}/include/vulkan/vulkan.h" ]; then
-	echo "Vulkan NOT FOUND at ${VULKAN_SDK}/include/vulkan"
-	export TLRENDER_VK=OFF
-	export MRV2_HDR=OFF
-    else
-	echo "Vulkan FOUND at ${VULKAN_SDK}/include/vulkan"
-    fi
+    export TLRENDER_VK=OFF
+    export MRV2_HDR=OFF
 fi
 
     
