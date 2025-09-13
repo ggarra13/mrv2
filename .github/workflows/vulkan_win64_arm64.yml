@@ -64,7 +64,11 @@ jobs:
       with:
         update: true
         path-type: inherit
-        
+        msystem: CLANGARM64
+        install: >-
+          base-devel
+          mingw-w64-clang-aarch64-toolchain
+      
     - name: Get machine name
       run: |
         echo "Machine name: $RUNNER_NAME"

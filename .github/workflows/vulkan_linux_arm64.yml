@@ -31,6 +31,12 @@ jobs:
         sudo add-apt-repository universe -y
         sudo apt-get update || { echo "apt-get update failed"; exit 1; }
 
+    - name: Install OpenGL dev
+      run: sudo apt-get install -y xorg-dev libglu1-mesa-dev mesa-common-dev
+
+    - name: Install X11 dev
+      run: sudo apt-get install -y libx11-dev libxcursor-dev libxinerama-dev
+      
     - name: Install ALSA dev
       run: sudo apt-get install -y libasound2-dev
 
@@ -41,7 +47,7 @@ jobs:
       run: sudo apt-get install -y libpango1.0-dev
 
     - name: Install Wayland
-      run: sudo apt-get install -y libwayland-dev wayland-protocols libdbus-1-dev libxkbcommon-dev libegl-dev libgtk-3-dev
+      run: sudo apt-get install -y libwayland-dev wayland-protocols libdbus-1-dev libxkbcommon-dev libegl-dev libgtk-3-dev libglu-dev
 
     - name: Install curl and openssl
       run: sudo apt-get install -y curl openssl rsync libunistring-dev
