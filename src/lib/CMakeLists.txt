@@ -34,8 +34,8 @@ if(MRV2_PYBIND11)
     add_subdirectory(mrvPy)  # mrvApp
 endif()
 if(TLRENDER_VK AND TLRENDER_NDI AND MRV2_HDR)
-    add_subdirectory(mrvHDRWidgets)  # FLTK FLTK_vk Intl
-    add_subdirectory(mrvHDR)         # FLTK FLTK_vk NDI Intl
+    # add_subdirectory(mrvHDRWidgets)  # FLTK FLTK_vk Intl
+    # add_subdirectory(mrvHDR)         # FLTK FLTK_vk NDI Intl
 endif()
 
 

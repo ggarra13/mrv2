@@ -23,9 +23,9 @@ endif()
 
 list(APPEND LIBRARIES mrvApp)
 
-if(TLRENDER_VK)
-    list(APPEND LIBRARIES ${FLTK_vk_LIBRARY})
-endif()
+# if(TLRENDER_VK)
+#     list(APPEND LIBRARIES ${FLTK_vk_LIBRARY})
+# endif()
 
 list(APPEND LIBRARIES ${FLTK_LIBRARIES} ${Intl_LIBRARIES})
 
