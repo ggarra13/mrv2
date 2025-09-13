@@ -532,6 +532,9 @@ namespace mrv
                     }
                     else if (p.actionMode == ActionMode::kVoice)
                     {
+                        if (!p.player)
+                            return;
+                        
                         p.mousePos = _getFocus();
                         auto pos = _getRasterf();
 
@@ -963,29 +966,33 @@ namespace mrv
                     float mult = renderSize.w * 6 / 4096.0 / p.viewZoom / 2 * pixels_per_unit();
                     mult = std::clamp(mult, 1.F, 10.F);
 
-                    auto annotations = p.player->getVoiceAnnotations();
-                    if (!annotations.empty())
+                    if (p.player)
                     {
-                        for (auto& annotation : annotations)
+                        auto annotations = p.player->getVoiceAnnotations();
+                        if (!annotations.empty())
                         {
-                            for (auto& voice : annotation->voices)
+                            for (auto& annotation : annotations)
                             {
-                                auto center = voice->getCenter();
-                                auto buttonBox = voice->getBBox(mult);
-                                if (buttonBox.contains(pos))
+                                for (auto& voice : annotation->voices)
                                 {
-                                    currentVoiceOver = voice;
-                                    p.popupMenu->add(_("Voice Over/Delete"), 0,
-                                                     (Fl_Callback*)voice_over_delete_cb,
-                                                     this);
-                                    p.popupMenu->add(_("Audio/Clear"), 0,
-                                                     (Fl_Callback*)voice_over_clear_cb,
-                                                     this);
-                                    p.popupMenu->add(_("Audio/Append"), 0,
-                                                     (Fl_Callback*)voice_over_append_cb,
-                                                     this);
-                                    p.popupMenu->popup();
-                                    return 1;
+                                    auto center = voice->getCenter();
+                                    auto buttonBox = voice->getBBox(mult);
+                                    if (buttonBox.contains(pos))
+                                    {
+                                        currentVoiceOver = voice;
+                                        p.popupMenu->add(_("Voice Over/Delete"),
+                                                         0,
+                                                         (Fl_Callback*)voice_over_delete_cb,
+                                                         this);
+                                        p.popupMenu->add(_("Audio/Clear"), 0,
+                                                         (Fl_Callback*)voice_over_clear_cb,
+                                                         this);
+                                        p.popupMenu->add(_("Audio/Append"), 0,
+                                                         (Fl_Callback*)voice_over_append_cb,
+                                                         this);
+                                        p.popupMenu->popup();
+                                        return 1;
+                                    }
                                 }
                             }
                         }
