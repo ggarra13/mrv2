@@ -5,6 +5,7 @@ on:
     branches-ignore:
       - main
       - beta
+      - vulkan
       
 jobs:
   ###################################
@@ -25,8 +26,10 @@ jobs:
       with:
         submodules: recursive
         
-    - name: Setup environment
+    - name: Setup environment (ARM64 native)
       uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: arm64
 
     - name: Install Visual C++ Redistributable 2022 (ARM64)
       run: |
@@ -109,11 +112,12 @@ jobs:
     - name: Install MSYS2 Dependencies
       run: |
         pacman -S --noconfirm nasm rsync
-        
-    - name: List disk space
-      shell: cmd
-      run: |
-        wmic logicaldisk get freespace, size, caption
+
+    # No wmic on arm64
+    # - name: List disk space
+    #   shell: cmd
+    #   run: |
+    #     wmic logicaldisk get freespace, size, caption
       
     - name: Build vmrv2
       run: |
