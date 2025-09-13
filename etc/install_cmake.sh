@@ -22,10 +22,18 @@ fi
 
 echo "Will install it in $PWD/$BUILD_DIR/install.."
 if [[ $KERNEL == *Linux* ]]; then
-    CMAKE_PLATFORM=linux-x86_64
+    if [[ $ARCH == *aarch64* || $ARCH == *arm64* ]]; then
+	CMAKE_PLATFORM=linux-aarch64
+    else
+	CMAKE_PLATFORM=linux-x86_64
+    fi
     CMAKE_EXT=tar.gz
 elif [[ $KERNEL == *Msys* ]]; then
-    CMAKE_PLATFORM=windows-x86_64
+    if [[ $ARCH == *aarch64* || $ARCH == *arm64* ]]; then
+	CMAKE_PLATFORM=windows-arm64
+    else
+	CMAKE_PLATFORM=windows-x86_64
+    fi
     CMAKE_EXT=zip
 fi
 
