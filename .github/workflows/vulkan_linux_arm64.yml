@@ -1,11 +1,10 @@
-name: Vulkan Linux
+name: Vulkan Linux ARM64
 
 on:
   push:
     branches-ignore:
       - main
       - beta
-      - arm64
 
 jobs:
   ###################################
@@ -14,7 +13,7 @@ jobs:
   #                                 #
   ###################################
   linux-vulkan-full-build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-22.04-arm
 
     steps:
     
@@ -30,12 +29,6 @@ jobs:
       run: |
         sudo add-apt-repository universe -y
         sudo apt-get update || { echo "apt-get update failed"; exit 1; }
-      
-    - name: Install OpenGL dev
-      run: sudo apt-get install -y xorg-dev libglu1-mesa-dev mesa-common-dev
-
-    - name: Install X11 dev
-      run: sudo apt-get install -y libx11-dev libxcursor-dev libxinerama-dev
 
     - name: Install ALSA dev
       run: sudo apt-get install -y libasound2-dev
@@ -101,7 +94,7 @@ jobs:
       run: |
         df -k
 
-    - name: Build mrv2
+    - name: Build vmrv2
       run: |
         ./etc/runme_nolog.sh -t package -vk
       

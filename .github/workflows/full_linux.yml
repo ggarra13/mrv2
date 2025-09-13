@@ -4,6 +4,7 @@ on:
   push:
     branches-ignore:
       - vulkan
+      - arm64
 
 jobs:
   ###################################

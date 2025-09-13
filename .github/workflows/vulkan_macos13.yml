@@ -5,6 +5,7 @@ on:
     branches-ignore:
       - main
       - beta
+      - arm64
 
 jobs:
   ###################################
