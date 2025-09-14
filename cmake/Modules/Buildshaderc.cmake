@@ -13,6 +13,8 @@ set(shaderc_ARGS
 
 ExternalProject_Add(
     shaderc
+    GIT_REPOSITORY ${shaderc_REPOSITORY}
+    GIT_TAG ${shaderc_TAG}
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/shaderc
     SOURCE_DIR ${CMAKE_SOURCE_DIR}/src
     LIST_SEPARATOR |
