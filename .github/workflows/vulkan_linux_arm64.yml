@@ -5,6 +5,7 @@ on:
     branches-ignore:
       - main
       - beta
+      - vulkan
 
 jobs:
   ###################################
@@ -29,13 +30,13 @@ jobs:
       run: |
         sudo add-apt-repository universe -y
         sudo apt-get update || { echo "apt-get update failed"; exit 1; }
-      
+
     - name: Install OpenGL dev
       run: sudo apt-get install -y xorg-dev libglu1-mesa-dev mesa-common-dev
 
     - name: Install X11 dev
       run: sudo apt-get install -y libx11-dev libxcursor-dev libxinerama-dev
-
+      
     - name: Install ALSA dev
       run: sudo apt-get install -y libasound2-dev
 
@@ -67,7 +68,6 @@ jobs:
     - name: Install/Build Vulkan SDK
       run: |
         ./etc/linux/install_vulkan.sh
-      shell: bash
         
     - name: Synchronize clock
       run: |

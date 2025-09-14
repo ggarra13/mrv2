@@ -5,6 +5,7 @@ on:
     branches-ignore:
       - main
       - beta
+      - arm64
 
 jobs:
   ###################################
@@ -59,12 +60,9 @@ jobs:
       
     - name: Install python dependencies
       run: sudo apt-get install -y libssl-dev libffi-dev python3
-      
-    - name: Install Vulkan drivers
-      run: sudo apt install -y mesa-vulkan-drivers
-      
+        
     # Install Vulkan SDK
-    - name: Install/Build Vulkan SDK
+    - name: Install Vulkan
       run: |
         ./etc/linux/install_vulkan.sh
       shell: bash
@@ -103,7 +101,7 @@ jobs:
       run: |
         df -k
 
-    - name: Build vmrv2
+    - name: Build mrv2
       run: |
         ./etc/runme_nolog.sh -t package -vk
       
