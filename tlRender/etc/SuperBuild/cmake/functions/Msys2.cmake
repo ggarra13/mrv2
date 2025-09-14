@@ -14,8 +14,7 @@ endfunction()
 find_package(Msys REQUIRED)
 if(WIN32)
     if(CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "ARM64|AArch64")
-	set(MRV2_MSYS_CMD
-	    ${MSYS_CMD})
+	set(MRV2_MSYS_CMD "C:/msys64/msys2_cmd.bat")
     else()
 	set(MRV2_MSYS_CMD
 	    ${MSYS_CMD}
