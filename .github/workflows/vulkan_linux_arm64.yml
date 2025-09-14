@@ -62,7 +62,7 @@ jobs:
       run: sudo apt-get install -y libssl-dev libffi-dev python3
 
     - name: Install Vulkan libs
-      run: apt install libvulkan-dev mesa-vulkan-drivers
+      run: sudo apt install libvulkan-dev mesa-vulkan-drivers
       
     # Install Vulkan SDK
     - name: Install Vulkan SDK
