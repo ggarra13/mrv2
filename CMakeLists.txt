@@ -183,7 +183,7 @@ set(VMA_DEP )
 set(SHADERC_DEP )
 
 #
-# We build shaderrc in install_vulkan.sh for
+# We build shaderrc in build_vulkan.sh for
 # Linux ARM64 mainly
 #
 # if(TLRENDER_VK)

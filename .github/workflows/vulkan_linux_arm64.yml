@@ -60,12 +60,12 @@ jobs:
       
     - name: Install python dependencies
       run: sudo apt-get install -y libssl-dev libffi-dev python3
-
-    - name: Install Vulkan libs
-      run: sudo apt install -y libvulkan-dev glslang-dev spirv-tools mesa-vulkan-drivers
+      
+    - name: Install Vulkan drivers
+      run: sudo apt install -y mesa-vulkan-drivers
       
     # Install Vulkan SDK
-    - name: Install Vulkan SDK
+    - name: Install/Build Vulkan SDK
       run: |
         ./etc/linux/install_vulkan.sh
         
