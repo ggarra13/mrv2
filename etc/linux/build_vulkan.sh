@@ -92,6 +92,9 @@ cd compile
 
 # https://vulkan.lunarg.com/doc/sdk/1.4.321.1/linux/getting_started.html
 #
+##########################
+# Vulkan Headers         #
+##########################
 if [[ "$BUILD_VULKAN_HEADERS" == "ON" || "$BUILD_VULKAN_HEADERS" == "1" ]]; then
     if [ ! -d Vulkan-Headers ]; then
 	git clone https://github.com/KhronosGroup/Vulkan-Headers
@@ -99,8 +102,9 @@ if [[ "$BUILD_VULKAN_HEADERS" == "ON" || "$BUILD_VULKAN_HEADERS" == "1" ]]; then
 
     cd Vulkan-Headers
     try_checkout
-    cmake -S . -B build -D CMAKE_INSTALL_PREFIX=$VULKAN_SDK -j $nproc
+    cmake -S . -B build -D CMAKE_INSTALL_PREFIX=$VULKAN_SDK
     cmake --build build -t install
+    cd ..
 fi
 
 ##########################
@@ -121,9 +125,8 @@ if [[ "$BUILD_VULKAN_LOADER" == "ON" || "$BUILD_VULKAN_LOADER" == "1" ]]; then
 	  -D BUILD_WSI_XCB_SUPPORT=OFF \
 	  -D CMAKE_BUILD_TYPE=Release \
 	  -D CMAKE_INSTALL_PREFIX=$VULKAN_SDK
-    cmake --build build -j $nproc
-    cmake --build build -t install
-    cd ..
+    cmake --build build
+    cmake --install build --prefix $VULKAN_SDK
 
     # Alternatively, using Python
     # mkdir build
@@ -131,6 +134,7 @@ if [[ "$BUILD_VULKAN_LOADER" == "ON" || "$BUILD_VULKAN_LOADER" == "1" ]]; then
     # python ../scripts/update_deps.py
     # cmake -C helper.cmake ..
     # cmake --build .
+    cd ..
 fi
 
 # Khronos Vulkan Tools source: https://github.com/KhronosGroup/Vulkan-Tools
@@ -148,16 +152,14 @@ if [[ "$BUILD_SPIRV_TOOLS" == "ON" || "$BUILD_SPIRV_TOOLS" == "1" ]]; then
     try_checkout
     python3 utils/git-sync-deps
     cmake -G Ninja -B build \
-	  -D BUILD_TESTING=OFF \
-	  -D BUILD_GMOCK=OFF \
 	  -D SPIRV_SKIP_EXECUTABLES=ON \
 	  -D SPIRV_SKIP_TESTS=ON \
 	  -D CMAKE_BUILD_TYPE=Release \
 	  -D CMAKE_PREFIX_PATH=${VULKAN_SDK} \
 	  -D CMAKE_INSTALL_PREFIX=${VULKAN_SDK}
-    cmake --build build -j $nproc
-    cmake --build build -t install
-
+    cd build
+    ninja -j $nproc -t install
+    cd ..
     cd ..
 fi
 
@@ -181,8 +183,9 @@ if [[ "$BUILD_SPIRV_CROSS" == "ON" || "$BUILD_SPIRV_CROSS" == "1" ]]; then
 	  -D SPIRV_CROSS_ENABLE_HLSL=OFF \
 	  -D SPIRV_CROSS_ENABLE_TESTS=OFF \
 	  -D SPIRV_CROSS_FORCE_PIC=ON  # it was off by default
-    cmake --build build -j $nproc
-    cmake --build build -t install
+    cd build
+    ninja -j $nproc -t install
+    cd ..
     cd ..
 fi
 
@@ -244,8 +247,9 @@ if [[ "$BUILD_VULKAN_EXTENSIONLAYER" == "ON" || \
 	  -D CMAKE_PREFIX_PATH=${VULKAN_SDK} \
 	  -D CMAKE_INSTALL_PREFIX=${VULKAN_SDK} \
 	  -D CMAKE_BUILD_TYPE=Release
-    cmake --build build -j $nproc
-    cmake --build build -t install
+    cd build
+    ninja -j $nproc -t install
+    cd ..
     cd ..
 fi
 
@@ -267,8 +271,9 @@ if [[ "$BUILD_VULKAN_PROFILES" == "ON" || \
 	  -D CMAKE_PREFIX_PATH=${VULKAN_SDK} \
 	  -D CMAKE_INSTALL_PREFIX=${VULKAN_SDK} \
 	  -D CMAKE_BUILD_TYPE=Release
-    cmake --build build -j $nproc
-    cmake --build build -t install
+    cd build
+    ninja -j $nproc -t install
+    cd ..
     cd ..
 fi
 
@@ -293,8 +298,9 @@ if [[ "$BUILD_VULKAN_VALIDATIONLAYERS" == "ON" || \
 	  -D CMAKE_PREFIX_PATH=$VULKAN_SDK \
 	  -D CMAKE_INSTALL_PREFIX=$VULKAN_SDK
 
-    cmake --build build -j $nproc
-    cmake --build build -t install
+    cd build
+    ninja -j $nproc -t install
+    cd ..
 
     cd ..
 fi
@@ -302,8 +308,11 @@ fi
 ##############################
 # shaderc                    #
 ##############################
+echo "SHADERC install in $PWD"
 if [[ "$BUILD_SHADERC" == "ON" || "$BUILD_SHADERC" == "1" ]]; then
-    git clone "https://github.com/google/shaderc.git"
+    if [[ ! -d shaderc ]]; then
+	git clone "https://github.com/google/shaderc.git"
+    fi
     cd shaderc
     try_checkout
     cmake -S . -B build \
@@ -318,8 +327,9 @@ if [[ "$BUILD_SHADERC" == "ON" || "$BUILD_SHADERC" == "1" ]]; then
 	  -D CMAKE_PREFIX_PATH=$VULKAN_SDK \
 	  -D CMAKE_INSTALL_PREFIX=$VULKAN_SDK
 
-    cmake --build build -j $nproc
-    cmake --build build -t install
+    cd build
+    ninja -j $nproc -t install
+    cd ..
 
     cd ..
 fi
