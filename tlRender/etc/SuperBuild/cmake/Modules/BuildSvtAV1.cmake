@@ -17,14 +17,8 @@ set(SvtAV1_DEPS )
 if(NOT WIN32)
     set(SvtAV1_DEPS NASM)
 else()
-    # Build SvtAV1 with MSYS2 on Windows.
-    find_package(Msys REQUIRED)
-    set(SvtAV1_MSYS2
-        ${MSYS_CMD}
-        -use-full-path
-        -defterm
-        -no-start
-        -here)
+    include(functions/Msys2)
+    set(SvtAV1_MSYS2 ${MRV2_MSYS_CMD})
 endif()
 
 ExternalProject_Add(

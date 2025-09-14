@@ -8,16 +8,8 @@ set(VPX_TAG v1.15.2)  # was v1.15.0
 include(ProcessorCount)
 ProcessorCount(NPROCS)
 
-set(VPX_MSYS2)
 if(WIN32)
-    # Build VPX with MSYS2 on Windows.
-    find_package(Msys REQUIRED)
-    set(VPX_MSYS2
-        ${MSYS_CMD}
-        -use-full-path
-        -defterm
-        -no-start
-        -here)
+    include(functions/Msys2)
 endif()
 
 set(VPX_CFLAGS)
@@ -34,11 +26,10 @@ if (UNIX)
     set(VPX_ENV PATH="${CMAKE_INSTALL_PREFIX}/bin:$ENV{PATH}")
     set(INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
 else()
-    include(functions/Msys2)
     
     # Convert path for MSYS2 properly
     convert_path_for_msys2("${CMAKE_INSTALL_PREFIX}" INSTALL_PREFIX)
-    if ($ENV{ARCH} MATCHES ".*arm.*" OR $ENV{ARCH} MATCHES ".*aarch64.*")
+    if(WIN32 AND CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "ARM64|AArch64")
 	set(VPX_TARGET --target=arm64-win64-vs17)
     else()
 	set(VPX_TARGET --target=x86_64-win64-vs17)
@@ -77,11 +68,11 @@ if (WIN32)
     # Properly format VPX_CONFIGURE_ARGS
     list(JOIN VPX_CONFIGURE_ARGS " " VPX_CONFIGURE_ARGS_STR)
 
-    set(VPX_CONFIGURE ${VPX_MSYS2} -c "pacman -Sy make nasm diffutils --noconfirm && ./configure ${VPX_CONFIGURE_ARGS_STR}")
+    set(VPX_CONFIGURE ${MRV2_MSYS_CMD} -c "pacman -Sy make nasm diffutils --noconfirm && ./configure ${VPX_CONFIGURE_ARGS_STR}")
 
-    set(VPX_BUILD ${VPX_MSYS2} -c "make -j ${NPROCS}")
+    set(VPX_BUILD ${MRV2_MSYS_CMD} -c "make -j ${NPROCS}")
 
-    set(VPX_INSTALL ${VPX_MSYS2} -c "make install && mv ${INSTALL_PREFIX}/lib/x64/vpxmd.lib ${INSTALL_PREFIX}/lib/vpx.lib" )
+    set(VPX_INSTALL ${MRV2_MSYS_CMD} -c "make install && mv ${INSTALL_PREFIX}/lib/x64/vpxmd.lib ${INSTALL_PREFIX}/lib/vpx.lib" )
 
 else()
 

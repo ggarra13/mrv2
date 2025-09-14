@@ -41,13 +41,7 @@ set(LCMS2_INSTALL_COMMAND make install)
 
 if(WIN32)
     # Build LCMS2 with MSYS2 on Windows.
-    find_package(Msys REQUIRED)
-    set(LCMS2_MSYS2
-        ${MSYS_CMD}
-        -use-full-path
-        -defterm
-        -no-start
-        -here)
+    set(LCMS2_MSYS2 ${MRV2_MSYS_CMD})
 
     # Properly format VPX_CONFIGURE_ARGS
     list(JOIN LCMS2_CONFIGURE_ARGS " " LCMS2_CONFIGURE_ARGS_STR)

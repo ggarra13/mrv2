@@ -3,12 +3,6 @@ include(ExternalProject)
 include(ProcessorCount)
 ProcessorCount(NPROCS)
 
-if(WIN32)
-    # Build FFmpeg with MSYS2 on Windows.
-    find_package(Msys REQUIRED)
-endif()
-
-
 set(FFmpeg_DEPS ZLIB)
 if(TLRENDER_NET AND NOT WIN32)
     list(APPEND FFmpeg_DEPS OpenSSL)
@@ -506,13 +500,8 @@ if(WIN32)
     list(APPEND FFmpeg_CONFIGURE_ARGS
         --arch=x86_64
         --toolchain=msvc)
-    set(FFmpeg_MSYS2
-        ${MSYS_CMD}
-        -use-full-path
-        -defterm
-        -no-start
-        -here)
-
+    set(FFmpeg_MSYS2 ${MRV2_MSYS_CMD})
+    
     # \bug Copy libssl.lib to ssl.lib and libcrypto.lib to crypto.lib so the
     # FFmpeg configure script can find them.
     # Not done here, but in pre-flight script of mrv2

@@ -64,11 +64,19 @@ jobs:
       with:
         update: true
         path-type: inherit
-        msystem: CLANGARM64
+        msystem: CLANGARM64  # works but incompatible with MSVC
         install: >-
           base-devel
-          mingw-w64-clang-aarch64-toolchain
-      
+          # mingw-w64-clang-aarch64-toolchain
+
+    - name: Create msys_cmd.bat wrapper
+      run: |
+        echo @echo off > C:\msys64\msys2_cmd.bat
+        echo "set MSYS2_PATH_TYPE=inherit" >> C:\msys64\msys2_cmd.bat
+        echo "set MSYS2_NOSTART=yes" >> C:\msys64\msys2_cmd.bat
+        echo "set CHERE_INVOKING=enabled_from_arguments" >> C:\msys64\msys2_cmd.bat
+        echo "C:\msys64\usr\bin\bash.exe %*" >> C:\msys64\msys2_cmd.bat
+          
     - name: Get machine name
       run: |
         echo "Machine name: $RUNNER_NAME"
