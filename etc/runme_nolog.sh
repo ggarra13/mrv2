@@ -209,17 +209,17 @@ if [ -z "$VULKAN_SDK" ]; then
 	export VULKAN_SDK=/C/VulkanSDK
     elif [[ $KERNEL == *Linux* ]]; then
 	if [[ -d VulkanSDK-Linux ]]; then
-	    local VULKAN_ROOT=$PWD/VulkanSDK-Linux
-	    SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sort -r | grep -o "$VULKAN_ROOT/[0-9]*\..*"| sed -e "s#$VULKAN_ROOT/##" | head -1)
-	    export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/$UNAME_ARCH
+	    vulkan_root=$PWD/VulkanSDK-Linux
+	    SDK_VERSION=$(ls -d ${vulkan_root}/* | sort -r | grep -o "$vulkan_root/[0-9]*\..*"| sed -e "s#$vulkan_root/##" | head -1)
+	    export VULKAN_SDK=$vulkan_root/$SDK_VERSION/$UNAME_ARCH
 	else
 	    export VULKAN_SDK=/usr/
 	fi
     elif [[ $KERNEL == *Darwin* ]]; then
-	local VULKAN_ROOT=$HOME/VulkanSDK
-	if [ -d "$VULKAN_ROOT" ]; then
-	    SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sort -r | grep -o "$VULKAN_ROOT/[0-9]*\..*"| sed -e "s#$VULKAN_ROOT/##" | head -1)
-	    export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/macOS
+	vulkan_root=$HOME/VulkanSDK
+	if [ -d "$vulkan_root" ]; then
+	    SDK_VERSION=$(ls -d ${vulkan_root}/* | sort -r | grep -o "$vulkan_root/[0-9]*\..*"| sed -e "s#$vulkan_root/##" | head -1)
+	    export VULKAN_SDK=$vulkan_root/$SDK_VERSION/macOS
 	else
 	    if [[ -d /usr/local/include/vulkan ]]; then
 		export VULKAN_SDK=/usr/local/
