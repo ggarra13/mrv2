@@ -67,7 +67,7 @@ jobs:
         msystem: CLANGARM64
         install: >-
           base-devel
-# mingw-w64-clang-aarch64-toolchain
+          # mingw-w64-clang-aarch64-toolchain
 
     - name: Create msys_cmd.bat wrapper
       run: |
@@ -83,7 +83,6 @@ jobs:
     
     # Install Vulkan SDK
     - name: Install Vulkan SDK
-      if: github.ref_name == 'vulkan'
       run: |
 
         . ./etc/windows/install_vulkan.sh

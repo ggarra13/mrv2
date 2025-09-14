@@ -19,14 +19,14 @@ fi
 if [[ ! -e /ucrt64/bin/gettext.exe ||
 	  ! -e /ucrt64/lib/libiconv.dll.a ||
 	  ! -e /ucrt64/lib/libintl.dll.a ]]; then
-    echo "Installing libssl, libiconv, libintl, subversion, swig, diffutils, nasm and gettext thru Msys..."
+    echo "Installing libssl, libiconv, libintl thru Msys..."
     pacman -Syu --noconfirm
 fi
 
 #
 # Install 
 #
-pacman -Sy libsqlite swig diffutils mingw-w64-ucrt-x86_64-gettext --noconfirm
+pacman -Sy libsqlite --noconfirm
 
 mkdir -p $BUILD_DIR/install/bin
 mkdir -p $BUILD_DIR/install/lib

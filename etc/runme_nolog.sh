@@ -22,10 +22,8 @@
 if [[ !$RUNME ]]; then
     . $PWD/etc/build_dir.sh
 fi
-echo "install_cmake.sh RUNME=$RUNME $BUILD_DIR"
 
 #
-
 # Set environment variables to point to install directory
 #
 export PATH="$PWD/${BUILD_DIR}/install/bin:$PWD/$BUILD_DIR/install/bin/Scripts:${PATH}"
@@ -38,7 +36,6 @@ ls $PWD/${BUILD_DIR}/install/bin/
 # Extract cmake version
 #
 . etc/install_cmake.sh
-echo "install_cmake.sh=$RUNME $BUILD_DIR"
 
 get_cmake_version
 
@@ -280,6 +277,16 @@ if [ -z "$FLTK_BUILD_SHARED" ]; then
 fi
 
 #
+#
+#
+if [[ $KERNEL == *Msys* ]]; then
+    if [[ $ARCH == *arm64* || $ARCH == aarch64 ]]; then
+	export TLRENDER_NET=OFF  # off for now
+	export BUILD_GETTEXT=ON
+    fi
+fi
+    
+#
 # Clean python path to avoid clashes, mainly, with macOS meson
 #
 unset PYTHONPATH
@@ -339,6 +346,7 @@ if [[ ${BUILD_PYTHON} == OFF || ${BUILD_PYTHON} == 0 ]]; then
 else
     echo "Python FUTURE location: ${MRV2_PYTHON}"
 fi
+echo "Build Gettext                        ${BUILD_GETTEXT}     (BUILD_GETTEXT)"
 echo "Build pyFLTK........................ ${MRV2_PYFLTK} 	(MRV2_PYFLTK)"
 echo "Build FLTK shared................... ${FLTK_BUILD_SHARED} 	(FLTK_BUILD_SHARED)"
 echo "Build embedded Python............... ${MRV2_PYBIND11} 	(MRV2_PYBIND11)"
