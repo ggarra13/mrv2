@@ -13,7 +13,7 @@ jobs:
   # FULL BUILDS                     #
   #                                 #
   ###################################
-  windows-vulkan-full-build:
+  windows-vulkan-arm64:
     runs-on: windows-11-arm
 
     defaults:

@@ -102,10 +102,12 @@ set_target_properties(tlIO PROPERTIES FOLDER lib)
 set_target_properties(tlIO PROPERTIES PUBLIC_HEADER "${HEADERS}")
 
 if (CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64")
-    target_compile_options(tlIO PRIVATE
-        -O3
-        -mcpu=apple-m1  # Optional, or use -march=armv8-a+simd
-    )
+    if (APPLE)
+	target_compile_options(tlIO PRIVATE
+            -O3
+            -mcpu=apple-m1  # Optional, or use -march=armv8-a+simd
+	)
+    endif()
 elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
     # MSVC uses AVX2 by default
     target_compile_options(tlIO PRIVATE
