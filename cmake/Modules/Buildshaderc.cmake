@@ -4,6 +4,9 @@
 
 include(ExternalProject)
 
+set(shaderc_REPOSITORY "https://github.com/google/shaderc.git")
+set(shaderc_TAG v2025.1)
+
 set(shaderc_ARGS
     ${TLRENDER_EXTERNAL_ARGS}
 )
