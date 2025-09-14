@@ -103,14 +103,20 @@ get_kernel()
 	export UNAME_ARCH=$ARCH # Store uname architecture to compile properly
     fi
 
-    if [[ $ARCH == arm64 ]]; then
-	export ARCH=arm64
-    elif [[ $ARCH == aarch64 ]]; then
-	export ARCH=aarch64
-    elif [[ $ARCH == *64* ]]; then
-	export ARCH=amd64
+    if [[ $KERNEL == *Darwin* ]]; then
+	if [[ $ARCH == arm64 ]]; then
+	    export ARCH=arm64
+	else
+	    export ARCH=amd64
+	fi
     else
-	export ARCH=i386
+	if [[ $ARCH == aarch64 || $ARCH == arm64 ]]; then
+	    export ARCH=aarch64
+	elif [[ $ARCH == *64* ]]; then
+	    export ARCH=amd64
+	else
+	    export ARCH=i386
+	fi
     fi
 }
 
