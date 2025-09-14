@@ -60,12 +60,14 @@ jobs:
       
     - name: Install python dependencies
       run: sudo apt-get install -y libssl-dev libffi-dev python3
-        
+
+    - name: Install Vulkan libs
+      run: apt install libvulkan-dev mesa-vulkan-drivers
+      
     # Install Vulkan SDK
-    - name: Install Vulkan
+    - name: Install Vulkan SDK
       run: |
         ./etc/linux/install_vulkan.sh
-      shell: bash
         
     - name: Synchronize clock
       run: |
