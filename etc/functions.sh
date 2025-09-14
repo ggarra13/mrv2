@@ -100,7 +100,7 @@ get_kernel()
 
     if [[ $ARCH == "" ]]; then
 	export ARCH=`uname -m` # was uname -a
-	export UNAME_ARCH=$ARCH
+	export UNAME_ARCH=$ARCH # Store uname architecture to compile properly
     fi
 
     if [[ $ARCH == arm64 ]]; then

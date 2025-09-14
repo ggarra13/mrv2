@@ -3,7 +3,14 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-curl -L -o /tmp/vulkan-sdk.exe "https://sdk.lunarg.com/sdk/download/latest/windows/vulkan-sdk.exe"
+. etc/build_dir.sh
+
+if [[ $ARCH == *aarch64* || $ARCH == *arm64* ]]; then
+    # curl -L -o /tmp/vulkan-sdk.exe "https://sdk.lunarg.com/sdk/download/1.4.321.1/latest/windows/vulkansdk-windows-ARM64-1.4.321.1.exe"
+    curl -L -o /tmp/vulkan-sdk.exe "https://sdk.lunarg.com/sdk/download/1.4.321.1/warm/vulkansdk-windows-ARM64-1.4.321.1.exe"
+else
+    curl -L -o /tmp/vulkan-sdk.exe "https://sdk.lunarg.com/sdk/download/latest/windows/vulkan-sdk.exe"
+fi
 
 ls /tmp
 

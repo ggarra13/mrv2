@@ -181,11 +181,16 @@ set(VMA_DEP )
 # endif()
 
 set(SHADERC_DEP )
-if(TLRENDER_VK)
-    if (UNIX AND NOT APPLE)
-	include(cmake/Modules/Buildshaderc.cmake)
-    endif()
-endif()
+
+#
+# We build shaderrc in install_vulkan.sh for
+# Linux ARM64 mainly
+#
+# if(TLRENDER_VK)
+#     if (UNIX AND NOT APPLE)
+# 	include(cmake/Modules/Buildshaderc.cmake)
+#     endif()
+# endif()
 
 add_subdirectory( tlRender/etc/SuperBuild)
 
