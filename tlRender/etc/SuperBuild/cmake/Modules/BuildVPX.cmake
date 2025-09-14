@@ -38,7 +38,11 @@ else()
     
     # Convert path for MSYS2 properly
     convert_path_for_msys2("${CMAKE_INSTALL_PREFIX}" INSTALL_PREFIX)
-    set(VPX_TARGET --target=x86_64-win64-vs17)
+    if ($ENV{ARCH} MATCHES "*arm*" OR $ENV{ARCH} MATCHES "*aarch64*")
+	set(VPX_TARGET --target=arm64-win64-vs17)
+    else()
+	set(VPX_TARGET --target=x86_64-win64-vs17)
+    endif()
     set(VPX_CXX_FLAGS "")
     set(VPX_C_FLAGS "")
     set(VPX_DEPENDS)
