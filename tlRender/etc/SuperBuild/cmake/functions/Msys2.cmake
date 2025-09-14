@@ -10,10 +10,9 @@ function(convert_path_for_msys2 IN_PATH OUT_PATH)
     set(${OUT_PATH} "${INTERMEDIATE_PATH}" PARENT_SCOPE)
 endfunction()
 
-
-find_package(Msys REQUIRED)
 if(WIN32)
-    if(CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "ARM64|AArch64")
+    find_package(Msys REQUIRED)
+    if($ENV{ARCH} MATCHES ".*arm64.*" OR $ENV{ARCH} MATCHES ".*aarch64.*")
 	set(MRV2_MSYS_CMD "C:/msys64/msys2_cmd.bat")
     else()
 	set(MRV2_MSYS_CMD
