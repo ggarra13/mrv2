@@ -77,6 +77,7 @@ export COMPILE_VERSION=$(echo "$SDK_VERSION" | sed -E 's/^([0-9]+\.[0-9]+\.[0-9]
 export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/$UNAME_ARCH
 if [[ -d ${VULKAN_SDK} && ! -d ${VULKAN_SDK}_orig ]]; then
     mv ${VULKAN_SDK} ${VULKAN_SDK}_orig
+    cp -rf ${VULKAN_SDK}_orig/include ${VULKAN_SDK}
 fi
 
 echo "--------------------------------------------------------"
@@ -144,6 +145,10 @@ if [[ "$BUILD_SPIRV_TOOLS" == "ON" || "$BUILD_SPIRV_TOOLS" == "1" ]]; then
     try_checkout
     python3 utils/git-sync-deps
     cmake -G Ninja -B build \
+	  -D BUILD_TESTING=OFF \
+	  -D BUILD_GMOCK=OFF \
+	  -D SPIRV_SKIP_EXECUTABLES=ON \
+	  -D SPIRV_SKIP_TESTS=ON \
 	  -D CMAKE_BUILD_TYPE=Release \
 	  -D CMAKE_PREFIX_PATH=${VULKAN_SDK} \
 	  -D CMAKE_INSTALL_PREFIX=${VULKAN_SDK}
@@ -287,7 +292,7 @@ if [[ "$BUILD_VULKAN_VALIDATIONLAYERS" == "ON" || \
 
     cmake --build build -j $nproc
     cmake --build build -t install
-    
+
     cd ..
 fi
 
