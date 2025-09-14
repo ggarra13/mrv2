@@ -15,3 +15,5 @@ ExternalProject_Add(
     LIST_SEPARATOR |
     CMAKE_ARGS ${shaderc_ARGS}
 )
+
+set(SHADERC_DEP shaderc)

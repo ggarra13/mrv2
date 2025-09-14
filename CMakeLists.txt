@@ -180,6 +180,7 @@ set(VMA_DEP )
 #     include(cmake/Modules/BuildVMA.cmake)
 # endif()
 
+set(SHADERC_DEP )
 if(TLRENDER_VK)
     if (UNIX AND NOT APPLE)
 	include(cmake/Modules/Buildshaderc.cmake)
