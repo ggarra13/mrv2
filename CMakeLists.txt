@@ -180,6 +180,12 @@ set(VMA_DEP )
 #     include(cmake/Modules/BuildVMA.cmake)
 # endif()
 
+if(TLRENDER_VK)
+    if (UNIX AND NOT APPLE)
+	include(cmake/Modules/Buildshaderc.cmake)
+    endif()
+endif()
+
 add_subdirectory( tlRender/etc/SuperBuild)
 
 set(FLTK_DEP )
