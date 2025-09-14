@@ -62,13 +62,7 @@ jobs:
       run: sudo apt-get install -y libssl-dev libffi-dev python3
 
     - name: Install Vulkan libs
-      run: sudo apt install -y \
-             libvulkan-dev \
-             glslang-dev \
-             libshaderc-dev \
-             spirv-tools \
-             spirv-tools-dev \
-             mesa-vulkan-drivers
+      run: sudo apt install -y libvulkan-dev glslang-dev libshaderc-dev spirv-tools spirv-tools-dev mesa-vulkan-drivers
       
     # Install Vulkan SDK
     - name: Install Vulkan SDK
