@@ -95,7 +95,7 @@ if [[ "$BUILD_VULKAN_HEADERS" == "ON" || "$BUILD_VULKAN_HEADERS" == "1" ]]; then
 
     cd Vulkan-Headers
     try_checkout
-    cmake -S . -B build -D CMAKE_INSTALL_PREFIX=$VULKAN_SDK
+    cmake -S . -B build -D CMAKE_INSTALL_PREFIX=$VULKAN_SDK -j $nproc
     cmake --build build -t install
 fi
 
@@ -117,7 +117,7 @@ if [[ "$BUILD_VULKAN_LOADER" == "ON" || "$BUILD_VULKAN_LOADER" == "1" ]]; then
 	  -D BUILD_WSI_XCB_SUPPORT=OFF \
 	  -D CMAKE_BUILD_TYPE=Release \
 	  -D CMAKE_INSTALL_PREFIX=$VULKAN_SDK
-    cmake --build build
+    cmake --build build -j $nproc
     cmake --build build -t install
     cd ..
 
@@ -147,7 +147,7 @@ if [[ "$BUILD_SPIRV_TOOLS" == "ON" || "$BUILD_SPIRV_TOOLS" == "1" ]]; then
 	  -D CMAKE_BUILD_TYPE=Release \
 	  -D CMAKE_PREFIX_PATH=${VULKAN_SDK} \
 	  -D CMAKE_INSTALL_PREFIX=${VULKAN_SDK}
-    cmake --build build
+    cmake --build build -j $nproc
     cmake --build build -t install
 
     cd ..
@@ -173,7 +173,7 @@ if [[ "$BUILD_SPIRV_CROSS" == "ON" || "$BUILD_SPIRV_CROSS" == "1" ]]; then
 	  -D SPIRV_CROSS_ENABLE_HLSL=OFF \
 	  -D SPIRV_CROSS_ENABLE_TESTS=OFF \
 	  -D SPIRV_CROSS_FORCE_PIC=ON  # it was off by default
-    cmake --build build
+    cmake --build build -j $nproc
     cmake --build build -t install
     cd ..
 fi
@@ -195,7 +195,7 @@ if [[ "$BUILD_GLSLANG" == "ON" || "$BUILD_GLSLANG" == "1" ]]; then
 	  -D CMAKE_INSTALL_PREFIX=${VULKAN_SDK} \
 	  -D ALLOW_EXTERNAL_SPIRV_TOOLS=ON \
 	  -D BUILD_EXTERNAL=OFF
-    cmake --build build
+    cmake --build build -j $nproc
     cmake --build build -t install
     cd ..
 fi
@@ -236,7 +236,7 @@ if [[ "$BUILD_VULKAN_EXTENSIONLAYER" == "ON" || \
 	  -D CMAKE_PREFIX_PATH=${VULKAN_SDK} \
 	  -D CMAKE_INSTALL_PREFIX=${VULKAN_SDK} \
 	  -D CMAKE_BUILD_TYPE=Release
-    cmake --build build
+    cmake --build build -j $nproc
     cmake --build build -t install
     cd ..
 fi
@@ -259,7 +259,7 @@ if [[ "$BUILD_VULKAN_PROFILES" == "ON" || \
 	  -D CMAKE_PREFIX_PATH=${VULKAN_SDK} \
 	  -D CMAKE_INSTALL_PREFIX=${VULKAN_SDK} \
 	  -D CMAKE_BUILD_TYPE=Release
-    cmake --build build
+    cmake --build build -j $nproc
     cmake --build build -t install
     cd ..
 fi
@@ -285,7 +285,7 @@ if [[ "$BUILD_VULKAN_VALIDATIONLAYERS" == "ON" || \
 	  -D CMAKE_PREFIX_PATH=$VULKAN_SDK \
 	  -D CMAKE_INSTALL_PREFIX=$VULKAN_SDK
 
-    cmake --build build
+    cmake --build build -j $nproc
     cmake --build build -t install
     
     cd ..
@@ -310,7 +310,7 @@ if [[ "$BUILD_SHADERC" == "ON" || "$BUILD_SHADERC" == "1" ]]; then
 	  -D CMAKE_PREFIX_PATH=$VULKAN_SDK \
 	  -D CMAKE_INSTALL_PREFIX=$VULKAN_SDK
 
-    cmake --build build
+    cmake --build build -j $nproc
     cmake --build build -t install
 
     cd ..
