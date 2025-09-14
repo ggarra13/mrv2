@@ -58,7 +58,7 @@ if [[ $ARCH == *arm64* || $ARCH == *aarch64* ]]; then
     . etc/linux/build_vulkan.sh
 else
     echo "-------------------------------"
-    echo "   Using pre-compiled Vulkan"
+    echo "   Using pre-compiled Vulkan   "
     echo "-------------------------------"
 fi
 

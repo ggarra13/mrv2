@@ -88,7 +88,16 @@ cd compile
 
 # https://vulkan.lunarg.com/doc/sdk/1.4.321.1/linux/getting_started.html
 #
-# git clone https://github.com/KhronosGroup/Vulkan-Headers # Not needed, shipped i
+if [[ "$BUILD_VULKAN_HEADERS" == "ON" || "$BUILD_VULKAN_HEADERS" == "1" ]]; then
+    if [ ! -d Vulkan-Headers ]; then
+	git clone https://github.com/KhronosGroup/Vulkan-Headers
+    fi
+
+    cd Vulkan-Headers
+    try_checkout
+    cmake -S . -B build -D CMAKE_INSTALL_PREFIX=$VULKAN_SDK
+    cmake --build build -t install
+fi
 
 ##########################
 # Vulkan Loader          #
@@ -168,8 +177,6 @@ if [[ "$BUILD_SPIRV_CROSS" == "ON" || "$BUILD_SPIRV_CROSS" == "1" ]]; then
     cmake --build build -t install
     cd ..
 fi
-
-
 
 ##########################
 # glslang                #
