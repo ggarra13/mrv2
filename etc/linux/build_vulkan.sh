@@ -8,6 +8,10 @@ if [[ -z "$BUILD_WERROR" ]]; then
     BUILD_WERROR=OFF
 fi
 
+if [[ -z "$BUILD_VULKAN_HEADERS" ]]; then
+    BUILD_VULKAN_HEADERS=ON
+fi
+
 if [[ -z "$BUILD_VULKAN_LOADER" ]]; then
     BUILD_VULKAN_LOADER=ON
 fi
@@ -77,7 +81,6 @@ export COMPILE_VERSION=$(echo "$SDK_VERSION" | sed -E 's/^([0-9]+\.[0-9]+\.[0-9]
 export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/$UNAME_ARCH
 if [[ -d ${VULKAN_SDK} && ! -d ${VULKAN_SDK}_orig ]]; then
     mv ${VULKAN_SDK} ${VULKAN_SDK}_orig
-    cp -rf ${VULKAN_SDK}_orig/include ${VULKAN_SDK}
 fi
 
 echo "--------------------------------------------------------"
