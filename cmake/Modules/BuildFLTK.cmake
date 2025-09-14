@@ -95,7 +95,9 @@ else()
     set(FLTK_USE_PANGO   ON)
 endif()
 
-    
+
+message(STATUS "FLTK DEPENDENCIES: ${FLTK_DEPENDENCIES}")
+
 ExternalProject_Add(
     FLTK
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps/FLTK
