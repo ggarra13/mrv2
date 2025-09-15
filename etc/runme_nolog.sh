@@ -42,6 +42,10 @@ get_cmake_version
 #
 # These are some of the expensive mrv2 options
 #
+if [ -z "$BUILD_GETTEXT" ]; then
+    export BUILD_GETTEXT=OFF
+fi
+
 if [ -z "$BUILD_PYTHON" ]; then
     export BUILD_PYTHON=ON
 fi
@@ -430,6 +434,7 @@ cmd="cmake -G '${CMAKE_GENERATOR}'
 	   -D BUILD_PYTHON=${BUILD_PYTHON}
 	   -D BUILD_X11=${BUILD_X11}
 	   -D BUILD_WAYLAND=${BUILD_WAYLAND}
+	   -D BUILD_GETTEXT=${BUILD_GETTEXT}
 
 	   -D MRV2_COMPILER=${COMPILER}
 	   -D MRV2_BACKEND=${MRV2_BACKEND}
