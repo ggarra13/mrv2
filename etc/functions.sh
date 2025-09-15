@@ -103,8 +103,13 @@ get_kernel()
 	export UNAME_ARCH=$ARCH # Store uname architecture to compile properly
     fi
 
+
+    echo "GOT KERNEL=$KERNEL"
+    echo "GOT ARCH=$ARCH"
+    echo "GOT UNAME_ARCH=$UNAME_ARCH"
+    
     if [[ $KERNEL == *Darwin* ]]; then
-	if [[ $ARCH == arm64 ]]; then
+	if [[ $ARCH == aarch64 || $ARCH == arm64 ]]; then
 	    export ARCH=arm64
 	else
 	    export ARCH=amd64
@@ -118,6 +123,10 @@ get_kernel()
 	    export ARCH=i386
 	fi
     fi
+    
+    echo "FINAL KERNEL=$KERNEL"
+    echo "FINAL ARCH=$ARCH"
+    echo "FINAL UNAME_ARCH=$UNAME_ARCH"
 }
 
 get_msvc_version()

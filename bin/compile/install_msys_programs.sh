@@ -21,7 +21,13 @@ pacman -Syu --noconfirm
 #
 # Install 
 #
-pacman -Sy swig diffutils mingw-w64-ucrt-x86_64-gettext --noconfirm
+pacman -Sy swig diffutils --noconfirm
+
+if [[ "$ARCH" == "aarch64" || "$ARCH" == "arm64" ]]; then
+    pacman -Sy mingw-w64-clang-aarc64-gettext --noconfirm
+else
+    pacman -Sy mingw-w64-ucrt-x86_64-gettext --noconfirm
+fi
 
 mkdir -p $BUILD_DIR/install/bin
 mkdir -p $BUILD_DIR/install/lib

@@ -284,7 +284,7 @@ fi
 #
 #
 if [[ $KERNEL == *Msys* ]]; then
-    if [[ $ARCH == *arm64* || $ARCH == aarch64 ]]; then
+    if [[ $ARCH == *arm64* || $ARCH == *aarch64* ]]; then
 	export TLRENDER_NET=OFF  # off for now
 	export BUILD_GETTEXT=ON
     fi
