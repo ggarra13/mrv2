@@ -76,7 +76,7 @@ jobs:
       run: |
         echo "Machine name: $RUNNER_NAME"
         cat  "$TEMP/msys2_cmd.bat"
-        ls /C/msys64/usr/bin/bash.exe
+        # ls /C/msys64/usr/bin/bash.exe
         ls /C/a/_temp/setup-msys2/msys2.cmd
         cat /C/a/_temp/setup-msys2/msys2.cmd
     
