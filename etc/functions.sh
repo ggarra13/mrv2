@@ -102,11 +102,6 @@ get_kernel()
 	export ARCH=`uname -m` # was uname -a
 	export UNAME_ARCH=$ARCH # Store uname architecture to compile properly
     fi
-
-
-    echo "GOT KERNEL=$KERNEL"
-    echo "GOT ARCH=$ARCH"
-    echo "GOT UNAME_ARCH=$UNAME_ARCH"
     
     if [[ $KERNEL == *Darwin* ]]; then
 	if [[ $ARCH == aarch64 || $ARCH == arm64 ]]; then
@@ -119,22 +114,19 @@ get_kernel()
 	    export ARCH=aarch64
 	elif [[ $ARCH == *64* ]]; then
 	    export ARCH=amd64
-	    # Note: on aarch windows we currently get amd64 from uname -m,
-	    #       so we get the architecture from clang.
+	    # \@bug: on aarch windows we currently get amd64 from uname -m,
+	    #        so we get the architecture from clang.
 	    if [[ $KERNEL == *Msys* ]]; then
 		has_aarch64=`clang.exe --version`
 		if [[ $has_aarch64 == *aarch64* ]]; then
 		    export ARCH=aarch64
+		    export UNAME_ARCH=aarch64
 		fi
 	    fi
 	else
 	    export ARCH=i386
 	fi
     fi
-    
-    echo "FINAL KERNEL=$KERNEL"
-    echo "FINAL ARCH=$ARCH"
-    echo "FINAL UNAME_ARCH=$UNAME_ARCH"
 }
 
 get_msvc_version()
