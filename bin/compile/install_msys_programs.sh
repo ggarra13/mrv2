@@ -21,10 +21,10 @@ pacman -Syu --noconfirm
 #
 # Install 
 #
-pacman -Sy swig diffutils --noconfirm
+pacman -Sy swig diffutils nasm --noconfirm
 
 if [[ "$ARCH" == "aarch64" || "$ARCH" == "arm64" ]]; then
-    pacman -Sy mingw-w64-clang-aarc64-gettext --noconfirm
+    pacman -Sy mingw-w64-clang-aarch64-gettext --noconfirm
 else
     pacman -Sy mingw-w64-ucrt-x86_64-gettext --noconfirm
 fi
