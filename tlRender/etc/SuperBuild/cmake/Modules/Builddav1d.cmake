@@ -8,6 +8,11 @@ if(UNIX)
     set(dav1d_DEPS NASM ${dav1d_DEPS})
 endif()
 
+set(CLANG_ENV )
+if(WIN32)
+    set(CLANG_ENV CC=clang CXX=clang)
+endif()
+
 set(dav1d_PYTHONPATH )
 if(NOT BUILD_PYTHON)
     find_program(MESON_EXECUTABLE NAMES meson meson.exe)
@@ -53,15 +58,17 @@ if(APPLE AND CMAKE_OSX_DEPLOYMENT_TARGET)
     set(dav1d_LDFLAGS -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET})
 endif()
 
+
 set(dav1d_RENAME_TO_LIB )
-if (WIN32)
-    set(dav1d_RENAME_TO_LIB
-	COMMAND cmake -E rename ${CMAKE_INSTALL_PREFIX}/lib/libdav1d.a
-	 ${CMAKE_INSTALL_PREFIX}/lib/dav1d.lib)
-endif()
+# if (WIN32)
+#     set(dav1d_RENAME_TO_LIB
+# 	COMMAND cmake -E rename ${CMAKE_INSTALL_PREFIX}/lib/libdav1d.a
+# 	 ${CMAKE_INSTALL_PREFIX}/lib/dav1d.lib)
+# endif()
 
 set(dav1d_CONFIGURE
     COMMAND ${CMAKE_COMMAND} -E env
+    ${CLANG_ENV}
     "CXXFLAGS=${dav1d_CXXFLAGS}"
     "CFLAGS=${dav1d_CFLAGS}"
     "LDFLAGS=${dav1d_LDFLAGS}"
