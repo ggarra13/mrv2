@@ -16,17 +16,19 @@ ProcessorCount(NPROCS)
 
 if(WIN32)
     #
-    # We build with MSys
+    # We build with Msys
     #
-    # set(OpenSSL_CONFIGURE
-    #     perl Configure VC-WIN64A
-    #     --prefix=${CMAKE_INSTALL_PREFIX}
-    #     --openssldir=${CMAKE_INSTALL_PREFIX}
-    #     no-external-tests
-    #     no-tests
-    #     no-unit-test)
-    # set(OpenSSL_BUILD nmake install)
-    # set(OpenSSL_INSTALL nmake install)
+    if ($ENV{ARCH} == ".*aarch64.*" OR $ENV{ARCH} == ".*arm64.*")
+	set(OpenSSL_CONFIGURE
+            perl Configure VC-WIN64A
+            --prefix=${CMAKE_INSTALL_PREFIX}
+            --openssldir=${CMAKE_INSTALL_PREFIX}
+            no-external-tests
+            no-tests
+            no-unit-test)
+	set(OpenSSL_BUILD nmake install)
+	set(OpenSSL_INSTALL nmake install)
+    endif()
 elseif(APPLE)
     set(OpenSSL_CONFIGURE
         ./Configure
@@ -70,6 +72,19 @@ if(NOT WIN32)
 	BUILD_COMMAND ${OpenSSL_BUILD}
 	INSTALL_COMMAND ${OpenSSL_INSTALL}
 	BUILD_IN_SOURCE 1)
-
-    set(OpenSSL OpenSSL)
+else()
+    if ($ENV{ARCH} == ".*aarch64.*" OR $ENV{ARCH} == ".*arm64.*")
+	ExternalProject_Add(
+	    OpenSSL
+	    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/OpenSSL
+	    DEPENDS ${OpenSSL_DEPENDS}
+	    GIT_REPOSITORY ${OpenSSL_GIT_REPOSITORY}
+	    GIT_TAG ${OpenSSL_GIT_TAG}
+	    CONFIGURE_COMMAND ${OpenSSL_CONFIGURE}
+	    BUILD_COMMAND ${OpenSSL_BUILD}
+	    INSTALL_COMMAND ${OpenSSL_INSTALL}
+	    BUILD_IN_SOURCE 1)
+    endif()
 endif()
+
+set(OpenSSL_DEP OpenSSL)

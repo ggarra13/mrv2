@@ -119,6 +119,14 @@ get_kernel()
 	    export ARCH=aarch64
 	elif [[ $ARCH == *64* ]]; then
 	    export ARCH=amd64
+	    # Note: on aarch windows we currently get amd64 from uname -m,
+	    #       so we get the architecture from clang.
+	    if [[ $KERNEL == *Msys* ]]; then
+		has_aarch64=`clang.exe --version`
+		if [[ $has_aarch64 == *aarch64* ]]; then
+		    export ARCH=aarch64
+		fi
+	    fi
 	else
 	    export ARCH=i386
 	fi
