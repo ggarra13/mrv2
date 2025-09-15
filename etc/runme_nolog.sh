@@ -290,7 +290,6 @@ fi
 if [[ $KERNEL == *Msys* ]]; then
     if [[ $ARCH == *arm64* || $ARCH == *aarch64* ]]; then
 	export TLRENDER_NET=OFF  # off for now
-	export BUILD_GETTEXT=ON
     fi
 fi
     
@@ -352,7 +351,6 @@ if [[ ${BUILD_PYTHON} == OFF || ${BUILD_PYTHON} == 0 ]]; then
 else
     echo "Python FUTURE location: ${MRV2_PYTHON}"
 fi
-echo "Build Gettext                        ${BUILD_GETTEXT}     (BUILD_GETTEXT)"
 echo "Build pyFLTK........................ ${MRV2_PYFLTK} 	(MRV2_PYFLTK)"
 echo "Build FLTK shared................... ${FLTK_BUILD_SHARED} 	(FLTK_BUILD_SHARED)"
 echo "Build embedded Python............... ${MRV2_PYBIND11} 	(MRV2_PYBIND11)"

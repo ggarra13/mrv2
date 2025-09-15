@@ -76,7 +76,34 @@ message( STATUS "FLTK LIBRARIES: ${FLTK_vk_LIBRARY} ${FLTK_gl_LIBRARY} ${FLTK_LI
 message( STATUS "FLTK_FLUID_EXECUTABLE: ${FLTK_FLUID_EXECUTABLE}" )
 
 
-find_package(Intl REQUIRED)
+if (UNIX)
+    find_package(Intl REQUIRED)  # old method
+else()
+    if(NOT VCPKG_TOOLCHAIN_FILE)
+	set(VCPKG_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
+    endif()
+    include(${VCPKG_TOOLCHAIN_FILE})
+
+    # Find the vcpkg-installed library. The vcpkg toolchain handles the path.
+    find_package(gettext-libintl CONFIG REQUIRED)
+    find_package(gettext-libiconv CONFIG REQUIRED)
+    set(Intl_LIBRARIES gettext-libintl::gettext-libintl gettext-libiconv::gettext-libiconv)
+    
+    # Install the dependencies' binaries (DLLs)
+    install(FILES
+	$<TARGET_FILE:gettext-libintl::gettext-libintl>
+	$<TARGET_FILE:gettext-libiconv::gettext-libiconv>
+	DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
+	# The OPTIONAL keyword prevents errors if the file doesn't exist
+	OPTIONAL
+    )
+
+    # Install the headers
+    install(DIRECTORY ${VCPKG_ROOT}/installed/${VCPKG_TARGET_TRIPLET}/include/
+	DESTINATION ${CMAKE_INSTALL_PREFIX}/include
+    )
+endif()
+
 find_package(tlRender REQUIRED)
 find_package(nlohmann_json REQUIRED)
 find_package(glfw3 REQUIRED)
