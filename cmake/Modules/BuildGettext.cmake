@@ -34,14 +34,17 @@ set(GETTEXT_ARGS
 if(WIN32)
     list(APPEND GETTEXT_ARGS --target aarch-windows-msvc)
     set(Gettext_COMPILER $ENV{GENERIC_C_COMPILER})
+    set(Gettext_LINKER link)
 else()
     set(Gettext_COMPILER $ENV{NATIVE_C_COMPILER})
+    set(Gettext_LINKER ld)
 endif()
 
 ExternalProject_Add(
     GETTEXT
     URL "https://ftp.gnu.org/gnu/gettext/gettext-0.21.1.tar.gz"
-    CONFIGURE_COMMAND CC=${Gettext_COMPILER} ./configure ${GETTEXT_ARGS}
+    CONFIGURE_COMMAND
+    CC=${Gettext_COMPILER} LD=${Gettext_LINKER} ./configure ${GETTEXT_ARGS}
     "CFLAGS=${GETTEXT_C_FLAGS}"
     "CXXFLAGS=${GETTEXT_CXX_FLAGS}"
     BUILD_COMMAND make -j 16
