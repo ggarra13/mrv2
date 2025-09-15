@@ -4,6 +4,10 @@ set(OpenEXR_GIT_REPOSITORY "https://github.com/AcademySoftwareFoundation/openexr
 set(OpenEXR_GIT_TAG "v3.4.0")
 
 
+set(OpenEXR_PATCH COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    ${CMAKE_CURRENT_SOURCE_DIR}/patches/OpenEXR-patch/cmake/OpenEXRSetup.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/OpenEXR/src/OpenEXR/cmake/OpenEXRSetup.cmake)
+
 # \bug Disable OpenEXR threading to work around a crash at shutdown in the
 # OpenEXR thread pool. Note that we already set the OpenEXR global thread
 # count to zero since we load frames in parallel.
@@ -23,6 +27,8 @@ ExternalProject_Add(
     DEPENDS ${OpenJPH_DEP} Imath ZLIB
     GIT_REPOSITORY ${OpenEXR_GIT_REPOSITORY}
     GIT_TAG ${OpenEXR_GIT_TAG}
+
+    PATCH_COMMAND ${OpenEXR_PATCH}
     
     LIST_SEPARATOR |
     CMAKE_ARGS ${OpenEXR_ARGS})
