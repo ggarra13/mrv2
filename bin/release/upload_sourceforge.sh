@@ -8,6 +8,23 @@ echo "RUNNING upload_sourceforge.sh......"
 
 . etc/build_dir.sh
 
+upload_file()
+{
+    echo
+    echo "Uploading $1 as $2..."
+    echo
+    
+    rsync -avz -e "ssh -i $SSH_KEY -o StrictHostKeyChecking=no" $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$branch/$2
+    if [[ $? -ne 0 ]]; then
+        echo "rsync command failed. Error log:"
+	cat rsync_error.log
+        exit 1
+    fi
+    echo
+    echo "Upload was successful."
+    echo
+}
+
 #
 # Unset LD_LIBRARY_PATH and DYLD_LIBRARY_PATH just in case so we don't use
 # an incorrect library that is not on the system
@@ -100,23 +117,6 @@ echo "ssh version:"
 ssh -V
 
 echo "Proceed with uploading..."
-
-upload_file()
-{
-    echo
-    echo "Uploading $1 as $2..."
-    echo
-    
-    rsync -avz -e "ssh -i $SSH_KEY -o StrictHostKeyChecking=no" $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$branch/$2
-    if [[ $? -ne 0 ]]; then
-        echo "rsync command failed. Error log:"
-	cat rsync_error.log
-        exit 1
-    fi
-    echo
-    echo "Upload was successful."
-    echo
-}
 
 #
 # Create the README.md file
@@ -217,6 +217,7 @@ else
     echo "Release notes extracted."
 fi
 
+echo "Appending release notes..."
 echo "$release_notes" >> README.md
 
 cat <<EOF > VULKAN_NOTES.md
@@ -235,30 +236,6 @@ In order to get HDR, you currently need to have the KWin6 or GNOME48 compositors
 It will likely work with any NVidia RTX 3080+ or similar AMD board, but it will require you to choose and test your hardware carefully.
 
 The preferred NVidia driver tested for best performance is nvidia-driver-570 (default on Ubuntu 25.04 with GNOME48).
-
-For best performance with the NVidia driver, you can modify:
-
-\`\`\`
-    sudo nano /etc/default/grub
-\`\`\`
-
-Modify line 11 to from:
-
-\`\`\`
-GRUB_CMDLINE_LINUX_DEFAULT="quiet splash nvidia_drm.modeset=1 nvidia_drm.fbdev=1"
-\`\`\`
-
-To this content:
-
-\`\`\`
-GRUB_CMDLINE_LINUX_DEFAULT="quiet splash nvidia_drm.modeset=1 nvidia_drm.fbdev=1 nvidia.NVreg_EnableGpuFirmware=0"
-\`\`\`
-
-\`\`\`
-   sudo update-grub
-   sudo reboot
-\`\`\`
-
 
 Notes about Vulkan on macOS Intel
 ---------------------------------
