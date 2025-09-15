@@ -131,7 +131,7 @@ jobs:
       
     - name: Build vmrv2
       run: |
-        ./etc/runme_nolog.sh -v -t package -vk
+        ./etc/runme_nolog.sh -v -t package -vk -D TLRENDER_VPX=OFF
         
     - name: Upload binaries  # Conditional step
       run: |

@@ -89,7 +89,9 @@ else()
     set( Python_DEPENDENCIES )
     
     set( platform x64 )
-    if( "$ENV{ARCH}" STREQUAL "i386" )
+    if( "$ENV{ARCH}" MATCHES ".*aarch64.*" OR "$ENV{ARCH}" MATCHES ".*arm64.*" )
+    	set( platform ARM64 )
+    elseif( "$ENV{ARCH}" STREQUAL "i386" )
     	set( platform Win32 )
     endif()
 
