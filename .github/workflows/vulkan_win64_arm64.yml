@@ -45,12 +45,6 @@ jobs:
     #     Start-Process vc_redist_2022.x64.exe -ArgumentList "/install", "/quiet", "/norestart" -Wait
     #   shell: powershell
       
-    # Install Vulkan SDK
-    - name: Install Vulkan
-      run: |
-        ./etc/windows/install_vulkan.sh
-      shell: bash
-      
     - name: Synchronize clock
       shell: cmd
       run: |
@@ -83,6 +77,8 @@ jobs:
         echo "Machine name: $RUNNER_NAME"
         cat  "$TEMP/msys2_cmd.bat"
         ls /C/msys64/usr/bin/bash.exe
+        ls /C/a/_temp/setup-msys2/msys2.cmd
+        cat /C/a/_temp/setup-msys2/msys2.cmd
     
     # Install Vulkan SDK
     - name: Install Vulkan SDK
