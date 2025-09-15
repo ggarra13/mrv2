@@ -1,5 +1,8 @@
 include(ExternalProject)
 
+include(ProcessorCount)
+ProcessorCount(NPROCS)
+
 set(OpenSSL_DEPENDS)
 if(NOT WIN32)
     list(APPEND OpenSSL_DEPENDS NASM)
@@ -9,16 +12,13 @@ list(APPEND OpenSSL_DEPENDS ZLIB)
 set(OpenSSL_GIT_REPOSITORY "https://github.com/openssl/openssl.git")
 set(OpenSSL_GIT_TAG "openssl-3.3.0")
 
-set(OpenSSL )
-
-include(ProcessorCount)
-ProcessorCount(NPROCS)
+set(OpenSSL_DEP )
 
 if(WIN32)
     #
     # We build with Msys
     #
-    if ($ENV{ARCH} == ".*aarch64.*" OR $ENV{ARCH} == ".*arm64.*")
+    if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
 	set(OpenSSL_CONFIGURE
             perl Configure VC-WIN64A
             --prefix=${CMAKE_INSTALL_PREFIX}
@@ -73,7 +73,7 @@ if(NOT WIN32)
 	INSTALL_COMMAND ${OpenSSL_INSTALL}
 	BUILD_IN_SOURCE 1)
 else()
-    if ($ENV{ARCH} == ".*aarch64.*" OR $ENV{ARCH} == ".*arm64.*")
+    if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
 	ExternalProject_Add(
 	    OpenSSL
 	    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/OpenSSL
@@ -84,7 +84,8 @@ else()
 	    BUILD_COMMAND ${OpenSSL_BUILD}
 	    INSTALL_COMMAND ${OpenSSL_INSTALL}
 	    BUILD_IN_SOURCE 1)
+
+	set(OpenSSL_DEP OpenSSL)
     endif()
 endif()
 
-set(OpenSSL_DEP OpenSSL)
