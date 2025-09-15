@@ -272,7 +272,7 @@ if (NOT OPENEXR_FORCE_INTERNAL_OPENJPH)
     #        openjph/ prefix directory.
     foreach(_dir ${CMAKE_PREFIX_PATH})
 	if (EXISTS "${_dir}/include/openjph")
-	    include_directories("${CMAKE_PREFIX_PATH}/include/openjph")
+	    include_directories("${_dir}/include/openjph")
 	endif()
     endforeach()
   else()
