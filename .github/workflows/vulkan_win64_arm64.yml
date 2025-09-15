@@ -64,21 +64,15 @@ jobs:
 
     - name: Create msys_cmd.bat wrapper
       run: |
-        echo "TEMP=$TEMP"
-        echo "REM ------------- MSYS COMPILING" > $TEMP/msys2_cmd.bat 
-        # echo "@echo off" >> C:/msys64/msys2_cmd.bat
+        echo "@echo off" >> C:/msys64/msys2_cmd.bat
         echo "set MSYS2_PATH_TYPE=inherit" >> $TEMP/msys2_cmd.bat
         echo "set MSYS2_NOSTART=yes" >> $TEMP/msys2_cmd.bat
         echo "set CHERE_INVOKING=enabled_from_arguments" >> $TEMP/msys2_cmd.bat
-        echo "C:\msys64\usr\bin\bash.exe %*" >> $TEMP/msys2_cmd.bat
+        echo "C:\a\_temp\msys64\usr\bin\bash.exe %*" >> $TEMP/msys2_cmd.bat
         
     - name: Get machine name
       run: |
         echo "Machine name: $RUNNER_NAME"
-        cat  "$TEMP/msys2_cmd.bat"
-        # ls /C/msys64/usr/bin/bash.exe
-        ls /C/a/_temp/setup-msys2/msys2.cmd
-        cat /C/a/_temp/setup-msys2/msys2.cmd
     
     # Install Vulkan SDK
     - name: Install Vulkan SDK
