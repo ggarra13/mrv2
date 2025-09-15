@@ -60,11 +60,11 @@ endif()
 
 
 set(dav1d_RENAME_TO_LIB )
-# if (WIN32)
-#     set(dav1d_RENAME_TO_LIB
-# 	COMMAND cmake -E rename ${CMAKE_INSTALL_PREFIX}/lib/libdav1d.a
-# 	 ${CMAKE_INSTALL_PREFIX}/lib/dav1d.lib)
-# endif()
+if (WIN32)
+    set(dav1d_RENAME_TO_LIB
+	COMMAND cmake -E rename ${CMAKE_INSTALL_PREFIX}/lib/libdav1d.a
+	 ${CMAKE_INSTALL_PREFIX}/lib/dav1d.lib)
+endif()
 
 set(dav1d_CONFIGURE
     COMMAND ${CMAKE_COMMAND} -E env
