@@ -28,6 +28,9 @@ I use the email information to contact you privately.  I don't sell your informa
 
 - u$  50 for a node-lock license for one year.
 - u$ 150 for a node-lock license to own.
+
+- u$ 200 for a node-lock license on Windows or Linux aarch64.
+
 - The prices are cumulative.  If you donate, say u$10 in 5 months, you can access the node-lock license for one year.
 
 License works for both mrv2 and vmrv2 (you can have both installed).
