@@ -73,9 +73,11 @@ if (WIN32)
     set(VPX_BUILD ${MRV2_MSYS_CMD} -c "make -j ${NPROCS}")
 
     set(VPX_ARCH x64)
-    if ($ENV[ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
+    if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
 	set(VPX_ARCH ARM64)
+	# set(VPX_ARCH ARM64EC)  # what's this for?
     endif()
+    message(FATAL_ERROR "VPX_ARCH=${VPX_ARCH} BECAUSE=$ENV{ARCH}")
     
     set(VPX_INSTALL ${MRV2_MSYS_CMD} -c "make install && mv ${INSTALL_PREFIX}/lib/${VPX_ARCH}/vpxmd.lib ${INSTALL_PREFIX}/lib/vpx.lib" )
 
