@@ -4,6 +4,8 @@
 
 include( ExternalProject )
 
+include(ProcessorCount)
+ProcessorCount(NPROCS)
 
 if(APPLE)
     set(GETTEXT_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
@@ -16,15 +18,17 @@ endif()
 
 set(GETTEXT_ARGS
     --disable-silent-rules
-    --with-included-glib
-    --with-included-libcroco
-    --with-included-libunistring
-    --with-included-libxml
-    --with-included-gettext
-    
+
     --disable-java
     --disable-csharp
-
+    --disable-curses
+    --disable-openmp
+    --disable-c++
+    
+    --with-included-libunistring
+    --with-included-gettext
+    
+    --without-emacs
     --without-git
     --without-cvs
     --without-xz
@@ -37,7 +41,6 @@ if(WIN32)
     set(Gettext_LINKER link)
 else()
     set(Gettext_COMPILER $ENV{NATIVE_C_COMPILER})
-    set(Gettext_LINKER ld)
 endif()
 
 ExternalProject_Add(
@@ -47,7 +50,7 @@ ExternalProject_Add(
     CC=${Gettext_COMPILER} LD=${Gettext_LINKER} ./configure ${GETTEXT_ARGS}
     "CFLAGS=${GETTEXT_C_FLAGS}"
     "CXXFLAGS=${GETTEXT_CXX_FLAGS}"
-    BUILD_COMMAND make -j 16
+    BUILD_COMMAND make -j ${NPROCS}
     BUILD_IN_SOURCE 1
 )
 
