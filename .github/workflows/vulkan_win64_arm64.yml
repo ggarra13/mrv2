@@ -115,7 +115,7 @@ jobs:
         
     - name: Install MSYS2 Dependencies
       run: |
-        pacman -S --noconfirm nasm rsync
+        pacman -S --noconfirm rsync
 
     # No wmic on arm64
     # - name: List disk space

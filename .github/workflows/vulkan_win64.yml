@@ -102,7 +102,7 @@ jobs:
         
     - name: Install MSYS2 Dependencies
       run: |
-        pacman -S --noconfirm nasm rsync
+        pacman -S --noconfirm rsync
         
     - name: List disk space
       shell: cmd

@@ -528,7 +528,7 @@ if(WIN32)
     list(JOIN FFmpeg_CONFIGURE_ARGS " \\\n" FFmpeg_CONFIGURE_ARGS_TMP)
 
     set(FFmpeg_CONFIGURE ${FFmpeg_MSYS2}
-        -c "pacman -S diffutils make nasm pkg-config --noconfirm && \
+        -c "pacman -S diffutils make pkg-config --noconfirm && \
         ${FFmpeg_OPENSSL_COPY} ${PKG_CONFIG_PATH_CMD} \
         ./ffmpeg_configure.sh")
     set(FFmpeg_BUILD ${FFmpeg_MSYS2} -c "make -j ${NPROCS}")
