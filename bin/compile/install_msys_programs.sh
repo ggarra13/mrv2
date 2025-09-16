@@ -27,7 +27,7 @@ if [[ $ARCH == *amd64* ]]; then
     pacman -Sy nasm --noconfirm
 else
     echo "Installing clang-aarch64-toolchain..."
-    pacman -Sy mingw-w64-clang-aarch64-toolchain
+    pacman -Sy mingw-w64-clang-aarch64-binutils --noconfirm
     echo "Installed  AS version:"
     as --version
 fi
