@@ -139,12 +139,14 @@ jobs:
         -D TLRENDER_JPEG=OFF \
         -D TLRENDER_NDI=OFF \
         -D TLRENDER_NET=OFF \
+        -D TLRENDER_OPENJPH=ON \
         -D TLRENDER_RAW=OFF \
         -D TLRENDER_SGI=OFF \
         -D TLRENDER_STB=OFF \
         -D TLRENDER_SVTAV1=OFF \
         -D TLRENDER_TIFF=OFF \
         -D TLRENDER_USD=OFF \
+        -D TLRENDER_VPX=OFF \
         -D TLRENDER_YASM=OFF
         
     # ./etc/runme_nolog.sh -v -t package -vk \

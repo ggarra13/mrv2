@@ -12,7 +12,7 @@ if [[ $ARCH != *arm64* && $ARCH != *aarch64* ]]; then
     # Install libintl, iconv and gettext, subversion, libsqlite and swig
     # from MSys repositories
     #
-    # . bin/compile/install_libintl_windows.sh
+    . bin/compile/install_libintl_windows.sh
 
     #
     # Deal with FFmpeg dependencies (compiled from source)

@@ -117,8 +117,6 @@ elseif(WIN32)
 	)
 	set(Gettext_DEP libiconv_gettext_integrate)
     endif()
-
-    # message(FATAL_ERROR "last integration")
 endif()
 
 
