@@ -45,6 +45,8 @@ export CMAKE_FLAGS=""
 
 . etc/options_off.sh
 
+export BUILD_PYTHON=ON   # needed for meson install
+
 export TLRENDER_FFMPEG=ON
 export TLRENDER_FFMPEG_MINIMAL=ON
 export TLRENDER_LIBPLACEBO=ON

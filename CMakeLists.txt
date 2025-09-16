@@ -78,40 +78,45 @@ elseif(APPLE)
 	endif()
     endif()
 elseif(WIN32)
-    set(vcpkg_DEP )
-    set(BUILD_VCPKG TRUE)
-    if (BUILD_VCPKG)
-	include(cmake/Modules/Buildvcpkg.cmake)
-    else()
-	set(VCPKG vcpkg)
-    endif()
     
     set(vcpkg_ARCH x64)
+    
     if (CMAKE_SYSTEM_PROCESSOR STREQUAL "ARM64" OR
 	    CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
+	set(vcpkg_DEP )
+	set(BUILD_VCPKG TRUE)
+	if (BUILD_VCPKG)
+	    include(cmake/Modules/Buildvcpkg.cmake)
+	else()
+	    #
+	    # Use default vcpkg from MSVC
+	    #
+	    set(VCPKG vcpkg)
+	endif()
+    
 	set(vcpkg_ARCH arm64)
-    endif()
-    message(STATUS "Building for Windows ${vcpkg_ARCH}")
+	message(STATUS "Building for Windows ${vcpkg_ARCH}")
+	message(STATUS "VCPKG running from ${VCPKG}")
 	
-    set($ENV{VCPKG_INSTALL_PREFIX} ${CMAKE_INSTALL_PREFIX})
-    add_custom_command(
-	OUTPUT ${CMAKE_BINARY_DIR}/libiconv_done.stamp
-	COMMAND ${CMAKE_COMMAND} -E echo "Running libiconv_done..."
-	COMMAND ${VCPKG} install libiconv:${vcpkg_ARCH}-windows
-	DEPENDS vcpkg_DEP)
-    add_custom_command(
-	OUTPUT ${CMAKE_BINARY_DIR}/gettext_done.stamp
-	COMMAND ${CMAKE_COMMAND} -E echo "Running libiconv_done..."
-	COMMAND ${VCPKG} install gettext:${vcpkg_ARCH}-windows
-	DEPENDS vcpkg_DEP)
-    add_custom_command(
-	OUTPUT ${CMAKE_BINARY_DIR}/libiconv_integrate_done.stamp
-	COMMAND ${CMAKE_COMMAND} -E echo "Running libiconv_done..."
-	COMMAND ${VCPKG} integrate install
-	DEPENDS
-	${CMAKE_BINARY_DIR}/gettext_done.stamp
-	${CMAKE_BINARY_DIR}/libiconv_done.stamp
-    )
+	add_custom_target(
+	    libiconv ALL
+	    ${CMAKE_COMMAND} -E echo "Running libiconv_done..."
+	    COMMAND ${VCPKG} install libiconv:${vcpkg_ARCH}-windows
+	    DEPENDS ${vcpkg_DEP})
+	add_custom_target(
+	    gettext ALL
+	    ${CMAKE_COMMAND} -E echo "Running gettext_done..."
+	    COMMAND ${VCPKG} install gettext:${vcpkg_ARCH}-windows
+	    #COMMAND ${VCPKG} install gettext:${vcpkg_ARCH}-windows
+	    DEPENDS ${vcpkg_DEP} libiconv)
+	add_custom_target(
+	    libiconv_gettext_integrate ALL
+	    ${CMAKE_COMMAND} -E echo "Running integrate install..."
+	    COMMAND ${VCPKG} integrate install
+	    DEPENDS libiconv gettext
+	)
+	set(Gettext_DEP libiconv_gettext_integrate)
+    endif()
 
     # message(FATAL_ERROR "last integration")
 endif()

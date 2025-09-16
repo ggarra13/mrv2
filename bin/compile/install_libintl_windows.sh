@@ -15,12 +15,12 @@ else
     . etc/functions.sh
 fi
 
-if [[ "${BUILD_GETTEXT}" != "OFF" || "${BUILD_GETTEXT}" != "0" ]]; then
+if [[ ${ARCH} == *amd64* ]]; then
 
     if [[ ! -e /ucrt64/bin/gettext.exe ||
 	      ! -e /ucrt64/lib/libiconv.dll.a ||
 	      ! -e /ucrt64/lib/libintl.dll.a ]]; then
-	echo "Installing libssl, libsqlite, libiconv, libintl thru Msys..."
+	echo "Installing libsqlite, libiconv, libintl thru Msys..."
 	pacman -Syu --noconfirm
     fi
 

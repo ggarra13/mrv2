@@ -18,5 +18,5 @@ ExternalProject_Add(
     BUILD_IN_SOURCE 1
 )
 
-set( VCPKG ${CMAKE_CURRENT_BINARY_DIR}/deps/vcpkg/vkpkg.exe)
+set( VCPKG ${CMAKE_CURRENT_BINARY_DIR}/deps/vcpkg/src/vcpkg/vcpkg.exe)
 set( vcpkg_DEP vcpkg )
