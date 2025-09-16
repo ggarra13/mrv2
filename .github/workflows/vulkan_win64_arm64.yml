@@ -125,7 +125,10 @@ jobs:
       
     - name: Build vmrv2
       run: |
-        ./etc/runme_nolog.sh -v -t package -vk -D TLRENDER_SVTAV1=OFF
+        ./etc/runme_nolog.sh -v -t package -vk \
+        -D TLRENDER_SVTAV1=OFF \
+        -D TLRENDER_NET=OFF \
+        -D TLRENDER_USD=OFF
         
     - name: Upload binaries  # Conditional step
       run: |
