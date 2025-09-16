@@ -3,10 +3,8 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#!/bin/bash
-
 #
-# Script used to install libiconv and libintl on windows through Msys.
+# Script used to install compiling tools on windows through Msys.
 #
 
 if [[ ! $RUNME ]]; then
@@ -27,7 +25,7 @@ if [[ $ARCH == *amd64* ]]; then
     pacman -Sy mingw-w64-ucrt-x86_64-gettext --noconfirm
     pacman -Sy nasm --noconfirm
 else
-    pacman -Sy mingw-w64-aarch64-binutils
+    pacman -Sy mingw-w64-ucrt-aarch64-binutils
     echo "------------------------ AS version:"
     as --version
 fi
