@@ -14,7 +14,7 @@ set(LCMS2_PATCH
     ${CMAKE_CURRENT_SOURCE_DIR}/patches/LCMS2-patch/CMakeLists.txt <SOURCE_DIR>
     COMMAND ${CMAKE_COMMAND} -E make_directory <SOURCE_DIR>/cmake
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-    ${CMAKE_CURRENT_SOURCE_DIR}/patches/LCMS2-patch/cmake/LCMS2Config.cmake.in <SOURCE_DIR>/cmake/LCMS2Config.cmake
+    ${CMAKE_CURRENT_SOURCE_DIR}/patches/LCMS2-patch/cmake/LCMS2Config.cmake.in <SOURCE_DIR>/cmake/LCMS2Config.cmake.in
 )
 
 ExternalProject_Add(

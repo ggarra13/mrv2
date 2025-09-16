@@ -3,7 +3,11 @@ project(lcms2 LANGUAGES C VERSION 2.16) # adjust version
 
 # Sources
 file(GLOB SRC src/*.c)
-add_library(lcms2 ${SRC})
+
+# All symbols in lcms2 source don't have dllimport / dllexport, so we use this:
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
+add_library(lcms2 SHARED ${SRC})
 target_include_directories(lcms2
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
