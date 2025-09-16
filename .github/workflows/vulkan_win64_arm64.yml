@@ -126,9 +126,31 @@ jobs:
     - name: Build vmrv2
       run: |
         ./etc/runme_nolog.sh -v -t package -vk \
-        -D TLRENDER_SVTAV1=OFF \
+        -D BUILD_PYTHON=ON \
+        -D MRV2_PYFLTK=OFF \
+        -D MRV2_PYBIND11=OFF \
+        -D MRV2_NETWORK=OFF \
+        -D MRV2_PDF=OFF \
+        -D TLRENDER_AV1=OFF \
+        -D TLRENDER_EXR=ON \
+        -D TLRENDER_FFMPEG=ON \
+        -D TLRENDER_FFMPEG_MINIMAL=ON \
+        -D TLRENDER_HAP=OFF \
+        -D TLRENDER_JPEG=OFF \
+        -D TLRENDER_NDI=OFF \
         -D TLRENDER_NET=OFF \
-        -D TLRENDER_USD=OFF
+        -D TLRENDER_RAW=OFF \
+        -D TLRENDER_SGI=OFF \
+        -D TLRENDER_STB=OFF \
+        -D TLRENDER_SVTAV1=OFF \
+        -D TLRENDER_TIFF=OFF \
+        -D TLRENDER_USD=OFF \
+        -D TLRENDER_YASM=OFF
+        
+    # ./etc/runme_nolog.sh -v -t package -vk \
+    # -D TLRENDER_SVTAV1=OFF \
+    # -D TLRENDER_NET=OFF \
+    # -D TLRENDER_USD=OFF
         
     - name: Upload binaries  # Conditional step
       run: |
