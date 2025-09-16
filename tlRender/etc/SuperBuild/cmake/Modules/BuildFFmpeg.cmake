@@ -17,20 +17,13 @@ endif()
 
 set(FFmpeg_PATCH )
 if(WIN32)
-    if ($ENV{ARCH} MATCHES ".*amd64.*")
-	set(FFmpeg_PATCH ${CMAKE_COMMAND} -E copy_if_different
-            ${CMAKE_CURRENT_SOURCE_DIR}/patches/FFmpeg-patch/configure
-            ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg/src/FFmpeg/configure
-	    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            ${CMAKE_CURRENT_SOURCE_DIR}/patches/FFmpeg-patch/compat/windows/makedef
-            ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg/src/FFmpeg/compat/windows/makedef
-	)
-    else()
-	set(FFmpeg_PATCH ${CMAKE_COMMAND} -E copy_if_different
-            ${CMAKE_CURRENT_SOURCE_DIR}/patches/FFmpeg-patch/compat/windows/makedef
-            ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg/src/FFmpeg/compat/windows/makedef
-	    )
-    endif()
+    set(FFmpeg_PATCH ${CMAKE_COMMAND} -E copy_if_different
+        ${CMAKE_CURRENT_SOURCE_DIR}/patches/FFmpeg-patch/configure
+        ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg/src/FFmpeg/configure
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${CMAKE_CURRENT_SOURCE_DIR}/patches/FFmpeg-patch/compat/windows/makedef
+        ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg/src/FFmpeg/compat/windows/makedef
+    )
 endif()
 
 set(FFmpeg_SHARED_LIBS ON)
@@ -505,9 +498,15 @@ if(FFmpeg_DEBUG)
         --assert-level=2)
 endif()
 if(WIN32)
-    list(APPEND FFmpeg_CONFIGURE_ARGS
-        --arch=x86_64
-        --toolchain=msvc)
+    if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
+	list(APPEND FFmpeg_CONFIGURE_ARGS
+            --arch=aarch64
+            --toolchain=msvc)
+    else()
+	list(APPEND FFmpeg_CONFIGURE_ARGS
+            --arch=x86_64
+            --toolchain=msvc)
+    endif()
     set(FFmpeg_MSYS2 ${MRV2_MSYS_CMD})
     
     # \bug Copy libssl.lib to ssl.lib and libcrypto.lib to crypto.lib so the
