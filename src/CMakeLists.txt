@@ -79,30 +79,18 @@ message( STATUS "FLTK_FLUID_EXECUTABLE: ${FLTK_FLUID_EXECUTABLE}" )
 if (UNIX)
     find_package(Intl REQUIRED)  # old method
 else()
-    if (WIN32 AND CMAKE_SYSTEM_PROCESSOR STREQUAL "ARM64")
-	if(NOT VCPKG_TOOLCHAIN_FILE)
-	    set(VCPKG_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
+    if (WIN32)
+	if (CMAKE_SYSTEM_PROCESSOR STREQUAL "ARM64" OR
+		CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
+	    find_package(Iconv REQUIRED)
+	    find_package(Gettext REQUIRED)
+	    set(Intl_LIBRARIES Iconv::Iconv Gettext::Gettext)
+	else()
+	    # find_package(Intl REQUIRED)  # old method using MSys2
+	    find_package(Iconv REQUIRED)
+	    find_package(Gettext REQUIRED)
+	    set(Intl_LIBRARIES Iconv::Iconv Gettext::Gettext)
 	endif()
-	include(${VCPKG_TOOLCHAIN_FILE})
-
-	# Find the vcpkg-installed library. The vcpkg toolchain handles the path.
-	find_package(gettext-libintl CONFIG REQUIRED)
-	find_package(gettext-libiconv CONFIG REQUIRED)
-	set(Intl_LIBRARIES gettext-libintl::gettext-libintl gettext-libiconv::gettext-libiconv)
-	
-	# Install the dependencies' binaries (DLLs)
-	install(FILES
-	    $<TARGET_FILE:gettext-libintl::gettext-libintl>
-	    $<TARGET_FILE:gettext-libiconv::gettext-libiconv>
-	    DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
-	    # The OPTIONAL keyword prevents errors if the file doesn't exist
-	    OPTIONAL
-	)
-
-	# Install the headers
-	install(DIRECTORY ${VCPKG_ROOT}/installed/${VCPKG_TARGET_TRIPLET}/include/
-	    DESTINATION ${CMAKE_INSTALL_PREFIX}/include
-	)
     else()
 	find_package(Intl REQUIRED)  # old method
     endif()

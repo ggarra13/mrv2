@@ -57,6 +57,67 @@ if(NOT DEFINED CMAKE_INSTALL_MESSAGE)
 endif()
 
 #
+# Handle libintl, gettext and libintl
+#
+set( Gettext_DEP )
+if(BUILD_GETTEXT)
+    include(cmake/Modules/BuildGettext.cmake )
+elseif(APPLE)
+    if (NOT CMAKE_OSX_ARCHITECTURES OR CMAKE_OSX_ARCHITECTURES STREQUAL "")
+	message(WARNING
+	    "Target architecture not specified for macOS deployment")
+    else()
+	if(CMAKE_OSX_ARCHITECTURES MATCHES "^x86_64$") 
+	    #
+	    # brew .dylibs are compiled only for the current version of the OS.
+	    #
+	    # We distribute libintl dylib compatible with v10.5 on Intel macOS
+	    file(COPY
+		precompiled/macOS/v10.5/ DESTINATION ${CMAKE_INSTALL_PREFIX}/
+		FOLLOW_SYMLINK_CHAIN)
+	endif()
+    endif()
+elseif(WIN32)
+    set(vcpkg_DEP )
+    set(BUILD_VCPKG TRUE)
+    if (BUILD_VCPKG)
+	include(cmake/Modules/Buildvcpkg.cmake)
+    else()
+	set(VCPKG vcpkg)
+    endif()
+    
+    set(vcpkg_ARCH x64)
+    if (CMAKE_SYSTEM_PROCESSOR STREQUAL "ARM64" OR
+	    CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
+	set(vcpkg_ARCH arm64)
+    endif()
+    message(FATAL_ERROR "Building for Windows ${vcpkg_ARCH}")
+	
+    set($ENV{VCPKG_INSTALL_PREFIX} ${CMAKE_INSTALL_PREFIX})
+    add_custom_command(
+	OUTPUT ${CMAKE_BINARY_DIR}/libiconv_done.stamp
+	COMMAND ${CMAKE_COMMAND} -E echo "Running libiconv_done..."
+	COMMAND ${VCPKG} install libiconv:${vcpkg_ARCH}-windows
+	DEPENDS vcpkg_DEP)
+    add_custom_command(
+	OUTPUT ${CMAKE_BINARY_DIR}/gettext_done.stamp
+	COMMAND ${CMAKE_COMMAND} -E echo "Running libiconv_done..."
+	COMMAND ${VCPKG} install gettext:${vcpkg_ARCH}-windows
+	DEPENDS vcpkg_DEP)
+    add_custom_command(
+	OUTPUT ${CMAKE_BINARY_DIR}/libiconv_integrate_done.stamp
+	COMMAND ${CMAKE_COMMAND} -E echo "Running libiconv_done..."
+	COMMAND ${VCPKG} integrate install
+	DEPENDS
+	${CMAKE_BINARY_DIR}/gettext_done.stamp
+	${CMAKE_BINARY_DIR}/libiconv_done.stamp
+    )
+
+    # message(FATAL_ERROR "last integration")
+endif()
+
+
+#
 # Python cannot be built with asan dependencies
 #set(PYTHON_DEP )
 if(BUILD_PYTHON)
@@ -139,26 +200,6 @@ if(CMAKE_BUILD_TYPE MATCHES "^Debug$")
     endif()
 endif()
 
-
-set( Gettext_DEP )
-if(BUILD_GETTEXT)
-    include(cmake/Modules/BuildGettext.cmake )
-elseif(APPLE)
-    if (NOT CMAKE_OSX_ARCHITECTURES OR CMAKE_OSX_ARCHITECTURES STREQUAL "")
-	message(WARNING
-	    "Target architecture not specified for macOS deployment")
-    else()
-	if(CMAKE_OSX_ARCHITECTURES MATCHES "^x86_64$") 
-	    #
-	    # brew .dylibs are compiled only for the current version of the OS.
-	    #
-	    # We distribute libintl dylib compatible with v10.5 on Intel macOS
-	    file(COPY
-		precompiled/macOS/v10.5/ DESTINATION ${CMAKE_INSTALL_PREFIX}/
-		FOLLOW_SYMLINK_CHAIN)
-	endif()
-    endif()
-endif()
 
 
 set(cpptrace_DEP )
