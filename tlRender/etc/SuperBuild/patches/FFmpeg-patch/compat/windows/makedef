@@ -46,11 +46,11 @@ libname=$(mktemp -u "library").lib
 trap 'rm -f -- $libname' EXIT
 
 if [ -n "$AR" ]; then
-    echo "------------------  AR ($AR) path"
-    $AR rcs ${libname} $@ >/dev/null
+    echo "------------------  AR ($AR) path" >&2
+    $AR rcs ${libname} $@ >&2
 else
-    echo "------------------ lib path"
-    lib.exe -out:${libname} $@
+    echo "------------------ lib.exe path" >&2
+    lib.exe -out:${libname} $@ >&2
 fi
 if [ $? != 0 ]; then
     echo "Could not create temporary library." >&2
