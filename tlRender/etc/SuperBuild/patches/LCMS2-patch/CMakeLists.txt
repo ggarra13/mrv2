@@ -38,7 +38,7 @@ install(DIRECTORY include/
 # Export targets for downstream usage
 install(EXPORT LCMS2Targets
     FILE LCMS2Targets.cmake
-    NAMESPACE LCMS::
+    NAMESPACE LCMS2::
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/LCMS2
 )
 

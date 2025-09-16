@@ -132,14 +132,17 @@ endif()
 
 set(LCMS_SUPPORT_CAN_BE_COMPILED false)
 set(LCMS2_FOUND false)
-set(LCMS_FOUND false)
 
 if(ENABLE_LCMS)
     message(STATUS "Check for LCMS2 availability...")
     find_package(LCMS2 CONFIG)
     if(LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION VERSION_GREATER 2.1))
-        message(STATUS "Found LCMS2 : ${LCMS2_LIBRARIES} ${LCMS2_INCLUDE_DIR}")
-        include_directories(${LCMS2_INCLUDE_DIR})
+	get_target_property(_lcms2_version LCMS2::lcms2 VERSION)
+	get_target_property(_lcms2_soversion LCMS2::lcms2 SOVERSION)
+	get_target_property(_lcms2_lib LCMS2::lcms2 LOCATION)
+	
+        message(STATUS "Found LCMS2: ${_lcms2_lib}")
+        # include_directories(${LCMS2_INCLUDE_DIR})
         MACRO_LOG_FEATURE(LCMS2_FOUND "LCMS2" "A small-footprint color management engine" "http://www.littlecms.com" FALSE "" "Needed by libkdcraw")
         # Flag to compile Little CMS version 2 with LibRaw
         add_definitions(-DUSE_LCMS2)
@@ -482,7 +485,7 @@ if(OPENMP_SUPPORT_CAN_BE_COMPILED)
 endif()
 
 if(LCMS_SUPPORT_CAN_BE_COMPILED)
-    target_link_libraries(raw PUBLIC ${LCMS2_LIBRARIES})
+    target_link_libraries(raw PRIVATE LCMS2::lcms2)
 endif()
 
 if(ZLIB_FOUND)
@@ -549,7 +552,7 @@ if(OPENMP_SUPPORT_CAN_BE_COMPILED)
 endif()
 
 if(LCMS_SUPPORT_CAN_BE_COMPILED)
-    target_link_libraries(raw_r PUBLIC ${LCMS2_LIBRARIES})
+    target_link_libraries(raw_r PRIVATE LCMS2::lcms2)
 endif()
 
 if(ZLIB_FOUND)

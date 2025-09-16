@@ -1,1 +1,1 @@
-Fixes the Libraw_cmake files.
+Fixes the Libraw_cmake files to use LCMS2 CONFIG.
