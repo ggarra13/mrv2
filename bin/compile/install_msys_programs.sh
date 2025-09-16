@@ -21,12 +21,15 @@ pacman -Syu --noconfirm
 #
 # Install 
 #
-pacman -Sy swig diffutils nasm --noconfirm
+pacman -Sy swig diffutils --noconfirm
 
-if [[ "$ARCH" == "aarch64" || "$ARCH" == "arm64" ]]; then
-    pacman -Sy mingw-w64-clang-aarch64-gettext --noconfirm
-else
+if [[ $ARCH == *amd64* ]]; then
     pacman -Sy mingw-w64-ucrt-x86_64-gettext --noconfirm
+    pacman -Sy nasm --noconfirm
+else
+    pacman -Sy mingw-w64-aarch64-binutils
+    echo "------------------------ AS version:"
+    as --version
 fi
 
 mkdir -p $BUILD_DIR/install/bin
