@@ -16,7 +16,7 @@
 
 find_package(ZLIB REQUIRED)
 find_package(OpenMP)
-find_package(LCMS2)
+find_package(LCMS2 CONFIG)
 
 find_path(LibRaw_INCLUDE_DIR NAMES libraw/libraw.h)
 set(LibRaw_INCLUDE_DIRS
@@ -46,7 +46,7 @@ mark_as_advanced(LibRaw_INCLUDE_DIR LibRaw_LIBRARY)
 
 set(LibRaw_LINK_LIBRARIES ZLIB)
 if(LCMS2_FOUND)
-    list(APPEND LibRaw_LINK_LIBRARIES LCMS2)
+    list(APPEND LibRaw_LINK_LIBRARIES LCMS2::lcms2)
 endif()
 if(OpenMP_FOUND)
     list(APPEND LibRaw_LINK_LIBRARIES OpenMP::OpenMP_CXX)
