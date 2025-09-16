@@ -91,7 +91,7 @@ elseif(WIN32)
 	    CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
 	set(vcpkg_ARCH arm64)
     endif()
-    message(FATAL_ERROR "Building for Windows ${vcpkg_ARCH}")
+    message(STATUS "Building for Windows ${vcpkg_ARCH}")
 	
     set($ENV{VCPKG_INSTALL_PREFIX} ${CMAKE_INSTALL_PREFIX})
     add_custom_command(
