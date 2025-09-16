@@ -25,7 +25,7 @@ if [[ $ARCH == *amd64* ]]; then
     pacman -Sy mingw-w64-ucrt-x86_64-gettext --noconfirm
     pacman -Sy nasm --noconfirm
 else
-    pacman -Sy mingw-w64-ucrt-x86_64-binutils
+    pacman -Sy mingw-w64-clang-aarch64-binutils
     echo "------------------------ AS version:"
     as --version
 fi
