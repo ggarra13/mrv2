@@ -101,12 +101,6 @@ elseif(WIN32)
 	add_custom_target(
 	    libiconv ALL
 	    ${CMAKE_COMMAND} -E echo "Running libiconv_done..."
-	    COMMAND ${VCPKG} install nasm:${vcpkg_ARCH}-windows
-	    DEPENDS ${vcpkg_DEP})
-	
-	add_custom_target(
-	    libiconv ALL
-	    ${CMAKE_COMMAND} -E echo "Running libiconv_done..."
 	    COMMAND ${VCPKG} install libiconv:${vcpkg_ARCH}-windows
 	    DEPENDS ${vcpkg_DEP})
 	add_custom_target(
