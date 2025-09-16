@@ -72,6 +72,8 @@ if(NOT WIN32)
 	BUILD_COMMAND ${OpenSSL_BUILD}
 	INSTALL_COMMAND ${OpenSSL_INSTALL}
 	BUILD_IN_SOURCE 1)
+    
+	set(OpenSSL_DEP OpenSSL)
 else()
     if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
 	ExternalProject_Add(

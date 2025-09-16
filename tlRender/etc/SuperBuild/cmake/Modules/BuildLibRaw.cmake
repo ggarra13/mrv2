@@ -47,8 +47,8 @@ set(LibRaw_PATCH
     ${CMAKE_CURRENT_SOURCE_DIR}/patches/LibRaw-patch/CMakeLists.txt <SOURCE_DIR>
     COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
     ${CMAKE_CURRENT_BINARY_DIR}/LibRaw_cmake/src/LibRaw_cmake/cmake <SOURCE_DIR>/cmake
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-    ${CMAKE_CURRENT_SOURCE_DIR}/patches/LibRaw-patch/FindLCMS2.cmake <SOURCE_DIR>/cmake/modules
+    # COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    # ${CMAKE_CURRENT_SOURCE_DIR}/patches/LibRaw-patch/FindLCMS2.cmake <SOURCE_DIR>/cmake/modules
 )
 
 set(LibRaw_DEPS LibRaw_cmake jasper LCMS2 ZLIB)
