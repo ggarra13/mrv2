@@ -13,7 +13,7 @@ else
     . etc/functions.sh
 fi
 
-echo "Installing swig, diffutils, nasm and gettext thru Msys..."
+echo "Installing swig, diffutils thru Msys..."
 pacman -Syu --noconfirm
 
 #
@@ -22,11 +22,13 @@ pacman -Syu --noconfirm
 pacman -Sy swig diffutils --noconfirm
 
 if [[ $ARCH == *amd64* ]]; then
+    echo "Installing nasm gettext thru Msys2 x86_64..."
     pacman -Sy mingw-w64-ucrt-x86_64-gettext --noconfirm
     pacman -Sy nasm --noconfirm
 else
-    pacman -Sy mingw-w64-clang-aarch64-binutils
-    echo "------------------------ AS version:"
+    echo "Installing clang-aarch64-toolchain..."
+    pacman -Sy mingw-w64-clang-aarch64-toolchain
+    echo "Installed  AS version:"
     as --version
 fi
 
