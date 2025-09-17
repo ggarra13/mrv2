@@ -98,9 +98,9 @@ elseif(WIN32)
 	message(STATUS "Building for Windows ${vcpkg_ARCH}")
 	message(STATUS "VCPKG running from ${VCPKG}")
 
-	file(TO_NATIVE_PATH "${CMAKE_INSTALL_PREFIX}/install/bin"
+	file(TO_NATIVE_PATH "${CMAKE_INSTALL_PREFIX}/bin"
 	    WIN32_INSTALL_BIN_DIR)
-	file(TO_NATIVE_PATH "${CMAKE_INSTALL_PREFIX}/install/lib"
+	file(TO_NATIVE_PATH "${CMAKE_INSTALL_PREFIX}/lib"
 	    WIN32_INSTALL_LIB_DIR)
 	
 	add_custom_target(
