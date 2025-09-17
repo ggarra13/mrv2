@@ -112,9 +112,9 @@ elseif(WIN32)
 	    libiconv_gettext_integrate ALL
 	    ${CMAKE_COMMAND} -E echo "Running integrate install..."
 	    COMMAND ${VCPKG} integrate install
-	    COMMAND ${CMAKE_COMMAND} -E echo "DIR of install/bin..."
+	    COMMAND ${CMAKE_COMMAND} -E echo "AFTER integrate install DIR of install/bin..."
 	    COMMAND dir ${CMAKE_INSTALL_PREFIX}/install/bin
-	    COMMAND ${CMAKE_COMMAND} -E echo "DIR of install/lib..."
+	    COMMAND ${CMAKE_COMMAND} -E echo "AFTER integrate install DIR of install/lib..."
 	    COMMAND dir ${CMAKE_INSTALL_PREFIX}/install/lib
 	    DEPENDS libiconv gettext
 	)
