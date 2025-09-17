@@ -117,10 +117,10 @@ elseif(WIN32)
 	    libiconv_gettext_integrate ALL
 	    ${CMAKE_COMMAND} -E echo "Running integrate install..."
 	    COMMAND ${VCPKG} integrate install
-	    COMMAND ${CMAKE_COMMAND} -E echo "AFTER integrate install DIR of install/bin..."
-	    COMMAND dir ${WIN32_INSTALL_BIN_DIR}
-	    COMMAND ${CMAKE_COMMAND} -E echo "AFTER integrate install DIR of install/lib..."
-	    COMMAND dir ${WIN32_INSTALL_LIB_DIR}
+	    COMMAND ${CMAKE_COMMAND} -E echo "AFTER integrate install DIR ${WIN32_INSTALL_LIB_DIR}..."
+	    COMMAND dir $<SHELL_PATH:${WIN32_INSTALL_BIN_DIR}>
+	    COMMAND ${CMAKE_COMMAND} -E echo "AFTER integrate install DIR ${WIN32_INSTALL_LIB_DIR}..."
+	    COMMAND dir $<SHELL_PATH:${WIN32_INSTALL_LIB_DIR}>
 	    DEPENDS libiconv gettext
 	)
 	set(Gettext_DEP libiconv_gettext_integrate)
