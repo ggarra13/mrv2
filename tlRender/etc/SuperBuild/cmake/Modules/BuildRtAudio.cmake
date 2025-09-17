@@ -37,6 +37,7 @@ ExternalProject_Add(
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/RtAudio
     GIT_REPOSITORY ${RtAudio_GIT_REPOSITORY}
     GIT_TAG ${RtAudio_GIT_TAG}
+    DEPENDS ${Gettext_DEP}
     PATCH_COMMAND ${RtAudio_PATCH}
     LIST_SEPARATOR |
     CMAKE_ARGS ${RtAudio_ARGS})

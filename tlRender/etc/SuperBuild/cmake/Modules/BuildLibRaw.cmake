@@ -50,7 +50,7 @@ set(LibRaw_PATCH
     ${CMAKE_CURRENT_BINARY_DIR}/LibRaw/src/LibRaw/CMakeLists.txt
 )
 
-set(LibRaw_DEPS LibRaw_cmake jasper LCMS2 ZLIB)
+set(LibRaw_DEPS LibRaw_cmake jasper LCMS2 ZLIB ${Gettext_DEP})
 if(TLRENDER_JPEG)
     list(APPEND LibRaw_DEPS libjpeg-turbo)
 endif()

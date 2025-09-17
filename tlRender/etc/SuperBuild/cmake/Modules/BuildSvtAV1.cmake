@@ -24,9 +24,11 @@ endif()
 ExternalProject_Add(
     SvtAV1
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/SvtAV1
-    DEPENDS ${SvtAV1_DEPS}
+
     GIT_REPOSITORY "https://gitlab.com/AOMediaCodec/SVT-AV1.git"
     GIT_TAG ${SvtAV1_TAG}
+    
+    DEPENDS ${SvtAV1_DEPS} ${Gettext_DEP}
 
     PATCH_COMMAND ${SvtAV1_PATCH}
     

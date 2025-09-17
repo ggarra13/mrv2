@@ -93,7 +93,7 @@ set(dav1d_INSTALL
 ExternalProject_Add(
     dav1d
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/dav1d
-    DEPENDS ${dav1d_DEPS}
+    DEPENDS ${dav1d_DEPS} ${Gettext_DEP}
     GIT_REPOSITORY "https://code.videolan.org/videolan/dav1d.git"
     GIT_TAG ${dav1d_GIT_TAG}
     

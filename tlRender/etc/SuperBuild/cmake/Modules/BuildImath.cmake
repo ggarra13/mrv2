@@ -12,6 +12,8 @@ ExternalProject_Add(
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/Imath
     GIT_REPOSITORY ${Imath_GIT_REPOSITORY}
     GIT_TAG ${Imath_GIT_TAG}
+
+    DEPENDS ${Gettext_DEP}
     
     LIST_SEPARATOR |
     CMAKE_ARGS ${Imath_ARGS})

@@ -24,7 +24,7 @@ set(OpenEXR_ARGS
 ExternalProject_Add(
     OpenEXR
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/OpenEXR
-    DEPENDS ${OpenJPH_DEP} Imath ZLIB
+    DEPENDS ${OpenJPH_DEP} Imath ZLIB ${Gettext_DEP}
     GIT_REPOSITORY ${OpenEXR_GIT_REPOSITORY}
     GIT_TAG ${OpenEXR_GIT_TAG}
 

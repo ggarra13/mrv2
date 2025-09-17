@@ -26,7 +26,7 @@ ExternalProject_Add(
     GIT_REPOSITORY ${OpenJPH_GIT_REPOSITORY}
     GIT_TAG ${OpenJPH_GIT_TAG}
 
-    DEPENDS ZLIB
+    DEPENDS ZLIB ${Gettext_DEP}
     
     PATCH_COMMAND ${OpenJPH_PATCH}
     

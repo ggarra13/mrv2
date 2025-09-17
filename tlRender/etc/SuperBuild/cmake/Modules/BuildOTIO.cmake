@@ -27,7 +27,7 @@ endif()
 ExternalProject_Add(
     OTIO
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/OTIO
-    DEPENDS Imath
+    DEPENDS Imath ${Gettext_DEP}
     GIT_REPOSITORY ${OTIO_GIT_REPOSITORY}
     GIT_TAG ${OTIO_GIT_TAG}
     LIST_SEPARATOR |

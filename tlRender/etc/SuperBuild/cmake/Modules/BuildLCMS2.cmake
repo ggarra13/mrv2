@@ -23,6 +23,8 @@ ExternalProject_Add(
     GIT_REPOSITORY ${LCMS2_GIT_REPO}
     GIT_TAG ${LCMS2_GIT_TAG}
 
+    DEPENDS ${Gettext_DEP}
+    
     PATCH_COMMAND ${LCMS2_PATCH}
     
     LIST_SEPARATOR |
