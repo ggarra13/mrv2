@@ -46,7 +46,7 @@ namespace tl
                 void* outputBuffer, void* inputBuffer, unsigned int nFrames,
                 double streamTime, RtAudioStreamStatus status, void* userData);
             static void rtAudioErrorCallback(
-                RtAudioError::Type type, const std::string& errorText);
+                RtAudioErrorType type, const std::string& errorText);
 #endif // TLRENDER_AUDIO
 
             void log(const std::shared_ptr<system::Context>&);

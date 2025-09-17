@@ -28,6 +28,36 @@ namespace tl
         namespace
         {
 #if defined(TLRENDER_AUDIO)
+            void checkRtError(const RtAudioErrorType e)
+            {
+                if (e == RTAUDIO_NO_ERROR || e == RTAUDIO_WARNING) return;
+                switch(e)
+                {
+                case RTAUDIO_UNKNOWN_ERROR:
+                    throw std::runtime_error("Unspecified error type");
+                case RTAUDIO_NO_DEVICES_FOUND:
+                    throw std::runtime_error("No Devices Found");
+                case RTAUDIO_INVALID_DEVICE:
+                    throw std::runtime_error("An invalid device ID was specified.");
+                case RTAUDIO_DEVICE_DISCONNECT:
+                    throw std::runtime_error("A device in use was disconnected.");
+                case RTAUDIO_MEMORY_ERROR:
+                    throw std::runtime_error("An error occurred during memory allocation.");
+                case RTAUDIO_INVALID_PARAMETER:
+                    throw std::runtime_error("An invalid parameter was specified to a function.");
+                case RTAUDIO_INVALID_USE:
+                    throw std::runtime_error("The function was called incorrectly.");
+                case RTAUDIO_DRIVER_ERROR:
+                    throw std::runtime_error("A system driver error occurred.");
+                case RTAUDIO_SYSTEM_ERROR:
+                    throw std::runtime_error("A system error occurred.");
+                case RTAUDIO_THREAD_ERROR:
+                    throw std::runtime_error("A thread error occurred.");
+                default:
+                    throw std::runtime_error("Undefined error.");
+                }
+            }
+            
             RtAudioFormat toRtAudio(audio::DataType value) noexcept
             {
                 RtAudioFormat out = 0;
@@ -184,14 +214,17 @@ namespace tl
                                         p.audioThread.info.channelCount;
                                     unsigned int rtBufferFrames =
                                         p.playerOptions.audioBufferFrameCount;
-                                    p.thread.rtAudio->openStream(
+                                    RtAudioErrorType rterror =
+                                        p.thread.rtAudio->openStream(
                                         &rtParameters, nullptr,
                                         toRtAudio(p.audioThread.info.dataType),
                                         p.audioThread.info.sampleRate,
-                                        &rtBufferFrames, p.rtAudioCallback,
-                                        _p.get(), nullptr,
-                                        p.rtAudioErrorCallback);
-                                    p.thread.rtAudio->startStream();
+                                        &rtBufferFrames,
+                                        p.rtAudioCallback,
+                                        _p.get());
+                                    checkRtError(rterror);
+                                    rterror = p.thread.rtAudio->startStream();
+                                    checkRtError(rterror);
                                 }
                                 catch (const std::exception& e)
                                 {
@@ -328,7 +361,8 @@ namespace tl
             {
                 try
                 {
-                    p.thread.rtAudio->abortStream();
+                    RtAudioErrorType rterror = p.thread.rtAudio->abortStream();
+                    checkRtError(rterror);
                     p.thread.rtAudio->closeStream();
                 }
                 catch (const std::exception&)

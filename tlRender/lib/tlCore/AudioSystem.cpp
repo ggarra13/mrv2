@@ -363,7 +363,7 @@ namespace tl
                 {
                     const RtAudio::DeviceInfo rtInfo =
                         p.rtAudio->getDeviceInfo(i);
-                    if (rtInfo.probed)
+                    if (1)
                     {
                         Device device;
                         device.name = rtInfo.name;

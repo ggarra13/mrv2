@@ -42,29 +42,6 @@ fi
 
 cd -
 
-#
-#  Rebuild latest pyFLTK if on Windows
-#
-if [[ $KERNEL == *Msys* ]]; then
-    root=$PWD
-    dir=$PWD/$BUILD_DIR/deps/pyFLTK/src/pyFLTK/
-
-    echo $dir
-    cd $dir
-
-    export FLTK_HOME=$BUILD_DIR/install
-    
-    $root/$BUILD_DIR/install/bin/python.exe setup.py build --enable-shared --disable-forms
-    $root/$BUILD_DIR/install/bin/python.exe -m pip install .
-    if [[ $? != 0 ]]; then
-	echo "COMPILATON of pyFLTK failed"
-	cd -
-	exit 1
-    fi
-
-    cd -
-fi
-
 dir=$BUILD_DIR/tlRender/etc/SuperBuild/tlRender/src/tlRender-build/
 if [[ ! -d $dir ]]; then
     echo "tlRender directory:"

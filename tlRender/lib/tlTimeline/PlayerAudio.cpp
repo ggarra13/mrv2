@@ -448,7 +448,7 @@ namespace tl
         }
 
         void Player::Private::rtAudioErrorCallback(
-            RtAudioError::Type type, const std::string& errorText)
+            RtAudioErrorType type, const std::string& errorText)
         {
             std::cout << "RtAudio ERROR: " << errorText << std::endl;
         }

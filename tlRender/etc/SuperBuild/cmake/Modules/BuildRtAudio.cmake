@@ -1,8 +1,8 @@
 include(ExternalProject)
 
 set(RtAudio_GIT_REPOSITORY "https://github.com/thestk/rtaudio.git")
-#set(RtAudio_GIT_TAG "d7f12763c55795ef8a71a9b589b39e7be01db7b2") # 2020/06/07
-set(RtAudio_GIT_TAG "5.2.0") # Nov. 16, 2021
+#set(RtAudio_GIT_TAG "5.2.0") # Nov. 16, 2021
+set(RtAudio_GIT_TAG "6.0.1")  # Aug. 1, 2023
 
 set(RtAudio_PATCH )
 
@@ -11,11 +11,11 @@ set(RtAudio_PATCH )
 #       We also patch windows, as we added more debugging checks when audio
 #       device mix fails.
 #
-if (NOT APPLE)
-    set(RtAudio_PATCH ${CMAKE_COMMAND} -E copy_if_different
-        ${CMAKE_CURRENT_SOURCE_DIR}/patches/RtAudio-patch/RtAudio.cpp
-        ${CMAKE_CURRENT_BINARY_DIR}/RtAudio/src/RtAudio/RtAudio.cpp )
-endif()
+# if (NOT APPLE)
+#     set(RtAudio_PATCH ${CMAKE_COMMAND} -E copy_if_different
+#         ${CMAKE_CURRENT_SOURCE_DIR}/patches/RtAudio-patch/RtAudio.cpp
+#         ${CMAKE_CURRENT_BINARY_DIR}/RtAudio/src/RtAudio/RtAudio.cpp )
+# endif()
 
 set(RtAudio_ARGS
     ${TLRENDER_EXTERNAL_ARGS}
