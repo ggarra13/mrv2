@@ -547,6 +547,7 @@ fi
 : ${ncols:=72}
 
 log(){
+    echo "$@"
     echo "$@" >> $logfile
 }
 

@@ -22,11 +22,11 @@ pacman -Syu --noconfirm
 pacman -Sy swig diffutils --noconfirm
 
 if [[ $ARCH == *amd64* ]]; then
-    echo "Installing nasm gettext thru Msys2 x86_64..."
+    echo "Installing nasm and gettext thru Msys2 x86_64..."
     pacman -Sy mingw-w64-ucrt-x86_64-gettext --noconfirm
     pacman -Sy nasm --noconfirm
 else
-    echo "Installing clang-aarch64-toolchain..."
+    echo "Installing clang-aarch64-binutils..."
     pacman -Sy mingw-w64-clang-aarch64-binutils --noconfirm
     echo "Installed  AS version:"
     as --version
