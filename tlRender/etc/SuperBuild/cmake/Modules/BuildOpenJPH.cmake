@@ -1,8 +1,8 @@
 include(ExternalProject)
 
 set(OpenJPH_GIT_REPOSITORY "https://github.com/aous72/OpenJPH.git")
-#set(OpenJPH_GIT_TAG "0.23.0")
-set(OpenJPH_GIT_TAG c7145b287401c02f85528b9af0193a48042c380f)
+set(OpenJPH_GIT_TAG "0.23.1") # was 0.23.0
+#set(OpenJPH_GIT_TAG c7145b287401c02f85528b9af0193a48042c380f)
 
 set(OpenJPH_ARGS
     ${TLRENDER_EXTERNAL_ARGS}
