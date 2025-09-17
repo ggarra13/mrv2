@@ -107,12 +107,15 @@ elseif(WIN32)
 	    gettext ALL
 	    ${CMAKE_COMMAND} -E echo "Running gettext_done..."
 	    COMMAND ${VCPKG} install gettext:${vcpkg_ARCH}-windows
-	    #COMMAND ${VCPKG} install gettext:${vcpkg_ARCH}-windows
 	    DEPENDS ${vcpkg_DEP} libiconv)
 	add_custom_target(
 	    libiconv_gettext_integrate ALL
 	    ${CMAKE_COMMAND} -E echo "Running integrate install..."
 	    COMMAND ${VCPKG} integrate install
+	    COMMAND ${CMAKE_COMMAND} -E echo "DIR of install/bin..."
+	    COMMAND dir ${CMAKE_INSTALL_PREFIX}/install/bin
+	    COMMAND ${CMAKE_COMMAND} -E echo "DIR of install/lib..."
+	    COMMAND dir ${CMAKE_INSTALL_PREFIX}/install/lib
 	    DEPENDS libiconv gettext
 	)
 	set(Gettext_DEP libiconv_gettext_integrate)
@@ -227,7 +230,7 @@ set(VMA_DEP )
 set(SHADERC_DEP )
 
 #
-# We build shaderrc in build_vulkan.sh for
+# We build shaderc in build_vulkan.sh for
 # Linux ARM64 mainly
 #
 # if(TLRENDER_VK)
