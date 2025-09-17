@@ -97,11 +97,6 @@ elseif(WIN32)
 	set(vcpkg_ARCH arm64)
 	message(STATUS "Building for Windows ${vcpkg_ARCH}")
 	message(STATUS "VCPKG running from ${VCPKG}")
-
-	file(TO_NATIVE_PATH "${CMAKE_INSTALL_PREFIX}/bin"
-	    WIN32_INSTALL_BIN_DIR)
-	file(TO_NATIVE_PATH "${CMAKE_INSTALL_PREFIX}/lib"
-	    WIN32_INSTALL_LIB_DIR)
 	
 	add_custom_target(
 	    libiconv ALL
@@ -114,16 +109,15 @@ elseif(WIN32)
 	    COMMAND ${VCPKG} install gettext:${vcpkg_ARCH}-windows
 	    DEPENDS ${vcpkg_DEP} libiconv)
 	add_custom_target(
-	    libiconv_gettext_integrate ALL
-	    ${CMAKE_COMMAND} -E echo "Running integrate install..."
-	    COMMAND ${VCPKG} integrate install
-	    COMMAND ${CMAKE_COMMAND} -E echo "AFTER integrate install DIR ${WIN32_INSTALL_LIB_DIR}..."
-	    COMMAND dir $<SHELL_PATH:${WIN32_INSTALL_BIN_DIR}>
-	    COMMAND ${CMAKE_COMMAND} -E echo "AFTER integrate install DIR ${WIN32_INSTALL_LIB_DIR}..."
-	    COMMAND dir $<SHELL_PATH:${WIN32_INSTALL_LIB_DIR}>
+	    libiconv_gettext ALL
+	    COMMAND cmake -E echo "LOOKING IN DIR Directory ${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows"
+	    COMMAND dir $<SHELL_PATH:${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows>
 	    DEPENDS libiconv gettext
 	)
-	set(Gettext_DEP libiconv_gettext_integrate)
+	set(Gettext_DEP libiconv_gettext)
+
+	list(APPEND CMAKE_PREFIX_PATH
+	    "${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows")
     endif()
 endif()
 

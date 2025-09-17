@@ -424,7 +424,7 @@ cd $BUILD_DIR
 #
 # Handle Microsoft vcpkg variables
 #
-unset  VCPKG_ROOT
+unset  VCPKG_ROOT=$PWD/$BUILD_DIR/deps/vcpkg
 export VCPKG_INSTALL_PREFIX=$PWD/install
 
 cmd="cmake -G '${CMAKE_GENERATOR}'
@@ -432,8 +432,10 @@ cmd="cmake -G '${CMAKE_GENERATOR}'
            -D CMAKE_VERBOSE_MAKEFILE=${CMAKE_VERBOSE_MAKEFILE}
 	   -D CMAKE_INSTALL_PREFIX=$PWD/install
 	   -D CMAKE_PREFIX_PATH=$PWD/install
+	   -D CMAKE_TOOLCHAIN_FILE=\"${VCPKG_ROOT}/scripts/buildsystems/vcpkg.make\"
            -D CMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES}
            -D CMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}
+	   
 
 	   -D NATIVE_C_COMPILER=\"${NATIVE_C_COMPILER}\"
 	   -D GENERIC_C_COMPILER=\"${GENERIC_C_COMPILER}\"
