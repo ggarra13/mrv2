@@ -7,6 +7,9 @@ include( ExternalProject )
 set(vcpkg_REPOSITORY "https://github.com/Microsoft/vcpkg.git")
 set(vcpkg_TAG 2025.08.27)
 
+#
+# Sourcecode is in github:/microsoft/vcpkg-tool
+#
 ExternalProject_Add(
     vcpkg
     GIT_REPOSITORY ${vcpkg_REPOSITORY}
