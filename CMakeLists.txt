@@ -81,46 +81,43 @@ elseif(WIN32)
     
     set(vcpkg_ARCH x64)
     
-    if (CMAKE_SYSTEM_PROCESSOR STREQUAL "ARM64" OR
-	    CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
-	set(vcpkg_DEP )
-	set(BUILD_VCPKG TRUE)
-	if (BUILD_VCPKG)
-	    include(cmake/Modules/Buildvcpkg.cmake)
-	else()
-	    #
-	    # Use default vcpkg from MSVC
-	    #
-	    set(VCPKG vcpkg)
-	endif()
+    set(vcpkg_DEP )
+    set(BUILD_VCPKG TRUE)
+    if (BUILD_VCPKG)
+	include(cmake/Modules/Buildvcpkg.cmake)
+    else()
+	#
+	# Use default vcpkg from MSVC
+	#
+	set(VCPKG vcpkg)
+    endif()
     
-	set(vcpkg_ARCH arm64)
-	message(STATUS "Building for Windows ${vcpkg_ARCH}")
-	message(STATUS "VCPKG running from ${VCPKG}")
-	
-	add_custom_target(
-	    libiconv ALL
-	    ${CMAKE_COMMAND} -E echo "Running libiconv_done..."
-	    COMMAND ${VCPKG} install libiconv:${vcpkg_ARCH}-windows
-	    DEPENDS ${vcpkg_DEP})
-	add_custom_target(
-	    gettext ALL
-	    ${CMAKE_COMMAND} -E echo "Running gettext_done..."
-	    COMMAND ${VCPKG} install gettext:${vcpkg_ARCH}-windows
-	    DEPENDS ${vcpkg_DEP} libiconv)
-	add_custom_target(
-	    libiconv_gettext ALL
-	    COMMAND cmake -E echo "LOOKING IN DIR Directory ${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows"
-	    COMMAND dir $<SHELL_PATH:${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows>
-	    DEPENDS libiconv gettext
-	)
-	set(Gettext_DEP libiconv_gettext)
+    set(vcpkg_ARCH arm64)
+    message(STATUS "Building for Windows ${vcpkg_ARCH}")
+    message(STATUS "VCPKG running from ${VCPKG}")
+    
+    add_custom_target(
+	libiconv ALL
+	${CMAKE_COMMAND} -E echo "Running libiconv_done..."
+	COMMAND ${VCPKG} install libiconv:${vcpkg_ARCH}-windows
+	DEPENDS ${vcpkg_DEP})
+    add_custom_target(
+	gettext ALL
+	${CMAKE_COMMAND} -E echo "Running gettext_done..."
+	COMMAND ${VCPKG} install gettext:${vcpkg_ARCH}-windows
+	DEPENDS ${vcpkg_DEP} libiconv)
+    add_custom_target(
+	libiconv_gettext ALL
+	COMMAND cmake -E echo "LOOKING IN DIR Directory ${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows"
+	COMMAND dir $<SHELL_PATH:${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows>
+	DEPENDS libiconv gettext
+    )
+    set(Gettext_DEP libiconv_gettext)
 
-	list(APPEND CMAKE_PREFIX_PATH
+    list(APPEND CMAKE_PREFIX_PATH
 	    "${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows")
 	set(CMAKE_TOOLCHAIN_FILE "${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
 	set(VCPKG_TARGET_TRIPLET "${vpkg_ARCH}-windows")
-    endif()
 endif()
 
 
