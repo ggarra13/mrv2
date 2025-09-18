@@ -131,6 +131,10 @@ elseif(WIN32)
     set(CMAKE_TOOLCHAIN_FILE "${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
     #set(VCPKG_TARGET_TRIPLET "${vpkg_ARCH}-windows-static")
     set(VCPKG_TARGET_TRIPLET "${vpkg_ARCH}-windows")
+    
+    
+    # https://stackoverflow.com/questions/45414507/pass-a-list-of-prefix-paths-to-externalproject-add-in-cmake-args
+    string(REPLACE ";" "|" CMAKE_PREFIX_PATH_TMP "${CMAKE_PREFIX_PATH}")
 endif()
 
 
