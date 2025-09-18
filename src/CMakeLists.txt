@@ -80,17 +80,9 @@ if (UNIX)
     find_package(Intl REQUIRED)  # old method
 else()
     if (WIN32)
-	if (CMAKE_SYSTEM_PROCESSOR STREQUAL "ARM64" OR
-		CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
-	    find_package(Iconv REQUIRED)
-	    find_package(Intl REQUIRED)
-	    set(Intl_LIBRARIES Iconv::Iconv Intl::Intl)
-	else()
-	    # find_package(Intl REQUIRED)  # old method using MSys2
-	    find_package(Iconv REQUIRED)
-	    find_package(Intl REQUIRED)
-	    set(Intl_LIBRARIES Iconv::Iconv Intl::Intl)
-	endif()
+	find_package(Iconv REQUIRED)
+	find_package(Intl REQUIRED)
+	set(Intl_LIBRARIES Iconv::Iconv Intl::Intl)
     else()
 	find_package(Intl REQUIRED)  # old method
     endif()

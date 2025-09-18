@@ -93,8 +93,8 @@ elseif(WIN32)
     endif()
     
     set(vcpkg_ARCH x64)
-    if ($ENV{ARCH} MATCHES ".aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
-	set(vcpkg_ARCH aarch64)
+    if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
+	set(vcpkg_ARCH arm64)
     endif()
     
     message(STATUS "Building for Windows ${vcpkg_ARCH}")
@@ -114,6 +114,14 @@ elseif(WIN32)
 	libiconv_gettext ALL
 	COMMAND cmake -E echo "LOOKING IN DIR Directory ${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows"
 	COMMAND dir $<SHELL_PATH:${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows>
+	COMMAND cmake -E echo "LOOKING IN DIR Directory ${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows/bin"
+	COMMAND dir $<SHELL_PATH:${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows/bin>
+	COMMAND cmake -E echo "LOOKING IN DIR Directory ${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows/lib"
+	COMMAND dir $<SHELL_PATH:${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows/lib>
+	COMMAND cmake -E echo "LOOKING IN DIR Directory ${CMAKE_PREFIX_PATH}/lib"
+	COMMAND dir $<SHELL_PATH:${CMAKE_PREFIX_PATH}/lib>
+	COMMAND cmake -E echo "LOOKING IN DIR Directory ${CMAKE_PREFIX_PATH}/bin"
+	COMMAND dir $<SHELL_PATH:${CMAKE_PREFIX_PATH}/bin>
 	DEPENDS libiconv gettext
     )
     set(Gettext_DEP libiconv_gettext)
@@ -121,7 +129,12 @@ elseif(WIN32)
     list(APPEND CMAKE_PREFIX_PATH
 	"${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows")
     set(CMAKE_TOOLCHAIN_FILE "${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
+    #set(VCPKG_TARGET_TRIPLET "${vpkg_ARCH}-windows-static")
     set(VCPKG_TARGET_TRIPLET "${vpkg_ARCH}-windows")
+    
+    
+    # https://stackoverflow.com/questions/45414507/pass-a-list-of-prefix-paths-to-externalproject-add-in-cmake-args
+    string(REPLACE ";" "|" CMAKE_PREFIX_PATH_TMP "${CMAKE_PREFIX_PATH}")
 endif()
 
 
@@ -250,7 +263,7 @@ if(BUILD_FLTK)
 endif()
 
 if(BUILD_PYTHON AND TLRENDER_USD)
-    add_dependencies(USD ${PYTHON_DEP})
+    add_dependencies(USD ${PYTHON_DEP} ${Gettext_DEP})
 endif()
 
 set(pyFLTK_DEP )
