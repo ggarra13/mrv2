@@ -7,10 +7,22 @@ set(SvtAV1_TAG v2.3.0)
 
 set(SvtAV1_ARGS ${TLRENDER_EXTERNAL_ARGS})
 list(APPEND SvtAV1_ARGS
-    -DENABLE_NASM=ON
     -DCMAKE_INSTALL_LIBDIR=lib
     -DCMAKE_POLICY_VERSION_MINIMUM=3.5  # uses old CMake files
 )
+
+if (WIN32)
+    if ($ENV{ARCH} MACHES ".*amd64.*")
+	list(APPEND SvtAV1_ARGS
+	    -DENABLE_NASM=ON)
+    else()
+	list(APPEND SvtAV1_ARGS
+	    -DENABLE_NASM=OFF)
+    endif()
+else()
+    list(APPEND SvtAV1_ARGS
+	-DENABLE_NASM=ON)
+endif()
 
 
 set(SvtAV1_DEPS )

@@ -502,11 +502,12 @@ if(WIN32)
 	list(APPEND FFmpeg_CONFIGURE_ARGS
             --arch=aarch64
             --toolchain=msvc
-	    --disable-asm)  # for now we disable-asm
+	    --enable-asm)  # for now we disable-asm
     else()
 	list(APPEND FFmpeg_CONFIGURE_ARGS
             --arch=x86_64
-            --toolchain=msvc)
+            --toolchain=msvc
+	    --enable-asm)
     endif()
     set(FFmpeg_MSYS2 ${MRV2_MSYS_CMD})
     
@@ -540,14 +541,16 @@ if(WIN32)
         COMMAND ${FFmpeg_MSYS2} -c "mv ${INSTALL_PREFIX}/bin/avutil.lib ${INSTALL_PREFIX}/lib"
         COMMAND ${FFmpeg_MSYS2} -c "mv ${INSTALL_PREFIX}/bin/swresample.lib ${INSTALL_PREFIX}/lib"
         COMMAND ${FFmpeg_MSYS2} -c "mv ${INSTALL_PREFIX}/bin/swscale.lib ${INSTALL_PREFIX}/lib")
+    set(FFmpeg_COMPILERS AS="clang --target=aarch64-pc-windows-msvc" )
 else()
     set(FFmpeg_CONFIGURE ./configure ${FFmpeg_CONFIGURE_ARGS})
     set(FFmpeg_BUILD make -j ${NPROCS})
     set(FFmpeg_INSTALL make install)
     list(JOIN FFmpeg_CONFIGURE_ARGS " \\\n" FFmpeg_CONFIGURE_ARGS_TMP)
+    set(FFmpeg_COMPILERS )
 endif()
 
-set(FFmpeg_CONFIGURE_CONTENTS "#!/usr/bin/env bash\n./configure ${FFmpeg_CONFIGURE_ARGS_TMP}\n")
+set(FFmpeg_CONFIGURE_CONTENTS "#!/usr/bin/env bash\n${FFmpeg_COMPILERS} ./configure ${FFmpeg_CONFIGURE_ARGS_TMP}\n")
 
 # Ensure the directory exists
 message(STATUS "Creating directory ${CMAKE_CURRENT_BINARY_DIR}/")
