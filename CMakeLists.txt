@@ -114,6 +114,10 @@ elseif(WIN32)
 	libiconv_gettext ALL
 	COMMAND cmake -E echo "LOOKING IN DIR Directory ${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows"
 	COMMAND dir $<SHELL_PATH:${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows>
+	COMMAND cmake -E echo "LOOKING IN DIR Directory ${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows/bin"
+	COMMAND dir $<SHELL_PATH:${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows/bin>
+	COMMAND cmake -E echo "LOOKING IN DIR Directory ${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows/lib"
+	COMMAND dir $<SHELL_PATH:${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows/lib>
 	DEPENDS libiconv gettext
     )
     set(Gettext_DEP libiconv_gettext)
