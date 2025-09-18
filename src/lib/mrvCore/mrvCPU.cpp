@@ -21,6 +21,13 @@
 #    define ARCH_X86_64
 #endif
 
+#if defined(_M_ARM64) || defined(__aarch64__)
+#    define ARCH_ARM64
+#  ifdef __linux__
+#        include <sys/auxv.h>
+#  endif
+#endif
+
 #ifdef ARCH_X86_64
 #    define OPSIZE "q"
 #    define REG_a "rax"
@@ -105,7 +112,7 @@ char* GetCpuFriendlyName(
 #        include <signal.h>
 #    endif
 
-#    ifdef WIN32
+#    ifdef _WIN32
 #        include <windows.h>
 #    endif
 
@@ -207,12 +214,32 @@ std::string GetCpuCaps(CpuCaps* caps)
 {
     std::ostringstream out;
 
+    caps->cpuType = 0;
+    caps->cpuModel = 0;
+    caps->cpuStepping = 0;
+    caps->isX86 = 0;
+    caps->hasMMX = 0;
+    caps->hasMMX2 = 0;
+    caps->has3DNow = 0;
+    caps->has3DNowExt = 0;
+    caps->hasSSE = 0;
+    caps->hasSSE2 = 0;
+    caps->hasSSE3 = 0;
+    caps->hasSSSE3 = 0;
+    caps->hasSSE4 = 0;
+    caps->hasSSE42 = 0;
+    caps->hasAESNI = 0;
+    caps->hasAltiVec = 0;
+    caps->cl_size = 64; // Typical cache line size for ARM64
+    caps->hasNEON = 0;
+    caps->hasARMv8 = 0;
+    caps->hasARMv8Crypto = 0;
+    
     unsigned int regs[4];
     unsigned int regs2[4];
     memset(regs, 0, sizeof(unsigned int) * 4);
     memset(regs2, 0, sizeof(unsigned int) * 4);
 
-    memset(caps, 0, sizeof(*caps));
     caps->isX86 = 1;
     caps->cl_size = 32; /* default */
     if (!has_cpuid())
@@ -669,8 +696,49 @@ std::string GetCpuCaps(CpuCaps* caps)
     caps->hasSSE2 = 0;
     caps->isX86 = 0;
     caps->hasAltiVec = 0;
-#    ifdef HAVE_ALTIVEC
-#        ifdef SYS_DARWIN
+    caps->cl_size = 64; // Typical cache line size for ARM64
+#ifdef ARCH_ARM64
+    caps->hasNEON = 0;
+    caps->hasARMv8 = 0;
+    caps->hasARMv8Crypto = 0;
+    
+#  ifdef _WIN32
+    // Windows ARM64: Use IsProcessorFeaturePresent for feature detection
+    LOG_INFO("CPU: ARM64 (Windows)");
+    caps->hasNEON = IsProcessorFeaturePresent(PF_ARM_VFP_32_REGISTERS_AVAILABLE);
+    caps->hasARMv8 = IsProcessorFeaturePresent(PF_ARM_V8_INSTRUCTIONS_AVAILABLE);
+    caps->hasARMv8Crypto = IsProcessorFeaturePresent(PF_ARM_V8_CRYPTO_INSTRUCTIONS_AVAILABLE);
+    LOG_INFO("NEON: " << (caps->hasNEON ? "yes" : "no"));
+    LOG_INFO("ARMv8-A: " << (caps->hasARMv8 ? "yes" : "no"));
+    LOG_INFO("ARMv8-A Crypto: " << (caps->hasARMv8Crypto ? "yes" : "no"));
+#  else // _WIN32
+      // Linux or other non-Windows ARM64
+      LOG_INFO("CPU: ARM64");
+#     ifdef __linux__
+         unsigned long hwcap = getauxval(AT_HWCAP);
+         caps->hasNEON = (hwcap & HWCAP_ASIMD) != 0;
+         caps->hasARMv8 = (hwcap & HWCAP_CPUID) != 0; // Basic ARMv8-A support
+         caps->hasARMv8Crypto = (hwcap & (HWCAP_AES | HWCAP_PMULL)) != 0;
+         LOG_INFO("NEON: " << (caps->hasNEON ? "yes" : "no"));
+         LOG_INFO("ARMv8-A: " << (caps->hasARMv8 ? "yes" : "no"));
+         LOG_INFO("ARMv8-A Crypto: " << (caps->hasARMv8Crypto ? "yes" : "no"));
+#     else // __linux__
+         // Fallback for other ARM64 platforms (e.g., macOS)
+         LOG_INFO("CPU: ARM64 (Unknown platform, assuming NEON)");
+         caps->hasNEON = 1; // Most ARM64 CPUs have NEON
+        caps->hasARMv8 = 1; // Assume ARMv8-A
+#     endif
+#  endif
+
+    
+#endif  // ARCH_ARM64
+
+    
+
+
+    
+#ifdef HAVE_ALTIVEC
+#  ifdef SYS_DARWIN
     /*
       rip-off from ffmpeg altivec detection code.
       this code also appears on Apple's AltiVec pages.
@@ -687,14 +755,14 @@ std::string GetCpuCaps(CpuCaps* caps)
             if (has_vu != 0)
                 caps->hasAltiVec = 1;
     }
-#        else /* SYS_DARWIN */
-#            ifdef __AMIGAOS4__
-    ULONG result = 0;
+#  else /* SYS_DARWIN */
+#    ifdef __AMIGAOS4__
+       ULONG result = 0;
 
-    GetCPUInfoTags(GCIT_VectorUnit, &result, TAG_DONE);
-    if (result == VECTORTYPE_ALTIVEC)
-        caps->hasAltiVec = 1;
-#            else
+       GetCPUInfoTags(GCIT_VectorUnit, &result, TAG_DONE);
+       if (result == VECTORTYPE_ALTIVEC)
+           caps->hasAltiVec = 1;
+#    else
     /* no Darwin, do it the brute-force way */
     /* this is borrowed from the libmpeg2 library */
     {
@@ -716,50 +784,59 @@ std::string GetCpuCaps(CpuCaps* caps)
             caps->hasAltiVec = 1;
         }
     }
-#            endif //__AMIGAOS4__
-#        endif     /* SYS_DARWIN */
+#    endif //__AMIGAOS4__
+#  endif     /* SYS_DARWIN */
     LOG_INFO("AltiVec " << (caps->hasAltiVec ? "" : "not ") << "found");
-#    endif         /* HAVE_ALTIVEC */
+#endif         /* HAVE_ALTIVEC */
 
-#    if defined(__ia64__) || defined(_M_IA64)
+#if defined(__ia64__) || defined(_M_IA64)
     LOG_INFO("CPU: Intel Itanium");
-#    endif
+#endif
 
-#    ifdef ARCH_SPARC
+#ifdef ARCH_SPARC
     LOG_INFO("CPU: Sun Sparc");
-#    endif
+#endif
 
-#    ifdef ARCH_ARMV4L
+#ifdef ARCH_ARMV4L
     LOG_INFO("CPU: ARM");
-#    endif
+#endif
 
-#    if defined(__powerpc__) || defined(__ppc__) || defined(_M_PPC)
+#if defined(__powerpc__) || defined(__ppc__) || defined(_M_PPC)
     LOG_INFO("CPU: PowerPC");
-#    endif
+#endif
 
-#    if defined(__alpha__) || defined(_M_ALPHA)
+#if defined(__alpha__) || defined(_M_ALPHA)
     LOG_INFO("CPU: Digital Alpha");
-#    endif
+#endif
 
-#    if defined(ARCH_SGI_MIPS) || defined(_M_MRX000)
+#if defined(ARCH_SGI_MIPS) || defined(_M_MRX000)
     LOG_INFO("CPU: SGI MIPS");
-#    endif
+#endif
 
-#    ifdef ARCH_PA_RISC
+#ifdef ARCH_PA_RISC
     LOG_INFO("CPU: Hewlett-Packard PA-RISC");
-#    endif
+#endif
 
-#    ifdef ARCH_S390
+#ifdef ARCH_S390
     LOG_INFO("CPU: IBM S/390");
-#    endif
+#endif
 
-#    ifdef ARCH_S390X
+#ifdef ARCH_S390X
     LOG_INFO("CPU: IBM S/390X");
-#    endif
+#endif
 
-#    ifdef ARCH_VAX
+#ifdef ARCH_VAX
     LOG_INFO("CPU: Digital VAX");
-#    endif
+#endif
+    
+    if (caps->hasNEON)
+        out << "NEON ";
+    if (caps->hasARMv8)
+        out << "ARMv8-A ";
+    if (caps->hasARMv8Crypto)
+        out << "ARMv8-A-Crypto ";
+    if (caps->hasAltiVec)
+        out << "AltiVec ";
 
     return out.str();
 }
@@ -767,15 +844,14 @@ std::string GetCpuCaps(CpuCaps* caps)
 
 unsigned int cpu_count()
 {
-#if defined(WIN32) || defined(WIN64)
-#    ifndef _SC_NPROCESSORS_ONLN
+#if defined(_WIN32)
+#  ifndef _SC_NPROCESSORS_ONLN
     SYSTEM_INFO info;
     GetSystemInfo(&info);
-#        define sysconf(a) info.dwNumberOfProcessors
-#        define _SC_NPROCESSORS_ONLN
-#    endif
+#    define sysconf(a) info.dwNumberOfProcessors
+#    define _SC_NPROCESSORS_ONLN
+#  endif
 #endif
-
 #ifdef _SC_NPROCESSORS_ONLN
     return sysconf(_SC_NPROCESSORS_ONLN);
 #else
