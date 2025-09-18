@@ -93,7 +93,7 @@ elseif(WIN32)
     endif()
     
     set(vcpkg_ARCH x64)
-    if ($ENV{ARCH} MATCHES ".aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
+    if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
 	set(vcpkg_ARCH aarch64)
     endif()
     
@@ -250,7 +250,7 @@ if(BUILD_FLTK)
 endif()
 
 if(BUILD_PYTHON AND TLRENDER_USD)
-    add_dependencies(USD ${PYTHON_DEP})
+    add_dependencies(USD ${PYTHON_DEP} ${Gettext_DEP})
 endif()
 
 set(pyFLTK_DEP )
