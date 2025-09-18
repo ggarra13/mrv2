@@ -14,15 +14,15 @@
 #include <stdint.h>
 
 #if defined(__i386__) || defined(_M_IX86)
-#    define ARCH_X86
+#  define ARCH_X86
 #endif
 
 #if defined(_M_X64) || defined(__x86_64__)
-#    define ARCH_X86_64
+#  define ARCH_X86_64
 #endif
 
 #if defined(_M_ARM64) || defined(__aarch64__)
-#    define ARCH_ARM64
+#  define ARCH_ARM64
 #  ifdef __linux__
 #        include <sys/auxv.h>
 #  endif
@@ -657,9 +657,11 @@ static void check_os_katmai_support(void)
 }
 #else /* ARCH_X86 || ARCH_X86_64 */
 
-#    ifdef SYS_DARWIN
-#        include <sys/sysctl.h>
-#    else
+#  ifdef SYS_DARWIN
+#    include <sys/sysctl.h>
+#  elif defined(_WIN32) // Windows (including ARM64 and x86_64)
+#    include <windows.h>
+#  else
 #        ifndef __AMIGAOS4__
 #            include <signal.h>
 #            include <setjmp.h>
@@ -679,7 +681,26 @@ static void sigill_handler(int sig)
     siglongjmp(jmpbuf, 1);
 }
 #        endif //__AMIGAOS4__
-#    endif
+#    endif // SYS_DARWIN
+
+
+#ifdef _WIN32
+
+// Windows-specific exception handling for illegal instructions
+static volatile LONG can_handle_exception = 0;
+static volatile LONG exception_result = 0;
+
+static LONG WINAPI exception_handler(EXCEPTION_POINTERS* ExceptionInfo)
+{
+    if (ExceptionInfo->ExceptionRecord->ExceptionCode == EXCEPTION_ILLEGAL_INSTRUCTION && can_handle_exception)
+    {
+        can_handle_exception = 0;
+        exception_result = 1; // Indicate exception occurred
+        return EXCEPTION_EXECUTE_HANDLER;
+    }
+    return EXCEPTION_CONTINUE_SEARCH; // Pass to next handler
+}
+#endif
 
 std::string GetCpuCaps(CpuCaps* caps)
 {
@@ -711,7 +732,7 @@ std::string GetCpuCaps(CpuCaps* caps)
     LOG_INFO("NEON: " << (caps->hasNEON ? "yes" : "no"));
     LOG_INFO("ARMv8-A: " << (caps->hasARMv8 ? "yes" : "no"));
     LOG_INFO("ARMv8-A Crypto: " << (caps->hasARMv8Crypto ? "yes" : "no"));
-#  else // _WIN32
+#  else // ! _WIN32
       // Linux or other non-Windows ARM64
       LOG_INFO("CPU: ARM64");
 #     ifdef __linux__
@@ -722,23 +743,19 @@ std::string GetCpuCaps(CpuCaps* caps)
          LOG_INFO("NEON: " << (caps->hasNEON ? "yes" : "no"));
          LOG_INFO("ARMv8-A: " << (caps->hasARMv8 ? "yes" : "no"));
          LOG_INFO("ARMv8-A Crypto: " << (caps->hasARMv8Crypto ? "yes" : "no"));
-#     else // __linux__
+#     else // ! __linux__
          // Fallback for other ARM64 platforms (e.g., macOS)
          LOG_INFO("CPU: ARM64 (Unknown platform, assuming NEON)");
          caps->hasNEON = 1; // Most ARM64 CPUs have NEON
         caps->hasARMv8 = 1; // Assume ARMv8-A
 #     endif
-#  endif
+#  endif // _WIN32
 
     
-#endif  // ARCH_ARM64
-
-    
-
-
-    
-#ifdef HAVE_ALTIVEC
-#  ifdef SYS_DARWIN
+#elif defined(SYS_DARWIN)  // ARCH_ARM64
+   LOG_INFO("CPU: PowerPC or ARM (macOS)");
+                 
+#  ifdef HAVE_ALTIVEC
     /*
       rip-off from ffmpeg altivec detection code.
       this code also appears on Apple's AltiVec pages.
@@ -755,17 +772,22 @@ std::string GetCpuCaps(CpuCaps* caps)
             if (has_vu != 0)
                 caps->hasAltiVec = 1;
     }
-#  else /* SYS_DARWIN */
-#    ifdef __AMIGAOS4__
-       ULONG result = 0;
-
-       GetCPUInfoTags(GCIT_VectorUnit, &result, TAG_DONE);
-       if (result == VECTORTYPE_ALTIVEC)
-           caps->hasAltiVec = 1;
-#    else
+#  endif // HAVE_ALTIVEC
+#elif defined(__AMIGAOS4__)
+    
+        LOG_INFO("CPU: PowerPC (AmigaOS4)");
+#  ifdef HAVE_ALTIVEC
+        ULONG result = 0;
+        GetCPUInfoTags(GCIT_VectorUnit, &result, TAG_DONE);
+        if (result == VECTORTYPE_ALTIVEC)
+            caps->hasAltiVec = 1;
+        LOG_INFO("AltiVec " << (caps->hasAltiVec ? "" : "not ") << "found");
+#  endif  // HAVE_AlTIVE
+#else  // unknown
+#  ifndef __AMIGAOS4_
+    LOG_INFO("CPU: Non-x86 (POSIX)");
     /* no Darwin, do it the brute-force way */
     /* this is borrowed from the libmpeg2 library */
-    {
         signal(SIGILL, sigill_handler);
         if (sigsetjmp(jmpbuf, 1))
         {
@@ -783,11 +805,9 @@ std::string GetCpuCaps(CpuCaps* caps)
             signal(SIGILL, SIG_DFL);
             caps->hasAltiVec = 1;
         }
-    }
-#    endif //__AMIGAOS4__
-#  endif     /* SYS_DARWIN */
-    LOG_INFO("AltiVec " << (caps->hasAltiVec ? "" : "not ") << "found");
-#endif         /* HAVE_ALTIVEC */
+        LOG_INFO("AltiVec " << (caps->hasAltiVec ? "" : "not ") << "found");
+#  endif // !__AMIGAOS4__ (POSIX)
+#endif  /* FINAL platform check */
 
 #if defined(__ia64__) || defined(_M_IA64)
     LOG_INFO("CPU: Intel Itanium");
