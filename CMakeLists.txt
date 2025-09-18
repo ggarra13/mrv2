@@ -94,7 +94,7 @@ elseif(WIN32)
     
     set(vcpkg_ARCH x64)
     if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
-	set(vcpkg_ARCH aarch64)
+	set(vcpkg_ARCH arm64)
     endif()
     
     message(STATUS "Building for Windows ${vcpkg_ARCH}")
@@ -125,6 +125,7 @@ elseif(WIN32)
     list(APPEND CMAKE_PREFIX_PATH
 	"${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows")
     set(CMAKE_TOOLCHAIN_FILE "${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
+    #set(VCPKG_TARGET_TRIPLET "${vpkg_ARCH}-windows-static")
     set(VCPKG_TARGET_TRIPLET "${vpkg_ARCH}-windows")
 endif()
 
