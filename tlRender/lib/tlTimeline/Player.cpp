@@ -375,8 +375,12 @@ namespace tl
             {
                 try
                 {
+#if RTAUDIO_VERSION_MAJOR >= 6
                     RtAudioErrorType rterror = p.thread.rtAudio->abortStream();
                     checkRtError(rterror);
+#else
+                    p.thread.rtAudio->abortStream();
+#endif
                     p.thread.rtAudio->closeStream();
                 }
                 catch (const std::exception&)
