@@ -28,6 +28,8 @@ namespace tl
         namespace
         {
 #if defined(TLRENDER_AUDIO)
+
+#if RTAUDIO_VERSION_MAJOR >= 6
             void checkRtError(const RtAudioErrorType e)
             {
                 if (e == RTAUDIO_NO_ERROR || e == RTAUDIO_WARNING) return;
@@ -57,6 +59,7 @@ namespace tl
                     throw std::runtime_error("Undefined error.");
                 }
             }
+#endif
             
             RtAudioFormat toRtAudio(audio::DataType value) noexcept
             {
@@ -214,6 +217,7 @@ namespace tl
                                         p.audioThread.info.channelCount;
                                     unsigned int rtBufferFrames =
                                         p.playerOptions.audioBufferFrameCount;
+#if RTAUDIO_VERSION_MAJOR >= 6
                                     RtAudioErrorType rterror =
                                         p.thread.rtAudio->openStream(
                                         &rtParameters, nullptr,
@@ -225,6 +229,16 @@ namespace tl
                                     checkRtError(rterror);
                                     rterror = p.thread.rtAudio->startStream();
                                     checkRtError(rterror);
+#else
+                                    p.thread.rtAudio->openStream(
+                                        &rtParameters, nullptr,
+                                        toRtAudio(p.audioThread.info.dataType),
+                                        p.audioThread.info.sampleRate,
+                                        &rtBufferFrames, p.rtAudioCallback,
+                                        _p.get(), nullptr,
+                                        p.rtAudioErrorCallback);
+                                    p.thread.rtAudio->startStream();
+#endif
                                 }
                                 catch (const std::exception& e)
                                 {

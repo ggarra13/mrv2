@@ -447,11 +447,20 @@ namespace tl
             return 0;
         }
 
+#if RTAUDIO_VERSION_MAJOR >= 6
         void Player::Private::rtAudioErrorCallback(
             RtAudioErrorType type, const std::string& errorText)
         {
             std::cout << "RtAudio ERROR: " << errorText << std::endl;
         }
+#else
+        void Player::Private::rtAudioErrorCallback(
+            RtAudioError::Type type, const std::string& errorText)
+        {
+            std::cout << "RtAudio ERROR: " << errorText << std::endl;
+        }
+#endif
+
 #endif // TLRENDER_AUDIO
 
     } // namespace timeline

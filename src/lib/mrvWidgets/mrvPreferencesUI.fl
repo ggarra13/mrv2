@@ -2164,9 +2164,9 @@ o->add(name.c_str());
 for (size_t i = 0; i < numDevices - 1; ++i)
 {
    const auto& deviceInfo = audio.getDeviceInfo(i);
-#if RTAUDIO_VERSION_MAJOR < 6
+\#ifndef RTAUDIO_VERSION_MAJOR
    if (!deviceInfo.probed) continue;
-#endif
+\#endif
    
    unsigned numOutput = deviceInfo.outputChannels;
    unsigned numDuplex = deviceInfo.duplexChannels;
@@ -2251,9 +2251,9 @@ o->add(name.c_str());
 for (size_t i = 0; i < numDevices - 1; ++i)
 {
    const auto& deviceInfo = audio.getDeviceInfo(i);
-#if RTAUDIO_VERSION_MAJOR < 6
+\#ifndef RTAUDIO_VERSION_MAJOR
    if (!deviceInfo.probed) continue;
-#endif
+\#endif
    
    unsigned numInput = deviceInfo.inputChannels;
    unsigned numDuplex = deviceInfo.duplexChannels;

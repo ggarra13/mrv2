@@ -363,7 +363,11 @@ namespace tl
                 {
                     const RtAudio::DeviceInfo rtInfo =
                         p.rtAudio->getDeviceInfo(i);
+#if RTAUDIO_VERSION_MAJOR >= 6
                     if (1)
+#else
+                    if (rtInfo.prob)
+#endif
                     {
                         Device device;
                         device.name = rtInfo.name;
