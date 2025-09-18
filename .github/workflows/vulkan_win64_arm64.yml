@@ -126,26 +126,26 @@ jobs:
     - name: Build vmrv2
       env:
         BUILD_PYTHON: ON
-        MRV2_PYFLTK: OFF
-        MRV2_PYBIND11: OFF
-        MRV2_NETWORK: OFF
-        MRV2_PDF: OFF
-        TLRENDER_AV1: OFF
+        MRV2_PYFLTK: ON
+        MRV2_PYBIND11: ON
+        MRV2_NETWORK: ON
+        MRV2_PDF: ON
+        TLRENDER_AV1: ONxs
         TLRENDER_EXR: ON
         TLRENDER_FFMPEG: ON
         TLRENDER_FFMPEG_MINIMAL: ON
-        TLRENDER_HAP: OFF
-        TLRENDER_JPEG: OFF
+        TLRENDER_HAP: ON
+        TLRENDER_JPEG: ON
         TLRENDER_NDI: OFF
-        TLRENDER_NET: OFF
+        TLRENDER_NET: ON
         TLRENDER_OPENJPH: ON
-        TLRENDER_RAW: OFF
-        TLRENDER_SGI: OFF
-        TLRENDER_STB: OFF
-        TLRENDER_SVTAV1: OFF
-        TLRENDER_TIFF: OFF
-        TLRENDER_USD: OFF
-        TLRENDER_VPX: OFF
+        TLRENDER_RAW: ON
+        TLRENDER_SGI: ON
+        TLRENDER_STB: ON
+        TLRENDER_SVTAV1: ON
+        TLRENDER_TIFF: ON
+        TLRENDER_USD: ON
+        TLRENDER_VPX: ON
         TLRENDER_YASM: OFF
         
       run: |
