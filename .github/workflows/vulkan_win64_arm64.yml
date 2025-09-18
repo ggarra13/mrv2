@@ -124,36 +124,33 @@ jobs:
     #     wmic logicaldisk get freespace, size, caption
       
     - name: Build vmrv2
+      env:
+        BUILD_PYTHON: ON
+        MRV2_PYFLTK: OFF
+        MRV2_PYBIND11: OFF
+        MRV2_NETWORK: OFF
+        MRV2_PDF: OFF
+        TLRENDER_AV1: OFF
+        TLRENDER_EXR: ON
+        TLRENDER_FFMPEG: ON
+        TLRENDER_FFMPEG_MINIMAL: ON
+        TLRENDER_HAP: OFF
+        TLRENDER_JPEG: OFF
+        TLRENDER_NDI: OFF
+        TLRENDER_NET: OFF
+        TLRENDER_OPENJPH: ON
+        TLRENDER_RAW: OFF
+        TLRENDER_SGI: OFF
+        TLRENDER_STB: OFF
+        TLRENDER_SVTAV1: OFF
+        TLRENDER_TIFF: OFF
+        TLRENDER_USD: OFF
+        TLRENDER_VPX: OFF
+        TLRENDER_YASM: OFF
+        
       run: |
-        ./etc/runme_nolog.sh -v -t package -vk \
-        -D BUILD_PYTHON=ON \
-        -D MRV2_PYFLTK=OFF \
-        -D MRV2_PYBIND11=OFF \
-        -D MRV2_NETWORK=OFF \
-        -D MRV2_PDF=OFF \
-        -D TLRENDER_AV1=OFF \
-        -D TLRENDER_EXR=ON \
-        -D TLRENDER_FFMPEG=ON \
-        -D TLRENDER_FFMPEG_MINIMAL=ON \
-        -D TLRENDER_HAP=OFF \
-        -D TLRENDER_JPEG=OFF \
-        -D TLRENDER_NDI=OFF \
-        -D TLRENDER_NET=OFF \
-        -D TLRENDER_OPENJPH=ON \
-        -D TLRENDER_RAW=OFF \
-        -D TLRENDER_SGI=OFF \
-        -D TLRENDER_STB=OFF \
-        -D TLRENDER_SVTAV1=OFF \
-        -D TLRENDER_TIFF=OFF \
-        -D TLRENDER_USD=OFF \
-        -D TLRENDER_VPX=OFF \
-        -D TLRENDER_YASM=OFF
-        
-    # ./etc/runme_nolog.sh -v -t package -vk \
-    # -D TLRENDER_SVTAV1=OFF \
-    # -D TLRENDER_NET=OFF \
-    # -D TLRENDER_USD=OFF
-        
+        ./etc/runme_nolog.sh -v -t package -vk 
+                
     - name: Upload binaries  # Conditional step
       run: |
         ./bin/release/upload_sourceforge.sh -vk

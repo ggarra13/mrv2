@@ -2164,7 +2164,6 @@ o->add(name.c_str());
 for (size_t i = 0; i < numDevices - 1; ++i)
 {
    const auto& deviceInfo = audio.getDeviceInfo(i);
-   if (!deviceInfo.probed) continue;
    
    unsigned numOutput = deviceInfo.outputChannels;
    unsigned numDuplex = deviceInfo.duplexChannels;
@@ -2249,7 +2248,6 @@ o->add(name.c_str());
 for (size_t i = 0; i < numDevices - 1; ++i)
 {
    const auto& deviceInfo = audio.getDeviceInfo(i);
-   if (!deviceInfo.probed) continue;
    
    unsigned numInput = deviceInfo.inputChannels;
    unsigned numDuplex = deviceInfo.duplexChannels;
