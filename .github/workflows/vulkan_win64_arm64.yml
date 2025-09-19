@@ -135,7 +135,7 @@ jobs:
         TLRENDER_RAW: ON
         TLRENDER_SGI: ON
         TLRENDER_STB: ON
-        TLRENDER_SVTAV1: ON
+        TLRENDER_SVTAV1: OFF # does not compile on Windows ARM64
         TLRENDER_TIFF: ON
         TLRENDER_USD: OFF
         TLRENDER_VPX: ON
