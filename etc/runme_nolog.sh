@@ -301,7 +301,7 @@ unset PYTHONPATH
 #
 # For Windows mainly, make sure we use UTF8 encoding.
 #
-export PYTHONUTF8=1
+#  export PYTHONUTF8=1  USD needs it, meson fails.
 
 echo
 echo

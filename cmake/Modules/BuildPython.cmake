@@ -23,7 +23,6 @@ endif()
 set( Python_PATCH )
 set( Python_ENV )
 set( Python_PATH $ENV{PATH} )
-set( Python_DEPENDENCIES ${OpenSSL_DEP} )
 
 if(APPLE)
 
@@ -129,7 +128,6 @@ ExternalProject_Add(
     Python
     URL ${Python_URL}
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps/Python
-    DEPENDS ${Python_DEPENDENCIES}
     PATCH_COMMAND     "${Python_PATCH}"
     CONFIGURE_COMMAND "${Python_CONFIGURE}"
     BUILD_COMMAND     "${Python_BUILD}"

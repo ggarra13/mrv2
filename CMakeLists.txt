@@ -246,7 +246,7 @@ set(SHADERC_DEP )
 #     endif()
 # endif()
 
-add_subdirectory( tlRender/etc/SuperBuild)
+add_subdirectory(tlRender/etc/SuperBuild)
 
 set(FLTK_DEP )
 if(BUILD_FLTK)
@@ -266,7 +266,7 @@ endif()
 # OpenSSL must be built before Python and pyFLTK to use the right path when
 # building Python's _ssl module.
 if(TLRENDER_NET)
-    if (BUILD_PYTHON AND OpenSSL_DEP)
+    if (BUILD_PYTHON)
 	add_dependencies(Python ${OpenSSL_DEP})
     endif()
 endif()
