@@ -16,11 +16,11 @@ if(WIN32)
 endif()
 
 set(FFmpeg_PATCH )
-# if(WIN32)
-#     set(FFmpeg_PATCH ${CMAKE_COMMAND} -E copy_if_different
-#         ${CMAKE_CURRENT_SOURCE_DIR}/patches/FFmpeg-patch/configure
-#         ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg/src/FFmpeg/configure)
-# endif()
+if(WIN32)
+    set(FFmpeg_PATCH ${CMAKE_COMMAND} -E copy_if_different
+        ${CMAKE_CURRENT_SOURCE_DIR}/patches/FFmpeg-patch/configure
+        ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg/src/FFmpeg/configure)
+endif()
 
 set(FFmpeg_SHARED_LIBS ON)
 set(FFmpeg_DEBUG OFF)
