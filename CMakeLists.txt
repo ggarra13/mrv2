@@ -97,26 +97,32 @@ elseif(WIN32)
 	set(vcpkg_ARCH arm64)
     endif()
     
+    set(vcpkg_BUILD_TYPE debug)
+    if (CMAKE_BUILD_TYPE MATCHES ".*Release.*")
+	set(vcpkg_BUILD_TYPE release)
+    endif()
+    
+    set(VCPKG_TARGET_TRIPLET "${vpkg_ARCH}-windows-${vcpkg_BUILD_TYPE}")
+    
     message(STATUS "Building for Windows ${vcpkg_ARCH}")
     message(STATUS "VCPKG running from ${VCPKG}")
+    message(STATUS "VCPKG_TARGET_TRIPLET=${VCPKG_TARGET_TRIPLET}")
     
     add_custom_target(
 	libiconv ALL
 	${CMAKE_COMMAND} -E echo "Running libiconv_done..."
-	COMMAND ${VCPKG} install libiconv:${vcpkg_ARCH}-windows
+	COMMAND ${VCPKG} install libiconv:${VCPKG_TARGET_TRIPLET}
 	DEPENDS ${vcpkg_DEP})
     add_custom_target(
 	gettext ALL
 	${CMAKE_COMMAND} -E echo "Running gettext_done..."
-	COMMAND ${VCPKG} install gettext:${vcpkg_ARCH}-windows
+	COMMAND ${VCPKG} install gettext:${VCPKG_TARGET_TRIPLET}
 	DEPENDS ${vcpkg_DEP} libiconv)
     set(Gettext_DEP libiconv gettext)
 
     list(APPEND CMAKE_PREFIX_PATH
 	"${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows")
     set(CMAKE_TOOLCHAIN_FILE "${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
-    #set(VCPKG_TARGET_TRIPLET "${vpkg_ARCH}-windows-static") # for static builds
-    set(VCPKG_TARGET_TRIPLET "${vpkg_ARCH}-windows")
     
     
     # https://stackoverflow.com/questions/45414507/pass-a-list-of-prefix-paths-to-externalproject-add-in-cmake-args

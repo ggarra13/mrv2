@@ -12,9 +12,6 @@ set(OpenJPH_ARGS
 
 set(OpenJPH_PATCH )
 if(WIN32)
-    # list(APPEND OpenJPH_PATCH COMMAND ${CMAKE_COMMAND} -E copy_if_different
-    #     ${CMAKE_CURRENT_SOURCE_DIR}/patches/OpenJPH-patch/src/core/common/ojph_arch.h
-    #     ${CMAKE_CURRENT_BINARY_DIR}/OpenJPH/src/OpenJPH/src/core/common/ojph_arch.h)
     list(APPEND OpenJPH_PATCH COMMAND ${CMAKE_COMMAND} -E copy_if_different
         ${CMAKE_CURRENT_SOURCE_DIR}/patches/OpenJPH-patch/CMakeLists.txt
         ${CMAKE_CURRENT_BINARY_DIR}/OpenJPH/src/OpenJPH/CMakeLists.txt)
