@@ -206,6 +206,10 @@ fi
 
 if [ -z "$TLRENDER_USD" ]; then
     export TLRENDER_USD=ON
+    if [[ "$BUILD_PYTHON" == OFF || "$BUILD_PYTHON" == 0 ]]; then
+	echo "For USD, we need to build python..."
+	export BUILD_PYTHON=ON
+    fi
 fi
 
 if [ -z "$VULKAN_SDK" ]; then
