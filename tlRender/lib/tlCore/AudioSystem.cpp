@@ -103,9 +103,7 @@ namespace tl
             
 #  if RTAUDIO_VERSION_MAJOR >= 6
             // Get info for the default device to check its suitability.
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             RtAudio::DeviceInfo info = p.rtAudio->getDeviceInfo(out);
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
 
             // If the default device has no input channels, find a fallback.
             if (info.inputChannels == 0)
@@ -116,9 +114,7 @@ namespace tl
                 // Iterate through the available devices to find the first one with input channels.
                 for (unsigned int id : deviceIds)
                 {
-                    std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                     info = p.rtAudio->getDeviceInfo(id);
-                    std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                     if (info.inputChannels > 0)
                     {
                         out = id; // Found a suitable device.
@@ -176,9 +172,7 @@ namespace tl
                 // Iterate through the available devices to find the first one with input channels.
                 for (unsigned int id : deviceIds)
                 {
-                    std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                     info = p.rtAudio->getDeviceInfo(id);
-                    std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                     if (info.outputChannels > 0)
                     {
                         out = id; // Found a suitable device.
@@ -227,7 +221,6 @@ namespace tl
 
         Info System::getInputInfo(const size_t deviceIndex) const
         {
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             TLRENDER_P();
             Info out;
             if (deviceIndex < p.devices.size())
@@ -264,7 +257,6 @@ namespace tl
         Info System::getDefaultInputInfo() const
         {
             TLRENDER_P();
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             const size_t deviceIndex = getInputDevice();
             return getInputInfo(deviceIndex);
         }
@@ -272,7 +264,6 @@ namespace tl
         Info System::getDefaultOutputInfo() const
         {
             TLRENDER_P();
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             const size_t deviceIndex = getOutputDevice();
             return getOutputInfo(deviceIndex);
         }
@@ -281,7 +272,6 @@ namespace tl
         {
             TLRENDER_P();
             Info out;
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             if (deviceIndex < p.devices.size())
             {
                 const auto& device = p.devices[deviceIndex];
@@ -412,8 +402,6 @@ namespace tl
         void System::_getDevices()
         {
             TLRENDER_P();
-
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             
 #if defined(TLRENDER_AUDIO)
             try
@@ -436,9 +424,7 @@ namespace tl
 
                 for (unsigned int id : deviceIds)
                 {
-                    std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                     RtAudio::DeviceInfo rtInfo = p.rtAudio->getDeviceInfo(id);
-                    std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                     
                     Device device;
                     device.name = rtInfo.name;
@@ -517,7 +503,6 @@ namespace tl
                     }
                 }
 #  else
-                std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                 p.devices.clear();
                 p.rtAudio.reset(
                     new RtAudio(static_cast<RtAudio::Api>(p.currentApi)));
@@ -605,14 +590,12 @@ namespace tl
                     }
                 }
 #endif
-                std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                 {
                     std::stringstream ss;
                     ss << "    Default input device: "
                        << getDefaultInputDevice();
                     log.push_back(ss.str());
                 }
-                std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                 {
                     std::stringstream ss;
                     ss << "    Default input info: "
@@ -622,14 +605,12 @@ namespace tl
                        << getDefaultInputInfo().sampleRate;
                     log.push_back(ss.str());
                 }
-                std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                 {
                     std::stringstream ss;
                     ss << "    Default output device: "
                        << getDefaultOutputDevice();
                     log.push_back(ss.str());
                 }
-                std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                 {
                     std::stringstream ss;
                     ss << "    Default output info: "
@@ -640,7 +621,6 @@ namespace tl
                     log.push_back(ss.str());
                 }
                 _log(string::join(log, "\n"));
-                std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             }
             catch (const std::exception& e)
             {

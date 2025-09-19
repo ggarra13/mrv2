@@ -4,7 +4,9 @@ include(ExternalProject)
 set(USD_DEPS ${PYTHON_DEP})
 
 set(USD_GIT_REPOSITORY https://github.com/PixarAnimationStudios/OpenUSD.git)
-set(USD_GIT_TAG v25.08) # latest (was v25.02a)
+
+set(USD_GIT_TAG v25.02a) # v25.02
+#set(USD_GIT_TAG v25.08) # latest (was v25.02a)
 
 string(TOLOWER ${CMAKE_BUILD_TYPE} cmake_build_type)
 
