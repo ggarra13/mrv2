@@ -16,6 +16,11 @@ if(WIN32)
 endif()
 
 set(FFmpeg_PATCH )
+if(WIN32)
+    set(FFmpeg_PATCH ${CMAKE_COMMAND} -E copy_if_different
+        ${CMAKE_CURRENT_SOURCE_DIR}/patches/FFmpeg-patch/configure
+        ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg/src/FFmpeg/configure)
+endif()
 
 set(FFmpeg_SHARED_LIBS ON)
 set(FFmpeg_DEBUG OFF)
@@ -54,8 +59,7 @@ endif()
 
 set(FFmpeg_CONFIGURE_ARGS
     --prefix=${INSTALL_PREFIX}
-    --enable-pic	    
-    --enable-asm
+    --enable-pic
     --disable-programs
     --disable-doc
     --disable-avfilter
@@ -492,6 +496,7 @@ endif()
 if(WIN32)
     if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
 	list(APPEND FFmpeg_CONFIGURE_ARGS
+            --enable-asm
 
 	    --arch=arm64
 	    --target-os=win32
@@ -501,15 +506,10 @@ if(WIN32)
 	    --cc=clang-cl
 	    --cxx=clang-cl
 	    --as=clang-cl)
-	#
-	# list(APPEND FFmpeg_CONFIGURE_ARGS
-        #     --arch=arm64
-        #     --toolchain=msvc
-	#     --disable-asm)  # for now we disable-asm
     else()
-	list(APPEND FFmpeg_CONFIGURE_ARGS
-            --arch=x86_64
-            --toolchain=msvc)
+    list(APPEND FFmpeg_CONFIGURE_ARGS
+        --arch=x86_64
+        --toolchain=msvc)
     endif()
     set(FFmpeg_MSYS2 ${MRV2_MSYS_CMD})
     
@@ -532,7 +532,7 @@ if(WIN32)
     list(JOIN FFmpeg_CONFIGURE_ARGS " \\\n" FFmpeg_CONFIGURE_ARGS_TMP)
 
     set(FFmpeg_CONFIGURE ${FFmpeg_MSYS2}
-        -c "pacman -S diffutils make pkg-config --noconfirm && \
+        -c "pacman -S diffutils make nasm pkg-config --noconfirm && \
         ${FFmpeg_OPENSSL_COPY} ${PKG_CONFIG_PATH_CMD} \
         ./ffmpeg_configure.sh")
     set(FFmpeg_BUILD ${FFmpeg_MSYS2} -c "make -j ${NPROCS}")
@@ -543,16 +543,14 @@ if(WIN32)
         COMMAND ${FFmpeg_MSYS2} -c "mv ${INSTALL_PREFIX}/bin/avutil.lib ${INSTALL_PREFIX}/lib"
         COMMAND ${FFmpeg_MSYS2} -c "mv ${INSTALL_PREFIX}/bin/swresample.lib ${INSTALL_PREFIX}/lib"
         COMMAND ${FFmpeg_MSYS2} -c "mv ${INSTALL_PREFIX}/bin/swscale.lib ${INSTALL_PREFIX}/lib")
-    set(FFmpeg_COMPILERS )
 else()
     set(FFmpeg_CONFIGURE ./configure ${FFmpeg_CONFIGURE_ARGS})
     set(FFmpeg_BUILD make -j ${NPROCS})
     set(FFmpeg_INSTALL make install)
     list(JOIN FFmpeg_CONFIGURE_ARGS " \\\n" FFmpeg_CONFIGURE_ARGS_TMP)
-    set(FFmpeg_COMPILERS )
 endif()
 
-set(FFmpeg_CONFIGURE_CONTENTS "#!/usr/bin/env bash\n${FFmpeg_COMPILERS} ./configure ${FFmpeg_CONFIGURE_ARGS_TMP}\n")
+set(FFmpeg_CONFIGURE_CONTENTS "#!/usr/bin/env bash\n./configure ${FFmpeg_CONFIGURE_ARGS_TMP}\n")
 
 # Ensure the directory exists
 message(STATUS "Creating directory ${CMAKE_CURRENT_BINARY_DIR}/")
