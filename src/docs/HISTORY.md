@@ -39,6 +39,7 @@ ChangeLog
 ---------
 
 - Added Linux aarch64 builds, without NDI.
+- Added Windows aarch64 builds, without NDI or SVT-AV1 encoder.
 
 
 
