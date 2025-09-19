@@ -502,8 +502,7 @@ if(WIN32)
 	list(APPEND FFmpeg_CONFIGURE_ARGS
             --arch=aarch64
             --toolchain=msvc
-	    --as=clang
-	    --enable-asm)  # for now we disable-asm
+	    --disable-asm)  # for now we disable-asm
     else()
 	list(APPEND FFmpeg_CONFIGURE_ARGS
             --arch=x86_64

@@ -59,7 +59,8 @@ endif()
 #
 # Handle libintl, gettext and libintl
 #
-set( Gettext_DEP )
+set(Gettext_DEP )
+set(gaspreprocessor_DEP )
 if(BUILD_GETTEXT)
     include(cmake/Modules/BuildGettext.cmake )
 elseif(APPLE)
@@ -92,6 +93,8 @@ elseif(WIN32)
 	set(VCPKG vcpkg)
     endif()
     
+    include(cmake/Modules/Buildgaspreprocessor.cmake)
+    
     set(vcpkg_ARCH x64)
     if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
 	set(vcpkg_ARCH arm64)
@@ -110,26 +113,12 @@ elseif(WIN32)
 	${CMAKE_COMMAND} -E echo "Running gettext_done..."
 	COMMAND ${VCPKG} install gettext:${vcpkg_ARCH}-windows
 	DEPENDS ${vcpkg_DEP} libiconv)
-    add_custom_target(
-	libiconv_gettext ALL
-	COMMAND cmake -E echo "LOOKING IN DIR Directory ${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows"
-	COMMAND dir $<SHELL_PATH:${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows>
-	COMMAND cmake -E echo "LOOKING IN DIR Directory ${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows/bin"
-	COMMAND dir $<SHELL_PATH:${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows/bin>
-	COMMAND cmake -E echo "LOOKING IN DIR Directory ${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows/lib"
-	COMMAND dir $<SHELL_PATH:${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows/lib>
-	COMMAND cmake -E echo "LOOKING IN DIR Directory ${CMAKE_PREFIX_PATH}/lib"
-	COMMAND dir $<SHELL_PATH:${CMAKE_PREFIX_PATH}/lib>
-	COMMAND cmake -E echo "LOOKING IN DIR Directory ${CMAKE_PREFIX_PATH}/bin"
-	COMMAND dir $<SHELL_PATH:${CMAKE_PREFIX_PATH}/bin>
-	DEPENDS libiconv gettext
-    )
-    set(Gettext_DEP libiconv_gettext)
+    set(Gettext_DEP libiconv gettext)
 
     list(APPEND CMAKE_PREFIX_PATH
 	"${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows")
     set(CMAKE_TOOLCHAIN_FILE "${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
-    #set(VCPKG_TARGET_TRIPLET "${vpkg_ARCH}-windows-static")
+    #set(VCPKG_TARGET_TRIPLET "${vpkg_ARCH}-windows-static") # for static builds
     set(VCPKG_TARGET_TRIPLET "${vpkg_ARCH}-windows")
     
     
