@@ -23,6 +23,8 @@ endif()
 set( Python_PATCH )
 set( Python_ENV )
 set( Python_PATH $ENV{PATH} )
+set( Python_DEPENDENCIES ${OpenSSL_DEP} )
+
 if(APPLE)
 
     set(Python_DYLD_LIBRARY_PATH $ENV{DYLD_LIBRARY_PATH})
@@ -85,8 +87,6 @@ elseif(UNIX)
 	COMMAND ${Python_ENV} ${Python_EXECUTABLE} -m ensurepip --upgrade 
 	COMMAND ${Python_ENV} ${Python_EXECUTABLE} -m pip install meson)
 else()
-
-    set( Python_DEPENDENCIES )
     
     set( platform x64 )
     if( "$ENV{ARCH}" MATCHES ".*aarch64.*" OR "$ENV{ARCH}" MATCHES ".*arm64.*" )
@@ -129,6 +129,7 @@ ExternalProject_Add(
     Python
     URL ${Python_URL}
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps/Python
+    DEPENDS ${Python_DEPENDENCIES}
     PATCH_COMMAND     "${Python_PATCH}"
     CONFIGURE_COMMAND "${Python_CONFIGURE}"
     BUILD_COMMAND     "${Python_BUILD}"
