@@ -260,13 +260,11 @@ endif()
 
 # OpenSSL must be built before Python and pyFLTK to use the right path when
 # building Python's _ssl module.
-if(TLRENDER_NET)
-    if (BUILD_PYTHON)
-	if (NOT OpenSSL_DEP)
-	    message(FATAL_ERROR "Python needs OpenSSL but OpenSSL_DEP is ${OpenSSL_DEP}!")
-	endif()
-	add_dependencies(Python ${OpenSSL_DEP})
+if(BUILD_PYTHON AND TLRENDER_NET)
+    if (NOT OpenSSL_DEP)
+	message(FATAL_ERROR "Python needs OpenSSL but OpenSSL_DEP is ${OpenSSL_DEP}!")
     endif()
+    add_dependencies(Python ${OpenSSL_DEP})
 endif()
 
 set(pyFLTK_DEP )
