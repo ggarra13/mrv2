@@ -79,8 +79,6 @@ elseif(APPLE)
     endif()
 elseif(WIN32)
     
-    set(vcpkg_ARCH x64)
-    
     set(vcpkg_DEP )
     set(BUILD_VCPKG TRUE)
     if (BUILD_VCPKG)
@@ -102,9 +100,8 @@ elseif(WIN32)
 	set(vcpkg_BUILD_TYPE release)
     endif()
     
-    set(VCPKG_TARGET_TRIPLET "${vpkg_ARCH}-windows-${vcpkg_BUILD_TYPE}")
+    set(VCPKG_TARGET_TRIPLET "${vcpkg_ARCH}-windows-${vcpkg_BUILD_TYPE}")
     
-    message(STATUS "Building for Windows ${vcpkg_ARCH}")
     message(STATUS "VCPKG running from ${VCPKG}")
     message(STATUS "VCPKG_TARGET_TRIPLET=${VCPKG_TARGET_TRIPLET}")
     
