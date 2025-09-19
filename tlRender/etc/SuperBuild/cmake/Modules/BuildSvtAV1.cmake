@@ -12,7 +12,7 @@ list(APPEND SvtAV1_ARGS
 )
 
 if (WIN32)
-    if ($ENV{ARCH} MACHES ".*amd64.*")
+    if ($ENV{ARCH} MATCHES ".*amd64.*")
 	list(APPEND SvtAV1_ARGS
 	    -DENABLE_NASM=ON)
     else()
