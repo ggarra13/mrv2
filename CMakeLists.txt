@@ -265,10 +265,12 @@ if(BUILD_PYTHON AND TLRENDER_NET)
     #         add_subdirectory.
     if (UNIX)
 	add_dependencies(Python OpenSSL)
-    else()
+    elseif(WIN32)
 	if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
 	    add_dependencies(Python OpenSSL)
 	endif()
+    else()
+	message(FATAL_ERROR "Unknown architecture for Python and OpenSSL")
     endif()
 endif()
 
