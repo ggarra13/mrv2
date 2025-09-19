@@ -62,8 +62,6 @@ else()
     set(OpenSSL_BUILD make -j ${NPROCS})
     set(OpenSSL_INSTALL make -j ${NPROCS} install &&
 	rm -f ${CMAKE_INSTALL_PREFIX}/bin/openssl)
-
-    set(OpenSSL_DEP OpenSSL)
 endif()
 
 if(NOT WIN32)
