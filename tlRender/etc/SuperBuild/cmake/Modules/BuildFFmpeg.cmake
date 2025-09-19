@@ -507,9 +507,9 @@ if(WIN32)
 	    --cxx=clang-cl
 	    --as=clang-cl)
     else()
-    list(APPEND FFmpeg_CONFIGURE_ARGS
-        --arch=x86_64
-        --toolchain=msvc)
+	list(APPEND FFmpeg_CONFIGURE_ARGS
+            --arch=x86_64
+            --toolchain=msvc)
     endif()
     set(FFmpeg_MSYS2 ${MRV2_MSYS_CMD})
     
