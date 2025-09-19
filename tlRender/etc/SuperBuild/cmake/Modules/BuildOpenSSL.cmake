@@ -28,6 +28,8 @@ if(WIN32)
             no-unit-test)
 	set(OpenSSL_BUILD nmake install)
 	set(OpenSSL_INSTALL nmake install)
+	
+	set(OpenSSL_DEP OpenSSL)
     endif()
 elseif(APPLE)
     set(OpenSSL_CONFIGURE
@@ -45,6 +47,8 @@ elseif(APPLE)
     set(OpenSSL_BUILD make -j ${NPROCS})
     set(OpenSSL_INSTALL make -j ${NPROCS} install &&
 	rm -f ${CMAKE_INSTALL_PREFIX}/bin/openssl)
+    
+    set(OpenSSL_DEP OpenSSL)
 else()
     set(OpenSSL_CONFIGURE
         ./Configure
@@ -59,6 +63,7 @@ else()
     set(OpenSSL_INSTALL make -j ${NPROCS} install &&
 	rm -f ${CMAKE_INSTALL_PREFIX}/bin/openssl)
 
+    set(OpenSSL_DEP OpenSSL)
 endif()
 
 if(NOT WIN32)
@@ -73,7 +78,7 @@ if(NOT WIN32)
 	INSTALL_COMMAND ${OpenSSL_INSTALL}
 	BUILD_IN_SOURCE 1)
     
-	set(OpenSSL_DEP OpenSSL)
+    set(OpenSSL_DEP OpenSSL)
 else()
     if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
 	ExternalProject_Add(
