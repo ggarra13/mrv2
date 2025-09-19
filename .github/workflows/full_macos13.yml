@@ -62,7 +62,10 @@ jobs:
           ssh-keyscan github.com >> ~/.ssh/known_hosts
       
     - name: Add SourceForge to known_hosts
-      run: ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
+      shell: bash
+      run: |
+        mkdir -p ~/.ssh
+        ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
 
     - name: Set executable permissions
       run: |
@@ -73,10 +76,34 @@ jobs:
         df -k
 
     - name: Build mrv2
+      env:
+        BUILD_PYTHON: ON
+        MRV2_PYFLTK: ON
+        MRV2_PYBIND11: ON
+        MRV2_NETWORK: ON
+        MRV2_PDF: ON
+        TLRENDER_AV1: ON
+        TLRENDER_EXR: ON
+        TLRENDER_FFMPEG: ON
+        TLRENDER_FFMPEG_MINIMAL: ON
+        TLRENDER_HAP: ON
+        TLRENDER_JPEG: ON
+        TLRENDER_NDI: OFF
+        TLRENDER_NET: ON
+        TLRENDER_OPENJPH: ON
+        TLRENDER_RAW: ON
+        TLRENDER_SGI: ON
+        TLRENDER_STB: ON
+        TLRENDER_SVTAV1: ON
+        TLRENDER_TIFF: ON
+        TLRENDER_USD: ON
+        TLRENDER_VPX: ON
+        TLRENDER_YASM: ON
+        
       run: |
         ./etc/runme_nolog.sh -t package
       
-    - name: Upload binaries
+    - name: Upload binaries  # Conditional step
       if: github.ref_name == 'beta'
       run: |
         ./bin/release/upload_sourceforge.sh

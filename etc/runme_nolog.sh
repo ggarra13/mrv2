@@ -65,10 +65,6 @@ if [ -z "$MRV2_DEMO" ]; then
     export MRV2_DEMO=OFF
 fi
 
-if [ -z "$MRV2_HDR" ]; then
-    export MRV2_HDR=ON
-fi
-
 if [ -z "$MRV2_PYFLTK" ]; then
     export MRV2_PYFLTK=ON
 fi
@@ -169,9 +165,14 @@ if [ -z "$TLRENDER_NDI_SDK" ]; then
     fi
 fi
 
+export MRV2_HDR=OFF
 if [ -z "$TLRENDER_NDI" ]; then
     if [ -d "${TLRENDER_NDI_SDK}" ]; then
 	export TLRENDER_NDI=ON
+
+	if [ -z "$MRV2_HDR" ]; then
+	    export MRV2_HDR=ON
+	fi
     else
 	echo "TLRENDER_NDI_SDK not found at ${TLRENDER_NDI_SDK}!"
 	export TLRENDER_NDI=OFF

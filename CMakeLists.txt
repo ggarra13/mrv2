@@ -60,7 +60,6 @@ endif()
 # Handle libintl, gettext and libintl
 #
 set(Gettext_DEP )
-set(gaspreprocessor_DEP )
 if(BUILD_GETTEXT)
     include(cmake/Modules/BuildGettext.cmake )
 elseif(APPLE)
@@ -92,8 +91,6 @@ elseif(WIN32)
 	#
 	set(VCPKG vcpkg)
     endif()
-    
-    include(cmake/Modules/Buildgaspreprocessor.cmake)
     
     set(vcpkg_ARCH x64)
     if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")

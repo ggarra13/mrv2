@@ -63,7 +63,8 @@ endif()
 
 set(FFmpeg_CONFIGURE_ARGS
     --prefix=${INSTALL_PREFIX}
-    --enable-pic
+    --enable-pic	    
+    --enable-asm
     --disable-programs
     --disable-doc
     --disable-avfilter
@@ -508,9 +509,7 @@ if(WIN32)
 
 	    --cc=clang-cl
 	    --cxx=clang-cl
-	    --as=clang-cl
-	    
-	    --enable-asm)
+	    --as=clang-cl)
 	#
 	# list(APPEND FFmpeg_CONFIGURE_ARGS
         #     --arch=arm64
@@ -519,8 +518,7 @@ if(WIN32)
     else()
 	list(APPEND FFmpeg_CONFIGURE_ARGS
             --arch=x86_64
-            --toolchain=msvc
-	    --enable-asm)
+            --toolchain=msvc)
     endif()
     set(FFmpeg_MSYS2 ${MRV2_MSYS_CMD})
     
