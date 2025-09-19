@@ -500,9 +500,19 @@ endif()
 if(WIN32)
     if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
 	list(APPEND FFmpeg_CONFIGURE_ARGS
-            --arch=aarch64
+
+	    --arch=aarch64
+	    --target-os=win32
+	    
             --toolchain=msvc
-	    --disable-asm)  # for now we disable-asm
+
+	    --cc=clang-cl
+	    --cxx=clang-cl
+	    --enable-asm)  # for now we disable-asm
+	# list(APPEND FFmpeg_CONFIGURE_ARGS
+        #     --arch=aarch64
+        #     --toolchain=msvc
+	#     --disable-asm)  # for now we disable-asm
     else()
 	list(APPEND FFmpeg_CONFIGURE_ARGS
             --arch=x86_64
