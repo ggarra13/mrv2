@@ -74,6 +74,7 @@ if(NOT WIN32)
 
     message(STATUS "Added OpenSSL NOT WIN32")
     set(OpenSSL_DEP OpenSSL)
+    message(STATUS "OpenSSL here is ${OpenSSL_DEP}")
 else()
     if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
 	ExternalProject_Add(
