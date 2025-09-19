@@ -53,7 +53,7 @@ else
     unzip -o cmake-${CMAKE_RELEASE}-${CMAKE_PLATFORM}.${CMAKE_EXT}
 fi
 
-
+echo "Copying files..."
 if [[ $KERNEL != *Darwin* ]]; then
     dir=cmake-${CMAKE_RELEASE}-${CMAKE_PLATFORM}
     cp -rf ${dir}/* $PWD/$BUILD_DIR/install/
