@@ -258,18 +258,22 @@ if(BUILD_PYTHON AND TLRENDER_USD)
     add_dependencies(USD ${PYTHON_DEP} ${Gettext_DEP})
 endif()
 
+# OpenSSL must be built before Python and pyFLTK to use the right path when
+# building Python's _ssl module.
+if(TLRENDER_NET)
+    if (BUILD_PYTHON)
+	if (NOT OpenSSL_DEP)
+	    message(FATAL_ERROR "Python needs OpenSSL but OpenSSL_DEP is not set!")
+	endif()
+	add_dependencies(Python ${OpenSSL_DEP})
+    endif()
+endif()
+
 set(pyFLTK_DEP )
 if(MRV2_PYFLTK)
     include(cmake/Modules/BuildpyFLTK.cmake)
 endif()
 
-# OpenSSL must be built before Python and pyFLTK to use the right path when
-# building Python's _ssl module.
-if(TLRENDER_NET)
-    if (BUILD_PYTHON)
-	add_dependencies(Python ${OpenSSL_DEP})
-    endif()
-endif()
 
 
 set(POCO_DEP )
