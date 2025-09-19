@@ -541,7 +541,7 @@ if(WIN32)
         COMMAND ${FFmpeg_MSYS2} -c "mv ${INSTALL_PREFIX}/bin/avutil.lib ${INSTALL_PREFIX}/lib"
         COMMAND ${FFmpeg_MSYS2} -c "mv ${INSTALL_PREFIX}/bin/swresample.lib ${INSTALL_PREFIX}/lib"
         COMMAND ${FFmpeg_MSYS2} -c "mv ${INSTALL_PREFIX}/bin/swscale.lib ${INSTALL_PREFIX}/lib")
-    set(FFmpeg_COMPILERS AS="clang --target=aarch64-pc-windows-msvc" )
+    set(FFmpeg_COMPILERS )
 else()
     set(FFmpeg_CONFIGURE ./configure ${FFmpeg_CONFIGURE_ARGS})
     set(FFmpeg_BUILD make -j ${NPROCS})
