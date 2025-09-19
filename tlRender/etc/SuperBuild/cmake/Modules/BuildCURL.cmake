@@ -11,6 +11,8 @@ set(CURL_ARGS
     -DCURL_DISABLE_LDAP=ON
     ${TLRENDER_EXTERNAL_ARGS})
 
+message(STATUS "CURL has OpenSSL_DEP=${OpenSSL_DEP}")
+
 ExternalProject_Add(
     CURL
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/CURL
