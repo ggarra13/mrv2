@@ -100,7 +100,7 @@ elseif(WIN32)
 	set(vcpkg_BUILD_TYPE release)
     endif()
     
-    set(VCPKG_TARGET_TRIPLET "${vcpkg_ARCH}-windows-${vcpkg_BUILD_TYPE}")
+    set(VCPKG_TARGET_TRIPLET "${vcpkg_ARCH}-windows")
     
     message(STATUS "VCPKG running from ${VCPKG}")
     message(STATUS "VCPKG_TARGET_TRIPLET=${VCPKG_TARGET_TRIPLET}")
