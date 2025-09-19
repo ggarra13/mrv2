@@ -425,7 +425,7 @@ cd $BUILD_DIR
 #
 # Handle Microsoft vcpkg variables
 #
-unset  VCPKG_ROOT=$PWD/$BUILD_DIR/deps/vcpkg
+export  VCPKG_ROOT=$PWD/$BUILD_DIR/deps/vcpkg
 export VCPKG_INSTALL_PREFIX=$PWD/install
 
 cmd="cmake -G '${CMAKE_GENERATOR}'
