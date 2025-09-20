@@ -169,10 +169,7 @@ export MRV2_HDR=OFF
 if [ -z "$TLRENDER_NDI" ]; then
     if [ -d "${TLRENDER_NDI_SDK}" ]; then
 	export TLRENDER_NDI=ON
-
-	if [ -z "$MRV2_HDR" ]; then
-	    export MRV2_HDR=ON
-	fi
+	export MRV2_HDR=ON
     else
 	echo "TLRENDER_NDI_SDK not found at ${TLRENDER_NDI_SDK}!"
 	export TLRENDER_NDI=OFF
