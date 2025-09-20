@@ -31,8 +31,8 @@ endif()
 
 set( MRV2_OS_BITS 32 )
 if(APPLE)
-    if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm" OR
-	    CMAKE_SYSTEM_PROCESSOR MATCHES "aarch")
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES ".*arm.*" OR
+	    CMAKE_SYSTEM_PROCESSOR MATCHES ".*aarch.*")
 	if(CMAKE_SIZEOF_VOID_P EQUAL 8)
 	    set( MRV2_OS_BITS 64 )
             set( MRV2_ARCHITECTURE "arm64")
@@ -56,12 +56,19 @@ elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^ppc.*")
     else()
         message(FATAL_ERROR "Architecture is not supported")
     endif()
-else()
-    if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-	set( MRV2_OS_BITS 64 )
+else()  # Handles Linux and other non-Apple/MIPS/PPC systems
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
+        set( MRV2_OS_BITS 64 )
         set( MRV2_ARCHITECTURE "aarch64")
-    else()
+    elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64" OR
+	    CMAKE_SYSTEM_PROCESSOR MATCHES "amd64")
+        set( MRV2_OS_BITS 64 )
+        set( MRV2_ARCHITECTURE "amd64")
+    elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "i686" OR
+	    CMAKE_SYSTEM_PROCESSOR MATCHES "x86")
         set( MRV2_ARCHITECTURE "x86")
+    else()
+        message(FATAL_ERROR "Architecture ${CMAKE_SYSTEM_PROCESSOR} not supported")
     endif()
 endif()
 
