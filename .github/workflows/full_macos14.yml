@@ -4,7 +4,6 @@ on:
   push:
     branches-ignore:
       - vulkan
-      - arm64
 
 jobs:
   ###################################
@@ -45,29 +44,7 @@ jobs:
         
     - name: Install pyFLTK dependencies
       run: brew install swig
-      
-        
-    # Download and install Vulkan SDK with MoltenVK
-    - name: Install Vulkan SDK
-      if: github.ref_name == 'vulkan'
-      run: |
-        
-        . ./etc/macos/install_vulkan.sh
-        
-        echo "VULKAN_SDK=${VULKAN_SDK}" >> $GITHUB_ENV
-        echo "DYLD_LIBRARY_PATH=${VULKAN_SDK}/lib:$DYLD_LIBRARY_PATH" >> $GITHUB_ENV
-        echo "VK_ICD_FILENAMES=${VULKAN_SDK}/share/vulkan/icd.d/MoltenVK_icd.json" >> $GITHUB_ENV
-        echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
-
-    # Verify Vulkan installation
-    - name: Verify Vulkan
-      if: github.ref_name == 'vulkan'
-      run: |
-        echo "VULKAN_SDK: $VULKAN_SDK"
-        echo "PATH: $PATH"
-        echo "DYLD_LIBRARY_PATH: $DYLD_LIBRARY_PATH"
-        vulkaninfo --summary
-        
+              
     - name: Setup environment
       run: mkdir -p ssh
 
@@ -97,6 +74,30 @@ jobs:
         df -k
 
     - name: Build mrv2
+      env:
+        BUILD_PYTHON: ON
+        MRV2_PYFLTK: ON
+        MRV2_PYBIND11: ON
+        MRV2_NETWORK: ON
+        MRV2_PDF: ON
+        TLRENDER_AV1: ON
+        TLRENDER_EXR: ON
+        TLRENDER_FFMPEG: ON
+        TLRENDER_FFMPEG_MINIMAL: ON
+        TLRENDER_HAP: ON
+        TLRENDER_JPEG: ON
+        TLRENDER_NDI: OFF
+        TLRENDER_NET: ON
+        TLRENDER_OPENJPH: ON
+        TLRENDER_RAW: ON
+        TLRENDER_SGI: ON
+        TLRENDER_STB: ON
+        TLRENDER_SVTAV1: ON
+        TLRENDER_TIFF: ON
+        TLRENDER_USD: ON
+        TLRENDER_VPX: ON
+        TLRENDER_YASM: ON
+        
       run: |
         ./etc/runme_nolog.sh -t package
 

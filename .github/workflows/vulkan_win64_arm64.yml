@@ -38,19 +38,6 @@ jobs:
         Start-Process vc_redist_2022.arm64.exe -ArgumentList "/install", "/quiet", "/norestart" -Wait
       shell: powershell
   
-    # - name: Install Visual C++ Redistributable 2022
-    #   run: |
-    #     $vc_redist_url_2022 = "https://aka.ms/vs/17/release/vc_redist.x64.exe"
-    #     Invoke-WebRequest -Uri $vc_redist_url_2022 -OutFile vc_redist_2022.x64.exe
-    #     Start-Process vc_redist_2022.x64.exe -ArgumentList "/install", "/quiet", "/norestart" -Wait
-    #   shell: powershell
-      
-    # Install Vulkan SDK
-    - name: Install Vulkan
-      run: |
-        ./etc/windows/install_vulkan.sh
-      shell: bash
-      
     - name: Synchronize clock
       shell: cmd
       run: |
@@ -70,12 +57,12 @@ jobs:
 
     - name: Create msys_cmd.bat wrapper
       run: |
-        echo @echo off > C:\msys64\msys2_cmd.bat
-        echo "set MSYS2_PATH_TYPE=inherit" >> C:\msys64\msys2_cmd.bat
-        echo "set MSYS2_NOSTART=yes" >> C:\msys64\msys2_cmd.bat
-        echo "set CHERE_INVOKING=enabled_from_arguments" >> C:\msys64\msys2_cmd.bat
-        echo "C:\msys64\usr\bin\bash.exe %*" >> C:\msys64\msys2_cmd.bat
-          
+        echo "@echo off" >> $TEMP/msys2_cmd.bat
+        echo "set MSYS2_PATH_TYPE=inherit" >> $TEMP/msys2_cmd.bat
+        echo "set MSYS2_NOSTART=yes" >> $TEMP/msys2_cmd.bat
+        echo "set CHERE_INVOKING=enabled_from_arguments" >> $TEMP/msys2_cmd.bat
+        echo "C:\a\_temp\msys64\usr\bin\bash.exe %*" >> $TEMP/msys2_cmd.bat
+        
     - name: Get machine name
       run: |
         echo "Machine name: $RUNNER_NAME"
@@ -97,12 +84,12 @@ jobs:
       run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
       shell: bash
         
-    - name: Decode FLTK SSH key
-      run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.FLTK_DEPLOY_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
+    # - name: Decode FLTK SSH key
+    #   run: |
+    #       mkdir -p ~/.ssh
+    #       echo "${{ secrets.FLTK_DEPLOY_KEY }}" > ~/.ssh/id_ed25519
+    #       chmod 600 ~/.ssh/id_ed25519
+    #       ssh-keyscan github.com >> ~/.ssh/known_hosts
           
     - name: Set permissions on SSH key
       shell: cmd
@@ -121,7 +108,7 @@ jobs:
         
     - name: Install MSYS2 Dependencies
       run: |
-        pacman -S --noconfirm nasm rsync
+        pacman -S --noconfirm rsync
 
     # No wmic on arm64
     # - name: List disk space
@@ -130,9 +117,33 @@ jobs:
     #     wmic logicaldisk get freespace, size, caption
       
     - name: Build vmrv2
-      run: |
-        ./etc/runme_nolog.sh -v -t package -vk
+      env:
+        BUILD_PYTHON: ON
+        MRV2_PYFLTK: ON
+        MRV2_PYBIND11: ON
+        MRV2_NETWORK: ON
+        MRV2_PDF: ON
+        TLRENDER_AV1: ON
+        TLRENDER_EXR: ON
+        TLRENDER_FFMPEG: ON
+        TLRENDER_FFMPEG_MINIMAL: ON
+        TLRENDER_HAP: ON
+        TLRENDER_JPEG: ON
+        TLRENDER_NDI: OFF
+        TLRENDER_NET: ON
+        TLRENDER_OPENJPH: ON
+        TLRENDER_RAW: ON
+        TLRENDER_SGI: ON
+        TLRENDER_STB: ON
+        TLRENDER_SVTAV1: OFF # does not compile on Windows ARM64
+        TLRENDER_TIFF: ON
+        TLRENDER_USD: OFF
+        TLRENDER_VPX: ON
+        TLRENDER_YASM: ON
         
+      run: |
+        ./etc/runme_nolog.sh -v -t package -vk 
+                
     - name: Upload binaries  # Conditional step
       run: |
         ./bin/release/upload_sourceforge.sh -vk
