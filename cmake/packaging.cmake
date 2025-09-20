@@ -57,10 +57,13 @@ elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^ppc.*")
         message(FATAL_ERROR "Architecture is not supported")
     endif()
 else()  # Handles Linux and other non-Apple/MIPS/PPC systems
-    if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64" OR
+	    CMAKE_SYSTEM_PROCESSOR MATCHES "ARM64" OR
+	    CMAKE_SYSTEM_PROCESSOR MATCHES "arm64")
         set( MRV2_OS_BITS 64 )
         set( MRV2_ARCHITECTURE "aarch64")
     elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64" OR
+	    CMAKE_SYSTEM_PROCESSOR MATCHES "AMD64" OR
 	    CMAKE_SYSTEM_PROCESSOR MATCHES "amd64")
         set( MRV2_OS_BITS 64 )
         set( MRV2_ARCHITECTURE "amd64")
