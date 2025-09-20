@@ -13,7 +13,16 @@ endfunction()
 if(WIN32)
     find_package(Msys REQUIRED)
     if($ENV{ARCH} MATCHES ".*arm64.*" OR $ENV{ARCH} MATCHES ".*aarch64.*")
-	set(MRV2_MSYS_CMD "C:/msys64/msys2_cmd.bat")
+	if (EXISTS "$ENV{TEMP}/msys2_cmd.bat")
+	    set(MRV2_MSYS_CMD "$ENV{TEMP}/msys2_cmd.bat")
+	else()
+	    set(MRV2_MSYS_CMD
+		${MSYS_CMD}
+		-use-full-path
+		-defterm
+		-no-start
+		-here)
+	endif()
     else()
 	set(MRV2_MSYS_CMD
 	    ${MSYS_CMD}

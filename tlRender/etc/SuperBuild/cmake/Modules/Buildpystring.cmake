@@ -11,6 +11,8 @@ ExternalProject_Add(
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/pystring
     GIT_REPOSITORY ${pystring_GIT_REPOSITORY}
     GIT_TAG ${pystring_GIT_TAG}
+
+    DEPENDS ${Gettext_DEP}
     
     PATCH_COMMAND ${CMAKE_COMMAND} -E copy_if_different
         ${CMAKE_CURRENT_SOURCE_DIR}/patches/pystring-patch/CMakeLists.txt

@@ -102,9 +102,9 @@ get_kernel()
 	export ARCH=`uname -m` # was uname -a
 	export UNAME_ARCH=$ARCH # Store uname architecture to compile properly
     fi
-
+    
     if [[ $KERNEL == *Darwin* ]]; then
-	if [[ $ARCH == arm64 ]]; then
+	if [[ $ARCH == aarch64 || $ARCH == arm64 ]]; then
 	    export ARCH=arm64
 	else
 	    export ARCH=amd64
@@ -114,6 +114,15 @@ get_kernel()
 	    export ARCH=aarch64
 	elif [[ $ARCH == *64* ]]; then
 	    export ARCH=amd64
+	    # \@bug: on aarch windows we currently get amd64 from uname -m,
+	    #        so we get the architecture from clang.
+	    if [[ $KERNEL == *Msys* ]]; then
+		has_aarch64=`clang.exe --version`
+		if [[ $has_aarch64 == *aarch64* ]]; then
+		    export ARCH=aarch64
+		    export UNAME_ARCH=aarch64
+		fi
+	    fi
 	else
 	    export ARCH=i386
 	fi
@@ -181,7 +190,7 @@ locate_python() {
     # Clear previous exports to ensure a clean slate
     unset PYTHONDIR PYTHONEXE PYTHON PYTHON_VERSION PYTHON_SITEDIR PYTHON_USER_SITEDIR PYTHON_LIBDIR
 
-    local executables=("python" "python3" "python3.11" "python3.10" "python3.9")
+    local executables=("python" "python3" "python3.11" "python3.10" "python3.9" "py.exe")
     local locations
     
     # Check if BUILD_DIR exists and is a directory

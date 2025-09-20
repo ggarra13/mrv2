@@ -18,7 +18,6 @@
 #
 # Install cmake
 #
-
 if [[ !$RUNME ]]; then
     . $PWD/etc/build_dir.sh
 fi
@@ -42,6 +41,10 @@ get_cmake_version
 #
 # These are some of the expensive mrv2 options
 #
+if [ -z "$BUILD_GETTEXT" ]; then
+    export BUILD_GETTEXT=OFF
+fi
+
 if [ -z "$BUILD_PYTHON" ]; then
     export BUILD_PYTHON=ON
 fi
@@ -60,10 +63,6 @@ fi
 
 if [ -z "$MRV2_DEMO" ]; then
     export MRV2_DEMO=OFF
-fi
-
-if [ -z "$MRV2_HDR" ]; then
-    export MRV2_HDR=ON
 fi
 
 if [ -z "$MRV2_PYFLTK" ]; then
@@ -166,9 +165,14 @@ if [ -z "$TLRENDER_NDI_SDK" ]; then
     fi
 fi
 
+export MRV2_HDR=OFF
 if [ -z "$TLRENDER_NDI" ]; then
     if [ -d "${TLRENDER_NDI_SDK}" ]; then
 	export TLRENDER_NDI=ON
+
+	if [ -z "$MRV2_HDR" ]; then
+	    export MRV2_HDR=ON
+	fi
     else
 	echo "TLRENDER_NDI_SDK not found at ${TLRENDER_NDI_SDK}!"
 	export TLRENDER_NDI=OFF
@@ -178,6 +182,10 @@ fi
 
 if [ -z "$TLRENDER_NET" ]; then
     export TLRENDER_NET=ON
+fi
+
+if [ -z "$TLRENDER_OPENJPH" ]; then
+    export TLRENDER_OPENJPH=ON
 fi
 
 if [ -z "$TLRENDER_RAW" ]; then
@@ -280,9 +288,8 @@ fi
 #
 #
 if [[ $KERNEL == *Msys* ]]; then
-    if [[ $ARCH == *arm64* || $ARCH == aarch64 ]]; then
+    if [[ $ARCH == *arm64* || $ARCH == *aarch64* ]]; then
 	export TLRENDER_NET=OFF  # off for now
-	export BUILD_GETTEXT=ON
     fi
 fi
     
@@ -290,6 +297,11 @@ fi
 # Clean python path to avoid clashes, mainly, with macOS meson
 #
 unset PYTHONPATH
+
+#
+# For Windows mainly, make sure we use UTF8 encoding.
+#
+#  export PYTHONUTF8=1  USD needs it, meson fails.
 
 echo
 echo
@@ -315,17 +327,15 @@ if [[ $KERNEL == *Msys* ]]; then
     fi
     nsis_version=`"${nsis_exe}" -version`
     echo "NSIS ${nsis_version}"
-    if [[ $TLRENDER_LIBPLACEBO == 1 || $TLRENDER_LIBPLACEBO == ON ]]; then
-	if command -v clang > /dev/null 2>&1; then
-	    clang_exe=clang.exe
-	    ${clang_exe} --version
-	else
-	    echo
-	    echo "clang.exe NOT found!!! Cannot compile libplacebo."
-	    echo "Please re-install MSVC with Clang turned on."
-	    echo
-	    exit 1
-	fi
+    if command -v clang > /dev/null 2>&1; then
+	clang_exe=clang.exe
+	${clang_exe} --version
+    else
+	echo
+	echo "clang.exe NOT found!!! Cannot compile libplacebo."
+	echo "Please re-install MSVC with Clang turned on."
+	echo
+	exit 1
     fi
 fi
 
@@ -346,7 +356,6 @@ if [[ ${BUILD_PYTHON} == OFF || ${BUILD_PYTHON} == 0 ]]; then
 else
     echo "Python FUTURE location: ${MRV2_PYTHON}"
 fi
-echo "Build Gettext                        ${BUILD_GETTEXT}     (BUILD_GETTEXT)"
 echo "Build pyFLTK........................ ${MRV2_PYFLTK} 	(MRV2_PYFLTK)"
 echo "Build FLTK shared................... ${FLTK_BUILD_SHARED} 	(FLTK_BUILD_SHARED)"
 echo "Build embedded Python............... ${MRV2_PYBIND11} 	(MRV2_PYBIND11)"
@@ -417,6 +426,12 @@ rm -rf $BUILD_DIR/install/include/FL
 
 cd $BUILD_DIR
 
+#
+# Handle Microsoft vcpkg variables
+#
+export  VCPKG_ROOT=$PWD/$BUILD_DIR/deps/vcpkg
+export VCPKG_INSTALL_PREFIX=$PWD/install
+
 cmd="cmake -G '${CMAKE_GENERATOR}'
 	   -D CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
            -D CMAKE_VERBOSE_MAKEFILE=${CMAKE_VERBOSE_MAKEFILE}
@@ -424,12 +439,21 @@ cmd="cmake -G '${CMAKE_GENERATOR}'
 	   -D CMAKE_PREFIX_PATH=$PWD/install
            -D CMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES}
            -D CMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}
+	   
 
-	   -D NATIVE_COMPILER=\"${NATIVE_COMPILER}\"
-	   -D GENERIC_COMPILER=\"${GENERIC_COMPILER}\"
+	   -D NATIVE_C_COMPILER=\"${NATIVE_C_COMPILER}\"
+	   -D GENERIC_C_COMPILER=\"${GENERIC_C_COMPILER}\"
+	   -D NATIVE_CXX_COMPILER=\"${NATIVE_CXX_COMPILER}\"
+	   -D GENERIC_CXX_COMPILER=\"${GENERIC_CXX_COMPILER}\"
+	   -D NATIVE_C_COMPILER_NAME=\"${NATIVE_C_COMPILER_NAME}\"
+	   -D GENERIC_C_COMPILER_NAME=\"${GENERIC_C_COMPILER_NAME}\"
+	   -D NATIVE_CXX_COMPILER_NAME=\"${NATIVE_CXX_COMPILER_NAME}\"
+	   -D GENERIC_CXX_COMPILER_NAME=\"${GENERIC_CXX_COMPILER_NAME}\"
+
 	   -D BUILD_PYTHON=${BUILD_PYTHON}
 	   -D BUILD_X11=${BUILD_X11}
 	   -D BUILD_WAYLAND=${BUILD_WAYLAND}
+	   -D BUILD_GETTEXT=${BUILD_GETTEXT}
 
 	   -D MRV2_COMPILER=${COMPILER}
 	   -D MRV2_BACKEND=${MRV2_BACKEND}
@@ -457,6 +481,7 @@ cmd="cmake -G '${CMAKE_GENERATOR}'
 	   -D TLRENDER_NDI_SDK=\"${TLRENDER_NDI_SDK}\"
 	   -D TLRENDER_NET=${TLRENDER_NET}
 	   -D TLRENDER_NFD=OFF
+	   -D TLRENDER_OPENJPH=${TLRENDER_OPENJPH}
 	   -D TLRENDER_RAW=${TLRENDER_RAW}
            -D TLRENDER_STB=${TLRENDER_STB}
            -D TLRENDER_SVTAV1=${TLRENDER_SVTAV1}

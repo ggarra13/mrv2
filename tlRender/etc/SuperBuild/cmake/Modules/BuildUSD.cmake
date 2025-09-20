@@ -4,8 +4,9 @@ include(ExternalProject)
 set(USD_DEPS ${PYTHON_DEP})
 
 set(USD_GIT_REPOSITORY https://github.com/PixarAnimationStudios/OpenUSD.git)
-#set(USE_BIT_TAG v25.05.01) # latest
-set(USD_GIT_TAG v25.02a) # v24.08 
+                        # v24.08 works
+set(USD_GIT_TAG v25.02a) # v25.02a works
+#set(USD_GIT_TAG v25.08) # latest - broken on Windows and Linux assembler.
 
 string(TOLOWER ${CMAKE_BUILD_TYPE} cmake_build_type)
 
@@ -47,6 +48,7 @@ ExternalProject_Add(
     DEPENDS ${USD_DEPS}
     GIT_REPOSITORY ${USD_GIT_REPOSITORY}
     GIT_TAG ${USD_GIT_TAG}
+    
     CONFIGURE_COMMAND ""
     PATCH_COMMAND ${USD_PATCH_COMMAND}
     BUILD_COMMAND ${CMAKE_COMMAND} -E env "DYLD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib" -- ${TLRENDER_USD_PYTHON} build_scripts/build_usd.py ${CMAKE_INSTALL_PREFIX} ${USD_ARGS} 

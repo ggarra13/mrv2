@@ -21,5 +21,7 @@ ExternalProject_Add(
     GIT_TAG ${yaml-cpp_GIT_TAG}
     PATCH_COMMAND ${yaml-cpp_PATCH}
     
+    DEPENDS ${Gettext_DEP}
+    
     LIST_SEPARATOR |
     CMAKE_ARGS ${yaml-cpp_ARGS})

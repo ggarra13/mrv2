@@ -14,9 +14,9 @@ if [[ $ARCH != *arm64* && $ARCH != *aarch64* ]]; then
     #
     . bin/compile/install_libintl_windows.sh
 
-#
-# Deal with FFmpeg dependencies (compiled from source)
-#
+    #
+    # Deal with FFmpeg dependencies (compiled from source)
+    #
     . bin/compile/compile_ffmpeg_deps_windows.sh
 fi
 

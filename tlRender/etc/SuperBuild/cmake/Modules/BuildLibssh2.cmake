@@ -9,10 +9,12 @@ set(Libssh2_ARGS
     -DBUILD_TESTING=OFF
     ${TLRENDER_EXTERNAL_ARGS})
 
+message(STATUS "Libssh2 has OpenSSL_DEP=${OpenSSL_DEP}")
+
 ExternalProject_Add(
     Libssh2
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/Libssh2
-    DEPENDS ${OpenSSL} ZLIB
+    DEPENDS ${OpenSSL_DEP} ZLIB ${Gettext_DEP}
     GIT_REPOSITORY ${Libssh2_GIT_REPOSITORY}
     GIT_TAG ${Libssh2_GIT_TAG}
     

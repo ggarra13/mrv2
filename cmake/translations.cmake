@@ -196,8 +196,8 @@ set( mo_files )
     
 create_translation_for(mrv2 "${PO_SOURCES}")
 
-set(hdr_pot_target)
-if (MRV2_HDR)
+set(hdr_pot_target )
+if (TLRENDER_NDI AND TLRENDER_VK AND MRV2_HDR)
     create_translation_for(hdr "${PO_HDR_SOURCES}")
     set(hdr_pot_target hdr_pot)
 endif()

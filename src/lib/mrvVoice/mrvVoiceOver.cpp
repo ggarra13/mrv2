@@ -79,6 +79,42 @@ struct AudioData
 
 
 #if defined(TLRENDER_AUDIO)
+namespace
+{
+#if RTAUDIO_VERSION_MAJOR >= 6
+    void checkRtError(const RtAudioErrorType e)
+    {
+        if (e == RTAUDIO_NO_ERROR || e == RTAUDIO_WARNING) return;
+        switch(e)
+        {
+        case RTAUDIO_UNKNOWN_ERROR:
+            throw std::runtime_error("Unspecified error type");
+        case RTAUDIO_NO_DEVICES_FOUND:
+            throw std::runtime_error("No Devices Found");
+        case RTAUDIO_INVALID_DEVICE:
+            throw std::runtime_error("An invalid device ID was specified.");
+        case RTAUDIO_DEVICE_DISCONNECT:
+            throw std::runtime_error("A device in use was disconnected.");
+        case RTAUDIO_MEMORY_ERROR:
+            throw std::runtime_error("An error occurred during memory allocation.");
+        case RTAUDIO_INVALID_PARAMETER:
+            throw std::runtime_error("An invalid parameter was specified to a function.");
+        case RTAUDIO_INVALID_USE:
+            throw std::runtime_error("The function was called incorrectly.");
+        case RTAUDIO_DRIVER_ERROR:
+            throw std::runtime_error("A system driver error occurred.");
+        case RTAUDIO_SYSTEM_ERROR:
+            throw std::runtime_error("A system error occurred.");
+        case RTAUDIO_THREAD_ERROR:
+            throw std::runtime_error("A thread error occurred.");
+        default:
+            throw std::runtime_error("Undefined error.");
+        }
+    }
+#endif
+
+}
+
 static int rtAudioPlaybackCallback(
     void* outputBuffer, void* inputBuffer, unsigned int nFrames,
     double streamTime, RtAudioStreamStatus status, void* userData)
@@ -170,11 +206,20 @@ static int rtAudioRecordCallback(
     return 0; // Return 0 to continue streaming
 }
 
+#if RTAUDIO_VERSION_MAJOR >= 6
+static void rtAudioErrorCallback(
+    RtAudioErrorType type, const std::string& errorText)
+{
+    LOG_ERROR("rtAudio ERROR: " << type << " " << errorText);
+}
+#else
 static void rtAudioErrorCallback(
     RtAudioError::Type type, const std::string& errorText)
 {
     LOG_ERROR("rtAudio ERROR: " << type << " " << errorText);
 }
+#endif
+
 #endif // TLRENDER_AUDIO
 
 namespace mrv
@@ -323,7 +368,16 @@ namespace mrv
                         // We record one channel as macOS has a single mic,
                         // but we store stereo audio.
                         rtParameters.nChannels = 1;
-                        
+#if RTAUDIO_VERSION_MAJOR >= 6
+                        RtAudioErrorType rterror = p.rtAudio->openStream(
+                            nullptr, &rtParameters,
+                            RTAUDIO_FLOAT32,
+                            kSampleRate,
+                            &rtBufferFrames,
+                            rtAudioRecordCallback,
+                            &p.audio);
+                        rterror = p.rtAudio->startStream();
+#else
                         p.rtAudio->openStream(
                             nullptr, &rtParameters,
                             RTAUDIO_FLOAT32,
@@ -332,6 +386,7 @@ namespace mrv
                             &p.audio, nullptr,
                             rtAudioErrorCallback);
                         p.rtAudio->startStream();
+#endif
                         status = RecordStatus::Recording;
                     }
                     catch (const std::exception& e)
@@ -506,9 +561,28 @@ namespace mrv
                 return;
             }
             
+#if defined(TLRENDER_AUDIO)
+#  if RTAUDIO_VERSION_MAJOR >= 6
             try
             {
-#if defined(TLRENDER_AUDIO)
+               RtAudioErrorType rterror;
+               if (p.rtAudio && p.rtAudio->isStreamRunning())
+               {
+                   rterror = p.rtAudio->stopStream();
+                   checkRtError(rterror);
+               }   
+               if (p.rtAudio && p.rtAudio->isStreamOpen())
+               {
+                p.rtAudio->closeStream();
+               }
+            }
+            catch (const std::exception& e)
+            {
+               LOG_ERROR(e.what());
+            }
+#  else
+           try
+           {
                 if (p.rtAudio && p.rtAudio->isStreamRunning())
                     p.rtAudio->stopStream();
                 
@@ -516,12 +590,13 @@ namespace mrv
                 {
                     p.rtAudio->closeStream();
                 }
-#endif
             }
             catch (const RtAudioError& e)
             {
                 e.printMessage();
             }
+#  endif
+#endif
 
             status = RecordStatus::Saved;
             mouse.idx = 0;
@@ -672,6 +747,18 @@ namespace mrv
                         auto audioSystem = context->getSystem<audio::System>();
                         rtParameters.deviceId = audioSystem->getOutputDevice();
                         rtParameters.nChannels = kNumChannels;
+#  if RTAUDIO_VERSION_MAJOR >= 6
+                        RtAudioErrorType rterror;
+                        rterror = p.rtAudio->openStream(
+                            &rtParameters, nullptr,
+                            RTAUDIO_FLOAT32,
+                            kSampleRate,
+                            &rtBufferFrames, rtAudioPlaybackCallback,
+                            &p.audio);
+                        checkRtError(rterror);
+                        rterror = p.rtAudio->startStream();
+                        checkRtError(rterror);
+#  else
                         p.rtAudio->openStream(
                             &rtParameters, nullptr,
                             RTAUDIO_FLOAT32,
@@ -680,6 +767,7 @@ namespace mrv
                             &p.audio, nullptr,
                             rtAudioErrorCallback);
                         p.rtAudio->startStream();
+#  endif
                         status = RecordStatus::Playing;
                     }
                     catch (const std::exception& e)
@@ -706,14 +794,7 @@ namespace mrv
                 return;
             }
             
-            try
-            {
-                _cleanupAudio();
-            }
-            catch (const RtAudioError& e)
-            {
-                e.printMessage();
-            }
+            _cleanupAudio();
             
             status = RecordStatus::Saved;
             p.audio.rtCurrentFrame = 0;
@@ -781,6 +862,24 @@ namespace mrv
 #if defined(TLRENDER_AUDIO)
             if (!p.rtAudio) return; // Nothing to do
 
+#  if RTAUDIO_VERSION_MAJOR >= 6
+            try
+            {
+                RtAudioErrorType rterror;
+                if (p.rtAudio->isStreamRunning())
+                {
+                    rterror = p.rtAudio->abortStream();
+                    checkRtError(rterror);
+                }
+                
+                if (p.rtAudio->isStreamOpen())
+                    p.rtAudio->closeStream();
+            }
+            catch (const std::exception& e)
+            {
+                LOG_ERROR(e.what());
+            }
+#  else
             try
             {
                 if (p.rtAudio->isStreamRunning())
@@ -793,6 +892,7 @@ namespace mrv
             {
                 e.printMessage();
             }
+#  endif
 
             p.rtAudio.reset(); // Destroy the object and release resources
 #endif

@@ -97,8 +97,32 @@ namespace tl
         {
             TLRENDER_P();
             size_t out = 0;
+            
 #if defined(TLRENDER_AUDIO)
             out = p.rtAudio->getDefaultInputDevice();
+            
+#  if RTAUDIO_VERSION_MAJOR >= 6
+            // Get info for the default device to check its suitability.
+            RtAudio::DeviceInfo info = p.rtAudio->getDeviceInfo(out);
+
+            // If the default device has no input channels, find a fallback.
+            if (info.inputChannels == 0)
+            {
+                // Get the list of all available device IDs.
+                std::vector<unsigned int> deviceIds = p.rtAudio->getDeviceIds();
+
+                // Iterate through the available devices to find the first one with input channels.
+                for (unsigned int id : deviceIds)
+                {
+                    info = p.rtAudio->getDeviceInfo(id);
+                    if (info.inputChannels > 0)
+                    {
+                        out = id; // Found a suitable device.
+                        break;    // Stop searching.
+                    }
+                }
+            }
+#  else
             const size_t rtDeviceCount = p.rtAudio->getDeviceCount();
             std::vector<size_t> inputChannels;
             for (size_t i = 0; i < rtDeviceCount; ++i)
@@ -119,6 +143,8 @@ namespace tl
                     }
                 }
             }
+#  endif
+            
 #endif // TLRENDER_AUDIO
             return out;
         }
@@ -127,8 +153,34 @@ namespace tl
         {
             TLRENDER_P();
             size_t out = 0;
+
+            
 #if defined(TLRENDER_AUDIO)
+
             out = p.rtAudio->getDefaultOutputDevice();
+            
+#  if RTAUDIO_VERSION_MAJOR >= 6
+            // Get info for the default device to check its suitability.
+            RtAudio::DeviceInfo info = p.rtAudio->getDeviceInfo(out);
+
+            // If the default device has no output channels, find a fallback.
+            if (info.outputChannels == 0)
+            {
+                // Get the list of all available device IDs.
+                std::vector<unsigned int> deviceIds = p.rtAudio->getDeviceIds();
+
+                // Iterate through the available devices to find the first one with input channels.
+                for (unsigned int id : deviceIds)
+                {
+                    info = p.rtAudio->getDeviceInfo(id);
+                    if (info.outputChannels > 0)
+                    {
+                        out = id; // Found a suitable device.
+                        break;    // Stop searching.
+                    }
+                }
+            }
+#  else
             const size_t rtDeviceCount = p.rtAudio->getDeviceCount();
             std::vector<size_t> outputChannels;
             for (size_t i = 0; i < rtDeviceCount; ++i)
@@ -149,6 +201,7 @@ namespace tl
                     }
                 }
             }
+#  endif
 #endif // TLRENDER_AUDIO
             return out;
         }
@@ -349,10 +402,107 @@ namespace tl
         void System::_getDevices()
         {
             TLRENDER_P();
-
+            
 #if defined(TLRENDER_AUDIO)
             try
             {
+#  if RTAUDIO_VERSION_MAJOR >= 6
+                // Create RtAudio instance with the current API
+                p.rtAudio.reset(new RtAudio(static_cast<RtAudio::Api>(p.currentApi)));
+                
+                std::vector<std::string> log;
+                log.push_back("Audio API: " + std::string(RtAudio::getApiDisplayName(static_cast<RtAudio::Api>(p.currentApi))));
+                
+                // Get list of device IDs
+                const std::vector<unsigned int> deviceIds = p.rtAudio->getDeviceIds();
+                if (deviceIds.empty())
+                {
+                    log.push_back("No audio devices found.");
+                    _log(string::join(log, "\n"), log::Type::Warning);
+                    return; // Exit early if no devices are available
+                }
+
+                for (unsigned int id : deviceIds)
+                {
+                    RtAudio::DeviceInfo rtInfo = p.rtAudio->getDeviceInfo(id);
+                    
+                    Device device;
+                    device.name = rtInfo.name;
+                    device.outputChannels = rtInfo.outputChannels;
+                    device.inputChannels = rtInfo.inputChannels;
+                    device.duplexChannels = rtInfo.duplexChannels;
+                    for (auto j : rtInfo.sampleRates)
+                    {
+                        device.sampleRates.push_back(j);
+                    }
+                    device.preferredSampleRate = rtInfo.preferredSampleRate;
+                
+                    if (rtInfo.nativeFormats & RTAUDIO_SINT8)
+                    {
+                        device.nativeFormats.push_back(DeviceFormat::S8);
+                    }
+                    if (rtInfo.nativeFormats & RTAUDIO_SINT16)
+                    {
+                        device.nativeFormats.push_back(DeviceFormat::S16);
+                    }
+                    if (rtInfo.nativeFormats & RTAUDIO_SINT24)
+                    {
+                        device.nativeFormats.push_back(DeviceFormat::S24);
+                    }
+                    if (rtInfo.nativeFormats & RTAUDIO_SINT32)
+                    {
+                        device.nativeFormats.push_back(DeviceFormat::S32);
+                    }
+                    if (rtInfo.nativeFormats & RTAUDIO_FLOAT32)
+                    {
+                        device.nativeFormats.push_back(DeviceFormat::F32);
+                    }
+                    if (rtInfo.nativeFormats & RTAUDIO_FLOAT64)
+                    {
+                        device.nativeFormats.push_back(DeviceFormat::F64);
+                    }
+                    p.devices.push_back(device);
+
+                    // Logging device information
+                    {
+                        std::stringstream ss;
+                        ss << "    Device ID " << id << ": " << device.name;
+                        log.push_back(ss.str());
+                    }
+                    {
+                        std::stringstream ss;
+                        ss << "        Channels: " << device.outputChannels
+                           << " output, " << device.inputChannels
+                           << " input, " << device.duplexChannels
+                           << " duplex";
+                    log.push_back(ss.str());
+                    }
+                    {
+                        std::stringstream ss;
+                        ss << "        Sample rates: ";
+                        for (auto j : device.sampleRates)
+                        {
+                            ss << j << " ";
+                        }
+                        log.push_back(ss.str());
+                    }
+                    {
+                        std::stringstream ss;
+                        ss << "        Preferred sample rate: "
+                           << device.preferredSampleRate;
+                        log.push_back(ss.str());
+                    }
+                    {
+                        std::stringstream ss;
+                        ss << "        Native formats: ";
+                        for (auto j : device.nativeFormats)
+                        {
+                            ss << j << " ";
+                        }
+                        log.push_back(ss.str());
+                    }
+                }
+#  else
                 p.devices.clear();
                 p.rtAudio.reset(
                     new RtAudio(static_cast<RtAudio::Api>(p.currentApi)));
@@ -439,6 +589,7 @@ namespace tl
                         }
                     }
                 }
+#endif
                 {
                     std::stringstream ss;
                     ss << "    Default input device: "

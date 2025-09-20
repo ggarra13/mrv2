@@ -30,6 +30,9 @@ typedef struct cpucaps_s
     unsigned cl_size; /* size of cache line */
     int hasAltiVec;
     int hasTSC;
+    int hasNEON;
+    int hasARMv8;
+    int hasARMv8Crypto;
 } CpuCaps;
 
 extern CpuCaps gCpuCaps;

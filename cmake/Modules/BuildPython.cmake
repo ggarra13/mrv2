@@ -23,6 +23,7 @@ endif()
 set( Python_PATCH )
 set( Python_ENV )
 set( Python_PATH $ENV{PATH} )
+
 if(APPLE)
 
     set(Python_DYLD_LIBRARY_PATH $ENV{DYLD_LIBRARY_PATH})
@@ -85,11 +86,11 @@ elseif(UNIX)
 	COMMAND ${Python_ENV} ${Python_EXECUTABLE} -m ensurepip --upgrade 
 	COMMAND ${Python_ENV} ${Python_EXECUTABLE} -m pip install meson)
 else()
-
-    set( Python_DEPENDENCIES )
     
     set( platform x64 )
-    if( "$ENV{ARCH}" STREQUAL "i386" )
+    if( "$ENV{ARCH}" MATCHES ".*aarch64.*" OR "$ENV{ARCH}" MATCHES ".*arm64.*" )
+    	set( platform ARM64 )
+    elseif( "$ENV{ARCH}" STREQUAL "i386" )
     	set( platform Win32 )
     endif()
 
