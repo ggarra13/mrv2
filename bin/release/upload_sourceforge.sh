@@ -33,8 +33,11 @@ unset LD_LIBRARY_PATH
 unset DYLD_LIBRARY_PATH
 
 export branch=$(git rev-parse --abbrev-ref HEAD)
-if [[ "$branch" != "beta" && "$branch" != "vulkan" && "$branch" != "opengl" ]]; then
-    echo "You are not on the beta or vulkan branch.  Will not make a release."
+if [[ "$branch" != "beta" && \
+	  "$branch" != "vulkan" && \
+	  "$branch" != "opengl" && \
+	  "$branch" != "arm64"  ]]; then
+    echo "You are not on the beta, vulkan or arm64 branch.  Will not make a release."
     exit 0
 fi
 
