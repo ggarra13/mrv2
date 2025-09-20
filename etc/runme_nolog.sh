@@ -280,15 +280,6 @@ if [ -z "$FLTK_BUILD_SHARED" ]; then
 	export FLTK_BUILD_SHARED=OFF
     fi
 fi
-
-#
-#
-#
-if [[ $KERNEL == *Msys* ]]; then
-    if [[ $ARCH == *arm64* || $ARCH == *aarch64* ]]; then
-	export TLRENDER_NET=OFF  # off for now
-    fi
-fi
     
 #
 # Clean python path to avoid clashes, mainly, with macOS meson

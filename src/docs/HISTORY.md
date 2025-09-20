@@ -42,6 +42,7 @@ ChangeLog
 
 - Added Linux aarch64 builds, without NDI.
 - Added Windows aarch64 builds, without NDI or SVT-AV1 encoder.
+- Upgraded OpenJPH to v0.23 from OpenEXR's internal version.
 
 
 
