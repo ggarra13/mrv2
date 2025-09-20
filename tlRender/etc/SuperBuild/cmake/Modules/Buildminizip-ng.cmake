@@ -20,7 +20,7 @@ set(minizip-ng_ARGS
 ExternalProject_Add(
     minizip-ng
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/minizip-ng
-    DEPENDS ZLIB
+    DEPENDS ZLIB ${Gettext_DEP}
     GIT_REPOSITORY ${minizip-ng_GIT_REPOSITORY}
     GIT_TAG ${minizip-ng_GIT_TAG}
     

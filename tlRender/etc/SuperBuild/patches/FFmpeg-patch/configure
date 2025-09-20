@@ -4717,7 +4717,8 @@ case "$toolchain" in
         ar_default="lib.exe"
         case "${arch:-$arch_default}" in
         aarch64|arm64)
-            as_default="armasm64.exe"
+            as_default="clang.exe --target=aarch64-pc-windows-msvc"
+            #as_default="armasm64.exe"
             ;;
         arm*)
             as_default="armasm.exe"
@@ -7869,13 +7870,13 @@ EOF
 done
 
 case $as_type in
-    clang)
+    clang*)
         add_asflags -Qunused-arguments
     ;;
 esac
 
 case $ld_type in
-    clang)
+    clang*)
         check_ldflags -Qunused-arguments
     ;;
 esac

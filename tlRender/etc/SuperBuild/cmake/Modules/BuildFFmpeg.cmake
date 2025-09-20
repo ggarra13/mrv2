@@ -3,10 +3,7 @@ include(ExternalProject)
 include(ProcessorCount)
 ProcessorCount(NPROCS)
 
-set(FFmpeg_DEPS ZLIB)
-if(TLRENDER_NET AND NOT WIN32)
-    list(APPEND FFmpeg_DEPS OpenSSL)
-endif()
+set(FFmpeg_DEPS ZLIB ${OpenSSL_DEP})
 if(NOT WIN32)
     list(APPEND FFmpeg_DEPS NASM)
 else()
@@ -497,9 +494,23 @@ if(FFmpeg_DEBUG)
         --assert-level=2)
 endif()
 if(WIN32)
-    list(APPEND FFmpeg_CONFIGURE_ARGS
-        --arch=x86_64
-        --toolchain=msvc)
+    if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
+	list(APPEND FFmpeg_CONFIGURE_ARGS
+            --enable-asm
+
+	    --arch=arm64
+	    --target-os=win32
+	    
+            --toolchain=msvc
+
+	    --cc=clang-cl
+	    --cxx=clang-cl
+	    --as=clang-cl)
+    else()
+	list(APPEND FFmpeg_CONFIGURE_ARGS
+            --arch=x86_64
+            --toolchain=msvc)
+    endif()
     set(FFmpeg_MSYS2 ${MRV2_MSYS_CMD})
     
     # \bug Copy libssl.lib to ssl.lib and libcrypto.lib to crypto.lib so the

@@ -34,6 +34,9 @@ ExternalProject_Add(
     GIT_REPOSITORY ${glfw3_GIT_REPOSITORY}
     GIT_TAG ${glfw3_GIT_TAG}
     PATCH_COMMAND ${glfw3_PATCH}
+    
+    DEPENDS ${Gettext_DEP}
+    
     LIST_SEPARATOR |
     CMAKE_ARGS ${glfw3_ARGS})
 

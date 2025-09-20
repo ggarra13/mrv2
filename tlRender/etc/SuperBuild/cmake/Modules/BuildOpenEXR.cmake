@@ -3,6 +3,11 @@ include(ExternalProject)
 set(OpenEXR_GIT_REPOSITORY "https://github.com/AcademySoftwareFoundation/openexr.git")
 set(OpenEXR_GIT_TAG "v3.4.0")
 
+
+set(OpenEXR_PATCH COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    ${CMAKE_CURRENT_SOURCE_DIR}/patches/OpenEXR-patch/cmake/OpenEXRSetup.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/OpenEXR/src/OpenEXR/cmake/OpenEXRSetup.cmake)
+
 # \bug Disable OpenEXR threading to work around a crash at shutdown in the
 # OpenEXR thread pool. Note that we already set the OpenEXR global thread
 # count to zero since we load frames in parallel.
@@ -13,14 +18,17 @@ set(OpenEXR_ARGS
     -DOPENEXR_INSTALL_EXAMPLES=OFF
     -DBUILD_TESTING=OFF
     -DOPENEXR_ENABLE_THREADING=ON
+    -DOPENEXR_FORCE_INTERNAL_OPENJPH=OFF
     -DOPENEXR_FORCE_INTERNAL_DEFLATE=ON)
 
 ExternalProject_Add(
     OpenEXR
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/OpenEXR
-    DEPENDS Imath ZLIB
+    DEPENDS ${OpenJPH_DEP} Imath ZLIB ${Gettext_DEP}
     GIT_REPOSITORY ${OpenEXR_GIT_REPOSITORY}
     GIT_TAG ${OpenEXR_GIT_TAG}
+
+    PATCH_COMMAND ${OpenEXR_PATCH}
     
     LIST_SEPARATOR |
     CMAKE_ARGS ${OpenEXR_ARGS})

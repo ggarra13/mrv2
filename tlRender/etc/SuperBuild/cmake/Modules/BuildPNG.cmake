@@ -33,6 +33,8 @@ ExternalProject_Add(
     DEPENDS ZLIB
     GIT_REPOSITORY ${PNG_GIT_REPOSITORY}
     GIT_TAG ${PNG_GIT_TAG}
+
+    DEPENDS ${Gettext_DEP}
     
     LIST_SEPARATOR |
     CMAKE_ARGS ${PNG_ARGS})

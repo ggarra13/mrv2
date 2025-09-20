@@ -3,7 +3,7 @@ include(ExternalProject)
 set(libjpeg-turbo_GIT_REPOSITORY "https://github.com/libjpeg-turbo/libjpeg-turbo.git")
 set(libjpeg-turbo_GIT_TAG "3.1.0") # was 3.0.0
 
-set(libjpeg-turbo_DEPS ZLIB)
+set(libjpeg-turbo_DEPS ZLIB ${Gettext_DEP})
 if(NOT WIN32)
     set(libjpeg-turbo_DEPS ${libjpeg-turbo_DEPS} NASM)
 endif()

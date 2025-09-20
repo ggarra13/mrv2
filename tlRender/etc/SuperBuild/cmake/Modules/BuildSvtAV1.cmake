@@ -5,9 +5,9 @@ include(GNUInstallDirs)
 #set(SvtAV1_TAG v3.0.0)  # 3.0+ branch not ocmpatible with FFmpeg 7.0.1
 set(SvtAV1_TAG v2.3.0)
 
+# This tries to use NASM or GAS for compilation
 set(SvtAV1_ARGS ${TLRENDER_EXTERNAL_ARGS})
 list(APPEND SvtAV1_ARGS
-    -DENABLE_NASM=ON
     -DCMAKE_INSTALL_LIBDIR=lib
     -DCMAKE_POLICY_VERSION_MINIMUM=3.5  # uses old CMake files
 )
@@ -24,9 +24,11 @@ endif()
 ExternalProject_Add(
     SvtAV1
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/SvtAV1
-    DEPENDS ${SvtAV1_DEPS}
+
     GIT_REPOSITORY "https://gitlab.com/AOMediaCodec/SVT-AV1.git"
     GIT_TAG ${SvtAV1_TAG}
+    
+    DEPENDS ${SvtAV1_DEPS} ${Gettext_DEP}
 
     PATCH_COMMAND ${SvtAV1_PATCH}
     

@@ -57,6 +57,80 @@ if(NOT DEFINED CMAKE_INSTALL_MESSAGE)
 endif()
 
 #
+# Handle libintl, gettext and libintl
+#
+set(Gettext_DEP )
+if(BUILD_GETTEXT)
+    include(cmake/Modules/BuildGettext.cmake )
+elseif(APPLE)
+    if (NOT CMAKE_OSX_ARCHITECTURES OR CMAKE_OSX_ARCHITECTURES STREQUAL "")
+	message(WARNING
+	    "Target architecture not specified for macOS deployment")
+    else()
+	if(CMAKE_OSX_ARCHITECTURES MATCHES "^x86_64$") 
+	    #
+	    # brew .dylibs are compiled only for the current version of the OS.
+	    #
+	    # We distribute libintl dylib compatible with v10.5 on Intel macOS
+	    file(COPY
+		precompiled/macOS/v10.5/ DESTINATION ${CMAKE_INSTALL_PREFIX}/
+		FOLLOW_SYMLINK_CHAIN)
+	endif()
+    endif()
+elseif(WIN32)
+    
+    set(vcpkg_DEP )
+    set(BUILD_VCPKG TRUE)
+    if (BUILD_VCPKG)
+	include(cmake/Modules/Buildvcpkg.cmake)
+    else()
+	#
+	# Use default vcpkg from MSVC
+	#
+	set(VCPKG vcpkg)
+    endif()
+    
+    set(vcpkg_ARCH x64)
+    if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
+	set(vcpkg_ARCH arm64)
+    endif()
+    
+    set(vcpkg_BUILD_TYPE debug)
+    if (CMAKE_BUILD_TYPE MATCHES ".*Release.*")
+	set(vcpkg_BUILD_TYPE release)
+    endif()
+    
+    set(VCPKG_TARGET_TRIPLET "${vcpkg_ARCH}-windows")
+    
+    message(STATUS "VCPKG running from ${VCPKG}")
+    message(STATUS "VCPKG_TARGET_TRIPLET=${VCPKG_TARGET_TRIPLET}")
+    
+    add_custom_target(
+	libiconv ALL
+	${CMAKE_COMMAND} -E echo "Running libiconv_done..."
+	COMMAND ${VCPKG} install libiconv:${VCPKG_TARGET_TRIPLET}
+	DEPENDS ${vcpkg_DEP})
+    add_custom_target(
+	gettext ALL
+	${CMAKE_COMMAND} -E echo "Running gettext_done..."
+	COMMAND ${VCPKG} install gettext:${VCPKG_TARGET_TRIPLET}
+	DEPENDS ${vcpkg_DEP} libiconv)
+    set(Gettext_DEP libiconv gettext)
+
+    list(APPEND CMAKE_PREFIX_PATH
+	"${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows")
+    set(CMAKE_TOOLCHAIN_FILE "${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
+    
+    
+endif()
+
+
+# https://stackoverflow.com/questions/45414507/pass-a-list-of-prefix-paths-to-externalproject-add-in-cmake-args
+string(REPLACE ";" "|" CMAKE_PREFIX_PATH_TMP "${CMAKE_PREFIX_PATH}")
+string(REPLACE ";" "|" CMAKE_MODULE_PATH_TMP "${CMAKE_MODULE_PATH}")
+
+    
+#
 # Python cannot be built with asan dependencies
 #set(PYTHON_DEP )
 if(BUILD_PYTHON)
@@ -140,26 +214,6 @@ if(CMAKE_BUILD_TYPE MATCHES "^Debug$")
 endif()
 
 
-set( Gettext_DEP )
-if(BUILD_GETTEXT)
-    include(cmake/Modules/BuildGettext.cmake )
-elseif(APPLE)
-    if (NOT CMAKE_OSX_ARCHITECTURES OR CMAKE_OSX_ARCHITECTURES STREQUAL "")
-	message(WARNING
-	    "Target architecture not specified for macOS deployment")
-    else()
-	if(CMAKE_OSX_ARCHITECTURES MATCHES "^x86_64$") 
-	    #
-	    # brew .dylibs are compiled only for the current version of the OS.
-	    #
-	    # We distribute libintl dylib compatible with v10.5 on Intel macOS
-	    file(COPY
-		precompiled/macOS/v10.5/ DESTINATION ${CMAKE_INSTALL_PREFIX}/
-		FOLLOW_SYMLINK_CHAIN)
-	endif()
-    endif()
-endif()
-
 
 set(cpptrace_DEP )
 if(NOT APPLE)
@@ -183,7 +237,7 @@ set(VMA_DEP )
 set(SHADERC_DEP )
 
 #
-# We build shaderrc in build_vulkan.sh for
+# We build shaderc in build_vulkan.sh for
 # Linux ARM64 mainly
 #
 # if(TLRENDER_VK)
@@ -192,7 +246,7 @@ set(SHADERC_DEP )
 #     endif()
 # endif()
 
-add_subdirectory( tlRender/etc/SuperBuild)
+add_subdirectory(tlRender/etc/SuperBuild)
 
 set(FLTK_DEP )
 if(BUILD_FLTK)
@@ -201,7 +255,23 @@ if(BUILD_FLTK)
 endif()
 
 if(BUILD_PYTHON AND TLRENDER_USD)
-    add_dependencies(USD ${PYTHON_DEP})
+    add_dependencies(USD ${PYTHON_DEP} ${Gettext_DEP})
+endif()
+
+# OpenSSL must be built before Python and pyFLTK to use the right path when
+# building Python's _ssl module.
+if(BUILD_PYTHON AND TLRENDER_NET)
+    # \@note: we must not use OpenSSL_DEP here as it is undefined after
+    #         add_subdirectory.
+    if (UNIX)
+	add_dependencies(Python OpenSSL)
+    elseif(WIN32)
+	if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
+	    add_dependencies(Python OpenSSL)
+	endif()
+    else()
+	message(FATAL_ERROR "Unknown architecture for Python and OpenSSL")
+    endif()
 endif()
 
 set(pyFLTK_DEP )
@@ -209,13 +279,6 @@ if(MRV2_PYFLTK)
     include(cmake/Modules/BuildpyFLTK.cmake)
 endif()
 
-# OpenSSL must be built before Python and pyFLTK to use the right path when
-# building Python's _ssl module.
-if(TLRENDER_NET AND NOT WIN32)
-    if (BUILD_PYTHON)
-	add_dependencies(Python OpenSSL)
-    endif()
-endif()
 
 
 set(POCO_DEP )
