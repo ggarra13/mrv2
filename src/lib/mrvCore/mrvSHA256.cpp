@@ -240,37 +240,39 @@ namespace mrv
         return oss.str();
     }
 
-#define __get_xxx                                           \
-    __xxx_date = __xxx_date_c;                                    \
-    __xxx_date = __xxx_date.substr(64,                        \
-                                             __xxx_date.size());
+#define __get_xxx                                               \
+    lic_xxx__ = lic_xxx___c;                                    \
+    lic_xxx__ = lic_xxx__.substr(0, 64);                        \
+    date_xxx = lic_xxx___c;                                     \
+    date_xxx = date_xxx.substr(64,                              \
+                               date_xxx.size());
     
 
     License validate_xxx(std::string& unencoded_expiration,
                              const std::string& secret_salt)
     {
-        std::string __xxx_lic;
-        std::string __xxx_date;
+        std::string lic_xxx__;
+        std::string date_xxx;
         
-        char __xxx_lic_c[256];
-        char __xxx_date_c[256];
+        char lic_xxx___c[256];
+        char date_xxx_c[256];
         
         Fl_Preferences base(
             prefspath().c_str(), "filmaura", "mrv2.license",
             (Fl_Preferences::Root)0);
-        base.get("full_license", __xxx_lic_c, "", 256);
+        base.get("full_license", lic_xxx___c, "", 256);
 
-        if (strlen(__xxx_lic_c) > 0)
+        if (strlen(lic_xxx___c) > 0)
         {
             __get_xxx;
         }
         else
         {
-            base.get("license", __xxx_lic_c, "", 256);
-            base.get("expiration", __xxx_date_c, "", 256);
+            base.get("license", lic_xxx___c, "", 256);
+            base.get("expiration", date_xxx_c, "", 256);
 
-            __xxx_lic = __xxx_lic_c;
-            __xxx_date = __xxx_date_c;
+            lic_xxx__ = lic_xxx___c;
+            date_xxx = date_xxx_c;
         }
         
         std::string machine_id = get_machine_id();
@@ -282,10 +284,10 @@ namespace mrv
                          machine_id.end());
         
         std::string expected_key = sha256(machine_id + secret_salt);
-        if (__xxx_lic != expected_key)
+        if (lic_xxx__ != expected_key)
             return License::kInvalid;
 
-        unencoded_expiration = decode_string(__xxx_date);
+        unencoded_expiration = decode_string(date_xxx);
         
         // Validate expiration date
         std::tm tm = {};
