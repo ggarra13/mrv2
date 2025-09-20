@@ -13,7 +13,7 @@ upload_file()
     echo
     echo "Uploading $1 as $2..."
     echo
-    
+
     rsync -avz -e "ssh -i $SSH_KEY -o StrictHostKeyChecking=no" $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$branch/$2
     if [[ $? -ne 0 ]]; then
         echo "rsync command failed. Error log:"
@@ -104,6 +104,13 @@ echo "Looking for files in ${package_dir}"
 mkdir -p $package_dir
 cd $package_dir
 
+#
+# Remove all files if present
+#
+rm -f README.md
+rm -f INSTALLATION_NOTES.md
+rm -f VULKAN_NOTES.md
+
 # Read all the files of this version
 shopt -s nullglob
 files=$(ls -1 *v${mrv2_VERSION}*)
@@ -127,8 +134,6 @@ echo "Proceed with uploading..."
 
 cat <<EOF > README.md
 
-[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UJMHRRKYCPXYW)
-
 ${mrv2_NAME} v${mrv2_VERSION} ${branch}
 ====================
 
@@ -137,7 +142,7 @@ ${date}.
 
 It does not support NDI® on any platform.
 
-It works on Windows 10+, Ubuntu 22.04 LTS+, macOS 13 (amd64) and macOS M1+ (arm64). 
+It works on Windows 10+, Windows ARM64, Ubuntu 22.04 LTS+, Ubuntu 22.04+ ARM64, macOS 13 (amd64) and macOS M1+ (arm64). 
 
 It may contain bugs, new untested features and more.
 
@@ -147,11 +152,17 @@ Enjoy!
 
 ## v${mrv2_VERSION} Notes
 
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UJMHRRKYCPXYW)
+
 Prices after v1.4.0
 -------------------
 * Buy mrv2 (or Vulkan vmrv2) for personal use at a cost of u\$50, paid by a Paypal donation (I will use the email to verify purchase and issue a yearly license).
 
 * Buy mrv2 (or Vulkan vmrv2) for personal use to own at a cost of u\$150, paid by a Paypal donation (I will use the email to verify purchase and issue a non-expiring, node-locked license).
+
+* Buy mrv2 (or Vulkan vmrv2) for personal use at a cost of u\$250 for aarch64, paid by a Paypal donation (I will use the email to verify purchase and issue a yearly license).
+
+* Buy mrv2 (or Vulkan vmrv2) for personal use to own at a cost of u\$500 for aarch64 builds, paid by a Paypal donation (I will use the email to verify purchase and issue a non-expiring, node-locked license).
 
 Differences between Vulkan and OpenGL
 -------------------------------------
@@ -327,8 +338,8 @@ rm INSTALLATION_NOTES.md
 if [[ $branch == "vulkan" ]]; then
     echo "Concatenating Vulkan notes"
     cat VULKAN_NOTES.md >> README.md
-    rm VULKAN_NOTES.md
 fi
+rm VULKAN_NOTES.md
 
 echo "Upload README.md"
 upload_file README.md README.md
@@ -350,7 +361,7 @@ file_array=($files)
 
 # Iterate over the array of filenames
 for src in "${file_array[@]}"; do
-    dest=`echo $src | sed -e "s/v$mrv2_VERSION/beta/"`
+    dest=`echo $src | sed -e "s#v$mrv2_VERSION#beta#"`
     upload_file "${src}" "${dest}"
 done
 

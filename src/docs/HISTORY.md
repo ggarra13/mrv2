@@ -3,12 +3,13 @@ v1.4.2
 
 mrv2 and vmrv2 are an open source professional players and review tools for vfx, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
 
-This is the first donationware version of mrv2 and vmrv2.
+mrv2 ships now in two compiled versions:
 
-It ships now in two compiled versions:
    - mrv2 with OpenGL backend  (free up to version 1.4.0 -
      	       	      	        donationware afterwards)
+				
    - vmrv2 with Vulkan backend (donationware)
+
 
 Difference between OpenGL and Vulkan
 ------------------------------------
@@ -22,14 +23,15 @@ Prices for binaries
 
 Donationware prices of binary licenses through PayPal:
 
-https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UJMHRRKYCPXYW
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UJMHRRKYCPXYW)
 
 I use the email information to contact you privately.  I don't sell your information, as I don't have access to it, except for your email, which I use to contact you.
 
 - u$  50 for a node-lock license for one year.
 - u$ 150 for a node-lock license to own.
 
-- u$ 500 for a node-lock license on Windows or Linux aarch64.
+- u$ 250 for a node-lock license for one year on Windows ARM64 or Linux aarch64.
+- u$ 500 for a node-lock license to own on Windows ARM64 or Linux aarch64.
 
 - The prices are cumulative.  If you donate, say u$10 in 5 months, you can access the node-lock license for one year.
 
