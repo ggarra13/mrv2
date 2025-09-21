@@ -74,33 +74,31 @@ if(NOT WIN32)
 
     set(OpenSSL_DEP OpenSSL)
 else()
-    if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
-	if (USE_VCPKG)
-	    add_custom_target(
-		OpenSSL ALL
-		${CMAKE_COMMAND} -E echo "Installing openssl..."
-		COMMAND ${VCPKG} install openssl:${VCPKG_TARGET_TRIPLET}
-		DEPENDS ${vcpkg_DEP} ${Gettext_DEP})
-	    add_custom_target(
-		OpenSSL_install ALL
-		${CMAKE_COMMAND} -E copy_directory_if_different ${vcpkg_LIB_DIR} ${CMAKE_INSTALL_PREFIX}/lib
-		COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different ${vcpkg_INCLUDE_DIR} ${CMAKE_INSTALL_PREFIX}/include
-		COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different ${vcpkg_BIN_DIR} ${CMAKE_INSTALL_PREFIX}/bin
-		DEPENDS OpenSSL
-	    )
-	else()
-	    ExternalProject_Add(
-		OpenSSL
-		PREFIX ${CMAKE_CURRENT_BINARY_DIR}/OpenSSL
-		DEPENDS ${OpenSSL_DEPENDS}
-		GIT_REPOSITORY ${OpenSSL_GIT_REPOSITORY}
-		GIT_TAG ${OpenSSL_GIT_TAG}
-		CONFIGURE_COMMAND ${OpenSSL_CONFIGURE}
-		BUILD_COMMAND ${OpenSSL_BUILD}
-		INSTALL_COMMAND ${OpenSSL_INSTALL}
-		BUILD_IN_SOURCE 1)
-	endif()
-	set(OpenSSL_DEP OpenSSL)
+    if (USE_VCPKG)
+	add_custom_target(
+	    OpenSSL ALL
+	    ${CMAKE_COMMAND} -E echo "Installing openssl..."
+	    COMMAND ${VCPKG} install openssl:${VCPKG_TARGET_TRIPLET}
+	    DEPENDS ${vcpkg_DEP} ${Gettext_DEP})
+	add_custom_target(
+	    OpenSSL_install ALL
+	    ${CMAKE_COMMAND} -E copy_directory_if_different ${VCPKG_LIB_DIR} ${CMAKE_INSTALL_PREFIX}/lib
+	    COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different ${VCPKG_INCLUDE_DIR} ${CMAKE_INSTALL_PREFIX}/include
+	    COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different ${VCPKG_BIN_DIR} ${CMAKE_INSTALL_PREFIX}/bin
+	    DEPENDS OpenSSL
+	)
+    else()
+	ExternalProject_Add(
+	    OpenSSL
+	    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/OpenSSL
+	    DEPENDS ${OpenSSL_DEPENDS}
+	    GIT_REPOSITORY ${OpenSSL_GIT_REPOSITORY}
+	    GIT_TAG ${OpenSSL_GIT_TAG}
+	    CONFIGURE_COMMAND ${OpenSSL_CONFIGURE}
+	    BUILD_COMMAND ${OpenSSL_BUILD}
+	    INSTALL_COMMAND ${OpenSSL_INSTALL}
+	    BUILD_IN_SOURCE 1)
     endif()
+    set(OpenSSL_DEP OpenSSL)
 endif()
 
