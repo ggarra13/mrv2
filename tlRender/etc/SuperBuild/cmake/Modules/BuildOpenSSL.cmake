@@ -20,7 +20,7 @@ if(WIN32)
     #
     if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
 	set(OpenSSL_CONFIGURE
-            perl Configure VC-WIN64A
+            perl Configure VC-WIN64-ARM
             --prefix=${CMAKE_INSTALL_PREFIX}
             --openssldir=${CMAKE_INSTALL_PREFIX}
             no-external-tests
