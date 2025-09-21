@@ -20,12 +20,12 @@ if(WIN32)
     #
     if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
 	set(OpenSSL_CONFIGURE
-            perl Configure VC-WIN64-ARM
-            --prefix=${CMAKE_INSTALL_PREFIX}
-            --openssldir=${CMAKE_INSTALL_PREFIX}
-            no-external-tests
-            no-tests
-            no-unit-test)
+	    perl Configure VC-WIN64-ARM
+	    --prefix=${CMAKE_INSTALL_PREFIX}
+	    --openssldir=${CMAKE_INSTALL_PREFIX}
+	    no-external-tests
+	    no-tests
+	    no-unit-test)
 	set(OpenSSL_BUILD nmake install)
 	set(OpenSSL_INSTALL nmake install)
     endif()
@@ -77,18 +77,24 @@ if(NOT WIN32)
     message(STATUS "OpenSSL here is ${OpenSSL_DEP}")
 else()
     if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
-	ExternalProject_Add(
-	    OpenSSL
-	    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/OpenSSL
-	    DEPENDS ${OpenSSL_DEPENDS}
-	    GIT_REPOSITORY ${OpenSSL_GIT_REPOSITORY}
-	    GIT_TAG ${OpenSSL_GIT_TAG}
-	    CONFIGURE_COMMAND ${OpenSSL_CONFIGURE}
-	    BUILD_COMMAND ${OpenSSL_BUILD}
-	    INSTALL_COMMAND ${OpenSSL_INSTALL}
-	    BUILD_IN_SOURCE 1)
-
-	message(STATUS "Added OpenSSL Win64 ARM64")
+	if (USE_VCPKG)
+	    add_custom_target(
+		OpenSSL ALL
+		${CMAKE_COMMAND} -E echo "Installing openssl..."
+		COMMAND ${VCPKG} install openssl:${VCPKG_TARGET_TRIPLET}
+		DEPENDS ${vcpkg_DEP})
+	else()
+	    ExternalProject_Add(
+		OpenSSL
+		PREFIX ${CMAKE_CURRENT_BINARY_DIR}/OpenSSL
+		DEPENDS ${OpenSSL_DEPENDS}
+		GIT_REPOSITORY ${OpenSSL_GIT_REPOSITORY}
+		GIT_TAG ${OpenSSL_GIT_TAG}
+		CONFIGURE_COMMAND ${OpenSSL_CONFIGURE}
+		BUILD_COMMAND ${OpenSSL_BUILD}
+		INSTALL_COMMAND ${OpenSSL_INSTALL}
+		BUILD_IN_SOURCE 1)
+	endif()
 	set(OpenSSL_DEP OpenSSL)
     endif()
 endif()

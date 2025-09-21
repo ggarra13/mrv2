@@ -81,6 +81,7 @@ elseif(WIN32)
     
     set(vcpkg_DEP )
     set(BUILD_VCPKG TRUE)
+    set(USE_VCPKG TRUE)
     if (BUILD_VCPKG)
 	include(cmake/Modules/Buildvcpkg.cmake)
     else()
