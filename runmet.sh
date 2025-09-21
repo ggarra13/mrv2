@@ -45,7 +45,7 @@ cd -
 #
 #  Rebuild latest pyFLTK if on Windows
 #
-if [[ $KERNEL == *Msys* ]]; then
+if [[ $KERNEL == *Windows* ]]; then
     root=$PWD
     dir=$PWD/$BUILD_DIR/deps/pyFLTK/src/pyFLTK/
 
