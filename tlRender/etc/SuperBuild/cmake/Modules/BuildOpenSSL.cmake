@@ -80,7 +80,7 @@ else()
 		OpenSSL ALL
 		${CMAKE_COMMAND} -E echo "Installing openssl..."
 		COMMAND ${VCPKG} install openssl:${VCPKG_TARGET_TRIPLET}
-		DEPENDS ${vcpkg_DEP} libiconv)
+		DEPENDS ${vcpkg_DEP} ${Gettext_DEP})
 	else()
 	    ExternalProject_Add(
 		OpenSSL
