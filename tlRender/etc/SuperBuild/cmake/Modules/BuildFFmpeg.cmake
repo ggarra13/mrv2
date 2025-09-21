@@ -475,11 +475,11 @@ if(NOT WIN32)
 endif()
 if(TLRENDER_NET)
     list(APPEND FFmpeg_CONFIGURE_ARGS
-        --enable-openssl)
-    if(WIN32)
-	list(APPEND FFmpeg_CONFIGURE_ARGS
-            --extra-libs=crypto.lib --enable-version3)
-    endif()
+        --enable-openssl --enable-version3)
+    # if(WIN32)
+    # 	list(APPEND FFmpeg_CONFIGURE_ARGS
+    #         --extra-libs=libcrypto.lib )
+    # endif()
 endif()
 if(FFmpeg_SHARED_LIBS)
     list(APPEND FFmpeg_CONFIGURE_ARGS
@@ -559,6 +559,8 @@ message(STATUS "Creating ffmpeg_configure.sh ${CMAKE_CURRENT_BINARY_DIR}/")
 file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/ffmpeg_configure.sh
     ${FFmpeg_CONFIGURE_CONTENTS}
 )
+
+message(STATUS "Compiling FFmpeg with deps ${FFmpeg_DEPS}")
 
 ExternalProject_Add(
     FFmpeg

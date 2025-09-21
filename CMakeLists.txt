@@ -266,14 +266,8 @@ endif()
 # OpenSSL must be built before Python and pyFLTK to use the right path when
 # building Python's _ssl module.
 if(BUILD_PYTHON AND TLRENDER_NET)
-    # \@note: we must not use OpenSSL_DEP here as it is undefined after
-    #         add_subdirectory.
-    if (UNIX)
-	add_dependencies(Python OpenSSL)
-    elseif(WIN32)
-	if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
-	    add_dependencies(Python OpenSSL)
-	endif()
+    if (OpenSSL_DEP)
+	add_dependencies(Python ${OpenSSL_DEP})
     else()
 	message(FATAL_ERROR "Unknown architecture for Python and OpenSSL")
     endif()

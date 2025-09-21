@@ -12,7 +12,7 @@ list(APPEND OpenSSL_DEPENDS ZLIB)
 set(OpenSSL_GIT_REPOSITORY "https://github.com/openssl/openssl.git")
 set(OpenSSL_GIT_TAG "openssl-3.3.0")
 
-set(OpenSSL_DEP )
+set(OpenSSL_DEP PARENT_SCOPE )
 
 if(WIN32)
     #
@@ -72,7 +72,7 @@ if(NOT WIN32)
 	INSTALL_COMMAND ${OpenSSL_INSTALL}
 	BUILD_IN_SOURCE 1)
 
-    set(OpenSSL_DEP OpenSSL)
+    set(OpenSSL_DEP OpenSSL PARENT_SCOPE)
 else()
     if (USE_VCPKG)
 	add_custom_target(
@@ -87,6 +87,7 @@ else()
 	    COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different ${VCPKG_BIN_DIR} ${CMAKE_INSTALL_PREFIX}/bin
 	    DEPENDS OpenSSL
 	)
+	set(OpenSSL_DEP OpenSSL_install PARENT_SCOPE)
     else()
 	ExternalProject_Add(
 	    OpenSSL
@@ -98,7 +99,7 @@ else()
 	    BUILD_COMMAND ${OpenSSL_BUILD}
 	    INSTALL_COMMAND ${OpenSSL_INSTALL}
 	    BUILD_IN_SOURCE 1)
+	set(OpenSSL_DEP OpenSSL PARENT_SCOPE)
     endif()
-    set(OpenSSL_DEP OpenSSL)
 endif()
 

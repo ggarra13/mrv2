@@ -502,7 +502,7 @@ fi
 cmd="./runmeq.sh ${CMAKE_BUILD_TYPE} -t ${CMAKE_TARGET}"
 run_cmd $cmd
 
-if [[ "$CMAKE_TARGET" != "package" ]]; then
+if [[ "$CMAKE_TARGET" != "package" && "$CMAKE_TARGET" != "install" ]]; then
     . $PWD/etc/build_end.sh
 fi
 
