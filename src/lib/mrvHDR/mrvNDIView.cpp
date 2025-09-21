@@ -14,7 +14,7 @@
 #include <regex>
 #include <thread>
 
-#include "half.h"
+#include <Imath/half.h>
 
 #include <tlCore/Image.h>
 #include <tlCore/HDR.h>
