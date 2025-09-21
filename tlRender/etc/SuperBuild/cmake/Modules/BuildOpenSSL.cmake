@@ -83,9 +83,9 @@ else()
 		DEPENDS ${vcpkg_DEP} ${Gettext_DEP})
 	    add_custom_target(
 		OpenSSL_install ALL
-		${CMAKE_COMMAND} -E copy_directory_if_different {$vcpkg_LIB_DIR} ${CMAKE_INSTALL_PREFIX}/lib
-		COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different {$vcpkg_INCLUDE_DIR} ${CMAKE_INSTALL_PREFIX}/include
-		COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different {$vcpkg_BIN_DIR} ${CMAKE_INSTALL_PREFIX}/bin
+		${CMAKE_COMMAND} -E copy_directory_if_different ${vcpkg_LIB_DIR} ${CMAKE_INSTALL_PREFIX}/lib
+		COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different ${vcpkg_INCLUDE_DIR} ${CMAKE_INSTALL_PREFIX}/include
+		COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different ${vcpkg_BIN_DIR} ${CMAKE_INSTALL_PREFIX}/bin
 		DEPENDS OpenSSL
 	    )
 	else()
