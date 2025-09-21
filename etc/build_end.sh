@@ -9,7 +9,7 @@ vcpkg_ARCH=x64
 if [[ $ARCH == *amd64* ]]; then
     vcpkg_ARCH=x64
 elif [[ $ARCH == *aarch64* || $ARCH == *arm64* ]]; then
-    vcpkg_ARCH=aarch64
+    vcpkg_ARCH=arm64
 fi
 vcpkg_TRIPLET=${vcpkg_ARCH}-windows
 vcpkg_DIR=$BUILD_DIR/deps/vcpkg/src/vcpkg/installed/$vcpkg_TRIPLET

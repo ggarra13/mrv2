@@ -118,8 +118,12 @@ elseif(WIN32)
 	DEPENDS ${vcpkg_DEP} libiconv)
     set(Gettext_DEP libiconv gettext)
 
-    list(APPEND CMAKE_PREFIX_PATH
-	"${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows")
+    set(VCPKG_INSTALLED "${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows")
+    set(VCPKG_INCLUDE_DIR "${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows/include")
+    set(VCPKG_LIB_DIR "${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows/lib")
+    set(VCPKG_BIN_DIR "${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows/bin")
+    
+    list(APPEND CMAKE_PREFIX_PATH ${VCPKG_INSTALLED})
     set(CMAKE_TOOLCHAIN_FILE "${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
     
     
