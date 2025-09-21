@@ -16,7 +16,7 @@ if [[ "$CMAKE_TARGET" == "package" ]]; then
 	mrv2_NAME=vmrv2
     fi
     
-    if [[ $KERNEL == *Msys* ]]; then
+    if [[ $KERNEL == *Windows* ]]; then
 	send_to_packages "${mrv2_NAME}-v${mrv2_VERSION}-Windows-${ARCH}.exe"
 	send_to_packages "${mrv2_NAME}-v${mrv2_VERSION}-Windows-${ARCH}.zip"
 	. etc/windows/windows_signing_installer.sh
@@ -35,7 +35,7 @@ fi
 #
 # Create symbolic links to start-up shell scripts
 #
-if [[ $KERNEL != *Msys* ]]; then
+if [[ $KERNEL != *Windows* ]]; then
     chmod a+x $PWD/$BUILD_DIR/install/bin/mrv2.sh
     has_hdr=0
     if [[ -e $PWD/$BUILD_DIR/install/bin/hdr.sh ]]; then

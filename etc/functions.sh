@@ -40,7 +40,7 @@ get_kernel()
     export KERNEL=`uname`
     export MACOS_BRAND=''
     if [[ $KERNEL == *MSYS* || $KERNEL == *MINGW* ]]; then
-	export KERNEL=Msys
+	export KERNEL=Windows
 	export NATIVE_C_COMPILER=`which cl.exe`
 	export NATIVE_C_COMPILER_NAME="cl.exe"
 	export NATIVE_CXX_COMPILER=`which cl.exe`
@@ -116,7 +116,7 @@ get_kernel()
 	    export ARCH=amd64
 	    # \@bug: on aarch windows we currently get amd64 from uname -m,
 	    #        so we get the architecture from clang.
-	    if [[ $KERNEL == *Msys* ]]; then
+	    if [[ $KERNEL == *Windows* ]]; then
 		has_aarch64=`clang.exe --version`
 		if [[ $has_aarch64 == *aarch64* ]]; then
 		    export ARCH=aarch64
@@ -142,7 +142,7 @@ get_cmake_version()
 
 get_compiler_version()
 {
-    if [[ $KERNEL == *Msys* ]]; then
+    if [[ $KERNEL == *Windows* ]]; then
 	get_msvc_version
 	export NATIVE_COMPILER_VERSION="MSVC ${MSVC_VERSION}"
 	export GENERIC_COMPILER_VERSION=`clang --version | grep version`
@@ -220,15 +220,15 @@ locate_python() {
             exit 1
         fi        # Fallback for when BUILD_PYTHON is set
         export PYTHONDIR="${PWD}/${BUILD_DIR}/install/bin/"
-        if [[ "${KERNEL}" != *Msys* && "${KERNEL}" != *MSYS* && "${KERNEL}" != *mingw* ]]; then
+        if [[ "${KERNEL}" != *Windows* && "${KERNEL}" != *MSYS* && "${KERNEL}" != *mingw* ]]; then
             export PYTHONEXE=python3
         else
             export PYTHONEXE=python
         fi
         export PYTHON="${PYTHONDIR}/${PYTHONEXE}"
     fi
-    # Normalize paths for Windows (convert to Unix-style if in Msys/Cygwin)
-    if [[ "${KERNEL}" == *Msys* || "${KERNEL}" == *MSYS* || "${KERNEL}" == *mingw* ]]; then
+    # Normalize paths for Windows (convert to Unix-style if in Windows/Cygwin)
+    if [[ "${KERNEL}" == *Windows* || "${KERNEL}" == *MSYS* || "${KERNEL}" == *mingw* ]]; then
         PYTHON=$(cygpath -u "${PYTHON}" 2>/dev/null || echo "${PYTHON}")
         PYTHONDIR=$(cygpath -u "${PYTHONDIR}" 2>/dev/null || echo "${PYTHONDIR}")
     fi

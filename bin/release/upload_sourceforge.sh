@@ -117,7 +117,7 @@ files=$(ls -1 *v${mrv2_VERSION}*)
 shopt -u nullglob  # Optional: turn it off again
 
 
-if [[ $KERNEL == *Msys* ]]; then
+if [[ $KERNEL == *Windows* ]]; then
     pacman -Sy openssh rsync --noconfirm
 fi
 

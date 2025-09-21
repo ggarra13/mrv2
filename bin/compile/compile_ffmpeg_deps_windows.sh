@@ -24,7 +24,7 @@ else
     get_msvc_version
 fi
 
-if [[ $KERNEL != *Msys* ]]; then
+if [[ $KERNEL != *Windows* ]]; then
     echo
     echo "This script is for Windows MSys2-64 only."
     echo
