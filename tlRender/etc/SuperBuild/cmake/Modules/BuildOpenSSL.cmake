@@ -72,9 +72,7 @@ if(NOT WIN32)
 	INSTALL_COMMAND ${OpenSSL_INSTALL}
 	BUILD_IN_SOURCE 1)
 
-    message(STATUS "Added OpenSSL NOT WIN32")
     set(OpenSSL_DEP OpenSSL)
-    message(STATUS "OpenSSL here is ${OpenSSL_DEP}")
 else()
     if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
 	if (USE_VCPKG)
