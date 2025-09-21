@@ -8,57 +8,57 @@
 # We now use vcpkg on Windows in CMake, which handles x86_64 and ARM64.
 #
 
-# if [[ ! $RUNME ]]; then
-#     . etc/build_dir.sh
-# else
-#     . etc/functions.sh
-# fi
+if [[ ! $RUNME ]]; then
+    . etc/build_dir.sh
+else
+    . etc/functions.sh
+fi
 
-# if [[ ${ARCH} == *amd64* ]]; then
+if [[ ${ARCH} == *amd64* ]]; then
 
-#     echo "Will install with vcpkg from now on..."
+    echo "Will install with vcpkg from now on..."
     
-#     if [[ ! -e /ucrt64/bin/gettext.exe ||
-# 	      ! -e /ucrt64/lib/libiconv.dll.a ||
-# 	      ! -e /ucrt64/lib/libintl.dll.a ]]; then
-# 	echo "Installing libsqlite, libiconv, libintl thru Msys..."
-# 	pacman -Syu --noconfirm
-#     fi
+    if [[ ! -e /ucrt64/bin/gettext.exe ||
+	      ! -e /ucrt64/lib/libiconv.dll.a ||
+	      ! -e /ucrt64/lib/libintl.dll.a ]]; then
+	echo "Installing libsqlite, libiconv, libintl thru Msys..."
+	pacman -Syu --noconfirm
+    fi
 
-#     #
-#     # Install 
-#     #
-#     pacman -Sy libsqlite --noconfirm
+    #
+    # Install 
+    #
+    pacman -Sy libsqlite --noconfirm
 
-#     mkdir -p $BUILD_DIR/install/bin
-#     mkdir -p $BUILD_DIR/install/lib
-#     mkdir -p $BUILD_DIR/install/include
+    mkdir -p $BUILD_DIR/install/bin
+    mkdir -p $BUILD_DIR/install/lib
+    mkdir -p $BUILD_DIR/install/include
 
-#     #
-#     # Install libiconv
-#     #
-#     if [[ ! -e $BUILD_DIR/install/lib/libiconv.lib ]]; then
-# 	if [[ ! -e /ucrt64/lib/libiconv.dll.a ]]; then
-# 	    pacman -Sy mingw-w64-ucrt-x86_64-libiconv --noconfirm
-# 	fi
+    #
+    # Install libiconv
+    #
+    if [[ ! -e $BUILD_DIR/install/lib/libiconv.lib ]]; then
+	if [[ ! -e /ucrt64/lib/libiconv.dll.a ]]; then
+	    pacman -Sy mingw-w64-ucrt-x86_64-libiconv --noconfirm
+	fi
 
-# 	run_cmd cp /ucrt64/bin/libiconv*.dll $BUILD_DIR/install/bin/
-# 	run_cmd cp /ucrt64/lib/libiconv.dll.a $BUILD_DIR/install/lib/libiconv.lib
+	run_cmd cp /ucrt64/bin/libiconv*.dll $BUILD_DIR/install/bin/
+	run_cmd cp /ucrt64/lib/libiconv.dll.a $BUILD_DIR/install/lib/libiconv.lib
 
-# 	run_cmd cp /ucrt64/include/iconv.h $BUILD_DIR/install/include/
-#     fi
+	run_cmd cp /ucrt64/include/iconv.h $BUILD_DIR/install/include/
+    fi
 
-#     #
-#     # Install libintl
-#     #
-#     if [[ ! -e $BUILD_DIR/install/lib/libintl.lib ]]; then
-# 	if [[ ! -e /ucrt64/lib/libintl.dll.a ]]; then
-# 	    pacman -Sy mingw-w64-ucrt-x86_64-gettext-runtime --noconfirm
-# 	fi
+    #
+    # Install libintl
+    #
+    if [[ ! -e $BUILD_DIR/install/lib/libintl.lib ]]; then
+	if [[ ! -e /ucrt64/lib/libintl.dll.a ]]; then
+	    pacman -Sy mingw-w64-ucrt-x86_64-gettext-runtime --noconfirm
+	fi
 
-# 	run_cmd cp /ucrt64/bin/libintl*.dll $BUILD_DIR/install/bin/
-# 	run_cmd cp /ucrt64/lib/libintl.dll.a $BUILD_DIR/install/lib/libintl.lib
+	run_cmd cp /ucrt64/bin/libintl*.dll $BUILD_DIR/install/bin/
+	run_cmd cp /ucrt64/lib/libintl.dll.a $BUILD_DIR/install/lib/libintl.lib
 
-# 	run_cmd cp /ucrt64/include/libintl.h $BUILD_DIR/install/include/
-#     fi
-# fi
+	run_cmd cp /ucrt64/include/libintl.h $BUILD_DIR/install/include/
+    fi
+fi
