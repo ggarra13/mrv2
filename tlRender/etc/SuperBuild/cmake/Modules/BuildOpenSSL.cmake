@@ -110,7 +110,7 @@ else()
 	add_custom_target(
 	    OpenSSL_install ALL
 	    ${CMAKE_COMMAND} -E echo "Copying openssl to cmake prefix path..."
-	    ${CMAKE_COMMAND} -E copy_directory_if_different ${VCPKG_LIB_DIR} ${CMAKE_INSTALL_PREFIX}/lib
+	    COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different ${VCPKG_LIB_DIR} ${CMAKE_INSTALL_PREFIX}/lib
 	    COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different ${VCPKG_INCLUDE_DIR} ${CMAKE_INSTALL_PREFIX}/include
 	    COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different ${VCPKG_BIN_DIR} ${CMAKE_INSTALL_PREFIX}/bin
 	    COMMAND ${CMAKE_COMMAND} -E echo "Copying openssl for FFmpeg..."
