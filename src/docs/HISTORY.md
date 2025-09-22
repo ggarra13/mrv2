@@ -45,6 +45,7 @@ ChangeLog
 - Upgraded OpenJPH to v0.23 from OpenEXR's internal version.
 - Fixed incorrect use of FLTK_USE_WAYLAND when not in __linux__.
 - Fixed incorrect use of FLTK_USE_X11 when not in __linux__.
+- Made volume slider automatically unmute the audio if it was muted.
 
 
 
