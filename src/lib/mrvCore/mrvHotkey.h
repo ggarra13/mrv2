@@ -76,7 +76,7 @@ namespace mrv
 
         std::string to_s() const;
 
-    public:
+    public: 
         bool ctrl;
         bool meta;
         bool alt;
@@ -92,6 +92,10 @@ namespace mrv
     extern Hotkey kOpenSingleImage;
     extern Hotkey kOpenStereoImage;
     extern Hotkey kOpenSession;
+
+    //! Application behavior
+    extern Hotkey kOpenNewInstance;
+    
     extern Hotkey kSaveImage;
     extern Hotkey kSaveImageToFolder;
     extern Hotkey kSaveOTIOEDL;
@@ -310,7 +314,7 @@ namespace mrv
     extern Hotkey kToggleNetwork;
     extern Hotkey kToggleStereo3D;
     extern Hotkey kToggleUSD;
-
+    
     //! Window behavior
     extern Hotkey kToggleClickThrough;
     extern Hotkey kUITransparencyLess;
