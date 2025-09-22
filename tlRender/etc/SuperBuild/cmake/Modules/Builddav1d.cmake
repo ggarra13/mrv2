@@ -5,7 +5,7 @@ set(dav1d_GIT_TAG 1.3.0)
 
 set(dav1d_DEPENDENCIES ${PYTHON_DEP})
 if(UNIX)
-    liast(APPEND dav1d_DEPENDENCIES NASM ${dav1d_DEPS})
+    list(APPEND dav1d_DEPENDENCIES NASM ${dav1d_DEPS})
 endif()
 
 message(STATUS "dav1d DEPENDENCIES=${dav1d_DEPENDENCIES}")
