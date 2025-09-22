@@ -3,10 +3,12 @@ include(ExternalProject)
 
 set(dav1d_GIT_TAG 1.3.0)
 
-set(dav1d_DEPS ${PYTHON_DEP})
+set(dav1d_DEPENDENCIES ${PYTHON_DEP})
 if(UNIX)
-    set(dav1d_DEPS NASM ${dav1d_DEPS})
+    liast(APPEND dav1d_DEPENDENCIES NASM ${dav1d_DEPS})
 endif()
+
+message(STATUS "dav1d DEPENDENCIES=${dav1d_DEPENDENCIES}")
 
 set(CLANG_ENV )
 if(WIN32)
@@ -93,7 +95,7 @@ set(dav1d_INSTALL
 ExternalProject_Add(
     dav1d
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/dav1d
-    DEPENDS ${dav1d_DEPS} ${Gettext_DEP}
+    DEPENDS ${dav1d_DEPENDENCIES}
     GIT_REPOSITORY "https://code.videolan.org/videolan/dav1d.git"
     GIT_TAG ${dav1d_GIT_TAG}
     

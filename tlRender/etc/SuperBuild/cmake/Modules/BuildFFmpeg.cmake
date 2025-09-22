@@ -3,9 +3,9 @@ include(ExternalProject)
 include(ProcessorCount)
 ProcessorCount(NPROCS)
 
-set(FFmpeg_DEPS ZLIB ${OpenSSL_DEP})
+set(FFmpeg_DEPENDENCIES ZLIB ${OpenSSL_DEP})
 if(NOT WIN32)
-    list(APPEND FFmpeg_DEPS NASM)
+    list(APPEND FFmpeg_DEPENDENCIES NASM)
 else()
     include(functions/Msys2)
 endif()
@@ -389,7 +389,7 @@ if(TLRENDER_FFMPEG_MINIMAL)
 endif()
 
 if(TLRENDER_VPX)
-    list(APPEND FFmpeg_DEPS VPX)
+    list(APPEND FFmpeg_DEPENDENCIES VPX)
     list(APPEND FFmpeg_CONFIGURE_ARGS
         --enable-decoder=libvpx_vp8
         --enable-decoder=libvpx_vp9
@@ -415,7 +415,7 @@ if(TLRENDER_VPX)
     endif()
 endif()
 if(TLRENDER_AV1)
-    list(APPEND FFmpeg_DEPS dav1d)
+    list(APPEND FFmpeg_DEPENDENCIES dav1d)
     list(APPEND FFmpeg_CONFIGURE_ARGS
 	--enable-libdav1d
 	--enable-decoder=libdav1d)
@@ -434,7 +434,7 @@ if(TLRENDER_HAP)
         --enable-encoder=hap
         --enable-decoder=hap
 	--enable-libsnappy)
-    list(APPEND FFmpeg_DEPS libsnappy)
+    list(APPEND FFmpeg_DEPENDENCIES libsnappy)
 endif()
 if(TLRENDER_X264)
     list(APPEND FFmpeg_CONFIGURE_ARGS
@@ -449,12 +449,12 @@ if(TLRENDER_X264)
     # if(UNIX)
     # 	list(APPEND FFmpeg_CONFIGURE_ARGS
     # 	    --extra-ldflags="${INSTALL_PREFIX}/lib/libx264.a")
-    # 	list(APPEND FFmpeg_DEPS X264)
+    # 	list(APPEND FFmpeg_DEPENDENCIES X264)
     # endif()
 endif()
 
 if(TLRENDER_SVTAV1)
-    list(APPEND FFmpeg_DEPS SvtAV1)
+    list(APPEND FFmpeg_DEPENDENCIES SvtAV1)
     list(APPEND FFmpeg_CONFIGURE_ARGS
 	--enable-libsvtav1
         --enable-encoder=libsvtav1)
@@ -560,12 +560,12 @@ file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/ffmpeg_configure.sh
     ${FFmpeg_CONFIGURE_CONTENTS}
 )
 
-message(STATUS "Compiling FFmpeg with deps ${FFmpeg_DEPS}")
+message(STATUS "FFmpeg DEPENDENCIES=${FFmpeg_DEPENDENCIES}")
 
 ExternalProject_Add(
     FFmpeg
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg
-    DEPENDS ${FFmpeg_DEPS}
+    DEPENDS ${FFmpeg_DEPENDENCIES}
     URL https://ffmpeg.org/releases/ffmpeg-8.0.tar.bz2
     PATCH_COMMAND ${FFmpeg_PATCH}
     CONFIGURE_COMMAND ${FFmpeg_CONFIGURE}

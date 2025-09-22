@@ -3,6 +3,9 @@ include(ExternalProject)
 set(Freetype_GIT_REPOSITORY "https://github.com/freetype/freetype.git")
 set(Freetype_GIT_TAG "VER-2-13-3")
 
+set(Freetype_DEPENDENCIES ZLIB)
+message(STATUS "Freetype_DEPENDENCIES=${Freetype_DEPENDENCIES}")
+
 set(Freetype_ARGS
     ${TLRENDER_EXTERNAL_ARGS}
     -DCMAKE_INSTALL_LIBDIR=lib
@@ -16,7 +19,7 @@ set(Freetype_ARGS
 ExternalProject_Add(
     Freetype
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/Freetype
-    DEPENDS ZLIB ${Gettext_DEP}
+    DEPENDS ${Freetype_DEPENDENCIES}
     GIT_REPOSITORY ${Freetype_GIT_REPOSITORY}
     GIT_TAG ${Freetype_GIT_TAG}
     

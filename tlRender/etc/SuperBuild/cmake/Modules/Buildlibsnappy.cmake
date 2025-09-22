@@ -7,6 +7,8 @@ set(libsnappy_REPO "https://github.com/google/snappy.git")
 # set(libsnappy_TAG 6af9287fbdb913f0794d0148c6aa43b58e63c8e3)  # or 1.2.2
 set(libsnappy_TAG 1.2.2)  # or 1.2.2
 
+set(libsnappy_DEPENDENCIES )
+message(STATUS "libsnappy DEPENDENCIES=${libsnappy_DEPENDENCIES}")
 
 set(libsnappy_ARGS ${TLRENDER_EXTERNAL_ARGS})
 
@@ -58,7 +60,7 @@ ExternalProject_Add(
     GIT_REPOSITORY ${libsnappy_REPO}
     GIT_TAG ${libsnappy_TAG}
 
-    DEPENDS ${Gettext_DEP}
+    DEPENDS ${libsnappy_DEPENDENCIES}
     
     UPDATE_COMMAND ${libsnappy_UPDATE_CMD}
     

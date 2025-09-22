@@ -3,14 +3,15 @@ include(ExternalProject)
 include(ProcessorCount)
 ProcessorCount(NPROCS)
 
-set(OpenSSL_DEPENDS)
-if(NOT WIN32)
-    list(APPEND OpenSSL_DEPENDS NASM)
-endif()
-list(APPEND OpenSSL_DEPENDS ZLIB)
-
 set(OpenSSL_GIT_REPOSITORY "https://github.com/openssl/openssl.git")
 set(OpenSSL_GIT_TAG "openssl-3.3.0")
+
+set(OpenSSL_DEPENDENCIES )
+if(NOT WIN32)
+    list(APPEND OpenSSL_DEPENDENCIES NASM)
+endif()
+list(APPEND OpenSSL_DEPENDENCIES ZLIB)
+message(STATUS "OpenSSL DEPENDENCIES=${OpenSSL_DEPENDENCIES}")
 
 #
 # Set up the dependency
@@ -85,7 +86,7 @@ if(NOT WIN32)
     ExternalProject_Add(
 	OpenSSL
 	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/OpenSSL
-	DEPENDS ${OpenSSL_DEPENDS}
+	DEPENDS ${OpenSSL_DEPENDENCIES}
 	GIT_REPOSITORY ${OpenSSL_GIT_REPOSITORY}
 	GIT_TAG ${OpenSSL_GIT_TAG}
 	CONFIGURE_COMMAND ${OpenSSL_CONFIGURE}
@@ -101,9 +102,10 @@ else()
 	    OpenSSL ALL
 	    ${CMAKE_COMMAND} -E echo "Installing openssl..."
 	    COMMAND ${VCPKG} install openssl:${VCPKG_TARGET_TRIPLET}
-	    DEPENDS ${vcpkg_DEP} ${Gettext_DEP})
+	    DEPENDS ${vcpkg_DEP} ${Gettext_DEP}) # Gettext_DEP needed
 	add_custom_target(
 	    OpenSSL_install ALL
+	    ${CMAKE_COMMAND} -E echo "Copying openssl to cmake prefix path..."
 	    ${CMAKE_COMMAND} -E copy_directory_if_different ${VCPKG_LIB_DIR} ${CMAKE_INSTALL_PREFIX}/lib
 	    COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different ${VCPKG_INCLUDE_DIR} ${CMAKE_INSTALL_PREFIX}/include
 	    COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different ${VCPKG_BIN_DIR} ${CMAKE_INSTALL_PREFIX}/bin
@@ -115,7 +117,7 @@ else()
 	ExternalProject_Add(
 	    OpenSSL
 	    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/OpenSSL
-	    DEPENDS ${OpenSSL_DEPENDS}
+	    DEPENDS ${OpenSSL_DEPENDENCIES}
 	    GIT_REPOSITORY ${OpenSSL_GIT_REPOSITORY}
 	    GIT_TAG ${OpenSSL_GIT_TAG}
 	    CONFIGURE_COMMAND ${OpenSSL_CONFIGURE}

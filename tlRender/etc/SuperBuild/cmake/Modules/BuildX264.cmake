@@ -12,16 +12,20 @@ set(X264_CFLAGS)
 set(X264_CXXFLAGS)
 set(X264_OBJCFLAGS)
 set(X264_LDFLAGS)
-set(X264_DEPENDENCIES NASM)
+set(X264_DEPENDENCIES )
+if(NOT WIN32)
+    list(APPEND X264_DEPENDENCIES NASM)
+endif()
 
 if (WIN32)
     include(functions/Msys2)
     # Convert path for MSYS2 properly
     convert_path_for_msys2("${CMAKE_INSTALL_PREFIX}" INSTALL_PREFIX)
-    set(X264_DEPENDENCIES)
 else()
     set(INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
 endif()
+
+message(STATUS "X264 DEPENDENCIES=${X264_DEPENDENCIES}")
 
 
 if(APPLE)
