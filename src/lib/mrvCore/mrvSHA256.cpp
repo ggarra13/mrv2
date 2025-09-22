@@ -240,12 +240,15 @@ namespace mrv
         return oss.str();
     }
 
-#define __get_xxx                                                    \
-    full      = lic_xxx___c;                                         \
-    lic_xxx__ = full.substr(4, 64);                                  \
-    date_xxx  = full.substr(0, 4);                                   \
-    date_xxx += full.substr(64 + 4,                                  \
-                            full.size());
+#define get_xxx___                                                      \
+    std::string key_part1 = full.substr(0, key_part1_len);              \
+    std::string expiry_part1 = full.substr(expiry_part1_start,          \
+                                           expiry_part1_len);           \
+    std::string key_part2 = full.substr(key_part2_start,                \
+                                        key_part2_len);                 \
+    std::string expiry_part2 = full.substr(expiry_part2_start);         \
+    lic_xxx__ = key_part1 + key_part2;                                  \
+    date_xxx  = expiry_part1 + expiry_part2; 
     
 
     License validate_xxx(std::string& unencoded_expiration,
@@ -265,7 +268,24 @@ namespace mrv
 
         if (strlen(lic_xxx___c) > 0)
         {
-            __get_xxx;
+            // Define the known lengths of the segments based on the encoding specification.
+            const size_t key_part1_len = 48;
+            const size_t expiry_part1_len = 4;
+            const size_t key_part2_len = 16;
+
+            // Define the starting positions for each segment.
+            const size_t expiry_part1_start = key_part1_len;
+            const size_t key_part2_start = expiry_part1_start + expiry_part1_len;
+            const size_t expiry_part2_start = key_part2_start + key_part2_len;
+
+            full = lic_xxx___c;
+            
+            // Defensive check to ensure the full_license is long enough to contain all fixed-size parts.
+            if (full.length() < expiry_part2_start) {
+                return License::kInvalid;
+            }
+
+            get_xxx___;
         }
         
         std::string machine_id = get_machine_id();
