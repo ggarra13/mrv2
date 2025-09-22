@@ -46,14 +46,7 @@ namespace mrv
             return bytes;
         }
         
-        void print_hex(const std::vector<unsigned char>& data) {
-            for (unsigned char byte : data) {
-                std::cout << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(byte) << " ";
-            }
-            std::cout << std::dec << std::endl;
-        }
-        
-        std::vector<int> rc4_ksa(const std::string& key)
+        std::vector<int> xor_cypher_ksa(const std::string& key)
         {
             std::vector<int> S(256);
             std::iota(S.begin(), S.end(), 0); // Fill with 0-255
@@ -66,7 +59,7 @@ namespace mrv
             return S;
         }
 
-        std::vector<unsigned char> rc4_prga(std::vector<int>& S,
+        std::vector<unsigned char> xor_cypher_prga(std::vector<int>& S,
                                             size_t length)
         {
             std::vector<unsigned char> keystream;
@@ -81,13 +74,13 @@ namespace mrv
             return keystream;
         }
 
-        std::vector<unsigned char> rc4_crypt(const std::string& data,
+        std::vector<unsigned char> xor_cypher_crypt(const std::string& data,
                                              const std::string& key)
         {
             std::vector<unsigned char> out;
             
-            std::vector<int> S = rc4_ksa(key);
-            std::vector<unsigned char> keystream = rc4_prga(S, data.length());
+            std::vector<int> S = xor_cypher_ksa(key);
+            std::vector<unsigned char> keystream = xor_cypher_prga(S, data.length());
 
             for (size_t i = 0; i < data.length(); ++i) {
                 out.push_back(static_cast<unsigned char>(data[i] ^ keystream[i]));
@@ -99,7 +92,7 @@ namespace mrv
     void xor_cipher_hex(
         std::string& cipherText, const std::string& plaintext, const std::string& key)
     {
-        std::vector<unsigned char> encrypted_data = rc4_crypt(plaintext, key);
+        std::vector<unsigned char> encrypted_data = xor_cypher_crypt(plaintext, key);
         std::stringstream hex;
         for (auto xored : encrypted_data)
         {
@@ -113,8 +106,8 @@ namespace mrv
     {
         std::vector<unsigned char> encrypted_data = hexStringToBytes(cipherText);
             
-        std::vector<int> S = rc4_ksa(key);
-        std::vector<unsigned char> keystream = rc4_prga(S, encrypted_data.size());
+        std::vector<int> S = xor_cypher_ksa(key);
+        std::vector<unsigned char> keystream = xor_cypher_prga(S, encrypted_data.size());
 
         for (size_t i = 0; i < encrypted_data.size(); ++i) {
             plainText += static_cast<char>(static_cast<unsigned char>(encrypted_data[i]) ^ keystream[i]);

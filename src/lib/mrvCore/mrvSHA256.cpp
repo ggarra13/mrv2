@@ -240,17 +240,18 @@ namespace mrv
         return oss.str();
     }
 
-#define __get_xxx                                               \
-    lic_xxx__ = lic_xxx___c;                                    \
-    lic_xxx__ = lic_xxx__.substr(0, 64);                        \
-    date_xxx = lic_xxx___c;                                     \
-    date_xxx = date_xxx.substr(64,                              \
-                               date_xxx.size());
+#define __get_xxx                                                    \
+    full      = lic_xxx___c;                                         \
+    lic_xxx__ = full.substr(4, 64);                                  \
+    date_xxx  = full.substr(0, 4);                                   \
+    date_xxx += full.substr(64 + 4,                                  \
+                            full.size());
     
 
     License validate_xxx(std::string& unencoded_expiration,
-                             const std::string& secret_salt)
+                         const std::string& secret_salt)
     {
+        std::string full;
         std::string lic_xxx__;
         std::string date_xxx;
         
@@ -269,7 +270,7 @@ namespace mrv
         
         std::string machine_id = get_machine_id();
         machine_id.erase(remove(machine_id.begin(), machine_id.end(), '\n'),
-                          machine_id.end());
+                         machine_id.end());
         machine_id.erase(remove(machine_id.begin(), machine_id.end(), '\r'),
                          machine_id.end());
         machine_id.erase(remove(machine_id.begin(), machine_id.end(), ' '),

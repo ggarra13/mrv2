@@ -3,8 +3,6 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-echo "Copying vcpkg DLLs..."
-
 vcpkg_ARCH=x64
 if [[ $ARCH == *amd64* ]]; then
     vcpkg_ARCH=x64
@@ -17,7 +15,7 @@ vcpkg_DIR=$BUILD_DIR/deps/vcpkg/src/vcpkg/installed/$vcpkg_TRIPLET
 if [[ $KERNEL == *Windows* ]]; then
     if [[ -d $vcpkg_DIR ]]; then
 	echo "Copying $vcpkg_DIR/bin/*.dll"
-	run_cmd cp -rf $vcpkg_DIR/bin/*.dll $BUILD_DIR/install/bin
+	cp -rf $vcpkg_DIR/bin/*.dll $BUILD_DIR/install/bin
     fi
 fi
 
