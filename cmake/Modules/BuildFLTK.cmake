@@ -7,6 +7,8 @@ include( ExternalProject )
 set(USER_NAME $ENV{USER})
 if (USER_NAME STREQUAL "gga" OR USER_NAME STREQUAL "User-PC" OR
 	USER_NAME STREQUAL "ggarra13")
+    # \@todo: We check the repository with git so we can easily edit it
+    #         later.
     set(FLTK_GIT_REPOSITORY "git@github.com:ggarra13/fltk.git")
 else()
     set(FLTK_GIT_REPOSITORY "https://github.com/ggarra13/fltk.git")
@@ -52,8 +54,6 @@ message(STATUS "FLTK CXX flags ${FLTK_CXX_FLAGS}")
 set(FLTK_USE_SYSTEM_ZLIB TRUE)
 set(FLTK_USE_SYSTEM_LIBPNG TRUE)
 
-# Set FLTK default dependencies
-set(FLTK_DEPENDENCIES PNG ${VMA_DEP} ${SHADERC_DEP} ZLIB)
 
 # We set this to use FLTK's built-in libdecor
 set(FLTK_USE_SYSTEM_LIBDECOR FALSE)
@@ -64,11 +64,17 @@ set(FLTK_USE_SYSTEM_LIBDECOR FALSE)
 set(FLTK_USE_LIBDECOR_GTK FALSE)
 
 # This one may be turned off
+
+# Set FLTK default dependencies
+set(FLTK_DEPENDENCIES PNG ${VMA_DEP} ${SHADERC_DEP} ZLIB)
+
 set(FLTK_USE_SYSTEM_LIBJPEG FALSE)
 if(TLRENDER_JPEG)
     set(FLTK_USE_SYSTEM_LIBJPEG TRUE)
     set(FLTK_DEPENDENCIES libjpeg-turbo ${FLTK_DEPENDENCIES})
 endif()
+
+message(STATUS "FLTK DEPENDENCIES=${FLTK_DEPENDENCIES}")
 
 #
 # Determine whether to build fltk-gl
@@ -79,19 +85,22 @@ set(FLTK_BUILD_GL ${TLRENDER_GL})
 # Determine whether to build fltk-vk
 #
 set(FLTK_BUILD_VK OFF)
-if (MRV2_HDR OR MRV2_BACKEND STREQUAL "VK" OR MRV2_BACKEND STREQUAL "BOTH")
+if (MRV2_HDR OR MRV2_BACKEND STREQUAL "VK")
     set(FLTK_BUILD_VK ON)
 endif()
 
 
 set(FLTK_PATCH
 )
-    
+
 if (APPLE OR WIN32)
-    set(TLRENDER_X11 OFF)
-    set(TLRENDER_WAYLAND OFF )
+    set(FLTK_BACKEND_X11 OFF)
+    set(FLTK_BACKEND_WAYLAND OFF )
     set(FLTK_USE_PANGO   OFF )
 else()
+    # Linux
+    set(FLTK_BACKEND_X11 ON)
+    set(FLTK_BACKEND_WAYLAND ON)
     set(FLTK_USE_PANGO   ON)
 endif()
 
@@ -131,8 +140,8 @@ ExternalProject_Add(
     -DFLTK_BUILD_TEST=OFF
     -DFLTK_BUILD_SHARED_LIBS=${FLTK_BUILD_SHARED_LIBS}
     -DFLTK_BUILD_FORMS=OFF
-    -DFLTK_BACKEND_WAYLAND=${TLRENDER_WAYLAND}
-    -DFLTK_BACKEND_X11=${TLRENDER_X11}
+    -DFLTK_BACKEND_WAYLAND=${FLTK_BACKEND_WAYLAND}
+    -DFLTK_BACKEND_X11=${FLTK_BACKEND_X11}
     -DFLTK_USE_SYSTEM_LIBDECOR=${FLTK_USE_SYSTEM_LIBDECOR}
     -DFLTK_USE_LIBDECOR_GTK=${FLTK_USE_LIBDECOR_GTK}
     -DFLTK_USE_SYSTEM_ZLIB=${FLTK_USE_SYSTEM_ZLIB}

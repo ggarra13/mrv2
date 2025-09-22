@@ -22,6 +22,8 @@ if(WIN32)
     set(POCO_SHARED_LIBS ON)
 endif()
 
+message(STATUS "POCO DEPENDENCIES=${POCO_DEPENDENCIES}")
+
 
 ExternalProject_Add(
     POCO
