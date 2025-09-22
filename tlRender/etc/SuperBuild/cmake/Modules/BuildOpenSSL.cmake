@@ -20,12 +20,26 @@ set(OpenSSL_DEP )
 set(OpenSSL_DEP PARENT_SCOPE )
 
 if(WIN32)
-    #
-    # We build with Msys
-    #
+    # Define the default, and most common, Strawberry Perl path
+    set(STRAWBERRY_PERL_ROOT "C:/Strawberry")
+
+    # Use CMake's find_program with the HINTS argument.
+    # HINTS gives a set of paths to check *before* looking in the system's PATH.
+    find_program(PERL_EXE
+        NAMES perl.exe
+        HINTS "${STRAWBERRY_PERL_ROOT}/perl/bin"
+        DOC "Path to the Strawberry Perl executable"
+    )
+
+    # If PERL_EXE is not found, it's still possible that the user has a custom
+    # installation. In that case, we can provide a helpful error message.
+    if(NOT PERL_EXE)
+	message(FATAL_ERROR "Could not find Strawberry Perl. Please ensure that the 'PERL_EXE' CMake variable STRAWBERRY_PERL_ROOT is set correctly, or that Strawberry Perl is installed to the default location.")
+    endif()
+    
     if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
 	set(OpenSSL_CONFIGURE
-	    perl Configure VC-WIN64-ARM
+	    ${PERL_EXE} Configure VC-WIN64-ARM
 	    --prefix=${CMAKE_INSTALL_PREFIX}
 	    --openssldir=${CMAKE_INSTALL_PREFIX}
 	    no-external-tests
@@ -35,7 +49,7 @@ if(WIN32)
 	set(OpenSSL_INSTALL nmake install)
     elseif ($ENV{ARCH} MATCHES ".*amd64.*")
 	set(OpenSSL_CONFIGURE
-	    perl Configure VC-WIN64A
+	    ${PERL_EXE} Configure VC-WIN64A
 	    --prefix=${CMAKE_INSTALL_PREFIX}
 	    --openssldir=${CMAKE_INSTALL_PREFIX}
 	    no-external-tests
