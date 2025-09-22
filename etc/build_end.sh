@@ -3,6 +3,21 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
+vcpkg_ARCH=x64
+if [[ $ARCH == *amd64* ]]; then
+    vcpkg_ARCH=x64
+elif [[ $ARCH == *aarch64* || $ARCH == *arm64* ]]; then
+    vcpkg_ARCH=arm64
+fi
+vcpkg_TRIPLET=${vcpkg_ARCH}-windows
+vcpkg_DIR=$BUILD_DIR/deps/vcpkg/src/vcpkg/installed/$vcpkg_TRIPLET
+	
+if [[ $KERNEL == *Windows* ]]; then
+    if [[ -d $vcpkg_DIR ]]; then
+	echo "Copying $vcpkg_DIR/bin/*.dll"
+	cp -rf $vcpkg_DIR/bin/*.dll $BUILD_DIR/install/bin
+    fi
+fi
 
 if [[ "$CMAKE_TARGET" == "package" ]]; then
 
@@ -16,7 +31,7 @@ if [[ "$CMAKE_TARGET" == "package" ]]; then
 	mrv2_NAME=vmrv2
     fi
     
-    if [[ $KERNEL == *Msys* ]]; then
+    if [[ $KERNEL == *Windows* ]]; then
 	send_to_packages "${mrv2_NAME}-v${mrv2_VERSION}-Windows-${ARCH}.exe"
 	send_to_packages "${mrv2_NAME}-v${mrv2_VERSION}-Windows-${ARCH}.zip"
 	. etc/windows/windows_signing_installer.sh
@@ -35,7 +50,7 @@ fi
 #
 # Create symbolic links to start-up shell scripts
 #
-if [[ $KERNEL != *Msys* ]]; then
+if [[ $KERNEL != *Windows* ]]; then
     chmod a+x $PWD/$BUILD_DIR/install/bin/mrv2.sh
     has_hdr=0
     if [[ -e $PWD/$BUILD_DIR/install/bin/hdr.sh ]]; then

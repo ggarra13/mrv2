@@ -84,7 +84,7 @@ fi
 
 if [ -z "$MRV2_PYTHON" ]; then
     if [[ $BUILD_PYTHON == ON || $BUILD_PYTHON == 1 ]]; then
-	if [[ $KERNEL == *Msys* ]]; then
+	if [[ $KERNEL == *Windows* ]]; then
 	    export PYTHONEXE=python.exe
 	else
 	    export PYTHONEXE=python3
@@ -158,7 +158,7 @@ fi
 if [ -z "$TLRENDER_NDI_SDK" ]; then
     if [[ $KERNEL == *Linux* ]]; then
 	export TLRENDER_NDI_SDK="$HOME/code/lib/NDI Advanced SDK for Linux/"
-    elif [[ $KERNEL == *Msys* ]]; then
+    elif [[ $KERNEL == *Windows* ]]; then
 	export TLRENDER_NDI_SDK="C:/Program Files/NDI/NDI 6 Advanced SDK/"
     else
 	export TLRENDER_NDI_SDK="/Library/NDI Advanced SDK for Apple/"
@@ -207,7 +207,7 @@ fi
 
 if [ -z "$VULKAN_SDK" ]; then
     export VULKAN_SDK=/crapola_of_dir
-    if [[ $KERNEL == *Msys* ]]; then
+    if [[ $KERNEL == *Windows* ]]; then
 	export VULKAN_SDK=/C/VulkanSDK
     elif [[ $KERNEL == *Linux* ]]; then
 	if [[ -d VulkanSDK-Linux ]]; then
@@ -280,15 +280,6 @@ if [ -z "$FLTK_BUILD_SHARED" ]; then
 	export FLTK_BUILD_SHARED=OFF
     fi
 fi
-
-#
-#
-#
-if [[ $KERNEL == *Msys* ]]; then
-    if [[ $ARCH == *arm64* || $ARCH == *aarch64* ]]; then
-	export TLRENDER_NET=OFF  # off for now
-    fi
-fi
     
 #
 # Clean python path to avoid clashes, mainly, with macOS meson
@@ -316,7 +307,7 @@ if [[ $KERNEL == *Darwin* ]]; then
     echo "Building on MacOS Brand ${MACOS_BRAND}"
 fi
 echo "Compiler flags are ${FLAGS}"
-if [[ $KERNEL == *Msys* ]]; then
+if [[ $KERNEL == *Windows* ]]; then
     if command -v makensis.exe > /dev/null 2>&1; then
 	nsis_exe=makensis.exe
     else
@@ -403,7 +394,7 @@ fi
 #
 # Handle Windows pre-flight compiles
 #
-if [[ $KERNEL == *Msys* ]]; then
+if [[ $KERNEL == *Windows* ]]; then
     . $PWD/etc/windows/compile_dlls.sh
 fi
 
@@ -426,7 +417,7 @@ cd $BUILD_DIR
 #
 # Handle Microsoft vcpkg variables
 #
-export  VCPKG_ROOT=$PWD/$BUILD_DIR/deps/vcpkg
+unset  VCPKG_ROOT
 export VCPKG_INSTALL_PREFIX=$PWD/install
 
 cmd="cmake -G '${CMAKE_GENERATOR}'
@@ -511,7 +502,7 @@ fi
 cmd="./runmeq.sh ${CMAKE_BUILD_TYPE} -t ${CMAKE_TARGET}"
 run_cmd $cmd
 
-if [[ "$CMAKE_TARGET" != "package" ]]; then
+if [[ "$CMAKE_TARGET" != "package" && "$CMAKE_TARGET" != "install" ]]; then
     . $PWD/etc/build_end.sh
 fi
 

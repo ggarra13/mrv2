@@ -2,6 +2,9 @@
 set(LCMS2_GIT_REPO "https://github.com/mm2/Little-CMS.git")
 set(LCMS2_GIT_TAG lcms2.17)
 
+set(LCMS2_DEPENDENCIES )
+message(STATUS "LCMS2 DEPENDENCIES=${LCMS2_DEPENDENCIES}")
+
 set(LCMS2_ARGS
     ${TLRENDER_EXTERNAL_ARGS}
 )
@@ -23,7 +26,7 @@ ExternalProject_Add(
     GIT_REPOSITORY ${LCMS2_GIT_REPO}
     GIT_TAG ${LCMS2_GIT_TAG}
 
-    DEPENDS ${Gettext_DEP}
+    DEPENDS ${LCMS2_DEPENDENCIES}
     
     PATCH_COMMAND ${LCMS2_PATCH}
     

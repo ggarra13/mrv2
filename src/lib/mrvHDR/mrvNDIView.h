@@ -18,7 +18,7 @@
 
 #include <memory>
 
-#include <half.h>
+#include <Imath/half.h>
 
 #include <tlVk/Texture.h>
 

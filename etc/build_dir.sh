@@ -125,7 +125,7 @@ if [[ ! $RUNME || ${BUILD_PYTHON} == OFF || ${BUILD_PYTHON} == 0 ]]; then
     #
     export PYTHONPATH="${PYTHON_LIBDIR}:${PYTHON_SITEDIR}:${PYTHONPATH}"
 else
-    if [[ $KERNEL == *Msys* ]]; then
+    if [[ $KERNEL == *Windows* ]]; then
 	export PYTHONEXE="$PWD/${BUILD_DIR}/install/bin/python.exe"
     else
 	export PYTHONEXE="$PWD/${BUILD_DIR}/install/bin/python${PYTHON_VERSION}"

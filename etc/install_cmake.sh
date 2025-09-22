@@ -28,7 +28,7 @@ if [[ $KERNEL == *Linux* ]]; then
 	CMAKE_PLATFORM=linux-x86_64
     fi
     CMAKE_EXT=tar.gz
-elif [[ $KERNEL == *Msys* ]]; then
+elif [[ $KERNEL == *Windows* ]]; then
     if [[ $ARCH == *aarch64* || $ARCH == *arm64* ]]; then
 	CMAKE_PLATFORM=windows-arm64
     else
@@ -45,7 +45,7 @@ wget -c -q https://github.com/Kitware/CMake/releases/download/v${CMAKE_RELEASE}/
 
 
 echo "Decompressing archive..."
-if [[ $KERNEL != *Msys* ]]; then
+if [[ $KERNEL != *Windows* ]]; then
     echo "untarring cmake"
     tar -xf cmake-${CMAKE_RELEASE}-${CMAKE_PLATFORM}.${CMAKE_EXT}
 else
