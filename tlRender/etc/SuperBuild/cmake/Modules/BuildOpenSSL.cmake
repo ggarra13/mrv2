@@ -113,7 +113,7 @@ else()
 	    ${CMAKE_COMMAND} -E copy_directory_if_different ${VCPKG_LIB_DIR} ${CMAKE_INSTALL_PREFIX}/lib
 	    COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different ${VCPKG_INCLUDE_DIR} ${CMAKE_INSTALL_PREFIX}/include
 	    COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different ${VCPKG_BIN_DIR} ${CMAKE_INSTALL_PREFIX}/bin
-	    ${CMAKE_COMMAND} -E echo "Copying openssl for FFmpeg..."
+	    COMMAND ${CMAKE_COMMAND} -E echo "Copying openssl for FFmpeg..."
 	    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_INSTALL_PREFIX}/lib/libssl.lib ${CMAKE_INSTALL_PREFIX}/lib/ssl.lib 
 	    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_INSTALL_PREFIX}/lib/libcrypto.lib ${CMAKE_INSTALL_PREFIX}/lib/crypto.lib 
 	    DEPENDS OpenSSL
