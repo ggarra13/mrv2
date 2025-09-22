@@ -266,14 +266,6 @@ namespace mrv
         {
             __get_xxx;
         }
-        else
-        {
-            base.get("license", lic_xxx___c, "", 256);
-            base.get("expiration", date_xxx_c, "", 256);
-
-            lic_xxx__ = lic_xxx___c;
-            date_xxx = date_xxx_c;
-        }
         
         std::string machine_id = get_machine_id();
         machine_id.erase(remove(machine_id.begin(), machine_id.end(), '\n'),
@@ -286,7 +278,7 @@ namespace mrv
         std::string expected_key = sha256(machine_id + secret_salt);
         if (lic_xxx__ != expected_key)
             return License::kInvalid;
-
+        
         unencoded_expiration = decode_string(date_xxx);
         
         // Validate expiration date
