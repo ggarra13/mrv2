@@ -109,17 +109,13 @@ else()
 	# Not done here, but in pre-flight script of mrv2
 	add_custom_target(
 	    OpenSSL_install ALL
-	    ${CMAKE_COMMAND} -E echo "Copying openssl to cmake prefix path..."
+	    ${CMAKE_COMMAND} -E echo "Copying openssl directories to CMAKE_INSTALL_PREFIX..."
 	    COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different ${VCPKG_LIB_DIR} ${CMAKE_INSTALL_PREFIX}/lib
 	    COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different ${VCPKG_INCLUDE_DIR} ${CMAKE_INSTALL_PREFIX}/include
 	    COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different ${VCPKG_BIN_DIR} ${CMAKE_INSTALL_PREFIX}/bin
-	    COMMAND ${CMAKE_COMMAND} -E echo "Copying openssl for FFmpeg..."
-	    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_INSTALL_PREFIX}/lib/libssl.lib ${CMAKE_INSTALL_PREFIX}/lib/ssl.lib 
-	    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_INSTALL_PREFIX}/lib/libcrypto.lib ${CMAKE_INSTALL_PREFIX}/lib/crypto.lib 
 	    DEPENDS OpenSSL
 	)
 	set(OpenSSL_DEP OpenSSL_install)
-	set(OpenSSL_DEP OpenSSL_install PARENT_SCOPE)
     else()
 	ExternalProject_Add(
 	    OpenSSL
@@ -131,8 +127,21 @@ else()
 	    BUILD_COMMAND ${OpenSSL_BUILD}
 	    INSTALL_COMMAND ${OpenSSL_INSTALL}
 	    BUILD_IN_SOURCE 1)
+	
 	set(OpenSSL_DEP OpenSSL)
-	set(OpenSSL_DEP OpenSSL PARENT_SCOPE)
     endif()
+    
+    # \bug Copy libssl.lib to ssl.lib and libcrypto.lib to crypto.lib so the
+    # FFmpeg configure script can find them.
+    add_custom_target(
+	OpenSSL_rename ALL
+	${CMAKE_COMMAND} -E echo "Copying openssl libraries for FFmpeg..."
+	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_INSTALL_PREFIX}/lib/libssl.lib ${CMAKE_INSTALL_PREFIX}/lib/ssl.lib 
+	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_INSTALL_PREFIX}/lib/libcrypto.lib ${CMAKE_INSTALL_PREFIX}/lib/crypto.lib 
+	DEPENDS ${OpenSSL_DEP}
+    )
+    
+    set(OpenSSL_DEP OpenSSL_rename)
+    set(OpenSSL_DEP OpenSSL_rename PARENT_SCOPE)
 endif()
 
