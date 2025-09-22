@@ -84,10 +84,7 @@ set(FLTK_BUILD_GL ${TLRENDER_GL})
 #
 # Determine whether to build fltk-vk
 #
-set(FLTK_BUILD_VK OFF)
-if (MRV2_HDR OR MRV2_BACKEND STREQUAL "VK")
-    set(FLTK_BUILD_VK ON)
-endif()
+set(FLTK_BUILD_VK ${TLRENDER_VK})
 
 
 set(FLTK_PATCH

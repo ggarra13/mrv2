@@ -14,6 +14,8 @@ namespace mrv
     class DragButton : public Fl_Box
     {
     private:
+        static bool can_drag;
+        
         bool use_timeout = false;
         bool was_docked = false; // used in handle to note that we have just undocked
         int fromx = 0, fromy = 0; // click posn., used for dragging and docking checks

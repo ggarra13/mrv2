@@ -29,6 +29,7 @@ namespace
 
 namespace mrv
 {
+    bool DragButton::can_drag = true;
 
     DragButton::DragButton(int x, int y, int w, int h, const char* l) :
         Fl_Box(x, y, w, h, l)
@@ -82,21 +83,24 @@ namespace mrv
                     get_window_coords(winx, winy);
                 }
                 
-                int deltax = Fl::event_x() + window()->x() - fromx;
-                int deltay = Fl::event_y() + window()->y() - fromy;
-                window()->position(winx + deltax, winy + deltay);
-                if (window()->parent())
-                    window()->parent()->init_sizes();
+                if (can_drag)
+                {
+                    int deltax = Fl::event_x() + window()->x() - fromx;
+                    int deltay = Fl::event_y() + window()->y() - fromy;
+                    window()->position(winx + deltax, winy + deltay);
+                    if (window()->parent())
+                        window()->parent()->init_sizes();
                 
-                int dock_attempt = would_dock();
-                if (dock_attempt)
-                {
-                    color_dock_group(FL_DARK_YELLOW);
-                    show_dock_group();
-                }
-                else
-                {
-                    hide_dock_group();
+                    int dock_attempt = would_dock();
+                    if (dock_attempt)
+                    {
+                        color_dock_group(FL_DARK_YELLOW);
+                        show_dock_group();
+                    }
+                    else
+                    {
+                        hide_dock_group();
+                    }
                 }
                 
                 ret = 1;
