@@ -4,7 +4,7 @@ set(OpenEXR_GIT_REPOSITORY "https://github.com/AcademySoftwareFoundation/openexr
 set(OpenEXR_GIT_TAG "v3.4.0")
 
 set(OpenEXR_DEPENDENCIES ${OpenJPH_DEP} Imath ZLIB)
-message(STATUS "OpenEXR DEPENDENCIES=${OpenEXR_DEPENDENCIES}"
+message(STATUS "OpenEXR DEPENDENCIES=${OpenEXR_DEPENDENCIES}")
 
 set(OpenEXR_PATCH COMMAND ${CMAKE_COMMAND} -E copy_if_different
     ${CMAKE_CURRENT_SOURCE_DIR}/patches/OpenEXR-patch/cmake/OpenEXRSetup.cmake
