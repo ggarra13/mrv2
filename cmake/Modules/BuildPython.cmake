@@ -13,6 +13,9 @@ set( Python_TINY    9 )
 
 set( Python_URL https://www.python.org/ftp/python/${Python_VERSION}.${Python_TINY}/Python-${Python_VERSION}.${Python_TINY}.tar.xz )
 
+
+set( Python_DEPENDENCIES ${OpenSSL_DEP} )
+
 if(UNIX)
     set(Python_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/python${Python_VERSION})
 else()
@@ -128,6 +131,9 @@ ExternalProject_Add(
     Python
     URL ${Python_URL}
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps/Python
+
+    DEPENDS ${Python_DPENDENCIES}
+    
     PATCH_COMMAND     "${Python_PATCH}"
     CONFIGURE_COMMAND "${Python_CONFIGURE}"
     BUILD_COMMAND     "${Python_BUILD}"

@@ -513,9 +513,6 @@ if(WIN32)
     endif()
     set(FFmpeg_MSYS2 ${MRV2_MSYS_CMD})
     
-    # \bug Copy libssl.lib to ssl.lib and libcrypto.lib to crypto.lib so the
-    # FFmpeg configure script can find them.
-    # Not done here, but in pre-flight script of mrv2
     set(FFmpeg_OPENSSL_COPY)
 
     if(WIN32)
