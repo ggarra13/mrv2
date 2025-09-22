@@ -6,11 +6,12 @@
 
 #include <FL/platform.H>
 
-#ifdef FLTK_USE_X11
+#ifdef __linux__
+#  ifdef FLTK_USE_X11
 #    include <GL/glx.h>
-#endif
+#  endif // FLTK_USE_X11
 
-#ifdef FLTK_USE_WAYLAND
+#  ifdef FLTK_USE_WAYLAND
 
 #    include <wayland-client.h>
 
@@ -28,7 +29,8 @@ extern "C"
         EGLDisplay display, EGLSurface draw, EGLSurface read,
         EGLContext context);
 }
-#endif
+#  endif // FLTK_USE_WAYLAND
+#endif // __linux__
 
 #include "mrvGL/mrvGLWindow.h"
 
@@ -59,7 +61,7 @@ namespace mrv
             if (!ctx)
                 return Fl_Gl_Window::make_current();
 
-#    ifdef _WIN32
+#  ifdef _WIN32
             HGLRC cur_hglrc = wglGetCurrentContext();
             HGLRC hglrc = fl_win32_glcontext(ctx);
             if (hglrc == cur_hglrc)
@@ -68,10 +70,10 @@ namespace mrv
             HWND hwnd = fl_win32_xid(this);
             HDC hdc = fl_GetDC(hwnd);
             wglMakeCurrent(hdc, hglrc);
-#    endif
+#  endif
 
-#    ifdef __linux__
-#        ifdef FLTK_USE_WAYLAND
+#  ifdef __linux__
+#    ifdef FLTK_USE_WAYLAND
             auto wldpy = fl_wl_display();
             if (wldpy)
             {
@@ -85,8 +87,8 @@ namespace mrv
                 auto surface = fl_wl_surface(win);
                 eglMakeCurrent(wldpy, surface, surface, eglctx);
             }
-#        endif
-#        ifdef FLTK_USE_X11
+#    endif // FLTK_USE_WAYLAND
+#    ifdef FLTK_USE_X11
             auto dpy = fl_x11_display();
             if (dpy)
             {
@@ -98,8 +100,8 @@ namespace mrv
                 auto win = fl_x11_xid(this);
                 glXMakeCurrent(dpy, win, (GLXContext)ctx);
             }
-#        endif
 #    endif
+#  endif
         }
 #endif
 

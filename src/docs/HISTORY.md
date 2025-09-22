@@ -43,6 +43,8 @@ ChangeLog
 - Added Linux aarch64 builds, without NDI.
 - Added Windows aarch64 builds, without NDI or SVT-AV1 encoder.
 - Upgraded OpenJPH to v0.23 from OpenEXR's internal version.
+- Fixed incorrect use of FLTK_USE_WAYLAND when not in __linux__.
+- Fixed incorrect use of FLTK_USE_X11 when not in __linux__.
 
 
 

@@ -59,15 +59,17 @@
 #endif
 
 
-#ifdef FLTK_USE_WAYLAND
+#ifdef __linux__
+#  ifdef FLTK_USE_WAYLAND
 #    include <wayland-client.h>
 #    include <wayland-server.h>
 #    include <wayland-client-protocol.h>
-#if  defined(OPENGL_BACKEND)
+#    if  defined(OPENGL_BACKEND)
 #        include <wayland-egl.h> // Wayland EGL MUST be included before EGL headers
 #        include <EGL/egl.h>
 #        include <EGL/eglplatform.h>
 #    endif
+#  endif
 #endif
 
 #ifdef TLRENDER_OCIO
@@ -1137,11 +1139,12 @@ namespace mrv
           << endl;
 #endif
 
-#ifdef FLTK_USE_WAYLAND
+#ifdef __linux__
+#  ifdef FLTK_USE_WAYLAND
         wl_display* wld = fl_wl_display();
         if (wld)
         {
-#ifdef OPENGL_BACKEND
+#    ifdef OPENGL_BACKEND
             EGLDisplay display = eglGetDisplay((EGLNativeDisplayType)wld);
             const char* client_apis = eglQueryString(display, EGL_CLIENT_APIS);
             const char* egl_version = eglQueryString(display, EGL_VERSION);
@@ -1156,8 +1159,9 @@ namespace mrv
               << std::endl
               << "Extensions:\t" << extensions << std::endl
               << std::endl;
-#endif
+#    endif
         }
+#  endif
 #endif
 
 #ifdef VULKAN_BACKEND
