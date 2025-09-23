@@ -3624,6 +3624,9 @@ msgstr "Preferences"
 msgid "About"
 msgstr "About"
 
+msgid "Could not open a new mrv2 instance"
+msgstr ""
+
 msgid "File extension cannot be empty."
 msgstr "File extension cannot be empty."
 
@@ -3903,6 +3906,10 @@ msgstr "File/Open/Directory"
 
 msgid "File/Open/Session"
 msgstr "File/Open/Session"
+
+#, fuzzy
+msgid "File/Open/New Program Instance"
+msgstr "File/Open/Movie or Sequence"
 
 msgid "File/Save/Movie or Sequence"
 msgstr "File/Save/Movie or Sequence"
@@ -7292,6 +7299,9 @@ msgstr "Open Movie or Sequence"
 
 msgid "Open Single Image"
 msgstr "Open Single Image"
+
+msgid "Open New Program Instance"
+msgstr ""
 
 msgid "Save Image"
 msgstr "Save Image"

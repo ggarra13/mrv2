@@ -2,7 +2,7 @@
 %typemap(in) char ** {
   // Check if is a list
   if (PyList_Check($input)) {
-    int size = PyList_Size($input);
+    Py_ssize_t size = PyList_Size($input);
     int i = 0;
     $1 = (char **) malloc((size+1)*sizeof(char *));
     for (i = 0; i < size; i++) {
@@ -13,6 +13,7 @@
       if (PyString_Check(o))
 %#endif
 	//$1[i] = PyString_AsString(PyList_GetItem($input,i));
+	//$1[i] = SWIG_Python_str_AsChar(PyList_GetItem($input,i));
         $1[i] = const_cast<char*>(PyUnicode_AsUTF8(PyList_GetItem($input,i)));
       else {
 	PyErr_SetString(PyExc_TypeError,"list must contain strings");
@@ -42,7 +43,7 @@ void show(PyObject *count = 0, PyObject *data = 0)
     self->show();
   else if (!data) {
     if (PyList_Check(count)) {
-      int size = PyList_Size(count);
+      Py_ssize_t size = PyList_Size(count);
       int i = 0;
       char** tmp = (char **) malloc((size+1)*sizeof(char *));
       for (i = 0; i < size; i++) {
@@ -52,6 +53,7 @@ void show(PyObject *count = 0, PyObject *data = 0)
 %#else  
         if (PyString_Check(o))
 %#endif
+          //tmp[i] = SWIG_Python_str_AsChar(PyList_GetItem(count,i));
      tmp[i] = const_cast<char*>(PyUnicode_AsUTF8(PyList_GetItem(count,i)));
 	  //tmp[i] = PyString_AsString(PyList_GetItem(count,i));
 	else {
@@ -77,6 +79,7 @@ void show(PyObject *count = 0, PyObject *data = 0)
 %#else  
         if (PyString_Check(o))
 %#endif
+          //tmp[i] = SWIG_Python_str_AsChar(PyList_GetItem(data,i));
      tmp[i] = const_cast<char*>(PyUnicode_AsUTF8(PyList_GetItem(data,i)));
 	  //tmp[i] = PyString_AsString(PyList_GetItem(data,i));
 	else {

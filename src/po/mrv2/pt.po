@@ -3609,6 +3609,9 @@ msgstr "Preferncias"
 msgid "About"
 msgstr "Sobre"
 
+msgid "Could not open a new mrv2 instance"
+msgstr ""
+
 msgid "File extension cannot be empty."
 msgstr "A extenso do ficheiro no pode ser vazia."
 
@@ -3888,6 +3891,10 @@ msgstr "Ficheiro/Abrir/Diretrio"
 
 msgid "File/Open/Session"
 msgstr "Ficheiro/Abrir/Sesso"
+
+#, fuzzy
+msgid "File/Open/New Program Instance"
+msgstr "Ficheiro/Abrir/Filme ou sequncia"
 
 msgid "File/Save/Movie or Sequence"
 msgstr "Ficheiro/Gravar/Filme ou sequncia"
@@ -7298,6 +7305,9 @@ msgstr "Abrir filme ou sequncia"
 
 msgid "Open Single Image"
 msgstr "Abrir a Imagem nica"
+
+msgid "Open New Program Instance"
+msgstr ""
 
 msgid "Save Image"
 msgstr "Gravar a Imagem"

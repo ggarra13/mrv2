@@ -24,7 +24,6 @@ namespace
 {
     // Minimum distance to move for undocking
     const int kDragMinDistance = 10;
-    const int kMinMove = 120;
 }
 
 namespace mrv
@@ -90,6 +89,9 @@ namespace mrv
                     window()->position(winx + deltax, winy + deltay);
                     if (window()->parent())
                         window()->parent()->init_sizes();
+
+                    // std::cerr << "dragging " << winx + deltax << ", "
+                    //           << winy + deltay << std::endl;
                 
                     int dock_attempt = would_dock();
                     if (dock_attempt)
@@ -124,7 +126,7 @@ namespace mrv
             default:
                 break;
             }
-            return (ret);
+            return ret;
         }
 
         // OK, so we must be docked - are we being dragged out of the dock?

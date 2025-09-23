@@ -5,6 +5,8 @@
 // Debug scaling of the window to image size.
 // #define DEBUG_SCALING 1
 
+#define WAYLAND_WORK_AROUND 1 
+
 #ifdef _WIN32
 #include <winsock2.h>
 #endif
@@ -16,6 +18,8 @@
 #include "mrvUI/mrvDesktop.h"
 
 #include "mrvViewport/mrvTimelineViewport.h"
+
+#include "mrvWidgets/mrvDragButton.h"
 
 namespace
 {
@@ -71,8 +75,17 @@ namespace mrv
             _init();
         }
 
+        static void can_drag_reset(bool *pter) {
+            *pter = true;
+        }
+        
         void TimelineViewport::resize(int X, int Y, int W, int H)
         {
+#if WAYLAND_WORK_AROUND
+            DragButton::can_drag = false;
+            Fl::add_timeout(0.1, (Fl_Timeout_Handler)can_drag_reset,
+                            &DragButton::can_drag);
+#endif
             GLWindow::resize(X, Y, W, H);
             if (hasFrameView())
             {
