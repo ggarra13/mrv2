@@ -1877,21 +1877,6 @@ msgstr "Flux {0} {1}..."
 msgid "Stop streaming"
 msgstr "Arrêter le streaming"
 
-msgid "Renderer"
-msgstr "Rendeur"
-
-msgid "Complexity"
-msgstr "Complexité"
-
-msgid "Draw Mode"
-msgstr "Mode de dessin"
-
-msgid "Stage Cache"
-msgstr "Cache d'étape"
-
-msgid "Disk Cache in GB"
-msgstr "Cache de disque en GB"
-
 msgid "Toggle other eye stereo image."
 msgstr "Commutation d'une autre image stéréo de l'œil."
 
@@ -2895,25 +2880,14 @@ msgstr "Le profil HAP a besoin d'une extension.mov."
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "Un nouveau fichier {0} existe déjà! Impossible de l'écraser."
 
-msgid "Rotated image info: {0}"
-msgstr "Informations sur l'image rotative: {0}"
-
-msgid "Scaled image info: {0}"
-msgstr "Informations sur l'image à l'échelle: {0}"
-
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: Impossible d'ouvrir le plugin d'écriture."
 
 msgid "Image info: {0} {1}"
 msgstr "Informations sur l'image: {0} {1}"
 
-msgid "Image too big for Save Annotations.  Will scale to the viewport size."
-msgstr ""
-"Image trop grande pour enregistrer les annotations. L'échelle sera à la "
-"taille du viseur."
-
-msgid "Viewport Size: {0} - X={1}, Y={2}"
-msgstr "Taille du point de vue : {0} - X={1}, Y={2}"
+msgid "Scaled image info: {0}"
+msgstr "Informations sur l'image à l'échelle: {0}"
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr ""
@@ -2927,6 +2901,9 @@ msgstr "En utilisant le profil {0}, le format pixel {1}."
 
 msgid "Using preset {0}."
 msgstr "Utiliser le préréglage {0}."
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "Infos du tampon hors écran : {0}"
 
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr "Enregistrer un film sans audio %<PRId64> - %<PRId64>"
@@ -2945,32 +2922,17 @@ msgstr ""
 "Audio seulement dans la chronologie, mais pas en essayant d'enregistrer "
 "l'audio."
 
-msgid "{0}: Invalid OpenGL format and type"
-msgstr "{0}: Format et type OpenGL non valide"
-
-msgid "OpenGL info: {0}"
-msgstr "Informations OpenGL: {0}"
-
 msgid "Saving... {0}"
 msgstr "Enregistrement... {0}"
 
-msgid "Unsupported output format"
-msgstr "Format de sortie non supporté"
+msgid "Could not read image data from view"
+msgstr "Impossible de lire les données d’image depuis la vue"
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "Données vidéo vides au moment {0}. Cadre répétitif."
 
 msgid "Render size: {0}"
 msgstr "Taille de rendu : {0}"
-
-msgid "Image Layer '{0}' info: {1} {2}"
-msgstr "Informations de la couche d'image '{0}' : {1} {2}"
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "Infos du tampon hors écran : {0}"
-
-msgid "Unsupported output format: "
-msgstr "Format de sortie non supporté: "
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -3694,8 +3656,8 @@ msgstr "Cadre {0} - CT: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "Image trop grande. Enregistrera la taille du viseur."
 
-msgid "Could not read image data from view"
-msgstr "Impossible de lire les données d’image depuis la vue"
+msgid "Viewport Size: {0} - X={1}, Y={2}"
+msgstr "Taille du point de vue : {0} - X={1}, Y={2}"
 
 msgid "Voice Over/Delete"
 msgstr "Voice Over/Supprimer"
@@ -3819,11 +3781,14 @@ msgstr "Avant V: % 4<PRIu64> A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "Derrière V: % 4<PRIu64> A: % 4<PRIu64>"
 
+msgid "HDR monitor found."
+msgstr "Moniteur HDR trouvé."
+
+msgid "HDR monitor not found or not configured."
+msgstr "Moniteur HDR non trouvé ou non configuré."
+
 msgid "Edit Text"
 msgstr "Modifier le texte"
-
-msgid "Invalid font for text drawing"
-msgstr "Police invalide pour le dessin de texte"
 
 msgid "Could not convert message to shape: "
 msgstr "Impossible de convertir le message en forme :"
@@ -7704,6 +7669,9 @@ msgstr "Mode d'écrasement"
 msgid "Area Selection Mode"
 msgstr "Mode de sélection des zones"
 
+msgid "Draw Mode"
+msgstr "Mode de dessin"
+
 msgid "Erase Mode"
 msgstr "Mode d'effacement"
 
@@ -7797,11 +7765,8 @@ msgstr "Activer la fenêtre des touches d'amorçage"
 msgid "Toggle About Window"
 msgstr "Commutation à propos de la fenêtre"
 
-#~ msgid "HDR monitor found."
-#~ msgstr "Moniteur HDR trouvé."
-
-#~ msgid "HDR monitor not found or not configured."
-#~ msgstr "Moniteur HDR non trouvé ou non configuré."
+#~ msgid "Renderer"
+#~ msgstr "Rendeur"
 
 #~ msgid "Complexity"
 #~ msgstr "Complexité"
@@ -7837,35 +7802,3 @@ msgstr "Commutation à propos de la fenêtre"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Police invalide pour le dessin de texte"
-
-#~ msgid "Could not read annotation image from view"
-#~ msgstr "Impossible de lire l’image d’annotation depuis la vue"
-
-#~ msgid "Returns true if the rate is valid for use with timecode."
-#~ msgstr ""
-#~ "Renvoie true si le taux est valide pour l'utilisation avec le code de temps."
-
-#~ msgid ""
-#~ "The Pixel Bar can slow down playback at high resolutions.  When this option "
-#~ "is on, the pixel toolbar will be hidden automatically."
-#~ msgstr ""
-#~ "La barre Pixel peut ralentir la lecture à haute résolution. Lorsque cette "
-#~ "option est activée, la barre d'outils pixel sera cachée automatiquement."
-
-#~ msgid "smpte2084"
-#~ msgstr "smpte2084"
-
-#~ msgid "arib-std-b67"
-#~ msgstr "arib-std-b67"
-
-#~ msgid "Vulkan info: {0}"
-#~ msgstr "Informations Vulkan: {0}"
-
-#~ msgid "Scrub with Audio"
-#~ msgstr "Scrub avec l'audio"
-
-#~ msgid "Blit Viewports"
-#~ msgstr "Affiner les affichages"
-
-#~ msgid "Blit Timeline"
-#~ msgstr "Délai de fermeture"

@@ -1922,21 +1922,6 @@ msgstr "Сверкает {0} {1}..."
 msgid "Stop streaming"
 msgstr "Прекратить поток"
 
-msgid "Renderer"
-msgstr "Редактор"
-
-msgid "Complexity"
-msgstr "Сложность"
-
-msgid "Draw Mode"
-msgstr "Режим рисования"
-
-msgid "Stage Cache"
-msgstr "Сценический кэш"
-
-msgid "Disk Cache in GB"
-msgstr "Дисковый кэш в GB"
-
 msgid "Toggle other eye stereo image."
 msgstr "Настроить другой стереоизображение."
 
@@ -2932,25 +2917,14 @@ msgstr "Профиль HAP требует расширения.mov."
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "Новый файл {0} уже существует! Не может переписать его."
 
-msgid "Rotated image info: {0}"
-msgstr "Информация о поворачиваемых изображениях: {0}"
-
-msgid "Scaled image info: {0}"
-msgstr "Расширенная информация об изображениях: {0}"
-
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: Не удаётся открыть пиджак."
 
 msgid "Image info: {0} {1}"
 msgstr "Фотография: {0} {1}"
 
-msgid "Image too big for Save Annotations.  Will scale to the viewport size."
-msgstr ""
-"Фотография слишком большая, чтобы сохранить аннотации. Расширится до размера"
-" смотрового портала."
-
-msgid "Viewport Size: {0} - X={1}, Y={2}"
-msgstr "Размер просмотра: {0} - X= {1}, Y= {2}"
+msgid "Scaled image info: {0}"
+msgstr "Расширенная информация об изображениях: {0}"
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr "Писатель не получил информацию о выходе. По умолчанию {0}"
@@ -2963,6 +2937,9 @@ msgstr "Используя профиль {0}, пиксельный формат
 
 msgid "Using preset {0}."
 msgstr "Использование предварительного оборудования {0}."
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "Информация о буфере вне экрана: {0}"
 
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr "Спасение фильма без звука %<PRId64> - %<PRId64>"
@@ -2979,32 +2956,17 @@ msgstr "Securing Pictures without Audio %<PRId64> - %<PRId64>"
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Звук только в хронологии, но не в попытке сохранить звук."
 
-msgid "{0}: Invalid OpenGL format and type"
-msgstr "{0}: Неверный формат и тип OpenGL"
-
-msgid "OpenGL info: {0}"
-msgstr "Информация OpenGL: {0}"
-
 msgid "Saving... {0}"
 msgstr "Спасаю... {0}"
 
-msgid "Unsupported output format"
-msgstr "Неподдерживаемый формат вывода"
+msgid "Could not read image data from view"
+msgstr "Не удалось прочитать данные изображения с вида"
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "Пустые видеоданные в момент {0} Повторяю рамку."
 
 msgid "Render size: {0}"
 msgstr "Размер рендеринга: {0}"
-
-msgid "Image Layer '{0}' info: {1} {2}"
-msgstr "Информация о слое изображения '{0}': {1} {2}"
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "Информация о буфере вне экрана: {0}"
-
-msgid "Unsupported output format: "
-msgstr "Неподдерживаемый формат вывода: "
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -3729,8 +3691,8 @@ msgstr "Рамка {0} - ТС: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "Слишком большое изображение, сохранит размер смотрового портала."
 
-msgid "Could not read image data from view"
-msgstr "Не удалось прочитать данные изображения с вида"
+msgid "Viewport Size: {0} - X={1}, Y={2}"
+msgstr "Размер просмотра: {0} - X= {1}, Y= {2}"
 
 msgid "Voice Over/Delete"
 msgstr "Озвучка/Удалить"
@@ -3854,11 +3816,14 @@ msgstr "   Впереди   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "      Позади V: % 4<PRIu64>    A: % 4<PRIu64>"
 
+msgid "HDR monitor found."
+msgstr "HDR-монитор найден."
+
+msgid "HDR monitor not found or not configured."
+msgstr "HDR-монитор не найден или не настроен."
+
 msgid "Edit Text"
 msgstr "Изменить текст"
-
-msgid "Invalid font for text drawing"
-msgstr "Неверный шрифт для текстового рисунка"
 
 msgid "Could not convert message to shape: "
 msgstr "Невозможно преобразовать сообщение в форму:"
@@ -7699,6 +7664,9 @@ msgstr "Режим скруба"
 msgid "Area Selection Mode"
 msgstr "Режим выделения области"
 
+msgid "Draw Mode"
+msgstr "Режим рисования"
+
 msgid "Erase Mode"
 msgstr "Стереть режим"
 
@@ -7792,11 +7760,8 @@ msgstr "Переключить окно горячих клавиш"
 msgid "Toggle About Window"
 msgstr "Закладка о окне"
 
-#~ msgid "HDR monitor found."
-#~ msgstr "HDR-монитор обнаружен."
-
-#~ msgid "HDR monitor not found or not configured."
-#~ msgstr "HDR-монитор не найден или не настроен."
+#~ msgid "Renderer"
+#~ msgstr "Редактор"
 
 #~ msgid "Complexity"
 #~ msgstr "Сложность"
@@ -7832,36 +7797,3 @@ msgstr "Закладка о окне"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Неверный шрифт для текстового рисунка"
-
-#~ msgid "Could not read annotation image from view"
-#~ msgstr "Не удалось прочитать изображение аннотации с вида"
-
-#~ msgid "Returns true if the rate is valid for use with timecode."
-#~ msgstr ""
-#~ "Возвращение верно, если ставка действительна для использования с помощью "
-#~ "временного кода."
-
-#~ msgid ""
-#~ "The Pixel Bar can slow down playback at high resolutions.  When this option "
-#~ "is on, the pixel toolbar will be hidden automatically."
-#~ msgstr ""
-#~ "Pixel Bar может замедлить воспроизведение при высоких разрешениях. Когда эта"
-#~ " опция включена, панель пикселя будет скрыта автоматически."
-
-#~ msgid "smpte2084"
-#~ msgstr "smpte2084"
-
-#~ msgid "arib-std-b67"
-#~ msgstr "arib-std-b67"
-
-#~ msgid "Vulkan info: {0}"
-#~ msgstr "Информация Vulkan: {0}"
-
-#~ msgid "Scrub with Audio"
-#~ msgstr "Скрутка звука"
-
-#~ msgid "Blit Viewports"
-#~ msgstr "Blit Viewports"
-
-#~ msgid "Blit Timeline"
-#~ msgstr "Блитная временн*е рамки"
