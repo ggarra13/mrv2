@@ -3583,6 +3583,9 @@ msgstr "Prferenzen"
 msgid "About"
 msgstr "ber"
 
+msgid "Could not open a new mrv2 instance"
+msgstr ""
+
 msgid "File extension cannot be empty."
 msgstr "Die Dateierweiterung kann nicht leer sein."
 
@@ -3865,6 +3868,10 @@ msgstr "Datei/ffnen/Verzeichnis"
 
 msgid "File/Open/Session"
 msgstr "Datei/ffnen/Sitzung"
+
+#, fuzzy
+msgid "File/Open/New Program Instance"
+msgstr "Datei/ffnen/Film oder Sequenz"
 
 msgid "File/Save/Movie or Sequence"
 msgstr "Datei/Speichern/Film oder Sequenz"
@@ -7286,6 +7293,9 @@ msgstr "Film oder Sequenz ffnen"
 
 msgid "Open Single Image"
 msgstr "Einzelnes Bild ffnen"
+
+msgid "Open New Program Instance"
+msgstr ""
 
 msgid "Save Image"
 msgstr "Bild speichern"

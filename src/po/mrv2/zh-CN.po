@@ -3522,6 +3522,9 @@ msgstr "首选项"
 msgid "About"
 msgstr "关于"
 
+msgid "Could not open a new mrv2 instance"
+msgstr ""
+
 msgid "File extension cannot be empty."
 msgstr "文件扩展名不能为空 。"
 
@@ -3796,6 +3799,10 @@ msgstr "文件/打开/目录"
 
 msgid "File/Open/Session"
 msgstr "文件/打开/Session"
+
+#, fuzzy
+msgid "File/Open/New Program Instance"
+msgstr "文件/打开/影片或序列"
 
 msgid "File/Save/Movie or Sequence"
 msgstr "文件/保存/影片或序列"
@@ -7107,6 +7114,9 @@ msgstr "打开影片或序列"
 
 msgid "Open Single Image"
 msgstr "打开单个图像"
+
+msgid "Open New Program Instance"
+msgstr ""
 
 msgid "Save Image"
 msgstr "保存图像"

@@ -3542,6 +3542,9 @@ msgstr "वरीयताएँ"
 msgid "About"
 msgstr "के बारे में"
 
+msgid "Could not open a new mrv2 instance"
+msgstr ""
+
 msgid "File extension cannot be empty."
 msgstr "फ़ाइल एक्सटेंशन रिक्त नहीं हो सकता."
 
@@ -3822,6 +3825,10 @@ msgstr "फ़ाइल/खोलें/निर्देशिका नाम
 
 msgid "File/Open/Session"
 msgstr "फ़ाइल/खोलें/सत्र"
+
+#, fuzzy
+msgid "File/Open/New Program Instance"
+msgstr "फ़ाइल/खोलें/मूवी या अनुक्रम"
 
 msgid "File/Save/Movie or Sequence"
 msgstr "फ़ाइल/सहेजें/मूवी या अनुक्रम"
@@ -7163,6 +7170,9 @@ msgstr "चलचित्र या अनुक्रम खोलें"
 
 msgid "Open Single Image"
 msgstr "एकल छवि खोलें"
+
+msgid "Open New Program Instance"
+msgstr ""
 
 msgid "Save Image"
 msgstr "छवि सहेजें"

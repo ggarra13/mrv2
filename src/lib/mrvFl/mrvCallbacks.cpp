@@ -277,16 +277,15 @@ namespace mrv
     void open_new_instance_cb(Fl_Menu_* w, ViewerUI* ui)
     {
 #ifdef _WIN32
-            std::string program = rootpath() + "/bin/mrv2.exe";
+        std::string program = rootpath() + "/bin/mrv2.exe";
 #else
-            std::string program = rootpath() + "/bin/mrv2.sh";
+        std::string program = rootpath() + "/bin/mrv2.sh";
 #endif
-            // This is needed for macOS installed bundle.
-            int ret = os::exec_command(program.c_str());
-            if (ret != 0)
-            {
-                LOG_ERROR(_("Could not open a new mrv2 instance"));
-            }
+        int ret = os::exec_command_no_block(program.c_str());
+        if (ret != 0)
+        {
+            LOG_ERROR(_("Could not open a new mrv2 instance"));
+        }
     }
 
     void previous_file_cb(Fl_Widget* w, ViewerUI* ui)

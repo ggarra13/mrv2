@@ -3616,6 +3616,9 @@ msgstr "Преференции"
 msgid "About"
 msgstr "О том, что"
 
+msgid "Could not open a new mrv2 instance"
+msgstr ""
+
 msgid "File extension cannot be empty."
 msgstr "Распространение файла не может быть пустым."
 
@@ -3899,6 +3902,10 @@ msgstr "Файл/Открыто/Каталог"
 
 msgid "File/Open/Session"
 msgstr "Файл/Открыто/Сессия"
+
+#, fuzzy
+msgid "File/Open/New Program Instance"
+msgstr "Файл/Открыто/Фильм или последовательность"
 
 msgid "File/Save/Movie or Sequence"
 msgstr "Файл/Сохранить/Фильм или последовательность"
@@ -7302,6 +7309,9 @@ msgstr "Открытое кино или последовательность"
 
 msgid "Open Single Image"
 msgstr "Открыть единый образ"
+
+msgid "Open New Program Instance"
+msgstr ""
 
 msgid "Save Image"
 msgstr "Сохранить изображение"

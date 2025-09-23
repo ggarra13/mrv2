@@ -3575,6 +3575,9 @@ msgstr "環境設定"
 msgid "About"
 msgstr "情報"
 
+msgid "Could not open a new mrv2 instance"
+msgstr ""
+
 msgid "File extension cannot be empty."
 msgstr "ファイル名を空にできません。"
 
@@ -3859,6 +3862,10 @@ msgstr "ファイル/開く/ディレクトリ"
 
 msgid "File/Open/Session"
 msgstr "ファイル/開く/セッション"
+
+#, fuzzy
+msgid "File/Open/New Program Instance"
+msgstr "ファイル/開く/ムービーまたはシーケンス"
 
 msgid "File/Save/Movie or Sequence"
 msgstr "ファイル/保存/映画またはシーケンス"
@@ -7234,6 +7241,9 @@ msgstr "ムービーまたはシーケンスを開く"
 
 msgid "Open Single Image"
 msgstr "単一画像を開く"
+
+msgid "Open New Program Instance"
+msgstr ""
 
 msgid "Save Image"
 msgstr "画像を保存"
