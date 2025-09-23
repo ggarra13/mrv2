@@ -3685,7 +3685,7 @@ msgid "About"
 msgstr "Acerca"
 
 msgid "Could not open a new mrv2 instance"
-msgstr ""
+msgstr "No pude abrir una nueva instancia de mrv2"
 
 msgid "File extension cannot be empty."
 msgstr "Extensión del archivo no puede estar vacía."
@@ -3967,9 +3967,8 @@ msgstr "Archivo/Abrir/Carpeta"
 msgid "File/Open/Session"
 msgstr "Archivo/Abrir/Sesión"
 
-#, fuzzy
 msgid "File/Open/New Program Instance"
-msgstr "Archivo/Abrir/Pelídula o Secuencia"
+msgstr "Archivo/Abrir/Nueva Instancia del Programa"
 
 msgid "File/Save/Movie or Sequence"
 msgstr "Archivo/Guardar/Pelídula o Secuencia"
@@ -7380,7 +7379,7 @@ msgid "Open Single Image"
 msgstr "Abrir una Sola Imagen"
 
 msgid "Open New Program Instance"
-msgstr ""
+msgstr "Abrir Nueva Instancia del Programa"
 
 msgid "Save Image"
 msgstr "Guardar Imagen"
@@ -7885,6 +7884,42 @@ msgstr "Alternar Ventana de Acerca de mrv2"
 
 #~ msgid "HDR monitor not found or not configured."
 #~ msgstr "Monitor HDR no encontrado o no configurado."
+
+#~ msgid "Complexity"
+#~ msgstr "Complejidad"
+
+#~ msgid "Stage Cache"
+#~ msgstr "Cache del Escenario"
+
+#~ msgid "Disk Cache in GB"
+#~ msgstr "Cache en Disco en GB"
+
+#~ msgid "Rotated image info: {0}"
+#~ msgstr "Información de Imagen Rotada: {0}"
+
+#~ msgid ""
+#~ "Image too big for Save Annotations.  Will scale to the viewport size."
+#~ msgstr ""
+#~ "Imagen demasiado grande para guardar anotaciones. Se escalará al tamaño "
+#~ "de la vista."
+
+#~ msgid "{0}: Invalid OpenGL format and type"
+#~ msgstr "{0}: Formato y tipo de OpenGL inválidos"
+
+#~ msgid "OpenGL info: {0}"
+#~ msgstr "Información de OpenGL: {0}"
+
+#~ msgid "Unsupported output format"
+#~ msgstr "Formato de salida no soportado"
+
+#~ msgid "Image Layer '{0}' info: {1} {2}"
+#~ msgstr "Información de la capa de imagen '{0}': {1} {2}"
+
+#~ msgid "Unsupported output format: "
+#~ msgstr "Formato de salida no soportado: "
+
+#~ msgid "Invalid font for text drawing"
+#~ msgstr "Fuente inválida para dibujar texto"
 
 #~ msgid "Could not read annotation image from view"
 #~ msgstr "No pude leer la imagen de anotación de la vista"
