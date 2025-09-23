@@ -3,6 +3,9 @@ include(ExternalProject)
 set(PNG_GIT_REPOSITORY "https://github.com/pnggroup/libpng.git")
 set(PNG_GIT_TAG "v1.6.44")
 
+set(PNG_DEPENDENCIES ZLIB)
+message(STATUS "PNG DEPENDENCIES=${PNG_DEPENDENCIES}")
+
 if(UNIX AND NOT APPLE)
     set(PNG_SHARED_LIBS ON)
     set(PNG_STATIC_LIBS OFF)
@@ -30,11 +33,9 @@ set(PNG_ARGS
 ExternalProject_Add(
     PNG
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/PNG
-    DEPENDS ZLIB
+    DEPENDS ${PNG_DEPENDENCIES}
     GIT_REPOSITORY ${PNG_GIT_REPOSITORY}
     GIT_TAG ${PNG_GIT_TAG}
-
-    DEPENDS ${Gettext_DEP}
     
     LIST_SEPARATOR |
     CMAKE_ARGS ${PNG_ARGS})

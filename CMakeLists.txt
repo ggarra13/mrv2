@@ -81,6 +81,7 @@ elseif(WIN32)
     
     set(vcpkg_DEP )
     set(BUILD_VCPKG TRUE)
+    set(USE_VCPKG TRUE)
     if (BUILD_VCPKG)
 	include(cmake/Modules/Buildvcpkg.cmake)
     else()
@@ -117,8 +118,12 @@ elseif(WIN32)
 	DEPENDS ${vcpkg_DEP} libiconv)
     set(Gettext_DEP libiconv gettext)
 
-    list(APPEND CMAKE_PREFIX_PATH
-	"${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows")
+    set(VCPKG_INSTALLED "${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows")
+    set(VCPKG_INCLUDE_DIR "${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows/include")
+    set(VCPKG_LIB_DIR "${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows/lib")
+    set(VCPKG_BIN_DIR "${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows/bin")
+    
+    list(APPEND CMAKE_PREFIX_PATH ${VCPKG_INSTALLED})
     set(CMAKE_TOOLCHAIN_FILE "${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
     
     
@@ -261,14 +266,8 @@ endif()
 # OpenSSL must be built before Python and pyFLTK to use the right path when
 # building Python's _ssl module.
 if(BUILD_PYTHON AND TLRENDER_NET)
-    # \@note: we must not use OpenSSL_DEP here as it is undefined after
-    #         add_subdirectory.
-    if (UNIX)
-	add_dependencies(Python OpenSSL)
-    elseif(WIN32)
-	if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
-	    add_dependencies(Python OpenSSL)
-	endif()
+    if (OpenSSL_DEP)
+	add_dependencies(Python ${OpenSSL_DEP})
     else()
 	message(FATAL_ERROR "Unknown architecture for Python and OpenSSL")
     endif()

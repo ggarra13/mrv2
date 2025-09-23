@@ -24,11 +24,11 @@ namespace
 {
     // Minimum distance to move for undocking
     const int kDragMinDistance = 10;
-    const int kMinMove = 120;
 }
 
 namespace mrv
 {
+    bool DragButton::can_drag = true;
 
     DragButton::DragButton(int x, int y, int w, int h, const char* l) :
         Fl_Box(x, y, w, h, l)
@@ -82,21 +82,27 @@ namespace mrv
                     get_window_coords(winx, winy);
                 }
                 
-                int deltax = Fl::event_x() + window()->x() - fromx;
-                int deltay = Fl::event_y() + window()->y() - fromy;
-                window()->position(winx + deltax, winy + deltay);
-                if (window()->parent())
-                    window()->parent()->init_sizes();
+                if (can_drag)
+                {
+                    int deltax = Fl::event_x() + window()->x() - fromx;
+                    int deltay = Fl::event_y() + window()->y() - fromy;
+                    window()->position(winx + deltax, winy + deltay);
+                    if (window()->parent())
+                        window()->parent()->init_sizes();
+
+                    // std::cerr << "dragging " << winx + deltax << ", "
+                    //           << winy + deltay << std::endl;
                 
-                int dock_attempt = would_dock();
-                if (dock_attempt)
-                {
-                    color_dock_group(FL_DARK_YELLOW);
-                    show_dock_group();
-                }
-                else
-                {
-                    hide_dock_group();
+                    int dock_attempt = would_dock();
+                    if (dock_attempt)
+                    {
+                        color_dock_group(FL_DARK_YELLOW);
+                        show_dock_group();
+                    }
+                    else
+                    {
+                        hide_dock_group();
+                    }
                 }
                 
                 ret = 1;
@@ -120,7 +126,7 @@ namespace mrv
             default:
                 break;
             }
-            return (ret);
+            return ret;
         }
 
         // OK, so we must be docked - are we being dragged out of the dock?

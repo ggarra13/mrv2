@@ -18,6 +18,9 @@ namespace mrv
         std::string sgetenv(const char* const n);
 
         //! Execute a command without bringing up a console on Windows.
+        int exec_command_no_block(const std::string& command);
+        
+        //! Execute a command without bringing up a console on Windows.
         int exec_command(const std::string& command);
 
         //! Execute a command through pipes and capture stdout/sterr.

@@ -13,13 +13,15 @@ list(APPEND SvtAV1_ARGS
 )
 
 
-set(SvtAV1_DEPS )
+set(SvtAV1_DEPENDENCIES )
 if(NOT WIN32)
-    set(SvtAV1_DEPS NASM)
+    set(SvtAV1_DEPENDENCIES NASM)
 else()
     include(functions/Msys2)
     set(SvtAV1_MSYS2 ${MRV2_MSYS_CMD})
 endif()
+
+message(STATUS "SvtAV1 DEPENDENCIES=${SvtAV1_DEPENDENCIES}")
 
 ExternalProject_Add(
     SvtAV1
@@ -28,7 +30,7 @@ ExternalProject_Add(
     GIT_REPOSITORY "https://gitlab.com/AOMediaCodec/SVT-AV1.git"
     GIT_TAG ${SvtAV1_TAG}
     
-    DEPENDS ${SvtAV1_DEPS} ${Gettext_DEP}
+    DEPENDS ${SvtAV1_DEPENDENCIES}
 
     PATCH_COMMAND ${SvtAV1_PATCH}
     

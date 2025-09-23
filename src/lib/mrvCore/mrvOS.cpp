@@ -123,6 +123,47 @@ namespace mrv
             return static_cast<int>(exitCode);
         }
         
+        int exec_command_no_block(const std::string& command)
+        {        
+            STARTUPINFOA si;
+            PROCESS_INFORMATION pi;
+
+            // Initialize the structures
+            ZeroMemory(&si, sizeof(si));
+            si.cb = sizeof(si);
+            ZeroMemory(&pi, sizeof(pi));
+
+            // Convert command to a mutable char buffer for CreateProcessA
+            std::vector<char> cmd(command.begin(), command.end());
+            cmd.push_back('\0');
+
+            // Create the process
+            if (!CreateProcessA(
+                    NULL,           // No module name (use command line)
+                    cmd.data(),     // Command line
+                    NULL,           // Process handle not inheritable
+                    NULL,           // Thread handle not inheritable
+                    FALSE,          // Set handle inheritance to FALSE
+                    CREATE_NO_WINDOW, // Don't create a console window
+                    NULL,           // Use parent's environment block
+                    NULL,           // Use parent's starting directory
+                    &si,            // Pointer to STARTUPINFOA structure
+                    &pi             // Pointer to PROCESS_INFORMATION structure
+                    )) {
+                throw std::runtime_error("CreateProcess failed!");
+            }
+
+
+            // DO NOT wait for the process to finish.
+            // Instead, close the handles immediately.
+            // Closing these handles does NOT terminate the new process.
+            // It just releases your program's reference to it.
+            CloseHandle(pi.hProcess);
+            CloseHandle(pi.hThread);
+
+            return 0;
+        }
+        
         int exec_command(const std::string& command,
                          std::string& std_out,
                          std::string& std_err)
@@ -213,9 +254,17 @@ namespace mrv
         }
 
 #else
+        
         int exec_command(const std::string& command)
         {
             return ::system(command.c_str());
+        }
+        
+        int exec_command_no_block(const std::string& command)
+        {
+            std::string no_block = command + " &";
+            exec_command(no_block);
+            return 0;
         }
         
         int exec_command(const std::string& command,

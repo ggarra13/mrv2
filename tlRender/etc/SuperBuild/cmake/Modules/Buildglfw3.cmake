@@ -4,6 +4,8 @@ set(glfw3_GIT_REPOSITORY "https://github.com/glfw/glfw.git")
 #set(glfw3_GIT_TAG 3eaf1255b29fdf5c2895856c7be7d7185ef2b241)  # used to work
 set(glfw3_GIT_TAG "3.4")  # used to work
 
+set(glfw3_DEPENDENCIES )
+
 set(glfw3_Linux_ARGS )
 if(UNIX AND NOT APPLE)
     list(APPEND glfw3_Linux_ARGS
@@ -35,7 +37,7 @@ ExternalProject_Add(
     GIT_TAG ${glfw3_GIT_TAG}
     PATCH_COMMAND ${glfw3_PATCH}
     
-    DEPENDS ${Gettext_DEP}
+    DEPENDS ${glfw_DEPENDENCIES}
     
     LIST_SEPARATOR |
     CMAKE_ARGS ${glfw3_ARGS})

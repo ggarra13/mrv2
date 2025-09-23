@@ -240,17 +240,21 @@ namespace mrv
         return oss.str();
     }
 
-#define __get_xxx                                               \
-    lic_xxx__ = lic_xxx___c;                                    \
-    lic_xxx__ = lic_xxx__.substr(0, 64);                        \
-    date_xxx = lic_xxx___c;                                     \
-    date_xxx = date_xxx.substr(64,                              \
-                               date_xxx.size());
+#define get_xxx___                                                      \
+    std::string key_part1 = full.substr(0, key_part1_len);              \
+    std::string expiry_part1 = full.substr(expiry_part1_start,          \
+                                           expiry_part1_len);           \
+    std::string key_part2 = full.substr(key_part2_start,                \
+                                        key_part2_len);                 \
+    std::string expiry_part2 = full.substr(expiry_part2_start);         \
+    lic_xxx__ = key_part1 + key_part2;                                  \
+    date_xxx  = expiry_part1 + expiry_part2; 
     
 
     License validate_xxx(std::string& unencoded_expiration,
-                             const std::string& secret_salt)
+                         const std::string& secret_salt)
     {
+        std::string full;
         std::string lic_xxx__;
         std::string date_xxx;
         
@@ -264,20 +268,29 @@ namespace mrv
 
         if (strlen(lic_xxx___c) > 0)
         {
-            __get_xxx;
-        }
-        else
-        {
-            base.get("license", lic_xxx___c, "", 256);
-            base.get("expiration", date_xxx_c, "", 256);
+            // Define the known lengths of the segments based on the encoding specification.
+            const size_t key_part1_len = 48;
+            const size_t expiry_part1_len = 4;
+            const size_t key_part2_len = 16;
 
-            lic_xxx__ = lic_xxx___c;
-            date_xxx = date_xxx_c;
+            // Define the starting positions for each segment.
+            const size_t expiry_part1_start = key_part1_len;
+            const size_t key_part2_start = expiry_part1_start + expiry_part1_len;
+            const size_t expiry_part2_start = key_part2_start + key_part2_len;
+
+            full = lic_xxx___c;
+            
+            // Defensive check to ensure the full_license is long enough to contain all fixed-size parts.
+            if (full.length() < expiry_part2_start) {
+                return License::kInvalid;
+            }
+
+            get_xxx___;
         }
         
         std::string machine_id = get_machine_id();
         machine_id.erase(remove(machine_id.begin(), machine_id.end(), '\n'),
-                          machine_id.end());
+                         machine_id.end());
         machine_id.erase(remove(machine_id.begin(), machine_id.end(), '\r'),
                          machine_id.end());
         machine_id.erase(remove(machine_id.begin(), machine_id.end(), ' '),
@@ -286,7 +299,7 @@ namespace mrv
         std::string expected_key = sha256(machine_id + secret_salt);
         if (lic_xxx__ != expected_key)
             return License::kInvalid;
-
+        
         unencoded_expiration = decode_string(date_xxx);
         
         // Validate expiration date

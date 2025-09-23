@@ -5,64 +5,122 @@
 
 #include "mrvCypher.h"
 
-#include <sstream>
+#include <algorithm>
 #include <iomanip>
+#include <iostream>
+#include <numeric>
+#include <string>
+#include <sstream>
+#include <vector>
 
 namespace
 {
-    const std::string kKey = "mrv2 is simple and great!";
+    const std::string kKey = "mrv2 and vmrv2 are simple and great! Please don't crack it.";
     bool cypher_enabled = true;
 } // namespace
 
 namespace mrv
 {
-
-    void xor_cipher_hex(
-        const std::string& plaintext, const std::string& key,
-        std::string& ciphertext)
+    namespace
     {
-        int key_len = key.length();
-        int plaintext_len = plaintext.length();
-        for (int i = 0; i < plaintext_len; i++)
-        {
-            // XOR the current character with the corresponding character in
-            // the key
-            char xored = plaintext[i] ^ key[i % key_len];
+        // Helper to convert a single hex digit to its integer value
+        unsigned char hexCharToByte(char c) {
+            if (c >= '0' && c <= '9') return c - '0';
+            if (c >= 'a' && c <= 'f') return c - 'a' + 10;
+            if (c >= 'A' && c <= 'F') return c - 'A' + 10;
+            throw std::invalid_argument("Invalid hex character");
+        }
+
+        std::vector<unsigned char> hexStringToBytes(const std::string& hex) {
+            if (hex.size() % 2 != 0)
+                throw std::invalid_argument("Hex string must have even length");
+
+            std::vector<unsigned char> bytes;
+            bytes.reserve(hex.size() / 2);
+
+            for (size_t i = 0; i < hex.size(); i += 2) {
+                unsigned char high = hexCharToByte(hex[i]);
+                unsigned char low  = hexCharToByte(hex[i + 1]);
+                bytes.push_back((high << 4) | low);
+            }
+            return bytes;
+        }
         
-            std::stringstream hex;
-            hex << std::hex << std::setw(2) << std::setfill('0') << (static_cast<unsigned int>(static_cast<unsigned char>(xored)));
-            ciphertext += hex.str();
+        std::vector<int> xor_cypher_ksa(const std::string& key)
+        {
+            std::vector<int> S(256);
+            std::iota(S.begin(), S.end(), 0); // Fill with 0-255
+            
+            int j = 0;
+            for (int i = 0; i < 256; ++i) {
+                j = (j + S[i] + key[i % key.length()]) % 256;
+                std::swap(S[i], S[j]);
+            }
+            return S;
+        }
+
+        std::vector<unsigned char> xor_cypher_prga(std::vector<int>& S,
+                                            size_t length)
+        {
+            std::vector<unsigned char> keystream;
+            int i = 0, j = 0;
+            for (size_t k = 0; k < length; ++k) {
+                i = (i + 1) % 256;
+                j = (j + S[i]) % 256;
+                std::swap(S[i], S[j]);
+                int t = (S[i] + S[j]) % 256;
+                keystream.push_back(static_cast<unsigned char>(S[t]));
+            }
+            return keystream;
+        }
+
+        std::vector<unsigned char> xor_cypher_crypt(const std::string& data,
+                                             const std::string& key)
+        {
+            std::vector<unsigned char> out;
+            
+            std::vector<int> S = xor_cypher_ksa(key);
+            std::vector<unsigned char> keystream = xor_cypher_prga(S, data.length());
+
+            for (size_t i = 0; i < data.length(); ++i) {
+                out.push_back(static_cast<unsigned char>(data[i] ^ keystream[i]));
+            }
+            return out;
         }
     }
     
-    char hex_char_to_byte(char c)
+    void xor_cipher_hex(
+        std::string& cipherText, const std::string& plaintext, const std::string& key)
     {
-        if (c >= '0' && c <= '9') return c - '0';
-        if (c >= 'a' && c <= 'f') return 10 + (c - 'a');
-        if (c >= 'A' && c <= 'F') return 10 + (c - 'A');
-        return 0;
+        std::vector<unsigned char> encrypted_data = xor_cypher_crypt(plaintext, key);
+        std::stringstream hex;
+        for (auto xored : encrypted_data)
+        {
+            hex << std::hex << std::setw(2) << std::setfill('0') << (static_cast<unsigned int>(static_cast<unsigned char>(xored)));
+        }
+        cipherText = hex.str();
     }
 
     void xor_decipher_hex(
-        const std::string& ciphertext, const std::string& key,
-        std::string& plaintext)
+        std::string& plainText, const std::string& cipherText, const std::string& key) 
     {
-        plaintext.clear();
-        int key_len = key.length();
-        for (size_t i = 0; i < ciphertext.length(); i += 2)
-        {
-            unsigned char byte = (hex_char_to_byte(ciphertext[i]) << 4) |
-                                 hex_char_to_byte(ciphertext[i + 1]);
-            char decoded = byte ^ key[(i / 2) % key_len];
-            plaintext += decoded;
+        std::vector<unsigned char> encrypted_data = hexStringToBytes(cipherText);
+            
+        std::vector<int> S = xor_cypher_ksa(key);
+        std::vector<unsigned char> keystream = xor_cypher_prga(S, encrypted_data.size());
+
+        for (size_t i = 0; i < encrypted_data.size(); ++i) {
+            plainText += static_cast<char>(static_cast<unsigned char>(encrypted_data[i]) ^ keystream[i]);
         }
     }
     
     std::string encode_string(const std::string& plainText)
     {
+         
         std::string out;
+        
         if (cypher_enabled)
-            xor_cipher_hex(plainText, kKey, out);
+            xor_cipher_hex(out, plainText, kKey);
         else
             out = plainText;
         return out;
@@ -72,7 +130,7 @@ namespace mrv
     {
         std::string out;
         if (cypher_enabled)
-            xor_decipher_hex(encodedText, kKey, out);
+            xor_decipher_hex(out, encodedText, kKey);
         else
             out = encodedText;
         return out;
