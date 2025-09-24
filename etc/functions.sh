@@ -80,19 +80,19 @@ get_kernel()
 	    export NATIVE_CXX_COMPILER_NAME="c++"
 	fi
 
-	if [[ "$NATIVE_C_COMPILER" == "" ]]; then
+	if [[ -z "$NATIVE_C_COMPILER" ]]; then
 	    export NATIVE_C_COMPILER=`which gcc`
 	    export NATIVE_C_COMPILER_NAME="gcc"
 	fi
-	if [[ "$NATIVE_CXX_COMPILER" == "" ]]; then
+	if [[ -z "$NATIVE_CXX_COMPILER" ]]; then
 	    export NATIVE_CXX_COMPILER=`which g++`
 	    export NATIVE_CXX_COMPILER_NAME="g++"
 	fi
-	if [[ "$GENERIC_C_COMPILER" == "" ]]; then
+	if [[ -z "$GENERIC_C_COMPILER" ]]; then
 	    export GENERIC_C_COMPILER=`which gcc`
 	    export GENERIC_C_COMPILER_NAME="gcc"
 	fi
-	if [[ "$GENERIC_CXX_COMPILER" == "" ]]; then
+	if [[ -z "$GENERIC_CXX_COMPILER" ]]; then
 	    export GENERIC_CXX_COMPILER=`which g++`
 	    export GENERIC_CXX_COMPILER_NAME="g++"
 	fi
