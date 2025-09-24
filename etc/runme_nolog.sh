@@ -249,7 +249,11 @@ else
 	export TLRENDER_VK=OFF
 	export MRV2_HDR=OFF
     else
-	echo "Vulkan FOUND at ${VULKAN_SDK}/include/vulkan"
+	if [[ "$TLRENDER_VK" == "ON" || "$TLRENDER_VK" == "1" ]]; then
+	    echo "Vulkan FOUND at ${VULKAN_SDK}/include/vulkan"
+	else
+	    export MRV2_HDR=OFF
+	fi
     fi
 fi
 
