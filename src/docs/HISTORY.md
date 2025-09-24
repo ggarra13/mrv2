@@ -30,10 +30,9 @@ I use the email information to contact you privately.  I don't sell your informa
 - u$  50 for a node-lock license for one year.
 - u$ 150 for a node-lock license to own.
 
-- u$ 250 for a node-lock license for one year on Windows ARM64 or Linux aarch64.
-- u$ 500 for a node-lock license to own on Windows ARM64 or Linux aarch64.
-
 - The prices are cumulative.  If you donate, say u$10 in 5 months, you can access the node-lock license for one year.
+
+- Excessive pricing for aarch64 builds has been removed.
 
 License works for both mrv2 and vmrv2 (you can have both installed).
 
@@ -46,7 +45,7 @@ ChangeLog
 - Fixed incorrect use of FLTK_USE_WAYLAND when not in __linux__.
 - Fixed incorrect use of FLTK_USE_X11 when not in __linux__.
 - Made volume slider automatically unmute the audio if it was muted.
-
+- Added "File/Open/New Program Instance" to pop up a new mrv2.
 
 
 v1.4.1
