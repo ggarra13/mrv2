@@ -207,6 +207,8 @@ namespace mrv
         virtual void draw(
             const std::shared_ptr<timeline_vlk::Render>&,
             const std::shared_ptr<vulkan::Lines> lines) override;
+
+        bool rectangle = false;
     };
 
     void to_json(nlohmann::json& json, const VKErasePathShape& value);

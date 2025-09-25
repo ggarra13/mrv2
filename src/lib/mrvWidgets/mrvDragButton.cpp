@@ -89,9 +89,6 @@ namespace mrv
                     window()->position(winx + deltax, winy + deltay);
                     if (window()->parent())
                         window()->parent()->init_sizes();
-
-                    // std::cerr << "dragging " << winx + deltax << ", "
-                    //           << winy + deltay << std::endl;
                 
                     int dock_attempt = would_dock();
                     if (dock_attempt)

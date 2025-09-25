@@ -91,6 +91,7 @@ namespace mrv
 
     namespace vulkan
     {
+        
         void TimelineViewport::_handleDragLeftMouseButtonShapes() noexcept
         {
             TLRENDER_P();
@@ -163,8 +164,20 @@ namespace mrv
                 if (!shape)
                     return;
 
-                shape->pts.push_back(pnt);
-                _addAnnotationShapePoint();
+                if (shape->rectangle)
+                {
+                    shape->pts[1].x = pnt.x;
+                    shape->pts[2].x = pnt.x;
+                    shape->pts[2].y = pnt.y;
+                    shape->pts[3].y = pnt.y;
+                    _updateAnnotationShape();
+                }
+                else
+                {
+                    shape->pts.push_back(pnt);
+                    _addAnnotationShapePoint();
+                }
+                
                 redrawWindows();
                 return;
             }
@@ -354,12 +367,24 @@ namespace mrv
             case ActionMode::kErase:
             {
                 auto shape = std::make_shared< VKErasePathShape >();
-                shape->pen_size = pen_size * 3.5F;
-                shape->color = color;
-                shape->soft = softBrush;
-                shape->pts.push_back(pnt);
+                if (Fl::event_alt())
+                {
+                    shape->rectangle = true;
+                    shape->pts.push_back(pnt);
+                    shape->pts.push_back(pnt);
+                    shape->pts.push_back(pnt);
+                    shape->pts.push_back(pnt);
+                }
+                else
+                {
+                    shape->pen_size = pen_size * 3.5F;
+                    shape->color = color;
+                    shape->soft = softBrush;
+                    shape->pts.push_back(pnt);
+                }
+                
                 annotation->push_back(shape);
-                _createAnnotationShape(false);
+                _createAnnotationShape(false); // not laser
                 break;
             }
             case ActionMode::kArrow:

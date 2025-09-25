@@ -291,6 +291,12 @@ namespace mrv
             std::string prefix = "gui/" + label;
             std::string key;
 
+            key = prefix + "/WindowX";
+            settings->setValue(key, x_root());
+            
+            key = prefix + "/WindowY";
+            settings->setValue(key, y_root());
+            
             key = prefix + "/WindowW";
             settings->setValue(key, w());
 

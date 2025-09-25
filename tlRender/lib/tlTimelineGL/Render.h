@@ -64,10 +64,11 @@ namespace tl
             void setLUTOptions(const timeline::LUTOptions&) override;
             void setHDROptions(const timeline::HDROptions&) override;
 
-            void drawRect(const math::Box2i&, const image::Color4f&) override;
+            void drawRect(const math::Box2i&, const image::Color4f&,
+                          const std::string& shaderName = "") override;
             void drawMesh(
                 const geom::TriangleMesh2&, const math::Vector2i& position,
-                const image::Color4f&, const std::string& meshName = "") override;
+                const image::Color4f&, const std::string& shaderName = "") override;
             void drawColorMesh(
                 const geom::TriangleMesh2&, const math::Vector2i& position,
                 const image::Color4f&) override;
