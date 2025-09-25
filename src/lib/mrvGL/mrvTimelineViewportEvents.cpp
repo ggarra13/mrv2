@@ -156,6 +156,7 @@ namespace mrv
                     shape->pts[2].x = pnt.x;
                     shape->pts[2].y = pnt.y;
                     shape->pts[3].y = pnt.y;
+                    shape->drawing = true;
                     _updateAnnotationShape();
                 }
                 else
@@ -423,6 +424,7 @@ namespace mrv
 
                 if (Fl::event_alt())
                 {
+                    shape->drawing = true;
                     shape->rectangle = true;
                     shape->pts.push_back(pnt);
                     shape->pts.push_back(pnt);
@@ -431,6 +433,7 @@ namespace mrv
                 }
                 else
                 {
+                    shape->drawing = false;
                     shape->rectangle = false;
                     shape->pen_size = pen_size * 3.5F;
                     shape->soft = softBrush;
@@ -629,8 +632,32 @@ namespace mrv
             p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
             p.ui->uiUndoDraw->activate();
         }
+        
+        int TimelineViewport::_handleReleaseLeftMouseButtonShapes() noexcept
+        {
+            TLRENDER_P();
 
+            auto annotation = p.player->getAnnotation();
+            if (p.actionMode != ActionMode::kScrub && !annotation)
+                return 0;
+            
+            std::shared_ptr< draw::Shape > s;
+            if (annotation) s = annotation->lastShape();
+            
+            auto shape = dynamic_cast< GLErasePathShape* >(s.get());
+            if (!shape)
+            {
+                return 1;
+            }
+            
+            if (shape->rectangle)
+                shape->drawing = false;
 
+            redrawWindows();
+
+            return 1;
+        }
+        
         void TimelineViewport::editText(
             const std::shared_ptr< draw::Shape >& s, const int index) noexcept
         {

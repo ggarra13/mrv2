@@ -46,6 +46,7 @@ ChangeLog
 - Fixed incorrect use of FLTK_USE_X11 when not in __linux__.
 - Made volume slider automatically unmute the audio if it was muted.
 - Added "File/Open/New Program Instance" to pop up a new mrv2.
+- Made Erase tool support Alt + Drag to clear a rectangular area quickly.
 
 
 v1.4.1

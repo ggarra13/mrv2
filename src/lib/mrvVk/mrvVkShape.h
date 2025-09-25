@@ -209,6 +209,7 @@ namespace mrv
             const std::shared_ptr<vulkan::Lines> lines) override;
 
         bool rectangle = false;
+        bool drawing = false;
     };
 
     void to_json(nlohmann::json& json, const VKErasePathShape& value);

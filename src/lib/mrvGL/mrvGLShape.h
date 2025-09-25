@@ -222,6 +222,7 @@ namespace mrv
             const std::shared_ptr<opengl::Lines>&) override;
 
         bool rectangle = false;
+        bool drawing = true;
     };
 
     void to_json(nlohmann::json& json, const GLErasePathShape& value);

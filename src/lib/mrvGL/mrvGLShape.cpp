@@ -178,6 +178,19 @@ namespace mrv
             math::Box2i box(
                 pts[0].x, pts[0].y, pts[2].x - pts[0].x, pts[2].y - pts[0].y);
             render->drawRect(box, color, "erase");
+            
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+            if (drawing)
+            {
+                const bool catmullRomSpline = false;
+                color.r = 0.F; color.g = 1.F;
+                
+                lines->drawLines(
+                    render, pts, color, 1, soft,
+                    Polyline2D::JointStyle::ROUND,
+                    Polyline2D::EndCapStyle::JOINT, catmullRomSpline);
+            }
         }
         else
         {

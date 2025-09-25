@@ -294,6 +294,30 @@ namespace mrv
             return 1;
         }
 
+        
+        int TimelineViewport::_handleReleaseLeftMouseButtonShapes() noexcept
+        {
+            TLRENDER_P();
+            
+            auto annotation = p.player->getAnnotation();
+            if (p.actionMode != ActionMode::kScrub && !annotation)
+                return 0;
+            
+            std::shared_ptr< draw::Shape > s;
+            if (annotation) s = annotation->lastShape();
+            
+            auto shape = dynamic_cast< VKErasePathShape* >(s.get());
+            if (!shape)
+                return 1;
+
+            if (shape->rectangle)
+                shape->drawing = false;
+
+            redrawWindows();
+
+            return 1;
+        }
+        
         void TimelineViewport::_handlePushLeftMouseButtonShapes() noexcept
         {
             TLRENDER_P();
@@ -369,6 +393,7 @@ namespace mrv
                 auto shape = std::make_shared< VKErasePathShape >();
                 if (Fl::event_alt())
                 {
+                    shape->drawing = true;
                     shape->rectangle = true;
                     shape->pts.push_back(pnt);
                     shape->pts.push_back(pnt);
