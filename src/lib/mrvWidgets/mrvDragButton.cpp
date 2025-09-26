@@ -18,7 +18,7 @@
 
 #include "mrvUI/mrvDesktop.h"
 
-#define DEBUG_COORDS
+#define DEBUG_EVENTS 1
 
 namespace
 {
@@ -28,8 +28,16 @@ namespace
 
 namespace mrv
 {
-    bool DragButton::can_drag = true;
-
+    
+    bool dragging = false;
+    static void drag_idle(void* v)
+    {
+        DragButton* self = static_cast<DragButton*>(v);
+        if (!dragging) return;
+        self->update_drag(); // compute new position
+        Fl::repeat_timeout(0.0, drag_idle, v);
+    }
+    
     DragButton::DragButton(int x, int y, int w, int h, const char* l) :
         Fl_Box(x, y, w, h, l)
     {
@@ -40,10 +48,32 @@ namespace mrv
     {
     }
 
+    void DragButton::update_drag()
+    {
+        // This is the stable calculation.
+
+        int current_mouse_x = Fl::event_x_root();
+        int current_mouse_y = Fl::event_y_root();
+        
+        int new_x = winx + (current_mouse_x - fromx);
+        int new_y = winy + (current_mouse_y - fromy);
+        window()->position(new_x, new_y);
+        if (window()->parent())
+            window()->parent()->init_sizes();
+        
+        // Update docking highlight feedback.
+        if (would_dock()) {
+            color_dock_group(FL_DARK_YELLOW);
+            show_dock_group();
+        } else {
+            hide_dock_group();
+        }
+    }
+    
     int DragButton::handle(int event)
     {
         int ret = Fl_Box::handle(event);
-
+        
         PanelGroup* tg = (PanelGroup*)parent();
         int docked = tg->docked();
         int x2 = 0, y2 = 0;
@@ -60,33 +90,81 @@ namespace mrv
                 window()->cursor(FL_CURSOR_DEFAULT);
             ret = 1;
         }
-        // If we are not docked, deal with dragging the toolwin around
-        if (!docked)
+
+        if (desktop::Wayland())
         {
-            switch (event)
+            // If we are not docked, deal with dragging the toolwin around
+            if (!docked)
             {
-            case FL_PUSH: // downclick in button creates cursor offsets
-                get_global_coords(fromx, fromy);
-                get_window_coords(winx, winy);
-                ret = 1;
-                break;
-            case FL_DRAG: // drag the button (and its parent window) around the
-            {          // screen
-                if (was_docked)
+                switch (event)
                 {
-                    // Need to init offsets, we probably got here following a
-                    // drag from the dock, so the PUSH (above) will not have
-                    // happened.
-                    was_docked = false;
+                case FL_PUSH: // downclick in button creates cursor offsets
                     get_global_coords(fromx, fromy);
                     get_window_coords(winx, winy);
+                    dragging = true;
+
+                    // 2. Grab events for our window.
+                    Fl::grab(window());
+                    Fl::add_timeout(0.0, drag_idle, this);
+                    return 1;
+                case FL_RELEASE:
+                    dragging = false;
+                    Fl::grab(0);
+                    
+                    // Finalize the dock state.
+                    if (would_dock())
+                    {
+                        color_dock_group(FL_BACKGROUND_COLOR);
+                        show_dock_group();
+                        tg->dock_grp();
+                    }
+                    else
+                    {
+                        hide_dock_group();
+                    }
+                    return 1;
+                    
+                    // The loop can also be broken if the window loses focus or the grab
+                    // is taken by someone else, which Fl::grab(0) handles
+
+                case FL_UNFOCUS:
+                case FL_HIDE:
+                case FL_LEAVE:
+                    Fl::grab(0);
+                    hide_dock_group();
+                    return 1;
+                default:
+                    break; // Ignore other events.
                 }
-                
-                if (can_drag)
+            }
+        }
+        else
+        {
+            // If we are not docked, deal with dragging the toolwin around
+            if (!docked)
+            {
+                switch (event)
                 {
-                    int deltax = Fl::event_x() + window()->x() - fromx;
-                    int deltay = Fl::event_y() + window()->y() - fromy;
-                    window()->position(winx + deltax, winy + deltay);
+                case FL_PUSH: // downclick in button creates cursor offsets
+                    get_global_coords(fromx, fromy);
+                    get_window_coords(winx, winy);
+                    return 1;
+                    break;
+                case FL_DRAG: // drag the button (and its parent window) around the
+                {             // screen
+                    if (was_docked)
+                    {
+                        // Need to init offsets, we probably got here following a
+                        // drag from the dock, so the PUSH (above) will not have
+                        // happened.
+                        was_docked = false;
+                        get_global_coords(fromx, fromy);
+                        get_window_coords(winx, winy);
+                    }
+
+                    int new_x = winx + (Fl::event_x_root() - fromx);
+                    int new_y = winy + (Fl::event_y_root() - fromy);
+                    window()->position(new_x, new_y);
                     if (window()->parent())
                         window()->parent()->init_sizes();
                 
@@ -100,30 +178,30 @@ namespace mrv
                     {
                         hide_dock_group();
                     }
-                }
-                
-                ret = 1;
-                break;
-            }
-            case FL_RELEASE:
-            {
-                int dock_attempt = would_dock();
-                    
-                if (dock_attempt)
-                {
-                    // Color the dock area with the background color
-                    color_dock_group(FL_BACKGROUND_COLOR);
-                    show_dock_group();
-                    tg->dock_grp();
-                }
-                ret = 1;
-            }
-            break;
 
-            default:
+                    return 1;
+                }
                 break;
+                case FL_RELEASE:
+                {
+                    int dock_attempt = would_dock();
+                    
+                    if (dock_attempt)
+                    {
+                        // Color the dock area with the background color
+                        color_dock_group(FL_BACKGROUND_COLOR);
+                        show_dock_group();
+                        tg->dock_grp();
+                    }
+                    return 1;
+                }
+                break;
+
+                default:
+                    break;
+                }
+                return ret;
             }
-            return ret;
         }
 
         // OK, so we must be docked - are we being dragged out of the dock?
@@ -161,6 +239,7 @@ namespace mrv
         default:
             break;
         }
+        
         return ret;
     } // handle
 

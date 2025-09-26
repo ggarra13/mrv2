@@ -5,8 +5,6 @@
 // Debug scaling of the window to image size.
 // #define DEBUG_SCALING 1
 
-#define WAYLAND_WORK_AROUND 1
-
 #include "mrViewer.h"
 
 #include <tlDevice/IOutput.h>
@@ -72,17 +70,8 @@ namespace mrv
             _init();
         }
         
-        static void can_drag_reset(bool *pter) {
-            *pter = true;
-        }
-
         void TimelineViewport::resize(int X, int Y, int W, int H)
         {
-#if WAYLAND_WORK_AROUND
-            DragButton::can_drag = false;
-            Fl::add_timeout(0.3, (Fl_Timeout_Handler)can_drag_reset,
-                            &DragButton::can_drag);
-#endif
             VkWindow::resize(X, Y, W, H);
             if (hasFrameView())
             {
