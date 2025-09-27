@@ -462,7 +462,8 @@ namespace mrv
 
         void Viewport::_drawShape(
             const std::shared_ptr< draw::Shape >& shape,
-            const float alphamult) noexcept
+            const float alphamult,
+            const float resolutionMultiplier) noexcept
         {
             TLRENDER_P();
             MRV2_GL();
@@ -499,7 +500,12 @@ namespace mrv
                 float alpha = shape->color.a;
                 shape->color.a *= alphamult;
                 shape->color.a *= shape->fade;
-                if (auto glshape = dynamic_cast<GLPathShape*>(shape.get()))
+                if (auto glshape = dynamic_cast<GLErasePathShape*>(shape.get()))
+                {
+                    glshape->mult = resolutionMultiplier;
+                    glshape->draw(gl.render, gl.lines);
+                }
+                else if (auto glshape = dynamic_cast<GLPathShape*>(shape.get()))
                 {
                     glshape->draw(gl.render, gl.lines);
                 }
@@ -534,7 +540,11 @@ namespace mrv
             gl.render->begin(renderSize, renderOptions);
             gl.render->setOCIOOptions(timeline::OCIOOptions());
             gl.render->setLUTOptions(timeline::LUTOptions());
-                    
+
+            // Calculate resolution multiplier.
+            float resolutionMultiplier = renderSize.w * 6 / 4096.0 / p.viewZoom;
+            resolutionMultiplier = std::clamp(resolutionMultiplier, 1.F, 10.F);
+            
             for (const auto& annotation : annotations)
             {
                 const auto& annotationTime = annotation->time;
@@ -576,15 +586,12 @@ namespace mrv
                         continue;
                     gl.render->setTransform(renderMVP);
                     CHECK_GL;
-                    _drawShape(shape, alphamult);
+                    _drawShape(shape, alphamult, resolutionMultiplier);
                     CHECK_GL;
                 }
             }
             
             GLVoiceOverShape shape;
-
-            float mult = renderSize.w * 6 / 4096.0 / p.viewZoom;
-            mult = std::clamp(mult, 1.F, 10.F);
             
             for (const auto annotation : voannotations)
             {
@@ -596,7 +603,7 @@ namespace mrv
                 {
                     shape.center = voice->getCenter();
                     shape.status = voice->getStatus();
-                    shape.mult   = mult;
+                    shape.mult   = resolutionMultiplier;
 
                     const auto& mouseData = voice->getMouseData();
                     

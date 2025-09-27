@@ -210,6 +210,7 @@ namespace mrv
 
         bool rectangle = false;
         bool drawing = false;
+        float mult = 1.F;
     };
 
     void to_json(nlohmann::json& json, const VKErasePathShape& value);

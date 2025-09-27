@@ -180,9 +180,12 @@ namespace mrv
             {
                 const bool catmullRomSpline = false;
                 color.r = 0.F; color.g = 1.F;
+
+                int lineSize = 3 * mult;
+                if (lineSize < 1) lineSize = 1;
                 
                 lines->drawLines(
-                    render, pts, color, 1, soft,
+                    render, pts, color, lineSize, false,
                     Polyline2D::JointStyle::ROUND,
                     Polyline2D::EndCapStyle::JOINT, catmullRomSpline);
             }

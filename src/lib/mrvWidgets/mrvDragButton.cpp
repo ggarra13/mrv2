@@ -18,7 +18,7 @@
 
 #include "mrvUI/mrvDesktop.h"
 
-#define DEBUG_EVENTS 1
+#define DEBUG_EVENTS 0
 
 namespace
 {
@@ -51,9 +51,8 @@ namespace mrv
     void DragButton::update_drag()
     {
         // This is the stable calculation.
-
-        int current_mouse_x = Fl::event_x_root();
-        int current_mouse_y = Fl::event_y_root();
+        int current_mouse_x, current_mouse_y;
+        get_global_coords(current_mouse_x, current_mouse_y);
         
         int new_x = winx + (current_mouse_x - fromx);
         int new_y = winy + (current_mouse_y - fromy);
@@ -91,117 +90,51 @@ namespace mrv
             ret = 1;
         }
 
-        if (desktop::Wayland())
+        // If we are not docked, deal with dragging the toolwin around
+        if (!docked)
         {
-            // If we are not docked, deal with dragging the toolwin around
-            if (!docked)
+            switch (event)
             {
-                switch (event)
-                {
-                case FL_PUSH: // downclick in button creates cursor offsets
-                    get_global_coords(fromx, fromy);
-                    get_window_coords(winx, winy);
-                    dragging = true;
+            case FL_PUSH: // downclick in button creates cursor offsets
+                get_global_coords(fromx, fromy);
+                get_window_coords(winx, winy);
+                dragging = true;
 
-                    // 2. Grab events for our window.
-                    Fl::grab(window());
-                    Fl::add_timeout(0.0, drag_idle, this);
-                    return 1;
-                case FL_RELEASE:
-                    dragging = false;
-                    Fl::grab(0);
-                    
-                    // Finalize the dock state.
-                    if (would_dock())
-                    {
-                        color_dock_group(FL_BACKGROUND_COLOR);
-                        show_dock_group();
-                        tg->dock_grp();
-                    }
-                    else
-                    {
-                        hide_dock_group();
-                    }
-                    return 1;
-                    
-                    // The loop can also be broken if the window loses focus or the grab
-                    // is taken by someone else, which Fl::grab(0) handles
-
-                case FL_UNFOCUS:
-                case FL_HIDE:
-                case FL_LEAVE:
-                    Fl::grab(0);
-                    hide_dock_group();
-                    return 1;
-                default:
-                    break; // Ignore other events.
-                }
-            }
-        }
-        else
-        {
-            // If we are not docked, deal with dragging the toolwin around
-            if (!docked)
-            {
-                switch (event)
-                {
-                case FL_PUSH: // downclick in button creates cursor offsets
-                    get_global_coords(fromx, fromy);
-                    get_window_coords(winx, winy);
-                    return 1;
-                    break;
-                case FL_DRAG: // drag the button (and its parent window) around the
-                {             // screen
-                    if (was_docked)
-                    {
-                        // Need to init offsets, we probably got here following a
-                        // drag from the dock, so the PUSH (above) will not have
-                        // happened.
-                        was_docked = false;
-                        get_global_coords(fromx, fromy);
-                        get_window_coords(winx, winy);
-                    }
-
-                    int new_x = winx + (Fl::event_x_root() - fromx);
-                    int new_y = winy + (Fl::event_y_root() - fromy);
-                    window()->position(new_x, new_y);
-                    if (window()->parent())
-                        window()->parent()->init_sizes();
+                Fl::add_timeout(0.0, drag_idle, this);
+                return 1;
+            case FL_DRAG:
+                dragging = true;
                 
-                    int dock_attempt = would_dock();
-                    if (dock_attempt)
-                    {
-                        color_dock_group(FL_DARK_YELLOW);
-                        show_dock_group();
-                    }
-                    else
-                    {
-                        hide_dock_group();
-                    }
-
-                    return 1;
-                }
-                break;
-                case FL_RELEASE:
+                if (was_docked)
                 {
-                    int dock_attempt = would_dock();
+                    // Need to init offsets, we probably got here following
+                    // a drag from the dock, so the PUSH (above) will not
+                    // have happened.
+                    was_docked = false;
+                    get_global_coords(fromx, fromy);
+                    get_window_coords(winx, winy);
+                    Fl::add_timeout(0.0, drag_idle, this);
+                }
+                return 1;
+            case FL_RELEASE:
+                dragging = false;
                     
-                    if (dock_attempt)
-                    {
-                        // Color the dock area with the background color
-                        color_dock_group(FL_BACKGROUND_COLOR);
-                        show_dock_group();
-                        tg->dock_grp();
-                    }
-                    return 1;
+                // Finalize the dock state.
+                if (would_dock())
+                {
+                    color_dock_group(FL_BACKGROUND_COLOR);
+                    show_dock_group();
+                    tg->dock_grp();
                 }
-                break;
-
-                default:
-                    break;
+                else
+                {
+                    hide_dock_group();
                 }
-                return ret;
+                return 1;                    
+            default:
+                break; // Ignore other events.
             }
+            return ret;
         }
 
         // OK, so we must be docked - are we being dragged out of the dock?
