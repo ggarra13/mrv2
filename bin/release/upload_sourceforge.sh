@@ -150,28 +150,24 @@ Enjoy!
 
 -----------------------------------------------------------------
 
-## v${mrv2_VERSION} Notes
+Donation Prices after v1.4.0
+----------------------------
+
+Donationware prices of binary licenses through PayPal:
 
 [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UJMHRRKYCPXYW)
 
-Prices after v1.4.0
--------------------
-* Buy mrv2 (or Vulkan vmrv2) for personal use at a cost of u\$50, paid by a Paypal donation (I will use the email to verify purchase and issue a yearly license).
+I use the email information to contact you privately.  I don't sell your information, as I don't have access to it, except for your email, which I use to contact you.
 
-* Buy mrv2 (or Vulkan vmrv2) for personal use to own at a cost of u\$150, paid by a Paypal donation (I will use the email to verify purchase and issue a non-expiring, node-locked license).
+- u\$  50 for a node-lock license for one year.
+- u\$ 150 for a node-lock license to own.
 
-* Buy mrv2 (or Vulkan vmrv2) for personal use at a cost of u\$250 for aarch64, paid by a Paypal donation (I will use the email to verify purchase and issue a yearly license).
+- The prices are cumulative.  If you donate, say u\$ 10 in 5 months, you can access the node-lock license for one year.
 
-* Buy mrv2 (or Vulkan vmrv2) for personal use to own at a cost of u\$500 for aarch64 builds, paid by a Paypal donation (I will use the email to verify purchase and issue a non-expiring, node-locked license).
+License works for both mrv2 and vmrv2 (you can have both installed).
 
-Differences between Vulkan and OpenGL
--------------------------------------
-
-- Vulkan is a new open source API, compared to OpenGL that it might get deprecated on some platforms like macOS.  It supports true HDR (High Dynamic Range), it is between 20% and 50% faster than the OpenGL version but it does not support OpenUSD.
-- OpenGL's only benefit at this point is that it supports OpenUSD and runs better on older OSes like MacOS Intel or Linux's X11 desktops.
-
-Vulkan Demo Version
--------------------
+Demo Versions
+-------------
 
 The OpenGL releases at:
 
@@ -190,9 +186,6 @@ Currently, when run as demo these versions don't have:
 	   - NDI support
 	   - Allow more than 5 minutes of use.
 
-History
--------
-
 EOF
 
 HISTORY=../../../src/docs/HISTORY.md
@@ -202,11 +195,14 @@ if [[ ! -f "$HISTORY" ]]; then
 fi
 
 # Find the line number of "v${mrv2_VERSION}" in the file
-start_line=$(grep -n "^v${mrv2_VERSION}" "$HISTORY" | cut -d':' -f1)
-if [[ -z "$start_line" ]]; then
-    echo "Error: Version v${mrv2_VERSION} not found in $HISTORY."
+start_lines=$(grep -n "^ChangeLog" "$HISTORY" | cut -d':' -f1)
+if [[ -z "$start_lines" ]]; then
+    echo "Error: Version v${mrv2_VERSION} has no ChangeLog in $HISTORY."
     exit 1
 fi
+
+# Convert end_lines to an array (compatible with Bash 3.2)
+IFS=$'\n' read -d '' -r -a start_lines <<< "$start_lines" || true  # '|| true' handles potential read failure"
 
 # Find the line numbers of all "v*.*.*" occurrences in the file
 end_lines=$(grep -n "^v[0-9]\+\.[0-9]\+\.[0-9]\+" "$HISTORY" | cut -d':' -f1)
@@ -218,10 +214,12 @@ fi
 # Convert end_lines to an array (compatible with Bash 3.2)
 IFS=$'\n' read -d '' -r -a end_lines <<< "$end_lines" || true  # '|| true' handles potential read failure"
 
+
 # Initialize the end_line to 0
 end_line=${end_lines[1]}
 end_line=$((end_line - 1))
-start_line=$((start_line + 2))
+start_line=${start_lines[0]}
+start_line=$((start_line))
 
 # Use sed to extract the text between the two lines and store it in a variable
 release_notes=$(sed -n "$start_line,${end_line}p" "$HISTORY")
