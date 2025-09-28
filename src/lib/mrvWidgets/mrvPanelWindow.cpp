@@ -27,12 +27,27 @@ namespace mrv
 
     std::vector<PanelWindow*> PanelWindow::active_list;
     
+    static bool resizing = false;
+
+    static void drag_idle(void* v)
+    {
+        PanelWindow* self = static_cast<PanelWindow*>(v);
+        if (!resizing) return;
+        self->update_drag(); // compute new position
+        Fl::repeat_timeout(0.0, drag_idle, v);
+    }
+    
     // Dummy close button callback
     static void cb_ignore(void)
     {
         // Just shrug off the close callback...
     }
-
+    
+    void PanelWindow::update_drag()
+    {
+        resize(newX, newY, newW, newH);
+    }
+    
     // constructors
     PanelWindow::PanelWindow(int x, int y, int w, int h, const char* l) :
         Fl_Double_Window(x, y, w, h, l)
@@ -194,6 +209,8 @@ namespace mrv
                 last_x = ex;
                 last_y = ey;
 
+                resizing = true;
+                
                 return 1;
             }
             break;
@@ -273,9 +290,8 @@ namespace mrv
                     newY = y();
                     newH = kMinHeight;
                 }
-                resize(newX, newY, newW, newH);
-                if (parent())
-                    parent()->init_sizes();
+                Fl::add_timeout(0.0, (Fl_Timeout_Handler) drag_idle, this);
+                resizing = true;
             }
             
             last_x = ex;
@@ -284,6 +300,8 @@ namespace mrv
         }
         case FL_RELEASE:
         {
+            resizing = false;
+            
             auto settings = App::app->settings();
             PanelGroup* gp = static_cast< PanelGroup* >(child(0));
             auto dragger = gp->get_dragger();

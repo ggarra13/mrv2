@@ -36,7 +36,6 @@ namespace mrv
             kBottomLeft = kBottom | kLeft
         };
         Direction dir;
-        int newX, newY, newW, newH;
         int valid;
 
         int last_x, last_y;
@@ -48,6 +47,10 @@ namespace mrv
         PanelWindow(int w, int h, const char* l = 0);
         PanelWindow(int x, int y, int w, int h, const char* l = 0);
 
+        void update_drag();
+        
+        int newX, newY, newW, newH;
+        
         virtual ~PanelWindow();
 
         int handle(int event) FL_OVERRIDE;
