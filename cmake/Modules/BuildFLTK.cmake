@@ -14,13 +14,14 @@ if(TLRENDER_VK)
     else()
 	set(FLTK_GIT_REPOSITORY "https://github.com/ggarra13/fltk.git")
     endif()
-    set(FLTK_GIT_TAG v0.9.2)
+    
+    set(FLTK_GIT_TAG v0.9.3)
+    #set(FLTK_GIT_TAG vk)  # Cutting edge!
+    #set(FLTK_GIT_TAG vk_test) # Testing branch
 else()
     set(FLTK_GIT_REPOSITORY "https://github.com/fltk/fltk.git")
     set(FLTK_GIT_TAG b7e52bb03cfd2d47249019de9c39cadcad18f547)
 endif()
-#set(FLTK_GIT_TAG vk)  # Cutting edge!
-#set(FLTK_GIT_TAG vk_test) # Testing branch
 
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
     # If we are building pyFLTK compile shared
