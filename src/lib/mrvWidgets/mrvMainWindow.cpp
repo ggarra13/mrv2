@@ -1055,6 +1055,8 @@ namespace mrv
             cairo_paint_with_alpha(cr, alpha);
             
             fl_delete_offscreen(p.offscreen);
+
+            clear_damage();
         }
         else
         {
