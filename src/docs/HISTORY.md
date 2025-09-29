@@ -45,7 +45,8 @@ ChangeLog
 - Made volume slider automatically unmute the audio if it was muted.
 - Added "File/Open/New Program Instance" to pop up a new mrv2.
 - Made Erase tool support Alt + Drag to clear a rectangular area quickly.
-- Fixed subwindow panels flickering under Wayland and X11.
+- Fixed subwindow panels flickering under Wayland and X11. Tested under:
+  	* Wayland ubuntu GNOME Shell 48.0
 
 
 v1.4.1

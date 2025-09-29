@@ -1065,9 +1065,9 @@ namespace mrv
 #  else  // !FLTK_USE_WAYLAND
         DropWindow::draw();
 #  endif  // FLTK_USE_WAYLAND
-#else
+#else  // ! __linux__
         DropWindow::draw();
-#endif
+#endif // ! __linux__
     }
 
     void MainWindow::set_alpha(int new_alpha)
