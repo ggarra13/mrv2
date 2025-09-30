@@ -197,14 +197,51 @@ namespace mrv
 {
     std::string get_machine_id() {
 #if defined(_WIN32)
+#  if defined(_M_X64) || defined(_M_AMD64)
         std::string output, errors;
-        os::exec_command("wmic csproduct get uuid", output, errors);
+        mrv::os::exec_command("wmic csproduct get uuid", output, errors);
         size_t pos = output.find("\r\n");
         if (pos != std::string::npos)
         {
             output = output.substr(pos + 2);
         }
         return output;
+#  else
+        HKEY hKey;
+        std::string uuid;
+        if (RegOpenKeyExA(HKEY_LOCAL_MACHINE,
+                          "SOFTWARE\\Microsoft\\Cryptography",
+                          0, KEY_READ, &hKey) == ERROR_SUCCESS)
+        {
+            char value[256];
+            DWORD value_length = sizeof(value);
+            if (RegGetValueA(hKey, nullptr, "MachineGuid",
+                             RRF_RT_REG_SZ, nullptr,
+                             &value, &value_length) == ERROR_SUCCESS)
+            {
+                uuid = value;
+            }
+            RegCloseKey(hKey);
+        }
+        return uuid;
+#  endif
+        HKEY hKey;
+        std::string uuid;
+        if (RegOpenKeyExA(HKEY_LOCAL_MACHINE,
+                          "SOFTWARE\\Microsoft\\Cryptography",
+                          0, KEY_READ, &hKey) == ERROR_SUCCESS)
+        {
+            char value[256];
+            DWORD value_length = sizeof(value);
+            if (RegGetValueA(hKey, nullptr, "MachineGuid",
+                             RRF_RT_REG_SZ, nullptr,
+                             &value, &value_length) == ERROR_SUCCESS)
+            {
+                uuid = value;
+            }
+            RegCloseKey(hKey);
+        }
+        return uuid;
 #elif defined(__APPLE__)
         std::array<char, 128> buffer;
         std::string result;
