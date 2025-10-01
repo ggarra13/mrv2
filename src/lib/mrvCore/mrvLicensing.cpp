@@ -7,9 +7,12 @@
 #include "mrvCore/mrvLicensing.h"
 #include "mrvCore/mrvOS.h"
 
+#include <Poco/Net/DNS.h>
 #include <Poco/Net/HTTPSClientSession.h>
 #include <Poco/Net/HTTPRequest.h>
 #include <Poco/Net/HTTPResponse.h>
+#include <Poco/Net/HostEntry.h>
+#include <Poco/Net/SecureStreamSocket.h>
 #include <Poco/StreamCopier.h>
 #include <Poco/JSON/Object.h>
 #include <Poco/JSON/Parser.h>
@@ -25,6 +28,7 @@
 #include <openssl/bio.h>
 #include <openssl/buffer.h>
 #include <openssl/err.h>
+#include <openssl/x509_vfy.h>
 
 #include <tlCore/StringFormat.h>
 
@@ -193,8 +197,13 @@ namespace mrv
             // --- Build JSON request ---
             std::string requestBody = "{\"machine_id\":\"" + machine_id + "\",\"plan\":\"Pro\"}";
 
-            std::string caLocation = "";
+            std::string caLocation = mrv::rootpath() + "/certs/cacert.pem";
 
+            if (!file::isReadable(caLocation))
+            {
+                LOG_STATUS(caLocation << " is not readable");
+            }
+            
 #ifdef __linux___
             caLocation = "/etc/ssl/certs/ca-certificates.crt";
 #endif
@@ -202,7 +211,7 @@ namespace mrv
 #ifdef __APPLE__
             caLocation = "/usr/local/etc/openssl@3/cert.pem";
 #endif
-
+            
             Poco::Net::Context::Ptr context = new Poco::Net::Context(
                 Poco::Net::Context::CLIENT_USE,
                 "",    // privateKeyFile
@@ -215,8 +224,27 @@ namespace mrv
                 );
 
             // --- HTTP POST to /request_license ---
-            Poco::Net::HTTPSClientSession session(serverHost, serverPort,
-                                                  context);
+
+            using namespace Poco::Net;
+
+            HostEntry he = DNS::hostByName("srv1037957.hstgr.cloud");
+            IPAddress ipv4;
+
+            for (auto& addr : he.addresses())
+            {
+                if (addr.family() == IPAddress::IPv4)
+                {
+                    ipv4 = addr;
+                    break;
+                }
+            }
+
+            SocketAddress sa(ipv4, serverPort);
+            
+            // Create socket bound to context
+            SecureStreamSocket sss(sa, context);
+            
+            Poco::Net::HTTPSClientSession session(sss, serverHost, serverPort);
             Poco::Net::HTTPRequest request(Poco::Net::HTTPRequest::HTTP_POST, "/request_license", Poco::Net::HTTPMessage::HTTP_1_1);
             request.setContentType("application/json");
             request.setContentLength(requestBody.length());
@@ -295,7 +323,8 @@ namespace mrv
                 return License::kInvalid;
             }
 
-            std::string msg = string::Format(_("Your license will expire on {0}.")).arg(expires_at);  
+            std::string msg = string::Format(_("Your license will expire on {0}.")).arg(expires_at);
+            LOG_STATUS(msg);
 
             return License::kValid;
         }
