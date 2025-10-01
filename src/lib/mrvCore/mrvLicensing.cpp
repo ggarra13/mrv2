@@ -204,13 +204,13 @@ namespace mrv
                 LOG_STATUS(caLocation << " is not readable");
             }
             
-#ifdef __linux___
-            caLocation = "/etc/ssl/certs/ca-certificates.crt";
-#endif
+// #ifdef __linux___
+//             caLocation = "/etc/ssl/certs/ca-certificates.crt";
+// #endif
 
-#ifdef __APPLE__
-            caLocation = "/usr/local/etc/openssl@3/cert.pem";
-#endif
+// #ifdef __APPLE__
+//             caLocation = "/usr/local/etc/openssl@3/cert.pem";
+// #endif
             
             Poco::Net::Context::Ptr context = new Poco::Net::Context(
                 Poco::Net::Context::CLIENT_USE,
@@ -219,32 +219,13 @@ namespace mrv
                 caLocation,    // caLocation ("" = system default, if available)
                 Poco::Net::Context::VERIFY_RELAXED, // or VERIFY_STRICT
                 9,     // verificationDepth
-                true, // load default CA location
+                false, // load default CA location
                 "ALL"
                 );
 
             // --- HTTP POST to /request_license ---
-
-            using namespace Poco::Net;
-
-            HostEntry he = DNS::hostByName("srv1037957.hstgr.cloud");
-            IPAddress ipv4;
-
-            for (auto& addr : he.addresses())
-            {
-                if (addr.family() == IPAddress::IPv4)
-                {
-                    ipv4 = addr;
-                    break;
-                }
-            }
-
-            SocketAddress sa(ipv4, serverPort);
             
-            // Create socket bound to context
-            SecureStreamSocket sss(sa, context);
-            
-            Poco::Net::HTTPSClientSession session(sss, serverHost, serverPort);
+            Poco::Net::HTTPSClientSession session(serverHost, serverPort, context);
             Poco::Net::HTTPRequest request(Poco::Net::HTTPRequest::HTTP_POST, "/request_license", Poco::Net::HTTPMessage::HTTP_1_1);
             request.setContentType("application/json");
             request.setContentLength(requestBody.length());
