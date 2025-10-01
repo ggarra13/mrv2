@@ -29,9 +29,9 @@ namespace py = pybind11;
 #include "mrvCore/mrvMemory.h"
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvHotkey.h"
+#include "mrvCore/mrvLicensing.h"
 #include "mrvCore/mrvUtil.h"
 #include "mrvCore/mrvRoot.h"
-#include "mrvCore/mrvSHA256.h"
 #include "mrvCore/mrvSignalHandler.h"
 
 #include "mrvFl/mrvContextObject.h"
@@ -85,6 +85,8 @@ namespace py = pybind11;
 
 // we include it here to avoid tl::image and mrv::image clashes
 #include "mrvFl/mrvOCIO.h"
+
+#include <Poco/Net/SSLManager.h>
 
 #include <FL/platform.H>
 #include <FL/filename.H>
@@ -246,7 +248,7 @@ namespace mrv
 
     ViewerUI* App::ui = nullptr;
     App* App::app = nullptr;
-    bool App::demo_mode = false;
+    bool App::demo_mode = true;
     bool App::unsaved_annotations = false;
     bool App::unsaved_edits = false;
 
@@ -530,6 +532,10 @@ namespace mrv
 #endif
             return;
         }
+
+
+        Poco::Net::initializeSSL();
+
 
         License ok = license_beat();
         if (ok != License::kValid)

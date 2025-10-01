@@ -31,19 +31,19 @@ namespace fs = std::filesystem;
 #include <iostream>
 
 std::string get_machine_id() {
+    std::string out;
+        
 #if defined(_WIN32)
 #  if defined(_M_X64) || defined(_M_AMD64)
-    std::string output, errors;
-    mrv::os::exec_command("wmic csproduct get uuid", output, errors);
-    size_t pos = output.find("\r\n");
+    std::string errors;
+    mrv::os::exec_command("wmic csproduct get uuid", out, errors);
+    size_t pos = out.find("\r\n");
     if (pos != std::string::npos)
     {
-        output = output.substr(pos + 2);
+        out = out.substr(pos + 2);
     }
-    return output;
 #  else
     HKEY hKey;
-    std::string uuid;
     if (RegOpenKeyExA(HKEY_LOCAL_MACHINE,
                       "SOFTWARE\\Microsoft\\Cryptography",
                       0, KEY_READ, &hKey) == ERROR_SUCCESS)
@@ -54,29 +54,28 @@ std::string get_machine_id() {
                          RRF_RT_REG_SZ, nullptr,
                          &value, &value_length) == ERROR_SUCCESS)
         {
-            uuid = value;
+            out = value;
         }
         RegCloseKey(hKey);
     }
-    return uuid;
 #  endif
 #elif defined(__APPLE__)
     std::array<char, 128> buffer;
-    std::string result;
     std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(
                                                       "ioreg -rd1 -c IOPlatformExpertDevice | grep IOPlatformUUID | cut -d '\"' -f4", "r"), pclose);
     if (pipe) {
         while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
-            result += buffer.data();
+            out += buffer.data();
         }
     }
-    return result;
 #else
     std::ifstream f("/etc/machine-id");
-    std::string id;
-    std::getline(f, id);
-    return id;
+    std::getline(f, out);
 #endif
+    out.erase(remove(out.begin(), out.end(), '\n'), out.end());
+    out.erase(remove(out.begin(), out.end(), '\r'), out.end());
+    out.erase(remove(out.begin(), out.end(), ' '), out.end());
+    return out;
 }
 
 static void exit_cb(Fl_Widget* b, void* data)
@@ -84,110 +83,13 @@ static void exit_cb(Fl_Widget* b, void* data)
     exit(1);
 }
 
-std::string homepath()
-{
-    std::string path;
-
-#ifdef _WIN32
-    char* e = nullptr;
-    if ((e = fl_getenv("HOME")))
-    {
-        path = e;
-        size_t pos = path.rfind("Documents");
-        if (pos != std::string::npos)
-        {
-            path = path.replace(pos, path.size(), "");
-        }
-        if (fs::is_directory(path))
-            return path;
-    }
-    if ((e = fl_getenv("USERPROFILE")))
-    {
-        path = e;
-        if (fs::is_directory(path))
-            return path;
-    }
-    if ((e = fl_getenv("HOMEDRIVE")))
-    {
-        path = e;
-        const char* var = fl_getenv("HOMEPATH");
-        if (var)
-        {
-            path += var;
-            var = fl_getenv("USERNAME");
-            if (var)
-            {
-                path += "/";
-                path += var;
-            }
-        }
-        if (fs::is_directory(path))
-            return path;
-    }
-#else
-    char* e = nullptr;
-    if ((e = fl_getenv("HOME")))
-    {
-        path = e;
-        size_t pos = path.rfind("Documents");
-        if (pos != std::string::npos)
-        {
-            path = path.replace(pos, path.size(), "");
-        }
-        if (fs::is_directory(path))
-            return path;
-    }
-    else
-    {
-        e = getpwuid(getuid())->pw_dir;
-        if (e)
-        {
-            path = e;
-            return path;
-        }
-    }
-#endif
-    return ".";
-}
-
-std::string prefspath()
-{
-    std::string prefs = homepath();
-    prefs += "/.filmaura/";
-    return prefs;
-}
-
 Fl_Input* license;
 
-
-static void create_license_cb(Fl_Widget* b, void* data)
-{
-    std::string license_string = license->value();
-    if (license_string.empty())
-    {
-        return;
-    }
-    
-    Fl_Preferences base(
-            prefspath().c_str(), "filmaura", "mrv2.license",
-            (Fl_Preferences::Root)0);
-    base.set("full_license", license_string.c_str());
-    base.flush();
-    
-    exit(0);
-}
 
 int main(int argc, char** argv)
 {
     Fl_Double_Window win(640, 380, "License helper");
     std::string machine_id = get_machine_id();
-    machine_id.erase(remove(machine_id.begin(), machine_id.end(), '\n'),
-                     machine_id.end());
-    machine_id.erase(remove(machine_id.begin(), machine_id.end(), '\r'),
-                     machine_id.end());
-    machine_id.erase(remove(machine_id.begin(), machine_id.end(), ' '),
-                     machine_id.end());
-
 
     win.begin();
 
@@ -200,15 +102,9 @@ int main(int argc, char** argv)
     machine.align(FL_ALIGN_CENTER | FL_ALIGN_TOP);
     machine.value(machine_id.c_str());
 
-    license = new Fl_Input(20, 240, 600, 40, "License");
-    license->align(FL_ALIGN_CENTER | FL_ALIGN_TOP);
-    license->tooltip("Once you obtain a license, copy it here");
-    
-    Fl_Button exit(80, 300, 150, 40, "Demo");
+    Fl_Button exit(180, 300, 250, 40, "Demo");
     exit.callback((Fl_Callback*)exit_cb, nullptr);
 
-    Fl_Button create(370, 300, 150, 40, "Create");
-    create.callback((Fl_Callback*)create_license_cb, nullptr);
 
     
     win.end();               

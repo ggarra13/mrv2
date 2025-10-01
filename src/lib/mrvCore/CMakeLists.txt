@@ -17,6 +17,7 @@ set(HEADERS
     mrvHotkey.h
     mrvI8N.h
     mrvImage.h
+    mrvLicensing.h
     mrvLocale.h
     mrvMedia.h
     mrvMemory.h
@@ -27,7 +28,6 @@ set(HEADERS
     mrvPixelConverter.h
     mrvRoot.h
     mrvSequence.h
-    mrvSHA256.h
     mrvSignalHandler.h
     mrvStackTrace.h
     mrvString.h
@@ -45,6 +45,7 @@ set(SOURCES
     mrvHome.cpp
     mrvHotkey.cpp
     mrvImage.cpp
+    mrvLicensing.cpp
     mrvLocale.cpp
     mrvMedia.cpp
     mrvMemory.cpp
@@ -52,7 +53,6 @@ set(SOURCES
     mrvOS.cpp
     mrvPathMapping.cpp
     mrvRoot.cpp
-    mrvSHA256.cpp
     mrvStackTrace.cpp
     mrvString.cpp
     mrvTimeObject.cpp
@@ -60,7 +60,18 @@ set(SOURCES
     mrvWait.cpp
 )
 
-set(LIBRARIES tlRender::tlIO tlRender::tlCore OpenEXR::OpenEXR Imath::Imath ${FLTK_LIBRARIES} )
+find_package(Poco REQUIRED Net NetSSL JSON Foundation)
+find_package(OpenSSL REQUIRED)
+
+set(LIBRARIES tlRender::tlIO tlRender::tlCore OpenEXR::OpenEXR Imath::Imath ${FLTK_LIBRARIES})
+
+set(LIBRARIES_PRIVATE
+    Poco::Net
+    Poco::NetSSL
+    Poco::JSON
+    Poco::Foundation
+    OpenSSL::SSL
+    OpenSSL::Crypto)
 
 
 if( WIN32 )
