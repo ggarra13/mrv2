@@ -12,6 +12,7 @@
 
 #if defined(_WIN32)
 #  include <windows.h>
+#  include <winreg.h>
 #else // Linux/Unix
 #  include <unistd.h>
 #  include <sys/types.h>

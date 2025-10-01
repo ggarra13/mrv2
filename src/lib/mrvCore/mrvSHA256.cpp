@@ -47,6 +47,11 @@ namespace fs = std::filesystem;
 #include <stdlib.h>
 #include <memory.h>
 
+#ifdef _WIN32
+#  include <windows.h>
+#  include <winreg.h>
+#endif
+
 namespace
 {
     const char* kModule = "lic.";
