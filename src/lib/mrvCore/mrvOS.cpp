@@ -193,7 +193,7 @@ namespace mrv
             SetHandleInformation(hStdErrRead, HANDLE_FLAG_INHERIT, 0);
 
             // Configure STARTUPINFO
-            STARTUPINFO si;
+            STARTUPINFOA si;
             PROCESS_INFORMATION pi;
             ZeroMemory(&si, sizeof(STARTUPINFO));
             ZeroMemory(&pi, sizeof(PROCESS_INFORMATION));
@@ -208,7 +208,7 @@ namespace mrv
             cmd.push_back(0);
 
             // Create the process
-            if (!CreateProcess(NULL, cmd.data(), NULL, NULL, TRUE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi))
+            if (!CreateProcessA(NULL, cmd.data(), NULL, NULL, TRUE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi))
             {
                 CloseHandle(hStdOutRead);
                 CloseHandle(hStdOutWrite);
