@@ -79,14 +79,14 @@ namespace mrv
         std::string buf = "explorer /select,\"" + native_path + "\"";
 
         // CreateProcess parameters
-        STARTUPINFO si;
+        STARTUPINFOA si;
         PROCESS_INFORMATION pi;
         ZeroMemory(&si, sizeof(si));
         ZeroMemory(&pi, sizeof(pi));
         si.cb = sizeof(si);
 
         // Create the process
-        if (CreateProcess(
+        if (CreateProcessA(
                 NULL, const_cast<char*>(buf.c_str()), NULL, NULL, FALSE,
                 CREATE_NO_WINDOW, NULL, NULL, &si, &pi))
         {
