@@ -202,15 +202,15 @@ namespace mrv
             if (!file::isReadable(caLocation))
             {
                 LOG_STATUS(caLocation << " is not readable");
+#ifdef __linux___
+                caLocation = "/etc/ssl/certs/ca-certificates.crt";
+#elif defined(__APPLE__)
+                caLocation = "/usr/local/etc/openssl@3/cert.pem";
+#else
+                caLocation = "";
+#endif
             }
             
-// #ifdef __linux___
-//             caLocation = "/etc/ssl/certs/ca-certificates.crt";
-// #endif
-
-// #ifdef __APPLE__
-//             caLocation = "/usr/local/etc/openssl@3/cert.pem";
-// #endif
             
             Poco::Net::Context::Ptr context = new Poco::Net::Context(
                 Poco::Net::Context::CLIENT_USE,
