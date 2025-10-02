@@ -31,52 +31,50 @@ namespace fs = std::filesystem;
 #include <iostream>
 
 std::string get_machine_id() {
+        std::string out;
 #if defined(_WIN32)
 #  if defined(_M_X64) || defined(_M_AMD64)
-    std::string output, errors;
-    mrv::os::exec_command("wmic csproduct get uuid", output, errors);
-    size_t pos = output.find("\r\n");
-    if (pos != std::string::npos)
-    {
-        output = output.substr(pos + 2);
-    }
-    return output;
-#  else
-    HKEY hKey;
-    std::string uuid;
-    if (RegOpenKeyExA(HKEY_LOCAL_MACHINE,
-                      "SOFTWARE\\Microsoft\\Cryptography",
-                      0, KEY_READ, &hKey) == ERROR_SUCCESS)
-    {
-        char value[256];
-        DWORD value_length = sizeof(value);
-        if (RegGetValueA(hKey, nullptr, "MachineGuid",
-                         RRF_RT_REG_SZ, nullptr,
-                         &value, &value_length) == ERROR_SUCCESS)
+        std::string errors;
+        mrv::os::exec_command("wmic csproduct get uuid", out, errors);
+        size_t pos = output.find("\r\n");
+        if (pos != std::string::npos)
         {
-            uuid = value;
+            out = out.substr(pos + 2);
         }
-        RegCloseKey(hKey);
-    }
-    return uuid;
+#  else
+        HKEY hKey;
+        if (RegOpenKeyExA(HKEY_LOCAL_MACHINE,
+                          "SOFTWARE\\Microsoft\\Cryptography",
+                          0, KEY_READ, &hKey) == ERROR_SUCCESS)
+        {
+            char value[256];
+            DWORD value_length = sizeof(value);
+            if (RegGetValueA(hKey, nullptr, "MachineGuid",
+                             RRF_RT_REG_SZ, nullptr,
+                             &value, &value_length) == ERROR_SUCCESS)
+            {
+                out = value;
+            }
+            RegCloseKey(hKey);
+        }
 #  endif
 #elif defined(__APPLE__)
-    std::array<char, 128> buffer;
-    std::string result;
-    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(
-                                                      "ioreg -rd1 -c IOPlatformExpertDevice | grep IOPlatformUUID | cut -d '\"' -f4", "r"), pclose);
-    if (pipe) {
-        while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
-            result += buffer.data();
+        std::array<char, 128> buffer;
+        std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(
+                                                          "ioreg -rd1 -c IOPlatformExpertDevice | grep IOPlatformUUID | cut -d '\"' -f4", "r"), pclose);
+        if (pipe) {
+            while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
+                out += buffer.data();
+            }
         }
-    }
-    return result;
 #else
-    std::ifstream f("/etc/machine-id");
-    std::string id;
-    std::getline(f, id);
-    return id;
+        std::ifstream f("/etc/machine-id");
+        std::getline(f, out);
 #endif
+        out.erase(remove(out.begin(), out.end(), '\n'), out.end());
+        out.erase(remove(out.begin(), out.end(), '\r'), out.end());
+        out.erase(remove(out.begin(), out.end(), ' '), out.end());
+        return out;
 }
 
 static void exit_cb(Fl_Widget* b, void* data)
