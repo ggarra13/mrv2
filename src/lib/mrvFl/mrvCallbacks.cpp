@@ -18,6 +18,7 @@
 
 #include "mrvCore/mrvFileManager.h"
 #include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvLicensing.h"
 #include "mrvCore/mrvOS.h"
 #include "mrvCore/mrvUtil.h"
 
@@ -1167,6 +1168,9 @@ namespace mrv
         // Delete Color Chooser
         delete colorChooser;
 
+        // Release the floating license if any.
+        release_license();
+    
         // Remove any temporary EDLs in tmppath
         if (ui->uiPrefs->uiPrefsRemoveEDLs->value())
             removeTemporaryEDLs(ui);

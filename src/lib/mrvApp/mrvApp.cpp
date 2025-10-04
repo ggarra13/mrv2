@@ -29,9 +29,9 @@ namespace py = pybind11;
 #include "mrvCore/mrvMemory.h"
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvHotkey.h"
+#include "mrvCore/mrvLicensing.h"
 #include "mrvCore/mrvUtil.h"
 #include "mrvCore/mrvRoot.h"
-#include "mrvCore/mrvSHA256.h"
 #include "mrvCore/mrvSignalHandler.h"
 
 #include "mrvFl/mrvContextObject.h"
@@ -86,6 +86,8 @@ namespace py = pybind11;
 // we include it here to avoid tl::image and mrv::image clashes
 #include "mrvFl/mrvOCIO.h"
 
+#include <Poco/Net/SSLManager.h>
+
 #include <FL/platform.H>
 #include <FL/filename.H>
 #include <FL/fl_ask.H>
@@ -137,7 +139,7 @@ namespace mrv
 
     namespace
     {
-        const float errorTimeout = 5.F;
+        const float kLicenseTimeout = 110;
     }
 
     struct Options
@@ -246,7 +248,8 @@ namespace mrv
 
     ViewerUI* App::ui = nullptr;
     App* App::app = nullptr;
-    bool App::demo_mode = false;
+    bool App::demo_mode = true;
+    LicenseType App::license_type = LicenseType::kDemo;
     bool App::unsaved_annotations = false;
     bool App::unsaved_edits = false;
 
@@ -259,7 +262,7 @@ namespace mrv
     static void beat_cb(void* data)
     {
         license_beat();
-        Fl::repeat_timeout(300, (Fl_Timeout_Handler)beat_cb, data);
+        Fl::repeat_timeout(kLicenseTimeout, (Fl_Timeout_Handler)beat_cb, data);
     }
 
     namespace
@@ -531,9 +534,16 @@ namespace mrv
             return;
         }
 
+
+        //
+        // Initialize POCO Net for SSL connections.
+        //
+        Poco::Net::initializeSSL();
+
+
         License ok = license_beat();
-        if (ok != License::kValid)
-            Fl::add_timeout(300, (Fl_Timeout_Handler)beat_cb, this);
+        if (ok != License::kValid || license_type == LicenseType::kFloating)
+            Fl::add_timeout(kLicenseTimeout, (Fl_Timeout_Handler)beat_cb, this);
 
         DBG;
         // Initialize FLTK.

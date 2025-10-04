@@ -182,6 +182,10 @@ if(TLRENDER_OCIO)
     add_definitions(-DTLRENDER_OCIO)
 endif()
 
+if(TLRENDER_OPENJPH)
+    add_definitions(-DTLRENDER_OPENJPH)
+endif()
+
 if(TLRENDER_PNG)
     add_definitions(-DTLRENDER_PNG)
 endif()
@@ -293,7 +297,7 @@ include_directories( ${mrv2_INCLUDE_DIRS} )
 #
 # Install mrv2's auxiliary application directories
 #
-install( DIRECTORY colors ocio presets
+install( DIRECTORY certs colors ocio presets
     DESTINATION .
     COMPONENT applications )
 

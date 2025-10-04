@@ -33,13 +33,14 @@ I use the email information to contact you privately.  I don't sell your informa
 - The prices are cumulative.  If you donate, say u$10 in 5 months, you can access the node-lock license for one year.
 
 License works for both mrv2 and vmrv2 (you can have both installed).
+You need to have an internet connection for the license system.
 
 ChangeLog
 ---------
 
 - Added Linux aarch64 builds, without NDI.
 - Added Windows aarch64 builds, without NDI or SVT-AV1 encoder.
-- Upgraded OpenJPH to v0.23 from OpenEXR's internal version.
+- Upgraded OpenJPH to v0.24.1 from OpenEXR's internal version.
 - Fixed incorrect use of FLTK_USE_WAYLAND when not in __linux__.
 - Fixed incorrect use of FLTK_USE_X11 when not in __linux__.
 - Made volume slider automatically unmute the audio if it was muted.
@@ -49,6 +50,9 @@ ChangeLog
   Tested under:
   	* Wayland ubuntu GNOME Shell 48.0 (older GNOME's still wobble)
 - Fixed lookup of machine's UUID for licensing on Windows aarch64 builds.
+- Created a web server for node-lock licenses so that hacking the node-lock
+  license cannot happen.
+- Added support for network licenses.
 
 
 v1.4.1

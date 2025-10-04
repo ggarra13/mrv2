@@ -113,6 +113,10 @@ extern "C"
 }
 #endif
 
+#ifdef TLRENDER_OPENJPH
+#    include <openjph/ojph_version.h>
+#endif
+
 // Must come last!
 #ifdef TLRENDER_RAW
 #    include <lcms2.h>
@@ -945,6 +949,15 @@ namespace mrv
         o << "OpenEXR v" << OPENEXR_VERSION_STRING << endl
           << "http://www.openexr.org/" << endl
           << "(C) 2005-Present Industrial Light & Magic" << endl
+          << endl;
+#endif
+#ifdef TLRENDER_OPENJPH
+        o << "OpenJPH v"
+          << OPENJPH_VERSION_MAJOR << "." << OPENJPH_VERSION_MINOR
+          << OPENJPH_VERSION_PATCH
+          << "Copyright (c) 2019, Aous Naman" << std::endl 
+          << "Copyright (c) 2019, Kakadu Software Pty Ltd, Australia" << endl
+          << "Copyright (C) 2008-2021 LibRaw LLC (info@libraw.org)" << endl
           << endl;
 #endif
         o << "OpenTimelineIO" << endl
