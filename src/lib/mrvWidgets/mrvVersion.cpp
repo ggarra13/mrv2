@@ -954,7 +954,7 @@ namespace mrv
 #ifdef TLRENDER_OPENJPH
         o << "OpenJPH v"
           << OPENJPH_VERSION_MAJOR << "." << OPENJPH_VERSION_MINOR
-          << OPENJPH_VERSION_PATCH
+          << OPENJPH_VERSION_PATCH << std::endl
           << "Copyright (c) 2019, Aous Naman" << std::endl 
           << "Copyright (c) 2019, Kakadu Software Pty Ltd, Australia" << endl
           << "Copyright (C) 2008-2021 LibRaw LLC (info@libraw.org)" << endl
