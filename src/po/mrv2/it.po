@@ -1903,6 +1903,21 @@ msgstr "Streaming {0} {1}..."
 msgid "Stop streaming"
 msgstr "Smettila di trasmettere in streaming"
 
+msgid "Renderer"
+msgstr "Renderer"
+
+msgid "Complexity"
+msgstr "Complexità"
+
+msgid "Draw Mode"
+msgstr "Modalità di disegno"
+
+msgid "Stage Cache"
+msgstr "Cache per stadio"
+
+msgid "Disk Cache in GB"
+msgstr "Cache disco in GB"
+
 msgid "Toggle other eye stereo image."
 msgstr "Commutare l'altra immagine stereo degli occhi."
 
@@ -2911,14 +2926,25 @@ msgstr "Il profilo HAP ha bisogno di un'estensione.mov. Cambiandolo in.mov"
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "Esistono già nuovi file {0}! Impossibile sovrascriverlo."
 
+msgid "Rotated image info: {0}"
+msgstr "Informazioni sull'immagine rotante: {0}"
+
+msgid "Scaled image info: {0}"
+msgstr "Informazioni sull'immagine scalata: {0}"
+
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: Impossibile aprire il plugin scrittore."
 
 msgid "Image info: {0} {1}"
 msgstr "Informazioni sull'immagine: {0} {1}"
 
-msgid "Scaled image info: {0}"
-msgstr "Informazioni sull'immagine scalata: {0}"
+msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+msgstr ""
+"Immagine troppo grande per salvare le annotazioni. Sarà scalato alla "
+"dimensione della vista."
+
+msgid "Viewport Size: {0} - X={1}, Y={2}"
+msgstr "Dimensione viewport: {0} - X={1}, Y={2}"
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr ""
@@ -2933,9 +2959,6 @@ msgstr "Utilizzando profilo {0}, formato pixel {1}."
 
 msgid "Using preset {0}."
 msgstr "Usando preimpostazione {0}."
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "Informazioni buffer offscreen: {0}"
 
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr "Salvataggio di film senza audio %<PRId64> - %<PRId64>"
@@ -2952,17 +2975,32 @@ msgstr "Salvataggio delle immagini senza audio %<PRId64> - %<PRId64>"
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Audio solo nella timeline, ma non cercando di salvare l'audio."
 
+msgid "{0}: Invalid OpenGL format and type"
+msgstr "{0}: Formato e tipo OpenGL non valido"
+
+msgid "OpenGL info: {0}"
+msgstr "Informazioni OpenGL: {0}"
+
 msgid "Saving... {0}"
 msgstr "Salvataggio... {0}"
 
-msgid "Could not read image data from view"
-msgstr "Impossibile leggere i dati dell’immagine dalla vista"
+msgid "Unsupported output format"
+msgstr "Formato di output non supportato"
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "Dati video vuoti al momento {0}. Ripetizione della cornice."
 
 msgid "Render size: {0}"
 msgstr "रेंडर आकार: {0}"
+
+msgid "Image Layer '{0}' info: {1} {2}"
+msgstr "छवि परत '{0}' जानकारी: {1} {2}"
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "Informazioni buffer offscreen: {0}"
+
+msgid "Unsupported output format: "
+msgstr "Formato di output non supportato: "
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -3685,8 +3723,8 @@ msgstr "Frame {0} - TC: {1} - {2} Secs."
 msgid "Image too big.  Will save the viewport size."
 msgstr "Immagine troppo grande. Salva la dimensione della vista."
 
-msgid "Viewport Size: {0} - X={1}, Y={2}"
-msgstr "Dimensione viewport: {0} - X={1}, Y={2}"
+msgid "Could not read image data from view"
+msgstr "Impossibile leggere i dati dell’immagine dalla vista"
 
 msgid "Voice Over/Delete"
 msgstr "Voice-over/Elimina"
@@ -3810,14 +3848,11 @@ msgstr "Prima V: % 4<PRIu64> A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "Dietro V: % 4<PRIu64> A: % 4<PRIu64>"
 
-msgid "HDR monitor found."
-msgstr "Monitor HDR trovato."
-
-msgid "HDR monitor not found or not configured."
-msgstr "Monitor HDR non trovato o non configurato."
-
 msgid "Edit Text"
 msgstr "Modifica testo"
+
+msgid "Invalid font for text drawing"
+msgstr "Tipo di carattere non valido per il disegno di testo"
 
 msgid "Could not convert message to shape: "
 msgstr "Impossibile convertire il messaggio in forma:"
@@ -7263,6 +7298,28 @@ msgstr "host_statistics64 non riuscito"
 msgid "task info failed"
 msgstr "Informazione dell'attività non riuscita"
 
+msgid "Demo"
+msgstr "Demo"
+
+msgid "Node-Locked"
+msgstr "Vincolata al computer"
+
+msgid "Floating"
+msgstr "Fluttuante"
+
+msgid "License expired"
+msgstr "Licenza scaduta"
+
+msgid "{0} is not readable. Using system default."
+msgstr ""
+"{0} non è leggibile. Verrà utilizzato il valore predefinito del sistema."
+
+msgid "Released Floating License"
+msgstr "Licenza fluttuante rilasciata"
+
+msgid "Your {0} license will expire on {1}."
+msgstr "La tua licenza {0} scadrà il {1}."
+
 msgid "Open Directory"
 msgstr "Apri directory"
 
@@ -7680,9 +7737,6 @@ msgstr "Modalità spruzzo"
 msgid "Area Selection Mode"
 msgstr "Modalità di selezione dell'area"
 
-msgid "Draw Mode"
-msgstr "Modalità di disegno"
-
 msgid "Erase Mode"
 msgstr "Modalità di cancellazione"
 
@@ -7776,40 +7830,8 @@ msgstr "Finestra di commutazione di tasti di avviamento"
 msgid "Toggle About Window"
 msgstr "Commuta la finestra"
 
-#~ msgid "Renderer"
-#~ msgstr "Renderer"
+#~ msgid "HDR monitor found."
+#~ msgstr "Monitor HDR trovato."
 
-#~ msgid "Complexity"
-#~ msgstr "Complexità"
-
-#~ msgid "Stage Cache"
-#~ msgstr "Cache per stadio"
-
-#~ msgid "Disk Cache in GB"
-#~ msgstr "Cache disco in GB"
-
-#~ msgid "Rotated image info: {0}"
-#~ msgstr "Informazioni sull'immagine rotante: {0}"
-
-#~ msgid "Image too big for Save Annotations.  Will scale to the viewport size."
-#~ msgstr ""
-#~ "Immagine troppo grande per salvare le annotazioni. Sarà scalato alla "
-#~ "dimensione della vista."
-
-#~ msgid "{0}: Invalid OpenGL format and type"
-#~ msgstr "{0}: Formato e tipo OpenGL non valido"
-
-#~ msgid "OpenGL info: {0}"
-#~ msgstr "Informazioni OpenGL: {0}"
-
-#~ msgid "Unsupported output format"
-#~ msgstr "Formato di output non supportato"
-
-#~ msgid "Image Layer '{0}' info: {1} {2}"
-#~ msgstr "छवि परत '{0}' जानकारी: {1} {2}"
-
-#~ msgid "Unsupported output format: "
-#~ msgstr "Formato di output non supportato: "
-
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "Tipo di carattere non valido per il disegno di testo"
+#~ msgid "HDR monitor not found or not configured."
+#~ msgstr "Monitor HDR non trovato o non configurato."
