@@ -3,7 +3,6 @@ name: Vulkan Linux
 on:
   push:
     branches-ignore:
-      - main
       - beta
 
 jobs:
