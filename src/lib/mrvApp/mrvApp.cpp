@@ -535,16 +535,6 @@ namespace mrv
         }
 
 
-        //
-        // Initialize POCO Net for SSL connections.
-        //
-        Poco::Net::initializeSSL();
-
-
-        License ok = license_beat();
-        if (ok != License::kValid || license_type == LicenseType::kFloating)
-            Fl::add_timeout(kLicenseTimeout, (Fl_Timeout_Handler)beat_cb, this);
-
         DBG;
         // Initialize FLTK.
         Fl::scheme("gtk+");
@@ -615,6 +605,16 @@ namespace mrv
 
         DBG;
         uiLogDisplay = new LogDisplay(0, 20, 340, 320);
+
+        //
+        // Initialize POCO Net for SSL connections.
+        //
+        Poco::Net::initializeSSL();
+
+
+        License ok = license_beat();
+        if (ok != License::kValid || license_type == LicenseType::kFloating)
+            Fl::add_timeout(kLicenseTimeout, (Fl_Timeout_Handler)beat_cb, this);
 
         DBG;
         std::string version = "mrv2 v";
