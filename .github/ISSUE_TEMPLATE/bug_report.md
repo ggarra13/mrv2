@@ -28,5 +28,9 @@ If applicable, add screenshots to help explain your problem.
  - Version [e.g. mrv2 v1.1.6]
  - Backend [eg. OpenGL or Vulkan ]
 
+** Linux Window Manager (if applicable):
+- X11
+- Wayland
+
 **Additional context**
 Add any other context about the problem here.
