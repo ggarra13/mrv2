@@ -1,6 +1,5 @@
-v1.4.2
+v1.4.3
 ======
-
 mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
 
 mrv2 ships now in two compiled versions:
@@ -37,6 +36,13 @@ You need to have an internet connection for the license system.
 
 ChangeLog
 ---------
+
+- Upgraded to OpenColorIO v2.5.0.
+
+
+v1.4.2
+======
+
 
 - Added Linux aarch64 builds, without NDI.
 - Added Windows aarch64 builds, without NDI or SVT-AV1 encoder.
