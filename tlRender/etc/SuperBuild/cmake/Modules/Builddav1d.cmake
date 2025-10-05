@@ -15,11 +15,6 @@ if(WIN32)
     set(CLANG_ENV CC=clang CXX=clang)
 endif()
 
-set(CLANG_ENV )
-if(WIN32)
-    set(CLANG_ENV CC=clang CXX=clang)
-endif()
-
 set(dav1d_PYTHONPATH )
 if(NOT BUILD_PYTHON)
     find_program(MESON_EXECUTABLE NAMES meson meson.exe)
