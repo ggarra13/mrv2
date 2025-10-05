@@ -135,7 +135,7 @@ for full_name in full_names:
                             continue
                     total_count += asset['download_count']
                     asset_date = asset['updated_at'].split('T')[0]
-                    print('%s\tAsset: %s\tDate: %s'%(
+                    print('{:>5} Asset: {:<40} Date: {}'.format(
                         format_number(asset['download_count'], 5),
                         asset['name'],
                         asset_date,
@@ -146,7 +146,8 @@ for full_name in full_names:
         exit(1)
 
     formatted_total = format_number(total_count, 5)
-    print(f'{formatted_total}\tTotal Downloads for repo {full_name}')
+    print('{:>5} Total Downloads for repo {}'.format(formatted_total,
+                                                     full_name))
     
 
 def count_sourceforge(repo, folder_name, end_date, start_date = '2021-10-29'):
@@ -160,14 +161,16 @@ def count_sourceforge(repo, folder_name, end_date, start_date = '2021-10-29'):
     # Base URL for the project downloads page
     base_url = f"https://sourceforge.net/projects/{repo}/files/{folder_name}/stats/json?start_date={start_date}&end_date={end_date}"
 
-    # Send request to download page
-    response = requests.get(base_url)
     try:
+        # Send request to download page
+        response = requests.get(base_url)
+        response.raise_for_status()
         r = response.json()
     except Exception as e:
         base_url = f"https://sourceforge.net/projects/{repo}/files/archive/{folder_name}/stats/json?start_date={start_date}&end_date={end_date}"
         try:
             response = requests.get(base_url)
+            response.raise_for_status()
             r = response.json()
         except Exception as e:
             print(f'Could not get info for version {folder_name}')
@@ -177,11 +180,12 @@ def count_sourceforge(repo, folder_name, end_date, start_date = '2021-10-29'):
     total = 0
     for item in r['oses']:
         num=int(item[1])
-        print(f'\tOS: {item[0]}\tCount: {num}')
+        print('{:>5}   For OS: {:<40}'.format(num, item[0]))
         total += num
 
     formatted_total = format_number(total, 5)
-    print(f'{formatted_total}\tTotal Downloads for sourceforge {repo}/{folder_name}')
+    print('{:>5} Total Downloads for sourceforge {}'.
+          format(formatted_total, f'{repo}/{folder_name}'))
 
     return total
 

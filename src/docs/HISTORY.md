@@ -1,22 +1,22 @@
 v1.4.2
 ======
 
-mrv2 and vmrv2 are an open source professional players and review tools for vfx, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
+mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
 
 mrv2 ships now in two compiled versions:
 
-   - mrv2 with OpenGL backend  (free up to version 1.4.0 -
-     	       	      	        donationware afterwards)
+   - mrv2 with OpenGL backend  (free up to version 1.4.0 - donationware afterwards)
 				
    - vmrv2 with Vulkan backend (donationware)
 
+It also ships for many more architectures, so be careful to download the correct one.
 
 Difference between OpenGL and Vulkan
 ------------------------------------
 
 Vulkan is a new open source API, compared to OpenGL that it might get deprecated on some platforms like macOS. It supports true HDR (High Dynamic Range), it is about 20% to 50% faster than the OpenGL version (on Windows, macOS M1+ and it is the same speed for Linux's GNOME 48 and later) but it does not support OpenUSD.
 
-OpenGL's main benefit at this point is that it supports OpenUSD and works better on old CPUs (macOS Intel and older Wayland compositors).
+OpenGL's main benefit at this point is that it supports OpenUSD and works better on old CPUs (macOS Intel and X11 backend).
 
 Prices for binaries
 -------------------
@@ -48,7 +48,7 @@ ChangeLog
 - Made Erase tool support Alt + Drag to clear a rectangular area quickly.
 - Fixed subwindow panels flickering/wobbling under Wayland and X11.
   Tested under:
-  	* Wayland ubuntu GNOME Shell 48.0 (older GNOME's still wobble)
+  	* Wayland Ubuntu GNOME Shell 48.0 (older GNOMEs may still wobble)
 - Fixed lookup of machine's UUID for licensing on Windows aarch64 builds.
 - Created a web server for node-lock licenses so that hacking the node-lock
   license cannot happen.
