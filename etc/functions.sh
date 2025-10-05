@@ -190,7 +190,7 @@ locate_python() {
     # Clear previous exports to ensure a clean slate
     unset PYTHONDIR PYTHONEXE PYTHON PYTHON_VERSION PYTHON_SITEDIR PYTHON_USER_SITEDIR PYTHON_LIBDIR
 
-    local executables=("python" "python3" "python3.11" "python3.10" "python3.9")
+    local executables=("python" "python3" "python3.11" "python3.10" "python3.9" "py.exe")
     local locations
     
     # Check if BUILD_DIR exists and is a directory
@@ -218,22 +218,25 @@ locate_python() {
         if [[ -z $BUILD_PYTHON ]]; then
             echo "No python found! Please install it in your PATH." >&2
             exit 1
-        fi
-        # Fallback for when BUILD_PYTHON is set
+        fi        # Fallback for when BUILD_PYTHON is set
         export PYTHONDIR="${PWD}/${BUILD_DIR}/install/bin/"
-        if [[ $KERNEL != *Msys* ]]; then
+        if [[ "${KERNEL}" != *Windows* && "${KERNEL}" != *MSYS* && "${KERNEL}" != *mingw* ]]; then
             export PYTHONEXE=python3
         else
             export PYTHONEXE=python
         fi
         export PYTHON="${PYTHONDIR}/${PYTHONEXE}"
     fi
-
+    # Normalize paths for Windows (convert to Unix-style if in Windows/Cygwin)
+    if [[ "${KERNEL}" == *Windows* || "${KERNEL}" == *MSYS* || "${KERNEL}" == *mingw* ]]; then
+        PYTHON=$(cygpath -u "${PYTHON}" 2>/dev/null || echo "${PYTHON}")
+        PYTHONDIR=$(cygpath -u "${PYTHONDIR}" 2>/dev/null || echo "${PYTHONDIR}")
+    fi
+    
     # Use Python to determine version and directories
     if [[ -x "${PYTHON}" ]]; then
         local python_info
-        python_info=$("${PYTHON}" -c "import sys; import site; print(f'VER={sys.version_info.major}.{sys.version_info.minor}\nLIBDIR={sys.exec_prefix}/lib/python{sys.version_info.major}.{sys.version_info.minor}\nSYSTEM_SITEDIR={site.getsitepackages()[0]}\nUSER_SITEDIR={site.getusersitepackages()}')" 2>/dev/null)
-
+	python_info=$("${PYTHON}" -c "import sys; import site; import os; print(f'VER={sys.version_info.major}.{sys.version_info.minor}\nLIBDIR={sys.exec_prefix}/lib\nUSER_SITEDIR={site.getusersitepackages()}'); sp_dirs=site.getsitepackages(); sitedir=[d for d in sp_dirs if d.endswith('site-packages')][0] if [d for d in sp_dirs if d.endswith('site-packages')] else ''; print(f'SYSTEM_SITEDIR={sitedir}')" 2>/dev/null)
         if [[ -n "${python_info}" ]]; then
             export PYTHON_VERSION=$(echo "${python_info}" | grep 'VER=' | cut -d'=' -f2)
             export PYTHON_LIBDIR=$(echo "${python_info}" | grep 'LIBDIR=' | cut -d'=' -f2)
