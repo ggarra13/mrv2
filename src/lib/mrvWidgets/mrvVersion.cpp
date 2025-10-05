@@ -957,7 +957,8 @@ namespace mrv
           << OPENJPH_VERSION_PATCH << std::endl
           << "Copyright (c) 2019, Aous Naman" << std::endl 
           << "Copyright (c) 2019, Kakadu Software Pty Ltd, Australia" << endl
-          << "Copyright (C) 2008-2021 LibRaw LLC (info@libraw.org)" << endl
+          << "Copyright (c) 2019, The University of New South Wales, Australia"
+          << endl
           << endl;
 #endif
         o << "OpenTimelineIO" << endl
