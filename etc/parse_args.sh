@@ -15,7 +15,6 @@ show_help()
 	echo "* reldeb  builds a release build with debugging symbols."
 	echo "* clean clears the directory before building -- use only with runme.sh"
 	echo "* -j <num>  controls the threads to use when compiling. [default=$CPU_CORES]"
-	echo "* -vk build Vulkan backend."
 	echo "* -v builds verbosely. [default=off]"
 	echo "* -D sets cmake variables, like -D TLRENDER_USD=OFF."
 	echo "* -gpl builds FFmpeg with x264 encoder support in a GPL version of it."
@@ -178,15 +177,6 @@ if [[ "$NOARGS" == "" ]]; then
 	    -v|--v|--verbose)
 		export CMAKE_VERBOSE_MAKEFILE=ON
 		export FLAGS="-v ${FLAGS}"
-		shift
-		continue
-		;;
-	    -vk|--vk|--vulkan)
-		export MRV2_HDR=ON
-		export MRV2_BACKEND=VK
-		export TLRENDER_VK=ON
-		export TLRENDER_USD=OFF  # Turn off USD building as it does
-		                         # not currently work with Vulkan
 		shift
 		continue
 		;;
