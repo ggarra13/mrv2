@@ -2,6 +2,8 @@ include(ExternalProject)
 
 set(pystring_GIT_REPOSITORY "https://github.com/imageworks/pystring.git")
 set(pystring_GIT_TAG "v1.1.4")
+set(pystring_DEPENDENCIES )
+
 
 set(pystring_ARGS
     ${TLRENDER_EXTERNAL_ARGS})
@@ -12,7 +14,7 @@ ExternalProject_Add(
     GIT_REPOSITORY ${pystring_GIT_REPOSITORY}
     GIT_TAG ${pystring_GIT_TAG}
 
-    DEPENDS ${Gettext_DEP}
+    DEPENDS ${pystring_DEPENDENCIES}
     
     PATCH_COMMAND ${CMAKE_COMMAND} -E copy_if_different
         ${CMAKE_CURRENT_SOURCE_DIR}/patches/pystring-patch/CMakeLists.txt

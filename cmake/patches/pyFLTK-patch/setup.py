@@ -12,7 +12,7 @@ INCLUDE_REGEX = r"-I[\"']?([^\"']+)[\"']?"
 #
 fltk_dir = ""
 opengl_dir = ""
-# this will be overridden by environment variables:
+# this will be overrridden by environment variables:
 fltk_dir = os.environ.get('FLTK_HOME', '')
 opengl_dir = os.environ.get('OPENGL_HOME', '')
 
@@ -87,7 +87,7 @@ link_arg_list = []
 if sys.platform == 'win32':
     print("Building for MS Windows, using Visual C++")
     opengl_lib_dir = os.path.join(opengl_dir, 'lib')
-    def_list = [('WIN32', '1'),('FL_INTERNALS','1'),('FLTK_INCLUDE_FL_ASK', '1')]
+    def_list = [('WIN32', '1'),('FL_INTERNALS','1')]
     compile_arg_list=['/GR', '/wd4101']
     lib_dir_list = [fltk_lib_dir, opengl_lib_dir]
     win32_lib_list = ["kernel32", "user32", "gdi32", "winspool", "comdlg32", "Comctl32", "advapi32", "shell32", "ole32", "oleaut32", "uuid", "odbc32", "odbccp32", "wsock32", "gdiplus", "glu32", "opengl32"]
@@ -107,7 +107,7 @@ if sys.platform == 'win32':
 elif sys.platform.startswith('linux')  or sys.platform.startswith('gnukfreebsd') or sys.platform.startswith('gnu0'):
     print("Building for Linux")
 
-    def_list = [('UNIX', '1'),('FL_INTERNALS','1'),('FLTK_INCLUDE_FL_ASK', '1')]
+    def_list = [('UNIX', '1'),('FL_INTERNALS','1')]
     compile_arg_list.append('-Wno-unused-label')
     compile_arg_list.append('-Wno-unused-but-set-variable')
     compile_arg_list.append('-Wformat=1')
@@ -121,7 +121,7 @@ elif sys.platform in ['freebsd4','freebsd5','freebsd6','freebsd7', 'sunos5']:
     lib_list = ["fltk"]
 elif sys.platform == 'darwin':
     print("Building for  Mac OS X")
-    def_list = [('UNIX', '1'),('FL_INTERNALS','1'),('FLTK_INCLUDE_FL_ASK', '1')]
+    def_list = [('UNIX', '1'),('FL_INTERNALS','1')]
     lib_dir_list = [fltk_lib_dir]
     lib_list = ["fltk"]
     cpu_type = platform.processor()
@@ -339,7 +339,7 @@ class PySwigCommand(setuptools.Command):
 
   def run(self):
     """Run command."""
-    command = ['swig', '-D{0}'.format(sys.platform.upper()), '-DFL_INTERNALS', '-DFLTK_INCLUDE_FL_ASK=1', '-w302', '-w312', '-w325', '-w362', '-w389', '-w401', '-w473', '-w509', '-I./swig', '-DPYTHON', '-DPYTHON3', '-c++', '-python', '-shadow', '-fastdispatch', '-outdir', 'fltk', '-o', 'fltk/fltk_wrap.cpp', './swig/fltk.i']
+    command = ['swig', '-D{0}'.format(sys.platform.upper()), '-DFL_INTERNALS', '-w302', '-w312', '-w325', '-w362', '-w389', '-w401', '-w473', '-w509', '-I./swig', '-DPYTHON', '-DPYTHON3', '-c++', '-python', '-shadow', '-fastdispatch', '-outdir', 'fltk', '-o', 'fltk/fltk_wrap.cpp', './swig/fltk.i']
     pos = command.index('-I./swig')
     if sys.platform.upper() == 'DARWIN':
         command[pos:pos] = ["-D__APPLE__"]
@@ -376,7 +376,7 @@ setuptools.setup (cmdclass={
         'swig': PySwigCommand,
        },
        name = 'pyfltk',
-       version = '1.4.1.0',
+       version = '1.4.2.0',
        #setup_requires=['wheel'],
        ext_modules = [module1],
        packages = ['fltk','fltk.test'],

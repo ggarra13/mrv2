@@ -54,7 +54,8 @@ namespace tl
         }
 
         void Render::drawRect(const math::Box2i& box,
-                              const image::Color4f& color)
+                              const image::Color4f& color,
+                              const std::string& unused)
         {
             TLRENDER_P();
             ++(p.currentStats.rects);
@@ -99,7 +100,8 @@ namespace tl
         void Render::drawRect(const std::string& pipelineName,
                               const math::Box2i& box,
                               const image::Color4f& color,
-                              const bool enableBlending)
+                              const bool enableBlending,
+                              const std::string& shaderName)
         {
             TLRENDER_P();
             ++(p.currentStats.rects);
@@ -119,6 +121,21 @@ namespace tl
             vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
             colorBlendAttachment.blendEnable = enableBlending ?
                                                VK_TRUE : VK_FALSE;
+
+            if (shaderName != "erase")
+            {
+                colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+                colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+                colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+                colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+            }
+            else
+            {
+                colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_ZERO;
+                colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+                colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+                colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+            }
             
             cb.attachments.push_back(colorBlendAttachment);
             

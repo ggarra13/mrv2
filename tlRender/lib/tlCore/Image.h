@@ -9,7 +9,7 @@
 #include <tlCore/Range.h>
 #include <tlCore/Util.h>
 
-#include <half.h>
+#include <Imath/half.h>
 
 #include <iostream>
 #include <limits>

@@ -441,9 +441,9 @@ decl {class HotkeyUI;} {public global
 decl {class AboutUI;} {public global
 }
 
-widget_class TimelineClass {
-  xywh {112 135 933 56} box NO_BOX hide resizable
-  class Fl_Double_Window
+widget_class TimelineClass {open
+  xywh {112 135 933 56} box NO_BOX resizable
+  class Fl_Double_Window visible
 } {
   Fl_Group {} {open
     xywh {0 0 933 29} box FLAT_BOX
@@ -700,7 +700,7 @@ ui->uiView->updatePlaybackButtons()}
             class {mrv::FPSInput}
           }
         }
-        Fl_Group {} {
+        Fl_Group {} {open
           xywh {576 3 101 24}
         } {
           Fl_Button uiAudioTracks {
@@ -723,8 +723,17 @@ o->redraw();}
           }
           Fl_Slider uiVolume {
             user_data this user_data_type {ViewerUI*}
-            callback {float value = o->value();
-ui->app->setVolume(value);}
+            callback {TimelineClass* c = ui->uiTimeWindow;
+
+bool muted = c->uiAudioTracks->value();
+if (muted)
+{
+   c->uiAudioTracks->value(false);
+   c->uiAudioTracks->do_callback();
+}
+
+float value = o->value();
+ui->app->setVolume(value);} selected
             tooltip {Audio Volume} xywh {604 7 73 16} type {Horz Knob} selection_color 1 align 4 step 0.1 value 1 slider_size 0.2
             class {mrv::VolumeSlider}
           }
@@ -852,7 +861,7 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {0 0 933 641} type Double align 80 resizable
+      xywh {86 109 933 641} type Double align 80 resizable
       class {mrv::MainWindow} size_range {933 641 0 0} visible
     } {
       Fl_Flex uiRegion {open
@@ -1133,7 +1142,7 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
             code1 {uiMain->workspace = uiViewGroup;}
             class Fl_Flex
           } {
-            Fl_Group uiToolsGroup {open
+            Fl_Group uiToolsGroup {
               xywh {0 59 42 468} box FLAT_BOX
             } {
               Fl_Button uiScrub {
@@ -1379,7 +1388,7 @@ settings->setValue( mrv::kPenColorA, a);}
                 class {mrv::ResizableBar}
               }
               Fl_Group uiDock {
-                label DockGroup open selected
+                label DockGroup open
                 xywh {673 59 260 468} box FLAT_BOX labeltype NO_LABEL resizable
                 code0 {o->set_window( uiMain );}
                 code1 {uiMain->set_dock(o);}

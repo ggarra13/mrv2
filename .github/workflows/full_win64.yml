@@ -119,7 +119,6 @@ jobs:
       run: |
         ./etc/runme_nolog.sh -v -t package
         
-    - name: Upload binaries  # Conditional step (beta branch only)
-      if: github.ref_name == 'beta'
+    - name: Upload binaries 
       run: |
         ./bin/release/upload_sourceforge.sh

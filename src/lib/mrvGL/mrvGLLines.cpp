@@ -45,7 +45,7 @@ namespace mrv
         }
 
         Lines::~Lines() {}
-
+        
         void Lines::drawLines(
             const std::shared_ptr<timeline::IRender>& render,
             const draw::PointList& pts, const image::Color4f& color,

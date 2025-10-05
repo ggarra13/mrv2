@@ -17,12 +17,12 @@ set(VPX_CXXFLAGS)
 set(VPX_OBJCFLAGS)
 set(VPX_LDFLAGS)
 set(VPX_TARGET)
-set(VPX_DEPENDS)
+set(VPX_DEPENDENCIES)
 set(VPX_ENV)
 if (UNIX)
     # We modify PATH so nasm is found.  On windows, it is already in Msys2
     # path.
-    set(VPX_DEPENDS NASM)
+    set(VPX_DEPENDENCIES NASM)
     set(VPX_ENV PATH="${CMAKE_INSTALL_PREFIX}/bin:$ENV{PATH}")
     set(INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
 else()
@@ -36,7 +36,7 @@ else()
     endif()
     set(VPX_CXX_FLAGS "")
     set(VPX_C_FLAGS "")
-    set(VPX_DEPENDS)
+    set(VPX_DEPENDENCIES)
 endif()
 
 if(APPLE)
@@ -47,6 +47,8 @@ if(APPLE)
         list(APPEND VPX_C_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
     endif()
 endif()
+
+message(STATUS "VPX DEPENDENCIES=${VPX_DEPENDENCIES}")
 
 set(VPX_CONFIGURE_ARGS
     --prefix=${INSTALL_PREFIX}
@@ -95,7 +97,7 @@ endif()
 ExternalProject_Add(
     VPX
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/VPX
-    DEPENDS ${VPX_DEPENDS}
+    DEPENDS ${VPX_DEPENDENCIES}
     GIT_REPOSITORY "https://github.com/webmproject/libvpx.git"
     GIT_TAG ${VPX_TAG}
     

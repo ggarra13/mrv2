@@ -220,6 +220,10 @@ namespace mrv
         virtual void draw(
             const std::shared_ptr<timeline::IRender>&,
             const std::shared_ptr<opengl::Lines>&) override;
+
+        bool rectangle = false;
+        bool drawing = true;
+        float mult = 1.F;
     };
 
     void to_json(nlohmann::json& json, const GLErasePathShape& value);

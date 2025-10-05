@@ -3,6 +3,9 @@ include(ExternalProject)
 set(expat_GIT_REPOSITORY "https://github.com/libexpat/libexpat.git")
 set(expat_GIT_TAG "R_2_7_1")  # was 2_5_0
 
+set(expat_DEPENDENCIES )
+message(STATUS "expat DEPENDENCIES=${expat_DEPENDENCIES}")
+
 set(expat_ARGS
     -DEXPAT_BUILD_TOOLS=OFF
     -DEXPAT_BUILD_EXAMPLES=OFF
@@ -15,7 +18,7 @@ ExternalProject_Add(
     GIT_REPOSITORY ${expat_GIT_REPOSITORY}
     GIT_TAG ${expat_GIT_TAG}
 
-    DEPENDS ${Gettext_DEP}
+    DEPENDS ${expat_DEPENDENCIES}
     
     SOURCE_SUBDIR expat
     LIST_SEPARATOR |

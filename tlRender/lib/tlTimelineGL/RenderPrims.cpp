@@ -11,7 +11,8 @@ namespace tl
     namespace timeline_gl
     {
         void
-        Render::drawRect(const math::Box2i& box, const image::Color4f& color)
+        Render::drawRect(const math::Box2i& box, const image::Color4f& color,
+                         const std::string& name)
         {
             TLRENDER_P();
             ++(p.currentStats.rects);
@@ -19,7 +20,8 @@ namespace tl
             p.shaders["rect"]->bind();
             p.shaders["rect"]->setUniform("color", color);
 
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            if (name != "erase")
+                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
             if (p.vbos["rect"])
             {
@@ -51,7 +53,8 @@ namespace tl
                 p.shaders["mesh"]->setUniform("transform.mvp", transform);
                 p.shaders["mesh"]->setUniform("color", color);
 
-                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+                if (meshName != "erase")
+                    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
                 if (!p.vbos["mesh"] ||
                     (p.vbos["mesh"] && p.vbos["mesh"]->getSize() < size * 3))

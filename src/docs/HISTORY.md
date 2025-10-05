@@ -3,12 +3,13 @@ v1.4.2
 
 mrv2 and vmrv2 are an open source professional players and review tools for vfx, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
 
-This is the first donationware version of mrv2 and vmrv2.
+mrv2 ships now in two compiled versions:
 
-It ships now in two compiled versions:
    - mrv2 with OpenGL backend  (free up to version 1.4.0 -
      	       	      	        donationware afterwards)
+				
    - vmrv2 with Vulkan backend (donationware)
+
 
 Difference between OpenGL and Vulkan
 ------------------------------------
@@ -22,21 +23,36 @@ Prices for binaries
 
 Donationware prices of binary licenses through PayPal:
 
-https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UJMHRRKYCPXYW
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UJMHRRKYCPXYW)
 
 I use the email information to contact you privately.  I don't sell your information, as I don't have access to it, except for your email, which I use to contact you.
 
 - u$  50 for a node-lock license for one year.
 - u$ 150 for a node-lock license to own.
+
 - The prices are cumulative.  If you donate, say u$10 in 5 months, you can access the node-lock license for one year.
 
 License works for both mrv2 and vmrv2 (you can have both installed).
+You need to have an internet connection for the license system.
 
 ChangeLog
 ---------
 
 - Added Linux aarch64 builds, without NDI.
-
+- Added Windows aarch64 builds, without NDI or SVT-AV1 encoder.
+- Upgraded OpenJPH to v0.24.1 from OpenEXR's internal version.
+- Fixed incorrect use of FLTK_USE_WAYLAND when not in __linux__.
+- Fixed incorrect use of FLTK_USE_X11 when not in __linux__.
+- Made volume slider automatically unmute the audio if it was muted.
+- Added "File/Open/New Program Instance" to pop up a new mrv2.
+- Made Erase tool support Alt + Drag to clear a rectangular area quickly.
+- Fixed subwindow panels flickering/wobbling under Wayland and X11.
+  Tested under:
+  	* Wayland ubuntu GNOME Shell 48.0 (older GNOME's still wobble)
+- Fixed lookup of machine's UUID for licensing on Windows aarch64 builds.
+- Created a web server for node-lock licenses so that hacking the node-lock
+  license cannot happen.
+- Added support for network licenses.
 
 
 v1.4.1

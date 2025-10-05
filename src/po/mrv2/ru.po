@@ -1615,6 +1615,9 @@ msgstr "Имя файла LUT."
 msgid "LUT operation order."
 msgstr "Порядок операций LUT."
 
+msgid "Don't load python for faster startup."
+msgstr "Не загружайте Python для более быстрого запуска."
+
 msgid "Python Script to run and exit."
 msgstr "Скрипт Python для выполнения и выхода."
 
@@ -3603,6 +3606,9 @@ msgstr "Преференции"
 msgid "About"
 msgstr "О том, что"
 
+msgid "Could not open a new mrv2 instance"
+msgstr "Не удалось открыть новый экземпляр mrv2"
+
 msgid "File extension cannot be empty."
 msgstr "Распространение файла не может быть пустым."
 
@@ -3866,8 +3872,8 @@ msgstr "Воспроизведение невозможно – аудио-ан�
 msgid "Status is not saved"
 msgstr "Статус не сохранён"
 
-msgid "Audio annotation file {0} is missing or not !"
-msgstr ""
+msgid "Audio annotation file {0} is missing or not exists!"
+msgstr "Файл аудиоаннотации {0} отсутствует или не существует!"
 
 msgid "File/Open/Movie or Sequence"
 msgstr "Файл/Открыто/Фильм или последовательность"
@@ -3883,6 +3889,9 @@ msgstr "Файл/Открыто/Каталог"
 
 msgid "File/Open/Session"
 msgstr "Файл/Открыто/Сессия"
+
+msgid "File/Open/New Program Instance"
+msgstr "Файл/Открыть/Новый экземпляр программы"
 
 msgid "File/Save/Movie or Sequence"
 msgstr "Файл/Сохранить/Фильм или последовательность"
@@ -7273,6 +7282,28 @@ msgstr "shop_statistics64 не сработал"
 msgid "task info failed"
 msgstr "Ошибка информации о задаче"
 
+msgid "Demo"
+msgstr "Демо"
+
+msgid "Node-Locked"
+msgstr "Привязанная к узлу"
+
+msgid "Floating"
+msgstr "Плавающая"
+
+msgid "License expired"
+msgstr "Срок действия лицензии истёк"
+
+msgid "{0} is not readable. Using system default."
+msgstr ""
+"{0} не может быть прочитан. Используется значение по умолчанию системы."
+
+msgid "Released Floating License"
+msgstr "Плавающая лицензия освобождена"
+
+msgid "Your {0} license will expire on {1}."
+msgstr "Ваша лицензия {0} истекает {1}."
+
 msgid "Open Directory"
 msgstr "Открыть каталог"
 
@@ -7281,6 +7312,9 @@ msgstr "Открытое кино или последовательность"
 
 msgid "Open Single Image"
 msgstr "Открыть единый образ"
+
+msgid "Open New Program Instance"
+msgstr "Открыть новый экземпляр программы"
 
 msgid "Save Image"
 msgstr "Сохранить изображение"
@@ -7780,41 +7814,8 @@ msgstr "Переключить окно горячих клавиш"
 msgid "Toggle About Window"
 msgstr "Закладка о окне"
 
-#~ msgid "Could not read annotation image from view"
-#~ msgstr "Не удалось прочитать изображение аннотации с вида"
-
 #~ msgid "HDR monitor found."
-#~ msgstr "HDR-монитор обнаружен."
+#~ msgstr "HDR-монитор найден."
 
 #~ msgid "HDR monitor not found or not configured."
 #~ msgstr "HDR-монитор не найден или не настроен."
-
-#~ msgid "Returns true if the rate is valid for use with timecode."
-#~ msgstr ""
-#~ "Возвращение верно, если ставка действительна для использования с помощью "
-#~ "временного кода."
-
-#~ msgid ""
-#~ "The Pixel Bar can slow down playback at high resolutions.  When this option "
-#~ "is on, the pixel toolbar will be hidden automatically."
-#~ msgstr ""
-#~ "Pixel Bar может замедлить воспроизведение при высоких разрешениях. Когда эта"
-#~ " опция включена, панель пикселя будет скрыта автоматически."
-
-#~ msgid "smpte2084"
-#~ msgstr "smpte2084"
-
-#~ msgid "arib-std-b67"
-#~ msgstr "arib-std-b67"
-
-#~ msgid "Vulkan info: {0}"
-#~ msgstr "Информация Vulkan: {0}"
-
-#~ msgid "Scrub with Audio"
-#~ msgstr "Скрутка звука"
-
-#~ msgid "Blit Viewports"
-#~ msgstr "Blit Viewports"
-
-#~ msgid "Blit Timeline"
-#~ msgstr "Блитная временн*е рамки"

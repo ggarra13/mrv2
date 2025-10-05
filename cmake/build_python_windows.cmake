@@ -19,8 +19,15 @@ if(NOT DEFINED Python_PLATFORM)
     set( Python_PLATFORM x64 )
 endif()
 
+
+# \@bug: ARM64 errors out with --pgo in it.
+set(PGO --pgo)
+if(Python_PLATFORM STREQUAL "ARM64")
+    set(PGO )
+endif()
+
 if (Python_COMMAND STREQUAL "build")
-    set(CMD PCbuild\\build.bat -p ${Python_PLATFORM} --pgo ) # --pgo
+    set(CMD PCbuild\\build.bat -p ${Python_PLATFORM} ${PGO} )
 elseif(Python_COMMAND STREQUAL "install")
     set(CMD python.bat PC\\layout --precompile --preset-default  --copy "${CMAKE_INSTALL_PREFIX}/bin/")
 elseif(Python_COMMAND STREQUAL "pip")

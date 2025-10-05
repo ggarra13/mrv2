@@ -1631,6 +1631,9 @@ msgstr "Nombre del archivo LUT."
 msgid "LUT operation order."
 msgstr "Orden de operación del LUT."
 
+msgid "Don't load python for faster startup."
+msgstr "No cargar python para más rápidos arranques."
+
 msgid "Python Script to run and exit."
 msgstr "Script de Python para ejecutar y salir."
 
@@ -3639,6 +3642,9 @@ msgstr "Preferencias"
 msgid "About"
 msgstr "Acerca"
 
+msgid "Could not open a new mrv2 instance"
+msgstr "No pude abrir una nueva instancia de mrv2"
+
 msgid "File extension cannot be empty."
 msgstr "Extensión del archivo no puede estar vacía."
 
@@ -3901,7 +3907,7 @@ msgstr "No puedo reproducir - la anotación de audio está vacia"
 msgid "Status is not saved"
 msgstr "Estatus no es grabado"
 
-msgid "Audio annotation file {0} is missing or not !"
+msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "Anotación de audio en archivo {0} está faltante o no existe!"
 
 msgid "File/Open/Movie or Sequence"
@@ -3918,6 +3924,9 @@ msgstr "Archivo/Abrir/Carpeta"
 
 msgid "File/Open/Session"
 msgstr "Archivo/Abrir/Sesión"
+
+msgid "File/Open/New Program Instance"
+msgstr "Archivo/Abrir/Nueva Instancia del Programa"
 
 msgid "File/Save/Movie or Sequence"
 msgstr "Archivo/Guardar/Pelídula o Secuencia"
@@ -7313,6 +7322,27 @@ msgstr "host_statistics64 failed"
 msgid "task info failed"
 msgstr "task info falló"
 
+msgid "Demo"
+msgstr "Demo"
+
+msgid "Node-Locked"
+msgstr "Atada a tu Máquina"
+
+msgid "Floating"
+msgstr "Flotante"
+
+msgid "License expired"
+msgstr "Licencia expiró"
+
+msgid "{0} is not readable. Using system default."
+msgstr "{0} no es legible.  Usando el sistema por defecto."
+
+msgid "Released Floating License"
+msgstr "Devolvió una Licencia Floatante."
+
+msgid "Your {0} license will expire on {1}."
+msgstr "Su licencia {0} expirará en {1}."
+
 msgid "Open Directory"
 msgstr "Abrir Carpeta"
 
@@ -7321,6 +7351,9 @@ msgstr "Abrir Película o Secuencia"
 
 msgid "Open Single Image"
 msgstr "Abrir una Sola Imagen"
+
+msgid "Open New Program Instance"
+msgstr "Abrir Nueva Instancia del Programa"
 
 msgid "Save Image"
 msgstr "Guardar Imagen"
@@ -7820,257 +7853,8 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
 
-#~ msgid "Could not read annotation image from view"
-#~ msgstr "No pude leer la imagen de anotación de la vista"
-
 #~ msgid "HDR monitor found."
-#~ msgstr "Monitor HDR encontrado."
+#~ msgstr "Monitor HDR no encontrado."
 
 #~ msgid "HDR monitor not found or not configured."
 #~ msgstr "Monitor HDR no encontrado o no configurado."
-
-#~ msgid "Returns true if the rate is valid for use with timecode."
-#~ msgstr "Retorna verdadero si la razón es válida para usar con timecode."
-
-#~ msgid ""
-#~ "The Pixel Bar can slow down playback at high resolutions.  When this option "
-#~ "is on, the pixel toolbar will be hidden automatically."
-#~ msgstr ""
-#~ "La Barra de Pixel puede desacelearar la reproducción a altas resoluciones.  "
-#~ "Cuando esta opción está activada la barra de pixel será ocultada "
-#~ "automáticamente."
-
-#~ msgid "smpte2084"
-#~ msgstr "smpte2084"
-
-#~ msgid "arib-std-b67"
-#~ msgstr "arib-std-b67"
-
-#~ msgid "Vulkan info: {0}"
-#~ msgstr "Información de Vulkan: {0}"
-
-#~ msgid "Scrub with Audio"
-#~ msgstr "Fregar con Audio"
-
-#~ msgid "Blit Viewports"
-#~ msgstr "Copia de Vistas"
-
-#~ msgid "Blit Timeline"
-#~ msgstr "Transferir Línea de Tiempo"
-
-#~ msgid ""
-#~ "tter then the other.Timeline can be drawn with blitting or with shaders.  "
-#~ "Depending on graphics card and OS one can perform be"
-#~ msgstr ""
-#~ "La línea de tiempo puede ser dibujada con blitting (transferencia) o con "
-#~ "shaders de OpenGL.  Dependiendo en tu tarjeta gráfica y sistema operativo "
-#~ "una u otra puede desempeñarse mejor que la otra."
-
-#~ msgid "Render/HDR/Toggle Tonemap"
-#~ msgstr "Render/HDR/Alternar Mapeo de Tonos"
-
-#~ msgid "Never"
-#~ msgstr "Nunca"
-
-#~ msgid "Tonemap"
-#~ msgstr "Mapeo de Tonos"
-
-#~ msgid "Could not initialize NDI"
-#~ msgstr "No pude inicializar NDI"
-
-#~ msgid "You cannot set Window click through with a totally opaque window."
-#~ msgstr ""
-#~ "No se puede configurar el clic en la ventana con una ventana totalmente "
-#~ "opaca."
-
-#~ msgid "Linux Distribution: "
-#~ msgstr "Distribución Linux:"
-
-#~ msgid "Running from "
-#~ msgstr "Corriendo desde: "
-
-#~ msgid "Desktop: "
-#~ msgstr "Escritorio: "
-
-#~ msgid "RLE"
-#~ msgstr "RLE"
-
-#~ msgid "ZIPS"
-#~ msgstr "ZIPS"
-
-#~ msgid "ZIP"
-#~ msgstr "ZIP"
-
-#~ msgid "PIZ"
-#~ msgstr "PIZ"
-
-#~ msgid "PXR24"
-#~ msgstr "PXR24"
-
-#~ msgid "B44"
-#~ msgstr "B44"
-
-#~ msgid "B44A"
-#~ msgstr "B44A"
-
-#~ msgid "DWAA"
-#~ msgstr "DWAA"
-
-#~ msgid "DWAB"
-#~ msgstr "DWAB"
-
-#~ msgid "File {0} is a network file.  Cannot do versioning."
-#~ msgstr "Archivo \"{0}\" es un archivo de red.  No puedo versionar."
-
-#~ msgid "Found new versioned file {0}."
-#~ msgstr "Encontré archivo versionado \"{0}\"."
-
-#~ msgid "File {0} found but is not readable."
-#~ msgstr "Archivo \"{0}\" encontrado pero no es leíble."
-
-#~ msgid "Did not find new versioned file {0}."
-#~ msgstr "No encontre archivo versionado \"{0}\"."
-
-#~ msgid "Iteration {0} matched prefix={1}"
-#~ msgstr "Iteración {0} encontró prefijo={1}"
-
-#~ msgid "Iteration {0} matched version={1}"
-#~ msgstr "Iteración {0} encontró versión={1}"
-
-#~ msgid "Iteration {0} matched suffix={1}"
-#~ msgstr "Iteración {0} encontró sufijo={1}"
-
-#~ msgid "TV"
-#~ msgstr "TV"
-
-#~ msgid "PC"
-#~ msgstr "PC"
-
-#~ msgid "sRGB"
-#~ msgstr "sRGB"
-
-#~ msgid "Page Size: {0} x {1}"
-#~ msgstr "Información de Imagen: {0} {1}"
-
-#~ msgid "A0"
-#~ msgstr "A0"
-
-#~ msgid "A1"
-#~ msgstr "A1"
-
-#~ msgid "A2"
-#~ msgstr "A2"
-
-#~ msgid "A3"
-#~ msgstr "A3"
-
-#~ msgid "A4"
-#~ msgstr "A4"
-
-#~ msgid "A5"
-#~ msgstr "A5"
-
-#~ msgid "A6"
-#~ msgstr "A6"
-
-#~ msgid "A7"
-#~ msgstr "A7"
-
-#~ msgid "A8"
-#~ msgstr "A8"
-
-#~ msgid "A9"
-#~ msgstr "A9"
-
-#~ msgid "B0"
-#~ msgstr "B0"
-
-#~ msgid "B1"
-#~ msgstr "B1"
-
-#~ msgid "B2"
-#~ msgstr "B2"
-
-#~ msgid "B3"
-#~ msgstr "B3"
-
-#~ msgid "B4"
-#~ msgstr "B44"
-
-#~ msgid "B5"
-#~ msgstr "B5"
-
-#~ msgid "B6"
-#~ msgstr "B6"
-
-#~ msgid "B7"
-#~ msgstr "B7"
-
-#~ msgid "B8"
-#~ msgstr "B8"
-
-#~ msgid "B9"
-#~ msgstr "B9"
-
-#~ msgid "B10"
-#~ msgstr "120"
-
-#~ msgid "C5E"
-#~ msgstr "C5E"
-
-#~ msgid "DLE"
-#~ msgstr "RLE"
-
-#~ msgid "Executive"
-#~ msgstr "Activo"
-
-#~ msgid "Folio"
-#~ msgstr "Folio"
-
-#~ msgid "Ledger"
-#~ msgstr "Ledger"
-
-#~ msgid "Legal"
-#~ msgstr "Rango Legal"
-
-#~ msgid "Letter"
-#~ msgstr "Letter"
-
-#~ msgid "Tabloid"
-#~ msgstr "Tabloid"
-
-#~ msgid "Viewport Size: {0}  Render Size: {1}"
-#~ msgstr "Tamaño de la Ventana: {0}  Tamaño del Render {1}"
-
-#~ msgid "Font not found.  Will not use UTF-8."
-#~ msgstr "Tipografía no encontrada.  No usaré UTF-8."
-
-#~ msgid "Resizable Control Group"
-#~ msgstr "Grupo de Control de Ajuste"
-
-#~ msgid "View and Look"
-#~ msgstr "Vista y Look"
-
-#~ msgid "Layers, Exposure and Gain"
-#~ msgstr "Capas, Exposición y Ganancia"
-
-#~ msgid "Could not match "
-#~ msgstr "No pude empatar "
-
-#~ msgid "Wizard labels are:"
-#~ msgstr "Las etiquetas del wizard son:"
-
-#~ msgid "OCIO/   Display: %s"
-#~ msgstr "OCIO/   Display: %s"
-
-#~ msgid "OCIO/      View: %s"
-#~ msgstr "OCIO/      View: %s "
-
-#~ msgid "OCIO/     Input Color Space "
-#~ msgstr "OCIO/      Color de Entrada "
-
-#~ msgid "OCIO/Change All Files"
-#~ msgstr "OCIO/Cambiar Todos los Clips"
-
-#~ msgid "Traditional Chinese"
-#~ msgstr "Chino Tradicional"

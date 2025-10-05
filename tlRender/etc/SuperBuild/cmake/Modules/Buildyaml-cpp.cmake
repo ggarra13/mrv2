@@ -3,6 +3,8 @@ include(ExternalProject)
 set(yaml-cpp_GIT_REPOSITORY "https://github.com/jbeder/yaml-cpp.git")
 set(yaml-cpp_GIT_TAG "yaml-cpp-0.7.0")
 
+set(yaml-cpp_DEPENDENCIES )
+
 # \@todo: Patch for cmake 4.0 (remove later)
 set(yaml-cpp_PATCH ${CMAKE_COMMAND} -E copy_if_different
     ${CMAKE_CURRENT_SOURCE_DIR}/patches/yaml-cpp-patch/CMakeLists.txt
@@ -21,7 +23,7 @@ ExternalProject_Add(
     GIT_TAG ${yaml-cpp_GIT_TAG}
     PATCH_COMMAND ${yaml-cpp_PATCH}
     
-    DEPENDS ${Gettext_DEP}
+    DEPENDS ${yaml-cpp_DEPENDENCIES}
     
     LIST_SEPARATOR |
     CMAKE_ARGS ${yaml-cpp_ARGS})

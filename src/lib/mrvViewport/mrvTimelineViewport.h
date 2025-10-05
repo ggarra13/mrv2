@@ -490,11 +490,12 @@ namespace mrv
 
             void _handlePushLeftMouseButton() noexcept;
             void _handlePushLeftMouseButtonShapes() noexcept;
+            int  _handleReleaseLeftMouseButtonShapes() noexcept;
             
             void _handleDragLeftMouseButton() noexcept;
             void _handleDragLeftMouseButtonShapes() noexcept;
             void _handleDragSelection() noexcept;
-
+            
             void _handleDragMiddleMouseButton() noexcept;
 
             void _updateCursor() const noexcept;

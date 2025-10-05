@@ -3,6 +3,9 @@ include(ExternalProject)
 set(OpenColorIO_GIT_REPOSITORY "https://github.com/AcademySoftwareFoundation/OpenColorIO.git")
 set(OpenColorIO_GIT_TAG "v2.4.2")
 
+set(OpenColorIO_DEPENDENCIES Imath yaml-cpp expat pystring minizip-ng ZLIB)
+message(STATUS "OpenColorIO DEPENDENCIES=${OpenColorIO_DEPENDENCIES}")
+
 set(OpenColorIO_ARGS
     ${TLRENDER_EXTERNAL_ARGS}
     -DCMAKE_INSTALL_LIBDIR=lib
@@ -15,7 +18,7 @@ set(OpenColorIO_ARGS
 ExternalProject_Add(
     OpenColorIO
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/OpenColorIO
-    DEPENDS Imath yaml-cpp expat pystring minizip-ng ZLIB
+    DEPENDS ${OpenColorIO_DEPENDENCIES}
     GIT_REPOSITORY ${OpenColorIO_GIT_REPOSITORY}
     GIT_TAG ${OpenColorIO_GIT_TAG}
     

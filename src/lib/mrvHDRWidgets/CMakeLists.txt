@@ -16,9 +16,6 @@ set(SOURCES
 
 hdr_files_to_absolute_paths()
 
-find_package(Intl REQUIRED)
-
-
 set(LIBRARIES ${FLTK_vk_LIBRARY} ${FLTK_LIBRARIES} ${Intl_LIBRARIES})
 
 if( APPLE )

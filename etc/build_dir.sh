@@ -31,6 +31,7 @@ extract_python_version
 #
 . etc/parse_args.sh
 
+
 #
 # Build a build directory with that information
 #
@@ -63,10 +64,12 @@ fi
 #
 . etc/build_cores.sh
 
+
 #
 # Extract compiler version
 #
 get_compiler_version
+
 
 #
 # For Darwin, when building amd64, we make it compatible with macOS 11.0
@@ -122,7 +125,7 @@ if [[ ! $RUNME || ${BUILD_PYTHON} == OFF || ${BUILD_PYTHON} == 0 ]]; then
     #
     export PYTHONPATH="${PYTHON_LIBDIR}:${PYTHON_SITEDIR}:${PYTHONPATH}"
 else
-    if [[ $KERNEL == *Msys* ]]; then
+    if [[ $KERNEL == *Windows* ]]; then
 	export PYTHONEXE="$PWD/${BUILD_DIR}/install/bin/python.exe"
     else
 	export PYTHONEXE="$PWD/${BUILD_DIR}/install/bin/python${PYTHON_VERSION}"
@@ -133,5 +136,3 @@ else
     export PYTHONPATH="$PWD/${BUILD_DIR}/install/lib/python${PYTHON_VERSION}:$PWD/${BUILD_DIR}/install/lib/python${PYTHON_VERSION}/site-packages:${PYTHONPATH}"
 fi
  
-
-

@@ -125,6 +125,9 @@ def fltk_check_callback(data):
                 except:
                     time.sleep(2) # Wait 2 seconds before trying again. 
                     pass
+        else:
+            run_subprocess("history -c")
+            run_subprocess("history -w")
 
         exe = this.get_installed_executable(download_file)
         if os.path.exists(exe):

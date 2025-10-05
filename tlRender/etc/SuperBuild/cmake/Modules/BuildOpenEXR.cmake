@@ -3,6 +3,8 @@ include(ExternalProject)
 set(OpenEXR_GIT_REPOSITORY "https://github.com/AcademySoftwareFoundation/openexr.git")
 set(OpenEXR_GIT_TAG "v3.4.0")
 
+set(OpenEXR_DEPENDENCIES ${OpenJPH_DEP} Imath ZLIB)
+message(STATUS "OpenEXR DEPENDENCIES=${OpenEXR_DEPENDENCIES}")
 
 set(OpenEXR_PATCH COMMAND ${CMAKE_COMMAND} -E copy_if_different
     ${CMAKE_CURRENT_SOURCE_DIR}/patches/OpenEXR-patch/cmake/OpenEXRSetup.cmake
@@ -24,7 +26,7 @@ set(OpenEXR_ARGS
 ExternalProject_Add(
     OpenEXR
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/OpenEXR
-    DEPENDS ${OpenJPH_DEP} Imath ZLIB ${Gettext_DEP}
+    DEPENDS ${OpenEXR_DEPENDENCIES}
     GIT_REPOSITORY ${OpenEXR_GIT_REPOSITORY}
     GIT_TAG ${OpenEXR_GIT_TAG}
 

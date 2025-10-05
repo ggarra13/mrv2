@@ -1590,6 +1590,9 @@ msgstr "LUT 文件名"
 msgid "LUT operation order."
 msgstr "LUT执行顺序"
 
+msgid "Don't load python for faster startup."
+msgstr "为加快启动速度，请不要加载 Python。"
+
 msgid "Python Script to run and exit."
 msgstr "运行和退出 Python 脚本"
 
@@ -3521,6 +3524,9 @@ msgstr "首选项"
 msgid "About"
 msgstr "关于"
 
+msgid "Could not open a new mrv2 instance"
+msgstr "无法打开新的 mrv2 实例"
+
 msgid "File extension cannot be empty."
 msgstr "文件扩展名不能为空 。"
 
@@ -3775,8 +3781,8 @@ msgstr "无法播放 – 音频注释为空"
 msgid "Status is not saved"
 msgstr "状态未保存"
 
-msgid "Audio annotation file {0} is missing or not !"
-msgstr ""
+msgid "Audio annotation file {0} is missing or not exists!"
+msgstr "音频注释文件 {0} 缺失或不存在！"
 
 msgid "File/Open/Movie or Sequence"
 msgstr "文件/打开/影片或序列"
@@ -3792,6 +3798,9 @@ msgstr "文件/打开/目录"
 
 msgid "File/Open/Session"
 msgstr "文件/打开/Session"
+
+msgid "File/Open/New Program Instance"
+msgstr "文件/打开/新程序实例"
 
 msgid "File/Save/Movie or Sequence"
 msgstr "文件/保存/影片或序列"
@@ -7065,6 +7074,27 @@ msgstr "host_statistics64 failed"
 msgid "task info failed"
 msgstr "任务信息失败"
 
+msgid "Demo"
+msgstr "演示版"
+
+msgid "Node-Locked"
+msgstr "节点锁定"
+
+msgid "Floating"
+msgstr "浮动"
+
+msgid "License expired"
+msgstr "许可证已过期"
+
+msgid "{0} is not readable. Using system default."
+msgstr "{0} 无法读取。正在使用系统默认值。"
+
+msgid "Released Floating License"
+msgstr "已释放浮动许可证"
+
+msgid "Your {0} license will expire on {1}."
+msgstr "您的 {0} 许可证将于 {1} 到期。"
+
 msgid "Open Directory"
 msgstr "打开目录"
 
@@ -7073,6 +7103,9 @@ msgstr "打开影片或序列"
 
 msgid "Open Single Image"
 msgstr "打开单个图像"
+
+msgid "Open New Program Instance"
+msgstr "打开新程序实例"
 
 msgid "Save Image"
 msgstr "保存图像"
@@ -7572,37 +7605,8 @@ msgstr "开关热键窗口"
 msgid "Toggle About Window"
 msgstr "开关关于窗口"
 
-#~ msgid "Could not read annotation image from view"
-#~ msgstr "无法从视图读取注释图像"
-
 #~ msgid "HDR monitor found."
 #~ msgstr "发现HDR显示器。"
 
 #~ msgid "HDR monitor not found or not configured."
 #~ msgstr "未找到HDR显示器或未配置。"
-
-#~ msgid "Returns true if the rate is valid for use with timecode."
-#~ msgstr "返回true, 如果rate是有效的时间编码率"
-
-#~ msgid ""
-#~ "The Pixel Bar can slow down playback at high resolutions.  When this option "
-#~ "is on, the pixel toolbar will be hidden automatically."
-#~ msgstr "像素栏会减慢高分辨率的重播。 当此选项打开时, 像素工具栏将被自动隐藏 。"
-
-#~ msgid "smpte2084"
-#~ msgstr "smpte2084"
-
-#~ msgid "arib-std-b67"
-#~ msgstr "arib-std-b67"
-
-#~ msgid "Vulkan info: {0}"
-#~ msgstr "Vulkan 信息: {0}"
-
-#~ msgid "Scrub with Audio"
-#~ msgstr "带音频的Scrub"
-
-#~ msgid "Blit Viewports"
-#~ msgstr "Blit 视图"
-
-#~ msgid "Blit Timeline"
-#~ msgstr "Blit 时间线"

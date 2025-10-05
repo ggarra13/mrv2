@@ -14,10 +14,11 @@ set(jasper_ARGS
 )
 
 
-set(jasper_DEPS ${Gettext_DEP})
+set(jasper_DEPENDENCIES )
 if(TLRENDER_JPEG)
-    list(APPEND jasper_DEPS libjpeg-turbo)
+    list(APPEND jasper_DEPENDENCIES libjpeg-turbo)
 endif()
+message(STATUS "jasper DEPENDENCIES=${jasper_DEPENDENCIES}")
     
 ExternalProject_Add(
      jasper
@@ -25,7 +26,7 @@ ExternalProject_Add(
      GIT_REPOSITORY ${jasper_GIT_REPOSITORY}
      GIT_TAG ${jasper_GIT_TAG}
      
-     DEPENDS ${jasper_DEPS}
+     DEPENDS ${jasper_DEPENDENCIES}
      
      LIST_SEPARATOR |
      CMAKE_ARGS ${jasper_ARGS}
