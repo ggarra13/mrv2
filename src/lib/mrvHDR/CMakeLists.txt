@@ -17,7 +17,6 @@ if(APPLE)
     list(APPEND SOURCES mrvHDRMonitor.mm)
 endif()
 
-find_package(Intl REQUIRED)
 find_package(libplacebo REQUIRED)
 find_package(NDI REQUIRED)
 find_package(tlRender REQUIRED)

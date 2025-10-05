@@ -25,6 +25,17 @@ namespace mrv
             Lines();
             ~Lines();
 
+            //! Draw a mesh.
+            void drawMesh(const std::shared_ptr<timeline::IRender>& render,
+                          const geom::TriangleMesh2& mesh,
+                          const image::Color4f& color);
+            
+            //! Draw a single rectangle in raster coordinates.
+            void drawRect(
+                const std::shared_ptr<timeline::IRender>& render,
+                const math::Vector2f& start, const math::Vector2f& end,
+                const image::Color4f& color);
+            
             //! Draw a single line in raster coordinates with a mesh.
             void drawLine(
                 const std::shared_ptr<timeline::IRender>& render,

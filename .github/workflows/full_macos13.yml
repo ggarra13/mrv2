@@ -12,7 +12,7 @@ jobs:
   #                                 #
   ###################################
   macos-full-build:
-    runs-on: macos-13
+    runs-on: macos-15-intel
 
     steps:
     
@@ -102,7 +102,6 @@ jobs:
       run: |
         ./etc/runme_nolog.sh -t package
       
-    - name: Upload binaries  # Conditional step
-      if: github.ref_name == 'beta'
+    - name: Upload binaries
       run: |
         ./bin/release/upload_sourceforge.sh

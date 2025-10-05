@@ -1,0 +1,69 @@
+{
+    "name": "vmrv2",
+    "version": "1.4.1",
+    "dependencies": [
+        "cpptrace",  
+        "curl",
+        "expat",
+        {
+            "name": "ffmpeg",
+            "features": [
+                "aom",
+                "avcodec",
+                "avdevice",
+                "avfilter",
+                "avformat",
+                "avutil",
+                "bzip2",
+                "dav1d",
+                "ffmpeg",
+                "iconv",
+                "lzma",
+                "mp3lame",
+                "openjpeg",
+                "openmpt",
+                "openssl",
+                "opus",
+                "snappy",
+                "soxr",
+                "ssh",
+                "swresample",
+                "swscale",
+                "theora",
+                "vorbis",
+                "vpx",
+                "webp",
+                "xml2",
+                "x265",
+                "zlib"
+            ]
+        },
+        "fltk",
+        "freetype",
+        "glfw3",
+        "imath",
+        "jasper",
+        "lcms2",       # not found
+        "libjpeg-turbo",
+        "libplacebo",  # not found
+        "libraw",
+        "libssh2",
+        "minizip-ng",
+        "molten-vk",   # not found
+        "nlohmann-json",
+        "opencolorio",
+        "otio",        # not found
+        "openexr",
+        "openssl",
+        "openusd",     # not found
+        "poco",
+        "pybind11",
+        "pyfltk",      # not found
+        "pystring",
+        "python3",
+        "rtaudio",
+        "vulkan",
+        "yaml-cpp",
+        "zlib"
+    ]
+}

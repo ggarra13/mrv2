@@ -1,7 +1,8 @@
 
 include(ExternalProject)
 
-set(USD_DEPS ${PYTHON_DEP})
+set(USD_DEPENDENCIES ${PYTHON_DEP})
+message(STATUS "USD DEPENDENCIES=${USD_DEPENDENCIES}")
 
 set(USD_GIT_REPOSITORY https://github.com/PixarAnimationStudios/OpenUSD.git)
                         # v24.08 works
@@ -45,7 +46,7 @@ endif()
 ExternalProject_Add(
     USD
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/USD
-    DEPENDS ${USD_DEPS}
+    DEPENDS ${USD_DEPENDENCIES}
     GIT_REPOSITORY ${USD_GIT_REPOSITORY}
     GIT_TAG ${USD_GIT_TAG}
     

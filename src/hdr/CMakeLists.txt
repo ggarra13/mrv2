@@ -31,8 +31,6 @@ set(SOURCES
 
 hdr_files_to_absolute_paths()
 
-find_package(Intl REQUIRED)
-
 if (WIN32)
     enable_language("RC")
     set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_CURRENT_SOURCE_DIR}/app.rc")

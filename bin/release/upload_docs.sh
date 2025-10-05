@@ -20,7 +20,7 @@ find "$start_dir" -type f -name '*.rst' -exec $CMD "s/v[0-9]\.[0-9]\.[0-9]/v${mr
 
 ./runmeq.sh -t doc
 
-if [[ $KERNEL == *Msys* ]]; then
+if [[ $KERNEL == *Windows* ]]; then
     pacman -Sy rsync --noconfirm
 fi
 

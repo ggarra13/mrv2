@@ -5,7 +5,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.4.1\n"
+"Project-Id-Version: mrv2 v1.4.2\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -420,8 +420,8 @@ msgstr ""
 
 msgid ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/"
-"rt.rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/rt."
+"rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
 
@@ -1362,6 +1362,9 @@ msgid "LUT file name."
 msgstr ""
 
 msgid "LUT operation order."
+msgstr ""
+
+msgid "Don't load python for faster startup."
 msgstr ""
 
 msgid "Python Script to run and exit."
@@ -3277,6 +3280,9 @@ msgstr ""
 msgid "About"
 msgstr ""
 
+msgid "Could not open a new mrv2 instance"
+msgstr ""
+
 msgid "File extension cannot be empty."
 msgstr ""
 
@@ -3531,7 +3537,7 @@ msgstr ""
 msgid "Status is not saved"
 msgstr ""
 
-msgid "Audio annotation file {0} is missing or not !"
+msgid "Audio annotation file {0} is missing or not exists!"
 msgstr ""
 
 msgid "File/Open/Movie or Sequence"
@@ -3547,6 +3553,9 @@ msgid "File/Open/Directory"
 msgstr ""
 
 msgid "File/Open/Session"
+msgstr ""
+
+msgid "File/Open/New Program Instance"
 msgstr ""
 
 msgid "File/Save/Movie or Sequence"
@@ -6183,8 +6192,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
+"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
+"exr"
 msgstr ""
 
 msgid "Maximum Images Apart"
@@ -6679,6 +6688,27 @@ msgstr ""
 msgid "task info failed"
 msgstr ""
 
+msgid "Demo"
+msgstr ""
+
+msgid "Node-Locked"
+msgstr ""
+
+msgid "Floating"
+msgstr ""
+
+msgid "License expired"
+msgstr ""
+
+msgid "{0} is not readable. Using system default."
+msgstr ""
+
+msgid "Released Floating License"
+msgstr ""
+
+msgid "Your {0} license will expire on {1}."
+msgstr ""
+
 msgid "Open Directory"
 msgstr ""
 
@@ -6686,6 +6716,9 @@ msgid "Open Movie or Sequence"
 msgstr ""
 
 msgid "Open Single Image"
+msgstr ""
+
+msgid "Open New Program Instance"
 msgstr ""
 
 msgid "Save Image"

@@ -50,16 +50,17 @@ set(LibRaw_PATCH
     ${CMAKE_CURRENT_BINARY_DIR}/LibRaw/src/LibRaw/CMakeLists.txt
 )
 
-set(LibRaw_DEPS LibRaw_cmake jasper LCMS2 ZLIB ${Gettext_DEP})
+set(LibRaw_DEPENDENCIES LibRaw_cmake jasper LCMS2 ZLIB)
 if(TLRENDER_JPEG)
-    list(APPEND LibRaw_DEPS libjpeg-turbo)
+    list(APPEND LibRaw_DEPENDENCIES libjpeg-turbo)
 endif()
+message(STATUS "LibRaw DPEENDENCIES=${LibRaw_DEPENDENCIES}")
     
 ExternalProject_Add(
      LibRaw
      PREFIX ${CMAKE_CURRENT_BINARY_DIR}/LibRaw
      URL ${LibRaw_URL}
-     DEPENDS ${LibRaw_DEPS}
+     DEPENDS ${LibRaw_DEPENDENCIES}
      PATCH_COMMAND ${LibRaw_PATCH}
      LIST_SEPARATOR |
      CMAKE_ARGS ${LibRaw_ARGS}

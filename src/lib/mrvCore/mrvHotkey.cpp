@@ -25,6 +25,8 @@ namespace mrv
     Hotkey kOpenSeparateAudio(false, false, false, false, 0);
     Hotkey kOpenSession(false, false, true, false, 'o');
 
+    Hotkey kOpenNewInstance(true, false, false, false, 'n');
+
     Hotkey kSaveImage(false, false, false, false, 0);
     Hotkey kSaveImageToFolder(false, false, false, false, 0);
     Hotkey kSaveSequence(true, false, false, true, 's');
@@ -270,7 +272,7 @@ namespace mrv
     Hotkey kAlphaBlendNone(false, false, false, false, 0);
     Hotkey kAlphaBlendStraight(false, false, false, false, 0);
     Hotkey kAlphaBlendPremultiplied(false, false, false, false, 0);
-
+    
     inline bool has_shift(unsigned rawkey)
     {
         return Fl::event_key(FL_Shift_L) || Fl::event_key(FL_Shift_R);
@@ -386,6 +388,8 @@ namespace mrv
         HotkeyEntry(_("Open Movie or Sequence"), &kOpenImage),
         HotkeyEntry(_("Open Single Image"), &kOpenSingleImage),
         HotkeyEntry(_("Open Session"), &kOpenSession),
+        HotkeyEntry(_("Open New Program Instance"), &kOpenNewInstance),
+
         HotkeyEntry(_("Save Image"), &kSaveImage),
         HotkeyEntry(_("Save Audio"), &kSaveAudio),
         HotkeyEntry(_("Save Frames To Folder"), &kSaveImageToFolder),

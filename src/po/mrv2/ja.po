@@ -1585,6 +1585,9 @@ msgstr "ファイル名"
 msgid "LUT operation order."
 msgstr "⑥台当たりセット作業（受注№単位に仕分け）"
 
+msgid "Don't load python for faster startup."
+msgstr "起動を速くするために Python を読み込まないでください。"
+
 msgid "Python Script to run and exit."
 msgstr "Pythonスクリプト"
 
@@ -3531,6 +3534,9 @@ msgstr "環境設定"
 msgid "About"
 msgstr "情報"
 
+msgid "Could not open a new mrv2 instance"
+msgstr "新しい mrv2 インスタンスを開くことができませんでした"
+
 msgid "File extension cannot be empty."
 msgstr "ファイル名を空にできません。"
 
@@ -3785,8 +3791,8 @@ msgstr "再生できません ― 音声注釈が空です"
 msgid "Status is not saved"
 msgstr "ステータスは保存されていません"
 
-msgid "Audio annotation file {0} is missing or not !"
-msgstr ""
+msgid "Audio annotation file {0} is missing or not exists!"
+msgstr "オーディオ注釈ファイル {0} が見つからないか存在しません！"
 
 msgid "File/Open/Movie or Sequence"
 msgstr "ファイル/開く/ムービーまたはシーケンス"
@@ -3802,6 +3808,9 @@ msgstr "ファイル/開く/ディレクトリ"
 
 msgid "File/Open/Session"
 msgstr "ファイル/開く/セッション"
+
+msgid "File/Open/New Program Instance"
+msgstr "ファイル/開く/新しいプログラムインスタンス"
 
 msgid "File/Save/Movie or Sequence"
 msgstr "ファイル/保存/映画またはシーケンス"
@@ -7051,6 +7060,27 @@ msgstr "host_statistics64に失敗しました。"
 msgid "task info failed"
 msgstr "タスク情報の取得に失敗しました。"
 
+msgid "Demo"
+msgstr "デモ"
+
+msgid "Node-Locked"
+msgstr "ノードロック"
+
+msgid "Floating"
+msgstr "フローティング"
+
+msgid "License expired"
+msgstr "ライセンスの有効期限が切れています"
+
+msgid "{0} is not readable. Using system default."
+msgstr "{0} は読み取れません。システムのデフォルトを使用します。"
+
+msgid "Released Floating License"
+msgstr "フローティングライセンスを解放しました"
+
+msgid "Your {0} license will expire on {1}."
+msgstr "お使いの {0} ライセンスは {1} に期限切れとなります。"
+
 msgid "Open Directory"
 msgstr "ディレクトリを開く"
 
@@ -7059,6 +7089,9 @@ msgstr "ムービーまたはシーケンスを開く"
 
 msgid "Open Single Image"
 msgstr "単一画像を開く"
+
+msgid "Open New Program Instance"
+msgstr "新しいプログラムインスタンスを開く"
 
 msgid "Save Image"
 msgstr "画像を保存"
@@ -7558,37 +7591,8 @@ msgstr "ホットキーウィンドウを切り替え"
 msgid "Toggle About Window"
 msgstr "バージョン情報ウィンドウを切り替え"
 
-#~ msgid "Could not read annotation image from view"
-#~ msgstr "ビューから注釈画像を読み取れませんでした"
-
 #~ msgid "HDR monitor found."
 #~ msgstr "HDRモニターが見つかりました。"
 
 #~ msgid "HDR monitor not found or not configured."
 #~ msgstr "HDRモニターが見つからないか、設定されていません。"
-
-#~ msgid "Returns true if the rate is valid for use with timecode."
-#~ msgstr "テーブルのセルのテキストを返す。"
-
-#~ msgid ""
-#~ "The Pixel Bar can slow down playback at high resolutions.  When this option "
-#~ "is on, the pixel toolbar will be hidden automatically."
-#~ msgstr "ピクセルバーは高解像度で再生を遅くすることがあります。このオプションがオンになると、ピクセルツールバーが自動的に隠されます。"
-
-#~ msgid "smpte2084"
-#~ msgstr "smpte2084"
-
-#~ msgid "arib-std-b67"
-#~ msgstr "arib-std-b67"
-
-#~ msgid "Vulkan info: {0}"
-#~ msgstr "Vulkan 情報: {0}"
-
-#~ msgid "Scrub with Audio"
-#~ msgstr "オーディオとともにスクラブ"
-
-#~ msgid "Blit Viewports"
-#~ msgstr "ビューポートをブリット"
-
-#~ msgid "Blit Timeline"
-#~ msgstr "タイムラインをブリット"

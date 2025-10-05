@@ -4,7 +4,8 @@ include(ExternalProject)
 set(libplacebo_GIT_REPO "https://code.videolan.org/videolan/libplacebo.git")
 set(libplacebo_GIT_TAG v7.351.0) # was v7.349.0
 
-set(libplacebo_DEPS ${PYTHON_DEP})
+set(libplacebo_DEPENDENCIES ${PYTHON_DEP})
+message(STATUS "libplacebo DEPENDENCIES=${libplacebo_DEPENDENCIES}")
 
 set(libplacebo_PYTHONPATH)
 if(NOT BUILD_PYTHON)
@@ -95,7 +96,7 @@ ExternalProject_Add(
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/libplacebo
     GIT_REPOSITORY ${libplacebo_GIT_REPO}
     GIT_TAG ${libplacebo_GIT_TAG}
-    DEPENDS ${libplacebo_DEPS}
+    DEPENDS ${libplacebo_DEPENDENCIES}
     CONFIGURE_COMMAND ${libplacebo_CONFIGURE}
     PATCH_COMMAND ${libplacebo_PATCH}
     BUILD_COMMAND ${libplacebo_BUILD}

@@ -1608,6 +1608,9 @@ msgstr "LUT file name."
 msgid "LUT operation order."
 msgstr "LUT operation order."
 
+msgid "Don't load python for faster startup."
+msgstr "Don't load python for faster startup."
+
 msgid "Python Script to run and exit."
 msgstr "Python Script to run and exit."
 
@@ -3583,6 +3586,9 @@ msgstr "Preferences"
 msgid "About"
 msgstr "About"
 
+msgid "Could not open a new mrv2 instance"
+msgstr "Could not open a new mrv2 instance"
+
 msgid "File extension cannot be empty."
 msgstr "File extension cannot be empty."
 
@@ -3845,8 +3851,8 @@ msgstr "Cannot play - audio annotation is empty"
 msgid "Status is not saved"
 msgstr "Status is not saved"
 
-msgid "Audio annotation file {0} is missing or not !"
-msgstr "Audio annotation file {0} is missing or not !"
+msgid "Audio annotation file {0} is missing or not exists!"
+msgstr "Audio annotation file {0} is missing or not exists!"
 
 msgid "File/Open/Movie or Sequence"
 msgstr "File/Open/Movie or Sequence"
@@ -3862,6 +3868,9 @@ msgstr "File/Open/Directory"
 
 msgid "File/Open/Session"
 msgstr "File/Open/Session"
+
+msgid "File/Open/New Program Instance"
+msgstr "File/Open/New Program Instance"
 
 msgid "File/Save/Movie or Sequence"
 msgstr "File/Save/Movie or Sequence"
@@ -7240,6 +7249,27 @@ msgstr "host_statistics64 failed"
 msgid "task info failed"
 msgstr "task info failed"
 
+msgid "Demo"
+msgstr "Demo"
+
+msgid "Node-Locked"
+msgstr "Node-Locked"
+
+msgid "Floating"
+msgstr "Floating"
+
+msgid "License expired"
+msgstr "License expired"
+
+msgid "{0} is not readable. Using system default."
+msgstr "{0} is not readable. Using system default."
+
+msgid "Released Floating License"
+msgstr "Released Floating License"
+
+msgid "Your {0} license will expire on {1}."
+msgstr "Your {0} license will expire on {1}."
+
 msgid "Open Directory"
 msgstr "Open Directory"
 
@@ -7248,6 +7278,9 @@ msgstr "Open Movie or Sequence"
 
 msgid "Open Single Image"
 msgstr "Open Single Image"
+
+msgid "Open New Program Instance"
+msgstr "Open New Program Instance"
 
 msgid "Save Image"
 msgstr "Save Image"
@@ -7747,301 +7780,8 @@ msgstr "Toggle Hotkeys Window"
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
 
-#~ msgid "Could not read annotation image from view"
-#~ msgstr "Could not read annotation image from view"
-
 #~ msgid "HDR monitor found."
 #~ msgstr "HDR monitor found."
 
 #~ msgid "HDR monitor not found or not configured."
 #~ msgstr "HDR monitor not found or not configured."
-
-#~ msgid "Returns true if the rate is valid for use with timecode."
-#~ msgstr "Returns true if the rate is valid for use with timecode."
-
-#~ msgid ""
-#~ "The Pixel Bar can slow down playback at high resolutions.  When this option "
-#~ "is on, the pixel toolbar will be hidden automatically."
-#~ msgstr ""
-#~ "The Pixel Bar can slow down playback at high resolutions.  When this option "
-#~ "is on, the pixel toolbar will be hidden automatically."
-
-#~ msgid "smpte2084"
-#~ msgstr "smpte2084"
-
-#~ msgid "arib-std-b67"
-#~ msgstr "arib-std-b67"
-
-#~ msgid "Vulkan info: {0}"
-#~ msgstr "Vulkan info: {0}"
-
-#~ msgid "Scrub with Audio"
-#~ msgstr "Scrub with Audio"
-
-#~ msgid "Blit Viewports"
-#~ msgstr "Blit Viewports"
-
-#~ msgid "Blit Timeline"
-#~ msgstr "Blit Timeline"
-
-#~ msgid ""
-#~ "tter then the other.Timeline can be drawn with blitting or with shaders.  "
-#~ "Depending on graphics card and OS one can perform be"
-#~ msgstr ""
-#~ "tter then the other.Timeline can be drawn with blitting or with shaders.  "
-#~ "Depending on graphics card and OS one can perform be"
-
-#~ msgid "Render/HDR/Toggle Tonemap"
-#~ msgstr "Render/HDR/Toggle Tonemap"
-
-#~ msgid "Never"
-#~ msgstr "Never"
-
-#~ msgid "Tonemap"
-#~ msgstr "Tonemap"
-
-#~ msgid "Could not initialize NDI"
-#~ msgstr "Could not initialize NDI"
-
-#~ msgid "59.952"
-#~ msgstr "59.952"
-
-#~ msgid "You cannot set Window click through with a totally opaque window."
-#~ msgstr "You cannot set Window click through with a totally opaque window."
-
-#~ msgid "Linux Distribution: "
-#~ msgstr "Linux Distribution: "
-
-#~ msgid "Running from "
-#~ msgstr "Running from "
-
-#~ msgid "Desktop: "
-#~ msgstr "Desktop: "
-
-#~ msgid "RLE"
-#~ msgstr "RLE"
-
-#~ msgid "ZIPS"
-#~ msgstr "ZIPS"
-
-#~ msgid "ZIP"
-#~ msgstr "ZIP"
-
-#~ msgid "PIZ"
-#~ msgstr "PIZ"
-
-#~ msgid "PXR24"
-#~ msgstr "PXR24"
-
-#~ msgid "B44"
-#~ msgstr "B44"
-
-#~ msgid "B44A"
-#~ msgstr "B44A"
-
-#~ msgid "DWAA"
-#~ msgstr "DWAA"
-
-#~ msgid "DWAB"
-#~ msgstr "DWAB"
-
-#~ msgid "File {0} is a network file.  Cannot do versioning."
-#~ msgstr "File {0} is a network file.  Cannot do versioning."
-
-#~ msgid "Found new versioned file {0}."
-#~ msgstr "Found new versioned file {0}."
-
-#~ msgid "File {0} found but is not readable."
-#~ msgstr "File {0} found but is not readable."
-
-#~ msgid "Did not find new versioned file {0}."
-#~ msgstr "Did not find new versioned file {0}."
-
-#~ msgid "Iteration {0} matched prefix={1}"
-#~ msgstr "Iteration {0} matched prefix={1}"
-
-#~ msgid "Iteration {0} matched version={1}"
-#~ msgstr "Iteration {0} matched version={1}"
-
-#~ msgid "Iteration {0} matched suffix={1}"
-#~ msgstr "Iteration {0} matched suffix={1}"
-
-#~ msgid "TV"
-#~ msgstr "TV"
-
-#~ msgid "PC"
-#~ msgstr "PC"
-
-#~ msgid "sRGB"
-#~ msgstr "sRGB"
-
-#~ msgid "Page Size: {0} x {1}"
-#~ msgstr "Page Size: {0} x {1}"
-
-#~ msgid "A0"
-#~ msgstr "A0"
-
-#~ msgid "A1"
-#~ msgstr "A1"
-
-#~ msgid "A2"
-#~ msgstr "A2"
-
-#~ msgid "A3"
-#~ msgstr "A3"
-
-#~ msgid "A4"
-#~ msgstr "A4"
-
-#~ msgid "A5"
-#~ msgstr "A5"
-
-#~ msgid "A6"
-#~ msgstr "A6"
-
-#~ msgid "A7"
-#~ msgstr "A7"
-
-#~ msgid "A8"
-#~ msgstr "A8"
-
-#~ msgid "A9"
-#~ msgstr "A9"
-
-#~ msgid "B0"
-#~ msgstr "B0"
-
-#~ msgid "B1"
-#~ msgstr "B1"
-
-#~ msgid "B2"
-#~ msgstr "B2"
-
-#~ msgid "B3"
-#~ msgstr "B3"
-
-#~ msgid "B4"
-#~ msgstr "B4"
-
-#~ msgid "B5"
-#~ msgstr "B5"
-
-#~ msgid "B6"
-#~ msgstr "B6"
-
-#~ msgid "B7"
-#~ msgstr "B7"
-
-#~ msgid "B8"
-#~ msgstr "B8"
-
-#~ msgid "B9"
-#~ msgstr "B9"
-
-#~ msgid "B10"
-#~ msgstr "B10"
-
-#~ msgid "C5E"
-#~ msgstr "C5E"
-
-#~ msgid "DLE"
-#~ msgstr "DLE"
-
-#~ msgid "Executive"
-#~ msgstr "Executive"
-
-#~ msgid "Folio"
-#~ msgstr "Folio"
-
-#~ msgid "Ledger"
-#~ msgstr "Ledger"
-
-#~ msgid "Legal"
-#~ msgstr "Legal"
-
-#~ msgid "Letter"
-#~ msgstr "Letter"
-
-#~ msgid "Tabloid"
-#~ msgstr "Tabloid"
-
-#~ msgid "Viewport Size: {0}  Render Size: {1}"
-#~ msgstr "Viewport Size: {0}  Render Size: {1}"
-
-#~ msgid "Font not found.  Will not use UTF-8."
-#~ msgstr "Font not found.  Will not use UTF-8."
-
-#~ msgid "Resizable Control Group"
-#~ msgstr "Resizable Control Group"
-
-#~ msgid "View and Look"
-#~ msgstr "View and Look"
-
-#~ msgid "Layers, Exposure and Gain"
-#~ msgstr "Layers, Exposure and Gain"
-
-#~ msgid "Could not match "
-#~ msgstr "Could not match "
-
-#~ msgid "Wizard labels are:"
-#~ msgstr "Wizard labels are:"
-
-#~ msgid "OCIO/   Display: %s"
-#~ msgstr "OCIO/   Display: %s"
-
-#~ msgid "OCIO/      View: %s"
-#~ msgstr "OCIO/      View: %s"
-
-#~ msgid "OCIO/     Input Color Space "
-#~ msgstr "OCIO/     Input Color Space "
-
-#~ msgid "OCIO/Change All Files"
-#~ msgstr "OCIO/Change All Files"
-
-#~ msgid "Traditional Chinese"
-#~ msgstr "Traditional Chinese"
-
-#~ msgid "View/OCIO Presets"
-#~ msgstr "View/OCIO Presets"
-
-#~ msgid "Invalid EDID header"
-#~ msgstr "Invalid EDID header"
-
-#~ msgid "Unknown Monitor"
-#~ msgstr "Unknown Monitor"
-
-#~ msgid "Screen #"
-#~ msgstr "Screen #"
-
-#~ msgid "OCIO/     File Color Space"
-#~ msgstr "OCIO/     File Color Space"
-
-#~ msgid "OCIO/     File Color Space "
-#~ msgstr "OCIO/     File Color Space "
-
-#~ msgid "Seek to the given time."
-#~ msgstr "Seek to the given time."
-
-#~ msgid "Set the in/out points range."
-#~ msgstr "Set the in/out points range."
-
-#~ msgid "    Percentage: %.2g %%"
-#~ msgstr "    Percentage: %.2g %%"
-
-#~ msgid "IFF Picture"
-#~ msgstr "IFF Picture"
-
-#~ msgid "Map Picture"
-#~ msgstr "Map Picture"
-
-#~ msgid "PNG Picture"
-#~ msgstr "PNG Picture"
-
-#~ msgid "RGB Picture"
-#~ msgstr "RGB Picture"
-
-#~ msgid "Everything OK."
-#~ msgstr "Everything OK."
-
-#~ msgid "Auto Scrub Playback"
-#~ msgstr "Auto Scrub Playback"

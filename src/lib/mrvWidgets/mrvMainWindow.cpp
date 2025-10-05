@@ -21,10 +21,12 @@
 #include "mrvMainWindow.h"
 #include "mrvPreferencesUI.h"
 
-#ifdef FLTK_USE_WAYLAND
+#ifdef __linux__
+#  ifdef FLTK_USE_WAYLAND
 #    include <regex>
 #    include <cairo/cairo.h>
 #    include <wayland-client.h>
+#  endif
 #endif
 
 #include "mrvFl/mrvIO.h"
@@ -634,13 +636,15 @@ namespace mrv
     {
         if (value)
         {
-#ifdef FLTK_USE_WAYLAND
+#ifdef __linux__
+#  ifdef FLTK_USE_WAYLAND
             // Restore screensaver/black screen
-#elif defined(FLTK_USE_X11)
+#  elif defined(FLTK_USE_X11)
             if (fl_x11_display())
             {
                 XScreenSaverSuspend(fl_x11_display(), False);
             }
+#  endif
 #elif defined(_WIN32)
             SetThreadExecutionState(ES_CONTINUOUS);
 #elif defined(__APPLE__)
@@ -650,7 +654,8 @@ namespace mrv
         else
         {
             //! Turn off screensaver and black screen
-#if defined(FLTK_USE_X11)
+#ifdef __linux__
+#  if defined(FLTK_USE_X11)
             if (fl_x11_display())
             {
                 int event_base, error_base;
@@ -659,6 +664,7 @@ namespace mrv
                 if (ok == True)
                     XScreenSaverSuspend(fl_x11_display(), True);
             }
+#endif
 #elif defined(_WIN32)
             SetThreadExecutionState(
                 ES_CONTINUOUS | ES_DISPLAY_REQUIRED);
@@ -746,13 +752,14 @@ namespace mrv
     int MainWindow::handle(int event)
     {
         TLRENDER_P();
-        
-#ifdef FLTK_USE_WAYLAND
+#ifdef __linux__
+#  ifdef FLTK_USE_WAYLAND
         if (click_through && ignoreFocus && desktop::Wayland() &&
             event == FL_UNFOCUS)
         {
             return 0;
         }
+#  endif
 #endif
         if (event == FL_FOCUS && click_through)
         {
@@ -909,7 +916,8 @@ namespace mrv
     {
         DropWindow::show();
 
-#ifdef FLTK_USE_WAYLAND
+#ifdef __linux__
+#  ifdef FLTK_USE_WAYLAND
         if (desktop::Wayland())
         {
             // This call is needed for proper transparency of the main window.
@@ -993,6 +1001,7 @@ namespace mrv
                 }
             }
         }
+#  endif
 #endif
     }
 
@@ -1000,7 +1009,8 @@ namespace mrv
     {
         TLRENDER_P();
 
-#ifdef FLTK_USE_WAYLAND
+#ifdef __linux__
+#  ifdef FLTK_USE_WAYLAND
         if (fl_wl_display() && win_alpha < 255)
         {
             cairo_t* cr = fl_wl_gc();
@@ -1045,14 +1055,19 @@ namespace mrv
             cairo_paint_with_alpha(cr, alpha);
             
             fl_delete_offscreen(p.offscreen);
+
+            clear_damage();
         }
         else
         {
             DropWindow::draw();
         }
-#else
+#  else  // !FLTK_USE_WAYLAND
         DropWindow::draw();
-#endif
+#  endif  // FLTK_USE_WAYLAND
+#else  // ! __linux__
+        DropWindow::draw();
+#endif // ! __linux__
     }
 
     void MainWindow::set_alpha(int new_alpha)
@@ -1178,12 +1193,12 @@ namespace mrv
 
     void MainWindow::setClickThrough(bool enable)
     {
-#    ifdef _WIN32
+#ifdef _WIN32
         HWND win = fl_win32_xid(this);
         setClickThroughWin32(win, enable);
-#    elif defined(__linux__)
+#elif defined(__linux__)
 
-#        ifdef FLTK_USE_X11
+#  ifdef FLTK_USE_X11
         auto dpy = fl_x11_display();
         if (dpy)
         {
@@ -1196,8 +1211,8 @@ namespace mrv
                 Fl::remove_system_handler((Fl_System_Handler)x11_handler);
             }
         }
-#        endif
-#        ifdef FLTK_USE_WAYLAND
+#  endif
+#  ifdef FLTK_USE_WAYLAND
         auto wldpy = fl_wl_display();
         if (wldpy)
         {
@@ -1205,9 +1220,9 @@ namespace mrv
             for (; window; window = Fl::next_window(window))
                 setClickThroughWayland(window, enable);
         }
-#        endif // FLTK_USE_WAYLAND
+#  endif // FLTK_USE_WAYLAND
 
-#    endif // __linux__
+#endif // __linux__
     }
 
 #endif // !__APPLE__

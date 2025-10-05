@@ -1569,6 +1569,9 @@ msgstr "Nom du fichier LUT."
 msgid "LUT operation order."
 msgstr "LUT ordre d'opération."
 
+msgid "Don't load python for faster startup."
+msgstr "Ne pas charger Python pour un démarrage plus rapide."
+
 msgid "Python Script to run and exit."
 msgstr "Python Script à exécuter et à sortir."
 
@@ -3568,6 +3571,9 @@ msgstr "Préférences"
 msgid "About"
 msgstr "À propos de"
 
+msgid "Could not open a new mrv2 instance"
+msgstr "Impossible d’ouvrir une nouvelle instance de mrv2"
+
 msgid "File extension cannot be empty."
 msgstr "L'extension de fichier ne peut pas être vide."
 
@@ -3831,8 +3837,8 @@ msgstr "Impossible de lire – l’annotation audio est vide"
 msgid "Status is not saved"
 msgstr "L’état n’est pas enregistré"
 
-msgid "Audio annotation file {0} is missing or not !"
-msgstr ""
+msgid "Audio annotation file {0} is missing or not exists!"
+msgstr "Le fichier d’annotation audio {0} est manquant ou n’existe pas !"
 
 msgid "File/Open/Movie or Sequence"
 msgstr "Fichier/Ouvrir/Film ou séquence"
@@ -3848,6 +3854,9 @@ msgstr "Fichier/Ouvrir/Annuaire"
 
 msgid "File/Open/Session"
 msgstr "Fichier/Ouvrir/Session"
+
+msgid "File/Open/New Program Instance"
+msgstr "Fichier/Ouvrir/Nouvelle instance du programme"
 
 msgid "File/Save/Movie or Sequence"
 msgstr "Fichier/Enregistrer/Film ou séquence"
@@ -7278,6 +7287,28 @@ msgstr "host_statistics64 a échoué"
 msgid "task info failed"
 msgstr "l'information de la tâche a échoué"
 
+msgid "Demo"
+msgstr "Démo"
+
+msgid "Node-Locked"
+msgstr "Liée à la machine"
+
+msgid "Floating"
+msgstr "Flottante"
+
+msgid "License expired"
+msgstr "Licence expirée"
+
+msgid "{0} is not readable. Using system default."
+msgstr ""
+"{0} n’est pas lisible. Utilisation de la valeur par défaut du système."
+
+msgid "Released Floating License"
+msgstr "Licence flottante libérée"
+
+msgid "Your {0} license will expire on {1}."
+msgstr "Votre licence {0} expirera le {1}."
+
 msgid "Open Directory"
 msgstr "Ouvrir l'annuaire"
 
@@ -7286,6 +7317,9 @@ msgstr "Ouvrez le film ou la séquence"
 
 msgid "Open Single Image"
 msgstr "Ouvrir une image unique"
+
+msgid "Open New Program Instance"
+msgstr "Ouvrir une nouvelle instance du programme"
 
 msgid "Save Image"
 msgstr "Enregistrer l'image"
@@ -7785,40 +7819,8 @@ msgstr "Activer la fenêtre des touches d'amorçage"
 msgid "Toggle About Window"
 msgstr "Commutation à propos de la fenêtre"
 
-#~ msgid "Could not read annotation image from view"
-#~ msgstr "Impossible de lire l’image d’annotation depuis la vue"
-
 #~ msgid "HDR monitor found."
 #~ msgstr "Moniteur HDR trouvé."
 
 #~ msgid "HDR monitor not found or not configured."
 #~ msgstr "Moniteur HDR non trouvé ou non configuré."
-
-#~ msgid "Returns true if the rate is valid for use with timecode."
-#~ msgstr ""
-#~ "Renvoie true si le taux est valide pour l'utilisation avec le code de temps."
-
-#~ msgid ""
-#~ "The Pixel Bar can slow down playback at high resolutions.  When this option "
-#~ "is on, the pixel toolbar will be hidden automatically."
-#~ msgstr ""
-#~ "La barre Pixel peut ralentir la lecture à haute résolution. Lorsque cette "
-#~ "option est activée, la barre d'outils pixel sera cachée automatiquement."
-
-#~ msgid "smpte2084"
-#~ msgstr "smpte2084"
-
-#~ msgid "arib-std-b67"
-#~ msgstr "arib-std-b67"
-
-#~ msgid "Vulkan info: {0}"
-#~ msgstr "Informations Vulkan: {0}"
-
-#~ msgid "Scrub with Audio"
-#~ msgstr "Scrub avec l'audio"
-
-#~ msgid "Blit Viewports"
-#~ msgstr "Affiner les affichages"
-
-#~ msgid "Blit Timeline"
-#~ msgstr "Délai de fermeture"

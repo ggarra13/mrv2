@@ -44,22 +44,26 @@ endif()
 find_package(Vulkan OPTIONAL_COMPONENTS glslang shaderc_combined SPIRV-Tools)
 find_package(FLTK CONFIG REQUIRED)
 
+set(FLTK_vk_LIBRARY )
 
 if(FLTK_BUILD_SHARED_LIBS)
     if(MSVC)
 	add_definitions(-D FL_DLL)
 	set(FLTK_LIBRARIES fltk::fltk-shared )
 	set(FLTK_gl_LIBRARY )
-	set(FLTK_vk_LIBRARY )
     else()
 	set(FLTK_LIBRARIES fltk::fltk-shared fltk::images-shared )
 	set(FLTK_gl_LIBRARY fltk::gl-shared)
-	set(FLTK_vk_LIBRARY fltk::vk-shared)
+	if(TLRENDER_VK)
+	    set(FLTK_vk_LIBRARY fltk::vk-shared)
+	endif()
     endif()
 else()
     set(FLTK_LIBRARIES fltk::fltk fltk::images )
     set(FLTK_gl_LIBRARY fltk::gl )
-    set(FLTK_vk_LIBRARY fltk::vk )
+    if(TLRENDER_VK)
+	set(FLTK_vk_LIBRARY fltk::vk)
+    endif()
 endif()
 
 #
@@ -76,7 +80,18 @@ message( STATUS "FLTK LIBRARIES: ${FLTK_vk_LIBRARY} ${FLTK_gl_LIBRARY} ${FLTK_LI
 message( STATUS "FLTK_FLUID_EXECUTABLE: ${FLTK_FLUID_EXECUTABLE}" )
 
 
-find_package(Intl REQUIRED)
+if (UNIX)
+    find_package(Intl REQUIRED)  # old method
+else()
+    if (WIN32)
+	find_package(Iconv REQUIRED)
+	find_package(Intl REQUIRED)
+	set(Intl_LIBRARIES Iconv::Iconv Intl::Intl)
+    else()
+	find_package(Intl REQUIRED)  # old method
+    endif()
+endif()
+
 find_package(tlRender REQUIRED)
 find_package(nlohmann_json REQUIRED)
 find_package(glfw3 REQUIRED)
@@ -165,6 +180,10 @@ endif()
 
 if(TLRENDER_OCIO)
     add_definitions(-DTLRENDER_OCIO)
+endif()
+
+if(TLRENDER_OPENJPH)
+    add_definitions(-DTLRENDER_OPENJPH)
 endif()
 
 if(TLRENDER_PNG)
@@ -278,7 +297,7 @@ include_directories( ${mrv2_INCLUDE_DIRS} )
 #
 # Install mrv2's auxiliary application directories
 #
-install( DIRECTORY colors ocio presets
+install( DIRECTORY certs colors ocio presets
     DESTINATION .
     COMPONENT applications )
 

@@ -7,9 +7,10 @@
 #include <FL/platform.H>
 #include <FL/Fl_Vk_Utils.H>
 
-
-#ifdef FLTK_USE_WAYLAND
+#ifdef __linux__
+#  ifdef FLTK_USE_WAYLAND
 #    include <wayland-client.h>
+#  endif
 #endif
 
 #include "mrvVk/mrvVkWindow.h"
@@ -127,13 +128,15 @@ namespace mrv
         {
             Fl_Vk_Window::show();
 
-#ifdef FLTK_USE_WAYLAND
+#ifdef __linux__
+#  ifdef FLTK_USE_WAYLAND
             // \@todo: Not sure if this is needed.  It was added to provide
             //         transparency on Wayland surfaces.
             if (fl_wl_display())
             {
                 wl_surface_set_opaque_region(fl_wl_surface(fl_wl_xid(this)), NULL);
             }
+#  endif
 #endif
         }
 

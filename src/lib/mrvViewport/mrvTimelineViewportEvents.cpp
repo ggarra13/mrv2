@@ -1095,7 +1095,8 @@ namespace mrv
                     p.actionMode == ActionMode::kDraw ||
                     p.actionMode == ActionMode::kArrow ||
                     p.actionMode == ActionMode::kRectangle ||
-                    p.actionMode == ActionMode::kCircle)
+                    p.actionMode == ActionMode::kCircle ||
+                    p.actionMode == ActionMode::kErase)
                 {
                     auto player = getTimelinePlayer();
                     if (!player)
@@ -1110,6 +1111,9 @@ namespace mrv
                         s = annotation->lastShape();
                 
                     p.lastEvent = 0;
+
+                    if (_handleReleaseLeftMouseButtonShapes())
+                        return 1;
 
                     if (!s->laser)
                         return 1;

@@ -4,7 +4,7 @@
 
 #include <tlIO/Normalize.h>
 
-#include <half.h>
+#include <Imath/half.h>
 
 #include <sstream>
 

@@ -31,6 +31,13 @@ namespace mrv
                 const std::shared_ptr<timeline_vlk::Render>& render,
                 const math::Vector2i& start, const math::Vector2i& end,
                 const image::Color4f& color, const float width);
+
+            //! Draw a mesh.
+            void drawMesh(const std::shared_ptr<timeline_vlk::Render>& render,
+                          const geom::TriangleMesh2& mesh,
+                          const image::Color4f& color,
+                          const bool soft = false,
+                          const std::string& pipelineName = "annotation");
             
             //! Draw a set of connected line segments.
             void drawLines(

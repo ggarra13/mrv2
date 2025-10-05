@@ -45,6 +45,58 @@ namespace mrv
 
         Lines::~Lines() {}
 
+        void Lines::drawMesh(
+            const std::shared_ptr<timeline_vlk::Render>& render,
+            const geom::TriangleMesh2& mesh,
+            const image::Color4f& color,
+            const bool soft,
+            const std::string& pipelineName)
+        {
+            bool enableBlending = false;
+            if (color.a < 0.99F)
+                enableBlending = true;
+        
+            VkBlendFactor srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+            VkBlendFactor dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+            VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+            VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+
+            std::string shaderName = "hard";
+
+            if (soft)
+            {
+                enableBlending = true;
+                shaderName = "soft";
+            }
+
+            if (pipelineName == "erase")
+            {
+                enableBlending = true;
+                srcColorBlendFactor = VK_BLEND_FACTOR_ZERO;
+                dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+                srcAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+                dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+            }
+
+            if (getRenderPass() == VK_NULL_HANDLE)
+            {
+                render->drawMesh("viewport", shaderName, shaderName, "mesh",
+                                 mesh, math::Vector2i(0, 0), color,
+                                 enableBlending,
+                                 srcColorBlendFactor, dstColorBlendFactor,
+                                 srcAlphaBlendFactor, dstAlphaBlendFactor);
+            }
+            else
+            {
+                VkRenderPass oldRenderPass = render->getRenderPass();
+                render->setRenderPass(getRenderPass());
+                render->drawMesh(pipelineName, shaderName, "mesh",
+                                 mesh, math::Vector2i(0, 0),
+                                 color);
+                render->setRenderPass(oldRenderPass);
+            }
+        }
+        
         void Lines::drawLines(
             const std::shared_ptr<timeline_vlk::Render>& render,
             const draw::PointList& pts, const image::Color4f& color,
@@ -118,51 +170,7 @@ namespace mrv
             for (size_t i = 0; i < numVertices; ++i)
                 mesh.v.push_back(math::Vector2f(draw[i].x, draw[i].y));
 
-            bool enableBlending = false;
-            if (color.a < 0.99F)
-                enableBlending = true;
-        
-            VkBlendFactor srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
-            VkBlendFactor dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-            VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-            VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-
-            std::string shaderName = "hard";
-
-            // This is not working
-            if (soft)
-            {
-                enableBlending = true;
-                shaderName = "soft";
-            }
-
-            // This works, so blending is working
-            if (pipelineName == "erase")
-            {
-                enableBlending = true;
-                srcColorBlendFactor = VK_BLEND_FACTOR_ZERO;
-                dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-                srcAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
-                dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-            }
-
-            if (getRenderPass() == VK_NULL_HANDLE)
-            {
-                render->drawMesh("viewport", shaderName, shaderName, "mesh",
-                                 mesh, math::Vector2i(0, 0), color,
-                                 enableBlending,
-                                 srcColorBlendFactor, dstColorBlendFactor,
-                                 srcAlphaBlendFactor, dstAlphaBlendFactor);
-            }
-            else
-            {
-                VkRenderPass oldRenderPass = render->getRenderPass();
-                render->setRenderPass(getRenderPass());
-                render->drawMesh(pipelineName, shaderName, "mesh",
-                                 mesh, math::Vector2i(0, 0),
-                                 color);
-                render->setRenderPass(oldRenderPass);
-            }
+            drawMesh(render, mesh, color, soft, pipelineName);
         }
 
         void Lines::drawLine(

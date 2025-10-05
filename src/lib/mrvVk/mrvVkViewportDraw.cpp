@@ -250,7 +250,8 @@ namespace mrv
         void Viewport::_drawShape(
             const std::shared_ptr<timeline_vlk::Render>& render,
             const std::shared_ptr< draw::Shape >& shape,
-            const float alphamult) noexcept
+            const float alphamult,
+            const float resolutionMultiplier) noexcept
         {
             TLRENDER_P();
             MRV2_VK();
@@ -266,7 +267,12 @@ namespace mrv
                 float alpha = shape->color.a;
                 shape->color.a *= alphamult;
                 shape->color.a *= shape->fade;
-                if (auto vkshape = dynamic_cast<VKPathShape*>(shape.get()))
+                if (auto vkshape = dynamic_cast<VKErasePathShape*>(shape.get()))
+                {
+                    vkshape->mult = resolutionMultiplier;
+                    vkshape->draw(render, vk.lines);
+                }
+                else if (auto vkshape = dynamic_cast<VKPathShape*>(shape.get()))
                 {
                     vkshape->draw(render, vk.lines);
                 }
@@ -311,6 +317,10 @@ namespace mrv
             
             render->beginRenderPass();
             
+            // Calculate resolution multiplier.
+            float resolutionMultiplier = renderSize.w * 6 / 4096.0 / p.viewZoom;
+            resolutionMultiplier = std::clamp(resolutionMultiplier, 1.F, 10.F);
+            
             // Iterate through each annotation.
             for (const auto& annotation : annotations)
             {
@@ -352,7 +362,7 @@ namespace mrv
                     if (alphamult <= 0.001F)
                         continue;
                     
-                    _drawShape(render, shape, alphamult);
+                    _drawShape(render, shape, alphamult, resolutionMultiplier);
                 }
             }
 
@@ -373,7 +383,7 @@ namespace mrv
                     
                     shape.center = voice->getCenter();
                     shape.status = voice->getStatus();
-                    shape.mult   = mult;
+                    shape.mult   = resolutionMultiplier;
                     
                     const auto& mouseData = voice->getMouseData();
                     shape.blinkingIndex = ( voice->getCounter() * 12 ) % 256;

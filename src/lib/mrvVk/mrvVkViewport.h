@@ -145,7 +145,8 @@ namespace mrv
             void _drawShape(
                 const std::shared_ptr<timeline_vlk::Render>& render,
                 const std::shared_ptr< draw::Shape >& shape,
-                const float alphamult = 1.F) noexcept;
+                const float alphamult = 1.F,
+                const float resolutionMultiplier = 1.F) noexcept;
 
             void _calculateColorAreaFullValues(area::Info& info) noexcept;
 

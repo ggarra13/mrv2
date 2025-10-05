@@ -4,16 +4,24 @@
 
 include( ExternalProject )
 
-set(USER_NAME $ENV{USER})
-if (USER_NAME STREQUAL "gga" OR USER_NAME STREQUAL "User-PC" OR
-	USER_NAME STREQUAL "ggarra13")
-    set(FLTK_GIT_REPOSITORY "git@github.com:ggarra13/fltk.git")
+if(TLRENDER_VK)
+    set(USER_NAME $ENV{USER})
+    if (USER_NAME STREQUAL "gga" OR USER_NAME STREQUAL "User-PC" OR
+	    USER_NAME STREQUAL "ggarra13")
+	# \@todo: We check the repository with git so we can easily edit it
+	#         later.
+	set(FLTK_GIT_REPOSITORY "git@github.com:ggarra13/fltk.git")
+    else()
+	set(FLTK_GIT_REPOSITORY "https://github.com/ggarra13/fltk.git")
+    endif()
+    
+    set(FLTK_GIT_TAG v0.9.5)
+    #set(FLTK_GIT_TAG vk)  # Cutting edge!
+    #set(FLTK_GIT_TAG vk_test) # Testing branch
 else()
-    set(FLTK_GIT_REPOSITORY "https://github.com/ggarra13/fltk.git")
+    set(FLTK_GIT_REPOSITORY "https://github.com/fltk/fltk.git")
+    set(FLTK_GIT_TAG b7e52bb03cfd2d47249019de9c39cadcad18f547)
 endif()
-set(FLTK_GIT_TAG v0.9.1)
-#set(FLTK_GIT_TAG vk)  # Cutting edge!
-#set(FLTK_GIT_TAG vk_test) # Testing branch
 
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
     # If we are building pyFLTK compile shared
@@ -52,8 +60,6 @@ message(STATUS "FLTK CXX flags ${FLTK_CXX_FLAGS}")
 set(FLTK_USE_SYSTEM_ZLIB TRUE)
 set(FLTK_USE_SYSTEM_LIBPNG TRUE)
 
-# Set FLTK default dependencies
-set(FLTK_DEPENDENCIES PNG ${VMA_DEP} ${SHADERC_DEP} ZLIB)
 
 # We set this to use FLTK's built-in libdecor
 set(FLTK_USE_SYSTEM_LIBDECOR FALSE)
@@ -64,11 +70,17 @@ set(FLTK_USE_SYSTEM_LIBDECOR FALSE)
 set(FLTK_USE_LIBDECOR_GTK FALSE)
 
 # This one may be turned off
+
+# Set FLTK default dependencies
+set(FLTK_DEPENDENCIES PNG ${VMA_DEP} ${SHADERC_DEP} ZLIB)
+
 set(FLTK_USE_SYSTEM_LIBJPEG FALSE)
 if(TLRENDER_JPEG)
     set(FLTK_USE_SYSTEM_LIBJPEG TRUE)
     set(FLTK_DEPENDENCIES libjpeg-turbo ${FLTK_DEPENDENCIES})
 endif()
+
+message(STATUS "FLTK DEPENDENCIES=${FLTK_DEPENDENCIES}")
 
 #
 # Determine whether to build fltk-gl
@@ -78,20 +90,22 @@ set(FLTK_BUILD_GL ${TLRENDER_GL})
 #
 # Determine whether to build fltk-vk
 #
-set(FLTK_BUILD_VK OFF)
-if (MRV2_HDR OR MRV2_BACKEND STREQUAL "VK" OR MRV2_BACKEND STREQUAL "BOTH")
-    set(FLTK_BUILD_VK ON)
-endif()
+set(FLTK_BUILD_VK ${TLRENDER_VK})
 
 
 set(FLTK_PATCH
 )
-    
+
 if (APPLE OR WIN32)
+    # We modify and use TLRENDER_* variables to propagate them to tlRender
     set(TLRENDER_X11 OFF)
     set(TLRENDER_WAYLAND OFF )
     set(FLTK_USE_PANGO   OFF )
 else()
+    # Linux
+    # We modify and use TLRENDER_* variables to propagate them to tlRender
+    set(TLRENDER_X11 ON)
+    set(TLRENDER_WAYLAND ON)
     set(FLTK_USE_PANGO   ON)
 endif()
 

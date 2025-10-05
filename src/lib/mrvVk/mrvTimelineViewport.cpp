@@ -13,6 +13,8 @@
 
 #include "mrvViewport/mrvTimelineViewport.h"
 
+#include "mrvWidgets/mrvDragButton.h"
+
 namespace
 {
     inline uint32_t byteSwap32(uint32_t x)
@@ -67,7 +69,7 @@ namespace mrv
             p.ui = App::ui;
             _init();
         }
-
+        
         void TimelineViewport::resize(int X, int Y, int W, int H)
         {
             VkWindow::resize(X, Y, W, H);

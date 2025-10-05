@@ -14,6 +14,8 @@
 
 #include "mrvApp/mrvFilesModel.h"
 
+#include "mrvCore/mrvLicensing.h"
+
 namespace
 {
     const char* const kProgramName = "mrv2";
@@ -182,7 +184,11 @@ namespace mrv
     public:
         static ViewerUI* ui;
         static App* app;
+
+        // Licensing information.
         static bool demo_mode;
+        static LicenseType license_type;
+        
         static bool unsaved_annotations;
         static bool unsaved_edits;
 

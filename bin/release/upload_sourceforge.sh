@@ -13,7 +13,7 @@ upload_file()
     echo
     echo "Uploading $1 as $2..."
     echo
-    
+
     rsync -avz -e "ssh -i $SSH_KEY -o StrictHostKeyChecking=no" $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$branch/$2
     if [[ $? -ne 0 ]]; then
         echo "rsync command failed. Error log:"
@@ -33,8 +33,11 @@ unset LD_LIBRARY_PATH
 unset DYLD_LIBRARY_PATH
 
 export branch=$(git rev-parse --abbrev-ref HEAD)
-if [[ "$branch" != "beta" && "$branch" != "vulkan" && "$branch" != "opengl" ]]; then
-    echo "You are not on the beta or vulkan branch.  Will not make a release."
+if [[ "$branch" != "beta" && \
+	  "$branch" != "vulkan" && \
+	  "$branch" != "opengl" && \
+	  "$branch" != "arm64"  ]]; then
+    echo "You are not on the beta, vulkan or arm64 branch.  Will not make a release."
     exit 0
 fi
 
@@ -101,13 +104,20 @@ echo "Looking for files in ${package_dir}"
 mkdir -p $package_dir
 cd $package_dir
 
+#
+# Remove all files if present
+#
+rm -f README.md
+rm -f INSTALLATION_NOTES.md
+rm -f VULKAN_NOTES.md
+
 # Read all the files of this version
 shopt -s nullglob
 files=$(ls -1 *v${mrv2_VERSION}*)
 shopt -u nullglob  # Optional: turn it off again
 
 
-if [[ $KERNEL == *Msys* ]]; then
+if [[ $KERNEL == *Windows* ]]; then
     pacman -Sy openssh rsync --noconfirm
 fi
 
@@ -124,8 +134,6 @@ echo "Proceed with uploading..."
 
 cat <<EOF > README.md
 
-[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UJMHRRKYCPXYW)
-
 ${mrv2_NAME} v${mrv2_VERSION} ${branch}
 ====================
 
@@ -134,7 +142,7 @@ ${date}.
 
 It does not support NDI® on any platform.
 
-It works on Windows 10+, Ubuntu 22.04 LTS+, macOS 13 (amd64) and macOS M1+ (arm64). 
+It works on Windows 10+, Windows ARM64, Ubuntu 22.04 LTS+, Ubuntu 22.04+ ARM64, macOS 15 (amd64) and macOS M1+ (arm64). 
 
 It may contain bugs, new untested features and more.
 
@@ -142,22 +150,24 @@ Enjoy!
 
 -----------------------------------------------------------------
 
-## v${mrv2_VERSION} Notes
+Donation Prices after v1.4.0
+----------------------------
 
-Prices after v1.4.0
--------------------
-* Buy mrv2 (or Vulkan vmrv2) for personal use at a cost of u\$50, paid by a Paypal donation (I will use the email to verify purchase and issue a yearly license).
+Donationware prices of binary licenses through PayPal:
 
-* Buy mrv2 (or Vulkan vmrv2) for personal use to own at a cost of u\$150, paid by a Paypal donation (I will use the email to verify purchase and issue a non-expiring, node-locked license).
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UJMHRRKYCPXYW)
 
-Differences between Vulkan and OpenGL
--------------------------------------
+I use the email information to contact you privately.  I don't sell your information, as I don't have access to it, except for your email, which I use to contact you.
 
-- Vulkan is a new open source API, compared to OpenGL that it might get deprecated on some platforms like macOS.  It supports true HDR (High Dynamic Range), it is between 20% and 50% faster than the OpenGL version but it does not support OpenUSD.
-- OpenGL's only benefit at this point is that it supports OpenUSD and runs better on older OSes like MacOS Intel or Linux's X11 desktops.
+- u\$  50 for a node-lock license for one year.
+- u\$ 150 for a node-lock license to own.
 
-Vulkan Demo Version
--------------------
+- The prices are cumulative.  If you donate, say u\$ 10 in 5 months, you can access the node-lock license for one year.
+
+License works for both mrv2 and vmrv2 (you can have both installed).
+
+Demo Versions
+-------------
 
 The OpenGL releases at:
 
@@ -167,7 +177,7 @@ The Vulkan releases at:
 
 https://sourceforge.net/projects/mrv2/files/beta/vulkan
 
-directory are versions for you to evaluate mrv2 or vmrv2 before a purchase and report bugs or performance issues.
+directory are versions for you to evaluate mrv2 or vmrv2 before a donation and report bugs or performance issues.
 Currently, when run as demo these versions don't have:
 
 	   - Annotations
@@ -175,9 +185,6 @@ Currently, when run as demo these versions don't have:
 	   - OpenEXR Layer switching
 	   - NDI support
 	   - Allow more than 5 minutes of use.
-
-History
--------
 
 EOF
 
@@ -188,11 +195,14 @@ if [[ ! -f "$HISTORY" ]]; then
 fi
 
 # Find the line number of "v${mrv2_VERSION}" in the file
-start_line=$(grep -n "^v${mrv2_VERSION}" "$HISTORY" | cut -d':' -f1)
-if [[ -z "$start_line" ]]; then
-    echo "Error: Version v${mrv2_VERSION} not found in $HISTORY."
+start_lines=$(grep -n "^ChangeLog" "$HISTORY" | cut -d':' -f1)
+if [[ -z "$start_lines" ]]; then
+    echo "Error: Version v${mrv2_VERSION} has no ChangeLog in $HISTORY."
     exit 1
 fi
+
+# Convert end_lines to an array (compatible with Bash 3.2)
+IFS=$'\n' read -d '' -r -a start_lines <<< "$start_lines" || true  # '|| true' handles potential read failure"
 
 # Find the line numbers of all "v*.*.*" occurrences in the file
 end_lines=$(grep -n "^v[0-9]\+\.[0-9]\+\.[0-9]\+" "$HISTORY" | cut -d':' -f1)
@@ -204,10 +214,12 @@ fi
 # Convert end_lines to an array (compatible with Bash 3.2)
 IFS=$'\n' read -d '' -r -a end_lines <<< "$end_lines" || true  # '|| true' handles potential read failure"
 
+
 # Initialize the end_line to 0
 end_line=${end_lines[1]}
 end_line=$((end_line - 1))
-start_line=$((start_line + 2))
+start_line=${start_lines[0]}
+start_line=$((start_line))
 
 # Use sed to extract the text between the two lines and store it in a variable
 release_notes=$(sed -n "$start_line,${end_line}p" "$HISTORY")
@@ -324,8 +336,8 @@ rm INSTALLATION_NOTES.md
 if [[ $branch == "vulkan" ]]; then
     echo "Concatenating Vulkan notes"
     cat VULKAN_NOTES.md >> README.md
-    rm VULKAN_NOTES.md
 fi
+rm VULKAN_NOTES.md
 
 echo "Upload README.md"
 upload_file README.md README.md
@@ -347,7 +359,7 @@ file_array=($files)
 
 # Iterate over the array of filenames
 for src in "${file_array[@]}"; do
-    dest=`echo $src | sed -e "s/v$mrv2_VERSION/beta/"`
+    dest=`echo $src | sed -e "s#v$mrv2_VERSION#beta#"`
     upload_file "${src}" "${dest}"
 done
 

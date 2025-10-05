@@ -133,7 +133,8 @@ namespace tl
             void setupViewportAndScissor() override;
             
             //! These functions draw to the internal FBO.
-            void drawRect(const math::Box2i&, const image::Color4f&) override;
+            void drawRect(const math::Box2i&, const image::Color4f&,
+                          const std::string& shaderName = "") override;
             void drawMesh(const std::string& pipelineName,
                           const std::string& pipelineLayoutName,
                           const std::string& shaderName,
@@ -162,7 +163,8 @@ namespace tl
             //! These functions draw to the viewport
             void drawRect(const std::string& pipelineName,
                           const math::Box2i&, const image::Color4f&,
-                          const bool enableBlending = true);
+                          const bool enableBlending = true,
+                          const std::string& shaderName = "");
             void drawMesh(const std::string& pipelineName,
                           const std::string& shaderName,
                           const std::string& meshName,

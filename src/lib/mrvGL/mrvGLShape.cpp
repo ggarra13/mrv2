@@ -173,10 +173,36 @@ namespace mrv
         color.r = color.g = color.b = 0.F;
         color.a = 1.F;
 
-        const bool catmullRomSpline = false;
-        lines->drawLines(
-            render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
-            Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
+        if (rectangle)
+        {           
+            math::Box2i box(
+                pts[0].x, pts[0].y, pts[2].x - pts[0].x, pts[2].y - pts[0].y);
+            render->drawRect(box, color, "erase");
+            
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+            if (drawing)
+            {
+                const bool catmullRomSpline = false;
+                color.r = 0.F; color.g = 1.F;
+                
+                int lineSize = 3 * mult;
+                if (lineSize < 1) lineSize = 1;
+                
+                lines->drawLines(
+                    render, pts, color, lineSize, soft,
+                    Polyline2D::JointStyle::ROUND,
+                    Polyline2D::EndCapStyle::JOINT, catmullRomSpline);
+            }
+        }
+        else
+        {
+            const bool catmullRomSpline = false;
+            lines->drawLines(
+                render, pts, color, pen_size, soft,
+                Polyline2D::JointStyle::ROUND,
+                Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
+        }
     }
 
     void GLPolygonShape::draw(
@@ -520,11 +546,13 @@ namespace mrv
     {
         to_json(json, static_cast<const draw::PathShape&>(value));
         json["type"] = "ErasePath";
+        json["rectangle"] = value.rectangle;
     }
 
     void from_json(const nlohmann::json& json, GLErasePathShape& value)
     {
         from_json(json, static_cast<draw::PathShape&>(value));
+        json.at("rectangle").get_to(value.rectangle);
     }
 
     void GLVoiceOverShape::draw(

@@ -5,6 +5,8 @@ set(RtAudio_GIT_TAG "5.2.0") # Nov. 16, 2021
 # set(RtAudio_GIT_TAG "6.0.1") # does not seem to work. Aug 1, 2023.
 set(RtAudio_PATCH )
 
+set(RtAudio_DEPENDENCIES )
+
 #
 # \bug: this is needed to have Linux not hang when switching clips quickly.
 #       We also patch windows, as we added more debugging checks when audio
@@ -38,7 +40,11 @@ ExternalProject_Add(
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/RtAudio
     GIT_REPOSITORY ${RtAudio_GIT_REPOSITORY}
     GIT_TAG ${RtAudio_GIT_TAG}
-    DEPENDS ${Gettext_DEP}
+    
+    DEPENDS ${RtAudio_DEPENDENCIES}
+
     PATCH_COMMAND ${RtAudio_PATCH}
+
     LIST_SEPARATOR |
+
     CMAKE_ARGS ${RtAudio_ARGS})

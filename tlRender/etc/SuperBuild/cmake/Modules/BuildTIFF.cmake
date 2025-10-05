@@ -3,6 +3,9 @@ include(ExternalProject)
 set(TIFF_GIT_REPOSITORY "https://gitlab.com/libtiff/libtiff.git")
 set(TIFF_GIT_TAG "v4.5.0")
 
+set(TIFF_DEPENDENCIES ZLIB)
+message(STATUS "TIFF DEPENDENCIES=${TIFF_DEPENDENCIES}")
+
 set(TIFF_ARGS
     ${TLRENDER_EXTERNAL_ARGS}
     -DCMAKE_INSTALL_LIBDIR=lib
@@ -23,7 +26,7 @@ set(TIFF_ARGS
 ExternalProject_Add(
     TIFF
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/TIFF
-    DEPENDS ZLIB ${Gettext_DEP}
+    DEPENDS ${TIFF_DEPENDENCIES}
     GIT_REPOSITORY ${TIFF_GIT_REPOSITORY}
     GIT_TAG ${TIFF_GIT_TAG} 
     

@@ -629,6 +629,7 @@ msgid ""
 msgstr ""
 "\n"
 "'other' (:class:`~RationalTime`) को :attr:`start_time`/:attr:`end_time_exclusive` और बाउंड आर्ग्यूमेंट्स के अनुसार क्लैंप करें।\n"
+"'other' (:class:`~RationalTime`) को :attr:`start_time`/:attr:`end_time_exclusive` और बाउंड आर्ग्यूमेंट्स के अनुसार क्लैंप करें।\n"
 
 msgid ""
 "\n"
@@ -636,6 +637,7 @@ msgid ""
 ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
 msgstr ""
 "\n"
+"'other' (:class:`~TimeRange`) को :attr:`start_time`/:attr:`end_time_exclusive` और बाउंड आर्ग्यूमेंट्स के अनुसार क्लैंप करें।\n"
 "'other' (:class:`~TimeRange`) को :attr:`start_time`/:attr:`end_time_exclusive` और बाउंड आर्ग्यूमेंट्स के अनुसार क्लैंप करें।\n"
 
 msgid ""
@@ -1579,6 +1581,9 @@ msgstr "एलकैलेंडर फ़ाइल नाम."
 
 msgid "LUT operation order."
 msgstr "LOMOMOMOM आदेश."
+
+msgid "Don't load python for faster startup."
+msgstr "तेज़ शुरुआत के लिए पायथन लोड न करें।"
 
 msgid "Python Script to run and exit."
 msgstr "चलाने के लिए पायथन स्क्रिप्ट."
@@ -3564,6 +3569,9 @@ msgstr "वरीयताएँ"
 msgid "About"
 msgstr "के बारे में"
 
+msgid "Could not open a new mrv2 instance"
+msgstr "नई mrv2 इंस्टेंस खोलने में असमर्थ"
+
 msgid "File extension cannot be empty."
 msgstr "फ़ाइल एक्सटेंशन रिक्त नहीं हो सकता."
 
@@ -3826,8 +3834,8 @@ msgstr "चलाया नहीं जा सकता – ऑडियो ट
 msgid "Status is not saved"
 msgstr "स्थिति सहेजी नहीं गई है"
 
-msgid "Audio annotation file {0} is missing or not !"
-msgstr ""
+msgid "Audio annotation file {0} is missing or not exists!"
+msgstr "ऑडियो एनोटेशन फ़ाइल {0} गायब है या मौजूद नहीं है!"
 
 msgid "File/Open/Movie or Sequence"
 msgstr "फ़ाइल/खोलें/मूवी या अनुक्रम"
@@ -3843,6 +3851,9 @@ msgstr "फ़ाइल/खोलें/निर्देशिका नाम
 
 msgid "File/Open/Session"
 msgstr "फ़ाइल/खोलें/सत्र"
+
+msgid "File/Open/New Program Instance"
+msgstr "फ़ाइल/खोलें/नया प्रोग्राम इंस्टेंस"
 
 msgid "File/Save/Movie or Sequence"
 msgstr "फ़ाइल/सहेजें/मूवी या अनुक्रम"
@@ -7198,6 +7209,27 @@ msgstr "मेजबान स्पेस64 असफल (_s)"
 msgid "task info failed"
 msgstr "कार्य सूचना असफल"
 
+msgid "Demo"
+msgstr "डेमो"
+
+msgid "Node-Locked"
+msgstr "नोड-लॉक्ड"
+
+msgid "Floating"
+msgstr "फ्लोटिंग"
+
+msgid "License expired"
+msgstr "लाइसेंस की अवधि समाप्त हो गई है"
+
+msgid "{0} is not readable. Using system default."
+msgstr "{0} पढ़ा नहीं जा सकता। सिस्टम डिफ़ॉल्ट का उपयोग किया जा रहा है।"
+
+msgid "Released Floating License"
+msgstr "फ्लोटिंग लाइसेंस जारी किया गया"
+
+msgid "Your {0} license will expire on {1}."
+msgstr "आपका {0} लाइसेंस {1} को समाप्त हो जाएगा।"
+
 msgid "Open Directory"
 msgstr "ओपन डिरेक्ट्री"
 
@@ -7206,6 +7238,9 @@ msgstr "चलचित्र या अनुक्रम खोलें"
 
 msgid "Open Single Image"
 msgstr "एकल छवि खोलें"
+
+msgid "Open New Program Instance"
+msgstr "नया प्रोग्राम इंस्टेंस खोलें"
 
 msgid "Save Image"
 msgstr "छवि सहेजें"
@@ -7705,39 +7740,8 @@ msgstr "यदि आप विंडो को बन्द करना चा
 msgid "Toggle About Window"
 msgstr "विंडो के बारे में टॉगल करें"
 
-#~ msgid "Could not read annotation image from view"
-#~ msgstr "दृश्य से एनोटेशन छवि पढ़ी नहीं जा सकी"
-
 #~ msgid "HDR monitor found."
-#~ msgstr "HDR मॉनिटर पाया गया।"
+#~ msgstr "HDR मॉनिटर मिला।"
 
 #~ msgid "HDR monitor not found or not configured."
 #~ msgstr "HDR मॉनिटर नहीं मिला या कॉन्फ़िगर नहीं किया गया।"
-
-#~ msgid "Returns true if the rate is valid for use with timecode."
-#~ msgstr "समयकोड के साथ उपयोग के लिए सही पलटता है यदि दर वैध है."
-
-#~ msgid ""
-#~ "The Pixel Bar can slow down playback at high resolutions.  When this option "
-#~ "is on, the pixel toolbar will be hidden automatically."
-#~ msgstr ""
-#~ "पिक्सेल पट्टी उच्च रेज़ोल्यूशन्स में प्लेबैक को धीमा कर सकता है. जब यह "
-#~ "विकल्प चालू होगा, पिक्सेल औज़ार- पट्टी स्वचलित छुपाई जाएगी."
-
-#~ msgid "smpte2084"
-#~ msgstr "smpte2084"
-
-#~ msgid "arib-std-b67"
-#~ msgstr "arib-std-b67"
-
-#~ msgid "Vulkan info: {0}"
-#~ msgstr "वल्कन जानकारी: {0}"
-
-#~ msgid "Scrub with Audio"
-#~ msgstr "ऑडियो के साथ ग्रब करें"
-
-#~ msgid "Blit Viewports"
-#~ msgstr "विन्यास"
-
-#~ msgid "Blit Timeline"
-#~ msgstr "ब्लिट टाइम-लाइन"
