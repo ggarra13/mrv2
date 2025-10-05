@@ -27,14 +27,10 @@ export LD_LIBRARY_PATH=$BUILD_DIR/install/lib64:$BUILD_DIR/install/lib:$OLD_LIBR
 if [[ ! -d $PYTHON_SITEDIR/requests || ! -d $PYTHON_SITEDIR/pytz ]];
 then
     if [[ $PYTHON != *$BUILD_DIR* ]]; then
-	if [ ! -d venv ]; then
+	if [ ! -d .venv ]; then
 	    $PYTHON -m venv venv
 	fi
-	if [[ $KERNEL == *Windows* ]]; then
-	    venv/bin/activate
-	else
-	    . venv/bin/activate
-	fi
+	. venv/bin/activate
 	export PYTHON=python
     fi
     $PYTHON -m pip install requests pytz

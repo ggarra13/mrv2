@@ -3,7 +3,6 @@ name: Vulkan Win64
 on:
   push:
     branches-ignore:
-      - main
       - beta
       
 jobs:
