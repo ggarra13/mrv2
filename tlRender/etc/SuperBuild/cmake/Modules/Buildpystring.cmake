@@ -8,6 +8,12 @@ set(pystring_DEPENDENCIES )
 set(pystring_ARGS
     ${TLRENDER_EXTERNAL_ARGS})
 
+set(pystring_PATCH
+    ${CMAKE_COMMAND} -E copy_if_different
+    ${CMAKE_CURRENT_SOURCE_DIR}/patches/pystring-patch/CMakeLists.txt
+    ${CMAKE_CURRENT_BINARY_DIR}/pystring/src/pystring/CMakeLists.txt
+)
+	
 ExternalProject_Add(
     pystring
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/pystring
@@ -16,8 +22,7 @@ ExternalProject_Add(
 
     DEPENDS ${pystring_DEPENDENCIES}
     
-    PATCH_COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${CMAKE_CURRENT_SOURCE_DIR}/patches/pystring-patch/CMakeLists.txt
-        ${CMAKE_CURRENT_BINARY_DIR}/pystring/src/pystring/CMakeLists.txt
+    PATCH_COMMAND ${pystring_PATCH}
+    
     LIST_SEPARATOR |
     CMAKE_ARGS ${pystring_ARGS})
