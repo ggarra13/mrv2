@@ -6647,7 +6647,7 @@ msgstr ""
 "intégrée."
 
 msgid "Looping Mode"
-msgstr "Mode de braquage"
+msgstr "Mode de braquage" 
 
 msgid "Select default looping mode in timeline."
 msgstr "Sélectionnez le mode de boucle par défaut dans la timeline."
@@ -6663,16 +6663,6 @@ msgstr ""
 "Ce réglage contrôle la sensibilité du nettoyage.  Des valeurs plus petites "
 "font que la souris se déplace sauter plus de cadres tandis que des valeurs "
 "plus élevées font le contraire."
-
-msgid ""
-"Start playback when scrubbing so that audio can be heard.  Scrubbing can be "
-"less smooth."
-msgstr ""
-"Commencez la lecture lors du nettoyage afin que l'audio puisse être entendu."
-" Le frottement peut être moins lisse."
-
-msgid "Alt Sensitivity"
-msgstr "Sensibilité Alt"
 
 msgid ""
 "When using ALT + Left Mouse Button, this setting controls the multiplier "
