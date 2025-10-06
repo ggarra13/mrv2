@@ -35,9 +35,6 @@ elif [[ $KERNEL == *Windows* ]]; then
 	CMAKE_PLATFORM=windows-x86_64
     fi
     CMAKE_EXT=zip
-elif [[ $KERNEL == *Darwin* ]]; then
-    . etc/build_cmake.sh
-    return
 fi
 
 echo "Downloading cmake from:"
