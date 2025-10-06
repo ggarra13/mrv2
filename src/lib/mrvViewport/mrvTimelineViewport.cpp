@@ -260,11 +260,9 @@ namespace mrv
                 {
                 case voice::RecordStatus::Recording:
                     _stopVoiceRecording(currentVoiceOver);
-                    return 1;
                     break;
                 case voice::RecordStatus::Playing:
                     _stopVoicePlaying(currentVoiceOver);
-                    return 1;
                     break;
                 default:
                     break;
