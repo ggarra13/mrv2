@@ -88,7 +88,7 @@
 
 #include <libintl.h>
 #include <libpng16/png.h>
-#include <mz.h>
+#include <minizip/mz.h>
 #include <nlohmann/json.hpp>
 #include <opentime/version.h>
 #include <opentimelineio/version.h>

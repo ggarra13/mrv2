@@ -21,11 +21,11 @@
 
 #include <ctime>
 
-#include <mz.h>
-#include <mz_os.h>
-#include <mz_strm.h>
-#include <mz_zip.h>
-#include <mz_zip_rw.h>
+#include <minizip/mz.h>
+#include <minizip/mz_os.h>
+#include <minizip/mz_strm.h>
+#include <minizip/mz_zip.h>
+#include <minizip/mz_zip_rw.h>
 
 namespace tl
 {

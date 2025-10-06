@@ -17,10 +17,10 @@
 #include <opentimelineio/imageSequenceReference.h>
 #include <opentimelineio/serializableCollection.h>
 
-#include <mz.h>
-#include <mz_strm.h>
-#include <mz_zip.h>
-#include <mz_zip_rw.h>
+#include <minizip/mz.h>
+#include <minizip/mz_strm.h>
+#include <minizip/mz_zip.h>
+#include <minizip/mz_zip_rw.h>
 
 #if defined(TLRENDER_PYTHON)
 #    include <Python.h>
