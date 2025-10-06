@@ -45,3 +45,5 @@ rm -rf cmake
 echo "Checking executable is there:"
 ls  $root/$BUILD_DIR/install/bin
 echo "Done with building cmake"
+
+cd $root
