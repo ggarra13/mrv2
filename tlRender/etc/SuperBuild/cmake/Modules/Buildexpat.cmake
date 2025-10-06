@@ -1,7 +1,7 @@
 include(ExternalProject)
 
 set(expat_GIT_REPOSITORY "https://github.com/libexpat/libexpat.git")
-set(expat_GIT_TAG "R_2_7_1")  # was 2_5_0
+set(expat_GIT_TAG "R_2_7_2")  # was 2_7_1
 
 set(expat_DEPENDENCIES )
 message(STATUS "expat DEPENDENCIES=${expat_DEPENDENCIES}")
