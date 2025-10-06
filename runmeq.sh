@@ -82,7 +82,7 @@ fi
 
 cd $dir
 
-MAX_RETRIES=10
+MAX_RETRIES=3
 if [[ $CMAKE_TARGET != "package" ]]; then
    MAX_RETRIES=1
 fi
