@@ -491,6 +491,7 @@ cmd="cmake -G '${CMAKE_GENERATOR}'
 	   -D TLRENDER_USD_PYTHON=${TLRENDER_USD_PYTHON}
 	   -D TLRENDER_QT6=OFF
 	   -D TLRENDER_QT5=OFF
+	   --debug-find
 	   ${CMAKE_FLAGS} ../.."
 
 run_cmd $cmd
