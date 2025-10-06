@@ -41,6 +41,8 @@ ChangeLog
 - Upgraded to yaml-cpp v8.0.0.
 - Upgraded to expat R_2_7_2.
 - Upgraded to minizip-ng v4.0.10.
+- Made Voice Over Annotations stop playing or recordng when clicking on any other action tool or clicking on voice over annotation tool again.
+- Fixed an incorrect dependency on OpenGL on tlDevice when compiling the Vulkan backend.
 
 
 v1.4.2

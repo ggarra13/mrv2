@@ -252,6 +252,25 @@ namespace mrv
         {
             TLRENDER_P();
 
+            // If switching tool or clicking twice on voice over annotation,
+            // turn off voice over annotation recording or playing
+            if (currentVoiceOver)
+            {
+                switch(currentVoiceOver->getStatus())
+                {
+                case voice::RecordStatus::Recording:
+                    _stopVoiceRecording(currentVoiceOver);
+                    return 1;
+                    break;
+                case voice::RecordStatus::Playing:
+                    _stopVoicePlaying(currentVoiceOver);
+                    return 1;
+                    break;
+                default:
+                    break;
+                }
+            }
+            
             if (mode == p.actionMode)
                 return;
 
@@ -289,6 +308,7 @@ namespace mrv
             }
 
             p.actionMode = mode;
+            
 
             switch (mode)
             {

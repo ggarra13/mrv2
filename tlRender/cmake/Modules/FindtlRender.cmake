@@ -347,17 +347,9 @@ if(tlRender_FOUND AND NOT TARGET tlRender::tlTimelineUI)
         INTERFACE_LINK_LIBRARIES "${tlRender_tlTimelineUI_LIBRARIES}")
 endif()
 if(tlRender_FOUND AND NOT TARGET tlRender::tlDevice)
-    add_library(tlRender::tlDevice UNKNOWN IMPORTED)
-    set(tlRender_tlDevice_LIBRARIES "tlRender::tlIO;tlRender::tlTimeline;tlRender::tlUI")
-    list(APPEND tlRender_tlDevice_LIBRARIES tlRender::tlTimelineGL)
-    set_target_properties(tlRender::tlDevice PROPERTIES
-        IMPORTED_LOCATION "${tlRender_tlDevice_LIBRARY}"
-        INTERFACE_COMPILE_DEFINITIONS "${tlRender_COMPILE_DEFINITIONS}"
-        INTERFACE_INCLUDE_DIRECTORIES "${tlRender_INCLUDE_DIR}"
-	INTERFACE_LINK_LIBRARIES "${tlRender_tlDevice_LIBRARIES}")
 endif()
 if (tlRender_GL_FOUND)
-    if(tlRender_FOUND AND TLRENDER_GL AND NOT TARGET tlRender::tlGL)
+    if(tlRender_FOUND AND NOT TARGET tlRender::tlGL)
 	set(tlRender_tlGL_LIBRARIES "tlRender::tlCore;tlRender::glad;glfw3")
 	add_library(tlRender::tlGL UNKNOWN IMPORTED)
 	set_target_properties(tlRender::tlGL PROPERTIES
@@ -366,13 +358,23 @@ if (tlRender_GL_FOUND)
             INTERFACE_INCLUDE_DIRECTORIES "${tlRender_INCLUDE_DIR}"
 	    INTERFACE_LINK_LIBRARIES "${tlRender_tlGL_LIBRARIES}")
     endif()
-    if(tlRender_FOUND AND TLRENDER_GL AND NOT TARGET tlRender::tlTimelineGL)
+    if(tlRender_FOUND AND NOT TARGET tlRender::tlTimelineGL)
 	add_library(tlRender::tlTimelineGL UNKNOWN IMPORTED)
 	set_target_properties(tlRender::tlTimelineGL PROPERTIES
             IMPORTED_LOCATION "${tlRender_tlTimelineGL_LIBRARY}"
             INTERFACE_COMPILE_DEFINITIONS "${tlRender_COMPILE_DEFINITIONS}"
             INTERFACE_INCLUDE_DIRECTORIES "${tlRender_INCLUDE_DIR}"
             INTERFACE_LINK_LIBRARIES "${tlRender_tlTimelineGL_LIBRARIES}")
+    endif()
+    if(tlRender_FOUND AND NOT TARGET tlRender::tlDevice)
+	add_library(tlRender::tlDevice UNKNOWN IMPORTED)
+	set(tlRender_tlDevice_LIBRARIES "tlRender::tlIO;tlRender::tlTimeline;tlRender::tlUI")
+	list(APPEND tlRender_tlDevice_LIBRARIES tlRender::tlTimelineGL)
+	set_target_properties(tlRender::tlDevice PROPERTIES
+            IMPORTED_LOCATION "${tlRender_tlDevice_LIBRARY}"
+            INTERFACE_COMPILE_DEFINITIONS "${tlRender_COMPILE_DEFINITIONS}"
+            INTERFACE_INCLUDE_DIRECTORIES "${tlRender_INCLUDE_DIR}"
+	    INTERFACE_LINK_LIBRARIES "${tlRender_tlDevice_LIBRARIES}")
     endif()
 endif()
 if (tlRender_VK_FOUND)
@@ -402,6 +404,16 @@ if (tlRender_VK_FOUND)
             INTERFACE_COMPILE_DEFINITIONS "${tlRender_COMPILE_DEFINITIONS}"
             INTERFACE_INCLUDE_DIRECTORIES "${tlRender_INCLUDE_DIR}"
             INTERFACE_LINK_LIBRARIES "${tlRender_tlTimelineUIVk_LIBRARIES}")
+    endif()
+    if(tlRender_FOUND AND NOT TARGET tlRender::tlDevice)
+	add_library(tlRender::tlDevice UNKNOWN IMPORTED)
+	set(tlRender_tlDevice_LIBRARIES "tlRender::tlIO;tlRender::tlTimeline;tlRender::tlUI")
+	list(APPEND tlRender_tlDevice_LIBRARIES tlRender::tlTimelineVk)
+	set_target_properties(tlRender::tlDevice PROPERTIES
+            IMPORTED_LOCATION "${tlRender_tlDevice_LIBRARY}"
+            INTERFACE_COMPILE_DEFINITIONS "${tlRender_COMPILE_DEFINITIONS}"
+            INTERFACE_INCLUDE_DIRECTORIES "${tlRender_INCLUDE_DIR}"
+	    INTERFACE_LINK_LIBRARIES "${tlRender_tlDevice_LIBRARIES}")
     endif()
 endif()
 if(tlRender_FOUND AND NOT TARGET tlRender)
