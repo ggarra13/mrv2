@@ -38,6 +38,9 @@ ChangeLog
 ---------
 
 - Upgraded to OpenColorIO v2.5.0.
+- Upgraded to yaml-cpp v8.0.0.
+- Upgraded to expat R_2_7_2.
+- Upgraded to minizip-ng v4.0.10.
 
 
 v1.4.2

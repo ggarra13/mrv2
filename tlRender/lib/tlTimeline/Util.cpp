@@ -684,7 +684,7 @@ namespace tl
                 }
 
                 // Open the output file.
-                mz_zip_writer_create(&_writer);
+                _writer = mz_zip_writer_create();
                 if (!_writer)
                 {
                     throw std::runtime_error("Cannot create writer");
