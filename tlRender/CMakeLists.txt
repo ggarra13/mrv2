@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.19)
-cmake_policy(SET CMP0091 NEW)
-cmake_policy(SET CMP0114 NEW)
+cmake_policy(SET CMP0091 NEW)  # Do not place MSVC's runtime flags 
+cmake_policy(SET CMP0114 NEW)  # ExternalProject_Add steps improvement
 if(POLICY CMP0135)
-    cmake_policy(SET CMP0135 NEW)
+    cmake_policy(SET CMP0135 NEW) # Sets URL timestamps extraction
 endif()
 
 set(TLRENDER_VERSION_MAJOR "0")
@@ -46,17 +46,6 @@ set(TLRENDER_BMD FALSE CACHE BOOL "Enable support for Blackmagic Design devices"
 set(TLRENDER_BMD_SDK "" CACHE PATH "Full path to the Blackmagic Design SDK")
 set(TLRENDER_GL TRUE CACHE BOOL "Enable OpenGL support")
 set(TLRENDER_VK FALSE CACHE BOOL "Enable Vulkan support")
-
-if(WIN32 OR APPLE)
-    set(TLRENDER_NFD_DEFAULT TRUE)
-else()
-    set(TLRENDER_NFD_DEFAULT FALSE)
-endif()
-set(TLRENDER_NFD ${TLRENDER_NFD_DEFAULT} CACHE BOOL "Enable support for native file dialogs")
-set(TLRENDER_QT6 FALSE CACHE BOOL "Enable support for Qt6")
-set(TLRENDER_QT5 FALSE CACHE BOOL "Enable support for Qt5")
-set(TLRENDER_PROGRAMS TRUE CACHE BOOL "Build programs")
-set(TLRENDER_EXAMPLES TRUE CACHE BOOL "Build examples")
 set(TLRENDER_TESTS TRUE CACHE BOOL "Build tests")
 if(APPLE)
     set(TLRENDER_IGNORE_PREFIX_PATH_DEFAULT /opt/homebrew)
@@ -235,27 +224,6 @@ if(TLRENDER_PYTHON)
     find_package(Python3 REQUIRED COMPONENTS Development)
 endif()
 
-# Native file dialog dependencies
-if(TLRENDER_NFD)
-    find_package(NFD)
-    if(NFD_FOUND)
-        add_definitions(-DTLRENDER_NFD)
-    endif()
-endif()
-
-# Qt dependencies
-if(TLRENDER_QT6 AND NOT "${TLRENDER_API}" STREQUAL "GLES_2")
-    set(CMAKE_AUTOMOC ON)
-    set(CMAKE_AUTORCC ON)
-    set(CMAKE_AUTOUIC ON)
-    find_package(Qt6 REQUIRED COMPONENTS Quick Widgets OpenGLWidgets Svg HINTS "$ENV{QTDIR}")
-elseif(TLRENDER_QT5 AND NOT "${TLRENDER_API}" STREQUAL "GLES_2")
-    set(CMAKE_AUTOMOC ON)
-    set(CMAKE_AUTORCC ON)
-    set(CMAKE_AUTOUIC ON)
-    find_package(Qt5 REQUIRED COMPONENTS Quick Widgets Svg HINTS "$ENV{QTDIR}")
-endif()
-
 #-------------------------------------------------------------------------------
 # Sub-directories
 
@@ -273,12 +241,3 @@ if(TLRENDER_TESTS)
     add_subdirectory(tests)
 endif()
 add_subdirectory(etc)
-
-#-------------------------------------------------------------------------------
-# Packaging (not used by mrv2)
-
-# if(CMAKE_BUILD_TYPE MATCHES "^Release$")
-#     include(Package)
-#     include(CPack)
-#     include(InstallRequiredSystemLibraries)
-# endif()
