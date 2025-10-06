@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Copyright (c) 2021-2024 Darby Johnston
+// Copyright (c) 2024-Present Gonzalo Garramuño
 // All rights reserved.
 
 #include <tlTimeline/TimelinePrivate.h>
@@ -135,7 +136,7 @@ namespace tl
         public:
             ZipReader(const std::string& fileName)
             {
-                mz_zip_reader_create(&reader);
+                reader = mz_zip_reader_create();
                 if (!reader)
                 {
                     throw std::runtime_error(

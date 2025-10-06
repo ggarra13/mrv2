@@ -17,6 +17,17 @@ import sys
 import stat
 import shutil
 
+TLRENDER_DIRS = [
+    "tlRender/lib/tlBaseApp",
+    "tlRender/lib/tlCore",
+    "tlRender/lib/tlIO",
+    "tlRender/lib/tlGL",
+    "tlRender/lib/tlTimeline",
+    "tlRender/lib/tlTimelineGL",
+    "tlRender/lib/tlTimelineUI",
+    "tlRender/lib/tlDevice",
+]
+
 CPP_DIRS = [
     "src/hdr",
     "src/main",

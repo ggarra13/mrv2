@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Copyright (c) 2021-2024 Darby Johnston
+// Copyright (c) 2024-Present Gonzalo Garramuño
 // All rights reserved.
 
 #include <sstream>
