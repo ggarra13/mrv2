@@ -11,7 +11,7 @@ if(TLRENDER_VK)
     add_subdirectory(tlVk)
     add_subdirectory(tlTimelineVk)
 endif()
-add_subdirectory(tlDevice)    # needs tlTimelineGL for rendering
+add_subdirectory(tlDevice)    # needs tlTimelineGL or tlTimelineVk for rendering
 add_subdirectory(tlUI)
 if(TLRENDER_GLFW)
     add_subdirectory(tlTimelineUI)
