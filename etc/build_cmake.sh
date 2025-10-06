@@ -24,7 +24,7 @@ git clone https://gitlab.kitware.com/cmake/cmake.git
 #
 # Working checkout, instead of master
 #
-git checkout 9126ed5162829f308c5df81f370a9f86dc6892cb
+git checkout 55c6b79da6e16b1683c8b2339ad4a60133e93816
 
 mkdir -p _build
 cd _build
