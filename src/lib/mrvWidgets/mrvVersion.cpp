@@ -72,6 +72,10 @@
 #  endif
 #endif
 
+#ifdef TLRENDER_AOM
+#    include <aom/aom_encoder.h>
+#endif
+
 #ifdef TLRENDER_OCIO
 #    include <expat.h>
 #endif
@@ -853,6 +857,11 @@ namespace mrv
           << endl
           << "Copyright (c) 1998-Present Marti Maria Saguer" << endl
           << endl;
+#endif
+#ifdef TLRENDER_AOM
+        o << "libaom v3" << endl
+          << "Copyright (c) 2016, Alliance for Open Media. All rights reserved."
+          << endl << endl;
 #endif
 #ifdef TLRENDER_NET
         o << curl_version() << endl

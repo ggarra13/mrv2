@@ -43,6 +43,9 @@ ChangeLog
 - Upgraded to minizip-ng v4.0.10.
 - Made Voice Over Annotations stop playing or recordng when clicking on any other action tool or clicking on voice over annotation tool again.
 - Fixed an incorrect dependency on OpenGL on tlDevice when compiling the Vulkan backend.
+- Added guards on MRV2_NETWORK and TLRENDER_NET for network code.
+- Added support for libaom for encoding AV1 instead of SvtAV1, as it is better supported and portable to aarch64.
+- Removed a line printout debugging from video saving code.
 
 
 v1.4.2

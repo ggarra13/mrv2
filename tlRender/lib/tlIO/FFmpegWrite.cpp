@@ -1788,7 +1788,6 @@ namespace tl
 
                     if (p.avCodecContext)
                     {
-                        std::cerr << __LINE__ << std::endl;
                         _encode(
                             p.avCodecContext, p.avVideoStream, nullptr,
                             p.avPacket);

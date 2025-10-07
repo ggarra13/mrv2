@@ -123,6 +123,7 @@ jobs:
         MRV2_PYBIND11: ON
         MRV2_NETWORK: ON
         MRV2_PDF: ON
+        TLRENDER_AOM: ON
         TLRENDER_AV1: ON
         TLRENDER_EXR: ON
         TLRENDER_FFMPEG: ON

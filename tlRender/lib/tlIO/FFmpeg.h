@@ -44,6 +44,7 @@ namespace tl
             Cineform,
             AV1,
             HAP,
+            AV1_AOM,
 
             Count
         };

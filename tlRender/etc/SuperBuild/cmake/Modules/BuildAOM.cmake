@@ -1,0 +1,47 @@
+include(ExternalProject)
+
+set(AOM_TAG v3.13.1)
+set(AOM_DEPENDENCIES )
+
+set(AOM_ARGS ${TLRENDER_EXTERNAL_ARGS})
+list(APPEND AOM_ARGS
+    -DCMAKE_INSTALL_LIBDIR=lib
+    -DCONFIG_AV1_DECODER=0  # Must not be OFF
+    -DENABLE_EXAMPLES=OFF
+    -DENABLE_DOCS=OFF
+    -DENABLE_TESTDATA=OFF
+    -DENABLE_TESTS=OFF
+    -DENABLE_TOOLS=OFF
+)
+if (WIN32)
+    if ($ENV{ARCH} MATCHES ".*aarch64.*")
+	list(APPEND AOM_ARGS
+	    -DAOM_TARGET_CPU=generic)
+    else()
+	list(APPEND AOM_ARGS
+	    -DENABLE_NASM=ON)
+    endif()
+else()
+    list(APPEND AOM_ARGS
+	-DENABLE_NASM=ON)
+    set(AOM_DEPENDENCIES NASM)
+endif()
+
+message(STATUS "AOM DEPENDENCIES=${AOM_DEPENDENCIES}")
+
+set(AOM_PATCH )
+
+ExternalProject_Add(
+    AOM
+    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/AOM
+
+    GIT_REPOSITORY "https://aomedia.googlesource.com/aom.git"
+    GIT_TAG ${AOM_TAG}
+    
+    DEPENDS ${AOM_DEPENDENCIES}
+
+    PATCH_COMMAND ${AOM_PATCH}
+    
+    LIST_SEPARATOR |
+    CMAKE_ARGS ${AOM_ARGS}
+)

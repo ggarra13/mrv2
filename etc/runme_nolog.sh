@@ -61,8 +61,8 @@ if [ -z "$MRV2_BACKEND" ]; then
     export MRV2_BACKEND=GL
 fi
 
-if [ -z "$MRV2_DEMO" ]; then
-    export MRV2_DEMO=OFF
+if [ -z "$MRV2_CPPTRACE" ]; then
+    export MRV2_CPPTRACE=ON
 fi
 
 if [ -z "$MRV2_PYFLTK" ]; then
@@ -113,6 +113,14 @@ fi
 
 if [ -z "$TLRENDER_ASAN" ]; then
     export TLRENDER_ASAN=OFF # asan memory debugging (not yet working)
+fi
+
+if [ -z "$TLRENDER_AOM" ]; then
+    if [[ $ARCH == *aarch64* ]]; then
+	export TLRENDER_AOM=ON
+    else
+	export TLRENDER_AOM=OFF
+    fi
 fi
 
 if [ -z "$TLRENDER_AV1" ]; then
@@ -365,7 +373,12 @@ if [[ $TLRENDER_FFMPEG == ON || $TLRENDER_FFMPEG == 1 ]]; then
     echo "    FFmpeg minimal.................. ${TLRENDER_FFMPEG_MINIMAL}         (TLRENDER_FFMPEG_MINIMAL)"
     echo "    FFmpeg network support ......... ${TLRENDER_NET} 	(TLRENDER_NET)"
     echo "    dav1d decodec support .......... ${TLRENDER_AV1} 	(TLRENDER_AV1)"
-    echo "    SvtAv1 codec support. .......... ${TLRENDER_SVTAV1} 	(TLRENDER_SVTAV1)"
+    if [[ $TLRENDER_SVTAV1 == ON || $TLRENDER_SVTAV1 == 1 ]]; then
+	echo "    SvtAv1 codec support. .......... ${TLRENDER_SVTAV1} 	(TLRENDER_SVTAV1)"
+    fi
+    if [[ $TLRENDER_AOM == ON || $TLRENDER_AOM == 1 ]]; then
+	echo "    AOM encodeder support. .......... ${TLRENDER_AOM} 	(TLRENDER_AOM)"
+    fi
     echo "    HAP/Snappy codec support ....... ${TLRENDER_HAP} 	(TLRENDER_HAP)"
     echo "    VPX codec support .............. ${TLRENDER_VPX} 	(TLRENDER_VPX)"
     echo "    X264 codec support ............. ${TLRENDER_X264} 	(Use -gpl flag)"
@@ -449,6 +462,7 @@ cmd="cmake -G '${CMAKE_GENERATOR}'
 
 	   -D MRV2_COMPILER=${COMPILER}
 	   -D MRV2_BACKEND=${MRV2_BACKEND}
+	   -D MRV2_CPPTRACE=${MRV2_CPPTRACE}
 	   -D MRV2_DEMO=${MRV2_DEMO}
 	   -D MRV2_HDR=${MRV2_HDR}
 	   -D MRV2_NETWORK=${MRV2_NETWORK}

@@ -86,7 +86,9 @@ namespace py = pybind11;
 // we include it here to avoid tl::image and mrv::image clashes
 #include "mrvFl/mrvOCIO.h"
 
-#include <Poco/Net/SSLManager.h>
+#ifdef MRV2_NETWORK
+#    include <Poco/Net/SSLManager.h>
+#endif
 
 #include <FL/platform.H>
 #include <FL/filename.H>
@@ -609,8 +611,9 @@ namespace mrv
         //
         // Initialize POCO Net for SSL connections.
         //
+#ifdef MRV2_NETWORK
         Poco::Net::initializeSSL();
-
+#endif
 
         License ok = license_beat();
         if (ok != License::kValid || license_type == LicenseType::kFloating)

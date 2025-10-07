@@ -1,0 +1,7 @@
+# These settings were provided by ChatGPT
+cpu-used:6
+crf:30
+b:0
+row-mt:1
+tiles:4x2
+threads:8

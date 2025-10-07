@@ -8,27 +8,35 @@
 #include "mrvCore/mrvLicensing.h"
 #include "mrvCore/mrvOS.h"
 
-#include <Poco/Net/HTTPSClientSession.h>
-#include <Poco/Net/HTTPRequest.h>
-#include <Poco/Net/HTTPResponse.h>
-#include <Poco/StreamCopier.h>
-#include <Poco/Dynamic/Var.h>
-#include <Poco/Exception.h>
-#include <Poco/DateTimeFormatter.h>
-#include <Poco/DateTimeParser.h>
-#include <Poco/Timespan.h>
-#include <Poco/Path.h>
+#ifdef MRV2_NETWORK
+#    include <Poco/Net/HTTPSClientSession.h>
+#    include <Poco/Net/HTTPRequest.h>
+#    include <Poco/Net/HTTPResponse.h>
+#    include <Poco/StreamCopier.h>
+#    include <Poco/Dynamic/Var.h>
+#    include <Poco/Exception.h>
+#    include <Poco/DateTimeFormatter.h>
+#    include <Poco/DateTimeParser.h>
+#    include <Poco/Timespan.h>
+#    include <Poco/Path.h>
+#    include <Poco/Logger.h>
+#    include <Poco/ConsoleChannel.h>
+#    include <Poco/AutoPtr.h>
+#    include <Poco/PatternFormatter.h>
+#    include <Poco/FormattingChannel.h>
+#endif
 
 #include <nlohmann/json.hpp>
 
-#include <openssl/evp.h>
-#include <openssl/pem.h>
-#include <openssl/bio.h>
-#include <openssl/buffer.h>
-#include <openssl/err.h>
-#include <openssl/ssl.h>
-#include <openssl/x509_vfy.h>
-
+#ifdef TLRENDER_NET
+#    include <openssl/evp.h>
+#    include <openssl/pem.h>
+#    include <openssl/bio.h>
+#    include <openssl/buffer.h>
+#    include <openssl/err.h>
+#    include <openssl/ssl.h>
+#    include <openssl/x509_vfy.h>
+#endif
 #include <tlCore/StringFormat.h>
 
 #include <FL/Fl.H>
@@ -42,12 +50,6 @@
 #include <vector>
 #include <ctime>
 
-#include "Poco/Logger.h"
-#include "Poco/ConsoleChannel.h"
-#include "Poco/AutoPtr.h"
-#include "Poco/PatternFormatter.h"
-#include "Poco/FormattingChannel.h"
-
 
 namespace
 {
@@ -60,6 +62,7 @@ namespace
 namespace
 {
 
+#ifdef TLRENDER_NET
     // -------------------------
     // Base64 decode helper
     // -------------------------
@@ -143,6 +146,15 @@ namespace
             return false;
         }
     }
+#else
+    bool verify_ed25519(const std::string& pubkey_b64,
+                        const std::string& message,
+                        const std::string& signature_b64)
+    {
+        return false;
+    }
+#endif
+    
 }
 
 namespace mrv
@@ -258,6 +270,7 @@ namespace mrv
                                 const std::string& entryPoint,
                                 const std::string& requestBody)
     {
+#ifdef MRV2_NETWORK
         try
         {
             
@@ -341,6 +354,8 @@ namespace mrv
         catch (const std::exception& ex) {
             LOG_ERROR(ex.what());
         }
+#endif
+        
         return nlohmann::json();
     }
 

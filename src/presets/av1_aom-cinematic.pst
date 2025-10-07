@@ -1,0 +1,11 @@
+# These settings were provided by ChatGPT
+cpu-used:0
+crf:15
+b:0
+row-mt:1
+tiles:1x1
+threads:8
+aq-mode:1
+enable-restoration:1
+enable-chroma-deltaq:1
+denoise-noise-level:0
