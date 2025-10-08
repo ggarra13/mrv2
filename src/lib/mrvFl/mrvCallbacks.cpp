@@ -1748,8 +1748,8 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
-    void toggle_ui_bar(ViewerUI* ui, Fl_Group* const bar, const int size)
-    {
+    void toggle_ui_bar(ViewerUI* ui, Fl_Group* const bar)
+    {   
         if (bar->visible())
         {
             bar->hide();
@@ -1760,8 +1760,8 @@ namespace mrv
         }
 
         ui->uiRegion->layout();
-        ui->uiMain->fill_menu(ui->uiMenuBar);
-       
+        
+        ui->uiMain->fill_menu(ui->uiMenuBar);       
     }
 
     void toggle_menu_bar(Fl_Menu_*, ViewerUI* ui)

@@ -53,8 +53,6 @@ namespace mrv
         const int kBOX_BORDERS = 2;
 
         const double kTimeout = 0.008; // approx. 120 fps
-        //const double kTimeout = 0.016; // approx. 60 fps
-        //const double kTimeout = 0.05;
         const char* kModule = "timeline";
     } // namespace
 
@@ -782,7 +780,7 @@ namespace mrv
         void TimelineWidget::destroy()
         {
             TLRENDER_P();
-
+            
             p.buffer.reset();
 
             if (p.pipeline_layout != VK_NULL_HANDLE)

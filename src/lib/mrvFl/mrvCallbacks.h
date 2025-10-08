@@ -173,7 +173,7 @@ namespace mrv
     void toggle_status_bar(Fl_Menu_*, ViewerUI* ui);
     void toggle_ui_bar(
         ViewerUI* ui, Fl_Group* const bar, const int sizeX, const int sizeY);
-    void toggle_ui_bar(ViewerUI* ui, Fl_Group* const bar, const int size = 0);
+    void toggle_ui_bar(ViewerUI* ui, Fl_Group* const bar);
     void hide_ui_state(ViewerUI* ui);
     void restore_ui_state(ViewerUI* ui);
 

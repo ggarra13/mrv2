@@ -1,5 +1,6 @@
 v1.4.3
 ======
+
 mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
 
 mrv2 ships now in two compiled versions:
@@ -46,6 +47,8 @@ ChangeLog
 - Added guards on MRV2_NETWORK and TLRENDER_NET for network code.
 - Added support for libaom for encoding AV1 instead of SvtAV1, as it is better supported and portable to aarch64.
 - Removed a line printout debugging from video saving code.
+- Fixed Edit timeline refreshing improperly under Wayland (needs nvidia-drivers-580).
+- Fixed hiding of pixel toolbar on Wayland which had gotten broken.
 
 
 v1.4.2
