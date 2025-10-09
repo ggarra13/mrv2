@@ -388,11 +388,11 @@ namespace mrv
 
         //! Get list of annotations for between previous ghosting and
         //! next ghosting from current time.
-        std::vector< std::shared_ptr< voice::Annotation >>
+        std::vector< std::shared_ptr<voice::Annotation > >
         getVoiceAnnotations(const int from = 1, const int to = 1) const;
 
         //! Get all annotations in timeline player.
-        std::vector< std::shared_ptr< voice::Annotation >>
+        std::vector< std::shared_ptr<voice::Annotation > >
         getAllVoiceAnnotations() const;
 
         //! Set frame annotations in timeline player for current frame (time).

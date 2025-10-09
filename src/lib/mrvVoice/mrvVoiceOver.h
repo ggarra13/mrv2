@@ -123,6 +123,9 @@ namespace mrv
             //! Append mouse data.
             void appendMouseData(const MouseData&);
 
+            //! Get the audio file name where voice over is saved.
+            std::string getFileName() const;
+            
             //! Load the audio.
             void loadAudio();
             

@@ -400,7 +400,7 @@ namespace mrv2
          *
          * @param file The path to the movie file or to the sequence, like:
          *        bunny.0001.exr
-         * @param options (annotations, ffmpeg and openexr options)
+         * @param options (annotations, ffmpeg and OpenEXR options)
          */
         void
         save(const std::string& file, const SaveOptions opts = SaveOptions())
@@ -413,7 +413,7 @@ namespace mrv2
          *
          * @param file The path to the movie file or to the sequence, like:
          *        bunny.0001.exr
-         * @param options (annotations and penexr options)
+         * @param options (annotations and OpenEXR options)
          */
         void saveMultipleFrames(
             const std::string& file, std::vector<otime::RationalTime> times,
@@ -423,11 +423,11 @@ namespace mrv2
         }
         
         /**
-         * \brief Save a single frame.
+         * \brief Save multiple annotation frames.
          *
          * @param file The path to the movie file or to the sequence, like:
          *        bunny.0001.exr
-         * @param options (annotations and penexr options)
+         * @param options (annotations and OpenEXR options)
          */
         void saveMultipleAnnotationFrames(
             const std::string& file, std::vector<otime::RationalTime> times,
@@ -444,7 +444,7 @@ namespace mrv2
          *
          * @param file The path to the movie file or to the sequence, like:
          *        bunny.0001.exr
-         * @param options (annotations and penexr options)
+         * @param options (annotations and OpenEXR options)
          */
         void saveSingleFrame(
             const std::string& file, const SaveOptions opts = SaveOptions())

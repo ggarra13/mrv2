@@ -49,6 +49,7 @@ ChangeLog
 - Removed a line printout debugging from video saving code.
 - Fixed Edit timeline refreshing improperly under Wayland (needs nvidia-drivers-580).
 - Fixed hiding of pixel toolbar on Wayland which had gotten broken.
+- Added getting name of all temporary audio files from voice over annotations.
 
 
 v1.4.2
