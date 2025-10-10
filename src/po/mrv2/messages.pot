@@ -420,8 +420,8 @@ msgstr ""
 
 msgid ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/"
-"rt.rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/rt."
+"rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
 
@@ -1275,6 +1275,9 @@ msgid "Add notes annotations to current clip at certain seconds."
 msgstr ""
 
 msgid "Get all times for annotations."
+msgstr ""
+
+msgid "Get all voice annotations for current frame."
 msgstr ""
 
 msgid "Open with Audio"
@@ -5268,6 +5271,9 @@ msgstr ""
 msgid "TileGroup"
 msgstr ""
 
+msgid "ViewGroup"
+msgstr ""
+
 msgid "Polygon Tool."
 msgstr ""
 
@@ -5287,6 +5293,12 @@ msgid "Redo Previous Shape Drawn in Current Frame."
 msgstr ""
 
 msgid "DockGroup"
+msgstr ""
+
+msgid "uiTimelineGroup"
+msgstr ""
+
+msgid "uiTimeline"
 msgstr ""
 
 msgid "BottomBar"
@@ -6192,8 +6204,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
+"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
+"exr"
 msgstr ""
 
 msgid "Maximum Images Apart"

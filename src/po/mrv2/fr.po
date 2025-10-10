@@ -1,7 +1,7 @@
 # French translations for mrv2 package
 # This file is distributed under the same license as the mrv2 package.
 # Gonzalo Garramuño <ggarra13@gmail.com>, 2023.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.6\n"
@@ -1537,6 +1537,9 @@ msgstr "Ajouter des annotations de notes au clip actuel à certaines secondes."
 
 msgid "Get all times for annotations."
 msgstr "Obtenez tous les temps pour les annotations."
+
+msgid "Get all voice annotations for current frame."
+msgstr "Obtenez toutes les annotations vocales pour l’image actuelle."
 
 msgid "Open with Audio"
 msgstr "Ouvrez avec l'audio"
@@ -5712,7 +5715,7 @@ msgid "mrv2"
 msgstr "mrv2"
 
 msgid "MenuBar"
-msgstr "Barre de menus"
+msgstr "MenuBar"
 
 msgid "Edit"
 msgstr "Modifier"
@@ -5721,7 +5724,7 @@ msgid "Fit Window to Image"
 msgstr "Fixer la fenêtre à l'image"
 
 msgid "TopBar"
-msgstr "Barre supérieure"
+msgstr "TopBar"
 
 msgid "Layers"
 msgstr "Calques"
@@ -5794,7 +5797,10 @@ msgid "OCIO Looks"
 msgstr "OCIO regarde"
 
 msgid "TileGroup"
-msgstr "Groupe des carreaux"
+msgstr "TileGroup"
+
+msgid "ViewGroup"
+msgstr "ViewGroup"
 
 msgid "Polygon Tool."
 msgstr "Outil Polygone."
@@ -5817,14 +5823,20 @@ msgstr "Refaire la forme précédente dessinée dans le cadre actuel."
 msgid "DockGroup"
 msgstr "Groupe Dock"
 
+msgid "uiTimelineGroup"
+msgstr "Groupe des carreaux"
+
+msgid "uiTimeline"
+msgstr "Échéancier"
+
 msgid "BottomBar"
-msgstr "Barre inférieure"
+msgstr "BottomBar"
 
 msgid "PixelBar"
-msgstr "Barre à pixels"
+msgstr "PixelBar"
 
 msgid "StatusBar"
-msgstr "Barre d'état"
+msgstr "StatusBar"
 
 msgid "Current tool being used."
 msgstr "L'outil actuel est utilisé."
@@ -6567,8 +6579,8 @@ msgid ""
 "automatically.  You will have to use RMB->Update Thumbnail on the Thumbnail."
 msgstr ""
 "Lorsque cette option est activée, les miniatures dans les panneaux ne sont "
-"pas actualisées automatiquement. Vous devrez utiliser clic droit -> Mettre à"
-" jour la miniature sur la miniature."
+"pas actualisées automatiquement. Vous devrez utiliser clic droit -> Mettre à "
+"jour la miniature sur la miniature."
 
 msgid "Preview Thumbnails on Panels"
 msgstr "Aperçu des miniatures sur les panneaux"
@@ -6613,16 +6625,6 @@ msgstr "Lecture automatique"
 msgid "Start Playback when opening files."
 msgstr "Démarrer la lecture lors de l'ouverture des fichiers."
 
-msgid "Scrub with Audio"
-msgstr "Scrub avec l'audio"
-
-msgid ""
-"Start playback when scrubbing so that audio can be heard.  Scrubbing can be "
-"less smooth."
-msgstr ""
-"Commencez la lecture lors du nettoyage afin que l'audio puisse être entendu. "
-"Le frottement peut être moins lisse."
-
 msgid "Single Click Playback"
 msgstr "Un seul clic de lecture"
 
@@ -6647,7 +6649,7 @@ msgstr ""
 "intégrée."
 
 msgid "Looping Mode"
-msgstr "Mode de braquage" 
+msgstr "Mode de braquage"
 
 msgid "Select default looping mode in timeline."
 msgstr "Sélectionnez le mode de boucle par défaut dans la timeline."
@@ -6656,13 +6658,22 @@ msgid "Sensitivity"
 msgstr "Sensibilité"
 
 msgid ""
-"This setting controls the sensitivity of scrubbing (SHIFT and then the mouse "
-"right and left).  Smaller values make the mouse move jump more frames while "
-"higher values does the opposite."
+"This setting controls the sensitivity of scrubbing.  Smaller values make the "
+"mouse move jump more frames while higher values does the opposite."
 msgstr ""
 "Ce réglage contrôle la sensibilité du nettoyage.  Des valeurs plus petites "
 "font que la souris se déplace sauter plus de cadres tandis que des valeurs "
 "plus élevées font le contraire."
+
+msgid ""
+"Start playback when scrubbing so that audio can be heard.  Scrubbing can be "
+"less smooth."
+msgstr ""
+"Commencez la lecture lors du nettoyage afin que l'audio puisse être entendu. "
+"Le frottement peut être moins lisse."
+
+msgid "Alt Sensitivity"
+msgstr "Alt Sensibilité"
 
 msgid ""
 "When using ALT + Left Mouse Button, this setting controls the multiplier "
@@ -7368,8 +7379,7 @@ msgid "License expired"
 msgstr "Licence expirée"
 
 msgid "{0} is not readable. Using system default."
-msgstr ""
-"{0} n’est pas lisible. Utilisation de la valeur par défaut du système."
+msgstr "{0} n’est pas lisible. Utilisation de la valeur par défaut du système."
 
 msgid "Released Floating License"
 msgstr "Licence flottante libérée"
@@ -7892,3 +7902,12 @@ msgstr "Commutation à propos de la fenêtre"
 
 #~ msgid "HDR monitor not found or not configured."
 #~ msgstr "Moniteur HDR non trouvé ou non configuré."
+
+#~ msgid "uiMenuBar"
+#~ msgstr "Barre de menus"
+
+#~ msgid "uiStatusBar"
+#~ msgstr "Barre d'état"
+
+#~ msgid "Scrub with Audio"
+#~ msgstr "Scrub avec l'audio"
