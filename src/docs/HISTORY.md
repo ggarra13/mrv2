@@ -52,7 +52,7 @@ ChangeLog
 - Added getting name of all temporary audio files from voice over annotations.
 - Fixed a crash on A/B Comparison Overlays on the Vulkan backend.
 - Fixed a redraw (trails) on A/B Comparison Overlays on the Vulkan backend when alpha was not solid.
-- Fixed background color/checkers not showing on A/B wipes on Vulkan backend.
+- Fixed background color/checkers not showing on A/B comparisons on Vulkan backend.
 
 
 v1.4.2

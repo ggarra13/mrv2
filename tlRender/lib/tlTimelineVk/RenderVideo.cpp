@@ -290,6 +290,8 @@ namespace tl
             if (!videoData.empty() && !boxes.empty())
             {
                 p.buffers["wipe_image"]->transitionToColorAttachment(p.cmd);
+                p.buffers["wipe_image"]->beginClearRenderPass(p.cmd);
+                p.buffers["wipe_image"]->endRenderPass(p.cmd);
                 
                 _drawVideo(
                     p.buffers["wipe_image"], "display", 
@@ -323,8 +325,8 @@ namespace tl
             {
                 vlk::ColorBlendStateInfo cb;
                 vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
-                colorBlendAttachment.blendEnable = VK_FALSE;
-                // colorBlendAttachment.colorWriteMask = 0;
+                colorBlendAttachment.blendEnable = VK_TRUE;
+                colorBlendAttachment.colorWriteMask = 0;
                 cb.attachments.push_back(colorBlendAttachment);
             
                 vlk::DepthStencilStateInfo ds;
@@ -390,6 +392,7 @@ namespace tl
             {
                 vlk::ColorBlendStateInfo cb;
                 vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
+                colorBlendAttachment.blendEnable = VK_TRUE;
                 cb.attachments.push_back(colorBlendAttachment);
             
                 vlk::DepthStencilStateInfo ds;
@@ -447,172 +450,178 @@ namespace tl
             
             p.fbo->endRenderPass(p.cmd);
             // END FIRST RENDER PASS
-            
+
             // ----- SECOND RENDER PASS OF RIGHT VIDEO
 
             // Draw right image to "wipe" buffer
 
-            if (videoData.size() > 1 && boxes.size() > 1)
-            {   
-                p.buffers["wipe_image"]->transitionToColorAttachment(p.cmd);
+            p.buffers["wipe_image"]->transitionToColorAttachment(p.cmd);
+            p.buffers["wipe_image"]->beginClearRenderPass(p.cmd);
+            p.buffers["wipe_image"]->endRenderPass(p.cmd);
                 
+            if (videoData.size() > 1 && boxes.size() > 1)
+            {
                 _drawVideo(
                     p.buffers["wipe_image"], "display", 
                     videoData[1], boxes[1],
                     !imageOptions.empty() ? std::make_shared<timeline::ImageOptions>(imageOptions[0]) : nullptr,
-                    !displayOptions.empty() ? displayOptions[0] : timeline::DisplayOptions());  
+                    !displayOptions.empty() ? displayOptions[0] : timeline::DisplayOptions());
+            }
                 
-                p.buffers["wipe_image"]->transitionToShaderRead(p.cmd);
+            p.buffers["wipe_image"]->transitionToShaderRead(p.cmd);
             
-                if (p.vbos["wipe"])
-                {
-                    geom::TriangleMesh2 mesh;
-                    mesh.v.push_back(pts[2]);
-                    mesh.v.push_back(pts[3]);
-                    mesh.v.push_back(pts[0]);
-                    geom::Triangle2 tri;
-                    tri.v[0] = 1;
-                    tri.v[1] = 2;
-                    tri.v[2] = 3;
-                    mesh.triangles.push_back(tri);
-                    p.vbos["wipe"]->copy(convert(mesh, p.vbos["wipe"]->getType()));
-                }
+            if (p.vbos["wipe"])
+            {
+                geom::TriangleMesh2 mesh;
+                mesh.v.push_back(pts[2]);
+                mesh.v.push_back(pts[3]);
+                mesh.v.push_back(pts[0]);
+                geom::Triangle2 tri;
+                tri.v[0] = 1;
+                tri.v[1] = 2;
+                tri.v[2] = 3;
+                mesh.triangles.push_back(tri);
+                p.vbos["wipe"]->copy(convert(mesh, p.vbos["wipe"]->getType()));
+            }
 
             
-                p.fbo->transitionToColorAttachment(p.cmd);
-                p.fbo->transitionDepthToStencilAttachment(p.cmd);
+            p.fbo->transitionToColorAttachment(p.cmd);
+            p.fbo->transitionDepthToStencilAttachment(p.cmd);
             
-                p.fbo->beginLoadRenderPass(p.cmd);
+            p.fbo->beginLoadRenderPass(p.cmd);
             
-                pipelineLayoutName = "wipe_right_stencil";
+            pipelineLayoutName = "wipe_right_stencil";
             
-                {
-                    vlk::ColorBlendStateInfo cb;
-                    vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
-                    colorBlendAttachment.blendEnable = VK_FALSE;
-                    // colorBlendAttachment.colorWriteMask = 0;
-                    cb.attachments.push_back(colorBlendAttachment);
+            {
+                vlk::ColorBlendStateInfo cb;
+                vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
+                colorBlendAttachment.blendEnable = VK_TRUE;
+                colorBlendAttachment.colorWriteMask = 0;
+                cb.attachments.push_back(colorBlendAttachment);
             
-                    vlk::DepthStencilStateInfo ds;
-                    ds.depthTestEnable = VK_FALSE;
+                vlk::DepthStencilStateInfo ds;
+                ds.depthTestEnable = VK_FALSE;
                 
 #if USE_DYNAMIC_STENCILS
-                    ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
-                    ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
-                                             VK_STENCIL_OP_KEEP,
-                                             VK_STENCIL_OP_REPLACE,
-                                             VK_STENCIL_OP_KEEP,
-                                             VK_COMPARE_OP_ALWAYS);
-                    vkCmdSetStencilCompareMask(p.cmd,
-                                               VK_STENCIL_FACE_FRONT_AND_BACK,
-                                               0xFF);
-                    vkCmdSetStencilWriteMask(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
-                                             0xFF);
-                    vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK, 1);            
+                ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
+                ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_REPLACE,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_COMPARE_OP_ALWAYS);
+                vkCmdSetStencilCompareMask(p.cmd,
+                                           VK_STENCIL_FACE_FRONT_AND_BACK,
+                                           0xFF);
+                vkCmdSetStencilWriteMask(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         0xFF);
+                vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK, 1);            
 #else
-                    ds.stencilTestEnable = VK_TRUE;
+                ds.stencilTestEnable = VK_TRUE;
             
-                    VkStencilOpState stencilOp = {};
+                VkStencilOpState stencilOp = {};
 
-                    stencilOp.failOp = VK_STENCIL_OP_KEEP;
-                    stencilOp.passOp = VK_STENCIL_OP_REPLACE;
-                    stencilOp.depthFailOp = VK_STENCIL_OP_KEEP;
-                    stencilOp.compareOp = VK_COMPARE_OP_ALWAYS;
-                    stencilOp.compareMask = 0xFF;
-                    stencilOp.writeMask = 0xFF;
-                    stencilOp.reference = 1;
-                    ds.front = ds.back = stencilOp;
+                stencilOp.failOp = VK_STENCIL_OP_KEEP;
+                stencilOp.passOp = VK_STENCIL_OP_REPLACE;
+                stencilOp.depthFailOp = VK_STENCIL_OP_KEEP;
+                stencilOp.compareOp = VK_COMPARE_OP_ALWAYS;
+                stencilOp.compareMask = 0xFF;
+                stencilOp.writeMask = 0xFF;
+                stencilOp.reference = 1;
+                ds.front = ds.back = stencilOp;
 #endif
             
-                    // Draw left stencil mask
-                    createPipeline("wipe_right_stencil", pipelineLayoutName,
-                                   p.fbo->getLoadRenderPass(),
-                                   p.shaders["wipe"], p.vbos["wipe"],
-                                   cb, ds);
-                }
+                // Draw left stencil mask
+                createPipeline("wipe_right_stencil", pipelineLayoutName,
+                               p.fbo->getLoadRenderPass(),
+                               p.shaders["wipe"], p.vbos["wipe"],
+                               cb, ds);
+            }
             
-                pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+            pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
             
-                _createBindingSet(p.shaders["wipe"]);
-                color = image::Color4f(0.F, 1.F, 0.F);
-                vkCmdPushConstants(p.cmd, pipelineLayout,
-                                   p.shaders["wipe"]->getPushStageFlags(), 0,
-                                   sizeof(color), &color);
-                p.shaders["wipe"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
-                _bindDescriptorSets(pipelineLayoutName, "wipe");
+            _createBindingSet(p.shaders["wipe"]);
+            color = image::Color4f(0.F, 1.F, 0.F);
+            vkCmdPushConstants(p.cmd, pipelineLayout,
+                               p.shaders["wipe"]->getPushStageFlags(), 0,
+                               sizeof(color), &color);
+            p.shaders["wipe"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
+            _bindDescriptorSets(pipelineLayoutName, "wipe");
 
-                _vkDraw("wipe");
+            _vkDraw("wipe");
 
-                // Draw video
-                pipelineLayoutName = "wipe_right_image";
+            // Draw video
+            pipelineLayoutName = "wipe_right_image";
                 
             
-                if (p.vbos["video"])
-                {
-                    p.vbos["video"]->copy(convert(geom::box(boxes[0], true),
-                                                  p.vbos["video"]->getType()));
-                }
-
-                {
-                    vlk::ColorBlendStateInfo cb;
-                    vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
-                    cb.attachments.push_back(colorBlendAttachment);
-            
-                    vlk::DepthStencilStateInfo ds;
-                    ds.depthTestEnable = VK_FALSE;
-                    ds.stencilTestEnable = VK_TRUE;
-            
-                    VkStencilOpState stencilOp = {};
-                    stencilOp.failOp = VK_STENCIL_OP_KEEP;
-                    stencilOp.passOp = VK_STENCIL_OP_KEEP;
-                    stencilOp.depthFailOp = VK_STENCIL_OP_KEEP;
-                    stencilOp.compareOp = VK_COMPARE_OP_EQUAL;
-                    stencilOp.compareMask = 0xFF;
-                    stencilOp.writeMask = 0x00;
-                    stencilOp.reference = 1;
-
-                    ds.front = stencilOp;
-                    ds.back = stencilOp;
-
-                    ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
-                    ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
-                                             VK_STENCIL_OP_KEEP,
-                                             VK_STENCIL_OP_KEEP,
-                                             VK_STENCIL_OP_KEEP,
-                                             VK_COMPARE_OP_EQUAL);
-                    vkCmdSetStencilCompareMask(p.cmd,
-                                               VK_STENCIL_FACE_FRONT_AND_BACK,
-                                               0xFF);
-                    vkCmdSetStencilWriteMask(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
-                                             0x00);
-                    vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
-                                             1);
-
-                    createPipeline("wipe_right_image",
-                                   pipelineLayoutName,
-                                   p.fbo->getLoadRenderPass(),
-                                   p.shaders["overlay"],
-                                   p.vbos["video"],
-                                   cb, ds);
-                }
-            
-
-                pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
-            
-                _createBindingSet(p.shaders["overlay"]);
-                color = image::Color4f(1.F, 1.F, 1.F);
-                vkCmdPushConstants(p.cmd, pipelineLayout,
-                                   p.shaders["overlay"]->getPushStageFlags(), 0,
-                                   sizeof(color), &color);
-                p.shaders["overlay"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
-                p.shaders["overlay"]->setFBO("textureSampler",
-                                             p.buffers["wipe_image"]);
-                _bindDescriptorSets(pipelineLayoutName, "overlay");
-
-                _vkDraw("video");
-            
-                p.fbo->endRenderPass(p.cmd);
+            if (p.vbos["video"])
+            {
+                p.vbos["video"]->copy(convert(geom::box(boxes[0], true),
+                                              p.vbos["video"]->getType()));
             }
+
+            {
+                vlk::ColorBlendStateInfo cb;
+                vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
+                colorBlendAttachment.blendEnable = VK_TRUE;
+                cb.attachments.push_back(colorBlendAttachment);
+            
+                vlk::DepthStencilStateInfo ds;
+                ds.depthTestEnable = VK_FALSE;
+
+#if USE_DYNAMIC_STENCILS
+                ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
+                ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_COMPARE_OP_EQUAL);
+                vkCmdSetStencilCompareMask(p.cmd,
+                                           VK_STENCIL_FACE_FRONT_AND_BACK,
+                                           0xFF);
+                vkCmdSetStencilWriteMask(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         0x00);
+                vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         1);
+#else
+                ds.stencilTestEnable = VK_TRUE;
+            
+                VkStencilOpState stencilOp = {};
+                stencilOp.failOp = VK_STENCIL_OP_KEEP;
+                stencilOp.passOp = VK_STENCIL_OP_KEEP;
+                stencilOp.depthFailOp = VK_STENCIL_OP_KEEP;
+                stencilOp.compareOp = VK_COMPARE_OP_EQUAL;
+                stencilOp.compareMask = 0xFF;
+                stencilOp.writeMask = 0x00;
+                stencilOp.reference = 1;
+
+                ds.front = stencilOp;
+                ds.back = stencilOp;
+#endif
+
+                createPipeline("wipe_right_image",
+                               pipelineLayoutName,
+                               p.fbo->getLoadRenderPass(),
+                               p.shaders["overlay"],
+                               p.vbos["video"],
+                               cb, ds);
+            }
+            
+
+            pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+            
+            _createBindingSet(p.shaders["overlay"]);
+            color = image::Color4f(1.F, 1.F, 1.F);
+            vkCmdPushConstants(p.cmd, pipelineLayout,
+                               p.shaders["overlay"]->getPushStageFlags(), 0,
+                               sizeof(color), &color);
+            p.shaders["overlay"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
+            p.shaders["overlay"]->setFBO("textureSampler",
+                                         p.buffers["wipe_image"]);
+            _bindDescriptorSets(pipelineLayoutName, "overlay");
+
+            _vkDraw("video");
+            
+            p.fbo->endRenderPass(p.cmd);
             
             // END SECOND RENDER PASS
             
@@ -741,6 +750,10 @@ namespace tl
                 {
                     p.buffers["difference0"] = vlk::OffscreenBuffer::create(ctx, offscreenBufferSize, offscreenBufferOptions);
                 }
+                
+                p.buffers["difference0"]->transitionToColorAttachment(p.cmd);
+                p.buffers["difference0"]->beginClearRenderPass(p.cmd);
+                p.buffers["difference0"]->endRenderPass(p.cmd);
 
                 if (p.buffers["difference0"])
                 {
@@ -763,6 +776,10 @@ namespace tl
                     {
                         p.buffers["difference1"] = vlk::OffscreenBuffer::create(ctx, offscreenBufferSize, offscreenBufferOptions);
                     }
+
+                    p.buffers["difference1"]->transitionToColorAttachment(p.cmd);
+                    p.buffers["difference1"]->beginClearRenderPass(p.cmd);
+                    p.buffers["difference1"]->endRenderPass(p.cmd);
 
                     if (p.buffers["difference1"])
                     {
@@ -907,7 +924,6 @@ namespace tl
             vlk::OffscreenBufferOptions offscreenBufferOptions;
             offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
             offscreenBufferOptions.colorFilters = displayOptions.imageFilters;
-            offscreenBufferOptions.clear = true;
             if (doCreate(p.buffers["video"], offscreenBufferSize, offscreenBufferOptions))
             {
                 p.buffers["video"] = vlk::OffscreenBuffer::create(ctx, offscreenBufferSize,
@@ -918,6 +934,9 @@ namespace tl
             float d2 = 1;
             if (p.buffers["video"])
             {
+                p.buffers["video"]->beginClearRenderPass(p.cmd);
+                p.buffers["video"]->endRenderPass(p.cmd);
+                
                 for (const auto& layer : videoData.layers)
                 {
                     switch (layer.transition)
