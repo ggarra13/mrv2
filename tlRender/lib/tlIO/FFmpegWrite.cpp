@@ -1247,6 +1247,10 @@ namespace tl
                     avCodecID = AV_CODEC_ID_HAP;
                     avProfile = AV_PROFILE_UNKNOWN;
                     break;
+                case Profile::AV1_AOM:
+                    avCodecID = AV_CODEC_ID_AV1;
+                    avProfile = AV_PROFILE_UNKNOWN;
+                    break;
                 default:
                     break;
                 }
@@ -1297,6 +1301,14 @@ namespace tl
                     {
                         hardwareEncode = false;
                         avCodec = avcodec_find_encoder_by_name("libvpx-vp9");
+                    }
+                }
+                else if (avCodecID == AV_CODEC_ID_AV1)
+                {
+                    hardwareEncode = false;
+                    if (profile == Profile::AV1_AOM)
+                    {
+                        avCodec = avcodec_find_encoder_by_name("libaom-av1");
                     }
                 }
                 else if (avCodecID == AV_CODEC_ID_PRORES)
