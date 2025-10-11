@@ -41,6 +41,8 @@ namespace mrv
     Hotkey kCloseCurrent(false, false, false, false, 0);
     Hotkey kCloseAll(false, false, false, false, 0);
 
+    Hotkey kReloadSession(false, false, false, false, 0);
+
     Hotkey kQuitProgram(false, false, false, false, FL_Escape);
 
     Hotkey kZoomMin(false, false, false, false, '0');
@@ -408,6 +410,8 @@ namespace mrv
         HotkeyEntry(_("Close Current"), &kCloseCurrent),
         HotkeyEntry(_("Close All"), &kCloseAll),
 
+        HotkeyEntry(_("Reload Session"), &kReloadSession),
+        
         HotkeyEntry(_("Quit Program"), &kQuitProgram),
 
         HotkeyEntry(_("Zoom Minimum"), &kZoomMin),

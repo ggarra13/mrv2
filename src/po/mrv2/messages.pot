@@ -420,8 +420,8 @@ msgstr ""
 
 msgid ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/rt."
-"rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/"
+"rt.rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
 
@@ -3112,6 +3112,9 @@ msgstr ""
 msgid "Set Out Point"
 msgstr ""
 
+msgid "Mute/Unmute audio - Select Audio track with Right Mouse Button"
+msgstr ""
+
 msgid "Image zoom setting."
 msgstr ""
 
@@ -3339,6 +3342,9 @@ msgstr ""
 msgid ""
 "You have EDLs in the current session.  These will not be saved in the "
 "session file.  Do you want to continue?"
+msgstr ""
+
+msgid "Could not restart mrv2 instance with a session file."
 msgstr ""
 
 msgid "Edit Text Annotation"
@@ -3595,6 +3601,9 @@ msgid "File/Close Current"
 msgstr ""
 
 msgid "File/Close All"
+msgstr ""
+
+msgid "File/Save and Reload Session"
 msgstr ""
 
 msgid "File/Recent/%s"
@@ -6204,8 +6213,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
-"exr"
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
 msgstr ""
 
 msgid "Maximum Images Apart"
@@ -6760,6 +6769,9 @@ msgstr ""
 msgid "Close All"
 msgstr ""
 
+msgid "Reload Session"
+msgstr ""
+
 msgid "Quit Program"
 msgstr ""
 
@@ -6932,6 +6944,9 @@ msgid "Play Forwards"
 msgstr ""
 
 msgid "Play Forwards / Change Speed"
+msgstr ""
+
+msgid "Toggle Mute Audio"
 msgstr ""
 
 msgid "Next Clip"
@@ -7166,6 +7181,12 @@ msgid "Pen Size Less"
 msgstr ""
 
 msgid "Switch Pen Color"
+msgstr ""
+
+msgid "Clear In/Out Point"
+msgstr ""
+
+msgid "Toggle In/Out Point on .otio clip"
 msgstr ""
 
 msgid "Hud Window"

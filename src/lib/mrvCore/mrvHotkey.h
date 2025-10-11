@@ -110,6 +110,8 @@ namespace mrv
     extern Hotkey kCloseCurrent;
     extern Hotkey kCloseAll;
 
+    extern Hotkey kReloadSession;
+
     extern Hotkey kQuitProgram;
 
     extern Hotkey kZoomMin;

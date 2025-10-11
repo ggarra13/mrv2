@@ -2981,19 +2981,41 @@ namespace mrv
         save_session_impl(file, ui);
     }
 
-    void load_session_cb(Fl_Menu_* m, ViewerUI* ui)
+    void load_session_impl(const std::string& fileName, ViewerUI* ui)
     {
-        const std::string& file = open_session_file();
-        if (file.empty())
-            return;
-
-        if (session::load(file))
+        if (session::load(fileName))
         {
             auto settings = ui->app->settings();
-            settings->addRecentFile(file);
+            settings->addRecentFile(fileName);
         }
 
         ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+    
+    void load_session_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        const std::string& fileName = open_session_file();
+        if (fileName.empty())
+            return;
+
+        load_session_impl(fileName, ui);
+    }
+
+    void reload_session_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        const std::string& fileName = tmppath() + "/temp.mrv2s";
+
+        save_session_impl(fileName, ui);
+#ifdef _WIN32
+        std::string program = rootpath() + "/bin/mrv2.exe";
+#else
+        std::string program = rootpath() + "/bin/mrv2.sh";
+#endif
+        int ret = os::execv(program, fileName);
+        if (ret != 0)
+        {
+            LOG_ERROR(_("Could not restart mrv2 instance with a session file."));
+        }
     }
 
     void clear_note_annotation_cb(ViewerUI* ui)

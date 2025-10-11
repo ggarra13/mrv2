@@ -170,6 +170,9 @@ namespace mrv
             _("File/Close All"), kCloseAll.hotkey(), (Fl_Callback*)close_all_cb,
             ui, mode);
 
+        menu->add(_("File/Save and Reload Session"), kReloadSession.hotkey(),
+                  (Fl_Callback*)reload_session_cb, ui, mode);
+
         // std_any value;
         SettingsObject* settings = ui->app->settings();
         const std::vector< std::string >& recentFiles = settings->recentFiles();

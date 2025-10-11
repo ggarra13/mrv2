@@ -278,6 +278,7 @@ namespace mrv
     void save_session_as_cb(Fl_Menu_* m, ViewerUI* ui);
     void save_session_cb(Fl_Menu_* m, ViewerUI* ui);
     void load_session_cb(Fl_Menu_* m, ViewerUI* ui);
+    void reload_session_cb(Fl_Menu_* m, ViewerUI* ui);
 
     // Note annotations
     void clear_note_annotation_cb(ViewerUI* ui);
