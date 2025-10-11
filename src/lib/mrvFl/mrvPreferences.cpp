@@ -933,32 +933,28 @@ namespace mrv
         reset_hotkeys();
         if (!resetHotkeys)
         {
-            std::string hotkeyPath = prefspath() + hotkeys_file + ".prefs";
-            if (file::isReadable(hotkeyPath))
+            std::string hotkeyPath = prefspath();
+            std::string hotkeyFile = hotkeyPath + hotkeys_file + ".prefs";
+            if (!file::isReadable(hotkeyFile))
             {
-                msg =
-                    tl::string::Format(_("Loading hotkeys from \"{0}{1}.prefs\"."))
-                    .arg(prefspath())
-                    .arg(hotkeys_file);
+                hotkeyPath = studiopath();
             }
-            else
+            hotkeyFile = hotkeyPath + hotkeys_file + ".prefs";
+            if (file::isReadable(hotkeyFile))
             {
-                std::string hotkeyPath = studiopath() + hotkeys_file + ".prefs";
-                if (file::isReadable(hotkeyPath))
-                {
-                    msg =
-                        tl::string::Format(_("Loading hotkeys from \"{0}{1}.prefs\"."))
-                        .arg(studiopath())
-                        .arg(hotkeys_file);
-                }
+                msg = tl::string::Format(_("Loading hotkeys from \"{0}{1}.prefs\"."))
+                      .arg(hotkeyPath)
+                      .arg(hotkeys_file);
+                    
+                load_hotkeys(hotkeyPath);
+                LOG_STATUS(msg);
             }
-            load_hotkeys();
         }
         else
         {
             msg = tl::string::Format(_("Resetting hotkeys to default."));
+            LOG_STATUS(msg);
         }
-        LOG_STATUS(msg);
 
         // Fill the hotkeys window
         HotkeyUI* h = ui->uiHotkey;

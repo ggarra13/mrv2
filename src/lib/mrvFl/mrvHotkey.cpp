@@ -388,6 +388,11 @@ namespace mrv
         }
     }
 
+    /** 
+     * Load hotkeys from a path
+     * 
+     * @param path This parameter is the preferences path.  Not the full path.
+     */
     void load_hotkeys(const std::string& path)
     {
         Fl_Preferences* keys = new Fl_Preferences(

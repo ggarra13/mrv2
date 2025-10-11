@@ -53,9 +53,7 @@ ChangeLog
 - Fixed a crash on A/B Comparison Overlays on the Vulkan backend.
 - Fixed a redraw (trails) on A/B Comparison Overlays on the Vulkan backend when alpha was not solid.
 - Fixed background color/checkers not showing on A/B comparisons on Vulkan backend.
-- Fixed saving of hotkeys when using STUDIOPATH with mrv2.keys.prefs in it.
-  Now the user's home directory mrv2.keys.prefs takes precedence over the
-  STUDIOPATH one.
+- Fixed loading of hotkeys.  The user's home directory mrv2.keys.prefs takes precedence over the STUDIOPATH one.
 - Made Audio mute's icon turn on (off actually) automatically if volume is too low.
 - Added Mute Hotkey to turn on/off audio ('m' key by default).
 - Added a hotkey to reset the in/out points together (Shift + 'i' by default).
