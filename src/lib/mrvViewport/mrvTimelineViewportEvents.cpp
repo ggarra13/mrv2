@@ -913,13 +913,13 @@ namespace mrv
                 break;
             case FL_PUSH:
             {
+                p.mousePress = _getFocus();
                 if (!children() && Fl::focus() != this && Fl::event_button1())
                 {
                     take_focus();
                     if (Fl::event_clicks() < 2)
                         return 1;
                 }
-                p.mousePress = _getFocus();
                 if (Fl::event_button1())
                 {
                     if (Fl::event_ctrl())
@@ -927,7 +927,7 @@ namespace mrv
                         p.viewPosMousePress = p.viewPos;
                         return 1;
                     }
-                
+
                     _handlePushLeftMouseButton();
                 }
                 else if (Fl::event_button2())
