@@ -441,7 +441,7 @@ decl {class HotkeyUI;} {public global
 decl {class AboutUI;} {public global
 }
 
-widget_class TimelineClass {
+widget_class TimelineClass {open
   xywh {0 0 933 56} box NO_BOX hide resizable
   class Fl_Double_Window
 } {
@@ -725,6 +725,7 @@ o->redraw();}
             user_data this user_data_type {ViewerUI*}
             callback {TimelineClass* c = ui->uiTimeWindow;
 
+// If audio is muted and we moved the slider, unmute it
 bool muted = c->uiAudioTracks->value();
 if (muted)
 {
@@ -733,7 +734,14 @@ if (muted)
 }
 
 float value = o->value();
-ui->app->setVolume(value);}
+ui->app->setVolume(value);
+
+// If audio is too low, mute the audio.
+if (value < 0.01F)
+{
+   c->uiAudioTracks->value(true);
+   c->uiAudioTracks->do_callback();
+}} selected
             tooltip {Audio Volume} xywh {604 7 73 16} type {Horz Knob} selection_color 1 align 4 step 0.1 value 1 slider_size 0.2
             class {mrv::VolumeSlider}
           }
@@ -837,8 +845,7 @@ ui->uiView->take_focus();}
   }
 }
 
-class ViewerUI {open
-} {
+class ViewerUI {} {
   decl {static mrv::App* app;} {public local
   }
   decl {static PreferencesUI* uiPrefs;} {public local
@@ -1398,7 +1405,7 @@ settings->setValue( mrv::kPenColorA, a);}
             }
           }
           Fl_Group uiTimelineGroup {
-            label uiTimelineGroup open selected
+            label uiTimelineGroup open
             xywh {0 527 933 30} box FLAT_BOX color 51 labeltype NO_LABEL
             class {mrv::TimelineGroup}
           } {

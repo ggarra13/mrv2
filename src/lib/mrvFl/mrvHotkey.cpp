@@ -399,12 +399,21 @@ namespace mrv
 
     void load_hotkeys()
     {
-        std::string hotkeyPath = studiopath() +
+        std::string hotkeyPath = prefspath() +
                                  Preferences::hotkeys_file + ".pref";
         if (file::isReadable(hotkeyPath))
-            load_hotkeys(studiopath());
-        else
+        {
             load_hotkeys(prefspath());
+        }
+        else
+        {
+            hotkeyPath = studiopath() +
+                         Preferences::hotkeys_file + ".pref";
+            if (file::isReadable(hotkeyPath))
+            {
+                load_hotkeys(studiopath());
+            }
+        }
     }
 
 

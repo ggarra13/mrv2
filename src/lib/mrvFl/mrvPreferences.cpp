@@ -933,20 +933,24 @@ namespace mrv
         reset_hotkeys();
         if (!resetHotkeys)
         {
-            std::string hotkeyPath = studiopath() + hotkeys_file + ".prefs";
+            std::string hotkeyPath = prefspath() + hotkeys_file + ".prefs";
             if (file::isReadable(hotkeyPath))
             {
                 msg =
                     tl::string::Format(_("Loading hotkeys from \"{0}{1}.prefs\"."))
-                    .arg(studiopath())
+                    .arg(prefspath())
                     .arg(hotkeys_file);
             }
             else
             {
-                msg =
-                    tl::string::Format(_("Loading hotkeys from \"{0}{1}.prefs\"."))
-                    .arg(prefspath())
-                    .arg(hotkeys_file);;
+                std::string hotkeyPath = studiopath() + hotkeys_file + ".prefs";
+                if (file::isReadable(hotkeyPath))
+                {
+                    msg =
+                        tl::string::Format(_("Loading hotkeys from \"{0}{1}.prefs\"."))
+                        .arg(studiopath())
+                        .arg(hotkeys_file);
+                }
             }
             load_hotkeys();
         }
@@ -1514,6 +1518,12 @@ namespace mrv
             "max_images_apart", (int)uiPrefs->uiPrefsMaxImagesApart->value());
 
         char key[256];
+
+
+        userprefspath = studiopath();
+        if (!file::isReadable(userprefspath + "/mrv2.paths.prefs"))
+            userprefspath = prefspath();
+        
         Fl_Preferences path_mapping(
             userprefspath.c_str(), "filmaura", "mrv2.paths",
             (Fl_Preferences::Root)((int)Fl_Preferences::CLEAR));
@@ -1603,7 +1613,8 @@ namespace mrv
                      (int)uiPrefs->uiPrefsAllowScreenSaver->value());
         
         {
-
+            userprefspath = prefspath();
+        
             Fl_Preferences keys(
                 userprefspath.c_str(), "filmaura", hotkeys_file.c_str(),
                 (Fl_Preferences::Root)((int)Fl_Preferences::CLEAR));
@@ -1613,7 +1624,7 @@ namespace mrv
                       _("Hotkeys have been saved to \"{0}{1}.prefs\"."))
                       .arg(userprefspath)
                       .arg(hotkeys_file);
-            LOG_INFO(msg);
+            LOG_STATUS(msg);
         }
 
         base.flush();

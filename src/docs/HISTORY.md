@@ -42,7 +42,7 @@ ChangeLog
 - Upgraded to yaml-cpp v8.0.0.
 - Upgraded to expat R_2_7_2.
 - Upgraded to minizip-ng v4.0.10.
-- Made Voice Over Annotations stop playing or recordng when clicking on any other action tool or clicking on voice over annotation tool again.
+- Made Voice Over Annotations stop playing or recording when clicking on any other action tool or clicking on voice over annotation tool again.
 - Fixed an incorrect dependency on OpenGL on tlDevice when compiling the Vulkan backend.
 - Added guards on MRV2_NETWORK and TLRENDER_NET for network code.
 - Added support for libaom for encoding AV1 instead of SvtAV1, as it is better supported and portable to aarch64.
@@ -53,6 +53,10 @@ ChangeLog
 - Fixed a crash on A/B Comparison Overlays on the Vulkan backend.
 - Fixed a redraw (trails) on A/B Comparison Overlays on the Vulkan backend when alpha was not solid.
 - Fixed background color/checkers not showing on A/B comparisons on Vulkan backend.
+- Fixed saving of hotkeys when using STUDIOPATH with mrv2.keys.prefs in it.
+  Now the user's home directory mrv2.keys.prefs takes precedence over the
+  STUDIOPATH one.
+- Made Audio mute's icon turn on (off actually) automatically if volume is too low.
 
 
 v1.4.2
