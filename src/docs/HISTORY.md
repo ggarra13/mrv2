@@ -6,7 +6,7 @@ mrv2 and vmrv2 are open source professional players and review tools for VFX, an
 mrv2 ships now in two compiled versions:
 
    - mrv2 with OpenGL backend  (free up to version 1.4.0 - donationware afterwards)
-				
+   
    - vmrv2 with Vulkan backend (donationware)
 
 It also ships for many more architectures, so be careful to download the correct one.
@@ -58,7 +58,7 @@ ChangeLog
   STUDIOPATH one.
 - Made Audio mute's icon turn on (off actually) automatically if volume is too low.
 - Added Mute Hotkey to turn on/off audio ('m' key by default).
-- Added a hotkey to reset the in/out points together (Shift + 'i' by default). 
+- Added a hotkey to reset the in/out points together (Shift + 'i' by default).
 
 
 v1.4.2
