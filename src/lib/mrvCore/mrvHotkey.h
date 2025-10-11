@@ -208,6 +208,7 @@ namespace mrv
     extern Hotkey kSetInPoint;
     extern Hotkey kSetOutPoint;
     extern Hotkey kToggleOtioClipInOut;
+    extern Hotkey kToggleInOutPoint;
 
     extern Hotkey kPlaybackLoop;
     extern Hotkey kPlaybackOnce;
@@ -344,6 +345,8 @@ namespace mrv
     extern Hotkey kEditInsertAudioGap;
     extern Hotkey kEditRemoveAudioGap;
 
+    extern Hotkey kToggleMuteAudio;
+    
     extern Hotkey kEditUndo;
     extern Hotkey kEditRedo;
 

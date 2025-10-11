@@ -550,6 +550,11 @@ namespace mrv
         tooltip += addHotkey(kSetOutPoint);
         c->uiEndButton->copy_tooltip(tooltip.c_str());
         
+        tooltip = _("Mute/Unmute audio - Select Audio track with Right "
+                    "Mouse Button");
+        tooltip += addHotkey(kToggleMuteAudio);
+        c->uiAudioTracks->copy_tooltip(tooltip.c_str());
+        
         //
         // Pixel Tool Bar.
         //

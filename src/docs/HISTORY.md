@@ -57,6 +57,8 @@ ChangeLog
   Now the user's home directory mrv2.keys.prefs takes precedence over the
   STUDIOPATH one.
 - Made Audio mute's icon turn on (off actually) automatically if volume is too low.
+- Added Mute Hotkey to turn on/off audio ('m' key by default).
+- Added a hotkey to reset the in/out points together (Shift + 'i' by default). 
 
 
 v1.4.2

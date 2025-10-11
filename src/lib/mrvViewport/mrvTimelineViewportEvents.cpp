@@ -1509,6 +1509,28 @@ namespace mrv
                     undo();
                     return 1;
                 }
+                else if (kToggleMuteAudio.match(rawkey))
+                {
+                    TimelineClass* c = p.ui->uiTimeWindow;
+                    c->uiAudioTracks->value(!c->uiAudioTracks->value());
+                    c->uiAudioTracks->do_callback();
+                    return 1;
+                }
+                else if (kToggleInOutPoint.match(rawkey))
+                {
+                    TimelineClass* c = p.ui->uiTimeWindow;
+                    if (c->uiStartButton->value())
+                    {
+                        c->uiStartButton->value(0);
+                        c->uiStartButton->do_callback();
+                    }
+                    if (c->uiEndButton->value())
+                    {
+                        c->uiEndButton->value(0);
+                        c->uiEndButton->do_callback();
+                    }
+                    return 1;
+                }
                 else if (kZoomIn.match(rawkey))
                 {
                     setViewZoom(viewZoom() * 2, _getFocus());

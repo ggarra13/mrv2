@@ -192,13 +192,16 @@ namespace mrv
 
     Hotkey kSetInPoint(false, false, false, false, 'i');
     Hotkey kSetOutPoint(false, false, false, false, 'o');
-    Hotkey kToggleOtioClipInOut(false, false, false, false, 'm');
+    Hotkey kToggleInOutPoint(false, false, false, true, 'i');
+    Hotkey kToggleOtioClipInOut(false, false, false, true, 'm');
 
     Hotkey kGridToggle(true, false, false, false, 'g');
     Hotkey kGridSize(true, true, false, false, 'g');
 
     Hotkey kHudToggle(true, false, false, false, 'h');
 
+    Hotkey kToggleMuteAudio(false, false, false, false, 'm');
+    
     Hotkey kOCIOPresetsToggle(false, false, false, false, 0);
     Hotkey kOCIOInTopBarToggle(false, false, false, false, 't');
     Hotkey kOCIOInputColorSpace(false, false, false, false, 0);
@@ -479,6 +482,8 @@ namespace mrv
         HotkeyEntry(_("First Frame"), &kFirstFrame),
         HotkeyEntry(_("Last Frame"), &kLastFrame),
 
+        HotkeyEntry(_("Toggle Mute Audio"), &kToggleMuteAudio),
+
         HotkeyEntry(_("Next Clip"), &kNextClip),
         HotkeyEntry(_("Previous Clip"), &kPreviousClip),
 
@@ -583,6 +588,12 @@ namespace mrv
 
         HotkeyEntry(_("Set In Point"), &kSetInPoint),
         HotkeyEntry(_("Set Out Point"), &kSetOutPoint),
+
+        // \@todo: instead of Clear In/Out Point it should be a toggle
+        HotkeyEntry(_("Clear In/Out Point"), &kToggleInOutPoint),
+        
+        HotkeyEntry(_("Toggle In/Out Point on .otio clip"),
+                    &kToggleOtioClipInOut),
 
         HotkeyEntry(_("Hud Window"), &kHudToggle),
 
