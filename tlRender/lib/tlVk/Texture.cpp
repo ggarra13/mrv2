@@ -227,6 +227,7 @@ namespace tl
             VkFormat internalFormat = VK_FORMAT_UNDEFINED;
 
             bool hostVisible = true;
+            bool needPadRgbToRgba = false;
 
         };
 
@@ -262,6 +263,7 @@ namespace tl
             p.info.size.h = height;
             p.depth = depth;
             p.format = p.internalFormat = format;
+            p.needPadRgbToRgba = false;
             p.options = options;
             p.name = name;
 
@@ -566,9 +568,18 @@ namespace tl
             VkBuffer stagingBuffer;
             VmaAllocation stagingAllocation;
 
+            // We may need a larger staging buffer if we are converting formats
+            size_t bufferSize = size;
+            if (p.needPadRgbToRgba)
+            {
+                size_t pixelCount = static_cast<size_t>(p.info.size.w) * p.info.size.h;
+                size_t dstPixelBytes = getDataByteCount(p.imageType, p.info.size.w, p.info.size.h, p.depth, p.internalFormat) / pixelCount;
+                bufferSize = pixelCount * dstPixelBytes;
+            }
+    
             VkBufferCreateInfo bufInfo = {};
             bufInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-            bufInfo.size = size;
+            bufInfo.size = bufferSize;
             bufInfo.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
             
             VmaAllocationCreateInfo allocInfo = {};
@@ -577,20 +588,87 @@ namespace tl
             VK_CHECK(vmaCreateBuffer(ctx.allocator, &bufInfo, &allocInfo,
                                      &stagingBuffer, &stagingAllocation, nullptr));
 
-            // Copy image data to buffer, respecting alignment
+            // Copy image data to buffer, respecting alignment AND
+            // format conversion
             void* mapped;
             VK_CHECK(vmaMapMemory(ctx.allocator, stagingAllocation, &mapped));
-            if (info.layout.alignment == 1) {
-                std::memcpy(mapped, srcData, size);
-            } else {
-                size_t pixelSize = image::getBitDepth(info.pixelType) / 8 * image::getChannelCount(info.pixelType);
-                size_t srcRowBytes = info.size.w * pixelSize;
-                size_t dstRowBytes = (srcRowBytes + info.layout.alignment - 1) & ~(info.layout.alignment - 1);
-                for (uint32_t y = 0; y < info.size.h; ++y) {
-                    std::memcpy(
-                        static_cast<uint8_t*>(mapped) + y * dstRowBytes,
-                        srcData + y * srcRowBytes,
-                        srcRowBytes);
+
+            // Check if we need to convert from 3-channel to 4-channel float
+            if (p.needPadRgbToRgba)
+            {
+                 // Compute new buffer size for RGBA
+                size_t pixelCount = static_cast<size_t>(p.info.size.w) * p.info.size.h;
+                size_t dstPixelBytes = 4 * (image::getBitDepth(p.info.pixelType)/8); // careful to pick dest bit depth
+                size_t bufferSize = pixelCount * dstPixelBytes;
+
+                
+                if (p.info.pixelType == image::PixelType::RGBA_U8)
+                {
+                    const uint8_t* s = reinterpret_cast<const uint8_t*>(srcData);
+                    uint8_t* d = reinterpret_cast<uint8_t*>(mapped);
+                    for (size_t i = 0; i < pixelCount; ++i)
+                    {
+                        *d++ = *s++; // R
+                        *d++ = *s++; // G
+                        *d++ = *s++; // B
+                        *d++ = 255;  // A
+                    }
+                }
+                if (p.info.pixelType == image::PixelType::RGBA_U16)
+                {
+                    const uint16_t* s = reinterpret_cast<const uint16_t*>(srcData);
+                    uint16_t* d = reinterpret_cast<uint16_t*>(mapped);
+                    for (size_t i = 0; i < pixelCount; ++i)
+                    {
+                        *d++ = *s++; // R
+                        *d++ = *s++; // G
+                        *d++ = *s++; // B
+                        *d++ = 65535;  // A
+                    }
+                }
+                else if (p.info.pixelType == image::PixelType::RGB_F16)
+                {
+                    const uint16_t* s = reinterpret_cast<const uint16_t*>(srcData);
+                    uint16_t* d = reinterpret_cast<uint16_t*>(mapped);
+                    for (size_t i = 0; i < pixelCount; ++i)
+                    {
+                        *d++ = *s++; // R
+                        *d++ = *s++; // G
+                        *d++ = *s++; // B
+                        *d++ = 0x3C00; // A = 1.0f in half (implement helper)
+                    }
+                }
+                else if (p.info.pixelType == image::PixelType::RGB_F32)
+                {
+                    const float* s = reinterpret_cast<const float*>(srcData);
+                    float* d = reinterpret_cast<float*>(mapped);
+                    for (size_t i = 0; i < pixelCount; ++i)
+                    {
+                        *d++ = *s++; // R
+                        *d++ = *s++; // G
+                        *d++ = *s++; // B
+                        *d++ = 1.0f; // A
+                    }
+                }
+                else
+                {
+                    throw std::runtime_error("Unsupported pixel type for RGB to RGBA conversion");
+                }
+            }
+            else
+            {
+                if (info.layout.alignment == 1) {
+                    std::memcpy(mapped, srcData, size);
+                } else {
+                    size_t pixelSize = image::getBitDepth(info.pixelType) / 8 * image::getChannelCount(info.pixelType);
+                    size_t srcRowBytes = info.size.w * pixelSize;
+                    size_t dstRowBytes = (srcRowBytes + info.layout.alignment - 1) & ~(info.layout.alignment - 1);
+                    for (uint32_t y = 0; y < info.size.h; ++y) {
+                        std::memcpy(
+                            static_cast<uint8_t*>(mapped) + y * dstRowBytes,
+                            srcData + y * srcRowBytes,
+                            srcRowBytes);
+                    }
                 }
             }
             vmaUnmapMemory(ctx.allocator, stagingAllocation);
@@ -690,7 +768,8 @@ namespace tl
                     device, p.image, &subresource, &subresourceLayout);
 
                 void* mapped;
-                if (rowPitch == 0 && size == subresourceLayout.size)
+                if (rowPitch == 0 && size == subresourceLayout.size &&
+                    !p.needPadRgbToRgba)
                 {
 #ifdef MRV2_NO_VMA
                     // Host-visible upload (like glTexSubImage2D)
@@ -712,10 +791,89 @@ namespace tl
 #ifdef MRV2_NO_VMA
                     // Map based on layout offset and size
                     VK_CHECK(vkMapMemory(
-                        device, p.memory, subresourceLayout.offset,
-                        subresourceLayout.size, 0, &mapped));
+                                 device, p.memory, subresourceLayout.offset,
+                                 subresourceLayout.size, 0, &mapped));
+#else
+                    VK_CHECK(vmaMapMemory(ctx.allocator, p.allocation,
+                                          &mapped));
+#endif
+                    
+
                     const uint32_t src_row_pitch = rowPitch > 0 ? rowPitch : (p.info.size.w * pixel_size);
                     const uint32_t dst_row_size = p.info.size.w * pixel_size;
+                    
+                    if (p.needPadRgbToRgba)
+                    {
+                        size_t pixelCount = static_cast<size_t>(p.info.size.w) * p.info.size.h;
+
+                        switch(p.info.pixelType)
+                        {
+                        case image::PixelType::RGBA_F32:
+                        {
+                            const float* s = reinterpret_cast<const float*>(data);
+                            float* d = reinterpret_cast<float*>(mapped);
+                            for (size_t i = 0; i < pixelCount; ++i)
+                            {
+                                d[i * 4 + 0] = s[i * 3 + 0]; // R
+                                d[i * 4 + 1] = s[i * 3 + 1]; // G
+                                d[i * 4 + 2] = s[i * 3 + 2]; // B
+                                d[i * 4 + 3] = 1.0f;         // A
+                            }
+                            break;
+                        }
+                        case image::PixelType::RGBA_F16:
+                        {
+                            const uint16_t* s = reinterpret_cast<const uint16_t*>(data);
+                            uint16_t* d = reinterpret_cast<uint16_t*>(mapped);
+                            for (size_t i = 0; i < pixelCount; ++i)
+                            {
+                                d[i * 4 + 0] = s[i * 3 + 0]; // R
+                                d[i * 4 + 1] = s[i * 3 + 1]; // G
+                                d[i * 4 + 2] = s[i * 3 + 2]; // B
+                                d[i * 4 + 3] = 0x3C00;         // A
+                            }
+                            break;
+                        }
+                        case image::PixelType::RGBA_U16:
+                        {
+                            const uint16_t* s = reinterpret_cast<const uint16_t*>(data);
+                            uint16_t* d = reinterpret_cast<uint16_t*>(mapped);
+                            for (size_t i = 0; i < pixelCount; ++i)
+                            {
+                                d[i * 4 + 0] = s[i * 3 + 0]; // R
+                                d[i * 4 + 1] = s[i * 3 + 1]; // G
+                                d[i * 4 + 2] = s[i * 3 + 2]; // B
+                                d[i * 4 + 3] = 65535;         // A
+                            }
+                            break;
+                        }
+                        case image::PixelType::RGBA_U8:
+                        {
+                            const uint8_t* s = reinterpret_cast<const uint8_t*>(data);
+                            uint8_t* d = reinterpret_cast<uint8_t*>(mapped);
+                            for (size_t i = 0; i < pixelCount; ++i)
+                            {
+                                d[i * 4 + 0] = s[i * 3 + 0]; // R
+                                d[i * 4 + 1] = s[i * 3 + 1]; // G
+                                d[i * 4 + 2] = s[i * 3 + 2]; // B
+                                d[i * 4 + 3] = 255;          // A
+                            }
+                            break;
+                        }
+                        default:
+                            throw std::runtime_error("Unknown pixel type for RGB->RGBA conversion");
+                        }
+                    }
+                    else
+                    {
+                        for (uint32_t y = 0; y < static_cast<uint32_t>(p.info.size.h); ++y)
+                        {
+                            const void* src_row = static_cast<const uint8_t*>(data) + y * src_row_pitch;
+                            void* dst_row = static_cast<uint8_t*>(mapped) + y * subresourceLayout.rowPitch;
+                            std::memcpy(dst_row, src_row, dst_row_size);
+                        }
+                    }
+     
                     for (uint32_t y = 0;
                          y < static_cast<uint32_t>(p.info.size.h); ++y)
                     {
@@ -732,34 +890,11 @@ namespace tl
                         std::memcpy(dst_row, src_row, dst_row_size);
                     }
                     
+#ifdef MRV2_NO_VMA
                     vkUnmapMemory(device, p.memory);
 #else
-                    // Map based on layout offset and size
-                    VK_CHECK(vmaMapMemory(ctx.allocator, p.allocation, &mapped));
-
-                    // Assuming 'data' is a pointer to your tightly packed
-                    // source pixel data
-                    const uint32_t src_row_pitch = rowPitch > 0 ? rowPitch : (p.info.size.w * pixel_size);
-                    const uint32_t dst_row_size = p.info.size.w * pixel_size;
-                    for (uint32_t y = 0;
-                         y < static_cast<uint32_t>(p.info.size.h); ++y)
-                    {
-                        // Source row start in your tightly packed data
-                        const void* src_row = static_cast<const uint8_t*>(data) + y * src_row_pitch;
-
-                        // Destination row start in the mapped memory, using the
-                        // rowPitch
-                        void* dst_row = static_cast<uint8_t*>(mapped) +
-                                        y * subresourceLayout.rowPitch;
-
-                        // Copy the actual pixel data for this row (excluding
-                        // padding)
-                        std::memcpy(dst_row, src_row, dst_row_size);
-                    }
-
                     vmaUnmapMemory(ctx.allocator, p.allocation);
-                    vmaFlushAllocation(ctx.allocator, p.allocation, 0,
-                                       VK_WHOLE_SIZE); // Ensure flush
+                    vmaFlushAllocation(ctx.allocator, p.allocation, 0, VK_WHOLE_SIZE);
 #endif
                 }
             }
@@ -768,9 +903,18 @@ namespace tl
                 // Use a staging buffer
                 VkBuffer stagingBuffer;
 
+                // Calculate buffer size, accounting for format conversion
+                size_t bufferSize = size;
+                if (p.needPadRgbToRgba)
+                {
+                    size_t pixelCount = static_cast<size_t>(p.info.size.w) * p.info.size.h;
+                    size_t dstPixelBytes = getDataByteCount(p.imageType, p.info.size.w, p.info.size.h, p.depth, p.internalFormat) / pixelCount;
+                    bufferSize = pixelCount * dstPixelBytes;
+                }
+        
                 VkBufferCreateInfo bufInfo = {};
                 bufInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-                bufInfo.size = size;
+                bufInfo.size = bufferSize;
                 bufInfo.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
 
 #ifdef MRV2_NO_VMA
@@ -794,19 +938,42 @@ namespace tl
 
                 void* mapped;
                 vkMapMemory(device, stagingMemory, 0, size, 0, &mapped);
-                std::memcpy(mapped, data, size);
-                vkUnmapMemory(device, stagingMemory);
-#else
+#else                
                 VmaAllocation stagingAllocation;
                 VmaAllocationCreateInfo allocInfo = {};
                 allocInfo.usage = VMA_MEMORY_USAGE_CPU_ONLY;
-                
+        
                 VK_CHECK(vmaCreateBuffer(ctx.allocator, &bufInfo, &allocInfo,
-                                         &stagingBuffer, &stagingAllocation, nullptr));
+                                         &stagingBuffer, &stagingAllocation,
+                                         nullptr));
 
                 void* mapped;
-                VK_CHECK(vmaMapMemory(ctx.allocator, stagingAllocation, &mapped));
-                std::memcpy(mapped, data, size);
+                VK_CHECK(vmaMapMemory(ctx.allocator, stagingAllocation,
+                                      &mapped));
+#endif
+                
+                if (p.needPadRgbToRgba &&
+                    p.info.pixelType == image::PixelType::RGBA_F32)
+                {
+                    size_t pixelCount = static_cast<size_t>(p.info.size.w) * p.info.size.h;
+                    const float* s = reinterpret_cast<const float*>(data);
+                    float* d = reinterpret_cast<float*>(mapped);
+                    for (size_t i = 0; i < pixelCount; ++i)
+                    {
+                        d[i * 4 + 0] = s[i * 3 + 0]; // R
+                        d[i * 4 + 1] = s[i * 3 + 1]; // G
+                        d[i * 4 + 2] = s[i * 3 + 2]; // B
+                        d[i * 4 + 3] = 1.0f;         // A
+                    }
+                }
+                else
+                {
+                    std::memcpy(mapped, data, size);
+                }
+
+#ifdef MRV2_NO_VMA
+                vkUnmapMemory(device, stagingMemory);
+#else
                 vmaUnmapMemory(ctx.allocator, stagingAllocation);
 #endif
 
@@ -910,19 +1077,38 @@ namespace tl
                 case VK_FORMAT_R8G8B8_UNORM:
                     p.internalFormat = VK_FORMAT_R8G8B8A8_UNORM;
                     p.info.pixelType = image::PixelType::RGBA_U8;
+                    p.needPadRgbToRgba = true;
                     break;
                 case VK_FORMAT_R16G16B16_UNORM:
                     p.internalFormat = VK_FORMAT_R16G16B16A16_UNORM;
                     p.info.pixelType = image::PixelType::RGBA_U16;
+                    p.needPadRgbToRgba = true;
                     break;
                 case VK_FORMAT_R16G16B16_SFLOAT:
                     p.internalFormat = VK_FORMAT_R16G16B16A16_SFLOAT;
                     p.info.pixelType = image::PixelType::RGBA_F16;
+                    p.needPadRgbToRgba = true;
+                    break;
+                case VK_FORMAT_R32G32B32_SFLOAT:
+                    p.internalFormat = VK_FORMAT_R32G32B32A32_SFLOAT;
+                    p.info.pixelType = image::PixelType::RGBA_F32;
+                    p.needPadRgbToRgba = true;
                     break;
                 default:
                     std::string err = "tl::vlk::Texture Invalid VK_FORMAT: ";
                     throw std::runtime_error(err + string_VkFormat(p.format));
                     break;
+                }
+                
+                // Verify the fallback format is supported
+                formatInfo.format = p.internalFormat;
+                result = vkGetPhysicalDeviceImageFormatProperties2(gpu,
+                                                                   &formatInfo,
+                                                                   &imageProperties);
+                if (result != VK_SUCCESS)
+                {
+                    std::string err = "tl::vlk::Texture Fallback format not supported: ";
+                    throw std::runtime_error(err + string_VkFormat(p.internalFormat));
                 }
             }
 
