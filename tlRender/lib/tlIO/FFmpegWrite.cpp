@@ -443,8 +443,8 @@ namespace tl
                     if (line.empty() || line[0] == '#')
                         continue;
 
-                    // Find the position of the colon
-                    size_t colonPos = line.find(':');
+                    // Find the position of the rightmost colon
+                    size_t colonPos = line.rfind(':');
                     if (colonPos == std::string::npos)
                         continue;
 
