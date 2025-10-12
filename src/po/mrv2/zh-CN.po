@@ -1893,21 +1893,6 @@ msgstr "串流 {0} {1}..."
 msgid "Stop streaming"
 msgstr "停止流流"
 
-msgid "Renderer"
-msgstr "渲染器"
-
-msgid "Complexity"
-msgstr "复杂程度"
-
-msgid "Draw Mode"
-msgstr "绘制模式"
-
-msgid "Stage Cache"
-msgstr "缓存"
-
-msgid "Disk Cache in GB"
-msgstr "磁盘缓存 (GB)"
-
 msgid "Toggle other eye stereo image."
 msgstr "切换其它眼睛立体图像 。"
 
@@ -2872,23 +2857,14 @@ msgstr "HAP 配置需要. mov 扩展。 将其修改为. mov"
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "新建文件 {0} 已经存在! 无法覆盖它"
 
-msgid "Rotated image info: {0}"
-msgstr "已旋转的图像信息: {0}"
-
-msgid "Scaled image info: {0}"
-msgstr "缩放图像信息: {0}"
-
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: 无法打开插件"
 
 msgid "Image info: {0} {1}"
 msgstr "图像信息: {0} {1}"
 
-msgid "Image too big for Save Annotations.  Will scale to the viewport size."
-msgstr "图像太大, 无法保存说明 。 将缩放到查看端大小 。"
-
-msgid "Viewport Size: {0} - X={1}, Y={2}"
-msgstr "视图端口大小 : {0} - X={1}, Y={2}"
+msgid "Scaled image info: {0}"
+msgstr "缩放图像信息: {0}"
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr "Writer 插件没有获得输出信息 。 默认为 {0}"
@@ -2901,6 +2877,9 @@ msgstr "使用 profile {0}, 像素格式 {1} 。"
 
 msgid "Using preset {0}."
 msgstr "使用预设 {0} 。"
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "离屏缓冲区信息：{0}"
 
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr "Saving Movie without Audio %<PRId64> - %<PRId64>"
@@ -2917,32 +2896,17 @@ msgstr "Saving Pictures without Audio %<PRId64> - %<PRId64>"
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Audio only in timeline, but not trying to save audio."
 
-msgid "{0}: Invalid OpenGL format and type"
-msgstr "{0}: 无效的 OpenGL 格式和类型"
-
-msgid "OpenGL info: {0}"
-msgstr "OpenGL 信息: {0}"
-
 msgid "Saving... {0}"
 msgstr "保存... {0}"
 
-msgid "Unsupported output format"
-msgstr "不支持的不支持输出格式"
+msgid "Could not read image data from view"
+msgstr "无法从视图读取图像数据"
 
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "时间 {0} 空视频数据 重复帧"
 
 msgid "Render size: {0}"
 msgstr "渲染尺寸：{0}"
-
-msgid "Image Layer '{0}' info: {1} {2}"
-msgstr "图像层 '{0}' 信息：{1} {2}"
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "离屏缓冲区信息：{0}"
-
-msgid "Unsupported output format: "
-msgstr "不支持的不支持输出格式: "
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -3651,8 +3615,8 @@ msgstr "帧 {0} - 时间码 : {1} - 秒数: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "图像太大。 将保存视图的大小 。"
 
-msgid "Could not read image data from view"
-msgstr "无法从视图读取图像数据"
+msgid "Viewport Size: {0} - X={1}, Y={2}"
+msgstr "视图端口大小 : {0} - X={1}, Y={2}"
 
 msgid "Voice Over/Delete"
 msgstr "配音/删除"
@@ -3772,11 +3736,14 @@ msgstr "    前    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "    后    V: % 4<PRIu64>    A: % 4<PRIu64>"
 
+msgid "HDR monitor found."
+msgstr "发现HDR显示器。"
+
+msgid "HDR monitor not found or not configured."
+msgstr "未找到HDR显示器或未配置。"
+
 msgid "Edit Text"
 msgstr "编辑文本"
-
-msgid "Invalid font for text drawing"
-msgstr "用于文本绘图的无效字体"
 
 msgid "Could not convert message to shape: "
 msgstr "无法将信息转换为形状 :"
@@ -4026,6 +3993,9 @@ msgstr "播放/切换入点"
 
 msgid "Playback/Toggle Out Point"
 msgstr "播放/切换出点"
+
+msgid "Playback/Toggle In and Out Points"
+msgstr "播放/切换入点和出点"
 
 msgid "Playback/Toggle In\\/Out Otio Clip"
 msgstr "播放重放/切换英寸/Otio 剪切外"
@@ -7537,6 +7507,9 @@ msgstr "冲刷模式"
 msgid "Area Selection Mode"
 msgstr "区域选择模式"
 
+msgid "Draw Mode"
+msgstr "绘制模式"
+
 msgid "Erase Mode"
 msgstr "擦除模式"
 
@@ -7636,11 +7609,41 @@ msgstr "开关热键窗口"
 msgid "Toggle About Window"
 msgstr "开关关于窗口"
 
-#~ msgid "HDR monitor found."
-#~ msgstr "发现HDR显示器。"
+#~ msgid "Renderer"
+#~ msgstr "渲染器"
 
-#~ msgid "HDR monitor not found or not configured."
-#~ msgstr "未找到HDR显示器或未配置。"
+#~ msgid "Complexity"
+#~ msgstr "复杂程度"
+
+#~ msgid "Stage Cache"
+#~ msgstr "缓存"
+
+#~ msgid "Disk Cache in GB"
+#~ msgstr "磁盘缓存 (GB)"
+
+#~ msgid "Rotated image info: {0}"
+#~ msgstr "已旋转的图像信息: {0}"
+
+#~ msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+#~ msgstr "图像太大, 无法保存说明 。 将缩放到查看端大小 。"
+
+#~ msgid "{0}: Invalid OpenGL format and type"
+#~ msgstr "{0}: 无效的 OpenGL 格式和类型"
+
+#~ msgid "OpenGL info: {0}"
+#~ msgstr "OpenGL 信息: {0}"
+
+#~ msgid "Unsupported output format"
+#~ msgstr "不支持的不支持输出格式"
+
+#~ msgid "Image Layer '{0}' info: {1} {2}"
+#~ msgstr "图像层 '{0}' 信息：{1} {2}"
+
+#~ msgid "Unsupported output format: "
+#~ msgstr "不支持的不支持输出格式: "
+
+#~ msgid "Invalid font for text drawing"
+#~ msgstr "用于文本绘图的无效字体"
 
 #~ msgid "uiMenuBar"
 #~ msgstr "菜单栏"
