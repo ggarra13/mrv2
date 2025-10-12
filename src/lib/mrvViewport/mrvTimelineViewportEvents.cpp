@@ -917,8 +917,6 @@ namespace mrv
                 if (!children() && Fl::focus() != this && Fl::event_button1())
                 {
                     take_focus();
-                    if (Fl::event_clicks() < 2)
-                        return 1;
                 }
                 if (Fl::event_button1())
                 {
