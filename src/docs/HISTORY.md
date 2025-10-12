@@ -59,6 +59,8 @@ ChangeLog
 - Added a hotkey to toggle the in/out points together (Shift + 'i' by default).
 - Fixed scrubbing "jumping" when the previous action had been pressing on the timeline bar (like the Stop button).
 - Made color of S (Start) and E (End) range buttons more prominent.
+- Made the color of play buttons match the color of S and E.
+- Fixed drawing annotations not following the cursor accurately.
 
 
 v1.4.2
