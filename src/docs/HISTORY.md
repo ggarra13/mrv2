@@ -58,6 +58,7 @@ ChangeLog
 - Added Mute Hotkey to turn on/off audio ('m' key by default).
 - Added a hotkey to reset the in/out points together (Shift + 'i' by default).
 - Fixed scrubbing "jumping" when the previous action had been pressing on the timeline bar (like the Stop button).
+- Made color of S (Start) and E (End) range buttons more prominent.
 
 
 v1.4.2

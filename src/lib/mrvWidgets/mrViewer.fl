@@ -741,7 +741,7 @@ if (value < 0.01F)
 {
    c->uiAudioTracks->value(true);
    c->uiAudioTracks->do_callback();
-}} selected
+}}
             tooltip {Audio Volume} xywh {604 7 73 16} type {Horz Knob} selection_color 1 align 4 step 0.1 value 1 slider_size 0.2
             class {mrv::VolumeSlider}
           }
@@ -767,7 +767,7 @@ uiStartFrame->setTime( startTime );
 
 ui->uiTimeline->setTimelinePlayer(player);
 ui->uiTimeline->redraw();}
-          xywh {682 3 27 24} type Toggle down_box DOWN_BOX align 16
+          xywh {682 3 27 24} type Toggle down_box DOWN_BOX selection_color 14 labelcolor 20 align 16
         }
         Fl_Input uiStartFrame {
           user_data this user_data_type {ViewerUI*}
@@ -809,8 +809,8 @@ const auto& endTime = range.end_time_inclusive();
 uiEndFrame->setTime( endTime );
 
 ui->uiTimeline->setTimelinePlayer(player);
-ui->uiTimeline->redraw();}
-          xywh {808 3 27 24} type Toggle
+ui->uiTimeline->redraw();} selected
+          xywh {808 3 27 24} type Toggle selection_color 14 labelcolor 20
         }
         Fl_Input uiEndFrame {
           user_data this user_data_type {ViewerUI*}

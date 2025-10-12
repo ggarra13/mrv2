@@ -2001,6 +2001,16 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
+    void playback_toggle_in_out_points_cb(Fl_Menu_*, ViewerUI* ui)
+    {
+        TimelineClass* c = ui->uiTimeWindow;
+        c->uiStartButton->value(false);
+        c->uiStartButton->do_callback();
+        c->uiEndButton->value(false);
+        c->uiEndButton->do_callback();
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
     static void playback_loop_mode(ViewerUI* ui, timeline::Loop mode)
     {
         TimelineClass* c = ui->uiTimeWindow;

@@ -964,10 +964,10 @@ namespace mrv
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (c->uiEndButton->value())
             item->set();
-        // idx = menu->add(
-        //     _("Playback/Clear In and Out Points"), kToggleInOutPoints.hotkey(),
-        //     (Fl_Callback*)playback_clear_in_out_points_cb, ui,
-        //     FL_MENU_DIVIDER | mode);
+        idx = menu->add(
+            _("Playback/Reset In and Out Points"), kToggleInOutPoint.hotkey(),
+            (Fl_Callback*)playback_toggle_in_out_points_cb, ui,
+            FL_MENU_DIVIDER | mode);
 
         if (isOtio)
         {
