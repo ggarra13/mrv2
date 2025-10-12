@@ -967,7 +967,7 @@ namespace mrv
         idx = menu->add(
             _("Playback/Reset In and Out Points"), kToggleInOutPoint.hotkey(),
             (Fl_Callback*)playback_toggle_in_out_points_cb, ui,
-            FL_MENU_DIVIDER | mode);
+            FL_MENU_DIVIDER);
 
         if (isOtio)
         {
