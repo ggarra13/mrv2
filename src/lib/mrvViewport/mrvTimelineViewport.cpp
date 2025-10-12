@@ -595,7 +595,7 @@ namespace mrv
             c->uiPlayForwards->color(FL_BACKGROUND_COLOR);
             c->uiPlayBackwards->color(FL_BACKGROUND_COLOR);
             c->uiStop->color(FL_BACKGROUND_COLOR);
-            Fl_Color color = FL_YELLOW;
+            Fl_Color color = 14;  // a nice FL_CYAN
             switch (p.player->playback())
             {
             case timeline::Playback::Forward:
