@@ -56,7 +56,7 @@ ChangeLog
 - Fixed loading of hotkeys.  The user's home directory mrv2.keys.prefs takes precedence over the STUDIOPATH one.
 - Made Audio mute's icon turn on (off actually) automatically if volume is too low.
 - Added Mute Hotkey to turn on/off audio ('m' key by default).
-- Added a hotkey to reset the in/out points together (Shift + 'i' by default).
+- Added a hotkey to toggle the in/out points together (Shift + 'i' by default).
 - Fixed scrubbing "jumping" when the previous action had been pressing on the timeline bar (like the Stop button).
 - Made color of S (Start) and E (End) range buttons more prominent.
 
