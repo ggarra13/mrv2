@@ -2003,12 +2003,44 @@ namespace mrv
 
     void playback_toggle_in_out_points_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        static otime::TimeRange inOut = time::invalidTimeRange;
+
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player) return;
+        
         TimelineClass* c = ui->uiTimeWindow;
-        c->uiStartButton->value(false);
-        c->uiStartButton->do_callback();
-        c->uiEndButton->value(false);
-        c->uiEndButton->do_callback();
+        const otime::TimeRange& inOutRange = player->inOutRange();
+        const otime::TimeRange& timeRange = player->timeRange();
+        if (timeRange != inOutRange)
+        {
+            inOut = inOutRange;
+            c->uiStartButton->value(false);
+            c->uiStartButton->do_callback();
+            c->uiEndButton->value(false);
+            c->uiEndButton->do_callback();
+        }
+        else
+        {
+            if (inOut == time::invalidTimeRange)
+            {
+                player->setInOutRange(timeRange);
+                c->uiStartButton->value(false);
+                c->uiStartButton->do_callback();
+                c->uiEndButton->value(false);
+                c->uiEndButton->do_callback();
+            }
+            else
+            {
+                player->setInOutRange(inOut);
+                c->uiStartFrame->setTime(inOut.start_time());
+                c->uiStartButton->value(true);
+                c->uiEndFrame->setTime(inOut.end_time_exclusive());
+                c->uiEndButton->value(true);
+            }
+        }
+        
         ui->uiMain->fill_menu(ui->uiMenuBar);
+        
     }
 
     static void playback_loop_mode(ViewerUI* ui, timeline::Loop mode)
