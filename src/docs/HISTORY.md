@@ -62,6 +62,7 @@ ChangeLog
 - Made the color of play buttons match the color of S and E.
 - Fixed drawing annotations not following the cursor accurately.
 - Fixed Text annotations on Vulkan backend which had gotten broken in v1.4.2 due to refactoring of code.
+- Improved performance of draw cursor on Windows by using PRESENTATION_MAILBOX instead of PRESENTATION_FIFO.
 
 
 v1.4.2
