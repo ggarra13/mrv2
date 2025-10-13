@@ -30,7 +30,8 @@ namespace mrv
 
         //! Re-run the executable with its parameters or an optional session
         //! file.
-        int execv(const std::string& exe = "", const std::string& session = "");
+        int execv(const std::string& exe = "", const std::string& session = "",
+                  const bool wait = true);
 
         //! Return the name of the wayland compositor.
         const std::string getWaylandCompositor(const std::string& desktop);

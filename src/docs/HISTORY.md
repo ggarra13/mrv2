@@ -64,6 +64,7 @@ ChangeLog
 - Fixed Text annotations on Vulkan backend which had gotten broken in v1.4.2 due to refactoring of code.
 - Improved performance of draw cursor on Windows by using PRESENTATION_MAILBOX instead of PRESENTATION_FIFO.
 - Fixed decoding of some movies where a frame would be missing with FFmpeg 8.0.
+- Made Save and Reload Session close the original mrv2 and open a new one with the session.
 
 
 v1.4.2

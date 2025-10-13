@@ -336,7 +336,8 @@ namespace mrv
         //
         // When a session is provided, just pass that as a parameter
         //
-        int execv(const std::string& exe, const std::string& session)
+        int execv(const std::string& exe, const std::string& session,
+                  const bool wait)
         {
 #ifdef _WIN32
             LPWSTR* argv = nullptr;
@@ -484,7 +485,8 @@ namespace mrv
 
             // Wait for the process to complete (optional, remove if
             // you don't want to wait)
-            WaitForSingleObject(pi.hProcess, INFINITE);
+            if (wait)
+                WaitForSingleObject(pi.hProcess, INFINITE);
 
             // Get the exit code
             DWORD exitCode;

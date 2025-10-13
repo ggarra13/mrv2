@@ -3048,12 +3048,8 @@ namespace mrv
         const std::string& fileName = tmppath() + "/temp.mrv2s";
 
         save_session_impl(fileName, ui);
-#ifdef _WIN32
-        std::string program = rootpath() + "/bin/mrv2.exe";
-#else
-        std::string program = rootpath() + "/bin/mrv2.sh";
-#endif
-        int ret = os::execv(program, fileName);
+
+        int ret = os::execv("", fileName, false);
         if (ret != 0)
         {
             LOG_ERROR(_("Could not restart mrv2 instance with a session file."));
