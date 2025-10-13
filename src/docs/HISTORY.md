@@ -63,6 +63,7 @@ ChangeLog
 - Fixed drawing annotations not following the cursor accurately.
 - Fixed Text annotations on Vulkan backend which had gotten broken in v1.4.2 due to refactoring of code.
 - Improved performance of draw cursor on Windows by using PRESENTATION_MAILBOX instead of PRESENTATION_FIFO.
+- Fixed decoding of some movies where a frame would be missing with FFmpeg 8.0.
 
 
 v1.4.2

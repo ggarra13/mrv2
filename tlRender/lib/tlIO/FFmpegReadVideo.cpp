@@ -1221,10 +1221,10 @@ namespace tl
                         }
                         else if (decoding < 0)
                         {
-                            // We failed decoding this frame.
-                            // This will make FFmpeg use the next available frame.
+                            // \@bug: We failed decoding this frame.
+                            // This will make FFmpeg try to use the next available frame.
                             seek(targetTime);
-                            break;
+                            decoding = 0;
                         }
                         decoding = _decode(backwards, targetTime, currentTime);
                         if (AVERROR(EAGAIN) == decoding)
