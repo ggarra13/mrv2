@@ -1031,7 +1031,21 @@ namespace mrv
                     p.presentationTime = std::chrono::high_resolution_clock::now();
                 }
                 if (p.actionMode != ActionMode::kText)
+                {
                     _updateCursor();
+                }
+                else
+                {
+                    if (p.multilineText)
+                    {
+                        int ret = p.multilineText->handle(event);
+                        if (ret == 1)
+                        {
+                            redrawWindows();
+                            return ret;
+                        }
+                    }
+                }
                 _updatePixelBar();
                 return 1;
             }
@@ -1236,6 +1250,16 @@ namespace mrv
             case FL_KEYBOARD:
             {
 
+                if (p.multilineText)
+                {
+                    int ret = p.multilineText->handle(event);
+                    if (ret == 1)
+                    {
+                        redrawWindows();
+                        return ret;
+                    }
+                }
+                
                 // If we have a text widget, don't swallow key presses
                 unsigned rawkey = Fl::event_key();
 #if defined(FLTK_USE_WAYLAND)
