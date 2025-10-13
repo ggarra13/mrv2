@@ -61,6 +61,7 @@ ChangeLog
 - Made color of S (Start) and E (End) range buttons more prominent.
 - Made the color of play buttons match the color of S and E.
 - Fixed drawing annotations not following the cursor accurately.
+- Fixed Text annotations on Vulkan backend which had gotten broken in v1.4.2 due to refactoring of code.
 
 
 v1.4.2
