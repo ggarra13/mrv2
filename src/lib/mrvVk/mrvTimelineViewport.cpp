@@ -13,8 +13,6 @@
 
 #include "mrvViewport/mrvTimelineViewport.h"
 
-#include "mrvWidgets/mrvDragButton.h"
-
 namespace
 {
     inline uint32_t byteSwap32(uint32_t x)

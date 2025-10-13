@@ -1233,6 +1233,8 @@ namespace mrv
                 if (Fl::event_button1())
                 {
                     const math::Vector2i pos = _getRaster();
+                    
+#ifdef VULKAN_BACKEND
                     if (p.multilineText &&
                         p.multilineText->box.contains(pos))
                     {
@@ -1243,6 +1245,7 @@ namespace mrv
                             return ret;
                         }
                     }
+#endif
                     
                     if (Fl::event_ctrl())
                     {

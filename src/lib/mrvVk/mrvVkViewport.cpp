@@ -388,7 +388,7 @@ namespace mrv
             MRV2_VK();
 
             //
-            // Do not destroy buffers based on resolution here.
+            // Do *NOT* destroy buffers based on resolution here.
             //
             // vk.buffer.reset();
             // vk.stereoBuffer.reset();
@@ -816,7 +816,6 @@ namespace mrv
                         }
                     }
                 }
-
             }
             catch (const std::exception& e)
             {
@@ -848,7 +847,7 @@ namespace mrv
             if (desktop::Wayland())
                 opacity = alpha;
 #endif
-            
+
             if (panel::annotationsPanel)
             {
                 panel::annotationsPanel->notes->value("");
@@ -975,7 +974,6 @@ namespace mrv
             scissor.extent.width = W;
             scissor.extent.height = H;
             vkCmdSetScissor(cmd, 0, 1, &scissor);
-                
                 
             const float rotation = _getRotation();
             bool blitViewport = false;

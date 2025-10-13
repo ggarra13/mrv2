@@ -204,7 +204,8 @@ namespace mrv
         void Lines::drawCircle(
             const std::shared_ptr<timeline_vlk::Render>& render,
             const math::Vector2f& center, const float radius, const float width,
-            const image::Color4f& color, const bool soft)
+            const image::Color4f& color, const bool soft,
+            const std::string& pipelineName)
         {
             const int triangleAmount = 30;
             const double twoPi = math::pi * 2.0;
@@ -222,7 +223,8 @@ namespace mrv
             drawLines(
                 render, verts, color, width, soft,
                 draw::Polyline2D::JointStyle::ROUND,
-                draw::Polyline2D::EndCapStyle::JOINT);
+                draw::Polyline2D::EndCapStyle::JOINT,
+                false, false, pipelineName);
         }
 
         void Lines::drawCursor(
