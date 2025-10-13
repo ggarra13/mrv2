@@ -846,7 +846,7 @@ namespace mrv
 
         Fl_Preferences video(base, "opengl");
 
-        video.get("vsync", tmp, 1);
+        video.get("vsync", tmp, 2);
         uiPrefs->uiPrefsOpenGLVsync->value(tmp);
 
         video.get("color_buffers_accuracy", tmp, 0);
