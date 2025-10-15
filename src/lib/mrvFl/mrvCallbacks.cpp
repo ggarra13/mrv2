@@ -3045,7 +3045,9 @@ namespace mrv
 
     void reload_session_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        const std::string& fileName = tmppath() + "/temp.mrv2s";
+        std::string fileName = session::current();
+        if (fileName.empty())
+            fileName = tmppath() + "/temp.mrv2s";
 
         save_session_impl(fileName, ui);
 
