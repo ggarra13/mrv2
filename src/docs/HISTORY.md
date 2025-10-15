@@ -65,6 +65,7 @@ ChangeLog
 - Improved performance of draw cursor on Windows by using PRESENTATION_MAILBOX instead of PRESENTATION_FIFO.
 - Fixed decoding of some movies where a frame would be missing with FFmpeg 8.0.
 - Made Save and Reload Session close the original mrv2 and open a new one with the session.
+- Added presentation mode used in Vulkan's viewport when displaying FPS.
 
 
 v1.4.2

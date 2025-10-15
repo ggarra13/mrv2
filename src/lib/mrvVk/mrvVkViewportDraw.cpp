@@ -831,6 +831,12 @@ namespace mrv
                         fps, player->speed());
 
                     tmp += buf;
+                    
+                    if (swap_interval())
+                        tmp += " FIFO";
+                    else
+                        tmp += " MBOX";
+
                     p.startTime = std::chrono::high_resolution_clock::now();
                 }
             }
