@@ -27,10 +27,10 @@ if [[ -L /usr/bin/@mrv2_NAME@ ]]; then
 fi
 
 # When installing vmrv2, as we renamed the file, we need to clear
-# the directory manually.
-if [[ -e "@CPACK_INSTALL_PREFIX@" ]]; then
-   rm -rf "@CPACK_INSTALL_PREFIX@"
-fi
+# the directory manually.  \@bug: This is wrong.
+# if [[ -e "@CPACK_INSTALL_PREFIX@" ]]; then
+#    rm -rf "@CPACK_INSTALL_PREFIX@"
+# fi
 
 echo "Removing symlink from /usr/bin/@mrv2_NAME@-v@mrv2_VERSION@"
 rm -f /usr/bin/@mrv2_NAME@-v@mrv2_VERSION@
