@@ -66,6 +66,7 @@ ChangeLog
 - Fixed decoding of some movies where a frame would be missing with FFmpeg 8.0.
 - Made Save and Reload Session close the original mrv2 and open a new one with the session.
 - Added presentation mode used in Vulkan's viewport when displaying FPS.
+- Fixed resource leak on Vulkan's vmrv2 exit.
 
 
 v1.4.2

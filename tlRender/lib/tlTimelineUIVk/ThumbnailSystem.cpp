@@ -357,7 +357,8 @@ namespace tl
                 {
                     TLRENDER_P();
                         
-                    while (p.thumbnailThread.running)
+                    while (p.thumbnailThread.running &&
+                           ctx.instance != VK_NULL_HANDLE)
                     {
                         if (ctx.queue() == VK_NULL_HANDLE ||
                             ctx.device == VK_NULL_HANDLE)

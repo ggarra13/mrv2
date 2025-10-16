@@ -209,7 +209,7 @@ namespace mrv
             // Render data
             std::shared_ptr<ui::Style> style;
             std::shared_ptr<ui::IconLibrary> iconLibrary;
-            std::shared_ptr<image::FontSystem> fontSystem;//@}//@}
+            std::shared_ptr<image::FontSystem> fontSystem;
             std::shared_ptr<Clipboard> clipboard;
             std::shared_ptr<timeline_vlk::Render> render;
             timelineui_vk::DisplayOptions displayOptions;
@@ -241,6 +241,7 @@ namespace mrv
         {
             int fl_double = FL_DOUBLE;
             mode(FL_RGB | FL_ALPHA | fl_double);
+            // m_debugSync = true;
         }
 
         void TimelineWidget::init_colorspace()
@@ -1813,20 +1814,23 @@ namespace mrv
         {
             TLRENDER_P();
 
-            _tickEvent();
-
-            _thumbnailEvent();
-
-            if (_getSizeUpdate(p.timelineWindow))
+            if (shown())
             {
-                _sizeHintEvent();
-                _setGeometry();
-                _clipEvent();
-            }
+                _tickEvent();
 
-            if (_getDrawUpdate(p.timelineWindow))
-            {
-                redraw();
+                _thumbnailEvent();
+
+                if (_getSizeUpdate(p.timelineWindow))
+                {
+                    _sizeHintEvent();
+                    _setGeometry();
+                    _clipEvent();
+                }
+
+                if (_getDrawUpdate(p.timelineWindow))
+                {
+                    redraw();
+                }
             }
             
             Fl::repeat_timeout(
