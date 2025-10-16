@@ -67,6 +67,7 @@ ChangeLog
 - Made Save and Reload Session close the original mrv2 and open a new one with the session.
 - Added presentation mode used in Vulkan's viewport when displaying FPS.
 - Fixed resource leak on Vulkan's vmrv2 exit.
+- Improved performance of Vulkan under Wayland to support 4K OpenEXRs at 60FPS properly.
 
 
 v1.4.2
