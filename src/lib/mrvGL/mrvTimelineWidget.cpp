@@ -1563,12 +1563,24 @@ namespace mrv
 
             _thumbnailEvent();
 
+#ifndef __linux__
             if (_getSizeUpdate(p.timelineWindow))
             {
                 _sizeHintEvent();
                 _setGeometry();
                 _clipEvent();
             }
+#else
+            // We check desktop::Wayland to try to work around NVidia bug
+            // when playback is stopped.
+            if (desktop::Wayland() || _getSizeUpdate(p.timelineWindow))
+            {
+                _sizeHintEvent();
+                _setGeometry();
+                _clipEvent();
+                redraw();
+            }
+#endif
 
             if (_getDrawUpdate(p.timelineWindow))
             {
