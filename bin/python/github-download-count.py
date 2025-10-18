@@ -34,6 +34,12 @@ headers = {}
 if "GITHUB_TOKEN" in os.environ:
     headers["Authorization"] = "token %s" % os.environ["GITHUB_TOKEN"]
 
+# --- GLOBAL TRACKERS FOR GRAND TOTALS ---
+# These will accumulate downloads for each product across all sources (GitHub + SourceForge)
+mrv2_grand_total = 0
+vmrv2_grand_total = 0
+# ----------------------------------------
+
 def get_date_arguments():
     """Initializes and parses command-line arguments."""
     parser = argparse.ArgumentParser(
@@ -71,7 +77,7 @@ def parse_and_process_dates(args):
             return dt
         except ValueError:
             pass # Fall through to the next attempt
-        
+            
         # 2. Try to parse the simple YYYY-MM-DD format (as required by the original script)
         try:
             dt_naive = datetime.strptime(date_str, '%Y-%m-%d')
@@ -106,7 +112,7 @@ def parse_and_process_dates(args):
     # 3. Compare and flip dates if necessary
     if end_dt < start_dt:
         print(f"\n⚠️ **Warning:** End date ({end_dt.strftime('%Y-%m-%d')}) is before start date ({start_dt.strftime('%Y-%m-%d')}).")
-        print("   **Dates have been flipped** to ensure a valid range.")
+        print("  **Dates have been flipped** to ensure a valid range.")
         start_dt, end_dt = end_dt, start_dt
         
         # When dates are swapped, ensure the new start_dt is at the beginning of its day
@@ -122,7 +128,7 @@ def parse_and_process_dates(args):
 
     # Display dates and difference (using the newly swapped/ordered dates)
     print(" START DATE:", start_dt.strftime("%Y-%m-%d %H:%M:%S %Z"))
-    print("   END DATE:", end_dt.strftime("%Y-%m-%d %H:%M:%S %Z"))
+    print("    END DATE:", end_dt.strftime("%Y-%m-%d %H:%M:%S %Z"))
     print(f' DIFFERENCE: {days} days, {hours} hours, {minutes} minutes')
     print("-----------------------------------------------------------------------")
 
@@ -133,10 +139,13 @@ def parse_and_process_dates(args):
     return start_date_str, end_date_str, args.user, args.repo, args.tag
 
 def get_github_downloads(user, repo, tag):
-    """Fetches and sums GitHub release asset download counts."""
+    """
+    Fetches and sums GitHub release asset download counts.
+    Returns: (mrv2_total_count, vmrv2_total_count)
+    """
     if not user or not repo:
         print("Skipping GitHub downloads: Both user and repository must be provided.")
-        return 0
+        return 0, 0
 
     full_name = f"{user}/{repo}"
     print(f"--- GitHub Downloads for {full_name} ---")
@@ -192,16 +201,19 @@ def get_github_downloads(user, repo, tag):
         sys.exit(1)
 
     print("-----------------------------------------------------------------------")
-    formatted_total = format_number(mrv2_total_count, 5)
-    print(f'{formatted_total} Total mrv2 Downloads')
     
-    formatted_total = format_number(vmrv2_total_count, 5)
-    print(f'{formatted_total} Total vmrv2 Downloads')
+    formatted_mrv2_total = format_number(mrv2_total_count, 5)
+    print(f'{formatted_mrv2_total} Total mrv2 Downloads (GitHub)')
+    
+    formatted_vmrv2_total = format_number(vmrv2_total_count, 5)
+    print(f'{formatted_vmrv2_total} Total vmrv2 Downloads (GitHub)')
 
     total_count = mrv2_total_count + vmrv2_total_count
     formatted_total = format_number(total_count, 5)
     print(f'{formatted_total} Total Downloads for GitHub repo {full_name}')
-    return total_count
+    
+    # Return separate counts
+    return mrv2_total_count, vmrv2_total_count
 
 def get_file_stats(repo, file_path, start_date, end_date):
     """Fetches download stats for a specific SourceForge file path."""
@@ -225,8 +237,8 @@ def get_file_stats(repo, file_path, start_date, end_date):
 
 def count_sourceforge(repo, folder_name, end_date, start_date):
     """
-    Fetches and sums SourceForge download counts, using detailed file stats for
-    main tags and aggregated stats for beta/archive folders.
+    Fetches and sums SourceForge download counts for a folder.
+    Returns: (mrv2_total_count, vmrv2_total_count)
     """
     print()
     print(f"\tCount {folder_name} from {start_date} to {end_date}")
@@ -234,7 +246,8 @@ def count_sourceforge(repo, folder_name, end_date, start_date):
     # Heuristic: Only attempt detailed, file-level parsing for non-beta/non-archive folders
     is_detailed_stats_folder = not any(key in folder_name.lower() for key in ['beta/', 'archive'])
     
-    total_downloads = 0
+    mrv2_downloads = 0
+    vmrv2_downloads = 0
 
     if is_detailed_stats_folder:
         # --- 1. DETAILED FILE-LEVEL COUNTING (For main tag releases) ---
@@ -263,8 +276,12 @@ def count_sourceforge(repo, folder_name, end_date, start_date):
                     for _, count_str in oses_stats:
                         try:
                             count = int(count_str)
-                            total_downloads += count
                             
+                            if package == 'mrv2':
+                                mrv2_downloads += count
+                            elif package == 'vmrv2':
+                                vmrv2_downloads += count
+                                
                             # Use regex to extract OS and architecture for grouping
                             match = re.search(r'-(Windows|Darwin|Linux)-([a-zA-Z0-9]+)', pattern)
                             
@@ -298,12 +315,15 @@ def count_sourceforge(repo, folder_name, end_date, start_date):
                     key = (package, os_spec)
                     count = detailed_stats.get(key, 0)
                     if count > 0:
-                        print('         - File: {:<5} {:>5}'.format(package, count))
+                        print('        - File: {:<5} {:>5}'.format(package, count))
 
+            total_downloads = mrv2_downloads + vmrv2_downloads
             formatted_total = format_number(total_downloads, 5)
             print('{:>5} Total Downloads for SourceForge {}'.
                   format(formatted_total, f'{repo}/{folder_name} (File Breakdown)'))
-            return total_downloads
+            
+            # Return separate counts
+            return mrv2_downloads, vmrv2_downloads
 
     # --- 2. AGGREGATED FOLDER STATS (For beta/archive folders) ---
     
@@ -322,31 +342,41 @@ def count_sourceforge(repo, folder_name, end_date, start_date):
             r = response.json()
         except requests.exceptions.HTTPError as e:
             print(f'Could not get aggregated info for sfolder {folder_name} for either path. Error: {e}')
-            return 0
+            return 0, 0 # Return 0, 0 on failure
         except Exception as e:
             print(f'General error getting aggregated info for folder {folder_name}: {e}')
-            return 0
+            return 0, 0 # Return 0, 0 on failure
 
-    total_downloads = 0
     if r and 'oses' in r:
+        prefix = ''
+        if 'opengl' in folder_name.lower():
+            prefix = 'mrv2'
+        elif 'vulkan' in folder_name.lower():
+            prefix = 'vmrv2'
+            
         for item in r['oses']:
             try:
                 num = int(item[1])
-                # Print aggregated OS total using generic OS name (no architecture distinction)
-                prefix = 'mrv2' if 'opengl' in folder_name.lower() else 'vmrv2' if 'vulkan' in folder_name.lower() else ''
+                
+                # Assign the aggregated count based on the folder name heuristic
+                if prefix == 'mrv2':
+                    mrv2_downloads += num
+                elif prefix == 'vmrv2':
+                    vmrv2_downloads += num
                 
                 # The output format for betas (generic OS name)
                 print('{:>5}  {:<5} OS: {:<40}'.format(num, prefix, item[0]))
-                total_downloads += num
             except (ValueError, IndexError):
                 print(f"Warning: Could not parse SourceForge data item: {item}")
                 continue
 
+    total_downloads = mrv2_downloads + vmrv2_downloads
     formatted_total = format_number(total_downloads, 5)
     print('{:>5} Total Downloads for SourceForge {}'.
           format(formatted_total, f'{repo}/{folder_name} (Aggregated)'))
 
-    return total_downloads
+    # Return separate counts
+    return mrv2_downloads, vmrv2_downloads
 
 # --- Main Execution ---
 if __name__ == "__main__":
@@ -355,24 +385,44 @@ if __name__ == "__main__":
     # The function now handles the date flipping
     start_date_str, end_date_str, user, repo, tag = parse_and_process_dates(args)
 
-    github_total = get_github_downloads(user, repo, tag)
+    # 1. Get GitHub Totals
+    mrv2_github_total, vmrv2_github_total = get_github_downloads(user, repo, tag)
+    mrv2_grand_total += mrv2_github_total
+    vmrv2_grand_total += vmrv2_github_total
 
     if not repo or not args.tag:
-         print("\nSkipping SourceForge downloads: Both repository (SourceForge project name) and tag (folder name) must be provided.")
-         sys.exit(0)
+        print("\nSkipping SourceForge downloads: Both repository (SourceForge project name) and tag (folder name) must be provided.")
+        sys.exit(0)
 
     print(f"\n--- SourceForge Downloads for Project: {repo} ---")
 
-    # Main tag will use the detailed file-level counting logic
-    sourceforge_released_total = count_sourceforge(repo, args.tag, end_date_str, start_date_str)
+    # 2. Get SourceForge Released Totals
+    mrv2_sf_released_total, vmrv2_sf_released_total = count_sourceforge(repo, args.tag, end_date_str, start_date_str)
+    mrv2_grand_total += mrv2_sf_released_total
+    vmrv2_grand_total += vmrv2_sf_released_total
 
-    # Beta folders will use the aggregated fallback logic
-    sourceforge_beta_opengl_total = count_sourceforge(repo, 'beta/opengl', end_date_str, start_date_str)
-    sourceforge_beta_vulkan_total = count_sourceforge(repo, 'beta/vulkan', end_date_str, start_date_str)
+    # 3. Get SourceForge Beta OpenGL Totals
+    mrv2_sf_beta_opengl_total, vmrv2_sf_beta_opengl_total = count_sourceforge(repo, 'beta/opengl', end_date_str, start_date_str)
+    mrv2_grand_total += mrv2_sf_beta_opengl_total
+    vmrv2_grand_total += vmrv2_sf_beta_opengl_total
 
-    grand_total = github_total + sourceforge_released_total + sourceforge_beta_opengl_total + sourceforge_beta_vulkan_total
-    formatted_grand_total = format_number(grand_total, 5)
+    # 4. Get SourceForge Beta Vulkan Totals
+    mrv2_sf_beta_vulkan_total, vmrv2_sf_beta_vulkan_total = count_sourceforge(repo, 'beta/vulkan', end_date_str, start_date_str)
+    mrv2_grand_total += mrv2_sf_beta_vulkan_total
+    vmrv2_grand_total += vmrv2_sf_beta_vulkan_total
 
-    print("=======================================================================")
-    print(f'{formatted_grand_total} Grand Total (GitHub + SourceForge)')
+    final_grand_total = mrv2_grand_total + vmrv2_grand_total
+    
+    print("\n=======================================================================")
+    
+    # Print separate totals
+    formatted_mrv2_grand_total = format_number(mrv2_grand_total, 5)
+    formatted_vmrv2_grand_total = format_number(vmrv2_grand_total, 5)
+    formatted_final_grand_total = format_number(final_grand_total, 5)
+
+    print(f'{formatted_mrv2_grand_total} Grand Total mrv2 Downloads (GitHub + SourceForge)')
+    print(f'{formatted_vmrv2_grand_total} Grand Total vmrv2 Downloads (GitHub + SourceForge)')
+    
+    print("-----------------------------------------------------------------------")
+    print(f'{formatted_final_grand_total} Grand Total (GitHub + SourceForge)')
     
