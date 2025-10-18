@@ -50,6 +50,7 @@
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvMath.h"
 #include "mrvCore/mrvUtil.h"
+#include "mrvCore/mrvWait.h"
 
 #include "mrvFl/mrvIO.h"
 
@@ -1791,12 +1792,13 @@ namespace mrv
             if (use_maximize && !p.presentation && p.resizeWindow)
             {
                 mw->maximize();
+                wait::milliseconds(100);
             }
             else
             {
                 mw->resize(posX, posY, W, H);
             }
-
+            
             if (frameView)
             {
                 mw->wait_for_expose();

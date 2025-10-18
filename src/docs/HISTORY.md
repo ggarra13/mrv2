@@ -68,7 +68,8 @@ ChangeLog
 - Added presentation mode used in Vulkan's viewport when displaying FPS.
 - Fixed resource leak on Vulkan's vmrv2 exit.
 - Improved performance of Vulkan under Wayland to support 4K OpenEXRs at 60FPS properly.
-- Limited usage time to about 9 minutes before exiting the program.
+- Limited usage time of demo to about 9 minutes before exiting the program.
+- Fixed dock panel location when the window was maximized.
 
 
 v1.4.2
