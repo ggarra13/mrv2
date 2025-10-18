@@ -70,6 +70,7 @@ ChangeLog
 - Improved performance of Vulkan under Wayland to support 4K OpenEXRs at 60FPS properly.
 - Limited usage time of demo to about 9 minutes before exiting the program.
 - Fixed dock panel location when the window was maximized.
+- Made HUD draw an outline on the text to make it more readable.
 
 
 v1.4.2
