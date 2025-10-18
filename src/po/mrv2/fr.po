@@ -1501,6 +1501,9 @@ msgstr "Annuler"
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Chaînes: {1} {2} {3}"
 
+msgid "Usage time for demo exceeded"
+msgstr "Temps d’utilisation de la démo dépassé"
+
 msgid "Play timelines, movies, and image sequences."
 msgstr "Jouez des chronologies, des films et des séquences d'images."
 
@@ -7299,6 +7302,12 @@ msgstr "Licence flottante libérée"
 
 msgid "Your {0} license will expire on {1}."
 msgstr "Votre licence {0} expirera le {1}."
+
+msgid "Invalid license. Entering demo mode"
+msgstr "Licence invalide. Passage en mode démo"
+
+msgid "License expired. Entering demo mode"
+msgstr "Licence expirée. Passage en mode démo"
 
 msgid "Open Directory"
 msgstr "Ouvrir l'annuaire"

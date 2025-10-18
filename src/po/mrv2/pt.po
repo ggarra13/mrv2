@@ -1514,6 +1514,9 @@ msgstr "Cancelar"
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Canais: {1} {2} {3}"
 
+msgid "Usage time for demo exceeded"
+msgstr "Tempo de uso da demonstração excedido"
+
 msgid "Play timelines, movies, and image sequences."
 msgstr "Reproduzir linhas de tempo, filmes e sequncias de imagens."
 
@@ -7260,6 +7263,12 @@ msgstr "Licença flutuante liberada"
 
 msgid "Your {0} license will expire on {1}."
 msgstr "Sua licença {0} expirará em {1}."
+
+msgid "Invalid license. Entering demo mode"
+msgstr "Licença inválida. Entrando no modo de demonstração"
+
+msgid "License expired. Entering demo mode"
+msgstr "Licença expirada. Entrando no modo de demonstração"
 
 msgid "Open Directory"
 msgstr "Abrir o Diretrio"

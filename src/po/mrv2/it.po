@@ -1528,6 +1528,9 @@ msgstr "Annulla"
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Canali: {1} {2} {3}"
 
+msgid "Usage time for demo exceeded"
+msgstr "Tempo di utilizzo della demo scaduto"
+
 msgid "Play timelines, movies, and image sequences."
 msgstr "Gioca timeline, film e sequenze di immagini."
 
@@ -7310,6 +7313,12 @@ msgstr "Licenza fluttuante rilasciata"
 
 msgid "Your {0} license will expire on {1}."
 msgstr "La tua licenza {0} scadrà il {1}."
+
+msgid "Invalid license. Entering demo mode"
+msgstr "Licenza non valida. Passaggio alla modalità demo"
+
+msgid "License expired. Entering demo mode"
+msgstr "Licenza scaduta. Passaggio alla modalità demo"
 
 msgid "Open Directory"
 msgstr "Apri directory"

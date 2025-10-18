@@ -263,7 +263,17 @@ namespace mrv
 
     static void beat_cb(void* data)
     {
+        static int counter = 0;
+        ++counter;
         license_beat();
+        
+        if (counter == 3)
+        {
+            fl_alert("%s", _("Usage time for demo exceeded"));
+            Fl::check();
+            exit_cb(nullptr, App::ui);
+        }
+        
         Fl::repeat_timeout(kLicenseTimeout, (Fl_Timeout_Handler)beat_cb, data);
     }
 

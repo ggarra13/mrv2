@@ -1489,6 +1489,9 @@ msgstr "Abbrechen"
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Kanle: {1} {2} {3}"
 
+msgid "Usage time for demo exceeded"
+msgstr "Nutzungszeit der Demo überschritten"
+
 msgid "Play timelines, movies, and image sequences."
 msgstr "Zeitleisten, Filme und Bildsequenzen abspielen."
 
@@ -7264,6 +7267,12 @@ msgstr "Freigegebene Floating-Lizenz"
 
 msgid "Your {0} license will expire on {1}."
 msgstr "Ihre {0}-Lizenz läuft am {1} ab."
+
+msgid "Invalid license. Entering demo mode"
+msgstr "Ungültige Lizenz. Wechsle in den Demomodus"
+
+msgid "License expired. Entering demo mode"
+msgstr "Lizenz abgelaufen. Wechsle in den Demomodus"
 
 msgid "Open Directory"
 msgstr "Ordner ffnen"

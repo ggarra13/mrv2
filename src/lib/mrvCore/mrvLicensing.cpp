@@ -661,13 +661,13 @@ namespace mrv
                 License ok = validate_license(expiration);
                 if (ok == License::kInvalid)
                 {
-                    fl_alert("Invalid license. Entering demo mode");
+                    fl_alert("%s", _("Invalid license. Entering demo mode"));
                     Fl::check();
                     App::demo_mode = true;
                 }
                 else if (ok == License::kExpired)
                 {
-                    fl_alert("License expired. Entering demo mode");
+                    fl_alert("%s", _("License expired. Entering demo mode"));
                     Fl::check();
                     App::demo_mode = true;
                 }

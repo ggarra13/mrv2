@@ -1298,6 +1298,9 @@ msgstr ""
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr ""
 
+msgid "Usage time for demo exceeded"
+msgstr ""
+
 msgid "Play timelines, movies, and image sequences."
 msgstr ""
 
@@ -6698,6 +6701,12 @@ msgid "Released Floating License"
 msgstr ""
 
 msgid "Your {0} license will expire on {1}."
+msgstr ""
+
+msgid "Invalid license. Entering demo mode"
+msgstr ""
+
+msgid "License expired. Entering demo mode"
 msgstr ""
 
 msgid "Open Directory"

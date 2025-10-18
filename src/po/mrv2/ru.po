@@ -1545,6 +1545,9 @@ msgstr "Отмена"
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Каналы: {1} {2} {3}"
 
+msgid "Usage time for demo exceeded"
+msgstr "Время использования демо-версии истекло"
+
 msgid "Play timelines, movies, and image sequences."
 msgstr "Воспроизвести графики, фильмы и последовательности изображений."
 
@@ -7292,6 +7295,12 @@ msgstr "Плавающая лицензия освобождена"
 
 msgid "Your {0} license will expire on {1}."
 msgstr "Ваша лицензия {0} истекает {1}."
+
+msgid "Invalid license. Entering demo mode"
+msgstr "Недействительная лицензия. Переход в демонстрационный режим"
+
+msgid "License expired. Entering demo mode"
+msgstr "Срок действия лицензии истек. Переход в демонстрационный режим"
 
 msgid "Open Directory"
 msgstr "Открыть каталог"

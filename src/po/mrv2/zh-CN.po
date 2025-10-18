@@ -1524,6 +1524,9 @@ msgstr "取消"
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Channels: {1} {2} {3}"
 
+msgid "Usage time for demo exceeded"
+msgstr "演示使用时间已超出"
+
 msgid "Play timelines, movies, and image sequences."
 msgstr "播放时间轴、影片和图像序列"
 
@@ -7083,6 +7086,12 @@ msgstr "已释放浮动许可证"
 
 msgid "Your {0} license will expire on {1}."
 msgstr "您的 {0} 许可证将于 {1} 到期。"
+
+msgid "Invalid license. Entering demo mode"
+msgstr "许可证无效。正在进入演示模式"
+
+msgid "License expired. Entering demo mode"
+msgstr "许可证已过期。正在进入演示模式"
 
 msgid "Open Directory"
 msgstr "打开目录"

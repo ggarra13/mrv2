@@ -1519,6 +1519,9 @@ msgstr "キャンセル"
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - チャンネル: {1} {2} {3}"
 
+msgid "Usage time for demo exceeded"
+msgstr "デモの使用時間が終了しました"
+
 msgid "Play timelines, movies, and image sequences."
 msgstr "動画や音楽を再生します"
 
@@ -7072,6 +7075,12 @@ msgstr "フローティングライセンスを解放しました"
 
 msgid "Your {0} license will expire on {1}."
 msgstr "お使いの {0} ライセンスは {1} に期限切れとなります。"
+
+msgid "Invalid license. Entering demo mode"
+msgstr "無効なライセンスです。デモモードに切り替えます"
+
+msgid "License expired. Entering demo mode"
+msgstr "ライセンスの有効期限が切れました。デモモードに切り替えます"
 
 msgid "Open Directory"
 msgstr "ディレクトリを開く"

@@ -109,11 +109,11 @@ namespace mrv
         menu->add(
             _("File/Open/Session"), kOpenSession.hotkey(),
             (Fl_Callback*)load_session_cb, ui);
-        
+
         menu->add(
             _("File/Open/New Program Instance"), kOpenNewInstance.hotkey(),
             (Fl_Callback*)open_new_instance_cb, ui);
-
+        
         mode = 0;
         if (numFiles == 0)
             mode = FL_MENU_INACTIVE;

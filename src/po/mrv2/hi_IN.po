@@ -1513,6 +1513,9 @@ msgstr "रद्द करें"
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - चैनल्स: {1} {2} {3}"
 
+msgid "Usage time for demo exceeded"
+msgstr "डेमो के उपयोग का समय समाप्त हो गया है"
+
 msgid "Play timelines, movies, and image sequences."
 msgstr "समयरेखा, फिल्में, और छवि अनुक्रम खेलें."
 
@@ -7219,6 +7222,12 @@ msgstr "फ्लोटिंग लाइसेंस जारी किया
 
 msgid "Your {0} license will expire on {1}."
 msgstr "आपका {0} लाइसेंस {1} को समाप्त हो जाएगा।"
+
+msgid "Invalid license. Entering demo mode"
+msgstr "अमान्य लाइसेंस। डेमो मोड में प्रवेश किया जा रहा है"
+
+msgid "License expired. Entering demo mode"
+msgstr "लाइसेंस की अवधि समाप्त हो गई है। डेमो मोड में प्रवेश किया जा रहा है"
 
 msgid "Open Directory"
 msgstr "ओपन डिरेक्ट्री"
