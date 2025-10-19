@@ -1792,7 +1792,11 @@ namespace mrv
             if (use_maximize && !p.presentation && p.resizeWindow)
             {
                 mw->maximize();
+#ifdef __linux__
+                // On Linux, we wait 100 milliseconds to account for
+                // the main Window's animation when maximize is used.
                 wait::milliseconds(100);
+#endif
             }
             else
             {
