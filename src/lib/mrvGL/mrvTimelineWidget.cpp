@@ -1573,12 +1573,19 @@ namespace mrv
 #else
             // We check desktop::Wayland to try to work around NVidia bug
             // when playback is stopped.
-            if (desktop::Wayland() || _getSizeUpdate(p.timelineWindow))
+            if (desktop::Wayland())
             {
                 _sizeHintEvent();
                 _setGeometry();
                 _clipEvent();
                 redraw();
+                App::ui->uiView->redraw();
+            }
+            else if(_getSizeUpdate(p.timelineWindow))
+            {
+                _sizeHintEvent();
+                _setGeometry();
+                _clipEvent();
             }
 #endif
 
