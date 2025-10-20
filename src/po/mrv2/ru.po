@@ -3344,8 +3344,9 @@ msgstr "Выделить область"
 msgid "Freehand Drawing Tool"
 msgstr "Инструмент свободного рисования"
 
-msgid "Eraser Tool"
-msgstr "Стереть инструмент"
+msgid "Eraser Tool.   ALT + Left Mouse Button to erase an area."
+msgstr ""
+"Инструмент «Ластик».   ALT + Левая кнопка мыши, чтобы стереть область."
 
 msgid "Polygon Tool"
 msgstr "Многоугольный режим."
@@ -5739,6 +5740,9 @@ msgstr "Группа TileGroup"
 
 msgid "ViewGroup"
 msgstr "Группа TileGroup"
+
+msgid "Eraser Tool"
+msgstr "Стереть инструмент"
 
 msgid "Polygon Tool."
 msgstr "Многоугольник."

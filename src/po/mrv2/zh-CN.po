@@ -3264,8 +3264,8 @@ msgstr "区域选择工具"
 msgid "Freehand Drawing Tool"
 msgstr "自由绘制工具"
 
-msgid "Eraser Tool"
-msgstr "橡皮擦工具"
+msgid "Eraser Tool.   ALT + Left Mouse Button to erase an area."
+msgstr "橡皮擦工具。   按 ALT + 鼠标左键可擦除区域。"
 
 msgid "Polygon Tool"
 msgstr "多边形工具 。"
@@ -5631,6 +5631,9 @@ msgstr "TileGroup"
 
 msgid "ViewGroup"
 msgstr "TileGroup"
+
+msgid "Eraser Tool"
+msgstr "橡皮擦工具"
 
 msgid "Polygon Tool."
 msgstr "多边形工具 。"

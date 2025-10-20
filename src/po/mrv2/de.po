@@ -3302,8 +3302,8 @@ msgstr "Bereichsauswahlwerkzeug"
 msgid "Freehand Drawing Tool"
 msgstr "Freihndiges Zeichenwerkzeug"
 
-msgid "Eraser Tool"
-msgstr "Eraster-Tool"
+msgid "Eraser Tool.   ALT + Left Mouse Button to erase an area."
+msgstr "Radierwerkzeug.   ALT + Linke Maustaste, um einen Bereich zu löschen."
 
 msgid "Polygon Tool"
 msgstr "Polygon-Werkzeug."
@@ -5698,6 +5698,9 @@ msgstr "TileGroup"
 
 msgid "ViewGroup"
 msgstr "ViewGroup"
+
+msgid "Eraser Tool"
+msgstr "Eraster-Tool"
 
 msgid "Polygon Tool."
 msgstr "Polygon-Werkzeug."

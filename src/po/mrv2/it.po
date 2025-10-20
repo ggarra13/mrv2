@@ -3334,8 +3334,9 @@ msgstr "Strumento di selezione area"
 msgid "Freehand Drawing Tool"
 msgstr "Strumento di disegno a mano libera"
 
-msgid "Eraser Tool"
-msgstr "Strumento di cancellazione"
+msgid "Eraser Tool.   ALT + Left Mouse Button to erase an area."
+msgstr ""
+"Strumento gomma.   ALT + Pulsante sinistro del mouse per cancellare un'area."
 
 msgid "Polygon Tool"
 msgstr "Strumento poligono."
@@ -5733,6 +5734,9 @@ msgstr "Gruppo piastrelle"
 
 msgid "ViewGroup"
 msgstr "Gruppo piastrelle"
+
+msgid "Eraser Tool"
+msgstr "Strumento di cancellazione"
 
 msgid "Polygon Tool."
 msgstr "Strumento poligono."

@@ -3274,8 +3274,8 @@ msgstr "選択ツール"
 msgid "Freehand Drawing Tool"
 msgstr "フリーハンド描画ツール"
 
-msgid "Eraser Tool"
-msgstr "消しゴムツール"
+msgid "Eraser Tool.   ALT + Left Mouse Button to erase an area."
+msgstr "消しゴムツール。   ALT + 左クリックで範囲を消去します。"
 
 msgid "Polygon Tool"
 msgstr "多角形ツール"
@@ -5608,6 +5608,9 @@ msgstr "タイルグループ"
 
 msgid "ViewGroup"
 msgstr "タイルグループ"
+
+msgid "Eraser Tool"
+msgstr "消しゴムツール"
 
 msgid "Polygon Tool."
 msgstr "多角形ツール"

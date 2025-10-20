@@ -3325,8 +3325,8 @@ msgstr "Area Select Tool"
 msgid "Freehand Drawing Tool"
 msgstr "Freehand Drawing Tool"
 
-msgid "Eraser Tool"
-msgstr "Eraser Tool"
+msgid "Eraser Tool.   ALT + Left Mouse Button to erase an area."
+msgstr "Eraser Tool.   ALT + Left Mouse Button to erase an area."
 
 msgid "Polygon Tool"
 msgstr "Polygon Tool"
@@ -5718,6 +5718,9 @@ msgstr "TileGroup"
 
 msgid "ViewGroup"
 msgstr "TileGroup"
+
+msgid "Eraser Tool"
+msgstr "Eraser Tool"
 
 msgid "Polygon Tool."
 msgstr "Polygon Tool."

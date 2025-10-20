@@ -3378,8 +3378,10 @@ msgstr "Herramienta de Selección de Area"
 msgid "Freehand Drawing Tool"
 msgstr "Herramienta de Dibujo a Mano Alzada"
 
-msgid "Eraser Tool"
-msgstr "Herramienta de Borrar"
+msgid "Eraser Tool.   ALT + Left Mouse Button to erase an area."
+msgstr ""
+"Herramienta de borrado.   ALT + Botón izquierdo del ratón para borrar un "
+"área."
 
 msgid "Polygon Tool"
 msgstr "Herramienta de polígono."
@@ -5773,6 +5775,9 @@ msgstr "TileGroup"
 
 msgid "ViewGroup"
 msgstr "ViewGroup"
+
+msgid "Eraser Tool"
+msgstr "Herramienta de Borrar"
 
 msgid "Polygon Tool."
 msgstr "Herramienta de polígono."

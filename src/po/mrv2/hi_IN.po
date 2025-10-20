@@ -3305,8 +3305,9 @@ msgstr "क्षेत्र चुनें"
 msgid "Freehand Drawing Tool"
 msgstr "फ्रीहैण्ड ड्राइंग औज़ार"
 
-msgid "Eraser Tool"
-msgstr "मिटाने का औजार"
+msgid "Eraser Tool.   ALT + Left Mouse Button to erase an area."
+msgstr ""
+"रबर उपकरण।   किसी क्षेत्र को मिटाने के लिए ALT + बायाँ माउस बटन दबाएँ।"
 
 msgid "Polygon Tool"
 msgstr "बहुभुज औज़ार."
@@ -5676,6 +5677,9 @@ msgstr "टाइल समूह"
 
 msgid "ViewGroup"
 msgstr "टाइल समूह"
+
+msgid "Eraser Tool"
+msgstr "मिटाने का औजार"
 
 msgid "Polygon Tool."
 msgstr "बहुभुज औज़ार."

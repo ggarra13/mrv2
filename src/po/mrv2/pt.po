@@ -3299,8 +3299,9 @@ msgstr "Ferramenta de Seleco de reas"
 msgid "Freehand Drawing Tool"
 msgstr "Ferramenta de desenho  mo livre"
 
-msgid "Eraser Tool"
-msgstr "Ferramenta de eliminao"
+msgid "Eraser Tool.   ALT + Left Mouse Button to erase an area."
+msgstr ""
+"Ferramenta borracha.   ALT + Botão esquerdo do mouse para apagar uma área."
 
 msgid "Polygon Tool"
 msgstr "Ferramenta de polígonos."
@@ -5698,6 +5699,9 @@ msgstr "Grupo de Telha"
 
 msgid "ViewGroup"
 msgstr "Grupo de Telha"
+
+msgid "Eraser Tool"
+msgstr "Ferramenta de eliminao"
 
 msgid "Polygon Tool."
 msgstr "Ferramenta de polígonos."
