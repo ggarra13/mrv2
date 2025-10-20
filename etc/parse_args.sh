@@ -8,14 +8,13 @@
 show_help()
 {
     if [[ $RUNME == 1 ]]; then
-	echo "$0 [debug|release|reldeb] [clean] [-v] [-j <num>] [-lgpl] [-gpl] [-D VAR=VALUE] [-t <target>] [-vk] [-help]"
+	echo "$0 [debug|release|reldeb] [clean] [-v] [-j <num>] [-lgpl] [-gpl] [-D VAR=VALUE] [-t <target>] [-help]"
 	echo ""
 	echo "* debug builds a debug build."
 	echo "* release builds a release build. (default)"
 	echo "* reldeb  builds a release build with debugging symbols."
 	echo "* clean clears the directory before building -- use only with runme.sh"
 	echo "* -j <num>  controls the threads to use when compiling. [default=$CPU_CORES]"
-	echo "* -vk build Vulkan backend."
 	echo "* -v builds verbosely. [default=off]"
 	echo "* -D sets cmake variables, like -D TLRENDER_USD=OFF."
 	echo "* -gpl builds FFmpeg with x264 encoder support in a GPL version of it."
