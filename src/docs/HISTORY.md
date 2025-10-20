@@ -74,6 +74,7 @@ ChangeLog
 - Fixed Linux drawing of timeline and viewport on OpenGL Wayland with buggy NVidia drivers.
 - Vulkan's vmrv2 OpenEXR saving now saves out HDR Primaries as OpenEXR chromaticities.  Also, the inverse PQ transform is made to keep the OpenEXR as close to match the HDR video (with the use of OpenColorIO).
 - Added OpenColorIO's ACES 2.0 .ocio files, besides using ocio:// so that artists can inspect and modify the original .ocio configs.
+- Added "Video Primaries Name" to OpenEXR to more easily clasify the chromaticities attribute.
 
 
 v1.4.2

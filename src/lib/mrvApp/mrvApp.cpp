@@ -583,6 +583,13 @@ namespace mrv
         }
         DBG;
 
+        //
+        // Initialize POCO Net for SSL connections.
+        //
+#ifdef MRV2_NETWORK
+        Poco::Net::initializeSSL();
+#endif
+        
         // Classes used to handle network connections
 #ifdef MRV2_NETWORK
         p.commandInterpreter = new CommandInterpreter(ui);
@@ -620,12 +627,6 @@ namespace mrv
         DBG;
         uiLogDisplay = new LogDisplay(0, 20, 340, 320);
 
-        //
-        // Initialize POCO Net for SSL connections.
-        //
-#ifdef MRV2_NETWORK
-        Poco::Net::initializeSSL();
-#endif
 
         License ok = license_beat();
         if (ok != License::kValid || license_type == LicenseType::kFloating)
