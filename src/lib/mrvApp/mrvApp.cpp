@@ -2108,11 +2108,8 @@ namespace mrv
                                     pixelToolbar)
 #endif
                                 {
-                                    if (isRunning())
-                                    {
-                                        toggle_pixel_bar(nullptr, ui);
-                                        Fl::flush();
-                                    }
+                                    toggle_pixel_bar(nullptr, ui);
+                                    Fl::flush();
                                 }
                             }
 
