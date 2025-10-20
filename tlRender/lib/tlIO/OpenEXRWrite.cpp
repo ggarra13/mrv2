@@ -83,6 +83,16 @@ namespace tl
                 std::stringstream ss(i->second);
                 ss >> _speed;
             }
+            i = options.find("OpenEXR/Chromaticities");
+            if (i != options.end())
+            {
+                _hasChromaticities = true;
+                std::stringstream ss(i->second);
+                ss >> _chromaticities.red.x   >> _chromaticities.red.y
+                   >> _chromaticities.green.x >> _chromaticities.green.y
+                   >> _chromaticities.blue.x  >> _chromaticities.blue.y
+                   >> _chromaticities.white.x >> _chromaticities.white.y;
+            }
         }
 
         Write::Write() :
@@ -157,6 +167,15 @@ namespace tl
                 Imath::V2f(0.F, 0.F), 1.F, Imf::INCREASING_Y, _compression);
             header.zipCompressionLevel() = _zipCompressionLevel;
             header.dwaCompressionLevel() = _dwaCompressionLevel;
+            if (_hasChromaticities)
+            {
+                addChromaticities(header, _chromaticities);
+                addWhiteLuminance(header, 100.0F);
+                Imath::V2f adoptedNeutral(_chromaticities.white.x,
+                                          _chromaticities.white.y);
+                addAdoptedNeutral(header, adoptedNeutral);
+            }
+            
             const auto tags = image->getTags();
             writeTags(tags, _speed, header);
 

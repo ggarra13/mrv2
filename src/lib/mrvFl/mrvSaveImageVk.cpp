@@ -48,6 +48,34 @@ namespace
 namespace mrv
 {
     
+#include <cmath>
+#include <algorithm>
+
+
+    // PQ (ST2084) → Linear light (normalized to 10,000 nits = 1.0)
+    inline float pq_to_linear(float pq)
+    {
+        // Clamp to [0, 1] to avoid NANs
+        pq = std::clamp(pq, 0.0f, 1.0f);
+        
+        // Note: Constants are defined in terms of the formula:
+        // L = ((max(0, V^(1/m2) - c1)) / (c2 - c3 * V^(1/m2)))^(1/m1)
+        const double m1 = 0.1593017578125;
+        const double m2 = 78.84375;
+        const double c1 = 0.8359375;
+        const double c2 = 18.8515625;
+        const double c3 = 18.6875;
+
+        // Compute the EOTF
+        const double vp = std::pow(pq, 1.0 / m2);
+        const double numerator = std::max(vp - c1, 0.0);
+        const double denominator = c2 - c3 * vp;
+        const double L = std::pow(numerator / denominator, 1.0 / m1);
+        
+        // L is already the relative linear light value where 1.0 == 10000 nits.
+        return static_cast<float>(L);
+    }
+
     int _save_single_frame(
         std::string file, const ViewerUI* ui, SaveOptions options,
         const int32_t frameIndex)
@@ -94,6 +122,19 @@ namespace mrv
                 s << options.dwaCompressionLevel;
                 ioOptions["OpenEXR/DWACompressionLevel"] = s.str();
             }
+
+            const auto& hdrOptions = ui->uiView->getHDROptions();
+            if (hdrOptions.passthru || hdrOptions.tonemap)
+            {
+                const auto& hdr = hdrOptions.hdrData;
+                std::stringstream s;
+                s << hdr.primaries[0].x << " " << hdr.primaries[0].y
+                  << hdr.primaries[1].x << " " << hdr.primaries[1].y
+                  << hdr.primaries[2].x << " " << hdr.primaries[2].y
+                  << hdr.primaries[3].x << " " << hdr.primaries[3].y;
+                ioOptions["OpenEXR/Chromaticities"] = s.str();
+            }
+            
 #endif
 
             otime::TimeRange oneFrameTimeRange(
@@ -737,6 +778,62 @@ namespace mrv
                 outputImage = bufferImage;
             }
 
+            if (hdrOptions.passthru || hdrOptions.tonemap)
+            {
+                image::PixelType type = outputImage->getPixelType();
+                int numChannels = image::getChannelCount(type);
+                
+                int channelCount = numChannels;
+                if (numChannels == 2 || numChannels == 4)
+                    channelCount = numChannels - 1;
+
+                const float MAX_CLL_SOURCE = hdrOptions.hdrData.maxCLL; // Get this from your HDR metadata!
+                const float SCALE_FACTOR = 10000.0f / MAX_CLL_SOURCE;
+                const size_t w = outputImage->getWidth();
+                const size_t h = outputImage->getHeight();
+                for (size_t y = 0; y < h; ++y)
+                {
+                    const size_t y_stride = y * w * numChannels;
+                    for (size_t x = 0; x < w; ++x)
+                    {
+                        const size_t xy_stride = y_stride + x * numChannels;
+                        for (int c = 0; c < channelCount; ++c)
+                        {
+                            const size_t offset = xy_stride + c;
+                            
+                            if (type == image::PixelType::RGBA_F32 ||
+                                type == image::PixelType::RGB_F32)
+                            {
+                                float* p = reinterpret_cast<float*>(outputImage->getData());
+                                p += offset;
+                                
+                                // 1. Apply inverse EOTF.
+                                *p = pq_to_linear(*p);
+                                
+                                // 2. Apply Luminance Scaling based on Source MaxCLL (e.g., 1000 nits)
+                                *p *= SCALE_FACTOR;
+                            }
+                            else if (type == image::PixelType::RGBA_F16 ||
+                                     type == image::PixelType::RGB_F16)
+                            {
+                                half* p = reinterpret_cast<half*>(outputImage->getData());
+                                p += offset;
+
+                                // 1. Convert to float and apply inverse EOTF.
+                                float tmp = *p;
+                                tmp = pq_to_linear(tmp);
+                                
+                                // 2. Apply Luminance Scaling based on Source MaxCLL (e.g., 1000 nits)
+                                tmp *= SCALE_FACTOR;
+
+                                // 3. Convert back to half
+                                *p = tmp;
+                            }
+                        }
+                    }
+                }
+            }
+            
             outputImage->setTags(tags);
             writer->writeVideo(currentTime, outputImage);
         }

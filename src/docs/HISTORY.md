@@ -72,6 +72,7 @@ ChangeLog
 - Fixed dock panel location when the window was maximized.
 - Made HUD draw an outline on the text to make it more readable.
 - Fixed Linux drawing of timeline and viewport on OpenGL Wayland with buggy NVidia drivers.
+- Vulkan's vmrv2 OpenEXR saving now saves out HDR Primaries as OpenEXR chromaticities.  Also, the inverse PQ transform is made to keep the OpenEXR as close to match the HDR video (with the use of OpenColorIO).
 
 
 v1.4.2
