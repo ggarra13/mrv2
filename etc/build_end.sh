@@ -59,7 +59,7 @@ if [[ $KERNEL != *Windows* ]]; then
     fi
     if [ -d ~/bin ] && [ -w ~/bin ]; then
 	if [[ $CMAKE_BUILD_TYPE == Debug ]]; then
-	    if [ $MRV2_BACKEND == "VK" ]; then
+	    if [ "$MRV2_BACKEND" == "VK" ]; then
 		run_cmd rm -f ~/bin/vmrv2-dbg
 		run_cmd ln -s $PWD/$BUILD_DIR/install/bin/mrv2.sh ~/bin/vmrv2-dbg
 	    else

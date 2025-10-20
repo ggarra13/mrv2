@@ -479,7 +479,8 @@ namespace mrv
         tooltip += addHotkey(kDrawMode);
         ui->uiDraw->copy_tooltip(tooltip.c_str());
 
-        tooltip = _("Eraser Tool");
+        tooltip = _("Eraser Tool.   "
+                    "ALT + Left Mouse Button to erase an area.");
         tooltip += addHotkey(kEraseMode);
         ui->uiErase->copy_tooltip(tooltip.c_str());
         
