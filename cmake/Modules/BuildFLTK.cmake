@@ -15,12 +15,12 @@ if(TLRENDER_VK)
 	set(FLTK_GIT_REPOSITORY "https://github.com/ggarra13/fltk.git")
     endif()
     
-    set(FLTK_GIT_TAG v1.0.4)   
+    set(FLTK_GIT_TAG v1.0.5)
     #set(FLTK_GIT_TAG vk)  # Cutting edge!
     #set(FLTK_GIT_TAG vk_test) # Testing branch
 else()
     set(FLTK_GIT_REPOSITORY "https://github.com/fltk/fltk.git")
-    set(FLTK_GIT_TAG b7e52bb03cfd2d47249019de9c39cadcad18f547)
+    set(FLTK_GIT_TAG efac0cb9ab3f228a28f365ef7e3ad3acf3144eff)
 endif()
 
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
