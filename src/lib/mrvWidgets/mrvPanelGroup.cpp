@@ -266,7 +266,6 @@ namespace mrv
         assert(GH >= 0);
 
         group->size(pack->w(), GH);
-        
 
         Fl_Group::resizable(0);
         Fl_Group::size(W, H);
@@ -295,7 +294,7 @@ namespace mrv
 
             if (H > maxH)
                 H = maxH;
-
+        
             scroll->size(pack->w(), H);
             scroll->init_sizes();
             

@@ -84,7 +84,25 @@ namespace mrv
                 value = settings->getValue<std::any>(key);
                 H = std_any_empty(value) ? H : std_any_cast<int>(value);
                 if (H == 0)
-                    H = 20 + 30;
+                    H = 24 + 30;
+
+                //
+                // Windows' default heights based on images loaded
+                // 
+                if (label == "Files" || label == "Compare" ||
+                    label == "Stereo 3D")
+                {
+                    int num = App::app->filesModel()->observeFiles()->getSize();
+                    H += num * 64;
+                }
+                if (label == "Compare")
+                {
+                    H += 186;
+                }
+                if (label == "Stereo 3D")
+                {
+                    H += 124;
+                }
             }
             else
             {
